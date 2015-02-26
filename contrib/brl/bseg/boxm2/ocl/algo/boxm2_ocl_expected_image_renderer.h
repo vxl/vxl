@@ -23,7 +23,7 @@ class boxm2_ocl_expected_image_renderer
     vcl_string data_type_;
     int apptypesize_;
     vcl_vector<bocl_kernel*> kernels_;
-    void compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts);
+    bool compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type);
 
     bool render_success_;
     vil_image_view<float> expected_img_;

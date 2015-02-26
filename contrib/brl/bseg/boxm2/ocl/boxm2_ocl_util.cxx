@@ -326,6 +326,8 @@ vcl_string boxm2_ocl_util::mog_options(vcl_string data_type)
      return "-D MOG_VIEW_DEP_COLOR ";
   else if ( data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) != vcl_string::npos )
      return "-D MOG_VIEW_DEP_COLOR_COMPACT ";
+  else if (data_type.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos )
+    return "-D FLOAT8 ";
   else
     return "";
 }

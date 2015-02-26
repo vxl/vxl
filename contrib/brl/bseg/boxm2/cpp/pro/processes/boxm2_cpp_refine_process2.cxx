@@ -78,7 +78,7 @@ bool boxm2_cpp_refine_process2(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cout<<"BOXM2_CPP_REFINE_PROCESS2 ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
   vcl_string num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS>::prefix(); 

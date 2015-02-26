@@ -58,7 +58,7 @@ class boxm2_render_exp_image_functor
     float vis=(*vis_img_)(i,j);
     float exp_int=(*expected_img_)(i,j);
     float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
-    float exp_color = boxm2_data_traits<APM_TYPE>::processor::expected_color(mog3_data_->data()[index]);
+    float exp_color = boxm2_processor_type<APM_TYPE>::type::expected_color(mog3_data_->data()[index]);
     exp_int += curr_p * exp_color;
     (*expected_img_)(i,j)=exp_int;
     vis*=vcl_exp(-alpha*seg_len);

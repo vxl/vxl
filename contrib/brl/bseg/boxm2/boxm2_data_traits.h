@@ -21,776 +21,207 @@ class boxm2_gauss_rgb_processor;
 class boxm2_mog6_view_processor;
 class boxm2_mog6_view_compact_processor;
 
-enum boxm2_data_type
-{
-  BOXM2_ALPHA=0,
-  BOXM2_GAMMA,
-  BOXM2_MOG3_GREY,
-  BOXM2_MOG3_GREY_16,
-  BOXM2_MOG6_VIEW,
-  BOXM2_MOG6_VIEW_COMPACT,
-  BOXM2_BATCH_HISTOGRAM,
-  BOXM2_GAUSS_RGB,
-  BOXM2_GAUSS_RGB_VIEW,
-  BOXM2_GAUSS_RGB_VIEW_COMPACT,
-  BOXM2_GAUSS_UV_VIEW,
-  BOXM2_MOG2_RGB,
-  BOXM2_NUM_OBS,
-  BOXM2_NUM_OBS_SINGLE,
-  BOXM2_NUM_OBS_SINGLE_INT,
-  BOXM2_NUM_OBS_VIEW,
-  BOXM2_NUM_OBS_VIEW_COMPACT,
-  BOXM2_LABEL_SHORT,
-  BOXM2_AUX,
-  BOXM2_INTENSITY,
-  BOXM2_AUX0,
-  BOXM2_AUX1,
-  BOXM2_AUX2,
-  BOXM2_AUX3,
-  BOXM2_AUX4,
-  BOXM2_FLOAT,
-  BOXM2_FLOAT8,
-  BOXM2_FLOAT16,
-  BOXM2_VIS_SPHERE,
-  BOXM2_NORMAL,
-  BOXM2_POINT,
-  BOXM2_VIS_SCORE,
-  BOXM2_GAUSS_GREY,
-  BOXM2_NORMAL_ALBEDO_ARRAY,
-  BOXM2_COVARIANCE,
-  BOXM2_FEATURE_VECTOR,
-  BOXM2_PIXEL,
-  BOXM2_EXPECTATION,
-  BOXM2_DATA_INDEX,
-  BOXM2_RAY_DIR,
-  BOXM2_CHAR8,
-  BOXM2_UNKNOWN
-};
+/** 
+ * dec: Use the "X macro" pattern to define a table of enum values, string ids, and 
+ * associated datatypes, and then use the table to actually create the enum and
+ * specializations of the traits classes for each row of the table.  It is ugly, but not
+ * as ugly as the many hundreds of lines of copy/pasted code duplication that it replaced.
+ * To add a new boxm2 data type, you now just add a row to the bottom of the table below.
+ * If the type needs a "processor type" associated with it, that is now in a separate table further below.
+ */
+#define BOXM2_DATATYPE_TABLE \
+  X(BOXM2_ALPHA, "alpha", float) \
+  X(BOXM2_GAMMA, "gamma", float) \
+  X(BOXM2_MOG3_GREY, "boxm2_mog3_grey", (vnl_vector_fixed<unsigned char, 8>)) \
+  X(BOXM2_MOG3_GREY_16, "boxm2_mog3_grey16", (vnl_vector_fixed<unsigned short, 8>)) \
+  X(BOXM2_MOG6_VIEW, "boxm2_mog6_view", (vnl_vector_fixed<float, 16>)) \
+  X(BOXM2_MOG6_VIEW_COMPACT, "boxm2_mog6_view_compact", (vnl_vector_fixed<unsigned char, 16>)) \
+  X(BOXM2_BATCH_HISTOGRAM, "boxm2_batch_histogram", (vnl_vector_fixed<float, 8>)) \
+  X(BOXM2_GAUSS_RGB, "boxm2_gauss_rgb", (vnl_vector_fixed<unsigned char, 8>)) \
+  X(BOXM2_GAUSS_RGB_VIEW, "boxm2_gauss_rgb_view", (vnl_vector_fixed<int, 16>)) \
+  X(BOXM2_GAUSS_RGB_VIEW_COMPACT, "boxm2_gauss_rgb_view_compact", (vnl_vector_fixed<int, 8>)) \
+  X(BOXM2_GAUSS_UV_VIEW, "boxm2_gauss_uv_view", (vnl_vector_fixed<int, 4>)) \
+  X(BOXM2_MOG2_RGB,"boxm2_mog2_rgb", (vnl_vector_fixed<unsigned char, 16>)) \
+  X(BOXM2_NUM_OBS, "boxm2_num_obs", (vnl_vector_fixed<unsigned short, 4>)) \
+  X(BOXM2_NUM_OBS_SINGLE, "boxm2_num_obs_single", unsigned short) \
+  X(BOXM2_NUM_OBS_SINGLE_INT, "boxm2_num_obs_single_int", unsigned) \
+  X(BOXM2_NUM_OBS_VIEW, "boxm2_num_obs_view", (vnl_vector_fixed<float, 8>)) \
+  X(BOXM2_NUM_OBS_VIEW_COMPACT, "boxm2_num_obs_view_compact", (vnl_vector_fixed<short, 8>)) \
+  X(BOXM2_LABEL_SHORT, "boxm2_label_short", short) \
+  X(BOXM2_AUX, "aux", (vnl_vector_fixed<float, 4>)) \
+  X(BOXM2_INTENSITY, "boxm2_intensity", float) \
+  X(BOXM2_AUX0, "aux0", float) \
+  X(BOXM2_AUX1, "aux1", float) \
+  X(BOXM2_AUX2, "aux2", float) \
+  X(BOXM2_AUX3, "aux3", float) \
+  X(BOXM2_AUX4, "aux4", float) \
+  X(BOXM2_FLOAT, "float", float) \
+  X(BOXM2_FLOAT8, "float8", (vnl_vector_fixed<float, 8>)) \
+  X(BOXM2_FLOAT16, "float16", (vnl_vector_fixed<float, 16>)) \
+  X(BOXM2_VIS_SPHERE, "boxm2_vis_sphere", (vnl_vector_fixed<float, 16>)) \
+  X(BOXM2_NORMAL, "boxm2_normal", (vnl_vector_fixed<float, 4>)) \
+  X(BOXM2_POINT, "boxm2_point", (vnl_vector_fixed<float, 4>)) \
+  X(BOXM2_VIS_SCORE, "boxm2_vis_score", float) \
+  X(BOXM2_GAUSS_GREY, "boxm2_gauss_grey", (vnl_vector_fixed<unsigned char, 2>)) \
+  X(BOXM2_NORMAL_ALBEDO_ARRAY, "boxm2_normal_albedo_array", boxm2_normal_albedo_array) \
+  X(BOXM2_COVARIANCE, "boxm2_covariance", (vnl_vector_fixed<float, 9>)) \
+  X(BOXM2_FEATURE_VECTOR, "boxm2_feature_vector", boxm2_feature_vector) \
+  X(BOXM2_PIXEL, "boxm2_pixel", unsigned char) \
+  X(BOXM2_EXPECTATION, "boxm2_expectation", float) \
+  X(BOXM2_DATA_INDEX, "boxm2_data_index", unsigned int) \
+  X(BOXM2_RAY_DIR, "boxm2_ray_dir", (vnl_vector_fixed<float, 4>)) \
+  X(BOXM2_CHAR8, "char8", (vnl_vector_fixed<unsigned char, 8>))
 
-//: Pixel properties for templates.
+// The following two lines are a workaround that allows passing in of types that include
+// commas as macro arguments, as long as you enclose them in parentheses, e.g. (vcl_map<int,int>)
+template<typename T> struct argument_type;
+template<typename T, typename U> struct argument_type<T(U)> { typedef U type; };
+
+// define the boxm2_data_type enum using the X macro pattern and the table above.
+#define X(enum_val, string_val, datatype_val) enum_val,
+enum boxm2_data_type {
+  BOXM2_DATATYPE_TABLE
+  BOXM2_UNKNOWN // last enum value, also avoids trialing comma problem
+};
+#undef X
+
+//: voxel datatype traits: will be specialized for each relevant boxm2_data_type val
 template <boxm2_data_type type>
 class boxm2_data_traits;
 
-//: traits for a mixture of gaussian appearance model of gray-scale images
-template<>
-class boxm2_data_traits<BOXM2_ALPHA>
+// specialize the traits class for each boxm2_data_type value in the table above using the X macro pattern
+#define X(enum_val, string_val, datatype_val) \
+  template<> \
+  class boxm2_data_traits<enum_val> \
+  { \
+  public: \
+    typedef argument_type<void(datatype_val)>::type datatype; \
+    static vcl_size_t datasize() { return sizeof(datatype); } \
+    static vcl_string prefix(const vcl_string& identifier = "") \
+    { if (!identifier.size()) return string_val; else return string_val + vcl_string("_") + identifier; } \
+  };
+BOXM2_DATATYPE_TABLE
+#undef X
+
+// A Collection of functions mapping datatypes to properties.
+// There are handy if you don't know the enum val at compile time.
+class boxm2_data_info 
 {
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "alpha"; else return "alpha_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_GAMMA>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "gamma"; else return "gamma_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_MOG3_GREY>
-{
- public:
-  typedef boxm2_mog3_grey_processor processor;
-  typedef vnl_vector_fixed<unsigned char, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_mog3_grey"; else return "boxm2_mog3_grey_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_MOG6_VIEW>
-{
- public:
-  typedef boxm2_mog6_view_processor processor;
-  typedef vnl_vector_fixed<float, 16> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_mog6_view"; else return "boxm2_mog6_view_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>
-{
- public:
-  typedef boxm2_mog6_view_compact_processor processor;
-  typedef vnl_vector_fixed<unsigned char, 16> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_mog6_view_compact"; else return "boxm2_mog6_view_compact_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_MOG3_GREY_16>
-{
- public:
-  typedef boxm2_mog3_grey_processor processor;
-  typedef vnl_vector_fixed<unsigned short, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_mog3_grey_16"; else return "boxm2_mog3_grey_16_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_GAUSS_RGB>
-{
- public:
-  typedef boxm2_gauss_rgb_processor processor;
-  typedef vnl_vector_fixed<unsigned char, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_gauss_rgb"; else return "boxm2_gauss_rgb_"+identifier; }
-};
-
-//: simple gaussian with a sigma and std dev
-template<>
-class boxm2_data_traits<BOXM2_GAUSS_GREY>
-{
- public:
-  typedef boxm2_gauss_grey_processor processor;
-  typedef vnl_vector_fixed<unsigned char, 2> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_gauss_grey"; else return "boxm2_gauss_grey_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_GAUSS_UV_VIEW>
-{
- public:
-  typedef boxm2_mog6_view_processor processor;
-  typedef vnl_vector_fixed<int, 4> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_gauss_uv_view"; else return "boxm2_gauss_UV_view_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>
-{
- public:
-  typedef boxm2_mog6_view_processor processor;
-  typedef vnl_vector_fixed<int, 16> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_gauss_rgb_view"; else return "boxm2_gauss_rgb_view_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>
-{
- public:
-  typedef boxm2_mog6_view_processor processor;
-  typedef vnl_vector_fixed<int, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_gauss_rgb_view_compact"; else return "boxm2_gauss_rgb_view_compact_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_MOG2_RGB>
-{
- public:
-  typedef vnl_vector_fixed<unsigned char, 16> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_mog2_rgb"; else return "boxm2_mog2_rgb_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_NORMAL>
-{
- public:
-  typedef vnl_vector_fixed<float, 4> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_normal"; else return "boxm2_normal_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_RAY_DIR>
-{
- public:
-  typedef vnl_vector_fixed<float, 4> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_ray_dir"; else return "boxm2_ray_dir_"+identifier; }
-};
-
-
-
-template<>
-class boxm2_data_traits<BOXM2_POINT>
-{
- public:
-  typedef vnl_vector_fixed<float, 4> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_point"; else return "boxm2_point_"+identifier; }
-};
-
-// 3x3 covariance matrix for a 3d point
-template<>
-class boxm2_data_traits<BOXM2_COVARIANCE>
-{
- public:
-  typedef vnl_vector_fixed<float, 9> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_covariance"; else return "boxm2_covariance_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_NUM_OBS>
-{
- public:
-  typedef vnl_vector_fixed<unsigned short, 4> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_num_obs"; else return "boxm2_num_obs_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_NUM_OBS_VIEW>
-{
- public:
-  typedef vnl_vector_fixed<float, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_num_obs_view"; else return "boxm2_num_obs_view"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>
-{
- public:
-  typedef vnl_vector_fixed<unsigned short, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_num_obs_view_compact"; else return "boxm2_num_obs_view_compact"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>
-{
- public:
-  typedef unsigned short datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_num_obs_single"; else return "boxm2_num_obs_single_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>
-{
- public:
-  typedef unsigned datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_num_obs_single_int"; else return "boxm2_num_obs_single_int_"+identifier; }
-};
-
-
-//: Aux data contains four values to assist update calculations:
-// * seg_len_array,   (total cell segment length)
-// * mean_obs_array,  (total cell mean obs)
-// * vis_array,       (total cell visibility)
-// * beta_array,      (total cell bayes update factor)
-template<>
-class boxm2_data_traits<BOXM2_AUX>
-{
- public:
-  typedef vnl_vector_fixed<float, 4> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux"; else return "aux_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_FLOAT8>
-{
- public:
-  typedef vnl_vector_fixed<float, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "float8"; else return "float8_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_CHAR8>
-{
- public:
-  typedef vnl_vector_fixed<unsigned char, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "char8"; else return "char8_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_FLOAT>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "float"; else return "float_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_FLOAT16>
-{
- public:
-  typedef vnl_vector_fixed<float, 16> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "float16"; else return "float16_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_VIS_SPHERE>
-{
- public:
-  typedef vnl_vector_fixed<float, 16> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_vis_sphere"; else return "boxm2_vis_sphere_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_VIS_SCORE>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_vis_score"; else return "boxm2_vis_score_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_AUX0>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux0"; else return "aux0_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_AUX1>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux1"; else return "aux1_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_AUX2>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux2"; else return "aux2_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_AUX3>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux3"; else return "aux3_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_AUX4>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux4"; else return "aux4_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>
-{
- public:
-  typedef vnl_vector_fixed<float, 8> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "") { return "boxm2_batch_histogram"; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_INTENSITY>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_intensity"; else return "boxm2_intensity_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>
-{
- public:
-  typedef boxm2_normal_albedo_array datatype;
-  static vcl_size_t datasize() { return sizeof(boxm2_normal_albedo_array); }
-  static vcl_string prefix() { return "boxm2_normal_albedo_array"; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_FEATURE_VECTOR>
-{
- public:
-  typedef boxm2_feature_vector datatype;
-  static vcl_size_t datasize() { return sizeof(boxm2_feature_vector); }
-  static vcl_string prefix() { return "boxm2_feature_vector"; }
-};
-template<>
-class boxm2_data_traits<BOXM2_LABEL_SHORT>
-{
- public:
-  typedef short datatype;
-  static vcl_size_t datasize() { return sizeof(short); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_label_short"; else return "boxm2_label_short_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_PIXEL>
-{
- public:
-  typedef unsigned char datatype;
-  static vcl_size_t datasize() { return sizeof(unsigned char); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_pixel"; else return "boxm2_pixel_"+identifier; }
-};
-
-
-template<>
-class boxm2_data_traits<BOXM2_EXPECTATION>
-{
- public:
-  typedef float datatype;
-  static vcl_size_t datasize() { return sizeof(float); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_expectation"; else return "boxm2_expectation_"+identifier; }
-};
-
-template<>
-class boxm2_data_traits<BOXM2_DATA_INDEX>
-{
- public:
-  typedef unsigned int datatype;
-  static vcl_size_t datasize() { return sizeof(unsigned int); }
-  static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "boxm2_data_index"; else return "boxm2_data_index_"+identifier; }
-};
-
-
-
-//: HACKY WAY TO GENERICALLY GET DATASIZES -
-class boxm2_data_info
-{
- public:
-
-  static vcl_size_t datasize(vcl_string prefix)
-  {
-    // some of them changed to using find method to account for identifiers
-
-    if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_ALPHA>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_GAMMA>::datasize();
-
-     if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_MOG6_VIEW>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::datasize();
-
-    if (prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix())
-      return boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_MOG2_RGB>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_NUM_OBS>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_AUX0>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_AUX1>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_AUX2>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_AUX3>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX4>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_AUX4>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_AUX>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_FLOAT16>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_FLOAT8>::datasize();
-    if (prefix.find(boxm2_data_traits<BOXM2_FLOAT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_FLOAT>::datasize();
-
-    if (prefix == boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix())
-      return boxm2_data_traits<BOXM2_VIS_SPHERE>::datasize();
-    if (prefix == boxm2_data_traits<BOXM2_VIS_SCORE>::prefix())
-      return boxm2_data_traits<BOXM2_VIS_SCORE>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_INTENSITY>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_GAUSS_RGB>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_GAUSS_GREY>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_NORMAL>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_POINT>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_COVARIANCE>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_FEATURE_VECTOR>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_PIXEL>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_PIXEL>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_EXPECTATION>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_EXPECTATION>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_DATA_INDEX>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_DATA_INDEX>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_RAY_DIR>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_RAY_DIR>::datasize();
-
-    if (prefix.find(boxm2_data_traits<BOXM2_CHAR8>::prefix()) != vcl_string::npos)
-      return boxm2_data_traits<BOXM2_CHAR8>::datasize();
-
-    return 0;
+public:
+
+// map string prefix to enum val
+// note that some prefixes are substrings of others.
+// this could be made more efficient by requiring that the table is sorted 
+// such that types that are substrings are listed last, but that is probably asking for trouble.
+static boxm2_data_type data_type(vcl_string const& prefix) {
+  boxm2_data_type retval = BOXM2_UNKNOWN;
+#define X(enum_val, string_val, datatype_val) \
+  if (prefix.find(boxm2_data_traits<enum_val>::prefix()) == 0) {\
+    retval = enum_val; \
   }
+  BOXM2_DATATYPE_TABLE
+#undef X
+  return retval;
+}
 
-
-  static boxm2_data_type data_type(vcl_string prefix)
-  {
-    // some of them changed to using find method to account for identifiers
-    if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos)
-      return BOXM2_ALPHA ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != vcl_string::npos)
-      return BOXM2_GAMMA ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos)
-      return  BOXM2_MOG3_GREY_16 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos)
-      return  BOXM2_MOG3_GREY ;
-    else if (prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix())
-      return  BOXM2_BATCH_HISTOGRAM ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos)
-      return  BOXM2_MOG2_RGB ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix()) != vcl_string::npos)
-      return  BOXM2_NUM_OBS_SINGLE_INT ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos)
-      return  BOXM2_NUM_OBS_SINGLE ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos)
-      return  BOXM2_NUM_OBS ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos)
-      return  BOXM2_AUX0 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos)
-      return  BOXM2_AUX1 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos)
-      return  BOXM2_AUX2 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos)
-      return  BOXM2_AUX3 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_AUX4>::prefix()) != vcl_string::npos)
-      return  BOXM2_AUX4 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos)
-      return  BOXM2_AUX ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != vcl_string::npos)
-      return  BOXM2_FLOAT16 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != vcl_string::npos)
-      return  BOXM2_FLOAT8 ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_FLOAT>::prefix()) != vcl_string::npos)
-      return  BOXM2_FLOAT;
-    else if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos)
-      return  BOXM2_INTENSITY ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos)
-      return  BOXM2_GAUSS_RGB ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos)
-      return  BOXM2_GAUSS_GREY ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix()) != vcl_string::npos)
-      return  BOXM2_NORMAL_ALBEDO_ARRAY ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos)
-      return  BOXM2_POINT ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_NORMAL>::prefix()) != vcl_string::npos)
-      return  BOXM2_NORMAL ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos)
-      return  BOXM2_COVARIANCE ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_FEATURE_VECTOR>::prefix()) != vcl_string::npos)
-      return  BOXM2_FEATURE_VECTOR ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()) != vcl_string::npos)
-      return  BOXM2_LABEL_SHORT ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_PIXEL>::prefix()) != vcl_string::npos)
-      return  BOXM2_PIXEL ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_EXPECTATION>::prefix()) != vcl_string::npos)
-      return  BOXM2_EXPECTATION ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_DATA_INDEX>::prefix()) != vcl_string::npos)
-      return  BOXM2_DATA_INDEX ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_RAY_DIR>::prefix()) != vcl_string::npos)
-          return  BOXM2_RAY_DIR ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_VIS_SCORE>::prefix()) != vcl_string::npos)
-          return  BOXM2_VIS_SCORE ;
-    else if (prefix.find(boxm2_data_traits<BOXM2_CHAR8>::prefix()) != vcl_string::npos)
-          return  BOXM2_CHAR8 ;
-    else
-      return BOXM2_UNKNOWN;
+// map enum val to string prefix
+static vcl_string prefix(boxm2_data_type data_type) {
+  switch(data_type) {
+#define X(enum_val, string_val, datatype_val) \
+    case enum_val: \
+      return boxm2_data_traits<enum_val>::prefix();
+    BOXM2_DATATYPE_TABLE
+#undef X
   }
+  // switch fell through with no match
+  return "unknown";
+}
 
-  static void print_data(vcl_string prefix, char *cell)
-  {
-    if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(cell)[0];
-      return;
-    }
-#if 0
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY_16>::datatype*>(cell)[0];
-      return;
-    }
+// map enum to datasize
+static vcl_size_t datasize(boxm2_data_type data_type) {
+  switch (data_type) {
+#define X(enum_val, string_val, datatype_val) \
+    case enum_val: \
+      return boxm2_data_traits<enum_val>::datasize();
+    BOXM2_DATATYPE_TABLE
+#undef X
+  }
+  // switch fell through with no match
+  return 0;
+};
 
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(cell)[0];
-      return;
-    }
+// map string prefix to datasize
+static vcl_size_t datasize(vcl_string const& prefix) {
+  return datasize(data_type(prefix));
+}
 
-    if (prefix == boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix()) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::datatype*>(cell)[0];
-      return;
-    }
 
-    if (prefix.find(boxm2_data_traits<BOXM2_MOG2_RGB>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_MOG2_RGB>::datatype*>(cell)[0];
-      return;
-    }
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::datatype*>(cell)[0];
-      return;
-    }
-
-    if (prefix.find(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(cell)[0];
-      return;
-    }
-#endif // 0
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX0>::datatype*>(cell)[0];
-      return;
-    }
-#if 0
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX1>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX1>::datatype*>(cell)[0];
-      return;
-    }
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX2>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX2>::datatype*>(cell)[0];
-      return;
-    }
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX3>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX3>::datatype*>(cell)[0];
-      return;
-    }
-#endif // 0
-    if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX>::datatype*>(cell)[0];
-      return;
-    }
-
-    if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_INTENSITY>::datatype*>(cell)[0];
-      return;
-    }
-
-    if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(cell)[0];
-      return;
-    }
-
-    if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_COVARIANCE>::datatype*>(cell)[0];
-      return;
-    }
-
-#if 0
-    if (prefix.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != vcl_string::npos) {
-      vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(cell)[0];
-      return;
-    }
-#endif // 0
-
-    vcl_cerr << "In boxm2_data_info::print_data() -- type: " << prefix << " could not be identified!\n";
+// TODO: create a table mapping enum to print function, or just require that all types have a stream operator.
+static void print_data(vcl_string const& prefix, char *cell)
+{
+  if (prefix.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != vcl_string::npos) {
+    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(cell)[0];
     return;
   }
+  if (prefix.find(boxm2_data_traits<BOXM2_AUX0>::prefix()) != vcl_string::npos) {
+    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX0>::datatype*>(cell)[0];
+    return;
+  }
+  if (prefix.find(boxm2_data_traits<BOXM2_AUX>::prefix()) != vcl_string::npos) {
+    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_AUX>::datatype*>(cell)[0];
+    return;
+  }
+
+  if (prefix.find(boxm2_data_traits<BOXM2_INTENSITY>::prefix()) != vcl_string::npos) {
+    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_INTENSITY>::datatype*>(cell)[0];
+    return;
+  }
+
+  if (prefix.find(boxm2_data_traits<BOXM2_POINT>::prefix()) != vcl_string::npos) {
+    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(cell)[0];
+    return;
+  }
+
+  if (prefix.find(boxm2_data_traits<BOXM2_COVARIANCE>::prefix()) != vcl_string::npos) {
+    vcl_cout <<  reinterpret_cast<boxm2_data_traits<BOXM2_COVARIANCE>::datatype*>(cell)[0];
+    return;
+  }
+
+  vcl_cerr << "In boxm2_data_info::print_data() -- type: " << prefix << " could not be identified!\n";
+  return;
+}
+
 };
 
+
+// A table mapping boxm2 appearance model types to the class resposible for processing them.
+// Use the "X macro" pattern to generate the traits-style boxm2_processor_type specializations from the table
+#define BOXM2_PROCESSOR_TABLE \
+  X(BOXM2_MOG3_GREY, boxm2_mog3_grey_processor) \
+  X(BOXM2_MOG6_VIEW, boxm2_mog6_view_processor) \
+  X(BOXM2_MOG6_VIEW_COMPACT, boxm2_mog6_view_compact_processor) \
+  X(BOXM2_MOG3_GREY_16, boxm2_mog3_grey_processor) \
+  X(BOXM2_GAUSS_RGB, boxm2_gauss_rgb_processor) \
+  X(BOXM2_GAUSS_GREY, boxm2_gauss_grey_processor) \
+  X(BOXM2_GAUSS_UV_VIEW, boxm2_mog6_view_processor) \
+  X(BOXM2_GAUSS_RGB_VIEW, boxm2_mog6_view_processor) \
+  X(BOXM2_GAUSS_RGB_VIEW_COMPACT, boxm2_mog6_view_processor)
+
+// the empty base declaration.  This template will be specialized for each row in the table above.
+template <boxm2_data_type type>
+class boxm2_processor_type;
+
+// define the specialization generically
+#define X(enum_val, processor_type) \
+  template<> \
+  class boxm2_processor_type<enum_val> \
+  { \
+    public: \
+    typedef argument_type<void(processor_type)>::type type; \
+  };
+
+// declare the specializations via the "X macro" pattern.
+BOXM2_PROCESSOR_TABLE
+#undef X
 
 #endif

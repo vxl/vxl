@@ -32,7 +32,7 @@ class boxm2_image_density_functor
     float vis=(*vis_img_)(i,j);
     float color=(*img_)(i,j);
     float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
-    float color_dens = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], color);
+    float color_dens = boxm2_processor_type<APM_TYPE>::type::prob_density(mog3_data_->data()[index], color);
     (*density_img_)(i,j)+=color_dens*curr_p;
     vis*=vcl_exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;

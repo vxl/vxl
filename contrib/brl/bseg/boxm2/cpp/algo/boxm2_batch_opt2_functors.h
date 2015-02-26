@@ -53,7 +53,7 @@ class boxm2_batch_update_opt2_pass2_functor
     /////////////
     // compute appearance probability of observation
     float mean_obs =aux0/aux1;
-    float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+    float PI=boxm2_processor_type<APM_TYPE>::type::prob_density(mog3_data_->data()[index], mean_obs);
 
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
     // update alpha integral
@@ -206,7 +206,7 @@ class boxm2_batch_update_opt2_functor
 #if 0
       if (index == cell_no) {
         float mean_obs = aux0[s]/obs_seg_len;
-        float PI = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog, mean_obs);
+        float PI = boxm2_processor_type<APM_TYPE>::type::prob_density(mog, mean_obs);
         vcl_cout << "\t m: " << s << " pre_i: " << aux[s][0]/obs_seg_len << " vis_i: " << aux[s][1]/obs_seg_len << '\n'
                  << "obs_seg_len: " << obs_seg_len << " PI: " << PI << " mean_obs: " << mean_obs << '\n'
                  << "max_obs_seg_len: " << max_obs_seg_len << vcl_endl;
@@ -244,8 +244,8 @@ class boxm2_batch_update_opt2_functor
     // update with new appearance
     const float min_sigma = 0.02f;
     //boxm_apm_traits<APM>::apm_processor::compute_appearance(obs_vector, pre_vector, vis_vector, data.appearance_, min_sigma);
-    //boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs_vector, vis_vector,n_table_,min_sigma);
-    boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs_vector, pre_vector,vis_vector,n_table_,min_sigma);
+    //boxm2_processor_type<APM_TYPE>::type::compute_app_model(mog,obs_vector, vis_vector,n_table_,min_sigma);
+    boxm2_processor_type<APM_TYPE>::type::compute_app_model(mog,obs_vector, pre_vector,vis_vector,n_table_,min_sigma);
 
     return true;
   }

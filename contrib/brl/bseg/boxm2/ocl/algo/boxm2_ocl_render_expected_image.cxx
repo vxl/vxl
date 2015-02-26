@@ -59,7 +59,7 @@ bool boxm2_ocl_render_expected_image_globals::validate_appearances(
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cout<<"BOXM2_OCL_RENDER_EXPECTED_IMAGE ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
   return true;

@@ -84,7 +84,7 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cout<<"BOXM2_OCL_CHANGE_DETECTION_PROCESS2 ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
 

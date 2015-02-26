@@ -114,7 +114,7 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
       }
   }
   if (!foundDataType) {
-      vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+      vcl_cout<<"BOXM2_OCL_CONVERT_FLOAT_IMAGE_TO_RGBA_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
       return false;
   }
 

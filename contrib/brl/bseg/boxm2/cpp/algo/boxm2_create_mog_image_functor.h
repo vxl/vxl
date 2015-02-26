@@ -34,8 +34,8 @@ class boxm2_create_mog_image_functor
     float curr_p=(1-vcl_exp(-alpha*seg_len))*vis;
     typename boxm2_data<APM_TYPE>::datatype & mog3_voxel =mog3_data_->data()[index];
 
-    //float mean_obs = boxm2_data_traits<APM_TYPE>::processor::most_probable_mode_color(mog3_voxel);
-    float mean_obs = boxm2_data_traits<APM_TYPE>::processor::expected_color(mog3_voxel);
+    //float mean_obs = boxm2_processor_type<APM_TYPE>::type::most_probable_mode_color(mog3_voxel);
+    float mean_obs = boxm2_processor_type<APM_TYPE>::type::expected_color(mog3_voxel);
 
     typename boxm2_data<APM_TYPE>::datatype & mog3=(*mog_img_)(i,j);
     typename boxm2_data<BOXM2_NUM_OBS>::datatype & nobs=nobs_data_->data()[index];
@@ -43,7 +43,7 @@ class boxm2_create_mog_image_functor
     nobs_float[0]=(float)nobs[0]; nobs_float[1]=(float)nobs[1]; nobs_float[2]=(float)nobs[2];
     //: converting float to short
     nobs_float[3]=((float)nobs[3])/100.0f;
-    boxm2_data_traits<APM_TYPE>::processor::update_app_model(mog3,nobs_float, mean_obs,curr_p,0.09f, 0.03f);
+    boxm2_processor_type<APM_TYPE>::type::update_app_model(mog3,nobs_float, mean_obs,curr_p,0.09f, 0.03f);
     nobs[0]=(unsigned short)nobs_float[0]; nobs[1]=(unsigned short)nobs_float[1]; nobs[2]=(unsigned short)nobs_float[2];
     nobs[3]=(unsigned short)(nobs_float[3]*100.0f);
 

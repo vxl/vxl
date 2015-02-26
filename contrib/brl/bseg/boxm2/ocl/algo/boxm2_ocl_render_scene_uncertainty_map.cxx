@@ -81,7 +81,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        vcl_cout<<"BOXM2_OCL_RENDER_SCENE_UNCERTAINTY_MAP ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
         return false;
     }
     if (ident.size() > 0) {

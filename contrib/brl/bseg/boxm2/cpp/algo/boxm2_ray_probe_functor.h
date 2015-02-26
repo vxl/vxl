@@ -252,7 +252,7 @@ class boxm2_ray_app_density_functor
 
   inline bool step_cell(float seg_len,int index,unsigned i, unsigned j,float t_abs)
   {
-    app_density_->push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], intensity_));
+    app_density_->push_back(boxm2_processor_type<BOXM2_MOG3_GREY>::type::prob_density(mog3_data_->data()[index], intensity_));
     return true;
   }
  private:

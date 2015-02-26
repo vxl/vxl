@@ -31,7 +31,7 @@ class boxm2_render_cone_functor
   {
     //grab voxel alpha and intensity
     boxm2_data<BOXM2_GAMMA>::datatype alpha = alpha_data_->data()[index];
-    float voxel_int = boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog3_data_->data()[index]);
+    float voxel_int = boxm2_processor_type<BOXM2_MOG3_GREY>::type::expected_color(mog3_data_->data()[index]);
     //probability that this voxel is occupied by surface
     float temp =vcl_exp(-alpha*volume);
 

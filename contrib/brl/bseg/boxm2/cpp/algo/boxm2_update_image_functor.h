@@ -59,7 +59,7 @@ class boxm2_update_pass1_functor
     if (aux[0]<1e-10f)return true;
 
     float mean_obs=aux[1]/aux[0];
-    float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+    float PI=boxm2_processor_type<APM_TYPE>::type::prob_density(mog3_data_->data()[index], mean_obs);
 
     float vis=(*vis_img_)(i,j);
     float pre=(*pre_img_)(i,j);
@@ -104,7 +104,7 @@ class boxm2_update_pass2_functor
     typename boxm2_data<BOXM2_AUX>::datatype & aux=aux_data_->data()[index];
     if (aux[0]<1e-10f)return true;
     float mean_obs=aux[1]/aux[0];
-    float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+    float PI=boxm2_processor_type<APM_TYPE>::type::prob_density(mog3_data_->data()[index], mean_obs);
 
     //if (PI==vcl_numeric_limits<float>::infinity())
     float vis=(*vis_img_)(i,j);
@@ -168,7 +168,7 @@ class boxm2_update_data_functor
       nobs_float[2]=(float)nobs[2];
       //: converting flot to short
       nobs_float[3]=((float)nobs[3])/100.0f;
-      boxm2_data_traits<APM_TYPE>::processor::update_app_model(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
+      boxm2_processor_type<APM_TYPE>::type::update_app_model(mog3,nobs_float, mean_obs,vis,0.09f, 0.03f);
       nobs[0]=(unsigned short)nobs_float[0];
       nobs[1]=(unsigned short)nobs_float[1];
       nobs[2]=(unsigned short)nobs_float[2];

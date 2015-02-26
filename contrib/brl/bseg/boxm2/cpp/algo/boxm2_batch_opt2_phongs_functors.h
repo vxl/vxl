@@ -60,7 +60,7 @@ class boxm2_batch_update_phongs_pass1_functor
         float expI=boxm2_phongs_model_processor::expected_color(model,view_dir,sun_elev_,sun_azim_);
         // compute appearance probability of observation
         float PI=boxm2_phongs_model_processor::prob_density(mean_obs,expI,phongs_model_data[5]);
-        // was: =boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+        // was: =boxm2_processor_type<BOXM2_MOG3_GREY>::type::prob_density(mog3_data_->data()[index], mean_obs);
 
         float vis=(*vis_img_)(i,j);
         float pre=(*pre_img_)(i,j);
@@ -158,7 +158,7 @@ class boxm2_batch_update_opt2_phongs_pass2_functor
             float expI=boxm2_phongs_model_processor::expected_color(model,view_dir,sun_elev_,sun_azim_);
             // compute appearance probability of observation
             PI=boxm2_phongs_model_processor::prob_density(mean_obs,expI,phongs_model_data[5]);
-            // was: =boxm2_data_traits<BOXM2_MOG3_GREY>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+            // was: =boxm2_processor_type<BOXM2_MOG3_GREY>::type::prob_density(mog3_data_->data()[index], mean_obs);
         }
         float vis=(*vis_img_)(i,j);
         float pre=(*pre_img_)(i,j);

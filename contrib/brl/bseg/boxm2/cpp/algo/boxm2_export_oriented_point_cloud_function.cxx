@@ -122,7 +122,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
         //check bounding box
         if (bb.is_empty() || bb.contains(points_data[currIdx][0] ,points_data[currIdx][1] ,points_data[currIdx][2]) )
         {
-          exp_color = boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog_data[currIdx]);
+          exp_color = boxm2_processor_type<BOXM2_MOG3_GREY>::type::expected_color(mog_data[currIdx]);
           file <<  points_data[currIdx][0] << ' ' << points_data[currIdx][1] << ' ' << points_data[currIdx][2] << ' ';
           int col = (int)(exp_color*255);
           col = col > 255 ? 255 : col;
@@ -160,7 +160,7 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
                 if(datatype == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
                 {
                     boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *   mog_data     = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
-                    float exp_color  = boxm2_data_traits<BOXM2_MOG3_GREY>::processor::expected_color(mog_data[currIdx]);
+                    float exp_color  = boxm2_processor_type<BOXM2_MOG3_GREY>::type::expected_color(mog_data[currIdx]);
                     int col = (int)(exp_color*255);
                     col = col > 255 ? 255 : col;
                     file << col << ' ' << col << ' ' << col <<"\n";
@@ -168,7 +168,7 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
                 else if ( datatype == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
                 {
                     boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *   color_data     = (boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*) mog->data_buffer();
-                    vnl_vector_fixed<float,3> exp_color = boxm2_data_traits<BOXM2_GAUSS_RGB>::processor::expected_color(color_data[currIdx]);
+                    vnl_vector_fixed<float,3> exp_color = boxm2_processor_type<BOXM2_GAUSS_RGB>::type::expected_color(color_data[currIdx]);
 
                     int col0 = (int)(exp_color[0]*255);
                     col0 = col0 > 255 ? 255 : col0;

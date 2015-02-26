@@ -28,52 +28,36 @@ boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene
   : scene_(scene), device_(device), render_success_(false)
 {
   bool foundDataType = false;
-  vcl_string options;
   vcl_vector<vcl_string> apps = scene->appearances();
 
   apptypesize_ = 0;
+  boxm2_data_type valid_appearance_types[] = {
+    BOXM2_MOG3_GREY, BOXM2_MOG3_GREY_16, BOXM2_FLOAT8, BOXM2_LABEL_SHORT  
+  };
+  int num_valid_appearances = sizeof(valid_appearance_types) / sizeof(valid_appearance_types[0]);
+
   for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-    {
-      data_type_ = apps[i];
-      foundDataType = true;
-      options="-D MOG_TYPE_8 ";
-      apptypesize_ = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-    {
-      data_type_ = apps[i];
-      foundDataType = true;
-      options="-D MOG_TYPE_16 ";
-      apptypesize_ = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
-    {
-      data_type_ = apps[i];
-      foundDataType = true;
-      options="-D FLOAT8 ";
-      apptypesize_ = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
-    }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
-    {
-      data_type_ = apps[i];
-      foundDataType = true;
-      options="-D SHORT ";
-      apptypesize_ = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
+    for (unsigned v = 0; v < num_valid_appearances; ++v) {
+      boxm2_data_type valid_apm_type = valid_appearance_types[v];
+      vcl_string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type);
+      if ( apps[i] == valid_apm_prefix )
+      {
+        data_type_ = valid_apm_prefix;
+        foundDataType = true;
+        apptypesize_ = boxm2_data_info::datasize(valid_apm_type);
+        vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+        compile_kernels(device, kernels_, valid_apm_type);
+        break;
+      }
     }
   }
+
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+    vcl_cout<<"BOXM2_OCL_EXPECTED_IMAGE_RENDERER ERROR: scene doesn't have valid appearance type"<<vcl_endl;
   }
   if (ident.size() > 0) {
     data_type_ += "_" + ident;
   }
-
-  vcl_string identifier=device->device_identifier()+options;
-
-  vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-  compile_kernels(device,kernels_,options);
-
 }
 
 bool boxm2_ocl_expected_image_renderer::get_last_rendered(vil_image_view<float> &img)
@@ -193,44 +177,25 @@ bool boxm2_ocl_expected_image_renderer::render(vpgl_camera_double_sptr camera, u
   return render_success_;
 }
 
-void boxm2_ocl_expected_image_renderer::compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, vcl_string opts)
+bool boxm2_ocl_expected_image_renderer::compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
 {
-  //gather all render sources... seems like a lot for rendering...
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-  src_paths.push_back(source_dir + "scene_info.cl");
-  src_paths.push_back(source_dir + "pixel_conversion.cl");
-  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-  src_paths.push_back(source_dir + "backproject.cl");
-  src_paths.push_back(source_dir + "statistics_library_functions.cl");
-  src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-  src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
-  src_paths.push_back(source_dir + "expected_functor.cl");
-  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+  vcl_string options = boxm2_ocl_util::mog_options( boxm2_data_info::prefix(data_type) );
 
-
-  vcl_size_t found = opts.find("SHORT");
-  if (found!=vcl_string::npos)
+  if ( (data_type == BOXM2_MOG3_GREY) ||
+       (data_type == BOXM2_MOG3_GREY_16) )
   {
-    vcl_cout<<"COMPILING SHORT"<<vcl_endl;
-    vcl_string options = opts;
-    options += "-D RENDER ";
-    options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "pixel_conversion.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+    src_paths.push_back(source_dir + "expected_functor.cl");
+    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-
-    //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
-    ray_trace_kernel->create_kernel( &device->context(),
-                                     device->device_id(),
-                                     src_paths,
-                                     "render_bit_scene",   //kernel name
-                                     options,              //options
-                                     "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
-    vec_kernels.push_back(ray_trace_kernel);
-  }
-  else
-  {
-    vcl_string options = opts;
     options += "-D RENDER ";
 
     options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
@@ -259,5 +224,39 @@ void boxm2_ocl_expected_image_renderer::compile_kernels(bocl_device_sptr device,
                                             "normalize render kernel"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(normalize_render_kernel);
+
   }
+  else if (data_type == BOXM2_LABEL_SHORT) {
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "pixel_conversion.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
+    src_paths.push_back(source_dir + "expected_functor.cl");
+    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+    vcl_cout<<"COMPILING SHORT"<<vcl_endl;
+    options += "-D RENDER ";
+    options += "-D RENDER_MAX -D STEP_CELL=step_cell_render_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
+
+
+    //have kernel construct itself using the context and device
+    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    ray_trace_kernel->create_kernel( &device->context(),
+                                     device->device_id(),
+                                     src_paths,
+                                     "render_bit_scene",   //kernel name
+                                     options,              //options
+                                     "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
+    vec_kernels.push_back(ray_trace_kernel);
+
+  }
+  else {
+    vcl_cerr << "ERROR: boxm2_ocl_expected_image_renderer::compile_kernels(): Unsupported Appearance model type " << data_type << vcl_endl;
+    return false;
+  }
+  return true;
 }

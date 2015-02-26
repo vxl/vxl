@@ -93,7 +93,7 @@ bool boxm2_cpp_cone_update_image_process(bprb_func_process& pro)
       }
     }
     if (!foundDataType) {
-      vcl_cout<<"BOXM2_OCL_RENDER_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+      vcl_cout<<"BOXM2_OCL_CONE_UPDATE_IMAGE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
       return false;
     }
     if (illumination_bin_index>=0) {

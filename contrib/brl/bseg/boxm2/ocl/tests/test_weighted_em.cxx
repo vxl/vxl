@@ -64,7 +64,7 @@ void test_weighted_em()
   }
   bsta_sigma_normalizer_sptr n_table = new bsta_sigma_normalizer(0.2f, 40);
   vnl_vector_fixed<vxl_byte, 8> mog;
-  boxm2_data_traits<BOXM2_MOG3_GREY>::processor::compute_app_model(mog,obsV,visV,n_table,0.03f);
+  boxm2_processor_type<BOXM2_MOG3_GREY>::type::compute_app_model(mog,obsV,visV,n_table,0.03f);
 
   vcl_cout<<"CPP MOG-------------:\n"
           <<"  mu0,sigma0,w0: "<<(float) mog[0]/255.0f<<", "<<(float) mog[1]/255.0f<<", "<<(float)mog[2]/255.0f<<vcl_endl

@@ -77,7 +77,7 @@ class boxm2_batch_update_pass1_functor
     float mean_obs =aux0/aux1;
 
     // compute appearance probability of observation
-    float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+    float PI=boxm2_processor_type<APM_TYPE>::type::prob_density(mog3_data_->data()[index], mean_obs);
 #if 0
     float vis=(*vis_img_)(i,j);
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
@@ -159,7 +159,7 @@ class boxm2_batch_update_pass2_functor
     float mean_obs = aux0/aux1;
 
     // compute appearance probability of observation
-    float PI=boxm2_data_traits<APM_TYPE>::processor::prob_density(mog3_data_->data()[index], mean_obs);
+    float PI=boxm2_processor_type<APM_TYPE>::type::prob_density(mog3_data_->data()[index], mean_obs);
 
 #if 0
     boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
@@ -283,7 +283,7 @@ class boxm2_batch_update_functor
 
         if (max_obs_seg_len < obs_seg_len/nrays[m]) max_obs_seg_len = obs_seg_len/nrays[m];
 
-        float PI = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog, mean_obs);
+        float PI = boxm2_processor_type<APM_TYPE>::type::prob_density(mog, mean_obs);
         float pre_i = out[m][0]/obs_seg_len; // mean pre
         pre.push_back(pre_i);
         float vis_i = out[m][1]/obs_seg_len; // mean vis
@@ -315,7 +315,7 @@ class boxm2_batch_update_functor
        alpha = alpha_max;
 
       // compute new appearance model
-      boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs,pre,vis,n_table_,0.03f);
+      boxm2_processor_type<APM_TYPE>::type::compute_app_model(mog,obs,pre,vis,n_table_,0.03f);
     }
     return true;
   }
@@ -391,8 +391,8 @@ class boxm2_batch_update_app_functor
     }
 
     // compute new appearance model
-    boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs, vis,n_table_,0.03f);
-    // was: boxm2_data_traits<APM_TYPE>::processor::compute_app_model(mog,obs, pre,vis,n_table_,0.03f);
+    boxm2_processor_type<APM_TYPE>::type::compute_app_model(mog,obs, vis,n_table_,0.03f);
+    // was: boxm2_processor_type<APM_TYPE>::type::compute_app_model(mog,obs, pre,vis,n_table_,0.03f);
 
     return true;
   }
@@ -455,7 +455,7 @@ class boxm2_batch_update_alpha_functor
 
       if (max_obs_seg_len < obs_seg_len/nrays[m]) max_obs_seg_len = obs_seg_len/nrays[m];
 
-      float PI = boxm2_data_traits<APM_TYPE>::processor::prob_density(mog, mean_obs);
+      float PI = boxm2_processor_type<APM_TYPE>::type::prob_density(mog, mean_obs);
       float pre_i = out[m][0]/obs_seg_len; // mean pre
       pre.push_back(pre_i);
       float vis_i = out[m][1]/obs_seg_len; // mean vis
