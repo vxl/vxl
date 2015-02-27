@@ -294,6 +294,26 @@ bool bgui_image_utils::construct_histogram()
 
   vcl_cout << "computed histogram on " << np*data_[0].size()
            << " pixels in " << t.real() << " milliseconds\n";
+
+  float area = hist_[0].area();
+  float low_perc = percent_limit_;
+#if 0
+    vcl_cout << "n pix low " << low_perc*area << '\n';
+#endif
+  if(low_perc*area < 100.0f)
+    low_perc = 100.0f/area;
+  if(low_perc >0.01f)
+    vcl_cout << "Warning too few pixels in image\n";
+  else
+    vcl_cout << "low limit based on " << low_perc*area << " pixels\n";
+  float low = hist_[0].value_with_area_below(low_perc);
+  float high = hist_[0].value_with_area_above(0.1f);
+  float mean = hist_[0].mean_vals(low, high);
+#if 0
+  vcl_cout << " Hist stats \n";
+  vcl_cout << "low\thigh\tmean\n";
+  vcl_cout << low << '\t' << high << '\t' << mean << '\n';
+#endif
   hist_valid_ = true;
   return true;
 }
