@@ -1466,6 +1466,7 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image)
     for (unsigned x = 0; x<w; x++)
     {
       float v = (image(x,y)-min_val)*range;
+      if(v>255.0f) v = 255.0f;//could have small round off above 255
       output(x,y) = (unsigned char)v;
     }
   return output;
