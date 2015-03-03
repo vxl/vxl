@@ -76,11 +76,6 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
 
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix(apm_id) )
-    {
-      data_type = apps[i];
-      foundDataType = true;
-    }
     else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix(apm_id) )
     {
       num_obs_type = apps[i];
