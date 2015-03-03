@@ -35,7 +35,8 @@ float render_expected_image( boxm2_scene_sptr & scene,
 
     //camera check
     if (cam->type_name()!= "vpgl_perspective_camera" &&
-        cam->type_name()!= "vpgl_generic_camera" ) {
+        cam->type_name()!= "vpgl_generic_camera" &&
+        cam->type_name()!= "vpgl_affine_camera") {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
@@ -148,7 +149,8 @@ float render_expected_image2( boxm2_scene_sptr & scene,
 
     //camera check
     if (cam->type_name()!= "vpgl_perspective_camera" &&
-        cam->type_name()!= "vpgl_generic_camera" ) {
+        cam->type_name()!= "vpgl_generic_camera" &&
+        cam->type_name()!= "vpgl_affine_camera" ) {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
@@ -260,7 +262,9 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
     float gpu_time=0.0f;
 
     //camera check
-    if (cam->type_name()!= "vpgl_perspective_camera" && cam->type_name() != "vpgl_generic_camera" ) {
+    if (cam->type_name()!= "vpgl_perspective_camera" &&
+        cam->type_name() != "vpgl_generic_camera" &&
+        cam->type_name() != "vpgl_affine_camera" ) {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
@@ -397,7 +401,9 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
     float gpu_time=0.0f;
 
     //camera check
-    if (cam->type_name()!= "vpgl_perspective_camera" && cam->type_name() != "vpgl_generic_camera" ) {
+    if (cam->type_name()!= "vpgl_perspective_camera" &&
+        cam->type_name() != "vpgl_generic_camera" &&
+        cam->type_name() != "vpgl_affine_camera") {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
@@ -502,7 +508,8 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
 
     //camera check
     if (cam->type_name()!= "vpgl_perspective_camera" &&
-        cam->type_name()!= "vpgl_generic_camera" ) {
+        cam->type_name()!= "vpgl_generic_camera" &&
+        cam->type_name()!= "vpgl_affine_camera" ) {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
@@ -604,7 +611,8 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
 
     //camera check
     if (cam->type_name()!= "vpgl_perspective_camera" &&
-        cam->type_name()!= "vpgl_generic_camera" ) {
+        cam->type_name()!= "vpgl_generic_camera" &&
+        cam->type_name()!= "vpgl_affine_camera" )  {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
@@ -763,7 +771,8 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
 
     //camera check
     if (cam->type_name()!= "vpgl_perspective_camera" &&
-        cam->type_name()!= "vpgl_generic_camera" ) {
+        cam->type_name()!= "vpgl_generic_camera" &&
+        cam->type_name()!= "vpgl_affine_camera" ) {
       vcl_cout<<"Cannot render with camera of type "<<cam->type_name()<<vcl_endl;
       return 0.0f;
     }
