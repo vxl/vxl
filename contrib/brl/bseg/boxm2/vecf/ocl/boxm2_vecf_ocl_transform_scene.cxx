@@ -8,12 +8,14 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_intersection.h>
+#include <boxm2/boxm2_data_traits.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <boxm2/ocl/algo/boxm2_ocl_expected_image_renderer.h>
 #include <boct/boct_bit_tree.h>
 
 #include <bocl/bocl_kernel.h>
@@ -27,21 +29,22 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
     vcl_vector<vcl_string> apps = scene->appearances();
     bool foundDataType = false;
     for (unsigned int i=0; i<apps.size(); ++i) {
-        if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+      boxm2_data_type app_type = boxm2_data_info::data_type(apps[i]);
+        if ( app_type == BOXM2_MOG3_GREY )
         {
-            app_type_ = apps[i];
+            app_type_ = BOXM2_MOG3_GREY;
             foundDataType = true;
             options=" -D MOG_TYPE_8 ";
         }
-        else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+        else if ( app_type == BOXM2_MOG3_GREY_16 )
         {
-            app_type_ = apps[i];
+            app_type_ = BOXM2_MOG3_GREY_16;
             foundDataType = true;
             options=" -D MOG_TYPE_16 ";
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"boxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        vcl_cout<<"ERROR: boxm2_vecf_ocl_transform_scene: unsupported appearance type" << vcl_endl;
         return false;
     }
     //set apptype size
@@ -57,13 +60,11 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
   : source_scene_(source_scene),
      target_scene_(target_scene),
      opencl_cache_(ocl_cache),
-     ni_(ni), nj_(nj)
+     ni_(ni), nj_(nj),
+     renderer_(target_scene, ocl_cache->get_device())
 {
   device_=opencl_cache_->get_device();
-  this->compile_trans_kernel();
   this->compile_trans_interp_kernel();
-  this->compile_rend_kernel();
-  this->compile_norm_kernel();
   this->compile_depth_kernel();
   this->compile_depth_norm_kernel();
   this->init_ocl_trans();
@@ -76,8 +77,6 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
 boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
 {
   delete trans_kern;
-  delete rend_kern_;
-  delete rend_norm_kern_;
   delete depth_kern_;
   delete depth_norm_kern_;
   //opencl_cache_->clear_cache();
@@ -233,10 +232,15 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
     return false;
   }
 
-  if(app_type_ == "boxm2_mog3_grey")
+  if(app_type_ == BOXM2_MOG3_GREY) {
     mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,false);
-  else if(app_type_ == "boxm2_mog3_grey_16")
+  }
+  else if(app_type_ == BOXM2_MOG3_GREY_16) {
     mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(target_scene_, *iter_blk_target,0,false);
+  }
+  else if (app_type_ == BOXM2_GAUSS_RGB) {
+    mog_target_ = opencl_cache_->get_data<BOXM2_GAUSS_RGB>(target_scene_, *iter_blk_target,0,false);
+  }
   else {
     vcl_cout << "Unknown appearance type for target_scene " << app_type_ << '\n';
     return false;
@@ -273,54 +277,6 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_kernel()
   src_paths.push_back(vecf_source_dir + "transform_scene_with_interpolation.cl");
   this->trans_interp_kern = new bocl_kernel();
   return trans_interp_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "transform_scene_interpolate", options, "trans_interp_scene");
-}
-
-bool boxm2_vecf_ocl_transform_scene::compile_rend_kernel()
-{
-  vcl_string options;
-  // sets apptypesize_ and app_type
-  get_scene_appearance(source_scene_, options);
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  src_paths.push_back(source_dir + "scene_info.cl");
-  src_paths.push_back(source_dir + "pixel_conversion.cl");
-  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-  src_paths.push_back(source_dir + "backproject.cl");
-  src_paths.push_back(source_dir + "statistics_library_functions.cl");
-  src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-  src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
-  src_paths.push_back(source_dir + "expected_functor.cl");
-  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
-  options += "-D RENDER ";
-  options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
-  
-  this->rend_kern_ = new bocl_kernel();
-  bool good = rend_kern_->create_kernel( &device_->context(),
-       device_->device_id(),
-       src_paths,
-       "render_bit_scene",   //kernel name
-       options,              //options
-       "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)  
-  return good;
-}
-bool boxm2_vecf_ocl_transform_scene::compile_norm_kernel()
-{
-  vcl_string options;
-  // sets apptypesize_ and app_type
-  get_scene_appearance(source_scene_, options);
-  options += "-D RENDER ";
-  vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
-  src_paths.push_back(source_dir + "pixel_conversion.cl");
-  src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-  rend_norm_kern_ = new bocl_kernel();
-  bool good = rend_norm_kern_->create_kernel( &device_->context(),
-     device_->device_id(),
-     src_paths,
-     "normalize_render_kernel",   //kernel name
-     options,              //options
-     "boxm2 opencl norm image"); //kernel identifier (for error checking)
-  return good;
 }
 
 bool boxm2_vecf_ocl_transform_scene::compile_depth_kernel()
@@ -882,12 +838,17 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    
    blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );   
    blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-   if(app_type_ == "boxm2_mog3_grey")
+   if(app_type_ == BOXM2_MOG3_GREY) {
      mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk_source,0,true);
-   else if(app_type_ == "boxm2_mog3_grey_16")
+   }
+   else if(app_type_ == BOXM2_MOG3_GREY_16) {
      mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk_source,0,true);
+   }
+   else if (app_type_ == BOXM2_GAUSS_RGB) {
+     mog_source = opencl_cache_->get_data<BOXM2_GAUSS_RGB>(source_scene_, *iter_blk_source,0,true);
+   }
    else {
-     vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
+     vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
      return false;
    }
    //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
@@ -922,7 +883,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
        return false;
     }
    int status = clFinish(queue_);
-   bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL FAILED: " + error_to_string(status));
+   bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL (INTERP) FAILED: " + error_to_string(status));
    if(!good_kern)
      return false;
    mog_target_->read_to_buffer(queue_);
@@ -964,102 +925,12 @@ bool boxm2_vecf_ocl_transform_scene::
 render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float>& expected_img,
                         vil_image_view<float>& vis_img)
 {
-  // It is assumed that this function will be called multiple times
-  // where the scene changes between calls and possibly the camera
-  // It is also assumed that the scene is one block
-  // and the data is already avaiable in the cache and required buffers
-  // have been allocated by a previous function call.
-  vpgl_camera_double_sptr & nccam = const_cast<vpgl_camera_double_sptr &>(cam);
 
-  // intialize the render image planes
-  vcl_fill(img_buff_, img_buff_ + cl_ni_*cl_nj_, 0.0f);
-  vcl_fill(vis_buff_, vis_buff_ + cl_ni_*cl_nj_, 1.0f);
-  vcl_fill(max_omega_buff_, max_omega_buff_ + cl_ni_*cl_nj_, 0.0f);
-  exp_image_->write_to_buffer(queue_);
-  vis_image_->write_to_buffer(queue_);
-  max_omega_image_->write_to_buffer(queue_);
-
-  //camera check
-  const vcl_string cam_type( cam->type_name() );
-  if (cam_type != "vpgl_perspective_camera" &&
-      cam_type != "vpgl_generic_camera" &&
-      cam_type != "vpgl_affine_camera" ) {
-    vcl_cout<<"Cannot render with camera of type " << cam_type << vcl_endl;
-    return false;
-  }
-
-  // assumes that the camera may be changing between calls
-  boxm2_ocl_camera_converter::compute_ray_image( device_, queue_, nccam, cl_ni_, cl_nj_, ray_o_buff_, ray_d_buff_, 0, 0, false);
-  ray_o_buff_->write_to_buffer(queue_);
-  ray_d_buff_->write_to_buffer(queue_);
-
-  int statusw = clFinish(queue_);
-  bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
-  if(!good_write) {
-    return false;
-  }
-
-  rend_kern_->set_arg( blk_info_target_.ptr() );
-  rend_kern_->set_arg( blk_target_ );
-  rend_kern_->set_arg( alpha_target_ );
-  rend_kern_->set_arg( mog_target_ );
-  rend_kern_->set_arg( ray_o_buff_.ptr() );
-  rend_kern_->set_arg( ray_d_buff_.ptr() );
-  rend_kern_->set_arg( tnearfar_mem_ptr_.ptr() );
-  rend_kern_->set_arg( exp_image_.ptr() );
-  rend_kern_->set_arg( exp_img_dim_.ptr());
-  rend_kern_->set_arg( output_.ptr() );
-  rend_kern_->set_arg( lookup_.ptr() );
-  rend_kern_->set_arg( vis_image_.ptr() );
-  rend_kern_->set_arg( max_omega_image_.ptr() );
-
-  //local tree , cumsum buffer, imindex buffer
-  rend_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_uchar16) );
-  rend_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*10*sizeof(cl_uchar) );
-  rend_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_int) );
-
-  //execute kernel
-  vcl_size_t gThreads[] = {cl_ni_,cl_nj_};
-  rend_kern_->execute(queue_, 2, lthreads_, gThreads);
-  statusw = clFinish(queue_);
-  bool good_run = check_val(statusw, CL_SUCCESS, "RENDER KERNEL FAILED " + error_to_string(statusw));
-  if (!good_run) {
-    return false;
-  }
-
-  rend_norm_kern_->set_arg( exp_image_.ptr() );
-  rend_norm_kern_->set_arg( vis_image_.ptr() );
-  rend_norm_kern_->set_arg( exp_img_dim_.ptr() );
-  rend_norm_kern_->execute( queue_, 2, lthreads_, gThreads);
-  statusw = clFinish(queue_);
-  good_run = check_val(statusw, CL_SUCCESS, "RENDER NORM KERNEL FAILED " + error_to_string(statusw));
-  if (!good_run) {
-    return false;
-  }
-
-  exp_image_->read_to_buffer(queue_);
-  vis_image_->read_to_buffer(queue_);
-  statusw = clFinish(queue_);
-  bool good_read = check_val(statusw, CL_SUCCESS, "READ OF IMAGE BUFFERS FAILED " + error_to_string(statusw));
-  if (!good_read) {
-    return false;
-  }
-
-  rend_kern_->clear_args();
-  rend_norm_kern_->clear_args();
-
-  expected_img.set_size(ni_, nj_);
-  expected_img.fill(0.0f);
-  for (unsigned r=0;r<nj_;r++)
-    for (unsigned c=0;c<ni_;c++)
-      expected_img(c,r)=img_buff_[r*cl_ni_+c];
-  vis_img.set_size(ni_, nj_);
-  vis_img.fill(0.0f);
-  for (unsigned r=0;r<nj_;r++)
-    for (unsigned c=0;c<ni_;c++)
-      vis_img(c,r)=vis_buff_[r*cl_ni_+c];
-
-  return true;
+  bool status = renderer_.render(cam, ni_, nj_, opencl_cache_);
+  renderer_.get_last_vis(vis_img);
+  renderer_.get_last_rendered(expected_img);
+  
+  return status;
 }
 
 bool boxm2_vecf_ocl_transform_scene::render_scene_depth(vpgl_camera_double_sptr const & cam,

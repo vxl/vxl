@@ -16,6 +16,7 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
+#include <boxm2/ocl/algo/boxm2_ocl_expected_image_renderer.h>
 //: Map a scene with Euclidean and anisotropic scale transforms.
 // the input transform is the inverse so that the target scene voxels
 // are mapped backwards to extract the data from the source
@@ -69,11 +70,11 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
  private:
   bool init_render_args();
 
+  boxm2_ocl_expected_image_renderer renderer_;
+
  protected:
   bool compile_trans_kernel();
   bool compile_trans_interp_kernel();
-  bool compile_rend_kernel();
-  bool compile_norm_kernel();
   bool compile_depth_kernel();
   bool compile_depth_norm_kernel();
   bool init_ocl_trans();
@@ -85,7 +86,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   boxm2_scene_sptr source_scene_;
   bocl_device_sptr device_;
   int apptypesize_;//size of the appearance model in bytes
-  vcl_string app_type_; //type of appearance
+  boxm2_data_type app_type_; //type of appearance
 
   //transform kernels and args 
   bocl_kernel * trans_kern;
@@ -140,8 +141,6 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   cl_float* ray_directions_;
   bocl_mem_sptr ray_o_buff_;
   bocl_mem_sptr ray_d_buff_;
-  bocl_kernel * rend_kern_;
-  bocl_kernel * rend_norm_kern_;
   bocl_kernel * depth_kern_;
   bocl_kernel * depth_norm_kern_;
 
