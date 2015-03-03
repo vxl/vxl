@@ -186,6 +186,53 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<doubl
   return vis_order;
 }
 
+vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_affine_camera<double>* cam)
+{
+  vcl_vector<boxm2_block_id> vis_order;
+  if (!cam) {
+    vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
+    return vis_order;
+  }
+  vgl_homg_point_3d<double> cam_center_ideal = cam->camera_center();
+  vgl_vector_3d<double> ray_dir(cam_center_ideal.x(), cam_center_ideal.y(), cam_center_ideal.z());
+
+  vgl_box_3d<int> idx_bbox;
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks_.begin();
+       iter != blocks_.end(); ++iter) {
+    boxm2_block_id const& id = iter->first;
+    idx_bbox.add(vgl_point_3d<int>(id.i_, id.j_, id.k_));
+  }
+  int closest_i = ray_dir.x() > 0? idx_bbox.min_x() : idx_bbox.max_x();
+  int closest_j = ray_dir.y() > 0? idx_bbox.min_y() : idx_bbox.max_y();
+  int closest_k = ray_dir.z() > 0? idx_bbox.min_z() : idx_bbox.max_z();
+
+  // visibility ordering is based on manhattan distance of block index from that of closest block.
+  vcl_vector<boxm2_dist_id_pair> manhattan_distances;
+  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks_.begin();
+       iter != blocks_.end(); ++iter) 
+  {
+    // dec: we would perform a visibility test here if we had ni,nj.
+    //if(!this->is_block_visible(iter->second,*cam,ni,nj))
+    //  continue;
+    
+    int manhattan_distance = vcl_abs(iter->first.i_ - closest_i) + 
+                             vcl_abs(iter->first.j_ - closest_j) +
+                             vcl_abs(iter->first.k_ - closest_k);
+
+    manhattan_distances.push_back( boxm2_dist_id_pair(manhattan_distance, iter->first) );
+  }
+
+    //sort distances
+    vcl_sort(manhattan_distances.begin(), manhattan_distances.end());
+    //put blocks in "vis_order"
+    vcl_vector<boxm2_dist_id_pair>::iterator di;
+    for (di = manhattan_distances.begin(); di != manhattan_distances.end(); ++di) {
+        vis_order.push_back(di->id_);
+    }
+    return vis_order;
+}
+
+
 vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_perspective_camera<double>* cam, double dist)
 {
   vcl_vector<boxm2_block_id> vis_order;
@@ -218,10 +265,6 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks_opt(vpgl_perspective_came
         vcl_cout << "null camera in boxm2_scene::get_vis_blocks(.)\n";
         return vis_order;
     }
-    // create a copy of cam to pass to is_block_visible.  
-    // Maybe we should overload is_block_visible to directly accept a vpgl_perspective_camera* ?
-    vpgl_camera_double_sptr cam_sptr(new vpgl_perspective_camera<double>(*cam));
-
     //grab visibility order from camera center
     vgl_point_3d<double> cam_center = cam->camera_center();
     //Map of distance, id
@@ -232,7 +275,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks_opt(vpgl_perspective_came
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
     for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) 
     {
-        if(!this->is_block_visible(iter->second,cam_sptr,ni,nj))
+        if(!this->is_block_visible(iter->second,*cam,ni,nj))
             continue;
         vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
         vgl_vector_3d<double>&   blk_dim = (iter->second).sub_block_dim_;
@@ -615,7 +658,7 @@ bool boxm2_scene::has_data_type(vcl_string data_type)
   return false;
 }
 
-bool boxm2_scene::is_block_visible(boxm2_block_metadata & data, vpgl_camera_double_sptr & cam, unsigned int ni, unsigned int nj )
+bool boxm2_scene::is_block_visible(boxm2_block_metadata & data, vpgl_camera<double> const& cam, unsigned int ni, unsigned int nj )
 {
     vgl_box_3d<double> bbox = data.bbox();
     vcl_vector<vgl_point_3d<double> > vertices =  bbox.vertices() ;
@@ -623,7 +666,7 @@ bool boxm2_scene::is_block_visible(boxm2_block_metadata & data, vpgl_camera_doub
     for(unsigned int i = 0 ; i < vertices.size(); i++)
     {
         double u,v;
-        cam->project(vertices[i].x(),vertices[i].y(),vertices[i].z(),u,v);
+        cam.project(vertices[i].x(),vertices[i].y(),vertices[i].z(),u,v);
         projectionbox.add(vgl_point_2d<double>(u,v) );
     }
     vgl_box_2d<double> imagebbox(0,ni,0,nj);

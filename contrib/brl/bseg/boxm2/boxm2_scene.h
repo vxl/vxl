@@ -22,6 +22,7 @@
 //vpgl camera
 #include <vpgl/vpgl_generic_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_affine_camera.h>
 
 
 //: block info that can be easily made into a buffer and sent to gpu
@@ -86,11 +87,14 @@ class boxm2_scene : public vbl_ref_count
     //: return a vector of block ids in visibility order
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_generic_camera<double>* cam, double dist = -1.0);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_perspective_camera<double>* cam, double dist = -1.0);
+    vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_affine_camera<double>* cam);
     vcl_vector<boxm2_block_id> get_vis_blocks(vpgl_camera_double_sptr & cam, double dist = -1.0) {
       if ( cam->type_name() == "vpgl_generic_camera" )
         return this->get_vis_blocks( (vpgl_generic_camera<double>*) cam.ptr(), dist );
       else if ( cam->type_name() == "vpgl_perspective_camera" )
         return this->get_vis_blocks( (vpgl_perspective_camera<double>*) cam.ptr(), dist );
+      else if ( cam->type_name() == "vpgl_affine_camera" )
+        return this->get_vis_blocks( (vpgl_affine_camera<double>*) cam.ptr() );
       else
         vcl_cout<<"boxm2_scene::get_vis_blocks doesn't support camera type "<<cam->type_name()<<vcl_endl;
       //else return empty
@@ -212,7 +216,7 @@ class boxm2_scene : public vbl_ref_count
     int num_illumination_bins_;
     int version_;
 
-    bool is_block_visible(boxm2_block_metadata & data, vpgl_camera_double_sptr & cam, unsigned ni, unsigned nj );
+    bool is_block_visible(boxm2_block_metadata & data, vpgl_camera<double> const& cam, unsigned ni, unsigned nj );
 };
 
 
