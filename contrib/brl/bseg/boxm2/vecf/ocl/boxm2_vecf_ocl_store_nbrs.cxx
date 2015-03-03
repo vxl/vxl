@@ -32,7 +32,7 @@ bool boxm2_vecf_ocl_store_nbrs::get_scene_appearance( boxm2_scene_sptr scene,
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"boxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        vcl_cout<<"ERROR: boxm2_vecf_ocl_store_nbrs: unsupported appearance type"<<vcl_endl;
         return false;
     }
     //set apptype size
@@ -111,10 +111,12 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   blk_info_source  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
   blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   
-  if(app_type_ == "boxm2_mog3_grey")
+  if(app_type_ == "boxm2_mog3_grey") {
     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk,0,true);
-  else if(app_type_ == "boxm2_mog3_grey_16")
+  }
+  else if(app_type_ == "boxm2_mog3_grey_16") {
     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk,0,true);
+  }
   else {
     vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
     return false;
