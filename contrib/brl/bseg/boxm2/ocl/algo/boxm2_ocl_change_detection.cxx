@@ -65,7 +65,7 @@ bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr
         }
     }
     if (!foundDataType) {
-        vcl_cout<<"boxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
+        vcl_cout<<"yyboxm2_ocl_change_detection_process ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
         return false;
     }
     if (!foundNumObsType) {
