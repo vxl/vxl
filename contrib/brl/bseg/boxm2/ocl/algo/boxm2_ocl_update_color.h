@@ -27,6 +27,17 @@ class boxm2_ocl_update_color
                               bool                     update_alpha=true,
                               vcl_size_t               startI = 0,
                               vcl_size_t               startJ = 0); 
+
+    static bool update_color(boxm2_scene_sptr         scene,
+                             bocl_device_sptr         device,
+                             boxm2_opencl_cache_sptr  opencl_cache,
+                             vpgl_camera_double_sptr  cam,
+                             vil_image_view_base_sptr img,
+                             vcl_string               in_identifier="",
+                             vil_image_view_base_sptr mask_img=vil_image_view_base_sptr(),
+                             bool                     update_alpha=true,
+                             vcl_size_t               startI=0,
+                             vcl_size_t               startJ=0);
     
   private:
     //compile kernels and place in static map

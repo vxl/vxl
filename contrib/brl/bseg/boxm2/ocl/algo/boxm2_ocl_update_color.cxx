@@ -28,6 +28,26 @@
 //: Map of kernels should persist between process executions
 vcl_map<vcl_string,vcl_vector<bocl_kernel*> > boxm2_ocl_update_color::kernels_;
 
+bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
+                                          bocl_device_sptr         device,
+                                          boxm2_opencl_cache_sptr  opencl_cache,
+                                          vpgl_camera_double_sptr  cam,
+                                          vil_image_view_base_sptr img,
+                                          vcl_string               in_identifier,
+                                          vcl_string    mask_filename,
+                                          bool                     update_alpha,
+                                          vcl_size_t               startI,
+                                          vcl_size_t               startJ)
+{
+  vil_image_view_base_sptr mask_img;
+  if (mask_filename!="")
+  {
+    vcl_cout<<"MASK FOUND"<<vcl_endl;
+    mask_img=vil_load(mask_filename.c_str());
+  }
+  return update_color(scene, device, opencl_cache, cam, img, in_identifier, mask_img, update_alpha, startI, startJ);
+}
+
 //Main public method, updates color model
 bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
                                           bocl_device_sptr         device,
@@ -35,7 +55,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
                                           vpgl_camera_double_sptr  cam,
                                           vil_image_view_base_sptr img,
                                           vcl_string               in_identifier,
-                                          vcl_string               mask_filename,
+                                          vil_image_view_base_sptr mask_img,
                                           bool                     update_alpha,
                                           vcl_size_t               startI,
                                           vcl_size_t               startJ)
@@ -213,10 +233,8 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
       continue;
     }
     vis_image->read_to_buffer(queue);
-    if (mask_filename!="")
-    {
-      vcl_cout<<"MASK FOUND"<<vcl_endl;
-      vil_image_view_base_sptr mask_img=vil_load(mask_filename.c_str());
+    if (mask_img) {
+      // boolean mask
       if (vil_image_view<unsigned char> * mask_char
           =dynamic_cast<vil_image_view<unsigned char> * >(mask_img.ptr()))
       {
@@ -234,6 +252,34 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
             }
             ++count;
           }
+      }
+      else if (vil_image_view<float> * mask_float = 
+               dynamic_cast<vil_image_view<float> * >(mask_img.ptr()) ) {
+        int count = 0;
+        for (unsigned int j=0;j<cl_nj;++j) {
+          for (unsigned int i=0;i<cl_ni;++i) {
+            if (i<mask_float->ni() && j<mask_float->nj()  )
+            {
+              float mask_val = (*mask_float)(i,j);
+              if (mask_val < 0.0f) { mask_val = 0.0f;}
+              if (mask_val > 1.0f) { mask_val = 1.0f;}
+
+              if ( mask_val == 0 )
+              {
+                input_buff[numFloats*count+0]=-1.0f;
+                vis_buff[count] =-1.0f;
+              }
+              else {
+                vis_buff[count] = mask_val;
+              }
+              ++count;
+            }
+          }
+        }
+      }
+      else {
+        vcl_cerr << "ERROR: boxm2_ocl_update_color: upsupported mask type! " << vcl_endl;
+        return false;
       }
     }
     in_image->write_to_buffer(queue);
