@@ -17,10 +17,13 @@ class boxm2_ocl_expected_image_renderer
     bool get_last_rendered(vil_image_view<float> &img);
     bool get_last_vis(vil_image_view<float> &vis_img);
 
+    bool is_rgb() const {return num_planes_ > 1;}
+
   private:
     boxm2_scene_sptr scene_;
     bocl_device_sptr device_;
     vcl_string data_type_;
+    int num_planes_;
     int apptypesize_;
     vcl_vector<bocl_kernel*> kernels_;
     bool compile_kernels(bocl_device_sptr device, vcl_vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type);
