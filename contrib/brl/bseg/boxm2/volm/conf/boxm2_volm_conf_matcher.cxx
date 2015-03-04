@@ -73,10 +73,10 @@ int boxm2_volm_conf_matcher::conf_match_cpp(vcl_string const& index_name, bool c
     vcl_stringstream index_file_pre;
     index_file_pre << index_folder_ << "/conf_index_tile_" << tile_id_;
     vcl_string bin_file_name = index_file_pre.str() + "_" + leaf->get_string() + "_" + index_name + ".bin";
-    if (!vul_file::exists(bin_file_name)) {
-      vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: can not find index binary file " << bin_file_name << " for leaf " << l_idx << " and index name " << index_name << "!\n";
-      return -1;
-    }
+    //if (!vul_file::exists(bin_file_name)) {
+    //  vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: can not find index binary file " << bin_file_name << " for leaf " << l_idx << " and index name " << index_name << "!\n";
+    //  return -1;
+    //}
     vcl_cout << "loading index from: " << bin_file_name << " using " << buffer_capacity_ << " GB buffer" << vcl_flush << vcl_endl;
     volm_conf_buffer<volm_conf_object> ind(buffer_capacity_);
     if (!ind.initialize_read(bin_file_name)) {
@@ -202,10 +202,10 @@ int boxm2_volm_conf_matcher::conf_match_cpp_no_candidate(vcl_string& index_name,
     vcl_stringstream index_file_pre;
     index_file_pre << index_folder_ << "/conf_index_tile_" << tile_id_;
     vcl_string bin_file_name = index_file_pre.str() + "_" + leaf->get_string() + "_" + index_name + ".bin";
-    if (!vul_file::exists(bin_file_name)) {
-      vcl_cerr << "In boxm2_volm_conf_matcher::conf_matcher: can not find index binary file " << bin_file_name << " for leaf " << l_idx << " and index name " << index_name << "!\n";
-      return -1;
-    }
+    //if (!vul_file::exists(bin_file_name)) {
+    //  vcl_cerr << "in boxm2_volm_conf_matcher::conf_match_cpp_no_candidate: can not find index binary file " << bin_file_name << " for leaf " << l_idx << " and index name " << index_name << "!\n";
+    //  return -1;
+    //}
     vcl_cout << "loading index from: " << bin_file_name << " using " << buffer_capacity_ << " GB buffer" << vcl_flush << vcl_endl;
     volm_conf_buffer<volm_conf_object> ind(buffer_capacity_);
     if (!ind.initialize_read(bin_file_name)) {
@@ -226,7 +226,7 @@ int boxm2_volm_conf_matcher::conf_match_cpp_no_candidate(vcl_string& index_name,
     unsigned cnt = 0;
     while ( leaf->hyps_->get_next(0,1,h_pt))
     {
-      if (cnt++/1000 == 0)  vcl_cout << '.' << vcl_flush << vcl_endl;
+      if (cnt++/1000 == 0)  vcl_cout << '.' << vcl_flush;
       // get index from index database
       vcl_vector<volm_conf_object> values;
       if (!ind.get_next(values)) {

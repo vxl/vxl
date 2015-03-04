@@ -69,10 +69,10 @@ int main(int argc, char** argv)
   volm_conf_buffer<volm_conf_object> ind(buffer_capacity());
   vcl_string bin_file_name;
   bin_file_name = index_file_pre.str() + "_" + leaf->get_string() + "_conf_2d.bin";
-  if (!vul_file::exists(bin_file_name)) {
-    vcl_cerr << "ERROR: can not find index binary file: " << bin_file_name << '\n';
-    return 1;
-  }
+  //if (!vul_file::exists(bin_file_name)) {
+  //  vcl_cerr << "ERROR: can not find index binary file: " << bin_file_name << '\n';
+  //  return 1;
+  //}
   if (!ind.initialize_read(bin_file_name)) {
     vcl_cerr << "ERROR: initialize reading binary file failed -- " << bin_file_name << '\n';
     return 1;

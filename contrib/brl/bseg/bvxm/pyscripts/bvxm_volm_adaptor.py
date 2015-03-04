@@ -275,7 +275,12 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
   bvxm_batch.set_input_string(5, osm_category_name);
   bvxm_batch.set_input_string(6,vsol_bin_filename)
   status = bvxm_batch.run_process();
-  return status;
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_img = dbvalue(id,type)
+  else:
+    out_img = 0
+  return out_img;
 
 ## process to project DEM images to a satellite image given the satellite viewpoint
 ## modified to also input ortho camera (instead of a rational camera) so that DEMs or height maps can be projected onto any ortho image - just pass the ortho cam for sat_cam

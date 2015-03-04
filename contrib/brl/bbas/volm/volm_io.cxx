@@ -1156,15 +1156,13 @@ bool volm_io::read_building_file(vcl_string file, vcl_vector<vcl_pair<vgl_polygo
   vcl_ifstream ifs(file.c_str());
   if (!ifs.is_open())
     return false;
-
   while (!ifs.eof()) {
     // each line is one building
     double height, volume, area, confidence, cent_lon, cent_lat, lon, lat;
-    char buffer[10000];
-    ifs.getline(buffer, 10000);
+    char buffer[100000];
+    ifs.getline(buffer, 100000);
     vcl_string temp_buf(buffer);
     if (ifs.eof()) break;
-
     char *tok = vcl_strtok(buffer, ",");
     vcl_stringstream th(tok); th >> height;
 
@@ -1223,8 +1221,8 @@ bool volm_io::read_sme_file(vcl_string file, vcl_vector<vcl_pair<vgl_point_2d<do
     // each line is one object
     vcl_string name, type;
     double lon, lat;
-    char buffer[10000];
-    ifs.getline(buffer, 10000);
+    char buffer[100000];
+    ifs.getline(buffer, 100000);
     vcl_string temp_buf(buffer);
     if (ifs.eof()) break;
 

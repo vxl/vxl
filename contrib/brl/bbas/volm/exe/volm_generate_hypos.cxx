@@ -173,8 +173,9 @@ int main(int argc,  char** argv)
     vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
     vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
     poly.print(vcl_cout);
-    vcl_vector<volm_tile> tiles = volm_tile::generate_p1b_wr_tiles(world_id());
-    if (!tiles.size()) {  
+    vcl_vector<volm_tile> tiles;
+    if (!volm_tile::generate_tiles(world_id(),tiles))
+    {  
       vcl_cerr << "Unknown world id: " << world_id() << vcl_endl;
       return volm_io::EXE_ARGUMENT_ERROR;
     }
@@ -188,7 +189,7 @@ int main(int argc,  char** argv)
 
     double meter_to_sec = volm_io_tools::meter_to_seconds(tiles[i].lat_, tiles[i].lon_);
 
-    float size = 0.1f;  // in seconds, set a fixed size for the leaves
+    float size = 0.05f;  // in seconds, set a fixed size for the leaves
     volm_geo_index_node_sptr hyp_root = volm_geo_index::construct_tree(tiles[i], (float)size, poly);
     // write the geo index and the hyps
     if (region_name().compare("") == 0 && !non_building()) {

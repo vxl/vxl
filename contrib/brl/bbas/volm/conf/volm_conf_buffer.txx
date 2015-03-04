@@ -73,10 +73,10 @@ bool volm_conf_buffer<T>::initialize_write(vcl_string const& filename)
 template <class T>
 bool volm_conf_buffer<T>::initialize_read(vcl_string const& filename)
 {
-  if (!vul_file::exists(filename))  {
-    vcl_cerr << "In volm_conf_buffered_index: can not find " << filename << " for reading!\n";
-    return false;
-  }
+  //if (!vul_file::exists(filename))  {
+  //  vcl_cerr << "In volm_conf_buffered_index: can not find " << filename << " for reading!\n";
+  //  return false;
+  //}
   file_name_ = filename;
   m_ = READ;
   // clean the output file stream

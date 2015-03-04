@@ -32,7 +32,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> osm_in("-osm", "osm binary file contains all volm_osm objects", "");
   vul_arg<vcl_string> in_poly("-poly", "region polygon as kml, only the hypos inside this will be added", "");
   vul_arg<double> min_size("-min-size", "minimum leaf size (in degree), note the root corresponds to a tile with 1 degree in size", 0.5);
-  vul_arg<vcl_string> world_str("-world", "id of the region of interests(1-5)", "");
+  vul_arg<unsigned> world_id("-world", "id of the region of interests(1-5)", 100);
   vul_arg<unsigned> tile_id("-tile", "id of the tile", 100);
   vul_arg<vcl_string> out_pre("-out_pre", "output file folder with file separator at the end", "");
   vul_arg<bool> read("-read", "option to read created geo_index2_osm and osm statistics for current tile", false);
@@ -42,28 +42,15 @@ int main(int argc, char** argv)
 
   if (read()) {
     // check input
-    if(osm_in().compare("") == 0 || out_pre().compare("") == 0 || tile_id() == 100 || world_str().compare("") == 0)
+    if(osm_in().compare("") == 0 || out_pre().compare("") == 0 || tile_id() == 100 || world_id() == 100)
     {
       vul_arg_display_usage_and_exit();
       return volm_io::EXE_ARGUMENT_ERROR;
     }
 
-    // from world name to world_id
-    unsigned world_id;
-    if (world_str() == "desert")            world_id = 1;
-    else if (world_str() == "coast")        world_id = 2;
-    else if (world_str() == "chile")        world_id = 1;
-    else if (world_str() == "india")        world_id = 2;
-    else if (world_str() == "jordan")       world_id = 3;
-    else if (world_str() == "philippines")  world_id = 4;
-    else if (world_str() == "taiwan")       world_id = 5;
-    else {
-      vcl_cout << "ERROR: unknown world name: " << world_str() << vcl_endl;
-      return volm_io::EXE_ARGUMENT_ERROR;
-    }
     // read and construct tree
     vcl_stringstream file_name;
-    file_name << out_pre() << "geo_index2_wr" << world_id << "_tile_" << tile_id() << ".txt";
+    file_name << out_pre() << "geo_index2_wr" << world_id() << "_tile_" << tile_id() << ".txt";
     if (!vul_file::exists(file_name.str())) {
       vcl_cout << "ERROR: can not find geo_index2 txt: " << file_name.str() << vcl_endl;
       return volm_io::EXE_ARGUMENT_ERROR;
@@ -75,7 +62,7 @@ int main(int argc, char** argv)
     volm_geo_index2::get_leaves(root, leaves);
     // load the content for valid leaves
     vcl_stringstream file_name_pre;
-    file_name_pre << out_pre() << "/geo_index2_wr" << world_id << "_tile_" << tile_id();
+    file_name_pre << out_pre() << "/geo_index2_wr" << world_id() << "_tile_" << tile_id();
     for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
       vcl_string bin_file = leaves[l_idx]->get_label_name(file_name_pre.str(), "osm");
       if (!vul_file::exists(bin_file))
@@ -92,9 +79,9 @@ int main(int argc, char** argv)
     volm_osm_objects osm_objs(osm_in());
     if (is_kml()) {
         vcl_stringstream kml_pts, kml_roads, kml_regions;
-        kml_pts << out_pre() << "/p1b_wr" << world_id << "_tile_" << tile_id() << "_osm_pts.kml";
-        kml_roads << out_pre() << "/p1b_wr" << world_id << "_tile_" << tile_id() << "_osm_roads.kml";
-        kml_regions << out_pre() << "/p1b_wr" << world_id << "_tile_" << tile_id() << "_osm_regions.kml";
+        kml_pts << out_pre() << "/geo_index2_wr" << world_id() << "_tile_" << tile_id() << "_osm_pts.kml";
+        kml_roads << out_pre() << "/geo_index2_wr" << world_id() << "_tile_" << tile_id() << "_osm_roads.kml";
+        kml_regions << out_pre() << "/geo_index2_wr" << world_id() << "_tile_" << tile_id() << "_osm_regions.kml";
         osm_objs.write_pts_to_kml(kml_pts.str());
         osm_objs.write_lines_to_kml(kml_roads.str());
         osm_objs.write_polys_to_kml(kml_regions.str());
@@ -132,29 +119,17 @@ int main(int argc, char** argv)
 
   // check input
   if (osm_in().compare("") == 0 || out_pre().compare("") == 0 ||
-      in_poly().compare("") == 0 || tile_id() == 100 || world_str().compare("") == 0)
+      in_poly().compare("") == 0 || tile_id() == 100 || world_id() == 100)
   {
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  // parse world name
-  unsigned world_id;
-  if (world_str() == "desert")            world_id = 1;
-  else if (world_str() == "coast")        world_id = 2;
-  else if (world_str() == "chile")        world_id = 1;
-  else if (world_str() == "india")        world_id = 2;
-  else if (world_str() == "jordan")       world_id = 3;
-  else if (world_str() == "philippines")  world_id = 4;
-  else if (world_str() == "taiwan")       world_id = 5;
-  else {
-    vcl_cout << "ERROR: unknown world name: " << world_str() << '\n';
-    return volm_io::EXE_ARGUMENT_ERROR;
-  }
+  
   vcl_stringstream log;
   vcl_stringstream log_file;
-  log_file << out_pre() << "/log_wr" << world_id << "_tile_" << tile_id() << ".xml";
+  log_file << out_pre() << "/log_wr" << world_id() << "_tile_" << tile_id() << ".xml";
   // create volm_geo_index2
-  vcl_cout << " =========== Start to create geo_index2_osm for world " << world_id << " on tile " << tile_id()
+  vcl_cout << " =========== Start to create geo_index2_osm for world " << world_id() << " on tile " << tile_id()
            << " ===============" << vcl_endl;
   vcl_cout << " \t leaf size = " << min_size() << " degree" << vcl_endl;
   if (!vul_file::exists(in_poly())) {
@@ -167,21 +142,13 @@ int main(int argc, char** argv)
 
   // generate tiles
   vcl_vector<volm_tile> tiles;
-  if (world_str() == "desert")      tiles = volm_tile::generate_p1_wr1_tiles();
-  else if (world_str() == "coast")  tiles = volm_tile::generate_p1_wr2_tiles();
-  else if (world_str() == "chile")  tiles = volm_tile::generate_p1b_wr1_tiles();
-  else if (world_str() == "india")  tiles = volm_tile::generate_p1b_wr2_tiles();
-  else if (world_str() == "jordan") tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (world_str() == "philippines")  tiles = volm_tile::generate_p1b_wr4_tiles();
-  else if (world_str() == "taiwan") tiles = volm_tile::generate_p1b_wr5_tiles();
-  else {
-    log << "ERROR: unknown roi world name: " << world_str() << '\n';
+  if (!volm_tile::generate_tiles(world_id(),tiles))
+  {  
+    log << "ERROR: unknown roi world id: " << world_id() << '\n';
     error_report(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
   }
-
-  
   if (tile_id() > tiles.size()) {
-    log << "ERROR: given tile id " << tile_id() << " exceeds total number of tiles in world " << world_id << '\n';
+    log << "ERROR: given tile id " << tile_id() << " exceeds total number of tiles in world " << world_id() << '\n';
     error_report(log_file.str(), log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
@@ -190,13 +157,13 @@ int main(int argc, char** argv)
   volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_osm_object_ids_sptr>(tile, min_size(), poly);
 
   // write the geo index2 structure
-  vcl_stringstream file_name; file_name << out_pre() << "geo_index2_wr" << world_id << "_tile_" << tile_id() << ".txt";
+  vcl_stringstream file_name; file_name << out_pre() << "geo_index2_wr" << world_id() << "_tile_" << tile_id() << ".txt";
   volm_geo_index2::write(root, file_name.str(), min_size());
   unsigned depth = volm_geo_index2::depth(root);
   vcl_stringstream file_name2;
-  file_name2 << out_pre() << "geo_index2_wr" << world_id << "_tile_" << tile_id() << "_depth_0" << ".kml";
+  file_name2 << out_pre() << "geo_index2_wr" << world_id() << "_tile_" << tile_id() << "_depth_0" << ".kml";
   vcl_stringstream file_name3;
-  file_name3 << out_pre() << "geo_index2_wr" << world_id << "_tile_" << tile_id() << "_depth_" << depth << ".kml";
+  file_name3 << out_pre() << "geo_index2_wr" << world_id() << "_tile_" << tile_id() << "_depth_" << depth << ".kml";
   volm_geo_index2::write_to_kml(root, 0, file_name2.str());
   volm_geo_index2::write_to_kml(root, depth, file_name3.str());
 
@@ -266,7 +233,7 @@ int main(int argc, char** argv)
   vcl_cout << " =========== write binary for leaves with contents... " << vcl_endl;
   // write contents (only leaves with contents)
   vcl_stringstream file_name_pre;
-  file_name_pre << out_pre() << "/geo_index2_wr" << world_id << "_tile_" << tile_id();
+  file_name_pre << out_pre() << "/geo_index2_wr" << world_id() << "_tile_" << tile_id();
   vcl_vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
   for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
