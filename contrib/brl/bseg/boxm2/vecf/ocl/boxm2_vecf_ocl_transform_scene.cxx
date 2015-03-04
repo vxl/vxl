@@ -61,7 +61,7 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
      target_scene_(target_scene),
      opencl_cache_(ocl_cache),
      ni_(ni), nj_(nj),
-     renderer_(target_scene, ocl_cache->get_device())
+     renderer_(target_scene, ocl_cache)
 {
   device_=opencl_cache_->get_device();
   this->compile_trans_interp_kernel();
@@ -76,7 +76,8 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
 
 boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
 {
-  delete trans_kern;
+  delete trans_interp_kern;
+  //delete trans_kern;
   delete depth_kern_;
   delete depth_norm_kern_;
   //opencl_cache_->clear_cache();
@@ -250,6 +251,7 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
 }
 
 
+#if 0
 bool boxm2_vecf_ocl_transform_scene::compile_trans_kernel()
 {
   vcl_string options;
@@ -264,6 +266,8 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_kernel()
   this->trans_kern = new bocl_kernel();
   return trans_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "transform_scene_blockwise", options, "trans_scene");
 }
+#endif
+
 bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_kernel()
 {
   vcl_string options;
@@ -926,7 +930,7 @@ render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float
                         vil_image_view<float>& vis_img)
 {
 
-  bool status = renderer_.render(cam, ni_, nj_, opencl_cache_);
+  bool status = renderer_.render(cam, ni_, nj_);
   renderer_.get_last_vis(vis_img);
   renderer_.get_last_rendered(expected_img);
   

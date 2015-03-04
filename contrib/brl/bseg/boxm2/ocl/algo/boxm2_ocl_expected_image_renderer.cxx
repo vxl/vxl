@@ -25,9 +25,10 @@
 #include <vul/vul_timer.h>
 
 
-boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene_sptr scene, bocl_device_sptr device, vcl_string ident)
-  : scene_(scene), device_(device), render_success_(false)
+boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, vcl_string ident)
+  : scene_(scene), opencl_cache_(ocl_cache), render_success_(false), buffers_allocated_(false)
 {
+  device_ = ocl_cache->get_device();
   bool foundDataType = false;
   vcl_vector<vcl_string> apps = scene->appearances();
 
@@ -43,7 +44,7 @@ boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene
   for (unsigned int i=0; i<apps.size(); ++i) {
     for (unsigned v = 0; v < num_valid_appearances_grey; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_grey[v];
-      vcl_string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type);
+      vcl_string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
       if ( apps[i] == valid_apm_prefix )
       {
         data_type_ = valid_apm_prefix;
@@ -51,7 +52,7 @@ boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene
         apptypesize_ = boxm2_data_info::datasize(valid_apm_type);
         num_planes_ = 1;
         vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-        compile_kernels(device, kernels_, valid_apm_type);
+        compile_kernels(device_, kernels_, valid_apm_type);
         break;
       }
     }
@@ -60,7 +61,7 @@ boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene
   for (unsigned int i=0; i<apps.size(); ++i) {
     for (unsigned v = 0; v < num_valid_appearances_rgb; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_rgb[v];
-      vcl_string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type);
+      vcl_string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
       if ( apps[i] == valid_apm_prefix )
       {
         data_type_ = valid_apm_prefix;
@@ -68,7 +69,7 @@ boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene
         apptypesize_ = boxm2_data_info::datasize(valid_apm_type);
         num_planes_ = 4;
         vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-        compile_kernels(device, kernels_, valid_apm_type);
+        compile_kernels(device_, kernels_, valid_apm_type);
         break;
       }
     }
@@ -76,11 +77,68 @@ boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene
 
   if (!foundDataType) {
     vcl_cout<<"BOXM2_OCL_EXPECTED_IMAGE_RENDERER ERROR: scene doesn't have valid appearance type"<<vcl_endl;
+    vcl_cout<<"                                         looking for ident = " << ident << vcl_endl;
     throw vcl_runtime_error("scene does not have valid appearance type");
   }
-  if (ident.size() > 0) {
-    data_type_ += "_" + ident;
+}
+
+bool boxm2_ocl_expected_image_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
+{
+  if ( buffers_allocated_ && (prev_ni_ == cl_ni) && (prev_nj_ == cl_nj) ) {
+    // can reuse old buffers
+    return true;
   }
+  // else we need to allocate new buffers
+  if (buffers_allocated_) {
+    cleanup_render_buffers();
+  }
+  img_buff_ = new float[cl_ni*cl_nj*num_planes_];
+  vis_buff_ = new float[cl_ni*cl_nj];
+  max_omega_buff_ = new float[cl_ni*cl_nj];
+
+  exp_image_ = opencl_cache_->alloc_mem(cl_ni*cl_nj*num_planes_*sizeof(cl_float), img_buff_,"exp image buffer");
+  exp_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
+
+  vis_image_ = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float), vis_buff_,"vis image buffer");
+  vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
+
+  max_omega_image_ = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float), max_omega_buff_,"vis image buffer");
+  max_omega_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
+
+  img_dim_ = opencl_cache_->alloc_mem(sizeof(cl_int)*4, img_dim_buff_, "image dims");
+  img_dim_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
+
+  tnearfar_ = opencl_cache_->alloc_mem(2*sizeof(cl_float), tnearfar_buff_, "tnearfar  buffer");
+  tnearfar_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
+
+  buffers_allocated_ = true;
+  prev_ni_ = cl_ni;
+  prev_nj_ = cl_nj;
+  return true;
+}
+
+bool boxm2_ocl_expected_image_renderer::cleanup_render_buffers()
+{
+  if(!buffers_allocated_) {
+    return false;
+  }
+
+  delete[] img_buff_;
+  delete[] vis_buff_;
+  delete[] max_omega_buff_;
+
+  opencl_cache_->unref_mem(exp_image_.ptr());
+  opencl_cache_->unref_mem(vis_image_.ptr());
+  opencl_cache_->unref_mem(max_omega_image_.ptr());
+  opencl_cache_->unref_mem(img_dim_.ptr());
+  opencl_cache_->unref_mem(tnearfar_.ptr());
+
+  return true;
+}
+
+boxm2_ocl_expected_image_renderer::~boxm2_ocl_expected_image_renderer()
+{
+  cleanup_render_buffers();
 }
 
 bool boxm2_ocl_expected_image_renderer::get_last_rendered(vil_image_view<float> &img)
@@ -101,7 +159,7 @@ bool boxm2_ocl_expected_image_renderer::get_last_vis(vil_image_view<float> &vis_
   return false;
 }
 
-bool boxm2_ocl_expected_image_renderer::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, boxm2_opencl_cache_sptr opencl_cache, float nearfactor, float farfactor)
+bool boxm2_ocl_expected_image_renderer::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor, float farfactor)
 {
   render_success_ = false;
 
@@ -116,56 +174,50 @@ bool boxm2_ocl_expected_image_renderer::render(vpgl_camera_double_sptr camera, u
 
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
-  float* img_buff = new float[cl_ni*cl_nj*num_planes_];
-  for (unsigned i=0;i<cl_ni*cl_nj*num_planes_;i++) img_buff[i]=0.0f;
 
-  bocl_mem_sptr exp_image=opencl_cache->alloc_mem(cl_ni*cl_nj*num_planes_*sizeof(cl_float), img_buff,"exp image buffer");
-  exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  allocate_render_buffers(cl_ni, cl_nj);
 
-  int img_dim_buff[4];
-  img_dim_buff[0] = 0;   img_dim_buff[2] = ni;
-  img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
-  bocl_mem_sptr exp_img_dim=new bocl_mem(device_->context(), img_dim_buff, sizeof(int)*4, "image dims");
-  exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  for (unsigned i=0;i<cl_ni*cl_nj*num_planes_;i++){
+    img_buff_[i]=0.0f;
+  }
+  for (unsigned i=0;i<cl_ni*cl_nj;i++) {
+    vis_buff_[i] = 1.0f;
+    max_omega_buff_[i] = 0.0f;
+  }
+  exp_image_->write_to_buffer(queue, true);
+  vis_image_->write_to_buffer(queue, true);
+  max_omega_image_->write_to_buffer(queue, true);
 
-  // visibility image
-  float* vis_buff = new float[cl_ni*cl_nj];
-  vcl_fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
-  bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
-  vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-   float* max_omega_buff = new float[cl_ni*cl_nj];
-  vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
-  bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
-  max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+  img_dim_buff_[0] = 0;   img_dim_buff_[2] = ni;
+  img_dim_buff_[1] = 0;   img_dim_buff_[3] = nj;
+  img_dim_->write_to_buffer(queue, true);
 
-  float tnearfar[2] = { 0.0f, 1000000} ;
+  tnearfar_buff_[0] = 0.0f;
+  tnearfar_buff_[1] = 1000000.0f;
 
   if(camera->type_name() == "vpgl_perspective_camera")
   {
-      
       float f  = ((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)camera.ptr())->get_calibration().x_scale();
       vcl_cout<<"Focal Length " << f<<vcl_endl;
-      tnearfar[0] = f* scene_->finest_resolution()/nearfactor ;
-      tnearfar[1] = f* scene_->finest_resolution()*farfactor ;
+      tnearfar_buff_[0] = f* scene_->finest_resolution()/nearfactor ;
+      tnearfar_buff_[1] = f* scene_->finest_resolution()*farfactor ;
 
-      vcl_cout<<"Near and Far Clipping planes "<<tnearfar[0]<<" "<<tnearfar[1]<<vcl_endl;
+      vcl_cout<<"Near and Far Clipping planes "<<tnearfar_buff_[0]<<" "<<tnearfar_buff_[1]<<vcl_endl;
   }
-  bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
-  tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
+  tnearfar_->write_to_buffer(queue, true);
 
   // run expected image function
-  render_expected_image(scene_, device_, opencl_cache, queue,
-                        camera, exp_image, vis_image, max_omega_image,exp_img_dim,
-                        data_type_, kernels_[0], lthreads, cl_ni, cl_nj,apptypesize_,tnearfar_mem_ptr);
+  render_expected_image(scene_, device_, opencl_cache_, queue,
+                        camera, exp_image_, vis_image_, max_omega_image_, img_dim_,
+                        data_type_, kernels_[0], lthreads, cl_ni, cl_nj,apptypesize_, tnearfar_);
   // normalize
   if (kernels_.size()>1)
   {
     vcl_size_t gThreads[] = {cl_ni,cl_nj};
     bocl_kernel* normalize_kern = kernels_[1];
-    normalize_kern->set_arg( exp_image.ptr() );
-    normalize_kern->set_arg( vis_image.ptr() );
-    normalize_kern->set_arg( exp_img_dim.ptr());
+    normalize_kern->set_arg( exp_image_.ptr() );
+    normalize_kern->set_arg( vis_image_.ptr() );
+    normalize_kern->set_arg( img_dim_.ptr());
     normalize_kern->execute( queue, 2, lthreads, gThreads);
     clFinish(queue);
 
@@ -174,8 +226,8 @@ bool boxm2_ocl_expected_image_renderer::render(vpgl_camera_double_sptr camera, u
   }
 
   // read out expected image
-  exp_image->read_to_buffer(queue);
-  vis_image->read_to_buffer(queue);
+  exp_image_->read_to_buffer(queue);
+  vis_image_->read_to_buffer(queue);
   clFinish(queue);
 
   expected_img_.set_size(ni,nj,num_planes_);
@@ -183,20 +235,13 @@ bool boxm2_ocl_expected_image_renderer::render(vpgl_camera_double_sptr camera, u
   for (unsigned r=0;r<nj;++r) {
       for (unsigned c=0;c<ni;++c) {
         for (unsigned p=0; p<num_planes_; ++p) {
-        expected_img_(c,r,p)=img_buff[r*cl_ni*num_planes_ + c*num_planes_ + p];
-        vis_img_(c,r)=vis_buff[r*cl_ni+c];
+        expected_img_(c,r,p)=img_buff_[r*cl_ni*num_planes_ + c*num_planes_ + p];
+        vis_img_(c,r)=vis_buff_[r*cl_ni+c];
       }
     }
   }
 
   vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
-  delete [] vis_buff;
-  delete [] img_buff;
-  delete [] max_omega_buff;
-  opencl_cache->unref_mem(vis_image.ptr());
-  opencl_cache->unref_mem(exp_image.ptr());
-  opencl_cache->unref_mem(max_omega_image.ptr());
-  opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
   clReleaseCommandQueue(queue);
 
   render_success_ = true;

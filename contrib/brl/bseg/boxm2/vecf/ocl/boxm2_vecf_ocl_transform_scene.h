@@ -73,7 +73,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   boxm2_ocl_expected_image_renderer renderer_;
 
  protected:
-  bool compile_trans_kernel();
+  //bool compile_trans_kernel();
   bool compile_trans_interp_kernel();
   bool compile_depth_kernel();
   bool compile_depth_norm_kernel();
@@ -89,7 +89,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   boxm2_data_type app_type_; //type of appearance
 
   //transform kernels and args 
-  bocl_kernel * trans_kern;
+  //bocl_kernel * trans_kern;
   bocl_kernel * trans_interp_kern;
   float* translation_buff;
   float* rotation_buff;
