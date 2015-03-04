@@ -125,11 +125,11 @@ static boxm2_data_type data_type(vcl_string const& prefix) {
 }
 
 // map enum val to string prefix
-static vcl_string prefix(boxm2_data_type data_type) {
+static vcl_string prefix(boxm2_data_type data_type, vcl_string const& identifier="") {
   switch(data_type) {
 #define X(enum_val, string_val, datatype_val) \
     case enum_val: \
-      return boxm2_data_traits<enum_val>::prefix();
+      return boxm2_data_traits<enum_val>::prefix(identifier);
     BOXM2_DATATYPE_TABLE
 #undef X
   }
