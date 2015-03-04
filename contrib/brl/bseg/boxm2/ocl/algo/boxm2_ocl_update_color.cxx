@@ -78,21 +78,21 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   //make sure the scene corresponds to this datatype
   bool foundDataType = false, foundNumObsType = false;
   vcl_string data_type, num_obs_type, options;
-  if ( scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
-    data_type = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();
+  if ( scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(in_identifier)) ) {
+    data_type = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(in_identifier);
     foundDataType = true;
     options=" -D MOG_TYPE_8 ";
   }
-  if ( scene->has_data_type(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix()) ) {
-    num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix();
+  if ( scene->has_data_type(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(in_identifier)) ) {
+    num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(in_identifier);
     foundNumObsType = true;
   }
   if (!foundDataType) {
-    vcl_cout<<"boxm2_ocl_update_color_process ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
+    vcl_cout<<"boxm2_ocl_update_color: ERROR: scene doesn't have BOXM2_GAUSS_RGB data type"<<vcl_endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"boxm2_ocl_update_color_process ERROR: scene doesn't have BOXM2_NUM_OBS_SINGLE type"<<vcl_endl;
+    vcl_cout<<"boxm2_ocl_update_color: ERROR: scene doesn't have BOXM2_NUM_OBS_SINGLE type"<<vcl_endl;
     return false;
   }
 
@@ -109,7 +109,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
   //prepare input image
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, false);
   if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
-    vcl_cout<<"boxm2_ocl_update_color_process::using a non RGBA image!!"<<vcl_endl;
+    vcl_cout<<"boxm2_ocl_update_color::using a non RGBA image!!"<<vcl_endl;
     return false;
   }
   vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(float_img.ptr());
@@ -281,8 +281,19 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         vcl_cerr << "ERROR: boxm2_ocl_update_color: upsupported mask type! " << vcl_endl;
         return false;
       }
+      in_image->write_to_buffer(queue);
+    } 
+    else {
+      // no mask
+      int count = 0;
+      for (unsigned int j=0;j<cl_nj;++j) {
+        for (unsigned int i=0;i<cl_ni;++i)
+        {
+          vis_buff[count] =1.0f;
+        }
+      }
+      ++count;
     }
-    in_image->write_to_buffer(queue);
     vis_image->write_to_buffer(queue);
     clFinish(queue);
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -322,6 +333,15 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
       transfer_time += (float) transfer.all();
       if (i==UPDATE_SEGLEN)
       {
+        aux0->zero_gpu_buffer(queue, true);
+        aux1->zero_gpu_buffer(queue, true);
+        aux2->zero_gpu_buffer(queue, true);
+        aux3->zero_gpu_buffer(queue, true);
+        cl_int init_status = clFinish(queue);
+
+        if (!check_val(init_status, MEM_FAILURE, "initializaiton of aux buffers failed!: " + error_to_string(status)) ) {
+          return false;
+        }
         local_threads[0] = 8; local_threads[1] = 8;
         global_threads[0]=cl_ni; global_threads[1]=cl_nj;
         kern->set_arg( blk_info );
@@ -334,7 +354,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         kern->set_arg( lookup.ptr() );
         kern->set_arg( ray_o_buff.ptr() );
         kern->set_arg( ray_d_buff.ptr() );
-                kern->set_arg( tnearfar_mem_ptr.ptr() );
+        kern->set_arg( tnearfar_mem_ptr.ptr() );
         kern->set_arg( img_dim.ptr() );
         kern->set_arg( in_image.ptr() );
         kern->set_arg( cl_output.ptr() );
@@ -490,7 +510,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr d
     return kernels_[identifier];
 
   //otherwise compile the kernels
-  vcl_cout<<"=== boxm2_ocl_update_color_process::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
+  vcl_cout<<"=== boxm2_ocl_update_color::compiling kernels on device "<<identifier<<"==="<<vcl_endl;
 
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
