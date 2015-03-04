@@ -133,6 +133,7 @@ int main(int argc, char** argv)
   vcl_cout << "Converting bvxm scene to boxm2 Scene" << vcl_endl;
   vul_arg<vcl_string> scene_path("-bvxm_scene", "bvxm scene filename", "");
   vul_arg<vcl_string> out_dir("-out", "output world directory for boxm2 scene", "");
+  vul_arg<bool> only_create_xml("-only_scene_xml", "if present creates boxm2 scene xml file by converting bvxm scene file and exists", false);
   vul_arg_parse(argc, argv);
 
   // parse bvxm scene
@@ -152,6 +153,7 @@ int main(int argc, char** argv)
   new_scene.set_xml_path(out_dir()+"/scene.xml");
   vcl_vector<vcl_string> apps;
   apps.push_back("boxm2_mog3_grey");
+  apps.push_back("boxm2_num_obs");
   new_scene.set_appearances(apps);
 
   int max_level = 1;
@@ -159,12 +161,15 @@ int main(int argc, char** argv)
   create_regular_world_scene_xml(new_scene, params, world, max_level);
   new_scene.save_scene();
 
-  // now load the scene and create a cpp cache
-  boxm2_scene_sptr scene = new boxm2_scene(out_dir()+"/scene.xml");
-  boxm2_lru_cache::create(scene);
+  if (!only_create_xml()) {
 
-  boxm2_cache_sptr cache = boxm2_cache::instance();
+    // now load the scene and create a cpp cache
+    boxm2_scene_sptr scene = new boxm2_scene(out_dir()+"/scene.xml");
+    boxm2_lru_cache::create(scene);
 
-  initialize_regular_world_scene(scene, cache, params, world);
-  cache->write_to_disk();
+    boxm2_cache_sptr cache = boxm2_cache::instance();
+
+    initialize_regular_world_scene(scene, cache, params, world);
+    cache->write_to_disk();
+  }
 }

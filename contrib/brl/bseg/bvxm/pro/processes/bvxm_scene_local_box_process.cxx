@@ -46,9 +46,9 @@ bool bvxm_scene_local_box_process(bprb_func_process& pro)
   min_x = params->corner().x();
   min_y = params->corner().y();
   min_z = params->corner().z();
-  max_x = params->num_voxels().x() * params->voxel_length();
-  max_y = params->num_voxels().y() * params->voxel_length();
-  max_z = params->num_voxels().z() * params->voxel_length();
+  max_x = params->num_voxels().x() * params->voxel_length() + params->corner().x();
+  max_y = params->num_voxels().y() * params->voxel_length() + params->corner().y();
+  max_z = params->num_voxels().z() * params->voxel_length() + params->corner().z();
   voxel_size = params->voxel_length();
 
   // output

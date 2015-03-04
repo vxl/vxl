@@ -2,6 +2,8 @@
 # World Modeling GUI executables
 
 INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+INCLUDE_DIRECTORIES( ${OXL_INCLUDE_DIR} )
 
 IF(EXPAT_FOUND)
  IF(EXPATPP_FOUND)
@@ -36,6 +38,9 @@ IF(EXPAT_FOUND)
 
    ADD_EXECUTABLE( bwm_triangulate_2d_corrs  bwm_triangulate_2d_corrs.cxx)
    TARGET_LINK_LIBRARIES( bwm_triangulate_2d_corrs bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml)
+   
+   ADD_EXECUTABLE( bwm_test_TFT  bwm_test_TFT_constraints.cxx)
+   TARGET_LINK_LIBRARIES( bwm_test_TFT bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml ipts mvl)
 
   ENDIF(SHAPELIB_FOUND)
  ENDIF(EXPATPP_FOUND)

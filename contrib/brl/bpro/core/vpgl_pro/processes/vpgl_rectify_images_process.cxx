@@ -166,7 +166,7 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
 
   vcl_vector< vnl_vector_fixed<double, 3> > img_pts1, img_pts2;
 
-  vnl_random rng;
+  vnl_random rng(10);
   vcl_cout << " using z = " << z << " as local ground plane height and will sample points on this plane randomly! the mid point z height would be: " << 0.5*height + min_z << '\n';
   for (unsigned i = 0; i < n_points; i++) {
     vgl_point_3d<float> corner_world;
@@ -485,7 +485,6 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   vcl_string path_H2 = pro.get_input<vcl_string>(i++);
 
   vnl_matrix_fixed<double, 3, 3> H1, H2;
-  double minih1, minjh1, minih2, minjh2;
   vcl_ifstream ifs(path_H1.c_str());
   ifs >> H1;
   ifs.close();

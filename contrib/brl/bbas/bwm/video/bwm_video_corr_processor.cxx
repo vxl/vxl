@@ -536,7 +536,7 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
 {
   // extract the image from the frame
   if (!video_istr_) return false;
-  video_istr_->seek_frame(frame_index);
+  if (!video_istr_->seek_frame(frame_index)) return false;
   vidl_frame_sptr frame = video_istr_->current_frame();
   if (!frame)
   {
@@ -554,8 +554,9 @@ bool bwm_video_corr_processor::frame_at_index(unsigned frame_index,
   }
   else{
     static vil_image_view<vxl_byte> img;
-    if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB))
+    if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB)) {
       view = brip_vil_float_ops::convert_to_float(img);
+    }
     else{
       vcl_cerr << "Failed to convert frame to vil_image_view\n";
       return false;

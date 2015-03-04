@@ -414,8 +414,8 @@ def prepare_mask_image_from_vis_image(vis_image, ni2, nj2, threshold):
   #print "mask sum: " + str(sum) + " ratio of true: " + str(sum/(ni2*nj2));
   ratio = sum/(ni2*nj2)*100;
   exp_img_mask = stretch_image(exp_img_mask_f, 0, 1, 'byte');
+  boxm2_batch.remove_data(exp_img_mask_f.id);
   return exp_img_mask, img_1, vis_image_neg, ratio
-
 
 def fill_holes(img):
   boxm2_batch.init_process("vilFillHolesInRegionsProcess")

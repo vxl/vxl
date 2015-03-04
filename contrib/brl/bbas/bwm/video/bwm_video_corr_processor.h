@@ -155,16 +155,16 @@ class bwm_video_corr_processor
   //: return the number of cameras that observe the correspondences
   unsigned get_ncameras(unsigned& min_frame, unsigned& max_frame) const;
 
+  //: get a float view of the frame at the specified index
+  bool frame_at_index(unsigned frame_index, vil_image_view<float>& view);
+
   // INTERNALS-----------------------------------------------------------------
 
  protected:
   //: compute the boolean mask defining which frames have correspondences
   void mask(unsigned& min_frame, unsigned& max_frame,
             vcl_vector<vcl_vector<bool> >& mask);
-
-  //: get a float view of the frame at the specified index
-  bool frame_at_index(unsigned frame_index, vil_image_view<float>& view);
-
+  
   //: extract the float pixel windows for start and end frames used to find correspondences
   void compute_ab_corr_windows(unsigned match_radius,
                                vcl_vector<bool> const& mask_a,
