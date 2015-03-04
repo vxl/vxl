@@ -69,8 +69,8 @@ bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // set input defaults
-  brdb_value_sptr lvcs = new brdb_value_t<vpgl_camera_double_sptr>;
-  pro.set_input(9, lvcs);
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
+  pro.set_input(9, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
 
   return good; 
 }
@@ -80,9 +80,13 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
 {
   using namespace vpgl_crop_img_using_3d_box_process_globals;
   // sanity check
-  if (pro.n_inputs() != n_inputs_) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
-    return false;
+  //if (pro.n_inputs() != n_inputs_) {
+  //  vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
+  //  return false;
+  //}
+  if (!pro.verify_inputs())
+  {
+    vcl_cout << pro.name() << ": The input is wrong!!!" << vcl_endl;
   }
 
   // get the input

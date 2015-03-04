@@ -754,7 +754,7 @@ def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_ra
 
 ## use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
 ## note that the input 3-d box is in unit of wgs84 geo coordinates
-def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty):
+def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=0):
   bvxm_batch.init_process("vpglCropImgUsing3DboxProcess")
   bvxm_batch.set_input_from_db(0, img_res);
   bvxm_batch.set_input_from_db(1, camera);
@@ -765,6 +765,8 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
   bvxm_batch.set_input_double(6, upper_right_lat);
   bvxm_batch.set_input_double(7, upper_right_elev);
   bvxm_batch.set_input_double(8, uncertainty);
+  if lvcs != 0:
+    bvxm_batch.set_input_from_db(9, lvcs);
   status = bvxm_batch.run_process();
   if status:
     (id, type) = bvxm_batch.commit_output(0);
