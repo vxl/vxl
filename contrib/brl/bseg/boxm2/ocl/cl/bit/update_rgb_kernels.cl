@@ -529,7 +529,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
       //mean obs is already normalized
       float4 meanObs = convert_float4(as_uchar4(obs_int))/255.0f;
-      float mean_obs = meanObs.x;
+
       float cell_vis  = convert_float(vis_int) / (convert_float(len_int) * info->block_len); //(SEGLEN_FACTOR*cum_len);
       float cell_beta = convert_float(beta_int) / (convert_float(len_int) * info->block_len); //(SEGLEN_FACTOR*cum_len);
       CONVERT_FUNC_FLOAT8(mixture,mixture_array[gid])/NORM;
