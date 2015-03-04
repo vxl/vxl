@@ -140,7 +140,7 @@ class boxm2_scene_adaptor(object):
       return update_grey(self.scene, cache, cam, img, dev, ident_string, mask, update_alpha, var, update_app, tnear, tfar);
 
   #update wrapper, can pass in a Null device to use
-  def update_app(self, cam, img, device_string="") :
+  def update_app(self, cam, img, device_string="", force_grey=False) :
     cache = self.active_cache;
     dev = self.device;
 
@@ -150,7 +150,7 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       print " Not  implemented in C++ yet ";
       return;
-    if self.rgb :
+    if self.rgb and not force_grey:
       update_rgb(self.scene, cache, cam, img, dev, "", False);
     else :
       update_app_grey(self.scene, cache, cam, img, dev);
