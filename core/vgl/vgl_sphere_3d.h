@@ -24,7 +24,7 @@ class vgl_sphere_3d
   // Constructors/Initializers/Destructor------------------------------------
 
   //: Default constructor
-   inline vgl_sphere_3d (): c_(0.0, 0.0, 0.0), r_(-1) {}
+  inline vgl_sphere_3d (): c_(Type(0), Type(0), Type(0)), r_(Type(-1)) {}
 
   //: Construct from four scalars: centre and radius.
   inline vgl_sphere_3d(Type px, Type py, Type pz, Type rad) : c_(px, py, pz), r_(rad) {}
