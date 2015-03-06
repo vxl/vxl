@@ -32,7 +32,7 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
 //  The curve is treated as a polygon connecting subset of given points/
 //  As long as the points are dense enough, this is a good enough approximation
 //  to fitting a smooth curve through the points.
-double msm_dist_to_curve(const msm_points& all_points,
+inline double msm_dist_to_curve(const msm_points& all_points,
                          const msm_curve& curve,
                          const vgl_point_2d<double>& pt)
 {
@@ -61,7 +61,7 @@ double msm_dist_to_curve(const msm_points& all_points,
 
 //: Compute the distance between pt and nearest point on any of the curves through points
 //  The curves are treated as a polygon connecting subset of given points.
-double msm_dist_to_curves(const msm_points& points,
+inline double msm_dist_to_curves(const msm_points& points,
                          const msm_curves& curves,
                          const vgl_point_2d<double>& pt)
 {
@@ -76,7 +76,7 @@ double msm_dist_to_curves(const msm_points& points,
 }
 
 //: Find the mean of closest distance between each point in points and the curves through ref_points
-double msm_mean_dist_to_curves(const msm_points& ref_points,
+inline double msm_mean_dist_to_curves(const msm_points& ref_points,
                                const msm_curves& curves,
                                const msm_points& points)
 {
@@ -92,7 +92,7 @@ double msm_mean_dist_to_curves(const msm_points& ref_points,
 //  Assumes points.size()==ref_points.size().  
 //  Goes through each point listed in curves and finds the closest distance to equivalent
 //  curve through ref_points.
-double msm_mean_dist_to_matching_curves(const msm_points& ref_points,
+inline double msm_mean_dist_to_matching_curves(const msm_points& ref_points,
                                const msm_curves& curves,
                                const msm_points& points)
 {
