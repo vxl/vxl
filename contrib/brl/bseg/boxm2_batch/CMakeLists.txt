@@ -49,7 +49,7 @@ IF( PYTHON_FOUND )
         ADD_DEFINITIONS(-DUSE_VOLM=1)
         TARGET_LINK_LIBRARIES(boxm2_batch volm_pro)
       ENDIF(BOXM2_USE_VOLM)
-      IF(GLEW_FOUND AND HAS_VGUI)
+      IF(GLEW_FOUND AND HAS_VGUI AND OPENCL_FOUND)
         ADD_DEFINITIONS(-DHAS_GLEW=1)
         TARGET_LINK_LIBRARIES(boxm2_batch boxm2_view_pro )
       ENDIF(GLEW_FOUND AND HAS_VGUI)
@@ -60,14 +60,14 @@ IF( PYTHON_FOUND )
         IF(BOXM2_USE_VOLM)
              TARGET_LINK_LIBRARIES(boxm2_batch boxm2_volm_pro boxm2_volm_io )
         ENDIF(BOXM2_USE_VOLM)
-	        
+
       ENDIF(OPENCL_FOUND)
-      
+
       IF(HDFS_FOUND)
         ADD_DEFINITIONS(-DHAS_HDFS=1)
-        TARGET_LINK_LIBRARIES(boxm2_batch bhdfs_pro ) 
+        TARGET_LINK_LIBRARIES(boxm2_batch bhdfs_pro )
       ENDIF(HDFS_FOUND)
-      
+
       IF (PYTHON_DEBUG_LIBRARIES)
         TARGET_LINK_LIBRARIES( boxm2_batch debug ${PYTHON_DEBUG_LIBRARY})
       ENDIF(PYTHON_DEBUG_LIBRARIES )
@@ -75,13 +75,13 @@ IF( PYTHON_FOUND )
       IF(PYTHON_LIBRARIES)
         TARGET_LINK_LIBRARIES( boxm2_batch optimized ${PYTHON_LIBRARY})
       ENDIF(PYTHON_LIBRARIES)
-      
-      
+
+
 
       IF( BUILD_TESTING )
         SUBDIRS(tests)
       ENDIF( BUILD_TESTING )
-      
+
       #install the .h .txx and libs
       INSTALL_TARGETS(/lib boxm2_batch)
       INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_batch/ ${boxm2_batch_sources})
