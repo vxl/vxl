@@ -573,6 +573,10 @@ namespace vnl_math
  inline double             abs(double x)             { return x < 0.0 ? -x : x; }
  inline long double        abs(long double x)        { return x < 0.0 ? -x : x; }
 
+#ifdef max
+  #undef max
+#endif
+
  // max
  inline int                max(int x, int y)                               { return (x > y) ? x : y; }
  inline unsigned int       max(unsigned int x, unsigned int y)             { return (x > y) ? x : y; }
@@ -585,6 +589,11 @@ namespace vnl_math
  inline float              max(float x, float y)                           { return (x < y) ? y : x; }
  inline double             max(double x, double y)                         { return (x < y) ? y : x; }
 
+
+#ifdef min
+  #undef min
+#endif
+
  // min
  inline int                min(int x, int y)                               { return (x < y) ? x : y; }
  inline unsigned int       min(unsigned int x, unsigned int y)             { return (x < y) ? x : y; }
@@ -596,6 +605,11 @@ namespace vnl_math
 #endif
  inline float              min(float x, float y)                           { return (x > y) ? y : x; }
  inline double             min(double x, double y)                         { return (x > y) ? y : x; }
+
+// If we must use windows.h, we should at least sanitise it first
+#ifndef NOMINMAX
+  #define NOMINMAX
+#endif
 
  // sqr (square)
  inline bool               sqr(bool x)               { return x; }
