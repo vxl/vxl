@@ -3,7 +3,7 @@
 // \file
 #include <vul/vul_file.h>
 #include <vcl_where_root_dir.h>
-
+#include "volm_utils.h"
 
 vil_rgb<vxl_byte> color(unsigned char id)
 {
@@ -146,8 +146,12 @@ bool volm_osm_category_io::load_road_junction_table(vcl_string const& filename, 
 vcl_map<vcl_pair<int, int>, volm_land_layer> load_osm_road_junction_table()
 {
   vcl_map<vcl_pair<int, int>, volm_land_layer> m;
-  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/road_junction_category.txt";
+  vcl_string txt_file = volm_utils::volm_src_root() + "road_junction_category.txt";
   vcl_ifstream ifs(txt_file.c_str());
+  if (!ifs.is_open()) {
+    vcl_cerr << " cannot open: " << txt_file << '\n';
+    return m;
+  }
   vcl_string header;
   vcl_getline(ifs, header);
   int id1, id2;  vcl_string n1, n2;  float w1, w2;
@@ -168,8 +172,12 @@ vcl_map<vcl_pair<int, int>, volm_land_layer> load_osm_road_junction_table()
 vcl_map<vcl_string, volm_land_layer> load_tag_to_volm_land_table()
 {
   vcl_map<vcl_string, volm_land_layer> m;
-  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/bae_tag_to_volm_labels.txt";
+  vcl_string txt_file = volm_utils::volm_src_root() + "bae_tag_to_volm_labels.txt";
   vcl_ifstream ifs(txt_file.c_str());
+  if (!ifs.is_open()) {
+    vcl_cerr << " cannot open: " << txt_file << '\n';
+    return m;
+  }
   vcl_string header;
   vcl_getline(ifs,header);
   vcl_string tag_name, volm_land_name;
@@ -190,7 +198,7 @@ vcl_map<unsigned, volm_land_layer> create_volm_land_table()
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
   vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table = load_osm_road_junction_table();
 
-  vcl_string osm_to_volm_txt = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
+  vcl_string osm_to_volm_txt = volm_utils::volm_src_root() + "qosm_to_volm_labels.txt";
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
 
   for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)

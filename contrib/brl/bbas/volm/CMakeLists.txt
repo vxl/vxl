@@ -50,7 +50,7 @@ IF(EXPAT_FOUND)
      volm_osm_object_line.h                 volm_osm_object_line.cxx
      volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
      volm_candidate_region_parser.h         volm_candidate_region_parser.cxx
-     volm_utils.h                           volm_utils.txx
+     volm_utils.h                           volm_utils.txx                   volm_utils.cxx
     )
 
     AUX_SOURCE_DIRECTORY(Templates volm_sources)

@@ -15,6 +15,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
+#include <vcl_string.h>
 
 class volm_utils
 {
@@ -32,6 +33,7 @@ public:
   template <class T>
   static vgl_polygon<T> poly_contains(vcl_vector<vgl_point_2d<T> > const& p_out, vgl_polygon<T> const& p_in);
 
+  static vcl_string volm_src_root();
 
 private:  // only static function in this class: disallow instantiation
   volm_utils();

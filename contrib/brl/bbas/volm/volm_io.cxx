@@ -16,7 +16,7 @@
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_where_root_dir.h>
+#include "volm_utils.h"
 
 vcl_map<vcl_string, depth_map_region::orientation> create_orient_map()
 {
@@ -144,8 +144,12 @@ vcl_map<unsigned char, vcl_vector<unsigned char> > create_fallback_label()
   vcl_map<unsigned char, vcl_vector<unsigned char> > m;
   vcl_vector<unsigned char> f(4,0);
   // load the text file
-  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/fallback_category.txt";
+  vcl_string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
   vcl_ifstream ifs(txt_file.c_str());
+  if (!ifs.is_open()) {
+    vcl_cerr << " cannot open: " << txt_file << '\n';
+    return m;
+  }
   vcl_string header;
   vcl_getline(ifs, header);
   vcl_string name;
@@ -208,8 +212,12 @@ vcl_map<unsigned char, vcl_vector<float> > create_fallback_weight()
 {
   vcl_map<unsigned char, vcl_vector<float> > m;
   vcl_vector<float> w(4,0.0f);
-  vcl_string txt_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/fallback_category.txt";
+  vcl_string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
   vcl_ifstream ifs(txt_file.c_str());
+  if (!ifs.is_open()) {
+    vcl_cerr << " cannot open: " << txt_file << '\n';
+    return m;
+  }
   vcl_string header;
   vcl_getline(ifs, header);
   vcl_string name;
