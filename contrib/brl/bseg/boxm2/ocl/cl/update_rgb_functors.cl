@@ -306,3 +306,34 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     aux_args.cell_ptrs[llid] = -1;
 }
 #endif // BAYES
+
+
+#ifdef SEGLEN_VIS
+//Update step cell functor::seg_len_vis
+void step_cell_seglen_vis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
+{
+    float alpha    = aux_args.alpha[data_ptr];
+    float diff_omega = exp(-alpha * d * aux_args.linfo->block_len);
+    float vis_prob_end = (*aux_args.vis_inf) * diff_omega;
+
+    int seg_int = convert_int_rte(d * SEGLEN_FACTOR);
+    atom_add(&aux_args.seg_len[data_ptr], seg_int);
+
+    //increment mean observation
+    int cum_obsR = convert_int_rte(d * aux_args.obs.x * SEGLEN_FACTOR);
+    int cum_obsG = convert_int_rte(d * aux_args.obs.y * SEGLEN_FACTOR);
+    int cum_obsB = convert_int_rte(d * aux_args.obs.z * SEGLEN_FACTOR);
+    int cum_vis = convert_int_rte(d * (*aux_args.vis_inf) * SEGLEN_FACTOR);
+
+    atom_add(&aux_args.mean_obsR[data_ptr], cum_obsR);
+    atom_add(&aux_args.mean_obsG[data_ptr], cum_obsG);
+    atom_add(&aux_args.mean_obsB[data_ptr], cum_obsB);
+    atom_add(&aux_args.mean_vis[data_ptr], cum_vis);
+
+    *aux_args.vis_inf = vis_prob_end;
+
+    //dec: copy/pasting the line below.. not sure if its needed here
+    //reset cell_ptrs to negative one every time (prevents invisible layer bug)
+    aux_args.cell_ptrs[llid] = -1;
+}
+#endif // SEGLEN_VIS

@@ -136,7 +136,7 @@ compress_rgb(__global RenderSceneInfo * info,
 
     //normalize mean obs by CUM_LEN and SEGLEN_FACTOR
     int4 rgbs = (int4) (r_int, g_int, b_int, 0);
-    float4 mean_obs = (float4) convert_float4(rgbs) / (convert_float(len_int));
+    float4 mean_obs =  convert_float4(rgbs) / (convert_float(len_int));
 
     //------------- YUV EDIT ---------------
     //now mean_obs should have Y, U, V where U in [-.436, .436] and V in [-.615, .615]
@@ -562,3 +562,159 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
   }
 }
 
+#ifdef UPDATE_APP_YUV
+__kernel
+    void
+    update_yuv_main(__global RenderSceneInfo  * info,
+    __global MOG_TYPE         * apm_array,
+    __global ushort           * nobs_array,
+    __global int              * aux_array0, //seg_len
+    __global int              * aux_array1, //vis
+    __global int              * aux_array2, //YUV
+    __global float            * output)
+{
+    int gid=get_global_id(0);
+    int datasize = info->data_len ;
+    if (gid<datasize)
+    {
+        //get cell cumulative length and make sure it isn't 0
+        int len_int = aux_array0[gid];
+        float cum_len  = convert_float(len_int)/SEGLEN_FACTOR;
+        //update cell if alpha and cum_len are greater than 0
+        if (cum_len > 0)
+        {
+
+            int vis_int = aux_array1[gid];
+            int obs_int = aux_array2[gid];
+
+            float4 mean_obs = convert_float4(as_uchar4(obs_int))/255.0f;
+            float cell_vis  = convert_float(vis_int) / convert_float(len_int);
+
+            CONVERT_FUNC_FLOAT8(apm,apm_array[gid])/NORM;
+
+            //single gauss appearance update
+            float nobs_single = convert_float(nobs_array[gid])/100.0f;
+            update_yuv_appearance(&apm, &nobs_single, mean_obs, cell_vis, 0.02f);
+
+            nobs_array[gid] = nobs_single * 100.0f;
+
+            float8 post_mix       = apm * (float) NORM;
+            CONVERT_FUNC_SAT_RTE(apm_array[gid],post_mix);
+        }
+    }
+}
+#endif // UPDATE_APP_YUV
+
+#ifdef SEGLEN_VIS
+typedef struct
+{
+  __global float* alpha;
+  __global int* seg_len;
+  __global int* mean_vis;
+  __global int* mean_obsR;
+  __global int* mean_obsG;
+  __global int* mean_obsB;
+
+  __local  short2* ray_bundle_array;
+  __local  int*    cell_ptrs;
+           float4  obs;
+           float * vis_inf;
+  __global float * output;
+  __constant  RenderSceneInfo    * linfo;
+} AuxArgs;
+
+//forward declare cast ray (so you can use it)
+void cast_ray(int,int,float,float,float,float,float,float,__constant RenderSceneInfo*,
+              __global int4*,local uchar16*,constant uchar *,local uchar *,float*,AuxArgs, float tnear, float tfar);
+__kernel
+void
+seg_len_vis_main(__constant  RenderSceneInfo    * linfo,
+             __global    int4               * tree_array,       // tree structure for each block
+             __global    float              * alpha_array,      // alpha for each block
+             __global    int                * aux_seg_len,        // seg len aux array
+             __global    int                * aux_vis,          // weighted vis sum
+             __global    int                * aux_mean_obsY,    // mean obs y aux array
+             __global    int                * aux_mean_obsU,    // mean obs u aux array
+             __global    int                * aux_mean_obsV,    // mean obs v aux array
+             __constant  uchar              * bit_lookup,       // used to get data_index
+             __global    float4             * ray_origins,
+             __global    float4             * ray_directions,
+             __global    float              * nearfarplanes,
+             __global    uint4              * imgdims,          // dimensions of the input image
+             __global    float4             * in_image,         // the input image
+             __global    float              * vis_image,        // visibility image
+             __global    float              * output,
+             __local     uchar16            * local_tree,       // cache current tree into local memory
+             __local     short2             * ray_bundle_array, // gives information for which ray takes over in the workgroup
+             __local     int                * cell_ptrs,        // local list of cell_ptrs (cells that are hit by this workgroup
+             __local     float4             * cached_aux_data,  // seg len cached aux data is only a float2
+             __local     uchar              * cumsum )          // cumulative sum for calculating data pointer
+{
+  //get local id (0-63 for an 8x8) of this patch
+  uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
+
+  //initialize pre-broken ray information (non broken rays will be re initialized)
+  ray_bundle_array[llid] = (short2) (-1, 0);
+  cell_ptrs[llid] = -1;
+
+  //----------------------------------------------------------------------------
+  // get image coordinates and camera,
+  // check for validity before proceeding
+  //----------------------------------------------------------------------------
+  int i=0,j=0;
+  i=get_global_id(0);
+  j=get_global_id(1);
+  int imIndex = j*get_global_size(0) + i;
+
+  AuxArgs aux_args;
+
+  //grab input image value (also holds vis)
+  float4 obs = in_image[imIndex];
+  float vis_inf = vis_image[imIndex];
+  aux_args.vis_inf = &vis_inf;
+  barrier(CLK_LOCAL_MEM_FENCE);
+
+  if (obs.x <0.0)
+      return;
+  // cases #of threads will be more than the pixels.
+  if (i>=(*imgdims).z || j>=(*imgdims).w || i<(*imgdims).x || j<(*imgdims).y )
+    return;
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image,w
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  float4 ray_o = ray_origins[ imIndex ];
+  float4 ray_d = ray_directions[ imIndex ];
+  float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
+
+  //----------------------------------------------------------------------------
+  // we know i,j map to a point on the image, have calculated ray
+  // BEGIN RAY TRACE
+  //----------------------------------------------------------------------------
+  aux_args.linfo   = linfo;
+  aux_args.alpha = alpha_array;
+  aux_args.seg_len  = aux_seg_len;
+  aux_args.mean_vis = aux_vis;
+  aux_args.mean_obsR = aux_mean_obsY; //&aux_array[linfo->num_buffer * linfo->data_len];
+  aux_args.mean_obsG = aux_mean_obsU; //&aux_array[2 * linfo->num_buffer * linfo->data_len];
+  aux_args.mean_obsB = aux_mean_obsV; //&aux_array[3 * linfo->num_buffer * linfo->data_len];
+
+  aux_args.ray_bundle_array = ray_bundle_array;
+  aux_args.cell_ptrs  = cell_ptrs;
+  float nearplane = nearfarplanes[0]/linfo->block_len;
+  float farplane = nearfarplanes[1]/linfo->block_len;
+
+  aux_args.obs = rgb2yuv(obs);
+  aux_args.output = output;
+
+  cast_ray( i, j,
+            ray_ox, ray_oy, ray_oz,
+            ray_dx, ray_dy, ray_dz,
+            linfo, tree_array,                                  //scene info
+            local_tree, bit_lookup, cumsum, &vis_inf, aux_args,nearplane,farplane);    //utility info
+
+  vis_image[ imIndex ] = *(aux_args.vis_inf);
+}
+#endif
