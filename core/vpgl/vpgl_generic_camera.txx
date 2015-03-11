@@ -296,18 +296,22 @@ void vpgl_generic_camera<T>::project(const T x, const T y, const T z,
     this->refine_projection(nearest_c, nearest_r, p, u, v);
 }
 
+
 // a ray specified by an image location (can be sub-pixel)
 template <class T>
 vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
 {
     double du = static_cast<double>(u);
     double dv = static_cast<double>(v);
-    // also allow for very small negative values, they are truncated to the nearest ray anyways
-    assert( (du>=0.0&&dv>=0.0) || (vcl_abs(du)<0.01 && vcl_abs(dv) < 0.01) );
+    int nright = static_cast<int>(cols())-1;
+    int nbelow = static_cast<int>(rows())-1;
+    if( ! (du>=-0.5 && dv>=-0.5 && du<=nright+0.5 && dv<=nbelow+0.5) ) {
+        assert(false);
+        return vgl_ray_3d<T>();
+    }
+
     int iu = static_cast<int>(du);
     int iv = static_cast<int>(dv);
-    // also allow for values which are very close to ncols and nrows, they are truncated anyways
-    assert( iu <= static_cast<int>(cols()) + 0.01 && iv <= static_cast<int>(rows()) + 0.01 );
     //check for integer pixel coordinates
     if ((du-iu) == 0.0 && (dv-iv) == 0.0)
         return rays_[0][iv][iu];
@@ -315,58 +319,95 @@ vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
     //find neighboring rays and pixel distances to the sub-pixel location
     vcl_vector<double> dist;
     vcl_vector<vgl_ray_3d<T> > nrays;
-    // ray above
-    if (iv>0) {
-        vgl_ray_3d<T> ru = rays_[0][iv-1][iu];
-        nrays.push_back(ru);
-        double d = vcl_sqrt((iv-1-dv)*(iv-1-dv) + (iu-du)*(iu-du));
-        if (d==0.0)
-            return ru;
-        dist.push_back(1.0/d);
+    // closest ray (the lower left corner pixel in this case)
+    vgl_ray_3d<T> ru = rays_[0][iv][iu];
+    nrays.push_back(ru);
+    double d;
+    // origin of the unit-square defined by the nearest neighbors is the upper-left corner
+    if(du<nright && dv<nbelow) {
+        d = (1 - (dv-iv))*(1 - (du-iu));
     }
-    // ray to the left
-    if (iu>0) {
-        vgl_ray_3d<T> rl = rays_[0][iv][iu-1];
-        nrays.push_back(rl);
-        double d = vcl_sqrt((iv-dv)*(iv-dv) + (iu-1-du)*(iu-1-du));
-        if (d==0.0)
-            return rl;
-        dist.push_back(1.0/d);
+    // origin of the unit-square defined by the nearest neighbors is the lower-right corner
+    else if(du>=nright && dv>=nbelow) {
+        d = (1 - (iv-dv))*(1 - (iu-du));
     }
-    // ray to the right
-    int nrght = static_cast<int>(cols())-1;
-    if (iu<nrght) {
+    // origin of the unit-square defined by the nearest neighbors is the lower-left corner
+    else if(du<nright && dv>=nbelow) {
+        d = (1 - (iv-dv))*(1 - (du-iu));
+    }
+    // origin of the unit-square defined by the nearest neighbors is the upper-right corner
+    else if(du>=nright && dv<nbelow) {
+        d = (1 - (dv-iv))*(1 - (iu-du));
+    }
+    dist.push_back(d);
+
+    if(iu<nright) {
+        // ray to the right
         vgl_ray_3d<T> rr = rays_[0][iv][iu+1];
         nrays.push_back(rr);
-        double d = vcl_sqrt((iv-dv)*(iv-dv) + (iu+1-du)*(iu+1-du));
-        if (d==0.0)
-            return rr;
-        dist.push_back(1.0/d);
+        double d = (1 - (dv-iv))*(1 - (iu+1-du));
+        dist.push_back(d);
     }
-    // ray below
-    int nbl = static_cast<int>(rows())-1;
-    if (iv<nbl) {
+    if(iv<nbelow) {
+        // ray below
         vgl_ray_3d<T> rd = rays_[0][iv+1][iu];
         nrays.push_back(rd);
-        double d = vcl_sqrt((iv+1-dv)*(iv+1-dv) + (iu-du)*(iu-du));
-        if (d==0.0)
-            return rd;
-        dist.push_back(1.0/d);
+        double d = (1 - (iv+1-dv))*(1 - (du-iu));
+        dist.push_back(d);
     }
+    if(iu<nright && iv<nbelow) {
+        // ray to the lower-right diagonal
+        vgl_ray_3d<T> rlr = rays_[0][iv+1][iu+1];
+        nrays.push_back(rlr);
+        double d = (1 - (iv+1-dv))*(1 - (iu+1-du));
+        dist.push_back(d);
+    }
+    if(dist.size()<4 && iu>0) {
+        // ray to the left
+        vgl_ray_3d<T> rl = rays_[0][iv][iu-1];
+        nrays.push_back(rl);
+        double d = (1 - (dv-iv))*(1 - (du-(iu-1)));
+        dist.push_back(d);
+    }
+    if(dist.size()<4 && iv>0) {
+        // ray above
+        vgl_ray_3d<T> ru = rays_[0][iv-1][iu];
+        nrays.push_back(ru);
+        double d = (1 - (dv-(iv-1)))*(1 - (du-iu));
+        dist.push_back(d);
+    }
+    if(dist.size()<4 && iv<nbelow && iu>0) {
+        // ray to the lower-left diagonal
+        vgl_ray_3d<T> rll = rays_[0][iv+1][iu-1];
+        nrays.push_back(rll);
+        double d = (1 - (iv+1-dv))*(1 - (du-(iu-1)));
+        dist.push_back(d);
+    }
+    if(dist.size()<4 && iv>0 && iu>0) {
+        // ray to the upper-left diagonal
+        vgl_ray_3d<T> rul = rays_[0][iv-1][iu-1];
+        nrays.push_back(rul);
+        double d = (1 - (dv-(iv-1)))*(1 - (du-(iu-1)));
+        dist.push_back(d);
+    }
+    if(dist.size()<4 && iv>0 && iu<nright) {
+        // ray to the upper-right diagonal
+        vgl_ray_3d<T> rur = rays_[0][iv-1][iu+1];
+        nrays.push_back(rur);
+        double d = (1 - (dv-(iv-1)))*(1 - (iu+1-du));
+        dist.push_back(d);
+    }
+    assert(dist.size() == 4);
     // compute the interpolated ray
     double ox = 0.0, oy = 0.0, oz = 0.0, dx = 0.0, dy = 0.0, dz = 0.0;
-    double sumw = 0.0;
     for (unsigned i = 0; i<nrays.size(); ++i) {
         vgl_ray_3d<T> r = nrays[i];
         vgl_point_3d<T> org = r.origin();
         vgl_vector_3d<T> dir = r.direction();
         double w = dist[i];
-        sumw += w;
         ox += w*org.x(); oy += w*org.y(); oz += w*org.z();
         dx += w*dir.x(); dy += w*dir.y(); dz += w*dir.z();
     }
-    ox /= sumw;  oy /= sumw; oz /= sumw;
-    dx /= sumw;  dy /= sumw; dz /= sumw;
     vgl_point_3d<T> avg_org(static_cast<T>(ox),
         static_cast<T>(oy),
         static_cast<T>(oz));
