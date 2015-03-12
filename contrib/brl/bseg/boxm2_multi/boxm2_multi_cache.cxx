@@ -9,8 +9,8 @@
 #include <vsph/vsph_camera_bounds.h>
 
 //: init opencl cache for each device
-boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr              scene,
-                                     vcl_vector<bocl_device*> &    devices)
+boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
+                               const vcl_vector<bocl_device_sptr> &devices)
 {
   scene_ = scene;
   boxm2_lru_cache1::create(scene);

@@ -51,8 +51,8 @@ class bocl_manager
   void clear_cl();
 
   //: available devices
-  vcl_vector<bocl_device*> gpus_;
-  vcl_vector<bocl_device*> cpus_;
+  vcl_vector<bocl_device_sptr> gpus_;
+  vcl_vector<bocl_device_sptr> cpus_;
   int numCPUs() const { return cpus_.size(); }
   int numGPUs() const { return gpus_.size(); }
 

@@ -22,19 +22,19 @@
 class bocl_device: public vbl_ref_count
 {
   public:
-    bocl_device() : device_(0) {}
+    bocl_device() {}
     bocl_device(cl_device_id& device);
     virtual ~bocl_device();
 
     //: accessors for context/device
-    cl_device_id*     device_id() { return device_; }
+    cl_device_id*     device_id() { return &device_; }
     cl_context&       context() { return context_; }
     bocl_device_info& info() { return info_; }
     //: function which returns a unique string for a device.
     vcl_string device_identifier();
   private:
     //:Store a pointer to the cl_device_id
-    cl_device_id* device_;
+    cl_device_id device_;
 
     //: create and store a context
     cl_context context_;

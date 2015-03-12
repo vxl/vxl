@@ -33,8 +33,8 @@ class boxm2_multi_cache: public vbl_ref_count
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   public:
-    boxm2_multi_cache( boxm2_scene_sptr              scene,
-                       vcl_vector<bocl_device*> &    devices );
+    boxm2_multi_cache( boxm2_scene_sptr               scene,
+                 const vcl_vector<bocl_device_sptr> & devices );
     ~boxm2_multi_cache();
 
     vcl_vector<boxm2_opencl_cache1*>& ocl_caches() { return ocl_caches_; }

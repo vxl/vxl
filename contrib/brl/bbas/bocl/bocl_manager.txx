@@ -94,7 +94,7 @@ bool bocl_manager<T>::initialize_cl()
 
       //create device objects, push them onto gpu list
       for (unsigned int i=0; i<numGpus; ++i) {
-        bocl_device* gpu = new bocl_device(gpu_ids[i]);
+        bocl_device_sptr gpu = new bocl_device(gpu_ids[i]);
         gpus_.push_back(gpu);
       }
 
@@ -115,7 +115,7 @@ bool bocl_manager<T>::initialize_cl()
 
       //create device objects, push them onto gpu list
       for (unsigned int i=0; i<numCpus; ++i) {
-        bocl_device* cpu = new bocl_device(cpu_ids[i]);
+        bocl_device_sptr cpu = new bocl_device(cpu_ids[i]);
         cpus_.push_back(cpu);
       }
       break;

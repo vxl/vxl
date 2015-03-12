@@ -9,17 +9,15 @@
 #include <vcl_cstring.h>
 
 
-bocl_device::bocl_device(cl_device_id& device)
+bocl_device::bocl_device(cl_device_id& device) : device_(device)
 {
-  device_ = new cl_device_id[1];
-  device_[0] = device;
-  info_ = bocl_device_info(device_);
+  info_ = bocl_device_info(&device_);
 
   //vcl_cout<<"Device specs: "<<info_<<vcl_endl;
 
   //Create a context from the device ID
   int status = 1;
-  context_ = clCreateContext(0, 1, device_, NULL, NULL, &status);
+  context_ = clCreateContext(0, 1, &device_, NULL, NULL, &status);
   if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed: " + error_to_string(status))) {
     return;
   }
@@ -28,14 +26,13 @@ bocl_device::bocl_device(cl_device_id& device)
 vcl_string bocl_device::device_identifier()
 {
     vcl_stringstream outstr;
-    outstr<<(long)(device_[0]);
+    outstr<<(long)(device_);
     return info_.device_vendor_+info_.device_name_+outstr.str();
 }
 //destructor
 bocl_device::~bocl_device()
 {
   if (context_) clReleaseContext(context_);
-  if (device_) delete[] device_;
 }
 
 
