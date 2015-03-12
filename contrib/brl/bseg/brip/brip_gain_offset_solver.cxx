@@ -91,6 +91,7 @@ brip_gain_offset_solver(vil_image_view<float> const& model_image,
 //  Use SVD to solve A [gain] = b
 //                     [off]
 //
+//: compute the number of valid corresponding pixels in the case of masks
 bool brip_gain_offset_solver::solve()
 {
   if (test_image_.ni() !=ni_ ||
@@ -120,7 +121,48 @@ bool brip_gain_offset_solver::solve()
   offset_ = static_cast<float>(x[1][0]);
   return true;
 }
+bool brip_gain_offset_solver::solve_with_constraints(double lambda)
+{
 
+    if (test_image_.ni() != ni_ ||
+        test_image_.nj() != nj_ ||
+        model_image_.ni() != ni_ ||
+        model_image_.nj() != nj_)
+        return false;
+
+    double sumx = 0.0;
+    double sumy = 0.0;
+    double sumxy = 0.0;
+    double sumyy = 0.0;
+    int count = 0;
+    for (unsigned j = 0; j<nj_; ++j)
+        for (unsigned i = 0; i<ni_; ++i)
+        {
+            if (m_mask_)
+                if (!model_mask_(i, j))
+                    continue;
+            if (t_mask_)
+                if (!test_mask_(i, j))
+                    continue;
+
+            float x = model_image_(i, j);
+            float y = test_image_(i, j);
+            sumx += x;
+            sumy += y;
+            sumxy += x*y;
+            sumyy += y*y;
+            count++;
+        }
+    sumx /= (double)count;
+    sumy /= (double)count;
+    sumxy /= (double)count;
+    sumyy /= (double)count;
+    gain_ = static_cast<float>((lambda + sumxy - (sumx*sumy) / (double)(lambda + 1)) / (lambda + sumyy - (sumy*sumy) / (double)(lambda + 1)));
+    offset_ = static_cast<float>((sumx - sumy*gain_) / (double)(1 + lambda));
+
+    vcl_cout << "Gain " << gain_ << " offset " << offset_ << vcl_endl;
+    return true;
+}
 vil_image_view<float> brip_gain_offset_solver::mapped_test_image()
 {
   vil_image_view<float> temp(ni_, nj_);

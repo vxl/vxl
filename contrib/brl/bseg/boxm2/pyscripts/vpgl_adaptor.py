@@ -610,7 +610,27 @@ def get_nitf_footprint(nitf_list_filename, out_kml_filename):
     boxm2_batch.set_input_string(0,nitf_list_filename);
     boxm2_batch.set_input_string(1,out_kml_filename);
     boxm2_batch.run_process();
-
+def get_single_nitf_footprint(nitf_filename, out_kml_filename="",isKml = False, metafolder =""):
+    boxm2_batch.init_process('vpglNITFFootprintProcess2');
+    boxm2_batch.set_input_string(0,nitf_filename);
+    boxm2_batch.set_input_string(1,out_kml_filename);
+    boxm2_batch.set_input_bool(2,isKml);
+    boxm2_batch.set_input_string(3,metafolder);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    llon = boxm2_batch.get_output_double(id);
+    (id,type) = boxm2_batch.commit_output(1);
+    llat = boxm2_batch.get_output_double(id);
+    (id,type) = boxm2_batch.commit_output(2);
+    lele = boxm2_batch.get_output_double(id);
+    (id,type) = boxm2_batch.commit_output(3);
+    rlon = boxm2_batch.get_output_double(id);
+    (id,type) = boxm2_batch.commit_output(4);
+    rlat = boxm2_batch.get_output_double(id);
+    (id,type) = boxm2_batch.commit_output(5);
+    rele = boxm2_batch.get_output_double(id);
+    boxm2_batch.remove_data(id);
+    return llon, llat, lele, rlon, rlat, rele
 def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=True):
     boxm2_batch.init_process('vpglGeoFootprintProcess');
     boxm2_batch.set_input_from_db(0,geocam);

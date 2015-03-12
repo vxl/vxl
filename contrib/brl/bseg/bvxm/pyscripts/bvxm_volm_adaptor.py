@@ -159,12 +159,11 @@ def find_stereo_pairs2(res, poly_roi, GSD_threshold, scene_res_file, satellite_n
   cnt = bvxm_batch.get_output_unsigned(id);
   return cnt;
 
-def correct_ransac_process(res, cor_file, output_folder, pixel_radius):
+def correct_ransac_process( cor_file, output_folder, pixel_radius):
   bvxm_batch.init_process("volmCorrectRationalCamerasRANSACProcess");
-  bvxm_batch.set_input_from_db(0, res);
-  bvxm_batch.set_input_string(1, cor_file);
-  bvxm_batch.set_input_string(2, output_folder);
-  bvxm_batch.set_input_float(3, pixel_radius);  ## pixel radius to count for inliers
+  bvxm_batch.set_input_string(0, cor_file);
+  bvxm_batch.set_input_string(1, output_folder);
+  bvxm_batch.set_input_float(2, pixel_radius);  ## pixel radius to count for inliers
   bvxm_batch.run_process();
 
 ## this one checks if the camera is already corrected and exists in the output folder

@@ -11,4 +11,6 @@ DECLARE_FUNC_CONS(brip_blobwise_kl_div_process);
 DECLARE_FUNC_CONS(brip_blob_intersection_process);
 DECLARE_FUNC_CONS(brip_solve_gain_offset_process);
 DECLARE_FUNC_CONS(brip_truncate_nitf_bit_process);
+DECLARE_FUNC_CONS(brip_solve_gain_offset_constraints_process);
+
 #endif

@@ -96,12 +96,19 @@ bool vpgl_nitf_footprint_process(bprb_func_process& pro)
 //: initialization
 bool vpgl_nitf_footprint_process2_cons(bprb_func_process& pro)
 {
-  //this process takes 5 inputs:
+  //this process takes 4 inputs:
   // 1: (vcl_string) the image filename
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("vcl_string");
   input_types.push_back("bool");
+  input_types.push_back("vcl_string"); // metadata folder
+
+  if(!pro.set_input_types(input_types) )
+    return false;
+
+  pro.set_input(3, new brdb_value_t<vcl_string>("")); // empty metadata folder
+
   //this process takes 4 outputs
   vcl_vector<vcl_string> output_types;
   output_types.push_back("double");  // lower left  lon
@@ -110,6 +117,7 @@ bool vpgl_nitf_footprint_process2_cons(bprb_func_process& pro)
   output_types.push_back("double");  // upper right lon
   output_types.push_back("double");  // upper right lat
   output_types.push_back("double");  // upper right elev
+  pro.set_output_types(output_types);
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 
@@ -125,6 +133,7 @@ bool vpgl_nitf_footprint_process2(bprb_func_process& pro)
   vcl_string img_file = pro.get_input<vcl_string>(0);
   vcl_string kml_file = pro.get_input<vcl_string>(1);
   bool         is_kml = pro.get_input<bool>(2);
+  vcl_string metadatafolder = pro.get_input<vcl_string>(3);
   if (!vul_file::exists(img_file)) {
     vcl_cerr << pro.name() << ": can not find input image file: " << img_file << "!\n";
     return false;
@@ -132,7 +141,7 @@ bool vpgl_nitf_footprint_process2(bprb_func_process& pro)
   
   
   // load image metadata
-  brad_image_metadata meta(img_file,"");
+  brad_image_metadata meta(img_file,metadatafolder);
   double lower_left_lon  = meta.lower_left_.x();
   double lower_left_lat  = meta.lower_left_.y();
   double lower_left_elev = meta.lower_left_.z();

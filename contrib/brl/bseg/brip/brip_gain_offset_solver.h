@@ -56,6 +56,7 @@ class brip_gain_offset_solver
   float offset()const {return offset_;}
   //: operations
   bool solve();
+  bool solve_with_constraints(double lambda);
   //:transform the test image by the solved gain and offset
   vil_image_view<float> mapped_test_image();
  protected:
