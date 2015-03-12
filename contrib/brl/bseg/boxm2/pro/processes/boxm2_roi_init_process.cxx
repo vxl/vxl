@@ -89,6 +89,10 @@ bool boxm2_roi_init_process_globals::roi_init( vcl_string const& image_path,
 {
   //: read the image and extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
+  if(!img) {
+    vcl_cerr << "boxm2_roi_init_process::execute - The NITF could not be loaded\n";
+    return false;
+  }
   vcl_string format = img->file_format();
   vcl_string prefix = format.substr(0,4);
   if (prefix.compare("nitf") != 0) {
