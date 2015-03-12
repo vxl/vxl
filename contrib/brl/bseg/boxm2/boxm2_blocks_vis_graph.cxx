@@ -4,9 +4,9 @@
 
 boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_metadata> & blkmetadata, vpgl_generic_camera<double> const& cam ): nodes_()
 {
-    // bounding box representation of image bounds
+    // bounding box representation of image point samples
     vgl_box_2d<double> image_bounds(vgl_point_2d<double>(0,0),
-                                    vgl_point_2d<double>(cam.cols(), cam.rows()));
+                                    vgl_point_2d<double>(cam.cols()-1, cam.rows()-1));
 
     vcl_list<boxm2_block_vis_graph_node_sptr> temp_nodes;
     // create a node for every block in the model

@@ -18,6 +18,9 @@
 //   the map can be more complex. It is assumed that the ray field is smooth
 //   so that local derivatives are defined
 //
+//   Pixels (point samples, really) are centered at integer values; consequently,
+//   the leading edge of pixel (0,0) is technically (-0.5, -0.5).
+
 // \verbatim
 //  Modifications <none>
 // \endverbatim

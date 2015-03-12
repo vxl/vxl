@@ -1162,6 +1162,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           unsigned int offsetj = bigj*factor;
           if(bigj == numj )
               offsetj = gnj-factor;     
+          // vpgl_generic_camera expects pixels centered at integer values (pyramid_est is agnostic; 
+          // although, as uints, offseti and offsetj will center pixels on integers)
           if(!vpgl_generic_camera_convert::pyramid_est(rat_cam,ni,nj,offseti,offsetj,local_z_min, local_z_max,n_levels,nr, nc,scl,ray_pyr ))
               return false;
           for(unsigned int i = 0; i < factor; i++)

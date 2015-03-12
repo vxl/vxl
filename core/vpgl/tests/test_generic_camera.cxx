@@ -32,7 +32,7 @@ static void simple_test()
 #endif
   vgl_ray_3d<double> interp_ray = c.ray(3.5, 2.5);
   vgl_point_3d<double> org = interp_ray.origin();
-  double er = vcl_fabs(org.x()-3.190983) + vcl_fabs(org.y()-2.190983);
+  double er = vcl_fabs(org.x()-3.5) + vcl_fabs(org.y()-2.5);
   TEST_NEAR("interpolated ray", er, 0.0, 0.0001);
   double x = 1.5, y = 2.5, z = 0.0, u = 0.0, v= 0.0;
   c.project(x, y, z, u, v);
@@ -55,7 +55,7 @@ static void proj_test()
   unsigned nj = 480;
   // construct a perspective camera for reference
   vpgl_calibration_matrix<double> K(ni, vgl_point_2d<double>((double)ni/2.0, (double)nj/2.0));
-  vgl_point_3d<double> center(0.0, 0.0, 0.0);
+  vgl_point_3d<double> center(10.0, 5.0, 15.0);
   vgl_rotation_3d<double> R;
   vpgl_perspective_camera<double> pcam(K, center, R);
 
@@ -70,14 +70,15 @@ static void proj_test()
 
   // project some random 3-d points into the image
   vcl_vector<vgl_point_3d<double> > test_pts;
-  test_pts.push_back(vgl_point_3d<double>(-4.2, -1.0, 10.9));
-  test_pts.push_back(vgl_point_3d<double>(-4.0, 3.4, 9.1));
-  test_pts.push_back(vgl_point_3d<double>(4.0, 2.9, 11.3));
-  test_pts.push_back(vgl_point_3d<double>(3.5, -2.0, 10.2));
-  test_pts.push_back(vgl_point_3d<double>(1.3, 0.1, 5.4));
-  test_pts.push_back(vgl_point_3d<double>(0.8, 3.0, 10.6));
-  test_pts.push_back(vgl_point_3d<double>(-1.5, -2.1, 10.0));
-  test_pts.push_back(vgl_point_3d<double>(0.1, 0.7, 5.8));
+  vgl_vector_3d<double> offset(center.x(), center.y(), center.z());
+  test_pts.push_back(vgl_point_3d<double>(-4.2, -1.0, 10.9)+offset);
+  test_pts.push_back(vgl_point_3d<double>(-4.0, 3.4, 9.1)+offset);
+  test_pts.push_back(vgl_point_3d<double>(4.0, 2.9, 11.3)+offset);
+  test_pts.push_back(vgl_point_3d<double>(3.5, -2.0, 10.2)+offset);
+  test_pts.push_back(vgl_point_3d<double>(1.3, 0.1, 5.4)+offset);
+  test_pts.push_back(vgl_point_3d<double>(0.8, 3.0, 10.6)+offset);
+  test_pts.push_back(vgl_point_3d<double>(-1.5, -2.1, 10.0)+offset);
+  test_pts.push_back(vgl_point_3d<double>(0.1, 0.7, 5.8)+offset);
 
   for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = test_pts.begin();
        pit != test_pts.end(); ++pit) {
@@ -89,9 +90,55 @@ static void proj_test()
     vcl_stringstream testname;
     testname << "Projection of test point " << *pit << ": u" << vcl_endl;
     TEST_NEAR(testname.str().c_str(), u, p2d.x(), 1e-3);
-    testname.str();
+    testname.str("");
     testname << "Projection of test point " << *pit << ": v" << vcl_endl;
     TEST_NEAR(testname.str().c_str(), v, p2d.y(), 1e-3);
+  }
+
+
+  vcl_vector<vgl_point_2d<double> > test_pts1;
+  test_pts1.push_back(vgl_point_2d<double>(639.496, 97.5777));
+  test_pts1.push_back(vgl_point_2d<double>(280.9, 1.9)); // original failing point (interior)
+  // exterior points
+  test_pts1.push_back(vgl_point_2d<double>(0.5, -0.5));
+  test_pts1.push_back(vgl_point_2d<double>(-0.5, -0.5));
+  test_pts1.push_back(vgl_point_2d<double>(-0.5, 0.5));
+  test_pts1.push_back(vgl_point_2d<double>(638.5, -0.5));
+  test_pts1.push_back(vgl_point_2d<double>(639.5, -0.5));
+  test_pts1.push_back(vgl_point_2d<double>(639.5, 0.0));
+  test_pts1.push_back(vgl_point_2d<double>(639.5, 0.5));
+  test_pts1.push_back(vgl_point_2d<double>(-0.5, 478.5));
+  test_pts1.push_back(vgl_point_2d<double>(-0.5, 479.5));
+  test_pts1.push_back(vgl_point_2d<double>(0.5, 479.5));
+  test_pts1.push_back(vgl_point_2d<double>(638.5, 479.5));
+  test_pts1.push_back(vgl_point_2d<double>(639.5, 479.5));
+  test_pts1.push_back(vgl_point_2d<double>(638.5, 479.5));
+
+  for (vcl_vector<vgl_point_2d<double> >::const_iterator pit = test_pts1.begin();
+       pit != test_pts1.end(); ++pit) {
+    double u=pit->x(), v=pit->y();
+    vgl_ray_3d<double> ray = pcam.backproject_ray(u, v);
+    vgl_ray_3d<double> r = gcam.ray(u, v);
+
+    vcl_cout << vcl_endl;
+    vcl_stringstream testname;
+    testname << "Ray origin for test point " << *pit << ": x" << vcl_endl;
+    TEST_NEAR(testname.str().c_str(), r.origin().x(), ray.origin().x(), 1e-3);
+    testname.str("");
+    testname << "Ray origin for test point " << *pit << ": y" << vcl_endl;
+    TEST_NEAR(testname.str().c_str(), r.origin().y(), ray.origin().y(), 1e-3);
+    testname.str("");
+    testname << "Ray origin for test point " << *pit << ": z" << vcl_endl;
+    TEST_NEAR(testname.str().c_str(), r.origin().z(), ray.origin().z(), 1e-3);
+    testname.str("");
+    testname << "Ray direction for test point " << *pit << ": dx" << vcl_endl;
+    TEST_NEAR(testname.str().c_str(), r.direction().x(), ray.direction().x(), 1e-3);
+    testname.str("");
+    testname << "Ray direction for test point " << *pit << ": dy" << vcl_endl;
+    TEST_NEAR(testname.str().c_str(), r.direction().y(), ray.direction().y(), 1e-3);
+    testname.str("");
+    testname << "Ray direction for test point " << *pit << ": dz" << vcl_endl;
+    TEST_NEAR(testname.str().c_str(), r.direction().z(), ray.direction().z(), 1e-3);
   }
 }
 
