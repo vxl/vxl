@@ -16,7 +16,7 @@ void compute_ocl_cholesky(vnl_matrix<float>  A, vnl_vector<float>  b, vnl_vector
   //load BOCL stuff
   bocl_manager_child* mgr = bocl_manager_child::instance();
   if (mgr->gpus_.size()==0)   return;
-  bocl_device* device = mgr->gpus_[0];
+  bocl_device_sptr device = mgr->gpus_[0];
 
   vcl_cout<<device->info();
 

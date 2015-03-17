@@ -41,7 +41,7 @@ void test_image()
   bocl_manager_child* mgr = bocl_manager_child::instance();
   if (mgr->gpus_.size()==0)
     return;
-  bocl_device* device = mgr->gpus_[0];
+  bocl_device_sptr device = mgr->gpus_[0];
 
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;
@@ -149,7 +149,7 @@ void test_ray_pyramid()
   bocl_manager_child* mgr = bocl_manager_child::instance();
   if (mgr->gpus_.size()==0)
     return;
-  bocl_device* device = mgr->gpus_[0];
+  bocl_device_sptr device = mgr->gpus_[0];
 
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;

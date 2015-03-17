@@ -125,7 +125,7 @@ int main(int argc,  char** argv)
     return -1;
   }
   //make a multicache
-  vcl_vector<bocl_device*> gpus;
+  vcl_vector<bocl_device_sptr> gpus;
   for (unsigned int i=0; i<numGPU(); ++i)
     gpus.push_back(mgr->gpus_[i]);
   boxm2_multi_cache mcache(scene, gpus);
