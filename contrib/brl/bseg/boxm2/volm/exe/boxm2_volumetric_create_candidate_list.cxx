@@ -178,7 +178,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> query_img("-img", "query image", "");
   vul_arg<unsigned> test_id("-testid", "phase 1 test id", 0);
   vul_arg<unsigned> id("-imgid", "query image id", 101);
-  vul_arg<vcl_string> world_str("-world", "roi world name -- coast, desert, Chile, India, Jordan, Philippines, Taiwan", "");
+  vul_arg<unsigned> world_id("-world", "roi world id", 9999);
   vul_arg<unsigned> threshold("-thres", "threshold that used to create candidate list", 0);
   vul_arg<float> thres_scale("-scale", "threshold that used to create Probability map", 0.0f);
   vul_arg<unsigned> top_size("-top", "desired top list for each candidate list", 1);
@@ -373,7 +373,7 @@ int main(int argc,  char** argv)
   vcl_string log_file = out_kml() + "/candidate_list_log.xml";
   vcl_cout << " log_file = " << log_file << vcl_endl;
   // check input parameter
-  if (out().compare("") == 0 || threshold() == 0 || world_str().compare("") == 0 || cam_bin().compare("") == 0 || query_img().compare("") == 0 ||
+  if (out().compare("") == 0 || threshold() == 0 || world_id() == 9999 || cam_bin().compare("") == 0 || query_img().compare("") == 0 ||
       score_folder().compare("") == 0 || geo_hypo().compare("") == 0 || out_kml().compare("") == 0 ||
       id() > 900 || test_id() == 0 || thres_scale() == 0.0f) {
     log << " ERROR: input files/folders/arguments can not be empty\n";
@@ -398,17 +398,9 @@ int main(int argc,  char** argv)
 
   // create volm_tile
   vcl_vector<volm_tile> tiles;
-  if (world_str() == "coast")             tiles = volm_tile::generate_p1_wr2_tiles();
-  else if (world_str() == "desert")       tiles = volm_tile::generate_p1_wr1_tiles();
-  else if (world_str() == "Chile")        tiles = volm_tile::generate_p1b_wr1_tiles();
-  else if (world_str() == "India")        tiles = volm_tile::generate_p1b_wr2_tiles();
-  else if (world_str() == "Jordan")       tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (world_str() == "Philippines")  tiles = volm_tile::generate_p1b_wr4_tiles();
-  else if (world_str() == "Taiwan")       tiles = volm_tile::generate_p1b_wr5_tiles();
-  else {
-    log << "ERROR: unknown world region, should be \" desert, coast, Chile, India, Jordan, Philippines, Taiwan\"\n";
-    volm_io::write_post_processing_log(log_file, log.str());
-    vcl_cerr << log.str();
+  if (!volm_tile::generate_tiles(world_id(), tiles)) {
+    log << "ERROR: unknown world id: " << world_id() << "!!!\n";
+    volm_io::write_post_processing_log(log_file, log.str());  vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
   unsigned n_tile = tiles.size();

@@ -25,6 +25,7 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <bsol/bsol_algs.h>
+#include <bkml/bkml_write.h>
 //:
 //  Take an ortho image and its camera, a bin file with an osm object list, map the objects onto the image
 bool volm_map_osm_process_cons(bprb_func_process& pro)
@@ -33,6 +34,7 @@ bool volm_map_osm_process_cons(bprb_func_process& pro)
   input_types.push_back("vil_image_view_base_sptr");  // ortho image - pass as converted to byte image
   input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
   input_types.push_back("vcl_string");   // bin file with osm object list
+  input_types.push_back("vcl_string");   // a binary file to store the projected line on image domain
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
   return pro.set_input_types(input_types)
@@ -42,8 +44,11 @@ bool volm_map_osm_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool volm_map_osm_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs() < 3) {
-    vcl_cout << "volm_map_osm_process: The number of inputs should be 3" << vcl_endl;
+  vsl_add_to_binary_loader(vsol_polygon_2d());
+  vsl_add_to_binary_loader(vsol_polyline_2d());
+  vsl_add_to_binary_loader(vsol_point_2d());
+  if (pro.verify_inputs()) {
+    vcl_cout << "volm_map_osm_process: Input Error" << vcl_endl;
     return false;
   }
 
@@ -51,6 +56,7 @@ bool volm_map_osm_process(bprb_func_process& pro)
   vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(1);
   vcl_string osm_file  = pro.get_input<vcl_string>(2);
+  vcl_string out_bin_file = pro.get_input<vcl_string>(3);
 
   vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
   if (!geo_cam) {
@@ -59,7 +65,6 @@ bool volm_map_osm_process(bprb_func_process& pro)
   }
   
   vil_image_view<vxl_byte> bimg(img_sptr);
-  
   vil_image_view<vil_rgb<vxl_byte> > out_img(img_sptr->ni(), img_sptr->nj(), 1);
   for (unsigned i = 0; i < out_img.ni(); i++) 
     for (unsigned j = 0; j < out_img.nj(); j++) {
@@ -95,9 +100,15 @@ bool volm_map_osm_process(bprb_func_process& pro)
       img_lines.push_back(img_line);
   }
   vcl_cout << "number of img lines: " << img_lines.size() << vcl_endl;
+  vcl_vector<vsol_spatial_object_2d_sptr> sos;
   if (hit) {
     for (unsigned i = 0; i < img_lines.size(); i++) {
       vcl_cout << "img line: " << i << " number of pts: " << img_lines[i].size() << " ";
+      vcl_vector<vsol_point_2d_sptr> vertices;
+      for (unsigned j = 0; j < img_lines.size(); j++)
+        vertices.push_back(new vsol_point_2d(img_lines[i][j].first, img_lines[i][j].second));
+      vsol_polyline_2d_sptr vsolp = new vsol_polyline_2d(vertices);
+      sos.push_back(vsolp->cast_to_spatial_object());
       out_img(img_lines[i][0].first, img_lines[i][0].second).r = 255;
       for (unsigned j = 1; j < img_lines[i].size(); j++) {
         double prev_u = img_lines[i][j-1].first;
@@ -124,6 +135,18 @@ bool volm_map_osm_process(bprb_func_process& pro)
     }
   }
 
+  // write out the binary file
+  if (out_bin_file.compare("") != 0) {
+    if (sos.size() != 0) {
+      vsl_b_ofstream ostr(out_bin_file);
+      if (!ostr)
+        vcl_cerr << pro.name() << ": failed to open output stream " << out_bin_file << vcl_endl;
+      else {
+        vsl_b_write(ostr, sos);
+        ostr.close();
+      }
+    }
+  }
 
   vil_image_view_base_sptr out_img_sptr = new vil_image_view<vxl_byte>(out_img);
 
@@ -342,6 +365,7 @@ bool volm_map_osm_onto_image_process_cons(bprb_func_process& pro)
   input_types.push_back("bool");         // option to project OSM road
   input_types.push_back("bool");         // option to project OSM buildings
   input_types.push_back("vcl_string");   // if passed then also output a binary file with the mapped objects in image coordinates saved as a vector of vsol_spatial_object_2d_sptr
+  input_types.push_back("vcl_string");   // if passed then also output a ortho kml file with all projected OSM objects
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
   return pro.set_input_types(input_types)
@@ -351,11 +375,13 @@ bool volm_map_osm_onto_image_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool volm_map_osm_onto_image_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs() < 5) {
-    vcl_cout << "volm_map_osm_process: The number of inputs should be 5" << vcl_endl;
+  if (!pro.verify_inputs()) {
+    vcl_cout << pro.name() << ": Wrong Input!!!" << vcl_endl;
     return false;
   }
-
+  vsl_add_to_binary_loader(vsol_polygon_2d());
+  vsl_add_to_binary_loader(vsol_polyline_2d());
+  vsl_add_to_binary_loader(vsol_point_2d());
   // get the inputs
   vil_image_view_base_sptr sat_img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
   vpgl_camera_double_sptr sat_cam = pro.get_input<vpgl_camera_double_sptr>(1);
@@ -367,8 +393,11 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
   bool is_region = pro.get_input<bool>(6);
   bool is_line   = pro.get_input<bool>(7);
   vcl_string bin_filename = pro.get_input<vcl_string>(8);
+  vcl_string out_kml_file = pro.get_input<vcl_string>(9);
   vcl_vector<vsol_spatial_object_2d_sptr> sos;
-
+  vcl_vector<vgl_polygon<double> >  projected_regions;
+  vcl_vector<vcl_vector<vgl_point_2d<double> > > projected_roads;
+  
   vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(ortho_cam.ptr());
   if (!geo_cam) {
     vcl_cerr << pro.name() << ": cannot cast the input cam to a vpgl_geo_camera!\n";
@@ -404,7 +433,6 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
   volm_osm_objects osm_objs(osm_file);
   vcl_cout << " =========== Load volumetric open street map objects... " << " ===============" << vcl_endl;
 
-
   // project OSM regions (building specifically) onto image
   bool hit = false;
   if (is_region)
@@ -425,7 +453,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
       vcl_vector<vgl_point_2d<double> > pts = loc_regions[i][0];
       //pts.push_back(loc_regions[i][0][0]);
       vcl_vector<vgl_point_2d<double> > img_poly;
-      
+      vcl_vector<vgl_point_2d<double> > loc_poly;
       vcl_vector<vsol_point_2d_sptr> vsol_pts;
       for (unsigned j = 0; j < pts.size(); j++) {
         double u, v;
@@ -445,6 +473,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
             vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
             img_poly.push_back(vgl_point_2d<double>(iuu,ivv));
+            loc_poly.push_back(vgl_point_2d<double>(pts[j].x(), pts[j].y()));
             vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
             hit = true;
           }
@@ -452,13 +481,16 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
       }
       if (img_poly.size() > 0) {
         img_polys.push_back(img_poly);
+        vgl_polygon<double> project_poly(loc_poly);
+        projected_regions.push_back(project_poly);
         if (vsol_pts.size() > 2) {
           vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
           sos.push_back(vsolp->cast_to_spatial_object());
         }
       }
     }
-
+    if (img_polys.size() > 0)
+      hit = true;
     if (hit) {
       for (unsigned i = 0; i < img_polys.size(); i++) {
         vcl_vector<vcl_pair<int, int> > img_line;
@@ -519,9 +551,11 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
     hit = false;
     vcl_vector<vcl_vector<vcl_pair<int, int> > > img_lines;
     vcl_vector<volm_osm_object_line_sptr> loc_lines = osm_objs.loc_lines();
-    for (unsigned i = 0; i < loc_lines.size(); i++) {
+    for (unsigned i = 0; i < loc_lines.size(); i++)
+    {
       vcl_vector<vgl_point_2d<double> > pts = loc_lines[i]->line();
       vcl_vector<vcl_pair<int, int> > img_line;
+      vcl_vector<vgl_point_2d<double> > loc_line;
       vcl_vector<vsol_point_2d_sptr> vsol_pts;
       for (unsigned j = 0; j < pts.size(); j++) {
         double u, v;
@@ -542,28 +576,23 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           unsigned ivv = (unsigned)vcl_floor(iv + 0.5f);
           if (iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
             vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
+            loc_line.push_back(pts[j]);
             img_line.push_back(vcl_pair<int, int>(iuu,ivv));
             vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
-            hit = true;
           }
         }
       }
-      if (img_line.size() > 0) {
+      if (img_line.size() > 2) {
         img_lines.push_back(img_line);
-        // add these as polygons too for now
-        //vsol_polyline_2d_sptr vsoll = new vsol_polyline_2d(vsol_pts);
-        //sos.push_back(vsoll->cast_to_spatial_object());
-        
-        // trace back the points to make it a polygon (its not a good idea to connect end point to the first point since roads curve and then the poly includes buildings, etc.)
-        for (int i = vsol_pts.size()-1; i >=0; i--) 
-          vsol_pts.push_back(vsol_pts[i]);
-        if (vsol_pts.size() > 2) {
-          vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-          sos.push_back(vsolp->cast_to_spatial_object());
-        } 
+        // add the line into project line
+        projected_roads.push_back(loc_line);
+        vsol_polyline_2d_sptr vsoll = new vsol_polyline_2d(vsol_pts);
+        sos.push_back(vsoll->cast_to_spatial_object());
       }
     }
     vcl_cout << "number of img lines: " << img_lines.size() << vcl_endl;
+    if (img_lines.size() > 0)
+      hit = true;
     if (hit) {
       for (unsigned i = 0; i < img_lines.size(); i++) {
         vcl_cout << "img line: " << i << " number of pts: " << img_lines[i].size() << " ";
@@ -591,7 +620,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           if (line_img.empty())
             continue;
           // expand the line to a region with certain width
-          double width = 3.0;
+          double width = 2.0;
           vgl_polygon<double> img_poly;
           volm_io_tools::expend_line(line_img, width, img_poly);
           vgl_polygon_scan_iterator<double> it(img_poly, true);
@@ -627,7 +656,28 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
         ostr.close();
       }
     }
-   
+  }
+  // write the kml
+  if (out_kml_file.compare("") != 0)
+  {
+    vcl_ofstream ofs(out_kml_file.c_str());
+    if (!ofs)
+      vcl_cerr << pro.name() << ": failed to open output stream " << out_kml_file << vcl_endl;
+    else {
+      bkml_write::open_document(ofs);
+      for (unsigned i = 0; i < projected_roads.size(); i++) {
+        vcl_stringstream name;
+        name << "road" << i;
+        bkml_write::write_path(ofs, projected_roads[i], name.str(), name.str(), 1.0, 2.0, 1.0, 255, 0, 0);
+      }
+      for (unsigned i = 0; i < projected_regions.size(); i++) {
+        vcl_stringstream name;
+        name << "region" << i;
+        bkml_write::write_polygon(ofs, projected_regions[i], name.str(), name.str(), 1.0, 3.0, 0.45, 0, 255, 0);
+      }
+      bkml_write::close_document(ofs);
+      ofs.close();
+    }
   }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
@@ -657,10 +707,13 @@ bool volm_map_osm_onto_image_process2_cons(bprb_func_process& pro)
 //: Execute the process
 bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
 {
-  if (pro.n_inputs() < 7) {
+  if (!pro.verify_inputs()) {
     vcl_cout << "volm_map_osm_onto_image_process2: The number of inputs should be 7" << vcl_endl;
     return false;
   }
+  vsl_add_to_binary_loader(vsol_polygon_2d());
+  vsl_add_to_binary_loader(vsol_polyline_2d());
+  vsl_add_to_binary_loader(vsol_point_2d());
 
   // get the inputs
   vil_image_view_base_sptr sat_img_sptr = pro.get_input<vil_image_view_base_sptr>(0);

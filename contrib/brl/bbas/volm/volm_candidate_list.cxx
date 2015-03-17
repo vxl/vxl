@@ -76,7 +76,7 @@ bool volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> 
     vgl_box_2d<int> bbox;
     for (unsigned v_idx = 0; v_idx < n_verts; v_idx++)
       bbox.add(poly_[sh_idx][v_idx]);
-    int max_u, max_v;
+    int max_u = 0, max_v = 0;
     unsigned max_score = thres_;
     for (int u = bbox.min_x(); u <= bbox.max_x(); u++) {
       for (int v = bbox.min_y(); v <= bbox.max_y(); v++) {
@@ -286,7 +286,7 @@ void volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string const&
       << "        <Icon><href>http://google.com/mapfiles/ms/micons/flag.png</href></Icon>\n"
       << "      </IconStyle>\n"
       << "    </Style>\n";
-#if 0
+#if 1
   str << "    <!-- The following <Folder> is the Candidate List -->\n";
   str << "    <Folder>\n"
       << "      <name>Candidate List</name>\n"
@@ -303,7 +303,7 @@ void volm_candidate_list::open_kml_document(vcl_ofstream& str, vcl_string const&
 void volm_candidate_list::close_kml_document(vcl_ofstream& str)
 {
   str << "    <!-- Here ends all Candidate lists -->\n";
-  //str << "    </Folder>\n";
+  str << "    </Folder>\n";
   str << "  </Document>\n</kml>\n";
 }
 

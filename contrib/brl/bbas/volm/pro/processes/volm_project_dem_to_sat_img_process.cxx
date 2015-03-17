@@ -1,4 +1,4 @@
-// This is brl/bbas/volm/volm_pro/processes/vpgl_project_dem_to_sat_res.cxx
+// This is brl/bbas/volm/processes/vlm_project_dem_to_sat_img_process.cxx
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -6,6 +6,7 @@
 //
 // \author Yi Dong
 // \date April 23, 2014
+// \verbatim
 //  Modifications
 //   Yi Dong May 1, 2014  -- add a bounding box of satellite viewpoint to speed up the process execution
 //   Ozge C. Ozcanli June 05, 2014 -- adding an option to use an ortho camera instead of a rational camera for the satellite view 

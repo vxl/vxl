@@ -222,7 +222,7 @@ def refine_bvxm_height_map(img, max_h, min_h):
 
 ## process to project open street map roads onto a cropped satellite images using
 ## its local cropped RPC camera, an ortho height map and an ortho camera
-def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, band = "r", is_road=True, is_region=False, vsol_bin_filename=""):
+def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, band = "r", is_road=True, is_region=False, vsol_bin_filename="", kml_file = ""):
   bvxm_batch.init_process("volmMapOSMtoImage");
   bvxm_batch.set_input_from_db(0, crop_img);
   bvxm_batch.set_input_from_db(1, crop_cam);
@@ -233,6 +233,7 @@ def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_fi
   bvxm_batch.set_input_bool(6,is_region)
   bvxm_batch.set_input_bool(7,is_road)
   bvxm_batch.set_input_string(8,vsol_bin_filename)
+  bvxm_batch.set_input_string(9,kml_file)
   status = bvxm_batch.run_process();
   if status:
     (id, type) = bvxm_batch.commit_output(0);
@@ -251,6 +252,7 @@ def project_osm_to_ortho_img(img_byte, ortho_cam, osm_file):
   (id, type) = bvxm_batch.commit_output(0);
   out_img = dbvalue(id, type);
   return hit, out_img
+
 def project_osm_category_to_ortho_img(img_byte, ortho_cam, osm_file, osm_category_name, output_vsol_binary_name):
   bvxm_batch.init_process("volmMapOSMontoImageProcess3");
   bvxm_batch.set_input_from_db(0,img_byte);
@@ -264,7 +266,7 @@ def project_osm_category_to_ortho_img(img_byte, ortho_cam, osm_file, osm_categor
 ## process to project open street map roads onto a cropped satellite images using
 ## its local cropped RPC camera, an ortho height map and an ortho camera
 ## pass osm_category_name as in the volm category names in table: Dropbox\projects\FINDER\data\OSM\land_category_08_12_2014.txt
-def project_osm_to_crop_img(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, osm_category_name, vsol_bin_filename):
+def project_osm_to_crop_img2(crop_img, crop_cam, ortho_img, ortho_cam, osm_bin_file, osm_category_name, vsol_bin_filename):
   bvxm_batch.init_process("volmMapOSMontoImageProcess2");
   bvxm_batch.set_input_from_db(0, crop_img);
   bvxm_batch.set_input_from_db(1, crop_cam);
@@ -358,3 +360,27 @@ def extract_building_outlines(height_img, class_img, geocam, csv_file_name, kml_
   binary_img_d = dbvalue(id, type);
   return binary_img, binary_img_e, binary_img_d
 
+def registration_error_analysis(gt_file, cor_file, ori_file, gsd = 1.0, cor_vector_file = "", ori_vector_file = ""):
+  bvxm_batch.init_process("volmRegistrationErrorProcess")
+  bvxm_batch.set_input_string(0, gt_file)
+  bvxm_batch.set_input_string(1, cor_file)
+  bvxm_batch.set_input_string(2, ori_file)
+  bvxm_batch.set_input_double(3, gsd)
+  bvxm_batch.set_input_string(4, cor_vector_file)
+  bvxm_batch.set_input_string(5, ori_vector_file)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    cor_average = bvxm_batch.get_output_double(id)
+    (id, type) = bvxm_batch.commit_output(1)
+    cor_std = bvxm_batch.get_output_double(id)
+    (id, type) = bvxm_batch.commit_output(2)
+    ori_average = bvxm_batch.get_output_double(id)
+    (id, type) = bvxm_batch.commit_output(3)
+    ori_std = bvxm_batch.get_output_double(id)
+    return cor_average, cor_std, ori_average, ori_std
+  else:
+    return 0.0, 0.0, 0.0, 0.0
+    
+    
+    
