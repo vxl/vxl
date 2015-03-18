@@ -634,8 +634,6 @@ bool volm_io::read_conf_query_tags(vcl_string xml_file,
   }
 
   // parse the world region
-  vcl_cout << "parser.region(): " << parser.region();
-  vcl_cout << "filename: " << parser.image_name();
   world_region = parser.region();
   // parse the query name
   vcl_string filename = parser.image_name();

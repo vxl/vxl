@@ -9,12 +9,12 @@ vcl_string volm_utils::volm_src_root()
     vcl_string volm_src_dir;
     char* volm_dir_env = getenv("VOLM_DIR");
     if (volm_dir_env != NULL) {
-    	volm_src_dir = vcl_string(volm_dir_env) + "/";
+      volm_src_dir = vcl_string(volm_dir_env) + "/";
     }
 //    vcl_cout<<"VOLM dir "<<volm_src_dir<<vcl_endl;
 //    if ( volm_src_dir == "" )
-//    	volm_src_dir = VOLM_SOURCE_DIR ;
+//      volm_src_dir = VOLM_SOURCE_DIR ;
     if ( volm_src_dir == "" )
-    	volm_src_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/";
+      volm_src_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/";
     return volm_src_dir;
 }

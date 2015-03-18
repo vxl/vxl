@@ -186,6 +186,7 @@ vcl_map<vcl_string, volm_land_layer> load_tag_to_volm_land_table()
     if (volm_land_name.compare("invalid") != 0)
       m[tag_name] = volm_osm_category_io::volm_land_table_name[volm_land_name];
   }
+  unsigned cnt = 0;
   return m;
 }
 
@@ -198,7 +199,7 @@ vcl_map<unsigned, volm_land_layer> create_volm_land_table()
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
   vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table = load_osm_road_junction_table();
 
-  vcl_string osm_to_volm_txt = volm_utils::volm_src_root() + "qosm_to_volm_labels.txt";
+  vcl_string osm_to_volm_txt = volm_utils::volm_src_root() + "osm_to_volm_labels.txt";
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
 
   for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
