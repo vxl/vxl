@@ -17,6 +17,7 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/ocl/algo/boxm2_ocl_expected_image_renderer.h>
+#include <boxm2/ocl/algo/boxm2_ocl_depth_renderer.h>
 //: Map a scene with Euclidean and anisotropic scale transforms.
 // the input transform is the inverse so that the target scene voxels
 // are mapped backwards to extract the data from the source
@@ -28,13 +29,9 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //: Constructor. 
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& target_scene,
-                                 boxm2_opencl_cache_sptr ocl_cache,
-                                 unsigned ni, unsigned nj);
+                                 boxm2_opencl_cache_sptr ocl_cache);
 
   ~boxm2_vecf_ocl_transform_scene();
-
-  unsigned ni() const{return  cl_ni_;}
-  unsigned nj() const{return  cl_nj_;}
 
   //: transform a scene of arbitray size, block by block
   // no interpolation
@@ -61,22 +58,23 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 
   //:render the current state of the target scene leaving scene GPU buffers in place
   // thus rendering can be faster since block buffer transfers are not needed
-  bool render_scene_appearance(vpgl_camera_double_sptr const & cam, vil_image_view<float>& expected_img,
-                               vil_image_view<float>& vis_img);
+  bool render_scene_appearance(vpgl_camera_double_sptr const & cam,
+                               vil_image_view<float>& expected_img, vil_image_view<float>& vis_img,
+                               unsigned ni, unsigned nj);
 
   //:render the depth of the current state of the target scene leaving scene GPU buffers in place
-  bool render_scene_depth(vpgl_camera_double_sptr const & cam, vil_image_view<float>& expected_depth,
-                          vil_image_view<float>& vis_img);
+  bool render_scene_depth(vpgl_camera_double_sptr const & cam,
+                          vil_image_view<float>& expected_depth, vil_image_view<float>& vis_img,
+                          unsigned ni, unsigned nj);
  private:
   bool init_render_args();
 
   boxm2_ocl_expected_image_renderer renderer_;
+  boxm2_ocl_depth_renderer depth_renderer_;
 
  protected:
   //bool compile_trans_kernel();
   bool compile_trans_interp_kernel();
-  bool compile_depth_kernel();
-  bool compile_depth_norm_kernel();
   bool init_ocl_trans();
   bool get_scene_appearance(boxm2_scene_sptr scene,
                             vcl_string&      options);
@@ -125,45 +123,6 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem* mog_target_;
   bocl_mem* blk_target_;
 
-  // expected image kernels and args
-  vcl_size_t lthreads_[2];
-  float* img_buff_; // exp. img
-  float* vis_buff_; // exp. img and depth
-  float* max_omega_buff_; // for exp. img
-
-  float* depth_buff_; // for depth
-  float* var_buff_; // for depth
-  float* prob_image_buff_; // for depth
-  float* t_infinity_buff_; // for depth
-  float subblk_dim_buff_;
-
-  cl_float* ray_origins_;
-  cl_float* ray_directions_;
-  bocl_mem_sptr ray_o_buff_;
-  bocl_mem_sptr ray_d_buff_;
-  bocl_kernel * depth_kern_;
-  bocl_kernel * depth_norm_kern_;
-
-  // for exp image
-  bocl_mem_sptr exp_image_;
-  bocl_mem_sptr vis_image_; // used by both
-  bocl_mem_sptr max_omega_image_;
-  bocl_mem_sptr exp_img_dim_;
-
-  // for depth
-  bocl_mem_sptr depth_image_;
-  bocl_mem_sptr var_image_;
-  bocl_mem_sptr prob_image_;
-  bocl_mem_sptr t_infinity_;
-  bocl_mem_sptr subblk_dim_;
-
-  const unsigned ni_;
-  const unsigned nj_;
-  unsigned cl_ni_;
-  unsigned cl_nj_;
-  float tnearfar_buff_[2];
-  int img_dim_buff_[4];
-  bocl_mem_sptr tnearfar_mem_ptr_;
   cl_command_queue queue_;
 };
 

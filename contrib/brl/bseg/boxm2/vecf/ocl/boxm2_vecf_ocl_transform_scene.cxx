@@ -55,18 +55,15 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
 
 boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
               boxm2_scene_sptr& target_scene,
-              boxm2_opencl_cache_sptr ocl_cache, 
-              unsigned ni, unsigned nj)
+              boxm2_opencl_cache_sptr ocl_cache)
   : source_scene_(source_scene),
      target_scene_(target_scene),
      opencl_cache_(ocl_cache),
-     ni_(ni), nj_(nj),
-     renderer_(target_scene, ocl_cache)
+     renderer_(target_scene, ocl_cache),
+     depth_renderer_(target_scene, ocl_cache)
 {
   device_=opencl_cache_->get_device();
   this->compile_trans_interp_kernel();
-  this->compile_depth_kernel();
-  this->compile_depth_norm_kernel();
   this->init_ocl_trans();
 
   if (!init_render_args()) {
@@ -78,35 +75,8 @@ boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
 {
   delete trans_interp_kern;
   //delete trans_kern;
-  delete depth_kern_;
-  delete depth_norm_kern_;
   //opencl_cache_->clear_cache();
 
-
-  // destroy render args
-  if ((ni_ > 0) && (nj_ > 0)) {
-    delete [] img_buff_;
-    delete [] vis_buff_;
-    delete [] max_omega_buff_;
-    delete [] ray_origins_;
-    delete [] ray_directions_;
-    opencl_cache_->unref_mem(ray_o_buff_.ptr());
-    opencl_cache_->unref_mem(ray_d_buff_.ptr());
-    opencl_cache_->unref_mem(tnearfar_mem_ptr_.ptr());
-    opencl_cache_->unref_mem(exp_image_.ptr());
-    opencl_cache_->unref_mem(vis_image_.ptr());
-    opencl_cache_->unref_mem(max_omega_image_.ptr());
-    // depth stuff
-    delete[] depth_buff_;
-    delete[] var_buff_;
-    delete[] prob_image_buff_;
-    delete[] t_infinity_buff_;
-    opencl_cache_->unref_mem(depth_image_.ptr());
-    opencl_cache_->unref_mem(var_image_.ptr());
-    opencl_cache_->unref_mem(prob_image_.ptr());
-    opencl_cache_->unref_mem(t_infinity_.ptr());
-    opencl_cache_->unref_mem(subblk_dim_.ptr());
-  }
   // common stuff
   opencl_cache_->unref_mem( output_.ptr() );
   opencl_cache_->unref_mem( blk_info_target_.ptr() );
@@ -122,78 +92,8 @@ boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
 
 bool boxm2_vecf_ocl_transform_scene::init_render_args()
 {
-  lthreads_[0]=8;
-  lthreads_[1]=8;
-
-  if ((ni_ == 0) || (nj_ == 0)) {
-    vcl_cerr << "Error: invalid image dimensions " << ni_ << ", " << nj_ << vcl_endl;
-    return false;
-  }
-  cl_ni_=RoundUp(ni_,lthreads_[0]);
-  cl_nj_=RoundUp(nj_,lthreads_[1]);
-
 
   bool good_buffers = true;
-
-  img_buff_ = new float[cl_ni_*cl_nj_];
-  vcl_fill(img_buff_, img_buff_ + cl_ni_*cl_nj_, 0.0f);
-  exp_image_=opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), img_buff_,"exp image buffer");
-  good_buffers &= exp_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  vis_buff_ = new float[cl_ni_*cl_nj_];
-  vcl_fill(vis_buff_, vis_buff_ + cl_ni_*cl_nj_, 1.0f);
-  vis_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), vis_buff_,"vis image buffer");
-  good_buffers &= vis_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  max_omega_buff_ = new float[cl_ni_*cl_nj_];
-  vcl_fill(max_omega_buff_, max_omega_buff_ + cl_ni_*cl_nj_, 0.0f);
-  max_omega_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float), max_omega_buff_,"vis image buffer");
-  good_buffers &= max_omega_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  tnearfar_buff_[0] = 0.0f;
-  tnearfar_buff_[1] = 1000000.0f;
-
-  tnearfar_mem_ptr_ = opencl_cache_->alloc_mem(2*sizeof(float), tnearfar_buff_, "tnearfar  buffer");
-  good_buffers &= tnearfar_mem_ptr_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);  
-  
-  img_dim_buff_[0] = 0;   img_dim_buff_[2] = (int)ni_;
-  img_dim_buff_[1] = 0;   img_dim_buff_[3] = (int)nj_;
-
-  exp_img_dim_ = new bocl_mem(device_->context(), img_dim_buff_, sizeof(int)*4, "image dims");
-  good_buffers &= exp_img_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-
-  // create all buffers
-  ray_origins_ = new cl_float[4*cl_ni_*cl_nj_];
-  ray_directions_ = new cl_float[4*cl_ni_*cl_nj_];
-  ray_o_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_origins_, "ray_origins buffer");
-  ray_d_buff_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(cl_float4), ray_directions_, "ray_directions buffer");
-  good_buffers &= ray_o_buff_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  good_buffers &= ray_d_buff_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  // depth args
-  depth_buff_ = new float[cl_ni_*cl_nj_];
-  vcl_fill(depth_buff_, depth_buff_ + cl_ni_*cl_nj_, 0.0f);
-  depth_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),depth_buff_,"exp depth buffer");
-  good_buffers &= depth_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  var_buff_ = new float[cl_ni_*cl_nj_];
-  vcl_fill(var_buff_, var_buff_ + cl_ni_*cl_nj_, 0.0f);
-  var_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),var_buff_,"var image buffer");
-  good_buffers &= var_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  prob_image_buff_ = new float[cl_ni_*cl_nj_];
-  vcl_fill(prob_image_buff_, prob_image_buff_ + cl_ni_*cl_nj_, 0.0f);
-  prob_image_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),prob_image_buff_,"vis x omega image buffer");
-  good_buffers &= prob_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  t_infinity_buff_ = new float[cl_ni_*cl_nj_];
-  vcl_fill(t_infinity_buff_, t_infinity_buff_ + cl_ni_*cl_nj_, 0.0f);
-  t_infinity_ = opencl_cache_->alloc_mem(cl_ni_*cl_nj_*sizeof(float),t_infinity_buff_,"t infinity buffer");
-  good_buffers &= t_infinity_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-
-  subblk_dim_buff_ = 1.0f;
-  subblk_dim_ = opencl_cache_->alloc_mem(sizeof(cl_float), &(subblk_dim_buff_), "sub block dim buffer");
-  good_buffers &= subblk_dim_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
   // common stuff
   vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
@@ -229,7 +129,6 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
 
   if (!good_buffers) {
     std::cerr << "Error allocating one or more opencl buffers" << std::endl;
-    std::cerr << "cl_ni_ = " << cl_ni_ << " cl_nj_ = " << cl_nj_ << std::endl;
     return false;
   }
 
@@ -283,57 +182,6 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_kernel()
   return trans_interp_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "transform_scene_interpolate", options, "trans_interp_scene");
 }
 
-bool boxm2_vecf_ocl_transform_scene::compile_depth_kernel()
-{
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-    src_paths.push_back(source_dir + "scene_info.cl");
-    src_paths.push_back(source_dir + "pixel_conversion.cl");
-    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-    src_paths.push_back(source_dir + "backproject.cl");
-    src_paths.push_back(source_dir + "statistics_library_functions.cl");
-    src_paths.push_back(source_dir + "expected_functor.cl");
-    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/render_bit_scene.cl");
-    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
-
-    //set kernel options
-    vcl_string options = " -D RENDER_DEPTH ";
-    options +=  "-D DETERMINISTIC";
-    options += " -D STEP_CELL=step_cell_render_depth2(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
-
-    //have kernel construct itself using the context and device
-    this->depth_kern_ = new bocl_kernel();
-
-    bool good = depth_kern_->create_kernel( &device_->context(),
-                                            device_->device_id(),
-                                            src_paths,
-                                            "render_depth",   //kernel name
-                                            options,              //options
-                                            "boxm2 opencl render depth image"); //kernel identifier (for error checking)
-    return good;
-}
-
-bool boxm2_vecf_ocl_transform_scene::compile_depth_norm_kernel()
-{
-    vcl_vector<vcl_string> norm_src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-    norm_src_paths.push_back(source_dir + "scene_info.cl");
-
-    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
-    norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    depth_norm_kern_ = new bocl_kernel();
-
-    vcl_string options = " -D RENDER_DEPTH ";
-
-    bool good = depth_norm_kern_->create_kernel( &device_->context(),
-                                                 device_->device_id(),
-                                                 norm_src_paths,
-                                                 "normalize_render_depth_kernel",   //kernel name
-                                                 options,              //options
-                                                 "normalize render depth kernel"); //kernel identifier (for error checking)
-    return good;
-}
 
 bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
 {
@@ -925,12 +773,14 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 #endif
    return true;
 }
+
 bool boxm2_vecf_ocl_transform_scene::
-render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float>& expected_img,
-                        vil_image_view<float>& vis_img)
+render_scene_appearance(vpgl_camera_double_sptr const& cam,
+                        vil_image_view<float>& expected_img, vil_image_view<float>& vis_img,
+                        unsigned ni, unsigned nj)
 {
 
-  bool status = renderer_.render(cam, ni_, nj_);
+  bool status = renderer_.render(cam, ni, nj);
   renderer_.get_last_vis(vis_img);
   renderer_.get_last_rendered(expected_img);
   
@@ -939,111 +789,12 @@ render_scene_appearance(vpgl_camera_double_sptr const& cam, vil_image_view<float
 
 bool boxm2_vecf_ocl_transform_scene::render_scene_depth(vpgl_camera_double_sptr const & cam,
                                                         vil_image_view<float>& expected_depth,
-                                                        vil_image_view<float>& vis_img)
+                                                        vil_image_view<float>& vis_img, 
+                                                        unsigned ni, unsigned nj)
 {
-  // It is assumed that this function will be called multiple times
-  // where the scene changes between calls and possibly the camera
-  // It is also assumed that the scene is one block
-  // and the data is already avaiable in the cache and required buffers
-  // have been allocated by a previous function call.
-  vpgl_camera_double_sptr & nccam = const_cast<vpgl_camera_double_sptr &>(cam);
-
-  //camera check
-  const vcl_string cam_type( cam->type_name() );
-  if (cam_type != "vpgl_perspective_camera" &&
-      cam_type != "vpgl_generic_camera" &&
-      cam_type != "vpgl_affine_camera" ) {
-    vcl_cout<<"Cannot render with camera of type " << cam_type << vcl_endl;
-    return false;
-  }
-
-  // intialize the render image planes
-  vcl_fill(depth_buff_, depth_buff_ + cl_ni_*cl_nj_, 0.0f);
-  vcl_fill(vis_buff_, vis_buff_ + cl_ni_*cl_nj_, 1.0f);
-  vcl_fill(var_buff_, var_buff_ + cl_ni_*cl_nj_, 0.0f);
-  vcl_fill(prob_image_buff_, prob_image_buff_ + cl_ni_*cl_nj_, 0.0f);
-  vcl_fill(t_infinity_buff_, t_infinity_buff_ + cl_ni_*cl_nj_, 0.0f);
-
-  depth_image_->write_to_buffer(queue_);
-  vis_image_->write_to_buffer(queue_);
-  var_image_->write_to_buffer(queue_);
-  prob_image_->write_to_buffer(queue_);
-  t_infinity_->write_to_buffer(queue_);
-
-  // assumes that the camera may be changing between calls
-  boxm2_ocl_camera_converter::compute_ray_image( device_, queue_, nccam, cl_ni_, cl_nj_, ray_o_buff_, ray_d_buff_, 0, 0, false);
-  ray_o_buff_->write_to_buffer(queue_);
-  ray_d_buff_->write_to_buffer(queue_);
-
-  int statusw = clFinish(queue_);
-  bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
-  if(!good_write) {
-    return false;
-  }
-
-  depth_kern_->set_arg( blk_info_target_.ptr() );
-  depth_kern_->set_arg( blk_target_);
-  depth_kern_->set_arg( alpha_target_  );
-  depth_kern_->set_arg( ray_o_buff_.ptr() );
-  depth_kern_->set_arg( ray_d_buff_.ptr() );
-  depth_kern_->set_arg( depth_image_.ptr() );
-  depth_kern_->set_arg( var_image_.ptr() );
-  depth_kern_->set_arg( exp_img_dim_.ptr() );
-  depth_kern_->set_arg( output_.ptr() );
-  depth_kern_->set_arg( lookup_.ptr() );
-  depth_kern_->set_arg( vis_image_.ptr() );
-  depth_kern_->set_arg( prob_image_.ptr() );
-  depth_kern_->set_arg( t_infinity_.ptr() );
-
-  //local tree , cumsum buffer, imindex buffer
-  depth_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_uchar16) );
-  depth_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*10*sizeof(cl_uchar) );
-  depth_kern_->set_local_arg( lthreads_[0]*lthreads_[1]*sizeof(cl_int) );
-
-  //execute kernel
-  vcl_size_t gThreads[] = {cl_ni_,cl_nj_};
-  depth_kern_->execute(queue_, 2, lthreads_, gThreads);
-  statusw = clFinish(queue_);
-  bool good_run = check_val(statusw, CL_SUCCESS, "EXECUTION OF DEPTH KERNEL FAILED " + error_to_string(statusw));
-  if (!good_run) {
-    return false;
-  }
-
-  depth_norm_kern_->set_arg( depth_image_.ptr() );
-  depth_norm_kern_->set_arg( var_image_.ptr() );
-  depth_norm_kern_->set_arg( vis_image_.ptr() );
-  depth_norm_kern_->set_arg( exp_img_dim_.ptr());
-  depth_norm_kern_->set_arg( t_infinity_.ptr());
-  depth_norm_kern_->set_arg( subblk_dim_.ptr() );
-  depth_norm_kern_->execute( queue_, 2, lthreads_, gThreads);
-  statusw = clFinish(queue_);
-  good_run = check_val(statusw, CL_SUCCESS, "EXECUTION OF DEPTH NORM KERNEL FAILED " + error_to_string(statusw));
-  if (!good_run) {
-    return false;
-  }
-
-  depth_image_->read_to_buffer(queue_);
-  var_image_->read_to_buffer(queue_);
-  vis_image_->read_to_buffer(queue_);
-  statusw = clFinish(queue_);
-  bool good_read = check_val(statusw, CL_SUCCESS, "READ OF DEPTH BUFFERS FAILED " + error_to_string(statusw));
-  if (!good_read) {
-    return false;
-  }
-
-  depth_kern_->clear_args();
-  depth_norm_kern_->clear_args();
-
-  expected_depth.set_size(ni_, nj_);
-  expected_depth.fill(0.0f);
-  for (unsigned r=0;r<nj_;r++)
-    for (unsigned c=0;c<ni_;c++)
-      expected_depth(c,r)=depth_buff_[r*cl_ni_+c];
-  vis_img.set_size(ni_, nj_);
-  vis_img.fill(0.0f);
-  for (unsigned r=0;r<nj_;r++)
-    for (unsigned c=0;c<ni_;c++)
-      vis_img(c,r)=vis_buff_[r*cl_ni_+c];
-
-  return true;
+  bool status = depth_renderer_.render(cam, ni, nj);
+  depth_renderer_.get_last_vis(vis_img);
+  depth_renderer_.get_last_rendered(expected_depth);
+  
+  return status;
 }

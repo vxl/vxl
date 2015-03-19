@@ -70,7 +70,10 @@ bool boxm2_ocl_depth_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
   t_infinity_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
 
   ray_origins_image_ = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins_buff_, "ray_origins buffer");
+  ray_origins_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
+
   ray_directions_image_= opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions_buff_, "ray_directions buffer");
+  ray_directions_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
 
   img_dim_ = opencl_cache_->alloc_mem(sizeof(cl_int)*4, img_dim_buff_, "image dims");
   img_dim_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);
@@ -160,6 +163,11 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
 
+  bool good_queue = check_val(status, CL_SUCCESS, "ERROR: boxm2_ocl_depth_renderer: Failed to create command queue: " + error_to_string(status));
+  if(!good_queue) {
+    return false;
+  }
+
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
   vcl_size_t global_threads[] = {cl_ni,cl_nj};
@@ -182,7 +190,7 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   // assumes that the camera may be changing between calls
   boxm2_ocl_camera_converter::compute_ray_image( device_, queue, camera, cl_ni, cl_nj, ray_origins_image_, ray_directions_image_, 0, 0, false);
   ray_origins_image_->write_to_buffer(queue);
-  ray_origins_image_->write_to_buffer(queue);
+  ray_directions_image_->write_to_buffer(queue);
 
   int statusw = clFinish(queue);
   bool good_write = check_val(statusw, CL_SUCCESS, "ERROR: boxm2_ocl_depth_renderer: Initial write to GPU failed: " + error_to_string(statusw));
@@ -279,6 +287,7 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   vcl_cout<<"Total Render time: "<<rtime.all()<<" ms"<<vcl_endl;
   clReleaseCommandQueue(queue);
 
+  render_success_ = true;
   return true;
 }
 
