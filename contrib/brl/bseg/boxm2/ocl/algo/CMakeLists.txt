@@ -23,6 +23,7 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_update_max_vis.h                  boxm2_ocl_update_max_vis.cxx
     boxm2_ocl_fuse_based_visibility.h           boxm2_ocl_fuse_based_visibility.cxx
     boxm2_ocl_expected_image_renderer.h         boxm2_ocl_expected_image_renderer.cxx
+    boxm2_ocl_depth_renderer.h                  boxm2_ocl_depth_renderer.cxx
     boxm2_ocl_update_sun_visibilities.h         boxm2_ocl_update_sun_visibilities.cxx
     boxm2_ocl_render_expected_shadow_map.h      boxm2_ocl_render_expected_shadow_map.cxx
    )
