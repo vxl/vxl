@@ -128,11 +128,17 @@ bool boxm2_ocl_expected_image_renderer::cleanup_render_buffers()
   delete[] max_omega_buff_;
 
   opencl_cache_->unref_mem(exp_image_.ptr());
+  exp_image_ = bocl_mem_sptr(0);
   opencl_cache_->unref_mem(vis_image_.ptr());
+  vis_image_ = bocl_mem_sptr(0);
   opencl_cache_->unref_mem(max_omega_image_.ptr());
+  max_omega_image_ = bocl_mem_sptr(0);
   opencl_cache_->unref_mem(img_dim_.ptr());
+  img_dim_ = bocl_mem_sptr(0);
   opencl_cache_->unref_mem(tnearfar_.ptr());
+  tnearfar_ = bocl_mem_sptr(0);
 
+  buffers_allocated_ = false;
   return true;
 }
 
