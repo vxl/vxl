@@ -195,16 +195,22 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   vcl_fill(prob_buff_, prob_buff_ + cl_ni*cl_nj, 0.0f);
   vcl_fill(t_infinity_buff_, t_infinity_buff_ + cl_ni*cl_nj, 0.0f);
 
+  img_dim_buff_[0] = 0;
+  img_dim_buff_[1] = 0;
+  img_dim_buff_[2] = ni;
+  img_dim_buff_[3] = nj;
+
   depth_image_->write_to_buffer(queue);
   vis_image_->write_to_buffer(queue);
   var_image_->write_to_buffer(queue);
   prob_image_->write_to_buffer(queue);
   t_infinity_image_->write_to_buffer(queue);
+  img_dim_->write_to_buffer(queue);
 
   // assumes that the camera may be changing between calls
   boxm2_ocl_camera_converter::compute_ray_image( device_, queue, camera, cl_ni, cl_nj, ray_origins_image_, ray_directions_image_, 0, 0, false);
-  ray_origins_image_->write_to_buffer(queue);
-  ray_directions_image_->write_to_buffer(queue);
+  //ray_origins_image_->write_to_buffer(queue);
+  //ray_directions_image_->write_to_buffer(queue);
 
   int statusw = clFinish(queue);
   bool good_write = check_val(statusw, CL_SUCCESS, "ERROR: boxm2_ocl_depth_renderer: Initial write to GPU failed: " + error_to_string(statusw));
@@ -257,6 +263,7 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
     if (!good_run) {
       return false;
     }
+    depth_kern_.clear_args();
   }
 
   cl_subblk_dim_->write_to_buffer(queue, true);
@@ -283,8 +290,6 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   if (!good_read) {
     return false;
   }
-
-  depth_kern_.clear_args();
   depth_norm_kern_.clear_args();
 
   depth_img_.set_size(ni, nj);
