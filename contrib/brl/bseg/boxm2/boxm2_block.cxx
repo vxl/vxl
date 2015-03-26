@@ -298,6 +298,10 @@ bool boxm2_block::data_index(vgl_point_3d<double> const& global_pt, unsigned& in
   int index_x=(int)vcl_floor(loc.x());
   int index_y=(int)vcl_floor(loc.y());
   int index_z=(int)vcl_floor(loc.z());
+  //could be on block boundary so double check array bounds
+  if(index_x<0||index_x>=trees_.get_row1_count()) return false;
+  if(index_x<0||index_y>=trees_.get_row2_count()) return false;
+  if(index_x<0||index_z>=trees_.get_row3_count()) return false;
   vnl_vector_fixed<unsigned char,16> treebits=trees_(index_x,index_y,index_z);
   boct_bit_tree tree(treebits.data_block(),max_level_);
   int bit_index=tree.traverse(loc);
