@@ -56,7 +56,7 @@
 #include <vcl_vector.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_eye_params.h"
-class boxm2_vecf_eye_scene : public boxm2_scene
+class boxm2_vecf_eye_scene
 {
  public:
  boxm2_vecf_eye_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0),
@@ -76,6 +76,7 @@ class boxm2_vecf_eye_scene : public boxm2_scene
   vcl_vector<vgl_vector_3d<double> > inverse_vector_field(vgl_rotation_3d<double> const& rot) const;
 
 private:
+  boxm2_scene_sptr base_model_;
   //:scan spherical shell
   void create_eye();
   //:read block eye data and reset indices

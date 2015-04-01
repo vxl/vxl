@@ -62,36 +62,35 @@ void boxm2_vecf_eye_scene::fill_target_block(){
   }
 }
 void boxm2_vecf_eye_scene::extract_block_data(){
-  boxm2_scene_sptr sc(this);
-  vcl_vector<boxm2_block_id> blocks = sc->get_block_ids();
+  vcl_vector<boxm2_block_id> blocks = base_model_->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
-  blk_ = boxm2_cache::instance()->get_block(sc, *iter_blk);
+  blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
 
-  boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   alpha_base->enable_write();
   alpha_data_=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
-  boxm2_data_base *  app_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  boxm2_data_base *  app_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   app_base->enable_write();
   app_data_=new boxm2_data<BOXM2_MOG3_GREY>(app_base->data_buffer(),app_base->buffer_length(),app_base->block_id());
 
-  boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+  boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   nobs_base->enable_write();
   nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
  
-  boxm2_data_base *  sphere_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("sphere"));
+  boxm2_data_base *  sphere_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("sphere"));
   sphere_base->enable_write();
   sphere_=new boxm2_data<BOXM2_PIXEL>(sphere_base->data_buffer(),sphere_base->buffer_length(),sphere_base->block_id());
  
-  boxm2_data_base *  sphere_dist_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_FLOAT>::prefix("sphere_dist"));
+  boxm2_data_base *  sphere_dist_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_FLOAT>::prefix("sphere_dist"));
   sphere_dist_base->enable_write();
   sphere_dist_=new boxm2_data<BOXM2_FLOAT>(sphere_dist_base->data_buffer(),sphere_dist_base->buffer_length(),sphere_dist_base->block_id());
 
-  boxm2_data_base *  iris_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("iris"));
+  boxm2_data_base *  iris_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("iris"));
   iris_base->enable_write();
   iris_=new boxm2_data<BOXM2_PIXEL>(iris_base->data_buffer(),iris_base->buffer_length(),iris_base->block_id());
 
-  boxm2_data_base *  pupil_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("pupil"));
+  boxm2_data_base *  pupil_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("pupil"));
   pupil_base->enable_write();
   pupil_=new boxm2_data<BOXM2_PIXEL>(pupil_base->data_buffer(),pupil_base->buffer_length(),pupil_base->block_id());
 
@@ -158,10 +157,10 @@ void boxm2_vecf_eye_scene::reset_indices(){
   }
 }
 boxm2_vecf_eye_scene::boxm2_vecf_eye_scene(vcl_string const& scene_file, bool initialize):
-  boxm2_scene(scene_file), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0)
+  base_model_(new boxm2_scene(scene_file)), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0)
 {
   
-  boxm2_lru_cache::create(this);
+  boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
   if(initialize){
     this->fill_block();
