@@ -147,10 +147,8 @@ open(const vcl_string& filename)
   close();
 
   // Open the file
-  int err;
-  if ((err = avformat_open_input(&is_->fmt_cxt_, filename.c_str(), NULL, NULL)) != 0) {
+  if (avformat_open_input(&is_->fmt_cxt_, filename.c_str(), NULL, NULL) != 0)
     return false;
-  }
 
   // Get the stream information by reading a bit of the file
   if (avformat_find_stream_info(is_->fmt_cxt_, NULL) < 0) {
@@ -161,10 +159,12 @@ open(const vcl_string& filename)
   // Use the first ones we find.
   is_->vid_index_ = -1;
   is_->data_index_ = -1;
+  AVCodecContext* codec_context_origin = NULL;
   for (unsigned i = 0; i < is_->fmt_cxt_->nb_streams; ++i) {
     AVCodecContext *enc = is_->fmt_cxt_->streams[i]->codec;
     if (enc->codec_type == AVMEDIA_TYPE_VIDEO && is_->vid_index_ < 0) {
       is_->vid_index_ = i;
+      codec_context_origin = enc;
     }
     else if (enc->codec_type == AVMEDIA_TYPE_DATA && is_->data_index_ < 0) {
       is_->data_index_ = i;
@@ -173,21 +173,23 @@ open(const vcl_string& filename)
   if (is_->vid_index_ == -1) {
     return false;
   }
+  assert(codec_context_origin);
 
   av_dump_format(is_->fmt_cxt_, 0, filename.c_str(), 0);
-  is_->video_enc_ = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
-
-  //Tell ffmpeg to use our get/release buffers for pts management
-
-  uint64_t *video_pkt_pts = (uint64_t *)av_malloc(sizeof(uint64_t));
-  *video_pkt_pts = AV_NOPTS_VALUE;
-  is_->video_enc_->opaque = video_pkt_pts;
 
   // Open the stream
-  AVCodec* codec = avcodec_find_decoder(is_->video_enc_->codec_id);
-  if (!codec || avcodec_open2(is_->video_enc_, codec, NULL) < 0) {
+  AVCodec* codec = avcodec_find_decoder(codec_context_origin->codec_id);
+  if (!codec)
     return false;
-  }
+
+  // Copy context
+  is_->video_enc_ = avcodec_alloc_context3(codec);
+  if (avcodec_copy_context(is_->video_enc_, codec_context_origin) != 0)
+    return false;
+
+  // Open codec
+  if (avcodec_open2(is_->video_enc_, codec, NULL) < 0)
+    return false;
 
   is_->vid_str_ = is_->fmt_cxt_->streams[is_->vid_index_];
   is_->frame_ = av_frame_alloc();
