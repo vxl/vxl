@@ -335,12 +335,13 @@ void step_cell_render_depth2(float depth,
   (*probsum)+=omega;
   (*t) = depth*block_len;
   //: to compute the expected depth
-  float expdepth = (*vis)*((*t)*(1 - diff_omega) + d*(-diff_omega) + (1.0 - diff_omega) / alpha);
-  (*expected_depth) += expdepth;
-  (*expected_depth_square) += expdepth*expdepth;
-  (*vis) *= diff_omega;
+  if (alpha > 1e-6) {
+      float expdepth = (*vis)*((*t)*(1 - diff_omega) + d*(-diff_omega) + (1.0 - diff_omega) / alpha);
+      (*expected_depth) += expdepth;
+      (*expected_depth_square) += expdepth*expdepth;
+      (*vis) *= diff_omega;
+  }
   (*t) = depth*block_len +d;
-
 }
 
 void step_cell_render_depth2_byte(float depth,
