@@ -70,7 +70,7 @@ class boxm2_vecf_eye_scene
   boxm2_vecf_eye_scene(vcl_string const& scene_file, bool initialize = false);
 
   //: map eye data to the target scene
-  void map_to_target(boxm2_scene_sptr target_scene);
+  void map_to_target(boxm2_scene_sptr target_scene, vcl_string const& app_id="");
 
   //: compute an inverse vector field defined at sphere points (debug helper)
   vcl_vector<vgl_vector_3d<double> > inverse_vector_field(vgl_rotation_3d<double> const& rot) const;
@@ -84,7 +84,7 @@ private:
   //: set up pointers to source block databases
   void extract_block_data();
   //: set up pointers to target block databases
-  void extract_target_block_data(boxm2_scene_sptr target_scene);
+  void extract_target_block_data(boxm2_scene_sptr target_scene, vcl_string const& app_id);
   //: initialize the source block data
   void fill_block();
   //: initialize the full target block (not currently used )

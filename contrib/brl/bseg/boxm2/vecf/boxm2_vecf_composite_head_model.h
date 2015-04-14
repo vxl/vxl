@@ -13,9 +13,10 @@ class boxm2_vecf_composite_head_model
 public:
   boxm2_vecf_composite_head_model(vcl_string const& head_model_path, vcl_string const& eye_model_path );
 
-  bool composite(boxm2_scene_sptr target);
+  bool map_to_target(boxm2_scene_sptr target, vcl_string const& app_id="", bool eyes_only=false);
 
   void set_parameters(boxm2_vecf_composite_head_parameters const& params);
+  void get_parameters(boxm2_vecf_composite_head_parameters &params) const {params = params_;}
 
 private:
   boxm2_vecf_composite_head_parameters params_;

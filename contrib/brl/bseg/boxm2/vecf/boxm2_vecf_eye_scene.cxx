@@ -95,7 +95,7 @@ void boxm2_vecf_eye_scene::extract_block_data(){
   pupil_=new boxm2_data<BOXM2_PIXEL>(pupil_base->data_buffer(),pupil_base->buffer_length(),pupil_base->block_id());
 
 }
-void boxm2_vecf_eye_scene::extract_target_block_data(boxm2_scene_sptr target_scene){
+void boxm2_vecf_eye_scene::extract_target_block_data(boxm2_scene_sptr target_scene, vcl_string const& app_id){
 
   vcl_vector<boxm2_block_id> blocks = target_scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
@@ -105,11 +105,11 @@ void boxm2_vecf_eye_scene::extract_target_block_data(boxm2_scene_sptr target_sce
   alpha_base->enable_write();
   target_alpha_data_=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
-  boxm2_data_base *  app_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  boxm2_data_base *  app_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(app_id));
   app_base->enable_write();
   target_app_data_=new boxm2_data<BOXM2_MOG3_GREY>(app_base->data_buffer(),app_base->buffer_length(),app_base->block_id());
 
-  boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+  boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix(app_id));
   nobs_base->enable_write();
   target_nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
 }
@@ -532,8 +532,8 @@ void boxm2_vecf_eye_scene::apply_vector_field_to_target(vcl_vector<vgl_vector_3d
   }
 }
 
-void boxm2_vecf_eye_scene::map_to_target(boxm2_scene_sptr target_scene){
-  this->extract_target_block_data(target_scene);
+void boxm2_vecf_eye_scene::map_to_target(boxm2_scene_sptr target_scene, vcl_string const& app_id){
+  this->extract_target_block_data(target_scene, app_id);
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
   vnl_vector_fixed<double, 3> to_dir(params_.eye_pointing_dir_.x(),
                                      params_.eye_pointing_dir_.y(),

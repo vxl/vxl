@@ -11,6 +11,8 @@ boxm2_vecf_composite_head_model::boxm2_vecf_composite_head_model( vcl_string con
 
 void boxm2_vecf_composite_head_model::set_parameters(boxm2_vecf_composite_head_parameters const& params)
 {
+  params_ = params;
+
   boxm2_vecf_eye_params leye_params, reye_params;
   double eye_offset_x = 0.0;
   double eye_offset_y = 21; // 31.4
@@ -28,19 +30,25 @@ void boxm2_vecf_composite_head_model::set_parameters(boxm2_vecf_composite_head_p
   leye_params.eye_pointing_dir_ = params.look_dir_;
   reye_params.eye_pointing_dir_ = params.look_dir_;
 
+  head_.set_scale( params_.head_scale_ );
   right_eye_.set_params(reye_params);
   left_eye_.set_params(leye_params);
 }
 
 
-bool boxm2_vecf_composite_head_model::composite(boxm2_scene_sptr target)
+bool boxm2_vecf_composite_head_model::map_to_target(boxm2_scene_sptr target, vcl_string const& app_id, bool eyes_only)
 {
-  // head model
-  head_.map_to_target(target);
+  if (!eyes_only) {
+    vcl_cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << vcl_endl;
+    // clear target 
+    head_.clear_target(target);
+    // head model
+    head_.map_to_target(target);
+  }
   // right eye model
-  right_eye_.map_to_target(target);
+  right_eye_.map_to_target(target, app_id);
   // left eye model
-  left_eye_.map_to_target(target);
+  left_eye_.map_to_target(target, app_id);
 
   return true;
 }

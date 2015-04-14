@@ -18,9 +18,15 @@ class boxm2_vecf_head_model
   //: map eye data to the target scene
   bool map_to_target(boxm2_scene_sptr target_scene);
 
+  bool clear_target(boxm2_scene_sptr target_scene);
+
+  void set_scale(vgl_vector_3d<double> scale) { scale_ = scale;}
+
 private:
 
   boxm2_scene_sptr base_model_;
+
+  vgl_vector_3d<double> scale_;
 
   bool get_data(boxm2_scene_sptr scene, boxm2_block_id const& blk_id,
                 boxm2_data_base **alpha_data,
