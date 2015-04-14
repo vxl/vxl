@@ -65,4 +65,5 @@
 * - msm_plot_aligned_shapes : Generate EPS file showing scatterplots of aligned shapes
 * - msm_get_shape_params: Compute shape parameters for each example and save to a file
 * - msm_add_dir_to_names: Create new image list files by adding directory to points/image paths
+* - msm_concat_points: Concatenate two or more points files into one
 */
