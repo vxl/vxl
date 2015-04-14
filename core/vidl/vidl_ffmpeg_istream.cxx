@@ -27,8 +27,13 @@ extern "C" {
 # include "vidl_ffmpeg_istream_v2.txx"
 #elif LIBAVFORMAT_BUILD < ((53<<16)+(24<<8)+0)  // before ver 53.24.0
 # include "vidl_ffmpeg_istream_v3.txx"
-#else
+#elif LIBAVFORMAT_BUILD < ((54<<16)+(4<<8)+1)  // before ver 54.4.1
 # include "vidl_ffmpeg_istream_v0.9.txx"
+#elif LIBAVFORMAT_BUILD < ((56<<16)+(6<<8)+1) // between ver 54.4.1 and 56.6.1
+# pragma message("FFMPEG is NOT supported for LIBAVFORMTAT version between 54.4.1 and 56.6.1")
+# include "vidl_ffmpeg_istream_stub.txx"
+#else
+# include "vidl_ffmpeg_istream_v2.5.txx"
 #endif
 
 #else // VIDL_HAS_FFMPEG
