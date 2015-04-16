@@ -415,27 +415,22 @@ advance()
     is_->num_frames_ = -1;
   }
 
-  AVCodecContext* codec = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
-
   if (is_->packet_.data)
     av_free_packet(&is_->packet_);  // free previous packet
 
   int got_picture = 0;
-  uint64_t pts;
 
   // clear the metadata from the previous frame
   is_->metadata_.clear();
 
-  while (av_read_frame(is_->fmt_cxt_, &is_->packet_) >= 0 && got_picture == 0)
+  while (got_picture == 0 && av_read_frame(is_->fmt_cxt_, &is_->packet_) >= 0)
   {
     is_->last_dts = is_->packet_.dts;
-
-    pts = 0;
 
     // Make sure that the packet is from the actual video stream.
     if (is_->packet_.stream_index == is_->vid_index_)
     {
-      if (avcodec_decode_video2(codec,
+      if (avcodec_decode_video2(is_->video_enc_,
         is_->frame_, &got_picture,
         &is_->packet_) < 0) {
         vcl_cerr << "vidl_ffmpeg_istream: Error decoding packet!\n";
@@ -443,13 +438,11 @@ advance()
         return false;
       }
 
-      if (is_->packet_.dts != AV_NOPTS_VALUE)
-        pts = av_frame_get_best_effort_timestamp(is_->frame_);
-      else
+      uint64_t pts = av_frame_get_best_effort_timestamp(is_->frame_);
+      if (pts == AV_NOPTS_VALUE)
         pts = 0;
 
       is_->pts_ = pts * av_q2d(is_->vid_str_->time_base);
-      break; // without freeing the packet
     }
     // grab the metadata from this packet if from the metadata stream
     else if (is_->packet_.stream_index == is_->data_index_)
@@ -458,7 +451,8 @@ advance()
         is_->packet_.data + is_->packet_.size);
     }
 
-    av_free_packet(&is_->packet_);
+    if (!got_picture)
+      av_free_packet(&is_->packet_);
   }
 
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the
@@ -468,7 +462,7 @@ advance()
     av_init_packet(&is_->packet_);
     is_->packet_.data = NULL;
     is_->packet_.size = 0;
-    if (avcodec_decode_video2(codec,
+    if (avcodec_decode_video2(is_->video_enc_,
       is_->frame_, &got_picture,
       &is_->packet_) >= 0) {
       is_->last_dts += int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den
