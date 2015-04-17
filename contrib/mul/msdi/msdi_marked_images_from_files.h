@@ -108,6 +108,12 @@ class msdi_marked_images_from_files : public msdi_marked_images
            const vcl_vector<vcl_string>& image_names,
            const vcl_string& points_dir);
   
+  //: When true, all images converted to greyscale (1 plane) on loading
+  void set_convert_to_greyscale(bool b);
+  
+  //: When true, all images converted to greyscale on loading
+  bool grey_only() const { return grey_only_; }
+  
   //: Scaling required to convert from units in image to desired world units 
   // (e.g. 1000 for mm if image units are metres)
   // Only used if load_as_float_ is true.

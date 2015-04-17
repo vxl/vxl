@@ -76,6 +76,12 @@ msdi_marked_images_from_files::~msdi_marked_images_from_files()
 {
 }
 
+//: When true, all images converted to greyscale (1 plane) on loading
+void msdi_marked_images_from_files::set_convert_to_greyscale(bool b)
+{
+  grey_only_=b;
+}
+
 //: Scaling required to convert from units in image to desired world units 
 // (e.g. 1000 for mm if image units are metres)
 // Only used if load_as_float_ is true.
