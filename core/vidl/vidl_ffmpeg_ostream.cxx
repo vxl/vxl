@@ -32,7 +32,7 @@ extern "C" {
 # include "vidl_ffmpeg_ostream_v0.9.txx"
 #elif LIBAVCODEC_BUILD < ((55<<16)+(28<<8)+1)  // before ver 55.28.1
 # include "vidl_ffmpeg_ostream_v0.11.txx"
-#elif LIBAVCODEC_BUILD < ((56<<16)+(5<<8)+2) // between ver 55.28.1 and 56.5.2
+#elif LIBAVCODEC_BUILD < ((56<<16)+(5<<8)+2) // before ver 56.5.2
 # pragma message("FFMPEG is NOT supported for LIBAVCODEC version between 55.28.1 and 56.5.2")
 # include "vidl_ffmpeg_ostream_stub.txx"
 #else

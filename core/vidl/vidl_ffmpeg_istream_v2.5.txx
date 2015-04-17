@@ -9,7 +9,7 @@
 // \author Johan Andruejol
 // \date   6 April 2015
 //
-// Update implementation based on FFMPEG release version 0.12
+// Update implementation based on FFMPEG release version 2.6.2
 // ffmpeg git hash c089e72
 
 //-----------------------------------------------------------------------------
