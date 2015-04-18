@@ -44,7 +44,7 @@ void msm_shape_model::set(const msm_points& mean,
 }
 
 //: Equality test
-bool msm_shape_model::operator==(const msm_shape_model& model)
+bool msm_shape_model::operator==(const msm_shape_model& model) const
 {
   if (model.mean_.size()!=mean_.size()) return false;
   if (model.mode_var_.size()!=mode_var_.size()) return false;

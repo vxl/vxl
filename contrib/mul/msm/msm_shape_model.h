@@ -64,7 +64,7 @@ class msm_shape_model : public msm_ref_shape_model
   void b_read(vsl_b_istream& bfs);
 
   //: Equality test
-  bool operator==(const msm_shape_model& points);
+  bool operator==(const msm_shape_model& model) const;
 };
 
 
