@@ -14,6 +14,9 @@
 #include <mcal/mcal_pca.h>
 #include <mcal/mcal_extract_mode.h>
 #include <mbl/mbl_exception.h>
+#include <mbl/mbl_read_props.h>
+#include <mbl/mbl_parse_block.h>
+#include <vul/vul_string.h>
 
 //=======================================================================
 // Dflt ctor
@@ -363,6 +366,40 @@ void msm_load_shapes(const vcl_string& points_dir,
     }
   }
 }
+
+//: Initialise from a text stream.
+void msm_shape_model_builder::config_from_stream(vcl_istream &is)
+{
+  vcl_string s = mbl_parse_block(is);
+
+  vcl_istringstream ss(s);
+  mbl_read_props_type props = mbl_read_props_ws(ss);
+  
+  vcl_string aligner_str = props.get_required_property("aligner");
+  vcl_stringstream aligner_ss(aligner_str);
+  vcl_auto_ptr<msm_aligner> aligner=msm_aligner::create_from_stream(aligner_ss);
+  aligner_=aligner->clone();
+ 
+  vcl_string param_limiter_str 
+      = props.get_optional_property("param_limiter",
+                                    "msm_ellipsoid_limiter { accept_prop: 0.98 }");
+  if (param_limiter_str!="-")
+  {
+    vcl_stringstream ss(param_limiter_str);
+
+    vcl_auto_ptr<msm_param_limiter> param_limiter;
+    param_limiter = msm_param_limiter::create_from_stream(ss);
+    param_limiter_ = param_limiter->clone();
+  }
+
+  min_modes_=vul_string_atoi(props.get_optional_property("min_modes","0"));
+  max_modes_=vul_string_atoi(props.get_optional_property("max_modes","999"));
+  var_prop_=vul_string_atof(props.get_optional_property("var_prop","0.98"));
+
+  mbl_read_props_look_for_unused_props(
+      "msm_shape_model_builder::config_from_stream", props, mbl_read_props_type());
+}
+
 
 //=======================================================================
 // Method: version_no
