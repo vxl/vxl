@@ -42,7 +42,6 @@ struct vidl_ffmpeg_istream::pimpl
     vid_index_(-1),
     data_index_(-1),
     vid_str_(NULL),
-    last_dts(0),
     frame_(NULL),
     num_frames_(-2), // sentinel value to indicate not yet computed
     sws_context_(NULL),
@@ -62,11 +61,9 @@ struct vidl_ffmpeg_istream::pimpl
 
   AVCodecContext *video_enc_;
 
-  //: Decode time of last frame.
-  int64_t last_dts;
-
-  //: Start time of the stream, to offset the dts when computing the frame number.
-  int64_t start_time;
+  //: Start time of the stream, to offset the pts when computing the frame number.
+  //  (in stream time base)
+  int64_t start_time_;
 
   //: The last successfully read frame.
   //
@@ -104,8 +101,18 @@ struct vidl_ffmpeg_istream::pimpl
   // These codecs have a delay between reading packets and generating frames.
   unsigned frame_number_offset_;
 
-  //: Presentation timestamp
-  double pts_;
+  //: Presentation timestamp (in stream time base)
+  int64_t pts_;
+
+  //: Returns the double value to convert from a stream time base to
+  //  a frame number
+  double stream_time_base_to_frame()
+    {
+    assert(this->vid_str_);
+    return av_q2d(
+      av_inv_q(
+        av_mul_q(this->vid_str_->time_base, this->vid_str_->avg_frame_rate)));
+    }
 };
 
 
@@ -204,15 +211,15 @@ open(const vcl_string& filename)
   is_->frame_ = av_frame_alloc();
 
   if (is_->vid_str_->start_time == int64_t(1) << 63) {
-    is_->start_time = 0;
+    is_->start_time_ = 0;
   }
   else {
-    is_->start_time = is_->vid_str_->start_time;
+    is_->start_time_ = is_->vid_str_->start_time;
   }
 
   // The MPEG 2 codec has a latency of 1 frame when encoded in an AVI
-  // stream, so the dts of the last packet (stored in last_dts) is
-  // actually the next frame's dts.
+  // stream, so the pts of the last packet (stored in pts) is
+  // actually the next frame's pts.
   if (is_->vid_str_->codec->codec_id == CODEC_ID_MPEG2VIDEO &&
     vcl_string("avi") == is_->fmt_cxt_->iformat->name) {
     is_->frame_number_offset_ = 1;
@@ -325,11 +332,10 @@ frame_number() const
     return static_cast<unsigned int>(-1);
   }
 
-  return (unsigned int)(((is_->last_dts - is_->start_time)
-    * is_->vid_str_->r_frame_rate.num / is_->vid_str_->r_frame_rate.den
-    * is_->vid_str_->time_base.num + is_->vid_str_->time_base.den / 2)
-    / is_->vid_str_->time_base.den
-    - int(is_->frame_number_offset_));
+  unsigned int frame_number = static_cast<unsigned int>(
+    (is_->pts_ - is_->start_time_) / is_->stream_time_base_to_frame()
+    - static_cast<int>(is_->frame_number_offset_));
+  return frame_number;
 }
 
 
@@ -389,7 +395,8 @@ vidl_ffmpeg_istream
     return 0.0;
   }
 
-  return static_cast<double>(is_->vid_str_->r_frame_rate.num) / is_->vid_str_->r_frame_rate.den;
+  AVRational frame_rate = is_->vid_str_->avg_frame_rate;
+  return av_q2d(frame_rate);
 }
 
 
@@ -402,7 +409,7 @@ vidl_ffmpeg_istream
   if (!is_open()) {
     return 0.0;
   }
-  return static_cast<double>(is_->vid_str_->time_base.num) / is_->vid_str_->time_base.den
+  return av_q2d(is_->vid_str_->time_base)
     * static_cast<double>(is_->vid_str_->duration);
 }
 
@@ -434,8 +441,6 @@ advance()
 
   while (got_picture == 0 && av_read_frame(is_->fmt_cxt_, &is_->packet_) >= 0)
   {
-    is_->last_dts = is_->packet_.dts;
-
     // Make sure that the packet is from the actual video stream.
     if (is_->packet_.stream_index == is_->vid_index_)
     {
@@ -447,11 +452,9 @@ advance()
         return false;
       }
 
-      uint64_t pts = av_frame_get_best_effort_timestamp(is_->frame_);
-      if (pts == AV_NOPTS_VALUE)
-        pts = 0;
-
-      is_->pts_ = pts * av_q2d(is_->vid_str_->time_base);
+      is_->pts_ = av_frame_get_best_effort_timestamp(is_->frame_);
+      if (is_->pts_ == AV_NOPTS_VALUE)
+        is_->pts_ = 0;
     }
     // grab the metadata from this packet if from the metadata stream
     else if (is_->packet_.stream_index == is_->data_index_)
@@ -471,11 +474,12 @@ advance()
     av_init_packet(&is_->packet_);
     is_->packet_.data = NULL;
     is_->packet_.size = 0;
+
     if (avcodec_decode_video2(is_->video_enc_,
       is_->frame_, &got_picture,
       &is_->packet_) >= 0) {
-      is_->last_dts += int64_t(is_->vid_str_->time_base.den) * is_->vid_str_->r_frame_rate.den
-        / is_->vid_str_->time_base.num / is_->vid_str_->r_frame_rate.num;
+     
+      is_->pts_ += static_cast<int64_t>(is_->stream_time_base_to_frame());
     }
   }
 
@@ -599,12 +603,9 @@ seek_frame(unsigned int frame)
 
   // We rely on the initial cast to make sure all the operations happen in int64.
   int64_t req_timestamp =
-    int64_t(frame + is_->frame_number_offset_)
-    * is_->vid_str_->time_base.den
-    * is_->vid_str_->r_frame_rate.den
-    / is_->vid_str_->time_base.num
-    / is_->vid_str_->r_frame_rate.num
-    + is_->start_time;
+    static_cast<int64_t>((frame + is_->frame_number_offset_)
+    / is_->stream_time_base_to_frame())
+    + is_->start_time_;
 
   // Seek to a keyframe before the timestamp that we want.
   int seek = av_seek_frame(is_->fmt_cxt_, is_->vid_index_, req_timestamp, AVSEEK_FLAG_BACKWARD);
@@ -620,8 +621,8 @@ seek_frame(unsigned int frame)
     if (!advance()) {
       return false;
     }
-    if (is_->last_dts >= req_timestamp) {
-      if (is_->last_dts > req_timestamp) {
+    if (is_->pts_ >= req_timestamp) {
+      if (is_->pts_ > req_timestamp) {
         vcl_cerr << "Warning: seek went into the future!\n";
         return false;
       }
@@ -655,7 +656,7 @@ double
 vidl_ffmpeg_istream::
 current_pts() const
 {
-  return is_->pts_;
+  return is_->pts_ * av_q2d(is_->vid_str_->time_base);
 }
 
 //: Return the current video packet's data, is used to get
