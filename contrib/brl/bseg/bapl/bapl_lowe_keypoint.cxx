@@ -96,10 +96,12 @@ bapl_lowe_keypoint_sptr read_from_file(vcl_istream& ifs, int len, int img_width,
     loc_y -= 0.5f*img_height;
   }
   if (len != 128) {  // not possible to use this method for any other sized descriptor
-    vcl_cout << "In bapl_lowe_keypoint_sptr read_from_file() -- this method assumes 128 length descriptor vector!\n";
-    return 0;
+    //vcl_cout << "In bapl_lowe_keypoint_sptr read_from_file() -- this method assumes 128 length descriptor vector!\n";
+    vcl_cerr << "WARNING descriptor size is not 128, this method will work if len < 128 and fill the rest with zeros, otherwise it will break!\n";
+    //return 0;
   }
   vnl_vector_fixed<double, 128> desc;
+  desc.fill(0.0);
   for (int j = 0; j < len; ++j) {
     ifs >> desc[j];
   }

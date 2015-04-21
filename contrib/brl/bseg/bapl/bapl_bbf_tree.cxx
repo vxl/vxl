@@ -265,26 +265,26 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
   vcl_make_heap( priority_queue.begin(), priority_queue.end() );
   sq_dist = 0;
 
-   vcl_cout << "\nAfter initial trip down the tree, here's the heap\n";
+   /*vcl_cout << "\nAfter initial trip down the tree, here's the heap\n";
    int i;
    for ( i=0; i<priority_queue.size(); ++i )
      vcl_cout << "  " << i << ":  sq distance " << priority_queue[i].dist_
-              << ", node depth " << priority_queue[i].node_->depth_ << vcl_endl;
+              << ", node depth " << priority_queue[i].node_->depth_ << vcl_endl;*/
 
   bool first_leaf = true;
 
   do {
-     vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_ << '\n';
+     //vcl_cout << "\ncurrent -- sq_dist " << sq_dist << ", depth: " << current->depth_ << '\n';
              //<< current->outer_box_ << "\ninner_box: "
           //<< current->inner_box_ << '\n';
      //vcl_cout << "heap size: " << heap_vec.size() << vcl_endl;
     if ( num_found < n || sq_dist < sq_distances[ num_found-1 ] ) {
       if ( ! current->left_ ) {  // a leaf node
-         vcl_cout << "Leaf\n";
+         //vcl_cout << "Leaf\n";
         leaves_examined_ ++ ;
         update_closest( query_point, n, current, closest_indices, sq_distances, num_found );
         if ( first_leaf ) {  // check if we can quit just at this leaf node.
-           vcl_cout << "First leaf\n";
+           //vcl_cout << "First leaf\n";
           first_leaf = false;
           if ( this-> bounded_at_leaf( query_point, n, current, sq_distances, num_found ) )
             break;
@@ -292,27 +292,27 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
       }
 
       else {
-         vcl_cout << "Internal\n";
+         //vcl_cout << "Internal\n";
         internal_examined_ ++ ;
 
         left_box_sq_dist = bapl_bbf_dist_sq( query_point, current->left_->inner_box_ );
-         vcl_cout << "left sq distance = " << left_box_sq_dist << vcl_endl;
+         //vcl_cout << "left sq distance = " << left_box_sq_dist << vcl_endl;
         if ( num_found < n || sq_distances[ num_found-1 ] > left_box_sq_dist ) {
-           vcl_cout << "pushing left onto the heap\n";
+           //vcl_cout << "pushing left onto the heap\n";
           priority_queue.push_back( bapl_bbf_queue_entry( left_box_sq_dist, current->left_ ) );
           vcl_push_heap( priority_queue.begin(), priority_queue.end() );
         };
 
         right_box_sq_dist = bapl_bbf_dist_sq( query_point, current->right_->inner_box_ );
-         vcl_cout << "right sq distance = " << right_box_sq_dist << vcl_endl;
+         //vcl_cout << "right sq distance = " << right_box_sq_dist << vcl_endl;
         if ( num_found < n || sq_distances[ num_found-1 ] > right_box_sq_dist ) {
-           vcl_cout << "pushing right onto the heap\n";
+           //vcl_cout << "pushing right onto the heap\n";
           priority_queue.push_back( bapl_bbf_queue_entry( right_box_sq_dist, current->right_ ) );
           vcl_push_heap( priority_queue.begin(), priority_queue.end() );
         }
       }
     }
-     else vcl_cout << "skipping node\n";
+    // else vcl_cout << "skipping node\n";
 
     if ( leaves_examined_ >= max_search_nodes && max_search_nodes > 0)
       break;
@@ -326,10 +326,10 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
     }
   } while ( true );
 
-  vcl_cout << "\nAfter n_nearest, leaves_examined_ = " << leaves_examined_
+  /*vcl_cout << "\nAfter n_nearest, leaves_examined_ = " << leaves_examined_
            << ", fraction = " << float(leaves_examined_) / leaf_count_
            << "\n     internal_examined_ = " << internal_examined_
-           << ", fraction = " << float(internal_examined_) / internal_count_ << vcl_endl;
+           << ", fraction = " << float(internal_examined_) / internal_count_ << vcl_endl;*/
 
   assert(num_found >= 0);
   if ( closest_points.size() != (unsigned int)num_found )
