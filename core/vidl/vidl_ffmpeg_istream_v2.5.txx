@@ -170,6 +170,15 @@ open(const vcl_string& filename)
       is_->data_index_ = i;
     }
   }
+
+  // Fallback for the DATA stream if incorrectly coded as UNKNOWN.
+  for (unsigned i = 0; i < is_->fmt_cxt_->nb_streams && is_->data_index_ < 0; ++i) {
+    AVCodecContext *enc = is_->fmt_cxt_->streams[i]->codec;
+    if (enc->codec_type == AVMEDIA_TYPE_UNKNOWN ) {
+      is_->data_index_ = i;
+    }
+  }
+
   if (is_->vid_index_ == -1) {
     return false;
   }
