@@ -452,6 +452,13 @@ def get_rational_camera_offsets(cam_in):
     boxm2_batch.remove_data(id);
     return (offset_u,offset_v);
 
+def get_correction_offset(cam_orig, cam_corrected):
+  offset_u,   offset_v   = get_rational_camera_offsets(cam_orig)
+  offset_u_c, offset_v_c = get_rational_camera_offsets(cam_corrected)
+  diff_u = offset_u_c - offset_u
+  diff_v = offset_v_c - offset_v
+  return diff_u, diff_v
+
 def find_offset_and_correct_rational_camera(cam_orig, cam_corrected, cam_to_be_corrected):
   offset_u, offset_v = get_rational_camera_offsets(cam_orig);
   offset_u_c, offset_v_c = get_rational_camera_offsets(cam_corrected);
@@ -610,6 +617,7 @@ def get_nitf_footprint(nitf_list_filename, out_kml_filename):
     boxm2_batch.set_input_string(0,nitf_list_filename);
     boxm2_batch.set_input_string(1,out_kml_filename);
     boxm2_batch.run_process();
+
 def get_single_nitf_footprint(nitf_filename, out_kml_filename="",isKml = False, metafolder =""):
     boxm2_batch.init_process('vpglNITFFootprintProcess2');
     boxm2_batch.set_input_string(0,nitf_filename);
@@ -631,6 +639,22 @@ def get_single_nitf_footprint(nitf_filename, out_kml_filename="",isKml = False, 
     rele = boxm2_batch.get_output_double(id);
     boxm2_batch.remove_data(id);
     return llon, llat, lele, rlon, rlat, rele
+
+# use a local lvcs to calculate GSD of nitf image
+def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance = 1000.0):
+    # create a local lvcs
+    lvcs = create_lvcs(lat1, lon1, elev1, 'wgs84')
+    lat2, lon2, elev2 = convert_local_to_global_coordinates(lvcs, distance, distance, 0.0)
+    # calculate image pixel difference
+    i1, j1 = project_point(rational_cam, lon1, lat1, elev1)
+    i2, j2 = project_point(rational_cam, lon2, lat2, elev2)
+    gsd_i = distance / (i2-i1)
+    gsd_j = distance / (j2-j1)
+    if (gsd_i < 0.0):  gsd_i = -1*gsd_i
+    if (gsd_j < 0.0):  gsd_j = -1*gsd_j
+    boxm2_batch.remove_data(lvcs.id)
+    return gsd_i, gsd_j
+
 def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=True):
     boxm2_batch.init_process('vpglGeoFootprintProcess');
     boxm2_batch.set_input_from_db(0,geocam);
@@ -814,7 +838,7 @@ def compute_camera_to_world_homography(cam,plane,inverse = False):
 
 ## use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
 ## note that the input 3-d box is in unit of wgs84 geo coordinates
-def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=None):
+def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=0):
   boxm2_batch.init_process("vpglCropImgUsing3DboxProcess");
   boxm2_batch.set_input_from_db(0, img_res);
   boxm2_batch.set_input_from_db(1, camera);
