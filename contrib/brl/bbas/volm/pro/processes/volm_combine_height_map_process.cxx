@@ -7,6 +7,7 @@
 //
 #include <vil/vil_image_view.h>
 #include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <volm/volm_io_tools.h>
@@ -15,6 +16,7 @@
 #include <vil/vil_load.h>
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
+#include <vcl_algorithm.h>
 
 namespace volm_combine_height_map_process_globals
 {
@@ -220,4 +222,95 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
   }
 
   return true;
+}
+
+
+// combine multiple height maps by taking the median values of all pixels from multiple maps
+namespace volm_combine_height_map_process2_globals
+{
+  const unsigned n_inputs_  = 2;
+  const unsigned n_outputs_ = 1;
+
+  //: function to obtain the median
+  float median(vcl_vector<float> values);
+}
+
+bool volm_combine_height_map_process2_cons(bprb_func_process& pro)
+{
+  using namespace volm_combine_height_map_process2_globals;
+  // process takes 1 input
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0]  = "vcl_string";  // folder that stores all height maps
+  input_types_[1]  = "float";       // threshold
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";  // output image
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool volm_combine_height_map_process2(bprb_func_process& pro)
+{
+  using namespace volm_combine_height_map_process2_globals;
+  // sanity check
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Input!!!" << vcl_endl;
+    return false;
+  }
+  // get the input
+  unsigned in_i = 0;
+  vcl_string img_folder = pro.get_input<vcl_string>(in_i++);
+  float threshold       = pro.get_input<float>(in_i++);
+  // get all images from the folder
+  vcl_vector<vcl_string> img_files;
+  vcl_string in_dir = img_folder + "*.tif";
+  for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn)
+    img_files.push_back(fn());
+  if (img_files.size() == 0) {
+    vcl_cerr << pro.name() << ": No image at folder: " << img_folder << vcl_endl;
+    return false;
+  }
+  // load the images
+  vcl_vector<vil_image_view<float> > in_imgs;
+  for (unsigned i = 0; i < img_files.size(); i++) {
+    vil_image_view<float> in_img = vil_load(img_files[i].c_str());
+    in_imgs.push_back(in_img);
+  }
+  vcl_cout << in_imgs.size() << " images are loaded" << vcl_endl;
+  vcl_cout << "invalid pixel threshold: " << threshold << vcl_endl;
+  // verify the image size
+  unsigned ni = in_imgs[0].ni();
+  unsigned nj = in_imgs[0].nj();
+  for (unsigned i = 1; i < in_imgs.size(); i++)
+    if (in_imgs[i].ni() != ni || in_imgs[i].nj() != nj) {
+      vcl_cerr << pro.name() << ": image size mismatch!\n";
+      return false;
+    }
+
+  // obtain the median
+  vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj);
+  out_img->fill(-1.0f);
+  for (unsigned i = 0; i < ni; i++) 
+  {
+    for (unsigned j = 0; j < nj; j++)
+    {
+      vcl_vector<float> pixel_values;
+      for (unsigned img_idx = 0; img_idx < in_imgs.size(); img_idx++)
+        if ( (in_imgs[img_idx](i,j)-threshold)*(in_imgs[img_idx](i,j)-threshold) > 1E-5 )
+          pixel_values.push_back( (in_imgs[img_idx])(i,j) );
+      float median_value = median(pixel_values);
+      (*out_img)(i,j) = median_value;
+    }
+  }
+
+  // generate output
+  vil_image_view_base_sptr out_img_sptr = new vil_image_view<float>(out_img);
+  pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
+  return true;
+}
+
+float volm_combine_height_map_process2_globals::median(vcl_vector<float> values)
+{
+  vcl_sort(values.begin(), values.end());
+  int size = values.size();
+  int s2 = size / 2;
+  return size == 0 ? 0.0 : size%2 ? values[s2] : (values[s2]+values[s2-1])*0.5;
 }

@@ -320,3 +320,47 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
   //pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<float >(height));
   return true;
 }
+
+namespace volm_stereo_height_fix_process_globals
+{
+  const unsigned int n_inputs_ = 2;
+  const unsigned int n_outputs_ = 0;
+}
+
+bool volm_stereo_height_fix_process_cons(bprb_func_process& pro)
+{
+  using namespace volm_stereo_height_fix_process_globals;
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";       // original height map image
+  input_types_[1] = "float";
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool volm_stereo_height_fix_process(bprb_func_process& pro)
+{
+  using namespace volm_stereo_height_fix_process_globals;
+  if (!pro.verify_inputs()) {
+    vcl_cout << pro.name() << ": invalid inputs" << vcl_endl;
+    return false;
+  }
+  // get inputs
+  unsigned i = 0;
+  vil_image_view_base_sptr i_img_res = pro.get_input<vil_image_view_base_sptr>(i++);
+  float h_fix = pro.get_input<float>(i++);
+  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(i_img_res.ptr());
+  if (!in_img) {
+    vcl_cout << pro.name() << ": The image pixel format: " << i_img_res->pixel_format() << " is not supported" << vcl_endl;
+    return false;
+  }
+  unsigned ni = in_img->ni();
+  unsigned nj = in_img->nj();
+
+  for (unsigned i = 0; i < ni; i++) {
+    for (unsigned j = 0; j < nj; j++) {
+      if ( (*in_img)(i,j) != 0 )
+        (*in_img)(i,j) += h_fix;
+    }
+  }
+  return true;
+}

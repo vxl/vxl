@@ -8,6 +8,7 @@
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <volm/volm_category_io.h>
+#include <volm/volm_io_tools.h>
 #include <vul/vul_file_iterator.h>
 #include <rply.h>   //.ply parser
 
@@ -106,6 +107,7 @@ bool volm_generate_height_map_plot_process_cons(bprb_func_process& pro)
   input_types.push_back("float");  // initial height difference
   input_types.push_back("float");  // final height difference
   input_types.push_back("float");  // height increments
+  input_types.push_back("float");  // fix the ground truth height
   
   vcl_vector<vcl_string> output_types;
   output_types.push_back("bbas_1d_array_float_sptr");  // #correct rate
@@ -131,6 +133,7 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
   float dif_init = pro.get_input<float>(2);
   float dif_final = pro.get_input<float>(3);
   float dif_increments = pro.get_input<float>(4);
+  float gt_fix = pro.get_input<float>(5);
 
   vil_image_view<float> gt_height(gt_height_sptr);
   vcl_cout << "gt ni: " << gt_height.ni() << " nj: " << gt_height.nj() << vcl_endl;
@@ -140,6 +143,16 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
     vcl_cerr << " The input images have inconsistent sizes!\n";
     return false;
   }
+
+  // fix the ground truth height
+  for (unsigned i = 0; i < gt_height.ni(); i++)
+    for (unsigned j = 0; j < gt_height.nj(); j++)
+    {
+      float gt_val = gt_height(i,j);
+      if ( (gt_val)*(gt_val) > 1E-5)
+        gt_height(i,j) += gt_fix;
+    }
+
   float min_val, max_val;
   vil_math_value_range(height, min_val, max_val);
   float dif_min_max = max_val-min_val;
@@ -179,7 +192,7 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
       for (unsigned j = 0; j < gt_height.nj(); j++) {
         float gt_val = gt_height(i,j);
         float val = height(i,j);
-        if (gt_val > 0) {
+        if ( (gt_val)*(gt_val) > 1E-5) {
           gt_cnt++;
           if (val > 0) {
             float dif_actual_val = gt_val - val;
@@ -200,6 +213,7 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
         }
       }
     }
+    vcl_cout << "ratio: " << correct_rate->data_array[pnt] << " gt pixel: " << gt_cnt << vcl_endl;
     correct_rate->data_array[pnt] /= gt_cnt;
   }
 
@@ -212,3 +226,61 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
   return true;
 }
 
+//
+//:  Find the minimum and maximum height values for a given 2-d box region
+bool volm_find_min_max_height_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types(5);
+  input_types[0] = "double";      // 2-d region lower left lon
+  input_types[1] = "double";      // 2-d region lower left lat
+  input_types[2] = "double";      // 2-d region upper right lon
+  input_types[3] = "double";      // 2-d region upper right lat
+  input_types[4] = "vcl_string";  // folder of the orthogonal height maps
+
+  vcl_vector<vcl_string> output_types(2);
+  output_types[0] = "double";     // minimum elevation value for the given region from height maps
+  output_types[1] = "double";     // maximum elevation value for the given region from height maps
+
+  return pro.set_input_types(input_types) && pro.set_output_types(output_types);
+}
+
+
+//: Execute the process
+bool volm_find_min_max_height_process(bprb_func_process& pro)
+{
+  // check input
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Inputs!!!\n";
+    return false;
+  }
+  // get inputs
+  unsigned in_i = 0;
+  double ll_lon = pro.get_input<double>(in_i++);
+  double ll_lat = pro.get_input<double>(in_i++);
+  double ur_lon = pro.get_input<double>(in_i++);
+  double ur_lat = pro.get_input<double>(in_i++);
+  vcl_string dem_folder = pro.get_input<vcl_string>(in_i++);
+
+  // load DEM images
+  vcl_vector<volm_img_info> infos;
+  volm_io_tools::load_aster_dem_imgs(dem_folder, infos);
+  if (infos.empty()) {
+    vcl_cerr << pro.name() << ": can not find any height map in the folder: " << dem_folder << "\n";
+    return false;
+  }
+
+  // find the min and max elevation from height maps
+  vgl_point_2d<double>  lower_left(ll_lon, ll_lat);
+  vgl_point_2d<double> upper_right(ur_lon, ur_lat);
+  double min_elev = 10000.0, max_elev = -10000.0;
+  if (!volm_io_tools::find_min_max_height(lower_left, upper_right, infos, min_elev, max_elev)) {
+    vcl_cerr << pro.name() << " can not find elevation for the given region " << lower_left << ", " << upper_right << "\n";
+    return false;
+  }
+
+  // output
+  unsigned out_i = 0;
+  pro.set_output_val<double>(out_i++, min_elev);
+  pro.set_output_val<double>(out_i++, max_elev);
+  return true;
+}

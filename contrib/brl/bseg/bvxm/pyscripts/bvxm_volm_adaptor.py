@@ -322,13 +322,14 @@ def upsample_projected_img(input_img, num_neighbors=4, bin_size_col = 30, bin_si
     output_img = 0;
   return output_img;
 
-def generate_height_map_plot(gt_height, height, dif_init, dif_final, dif_increment):
+def generate_height_map_plot(gt_height, height, dif_init, dif_final, dif_increment, gt_fix):
   bvxm_batch.init_process("volmGenerateHeightMapPlotProcess");
   bvxm_batch.set_input_from_db(0, gt_height);
   bvxm_batch.set_input_from_db(1, height);
   bvxm_batch.set_input_float(2, dif_init);
   bvxm_batch.set_input_float(3, dif_final);
   bvxm_batch.set_input_float(4, dif_increment);
+  bvxm_batch.set_input_float(5, gt_fix)
   bvxm_batch.run_process();
   (id, type) = bvxm_batch.commit_output(0);
   correct_rate_array = bvxm_batch.get_bbas_1d_array_float(id);
@@ -349,6 +350,19 @@ def combine_height_map(height_map_folder, poly_roi, out_folder, size_in_degree =
   bvxm_batch.set_input_float(3, size_in_degree);
   bvxm_batch.set_input_int(4, leaf_id);
   bvxm_batch.run_process();
+  
+# combine height maps by taking the median pixel values
+def combine_height_map2(height_map_folder, threshold):
+  bvxm_batch.init_process("volmCombineHeightMapProcess2");
+  bvxm_batch.set_input_string(0, height_map_folder);
+  bvxm_batch.set_input_float(1, threshold)
+  status = bvxm_batch.run_process();
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_map = dbvalue(id, type);
+    return out_map;
+  else:
+    return 0;
 
 ## process that takes an ortho height map, an ortho classification map (id image) and their ortho camera
 ##   extracts the outlines of the buildings in the classification map
@@ -390,6 +404,27 @@ def registration_error_analysis(gt_file, cor_file, ori_file, gsd = 1.0, cor_vect
     return cor_average, cor_std, ori_average, ori_std
   else:
     return 0.0, 0.0, 0.0, 0.0
-    
-    
-    
+
+def stereo_h_map_fix(h_img, height_fix = 0.0):
+  bvxm_batch.init_process("volmStereoHeightFixProcess")
+  bvxm_batch.set_input_from_db(0,h_img)
+  bvxm_batch.set_input_float(1, height_fix)
+  bvxm_batch.run_process()
+  
+## process that find the minimum and maximum elevation from height map, for a give 2-d rectangluar region
+def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
+  bvxm_batch.init_process("volmFindMinMaxHeightPorcess")
+  bvxm_batch.set_input_double(0, ll_lon)
+  bvxm_batch.set_input_double(1, ll_lat)
+  bvxm_batch.set_input_double(2, ur_lon)
+  bvxm_batch.set_input_double(3, ur_lat)
+  bvxm_batch.set_input_string(4, dem_folder)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    min_elev = bvxm_batch.get_output_double(id)
+    (id, type) = bvxm_batch.commit_output(1)
+    max_elev = bvxm_batch.get_output_double(id)
+    return min_elev, max_elev
+  else:
+    return 0.0, 0.0

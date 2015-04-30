@@ -107,7 +107,8 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
         if (cam_name.size() < 2) break;
         vcl_cout << "reading cam: " << cam_name << vcl_endl;
 
-        vcl_string out_cam_name = cam_name + "_corrected.rpb";
+        //vcl_string out_cam_name = vul_file::strip_extension(cam_name) + "_corrected.rpb";
+        vcl_string out_cam_name = output_path + vul_file::strip_extension(vul_file::strip_directory(cam_name)) + "_corrected.rpb";
         vcl_cout << "out cam name: " << out_cam_name << vcl_endl;
 
         cam_names.push_back(cam_name);

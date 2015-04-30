@@ -30,6 +30,7 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_color_class_map_process, "volmGenerateColorClassMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_update_class_map_process, "volmUpdateClassMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_res_pair_process, "volmFindResourcePairProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_min_max_height_process, "volmFindMinMaxHeightPorcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_correct_rational_cameras_ransac_process2, "volmCorrectRationalCamerasRANSACProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_get_full_path_process, "volmGetFullPathProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_satellite_pairs_process, "volmFindSatellitePairsProcess");
@@ -43,9 +44,11 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_generate_height_map_plot_process, "volmGenerateHeightMapPlotProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_satellite_pair_intersection_process, "volmSatellitePairIntersectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_combine_height_map_process, "volmCombineHeightMapProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_combine_height_map_process2, "volmCombineHeightMapProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_extract_building_outlines_process, "volmExtractBuildinOutlinesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_osm_onto_image_process2, "volmMapOSMontoImageProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_osm_onto_image_process3, "volmMapOSMontoImageProcess3");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_registration_error_process, "volmRegistrationErrorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_overlapping_sat_resources_process, "volmFindOverlappingSatResourcesProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_stereo_height_fix_process, "volmStereoHeightFixProcess");
 }
