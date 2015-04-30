@@ -52,7 +52,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_normalize_image_process.h          processes/bvxm_normalize_image_process.cxx
     processes/bvxm_roi_init_process.h                 processes/bvxm_roi_init_process.cxx
     processes/bvxm_heightmap_process.h                processes/bvxm_heightmap_process.cxx
-	processes/bvxm_heightmap_ortho_process.h          processes/bvxm_heightmap_ortho_process.cxx
+    processes/bvxm_heightmap_ortho_process.h          processes/bvxm_heightmap_ortho_process.cxx
     processes/bvxm_update_process.h                   processes/bvxm_update_process.cxx
     processes/bvxm_detect_changes_process.h           processes/bvxm_detect_changes_process.cxx
     processes/bvxm_save_occupancy_raw_process.h       processes/bvxm_save_occupancy_raw_process.cxx
@@ -85,6 +85,7 @@ IF(EXPAT_FOUND)
     processes/bvxm_scene_local_box_process.h          processes/bvxm_scene_local_box_process.cxx
     processes/bvxm_create_ortho_camera_process.h      processes/bvxm_create_ortho_camera_process.cxx
     processes/bvxm_scene_model_dir_process.h          processes/bvxm_scene_model_dir_process.cxx
+    processes/bvxm_scene_lvcs_process.h               processes/bvxm_scene_lvcs_process.cxx
     processes/bvxm_orthorectify_process.h             processes/bvxm_orthorectify_process.cxx
     processes/bvxm_dem_to_xyz_process.h               processes/bvxm_dem_to_xyz_process.cxx
     processes/bvxm_create_land_map_process.h          processes/bvxm_create_land_map_process.cxx

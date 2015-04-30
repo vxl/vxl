@@ -382,3 +382,14 @@ def create_land_map(world, geo_folder, urban_folder, osm_folder, is_osm_pt, is_o
   else:
     land_img = 0
   return land_img
+
+def scene_lvcs(world):
+  bvxm_batch.init_process("bvxmSceneLvcsProcess");
+  bvxm_batch.set_input_from_db(0, world);
+  status = bvxm_batch.run_process();
+  if status:
+    (id, type) = bvxm_batch.commit_output(0);
+    lvcs = dbvalue(id, type);
+    return lvcs;
+  else:
+    return 0;

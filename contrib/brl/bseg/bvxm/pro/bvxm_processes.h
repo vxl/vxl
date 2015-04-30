@@ -66,7 +66,7 @@ DECLARE_FUNC_CONS(bvxm_dem_to_xyz_process2);
 //Basic operation
 DECLARE_FUNC_CONS(bvxm_scene_model_dir_process);
 DECLARE_FUNC_CONS(bvxm_scene_origin_process);
-
+DECLARE_FUNC_CONS(bvxm_scene_lvcs_process);
 DECLARE_FUNC_CONS(bvxm_orthorectify_process);
 DECLARE_FUNC_CONS(bvxm_uncertainty_process);
 DECLARE_FUNC_CONS(bvxm_heightmap_exp_process);
