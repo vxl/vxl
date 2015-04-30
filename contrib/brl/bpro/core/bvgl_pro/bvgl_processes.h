@@ -8,5 +8,5 @@
 DECLARE_FUNC_CONS(bvgl_generate_mask_process);
 DECLARE_FUNC_CONS(bvgl_generate_mask_process2);
 DECLARE_FUNC_CONS(bvgl_set_change_type_process);
-
+DECLARE_FUNC_CONS(bvgl_2d_box_intersection_process);
 #endif

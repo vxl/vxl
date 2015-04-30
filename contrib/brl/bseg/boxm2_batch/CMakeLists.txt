@@ -44,7 +44,7 @@ IF( PYTHON_FOUND )
       ENDIF(APPLE)
       SET_TARGET_PROPERTIES(boxm2_batch PROPERTIES PREFIX "")
 
-      TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
+      TARGET_LINK_LIBRARIES(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro bvgl_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
       IF(BOXM2_USE_VOLM)
         ADD_DEFINITIONS(-DUSE_VOLM=1)
         TARGET_LINK_LIBRARIES(boxm2_batch volm_pro)

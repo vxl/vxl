@@ -9,6 +9,7 @@
 #include <boxm2/cpp/pro/boxm2_cpp_register.h>
 #include <vpgl_pro/vpgl_register.h>
 #include <vil_pro/vil_register.h>
+#include <bvgl_pro/bvgl_register.h>
 #include <sdet_pro/sdet_register.h>
 #include <brip_pro/brip_register.h>
 #if defined(HAS_OPENCL) && HAS_OPENCL
@@ -43,6 +44,7 @@ PyObject *
     boxm2_cpp_register::register_process();
     vpgl_register::register_process();
     vil_register::register_process();
+    bvgl_register::register_process();
     brip_register::register_process();
     bvpl_kernels_register::register_process();
 #if defined(HAS_OPENCL) && HAS_OPENCL
@@ -86,6 +88,7 @@ PyObject *
     boxm2_cpp_register::register_datatype();
     vpgl_register::register_datatype();
     vil_register::register_datatype();
+    bvgl_register::register_datatype();
     brip_register::register_datatype(); 
     bvpl_kernels_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL

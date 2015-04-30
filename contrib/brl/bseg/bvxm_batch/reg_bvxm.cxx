@@ -4,6 +4,7 @@
 
 // processes
 #include <vil_pro/vil_register.h>
+#include <bvgl_pro/bvgl_register.h>
 #include <vpgl_pro/vpgl_register.h>
 #include <bvxm/pro/bvxm_register.h>
 #include <bvxm/grid/pro/bvxm_grid_register.h>
@@ -18,6 +19,7 @@ PyObject *
 register_processes(PyObject *self, PyObject *args)
 {
   vil_register::register_process();
+  bvgl_register::register_process();
   vpgl_register::register_process();
   bvxm_register::register_process();
   bvxm_grid_register::register_process();
@@ -37,6 +39,7 @@ register_datatypes(PyObject *self, PyObject *args)
 {
   register_basic_datatypes();
   vil_register::register_datatype();
+  bvgl_register::register_datatype();
   vpgl_register::register_datatype();
   bvxm_register::register_datatype();
   bvxm_grid_register::register_datatype();
