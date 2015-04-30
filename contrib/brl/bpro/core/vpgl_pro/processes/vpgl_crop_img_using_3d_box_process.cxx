@@ -6,6 +6,8 @@
 //
 //
 //
+#include <vul/vul_file.h>
+#include <vul/vul_file_iterator.h>
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_roi.h>
 #include <vgl/vgl_point_3d.h>
@@ -16,6 +18,9 @@
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_image_resource.h>
+#include <vil/vil_image_view.h>
+#include <vil/vil_crop.h>
+#include <vil/vil_load.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
@@ -87,6 +92,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   if (!pro.verify_inputs())
   {
     vcl_cout << pro.name() << ": The input is wrong!!!" << vcl_endl;
+    return false;
   }
 
   // get the input
@@ -109,7 +115,9 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   }
 
   // generate a lvcs coordinates to transfer camera offset coordinates
-  if(!lvcs_sptr) {
+  double ori_lon, ori_lat, ori_elev;
+  lvcs_sptr->get_origin(ori_lat, ori_lon, ori_elev);
+  if ( (ori_lat+ori_lon+ori_elev)*(ori_lat+ori_lon+ori_elev) < 1E-7) {
     lvcs_sptr = new vpgl_lvcs(lower_left_lat, lower_left_lon, lower_left_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   }
 
@@ -465,3 +473,288 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
   return true;
 }
 
+//: process to crop image using its rational camera and a given region.  Note that the elevation values are retrieved from
+//  ASTER DEM height maps, which are Geotiff images
+// global variables and functions
+namespace vpgl_crop_img_using_3d_box_dem_process_globals
+{
+  const unsigned n_inputs_ = 10;
+  const unsigned n_outputs_ = 5;
+  //: find the min and max height in a given region from height map resources
+  bool find_min_max_height(double const& ll_lon, double const& ll_lat, double const& uu_lon, double const& uu_lat,
+                           vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+                           double& min, double& max);
+  void crop_and_find_min_max(vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+                             unsigned const& img_id, int const& i0, int const& j0, int const& crop_ni, int const& crop_nj,
+                             double& min, double& max);
+}
+
+// initialization
+bool vpgl_crop_img_using_3d_box_dem_process_cons(bprb_func_process& pro)
+{
+  using namespace vpgl_crop_img_using_3d_box_dem_process_globals;
+  // process takes 10 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_resource_sptr";  // image resource
+  input_types_[1] = "vpgl_camera_double_sptr";  // rational camera
+  input_types_[2] = "double";                   // lower left lon
+  input_types_[3] = "double";                   // lower left lat
+  input_types_[4] = "double";                   // upper right lon
+  input_types_[5] = "double";                   // upper right lat
+  input_types_[6] = "vcl_string";               // ASTER DEM image folder
+  input_types_[7] = "double";                   // the amount to be added on top of the terrain height
+  input_types_[8] = "double";                   // uncertainty values (in meter units)
+  input_types_[9] = "vpgl_lvcs_sptr";           // lvcs
+
+  // process takes 5 outputs
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vpgl_camera_double_sptr";  // local crop rational camera
+  output_types_[1] = "unsigned";                 // image pixel i0
+  output_types_[2] = "unsigned";                 // image pixel j0
+  output_types_[3] = "unsigned";                 // image size ni
+  output_types_[4] = "unsigned";                 // image size nj
+  bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  // set input default
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
+  pro.set_input(9, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
+  return good;
+}
+
+// execute the process
+bool vpgl_crop_img_using_3d_box_dem_process(bprb_func_process& pro)
+{
+  using namespace vpgl_crop_img_using_3d_box_dem_process_globals;
+  // sanity check
+  if (!pro.verify_inputs())
+  {
+    vcl_cerr << pro.name() << ": Wrong inputs!!!" << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(in_i++);  // image resource
+  vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);      // rational camera
+  double lower_left_lon  = pro.get_input<double>(in_i++);
+  double lower_left_lat  = pro.get_input<double>(in_i++);
+  double upper_right_lon = pro.get_input<double>(in_i++);
+  double upper_right_lat = pro.get_input<double>(in_i++);
+  vcl_string dem_folder  = pro.get_input<vcl_string>(in_i++);
+  double box_height = pro.get_input<double>(in_i++);
+  double uncertainty = pro.get_input<double>(in_i++);
+  vpgl_lvcs_sptr lvcs_sptr = pro.get_input<vpgl_lvcs_sptr>(in_i++);
+
+  vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
+  if (!rat_cam) {
+    vcl_cerr << pro.name() << ": the input camera is not a rational camera!\n";
+    return false;
+  }
+
+  // load the height map resources
+  vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> > infos;
+  vcl_string file_glob = dem_folder + "/*.tif";
+  for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn)
+  {
+    vcl_string filename = fn();
+    vil_image_view_base_sptr img_r = vil_load(filename.c_str());
+    vpgl_geo_camera* cam;
+    vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+    vil_image_resource_sptr img_res = vil_load_image_resource(filename.c_str());
+    if (!vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam)) {
+      vcl_cerr << pro.name() << ": Given height map " << filename << " is NOT a GeoTiff!\n";
+      return false;
+    }
+    infos.push_back(vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*>(img_r, cam));
+  }
+  if (infos.empty()) {
+    vcl_cerr << pro.name() << ": No image in the folder: " << dem_folder << vcl_endl;
+    return false;
+  }
+
+  // obtain the height values from height maps
+  double min = 10000.0, max = -10000.0;
+  if (!find_min_max_height(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, infos, min, max)) {
+    vcl_cerr << pro.name() << ": find min and max height failed!!!\n";
+    return false;
+  }
+  double lower_left_elev = min;
+  double upper_right_elev = max + box_height;
+  
+  vcl_cout << pro.name() << " lower_left_elev: " << lower_left_elev << ", upper_right_elev: " << upper_right_elev << vcl_endl;
+  // generate local lvcs to transfer camera offset coordinates
+  double ori_lon, ori_lat, ori_elev;
+  lvcs_sptr->get_origin(ori_lat, ori_lon, ori_elev);
+  if ( (ori_lat+ori_lon+ori_elev)*(ori_lat+ori_lon+ori_elev) < 1E-7) {
+    lvcs_sptr = new vpgl_lvcs(lower_left_lat, lower_left_lon, lower_left_elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  }
+  vgl_box_3d<double> scene_bbox(lower_left_lon, lower_left_lat, lower_left_elev,
+                                upper_right_lon, upper_right_lat, upper_right_elev);
+
+  vgl_box_2d<double> roi_box_2d;
+  bool good = project_box(*rat_cam, lvcs_sptr, scene_bbox, uncertainty, roi_box_2d);
+  if(!good) {
+    return false;
+  }
+  vcl_cout << pro.name() << ": projected 2d roi box: " << roi_box_2d << " given uncertainty " << uncertainty << " meters." << vcl_endl;
+  // crop the image
+  brip_roi broi(img_res_sptr->ni(), img_res_sptr->nj());
+  vsol_box_2d_sptr bb = new vsol_box_2d();
+  bb->add_point(roi_box_2d.min_x(), roi_box_2d.min_y());
+  bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
+  bb = broi.clip_to_image_bounds(bb);
+  // store output
+  unsigned i0 = (unsigned)bb->get_min_x();
+  unsigned j0 = (unsigned)bb->get_min_y();
+  unsigned ni = (unsigned)bb->width();
+  unsigned nj = (unsigned)bb->height();
+
+  if (ni <= 0 || nj <= 0)
+  {
+    vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
+    return false;
+  }
+  // create the local camera
+  vpgl_local_rational_camera<double> local_camera;
+  create_local_rational_camera(*rat_cam, lvcs_sptr, bb, local_camera);
+
+  // store output
+  unsigned out_j = 0;
+  pro.set_output_val<vpgl_camera_double_sptr>(out_j++, new vpgl_local_rational_camera<double>(local_camera));
+  pro.set_output_val<unsigned>(out_j++, i0);
+  pro.set_output_val<unsigned>(out_j++, j0);
+  pro.set_output_val<unsigned>(out_j++, ni);
+  pro.set_output_val<unsigned>(out_j++, nj);
+  return true;
+}
+
+bool vpgl_crop_img_using_3d_box_dem_process_globals::find_min_max_height(double const& ll_lon, double const& ll_lat, double const& ur_lon, double const& ur_lat,
+                                                                         vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+                                                                         double& min, double& max)
+{
+  // find the corner points
+  vcl_vector<vcl_pair<unsigned, vcl_pair<int, int> > > corners;
+  vcl_vector<vgl_point_2d<double> > pts;
+  pts.push_back(vgl_point_2d<double>(ll_lon, ur_lat));
+  pts.push_back(vgl_point_2d<double>(ur_lon, ll_lat));
+  pts.push_back(vgl_point_2d<double>(ll_lon, ll_lat));
+  pts.push_back(vgl_point_2d<double>(ur_lon, ur_lat));
+  for (unsigned k = 0; k < (unsigned)pts.size(); k++)
+  {
+    // find the image
+    for (unsigned j = 0; j < (unsigned)infos.size(); j++)
+    {
+      double u, v;
+      infos[j].second->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
+      int uu = (int)vcl_floor(u+0.5);
+      int vv = (int)vcl_floor(v+0.5);
+      if (uu < 0 || vv < 0 || uu >= (int)infos[j].first->ni() || vv >= (int)infos[j].first->nj())
+        continue;
+      vcl_pair<unsigned, vcl_pair<int, int> > pp(j, vcl_pair<int, int>(uu, vv));
+      corners.push_back(pp);
+      break;
+    }
+  }
+  if (corners.size() != 4) {
+    vcl_cerr << "Cannot locate all 4 corners among given DEM tiles!\n";
+    return false;
+  }
+  // case 1 all corners are in the same image
+  if (corners[0].first == corners[1].first) {
+    // crop the image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = corners[1].second.first-corners[0].second.first+1;
+    int crop_nj = corners[1].second.second-corners[0].second.second+1;
+    crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+    return true;
+  }
+  // case 2: two corners are in the same image
+  if (corners[0].first == corners[2].first && corners[1].first == corners[3].first) {
+    // crop the first image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
+    int crop_nj = corners[2].second.second-corners[0].second.second+1;
+    crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+    
+    // crop the second image
+    i0 = 0;
+    j0 = corners[3].second.second;
+    crop_ni = corners[3].second.first + 1;
+    crop_nj = corners[1].second.second-corners[3].second.second+1;
+    crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
+    return true;
+  }
+  // case 3: two corners are in the same image
+  if (corners[0].first == corners[3].first && corners[1].first == corners[2].first) {
+    // crop the first image
+    int i0 = corners[0].second.first;
+    int j0 = corners[0].second.second;
+    int crop_ni = corners[3].second.first - corners[0].second.first + 1;
+    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second; 
+    crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+    
+    // crop the second image
+    i0 = corners[2].second.first;
+    j0 = 0; 
+    crop_ni = corners[1].second.first - corners[2].second.first + 1;
+    crop_nj = corners[2].second.second + 1;
+    crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
+    return true;
+  }
+  // case 4: all corners are in a different image
+  // crop the first image, image of corner 0
+  int i0 = corners[0].second.first;
+  int j0 = corners[0].second.second;
+  int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
+  int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
+  crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
+  
+  // crop the second image, image of corner 1
+  i0 = 0;
+  j0 = 0;
+  crop_ni = corners[1].second.first + 1;
+  crop_nj = corners[1].second.second + 1;
+  crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
+  
+  // crop the third image, image of corner 2
+  i0 = corners[2].second.first;
+  j0 = 0;
+  crop_ni = infos[corners[2].first].first->ni() - corners[2].second.first;
+  crop_nj = corners[2].second.second + 1;
+  crop_and_find_min_max(infos, corners[2].first, i0, j0, crop_ni, crop_nj, min, max);
+  
+  // crop the fourth image, image of corner 3
+  i0 = 0;
+  j0 = corners[3].second.second;
+  crop_ni = corners[3].second.first + 1;
+  crop_nj = infos[corners[3].first].first->nj() - corners[3].second.second;
+  crop_and_find_min_max(infos, corners[3].first, i0, j0, crop_ni, crop_nj, min, max);
+  return true;
+}
+
+void vpgl_crop_img_using_3d_box_dem_process_globals::crop_and_find_min_max(vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
+                                                                           unsigned const& img_id, int const& i0, int const& j0, int const& crop_ni, int const& crop_nj,
+                                                                           double& min, double& max)
+{
+  if (vil_image_view<vxl_int_16>* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].first.ptr()))
+  {
+    vil_image_view<vxl_int_16> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
+    for (unsigned ii = 0; ii < img_crop.ni(); ii++) {
+      for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
+        if (min > img_crop(ii, jj)) min = img_crop(ii,jj);
+        if (max < img_crop(ii, jj)) max = img_crop(ii,jj);
+      }
+    }
+  }
+  else if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].first.ptr()))
+  {
+    vil_image_view<float> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
+    for (unsigned ii = 0; ii < img_crop.ni(); ii++) {
+      for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
+        if (min > img_crop(ii, jj)) min = img_crop(ii,jj);
+        if (max < img_crop(ii, jj)) max = img_crop(ii,jj);
+      }
+    }
+  }
+  return;
+}

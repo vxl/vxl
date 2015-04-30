@@ -783,6 +783,37 @@ def crop_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, low
   else:
     return status, dbvalue(0, ""), 0, 0, 0, 0;
 
+## use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
+## note that the elevation of 3-d box is obtained from DEM height map
+def crop_image_using_3d_box_dem(img_res, camera, ll_lon, ll_lat, ur_lon, ur_lat, dem_folder, extra_height, uncertainty, lvcs = 0):
+  bvxm_batch.init_process("vpglCropImgUsing3DboxDemProcess")
+  bvxm_batch.set_input_from_db(0, img_res)
+  bvxm_batch.set_input_from_db(1, camera)
+  bvxm_batch.set_input_double(2, ll_lon)
+  bvxm_batch.set_input_double(3, ll_lat)
+  bvxm_batch.set_input_double(4, ur_lon)
+  bvxm_batch.set_input_double(5, ur_lat)
+  bvxm_batch.set_input_string(6, dem_folder)
+  bvxm_batch.set_input_double(7, extra_height)
+  bvxm_batch.set_input_double(8, uncertainty)
+  if lvcs != 0:
+    bvxm_batch.set_input_from_db(9, lvcs)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0);
+    local_cam  = dbvalue(id, type);
+    (id, type) = bvxm_batch.commit_output(1);
+    i0 = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(2);
+    j0 = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(3);
+    ni = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(4);
+    nj = bvxm_batch.get_output_unsigned(id)
+    return status, local_cam, i0, j0, ni, nj;
+  else:
+    return status, dbvalue(0, ""), 0.0, 0.0, 0.0, 0.0
+
 ## use the 3-d box to crop an ortho image using its geo camera
 ## note that the input 3-d box is in unit of wgs84 geo coordinates
 def crop_ortho_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev):
