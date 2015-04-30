@@ -14,4 +14,5 @@ DECLARE_FUNC_CONS(boxm2_create_all_index_process);
 DECLARE_FUNC_CONS(boxm2_geo_cover_with_osm_to_xyz_process);
 DECLARE_FUNC_CONS(boxm2_change_scene_res_by_geo_cover_process);
 DECLARE_FUNC_CONS(boxm2_load_score_binary_process);
+DECLARE_FUNC_CONS(boxm2_location_pin_point_ranking_process);
 #endif

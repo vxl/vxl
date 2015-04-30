@@ -22,4 +22,5 @@ void boxm2_volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_geo_cover_with_osm_to_xyz_process, "boxm2OSMToXYZProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_change_scene_res_by_geo_cover_process, "boxm2ChangeSceneResByGeoCover");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_load_score_binary_process, "boxm2LoadScoreBinary");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_location_pin_point_ranking_process, "boxm2LocationPinPointRanking");
 }

@@ -1958,4 +1958,19 @@ def load_score_binary(geo_hypo_folder, score_file, out_text, tile_id, candidate_
   boxm2_batch.set_input_string(3, out_text);
   boxm2_batch.set_input_unsigned(4, tile_id);
   boxm2_batch.run_process();
+  
+## return the location rank in the pin-point region
+def location_rank_in_pin_point(lon, lat, pin_point_kml):
+  boxm2_batch.init_process("boxm2LocationPinPointRanking");
+  boxm2_batch.set_input_double(0, lon);
+  boxm2_batch.set_input_double(1, lat);
+  boxm2_batch.set_input_string(2, pin_point_kml);
+  status = boxm2_batch.run_process();
+  if status:
+    (id, type) = boxm2_batch.commit_output(0)
+    rank = boxm2_batch.get_output_unsigned(id)
+    boxm2_batch.remove_data(id)
+    return rank
+  else:
+    return 0
 
