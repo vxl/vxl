@@ -36,4 +36,9 @@ void vimt3d_load(const vcl_string& path,
   image.set_world2im(vimt3d_load_transform(ir,use_millimetres));
 }
 
+//: Load 3D image and return pointer.  Caller responsible for deleting object
+//  Object will be of type matching pixel format in file, such as
+//  vimt3d_image_3d_of<vxl_byte>  or vimt3d_image_3d_of<float>
+vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm=false);
+
 #endif // vimt3d_load_h_
