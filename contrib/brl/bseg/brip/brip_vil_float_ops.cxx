@@ -314,8 +314,19 @@ static void brip_1d_gaussian_kernel(double sigma, double fuzz,
 
 vil_image_view<float>
 brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma,
+                             vcl_string const& boundary_condition,
                              float fill)
 {
+  vil_convolve_boundary_option option=vil_convolve_ignore_edge;
+  if(boundary_condition == "zeros")
+    option = vil_convolve_zero_extend;
+  else if(boundary_condition == "const")
+    option = vil_convolve_constant_extend;
+  else if(boundary_condition == "periodic")
+    option = vil_convolve_periodic_extend;
+  else if(boundary_condition == "reflect")
+    option = vil_convolve_reflect_extend;
+
   unsigned ni = input.ni(), nj = input.nj();
   unsigned np = input.nplanes();
   vil_image_view<float> dest(ni, nj, np);
@@ -337,16 +348,14 @@ brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma,
     float accum=0.0f;
     vil_convolve_1d(input_temp, work, ker + ksize/2,
                     -ksize/2, r, accum,
-                    vil_convolve_ignore_edge,
-                    vil_convolve_ignore_edge);
-
+                    option, option);
     // filter vertical
     vil_image_view<float> work_t = vil_transpose(work);
     vil_image_view<float> out_temp_t = vil_transpose(dest);
     vil_convolve_1d(work_t, out_temp_t, ker+ ksize/2,
                     -ksize/2, r, accum,
-                    vil_convolve_ignore_edge,
-                    vil_convolve_ignore_edge);
+                    option, option);
+
     vil_image_view<float> plane = vil_transpose(out_temp_t);
     for (unsigned j = 0; j<nj; ++j)
       for (unsigned i = 0; i<ni; ++i)

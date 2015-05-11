@@ -117,6 +117,17 @@ void vgl_sphere_3d<Type>::spherical_to_cartesian(Type elevation_rad, Type azimut
   pt.set(x, y, z);
 
 }
+template <class Type>
+void vgl_sphere_3d<Type>::cartesian_to_spherical(Type x, Type y, Type z, Type& elevation_rad, Type& azimuth_rad) const{
+  double xd = static_cast<double>(x-c_.x()), yd = static_cast<double>(y-c_.y()), zd = static_cast<double>(z-c_.z());
+  double r  = vcl_sqrt(xd*xd + yd*yd +zd*zd);
+  elevation_rad = static_cast<Type>(vcl_acos(zd/r));
+  azimuth_rad = static_cast<Type>(vcl_atan2(yd,xd));
+}
+template <class Type>
+void vgl_sphere_3d<Type>::cartesian_to_spherical(vgl_point_3d<Type> const& pt, Type& elevation_rad, Type& azimuth_rad) const{
+  return cartesian_to_spherical(pt.x(), pt.y(), pt.z(),elevation_rad,azimuth_rad);
+}
 
 //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
 template <class T>

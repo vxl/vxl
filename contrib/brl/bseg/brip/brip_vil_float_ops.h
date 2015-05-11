@@ -52,8 +52,30 @@ class brip_vil_float_ops
   static unsigned gaussian_radius(const double sigma, const double fuzz=0.02);
 
   //: convolves with a Gaussian kernel
+  // boundary_condition = {"none", "zeros", "const", "periodic", "reflect}
+  // "none"
+  // K                       ----*-------
+  // in   ... ---------------------------
+  // out  ... --------------------0000000
+  // "zeros"
+  // K                              ----*--------
+  // in   ... ---------------------------000000000000...
+  // out  ... ---------------------------
+  // "const"
+  // K                              ----*--------
+  // in   ... --------------------------aaaaaaaaaaaaa...
+  // out  ... ---------------------------
+  // "periodic"
+  // K                              ----*--------
+  // in   abc...-------------------------abc...------..
+  // out  ... ---------------------------
+  // "reflect"
+  // K                              ----*--------
+  // in   ... -------------------...edcbabcde...
+  // out  ... ---------------------------
   static vil_image_view<float> gaussian(vil_image_view<float> const& input,
                                         float sigma,
+                                        vcl_string const& boundary_condition = "none",
                                         float fill = 0.0f);
   //: computes absolute value
   static vil_image_view<float>

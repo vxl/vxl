@@ -73,8 +73,13 @@ class vgl_sphere_3d
   void spherical_to_cartesian(Type elevation_rad, Type azimuth_rad,
                               vgl_point_3d<Type>&  pt) const;
 
+  //:find elevation and azimuth of closest point on the sphere to x,y,z
+  void cartesian_to_spherical(Type x, Type y, Type z, Type& elevation_rad, Type& azimuth_rad) const;
+  void cartesian_to_spherical(vgl_point_3d<Type> const& pt, Type& elevation_rad, Type& azimuth_rad) const;
+  
   //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
   vcl_ostream& print(vcl_ostream& os) const;
+
 
   //: Read from stream, possibly with formatting.
   //  Either just reads 4 blank-separated numbers,

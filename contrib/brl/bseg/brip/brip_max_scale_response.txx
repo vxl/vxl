@@ -121,7 +121,7 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
       continue;
     }
     vil_image_view<float> temp = grey_pyramid_[level];
-    vil_image_view<float> smooth = brip_vil_float_ops::gaussian(temp, 0.75, temp(0,0));
+    vil_image_view<float> smooth = brip_vil_float_ops::gaussian(temp, 0.75,"none", temp(0,0));
 #ifdef DEBUG
     vcl_cout << "Input at level " << level << '\n';
     for (unsigned j = 0; j<smooth.nj(); ++j){

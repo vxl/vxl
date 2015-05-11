@@ -1,6 +1,7 @@
 #include "boxm2_block.h"
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_distance.h>
 //:
 // \file
 #include <boxm2/boxm2_util.h>
@@ -327,15 +328,27 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   double local_y_min =(min_pt.y()-local_origin_.y())/sub_block_dim_.y();
   double local_z_min =(min_pt.z()-local_origin_.z())/sub_block_dim_.z();
   int index_x_min=(int)vcl_floor(local_x_min);
+  if(index_x_min<0) index_x_min = 0;
+ 
   int index_y_min=(int)vcl_floor(local_y_min);
+   if(index_y_min<0) index_y_min = 0;
+
   int index_z_min=(int)vcl_floor(local_z_min);
+  if(index_z_min<0) index_z_min = 0;
+
   vgl_point_3d<double> max_pt = inter.max_point();
   double local_x_max =(max_pt.x()-local_origin_.x())/sub_block_dim_.x();
   double local_y_max =(max_pt.y()-local_origin_.y())/sub_block_dim_.y();
   double local_z_max =(max_pt.z()-local_origin_.z())/sub_block_dim_.z();
   int index_x_max=(int)vcl_floor(local_x_max);
+  int nx = static_cast<int>(trees_.get_row1_count());
+  if(index_x_max >=nx) index_x_max = nx-1; 
   int index_y_max=(int)vcl_floor(local_y_max);
+  int ny = static_cast<int>(trees_.get_row2_count());
+   if(index_y_max >=ny) index_y_max = ny-1; 
   int index_z_max=(int)vcl_floor(local_z_max);
+  int nz = static_cast<int>(trees_.get_row3_count());
+   if(index_z_max >=nz) index_z_max = nz-1; 
   vgl_point_3d<double> loc;
   for(int iz = index_z_min; iz<=index_z_max; ++iz){
     loc.z() = iz*sub_block_dim_.z();
@@ -350,15 +363,38 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
         ci.depth_=tree.depth_at(bit_index);
         ci.data_index_=tree.get_data_index(bit_index,false);
         ci.side_length_=static_cast<float>(sub_block_dim_.x()/((float)(1<<ci.depth_)));
-        vgl_point_3d<double> cell_center = tree.cell_center(bit_index);
-        ci.cell_center_.set(cell_center.x()+loc.x()+local_origin_.x(),
-                        cell_center.y()+loc.y()+local_origin_.y(),
-                        cell_center.z()+loc.z()+local_origin_.z());
+        ci.cell_center_.set(loc.x()+local_origin_.x(),
+                            loc.y()+local_origin_.y(),
+                            loc.z()+local_origin_.z());
           temp.push_back(ci);
       }
     }
   }
   return temp;
+}
+
+vcl_vector<vgl_point_3d<double> > boxm2_block::neighbors(vgl_point_3d<double> const& probe, double distance) const{
+  vcl_vector<vgl_point_3d<double> > ret;
+  double r = sub_block_dim_.x();//assume cubical tree subblock
+  double dr = vcl_floor(distance/r) + r;// add r as margin for roundoff
+  vgl_box_3d<double> bb = this->bounding_box_global();
+
+  // find the voxel center (x0, y0, z0) containing the probe
+  vgl_vector_3d<double> loc = (probe-local_origin_)/r;
+  double x0 = vcl_floor(loc.x()), y0 = vcl_floor(loc.y()), z0 = vcl_floor(loc.z());
+  x0 = x0*r + local_origin_.x();   y0 = y0*r + local_origin_.y();  z0 = z0*r + local_origin_.z();
+  // scan the NxNxN neigborhood around the origin voxel
+  for(double x = (x0-dr); x<=(x0+dr); x+=r)
+    for(double y = (y0-dr); y<=(y0+dr); y+=r)
+      for(double z = (z0-dr); z<=(z0+dr); z+=r){
+        vgl_point_3d<double> p(x, y, z);//block cell of probe is also a neighbor
+        if(!bb.contains(p)) // be sure neighbor is inside block
+          continue;
+        double d = vgl_distance(p, probe);
+        if(d<=distance)
+          ret.push_back(p);
+      }
+  return ret;
 }
 //------------ I/O -------------------------------------------------------------
 vcl_ostream& operator <<(vcl_ostream &s, boxm2_block& block)

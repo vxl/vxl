@@ -18,6 +18,7 @@
 #include <vgl/vgl_homg_line_3d_2_points.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_cassert.h>
@@ -247,6 +248,14 @@ double vgl_distance(vgl_homg_plane_3d<T> const& l, vgl_homg_point_3d<T> const& p
   if (num == 0) return 0.0; // always return 0 when point on plane, even at infinity
   else return vcl_abs(static_cast<double>(num/p.w())) / vcl_sqrt(static_cast<double>(l.nx()*l.nx() + l.ny()*l.ny() + l.nz()*l.nz()));
 }
+template <class T>
+double vgl_distance(vgl_point_3d<T> const& p,
+                    vgl_sphere_3d<T> const& s){
+  double r = static_cast<double>(s.radius());
+  vgl_point_3d<T> c = s.centre();
+  double d = vgl_distance<T>(p,c);
+  return vcl_fabs(d-r);
+}
 
 template <class T>
 double vgl_distance(vgl_polygon<T> const& poly, vgl_point_2d<T> const& point, bool closed)
@@ -361,6 +370,7 @@ template double vgl_distance(vgl_plane_3d<T >const&,vgl_point_3d<T >const&); \
 template double vgl_distance(vgl_point_3d<T >const&,vgl_plane_3d<T >const&); \
 template double vgl_distance(vgl_homg_plane_3d<T >const&,vgl_homg_point_3d<T >const&); \
 template double vgl_distance(vgl_homg_point_3d<T >const&,vgl_homg_plane_3d<T >const&); \
+template double vgl_distance(vgl_point_3d<T> const&, vgl_sphere_3d<T> const&); \
 template double vgl_distance(vgl_polygon<T >const&,vgl_point_2d<T >const&,bool); \
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_line_3d_2_points<T >const&); \
 template double vgl_distance(vgl_homg_line_3d_2_points<T >const&,vgl_homg_point_3d<T >const&); \

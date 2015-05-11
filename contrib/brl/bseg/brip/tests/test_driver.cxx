@@ -15,6 +15,7 @@ DECLARE( test_extrema );
 DECLARE( test_filter_bank );
 DECLARE( test_gain_offset_solver );
 DECLARE( test_nitf_ops );
+DECLARE( test_phase_correlation );
 void
 register_tests()
 {
@@ -33,6 +34,7 @@ register_tests()
   REGISTER( test_filter_bank );
   REGISTER( test_gain_offset_solver );
   REGISTER( test_nitf_ops );
+  REGISTER( test_phase_correlation );
 }
 
 DEFINE_MAIN;
