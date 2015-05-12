@@ -3,6 +3,8 @@ ADD_EXECUTABLE( boxm2_vecf_view_test_all
 #  test_articulated_render.cxx
  )
 
+TARGET_LINK_LIBRARIES(boxm2_vecf_view_test_all testlib boxm2_vecf_view)
+
 INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 
 IF(GLEW_FOUND)
