@@ -159,6 +159,15 @@ def find_stereo_pairs2(res, poly_roi, GSD_threshold, scene_res_file, satellite_n
   cnt = bvxm_batch.get_output_unsigned(id);
   return cnt;
 
+def find_seed_sat_resources(res, poly_kml, downsample_factor, sat_res_file):
+  bvxm_batch.init_process("volmFindOverlappingSatResourcesProcess")
+  bvxm_batch.set_input_from_db(0,res);             # satellite resource
+  bvxm_batch.set_input_string(1,poly_kml);         # kml polygon filename
+  bvxm_batch.set_input_float(2,downsample_factor); # factor by which to downsample resource footprints when 
+                                                   # computing the raster (smaller factor takes more time & memory)
+  bvxm_batch.set_input_string(3,sat_res_file);     # output file to print the list (this will also save a kml version)
+  bvxm_batch.run_process();
+
 def correct_ransac_process( cor_file, output_folder, pixel_radius):
   bvxm_batch.init_process("volmCorrectRationalCamerasRANSACProcess");
   bvxm_batch.set_input_string(0, cor_file);

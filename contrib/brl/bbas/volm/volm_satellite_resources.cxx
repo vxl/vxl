@@ -2,11 +2,25 @@
 
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
+#include <vil/vil_save.h>
+#include <vil/vil_convert.h>
+#include <vil/algo/vil_threshold.h>
+#include <vil/algo/vil_binary_erode.h>
+#include <vil/algo/vil_structuring_element.h>
+#include <vil/algo/vil_region_finder.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_file.h>
 #include <volm/volm_tile.h>
 #include <volm/volm_geo_index2.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_polygon_scan_iterator.h>
+#include <vgl/vgl_area.h>
+#include <vgl/algo/vgl_convex_hull_2d.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vcl_algorithm.h>
+#include <vcl_cstdio.h>
+#include <bkml/bkml_parser.h>
 
 void add_directories(vcl_string root, vcl_vector<vcl_string>& directories) {
   if (vul_file::is_directory(root))
@@ -113,7 +127,7 @@ void volm_satellite_resources::add_resources(unsigned start, unsigned end) {
 }
 
 //: get a list of ids in the resources_ list that overlap the given rectangular region
-void volm_satellite_resources::query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& band_str, vcl_vector<unsigned>& ids, double gsd_thres)
+void volm_satellite_resources::query(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, const vcl_string& band_str, vcl_vector<unsigned>& ids, double gsd_thres)
 {
   vgl_box_2d<double> area(lower_left_lon, upper_right_lon, lower_left_lat, upper_right_lat);
   vcl_vector<volm_geo_index2_node_sptr> leaves;
@@ -173,7 +187,7 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
 
 }
 //: query the resources in the given box and output the full paths to the given file
-bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres)
+bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, const vcl_string& band_str, double gsd_thres)
 {
   vcl_vector<unsigned> ids, ids_all;
   query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band_str, ids_all, gsd_thres);
@@ -499,6 +513,459 @@ vcl_string volm_satellite_resources::find_pair(vcl_string const& name)
   }
   return "";
 }
+
+void
+volm_satellite_resources::convert_to_global_footprints(vcl_vector<vgl_polygon<double> >& footprints, const vpgl_lvcs_sptr& lvcs,
+  const vcl_vector<vgl_polygon<double> >& lvcs_footprints, float downsample_factor)
+{
+  footprints = lvcs_footprints;
+
+  // rescale by GSD
+  for(vcl_vector<vgl_polygon<double> >::iterator it=footprints.begin(); 
+      it!=footprints.end(); ++it) {
+    vgl_polygon<double>& footprint = *it;
+
+    assert(footprint.num_sheets() == 1);
+    for (unsigned int p=0; p < footprint[0].size(); ++p) {
+      footprint[0][p].x() *= downsample_factor;
+      footprint[0][p].y() *= downsample_factor;
+    }
+  }
+
+  // convert to global lon/lat coordinate system
+  for(vcl_vector<vgl_polygon<double> >::iterator it=footprints.begin(); it!=footprints.end(); ++it) {
+    vgl_polygon<double>& footprint = *it;
+
+    assert(footprint.num_sheets() == 1);
+    for (unsigned int p=0; p < footprint[0].size(); ++p) {
+      double x = footprint[0][p].x();
+      double y = footprint[0][p].y();
+      double lon,lat,gz;
+      lvcs->local_to_global(x, y, 0,
+                            lvcs->get_cs_name(), // this is output global cs
+                            lon, lat, gz,
+                            lvcs->geo_angle_unit(), lvcs->local_length_unit());
+      footprint[0][p] = vgl_point_2d<double>(lon,lat);
+    }
+  }
+}
+
+void
+volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, vcl_vector<vgl_polygon<double> >& lvcs_footprints, 
+  const vcl_vector<vgl_polygon<double> >& footprints, float downsample_factor)
+{
+  lvcs_footprints.clear();
+
+  // if no lvcs was provided, create one
+  if(!lvcs) {
+    // find the lower-left lat/lon
+    double min_lon=181.0, min_lat=91.0;
+    for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); it!=footprints.end(); ++it) {
+      const vgl_polygon<double>& footprint = *it;
+
+      assert(footprint.num_sheets() == 1);
+      for (unsigned int p=0; p < footprint[0].size(); ++p) {
+        min_lon = vcl_min(footprint[0][p].x(), min_lon);
+        min_lat = vcl_min(footprint[0][p].y(), min_lat);
+      }
+    }
+
+    // create an lvcs coordinate system
+    lvcs = new vpgl_lvcs(min_lat, min_lon, 0, vpgl_lvcs::str_to_enum("wgs84"), vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  }
+
+  // convert to the lvcs coordinate system
+  //vcl_vector<vgl_polygon<double> > lvcs_footprints;
+  for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); it!=footprints.end(); ++it) {
+    const vgl_polygon<double>& footprint = *it;
+
+    vgl_polygon<double> lvcs_footprint(1);
+    assert(footprint.num_sheets() == 1);
+    for (unsigned int p=0; p < footprint[0].size(); ++p) {
+      double lon = footprint[0][p].x();
+      double lat = footprint[0][p].y();
+      double x,y,z;
+      lvcs->global_to_local(lon, lat, 0, lvcs->get_cs_name(), x, y, z, lvcs->geo_angle_unit(), lvcs->local_length_unit());
+      lvcs_footprint.push_back(x,y);
+    }
+    lvcs_footprints.push_back(lvcs_footprint);
+  }
+
+  // rescale by GSD
+  for(vcl_vector<vgl_polygon<double> >::iterator it=lvcs_footprints.begin(); 
+      it!=lvcs_footprints.end(); ++it) {
+    vgl_polygon<double>& footprint = *it;
+
+    assert(footprint.num_sheets() == 1);
+    for (unsigned int p=0; p < footprint[0].size(); ++p) {
+      footprint[0][p].x() /= downsample_factor;
+      footprint[0][p].y() /= downsample_factor;
+    }
+  }
+}
+
+// this is creating a raster, so ensure the union of the footprints does not cover a huge area
+void
+volm_satellite_resources::compute_footprints_heatmap(vil_image_view<unsigned>& heatmap, vgl_box_2d<double>& image_window,
+  const vcl_vector<vgl_polygon<double> >& footprints) 
+{
+  // find the lower-left & upper-right coordinates to create the image region
+  double min_x, min_y, max_x, max_y;
+  if(footprints.size() > 0 && footprints[0].num_vertices() > 0) { // not the most ideal way to initilize this...
+    const vgl_polygon<double>& footprint = footprints[0];
+
+    unsigned i = 0;
+    while(footprint[i].size() == 0) ++i;
+    min_x = max_x = footprint[i][0].x();
+    min_y = max_y = footprint[i][0].y();
+  }
+
+  for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); 
+      it!=footprints.end(); ++it) {
+    const vgl_polygon<double>& footprint = *it;
+
+    assert(footprint.num_sheets() == 1);
+    for (unsigned int p=0; p < footprint[0].size(); ++p) {
+      min_x = vcl_min(footprint[0][p].x(), min_x);
+      min_y = vcl_min(footprint[0][p].y(), min_y);
+      max_x = vcl_max(footprint[0][p].x(), max_x);
+      max_y = vcl_max(footprint[0][p].y(), max_y);
+    }
+  }
+  vcl_cout << "max_x,max_y,max_x,max_y: " << min_x << "," << min_y << "," << max_x << "," << max_y << vcl_endl;
+
+  unsigned ncols = (int)vcl_ceil(max_x - min_x);
+  unsigned nrows = (int)vcl_ceil(max_y - min_y);
+
+  // create the heatmap of intersecting polygons
+  assert(ncols != 0 && nrows != 0);
+  heatmap.set_size(ncols, nrows, 1);
+  heatmap.fill(0);
+  // define window as image size to prevent out-of-range in case of bad polygons
+  image_window = vgl_box_2d<double>(min_x, max_x, min_y, max_y);
+  vil_image_view<bool> object_mask;
+  for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); 
+      it!=footprints.end(); ++it) {
+    const vgl_polygon<double>& footprint = *it;
+
+    rasterize(image_window, footprint, object_mask);
+    vil_math_image_sum(heatmap, object_mask, heatmap);
+  }
+
+#ifdef DEBUG_HIGHLY_OVERLAPPING_SAT_RESOURCES
+  vil_image_view<vxl_byte> dest;
+  vil_convert_stretch_range(heatmap, dest);
+  vil_save(dest, "./heatmap.png");
+#endif
+}
+
+template<class T> struct index_cmp {
+  index_cmp(const T arr) : arr(arr) {}
+  bool operator()(const size_t a, const size_t b) const { return arr[a] > arr[b]; }
+  const T arr;
+};
+
+void
+volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+  const vcl_string& kml_file, float downsample_factor, const vcl_string& band, double gsd_thres)
+{
+  // parse the polygon and construct its bounding box
+  if (!vul_file::exists(kml_file)) {
+    vcl_cout << "can not find input kml file: " << kml_file << vcl_endl;
+    return;
+  }
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(kml_file);
+  vgl_box_2d<double> bbox;
+  for (unsigned i = 0; i < poly[0].size(); i++)
+    bbox.add(poly[0][i]);
+  double lower_left_lon  = bbox.min_x();
+  double lower_left_lat  = bbox.min_y();
+  double upper_right_lon = bbox.max_x();
+  double upper_right_lat = bbox.max_y();
+  vcl_vector<unsigned> ids;
+  res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids, gsd_thres);
+
+  // eliminate the repeating ids (maintaining original order), more than one leaf may contain the same resource
+  // this mangles the expected order...
+  //vcl_set<unsigned> s(ids.begin(),ids.end());
+  //ids.assign(s.begin(), s.end());
+  vcl_vector<unsigned> deduped_ids;
+  for (unsigned i = 0; i < ids.size(); i++) {
+    bool contains = false;
+    for (unsigned j = i+1; j < ids.size(); j++) {
+      if (ids[i] == ids[j]) {
+        contains = true;
+        break;
+      }
+    }
+    if (!contains)
+      deduped_ids.push_back(ids[i]);
+  }
+
+  // filter footprints
+  vcl_vector<vgl_polygon<double> > footprints;
+  for(unsigned res_id=0; res_id < deduped_ids.size(); ++res_id) {
+    footprints.push_back(resources_[deduped_ids[res_id]].meta_->footprint_);
+    //vcl_cout << resources_[deduped_ids[res_id]].name_ << vcl_endl;
+  }
+  vcl_cout << "nfootprints: " << footprints.size() << vcl_endl;
+
+  vcl_vector<unsigned> filtered_ids;
+  res->highly_overlapping_resources(filtered_ids, footprints, downsample_factor);
+  //for(int i=0; i < filtered_ids.size(); ++i) {
+  //  vcl_cout << filtered_ids[i] << ",";
+  //}
+  //vcl_cout << vcl_endl;
+
+  for(unsigned res_id=0; res_id < filtered_ids.size(); ++res_id) {
+    overlapping_res.push_back(resources_[deduped_ids[filtered_ids[res_id]]].full_path_);
+  }
+}
+
+void
+volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& overlapping_ids, 
+  const vcl_vector<vgl_polygon<double> >& footprints, float downsample_factor)
+{
+  // be careful with coordinate transforms
+
+  // convert to local coordinates
+  vpgl_lvcs_sptr lvcs;
+  vcl_vector<vgl_polygon<double> > lvcs_footprints;
+  convert_to_local_footprints(lvcs, lvcs_footprints, footprints, downsample_factor);
+
+  // compute the heatmap of the resource (nitf) footprints
+  vil_image_view<unsigned> heatmap;
+  vgl_box_2d<double> lvcs_window;
+  compute_footprints_heatmap(heatmap, lvcs_window, lvcs_footprints);
+  unsigned int nrows = heatmap.nj();
+  unsigned int ncols = heatmap.ni();
+
+
+  // compute the set of highly overlapping regions
+  float best_score = 0;
+  unsigned best_nimages = 0; 
+  vgl_polygon<double> best_region_hull;
+
+  vil_image_view<bool> mask;
+  for(unsigned nimages=1; nimages < lvcs_footprints.size(); ++nimages) {
+    // threshold image
+    vil_threshold_above(heatmap, mask, nimages);
+//#define DEBUG_HIGHLY_OVERLAPPING_SAT_RESOURCES
+#ifdef DEBUG_HIGHLY_OVERLAPPING_SAT_RESOURCES
+    vil_image_view<vxl_byte> dest;
+    vil_convert_stretch_range(mask, dest);
+    char path[256];
+    vcl_sprintf(path, "./masks/mask_%u.png", nimages);
+    vil_save(dest, path);
+#endif 
+    // find regions in the mask
+    vil_image_view<bool> to_process;
+    to_process.deep_copy(mask);
+    // traverse image, looking for pixels in regions yet to process
+    for (unsigned int j=0; j<nrows; ++j) {
+      for (unsigned int i=0; i<ncols; ++i) {
+        if (!to_process(i,j)) {
+          continue;
+        }
+        // found a new region - extract all connected pixels 
+        // (i'm using vil_region_finder a little differently than it seems it was 
+        // designed; i'll keep track of what to process externally and use the 
+        // boolean_region_image as the binary mask).
+        vil_region_finder<bool> region_finder(mask, vil_region_finder_4_conn);
+        vcl_vector<unsigned> ri,rj;
+        region_finder.same_int_region(i,j,ri,rj);
+        // get the binary mask
+        vil_image_view<bool> region_mask;
+        region_mask = region_finder.boolean_region_image();
+        // mark all pixels in region as processed and compute mean score
+        for (vcl_vector<unsigned>::const_iterator rj_it=rj.begin(), ri_it=ri.begin(); 
+            rj_it!=rj.end(); ++rj_it, ++ri_it) {
+          to_process(*ri_it, *rj_it) = false;
+        }
+        //const unsigned region_mask_area = ri.size();
+
+        // compute the convex hull of each region
+        vgl_polygon<double> region_hull = calculate_convex_hull(region_mask);
+
+        // compute a score for each region based on its density and the number of contributing images
+        double compactness_score = compactness(region_hull, region_mask) * nimages*nimages;
+        //vcl_cout << compactness_score << vcl_endl;
+
+        // find the best score
+        if(compactness_score > best_score) {
+          best_nimages = nimages;
+          best_score = compactness_score;
+          best_region_hull = region_hull;
+          //vcl_cout << best_region_hull << vcl_endl;
+        }
+      }
+    }
+  }
+
+
+  // find the image ids associated with the best scoring region
+  //vcl_cout << "at least " << best_nimages << " footprints intersecting" << vcl_endl;
+  //vcl_cout << best_region_hull << vcl_endl;
+  
+  //vgl_point_2d<double> centroid = vgl_centroid(best_region_hull);
+  // map image coordinates to lvcs coordinates
+  //vgl_point_2d<double> lvcs_centroid(centroid.x()-lvcs_window.min_x(), centroid.y()-lvcs_window.min_y());
+  //vcl_cout << lvcs_centroid.x() << "," << lvcs_centroid.y() << vcl_endl;
+  // map lvcs coordinates to global coordinates
+  //double lon, lat, gz;
+  //lvcs->local_to_global(lvcs_centroid.x()*downsample_factor, lvcs_centroid.y()*downsample_factor, 0,
+  //                      lvcs->get_cs_name(), // this is output global cs
+  //                      lon, lat, gz,
+  //                      lvcs->geo_angle_unit(), lvcs->local_length_unit());
+  //
+  //for(unsigned i=0; i < lvcs_footprints.size(); ++i) {
+  //  vgl_polygon<double>& footprint = lvcs_footprints[i];
+  //
+  //  if(footprint.contains(lvcs_centroid)) {
+  //    //vcl_cout << footprint << vcl_endl;
+  //    overlapping_ids.push_back(i);
+  //  }
+  //}
+
+  // unfortunately, there is no function to compute the intersection of two polygons, or even the 
+  // intersection of a polygon and a box (there is a test for this, but it returns true/false, not
+  // a polygon); so instead, i rasterize...
+  vil_image_view<bool> best_region_mask;
+  rasterize(lvcs_window, best_region_hull, best_region_mask);
+  unsigned int best_region_mask_area;
+  vil_math_sum(best_region_mask_area, best_region_mask, 0);
+
+  vcl_vector<double> covered_areas;
+  for(unsigned i=0; i < lvcs_footprints.size(); ++i) {
+    vgl_polygon<double>& footprint = lvcs_footprints[i];
+
+    vil_image_view<bool> mask;
+    rasterize(lvcs_window, footprint, mask);
+
+    vil_image_view<bool> intersection_mask;
+    vil_math_image_product(best_region_mask, mask, intersection_mask);
+    unsigned int intersection_mask_area;
+    vil_math_sum(intersection_mask_area, intersection_mask, 0);
+    covered_areas.push_back(intersection_mask_area/(double)best_region_mask_area);
+  }
+  overlapping_ids.resize(covered_areas.size());
+  for(size_t i=0; i < overlapping_ids.size(); ++i) { overlapping_ids[i] = i; }
+  vcl_sort(overlapping_ids.begin(), overlapping_ids.end(), index_cmp<vcl_vector<double>&>(covered_areas));
+
+  double best_area = covered_areas[overlapping_ids[0]];
+  unsigned i=3;
+  for( ; i<covered_areas.size(); ++i) {
+    if(covered_areas[overlapping_ids[i]] < best_area*.95) {
+      break;
+    }
+  }
+  overlapping_ids.erase(overlapping_ids.begin()+i,overlapping_ids.end());
+
+
+  // map lvcs coordinates to global coordinates
+  //vcl_vector<vgl_polygon<double> > footprints;
+  //convert_to_global_footprints(footprints, lvcs, lvcs_footprints, downsample_factor);
+}
+
+void
+volm_satellite_resources::rasterize(
+    const vgl_polygon<double> &bounds, vil_image_view<bool> &mask)
+{
+  double min_x, max_x, min_y, max_y;
+  for (unsigned int s=0; s < bounds.num_sheets(); ++s) {
+    for (unsigned int p=0; p < bounds[s].size(); ++p) {
+      if(s==0 && p==0) { // not the most ideal way to initilize this...
+        min_x = max_x = bounds[0][0].x();
+        min_y = max_y = bounds[0][0].y();
+      }
+
+      min_x = vcl_min(bounds[s][p].x(), min_x);
+      min_y = vcl_min(bounds[s][p].y(), min_y);
+      max_x = vcl_max(bounds[s][p].x(), max_x);
+      max_y = vcl_max(bounds[s][p].y(), max_y);
+    }
+  }
+
+  vgl_box_2d<double> window(min_x, max_x, min_y, max_y);
+
+  rasterize(window, bounds, mask);
+}
+
+void
+volm_satellite_resources::rasterize(
+    const vgl_box_2d<double> &bbox_clipped, const vgl_polygon<double> &bounds, vil_image_view<bool> &mask)
+{
+  if(mask.ni() != bbox_clipped.width() && mask.nj() != bbox_clipped.height() && mask.nplanes() != 1) {
+    assert(!"mask not formated properly");
+  } else {
+    mask.set_size((int)vcl_ceil(bbox_clipped.width()), (int)vcl_ceil(bbox_clipped.height()), 1);
+    mask.fill(false);
+  }
+  // NOTE sgr - there is a bug/instability in vgl_polygon_scan_iterator that sometimes 
+  // causes a scanline of pixels outside the convex hull to be included in the mask. 
+  // setting this to false avoids the bug 
+  const bool include_boundary = false;
+  vgl_polygon_scan_iterator<double> polyIter(bounds, include_boundary, bbox_clipped);
+  for (polyIter.reset(); polyIter.next(); ) {
+    // Y position in the mask needs to be relativized
+    int y_shifted = polyIter.scany() - bbox_clipped.min_y();
+    for (int x = polyIter.startx(); x <= polyIter.endx(); x++) {
+      int x_shifted = x - bbox_clipped.min_x();
+      mask(x_shifted, y_shifted) = true;
+    }
+  }
+}
+
+double
+volm_satellite_resources::compactness(vgl_polygon<double> const&poly, vil_image_view<bool> const& mask)
+{
+  double region_hull_area = vgl_area(poly);
+  if(region_hull_area == 0) return 0.0;
+
+  unsigned int region_mask_area;
+  vil_math_sum(region_mask_area, mask, 0);
+
+  // region_mask_area <= region_hull_area
+  double compactness_score = region_hull_area * (region_mask_area / region_hull_area); 
+
+  return compactness_score;
+}
+
+vgl_polygon<double>
+volm_satellite_resources::calculate_convex_hull(vil_image_view<bool> const& mask, unsigned off_x, unsigned off_y)
+{
+  const unsigned ni = mask.ni();
+  const unsigned nj = mask.nj();
+
+  // determine the boundary points (can't remember why I do this...)
+  vil_structuring_element strel;
+  strel.set_to_disk(1.1); // set radius to 1.1 to make sure pixels dist 1 away are included
+  vil_image_view<bool> mask_eroded(ni,nj);
+  // NOTE the erode operation could remove (very) thin elements 
+  vil_binary_erode(mask, mask_eroded, strel, vil_border_create_constant(mask, false));
+
+  // find non-zero points
+  vcl_vector<vgl_point_2d<double> > boundary_pts;
+  for (unsigned bj=0; bj<nj; ++bj) {
+    for (unsigned bi=0; bi<ni; ++bi) {
+      if (mask(bi,bj) && !mask_eroded(bi,bj)) {
+        boundary_pts.push_back(vgl_point_2d<double>((double)bi + off_x,(double)bj + off_y));
+      }
+    }
+  }
+  if (boundary_pts.size() < 3) {
+    //vcl_cerr << "boundary points < 3" << vcl_endl;
+    assert(boundary_pts.size() > 0);
+    // if not debugging, just return empty polygon
+    return vgl_polygon<double>();
+  }
+  // compute convex hull
+  vgl_convex_hull_2d<double> compute_hull(boundary_pts);
+  vgl_polygon<double> poly = compute_hull.hull();
+
+  return poly;
+}
+
 
 //: binary save self to stream
 void volm_satellite_resources::b_write(vsl_b_ostream& os) const

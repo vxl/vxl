@@ -17,6 +17,7 @@
 #include <vnl/vnl_double_2.h>
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_polygon.h>
 
 struct image_time {
   int year, month, day, hour, min, sec;
@@ -55,6 +56,7 @@ class brad_image_metadata : public vbl_ref_count
   //vnl_double_2 upper_right_;
   //vnl_double_2 lower_left_;
   //vnl_double_2 lower_right_;
+  vgl_polygon<double> footprint_;  // the (lon,lat) corner coordinates of the image. there is no 2.5D vgl_polygon, so ignore the height...
   vgl_point_3d<double> lower_left_;  // x is lon, y is lat  // lower_left corner of the 'extent' of the satellite image (not necessarily lower left corner of the image, since the image may be rotated in plane)
   vgl_point_3d<double> upper_right_; 
   vgl_point_3d<double> cam_offset_;  // these are the lat, lon, elev coords of upper left corner of the image read from the RPC camera
@@ -78,7 +80,7 @@ class brad_image_metadata : public vbl_ref_count
   bool same_extent(brad_image_metadata& other);
 
   // ===========  binary I/O ================
-  short version() const { return 3; }
+  short version() const { return 4; }
   void b_write(vsl_b_ostream& os) const;
   void b_read(vsl_b_istream& is);
 

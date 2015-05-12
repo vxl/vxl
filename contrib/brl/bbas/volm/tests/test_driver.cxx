@@ -18,6 +18,7 @@ DECLARE( test_category_io );
 DECLARE( test_osm_object );
 DECLARE( test_candidate_region_parser );
 DECLARE( test_utils );
+DECLARE( test_find_overlapping );
 
 void
 register_tests()
@@ -39,6 +40,7 @@ register_tests()
   REGISTER( test_osm_object );
   REGISTER( test_candidate_region_parser );
   REGISTER( test_utils );
+  REGISTER( test_find_overlapping );
 }
 
 DEFINE_MAIN;

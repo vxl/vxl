@@ -19,6 +19,7 @@ ADD_EXECUTABLE( volm_test_all
   test_osm_object.cxx
   test_candidate_region_parser.cxx
   test_utils.cxx
+  test_find_overlapping.cxx
 )
 
 TARGET_LINK_LIBRARIES( volm_test_all volm brad testlib vpl )
@@ -40,6 +41,7 @@ ADD_TEST(volm_test_osm_parser ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_osm_p
 ADD_TEST(volm_test_candidate_region_parser ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_candidate_region_parser)
 ADD_TEST(volm_test_osm_object ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_osm_object)
 ADD_TEST(volm_test_utils ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_utils)
+ADD_TEST(volm_test_find_overlapping ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_find_overlapping)
 
 ADD_EXECUTABLE(volm_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(volm_test_include volm)

@@ -21,6 +21,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/io/vgl_io_polygon.h>
 
 #include <brad/brad_sun_pos.h>
 
@@ -108,6 +109,9 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
   double effectiveBand = 1.0;
   lower_left_.set(181, 91, 10000);
   upper_right_.set(-181,-91, -10000);
+  // ugh, introducting a sequential dependency...need all points in order to add to polygon
+  // parse_from_pvl() does this a little cleaner
+  vcl_vector<vgl_point_2d<double> > footprint_corners(4);
   for (; awk; ++awk)
   {
     vcl_stringstream linestr(awk.line());
@@ -148,19 +152,51 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
       continue;
     }
     if (tag.compare("LLLon") == 0 || tag.compare("URLon") == 0 || tag.compare("ULLon") == 0 || tag.compare("LRLon") == 0) {
+      int corner_pos = 0;
+      if(tag.compare("ULLon") == 0) {
+        corner_pos = 0;
+      } else if(tag.compare("URLon") == 0) {
+        corner_pos = 1;
+      } else if (tag.compare("LRLon") == 0) {
+        corner_pos = 2;
+      } else if (tag.compare("LLLon") == 0) {
+        corner_pos = 3;
+      } else {
+        assert(!"Could not place the point in the polygon");
+      }
+
       linestr >> tag;
       double x;
       linestr >> x;
       if (lower_left_.x() > x) lower_left_.set(x, lower_left_.y(), lower_left_.z());
       if (upper_right_.x() < x) upper_right_.set(x, upper_right_.y(), upper_right_.z());
+
+      footprint_corners[corner_pos].x() = x;
+
       continue;
     }
     if (tag.compare("LLLat") == 0 || tag.compare("URLat") == 0 || tag.compare("ULLat") == 0 || tag.compare("LRLat") == 0) {
+      int corner_pos = 0;
+      if(tag.compare("ULLat") == 0) {
+        corner_pos = 0;
+      } else if(tag.compare("URLat") == 0) {
+        corner_pos = 1;
+      } else if (tag.compare("LRLat") == 0) {
+        corner_pos = 2;
+      } else if (tag.compare("LLLat") == 0) {
+        corner_pos = 3;
+      } else {
+        assert(!"Could not place the point in the polygon");
+      }
+
       linestr >> tag;
       double y;
       linestr >> y;
       if (lower_left_.y() > y) lower_left_.set(lower_left_.x(), y, lower_left_.z());
       if (upper_right_.y() < y) upper_right_.set(upper_right_.x(), y, upper_right_.z());
+
+      footprint_corners[corner_pos].y() = y;
+
       continue;
     }
     if (tag.compare("LLHAE") == 0 || tag.compare("URHAE") == 0 || tag.compare("ULHAE") == 0 || tag.compare("LRHAE") == 0) {  //CAUTION: height above ELLIPSOID (not mean sea level/ geoid)
@@ -190,6 +226,9 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
   vcl_cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
   gain_ = absCalfact/effectiveBand;
   offset_ = 0.0;
+
+  footprint_ = vgl_polygon<double>(footprint_corners);
+
   return true;
 }
 
@@ -205,6 +244,9 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
   n_bands_ = 0;
   lower_left_.set(181, 91, 10000);
   upper_right_.set(-181,-91, -10000);
+
+  vcl_vector<vgl_point_2d<double> > footprint_corners(4);
+
   // now parse the IMD file
   vul_awk awk(ifs);
   for (; awk; ++awk)
@@ -223,6 +265,20 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
         (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerRightCorner") != vcl_string::npos) ||
         (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerLeftCorner") != vcl_string::npos) )
     {
+      int corner_pos = 0;
+      // ugh
+      if (linestr.str().find("upperLeftCorner") != vcl_string::npos) {
+        corner_pos = 0;
+      } else if (linestr.str().find("upperRightCorner") != vcl_string::npos) {
+        corner_pos = 1;
+      } else if (linestr.str().find("lowerRightCorner") != vcl_string::npos) {
+        corner_pos = 2;
+      } else if (linestr.str().find("lowerLeftCorner") != vcl_string::npos) {
+        corner_pos = 3;
+      } else {
+        assert(!"Could not place the point in the polygon");
+      }
+
       vcl_stringstream linestr(awk.line());
       while (linestr.str().find("latitude") == vcl_string::npos) {
          ++awk;
@@ -255,6 +311,9 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
       if (upper_right_.x() < x) upper_right_.set(x, upper_right_.y(), upper_right_.z());
       if (upper_right_.y() < y) upper_right_.set(upper_right_.x(), y, upper_right_.z());
       if (upper_right_.z() < z) upper_right_.set(upper_right_.x(), upper_right_.y(), z);
+
+      footprint_corners[corner_pos] = vgl_point_2d<double>(x,y);
+
       continue;
     }
     if (tag.compare("productSpectralType") == 0) {
@@ -298,6 +357,9 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
       gains_.push_back(vcl_pair<double, double>(g, off));
     }
   }
+
+  footprint_ = vgl_polygon<double>(footprint_corners);
+
   vcl_cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
   return true;
 }
@@ -316,6 +378,7 @@ bool brad_image_metadata::parse_from_pvl(vcl_string const& filename)
 // numberOfSpectralBands 4
 // solar_irradiance 1924.59 1843.08 1574.77 1113.71
 // gain_offset 0.2359 0 0.1453 0 0.1785 0 0.1353 0
+// TODO extend with LRLat,LRLon, LRHAE, ULLat, ULLon, ULHAE
 bool brad_image_metadata::parse_from_txt(vcl_string const& filename, vcl_vector<double>& solar_irrads)
 {
   vcl_cout << "parsing radiometric calibration and atmospheric normalization parameters from: " << filename << "...\n";
@@ -469,12 +532,21 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
 
   vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
 
-  //upper_left_ = nitf_cam.upper_left(); // caution, lat is x and lon is y when read from nitf camera with this method
-  upper_right_.set(nitf_cam.upper_right()[1], nitf_cam.upper_right()[0], 0);
-  lower_left_.set(nitf_cam.lower_left()[1], nitf_cam.lower_left()[0], 0);
+  //upper_left_ = nitf_cam.upper_left(); // CAUTION: lat is x and lon is y when read from nitf camera with this method
+  upper_right_.set(nitf_cam.upper_right()[nitf_cam.LON], nitf_cam.upper_right()[nitf_cam.LAT], 0);
+  lower_left_.set(nitf_cam.lower_left()[nitf_cam.LON],   nitf_cam.lower_left()[nitf_cam.LAT], 0);
   //lower_right_ = nitf_cam.lower_right();
   vcl_cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
   vcl_cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
+
+  vpgl_nitf_rational_camera::geopt_coord LON = vpgl_nitf_rational_camera::LON;
+  vpgl_nitf_rational_camera::geopt_coord LAT = vpgl_nitf_rational_camera::LAT;
+  vgl_polygon<double> footprint(1);
+  footprint.push_back(nitf_cam.upper_left()[LON], nitf_cam.upper_left()[LAT]);
+  footprint.push_back(nitf_cam.upper_right()[LON],nitf_cam.upper_right()[LAT]);
+  footprint.push_back(nitf_cam.lower_right()[LON],nitf_cam.lower_right()[LAT]);
+  footprint.push_back(nitf_cam.lower_left()[LON], nitf_cam.lower_left()[LAT]);
+  footprint_ = footprint;
 
   double xoff, yoff, zoff;
   xoff = nitf_cam.offset(vpgl_rational_camera<double>::X_INDX);
@@ -850,6 +922,7 @@ void brad_image_metadata::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, cam_offset_.z());
   vsl_b_write(os, gsd_);
   vsl_b_write(os, t_.sec);
+  vsl_b_write(os, footprint_);
 }
 
 //: binary load self from stream
@@ -858,7 +931,12 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
   if (!is) return;
   short ver;
   vsl_b_read(is, ver);
-  if (ver == 0 || ver == 1 || ver == 2 || ver == 3) {
+  if(ver > 4) {
+    vcl_cout << "brad_image_metadata -- unknown binary io version " << ver << '\n';
+    return;
+  }
+
+  if (ver == 0 || ver == 1 || ver == 2 || ver == 3 || ver == 4) {
     vsl_b_read(is, sun_elevation_);
     vsl_b_read(is, sun_azimuth_);
     vsl_b_read(is, view_elevation_);
@@ -874,6 +952,7 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
     vsl_b_read(is, number_of_bits_);
     vsl_b_read(is, satellite_name_);
     vsl_b_read(is, cloud_coverage_percentage_);
+    // could be done with vgl_io_point_3d, but this file is versioned
     double x,y,z;
     vsl_b_read(is, x);
     vsl_b_read(is, y);
@@ -886,19 +965,17 @@ void brad_image_metadata::b_read(vsl_b_istream& is)
     vsl_b_read(is, band_);
     vsl_b_read(is, n_bands_);
   }
-  if (ver == 1 || ver == 2 || ver == 3) {
+  if (ver == 1 || ver == 2 || ver == 3 || ver == 4) {
     double x,y,z;
     vsl_b_read(is, x);
     vsl_b_read(is, y);
     vsl_b_read(is, z);
     cam_offset_.set(x,y,z);
-  } if (ver == 2 || ver == 3) {
+  } if (ver == 2 || ver == 3 || ver == 4) {
     vsl_b_read(is, gsd_);
-  } if (ver == 3) {
+  } if (ver == 3 || ver == 4) {
     vsl_b_read(is, t_.sec);
-  }
-  else {
-    vcl_cout << "brad_image_metadata -- unknown binary io version " << ver << '\n';
-    return;
+  } if (ver == 4) {
+    vsl_b_read(is, footprint_);
   }
 }

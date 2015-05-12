@@ -47,5 +47,5 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_osm_onto_image_process2, "volmMapOSMontoImageProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_osm_onto_image_process3, "volmMapOSMontoImageProcess3");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_registration_error_process, "volmRegistrationErrorProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_overlapping_sat_resources_process, "volmFindOverlappingSatResourcesProcess");
 }
