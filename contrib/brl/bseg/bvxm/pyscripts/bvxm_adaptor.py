@@ -9,7 +9,9 @@ import os
 def create_scene(scene_params_xml):
   bvxm_batch.init_process("bvxmCreateVoxelWorldProcess");
   bvxm_batch.set_params_process(scene_params_xml);  ## "./bvxmCreateVoxelWorldProcess.xml"
-  bvxm_batch.run_process();
+  status = bvxm_batch.run_process();
+  if status != 1:
+      raise Exception('Error creating scene from ' + scene_params_xml)
   (world_id, world_type) = bvxm_batch.commit_output(0);
   world = dbvalue(world_id, world_type);
   return world
