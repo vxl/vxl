@@ -1,6 +1,6 @@
 ADD_EXECUTABLE( boxm2_vecf_view_test_all
   test_driver.cxx
-#  test_articulated_render.cxx
+ test_articulated_render.cxx
  )
 
 TARGET_LINK_LIBRARIES(boxm2_vecf_view_test_all testlib boxm2_vecf_view)
