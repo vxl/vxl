@@ -1,5 +1,10 @@
-//    Volume rendering sample
-//    This sample loads a 3D volume
+//    Volume rendering of an articulated model
+//
+//    The scene must have a companion articulation class with iterator
+//    an iterator that emits a sequence of scene parameters that
+//    constitute the articulation of the model.  The articulation
+//    is initiatied/paused by pressing the 'v' key in a toggle mode
+//    
 #include <vcl_fstream.h>
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>

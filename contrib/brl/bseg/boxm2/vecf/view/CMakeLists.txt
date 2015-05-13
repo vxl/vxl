@@ -33,9 +33,9 @@ IF(VGUI_FOUND)
   #pro
 #  SUBDIRS(pro)
 
-  #tests  none for now
+  #tests
   IF( BUILD_TESTING )
-  #  SUBDIRS(tests)
+    SUBDIRS(tests)
   ENDIF( BUILD_TESTING )
 ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)
