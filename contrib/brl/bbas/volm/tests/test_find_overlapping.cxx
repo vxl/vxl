@@ -11,8 +11,8 @@
 static void test_find_overlapping()
 {
   // resource file created by create_satellite_resources.py, which calls 
-  vcl_string resource_file = "/home/sgrichar/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
-  vcl_string kml_file = "/home/sgrichar/Dropbox (VSI)/satellite_resources/jordan-mafraq_seed_region.kml";
+  vcl_string resource_file = "/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
+  vcl_string kml_file = "/mnt/finderdata/p1b_data/satellite_resources/jordan-mafraq_seed_region.kml";
 
   volm_satellite_resources_sptr res = new volm_satellite_resources();
   vsl_b_ifstream is(resource_file);
