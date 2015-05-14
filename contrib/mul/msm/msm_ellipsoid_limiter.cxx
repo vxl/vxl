@@ -42,6 +42,12 @@ void msm_ellipsoid_limiter::set_acceptance(double prop,
   assert(prop>=0 && prop<=1.0);
   accept_prop_ = prop;
   if (n_modes==0) n_modes=mode_var_.size();
+  if (n_modes==0)
+  {
+    M_max_=0.0;
+    return;
+  }
+  
   M_max_ = msm_chi2_for_cum_prob(prop,n_modes);
 }
 
