@@ -51,6 +51,12 @@ class msm_points
     assert(i<size()); v_[2*i]=x; v_[2*i+1]=y;
   }
 
+  //: Set point i
+  void set_point(unsigned i, const vgl_point_2d<double>& p)
+  {
+    assert(i<size()); v_[2*i]=p.x(); v_[2*i+1]=p.y();
+  }
+
   //: Return i-th point
   vgl_point_2d<double> operator[](unsigned i) const
   {
