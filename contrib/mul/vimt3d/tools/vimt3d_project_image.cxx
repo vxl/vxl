@@ -14,6 +14,7 @@
 #include <vil3d/vil3d_resample_trilinear.h>
 #include <vil/vil_save.h>
 #include <vil3d/vil3d_save.h>
+#include <vil3d/vil3d_math.h>
 #include <vnl/vnl_math.h>
 #include <vxl_config.h> // For vxl_byte
 #include <vimt3d/vimt3d_add_all_loaders.h>
@@ -24,6 +25,40 @@ void print_usage()
   vcl_cout<<"Sums pixels along one direction (eg k) and linearly stretches to a byte image."<<vcl_endl;
 
   vul_arg_display_usage_and_exit();
+}
+
+// Generate a projection along the i axis by summing all the i-planes
+template<class T>
+void i_axis_projection(const vil3d_image_view<T>& im3d,
+                       vil_image_view<vxl_byte>& byte_image)
+{
+  unsigned ni=im3d.ni();
+  unsigned nj=im3d.nj();
+  unsigned nk=im3d.nk();
+
+  vil_image_view<float> sum_image(nj,nk);
+  sum_image.fill(0.0f);
+  for (unsigned i=0;i<ni;++i)
+    vil_math_add_image_fraction(sum_image,1.0,vil3d_slice_jk(im3d,i),1.0);
+
+  vil_convert_stretch_range(sum_image,byte_image);
+}
+
+// Generate a projection along the j axis by summing all the j-planes
+template<class T>
+void j_axis_projection(const vil3d_image_view<T>& im3d,
+                       vil_image_view<vxl_byte>& byte_image)
+{
+  unsigned ni=im3d.ni();
+  unsigned nj=im3d.nj();
+  unsigned nk=im3d.nk();
+
+  vil_image_view<float> sum_image(ni,nk);
+  sum_image.fill(0.0f);
+  for (unsigned j=0;j<nj;++j)
+    vil_math_add_image_fraction(sum_image,1.0,vil3d_slice_ik(im3d,j),1.0);
+
+  vil_convert_stretch_range(sum_image,byte_image);
 }
 
 // Generate a projection along the k axis by summing all the k-planes
@@ -54,6 +89,9 @@ int main(int argc, char** argv)
   vul_arg<double> bz("-bz","Proportional border along z",0.1);
   vul_arg<double> voxel_width("-vw","Voxel width for resampling (or 0 for smallest in input)",0.0);
   vul_arg<unsigned > n_frames("-nf","Number of frames",36);
+  vul_arg<vcl_string> axis_str("-a","Axis of rotation (x/y/z)","y");
+  vul_arg<vcl_string> projection_dir("-pd","Projection direction (x/y/z)","z");
+  vul_arg<float> value_threshold("-t","Threshold below which image ignored.",-999.0f);
 
   vul_arg_parse(argc,argv);
 
@@ -100,6 +138,19 @@ int main(int argc, char** argv)
   unsigned nj=unsigned((1-2*by())*wy/d+0.5);
   unsigned nk=unsigned((1-2*bz())*wz/d+0.5);
   vcl_cout<<"Resampled image: "<<ni<<"x"<<nj<<"x"<<nk<<vcl_endl;
+  
+  float min_v,max_v;
+  vil3d_math_value_range(image3d.image(),min_v,max_v);
+  vcl_cout<<"Pixel range: ["<<min_v<<","<<max_v<<"]"<<vcl_endl;
+  
+  if (min_v<value_threshold())
+  {
+    for (unsigned k=0;k<image3d.image().nk();++k)
+      for (unsigned j=0;j<image3d.image().nj();++j)
+        for (unsigned i=0;i<image3d.image().ni();++i)
+          if (image3d.image()(i,j,k)<value_threshold()) 
+            image3d.image()(i,j,k)=value_threshold();
+  }
     
   // Unit transformation from resampled image co-ords to image3d co-ords
   vimt3d_transform_3d t1;
@@ -111,10 +162,16 @@ int main(int argc, char** argv)
 
   for (unsigned i=0;i<n_frames();++i)
   {
-    double Ay=i*2.0*3.1415/n_frames();  // Radians
+    double A=i*2.0*3.1415/n_frames();  // Radians
     
     vimt3d_transform_3d rot;  // Apply rotation
-    rot.set_rigid_body(0.0,Ay,0.0,  0.0,0.0,0.0);  // Rotation about y axis
+    
+    if (axis_str()=="x")
+      rot.set_rigid_body(A,0.0,0.0,  0.0,0.0,0.0);  // Rotation about x axis
+    else if (axis_str()=="y")
+      rot.set_rigid_body(0.0,A,0.0,  0.0,0.0,0.0);  // Rotation about y axis
+    else 
+      rot.set_rigid_body(0.0,0.0,A,  0.0,0.0,0.0);  // Rotation about z axis
     
     
     vimt3d_transform_3d rot_about_centre = tc*rot*tc.inverse();
@@ -135,7 +192,14 @@ int main(int argc, char** argv)
     // Project along k
     // Note - ignores voxel size
     vil_image_view<vxl_byte> image2d;
-    k_axis_projection(resampled_image,image2d);
+    
+    if (projection_dir()=="x")
+      i_axis_projection(resampled_image,image2d);
+    else
+    if (projection_dir()=="y")
+      j_axis_projection(resampled_image,image2d);
+    else
+      k_axis_projection(resampled_image,image2d);
     
     vcl_stringstream ss;
     ss<<output_path()<<"_";
