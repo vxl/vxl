@@ -8,9 +8,6 @@
 #include <vcl_string.h>
 
 #include "msdi_points_subset.h"
-#include <vimt/vimt_image_2d_of.h>
-#include <vil/vil_flip.h>
-#include <msm/msm_reflect_shape.h>
 
 //: Construct with external vectors of images and points
 msdi_points_subset::msdi_points_subset(

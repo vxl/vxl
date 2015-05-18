@@ -8,8 +8,6 @@
 
 #include <msdi/msdi_marked_images.h>
 #include <msm/msm_points.h>
-#include <vimt/vimt_image_pyramid.h>
-#include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 
 //: Adaptor which steps through images and returns a subset of original points
 //  Given a source msdi_marked_images, generates a subset of each set of points.
