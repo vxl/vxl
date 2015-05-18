@@ -10,7 +10,8 @@ SET(msdi_sources
   msdi_marked_images.h
   msdi_marked_images_from_files.cxx  msdi_marked_images_from_files.h
   msdi_array_of_marked_images.cxx    msdi_array_of_marked_images.h
-  msdi_reflected_marked_images.cxx     msdi_reflected_marked_images.h
+  msdi_reflected_marked_images.cxx   msdi_reflected_marked_images.h
+  msdi_points_subset.cxx             msdi_points_subset.h
 )
 
 #AUX_SOURCE_DIRECTORY(Templates msdi_sources)
