@@ -39,6 +39,7 @@ __kernel void normalize_render_rgb_kernel(__global float4* exp_img,
     //normalize image with respect to visibility
     float vis   = vis_img[imindex];
     exp_img[imindex] = exp_img[imindex]+ (vis*0.5f);
+    exp_img[imindex].s3 = (1.0 - vis);
 }
 
 #endif

@@ -91,7 +91,12 @@ seg_len_main(__constant  RenderSceneInfo    * linfo,
   aux_args.ray_bundle_array = ray_bundle_array;
   aux_args.cell_ptrs  = cell_ptrs;
   aux_args.cached_aux = cached_aux_data;
+#ifdef YUV
+  float4 obs_yuv = rgb2yuv(obs);
+  aux_args.obs = obs_yuv;
+#else
   aux_args.obs = obs;
+#endif
 
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
@@ -128,8 +133,13 @@ compress_rgb(__global RenderSceneInfo * info,
     float4 mean_obs = (float4) convert_float4(rgbs) / (convert_float(len_int));
 
     //pack them in a single integer, and store in global memory
-    uchar4 packed = convert_uchar4_sat_rte(mean_obs*255.0f);
-    aux_mean_obsY[gid] = as_int(packed); //aux_array[datasize + gid] = as_int(packed);
+#ifdef YUV
+    int packed = pack_yuv(mean_obs);
+#else
+    int packed = pack_uchar4(convert_uchar4_sat_rte(mean_obs * 255.0));
+#endif
+    aux_mean_obsY[gid] = packed; //aux_array[datasize + gid] = as_int(packed);
+
 
     //zero out the rest of the aux array
     aux_mean_obsU[gid] = 0; //aux_array[2*datasize + gid] = 0;
@@ -142,7 +152,7 @@ compress_rgb(__global RenderSceneInfo * info,
 typedef struct
 {
   __global float* alpha;
-  __global MOG_TYPE * mog;
+  __global int16 * mog;
   __global int* seg_len;
   __global int* mean_obs;
   __global float8 * num_obs;
@@ -164,7 +174,7 @@ void
 pre_inf_main(__constant  RenderSceneInfo    * linfo,
              __global    int4               * tree_array,       // tree structure for each block
              __global    float              * alpha_array,      // alpha for each block
-             __global    MOG_TYPE           * mixture_array,    // mixture for each block
+             __global    int16           * mixture_array,    // mixture for each block
              __global    float8             * num_obs_array,    // num obs for each block
              __global    float4             * aux_array,        // four aux arrays strung together
              __global    int                * aux_seg_len,       // seg len aux array
@@ -216,7 +226,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 
   float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
-  compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
+  compute_app_model_weights(app_model_weights, viewdir,(__constant float4*)&app_model_view_directions);
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -250,7 +260,7 @@ pre_inf_main(__constant  RenderSceneInfo    * linfo,
 typedef struct
 {
   __global float*   alpha;
-  __global MOG_TYPE * mog;
+  __global int16 * mog;
   __global float8 * num_obs;
   __global int* seg_len;
   __global int* mean_obs;
@@ -278,7 +288,7 @@ void
 bayes_main(__constant  RenderSceneInfo    * linfo,
            __global    int4               * tree_array,       // tree structure for each block
            __global    float              * alpha_array,      // alpha for each block
-           __global    MOG_TYPE           * mixture_array,    // mixture for each block
+           __global    int16           * mixture_array,    // mixture for each block
            __global    float8             * num_obs_array,    // num obs for each block
            __global    int                * aux_seg_len,      // seg len aux array
            __global    int                * aux_mean_obs,     // mean obs r aux array
@@ -336,7 +346,7 @@ bayes_main(__constant  RenderSceneInfo    * linfo,
   calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
   float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
-  compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
+  compute_app_model_weights(app_model_weights, viewdir,(__constant float4*)&app_model_view_directions);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -418,7 +428,7 @@ __kernel
 void
 update_bit_scene_main(__global RenderSceneInfo  * info,
                       __global float            * alpha_array,
-                      __global MOG_TYPE         * mixture_array,
+                      __global int16         * mixture_array,
                       __global float8           * nobs_array,
                       __global float4           * ray_dir,
                       __global int              * aux_seg_len,        // seg len aux array
@@ -452,8 +462,11 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
       int vis_int = aux_vis[gid];
       int beta_int= aux_beta[gid];
 
-      //mean obs is already normalized
-      float4 mean_obs = convert_float4(as_uchar4(obs_int))/255.0f;
+#ifdef YUV
+      float4 mean_obs = unpack_yuv(obs_int);
+#else
+      float4 mean_obs = convert_float4(unpack_uchar4(obs_int)) / 255.0f;
+#endif
 
       float cell_vis  = convert_float(vis_int) / (convert_float(len_int) * info->block_len); //(SEGLEN_FACTOR*cum_len);
       float cell_beta = convert_float(beta_int) / (convert_float(len_int) * info->block_len); //(SEGLEN_FACTOR*cum_len);
@@ -465,13 +478,13 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
 
       //second, update app model
       float8 nobs     = nobs_array[gid];
-      MOG_TYPE mixture = mixture_array[gid];
+      int16 mixture = mixture_array[gid];
 
       //select view dependent mixture and nobs
       float app_model_weights[8] = {0};
       float4 viewdir = ray_dir[gid];
-      compute_app_model_weights(app_model_weights, viewdir, &app_model_view_directions);
-      update_view_dep_app(mean_obs,cell_vis, app_model_weights, &mixture, (float*)(&nobs) );
+      compute_app_model_weights(app_model_weights, viewdir, (__constant float4*)&app_model_view_directions);
+      update_view_dep_app(mean_obs, cell_vis, app_model_weights, &mixture, (float*)(&nobs) );
 
       if (*mog_var > 0.0f) {
         (mixture).s1 = (*mog_var);
@@ -482,6 +495,7 @@ update_bit_scene_main(__global RenderSceneInfo  * info,
         (mixture).sb = (*mog_var);
         (mixture).sd = (*mog_var);
        }
+
       nobs_array[gid] = nobs;
       mixture_array[gid] = mixture;
 

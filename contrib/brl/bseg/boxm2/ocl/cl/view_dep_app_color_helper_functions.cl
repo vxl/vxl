@@ -35,25 +35,30 @@ void compute_app_model_weights(float* app_model_weights, float4 viewdir,__consta
     for(short i = 0; i < 8; i++) {
         float cos_angle = -dot(viewdir,app_model_view_directions[i]);
         app_model_weights[i] = (cos_angle > 0.01f) ? cos_angle : 0.0f; //if negative, set to 0
-	// app_model_weights[i] = 0.125f;
+	    //app_model_weights[i] = 0.125f;
         sum_weights += app_model_weights[i];
     }
 
-    for(short i = 0; i < 8; i++)
+    for(short i = 0; i < 8; i++) {
       app_model_weights[i] /= sum_weights;
+    }
 }
 
 
-float view_dep_mixture_model(float4 x, int16 mixture, float* app_model_weights)
+float view_dep_mixture_model(float4 x, MOG_TYPE mixture, float* app_model_weights)
 {
     int* mixture_array = (int*)(&mixture);
 
     float PI = 0;
     for(short i= 0; i < 8; i++) {
 
-      uchar4 tmp_mu = as_uchar4(mixture_array[2*i]) ;
-      uchar4 tmp_sig = as_uchar4(mixture_array[2*i+1]);
-      PI += app_model_weights[i] * gauss_prob_density_rgb(x, convert_float4(tmp_mu)/255.0f,convert_float4(tmp_sig)/255.0f );
+#ifdef YUV
+      float4 mu = unpack_yuv(mixture_array[2*i]);
+#else
+      float4 mu = convert_float4(unpack_uchar4(mixture_array[2*i]))/255.0f ;
+#endif
+      uchar4 tmp_sig = unpack_uchar4(mixture_array[2*i+1]);
+      PI += app_model_weights[i] * gauss_prob_density_rgb(x, mu, convert_float4(tmp_sig)/255.0f );
       // PI += app_model_weights[i] * gauss_prob_density(x.x, (convert_float4(tmp_mu)/255.0f).x,(convert_float4(tmp_sig)/255.0f).x );
     }
      return PI;
@@ -67,8 +72,12 @@ void update_view_dep_app(float4 x, float w, float* view_dep_w, MOG_TYPE* mixture
     {
       if(view_dep_w[i] > 0.01f)   //update only if view weight is positive
       {
-        float4 tmp_mean = convert_float4(as_uchar4(mixture[2*i]))/255.0f;
-        float4 tmp_sig  = convert_float4(as_uchar4(mixture[2*i+1]))/255.0f;
+#ifdef YUV
+        float4 tmp_mean = unpack_yuv(mixture[2*i]);
+#else
+        float4 tmp_mean = convert_float4(unpack_uchar4(mixture[2*i]))/255.0f;
+#endif
+        float4 tmp_sig  = convert_float4(unpack_uchar4(mixture[2*i+1]))/255.0f;
 
 
         float n = nobs[i];
@@ -105,17 +114,29 @@ void update_view_dep_app(float4 x, float w, float* view_dep_w, MOG_TYPE* mixture
             sk_B += w*view_dep_w[i]*(x.z-prev_mean_B)*( x.z - mean_B );
         }
 
-        float4 mean_fp = (float4)(mean_R,mean_G,mean_B,0);
-        float4 sig_fp = (float4) (sqrt(sk_R/n),sqrt(sk_G/n),sqrt(sk_B/n),0);
+        // dec: use the "alpha" component to signal that a valid view direction has been
+        // observed.  If the flag is unset when rendering, you'll want to avoid incorporating
+        // that viewpoint into the output.
+        float4 mean_fp = (float4)(mean_R,mean_G,mean_B,1.0f);
+        float4 sig_fp = (float4) (sqrt(sk_R/n),sqrt(sk_G/n),sqrt(sk_B/n),1.0f);
 
-        uchar4 mean_updt = convert_uchar4_sat_rte(mean_fp * 255.0f);
+#ifdef YUV
+        int mean_updt = pack_yuv(mean_fp);
+#else
+        int mean_updt = pack_uchar4(convert_uchar4_sat_rte(mean_fp * 255.0f));
+#endif
         uchar4 sig_updt = convert_uchar4_sat_rte(sig_fp * 255.0f);
 
-
-        mixture[2*i] = as_int(mean_updt);
-        mixture[2*i+1]= as_int(sig_updt);
+        mixture[2*i] = mean_updt;
+        mixture[2*i+1]= pack_uchar4(sig_updt);
         nobs[i] = n;
 	   }
-
+      else {
+        if (nobs[i] == 0.0f) {
+            // dec: no prior observations, and this viewpoint weight is 0.
+            // Make sure that "valid data" flag, i.e. the alpha component, is not set
+            mixture[2*i] = 0;
+        }
+      }
   }
 }

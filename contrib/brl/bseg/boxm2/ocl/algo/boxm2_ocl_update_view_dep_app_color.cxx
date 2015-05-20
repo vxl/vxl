@@ -13,6 +13,7 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_convert.h>
 
 //directory utility
 #include <vul/vul_timer.h>
@@ -49,19 +50,34 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
 
-  //catch a "null" mask (not really null because that throws an error)
+  //catch a "null" mask
   bool use_mask = false;
-  if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
-    vcl_cout<<"Update using mask."<<vcl_endl;
-    use_mask = true;
+  if (mask_sptr) {
+    if ( mask_sptr->ni() == img->ni() && mask_sptr->nj() == img->nj() ) {
+      vcl_cout<<"Update using mask."<<vcl_endl;
+      use_mask = true;
+    }
+    else {
+      vcl_cout << "WARNING: received mask, but different size than image - ignoring." << vcl_endl;
+    }
   }
-  vil_image_view<unsigned char >* mask_map = 0;
+  vil_image_view<float> mask;
   if (use_mask) {
-    mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
-    if (!mask_map) {
-      vcl_cout<<"boxm2_update_process:: mask map is not an unsigned char map"<<vcl_endl;
+    if (vil_image_view<unsigned char>* mask_char = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr())) {
+      mask.set_size(mask_char->ni(), mask_char->nj());
+      vil_convert_stretch_range_limited(*mask_char, mask, (unsigned char)0, (unsigned char)255, 0.0f, 1.0f);
+    }
+    else if (vil_image_view<float>* mask_flt = dynamic_cast<vil_image_view<float>*>(mask_sptr.ptr())) {
+      mask = *mask_flt;
+    }
+    else {
+      vcl_cout<<"boxm2_ocl_update_view_dep_app_color: mask map is not an unsigned char or float image" << vcl_endl;
       return false;
     }
+  }
+  else {
+    mask.set_size(img->ni(), img->nj());
+    mask.fill(1.0f);
   }
 
   //cache size sanity check
@@ -71,13 +87,9 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   //make correct data types are here
   vcl_string data_type, num_obs_type,options;
   int appTypeSize;
-  if (!validate_appearances(scene, data_type, appTypeSize, num_obs_type, options))
+  if (!validate_appearances(scene, ident, data_type, appTypeSize, num_obs_type, options)) {
     return false;
-  if (ident.size() > 0) {
-    data_type += "_" + ident;
-    num_obs_type += "_" + ident;
   }
-
 
   // create a command queue.
   int status=0;
@@ -92,12 +104,12 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   vcl_vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-  vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, false);
-  if ( float_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
+  vil_image_view_base_sptr byte_img = boxm2_util::prepare_input_image(img, false);
+  if ( byte_img->pixel_format() != VIL_PIXEL_FORMAT_RGBA_BYTE ) {
     vcl_cout<<"boxm2_ocl_update_color_process::using a non RGBA image!!"<<vcl_endl;
     return false;
   }
-  vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(float_img.ptr());
+  vil_image_view<vil_rgba<vxl_byte> >* img_view = static_cast<vil_image_view<vil_rgba<vxl_byte> >* >(byte_img.ptr());
   unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
   unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
   global_threads[0]=cl_ni;
@@ -138,7 +150,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
         input_buff[numFloats*count + 0] = (float) rgba.R() / 255.0f;
         input_buff[numFloats*count + 1] = (float) rgba.G() / 255.0f;
         input_buff[numFloats*count + 2] = (float) rgba.B() / 255.0f;
-        input_buff[numFloats*count + 3] = (float) 1.0f;
+        input_buff[numFloats*count + 3] = (float) mask(i,j);
       }
       ++count;
     }
@@ -217,6 +229,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
 
     //set masked values
     vis_image->read_to_buffer(queue);
+#if 0
     if (use_mask)
     {
       int count = 0;
@@ -238,6 +251,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
       vis_image->write_to_buffer(queue);
       clFinish(queue);
     }
+#endif
 
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
@@ -439,7 +453,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
         bocl_mem_sptr mog_var_mem = new bocl_mem(device->context(), &mog_var, sizeof(mog_var), "update gauss variance");
         mog_var_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-        local_threads[0] = 64;
+        local_threads[0] = 16;
         local_threads[1] = 1 ;
         global_threads[0]=RoundUp(info_buffer->data_buffer_length,local_threads[0]);
         global_threads[1]=1;
@@ -472,6 +486,9 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
         alpha->read_to_buffer(queue);
         mog->read_to_buffer(queue);
         num_obs->read_to_buffer(queue);
+        status = clFinish(queue);
+        if (!check_val(status, MEM_FAILURE, "READ MODEL BUFFERS FAILED: " + error_to_string(status)))
+          return false;
       }
 
       //read image out to buffer (from gpu)
@@ -479,7 +496,9 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
       vis_image->read_to_buffer(queue);
       pre_image->read_to_buffer(queue);
       cl_output->read_to_buffer(queue);
-      clFinish(queue);
+      status = clFinish(queue);
+      if (!check_val(status, MEM_FAILURE, "READ IMAGE BUFFERS FAILED: " + error_to_string(status)))
+        return false;
     }
   }
 
@@ -495,11 +514,6 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
   opencl_cache->unref_mem(norm_image.ptr());
   opencl_cache->unref_mem(ray_o_buff.ptr());
   opencl_cache->unref_mem(ray_d_buff.ptr());
-
-  local_threads[0] = 8;
-  local_threads[1] = 8;
-  global_threads[0]=cl_ni;
-  global_threads[1]=cl_nj;
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
   clReleaseCommandQueue(queue);
@@ -535,7 +549,8 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl_
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   vcl_string options="";
-  options = " -D INTENSITY -D DETERMINISTIC" + opts;
+  options = " -D DETERMINISTIC -D YUV" + opts;
+  //options = " -D DETERMINISTIC" + opts;
 
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;
@@ -582,40 +597,41 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl_
 
 //makes sure appearance types correspond correctly
 bool boxm2_ocl_update_view_dep_app_color::validate_appearances(boxm2_scene_sptr scene,
-                                            vcl_string& data_type,
-                                            int& appTypeSize,
-                                            vcl_string& num_obs_type,
-                                            vcl_string& options)
+                                                               vcl_string const& ident,
+                                                               vcl_string& data_type,
+                                                               int& appTypeSize,
+                                                               vcl_string& num_obs_type,
+                                                               vcl_string& options)
 {
   vcl_vector<vcl_string> apps = scene->appearances();
   bool foundDataType = false, foundNumObsType = false;
   for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()&& !foundDataType)
+    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix(ident)&& !foundDataType)
     {
       data_type = apps[i];
       foundDataType = true;
-      options=" -D MOG_VIEW_DEP_COLOR ";
-      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
+      options=" -D MOG_VIEW_DEP_COLOR";
+      appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix());
     }
-    else if (apps[i] == boxm2_data_traits<BOXM2_GAUSS_UV_VIEW>::prefix()&& !foundDataType){
+    else if (apps[i] == boxm2_data_traits<BOXM2_GAUSS_UV_VIEW>::prefix(ident)&& !foundDataType){
       data_type = apps[i];
       foundDataType = true;
       options=" -D MOG_VIEW_DEP_UV ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
 
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix() )
+    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix(ident) )
     {
       num_obs_type = apps[i];
       foundNumObsType = true;
     }
   }
   if (!foundDataType) {
-    vcl_cout<<"BOXM2_OPENCL_VIEW_BASED_UPDATE_COLOR_PROCESS ERROR: scene doesn't have BOXM2_GAUSS_RGB_VIEW or BOXM2_GAUSS_UV_VIEW data type"<<vcl_endl;
+    vcl_cout<<"BOXM2_OPENCL_VIEW_BASED_UPDATE_COLOR_PROCESS ERROR: scene doesn't have BOXM2_GAUSS_RGB_VIEW or BOXM2_GAUSS_UV_VIEW data type with ident = <" << ident << ">" << vcl_endl;
     return false;
   }
   if (!foundNumObsType) {
-    vcl_cout<<"BOXM2_OPENCL_VIEW_BASED_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS_VIEW type"<<vcl_endl;
+    vcl_cout<<"BOXM2_OPENCL_VIEW_BASED_UPDATE_PROCESS ERROR: scene doesn't have BOXM2_NUM_OBS_VIEW type with ident = <" << ident << ">" <<vcl_endl;
     return false;
   }
   return true;

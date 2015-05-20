@@ -59,7 +59,11 @@ void step_cell_preinf(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     MOG_TYPE mixture = aux_args.mog[data_ptr];
     float8 num_obs = aux_args.num_obs[data_ptr];
 
-    float4 mean_obs = convert_float4(as_uchar4(aux_args.mean_obs[data_ptr]))/255.0f;
+#ifdef YUV
+    float4 mean_obs = unpack_yuv(aux_args.mean_obs[data_ptr]);
+#else
+    float4 mean_obs = convert_float4(unpack_uchar4(aux_args.mean_obs[data_ptr])) * 255.0;
+#endif
 
     float cum_len = convert_float( aux_args.seg_len[data_ptr]) / SEGLEN_FACTOR;
 
@@ -127,8 +131,11 @@ void step_cell_bayes(AuxArgs aux_args, int data_ptr, uchar llid, float d)
 
     //load aux data
     int cum_int = aux_args.seg_len[data_ptr];
-
-    float4 mean_obs = convert_float4(as_uchar4(aux_args.mean_obs[data_ptr]))/255.0f;
+#ifdef YUV
+    float4 mean_obs = unpack_yuv(aux_args.mean_obs[data_ptr]);
+#else
+    float4 mean_obs = convert_float4(unpack_uchar4(aux_args.mean_obs[data_ptr])) * 255.0;
+#endif
     float cum_len = convert_float(cum_int) / SEGLEN_FACTOR;
 
     float ray_beta, vis_cont;

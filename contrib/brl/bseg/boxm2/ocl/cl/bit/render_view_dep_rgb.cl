@@ -66,7 +66,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
 
   float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
-  compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
+  compute_app_model_weights(app_model_weights, viewdir,(__constant float4*)&app_model_view_directions);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
@@ -76,6 +76,9 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   //uchar echar   = convert_uchar(eint);
   //float expint  = convert_float(echar)/255.0f;
   float4 expint  = exp_image[imIndex[llid]];
+#ifdef YUV
+  expint = rgb2yuv(expint);
+#endif
   float vis     = vis_image[imIndex[llid]];
   float max_omega     = max_omega_image[imIndex[llid]];
 
@@ -97,6 +100,9 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
 
 
   //store the expected intensity (as UINT)
+#ifdef YUV
+  expint = yuv2rgb(expint);
+#endif
   exp_image[imIndex[llid]] =  expint;
   //store visibility at the end of this block
   vis_image[imIndex[llid]] = vis;
@@ -109,14 +115,13 @@ void step_cell_render(AuxArgs    aux_args,
 		                  int        data_ptr,
                       float      d)
 {
-  float alpha = aux_args.alpha[data_ptr];b
+  float alpha = aux_args.alpha[data_ptr];
   float diff_omega=exp(-alpha*d);
 
-  float4 expected_int_cell= (float4)(0.0f,0.0f,0.0f,0.0f);
+  float4 expected_app_cell= (float4)(0.0f,0.0f,0.0f,0.0f);
   // for rendering only
 
-  if (diff_omega<0.995f)
-  {
+  if (diff_omega<0.995f) {
 #ifdef MOG_VIEW_DEP_COLOR_COMPACT
       int8 mixture = aux_args.mog[data_ptr];
 #else
@@ -124,23 +129,37 @@ void step_cell_render(AuxArgs    aux_args,
 #endif
     int * mixture_array = (int*)(&mixture);
     float * app_model_weights = aux_args.app_model_weights;
-    float sum_weights = 0;
+    float sum_weights = 0.0f;
     for(short i= 0; i < 8; i++)
     {
+#ifdef YUV
+        // YUV
 #ifdef MOG_VIEW_DEP_COLOR_COMPACT
-      uchar4 tmp_mu = as_uchar4(mixture_array[i]) ;
+      float4 tmp_mu = unpack_yuv(mixture_array[i]);
 #else
-      uchar4 tmp_mu = as_uchar4(mixture_array[2*i]) ;
+      float4 tmp_mu = unpack_yuv(mixture_array[2*i]);
 #endif
-      if(app_model_weights[i] > 0.01f)
-          expected_int_cell += app_model_weights[i] * convert_float4(tmp_mu)/255.0f;
+#else
+      // RGB
+#ifdef MOG_VIEW_DEP_COLOR_COMPACT
+      float4 tmp_mu = convert_float4(unpack_uchar4(mixture_array[i])) / 255.0;
+#else
+      float4 tmp_mu = convert_float4(unpack_uchar4(mixture_array[2*i])) / 255.0;
+#endif
+#endif
+      bool viewpoint_has_data = tmp_mu.s3 > 0.0f;
+      if(viewpoint_has_data && (app_model_weights[i] > 0.01)) {
+          expected_app_cell += app_model_weights[i] * tmp_mu;
+          sum_weights += app_model_weights[i];
+      }
     }
-
+    // need to normalize because we may have encountered some viewpoints w/no data.
+    expected_app_cell /= sum_weights;
   }
 
   float omega=(*aux_args.vis) * (1.0f - diff_omega);
   (*aux_args.vis) *= diff_omega;
-  (*aux_args.expint)+= expected_int_cell * omega;
+  (*aux_args.expint)+= expected_app_cell * omega;
 }
 
 

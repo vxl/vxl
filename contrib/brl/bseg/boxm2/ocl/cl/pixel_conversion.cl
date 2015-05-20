@@ -26,10 +26,52 @@ uint intensityFloatToInt(float intensity)
 #define V_MAX 0.615
 #define U_RANGE 0.872f
 #define V_RANGE 1.23f
+
+uchar4 unpack_uchar4(int packed)
+{
+    uint upacked = as_uint(packed);
+    uchar s0 = (upacked >> 24) & 0xff;
+    uchar s1 = (upacked >> 16) & 0xff;
+    uchar s2 = (upacked >> 8) & 0xff;
+    uchar s3 = upacked & 0xff;
+    return (uchar4)(s0, s1, s2, s3);
+}
+
+int pack_uchar4(uchar4 x)
+{
+    uint s0 = x.s0;
+    uint s1 = x.s1;
+    uint s2 = x.s2;
+    uint s3 = x.s3;
+    uint upacked = 0;
+    upacked |= (s0 << 24);
+    upacked |= (s1 << 16);
+    upacked |= (s2 << 8);
+    upacked |= s3;
+    return as_int(upacked);
+}
+
+float4 unpack_yuv(int packed)
+{
+    float4 yuv = convert_float4(unpack_uchar4(packed)) / 255.0;
+    yuv.s1 = yuv.s1 * U_RANGE - U_MAX;
+    yuv.s2 = yuv.s2 * V_RANGE - V_MAX;
+    return yuv;
+}
+
+int pack_yuv(float4 yuv)
+{
+    float4 yuv_norm = yuv;
+    yuv_norm.s1 = (yuv.s1 + U_MAX) / U_RANGE;
+    yuv_norm.s2 = (yuv.s2 + V_MAX) / V_RANGE;
+    uchar4 yuv_uchar = convert_uchar4_sat_rte(yuv_norm*255.0);
+    return pack_uchar4(yuv_uchar);
+}
+
 float4 rgb2yuv(float4 in)
 {
   float Y = 0.299f * in.x + 0.587f * in.y + 0.114f * in.z;
-  return (float4) ( Y, 0.492f * (in.z - Y), 0.877f * (in.x - Y), 0.0 );
+  return (float4) ( Y, 0.492f * (in.z - Y), 0.877f * (in.x - Y), in.w);
 }
 float4 yuv2rgb(float4 in)
 {
@@ -39,5 +81,5 @@ float4 yuv2rgb(float4 in)
   return (float4) ( in.x + 1.1402508551881f * in.z, 
                     in.x - 0.39473137491174f * in.y - 0.5808092090311f * in.z,
                     in.x + 2.0325203252033f * in.y, 
-                    0.0 );
+                    in.w);
 }

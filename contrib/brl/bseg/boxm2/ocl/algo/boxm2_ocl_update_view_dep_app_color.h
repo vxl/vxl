@@ -41,6 +41,7 @@ class boxm2_ocl_update_view_dep_app_color
 
     //helper method to validate appearances
     static bool validate_appearances(boxm2_scene_sptr scene,
+                                     vcl_string const& ident,
                                      vcl_string& data_type,
                                      int& appTypeSize,
                                      vcl_string& nobs_type,

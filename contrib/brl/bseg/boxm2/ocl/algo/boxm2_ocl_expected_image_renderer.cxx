@@ -37,7 +37,7 @@ boxm2_ocl_expected_image_renderer::boxm2_ocl_expected_image_renderer(boxm2_scene
   boxm2_data_type valid_appearance_types_grey[] = {
     BOXM2_MOG3_GREY, BOXM2_MOG3_GREY_16, BOXM2_FLOAT8, BOXM2_LABEL_SHORT
   };
-  boxm2_data_type valid_appearance_types_rgb[] = {BOXM2_GAUSS_RGB};
+  boxm2_data_type valid_appearance_types_rgb[] = {BOXM2_GAUSS_RGB, BOXM2_GAUSS_RGB_VIEW };
 
   int num_valid_appearances_grey = sizeof(valid_appearance_types_grey) / sizeof(valid_appearance_types_grey[0]);
 
@@ -374,6 +374,52 @@ bool boxm2_ocl_expected_image_renderer::compile_kernels(bocl_device_sptr device,
                                             options,              //options
                                             "normalize render color kernel"); //kernel identifier (for error checking)
     vec_kernels.push_back(normalize_render_kernel);
+  }
+  else if (data_type == BOXM2_GAUSS_RGB_VIEW) {
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "pixel_conversion.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "view_dep_app_color_helper_functions.cl");
+    src_paths.push_back(source_dir + "bit/render_view_dep_rgb.cl");
+    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+
+      vcl_string options = options_basic + " -D RENDER -D YUV";
+      //vcl_string options = options_basic + " -D RENDER";
+      options += " -D RENDER_VIEW_DEP ";
+      options += " -D STEP_CELL=step_cell_render(aux_args,data_ptr,d*linfo->block_len)";
+
+      bocl_kernel * ray_trace_kernel=new bocl_kernel();
+      ray_trace_kernel->create_kernel( &device->context(),
+                                       device->device_id(),
+                                       src_paths,
+                                       "render_bit_scene",   //kernel name
+                                       options,              //options
+                                       "boxm2 opencl render_view_dep_color_bit_scene"); //kernel identifier (for error checking)
+      vec_kernels.push_back(ray_trace_kernel);
+
+      //create normalize image kernel
+      vcl_vector<vcl_string> norm_src_paths;
+      norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
+      norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+      bocl_kernel * normalize_render_kernel=new bocl_kernel();
+
+      vcl_string normalize_options = options_basic;
+      normalize_options += " -D RENDER -D YUV";
+      //normalize_options += " -D RENDER";
+      normalize_render_kernel->create_kernel( &device->context(),
+                                              device->device_id(),
+                                              norm_src_paths,
+                                              "normalize_render_rgb_kernel",   //kernel name
+                                              normalize_options,              //options
+                                              "normalize render color kernel"); //kernel identifier (for error checking)
+
+      vec_kernels.push_back(normalize_render_kernel);
+
   }
   else {
     vcl_cerr << "ERROR: boxm2_ocl_expected_image_renderer::compile_kernels(): Unsupported Appearance model type " << data_type << vcl_endl;
