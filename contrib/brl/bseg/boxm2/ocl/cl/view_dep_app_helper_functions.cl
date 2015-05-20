@@ -9,7 +9,7 @@
 //DECLARE app_model_view_directions
 
 
-#if 0
+#if 1
 //used for aerial scenes.
 __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
                                                       (float4)(0.707,    0,      0.707,0),
@@ -21,7 +21,7 @@ __constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      
                                                       (float4)(0,         0,     0,0)};
 #endif
 
-#if 1
+#if 0
 //used for aerial scenes.
 __constant  float4  app_model_view_directions[8] = {  (float4)(0.81654 ,  0.00000 ,  0.57729 ,0),
                                                        (float4)(0.00000 ,  0.81654 ,  0.57729,0),
