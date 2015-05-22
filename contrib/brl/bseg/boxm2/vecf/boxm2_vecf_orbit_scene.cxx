@@ -207,23 +207,18 @@ void boxm2_vecf_orbit_scene::reset_indices(){
  boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool initialize):
   boxm2_scene(scene_file), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
-  eyelid_geo_.set_x_mid(params_.x_mid_);
-  eyelid_geo_.set_y_off(params_.y_off_);
+
   eyelid_geo_.set_tmin(params_.eyelid_tmin_);
   eyelid_geo_.set_tmax(params_.eyelid_tmax_);
 
-  
-  lower_eyelid_geo_.set_x_mid(params_.x_mid_);
-  lower_eyelid_geo_.set_y_off(params_.y_off_);
+
   lower_eyelid_geo_.set_tmin(params_.lower_eyelid_tmin_);
   lower_eyelid_geo_.set_tmax(params_.lower_eyelid_tmax_);
 
-  eyelid_crease_geo_.set_x_mid(params_.x_mid_);
-  eyelid_crease_geo_.set_y_off(params_.y_off_);
   eyelid_crease_geo_.set_tmin(params_.eyelid_crease_tmin_);
   eyelid_crease_geo_.set_tmax(params_.eyelid_crease_tmax_);
   eyelid_crease_geo_.set_ct(params_.eyelid_crease_ct_);
-  eyelid_crease_geo_.set_brow_angle_rad(params_.brow_angle_rad_);
+  
   
   boxm2_lru_cache::create(this);
   this->extract_block_data();
