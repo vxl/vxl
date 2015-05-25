@@ -3,10 +3,10 @@
 #   Tim Cootes
 #
 
-doxygen_add_library(contrib/mul/msm/utils
+doxygen_add_library(contrib/mul/msm_utils
   DEPENDS contrib/mul/msm
   PACKAGE contrib/mul
-  DESCRIPTION "Manchester's SM Library"
+  DESCRIPTION "Utils for Manchester's SM Library"
 )
 
 SET(msm_utils_sources
