@@ -20,6 +20,7 @@
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vcl_algorithm.h>
+#include <vcl_iterator.h>
 #include <vcl_cstdio.h>
 #include <bkml/bkml_parser.h>
 
@@ -967,24 +968,78 @@ volm_satellite_resources::calculate_convex_hull(vil_image_view<bool> const& mask
   return poly;
 }
 
-// TODO make this an iterator
-void
-volm_satellite_resources::ind_combinations(vcl_vector<vcl_vector<unsigned> >& combs, unsigned N, unsigned K)
+class Combinator
 {
-  combs.clear();
+public:
+  Combinator(unsigned N=0, unsigned K=0) : N(N), K(K) {
+    bitmask = vcl_string(K,1); // K leading 1's
+    bitmask.resize(N,0); // N-K trailing 0's
+  }
 
-  vcl_string bitmask(K, 1); // K leading 1's
-  bitmask.resize(N, 0); // N-K trailing 0's
+  bool operator==(const Combinator& other) const {
+    return (inds == other.inds && bitmask == other.bitmask);
+  }
+  bool operator!=(const Combinator& other) const {
+    return !(this == &other);
+  }
 
-  // print integers and permute bitmask
-  do {
-    vcl_vector<unsigned> comb;
-    for (unsigned i = 0; i < N; ++i) { // [0..N-1] integers
-        if (bitmask[i]) comb.push_back(i);
+  Combinator& operator++() {
+    if(!std::prev_permutation(bitmask.begin(), bitmask.end())) {
+      *this = Combinator();
+      return *this;
     }
-    combs.push_back(comb);
-  } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
-}
+
+    inds.clear();
+    for (unsigned i = 0; i < N; ++i) { // [0..N-1] integers
+      if (bitmask[i]) inds.push_back(i);
+    }
+    return *this;
+  }
+
+  class Iterator : vcl_iterator<vcl_forward_iterator_tag, vcl_vector<unsigned> >
+  {
+    typedef Iterator self_type;
+    public:
+      explicit Iterator(Combinator* ptr=0) : ptr_(ptr) { }
+      self_type& operator++() {
+        if(++(*ptr_) == Combinator()) { // null object pattern
+          *this = Iterator(); // WARNING modifiying iterator in flight...
+        }
+        return *this;
+      }
+      self_type operator++(int junk) { self_type i = *this; ptr_++; return i; }
+      reference operator*() { return ptr_->inds; }
+      pointer operator->() { return &(ptr_->inds); }
+      bool operator==(const self_type& rhs) const {
+        if(!ptr_ && !rhs.ptr_) { return true; }
+        else if(!ptr_ || !rhs.ptr_) { return false; }
+        else { return *ptr_ == *rhs.ptr_; }
+      }
+      bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
+    private:
+      Combinator* ptr_;
+  };
+
+  // FIXME can't create the ConstIterator because ConstIterator begin() must be marked 
+  // const, which prevents it from modifying *this (Combinator), but operator++ must 
+  // modify bitmask, one of *this's data members
+public:
+  Iterator begin() {
+    return Iterator(this);
+  }
+
+  Iterator end() {
+    return Iterator();
+  }
+
+public:
+  typedef Iterator iterator;
+
+private:
+  vcl_vector<unsigned> inds;
+  unsigned N, K;
+  vcl_string bitmask;
+};
 
 void
 volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids, 
@@ -997,13 +1052,9 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& ov
   vcl_map<vcl_vector<unsigned>, vgl_polygon<double> > cache;
 
   unsigned n = footprints.size();
-  vcl_vector<vcl_vector<unsigned> > combs;
-  // TODO incrament k up to l
-  ind_combinations(combs, n, k);
-
-  for(vcl_vector<vcl_vector<unsigned> >::const_iterator comb_it=combs.begin(); 
-      comb_it != combs.end(); ++comb_it) {
-    const vcl_vector<unsigned>& inds = *comb_it;
+  Combinator combs1(n, k);
+  for(Combinator::iterator it=combs1.begin(); it != combs1.end(); ++it) {
+    const vcl_vector<unsigned>& inds = *it;
     //for(int i=0; i < inds.size(); ++i) 
     //  vcl_cout << inds[i] << " ";
     //vcl_cout << vcl_endl;
