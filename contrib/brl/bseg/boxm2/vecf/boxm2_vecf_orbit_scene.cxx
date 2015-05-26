@@ -568,7 +568,7 @@ void boxm2_vecf_orbit_scene::find_eyelid_cell_neigborhoods(){
 
 void boxm2_vecf_orbit_scene::build_eyelid(){
   double len = this->subblock_len();
-  double d_thresh =0.86602540*len;//sqrt(3)/2 x len, diagonal distance
+  double d_thresh = 0.5*params_.neighbor_radius()*len;
   vgl_box_3d<double> bb = eyelid_geo_.bounding_box();
  // cells in  box centers are in global coordinates
   vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
