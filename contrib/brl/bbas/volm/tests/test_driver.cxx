@@ -19,6 +19,7 @@ DECLARE( test_osm_object );
 DECLARE( test_candidate_region_parser );
 DECLARE( test_utils );
 DECLARE( test_find_overlapping );
+DECLARE( compute_intersection );
 
 void
 register_tests()
@@ -41,6 +42,7 @@ register_tests()
   REGISTER( test_candidate_region_parser );
   REGISTER( test_utils );
   REGISTER( test_find_overlapping );
+  REGISTER( compute_intersection );
 }
 
 DEFINE_MAIN;

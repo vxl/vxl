@@ -16,6 +16,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_area.h>
+#include <vgl/vgl_clip.h>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vcl_algorithm.h>
@@ -966,6 +967,116 @@ volm_satellite_resources::calculate_convex_hull(vil_image_view<bool> const& mask
   return poly;
 }
 
+// TODO make this an iterator
+void
+volm_satellite_resources::ind_combinations(vcl_vector<vcl_vector<unsigned> >& combs, unsigned N, unsigned K)
+{
+  combs.clear();
+
+  vcl_string bitmask(K, 1); // K leading 1's
+  bitmask.resize(N, 0); // N-K trailing 0's
+
+  // print integers and permute bitmask
+  do {
+    vcl_vector<unsigned> comb;
+    for (unsigned i = 0; i < N; ++i) { // [0..N-1] integers
+        if (bitmask[i]) comb.push_back(i);
+    }
+    combs.push_back(comb);
+  } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
+}
+
+void
+volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids, 
+  const vcl_vector<vgl_polygon<double> >& footprints, unsigned k, unsigned l)
+{
+  double max_area = 0.0;
+  vcl_list<vcl_pair<vcl_vector<unsigned>, double> > areas;
+  // could be memory inefficient; TODO prune
+  // RE only need to keep the previous level of indices (len(inds)-1) 
+  vcl_map<vcl_vector<unsigned>, vgl_polygon<double> > cache;
+
+  unsigned n = footprints.size();
+  vcl_vector<vcl_vector<unsigned> > combs;
+  // TODO incrament k up to l
+  ind_combinations(combs, n, k);
+
+  for(vcl_vector<vcl_vector<unsigned> >::const_iterator comb_it=combs.begin(); 
+      comb_it != combs.end(); ++comb_it) {
+    const vcl_vector<unsigned>& inds = *comb_it;
+    //for(int i=0; i < inds.size(); ++i) 
+    //  vcl_cout << inds[i] << " ";
+    //vcl_cout << vcl_endl;
+
+    if(inds.size() < 2) {
+      continue;
+    }
+    unsigned i = 0;
+    vgl_polygon<double> intersection = footprints[inds[0]];
+    if(inds.size() == 2) {
+      i = 1;
+    }
+    else if(inds.size() <= k) {
+      for(i=inds.size()-2; i>0; --i) { // full sub-index cannot already be processed
+        vcl_vector<unsigned> sub_inds(&inds[0], &inds[i+1]);
+        if(cache.find(sub_inds) != cache.end()) {
+          intersection = cache[sub_inds];
+          i++;
+          break;
+        }
+      }
+    }
+    else { // must have k+1 footprints to intersect
+      i = inds.size()-2;
+      vcl_vector<unsigned> sub_inds(&inds[0], &inds[i+1]);
+      if(cache.find(sub_inds) != cache.end()) {
+        intersection = cache[sub_inds];
+        i++;
+      }
+      // if the sub-index is not in the cache, it is because the intersection area was 
+      // smaller than already observed, so just continue
+      else {
+        continue;
+      }
+    }
+
+    double area = 0;
+    for(unsigned j=i; j < inds.size(); ++j) {
+      unsigned ind = inds[j];
+      // compute the intersection of all images in the set
+      intersection = vgl_clip( intersection, footprints[ind], vgl_clip_type_intersect );
+      unsigned nimages = inds.size();
+      area = vgl_area(intersection)*nimages*nimages;
+      // if this has a smaller area than we've already seen, just abort
+      if(area <= max_area) {
+        break;
+      }
+      else {
+        vcl_vector<unsigned> sub_inds(&inds[0], &inds[j+1]);
+        cache[sub_inds] = intersection;
+      }
+    }
+
+    // is this a larger area than what we've alread seen
+    if(area > max_area) {
+      max_area = area;
+      areas.push_back(vcl_make_pair(inds,area));
+    }
+  }
+
+
+  overlapping_ids = areas.back().first;
+  for(vcl_list<vcl_pair<vcl_vector<unsigned>, double> >::const_iterator it=areas.begin();
+      it != areas.end(); ++it) {
+    const vcl_vector<unsigned>& inds = it->first;
+    double area = it->second;
+    vcl_cout << "(";
+    for(int i=0; i<inds.size(); ++i) {
+      vcl_cout << inds[i] << ",";
+    }
+    vcl_cout << "), " << area << vcl_endl;
+  }
+}
 
 //: binary save self to stream
 void volm_satellite_resources::b_write(vsl_b_ostream& os) const

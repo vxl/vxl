@@ -92,6 +92,11 @@ class volm_satellite_resources : public vbl_ref_count
     void highly_overlapping_resources(vcl_vector<unsigned>& overlapping_ids, const vcl_vector<vgl_polygon<double> >& footprints,
         float downsample_factor);
 
+    void highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids, 
+        const vcl_vector<vgl_polygon<double> >& footprints, unsigned k, unsigned l);
+    
+    void ind_combinations(vcl_vector<vcl_vector<unsigned> >& combs, unsigned N, unsigned K);
+
     //: return the full path of a satellite image given its name, if not found returns empty string
     vcl_pair<vcl_string, vcl_string> full_path(vcl_string name);
 
