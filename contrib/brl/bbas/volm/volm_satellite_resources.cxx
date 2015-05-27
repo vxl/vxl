@@ -968,77 +968,105 @@ volm_satellite_resources::calculate_convex_hull(vil_image_view<bool> const& mask
   return poly;
 }
 
-class Combinator
+// from http://www.drdobbs.com/the-standard-librarian-defining-iterato/184401331?pgno=3 and 
+// http://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/lectures/iterators.html#example-simple-list-continued
+// with modifications
+class CombinatorGenerator
 {
 public:
-  Combinator(unsigned N=0, unsigned K=0) : N(N), K(K) {
-    bitmask = vcl_string(K,1); // K leading 1's
-    bitmask.resize(N,0); // N-K trailing 0's
-  }
+  CombinatorGenerator(unsigned N, unsigned K) : N(N), K(K) { }
 
-  bool operator==(const Combinator& other) const {
-    return (inds == other.inds && bitmask == other.bitmask);
-  }
-  bool operator!=(const Combinator& other) const {
-    return !(this == &other);
-  }
+private:
+  struct Combinator
+  {
+    Combinator(unsigned N=0, unsigned K=0) : N(N), K(K) {
+      bitmask = vcl_string(K,1); // K leading 1's
+      bitmask.resize(N,0);       // N-K trailing 0's
+    }
 
-  Combinator& operator++() {
-    if(!std::prev_permutation(bitmask.begin(), bitmask.end())) {
-      *this = Combinator();
+    bool operator==(const Combinator& other) const {
+      return bitmask == other.bitmask; // inds is derived from bitmask
+    }
+    bool operator!=(const Combinator& other) const {
+      return !(this == &other);
+    }
+    Combinator& operator++() {
+      std::prev_permutation(bitmask.begin(), bitmask.end());
+
+      inds.clear();
+      for (unsigned i = 0; i < N; ++i) { // [0..N-1] integers
+        if (bitmask[i]) { inds.push_back(i); }
+      }
       return *this;
     }
 
-    inds.clear();
-    for (unsigned i = 0; i < N; ++i) { // [0..N-1] integers
-      if (bitmask[i]) inds.push_back(i);
+    Combinator& make_end() {
+      bitmask = vcl_string(N-K,0);
+      bitmask.resize(N,1);
+      return *this;
     }
-    return *this;
-  }
 
-  class Iterator : vcl_iterator<vcl_forward_iterator_tag, vcl_vector<unsigned> >
-  {
-    typedef Iterator self_type;
-    public:
-      explicit Iterator(Combinator* ptr=0) : ptr_(ptr) { }
-      self_type& operator++() {
-        if(++(*ptr_) == Combinator()) { // null object pattern
-          *this = Iterator(); // WARNING modifiying iterator in flight...
-        }
-        return *this;
-      }
-      self_type operator++(int junk) { self_type i = *this; ptr_++; return i; }
-      reference operator*() { return ptr_->inds; }
-      pointer operator->() { return &(ptr_->inds); }
-      bool operator==(const self_type& rhs) const {
-        if(!ptr_ && !rhs.ptr_) { return true; }
-        else if(!ptr_ || !rhs.ptr_) { return false; }
-        else { return *ptr_ == *rhs.ptr_; }
-      }
-      bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
-    private:
-      Combinator* ptr_;
+    vcl_vector<unsigned> inds;
+  private:
+    unsigned N, K;
+    vcl_string bitmask;
   };
 
-  // FIXME can't create the ConstIterator because ConstIterator begin() must be marked 
-  // const, which prevents it from modifying *this (Combinator), but operator++ must 
-  // modify bitmask, one of *this's data members
+  struct Iterator : vcl_iterator<vcl_forward_iterator_tag, vcl_vector<unsigned> >
+  {
+    Combinator asg_;
+
+    typedef Iterator self_type;
+  
+    explicit Iterator(Combinator asg) : asg_(asg) { }
+    reference operator*() { return asg_.inds; }
+    pointer operator->() { return &*(*this); }
+    self_type& operator++() { ++asg_; return *this; }
+    self_type operator++(int junk) { self_type i = *this; ++asg_; return i; }
+    bool operator==(const self_type& rhs) const { return asg_ == rhs.asg_; }
+    bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
+  };
+
+  struct ConstIterator : vcl_iterator<vcl_forward_iterator_tag, vcl_vector<unsigned>, 
+      vcl_ptrdiff_t, const vcl_vector<unsigned>*, const vcl_vector<unsigned>& >
+  {
+    Combinator asg_;
+
+    typedef ConstIterator self_type;
+  
+    explicit ConstIterator(Combinator asg) : asg_(asg) { }
+    ConstIterator(const Iterator& i) : asg_(i.asg_) { }
+    reference operator*() { return asg_.inds; }
+    pointer operator->() { return &*(*this); }
+    self_type& operator++() { ++asg_; return *this; }
+    self_type operator++(int junk) { self_type i = *this; ++asg_; return i; }
+    bool operator==(const self_type& rhs) const { return asg_ == rhs.asg_; }
+    bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
+  };
+
 public:
   Iterator begin() {
-    return Iterator(this);
+    return Iterator(Combinator(N,K));
   }
 
   Iterator end() {
-    return Iterator();
+    return Iterator(Combinator(N,K).make_end());
+  }
+
+  ConstIterator begin() const {
+    return ConstIterator(Combinator(N,K));
+  }
+
+  ConstIterator end() const {
+    return ConstIterator(Combinator(N,K).make_end());
   }
 
 public:
   typedef Iterator iterator;
+  typedef ConstIterator const_iterator;
 
 private:
-  vcl_vector<unsigned> inds;
   unsigned N, K;
-  vcl_string bitmask;
 };
 
 void
@@ -1052,8 +1080,8 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& ov
   vcl_map<vcl_vector<unsigned>, vgl_polygon<double> > cache;
 
   unsigned n = footprints.size();
-  Combinator combs1(n, k);
-  for(Combinator::iterator it=combs1.begin(); it != combs1.end(); ++it) {
+  CombinatorGenerator combs(n, k);
+  for(CombinatorGenerator::const_iterator it=combs.begin(); it != combs.end(); ++it) {
     const vcl_vector<unsigned>& inds = *it;
     //for(int i=0; i < inds.size(); ++i) 
     //  vcl_cout << inds[i] << " ";
