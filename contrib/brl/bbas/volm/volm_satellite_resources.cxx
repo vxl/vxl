@@ -982,6 +982,9 @@ private:
     Combinator(unsigned N=0, unsigned K=0) : N(N), K(K) {
       bitmask = vcl_string(K,1); // K leading 1's
       bitmask.resize(N,0);       // N-K trailing 0's
+      for (unsigned i = 0; i < N; ++i) { // [0..N-1] integers
+        if (bitmask[i]) { inds.push_back(i); }
+      }
     }
 
     bool operator==(const Combinator& other) const {
@@ -991,18 +994,15 @@ private:
       return !(this == &other);
     }
     Combinator& operator++() {
-      std::prev_permutation(bitmask.begin(), bitmask.end());
+      if(!std::prev_permutation(bitmask.begin(), bitmask.end())) {
+        *this = Combinator(); // null-object pattern
+        return *this;
+      }
 
       inds.clear();
-      for (unsigned i = 0; i < N; ++i) { // [0..N-1] integers
+      for (unsigned i = 0; i < N; ++i) {
         if (bitmask[i]) { inds.push_back(i); }
       }
-      return *this;
-    }
-
-    Combinator& make_end() {
-      bitmask = vcl_string(N-K,0);
-      bitmask.resize(N,1);
       return *this;
     }
 
@@ -1019,6 +1019,7 @@ private:
     typedef Iterator self_type;
   
     explicit Iterator(Combinator asg) : asg_(asg) { }
+    // implicit copy constructor, copy assignment and destructor
     reference operator*() { return asg_.inds; }
     pointer operator->() { return &*(*this); }
     self_type& operator++() { ++asg_; return *this; }
@@ -1035,6 +1036,9 @@ private:
     typedef ConstIterator self_type;
   
     explicit ConstIterator(Combinator asg) : asg_(asg) { }
+    // implicit copy constructor, copy assignment and destructor
+    // a non-const object calling begin() will return an iterator. implicitly
+    // convert it if a const_iterator is desired
     ConstIterator(const Iterator& i) : asg_(i.asg_) { }
     reference operator*() { return asg_.inds; }
     pointer operator->() { return &*(*this); }
@@ -1050,7 +1054,7 @@ public:
   }
 
   Iterator end() {
-    return Iterator(Combinator(N,K).make_end());
+    return Iterator(Combinator());
   }
 
   ConstIterator begin() const {
@@ -1058,7 +1062,7 @@ public:
   }
 
   ConstIterator end() const {
-    return ConstIterator(Combinator(N,K).make_end());
+    return ConstIterator(Combinator());
   }
 
 public:
@@ -1080,66 +1084,70 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& ov
   vcl_map<vcl_vector<unsigned>, vgl_polygon<double> > cache;
 
   unsigned n = footprints.size();
-  CombinatorGenerator combs(n, k);
-  for(CombinatorGenerator::const_iterator it=combs.begin(); it != combs.end(); ++it) {
-    const vcl_vector<unsigned>& inds = *it;
-    //for(int i=0; i < inds.size(); ++i) 
-    //  vcl_cout << inds[i] << " ";
-    //vcl_cout << vcl_endl;
 
-    if(inds.size() < 2) {
-      continue;
-    }
-    unsigned i = 0;
-    vgl_polygon<double> intersection = footprints[inds[0]];
-    if(inds.size() == 2) {
-      i = 1;
-    }
-    else if(inds.size() <= k) {
-      for(i=inds.size()-2; i>0; --i) { // full sub-index cannot already be processed
+  // compute the rising powerset from k to l
+  for(unsigned kk=k; kk < l; ++kk) {
+    CombinatorGenerator combs(n, kk);
+    for(CombinatorGenerator::const_iterator it=combs.begin(); it != combs.end(); ++it) {
+      const vcl_vector<unsigned>& inds = *it;
+      //for(int i=0; i < inds.size(); ++i) 
+      //  vcl_cout << inds[i] << " ";
+      //vcl_cout << vcl_endl;
+
+      if(inds.size() < 2) {
+        continue;
+      }
+      unsigned i = 0;
+      vgl_polygon<double> intersection = footprints[inds[0]];
+      if(inds.size() == 2) {
+        i = 1;
+      }
+      else if(inds.size() <= kk) {
+        for(i=inds.size()-2; i>0; --i) { // full sub-index cannot already be processed
+          vcl_vector<unsigned> sub_inds(&inds[0], &inds[i+1]);
+          if(cache.find(sub_inds) != cache.end()) {
+            intersection = cache[sub_inds];
+            i++;
+            break;
+          }
+        }
+      }
+      else { // must have k+1 footprints to intersect
+        i = inds.size()-2;
         vcl_vector<unsigned> sub_inds(&inds[0], &inds[i+1]);
         if(cache.find(sub_inds) != cache.end()) {
           intersection = cache[sub_inds];
           i++;
-          break;
+        }
+        // if the sub-index is not in the cache, it is because the intersection area was 
+        // smaller than already observed, so just continue
+        else {
+          continue;
         }
       }
-    }
-    else { // must have k+1 footprints to intersect
-      i = inds.size()-2;
-      vcl_vector<unsigned> sub_inds(&inds[0], &inds[i+1]);
-      if(cache.find(sub_inds) != cache.end()) {
-        intersection = cache[sub_inds];
-        i++;
-      }
-      // if the sub-index is not in the cache, it is because the intersection area was 
-      // smaller than already observed, so just continue
-      else {
-        continue;
-      }
-    }
 
-    double area = 0;
-    for(unsigned j=i; j < inds.size(); ++j) {
-      unsigned ind = inds[j];
-      // compute the intersection of all images in the set
-      intersection = vgl_clip( intersection, footprints[ind], vgl_clip_type_intersect );
-      unsigned nimages = inds.size();
-      area = vgl_area(intersection)*nimages*nimages;
-      // if this has a smaller area than we've already seen, just abort
-      if(area <= max_area) {
-        break;
+      double area = 0;
+      for(unsigned j=i; j < inds.size(); ++j) {
+        unsigned ind = inds[j];
+        // compute the intersection of all images in the set
+        intersection = vgl_clip( intersection, footprints[ind], vgl_clip_type_intersect );
+        unsigned nimages = inds.size();
+        area = vgl_area(intersection)*nimages*nimages;
+        // if this has a smaller area than we've already seen, just abort
+        if(area <= max_area) {
+          break;
+        }
+        else {
+          vcl_vector<unsigned> sub_inds(&inds[0], &inds[j+1]);
+          cache[sub_inds] = intersection;
+        }
       }
-      else {
-        vcl_vector<unsigned> sub_inds(&inds[0], &inds[j+1]);
-        cache[sub_inds] = intersection;
-      }
-    }
 
-    // is this a larger area than what we've alread seen
-    if(area > max_area) {
-      max_area = area;
-      areas.push_back(vcl_make_pair(inds,area));
+      // is this a larger area than what we've alread seen
+      if(area > max_area) {
+        max_area = area;
+        areas.push_back(vcl_make_pair(inds,area));
+      }
     }
   }
 

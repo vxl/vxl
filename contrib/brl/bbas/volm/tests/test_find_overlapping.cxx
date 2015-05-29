@@ -30,7 +30,6 @@ static void test_find_overlapping()
   vcl_cout << vcl_endl;
 }
 
-// must enable BUILD_NONCOMMERCIAL...
 static void compute_intersection()
 {
   // resource file created by create_satellite_resources.py, which calls 
@@ -137,7 +136,7 @@ static void compute_intersection()
   }
 
   vcl_vector<unsigned> overlapping_ids;
-  res->highly_intersecting_resources(overlapping_ids, footprints, 3, 5);
+  res->highly_intersecting_resources(overlapping_ids, footprints, 2, 5);
 
   for(int i=0; i < overlapping_ids.size(); ++i) {
     vcl_cout << overlapping_ids[i] << ",";
