@@ -6,6 +6,7 @@
 // \author fsm
 
 #include "vgl_clip.h"
+#include <vgl/vgl_distance.h>
 #include <vcl_cstdlib.h> // for vcl_malloc() and vcl_free()
 #include <vcl_cstdio.h> // for vcl_fprintf()
 #include <vcl_algorithm.h> // for swap
@@ -84,6 +85,7 @@ bool vgl_clip_line_to_box(T a, T b, T c, // line coefficients.
 }
 
 
+// This license is very restrictive, prefer Angus Johnson's more liberal Clipper library.
 #ifdef BUILD_NONCOMMERCIAL
 
 extern "C" {
@@ -132,6 +134,83 @@ namespace {
         vgl_poly.push_back( T(gpc_poly.contour[c].vertex[p].x),
                             T(gpc_poly.contour[c].vertex[p].y) );
       }
+    }
+  }
+}
+
+#else 
+
+#include <clipper/clipper.hpp> // this is actually just a .h file
+
+namespace {
+  //: Creates a Clipper polygon from a vgl_polygon.
+  template <class T>
+  ClipperLib::Paths
+  vgl_to_clipper( const vgl_polygon<T>& vgl_poly, double scale )
+  {
+    ClipperLib::Paths clipper_poly;
+    for ( int s = 0; s < vgl_poly.num_sheets(); ++s ) {
+      ClipperLib::Path path;
+      for ( unsigned int p = 0; p < vgl_poly[s].size(); ++p ) {
+        ClipperLib::IntPoint pt((ClipperLib::cInt)((double)vgl_poly[s][p].x()*scale), 
+                                (ClipperLib::cInt)((double)vgl_poly[s][p].y()*scale));
+        path.push_back(pt);
+      }
+      clipper_poly.push_back(path);
+    }
+
+    return clipper_poly;
+  }
+
+  //: Adds a Clipper polygon to a given vgl_polygon.
+  template <class T>
+  void
+  add_clipper_to_vgl( vgl_polygon<T>& vgl_poly, const ClipperLib::Paths& clipper_poly, double scale )
+  {
+    for ( int c=0; c < clipper_poly.size(); ++c ) {
+      vgl_poly.new_sheet();
+      for ( int p=0; p < clipper_poly[c].size(); ++p ) {
+        vgl_poly.push_back( T((double)clipper_poly[c][p].X/scale),
+                            T((double)clipper_poly[c][p].Y/scale) );
+      }
+    }
+  }
+}
+
+template <class T>
+void
+bounds(vgl_polygon<T> vgl_poly, T& min_x, T& max_x, T& min_y, T& max_y) 
+{
+  for (unsigned int s=0; s < vgl_poly.num_sheets(); ++s) {
+    for (unsigned int p=0; p < vgl_poly[s].size(); ++p) {
+      if(s==0 && p==0) { // not the most ideal way to initilize this...
+        min_x = max_x = vgl_poly[0][0].x();
+        min_y = max_y = vgl_poly[0][0].y();
+      }
+
+      min_x = vcl_min(vgl_poly[s][p].x(), min_x);
+      min_y = vcl_min(vgl_poly[s][p].y(), min_y);
+      max_x = vcl_max(vgl_poly[s][p].x(), max_x);
+      max_y = vcl_max(vgl_poly[s][p].y(), max_y);
+    }
+  }
+}
+
+template <class T>
+void
+min_max_distance_between_vertices(vgl_polygon<T> vgl_poly, T& min_dist, T& max_dist)
+{
+  for (unsigned int s=0; s < vgl_poly.num_sheets(); ++s) {
+    if(vgl_poly[s].size() < 2) { continue; }
+
+    for (unsigned int p=1; p < vgl_poly[s].size(); ++p) {
+      if(s==0 && p==1) { // not the most ideal way to initilize this...
+        double min_dist = max_dist = vgl_distance(vgl_poly[0][0], vgl_poly[0][1]);
+      }
+
+      double dist = vgl_distance(vgl_poly[0][p-1], vgl_poly[0][p]);
+      min_dist = vcl_min(dist, min_dist);
+      max_dist = vcl_max(dist, max_dist);
     }
   }
 }
@@ -198,21 +277,53 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   gpc_free_polygon( &p3 );
 
 #else // BUILD_NONCOMMERCIAL
-  *p_retval = -1;
-  vcl_fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
-  vcl_fprintf(stderr,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
+
+  // Clipper operates in fixed point space (because it is more robust), so we need
+  // to compute a scale factor to preserve precision.
+#ifdef use_int32
+  double half_max_cInt = 1.0e5;
+#else
+  // per Angus Johnson, "if any coordinate value exceeds +/-3.0e+9, large integer
+  // math slows clipping by about 10%"
+  double half_max_cInt = 1.0e9;
+#endif
+
+  T min_x, max_x, min_y, max_y;
+  bounds( poly1, min_x, max_x, min_y, max_y);
+  T width = max_x - min_x;
+  T height = max_y - min_y;
+  double diameter1 = (double)vcl_max(width, height);
+
+  bounds( poly2, min_x, max_x, min_y, max_y);
+  width = max_x - min_x;
+  height = max_y - min_y;
+  double diameter2 = (double)vcl_max(width, height);
+
+  double diameter = vcl_max(diameter1, diameter2);
+  double scale = half_max_cInt / diameter; // center the computation in the avaliable dynamic range
+
+
+  ClipperLib::Paths p1 = vgl_to_clipper( poly1, scale );
+  ClipperLib::Paths p2 = vgl_to_clipper( poly2, scale );
+  ClipperLib::Paths p3;
+
+  ClipperLib::ClipType g_op = ClipperLib::ctIntersection;
   switch ( op )
   {
-    default:
-    case vgl_clip_type_intersect:    result = vgl_polygon<T>(); break; // empty
-    case vgl_clip_type_difference:   result = poly1; break;
-    case vgl_clip_type_union:
-    case vgl_clip_type_xor:
-      result = poly1;
-      for (unsigned int i=0; i<poly2.num_sheets(); ++i)
-        result.push_back(poly2[i]);
-      break;
+    case vgl_clip_type_intersect:    g_op = ClipperLib::ctIntersection; break;
+    case vgl_clip_type_difference:   g_op = ClipperLib::ctDifference;   break;
+    case vgl_clip_type_union:        g_op = ClipperLib::ctUnion; break;
+    case vgl_clip_type_xor:          g_op = ClipperLib::ctXor;   break;
+    default:                         break;
   }
+
+  ClipperLib::Clipper clpr;
+  clpr.AddPaths(p1, ClipperLib::ptSubject, true);
+  clpr.AddPaths(p2, ClipperLib::ptClip, true);
+  int retval = clpr.Execute(g_op, p3, ClipperLib::pftEvenOdd, ClipperLib::pftEvenOdd);
+  *p_retval = retval;
+
+  add_clipper_to_vgl( result, p3, scale );
   
 #endif // BUILD_NONCOMMERCIAL
 

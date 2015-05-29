@@ -1,5 +1,12 @@
 # core/vgl/CMakeLists.txt
 
+IF( NOT BUILD_NONCOMMERCIAL )
+  INCLUDE(${VXL_CMAKE_DIR}/FindClipper.cmake)
+  IF(CLIPPER_FOUND)
+    INCLUDE_DIRECTORIES( ${CLIPPER_INCLUDE_DIR})
+  ENDIF(CLIPPER_FOUND)
+ENDIF( NOT BUILD_NONCOMMERCIAL )
+
 SET( vgl_sources
   # General
   vgl_fwd.h
@@ -61,10 +68,10 @@ SET( vgl_sources
 )
 
 IF( BUILD_NONCOMMERCIAL )
-SET( vgl_sources ${vgl_sources}
+  SET( vgl_sources ${vgl_sources}
   # internals
   internals/gpc.h                internals/gpc.c
-)
+  )
 ENDIF( BUILD_NONCOMMERCIAL )
 
 AUX_SOURCE_DIRECTORY(Templates vgl_sources)
@@ -76,6 +83,11 @@ doxygen_add_library(core/vgl
   PACKAGE core
   DESCRIPTION "Geometry Library"
   )
+IF( NOT BUILD_NONCOMMERCIAL )
+  IF(CLIPPER_FOUND)
+    TARGET_LINK_LIBRARIES( vgl ${CLIPPER_LIBRARIES} )
+  ENDIF(CLIPPER_FOUND)
+ENDIF( NOT BUILD_NONCOMMERCIAL )
 
 INSTALL_TARGETS(/lib vgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})

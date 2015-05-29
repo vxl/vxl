@@ -300,6 +300,9 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
                                               vgl_polygon<T> const& poly){
   return vgl_intersection(poly, line);
 }
+
+// SEE vgl_clip.h to compute the intersection (as well as other boolean operations) of two vgl_polygons
+
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 
