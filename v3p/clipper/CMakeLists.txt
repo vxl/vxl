@@ -6,6 +6,10 @@
 
 PROJECT( clipper CXX )
 
+if( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
+    ADD_DEFINITIONS( -Duse_int32 )
+endif( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
+
 SET( clipper_sources
      clipper.cpp clipper.hpp
 )

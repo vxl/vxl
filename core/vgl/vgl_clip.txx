@@ -6,10 +6,11 @@
 // \author fsm
 
 #include "vgl_clip.h"
-#include <vgl/vgl_distance.h>
 #include <vcl_cstdlib.h> // for vcl_malloc() and vcl_free()
 #include <vcl_cstdio.h> // for vcl_fprintf()
 #include <vcl_algorithm.h> // for swap
+#include <vcl_limits.h>
+#include <vcl_cmath.h>
 
 template <class T>
 bool vgl_clip_lineseg_to_line(T &x1, T &y1,
@@ -138,9 +139,9 @@ namespace {
   }
 }
 
-#else 
+#elif HAS_CLIPPER
 
-#include <clipper/clipper.hpp> // this is actually just a .h file
+#include <clipper.hpp> // this is actually just a .h file
 
 namespace {
   //: Creates a Clipper polygon from a vgl_polygon.
@@ -196,26 +197,7 @@ bounds(vgl_polygon<T> vgl_poly, T& min_x, T& max_x, T& min_y, T& max_y)
   }
 }
 
-template <class T>
-void
-min_max_distance_between_vertices(vgl_polygon<T> vgl_poly, T& min_dist, T& max_dist)
-{
-  for (unsigned int s=0; s < vgl_poly.num_sheets(); ++s) {
-    if(vgl_poly[s].size() < 2) { continue; }
-
-    for (unsigned int p=1; p < vgl_poly[s].size(); ++p) {
-      if(s==0 && p==1) { // not the most ideal way to initilize this...
-        double min_dist = max_dist = vgl_distance(vgl_poly[0][0], vgl_poly[0][1]);
-      }
-
-      double dist = vgl_distance(vgl_poly[0][p-1], vgl_poly[0][p]);
-      min_dist = vcl_min(dist, min_dist);
-      max_dist = vcl_max(dist, max_dist);
-    }
-  }
-}
-
-#endif // BUILD_NONCOMMERCIAL
+#endif
 
 template <class T>
 vgl_polygon<T>
@@ -276,31 +258,27 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   gpc_free_polygon( &p2 );
   gpc_free_polygon( &p3 );
 
-#else // BUILD_NONCOMMERCIAL
+#elif HAS_CLIPPER
 
   // Clipper operates in fixed point space (because it is more robust), so we need
   // to compute a scale factor to preserve precision.
-#ifdef use_int32
-  double half_max_cInt = 1.0e5;
-#else
   // per Angus Johnson, "if any coordinate value exceeds +/-3.0e+9, large integer
   // math slows clipping by about 10%"
-  double half_max_cInt = 1.0e9;
-#endif
+  int halfSignificantDigits = vcl_numeric_limits<ClipperLib::cInt>::digits10/2;
 
   T min_x, max_x, min_y, max_y;
   bounds( poly1, min_x, max_x, min_y, max_y);
-  T width = max_x - min_x;
-  T height = max_y - min_y;
-  double diameter1 = (double)vcl_max(width, height);
+  max_x = vcl_max(max_x, vcl_abs(min_x));
+  max_y = vcl_max(max_y, vcl_abs(min_y));
+  T max1 = vcl_max(max_x, max_y);
 
   bounds( poly2, min_x, max_x, min_y, max_y);
-  width = max_x - min_x;
-  height = max_y - min_y;
-  double diameter2 = (double)vcl_max(width, height);
+  max_x = vcl_max(max_x, vcl_abs(min_x));
+  max_y = vcl_max(max_y, vcl_abs(min_y));
+  T max2 = vcl_max(max_x, max_y);
 
-  double diameter = vcl_max(diameter1, diameter2);
-  double scale = half_max_cInt / diameter; // center the computation in the avaliable dynamic range
+  T max = vcl_max(max1, max2);
+  double scale = vcl_pow(10, halfSignificantDigits) / max;
 
 
   ClipperLib::Paths p1 = vgl_to_clipper( poly1, scale );
@@ -325,7 +303,24 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
 
   add_clipper_to_vgl( result, p3, scale );
   
-#endif // BUILD_NONCOMMERCIAL
+#else
+  *p_retval = -1;
+  vcl_fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
+  vcl_fprintf(stderr,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");
+  switch ( op )
+  {
+    default:
+    case vgl_clip_type_intersect:    result = vgl_polygon<T>(); break; // empty
+    case vgl_clip_type_difference:   result = poly1; break;
+    case vgl_clip_type_union:
+    case vgl_clip_type_xor:
+      result = poly1;
+      for (unsigned int i=0; i<poly2.num_sheets(); ++i)
+        result.push_back(poly2[i]);
+      break;
+  }
+
+#endif
 
   return result;
 }
