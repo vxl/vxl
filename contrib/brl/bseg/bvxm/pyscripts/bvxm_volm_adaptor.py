@@ -168,6 +168,16 @@ def find_seed_sat_resources(res, poly_kml, downsample_factor, sat_res_file):
   bvxm_batch.set_input_string(3,sat_res_file);     # output file to print the list (this will also save a kml version)
   bvxm_batch.run_process();
 
+def find_intersecting_sat_resources(res, poly_kml, max_intersecting_resources, sat_res_file):
+  bvxm_batch.init_process("volmFindIntersectingSatResourcesProcess")
+  bvxm_batch.set_input_from_db(0,res);         # satellite resource
+  bvxm_batch.set_input_string(1,poly_kml);     # kml polygon filename
+  bvxm_batch.set_input_float(2,max_intersecting_resources); # maximum number of intersecting images to consider, e.g., 5;
+                                                            # be careful with this number as this process computes
+                                                            # a rising powerset, i.e., n choose k ... n choose l
+  bvxm_batch.set_input_string(3,sat_res_file); # output file to print the list (this will also save a kml version)
+  bvxm_batch.run_process();
+
 def correct_ransac_process( cor_file, output_folder, pixel_radius):
   bvxm_batch.init_process("volmCorrectRationalCamerasRANSACProcess");
   bvxm_batch.set_input_string(0, cor_file);

@@ -668,8 +668,8 @@ template<class T> struct index_cmp {
 };
 
 void
-volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
-  const vcl_string& kml_file, float downsample_factor, const vcl_string& band, double gsd_thres)
+volm_satellite_resources::query_resources(vcl_vector<vgl_polygon<double> >& footprints, vcl_vector<unsigned>& footprint_ids, 
+  volm_satellite_resources_sptr res, const vcl_string& kml_file, const vcl_string& band, double gsd_thres)
 {
   // parse the polygon and construct its bounding box
   if (!vul_file::exists(kml_file)) {
@@ -691,7 +691,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& o
   // this mangles the expected order...
   //vcl_set<unsigned> s(ids.begin(),ids.end());
   //ids.assign(s.begin(), s.end());
-  vcl_vector<unsigned> deduped_ids;
+  vcl_vector<unsigned>& deduped_ids = footprint_ids;
   for (unsigned i = 0; i < ids.size(); i++) {
     bool contains = false;
     for (unsigned j = i+1; j < ids.size(); j++) {
@@ -700,17 +700,27 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& o
         break;
       }
     }
-    if (!contains)
+    if (!contains) {
       deduped_ids.push_back(ids[i]);
+    }
   }
 
   // filter footprints
-  vcl_vector<vgl_polygon<double> > footprints;
   for(unsigned res_id=0; res_id < deduped_ids.size(); ++res_id) {
     footprints.push_back(resources_[deduped_ids[res_id]].meta_->footprint_);
     //vcl_cout << resources_[deduped_ids[res_id]].name_ << vcl_endl;
   }
   vcl_cout << "nfootprints: " << footprints.size() << vcl_endl;
+}
+
+void
+volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+  const vcl_string& kml_file, float downsample_factor, const vcl_string& band, double gsd_thres)
+{
+  // query_resources
+  vcl_vector<vgl_polygon<double> > footprints;
+  vcl_vector<unsigned> resource_ids;
+  query_resources(footprints, resource_ids, res, kml_file, band, gsd_thres);
 
   vcl_vector<unsigned> filtered_ids;
   res->highly_overlapping_resources(filtered_ids, footprints, downsample_factor);
@@ -720,7 +730,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& o
   //vcl_cout << vcl_endl;
 
   for(unsigned res_id=0; res_id < filtered_ids.size(); ++res_id) {
-    overlapping_res.push_back(resources_[deduped_ids[filtered_ids[res_id]]].full_path_);
+    overlapping_res.push_back(resources_[resource_ids[filtered_ids[res_id]]].full_path_);
   }
 }
 
@@ -832,6 +842,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
   // unfortunately, there is no function to compute the intersection of two polygons, or even the 
   // intersection of a polygon and a box (there is a test for this, but it returns true/false, not
   // a polygon); so instead, i rasterize...
+  // RE: not true anymore
   vil_image_view<bool> best_region_mask;
   rasterize(lvcs_window, best_region_hull, best_region_mask);
   unsigned int best_region_mask_area;
@@ -1074,6 +1085,32 @@ private:
 };
 
 void
+volm_satellite_resources::highly_intersecting_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+  const vcl_string& kml_file, int k, int l, const vcl_string& band, double gsd_thres)
+{
+  // query_resources
+  vcl_vector<vgl_polygon<double> > footprints;
+  vcl_vector<unsigned> resource_ids;
+  query_resources(footprints, resource_ids, res, kml_file, band, gsd_thres);
+
+  // convert to local coordinates
+  vpgl_lvcs_sptr lvcs;
+  vcl_vector<vgl_polygon<double> > lvcs_footprints;
+  convert_to_local_footprints(lvcs, lvcs_footprints, footprints);
+
+  vcl_vector<unsigned> filtered_ids;
+  res->highly_intersecting_resources(filtered_ids, lvcs_footprints, k, l);
+  //for(int i=0; i < filtered_ids.size(); ++i) {
+  //  vcl_cout << filtered_ids[i] << ",";
+  //}
+  //vcl_cout << vcl_endl;
+
+  for(unsigned res_id=0; res_id < filtered_ids.size(); ++res_id) {
+    overlapping_res.push_back(resources_[resource_ids[filtered_ids[res_id]]].full_path_);
+  }
+}
+
+void
 volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids, 
   const vcl_vector<vgl_polygon<double> >& footprints, unsigned k, unsigned l)
 {
@@ -1088,7 +1125,10 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& ov
   // compute the rising powerset from k to l
   for(unsigned kk=k; kk < l; ++kk) {
     CombinatorGenerator combs(n, kk);
-    for(CombinatorGenerator::const_iterator it=combs.begin(); it != combs.end(); ++it) {
+
+    CombinatorGenerator::const_iterator it=combs.begin();
+    CombinatorGenerator::const_iterator end=combs.end();
+    for( ; it != end; ++it) {
       const vcl_vector<unsigned>& inds = *it;
       //for(int i=0; i < inds.size(); ++i) 
       //  vcl_cout << inds[i] << " ";
@@ -1153,16 +1193,16 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& ov
 
 
   overlapping_ids = areas.back().first;
-  for(vcl_list<vcl_pair<vcl_vector<unsigned>, double> >::const_iterator it=areas.begin();
-      it != areas.end(); ++it) {
-    const vcl_vector<unsigned>& inds = it->first;
-    double area = it->second;
-    vcl_cout << "(";
-    for(int i=0; i<inds.size(); ++i) {
-      vcl_cout << inds[i] << ",";
-    }
-    vcl_cout << "), " << area << vcl_endl;
-  }
+  //for(vcl_list<vcl_pair<vcl_vector<unsigned>, double> >::const_iterator it=areas.begin();
+  //    it != areas.end(); ++it) {
+  //  const vcl_vector<unsigned>& inds = it->first;
+  //  double area = it->second;
+  //  vcl_cout << "(";
+  //  for(int i=0; i<inds.size(); ++i) {
+  //    vcl_cout << inds[i] << ",";
+  //  }
+  //  vcl_cout << "), " << area << vcl_endl;
+  //}
 }
 
 //: binary save self to stream

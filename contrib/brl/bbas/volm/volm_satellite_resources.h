@@ -77,7 +77,7 @@ class volm_satellite_resources : public vbl_ref_count
     double compactness(const vgl_polygon<double>& poly, const vil_image_view<bool>& mask);
 
     void convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, vcl_vector<vgl_polygon<double> >& lvcs_footprints,
-        const vcl_vector<vgl_polygon<double> >& footprints, float downsample_factor);
+        const vcl_vector<vgl_polygon<double> >& footprints, float downsample_factor=1.0);
 
     void convert_to_global_footprints(vcl_vector<vgl_polygon<double> >& footprints, const vpgl_lvcs_sptr& lvcs,
         const vcl_vector<vgl_polygon<double> >& lvcs_footprints, float downsample_factor);
@@ -86,14 +86,20 @@ class volm_satellite_resources : public vbl_ref_count
     void compute_footprints_heatmap(vil_image_view<unsigned>& heatmap, vgl_box_2d<double>& image_window, 
         const vcl_vector<vgl_polygon<double> >& footprints);
 
+    void query_resources(vcl_vector<vgl_polygon<double> >& footprints, vcl_vector<unsigned>& footprint_ids, 
+        volm_satellite_resources_sptr res, const vcl_string& kml_file, const vcl_string& band="PAN", double gsd_thres=10.0);
+
     void highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
         const vcl_string& kml_file, float downsample_factor, const vcl_string& band="PAN", double gsd_thres=10.0);
 
     void highly_overlapping_resources(vcl_vector<unsigned>& overlapping_ids, const vcl_vector<vgl_polygon<double> >& footprints,
         float downsample_factor);
 
+    void highly_intersecting_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+        const vcl_string& kml_file, int k=3, int l=5, const vcl_string& band="PAN", double gsd_thres=10.0);
+
     void highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids, 
-        const vcl_vector<vgl_polygon<double> >& footprints, unsigned k, unsigned l);
+        const vcl_vector<vgl_polygon<double> >& footprints, unsigned k=3, unsigned l=5);
     
     void ind_combinations(vcl_vector<vcl_vector<unsigned> >& combs, unsigned N, unsigned K);
 

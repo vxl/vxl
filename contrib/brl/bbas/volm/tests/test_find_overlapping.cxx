@@ -8,11 +8,11 @@
 #include <vul/vul_file.h>
 
 
-static void test_find_overlapping()
+static void test_overlapping_resources()
 {
   // resource file created by create_satellite_resources.py, which calls 
   vcl_string resource_file = "/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
-  vcl_string kml_file = "/mnt/finderdata/p1b_data/satellite_resources/jordan-mafraq_seed_region.kml";
+  vcl_string kml_file = "/mnt/finderdata/p1b_data/jordan-mafraq_seed_region.kml";
 
   volm_satellite_resources_sptr res = new volm_satellite_resources();
   vsl_b_ifstream is(resource_file);
@@ -30,11 +30,33 @@ static void test_find_overlapping()
   vcl_cout << vcl_endl;
 }
 
-static void compute_intersection()
+static void test_intersecting_resources()
 {
   // resource file created by create_satellite_resources.py, which calls 
   vcl_string resource_file = "/home/sgrichar/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
-  vcl_string kml_file = "/home/sgrichar/mnt/finderdata/p1b_data/satellite_resources/jordan-mafraq_seed_region.kml";
+  vcl_string kml_file = "/home/sgrichar/mnt/finderdata/p1b_data/jordan-mafraq_seed_region.kml";
+
+  volm_satellite_resources_sptr res = new volm_satellite_resources();
+  vsl_b_ifstream is(resource_file);
+  if(!is) { assert(false); }
+  res->b_read(is);
+  is.close();
+  vcl_cout << "there are " << res->resources_size() << " resources in the file!\n";
+
+  vcl_vector<vcl_string> overlapping_res;
+  res->highly_intersecting_resources(overlapping_res, res, kml_file);
+
+  for(int i=0; i < overlapping_res.size(); ++i) {
+    vcl_cout << overlapping_res[i] << vcl_endl;
+  }
+  vcl_cout << vcl_endl;
+}
+
+static void test_compute_intersection()
+{
+  // resource file created by create_satellite_resources.py, which calls 
+  vcl_string resource_file = "/home/sgrichar/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
+  vcl_string kml_file = "/home/sgrichar/mnt/finderdata/p1b_data/jordan-mafraq_seed_region.kml";
 
   volm_satellite_resources_sptr res = new volm_satellite_resources();
   vsl_b_ifstream is(resource_file);
@@ -144,6 +166,8 @@ static void compute_intersection()
   vcl_cout << vcl_endl;
 }
 
-TESTMAIN(test_find_overlapping);
+TESTMAIN(test_intersecting_resources);
 
-TESTMAIN(compute_intersection);
+TESTMAIN(test_overlapping_resources);
+
+TESTMAIN(test_compute_intersection);

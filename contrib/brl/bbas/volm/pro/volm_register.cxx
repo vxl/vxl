@@ -51,4 +51,5 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_registration_error_process, "volmRegistrationErrorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_overlapping_sat_resources_process, "volmFindOverlappingSatResourcesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_stereo_height_fix_process, "volmStereoHeightFixProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_intersecting_sat_resources_process, "volmFindIntersectingSatResourcesProcess");
 }
