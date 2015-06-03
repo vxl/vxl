@@ -229,19 +229,19 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
 
     //set masked values
     vis_image->read_to_buffer(queue);
-#if 0
+#if 1
     if (use_mask)
     {
       int count = 0;
       for (unsigned int j=0;j<cl_nj;++j) {
         for (unsigned int i=0;i<cl_ni;++i) {
-          if ( i<mask_map->ni() && j<mask_map->nj() ) {
-            if ( (*mask_map)(i,j)==0 ) {
+          if ( i<mask.ni() && j<mask.nj() ) {
+            vis_buff[count] = mask(i,j);
+            if (mask(i,j) == 0) {
               input_buff[count+0] = -1.0f;
               input_buff[count+1] = -1.0f;
               input_buff[count+2] = -1.0f;
               input_buff[count+3] = -1.0f;
-              vis_buff  [count] = 0.0f;
             }
           }
           ++count;
