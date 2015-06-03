@@ -27,18 +27,31 @@ uint intensityFloatToInt(float intensity)
 #define U_RANGE 0.872f
 #define V_RANGE 1.23f
 
+// dec: turning USE_IMPL_DEFINED_CAST on causes bad results on my system (linux w/nvidia drivers)
+// The OpenCL spec says that behavior of cast between types of different cardinality
+// (e.g. 4 element vector and singelton as below) is implementation defined.  Create
+// a workaround that explicitly packs bytes instead.
+//#define USE_IMPL_DEFINED_CAST
+
 uchar4 unpack_uchar4(int packed)
 {
+#ifdef USE_IMPL_DEFINED_CAST
+    return as_uchar4(packed);
+#else
     uint upacked = as_uint(packed);
     uchar s0 = (upacked >> 24) & 0xff;
     uchar s1 = (upacked >> 16) & 0xff;
     uchar s2 = (upacked >> 8) & 0xff;
     uchar s3 = upacked & 0xff;
     return (uchar4)(s0, s1, s2, s3);
+#endif
 }
 
 int pack_uchar4(uchar4 x)
 {
+#ifdef USE_IMPL_DEFINED_CAST
+    return as_int(x);
+#else
     uint s0 = x.s0;
     uint s1 = x.s1;
     uint s2 = x.s2;
@@ -49,6 +62,7 @@ int pack_uchar4(uchar4 x)
     upacked |= (s2 << 8);
     upacked |= s3;
     return as_int(upacked);
+#endif
 }
 
 float4 unpack_yuv(int packed)
