@@ -67,7 +67,7 @@ int pack_uchar4(uchar4 x)
 
 float4 unpack_yuv(int packed)
 {
-    float4 yuv = convert_float4(unpack_uchar4(packed)) / 255.0;
+    float4 yuv = convert_float4(unpack_uchar4(packed)) / 255.0f;
     yuv.s1 = yuv.s1 * U_RANGE - U_MAX;
     yuv.s2 = yuv.s2 * V_RANGE - V_MAX;
     return yuv;
@@ -78,7 +78,7 @@ int pack_yuv(float4 yuv)
     float4 yuv_norm = yuv;
     yuv_norm.s1 = (yuv.s1 + U_MAX) / U_RANGE;
     yuv_norm.s2 = (yuv.s2 + V_MAX) / V_RANGE;
-    uchar4 yuv_uchar = convert_uchar4_sat_rte(yuv_norm*255.0);
+    uchar4 yuv_uchar = convert_uchar4_sat_rte(yuv_norm*255.0f);
     return pack_uchar4(yuv_uchar);
 }
 
