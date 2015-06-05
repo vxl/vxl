@@ -97,7 +97,7 @@ bool boxm2_ocl_paint_online_color::paint_scene_with_weights(boxm2_scene_sptr    
     return false;
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-  vil_image_view_base_sptr rgba_img = boxm2_util::prepare_input_image(img, false);
+  vil_image_view_base_sptr rgba_img = boxm2_util::prepare_input_rgb_image(img);
   vil_image_view<vil_rgba<vxl_byte> >* img_view = dynamic_cast<vil_image_view<vil_rgba<vxl_byte> >*>(rgba_img.ptr());
   if (!img_view) {
     vcl_cerr << "Error casting prepared image to type vil_image_view<vil_rgba<vxl_byte> >" << vcl_endl;
