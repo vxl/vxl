@@ -3,7 +3,7 @@
 
 //:
 // \file
-// \brief Generates shapes displaying modes of a shape model.
+// \brief Functions to calculate distance from points to curves (poly-lines)
 // \author Tim Cootes
 
 #include <msm/msm_points.h>
@@ -25,11 +25,11 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
   
   // pt is closest to some point between pt0 and pt1
   // Use pythagorus  :   dp^2 = d^2 + sqr(pu/u.length)
-  return vcl_max(dp.sqr_length() - pu*pu/Lu2,0.0);
+  return vcl_max(dp.sqr_length() - pu2/Lu2,0.0);
 }
 
 //: Compute the distance between pt and nearest point on given curve
-//  The curve is treated as a polygon connecting subset of given points/
+//  The curve is treated as a polygon connecting subset of given points.
 //  As long as the points are dense enough, this is a good enough approximation
 //  to fitting a smooth curve through the points.
 inline double msm_dist_to_curve(const msm_points& all_points,
