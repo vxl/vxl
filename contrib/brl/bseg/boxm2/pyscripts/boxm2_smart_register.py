@@ -12,6 +12,16 @@
 # directly with boxm2_batch.remove_data(), as the version in boxm2_register 
 # will be disabled (should not happen as they should imediately be converted 
 # to their primitive type...).
+#
+# WARNING this does not work if a static pointer is returned, as is done in 
+# bocl_init_manager_process(), because a pointer that should live for the life
+# of the program will be removed and concequently destructed. as a result, a 
+# bocl_manager cannot be created, destroyed, and then created again, (even 
+# without using this smart reference module) because this produces a dangling 
+# pointer (although it seems like we could null the pointer and it might work,
+# although state would still be lost)
+# RE: maybe we should increase the reference count by 1 for static pointers 
+# before they are returned by the process...
 #############################################################################
 
 import boxm2_register
