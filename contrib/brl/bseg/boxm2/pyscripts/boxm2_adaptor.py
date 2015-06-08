@@ -172,7 +172,7 @@ def init_alpha(scene, cache, device,pinit = 0.01, thresh = 1.0) :
 # Model building stuff
 ###############################################
 # Generic update - will use GPU if device/openclcache are passed in
-def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0,update_app=True,tnear = 100000.0 , tfar = 0.000001 ) :
+def update_grey(scene, cache, cam, img, device=None, ident="", mask=None, update_alpha=True, var=-1.0,update_app=True,tnear = 100000.0 , tfar = 100000.0 ) :
   #If no device is passed in, do cpu update
   if cache.type == "boxm2_cache_sptr" :
     print "boxm2_batch CPU update";
