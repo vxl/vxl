@@ -150,9 +150,9 @@ namespace {
   vgl_to_clipper( const vgl_polygon<T>& vgl_poly, double scale )
   {
     ClipperLib::Paths clipper_poly;
-    for ( int s = 0; s < vgl_poly.num_sheets(); ++s ) {
+    for ( size_t s = 0; s < vgl_poly.num_sheets(); ++s ) {
       ClipperLib::Path path;
-      for ( unsigned int p = 0; p < vgl_poly[s].size(); ++p ) {
+      for ( size_t p = 0; p < vgl_poly[s].size(); ++p ) {
         ClipperLib::IntPoint pt((ClipperLib::cInt)((double)vgl_poly[s][p].x()*scale), 
                                 (ClipperLib::cInt)((double)vgl_poly[s][p].y()*scale));
         path.push_back(pt);
@@ -168,9 +168,9 @@ namespace {
   void
   add_clipper_to_vgl( vgl_polygon<T>& vgl_poly, const ClipperLib::Paths& clipper_poly, double scale )
   {
-    for ( int c=0; c < clipper_poly.size(); ++c ) {
+    for ( size_t c=0; c < clipper_poly.size(); ++c ) {
       vgl_poly.new_sheet();
-      for ( int p=0; p < clipper_poly[c].size(); ++p ) {
+      for ( size_t p=0; p < clipper_poly[c].size(); ++p ) {
         vgl_poly.push_back( T((double)clipper_poly[c][p].X/scale),
                             T((double)clipper_poly[c][p].Y/scale) );
       }
@@ -182,8 +182,8 @@ template <class T>
 void
 bounds(vgl_polygon<T> vgl_poly, T& min_x, T& max_x, T& min_y, T& max_y) 
 {
-  for (unsigned int s=0; s < vgl_poly.num_sheets(); ++s) {
-    for (unsigned int p=0; p < vgl_poly[s].size(); ++p) {
+  for (size_t s=0; s < vgl_poly.num_sheets(); ++s) {
+    for (size_t p=0; p < vgl_poly[s].size(); ++p) {
       if(s==0 && p==0) { // not the most ideal way to initilize this...
         min_x = max_x = vgl_poly[0][0].x();
         min_y = max_y = vgl_poly[0][0].y();
@@ -278,7 +278,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   T max2 = vcl_max(max_x, max_y);
 
   T max = vcl_max(max1, max2);
-  double scale = vcl_pow(10, halfSignificantDigits) / max;
+  double scale = vcl_pow(10.0, halfSignificantDigits) / max;
 
 
   ClipperLib::Paths p1 = vgl_to_clipper( poly1, scale );
