@@ -154,7 +154,9 @@ void step_cell_render(AuxArgs    aux_args,
       }
     }
     // need to normalize because we may have encountered some viewpoints w/no data.
-    expected_app_cell /= sum_weights;
+    if (sum_weights > 0.0f) {
+        expected_app_cell /= sum_weights;
+    }
   }
 
   float omega=(*aux_args.vis) * (1.0f - diff_omega);

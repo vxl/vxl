@@ -9,68 +9,6 @@
 //DECLARE app_model_view_directions
 
 
-#if 1
-//used for aerial scenes.
-__constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
-                                                      (float4)(0.707,    0,      0.707,0),
-                                                      (float4)(0.354,    0.612,  0.707, 0),
-                                                      (float4)(-0.354,    0.612, 0.707,0),
-                                                      (float4)(-0.707,    0,     0.707,0),
-                                                      (float4)(-0.354,   -0.612, 0.707,0),
-                                                      (float4)(0.354,    -0.612, 0.707,0),
-                                                      (float4)(0,         0,     0,0)};
-#endif
-
-#if 0
-//used for aerial scenes.
-__constant  float4  app_model_view_directions[8] = {  (float4)(0.81654 ,  0.00000 ,  0.57729 ,0),
-                                                       (float4)(0.00000 ,  0.81654 ,  0.57729,0),
-                                                      (float4)(-0.81654 ,  0.00000 ,  0.57729,0),
-                                                       (float4)(0.00000 , -0.81654 ,  0.57729,0),
-                                                       (float4)(0.57735 ,  0.57735 ,  0.57735,0),
-                                                       (float4)(0.57735 , -0.57735 ,  0.57735,0),
-                                                      (float4)(-0.57735 ,  0.57735 ,  0.57735,0),
-                                                      (float4)(-0.57735 , -0.57735 ,  0.57735,0) };
-#endif
-
-#if 0
-//used for motion capture scenes
-__constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
-                                                      (float4)(1,    0,      0,0),
-                                                      (float4)(0.5,    0.866,  0, 0),
-                                                      (float4)(-0.5,    0.866, 0,0),
-                                                      (float4)(-1,    0,     0,0),
-                                                      (float4)(-0.5,   -0.866, 0,0),
-                                                      (float4)(0.5,   -0.866, 0,0),
-                                                      (float4)(0,         0,     0,0)};
-#endif
-
-void compute_app_model_weights(float* app_model_weights, float4 viewdir,__constant float4* app_model_view_directions)
-{
-    //compute the dot product btw ray dir and canonical directions
-    //normalize weights to 1 in the end
-    float sum_weights = 0.0f;
-    for (short i = 0; i < 8; i++) {
-        float cos_angle = -dot(viewdir,app_model_view_directions[i]);
-        app_model_weights[i] = (cos_angle > 0.01f) ? (cos_angle) : 0.0f; //if negative, set to 0
-        sum_weights += app_model_weights[i];
-    }
-
-    for (short i = 0; i < 8; i++)
-        app_model_weights[i] /= sum_weights;
-}
-
-#if 0
-void compute_app_model_weights_unormalized(float* app_model_weights, float4 viewdir,__constant float4* app_model_view_directions)
-{
-    //compute the dot product btw ray dir and canonical directions
-    for (short i = 0; i < 8; i++) {
-        float cos_angle = -dot(viewdir,app_model_view_directions[i]);
-        app_model_weights[i] = (cos_angle > 0.01f) ? cos_angle : 0.0f; //if negative, set to 0
-    }
-}
-#endif // 0
-
 
 float view_dep_mixture_model(float x,float16 mixture, float* app_model_weights)
 {

@@ -384,6 +384,7 @@ bool boxm2_ocl_expected_image_renderer::compile_kernels(bocl_device_sptr device,
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "view_dep_app_common_functions.cl");
     src_paths.push_back(source_dir + "view_dep_app_color_helper_functions.cl");
     src_paths.push_back(source_dir + "bit/render_view_dep_rgb.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");

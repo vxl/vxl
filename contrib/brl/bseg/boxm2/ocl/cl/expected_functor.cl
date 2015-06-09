@@ -53,11 +53,16 @@ void step_cell_render(__global MOG_TYPE * cell_data,
 #endif
     float* mixture_array = (float*)(&mixture);
     
-    float sum_weights = 0;
+    float weight_sum = 0.0f;
     for(short i= 0; i < 8; i++)
     {
-        if(app_model_weights[i] > 0.01f)
+        if(app_model_weights[i] > 0.01f) {
             expected_int_cell += app_model_weights[i] * mixture_array[2*i];
+            weight_sum += app_model_weights[i];
+        }
+    }
+    if (weight_sum > 0.0f) {
+        expected_int_cell /= weight_sum;
     }
   }  
 

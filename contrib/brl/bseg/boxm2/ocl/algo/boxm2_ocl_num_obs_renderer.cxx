@@ -35,7 +35,7 @@ boxm2_ocl_num_obs_renderer::boxm2_ocl_num_obs_renderer(boxm2_scene_sptr scene, b
 
   nobs_type_size_ = 0;
   boxm2_data_type valid_nobs_types[] = {
-    BOXM2_NUM_OBS_VIEW
+    BOXM2_NUM_OBS_VIEW, BOXM2_NUM_OBS_SINGLE
   };
 
   int num_valid_nobs_types = sizeof(valid_nobs_types) / sizeof(valid_nobs_types[0]);
@@ -249,12 +249,58 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, vcl_ve
     src_paths.push_back(source_dir + "statistics_library_functions.cl");
     src_paths.push_back(source_dir + "backproject.cl");
     src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "view_dep_app_common_functions.cl");
     src_paths.push_back(source_dir + "view_dep_app_helper_functions.cl");
     src_paths.push_back(source_dir + "bit/render_nobs_bit_scene.cl");
     src_paths.push_back(source_dir + "expected_nobs_functor.cl");
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     vcl_string options = "-D RENDER_VIEW_DEP -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
+
+    //have kernel construct itself using the context and device
+    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    ray_trace_kernel->create_kernel( &device->context(),
+                                     device->device_id(),
+                                     src_paths,
+                                     "render_nobs_bit_scene",   //kernel name
+                                     options,              //options
+                                     "boxm2 opencl render_bit_scene"); //kernel identifier (for error checking)
+    vec_kernels.push_back(ray_trace_kernel);
+
+#if 0
+    //create normalize image kernel
+    vcl_vector<vcl_string> norm_src_paths;
+    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
+    norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+
+    normalize_render_kernel->create_kernel( &device->context(),
+                                            device->device_id(),
+                                            norm_src_paths,
+                                            "normalize_render_kernel",   //kernel name
+                                            options,              //options
+                                            "normalize render kernel"); //kernel identifier (for error checking)
+
+    vec_kernels.push_back(normalize_render_kernel);
+#endif
+
+  }
+  else if (data_type == BOXM2_NUM_OBS_SINGLE)
+  {
+    vcl_vector<vcl_string> src_paths;
+    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    src_paths.push_back(source_dir + "scene_info.cl");
+    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+    src_paths.push_back(source_dir + "statistics_library_functions.cl");
+    src_paths.push_back(source_dir + "backproject.cl");
+    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+    src_paths.push_back(source_dir + "view_dep_app_common_functions.cl");
+    src_paths.push_back(source_dir + "view_dep_app_helper_functions.cl");
+    src_paths.push_back(source_dir + "bit/render_nobs_bit_scene.cl");
+    src_paths.push_back(source_dir + "expected_nobs_functor.cl");
+    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+
+    vcl_string options = "-D RENDER -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
     bocl_kernel * ray_trace_kernel=new bocl_kernel();

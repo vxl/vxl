@@ -540,6 +540,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl_
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "backproject.cl");
   src_paths.push_back(source_dir + "statistics_library_functions.cl");
+  src_paths.push_back(source_dir + "view_dep_app_common_functions.cl");
   src_paths.push_back(source_dir + "view_dep_app_color_helper_functions.cl");
   src_paths.push_back(source_dir + "bit/update_view_dep_app_color_kernels.cl");
   vcl_vector<vcl_string> non_ray_src = vcl_vector<vcl_string>(src_paths);

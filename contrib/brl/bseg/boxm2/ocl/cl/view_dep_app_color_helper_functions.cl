@@ -6,44 +6,6 @@
 // num_obs_(x) is simply the sum of weights received so far for the appearance model at direction x.
 // The weights are computed as visibility times the dot product between the viewing direction and appearance model direction.
 
-//DECLARE app_model_view_directions
-
-/*__constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1, 0),
-                                                      (float4)(0.707,    0,      0.707,0),
-                                                      (float4)(0.354,    0.612,  0.707, 0),
-                                                      (float4)(-0.354,    0.612, 0.707,0),
-                                                      (float4)(-0.707,    0,     0.707,0),
-                                                      (float4)(-0.354,   -0.612, 0.707,0),
-                                                      (float4)(0.354,    -0.612, 0.707,0),
-                                                      (float4)(0,         0,     0,0)};*/
-
-
-__constant  float4  app_model_view_directions[8] = {  (float4)(0,       0,      1,  0),
-                                                      (float4)(1,    0,         0,  0),
-                                                      (float4)(0.5,    0.866,   0,  0),
-                                                      (float4)(-0.5,    0.866,  0,  0),
-                                                      (float4)(-1,    0,        0,  0),
-                                                      (float4)(-0.5,   -0.866,  0,  0),
-                                                      (float4)(0.5,   -0.866,   0,  0),
-                                                      (float4)(0,         0,    0,  0)  };
-
-void compute_app_model_weights(float* app_model_weights, float4 viewdir,__constant float4* app_model_view_directions)
-{
-    //compute the dot product btw ray dir and canonical directions
-    //normalize weights to 1 in the end
-    float sum_weights = 0.0f;
-    for(short i = 0; i < 8; i++) {
-        float cos_angle = -dot(viewdir,app_model_view_directions[i]);
-        app_model_weights[i] = (cos_angle > 0.01f) ? cos_angle : 0.0f; //if negative, set to 0
-	    //app_model_weights[i] = 0.125f;
-        sum_weights += app_model_weights[i];
-    }
-
-    for(short i = 0; i < 8; i++) {
-      app_model_weights[i] /= sum_weights;
-    }
-}
-
 
 float view_dep_mixture_model(float4 x, MOG_TYPE mixture, float* app_model_weights)
 {
