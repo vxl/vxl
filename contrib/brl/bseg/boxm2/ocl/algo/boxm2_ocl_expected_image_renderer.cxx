@@ -150,7 +150,7 @@ boxm2_ocl_expected_image_renderer::~boxm2_ocl_expected_image_renderer()
 bool boxm2_ocl_expected_image_renderer::get_last_rendered(vil_image_view<float> &img)
 {
   if (render_success_) {
-    img = expected_img_;
+    img.deep_copy(expected_img_);
     return true;
   }
   return false;
@@ -159,7 +159,7 @@ bool boxm2_ocl_expected_image_renderer::get_last_rendered(vil_image_view<float> 
 bool boxm2_ocl_expected_image_renderer::get_last_vis(vil_image_view<float> &vis_img)
 {
   if (render_success_) {
-    vis_img = vis_img_;
+    vis_img.deep_copy(vis_img_);
     return true;
   }
   return false;
