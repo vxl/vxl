@@ -93,13 +93,13 @@ __kernel void filter_block_six_neighbors(__constant  float           * centerX,
   int lid = get_local_id(0);
   __local uchar16* neighbor_tree = &neighbor_trees[lid];
   //The resolution of the kernels is fixed at the highest res cell
-  int  MAX_CELLS = 1;
-  if(max_depth[0] == 1)
-    MAX_CELLS=9;
-  else if (max_depth[0] == 2)
-    MAX_CELLS=73;
-  else if (max_depth[0] == 3)
-    MAX_CELLS=585;
+  int  MAX_CELLS = 585;
+  /* if(max_depth[0] == 1) */
+  /*   MAX_CELLS=9; */
+  /* else if (max_depth[0] == 2) */
+  /*   MAX_CELLS=73; */
+  /* else if (max_depth[0] == 3) */
+  /*   MAX_CELLS=585; */
   int nx = source_linfo->dims.x, ny = source_linfo->dims.y, nz = source_linfo->dims.z;
   int nt = nx*ny*nz;
   if(gid < nt){
