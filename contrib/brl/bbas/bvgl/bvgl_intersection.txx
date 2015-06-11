@@ -7,6 +7,10 @@
 //
 //  implementation based on code from Tomas Akenine-Moller
 //  http://jgt.akpeters.com/papers/AkenineMoller01/tribox.html
+// 
+//  \modifications
+//   11 June 2015 dec: incorporated bug fixes included in v3, available at: http://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/tribox3.txt
+//
 
 #include "bvgl_intersection.h"
 #include <vcl_limits.h>
@@ -48,20 +52,21 @@ namespace bvgl_intersection_helpers
   }
 
   template <typename T>
-  bool planeBoxIntersect(T normal[3], T d, T maxbox[3]) {
-    T vmin[3],vmax[3];
+  bool planeBoxIntersect(T normal[3], T vert[3], T maxbox[3]) {
+    int q;
+    T vmin[3],vmax[3],v;
     for (int q=X;q<=Z;q++) {
+      v = vert[q];
       if (normal[q]>0.0f) {
-        vmin[q]=-maxbox[q];
-        vmax[q]=maxbox[q];
+        vmin[q]=-maxbox[q] - v;
+        vmax[q]=maxbox[q] - v;
       }
       else {
-        vmin[q]=maxbox[q];
-        vmax[q]=-maxbox[q];
+        vmin[q]=maxbox[q] - v;
+        vmax[q]=-maxbox[q] - v;
       }
     }
-    return dot(normal,vmin)+d <= 0.0f
-       &&  dot(normal,vmax)+d >= 0.0f;
+    return ( (dot(normal,vmin) <= 0.0f) && (dot(normal,vmax) >= 0.0f) );
   }
 
   template<int Axis0, int Axis1, typename T>
@@ -117,8 +122,7 @@ bool bvgl_intersection(vgl_box_3d<T> const& A, bvgl_triangle_3d<T> const& B)
   //Test 2: test box/plane intersection
   T normal[3];
   cross(normal,e0,e1);
-  T d = -dot(normal,v0);  /* plane eq: normal.x+d=0 */
-  if (!planeBoxIntersect(normal,d,boxhalfsize))
+  if (!planeBoxIntersect(normal,v0,boxhalfsize))
     return false;
 
   //test 3: if plane/box do intersect, test bounds
