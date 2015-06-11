@@ -60,4 +60,6 @@ DECLARE_FUNC_CONS(boxm2_cpp_create_mog_image_process);
 DECLARE_FUNC_CONS(boxm2_cpp_los_visibility_process);
 
 DECLARE_FUNC_CONS(boxm2_cpp_normals_to_id_process);
+
+DECLARE_FUNC_CONS(boxm2_import_triangle_mesh_process);
 #endif
