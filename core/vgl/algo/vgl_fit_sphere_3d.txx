@@ -56,7 +56,7 @@ template <class T>
 vgl_fit_sphere_3d<T>::vgl_fit_sphere_3d(vcl_vector<vgl_point_3d<T> > points)
 
 {
-  for(vcl_vector<vgl_point_3d<T> >::iterator pit = points.begin();
+  for(typename vcl_vector<vgl_point_3d<T> >::iterator pit = points.begin();
       pit != points.end(); ++pit)
     points_.push_back(vgl_homg_point_3d<T>(*pit));
 }
