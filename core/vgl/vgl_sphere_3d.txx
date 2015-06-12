@@ -37,8 +37,8 @@ bool vgl_sphere_3d<T>::clip(const vgl_line_3d_2_points<T> & line,
 
   T cp_sqr_len = (cp - c_).sqr_length();
   if (cp_sqr_len > r_*r_) return false;
-
-  T half_chord_len = vcl_sqrt(r_*r_ - cp_sqr_len);
+  double arg = static_cast<double>(r_*r_ - cp_sqr_len);//for VC10
+  T half_chord_len = static_cast<T>(vcl_sqrt(arg));
 
   vgl_vector_3d<T> linevec = line.direction();
   linevec *= half_chord_len / linevec.length();
@@ -99,8 +99,8 @@ void vgl_sphere_3d<Type>::spherical_to_cartesian(Type elevation_rad, Type azimut
   double el = static_cast<double>(elevation_rad), az = static_cast<double>(azimuth_rad);
   double cx = static_cast<double>(c_.x()),cy =static_cast<double>(c_.y()), cz = static_cast<double>(c_.z());
   double r = static_cast<double>(r_);
-  double se = vcl_sin(elevation_rad), ce = vcl_cos(elevation_rad);
-  double sa = vcl_sin(azimuth_rad), ca = vcl_cos(azimuth_rad);
+  double se = vcl_sin(el), ce = vcl_cos(el);
+  double sa = vcl_sin(az), ca = vcl_cos(az);
   
   x = static_cast<Type>((r*se*ca)+cx);
   y = static_cast<Type>((r*se*sa)+cy);
