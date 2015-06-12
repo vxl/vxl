@@ -16,6 +16,8 @@ class boxm2_vecf_lid_base{
 
  boxm2_vecf_lid_base(double t_min, double t_max):t_min_(t_min), t_max_(t_max){}
 
+ boxm2_vecf_lid_base(boxm2_vecf_orbit_params const& params):t_min_(0.0), t_max_(1.0), opr_(params){}
+
   // limits for upper or lower lid contours
   void set_tmin(double t){t_min_ = t;}
   void set_tmax(double t){t_max_ = t;}

@@ -10,23 +10,23 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <vnl/vnl_vector_fixed.h>
 struct boxm2_vecf_orbit_params{
-boxm2_vecf_orbit_params(): x_min_(-1.167), x_max_(1.0),y_off_(-0.88), eye_radius_(12.0), iris_radius_(5.5),
-    pupil_radius_(1.75), socket_radius_coef_(0.875), sclera_intensity_(static_cast<unsigned char>(250)),
+boxm2_vecf_orbit_params(): x_min_(-1.0634), x_max_(0.99), x_marg_(0.1), y_off_(-0.88), eye_radius_(12.0), iris_radius_(5.5), //min -1.167, -1.0634, max 0.99
+    pupil_radius_(1.75), socket_radius_coef_(1.0), sclera_intensity_(static_cast<unsigned char>(250)), //socket radius 0.875
     iris_intensity_(static_cast<unsigned char>(100)),
-    pupil_intensity_(static_cast<unsigned char>(20)), eyelid_radius_offset_(1.0),
+    pupil_intensity_(static_cast<unsigned char>(20)), eyelid_radius_offset_(2.0), // radius offset 1.0
     eyelid_tmin_(0.1), eyelid_tmax_(0.95), eyelid_intensity_(160), eyelid_dt_(0.0),
     lower_eyelid_tmin_(1.05), lower_eyelid_tmax_(1.5),lower_eyelid_intensity_(160),
-    eyelid_crease_tmin_(0.0), eyelid_crease_tmax_(1.05),eyelid_crease_lower_intensity_(150),
-    eyelid_crease_upper_intensity_(180),eyelid_crease_ct_(0.6),brow_angle_rad_(1.3),  //brow_angle_rad_(0.87259),
+    eyelid_crease_scale_y_coef_(0.083333),eyelid_crease_tmin_(-0.5), eyelid_crease_tmax_(1.05),eyelid_crease_lower_intensity_(150),
+    eyelid_crease_upper_intensity_(180),eyelid_crease_ct_(0.0),brow_angle_rad_(0.5),  //brow_angle_rad_(0.87259),
     brow_z_limit_(0.25), scale_x_coef_(0.0833333), scale_y_coef_(0.0833333), offset_(vgl_vector_3d<double>(0.0, 0.0, 0.0)),
-    trans_x_(1.0) , trans_y_(2.0), rot_ang_rad_(0.0),
+    trans_x_(0.0) , trans_y_(0.0),trans_z_(0.0), rot_ang_rad_(0.0),
                            //eye_pointing_dir_(vgl_vector_3d<double>(-0.26, 0.0, 0.968)){
     eye_pointing_dir_(vgl_vector_3d<double>(0.0, 0.0, 1.0)){
     app_.fill(static_cast<unsigned char>(0));
     app_[1]=static_cast<unsigned char>(32); app_[2] = static_cast<unsigned char>(255);
                                                                              }
 
-    boxm2_vecf_orbit_params(double xmin, double xmax, double eye_radius, double iris_radius, double pupil_radius,
+boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_radius, double iris_radius, double pupil_radius,
                         double socket_radius_coef, double scale_x_coef, double scale_y_coef,
                         unsigned char sclera_intensity, unsigned char iris_intensity,
                         unsigned char pupil_intensity, double eyelid_tmin, double eyelid_tmax,
@@ -34,7 +34,7 @@ boxm2_vecf_orbit_params(): x_min_(-1.167), x_max_(1.0),y_off_(-0.88), eye_radius
                         double lower_eyelid_tmax, unsigned char lower_eyelid_intensity,
                         double eyelid_crease_tmin, double eyelid_crease_tmax, unsigned char eyelid_crease_lower_intensity,
                         unsigned char eyelid_crease_upper_intensity, double eyelid_crease_ct, double brow_angle_rad):
-  x_min_(xmin), x_max_(xmax), eye_radius_(eye_radius), iris_radius_(iris_radius),
+  x_min_(xmin), x_max_(xmax), x_marg_(x_margin), eye_radius_(eye_radius), iris_radius_(iris_radius),
     pupil_radius_(pupil_radius), socket_radius_coef_(socket_radius_coef),
     scale_x_coef_(scale_x_coef), scale_y_coef_(scale_y_coef),
     sclera_intensity_(sclera_intensity), iris_intensity_(iris_intensity), pupil_intensity_(pupil_intensity),
@@ -50,17 +50,21 @@ boxm2_vecf_orbit_params(): x_min_(-1.167), x_max_(1.0),y_off_(-0.88), eye_radius
   //offset of eyelid with respect to the center of the pupil
   double y_off_;
 
-  // horizontal limits of the orbit domain, scaled relative to the eye radius
+  // horizontal limits of the inner and outer eye cusps, scaled relative to the eye radius
   double x_min_;
   double x_max_;
-  double x_min() const {return eye_radius_*x_min_+x_trans();}
-  double x_max() const {return eye_radius_*x_max_+y_trans();}
+  // the additiona x margin to define the horizontal model extent
+  double x_marg_;
+  double x_min() const {return (1.0+x_marg_)*eye_radius_*x_min_+x_trans();}
+  double x_max() const {return (1.0+x_marg_)*eye_radius_*x_max_+y_trans();}
 
   // translation parameters
   double trans_x_;
   double x_trans() const {return trans_x_;}
   double trans_y_;
   double y_trans() const {return trans_y_ + y_off_;}
+  double trans_z_;
+  double z_trans() const {return trans_z_;}
   double eye_radius_;
 
   // scale parameters
@@ -68,7 +72,7 @@ boxm2_vecf_orbit_params(): x_min_(-1.167), x_max_(1.0),y_off_(-0.88), eye_radius
   double scale_x() const {return scale_x_coef_*eye_radius_;}
   double scale_y_coef_;
   double scale_y() const {return scale_y_coef_*eye_radius_;}
-
+  
   // vector to location of orbit in the head model
   vgl_vector_3d<double> offset_;
 
@@ -106,8 +110,11 @@ boxm2_vecf_orbit_params(): x_min_(-1.167), x_max_(1.0),y_off_(-0.88), eye_radius
   unsigned char eyelid_crease_upper_intensity_;
   double eyelid_crease_tmin_;
   double eyelid_crease_tmax_;
+  double eyelid_crease_scale_y_coef_;
+  double eyelid_crease_scale_y() const
+  {return eyelid_crease_scale_y_coef_*eye_radius_;}
 
-  // the t value of the crease, separated upper and lower crease regions
+// the t value of the crease, separated upper and lower crease regions
   double eyelid_crease_ct_;
 
   //inclication angle of the brow above the upper eyelid
@@ -123,7 +130,7 @@ boxm2_vecf_orbit_params(): x_min_(-1.167), x_max_(1.0),y_off_(-0.88), eye_radius
   //: vector of  monomials (includes x translation and scale)
   vnl_vector_fixed<double, 5> m(double xp) const{
     vnl_vector_fixed<double, 5> q;
-    q[0]=1.0; q[1] = (xp-x_trans())/scale_x(); q[2]=q[1]*q[1]; q[3]=q[2]*q[1]; q[4]=q[3]*q[1];
+    q[0]=1.0; q[1] = xp/scale_x(); q[2]=q[1]*q[1]; q[3]=q[2]*q[1]; q[4]=q[3]*q[1];
     return q;
   }
   //: lid and crease polynomial coeficients
@@ -131,17 +138,17 @@ boxm2_vecf_orbit_params(): x_min_(-1.167), x_max_(1.0),y_off_(-0.88), eye_radius
   vnl_vector_fixed<double, 5> eyelid_coefs_t0() const{
     double coefs[5]={5.70955, 0.128996, -0.0332313, 0.000466373, -0.00008886};
     vnl_vector_fixed<double, 5> temp = scale_y()*vnl_vector_fixed<double, 5>(coefs);
-    temp[0]+= y_trans(); return temp;}
+    return temp;}
   
   vnl_vector_fixed<double, 5> eyelid_coefs_t1() const{
     double coefs[5]={-3.85648, -0.0379334, 0.0140258, 0.00110097,0.00002418};
     vnl_vector_fixed<double, 5> temp = scale_y()*vnl_vector_fixed<double, 5>(coefs);
-    temp[0] += y_trans();    return temp;}
+    return temp;}
 
   vnl_vector_fixed<double, 5> crease_coefs_t0() const{
     double coefs[5]={8.91894, 0.0897925, -0.0264352, -0.000149888, -0.0001056};
-    vnl_vector_fixed<double, 5> temp = scale_y()*vnl_vector_fixed<double, 5>(coefs);
-    temp[0] += y_trans(); return temp;}
+    vnl_vector_fixed<double, 5> temp = eyelid_crease_scale_y()*vnl_vector_fixed<double, 5>(coefs);
+    return temp;}
   
   // internal voxel processing parameters
   double neighbor_radius() const {return 1.7320508075688772;}

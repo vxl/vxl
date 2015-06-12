@@ -7,6 +7,7 @@
 #include <vgl/algo/vgl_fit_conics_2d.h>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>
+#include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <vgl/algo/vgl_h_matrix_1d.h>
 #include <vgl/algo/vgl_h_matrix_1d_compute.h>
 #include <vgl/algo/vgl_h_matrix_1d_compute_3point.h>

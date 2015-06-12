@@ -13,6 +13,7 @@ SET(boxm2_vecf_sources
     boxm2_vecf_eyelid.h                     boxm2_vecf_eyelid.cxx
     boxm2_vecf_orbit_articulation.h         boxm2_vecf_orbit_articulation.cxx
     boxm2_vecf_eyelid_crease.h              boxm2_vecf_eyelid_crease.cxx
+    boxm2_vecf_fit_orbit.h                  boxm2_vecf_fit_orbit.cxx
 )
 
 ADD_LIBRARY(boxm2_vecf  ${boxm2_vecf_sources})

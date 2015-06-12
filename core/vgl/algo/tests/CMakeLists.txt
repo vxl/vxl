@@ -10,6 +10,7 @@ ADD_EXECUTABLE( vgl_algo_test_all
   test_fit_conics_2d.cxx
   test_fit_lines_2d.cxx
   test_fit_plane_3d.cxx
+  test_fit_sphere_3d.cxx
   test_h_matrix_1d.cxx
   test_h_matrix_2d.cxx
   test_h_matrix_3d.cxx
@@ -29,6 +30,7 @@ ADD_TEST( vgl_test_ellipsoid                      ${EXECUTABLE_OUTPUT_PATH}/vgl_
 ADD_TEST( vgl_test_fit_conics_2d                  ${EXECUTABLE_OUTPUT_PATH}/vgl_algo_test_all test_fit_conics_2d)
 ADD_TEST( vgl_test_fit_lines_2d                   ${EXECUTABLE_OUTPUT_PATH}/vgl_algo_test_all test_fit_lines_2d)
 ADD_TEST( vgl_test_fit_plane_3d                   ${EXECUTABLE_OUTPUT_PATH}/vgl_algo_test_all test_fit_plane_3d)
+ADD_TEST( vgl_test_fit_sphere_3d                   ${EXECUTABLE_OUTPUT_PATH}/vgl_algo_test_all test_fit_plane_3d)
 ADD_TEST( vgl_test_h_matrix_1d                    ${EXECUTABLE_OUTPUT_PATH}/vgl_algo_test_all test_h_matrix_1d )
 ADD_TEST( vgl_test_h_matrix_2d                    ${EXECUTABLE_OUTPUT_PATH}/vgl_algo_test_all test_h_matrix_2d )
 ADD_TEST( vgl_test_h_matrix_3d                    ${EXECUTABLE_OUTPUT_PATH}/vgl_algo_test_all test_h_matrix_3d )

@@ -14,16 +14,16 @@
 #include <vgl/vgl_plane_3d.h>
 #include "boxm2_vecf_eyelid.h"
 #include "boxm2_vecf_lid_base.h"
+#include "boxm2_vecf_orbit_params.h"
 #include <vcl_cmath.h>
 class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
  public:
- boxm2_vecf_eyelid_crease(): boxm2_vecf_lid_base(0.0, 1.0), ct_(0.25){}
+ boxm2_vecf_eyelid_crease(): boxm2_vecf_lid_base(0.0, 1.0){el_ = boxm2_vecf_eyelid(boxm2_vecf_orbit_params());}
   //                                                                                                                    50 degrees
  boxm2_vecf_eyelid_crease(double t_min, double t_max, double ct, vgl_vector_3d<double> upper_socket_normal):
-  boxm2_vecf_lid_base(t_min, t_max), ct_(ct){}
+  boxm2_vecf_lid_base(t_min, t_max), ct_(ct){el_ = boxm2_vecf_eyelid(boxm2_vecf_orbit_params());}
 
-  //: t value where the brow region of the crease starts
-  void set_ct(double t){ct_ = t;}
+ boxm2_vecf_eyelid_crease(boxm2_vecf_orbit_params const& params): boxm2_vecf_lid_base(params){el_ = boxm2_vecf_eyelid(params);}
 
   // internal functions
   //: crease curves projected onto a plane perpendicular to the zaxis (x horizontal , t vertical)

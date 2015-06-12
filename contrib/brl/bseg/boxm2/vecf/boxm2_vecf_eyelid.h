@@ -15,9 +15,8 @@ class boxm2_vecf_eyelid : public boxm2_vecf_lid_base{
  public:
  boxm2_vecf_eyelid(): boxm2_vecf_lid_base(0.0, 1.0){}
 
- boxm2_vecf_eyelid(double t_min, double t_max):
-  boxm2_vecf_lid_base(t_min, t_max){}
-
+ boxm2_vecf_eyelid(double t_min, double t_max): boxm2_vecf_lid_base(t_min, t_max){}
+ boxm2_vecf_eyelid(boxm2_vecf_orbit_params const& params): boxm2_vecf_lid_base(params){}
 
   // limits for crease
   void set_ctmin(double t){ct_min_ = t;}

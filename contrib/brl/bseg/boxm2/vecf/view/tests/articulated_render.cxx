@@ -32,7 +32,7 @@
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_clear_tableau.h>
-#include <vgui/vgui_easy3D_tableau.h>
+#include <vgui/vgui_easy2D_tableau.h>
 #include <vgui/vgui_viewer3D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -112,10 +112,11 @@ int main(int argc, char ** argv)
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_articulated_render_tableau_new bit_tableau;
       bit_tableau->init(device, opencl_cache, orbit_scene, target_scene, ni, nj, pcam, "");
-
       //create window, attach the new tableau and status bar
       vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer (Render)");
       win->get_adaptor()->set_tableau(bit_tableau);
+         
+
       bit_tableau->set_statusbar(win->get_statusbar());
       win->show();
 

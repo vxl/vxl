@@ -17,7 +17,9 @@ double boxm2_vecf_lid_base::zu(double xp, double t) const{
   double er = opr_.eyelid_radius();
   double r02 = er*er;
   double g0 = gi(xp,t);
-  return vcl_sqrt(r02-g0*g0-xp*xp);
+  double arg = r02-g0*g0-xp*xp;
+  if(arg<0.0) arg =0.0;
+  return vcl_sqrt(arg);
 }
 double boxm2_vecf_lid_base::r(double xp, double t) const{
   double zv = z(xp,t);

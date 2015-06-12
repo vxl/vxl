@@ -10,13 +10,16 @@
 double boxm2_vecf_eyelid_crease::gi(double xp, double t) const{
   vnl_vector_fixed<double, 5> m = opr_.m(xp);
   vnl_vector_fixed<double, 5> c0 = opr_.crease_coefs_t0();
-  return ((1.0-t)*dot_product(m, c0) + t*el_.gi(xp, 0.0));
+  double gg = el_.gi(xp,0.0);
+  double dmc = dot_product(m, c0);
+  return ((1.0-t)*dmc + t*gg + opr_.y_off_);
 }
 
 double boxm2_vecf_eyelid_crease::z(double xp, double t) const{
+  double ct = opr_.eyelid_crease_ct_;
   vgl_vector_3d<double> usn = opr_.upper_socket_normal();
   double xlim = opr_.socket_radius();
-  if(t>ct_) // lower part of crease region
+  if(t>ct) // lower part of crease region
     if((vcl_fabs(xp)<xlim)&&zu(xp,t)>=zlim())
       return zu(xp,t);
     else
@@ -31,7 +34,8 @@ double boxm2_vecf_eyelid_crease::z(double xp, double t) const{
     if(c == 0.0)
       return zlim(); // z is undefined
     double dz_dy = -usn.y()/c;
-    double zv = zu(xp, ct_) + dz_dy*(gi(xp, t)-gi(xp,ct_));
+    double zut = zu(xp, ct);
+    double zv = zu(xp, ct) + dz_dy*(gi(xp, t)-gi(xp,ct));
     double zm = zlim() + opr_.brow_z_limit_*opr_.eye_radius_;
     if(zv>zm)
       return zm;
@@ -51,6 +55,7 @@ double boxm2_vecf_eyelid_crease::t(double xp, double y) const{
 
 // theory of closest point - compute distance to eyelid sphere, compute distance to plane, take closest
 double boxm2_vecf_eyelid_crease::surface_distance(vgl_point_3d<double> const& p) const{
+  double ct = opr_.eyelid_crease_ct_;
   vgl_vector_3d<double> normal(0.0,0.0,1.0);
   vgl_point_3d<double> pt(0.0, 0.0, zlim());
   vgl_plane_3d<double> pl(normal, pt);
@@ -60,7 +65,7 @@ double boxm2_vecf_eyelid_crease::surface_distance(vgl_point_3d<double> const& p)
   double ds = vgl_distance(p, sp);
   double t = this->t(p.x(), p.y());
   // in the lower part of the crease region
-  if(t>ct_){
+  if(t>ct){
   // several cases to consider
   double r = vcl_sqrt(p.x()*p.x() + p.y()*p.y() + p.z()*p.z());
   // 1) point is outside sphere

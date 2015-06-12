@@ -22,9 +22,10 @@
 #include "../boxm2_vecf_eyelid.h"
 #include "../boxm2_vecf_eyelid_crease.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-
+//#define BUILD_TEST_ORBIT
 void test_orbit()
 {
+#ifdef BUILD_TEST_ORBIT
   boxm2_vecf_eyelid_crease ec;
 #if 0
   double t = 1.0;
@@ -60,6 +61,7 @@ void test_orbit()
   boxm2_cache::instance()->write_to_disk();
 #endif
 #endif
+#endif //BUILD_TEST_ORBIT
 }
 TESTMAIN( test_orbit );
  

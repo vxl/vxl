@@ -13,7 +13,7 @@ double boxm2_vecf_eyelid::gi(double xp, double t) const {
   vnl_vector_fixed<double, 5> c1 = opr_.eyelid_coefs_t1();
   double t0 = dot_product(m, c0 )*(1.0-t);
   double t1 = dot_product(m, c1)*t;
-  return (t0 + t1 );
+  return (t0 + t1 + opr_.y_off_);
 }
 
 double boxm2_vecf_eyelid::z(double xp, double t) const{

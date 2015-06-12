@@ -5,6 +5,7 @@
 // \file
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
+#include <vgui/vgui_soview2D.h>
 #include <vcl_sstream.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/view/boxm2_view_utils.h>
@@ -90,6 +91,7 @@ bool boxm2_ocl_articulated_render_tableau::init(bocl_device_sptr device,
     // set depth_scale_ and depth_offset_
     calibrate_depth_range();
     post_redraw();
+
     return true;
 }
 
@@ -104,6 +106,22 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
       this->init_clgl();
       do_init_ocl = false;
     }
+
+    vgl_homg_point_3d<double> cent(-26.25, -18.25, -18.25);
+    vgl_homg_point_2d<double> hpcent = cam_.project(cent);
+    vgl_point_2d<double> pc(hpcent);
+    double x0 = pc.x()/1280.0, y0 = pc.y()/720.0;
+    vgui_soview2D_point seg0(x0,y0);
+    cent.set(0.0, 0.0, 0.0);
+    hpcent = cam_.project(cent);
+    vgl_point_2d<double> pc1(hpcent);
+    double x1 = pc1.x()/1280.0, y1 = pc1.y()/720.0;
+    vgui_soview2D_point seg1(x1,y1);
+    cent.set(26.25, 18.25, 18.25);
+    hpcent = cam_.project(cent);
+    vgl_point_2d<double> pc2(hpcent);
+    double x2 = pc2.x()/1280.0, y2 = pc2.y()/720.0;
+    vgui_soview2D_point seg2(x2,y2);
     float gpu_time = this->render_frame();
     this->setup_gl_matrices();
     glClear(GL_COLOR_BUFFER_BIT);
@@ -112,14 +130,17 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
     glPixelZoom(1,-1);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, pbuffer_);
     glDrawPixels(ni_, nj_, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+   glPointSize(5);
+    glColor3f(1.0, 0.0, 0.0);
+    //seg0.draw(); seg1.draw(); seg2.draw();
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER_ARB, 0);
-
-    //calculate and write fps to status
+        //calculate and write fps to status
     vcl_stringstream str;
     str<<".  rendering at ~ "<< (1000.0f / gpu_time) <<" fps ";
     if (status_) {
       status_->write(str.str().c_str());
     }
+        
     return true;
   }
   
@@ -149,7 +170,6 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
                          return true;
     return false;
     }
-        
     if(orbit_scene_){
          vcl_cout<<"apply vector field"<<vcl_endl;
       boxm2_vecf_orbit_scene* oscene = dynamic_cast< boxm2_vecf_orbit_scene*>(orbit_scene_.ptr());

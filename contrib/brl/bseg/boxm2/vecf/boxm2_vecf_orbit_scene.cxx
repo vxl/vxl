@@ -217,8 +217,6 @@ void boxm2_vecf_orbit_scene::reset_indices(){
 
   eyelid_crease_geo_.set_tmin(params_.eyelid_crease_tmin_);
   eyelid_crease_geo_.set_tmax(params_.eyelid_crease_tmax_);
-  eyelid_crease_geo_.set_ct(params_.eyelid_crease_ct_);
-  
   
   boxm2_lru_cache::create(this);
   this->extract_block_data();
