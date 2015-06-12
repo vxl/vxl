@@ -14,7 +14,7 @@ inline bool valid_leaf(int i, __local uchar* tree, int max_d){
   int curr_d = get_depth(i);
   //if current bit is 0 and parent bit is 1, you're at a leaf
   bool validParent = tree_bit_at(tree, (i-1)>>3) || (i==0); // special case for root
-  return validParent && ( tree_bit_at(tree, i)==0 || curr_d == max_d );
+  return validParent && ( tree_bit_at(tree, i)==0 );
 }
 
 inline float prob(float alpha, float len){

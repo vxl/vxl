@@ -1,3 +1,4 @@
+
 #include "boxm2_vecf_ocl_transform_scene.h"
 //:
 // \file
@@ -21,7 +22,7 @@
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_algorithm.h>
-
+#include <vnl/vnl_vector_fixed.h>
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scene,
           vcl_string&      options)
@@ -111,7 +112,7 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
   trans_interp_kern->set_arg(lookup_.ptr());
 #endif
 
-  octree_depth_buff_ = 0;
+  octree_depth_buff_ = 3;
   octree_depth_ = new bocl_mem(device_->context(), &(octree_depth_buff_), sizeof(int), "  depth of octree " );
   good_buffers &= octree_depth_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
@@ -172,6 +173,7 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_kernel()
   vcl_string options;
   // sets apptypesize_ and app_type
   get_scene_appearance(source_scene_, options);
+  vcl_cout<<" compiling trans kernel "<<vcl_endl;
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
@@ -569,6 +571,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 #if 1
  static bool first = true;
   int depth = 0;
+
   // set up the buffers the first time the function is called
   // subsequent calls don't need to recreate the buffers
     if(first){
@@ -703,10 +706,12 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
      return false;
    }
+   vcl_cout<<"This is the transform scene Kernel"<<vcl_endl;
    //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
    nbr_exint = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exint");
    nbr_exists = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exist");
-   nbr_prob   = opencl_cache_->get_data<BOXM2_FLOAT8>(source_scene_, *iter_blk_source,0,true, "nbr_prob");
+   nbr_prob   = opencl_cache_->get_data<BOXM2_FLOAT8>(source_scene_, *iter_blk_source, 32 * info_buffer_source->data_buffer_length,true, "nbr_prob");
+   int sz =nbr_prob->num_bytes()/info_buffer_source->data_buffer_length;
    trans_interp_kern->set_arg(blk_info_target_.ptr());
    trans_interp_kern->set_arg(blk_info_source);
    trans_interp_kern->set_arg(blk_target_);

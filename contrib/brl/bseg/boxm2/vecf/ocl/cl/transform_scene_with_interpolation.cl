@@ -4,8 +4,19 @@ inline float alph(float p, float len){
   if(p>=1.0f) p = 0.999f;
   return -log(1-p)/len;
 }
+inline void get_max_inner_outer(int* MAX_INNER_CELLS, int* MAX_CELLS, int root_level)
+{
+  //USE rootlevel to determine MAX_INNER and MAX_CELLS
+  if(root_level == 1)
+    *MAX_INNER_CELLS=1, *MAX_CELLS=9;
+  else if (root_level == 2)
+    *MAX_INNER_CELLS=9, *MAX_CELLS=73;
+  else if (root_level == 3)
+    *MAX_INNER_CELLS=73, *MAX_CELLS=585;
+}
+
 void interp_mog(MOG_TYPE* mog, uchar8* nbr_exint, uchar8* nbr_exist,
-                float lx, float ly, float lz){
+                float lx, float ly, float lz,float4 center,float len){
   uchar8 lhs = as_uchar8(*mog);
   float nrm = (float)NORM;
   // number of neighbors for debug
@@ -14,11 +25,11 @@ void interp_mog(MOG_TYPE* mog, uchar8* nbr_exint, uchar8* nbr_exist,
   float8  nexint = convert_float8(*nbr_exint)/nrm;
   float mu0 = (float)lhs.s0/255.0f;
 
-  float fx = lx-0.5f, fy = ly-0.5f, fz = lz -0.5f;
+  float fx = lx - center.s0, fy = ly - center.s1, fz = lz - center.s2;
   float emx = (float)(*nbr_exist).s0; float epx = (float)(*nbr_exist).s1;
   float emy = (float)(*nbr_exist).s2; float epy = (float)(*nbr_exist).s3;
   float emz = (float)(*nbr_exist).s4; float epz = (float)(*nbr_exist).s5;
-  float w0x = 1.0f-fabs(fx), w0y = 1.0f-fabs(fy), w0z = 1.0f-fabs(fz);
+  float w0x = len-fabs(fx), w0y = len-fabs(fy), w0z = len-fabs(fz);
   float wmx = emx*((fx<0)? -fx: 0.0f), wpx = epx*((fx>0)? fx: 0.0f);
   float wmy = emy*((fy<0)? -fy: 0.0f), wpy = epy*((fy>0)? fy: 0.0f);
   float wmz = emz*((fz<0)? -fz: 0.0f), wpz = epz*((fz>0)? fz: 0.0f);
@@ -35,16 +46,17 @@ void interp_mog(MOG_TYPE* mog, uchar8* nbr_exint, uchar8* nbr_exist,
   lhs = (uchar8)((uchar)mu, 32, 255, 0, 0, 0, 0, 0);
   CONVERT_FUNC_SAT_RTE(*mog, lhs);
 }
-void interp_alpha(float* alpha, float len, float8* nbr_prob, uchar8* nbr_exist,
-                  float lx, float ly, float lz){
-  float fx = lx-0.5f, fy = ly-0.5f, fz = lz -0.5f;
+void interp_alpha(float* alpha, float8* nbr_prob, uchar8* nbr_exist,
+                  float lx, float ly, float lz,float4 center,float len){
+  float fx = lx - center.s0, fy = ly - center.s1, fz = lz - center.s2;
   float emx = (float)(*nbr_exist).s0; float epx = (float)(*nbr_exist).s1;
   float emy = (float)(*nbr_exist).s2; float epy = (float)(*nbr_exist).s3;
   float emz = (float)(*nbr_exist).s4; float epz = (float)(*nbr_exist).s5;
-  float w0x = 1.0f-fabs(fx), w0y = 1.0f-fabs(fy), w0z = 1.0f-fabs(fz);
+  float w0x = len-fabs(fx), w0y = len-fabs(fy), w0z = len-fabs(fz);
   float wmx = emx*((fx<0)? -fx: 0.0f), wpx = epx*((fx>0)? fx: 0.0f);
   float wmy = emy*((fy<0)? -fy: 0.0f), wpy = epy*((fy>0)? fy: 0.0f);
   float wmz = emz*((fz<0)? -fz: 0.0f), wpz = epz*((fz>0)? fz: 0.0f);
+
   float sumw = w0x + wmx +wpx;
   sumw +=  w0y + wmy +wpy;
   sumw += w0z + wmz +wpz;
@@ -85,13 +97,6 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
 {
     int gid = get_global_id(0);
     int lid = get_local_id(0);
-    int  MAX_CELLS = 1;
-    if(max_depth[0] == 1)
-      MAX_CELLS=9;
-    else if (max_depth[0] == 2)
-      MAX_CELLS=73;
-    else if (max_depth[0] == 3)
-      MAX_CELLS=585;
     //default values for empty cells
      MOG_INIT(mog_init);
     //-log(1.0f - init_prob)/side_length  init_prob = 0.001f
@@ -119,12 +124,15 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
             // iterate through leaves
             cumsum[0] = (*local_tree).s0;
             int cumIndex = 1;
+	    int MAX_INNER_CELLS, MAX_CELLS;
+	    get_max_inner_outer(&MAX_INNER_CELLS, &MAX_CELLS, target_scene_linfo->root_level);
+
             for (int i=0; i<MAX_CELLS; i++) {
                 //if current bit is 0 and parent bit is 1, you're at a leaf
                 int pi = (i-1)>>3;           //Bit_index of parent bit
                 bool validParent = tree_bit_at(local_tree, pi) || (i==0); // special case for root
                 int currDepth = get_depth(i);
-                if (validParent && ( tree_bit_at(local_tree, i)==0 || currDepth== max_depth[0] )) {
+                if (validParent && ( tree_bit_at(local_tree, i)==0 )) {
 
 
                     //: for each leaf node xform the cell and find the correspondence in another block.
@@ -164,27 +172,29 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
 
                         float cell_minx,cell_miny,cell_minz,cell_len;
                         ushort bit_index = traverse_deepest(curr_tree_ptr,source_lx,source_ly,source_lz,
-                                                             &cell_minx,&cell_miny,&cell_minz,&cell_len, max_depth[0] );
+                                                             &cell_minx,&cell_miny,&cell_minz,&cell_len, 3 );
                         if(bit_index >=0 && bit_index < MAX_CELLS )
                           {
+			    float4 cell_center = (float4) (cell_minx,cell_miny,cell_minz,0) + cell_len/2;
+			    cell_center.s3=0;
                             unsigned int alpha_offset = data_index_root(curr_tree_ptr)+data_index_relative(curr_tree_ptr,bit_index,bit_lookup);
                             if( alpha_offset >=0  && alpha_offset < source_scene_linfo->data_len )
                             {
                               // here is where interpolation occurs
                               int currDepth = get_depth(i);
                               float side_len = 1.0f/((float)(1<<currDepth));
-                              source_lx /= side_len; source_ly /= side_len; source_lz /= side_len;
+			      // source_lx /= side_len; source_ly /= side_len; source_lz /= side_len;
                               uchar8 nbr_exint = nbr_exint_array[alpha_offset];
                               uchar8 nbr_exist =  nbr_exists_array[alpha_offset];
                               float8 nbr_prob = nbr_prob_array[alpha_offset];
 
                               // interpolate alpha over the source
                               float alpha = source_scene_alpha_array[alpha_offset];
-                              interp_alpha(&alpha, side_len, &nbr_prob, &nbr_exist, source_lx, source_ly, source_lz);
+			      interp_alpha(&alpha, &nbr_prob, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
                               target_scene_alpha_array[dataIndex] = alpha;
 			      // interpolate mog over the source
                               MOG_TYPE mog = source_scene_mog_array[alpha_offset];
-                              interp_mog(&mog, &nbr_exint, &nbr_exist, source_lx, source_ly, source_lz);
+			      interp_mog(&mog, &nbr_exint, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
                               target_scene_mog_array[dataIndex] = mog;
                             }
                         }
