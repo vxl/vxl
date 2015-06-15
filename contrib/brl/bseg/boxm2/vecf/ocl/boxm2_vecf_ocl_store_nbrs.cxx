@@ -98,7 +98,8 @@ bool boxm2_vecf_ocl_store_nbrs::init_ocl_store()
 // input is a block (source scene) output is the source scene with neighbor information 
 // neighbor existence and expected intensity of neighbors
 bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
-  int depth = 0;
+  vcl_cout << "inside augment_1_blk" << vcl_endl;
+  int depth = 3;
   vcl_size_t local_threads[1]={64};
   static vcl_size_t global_threads[1]={1};   
 

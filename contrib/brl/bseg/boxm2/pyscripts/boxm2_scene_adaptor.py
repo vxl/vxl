@@ -731,3 +731,8 @@ class boxm2_scene_adaptor(object):
     boxm2_batch.set_input_from_db(1,self.cpu_cache);
     return boxm2_batch.run_process();
 
+  def cache_neighbor_info(self):
+      boxm2_batch.init_process("boxm2VecfOclCacheNeighborInfoProcess")
+      boxm2_batch.set_input_from_db(0,self.scene)
+      boxm2_batch.set_input_from_db(1,self.opencl_cache)
+      return boxm2_batch.run_process()
