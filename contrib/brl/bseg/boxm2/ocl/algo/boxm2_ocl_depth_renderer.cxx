@@ -209,8 +209,6 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
 
   // assumes that the camera may be changing between calls
   boxm2_ocl_camera_converter::compute_ray_image( device_, queue, camera, cl_ni, cl_nj, ray_origins_image_, ray_directions_image_, 0, 0, false);
-  //ray_origins_image_->write_to_buffer(queue);
-  //ray_directions_image_->write_to_buffer(queue);
 
   int statusw = clFinish(queue);
   bool good_write = check_val(statusw, CL_SUCCESS, "ERROR: boxm2_ocl_depth_renderer: Initial write to GPU failed: " + error_to_string(statusw));

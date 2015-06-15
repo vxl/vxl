@@ -19,7 +19,7 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
                                                     bocl_mem_sptr & ray_directions,
                                                     vcl_size_t i_min,
                                                     vcl_size_t j_min,
-						    bool create_ray_o_d_buffers)
+                                                    bool create_ray_o_d_buffers)
 {
   if (cam->type_name() == "vpgl_perspective_camera") {
 #ifdef DEBUG
@@ -42,8 +42,14 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
   else if (cam->type_name() == "vpgl_generic_camera") {
     //set the ray images, and write to buffer
     boxm2_ocl_util::set_generic_camera(cam, (cl_float*) ray_origins->cpu_buffer(), (cl_float*) ray_directions->cpu_buffer(), cl_ni, cl_nj,i_min,j_min);
-    ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-    ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    if(create_ray_o_d_buffers) {
+      ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+      ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
+    }
+    else {
+      ray_origins->write_to_buffer(queue);
+      ray_directions->write_to_buffer(queue);
+    }
   }
   else if (cam->type_name() == "vpgl_affine_camera") {
     vpgl_generic_camera<double> * gen_cam = new vpgl_generic_camera<double> ();
@@ -56,7 +62,11 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
     if(create_ray_o_d_buffers) {
       ray_origins->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
       ray_directions->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-	}
+    }
+    else {
+      ray_origins->write_to_buffer(queue);
+      ray_directions->write_to_buffer(queue);
+    }
   }
   else {
     vcl_cout<<"Camera type "<<cam->type_name()<<" not supported by boxm2_ocl_camera_converter"<<vcl_endl;
