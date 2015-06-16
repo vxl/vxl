@@ -18,7 +18,6 @@
 bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, imesh_mesh const& mesh,
                                 bool zero_model)
 {
-  const float big_alpha = 1.0e4;
   const imesh_face_array_base& mesh_faces = mesh.faces();
   const imesh_vertex_array_base& mesh_verts = mesh.vertices();
 
@@ -42,29 +41,14 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
     alpha_base->enable_write();
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
-    boxm2_array_3d<vnl_vector_fixed<unsigned char, 16> > &trees = blk->trees();
-
     if (zero_model) {
-      // zero out all cells
-      // for each subblock
-      for (unsigned iz=0; iz<trees.get_row3_count(); ++iz) {
-        for (unsigned iy=0; iy<trees.get_row2_count(); ++iy) {
-          for (unsigned ix=0; ix<trees.get_row1_count(); ++ix) {
-            //load current block/tree
-            vnl_vector_fixed<unsigned char, 16>  tree = trees(ix, iy, iz);
-            boct_bit_tree bit_tree((unsigned char*) tree.data_block(), mdata.max_level_);
-
-            //iterate through leaves of the tree
-            vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-            for (vcl_vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
-              int currBitIndex = (*iter);
-              int data_offset = bit_tree.get_data_index(currBitIndex); //data index
-              alpha_data->data()[data_offset] = 0.0f;
-            }
-          }
-        }
+      for (typename boxm2_array_1d<float>::iterator alpha_it = alpha_data->data().begin();
+           alpha_it != alpha_data->data().end(); ++alpha_it) {
+        *alpha_it = 0.0f;
       }
     }
+
+    boxm2_array_3d<vnl_vector_fixed<unsigned char, 16> > &trees = blk->trees();
 
     // iterate over every triangle in the mesh
     for (unsigned f=0; f<mesh_faces.size(); ++f) {
@@ -115,7 +99,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
               bool vert_in_box = cell_box.contains(tri_verts[0]) || cell_box.contains(tri_verts[1]) || cell_box.contains(tri_verts[2]);
               if (vert_in_box || bvgl_intersection(cell_box, triangle)) {
                 double side_len = cell_box.width();
-                double alpha = -vcl_log(0.001) / side_len;
+                double alpha = -vcl_log(0.005) / side_len;
                 alpha_data->data()[data_offset] = alpha;
               }
             }
