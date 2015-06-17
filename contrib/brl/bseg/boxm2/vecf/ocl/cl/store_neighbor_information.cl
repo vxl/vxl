@@ -44,14 +44,15 @@ __kernel void extract_neighbors_block( __constant float           * centerX,    
   __local uchar16* neighbor_tree = &neighbor_tree_arg[llid];
   //The resolution of the kernels is fixed at the highest res cell
 
-  int  MAX_CELLS = 1;
-  if(max_depth[0] == 1)
-    MAX_CELLS=9;
-  else if (max_depth[0] == 2)
-    MAX_CELLS=73;
-  else if (max_depth[0] == 3)
-    MAX_CELLS=585;
+  int MAX_CELLS=585;
+  /* if(max_depth[0] == 1) */
+  /*   MAX_CELLS=9; */
+  /* else if (max_depth[0] == 2) */
+  /*   MAX_CELLS=73; */
+  /* else if (max_depth[0] == 3) */
+  /*   MAX_CELLS=585; */
   // must be inside the block
+
   if(gid < numTrees)
   {
     local_tree_arg[llid]=as_uchar16(tree_array[gid]);

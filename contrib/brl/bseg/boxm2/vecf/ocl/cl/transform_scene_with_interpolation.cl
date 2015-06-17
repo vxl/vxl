@@ -126,14 +126,13 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
             int cumIndex = 1;
 	    int MAX_INNER_CELLS, MAX_CELLS;
 	    get_max_inner_outer(&MAX_INNER_CELLS, &MAX_CELLS, target_scene_linfo->root_level);
-
+            MAX_CELLS = 585;
             for (int i=0; i<MAX_CELLS; i++) {
                 //if current bit is 0 and parent bit is 1, you're at a leaf
                 int pi = (i-1)>>3;           //Bit_index of parent bit
                 bool validParent = tree_bit_at(local_tree, pi) || (i==0); // special case for root
                 int currDepth = get_depth(i);
                 if (validParent && ( tree_bit_at(local_tree, i)==0 )) {
-
 
                     //: for each leaf node xform the cell and find the correspondence in another block.
                     //get the index into this cell data
@@ -149,6 +148,7 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
                     float txg = scale[0]*(rotation[0]*xg +rotation[1]*yg + rotation[2]*zg) + translation[0];
                     float tyg = scale[1]*(rotation[3]*xg +rotation[4]*yg + rotation[5]*zg) + translation[1];
                     float tzg = scale[2]*(rotation[6]*xg +rotation[7]*yg + rotation[8]*zg) + translation[2];
+                    // float txg = xg; float tyg= yg; float tzg = zg;
                     // is the transformed point inside the source domain
                     if(txg > source_scene_origin.x && txg < source_scene_maxpoint.x &&
                        tyg > source_scene_origin.y && tyg < source_scene_maxpoint.y &&
@@ -171,8 +171,8 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
                         float source_lz = clamp((tzg - source_scene_origin.z)/source_scene_linfo->block_len - s_sub_blk_z,0.0f,1.0f);
 
                         float cell_minx,cell_miny,cell_minz,cell_len;
-                        ushort bit_index = traverse_deepest(curr_tree_ptr,source_lx,source_ly,source_lz,
-                                                             &cell_minx,&cell_miny,&cell_minz,&cell_len, 3 );
+                        ushort bit_index = traverse_three(curr_tree_ptr,source_lx,source_ly,source_lz,
+                                                             &cell_minx,&cell_miny,&cell_minz,&cell_len);
                         if(bit_index >=0 && bit_index < MAX_CELLS )
                           {
 			    float4 cell_center = (float4) (cell_minx,cell_miny,cell_minz,0) + cell_len/2;
@@ -190,11 +190,11 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
 
                               // interpolate alpha over the source
                               float alpha = source_scene_alpha_array[alpha_offset];
-			      //			      interp_alpha(&alpha, &nbr_prob, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
+                              interp_alpha(&alpha, &nbr_prob, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
                               target_scene_alpha_array[dataIndex] = alpha;
 			      // interpolate mog over the source
                               MOG_TYPE mog = source_scene_mog_array[alpha_offset];
-			      //     interp_mog(&mog, &nbr_exint, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
+                              interp_mog(&mog, &nbr_exint, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
                               target_scene_mog_array[dataIndex] = mog;
                             }
                         }
