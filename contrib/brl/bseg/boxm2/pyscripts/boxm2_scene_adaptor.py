@@ -736,3 +736,19 @@ class boxm2_scene_adaptor(object):
       boxm2_batch.set_input_from_db(0,self.scene)
       boxm2_batch.set_input_from_db(1,self.opencl_cache)
       return boxm2_batch.run_process()
+
+  def refine_scene_around_geometry(self, filter_v,n_times,p_thresh,use_gpu):
+    if self.opencl_cache.type == "boxm2_opencl_cache_sptr":
+        print("Refining around surface geometry");
+        boxm2_batch.init_process("boxm2_ocl_refine_scene_around_geometry_process");
+        boxm2_batch.set_input_from_db(0, self.scene);
+        boxm2_batch.set_input_from_db(1, self.opencl_cache);
+        boxm2_batch.set_input_from_db(2, self.device);
+        boxm2_batch.set_input_from_db(3, filter_v);
+        boxm2_batch.set_input_int(4, n_times);
+        boxm2_batch.set_input_float(5,p_thresh);  # use negative value to refine all
+        boxm2_batch.set_input_bool(6, use_gpu);
+        return boxm2_batch.run_process();
+    else:
+        print "ERROR: Cache type not recognized: ", cache.type;
+        return False;

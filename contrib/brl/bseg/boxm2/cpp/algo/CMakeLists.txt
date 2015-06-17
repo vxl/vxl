@@ -48,6 +48,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_export_stack_images_function.h boxm2_export_stack_images_function.cxx
     boxm2_normals_to_id_functor.h
     boxm2_import_triangle_mesh.h  boxm2_import_triangle_mesh.cxx
+    boxm2_refine_block_function_with_labels.h boxm2_refine_block_function_with_labels.cxx
+
    )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 

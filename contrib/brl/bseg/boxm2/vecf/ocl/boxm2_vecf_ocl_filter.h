@@ -53,7 +53,7 @@ class boxm2_vecf_ocl_filter
   bocl_mem_sptr centerZ;
   bocl_mem_sptr lookup;
   bocl_mem_sptr output;
-  float output_buff[1000];
+
   bocl_mem* ocl_depth;
   bocl_mem* ocl_n_iter;
   bocl_mem* blk_info_temp;

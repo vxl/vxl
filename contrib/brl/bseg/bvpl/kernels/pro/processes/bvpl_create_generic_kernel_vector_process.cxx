@@ -14,7 +14,7 @@
 #include <brdb/brdb_value.h>
 #include <bvpl/kernels/bvpl_create_directions.h>
 #include <bvpl/kernels/bvpl_gauss3d_x_kernel_factory.h>
-
+#include <bvpl/kernels/bvpl_gauss3d_kernel_factory.h>
 
 namespace bvpl_create_generic_kernel_vector_process_globals
 {
@@ -74,17 +74,25 @@ bool bvpl_create_generic_kernel_vector_process(bprb_func_process& pro)
   vcl_string dir_type =pro.get_input<vcl_string>(7);
 
 
-  if (factory_name == "gauss_x") //first order derivative of gaussian
-  {
-    //Create the factory and get the vector of kernels
-    bvpl_gauss3d_x_kernel_factory factory(dim_x, dim_y, dim_z, supp_x, supp_y, supp_z);  //in this case the values of dim_* correspond of sigma
-    if (dir_type == "XYZ") {
-      bvpl_create_directions_xyz dir;
-      bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
-      pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
-      return true;
-    }
-    
+  if (factory_name == "gauss_x") { //first order derivative of gaussian
+          //Create the factory and get the vector of kernels
+          bvpl_gauss3d_x_kernel_factory factory(dim_x, dim_y, dim_z, supp_x, supp_y, supp_z);  //in this case the values of dim_* correspond of sigma
+          if (dir_type == "XYZ") {
+                  bvpl_create_directions_xyz dir;
+                  bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
+                  pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
+                  return true;
+          }
+  }else if (factory_name == "gauss"){
+          //Create the factory and get the vector of kernels
+          bvpl_gauss3d_kernel_factory factory(dim_x, dim_y, dim_z, supp_x, supp_y, supp_z);  //in this case the values of dim_* correspond of sigma
+          if (dir_type == "XYZ") {
+                  bvpl_create_directions_xyz dir;
+                  bvpl_kernel_vector_sptr kernels = factory.create_kernel_vector(dir);
+                  pro.set_output_val<bvpl_kernel_vector_sptr>(0, kernels);
+                  return true;
+          }
+
   }
 
   //if got to here is because we didn't meet available conditions

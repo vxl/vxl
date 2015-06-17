@@ -32,11 +32,11 @@ class bvpl_gauss3d_kernel_factory : public bvpl_kernel_factory
   bvpl_gauss3d_kernel_factory(float s1, float s2);
 
   //: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2,s3
-  bvpl_gauss3d_kernel_factory(float s1, float s2, float s3);
+  bvpl_gauss3d_kernel_factory(float s1, float s2, float s3,float supp1 = 2.0, float supp2 = 1.0, float supp3 = 1.0);
 
   virtual ~bvpl_gauss3d_kernel_factory() {}
 
-  static vcl_string name() {return "gauss_x"; }
+  static vcl_string name() {return "gauss"; }
 
 #if 0
   /******************Batch Methods ***********************/
@@ -57,6 +57,9 @@ class bvpl_gauss3d_kernel_factory : public bvpl_kernel_factory
   float sigma1_;
   float sigma2_;
   float sigma3_;
+  float supp1_;
+  float supp2_;
+  float supp3_;
 
   static const unsigned max_size_ = 71;
 };
