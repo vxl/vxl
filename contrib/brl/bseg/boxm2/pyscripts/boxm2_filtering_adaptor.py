@@ -136,3 +136,30 @@ def create_coarse_model(scene, cache, device, model_dir) :
     print "ERROR: Cache type not recognized: ", cache.type;
     return False;
 
+def filter_scene_data(scene,cache,device,filters,filter_idx):
+  if cache.type == "boxm2_opencl_cache_sptr": 
+    print("Filtering Scene Data");
+    boxm2_batch.init_process("boxm2_ocl_filter_scene_data_process")
+    boxm2_batch.set_input_from_db(0,device);
+    boxm2_batch.set_input_from_db(1,scene);
+    boxm2_batch.set_input_from_db(2,cache);
+    boxm2_batch.set_input_from_db(3,filters);
+    boxm2_batch.set_input_int(4,filter_idx);    
+    return boxm2_batch.run_process();
+  else : 
+    print "ERROR: Cache type not recognized: ", cache.type; 
+    return False;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

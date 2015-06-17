@@ -105,4 +105,6 @@ DECLARE_FUNC_CONS(boxm2_ocl_compute_expectation_view_direction_process);
 DECLARE_FUNC_CONS(boxm2_ocl_ingest_label_with_cam_process);
 
 DECLARE_FUNC_CONS(boxm2_ocl_render_gl_expected_depth_process);
+DECLARE_FUNC_CONS(boxm2_ocl_refine_scene_around_geometry_process);
+DECLARE_FUNC_CONS(boxm2_ocl_filter_scene_data_process);
 #endif

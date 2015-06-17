@@ -90,8 +90,6 @@ bool boxm2_vecf_ocl_filter::init_ocl_filter()
     centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     // output buffer for debugging
-    output = new bocl_mem(device_->context(), output_buff, sizeof(float)*1000, "output" );
-    output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
     // bit lookup buffer
     cl_uchar lookup_arr[256];
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
@@ -165,13 +163,21 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,false);
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
+   data_size = info_buffer_source->data_buffer_length;
+   float* output_buff= new float[data_size];
+   output = new bocl_mem(device_->context(), output_buff, sizeof(float)*info_buffer_source->data_buffer_length, "output" );
+   output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+   output->zero_gpu_buffer(queue);
    blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );   
    blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+   int app_type_size_;
    if(app_type_ == "boxm2_mog3_grey") {
      mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk_source,0,false);
+     app_type_size_ = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
    }
    else if(app_type_ == "boxm2_mog3_grey_16") {
      mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk_source,0,false);
+     app_type_size_ = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
    }
    else {
      vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
@@ -206,12 +212,28 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
      return false;
    mog_source->read_to_buffer(queue);
    alpha_source->read_to_buffer(queue);
+   mog_temp->read_to_buffer(queue);
+   alpha_temp->read_to_buffer(queue);
+   vcl_memcpy(alpha_source->cpu_buffer(),alpha_temp->cpu_buffer(),data_size * sizeof(float));
+   vcl_memcpy(mog_source->cpu_buffer(),mog_temp->cpu_buffer(),data_size * app_type_size_);
+   mog_source->write_to_buffer(queue);
+   alpha_source->write_to_buffer(queue);
    output->read_to_buffer(queue);//for debug
    status = clFinish(queue);
    bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
    if(!good_read)
      return false;
    filter_kern->clear_args();
+   int count = 0;
+   for (int i=0;i<data_size;i++){
+           if(output_buff[i]!=0){
+                   vcl_cout<<output_buff[i]<<" ";
+                   count++;
+           }
+           if(count > 1000)
+                   break;
+
+   }
    vcl_cout << "Output: " << output_buff[0] <<' ' << output_buff[1] <<' ' << output_buff[2]
             << ' ' << output_buff[3] <<' ' << output_buff[4] <<' ' << output_buff[5] << '\n';
   
@@ -222,6 +244,7 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    delete info_buffer_source;
    blk_info_temp->release_memory();
    delete info_buffer;
+   delete output_buff;
 }
 
 

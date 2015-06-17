@@ -190,11 +190,11 @@ __kernel void transform_scene_interpolate(__constant  float           * centerX,
 
                               // interpolate alpha over the source
                               float alpha = source_scene_alpha_array[alpha_offset];
-			      interp_alpha(&alpha, &nbr_prob, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
+			      //			      interp_alpha(&alpha, &nbr_prob, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
                               target_scene_alpha_array[dataIndex] = alpha;
 			      // interpolate mog over the source
                               MOG_TYPE mog = source_scene_mog_array[alpha_offset];
-			      interp_mog(&mog, &nbr_exint, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
+			      //     interp_mog(&mog, &nbr_exint, &nbr_exist, source_lx, source_ly, source_lz,cell_center,cell_len);
                               target_scene_mog_array[dataIndex] = mog;
                             }
                         }
