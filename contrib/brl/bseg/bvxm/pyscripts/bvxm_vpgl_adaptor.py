@@ -919,3 +919,19 @@ def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance = 1000):
   if (gsd_j < 0.0): gsd_j = -1*gsd_j
   bvxm_batch.remove_data(lvcs.id)
   return gsd_i, gsd_j
+
+
+def isfm_rational_camera( trackfile, output_folder, pixel_radius):
+  bvxm_batch.init_process("vpglIsfmRationalCameraProcess");
+  bvxm_batch.set_input_string(0, trackfile);
+  bvxm_batch.set_input_string(1, output_folder);
+  bvxm_batch.set_input_float(2, pixel_radius);  ## pixel radius to count for inliers
+  if not bvxm_batch.run_process():
+    return None, -1.0, -1.0
+  (id, type) = bvxm_batch.commit_output(0);
+  cam = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(1);
+  error = bvxm_batch.get_output_float(id);
+  (id, type) = bvxm_batch.commit_output(2);
+  inliers = bvxm_batch.get_output_float(id);
+  return cam,error,inliers

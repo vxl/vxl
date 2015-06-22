@@ -105,4 +105,6 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_persp_cam_from_photo_overlay_process, "vpglPerspCameraFromPhotoOverlayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_affine_f_matrix_process, "vpglAffineFMatrixProcess");
 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_generic_camera_ray_process, "vpglGetGenericCamRayProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_process, "vpglIsfmRationalCameraProcess");
 }

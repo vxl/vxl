@@ -1,6 +1,28 @@
 from bvxm_register import bvxm_batch, dbvalue;
 import math;
 
+def create_satellite_resouces(roi_kml, leaf_size = 0.1, eliminate_same_images = False):
+  bvxm_batch.init_process("volmCreateSatResourcesProcess")
+  bvxm_batch.set_input_string(0, roi_kml)
+  bvxm_batch.set_input_float(1, leaf_size)
+  bvxm_batch.set_input_bool(2, eliminate_same_images)
+  bvxm_batch.run_process()
+  (id, type) = bvxm_batch.commit_output(0)
+  sat_res = dbvalue(id, type)
+  return sat_res
+
+def add_satellite_resources(sat_res, sat_res_folder):
+  bvxm_batch.init_process("volmAddSatelliteResourcesProcess")
+  bvxm_batch.set_input_from_db(0, sat_res)
+  bvxm_batch.set_input_string(1, sat_res_folder)
+  bvxm_batch.run_process()
+
+def save_satellite_resources(sat_res, out_file):
+  bvxm_batch.init_process("volmSaveSatResourcesProcess")
+  bvxm_batch.set_input_from_db(0,sat_res)
+  bvxm_batch.set_input_string(1,out_file)
+  bvxm_batch.run_process()
+
 def map_sdet_to_volm_ids(sdet_color_class_img):
   bvxm_batch.init_process("volmGenerateClassMapProcess");
   bvxm_batch.set_input_from_db(0,sdet_color_class_img);
@@ -196,6 +218,18 @@ def correct_ransac_process2(res, cor_file, output_folder, pixel_radius, enforce_
   bvxm_batch.set_input_int(4, enforce_existing);  ## if 1: enforce to have at least 2 existing images
   statuscode = bvxm_batch.run_process();
   return statuscode;
+
+## this one perform camera correction with an 3-d initial guessing point defined from the overlapped region of all cameras
+def correct_ransac_with_initial_process(res, cor_file, dem_folder, output_folder, pixel_radius, enforce_existing = False):
+  bvxm_batch.init_process("volmCorrectRationalCameraRANSACwithIntialProcess")
+  bvxm_batch.set_input_from_db(0, res)
+  bvxm_batch.set_input_string(1, cor_file)
+  bvxm_batch.set_input_string(2, dem_folder)
+  bvxm_batch.set_input_string(3, output_folder)
+  bvxm_batch.set_input_float(4, pixel_radius)
+  bvxm_batch.set_input_bool(5, enforce_existing)
+  status = bvxm_batch.run_process()
+  return status
 
 ## process to transfer geo_index leaf id to leaf string
 ## the geo index is loaded from tree_txt

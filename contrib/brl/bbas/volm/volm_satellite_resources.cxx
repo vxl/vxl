@@ -50,15 +50,19 @@ void volm_satellite_resources::add_resource(vcl_string name)
   res.meta_ = new brad_image_metadata(name, "");
   if (eliminate_same_) {
     // first check if we already have the exact same image, (unfortunately there are resources with different name but taken at exactly same time, so same image)
+    // we define images are same if they have time less than 2 minutes, close enough extent, same name and same band number
     for (unsigned i = 0; i < resources_.size(); i++) {
       if (resources_[i].meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
           resources_[i].meta_->band_.compare(res.meta_->band_) == 0 && 
-          resources_[i].meta_->same_time(*(res.meta_))) {
+          resources_[i].meta_->same_time(*(res.meta_)) && 
+          resources_[i].meta_->same_extent(*(res.meta_))
+          )
+      {
           vcl_cout << "!!!!!!!!!!!!! cannot add: " << res.name_ << " with time: "; res.meta_->print_time();
           vcl_cout << "already exists: \n" << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time(); 
           vcl_cout << " band of resources: " <<  resources_[i].meta_->band_ << " band trying to add: " << res.meta_->band_ << vcl_endl;
           return;
-        }
+      }
     }
   }
   if (res.meta_->gsd_ > 0)  // if there are parsing problems, gsd is negative

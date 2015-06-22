@@ -90,4 +90,5 @@ DECLARE_FUNC_CONS(vpgl_get_generic_camera_ray_process);
 DECLARE_FUNC_CONS(vpgl_persp_cam_from_photo_overlay_process);
 DECLARE_FUNC_CONS(vpgl_affine_f_matrix_process);
 
+DECLARE_FUNC_CONS(vpgl_isfm_rational_camera_process);
 #endif

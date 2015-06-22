@@ -344,3 +344,93 @@ bool vpgl_rational_adjust_multiple_pts::
   }
   return true;
 }
+
+// run Lev-Marq optimization to search the param spae to find the best parameter setting
+bool vpgl_rational_adjust_multiple_pts::adjust_lev_marq(vcl_vector<vpgl_rational_camera<double> > const& cams,          // cameras that will be corrected
+                                                        vcl_vector<float> const& cam_weights,                           // camera weight parameters
+                                                        vcl_vector<vcl_vector<vgl_point_2d<double> > > const& corrs,    // a vector of correspondences for each cam
+                                                        vgl_point_3d<double> const& initial_pt,                         // initial 3-d point for back-projection
+                                                        double const& zmin,                                             // minimum allowed height of the 3-d intersection point
+                                                        double const& zmax,                                             // maximum allowed height of the 3-d intersection point
+                                                        vcl_vector<vgl_vector_2d<double> >& cam_translations,           // output translations for each camera
+                                                        vcl_vector<vgl_point_3d<double> >& intersections,               // output 3-d locations for each correspondence
+                                                        double const relative_diameter)
+{
+  cam_translations.clear();
+  intersections.clear();
+  intersections.clear();
+  intersections.resize(corrs.size());
+  if (!cams.size() || !corrs.size() || cams.size() != corrs.size())
+    return false;
+  if (!corrs[0].size())
+    return false;
+  unsigned int cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
+  for (unsigned i = 1; i < corrs.size(); ++i)
+    if (corrs[i].size() != cnt_corrs_for_each_cam)
+      return false;
+
+  // reformat the correspondences array
+  vcl_vector<vgl_point_2d<double> > temp(cams.size());
+  vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs_reformatted(cnt_corrs_for_each_cam, temp);
+
+  for (unsigned int i = 0; i < cnt_corrs_for_each_cam; ++i) { // for each corr
+    for (unsigned int j = 0; j < corrs.size(); ++j) // for each cam (corr size and cams size are equal)
+      corrs_reformatted[i][j] = corrs[j][i];
+  }
+  // find the best 3-d intersections for all the correspondences using the given cameras to compute good initial estimates for z of each correspondence
+  vcl_vector<vgl_point_3d<double> > intersections_initial;
+  for (unsigned i = 0; i < corrs_reformatted.size(); i++) {
+    vgl_point_3d<double> pt;
+    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, corrs_reformatted[i], initial_pt, zmin, zmax, pt, relative_diameter))
+      return false;
+    intersections_initial.push_back(pt);
+  }
+
+  // now refine the intersections using Lev_Marqs
+  for (unsigned i = 0; i < corrs_reformatted.size(); i++) {
+    vgl_point_3d<double> final;
+    if (!vpgl_rational_adjust_onept::refine_intersection_pt(cams, cam_weights, corrs_reformatted[i],intersections_initial[i], final, relative_diameter))
+      return false;
+    intersections_initial[i] = final;
+  }
+  for (unsigned int i = 0; i < intersections_initial.size(); ++i)
+    vcl_cout << "before adjustment initial 3D intersection point: " << intersections_initial[i] << vcl_endl;
+
+  // search the camera translation space using Lev-Marq
+  vpgl_cam_trans_search_lsqr transsf(cams, cam_weights, corrs_reformatted, intersections_initial);
+  vnl_levenberg_marquardt levmarq(transsf);
+  levmarq.set_verbose(true);
+  // Set the x-tolerance.  Minimization terminates when the length of the steps taken in X (variables) are less than input x-tolerance
+  levmarq.set_x_tolerance(1e-10);
+  // Set the epsilon-function.  This is the step length for FD Jacobian
+  levmarq.set_epsilon_function(0.01);
+  // Set the f-tolerance.  Minimization terminates when the successive RSM errors are less then this
+  levmarq.set_f_tolerance(1e-15);
+  // Set the maximum number of iterations
+  levmarq.set_max_function_evals(10000);
+  vnl_vector<double> translations(2*(unsigned)cams.size(), 0.0);
+  vcl_cout << "Minimization x epsilon: " << levmarq.get_f_tolerance() << vcl_endl;
+
+  // Minimize the error and get the best intersection point
+  levmarq.minimize(translations);
+  levmarq.diagnose_outcome();
+  transsf.get_finals(intersections);
+  vcl_cout << "final translations:" << vcl_endl;
+  for (unsigned i = 0; i < cams.size(); i++) {
+    // if cam weight is 1 for one of them, it is a special case, then pass 0 as translation for that one, cause projections still cause a tiny translation, ignore that
+    vgl_vector_2d<double> trans(0.0, 0.0);
+    if (cam_weights[i] == 1.0f) {
+      cam_translations.push_back(trans);
+    }
+    else {
+      trans.set(translations[2*i], translations[2*i+1]);
+      cam_translations.push_back(trans);
+    }
+    if (vcl_abs(trans.x()) > 200 || vcl_abs(trans.y()) > 200) {
+      vcl_cerr << " trans: " << trans << " failed sanity check! returning false!\n";
+      return false;
+    }
+    vcl_cout << trans << '\n';
+  }
+  return true;
+}

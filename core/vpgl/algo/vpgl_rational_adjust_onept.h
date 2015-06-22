@@ -7,6 +7,10 @@
 // \author J. L. Mundy
 // \date July 29, 2007
 //
+// \verbatim
+//   Modifications
+//    Yi Dong  Jun-2015  added new function to optimize the 3-d point intersection search by a user-defined initial guess
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -31,7 +35,8 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
   vpgl_z_search_lsqr(vcl_vector<vpgl_rational_camera<double> > const& cams,
                      vcl_vector<float> const& cam_weights,
                      vcl_vector<vgl_point_2d<double> > const& image_pts,
-                     vgl_point_3d<double> const& initial_pt);
+                     vgl_point_3d<double> const& initial_pt,
+                     double const& relative_diameter = 1.0);
   //: Destructor
   virtual ~vpgl_z_search_lsqr() {}
 
@@ -49,6 +54,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
   vcl_vector<float> cam_weights_;
   vcl_vector<vgl_point_2d<double> > image_pts_; //image points
   double xm_, ym_;
+  double relative_diameter_;
 };
 
 
@@ -64,22 +70,51 @@ class vpgl_rational_adjust_onept
                           vgl_point_3d<double>& p_3d);
 
   static bool
+  find_intersection_point(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                          vcl_vector<float> const& cam_weights,
+                          vcl_vector<vgl_point_2d<double> > const& corrs,
+                          vgl_point_3d<double> const& initial_pt,
+                          double const& zmin,
+                          double const& zmax,
+                          vgl_point_3d<double> & p_3d,
+                          double const& relative_diameter = 1.0);
+
+  static bool
   refine_intersection_pt(vcl_vector<vpgl_rational_camera<double> > const& cams,
                          vcl_vector<float> const& cam_weights,
                          vcl_vector<vgl_point_2d<double> > const& image_pts,
                          vgl_point_3d<double> const& initial_pt,
-                         vgl_point_3d<double>& final_pt);
+                         vgl_point_3d<double>& final_pt,
+                         double const& relative_diameter = 1.0);
 
   static bool adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
                      vcl_vector<vgl_point_2d<double> > const& corrs,
                      vcl_vector<vgl_vector_2d<double> >& cam_translations,
                      vgl_point_3d<double>& intersection);
 
+  static bool adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
+                     vcl_vector<vgl_point_2d<double> > const& corrs,
+                     vgl_point_3d<double> const& initial_pt,
+                     double const& zmin,
+                     double const& zmax,
+                     vcl_vector<vgl_vector_2d<double> >& cam_translations,
+                     vgl_point_3d<double>& intersection,
+                     double const& relative_diameter = 1.0);
+
   // pass a weight for each camera, the weights should add up to 1.0
   static bool adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams, vcl_vector<float> weights,
                      vcl_vector<vgl_point_2d<double> > const& corrs,
                      vcl_vector<vgl_vector_2d<double> >& cam_translations,
                      vgl_point_3d<double>& intersection);
+
+  static bool adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams, vcl_vector<float> const& weights,
+                                  vcl_vector<vgl_point_2d<double> > const& corrs,
+                                  vgl_point_3d<double> const& initial_pt,
+                                  double const& zmin,
+                                  double const& zmax,
+                                  vcl_vector<vgl_vector_2d<double> >& cam_translations,
+                                  vgl_point_3d<double>& intersection,
+                                  double const& relative_diameter = 1.0);
 
  protected:
   vpgl_rational_adjust_onept();

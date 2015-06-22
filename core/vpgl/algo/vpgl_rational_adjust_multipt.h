@@ -7,6 +7,10 @@
 // \author Ozge C. Ozcanli
 // \date Nov 17, 2011
 //
+// \verbatim
+//   Modifications
+//    Yi Dong  Jun-2015  added new function to optimize the Lev-Marq refinement with given initial 3-d point, height range and search diameter
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -71,6 +75,17 @@ class vpgl_rational_adjust_multiple_pts
                               vcl_vector<vcl_vector< vgl_point_2d<double> > > const& corrs, // a vector of correspondences for each cam
                               vcl_vector<vgl_vector_2d<double> >& cam_translations, // output translations for each cam
                               vcl_vector<vgl_point_3d<double> >& intersections);    // output 3d locations for each correspondence
+
+  //: run Lev-Marq optimization to search the param space to find the best parameter setting, with a initial guess and relative diameter given for back-projection
+  static bool adjust_lev_marq(vcl_vector<vpgl_rational_camera<double> > const& cams,          // cameras that will be corrected
+                              vcl_vector<float> const& cam_weights,                           // camera weight parameters
+                              vcl_vector<vcl_vector<vgl_point_2d<double> > > const& corrs,    // a vector of correspondences for each cam
+                              vgl_point_3d<double> const& initial_pt,                         // initial 3-d point for back-projection
+                              double const& zmin,                                             // minimum allowed height of the 3-d intersection point
+                              double const& zmax,                                             // maximum allowed height of the 3-d intersection point
+                              vcl_vector<vgl_vector_2d<double> >& cam_translations,           // output translations for each camera
+                              vcl_vector<vgl_point_3d<double> >& intersections,               // output 3-d locations for each correspondence
+                              double const relative_diameter = 1.0);                          // relative diameter used in back-projection
 
  protected:
   vpgl_rational_adjust_multiple_pts();
