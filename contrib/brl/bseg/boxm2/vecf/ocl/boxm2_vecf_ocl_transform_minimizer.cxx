@@ -1,5 +1,5 @@
 #include "boxm2_vecf_ocl_transform_minimizer.h"
-#include <vnl/algo/vnl_levenberg_marquardt.h> 
+#include <vnl/algo/vnl_levenberg_marquardt.h>
 #include "boxm2_vecf_ocl_transform_scene.h"
 
 boxm2_vecf_ocl_transform_minimizer::boxm2_vecf_ocl_transform_minimizer(boxm2_scene_sptr& source_scene,

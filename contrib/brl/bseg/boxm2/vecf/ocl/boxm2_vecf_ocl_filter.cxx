@@ -130,8 +130,8 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
   ocl_n_iter->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
   vcl_size_t local_threads[1]={64};
-  vcl_size_t global_threads[1]={1};   
-  // set up all the kernel arguments 
+  vcl_size_t global_threads[1]={1};
+  // set up all the kernel arguments
    vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
    vcl_vector<boxm2_block_id> blocks_temp = temp_scene_->get_block_ids();
    if(blocks_temp.size()!=1||blocks_source.size()!=1)
@@ -145,9 +145,9 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
    info_buffer->data_buffer_length = (int) (alpha_temp->num_bytes()/alphaTypeSize);
    int data_size = info_buffer->data_buffer_length;
-   blk_info_temp  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
-   blk_info_temp->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
-   
+   blk_info_temp  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
+   blk_info_temp->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
    if(app_type_ == "boxm2_mog3_grey") {
      mog_temp       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(temp_scene_, *iter_blk_temp,0,true);
    }
@@ -168,7 +168,7 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    output = new bocl_mem(device_->context(), output_buff, sizeof(float)*info_buffer_source->data_buffer_length, "output" );
    output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
    output->zero_gpu_buffer(queue);
-   blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );   
+   blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );
    blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
    int app_type_size_;
    if(app_type_ == "boxm2_mog3_grey") {
@@ -236,15 +236,14 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    }
    vcl_cout << "Output: " << output_buff[0] <<' ' << output_buff[1] <<' ' << output_buff[2]
             << ' ' << output_buff[3] <<' ' << output_buff[4] <<' ' << output_buff[5] << '\n';
-  
-   boxm2_lru_cache::instance()->write_to_disk(source_scene_); 
+
+   boxm2_lru_cache::instance()->write_to_disk(source_scene_);
    // look into properly releasing all data
    ocl_depth->release_memory();
    blk_info_source->release_memory();
+   blk_info_source->cpu_buffer();
    delete info_buffer_source;
    blk_info_temp->release_memory();
    delete info_buffer;
    delete output_buff;
 }
-
-

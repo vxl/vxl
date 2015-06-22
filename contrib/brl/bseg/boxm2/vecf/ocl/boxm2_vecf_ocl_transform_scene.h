@@ -26,7 +26,7 @@
 class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 {
  public:
-  //: Constructor. 
+  //: Constructor.
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& target_scene,
                                  boxm2_opencl_cache_sptr ocl_cache);
@@ -56,6 +56,11 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
                               vgl_vector_3d<double> scale,
                               bool finish = true);
 
+  bool transform_1_blk_interp_trilin(vgl_rotation_3d<double>  rot,
+                                                            vgl_vector_3d<double> trans,
+                                                            vgl_vector_3d<double> scale,
+                                     bool finish);
+
   //:render the current state of the target scene leaving scene GPU buffers in place
   // thus rendering can be faster since block buffer transfers are not needed
   bool render_scene_appearance(vpgl_camera_double_sptr const & cam,
@@ -75,6 +80,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
  protected:
   //bool compile_trans_kernel();
   bool compile_trans_interp_kernel();
+  bool compile_trans_interp_trilin_kernel();
   bool init_ocl_trans();
   bool get_scene_appearance(boxm2_scene_sptr scene,
                             vcl_string&      options);
@@ -86,9 +92,10 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   int apptypesize_;//size of the appearance model in bytes
   boxm2_data_type app_type_; //type of appearance
 
-  //transform kernels and args 
+  //transform kernels and args
   //bocl_kernel * trans_kern;
   bocl_kernel * trans_interp_kern;
+  bocl_kernel * trans_interp_trilin_kern;
   float* translation_buff;
   float* rotation_buff;
   float* scale_buff;
@@ -118,6 +125,10 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem_sptr blk_info_target_;
   bocl_mem_sptr octree_depth_;
   bocl_mem_sptr lookup_;
+  int data_size;
+  float * long_output;
+  bocl_mem_sptr output_f;
+
 
   bocl_mem* alpha_target_;
   bocl_mem* mog_target_;
@@ -127,5 +138,3 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 };
 
 #endif
-
-

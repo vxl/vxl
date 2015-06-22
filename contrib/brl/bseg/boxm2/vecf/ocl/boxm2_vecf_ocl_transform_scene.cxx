@@ -65,7 +65,9 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
 {
   device_=opencl_cache_->get_device();
   this->compile_trans_interp_kernel();
+  this->compile_trans_interp_trilin_kernel();
   this->init_ocl_trans();
+
 
   if (!init_render_args()) {
     throw vcl_runtime_error("init_render_args returned false");
@@ -125,8 +127,8 @@ bool boxm2_vecf_ocl_transform_scene::init_render_args()
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
   info_buffer_->data_buffer_length = (int) (alpha_target_->num_bytes()/alphaTypeSize);
   int data_size = info_buffer_->data_buffer_length;
-  blk_info_target_  = new bocl_mem(device_->context(), info_buffer_, sizeof(boxm2_scene_info), " Scene Info" );   
-  good_buffers &= blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+  blk_info_target_  = new bocl_mem(device_->context(), info_buffer_, sizeof(boxm2_scene_info), " Scene Info" );
+  good_buffers &= blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   if (!good_buffers) {
     std::cerr << "Error allocating one or more opencl buffers" << std::endl;
@@ -184,25 +186,45 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_kernel()
   return trans_interp_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "transform_scene_interpolate", options, "trans_interp_scene");
 }
 
+bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_trilin_kernel()
+{
+  vcl_string options;
+  // sets apptypesize_ and app_type
+  get_scene_appearance(source_scene_, options);
+  vcl_cout<<" compiling trans kernel "<<vcl_endl;
+  vcl_vector<vcl_string> src_paths;
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  src_paths.push_back(source_dir     + "scene_info.cl");
+  src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
+  src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
+  src_paths.push_back(vecf_source_dir + "interp_helpers.cl");
+  src_paths.push_back(vecf_source_dir + "warp_and_resample_trilinear.cl");
+  this->trans_interp_trilin_kern = new bocl_kernel();
+  return trans_interp_trilin_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "warp_and_resample_trilinear", options, "trans_interp_trilin_scene");
+}
+
 
 bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
 {
     centerX_ = new bocl_mem(device_->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
     centerY_ = new bocl_mem(device_->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
     centerZ_ = new bocl_mem(device_->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
-  bocl_mem_sptr output;
+   bocl_mem_sptr output;
     centerX_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerY_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerZ_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // output buffer for debugging
-    output_ = new bocl_mem(device_->context(), output_buff_, sizeof(float)*1000, "output" );
-    output_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
-    // bit lookup buffer
+
+     // bit lookup buffer
     boxm2_ocl_util::set_bit_lookup(lookup_arr_);
     lookup_=new bocl_mem(device_->context(), lookup_arr_, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
+    bocl_mem_sptr output_ = new bocl_mem(device_->context(),output_buff_, sizeof(float)*1000, "output" );
+    output_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
     int status = 0;
     queue_ = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
@@ -218,6 +240,7 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
     blk_source = 0;
     alpha_source = 0;
     mog_source = 0;
+    long_output=0;
     return true;
 }
 // the transform is the inverse, i.e. a map from the target to the source
@@ -229,16 +252,16 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
 {
 #if 0
    float translation_buff[4];
-   translation_buff[0] = trans.x();        
-   translation_buff[1] = trans.y();        
+   translation_buff[0] = trans.x();
+   translation_buff[1] = trans.y();
    translation_buff[2] = trans.z();
    translation_buff[3] = 0.0;
    bocl_mem_sptr translation = new bocl_mem(device_->context(), translation_buff, sizeof(float)*4, " translation " );
    translation->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
    float scale_buff[4];
-   scale_buff[0] = scale.x();        
-   scale_buff[1] = scale.y();        
+   scale_buff[0] = scale.x();
+   scale_buff[1] = scale.y();
    scale_buff[2] = scale.z();
    scale_buff[3] = 0.0;
    bocl_mem_sptr scalem = new bocl_mem(device_->context(), scale_buff, sizeof(float)*4, " scale " );
@@ -251,7 +274,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
    rotation_buff[2] = R(0,2);  rotation_buff[5] = R(1,2);  rotation_buff[8] = R(2,2);
    bocl_mem_sptr rotation = new bocl_mem(device_->context(), rotation_buff, sizeof(float)*9, " rotation " );
    rotation->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-    
+
    bocl_mem_sptr ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
    ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
@@ -272,8 +295,8 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
        int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
        info_buffer->data_buffer_length = (int) (alpha_target->num_bytes()/alphaTypeSize);
        int data_size = info_buffer->data_buffer_length;
-       bocl_mem* blk_info_target  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
-       blk_info_target->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+       bocl_mem* blk_info_target  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
+       blk_info_target->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
        bocl_mem * mog_target = 0;
        if(app_type_ == "boxm2_mog3_grey")
       mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blks_target,0,false);
@@ -287,7 +310,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
         info_buffer->scene_origin[0]+info_buffer->scene_dims[0]*info_buffer->block_len,
         info_buffer->scene_origin[1]+info_buffer->scene_dims[1]*info_buffer->block_len,
         info_buffer->scene_origin[2]+info_buffer->scene_dims[2]*info_buffer->block_len);
-       
+
        vgl_box_3d<float> box_target_xformed;
        for(unsigned int k = 0 ; k<box_target.vertices().size(); k++)
   {
@@ -319,7 +342,7 @@ bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
                int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
                info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
 
-               bocl_mem* blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );   
+               bocl_mem* blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );
                blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
         bocl_mem* mog_source = 0;
         if(app_type_ == "boxm2_mog3_grey")
@@ -393,8 +416,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
     rotation_buff = new float[9];
     scale_buff = new float[4];
   }
-   translation_buff[0] = trans.x();        
-   translation_buff[1] = trans.y();        
+   translation_buff[0] = trans.x();
+   translation_buff[1] = trans.y();
    translation_buff[2] = trans.z();
    translation_buff[3] = 0.0;
 
@@ -402,13 +425,13 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
    rotation_buff[0] = R(0,0);  rotation_buff[3] = R(1,0);  rotation_buff[6] = R(2,0);
    rotation_buff[1] = R(0,1);  rotation_buff[4] = R(1,1);  rotation_buff[7] = R(2,1);
    rotation_buff[2] = R(0,2);  rotation_buff[5] = R(1,2);  rotation_buff[8] = R(2,2);
-   
-   scale_buff[0] = scale.x();        
-   scale_buff[1] = scale.y();        
+
+   scale_buff[0] = scale.x();
+   scale_buff[1] = scale.y();
    scale_buff[2] = scale.z();
    scale_buff[3] = 0.0;
    int statusw =0;
-   // just copy the transformation parameters to gpu memory 
+   // just copy the transformation parameters to gpu memory
    if(!first){
      translation->write_to_buffer(queue_);
      rotation->write_to_buffer(queue_);
@@ -419,8 +442,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
        return false;
    }
    vcl_size_t local_threads[1]={64};
-   static vcl_size_t global_threads[1]={1};   
-  // set up all the kernel arguments 
+   static vcl_size_t global_threads[1]={1};
+  // set up all the kernel arguments
   // subsequent calls don't need to do this initialization
    if(first){
      translation = new bocl_mem(device_->context(), translation_buff, sizeof(float)*4, " translation " );
@@ -428,7 +451,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
 
      rotation = new bocl_mem(device_->context(), rotation_buff, sizeof(float)*9, " rotation " );
      rotation->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-     
+
      scalem = new bocl_mem(device_->context(), scale_buff, sizeof(float)*4, " scale " );
      scalem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
@@ -448,16 +471,16 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
 
      //Gather information about the target and setup target data buffers
      // trans_kernel arguments set the first time the function is called
-   
+
      blk_target_       = opencl_cache_->get_block(target_scene_, *iter_blk_target);
      alpha_target_     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blk_target,0,true);
      info_buffer = target_scene_->get_blk_metadata(*iter_blk_target);
      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
      info_buffer->data_buffer_length = (int) (alpha_target_->num_bytes()/alphaTypeSize);
      int data_size = info_buffer->data_buffer_length;
-     blk_info_target_  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
-     blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
-   
+     blk_info_target_  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
+     blk_info_target_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
      if(app_type_ == "boxm2_mog3_grey")
        mog_target_       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,true);
      else if(app_type_ == "boxm2_mog3_grey_16")
@@ -470,7 +493,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
       info_buffer->scene_origin[0]+info_buffer->scene_dims[0]*info_buffer->block_len,
       info_buffer->scene_origin[1]+info_buffer->scene_dims[1]*info_buffer->block_len,
       info_buffer->scene_origin[2]+info_buffer->scene_dims[2]*info_buffer->block_len);
-       
+
      vgl_box_3d<float> box_target_xformed;//note the transformation is the inverse
      for(unsigned int k = 0 ; k<box_target.vertices().size(); k++)
        {
@@ -483,10 +506,10 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
 
    global_threads[0] = (unsigned) RoundUp(info_buffer->scene_dims[0]*info_buffer->scene_dims[1]*info_buffer->scene_dims[2],(int)local_threads[0]);
        // for each target block iterate over source blocks
-   
+
    //Gather information about the source and setup source data buffers
    info_buffer_source = source_scene_->get_blk_metadata(*iter_blk_source);
-   
+
    vgl_box_3d<float> box_source(info_buffer_source->scene_origin[0],info_buffer_source->scene_origin[1],info_buffer_source->scene_origin[2],
     info_buffer_source->scene_origin[0]+info_buffer_source->scene_dims[0]*info_buffer_source->block_len,
     info_buffer_source->scene_origin[1]+info_buffer_source->scene_dims[1]*info_buffer_source->block_len,
@@ -500,8 +523,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
    blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,false);
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
-   
-   blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );   
+
+   blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );
    blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
    if(app_type_ == "boxm2_mog3_grey")
      mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk_source,0,false);
@@ -579,8 +602,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
     rotation_buff = new float[9];
     scale_buff = new float[4];
   }
-   translation_buff[0] = trans.x();        
-   translation_buff[1] = trans.y();        
+   translation_buff[0] = trans.x();
+   translation_buff[1] = trans.y();
    translation_buff[2] = trans.z();
    translation_buff[3] = 0.0;
 
@@ -588,13 +611,13 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    rotation_buff[0] = R(0,0);  rotation_buff[3] = R(1,0);  rotation_buff[6] = R(2,0);
    rotation_buff[1] = R(0,1);  rotation_buff[4] = R(1,1);  rotation_buff[7] = R(2,1);
    rotation_buff[2] = R(0,2);  rotation_buff[5] = R(1,2);  rotation_buff[8] = R(2,2);
-   
-   scale_buff[0] = scale.x();        
-   scale_buff[1] = scale.y();        
+
+   scale_buff[0] = scale.x();
+   scale_buff[1] = scale.y();
    scale_buff[2] = scale.z();
    scale_buff[3] = 0.0;
    int statusw =0;
-   // just copy the transformation parameters to gpu memory 
+   // just copy the transformation parameters to gpu memory
    if(!first){
      translation->write_to_buffer(queue_);
      rotation->write_to_buffer(queue_);
@@ -605,8 +628,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
        return false;
    }
    vcl_size_t local_threads[1]={64};
-   static vcl_size_t global_threads[1]={1};   
-  // set up all the kernel arguments 
+   static vcl_size_t global_threads[1]={1};
+  // set up all the kernel arguments
   // subsequent calls don't need to do this initialization
    if(first){
      translation = new bocl_mem(device_->context(), translation_buff, sizeof(float)*4, " translation " );
@@ -614,7 +637,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 
      rotation = new bocl_mem(device_->context(), rotation_buff, sizeof(float)*9, " rotation " );
      rotation->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
-     
+
      scalem = new bocl_mem(device_->context(), scale_buff, sizeof(float)*4, " scale " );
      scalem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
@@ -636,16 +659,16 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 
      //Gather information about the target and setup target data buffers
      // trans_interp_kernel arguments set the first time the function is called
-   
+
      blk_target       = opencl_cache_->get_block(target_scene_, *iter_blk_target);
      alpha_target     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene_, *iter_blk_target,0, false);
      info_buffer = target_scene_->get_blk_metadata(*iter_blk_target);
      int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
      info_buffer->data_buffer_length = (int) (alpha_target->num_bytes()/alphaTypeSize);
      int data_size = info_buffer->data_buffer_length;
-     blk_info_target  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
-     blk_info_target->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
-   
+     blk_info_target  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
+     blk_info_target->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+
      if(app_type_ == "boxm2_mog3_grey")
        mog_target       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(target_scene_, *iter_blk_target,0,false);
      else if(app_type_ == "boxm2_mog3_grey_16")
@@ -659,7 +682,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
       info_buffer_->scene_origin[0]+info_buffer_->scene_dims[0]*info_buffer_->block_len,
       info_buffer_->scene_origin[1]+info_buffer_->scene_dims[1]*info_buffer_->block_len,
       info_buffer_->scene_origin[2]+info_buffer_->scene_dims[2]*info_buffer_->block_len);
-       
+
      vgl_box_3d<float> box_target_xformed;//note the transformation is the inverse
      for(unsigned int k = 0 ; k<box_target.vertices().size(); k++)
        {
@@ -672,10 +695,10 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 
    global_threads[0] = (unsigned) RoundUp(info_buffer_->scene_dims[0]*info_buffer_->scene_dims[1]*info_buffer_->scene_dims[2],(int)local_threads[0]);
        // for each target block iterate over source blocks
-   
+
    //Gather information about the source and setup source data buffers
    info_buffer_source = source_scene_->get_blk_metadata(*iter_blk_source);
-   
+
    vgl_box_3d<float> box_source(info_buffer_source->scene_origin[0],info_buffer_source->scene_origin[1],info_buffer_source->scene_origin[2],
     info_buffer_source->scene_origin[0]+info_buffer_source->scene_dims[0]*info_buffer_source->block_len,
     info_buffer_source->scene_origin[1]+info_buffer_source->scene_dims[1]*info_buffer_source->block_len,
@@ -690,8 +713,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,true);
    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
-   
-   blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );   
+
+   blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );
    blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
    if(app_type_ == BOXM2_MOG3_GREY) {
      mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk_source,0,true);
@@ -778,6 +801,189 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 #endif
    return true;
 }
+bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_3d<double>  rot,
+                                                            vgl_vector_3d<double> trans,
+                                                            vgl_vector_3d<double> scale,
+                                                            bool finish){
+ static bool first = true;
+  int depth = 0;
+  vcl_cout<<" Got to the beginning" <<vcl_endl;
+  // set up the buffers the first time the function is called
+  // subsequent calls don't need to recreate the buffers
+    if(first){
+    translation_buff = new float[4];
+    rotation_buff = new float[9];
+    scale_buff = new float[4];
+  }
+   translation_buff[0] = trans.x();
+   translation_buff[1] = trans.y();
+   translation_buff[2] = trans.z();
+   translation_buff[3] = 0.0;
+
+   vnl_matrix_fixed<double, 3, 3> R = rot.as_matrix();
+   rotation_buff[0] = R(0,0);  rotation_buff[3] = R(1,0);  rotation_buff[6] = R(2,0);
+   rotation_buff[1] = R(0,1);  rotation_buff[4] = R(1,1);  rotation_buff[7] = R(2,1);
+   rotation_buff[2] = R(0,2);  rotation_buff[5] = R(1,2);  rotation_buff[8] = R(2,2);
+
+   scale_buff[0] = scale.x();
+   scale_buff[1] = scale.y();
+   scale_buff[2] = scale.z();
+   scale_buff[3] = 0.0;
+   int statusw =0;
+   // just copy the transformation parameters to gpu memory
+   if(!first){
+     translation->write_to_buffer(queue_);
+     rotation->write_to_buffer(queue_);
+     scalem->write_to_buffer(queue_);
+     statusw = clFinish(queue_);
+     bool good_write = check_val(statusw, CL_SUCCESS, "WRITE TO GPU FAILED " + error_to_string(statusw));
+     if(!good_write)
+       return false;
+   }
+   vcl_size_t local_threads[1]={64};
+   static vcl_size_t global_threads[1]={1};
+  // set up all the kernel arguments
+  // subsequent calls don't need to do this initialization
+   if(first){
+     translation = new bocl_mem(device_->context(), translation_buff, sizeof(float)*4, " translation " );
+     translation->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+     rotation = new bocl_mem(device_->context(), rotation_buff, sizeof(float)*9, " rotation " );
+     rotation->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+     scalem = new bocl_mem(device_->context(), scale_buff, sizeof(float)*4, " scale " );
+     scalem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+     trans_interp_trilin_kern->set_arg(centerX_.ptr());
+     trans_interp_trilin_kern->set_arg(centerY_.ptr());
+     trans_interp_trilin_kern->set_arg(centerZ_.ptr());
+     trans_interp_trilin_kern->set_arg(lookup_.ptr());
+
+     vcl_vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
+     vcl_vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
+     if(blocks_target.size()!=1||blocks_source.size()!=1)
+       return false;
+     vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
+     vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+
+     vgl_box_3d<float> box_target(info_buffer_->scene_origin[0],info_buffer_->scene_origin[1],info_buffer_->scene_origin[2],
+      info_buffer_->scene_origin[0]+info_buffer_->scene_dims[0]*info_buffer_->block_len,
+      info_buffer_->scene_origin[1]+info_buffer_->scene_dims[1]*info_buffer_->block_len,
+      info_buffer_->scene_origin[2]+info_buffer_->scene_dims[2]*info_buffer_->block_len);
+
+     vgl_box_3d<float> box_target_xformed;//note the transformation is the inverse
+     for(unsigned int k = 0 ; k<box_target.vertices().size(); k++)
+       {
+         vgl_point_3d<float> p = box_target.vertices()[k];
+         vgl_point_3d<float> px(scale.x()*(p.x()*R(0,0)+p.y()*R(0,1)+p.z()*R(0,2)) + trans.x(),
+                                scale.y()*(p.x()*R(1,0)+p.y()*R(1,1)+p.z()*R(1,2)) + trans.y(),
+                                scale.z()*(p.x()*R(2,0)+p.y()*R(2,1)+p.z()*R(2,2)) + trans.z());
+         box_target_xformed.add(px);
+       }
+
+   global_threads[0] = (unsigned) RoundUp(info_buffer_->scene_dims[0]*info_buffer_->scene_dims[1]*info_buffer_->scene_dims[2],(int)local_threads[0]);
+       // for each target block iterate over source blocks
+
+   //Gather information about the source and setup source data buffers
+   info_buffer_source = source_scene_->get_blk_metadata(*iter_blk_source);
+
+   vgl_box_3d<float> box_source(info_buffer_source->scene_origin[0],info_buffer_source->scene_origin[1],info_buffer_source->scene_origin[2],
+    info_buffer_source->scene_origin[0]+info_buffer_source->scene_dims[0]*info_buffer_source->block_len,
+    info_buffer_source->scene_origin[1]+info_buffer_source->scene_dims[1]*info_buffer_source->block_len,
+    info_buffer_source->scene_origin[2]+info_buffer_source->scene_dims[2]*info_buffer_source->block_len);
+
+   // If the bounding box of the reverse transformed target doesn't intersect the source box
+   // then there is nothing to do.
+   if(vgl_intersection<float>(box_target_xformed,box_source).is_empty())
+     return false;
+   // get more information about the source block since it will actually be used.
+   blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
+   alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,true);
+   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+   info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
+   data_size = info_buffer_source->data_buffer_length;
+   long_output = new float[8*data_size];
+   output_f = new bocl_mem(device_->context(), long_output, 8 * sizeof(float) * data_size, "output" );
+   output_f->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
+
+   blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );
+   blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
+   if(app_type_ == BOXM2_MOG3_GREY) {
+     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk_source,0,true);
+   }
+   else if(app_type_ == BOXM2_MOG3_GREY_16) {
+     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY_16>(source_scene_, *iter_blk_source,0,true);
+   }
+   else if (app_type_ == BOXM2_GAUSS_RGB) {
+     mog_source = opencl_cache_->get_data<BOXM2_GAUSS_RGB>(source_scene_, *iter_blk_source,0,true);
+   }
+   else {
+     vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
+     return false;
+   }
+   vcl_cout<<"This is the transform scene Kernel with trilinear interp"<<vcl_endl;
+   //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
+   nbr_exint = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exint");
+   nbr_exists = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exist");
+   nbr_prob   = opencl_cache_->get_data<BOXM2_FLOAT8>(source_scene_, *iter_blk_source, 32 * info_buffer_source->data_buffer_length,true, "nbr_prob");
+   trans_interp_trilin_kern->set_arg(blk_info_target_.ptr());
+   trans_interp_trilin_kern->set_arg(blk_info_source);
+   trans_interp_trilin_kern->set_arg(blk_target_);
+   trans_interp_trilin_kern->set_arg(alpha_target_);
+   trans_interp_trilin_kern->set_arg(mog_target_);
+   trans_interp_trilin_kern->set_arg(blk_source);
+   trans_interp_trilin_kern->set_arg(alpha_source);
+   trans_interp_trilin_kern->set_arg(mog_source);
+   //   trans_interp_trilin_kern->set_arg(nobs_source);
+   trans_interp_trilin_kern->set_arg(nbr_exint);
+   trans_interp_trilin_kern->set_arg(nbr_exists);
+   trans_interp_trilin_kern->set_arg(nbr_prob);
+   trans_interp_trilin_kern->set_arg(translation);
+   trans_interp_trilin_kern->set_arg(rotation);
+   trans_interp_trilin_kern->set_arg(scalem);
+   trans_interp_trilin_kern->set_arg(octree_depth_.ptr());
+   trans_interp_trilin_kern->set_arg(output_f.ptr());
+   trans_interp_trilin_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
+   trans_interp_trilin_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees target
+   trans_interp_trilin_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees source
+   trans_interp_trilin_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // neighbor trees
+   first = false;
+   }
+
+   output_f->zero_gpu_buffer(queue_);
+   if(!trans_interp_trilin_kern->execute(queue_, 1, local_threads, global_threads))
+     {
+       vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
+       return false;
+    }
+   int status = clFinish(queue_);
+   bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL (INTERP) FAILED: " + error_to_string(status));
+   if(!good_kern)
+     return false;
+   mog_target_->read_to_buffer(queue_);
+   alpha_target_->read_to_buffer(queue_);
+   vcl_cout<<"Attempting to read out output buff "<<vcl_endl;
+   output_f->read_to_buffer(queue_);
+   status = clFinish(queue_);
+   vcl_cout<<"output Buff is "<<vcl_endl;
+   float* cpu_buff = (float*) output_f->cpu_buffer();
+   int out_count = 0;
+   for(int i = 0; i<data_size * 8; i += 8)
+     if (out_count < 100 && cpu_buff[i+0] != 0){
+    vcl_cout << cpu_buff[i] << ' ' << cpu_buff[i+1] << ' '
+      << cpu_buff[i+2] << ' ' << cpu_buff[i+3] << ' '
+      << cpu_buff[i+4] << ' ' << cpu_buff[i+5] << ' '
+             << cpu_buff[i+6] << ' ' << cpu_buff[i+7] << '\n';
+    out_count++;
+}
+
+
+   bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
+   vcl_cout<<"good read is "<<good_read<<vcl_endl;
+   if(!good_read)
+     return false;
+   return true;
+}
 
 bool boxm2_vecf_ocl_transform_scene::
 render_scene_appearance(vpgl_camera_double_sptr const& cam,
@@ -788,18 +994,18 @@ render_scene_appearance(vpgl_camera_double_sptr const& cam,
   bool status = renderer_.render(cam, ni, nj);
   renderer_.get_last_vis(vis_img);
   renderer_.get_last_rendered(expected_img);
-  
+
   return status;
 }
 
 bool boxm2_vecf_ocl_transform_scene::render_scene_depth(vpgl_camera_double_sptr const & cam,
                                                         vil_image_view<float>& expected_depth,
-                                                        vil_image_view<float>& vis_img, 
+                                                        vil_image_view<float>& vis_img,
                                                         unsigned ni, unsigned nj)
 {
   bool status = depth_renderer_.render(cam, ni, nj);
   depth_renderer_.get_last_vis(vis_img);
   depth_renderer_.get_last_rendered(expected_depth);
-  
+
   return status;
 }
