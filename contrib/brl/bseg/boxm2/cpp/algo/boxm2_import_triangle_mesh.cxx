@@ -42,7 +42,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
     if (zero_model) {
-      for (typename boxm2_array_1d<float>::iterator alpha_it = alpha_data->data().begin();
+      for (boxm2_array_1d<float>::iterator alpha_it = alpha_data->data().begin();
            alpha_it != alpha_data->data().end(); ++alpha_it) {
         *alpha_it = 0.0f;
       }
