@@ -82,6 +82,7 @@ boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
 
   // common stuff
   opencl_cache_->unref_mem( output_.ptr() );
+  opencl_cache_->unref_mem( output_f.ptr() );
   opencl_cache_->unref_mem( blk_info_target_.ptr() );
   opencl_cache_->unref_mem( octree_depth_.ptr() );
   opencl_cache_->unref_mem( lookup_.ptr() );
@@ -90,6 +91,7 @@ boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
   opencl_cache_->unref_mem( centerX_.ptr() );
   opencl_cache_->unref_mem( centerY_.ptr() );
   opencl_cache_->unref_mem( centerZ_.ptr() );
+  delete [] long_output;
 }
 
 
@@ -806,8 +808,6 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_
                                                             vgl_vector_3d<double> scale,
                                                             bool finish){
  static bool first = true;
-  int depth = 0;
-  vcl_cout<<" Got to the beginning" <<vcl_endl;
   // set up the buffers the first time the function is called
   // subsequent calls don't need to recreate the buffers
     if(first){
@@ -923,9 +923,6 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_
    }
    vcl_cout<<"This is the transform scene Kernel with trilinear interp"<<vcl_endl;
    //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
-   nbr_exint = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exint");
-   nbr_exists = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exist");
-   nbr_prob   = opencl_cache_->get_data<BOXM2_FLOAT8>(source_scene_, *iter_blk_source, 32 * info_buffer_source->data_buffer_length,true, "nbr_prob");
    trans_interp_trilin_kern->set_arg(blk_info_target_.ptr());
    trans_interp_trilin_kern->set_arg(blk_info_source);
    trans_interp_trilin_kern->set_arg(blk_target_);
@@ -934,10 +931,6 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_
    trans_interp_trilin_kern->set_arg(blk_source);
    trans_interp_trilin_kern->set_arg(alpha_source);
    trans_interp_trilin_kern->set_arg(mog_source);
-   //   trans_interp_trilin_kern->set_arg(nobs_source);
-   trans_interp_trilin_kern->set_arg(nbr_exint);
-   trans_interp_trilin_kern->set_arg(nbr_exists);
-   trans_interp_trilin_kern->set_arg(nbr_prob);
    trans_interp_trilin_kern->set_arg(translation);
    trans_interp_trilin_kern->set_arg(rotation);
    trans_interp_trilin_kern->set_arg(scalem);
@@ -962,20 +955,20 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_
      return false;
    mog_target_->read_to_buffer(queue_);
    alpha_target_->read_to_buffer(queue_);
-   vcl_cout<<"Attempting to read out output buff "<<vcl_endl;
+
    output_f->read_to_buffer(queue_);
    status = clFinish(queue_);
-   vcl_cout<<"output Buff is "<<vcl_endl;
-   float* cpu_buff = (float*) output_f->cpu_buffer();
-   int out_count = 0;
-   for(int i = 0; i<data_size * 8; i += 8)
-     if (out_count < 100 && cpu_buff[i+0] != 0){
-    vcl_cout << cpu_buff[i] << ' ' << cpu_buff[i+1] << ' '
-      << cpu_buff[i+2] << ' ' << cpu_buff[i+3] << ' '
-      << cpu_buff[i+4] << ' ' << cpu_buff[i+5] << ' '
-             << cpu_buff[i+6] << ' ' << cpu_buff[i+7] << '\n';
-    out_count++;
-}
+
+   // float* cpu_buff = (float*) output_f->cpu_buffer();
+   // int out_count = 0;
+   // for(int i = 0; i<data_size * 8; i += 8)
+   //   if (out_count < 100 && cpu_buff[i+0] != 0){
+   //     vcl_cout << cpu_buff[i] << ' ' << cpu_buff[i+1] << ' '
+   //              << cpu_buff[i+2] << ' ' << cpu_buff[i+3] << ' '
+   //              << cpu_buff[i+4] << ' ' << cpu_buff[i+5] << ' '
+   //              << cpu_buff[i+6] << ' ' << cpu_buff[i+7] << '\n';
+   //     out_count++;
+   //   }
 
 
    bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
@@ -1006,6 +999,5 @@ bool boxm2_vecf_ocl_transform_scene::render_scene_depth(vpgl_camera_double_sptr 
   bool status = depth_renderer_.render(cam, ni, nj);
   depth_renderer_.get_last_vis(vis_img);
   depth_renderer_.get_last_rendered(expected_depth);
-
   return status;
 }
