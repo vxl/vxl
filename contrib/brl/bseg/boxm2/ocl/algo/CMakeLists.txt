@@ -29,10 +29,11 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_render_expected_shadow_map.h      boxm2_ocl_render_expected_shadow_map.cxx
     boxm2_ocl_refine_scene_around_geometry.h boxm2_ocl_refine_scene_around_geometry.cxx
     boxm2_ocl_filter_scene_data.h               boxm2_ocl_filter_scene_data.cxx
+    boxm2_ocl_aggregate_normal_from_filter_vector.h  boxm2_ocl_aggregate_normal_from_filter_vector.cxx
    )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul vnl_algo brad)
+TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
 
 #tests
 IF( BUILD_TESTING )

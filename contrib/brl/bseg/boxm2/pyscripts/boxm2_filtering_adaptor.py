@@ -150,16 +150,11 @@ def filter_scene_data(scene,cache,device,filters,filter_idx):
     print "ERROR: Cache type not recognized: ", cache.type; 
     return False;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+def aggregate_normal_from_filter_vector(scene,cache,device,filter_vector):
+    """ compute normals based on response of filter vector """
+    boxm2_batch.init_process("boxm2_ocl_aggregate_normal_from_filter_vector_process")
+    boxm2_batch.set_input_from_db(0, device)
+    boxm2_batch.set_input_from_db(1, scene)
+    boxm2_batch.set_input_from_db(2, cache)
+    boxm2_batch.set_input_from_db(3, filter_vector)
+    return boxm2_batch.run_process()
