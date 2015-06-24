@@ -40,14 +40,13 @@ void boxm2_ocl_filter_scene_data::compile_kernels()
 
 bool boxm2_ocl_filter_scene_data::apply_filter(int index)
 {
+  if(index>=filter_vector_->size())
+    return false;
 
-
-        if(index>=filter_vector_->size())
-                return false;
     // bit lookup buffer
     cl_uchar lookup_arr[256];
     boxm2_ocl_util::set_bit_lookup(lookup_arr);
-    bocl_mem_sptr lookup=new bocl_mem(device_->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+    bocl_mem_sptr lookup = opencl_cache_->alloc_mem(sizeof(cl_uchar)*256, lookup_arr,  "bit lookup buffer");
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
      bvpl_kernel_sptr filter = filter_vector_->kernels_[index]; //get last kernel, the averaging one
@@ -71,21 +70,21 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
       filter_coeff[ci].s[2] = loc.z();
       filter_coeff[ci].s[3] = w;
     }
-  bocl_mem_sptr filter_buffer=new bocl_mem(device_->context(), filter_coeff, sizeof(cl_float4)*filter->float_kernel_.size(), "filter coefficient buffer");
-  filter_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
+    bocl_mem_sptr filter_buffer = opencl_cache_->alloc_mem(sizeof(cl_float4)*filter->float_kernel_.size(), filter_coeff, "filter coefficient buffer");
+  filter_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   unsigned int filter_size[1];
   filter_size[0]=filter->float_kernel_.size();
-  bocl_mem_sptr filter_size_buffer = new bocl_mem(device_->context(), filter_size, sizeof(unsigned int), "filter_size buffer");
+  bocl_mem_sptr filter_size_buffer = opencl_cache_->alloc_mem(sizeof(unsigned int), filter_size, "filter_size buffer");
   filter_size_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     //2. set workgroup size
 
     vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
-    bocl_mem_sptr centerX = new bocl_mem(device_->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-    bocl_mem_sptr centerY = new bocl_mem(device_->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-    bocl_mem_sptr centerZ = new bocl_mem(device_->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+    bocl_mem_sptr centerX = opencl_cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerX, "centersX lookup buffer");
+    bocl_mem_sptr centerY = opencl_cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerY, "centersY lookup buffer");
+    bocl_mem_sptr centerZ = opencl_cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerZ, "centersZ lookup buffer");
     centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -112,7 +111,7 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
         bocl_mem * alpha_new =opencl_cache_->get_data_new(scene_,id,boxm2_data_traits<BOXM2_ALPHA>::prefix("new"),data_size * alphaTypeSize,false);
         bocl_mem * mog_new  = opencl_cache_->get_data_new(scene_,id, appType_+"_new", data_size * appTypeSize_, false);
         float* output_arr = new float[data_size];
-        bocl_mem_sptr  cl_output=new bocl_mem(device_->context(), output_arr, sizeof(float)*data_size, "output buffer");
+        bocl_mem_sptr cl_output = opencl_cache_->alloc_mem(sizeof(float)*data_size, output_arr, "output buffer");
         cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
         alpha_new->zero_gpu_buffer(*queue_);
@@ -161,10 +160,19 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
         mog->write_to_buffer(*queue_);
 
         delete [] output_arr;
+        opencl_cache_->unref_mem(cl_output.ptr());
         opencl_cache_->deep_remove_data(scene_,id,boxm2_data_traits<BOXM2_ALPHA>::prefix("new"),false);
         opencl_cache_->deep_remove_data(scene_,id,appType_+"_new",false);
     }
     delete [] filter_coeff;
+
+    opencl_cache_->unref_mem(lookup.ptr());
+    opencl_cache_->unref_mem(filter_buffer.ptr());
+    opencl_cache_->unref_mem(filter_size_buffer.ptr());
+    opencl_cache_->unref_mem(centerX.ptr());
+    opencl_cache_->unref_mem(centerY.ptr());
+    opencl_cache_->unref_mem(centerZ.ptr());
+
 
     return true;
 }

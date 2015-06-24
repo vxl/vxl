@@ -21,6 +21,7 @@ boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_open
   unsigned num_filters = filter_vector->kernels_.size();
 
   vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
+  vcl_cout << "device name = " << device->info().device_name_ << vcl_endl;
   bool status = false;
   if (num_filters == 3 ) {
     status = compile_kernel(kernel_, "-D XYZ");
@@ -52,6 +53,11 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::compile_kernel(bocl_kernel &
 
 bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
 {
+  ocl_cache_->clear_cache();
+  ocl_cache_->get_cpu_cache()->clear_cache();
+
+  long bytes_in_cache = ocl_cache_->bytes_in_cache();
+  vcl_cout<<"MBs in cache: "<<bytes_in_cache/(1024.0*1024.0)<<vcl_endl;
 
   vcl_size_t local_threads[2]={8,8};
   vcl_size_t global_threads[2]={8,8};
@@ -68,13 +74,12 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
   // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
-  bocl_mem_sptr lookup=new bocl_mem(device_->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+  bocl_mem_sptr lookup= ocl_cache_->alloc_mem(sizeof(cl_uchar)*256, lookup_arr, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // set up directions buffer
-  //cl_float4* directions = new cl_float4[num_filters];
   unsigned num_filters = filter_vector_->kernels_.size();
-  cl_float* directions = new float[4*num_filters];
+  cl_float directions[4*num_filters];
 
   //for (unsigned k = 0; k < num_filters; k++) {
   for (unsigned k = 0, count = 0; k < num_filters; k++, count += 4) {
@@ -83,18 +88,13 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
     dir.normalize();
     if ( vcl_abs(dir.magnitude() - 1.0f) > 1e-7 )
       vcl_cout << "Warning: In aggregate, direction doesn't have unit magnitude" << vcl_endl;
-#if 0
-    directions[k].s0 = dir[0];
-    directions[k].s1 = dir[1];
-    directions[k].s2 = dir[2];
-    directions[k].s3 = 0.0f;
-#endif
+
     directions[count+0] = dir[0];
     directions[count+1] = dir[1];
     directions[count+2] = dir[2];
     directions[count+3] = 0.0f;
   }
-  bocl_mem_sptr directions_buffer=new bocl_mem(device_->context(), directions, sizeof(cl_float4)*num_filters, "directions buffer");
+  bocl_mem_sptr directions_buffer= ocl_cache_->alloc_mem(sizeof(cl_float4)*num_filters, directions, "directions buffer");
   directions_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //timers
@@ -125,8 +125,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
     vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
     bocl_mem * normals    = ocl_cache_->get_data(scene_,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);
 
+    vcl_cout<<"MBs in cache: "<< (ocl_cache_->bytes_in_cache()/(1024.0*1024.0)) << vcl_endl;
+
     //set global and local threads
-    local_threads[0] = 128;
+    local_threads[0] = 64;
     local_threads[1] = 1;
     global_threads[0] = RoundUp((normals->num_bytes()/normalsTypeSize), local_threads[0]);
     global_threads[1]=1;
@@ -138,9 +140,12 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
       bvpl_kernel_sptr filter = filter_vector_->kernels_[i];
       vcl_stringstream filter_ident;
       filter_ident << filter->name() << '_' << filter->id();
-      bocl_mem * response = ocl_cache_->get_data(scene_,id,RESPONSE_DATATYPE::prefix(filter_ident.str()), 0, true);
+      vcl_string response_data_type = RESPONSE_DATATYPE::prefix(filter_ident.str());
+      vcl_cout << "reponse_data_type = " << response_data_type << vcl_endl;
+      bocl_mem * response = ocl_cache_->get_data(scene_,id, response_data_type, 0, true);
       kernel_.set_arg( response );
     }
+    vcl_cout<<"MBs in cache: "<< (ocl_cache_->bytes_in_cache()/(1024.0*1024.0)) << vcl_endl;
 
     transfer_time += (float) transfer.all();
 
@@ -163,6 +168,10 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
   }
 
   vcl_cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<vcl_endl;
+
+  // these buffers should be cleared as soon as they go out of scope
+  ocl_cache_->unref_mem(lookup.ptr());
+  ocl_cache_->unref_mem(directions_buffer.ptr());
 
   return true;
 }

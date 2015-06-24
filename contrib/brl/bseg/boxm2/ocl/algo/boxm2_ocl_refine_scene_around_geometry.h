@@ -55,10 +55,6 @@ private:
         boxm2_scene_sptr scene_;
         bocl_device_sptr device_;
         vcl_vector<bocl_kernel*> kerns_;
-        bocl_mem_sptr centerX;
-        bocl_mem_sptr centerY;
-        bocl_mem_sptr centerZ;
-        bocl_mem_sptr lookup;
         vcl_string app_type_;
         int app_type_size_;
 

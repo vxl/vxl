@@ -104,13 +104,14 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
 
         cl_uchar lookup_arr[256];
         boxm2_ocl_util::set_bit_lookup(lookup_arr);
-        lookup=new bocl_mem(device_->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+        bocl_mem_sptr lookup = cache_->alloc_mem(sizeof(cl_uchar)*256, lookup_arr, "bit lookup buffer");
         lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
 
-        centerX = new bocl_mem(device_->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-        centerY = new bocl_mem(device_->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-        centerZ = new bocl_mem(device_->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+        bocl_mem_sptr centerX = cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerX, "centersX lookup buffer");
+        bocl_mem_sptr centerY = cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerY, "centersY lookup buffer");
+        bocl_mem_sptr centerZ = cache_->alloc_mem(sizeof(cl_float)*585, boct_bit_tree::centerZ, "centersZ lookup buffer");
+
         centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
         centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
         centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -152,16 +153,16 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
                         filter_coeff[ci].s[2] = loc.z();
                         filter_coeff[ci].s[3] = w;
                 }
-                bocl_mem * filter_buffer=new bocl_mem(device_->context(), filter_coeff, sizeof(cl_float4)*filter->float_kernel_.size(), "filter coefficient buffer");
+                bocl_mem_sptr filter_buffer= cache_->alloc_mem(sizeof(cl_float4)*filter->float_kernel_.size(), filter_coeff, "filter coefficient buffer");
                 filter_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
                 unsigned int filter_size[1];
 
                 filter_size[0]=filter->float_kernel_.size();
 
-                bocl_mem_sptr filter_size_buffer = new bocl_mem(device_->context(), filter_size, sizeof(unsigned int), "filter_size buffer");
+                bocl_mem_sptr filter_size_buffer = cache_->alloc_mem(sizeof(unsigned int), filter_size, "filter_size buffer");
                 filter_size_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-                bocl_mem_sptr p_thresh_buffer = new bocl_mem(device_->context(), &p_thresh_, sizeof(float), "probability threshold");
+                bocl_mem_sptr p_thresh_buffer = cache_->alloc_mem(sizeof(float), &p_thresh_, "probability threshold");
                 p_thresh_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
 
@@ -184,7 +185,7 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
                         bocl_mem * to_refine = cache_->get_data_new(scene_,id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("refine"), data_size * labelTypeSize,false);
 
                         float * output_buff = new float[data_size];
-                        bocl_mem_sptr output_f = new bocl_mem(device_->context(), output_buff, data_size *sizeof(float), "output" );
+                        bocl_mem_sptr output_f = cache_->alloc_mem(data_size *sizeof(float), output_buff, "output" );
                         output_f->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
                         vcl_cout<<"Bytes in block "<<id<<" = "<<data_size<<vcl_endl;
@@ -212,7 +213,7 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
                         kern->set_arg( to_refine);
                         kern->set_arg( p_thresh_buffer.ptr());
                         kern->set_arg( output_f.ptr());
-                        kern->set_arg( filter_buffer );
+                        kern->set_arg( filter_buffer.ptr() );
                         kern->set_arg( filter_size_buffer.ptr() );
                         kern->set_arg( lookup.ptr() );
                         kern->set_arg( centerX.ptr() );
@@ -244,15 +245,23 @@ bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
 */
                         status = clFinish(queue);
                         delete [] output_buff;
+                        cache_->unref_mem(output_f.ptr());
+
                         if (!check_val(status, CL_SUCCESS, "READ REFINEMENT LABELS  FAILED: " + error_to_string(status)))
                                 return false;
 
                         }
-        delete [] filter_coeff;
+                delete [] filter_coeff;
+                cache_->unref_mem(filter_buffer.ptr());
+                cache_->unref_mem(filter_size_buffer.ptr());
+                cache_->unref_mem(p_thresh_buffer.ptr());
 
-                }  //end block iter for
+        }  //end block iter for
+
+        cache_->unref_mem(lookup.ptr());
+        cache_->unref_mem(centerX.ptr());
+        cache_->unref_mem(centerY.ptr());
+        cache_->unref_mem(centerZ.ptr());
 
         return true;
-
-
 }
