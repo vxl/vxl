@@ -9,7 +9,7 @@
 
 #include <bocl/bocl_manager.h>
 #include <boct/boct_bit_tree.h>
-#include <boxm2/ocl/pro/processes/boxm2_ocl_kernel_vector_filter_process.h>
+#include <boxm2/ocl/algo/boxm2_ocl_kernel_vector_filter.h>
 #include <boxm2/boxm2_util.h>
 
 #include <bvpl/kernels/bvpl_gauss3d_x_kernel_factory.h>
@@ -49,7 +49,8 @@ bool test_gauss_gradients_filter()
   bocl_device_sptr device = mgr->gpus_[gpu_idx];
   boxm2_lru_cache::create(scene);
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
-  boxm2_ocl_kernel_vector_filter_process_globals::process(device, scene, opencl_cache, filter_vector);
+  boxm2_ocl_kernel_vector_filter vec_filter(device);
+  vec_filter.run(scene, opencl_cache, filter_vector);
 
   //verify values of the response
 

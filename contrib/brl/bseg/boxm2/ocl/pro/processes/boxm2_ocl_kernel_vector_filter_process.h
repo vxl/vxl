@@ -15,6 +15,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/ocl/algo/boxm2_ocl_kernel_vector_filter.h>
 
 #include <bvpl/kernels/bvpl_kernel.h>
 
@@ -32,7 +33,7 @@ namespace boxm2_ocl_kernel_vector_filter_process_globals
 
   bool process(bocl_device_sptr device, boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_vector_sptr filter);
 
-  static vcl_map<vcl_string,bocl_kernel* > kernels;
+  static vcl_map<vcl_string, boxm2_ocl_kernel_vector_filter*> engines;
 }
 
 
