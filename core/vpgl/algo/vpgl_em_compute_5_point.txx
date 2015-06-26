@@ -395,10 +395,10 @@ void vpgl_em_compute_5_point<T>::compute_e_matrices(
 
             linear_e =
                 x * basis[0] + y * basis[1] + z * basis[2] + basis[3];
-            // skip solutions that involve a divide by zero
-            if (linear_e[8] == 0.0)
-                continue;
             linear_e /= linear_e[8];
+            // ignore solutions that are non-finite
+            if (!linear_e.is_finite())
+                continue;
 
             ems.push_back(vpgl_essential_matrix<T>(
                 vnl_matrix_fixed<T, 3, 3>(linear_e.data_block())));
