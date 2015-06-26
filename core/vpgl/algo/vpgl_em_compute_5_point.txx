@@ -399,7 +399,7 @@ void vpgl_em_compute_5_point<T>::compute_e_matrices(
                 x * basis[0] + y * basis[1] + z * basis[2] + basis[3];
             linear_e /= linear_e[8];
             // ignore solutions that are non-finite
-            if (i!linear_e.is_finite())
+            if (!linear_e.is_finite())
                 continue;
 
             ems.push_back(vpgl_essential_matrix<T>(
