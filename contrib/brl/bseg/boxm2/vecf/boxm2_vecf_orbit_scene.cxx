@@ -239,7 +239,7 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   double len = this->subblock_len();
   double d_thresh = 0.86602540*len;//sqrt(3)/2 x len, diagonal distance
   double r0 = params_.eye_radius_;
-  vgl_sphere_3d<double> sp(0.0, 0.0, 0.0, r0);
+  //  vgl_sphere_3d<double> sp(0.0, -params_.y_off_, 0.0, r0);
   double rmax = r0+this->subblock_len();
   vgl_box_3d<double> bb;
   bb.add(vgl_point_3d<double>(-rmax, 0.0, 0.0));
@@ -254,7 +254,7 @@ void boxm2_vecf_orbit_scene::reset_indices(){
       cit != ccs.end(); ++cit){
     const vgl_point_3d<double>& cell_center = cit->cell_center_;
     unsigned indx = cit->data_index_;
-    double d = vgl_distance(cell_center, sp);
+    double d = vgl_distance(cell_center, params_.sph_);
     if(d < d_thresh){
       if(!is_type_global(cell_center, SPHERE)){
         sphere_cell_centers_.push_back(cell_center);
@@ -271,12 +271,12 @@ void boxm2_vecf_orbit_scene::build_iris(){
   double pi = vnl_math::pi;
   double two_pi = 2.0*pi;
   double iris_half_ang = vcl_atan(params_.iris_radius_/params_.eye_radius_);
-  vgl_sphere_3d<double> sph(0.0, 0.0, 0.0, params_.eye_radius_);
+  //vgl_sphere_3d<double> sph(0.0, -params_.y_off_, 0.0, params_.eye_radius_);
   for(vcl_vector<vgl_point_3d<double> >::iterator cit = sphere_cell_centers_.begin();
       cit != sphere_cell_centers_.end(); ++cit){
     const vgl_point_3d<double>& cell_center = *cit;
     double az = 0.0, el =0.0;
-    sph.cartesian_to_spherical(cell_center, el, az);
+    params_.sph_.cartesian_to_spherical(cell_center, el, az);
     if(el<=iris_half_ang){
       unsigned sp_i = static_cast<unsigned>(cit-sphere_cell_centers_.begin());
       // add it to the base set
@@ -296,12 +296,12 @@ void boxm2_vecf_orbit_scene::build_pupil(){
   double pi = vnl_math::pi;
   double two_pi = 2.0*pi;
   double pupil_half_ang = vcl_atan(params_.pupil_radius_/params_.eye_radius_);
-  vgl_sphere_3d<double> sph(0.0, 0.0, 0.0, params_.eye_radius_);
+  //vgl_sphere_3d<double> sph(0.0, -params_.y_off_, 0.0, params_.eye_radius_);
   for(vcl_vector<vgl_point_3d<double> >::iterator cit = sphere_cell_centers_.begin();
       cit != sphere_cell_centers_.end(); ++cit){
     const vgl_point_3d<double>& cell_center = *cit;
     double az = 0.0, el =0.0;
-    sph.cartesian_to_spherical(cell_center, el, az);
+    params_.sph_.cartesian_to_spherical(cell_center, el, az);
     if(el<=pupil_half_ang){
       //check if the point is in the iris set
       vcl_vector<vgl_point_3d<double> >::iterator iit;
@@ -501,7 +501,7 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
   sb.add(vgl_point_3d<double>(0.0, +rmax, 0.0));
   sb.add(vgl_point_3d<double>(0.0, 0.0, -rmax));
   sb.add(vgl_point_3d<double>(0.0, 0.0, +rmax));
-  vgl_sphere_3d<double> smin(0.0, 0.0, 0.0,rmin);
+  vgl_sphere_3d<double> smin(params_.trans_x_, params_.trans_y_+params_.y_off_, params_.trans_z_,rmin);
   unsigned cnt = 0, ncont = 0;
 
   for(unsigned i = 0; i<nt; ++i){

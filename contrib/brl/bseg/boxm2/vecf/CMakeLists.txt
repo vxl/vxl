@@ -14,10 +14,12 @@ SET(boxm2_vecf_sources
     boxm2_vecf_orbit_articulation.h         boxm2_vecf_orbit_articulation.cxx
     boxm2_vecf_eyelid_crease.h              boxm2_vecf_eyelid_crease.cxx
     boxm2_vecf_fit_orbit.h                  boxm2_vecf_fit_orbit.cxx
+    boxm2_vecf_orbit_params.h               boxm2_vecf_orbit_params.cxx
+    boxm2_vecf_fit_margins.h                boxm2_vecf_fit_margins.cxx
 )
 
 ADD_LIBRARY(boxm2_vecf  ${boxm2_vecf_sources})
-TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_io  boxm2_ocl boxm2_ocl_algo bocl brip baio vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
+TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_io  boxm2_ocl boxm2_ocl_algo bocl brip baio bvrml vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
 
 # OpenCL support code
 SUBDIRS(ocl)
@@ -28,6 +30,9 @@ SUBDIRS(ocl)
 
 # viewing for articulated scenes
 subdirs(view)
+
+# fitting executables
+subdirs(exe)
 
 #tests
 IF( BUILD_TESTING )

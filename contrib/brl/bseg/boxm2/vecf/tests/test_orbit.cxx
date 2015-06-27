@@ -22,7 +22,7 @@
 #include "../boxm2_vecf_eyelid.h"
 #include "../boxm2_vecf_eyelid_crease.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-//#define BUILD_TEST_ORBIT
+#define BUILD_TEST_ORBIT
 void test_orbit()
 {
 #ifdef BUILD_TEST_ORBIT

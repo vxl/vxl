@@ -181,14 +181,22 @@ T vgl_fit_sphere_3d<T>::fit(vcl_ostream* outstream, bool verbose){
   if(outstream && verbose)
     lm.diagnose_outcome(*outstream);
 
-  T x0 = static_cast<T>(x_init[0]), y0 = static_cast<T>(x_init[1]), z0 = static_cast<T>(x_init[2]);
-  T nr = static_cast<T>(x_init[3]);
-  // scale back to original coordinates
-  T x0p = (x0-tx)/scale,  y0p = (y0-ty)/scale,  z0p = (z0-tz)/scale, rp = nr/scale;
-
-  vgl_point_3d<T> cf(x0p, y0p, z0p);
-  sphere_non_lin_.set_centre(cf);
-  sphere_non_lin_.set_radius(rp);
+  vnl_nonlinear_minimizer::ReturnCodes code = lm.get_failure_code();
+  if((code==vnl_nonlinear_minimizer::CONVERGED_FTOL||
+       code==vnl_nonlinear_minimizer::CONVERGED_XTOL||
+       code==vnl_nonlinear_minimizer::CONVERGED_XFTOL||
+       code==vnl_nonlinear_minimizer::CONVERGED_GTOL)){
+    T x0 = static_cast<T>(x_init[0]), y0 = static_cast<T>(x_init[1]), z0 = static_cast<T>(x_init[2]);
+    T nr = static_cast<T>(x_init[3]);
+    // scale back to original coordinates
+    T x0p = (x0-tx)/scale,  y0p = (y0-ty)/scale,  z0p = (z0-tz)/scale, rp = nr/scale;
+    
+    vgl_point_3d<T> cf(x0p, y0p, z0p);
+    sphere_non_lin_.set_centre(cf);
+    sphere_non_lin_.set_radius(rp);
+  }else{//non linear optimize failed -- use linear fit result
+    sphere_non_lin_ = sphere_lin_;
+  }
   // compute average distance error
   double dsum = 0.0;
   for (unsigned i=0; i<n; i++) {

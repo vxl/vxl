@@ -7,10 +7,14 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 
-double boxm2_vecf_lid_base::zlim() const{
-  double xlim = opr_.socket_radius();
+double boxm2_vecf_lid_base::zlim(double xp) const{
+  double xlim = opr_.lateral_socket_radius();
+  if(xp<0.0)
+    xlim = opr_.medial_socket_radius();
   double er = opr_.eyelid_radius();
-  return vcl_sqrt(er*er - xlim*xlim);
+  double arg = er*er - xlim*xlim;
+  if(arg<0.0) return 0.0;
+  return vcl_sqrt(arg);
 }
 
 double boxm2_vecf_lid_base::zu(double xp, double t) const{

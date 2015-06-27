@@ -18,12 +18,10 @@
 #include <vcl_cmath.h>
 class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
  public:
- boxm2_vecf_eyelid_crease(): boxm2_vecf_lid_base(0.0, 1.0){el_ = boxm2_vecf_eyelid(boxm2_vecf_orbit_params());}
-  //                                                                                                                    50 degrees
- boxm2_vecf_eyelid_crease(double t_min, double t_max, double ct, vgl_vector_3d<double> upper_socket_normal):
-  boxm2_vecf_lid_base(t_min, t_max), ct_(ct){el_ = boxm2_vecf_eyelid(boxm2_vecf_orbit_params());}
+  boxm2_vecf_eyelid_crease();
+  boxm2_vecf_eyelid_crease(double t_min, double t_max, double ct, vgl_vector_3d<double> upper_socket_normal);
 
- boxm2_vecf_eyelid_crease(boxm2_vecf_orbit_params const& params): boxm2_vecf_lid_base(params){el_ = boxm2_vecf_eyelid(params);}
+ boxm2_vecf_eyelid_crease(boxm2_vecf_orbit_params const& params);
 
   // internal functions
   //: crease curves projected onto a plane perpendicular to the zaxis (x horizontal , t vertical)
@@ -38,9 +36,15 @@ class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
   //: distance to closest point on crease surface
   double surface_distance(vgl_point_3d<double> const& p) const;
 
+  //: socket surface tapers from brow (params.mid_eyelid_crease_z_) to medial and lateral socket planes
+  // matches z values at t = params.eyelid_crease_ct_
+  double z_socket(double xp) const;
+
   double ct_; //t value at crease, i.e. brow plane starts at crease
 
  private:
+  vgl_plane_3d<double> crease_plane(double xp) const;
+  vgl_vector_3d<double> socket_normal(double xp) const;
   boxm2_vecf_eyelid el_;
 };
 #endif// boxm2_vecf_eyelid_crease

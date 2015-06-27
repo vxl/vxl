@@ -77,9 +77,9 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
   bocl_mem_sptr lookup= ocl_cache_->alloc_mem(sizeof(cl_uchar)*256, lookup_arr, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  // set up directions buffer
+  // set up directions buffer (previous code tried to use an array on the stack with variable dimension tsk tsk)
   unsigned num_filters = filter_vector_->kernels_.size();
-  cl_float directions[4*num_filters];
+  cl_float* directions = new cl_float[4*num_filters];
 
   //for (unsigned k = 0; k < num_filters; k++) {
   for (unsigned k = 0, count = 0; k < num_filters; k++, count += 4) {
@@ -172,6 +172,6 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
   // these buffers should be cleared as soon as they go out of scope
   ocl_cache_->unref_mem(lookup.ptr());
   ocl_cache_->unref_mem(directions_buffer.ptr());
-
+  delete [] directions;
   return true;
 }

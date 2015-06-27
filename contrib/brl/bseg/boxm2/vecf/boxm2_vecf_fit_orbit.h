@@ -9,6 +9,7 @@
 //
 #include <vcl_string.h>
 #include <vcl_iostream.h>
+#include <vcl_fstream.h>
 #include "boxm2_vecf_orbit_params.h"
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
@@ -24,11 +25,12 @@ public:
 class boxm2_vecf_fit_orbit{
  public:
   // ids for orbit measurements
-  enum mids {LEFT_EYE_INNER_CUSP, LEFT_EYE_OUTER_CUSP, LEFT_EYE_MID_LOWER_LID,
-             LEFT_EYE_MID_UP_LID, LEFT_EYE_MID_CREASE, LEFT_SCLERA, LEFT_Nz,LEFT_IRIS_RADIUS,
-             RIGHT_EYE_INNER_CUSP, RIGHT_EYE_OUTER_CUSP, RIGHT_EYE_MID_LOWER_LID,
-             RIGHT_EYE_MID_UP_LID, RIGHT_EYE_MID_CREASE, RIGHT_SCLERA, RIGHT_Nz, RIGHT_IRIS_RADIUS};
-  boxm2_vecf_fit_orbit(){fill_smid_map();};
+  enum mids {LEFT_EYE_MEDIAL_CANTHUS, LEFT_EYE_LATERAL_CANTHUS, LEFT_EYE_INFERIOR_MARGIN,
+             LEFT_EYE_SUPERIOR_MARGIN, LEFT_EYE_SUPERIOR_CREASE, LEFT_SCLERA, LEFT_Nz,LEFT_IRIS_RADIUS,
+             RIGHT_EYE_MEDIAL_CANTHUS, RIGHT_EYE_LATERAL_CANTHUS, RIGHT_EYE_INFERIOR_MARGIN,
+             RIGHT_EYE_SUPERIOR_MARGIN, RIGHT_EYE_SUPERIOR_CREASE, RIGHT_SCLERA, RIGHT_Nz, RIGHT_IRIS_RADIUS};
+ boxm2_vecf_fit_orbit(): nominal_medial_lateral_angle_rad_(0.110498)//left eye
+    {fill_smid_map();}
   boxm2_vecf_orbit_params fitted_params();
   bool add_labeled_point(labeled_point lp);
   bool read_anchor_file(vcl_string const& path);
@@ -41,12 +43,12 @@ class boxm2_vecf_fit_orbit{
   bool left_eye_radius( double& rad);
   void set_left_eye_radius(double rad){left_params_.eye_radius_=rad;}
 
-  bool left_trans_y_from_outer_cusp( double& tr_y);
+  bool left_trans_y_from_lateral_canthus( double& tr_y);
   void set_left_trans_y(double tr_y){left_params_.trans_y_=tr_y;}
 
   void set_left_trans_z(double tr_z){left_params_.trans_z_=tr_z;}
 
-  bool left_trans_x_from_outer_cusp(double& trx);
+  bool left_trans_x_from_lateral_canthus(double& trx);
   void set_left_trans_x(double trx){left_params_.trans_x_=trx;}
 
   bool left_eye_x_scale(double& left_x_scale);
@@ -57,29 +59,48 @@ class boxm2_vecf_fit_orbit{
   void set_left_eye_y_scale(double& left_y_scale)
   {left_params_.scale_y_coef_ = left_y_scale*left_params_.scale_y_coef_;}
   
-  bool left_eye_upper_lid_t(double& upper_lid_t);
-  void set_left_eye_upper_lid_t(double upper_lid_t){
-    left_params_.eyelid_dt_ = upper_lid_t-1.0;}
+  bool left_eye_inferior_margin_t(double& left_inf_t);
+  void set_left_eye_inferior_margin_t(double& left_inf_t){
+    left_params_.lower_eyelid_tmin_ = left_inf_t;
+  }
+
+  bool left_eye_superior_margin_t(double& superior_margin_t);
+  void set_left_eye_superior_margin_t(double superior_margin_t){
+    left_params_.eyelid_dt_ = superior_margin_t-1.0;}
 
   bool left_eyelid_crease_scale_y(double& crease_scale_y);
   void set_left_eyelid_crease_scale_y(double& left_crease_y_scale){
     left_params_.eyelid_crease_scale_y_coef_ = left_crease_y_scale*left_params_.eyelid_crease_scale_y_coef_;
   }
+  bool left_mid_eyelid_crease_z(double& crease_z);
+  void set_left_mid_eyelid_crease_z(double& crease_z){
+    left_params_.mid_eyelid_crease_z_= crease_z;
+  }
+  bool left_eye_superior_margin_crease_t(double& left_sup_crease_t);
+  void set_left_eye_superior_margin_crease_t(double& left_sup_crease_t){
+    left_params_.eyelid_crease_ct_ = left_sup_crease_t;
+  }
+
+  bool left_medial_lateral_angle(double& ang_rad);
+  void set_left_medial_lateral_angle(double& ang_rad);
+
 
   bool fit_sclera(vcl_string const& data_desc);
+  bool max_sclera_z(vcl_string const& data_desc, double& max_z);
 
+  bool set_left_iris_radius();
 
   //: Right orbit parameter fitting
   bool right_eye_radius( double& rad);
   void set_right_eye_radius(double rad){right_params_.eye_radius_=rad;}
 
-  bool right_trans_x_from_outer_cusp(double& trx);
+  bool right_trans_x_from_lateral_canthus(double& trx);
 
   //: can be determined from outer cusp or from the spherical fit to the sclera
   void set_right_trans_x(double trx){right_params_.trans_x_=trx;}
 
   //: determined from outer cusp or from the spherical fit to the sclera
-  bool right_trans_y_from_outer_cusp( double& tr_y);
+  bool right_trans_y_from_lateral_canthus( double& tr_y);
   void set_right_trans_y(double tr_y){right_params_.trans_y_=tr_y;}
 
   void set_right_trans_z(double tr_z){right_params_.trans_z_=tr_z;}
@@ -92,31 +113,79 @@ class boxm2_vecf_fit_orbit{
   void set_right_eye_y_scale(double& right_y_scale)
   {right_params_.scale_y_coef_ = right_y_scale*right_params_.scale_y_coef_;}
   
-  bool right_eye_upper_lid_t(double& upper_lid_t);
-  void set_right_eye_upper_lid_t(double upper_lid_t){
-    right_params_.eyelid_dt_ = upper_lid_t-1.0;}
+  bool right_eye_inferior_margin_t(double& right_inf_t);
+  void set_right_eye_inferior_margin_t(double& right_inf_t){
+    right_params_.lower_eyelid_tmin_ = right_inf_t;
+  }
+
+  bool right_eye_superior_margin_t(double& superior_margin_t);
+  void set_right_eye_superior_margin_t(double superior_margin_t){
+    right_params_.eyelid_dt_ = superior_margin_t-1.0;}
 
   bool right_eyelid_crease_scale_y(double& crease_scale_y);
   void set_right_eyelid_crease_scale_y(double& right_crease_y_scale){
     right_params_.eyelid_crease_scale_y_coef_ = right_crease_y_scale*right_params_.eyelid_crease_scale_y_coef_;
   }
 
+  bool right_mid_eyelid_crease_z(double& crease_z);
+  void set_right_mid_eyelid_crease_z(double& crease_z){
+    right_params_.mid_eyelid_crease_z_= crease_z;
+  }
+  bool right_eye_superior_margin_crease_t(double& right_sup_crease_t);
+  void set_right_eye_superior_margin_crease_t(double& right_sup_crease_t){
+    right_params_.eyelid_crease_tmin_ = right_sup_crease_t;
+  }
+  bool right_medial_lateral_angle(double& ang_rad);
+  void set_right_medial_lateral_angle(double& ang_rad);
+
+  bool set_right_iris_radius();
 
   // Testing the fit
   bool load_orbit_data(vcl_string const& data_desc, vcl_string const& path);
-  bool plot_orbit_data(vcl_string const& data_desc);
-  
+  bool plot_orbit_data(vcl_string const& data_desc, vcl_vector<vgl_point_3d<double> >& data);
+  bool plot_orbit_model(vcl_string const& data_desc, vcl_vector<vgl_point_3d<double> >& model, double xm_min = -15.0, double xm_max = 17.0);
+  bool display_orbit_vrml(vcl_ofstream& ostr, bool is_right, bool show_model = true);
+  bool display_anchors(vcl_ofstream& ostr, bool is_right);
+
+  // Accessors
+  boxm2_vecf_orbit_params left_params() const  {return left_params_;}
+  void set_left_params(boxm2_vecf_orbit_params const& params);
+
+
+  boxm2_vecf_orbit_params right_params() const {return right_params_;}
+  void set_right_params(boxm2_vecf_orbit_params const& params);
+
+
+  double left_dphi_rad() const {return left_dphi_rad_;}
+  void set_left_dphi_rad(double dphi_rad){left_dphi_rad_ = dphi_rad;}
+
+  double right_dphi_rad() const {return right_dphi_rad_;}
+  void set_right_dphi_rad(double dphi_rad){right_dphi_rad_ = dphi_rad;}
+
+  vcl_vector<vgl_point_3d<double> >& orbit_data(vcl_string const& data_desc){
+    return orbit_data_[smid_map_[data_desc]];}
+
+  bool lab_point(vcl_string const& data_desc, vgl_point_3d<double>& pt){
+    vcl_map<mids, labeled_point>::iterator lit;
+    lit = lpts_.find(smid_map_[data_desc]);
+    if(lit == lpts_.end())
+      return false;
+    pt = lit->second.p3d_;
+    return true;
+  }
  private:
   void fill_smid_map();
-  void plot_lower_lid(vcl_ostream& ostr, bool is_right);
-  void plot_upper_lid(vcl_ostream& ostr, bool is_right);
-  void plot_crease(vcl_ostream& ostr, bool is_right);
+  void plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
+  void plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
+  void plot_crease(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
+
   vcl_map<vcl_string, mids> smid_map_;
   vcl_map<mids, labeled_point> lpts_;
   boxm2_vecf_orbit_params left_params_;
   boxm2_vecf_orbit_params right_params_;
   vcl_map<mids, vcl_vector<vgl_point_3d<double> > > orbit_data_;
-  vgl_sphere_3d<double> left_sphere_;
-  vgl_sphere_3d<double> right_sphere_;
+  double nominal_medial_lateral_angle_rad_;
+  double left_dphi_rad_;
+  double right_dphi_rad_;
 };
 #endif// boxm2_vecf_fit_orbit

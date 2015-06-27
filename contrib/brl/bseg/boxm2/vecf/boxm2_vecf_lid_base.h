@@ -9,14 +9,16 @@
 //
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
+#include <vgl/vgl_sphere_3d.h>
 #include "boxm2_vecf_orbit_params.h"
 class boxm2_vecf_lid_base{
  public:
- boxm2_vecf_lid_base(): t_min_(0.0), t_max_(1.0){}
+ boxm2_vecf_lid_base(): t_min_(0.0), t_max_(1.0), dphi_rad_(0.0){}
 
- boxm2_vecf_lid_base(double t_min, double t_max):t_min_(t_min), t_max_(t_max){}
+ boxm2_vecf_lid_base(double t_min, double t_max):t_min_(t_min), t_max_(t_max),dphi_rad_(0.0){}
 
- boxm2_vecf_lid_base(boxm2_vecf_orbit_params const& params):t_min_(0.0), t_max_(1.0), opr_(params){}
+ boxm2_vecf_lid_base(boxm2_vecf_orbit_params const& params):t_min_(0.0), t_max_(1.0), opr_(params),dphi_rad_(0.0){}
+
 
   // limits for upper or lower lid contours
   void set_tmin(double t){t_min_ = t;}
@@ -26,7 +28,7 @@ class boxm2_vecf_lid_base{
   virtual double gi(double xp, double t) const = 0; 
 
   //: z distance from eye sphere center where planar region starts
-  virtual double zlim() const;
+  virtual double zlim(double xp) const;
 
   //: z coordinate of lid_base curve projected onto lid_base sphere, could be imaginary in general (outside sphere bounds)
   virtual double zu(double xp, double t) const;
@@ -46,6 +48,9 @@ class boxm2_vecf_lid_base{
   virtual double X(double xp, double t) const;
   virtual double Y(double xp, double t) const;
   virtual double Z(double xp, double t) const;
+
+  void set_phi_rotation_rad(double dphi_rad){dphi_rad_ = dphi_rad;}
+  double phi_rotation_rad() const{return dphi_rad_;}
 
   //: parameter t as a function of xp and y
   virtual double t(double xp, double y) const = 0;
@@ -72,5 +77,6 @@ class boxm2_vecf_lid_base{
   double t_min_; // min value of t parameter (closest to eyebrow)
   double t_max_; // max value of t parameter (closest to cheek bone)
   boxm2_vecf_orbit_params opr_;
+  double dphi_rad_;
 };
 #endif// boxm2_vecf_lid_base
