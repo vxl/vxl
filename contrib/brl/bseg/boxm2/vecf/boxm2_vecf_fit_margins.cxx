@@ -48,7 +48,7 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
     unsigned nscl = static_cast<unsigned>(sclera_pts_.size()), ncre = static_cast<unsigned>(crease_pts_.size());
     unsigned ncanth = (ninf + nsup)/2;
     for(unsigned i = 0; i<ninf; ++i){
-      vgl_point_2d<double>& p = inf_pts_[i]-v;
+      vgl_point_2d<double> p = inf_pts_[i]-v;
       double yinf = 0.0;
       if(is_right_)
         yinf = lid.Y(-p.x(),tinf);
@@ -58,7 +58,7 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
     }
     unsigned off = ninf;
     for(unsigned i = 0; i<nsup; ++i){
-      vgl_point_2d<double>& p = sup_pts_[i]-v;
+      vgl_point_2d<double> p = sup_pts_[i]-v;
       double ysup = 0.0;
       if(is_right_)
         ysup = lid.Y(-p.x(),tsup);
@@ -68,7 +68,7 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
     }
     off += nsup;
     for(unsigned i = 0; i<ncre; ++i){
-      vgl_point_2d<double>& p = crease_pts_[i]-v;
+      vgl_point_2d<double> p = crease_pts_[i]-v;
       double ycr = 0.0;
       if(is_right_)
         ycr = lid_cre.Y(-p.x(),ct);
@@ -78,15 +78,15 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
     }
     off += ncre;
     for(unsigned i = 0; i<nscl; ++i){
-      vgl_point_3d<double>p = (sclera_pts_[i]);
+      vgl_point_3d<double> p = (sclera_pts_[i]);
       vgl_point_3d<double> pc = vgl_closest_point(opr_.sph_, p);
       double dz = p.z() -pc.z(); 
       fx[i+off] = dz;
     }
     off += nscl;
     for(unsigned i = 0; i<2*ncanth; i+=2){
-      vgl_point_2d<double>& pl = lat_canth_-v;
-      vgl_point_2d<double>& pm = med_canth_-v;
+      vgl_point_2d<double> pl = lat_canth_-v;
+      vgl_point_2d<double> pm = med_canth_-v;
       double yl = 0.0, ym = 0;
       if(is_right_){
         double yli = lid.Y(-pl.x(),tinf);
@@ -192,7 +192,7 @@ bool boxm2_vecf_fit_margins::plot_orbit(vcl_ostream& ostr) const{
   unsigned ninf = static_cast<unsigned>(inferior_margin_pts_.size()), nsup = static_cast<unsigned>(superior_margin_pts_.size());
   unsigned ncre = static_cast<unsigned>(superior_crease_pts_.size());
     for(unsigned i = 0; i<ninf; ++i){
-      vgl_point_2d<double>& p = inferior_margin_pts_[i]-v;
+      vgl_point_2d<double> p = inferior_margin_pts_[i]-v;
       double yinf = 0.0;
       if(is_right_)
         yinf = lid.Y(-p.x(),tinf);
@@ -201,7 +201,7 @@ bool boxm2_vecf_fit_margins::plot_orbit(vcl_ostream& ostr) const{
       ostr << p.x() << ' ' << p.y() << ' ' << yinf << '\n';
     }
     for(unsigned i = 0; i<nsup; ++i){
-      vgl_point_2d<double>& p = superior_margin_pts_[i]-v;
+      vgl_point_2d<double> p = superior_margin_pts_[i]-v;
       double ysup = 0.0;
       if(is_right_)
         ysup = lid.Y(-p.x(),tsup);
@@ -210,7 +210,7 @@ bool boxm2_vecf_fit_margins::plot_orbit(vcl_ostream& ostr) const{
       ostr << p.x() << ' ' << p.y() << ' ' << ysup << '\n';
     }
     for(unsigned i = 0; i<ncre; ++i){
-      vgl_point_2d<double>& p = superior_crease_pts_[i]-v;
+      vgl_point_2d<double> p = superior_crease_pts_[i]-v;
       double ycre = 0.0;
       if(is_right_)
         ycre = lid_cre.Y(-p.x(),ct);

@@ -974,7 +974,7 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
      pts = orbit_data_[RIGHT_EYE_INFERIOR_MARGIN];
   for(vcl_vector<vgl_point_3d<double> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
-    vgl_point_3d<double>& p = *pit-v;
+    vgl_point_3d<double> p = *pit-v;
     vgl_point_3d<float> pf(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
     vgl_sphere_3d<float> sp(pf, r*0.025f);
     bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 1.0f, 0.0f);
@@ -997,7 +997,7 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
      pts = orbit_data_[RIGHT_EYE_SUPERIOR_MARGIN];
   for(vcl_vector<vgl_point_3d<double> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
-    vgl_point_3d<double>& p = *pit-v;
+    vgl_point_3d<double> p = *pit-v;
     vgl_point_3d<float> pf(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
     vgl_sphere_3d<float> sp(pf, r*0.025f);
     bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.0f, 0.0f);
@@ -1020,7 +1020,7 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
      pts = orbit_data_[RIGHT_EYE_SUPERIOR_CREASE];
   for(vcl_vector<vgl_point_3d<double> >::iterator pit = pts.begin();
       pit != pts.end(); ++pit){
-    vgl_point_3d<double>& p = *pit-v;
+    vgl_point_3d<double> p = *pit-v;
     vgl_point_3d<float> pf(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
     vgl_sphere_3d<float> sp(pf, r*0.025f);
     bvrml_write::write_vrml_sphere(ostr, sp, 0.0f, 1.0f, 1.0f);
