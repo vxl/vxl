@@ -75,7 +75,7 @@ bool boxm2_ocl_kernel_vector_filter::run(boxm2_scene_sptr scene, boxm2_opencl_ca
 
     vcl_stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
     vcl_cout<<"Computing Filter: " << filter_ident.str() << " of size: " << filter->float_kernel_.size() <<vcl_endl;
-    filter->print();
+    //filter->print();
 
     //set up the filter, filter buffer and other related filter variables
     vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
