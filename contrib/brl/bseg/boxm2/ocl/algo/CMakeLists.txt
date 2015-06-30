@@ -21,10 +21,12 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_update_auxQ.h						boxm2_ocl_update_auxQ.cxx
     boxm2_ocl_update_sky.h                      boxm2_ocl_update_sky.cxx
     boxm2_ocl_update_max_vis.h                  boxm2_ocl_update_max_vis.cxx
+    boxm2_ocl_update_vis_score.h                boxm2_ocl_update_vis_score.cxx
     boxm2_ocl_fuse_based_visibility.h           boxm2_ocl_fuse_based_visibility.cxx
     boxm2_ocl_expected_image_renderer.h         boxm2_ocl_expected_image_renderer.cxx
     boxm2_ocl_depth_renderer.h                  boxm2_ocl_depth_renderer.cxx
     boxm2_ocl_num_obs_renderer.h                boxm2_ocl_num_obs_renderer.cxx
+    boxm2_ocl_vis_score_renderer.h                boxm2_ocl_vis_score_renderer.cxx
     boxm2_ocl_update_sun_visibilities.h         boxm2_ocl_update_sun_visibilities.cxx
     boxm2_ocl_render_expected_shadow_map.h      boxm2_ocl_render_expected_shadow_map.cxx
     boxm2_ocl_refine_scene_around_geometry.h boxm2_ocl_refine_scene_around_geometry.cxx
