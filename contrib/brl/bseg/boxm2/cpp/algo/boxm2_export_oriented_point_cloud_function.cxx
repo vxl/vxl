@@ -6,6 +6,8 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vcl_limits.h>
 
+#include <rply.h>   //.ply parser
+
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 
 
@@ -296,9 +298,9 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeader(vcl_ofstream& fi
    file << "\nproperty float32 x\nproperty float32 y\nproperty float32 z";
    if (output_aux) {
      //file << "\nproperty float x\nproperty float y\nproperty float z\nproperty float nx\nproperty float ny\nproperty float nz\n" << "property float prob\nproperty float vis_score\n";
-     file << "\nproperty float nx\nproperty float ny\nproperty float nz\n" << "property float prob\nproperty float vis_score\nproperty float nmag\n";
+     file << "\nproperty float nx\nproperty float ny\nproperty float nz\n" << "property float prob\nproperty float vis_score\nproperty float nmag";
    }
-   file << "end_header\n"
+   file << "\nend_header\n"
         << ss.str();
 }
 

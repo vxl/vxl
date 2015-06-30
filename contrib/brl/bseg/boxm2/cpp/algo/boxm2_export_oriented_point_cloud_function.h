@@ -11,8 +11,6 @@
 #include <vcl_iomanip.h>
 #include <boct/boct_bit_tree.h>
 
-#include <rply.h>   //.ply parser
-
 #include "boxm2_mog3_grey_processor.h"
 #include "boxm2_gauss_rgb_processor.h"
 
