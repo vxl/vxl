@@ -94,6 +94,9 @@ class bocl_kernel
   //: returns program binary associated with kernel (NVIDIA case returns PTX string)
   vcl_string program_binaries();
 
+  //: return program source code - makes interpreting build errors easier
+  vcl_string source() { return prog_; }
+
  private:
 
   //: cl kernel object
