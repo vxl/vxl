@@ -71,5 +71,7 @@ void boxm2_cpp_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_cpp_normals_to_id_process, "boxm2CppNormalsToIdProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_import_triangle_mesh_process, "boxm2ImportTriangleMeshProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_export_oriented_point_cloud_process, "boxm2ExportOrientedPointCloudProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_extract_point_cloud_process, "boxm2ExtractPointCloudProcess");
 
 }

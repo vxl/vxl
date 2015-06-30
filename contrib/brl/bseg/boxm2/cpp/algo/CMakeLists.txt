@@ -27,6 +27,8 @@ SET(boxm2_cpp_algo_sources
     boxm2_filter_block_function.h     boxm2_filter_block_function.cxx
     boxm2_compute_derivative_function.h     boxm2_compute_derivative_function.cxx
     boxm2_apply_filter_function.h     boxm2_apply_filter_function.txx
+    boxm2_extract_point_cloud.h       boxm2_extract_point_cloud.cxx
+    boxm2_export_oriented_point_cloud.h  boxm2_export_oriented_point_cloud.cxx
     boxm2_export_oriented_point_cloud_function.h     boxm2_export_oriented_point_cloud_function.cxx
     boxm2_batch_functors.h
     boxm2_ray_probe_functor.h

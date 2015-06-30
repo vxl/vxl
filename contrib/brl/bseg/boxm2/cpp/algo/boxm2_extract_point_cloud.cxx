@@ -1,68 +1,15 @@
-// This is brl/bseg/boxm2/pro/processes/boxm2_extract_point_cloud_process.cxx
-#include <bprb/bprb_func_process.h>
-//:
-// \file
-// \brief  A process for extracting a point cloud from a boxm2 scene. The points correspond to the cell centroids of leaf cells in the scene.
-//         There is a probability threshold on cells to save for convenience. The points are saved in the BOXM2_POINT datatype.
-//
-// \author Ali Osman Ulusoy
-// \date Mar 21, 2011
-
-#include <vcl_fstream.h>
-#include <boxm2/boxm2_scene.h>
-#include <boxm2/boxm2_util.h>
-#include <boxm2/io/boxm2_cache.h>
+#include "boxm2_extract_point_cloud.h"
+#include <vcl_map.h>
 #include <boxm2/boxm2_data_traits.h>
+#include <boxm2/basic/boxm2_array_3d.h>
+#include <boxm2/boxm2_util.h>
 #include <boct/boct_bit_tree.h>
-#include <vnl/vnl_vector_fixed.h>
 
-namespace boxm2_extract_point_cloud_process_globals
+
+bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
+                                                    float prob_thresh, unsigned int depth)
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
-
-  typedef unsigned char uchar;
-  typedef vnl_vector_fixed<uchar, 16> uchar16;
-}
-
-bool boxm2_extract_point_cloud_process_cons (bprb_func_process& pro)
-{
-  using namespace boxm2_extract_point_cloud_process_globals;
-
-  //process takes 3 inputs, no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm2_scene_sptr";
-  input_types_[1] = "boxm2_cache_sptr";
-  input_types_[2] = "float"; //prob. threshold
-  input_types_[3] = "unsigned"; //deptht of the tree ( 0,1,2,3)
-
-
-  brdb_value_sptr prob_t = new brdb_value_t<float>(0.0);
-  pro.set_input(2, prob_t);
-  brdb_value_sptr default_depth = new brdb_value_t<unsigned int>(3);
-  pro.set_input(3, default_depth);
-
-  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-}
-
-
-bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
-{
-  using namespace boxm2_extract_point_cloud_process_globals;
-
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-    return false;
-  }
-
-  //get the inputs
-  unsigned i = 0;
-  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  float prob_t = pro.get_input<float>(i++);
-  unsigned int depth = pro.get_input<unsigned>(i++);
-
+  typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   //zip through each block
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
@@ -110,7 +57,7 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
            int curr_depth = bit_tree.depth_at(currBitIndex);
            double side_len = 1.0 / (double) (1<<curr_depth);
            float prob = 1.0f - (float)vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
-           if (prob < prob_t)
+           if (prob < prob_thresh)
            {
              points_data[currIdx][3] = -1.0f;
              continue;
@@ -126,9 +73,6 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
        }
       }
     }
-   
   }
-  
   return true;
 }
-
