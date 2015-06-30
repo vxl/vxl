@@ -67,8 +67,6 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
   this->compile_trans_interp_kernel();
   this->compile_trans_interp_trilin_kernel();
   this->init_ocl_trans();
-
-
   if (!init_render_args()) {
     throw vcl_runtime_error("init_render_args returned false");
   }

@@ -5,6 +5,7 @@
 
 #include <boxm2/boxm2_scene.h>
 #include "boxm2_vecf_eye_scene.h"
+#include "boxm2_vecf_orbit_scene.h"
 #include "boxm2_vecf_head_model.h"
 #include "boxm2_vecf_composite_head_parameters.h"
 
@@ -23,7 +24,12 @@ private:
 
   boxm2_vecf_eye_scene right_eye_;
   boxm2_vecf_eye_scene left_eye_;
+
+  boxm2_vecf_orbit_scene right_orbit_;
+  boxm2_vecf_orbit_scene left_orbit_;
   boxm2_vecf_head_model head_;
+  vcl_string scene_path;
+  bool use_orbit;
 
 };
 

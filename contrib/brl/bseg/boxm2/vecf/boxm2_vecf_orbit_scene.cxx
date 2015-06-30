@@ -40,7 +40,7 @@ void boxm2_vecf_orbit_scene::fill_block(){
     }
   }
 }
-// currently unused, except for display purposes 
+// currently unused, except for display purposes
 void boxm2_vecf_orbit_scene::fill_target_block(){
   params_.app_[0]=static_cast<unsigned char>(10);
   boxm2_data_traits<BOXM2_NUM_OBS>::datatype nobs;
@@ -79,44 +79,44 @@ void boxm2_vecf_orbit_scene::assign_target_cell_centers(){
 }
 
 void boxm2_vecf_orbit_scene::extract_block_data(){
-  boxm2_scene_sptr sc(this);
-  vcl_vector<boxm2_block_id> blocks = sc->get_block_ids();
-  vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
-  blk_ = boxm2_cache::instance()->get_block(sc, *iter_blk);
 
-  boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  vcl_vector<boxm2_block_id> blocks = base_model_->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
+
+  boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   alpha_base->enable_write();
   alpha_data_=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
-  boxm2_data_base *  app_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  boxm2_data_base *  app_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   app_base->enable_write();
   app_data_=new boxm2_data<BOXM2_MOG3_GREY>(app_base->data_buffer(),app_base->buffer_length(),app_base->block_id());
 
-  boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
+  boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   nobs_base->enable_write();
   nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
- 
-  boxm2_data_base *  sphere_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("sphere"));
+
+  boxm2_data_base *  sphere_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("sphere"));
   sphere_base->enable_write();
   sphere_=new boxm2_data<BOXM2_PIXEL>(sphere_base->data_buffer(),sphere_base->buffer_length(),sphere_base->block_id());
- 
-    boxm2_data_base *  iris_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("iris"));
+
+    boxm2_data_base *  iris_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("iris"));
   iris_base->enable_write();
   iris_=new boxm2_data<BOXM2_PIXEL>(iris_base->data_buffer(),iris_base->buffer_length(),iris_base->block_id());
 
-  boxm2_data_base *  pupil_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("pupil"));
+  boxm2_data_base *  pupil_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("pupil"));
   pupil_base->enable_write();
   pupil_=new boxm2_data<BOXM2_PIXEL>(pupil_base->data_buffer(),pupil_base->buffer_length(),pupil_base->block_id());
 
-  boxm2_data_base *  eyelid_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("eyelid"));
+  boxm2_data_base *  eyelid_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("eyelid"));
   eyelid_base->enable_write();
   eyelid_=new boxm2_data<BOXM2_PIXEL>(eyelid_base->data_buffer(),eyelid_base->buffer_length(),eyelid_base->block_id());
 
-  boxm2_data_base *  lower_eyelid_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("lower_eyelid"));
+  boxm2_data_base *  lower_eyelid_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("lower_eyelid"));
   lower_eyelid_base->enable_write();
   lower_eyelid_=new boxm2_data<BOXM2_PIXEL>(lower_eyelid_base->data_buffer(),lower_eyelid_base->buffer_length(),lower_eyelid_base->block_id());
 
-  boxm2_data_base *  eyelid_crease_base  = boxm2_cache::instance()->get_data_base(sc,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("eyelid_crease"));
+  boxm2_data_base *  eyelid_crease_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("eyelid_crease"));
   eyelid_crease_base->enable_write();
   eyelid_crease_=new boxm2_data<BOXM2_PIXEL>(eyelid_crease_base->data_buffer(),eyelid_crease_base->buffer_length(),eyelid_crease_base->block_id());
 }
@@ -137,7 +137,7 @@ void boxm2_vecf_orbit_scene::extract_target_block_data(boxm2_scene_sptr target_s
   boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   nobs_base->enable_write();
   target_nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
-  this->fill_target_block(); //intialize block data - only for visualization don't use in real case
+  //  this->fill_target_block(); //intialize block data - only for visualization don't use in real case
   this->assign_target_cell_centers(); // get cell centers in target corresponding to the source block (blk_)
 }
 
@@ -169,7 +169,7 @@ void boxm2_vecf_orbit_scene::reset_indices(){
         bool eyelid       = static_cast<unsigned char>(eyelid_->data()[indx])      >0;
         bool lower_eyelid = static_cast<unsigned char>(lower_eyelid_->data()[indx])>0;
         bool eyelid_crease = static_cast<unsigned char>(eyelid_crease_->data()[indx])>0;
-        
+
         if(sphere){
           sphere_cell_centers_.push_back(p);
           sphere_cell_data_index_.push_back(indx);
@@ -205,7 +205,7 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   vcl_cout << "Reset indices " << t.real()/1000.0 << " sec.\n";
 }
  boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool initialize):
-  boxm2_scene(scene_file), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
+   base_model_(new boxm2_scene(scene_file)), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
 
   eyelid_geo_.set_tmin(params_.eyelid_tmin_);
@@ -217,11 +217,11 @@ void boxm2_vecf_orbit_scene::reset_indices(){
 
   eyelid_crease_geo_.set_tmin(params_.eyelid_crease_tmin_);
   eyelid_crease_geo_.set_tmax(params_.eyelid_crease_tmax_);
-  
-  boxm2_lru_cache::create(this);
+
+  boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
   if(initialize){
-    this->fill_block();
+    //    this->fill_block();
     this->create_eye();
     this->create_eyelid();
     this->create_lower_eyelid();
@@ -442,7 +442,7 @@ void boxm2_vecf_orbit_scene::create_eye(){
    return false;
  }
 
- bool boxm2_vecf_orbit_scene::is_type_global(vgl_point_3d<double> const& global_pt, boxm2_vecf_orbit_scene::anat_type  type) const{
+bool boxm2_vecf_orbit_scene::is_type_global(vgl_point_3d<double> const& global_pt, boxm2_vecf_orbit_scene::anat_type  type) const{
   unsigned indx;
   blk_->data_index(global_pt, indx);
   return this->is_type_data_index(indx, type);
@@ -745,7 +745,7 @@ void boxm2_vecf_orbit_scene::build_eyelid_crease(){
   }
 }
 // assign appearance to crease voxels
-// upper part of crease is different intensity 
+// upper part of crease is different intensity
 void boxm2_vecf_orbit_scene::paint_eyelid_crease(){
   boxm2_data_traits<BOXM2_NUM_OBS>::datatype nobs;
   nobs.fill(0);
@@ -883,7 +883,7 @@ void boxm2_vecf_orbit_scene::apply_eye_vector_field_to_target(vcl_vector<vgl_vec
   if(n==0)
     return;//shouldn't happen
   vul_timer t;
-  // iterate over the target cells and interpolate info from source 
+  // iterate over the target cells and interpolate info from source
   for(int j = 0; j<n; ++j){
     if(!valid[j])
       continue;
@@ -911,7 +911,7 @@ void boxm2_vecf_orbit_scene::apply_eyelid_vector_field_to_target(vcl_vector<vgl_
   int n = static_cast<unsigned>(box_cell_centers_.size());
   if(n==0)
     return;//shouldn't happen
-  // iterate over the target cells and interpolate info from source 
+  // iterate over the target cells and interpolate info from source
   for(int j = 0; j<n; ++j){
     if(!valid[j])
       continue;
@@ -947,13 +947,13 @@ void boxm2_vecf_orbit_scene::apply_eyelid_vector_field_to_target(vcl_vector<vgl_
 
 void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
                                                                        vcl_vector<bool> const& valid){
-   
+
    vul_timer t;
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   int n = static_cast<unsigned>(box_cell_centers_.size());
   if(n==0)
     return;//shouldn't happen
-  // iterate over the target cells and interpolate info from source 
+  // iterate over the target cells and interpolate info from source
   for(int j = 0; j<n; ++j){
     if(!valid[j])
       continue;
@@ -964,7 +964,7 @@ void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vecto
     // but we don't need to check, since what is needed is the source cell for the rotation
     // for now no movement ie vf is always zer0
     vgl_point_3d<double> src = box_cell_centers_[j].cell_center_-params_.offset_;
-        
+
     // find closest sphere voxel cell
     unsigned sindx=0, dindx=0;
     if(!find_nearest_data_index(LOWER_LID, src, dindx))
@@ -980,13 +980,13 @@ void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vecto
 
 void boxm2_vecf_orbit_scene::apply_eyelid_crease_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
                                                                        vcl_vector<bool> const& valid){
-   
+
    vul_timer t;
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   int n = static_cast<unsigned>(box_cell_centers_.size());
   if(n==0)
     return;//shouldn't happen
-  // iterate over the target cells and interpolate info from source 
+  // iterate over the target cells and interpolate info from source
   for(int j = 0; j<n; ++j){
     if(!valid[j])
       continue;
@@ -997,7 +997,7 @@ void boxm2_vecf_orbit_scene::apply_eyelid_crease_vector_field_to_target(vcl_vect
     // but we don't need to check, since what is needed is the source cell for the rotation
     // for now no movement ie vf is always zer0
     vgl_point_3d<double> src = box_cell_centers_[j].cell_center_-params_.offset_;
-        
+
     // find closest sphere voxel cell
     unsigned sindx=0, dindx=0;
     if(!find_nearest_data_index(EYELID_CREASE, src, dindx))
@@ -1015,10 +1015,10 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
   static bool first = true;
   if(first){
     this->extract_target_block_data(target_scene);
-    this->fill_target_block();
-    first = false;
+    //       this->fill_target_block();
+    //    first = false;
   }
-  
+
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
   vnl_vector_fixed<double, 3> to_dir(params_.eye_pointing_dir_.x(),
                                      params_.eye_pointing_dir_.y(),

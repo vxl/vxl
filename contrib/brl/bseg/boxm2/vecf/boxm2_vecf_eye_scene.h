@@ -22,14 +22,14 @@
 // a single voxel to have multiple labels such as the iris and
 // the pupil. That is, if one considers the pupil to be a subset
 // of the iris, both iris and pupil labels will be true on the
-// pupil. 
+// pupil.
 //
 // A vector field is defined internally corresponding to the rotation
 // of the eye to obtain a given pointing direction, specified in
 // boxm2_vecf_eye_params.h. An additional vector field is defined by
 // the backwards translation from each target scene cell to the
 // corresponding source cell. The vector operation is defined in the figure.
-// 
+//
 //   [.] target cell
 //     \
 //      \  translation vector (-params_.offset_)
@@ -40,15 +40,15 @@
 //  scene  [.]------------->[.] source cell
 //         s0    rotation    s1
 //             vector field
-// 
+//
 // The reverse translation vector from target to source scene defines the tail position,
 // s0, of the rotation vector. The inverse rotation vector field element is then added to
 // the s0 position to reach the actual source cell s1. The neigbors of s1 are
 // used to interpolate the required target appearance and alpha data. Both s0
 // and s1 must be elements of the spherical shell defined above.
 // If s0 is not on the spherical shell then the target cell contents is unchanged.
-// Note that eye rotation always takes a shell cell into another shell cell. 
-// 
+// Note that eye rotation always takes a shell cell into another shell cell.
+//
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
@@ -56,7 +56,7 @@
 #include <vcl_vector.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_eye_params.h"
-class boxm2_vecf_eye_scene
+class boxm2_vecf_eye_scene : public boxm2_scene
 {
  public:
  boxm2_vecf_eye_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0),
@@ -74,6 +74,8 @@ class boxm2_vecf_eye_scene
 
   //: compute an inverse vector field defined at sphere points (debug helper)
   vcl_vector<vgl_vector_3d<double> > inverse_vector_field(vgl_rotation_3d<double> const& rot) const;
+
+  boxm2_scene_sptr scene(){ return base_model_;}
 
 private:
   boxm2_scene_sptr base_model_;
@@ -136,7 +138,7 @@ private:
   vcl_map<unsigned, vcl_vector<double> > cell_neighbor_distance_;     // data index to neighbor distances
   vcl_vector<double> closest_sphere_distance_norm_;                   // closest spherical shell distance/(side length)
 
-  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells 
+  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells
   vcl_vector<unsigned> iris_cell_data_index_;                         // corresponding data index
 
   vcl_vector<vgl_point_3d<double> > pupil_cell_centers_;              // center of pupil cells

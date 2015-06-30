@@ -12,7 +12,7 @@ struct ltstr1
 {
   bool operator()(const boxm2_scene_sptr  s1, const boxm2_scene_sptr  s2) const
   {
-      return vcl_strcmp(s1->xml_path().c_str(),s2->xml_path().c_str()) < 0;
+    return s1.ptr() < s2.ptr();
   }
 };
 //: A cache that keeps the most recently used blocks and data, while kicking out the least recently used blocks and data to make more room.
@@ -61,7 +61,7 @@ class boxm2_lru_cache : public boxm2_cache
     virtual void clear_cache();
 
     //: return the list of scenes with any data in the cache
-    virtual vcl_vector<boxm2_scene_sptr> get_scenes(); 
+    virtual vcl_vector<boxm2_scene_sptr> get_scenes();
 
   private:
 

@@ -7,7 +7,7 @@
 // \author J.L. Mundy
 // \date   27 Mar 2015
 //
-//  The eye sclara surface is constructed from  layers of voxels 
+//  The eye sclara surface is constructed from  layers of voxels
 //  that are within a diagonal cell radius from the sphere surface.
 //  The voxels are assigned by brute force scanning of a bounding box
 //  around the sphere that is enlarged by one cell side length.
@@ -19,14 +19,14 @@
 // a single voxel to have multiple labels such as the iris and
 // the pupil. That is, if one considers the pupil to be a subset
 // of the iris, both iris and pupil labels will be true on the
-// pupil. 
+// pupil.
 //
-// A vector field for eye rotation is defined internally 
+// A vector field for eye rotation is defined internally
 // to obtain a given pointing direction, specified in
 // boxm2_vecf_eye_params.h. An additional vector field is defined by
 // the backwards translation from each target scene cell to the
 // corresponding source cell. The vector operation is defined in the figure.
-// 
+//
 //   [.] target cell
 //     \
 //      \  translation vector (-params_.offset_)
@@ -37,15 +37,15 @@
 //  scene  [.]------------->[.] source cell
 //         s0    rotation    s1
 //             vector field
-// 
+//
 // The reverse translation vector from target to source scene defines the tail position,
 // s0, of the rotation vector. The inverse rotation vector field element is then added to
 // the s0 position to reach the actual source cell s1. The neigbors of s1 are
 // used to interpolate the required target appearance and alpha data. Both s0
 // and s1 must be elements of the spherical shell defined above.
 // If s0 is not on the spherical shell then the target cell contents is unchanged.
-// Note that eye rotation always takes a shell cell into another shell cell. 
-// 
+// Note that eye rotation always takes a shell cell into another shell cell.
+//
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
@@ -58,7 +58,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_set.h>
 
-class boxm2_vecf_orbit_scene : public boxm2_scene
+class boxm2_vecf_orbit_scene
 {
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
@@ -68,7 +68,7 @@ class boxm2_vecf_orbit_scene : public boxm2_scene
 
   //: set parameters
   void set_params(boxm2_vecf_orbit_params const& params){ params_ = params;}
-  
+
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
   boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool initialize = false);
@@ -89,8 +89,10 @@ class boxm2_vecf_orbit_scene : public boxm2_scene
   //: static eyelid creasefor now
   void  inverse_vector_field_eyelid_crease(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const;
 
+  boxm2_scene_sptr scene() { return base_model_; }
 
-private:
+ private:
+  boxm2_scene_sptr base_model_;
   //: test the anat_type (SPHERE, IRIS, ... ) of the voxel that contains a global point
  bool is_type_global(vgl_point_3d<double> const& global_pt, anat_type type) const;
  //: test the anat_type (SPHERE, IRIS, ... ) of a given data index
@@ -108,7 +110,7 @@ private:
  //: assign target cell centers that map to the source scene bounding box
  void assign_target_cell_centers();
 
- //: interpolate the alpha and appearance data around the vector field source location 
+ //: interpolate the alpha and appearance data around the vector field source location
  void interpolate_vector_field(vgl_point_3d<double> const& src, unsigned sindx, unsigned dindx, unsigned tindx,
                                 vcl_vector<vgl_point_3d<double> > & cell_centers,
                                 vcl_map<unsigned, vcl_vector<unsigned> >& cell_neighbor_cell_index,
@@ -139,8 +141,8 @@ private:
   void paint_iris();
   //: assign appearance to pupil voxels
   void paint_pupil();
-  
-    
+
+
   //: scan over target cells and interpolate appearance and alpha from source
   void apply_eye_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
                                         vcl_vector<bool> const& valid);
@@ -186,7 +188,7 @@ private:
   void build_eyelid_crease();
   //: assign appearance to eyelid voxels
   void paint_eyelid_crease();
-  
+
   //: members
   boxm2_block* blk_;                     // the source block
   boxm2_block* target_blk_;              // the target block
@@ -203,7 +205,7 @@ private:
   boxm2_data<BOXM2_PIXEL>* sphere_;      // is voxel a eye sphere point?
   boxm2_data<BOXM2_PIXEL>* iris_;        // is voxel an iris point
   boxm2_data<BOXM2_PIXEL>* pupil_;       // is voxel a pupil point
- 
+
   vcl_vector<vgl_point_3d<double> > sphere_cell_centers_; // centers of spherical shell voxels
   vcl_vector<unsigned> sphere_cell_data_index_;           // corresponding data indices
   //      cell_index          cell_index
@@ -213,7 +215,7 @@ private:
   //      data_index          data_index
   vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
 
-  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells 
+  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells
   vcl_vector<unsigned> iris_cell_data_index_;                         // corresponding data index
 
   vcl_vector<vgl_point_3d<double> > pupil_cell_centers_;              // center of pupil cells

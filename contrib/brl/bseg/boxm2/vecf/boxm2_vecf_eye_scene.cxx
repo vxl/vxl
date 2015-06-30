@@ -77,11 +77,11 @@ void boxm2_vecf_eye_scene::extract_block_data(){
   boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   nobs_base->enable_write();
   nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
- 
+
   boxm2_data_base *  sphere_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("sphere"));
   sphere_base->enable_write();
   sphere_=new boxm2_data<BOXM2_PIXEL>(sphere_base->data_buffer(),sphere_base->buffer_length(),sphere_base->block_id());
- 
+
   boxm2_data_base *  sphere_dist_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_FLOAT>::prefix("sphere_dist"));
   sphere_dist_base->enable_write();
   sphere_dist_=new boxm2_data<BOXM2_FLOAT>(sphere_dist_base->data_buffer(),sphere_dist_base->buffer_length(),sphere_dist_base->block_id());
@@ -159,7 +159,6 @@ void boxm2_vecf_eye_scene::reset_indices(){
 boxm2_vecf_eye_scene::boxm2_vecf_eye_scene(vcl_string const& scene_file, bool initialize):
   base_model_(new boxm2_scene(scene_file)), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0)
 {
-  
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
   if(initialize){
@@ -454,7 +453,7 @@ void boxm2_vecf_eye_scene::apply_vector_field_to_target(vcl_vector<vgl_vector_3d
   if(n==0)
     return;//shouldn't happen
 
-  // iterate over the target cells and interpolate info from source 
+  // iterate over the target cells and interpolate info from source
   // temporary data storage maps
   vcl_map<unsigned, unsigned char> temp;
   vcl_map<unsigned, boxm2_data_traits<BOXM2_ALPHA>::datatype> temp_alpha;
@@ -479,7 +478,7 @@ void boxm2_vecf_eye_scene::apply_vector_field_to_target(vcl_vector<vgl_vector_3d
     temp_is_sphere[j]=true;
     unsigned cell_indx = mit->second;
 
-    //source cell after reverse rotation vector field 
+    //source cell after reverse rotation vector field
     vgl_point_3d<double> src = p + vf[cell_indx];//add vector field
 
     if(!blk_->contains(src, lc, cell_center, side_len))
@@ -494,7 +493,7 @@ void boxm2_vecf_eye_scene::apply_vector_field_to_target(vcl_vector<vgl_vector_3d
       //not a sphere cell
       continue;
     }
-    //source cell index after rotation 
+    //source cell index after rotation
     cell_indx = mit->second;
 
     //appearance and alpha data at source cell
