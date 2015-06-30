@@ -20,7 +20,7 @@ class boxm2_ocl_aggregate_normal_from_filter_vector
     boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache,
                                                   bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector);
 
-    bool run();
+    bool run(bool clear_cache=true);
 
   private:
     

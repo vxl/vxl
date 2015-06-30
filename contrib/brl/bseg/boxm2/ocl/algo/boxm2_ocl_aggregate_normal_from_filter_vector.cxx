@@ -51,10 +51,13 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::compile_kernel(bocl_kernel &
 }
 
 
-bool boxm2_ocl_aggregate_normal_from_filter_vector::run()
+bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
 {
-  ocl_cache_->clear_cache();
-  ocl_cache_->get_cpu_cache()->clear_cache();
+  // dec: not sure why cache was being cleared, so default clear_cache to true to keep old behavior.
+  if (clear_cache) {
+    ocl_cache_->clear_cache();
+    ocl_cache_->get_cpu_cache()->clear_cache();
+  }
 
   long bytes_in_cache = ocl_cache_->bytes_in_cache();
   vcl_cout<<"MBs in cache: "<<bytes_in_cache/(1024.0*1024.0)<<vcl_endl;
