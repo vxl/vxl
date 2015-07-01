@@ -4,7 +4,7 @@
 //    an iterator that emits a sequence of scene parameters that
 //    constitute the articulation of the model.  The articulation
 //    is initiatied/paused by pressing the 'v' key in a toggle mode
-//    
+//
 #include <vcl_fstream.h>
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>
@@ -82,7 +82,7 @@ int main(int argc, char ** argv)
           return -1;
     }
     vcl_cout << "Using: " << *device;
-    boxm2_scene_sptr orbit_scene = new boxm2_vecf_orbit_scene(orbit_scene_path, true);
+    boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(orbit_scene_path, true);
     boxm2_scene_sptr target_scene = new boxm2_scene(target_scene_path);
 
     //create initial cam
@@ -107,16 +107,14 @@ int main(int argc, char ** argv)
     boxm2_lru_cache::create(target_scene);
     //boxm2_cache::instance()->add_scene(target_scene);
 
-    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device); 
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device);
 
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_articulated_render_tableau_new bit_tableau;
-      bit_tableau->init(device, opencl_cache, orbit_scene, target_scene, ni, nj, pcam, "");
+      bit_tableau->init(device, opencl_cache, orbit_scene->scene(), target_scene, ni, nj, pcam, "");
       //create window, attach the new tableau and status bar
       vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer (Render)");
       win->get_adaptor()->set_tableau(bit_tableau);
-         
-
       bit_tableau->set_statusbar(win->get_statusbar());
       win->show();
 
@@ -124,6 +122,6 @@ int main(int argc, char ** argv)
     //set vgui off
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
     vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
-         
+
     return vgui::run();
 }

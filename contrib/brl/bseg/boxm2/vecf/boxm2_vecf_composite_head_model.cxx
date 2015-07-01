@@ -41,7 +41,7 @@ void boxm2_vecf_composite_head_model::set_parameters(boxm2_vecf_composite_head_p
     left_eye_.set_params(leye_params);
   }else{
     boxm2_vecf_orbit_params lorbit_params,rorbit_params;
-    lorbit_params.offset_ = vgl_vector_3d<double>(eye_offset_x + eye_dist_x,eye_offset_y, eye_offset_z);
+    lorbit_params.offset_ = vgl_vector_3d<double>(eye_offset_x + eye_dist_x, eye_offset_y, eye_offset_z);
     rorbit_params.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y, eye_offset_z);
     lorbit_params.eye_pointing_dir_ = params.look_dir_;
     rorbit_params.eye_pointing_dir_ = params.look_dir_;

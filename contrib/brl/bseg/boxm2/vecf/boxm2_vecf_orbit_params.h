@@ -26,7 +26,7 @@ boxm2_vecf_orbit_params(): x_min_(-1.0634), x_max_(0.99), x_marg_(0.1), x_off_co
     app_[1]=static_cast<unsigned char>(32); app_[2] = static_cast<unsigned char>(255);
     init_sphere();
 }
-  
+
 boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_radius, double iris_radius, double pupil_radius,
                         double scale_x_coef, double scale_y_coef,
                         unsigned char sclera_intensity, unsigned char iris_intensity,
@@ -46,12 +46,12 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
     app_.fill(static_cast<unsigned char>(0));
     app_[1]=static_cast<unsigned char>(32); app_[2] = static_cast<unsigned char>(255);
     init_sphere();
-  }  
+  }
 
   void init_sphere() {
     //                                  eyelid/crease structure is positioned below the center of the iris by y_off_
     // ------------------------------------------V------------------------
-    vgl_point_3d<double> c(trans_x_, trans_y_+ y_off_, trans_z_);
+    vgl_point_3d<double> c(trans_x_, trans_y_ + y_off_, trans_z_);
     sph_.set_centre(c);
     sph_.set_radius(eye_radius_);
     lid_sph_.set_centre(c);
@@ -91,7 +91,7 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
   double scale_x() const {return scale_x_coef_*eye_radius_;}
   double scale_y_coef_;
   double scale_y() const {return scale_y_coef_*eye_radius_;}
-  
+
   // vector to location of orbit in the head model
   vgl_vector_3d<double> offset_;
 
@@ -99,14 +99,14 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
   vgl_vector_3d<double> eye_pointing_dir_;
 
   //movement of the upper eyelid opening (produces a vector field to move eyelid material)
-  // dt is measured from the closed position (t = 1) 
+  // dt is measured from the closed position (t = 1)
   double eyelid_dt_;
 
   // distance from pupil center to flat region surrounding eye sphere
   ///start of planar region adjacent to nose
   double medial_socket_radius_coef_;
   double medial_socket_radius() const {return eye_radius_*medial_socket_radius_coef_;}
-  
+
   ///start of planar region on side away from nose
   double lateral_socket_radius_coef_;
   double lateral_socket_radius() const {return eye_radius_*lateral_socket_radius_coef_;}
@@ -163,7 +163,7 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
     double coefs[5]={5.70955, 0.128996, -0.0332313, 0.000466373, -0.00008886};
     vnl_vector_fixed<double, 5> temp = vnl_vector_fixed<double, 5>(coefs);
     return temp;}
-  
+
   vnl_vector_fixed<double, 5> eyelid_coefs_t1() const{
     double coefs[5]={-3.85648, -0.0379334, 0.0140258, 0.00110097,0.00002418};
     vnl_vector_fixed<double, 5> temp = vnl_vector_fixed<double, 5>(coefs);
@@ -173,7 +173,7 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
     double coefs[5]={8.91894, 0.0897925, -0.0264352, -0.000149888, -0.0001056};
     vnl_vector_fixed<double, 5> temp = vnl_vector_fixed<double, 5>(coefs);
     return temp;}
-  
+
   // internal voxel processing parameters
   double neighbor_radius() const {return 1.7320508075688772;}
   double gauss_sigma() const {return 0.75;}
@@ -183,4 +183,3 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
 vcl_ostream&  operator<<(vcl_ostream& s, boxm2_vecf_orbit_params const& pr);
 
 #endif// boxm2_vecf_orbit_params
-

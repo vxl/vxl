@@ -226,7 +226,6 @@ void boxm2_vecf_orbit_scene::reset_indices(){
     this->create_eyelid();
     this->create_lower_eyelid();
     this->create_eyelid_crease();
-  }else{
     this->reset_indices();
     this->recreate_eye();
     this->recreate_eyelid();
@@ -239,7 +238,6 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   double len = this->subblock_len();
   double d_thresh = 0.86602540*len;//sqrt(3)/2 x len, diagonal distance
   double r0 = params_.eye_radius_;
-  //  vgl_sphere_3d<double> sp(0.0, -params_.y_off_, 0.0, r0);
   double rmax = r0+this->subblock_len();
   vgl_box_3d<double> bb;
   bb.add(vgl_point_3d<double>(-rmax, 0.0, 0.0));
@@ -345,7 +343,7 @@ void boxm2_vecf_orbit_scene::find_cell_neigborhoods(){
         indices.push_back(indx_n);
       }
   }
-  vcl_cout << "Find sphere cell neighborhoods in " << t.real()/1000.0 << " sec.\n";
+  vcl_cout << "Find sphere cell neighborhoods in " << t.real()/1000.0 << " sec.\n; size of data and cell maps are :"<<cell_neighbor_cell_index_.size()<<" "<<cell_neighbor_data_index_.size();
 }
 
 //run through all the sphere points (sclera) and paint them white
@@ -398,11 +396,6 @@ void boxm2_vecf_orbit_scene::create_eye(){
   this->build_sphere();
   this->build_iris();
   this->build_pupil();
-  this->find_cell_neigborhoods();
-  // paint the appearance in base gaze direction, +z
-  this->paint_sclera();
-  this->paint_iris();
-  this->paint_pupil();
   vcl_cout << "Create eye in " << t.real()/1000.0 << " sec.\n";
 }
 
@@ -494,14 +487,15 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
   len *= params_.neighbor_radius();
   double rmax = r0+len;
   double rmin = r0-len;
+  double yo = params_.y_off_;
   vgl_box_3d<double> sb; // sphere bounding box, slightly larger than the sphere
-  sb.add(vgl_point_3d<double>(-rmax, 0.0, 0.0));
-  sb.add(vgl_point_3d<double>(+rmax, 0.0, 0.0));
-  sb.add(vgl_point_3d<double>(0.0, -rmax, 0.0));
-  sb.add(vgl_point_3d<double>(0.0, +rmax, 0.0));
-  sb.add(vgl_point_3d<double>(0.0, 0.0, -rmax));
-  sb.add(vgl_point_3d<double>(0.0, 0.0, +rmax));
-  vgl_sphere_3d<double> smin(params_.trans_x_, params_.trans_y_+params_.y_off_, params_.trans_z_,rmin);
+  sb.add(vgl_point_3d<double>(-rmax, -yo, 0.0));
+  sb.add(vgl_point_3d<double>(+rmax, -yo, 0.0));
+  sb.add(vgl_point_3d<double>(0.0, -rmax-yo, 0.0));
+  sb.add(vgl_point_3d<double>(0.0, +rmax-yo, 0.0));
+  sb.add(vgl_point_3d<double>(0.0, -yo, -rmax));
+  sb.add(vgl_point_3d<double>(0.0, -yo, +rmax));
+  vgl_sphere_3d<double> smin(0.0, -params_.y_off_, 0.0,rmin);
   unsigned cnt = 0, ncont = 0;
 
   for(unsigned i = 0; i<nt; ++i){
@@ -528,9 +522,8 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
 
 void boxm2_vecf_orbit_scene::create_eyelid(){
   vul_timer t;
-  this->build_eyelid();
-  this->find_eyelid_cell_neigborhoods();
-  this->paint_eyelid();
+   this->build_eyelid();
+   this->paint_eyelid();
   vcl_cout << "Create eyelid in " << t.real()/1000.0 << " sec.\n";
 }
 
@@ -606,7 +599,6 @@ void boxm2_vecf_orbit_scene::paint_eyelid(){
 //: construct lolwer eyelid (voxelize and paint)
 void boxm2_vecf_orbit_scene::create_lower_eyelid(){
   this->build_lower_eyelid();
-  this->find_lower_eyelid_cell_neigborhoods();
   this->paint_lower_eyelid();
 }
 //:read block eyelid data and reset indices
@@ -684,7 +676,6 @@ void boxm2_vecf_orbit_scene::paint_lower_eyelid(){
 //: construct eyelid crease (voxelize and paint)
 void boxm2_vecf_orbit_scene::create_eyelid_crease(){
   this->build_eyelid_crease();
-  this->find_eyelid_crease_cell_neigborhoods();
   this->paint_eyelid_crease();
 }
 //:read block eyelid data and reset indices
@@ -854,6 +845,11 @@ void boxm2_vecf_orbit_scene::interpolate_vector_field(vgl_point_3d<double> const
   double sig = params_.gauss_sigma()*subblock_len();
   // interpolate using Gaussian weights based on distance to the source point
   double dc = vgl_distance(scell, src);
+  // if(cell_neighbor_data_index.find(dindx)==cell_neighbor_data_index.end())
+  //   {
+  //     vcl_cout<<"danger danger "<<dindx<<" "<<cell_neighbor_data_index.size()<<vcl_endl;
+  //     return;
+  //   }
   const vcl_vector<unsigned>& nbr_cells = cell_neighbor_cell_index[sindx];
   const vcl_vector<unsigned>& nbr_data = cell_neighbor_data_index[dindx];
   double sumw = gauss(dc, sig), sumint = app[0]*sumw, sumalpha = alpha0*sumw;
@@ -1016,7 +1012,7 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
   if(first){
     this->extract_target_block_data(target_scene);
     //       this->fill_target_block();
-    //    first = false;
+    //first = false; // won't work for two eyes
   }
 
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
