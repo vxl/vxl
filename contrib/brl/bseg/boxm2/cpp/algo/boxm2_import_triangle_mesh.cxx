@@ -16,7 +16,7 @@
 
 
 bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, imesh_mesh const& mesh,
-                                bool zero_model)
+                                bool zero_model, float occupied_prob)
 {
   const imesh_face_array_base& mesh_faces = mesh.faces();
   const imesh_vertex_array_base& mesh_verts = mesh.vertices();
@@ -99,7 +99,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
               bool vert_in_box = cell_box.contains(tri_verts[0]) || cell_box.contains(tri_verts[1]) || cell_box.contains(tri_verts[2]);
               if (vert_in_box || bvgl_intersection(cell_box, triangle)) {
                 double side_len = cell_box.width();
-                double alpha = -vcl_log(0.005) / side_len;
+                double alpha = -vcl_log(1.0 - occupied_prob) / side_len;
                 alpha_data->data()[data_offset] = alpha;
               }
             }

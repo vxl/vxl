@@ -90,9 +90,10 @@ def import_point_cloud(scene,cache,in_file,min_octree_depth=2):
   boxm2_batch.set_input_unsigned(3, min_octree_depth)
   boxm2_batch.run_process();
 
-def import_triangle_mesh(scene, cache, ply_filename):
-  boxm2_batch.init_process("boxm2ImportTriangleMeshProcess");
-  boxm2_batch.set_input_from_db(0,scene);
-  boxm2_batch.set_input_from_db(1,cache);
-  boxm2_batch.set_input_string(2,ply_filename);
-  boxm2_batch.run_process();
+def import_triangle_mesh(scene, cache, ply_filename, occupied_prob=0.99):
+  boxm2_batch.init_process("boxm2ImportTriangleMeshProcess")
+  boxm2_batch.set_input_from_db(0,scene)
+  boxm2_batch.set_input_from_db(1,cache)
+  boxm2_batch.set_input_string(2,ply_filename)
+  boxm2_batch.set_input_float(3,occupied_prob)
+  boxm2_batch.run_process()
