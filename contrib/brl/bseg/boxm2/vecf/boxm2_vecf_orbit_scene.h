@@ -47,6 +47,8 @@
 // Note that eye rotation always takes a shell cell into another shell cell.
 //
 #include <boxm2/boxm2_block.h>
+#include <boxm2/vecf/boxm2_vecf_articulated_scene.h>
+#include <boxm2/vecf/boxm2_vecf_articulated_params.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
 #include <vcl_string.h>
@@ -58,16 +60,19 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_set.h>
 
-class boxm2_vecf_orbit_scene
+class boxm2_vecf_orbit_scene:public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
 
  boxm2_vecf_orbit_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0),
-    eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0){}
+    eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), boxm2_vecf_articulated_scene(){}
 
   //: set parameters
-  void set_params(boxm2_vecf_orbit_params const& params){ params_ = params;}
+  void set_params(boxm2_vecf_articulated_params const& params){
+    boxm2_vecf_orbit_params const& params_ref = dynamic_cast<boxm2_vecf_orbit_params const &>(params);
+    params_ =boxm2_vecf_orbit_params(params_ref);
+}
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
@@ -89,10 +94,6 @@ class boxm2_vecf_orbit_scene
   //: static eyelid creasefor now
   void  inverse_vector_field_eyelid_crease(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const;
 
-  boxm2_scene_sptr scene() { return base_model_; }
-
- private:
-  boxm2_scene_sptr base_model_;
   //: test the anat_type (SPHERE, IRIS, ... ) of the voxel that contains a global point
  bool is_type_global(vgl_point_3d<double> const& global_pt, anat_type type) const;
  //: test the anat_type (SPHERE, IRIS, ... ) of a given data index

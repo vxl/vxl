@@ -81,6 +81,7 @@ void boxm2_vecf_orbit_scene::assign_target_cell_centers(){
 void boxm2_vecf_orbit_scene::extract_block_data(){
 
   vcl_vector<boxm2_block_id> blocks = base_model_->get_block_ids();
+  vcl_cout<<"base model is "<<base_model_<<" with block size "<<blocks.size()<<vcl_endl;
   vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
 
@@ -205,7 +206,7 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   vcl_cout << "Reset indices " << t.real()/1000.0 << " sec.\n";
 }
  boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool initialize):
-   base_model_(new boxm2_scene(scene_file)), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
+   boxm2_vecf_articulated_scene(scene_file), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
 
   eyelid_geo_.set_tmin(params_.eyelid_tmin_);
@@ -1009,7 +1010,7 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
   if(first){
     this->extract_target_block_data(target_scene);
     //       this->fill_target_block();
-    //first = false; // won't work for two eyes
+    first = false; // won't work for two eyes
   }
 
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);

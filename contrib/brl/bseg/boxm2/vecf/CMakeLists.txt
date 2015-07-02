@@ -8,6 +8,8 @@ SET(boxm2_vecf_sources
     boxm2_vecf_head_model.h                 boxm2_vecf_head_model.cxx
     boxm2_vecf_composite_head_parameters.h
     boxm2_vecf_composite_head_model.h       boxm2_vecf_composite_head_model.cxx
+    boxm2_vecf_articulated_scene.h          boxm2_vecf_articulated_scene.cxx
+    boxm2_vecf_articulated_params.h
     boxm2_vecf_orbit_scene.h                boxm2_vecf_orbit_scene.cxx
     boxm2_vecf_lid_base.h                   boxm2_vecf_lid_base.cxx
     boxm2_vecf_eyelid.h                     boxm2_vecf_eyelid.cxx
@@ -36,7 +38,5 @@ subdirs(exe)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests) 
+  SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
-
-

@@ -8,10 +8,12 @@
 // \date   27 Mar 2015
 //
 #include <boxm2/boxm2_data_traits.h>
+#include "boxm2_vecf_articulated_params.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
 #include <vgl/vgl_sphere_3d.h>
-struct boxm2_vecf_orbit_params{
+class boxm2_vecf_orbit_params : public boxm2_vecf_articulated_params{
+ public:
 boxm2_vecf_orbit_params(): x_min_(-1.0634), x_max_(0.99), x_marg_(0.1), x_off_coef_(0.1), y_off_(1.0), eye_radius_(12.0), iris_radius_(5.5),
     pupil_radius_(1.75), medial_socket_radius_coef_(1.0), lateral_socket_radius_coef_(1.5),dphi_rad_(0.0),
     sclera_intensity_(static_cast<unsigned char>(250)), iris_intensity_(static_cast<unsigned char>(100)),

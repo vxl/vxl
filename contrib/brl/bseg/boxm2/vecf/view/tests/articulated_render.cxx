@@ -54,11 +54,11 @@ int main(int argc, char ** argv)
     vgui::init(argc, argv);
 #endif
 
-  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/";
+  vcl_string base_dir_path = "/home/imagedata/janus/models/composite/";
   //vcl_string orbit_scene_path = base_dir_path + "orbit/orbit.25.xml";
   //vcl_string target_scene_path = base_dir_path + "orbit/target_orbit.25.xml";
   vcl_string orbit_scene_path = base_dir_path + "orbit/orbit.xml";
-  vcl_string target_scene_path = base_dir_path + "orbit/target_orbit.xml";
+  vcl_string target_scene_path = base_dir_path + "target_orbit/target_orbit.xml";
   vcl_string default_cam_path = base_dir_path + "orbit/default_orbit_cam.txt";
   unsigned ni = 1280, nj = 720;
   unsigned device_id = 1;
@@ -111,7 +111,7 @@ int main(int argc, char ** argv)
 
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_articulated_render_tableau_new bit_tableau;
-      bit_tableau->init(device, opencl_cache, orbit_scene->scene(), target_scene, ni, nj, pcam, "");
+      bit_tableau->init(device, opencl_cache, orbit_scene, target_scene, ni, nj, pcam, "");
       //create window, attach the new tableau and status bar
       vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer (Render)");
       win->get_adaptor()->set_tableau(bit_tableau);

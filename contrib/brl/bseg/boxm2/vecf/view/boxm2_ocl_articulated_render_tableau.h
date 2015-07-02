@@ -30,8 +30,8 @@
 #include <brdb/brdb_value.h>
 
 //vecf
-#include "../boxm2_vecf_orbit_scene.h"
-
+#include "../boxm2_vecf_articulated_scene.h"
+#include "../boxm2_vecf_articulated_params.h"
 class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
 {
  public:
@@ -41,7 +41,7 @@ class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
   //: initialize tableau with scene_file, viewport size, initial cam,
   bool init(bocl_device_sptr device,
             boxm2_opencl_cache_sptr opencl_cache,
-            boxm2_scene_sptr orbit_scene,
+            boxm2_vecf_articulated_scene_sptr articulated_scene,
             boxm2_scene_sptr target_scene,
             unsigned ni,
             unsigned nj,
@@ -61,7 +61,7 @@ class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
   bocl_device_sptr device_;
   cl_command_queue queue_;
   //: Boxm2 Scene
-  boxm2_scene_sptr orbit_scene_;
+  boxm2_vecf_articulated_scene_sptr articulated_scene_;
   boxm2_scene_sptr target_scene_;
   boxm2_opencl_cache_sptr opencl_cache_;
   unsigned ni_;
@@ -73,14 +73,14 @@ class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
   bocl_mem_sptr exp_img_;
-  bocl_mem_sptr exp_img_dim_; 
+  bocl_mem_sptr exp_img_dim_;
   //--Render, update, refine, save helper methods ------------------------------
   //func to render frame on GPU (returns gpu time)
   float render_frame();
 
   bool init_clgl();
   bool do_init_ocl;
-  
+
   //hack to toggle RGB to B&W
   bool is_bw_;
   // toggle depth / expected image
@@ -90,7 +90,7 @@ class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
   float depth_scale_;
   float depth_offset_;
 
-  // animation 
+  // animation
   bool animation_on_;
 };
 

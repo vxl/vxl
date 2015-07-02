@@ -8,7 +8,6 @@
 // \date   14 Apr 2015
 //
 #include "boxm2_vecf_orbit_params.h"
-
 class boxm2_vecf_orbit_articulation{
  public:
   boxm2_vecf_orbit_articulation();
