@@ -399,7 +399,7 @@ void volm_io_tools::load_geotiff_image(vcl_string filename, volm_img_info& info,
 
 void volm_io_tools::load_aster_dem_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
 {
-  vcl_string file_glob = folder + "//ASTGTM2_*.tif";
+  vcl_string file_glob = folder + "//*.tif";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
     volm_img_info info;
     volm_io_tools::load_geotiff_image(fn(), info);

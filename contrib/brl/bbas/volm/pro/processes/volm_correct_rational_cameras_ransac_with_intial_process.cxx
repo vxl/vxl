@@ -70,7 +70,7 @@ namespace volm_correct_rational_cameras_ransac_with_initial_process_globals
 bool volm_correct_rational_cameras_ransac_with_intial_process_cons(bprb_func_process& pro)
 {
   using namespace volm_correct_rational_cameras_ransac_with_initial_process_globals;
-  vcl_vector<vcl_string> input_types(6);
+  vcl_vector<vcl_string> input_types(n_inputs_);
   input_types[0] = "volm_satellite_resources_sptr";  // satellite resource to fetch the full path of the satellite images
   input_types[1] = "vcl_string";                     // a file that lists the name to a camera on each line and i and j coordinate of the 3D world point
                                                      // format of the file:
@@ -81,7 +81,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process_cons(bprb_func_pro
   input_types[3] = "vcl_string";                     // output folder
   input_types[4] = "float";                          // pixel radius for the disagreement among inliers, e.g. 2 pixels
   input_types[5] = "bool";                           // option to enforce having at least 2 existing corrected cameras
-  vcl_vector<vcl_string> output_types(0);
+  vcl_vector<vcl_string> output_types(n_outputs_);
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 
@@ -250,7 +250,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
       vcl_cout << '\n';
 #endif
       continue;
-    };
+    }
     cam_trans.push_back(cam_trans_i);
     corrs_ids.push_back(i);
 
@@ -315,7 +315,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
   // check whether the inliers count is sufficient
   double inlier_ratio = (double)max / cam_trans.size();
   if (inlier_ratio < 0.1) {
-    vcl_cout << pro.name() << ": less than 10% of correspondence yield constant translations deu to bad correspondence, correction failed" << vcl_endl;
+    vcl_cout << pro.name() << ": less than 10% of correspondence yield constant translations due to bad correspondence, correction failed" << vcl_endl;
     return false;
   }
 
