@@ -13,7 +13,7 @@
 #include "../boxm2_vecf_fit_orbit.h"
 #include "../boxm2_vecf_fit_margins.h"
 #include <vgl/vgl_sphere_3d.h>
-//#define BUILD_FIT_MARGIN
+#define BUILD_FIT_MARGIN
 #define CRISTINA 1
 #define P069 0
 #define P113 0

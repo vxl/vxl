@@ -13,9 +13,9 @@
 #include <vgl/vgl_sphere_3d.h>
 struct boxm2_vecf_orbit_params{
 boxm2_vecf_orbit_params(): x_min_(-1.0634), x_max_(0.99), x_marg_(0.1), x_off_coef_(0.1), y_off_(1.0), eye_radius_(12.0), iris_radius_(5.5),
-    pupil_radius_(1.75), medial_socket_radius_coef_(0.75), lateral_socket_radius_coef_(1.2),dphi_rad_(0.0),
+    pupil_radius_(1.75), medial_socket_radius_coef_(1.0), lateral_socket_radius_coef_(1.5),dphi_rad_(0.0),
     sclera_intensity_(static_cast<unsigned char>(250)), iris_intensity_(static_cast<unsigned char>(100)),
-    pupil_intensity_(static_cast<unsigned char>(20)), eyelid_radius_offset_(3.0), // radius offset 1.0
+    pupil_intensity_(static_cast<unsigned char>(20)), eyelid_radius_offset_(3.0), inferior_lid_radius_offset_(eyelid_radius_offset_),
     eyelid_tmin_(0.0), eyelid_tmax_(0.95), eyelid_intensity_(160), eyelid_dt_(0.0), //eyelid_tmin_ 0.1
     lower_eyelid_tmin_(1.05), lower_eyelid_tmax_(1.5),lower_eyelid_intensity_(160), mid_eyelid_crease_z_(eye_radius_),
     eyelid_crease_scale_y_coef_(0.083333),eyelid_crease_tmin_(-0.85), eyelid_crease_tmax_(1.05),eyelid_crease_lower_intensity_(150),
@@ -92,6 +92,10 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
   double scale_y_coef_;
   double scale_y() const {return scale_y_coef_*eye_radius_;}
 
+  // the inferior-superior margin opening at x == 0 relative to (xmax_-xmin_)*eye_radius_
+  double height_to_width_ratio() const;
+
+
   // vector to location of orbit in the head model
   vgl_vector_3d<double> offset_;
 
@@ -121,6 +125,10 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
   // essentially 1/2 the thickness of the eyelid skin
   double eyelid_radius_offset_;
   double eyelid_radius() const{ return eye_radius_ + eyelid_radius_offset_;}
+
+  double inferior_lid_radius_offset_;
+  double inferior_lid_thickness() const {return inferior_lid_radius_offset_;}
+  double inferior_lid_radius() const {return eyelid_radius_offset_+ eye_radius_;}
 
   // max and min limits of eyelid opening
   double eyelid_tmin_;

@@ -5,6 +5,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <bvrml/bvrml_write.h>
+#include <vcl_algorithm.h>
 #include <vcl_limits.h>
 # define USE_SPHERE 0
 # define SET_CREASE_T 0
@@ -15,6 +16,7 @@ void boxm2_vecf_fit_orbit::fill_smid_map(){
   smid_map_["left_eye_superior_margin"]=LEFT_EYE_SUPERIOR_MARGIN;
   smid_map_["left_eye_superior_crease"]=LEFT_EYE_SUPERIOR_CREASE;
   smid_map_["left_eye_sclera"]=LEFT_SCLERA;
+  smid_map_["left_eye_inferior_lid_surface"]=LEFT_INFERIOR_LID_SURFACE;
   smid_map_["left_Nz"]=LEFT_Nz;
   smid_map_["left_iris_radius"]=LEFT_IRIS_RADIUS;
 
@@ -24,6 +26,7 @@ void boxm2_vecf_fit_orbit::fill_smid_map(){
   smid_map_["right_eye_superior_margin"]=RIGHT_EYE_SUPERIOR_MARGIN;
   smid_map_["right_eye_superior_crease"]=RIGHT_EYE_SUPERIOR_CREASE;
   smid_map_["right_eye_sclera"]=RIGHT_SCLERA;
+  smid_map_["right_eye_inferior_lid_surface"]=RIGHT_INFERIOR_LID_SURFACE;
   smid_map_["right_Nz"]=RIGHT_Nz;
   smid_map_["right_iris_radius"]=RIGHT_IRIS_RADIUS;
 }
@@ -99,6 +102,72 @@ bool boxm2_vecf_fit_orbit::left_eye_radius( double& rad){
   rad = vcl_fabs(dx/(left_params_.x_max_-left_params_.x_min_));
   return true;
 }
+bool boxm2_vecf_fit_orbit::left_eye_socket_radii_coefs( double& lateral_radius_coef, double& medial_radius_coef){
+  double r = left_params_.sph_.radius();
+  double rsq = r*r;
+  vcl_map<mids, labeled_point>::iterator lit;
+  lit = lpts_.find(LEFT_EYE_MEDIAL_CANTHUS);
+  if(lit == lpts_.end())
+    return false;
+  const vgl_point_3d<double>& le_mc  = lit->second.p3d_;
+  double zmed =  le_mc.z() - left_params_.z_trans();
+  double xmed_sq = rsq - zmed*zmed;
+  if(xmed_sq <0.0)
+    medial_radius_coef = left_params_.medial_socket_radius_coef_;
+  else
+         medial_radius_coef = vcl_sqrt(xmed_sq)/r;
+
+  lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
+  if(lit == lpts_.end())
+    return false;
+  const vgl_point_3d<double>& le_lc  = lit->second.p3d_;
+  double zlat =  le_lc.z() - left_params_.z_trans();
+  double xlat_sq = rsq - zlat*zlat;
+  if(xlat_sq <0.0)
+    lateral_radius_coef = left_params_.lateral_socket_radius_coef_;
+  else
+    lateral_radius_coef = vcl_sqrt(xlat_sq)/r;
+  return true;
+}
+bool boxm2_vecf_fit_orbit::left_eye_inferior_lid_thickness(vcl_string const& data_desc, double& dr){
+  vcl_cout << "===left dr ===\n";
+  vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(data_desc);
+  if(iit == smid_map_.end() ){
+    vcl_cout << "data label " << data_desc << " doesn't exist\n";
+    return false;
+  } 
+  const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
+  if(!pts.size()){
+    vcl_cout << "No data of type " << data_desc << '\n';
+    return false;
+  }
+  double x0 = left_params_.x_trans(), y0 = left_params_.y_trans()+left_params_.y_off_, z0 =left_params_.z_trans(), r = left_params_.eye_radius_;
+  vcl_vector<double> dr_vals;
+  for(vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+          pit != pts.end(); ++pit){
+    double xi = pit->x(), yi = pit->y(), zi = pit->z();
+    double rsqi =  (xi-x0)*(xi-x0) + (yi-y0)*(yi-y0) + (zi-z0)*(zi-z0);
+    double ri = vcl_sqrt(rsqi);
+    ri -= r;
+    if(ri<0.0)
+      ri = 0.0;
+    dr_vals.push_back(ri);
+    vcl_cout << ri << '\n';
+  }
+  if(dr_vals.size() == 0)
+    return false;
+  vcl_sort(dr_vals.begin(), dr_vals.end());
+  // smallest 25% of dr values
+  unsigned n_small = static_cast<unsigned>(dr_vals.size())/4;
+  if(n_small==0)
+    n_small = 1;
+  double dr_mean = 0;
+  for(unsigned i = 0; i<n_small; ++i)
+    dr_mean += dr_vals[i];
+  dr = dr_mean/static_cast<double>(n_small);
+  return true;
+}
+
 bool boxm2_vecf_fit_orbit::set_left_iris_radius(){
   vcl_map<mids, labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_IRIS_RADIUS);
@@ -129,7 +198,32 @@ bool boxm2_vecf_fit_orbit::left_trans_y_from_lateral_canthus( double& tr_y){
   tr_y = le_oc.y();
   return true;
 }
-
+bool boxm2_vecf_fit_orbit::left_trans_z_from_sclera(vcl_string const& data_desc, double& tr_z){
+  vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(data_desc);
+  if(iit == smid_map_.end() ){
+    vcl_cout << "data label " << data_desc << " doesn't exist\n";
+    return false;
+  } 
+  const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
+  if(!pts.size()){
+    vcl_cout << "No data of type " << data_desc << '\n';
+    return false;
+  }
+  double x0 = left_params_.x_trans(), y0 = left_params_.y_trans(), r = left_params_.eye_radius_;
+  double sum_z0 = 0.0, nz = 0.0, rsq = r*r;
+  for(vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+      pit != pts.end(); ++pit, nz+=1.0){
+    double xi = pit->x(), yi = pit->y(), zi = pit->z();
+    double sq = rsq - (xi-x0)*(xi-x0) - (yi-y0)*(yi-y0);
+    if(sq<0.0)
+      continue;
+    sum_z0 += zi-vcl_sqrt(sq);
+  }
+  if(nz<=0.0)
+    return false;
+  tr_z = sum_z0/nz;
+  return true;
+}
 bool boxm2_vecf_fit_orbit::left_eye_x_scale(double& left_x_scale){
   vcl_map<mids, labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
@@ -310,6 +404,72 @@ bool boxm2_vecf_fit_orbit::right_eye_radius( double& rad){
 
   return true;
 }
+bool boxm2_vecf_fit_orbit::right_eye_socket_radii_coefs( double& lateral_radius_coef, double& medial_radius_coef){
+  double r = right_params_.sph_.radius();
+  double rsq = r*r;
+  vcl_map<mids, labeled_point>::iterator lit;
+  lit = lpts_.find(RIGHT_EYE_MEDIAL_CANTHUS);
+  if(lit == lpts_.end())
+    return false;
+  const vgl_point_3d<double>& re_mc  = lit->second.p3d_;
+  double zmed =  re_mc.z() - right_params_.z_trans();
+  double xmed_sq = rsq - zmed*zmed;
+  if(xmed_sq <0.0)
+    medial_radius_coef = right_params_.medial_socket_radius_coef_;
+  else
+    medial_radius_coef = vcl_sqrt(xmed_sq)/r;
+
+  lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
+  if(lit == lpts_.end())
+    return false;
+  const vgl_point_3d<double>& re_lc  = lit->second.p3d_;
+  double zlat =  re_lc.z() - right_params_.z_trans();
+  double xlat_sq = rsq - zlat*zlat;
+  if(xlat_sq <0.0)
+    lateral_radius_coef = right_params_.lateral_socket_radius_coef_;
+  else
+    lateral_radius_coef = vcl_sqrt(xlat_sq)/r;
+  return true;
+}
+bool boxm2_vecf_fit_orbit::right_eye_inferior_lid_thickness(vcl_string const& data_desc, double& dr){
+  vcl_cout << "===right dr ===\n";
+  vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(data_desc);
+  if(iit == smid_map_.end() ){
+    vcl_cout << "data label " << data_desc << " doesn't exist\n";
+    return false;
+  } 
+  const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
+  if(!pts.size()){
+    vcl_cout << "No data of type " << data_desc << '\n';
+    return false;
+  }
+  double x0 = right_params_.x_trans(), y0 = right_params_.y_trans()+right_params_.y_off_, z0 =right_params_.z_trans(), r = right_params_.eye_radius_;
+  vcl_vector<double> dr_vals;
+  for(vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+          pit != pts.end(); ++pit){
+    double xi = pit->x(), yi = pit->y(), zi = pit->z();
+    double rsqi =  (xi-x0)*(xi-x0) + (yi-y0)*(yi-y0) + (zi-z0)*(zi-z0);
+    double ri = vcl_sqrt(rsqi);
+    ri -= r;
+    if(ri<0.0)
+      ri = 0.0;
+    dr_vals.push_back(ri);
+    vcl_cout << ri << '\n';
+  }
+  if(dr_vals.size() == 0)
+    return false;
+  vcl_sort(dr_vals.begin(), dr_vals.end());
+  // smallest 25% of dr values
+  unsigned n_small = static_cast<unsigned>(dr_vals.size())/4;
+  if(n_small==0)
+    n_small = 1;
+  double dr_mean = 0;
+  for(unsigned i = 0; i<n_small; ++i)
+    dr_mean += dr_vals[i];
+  dr = dr_mean/static_cast<double>(n_small);
+  return true;
+}
+
 
 bool boxm2_vecf_fit_orbit::set_right_iris_radius(){
   vcl_map<mids, labeled_point>::iterator lit;
@@ -343,6 +503,32 @@ bool boxm2_vecf_fit_orbit::right_trans_x_from_lateral_canthus(double& trx){
   return true;
 }
 
+bool boxm2_vecf_fit_orbit::right_trans_z_from_sclera(vcl_string const& data_desc, double& tr_z){
+  vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(data_desc);
+  if(iit == smid_map_.end() ){
+    vcl_cout << "data label " << data_desc << " doesn't exist\n";
+    return false;
+  } 
+  const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
+  if(!pts.size()){
+    vcl_cout << "No data of type " << data_desc << '\n';
+    return false;
+  }
+  double x0 = right_params_.x_trans(), y0 = right_params_.y_trans(), r = right_params_.eye_radius_;
+  double sum_z0 = 0.0, nz = 0.0, rsq = r*r;
+  for(vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+      pit != pts.end(); ++pit, nz+=1.0){
+    double xi = pit->x(), yi = pit->y(), zi = pit->z();
+    double sq = rsq - (xi-x0)*(xi-x0) - (yi-y0)*(yi-y0);
+    if(sq<0.0)
+      continue;
+    sum_z0 += zi-vcl_sqrt(sq);
+  }
+  if(nz<=0.0)
+    return false;
+  tr_z = sum_z0/nz;
+  return true;
+}
 bool boxm2_vecf_fit_orbit::right_eye_x_scale(double& right_x_scale){
   vcl_map<mids, labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
@@ -495,7 +681,8 @@ bool boxm2_vecf_fit_orbit::fit_left(){
   d_try = rlat*vcl_sin(left_params_.dphi_rad_);
 
   trx -= d_trx;
-  trz = max_left_z - eye_rad;
+  // trz = max_left_z - eye_rad;
+
 #else
   good = this->fit_sclera("left_eye_sclera");
   if(!good)
@@ -506,7 +693,7 @@ bool boxm2_vecf_fit_orbit::fit_left(){
 #endif
 
   this->set_left_trans_x(trx);
-  this->set_left_trans_z(trz);
+  //this->set_left_trans_z(trz);
   // setting trans y from the sphere center seems not as accurate
   // as from the lateral canthus
   good = this->left_trans_y_from_lateral_canthus(tr_y);
@@ -514,10 +701,25 @@ bool boxm2_vecf_fit_orbit::fit_left(){
     return false;
   tr_y -= d_try;
   this->set_left_trans_y(tr_y);
-
+  good = this->left_trans_z_from_sclera("left_eye_sclera", trz);
+  if(!good)
+    return false;
+  this->set_left_trans_z(trz);
 #if !USE_SPHERE 
   left_params_.init_sphere();
 #endif
+  double lat_rad_coef = 0.0, med_rad_coef = 0.0;
+  good =  left_eye_socket_radii_coefs(lat_rad_coef, med_rad_coef);
+  if(!good)
+    return false;
+  this->set_left_eye_socket_radii_coefs(lat_rad_coef, med_rad_coef);
+
+  double lth = 0.0;
+  good = left_eye_inferior_lid_thickness("left_eye_inferior_lid_surface",lth);
+  if(!good)
+    return false;
+  this->set_left_eye_inferior_lid_thickness(lth);
+
   double left_x_scale;
   good = this->left_eye_x_scale(left_x_scale);
   if(!good)
@@ -600,7 +802,7 @@ bool boxm2_vecf_fit_orbit::fit_right(){
   d_try = rlat*vcl_sin(right_params_.dphi_rad_);
   
   trx += d_trx;
-  trz = max_right_z - eye_rad;
+  //trz = max_right_z - eye_rad;
 #else
   good = this->fit_sclera("right_eye_sclera");
   if(!good)
@@ -611,8 +813,7 @@ bool boxm2_vecf_fit_orbit::fit_right(){
 #endif
 
   this->set_right_trans_x(trx);
-  this->set_right_trans_z(trz);
-
+ // this->set_right_trans_z(trz);
   // setting trans y from the sphere center seems not as accurate
   // as from the outer cusp.
   good = this->right_trans_y_from_lateral_canthus(tr_y);
@@ -620,9 +821,26 @@ bool boxm2_vecf_fit_orbit::fit_right(){
     return false;
   tr_y -= d_try;
   this->set_right_trans_y(tr_y);
+  good = this->right_trans_z_from_sclera("right_eye_sclera", trz);
+  if(!good)
+    return false;
+   this->set_right_trans_z(trz);
 #if !USE_SPHERE 
   right_params_.init_sphere();
 #endif
+  double lat_rad_coef = 0.0, med_rad_coef = 0.0;
+  good =  right_eye_socket_radii_coefs(lat_rad_coef, med_rad_coef);
+  if(!good)
+    return false;
+  this->set_right_eye_socket_radii_coefs(lat_rad_coef, med_rad_coef);
+
+  double rth = 0.0;
+  good = right_eye_inferior_lid_thickness("right_eye_inferior_lid_surface",rth);
+  if(!good)
+    return false;
+  this->set_right_eye_inferior_lid_thickness(rth);
+
+
   double right_x_scale;
   good = this->right_eye_x_scale(right_x_scale);
   if(!good)
@@ -702,21 +920,30 @@ bool boxm2_vecf_fit_orbit::load_orbit_data(vcl_string const& data_desc, vcl_stri
 return true;
 }
 void boxm2_vecf_fit_orbit::plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  double left_tinf = left_params_.lower_eyelid_tmin_;
-  double right_tinf = right_params_.lower_eyelid_tmin_;
+  double left_min_tinf = left_params_.lower_eyelid_tmin_;
+  double right_min_tinf = right_params_.lower_eyelid_tmin_;
+  double left_max_tinf = left_params_.lower_eyelid_tmax_;
+  double right_max_tinf = right_params_.lower_eyelid_tmax_;
   boxm2_vecf_eyelid lelid(left_params_);
   boxm2_vecf_eyelid relid(right_params_);
   for(double xm = xm_min; xm<=xm_max; xm+=0.25){
-    double yy=0.0, zz = 0.0;
+    double min_yy=0.0, min_zz = 0.0;
+    double max_yy=0.0, max_zz = 0.0;
     if(is_right){
-        yy = relid.Y(-xm, right_tinf);
-        zz = relid.Z(-xm, right_tinf);
+        min_yy = relid.Y(-xm, right_min_tinf);
+        min_zz = relid.Z(-xm, right_min_tinf);
+        max_yy = relid.Y(-xm, right_max_tinf);
+        max_zz = relid.Z(-xm, right_max_tinf);
     }else{
-        yy = lelid.Y(xm, left_tinf);
-        zz = lelid.Z(xm, left_tinf);
+        min_yy = lelid.Y(xm, left_min_tinf);
+        min_zz = lelid.Z(xm, left_min_tinf);
+        max_yy = lelid.Y(xm, left_max_tinf);
+        max_zz = lelid.Z(xm, left_max_tinf);
       }
-    vgl_point_3d<double> p(xm, yy, zz);
-    pts.push_back(p);
+    vgl_point_3d<double> min_p(xm, min_yy, min_zz);
+    vgl_point_3d<double> max_p(xm, max_yy, max_zz);
+    pts.push_back(min_p);
+    pts.push_back(max_p);
   }
 }
 void boxm2_vecf_fit_orbit::plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
@@ -989,6 +1216,21 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
     vgl_sphere_3d<float> sp(pf, r*0.025f);
     bvrml_write::write_vrml_sphere(ostr, sp, 0.75f, 0.75f, 0.0f);
   }
+  }
+  pts.clear();
+  // display the inferior surface
+  pts = orbit_data_[LEFT_INFERIOR_LID_SURFACE];
+  if(is_right)
+    pts = orbit_data_[RIGHT_INFERIOR_LID_SURFACE];
+  double dx = -2.0;
+  if(is_right) dx = 2.0;
+  vgl_vector_3d<double> vv(v.x()+dx, v.y(), v.z());
+   for(vcl_vector<vgl_point_3d<double> >::iterator pit = pts.begin();
+      pit != pts.end(); ++pit){
+    vgl_point_3d<double> p = *pit-vv;
+    vgl_point_3d<float> pf(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
+    vgl_sphere_3d<float> sp(pf, r*0.025f);
+    bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.75f, 0.5f);
   }
   pts.clear();
   // display the superior margin

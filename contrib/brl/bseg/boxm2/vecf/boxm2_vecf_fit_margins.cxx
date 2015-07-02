@@ -21,7 +21,8 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
                          vgl_point_2d<double> const& lat_canth,
                          vgl_point_2d<double> const& med_canth,
                          boxm2_vecf_orbit_params& opr, bool is_right):
-  vnl_least_squares_function(7,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+crease_pts.size()+sclera_pts.size()+2*((inf_pts.size()+sup_pts.size())/2)),
+  vnl_least_squares_function(7,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+crease_pts.size()+ 2*((inf_pts.size()+sup_pts.size())/2)),
+                             //vnl_least_squares_function(7,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+crease_pts.size()+sclera_pts.size()+2*((inf_pts.size()+sup_pts.size())/2)),
   //vnl_least_squares_function(8,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+sclera_pts.size()),
                              vnl_least_squares_function::no_gradient), inf_pts_(inf_pts),
   sup_pts_(sup_pts),  crease_pts_(crease_pts), sclera_pts_(sclera_pts), lat_canth_(lat_canth), med_canth_(med_canth),opr_(opr), is_right_(is_right){}
@@ -77,6 +78,7 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
       fx[i+off]= p.y()-ycr;
     }
     off += ncre;
+#if 0
     for(unsigned i = 0; i<nscl; ++i){
       vgl_point_3d<double> p = (sclera_pts_[i]);
       vgl_point_3d<double> pc = vgl_closest_point(opr_.sph_, p);
@@ -84,6 +86,7 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
       fx[i+off] = dz;
     }
     off += nscl;
+#endif
     for(unsigned i = 0; i<2*ncanth; i+=2){
       vgl_point_2d<double> pl = lat_canth_-v;
       vgl_point_2d<double> pm = med_canth_-v;

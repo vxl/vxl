@@ -26,9 +26,9 @@ class boxm2_vecf_fit_orbit{
  public:
   // ids for orbit measurements
   enum mids {LEFT_EYE_MEDIAL_CANTHUS, LEFT_EYE_LATERAL_CANTHUS, LEFT_EYE_INFERIOR_MARGIN,
-             LEFT_EYE_SUPERIOR_MARGIN, LEFT_EYE_SUPERIOR_CREASE, LEFT_SCLERA, LEFT_Nz,LEFT_IRIS_RADIUS,
+             LEFT_EYE_SUPERIOR_MARGIN, LEFT_EYE_SUPERIOR_CREASE, LEFT_SCLERA, LEFT_INFERIOR_LID_SURFACE, LEFT_Nz,LEFT_IRIS_RADIUS,
              RIGHT_EYE_MEDIAL_CANTHUS, RIGHT_EYE_LATERAL_CANTHUS, RIGHT_EYE_INFERIOR_MARGIN,
-             RIGHT_EYE_SUPERIOR_MARGIN, RIGHT_EYE_SUPERIOR_CREASE, RIGHT_SCLERA, RIGHT_Nz, RIGHT_IRIS_RADIUS};
+             RIGHT_EYE_SUPERIOR_MARGIN, RIGHT_EYE_SUPERIOR_CREASE, RIGHT_SCLERA, RIGHT_INFERIOR_LID_SURFACE, RIGHT_Nz, RIGHT_IRIS_RADIUS};
  boxm2_vecf_fit_orbit(): nominal_medial_lateral_angle_rad_(0.110498)//left eye
     {fill_smid_map();}
   boxm2_vecf_orbit_params fitted_params();
@@ -43,9 +43,19 @@ class boxm2_vecf_fit_orbit{
   bool left_eye_radius( double& rad);
   void set_left_eye_radius(double rad){left_params_.eye_radius_=rad;}
 
+  bool left_eye_socket_radii_coefs( double& lateral_radius_coef, double& medial_radius_coef);
+  void set_left_eye_socket_radii_coefs(double lat_rad_coef, double med_rad_coef){
+    left_params_.lateral_socket_radius_coef_ = lat_rad_coef;
+    left_params_.medial_socket_radius_coef_ = med_rad_coef;
+  }
+
+  bool left_eye_inferior_lid_thickness(vcl_string const& data_desc, double& dr);
+  void set_left_eye_inferior_lid_thickness(double dr){left_params_.inferior_lid_radius_offset_=dr;}
+
   bool left_trans_y_from_lateral_canthus( double& tr_y);
   void set_left_trans_y(double tr_y){left_params_.trans_y_=tr_y;}
 
+  bool left_trans_z_from_sclera(vcl_string const& data_desc, double& tr_z);
   void set_left_trans_z(double tr_z){left_params_.trans_z_=tr_z;}
 
   bool left_trans_x_from_lateral_canthus(double& trx);
@@ -94,6 +104,15 @@ class boxm2_vecf_fit_orbit{
   bool right_eye_radius( double& rad);
   void set_right_eye_radius(double rad){right_params_.eye_radius_=rad;}
 
+  bool right_eye_socket_radii_coefs( double& lateral_radius_coef, double& medial_radius_coef);
+  void set_right_eye_socket_radii_coefs(double lat_rad_coef, double med_rad_coef){
+    right_params_.lateral_socket_radius_coef_ = lat_rad_coef;
+    right_params_.medial_socket_radius_coef_ = med_rad_coef;
+  }
+
+  bool right_eye_inferior_lid_thickness(vcl_string const& data_desc, double& dr);
+  void set_right_eye_inferior_lid_thickness(double dr){right_params_.inferior_lid_radius_offset_=dr;}
+
   bool right_trans_x_from_lateral_canthus(double& trx);
 
   //: can be determined from outer cusp or from the spherical fit to the sclera
@@ -103,6 +122,7 @@ class boxm2_vecf_fit_orbit{
   bool right_trans_y_from_lateral_canthus( double& tr_y);
   void set_right_trans_y(double tr_y){right_params_.trans_y_=tr_y;}
 
+  bool right_trans_z_from_sclera(vcl_string const& data_desc, double& tr_z);
   void set_right_trans_z(double tr_z){right_params_.trans_z_=tr_z;}
 
   bool right_eye_x_scale(double& right_x_scale);

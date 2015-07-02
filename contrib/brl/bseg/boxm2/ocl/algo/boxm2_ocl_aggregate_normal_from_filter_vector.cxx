@@ -80,7 +80,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
   bocl_mem_sptr lookup= ocl_cache_->alloc_mem(sizeof(cl_uchar)*256, lookup_arr, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  // set up directions buffer (previous code tried to use an array on the stack with variable dimension tsk tsk)
+  // set up directions buffer (previous code tried to create an array on the stack with variable dimension tsk tsk)
   unsigned num_filters = filter_vector_->kernels_.size();
   cl_float* directions = new cl_float[4*num_filters];
 
