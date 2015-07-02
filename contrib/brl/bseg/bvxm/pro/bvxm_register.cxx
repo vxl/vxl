@@ -78,4 +78,5 @@ void bvxm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_heightmap_exp_process, "bvxmHeightmapExpectedProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_uncertainty_process, "bvxmUncertaintyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_land_map_process, "bvxmCreateLandMapProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_scene_xml_process, "bvxmCreateSceneXmlProcess");
 }

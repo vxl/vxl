@@ -16,6 +16,26 @@ def create_scene(scene_params_xml):
   world = dbvalue(world_id, world_type);
   return world
 
+## create scene xml
+def create_scene_xml(scene_xml, world_dir, lvcs, lvcs_file, dim_x, dim_y, dim_z, voxel_size = 1.0, corner_x = 0.0, corner_y = 0.0, corner_z = 0.0,
+                     min_ocp_prob = 0.001, max_ocp_prob = 0.999, max_scale = 1):
+  bvxm_batch.init_process("bvxmCreateSceneXmlProcess")
+  bvxm_batch.set_input_string(0, scene_xml)
+  bvxm_batch.set_input_string(1, world_dir)
+  bvxm_batch.set_input_float(2,  corner_x)
+  bvxm_batch.set_input_float(3,  corner_y)
+  bvxm_batch.set_input_float(4,  corner_z)
+  bvxm_batch.set_input_unsigned(5, dim_x)
+  bvxm_batch.set_input_unsigned(6, dim_y)
+  bvxm_batch.set_input_unsigned(7, dim_z)
+  bvxm_batch.set_input_float(8, voxel_size)
+  bvxm_batch.set_input_from_db(9, lvcs)
+  bvxm_batch.set_input_string(10, lvcs_file)
+  bvxm_batch.set_input_float(11, min_ocp_prob)
+  bvxm_batch.set_input_float(12, max_ocp_prob)
+  bvxm_batch.set_input_unsigned(13, max_scale)
+  return bvxm_batch.run_process()
+
 def scene_box(scene):
   bvxm_batch.init_process("bvxmSceneBoxProcess");
   bvxm_batch.set_input_from_db(0, scene);
