@@ -12,7 +12,7 @@ typedef struct
 #ifdef USE_SURFACE_NORMALS
   __global float4* normal;
 #endif
-  __global float4 view_dir;
+  float4 view_dir;
   __global int  * vis_array;
   __local  short2* ray_bundle_array;
   __local  int*    cell_ptrs;
