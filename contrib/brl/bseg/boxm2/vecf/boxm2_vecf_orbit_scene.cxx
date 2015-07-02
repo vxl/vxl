@@ -238,14 +238,15 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   double len = this->subblock_len();
   double d_thresh = 0.86602540*len;//sqrt(3)/2 x len, diagonal distance
   double r0 = params_.eye_radius_;
+  double y0 = params_.y_off_;
   double rmax = r0+this->subblock_len();
   vgl_box_3d<double> bb;
-  bb.add(vgl_point_3d<double>(-rmax, 0.0, 0.0));
-  bb.add(vgl_point_3d<double>(+rmax, 0.0, 0.0));
-  bb.add(vgl_point_3d<double>(0.0, -rmax, 0.0));
-  bb.add(vgl_point_3d<double>(0.0, +rmax, 0.0));
-  bb.add(vgl_point_3d<double>(0.0, 0.0, -rmax));
-  bb.add(vgl_point_3d<double>(0.0, 0.0, +rmax));
+  bb.add(vgl_point_3d<double>(-rmax, -y0, 0.0));
+  bb.add(vgl_point_3d<double>(+rmax, -y0, 0.0));
+  bb.add(vgl_point_3d<double>(0.0, -rmax - y0, 0.0));
+  bb.add(vgl_point_3d<double>(0.0, +rmax - y0, 0.0));
+  bb.add(vgl_point_3d<double>(0.0, -y0, -rmax));
+  bb.add(vgl_point_3d<double>(0.0, -y0, +rmax));
    // cell in a box centers are in global coordinates
   vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
   for(vcl_vector<cell_info>::iterator cit = ccs.begin();
@@ -487,15 +488,15 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
   len *= params_.neighbor_radius();
   double rmax = r0+len;
   double rmin = r0-len;
-  double yo = params_.y_off_;
+  double y0 = params_.y_off_;
   vgl_box_3d<double> sb; // sphere bounding box, slightly larger than the sphere
-  sb.add(vgl_point_3d<double>(-rmax, -yo, 0.0));
-  sb.add(vgl_point_3d<double>(+rmax, -yo, 0.0));
-  sb.add(vgl_point_3d<double>(0.0, -rmax-yo, 0.0));
-  sb.add(vgl_point_3d<double>(0.0, +rmax-yo, 0.0));
-  sb.add(vgl_point_3d<double>(0.0, -yo, -rmax));
-  sb.add(vgl_point_3d<double>(0.0, -yo, +rmax));
-  vgl_sphere_3d<double> smin(0.0, -params_.y_off_, 0.0,rmin);
+  sb.add(vgl_point_3d<double>(-rmax, -y0, 0.0));
+  sb.add(vgl_point_3d<double>(+rmax, -y0, 0.0));
+  sb.add(vgl_point_3d<double>(0.0, -rmax - y0, 0.0));
+  sb.add(vgl_point_3d<double>(0.0, +rmax - y0, 0.0));
+  sb.add(vgl_point_3d<double>(0.0, -y0, -rmax));
+  sb.add(vgl_point_3d<double>(0.0, -y0, +rmax));
+  vgl_sphere_3d<double> smin(0.0, y0, 0.0,rmin);
   unsigned cnt = 0, ncont = 0;
 
   for(unsigned i = 0; i<nt; ++i){
@@ -513,8 +514,8 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
       continue;
     valid[i]=true;
     //is a sphere voxel cell so define the vector field
-    vgl_point_3d<double> rp = inv_rot*p;
-    vf[i].set(rp.x()-p.x(), rp.y()-p.y(), rp.z()-p.z());
+    vgl_point_3d<double> rp = inv_rot * p;
+    vf[i].set(rp.x() - p.x(), rp.y() - p.y(), rp.z() - p.z());
   }
   vcl_cout << "computed " << cnt << " pts out of "<< nt << " for eye vector field in " << t.real()/1000.0 << " sec.\n";
   vcl_cout << ncont << " were inside smin\n";
@@ -845,11 +846,6 @@ void boxm2_vecf_orbit_scene::interpolate_vector_field(vgl_point_3d<double> const
   double sig = params_.gauss_sigma()*subblock_len();
   // interpolate using Gaussian weights based on distance to the source point
   double dc = vgl_distance(scell, src);
-  // if(cell_neighbor_data_index.find(dindx)==cell_neighbor_data_index.end())
-  //   {
-  //     vcl_cout<<"danger danger "<<dindx<<" "<<cell_neighbor_data_index.size()<<vcl_endl;
-  //     return;
-  //   }
   const vcl_vector<unsigned>& nbr_cells = cell_neighbor_cell_index[sindx];
   const vcl_vector<unsigned>& nbr_data = cell_neighbor_data_index[dindx];
   double sumw = gauss(dc, sig), sumint = app[0]*sumw, sumalpha = alpha0*sumw;

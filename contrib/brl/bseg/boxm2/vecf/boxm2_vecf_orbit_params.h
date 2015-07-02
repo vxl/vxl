@@ -51,7 +51,7 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
   void init_sphere() {
     //                                  eyelid/crease structure is positioned below the center of the iris by y_off_
     // ------------------------------------------V------------------------
-    vgl_point_3d<double> c(trans_x_, trans_y_ + y_off_, trans_z_);
+    vgl_point_3d<double> c(trans_x_, trans_y_ - y_off_, trans_z_);
     sph_.set_centre(c);
     sph_.set_radius(eye_radius_);
     lid_sph_.set_centre(c);
