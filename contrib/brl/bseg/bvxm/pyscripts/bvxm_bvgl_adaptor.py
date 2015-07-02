@@ -17,6 +17,6 @@ def box_2d_intersection(in_kml, out_kml=""):
     ur_lon = bvxm_batch.get_output_double(id)
     (id, type) = bvxm_batch.commit_output(3)
     ur_lat = bvxm_batch.get_output_double(id)
-    return ll_lon, ll_lat, ur_lon, ur_lat
+    return status, ll_lon, ll_lat, ur_lon, ur_lat
   else:
-    return 0.0, 0.0, 0.0, 0.0
+    return status, 0.0, 0.0, 0.0, 0.0

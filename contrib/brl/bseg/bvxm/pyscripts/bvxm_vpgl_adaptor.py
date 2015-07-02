@@ -232,7 +232,7 @@ def write_generic_to_vrml(cam, out_file_name, level=0):
   bvxm_batch.set_input_string(1, out_file_name);
   bvxm_batch.set_input_unsigned(2, level);
   bvxm_batch.run_process();
-
+  
 #gets bounding box from a directory of cameras... (incomplete)_;
 def camera_dir_planar_bbox(dir_name) :
   bvxm_batch.init_process("vpglGetBoundingBoxProcess");
@@ -611,12 +611,19 @@ def geo2generic(geocam, ni, nj, scene_height, level):
     cam = dbvalue(c_id, c_type);
     return cam;
 
-def save_lvcs(lat,lon,hae,lvcs_filename):
+def save_lvcs(lvcs, lvcs_filename):
     bvxm_batch.init_process("vpglSaveLVCSProcess");
+    bvxm_batch.set_input_from_db(0, lvcs);
+    bvxm_batch.set_input_string(1, lvcs_filename);
+    return bvxm_batch.run_process()
+
+def create_and_save_lvcs(lat,lon,hae,cs_name,lvcs_filename):
+    bvxm_batch.init_process("vpglCreateAndSaveLVCSProcess");
     bvxm_batch.set_input_float(0,lat);
     bvxm_batch.set_input_float(1,lon);
     bvxm_batch.set_input_float(2,hae);
-    bvxm_batch.set_input_string(3,lvcs_filename);
+    bvxm_batch.set_input_string(3,cs_name)
+    bvxm_batch.set_input_string(4,lvcs_filename);
     bvxm_batch.run_process();
     return;
 
@@ -935,3 +942,38 @@ def isfm_rational_camera( trackfile, output_folder, pixel_radius):
   (id, type) = bvxm_batch.commit_output(2);
   inliers = bvxm_batch.get_output_float(id);
   return cam,error,inliers
+
+def isfm_rational_camera_seed(track_file, out_folder, dem_folder, ll_lon = 0.0, ll_lat = 0.0, ur_lon = 0.0, ur_lat = 0.0, height_diff = 20.0, pixel_radius = 2.0, enforce_existing = False):
+  bvxm_batch.init_process("vpglIsfmRationalCameraSeedProcess")
+  bvxm_batch.set_input_string(0, track_file)
+  bvxm_batch.set_input_string(1, out_folder)
+  bvxm_batch.set_input_string(2, dem_folder)
+  bvxm_batch.set_input_float(3, ll_lon)
+  bvxm_batch.set_input_float(4, ll_lat)
+  bvxm_batch.set_input_float(5, ur_lon)
+  bvxm_batch.set_input_float(6, ur_lat)
+  bvxm_batch.set_input_double(7, height_diff)
+  bvxm_batch.set_input_float(8, pixel_radius)
+  bvxm_batch.set_input_bool(9, enforce_existing)
+  status = bvxm_batch.run_process()
+  return status
+
+def isfm_rational_camera_with_init(track_file, dem_folder, ll_lon = 0.0, ll_lat = 0.0, ur_lon = 0.0, ur_lat = 0.0, height_diff = 20.0, pixel_radius = 2.0):
+  bvxm_batch.init_process("vpglIsfmRationalCameraWithInitialProcess")
+  bvxm_batch.set_input_string(0, track_file)
+  bvxm_batch.set_input_string(1, dem_folder)
+  bvxm_batch.set_input_double(2, ll_lon)
+  bvxm_batch.set_input_double(3, ll_lat)
+  bvxm_batch.set_input_double(4, ur_lon)
+  bvxm_batch.set_input_double(5, ur_lat)
+  bvxm_batch.set_input_double(6, height_diff)
+  bvxm_batch.set_input_float(7, pixel_radius)
+  if not bvxm_batch.run_process():
+    return None, -1.0, -1.0
+  (id, type) = bvxm_batch.commit_output(0)
+  cam = dbvalue(id, type)
+  (id, type) = bvxm_batch.commit_output(1)
+  error = bvxm_batch.get_output_float(id)
+  (id, type) = bvxm_batch.commit_output(2)
+  inliers = bvxm_batch.get_output_float(id)
+  return cam, error, inliers

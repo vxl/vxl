@@ -84,6 +84,8 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_interpolate_perspective_cameras_process, "vpglInterpolatePerspectiveCamerasProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_lvcs_process, "vpglLoadLVCSProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_save_lvcs_process, "vpglSaveLVCSProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_and_save_lvcs_process, "vpglCreateAndSaveLVCSProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_rational_camera_offsets_process, "vpglGetRationalCameraOffsetsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_write_generic_camera_process, "vpglWriteGenericCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_affine_from_rat_process, "vpglComputeAffineFromRationalProcess");
@@ -107,4 +109,6 @@ void vpgl_register::register_process()
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_generic_camera_ray_process, "vpglGetGenericCamRayProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_process, "vpglIsfmRationalCameraProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_seed_process, "vpglIsfmRationalCameraSeedProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_isfm_rational_camera_with_initial_process, "vpglIsfmRationalCameraWithInitialProcess");
 }

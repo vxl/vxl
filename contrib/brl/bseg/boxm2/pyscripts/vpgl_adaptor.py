@@ -756,14 +756,20 @@ def geo2generic_nonnadir(geocam, ni, nj, scene_height, dir_x, dir_y, dir_z, leve
     cam = dbvalue(c_id, c_type);
     return cam;
 
-def save_lvcs(lat,lon,hae,lvcs_filename):
+def save_lvcs(lvcs, lvcs_filename):
     boxm2_batch.init_process("vpglSaveLVCSProcess");
-    boxm2_batch.set_input_float(0,lat);
-    boxm2_batch.set_input_float(1,lon);
-    boxm2_batch.set_input_float(2,hae);
-    boxm2_batch.set_input_string(3,lvcs_filename);
-    boxm2_batch.run_process();
-    return;
+    boxm2_batch.set_input_from_db(0, lvcs);
+    boxm2_batch.set_input_string(1,lvcs_filename);
+    return boxm2_batch.run_process();
+
+def create_and_save_lvcs(lat, lon, elev, cs_name, lvcs_filename):
+    boxm2_batch.init_process("vpglCreateAndSaveLVCSProcess");
+    boxm2_batch.set_input_float(0, lat);
+    boxm2_batch.set_input_float(1, lon);
+    boxm2_batch.set_input_float(2, elev);
+    boxm2_batch.set_input_string(3, cs_name);
+    boxm2_batch.set_input_string(4, lvcs_filename);
+    return bvxm_batch.run_process();
 
 def load_lvcs(lvcs_filename):
     boxm2_batch.init_process("vpglLoadLVCSProcess");

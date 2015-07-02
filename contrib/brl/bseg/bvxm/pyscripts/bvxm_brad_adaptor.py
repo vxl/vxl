@@ -192,6 +192,10 @@ def get_metadata_info(mdata):
   bvxm_batch.remove_data(id)
   return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name
 
+def get_sat_name(mdata):
+  sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name = get_metadata_info(mdata)
+  return sat_name
+
 def get_view_angles(mdata):
   bvxm_batch.init_process("bradGetMetaDataInfoProcess")
   bvxm_batch.set_input_from_db(0, mdata)
