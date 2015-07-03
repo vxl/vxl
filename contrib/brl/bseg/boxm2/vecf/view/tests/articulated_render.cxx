@@ -53,13 +53,45 @@ int main(int argc, char ** argv)
     //init vgui (should choose/determine toolkit)
     vgui::init(argc, argv);
 #endif
+  vul_arg_info_list arglist;
+  vul_arg<vcl_string> base_dir_path_arg(arglist, "-bdir", "Base model directory", "");
+  vul_arg<vcl_string> model_path_arg(arglist, "-model", "model_xml_file", "");
+  vul_arg<vcl_string> target_path_arg(arglist, "-target", "target_xml_file", "");
+  vul_arg<vcl_string> camera_path_arg(arglist, "-cam", "default camera", "");
+  vul_arg<vcl_string> background_arg(arglist, "-bkgnd", "dark background", "true");
 
-  vcl_string base_dir_path = "/home/imagedata/janus/models/composite/";
-  //vcl_string orbit_scene_path = base_dir_path + "orbit/orbit.25.xml";
-  //vcl_string target_scene_path = base_dir_path + "orbit/target_orbit.25.xml";
-  vcl_string orbit_scene_path = base_dir_path + "orbit/orbit.xml";
-  vcl_string target_scene_path = base_dir_path + "target_orbit/target_orbit.xml";
-  vcl_string default_cam_path = base_dir_path + "orbit/default_orbit_cam.txt";
+  arglist.parse(argc, argv, false);
+  vcl_string base_dir_path = base_dir_path_arg();
+  vcl_string model_path = model_path_arg();
+  vcl_string target_path = target_path_arg();
+  vcl_string cam_path = camera_path_arg();
+  bool dark_background = background_arg()=="true";
+
+  // check if base directory exists
+  bool good = vul_file::exists(base_dir_path);
+  if(!good){
+    vcl_cout << base_dir_path << " is not valid\n";
+    return -1;
+  }
+  vcl_string articulated_scene_path = base_dir_path + model_path;
+  vcl_string target_scene_path = base_dir_path + target_path;
+  vcl_string default_cam_path = base_dir_path + cam_path;
+  // check for valid file paths
+  good = vul_file::exists(articulated_scene_path);
+  if(!good){
+    vcl_cout << articulated_scene_path << " is not valid\n";
+    return -1;
+  }
+  good = vul_file::exists(target_scene_path);
+  if(!good){
+    vcl_cout << target_scene_path << " is not valid\n";
+    return -1;
+  }
+  good = vul_file::exists(default_cam_path);
+  if(!good){
+    vcl_cout << default_cam_path << " is not valid\n";
+    return -1;
+  }
   unsigned ni = 1280, nj = 720;
   unsigned device_id = 1;
   vcl_string device_name = "gpu";
@@ -82,7 +114,7 @@ int main(int argc, char ** argv)
           return -1;
     }
     vcl_cout << "Using: " << *device;
-    boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(orbit_scene_path, true);
+    boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(articulated_scene_path, true);
     boxm2_scene_sptr target_scene = new boxm2_scene(target_scene_path);
 
     //create initial cam

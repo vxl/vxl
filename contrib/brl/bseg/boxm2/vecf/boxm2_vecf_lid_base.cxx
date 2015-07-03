@@ -11,8 +11,8 @@ double boxm2_vecf_lid_base::zlim(double xp) const{
   double xlim = opr_.lateral_socket_radius();
   if(xp<0.0)
     xlim = opr_.medial_socket_radius();
-  double er = opr_.sph_.radius();//was eyelid radius (incorrect)
-  // double er = opr_.eyelid_radius();//was eyelid radius (incorrect)
+  //double er = opr_.sph_.radius();//was eyelid radius (incorrect)
+   double er = opr_.eyelid_radius();//was eyelid radius (incorrect)
   double arg = er*er - xlim*xlim;
   if(arg<0.0) return 0.0;
   return vcl_sqrt(arg);

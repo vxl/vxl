@@ -72,7 +72,7 @@ class boxm2_vecf_orbit_scene:public boxm2_vecf_articulated_scene
   void set_params(boxm2_vecf_articulated_params const& params){
     boxm2_vecf_orbit_params const& params_ref = dynamic_cast<boxm2_vecf_orbit_params const &>(params);
     params_ =boxm2_vecf_orbit_params(params_ref);
-}
+  }
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface

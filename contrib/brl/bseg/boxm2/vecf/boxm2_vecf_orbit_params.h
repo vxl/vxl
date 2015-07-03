@@ -15,7 +15,7 @@
 class boxm2_vecf_orbit_params : public boxm2_vecf_articulated_params{
  public:
 boxm2_vecf_orbit_params(): x_min_(-1.0634), x_max_(0.99), x_marg_(0.1), x_off_coef_(0.1), y_off_(1.0), eye_radius_(12.0), iris_radius_(5.5),
-    pupil_radius_(1.75), medial_socket_radius_coef_(1.0), lateral_socket_radius_coef_(1.5),dphi_rad_(0.0),
+    pupil_radius_(1.75), medial_socket_radius_coef_(0.875), lateral_socket_radius_coef_(1.1),dphi_rad_(0.0),
     sclera_intensity_(static_cast<unsigned char>(250)), iris_intensity_(static_cast<unsigned char>(100)),
     pupil_intensity_(static_cast<unsigned char>(20)), eyelid_radius_offset_(3.0), inferior_lid_radius_offset_(eyelid_radius_offset_),
     eyelid_tmin_(0.0), eyelid_tmax_(0.95), eyelid_intensity_(160), eyelid_dt_(0.0), //eyelid_tmin_ 0.1

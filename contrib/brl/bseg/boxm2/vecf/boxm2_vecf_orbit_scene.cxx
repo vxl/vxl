@@ -58,7 +58,7 @@ void boxm2_vecf_orbit_scene::fill_target_block(){
         unsigned indx;
         if(!target_blk_->data_index(p, indx))
           continue;
-        target_alpha_data_->data()[indx]=0.0075f;//temporary to be able to see white
+            target_alpha_data_->data()[indx]=0.005f;//to see contrast against white
         target_app_data_->data()[indx] = params_.app_;
         target_nobs_data_->data()[indx] = nobs;
       }
@@ -138,7 +138,8 @@ void boxm2_vecf_orbit_scene::extract_target_block_data(boxm2_scene_sptr target_s
   boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   nobs_base->enable_write();
   target_nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
-  //  this->fill_target_block(); //intialize block data - only for visualization don't use in real case
+  if(has_background_)
+    this->fill_target_block(); //intialize block data - only for visualization don't use in real case
   this->assign_target_cell_centers(); // get cell centers in target corresponding to the source block (blk_)
 }
 
@@ -240,15 +241,15 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   double d_thresh = 0.86602540*len;//sqrt(3)/2 x len, diagonal distance
   double r0 = params_.eye_radius_;
   double y0 = params_.y_off_;
-  double rmax = r0+this->subblock_len();
+  double rmax = r0+ 2.0*this->subblock_len();// 2.0 added to provide sufficient margin
   vgl_box_3d<double> bb;
   bb.add(vgl_point_3d<double>(-rmax, -y0, 0.0));
-  bb.add(vgl_point_3d<double>(+rmax, -y0, 0.0));
-  bb.add(vgl_point_3d<double>(0.0, -rmax - y0, 0.0));
-  bb.add(vgl_point_3d<double>(0.0, +rmax - y0, 0.0));
+  bb.add(vgl_point_3d<double>(+rmax, -y0 , 0.0));
+  bb.add(vgl_point_3d<double>(0.0, -rmax-y0, 0.0));
+  bb.add(vgl_point_3d<double>(0.0, rmax-y0, 0.0));
   bb.add(vgl_point_3d<double>(0.0, -y0, -rmax));
   bb.add(vgl_point_3d<double>(0.0, -y0, +rmax));
-  vgl_sphere_3d<double> sp(0.0, -params_.y_off_, 0.0, params_.eye_radius_);
+  vgl_sphere_3d<double> sp(0.0, -y0, 0.0, params_.eye_radius_);
    // cell in a box centers are in global coordinates
   vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
   for(vcl_vector<cell_info>::iterator cit = ccs.begin();
@@ -486,7 +487,7 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
   vgl_rotation_3d<double> inv_rot = rot.inverse();
   // sphere center assumed to be at the origin, fix later
   double r0 = params_.eye_radius_;
-  double len = this->subblock_len();
+  double len =2.0*this->subblock_len(); //2.0 to provide sufficent margin
   len *= params_.neighbor_radius();
   double rmax = r0+len;
   double rmin = r0-len;

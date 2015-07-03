@@ -30,39 +30,6 @@ double boxm2_vecf_eyelid_crease::gi(double xp, double t) const{
   dmc = vcl_cos(dphi_rad_)*dmc + vcl_sin(dphi_rad_)*xs;
   return ((1.0-t)*dmc + t*gg);
 }
-#if 0 // original function
-double boxm2_vecf_eyelid_crease::z(double xp, double t) const{
-  double ct = opr_.eyelid_crease_ct_;
-  vgl_vector_3d<double> usn = opr_.upper_socket_normal();
-  double xlim = opr_.lateral_socket_radius();
-  if(xp<0.0)
-          xlim = opr_.medial_socket_radius();
-  if(t>ct) // lower part of crease region
-    if((vcl_fabs(xp)<xlim)&&zu(xp,t)>=zlim(xp))
-      return zu(xp,t);
-    else
-      return zlim(xp);
-  // in upper part of the crease region
-  // the underlying geometry is a plane. 
-  //                       dz
-  // z(x,t) = zu(x, ct) + ----(y(xp,t)-y(xp, ct))
-  //                       dy
-  if(vcl_fabs(xp)<xlim){
-    double c = usn.z();
-    if(c == 0.0)
-      return zlim(xp); // z is undefined
-    double dz_dy = -usn.y()/c;
-    double zut = zu(xp, ct);
-    double zv = zu(xp, ct) + dz_dy*(gi(xp, t)-gi(xp,ct));
-    double zm = zlim(xp) + opr_.brow_z_limit_*opr_.eye_radius_;
-        //double zm = zlim(xlim) + opr_.brow_z_limit_*opr_.eye_radius_;
-    if(zv>zm)
-      return zm;
-    return zv;
-  }
-  return zlim(xp);
-}
-#endif
 
 // the z of the upper orbit socket linearly interpolated with respect to y
 // given the value at the midpoint
