@@ -1275,32 +1275,52 @@ convert_with_margin( vpgl_perspective_camera<double> const& per_cam, int ni, int
 // the affine camera defines a principal plane which is
 // far enough from the scene origin so that all the scene
 // geometry is in front of the plane. The backproject function
-// finds constructs finite ray origins on the principal plane.
+// constructs finite ray origins on the principal plane.
 bool vpgl_generic_camera_convert::
 convert( vpgl_affine_camera<double> const& aff_cam, int ni, int nj,
          vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
   double scale = (level < 32) ? double(1L<<level) : vcl_pow(2.0,static_cast<double>(level));
-  // is an ideal point defining the ray direction
+  // The ray direction is the camera center (which is at inifnity)
   vgl_homg_point_3d<double> cent = aff_cam.camera_center();
   vgl_vector_3d<double> dir(cent.x(), cent.y(), cent.z());
+
+  // get the principal plane, on which all ray origins will lie
+  vgl_homg_plane_3d<double> plane = aff_cam.principal_plane();
+
+  // compute the transformation from image coordinates to X,Y,Z on the principal plane
+  vnl_matrix_fixed<double,3,4> P = aff_cam.get_matrix();
+  double u0 = P(0,3);
+  double v0 = P(1,3);
+
+  vnl_matrix_fixed<double,3,3> A;
+  for (unsigned j=0; j<3; ++j) {
+    A(0,j) = P(0,j);
+    A(1,j) = P(1,j);
+  }
+  A(2,0) = plane.a();
+  A(2,1) = plane.b();
+  A(2,2) = plane.c();
+
+  // invA maps (u-u0, v-v0, -d) to X,Y,Z on the principal plane
+  vnl_matrix_fixed<double,3,3> invA = vnl_svd<double>(A).inverse();
+
+  // construct the array of camera rays
+  vgl_point_3d<double> org;;
   vbl_array_2d<vgl_ray_3d<double> > rays(nj, ni);
-  vgl_homg_point_3d<double> horg;
-  vgl_point_3d<double> org;
-  vgl_homg_point_2d<double> ipt;
-  vgl_homg_line_3d_2_points<double> hline;
-  for (int j = 0; j<nj; ++j)
+  for (int j = 0; j<nj; ++j) {
     for (int i = 0; i<ni; ++i) {
-      ipt.set(i*scale, j*scale, 1.0);
-      hline = aff_cam.backproject(ipt);
-      
-      horg = hline.point_finite();
-      org.set(horg.x()/horg.w(), horg.y()/horg.w(), horg.z()/horg.w());
+      vnl_vector_fixed<double,3> ipt(i*scale-u0, j*scale-v0, -plane.d());
+      vnl_vector_fixed<double,3> org_vnl = invA * ipt;
+      // convert from vnl_vector to vgl_vector
+      org.set(org_vnl[0], org_vnl[1], org_vnl[2]);
       rays[j][i].set(org, dir);
     }
+  }
   gen_cam = vpgl_generic_camera<double>(rays);
   return true;
 }
+
 
 bool vpgl_generic_camera_convert::
 convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
