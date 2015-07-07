@@ -115,6 +115,7 @@ int main(int argc, char ** argv)
     }
     vcl_cout << "Using: " << *device;
     boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(articulated_scene_path, true);
+    orbit_scene->set_target_background(dark_background);
     boxm2_scene_sptr target_scene = new boxm2_scene(target_scene_path);
 
     //create initial cam

@@ -8,8 +8,8 @@ boxm2_vecf_composite_head_model::boxm2_vecf_composite_head_model( vcl_string con
 {
   use_orbit = true;
   if(use_orbit){
-    right_orbit_= boxm2_vecf_orbit_scene(eye_model_path,true);
-    left_orbit_= boxm2_vecf_orbit_scene(eye_model_path,true);
+    right_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false);
+    left_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false);
   }else{
     right_eye_ = boxm2_vecf_eye_scene(eye_model_path, true);
     left_eye_ = boxm2_vecf_eye_scene(eye_model_path, true);}

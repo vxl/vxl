@@ -60,7 +60,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_set.h>
 
-class boxm2_vecf_orbit_scene:public boxm2_vecf_articulated_scene
+class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
@@ -69,14 +69,11 @@ class boxm2_vecf_orbit_scene:public boxm2_vecf_articulated_scene
     eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), boxm2_vecf_articulated_scene(){}
 
   //: set parameters
-  void set_params(boxm2_vecf_articulated_params const& params){
-    boxm2_vecf_orbit_params const& params_ref = dynamic_cast<boxm2_vecf_orbit_params const &>(params);
-    params_ =boxm2_vecf_orbit_params(params_ref);
-  }
+  void set_params(boxm2_vecf_articulated_params const& params);
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
-  boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool initialize = false);
+  boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance = true);
 
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);

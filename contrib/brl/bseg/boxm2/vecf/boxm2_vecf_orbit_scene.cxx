@@ -138,8 +138,10 @@ void boxm2_vecf_orbit_scene::extract_target_block_data(boxm2_scene_sptr target_s
   boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   nobs_base->enable_write();
   target_nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
-  if(has_background_)
-    this->fill_target_block(); //intialize block data - only for visualization don't use in real case
+  if(has_background_){
+    vcl_cout<< " Darkening background "<<vcl_endl;
+    this->fill_target_block();
+  }
   this->assign_target_cell_centers(); // get cell centers in target corresponding to the source block (blk_)
 }
 
@@ -206,10 +208,11 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   }
   vcl_cout << "Reset indices " << t.real()/1000.0 << " sec.\n";
 }
- boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool initialize):
+ boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance):
    boxm2_vecf_articulated_scene(scene_file), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
 
+  is_single_instance_ = is_single_instance;
   eyelid_geo_.set_tmin(params_.eyelid_tmin_);
   eyelid_geo_.set_tmax(params_.eyelid_tmax_);
 
@@ -222,8 +225,9 @@ void boxm2_vecf_orbit_scene::reset_indices(){
 
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
-  if(initialize){
-    //    this->fill_block();
+  if(has_background_){
+    this->fill_block();
+  }
     this->create_eye();
     this->create_eyelid();
     this->create_lower_eyelid();
@@ -233,7 +237,7 @@ void boxm2_vecf_orbit_scene::reset_indices(){
     this->recreate_eyelid();
     this->recreate_lower_eyelid();
     this->recreate_eyelid_crease();
-  }
+
  }
 
  void boxm2_vecf_orbit_scene::build_sphere(){
@@ -1010,8 +1014,9 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
   static bool first = true;
   if(first){
     this->extract_target_block_data(target_scene);
-    //       this->fill_target_block();
-    first = false; // won't work for two eyes
+    if (is_single_instance_){
+      first = false; // won't work for two eyes
+    }
   }
 
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
@@ -1035,3 +1040,11 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
   this->apply_eye_vector_field_to_target(invf, valid);
 
 }
+  void boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& params){
+    try{
+    boxm2_vecf_orbit_params const& params_ref = dynamic_cast<boxm2_vecf_orbit_params const &>(params);
+    params_ =boxm2_vecf_orbit_params(params_ref);}
+    catch(std::exception e){
+      vcl_cout<<" Can't downcast parameters! Things will go wrong!"<<vcl_endl;
+    }
+  }
