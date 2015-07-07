@@ -329,7 +329,7 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   double local_z_min =(min_pt.z()-local_origin_.z())/sub_block_dim_.z();
   int index_x_min=(int)vcl_floor(local_x_min);
   if(index_x_min<0) index_x_min = 0;
- 
+
   int index_y_min=(int)vcl_floor(local_y_min);
    if(index_y_min<0) index_y_min = 0;
 
@@ -342,31 +342,39 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   double local_z_max =(max_pt.z()-local_origin_.z())/sub_block_dim_.z();
   int index_x_max=(int)vcl_floor(local_x_max);
   int nx = static_cast<int>(trees_.get_row1_count());
-  if(index_x_max >=nx) index_x_max = nx-1; 
+  if(index_x_max >=nx) index_x_max = nx-1;
   int index_y_max=(int)vcl_floor(local_y_max);
   int ny = static_cast<int>(trees_.get_row2_count());
-   if(index_y_max >=ny) index_y_max = ny-1; 
+   if(index_y_max >=ny) index_y_max = ny-1;
   int index_z_max=(int)vcl_floor(local_z_max);
   int nz = static_cast<int>(trees_.get_row3_count());
-   if(index_z_max >=nz) index_z_max = nz-1; 
+   if(index_z_max >=nz) index_z_max = nz-1;
   vgl_point_3d<double> loc;
   for(int iz = index_z_min; iz<=index_z_max; ++iz){
-    loc.z() = iz*sub_block_dim_.z();
     for(int iy = index_y_min; iy<=index_y_max; ++iy){
-      loc.y() = iy*sub_block_dim_.y();
       for(int ix = index_x_min; ix<=index_x_max; ++ix){
-        loc.x() = ix*sub_block_dim_.x();
         cell_info ci;
         vnl_vector_fixed<unsigned char,16> treebits=trees_(ix,iy,iz);
         boct_bit_tree tree(treebits.data_block(),max_level_);
-        int bit_index=tree.traverse(loc);
-        ci.depth_=tree.depth_at(bit_index);
-        ci.data_index_=tree.get_data_index(bit_index,false);
-        ci.side_length_=static_cast<float>(sub_block_dim_.x()/((float)(1<<ci.depth_)));
-        ci.cell_center_.set(loc.x()+local_origin_.x(),
-                            loc.y()+local_origin_.y(),
-                            loc.z()+local_origin_.z());
-          temp.push_back(ci);
+        vcl_vector<int> leafBits = tree.get_leaf_bits(0,max_level_);
+        vcl_vector<int>::iterator iter;
+        for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
+           int currBitIndex = (*iter);
+           int currIdx = tree.get_data_index(currBitIndex); //data index
+           int curr_depth = tree.depth_at(currBitIndex);
+
+           vgl_point_3d<double> localCenter = tree.cell_center(currBitIndex);
+           vgl_point_3d<double> cellCenter(localCenter.x() + ix, localCenter.y()+ iy, localCenter.z() + iz);
+
+
+           ci.depth_= curr_depth;
+           ci.data_index_=currIdx;
+           ci.side_length_= static_cast<float>(sub_block_dim_.x()/((float)(1<<ci.depth_)));
+           ci.cell_center_.set(cellCenter.x() * this->sub_block_dim_.x() +local_origin_.x(),
+                            cellCenter.y() * this->sub_block_dim_.y() +local_origin_.y(),
+                            cellCenter.z() * this->sub_block_dim_.z()+local_origin_.z());
+           temp.push_back(ci);
+        }
       }
     }
   }
@@ -420,4 +428,3 @@ void vsl_b_read(vsl_b_istream&, boxm2_block_sptr&) {}
 //: Binary load boxm2_block from stream.
 // DUMMY IMPLEMENTATION: does nothing!
 void vsl_b_read(vsl_b_istream&, boxm2_block_sptr const&) {}
-
