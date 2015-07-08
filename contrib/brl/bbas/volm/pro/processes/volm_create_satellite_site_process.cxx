@@ -573,10 +573,10 @@ bool volm_get_full_path_process(bprb_func_process& pro)
 bool volm_find_res_pair_process_cons(bprb_func_process& pro)
 {
   //inputs
-  vcl_vector<vcl_string> input_types_(2);
+  vcl_vector<vcl_string> input_types_(3);
   input_types_[0] = "volm_satellite_resources_sptr"; 
   input_types_[1] = "vcl_string";      // satellite img name  // only the name, don't need the full path
-  
+  input_types_[2] = "double";          // tolerance of footprint difference ( in meters)
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -599,8 +599,9 @@ bool volm_find_res_pair_process(bprb_func_process& pro)
   //get the inputs
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
   vcl_string name = pro.get_input<vcl_string>(1);
+  double tol = pro.get_input<double>(2);
   vcl_pair<vcl_string, vcl_string> full = res->full_path(name);
-  vcl_string pair_name = res->find_pair(name);
+  vcl_string pair_name = res->find_pair(name, tol);
   vcl_cout << "pair_name = " << pair_name << vcl_endl;
   if (pair_name.compare("") == 0) {
     pro.set_output_val<vcl_string>(0, "");

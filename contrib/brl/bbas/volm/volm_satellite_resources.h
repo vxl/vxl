@@ -106,7 +106,10 @@ class volm_satellite_resources : public vbl_ref_count
     //: return the full path of a satellite image given its name, if not found returns empty string
     vcl_pair<vcl_string, vcl_string> full_path(vcl_string name);
 
-    vcl_string find_pair(vcl_string const& name);
+    //: find the image PAN/MULTI band pair given the satellite image name
+    //: Note the PAN and MULTI band generally has shifted footprint and tolerance here is used to set the threshold that PAN/MULTI band needs to have footprint shift less than
+    //  10.0 meters (experiments shows a 30.0 meter for most of the pairs)
+    vcl_string find_pair(vcl_string const& name, double const& tol = 10.0);
 
     // ===========  binary I/O ================
     short version() const { return 0; }
@@ -121,6 +124,10 @@ protected:
     void construct_tree();
     //: add the resources in the resources_ vector to the tree
     void add_resources(unsigned start, unsigned end);
+    //: check the time difference between two images (images have time difference less than given time interval (in seconds) are treated as same time)
+    bool same_time(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, float const& t_diff_in_sec = 10);
+    //: compare the lat, lon bounding boxes of satellite resource. treat as Euclidean coordinate system
+    bool same_extent(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, double const& tol = 1.0);
 
   public:
     vcl_vector<volm_satellite_resource> resources_;

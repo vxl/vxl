@@ -55,10 +55,11 @@ def load_sat_resources(res_file_name):
   res2 = dbvalue(res2_id, res2_type);
   return res2
 
-def find_resource_pair(res, name):
+def find_resource_pair(res, name, tol = 10.0):
   bvxm_batch.init_process("volmFindResourcePairProcess");
   bvxm_batch.set_input_from_db(0,res);
   bvxm_batch.set_input_string(1,name);
+  bvxm_batch.set_input_double(2,tol)
   statuscode=bvxm_batch.run_process();
   (f_id, f_type) = bvxm_batch.commit_output(0);
   full_path = bvxm_batch.get_output_string(f_id);
