@@ -19,7 +19,7 @@ boxm2_vecf_orbit_params(): x_min_(-1.0634), x_max_(0.99), x_marg_(0.1), x_off_co
     sclera_intensity_(static_cast<unsigned char>(250)), iris_intensity_(static_cast<unsigned char>(100)),
     pupil_intensity_(static_cast<unsigned char>(20)), eyelid_radius_offset_(3.0), inferior_lid_radius_offset_(eyelid_radius_offset_),
     eyelid_tmin_(0.0), eyelid_tmax_(0.95), eyelid_intensity_(160), eyelid_dt_(0.0), //eyelid_tmin_ 0.1
-    lower_eyelid_tmin_(1.05), lower_eyelid_tmax_(1.5),lower_eyelid_intensity_(160), mid_eyelid_crease_z_(eye_radius_),
+    lower_eyelid_tmin_(1.05), lower_eyelid_tmax_(1.5),lower_eyelid_intensity_(140), mid_eyelid_crease_z_(eye_radius_),
     eyelid_crease_scale_y_coef_(0.083333),eyelid_crease_tmin_(-0.85), eyelid_crease_tmax_(1.05),eyelid_crease_lower_intensity_(150),
     eyelid_crease_upper_intensity_(180),eyelid_crease_ct_(0.0),crease_dphi_rad_(0.0), brow_angle_rad_(0.5),  //brow_angle_rad_(0.87259),
     brow_z_limit_(0.5), scale_x_coef_(0.0833333), scale_y_coef_(0.0833333), offset_(vgl_vector_3d<double>(0.0, 0.0, 0.0)),

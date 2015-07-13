@@ -81,7 +81,7 @@ void boxm2_vecf_orbit_scene::assign_target_cell_centers(){
 void boxm2_vecf_orbit_scene::extract_block_data(){
 
   vcl_vector<boxm2_block_id> blocks = base_model_->get_block_ids();
-  vcl_cout<<"base model is "<<base_model_<<" with block size "<<blocks.size()<<vcl_endl;
+
   vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
 
@@ -241,11 +241,11 @@ boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, boo
  }
 
  void boxm2_vecf_orbit_scene::build_sphere(){
-  double len = this->subblock_len();
+  double len = 1;
   double d_thresh = 0.86602540*len;//sqrt(3)/2 x len, diagonal distance
   double r0 = params_.eye_radius_;
-  double y0 = params_.y_off_;
-  double rmax = r0+ 2.0*this->subblock_len();// 2.0 added to provide sufficient margin
+  double y0 = params_.y_off_ ;
+  double rmax = r0+ 2.0;// 2.0 added to provide sufficient margin
   vgl_box_3d<double> bb;
   bb.add(vgl_point_3d<double>(-rmax, -y0, 0.0));
   bb.add(vgl_point_3d<double>(+rmax, -y0 , 0.0));
@@ -491,7 +491,7 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
   vgl_rotation_3d<double> inv_rot = rot.inverse();
   // sphere center assumed to be at the origin, fix later
   double r0 = params_.eye_radius_;
-  double len =2.0*this->subblock_len(); //2.0 to provide sufficent margin
+  double len = 2.0; //2.0 to provide sufficent margin
   len *= params_.neighbor_radius();
   double rmax = r0+len;
   double rmin = r0-len;
@@ -567,7 +567,7 @@ void boxm2_vecf_orbit_scene::find_eyelid_cell_neigborhoods(){
 }
 
 void boxm2_vecf_orbit_scene::build_eyelid(){
-  double len = this->subblock_len();
+  double len = 1;
   double d_thresh = 0.5*params_.neighbor_radius()*len;
   vgl_box_3d<double> bb = eyelid_geo_.bounding_box();
  // cells in  box centers are in global coordinates
@@ -643,7 +643,7 @@ void boxm2_vecf_orbit_scene::find_lower_eyelid_cell_neigborhoods(){
 
 //: scan dense set of points on the spherical shell to define surface voxels
 void boxm2_vecf_orbit_scene::build_lower_eyelid(){
-  double len = this->subblock_len();
+  double len =1;
   double d_thresh =0.86602540*len;//sqrt(3)/2 x len, diagonal distance
   vgl_box_3d<double> bb = lower_eyelid_geo_.bounding_box();
  // cells in  box centers are in global coordinates
@@ -720,7 +720,8 @@ void boxm2_vecf_orbit_scene::find_eyelid_crease_cell_neigborhoods(){
 
 //: scan dense set of points on the spherical shell to define surface voxels
 void boxm2_vecf_orbit_scene::build_eyelid_crease(){
-  double len = this->subblock_len();
+  //  double len = this->subblock_len();
+  double len =1;
   double d_thresh =0.86602540*len;//sqrt(3)/2 x len, diagonal distance
   vgl_box_3d<double> bb = eyelid_crease_geo_.bounding_box();
  // cells in  box centers are in global coordinates

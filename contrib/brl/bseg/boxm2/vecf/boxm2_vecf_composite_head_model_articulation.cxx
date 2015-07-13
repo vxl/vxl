@@ -62,4 +62,36 @@ boxm2_vecf_composite_head_model_articulation::boxm2_vecf_composite_head_model_ar
     head_params.r_orbit_params_ = params;
     params_.push_back(head_params);
   }
+
+for(int i = 0; i<6; ++i){
+  boxm2_vecf_orbit_params l_params,r_params;
+  r_params.eyelid_dt_ = 0;
+    boxm2_vecf_composite_head_parameters head_params;
+    if(i%3 == 0)
+      l_params.eyelid_dt_ = 0;
+    else if(i%3 == 1)
+      l_params.eyelid_dt_ = ddt/2;
+    else
+      l_params.eyelid_dt_ = ddt;
+    head_params.l_orbit_params_ = l_params;
+    head_params.r_orbit_params_ = r_params;
+    params_.push_back(head_params);
+  }
+
+for(int i = 0; i<6; ++i){
+  boxm2_vecf_orbit_params l_params,r_params;
+  l_params.eyelid_dt_ = 0;
+    boxm2_vecf_composite_head_parameters head_params;
+    if(i%3 == 0)
+      r_params.eyelid_dt_ = 0;
+    else if(i%3 == 1)
+      r_params.eyelid_dt_ = ddt/2;
+    else
+      r_params.eyelid_dt_ = ddt;
+    head_params.l_orbit_params_ = l_params;
+    head_params.r_orbit_params_ = r_params;
+    params_.push_back(head_params);
+  }
+
+
 }
