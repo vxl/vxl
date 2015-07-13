@@ -28,10 +28,11 @@
 
 //brdb stuff
 #include <brdb/brdb_value.h>
-
+static unsigned play_index_ ;
 //vecf
 #include "../boxm2_vecf_articulated_scene.h"
 #include "../boxm2_vecf_articulated_params.h"
+#include "../boxm2_vecf_scene_articulation.h"
 class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
 {
  public:
@@ -42,6 +43,7 @@ class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
   bool init(bocl_device_sptr device,
             boxm2_opencl_cache_sptr opencl_cache,
             boxm2_vecf_articulated_scene_sptr articulated_scene,
+            boxm2_vecf_scene_articulation* sa,
             boxm2_scene_sptr target_scene,
             unsigned ni,
             unsigned nj,
@@ -63,9 +65,11 @@ class boxm2_ocl_articulated_render_tableau : public boxm2_cam_tableau
   //: Boxm2 Scene
   boxm2_vecf_articulated_scene_sptr articulated_scene_;
   boxm2_scene_sptr target_scene_;
+  boxm2_vecf_scene_articulation* scene_articulation_;
   boxm2_opencl_cache_sptr opencl_cache_;
   unsigned ni_;
   unsigned nj_;
+
   vgui_statusbar* status_;
   vcl_string identifier_;
 

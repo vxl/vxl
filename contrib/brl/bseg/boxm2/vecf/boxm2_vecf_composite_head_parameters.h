@@ -2,8 +2,9 @@
 #define boxm2_vecf_composite_head_parameters_h_
 
 #include  <vgl/vgl_vector_3d.h>
-
-class boxm2_vecf_composite_head_parameters
+#include "boxm2_vecf_articulated_params.h"
+#include "boxm2_vecf_orbit_params.h"
+class boxm2_vecf_composite_head_parameters : public boxm2_vecf_articulated_params
 {
   public:
     //: default constructor
@@ -24,6 +25,7 @@ class boxm2_vecf_composite_head_parameters
 
     //: gaze direction of the eyes
     vgl_vector_3d<double> look_dir_;
+    boxm2_vecf_orbit_params l_orbit_params_,r_orbit_params_;
 
 };
 

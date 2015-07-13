@@ -13,7 +13,9 @@ SET(boxm2_vecf_sources
     boxm2_vecf_orbit_scene.h                boxm2_vecf_orbit_scene.cxx
     boxm2_vecf_lid_base.h                   boxm2_vecf_lid_base.cxx
     boxm2_vecf_eyelid.h                     boxm2_vecf_eyelid.cxx
+    boxm2_vecf_scene_articulation.h
     boxm2_vecf_orbit_articulation.h         boxm2_vecf_orbit_articulation.cxx
+    boxm2_vecf_composite_head_model_articulation.h         boxm2_vecf_composite_head_model_articulation.cxx
     boxm2_vecf_eyelid_crease.h              boxm2_vecf_eyelid_crease.cxx
     boxm2_vecf_fit_orbit.h                  boxm2_vecf_fit_orbit.cxx
     boxm2_vecf_orbit_params.h               boxm2_vecf_orbit_params.cxx

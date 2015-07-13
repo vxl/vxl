@@ -22,7 +22,7 @@ class boxm2_vecf_articulated_scene : public vbl_ref_count{
  public:
   boxm2_vecf_articulated_scene(){ base_model_ = 0; has_background_ = false; is_single_instance_ = false;}
   boxm2_vecf_articulated_scene(vcl_string scene_file){ base_model_ = new boxm2_scene(scene_file); has_background_ = false;}
-  virtual void set_params(boxm2_vecf_articulated_params const& params)=0;
+  virtual bool set_params(boxm2_vecf_articulated_params const& params)=0;
   virtual void map_to_target(boxm2_scene_sptr target_scene)=0;
   virtual void set_target_background(bool has_background){ has_background_ = has_background;}
   boxm2_scene_sptr scene(){return base_model_;}

@@ -7,17 +7,17 @@
 #include "boxm2_vecf_eye_scene.h"
 #include "boxm2_vecf_orbit_scene.h"
 #include "boxm2_vecf_head_model.h"
+#include "boxm2_vecf_articulated_params.h"
 #include "boxm2_vecf_composite_head_parameters.h"
-
-class boxm2_vecf_composite_head_model
-{
+#include "boxm2_vecf_articulated_scene.h"
+class boxm2_vecf_composite_head_model : public boxm2_vecf_head_model{
 public:
   boxm2_vecf_composite_head_model(vcl_string const& head_model_path, vcl_string const& eye_model_path );
 
-  bool map_to_target(boxm2_scene_sptr target, vcl_string const& app_id="", bool eyes_only=false);
+  void map_to_target(boxm2_scene_sptr target);
 
-  void set_parameters(boxm2_vecf_composite_head_parameters const& params);
-  void get_parameters(boxm2_vecf_composite_head_parameters &params) const {params = params_;}
+  bool set_params(boxm2_vecf_articulated_params const& params);
+  void get_params(boxm2_vecf_composite_head_parameters &params) const {params = params_;}
 
 private:
   boxm2_vecf_composite_head_parameters params_;
@@ -27,7 +27,6 @@ private:
 
   boxm2_vecf_orbit_scene right_orbit_;
   boxm2_vecf_orbit_scene left_orbit_;
-  boxm2_vecf_head_model head_;
   vcl_string scene_path;
   bool use_orbit;
 

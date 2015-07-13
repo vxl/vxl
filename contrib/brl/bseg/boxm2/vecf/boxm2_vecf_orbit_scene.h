@@ -69,11 +69,11 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
     eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), boxm2_vecf_articulated_scene(){}
 
   //: set parameters
-  void set_params(boxm2_vecf_articulated_params const& params);
+  bool set_params(boxm2_vecf_articulated_params const& params);
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
-  boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance = true);
+  boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance = true, bool is_right = false);
 
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);
@@ -198,7 +198,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   boxm2_data<BOXM2_NUM_OBS>* target_nobs_data_;  //target nobs
   vcl_vector<cell_info> box_cell_centers_;       // cell centers in the target block
   boxm2_vecf_orbit_params params_;               // parameter struct
-
+  bool is_right_;
   // =============  eye ===============
   boxm2_data<BOXM2_PIXEL>* sphere_;      // is voxel a eye sphere point?
   boxm2_data<BOXM2_PIXEL>* iris_;        // is voxel an iris point

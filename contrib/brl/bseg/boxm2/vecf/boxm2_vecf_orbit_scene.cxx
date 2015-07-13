@@ -208,8 +208,8 @@ void boxm2_vecf_orbit_scene::reset_indices(){
   }
   vcl_cout << "Reset indices " << t.real()/1000.0 << " sec.\n";
 }
- boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance):
-   boxm2_vecf_articulated_scene(scene_file), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
+boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance,bool is_right):
+  boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
 
   is_single_instance_ = is_single_instance;
@@ -507,7 +507,8 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
   unsigned cnt = 0, ncont = 0;
 
   for(unsigned i = 0; i<nt; ++i){
-    const vgl_point_3d<double>& p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+    vgl_point_3d<double> p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+
     if(!sb.contains(p)){
       continue;
     }
@@ -772,7 +773,13 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eyelid(double dt, vcl_vector<
   valid.resize(nt, static_cast<unsigned char>(0));
   vgl_box_3d<double> eb = eyelid_geo_.bounding_box();
   for(unsigned i = 0; i<nt; ++i){
-    const vgl_point_3d<double>& p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+    vgl_point_3d<double> p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+
+    if (is_right_){
+      vgl_vector_3d<double> flip(-2 * p.x(),0,0);
+      p = p + flip;
+    }
+
     if(!eb.contains(p))
       continue;
     // vf only defined for cells on the closed eyelid
@@ -800,7 +807,12 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_lower_eyelid(vcl_vector<vgl_v
   valid.resize(nt, false);
   vgl_box_3d<double> eb = lower_eyelid_geo_.bounding_box();
   for(unsigned i = 0; i<nt; ++i){
-    const vgl_point_3d<double>& p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+    vgl_point_3d<double> p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+    if (is_right_){
+      vgl_vector_3d<double> flip(-2 * p.x(),0,0);
+      p = p + flip;
+    }
+
     if(!eb.contains(p))
       continue;
     // vf only defined for cells on the closed eyelid
@@ -822,7 +834,11 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eyelid_crease(vcl_vector<vgl_
   valid.resize(nt, false);
   vgl_box_3d<double> eb = eyelid_crease_geo_.bounding_box();
   for(unsigned i = 0; i<nt; ++i){
-    const vgl_point_3d<double>& p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+    vgl_point_3d<double> p = (box_cell_centers_[i].cell_center_)-params_.offset_;
+    if (is_right_){
+      vgl_vector_3d<double> flip(-2 * p.x(),0,0);
+      p = p + flip;
+    }
     if(!eb.contains(p))
       continue;
     // vf only defined for cells crease
@@ -889,7 +905,9 @@ void boxm2_vecf_orbit_scene::apply_eye_vector_field_to_target(vcl_vector<vgl_vec
     // target cell center translated back to source box, and should be a sphere point
     // but we don't need to check, since what is needed is the source cell for the rotation
     vgl_point_3d<double> p = box_cell_centers_[j].cell_center_-params_.offset_;
+
     vgl_point_3d<double> src = p + vf[j];//add inverse vector field
+
     // find closest sphere voxel cell
     unsigned sindx, dindx;
     if(!this->find_nearest_data_index(SPHERE, src, dindx))
@@ -930,6 +948,10 @@ void boxm2_vecf_orbit_scene::apply_eyelid_vector_field_to_target(vcl_vector<vgl_
     // target cell center translated back to source box, and should be an eyelid point
     // but we don't need to check, since what is needed is the source cell for the rotation
     vgl_point_3d<double> p = box_cell_centers_[j].cell_center_-params_.offset_;
+    if (is_right_){
+      vgl_vector_3d<double> flip(-2 * p.x(),0,0);
+      p = p + flip;
+    }
     vgl_point_3d<double> src = p + vf[j];//add vector field
 
     // find closest sphere voxel cell
@@ -963,6 +985,10 @@ void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vecto
     // but we don't need to check, since what is needed is the source cell for the rotation
     // for now no movement ie vf is always zer0
     vgl_point_3d<double> src = box_cell_centers_[j].cell_center_-params_.offset_;
+    if (is_right_){
+      vgl_vector_3d<double> flip(-2 * src.x(),0,0);
+      src = src + flip;
+    }
 
     // find closest sphere voxel cell
     unsigned sindx=0, dindx=0;
@@ -996,6 +1022,10 @@ void boxm2_vecf_orbit_scene::apply_eyelid_crease_vector_field_to_target(vcl_vect
     // but we don't need to check, since what is needed is the source cell for the rotation
     // for now no movement ie vf is always zer0
     vgl_point_3d<double> src = box_cell_centers_[j].cell_center_-params_.offset_;
+    if (is_right_){
+      vgl_vector_3d<double> flip(-2 * src.x(),0,0);
+      src = src + flip;
+    }
 
     // find closest sphere voxel cell
     unsigned sindx=0, dindx=0;
@@ -1027,6 +1057,7 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
   vcl_vector<vgl_vector_3d<double> > invf, invf_lid, invf_lower_lid, invf_eyelid_crease;
   vcl_vector<bool> valid, valid_lower_lid, valid_eyelid_crease;
   vcl_vector<unsigned char> valid_lid;
+
   this->inverse_vector_field_eyelid(-params_.eyelid_dt_, invf_lid, valid_lid);
   this->apply_eyelid_vector_field_to_target(invf_lid, valid_lid);
 
@@ -1040,11 +1071,13 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
   this->apply_eye_vector_field_to_target(invf, valid);
 
 }
-  void boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& params){
-    try{
+bool boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& params){
+  try{
     boxm2_vecf_orbit_params const& params_ref = dynamic_cast<boxm2_vecf_orbit_params const &>(params);
-    params_ =boxm2_vecf_orbit_params(params_ref);}
-    catch(std::exception e){
-      vcl_cout<<" Can't downcast parameters! Things will go wrong!"<<vcl_endl;
-    }
+    params_ =boxm2_vecf_orbit_params(params_ref);
+    return true;
+  }catch(std::exception e){
+    vcl_cout<<" Can't downcast orbit parameters! PARAMATER ASSIGNMENT PHAILED!"<<vcl_endl;
+    return false;
   }
+}

@@ -1,5 +1,5 @@
 #include "boxm2_ocl_articulated_render_tableau.h"
-#include "../boxm2_vecf_orbit_articulation.h"
+#include "../boxm2_vecf_scene_articulation.h"
 
 //:
 // \file
@@ -47,12 +47,14 @@ boxm2_ocl_articulated_render_tableau::boxm2_ocl_articulated_render_tableau()
   REGISTER_DATATYPE(float);
   articulated_scene_ =0;
   target_scene_ = 0;
+  scene_articulation_ = 0;
 }
 
 //: initialize tableau properties
 bool boxm2_ocl_articulated_render_tableau::init(bocl_device_sptr device,
                                                 boxm2_opencl_cache_sptr opencl_cache,
                                                 boxm2_vecf_articulated_scene_sptr articulated_scene,
+                                                boxm2_vecf_scene_articulation* sa,
                                                 boxm2_scene_sptr target_scene,
                                                 unsigned ni,
                                                 unsigned nj,
@@ -81,6 +83,7 @@ bool boxm2_ocl_articulated_render_tableau::init(bocl_device_sptr device,
     //create the scene
     articulated_scene_ = articulated_scene;
     target_scene_ = target_scene;
+    scene_articulation_ = sa;
     opencl_cache_=opencl_cache;
     device_=device;
     do_init_ocl=true;
@@ -91,7 +94,7 @@ bool boxm2_ocl_articulated_render_tableau::init(bocl_device_sptr device,
     // set depth_scale_ and depth_offset_
     calibrate_depth_range();
     post_redraw();
-
+    play_index_ = 0;
     return true;
 }
 
@@ -171,18 +174,17 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
     return false;
     }
     if(articulated_scene_){
-         vcl_cout<<"apply vector field"<<vcl_endl;
+      vcl_cout<<"apply vector field"<<vcl_endl;
 
-        static boxm2_vecf_orbit_articulation oa;
-        static boxm2_vecf_orbit_articulation::iterator oit = oa.begin();
-        opencl_cache_->clear_cache();
-        articulated_scene_->set_params(*oit);
-        oit++;
-        if(oit==oa.end())
-          oit = oa.begin();
-        articulated_scene_->map_to_target(target_scene_);
-        post_redraw();
-        e.origin->post_timer(0.2f, 1234);
+
+      opencl_cache_->clear_cache();
+      articulated_scene_->set_params((*scene_articulation_)[play_index_]);
+      play_index_++;
+      if(play_index_ == scene_articulation_->size())
+        play_index_ = 0;
+      articulated_scene_->map_to_target(target_scene_);
+      post_redraw();
+      e.origin->post_timer(0.2f, 1234);
 
     }
   }

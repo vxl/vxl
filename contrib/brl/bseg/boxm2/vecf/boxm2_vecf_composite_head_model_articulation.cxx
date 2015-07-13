@@ -1,11 +1,14 @@
-#include "boxm2_vecf_orbit_articulation.h"
+#include "boxm2_vecf_composite_head_model_articulation.h"
 
-boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
+boxm2_vecf_composite_head_model_articulation::boxm2_vecf_composite_head_model_articulation(){
   double ddt = 0.9;
   for(double dt = 0.0;dt<=ddt; dt +=0.1){
     boxm2_vecf_orbit_params  params;
+    boxm2_vecf_composite_head_parameters head_params;
     params.eyelid_dt_ = dt;
-    params_.push_back(params);
+    head_params.l_orbit_params_ = params;
+    head_params.r_orbit_params_ = params;
+    params_.push_back(head_params);
   }
   // look left right
   vcl_vector<vgl_vector_3d<double> > emv;
@@ -21,10 +24,13 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
   for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
       eit != emv.end(); eit++){
     boxm2_vecf_orbit_params params;
+    boxm2_vecf_composite_head_parameters head_params;
     params.eyelid_dt_ = ddt;
-    params.eyelid_intensity_ =10;
+    //    params.eyelid_intensity_ =10;
     params.eye_pointing_dir_ = *eit;
-    params_.push_back(params);
+    head_params.l_orbit_params_ = params;
+    head_params.r_orbit_params_ = params;
+    params_.push_back(head_params);
   }
 
   // look up
@@ -36,18 +42,24 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
   for(vcl_vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
       eit != emv2.end(); eit++){
     boxm2_vecf_orbit_params params;
+    boxm2_vecf_composite_head_parameters head_params;
     params.eyelid_dt_ = ddt2;
     params.eye_pointing_dir_ = *eit;
-    params_.push_back(params);
+    params_.push_back(head_params);
+    head_params.l_orbit_params_ = params;
+    head_params.r_orbit_params_ = params;
     ddt2 += 0.15;
   }
 
   for(int i = 0; i<5; ++i){
     boxm2_vecf_orbit_params params;
+    boxm2_vecf_composite_head_parameters head_params;
     if(i%2 == 0)
       params.eyelid_dt_ = 0;
     else
       params.eyelid_dt_ = ddt;
-    params_.push_back(params);
+    head_params.l_orbit_params_ = params;
+    head_params.r_orbit_params_ = params;
+    params_.push_back(head_params);
   }
 }

@@ -37,6 +37,9 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include "../../boxm2_vecf_orbit_scene.h"
+#include "../../boxm2_vecf_composite_head_model.h"
+#include "../../boxm2_vecf_orbit_articulation.h"
+#include "../../boxm2_vecf_composite_head_model_articulation.h"
 #include "../boxm2_ocl_articulated_render_tableau.h"
 
 int main(int argc, char ** argv)
@@ -59,6 +62,8 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> target_path_arg(arglist, "-target", "target_xml_file", "");
   vul_arg<vcl_string> camera_path_arg(arglist, "-cam", "default camera", "");
   vul_arg<vcl_string> background_arg(arglist, "-bkgnd", "dark background", "true");
+  vul_arg<vcl_string> scene_arg(arglist, "-scene_t", " which scene ", "eye");
+  vul_arg<unsigned> gpu_idx(arglist, "-platform", " platform index ", 0);
 
   arglist.parse(argc, argv, false);
   vcl_string base_dir_path = base_dir_path_arg();
@@ -66,6 +71,8 @@ int main(int argc, char ** argv)
   vcl_string target_path = target_path_arg();
   vcl_string cam_path = camera_path_arg();
   bool dark_background = background_arg()=="true";
+  vcl_string scene_t = scene_arg();
+  unsigned device_id = gpu_idx();
 
   // check if base directory exists
   bool good = vul_file::exists(base_dir_path);
@@ -75,6 +82,7 @@ int main(int argc, char ** argv)
   }
   vcl_string articulated_scene_path = base_dir_path + model_path;
   vcl_string target_scene_path = base_dir_path + target_path;
+  vcl_string eye_model_path = base_dir_path + "eye/eye.xml";
   vcl_string default_cam_path = base_dir_path + cam_path;
   // check for valid file paths
   good = vul_file::exists(articulated_scene_path);
@@ -93,7 +101,6 @@ int main(int argc, char ** argv)
     return -1;
   }
   unsigned ni = 1280, nj = 720;
-  unsigned device_id = 1;
   vcl_string device_name = "gpu";
     bocl_device_sptr  device( NULL );
     //make bocl manager
@@ -114,9 +121,10 @@ int main(int argc, char ** argv)
           return -1;
     }
     vcl_cout << "Using: " << *device;
-    boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(articulated_scene_path, true);
-    orbit_scene->set_target_background(dark_background);
+
+
     boxm2_scene_sptr target_scene = new boxm2_scene(target_scene_path);
+
 
     //create initial cam
 #if 0
@@ -143,8 +151,35 @@ int main(int argc, char ** argv)
     boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device);
 
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
-      boxm2_ocl_articulated_render_tableau_new bit_tableau;
-      bit_tableau->init(device, opencl_cache, orbit_scene, target_scene, ni, nj, pcam, "");
+    boxm2_ocl_articulated_render_tableau_new bit_tableau;
+
+    if(scene_t == "eye"){
+
+      boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(articulated_scene_path, true,true);
+      boxm2_vecf_orbit_articulation* orbit_articulation =new boxm2_vecf_orbit_articulation();
+      orbit_scene->set_target_background(dark_background);
+      bit_tableau->init(device, opencl_cache, orbit_scene, orbit_articulation,target_scene, ni, nj, pcam, "");
+
+    }else if (scene_t =="head"){
+
+      boxm2_vecf_composite_head_model* composite_head_model = new boxm2_vecf_composite_head_model(articulated_scene_path, eye_model_path);
+      boxm2_vecf_composite_head_model_articulation* head_model_articulation =new boxm2_vecf_composite_head_model_articulation();
+    vgl_vector_3d<double> look_dir(0.0, 0.0, 1.0);
+    vgl_vector_3d<double> face_scale(1,1,1);
+    //initial parameters
+    boxm2_vecf_composite_head_parameters params( face_scale, look_dir );
+
+    params.l_orbit_params_.eye_pointing_dir_ = params.look_dir_;
+    params.r_orbit_params_.eye_pointing_dir_ = params.look_dir_;
+
+    params.r_orbit_params_.eyelid_dt_ = 0.1 ;
+    params.l_orbit_params_.eyelid_dt_ = 0.1 ;
+
+    composite_head_model->set_params( params );
+    composite_head_model->map_to_target(target_scene);
+
+      bit_tableau->init(device, opencl_cache, composite_head_model, head_model_articulation,target_scene, ni, nj, pcam, "");
+    }
       //create window, attach the new tableau and status bar
       vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer (Render)");
       win->get_adaptor()->set_tableau(bit_tableau);

@@ -11,13 +11,19 @@
 #include <vcl_limits.h>
 
 boxm2_vecf_head_model::boxm2_vecf_head_model(vcl_string const& scene_file):
-  base_model_(new boxm2_scene(scene_file)),
+  boxm2_vecf_articulated_scene(scene_file),
   scale_(1.0, 1.0, 1.0)
 {
-  boxm2_lru_cache::create(base_model_);
+
 }
 
+void boxm2_vecf_head_model::set_scale(vgl_vector_3d<double> scale) {
+  if( (scale_-scale).length() >0.0001 ){
+    scale_ = scale;
+    intrinsic_change_ = true;
+  }
 
+}
 bool boxm2_vecf_head_model::get_data(boxm2_scene_sptr scene, boxm2_block_id const& blk_id,
                                      boxm2_data_base** alpha_data,
                                      boxm2_data_base** app_data,
@@ -36,8 +42,9 @@ bool boxm2_vecf_head_model::get_data(boxm2_scene_sptr scene, boxm2_block_id cons
 }
 
 
-bool boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
+void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 {
+  intrinsic_change_ = false;
   // for each block of the target scene
   vcl_vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
   vcl_vector<boxm2_block_id> source_blocks = base_model_->get_block_ids();
@@ -52,7 +59,7 @@ bool boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
     boxm2_data_base  *target_nobs;
     if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
       vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << vcl_endl;
-      return false;
+      return;
     }
     target_alpha->enable_write();
     target_app->enable_write();
@@ -76,14 +83,14 @@ bool boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
       boxm2_data_base* source_nobs;
       if (!get_data(base_model_, *sblk, &source_alpha, &source_app, &source_nobs)) {
         vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_source(): error getting source block data block=" << sblk->to_string() << vcl_endl;
-        return false;
+        return ;
       }
       boxm2_data_traits<BOXM2_ALPHA>::datatype *source_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(source_alpha->data_buffer());
       boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *source_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(source_app->data_buffer());
       boxm2_data_traits<BOXM2_NUM_OBS>::datatype *source_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(source_nobs->data_buffer());
 
       boxm2_array_3d<uchar16>& trees = source_blk->trees();
-      
+
       //iterate through each block, filtering the root level first
       for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
         for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
@@ -102,7 +109,7 @@ bool boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
               vgl_point_3d<double> cell_center_norm = bit_tree.cell_center( bit_idx );
               // convert to global coordinates
               vgl_vector_3d<double> subblk_dims = target_blk->sub_block_dim();
-              vgl_vector_3d<double> subblk_offset(x*subblk_dims.x(), 
+              vgl_vector_3d<double> subblk_offset(x*subblk_dims.x(),
                                                   y*subblk_dims.y(),
                                                   z*subblk_dims.z());
 
@@ -139,7 +146,6 @@ bool boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
       }
     } // for each source block
   } // for each target block
-  return true;
 }
 
 bool boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)

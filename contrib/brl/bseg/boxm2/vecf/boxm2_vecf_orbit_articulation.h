@@ -7,15 +7,23 @@
 // \author J.L. Mundy
 // \date   14 Apr 2015
 //
+#include "boxm2_vecf_scene_articulation.h"
 #include "boxm2_vecf_orbit_params.h"
-class boxm2_vecf_orbit_articulation{
+
+class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
  public:
   boxm2_vecf_orbit_articulation();
-  //: Iterators
-  typedef vcl_vector<boxm2_vecf_orbit_params>::iterator iterator;
-  iterator begin() { return params_.begin(); }
-  iterator end()   { return params_.end(); }
+  ~boxm2_vecf_orbit_articulation(){
+    params_.clear();
+  }
+
+ unsigned size(){ return params_.size(); }
+ boxm2_vecf_articulated_params& operator [] (unsigned i) {
+   vcl_cout<<" method has been called for "<<i<<vcl_endl;
+   return params_[i] ; }
  private:
   vcl_vector<boxm2_vecf_orbit_params> params_;
+
+
 };
 #endif// boxm2_vecf_orbit_articulation
