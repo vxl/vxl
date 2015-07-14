@@ -10,6 +10,7 @@ doxygen_add_library(core/vpgl
 INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 
 SET( vpgl_sources
+  vpgl_export.h
   vpgl_camera.h                    vpgl_camera_double_sptr.h
                                    vpgl_camera_float_sptr.h
   vpgl_proj_camera.h               vpgl_proj_camera.txx

@@ -7,7 +7,7 @@ doxygen_add_library(contrib/rpl/rrel
   )
 
 SET(rrel_sources
-                                rrel_fwd.h
+ rrel_export.h                  rrel_fwd.h
  rrel_mlesac_obj.cxx            rrel_mlesac_obj.h
  rrel_ransac_obj.cxx            rrel_ransac_obj.h
  rrel_lms_obj.cxx               rrel_lms_obj.h
@@ -51,7 +51,6 @@ TARGET_LINK_LIBRARIES(rrel vnl_algo vnl vgl)
 
 INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
-
 IF (BUILD_EXAMPLES)
   SUBDIRS(examples)
 ENDIF (BUILD_EXAMPLES)

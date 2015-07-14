@@ -61,7 +61,7 @@ class boxm2_scene : public vbl_ref_count
 {
   public:
     //: empty scene, needs to be initialized manually
-    boxm2_scene() {count_++;}
+    boxm2_scene() {boxm2_scene::get_count()++;}
 
     boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version = 2);
 
@@ -199,7 +199,7 @@ class boxm2_scene : public vbl_ref_count
     //: unique scene id
     unsigned id_;
     // count of constructed scenes to generate a unique id
-    static unsigned count_;
+    static unsigned& get_count();
     //: world scene information
     vpgl_lvcs               lvcs_;
     vgl_point_3d<double>    local_origin_;

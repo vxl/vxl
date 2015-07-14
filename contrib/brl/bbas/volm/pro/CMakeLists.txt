@@ -19,7 +19,7 @@ INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply)
   AUX_SOURCE_DIRECTORY(Templates volm_pro_sources)
 
   ADD_LIBRARY(volm_pro ${volm_pro_sources})
-  TARGET_LINK_LIBRARIES( volm_pro volm bprb brip vul bmsh3d_algo rply bsol vgl)
+  TARGET_LINK_LIBRARIES( volm_pro bstm_cpp_pro boxm2_cpp volm bprb brip vul bmsh3d_algo rply bsol vgl vil vul bmsh3d)
 
   IF(BUILD_RPL)
     TARGET_LINK_LIBRARIES(volm_pro rsdl)

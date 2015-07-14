@@ -9,8 +9,9 @@ IF(vxl_SOURCE_DIR)
 ENDIF(vxl_SOURCE_DIR)
 
 INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
-
+INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/rpl )
 SET( rgrl_sources
+  rgrl_export.h
   rgrl_fwd.h
   rgrl_object.h                        rgrl_object.cxx
   rgrl_object_sptr.h
@@ -162,6 +163,7 @@ SET( rgrl_sources
 AUX_SOURCE_DIRECTORY( Templates rgrl_sources )
 
 ADD_LIBRARY( rgrl ${rgrl_sources} )
+
 INSTALL_TARGETS(/lib rgrl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgrl ${rgrl_sources})
 TARGET_LINK_LIBRARIES( rgrl rrel rsdl vil3d vil vnl_algo vnl vbl vul)

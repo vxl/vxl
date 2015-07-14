@@ -1,6 +1,6 @@
 #include "volm_desc_land_indexer.h"
 
-vcl_string volm_desc_land_indexer::name_ = "land";
+
 
 volm_desc_land_indexer::volm_desc_land_indexer(vcl_string const& NLCD_folder, vcl_string const& out_index_folder) : volm_desc_indexer(out_index_folder)
 {

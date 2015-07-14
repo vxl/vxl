@@ -12,7 +12,7 @@
 
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-
+#define vgl_tolerance_txx_
 #include <vgl/vgl_point_2d.txx>
 #include <vgl/vgl_point_3d.txx>
 #include <vgl/vgl_line_2d.txx>

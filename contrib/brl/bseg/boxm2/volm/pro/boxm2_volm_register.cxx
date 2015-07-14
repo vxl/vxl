@@ -13,6 +13,7 @@ void boxm2_volm_register::register_datatype()
 
 void boxm2_volm_register::register_process()
 {
+#ifdef HAVE_OPENCL
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_index_process, "boxm2IndexHypothesesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_visualize_index_process, "boxm2VisualizeIndicesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_create_index_process2, "boxm2IndexHypothesesProcess2");
@@ -23,4 +24,5 @@ void boxm2_volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_change_scene_res_by_geo_cover_process, "boxm2ChangeSceneResByGeoCover");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_load_score_binary_process, "boxm2LoadScoreBinary");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_location_pin_point_ranking_process, "boxm2LocationPinPointRanking");
+#endif
 }

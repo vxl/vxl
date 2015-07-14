@@ -19,6 +19,7 @@
 #include <boxm/sample/boxm_edge_sample.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vcl_iosfwd.h> // for std::ostream
+#include "boxm_export.h"
 
 class boxm_mog_grey_processor;
 class boxm_mog_rgb_processor;
@@ -58,7 +59,7 @@ enum boxm_apm_type
 class boxm_apm_types
 {
  public:
-  static const char* app_model_strings[];
+  static boxm_EXPORT_DATA const char* app_model_strings[];
   static boxm_apm_type str_to_enum(const char* s);
 };
 

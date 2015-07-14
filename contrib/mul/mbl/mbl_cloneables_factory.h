@@ -12,6 +12,7 @@
 #include <vcl_sstream.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneable_ptr.h>
+#include <mbl/mbl_export.h>
 
 //=======================================================================
 //: A general factory pattern.
@@ -49,13 +50,13 @@ class mbl_cloneables_factory
   typedef vcl_map<vcl_string, mbl_cloneable_ptr<BASE> > MAP;
 
   //: Singleton array of names, and association concrete instantiations of BASE.
-  static vcl_auto_ptr<MAP> objects_;
 
  private:
 
   //: Get singleton instance.
   static MAP &objects()
   {
+    static vcl_auto_ptr<MAP> objects_;
     if (objects_.get() == 0)
       objects_.reset(new MAP);
 
@@ -104,10 +105,6 @@ class mbl_cloneables_factory
 
 // Macro to instantiate template, and initialise singleton data item.
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
-template <class BASE > \
-vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_cloneables_factory<BASE >::MAP > \
-  mbl_cloneables_factory<BASE >::objects_ =  \
-    vcl_auto_ptr<VCL_DISAPPEARING_TYPENAME mbl_cloneables_factory<BASE >::MAP >(0); \
 template class mbl_cloneables_factory< T >
 
 #endif  // mbl_cloneables_factory_h

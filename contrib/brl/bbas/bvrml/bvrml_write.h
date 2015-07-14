@@ -18,13 +18,14 @@
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_line_segment_3d.h>
+#include "bvrml_export.h"
 
 class bvrml_color
 {
  public:
   //: store the color scheme 'classic' to generate a heatmap
-  static unsigned heatmap_classic_size;
-  static unsigned char heatmap_classic[256][3];
+  static bvrml_EXPORT_DATA unsigned heatmap_classic_size;
+  static bvrml_EXPORT_DATA unsigned char heatmap_classic[256][3];
 };
 
 class bvrml_write

@@ -21,7 +21,7 @@ template< class T >
 bool
 brdb_value_t<T>::eq(const brdb_value& other) const
 {
-  assert(type_string_ == other.is_a());
+  assert(get_type_string() == other.is_a());
   return this->value_ == static_cast<const brdb_value_t<T>&>(other).value_;
 }
 
@@ -31,7 +31,7 @@ template< class T >
 bool
 brdb_value_t<T>::lt(const brdb_value& other) const
 {
-  assert(type_string_ == other.is_a());
+  assert(get_type_string() == other.is_a());
   return this->value_ < static_cast<const brdb_value_t<T>&>(other).value_;
 }
 
@@ -78,19 +78,14 @@ brdb_value_t<T>::b_write_value(vsl_b_ostream& os) const
 //is required.
 //However MSVC rejects the declaration [temp.expl.spec]p6, [temp.expl.spec]p13
 
-#ifdef WIN32
 
 #define BRDB_VALUE_INSTANTIATE(T,NAME) \
 template class brdb_value_t<T >; \
-VCL_DEFINE_SPECIALIZATION const vcl_string brdb_value_t<T >::type_string_(NAME); \
+const vcl_string& brdb_value_t<T >::get_type_string()\
+{\
+static vcl_string type_string = NAME;\
+return type_string;\
+}\
 const brdb_value::registrar reg_inst_##T(new brdb_value_t<T >)
-#else
-
-#define BRDB_VALUE_INSTANTIATE(T,NAME) \
-VCL_DEFINE_SPECIALIZATION const vcl_string brdb_value_t<T >::type_string_; \
-template class brdb_value_t<T >; \
-VCL_DEFINE_SPECIALIZATION const vcl_string brdb_value_t<T >::type_string_(NAME); \
-const brdb_value::registrar reg_inst_##T(new brdb_value_t<T >)
-#endif
 
 #endif // brdb_value_txx_

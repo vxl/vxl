@@ -84,6 +84,11 @@ ELSE( BUILD_FOR_VXL_DASHBOARD )
   SET( YES_FOR_DASHBOARD "NO" )
 ENDIF( BUILD_FOR_VXL_DASHBOARD )
 
+# Use this variable in vxl_config.h to tell if it is a shared build
+set(VXL_BUILD_SHARED FALSE)
+if(BUILD_SHARED_LIBS)
+  set(VXL_BUILD_SHARED TRUE)
+endif()
 
 # Do platform-specific configuration.
 IF(NOT VXL_NO_CMAKE_CONFIGURE)

@@ -76,6 +76,7 @@ CONFIGURE_FILE(${vxl_SOURCE_DIR}/core/vnl/vnl_config.h.in
 
 SET( vnl_sources
   dll.h
+  vnl_export.h
 
   vnl_config.h.in
   vnl_fwd.h

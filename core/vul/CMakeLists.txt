@@ -6,7 +6,9 @@ doxygen_add_library(core/vul
   DESCRIPTION "Utility Library"
   )
 
+
 SET(vul_sources
+  vul_export.h
   vul_fwd.h
   vul_whereami.h
 

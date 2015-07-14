@@ -47,7 +47,7 @@ public:
   //: Create a volumetric existence descriptor for the query image
   virtual volm_desc_sptr create_query_desc();
 
-  virtual vcl_string get_index_type_str() { return volm_desc_ex_2d_indexer::name_; }
+  virtual vcl_string get_index_type_str() { return volm_desc_ex_2d_indexer::get_name(); }
 
 private:
     //: query depth_map_scene

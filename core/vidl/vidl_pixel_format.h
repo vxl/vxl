@@ -46,6 +46,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_typeinfo.h>
 #include <vxl_config.h>
+#include <vidl/vidl_export.h>
 
 //: Describes the format of pixel encoding in a video frame buffer
 enum vidl_pixel_format
@@ -288,7 +289,7 @@ struct vidl_pixel_pack_of<VIDL_PIXEL_FORMAT_##FMT> \
 {\
   enum { macro_pix_size = 1<<vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::chroma_shift_x }; \
   enum { num_channels = vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_##FMT>::num_channels }; \
-  static const vcl_ptrdiff_t offset[macro_pix_size][num_channels]; \
+  static VIDL_EXPORT const vcl_ptrdiff_t offset[macro_pix_size][num_channels]; \
 }
 
 vidl_pp_mac( YUYV_422 );

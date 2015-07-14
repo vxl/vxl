@@ -23,7 +23,6 @@
 // forward declaration
 template< class T > class brdb_value_t;
 
-
 //: This abstract class is the base class for database values
 class brdb_value : public vbl_ref_count
 {
@@ -169,9 +168,9 @@ class brdb_value_t : public brdb_value
    : value_(value) {}
 
   //: Return the string identifying this class
-  virtual vcl_string is_a() const { return type_string_; }
+  virtual vcl_string is_a() const { return get_type_string(); }
 
-  static vcl_string const& type() { return type_string_; }
+  static vcl_string const& type() { return get_type_string(); }
 
   //: Clone
   virtual brdb_value * clone() const { return new brdb_value_t<T>(*this); }
@@ -215,7 +214,7 @@ class brdb_value_t : public brdb_value
   T value_;
 
   //: The type identifier string for this class
-  const static vcl_string type_string_;
+  static const vcl_string& get_type_string();
 };
 
 template< class T >

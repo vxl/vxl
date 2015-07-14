@@ -12,6 +12,7 @@ IF(EXPAT_FOUND)
     INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
 
     SET(volm_sources
+     volm_export.h
      volm_io.h                              volm_io.cxx
      volm_io_tools.h                        volm_io_tools.cxx
      volm_tile.h                            volm_tile.cxx

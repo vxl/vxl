@@ -1,6 +1,7 @@
 # prip/vdtop/CMakeLists.txt
 
 SET(vdtop_sources
+    vdtop_export.h
     vdtop_4_lower_homotopic_kernel.h
     vdtop_4_lower_leveling_kernel.h
     vdtop_4_upper_homotopic_kernel.h

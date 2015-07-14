@@ -23,7 +23,7 @@
 class volm_desc_ex_indexer : public volm_desc_indexer
 {
 public:
-  static vcl_string name_;
+  static vcl_string&  get_name();
   //: constructor 
   volm_desc_ex_indexer(vcl_string const& index_folder,
                        vcl_string const& out_index_folder,
@@ -45,7 +45,7 @@ public:
   virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values);
 
   //: get the name of the indexer
-  virtual vcl_string get_index_type_str() { return volm_desc_ex_indexer::name_; }
+  virtual vcl_string get_index_type_str() { return volm_desc_ex_indexer::get_name(); }
 
   //: generate parameter files
   virtual bool write_params_file();

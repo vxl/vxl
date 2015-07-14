@@ -12,18 +12,18 @@
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
-#include "dll.h"
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_digital_curve_sptr.h>
+#include "bdgl_export.h"
 
 class bdgl_curve_algs
 {
  public:
-  static BDGL_DLL_DATA const double tol;
-  static BDGL_DLL_DATA const double max_edgel_sep;
-  static BDGL_DLL_DATA const double synthetic;
+  static bdgl_EXPORT_DATA const double tol;
+  static bdgl_EXPORT_DATA const double max_edgel_sep;
+  static bdgl_EXPORT_DATA const double synthetic;
   ~bdgl_curve_algs();
 
   //:Finds the index on a digital curve closest to the given point

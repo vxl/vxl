@@ -3,6 +3,7 @@
 
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_vector.h>
+#include "boxm2_export.h"
 
 class boxm2_normal_albedo_array
 {
@@ -18,7 +19,7 @@ class boxm2_normal_albedo_array
   void set_probability(unsigned int i, float prob) {probs[i] = prob;}
 
  protected:
-  static const unsigned NUM_NORMALS = 16; // 8 at elevation 0 + 7 at elevation 45 + 1 at elevation 90
+  static boxm2_EXPORT_DATA const unsigned NUM_NORMALS = 16; // 8 at elevation 0 + 7 at elevation 45 + 1 at elevation 90
   float albedos[NUM_NORMALS];
   float probs[NUM_NORMALS];
 };
@@ -26,10 +27,10 @@ class boxm2_normal_albedo_array
 class boxm2_normal_albedo_array_constants
 {
  public:
-  static const double sigma_albedo;
-  static const double sigma_optical_depth;
-  static const double sigma_airlight;
-  static const double sigma_skylight;
+  static boxm2_EXPORT_DATA const double sigma_albedo;
+  static boxm2_EXPORT_DATA const double sigma_optical_depth;
+  static boxm2_EXPORT_DATA const double sigma_airlight;
+  static boxm2_EXPORT_DATA const double sigma_skylight;
 };
 
 #endif

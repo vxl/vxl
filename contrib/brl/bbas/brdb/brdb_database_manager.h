@@ -16,6 +16,7 @@
 #include <vcl_set.h>
 #include <vcl_string.h>
 #include <brdb/brdb_database.h>
+#include "brdb_export.h"
 
 #define DATABASE brdb_database_manager::instance()
 
@@ -52,9 +53,9 @@ class brdb_database_manager
 
  private:
   //: A static instance of the database
-  static brdb_database_sptr instance_;
+  static brdb_EXPORT_DATA brdb_database_sptr instance_;
   //: A unique id
-  static unsigned id_;
+  static brdb_EXPORT_DATA unsigned id_;
 };
 
 

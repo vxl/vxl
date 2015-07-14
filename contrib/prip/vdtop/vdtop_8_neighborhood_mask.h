@@ -14,6 +14,7 @@
 
 #include <vxl_config.h>
 #include "vdtop_freeman_code.h"
+#include <vdtop/vdtop_export.h>
 
 //: This class handles sets of points included in an 8-neighborhood.
 // A vdtop_8_neighborhood_mask can be viewed as a set of points around a single point.
@@ -188,18 +189,18 @@ class vdtop_8_neighborhood_mask
   vxl_byte mask_ ;
 
   //precomputed tables
-  static const vxl_byte nb8cc_[256] ;
-  static const vxl_byte nb4cc_[256] ;
-  static const vxl_byte m8cc_[256][4] ;
-  static const vxl_byte m4cc_[256][4] ;
-  static const vxl_byte m8dir_[256][8] ;
-  static const vxl_byte m4dir_[256][4] ;
-  static const bool m8simple_[256] ;
-  static const bool m4simple_[256] ;
-  static const bool m8simple_or_isolated_[256] ;
-  static const bool m4simple_or_isolated_[256] ;
-  static const vxl_byte nb4neighbors_[256] ;
-  static const vxl_byte nb8neighbors_[256] ;
+  static vdtop_EXPORT const vxl_byte nb8cc_[256] ;
+  static vdtop_EXPORT const vxl_byte nb4cc_[256] ;
+  static vdtop_EXPORT const vxl_byte m8cc_[256][4] ;
+  static vdtop_EXPORT const vxl_byte m4cc_[256][4] ;
+  static vdtop_EXPORT const vxl_byte m8dir_[256][8] ;
+  static vdtop_EXPORT const vxl_byte m4dir_[256][4] ;
+  static vdtop_EXPORT const bool m8simple_[256] ;
+  static vdtop_EXPORT const bool m4simple_[256] ;
+  static vdtop_EXPORT const bool m8simple_or_isolated_[256] ;
+  static vdtop_EXPORT const bool m4simple_or_isolated_[256] ;
+  static vdtop_EXPORT const vxl_byte nb4neighbors_[256] ;
+  static vdtop_EXPORT const vxl_byte nb8neighbors_[256] ;
 };
 
 #endif

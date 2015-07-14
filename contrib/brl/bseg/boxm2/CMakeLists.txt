@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 
 SET(boxm2_sources
+    boxm2_export.h
     boxm2_block.h                 boxm2_block.cxx
     boxm2_block_metadata.h        boxm2_block_metadata.cxx
     boxm2_data_base.h             boxm2_data_base.cxx

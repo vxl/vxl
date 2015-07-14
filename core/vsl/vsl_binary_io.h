@@ -19,7 +19,7 @@
 #include <vcl_map.h>
 #include <vcl_utility.h>
 #include <vxl_config.h>
-
+#include <vsl/vsl_export.h>
 //: A binary output adaptor for any vcl_ostream
 // Currently the main use of this is to encourage streams to be opened
 // in binary mode (ie. without CR/LF conversion)
@@ -87,7 +87,7 @@ class vsl_b_ostream
   //: The length of the b_stream header.
   // You can move to this offset from the start of the file to get to
   // the first real data item.
-  static const vcl_streamoff header_length;
+  static VSL_EXPORT const vcl_streamoff header_length;
 
  protected:
   //: The member stream

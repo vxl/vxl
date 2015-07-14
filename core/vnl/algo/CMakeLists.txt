@@ -34,8 +34,7 @@ IF(NETLIB_FOUND)
   INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
 
   SET( vnl_algo_sources
-    dll.h
-
+    vnl_algo_export.h
     vnl_algo_fwd.h
     vnl_netlib.h
 
@@ -103,6 +102,8 @@ IF(NETLIB_FOUND)
 
   ADD_LIBRARY( vnl_algo ${vnl_algo_sources})
   TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
+  include(GenerateExportHeader)
+  generate_export_header(vnl_algo)
 
   INSTALL_TARGETS(/lib vnl_algo)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/algo ${vnl_algo_sources})

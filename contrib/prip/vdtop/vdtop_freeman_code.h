@@ -14,6 +14,7 @@
 
 #include <vxl_config.h>
 #include <vcl_utility.h>
+#include <vdtop/vdtop_export.h>
 
 //: Freeman code class.
 class vdtop_freeman_code
@@ -145,15 +146,15 @@ class vdtop_freeman_code
  private :
 
   vxl_byte code_ ;
-  static const vxl_byte reduction_ [8][8] ;
-  static const vxl_byte normalized_[8] ;
-  static const vxl_byte opposite_[8] ;
-  static const vxl_byte orthogonal_[8] ;
-  static const bool are_orthogonal_[8][8] ;
-  static const vxl_byte difcd_[3][3] ;
-  static const vxl_byte mask_ [8] ;
-  static const int di_[8] ;
-  static const int dj_[8] ;
+  static vdtop_EXPORT const vxl_byte reduction_ [8][8] ;
+  static vdtop_EXPORT const vxl_byte normalized_[8] ;
+  static vdtop_EXPORT const vxl_byte opposite_[8] ;
+  static vdtop_EXPORT const vxl_byte orthogonal_[8] ;
+  static vdtop_EXPORT const bool are_orthogonal_[8][8] ;
+  static vdtop_EXPORT const vxl_byte difcd_[3][3] ;
+  static vdtop_EXPORT const vxl_byte mask_ [8] ;
+  static vdtop_EXPORT const int di_[8] ;
+  static vdtop_EXPORT const int dj_[8] ;
 };
 
 #endif

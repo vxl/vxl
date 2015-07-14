@@ -13,6 +13,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_vector.h>
+#include <rrel/rrel_export.h>
 
 class rrel_estimation_problem;
 class rrel_wls_obj;
@@ -49,9 +50,9 @@ class rrel_wls_obj;
 class rrel_irls
 {
   //  default parameters
-  static const double dflt_convergence_tol_;
-  static const int dflt_max_iterations_;
-  static const int dflt_iterations_for_scale_ ;
+  static rrel_EXPORT const double dflt_convergence_tol_;
+  static rrel_EXPORT const int dflt_max_iterations_;
+  static rrel_EXPORT const int dflt_iterations_for_scale_ ;
 
  public:
   //: Constructor.

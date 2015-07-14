@@ -28,8 +28,7 @@
 
 //vul include
 #include <vul/vul_file.h>
-//initialize static count to assign unique scene id
-unsigned boxm2_scene::count_ = 0;
+
 
 boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
 {
@@ -38,8 +37,8 @@ boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origi
   xml_path_  = data_path_ + "/scene.xml";
   num_illumination_bins_ = -1;
   version_ = version;
-  id_ = count_;
-  count_++;
+  id_ = boxm2_scene::get_count();
+  boxm2_scene::get_count()++;
 }
 
 boxm2_scene::boxm2_scene(const char* buffer)
@@ -67,8 +66,8 @@ boxm2_scene::boxm2_scene(const char* buffer)
   appearances_ = parser.appearances();
   num_illumination_bins_ = parser.num_illumination_bins();
   version_ = parser.version();
-  id_ = count_;
-  count_++;
+  id_ = boxm2_scene::get_count();
+  boxm2_scene::get_count()++;
 }
 
 //: initializes Scene from XML file
@@ -115,8 +114,8 @@ boxm2_scene::boxm2_scene(vcl_string filename)
   appearances_ = parser.appearances();
   num_illumination_bins_ = parser.num_illumination_bins();
   version_ = parser.version();
-  id_ = count_;
-  count_++;
+  id_ = boxm2_scene::get_count();
+  boxm2_scene::get_count()++;
 }
 // pretty much a straignt copy but provide a unique id
 boxm2_scene::boxm2_scene(boxm2_scene const& other_scene){
@@ -130,7 +129,8 @@ boxm2_scene::boxm2_scene(boxm2_scene const& other_scene){
   appearances_ = other_scene.appearances();
   num_illumination_bins_ = other_scene.num_illumination_bins();
   version_ = other_scene.version();
-  id_ = count_++;
+  id_ = boxm2_scene::get_count();
+  boxm2_scene::get_count()++;
 }
 
 boxm2_scene_sptr boxm2_scene::clone_no_disk(){
@@ -648,6 +648,11 @@ void boxm2_scene::max_block_index (vgl_point_3d<int> &idx,
   local_origin.set(max_x, max_y, max_z);
 }
 
+unsigned& boxm2_scene::get_count()
+{
+  static unsigned count;
+  return count;
+}
 
 //: returns true if the scene has specified data type (simple linear search)
 bool boxm2_scene::has_data_type(vcl_string data_type)

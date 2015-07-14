@@ -21,8 +21,10 @@ SET(boxm2_vecf_sources
 )
 
 ADD_LIBRARY(boxm2_vecf  ${boxm2_vecf_sources})
-TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_io  boxm2_ocl boxm2_ocl_algo bocl brip baio bvrml vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
-
+TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_io brip baio bvrml vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
+IF(OPENCL_FOUND)
+  TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_ocl boxm2_ocl_algo  bocl )
+ENDIF()
 # OpenCL support code
 SUBDIRS(ocl)
 
