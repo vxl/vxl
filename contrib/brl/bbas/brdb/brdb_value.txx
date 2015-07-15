@@ -80,12 +80,12 @@ brdb_value_t<T>::b_write_value(vsl_b_ostream& os) const
 
 
 #define BRDB_VALUE_INSTANTIATE(T,NAME) \
-template class brdb_value_t<T >; \
 template <> const vcl_string& brdb_value_t<T >::get_type_string()\
 {\
 static vcl_string type_string = NAME;\
 return type_string;\
 }\
+template class brdb_value_t<T >; \
 const brdb_value::registrar reg_inst_##T(new brdb_value_t<T >)
 
 #endif // brdb_value_txx_
