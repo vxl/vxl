@@ -137,7 +137,7 @@ void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene_sptr scene)
     boxm2_block_metadata data = blk_iter->second;
 
     //3d array of trees
-    boxm2_array_3d<uchar16>& trees = blk->trees();
+    const boxm2_array_3d<uchar16>& trees = blk->trees();
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alphas->data_buffer();
 
     //iterate through each block, filtering the root level first

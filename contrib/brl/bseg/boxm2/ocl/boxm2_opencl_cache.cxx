@@ -11,7 +11,7 @@ boxm2_opencl_cache::boxm2_opencl_cache(bocl_device_sptr device)
   maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * 0.7);
 
   // by default try to create an LRU cache
-  
+
   cpu_cache_ = boxm2_cache::instance();
 
   // store the device pointer and context associated with the device
@@ -130,11 +130,11 @@ void boxm2_opencl_cache::shallow_remove_block(boxm2_scene_sptr scene, boxm2_bloc
 }
 
 //: check if max_bytes_in_cache is hit and call clear_cache() if necessary
-bool boxm2_opencl_cache::clear_cache_if_necessary() 
-{ 
-  if (bytesInCache_ >= maxBytesInCache_) 
-    return clear_cache(); 
-  else return true; 
+bool boxm2_opencl_cache::clear_cache_if_necessary()
+{
+  if (bytesInCache_ >= maxBytesInCache_)
+    return clear_cache();
+  else return true;
 }
 
 vcl_size_t boxm2_opencl_cache::bytes_in_cache()
@@ -205,11 +205,11 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_scene_sptr scene, boxm2_block_id i
   // check to see which block to kick out
   // grab block from CPU cache and see if the GPU cache needs some cleaning
   //boxm2_block* loaded = cpu_cache_->get_block(scene, id);
-  boxm2_array_3d<uchar16>& trees = cpu_cache_->get_block(scene, id)->trees();
+  const boxm2_array_3d<uchar16>& trees = cpu_cache_->get_block(scene, id)->trees();
   vcl_size_t toLoadSize = trees.size()*sizeof(uchar16);
   unsigned long totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
-    
+
 #ifdef DEBUG
     vcl_cout<<"Loading Block "<<id<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
@@ -231,9 +231,9 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_scene_sptr scene, boxm2_block_id i
     vcl_cout<<vcl_endl;
 #endif
   }
-
+  uchar16* data_block = const_cast<uchar16*>(trees.data_block());
   // otherwise load it from disk with blocking
-  bocl_mem* blk = new bocl_mem(*context_, trees.data_block(), toLoadSize, "3d trees buffer " + id.to_string() );
+  bocl_mem* blk = new bocl_mem(*context_, data_block, toLoadSize, "3d trees buffer " + id.to_string() );
   blk->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
   bytesInCache_ += blk->num_bytes();
 
@@ -287,7 +287,7 @@ bocl_mem* boxm2_opencl_cache::get_copy_of_block_info(boxm2_scene_sptr scene, box
 }
 //: Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* boxm2_opencl_cache::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_string type, 
+bocl_mem* boxm2_opencl_cache::get_data(boxm2_scene_sptr scene, boxm2_block_id id, vcl_string type,
                                         vcl_size_t num_bytes, bool read_only)
 {
 
@@ -517,7 +517,7 @@ void boxm2_opencl_cache::deep_remove_data(boxm2_scene_sptr scene, boxm2_block_id
   vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
-   
+
     bocl_mem* toDelete = iter->second;
      this->unref_mem(toDelete);
     delete toDelete;
@@ -552,11 +552,11 @@ void boxm2_opencl_cache::shallow_remove_data(boxm2_scene_sptr scene, boxm2_block
 //: helper method, \returns a reference to correct data map (ensures one exists)
 vcl_map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache::cached_data_map(boxm2_scene_sptr scene, vcl_string prefix)
 {
-  if(cached_data_.find(scene) == cached_data_.end() ) 
+  if(cached_data_.find(scene) == cached_data_.end() )
   {
       cached_data_[scene] = vcl_map<vcl_string, vcl_map<boxm2_block_id, bocl_mem*> >();
   }
-  
+
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_[scene].find(prefix) == cached_data_[scene].end() )
   {
@@ -573,7 +573,7 @@ vcl_map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache::cached_data_map(boxm2_sc
 void boxm2_opencl_cache::lru_push_front( vcl_pair<boxm2_scene_sptr, boxm2_block_id>  scene_id_pair )
 {
     //search for it in the list, if it's there, delete it
-    vcl_list<vcl_pair<boxm2_scene_sptr, boxm2_block_id> >::iterator iter=lru_order_.begin(); 
+    vcl_list<vcl_pair<boxm2_scene_sptr, boxm2_block_id> >::iterator iter=lru_order_.begin();
     for (; iter!=lru_order_.end(); ++iter) {
         if ( (scene_id_pair.second  ==  (*iter).second )&& ( (*iter).first == scene_id_pair.first ) ) {
             lru_order_.erase(iter);

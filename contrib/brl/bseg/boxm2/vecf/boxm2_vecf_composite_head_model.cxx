@@ -1,7 +1,6 @@
 #include "boxm2_vecf_composite_head_model.h"
 #include "boxm2_vecf_eye_params.h"
 
-
 boxm2_vecf_composite_head_model::boxm2_vecf_composite_head_model( vcl_string const& head_model_path, vcl_string const& eye_model_path)
   : boxm2_vecf_head_model(head_model_path),
   params_()
@@ -33,7 +32,17 @@ bool boxm2_vecf_composite_head_model::set_params(boxm2_vecf_articulated_params c
   eye_dist_x *= params_.head_scale_.x();
 
   params_.l_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + eye_dist_x, eye_offset_y, eye_offset_z);
-   params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y, eye_offset_z);
+  params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y, eye_offset_z);
+
+  params_.l_orbit_params_.eye_pointing_dir_ = params_.look_dir_;
+  params_.r_orbit_params_.eye_pointing_dir_ = params_.look_dir_; //assuming the person is not lazy eyed.
+
+  params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y, eye_offset_z);
+
+  left_orbit_.set_params( params_.l_orbit_params_);
+  right_orbit_.set_params( params_.r_orbit_params_);
+
+  //finally, propagate the params to each orbit
   left_orbit_.set_params( params_.l_orbit_params_);
   right_orbit_.set_params( params_.r_orbit_params_);
 

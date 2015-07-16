@@ -78,7 +78,7 @@ bool copy_fine_to_coarse(boxm2_block & blk,
                                                                       alpha_buffer_B->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-    boxm2_array_3d<uchar16>&  trees = blk.trees();  //trees to refine
+    const boxm2_array_3d<uchar16>&  trees = blk.trees();  //trees to refine
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();
@@ -122,7 +122,7 @@ bool copy_fine_to_coarse(boxm2_block & blk,
                             int index_y=(int)vcl_floor(local.y());
                             int index_z=(int)vcl_floor(local.z());
 
-                            boct_bit_tree tree(blksB->trees()(index_x,index_y,index_z).data_block()) ; 
+                            boct_bit_tree tree(blksB->trees_copy()(index_x,index_y,index_z).data_block()) ;
                             int bit_index=tree.traverse_to_level(local,1);
                             int depth=tree.depth_at(bit_index);
                             int data_offset=tree.get_data_index(bit_index,false);
@@ -182,7 +182,7 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
     coarse_scene->set_xml_path(coarse_model_dir+"/scene.xml");
 
     vcl_vector<boxm2_block_id> scene_blks = scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator iter = scene_blks.begin(); 
+    vcl_vector<boxm2_block_id>::iterator iter = scene_blks.begin();
     for(; iter!=scene_blks.end(); iter++)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata_const(*iter);
@@ -192,17 +192,17 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
                                                 vcl_ceil(mdata.sub_block_num_.z()/8.0f));
         vgl_vector_3d<double> coarse_blk_dim(mdata.sub_block_dim_.x()*(double) mdata.sub_block_num_.x() / (double) coarse_blk_num.x(),
                                              mdata.sub_block_dim_.y()*(double) mdata.sub_block_num_.y() / (double) coarse_blk_num.y(),
-                                             mdata.sub_block_dim_.z()*(double) mdata.sub_block_num_.z() / (double) coarse_blk_num.z() ); 
+                                             mdata.sub_block_dim_.z()*(double) mdata.sub_block_num_.z() / (double) coarse_blk_num.z() );
         mdata.sub_block_num_ = coarse_blk_num ;
         mdata.sub_block_dim_ = coarse_blk_dim ;
         mdata.init_level_ = 4;
-        //: Add a block to the scene.        
+        //: Add a block to the scene.
         coarse_scene->add_block_metadata(mdata);
     }
 
     coarse_scene->save_scene();
     vcl_vector<boxm2_block_id> coarse_scene_blks = coarse_scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator coarse_iter = coarse_scene_blks.begin(); 
+    vcl_vector<boxm2_block_id>::iterator coarse_iter = coarse_scene_blks.begin();
     for(; coarse_iter!=coarse_scene_blks.end(); coarse_iter++)
     {
         boxm2_block_metadata mdata = coarse_scene->get_block_metadata(*coarse_iter);
@@ -217,4 +217,3 @@ bool boxm2_ocl_create_coarser_scene_process(bprb_func_process& pro)
     vcl_cout<<"Update Parents Alpha: "<<gpu_time<<vcl_endl;
     return true;
 }
-

@@ -28,7 +28,7 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
     boxm2_data_base * points= cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_POINT>::prefix(), (alpha->buffer_length() /alphaTypeSize) * pointTypeSize, false);
 
     //3d array of trees
-    boxm2_array_3d<uchar16>& trees = cache->get_block(scene,id)->trees();
+    const boxm2_array_3d<uchar16>& trees = cache->get_block(scene,id)->trees();
 
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
     boxm2_data_traits<BOXM2_POINT>::datatype * points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
@@ -63,7 +63,7 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
              continue;
            }
            vgl_point_3d<double> localCenter = bit_tree.cell_center(currBitIndex);
-           vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y()+ y, localCenter.z() + z);         
+           vgl_point_3d<double> cellCenter(localCenter.x() + x, localCenter.y()+ y, localCenter.z() + z);
            points_data[currIdx][0] = float(cellCenter.x()*data.sub_block_dim_.x() + data.local_origin_.x());
            points_data[currIdx][1] = float(cellCenter.y()*data.sub_block_dim_.y() + data.local_origin_.y());
            points_data[currIdx][2] = float(cellCenter.z()*data.sub_block_dim_.z() + data.local_origin_.z());

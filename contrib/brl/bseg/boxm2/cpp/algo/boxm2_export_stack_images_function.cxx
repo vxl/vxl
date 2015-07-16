@@ -61,7 +61,7 @@ void boxm2_export_stack_images_function  ::export_opacity_stack_images(const box
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-    boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
+    const boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();
@@ -176,7 +176,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
     boxm2_data<BOXM2_MOG3_GREY> *int_data=new boxm2_data<BOXM2_MOG3_GREY>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-    boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
+    const boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();
@@ -286,7 +286,7 @@ void boxm2_export_stack_images_function  ::export_color_stack_images(const boxm2
     boxm2_data<BOXM2_GAUSS_RGB> *int_data=new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
 
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-    boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
+    const boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
     unsigned ni = trees.get_row1_count();
     unsigned nj = trees.get_row2_count();
     unsigned nk = trees.get_row3_count();

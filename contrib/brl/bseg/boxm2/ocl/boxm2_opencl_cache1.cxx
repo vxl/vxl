@@ -119,11 +119,11 @@ void boxm2_opencl_cache1::shallow_remove_block(boxm2_block_id id)
 }
 
 //: check if max_bytes_in_cache is hit and call clear_cache() if necessary
-bool boxm2_opencl_cache1::clear_cache_if_necessary() 
-{ 
-  if (bytesInCache_ >= maxBytesInCache_) 
-    return clear_cache(); 
-  else return true; 
+bool boxm2_opencl_cache1::clear_cache_if_necessary()
+{
+  if (bytesInCache_ >= maxBytesInCache_)
+    return clear_cache();
+  else return true;
 }
 
 vcl_size_t boxm2_opencl_cache1::bytes_in_cache()
@@ -188,11 +188,11 @@ bocl_mem* boxm2_opencl_cache1::get_block(boxm2_block_id id)
   // check to see which block to kick out
   // grab block from CPU cache and see if the GPU cache needs some cleaning
   boxm2_block* loaded = cpu_cache_->get_block(id);
-  boxm2_array_3d<uchar16>& trees = loaded->trees();
+  const boxm2_array_3d<uchar16>& trees = loaded->trees();
   vcl_size_t toLoadSize = trees.size()*sizeof(uchar16);
   unsigned long totalBytes = this->bytes_in_cache() + toLoadSize;
   if (totalBytes > maxBytesInCache_) {
-    
+
 #ifdef DEBUG
     vcl_cout<<"Loading Block "<<id<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
             <<"    removing... ";
@@ -214,9 +214,9 @@ bocl_mem* boxm2_opencl_cache1::get_block(boxm2_block_id id)
     vcl_cout<<vcl_endl;
 #endif
   }
-
+ uchar16* data_block = const_cast<uchar16*>(trees.data_block());
   // otherwise load it from disk with blocking
-  bocl_mem* blk = new bocl_mem(*context_, trees.data_block(), toLoadSize, "3d trees buffer " + id.to_string() );
+  bocl_mem* blk = new bocl_mem(*context_, data_block, toLoadSize, "3d trees buffer " + id.to_string() );
   blk->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
   bytesInCache_ += blk->num_bytes();
 
@@ -491,7 +491,7 @@ void boxm2_opencl_cache1::deep_remove_data(boxm2_block_id id, vcl_string type, b
   vcl_map<boxm2_block_id, bocl_mem*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
-   
+
     bocl_mem* toDelete = iter->second;
      this->unref_mem(toDelete);
     delete toDelete;

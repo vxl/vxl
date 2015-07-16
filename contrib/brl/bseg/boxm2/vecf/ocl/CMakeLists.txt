@@ -14,6 +14,7 @@ SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_store_nbrs.h                       boxm2_vecf_ocl_store_nbrs.cxx
     boxm2_vecf_ocl_filter.h                           boxm2_vecf_ocl_filter.cxx
     boxm2_vecf_ocl_transform_scene_sptr.h
+    boxm2_vecf_ocl_orbit_scene.h                boxm2_vecf_ocl_orbit_scene.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_ocl_sources)
@@ -31,7 +32,7 @@ subdirs(pro)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests) 
+  SUBDIRS(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(OPENCL_FOUND)

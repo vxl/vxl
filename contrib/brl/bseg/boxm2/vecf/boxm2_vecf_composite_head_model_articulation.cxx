@@ -78,7 +78,9 @@ for(int i = 0; i<6; ++i){
     params_.push_back(head_params);
   }
 
-for(int i = 0; i<6; ++i){
+ double scale =1.0;
+ for(int i = 0; i<6; ++i){
+  scale*=0.9;
   boxm2_vecf_orbit_params l_params,r_params;
   l_params.eyelid_dt_ = 0;
     boxm2_vecf_composite_head_parameters head_params;
@@ -90,6 +92,7 @@ for(int i = 0; i<6; ++i){
       r_params.eyelid_dt_ = ddt;
     head_params.l_orbit_params_ = l_params;
     head_params.r_orbit_params_ = r_params;
+    head_params.head_scale_.x_ = scale;
     params_.push_back(head_params);
   }
 

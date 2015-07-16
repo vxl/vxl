@@ -16,7 +16,7 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
   float*   alpha_cpy = (float*) newA->data_buffer();
 
   //3d array of trees
-  boxm2_array_3d<uchar16>& trees = blk->trees();
+  const boxm2_array_3d<uchar16>& trees = blk->trees();
   float*   alpha_data = (float*) alphas->data_buffer();
 
   //iterate through each block, filtering the root level first
@@ -163,7 +163,7 @@ boxm2_filter_block_function::neighbors( vgl_point_3d<int>& center, boxm2_array_3
 
 //: returns a list of 3d points of neighboring blocks
 vcl_vector<vgl_point_3d<double> >
-boxm2_filter_block_function::neighbor_points( vgl_point_3d<double>& cellCenter, double side_len, boxm2_array_3d<uchar16>& trees )
+boxm2_filter_block_function::neighbor_points( vgl_point_3d<double>& cellCenter, double side_len, const boxm2_array_3d<uchar16>& trees )
 {
   vcl_vector<vgl_point_3d<double> > toReturn;
 

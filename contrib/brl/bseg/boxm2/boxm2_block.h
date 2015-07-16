@@ -75,6 +75,7 @@ class boxm2_block : public vbl_ref_count
   int                       max_level()         const { return max_level_; }
   int                       max_mb()            const { return max_mb_; }
   long                      byte_count()        const { return byte_count_; }
+  unsigned                  num_cells()         const { return n_cells_; }
   vgl_point_3d<double>      local_origin()      const { return local_origin_;}
   //: mutators
   void set_block_id(boxm2_block_id id)  { block_id_ = id; }
@@ -88,6 +89,16 @@ class boxm2_block : public vbl_ref_count
 
   //: regardless of the way the instance is constructed, enable write
   void enable_write() { read_only_ = false; }
+  void set_trees(const boxm2_array_3d<uchar16>& that){
+    vcl_memcpy(this->trees_.data_block() , that.data_block(),that.size() * 16);
+    n_cells_ = this->recompute_num_cells();
+  }
+  boxm2_array_3d<uchar16> trees_copy(){
+    uchar16 * copy_buff = new uchar16[trees_.size()];
+    vcl_memcpy(copy_buff, this->trees_.data_block() ,trees_.size() * 16);
+    return boxm2_array_3d<uchar16>(trees_.get_row1_count(),trees_.get_row2_count(),trees_.get_row3_count(),copy_buff);
+
+  }
   bool read_only() const { return read_only_; }
 
   //: construct the bounding box for the block in scene coordinates
@@ -115,13 +126,13 @@ class boxm2_block : public vbl_ref_count
 
   //: retrieve a vector of cell centers and other info inside the specified bounding box, both in global world coordinates
   vcl_vector<cell_info> cells_in_box(vgl_box_3d<double> const& global_box);
-  
+
   // find neigboring cell centers within a specified distance from probe, including the cell containing the probe
   vcl_vector<vgl_point_3d<double> > neighbors(vgl_point_3d<double> const& probe, double distance) const;
 
   /////
  private:
-
+  unsigned recompute_num_cells();
   //: unique block id (currently 3D address)
   boxm2_block_id          block_id_;
 
@@ -143,7 +154,7 @@ class boxm2_block : public vbl_ref_count
   int init_level_;   //each sub_blocks's init level (default 1)
   int max_level_;    //each sub_blocks's max_level (default 4)
   int max_mb_;       //each total block mb
-
+  unsigned n_cells_;
   bool read_only_;   // if the block existed already on the disc, do not write it back
 
   short version_;

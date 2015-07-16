@@ -25,7 +25,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
   vcl_cout << "mesh has " << mesh_verts.size() << " vertices." << vcl_endl;
 
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  
+
   for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin(); iter!= blocks.end(); iter ++)
   {
     boxm2_block_id id = iter->first;
@@ -48,7 +48,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
       }
     }
 
-    boxm2_array_3d<vnl_vector_fixed<unsigned char, 16> > &trees = blk->trees();
+    const boxm2_array_3d<vnl_vector_fixed<unsigned char, 16> > &trees = blk->trees();
 
     // iterate over every triangle in the mesh
     for (unsigned f=0; f<mesh_faces.size(); ++f) {

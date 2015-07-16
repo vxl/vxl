@@ -71,7 +71,7 @@ void boxm2_apply_filter_function<RESPONSE_DATA_TYPE>::apply_filter(
   boxm2_block_id id = blk->block_id();
 
   //3d array of trees
-  boxm2_array_3d<uchar16>& trees = blk->trees();
+  const boxm2_array_3d<uchar16>& trees = blk->trees();
   boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alphas->data_buffer();
 
   typename boxm2_data_traits<RESPONSE_DATA_TYPE>::datatype * response_data =

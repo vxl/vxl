@@ -10,8 +10,8 @@
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
 
-boxm2_vecf_head_model::boxm2_vecf_head_model(vcl_string const& scene_file):
-  boxm2_vecf_articulated_scene(scene_file),
+boxm2_vecf_head_model::boxm2_vecf_head_model(vcl_string const& scene_file,vcl_string color_apm_ident):
+  boxm2_vecf_articulated_scene(scene_file,color_apm_ident),
   scale_(1.0, 1.0, 1.0)
 {
 
@@ -41,6 +41,13 @@ bool boxm2_vecf_head_model::get_data(boxm2_scene_sptr scene, boxm2_block_id cons
   return true;
 }
 
+  bool get_color_data(boxm2_scene_sptr scene, boxm2_block_id const& blk_id,
+                      vcl_string app_id, boxm2_data_base **color_data){
+    *color_data = boxm2_cache::instance()->get_data_base(scene, blk_id, app_id);
+    if (color_data)
+      return true;
+    return false;
+  }
 
 void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 {
@@ -56,7 +63,8 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 
     boxm2_data_base *target_alpha;
     boxm2_data_base *target_app;
-    boxm2_data_base  *target_nobs;
+    boxm2_data_base *target_nobs;
+    boxm2_data_base *target_color = boxm2_cache::instance()->get_data_base(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
     if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
       vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << vcl_endl;
       return;
@@ -67,11 +75,11 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
 
     //3d array of trees
     typedef boxm2_block::uchar16 uchar16;
-    boxm2_array_3d<uchar16>& trees = target_blk->trees();
+    const boxm2_array_3d<uchar16>& trees = target_blk->trees();
     boxm2_data_traits<BOXM2_ALPHA>::datatype *target_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(target_alpha->data_buffer());
     boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *target_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(target_app->data_buffer());
     boxm2_data_traits<BOXM2_NUM_OBS>::datatype *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
-
+    boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
     // for each block of the base model
     for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin();
          sblk != source_blocks.end(); ++sblk) {
@@ -81,6 +89,8 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
       boxm2_data_base* source_alpha;
       boxm2_data_base* source_app;
       boxm2_data_base* source_nobs;
+
+      boxm2_data_base* source_color = boxm2_cache::instance()->get_data_base(base_model_, *sblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
       if (!get_data(base_model_, *sblk, &source_alpha, &source_app, &source_nobs)) {
         vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_source(): error getting source block data block=" << sblk->to_string() << vcl_endl;
         return ;
@@ -88,8 +98,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
       boxm2_data_traits<BOXM2_ALPHA>::datatype *source_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(source_alpha->data_buffer());
       boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *source_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(source_app->data_buffer());
       boxm2_data_traits<BOXM2_NUM_OBS>::datatype *source_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(source_nobs->data_buffer());
-
-      boxm2_array_3d<uchar16>& trees = source_blk->trees();
+      boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *source_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(source_color->data_buffer());
 
       //iterate through each block, filtering the root level first
       for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
@@ -138,6 +147,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
                   target_alpha_data[data_idx] = source_alpha_data[source_data_idx];
                   target_app_data[data_idx] = source_app_data[source_data_idx];
                   target_nobs_data[data_idx] = source_nobs_data[source_data_idx];
+                  target_color_data[data_idx] =source_color_data[source_data_idx];
                 }
               }
             }
@@ -160,7 +170,8 @@ bool boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
 
     boxm2_data_base *target_alpha;
     boxm2_data_base *target_app;
-    boxm2_data_base  *target_nobs;
+    boxm2_data_base *target_nobs;
+    boxm2_data_base * target_color = boxm2_cache::instance()->get_data_base(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
     if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
       vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << vcl_endl;
       return false;
@@ -171,11 +182,11 @@ bool boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
 
     //3d array of trees
     typedef boxm2_block::uchar16 uchar16;
-    boxm2_array_3d<uchar16>& trees = target_blk->trees();
+    const boxm2_array_3d<uchar16>& trees = target_blk->trees();
     boxm2_data_traits<BOXM2_ALPHA>::datatype *target_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(target_alpha->data_buffer());
     boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *target_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(target_app->data_buffer());
     boxm2_data_traits<BOXM2_NUM_OBS>::datatype *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
-
+    boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
     //iterate through each block, filtering the root level first
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
@@ -195,6 +206,7 @@ bool boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
             target_alpha_data[data_idx] = 0.0f;
             target_app_data[data_idx] = boxm2_data_traits<BOXM2_MOG3_GREY>::datatype();
             target_nobs_data[data_idx] = boxm2_data_traits<BOXM2_NUM_OBS>::datatype();
+            target_color_data[data_idx] =boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype();
           }
         }
       }

@@ -12,6 +12,7 @@ boxm2_block::boxm2_block(boxm2_block_id id, char* buff): version_(1)
   buffer_ = buff;
   this->b_read(buff);
   read_only_ = true;
+  n_cells_ =this->recompute_num_cells();
 }
 
 boxm2_block::boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buffer)
@@ -27,6 +28,7 @@ boxm2_block::boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buf
   buffer_ = buffer;
   this->b_read(buffer_);
   read_only_ = true;
+  n_cells_ =this->recompute_num_cells();
 }
 
 boxm2_block::boxm2_block(boxm2_block_metadata data)
@@ -35,6 +37,16 @@ boxm2_block::boxm2_block(boxm2_block_metadata data)
   block_id_ = data.id_;
   this->init_empty_block(data);
   read_only_ = false;  // make sure that it is written back to disc
+  n_cells_ =this->recompute_num_cells();
+}
+
+unsigned boxm2_block::recompute_num_cells(){
+  unsigned N = 0;
+  for( const boxm2_block::uchar16* it= this->trees().begin();it!=this->trees().end(); it++){
+      boct_bit_tree curr_tree( (unsigned char*) it->data_block(),this->max_level_);
+      N += curr_tree.num_cells();
+  }
+  return N;
 }
 
 bool boxm2_block::b_read(char* buff)

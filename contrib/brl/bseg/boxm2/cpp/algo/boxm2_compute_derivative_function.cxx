@@ -21,7 +21,7 @@ boxm2_compute_derivative_function::boxm2_compute_derivative_function(
   boxm2_block_id id = blk->block_id();
 
   //3d array of trees
-  boxm2_array_3d<uchar16>& trees = blk->trees();
+  const boxm2_array_3d<uchar16>& trees = blk->trees();
   boxm2_data_traits<BOXM2_ALPHA>::datatype *   alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alphas->data_buffer();
   boxm2_data_traits<BOXM2_NORMAL>::datatype * normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
   boxm2_data_traits<BOXM2_POINT>::datatype* points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*)points->data_buffer();

@@ -4,14 +4,13 @@
 #include <boxm2/boxm2_block_metadata.h>
 #include <vcl_sstream.h>
 #include <vcl_set.h>
-
+#include <vcl_stdexcept.h>
+#include <boxm2/boxm2_data_traits.h>
 //: PUBLIC create method, for creating singleton instance of boxm2_cache
 void boxm2_lru_cache::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
 {
-  if (boxm2_cache::exists())
-  {
-  }
-  else {
+  if (boxm2_cache::exists()){
+  }else{
     instance_ = new boxm2_lru_cache(scene, fs_type);
     destroyer_.set_singleton(instance_);
   }
@@ -60,7 +59,7 @@ void boxm2_lru_cache::clear_cache()
       for (vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >::iterator iter = dmap.begin();
           iter != dmap.end(); iter++)
       {
-          for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) 
+          for (vcl_map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++)
               delete it->second;
 
           iter->second.clear();
@@ -71,7 +70,7 @@ void boxm2_lru_cache::clear_cache()
   vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::iterator scene_block_iter =cached_blocks_.begin();
   for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++)
   {
-      
+
       for (vcl_map<boxm2_block_id, boxm2_block*>::iterator iter = scene_block_iter->second.begin();
           iter != scene_block_iter->second.end(); iter++)
       {
@@ -80,7 +79,7 @@ void boxm2_lru_cache::clear_cache()
       scene_block_iter->second.clear();
   }
   cached_blocks_.clear();
- 
+
 
 }
 
@@ -88,7 +87,7 @@ void boxm2_lru_cache::clear_cache()
 boxm2_block* boxm2_lru_cache::get_block(boxm2_scene_sptr & scene, boxm2_block_id id)
 {
   boxm2_block_metadata mdata = scene->get_block_metadata(id);
-  
+
   //: add a scene
   if(cached_blocks_.find(scene) == cached_blocks_.end() ) {
     this->add_scene(scene);
@@ -97,7 +96,7 @@ boxm2_block* boxm2_lru_cache::get_block(boxm2_scene_sptr & scene, boxm2_block_id
     if(!this->add_scene(scene))
         return NULL;
 #endif
-  
+
   //: add a block
   if ( cached_blocks_[scene].find(id) == cached_blocks_[scene].end() )
   {
@@ -119,7 +118,13 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_scene_sptr & scene, boxm2_
 {
   // grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map =this->cached_data_map(scene, type);
-
+  vcl_size_t data_size  = boxm2_data_info::datasize(type);
+  if (!scene->block_exists(id)){
+    return 0;
+  }
+  boxm2_block* blk = this->get_block(scene,id);
+  unsigned n_cells = blk->num_cells();
+  vcl_size_t byte_length = n_cells * data_size; // override the num_bytes passed parameter
   // then look for the block you're requesting
   vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() )
@@ -136,8 +141,15 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_scene_sptr & scene, boxm2_
 
   // if num_bytes is greater than zero, then you're guaranteed to return a data size with that many bytes
   if (num_bytes > 0) {
+    if (num_bytes != byte_length){
+      vcl_stringstream ss;
+      ss<<"Attempting to retrieve "<<num_bytes<<" for datatype " << type <<"when actual buffer size should be "<<byte_length;
+      throw std::runtime_error(ss.str());
+      loaded = 0;
+      return loaded;
+    }
     // if loaded from disk is good and it matches size, you found it, return
-    if (loaded && loaded->buffer_length()==num_bytes) {
+    if (loaded && loaded->buffer_length() == byte_length) {
       // update data map
       data_map[id] = loaded;
       if (!read_only)  // write-enable is enforced
@@ -148,15 +160,16 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_scene_sptr & scene, boxm2_
     // requesting a specific number of bytes, and not found it on disk
     vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id
             <<" type: "<<type
-            <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
-    loaded = new boxm2_data_base(new char[num_bytes], num_bytes, id, read_only);
+            <<" to size: "<< byte_length <<" bytes"<<vcl_endl;
+    loaded = new boxm2_data_base(new char[byte_length], byte_length, id, read_only);
     loaded->set_default_value(type, data);
   }
   else {
     // otherwise it's a miss, load sync from disk, update cache
     if (!loaded && scene->block_exists(id)) {
       vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
-      loaded = new boxm2_data_base(data, type, read_only);
+      loaded = new boxm2_data_base(new char[byte_length], byte_length, id, read_only);
+      loaded->set_default_value(type, data);
     }
   }
 
@@ -185,15 +198,15 @@ boxm2_data_base* boxm2_lru_cache::get_data_base_new(boxm2_scene_sptr & scene, bo
   else {
     // initialize an empty data
     //vcl_cout<<"boxm2_lru_cache::initializing empty data "<<id<<" type: "<<type<<vcl_endl;
-    
+
     boxm2_block_metadata data = scene->get_block_metadata(id);
     // the following constructor also sets the default values
     block_data = new boxm2_data_base(data, type, read_only);
   }
   // grab a reference to the map of cached_data_
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = this->cached_data_map(scene, type);
-  
-  
+
+
   // then look for the block you're requesting
   vcl_map<boxm2_block_id, boxm2_data_base*>::iterator iter = data_map.find(id);
   if ( iter != data_map.end() )
@@ -277,8 +290,8 @@ vcl_map<boxm2_block_id, boxm2_data_base*>& boxm2_lru_cache::cached_data_map(boxm
   }
   // grab a reference to the map of cached_data_ and return it
   vcl_map<boxm2_block_id, boxm2_data_base*>& data_map = cached_data_[scene][prefix];
-  return data_map; 
-     
+  return data_map;
+
 }
 
 //: helper method says whether or not block id is valid
@@ -286,20 +299,20 @@ bool boxm2_lru_cache::is_valid_id(boxm2_scene_sptr & scene, boxm2_block_id id)
 {
   // use scene here to determine if this id is valid
   return scene->block_exists(id);
-  
+
 }
 
 
 //: Summarizes this cache's data
 vcl_string boxm2_lru_cache::to_string()
 {
-      
+
     vcl_stringstream stream;
     vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::iterator scene_block_iter =cached_blocks_.begin();
     vcl_map<boxm2_scene_sptr, vcl_map<vcl_string, vcl_map<boxm2_block_id, boxm2_data_base*> >,ltstr1 >::iterator scene_data_iter =cached_data_.begin();
 
   for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++,scene_data_iter++)
-  {  
+  {
       stream << "boxm2_lru_cache:: scene dir="<<scene_block_iter->first->data_path()<<'\n'
           << "  blocks: ";
       vcl_map<boxm2_block_id, boxm2_block*>::iterator blk_iter = scene_block_iter->second.begin();
@@ -346,7 +359,7 @@ void boxm2_lru_cache::write_to_disk()
   vcl_map< boxm2_scene_sptr, vcl_map<boxm2_block_id, boxm2_block*>,ltstr1 >::iterator scene_block_iter =cached_blocks_.begin();
   for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++)
   {
-      
+
       for (vcl_map<boxm2_block_id, boxm2_block*>::iterator iter = scene_block_iter->second.begin();
           iter != scene_block_iter->second.end(); iter++)
       {
@@ -354,7 +367,7 @@ void boxm2_lru_cache::write_to_disk()
           boxm2_sio_mgr::save_block(scene_block_iter->first->data_path(), iter->second);
       }
   }
-  
+
 }
 //: dumps all data onto disk
 void boxm2_lru_cache::write_to_disk(boxm2_scene_sptr & scene)
@@ -387,7 +400,7 @@ void boxm2_lru_cache::write_to_disk(boxm2_scene_sptr & scene)
           boxm2_sio_mgr::save_block(scene_block_iter->first->data_path(), iter->second);
       }
   }
-}  
+}
 
 //: add a new scene to the cache
 bool boxm2_lru_cache::add_scene(boxm2_scene_sptr & scene)
@@ -417,4 +430,3 @@ vcl_ostream& operator<<(vcl_ostream &s, boxm2_lru_cache& scene)
 {
   return s << scene.to_string();
 }
-

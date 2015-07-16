@@ -73,7 +73,7 @@ void boxm2_test_utils::save_test_scene_to_disk()
         vgl_point_3d<double> local_origin = vgl_point_3d<double>(0,0,0) + vgl_vector_3d<double>((double)nums[0]*dims[0]*(double)i,
                                                                                                 (double)nums[0]*dims[0]*(double)j,
                                                                                                 (double)nums[0]*dims[0]*(double)k);
-        boxm2_block_id id(i,j,k);  
+        boxm2_block_id id(i,j,k);
         boxm2_block_metadata mdata(id,
                                     local_origin,
                                     vgl_vector_3d<double> (dims[0], dims[1],dims[2]),
@@ -90,9 +90,9 @@ void boxm2_test_utils::save_test_scene_to_disk()
                                                                       init_level,
                                                                       max_level,
                                                                       max_mb );
-        
+
         boxm2_block b(id,mdata, stream);
-        
+
         vcl_cout<<"saving test block for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block("", &b);
       }
@@ -165,8 +165,8 @@ void boxm2_test_utils::test_block_equivalence(boxm2_block& a, boxm2_block& b)
     }
     TEST("boxm2_block: meta data from disk passed", true, true);
 
-    boxm2_array_3d<uchar16>&  treesa = a.trees();
-    boxm2_array_3d<uchar16>&  treesb = b.trees();
+    const boxm2_array_3d<uchar16>&  treesa = a.trees();
+    const boxm2_array_3d<uchar16>&  treesb = b.trees();
     for (unsigned int i=0; i<a.sub_block_num().x(); ++i) {
       for (unsigned int j=0; j<a.sub_block_num().y(); ++j) {
         for (unsigned int k=0; k<a.sub_block_num().z(); ++k) {

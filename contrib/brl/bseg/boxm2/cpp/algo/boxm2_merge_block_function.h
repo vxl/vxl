@@ -48,7 +48,7 @@ class boxm2_merge_block_function
   boxm2_scene_sptr scene_;
   int          merge_count_;
   boxm2_block* blk_;
-  uchar16*     trees_;
+  const uchar16*     trees_;
 
   float*       alpha_;
   uchar8*      mog_;

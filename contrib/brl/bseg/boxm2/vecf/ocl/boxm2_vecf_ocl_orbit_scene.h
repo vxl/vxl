@@ -54,17 +54,18 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include "boxm2_vecf_orbit_params.h"
-#include "boxm2_vecf_eyelid.h"
-#include "boxm2_vecf_eyelid_crease.h"
+#include "../boxm2_vecf_orbit_params.h"
+#include "../boxm2_vecf_eyelid.h"
+#include "../boxm2_vecf_eyelid_crease.h"
 #include <vgl/vgl_point_3d.h>
 #include <vcl_set.h>
 
-class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
+class boxm2_vecf_ocl_orbit_scene : public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
- boxm2_vecf_orbit_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0),
+
+ boxm2_vecf_ocl_orbit_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0),
     eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), boxm2_vecf_articulated_scene(){}
 
   //: set parameters
@@ -72,13 +73,10 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
-  boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance = true, bool is_right = false);
+  boxm2_vecf_ocl_orbit_scene(vcl_string const& scene_file, bool is_single_instance = true, bool is_right = false);
 
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);
-
-  //: extract the appearance from the target scene
-  void extract_appearance_from_target(boxm2_scene_sptr target_scene);
 
   //: compute an inverse vector field for rotation of the eye globe
   void inverse_vector_field_eye(vgl_rotation_3d<double> const& rot, vcl_vector<vgl_vector_3d<double> >& vfield,
@@ -114,7 +112,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  void interpolate_vector_field(vgl_point_3d<double> const& src, unsigned sindx, unsigned dindx, unsigned tindx,
                                 vcl_vector<vgl_point_3d<double> > & cell_centers,
                                 vcl_map<unsigned, vcl_vector<unsigned> >& cell_neighbor_cell_index,
-                               vcl_map<unsigned, vcl_vector<unsigned> >&cell_neighbor_data_index);
+                                vcl_map<unsigned, vcl_vector<unsigned> >&cell_neighbor_data_index);
 
 
  // find nearest cell and return the data index of the nearest cell
@@ -198,7 +196,6 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   boxm2_data<BOXM2_ALPHA>* target_alpha_data_;   //target alpha database
   boxm2_data<BOXM2_MOG3_GREY>* target_app_data_; //target appearance database
   boxm2_data<BOXM2_NUM_OBS>* target_nobs_data_;  //target nobs
-  boxm2_data<BOXM2_GAUSS_RGB>* target_color_data_;
   vcl_vector<cell_info> box_cell_centers_;       // cell centers in the target block
   boxm2_vecf_orbit_params params_;               // parameter struct
   bool is_right_;
@@ -265,5 +262,4 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_data_index_; // data index to neighbor data indices
 
 };
-vnl_vector_fixed<unsigned char,8> random_color();
-#endif // boxm2_vecf_orbit_scene_h_
+#endif // boxm2_vecf_ocl_orbit_scene_h_

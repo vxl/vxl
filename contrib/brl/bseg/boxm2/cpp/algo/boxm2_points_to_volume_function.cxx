@@ -93,7 +93,7 @@ void boxm2_points_to_volume::fillVolume()
 void boxm2_points_to_volume::fillBlockByTri(boxm2_block_metadata& data, boxm2_block* blk, vcl_vector<vcl_vector<float> >& alphas)
 {
   //initialize trees root data to empty
-  boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees to refine
+  boxm2_array_3d<uchar16>  trees = blk->trees_copy();  //trees to refine
   int Nx = trees.get_row1_count();
   int Ny = trees.get_row2_count();
   int Nz = trees.get_row3_count();
@@ -164,7 +164,7 @@ void boxm2_points_to_volume::fillBlockByTri(boxm2_block_metadata& data, boxm2_bl
         currDatPtr += alphas[c].size();
         ++c;
       }
-
+  blk->set_trees(trees);
   vcl_cout<<" Num size one: "<<numOne<<" of "<<Nx*Ny*Nz<<vcl_endl;
 }
 
@@ -306,4 +306,3 @@ boxm2_points_to_volume::tris_in_box(vcl_vector<bvgl_triangle_3d<double> >& tris,
   }
   return contained;
 }
-

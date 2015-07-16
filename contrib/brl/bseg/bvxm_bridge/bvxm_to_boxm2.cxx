@@ -29,21 +29,21 @@
 void create_regular_world_scene_xml(boxm2_scene& new_scene, bvxm_world_params_sptr params, bvxm_voxel_world_sptr world, int max_level)
 {
   vcl_cout << "boxm2 scene directory: " << new_scene.data_path() << vcl_endl;
-  vcl_cout << "setting 1 block only. number of subblocks, dimx: " << params->num_voxels().x() << " dimy: " << params->num_voxels().y() << " dimz: " << params->num_voxels().z() << vcl_endl; 
+  vcl_cout << "setting 1 block only. number of subblocks, dimx: " << params->num_voxels().x() << " dimy: " << params->num_voxels().y() << " dimz: " << params->num_voxels().z() << vcl_endl;
 
   vgl_point_3d<double> local_orig((double)params->corner().x(), (double)params->corner().y(), (double)params->corner().z());
-  
+
   //boxm2_lru_cache::create(&new_scene);
   vcl_map<boxm2_block_id, boxm2_block_metadata> new_blocks;
 
   // create only 1 block for a regular world
   boxm2_block_id block_id(0,0,0);
-  
+
   // make each subblock one voxel:
   vgl_vector_3d<double> sub_block_dim(params->voxel_length(),params->voxel_length(),params->voxel_length());
 
   vgl_vector_3d<unsigned> sub_block_num(params->num_voxels().x(),params->num_voxels().y(),params->num_voxels().z());
-  
+
   boxm2_block_metadata data(block_id, local_orig,sub_block_dim,sub_block_num,1,max_level,650.0,params->min_occupancy_prob());
   boxm2_block new_block(data);
   new_blocks[block_id]=data;
@@ -52,8 +52,8 @@ void create_regular_world_scene_xml(boxm2_scene& new_scene, bvxm_world_params_sp
 
 // this method creates a regular boxm2 world, i.e. each subblock/octree is one voxel of the bvxm_world, octrees are not refined/sub-divided.
 void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr cache, bvxm_world_params_sptr params, bvxm_voxel_world_sptr world)
-{ 
-  
+{
+
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
   bvxm_voxel_grid_base_sptr ocp_grid_base = world->get_grid<OCCUPANCY>(0,0);
   bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
@@ -68,8 +68,8 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
     boxm2_block_id id = blk_iter->first;
     boxm2_block_metadata data = blk_iter->second;
 
-    // to initialize alphas 
-    //float empty_prob_alpha = -vcl_log(1.0f-data.p_init_) / data.sub_block_dim_.x(); 
+    // to initialize alphas
+    //float empty_prob_alpha = -vcl_log(1.0f-data.p_init_) / data.sub_block_dim_.x();
     float empty_prob_alpha = data.p_init_;
 
     //get data from cache
@@ -77,7 +77,7 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
     vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     //3d array of trees
-    boxm2_array_3d<uchar16>& trees = cache->get_block(new_scene, id)->trees();
+    const boxm2_array_3d<uchar16> trees = cache->get_block(new_scene, id)->trees();
 
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
 
@@ -85,7 +85,7 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
 
     for ( unsigned i = 0 ; i < (alpha->buffer_length() /alphaTypeSize) ; ++i)
     {
-      alpha_data[i] = empty_prob_alpha; 
+      alpha_data[i] = empty_prob_alpha;
     }
     int Nz = trees.get_row3_count();
     int Nx = trees.get_row1_count();
@@ -93,19 +93,19 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
     //iterate through each tree
     bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();  // starts from z = 0 which is the top most slice in bvxm world
     for (unsigned int z = 0; z < trees.get_row3_count(); ++z, ++ocp_slab_it) {
-      
+
       bvxm_voxel_slab<ocp_datatype> const &slab = *ocp_slab_it;
 
       for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
         for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
-       
+
          // retrieve the corresponding prob value from bvxm world
          //float occ_prob = 1.0;
-         float occ_prob = slab(x,y);  
+         float occ_prob = slab(x,y);
 
          //int offset = (Nz-1-z) + Nz*(y + x*Ny);  // for boxm2 worlds, z = 0 is the bottom slice
          //alpha_data[offset] = occ_prob;
-         
+
          //load current block/tree
          uchar16 tree = trees(x, y, Nz-1-z);  // for boxm2 z = 0 is the bottom slice, so convert from bvxm z to boxm2 z
          boct_bit_tree bit_tree((unsigned char*) tree.data_block(), data.max_level_);
@@ -120,7 +120,7 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
            int curr_depth = bit_tree.depth_at(currBitIndex);
            double side_len = 1.0 / (double) (1<<curr_depth);
 
-           alpha_data[currIdx] = -vcl_log(1.0f-occ_prob) / side_len; 
+           alpha_data[currIdx] = -vcl_log(1.0f-occ_prob) / side_len;
          }
         }
       }

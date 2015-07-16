@@ -82,7 +82,7 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
   vcl_cout<<"CPU merge:"<<vcl_endl;
 
   //1. loop over each tree, refine it in place (keep a vector of locations for
-  boxm2_array_3d<uchar16>&  trees = blk_->trees();  //trees to refine
+  boxm2_array_3d<uchar16>  trees = blk_->trees_copy();  //trees to refine
   uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
   int* dataIndex = new int[trees.size()];           //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
@@ -149,6 +149,7 @@ bool boxm2_merge_block_function::merge(vcl_vector<boxm2_data_base*>& datas)
       //4. store old tree in new tree, swap data out
       vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
+  blk_->set_trees(trees);
   vcl_cout<<"Number of merged cells: "<<merge_count_ << '\n'
           <<"  New Alpha Size: "<<newA->buffer_length() / 1024.0/1024.0<<" mb" << '\n'
           <<"  New MOG   Size: "<<newM->buffer_length() / 1024.0/1024.0<<" mb" << '\n'
@@ -324,4 +325,3 @@ void boxm2_merge_block( boxm2_scene_sptr scene,
   merge_block.init_data(blk, datas, prob_thresh);
   merge_block.merge(datas);
 }
-

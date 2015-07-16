@@ -138,12 +138,12 @@ void test_inner_cluster(boxm2_block* blk,
 
   int dataSize = 8+9;
   float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
-
+  boxm2_array_3d<uchar16> trees=blk->trees_copy();
   //set up fake trees
   int count = 0;
   for (int i=0; i<3; ++i) {
     for (int j=0; j<3; ++j) {
-      uchar16 tree = blk->trees()(i,j,0);
+      uchar16 tree = trees(i,j,0);
       boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
 
       //make middle one complex
@@ -165,10 +165,10 @@ void test_inner_cluster(boxm2_block* blk,
 
       //store tree in blk
       vcl_memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
-      blk->trees()(i,j,0) = tree;
+      trees(i,j,0) = tree;
     }
   }
-
+  blk->set_trees(trees);
   vcl_cout<<"Original probs ----------------------"<<vcl_endl;
   print_probs(blk, alphas, data, dataSize);
   vcl_cout<<"Original alphas"<<vcl_endl;
@@ -278,9 +278,10 @@ void test_outer_cluster(boxm2_block* blk,
 
   //set up fake trees
   int count = 0;
+  boxm2_array_3d<uchar16> trees=blk->trees_copy();
   for (int i=0; i<3; ++i) {
     for (int j=0; j<3; ++j) {
-      uchar16 tree = blk->trees()(i,j,0);
+      uchar16 tree = trees(i,j,0);
       boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
 
       //make middle one simple
@@ -303,9 +304,10 @@ void test_outer_cluster(boxm2_block* blk,
       }
       //store tree in blk
       vcl_memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
-      blk->trees()(i,j,0) = tree;
+      trees(i,j,0) = tree;
     }
   }
+  blk->set_trees(trees);
   vcl_cout<<"Original probs ----------------------"<<vcl_endl;
   print_probs(blk, alphas, data, dataSize);
   vcl_cout<<"Original alphas"<<vcl_endl;

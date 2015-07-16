@@ -76,7 +76,7 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
 
   //loop over each tree, refine it in place (keep a vector of locations for
   // posterities sake
-  boxm2_array_3d<uchar16>&  trees = blk_->trees();  //trees to refine
+  boxm2_array_3d<uchar16> trees = blk_->trees_copy();  //trees to refine
   uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
   int* dataIndex = new int[trees.size()];           //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
@@ -135,7 +135,7 @@ bool boxm2_refine_block_function::refine_deterministic(vcl_vector<boxm2_data_bas
       //4. store old tree in new tree, swap data out
       vcl_memcpy(blk_iter, refined_tree.get_bits(), 16);
   }
-
+  blk_->set_trees(trees);
   vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
 
   //3. Replace data in the cache
@@ -292,4 +292,3 @@ void boxm2_refine_block( boxm2_scene_sptr scene,
 
   refine_block.refine_deterministic(datas);
 }
-

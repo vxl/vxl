@@ -80,7 +80,7 @@ void test_block()
     vgl_point_3d<double> local_origin = vgl_point_3d<double>(0,0,0) + vgl_vector_3d<double>((double)nums[0]*dims[0]*(double)0,
                                                                                             (double)nums[0]*dims[0]*(double)0,
                                                                                             (double)nums[0]*dims[0]*(double)0);
-    boxm2_block_id id(0,0,0);  
+    boxm2_block_id id(0,0,0);
     boxm2_block_metadata mdata(id,
                                 local_origin,
                                 vgl_vector_3d<double> (dims[0], dims[1],dims[2]),
@@ -91,10 +91,10 @@ void test_block()
                                 0.001,
                                 2);
 
-    char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers, 
-                                                                  treeLen, 
-                                                                  nums, 
-                                                                  dims, 
+    char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers,
+                                                                  treeLen,
+                                                                  nums,
+                                                                  dims,
                                                                   init_level,
                                                                   max_level,
                                                                   max_mb );
@@ -133,7 +133,7 @@ void test_block()
     }
     TEST("boxm2_block: meta data passed", true, true);
 
-    boxm2_array_3d<uchar16>&  trees = test_block.trees();
+    const boxm2_array_3d<uchar16>&  trees = test_block.trees();
     uchar16 comp((unsigned char) 0);
     for (int i=0; i<nums[0]; i++) {
       for (int j=0; j<nums[1]; j++) {

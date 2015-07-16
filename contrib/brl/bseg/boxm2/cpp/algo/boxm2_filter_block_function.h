@@ -25,12 +25,12 @@ class boxm2_filter_block_function
   boxm2_filter_block_function(boxm2_scene_sptr scene, boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas);
 
  private:
- 
+
   //: returns a list of 3d points (int locations) of neighboring blocks
   vcl_vector<vgl_point_3d<int> > neighbors( vgl_point_3d<int>& center, boxm2_array_3d<uchar16>& trees );
   //: returns a list of 3d points of neighboring blocks
-  vcl_vector<vgl_point_3d<double> > neighbor_points( vgl_point_3d<double>& cellCenter, double side_len, boxm2_array_3d<uchar16>& trees );
- 
+  vcl_vector<vgl_point_3d<double> > neighbor_points( vgl_point_3d<double>& cellCenter, double side_len,const boxm2_array_3d<uchar16>& trees );
+
   boxm2_block* blk_;
   uchar16*     trees_;
   float*       alpha_;

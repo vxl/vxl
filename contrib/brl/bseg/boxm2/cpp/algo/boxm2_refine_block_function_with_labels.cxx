@@ -106,7 +106,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
 
   //loop over each tree, refine it in place (keep a vector of locations for
   // posterities sake
-  boxm2_array_3d<uchar16>&  trees = blk_->trees();  //trees to refine
+  boxm2_array_3d<uchar16>  trees = blk_->trees_copy();  //trees to refine
   uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
 
   int* dataIndex = new int[trees.size()];           //data index for each new tree
@@ -218,6 +218,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
 
       count_new+=refined_tree.num_cells();
   }
+  blk_->set_trees(trees);
 
   vcl_cout<<"Number of new cells: "<<newInitCount<<vcl_endl;
 

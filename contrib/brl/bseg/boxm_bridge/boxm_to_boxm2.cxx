@@ -199,7 +199,7 @@ int main(int argc, char** argv)
 
       // divide the blocks
       int data_idx=0;
-      boxm2_array_3d<boxm2_block::uchar16>& trees = new_block.trees();
+      boxm2_array_3d<boxm2_block::uchar16> trees = new_block.trees_copy();
       for (unsigned z=0; z<dim; z++) {
         for (unsigned y=0; y<dim; y++) {
           for (unsigned x=0; x<dim; x++) {
@@ -235,6 +235,7 @@ int main(int argc, char** argv)
           }
         }
       }
+      new_block.set_trees(trees);
       char* b1 = reinterpret_cast<char *>(alpha_arr);
       boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(b1,data_size*sizeof(float),block_id);
       char* b2 = reinterpret_cast<char *>(data_arr);
