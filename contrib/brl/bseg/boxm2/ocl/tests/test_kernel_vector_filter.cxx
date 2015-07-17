@@ -72,7 +72,7 @@ bool test_gauss_gradients_filter()
       boxm2_block_metadata data = blk_iter->second;
 
       //3d array of trees
-      boxm2_array_3d<uchar16>& trees = blk->trees();
+      const boxm2_array_3d<uchar16>& trees = blk->trees();
       boxm2_data_traits<BOXM2_FLOAT>::datatype * response_data = (boxm2_data_traits<BOXM2_FLOAT>::datatype*) response->data_buffer();
 
       //iterate through each block, filtering the root level first

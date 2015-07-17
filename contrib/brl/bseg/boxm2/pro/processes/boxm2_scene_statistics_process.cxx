@@ -105,7 +105,7 @@ bool boxm2_scene_statistics_process(bprb_func_process& pro)
     {
       boxm2_block* blk = cache->get_block(scene,boxm2_id);
 
-      boxm2_array_3d<uchar16>&  trees = blk->trees();
+      const boxm2_array_3d<uchar16>&  trees = blk->trees();
       for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
         for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
          for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {

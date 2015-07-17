@@ -66,7 +66,9 @@ class boxm2_block : public vbl_ref_count
   //: accessors
   boxm2_block_id&           block_id()          { return block_id_; }         //somehow make this a const return..
   char*                     buffer()            { return buffer_; }
-  boxm2_array_3d<uchar16>&  trees()             { return trees_; }
+// User has only write access to a copy of the current trees  via trees_copy(); Use the set_trees method to put them back in the block
+// this way, n_cells_ will always remain up to date.
+  const boxm2_array_3d<uchar16>&  trees()       { return trees_; }
   vgl_vector_3d<double>&    sub_block_dim()     { return sub_block_dim_; }
   vgl_vector_3d<unsigned>&  sub_block_num()     { return sub_block_num_; }
   int                       num_buffers()       const { return 1; }
@@ -89,10 +91,16 @@ class boxm2_block : public vbl_ref_count
 
   //: regardless of the way the instance is constructed, enable write
   void enable_write() { read_only_ = false; }
+  // Sets the trees of the current block
   void set_trees(const boxm2_array_3d<uchar16>& that){
+    if(that.get_row1_count()!=this->trees_.get_row1_count() || that.get_row2_count()!=this->trees_.get_row2_count() || that.get_row3_count()!=this->trees_.get_row3_count()){
+      vcl_cout<<"Cannot assign tree array to block id "<<this->block_id_<<" ; sizes mismatch!"<<vcl_endl;
+      return;
+      }
     vcl_memcpy(this->trees_.data_block() , that.data_block(),that.size() * 16);
     n_cells_ = this->recompute_num_cells();
   }
+  // Returns a deep copy of the current tree array. The caller will take ownership; Use this method to modify the current tree array
   boxm2_array_3d<uchar16> trees_copy(){
     uchar16 * copy_buff = new uchar16[trees_.size()];
     vcl_memcpy(copy_buff, this->trees_.data_block() ,trees_.size() * 16);

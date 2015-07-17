@@ -116,14 +116,15 @@ template <bstm_data_type APM_TYPE, boxm2_data_type BOXM2_APM_TYPE>
 bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::conform()
 {
   boxm2_array_3d<uchar16>&  trees = blk_->trees();
-  boxm2_array_3d<uchar16>&  boxm2_trees = boxm2_blk_->trees();
+  boxm2_array_3d<uchar16>  boxm2_trees = boxm2_blk_->trees_copy();
   uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
   int* dataIndex = new int[trees.size()];           //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
   int dataSize = 0;                                 //running sum of data size
 
   //1. loop over each tree, refine it in place
-  boxm2_array_3d<uchar16>::iterator blk_iter, boxm2_blk_iter;
+  boxm2_array_3d<uchar16>::iterator blk_iter;
+  boxm2_array_3d<uchar16>::const_iterator boxm2_blk_iter;
   for (blk_iter = trees.begin(), boxm2_blk_iter = boxm2_trees.begin(); blk_iter != trees.end(); ++blk_iter, ++boxm2_blk_iter, ++currIndex)
   {
     //0. store data index for eahc tree.
@@ -354,8 +355,8 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
   //--------refine time tree(boxm2 dataptr, time tree)
   //----keep record of the datasize for alpha, mog, numobs etc.
 
-  boxm2_array_3d<uchar16>&  trees = blk_->trees();
-  boxm2_array_3d<uchar16>&  boxm2_trees = boxm2_blk_->trees();
+  const boxm2_array_3d<uchar16>&  trees = blk_->trees();
+  const boxm2_array_3d<uchar16>&  boxm2_trees = boxm2_blk_->trees();
   boxm2_array_1d<uchar8>&  time_trees = blk_t_->time_trees();    //time trees to refine
 
   //make a copy of the time trees in blk_t_
@@ -376,7 +377,7 @@ bool bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::ingest()
   change_array_ = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_buffer->data_buffer();
 
   int tree_index = 0;
-  boxm2_array_3d<uchar16>::iterator blk_iter, boxm2_blk_iter;
+  boxm2_array_3d<uchar16>::const_iterator blk_iter, boxm2_blk_iter;
   for (blk_iter = trees.begin(), boxm2_blk_iter = boxm2_trees.begin(); blk_iter != trees.end(); ++blk_iter, ++boxm2_blk_iter)
   {
      //load boct trees from both blk and boxm2_blk
