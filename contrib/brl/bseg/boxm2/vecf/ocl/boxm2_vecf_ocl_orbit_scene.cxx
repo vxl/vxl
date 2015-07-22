@@ -676,7 +676,7 @@ void boxm2_vecf_ocl_orbit_scene::paint_lower_eyelid(){
     unsigned indx = lower_eyelid_cell_data_index_[i];
     if(is_type_data_index(indx,UPPER_LID))
       continue;
-    alpha_data_->data()[indx]=200.0f;
+    alpha_data_->data()[indx]= -vcl_log(0.05)/subblock_len();
     app_data_->data()[indx] = params_.app_;
     nobs_data_->data()[indx] = nobs;
   }

@@ -118,7 +118,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
 
 
  // find nearest cell and return the data index of the nearest cell
- bool find_nearest_data_index(anat_type type, vgl_point_3d<double> const& probe, unsigned& data_indx) const;
+  bool find_nearest_data_index(anat_type type, vgl_point_3d<double> const& probe, unsigned& data_indx) const;
 
  // ============   eye methods ================
  //: construct eye sphere, iris and pupil
@@ -194,6 +194,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   boxm2_block* target_blk_;              // the target block
   boxm2_data<BOXM2_ALPHA>* alpha_data_;  // source alpha database
   boxm2_data<BOXM2_MOG3_GREY>* app_data_;// source appearance database
+  boxm2_data<BOXM2_GAUSS_RGB>* color_app_data_;// source appearance database
   boxm2_data<BOXM2_NUM_OBS>* nobs_data_; // source nobs database
   boxm2_data<BOXM2_ALPHA>* target_alpha_data_;   //target alpha database
   boxm2_data<BOXM2_MOG3_GREY>* target_app_data_; //target appearance database
@@ -263,7 +264,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   vcl_map<unsigned, unsigned > eyelid_crease_data_index_to_cell_index_;             // data index to shell index
   //      data_index          data_index
   vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_data_index_; // data index to neighbor data indices
-
+  vnl_vector_fixed<unsigned char,8> random_color();
 };
-vnl_vector_fixed<unsigned char,8> random_color();
+
 #endif // boxm2_vecf_orbit_scene_h_

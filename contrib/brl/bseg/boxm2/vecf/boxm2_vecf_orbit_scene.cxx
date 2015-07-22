@@ -93,6 +93,10 @@ void boxm2_vecf_orbit_scene::extract_block_data(){
   app_base->enable_write();
   app_data_=new boxm2_data<BOXM2_MOG3_GREY>(app_base->data_buffer(),app_base->buffer_length(),app_base->block_id());
 
+  boxm2_data_base *  color_app_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(this->color_apm_id()));
+  color_app_base->enable_write();
+  color_app_data_=new boxm2_data<BOXM2_GAUSS_RGB>(color_app_base->data_buffer(),color_app_base->buffer_length(),color_app_base->block_id());
+
   boxm2_data_base *  nobs_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   nobs_base->enable_write();
   nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
@@ -101,7 +105,7 @@ void boxm2_vecf_orbit_scene::extract_block_data(){
   sphere_base->enable_write();
   sphere_=new boxm2_data<BOXM2_PIXEL>(sphere_base->data_buffer(),sphere_base->buffer_length(),sphere_base->block_id());
 
-    boxm2_data_base *  iris_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("iris"));
+  boxm2_data_base *  iris_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("iris"));
   iris_base->enable_write();
   iris_=new boxm2_data<BOXM2_PIXEL>(iris_base->data_buffer(),iris_base->buffer_length(),iris_base->block_id());
 
@@ -373,7 +377,7 @@ void boxm2_vecf_orbit_scene::paint_sclera(){
       alpha_data_->data()[indx]= -5.0f*vcl_log(d);//factor of 5 to increase occlusion
         else
 #endif
-    alpha_data_->data()[indx]=200.0f;
+    alpha_data_->data()[indx]= - vcl_log(0.05)/ this->subblock_len();
     app_data_->data()[indx] = params_.app_;
     nobs_data_->data()[indx] = nobs;
   }
@@ -452,12 +456,6 @@ bool boxm2_vecf_orbit_scene::is_type_global(vgl_point_3d<double> const& global_p
   blk_->data_index(global_pt, indx);
   return this->is_type_data_index(indx, type);
 }
-
-
-
-
-
-
 
  bool boxm2_vecf_orbit_scene::find_nearest_data_index(boxm2_vecf_orbit_scene::anat_type type, vgl_point_3d<double> const& probe, unsigned& data_indx) const{
    double r = this->subblock_len();
@@ -609,7 +607,7 @@ void boxm2_vecf_orbit_scene::paint_eyelid(){
     unsigned indx = eyelid_cell_data_index_[i];
     if(is_type_data_index(indx,LOWER_LID))
       continue;
-    alpha_data_->data()[indx]=200.0f;
+    alpha_data_->data()[indx]= - vcl_log(0.05)/ this->subblock_len();
     app_data_->data()[indx] = params_.app_;
     nobs_data_->data()[indx] = nobs;
   }
@@ -686,7 +684,7 @@ void boxm2_vecf_orbit_scene::paint_lower_eyelid(){
     unsigned indx = lower_eyelid_cell_data_index_[i];
     if(is_type_data_index(indx,UPPER_LID))
       continue;
-    alpha_data_->data()[indx]=200.0f;
+    alpha_data_->data()[indx]= - vcl_log(0.05)/ this->subblock_len();
     app_data_->data()[indx] = params_.app_;
     nobs_data_->data()[indx] = nobs;
   }
@@ -771,7 +769,7 @@ void boxm2_vecf_orbit_scene::paint_eyelid_crease(){
     unsigned indx = eyelid_crease_cell_data_index_[i];
     if(is_type_data_index(indx,UPPER_LID))
       continue;
-    alpha_data_->data()[indx]=200.0f;
+    alpha_data_->data()[indx]= - vcl_log(0.05)/ this->subblock_len();
     app_data_->data()[indx] = params_.app_;
     nobs_data_->data()[indx] = nobs;
   }
@@ -873,9 +871,15 @@ void boxm2_vecf_orbit_scene::interpolate_vector_field(vgl_point_3d<double> const
                                                       vcl_map<unsigned, vcl_vector<unsigned> >& cell_neighbor_cell_index,
                                                       vcl_map<unsigned, vcl_vector<unsigned> >&cell_neighbor_data_index){
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
+  boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype color_app;
+  typedef vnl_vector_fixed<double,8> double8;
+  double8 curr_color;
+
   const vgl_point_3d<double>& scell = cell_centers[sindx];
   //appearance and alpha data at source cell
   app = app_data_->data()[dindx];
+  color_app = color_app_data_->data()[dindx];
+  curr_color[0] = ((double) color_app[0]) / 255; curr_color[2] = ((double)color_app[2])/255; curr_color[4]= ((double)color_app[4])/255;
   boxm2_data_traits<BOXM2_ALPHA>::datatype alpha0 = alpha_data_->data()[dindx];
   double sig = params_.gauss_sigma()*subblock_len();
   // interpolate using Gaussian weights based on distance to the source point
@@ -883,22 +887,30 @@ void boxm2_vecf_orbit_scene::interpolate_vector_field(vgl_point_3d<double> const
   const vcl_vector<unsigned>& nbr_cells = cell_neighbor_cell_index[sindx];
   const vcl_vector<unsigned>& nbr_data = cell_neighbor_data_index[dindx];
   double sumw = gauss(dc, sig), sumint = app[0]*sumw, sumalpha = alpha0*sumw;
+  double8 sumcolor= sumw * curr_color;
   for(unsigned k = 0; k<nbr_cells.size(); ++k){
     double d = vgl_distance(cell_centers[nbr_cells[k]],src);
     unsigned nidx = nbr_data[k];
     double w = gauss(d, sig);
     sumw += w;
     app = app_data_->data()[nidx];
+    color_app = color_app_data_->data()[dindx];
     double alpha = alpha_data_->data()[nidx];
-    sumint += w*app[0];
-    sumalpha += w*alpha;
+    curr_color[0] = ((double) color_app[0]) / 255; curr_color[2] = ((double)color_app[2])/255; curr_color[4]= ((double)color_app[4])/255;
+    sumint   += w * app[0];
+    sumalpha += w * alpha;
+    sumcolor += w * curr_color;
   }
   sumint/=sumw;
   app[0] = static_cast<unsigned char>(sumint);
   sumalpha /= sumw;
+  sumcolor/=sumw;
+  color_app[0] = (unsigned char) (sumcolor[0] * 255); color_app[2] = (unsigned char)(sumcolor[2]*255); color_app[4]= (unsigned char) (sumcolor[4] * 255);
   boxm2_data_traits<BOXM2_ALPHA>::datatype alpha = static_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype>(sumalpha);
   target_app_data_->data()[tindx] = app;
-  target_alpha_data_->data()[tindx]=alpha;
+  target_alpha_data_->data()[tindx] = alpha;
+  target_color_data_->data()[tindx] = color_app_data_->data()[dindx];
+  target_color_data_->data()[tindx] = color_app;
 }
 
 void boxm2_vecf_orbit_scene::apply_eye_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
@@ -925,7 +937,7 @@ void boxm2_vecf_orbit_scene::apply_eye_vector_field_to_target(vcl_vector<vgl_vec
       continue;
     sindx = data_index_to_cell_index_[dindx];
     unsigned tindx = box_cell_centers_[j].data_index_;
-    target_color_data_->data()[tindx] = color;
+    //target_color_data_->data()[tindx] = color;
     this->interpolate_vector_field(src, sindx, dindx, tindx,
                                    sphere_cell_centers_, cell_neighbor_cell_index_,
                                    cell_neighbor_data_index_);
@@ -973,7 +985,7 @@ void boxm2_vecf_orbit_scene::apply_eyelid_vector_field_to_target(vcl_vector<vgl_
       continue;
 
     sindx = eyelid_data_index_to_cell_index_[dindx];
-    target_color_data_->data()[tindx] = color;
+    //    target_color_data_->data()[tindx] = color;
     interpolate_vector_field(src, sindx, dindx, tindx,eyelid_cell_centers_,
                              eyelid_cell_neighbor_cell_index_,eyelid_cell_neighbor_data_index_);
   }
@@ -1011,7 +1023,7 @@ void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vecto
       continue;
 
     sindx = lower_eyelid_data_index_to_cell_index_[dindx];
-    target_color_data_->data()[tindx] = color;
+    //    target_color_data_->data()[tindx] = color;
     interpolate_vector_field(src, sindx, dindx, tindx, lower_eyelid_cell_centers_,
                              lower_eyelid_cell_neighbor_cell_index_,lower_eyelid_cell_neighbor_data_index_);
   }
@@ -1049,7 +1061,7 @@ void boxm2_vecf_orbit_scene::apply_eyelid_crease_vector_field_to_target(vcl_vect
       continue;
 
     sindx = eyelid_crease_data_index_to_cell_index_[dindx];
-    target_color_data_->data()[tindx] = color;
+    //    target_color_data_->data()[tindx] = color;
     interpolate_vector_field(src, sindx, dindx, tindx, eyelid_crease_cell_centers_,
                              eyelid_crease_cell_neighbor_cell_index_,eyelid_crease_cell_neighbor_data_index_);
   }
@@ -1088,10 +1100,6 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
 
 }
 
-void boxm2_vecf_orbit_scene::extract_appearance_from_target(boxm2_scene_sptr target_scene){
-
-
-}
 
 bool boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& params){
   try{
@@ -1103,7 +1111,7 @@ bool boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& par
     return false;
   }
 }
-vnl_vector_fixed<unsigned char,8> random_color(){
+ vnl_vector_fixed<unsigned char,8> boxm2_vecf_orbit_scene::random_color(){
   unsigned char  R = rand() % 255;
   unsigned char  G = rand() % 255;
   unsigned char  B = rand() % 255;
