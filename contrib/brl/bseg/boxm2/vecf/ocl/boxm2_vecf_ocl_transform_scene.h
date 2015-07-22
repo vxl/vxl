@@ -56,9 +56,12 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
                               vgl_vector_3d<double> scale,
                               bool finish = true);
 
+
+  //: warps using similarty transform + general vector field stored in type BOXM2_VEC3D
   bool transform_1_blk_interp_trilin(vgl_rotation_3d<double>  rot,
-                                                            vgl_vector_3d<double> trans,
-                                                            vgl_vector_3d<double> scale,
+                                     vgl_vector_3d<double> trans,
+                                     vgl_vector_3d<double> scale,
+                                     vcl_string vecf_ident,
                                      bool finish);
 
   //:render the current state of the target scene leaving scene GPU buffers in place

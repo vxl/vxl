@@ -70,7 +70,8 @@ class boxm2_mog6_view_compact_processor;
   X(BOXM2_EXPECTATION, "boxm2_expectation", float) \
   X(BOXM2_DATA_INDEX, "boxm2_data_index", unsigned int) \
   X(BOXM2_RAY_DIR, "boxm2_ray_dir", (vnl_vector_fixed<float, 4>)) \
-  X(BOXM2_CHAR8, "char8", (vnl_vector_fixed<unsigned char, 8>))
+  X(BOXM2_CHAR8, "char8", (vnl_vector_fixed<unsigned char, 8>)) \
+  X(BOXM2_VEC3D, "boxm2_vec3d", (vnl_vector_fixed<float, 4>))
 
 // The following two lines are a workaround that allows passing in of types that include
 // commas as macro arguments, as long as you enclose them in parentheses, e.g. (vcl_map<int,int>)

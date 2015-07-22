@@ -201,7 +201,7 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_trilin_kernel()
   src_paths.push_back(vecf_source_dir + "interp_helpers.cl");
   src_paths.push_back(vecf_source_dir + "warp_and_resample_trilinear.cl");
   this->trans_interp_trilin_kern = new bocl_kernel();
-  return trans_interp_trilin_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "warp_and_resample_trilinear", options, "trans_interp_trilin_scene");
+  return trans_interp_trilin_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "warp_and_resample_trilinear_vecf", options, "trans_interp_trilin_scene");
 }
 
 
@@ -534,6 +534,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  ro
      vcl_cout << "Unknown appearance type for source_scene " << app_type_ << '\n';
      return false;
    }
+
+   opencl_cache_->get_data<
    trans_kern->set_arg(blk_info_target);
    trans_kern->set_arg(blk_info_source);
    trans_kern->set_arg(blk_target);
@@ -804,6 +806,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_3d<double>  rot,
                                                             vgl_vector_3d<double> trans,
                                                             vgl_vector_3d<double> scale,
+                                                            vcl_string vecf_ident,
                                                             bool finish){
  static bool first = true;
   // set up the buffers the first time the function is called
@@ -919,6 +922,9 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_
      vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
      return false;
    }
+
+   bocl_mem* vector_field = opencl_cache_->get_data<BOXM2_VEC3D>(target_scene_, *iter_blk_target, 0, true, vecf_ident);
+   
    vcl_cout<<"This is the transform scene Kernel with trilinear interp"<<vcl_endl;
    //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
    trans_interp_trilin_kern->set_arg(blk_info_target_.ptr());
@@ -932,6 +938,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(vgl_rotation_
    trans_interp_trilin_kern->set_arg(translation);
    trans_interp_trilin_kern->set_arg(rotation);
    trans_interp_trilin_kern->set_arg(scalem);
+   trans_interp_trilin_kern->set_arg(vector_field);
    trans_interp_trilin_kern->set_arg(octree_depth_.ptr());
    trans_interp_trilin_kern->set_arg(output_f.ptr());
    trans_interp_trilin_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
