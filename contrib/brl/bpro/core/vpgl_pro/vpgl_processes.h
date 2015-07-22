@@ -87,4 +87,6 @@ DECLARE_FUNC_CONS(vpgl_crop_ortho_using_3d_box_process);
 DECLARE_FUNC_CONS(vpgl_convert_non_nadir_geo_camera_to_generic_process);
 DECLARE_FUNC_CONS(vpgl_get_generic_camera_ray_process);
 DECLARE_FUNC_CONS(vpgl_persp_cam_from_photo_overlay_process);
+DECLARE_FUNC_CONS(vpgl_affine_f_matrix_process);
+
 #endif

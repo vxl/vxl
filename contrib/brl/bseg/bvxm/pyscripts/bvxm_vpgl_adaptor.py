@@ -727,6 +727,14 @@ def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_
   out_cam2 = dbvalue(id, type);
   return out_img1, out_cam1, out_img2, out_cam2
 
+## use the affine cameras of the images to compute an affine fundamental matrix and write the f matrix out
+def affine_f_matrix(affine_cam1, affine_cam2, output_path):
+  bvxm_batch.init_process("vpglAffineFMatrixProcess");
+  bvxm_batch.set_input_from_db(0, affine_cam1);
+  bvxm_batch.set_input_from_db(1, affine_cam2);
+  bvxm_batch.set_input_string(2, output_path);
+  bvxm_batch.run_process();
+
 def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_rational_cam1, img2, local_rational_cam2, min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2):
   bvxm_batch.init_process("vpglConstructHeightMapProcess");
   bvxm_batch.set_input_from_db(0, img1);

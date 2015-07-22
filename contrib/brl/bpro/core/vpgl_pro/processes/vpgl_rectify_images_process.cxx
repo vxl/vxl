@@ -428,6 +428,57 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
 }
 
 
+// process to compute the affine fundamental matrix from two affine cameras
+bool vpgl_affine_f_matrix_process_cons(bprb_func_process& pro)
+{
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");  // camera1
+  input_types.push_back("vpgl_camera_double_sptr");  // camera2
+  input_types.push_back("vcl_string"); // output path to write fundamental matrix
+  vcl_vector<vcl_string> output_types;
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+
+//: Execute the process
+bool vpgl_affine_f_matrix_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs() < 3) {
+    vcl_cout << "vpgl_affine_rectify_images_process: The number of inputs should be 3" << vcl_endl;
+    return false;
+  }
+
+  // get the inputs
+  unsigned i = 0;
+  vpgl_camera_double_sptr cam1 = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_camera_double_sptr cam2 = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vcl_string output_path = pro.get_input<vcl_string>(i++);
+  
+  vpgl_affine_camera<double>* aff_camera1 = dynamic_cast<vpgl_affine_camera<double>*> (cam1.as_pointer());
+  if (!aff_camera1) {
+    vcl_cout << pro.name() <<" :--  Input camera 1 is not an affine camera!\n";
+    return false;
+  }
+  vpgl_affine_camera<double>* aff_camera2 = dynamic_cast<vpgl_affine_camera<double>*> (cam2.as_pointer());
+  if (!aff_camera2) {
+    vcl_cout << pro.name() <<" :--  Input camera 2 is not an affine camera!\n";
+    return false;
+  }
+  
+  vpgl_affine_fundamental_matrix<double> FA;
+  if (!vpgl_affine_rectification::compute_affine_f(aff_camera1,aff_camera2, FA)) {
+    vcl_cout << pro.name() <<" :--  problems in computing an affine fundamental matrix!\n";
+    return false;
+  }
+
+  vcl_ofstream ofs(output_path.c_str());
+  ofs << FA;
+  ofs.close();
+  return true;
+}
+
+
 // input the disparity map given by stereo matching of rectified image pairs, disparity map is for H1 warped image1
 // output an ortograhic height map using the input bounding box
 bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
