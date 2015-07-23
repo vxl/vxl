@@ -25,6 +25,7 @@
 //-------------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
+#include <vgl/vgl_export.h>
 
 //: General purpose support class for vgl_homg_ classes
 template <class T>
@@ -33,7 +34,7 @@ class vgl_homg
  public:
 
 //: Standard placeholder for methods that wish to return infinity.
-  static T infinity;
+  static VGL_EXPORT T infinity;
 
 //: Standard way to test whether a number is indeed infinite.
   static bool is_infinity(T v) { return v == infinity; }

@@ -7,7 +7,7 @@ doxygen_add_library(core/vsl
 
 SET(vsl_sources
   vsl_fwd.h
-
+  vsl_export.h
   vsl_binary_io.cxx vsl_binary_io.h
   vsl_binary_explicit_io.h
   vsl_binary_loader_base.cxx vsl_binary_loader_base.h

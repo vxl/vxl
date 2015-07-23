@@ -21,6 +21,7 @@
 #include <vcl_list.h>
 #include <vcl_iosfwd.h>
 #include <vxl_config.h>
+#include <vul/vul_export.h>
 
 //: forward declare all classes and their helper functions.
 class vul_arg_info_list;
@@ -36,7 +37,7 @@ class vul_arg_base
    struct required_option_type {}; // see constructors of vul_arg
 
  public:
-  static required_option_type is_required;
+  static vul_EXPORT required_option_type is_required;
 
   static void parse_deprecated(int& argc, char **& argv,
                                bool warn_about_unrecognized_arguments = true);

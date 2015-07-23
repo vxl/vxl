@@ -28,7 +28,7 @@ class bvpl_kernel: public vbl_ref_count
 {
  public:
   //: Default constructor
-  bvpl_kernel(){id_=++id_cnt;}
+  bvpl_kernel(){id_=bvpl_kernel::get_next_id();}
   //: Constructor
   bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, vnl_float_3 aux_axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, vcl_string name = "", double voxel_length = 1.0)
   : kernel_(kernel),axis_(axis),aux_axis_(aux_axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
@@ -36,7 +36,7 @@ class bvpl_kernel: public vbl_ref_count
 //#ifdef DEBUG
     vcl_cout << "Creating kernel with axis, angle, dim, max, min = " << axis_ << ' ' << angle_<< ' ' << dim_<< ' ' <<max_point_<< ' ' << min_point_ << '\n';
 //#endif
-    id_=++id_cnt;
+    id_=bvpl_kernel::get_next_id();
   }
   //: Destructor
   ~bvpl_kernel() {}
@@ -114,7 +114,7 @@ class bvpl_kernel: public vbl_ref_count
 
   unsigned id() const {return id_;}
 
-  static unsigned id_cnt;
+  static unsigned get_next_id();
   
   //: Set up access to the floating point kernel -- this should be made more elegantly
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > float_kernel_;

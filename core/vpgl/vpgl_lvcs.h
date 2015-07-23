@@ -39,7 +39,9 @@
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
-#include <vpgl/vpgl_dll.h>
+//#include <vpgl/vpgl_dll.h>
+#include <vpgl/vpgl_export.h>
+
 class vpgl_lvcs : public vbl_ref_count
 {
   // PUBLIC INTERFACE----------------------------------------------------------
@@ -48,7 +50,7 @@ class vpgl_lvcs : public vbl_ref_count
   enum LenUnits {FEET, METERS};
   enum AngUnits {RADIANS, DEG};
   enum cs_names { wgs84 =0, nad27n, wgs72, utm, NumNames};
-  VPGL_DLL_DATA static const char* cs_name_strings[];
+  static VPGL_EXPORT const char* cs_name_strings[];
   static vpgl_lvcs::cs_names str_to_enum(const char*);
   // Constructors/Initializers/Destructors-------------------------------------
   vpgl_lvcs(double orig_lat=0,         //!< latitude of LVCS orig in radians.

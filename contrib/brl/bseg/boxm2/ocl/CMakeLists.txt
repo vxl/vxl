@@ -22,7 +22,6 @@ SET(boxm2_ocl_sources
     boxm2_opencl_cache1.h     boxm2_opencl_cache1.cxx
     boxm2_ocl_util.h         boxm2_ocl_util.cxx
    )
-
 AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_sources)
 
 ADD_LIBRARY(boxm2_ocl ${boxm2_ocl_sources})

@@ -1,7 +1,7 @@
 #include <vgl/vgl_frustum_3d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vgl/vgl_tolerance.txx>
+#include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for std::sqrt

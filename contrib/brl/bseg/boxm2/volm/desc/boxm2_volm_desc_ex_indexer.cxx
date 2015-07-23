@@ -4,7 +4,11 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_file.h>
 
-vcl_string volm_desc_ex_indexer::name_ = "existance";
+vcl_string&  volm_desc_ex_indexer::get_name()
+{
+  static vcl_string name = "existance";
+  return name;
+}
 
 volm_desc_ex_indexer::volm_desc_ex_indexer(vcl_string const& index_folder,
                                            vcl_string const& out_index_folder,

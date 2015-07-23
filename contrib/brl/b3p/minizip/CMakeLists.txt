@@ -22,6 +22,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 ADD_LIBRARY( minizip ${minizip_sources} )
+target_link_libraries(minizip z)
 INSTALL_TARGETS( /lib minizip )
 
 ENDIF(ZLIB_FOUND)

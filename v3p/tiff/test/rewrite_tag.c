@@ -319,12 +319,14 @@ int rewrite_test( const char *filename, int length, int bigtiff,
 /************************************************************************/
 /*                                main()                                */
 /************************************************************************/
+
 int
 main(int argc, char **argv)
 {
+    int failure = 0;
     (void) argc;
     (void) argv;
-    int failure = 0;
+
 
     failure |= test_packbits();
 

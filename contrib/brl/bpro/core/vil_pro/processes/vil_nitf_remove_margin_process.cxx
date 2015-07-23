@@ -69,8 +69,8 @@ bool vil_nitf_remove_margin_process(bprb_func_process& pro)
   unsigned sub_i0, sub_j0, sub_size_i, sub_size_j;
   sub_i0 = 0;
   sub_j0 = 0;
-  sub_size_i = vcl_floor(ni / 10);
-  sub_size_j = vcl_floor(nj / 10);
+  sub_size_i = vcl_floor(ni / 10.0);
+  sub_size_j = vcl_floor(nj / 10.0);
   for (unsigned sub_idx_i = 1; (sub_idx_i <= 10 && !found);  sub_idx_i++)
     for (unsigned sub_idx_j = 1; (sub_idx_j <= 10 && !found);  sub_idx_j++)
     {

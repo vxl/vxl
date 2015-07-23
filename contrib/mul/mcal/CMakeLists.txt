@@ -1,4 +1,5 @@
 # mul/mcal/CMakeLists.txt
+INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/mul )
 
 doxygen_add_library(contrib/mul/mcal
   DEPENDS core/vnl/algo core/vnl contrib/mul/mbl

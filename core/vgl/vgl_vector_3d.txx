@@ -5,7 +5,7 @@
 // \file
 
 #include "vgl_vector_3d.h"
-#include "vgl_tolerance.txx"
+#include "vgl_tolerance.h"
 
 #include <vcl_cmath.h> // sqrt() , acos()
 #include <vcl_iostream.h>

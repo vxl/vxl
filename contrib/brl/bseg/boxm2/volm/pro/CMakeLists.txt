@@ -21,9 +21,10 @@ ENDIF(OPENCL_FOUND)
      )
 
   AUX_SOURCE_DIRECTORY(Templates boxm2_volm_pro_sources)
-IF(OPENCL_FOUND)
-  AUX_SOURCE_DIRECTORY(processes boxm2_volm_pro_sources)
-ENDIF(OPENCL_FOUND)
+  IF(OPENCL_FOUND)
+    AUX_SOURCE_DIRECTORY(processes boxm2_volm_pro_sources)
+    add_definitions(-DHAVE_OPENCL)
+  ENDIF(OPENCL_FOUND)
 
   ADD_LIBRARY(boxm2_volm_pro ${boxm2_volm_pro_sources})
 

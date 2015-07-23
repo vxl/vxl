@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
+#include <vnl/algo/vnl_algo_export.h>
 
 class vnl_cost_function;
 class vnl_least_squares_function;
@@ -100,7 +101,7 @@ class vnl_amoeba
   //: Modify x so as to minimise f(x)
   static void minimize(vnl_least_squares_function& f, vnl_vector<double>& x);
 
-  static bool default_verbose;
+  static VNL_ALGO_EXPORT bool default_verbose;
 
  protected:
   vnl_cost_function* fptr;

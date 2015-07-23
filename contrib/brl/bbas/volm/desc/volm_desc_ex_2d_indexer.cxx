@@ -2,7 +2,12 @@
 #include <vcl_algorithm.h>
 #include <vil/vil_load.h>
 
-vcl_string volm_desc_ex_2d_indexer::name_ = "ex_2d";
+vcl_string& volm_desc_ex_2d_indexer::get_name()
+{
+  static vcl_string name = "ex_2d";
+  return name;
+}
+
 
 volm_desc_ex_2d_indexer::
 volm_desc_ex_2d_indexer(vcl_string const& input_folder,

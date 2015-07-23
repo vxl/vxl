@@ -11,7 +11,7 @@ ENDIF( NOT BUILD_NONCOMMERCIAL )
 
 SET( vgl_sources
   # General
-  vgl_fwd.h
+  vgl_fwd.h                      vgl_export.h
   vgl_tolerance.h                vgl_tolerance.txx
   vgl_box_2d.h                   vgl_box_2d.txx
   vgl_box_3d.h                   vgl_box_3d.txx
@@ -80,6 +80,7 @@ AUX_SOURCE_DIRECTORY(Templates vgl_sources)
 
 ADD_LIBRARY(vgl ${vgl_sources})
 TARGET_LINK_LIBRARIES( vgl vcl )
+
 doxygen_add_library(core/vgl
   #DEPENDS core/vsl core/vnl
   PACKAGE core

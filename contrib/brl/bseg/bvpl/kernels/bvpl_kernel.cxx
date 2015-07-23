@@ -12,7 +12,12 @@
 #include "bvpl_edge3d_kernel_factory.h"
 
 
-unsigned bvpl_kernel::id_cnt=0;
+unsigned bvpl_kernel::get_next_id()
+{
+  static unsigned id_cnt =0;
+  id_cnt++;
+  return id_cnt;
+}
 
 //: Saves the kernel to ascii file
 void bvpl_kernel::print_to_file(vcl_string filename)

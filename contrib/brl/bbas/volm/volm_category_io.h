@@ -21,6 +21,7 @@
 #include <vil/vil_rgb.h>
 #include <vxl_config.h>
 #include <bvrml/bvrml_write.h>
+#include "volm_export.h"
 
 //: class to store all available land categories
 class volm_land_layer
@@ -83,7 +84,7 @@ public:
   static bool load_category_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>& land_category_table);
 
   //: table of all defined road junctions loaded from text file
-  static vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table;
+  static volm_EXPORT_DATA vcl_map<vcl_pair<int, int>, volm_land_layer> road_junction_table;
 
   //: function to load road junction file
   static bool load_road_junction_table(vcl_string const& filename, vcl_map<vcl_pair<int, int>, volm_land_layer>& road_junction_table);
@@ -92,26 +93,26 @@ public:
   static bool load_road_width_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, float>& road_width_table);
 
   //: table to transfer nlcd label to volm label
-  static vcl_map<int, volm_land_layer> nlcd_land_table;
+  static volm_EXPORT_DATA vcl_map<int, volm_land_layer> nlcd_land_table;
 
   //: table to transfer geo_cover
-  static vcl_map<int, volm_land_layer> geo_land_table;
+  static volm_EXPORT_DATA vcl_map<int, volm_land_layer> geo_land_table;
 
   //: table of all possible volm_object
-  static vcl_vector<vcl_string> volm_category_name_table;
+  static volm_EXPORT_DATA vcl_vector<vcl_string> volm_category_name_table;
 
   //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (key is the land_layer id)
-  static vcl_map<unsigned, volm_land_layer> volm_land_table;
+  static volm_EXPORT_DATA vcl_map<unsigned, volm_land_layer> volm_land_table;
 
   //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (key is the land_layer name, note that the land name is unique)
-  static vcl_map<vcl_string, volm_land_layer> volm_land_table_name;
+  static volm_EXPORT_DATA vcl_map<vcl_string, volm_land_layer> volm_land_table_name;
 
   //: use the corresponding increment during hypotheses generation, 
   //  the unit of the increments is in meters (user of this table shall convert to degrees if necessary depending on lat, lon of the area)
-  static vcl_map<int, double> geo_land_hyp_increments;
+  static volm_EXPORT_DATA vcl_map<int, double> geo_land_hyp_increments;
 
   //: table to transfer land tags in xml file to volm land category
-  static vcl_map<vcl_string, volm_land_layer> tag_to_volm_land_table;
+  static volm_EXPORT_DATA vcl_map<vcl_string, volm_land_layer> tag_to_volm_land_table;
 
 };
 

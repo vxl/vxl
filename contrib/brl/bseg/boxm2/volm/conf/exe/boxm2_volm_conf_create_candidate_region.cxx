@@ -167,7 +167,7 @@ int main(int argc, char** argv)
   vcl_vector<float> pin_pt_max_dist;
   vcl_vector<float> pin_pt_heading_mid;
   vcl_vector<float> likelihood;
-  vcl_multimap<float, vcl_pair<volm_conf_score, vgl_point_2d<double> > >::iterator mit = score_map.begin();
+  vcl_multimap<float, vcl_pair<volm_conf_score, vgl_point_2d<double> >, vcl_greater<float> >::iterator mit = score_map.begin();
   while (pin_pt_center.size() < num_top_locs() && mit != score_map.end())
   {
     // check whether the location has been in the pin-pointed region

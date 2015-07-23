@@ -4,7 +4,11 @@
 #include <vcl_algorithm.h>
 #include <vul/vul_file.h>
 
-vcl_string volm_desc_ex_land_only_indexer::name_ = "ex_land_only";
+vcl_string& volm_desc_ex_land_only_indexer::get_name()
+{
+  vcl_string name = "ex_land_only";
+  return name;
+}
 
 volm_desc_ex_land_only_indexer::volm_desc_ex_land_only_indexer(vcl_string const& index_folder,
                                                                vcl_string const& out_index_folder,

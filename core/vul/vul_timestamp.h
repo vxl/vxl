@@ -1,6 +1,8 @@
 // This is core/vul/vul_timestamp.h
 #ifndef vul_timestamp_h
 #define vul_timestamp_h
+#include <vul/vul_export.h>
+
 //:
 // \file
 // \brief generates a timestamp.
@@ -14,7 +16,7 @@
 class vul_timestamp
 {
   //: mark is incremented to give a unique timestamp
-  static unsigned long mark;
+  static vul_EXPORT unsigned long mark;
 
  public:
 

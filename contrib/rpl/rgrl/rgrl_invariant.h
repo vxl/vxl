@@ -13,6 +13,7 @@
 #include "rgrl_mask.h"
 #include "rgrl_invariant_sptr.h"
 #include "rgrl_object.h"
+#include "rgrl/rgrl_export.h"
 
 //: Represent a feature associated with a set of invariant properties.
 //
@@ -52,7 +53,7 @@ class rgrl_invariant
 
  private:
   // a 0-length dummy vector
-  static vnl_vector<double> zero_vec;
+  static RGRL_EXPORT vnl_vector<double> zero_vec;
 };
 
 #endif // rgrl_invariant_h_

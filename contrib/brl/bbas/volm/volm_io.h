@@ -20,6 +20,7 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
 #include "volm_category_io.h"
+#include "volm_export.h"
 
 class volm_weight;
 //: A class to hold xml file io methods for volumetric matchers
@@ -27,10 +28,10 @@ class volm_weight;
 class volm_orient_table
 {
  public:
-  static vcl_map<vcl_string, depth_map_region::orientation> ori_id;
+  static volm_EXPORT_DATA vcl_map<vcl_string, depth_map_region::orientation> ori_id;
 
   // list of the possible values for indexed orientations from the reference world
-  static vcl_map<int, vil_rgb<vxl_byte> >  ori_index_colors;
+  static volm_EXPORT_DATA vcl_map<int, vil_rgb<vxl_byte> >  ori_index_colors;
 };
 
 class volm_attributes
@@ -49,7 +50,7 @@ class volm_label_table
  public:
   static unsigned number_of_labels_;
   enum label_values {INVALID = 0, SAND = 31, WATER = 11, DEVELOPED_LOW = 22, DEVELOPED_MED = 23, DEVELOPED_HIGH = 24, DEVELOPED_OPEN = 21, WETLAND = 95, WOODY_WETLAND = 90, BUILDING = 100, FORT = 106, PIER = 114, BUILDING_TALL = 119};
-  static vcl_map<int, volm_attributes > land_id ;
+  static volm_EXPORT_DATA vcl_map<int, volm_attributes > land_id ;
   static vcl_string land_string(unsigned char id);
   //: pass the id of the class labeled in the query (volm_attribute.id_)
   static vil_rgb<vxl_byte> get_color(unsigned char id);
@@ -75,8 +76,8 @@ class volm_fallback_label
 {
  public:
   //: key -- assigned land_id in depth_map_scene, element -- an array with 4-elements defines the possible fallback land_id for given land type
-  static vcl_map<unsigned char, vcl_vector<unsigned char> > fallback_id;
-  static vcl_map<unsigned char, vcl_vector<float> > fallback_weight;
+  static volm_EXPORT_DATA vcl_map<unsigned char, vcl_vector<unsigned char> > fallback_id;
+  static volm_EXPORT_DATA vcl_map<unsigned char, vcl_vector<float> > fallback_weight;
   static void size(unsigned char& fallback_size) { fallback_size = (unsigned char)volm_fallback_label::fallback_id[0].size(); }
   static void print_id(unsigned char id)
   {

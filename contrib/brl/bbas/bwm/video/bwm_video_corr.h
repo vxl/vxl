@@ -17,7 +17,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include "dll.h"
+#include "bwm_video_export.h"
+
 class bwm_observer_video;
 
 class bwm_video_corr : public vbl_ref_count
@@ -104,7 +105,7 @@ class bwm_video_corr : public vbl_ref_count
 
   // Data Members--------------------------------------------------------------
  private:
-  BWM_VIDEO_DLL_DATA static unsigned unique_id_;
+  static bwm_video_EXPORT_DATA unsigned unique_id_;
   bwm_observer_video* observer_;
   vcl_map<unsigned, vgl_point_2d<double> > matches_; // match in each frame
   bool world_pt_valid_;

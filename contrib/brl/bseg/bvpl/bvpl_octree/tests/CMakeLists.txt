@@ -18,6 +18,7 @@ SET(bvpl_octree_test_all_sources
 
 ADD_LIBRARY(bvpl_octree_tests_util  ${bvpl_octree_test_all_sources})
 
+TARGET_LINK_LIBRARIES( bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
 TARGET_LINK_LIBRARIES( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
 
 ADD_TEST( bvpl_octree_test_kernel_operator ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_test_all test_octree_kernel_operator  )
