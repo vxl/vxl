@@ -30,7 +30,10 @@ class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
   //: z coordinate of bounded crease curve projected onto eyelid sphere with blend to planar regions
   double z(double xp, double t) const;
 
-  //: parameter t as a function of xp and y
+    //: parameter t as a function of xp and y
+  // initial approximate value - exact if no rotation
+  double t0(double xp, double y) const;
+  // value after one iteration of beta substitution
   double t(double xp, double y) const;
 
   //: distance to closest point on crease surface
@@ -40,6 +43,9 @@ class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
   // matches z values at t = params.eyelid_crease_ct_
   double z_socket(double xp) const;
 
+  //: return 2nd order coefffiients weighted by t
+  void blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const;
+  
   double ct_; //t value at crease, i.e. brow plane starts at crease
 
  private:

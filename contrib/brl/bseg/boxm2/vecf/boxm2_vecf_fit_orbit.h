@@ -14,6 +14,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vcl_map.h>
+//: a structure for holding a labeled 3-d point
 struct labeled_point{
 public:
   labeled_point(){}
@@ -29,17 +30,34 @@ class boxm2_vecf_fit_orbit{
              LEFT_EYE_SUPERIOR_MARGIN, LEFT_EYE_SUPERIOR_CREASE, LEFT_SCLERA, LEFT_INFERIOR_LID_SURFACE, LEFT_Nz,LEFT_IRIS_RADIUS,
              RIGHT_EYE_MEDIAL_CANTHUS, RIGHT_EYE_LATERAL_CANTHUS, RIGHT_EYE_INFERIOR_MARGIN,
              RIGHT_EYE_SUPERIOR_MARGIN, RIGHT_EYE_SUPERIOR_CREASE, RIGHT_SCLERA, RIGHT_INFERIOR_LID_SURFACE, RIGHT_Nz, RIGHT_IRIS_RADIUS};
- boxm2_vecf_fit_orbit(): nominal_medial_lateral_angle_rad_(0.110498)//left eye
+ boxm2_vecf_fit_orbit(): nominal_canthus_angle_rad_(0.110498), has_inferior_surface_pts_(true), from_image_data_(false), image_height_(0.0)
     {fill_smid_map();}
-  boxm2_vecf_orbit_params fitted_params();
-  bool add_labeled_point(labeled_point lp);
+
+  //: read a 3-d anchor file:
+  // lateral, medial canthi, inferior/superior margins, superior crease
   bool read_anchor_file(vcl_string const& path);
-  
+
+  //: read a 2-d dlib part file (uses tree regression)
+  bool read_dlib_part_file(vcl_string const& path, bool image_data = true);
+
+  //: find initial orbit parameters for the left orbit
   bool fit_left();
+  //: find initial orbit parameters for the right orbit
   bool fit_right();
 
+  // in the case of image coordinates ===>
+  // revert coordinates to approximate millimeters using the
+  // iris radius
+  bool from_image_data(){return from_image_data_;}
+  void normalize_eye_data();
+  // set the z values of the margin curve points and the crease curve points
+  bool set_left_z_values();
+  bool set_right_z_values();
+  // <=======
 
   // Left orbit parameter fitting
+  // see .cxx file for additional comments 
+  bool set_left_iris_radius();
   bool left_eye_radius( double& rad);
   void set_left_eye_radius(double rad){left_params_.eye_radius_=rad;}
 
@@ -65,15 +83,18 @@ class boxm2_vecf_fit_orbit{
   void set_left_eye_x_scale(double& left_x_scale)
   {left_params_.scale_x_coef_ = left_x_scale*right_params_.scale_x_coef_;}
 
+  // currently not used to estimate y_scale, nonlinear optimizer instead
   bool left_eye_y_scale(double& left_y_scale);
   void set_left_eye_y_scale(double& left_y_scale)
   {left_params_.scale_y_coef_ = left_y_scale*left_params_.scale_y_coef_;}
   
+  // currently not used, nominal tmin is used instead
   bool left_eye_inferior_margin_t(double& left_inf_t);
   void set_left_eye_inferior_margin_t(double& left_inf_t){
     left_params_.lower_eyelid_tmin_ = left_inf_t;
   }
 
+  // currently not used, nominal tmin is used instead
   bool left_eye_superior_margin_t(double& superior_margin_t);
   void set_left_eye_superior_margin_t(double superior_margin_t){
     left_params_.eyelid_dt_ = superior_margin_t-1.0;}
@@ -82,25 +103,37 @@ class boxm2_vecf_fit_orbit{
   void set_left_eyelid_crease_scale_y(double& left_crease_y_scale){
     left_params_.eyelid_crease_scale_y_coef_ = left_crease_y_scale*left_params_.eyelid_crease_scale_y_coef_;
   }
+  bool left_mid_inferior_margin_z(double& marg_z);
+  void set_left_inferior_margin_z(double& marg_z){
+    left_params_.mid_inferior_margin_z_= marg_z;
+  }
+  bool left_mid_superior_margin_z(double& marg_z);
+  void set_left_superior_margin_z(double& marg_z){
+    left_params_.mid_superior_margin_z_= marg_z;
+  }
   bool left_mid_eyelid_crease_z(double& crease_z);
   void set_left_mid_eyelid_crease_z(double& crease_z){
     left_params_.mid_eyelid_crease_z_= crease_z;
   }
+ // currently not used, nominal crease_ct is used instead
   bool left_eye_superior_margin_crease_t(double& left_sup_crease_t);
   void set_left_eye_superior_margin_crease_t(double& left_sup_crease_t){
     left_params_.eyelid_crease_ct_ = left_sup_crease_t;
   }
+  // just for initialization
+  bool left_ang_rad(double& ang_rad);
+  void set_left_ang_rad(double& ang_rad);
 
-  bool left_medial_lateral_angle(double& ang_rad);
-  void set_left_medial_lateral_angle(double& ang_rad);
-
+  // determine the canthus angles (either left or right) from inf and sup polynomial crossing points
+  void set_canthus_angle(bool is_right);
 
   bool fit_sclera(vcl_string const& data_desc);
-  bool max_sclera_z(vcl_string const& data_desc, double& max_z);
+  bool max_sclera_z(vcl_string const& data_desc, double r, double& max_z);
 
-  bool set_left_iris_radius();
 
   //: Right orbit parameter fitting
+  // see .cxx file for additional comments 
+  bool set_right_iris_radius();
   bool right_eye_radius( double& rad);
   void set_right_eye_radius(double rad){right_params_.eye_radius_=rad;}
 
@@ -129,15 +162,18 @@ class boxm2_vecf_fit_orbit{
   void set_right_eye_x_scale(double& right_x_scale)
   {right_params_.scale_x_coef_ = right_x_scale*right_params_.scale_x_coef_;}
 
+  // currently not used to estimate y_scale, nonlinear optimizer instead
   bool right_eye_y_scale(double& right_y_scale);
   void set_right_eye_y_scale(double& right_y_scale)
   {right_params_.scale_y_coef_ = right_y_scale*right_params_.scale_y_coef_;}
   
+  // currently not used, nominal tmin is used instead
   bool right_eye_inferior_margin_t(double& right_inf_t);
   void set_right_eye_inferior_margin_t(double& right_inf_t){
     right_params_.lower_eyelid_tmin_ = right_inf_t;
   }
 
+  // currently not used, nominal tmin is used instead
   bool right_eye_superior_margin_t(double& superior_margin_t);
   void set_right_eye_superior_margin_t(double superior_margin_t){
     right_params_.eyelid_dt_ = superior_margin_t-1.0;}
@@ -147,18 +183,28 @@ class boxm2_vecf_fit_orbit{
     right_params_.eyelid_crease_scale_y_coef_ = right_crease_y_scale*right_params_.eyelid_crease_scale_y_coef_;
   }
 
+  bool right_mid_inferior_margin_z(double& marg_z);
+  void set_right_inferior_margin_z(double& marg_z){
+    right_params_.mid_inferior_margin_z_= marg_z;
+  }
+
+  bool right_mid_superior_margin_z(double& marg_z);
+  void set_right_superior_margin_z(double& marg_z){
+    right_params_.mid_superior_margin_z_= marg_z;
+  }
+
   bool right_mid_eyelid_crease_z(double& crease_z);
   void set_right_mid_eyelid_crease_z(double& crease_z){
     right_params_.mid_eyelid_crease_z_= crease_z;
   }
+
+ // currently not used, nominal crease_ct is used instead
   bool right_eye_superior_margin_crease_t(double& right_sup_crease_t);
   void set_right_eye_superior_margin_crease_t(double& right_sup_crease_t){
     right_params_.eyelid_crease_tmin_ = right_sup_crease_t;
   }
-  bool right_medial_lateral_angle(double& ang_rad);
-  void set_right_medial_lateral_angle(double& ang_rad);
-
-  bool set_right_iris_radius();
+  bool right_ang_rad(double& ang_rad);
+  void set_right_ang_rad(double& ang_rad);
 
   // Testing the fit
   bool load_orbit_data(vcl_string const& data_desc, vcl_string const& path);
@@ -167,7 +213,12 @@ class boxm2_vecf_fit_orbit{
   bool display_orbit_vrml(vcl_ofstream& ostr, bool is_right, bool show_model = true);
   bool display_anchors(vcl_ofstream& ostr, bool is_right);
 
+  bool fitting_error(vcl_string const& data_desc);
+
   // Accessors
+  //: add a labeled point to lpts_
+  bool add_labeled_point(labeled_point lp);
+
   boxm2_vecf_orbit_params left_params() const  {return left_params_;}
   void set_left_params(boxm2_vecf_orbit_params const& params);
 
@@ -193,19 +244,51 @@ class boxm2_vecf_fit_orbit{
     pt = lit->second.p3d_;
     return true;
   }
+  void set_has_inferior_surface(bool has_surface){has_inferior_surface_pts_ = has_surface;}
  private:
+  //: the map between string and enum 
   void fill_smid_map();
-  void plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
+  //: for vrml display of the fitted orbit model
+  void plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, bool show_inf_crease, double xm_min, double xm_max);
   void plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
   void plot_crease(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
 
+  //: helpers for parsing the dlib part file
+  bool add_dlib_anchor_part(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,
+                            vcl_string const& dlabel, vcl_string const& olabel);
+  bool add_dlib_orbit_data(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,
+                           vcl_string const& dlabel, vcl_string const& olabel);
+
+  //: map a string label to the correspondingenum value
   vcl_map<vcl_string, mids> smid_map_;
+  //: a map of labeled points, e.g. left_eye_lateral_canthus
   vcl_map<mids, labeled_point> lpts_;
+
+  //: a map of contour point data,
+  // e.g. points along the inferior margin
+  vcl_map<mids, vcl_vector<vgl_point_3d<double> > > orbit_data_;
+
+  //: the current paramter estimates
   boxm2_vecf_orbit_params left_params_;
   boxm2_vecf_orbit_params right_params_;
-  vcl_map<mids, vcl_vector<vgl_point_3d<double> > > orbit_data_;
-  double nominal_medial_lateral_angle_rad_;
+
+  //: the typical canthus angle for estimating ang_rad from canthi (model rotation)
+  double nominal_canthus_angle_rad_;
+
+  //: estimates of the rotation of the
+  // entire orbit model to best fit the data
+  // should not be interpreted as the canthus angle
   double left_dphi_rad_;
   double right_dphi_rad_;
+
+  //: are points on the inferior lid pouch available
+  bool has_inferior_surface_pts_;
+  //: are only 2-d data available (e.g. from dlib)
+  bool only_2d_data_;
+  //: are the data in image coordinates
+  bool from_image_data_;
+  //: if so the image height is needed for processing
+  double image_height_;
+
 };
 #endif// boxm2_vecf_fit_orbit

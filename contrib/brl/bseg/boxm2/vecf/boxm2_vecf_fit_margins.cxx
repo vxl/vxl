@@ -17,15 +17,12 @@ class margin_residual_function : public vnl_least_squares_function{
 margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
                          vcl_vector<vgl_point_2d<double> >  const& sup_pts,
                          vcl_vector<vgl_point_2d<double> >  const& crease_pts,
-                         vcl_vector<vgl_point_3d<double> > const& sclera_pts,
                          vgl_point_2d<double> const& lat_canth,
                          vgl_point_2d<double> const& med_canth,
                          boxm2_vecf_orbit_params& opr, bool is_right):
-  vnl_least_squares_function(7,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+crease_pts.size()+ 2*((inf_pts.size()+sup_pts.size())/2)),
-                             //vnl_least_squares_function(7,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+crease_pts.size()+sclera_pts.size()+2*((inf_pts.size()+sup_pts.size())/2)),
-  //vnl_least_squares_function(8,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+sclera_pts.size()),
+  vnl_least_squares_function(7,static_cast<unsigned>(inf_pts.size()+sup_pts.size()+crease_pts.size()+ 2*((inf_pts.size()+sup_pts.size())/2)+1),
                              vnl_least_squares_function::no_gradient), inf_pts_(inf_pts),
-  sup_pts_(sup_pts),  crease_pts_(crease_pts), sclera_pts_(sclera_pts), lat_canth_(lat_canth), med_canth_(med_canth),opr_(opr), is_right_(is_right){}
+  sup_pts_(sup_pts),  crease_pts_(crease_pts), lat_canth_(lat_canth), med_canth_(med_canth),opr_(opr), is_right_(is_right){}
 
   virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx){
     // extract parameters from x
@@ -36,7 +33,6 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
     opr_.scale_y_coef_ =                x[4];
     opr_.eyelid_crease_scale_y_coef_ =  x[5];
     opr_.dphi_rad_ =                    x[6];
-    //  opr_.crease_dphi_rad_ =             x[7];
 
     opr_.init_sphere();
     // compute residuals
@@ -46,8 +42,10 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
     vgl_vector_2d<double> v(opr_.x_trans(), opr_.y_trans());
     vgl_vector_3d<double> v3(opr_.x_trans(), opr_.y_trans(), opr_.z_trans());
     unsigned ninf = static_cast<unsigned>(inf_pts_.size()), nsup = static_cast<unsigned>(sup_pts_.size());
-    unsigned nscl = static_cast<unsigned>(sclera_pts_.size()), ncre = static_cast<unsigned>(crease_pts_.size());
+        unsigned ncre = static_cast<unsigned>(crease_pts_.size());
     unsigned ncanth = (ninf + nsup)/2;
+    // penalize large angles
+    double ang_weight = static_cast<double>(ninf + nsup);
     for(unsigned i = 0; i<ninf; ++i){
       vgl_point_2d<double> p = inf_pts_[i]-v;
       double yinf = 0.0;
@@ -78,15 +76,7 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
       fx[i+off]= p.y()-ycr;
     }
     off += ncre;
-#if 0
-    for(unsigned i = 0; i<nscl; ++i){
-      vgl_point_3d<double> p = (sclera_pts_[i]);
-      vgl_point_3d<double> pc = vgl_closest_point(opr_.sph_, p);
-      double dz = p.z() -pc.z(); 
-      fx[i+off] = dz;
-    }
-    off += nscl;
-#endif
+
     for(unsigned i = 0; i<2*ncanth; i+=2){
       vgl_point_2d<double> pl = lat_canth_-v;
       vgl_point_2d<double> pm = med_canth_-v;
@@ -109,6 +99,8 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
         fx[i+off+1] = 0.5*(ymi+yms)-pm.y();
       }
     }
+    off += 2*ncanth;
+    fx[off] = ang_weight*x[6];
   }
  private:
   bool is_right_;
@@ -116,7 +108,6 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
   vcl_vector<vgl_point_2d<double> > inf_pts_;
   vcl_vector<vgl_point_2d<double> > sup_pts_;
   vcl_vector<vgl_point_2d<double> > crease_pts_;
-  vcl_vector<vgl_point_3d<double> > sclera_pts_;
   vgl_point_2d<double> lat_canth_;
   vgl_point_2d<double> med_canth_;
   };
@@ -136,7 +127,7 @@ double boxm2_vecf_fit_margins::fit(vcl_ostream* outstream, bool verbose){
 #endif
   double dtrx = opr_.trans_x_, dtry = opr_.trans_y_, dtrz = opr_.trans_z_; 
 
-  margin_residual_function mrf(inferior_margin_pts_, superior_margin_pts_, superior_crease_pts_,sclera_pts_,lateral_canthus_, medial_canthus_, opr_, is_right_);
+  margin_residual_function mrf(inferior_margin_pts_, superior_margin_pts_, superior_crease_pts_,lateral_canthus_, medial_canthus_, opr_, is_right_);
   vnl_levenberg_marquardt lmm(mrf);  
 
   vnl_vector<double> xm_init(7);
@@ -147,7 +138,6 @@ double boxm2_vecf_fit_margins::fit(vcl_ostream* outstream, bool verbose){
   xm_init[4] = opr_.scale_y_coef_;
   xm_init[5] = opr_.eyelid_crease_scale_y_coef_;
   xm_init[6] = opr_.dphi_rad_;
-  //xm_init[7] = opr_.crease_dphi_rad_;
 
   lmm.minimize(xm_init);
   //change in translation  - informative print out
@@ -173,8 +163,6 @@ double boxm2_vecf_fit_margins::fit(vcl_ostream* outstream, bool verbose){
   opr_.scale_y_coef_ =              xm_init[4];
   opr_.eyelid_crease_scale_y_coef_= xm_init[5];
   opr_.dphi_rad_ =                  xm_init[6];
-  //  opr_.crease_dphi_rad_ =           xm_init[7];
-  //opr_.crease_dphi_rad_ =           0.0;
 
   if(outstream && verbose){
     *outstream << " Final parameters \n";

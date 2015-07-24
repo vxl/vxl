@@ -12,6 +12,7 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> patient_idstr(arglist, "-bid", "Patient id string", "");
   vul_arg<vcl_string> show_model_arg(arglist, "-smod", "Show model", "true");
   vul_arg<vcl_string> non_lin_arg(arglist, "-nlin", "non-linear refine orbit parameters", "true");
+  vul_arg<vcl_string> dlib_arg(arglist, "-dlib", "2-d data from dlib", "false");
 
   arglist.parse(argc, argv, false);
   vcl_string show_model_str = show_model_arg();
@@ -19,6 +20,9 @@ int main(int argc, char ** argv)
 
   vcl_string non_lin_str = non_lin_arg();
   bool do_non_lin = non_lin_str == "true";
+
+  vcl_string dlib_str = dlib_arg();
+  bool from_dlib = dlib_str == "true";
 
   vcl_string base_dir = base_dir_path();
 
@@ -34,6 +38,7 @@ int main(int argc, char ** argv)
   //  patient sub-directory named by patient_id
   base_dir =  base_dir+ patient_id + "/";
 
+  vcl_string left_dlib_path = base_dir + patient_id + "_left_orbit_parts.txt";
   vcl_string left_anchor_path = base_dir + patient_id + "_left_anchors.txt";
   vcl_string left_sclera_path = base_dir + patient_id + "_left_sclera.txt";
   vcl_string left_inferior_margin_path = base_dir + patient_id + "_left_inferior_margin.txt";
@@ -43,6 +48,7 @@ int main(int argc, char ** argv)
   vcl_string left_vrml_path = base_dir + patient_id + "_left_orbit_plot.wrl";
   vcl_string left_param_path = base_dir + patient_id + "_left_orbit_params.txt";
 
+  vcl_string right_dlib_path = base_dir + patient_id + "_right_orbit_parts.txt";
   vcl_string right_anchor_path = base_dir + patient_id + "_right_anchors.txt";
   vcl_string right_sclera_path = base_dir + patient_id + "_right_sclera.txt";
   vcl_string right_inferior_margin_path = base_dir + patient_id + "_right_inferior_margin.txt";
@@ -52,32 +58,38 @@ int main(int argc, char ** argv)
   vcl_string right_vrml_path = base_dir + patient_id + "_right_orbit_plot.wrl";
   vcl_string right_param_path = base_dir + patient_id + "_right_orbit_params.txt";
   boxm2_vecf_fit_orbit fo;
-
+  bool good = true;
   /// left eye processing
-  bool good = fo.read_anchor_file(left_anchor_path);
+  if(!from_dlib){
+  good = fo.read_anchor_file(left_anchor_path);
   if(!good){
     vcl_cout << "failed to read left anchor file\n";
     return -1;
   }
   good = fo.load_orbit_data("left_eye_sclera", left_sclera_path);
   if(!good){
-    vcl_cout << "failed to read left sclera file\n";
+        vcl_cout << "failed to read left sclera file\n";
     return -1;
   }
   good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_surface_path);
   if(!good){
-    vcl_cout << "failed to read left inferior lid surface file\n";
-    return -1;
+          good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_margin_path);
+          if(!good){
+        vcl_cout << "failed to read left inferior lid surface file  or next best choice the left_inferior_margin file\n";
+        return -1;
+          }else{
+            fo.set_has_inferior_surface(false);
+            vcl_cout << "Substituted the inferior margin file instead -- Not Fatal\n";
+          }
   }
-  good = fo.fit_left();
-  if(!good){
-    vcl_cout << "left orbit parameter fit failed\n";
-    return -1;
+  }else{
+    good = fo.read_dlib_part_file(left_dlib_path);
+    if(!good)
+      return -1;
   }
-  boxm2_vecf_orbit_params lpr = fo.left_params();
-  vcl_cout << "\n>>>Left Orbit Parameters "<< patient_id << " <<<\n";
-  vcl_cout << lpr;
-  /// right eye processing
+  
+/// right eye processing
+  if(!from_dlib){
   good = fo.read_anchor_file(right_anchor_path);
   if(!good){
     vcl_cout << "failed to read right anchor file\n";
@@ -91,8 +103,40 @@ int main(int argc, char ** argv)
  good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_surface_path);
  if(!good){
     vcl_cout << "failed to read right inferior lid surface file\n";
+         good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_margin_path);
+          if(!good){
+        vcl_cout << "failed to read right inferior lid surface file  or next best choice, the right_inferior_margin file\n";
+        return -1;
+          }else{
+                  vcl_cout << "Substituted the inferior margin file instead -- Not Fatal\n";
+          }
+    }
+  }else{
+    good = fo.read_dlib_part_file(right_dlib_path);
+    if(!good)
+      return -1;
+  }    
+  
+  good= fo.set_left_iris_radius();
+  if(!good)
+    return false;
+  good= fo.set_right_iris_radius();
+  if(!good)
+    return false;
+
+  if(fo.from_image_data())
+    fo.normalize_eye_data();
+
+  good = fo.fit_left();
+  if(!good){
+    vcl_cout << "left orbit parameter fit failed\n";
     return -1;
   }
+  boxm2_vecf_orbit_params lpr = fo.left_params();
+  vcl_cout << "\n>>>Left Orbit Parameters "<< patient_id << " <<<\n";
+  vcl_cout << lpr;
+  
+
   good = fo.fit_right();
   if(!good){
     vcl_cout << "right orbit parameter fit failed\n";
@@ -103,11 +147,11 @@ int main(int argc, char ** argv)
   vcl_cout << "\n>>>Right Orbit Parameters "<< patient_id << " <<<\n";
   vcl_cout << rpr;
 
-
-  fo.load_orbit_data("right_eye_inferior_margin", right_inferior_margin_path);
-  fo.load_orbit_data("right_eye_superior_margin", right_superior_margin_path);
-  fo.load_orbit_data("right_eye_superior_crease", right_superior_crease_path);
-
+  if(!from_dlib){
+    fo.load_orbit_data("right_eye_inferior_margin", right_inferior_margin_path);
+    fo.load_orbit_data("right_eye_superior_margin", right_superior_margin_path);
+    fo.load_orbit_data("right_eye_superior_crease", right_superior_crease_path);
+  }
 
   // non-linear fit
   if(do_non_lin){
@@ -123,7 +167,7 @@ int main(int argc, char ** argv)
       return -1;
     }
     boxm2_vecf_fit_margins right_fmargs(fo.orbit_data("right_eye_inferior_margin"), fo.orbit_data("right_eye_superior_margin"),
-        fo.orbit_data("right_eye_superior_crease"), fo.orbit_data("right_eye_sclera"), rlat, rmed,true);
+        fo.orbit_data("right_eye_superior_crease"), rlat, rmed,true);
     right_fmargs.set_initial_guess(fo.right_params());
     right_fmargs.fit(&vcl_cout, true);
     boxm2_vecf_orbit_params rprm = right_fmargs.orbit_parameters();
@@ -133,20 +177,29 @@ int main(int argc, char ** argv)
     good = right_fmargs.plot_orbit(rmstr);
     rmstr.close();
   }
+  // if image data set z values for margin and crease curve points
+  if(fo.from_image_data()){
+    good = fo.set_right_z_values();
+    if(!good)
+      return -1;
+  }
   vcl_ofstream rostr(right_vrml_path.c_str());
   good = fo.display_orbit_vrml(rostr, true, show_model);
   rostr.close();
 
+  fo.fitting_error("right_eye_inferior_margin");
+  fo.fitting_error("right_eye_superior_margin");
+  fo.fitting_error("right_eye_superior_crease");
 
   vcl_ofstream rpstr(right_param_path.c_str());
   rpstr << fo.right_params() << '\n';
   rpstr.close();
 
-
-  fo.load_orbit_data("left_eye_inferior_margin", left_inferior_margin_path);
-  fo.load_orbit_data("left_eye_superior_margin", left_superior_margin_path);
-  fo.load_orbit_data("left_eye_superior_crease", left_superior_crease_path);
-  fo.load_orbit_data("left_eye_superior_crease", left_superior_crease_path);
+  if(!from_dlib){
+    fo.load_orbit_data("left_eye_inferior_margin", left_inferior_margin_path);
+    fo.load_orbit_data("left_eye_superior_margin", left_superior_margin_path);
+    fo.load_orbit_data("left_eye_superior_crease", left_superior_crease_path);
+  }
 
 
   // non-linear fit
@@ -163,7 +216,7 @@ int main(int argc, char ** argv)
       return -1;
     }
     boxm2_vecf_fit_margins left_fmargs(fo.orbit_data("left_eye_inferior_margin"), fo.orbit_data("left_eye_superior_margin"),
-                                       fo.orbit_data("left_eye_superior_crease"), fo.orbit_data("left_eye_sclera"), llat, lmed);
+                                       fo.orbit_data("left_eye_superior_crease"),  llat, lmed);
     left_fmargs.set_initial_guess(fo.left_params());
     left_fmargs.fit(&vcl_cout, true);
     boxm2_vecf_orbit_params lprm = left_fmargs.orbit_parameters();
@@ -173,14 +226,29 @@ int main(int argc, char ** argv)
     good = left_fmargs.plot_orbit(lmstr);
     lmstr.close();
   } 
+  // if image data set z values for margin and crease curve points
+  if(fo.from_image_data()){
+    good = fo.set_left_z_values();
+    if(!good)
+      return -1;
+  }
   vcl_ofstream lostr(left_vrml_path.c_str());
   good = fo.display_orbit_vrml(lostr, false, show_model);
   lostr.close();
 
-  vcl_ofstream lpstr(left_param_path.c_str());
+  // find canthus angles
+  fo.set_canthus_angle(false);
+  fo.set_canthus_angle(true);
+
+  // test the fitting accuracy
+  fo.fitting_error("left_eye_inferior_margin");
+  fo.fitting_error("left_eye_superior_margin");
+  fo.fitting_error("left_eye_superior_crease");
+
+   vcl_ofstream lpstr(left_param_path.c_str());
   lpstr << fo.left_params() << '\n';
   lpstr.close();
-
+  
   return 0;
 }
 

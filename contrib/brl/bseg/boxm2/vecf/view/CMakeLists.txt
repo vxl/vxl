@@ -19,6 +19,7 @@ IF(VGUI_FOUND)
 
   SET(boxm2_vecf_view_sources
       boxm2_ocl_articulated_render_tableau.h        boxm2_ocl_articulated_render_tableau.cxx
+      boxm2_vecf_orbit_tableau.h                     boxm2_vecf_orbit_tableau.cxx
      )
   AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_view_sources)
 

@@ -72,6 +72,34 @@ class boxm2_vecf_lid_base{
   //: test if point is inside the tmin, tmax bounds
   virtual bool inside(vgl_point_3d<double> const& p, double tolerance=0.5) const;
 
+  //: interpolate z as a linear function of y from midpoint to socket limits.
+  // t is the parameter defining the y(x) shape of the curve
+  double lin_interp_z(double xp, double mid_z, double t, double sy, double a0, double a1, double a2) const;
+
+  // return a linear combination of polynomial coefficients depending on margin or crease curves, thus pure virtual
+  virtual void blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const = 0;
+
+  // obsolete - linear is a much better fit
+  //  double  quad_interp_z(double xp, double mid_z, double t) const;
+
+  //: find the value of the parameter, beta, that defines the x and y polynomials under rotation
+  // That is if,
+  //  x'(beta) = Cos phi x(beta) - Sin phi y(beta)
+  //  y'(beta) = Sin phi x(beta) + Cos phi y(beta)
+  // then find beta such that x'(beta) = xp ( a measured or specified x coordinate)
+  // note that the angle phi is specified as a member, dphi_rad_.
+  //
+  double beta(double xp, double a0, double a1, double a2) const;
+
+  // when a margin or crease polynomial is rotated, the extreme value in y occurs at a different
+  // x position than for the un-rotated polynomial. This function finds the extremal y and x for a
+  // given set of 2nd order approximation coeficients and y scale factor.
+  void extrema(double sy, double a0, double a1, double a2, double& yext, double& xext) const;
+
+  //: distance to margin or crease curve
+  double curve_distance(double t, double x, double y) const;
+  double curve_distance(double t, double x, double y, double z) const;
+  double curve_distance(double t, vgl_point_3d<double> const& p) const;
 
   // assumed symmetrical for now
   double t_min_; // min value of t parameter (closest to eyebrow)

@@ -18,41 +18,40 @@ boxm2_vecf_eyelid_crease::boxm2_vecf_eyelid_crease(double t_min, double t_max, d
 
 boxm2_vecf_eyelid_crease:: boxm2_vecf_eyelid_crease(boxm2_vecf_orbit_params const& params):
   boxm2_vecf_lid_base(params){
- dphi_rad_=params.crease_dphi_rad_;
+ dphi_rad_=params.dphi_rad_;
   el_ = boxm2_vecf_eyelid(params);
 }
-double boxm2_vecf_eyelid_crease::gi(double xp, double t) const{
-  double xs = xp/opr_.scale_x();
-  vnl_vector_fixed<double, 5> m = opr_.m(xs);
+
+void boxm2_vecf_eyelid_crease::blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const{
   vnl_vector_fixed<double, 5> c0 = opr_.crease_coefs_t0();
+  vnl_vector_fixed<double, 5> c0e = opr_.eyelid_coefs_t0();
+  a0 = (1-t)*c0[0] + t*c0e[0];
+  a1 = (1-t)*c0[1] + t*c0e[1];
+  a2 = (1-t)*c0[2] + t*c0e[2];
+}
+
+double boxm2_vecf_eyelid_crease::gi(double xp, double t) const{
+  double a0, a1,a2;
+  this->blended_2nd_order_coefs(t, a0, a1, a2);
+  double xb = beta(xp, a0, a1, a2);
+  double xs = xb/opr_.scale_x();
+
+  vnl_vector_fixed<double, 5> c0 = opr_.crease_coefs_t0();
+  vnl_vector_fixed<double, 5> m = opr_.m(xs);
   double gg = el_.gi(xp,0.0);
   double dmc = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
   dmc = vcl_cos(dphi_rad_)*dmc + vcl_sin(dphi_rad_)*xs;
   return ((1.0-t)*dmc + t*gg);
 }
 
-// the z of the upper orbit socket linearly interpolated with respect to y
-// given the value at the midpoint
+// linearly interpolate the crease z position with respect to y
 double boxm2_vecf_eyelid_crease::z_socket(double xp) const{
+  double a0, a1, a2, sy = opr_.eyelid_crease_scale_y();
   double ct = opr_.eyelid_crease_ct_;
-  double mid_z =  opr_.mid_eyelid_crease_z_;
-  double xlat = opr_.lateral_socket_radius(), xmed = -opr_.medial_socket_radius();
-  double yz = gi(0.0, ct), ylat = gi(xlat, ct), ymed = gi(xmed, ct);
-  double ret_z = 0.0, s = 0.0;
-  double zl = zlim(xp);
-  if(xp>=0.0){
-    s = (gi(xp,ct)-yz)/(ylat-yz);
-    if(s<0.0) s = 0.0;
-    if(s>1.0) s = 1.0;
-    ret_z = mid_z*(1-s) + zl*s;
-  }else{
-    s = (gi(xp,ct)-yz)/(ymed-yz);
-    if(s<0.0) s = 0.0;
-    if(s>1.0) s = 1.0;
-    ret_z = mid_z*(1-s) + zl*s;
-  }
-  return ret_z;
+  this->blended_2nd_order_coefs(ct, a0, a1, a2);
+  return lin_interp_z(xp, opr_.mid_eyelid_crease_z_, ct, sy, a0, a1, a2);
 }
+
 // the plane containing the local neighborhood of the crease curve at xp
 vgl_plane_3d<double> boxm2_vecf_eyelid_crease::crease_plane(double xp) const{
   double xlat = opr_.lateral_socket_radius(), xmed = -opr_.medial_socket_radius();
@@ -124,10 +123,26 @@ double boxm2_vecf_eyelid_crease::z(double xp, double t) const{
   return z_ret;
 }
 
-double boxm2_vecf_eyelid_crease::t(double xp, double y) const{
+double boxm2_vecf_eyelid_crease::t0(double xp, double y) const{
+  vnl_vector_fixed<double, 5> c0 = opr_.crease_coefs_t0();
   double xs = xp/opr_.scale_x();
   vnl_vector_fixed<double, 5> m = opr_.m(xs);
-  double temp = dot_product(m, opr_.crease_coefs_t0())*opr_.eyelid_crease_scale_y();
+  double temp = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
+  temp = vcl_cos(dphi_rad_)*temp + vcl_sin(dphi_rad_)*xs;
+  // note that the top of the upper eyelid must match bottom of the crease region (el_.gi)
+  double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0)); 
+  return ret;
+}
+
+double boxm2_vecf_eyelid_crease::t(double xp, double y) const{
+  double ts = t0(xp, y);
+  double a0, a1, a2;
+  this->blended_2nd_order_coefs(ts, a0, a1, a2);
+  double xb = beta(xp,a0,a1,a2);
+  double xs = xb/opr_.scale_x();
+  vnl_vector_fixed<double, 5> m = opr_.m(xs);
+  vnl_vector_fixed<double, 5> c0 = opr_.crease_coefs_t0();
+  double temp = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
   temp = vcl_cos(dphi_rad_)*temp + vcl_sin(dphi_rad_)*xs;
   // note that the top of the upper eyelid must match bottom of the crease region (el_.gi)
   double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0)); 
@@ -137,7 +152,7 @@ double boxm2_vecf_eyelid_crease::t(double xp, double y) const{
 
 // theory of closest point - compute distance to eyelid sphere, compute distance to plane, take closest
 double boxm2_vecf_eyelid_crease::surface_distance(vgl_point_3d<double> const& p) const{
-
+          
   double ct = opr_.eyelid_crease_ct_;
   double t = this->t(p.x(), p.y());
   // if in the lower part of the crease region

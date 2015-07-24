@@ -22,7 +22,6 @@ class boxm2_vecf_fit_margins
  protected:
   boxm2_vecf_orbit_params opr_;
   double dphi_rad_;
-  vcl_vector<vgl_point_3d<double> > sclera_pts_;
   vcl_vector<vgl_point_2d<double> > inferior_margin_pts_;
   vcl_vector<vgl_point_2d<double> > superior_margin_pts_;
   vcl_vector<vgl_point_2d<double> > superior_crease_pts_;
@@ -38,11 +37,10 @@ class boxm2_vecf_fit_margins
  boxm2_vecf_fit_margins(vcl_vector<vgl_point_3d<double> >const& inferior_margin_pts,
                         vcl_vector<vgl_point_3d<double> >const& superior_margin_pts,
                         vcl_vector<vgl_point_3d<double> >const& superior_crease_pts,
-                        vcl_vector<vgl_point_3d<double> >const& sclera_pts,
                         vgl_point_3d<double> const& lateral_canthus,
                         vgl_point_3d<double> const& medial_canthus,
                         bool is_right=false):
-  is_right_(is_right),dphi_rad_(0.0), sclera_pts_(sclera_pts) {
+  is_right_(is_right),dphi_rad_(0.0){
     for(vcl_vector<vgl_point_3d<double> >::const_iterator pit = inferior_margin_pts.begin();
         pit != inferior_margin_pts.end(); ++pit)
       inferior_margin_pts_.push_back(vgl_point_2d<double>(pit->x(), pit->y()));
@@ -77,7 +75,6 @@ class boxm2_vecf_fit_margins
   vcl_vector<vgl_point_2d<double> > inferior_points() const {return inferior_margin_pts_;}
   vcl_vector<vgl_point_2d<double> > superior_points() const {return superior_margin_pts_;}
   vcl_vector<vgl_point_2d<double> > crease_points() const {return superior_crease_pts_;}
-  vcl_vector<vgl_point_3d<double> > sclera_points() const {return sclera_pts_;}
   vgl_point_2d<double> lateral_canthus()  {return lateral_canthus_;}
   vgl_point_2d<double> medial_canthus()  {return medial_canthus_;}
   boxm2_vecf_orbit_params orbit_parameters() const{return opr_;}

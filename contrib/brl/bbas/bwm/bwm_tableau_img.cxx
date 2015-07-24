@@ -13,6 +13,7 @@
 #include <vsol/vsol_digital_curve_2d.h>
 
 #include <vgui/vgui_dialog.h>
+#include <vgui/vgui_style.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_command.h>
@@ -326,7 +327,34 @@ void bwm_tableau_img::save_pointset_2d_ascii()
     os.close();
   }
 }
-
+void bwm_tableau_img::load_pointset_2d_ascii()
+{
+  // the style toggling is just to
+  // allow comparison of two or three point sets
+  static float r = 0.0;
+  if(r == 1.5f)
+    r = 0.0f;
+  vgui_style_sptr sty = vgui_style::new_style( r, 1.0f, 0.0f, 3.0, 2.0);
+  
+  vgui_dialog load_dlg("Load Pointset");
+  vcl_string ext, pt_filename;
+  load_dlg.file("Point Filename", ext, pt_filename);
+  if (!load_dlg.ask())
+    return;
+  vcl_ifstream istr(pt_filename.c_str());
+  if (istr.is_open()) {
+    unsigned n;
+    istr >> n; //number of pts
+    double x, y;
+    for(unsigned i = 0; i<n; ++i){
+      istr >> x >> y;
+      vsol_point_2d_sptr pt = new vsol_point_2d(x, y);
+      my_observer_->add_vsol_point_2d(pt, sty);
+    }
+    istr.close();
+  }
+  r = r+0.5f;
+}
 void bwm_tableau_img::help_pop()
 {
   bwm_tableau_text* text = new bwm_tableau_text(500, 500);

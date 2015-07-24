@@ -1,4 +1,5 @@
 #include "boxm2_vecf_lid_base.h"
+#include <vcl_limits.h>
 #include <vcl_cmath.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_point_3d.h>
@@ -6,20 +7,111 @@
 #include <vgl/vgl_sphere_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vnl/vnl_vector_fixed.h>
+// the rotated x position, xp, is input and a 2nd order approximation to the margin or crease polynomials is used to
+// recover the polynomial sweeping parameter, beta.
+double boxm2_vecf_lid_base::beta(double xp, double a0, double a1, double a2) const{
+  if(vcl_fabs(dphi_rad_)<0.001)
+    return xp;
+  double sy = opr_.scale_y();
+  double ss = vcl_sin(dphi_rad_);
+  double cs = vcl_cos(dphi_rad_);
+  double temp0 = a0*sy*ss, temp1 = a1*sy*ss, temp2 = a2*sy*ss;
+  double temp3 = 1.0-(temp1/cs);
+  double neu = temp1 + cs*(-1.0 + vcl_sqrt(-(4.0*temp2*(xp + temp0)/(cs*cs))+temp3*temp3));
+  double ret = -neu/(2.0*temp2);
+  return ret;
+}
+// find the extreme value in y for a 2nd order polynomial approximation of the margin and crease polynomials
+// also report the x position where the extremum happens
+void boxm2_vecf_lid_base::extrema(double sy, double a0, double a1, double a2, double& yext, double& xext) const{
+  double ss = vcl_sin(dphi_rad_);
+  double cs = vcl_cos(dphi_rad_);
+  double tan = ss/cs;
+  double temp0 = (a1*a1 -4.0*a0*a2)*sy*sy*cs;
+  double temp1 = ss*(2.0*a1*sy + tan);
+  yext = -(temp0 + temp1)/(4.0*a2*sy);
+  double beta_ext = -(a1*sy + tan)/(2.0*a2*sy);
+  double temp2 = a0 + a1*beta_ext + a2*beta_ext*beta_ext;
+  xext = cs*beta_ext -ss*sy*temp2;
+}
+
+//gave much worse approximation than the linear fit
+static double q(double s, double z0, double z1, double z2){
+ double L0 = -(s-1)*(s+1);
+ double  L1 = s*(s+1)/2.0;
+ double  L2 = s*(s-1)/2.0;
+ double ret = z0*L0 + z1*L1 +z2*L2;
+  return ret;
+}
+#if 0
+double  boxm2_vecf_lid_base::quad_interp_z(double xp, double mid_z, double t) const{
+  double xlat = opr_.lateral_socket_radius(), xmed = -opr_.medial_socket_radius();
+  double yz = gi(0.0, t), ylat = gi(xlat, t), ymed = gi(xmed, t);
+  double ret_z = 0.0, s = 0.0;
+  double z1 = zlim(xlat),  z2 = zlim(xmed);
+  double z0 = mid_z;
+  if(xp>=0.0){
+    s = (gi(xp,t)-yz)/(ylat-yz);
+    if(s<0.0) s = 0.0;
+    if(s>1.0) s = 1.0;
+    ret_z = q(s,z0,z1,z2);
+  }else{
+    s = (gi(xp,t)-yz)/(ymed-yz);
+    if(s<0.0) s = 0.0;
+    if(s>1.0) s = 1.0;
+    ret_z = q(-s,z0,z1,z2);
+  }
+  return ret_z;
+}
+#endif
+
+// the interpolation of z is bifurcated about the x position, xext, corresponding to the extreme value of y for a given margin or crease
+// in each domain x<xext , x>=xext the z value is linearly interpolated according to the parameter s. The value zlim is the z of the
+// lateral and medial planes as the margin or crease curves leave the surface of the eye sphere. Any interpolated z that is less than
+// the z of these planes is clipped to the appropriate plane according to the x domain.
+double boxm2_vecf_lid_base::lin_interp_z(double xp, double mid_z, double t, double sy, double a0, double a1, double a2) const{
+  // find extrema in the y excursion and the x at which it happens
+  // uses 2nd order polynomial coeficients
+  double yext = 0.0, xext = 0.0;
+  extrema(sy, a0, a1, a2, yext, xext);
+  double xlat = opr_.lateral_socket_radius(), xmed = -opr_.medial_socket_radius();
+  double ylat = gi(xlat, t), ymed = gi(xmed, t), yx =gi(xp,t);
+  double ret_z = 0.0, s = 0.0;
+
+  double zl = zlim(xp-xext);//switch zlim values at xp == xext, not xp == 0
+
+  // Note that it is possible that the mid_z value can be less than the medial socket z
+  // so in this case set the mid value to the socket z value
+
+  double zlp = zlim(1.0);
+  double zlm = zlim(-1.0);
+  if(mid_z < zlp)
+    mid_z = zlp;
+  else if(mid_z < zlm)
+    mid_z = zlm;
+  
+  if(xp>=xext)
+    s = (yx-yext)/(ylat-yext);
+  else
+    s = (yx-yext)/(ymed-yext);
+   ret_z = mid_z*(1-s) + zl*s;
+  if(ret_z<zl)
+    ret_z = zl;
+  return ret_z;
+}
 
 double boxm2_vecf_lid_base::zlim(double xp) const{
   double xlim = opr_.lateral_socket_radius();
   if(xp<0.0)
     xlim = opr_.medial_socket_radius();
-  //double er = opr_.sph_.radius();//was eyelid radius (incorrect)
-   double er = opr_.eyelid_radius();//was eyelid radius (incorrect)
+   double er = opr_.eyelid_radius();
   double arg = er*er - xlim*xlim;
   if(arg<0.0) return 0.0;
   return vcl_sqrt(arg);
 }
 
 double boxm2_vecf_lid_base::zu(double xp, double t) const{
-  double er = opr_.eyelid_radius();
+  double er = opr_.eyelid_radius(); //reconsider
   if(t>=opr_.lower_eyelid_tmin_)
     er = opr_.lid_sph_.radius();
   double r02 = er*er;
@@ -86,4 +178,36 @@ bool boxm2_vecf_lid_base::inside(vgl_point_3d<double> const& p, double tolerance
   double y = p.y();
   bool inside = y<=(y_top + tolerance) && y>=(y_bot-tolerance);
   return inside;
+}
+double boxm2_vecf_lid_base::curve_distance(double t, double x, double y) const{
+  double margin  = 1.5;
+  double xminus = -opr_.medial_socket_radius()*margin;
+  double xplus = opr_.lateral_socket_radius()*margin;
+  double dmin = vcl_numeric_limits<double>::max();
+  for(double xp = xminus; xp<=xplus; xp+=0.1){
+    double dx = xp-x, dy = y-gi(xp,t);
+    double d = vcl_sqrt(dx*dx + dy*dy);
+    if(d<dmin)
+      dmin = d;
+  }
+  return dmin;
+}
+double boxm2_vecf_lid_base::curve_distance(double t, double x, double y, double z) const{
+  double margin  = 1.5;
+  double xminus = -opr_.medial_socket_radius()*margin;
+  double xplus = opr_.lateral_socket_radius()*margin;
+  double dmin = vcl_numeric_limits<double>::max();
+  double xmin, ymin, zmin;// for debug purposes
+  for(double xp = xminus; xp<=xplus; xp+=0.1){
+    double dx = xp-x, dy = y-gi(xp,t), dz = z-Z(xp, t);
+    double d = vcl_sqrt(dx*dx + dy*dy + dz*dz);
+    if(d<dmin){
+      xmin = xp; ymin = gi(xp,t); zmin = Z(xp,t);
+      dmin = d;
+    }
+  }
+  return dmin;
+}
+double boxm2_vecf_lid_base::curve_distance(double t, vgl_point_3d<double> const& p) const{
+  return curve_distance(t, p.x(), p.y(), p.z());
 }

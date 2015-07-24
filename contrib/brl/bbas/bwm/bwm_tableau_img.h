@@ -92,6 +92,7 @@ class bwm_tableau_img : public bwm_tableau, public bgui_picker_tableau
   //: utilities
   void save_spatial_objects_2d();
   void load_spatial_objects_2d();
+  void load_pointset_2d_ascii();
   void save_pointset_2d_ascii();
 
   //: internal detail
