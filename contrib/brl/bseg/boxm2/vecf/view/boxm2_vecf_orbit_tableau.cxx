@@ -31,7 +31,7 @@ void boxm2_vecf_orbit_tableau::set_params(vcl_string const& param_path, bool is_
 
 void boxm2_vecf_orbit_tableau::plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
   double min_tinf = left_params_.lower_eyelid_tmin_;
-  boxm2_vecf_eyelid& lid = boxm2_vecf_eyelid(left_params_, false);
+  boxm2_vecf_eyelid lid = boxm2_vecf_eyelid(left_params_, false);
   if(is_right){
     min_tinf = right_params_.lower_eyelid_tmin_;
     lid = boxm2_vecf_eyelid(right_params_, false);
@@ -51,7 +51,7 @@ void boxm2_vecf_orbit_tableau::plot_inferior_margin(vcl_vector<vgl_point_3d<doub
   }
 }
 void boxm2_vecf_orbit_tableau::plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  boxm2_vecf_eyelid& lid = boxm2_vecf_eyelid(left_params_, true);
+  boxm2_vecf_eyelid lid = boxm2_vecf_eyelid(left_params_, true);
   double lid_t = left_params_.eyelid_tmin_;
   if(is_right){
     lid = boxm2_vecf_eyelid(right_params_, true);
@@ -71,7 +71,7 @@ void boxm2_vecf_orbit_tableau::plot_superior_margin(vcl_vector<vgl_point_3d<doub
   }
 }
 void boxm2_vecf_orbit_tableau::plot_crease(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  boxm2_vecf_eyelid_crease& crease = boxm2_vecf_eyelid_crease(left_params_);
+  boxm2_vecf_eyelid_crease crease = boxm2_vecf_eyelid_crease(left_params_);
   double ct = left_params_.eyelid_crease_ct_;
   if(is_right){
     crease = boxm2_vecf_eyelid_crease(right_params_);

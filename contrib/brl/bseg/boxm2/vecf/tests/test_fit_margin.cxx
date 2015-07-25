@@ -13,7 +13,7 @@
 #include "../boxm2_vecf_fit_orbit.h"
 #include "../boxm2_vecf_fit_margins.h"
 #include <vgl/vgl_sphere_3d.h>
-#define BUILD_FIT_MARGIN
+//#define BUILD_FIT_MARGIN
 #define CRISTINA 1
 #define P069 0
 #define P113 0
@@ -70,7 +70,7 @@ bool good = false;
   if(!good)
     return;
   boxm2_vecf_fit_margins cr_right_fmargs(cr_fo.orbit_data("right_eye_inferior_margin"), cr_fo.orbit_data("right_eye_superior_margin"),
-                                         cr_fo.orbit_data("right_eye_superior_crease"), cr_fo.orbit_data("right_eye_sclera"), rlat, rmed,true);
+                                         cr_fo.orbit_data("right_eye_superior_crease"), rlat, rmed,true);
   cr_right_fmargs.set_initial_guess( cr_fo.right_params());
   cr_right_fmargs.fit(&vcl_cout, true);
   boxm2_vecf_orbit_params cr_rprm = cr_right_fmargs.orbit_parameters();
@@ -109,7 +109,7 @@ bool good = false;
     return;
 
   boxm2_vecf_fit_margins cr_left_fmargs(cr_fo.orbit_data("left_eye_inferior_margin"), cr_fo.orbit_data("left_eye_superior_margin"),
-                                        cr_fo.orbit_data("left_eye_superior_crease"),cr_fo.orbit_data("left_eye_sclera"), llat, lmed);
+                                        cr_fo.orbit_data("left_eye_superior_crease"), llat, lmed);
   cr_left_fmargs.set_initial_guess( cr_fo.left_params());
   cr_left_fmargs.fit(&vcl_cout, true);
   boxm2_vecf_orbit_params cr_lprm = cr_left_fmargs.orbit_parameters();
@@ -169,7 +169,7 @@ bool good = false;
  
   // non-linear fit
   boxm2_vecf_fit_margins p69_right_fmargs(p69_fo.orbit_data("right_eye_inferior_margin"), p69_fo.orbit_data("right_eye_superior_margin"),
-                                          p69_fo.orbit_data("right_eye_superior_crease"), p69_fo.orbit_data("right_sclera"), true);
+                                          p69_fo.orbit_data("right_eye_superior_crease"), true);
   p69_right_fmargs.set_initial_guess( p69_fo.right_params());
   p69_right_fmargs.fit(&vcl_cout, true);
   boxm2_vecf_orbit_params p69_rprm = p69_right_fmargs.orbit_parameters();
@@ -200,7 +200,7 @@ bool good = false;
  
   // non-linear fit
   boxm2_vecf_fit_margins p69_left_fmargs(p69_fo.orbit_data("left_eye_inferior_margin"), p69_fo.orbit_data("left_eye_superior_margin"),
-                                         p69_fo.orbit_data("left_eye_superior_crease"), p69_fo.orbit_data("left_sclera"));
+                                         p69_fo.orbit_data("left_eye_superior_crease") );
   p69_left_fmargs.set_initial_guess( p69_fo.left_params());
   p69_left_fmargs.fit(&vcl_cout, true);
   boxm2_vecf_orbit_params p69_lprm = p69_left_fmargs.orbit_parameters();
