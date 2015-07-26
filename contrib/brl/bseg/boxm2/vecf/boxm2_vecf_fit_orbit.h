@@ -209,7 +209,6 @@ class boxm2_vecf_fit_orbit{
   // Testing the fit
   bool load_orbit_data(vcl_string const& data_desc, vcl_string const& path);
   bool plot_orbit_data(vcl_string const& data_desc, vcl_vector<vgl_point_3d<double> >& data);
-  bool plot_orbit_model(vcl_string const& data_desc, vcl_vector<vgl_point_3d<double> >& model, double xm_min = -15.0, double xm_max = 17.0);
   bool display_orbit_vrml(vcl_ofstream& ostr, bool is_right, bool show_model = true);
   bool display_anchors(vcl_ofstream& ostr, bool is_right);
 
@@ -248,10 +247,6 @@ class boxm2_vecf_fit_orbit{
  private:
   //: the map between string and enum 
   void fill_smid_map();
-  //: for vrml display of the fitted orbit model
-  void plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, bool show_inf_crease, double xm_min, double xm_max);
-  void plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
-  void plot_crease(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
 
   //: helpers for parsing the dlib part file
   bool add_dlib_anchor_part(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,

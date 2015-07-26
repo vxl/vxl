@@ -2,6 +2,7 @@
 #include "boxm2_vecf_fit_orbit.h"
 #include "boxm2_vecf_eyelid.h"
 #include "boxm2_vecf_eyelid_crease.h"
+#include "boxm2_vecf_plot_orbit.h"
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <bvrml/bvrml_write.h>
@@ -376,14 +377,14 @@ bool boxm2_vecf_fit_orbit::left_eye_radius( double& rad){
 // on each side of the eye sphere, i.e., the planar surfaces of the orbit socket
 //
 bool boxm2_vecf_fit_orbit::left_eye_socket_radii_coefs( double& lateral_radius_coef, double& medial_radius_coef){
-  double r = left_params_.lid_sph_.radius();
+  //double r = left_params_.lid_sph_.radius();
+  double r = left_params_.eyelid_radius();//JLM
   double rsq = r*r;
   vcl_map<mids, labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
   vgl_point_3d<double>& le_lc  = lit->second.p3d_;
-
   lit = lpts_.find(LEFT_EYE_MEDIAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -827,53 +828,33 @@ bool boxm2_vecf_fit_orbit::fit_sclera(vcl_string const& data_desc){
   return true;
 }
 void boxm2_vecf_fit_orbit::set_canthus_angle(bool is_right){
-  double xm_min = left_params_.x_min()-3.0;
-  double xm_max = left_params_.x_max()+10.0;
-  if(is_right){
-    xm_min = right_params_.x_min();
-    xm_max = right_params_.x_max();
-  }
-  // scan the margin polynomial curves
+  boxm2_vecf_orbit_params params = left_params_;
+  if(is_right)
+    params = right_params_;
+  double xm_min = params.x_min()-10.0;
+  double xm_max = params.x_max()+10.0;
   vcl_vector<vgl_point_3d<double> > inf_pts, sup_pts;
-  plot_inferior_margin(inf_pts, is_right, false, xm_min, xm_max);
-  plot_superior_margin(sup_pts, is_right,  xm_min, xm_max);
-  // find the inferior and superior crossing points (canthi)
-  int n  = static_cast<int>(inf_pts.size());
+  boxm2_vecf_plot_orbit::plot_inferior_margin(params, is_right, xm_min, xm_max, inf_pts);
+  boxm2_vecf_plot_orbit::plot_superior_margin(params, is_right, xm_min, xm_max, sup_pts);
   int imin = -1, imax = -1;
-  double yinf_pre = inf_pts[0].y();
-  double ysup_pre = sup_pts[0].y();
-  // the sign of this difference will change when curves cross
-  double pre_sign = yinf_pre-ysup_pre;
-  bool done = false;
+  bool success = boxm2_vecf_plot_orbit::plot_limits(inf_pts, sup_pts, imin, imax);
+  if(!success){
+    vcl_cout << "margin limits failed \n";
+    return;
+  }
   double lat_canthus_x= 0.0, lat_canthus_y= 0.0;
   double med_canthus_x= 0.0, med_canthus_y= 0.0; 
-  for(int i =1; i<n&&!done; ++i)
-    {
-      double yinf = inf_pts[i].y(), ysup = sup_pts[i].y();
-      double cur_sign = yinf - ysup;      
-      if(imin == -1 && cur_sign*pre_sign<0){//first sign change
-        imin = i;
-        if(is_right){
-          lat_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          lat_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }else{
-          med_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          med_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }
-        pre_sign = cur_sign;
-      }
-      if(imin>=0 && imax == -1 && cur_sign*pre_sign<0){//second sign change
-        imax = i;
-        done = true;
-        if(is_right){
-          med_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          med_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }else{
-          lat_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          lat_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }
-      }
-    }  
+  if(is_right){
+    lat_canthus_x = 0.5*(inf_pts[imin].x()+ sup_pts[imin].x());
+    lat_canthus_y = 0.5*(inf_pts[imin].y()+ sup_pts[imin].y());
+    med_canthus_x = 0.5*(inf_pts[imax].x()+ sup_pts[imax].x());
+    med_canthus_y = 0.5*(inf_pts[imax].y()+ sup_pts[imax].y());
+  }else{
+    lat_canthus_x = 0.5*(inf_pts[imax].x()+ sup_pts[imax].x());
+    lat_canthus_y = 0.5*(inf_pts[imax].y()+ sup_pts[imax].y());
+    med_canthus_x = 0.5*(inf_pts[imin].x()+ sup_pts[imin].x());
+    med_canthus_y = 0.5*(inf_pts[imin].y()+ sup_pts[imin].y());
+  }
   // temporary print out
   double canthus_ang = vcl_atan((med_canthus_y-lat_canthus_y)/(med_canthus_x - lat_canthus_x));
   if(is_right)
@@ -902,7 +883,8 @@ bool boxm2_vecf_fit_orbit::right_eye_radius( double& rad){
 // on each side of the eye sphere, i.e., the planar surfaces of the orbit socket
 //
 bool boxm2_vecf_fit_orbit::right_eye_socket_radii_coefs( double& lateral_radius_coef, double& medial_radius_coef){
-  double r = right_params_.lid_sph_.radius();
+  //double r = right_params_.lid_sph_.radius();
+  double r = right_params_.eyelid_radius();
   double rsq = r*r;
   vcl_map<mids, labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
@@ -1545,83 +1527,7 @@ bool boxm2_vecf_fit_orbit::load_orbit_data(vcl_string const& data_desc, vcl_stri
   }
 return true;
 }
-//
-// plot points on the inferior margin, given the current estimate of the orbit parameters
-//
-void boxm2_vecf_fit_orbit::plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, bool show_inf_crease, double xm_min, double xm_max){
-  double left_min_tinf = left_params_.lower_eyelid_tmin_;
-  double right_min_tinf = right_params_.lower_eyelid_tmin_;
-  double left_max_tinf = left_params_.lower_eyelid_tmax_;
-  double right_max_tinf = right_params_.lower_eyelid_tmax_;
-  boxm2_vecf_eyelid lelid(left_params_, false);
-  boxm2_vecf_eyelid relid(right_params_, false);
-  for(double xm = xm_min; xm<=xm_max; xm+=0.25){
-    double min_yy=0.0, min_zz = 0.0;
-    double max_yy=0.0, max_zz = 0.0;
-        if(is_right){
-    min_yy = relid.Y(-xm, right_min_tinf);
-    min_zz = relid.Z(-xm, right_min_tinf);
-    max_yy = relid.Y(-xm, right_max_tinf);
-    max_zz = relid.Z(-xm, right_max_tinf);
-    }else{
-        min_yy = lelid.Y(xm, left_min_tinf);
-        min_zz = lelid.Z(xm, left_min_tinf);
-        max_yy = lelid.Y(xm, left_max_tinf);
-        max_zz = lelid.Z(xm, left_max_tinf);
-      }
-    vgl_point_3d<double> min_p(xm, min_yy, min_zz);
-    vgl_point_3d<double> max_p(xm, max_yy, max_zz);
-    pts.push_back(min_p);
-    if(show_inf_crease)
-      pts.push_back(max_p);
-  }
-}
-//
-// plot points on the superior margin, given the current estimate of the orbit parameters
-//
-void boxm2_vecf_fit_orbit::plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  boxm2_vecf_eyelid lelid(left_params_);
-  boxm2_vecf_eyelid relid(right_params_);
-  double lid_t = 0.0;
-  if(is_right)
-    lid_t = right_params_.eyelid_tmin_;
-  else
-    lid_t = left_params_.eyelid_tmin_;
-  for(double xm = xm_min; xm<=xm_max; xm+=0.25){
-    double yy=0.0, zz = 0.0;
-    if(is_right){
-        yy = relid.Y(-xm, lid_t);
-        zz = relid.Z(-xm, lid_t);
-    }else{
-       yy = lelid.Y(xm, lid_t);
-       zz = lelid.Z(xm, lid_t);
-    }
-    vgl_point_3d<double> p(xm, yy, zz);
-      pts.push_back(p);
-  }
-}
-//
-// plot points on the superior crease, given the current estimate of the orbit parameters
-//
-void boxm2_vecf_fit_orbit::plot_crease(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  boxm2_vecf_eyelid_crease lcrease(left_params_);
-  boxm2_vecf_eyelid_crease rcrease(right_params_);
-  double ct = left_params_.eyelid_crease_ct_;
-  if(is_right)
-    ct = right_params_.eyelid_crease_ct_;
-  for(double xm = xm_min; xm<=xm_max; xm+=0.25){
-    double yy=0.0, zz = 0.0;
-  if(is_right){
-    yy = rcrease.Y(-xm, ct);
-    zz = rcrease.Z(-xm, ct);
-    }else{
-       yy = lcrease.Y(xm, ct);
-       zz = lcrease.Z(xm, ct);
-    }
-    vgl_point_3d<double> p(xm, yy, zz);
-    pts.push_back(p);
-  }
-}
+
 //
 // plot the picked point data
 //
@@ -1651,32 +1557,7 @@ bool boxm2_vecf_fit_orbit::plot_orbit_data(vcl_string const& data_desc, vcl_vect
   }
   return true;
 }
-//
-// plot the orbit model: inferior and superior margins, and superior crease
-//
-bool boxm2_vecf_fit_orbit::plot_orbit_model(vcl_string const& data_desc, vcl_vector<vgl_point_3d<double> >& model, double xm_min, double xm_max){
-  vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(data_desc);
-  if(iit == smid_map_.end() ){
-    vcl_cout << "data label " << data_desc << " doesn't exist\n";
-    return false;
-  } 
-  vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
-  if(!pts.size()){
-    vcl_cout << "No data of type " << data_desc << '\n';
-    return false;
-  }
-  bool is_right = iit->second > LEFT_IRIS_RADIUS; 
-  boxm2_vecf_orbit_params params = left_params_;
-  if(is_right)
-    params = right_params_;
-  if(iit->second == LEFT_EYE_INFERIOR_MARGIN || iit->second == RIGHT_EYE_INFERIOR_MARGIN )
-    this->plot_inferior_margin(model, is_right, true, xm_min, xm_max);
-  else if(iit->second == LEFT_EYE_SUPERIOR_MARGIN || iit->second == RIGHT_EYE_SUPERIOR_MARGIN )
-    this->plot_superior_margin(model, is_right, xm_min, xm_max);
-  else if(iit->second == LEFT_EYE_SUPERIOR_CREASE || iit->second == RIGHT_EYE_SUPERIOR_CREASE )
-    this->plot_crease(model, is_right, xm_min, xm_max);
-  return true;
-}
+
 //
 // input spheres for the anchor points
 //
@@ -1856,7 +1737,7 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
   }
   if(show_model){
   vcl_vector<vgl_point_3d<double> > inf_marg_pts;
-  this->plot_inferior_margin(inf_marg_pts, is_right, true, xm_min, xm_max);
+  boxm2_vecf_plot_orbit::plot_inferior_margin(params, is_right, xm_min, xm_max, inf_marg_pts);
   for(vcl_vector<vgl_point_3d<double> >::iterator pit = inf_marg_pts.begin();
       pit != inf_marg_pts.end(); ++pit){
     vgl_point_3d<double> p = *pit;
@@ -1895,7 +1776,7 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
   }
   if(show_model){
   vcl_vector<vgl_point_3d<double> > sup_marg_pts;
-  this->plot_superior_margin(sup_marg_pts, is_right, xm_min, xm_max);
+  boxm2_vecf_plot_orbit::plot_superior_margin(params, is_right, xm_min, xm_max, sup_marg_pts);
   for(vcl_vector<vgl_point_3d<double> >::iterator pit = sup_marg_pts.begin();
       pit != sup_marg_pts.end(); ++pit){
     vgl_point_3d<double> p = *pit;
@@ -1918,7 +1799,7 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
   }
   if(show_model){
   vcl_vector<vgl_point_3d<double> > sup_crease_pts;
-  this->plot_crease(sup_crease_pts, is_right, xm_min, xm_max);
+  boxm2_vecf_plot_orbit::plot_crease(params, is_right, xm_min, xm_max, sup_crease_pts);
   for(vcl_vector<vgl_point_3d<double> >::iterator pit = sup_crease_pts.begin();
       pit != sup_crease_pts.end(); ++pit){
     vgl_point_3d<double> p = *pit;

@@ -33,6 +33,8 @@ vcl_ostream&  operator<<(vcl_ostream& s, boxm2_vecf_orbit_params const& prc){
   s << "phi_rotation_angle(deg): " << pr.dphi_rad_*(180.0/3.14159) << '\n';
   s << "inferior_lid_thickness: " << pr.inferior_lid_thickness() << '\n';
   s << "height_to_width_ratio: " << pr.height_to_width_ratio() << '\n';
+  s << "mid_inf_margin_z: " << pr.mid_inferior_margin_z_<< '\n';
+  s << "mid_sup_margin_z: " << pr.mid_superior_margin_z_<< '\n';
   s << "mid_crease_z: " << pr.mid_eyelid_crease_z_<< '\n';
   s << "inferior_margin_xy_error: " << pr.inferior_margin_xy_error_<< '\n';
   s << "inferior_margin_xyz_error: " << pr.inferior_margin_xyz_error_<< '\n';
@@ -69,6 +71,8 @@ vcl_istream&  operator >>(vcl_istream& s, boxm2_vecf_orbit_params& pr){
   pr.dphi_rad_ = val*3.14159/180.0;
   s >> st >> pr.inferior_lid_radius_offset_;
   s >> st >> val;//do nothing
+  s >> st >> pr.mid_inferior_margin_z_;
+  s >> st >> pr.mid_superior_margin_z_;
   s >> st >> pr.mid_eyelid_crease_z_;
   s >> st >> pr.inferior_margin_xy_error_;
   s >> st >> pr.inferior_margin_xyz_error_;
@@ -76,5 +80,6 @@ vcl_istream&  operator >>(vcl_istream& s, boxm2_vecf_orbit_params& pr){
   s >> st >> pr.superior_margin_xyz_error_;
   s >> st >> pr.superior_crease_xy_error_;
   s >> st >> pr.superior_crease_xyz_error_;
+  pr.init_sphere();
   return s;
 }

@@ -22,6 +22,8 @@ SET(boxm2_vecf_sources
     boxm2_vecf_fit_margins.h                boxm2_vecf_fit_margins.cxx
     boxm2_vecf_appearance_extractor.h       boxm2_vecf_appearance_extractor.cxx
     boxm2_vecf_orbit_param_stats.h          boxm2_vecf_orbit_param_stats.cxx
+    boxm2_vecf_point_cloud_orbit_viewer.h   boxm2_vecf_point_cloud_orbit_viewer.cxx
+    boxm2_vecf_plot_orbit.h                 boxm2_vecf_plot_orbit.cxx
 )
 
 ADD_LIBRARY(boxm2_vecf  ${boxm2_vecf_sources})

@@ -23,9 +23,6 @@ class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
   bool set_image(vcl_string const& image_path);
   void draw_orbit(bool is_right);
  private:
-  void plot_crease(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
-  void plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
-  void plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max);
   bgui_image_tableau_sptr img_tab_;
   bgui_vsol2D_tableau_sptr vsol_tab_;
   boxm2_vecf_orbit_params left_params_;

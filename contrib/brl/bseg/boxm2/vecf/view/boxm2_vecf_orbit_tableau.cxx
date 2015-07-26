@@ -1,4 +1,5 @@
 #include "boxm2_vecf_orbit_tableau.h"
+#include "../boxm2_vecf_plot_orbit.h"
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 #include <vsol/vsol_point_2d.h>
@@ -29,132 +30,31 @@ void boxm2_vecf_orbit_tableau::set_params(vcl_string const& param_path, bool is_
     istr >> left_params_;
 }
 
-void boxm2_vecf_orbit_tableau::plot_inferior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  double min_tinf = left_params_.lower_eyelid_tmin_;
-  boxm2_vecf_eyelid lid = boxm2_vecf_eyelid(left_params_, false);
-  if(is_right){
-    min_tinf = right_params_.lower_eyelid_tmin_;
-    lid = boxm2_vecf_eyelid(right_params_, false);
-  }
-  for(double xm = xm_min; xm<=xm_max; xm+=0.25){
-    double min_yy=0.0, min_zz = 0.0;
-    double max_yy=0.0, max_zz = 0.0;
-        if(is_right){
-    min_yy = lid.Y(-xm, min_tinf);
-    min_zz = lid.Z(-xm, min_tinf);
-    }else{
-        min_yy = lid.Y(xm, min_tinf);
-        min_zz = lid.Z(xm, min_tinf);
-       }
-    vgl_point_3d<double> min_p(xm, min_yy, min_zz);
-    pts.push_back(min_p);
-  }
-}
-void boxm2_vecf_orbit_tableau::plot_superior_margin(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  boxm2_vecf_eyelid lid = boxm2_vecf_eyelid(left_params_, true);
-  double lid_t = left_params_.eyelid_tmin_;
-  if(is_right){
-    lid = boxm2_vecf_eyelid(right_params_, true);
-    lid_t = right_params_.eyelid_tmin_;
-  }
-  for(double xm = xm_min; xm<=xm_max; xm+=0.25){
-    double yy=0.0, zz = 0.0;
-    if(is_right){
-        yy = lid.Y(-xm, lid_t);
-        zz = lid.Z(-xm, lid_t);
-    }else{
-       yy = lid.Y(xm, lid_t);
-       zz = lid.Z(xm, lid_t);
-    }
-    vgl_point_3d<double> p(xm, yy, zz);
-      pts.push_back(p);
-  }
-}
-void boxm2_vecf_orbit_tableau::plot_crease(vcl_vector<vgl_point_3d<double> >& pts, bool is_right, double xm_min, double xm_max){
-  boxm2_vecf_eyelid_crease crease = boxm2_vecf_eyelid_crease(left_params_);
-  double ct = left_params_.eyelid_crease_ct_;
-  if(is_right){
-    crease = boxm2_vecf_eyelid_crease(right_params_);
-    ct = right_params_.eyelid_crease_ct_;
-  }
-  for(double xm = xm_min; xm<=xm_max; xm+=0.25){
-    double yy=0.0, zz = 0.0;
-  if(is_right){
-    yy = crease.Y(-xm, ct);
-    zz = crease.Z(-xm, ct);
-    }else{
-       yy = crease.Y(xm, ct);
-       zz = crease.Z(xm, ct);
-    }
-    vgl_point_3d<double> p(xm, yy, zz);
-    pts.push_back(p);
-  }
-}
-
 void boxm2_vecf_orbit_tableau::draw_orbit(bool is_right){
   // get parameter bounds and model to image transformation parameters
-  double xm_min = left_params_.x_min()-3.0;
-  double xm_max = left_params_.x_max()+3.0;
-  double xtr = left_params_.x_trans();
-  double ytr = left_params_.y_trans();
-  double mm_per_pix = left_params_.mm_per_pix_;
-  double image_height = left_params_.image_height_;
-  if(is_right){
-    xm_min = right_params_.x_min();
-    xm_max = right_params_.x_max();
-    xtr = right_params_.x_trans();
-    ytr = right_params_.y_trans();
-  }
+  boxm2_vecf_orbit_params params = left_params_;
+  if(is_right)
+    params = right_params_;
+  double xm_min = params.x_min()-3.0;
+  double xm_max = params.x_max()+3.0;
+  double xtr = params.x_trans();
+  double ytr = params.y_trans();
+  double mm_per_pix = params.mm_per_pix_;
+  double image_height = params.image_height_;
   // scan the margin and crease polynomial curves
   vcl_vector<vgl_point_3d<double> > crease_pts, inf_pts, sup_pts;
-  plot_inferior_margin(inf_pts, is_right, xm_min, xm_max);
-  plot_superior_margin(sup_pts, is_right, xm_min, xm_max);
-  plot_crease(crease_pts, is_right, xm_min, xm_max);
-  // find the inferior and superior crossing points (canthi)
-  int n  = static_cast<int>(inf_pts.size());
-  int imin = -1, imax = -1;
-  double yinf_pre = inf_pts[0].y();
-  double ysup_pre = sup_pts[0].y();
-  // the sign of this difference will change when curves cross
-  double pre_sign = yinf_pre-ysup_pre;
-  bool done = false;
-  double lat_canthus_x= 0.0, lat_canthus_y= 0.0;
-  double med_canthus_x= 0.0, med_canthus_y= 0.0; 
-  for(int i =1; i<n&&!done; ++i)
-    {
-      double yinf = inf_pts[i].y(), ysup = sup_pts[i].y();
-      double cur_sign = yinf - ysup;      
-      if(imin == -1 && cur_sign*pre_sign<0){//first sign change
-        imin = i;
-        if(is_right){
-          lat_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          lat_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }else{
-          med_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          med_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }
-        pre_sign = cur_sign;
-      }
-      if(imin>=0 && imax == -1 && cur_sign*pre_sign<0){//second sign change
-        imax = i;
-        done = true;
-        if(is_right){
-          med_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          med_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }else{
-          lat_canthus_x = 0.5*(inf_pts[i].x()+ sup_pts[i].x());
-          lat_canthus_y = 0.5*(inf_pts[i].y()+ sup_pts[i].y());
-        }
-      }
-    }  
-  // temporary print out
-  double canthus_ang = vcl_atan((med_canthus_y-lat_canthus_y)/(med_canthus_x - lat_canthus_x));
-  if(is_right)
-    vcl_cout << "RIGHT CANTHUS ANGLE (IMAGE) " << canthus_ang*180.0/3.14159 << '\n' << vcl_flush;
-  else
-    vcl_cout << "LEFT CANTHUS ANGLE (IMAGE) " << canthus_ang*180.0/3.14159 << '\n' << vcl_flush;
+  boxm2_vecf_plot_orbit::plot_inferior_margin(params, is_right, xm_min, xm_max, inf_pts);
+  boxm2_vecf_plot_orbit::plot_superior_margin(params, is_right, xm_min, xm_max, sup_pts);
+  boxm2_vecf_plot_orbit::plot_crease(params, is_right, xm_min, xm_max, crease_pts);
+  int imin=-1, imax=-1;
+  bool good = boxm2_vecf_plot_orbit::plot_limits(inf_pts, sup_pts, imin, imax);
+  if(!good){
+    vcl_cout << "determine plot limits failed \n";
+    return;
+  }
+  //shouldn't happen but just in case...
   if(imin == -1) imin = 0;
-  if(imax == -1) imax = n-1;
+  if(imax == -1) imax = static_cast<int>(inf_pts.size());
 
   // prepare vsol polyline curves for tableau display
   vcl_vector<vsol_point_2d_sptr> vsol_pts;
