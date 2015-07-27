@@ -18,6 +18,7 @@
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/ocl/algo/boxm2_ocl_expected_image_renderer.h>
 #include <boxm2/ocl/algo/boxm2_ocl_depth_renderer.h>
+#include <boxm2/vecf/ocl/boxm2_vecf_ocl_vector_field.h>
 //: Map a scene with Euclidean and anisotropic scale transforms.
 // the input transform is the inverse so that the target scene voxels
 // are mapped backwards to extract the data from the source
@@ -57,12 +58,14 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
                               bool finish = true);
 
 
-  //: warps using similarty transform + general vector field stored in type BOXM2_VEC3D
+  //: warps using similarty transform
   bool transform_1_blk_interp_trilin(vgl_rotation_3d<double>  rot,
                                      vgl_vector_3d<double> trans,
                                      vgl_vector_3d<double> scale,
-                                     vcl_string vecf_ident,
                                      bool finish);
+
+  //: warps using general vector field
+  bool transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field, bool finish);
 
   //:render the current state of the target scene leaving scene GPU buffers in place
   // thus rendering can be faster since block buffer transfers are not needed
@@ -84,6 +87,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //bool compile_trans_kernel();
   bool compile_trans_interp_kernel();
   bool compile_trans_interp_trilin_kernel();
+  bool compile_trans_interp_vecf_trilin_kernel();
   bool init_ocl_trans();
   bool get_scene_appearance(boxm2_scene_sptr scene,
                             vcl_string&      options);
@@ -99,6 +103,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //bocl_kernel * trans_kern;
   bocl_kernel * trans_interp_kern;
   bocl_kernel * trans_interp_trilin_kern;
+  bocl_kernel * trans_interp_vecf_trilin_kern;
   float* translation_buff;
   float* rotation_buff;
   float* scale_buff;

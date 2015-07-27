@@ -237,13 +237,9 @@ __kernel void warp_and_resample_trilinear_vecf(__constant  float           * cen
                                                __global    float           * source_scene_alpha_array,//10      // alpha for each block
                                                __global    MOG_TYPE        * source_scene_mog_array,//11        // appearance for each block
                                                //                                          __global    ushort4         * source_nobs_array,
-                                               __global    float           * translation,//12
-                                               __global    float           * rotation,//13
-                                               __global    float           * scale,//14
                                                __global    float4          * vector_field, //15
                                                __global    int             * max_depth,//16               // coarsness or fineness
                                                //at which voxels should be matched.
-                                               __global    float8          * output,//17
                                                __local     uchar           * cumsum_wkgp,//18
                                                __local     uchar16         * local_trees_target,//19
                                                __local     uchar16         * local_trees_source,
@@ -299,9 +295,9 @@ __kernel void warp_and_resample_trilinear_vecf(__constant  float           * cen
           float yg = target_scene_linfo->origin.y + ((float)index_y+centerY[i])*target_scene_linfo->block_len ;
           float zg = target_scene_linfo->origin.z + ((float)index_z+centerZ[i])*target_scene_linfo->block_len ;
 
-          float txg = vector_field[dataIndex].x + scale[0]*(rotation[0]*xg +rotation[1]*yg + rotation[2]*zg) + translation[0];
-          float tyg = vector_field[dataIndex].y + scale[1]*(rotation[3]*xg +rotation[4]*yg + rotation[5]*zg) + translation[1];
-          float tzg = vector_field[dataIndex].z + scale[2]*(rotation[6]*xg +rotation[7]*yg + rotation[8]*zg) + translation[2];
+          float txg = xg + vector_field[dataIndex].x;
+          float tyg = yg + vector_field[dataIndex].y;
+          float tzg = zg + vector_field[dataIndex].z;
 
           // float txg = xg; float tyg= yg; float tzg = zg;
           // is the transformed point inside the source domain
@@ -367,8 +363,6 @@ __kernel void warp_and_resample_trilinear_vecf(__constant  float           * cen
                   abs_neighbors[4].z = abs_neighbors[5].z =abs_neighbors[6].z = abs_neighbors[7].z = cell_center.z ; // z-top neighbor  is the  cell center
                 }
 
-                float8 out_local = output[dataIndex];
-                float* tmp_out =(float*) &out_local;
                 if (abs_neighbors[0].x == abs_neighbors[2].x || abs_neighbors[0].y == abs_neighbors[1].y || abs_neighbors[0].z == abs_neighbors[4].z )
                   continue;
                 int nb_count = 0; float sum = 0;
@@ -420,9 +414,6 @@ __kernel void warp_and_resample_trilinear_vecf(__constant  float           * cen
 #endif
                 target_scene_alpha_array[dataIndex] = alpha_interped;
                 target_scene_mog_array[dataIndex] = mog_interped;
-                output[dataIndex] = out_local;
-
-
               }
             }
           }

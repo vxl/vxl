@@ -15,6 +15,8 @@ SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_filter.h                           boxm2_vecf_ocl_filter.cxx
     boxm2_vecf_ocl_transform_scene_sptr.h
     boxm2_vecf_ocl_orbit_scene.h                boxm2_vecf_ocl_orbit_scene.cxx
+    boxm2_vecf_ocl_vector_field.h
+    boxm2_vecf_ocl_similarity_transform.h        boxm2_vecf_ocl_similarity_transform.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_ocl_sources)
