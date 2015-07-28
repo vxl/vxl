@@ -5,6 +5,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vgl/vgl_point_3d.h>
+#include <vcl_vector.h>
 #include <vcl_utility.h>
 
 #include "boxm2_vecf_vector_field.h"

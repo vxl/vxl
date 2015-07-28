@@ -29,6 +29,8 @@ SET(boxm2_vecf_sources
     boxm2_vecf_landmark_warp.h              boxm2_vecf_landmark_warp.cxx
 )
 
+AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_sources)
+
 ADD_LIBRARY(boxm2_vecf  ${boxm2_vecf_sources})
 TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_io brip baio bvrml vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
 IF(OPENCL_FOUND)
