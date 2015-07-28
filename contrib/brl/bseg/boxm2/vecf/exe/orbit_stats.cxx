@@ -63,6 +63,19 @@ int main(int argc, char ** argv)
   ops.print_xy_fitting_error();
   vcl_cout << "\n\n======= xyz fitting errors =========\n";
   ops.print_xyz_fitting_error();
+  vcl_string merged_plot_path = base_dir + "merged_plot.wrl";
+  vcl_ofstream mstr(merged_plot_path.c_str());
+  if(!mstr){
+    vcl_cout << merged_plot_path << " not valid\n";
+    return -1;
+  }
+  bool good = ops.merge_margins_and_crease();
+  if(!good)
+    return -1;
+  good = ops.plot_merged_margins(mstr);
+  if(!good)
+    return -1;
+
   return 0;
 }
 

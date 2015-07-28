@@ -57,6 +57,9 @@ int main(int argc, char ** argv)
   vcl_string right_superior_crease_path = base_dir + patient_id + "_right_superior_crease.txt";
   vcl_string right_vrml_path = base_dir + patient_id + "_right_orbit_plot.wrl";
   vcl_string right_param_path = base_dir + patient_id + "_right_orbit_params.txt";
+
+  vcl_string left_right_merge_path = base_dir + patient_id + "_left_right_merge_plot.wrl";
+
   boxm2_vecf_fit_orbit fo;
   bool good = true;
   /// left eye processing
@@ -71,16 +74,15 @@ int main(int argc, char ** argv)
         vcl_cout << "failed to read left sclera file\n";
     return -1;
   }
-  good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_surface_path);
+  good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_surface_path, false);
   if(!good){
-          good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_margin_path);
-          if(!good){
-        vcl_cout << "failed to read left inferior lid surface file  or next best choice the left_inferior_margin file\n";
-        return -1;
-          }else{
-            fo.set_has_inferior_surface(false);
-            vcl_cout << "Substituted the inferior margin file instead -- Not Fatal\n";
-          }
+    good = fo.load_orbit_data("left_eye_inferior_lid_surface", left_inferior_margin_path);
+    if(!good){
+      vcl_cout << "failed to read left inferior lid surface file  or next best choice the left_inferior_margin file\n";
+      return -1;
+    }else{
+      fo.set_has_inferior_surface(false);
+    }
   }
   }else{
     good = fo.read_dlib_part_file(left_dlib_path);
@@ -100,17 +102,17 @@ int main(int argc, char ** argv)
     vcl_cout << "failed to read right sclera file\n";
     return -1;
   }
- good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_surface_path);
- if(!good){
+  good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_surface_path, false);
+  if(!good){
     vcl_cout << "failed to read right inferior lid surface file\n";
-         good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_margin_path);
-          if(!good){
-        vcl_cout << "failed to read right inferior lid surface file  or next best choice, the right_inferior_margin file\n";
-        return -1;
-          }else{
-                  vcl_cout << "Substituted the inferior margin file instead -- Not Fatal\n";
-          }
+    good = fo.load_orbit_data("right_eye_inferior_lid_surface", right_inferior_margin_path);
+    if(!good){
+      vcl_cout << "failed to read right inferior lid surface file  or next best choice, the right_inferior_margin file\n";
+      return -1;
+    }else{
+      fo.set_has_inferior_surface(false);
     }
+  }
   }else{
     good = fo.read_dlib_part_file(right_dlib_path);
     if(!good)
@@ -127,15 +129,12 @@ int main(int argc, char ** argv)
   if(fo.from_image_data())
     fo.normalize_eye_data();
 
+
   good = fo.fit_left();
   if(!good){
     vcl_cout << "left orbit parameter fit failed\n";
     return -1;
   }
-  boxm2_vecf_orbit_params lpr = fo.left_params();
-  vcl_cout << "\n>>>Left Orbit Parameters "<< patient_id << " <<<\n";
-  vcl_cout << lpr;
-  
 
   good = fo.fit_right();
   if(!good){
@@ -143,16 +142,13 @@ int main(int argc, char ** argv)
     return -1;
   }
 
-  boxm2_vecf_orbit_params rpr = fo.right_params();
-  vcl_cout << "\n>>>Right Orbit Parameters "<< patient_id << " <<<\n";
-  vcl_cout << rpr;
 
   if(!from_dlib){
     fo.load_orbit_data("right_eye_inferior_margin", right_inferior_margin_path);
     fo.load_orbit_data("right_eye_superior_margin", right_superior_margin_path);
     fo.load_orbit_data("right_eye_superior_crease", right_superior_crease_path);
   }
-
+  vcl_cout << "\n>>>Processing "<< patient_id << " right eye <<<\n";
   // non-linear fit
   if(do_non_lin){
     vgl_point_3d<double> rlat, rmed;
@@ -169,7 +165,11 @@ int main(int argc, char ** argv)
     boxm2_vecf_fit_margins right_fmargs(fo.orbit_data("right_eye_inferior_margin"), fo.orbit_data("right_eye_superior_margin"),
         fo.orbit_data("right_eye_superior_crease"), rlat, rmed,true);
     right_fmargs.set_initial_guess(fo.right_params());
-    right_fmargs.fit(&vcl_cout, true);
+    double rer = right_fmargs.fit(&vcl_cout, true);
+    if(rer == -1){
+      vcl_cout << "non-linear fit for right eye failed \n";
+      return -1;
+    }
     boxm2_vecf_orbit_params rprm = right_fmargs.orbit_parameters();
     fo.set_right_params(rprm); 
     vcl_string right_marg_path = base_dir + patient_id +"_right_margin_fit.txt";
@@ -202,6 +202,7 @@ int main(int argc, char ** argv)
   }
 
 
+  vcl_cout << "\n>>>Processing "<< patient_id << " left eye <<<\n";
   // non-linear fit
   if(do_non_lin){
     vgl_point_3d<double> llat, lmed;
@@ -218,7 +219,11 @@ int main(int argc, char ** argv)
     boxm2_vecf_fit_margins left_fmargs(fo.orbit_data("left_eye_inferior_margin"), fo.orbit_data("left_eye_superior_margin"),
                                        fo.orbit_data("left_eye_superior_crease"),  llat, lmed);
     left_fmargs.set_initial_guess(fo.left_params());
-    left_fmargs.fit(&vcl_cout, true);
+    double ler = left_fmargs.fit(&vcl_cout, true);
+    if(ler == -1){
+      vcl_cout << "non-linear fit for left eye failed \n";
+      return -1;
+    }
     boxm2_vecf_orbit_params lprm = left_fmargs.orbit_parameters();
     fo.set_left_params(lprm); 
     vcl_string left_marg_path = base_dir + patient_id +"_left_margin_fit.txt";
@@ -248,7 +253,12 @@ int main(int argc, char ** argv)
    vcl_ofstream lpstr(left_param_path.c_str());
   lpstr << fo.left_params() << '\n';
   lpstr.close();
+
+  vcl_ofstream lrmstr(left_right_merge_path.c_str());
+  good = fo.display_left_right_orbit_model_vrml(lrmstr);
+  lrmstr.close();
   
+
   return 0;
 }
 

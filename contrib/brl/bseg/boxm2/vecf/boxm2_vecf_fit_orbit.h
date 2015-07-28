@@ -207,10 +207,12 @@ class boxm2_vecf_fit_orbit{
   void set_right_ang_rad(double& ang_rad);
 
   // Testing the fit
-  bool load_orbit_data(vcl_string const& data_desc, vcl_string const& path);
+  bool load_orbit_data(vcl_string const& data_desc, vcl_string const& path, bool error_msg = true);
   bool plot_orbit_data(vcl_string const& data_desc, vcl_vector<vgl_point_3d<double> >& data);
-  bool display_orbit_vrml(vcl_ofstream& ostr, bool is_right, bool show_model = true);
   bool display_anchors(vcl_ofstream& ostr, bool is_right);
+  bool display_orbit_vrml(vcl_ofstream& ostr, bool is_right, bool show_model = true);
+  bool display_left_right_orbit_model_vrml(vcl_ofstream& os);
+
 
   bool fitting_error(vcl_string const& data_desc);
 

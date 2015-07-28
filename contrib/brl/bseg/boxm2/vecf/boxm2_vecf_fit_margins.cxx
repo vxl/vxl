@@ -119,12 +119,6 @@ margin_residual_function(vcl_vector<vgl_point_2d<double> >  const& inf_pts,
 }
 
 double boxm2_vecf_fit_margins::fit(vcl_ostream* outstream, bool verbose){
-#if 0
-  if(outstream&&verbose){
-    *outstream << " Initial parameters \n";
-    *outstream << opr_ << '\n';
-  }
-#endif
   double dtrx = opr_.trans_x_, dtry = opr_.trans_y_, dtrz = opr_.trans_z_; 
 
   margin_residual_function mrf(inferior_margin_pts_, superior_margin_pts_, superior_crease_pts_,lateral_canthus_, medial_canthus_, opr_, is_right_);
@@ -163,11 +157,6 @@ double boxm2_vecf_fit_margins::fit(vcl_ostream* outstream, bool verbose){
   opr_.scale_y_coef_ =              xm_init[4];
   opr_.eyelid_crease_scale_y_coef_= xm_init[5];
   opr_.dphi_rad_ =                  xm_init[6];
-
-  if(outstream && verbose){
-    *outstream << " Final parameters \n";
-    *outstream << opr_ << '\n';
-  }
 
   double dsum = 0.0;
   return dsum;

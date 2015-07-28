@@ -1499,15 +1499,17 @@ void boxm2_vecf_fit_orbit::set_right_params(boxm2_vecf_orbit_params const& param
   right_params_ = params;
   right_params_.init_sphere();
 }
-bool boxm2_vecf_fit_orbit::load_orbit_data(vcl_string const& data_desc, vcl_string const& path){
+bool boxm2_vecf_fit_orbit::load_orbit_data(vcl_string const& data_desc, vcl_string const& path, bool error_msg){
   vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
-    vcl_cout << "data label " << data_desc << " doesn't exist\n";
+    if(error_msg)
+      vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
   } 
   vcl_ifstream istr(path.c_str());
   if(!istr.is_open()){
-    vcl_cout << "data file for type "<< data_desc << " at " << path << " not found\n";
+    if(error_msg)
+      vcl_cout << "data file for type "<< data_desc << " at " << path << " not found\n";
     return false;
   }
   // this loop termination may look strange
@@ -1810,6 +1812,91 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right,
   }
   this->display_anchors(ostr, is_right);
   ostr.close();
+  return true;
+}
+
+//compare the fitted orbit model for the left and right eye
+bool boxm2_vecf_fit_orbit::display_left_right_orbit_model_vrml(vcl_ofstream& os){
+  if(!os)
+    return false;
+  bvrml_write::write_vrml_header(os);
+  boxm2_vecf_orbit_params& lp = left_params_;
+  boxm2_vecf_orbit_params& rp = right_params_;
+
+  // plot left eye 
+  double xm_min_left = lp.x_min()-10.0;
+  double xm_max_left = lp.x_max()+10.0;
+  vgl_vector_3d<double> vl(0.0, 0.0, lp.eyelid_radius());
+  vcl_vector<vgl_point_3d<double> > left_inf_pts, left_sup_pts, left_crease_pts;
+  boxm2_vecf_plot_orbit::plot_inferior_margin(lp, false, xm_min_left, xm_max_left, left_inf_pts);
+  boxm2_vecf_plot_orbit::plot_superior_margin(lp, false, xm_min_left, xm_max_left, left_sup_pts);
+  boxm2_vecf_plot_orbit::plot_crease(lp, false, xm_min_left, xm_max_left, left_crease_pts);
+  int left_imin = -1, left_imax = -1;
+  bool success = boxm2_vecf_plot_orbit::plot_limits(left_inf_pts, left_sup_pts, left_imin, left_imax);
+  if(!success){
+    vcl_cout << "Find left plot limits failed\n";
+    return false;
+  }
+  // plot right eye 
+  double xm_min_right = rp.x_min()-10.0;
+  double xm_max_right = rp.x_max()+10.0;
+  vgl_vector_3d<double> vr(0.0, 0.0, rp.eyelid_radius());
+  vcl_vector<vgl_point_3d<double> > right_inf_pts, right_sup_pts, right_crease_pts;
+  boxm2_vecf_plot_orbit::plot_inferior_margin(rp, false, xm_min_right, xm_max_right, right_inf_pts);
+  boxm2_vecf_plot_orbit::plot_superior_margin(rp, false, xm_min_right, xm_max_right, right_sup_pts);
+  boxm2_vecf_plot_orbit::plot_crease(rp, false, xm_min_right, xm_max_right, right_crease_pts);
+  int right_imin = -1, right_imax = -1;
+  success = boxm2_vecf_plot_orbit::plot_limits(right_inf_pts, right_sup_pts, right_imin, right_imax);
+  if(!success){
+    vcl_cout << "Find right plot limits failed\n";
+    return false;
+  }
+  float r = 0.5f;
+  vgl_point_3d<double> pd;
+  vgl_point_3d<float> pf;
+
+  // write vrml left orbit
+  for(int i = left_imin; i<=left_imax; ++i){
+     pd = left_inf_pts[i]-vl;
+     pf.set(static_cast<float>(pd.x()),
+            static_cast<float>(pd.y()),
+            static_cast<float>(pd.z()));
+    vgl_sphere_3d<float> spi(pf, r);
+    bvrml_write::write_vrml_sphere(os, spi, 1.0f, 1.0f, 0.0f);
+    pd = left_sup_pts[i]-vl;
+    pf.set(static_cast<float>(pd.x()),
+           static_cast<float>(pd.y()),
+           static_cast<float>(pd.z()));
+    vgl_sphere_3d<float> sps(pf, r);
+    bvrml_write::write_vrml_sphere(os, sps, 1.0f, 0.0f, 0.0f);
+    pd = left_crease_pts[i]-vl;
+    pf.set(static_cast<float>(pd.x()),
+           static_cast<float>(pd.y()),
+           static_cast<float>(pd.z()));
+    vgl_sphere_3d<float> spc(pf, r);
+    bvrml_write::write_vrml_sphere(os, spc, 0.0f, 1.0f, 1.0f);
+  }
+  // write vrml right orbit
+  for(int i = right_imin; i<=right_imax; ++i){
+     pd = right_inf_pts[i]-vr;
+     pf.set(static_cast<float>(pd.x()),
+            static_cast<float>(pd.y()),
+            static_cast<float>(pd.z()));
+    vgl_sphere_3d<float> spi(pf, r);
+    bvrml_write::write_vrml_sphere(os, spi, 1.0f, 1.0f, 0.5f);
+    pd = right_sup_pts[i]-vr;
+    pf.set(static_cast<float>(pd.x()),
+           static_cast<float>(pd.y()),
+           static_cast<float>(pd.z()));
+    vgl_sphere_3d<float> sps(pf, r);
+    bvrml_write::write_vrml_sphere(os, sps, 1.0f, 0.5f, 0.5f);
+    pd = right_crease_pts[i]-vr;
+    pf.set(static_cast<float>(pd.x()),
+           static_cast<float>(pd.y()),
+           static_cast<float>(pd.z()));
+    vgl_sphere_3d<float> spc(pf, r);
+    bvrml_write::write_vrml_sphere(os, spc, 0.5f, 1.0f, 1.0f);
+  }
   return true;
 }
 //
