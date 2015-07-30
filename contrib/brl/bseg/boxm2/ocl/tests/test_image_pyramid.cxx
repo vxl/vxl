@@ -38,10 +38,10 @@ void print_column_major( float* buffer, int nrows, int ncols, int elementSize=4)
 void test_image()
 {
   //load BOCL stuff
-  bocl_manager_child* mgr = bocl_manager_child::instance();
-  if (mgr->gpus_.size()==0)
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  if (mgr.gpus_.size()==0)
     return;
-  bocl_device_sptr device = mgr->gpus_[0];
+  bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;
@@ -146,10 +146,10 @@ void test_image()
 void test_ray_pyramid()
 {
   //load BOCL stuff
-  bocl_manager_child* mgr = bocl_manager_child::instance();
-  if (mgr->gpus_.size()==0)
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  if (mgr.gpus_.size()==0)
     return;
-  bocl_device_sptr device = mgr->gpus_[0];
+  bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;

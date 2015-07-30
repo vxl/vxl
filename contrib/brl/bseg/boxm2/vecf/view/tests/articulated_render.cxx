@@ -104,12 +104,12 @@ int main(int argc, char ** argv)
   vcl_string device_name = "gpu";
     bocl_device_sptr  device( NULL );
     //make bocl manager
-    bocl_manager_child_sptr mgr =bocl_manager_child::instance();
+    bocl_manager_child &mgr =bocl_manager_child::instance();
     if(device_name=="gpu" || device_name =="")
     {
         vcl_vector<bocl_device_sptr> devices;
-        for(unsigned i = 0; i < mgr->gpus_.size(); i++)
-          devices.push_back( mgr->gpus_[i] );
+        for(unsigned i = 0; i < mgr.gpus_.size(); i++)
+          devices.push_back( mgr.gpus_[i] );
         if(device_id >= devices.size()){
             vcl_cout << "GPU index out of bounds" << vcl_endl;
             return -1;

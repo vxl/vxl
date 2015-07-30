@@ -25,18 +25,18 @@ bool test_opencl_cache2()
   boxm2_ocl_test_utils::create_test_simple_scene(scene1);
   boxm2_ocl_test_utils::create_test_simple_scene(scene2);
   //set up openCL
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
+  bocl_manager_child &mgr = bocl_manager_child::instance();
 
   unsigned gpu_idx = 0;
 
-  if (mgr->numGPUs()<1) {
+  if (mgr.numGPUs()<1) {
     vcl_cerr << "No GPU available\n";
     return false;
   }
-  if (mgr->numGPUs()==1) gpu_idx = 0;
-  if (mgr->numGPUs()==2) gpu_idx = 1;
+  if (mgr.numGPUs()==1) gpu_idx = 0;
+  if (mgr.numGPUs()==2) gpu_idx = 1;
 
-  bocl_device_sptr device = mgr->gpus_[gpu_idx];
+  bocl_device_sptr device = mgr.gpus_[gpu_idx];
 
   boxm2_lru_cache::create(scene1);
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);

@@ -42,7 +42,7 @@ class bocl_manager
   virtual ~bocl_manager();
 
   //: Use this instead of constructor
-  static T* instance();
+  static T& instance();
 
   //: Queries found platforms, creates a list of CPU and GPU devices
   bool initialize_cl();
@@ -80,10 +80,6 @@ class bocl_manager
   //: Constructor
   bocl_manager() {}
 
-  //Singleton instance of the manager
-  static T* instance_;
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // OLD helper methods/ deprecated
 ////////////////////////////////////////////////////////////////////////////////
@@ -106,25 +102,30 @@ class bocl_manager
 
   //build kernel program:
   int build_kernel_program(cl_program & program, vcl_string options);
+
+ private:
+  // prevent users from making copies of the singleton.
+  //: Copy constructor
+  bocl_manager(bocl_manager<T> const& og) {}
+  //: assignment operator
+  bocl_manager operator = (bocl_manager<T> const& rhs) {}
+
 };
 
-class bocl_manager_child: public bocl_manager<bocl_manager_child>, public vbl_ref_count
+class bocl_manager_child: public bocl_manager<bocl_manager_child>
 {
- public:
+  // friend class to allow the constructor to be called
+  friend class bocl_manager<bocl_manager_child>;
+ private:
   bocl_manager_child() : bocl_manager<bocl_manager_child>() {}
   ~bocl_manager_child() {}
 };
 
-typedef vbl_smart_ptr<bocl_manager_child> bocl_manager_child_sptr;
 //: Binary write boxm2_scene scene to stream
 void vsl_b_write(vsl_b_ostream& os, bocl_manager_child const& scene);
 void vsl_b_write(vsl_b_ostream& os, const bocl_manager_child* &p);
-void vsl_b_write(vsl_b_ostream& os, bocl_manager_child_sptr& sptr);
-void vsl_b_write(vsl_b_ostream& os, bocl_manager_child_sptr const& sptr);
 
 //: Binary load boxm2_scene scene from stream.
 void vsl_b_read(vsl_b_istream& is, bocl_manager_child &scene);
 void vsl_b_read(vsl_b_istream& is, bocl_manager_child* p);
-void vsl_b_read(vsl_b_istream& is, bocl_manager_child_sptr& sptr);
-void vsl_b_read(vsl_b_istream& is, bocl_manager_child_sptr const& sptr);
 #endif // bocl_manager_h_

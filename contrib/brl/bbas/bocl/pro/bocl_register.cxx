@@ -11,7 +11,6 @@
 void bocl_register::register_datatype()
 {  
 
-    REGISTER_DATATYPE( bocl_manager_child_sptr );
     REGISTER_DATATYPE( bocl_device_sptr );
 
 }

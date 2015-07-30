@@ -83,11 +83,11 @@ int main(int argc,  char** argv)
 
   boxm2_lru_cache::create(sceneA);
   boxm2_cache_sptr cache =boxm2_cache::instance();
-  bocl_manager_child_sptr mgr =bocl_manager_child::instance();
-  if (mgr->gpus_.size()==0)
+  bocl_manager_child &mgr =bocl_manager_child::instance();
+  if (mgr.gpus_.size()==0)
     return false;
 
-  bocl_device_sptr  device = mgr->gpus_[1];
+  bocl_device_sptr  device = mgr.gpus_[1];
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
 
   vnl_vector<double> x(7,0.0);    

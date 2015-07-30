@@ -396,11 +396,11 @@ void test_filter_kernel()
   REGISTER_DATATYPE(boxm2_scene_sptr);
   REGISTER_DATATYPE(bocl_device_sptr);
 
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
-  if (mgr->gpus_.size()==0)
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  if (mgr.gpus_.size()==0)
     return;
 
-  bocl_device_sptr device = mgr->gpus_[0];
+  bocl_device_sptr device = mgr.gpus_[0];
   bocl_kernel* kern = new bocl_kernel();
   boxm2_ocl_filter_process_globals::compile_filter_kernel(device,kern);
 

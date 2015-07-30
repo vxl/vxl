@@ -133,8 +133,8 @@ int main(int argc,  char** argv)
 
     //create scene
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
-    bocl_manager_child_sptr mgr =bocl_manager_child::instance();
-    bocl_device_sptr device = mgr->gpus_[2];
+    bocl_manager_child &mgr =bocl_manager_child::instance();
+    bocl_device_sptr device = mgr.gpus_[2];
 
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);

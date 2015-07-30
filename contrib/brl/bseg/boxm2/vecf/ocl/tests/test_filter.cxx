@@ -38,9 +38,9 @@ void test_filter()
   boxm2_scene_sptr temp_scene = source_scene->clone_no_disk();
   boxm2_lru_cache::create(source_scene);
 
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
+  bocl_manager_child &mgr = bocl_manager_child::instance();
   unsigned gpu_idx = 1; //on JLM's alienware
-  bocl_device_sptr device = mgr->gpus_[gpu_idx];
+  bocl_device_sptr device = mgr.gpus_[gpu_idx];
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
   boxm2_vecf_ocl_filter f(source_scene, temp_scene, opencl_cache);
   vcl_vector<float> coefs(8,0.125f);

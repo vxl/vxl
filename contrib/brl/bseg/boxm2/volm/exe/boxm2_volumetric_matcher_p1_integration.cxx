@@ -221,9 +221,9 @@ int main(int argc, char** argv)
   vcl_cout << "==================================================================================================\n\n";
 
   // define device that will be used
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
-  if (dev_id() >= (unsigned)mgr->numGPUs()) {
-    log << " ERROR: GPU is " << dev_id() << " is invalid, only " << mgr->numGPUs() << " are available\n";
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  if (dev_id() >= (unsigned)mgr.numGPUs()) {
+    log << " ERROR: GPU is " << dev_id() << " is invalid, only " << mgr.numGPUs() << " are available\n";
     if (do_log) {
       volm_io::write_log(out_folder(), log.str());
       volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR);
@@ -233,7 +233,7 @@ int main(int argc, char** argv)
   }
   vcl_cout << "\n==================================================================================================\n"
            << "\t\t  3. Following device is used for volm_matcher\n"
-           << "\t\t  " << mgr->gpus_[dev_id()]->info() << '\n'
+           << "\t\t  " << mgr.gpus_[dev_id()]->info() << '\n'
            << "\n==================================================================================================" << vcl_endl;
 
   // check the geo_hypo_folder and geo_index_folder
@@ -295,7 +295,7 @@ int main(int argc, char** argv)
   // start the volm_matcher
   bool is_last_pass = false;
   boxm2_volm_matcher_p1 obj_ps1_matcher(cam_space, query, leaves, buffer_capacity(), geo_index_folder(), tile_id(),
-                                        depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
+                                        depth_interval, cand_poly, mgr.gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
                                         threshold(), max_cam_per_loc(), weights);
 
   if (!obj_ps1_matcher.volm_matcher_p1()) {

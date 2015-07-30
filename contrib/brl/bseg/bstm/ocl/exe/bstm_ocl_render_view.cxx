@@ -69,7 +69,7 @@ int main(int argc, char ** argv)
     vul_arg_parse(argc, argv);
 
     //make bocl manager
-    bocl_manager_child_sptr mgr =bocl_manager_child::instance();
+    bocl_manager_child* mgr =bocl_manager_child::instance();
     if (gpu_idx() >= mgr->gpus_.size()){
       vcl_cout << "GPU index out of bounds" << vcl_endl;
       return -1;

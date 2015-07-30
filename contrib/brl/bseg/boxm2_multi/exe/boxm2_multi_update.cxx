@@ -49,19 +49,19 @@ int main(int argc,  char** argv)
   boxm2_scene_sptr scene = new boxm2_scene(scene_file());
 
   //make bocl manager (handles a lot of OpenCL stuff)
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
+  bocl_manager_child &mgr = bocl_manager_child::instance();
 
   
   //make a multicache
-  if ( numGPU() > mgr->gpus_.size() ) {
-    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl;
+  if ( numGPU() > mgr.gpus_.size() ) {
+    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr.gpus_.size()<<" available"<<vcl_endl;
     return -1;
   }
 
   //grab the number of devices specified
   vcl_vector<bocl_device_sptr> gpus;
   for (unsigned int i=0; i<numGPU(); ++i)
-    gpus.push_back(mgr->gpus_[i]);
+    gpus.push_back(mgr.gpus_[i]);
   boxm2_multi_cache mcache(scene, gpus);
   vcl_cout<<"Multi Cache:\n"<<mcache.to_string()<<vcl_endl;
 

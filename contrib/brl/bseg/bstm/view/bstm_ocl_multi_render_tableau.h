@@ -64,7 +64,7 @@ class bstm_ocl_multi_render_tableau : public bstm_cam_tableau
   vcl_vector<unsigned> gpu_ids_;
   unsigned num_gpus_;
 
-  bocl_manager_child_sptr mgr_;
+  bocl_manager_child* mgr_;
 
   vcl_vector<cl_command_queue> queues_;
   vcl_vector<bocl_device_sptr> devices_;

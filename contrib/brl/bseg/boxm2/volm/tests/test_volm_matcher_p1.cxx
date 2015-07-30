@@ -180,8 +180,8 @@ static void test_volm_matcher_p1()
              << ' ' << vit->w_obj_ << vcl_endl;
 
   // find the device that will be used
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
-  unsigned num_device = (unsigned)mgr->numGPUs();
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  unsigned num_device = (unsigned)mgr.numGPUs();
   TEST("GPU device is available", num_device!=0, true);
   if (num_device == 0)
     return;
@@ -195,7 +195,7 @@ static void test_volm_matcher_p1()
   bool is_last_pass = false;
   vgl_polygon<double> cand_poly;
   boxm2_volm_matcher_p1 obj_ps1_matcher(csp, query, leaves, buffer_capacity, geo_folder, 0, depth_interval,
-                                        cand_poly, mgr->gpus_[0], is_candidate, is_last_pass, out_folder, threshold,
+                                        cand_poly, mgr.gpus_[0], is_candidate, is_last_pass, out_folder, threshold,
                                         max_cam_per_loc, weights);
 
   TEST("volm pass 1 matcher execution", obj_ps1_matcher.volm_matcher_p1(), true);

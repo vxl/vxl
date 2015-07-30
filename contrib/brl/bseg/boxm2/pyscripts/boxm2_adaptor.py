@@ -9,14 +9,13 @@ import os
 def ocl_info():
   #print("Init Manager");
   boxm2_batch.init_process("boclInitManagerProcess");
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  mgr = dbvalue(id, type);
+  init_result = boxm2_batch.run_process();
 
   print("Get OCL info");
   boxm2_batch.init_process("bocl_info_process");
-  boxm2_batch.set_input_from_db(0,mgr)
-  boxm2_batch.run_process();
+  info_result = boxm2_batch.run_process();
+
+  return init_result and info_result
 
 def load_scene(scene_str):
   #print("Loading a Scene from file: ", scene_str);
@@ -41,32 +40,37 @@ def load_opencl(scene_str, device_string="gpu"):
   boxm2_batch.init_process("boxm2CreateCacheProcess");
   boxm2_batch.set_input_from_db(0,scene);
   boxm2_batch.set_input_string(1,"lru");
-  boxm2_batch.run_process();
+  result = boxm2_batch.run_process();
+  if not result:
+      raise Exception('boxm2CreateCacheProcess returned false')
   (id,type) = boxm2_batch.commit_output(0);
   cache = dbvalue(id, type);
 
   #print("Init Manager");
   boxm2_batch.init_process("boclInitManagerProcess");
-  boxm2_batch.run_process();
-  (id, type) = boxm2_batch.commit_output(0);
-  mgr = dbvalue(id, type);
+  result = boxm2_batch.run_process();
+  if not result:
+      raise Exception('boxm2InitManagerProcess returned false')
 
   #print("Get Gpu Device");
   boxm2_batch.init_process("boclGetDeviceProcess");
   boxm2_batch.set_input_string(0,device_string)
-  boxm2_batch.set_input_from_db(1,mgr)
-  boxm2_batch.run_process();
+  result = boxm2_batch.run_process();
+  if not result:
+      raise Exception('boclGetDeviceProcess returned false')
   (id, type) = boxm2_batch.commit_output(0);
   device = dbvalue(id, type);
 
   #print("Create Gpu Cache");
   boxm2_batch.init_process("boxm2CreateOpenclCacheProcess");
   boxm2_batch.set_input_from_db(0,device)
-  boxm2_batch.run_process();
+  result = boxm2_batch.run_process();
+  if not result:
+      raise Exception('boxm2CreateOpenclCacheProcess returned false')
   (id, type) = boxm2_batch.commit_output(0);
   openclcache = dbvalue(id, type);
 
-  return scene, cache, mgr, device, openclcache;
+  return scene, cache, device, openclcache;
 
 
 #Just loads up CPP cache

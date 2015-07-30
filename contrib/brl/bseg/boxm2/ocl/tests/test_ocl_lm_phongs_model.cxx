@@ -121,9 +121,9 @@ static void ocl_phongs_model(vnl_vector<float> & x,
 
   vnl_vector<float> y(m);
   //load BOCL stuff
-  bocl_manager_child* mgr = bocl_manager_child::instance();
-  if (mgr->gpus_.size()==0)   return;
-  bocl_device_sptr device = mgr->gpus_[0];
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  if (mgr.gpus_.size()==0)   return;
+  bocl_device_sptr device = mgr.gpus_[0];
 
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;

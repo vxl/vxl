@@ -16,17 +16,17 @@ bool test_fill_kernel()
   }
   
   //make bocl manager (handles a lot of OpenCL stuff)
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
-  if(mgr->gpus_.size() < 1) {
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  if(mgr.gpus_.size() < 1) {
     vcl_cout<<"NO GPUS!!!!"<<vcl_endl;  
     return false;
   }
   
   //create command queue
-  cl_command_queue queue = clCreateCommandQueue(mgr->context(), mgr->devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
+  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
   
   //cr  //make sure a is set to zero
-  bocl_mem a_mem(mgr->context(), a, length * sizeof(int), "test int buffer");
+  bocl_mem a_mem(mgr.context(), a, length * sizeof(int), "test int buffer");
   a_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   a_mem.zero_gpu_buffer(queue);
   a_mem.read_to_buffer(queue); 
@@ -42,7 +42,7 @@ bool test_fill_kernel()
   float* c = new float[length]; 
   for(int i=0; i<length; ++i)
     c[i] = (float) i / 2.0f;
-  bocl_mem c_mem(mgr->context(), c, length * sizeof(float), "test float buffer");
+  bocl_mem c_mem(mgr.context(), c, length * sizeof(float), "test float buffer");
   c_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   c_mem.fill(queue, 1.337f, "float");
   c_mem.read_to_buffer(queue);
@@ -55,7 +55,7 @@ bool test_fill_kernel()
   TEST("bocl_mem float fill gpu buffer returned all correct values", true, true);
   
   //make sure b is set 
-  bocl_mem b_mem(mgr->context(), b, length * sizeof(int), "test int buffer");
+  bocl_mem b_mem(mgr.context(), b, length * sizeof(int), "test int buffer");
   b_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   b_mem.fill(queue, (unsigned int) 1337, "uint");
   b_mem.read_to_buffer(queue);

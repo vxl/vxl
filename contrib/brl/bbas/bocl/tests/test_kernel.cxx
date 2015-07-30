@@ -13,21 +13,21 @@ bool test_multiply_kernel()
   for(int i=0; i<length; ++i) b[i] = (int) i;
 
   //get manager
-  bocl_command_queue_mgr* mgr = bocl_command_queue_mgr::instance(); 
+  bocl_command_queue_mgr &mgr = bocl_command_queue_mgr::instance(); 
 
   //create command queue
-  cl_command_queue queue = clCreateCommandQueue(mgr->context(), mgr->devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
+  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
   
   //create kernel
   vcl_string src_path = testlib_root_dir() + "/contrib/brl/bbas/bocl/tests/test_kernel.cl"; 
   vcl_vector<vcl_string> paths; paths.push_back(src_path); 
   bocl_kernel test_kernel; 
-  test_kernel.create_kernel( &mgr->context(), &mgr->devices()[0], paths, "test_multiply", "", "bocl test multiply kernel");
+  test_kernel.create_kernel( &mgr.context(), &mgr.devices()[0], paths, "test_multiply", "", "bocl test multiply kernel");
   
   //create in and out mems
-  bocl_mem a_mem(mgr->context(), a, length * sizeof(int), "test int buffer");
+  bocl_mem a_mem(mgr.context(), a, length * sizeof(int), "test int buffer");
   a_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
-  bocl_mem b_mem(mgr->context(), b, length * sizeof(int), "test int buffer");
+  bocl_mem b_mem(mgr.context(), b, length * sizeof(int), "test int buffer");
   b_mem.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
   
   //set up thread arrays

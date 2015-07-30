@@ -14,11 +14,6 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
 {
  public:
 
-  bocl_global_memory_bandwidth_manager()
-    : program_(0),time_in_secs_(0.0f) {}
-
-  ~bocl_global_memory_bandwidth_manager();
-
   unsigned array_size() const { return len_; }
   bocl_mem* array_buf() { return array_buf_; }
 
@@ -63,6 +58,16 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   float time_in_secs_;
   cl_image_format inputformat;
   unsigned len_;
+
+ private:
+  friend class bocl_manager<bocl_global_memory_bandwidth_manager>;
+
+  // don't allow users to create their own instance 
+  bocl_global_memory_bandwidth_manager()
+    : program_(0),time_in_secs_(0.0f) {}
+
+  ~bocl_global_memory_bandwidth_manager();
+
 };
 
 #endif // bocl_global_memory_bandwidth_manager_h_

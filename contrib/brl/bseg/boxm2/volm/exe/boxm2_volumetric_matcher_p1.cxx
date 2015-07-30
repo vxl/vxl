@@ -316,9 +316,9 @@ int main(int argc, char** argv)
 
 
   // define the device that will be used
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
-  if (dev_id() >= (unsigned)mgr->numGPUs()) {
-    log << " GPU is " << dev_id() << " is invalid, only " << mgr->numGPUs() << " are available\n";
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  if (dev_id() >= (unsigned)mgr.numGPUs()) {
+    log << " GPU is " << dev_id() << " is invalid, only " << mgr.numGPUs() << " are available\n";
     if (do_log)  volm_io::write_log(out_folder(), log.str());
     vcl_cerr << log.str();
     volm_io::write_status(out_folder(), volm_io::EXE_ARGUMENT_ERROR, 100, "", status_xml.str());
@@ -326,7 +326,7 @@ int main(int argc, char** argv)
   }
   vcl_cout << "\n==================================================================================================\n"
            << "\t\t  3. Following device is used for volm_matcher\n"
-           << "\t\t  " << mgr->gpus_[dev_id()]->info() << '\n'
+           << "\t\t  " << mgr.gpus_[dev_id()]->info() << '\n'
            << "==================================================================================================\n"
 
            << "\n==================================================================================================\n"
@@ -335,7 +335,7 @@ int main(int argc, char** argv)
 
   // start pass 1 volm_matcher
   boxm2_volm_matcher_p1 obj_ps1_matcher(cam_space, query, leaves, buffer_capacity(), geo_index_folder(), tile_id(),
-                                        depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
+                                        depth_interval, cand_poly, mgr.gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
                                         threshold(), max_cam_per_loc(), weights);
 
   if (!obj_ps1_matcher.volm_matcher_p1(num_locs())) {
@@ -440,7 +440,7 @@ int main(int argc, char** argv)
   // start pass 1 matcher
   if (use_ps1()) {
     boxm2_volm_matcher_p1 obj_order_matcher(query, leaves, buffer_capacity(), geo_index_folder(), tile_id(),
-                                            depth_interval, cand_poly, mgr->gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
+                                            depth_interval, cand_poly, mgr.gpus_[dev_id()], is_candidate, is_last_pass, out_folder(),
                                             threshold(), max_cam_per_loc() ,use_orient());
     if (! obj_order_matcher.volm_matcher_p1()) {
       log << " ERROR: pass 1 volm_matcher failed for geo_index " << index_file << '\n';

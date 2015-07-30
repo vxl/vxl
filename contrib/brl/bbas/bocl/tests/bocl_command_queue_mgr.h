@@ -28,8 +28,6 @@
 class bocl_command_queue_mgr: public bocl_manager<bocl_command_queue_mgr>
 {
  public:
-    bocl_command_queue_mgr() {}
-    ~bocl_command_queue_mgr(){}
 
     bool init_kernel(); 
     bool test_async_command_queue();
@@ -55,7 +53,12 @@ class bocl_command_queue_mgr: public bocl_manager<bocl_command_queue_mgr>
     bocl_mem*  offsets_[NUM_QUEUES]; 
     cl_command_queue queues_[NUM_QUEUES]; 
     bocl_kernel kernels_[NUM_QUEUES]; 
-    
+
+ private:
+    friend class bocl_manager<bocl_command_queue_mgr>;
+    // don't allow users to create their own instances (force use of instance())
+    bocl_command_queue_mgr() {}
+    ~bocl_command_queue_mgr(){}
     
 };
 

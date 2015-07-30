@@ -115,19 +115,19 @@ int main(int argc,  char** argv)
   boxm2_scene_sptr scene = new boxm2_scene(scene_file());
 
   //make bocl manager (handles a lot of OpenCL stuff)
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
+  bocl_manager_child &mgr = bocl_manager_child::instance();
 
   //create cpu cache (lru), and create opencl_cache on the device
   boxm2_lru_cache1::create(scene);
 
-  if (numGPU() > mgr->gpus_.size()) {
-    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr->gpus_.size()<<" available"<<vcl_endl;
+  if (numGPU() > mgr.gpus_.size()) {
+    vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr.gpus_.size()<<" available"<<vcl_endl;
     return -1;
   }
   //make a multicache
   vcl_vector<bocl_device_sptr> gpus;
   for (unsigned int i=0; i<numGPU(); ++i)
-    gpus.push_back(mgr->gpus_[i]);
+    gpus.push_back(mgr.gpus_[i]);
   boxm2_multi_cache mcache(scene, gpus);
   vcl_cout<<"Multi Cache:\n"<<mcache.to_string()<<vcl_endl;
 
@@ -166,8 +166,8 @@ int main(int argc,  char** argv)
           <<"-----------------------------------------"<<vcl_endl;
 
   //test scene render on one gpu
-  //boxm2_opencl_cache1* opencl_cache = new boxm2_opencl_cache1(scene, mgr->gpus_[0]);
-  //test_render_expected_images(scene, mgr->gpus_[0], opencl_cache, cams, ni(), nj());
+  //boxm2_opencl_cache1* opencl_cache = new boxm2_opencl_cache1(scene, mgr.gpus_[0]);
+  //test_render_expected_images(scene, mgr.gpus_[0], opencl_cache, cams, ni(), nj());
 
   return 0;
 }

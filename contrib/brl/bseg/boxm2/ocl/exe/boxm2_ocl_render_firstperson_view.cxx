@@ -78,12 +78,12 @@ int main(int argc, char ** argv)
     }
     ifile.close();
     //make bocl manager
-    bocl_manager_child_sptr mgr =bocl_manager_child::instance();
-    if (gpu_idx() >= mgr->gpus_.size()){
+    bocl_manager_child &mgr =bocl_manager_child::instance();
+    if (gpu_idx() >= mgr.gpus_.size()){
       vcl_cout << "GPU index out of bounds" << vcl_endl;
       return -1;
     }
-    bocl_device_sptr device = mgr->gpus_[gpu_idx()];
+    bocl_device_sptr device = mgr.gpus_[gpu_idx()];
     vcl_cout << "Using: " << *device;
     boxm2_scene_sptr scene = new boxm2_scene(scene_file());
     vpgl_calibration_matrix<double> K(focallength(), vgl_point_2d<double>(ni()/2, nj()/2));

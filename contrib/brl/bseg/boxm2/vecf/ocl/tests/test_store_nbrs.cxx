@@ -34,9 +34,9 @@ void test_store_nbrs()
   boxm2_scene_sptr source_scene = new boxm2_scene(source_scene_path);
   boxm2_lru_cache::create(source_scene);
 
-  bocl_manager_child_sptr mgr = bocl_manager_child::instance();
+  bocl_manager_child &mgr = bocl_manager_child::instance();
   unsigned gpu_idx = 1; //on JLM's alienware
-  bocl_device_sptr device = mgr->gpus_[gpu_idx];
+  bocl_device_sptr device = mgr.gpus_[gpu_idx];
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
   boxm2_vecf_ocl_store_nbrs snbrs(source_scene, opencl_cache);
   snbrs.augment_1_blk();

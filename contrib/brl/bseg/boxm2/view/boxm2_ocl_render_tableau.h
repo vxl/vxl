@@ -53,7 +53,7 @@ class boxm2_ocl_render_tableau : public boxm2_cam_tableau
  protected:
 
   //vector of image files, vector of
-  bocl_manager_child_sptr mgr_;
+  bocl_manager_child* mgr_;
   bocl_device_sptr device_;
   cl_command_queue queue_;
   //: Boxm2 Scene

@@ -24,7 +24,6 @@ class boxm2_scene_adaptor(object):
     self.cpu_cache = None;
     self.device = None;
     self.opencl_cache = None;
-    self.ocl_mgr = None;
     self.str_cache = None;
     self.model_dir = None;
     self.bbox = None;
@@ -33,8 +32,8 @@ class boxm2_scene_adaptor(object):
     #if device_string is gpu, load up opencl
     self.device_string = device_string;
     if device_string[0:3]=="gpu" or device_string[0:3]=="cpu":
-			self.scene, self.cpu_cache, self.ocl_mgr, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
-			self.active_cache = self.opencl_cache;
+            self.scene, self.cpu_cache, self.device, self.opencl_cache = load_opencl(scene_str, device_string);
+            self.active_cache = self.opencl_cache;
     elif device_string[0:3]=="cpp" :
       self.scene, self.cpu_cache = load_cpp(scene_str);
       self.active_cache = self.cpu_cache;
@@ -54,8 +53,6 @@ class boxm2_scene_adaptor(object):
         boxm2_batch.remove_data(self.scene.id)
     if self.cpu_cache is not None:
         boxm2_batch.remove_data(self.cpu_cache.id)
-    if self.ocl_mgr is not None:
-        boxm2_batch.remove_data(self.ocl_mgr.id)
     if self.device is not None:
         boxm2_batch.remove_data(self.device.id)
     if self.opencl_cache is not None:

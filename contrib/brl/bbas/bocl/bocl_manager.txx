@@ -17,13 +17,17 @@
 
 //: Ensure only one instance is created
 template <class T>
-T* bocl_manager<T>::instance()
+T& bocl_manager<T>::instance()
 {
-  if (!instance_) {
-    instance_ = new T();
-    instance_->initialize_cl();
-  }
-  return bocl_manager::instance_;
+  /** Note that prior to C++11, this was not thread safe, as
+   * multiple simultaneous calls to instance() could result in 
+   * multiple calls to T's constructor.  Compilers implementing the 
+   * C++11 standard are now required to gaurantee only one call to T's 
+   * constructor.
+   **/
+  static T instance_;
+  instance_.initialize_cl();
+  return instance_;
 }
 
 //: clears all opencl created objects
@@ -358,7 +362,6 @@ bool bocl_manager<T>::create_buffer(void** buffer,vcl_string type, int elm_size,
 
 #undef BOCL_MANAGER_INSTANTIATE
 #define BOCL_MANAGER_INSTANTIATE(T) \
-template <class T > T* bocl_manager<T >::instance_ = 0; \
 template class bocl_manager<T >
 
 
