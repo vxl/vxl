@@ -12,9 +12,9 @@
 
 static void test_save()
 {
-  vcl_cout << "*********************\n"
-           << " Testing vimt3d_save\n"
-           << "*********************\n";
+  vcl_cout << "******************************\n"
+           << " Testing vimt3d_save_transform\n"
+           << "******************************\n";
 
   vimt3d_add_all_loaders();
 
@@ -55,6 +55,48 @@ static void test_save()
   TEST("v3m image round-trip has same zoom transform",
        mbl_test_summaries_are_equal(tr_in2, tr_gold1 ), true);
 
+  vcl_cout << "*********************\n"
+           << " Testing vimt3d_save\n"
+           << "*********************\n";
+
+  vimt3d_image_3d_of<vxl_byte> image;
+  image.image().set_size(2,3,4);
+  image.set_world2im(tr_gold1);
+  bool use_mm=true;
+  
+  vimt3d_save("test_save2.v3i",image,use_mm);
+  {
+    vimt3d_image_3d_of<vxl_byte> loaded_image;
+    vimt3d_load("test_save2.v3i",loaded_image,use_mm);
+    TEST("v3i image round-trip has same zoom transform",
+         mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
+  }
+  
+  vimt3d_save("test_save2.v3m",image,use_mm);
+  {
+    vimt3d_image_3d_of<vxl_byte> loaded_image;
+    vimt3d_load("test_save2.v3m",loaded_image,use_mm);
+    TEST("v3m image round-trip has same zoom transform",
+         mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
+  }
+
+/*
+  vimt3d_save("test_save2.hdr",image,use_mm);
+  {
+    vimt3d_image_3d_of<vxl_byte> loaded_image;
+    vimt3d_load("test_save2.hdr",loaded_image,use_mm);
+    TEST("hdr image round-trip has same zoom transform",
+         mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
+  }
+  
+  vimt3d_save("test_save2.gipl",image,use_mm);
+  {
+    vimt3d_image_3d_of<vxl_byte> loaded_image;
+    vimt3d_load("test_save2.gipl",loaded_image,use_mm);
+    TEST("gipl image round-trip has same zoom transform",
+         mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
+  }
+*/
 }
 
 TESTMAIN(test_save);
