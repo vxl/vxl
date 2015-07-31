@@ -23,8 +23,6 @@
 class boxm2_cache;
 typedef vbl_smart_ptr<boxm2_cache> boxm2_cache_sptr;
 
-class boxm2_cache_destroyer;
-
 class boxm2_cache: public vbl_ref_count
 {
  public:
@@ -33,10 +31,6 @@ class boxm2_cache: public vbl_ref_count
   //: Use this instead of constructor
   static boxm2_cache_sptr instance();
   static bool         exists() { return boxm2_cache::instance_!=0; }
-
-  //: the destructor instance to make sure memory is deallocated when the program exits
-  static boxm2_cache_destroyer destroyer_;  // it's not a pointer so C++ will make sure that its destructor will be called
-  friend class boxm2_cache_destroyer;
 
   //: returns block pointer to block specified by ID
   virtual boxm2_block* get_block(boxm2_scene_sptr & scene, boxm2_block_id id) = 0;
@@ -127,18 +121,5 @@ void vsl_b_read(vsl_b_istream& is, boxm2_cache* p);
 void vsl_b_read(vsl_b_istream& is, boxm2_cache_sptr& sptr);
 //: Binary load boxm2_cache smart pointer from stream.
 void vsl_b_read(vsl_b_istream& is, boxm2_cache_sptr const& sptr);
-
-
-//: create another class whose sole purpose is to destroy the singleton instance
-class boxm2_cache_destroyer
-{
- public:
-  boxm2_cache_destroyer(boxm2_cache_sptr s = 0);
-  ~boxm2_cache_destroyer();
-
-  void set_singleton(boxm2_cache_sptr s);
- private:
-  boxm2_cache_sptr s_;
-};
 
 #endif // boxm2_cache_h_

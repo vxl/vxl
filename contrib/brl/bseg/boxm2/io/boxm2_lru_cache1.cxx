@@ -17,12 +17,10 @@ void boxm2_lru_cache1::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
     {
       vcl_cout << "boxm2_lru_cache1:: destroying current cache and creating new one: " << scene->data_path() << vcl_endl;
       instance_ = new boxm2_lru_cache1(scene, fs_type);
-      destroyer_.set_singleton(instance_);
     }
   }
   else {
     instance_ = new boxm2_lru_cache1(scene, fs_type);
-    destroyer_.set_singleton(instance_);
   }
 }
 

@@ -12,7 +12,6 @@ void boxm2_lru_cache::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
   if (boxm2_cache::exists()){
   }else{
     instance_ = new boxm2_lru_cache(scene, fs_type);
-    destroyer_.set_singleton(instance_);
   }
 }
 
