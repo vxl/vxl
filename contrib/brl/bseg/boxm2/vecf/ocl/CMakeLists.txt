@@ -19,6 +19,7 @@ SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_vector_field_adaptor.h       boxm2_vecf_ocl_vector_field_adaptor.cxx
     boxm2_vecf_ocl_similarity_transform.h       boxm2_vecf_ocl_similarity_transform.cxx
     boxm2_vecf_ocl_landmark_warp.h              boxm2_vecf_ocl_landmark_warp.cxx
+    boxm2_vecf_ocl_composite_transform.h        boxm2_vecf_ocl_composite_transform.cxx
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_ocl_sources)

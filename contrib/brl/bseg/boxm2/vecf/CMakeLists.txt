@@ -24,9 +24,11 @@ SET(boxm2_vecf_sources
     boxm2_vecf_orbit_param_stats.h          boxm2_vecf_orbit_param_stats.cxx
     boxm2_vecf_point_cloud_orbit_viewer.h   boxm2_vecf_point_cloud_orbit_viewer.cxx
     boxm2_vecf_plot_orbit.h                 boxm2_vecf_plot_orbit.cxx
-    boxm2_vecf_vector_field.h
+    boxm2_vecf_vector_field_base.h          boxm2_vecf_vector_field_base.cxx
+    boxm2_vecf_vector_field.h               boxm2_vecf_vector_field.txx
     boxm2_vecf_similarity_transform.h       boxm2_vecf_similarity_transform.cxx
     boxm2_vecf_landmark_warp.h              boxm2_vecf_landmark_warp.cxx
+    boxm2_vecf_composite_transform.h        boxm2_vecf_composite_transform.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_sources)

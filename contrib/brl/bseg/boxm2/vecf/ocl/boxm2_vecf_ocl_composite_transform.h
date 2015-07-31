@@ -1,23 +1,27 @@
-#ifndef boxm2_vecf_ocl_vector_field_h_included_
-#define boxm2_vecf_ocl_vector_field_h_included_
+#ifndef boxm2_vecf_ocl_composite_transform_h_included_
+#define boxm2_vecf_ocl_composite_transform_h_included_
 
+#include <bocl/bocl_cl.h>
 #include <boxm2/boxm2_scene.h>
-#include <boxm2/boxm2_block.h>
-#include <bocl/bocl_mem.h>
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
+#include <boxm2/ocl/boxm2_opencl_cache.h>
+#include <boxm2/vecf/boxm2_vecf_vector_field.h>
 
-class boxm2_vecf_ocl_vector_field : public vbl_ref_count
+#include "boxm2_vecf_ocl_vector_field.h"
+
+//: string a series of vector_field transforms together
+class boxm2_vecf_ocl_composite_transform: public boxm2_vecf_ocl_vector_field
 {
   public:
+    //: constructor
+    boxm2_vecf_ocl_composite_transform(vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms); 
 
-    //: compute vector field, writing to gpu cache
+    //: compute forward transform
     // Note that both pts_source and pts_target are defined for each cell in source scene using data type float4
     virtual bool compute_forward_transform(boxm2_scene_sptr source,
                                            boxm2_block_id const& blk_id,
                                            bocl_mem* pts_source, // in
                                            bocl_mem* pts_target, // out
-                                           cl_command_queue &queue) = 0;
+                                           cl_command_queue &queue);
 
     //: compute inverse vector field, writing result to gpu cache
     // Note that both pts_target and pts_source are defined for each cell in target scene using data type float4
@@ -25,16 +29,10 @@ class boxm2_vecf_ocl_vector_field : public vbl_ref_count
                                            boxm2_block_id const& blk_id,
                                            bocl_mem* pts_target, // in
                                            bocl_mem* pts_source, // out
-                                           cl_command_queue &queue) = 0;
-
-    //: virtual destructor to ensure proper cleanup when used polymorphically
-    virtual ~boxm2_vecf_ocl_vector_field(){}
-
+                                           cl_command_queue &queue);
+                                        
   private:
-    //TODO: might want to just make virtual method that returns kernel so we can reuse other ocl boilerplate stuff
-
+    vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms_;
 };
-
-typedef vbl_smart_ptr<boxm2_vecf_ocl_vector_field> boxm2_vecf_ocl_vector_field_sptr;
 
 #endif

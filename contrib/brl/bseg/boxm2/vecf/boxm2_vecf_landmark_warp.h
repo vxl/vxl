@@ -10,25 +10,39 @@
 
 #include "boxm2_vecf_vector_field.h"
 
-class boxm2_vecf_landmark_warp : public boxm2_vecf_vector_field
+//: helper class for mapping points from source to target and back
+class boxm2_vecf_landmark_mapper
+{
+  public:
+  boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
+                             vcl_vector<vgl_point_3d<double> > const& control_pts_target);
+
+  vgl_point_3d<double> operator() (vgl_point_3d<double> const& x) const;
+
+  private:
+    const vcl_vector<vgl_point_3d<double> > control_pts_source_;
+    const vcl_vector<vgl_point_3d<double> > control_pts_target_;
+};
+
+class boxm2_vecf_landmark_warp : public boxm2_vecf_vector_field<boxm2_vecf_landmark_mapper>
 {
   public:
     boxm2_vecf_landmark_warp(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
                              vcl_vector<vgl_point_3d<double> > const& control_pts_target);
 
-    //: write vector field to source's BOXM2_VEC3D data
-    virtual bool compute_forward_transform(boxm2_scene_sptr source,
-                                           boxm2_block_id const& blk_id,
-                                           boxm2_data_traits<BOXM2_VEC3D>::datatype *vec_field);
-    
-    //: write vector field to target's BOXM2_VEC3D data
-    virtual bool compute_inverse_transform(boxm2_scene_sptr target,
-                                           boxm2_block_id const& blk_id,
-                                           boxm2_data_traits<BOXM2_VEC3D>::datatype *vec_field);
-
   private:
-    typedef vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > control_pt_t;
-    vcl_vector<control_pt_t> control_pts_;
+    typedef boxm2_vecf_landmark_mapper MAPPER_T;
+
+    //: Create a function object that maps source pts to target pts.
+    virtual MAPPER_T make_forward_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id);
+    //: Create a function object that maps target pts to source pts.
+    virtual MAPPER_T make_inverse_mapper(boxm2_scene_sptr target, boxm2_block_id const& blk_id);
+
+    //: data
+    const vcl_vector<vgl_point_3d<double> > control_pts_source_;
+    const vcl_vector<vgl_point_3d<double> > control_pts_target_;
+
+
 };
 
 #endif

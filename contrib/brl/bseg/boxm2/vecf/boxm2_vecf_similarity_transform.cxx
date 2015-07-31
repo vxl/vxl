@@ -6,110 +6,46 @@
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
 
-boxm2_vecf_similarity_transform::boxm2_vecf_similarity_transform(vgl_rotation_3d<double> rot,
-                                                                         vgl_vector_3d<double> trans,
-                                                                         vgl_vector_3d<double> scale)
+// instantiate the template code in the .txx file
+#include "boxm2_vecf_vector_field.txx"
+BOXM2_VECF_VECTOR_FIELD_INSTANTIATE(boxm2_vecf_similarity_transform_mapper);
+
+boxm2_vecf_similarity_transform_mapper::
+boxm2_vecf_similarity_transform_mapper(vgl_rotation_3d<double> const& rot,
+                                       vgl_vector_3d<double> const& trans,
+                                       vgl_vector_3d<double> const& scale)
+  : rot_(rot), trans_(trans), scale_(scale)
+{}
+
+vgl_point_3d<double> boxm2_vecf_similarity_transform_mapper::operator() (vgl_point_3d<double> const& x) const
+{
+  const vgl_point_3d<double> tmp = rot_ * x;
+  // no vgl_vector_3d * vgl_point_3d operator, so we have to do this.
+  return vgl_point_3d<double>(tmp.x()*scale_.x(), tmp.y()*scale_.y(), tmp.z()*scale_.z()) + trans_;
+}
+
+
+boxm2_vecf_similarity_transform::boxm2_vecf_similarity_transform(vgl_rotation_3d<double> const& rot,
+                                                                 vgl_vector_3d<double> const& trans,
+                                                                 vgl_vector_3d<double> const& scale)
   : rot_(rot), trans_(trans), scale_(scale)
 {
 }
 
-bool boxm2_vecf_similarity_transform::
-compute_forward_transform(boxm2_scene_sptr source,
-                          boxm2_block_id const& blk_id,
-                          boxm2_data_traits<BOXM2_VEC3D>::datatype *vec_field)
+//: Create a function object that maps source pts to target pts.
+boxm2_vecf_similarity_transform_mapper
+boxm2_vecf_similarity_transform::make_forward_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id)
 {
-  // get block data
-  boxm2_block *blk = boxm2_cache::instance()->get_block(source, blk_id);
-  vgl_vector_3d<double> subblk_dims = blk->sub_block_dim();
-
-  //get the 3d array of trees
-  typedef boxm2_block::uchar16 uchar16;
-  const boxm2_array_3d<uchar16>& trees = blk->trees();
-  //iterate through each block, filtering the root level first
-  for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-    for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
-      for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
-        vgl_vector_3d<double> subblk_offset(x*subblk_dims.x(),
-                                            y*subblk_dims.y(),
-                                            z*subblk_dims.z());
-        //load current tree
-        uchar16 tree = trees(x, y, z);
-        boct_bit_tree bit_tree((unsigned char*) tree.data_block(), blk->max_level());
-        // for all leaves in current tree
-        vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-        vcl_vector<int>::iterator iter;
-        for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
-          int bit_idx = (*iter);
-          int data_idx = bit_tree.get_data_index(bit_idx);
-          // get the cell center
-          vgl_point_3d<double> cell_center_norm = bit_tree.cell_center( bit_idx );
-          // convert to global coordinates
-          vgl_vector_3d<double> cell_offset(cell_center_norm.x()*subblk_dims.x(),
-                                            cell_center_norm.y()*subblk_dims.y(),
-                                            cell_center_norm.z()*subblk_dims.z());
-
-          vgl_point_3d<double> cell_center = blk->local_origin() + subblk_offset + cell_offset;
-          vgl_point_3d<double> transformed_center = rot_ * cell_center;
-          transformed_center.set(transformed_center.x()*scale_.x(),
-                                 transformed_center.y()*scale_.y(),
-                                 transformed_center.z()*scale_.z());
-          transformed_center += trans_;
-          vgl_vector_3d<double> v(transformed_center - cell_center);
-
-          vec_field[data_idx] = vnl_vector_fixed<float,4>(v.x(), v.y(), v.z(), 0.0f);
-        }
-      }
-    }
-  }
-  return true;
+  return boxm2_vecf_similarity_transform_mapper(rot_, trans_, scale_);
 }
 
-bool boxm2_vecf_similarity_transform::
-compute_inverse_transform(boxm2_scene_sptr target,
-                          boxm2_block_id const& blk_id,
-                          boxm2_data_traits<BOXM2_VEC3D>::datatype *vec_field)
+//: Create a function object that maps target pts to source pts.
+boxm2_vecf_similarity_transform_mapper 
+boxm2_vecf_similarity_transform::make_inverse_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id)
 {
-  // get block data
-  boxm2_block *blk = boxm2_cache::instance()->get_block(target, blk_id);
-  vgl_vector_3d<double> subblk_dims = blk->sub_block_dim();
-
-  //get the 3d array of trees
-  typedef boxm2_block::uchar16 uchar16;
-  const boxm2_array_3d<uchar16>& trees = blk->trees();
-  //iterate through each block, filtering the root level first
-  for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
-    for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {
-      for (unsigned int z = 0; z < trees.get_row3_count(); ++z) {
-        vgl_vector_3d<double> subblk_offset(x*subblk_dims.x(),
-                                            y*subblk_dims.y(),
-                                            z*subblk_dims.z());
-        //load current tree
-        uchar16 tree = trees(x, y, z);
-        boct_bit_tree bit_tree((unsigned char*) tree.data_block(), blk->max_level());
-        // for all leaves in current tree
-        vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
-        vcl_vector<int>::iterator iter;
-        for (iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
-          int bit_idx = (*iter);
-          int data_idx = bit_tree.get_data_index(bit_idx);
-          // get the cell center
-          vgl_point_3d<double> cell_center_norm = bit_tree.cell_center( bit_idx );
-          // convert to global coordinates
-          vgl_vector_3d<double> cell_offset(cell_center_norm.x()*subblk_dims.x(),
-                                            cell_center_norm.y()*subblk_dims.y(),
-                                            cell_center_norm.z()*subblk_dims.z());
-
-          vgl_point_3d<double> cell_center = blk->local_origin() + subblk_offset + cell_offset;
-          vgl_point_3d<double> inv_transformed_center = rot_.inverse() * (cell_center - trans_);
-          inv_transformed_center.set(inv_transformed_center.x()/scale_.x(),
-                                     inv_transformed_center.y()/scale_.y(),
-                                     inv_transformed_center.z()/scale_.z());
-          vgl_vector_3d<double> v(inv_transformed_center - cell_center);
-
-          vec_field[data_idx] = vnl_vector_fixed<float,4>(v.x(), v.y(), v.z(), 0.0f);
-        }
-      }
-    }
-  }
-  return true;
+  vgl_rotation_3d<double> inv_rot = rot_.inverse();
+  vgl_vector_3d<double> inv_scale( 1.0/scale_.x(), 1.0/scale_.y(), 1.0/scale_.z() );
+  vgl_vector_3d<double> tmp = inv_rot * -trans_;
+  vgl_vector_3d<double> inv_trans(tmp.x() / scale_.x(), tmp.y()/scale_.y(), tmp.z()/scale_.z());
+  return boxm2_vecf_similarity_transform_mapper(inv_rot, inv_trans, inv_scale);
 }

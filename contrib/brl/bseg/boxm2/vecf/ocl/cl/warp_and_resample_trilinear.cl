@@ -224,10 +224,7 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
 }
 
 
-__kernel void warp_and_resample_trilinear_vecf(__constant  float           * centerX,//0
-                                               __constant  float           * centerY,//1
-                                               __constant  float           * centerZ,//2
-                                               __constant  uchar           * bit_lookup,//3             //0-255 num bits lookup table
+__kernel void warp_and_resample_trilinear_vecf( __constant  uchar           * bit_lookup,//3             //0-255 num bits lookup table
                                                __global  RenderSceneInfo * target_scene_linfo,//4
                                                __global  RenderSceneInfo * source_scene_linfo,//5
                                                __global    int4            * target_scene_tree_array,//6       // tree structure for each block
@@ -237,7 +234,7 @@ __kernel void warp_and_resample_trilinear_vecf(__constant  float           * cen
                                                __global    float           * source_scene_alpha_array,//10      // alpha for each block
                                                __global    MOG_TYPE        * source_scene_mog_array,//11        // appearance for each block
                                                //                                          __global    ushort4         * source_nobs_array,
-                                               __global    float4          * vector_field, //15
+                                               __global    float4          * inv_transformed_pts, //15
                                                __global    int             * max_depth,//16               // coarsness or fineness
                                                //at which voxels should be matched.
                                                __local     uchar           * cumsum_wkgp,//18
@@ -290,14 +287,10 @@ __kernel void warp_and_resample_trilinear_vecf(__constant  float           * cen
           target_scene_mog_array[dataIndex] = mog_init;
           target_scene_alpha_array[dataIndex] = alpha_init;
 
-          // transform coordinates to source scene
-          float xg = target_scene_linfo->origin.x + ((float)index_x+centerX[i])*target_scene_linfo->block_len ;
-          float yg = target_scene_linfo->origin.y + ((float)index_y+centerY[i])*target_scene_linfo->block_len ;
-          float zg = target_scene_linfo->origin.z + ((float)index_z+centerZ[i])*target_scene_linfo->block_len ;
-
-          float txg = xg + vector_field[dataIndex].x;
-          float tyg = yg + vector_field[dataIndex].y;
-          float tzg = zg + vector_field[dataIndex].z;
+          // get transformed coordinates mapping to source scene
+          float txg = inv_transformed_pts[dataIndex].x;
+          float tyg = inv_transformed_pts[dataIndex].y;
+          float tzg = inv_transformed_pts[dataIndex].z;
 
           // float txg = xg; float tyg= yg; float tzg = zg;
           // is the transformed point inside the source domain

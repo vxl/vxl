@@ -840,8 +840,10 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   vcl_vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
   vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
 
-  bocl_mem* vec_field_data = opencl_cache_->get_data<BOXM2_VEC3D>(target_scene_, *iter_blk_target, 0, false);
-  if(!vec_field.compute_inverse_transform(target_scene_, *iter_blk_target, vec_field_data, queue_)) {
+  bocl_mem* target_pts = opencl_cache_->get_data<BOXM2_POINT>(target_scene_, *iter_blk_target, 0, false, "target");
+  // TODO: Fill in target_pts with 3-d cell center locations
+  bocl_mem* source_pts = opencl_cache_->get_data<BOXM2_POINT>(target_scene_, *iter_blk_target, 0, false, "source");
+  if(!vec_field.compute_inverse_transform(target_scene_, *iter_blk_target, target_pts, source_pts, queue_)) {
     vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(): Error computing inverse transform!" << vcl_endl;
     return false;
   }
@@ -878,9 +880,6 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   vcl_cout<<"This is the transform scene Kernel with arbitrary vector field and trilinear interp"<<vcl_endl;
   //   nobs_source = opencl_cache_->get_data<BOXM2_NUM_OBS>(source_scene_, *iter_blk_source,0,false);
 
-  trans_interp_vecf_trilin_kern->set_arg(centerX_.ptr());
-  trans_interp_vecf_trilin_kern->set_arg(centerY_.ptr());
-  trans_interp_vecf_trilin_kern->set_arg(centerZ_.ptr());
   trans_interp_vecf_trilin_kern->set_arg(lookup_.ptr());
   trans_interp_vecf_trilin_kern->set_arg(blk_info_target_.ptr());
   trans_interp_vecf_trilin_kern->set_arg(blk_info_source_loc.ptr());
@@ -890,7 +889,7 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   trans_interp_vecf_trilin_kern->set_arg(blk_source);
   trans_interp_vecf_trilin_kern->set_arg(alpha_source);
   trans_interp_vecf_trilin_kern->set_arg(mog_source);
-  trans_interp_vecf_trilin_kern->set_arg(vec_field_data);
+  trans_interp_vecf_trilin_kern->set_arg(source_pts);
   trans_interp_vecf_trilin_kern->set_arg(octree_depth_.ptr());
   trans_interp_vecf_trilin_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
   trans_interp_vecf_trilin_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees target
