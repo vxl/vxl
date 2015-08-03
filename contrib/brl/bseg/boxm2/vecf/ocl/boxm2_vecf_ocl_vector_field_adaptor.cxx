@@ -22,11 +22,25 @@ compute_forward_transform(boxm2_scene_sptr source,
   // read input from gpu to host
   pts_source->read_to_buffer(queue);
 
+  int status = clFinish(queue);
+  bool good_read = check_val(status, CL_SUCCESS, "BUFFER READ FAILED: " + error_to_string(status));
+  if(!good_read) {
+    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad read of source points" << vcl_endl;
+    return false;
+  }
+  
   // compute the forward transform
   cpu_xform_->compute_forward_transform(source, blk_id, pts_source_host, pts_target_host);
 
   // copy output from host to gpu
   pts_target->write_to_buffer(queue);
+
+  status = clFinish(queue);
+  bool good_write= check_val(status, CL_SUCCESS, "BUFFER WRITE FAILED: " + error_to_string(status));
+  if(!good_write) {
+    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad write of target points" << vcl_endl;
+    return false;
+  }
 
   return true;
 }
@@ -48,11 +62,25 @@ compute_inverse_transform(boxm2_scene_sptr target,
   // read input from gpu to host
   pts_target->read_to_buffer(queue);
 
+  int status = clFinish(queue);
+  bool good_read = check_val(status, CL_SUCCESS, "BUFFER READ FAILED: " + error_to_string(status));
+  if(!good_read) {
+    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad read of target points" << vcl_endl;
+    return false;
+  }
+
   // compute the forward transform
   cpu_xform_->compute_inverse_transform(target, blk_id, pts_target_host, pts_source_host);
 
   // copy to gpu
   pts_source->write_to_buffer(queue);
+
+  status = clFinish(queue);
+  bool good_write = check_val(status, CL_SUCCESS, "BUFFER WRITE FAILED: " + error_to_string(status));
+  if(!good_write) {
+    vcl_cerr << "ERROR: boxm2_vecf_ocl_vector_field_adaptor::compute_forward_transform(): bad write of source points" << vcl_endl;
+    return false;
+  }
 
   return true;
 }

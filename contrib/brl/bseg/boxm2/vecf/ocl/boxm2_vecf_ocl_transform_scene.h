@@ -88,6 +88,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bool compile_trans_interp_kernel();
   bool compile_trans_interp_trilin_kernel();
   bool compile_trans_interp_vecf_trilin_kernel();
+  bool compile_compute_cell_centers_kernel();
   bool init_ocl_trans();
   bool get_scene_appearance(boxm2_scene_sptr scene,
                             vcl_string&      options);
@@ -104,6 +105,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_kernel * trans_interp_kern;
   bocl_kernel * trans_interp_trilin_kern;
   bocl_kernel * trans_interp_vecf_trilin_kern;
+  bocl_kernel * compute_cell_centers_kern;
   float* translation_buff;
   float* rotation_buff;
   float* scale_buff;

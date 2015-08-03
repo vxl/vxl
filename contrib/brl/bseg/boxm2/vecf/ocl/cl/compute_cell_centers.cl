@@ -12,10 +12,8 @@ __kernel void compute_cell_centers( __constant  float           * centerX,//0
                                     __global    int4            * scene_tree_array, // tree structure for each block
                                     __global    float4          * cell_centers,
                                     __global    int             * max_depth, // coarsness or fineness
-                                    __local     uchar           * cumsum_wkgp,//18
-                                    __local     uchar16         * local_trees,//19
-                                    __local     uchar16         * local_trees,
-                                    __local     uchar16         * neighbor_trees)
+                                    __local     uchar           * cumsum_wkgp,
+                                    __local     uchar16         * local_trees)
 {
   int gid = get_global_id(0);
   int lid = get_local_id(0);
@@ -36,7 +34,6 @@ __kernel void compute_cell_centers( __constant  float           * centerX,//0
         index_y >= 0 &&  index_y <= scene_linfo->dims.y -1 &&
         index_z >= 0 &&  index_z <= scene_linfo->dims.z -1  )) {
       __local uchar16* local_tree = &local_trees[lid];
-      __local uchar16* neighbor_tree = &neighbor_trees[lid];
       __local uchar * cumsum = &cumsum_wkgp[lid*10];
       // iterate through leaves
       cumsum[0] = (*local_tree).s0;
@@ -60,8 +57,7 @@ __kernel void compute_cell_centers( __constant  float           * centerX,//0
           float yg = scene_linfo->origin.y + ((float)index_y+centerY[i])*scene_linfo->block_len ;
           float zg = scene_linfo->origin.z + ((float)index_z+centerZ[i])*scene_linfo->block_len ;
           // save coordinates to buffer
-          cell_centers[data_index] = float4(xg, yg, zg, 1.0f);
-
+          cell_centers[dataIndex] = (float4)(xg, yg, zg, 1.0f);
         }
       }
     }

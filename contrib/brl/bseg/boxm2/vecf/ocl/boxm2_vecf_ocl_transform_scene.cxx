@@ -67,6 +67,7 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr&
   this->compile_trans_interp_kernel();
   this->compile_trans_interp_trilin_kernel();
   this->compile_trans_interp_vecf_trilin_kernel();
+  this->compile_compute_cell_centers_kernel();
   this->init_ocl_trans();
   if (!init_render_args()) {
     throw vcl_runtime_error("init_render_args returned false");
@@ -204,6 +205,23 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_trilin_kernel()
   this->trans_interp_trilin_kern = new bocl_kernel();
   return trans_interp_trilin_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "warp_and_resample_trilinear_similarity", options, "trans_interp_similarity_trilin_scene");
 }
+
+bool boxm2_vecf_ocl_transform_scene::compile_compute_cell_centers_kernel()
+{
+  vcl_string options;
+  vcl_cout<<" compiling compute_cell_centers kernel "<<vcl_endl;
+  vcl_vector<vcl_string> src_paths;
+  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
+  src_paths.push_back(source_dir     + "scene_info.cl");
+  src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
+  src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
+  src_paths.push_back(vecf_source_dir + "interp_helpers.cl");
+  src_paths.push_back(vecf_source_dir + "compute_cell_centers.cl");
+  this->compute_cell_centers_kern = new bocl_kernel();
+  return compute_cell_centers_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "compute_cell_centers", options, "compute_cell_centers");
+}
+
 
 bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_vecf_trilin_kernel()
 {
@@ -841,14 +859,38 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   vcl_vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
 
   bocl_mem* target_pts = opencl_cache_->get_data<BOXM2_POINT>(target_scene_, *iter_blk_target, 0, false, "target");
-  // TODO: Fill in target_pts with 3-d cell center locations
+
+  // Fill in target_pts with 3-d cell center locations
+  compute_cell_centers_kern->set_arg( centerX_.ptr() );
+  compute_cell_centers_kern->set_arg( centerY_.ptr() );
+  compute_cell_centers_kern->set_arg( centerZ_.ptr() );
+  compute_cell_centers_kern->set_arg(lookup_.ptr());
+  compute_cell_centers_kern->set_arg(blk_info_target_.ptr());
+  compute_cell_centers_kern->set_arg(blk_target_);
+  compute_cell_centers_kern->set_arg(target_pts);
+  compute_cell_centers_kern->set_arg(octree_depth_.ptr());
+  compute_cell_centers_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
+  compute_cell_centers_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees target
+
+  global_threads[0] = (unsigned) RoundUp(info_buffer_->scene_dims[0]*info_buffer_->scene_dims[1]*info_buffer_->scene_dims[2],(int)local_threads[0]);
+
+  if(!compute_cell_centers_kern->execute(queue_, 1, local_threads, global_threads))
+  {
+    vcl_cout<<"Compute Cell Centers Kernel Failed to Execute "<<vcl_endl;
+    return false;
+  }
+  int status = clFinish(queue_);
+  bool good_kern = check_val(status, CL_SUCCESS, "COMPUTE CELL CENTERS KERNEL FAILED: " + error_to_string(status));
+  if(!good_kern)
+    return false;
+
+  compute_cell_centers_kern->clear_args();
+
   bocl_mem* source_pts = opencl_cache_->get_data<BOXM2_POINT>(target_scene_, *iter_blk_target, 0, false, "source");
   if(!vec_field.compute_inverse_transform(target_scene_, *iter_blk_target, target_pts, source_pts, queue_)) {
     vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(): Error computing inverse transform!" << vcl_endl;
     return false;
   }
-
-  global_threads[0] = (unsigned) RoundUp(info_buffer_->scene_dims[0]*info_buffer_->scene_dims[1]*info_buffer_->scene_dims[2],(int)local_threads[0]);
 
   //Gather information about the source and setup source data buffers
   info_buffer_source = source_scene_->get_blk_metadata(*iter_blk_source);
@@ -901,8 +943,8 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
     vcl_cout<<"Kernel Failed to Execute "<<vcl_endl;
     return false;
   }
-  int status = clFinish(queue_);
-  bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL (INTERP) FAILED: " + error_to_string(status));
+  status = clFinish(queue_);
+  good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL (INTERP) FAILED: " + error_to_string(status));
   if(!good_kern)
     return false;
   mog_target_->read_to_buffer(queue_);
