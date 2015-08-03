@@ -301,6 +301,6 @@ int main(int argc, char*argv[])
 
   float voxel_size[3];
   im_resources(0,0,0)->get_property(vil3d_property_voxel_size, voxel_size);
-  output->set_voxel_size(voxel_size[0], voxel_size[1], voxel_size[2]);
+  output->set_voxel_size_mm(voxel_size[0], voxel_size[1], voxel_size[2]);
   return 0;
 }
