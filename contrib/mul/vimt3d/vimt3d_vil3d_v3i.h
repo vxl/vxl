@@ -134,7 +134,7 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
 
   //: Set the size of the each pixel in the i,j,k directions.
   // Return false if underlying image doesn't store pixel sizes.
-  virtual bool set_voxel_size(float i, float j, float k);
+  virtual bool set_voxel_size_mm(float i, float j, float k);
 
   //: Get full world to image transform
   const vimt3d_transform_3d & world2im() const;

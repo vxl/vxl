@@ -21,6 +21,8 @@ static void test_save()
 
   vimt3d_transform_3d tr_gold1;
   tr_gold1.set_zoom_only( 0.1, 0.2, 0.3, 4, 5, 6);
+  vimt3d_transform_3d tr_gold2;
+  tr_gold2.set_zoom_only( 0.1, 0.2, 0.3, 0, 0, 0);  // To test formats which can't cope with translation
 
   {
     vil3d_image_resource_sptr ir_out1 = vil3d_new_image_resource(
@@ -80,23 +82,25 @@ static void test_save()
          mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
   }
 
-/*
+  image.set_world2im(tr_gold2);  // hdr can't currently cope with translation
   vimt3d_save("test_save2.hdr",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;
     vimt3d_load("test_save2.hdr",loaded_image,use_mm);
     TEST("hdr image round-trip has same zoom transform",
-         mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
+         mbl_test_summaries_are_equal(loaded_image.world2im(), image.world2im() ), true);
   }
-  
+ 
+// There is an inconsistency in the way that gipl deals with the origin
+  image.set_world2im(tr_gold2);  
   vimt3d_save("test_save2.gipl",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;
     vimt3d_load("test_save2.gipl",loaded_image,use_mm);
+    vcl_cout<<"gipl loaded: "<<loaded_image<<vcl_endl;
     TEST("gipl image round-trip has same zoom transform",
-         mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
+         mbl_test_summaries_are_equal(loaded_image.world2im(), image.world2im() ), true);
   }
-*/
 }
 
 TESTMAIN(test_save);
