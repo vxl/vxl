@@ -747,7 +747,7 @@ vil_pixel_format vil3d_meta_image::pixel_format(void) const
 //===================================================================
 // Set the voxel size
 //===================================================================
-bool vil3d_meta_image::set_voxel_size(float vi, float vj, float vk)
+bool vil3d_meta_image::set_voxel_size_mm(float vi, float vj, float vk)
 {
   header_.set_vox_size(vi,vj,vk);
   if (!header_.write_header(fpath_+".mhd")) return false;

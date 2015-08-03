@@ -728,7 +728,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
 //: Set the size of the each voxel in the i,j,k directions.
 // You can get the voxel sizes via get_properties().
 // \return false if underlying image doesn't store pixel sizes.
-bool vil3d_analyze_image::set_voxel_size(float si,float sj,float sk)
+bool vil3d_analyze_image::set_voxel_size_mm(float si,float sj,float sk)
 {
   header_.set_voxel_size(si,sj,sk);
   // Overwrite the header in the file

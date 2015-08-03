@@ -239,10 +239,10 @@ class vil3d_analyze_image: public vil3d_image_resource
   virtual bool put_view(const vil3d_image_view_base& im,
                         unsigned i0, unsigned j0, unsigned k0);
 
-  //: Set the size of the each voxel in the i,j,k directions.
+  //: Set the size of the each voxel in the i,j,k directions (mm).
   // You can get the voxel sizes via get_properties().
   // \return false if underlying image doesn't store pixel sizes.
-  virtual bool set_voxel_size(float/*i*/,float/*j*/,float/*k*/);
+  virtual bool set_voxel_size_mm(float/*i*/,float/*j*/,float/*k*/);
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0

@@ -339,14 +339,7 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
     return true;
   }
 
-  if (vcl_strcmp(vil3d_property_origin_offset, key)==0)
-  {
-    float* array = static_cast<float*>(value);
-    array[0] = (float)(dim1_ * 0.5);
-    array[1] = (float)(dim2_ * 0.5);
-    array[2] = (float)(dim3_ * 0.5);
-    return true;
-  }
+  // GIPL doesn't store origin offset consistently, so don't attempt to return a value.
 
   return false;
 }
@@ -626,7 +619,7 @@ bool vil3d_gipl_image::write_header(void)
 //: Set the size of the each voxel in the i,j,k directions.
 // You can get the voxel sizes via get_properties().
 //
-bool vil3d_gipl_image::set_voxel_size(float i,float j,float k)
+bool vil3d_gipl_image::set_voxel_size_mm(float i,float j,float k)
 {
   vox_width1_=i;
   vox_width2_=j;
