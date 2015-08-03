@@ -35,13 +35,13 @@ static void test_load(int argc, char* argv[])
   typedef vgl_point_3d<double> GP;
 
   TEST_NEAR("Correct GIPL transform a",
-            (t2(GP(0,0,0))-GP(4.5,4.5,4.5)).length(),0.0,1e-4);
+            (t2(GP(0,0,0))-GP(0,0,0)).length(),0.0,1e-4);
   TEST_NEAR("Correct GIPL transform b",
-            (t2(GP(0.001,0,0))-GP(5.5,4.5,4.5)).length(),0.0,1e-4);
+            (t2(GP(0.001,0,0))-GP(1,0,0)).length(),0.0,1e-4);
   TEST_NEAR("Correct GIPL transform c",
-            (t2(GP(0,0.001,0))-GP(4.5,5.5,4.5)).length(),0.0,1e-4);
+            (t2(GP(0,0.001,0))-GP(0,1,0)).length(),0.0,1e-4);
   TEST_NEAR("Correct GIPL transform d",
-            (t2(GP(0,0,0.001))-GP(4.5,4.5,5.5)).length(),0.0,1e-4);
+            (t2(GP(0,0,0.001))-GP(0,0,1)).length(),0.0,1e-4);
 }
 
 TESTMAIN_ARGS(test_load);
