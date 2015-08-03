@@ -132,7 +132,7 @@ bool vil3d_save(const vil3d_image_view_base & im,
     return false;
   }
 
-  if (!out->set_voxel_size(voxel_width_i,voxel_width_j,voxel_width_k))
+  if (!out->set_voxel_size_mm(voxel_width_i,voxel_width_j,voxel_width_k))
   {
     vcl_cerr << __FILE__ ": (vil3d_save) Cannot save voxel sizes."<<vcl_endl;
     return false;

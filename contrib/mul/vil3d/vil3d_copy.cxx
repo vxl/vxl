@@ -31,9 +31,10 @@ bool vil3d_copy_deep(const vil3d_image_resource_sptr &src, vil3d_image_resource_
   if (src->ni() == 0 || src->nj() == 0 || src->nk() == 0 || src->nplanes() == 0) return true;
 
   float sizes[3];
+  // Get sizes in metres
   if (dest->get_property(vil3d_property_voxel_size, sizes))
   {
-    dest->set_voxel_size(sizes[0], sizes[1], sizes[2]);
+    dest->set_voxel_size_mm(1000*sizes[0], 1000*sizes[1], 1000*sizes[2]);
   }
 
   vil3d_image_view_base_sptr view_ref = src->get_view();
