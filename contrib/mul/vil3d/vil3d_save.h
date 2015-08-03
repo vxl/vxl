@@ -19,7 +19,7 @@ bool vil3d_save(const vil3d_image_view_base &, char const* filename);
 bool vil3d_save(const vil3d_image_view_base &, char const* filename, char const* file_format);
 
 //: Send a vil3d_image_view to disk, deducing format from filename
-//  Utility function, allowing definition of voxel widths in header info.
+//  Utility function, allowing definition of voxel widths (in mm) in header info.
 // \relatesalso vil3d_image_view
 bool vil3d_save(const vil3d_image_view_base & im, 
                 float voxel_width_i,
