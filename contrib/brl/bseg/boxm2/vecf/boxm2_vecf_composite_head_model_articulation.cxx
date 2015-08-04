@@ -27,7 +27,7 @@ boxm2_vecf_composite_head_model_articulation::boxm2_vecf_composite_head_model_ar
     boxm2_vecf_composite_head_parameters head_params;
     params.eyelid_dt_ = ddt;
     //    params.eyelid_intensity_ =10;
-    params.eye_pointing_dir_ = *eit;
+    head_params.look_dir_ = *eit;
     head_params.l_orbit_params_ = params;
     head_params.r_orbit_params_ = params;
     params_.push_back(head_params);
@@ -44,11 +44,11 @@ boxm2_vecf_composite_head_model_articulation::boxm2_vecf_composite_head_model_ar
     boxm2_vecf_orbit_params params;
     boxm2_vecf_composite_head_parameters head_params;
     params.eyelid_dt_ = ddt2;
-    params.eye_pointing_dir_ = *eit;
-    params_.push_back(head_params);
+    head_params.look_dir_ = *eit;
     head_params.l_orbit_params_ = params;
     head_params.r_orbit_params_ = params;
     ddt2 += 0.15;
+    params_.push_back(head_params);
   }
 
   for(int i = 0; i<5; ++i){
@@ -63,6 +63,7 @@ boxm2_vecf_composite_head_model_articulation::boxm2_vecf_composite_head_model_ar
     params_.push_back(head_params);
   }
 
+  // blink
 for(int i = 0; i<6; ++i){
   boxm2_vecf_orbit_params l_params,r_params;
   r_params.eyelid_dt_ = 0;
@@ -77,24 +78,42 @@ for(int i = 0; i<6; ++i){
     head_params.r_orbit_params_ = r_params;
     params_.push_back(head_params);
   }
-
- double scale =1.0;
- for(int i = 0; i<6; ++i){
-  scale*=0.9;
+//adjust brow angle
+ double brow_angle=2, angle=0;
+ unsigned char intensity =75;
+for(int i = 0; i<10; ++i){
   boxm2_vecf_orbit_params l_params,r_params;
-  l_params.eyelid_dt_ = 0;
+    r_params.eyelid_dt_ = 0.9;
+    l_params.eyelid_dt_ = 0.9;
     boxm2_vecf_composite_head_parameters head_params;
-    if(i%3 == 0)
-      r_params.eyelid_dt_ = 0;
-    else if(i%3 == 1)
-      r_params.eyelid_dt_ = ddt/2;
-    else
-      r_params.eyelid_dt_ = ddt;
+    r_params.brow_angle_rad_ = brow_angle;
+    l_params.dphi_rad_ = angle;
+    angle+=0.1;
+    brow_angle+=0.2;
+    intensity+=10;
+    r_params.lower_eyelid_intensity_ = intensity;
     head_params.l_orbit_params_ = l_params;
     head_params.r_orbit_params_ = r_params;
-    head_params.head_scale_.x_ = scale;
     params_.push_back(head_params);
   }
+//scale head
+ // double scale =1.0;
+ // for(int i = 0; i<6; ++i){
+ //  scale-=0.05;
+ //  boxm2_vecf_orbit_params l_params,r_params;
+ //  l_params.eyelid_dt_ = 0;
+ //    boxm2_vecf_composite_head_parameters head_params;
+ //    if(i%3 == 0)
+ //      r_params.eyelid_dt_ = 0;
+ //    else if(i%3 == 1)
+ //      r_params.eyelid_dt_ = ddt/2;
+ //    else
+ //      r_params.eyelid_dt_ = ddt;
+ //    head_params.l_orbit_params_ = l_params;
+ //    head_params.r_orbit_params_ = r_params;
+ //    head_params.head_scale_.x_ = scale;
+ //    params_.push_back(head_params);
+ //  }
 
 
 }

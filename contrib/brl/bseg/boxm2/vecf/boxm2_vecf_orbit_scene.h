@@ -188,7 +188,9 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   void build_eyelid_crease();
   //: assign appearance to eyelid voxels
   void paint_eyelid_crease();
-
+  void rebuild();
+  void init_eyelids();
+  bool vfield_params_change_check(const boxm2_vecf_orbit_params& params);
   //: members
   boxm2_block* blk_;                     // the source block
   boxm2_block* target_blk_;              // the target block

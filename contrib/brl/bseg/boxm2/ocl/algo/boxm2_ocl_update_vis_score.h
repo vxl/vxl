@@ -27,7 +27,7 @@ class boxm2_ocl_update_vis_score
               unsigned ni, unsigned nj,
               vcl_string apm_id="");
 
-
+  void reset(vcl_string prefix_name);
   private:
     bool compile_kernels();
 

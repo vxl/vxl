@@ -181,6 +181,11 @@ void boxm2_vecf_orbit_scene::reset_indices(){
         bool eyelid       = static_cast<unsigned char>(eyelid_->data()[indx])      >0;
         bool lower_eyelid = static_cast<unsigned char>(lower_eyelid_->data()[indx])>0;
         bool eyelid_crease = static_cast<unsigned char>(eyelid_crease_->data()[indx])>0;
+        // if( alpha_data_ )
+        //   alpha_data_->data()[indx] = 0;
+        // if(app_data_)
+        //   app_data_->data()[indx][0] = static_cast<unsigned char>(10);
+
 
         if(sphere){
           sphere_cell_centers_.push_back(p);
@@ -219,23 +224,18 @@ void boxm2_vecf_orbit_scene::reset_indices(){
 boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance,bool is_right):
   boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
-
+  this->init_eyelids();
   is_single_instance_ = is_single_instance;
-  eyelid_geo_.set_tmin(params_.eyelid_tmin_);
-  eyelid_geo_.set_tmax(params_.eyelid_tmax_);
-
-
-  lower_eyelid_geo_.set_tmin(params_.lower_eyelid_tmin_);
-  lower_eyelid_geo_.set_tmax(params_.lower_eyelid_tmax_);
-
-  eyelid_crease_geo_.set_tmin(params_.eyelid_crease_tmin_);
-  eyelid_crease_geo_.set_tmax(params_.eyelid_crease_tmax_);
 
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
   if(has_background_){
     this->fill_block();
   }
+  this->rebuild();
+ }
+void boxm2_vecf_orbit_scene::rebuild(){
+    this->init_eyelids();
     this->create_eye();
     this->create_eyelid();
     this->create_lower_eyelid();
@@ -245,9 +245,7 @@ boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, boo
     this->recreate_eyelid();
     this->recreate_lower_eyelid();
     this->recreate_eyelid_crease();
-
- }
-
+}
  void boxm2_vecf_orbit_scene::build_sphere(){
   double len = 1;
   double d_thresh = 0.86602540*len;//sqrt(3)/2 x len, diagonal distance
@@ -366,6 +364,8 @@ void boxm2_vecf_orbit_scene::find_cell_neigborhoods(){
 void boxm2_vecf_orbit_scene::paint_sclera(){
 
   params_.app_[0]=params_.sclera_intensity_;
+  vnl_vector_fixed<unsigned char,8> color;
+  color[0] = 255; color[2]= 0; color[4]=0;
   boxm2_data_traits<BOXM2_NUM_OBS>::datatype nobs;
   nobs.fill(0);
   unsigned ns = static_cast<unsigned>(sphere_cell_centers_.size());
@@ -380,6 +380,7 @@ void boxm2_vecf_orbit_scene::paint_sclera(){
     alpha_data_->data()[indx]= - vcl_log(0.05)/ this->subblock_len();
     app_data_->data()[indx] = params_.app_;
     nobs_data_->data()[indx] = nobs;
+    //    color_app_data_->data()[indx] =color;
   }
 }
 //run through all the iris points and paint them
@@ -412,7 +413,7 @@ void boxm2_vecf_orbit_scene::create_eye(){
   this->build_sphere();
   this->build_iris();
   this->build_pupil();
-  vcl_cout << "Create eye in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Create eye in " << t.real()/1000.0 << " sec.\n";
 }
 
  void boxm2_vecf_orbit_scene::recreate_eye(){
@@ -453,7 +454,13 @@ void boxm2_vecf_orbit_scene::create_eye(){
 
 bool boxm2_vecf_orbit_scene::is_type_global(vgl_point_3d<double> const& global_pt, boxm2_vecf_orbit_scene::anat_type  type) const{
   unsigned indx;
-  blk_->data_index(global_pt, indx);
+  bool success =  blk_->data_index(global_pt, indx);
+  if (!success){
+    //#if _DEBUG
+    vcl_cout<<"point "<<global_pt<< " was out of eye scene bounding box "<<vcl_endl;
+    //#endif
+    return false;
+}
   return this->is_type_data_index(indx, type);
 }
 
@@ -541,7 +548,7 @@ void boxm2_vecf_orbit_scene::create_eyelid(){
   vul_timer t;
    this->build_eyelid();
    this->paint_eyelid();
-  vcl_cout << "Create eyelid in " << t.real()/1000.0 << " sec.\n";
+   //  vcl_cout << "Create eyelid in " << t.real()/1000.0 << " sec.\n";
 }
 
 void boxm2_vecf_orbit_scene::recreate_eyelid(){
@@ -806,7 +813,7 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eyelid(double dt, vcl_vector<
     vfield[i]=eyelid_geo_.vf(p.x(),tc, -dt);
     valid[i]=static_cast<unsigned char>(2);
   }
-  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void  boxm2_vecf_orbit_scene::inverse_vector_field_lower_eyelid(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const{
@@ -833,7 +840,7 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_lower_eyelid(vcl_vector<vgl_v
    // no movement of the lower lid for now
     valid[i]=true;
   }
-  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void  boxm2_vecf_orbit_scene::inverse_vector_field_eyelid_crease(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const{
@@ -859,7 +866,7 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eyelid_crease(vcl_vector<vgl_
    // no movement of the crease for now
     valid[i]=true;
   }
-  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Create eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 //
@@ -909,7 +916,6 @@ void boxm2_vecf_orbit_scene::interpolate_vector_field(vgl_point_3d<double> const
   boxm2_data_traits<BOXM2_ALPHA>::datatype alpha = static_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype>(sumalpha);
   target_app_data_->data()[tindx] = app;
   target_alpha_data_->data()[tindx] = alpha;
-  target_color_data_->data()[tindx] = color_app_data_->data()[dindx];
   target_color_data_->data()[tindx] = color_app;
 }
 
@@ -942,7 +948,7 @@ void boxm2_vecf_orbit_scene::apply_eye_vector_field_to_target(vcl_vector<vgl_vec
                                    sphere_cell_centers_, cell_neighbor_cell_index_,
                                    cell_neighbor_data_index_);
   }
-  vcl_cout << "Apply eye vector field in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Apply eye vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void boxm2_vecf_orbit_scene::apply_eyelid_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
@@ -989,7 +995,7 @@ void boxm2_vecf_orbit_scene::apply_eyelid_vector_field_to_target(vcl_vector<vgl_
     interpolate_vector_field(src, sindx, dindx, tindx,eyelid_cell_centers_,
                              eyelid_cell_neighbor_cell_index_,eyelid_cell_neighbor_data_index_);
   }
-  vcl_cout << "Apply eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Apply eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
@@ -997,6 +1003,7 @@ void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vecto
 
    vul_timer t;
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
+
   vnl_vector_fixed<unsigned char,8> color = random_color();
   int n = static_cast<unsigned>(box_cell_centers_.size());
   if(n==0)
@@ -1021,13 +1028,13 @@ void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vecto
     unsigned sindx=0, dindx=0;
     if(!find_nearest_data_index(LOWER_LID, src, dindx))
       continue;
-
+    //    vcl_cout<<(int)app_data_->data()[dindx][0]<<" ";
     sindx = lower_eyelid_data_index_to_cell_index_[dindx];
     //    target_color_data_->data()[tindx] = color;
     interpolate_vector_field(src, sindx, dindx, tindx, lower_eyelid_cell_centers_,
                              lower_eyelid_cell_neighbor_cell_index_,lower_eyelid_cell_neighbor_data_index_);
   }
-  vcl_cout << "Apply lower lower_eyelid vector field in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Apply lower lower_eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void boxm2_vecf_orbit_scene::apply_eyelid_crease_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
@@ -1065,7 +1072,7 @@ void boxm2_vecf_orbit_scene::apply_eyelid_crease_vector_field_to_target(vcl_vect
     interpolate_vector_field(src, sindx, dindx, tindx, eyelid_crease_cell_centers_,
                              eyelid_crease_cell_neighbor_cell_index_,eyelid_crease_cell_neighbor_data_index_);
   }
-  vcl_cout << "Apply lower eyelid_crease vector field in " << t.real()/1000.0 << " sec.\n";
+  //  vcl_cout << "Apply lower eyelid_crease vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
 void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
@@ -1104,7 +1111,12 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
 bool boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& params){
   try{
     boxm2_vecf_orbit_params const& params_ref = dynamic_cast<boxm2_vecf_orbit_params const &>(params);
+    bool intrinsic_change = this->vfield_params_change_check(params_ref); // assuming intrinsic parameters changed,i.e. eye color and the orbit scene needs to be rebuilt and repainted
     params_ =boxm2_vecf_orbit_params(params_ref);
+    vcl_cout<< "intrinsic change? "<<intrinsic_change<<vcl_endl;
+    if(intrinsic_change)
+      this->rebuild();
+
     return true;
   }catch(std::exception e){
     vcl_cout<<" Can't downcast orbit parameters! PARAMATER ASSIGNMENT PHAILED!"<<vcl_endl;
@@ -1119,4 +1131,33 @@ bool boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& par
   ret.fill(0);
   ret[0] = R; ret[2] =G; ret[4] =B;
   return ret;
+}
+void boxm2_vecf_orbit_scene::init_eyelids(){
+  eyelid_geo_ =boxm2_vecf_eyelid(this->params_);
+  eyelid_geo_.set_tmin(params_.eyelid_tmin_);
+  eyelid_geo_.set_tmax(params_.eyelid_tmax_);
+
+  lower_eyelid_geo_ =boxm2_vecf_eyelid(this->params_);
+  lower_eyelid_geo_.set_tmin(params_.lower_eyelid_tmin_);
+  lower_eyelid_geo_.set_tmax(params_.lower_eyelid_tmax_);
+
+  eyelid_crease_geo_ =boxm2_vecf_eyelid_crease(this->params_);
+  eyelid_crease_geo_.set_tmin(params_.eyelid_crease_tmin_);
+  eyelid_crease_geo_.set_tmax(params_.eyelid_crease_tmax_);
+
+
+}
+bool boxm2_vecf_orbit_scene::vfield_params_change_check(const boxm2_vecf_orbit_params & params){
+  double tol = 0.001;
+  bool intrinsic_change = false;
+  //  intrinsic_change |= fabs(this->params_.crease_dphi_rad_ - params.crease_dphi_rad_)>tol;
+  intrinsic_change |= fabs(this->params_.dphi_rad_ - params.dphi_rad_)              >tol;
+  intrinsic_change |= fabs(this->params_.brow_angle_rad_  - params.brow_angle_rad_) > tol;
+  intrinsic_change |= fabs(this->params_.eye_radius_  - params.eye_radius_) > tol;
+  intrinsic_change |= fabs(this->params_.pupil_intensity_ - params.pupil_intensity_) > tol;
+  intrinsic_change |= fabs(this->params_.sclera_intensity_ - params.sclera_intensity_) > tol;
+  intrinsic_change |= fabs(this->params_.lower_eyelid_intensity_ - params.lower_eyelid_intensity_) > tol;
+  intrinsic_change |= fabs(this->params_.eyelid_intensity_ - params.eyelid_intensity_) > tol;
+  intrinsic_change |= fabs(this->params_.eyelid_crease_upper_intensity_ - params.eyelid_crease_upper_intensity_) > tol;
+  return intrinsic_change;
 }

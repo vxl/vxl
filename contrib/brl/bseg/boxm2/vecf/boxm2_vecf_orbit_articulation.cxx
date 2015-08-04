@@ -22,7 +22,6 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
       eit != emv.end(); eit++){
     boxm2_vecf_orbit_params params;
     params.eyelid_dt_ = ddt;
-    params.eyelid_intensity_ =10;
     params.eye_pointing_dir_ = *eit;
     params_.push_back(params);
   }

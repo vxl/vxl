@@ -26,18 +26,17 @@ class boxm2_ocl_paint_batch
                              cl_command_queue           &queue,
                              vcl_string                 data_type,
                              boxm2_block_id             id,
-                             bsta_sigma_normalizer_sptr n_table ); 
+                             bsta_sigma_normalizer_sptr n_table );
 
   private:
 
     //compile kernels and place in static map
-    static bocl_kernel* compile_kernels( bocl_device_sptr device, vcl_string opts="" ); 
+    static bocl_kernel* compile_kernels( bocl_device_sptr device, vcl_string opts="" );
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, bocl_kernel*> kernels_; 
+    static vcl_map<vcl_string, bocl_kernel*> kernels_;
 
-    static void weighted_mean_var(float* obs, float* vis, int numSamples, float& mean, float& var); 
-
+    static void weighted_mean_var(float* obs, float* vis, int numSamples, float& mean, float& var);
 };
 
 #endif // boxm2_ocl_paint_batch_h_

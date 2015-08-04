@@ -1,3 +1,4 @@
+
 #include <vcl_fstream.h>
 #include "boxm2_vecf_fit_orbit.h"
 #include "boxm2_vecf_eyelid.h"
@@ -31,14 +32,14 @@ void boxm2_vecf_fit_orbit::fill_smid_map(){
   smid_map_["right_Nz"]=RIGHT_Nz;
   smid_map_["right_iris_radius"]=RIGHT_IRIS_RADIUS;
 }
-bool boxm2_vecf_fit_orbit::add_labeled_point(labeled_point lp){ 
+bool boxm2_vecf_fit_orbit::add_labeled_point(labeled_point lp){
   vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(lp.label_);
   if(iit == smid_map_.end() ){
     vcl_cout << "Measurement label " << lp.label_ << " doesn't exist\n";
     return false;
   }
   lpts_[iit->second] = lp;
-  return true;  
+  return true;
 }
 //
 // there are two anchor file formats at present:
@@ -48,11 +49,11 @@ bool boxm2_vecf_fit_orbit::add_labeled_point(labeled_point lp){
 // and one where the iris diameter and Nz values are scalar, i.e.,
 // v, Nz
 // v, Diris
-// 
+//
 // moreover in the point label format the corresponding labels are
 // v, v, v, left_iris_radius (right_iris_radius)
 // v, v, v, left_Nz (right_Nz)
-// 
+//
 // these lablels are the used in internal maps, not Diris or Nz
 // so the reader maps to the internal labels. The implementation below
 // can ingest either format
@@ -188,6 +189,7 @@ bool boxm2_vecf_fit_orbit::add_dlib_anchor_part(vcl_map<vcl_string, vcl_vector<v
   if((pts.size()==1)&&!circ_pt)
     p = pts[0];
   else if((pts.size() == 2)&& circ_pt){
+
     const vgl_point_2d<double>& p0 = pts[0];
     const vgl_point_2d<double>& p1 = pts[1];
         //compute iris radius
@@ -265,7 +267,7 @@ bool boxm2_vecf_fit_orbit::read_dlib_part_file(vcl_string const& path, bool imag
     if(lab=="") continue;
     vcl_size_t found=lab.find("right");
     if (found!=vcl_string::npos)
-      is_right = true;    
+      is_right = true;
     //
     // the image y coordinate is inverted as in a matrix index
     // so to convert to Cartesian head coordinates, image height is needed
@@ -455,14 +457,14 @@ bool boxm2_vecf_fit_orbit::left_eye_inferior_lid_thickness(vcl_string const& dat
   if(iit == smid_map_.end() ){
     vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   if(!has_inferior_surface_pts_){
     dr = left_params_.eyelid_radius_offset_;
     return true;
   }
   const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
   if(!pts.size()){
-    vcl_cout << "No data of type " << data_desc << '\n';
+    vcl_cout << "No data of type " << data_desc <<" in left_eye_inferior_lid_thickness" <<'\n';
     return false;
   }
   double x0 = left_params_.x_trans(), y0 = left_params_.y_trans()+left_params_.y_off_, z0 =left_params_.z_trans(), r = left_params_.eye_radius_;
@@ -494,8 +496,10 @@ bool boxm2_vecf_fit_orbit::left_eye_inferior_lid_thickness(vcl_string const& dat
 bool boxm2_vecf_fit_orbit::set_left_iris_radius(){
   vcl_map<mids, labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_IRIS_RADIUS);
-  if(lit == lpts_.end())
+  if(lit == lpts_.end()){
+    vcl_cout<<"left iris radius not found"<<vcl_endl;
     return false;
+  }
   const vgl_point_3d<double>& l_iris_r  = lit->second.p3d_;
   left_params_.iris_radius_ = l_iris_r.x();
   return true;
@@ -530,15 +534,15 @@ bool boxm2_vecf_fit_orbit::left_trans_z_from_sclera(vcl_string const& data_desc,
     tr_z = 0.0;
     return true;
   }
-    
+
   vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
   if(!pts.size()){
-    vcl_cout << "No data of type " << data_desc << '\n';
+    vcl_cout << "No data of type " << data_desc <<" in left trans_z_from_sclera" <<'\n';
     return false;
   }
   double x0 = left_params_.x_trans(), y0 = left_params_.y_trans(), r = left_params_.eye_radius_;
@@ -565,7 +569,7 @@ bool boxm2_vecf_fit_orbit::left_eye_x_scale(double& left_x_scale){
   double x = le_oc.x()-left_params_.trans_x_;
   double xm = left_params_.eye_radius_*left_params_.x_max_;
   double temp  = x/xm;
-  
+
   lit = lpts_.find(LEFT_EYE_MEDIAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -720,7 +724,7 @@ bool boxm2_vecf_fit_orbit::left_ang_rad(double& ang_rad){
     return false;
   const vgl_point_3d<double>& le_mc  = lit->second.p3d_;
   lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
-  if(lit == lpts_.end()) 
+  if(lit == lpts_.end())
     return false;
   const vgl_point_3d<double>& le_lc  = lit->second.p3d_;
   double dy = le_mc.y()-le_lc.y();
@@ -730,7 +734,7 @@ bool boxm2_vecf_fit_orbit::left_ang_rad(double& ang_rad){
 }
 void  boxm2_vecf_fit_orbit::set_left_ang_rad(double& ang_rad){
   left_params_.dphi_rad_=   ang_rad - nominal_canthus_angle_rad_;
-} 
+}
 
 // assign z values to dlib points derived from images
 bool boxm2_vecf_fit_orbit::set_left_z_values(){
@@ -781,14 +785,14 @@ bool boxm2_vecf_fit_orbit::max_sclera_z(vcl_string const& data_desc, double r, d
   if(iit == smid_map_.end() ){
     vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   if(only_2d_data_){
     max_z = r;
     return true;
   }
   vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
   if(!pts.size()){
-    vcl_cout << "No data of type " << data_desc << '\n';
+    vcl_cout << "No data of type " << data_desc << " :max_sclera_z called\n";
     return false;
   }
   max_z = -vcl_numeric_limits<double>::max();
@@ -808,10 +812,10 @@ bool boxm2_vecf_fit_orbit::fit_sclera(vcl_string const& data_desc){
   if(iit == smid_map_.end() ){
     vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
   if(!pts.size()){
-    vcl_cout << "No data of type " << data_desc << '\n';
+    vcl_cout << "No data of type " << data_desc << " :fit_sclera called \n";
     return false;
   }
   vgl_fit_sphere_3d<double> fit_sph(pts);
@@ -843,7 +847,7 @@ void boxm2_vecf_fit_orbit::set_canthus_angle(bool is_right){
     return;
   }
   double lat_canthus_x= 0.0, lat_canthus_y= 0.0;
-  double med_canthus_x= 0.0, med_canthus_y= 0.0; 
+  double med_canthus_x= 0.0, med_canthus_y= 0.0;
   if(is_right){
     lat_canthus_x = 0.5*(inf_pts[imin].x()+ sup_pts[imin].x());
     lat_canthus_y = 0.5*(inf_pts[imin].y()+ sup_pts[imin].y());
@@ -957,10 +961,10 @@ bool boxm2_vecf_fit_orbit::right_eye_inferior_lid_thickness(vcl_string const& da
   if(iit == smid_map_.end() ){
     vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
   if(!pts.size()){
-    vcl_cout << "No data of type " << data_desc << '\n';
+    vcl_cout << "No data of type " << data_desc <<" in right eye inferior lid thickness" <<'\n';
     return false;
   }
   if(!has_inferior_surface_pts_){
@@ -997,8 +1001,10 @@ bool boxm2_vecf_fit_orbit::right_eye_inferior_lid_thickness(vcl_string const& da
 bool boxm2_vecf_fit_orbit::set_right_iris_radius(){
   vcl_map<mids, labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_IRIS_RADIUS);
-  if(lit == lpts_.end())
+  if(lit == lpts_.end()){
+    vcl_cout<<"right iris radius not found"<<vcl_endl;
     return false;
+  }
   const vgl_point_3d<double>& l_iris_r  = lit->second.p3d_;
   right_params_.iris_radius_ = l_iris_r.x();
   return true;
@@ -1039,10 +1045,10 @@ bool boxm2_vecf_fit_orbit::right_trans_z_from_sclera(vcl_string const& data_desc
   if(iit == smid_map_.end() ){
     vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   const vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
   if(!pts.size()){
-    vcl_cout << "No data of type " << data_desc << '\n';
+    vcl_cout << "No data of type " << data_desc <<" in right_trans_z_from_sclera "<< '\n';
     return false;
   }
   double x0 = right_params_.x_trans(), y0 = right_params_.y_trans(), r = right_params_.eye_radius_;
@@ -1222,7 +1228,7 @@ bool boxm2_vecf_fit_orbit::right_ang_rad(double& ang_rad){
     return false;
   const vgl_point_3d<double>& re_mc  = lit->second.p3d_;
   lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
-  if(lit == lpts_.end()) 
+  if(lit == lpts_.end())
     return false;
   const vgl_point_3d<double>& re_lc  = lit->second.p3d_;
   double dy = re_mc.y()-re_lc.y();
@@ -1231,9 +1237,9 @@ bool boxm2_vecf_fit_orbit::right_ang_rad(double& ang_rad){
   return true;
 }
 void  boxm2_vecf_fit_orbit::set_right_ang_rad(double& ang_rad){
-  
+
   right_params_.dphi_rad_= -(nominal_canthus_angle_rad_+ang_rad);
-} 
+}
 
 // assign z values to dlib points derived from images
 bool boxm2_vecf_fit_orbit::set_right_z_values(){
@@ -1291,7 +1297,7 @@ bool boxm2_vecf_fit_orbit::fit_left(){
 
 // the fitted sphere radius appears to be more accurate than from the cusp distances
 // also the x origin seems more accurate when estimated from the sphere center than cusps
-#if !USE_SPHERE 
+#if !USE_SPHERE
   good = this->left_eye_radius(eye_rad);
   if(!good)
     return false;
@@ -1331,7 +1337,7 @@ bool boxm2_vecf_fit_orbit::fit_left(){
   if(!good)
     return false;
   this->set_left_trans_z(trz);
-#if !USE_SPHERE 
+#if !USE_SPHERE
   left_params_.init_sphere();
 #endif
   double lat_rad_coef = 0.0, med_rad_coef = 0.0;
@@ -1400,7 +1406,7 @@ bool boxm2_vecf_fit_orbit::fit_right(){
   this->set_right_ang_rad(ang_rad);
 
 
-#if !USE_SPHERE 
+#if !USE_SPHERE
    good = this->right_eye_radius(eye_rad);
   if(!good)
     return false;
@@ -1415,7 +1421,7 @@ bool boxm2_vecf_fit_orbit::fit_right(){
   d_trx = right_params_.x_off_coef_*rlat;
   //<====
   d_try = rlat*vcl_sin(right_params_.dphi_rad_);
-  
+
   trx += d_trx;
 
 #else
@@ -1440,7 +1446,7 @@ bool boxm2_vecf_fit_orbit::fit_right(){
   if(!good)
     return false;
    this->set_right_trans_z(trz);
-#if !USE_SPHERE 
+#if !USE_SPHERE
   right_params_.init_sphere();
 #endif
   double lat_rad_coef = 0.0, med_rad_coef = 0.0;
@@ -1487,7 +1493,7 @@ bool boxm2_vecf_fit_orbit::fit_right(){
   if(!good)
     return false;
   this->set_right_superior_margin_z(r_sup_margin_z);
-  
+
   double crease_z;
   good = this->right_mid_eyelid_crease_z(crease_z);
   if(!good)
@@ -1505,7 +1511,7 @@ bool boxm2_vecf_fit_orbit::load_orbit_data(vcl_string const& data_desc, vcl_stri
     if(error_msg)
       vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   vcl_ifstream istr(path.c_str());
   if(!istr.is_open()){
     if(error_msg)
@@ -1538,13 +1544,13 @@ bool boxm2_vecf_fit_orbit::plot_orbit_data(vcl_string const& data_desc, vcl_vect
   if(iit == smid_map_.end() ){
     vcl_cout << "data label " << data_desc << " doesn't exist\n";
     return false;
-  } 
+  }
   vcl_vector<vgl_point_3d<double> >& pts = orbit_data_[iit->second];
   if(!pts.size()){
     vcl_cout << "No data of type " << data_desc << '\n';
     return false;
   }
-  bool is_right = iit->second > LEFT_IRIS_RADIUS; 
+  bool is_right = iit->second > LEFT_IRIS_RADIUS;
   boxm2_vecf_orbit_params params = left_params_;
   if(is_right)
     params = right_params_;
@@ -1686,7 +1692,7 @@ bool boxm2_vecf_fit_orbit::display_anchors(vcl_ofstream& ostr, bool is_right){
 // and superior crease
 //
 bool boxm2_vecf_fit_orbit::display_orbit_vrml(vcl_ofstream& ostr, bool is_right, bool show_model){
-  
+
   if(!ostr)
     return false;
   bvrml_write::write_vrml_header(ostr);

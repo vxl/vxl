@@ -56,7 +56,7 @@ class boxm2_vecf_fit_orbit{
   // <=======
 
   // Left orbit parameter fitting
-  // see .cxx file for additional comments 
+  // see .cxx file for additional comments
   bool set_left_iris_radius();
   bool left_eye_radius( double& rad);
   void set_left_eye_radius(double rad){left_params_.eye_radius_=rad;}
@@ -87,7 +87,7 @@ class boxm2_vecf_fit_orbit{
   bool left_eye_y_scale(double& left_y_scale);
   void set_left_eye_y_scale(double& left_y_scale)
   {left_params_.scale_y_coef_ = left_y_scale*left_params_.scale_y_coef_;}
-  
+
   // currently not used, nominal tmin is used instead
   bool left_eye_inferior_margin_t(double& left_inf_t);
   void set_left_eye_inferior_margin_t(double& left_inf_t){
@@ -132,7 +132,7 @@ class boxm2_vecf_fit_orbit{
 
 
   //: Right orbit parameter fitting
-  // see .cxx file for additional comments 
+  // see .cxx file for additional comments
   bool set_right_iris_radius();
   bool right_eye_radius( double& rad);
   void set_right_eye_radius(double rad){right_params_.eye_radius_=rad;}
@@ -166,7 +166,7 @@ class boxm2_vecf_fit_orbit{
   bool right_eye_y_scale(double& right_y_scale);
   void set_right_eye_y_scale(double& right_y_scale)
   {right_params_.scale_y_coef_ = right_y_scale*right_params_.scale_y_coef_;}
-  
+
   // currently not used, nominal tmin is used instead
   bool right_eye_inferior_margin_t(double& right_inf_t);
   void set_right_eye_inferior_margin_t(double& right_inf_t){
@@ -246,15 +246,17 @@ class boxm2_vecf_fit_orbit{
     return true;
   }
   void set_has_inferior_surface(bool has_surface){has_inferior_surface_pts_ = has_surface;}
- private:
-  //: the map between string and enum 
-  void fill_smid_map();
-
   //: helpers for parsing the dlib part file
+
   bool add_dlib_anchor_part(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,
                             vcl_string const& dlabel, vcl_string const& olabel);
   bool add_dlib_orbit_data(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,
                            vcl_string const& dlabel, vcl_string const& olabel);
+  void set_only_2d_data(bool is_from_dlib){this->only_2d_data_= is_from_dlib; }
+ private:
+  //: the map between string and enum
+  void fill_smid_map();
+
 
   //: map a string label to the correspondingenum value
   vcl_map<vcl_string, mids> smid_map_;

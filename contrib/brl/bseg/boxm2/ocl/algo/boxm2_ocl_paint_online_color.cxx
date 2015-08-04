@@ -228,7 +228,7 @@ bool boxm2_ocl_paint_online_color::paint_scene_with_weights(boxm2_scene_sptr    
       kern->set_arg( aux2 ); // mean Y
       kern->set_arg( aux3 ); // mean U
       kern->set_arg( aux4 ); // mean V
-      kern->set_arg( lookup.ptr() ); 
+      kern->set_arg( lookup.ptr() );
 
       // kern->set_arg( persp_cam.ptr() );
       kern->set_arg( ray_o_buff.ptr() );
@@ -452,4 +452,26 @@ vcl_vector< bocl_kernel* > boxm2_ocl_paint_online_color::compile_kernels( bocl_d
   //store in map
   kernels_[identifier] = kernels;
   return kernels;
+}
+bool boxm2_ocl_paint_online_color::reset( boxm2_scene_sptr scene,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,vcl_string apm_id){
+  int status=0;
+  cl_command_queue queue = clCreateCommandQueue( device->context(),
+                                                 *(device->device_id()),
+                                                 CL_QUEUE_PROFILING_ENABLE,
+                                                 &status);
+  if (status!=0)
+    return false;
+  vcl_vector<boxm2_block_id> block_ids = scene->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator id;
+  boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype grey;
+  grey.fill(128);
+  for(id = block_ids.begin(); id!=block_ids.end(); id++){
+
+    bocl_mem* rgb_data = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(apm_id));
+    bocl_mem* num_obs  = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(apm_id));
+    rgb_data->fill(queue, grey, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(apm_id));
+    //rgb_data->zero_gpu_buffer(queue);
+    num_obs-> zero_gpu_buffer(queue);
+}
+  return true;
 }

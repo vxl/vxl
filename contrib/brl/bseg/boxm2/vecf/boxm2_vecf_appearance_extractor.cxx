@@ -144,6 +144,7 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right){
   boxm2_scene_sptr source_model = orbit.scene();
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
   unsigned n_source_cells = static_cast<unsigned>(orbit.sphere_cell_centers_.size());
+  vcl_cout<<"sphere cell centers: "<<n_source_cells;
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
@@ -233,7 +234,7 @@ void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_r
 
           source_app_data[source_data_idx] = target_app_data[target_data_idx];
           source_color_data[source_data_idx]= target_color_data[target_data_idx];
-          //source_color_data[source_data_idx] = color;
+          //          source_color_data[source_data_idx] = color;
         }
       }
     }
@@ -291,10 +292,9 @@ void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right
           target_blk->data_index( mapped_p, target_data_idx);
           unsigned source_data_idx = orbit.lower_eyelid_cell_data_index_[i];
           source_app_data[source_data_idx] = target_app_data[target_data_idx];
-          float prob = 1 - vcl_exp( - target_alpha_data[target_data_idx] * target_side_len);
-          vcl_cout<<(int)target_color_data[target_data_idx][0]<<" -- "<<(int)target_color_data[target_data_idx][2]<<" -- "<<(int)target_color_data[target_data_idx][4]<<" | "<<prob<<vcl_endl;
+          //          float prob = 1 - vcl_exp( - target_alpha_data[target_data_idx] * target_side_len);
           source_color_data[source_data_idx]= target_color_data[target_data_idx];
-          //            source_color_data[source_data_idx] = color;
+          //          source_color_data[source_data_idx] = color;
         }
       }
     }
@@ -314,6 +314,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
     orbit_params = head_params.r_orbit_params_;
   }
   color_APM color =orbit.random_color();
+  color[0]=255; color[2]=0; color[4]=0;
   unsigned dt = orbit_params.eyelid_dt_;
   boxm2_scene_sptr source_model = orbit.scene();
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
@@ -367,7 +368,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
 
           source_app_data[source_data_idx] = target_app_data[target_data_idx];
           source_color_data[source_data_idx]= target_color_data[target_data_idx];
-          //          source_color_data[source_data_idx]= color;
+
         }
       }
     }

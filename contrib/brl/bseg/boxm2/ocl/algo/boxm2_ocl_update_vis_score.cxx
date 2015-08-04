@@ -268,3 +268,19 @@ bool boxm2_ocl_update_vis_score::run( vpgl_camera_double_sptr  cam,
   clReleaseCommandQueue(queue);
   return true;
 }
+void boxm2_ocl_update_vis_score::reset(vcl_string prefix_name){
+  int status=0;
+  cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),
+                                                CL_QUEUE_PROFILING_ENABLE,&status);
+  if (!check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status)) ) {
+    return ;
+  }
+
+  vcl_vector<boxm2_block_id> block_ids = scene_->get_block_ids();
+  vcl_vector<boxm2_block_id>::iterator id;
+
+  for(id = block_ids.begin(); id!=block_ids.end(); id++){
+    bocl_mem *vis_score  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(prefix_name));
+    vis_score->zero_gpu_buffer(queue);
+  }
+}
