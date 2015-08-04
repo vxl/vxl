@@ -467,11 +467,16 @@ bool boxm2_ocl_paint_online_color::reset( boxm2_scene_sptr scene,bocl_device_spt
   grey.fill(128);
   for(id = block_ids.begin(); id!=block_ids.end(); id++){
 
-    bocl_mem* rgb_data = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(apm_id));
+    bocl_mem* rgb_data = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(apm_id));
     bocl_mem* num_obs  = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(apm_id));
-    rgb_data->fill(queue, grey, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(apm_id));
-    //rgb_data->zero_gpu_buffer(queue);
+    rgb_data->fill(queue, grey, "uchar8" );
     num_obs-> zero_gpu_buffer(queue);
+    int status = clFinish(queue);
+    if(status != 0 ){
+      vcl_cout<<" could not reset num obs and appearance buffer! "<<vcl_endl;
+      return false;
+    }
+
 }
   return true;
 }
