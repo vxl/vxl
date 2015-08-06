@@ -108,7 +108,7 @@ class bocl_manager
   //: Copy constructor
   bocl_manager(bocl_manager<T> const& og) {}
   //: assignment operator
-  bocl_manager operator = (bocl_manager<T> const& rhs) {}
+  bocl_manager& operator = (bocl_manager<T> const& rhs) {return *this;}
 
 };
 
