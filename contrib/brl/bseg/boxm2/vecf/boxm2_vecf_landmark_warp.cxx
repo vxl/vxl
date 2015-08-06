@@ -23,15 +23,16 @@ boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_
 vgl_point_3d<double> boxm2_vecf_landmark_mapper::operator() (vgl_point_3d<double> const& x) const
 {
   // compute weighted sum of control points
-  const double epsilon = 1e-3;
+  const double epsilon = 1e-1;
   vgl_vector_3d<double> vec(0.0, 0.0, 0.0);
   double weight_sum = 0.0;
   for (vcl_vector<vgl_point_3d<double> >::const_iterator 
        spit=control_pts_source_.begin(), tpit = control_pts_target_.begin();
        spit != control_pts_source_.end(); ++spit, ++tpit) {
-    double weight = 1.0 / ((*spit - x).sqr_length() + epsilon);
+    double dist_sqrd = (*spit - x).sqr_length();
+    double weight = 1.0 / (dist_sqrd + epsilon);
     weight_sum += weight;
-    vec += (*tpit - *spit);
+    vec += weight*(*tpit - *spit);
   }
   vec /= weight_sum;
   return x + vec;
