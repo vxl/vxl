@@ -216,7 +216,6 @@ bool boxm2_vecf_ocl_transform_scene::compile_compute_cell_centers_kernel()
   src_paths.push_back(source_dir     + "scene_info.cl");
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
-  src_paths.push_back(vecf_source_dir + "interp_helpers.cl");
   src_paths.push_back(vecf_source_dir + "compute_cell_centers.cl");
   this->compute_cell_centers_kern = new bocl_kernel();
   return compute_cell_centers_kern->create_kernel(&device_->context(),device_->device_id(), src_paths, "compute_cell_centers", options, "compute_cell_centers");
