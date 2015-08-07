@@ -37,6 +37,9 @@ int get_parent_lvl(int level,int i){
   return p_index;
 
 }
+
+// dec: ifdef'ing this fn out because it doesn't seem to be called, and missing defition of "traverse_three_lvl", causing compile problems.
+#if 0
 int get_data_index_stream_cache(float x,float y,float z,int lid,int level,unsigned int* alpha_offset,__constant int* sceneB_bbox_ids,__constant float* sceneB_blk_dims,
                                 __constant float* sceneB_origin,__global float*  sub_block_len, __global unsigned int* sceneB_tree_offsets,__global unsigned int* sceneB_alpha_offsets,
         float* cell_len,__global int4* sceneB_trees,__local uchar16* local_trees_B,__constant uchar* bit_lookup){
@@ -91,6 +94,7 @@ int get_data_index_stream_cache(float x,float y,float z,int lid,int level,unsign
 }else
     return 0;
 }
+#endif
 
 void get_component(unsigned i,__global float* unpacked_mean,float8* component_mean){
   unsigned pos =0;
