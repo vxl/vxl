@@ -75,7 +75,9 @@ int main(int argc, char ** argv)
   good = ops.plot_merged_margins(mstr);
   if(!good)
     return -1;
-
+  ops.compute_feature_vectors();
+  ops.compute_covariance_matrix();
+  ops.separation_stats();
   return 0;
 }
 

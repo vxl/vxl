@@ -108,7 +108,7 @@ void vgui_tview_tableau::draw_icons(vgui_tableau_sptr const& parent, float x, fl
   if (children.size() > 0)
   {
     float ny = y + spacing*children.size(); // fsm; was: y + spacing*children.size()/10;
-    int num = children.size();
+    int num = static_cast<int>(children.size());
 
     float total_x = (num-1)*spacing;
     float start_x = x - (int) (total_x/2.0f); // why the cast?
@@ -214,7 +214,7 @@ void vgui_tview_tableau::add_icons(vcl_vector<vgui_tview_tableau::icon>* icons, 
   {
     float ny = y + spacing*children.size(); // fsm; was: y + spacing*children.size()/10;
     //float ny = y+spacing;
-    int num = children.size();
+    int num = static_cast<int>(children.size());
 
     float total_x = (num-1)*spacing;
     float start_x = x - (int) (total_x/2.0);

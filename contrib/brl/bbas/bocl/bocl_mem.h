@@ -135,7 +135,7 @@ template<class T>
 bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string, bool blocking)
 {
   //buffer length
-  cl_uint len = this->num_bytes_ / sizeof(val);
+  cl_uint len = this->num_bytes_ / static_cast<unsigned>(sizeof(val));
   vcl_size_t lThreads[2] = {64,1};
   vcl_size_t gThreads[2] = {RoundUp(len,lThreads[0]), 1};
 

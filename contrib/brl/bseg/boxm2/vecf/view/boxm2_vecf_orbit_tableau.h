@@ -10,9 +10,8 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <bgui/bgui_vsol2D_tableau.h>
 #include <vecf/boxm2_vecf_orbit_params.h>
-#include <vecf/boxm2_vecf_eyelid.h>
-#include <vecf/boxm2_vecf_eyelid_crease.h>
 #include <bgui/bgui_image_tableau.h>
+#include <vecf/boxm2_vecf_fit_orbit.h>
 class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
 {
  public:
@@ -21,12 +20,15 @@ class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
   void init();
   void set_params(vcl_string const& param_path, bool is_right);
   bool set_image(vcl_string const& image_path);
+  bool set_dlib_parts(vcl_string const& dlib_path);
   void draw_orbit(bool is_right);
+  void draw_dlib_parts(bool is_right);
  private:
   bgui_image_tableau_sptr img_tab_;
   bgui_vsol2D_tableau_sptr vsol_tab_;
   boxm2_vecf_orbit_params left_params_;
   boxm2_vecf_orbit_params right_params_;
+  boxm2_vecf_fit_orbit fo_;
 };
 
 //: declare smart pointer

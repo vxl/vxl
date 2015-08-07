@@ -1,6 +1,8 @@
 #include <bvrml/bvrml_write.h>
 #include "boxm2_vecf_orbit_param_stats.h"
 #include "boxm2_vecf_plot_orbit.h"
+#include <vnl/algo/vnl_svd.h>
+#include <vcl_iomanip.h>
 void boxm2_vecf_orbit_param_stats::average_params(){
   for(vcl_map<vcl_string, vcl_pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > >::iterator pit =  param_map_.begin();
       pit!=param_map_.end(); ++pit){
@@ -108,13 +110,13 @@ bool boxm2_vecf_orbit_param_stats::merge_margins_and_crease(){
     // get left medial canthus (as origin)
     vgl_point_3d<double> plc_inf = left_inf_pts[left_imin];
     vgl_point_3d<double> plc_sup = left_sup_pts[left_imin];
-#if 0// medial canthus origin (leads to excessive scatter)
+#if 1// medial canthus origin (leads to excessive scatter)
     vgl_vector_3d<double> vlc(0.5*(plc_inf.x() + plc_sup.x()),
                               0.5*(plc_inf.y() + plc_sup.y()),
                               0.5*(plc_inf.z() + plc_sup.z()));
 #endif
     // use sclera-derived z origin and palpebral x-y origin instead
-    vgl_vector_3d<double> vlc(0.0, 0.0, lp.eyelid_radius());
+    //vgl_vector_3d<double> vlc(0.0, 0.0, lp.eyelid_radius());
     // plot right eye 
     double xm_min_right = rp.x_min()-10.0;
     double xm_max_right = rp.x_max()+10.0;
@@ -131,13 +133,13 @@ bool boxm2_vecf_orbit_param_stats::merge_margins_and_crease(){
     // get right medial canthus (as origin)
     vgl_point_3d<double> prc_inf = right_inf_pts[right_imin];
     vgl_point_3d<double> prc_sup = right_sup_pts[right_imin];
-#if 0// medial canthus origin (leads to excessive scatter)
+#if 1// medial canthus origin (leads to excessive scatter)
     vgl_vector_3d<double> vrc(0.5*(prc_inf.x() + prc_sup.x()),
                               0.5*(prc_inf.y() + prc_sup.y()),
                               0.5*(prc_inf.z() + prc_sup.z()));
 #endif
     // use sclera-derived z origin and palpebral x-y origin instead
-    vgl_vector_3d<double> vrc(0.0, 0.0, rp.eyelid_radius());
+    //vgl_vector_3d<double> vrc(0.0, 0.0, rp.eyelid_radius());
     // merge margins and crease
     vcl_vector<vgl_point_3d<double> > inf_pts, sup_pts, crease_pts;
     for(int i = left_imin; i<=left_imax; ++i){
@@ -209,4 +211,127 @@ bool boxm2_vecf_orbit_param_stats::plot_merged_margins(vcl_ofstream& os, unsigne
   os.close();
   return true;
 }
+void boxm2_vecf_orbit_param_stats::compute_feature_vectors(){
+  unsigned dim = 9;
+  for(vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > >::iterator mit = merged_inf_margin_.begin();
+      mit != merged_inf_margin_.end(); ++mit){
+    vcl_string pid = mit->first;
+    vcl_vector<vgl_point_3d<double> > inf_pts = mit->second;
+    vcl_vector<vgl_point_3d<double> > sup_pts = merged_sup_margin_[pid];
+    vcl_vector<vgl_point_3d<double> > crease_pts = merged_crease_[pid];
+    vgl_point_3d<double> pl = inf_pts[inf_pts.size()-1];
+    vgl_point_3d<double> pmaxi, pmaxs, pmaxc;
+    unsigned n = 0;
+#if 0
+    n = static_cast<unsigned>(inf_pts.size());
+    double yi = -1000.0;
+    for(unsigned i = 0; i<n; ++i){
+      vgl_point_3d<double> pi = inf_pts[i];
+      if(pi.y()>yi){
+        yi = pi.y();
+        pmaxi = pi;
+      }
+    }
+#endif
+    n = static_cast<unsigned>(sup_pts.size());
+    double ys = -1000.0;
+    for(unsigned i = 0; i<n; ++i){
+      vgl_point_3d<double> ps = sup_pts[i];
+      if(ps.y()>ys){
+        ys = ps.y();
+        pmaxs = ps;
+      }
+    }
+    n = static_cast<unsigned>(crease_pts.size());
+    double yc = -1000.0;
+    for(unsigned i = 0; i<n; ++i){
+      vgl_point_3d<double> pc = crease_pts[i];
+      if(pc.y()>yc){
+        yc = pc.y();
+        pmaxc = pc;
+      }
+    }
+    vnl_matrix<double> fv(dim,1,0.0);
+#if 0
+    fv[0][0]=pm.x(); fv[1][0]=pm.y(); fv[2][0]= pm.z();
+    fv[3][0]=pl.x(); fv[4][0]=pl.y(); fv[5][0]= pl.z();
+    fv[6][0]=pmax.x(); fv[7][0]=pmax.y(); fv[8][0]= pmax.z();
+#endif
+    fv[0][0]=pl.x(); fv[1][0]=pl.y(); fv[2][0]= pl.z();
+    fv[3][0]=pmaxs.x(); fv[4][0]=pmaxs.y(); fv[5][0]= pmaxs.z();
+    fv[6][0]=pmaxc.x(); fv[7][0]=pmaxc.y(); fv[8][0]= pmaxc.z();
+    //    fv[9][0]=pmaxi.x(); fv[10][0]=pmaxi.y(); fv[11][0]= pmaxi.z();
+    feature_vectors_[pid]=fv;
+  }
+}
 
+void boxm2_vecf_orbit_param_stats::compute_covariance_matrix(){
+  unsigned dim = 9; //dimension of the feature vector
+  // compute mean vector
+  mean_ = vnl_matrix<double>(dim, 1, 0.0);
+  double nv = 0.0;
+  for(vcl_map<vcl_string, vnl_matrix<double> >::iterator fit = feature_vectors_.begin();
+      fit != feature_vectors_.end(); ++fit, nv+=1.0)
+    mean_ += fit->second;
+  mean_/=nv;
+  vcl_cout << "mean feature vector\n";
+  for(unsigned i = 0; i<dim; ++i)
+    vcl_cout << vcl_setprecision(2) << mean_[i][0] << ' ';
+  vcl_cout << '\n';
+  cov_ = vnl_matrix<double>(dim, dim, 0.0);
+  unsigned m = static_cast<unsigned>(feature_vectors_.size());
+  // the data matrix - rows denote the elements of the feature vector, columns each sample
+  vnl_matrix<double> X(dim, m);
+  unsigned k = 0;
+  for(vcl_map<vcl_string, vnl_matrix<double> >::iterator fit = feature_vectors_.begin();
+      fit != feature_vectors_.end(); ++fit, ++k){
+    vnl_matrix<double> x = (fit->second - mean_);
+    for(unsigned r = 0; r<static_cast<unsigned>(x.rows()); ++r)
+      X[r][k]=x[r][0];
+  }
+  vnl_svd<double> svd(X);
+  vnl_matrix<double> W = svd.W();
+  vnl_matrix<double> Wsq = W*W/m;
+  vcl_cout << Wsq << '\n';
+  vnl_matrix<double> U = svd.U();
+  vnl_matrix<double> Ut = U.transpose();
+  // the primary eigenvector
+  vcl_cout << "primary eigenvector\n";
+  for(unsigned i = 0; i<dim; ++i)
+    vcl_cout << vcl_setprecision(2) << Ut[0][i] << ' ';
+  vcl_cout << '\n';
+  vcl_cout << "secondary eigenvector\n";
+  for(unsigned i = 0; i<dim; ++i)
+    vcl_cout << vcl_setprecision(2) << Ut[1][i] << ' ';
+  vcl_cout << '\n';
+  cov_ = U*Wsq*Ut;
+  // a m x m matrix only the first dim rows are meaningful.
+  // the columns are the m data samples transformed so as
+  // to produce a diagonal covariance matrix
+  vnl_matrix<double> Xw = Ut*X;
+  k = 0;
+  for(vcl_map<vcl_string, vnl_matrix<double> >::iterator fit = feature_vectors_.begin();
+      fit != feature_vectors_.end(); ++fit, ++k){
+    vcl_string pid = fit->first;
+    vcl_cout << pid << ' ' << Xw[0][k] << ' ' << Xw[1][k] << '\n';
+  }
+}
+void boxm2_vecf_orbit_param_stats::separation_stats(){
+  double avg_ratio = 0.0;
+  double ns = 0.0;
+  for(vcl_map<vcl_string, vcl_pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > >::iterator pit =  param_map_.begin();
+      pit!=param_map_.end(); ++pit, ns += 1.0){
+    const vcl_string& pid = pit->first;
+    boxm2_vecf_orbit_params& left_params = (pit->second).first;
+    boxm2_vecf_orbit_params& right_params = (pit->second).second;
+    double avg_eye_radius= 0.5*(left_params.eye_radius_ + right_params.eye_radius_);
+    vgl_vector_3d<double> org_l(left_params.x_trans(), left_params.y_trans(), left_params.z_trans());
+    vgl_vector_3d<double> org_r(right_params.x_trans(), right_params.y_trans(), right_params.z_trans());
+    vgl_vector_3d<double> dif = org_l - org_r;
+    double sep = dif.length();
+    double ratio = sep/avg_eye_radius;
+    avg_ratio += ratio;
+    vcl_cout << pid << ' ' << avg_eye_radius << ' ' << sep << ' ' << ratio << '\n';
+  }
+  vcl_cout << "Average separation ratio " << avg_ratio/ns << '\n';
+}

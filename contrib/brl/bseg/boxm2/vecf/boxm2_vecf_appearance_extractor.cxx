@@ -88,8 +88,8 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
                 unsigned target_data_idx;
                 target_blk->data_index( fwd_scaled_cell_center, target_data_idx);
                 float alpha = target_alpha_data[target_data_idx];
-                float src_prob = 1 - vcl_exp( - source_alpha_data[data_idx] * source_side_len);
-                float prob = 1 - vcl_exp(-alpha*side_len);
+                float src_prob = static_cast<float>(1.0 - vcl_exp( - source_alpha_data[data_idx] * source_side_len));
+                float prob = static_cast<float>(1.0 - vcl_exp(-alpha*side_len));
                 const float prob_thresh = 0.0;
 
                 if (src_prob >= prob_thresh) {
@@ -315,7 +315,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
   }
   color_APM color =orbit.random_color();
   color[0]=255; color[2]=0; color[4]=0;
-  unsigned dt = orbit_params.eyelid_dt_;
+  double dt = orbit_params.eyelid_dt_;
   boxm2_scene_sptr source_model = orbit.scene();
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 

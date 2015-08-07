@@ -40,7 +40,8 @@ int main(int argc, char ** argv)
   vcl_string left_param_path = base_dir_path + bid_str + "/" + bid_str + "_left_orbit_params.txt";
   vcl_string right_param_path = base_dir_path + bid_str + "/" + bid_str + "_right_orbit_params.txt";
   vcl_string image_path = base_dir_path + bid_str + "/" + image_str;
-
+  vcl_string left_parts_path = base_dir_path + bid_str + "/" + bid_str + "_left_orbit_parts.txt";
+  vcl_string right_parts_path = base_dir_path + bid_str + "/" + bid_str + "_right_orbit_parts.txt";
   // check for valid file paths
   good = vul_file::exists(left_param_path);
   good = good && vul_file::exists(right_param_path);
@@ -53,13 +54,23 @@ int main(int argc, char ** argv)
     vcl_cout << image_path << " is not valid\n";
     return -1;
   }
+  good = vul_file::exists(left_parts_path);
+  good = good && vul_file::exists(right_parts_path);
+  if(!good){
+    vcl_cout << left_parts_path << " or " << right_parts_path << " is not valid\n";
+    return -1;
+  }
   boxm2_vecf_orbit_tableau_sptr otab = boxm2_vecf_orbit_tableau_new();
   if(!otab->set_image(image_path))
     return -1;
   otab->set_params(left_param_path, false);
   otab->set_params(right_param_path, true);
+  otab->set_dlib_parts(left_parts_path);
+  otab->set_dlib_parts(right_parts_path);
   otab->draw_orbit(false);
   otab->draw_orbit(true);
+  otab->draw_dlib_parts(false);
+  otab->draw_dlib_parts(true);
   unsigned w = 400, h = 340;
   vcl_string title = "Orbit Display";
   vgui_window* win = vgui::produce_window(w, h, title);

@@ -161,7 +161,7 @@ class bprb_choice_param_type : public bprb_param_type<unsigned>
   // Constructor
   bprb_choice_param_type(const vcl_string& name, const vcl_string& desc,
                          const vcl_vector<vcl_string>& choices, const unsigned def_val)
-   : bprb_param_type<unsigned>(name, desc, def_val, 0, choices.size()-1), choices_(choices) {}
+   : bprb_param_type<unsigned>(name, desc, def_val, 0, static_cast<unsigned>(choices.size()-1)), choices_(choices) {}
 
   //: Clone the parameter
   virtual bprb_param * clone() const { return new bprb_choice_param_type(*this); }

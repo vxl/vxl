@@ -110,7 +110,7 @@ class brdb_tuple : public vbl_ref_count
   brdb_tuple& operator = (const brdb_tuple& rhs);
 
   //: Return the number of attributes (i.e. the size)
-  unsigned int arity() const { return values_.size(); }
+  unsigned int arity() const { return static_cast<unsigned>(values_.size()); }
 
   //: Returns true if a value is null
   bool is_null(unsigned int index) const

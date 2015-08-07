@@ -272,7 +272,7 @@ bool boxm2_vecf_fit_orbit::read_dlib_part_file(vcl_string const& path, bool imag
     // the image y coordinate is inverted as in a matrix index
     // so to convert to Cartesian head coordinates, image height is needed
     //
-    vgl_point_2d<double> p(x,(image_height_-y));
+    vgl_point_2d<double> p(x,y);
     parts[lab].push_back(p);
   }
   // add anchor points and at the same time mapping from dlib labels to legacy labels
@@ -346,7 +346,7 @@ void boxm2_vecf_fit_orbit::normalize_eye_data(){
   for(vcl_map<mids, labeled_point>::iterator lit = lpts_.begin();
       lit != lpts_.end(); ++lit){
     vgl_point_3d<double>& p = lit->second.p3d_;
-    p.set(p.x()*mm_per_pix, p.y()*mm_per_pix, p.z()*mm_per_pix);
+    p.set(p.x()*mm_per_pix,(image_height_- p.y())*mm_per_pix, p.z()*mm_per_pix);
   }
 
   for(vcl_map<mids, vcl_vector<vgl_point_3d<double> > >::iterator dit =  orbit_data_.begin();
@@ -355,7 +355,7 @@ void boxm2_vecf_fit_orbit::normalize_eye_data(){
     for(vcl_vector<vgl_point_3d<double> >::iterator pit = pts.begin();
         pit != pts.end(); ++pit){
       vgl_point_3d<double>& p = (*pit);
-      p.set(p.x()*mm_per_pix, p.y()*mm_per_pix, p.z()*mm_per_pix);
+      p.set(p.x()*mm_per_pix, (image_height_-p.y())*mm_per_pix, p.z()*mm_per_pix);
     }
   }
 }
@@ -729,7 +729,9 @@ bool boxm2_vecf_fit_orbit::left_ang_rad(double& ang_rad){
   const vgl_point_3d<double>& le_lc  = lit->second.p3d_;
   double dy = le_mc.y()-le_lc.y();
   double dx = le_mc.x()-le_lc.x();
+  vcl_cout << "le_lc  " << le_lc << "\n le_mc " << le_mc << '\n';
   ang_rad = vcl_atan(dy/dx);
+  vcl_cout << "DLIB LEFT CANTHUS ANGLE " << ang_rad*180.0/3.14159 << '\n';
   return true;
 }
 void  boxm2_vecf_fit_orbit::set_left_ang_rad(double& ang_rad){
@@ -1234,6 +1236,8 @@ bool boxm2_vecf_fit_orbit::right_ang_rad(double& ang_rad){
   double dy = re_mc.y()-re_lc.y();
   double dx = re_mc.x()-re_lc.x();
   ang_rad = vcl_atan(dy/dx);
+   vcl_cout << "re_lc  " << re_lc << "\n re_mc " << re_mc << '\n';
+  vcl_cout << "DLIB RIGHT CANTHUS ANGLE " << ang_rad*180.0/3.14159 << '\n';
   return true;
 }
 void  boxm2_vecf_fit_orbit::set_right_ang_rad(double& ang_rad){

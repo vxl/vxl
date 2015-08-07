@@ -17,7 +17,7 @@ class boxm2_vecf_composite_head_model_articulation : public boxm2_vecf_scene_art
     params_.clear();
   }
 
- unsigned size(){ return params_.size(); }
+ unsigned size(){ return static_cast<unsigned>(params_.size()); }
  boxm2_vecf_articulated_params& operator [] (unsigned i) {
    return params_[i] ; }
  private:

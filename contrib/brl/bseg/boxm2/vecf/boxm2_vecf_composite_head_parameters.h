@@ -26,7 +26,7 @@ class boxm2_vecf_composite_head_parameters : public boxm2_vecf_articulated_param
     //: gaze direction of the eyes
     vgl_vector_3d<double> look_dir_;
     boxm2_vecf_orbit_params l_orbit_params_,r_orbit_params_;
-    static const double conic_depth_ = 92.1;
+    static double conic_depth_;
 
 };
 

@@ -53,9 +53,9 @@ class brdb_relation : public vbl_ref_count
 
   //========================= Accessors / Modifiers ===========================
   //: Return the number of tuples (i.e. the number of rows in the table)
-  unsigned int size() const { return tuples_.size(); }
+  unsigned int size() const { return static_cast<unsigned>(tuples_.size()); }
   //: Return the number of attributes in a tuple (i.e. the number of columns in the table)
-  unsigned int arity() const { return names_.size(); }
+  unsigned int arity() const { return static_cast<unsigned>(names_.size()); }
 
   //: Return the name for \p index
   // \note returns the empty string if the index is out of range

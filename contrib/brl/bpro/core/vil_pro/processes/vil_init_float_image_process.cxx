@@ -39,7 +39,7 @@ bool vil_init_float_image_process_cons(bprb_func_process& pro)
 //: Execute the process
 bool vil_init_float_image_process(bprb_func_process& pro)
 {
-  unsigned int num_inputs = pro.input_types().size();
+  unsigned int num_inputs = static_cast<int>(pro.input_types().size());
   // Sanity check
   if (pro.n_inputs() != num_inputs) {
     vcl_cout << "vil_load_image_view_binary_process: The number of inputs should be " << num_inputs << vcl_endl;

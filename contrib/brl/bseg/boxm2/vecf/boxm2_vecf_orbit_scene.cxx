@@ -1151,13 +1151,13 @@ bool boxm2_vecf_orbit_scene::vfield_params_change_check(const boxm2_vecf_orbit_p
   double tol = 0.001;
   bool intrinsic_change = false;
   //  intrinsic_change |= fabs(this->params_.crease_dphi_rad_ - params.crease_dphi_rad_)>tol;
-  intrinsic_change |= fabs(this->params_.dphi_rad_ - params.dphi_rad_)              >tol;
-  intrinsic_change |= fabs(this->params_.brow_angle_rad_  - params.brow_angle_rad_) > tol;
-  intrinsic_change |= fabs(this->params_.eye_radius_  - params.eye_radius_) > tol;
-  intrinsic_change |= fabs(this->params_.pupil_intensity_ - params.pupil_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.sclera_intensity_ - params.sclera_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.lower_eyelid_intensity_ - params.lower_eyelid_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.eyelid_intensity_ - params.eyelid_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.eyelid_crease_upper_intensity_ - params.eyelid_crease_upper_intensity_) > tol;
+  intrinsic_change |= vcl_fabs(this->params_.dphi_rad_ - params.dphi_rad_)              >tol;
+  intrinsic_change |= vcl_fabs(this->params_.brow_angle_rad_  - params.brow_angle_rad_) > tol;
+  intrinsic_change |= vcl_fabs(this->params_.eye_radius_  - params.eye_radius_) > tol;
+  intrinsic_change |= vcl_abs(this->params_.pupil_intensity_ - params.pupil_intensity_) > tol;
+  intrinsic_change |= vcl_abs(this->params_.sclera_intensity_ - params.sclera_intensity_) > tol;
+  intrinsic_change |= vcl_abs(this->params_.lower_eyelid_intensity_ - params.lower_eyelid_intensity_) > tol;
+  intrinsic_change |= vcl_abs(this->params_.eyelid_intensity_ - params.eyelid_intensity_) > tol;
+  intrinsic_change |= vcl_abs(this->params_.eyelid_crease_upper_intensity_ - params.eyelid_crease_upper_intensity_) > tol;
   return intrinsic_change;
 }

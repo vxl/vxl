@@ -147,7 +147,7 @@ class vgui_menu
   void clear() { items.clear(); }
 
   //: Return the number of items in this menu
-  unsigned size() const { return items.size(); }
+  unsigned size() const { return static_cast<unsigned>(items.size()); }
 
   //: Get the menu item using the [] index operator.
   vgui_menu_item const & operator[](unsigned i) const { return items[i]; }

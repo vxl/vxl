@@ -108,7 +108,7 @@ class vgui_poly_tableau : public vgui_tableau
   typedef container::const_iterator const_iterator;
 
   //: Returns the number of items in the list of items.
-  unsigned size() const { return sub.size(); }
+  unsigned size() const { return static_cast<unsigned>(sub.size()); }
 
   //: Return an iterator pointing to the first item in the list of items.
   iterator begin() { return sub.begin(); }

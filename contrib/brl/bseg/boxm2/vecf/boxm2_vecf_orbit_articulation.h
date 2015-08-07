@@ -17,7 +17,7 @@ class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
     params_.clear();
   }
 
- unsigned size(){ return params_.size(); }
+ unsigned size(){ return static_cast<unsigned>(params_.size()); }
  boxm2_vecf_articulated_params& operator [] (unsigned i) {
    vcl_cout<<" method has been called for "<<i<<vcl_endl;
    return params_[i] ; }

@@ -17,7 +17,10 @@ double boxm2_vecf_lid_base::beta(double xp, double a0, double a1, double a2) con
   double cs = vcl_cos(dphi_rad_);
   double temp0 = a0*sy*ss, temp1 = a1*sy*ss, temp2 = a2*sy*ss;
   double temp3 = 1.0-(temp1/cs);
-  double neu = temp1 + cs*(-1.0 + vcl_sqrt(-(4.0*temp2*(xp + temp0)/(cs*cs))+temp3*temp3));
+  double temp4 = -(4.0*temp2*(xp + temp0)/(cs*cs))+temp3*temp3;
+  if(temp4<0.0)
+    temp4 = 0.0;
+  double neu = temp1 + cs*(-1.0 + vcl_sqrt(temp4));
   double ret = -neu/(2.0*temp2);
   return ret;
 }
@@ -162,8 +165,9 @@ vgl_box_3d<double> boxm2_vecf_lid_base::bounding_box(double margin) const{
   vgl_point_3d<double> p2(X(0.0,t_min_), Y(0.0,t_min_), Z(0.0,t_min_));
   vgl_point_3d<double> p3(X(0.0,t_max_), Y(0.0,t_max_), Z(0.0,t_max_));
   vgl_point_3d<double> p4(X(0.0,0.5), Y(0.0,0.5), Z(0.0,0.5));
+  vgl_point_3d<double> p5(0.0, 0.0, opr_.eyelid_radius());
   vgl_box_3d<double> bb;
-  bb.add(p0); bb.add(p1); bb.add(p2); bb.add(p3); bb.add(p4);
+  bb.add(p0); bb.add(p1); bb.add(p2); bb.add(p3); bb.add(p4); bb.add(p5);
   //expand in each direction
   vgl_point_3d<double> minpt = bb.min_point();
   vgl_point_3d<double> maxpt = bb.max_point();
