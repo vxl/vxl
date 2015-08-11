@@ -82,7 +82,7 @@ int main(int argc, char ** argv)
   }
   vcl_string articulated_scene_path = base_dir_path + model_path;
   vcl_string target_scene_path = base_dir_path + target_path;
-  vcl_string eye_model_path = base_dir_path + "orbit/orbit.xml";
+  vcl_string eye_model_path = base_dir_path + "eye/eye.xml";
   vcl_string default_cam_path = base_dir_path + cam_path;
   // check for valid file paths
   good = vul_file::exists(articulated_scene_path);

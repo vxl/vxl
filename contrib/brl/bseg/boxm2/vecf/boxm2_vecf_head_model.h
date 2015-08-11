@@ -20,9 +20,11 @@ class boxm2_vecf_head_model : public boxm2_vecf_articulated_scene
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);
 
-  bool clear_target(boxm2_scene_sptr target_scene);
+  void clear_target(boxm2_scene_sptr target_scene);
 
   void set_scale(vgl_vector_3d<double> scale);
+
+  void set_intrinsic_change( bool change){intrinsic_change_ = change;}
 
   virtual bool set_params(boxm2_vecf_articulated_params const& params){return true;} //blank for now
 

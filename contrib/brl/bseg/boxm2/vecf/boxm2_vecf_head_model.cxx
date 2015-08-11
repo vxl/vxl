@@ -158,7 +158,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
   } // for each target block
 }
 
-bool boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
+void boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
 {
   // for each block of the target scene
   vcl_vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
@@ -174,7 +174,7 @@ bool boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
     boxm2_data_base * target_color = boxm2_cache::instance()->get_data_base(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
     if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
       vcl_cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << vcl_endl;
-      return false;
+      return ;
     }
     target_alpha->enable_write();
     target_app->enable_write();
@@ -212,5 +212,4 @@ bool boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
       }
     } // for each source block
   } // for each target block
-  return true;
 }

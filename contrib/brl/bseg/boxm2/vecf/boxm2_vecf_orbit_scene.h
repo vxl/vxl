@@ -120,6 +120,15 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  // find nearest cell and return the data index of the nearest cell
   bool find_nearest_data_index(anat_type type, vgl_point_3d<double> const& probe, unsigned& data_indx) const;
 
+  //re-create geometry according to params_
+  void rebuild();
+  //instantiate eyelids
+  void init_eyelids();
+  //check for intrinsic parameter change
+  bool vfield_params_change_check(const boxm2_vecf_orbit_params& params);
+  // store the neigbors of each cell for each anatomical component in a vector;
+  void cache_neighbors();
+
  // ============   eye methods ================
  //: construct eye sphere, iris and pupil
  void create_eye();
@@ -128,7 +137,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  //: cache index of neighboring cells
  void find_cell_neigborhoods();
  //: set sphere surface, sclera, iris and pupil cell indices
- void reset_indices();
+ void create_indices_from_anatomy_buffers();
  //: scan dense set of points on the spherical shell to define surface voxels
  void build_sphere();
  //: scan dense set of point on iris to define iris voxels
@@ -186,11 +195,10 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   void find_eyelid_crease_cell_neigborhoods();
   //: scan dense set of points on the spherical shell to define surface voxels
   void build_eyelid_crease();
+  //reset appearance and alpha_buffers
+  void reset_buffers();
   //: assign appearance to eyelid voxels
   void paint_eyelid_crease();
-  void rebuild();
-  void init_eyelids();
-  bool vfield_params_change_check(const boxm2_vecf_orbit_params& params);
   //: members
   boxm2_block* blk_;                     // the source block
   boxm2_block* target_blk_;              // the target block
@@ -266,7 +274,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   vcl_map<unsigned, unsigned > eyelid_crease_data_index_to_cell_index_;             // data index to shell index
   //      data_index          data_index
   vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_data_index_; // data index to neighbor data indices
-  vnl_vector_fixed<unsigned char,8> random_color();
+  vnl_vector_fixed<unsigned char,8> random_color(bool yuv = true);
 };
 
 #endif // boxm2_vecf_orbit_scene_h_

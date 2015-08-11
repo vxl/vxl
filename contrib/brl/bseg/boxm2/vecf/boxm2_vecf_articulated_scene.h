@@ -2,6 +2,7 @@
 #include <boxm2/boxm2_scene.h>
 #include <vcl_string.h>
 #include "boxm2_vecf_articulated_params.h"
+#include <boxm2/boxm2_data_traits.h>
 //smart pointer
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -13,6 +14,9 @@
 // \author O. T. Biris
 // \date   2 Jul 2015
 //
+typedef  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype gray_APM;
+typedef  boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype color_APM;
+
 class boxm2_vecf_articulated_scene;
 typedef vbl_smart_ptr<boxm2_vecf_articulated_scene> boxm2_vecf_articulated_scene_sptr;
 
@@ -30,6 +34,7 @@ class boxm2_vecf_articulated_scene : public vbl_ref_count{
   virtual bool set_params(boxm2_vecf_articulated_params const& params)=0;
   virtual void map_to_target(boxm2_scene_sptr target_scene)=0;
   virtual void set_target_background(bool has_background){ has_background_ = has_background;}
+  virtual void clear_target(boxm2_scene_sptr target_scene);
   boxm2_scene_sptr scene(){return base_model_;}
   vcl_string color_apm_id() {return color_apm_id_;}
  protected:

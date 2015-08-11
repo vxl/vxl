@@ -54,8 +54,12 @@ bool boxm2_vecf_composite_head_model::set_params(boxm2_vecf_articulated_params c
   params_.l_orbit_params_.eye_pointing_dir_ = params_.look_dir_;
   params_.r_orbit_params_.eye_pointing_dir_ = params_.look_dir_; //assuming the person is not lazy eyed.
 
+  //if the intrinsic eye parameters changed, clear target
+  if(left_orbit_.vfield_params_change_check(params_.l_orbit_params_) || right_orbit_.vfield_params_change_check(params_.r_orbit_params_) ){
+    boxm2_vecf_head_model::set_intrinsic_change(true);
+    }
   //finally, propagate the params to each orbit
-  left_orbit_.set_params( params_.l_orbit_params_);
+  left_orbit_. set_params( params_.l_orbit_params_);
   right_orbit_.set_params( params_.r_orbit_params_);
   this->set_scale( params_.head_scale_ );
   return true;
@@ -67,7 +71,7 @@ void boxm2_vecf_composite_head_model::map_to_target(boxm2_scene_sptr target)
   //  vcl_cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << vcl_endl;
   // clear target
   if (boxm2_vecf_head_model::intrinsic_change_){
-    boxm2_vecf_head_model::clear_target(target);
+    this->clear_target(target);
   // head model
     boxm2_vecf_head_model::map_to_target(target);
   }

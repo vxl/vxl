@@ -92,7 +92,7 @@ double boxm2_vecf_lid_base::lin_interp_z(double xp, double mid_z, double t, doub
     mid_z = zlp;
   else if(mid_z < zlm)
     mid_z = zlm;
-  
+
   if(xp>=xext)
     s = (yx-yext)/(ylat-yext);
   else
@@ -166,6 +166,7 @@ vgl_box_3d<double> boxm2_vecf_lid_base::bounding_box(double margin) const{
   vgl_point_3d<double> p3(X(0.0,t_max_), Y(0.0,t_max_), Z(0.0,t_max_));
   vgl_point_3d<double> p4(X(0.0,0.5), Y(0.0,0.5), Z(0.0,0.5));
   vgl_point_3d<double> p5(0.0, 0.0, opr_.eyelid_radius());
+
   vgl_box_3d<double> bb;
   bb.add(p0); bb.add(p1); bb.add(p2); bb.add(p3); bb.add(p4); bb.add(p5);
   //expand in each direction

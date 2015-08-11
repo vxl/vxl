@@ -268,7 +268,7 @@ ushort traverse_three(__local uchar* tree,
     pointy += pointy;
     pointz += pointz;
     int4 code =  (int4) (convert_int_rtn(pointx) & 1,
-                         convert_int_rtn(pointy) & 1,   
+                         convert_int_rtn(pointy) & 1,
                          convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
     int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)
     bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
@@ -312,7 +312,7 @@ ushort traverse_deepest(__local uchar* tree,
     pointy += pointy;
     pointz += pointz;
     int4 code =  (int4) (convert_int_rtn(pointx) & 1,
-                         convert_int_rtn(pointy) & 1,   
+                         convert_int_rtn(pointy) & 1,
                          convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
     int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)
     bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
@@ -367,3 +367,45 @@ ushort traverse_to(__local uchar* tree, float4 point, int deepest)
 }
 
 // end of library functions
+ushort traverse_three_lvl(__local uchar* tree,
+                      float pointx, float pointy, float pointz,
+                      float *cell_minx, float *cell_miny, float *cell_minz, float *cell_len, int deepest)
+{
+  // vars to replace "tree_bit_at"
+  //force 1 register: curr = (bit, child_offset, depth, c_offset)
+  int curr_bit = convert_int(tree[0]);
+  int child_offset = 0;
+  int depth = 0;
+
+  //bit index to be returned
+  ushort bit_index = 0;
+
+  //clamp point
+  pointx = clamp(pointx, 0.0001f, 0.9999f);
+  pointy = clamp(pointy, 0.0001f, 0.9999f);
+  pointz = clamp(pointz, 0.0001f, 0.9999f);
+
+  // while the curr node has children
+  while (curr_bit && depth < deepest) {
+    //determine child offset and bit index for given point
+    pointx += pointx;                                             //point = point*2
+    pointy += pointy;
+    pointz += pointz;
+    int4 code =  (int4) (convert_int_rtn(pointx) & 1,
+                         convert_int_rtn(pointy) & 1,
+                         convert_int_rtn(pointz) & 1, 0);         //code.xyz = lsb of floor(point.xyz)
+    int c_index = code.x + (code.y<<1) + (code.z<<2);             //c_index = binary(zyx)
+    bit_index = (8*bit_index + 1) + c_index;                      //i = 8i + 1 + c_index
+
+    //update value of curr_bit and level
+    curr_bit = (1<<c_index) & tree[(depth+1 + child_offset)];      //int curr_byte = (curr.z + 1) + curr.y;
+    child_offset = c_index;
+    ++depth;
+  }
+  // calculate cell bounding box
+  (*cell_len) = 1.0 / (float) (1<<depth);
+  (*cell_minx) = floor(pointx) * (*cell_len);
+  (*cell_miny) = floor(pointy) * (*cell_len);
+  (*cell_minz) = floor(pointz) * (*cell_len);
+  return bit_index;
+}
