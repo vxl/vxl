@@ -192,11 +192,7 @@ def get_metadata_info(mdata):
   bvxm_batch.remove_data(id)
   return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name
 
-def get_sat_name(mdata):
-  sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name = get_metadata_info(mdata)
-  return sat_name
-
-def get_view_angles(mdata):
+def get_metadata_info2(mdata):
   bvxm_batch.init_process("bradGetMetaDataInfoProcess")
   bvxm_batch.set_input_from_db(0, mdata)
   bvxm_batch.run_process()
@@ -236,7 +232,17 @@ def get_view_angles(mdata):
   (id, type) = bvxm_batch.commit_output(11)
   view_el = bvxm_batch.get_output_float(id)
   bvxm_batch.remove_data(id)
-  return view_az, view_el
+  (id, type) = bvxm_batch.commit_output(12)
+  band = bvxm_batch.get_output_string(id)
+  return sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band
+
+def get_sat_name(mdata):
+  sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name = get_metadata_info(mdata)
+  return sat_name
+
+def get_view_angles(mdata):
+  sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band = get_metadata_info2(mdata)
+  return view_az, view
 
 #create a new image_metadata object
 def create_image_metadata(gain=1.0, offset=0.0, view_az = 0.0, view_el = 90.0, sun_az = 0.0, sun_el = 90.0, sun_irrad = None):

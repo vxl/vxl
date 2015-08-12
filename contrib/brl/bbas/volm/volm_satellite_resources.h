@@ -128,6 +128,8 @@ protected:
     bool same_time(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, float const& t_diff_in_sec = 10);
     //: compare the lat, lon bounding boxes of satellite resource. treat as Euclidean coordinate system
     bool same_extent(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, double const& tol = 1.0);
+    //: compare the viewing elevation and azimuth of two satellite resource
+    bool same_view(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, double const& tol = 0.1);
 
   public:
     vcl_vector<volm_satellite_resource> resources_;

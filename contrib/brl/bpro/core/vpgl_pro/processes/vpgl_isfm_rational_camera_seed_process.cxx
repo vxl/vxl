@@ -151,7 +151,7 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
     ifs >> img_file;
     if (cam_file.size() < 2)
       break;
-    vcl_string out_cam_file = out_folder + vul_file::strip_extension(vul_file::basename(cam_file)) + "_corrected.rpb";
+    vcl_string out_cam_file = out_folder + vul_file::strip_extension(vul_file::basename(cam_file)) + "_local_corrected.rpb";
     vcl_cout << "reading camera: " << cam_file << vcl_endl;
     vcl_cout << "output camera: " << out_cam_file << vcl_endl;
 
@@ -317,7 +317,7 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
     }
     cam_trans.push_back(cam_trans_i);
     corrs_ids.push_back(i);
-#if 1
+#if 0
     vcl_cout << i << " --> correspondence: ";
     for (unsigned i = 0; i < corrs_i.size(); i++) {
         vcl_cout << "[" << corrs_i[i].x() << "," << corrs_i[i].y() << "]\t";
@@ -398,6 +398,7 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
     double u_off, v_off;
     cams[k].image_offset(u_off, v_off);
     local_cams[k].set_image_offset(u_off + cam_trans[max_i][k].x(), v_off + cam_trans[max_i][k].y());
+    cams[k].set_image_offset(u_off + cam_trans[max_i][k].x(), v_off + cam_trans[max_i][k].y());
   }
 
   // refine the cameras using all the inliers of this correspondence
@@ -416,7 +417,7 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
     return false;
   }
 
-#if 1
+#if 0
   vcl_cout << " after refinement: \n";
   for (unsigned i = 0; i < intersections.size(); i++)
     vcl_cout << "after adjustment 3D intersection point: " << intersections[i].y() << "," << intersections[i].x() 

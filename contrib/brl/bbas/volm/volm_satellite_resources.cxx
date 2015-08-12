@@ -55,10 +55,13 @@ void volm_satellite_resources::add_resource(vcl_string name)
       if (resources_[i].meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
           resources_[i].meta_->band_.compare(res.meta_->band_) == 0 &&
           this->same_time(resources_[i], res) &&
+          this->same_view(resources_[i], res) &&
           this->same_extent(resources_[i], res))
       {
           vcl_cout << "!!!!!!!!!!!!! cannot add: " << res.name_ << " with time: "; res.meta_->print_time();
+          vcl_cout << " view: " << res.meta_->view_azimuth_ << ", " << res.meta_->view_elevation_;
           vcl_cout << "already exists: \n"   << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time(); 
+          vcl_cout << " view: " << resources_[i].meta_->view_azimuth_ << ", " << resources_[i].meta_->view_elevation_;
           vcl_cout << " band of resources: " <<  resources_[i].meta_->band_ << " band trying to add: " << res.meta_->band_ << vcl_flush << vcl_endl;
           return;
       }
@@ -502,10 +505,9 @@ vcl_string volm_satellite_resources::find_pair(vcl_string const& name, double co
         vcl_cout << " there are " << ids.size() << " resources that cover the image!\n";
         for (unsigned iii = 0; iii < ids.size(); iii++) {
           unsigned ii = ids[iii];
-          if (resources_[ii].name_ == "11APR02085429-M1BS-500060282120_01_P001")
-            int tmp_debug = 1;
           if (resources_[i].meta_->satellite_name_.compare(resources_[ii].meta_->satellite_name_) == 0 &&  // same satellite good!
               this->same_time(resources_[i], resources_[ii]) &&
+              this->same_view(resources_[i], resources_[ii]) &&
               this->same_extent(resources_[i], resources_[ii], tol) )
           {
                   resources_[i].pair_ = resources_[ii].name_;
@@ -1224,26 +1226,24 @@ bool volm_satellite_resources::same_time(volm_satellite_resource const& res_a, v
   return false;
 }
 
+// compare the viewing elevation and azimuth angle of two satellite image
+bool volm_satellite_resources::same_view(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, double const & tol)
+{
+  if (vcl_abs(res_a.meta_->view_elevation_ - res_b.meta_->view_elevation_) > tol)
+    return false;
+  if (vcl_abs(res_a.meta_->view_azimuth_ - res_b.meta_->view_azimuth_) > tol)
+    return false;
+  return true;
+}
+
 // compare the lat, lon bounding boxes to check how close of the footprint of two satellite resources
 bool volm_satellite_resources::same_extent(volm_satellite_resource const& res_a, volm_satellite_resource const& res_b, double const& tol)
 {
-  // check the camera offset shift
-  vgl_point_2d<double> cam_offset_a(res_a.meta_->cam_offset_.x(), res_a.meta_->cam_offset_.y());
-  vgl_point_2d<double> cam_offset_b(res_b.meta_->cam_offset_.x(), res_b.meta_->cam_offset_.y());
-  vpgl_lvcs cam_lvcs(cam_offset_a.y(), cam_offset_a.x(), 0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-  double cam_lx, cam_ly, cam_lz;
-  cam_lvcs.global_to_local(cam_offset_b.x(), cam_offset_b.y(), 0.0, vpgl_lvcs::wgs84, cam_lx, cam_ly, cam_lz);
-  double cam_dist = vcl_sqrt(cam_lx*cam_lx + cam_ly*cam_ly);
-  if (cam_dist > tol) {
-    return false;
-  }
-
   // check by compare lower left corner and upper right corner with a local lvcs
   vgl_point_2d<double> ll_a(res_a.meta_->lower_left_.x(),  res_a.meta_->lower_left_.y());
   vgl_point_2d<double> ur_a(res_a.meta_->upper_right_.x(), res_a.meta_->upper_right_.y());
   vgl_point_2d<double> ll_b(res_b.meta_->lower_left_.x(),  res_b.meta_->lower_left_.y());
   vgl_point_2d<double> ur_b(res_b.meta_->upper_right_.x(), res_b.meta_->upper_right_.y());
-  
   vpgl_lvcs ll_lvcs(ll_a.y(), ll_a.x(), 0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   double ll_x, ll_y, ll_z;
   ll_lvcs.global_to_local(ll_b.x(), ll_b.y(), 0.0, vpgl_lvcs::wgs84, ll_x, ll_y, ll_z);
@@ -1256,12 +1256,10 @@ bool volm_satellite_resources::same_extent(volm_satellite_resource const& res_a,
   double ur_x, ur_y, ur_z;
   ur_lvcs.global_to_local(ur_b.x(), ur_b.y(), 0.0, vpgl_lvcs::wgs84, ur_x, ur_y, ur_z);
   double ur_dist = vcl_sqrt(ur_x*ur_x + ur_y*ur_y);
-
   // the footprints are allowed to have 30 meter shift (e.g. PAN and MULTI band)
   if (ur_dist > tol) {
     return false;
   }
-
   return true;
 }
 

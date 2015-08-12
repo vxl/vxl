@@ -31,6 +31,7 @@ bool brad_get_meta_data_info_process_cons(bprb_func_process& pro)
   output_types.push_back("vcl_string"); // satellite name
   output_types.push_back("float"); // sun azimuth angle
   output_types.push_back("float"); // sun elevation
+  output_types.push_back("vcl_string");  // image band type
   return pro.set_output_types(output_types);
 }
 
@@ -57,6 +58,7 @@ bool brad_get_meta_data_info_process(bprb_func_process& pro)
   pro.set_output_val<vcl_string>(9, mdata->satellite_name_);
   pro.set_output_val<float>(10, float(mdata->view_azimuth_));
   pro.set_output_val<float>(11, float(mdata->view_elevation_));
+  pro.set_output_val<vcl_string>(12, mdata->band_);
   return true;
 }
 

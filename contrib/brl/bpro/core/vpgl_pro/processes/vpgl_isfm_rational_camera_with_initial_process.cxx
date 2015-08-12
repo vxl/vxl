@@ -9,7 +9,7 @@
 //
 // \verbatim
 //  Modifications
-//  <none yet>
+//    Yi Dong, Aug, 2015, remove the track file to avoid using satellite original image
 // \endverbatim
 //
 #include <bprb/bprb_parameters.h>
@@ -51,18 +51,11 @@ namespace vpgl_isfm_rational_camera_with_initial_process_globals
 
   //: calculate the relative diameter used in back-projection
   //  Relative diameter is used to define the initial search range in Amoeba algorithm (check vnl/algo/vnl_amoeba.h for more details)
-  bool obtain_relative_diameter(vcl_vector<vcl_string> const& sat_res,
-                                double& relative_diameter);
   bool obtain_relative_diameter(double const& ll_lon, double const& ll_lat,
                                 double const& ur_lon, double const& ur_lat,
                                 double& relative_diameter);
 
   //: calculate the 3-d initial point from the overlapped region of satellite images
-  bool initial_point_by_overlap_region(vcl_vector<vcl_string> const& sat_res,
-                                       vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& dem_infos,
-                                       vgl_point_3d<double>& init_pt,
-                                       double& zmin, double& zmax,
-                                       double const& height_diff = 20.0);
   bool initial_point_by_overlap_region(double const& ll_lon, double const& ll_lat, double const& ur_lon, double const& ur_lat,
                                        vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& dem_infos,
                                        vgl_point_3d<double>& init_pt,
@@ -117,14 +110,9 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     return false;
   }
   vcl_string uncorrectedcam;
-  vcl_string uncorrectedimg;
   unsigned n_track;
   unsigned n_seeds;
-  ifs >> uncorrectedcam >> uncorrectedimg >> n_track >> n_seeds;
-  if (!vul_file::exists(uncorrectedimg)) {
-    vcl_cerr << pro.name() << ": can not find image file: " << uncorrectedimg << "!!\n";
-    return false;
-  }
+  ifs >> uncorrectedcam >> n_track >> n_seeds;
   vpgl_local_rational_camera<double> *cam = read_local_rational_camera<double>(uncorrectedcam);
   if (!cam) {
     vcl_cerr << pro.name() << ": failed to load local rational camera from file " << uncorrectedcam << "!!\n";
@@ -133,15 +121,13 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
 
   // read seed camera/image files
   vcl_vector<vcl_string> seed_cam_files;
-  vcl_vector<vcl_string> seed_img_files;
   for (unsigned i = 0; i < n_seeds; i++) {
     unsigned id;
-    vcl_string seed_cam_file, seed_img_file;
-    ifs >> id >> seed_cam_file >> seed_img_file;
+    vcl_string seed_cam_file;
+    ifs >> id >> seed_cam_file;
     seed_cam_files.push_back(seed_cam_file);
-    seed_img_files.push_back(seed_img_file);
-    if (!vul_file::exists(seed_img_file)) {
-      vcl_cerr << pro.name() << ": can not find seed image file: " << seed_img_file << "!!\n";
+    if (!vul_file::exists(seed_cam_file)) {
+      vcl_cerr << pro.name() << ": can not find seed camera file: " << seed_cam_file << "!!\n";
       return false;
     }
   }
@@ -206,25 +192,28 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
 
   // define overlap region by input coordinates
   vgl_box_2d<double> overlap_region(lower_left_lon, upper_right_lon, lower_left_lat, upper_right_lat);
-
+  if (overlap_region.is_empty()) {
+    vcl_cerr << pro.name() << ": Missing input search region!\n";
+    return false;
+  }
   // compute translations
   vcl_vector<vgl_vector_2d<double> > cam_trans;
   vcl_vector<vgl_point_3d<double> > reconstructed_pts;
   vcl_vector<vgl_point_2d<double> > img_points;
+  vcl_vector<vgl_point_3d<double> > init_pts;
+  vcl_vector<double> zmin_list;
+  vcl_vector<double> zmax_list;
   for (unsigned i = 0; i < n_track; i++)
   {
     vcl_vector<vgl_vector_2d<double> > cam_trans_i;
     vcl_vector<vgl_point_2d<double> > corrs;
     vcl_vector<float> weights;
     vcl_vector<vpgl_rational_camera<double> > cams;
-    vcl_vector<vcl_string> sat_img_res;
-    sat_img_res.push_back(uncorrectedimg);
     cams.push_back(*cam);
     weights.push_back(0.0f);  // the back-projection from un-corrected camera is ignored due to zero weight
     corrs.push_back(currpts[i]);
     for (unsigned k = 0; k < tracks[i].size(); k++) {
       cams.push_back(*lcams[trackimgids[i][k]]);
-      sat_img_res.push_back(seed_img_files[trackimgids[i][k]]);
       weights.push_back(1.0f);
       corrs.push_back(tracks[i][k]);
     }
@@ -232,31 +221,15 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     // find the initial guess point
     vgl_point_3d<double> initial_pt;
     double zmin, zmax;
-    if (overlap_region.is_empty()) {  // use satellite image footprint to calculate initial guessing points
-      if (!initial_point_by_overlap_region(sat_img_res, dem_infos, initial_pt, zmin, zmax, height_diff)) {
-        vcl_cerr << pro.name() << ": Evaluating initial point for correspondence " << i << " failed!\n";
-        return false;
-      }
-    }
-    else {  // use pre-defined overlap region to calculate initial guessing points
-      if (!initial_point_by_overlap_region(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, dem_infos, initial_pt, zmin, zmax, height_diff)) {
-        vcl_cerr << pro.name() << ": Evaluating initial point for correspondence " << i << " failed!\n";
-        return false;
-      }
+    if (!initial_point_by_overlap_region(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, dem_infos, initial_pt, zmin, zmax, height_diff)) {
+      vcl_cerr << pro.name() << ": Evaluating initial point for correspondence " << i << " failed!\n";
+      return false;
     }
     // find the searching diameter
     double relative_diameter;
-    if (overlap_region.is_empty()) {
-      if (!obtain_relative_diameter(sat_img_res, relative_diameter)) {
-        vcl_cerr << pro.name() << ": Evaluating relative diameter for correspondence " << i << " failed!\n";
-        return false;
-      }
-    }
-    else {
-      if (!obtain_relative_diameter(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, relative_diameter)) {
-        vcl_cerr << pro.name() << ": Evaluating relative diameter for correspondence " << i << " failed!\n";
-        return false;
-      }
+    if (!obtain_relative_diameter(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, relative_diameter)) {
+      vcl_cerr << pro.name() << ": Evaluating relative diameter for correspondence " << i << " failed!\n";
+      return false;
     }
     // search for 3-d intersection
     vgl_point_3d<double> intersection;
@@ -272,12 +245,17 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     img_points.push_back(currpts[i]);
     cam_trans.push_back(cam_trans_i[0]);
     reconstructed_pts.push_back(intersection);
+    init_pts.push_back(initial_pt);
+    zmin_list.push_back(zmin);
+    zmax_list.push_back(zmax);
   }
 
-#if 1
+#if 0
   vcl_cout << " ================== back-projection ======================= " << vcl_endl;
   for (unsigned k = 0; k < cam_trans.size(); k++) {
     vcl_cout << "image point: [" << img_points[k].x() << ',' << img_points[k].y() 
+             << "], initial pt: [" << init_pts[k].x() << ',' << init_pts[k].y() << ',' << init_pts[k].z()
+             << "], height range: [" << zmin_list[k] << ',' << zmax_list[k]
              << "], world point: [" << vcl_setprecision(10) << reconstructed_pts[k].x() << ',' << vcl_setprecision(10) << reconstructed_pts[k].y() << ','
              << vcl_setprecision(10) << reconstructed_pts[k].z()
              << "], camera translations: " << cam_trans[k].x() << ',' << cam_trans[k].y() << ']' << vcl_endl;
@@ -512,33 +490,6 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::initial_point_by_ov
   return true;
 }
 
-bool vpgl_isfm_rational_camera_with_initial_process_globals::initial_point_by_overlap_region(vcl_vector<vcl_string> const& sat_res,
-                                                                                             vcl_vector<vcl_pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& dem_infos,
-                                                                                             vgl_point_3d<double>& init_pt,
-                                                                                             double& zmin, double& zmax,
-                                                                                             double const& height_diff)
-{
-  // obtain the overlapped region
-  vcl_vector<vgl_box_2d<double> > img_footprints;
-  for (vcl_vector<vcl_string>::const_iterator vit = sat_res.begin(); vit != sat_res.end(); ++vit)
-  {
-    brad_image_metadata meta(*vit);
-    double ll_lon = meta.lower_left_.x();
-    double ll_lat = meta.lower_left_.y();
-    double ur_lon = meta.upper_right_.x();
-    double ur_lat = meta.upper_right_.y();
-    vgl_box_2d<double> img_box(ll_lon, ur_lon, ll_lat, ur_lat);
-    img_footprints.push_back(img_box);
-  }
-  vgl_box_2d<double> overlap_region = vpgl_isfm_rational_camera_with_initial_process_globals::intersection(img_footprints);
-  if (overlap_region.is_empty())
-    return false;
-
-  return vpgl_isfm_rational_camera_with_initial_process_globals::initial_point_by_overlap_region(overlap_region.min_x(), overlap_region.min_y(),
-                                                                                                 overlap_region.max_x(), overlap_region.max_y(),
-                                                                                                 dem_infos, init_pt, zmin, zmax, height_diff);
-}
-
 bool vpgl_isfm_rational_camera_with_initial_process_globals::obtain_relative_diameter(double const& ll_lon, double const& ll_lat,
                                                                                       double const& ur_lon, double const& ur_lat,
                                                                                       double& relative_diameter)
@@ -555,31 +506,6 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::obtain_relative_dia
   else
     relative_diameter = 0.5*diagonal/overlap_region.centroid_x();
   return true;
-}
-
-bool vpgl_isfm_rational_camera_with_initial_process_globals::obtain_relative_diameter(vcl_vector<vcl_string> const& sat_res,
-                                                                                      double& relative_diameter)
-{
-  relative_diameter = 1.0;
-  // obtain the overlap region
-  vcl_vector<vgl_box_2d<double> > img_footprints;
-  for (vcl_vector<vcl_string>::const_iterator vit = sat_res.begin(); vit != sat_res.end(); ++vit)
-  {
-    brad_image_metadata meta(*vit);
-    double ll_lon = meta.lower_left_.x();
-    double ll_lat = meta.lower_left_.y();
-    double ur_lon = meta.upper_right_.x();
-    double ur_lat = meta.upper_right_.y();
-    vgl_box_2d<double> img_box(ll_lon, ur_lon, ll_lat, ur_lat);
-    img_footprints.push_back(img_box);
-  }
-  vgl_box_2d<double> overlap_region = vpgl_isfm_rational_camera_with_initial_process_globals::intersection(img_footprints);
-  if (overlap_region.is_empty())
-    return false;
-
-  return vpgl_isfm_rational_camera_with_initial_process_globals::obtain_relative_diameter(overlap_region.min_x(), overlap_region.min_y(),
-                                                                                          overlap_region.max_x(), overlap_region.max_y(),
-                                                                                          relative_diameter);
 }
 
 vgl_box_2d<double> vpgl_isfm_rational_camera_with_initial_process_globals::intersection(vcl_vector<vgl_box_2d<double> > const& boxes)
