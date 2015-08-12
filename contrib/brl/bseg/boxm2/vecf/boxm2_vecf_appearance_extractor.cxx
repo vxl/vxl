@@ -135,26 +135,23 @@ void boxm2_vecf_appearance_extractor::extract_orbit_appearance(){
   this->reset(true);
   this->reset(false);
 
-
   this->extract_eyelid_crease_appearance(true);
   this->extract_eyelid_crease_appearance(false);
-
-  this->extract_upper_lid_appearance(true);
-  this->extract_upper_lid_appearance(false);
-
 
   this->extract_lower_lid_appearance(true);
   this->extract_lower_lid_appearance(false);
 
+  this->extract_upper_lid_appearance(true);
+  this->extract_upper_lid_appearance(false);
+
   this->extract_eye_appearance(true);
   this->extract_eye_appearance(false);
-
-  this->extract_pupil_appearance(true);
-  this->extract_pupil_appearance(false);
 
   this->extract_iris_appearance(true);
   this->extract_iris_appearance(false);
 
+  this->extract_pupil_appearance(true);
+  this->extract_pupil_appearance(false);
 
 }
 void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right){
@@ -185,7 +182,7 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right){
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
   unsigned n_source_cells = static_cast<unsigned>(orbit.iris_cell_centers_.size());
-  vcl_cout<<"iris cell centers: "<<n_source_cells;
+  vcl_cout<<"iris cell centers: "<<n_source_cells<<vcl_endl;
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
@@ -223,7 +220,7 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right){
             weighted_sum +=  curr_float_col * current_vis_score_[target_data_idx];
             sum_vis += current_vis_score_[target_data_idx];
           }
-          source_color_data[source_data_idx]= target_color_data[target_data_idx];
+          source_color_data[source_data_idx]= faux_ ? color : target_color_data[target_data_idx];
          }
       }
     }
@@ -231,7 +228,7 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right){
   if(sum_vis != 0)
     weighted_sum /= sum_vis;
     curr_iris = to_apm_t( weighted_sum );
-  vcl_cout<<"Extracted iris appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    //  vcl_cout<<"Extracted iris appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 
 }
 void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right){
@@ -262,7 +259,7 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right){
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
   unsigned n_source_cells = static_cast<unsigned>(orbit.pupil_cell_centers_.size());
-  vcl_cout<<"pupil cell centers: "<<n_source_cells;
+  vcl_cout<<"pupil cell centers: "<<n_source_cells<<vcl_endl;
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
@@ -300,7 +297,7 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right){
             weighted_sum +=  curr_float_col * current_vis_score_[target_data_idx];
             sum_vis += current_vis_score_[target_data_idx];
           }
-          source_color_data[source_data_idx]= target_color_data[target_data_idx];
+          source_color_data[source_data_idx]= faux_ ? color : target_color_data[target_data_idx];
          }
       }
     }
@@ -308,7 +305,7 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right){
   if(sum_vis != 0)
     weighted_sum /= sum_vis;
     curr_pupil = to_apm_t( weighted_sum );
-  vcl_cout<<"Extracted pupil appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    //  vcl_cout<<"Extracted pupil appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 
 }
 void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right){
@@ -333,7 +330,7 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right){
   boxm2_scene_sptr source_model = orbit.scene();
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
   unsigned n_source_cells = static_cast<unsigned>(orbit.sphere_cell_centers_.size());
-  vcl_cout<<"sphere cell centers: "<<n_source_cells;
+  vcl_cout<<"sphere cell centers: "<<n_source_cells<<vcl_endl;
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
@@ -371,7 +368,7 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right){
       }
     }
   }
-  vcl_cout<<"Extracted eye sphere appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+  //  vcl_cout<<"Extracted eye sphere appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 }
 void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_right){
   vul_timer t;
@@ -391,6 +388,7 @@ void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_r
   float8 weighted_sum; weighted_sum.fill(0);
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
   unsigned n_source_cells = static_cast<unsigned>(orbit.eyelid_crease_cell_centers_.size());
+  vcl_cout<<"eyelid crease cell centers "<<n_source_cells<<vcl_endl;
 
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
@@ -441,8 +439,7 @@ void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_r
   if(sum_vis != 0)
     weighted_sum /= sum_vis;
     curr_eyelid_crease = to_apm_t( weighted_sum );
-  vcl_cout<<"Extracted eyelid crease appearance in "<<t.real()/1000<<" seconds and sum_vis is "<<sum_vis<<vcl_endl;
-  vcl_cout<<"mean crease color "<<(int)curr_eyelid_crease[0]<<" "<<(int)curr_eyelid_crease[2]<<" "<<(int)curr_eyelid_crease[4]<<vcl_endl;
+    //  vcl_cout<<"Extracted eyelid crease appearance in "<<t.real()/1000<<" seconds and sum_vis is "<<sum_vis<<vcl_endl;
 }
 
 void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right){
@@ -463,7 +460,7 @@ void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right
   float8 weighted_sum; weighted_sum.fill(0); float sum_vis =0.0f;
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
   unsigned n_source_cells = static_cast<unsigned>(orbit.lower_eyelid_cell_centers_.size());
-  vcl_cout<<" number of lower lid source cells"<<n_source_cells<<vcl_endl;
+  vcl_cout<<"lower lid cell centers "<<n_source_cells<<vcl_endl;
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,*sblk,source_alpha_data,source_app_data,source_color_data)){
@@ -514,7 +511,7 @@ void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right
  if(sum_vis != 0)
     weighted_sum /= sum_vis;
     curr_lower_eyelid = to_apm_t( weighted_sum );
-  vcl_cout<<"Extracted lower lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    //  vcl_cout<<"Extracted lower lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 }
 
 void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right){
@@ -531,7 +528,9 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
   }
   color_APM color =orbit.random_color();
   color[0]=255; color[2]=0; color[4]=0;
-  double dt = orbit_params.eyelid_dt_;
+
+  double dt = 0;
+
   color_APM eyelid_color = is_right? rgb2yuv(red) : rgb2yuv(green);
   color[0]=0; color[1]=0; color[2]=255;
 
@@ -539,7 +538,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
   boxm2_scene_sptr source_model = orbit.scene();
   color_APM& curr_lower_lid = is_right ? right_lower_lid_app_ : left_lower_lid_app_ ;
   color_APM& curr_upper_lid = is_right ? right_upper_lid_app_ : left_upper_lid_app_ ;
-  vcl_cout<<"mean crease color "<<(int)curr_lower_lid[0]<<" "<<(int)curr_lower_lid[2]<<" "<<(int)curr_lower_lid[4]<<vcl_endl;
+
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
@@ -588,21 +587,17 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
 
           target_blk->data_index( mapped_p, target_data_idx);
           unsigned source_data_idx = orbit.eyelid_cell_data_index_[i];
-          float8 color_f = to_float8(target_color_data[target_data_idx]) * current_vis_score_[target_data_idx]
-                         + to_float8(curr_lower_lid)            * (1 - current_vis_score_[target_data_idx]);
           source_app_data  [source_data_idx] = target_app_data  [target_data_idx];
 
           float prob = 1 - exp (- target_alpha_data[target_data_idx] * target_side_len);
-          if (current_vis_score_ && prob>0.8){
+
+          if (current_vis_score_ && prob > 0.8){
             float8 curr_float_col = to_float8(target_color_data[target_data_idx]);
             weighted_sum +=  curr_float_col * current_vis_score_[target_data_idx];
             sum_vis += current_vis_score_[target_data_idx];
           }
 
-          uchar8 appearance = faux_ ? curr_lower_lid : target_color_data[target_data_idx];
-          source_color_data[source_data_idx]  = curr_lower_lid;
-
-
+          source_color_data[source_data_idx]  =  faux_ ? curr_lower_lid : target_color_data[target_data_idx];
         }
       }
     }
@@ -610,7 +605,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
  if(sum_vis != 0)
     weighted_sum /= sum_vis;
     curr_upper_lid = to_apm_t( weighted_sum );
-  vcl_cout<<"Extracted upper lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
+    //  vcl_cout<<"Extracted upper lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 }
 uchar8 boxm2_vecf_appearance_extractor::rgb2yuv(uchar8 rgb){
   uchar8 ret; ret.fill(0);

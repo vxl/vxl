@@ -365,7 +365,7 @@ void boxm2_vecf_orbit_scene::find_cell_neigborhoods(){
         indices.push_back(indx_n);
       }
   }
-  vcl_cout << "Find sphere cell neighborhoods in " << t.real()/1000.0 << " sec.\n; size of data and cell maps are :"<<cell_neighbor_cell_index_.size()<<" "<<cell_neighbor_data_index_.size();
+  vcl_cout << "Find sphere cell neighborhoods in " << t.real()/1000.0 << " sec.\n";
 }
 
 //run through all the sphere points (sclera) and paint them white
@@ -466,7 +466,7 @@ bool boxm2_vecf_orbit_scene::is_type_global(vgl_point_3d<double> const& global_p
   bool success =  blk_->data_index(global_pt, indx);
   if (!success){
     //#if _DEBUG
-    vcl_cout<<"point "<<global_pt<< " was out of eye scene bounding box "<<vcl_endl;
+    //    vcl_cout<<"point "<<global_pt<< " was out of eye scene bounding box "<<vcl_endl;
     //#endif
     return false;
 }
@@ -549,8 +549,8 @@ void  boxm2_vecf_orbit_scene::inverse_vector_field_eye(vgl_rotation_3d<double> c
     vgl_point_3d<double> rp = inv_rot * p;
     vf[i].set(rp.x() - p.x(), rp.y() - p.y(), rp.z() - p.z());
   }
-  vcl_cout << "computed " << cnt << " pts out of "<< nt << " for eye vector field in " << t.real()/1000.0 << " sec.\n";
-  vcl_cout << ncont << " were inside smin\n";
+  // vcl_cout << "computed " << cnt << " pts out of "<< nt << " for eye vector field in " << t.real()/1000.0 << " sec.\n";
+  // vcl_cout << ncont << " were inside smin\n";
 }
 
 void boxm2_vecf_orbit_scene::create_eyelid(){
