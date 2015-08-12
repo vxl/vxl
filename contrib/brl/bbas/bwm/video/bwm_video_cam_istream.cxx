@@ -110,7 +110,7 @@ bwm_video_cam_istream::current_camera()
   if (is_valid()) {
     if (!current_camera_) {
       current_camera_=new vpgl_perspective_camera<double>();
-
+      //vcl_cout << " \t reading cam: " << cam_paths_[index_] << vcl_endl;
       vcl_string ext = vul_file_extension(cam_paths_[index_].c_str());
       if (ext == ".vsl") // binary form
       {

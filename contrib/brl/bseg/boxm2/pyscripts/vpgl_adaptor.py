@@ -903,3 +903,82 @@ def offset_cam_using_3d_box(camera, lower_left_lon, lower_left_lat, lower_left_e
     return status, local_cam, i0, j0, ni, nj;
   else:
     return status, dbvalue(0, ""), 0, 0, 0, 0;
+
+# rotate a camera around principle axis
+def perspective_camera_distance(cam1, cam2):
+    boxm2_batch.init_process('vpglPerspCamDistanceProcess')
+    boxm2_batch.set_input_from_db(0,cam1)
+    boxm2_batch.set_input_from_db(1,cam2)
+    boxm2_batch.run_process()
+    (dist_id,type) = boxm2_batch.commit_output(0)
+    dist = boxm2_batch.get_output_float(dist_id);
+    return dist
+
+def correct_cam_rotation(img, pcam, exp_img, cone_half_angle, n_steps, refine=True):
+    boxm2_batch.init_process('icamCorrectCamRotationProcess')
+    boxm2_batch.set_input_from_db(0,img)
+    boxm2_batch.set_input_from_db(1,pcam)
+    boxm2_batch.set_input_from_db(2,exp_img)
+    boxm2_batch.set_input_float(3,cone_half_angle)
+    boxm2_batch.set_input_unsigned(4,n_steps)
+    boxm2_batch.set_input_bool(5,refine)
+    boxm2_batch.run_process()
+    (m_id,m_type) = boxm2_batch.commit_output(0)
+    mapped_img = dbvalue(m_id,m_type);
+    (c_id,c_type) = boxm2_batch.commit_output(1)
+    corr_cam = dbvalue(c_id,c_type);
+    return mapped_img, corr_cam
+
+def compute_direction_covariance(pcam, std_dev_angle, out_file):
+    boxm2_batch.init_process("vpglComputePerspCamPACovarianceProcess");
+    boxm2_batch.set_input_from_db(0, pcam);
+    boxm2_batch.set_input_float(1, std_dev_angle);
+    boxm2_batch.set_input_string(2, out_file);
+    boxm2_batch.run_process()
+
+# uniformly sample a camera rotated around principle axis
+def perturb_camera_uniform(cam_in, angle, rng):
+    boxm2_batch.init_process('vpglPerturbUniformPerspCamOrientProcess')
+    boxm2_batch.set_input_from_db(0,cam_in)
+    boxm2_batch.set_input_float(1,angle)
+    boxm2_batch.set_input_from_db(2,rng)
+    boxm2_batch.run_process()
+    (id,type) = boxm2_batch.commit_output(0)
+    pert_cam = dbvalue(id,type)
+    (theta_id,type) = boxm2_batch.commit_output(1)
+    (phi_id,type) = boxm2_batch.commit_output(2)
+    theta = boxm2_batch.get_output_float(theta_id);
+    phi = boxm2_batch.get_output_float(phi_id);
+    return pert_cam, theta, phi
+
+def create_perspective_camera_with_motion_dir(pcam, cent_x, cent_y, cent_z, cent2_x, cent2_y, cent2_z):
+    boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess4");
+    boxm2_batch.set_input_from_db(0, pcam);
+    boxm2_batch.set_input_float(1, cent_x);
+    boxm2_batch.set_input_float(2, cent_y);
+    boxm2_batch.set_input_float(3, cent_z);
+    boxm2_batch.set_input_float(4, cent2_x);
+    boxm2_batch.set_input_float(5, cent2_y);
+    boxm2_batch.set_input_float(6, cent2_z);
+    boxm2_batch.run_process()
+    (c_id,c_type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(c_id,c_type);
+    return cam
+
+def pers_cam_from_photo_overlay(lvcs,heading,tilt,roll,lat,lon,alt,fov_hor,fov_ver,ni,nj):
+    boxm2_batch.init_process("vpglPerspCameraFromPhotoOverlayProcess");
+    boxm2_batch.set_input_from_db(0, lvcs);
+    boxm2_batch.set_input_float(1,heading);
+    boxm2_batch.set_input_float(2,tilt);
+    boxm2_batch.set_input_float(3,roll);
+    boxm2_batch.set_input_float(4,lat);
+    boxm2_batch.set_input_float(5,lon);
+    boxm2_batch.set_input_float(6,alt);
+    boxm2_batch.set_input_float(7,fov_hor);
+    boxm2_batch.set_input_float(8,fov_ver);
+    boxm2_batch.set_input_unsigned(9,ni);
+    boxm2_batch.set_input_unsigned(10,nj);
+    boxm2_batch.run_process();
+    (c_id,c_type) = boxm2_batch.commit_output(0)
+    cam = dbvalue(c_id,c_type);
+    return cam

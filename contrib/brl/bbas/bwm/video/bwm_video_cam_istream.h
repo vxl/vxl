@@ -71,6 +71,7 @@ class bwm_video_cam_istream : public vbl_ref_count
   //: Return the current camera in the stream
    vpgl_perspective_camera<double>* current_camera();
 
+   vcl_string current_cam_name() { return cam_paths_[index_]; }
 
   //: Seek to the given camera number (but do not load the camera)
   // \returns true if successful

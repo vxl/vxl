@@ -7,7 +7,9 @@ ADD_EXECUTABLE( boxm2_vecf_test_all
   test_pc_viewer.cxx	
  )
 
-
+#depends on OPENCL being found...
+INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+IF(OPENCL_FOUND)
 
 TARGET_LINK_LIBRARIES(boxm2_vecf_test_all testlib  boxm2_vecf brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )
 
@@ -20,3 +22,4 @@ ADD_TEST( boxm2_vecf_test_pc_viewer      ${EXECUTABLE_OUTPUT_PATH}/boxm2_vecf_te
 #ADD_EXECUTABLE( boxm2_vecf_test_include test_include.cxx )
 #TARGET_LINK_LIBRARIES( boxm2_vecf_test_include boxm2_vecf )
 
+ENDIF(OPENCL_FOUND)

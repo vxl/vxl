@@ -37,6 +37,18 @@ bool bwm_video_corr::add(unsigned frame, vgl_point_2d<double> const& pt)
   return true;
 }
 
+bool bwm_video_corr::update(unsigned frame, vgl_point_2d<double> const& pt)
+{
+  //check if the match already exists
+  vcl_map<unsigned, vgl_point_2d<double> >::iterator iter = matches_.begin();
+  iter = matches_.find(frame);
+  //if so return false
+  if (iter == matches_.end())
+    return false;
+  matches_[frame]=pt;
+  return true;
+}
+
 //: the lowest frame number for which there is a match
 unsigned bwm_video_corr::min_frame()
 {

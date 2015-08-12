@@ -221,4 +221,11 @@ template <class T>
 vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
 			  T d_near, T d_far);
 
+template <class T>
+vgl_vector_3d<T> vpgl_persp_cam_base_line_vector( const vpgl_perspective_camera<T>& cam1, const vpgl_perspective_camera<T>& cam2);
+
+//: compute rotation such that principal_vector1 = R*principal_vector2
+template <class T>
+vgl_rotation_3d<T> vpgl_persp_cam_relative_orientation( const vpgl_perspective_camera<T>& cam1, const vpgl_perspective_camera<T>& cam2);
+
 #endif // vpgl_perspective_camera_h_

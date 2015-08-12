@@ -42,6 +42,12 @@ IF(EXPAT_FOUND)
    ADD_EXECUTABLE( bwm_test_TFT  bwm_test_TFT_constraints.cxx)
    TARGET_LINK_LIBRARIES( bwm_test_TFT bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml ipts mvl)
 
+   ADD_EXECUTABLE( bwm_3d_fixed_transform  bwm_3d_fixed_transform.cxx)
+   TARGET_LINK_LIBRARIES( bwm_3d_fixed_transform bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml)
+
+   ADD_EXECUTABLE( bwm_compute_orientation_variance bwm_compute_orientation_variance.cxx)
+   TARGET_LINK_LIBRARIES( bwm_compute_orientation_variance bwm bwm_algo vpgl vgl_algo vnl_algo vgl vnl vul vidl vcl bxml)
+
   ENDIF(SHAPELIB_FOUND)
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)

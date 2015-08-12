@@ -52,9 +52,9 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_to_local_coordinates_process, "vpglConvertToLocalCoordinatesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_perturb_persp_cam_orient_process, "vpglPerturbPerspCamOrientProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_rotate_persp_cam_process, "vpglRotatePerspCamProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_persp_cam_distance_process, "vpglPerspCamDistancaProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_persp_cam_distance_process, "vpglPerspCamDistanceProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_to_generic_camera_w_margin_process, "vpglConvertToGenericCameraWithMarginProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_persp_cam_pa_covariance_process, "vpglComputePerspCamPACovariancePRocess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_compute_persp_cam_pa_covariance_process, "vpglComputePerspCamPACovarianceProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_process2, "vpglCreatePerspectiveCameraProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_perspective_cam_center_process, "vpglGetPerspectiveCamCenterProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_geo_camera_process, "vpglLoadGeoCameraProcess");
@@ -100,5 +100,5 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_crop_ortho_using_3d_box_process, "vpglCropOrthoUsing3DboxPRocess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_non_nadir_geo_camera_to_generic_process, "vpglConvertNonNadirGeoCameraToGenericProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_get_generic_camera_ray_process, "vpglGetGenericCamRayProcess");
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_persp_cam_from_photo_overlay_process, "vpglPerspCameraFromPhotoOverlayProcess");
 }

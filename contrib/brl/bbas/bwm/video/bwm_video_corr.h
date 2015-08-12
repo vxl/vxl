@@ -63,6 +63,9 @@ class bwm_video_corr : public vbl_ref_count
   //: add a match
   bool add(unsigned frame, vgl_point_2d<double> const& pt);
 
+  //: updates a match
+  bool update(unsigned frame, vgl_point_2d<double> const& pt);
+
   //: remove a match
   void remove(unsigned frame) { matches_.erase(frame); }
 

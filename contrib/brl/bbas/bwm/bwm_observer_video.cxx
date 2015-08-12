@@ -13,6 +13,7 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vgui/vgui.h>
+#include <vgui/vgui_projection_inspector.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include <vnl/vnl_numeric_traits.h>
@@ -65,6 +66,24 @@ bool bwm_observer_video::handle(const vgui_event &e)
     this->add_match();
     return true;
   }
+
+  if (e.type==vgui_KEY_PRESS && e.key == 'r')
+  {
+    return this->remove_match();
+  }
+
+  if (e.type == vgui_BUTTON_DOWN &&
+      e.button == vgui_MIDDLE &&
+      e.modifier == vgui_SHIFT &&
+      bwm_observer_mgr::instance()->in_corr_picking())
+  {
+    vgui_projection_inspector pi;
+    float x,y;
+    pi.window_to_image_coordinates(e.wx, e.wy, x, y);
+    vgl_point_2d<double> pt(x,y);
+    return this->update_match(pt);
+  }
+
   return bwm_observer_cam::handle(e);
 }
 
@@ -527,6 +546,55 @@ bool bwm_observer_video::add_match()
   return true;
 }
 
+bool bwm_observer_video::remove_match()
+{
+  unsigned frame = 0, corr_index = 0;
+  bwm_soview2D_cross* cross =0;
+  if (!this->find_selected_video_corr(frame, corr_index, cross))
+    return false;
+
+  this->remove_selected_corr_match();
+
+  bwm_video_corr_sptr c = video_corrs_[corr_index];
+  c->nearest_frame(video_istr_->frame_number(), frame);
+  this->display_video_corr(c, frame, CORR_STYLE);
+  return true;
+}
+
+bool bwm_observer_video::update_match(vgl_point_2d<double> &pt)
+{
+  unsigned cur_frame =  video_istr_->frame_number();
+
+  if (!tracked_corr_)
+  {
+    unsigned frame = 0, corr_index = 0;
+    bwm_soview2D_cross* cross =0;
+    if (this->find_selected_video_corr(frame, corr_index, cross))
+    {//Selected cross found!
+      if (cur_frame == frame)
+      {
+        this->video_corrs_[corr_index]->update(cur_frame, pt);
+
+        cross->x = pt.x(); //Update graphics object
+        cross->y = pt.y(); //Update graphics object
+        //Yeah, I get I'm probably not supposed to do it this way
+        //but I don't currently know how I'm supposed to, and this
+        //worked safey.
+      }
+      else
+      {//Else, it was a missing point that needs to be added CAREFULLY
+        this->video_corrs_[corr_index]->add(cur_frame, pt);
+        cross->x = pt.x(); //Update graphics object
+        cross->y = pt.y(); //Update graphics object
+        cross->set_colour(PREV_STYLE->rgba[0], PREV_STYLE->rgba[1], PREV_STYLE->rgba[2]);
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+
 bwm_soview2D_cross* bwm_observer_video::corr_soview(unsigned corr_index)
 {
   if (!video_istr_)
@@ -659,9 +727,10 @@ void bwm_observer_video::display_corr_track()
     unsigned nframe=0;
     if (!c->nearest_frame(cur_frame, nframe))
       continue;
-    this->display_video_corr(c, nframe, PREV_STYLE);
     if (nframe!=cur_frame)
-      this->display_video_corr(c, cur_frame, CORR_STYLE);
+      this->display_video_corr(c, nframe, CORR_STYLE);
+    else
+      this->display_video_corr(c, nframe, PREV_STYLE); //Works
 
     if (cam_istr_&&c->world_pt_valid()&&display_world_pts_)
       this->display_projected_3d_point(c);

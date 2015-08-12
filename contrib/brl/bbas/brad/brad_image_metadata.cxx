@@ -2,6 +2,7 @@
 //:
 // \file
 
+#include <vcl_cstdlib.h> // for std::abs(int)
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vul/vul_awk.h>

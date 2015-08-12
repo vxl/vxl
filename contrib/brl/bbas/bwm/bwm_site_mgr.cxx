@@ -794,7 +794,7 @@ void bwm_site_mgr::save_video_site()
       (this->site_dir_.size() > 0) &&
       (vul_file::exists(this->site_dir_)))
   {
-    vgui_dialog_extensions d("Saving the Video Site");
+    vgui_dialog d("Saving the Video Site");
     d.message(("Saving the site " + site_name_).c_str());
     d.message(("under: " + site_dir_).c_str());
     d.line_break();
@@ -810,7 +810,7 @@ void bwm_site_mgr::save_video_site()
   {
     // ask the path for saving the site
     vcl_string ext = "png";
-    vgui_dialog_extensions d("Save the Video Site!");
+    vgui_dialog_extensions d("Save the Video Site!"); //Still will NOT work in Linux!
     d.field("Video Site Name:", this->site_name_);
     d.line_break();
     d.dir("Video Site Dir:", ext, this->site_dir_);
@@ -832,7 +832,7 @@ void bwm_site_mgr::save_video_site()
   vcl_vector<bwm_observable_sptr> objs = bwm_world::instance()->objects();
   vcl_vector<vcl_string> obj_types;
   vcl_vector<vcl_string> obj_paths;
-  vcl_string obj_dir = site_dir_ + "\\" + site_name_ + "_objects\\";
+  vcl_string obj_dir = site_dir_ + "/" + site_name_ + "_objects/";
   vul_file::make_directory(obj_dir);
   unsigned iobj = 0;
   for (vcl_vector<bwm_observable_sptr>::iterator oit = objs.begin();
@@ -857,7 +857,7 @@ void bwm_site_mgr::save_video_site()
   vcl_stringstream strm;
   strm << vcl_fixed << time;
   vcl_string ver(strm.str());
-  vcl_string site_path = site_dir_ + "\\" + site_name_ + "_v" + ver + ".xml";
+  vcl_string site_path = site_dir_ + "/" + site_name_ + "_v" + ver + ".xml";
   vio.x_write(site_path);
 }
 

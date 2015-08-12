@@ -177,7 +177,7 @@ brdb_database::print() const
              << "Relation name: " << (*itr).first << vcl_endl;
     (*itr).second->print();
   }
-  vcl_cout << "\n<<<<<<<<<<<<<<<<<<<<<<<<<<---- end ---->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n";
+  vcl_cout << "\n<<<<<<<<<<<<<<<<<<<<<<<<<<---- end ---->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n" << vcl_flush;
 }
 
 

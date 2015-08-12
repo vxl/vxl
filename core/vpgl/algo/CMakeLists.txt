@@ -26,6 +26,7 @@ SET( vpgl_algo_sources
   vpgl_ba_fixed_k_lsqr.h           vpgl_ba_fixed_k_lsqr.cxx
   vpgl_ba_shared_k_lsqr.h          vpgl_ba_shared_k_lsqr.cxx
   vpgl_affine_rectification.h      vpgl_affine_rectification.cxx
+  vpgl_camera_transform.h          vpgl_camera_transform.cxx
 )
 
 AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)

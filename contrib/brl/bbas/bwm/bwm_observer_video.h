@@ -74,6 +74,12 @@ class bwm_observer_video : public bwm_observer_cam
   //: add a match to an existing correspondence in the current frame
   bool add_match();
 
+  //: removes a match to an existing correspondence in the current frame
+  bool remove_match();
+
+  //: updatesa match to an existing correspondence in the current frame
+  bool update_match(vgl_point_2d<double> &pt);
+
   //: add video corr at a selected vertex
   bool add_match_at_vertex();
 

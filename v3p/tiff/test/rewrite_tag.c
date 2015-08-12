@@ -324,9 +324,6 @@ int
 main(int argc, char **argv)
 {
     int failure = 0;
-    (void) argc;
-    (void) argv;
-
 
     failure |= test_packbits();
 

@@ -572,6 +572,23 @@ double vpgl_persp_cam_distance( const vpgl_perspective_camera<T>& cam1, const vp
 }
 
 template <class T>
+vgl_vector_3d<T> vpgl_persp_cam_base_line_vector( const vpgl_perspective_camera<T>& cam1, const vpgl_perspective_camera<T>& cam2)
+{
+  vgl_vector_3d<T> out = cam2.get_camera_center()-cam1.get_camera_center();
+  return out;
+}
+
+template <class T>
+vgl_rotation_3d<T> vpgl_persp_cam_relative_orientation( const vpgl_perspective_camera<T>& cam1, const vpgl_perspective_camera<T>& cam2)
+{
+  vgl_vector_3d<T> p1 = cam1.principal_axis();
+  vgl_vector_3d<T> p2 = cam2.principal_axis();
+  
+  vgl_rotation_3d<T> R(p2, p1);
+  return R;
+}
+
+template <class T>
 vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
 			  T d_near, T d_far){
 
@@ -607,10 +624,15 @@ template vpgl_perspective_camera<T > postmultiply(const vpgl_perspective_camera<
                                                   const vgl_h_matrix_3d<T >& euclid_trans); \
 template double vpgl_persp_cam_distance(const vpgl_perspective_camera<T >& cam1, \
                                         const vpgl_perspective_camera<T >& cam2); \
+template vgl_vector_3d<T> vpgl_persp_cam_base_line_vector(const vpgl_perspective_camera<T>& cam1, \
+                                                          const vpgl_perspective_camera<T>& cam2); \
+template vgl_rotation_3d<T> vpgl_persp_cam_relative_orientation(const vpgl_perspective_camera<T>& cam1, \
+                                                                const vpgl_perspective_camera<T>& cam2); \
 template void vrml_write(vcl_ostream &s, const vpgl_perspective_camera<T >&, double rad); \
 template vcl_vector<vpgl_perspective_camera<T > > cameras_from_directory(vcl_string dir, T); \
  template vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam, T d_near, T d_far); \
 template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \
 template vcl_istream& operator>>(vcl_istream&, vpgl_perspective_camera<T >&)
+
 
 #endif // vpgl_perspective_camera_txx_
