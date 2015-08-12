@@ -36,6 +36,24 @@ def create_scene_xml(scene_xml, world_dir, lvcs, lvcs_file, dim_x, dim_y, dim_z,
   bvxm_batch.set_input_unsigned(13, max_scale)
   return bvxm_batch.run_process()
 
+def create_scene_large_scale(roi_kml, scene_root, world_dir, dem_folder, world_size = 500.0, voxel_size = 1.0, height_diff = 120.0, land_folder = ""):
+  bvxm_batch.init_process("bvxmCreateSceneXmlLargeScaleProcess")
+  bvxm_batch.set_input_string(0, roi_kml)
+  bvxm_batch.set_input_string(1, scene_root)
+  bvxm_batch.set_input_string(2, world_dir)
+  bvxm_batch.set_input_string(3, dem_folder)
+  bvxm_batch.set_input_string(4, land_folder)
+  bvxm_batch.set_input_float(5, world_size)
+  bvxm_batch.set_input_float(6, voxel_size)
+  bvxm_batch.set_input_float(7, height_diff)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    n_scenes = bvxm_batch.get_output_unsigned(id)
+    return n_scenes
+  else:
+    return 0
+
 def scene_box(scene):
   bvxm_batch.init_process("bvxmSceneBoxProcess");
   bvxm_batch.set_input_from_db(0, scene);
