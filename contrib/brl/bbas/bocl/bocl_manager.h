@@ -44,12 +44,6 @@ class bocl_manager
   //: Use this instead of constructor
   static T& instance();
 
-  //: Queries found platforms, creates a list of CPU and GPU devices
-  bool initialize_cl();
-
-  //: Initialise the opencl environment
-  void clear_cl();
-
   //: available devices
   vcl_vector<bocl_device_sptr> gpus_;
   vcl_vector<bocl_device_sptr> cpus_;
@@ -78,7 +72,13 @@ class bocl_manager
  protected:
 
   //: Constructor
-  bocl_manager() {}
+  bocl_manager();
+
+  //: Queries found platforms, creates a list of CPU and GPU devices
+  bool initialize_cl();
+
+  //: Initialise the opencl environment
+  void clear_cl();
 
 ////////////////////////////////////////////////////////////////////////////////
 // OLD helper methods/ deprecated

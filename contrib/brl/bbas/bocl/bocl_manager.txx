@@ -15,6 +15,13 @@
 #include <malloc.h> // for memalign()
 #endif
 
+//: constructor
+template <class T>
+bocl_manager<T>::bocl_manager()
+{
+  initialize_cl();
+}
+
 //: Ensure only one instance is created
 template <class T>
 T& bocl_manager<T>::instance()
@@ -26,7 +33,6 @@ T& bocl_manager<T>::instance()
    * constructor.
    **/
   static T instance_;
-  instance_.initialize_cl();
   return instance_;
 }
 
