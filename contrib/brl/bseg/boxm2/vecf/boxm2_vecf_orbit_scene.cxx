@@ -1193,11 +1193,11 @@ bool boxm2_vecf_orbit_scene::vfield_params_change_check(const boxm2_vecf_orbit_p
   intrinsic_change |= fabs(this->params_.eye_radius_  - params.eye_radius_) > tol;
   intrinsic_change |= fabs(this->params_.scale_x_coef_  - params.scale_x_coef_) > tol;
   intrinsic_change |= fabs(this->params_.scale_y_coef_  - params.scale_y_coef_) > tol;
-  intrinsic_change |= fabs(this->params_.pupil_intensity_ - params.pupil_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.sclera_intensity_ - params.sclera_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.lower_eyelid_intensity_ - params.lower_eyelid_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.eyelid_intensity_ - params.eyelid_intensity_) > tol;
-  intrinsic_change |= fabs(this->params_.eyelid_crease_upper_intensity_ - params.eyelid_crease_upper_intensity_) > tol;
+  intrinsic_change |= fabs((float)this->params_.pupil_intensity_ - (float)params.pupil_intensity_) > tol;
+  intrinsic_change |= fabs((float)this->params_.sclera_intensity_ - (float)params.sclera_intensity_) > tol;
+  intrinsic_change |= fabs((float)this->params_.lower_eyelid_intensity_ - (float)params.lower_eyelid_intensity_) > tol;
+  intrinsic_change |= fabs((float)this->params_.eyelid_intensity_ - (float)params.eyelid_intensity_) > tol;
+  intrinsic_change |= fabs((float)this->params_.eyelid_crease_upper_intensity_ - (float)params.eyelid_crease_upper_intensity_) > tol;
   return intrinsic_change;
 }
 void boxm2_vecf_orbit_scene::reset_buffers(){
