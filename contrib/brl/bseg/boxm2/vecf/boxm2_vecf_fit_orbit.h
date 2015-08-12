@@ -252,7 +252,11 @@ class boxm2_vecf_fit_orbit{
                             vcl_string const& dlabel, vcl_string const& olabel);
   bool add_dlib_orbit_data(vcl_map<vcl_string, vcl_vector<vgl_point_2d<double> > > const& parts,
                            vcl_string const& dlabel, vcl_string const& olabel);
+
+  //setters required for dlib fit.
   void set_only_2d_data(bool is_from_dlib){this->only_2d_data_= is_from_dlib; }
+
+  void set_image_height(double height){this->image_height_= height; }
  private:
   //: the map between string and enum
   void fill_smid_map();
