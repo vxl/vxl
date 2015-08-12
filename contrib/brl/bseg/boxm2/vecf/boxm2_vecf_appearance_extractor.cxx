@@ -597,7 +597,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
             sum_vis += current_vis_score_[target_data_idx];
           }
 
-          source_color_data[source_data_idx]  =  faux_ ? curr_lower_lid : target_color_data[target_data_idx];
+          source_color_data[source_data_idx]  =  faux_ ? color : curr_lower_lid;
         }
       }
     }

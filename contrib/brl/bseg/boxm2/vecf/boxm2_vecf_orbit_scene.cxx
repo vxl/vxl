@@ -154,7 +154,7 @@ void boxm2_vecf_orbit_scene::extract_target_block_data(boxm2_scene_sptr target_s
 }
 
 // after loading the block initialize all the cell indices from the block labels, e.g., cell == SPHERE, cell == LOWER_LID, etc.
-void boxm2_vecf_orbit_scene::create_indices_from_anatomy_buffers(){
+void boxm2_vecf_orbit_scene::cache_cell_centers_from_anatomy_labels(){
   vul_timer t;
   vgl_point_3d<double> orig = blk_->local_origin();
   vgl_vector_3d<double> dims = blk_->sub_block_dim();
@@ -181,11 +181,6 @@ void boxm2_vecf_orbit_scene::create_indices_from_anatomy_buffers(){
         bool eyelid       = static_cast<unsigned char>(eyelid_->data()[indx])      >0;
         bool lower_eyelid = static_cast<unsigned char>(lower_eyelid_->data()[indx])>0;
         bool eyelid_crease = static_cast<unsigned char>(eyelid_crease_->data()[indx])>0;
-
-        // if( alpha_data_ )
-        //   alpha_data_->data()[indx] = 0;
-        // if(app_data_)
-        //   app_data_->data()[indx][0] = static_cast<unsigned char>(10);
 
 
         if(sphere){
@@ -225,6 +220,7 @@ void boxm2_vecf_orbit_scene::create_indices_from_anatomy_buffers(){
 boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance,bool is_right):
   boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
+  this->extrinsic_only_ = false;
   this->init_eyelids();
   is_single_instance_ = is_single_instance;
 
@@ -235,7 +231,31 @@ boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, boo
   }
   this->rebuild();
  }
+
+boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file,vcl_string params_file_name, bool is_single_instance , bool is_right ): boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0){
+  vcl_ifstream params_file(params_file_name.c_str());
+
+  if (!params_file){
+    vcl_cout<<" could not open params file : "<<params_file_name<<vcl_endl;
+  }else{
+    params_file >> this->params_;
+    is_single_instance_ = is_single_instance;
+
+    boxm2_lru_cache::create(base_model_);
+
+    this->extract_block_data();
+    this->cache_cell_centers_from_anatomy_labels();
+    this->cache_neighbors();
+    this->extrinsic_only_ = true;
+  }
+
+
+}
 void boxm2_vecf_orbit_scene::rebuild(){
+  if(this->extrinsic_only_){
+    vcl_cout<<" warning! rebuild called but scene accepts only extrinsic articulations!"<<vcl_endl;
+    return;
+  }
     this->params_.init_sphere();
     this->reset_buffers();
     this->init_eyelids();
@@ -244,8 +264,6 @@ void boxm2_vecf_orbit_scene::rebuild(){
     this->create_lower_eyelid();
     this->create_eyelid_crease();
     this->cache_neighbors();
-    vcl_cout<<"lower eyelid cell centers "<<this->lower_eyelid_cell_centers_.size() <<vcl_endl;
-
 }
 void boxm2_vecf_orbit_scene::cache_neighbors(){
   this->find_cell_neigborhoods();
@@ -1228,7 +1246,6 @@ void boxm2_vecf_orbit_scene::reset_buffers(){
   eyelid_crease_cell_neighbor_cell_index_.clear();
   eyelid_crease_data_index_to_cell_index_.clear();
   eyelid_crease_cell_neighbor_data_index_.clear();
-
 
 
 }

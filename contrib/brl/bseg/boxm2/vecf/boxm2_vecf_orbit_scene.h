@@ -65,7 +65,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
  boxm2_vecf_orbit_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0),
-    eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), boxm2_vecf_articulated_scene(){}
+                           eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false), boxm2_vecf_articulated_scene(){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);
@@ -73,6 +73,8 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
   boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance = true, bool is_right = false);
+
+  boxm2_vecf_orbit_scene(vcl_string const& scene_file,vcl_string params_file, bool is_single_instance = true, bool is_right =false);
 
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);
@@ -137,7 +139,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  //: cache index of neighboring cells
  void find_cell_neigborhoods();
  //: set sphere surface, sclera, iris and pupil cell indices
- void create_indices_from_anatomy_buffers();
+ void cache_cell_centers_from_anatomy_labels();
  //: scan dense set of points on the spherical shell to define surface voxels
  void build_sphere();
  //: scan dense set of point on iris to define iris voxels
@@ -275,6 +277,9 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   //      data_index          data_index
   vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_data_index_; // data index to neighbor data indices
   vnl_vector_fixed<unsigned char,8> random_color(bool yuv = true);
+
+private:
+  bool extrinsic_only_;
 };
 
 #endif // boxm2_vecf_orbit_scene_h_
