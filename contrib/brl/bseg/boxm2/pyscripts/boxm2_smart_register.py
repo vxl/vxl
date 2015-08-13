@@ -5,12 +5,12 @@
 #
 # This script is for end-users; pyadaptors should continue to use 
 # boxm2_register and boxm2_batch. 
-# This setup scirpt must be called first, before any other adaptor imports
+# This setup script must be called first, before any other adaptor imports
 # boxm2_register. 
 # If by chance you get a naked reference to a database object that does not
 # get wrapped in a dbvalue (such as a float or int), it must be removed 
 # directly with boxm2_batch.remove_data(), as the version in boxm2_register 
-# will be disabled (should not happen as they should imediately be converted 
+# will be disabled (should not happen as they should immediately be converted 
 # to their primitive type...).
 #
 #############################################################################
