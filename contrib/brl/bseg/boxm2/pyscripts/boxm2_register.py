@@ -27,9 +27,9 @@ class dbvalue(object):
 
   def __deepcopy__(self):
     if smart_register:
-      pass
-    else:
       assert False, 'cannot copy a dbvalue'
+    else:
+      super(dbvalue, self).__deepcopy__()
 
   # TODO add a __del__ destructor which removes the data from the db
   # RE: requires taking ownership of the database id; we would either
