@@ -20,22 +20,19 @@ class dbvalue(object):
     self.type = type   # string
 
   def __del__(self):
-    if smart_register:
+    if smart_register and not hasattr(self, '__ref__'):
+      #__ref__ is only an attr if it's a copy, don't remove_data on delete
       boxm2_batch.remove_data(self.id)
-    else:
-      super(dbvalue, self).__del__()
 
-  def __deepcopy__(self):
+  def __copy__(self):
+    import copy
+    x = dbvalue(self.id, self.type)
     if smart_register:
-      assert False, 'cannot copy a dbvalue'
-    else:
-      super(dbvalue, self).__deepcopy__()
+      x.__ref__ = self #Create a linked list of refs
+    return x
 
-  # TODO add a __del__ destructor which removes the data from the db
-  # RE: requires taking ownership of the database id; we would either
-  # have to specialize the copy method (__deepcopy__()), for example, to 
-  # increment the reference count in the database, or make the database
-  # fail silently if it can't remove an object.
+  def __deepcopy__(self, memo):
+    return self.__copy__()
 
 def remove_data(id):
   if smart_register:
