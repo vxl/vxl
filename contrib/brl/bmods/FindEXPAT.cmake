@@ -23,7 +23,7 @@ IF(NOT EXPAT_FOUND)
 
   # If this FORCE variable is unset or is FALSE, try to find a native library.
   IF( NOT VXL_FORCE_B3P_EXPAT )
-    #INCLUDE( ${CMAKE_ROOT}/Modules/FindEXPAT.cmake )
+    INCLUDE( ${CMAKE_ROOT}/Modules/FindEXPAT.cmake )
     IF(EXPAT_FOUND)
       SET(VXL_USING_NATIVE_EXPAT "YES")
     ENDIF(EXPAT_FOUND)
@@ -32,7 +32,7 @@ IF(NOT EXPAT_FOUND)
 
   #
   # At some point, in a "release" version, it is possible that someone
-  # will not have the v3p geotiff library, so make sure the headers
+  # will not have the b3p expat library, so make sure the headers
   # exist.
   #
   IF(NOT EXPAT_FOUND)
