@@ -19,9 +19,6 @@ import boxm2_register
 def boxm2_register__dbvalue____del__(self):
   boxm2_register.boxm2_batch.remove_data(self.id)
 boxm2_register.dbvalue.__del__ = boxm2_register__dbvalue____del__
-def boxm2_register__dbvalue____copy__(self): 
-  assert False, 'cannot copy a dbvalue'
-boxm2_register.dbvalue.__copy__ = boxm2_register__dbvalue____copy__
 def boxm2_register__dbvalue____deepcopy__(self, memo): 
   assert False, 'cannot copy a dbvalue'
 boxm2_register.dbvalue.__deepcopy__ = boxm2_register__dbvalue____deepcopy__
