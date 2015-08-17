@@ -525,9 +525,9 @@ def convert_local_to_global_coordinates(lvcs,x,y,z):
 # convert lat,lon,el to local coordinates;
 def create_lvcs(lat,lon,el,csname):
     boxm2_batch.init_process('vpglCreateLVCSProcess');
-    boxm2_batch.set_input_float(0,lat);
-    boxm2_batch.set_input_float(1,lon);
-    boxm2_batch.set_input_float(2,el);
+    boxm2_batch.set_input_double(0,lat);
+    boxm2_batch.set_input_double(1,lon);
+    boxm2_batch.set_input_double(2,el);
     boxm2_batch.set_input_string(3,csname);
     boxm2_batch.run_process();
     (id,type) = boxm2_batch.commit_output(0);

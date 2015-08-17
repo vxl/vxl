@@ -12,15 +12,15 @@
 bool vpgl_create_lvcs_process_cons(bprb_func_process& pro)
 {
   //this process takes four inputs:
-  // 0: (float)  latitude
-  // 1: (float)  longitude
-  // 2: (float)  elevation
-  // 3: (string) lvcs filename to save
+  // 0: (double)  latitude
+  // 1: (double)  longitude
+  // 2: (double)  elevation
+  // 3: (string)  lvcs csname (wgs84, nad27n, wgs72, utm)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("float");
-  input_types.push_back("float");
-  input_types.push_back("float");
+  input_types.push_back("double");
+  input_types.push_back("double");
+  input_types.push_back("double");
   input_types.push_back("vcl_string"); 
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -43,9 +43,9 @@ bool vpgl_create_lvcs_process(bprb_func_process& pro)
   }
 
   // get the inputs
-  float lat = pro.get_input<float>(0);
-  float lon = pro.get_input<float>(1);
-  float el = pro.get_input<float>(2);
+  double lat = pro.get_input<double>(0);
+  double lon = pro.get_input<double>(1);
+  double el = pro.get_input<double>(2);
   vcl_string lvcs_name = pro.get_input<vcl_string>(3);
 
   // create lvcs
