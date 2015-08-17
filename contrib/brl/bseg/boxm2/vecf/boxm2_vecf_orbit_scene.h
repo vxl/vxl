@@ -211,6 +211,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   boxm2_data<BOXM2_ALPHA>* target_alpha_data_;   //target alpha database
   boxm2_data<BOXM2_MOG3_GREY>* target_app_data_; //target appearance database
   boxm2_data<BOXM2_NUM_OBS>* target_nobs_data_;  //target nobs
+  boxm2_data<BOXM2_VIS_SCORE>* target_vis_score_data_;  //target nobs
   boxm2_data<BOXM2_GAUSS_RGB>* target_color_data_;
   vcl_vector<cell_info> box_cell_centers_;       // cell centers in the target block
   boxm2_vecf_orbit_params params_;               // parameter struct

@@ -70,6 +70,7 @@ void boxm2_vecf_composite_head_model::map_to_target(boxm2_scene_sptr target)
 {
   //  vcl_cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << vcl_endl;
   // clear target
+
   if (boxm2_vecf_head_model::intrinsic_change_){
     this->clear_target(target);
   // head model

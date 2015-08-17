@@ -20,6 +20,7 @@ class boxm2_vecf_appearance_extractor{
   }
   void extract_appearance(bool faux=false){
     this->faux_ = faux;
+    vis_cells_.clear();
     this->extract_head_appearance();
     this->extract_orbit_appearance();
     head_model_.intrinsic_change_ = true;
@@ -28,12 +29,13 @@ class boxm2_vecf_appearance_extractor{
   bool faux_;
   void extract_orbit_appearance();
   void extract_head_appearance();
-  void extract_eye_appearance(bool is_right);
-  void extract_lower_lid_appearance(bool is_right);
-  void extract_upper_lid_appearance(bool is_right);
-  void extract_eyelid_crease_appearance(bool is_right);
-  void extract_pupil_appearance(bool is_right);
-  void extract_iris_appearance(bool is_right);
+  void extract_eye_appearance(bool is_right , bool extract);
+  void extract_lower_lid_appearance(bool is_right , bool extract);
+  void extract_upper_lid_appearance(bool is_right , bool extract);
+  void extract_eyelid_crease_appearance(bool is_right , bool extract);
+  void extract_pupil_appearance(bool is_right , bool extract);
+  void extract_iris_appearance(bool is_right , bool extract);
+  void bump_up_vis_scores();
   void reset(bool is_right);
   bool extract_data(boxm2_scene_sptr scene,boxm2_block_id& block,float * &alpha,gray_APM* &gray_app, color_APM* &color_app);
 
@@ -49,8 +51,8 @@ class boxm2_vecf_appearance_extractor{
     return apm_f;
   }
   boxm2_scene_sptr target_scene_;
-  color_APM left_upper_lid_app_, right_upper_lid_app_, right_lower_lid_app_,left_lower_lid_app_, left_eyelid_crease_app_, right_eyelid_crease_app_, iris_app_, sclera_app_, pupil_app_;
+  color_APM left_upper_lid_app_, right_upper_lid_app_, right_lower_lid_app_,left_lower_lid_app_, left_eyelid_crease_app_, right_eyelid_crease_app_, left_iris_app_,right_iris_app_, left_sclera_app_,right_sclera_app_,left_pupil_app_,right_pupil_app_;
   vis_score_t * current_vis_score_;
   boxm2_vecf_composite_head_model& head_model_;
-  uchar8 rgb2yuv(uchar8 rgb);
+  vcl_vector<unsigned> vis_cells_;
 };
