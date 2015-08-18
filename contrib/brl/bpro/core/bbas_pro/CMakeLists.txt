@@ -10,6 +10,7 @@ SET(bbas_pro_sources
     bbas_processes.h
     bbas_register.h             bbas_register.cxx
     bbas_1d_array_float.h       bbas_1d_array_float.cxx
+    bbas_1d_array_double.h      bbas_1d_array_double.cxx
     bbas_1d_array_int.h         bbas_1d_array_int.cxx
     bbas_1d_array_unsigned.h    bbas_1d_array_unsigned.cxx
     bbas_1d_array_string.h      bbas_1d_array_string.cxx

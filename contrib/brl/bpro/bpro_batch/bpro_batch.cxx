@@ -8,6 +8,7 @@
 #include <brdb/brdb_selection.h>
 #include <brdb/brdb_database_manager.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_int.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_unsigned.h>
@@ -27,6 +28,7 @@ static PyObject *set_input_long(PyObject *self, PyObject *args);
 static PyObject *set_input_float(PyObject *self, PyObject *args);
 static PyObject *set_input_float_array(PyObject *self, PyObject *args);
 static PyObject *set_input_double(PyObject * self, PyObject *args);
+static PyObject *set_input_double_array(PyObject *self, PyObject *args);
 static PyObject *get_output_string(PyObject *self, PyObject *args);
 static PyObject *get_output_float(PyObject *self, PyObject *args);
 static PyObject *get_output_double(PyObject *self, PyObject *args);
@@ -46,6 +48,7 @@ static PyObject *remove_data_obj(PyObject *self, PyObject *args);
 static PyObject *print_db(PyObject *self, PyObject *args);
 static PyObject *clear(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_float(PyObject *self, PyObject *args);
+static PyObject *get_output_double_array(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_int(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_unsigned(PyObject *self, PyObject *args);
 static PyObject *get_bbas_1d_array_string(PyObject *self, PyObject *args);
@@ -286,6 +289,29 @@ PyObject *set_input_double(PyObject * /*self*/, PyObject *args)
   brdb_value_sptr v = new brdb_value_t<double>(value);
   if (verbose_state)
     vcl_cout << "input[" << input << "](double): " << value << '\n';
+  bool result = bprb_batch_process_manager::instance()->set_input(input, v);
+  return Py_BuildValue("b", result);
+}
+
+PyObject *set_input_double_array(PyObject * /*self*/, PyObject *args)
+{
+  int input;
+  PyObject  * list;
+  if (!PyArg_ParseTuple(args, "iO:set_input_double_array", &input, &list))
+    return NULL;
+
+  if (!PyList_Check(list))
+    return Py_BuildValue("b", false);
+  Py_ssize_t length=PyList_GET_SIZE(list);
+
+  bbas_1d_array_double_sptr farray=new bbas_1d_array_double(length);
+  for (Py_ssize_t i = 0; i < length; ++i)
+  {
+    PyObject * obj = PyList_GetItem(list,i);
+    farray->data_array[i]=PyFloat_AsDouble(obj);
+  }
+
+  brdb_value_sptr v = new brdb_value_t<bbas_1d_array_double_sptr>(farray);
   bool result = bprb_batch_process_manager::instance()->set_input(input, v);
   return Py_BuildValue("b", result);
 }
@@ -734,6 +760,49 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
   return array_1d;
 }
 
+PyObject *get_output_double_array(PyObject * /*self*/, PyObject *args)
+{
+  unsigned id;
+  bbas_1d_array_double_sptr value;
+  if (!PyArg_ParseTuple(args, "i:get_output_double_array", &id))
+    return NULL;
+
+  vcl_string relation_name = "bbas_1d_array_double_sptr_data";
+
+  // query to get the data
+  brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  PyObject *array_1d=0;
+  if (selec->size()!=1) {
+    vcl_cout << "in get_bbas_1d_array_double() - no relation with type" << relation_name << " id: " << id << vcl_endl;
+
+    return array_1d;
+  }
+
+  brdb_value_sptr brdb_value;
+  if (!selec->get_value(vcl_string("value"), brdb_value)) {
+    vcl_cout << "in get_bbas_1d_array_double() didn't get value\n";
+    return array_1d;
+  }
+
+  if (!brdb_value) {
+    vcl_cout << "in get_bbas_1d_array_double() - null value\n";
+    return array_1d;
+  }
+
+  brdb_value_t<bbas_1d_array_double_sptr>* result_out = static_cast<brdb_value_t<bbas_1d_array_double_sptr>* >(brdb_value.ptr());
+  value = result_out->value();
+
+  array_1d = PyList_New(value->data_array.size());
+  PyObject *x;
+  for (Py_ssize_t i=0;i<value->data_array.size();i++)
+  {
+    x=PyFloat_FromDouble((double)value->data_array[i]);
+    PyList_SetItem(array_1d, i,x);
+  }
+  //Py_INCREF(array_1d);
+  return array_1d;
+}
 
 PyObject *get_bbas_1d_array_string(PyObject * /*self*/, PyObject *args)
 {
@@ -809,6 +878,7 @@ register_basic_datatypes()
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(double);
   REGISTER_DATATYPE(bbas_1d_array_float_sptr);
+  REGISTER_DATATYPE(bbas_1d_array_double_sptr);
   REGISTER_DATATYPE(bbas_1d_array_string_sptr);
   REGISTER_DATATYPE(bbas_1d_array_unsigned_sptr);
   REGISTER_DATATYPE(bbas_1d_array_int_sptr);
