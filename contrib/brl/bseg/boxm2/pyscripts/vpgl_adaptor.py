@@ -523,6 +523,24 @@ def convert_local_to_global_coordinates(lvcs,x,y,z):
     boxm2_batch.remove_data(id);
     return (lat,lon,el);
 # convert lat,lon,el to local coordinates;
+def convert_local_to_global_coordinates_array(lvcs,x,y,z):
+    boxm2_batch.init_process('vpglConvertLocalToGlobalCoordinatesArrayProcess');
+    boxm2_batch.set_input_from_db(0,lvcs);
+    boxm2_batch.set_input_double_array(1,x);
+    boxm2_batch.set_input_double_array(2,y);
+    boxm2_batch.set_input_double_array(3,z);
+    boxm2_batch.run_process();
+    (id,type) = boxm2_batch.commit_output(0);
+    lat = boxm2_batch.get_output_double_array(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(1);
+    lon = boxm2_batch.get_output_double_array(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(2);
+    el = boxm2_batch.get_output_double_array(id);
+    boxm2_batch.remove_data(id);
+    return (lat,lon,el);
+# convert lat,lon,el to local coordinates;
 def create_lvcs(lat,lon,el,csname):
     boxm2_batch.init_process('vpglCreateLVCSProcess');
     boxm2_batch.set_input_double(0,lat);

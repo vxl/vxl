@@ -62,6 +62,7 @@ DECLARE_FUNC_CONS(vpgl_load_geo_camera_process2);
 DECLARE_FUNC_CONS(vpgl_export_cameras_to_nvm_process);
 DECLARE_FUNC_CONS(vpgl_create_lvcs_process);
 DECLARE_FUNC_CONS(vpgl_convert_local_to_global_coordinates_process);
+DECLARE_FUNC_CONS(vpgl_convert_local_to_global_coordinates_array_process);
 DECLARE_FUNC_CONS(vpgl_convert_local_rational_to_perspective_process);
 DECLARE_FUNC_CONS(vpgl_load_geo_camera_process3);
 DECLARE_FUNC_CONS(vpgl_save_geo_camera_tfw_process);
