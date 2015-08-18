@@ -165,7 +165,7 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
                     float exp_color  = boxm2_processor_type<BOXM2_MOG3_GREY>::type::expected_color(mog_data[currIdx]);
                     int col = (int)(exp_color*255);
                     col = col > 255 ? 255 : col;
-                    file << col << ' ' << col << ' ' << col <<"\n";
+                    file << col << ' ' << col << ' ' << col;
                 }
                 else if ( datatype == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
                 {
@@ -178,12 +178,14 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
                     col1 = col1 > 255 ? 255 : col1;
                     int col2 = (int)(exp_color[2]*255);
                     col2 = col2 > 255 ? 255 : col2;
-                    file << col0 << ' ' << col1 << ' ' << col2 <<"\n";
+                    file << col0 << ' ' << col1 << ' ' << col2;
 
                 }
                 else{
-                    file << 0 << ' ' << 0 << ' ' << 0 <<"\n";
+                    file << 0 << ' ' << 0 << ' ' << 0;
                 }
+
+                file << ' ' << prob << ' ' <<"\n";
                
                 num_vertices++;
             }

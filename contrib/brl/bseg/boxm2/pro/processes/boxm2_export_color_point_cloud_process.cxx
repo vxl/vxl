@@ -123,7 +123,7 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
     myfile_input.close();
     myfile.open(output_filename.c_str());
     myfile << "ply\nformat ascii 1.0\nelement vertex " << num_vertices
-        << "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n"
+        << "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\nproperty float prob\n"
         << "end_header\n"
         << ss.str();
     myfile.flush();
