@@ -217,6 +217,11 @@ class vil_tiff_image : public vil_blocked_image_resource
   //:point to a particular image in the file
   void set_index(const unsigned int index)
     {assert(index<nimages_); index_=index;}
+  //: Get a smart pointer to opentiff object
+  tif_smart_ptr const& tiff() const 
+  {
+    return t_;
+  }
  private:
   //: the TIFF handle to the open resource file
   tif_smart_ptr t_;
