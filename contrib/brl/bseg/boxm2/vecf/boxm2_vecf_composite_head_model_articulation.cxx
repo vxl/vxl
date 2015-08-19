@@ -116,23 +116,23 @@ for(int i = 0; i<6; ++i){
     params_.push_back(head_params);
   }
 //scale head
- // double scale =1.0;
- // for(int i = 0; i<6; ++i){
- //  scale-=0.05;
- //  boxm2_vecf_orbit_params l_params,r_params;
- //  l_params.eyelid_dt_ = 0;
- //    boxm2_vecf_composite_head_parameters head_params;
- //    if(i%3 == 0)
- //      r_params.eyelid_dt_ = 0;
- //    else if(i%3 == 1)
- //      r_params.eyelid_dt_ = ddt/2;
- //    else
- //      r_params.eyelid_dt_ = ddt;
- //    head_params.l_orbit_params_ = l_params;
- //    head_params.r_orbit_params_ = r_params;
- //    head_params.head_scale_.x_ = scale;
- //    params_.push_back(head_params);
- //  }
+ double scale =1.0;
+ for(int i = 0; i<6; ++i){
+  scale-=0.05;
+  boxm2_vecf_orbit_params l_params,r_params;
+  l_params.eyelid_dt_ = 0;
+    boxm2_vecf_composite_head_parameters head_params;
+    if(i%3 == 0)
+      r_params.eyelid_dt_ = 0;
+    else if(i%3 == 1)
+      r_params.eyelid_dt_ = ddt/2;
+    else
+      r_params.eyelid_dt_ = ddt;
+    head_params.l_orbit_params_ = l_params;
+    head_params.r_orbit_params_ = r_params;
+    head_params.head_scale_.x_ = scale;
+    params_.push_back(head_params);
+  }
 
 
 }

@@ -35,7 +35,7 @@ boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_open
   }
   if (!status) {
     throw vcl_runtime_error("ERROR compiling kernel in boxm2_ocl_aggregate_normal_from_filter_vector");
-    
+
   }
 }
 
@@ -176,5 +176,38 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
   ocl_cache_->unref_mem(lookup.ptr());
   ocl_cache_->unref_mem(directions_buffer.ptr());
   delete [] directions;
+  return true;
+}
+bool boxm2_ocl_aggregate_normal_from_filter_vector::reset(){
+  int status=0;
+  cl_command_queue queue = clCreateCommandQueue( device_->context(),
+                                                 *(device_->device_id()),
+                                                 CL_QUEUE_PROFILING_ENABLE,
+                                                 &status);
+  if (status!=0)
+    return false;
+
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
+
+  //zip through each block
+  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter){
+    boxm2_block_id id = blk_iter->first;
+    bocl_mem * normals  = ocl_cache_->get_data(scene_,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(),false);
+    bocl_mem * alpha    = ocl_cache_->get_data(scene_,id,boxm2_data_traits<BOXM2_ALPHA >::prefix(),false);
+    normals->zero_gpu_buffer(queue);
+    alpha->write_to_buffer(queue);
+    unsigned num_filters = filter_vector_->size();
+    for (unsigned i = 0; i < num_filters; i++) {
+      bvpl_kernel_sptr filter = filter_vector_->kernels_[i];
+      vcl_stringstream filter_ident;
+      filter_ident << filter->name() << '_' << filter->id();
+      vcl_string response_data_type = RESPONSE_DATATYPE::prefix(filter_ident.str());
+      bocl_mem * response = ocl_cache_->get_data(scene_,id, response_data_type, 0, true);
+      response->zero_gpu_buffer(queue);
+      status = clFinish(queue);
+      check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
+    }
+  }
   return true;
 }

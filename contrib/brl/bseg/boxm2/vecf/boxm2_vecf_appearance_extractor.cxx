@@ -7,6 +7,11 @@ void boxm2_vecf_appearance_extractor::reset(bool is_right){
   boxm2_vecf_orbit_scene orbit = is_right ? head_model_.right_orbit_ : head_model_.left_orbit_;
   boxm2_scene_sptr scene = orbit.scene();
 
+  total_sclera_app_.fill(0); vis_sclera_ = 0.0f;
+  total_pupil_app_.fill(0); vis_pupil_ =0.0f;
+  total_iris_app_.fill(0); vis_iris_ = 0.0f;
+
+
   vcl_vector<boxm2_block_id> blocks = scene->get_block_ids();
   boxm2_data_base* gray_app_db  = boxm2_cache::instance()->get_data_base(scene, blocks[0],gray_APM_prefix);
   boxm2_data_base* color_app_db = boxm2_cache::instance()->get_data_base(scene, blocks[0], color_APM_prefix + "_" + (head_model_.color_apm_id_));
@@ -201,7 +206,15 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right,bool
 
   float sum_vis = 0;
   color_APM& curr_iris = is_right ? right_iris_app_ : left_iris_app_;
+  color_APM final_iris_app;
+
   float8 weighted_sum; weighted_sum.fill(0);
+  if(!extract && vis_iris_!= 0 ){
+    float8 final_iris_app_f = total_iris_app_ / vis_iris_;
+    final_iris_app = to_apm_t(final_iris_app_f);
+    curr_iris =  individual_appearance_ ? curr_iris : final_iris_app;
+  }
+
 
   boxm2_scene_sptr source_model = orbit.scene();
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
@@ -254,9 +267,12 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right,bool
       }
     }
   }
-  if(sum_vis != 0 && extract)
+  if(sum_vis != 0 && extract){
+    vis_iris_ += sum_vis;
+    total_iris_app_ +=weighted_sum;
     weighted_sum /= sum_vis;
     curr_iris = to_apm_t( weighted_sum );
+}
     //  vcl_cout<<"Extracted iris appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 
 }
@@ -272,6 +288,7 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
     orbit_params = head_params.r_orbit_params_;
   }
 
+
   color_APM color =orbit.random_color();
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
   vnl_vector_fixed<double, 3> to_dir(orbit_params.eye_pointing_dir_.x(),
@@ -284,8 +301,16 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
   color_APM& curr_pupil = is_right ? right_pupil_app_ : left_pupil_app_;
   float8 weighted_sum; weighted_sum.fill(0);
 
+  color_APM final_pupil_app;
+  if(!extract && vis_pupil_!= 0 ){
+    float8 final_pupil_app_f = total_pupil_app_ / vis_pupil_;
+    final_pupil_app = to_apm_t(final_pupil_app_f);
+    curr_pupil =  individual_appearance_ ? curr_pupil : final_pupil_app;
+  }
+
   boxm2_scene_sptr source_model = orbit.scene();
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
+
 
   unsigned n_source_cells = static_cast<unsigned>(orbit.pupil_cell_centers_.size());
   vcl_cout<<"pupil cell centers: "<<n_source_cells<<vcl_endl;
@@ -319,7 +344,7 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
           unsigned source_data_idx = orbit.pupil_cell_data_index_[i];
           uchar8 appearance = faux_ ? color : target_color_data[target_data_idx];
           source_app_data[source_data_idx]  = target_app_data[target_data_idx];
-          double prob =1 - exp (- target_alpha_data[target_data_idx] * target_side_len);
+          double prob = 1 - exp (- target_alpha_data[target_data_idx] * target_side_len);
           if(extract){
             if (current_vis_score_ && prob > 0.8){
               float8 curr_float_col = to_float8(target_color_data[target_data_idx]);
@@ -336,9 +361,14 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
       }
     }
   }
-  if(sum_vis != 0 && extract)
+  if(sum_vis != 0 && extract){
+    vis_pupil_ += sum_vis;
+    total_pupil_app_ +=weighted_sum;
     weighted_sum /= sum_vis;
-  curr_pupil = to_apm_t( weighted_sum );
+    curr_pupil = to_apm_t( weighted_sum );
+}
+  if(extract)
+    vcl_cout<<"Sum vis for current pupil is "<<sum_vis<<vcl_endl;
   //  vcl_cout<<"Extracted pupil appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 
 }
@@ -364,6 +394,15 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool
   float sum_vis = 0;
   color_APM& curr_sclera = is_right ? right_sclera_app_ : left_sclera_app_;
   float8 weighted_sum; weighted_sum.fill(0);
+
+  color_APM final_sclera_app;
+  if(!extract && vis_sclera_!= 0 ){
+    float8 final_sclera_app_f = total_sclera_app_ / vis_sclera_;
+    final_sclera_app = to_apm_t(final_sclera_app_f);
+    curr_sclera =  individual_appearance_ ? curr_sclera : final_sclera_app;
+  }
+
+
   boxm2_scene_sptr source_model = orbit.scene();
 
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
@@ -412,15 +451,19 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool
             float8 appearance = to_float8(target_color_data[target_data_idx]) * current_vis_score_[target_data_idx] +
                                 to_float8(curr_sclera)                   * (1 - current_vis_score_[target_data_idx]);
             source_color_data[source_data_idx]=  faux_ ? color : to_apm_t(appearance);
+            //source_color_data[source_data_idx]=  faux_ ? color : curr_sclera ;
             vis_cells_.push_back(target_data_idx); //need to set the vis of this index to 1
           }
         }
       }
     }
   }
-  if(sum_vis != 0 && extract)
+  if(sum_vis != 0 && extract){
+    vis_sclera_ += sum_vis;
+    total_sclera_app_ +=weighted_sum;
     weighted_sum /= sum_vis;
-  curr_sclera = to_apm_t( weighted_sum );
+    curr_sclera = to_apm_t( weighted_sum );
+}
   //  vcl_cout<<"Extracted eye sphere appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 }
 void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_right, bool extract){
@@ -681,6 +724,6 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
     //  vcl_cout<<"Extracted upper lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 }
 void boxm2_vecf_appearance_extractor::bump_up_vis_scores(){
-    for (vcl_vector<unsigned>::iterator it =vis_cells_.begin() ; it != vis_cells_.end(); it++)
-    current_vis_score_[*it] = 1;
+    // for (vcl_vector<unsigned>::iterator it =vis_cells_.begin() ; it != vis_cells_.end(); it++)
+    // current_vis_score_[*it] = 1;
 }

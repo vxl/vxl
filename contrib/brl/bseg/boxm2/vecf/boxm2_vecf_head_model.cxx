@@ -85,7 +85,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
          sblk != source_blocks.end(); ++sblk) {
 
       boxm2_block *source_blk = boxm2_cache::instance()->get_block(base_model_, *sblk);
-
+      const boxm2_array_3d<uchar16>& source_trees = source_blk->trees();
       boxm2_data_base* source_alpha;
       boxm2_data_base* source_app;
       boxm2_data_base* source_nobs;
@@ -140,15 +140,85 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
                 unsigned source_data_idx;
                 source_blk->data_index( inv_scaled_cell_center, source_data_idx);
                 float alpha = source_alpha_data[source_data_idx];
-                float prob = 1 - vcl_exp(-alpha*side_len);
-                const float prob_thresh = 0.0;
-                if (prob > prob_thresh) {
+                double prob = 1 - vcl_exp(-alpha*side_len);
+                const double prob_thresh = 0.0;
+
                   // get data can copy from source to target
-                  target_alpha_data[data_idx] = source_alpha_data[source_data_idx];
-                  target_app_data[data_idx] = source_app_data[source_data_idx];
-                  target_nobs_data[data_idx] = source_nobs_data[source_data_idx];
-                  target_color_data[data_idx] =source_color_data[source_data_idx];
+                target_alpha_data[data_idx] = source_alpha_data[source_data_idx];
+                target_app_data[data_idx]   = source_app_data[source_data_idx];
+                target_nobs_data[data_idx]  = source_nobs_data[source_data_idx];
+                target_color_data[data_idx] = source_color_data[source_data_idx];
+
+                double alphas[8];
+                double params[8];
+                vgl_point_3d<double> abs_neighbors[8];
+
+                vgl_vector_3d<double> source_scene_origin = vgl_vector_3d<double>(source_blk->local_origin().x(),source_blk->local_origin().y(),source_blk->local_origin().z());
+                vgl_vector_3d<double> source_center_rel = vgl_vector_3d<double>(source_cell_center.x() * source_blk->sub_block_dim().x() ,
+                                                                                source_cell_center.y() * source_blk->sub_block_dim().y() ,
+                                                                                source_cell_center.z() * source_blk->sub_block_dim().z() );
+                vgl_vector_3d<double> abs_cell_center_vec =  source_scene_origin + source_center_rel;
+                vgl_point_3d<double>  abs_source_cell_center = vgl_point_3d<double>(abs_cell_center_vec.x(),abs_cell_center_vec.y(),abs_cell_center_vec.z());
+
+
+                vgl_vector_3d<double> dP = inv_scaled_cell_center - abs_source_cell_center;
+                //                vcl_cout<<inv_scaled_cell_center<<" "<<abs_cell_center_vec<<" "<<dP<<" "<<side_len /source_blk->sub_block_dim().x() <<vcl_endl;
+                double cell_len_rw  = side_len;
+                if(dP.x() >= 0){ //source point is to the right of the cell center along x
+                  abs_neighbors[0].x() = abs_neighbors[1].x() =abs_neighbors[4].x() = abs_neighbors[5].x() = abs_source_cell_center.x(); // x-left neighbor is the cell center
+                  abs_neighbors[2].x() = abs_neighbors[3].x() =abs_neighbors[6].x() = abs_neighbors[7].x() = abs_source_cell_center.x() +cell_len_rw; // x-right neighbor  is the cell to the right of cell center
+                }else{ //source point is to the left of the cell center along x
+                  abs_neighbors[0].x() = abs_neighbors[1].x() =abs_neighbors[4].x() = abs_neighbors[5].x() = abs_source_cell_center.x() - cell_len_rw; // x-left neighbor is the cell to the left of cell center
+                  abs_neighbors[2].x() = abs_neighbors[3].x() =abs_neighbors[6].x() = abs_neighbors[7].x() = abs_source_cell_center.x() ; // x-right neighbor is the cell center
                 }
+                if(dP.y() >= 0){ //source point is to the right of the cell center along y
+                  abs_neighbors[0].y() = abs_neighbors[2].y() =abs_neighbors[4].y() = abs_neighbors[6].y() = abs_source_cell_center.y(); // y-left neighbor is the cell center
+                  abs_neighbors[1].y() = abs_neighbors[3].y() =abs_neighbors[5].y() = abs_neighbors[7].y() = abs_source_cell_center.y() +cell_len_rw; // y-right neighbor  is the cell to the right of cell center
+                }else{ //source point is to the left of the cell center along y
+                  abs_neighbors[0].y() = abs_neighbors[2].y() =abs_neighbors[4].y() = abs_neighbors[6].y() = abs_source_cell_center.y() -cell_len_rw; // y-left neighbor is the cell to the left of cell center
+                  abs_neighbors[1].y() = abs_neighbors[3].y() =abs_neighbors[5].y() = abs_neighbors[7].y() = abs_source_cell_center.y(); // y-right neighbor the cell center
+                }
+                if(dP.z() >= 0){ //source point is above the cell center along z
+                  abs_neighbors[0].z() = abs_neighbors[1].z() =abs_neighbors[2].z() = abs_neighbors[3].z() = abs_source_cell_center.z(); // z-bottom neighbor is the cell center
+                  abs_neighbors[4].z() = abs_neighbors[5].z() =abs_neighbors[6].z() = abs_neighbors[7].z() = abs_source_cell_center.z() +cell_len_rw; // z-top neighbor  is the cell on top of cell center
+                }else{ //source point is below the cell center along z
+                  abs_neighbors[0].z() = abs_neighbors[1].z() =abs_neighbors[2].z() = abs_neighbors[3].z() = abs_source_cell_center.z() -cell_len_rw; // z-bottom neighbor is the cell below cell center
+                  abs_neighbors[4].z() = abs_neighbors[5].z() =abs_neighbors[6].z() = abs_neighbors[7].z() = abs_source_cell_center.z() ; // z-top neighbor  is the  cell center
+                }
+
+                if (abs_neighbors[0].x() == abs_neighbors[2].x() || abs_neighbors[0].y() == abs_neighbors[1].y() || abs_neighbors[0].z() == abs_neighbors[4].z() )
+                  continue;
+                int nb_count = 0; double sum = 0;
+                for (unsigned i=0; i<8; i++){
+
+                  vgl_vector_3d<double> nbCenter = (abs_neighbors[i] - source_blk->local_origin()) / source_blk->sub_block_dim().x();
+
+                  bool in_bounds_x = (nbCenter.x() > 0) && (nbCenter.x() < source_blk->sub_block_num().x());
+                  bool in_bounds_y = (nbCenter.y() > 0) && (nbCenter.y() < source_blk->sub_block_num().y());
+                  bool in_bounds_z = (nbCenter.z() > 0) && (nbCenter.z() < source_blk->sub_block_num().z());
+
+                  bool in_bounds  = in_bounds_x && in_bounds_y && in_bounds_z;
+
+                  if (in_bounds){
+                    uchar16 nb_tree = source_trees((unsigned char) floor(nbCenter.x()),(unsigned char) floor(nbCenter.y()),(unsigned char) floor(nbCenter.z()));
+                    boct_bit_tree neighbor_tree((unsigned char*) nb_tree.data_block(), source_blk->max_level());
+
+                    //get neighbor local center, traverse to it
+                    vgl_vector_3d<double> locCenter = nbCenter - vgl_vector_3d<double>(floor(nbCenter.x()),floor(nbCenter.y()),floor(nbCenter.z()));
+                    int neighborBitIndex = neighbor_tree.traverse(vgl_point_3d<double>(locCenter.x(),locCenter.y(),locCenter.z()));
+                    int nb_data_index = neighbor_tree.get_data_index(neighborBitIndex);
+                    alphas[i] = source_alpha_data[nb_data_index] ;
+                    params[i] = (double)(source_app_data[nb_data_index][0])/255;
+                    nb_count++;
+                  }else{
+                    alphas[i] =0.0; params[i]=0;
+                  }
+                }
+                double interped_alpha = interp_generic_double(abs_neighbors,alphas,inv_scaled_cell_center);
+
+                double intensity = interp_generic_double(abs_neighbors,params,inv_scaled_cell_center);
+                target_alpha_data[data_idx] =  (float) interped_alpha;
+                target_app_data[data_idx][0] = (unsigned char)(intensity * 255);
               }
             }
           }

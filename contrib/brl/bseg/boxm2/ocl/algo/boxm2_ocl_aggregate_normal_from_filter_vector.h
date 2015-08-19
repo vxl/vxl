@@ -21,9 +21,10 @@ class boxm2_ocl_aggregate_normal_from_filter_vector
                                                   bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector);
 
     bool run(bool clear_cache=true);
+    bool reset();
 
   private:
-    
+
     bool compile_kernel(bocl_kernel &aggregate_kernel, vcl_string opts);
 
     bocl_kernel kernel_;

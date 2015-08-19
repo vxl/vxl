@@ -281,6 +281,8 @@ void boxm2_ocl_update_vis_score::reset(vcl_string prefix_name){
 
   for(id = block_ids.begin(); id!=block_ids.end(); id++){
     bocl_mem *vis_score  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(prefix_name));
+    bocl_mem * alpha  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vis_score->zero_gpu_buffer(queue);
+    alpha->write_to_buffer(queue);
   }
 }

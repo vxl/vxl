@@ -31,28 +31,15 @@ bool boxm2_vecf_composite_head_model::set_params(boxm2_vecf_articulated_params c
   eye_offset_z *= params_.head_scale_.z();
   eye_dist_x   *= params_.head_scale_.x();
 
-  params_.l_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z);
-  params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z);
+  double   eye_offset_z_left  =  eye_offset_z - (params_.l_orbit_params_.eye_radius_ -12);
+  double   eye_offset_z_right =  eye_offset_z - (params_.r_orbit_params_.eye_radius_ -12);
 
-  // double conic_depth = params_.conic_depth_;
-  // const double eye_ang =21 * 3.141/180;
-  // double eye_dist_x= conic_depth * sin(eye_ang) * params_.head_scale_.x();
-  // double eye_dist_z= conic_depth * cos(eye_ang) * params_.head_scale_.z();
-  // double scaled_conic_depth = sqrt(eye_dist_x * eye_dist_x + eye_dist_z * eye_dist_z);
-
-  // vgl_point_3d<double> skull_center(0.0 , 21 , -38 );
-  // double R = params_.l_orbit_params_.eye_radius_;
-
-  // vgl_vector_3d<double> dir_r(-sin(eye_ang) , 0 , cos(eye_ang));
-  // vgl_vector_3d<double> dir_l( sin(eye_ang) , 0 , cos(eye_ang));
-  // vgl_point_3d<double> l_pos = skull_center + dir_l * scaled_conic_depth;
-  // vgl_point_3d<double> r_pos = skull_center + dir_r * scaled_conic_depth;
-  // params_.l_orbit_params_.offset_ = vgl_vector_3d<double>(l_pos.x(),l_pos.y() ,l_pos.z());
-  // params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(r_pos.x(),r_pos.y() ,r_pos.z());
+  params_.l_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z_left);
+  params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z_right);
 
   //currently fixed to the head look direction. This might change
-  params_.l_orbit_params_.eye_pointing_dir_ = params_.look_dir_;
-  params_.r_orbit_params_.eye_pointing_dir_ = params_.look_dir_; //assuming the person is not lazy eyed.
+  // params_.l_orbit_params_.eye_pointing_dir_ = params_.look_dir_;
+  // params_.r_orbit_params_.eye_pointing_dir_ = params_.look_dir_; //assuming the person is not lazy eyed.
 
   //if the intrinsic eye parameters changed, clear target
   if(left_orbit_.vfield_params_change_check(params_.l_orbit_params_) || right_orbit_.vfield_params_change_check(params_.r_orbit_params_) ){

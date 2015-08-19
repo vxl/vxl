@@ -952,7 +952,7 @@ void boxm2_vecf_orbit_scene::interpolate_vector_field(vgl_point_3d<double> const
   target_app_data_->data()[tindx] = app;
   target_alpha_data_->data()[tindx] = alpha;
   target_color_data_->data()[tindx] = color_app;
-  //target_vis_score_data_->data()[tindx] = 1;
+  target_vis_score_data_->data()[tindx] = 1;
 }
 
 void boxm2_vecf_orbit_scene::apply_eye_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf,
@@ -981,8 +981,8 @@ void boxm2_vecf_orbit_scene::apply_eye_vector_field_to_target(vcl_vector<vgl_vec
     unsigned tindx = box_cell_centers_[j].data_index_;
 
     //target_color_data_->data()[tindx] = color;
-    if( target_vis_score_data_->data()[tindx]> 0.6)
-      target_vis_score_data_->data()[tindx] = 1;
+    // if( target_vis_score_data_->data()[tindx]> 0.6)
+    //   target_vis_score_data_->data()[tindx] = 1;
     this->interpolate_vector_field(src, sindx, dindx, tindx,
                                    sphere_cell_centers_, cell_neighbor_cell_index_,
                                    cell_neighbor_data_index_);
@@ -1032,7 +1032,7 @@ void boxm2_vecf_orbit_scene::apply_eyelid_vector_field_to_target(vcl_vector<vgl_
     sindx = eyelid_data_index_to_cell_index_[dindx];
     //    target_color_data_->data()[tindx] = color;
 
-    target_vis_score_data_->data()[tindx] = 1;
+    //    target_vis_score_data_->data()[tindx] = 1;
     interpolate_vector_field(src, sindx, dindx, tindx,eyelid_cell_centers_,
                              eyelid_cell_neighbor_cell_index_,eyelid_cell_neighbor_data_index_);
   }
@@ -1072,7 +1072,7 @@ void boxm2_vecf_orbit_scene::apply_lower_eyelid_vector_field_to_target(vcl_vecto
     //    vcl_cout<<(int)app_data_->data()[dindx][0]<<" ";
     sindx = lower_eyelid_data_index_to_cell_index_[dindx];
     //    target_color_data_->data()[tindx] = color;
-    target_vis_score_data_->data()[tindx] = 1;
+    //    target_vis_score_data_->data()[tindx] = 1;
     interpolate_vector_field(src, sindx, dindx, tindx, lower_eyelid_cell_centers_,
                              lower_eyelid_cell_neighbor_cell_index_,lower_eyelid_cell_neighbor_data_index_);
   }
@@ -1166,9 +1166,9 @@ bool boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& par
   }
 }
  vnl_vector_fixed<unsigned char,8> boxm2_vecf_orbit_scene::random_color(bool yuv){
-  unsigned char  R = rand() % 255;
-  unsigned char  G = rand() % 255;
-  unsigned char  B = rand() % 255;
+  unsigned char  R = rand() % (unsigned char) 255;
+  unsigned char  G = rand() % (unsigned char) 255;
+  unsigned char  B = rand() % (unsigned char) 255;
   vnl_vector_fixed<unsigned char,8> ret;
   ret.fill(0);
   ret[0] = R; ret[1] =G; ret[2] =B;
