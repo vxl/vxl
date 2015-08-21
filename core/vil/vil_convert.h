@@ -82,11 +82,13 @@
 
 #include <vcl_cassert.h>
 #include <vcl_limits.h>
+#include <vcl_cmath.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_exception.h>
+
 
 //: Performs conversion between different pixel types.
 template <class In, class Out>
@@ -461,6 +463,25 @@ class vil_convert_rgb_to_grey_pixel
   void operator() (vil_rgba<inP> v, outP& d) const {
     vil_convert_round_pixel<double,outP>()(rw_*v.r+gw_*v.g+bw_*v.b, d); }
 };
+
+//: Convert images with alpha plane (variable or binary) to images without alpha plane
+template <class inP, class outP>
+inline void vil_convert_merge_alpha(const vil_image_view<inP>& src,
+                                        vil_image_view<outP>& dest,
+                                        const unsigned nplanes)
+{
+  assert(vil_pixel_format_num_components(src.pixel_format()) == 1);
+  assert(vil_pixel_format_num_components(dest.pixel_format()) == 1);
+
+  assert((nplanes == 2) || (nplanes == 4));
+
+  dest.set_size(src.ni(), src.nj(), nplanes-1);
+
+  for (unsigned j = 0; j < src.nj(); ++j)
+    for (unsigned i = 0; i < src.ni(); ++i)
+      for (unsigned k = 0; k < nplanes-1; ++k)	
+      { vil_convert_round_pixel<double,outP>()(src(i,j,nplanes-1)/255.0*src(i,j,k), dest(i,j,k)); }
+}
 
 //: Convert single plane rgb (or rgba) images to greyscale.
 // Component types can be different. Rounding will take place if appropriate.
