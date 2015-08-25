@@ -212,7 +212,7 @@ bool boxm2_vecf_orbit_param_stats::plot_merged_margins(vcl_ofstream& os, unsigne
   return true;
 }
 void boxm2_vecf_orbit_param_stats::compute_feature_vectors(){
-  unsigned dim = 9;
+  unsigned dim = 4;
   for(vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > >::iterator mit = merged_inf_margin_.begin();
       mit != merged_inf_margin_.end(); ++mit){
     vcl_string pid = mit->first;
@@ -220,16 +220,16 @@ void boxm2_vecf_orbit_param_stats::compute_feature_vectors(){
     vcl_vector<vgl_point_3d<double> > sup_pts = merged_sup_margin_[pid];
     vcl_vector<vgl_point_3d<double> > crease_pts = merged_crease_[pid];
     vgl_point_3d<double> pl = inf_pts[inf_pts.size()-1];
-    vgl_point_3d<double> pmaxi, pmaxs, pmaxc;
+    vgl_point_3d<double> pmini, pmaxs, pmaxc;
     unsigned n = 0;
-#if 0
+#if 1
     n = static_cast<unsigned>(inf_pts.size());
-    double yi = -1000.0;
+    double yi = 1000.0;
     for(unsigned i = 0; i<n; ++i){
       vgl_point_3d<double> pi = inf_pts[i];
-      if(pi.y()>yi){
+      if(pi.y()<yi){
         yi = pi.y();
-        pmaxi = pi;
+        pmini = pi;
       }
     }
 #endif
@@ -251,22 +251,29 @@ void boxm2_vecf_orbit_param_stats::compute_feature_vectors(){
         pmaxc = pc;
       }
     }
+    double alpha = (ys-yi)/pl.x();
+    double zeta = 0.5*(pmaxc.z()-pl.z())/8.7;
+    double kappa = (yc-ys)/ys;
+    double eta = (pmaxs.z()-pmaxc.z())/pmaxs.z();
     vnl_matrix<double> fv(dim,1,0.0);
+    fv[0][0]= alpha;     fv[1][0]= zeta;
+    fv[2][0]= kappa;     fv[3][0]= eta;
 #if 0
     fv[0][0]=pm.x(); fv[1][0]=pm.y(); fv[2][0]= pm.z();
     fv[3][0]=pl.x(); fv[4][0]=pl.y(); fv[5][0]= pl.z();
     fv[6][0]=pmax.x(); fv[7][0]=pmax.y(); fv[8][0]= pmax.z();
-#endif
+
     fv[0][0]=pl.x(); fv[1][0]=pl.y(); fv[2][0]= pl.z();
     fv[3][0]=pmaxs.x(); fv[4][0]=pmaxs.y(); fv[5][0]= pmaxs.z();
     fv[6][0]=pmaxc.x(); fv[7][0]=pmaxc.y(); fv[8][0]= pmaxc.z();
-    //    fv[9][0]=pmaxi.x(); fv[10][0]=pmaxi.y(); fv[11][0]= pmaxi.z();
+    fv[9][0]=pmini.x(); fv[10][0]=pmini.y(); fv[11][0]= pmini.z();
+#endif
     feature_vectors_[pid]=fv;
   }
 }
 
 void boxm2_vecf_orbit_param_stats::compute_covariance_matrix(){
-  unsigned dim = 9; //dimension of the feature vector
+  unsigned dim = 4; //dimension of the feature vector
   // compute mean vector
   mean_ = vnl_matrix<double>(dim, 1, 0.0);
   double nv = 0.0;

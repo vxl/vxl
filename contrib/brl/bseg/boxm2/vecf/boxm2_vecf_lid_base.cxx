@@ -83,23 +83,34 @@ double boxm2_vecf_lid_base::lin_interp_z(double xp, double mid_z, double t, doub
 
   double zl = zlim(xp-xext);//switch zlim values at xp == xext, not xp == 0
 
-  // Note that it is possible that the mid_z value can be less than the medial socket z
-  // so in this case set the mid value to the socket z value
+  double zlp = zlim(1.0);   // zlimit value when xp is plus
+  double zlm = zlim(-1.0);  // zlimit value when xp is minus
 
-  double zlp = zlim(1.0);
-  double zlm = zlim(-1.0);
-  if(mid_z < zlp)
-    mid_z = zlp;
-  else if(mid_z < zlm)
-    mid_z = zlm;
+  bool less_p = mid_z<zlp;  // the mid z value is less than the plus z limit
+  bool less_m = mid_z<zlm;  // the mid z value is less than the minus z limit
 
-  if(xp>=xext)
+  bool not_less = !less_p && !less_m; // the mid z value is greater than either z limit
+  bool plus = xp>=xext;               // x is greater than or equal to the extremum  x
+
+  // compute the interpolating weight and interpolated z
+  if(plus)
     s = (yx-yext)/(ylat-yext);
   else
     s = (yx-yext)/(ymed-yext);
    ret_z = mid_z*(1-s) + zl*s;
-  if(ret_z<zl)
-    ret_z = zl;
+
+   // cases where the interpolated z value is clamped
+   // Case I - zmid is greater than either limit
+   if(not_less&&(ret_z<zl))
+     ret_z = zl;
+
+   // Case II - zmid is less than the plus z limit
+   if(plus && less_p && (ret_z>zl))
+     ret_z = zl;
+
+   // Case III - zmid is less than the minus z limit
+   if(!plus && less_m && (ret_z>zl))
+     ret_z = zl;
   return ret_z;
 }
 
