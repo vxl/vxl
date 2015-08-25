@@ -1,4 +1,5 @@
 
+
 #include "boxm2_vecf_appearance_extractor.h"
 #include <boct/boct_bit_tree.h>
 #include "boxm2_vecf_composite_head_parameters.h"
@@ -639,7 +640,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
   color_APM color =orbit.random_color();
   color[0]=255; color[2]=0; color[4]=0;
 
-  double dt = 0.9;
+  double dt = 0.95;
   color_APM eyelid_color = is_right? red : green;
   color[0]=0; color[1]=0; color[2]=255;
   float8 weighted_sum; weighted_sum.fill(0); float sum_vis =0.0f;
@@ -662,17 +663,35 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
       bool skip = false;vgl_point_3d<double> loc_p;
       vgl_point_3d<double> p = (orbit.eyelid_cell_centers_[i]);
 
-      if(!orbit.is_type_global(p, boxm2_vecf_orbit_scene::UPPER_LID) || !(source_blk->contains(p, loc_p) ) )
+
+      if(!orbit.is_type_global(p, boxm2_vecf_orbit_scene::UPPER_LID)  ){
+        //#if _DEBUG
+        if(is_right)
+          vcl_cout<<"this right eyelid point "<<p<<" was not ok w.r.t label type"<<vcl_endl;
+        else
+          vcl_cout<<"this left eyelid point "<<p<<" was not ok w.r.t label type"<<vcl_endl;
         continue;
+        //#endif
+}
+      if(!(source_blk->contains(p, loc_p) )){
+#if _DEBUG
+        if(is_right)
+          vcl_cout<<"this right eyelid point "<<p<<" was not in bounds"<<vcl_endl;
+        else
+          vcl_cout<<"this left eyelid point "<<p<<" was not in bounds"<<vcl_endl;
+#endif
+        continue;
+
+      }
       //is a sphere voxel cell so define the vector field
 
-      if (is_right){
-        vgl_vector_3d<double> flip(-2 * p.x(),0,0);
-        p = p + flip;
-      }
       double tc = orbit.eyelid_geo_.t(p.x(), p.y());
-      if(!orbit.eyelid_geo_.valid_t(tc))
+      if(!orbit.eyelid_geo_.valid_t(tc)){
+#if _DEBUG
+        vcl_cout<<"this eyelid point "<<p<<" was not ok w.r.t tc"<<vcl_endl;
         continue;
+#endif
+      }
       // inverse field so negate dt
       double ti = tc - dt;
       if(!orbit.eyelid_geo_.valid_t(ti)){
@@ -680,6 +699,11 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
       }
       vgl_point_3d<double> mapped_p = (p + orbit_params.offset_) ;
       mapped_p += orbit.eyelid_geo_.vf(p.x(), tc, - dt);
+      if (is_right){
+        vgl_vector_3d<double> flip(-2 * mapped_p.x(),0,0);
+        mapped_p += flip;
+      }
+
 
       // find closest sphere voxel cell
       vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();

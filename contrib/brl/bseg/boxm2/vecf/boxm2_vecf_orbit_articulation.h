@@ -18,11 +18,22 @@ class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
   }
 
  unsigned size(){ return static_cast<unsigned>(params_.size()); }
+
+  bool set_play_sequence(vcl_string seq_id){
+   if(play_sequence_map_.find(seq_id) != play_sequence_map_.end()){
+     params_ = play_sequence_map_[seq_id];
+     return true;
+   }else{
+     vcl_cout<<"could not find play sequance "<<seq_id<<" in map. choosing default one"<<vcl_endl;
+     params_=play_sequence_map_["default"];
+     return false;
+   }
+  }
  boxm2_vecf_articulated_params& operator [] (unsigned i) {
-   vcl_cout<<" method has been called for "<<i<<vcl_endl;
    return params_[i] ; }
  private:
   vcl_vector<boxm2_vecf_orbit_params> params_;
+  vcl_map<vcl_string,vcl_vector<boxm2_vecf_orbit_params> > play_sequence_map_;
 
 
 };

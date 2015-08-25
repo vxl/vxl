@@ -265,9 +265,9 @@ void boxm2_vecf_orbit_scene::rebuild(){
     this->reset_buffers();
     this->init_eyelids();
     this->create_eye();
-    this->create_eyelid();
     this->create_lower_eyelid();
     this->create_eyelid_crease();
+    this->create_eyelid();
     this->cache_neighbors();
 }
 void boxm2_vecf_orbit_scene::cache_neighbors(){
@@ -614,8 +614,10 @@ void boxm2_vecf_orbit_scene::find_eyelid_cell_neigborhoods(){
 
 void boxm2_vecf_orbit_scene::build_eyelid(){
   double len = 1;
-  double d_thresh = 0.5 * params_.neighbor_radius()*len;
-  vgl_box_3d<double> bb = eyelid_geo_.bounding_box();
+  double d_thresh = params_.neighbor_radius()*len;
+  double margin = params_.eyelid_radius() * 0.15;
+  d_thresh = margin;
+  vgl_box_3d<double> bb = eyelid_geo_.bounding_box(margin);
   // cells in  box centers are in global coordinates
   vcl_vector<cell_info> ccs = blk_->cells_in_box(bb);
   for(vcl_vector<cell_info>::iterator cit = ccs.begin();
@@ -627,7 +629,7 @@ void boxm2_vecf_orbit_scene::build_eyelid(){
     if(d < d_thresh){
       if(!eyelid_geo_.inside(cell_center))
         continue;
-      if(!is_type_global(cell_center, UPPER_LID)){
+      if(!is_type_global(cell_center, SPHERE)){
         eyelid_cell_centers_.push_back(cell_center);
         eyelid_cell_data_index_.push_back(indx);
         eyelid_->data()[indx] = static_cast<pixtype>(true);
@@ -1126,6 +1128,11 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
     }
   }
 
+  if(intrinsic_change_ && is_single_instance_){
+    intrinsic_change_ = false;
+    this->clear_target(target_scene);
+  }
+
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
   vnl_vector_fixed<double, 3> to_dir(params_.eye_pointing_dir_.x(),
                                      params_.eye_pointing_dir_.y(),
@@ -1153,12 +1160,12 @@ void boxm2_vecf_orbit_scene::map_to_target(boxm2_scene_sptr target_scene){
 bool boxm2_vecf_orbit_scene::set_params(boxm2_vecf_articulated_params const& params){
   try{
     boxm2_vecf_orbit_params const& params_ref = dynamic_cast<boxm2_vecf_orbit_params const &>(params);
-    bool intrinsic_change = this->vfield_params_change_check(params_ref); // assuming intrinsic parameters changed,i.e. eye color and the orbit scene needs to be rebuilt and repainted
+    intrinsic_change_ = this->vfield_params_change_check(params_ref); // assuming intrinsic parameters changed,i.e. eye color and the orbit scene needs to be rebuilt and repainted
     params_ =boxm2_vecf_orbit_params(params_ref);
-    vcl_cout<< "intrinsic change? "<<intrinsic_change<<vcl_endl;
-    if(intrinsic_change)
+    vcl_cout<< "intrinsic change? "<<intrinsic_change_<<vcl_endl;
+    if(intrinsic_change_){
       this->rebuild();
-
+    }
     return true;
   }catch(std::exception e){
     vcl_cout<<" Can't downcast orbit parameters! PARAMATER ASSIGNMENT PHAILED!"<<vcl_endl;

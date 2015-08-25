@@ -281,6 +281,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
 
 private:
   bool extrinsic_only_;
+  bool intrinsic_change_;
 };
 
 #endif // boxm2_vecf_orbit_scene_h_

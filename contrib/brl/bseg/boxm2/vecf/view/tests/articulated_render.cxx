@@ -156,6 +156,7 @@ int main(int argc, char ** argv)
 
       boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(articulated_scene_path, true,true);
       boxm2_vecf_orbit_articulation* orbit_articulation =new boxm2_vecf_orbit_articulation();
+      orbit_articulation->set_play_sequence("dphi_articulation");
       orbit_scene->set_target_background(dark_background);
       bit_tableau->init(device, opencl_cache, orbit_scene, orbit_articulation,target_scene, ni, nj, pcam, "");
 
@@ -163,6 +164,7 @@ int main(int argc, char ** argv)
 
       boxm2_vecf_composite_head_model* composite_head_model = new boxm2_vecf_composite_head_model(articulated_scene_path, eye_model_path);
       boxm2_vecf_composite_head_model_articulation* head_model_articulation =new boxm2_vecf_composite_head_model_articulation();
+      head_model_articulation->set_play_sequence("eyelid_open_and_close");
     vgl_vector_3d<double> look_dir(0.0, 0.0, 1.0);
     vgl_vector_3d<double> face_scale(1,1,1);
     //initial parameters
