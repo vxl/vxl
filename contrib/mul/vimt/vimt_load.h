@@ -8,7 +8,9 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_load.h>
+#include <vil/vil_flatten.h>
 #include <vimt/vimt_image_2d_of.h>
+#include <vcl_cstring.h>
 
 //: Create a transform from the properties of image resource.
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
@@ -45,6 +47,41 @@ void vimt_load(const vcl_string& path,
   image.set_world2im(vimt_load_transform(ir, unit_scaling));
 }
 
+
+//: Load image from path into given image (forcing to given pixel type), merging transparent planes
+// \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
+template<class T> inline
+void vimt_load_as_grey_or_rgb(const vcl_string& path,
+               vimt_image_2d_of<T>& image,
+               float unit_scaling=1.0f)
+{
+  vil_image_resource_sptr ir = vil_load_image_resource(path.c_str());
+
+  if (ir.ptr()==0)
+  {
+    image.image().set_size(0,0);
+    return;
+  }
+
+  image.image() = vil_convert_cast(T(),ir->get_view(0,ir->ni(),0,ir->nj()));
+  image.set_world2im(vimt_load_transform(ir, unit_scaling));
+
+  unsigned nplanes = image.image().nplanes();
+
+  // merge transparent plane in tiff and png images
+  if ((strcmp(ir->file_format(), "tiff") == 0) || (strcmp(ir->file_format(), "png") == 0))
+  {
+    if ((nplanes == 2) || (nplanes == 4))   
+    {
+      vil_image_view_base_sptr image_ref = new vil_image_view<vxl_byte>(image.image());
+      vil_image_view<T> new_image_view = vil_convert_to_n_planes(nplanes-1, image_ref);
+
+      vil_convert_merge_alpha(image.image(), new_image_view, nplanes);
+      image.image() = vil_convert_to_n_planes(nplanes-1, image_ref);
+      image.image() = new_image_view;
+    }
+  }
+}
 
 //: Load image from path into given image (forcing to given pixel type)
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)

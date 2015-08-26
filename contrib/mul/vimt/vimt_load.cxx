@@ -8,6 +8,7 @@
 #include <vil/vil_property.h>
 #include "vimt_convert.h"
 
+
 // Create a transform from the properties of image resource.
 // NB unit scaling is to convert from metres to desired world unts (e.g. 1000.0 for mm)
 vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr& im,
@@ -83,7 +84,7 @@ vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr& 
   return tx;
 }
 
-//: Load image from path into byte image
+//: Load image from path into byte image, merging transparent image planes
 // If input image is float then stretch values to byte
 void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image,
                        float unit_scaling)
@@ -98,7 +99,7 @@ void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& im
 
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   { 
-    vimt_load(im_path.c_str(), image, unit_scaling);
+    vimt_load_as_grey_or_rgb(im_path.c_str(), image, unit_scaling);
   }
   else 
   if ((ir->pixel_format()==VIL_PIXEL_FORMAT_FLOAT) || 
@@ -106,7 +107,7 @@ void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& im
      (ir->pixel_format()==VIL_PIXEL_FORMAT_INT_16))
   {
     vimt_image_2d_of<float> float_image;
-    vimt_load(im_path.c_str(),float_image, unit_scaling);
+    vimt_load_as_grey_or_rgb(im_path.c_str(),float_image, unit_scaling);
     vimt_convert_stretch_range(float_image, image);
   }
   else
