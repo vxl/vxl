@@ -25,9 +25,16 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                                                      __global    int4            * target_scene_tree_array,//6       // tree structure for each block
                                                      __global    float           * target_scene_alpha_array,//7      // alpha for each block
                                                      __global    MOG_TYPE        * target_scene_mog_array,//8        // appearance for each block
+#ifdef HAS_RGB
+                                                     __global    uchar8          * target_rgb_array,
+                                                     __global    uchar8          * source_rgb_array,
+#endif
+                                                     __global    ushort          * target_scene_nobs_array,
+
                                                      __global    int4            * source_scene_tree_array,//9       // tree structure for each block
                                                      __global    float           * source_scene_alpha_array,//10      // alpha for each block
                                                      __global    MOG_TYPE        * source_scene_mog_array,//11        // appearance for each block
+                                                     __global    ushort          * source_scene_nobs_array,
                                                      //                                          __global    ushort4         * source_nobs_array,
                                                      __global    float           * translation,//12
                                                      __global    float           * rotation,//13
@@ -134,6 +141,7 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 float alphas[8];
                 float params[8];
                 float4 abs_neighbors[8];
+                float4 rgb_params[8];
                 float4 dP = source_p - cell_center;
                 float cell_len_rw  = cell_len * source_scene_linfo->block_len;
                 if(dP.x >= 0){ //source point is to the right of the cell center along x
@@ -190,6 +198,12 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                     mog/=NORM;
                     EXPECTED_INT(params[i],mog);
 #endif
+#ifdef HAS_RGB
+                    CONVERT_FUNC_FLOAT8(rgb_tuple,source_rgb_array[nb_data_index]);
+                    rgb_tuple/=NORM;
+                    rgb_params[i].s0123 = rgb_tuple.s0123;
+
+#endif
                   }else{
                     alphas[i] =0.0; params[i]=0;
                   }
@@ -209,8 +223,20 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 uchar8 expected_int_interped  = (uchar8)((uchar)(expected_int * NORM), 32, 255, 0, 0, 0, 0, 0); // hack-city
                 CONVERT_FUNC_SAT_RTE(mog_interped, expected_int_interped);
 #endif
+
+#ifdef HAS_RGB
+                uchar8 curr_rgb_tuple = source_rgb_array[alpha_offset];
+                float4 float_rgb_tuple_interped   = interp_flow(abs_neighbors,rgb_params,source_p); //use the flow interp for float4s
+                uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
+                curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
+                //                target_rgb_array[dataIndex] = curr_rgb_tuple;
+                target_rgb_array[dataIndex] = source_rgb_array[alpha_offset];
+
+#endif
+
                 target_scene_alpha_array[dataIndex] = alpha_interped;
-                target_scene_mog_array[dataIndex] = mog_interped;
+                target_scene_mog_array[dataIndex]   = mog_interped;
+                //                target_scene_nobs_array[dataIndex]  = source_scene_nobs_array[alpha_offset];
                 output[dataIndex] = out_local;
 
 
@@ -386,6 +412,7 @@ __kernel void warp_and_resample_trilinear_vecf( __constant  uchar           * bi
                     mog/=NORM;
                     EXPECTED_INT(params[i],mog);
 #endif
+
                   }else{
                     alphas[i] =0.0; params[i]=0;
                   }
@@ -405,6 +432,8 @@ __kernel void warp_and_resample_trilinear_vecf( __constant  uchar           * bi
                 uchar8 expected_int_interped  = (uchar8)((uchar)(expected_int * NORM), 32, 255, 0, 0, 0, 0, 0); // hack-city
                 CONVERT_FUNC_SAT_RTE(mog_interped, expected_int_interped);
 #endif
+
+
                 target_scene_alpha_array[dataIndex] = alpha_interped;
                 target_scene_mog_array[dataIndex] = mog_interped;
               }

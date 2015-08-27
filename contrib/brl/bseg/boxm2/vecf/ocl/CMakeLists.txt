@@ -20,6 +20,10 @@ SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_similarity_transform.h       boxm2_vecf_ocl_similarity_transform.cxx
     boxm2_vecf_ocl_landmark_warp.h              boxm2_vecf_ocl_landmark_warp.cxx
     boxm2_vecf_ocl_composite_transform.h        boxm2_vecf_ocl_composite_transform.cxx
+    boxm2_vecf_ocl_composite_head_model.h       boxm2_vecf_ocl_composite_head_model.cxx
+    boxm2_vecf_ocl_head_model.h                 boxm2_vecf_ocl_head_model.cxx
+    boxm2_vecf_ocl_appearance_extractor.h       boxm2_vecf_ocl_appearance_extractor.cxx
+
    )
 
 AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_ocl_sources)

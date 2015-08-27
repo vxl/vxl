@@ -30,7 +30,9 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //: Constructor.
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& target_scene,
-                                 boxm2_opencl_cache_sptr ocl_cache);
+                                 boxm2_opencl_cache_sptr ocl_cache,
+                                 vcl_string gray_app_id="",
+                                 vcl_string color_app_id="");
 
   ~boxm2_vecf_ocl_transform_scene();
 
@@ -99,6 +101,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_device_sptr device_;
   int apptypesize_;//size of the appearance model in bytes
   boxm2_data_type app_type_; //type of appearance
+  vcl_string color_app_type_id_; //type of appearance
 
   //transform kernels and args
   //bocl_kernel * trans_kern;
@@ -138,12 +141,13 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   int data_size;
   float * long_output;
   bocl_mem_sptr output_f;
-
+  vcl_string grey_app_id_,color_app_id_;
 
   bocl_mem* alpha_target_;
   bocl_mem* mog_target_;
   bocl_mem* blk_target_;
-
+  bocl_mem* nobs_target_;
+  bocl_mem* rgb_target_;
   cl_command_queue queue_;
 };
 

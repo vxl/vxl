@@ -142,7 +142,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_scene_sptr & scene, boxm2_
   if (num_bytes > 0) {
     if (num_bytes != byte_length){
       vcl_stringstream ss;
-      ss<<"Attempting to retrieve "<<num_bytes<<" for datatype " << type <<"when actual buffer size should be "<<byte_length;
+      ss<<"Attempting to retrieve "<<num_bytes<<" bytes for datatype " << type <<" when actual buffer size should be "<<byte_length;
       throw std::runtime_error(ss.str());
       loaded = 0;
       return loaded;

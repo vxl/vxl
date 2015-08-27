@@ -37,9 +37,6 @@ bool boxm2_vecf_composite_head_model::set_params(boxm2_vecf_articulated_params c
   params_.l_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z_left);
   params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z_right);
 
-  //currently fixed to the head look direction. This might change
-  // params_.l_orbit_params_.eye_pointing_dir_ = params_.look_dir_;
-  // params_.r_orbit_params_.eye_pointing_dir_ = params_.look_dir_; //assuming the person is not lazy eyed.
 
   //if the intrinsic eye parameters changed, clear target
   if(left_orbit_.vfield_params_change_check(params_.l_orbit_params_) || right_orbit_.vfield_params_change_check(params_.r_orbit_params_) ){
