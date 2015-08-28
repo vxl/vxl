@@ -28,6 +28,7 @@ class brad_image_metadata : public vbl_ref_count
  public:
   //: Constructor extracts information from NITF header and vendor-specific metadata file
   brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
+
   //: Default constructor
   brad_image_metadata() : n_bands_(0), gsd_(-1.0), gain_(1.0), offset_(0.0) {}
 
@@ -68,6 +69,8 @@ class brad_image_metadata : public vbl_ref_count
   //: parse header in nitf image, assumes that metadata files are in the same folder with the image
   //  If meta_folder is not empty, they are searched in that folder as well
   bool parse(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
+  //: parse metadata file only
+  bool parse_from_meta_file(vcl_string const& meta_filename);
 
   bool same_time(brad_image_metadata& other);
   bool same_day(brad_image_metadata& other);
@@ -87,9 +90,15 @@ class brad_image_metadata : public vbl_ref_count
  protected:
   //: Parse Quickbird IMD file
   bool parse_from_imd(vcl_string const& filename);
+
+  //: Parse QuickBird, WorldView IMD file to obtain all metadata without using image header
+  bool parse_from_imd_only(vcl_string const& filename);
   
   //: Parse GeoEye PVL file
   bool parse_from_pvl(vcl_string const& filename);
+
+  //: Parse GeoEye PVL file to obtain all metadata without using image header
+  bool parse_from_pvl_only(vcl_string const& filename);
   
   //: Parse the required params for normalization from a text file with a known format, 
   //  it can be used to calibrate images from any satellite if such files are created for each image of the satellite

@@ -29,13 +29,21 @@
 // Construct using nitf and metadata file
 brad_image_metadata::brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder)
 {
-  if (!parse(nitf_filename, meta_folder)) {
-    vcl_cerr << "ERROR parsing image metadata\n";
-    gsd_ = -1;
+  vcl_string ext = vul_file::extension(nitf_filename);
+  if (ext.compare(".NTF") == 0 || ext.compare(".ntf") == 0) {
+    if (!parse(nitf_filename, meta_folder)) {
+      vcl_cerr << "ERROR parsing image metadata\n";
+      gsd_ = -1;
+    }
+  }
+  else {
+    if (!parse_from_meta_file(nitf_filename)) {
+      vcl_cerr << "ERROR parsing image metadata from metadata file\n";
+      gsd_ = -1;
+    }
   }
   vcl_cout << "!!!! lower left lon: " << lower_left_.x() << " lat: " << lower_left_.y() << '\n';
   vcl_cout << "!!!! upper right lon: " << upper_right_.x() << " lat: " << upper_right_.y() << '\n';
-
 }
 
 // Write brad_image_metadata to stream
@@ -230,6 +238,387 @@ bool brad_image_metadata::parse_from_imd(vcl_string const& filename)
 
   footprint_ = vgl_polygon<double>(footprint_corners);
 
+  return true;
+}
+
+// parse all metadata information from the imd file only, without using nitf image header
+// Note that imd file doesn't contain 1. camera offset value; 2. number of effective bits
+bool brad_image_metadata::parse_from_imd_only(vcl_string const& filename)
+{
+  vcl_ifstream ifs( filename.c_str() );
+  if (!ifs.good()){
+    vcl_cerr << "Error opening file " << filename << vcl_endl;
+    return false;
+  }
+  n_bands_ = 0;
+  cam_offset_.set(0,0,0);
+  number_of_bits_ = 11;
+  double absCalfact = 1.0;
+  double effectiveBand = 1.0;
+  lower_left_.set(181, 91, 10000);
+  upper_right_.set(-181,-91, -10000);
+  vcl_vector<vgl_point_2d<double> > footprint_corners(4);
+  // now parse the IMD file
+  vul_awk awk(ifs);
+  for (; awk; ++awk)
+  {
+    vcl_stringstream linestr(awk.line());
+    vcl_string tag;
+    linestr >> tag;
+    // absolute CalFactor and effective bandwidth (used to calculate the gains
+    if (tag.compare("absCalFactor") == 0) {
+      linestr >> tag;  // read =
+      linestr >> absCalfact;
+      continue;
+    }
+    if (tag.compare("effectiveBandwidth") == 0) {
+      linestr >> tag;  // read =
+      linestr >> effectiveBand;
+      gains_.push_back(vcl_pair<double, double>(absCalfact/effectiveBand, 0.0));
+      continue;
+    }
+    // cloud coverage
+    if (tag.compare("cloudCover") == 0) {
+      linestr >> tag;
+      linestr >> cloud_coverage_percentage_;
+      continue;
+    }
+    // check the product type to ensure it is Basic
+    if (tag.compare("productType") == 0) {
+      linestr >> tag;
+      linestr >> tag;
+      if (tag.find("Basic") == vcl_string::npos)
+        return false;
+    }
+    // GSD
+    if (tag.compare("meanProductGSD") == 0 || tag.compare("meanCollectedGSD") == 0) {
+      linestr >> tag;
+      linestr >> gsd_;
+      continue;
+    }
+    // Satellite name
+    if (tag.compare("satId") == 0) {
+      linestr >> tag;
+      linestr >> satellite_name_;
+      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of("\"")+1, satellite_name_.find_last_of("\"")-1);
+      continue;
+    }
+    // image footprint and cover extent
+    if (tag.compare("LLLon") == 0 || tag.compare("URLon") == 0 || tag.compare("ULLon") == 0 || tag.compare("LRLon") == 0)
+    {
+      int corner_pos = 0;
+      if(tag.compare("ULLon") == 0) {
+        corner_pos = 0;
+      } else if(tag.compare("URLon") == 0) {
+        corner_pos = 1;
+      } else if (tag.compare("LRLon") == 0) {
+        corner_pos = 2;
+      } else if (tag.compare("LLLon") == 0) {
+        corner_pos = 3;
+      } else {
+        assert(!"Could not place the point in the polygon");
+      }
+      linestr >> tag;
+      double x;
+      linestr >> x;
+      if (lower_left_.x() > x) lower_left_.set(x, lower_left_.y(), lower_left_.z());
+      if (upper_right_.x() < x) upper_right_.set(x, upper_right_.y(), upper_right_.z());
+      footprint_corners[corner_pos].x() = x;
+      continue;
+    }
+    if (tag.compare("LLLat") == 0 || tag.compare("URLat") == 0 || tag.compare("ULLat") == 0 || tag.compare("LRLat") == 0)
+    {
+      int corner_pos = 0;
+      if(tag.compare("ULLat") == 0) {
+        corner_pos = 0;
+      } else if(tag.compare("URLat") == 0) {
+        corner_pos = 1;
+      } else if (tag.compare("LRLat") == 0) {
+        corner_pos = 2;
+      } else if (tag.compare("LLLat") == 0) {
+        corner_pos = 3;
+      } else {
+        assert(!"Could not place the point in the polygon");
+      }
+      linestr >> tag;
+      double y;
+      linestr >> y;
+      if (lower_left_.y() > y) lower_left_.set(lower_left_.x(), y, lower_left_.z());
+      if (upper_right_.y() < y) upper_right_.set(upper_right_.x(), y, upper_right_.z());
+      footprint_corners[corner_pos].y() = y;
+      continue;
+    }
+    if (tag.compare("LLHAE") == 0 || tag.compare("URHAE") == 0 || tag.compare("ULHAE") == 0 || tag.compare("LRHAE") == 0)
+    {  //CAUTION: height above ELLIPSOID (not mean sea level/ geoid)
+      linestr >> tag;
+      double z;
+      linestr >> z;
+      if (lower_left_.z() > z) lower_left_.set(lower_left_.x(), lower_left_.y(), z);
+      if (upper_right_.z() < z) upper_right_.set(upper_right_.x(), upper_right_.y(), z);
+      continue;
+    }
+    // band type
+    if (tag.compare("bandId") == 0) {
+      linestr >> tag;
+      vcl_string band_str;
+      linestr >> band_str;
+      if (band_str.find("P") != vcl_string::npos) {
+        band_ = "PAN";
+      } else
+        band_ = "MULTI";
+      continue;
+    }
+    // count the band number
+    if (tag.compare("BEGIN_GROUP") == 0) {
+      n_bands_++;
+      continue;
+    }
+    // Sun elevation angle
+    if (tag.compare("meanSunEl") == 0) {
+      linestr >> tag;
+      linestr >> sun_elevation_;
+      continue;
+    }
+    // Sun azimuth angle
+    if (tag.compare("meanSunAz") == 0) {
+      linestr >> tag;
+      linestr >> sun_azimuth_;
+      continue;
+    }
+    // View elevation angle
+    if (tag.compare("meanSatEl") == 0) {
+      linestr >> tag;
+      linestr >> view_elevation_;
+      continue;
+    }
+    // View azimuth angle
+    if (tag.compare("meanSatAz") == 0) {
+      linestr >> tag;
+      linestr >> view_azimuth_;
+      continue;
+    }
+    // Time
+    if (tag.compare("firstLineTime") == 0) {
+      vcl_string time_str;
+      linestr >> tag;
+      linestr >> time_str;
+      vcl_string s_year, s_month, s_date, s_hour, s_minute, s_second;
+      s_year = time_str.substr(0,4);    s_month = time_str.substr(5,2);     s_date = time_str.substr(8,2);
+      s_hour = time_str.substr(11,2);  s_minute = time_str.substr(14,2);  s_second = time_str.substr(17,2);
+      t_.year  = vcl_atoi(s_year.c_str());
+      t_.month = vcl_atoi(s_month.c_str());
+      t_.day   = vcl_atoi(s_date.c_str());
+      t_.hour  = vcl_atoi(s_hour.c_str());
+      t_.min   = vcl_atoi(s_minute.c_str());
+      t_.sec   = vcl_atoi(s_second.c_str());
+      continue;
+    }
+  }
+  n_bands_--; // there is an extra BEGIN_GROUP for some other image info not related to individual bands
+  vcl_cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << vcl_endl;
+  gain_ = absCalfact/effectiveBand;
+  offset_ = 0.0;
+
+  footprint_ = vgl_polygon<double>(footprint_corners);
+  return true;
+}
+
+// parse all metadata information from the pvl file only, without using nitf image header
+bool brad_image_metadata::parse_from_pvl_only(vcl_string const& filename)
+{
+  vcl_ifstream ifs( filename.c_str() );
+  if (!ifs.good()){
+    vcl_cerr << "Error opening file " << filename << vcl_endl;
+    return false;
+  }
+  n_bands_ = 0;
+  double cam_xoff, cam_yoff, cam_zoff;
+  lower_left_.set(181, 91, 10000);
+  upper_right_.set(-181,-91, -10000);
+  vcl_vector<vgl_point_2d<double> > footprint_corners(4);
+
+  // start parsing
+  vul_awk awk(ifs);
+  for (; awk; ++awk)
+  {
+    vcl_stringstream linestr(awk.line());
+    vcl_string tag;
+    linestr >> tag;
+    // cloud cover percentage
+    if (tag.compare("productCloudCoverPercentage") == 0) {
+      linestr >> tag;
+      linestr >> cloud_coverage_percentage_;
+      continue;
+    }
+    // image footprint 
+    if ((linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperRightCorner") != vcl_string::npos) ||
+        (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperLeftCorner") != vcl_string::npos) ||
+        (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerRightCorner") != vcl_string::npos) ||
+        (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerLeftCorner") != vcl_string::npos) )
+    {
+      int corner_pos = 0;
+      // ugh
+      if (linestr.str().find("upperLeftCorner") != vcl_string::npos) {
+        corner_pos = 0;
+      } else if (linestr.str().find("upperRightCorner") != vcl_string::npos) {
+        corner_pos = 1;
+      } else if (linestr.str().find("lowerRightCorner") != vcl_string::npos) {
+        corner_pos = 2;
+      } else if (linestr.str().find("lowerLeftCorner") != vcl_string::npos) {
+        corner_pos = 3;
+      } else {
+        assert(!"Could not place the point in the polygon");
+      }
+
+      vcl_stringstream linestr(awk.line());
+      while (linestr.str().find("latitude") == vcl_string::npos) {
+         ++awk;
+         //linestr = vcl_stringstream(awk.line());
+         linestr.clear();
+         linestr.str(awk.line());
+      }
+      vcl_string dummy; linestr >> dummy; linestr >> dummy;
+      double y; linestr >> y;
+      while (linestr.str().find("longitude") == vcl_string::npos) {
+         ++awk;
+         //linestr = vcl_stringstream(awk.line());
+         linestr.clear();
+         linestr.str(awk.line());
+      }
+      linestr >> dummy; linestr >> dummy;
+      double x; linestr >> x;
+      while (linestr.str().find("height") == vcl_string::npos) {
+         ++awk;
+         //linestr = vcl_stringstream(awk.line());
+         linestr.clear();
+         linestr.str(awk.line());
+      }
+      linestr >> dummy; linestr >> dummy;
+      double z; linestr >> z;
+      if (lower_left_.x() > x) lower_left_.set(x, lower_left_.y(), lower_left_.z());
+      if (lower_left_.y() > y) lower_left_.set(lower_left_.x(), y, lower_left_.z());
+      if (lower_left_.z() > z) lower_left_.set(lower_left_.x(), lower_left_.y(), z);
+
+      if (upper_right_.x() < x) upper_right_.set(x, upper_right_.y(), upper_right_.z());
+      if (upper_right_.y() < y) upper_right_.set(upper_right_.x(), y, upper_right_.z());
+      if (upper_right_.z() < z) upper_right_.set(upper_right_.x(), upper_right_.y(), z);
+
+      footprint_corners[corner_pos] = vgl_point_2d<double>(x,y);
+      continue;
+    }
+    // band type
+    if (tag.compare("productSpectralType") == 0) {
+      linestr >> tag;
+      vcl_string band_str;
+      linestr >> band_str;
+      if (band_str.find("PAN") != vcl_string::npos)
+        band_ = "PAN";
+      else
+        band_ = "MULTI";
+      continue;
+    }
+    // GSD
+    if (tag.compare("pixelSpacing") == 0) {
+      linestr >> tag;
+      linestr >> gsd_;
+      continue;
+    }
+    // number of bands
+    if (tag.compare("numberOfSpectralBands") == 0) {
+      linestr >> tag;
+      linestr >> n_bands_;
+      continue;
+    }
+    // satellite name, could be GeoEye, WV, QB, WV02
+    if (tag.compare("satelliteName") == 0) {
+      linestr >> tag;
+      linestr >> satellite_name_;
+      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of("\"")+1, satellite_name_.find_last_of("\"")-1);
+      continue;
+    }
+    // gain and offset
+    if (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("radiometry") != vcl_string::npos) {
+      ++awk;
+      linestr.clear();
+      linestr.str(awk.line());
+
+      vcl_string dummy; linestr >> dummy; linestr >> dummy;
+      double g; linestr >> g;
+
+       ++awk;
+      linestr.clear();
+      linestr.str(awk.line());
+      linestr >> dummy; linestr >> dummy;
+      double off; linestr >> off;
+
+      gains_.push_back(vcl_pair<double, double>(g, off));
+      continue;
+    }
+    // sun elevation angle
+    if (tag.compare("firstLineSunElevationAngle") == 0) {
+      linestr >> tag;
+      linestr >> sun_elevation_;
+      continue;
+    }
+    // sun azimuth angle
+    if (tag.compare("firstLineSunAzimuthAngle") == 0) {
+      linestr >> tag;
+      linestr >> sun_azimuth_;
+      continue;
+    }
+    // view elevation angle
+    if (tag.compare("firstLineElevationAngle") == 0) {
+      linestr >> tag;
+      linestr >> view_elevation_;
+      continue;
+    }
+    // view azimuth angle
+    if (tag.compare("firstLineAzimuthAngle") == 0) {
+      linestr >> tag;
+      linestr >> view_azimuth_;
+      continue;
+    }
+    // camera offset
+    if (tag.compare("longitudeOffset") == 0) {
+      linestr >> tag;
+      linestr >> cam_xoff;
+      continue;
+    }
+    if (tag.compare("latitudeOffset") == 0) {
+      linestr >> tag;
+      linestr >> cam_yoff;
+      continue;
+    }
+    if (tag.compare("heightOffset") == 0) {
+      linestr >> tag;
+      linestr >> cam_zoff;
+      continue;
+    }
+    // number of effective bits
+    if (tag.compare("bitsPerPixel") == 0) {
+      linestr >> tag;
+      linestr >> number_of_bits_;
+      continue;
+    }
+    // image time
+    if (tag.compare("firstLineAcquisitionDateTime") == 0) {
+      vcl_string time_str;
+      linestr >> tag;
+      linestr >> time_str;
+      vcl_string s_year, s_month, s_date, s_hour, s_minute, s_second;
+      s_year = time_str.substr(0,4);    s_month = time_str.substr(5,2);     s_date = time_str.substr(8,2);
+      s_hour = time_str.substr(11,2);  s_minute = time_str.substr(14,2);  s_second = time_str.substr(17,2);
+      t_.year  = vcl_atoi(s_year.c_str());
+      t_.month = vcl_atoi(s_month.c_str());
+      t_.day   = vcl_atoi(s_date.c_str());
+      t_.hour  = vcl_atoi(s_hour.c_str());
+      t_.min   = vcl_atoi(s_minute.c_str());
+      t_.sec   = vcl_atoi(s_second.c_str());
+    }
+  }
+  // set the camera offset
+  footprint_ = vgl_polygon<double>(footprint_corners);
+  cam_offset_.set(cam_xoff, cam_yoff, cam_zoff);
   return true;
 }
 
@@ -830,6 +1219,152 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
   vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;
   vcl_cout << *this;
 
+  return true;
+}
+
+// parse image metadata from metadata text file only, without using image header (only consider IMD and PVL for now)
+bool brad_image_metadata::parse_from_meta_file(vcl_string const& meta_file)
+{
+  if (!vul_file::exists(meta_file))
+    return false;
+  vcl_string ext = vul_file::extension(meta_file);
+
+  // set gain offset defaults, some satellites' images do not require any adjustment
+  gain_ = 1.0f;
+  offset_ = 0.0f;
+  double solar_irrad = 1500.0;
+  vcl_vector<double> solar_irrads;  // for multi-spectral imagery there are multiple values
+  bool parsed_fine = false;
+  if (ext.compare(".IMD") == 0 || ext.compare(".imd") == 0)       // parse IMD file
+  {
+    parsed_fine = parse_from_imd_only(meta_file);
+    if(parsed_fine && n_bands_ >= 4) {
+      gains_.insert(gains_.begin(), vcl_pair<double, double> (gain_, offset_)); // insert a dummy GAIN to account for PAN gain, this value will never be used
+    }
+  }
+  else if (ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0)  // parse PVL file
+  {
+    parsed_fine = parse_from_pvl_only(meta_file);
+    if(parsed_fine) { 
+      // the first gain value obtained from PVL is assumed to be the PAN band gain
+      gain_ = gains_[0].first;
+      offset_ = gains_[0].second;
+    }
+  }
+  else
+  {
+    vcl_cout << "ERROR unrecognized metadata file format: " << ext << " in name: " << meta_file << "!\n";
+    return false;
+  }
+  
+  // calculate the solar irradiance
+  if (!parsed_fine) {
+    vcl_cerr << " Problems parsing meta-data file" << meta_file << "!\n";
+    return false;
+  }
+  for (unsigned i = 0; i < gains_.size(); i++) {
+    vcl_cout << " gain: " << gains_[i].first << " off: " << gains_[i].second << vcl_endl;
+  }
+  solar_irrads.resize(n_bands_, 1500.0);
+  if ( satellite_name_.find("IKNOOS") != vcl_string::npos )
+  {
+    solar_irrad = 1375.8;
+    satellite_name_ = "IKNOOS";
+  }
+  else if ( satellite_name_.find("OV-5") != vcl_string::npos || satellite_name_.find("GeoEye-1") != vcl_string::npos || satellite_name_.find("GEOEYE1") != vcl_string::npos)
+  {
+    // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
+    solar_irrad = 1617;
+    satellite_name_ = "GeoEye-1";
+    // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for geoeye1 plane 0
+    //          is blue, plane 1 is green, plane 2 is red and plane 3 is near-IR). this order may be different for
+    //          different satellites
+    if (n_bands_ == 1) {
+    }
+    else if (n_bands_ == 4) {
+      solar_irrads[0] = 1960; // Blue
+      solar_irrads[1] = 1853; // Green
+      solar_irrads[2] = 1505; // Red
+      solar_irrads[3] = 1039; // near-IR
+    } else {
+      vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from metadata file " << meta_file << vcl_endl;
+      return false;
+    }
+  }
+  else if ( satellite_name_.find("QB02") != vcl_string::npos || satellite_name_.find("QuickBird") != vcl_string::npos ) {
+    solar_irrad = 1381.7;
+    satellite_name_ = "QuickBird";
+    if (n_bands_ == 1) {
+      // pass
+    } else if (n_bands_ == 4) {
+      solar_irrads[0] = 1924.59; // Blue
+      solar_irrads[1] = 1843.08; // Green
+      solar_irrads[2] = 1574.77; // Red
+      solar_irrads[3] = 1113.71; // near-IR  // these values are from http://grasswiki.osgeo.org/wiki/QuickBird
+    } else {
+      vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from metadata file " << meta_file << vcl_endl;;
+      return false;
+    }
+  }
+  else if ( satellite_name_.find("WV01") != vcl_string::npos || satellite_name_.find("WorldView") != vcl_string::npos ) {
+    solar_irrad = 1580.814;
+    satellite_name_ = "WorldView";
+  }
+  else if ( satellite_name_.find("WV02") != vcl_string::npos || satellite_name_.find("WorldView2") != vcl_string::npos ) {
+    // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
+    solar_irrad = 1580.814;
+    satellite_name_ = "WorldView2";
+    // CAUTION: the order in this vector, should be the order of the bands in the image (i.e. for wv2 plane 0 is coastal (?), plane 1 is blue, etc.)
+    //          this order may be different for different satellites
+    if (n_bands_ == 1) {
+      // pass
+    } else if (n_bands_ == 8) {
+      solar_irrads[0] = 1758.2229; // Coastal
+      solar_irrads[1] = 1974.2416; // Blue
+      solar_irrads[2] = 1856.4104; // Green
+      solar_irrads[3] = 1738.4791; // Yellow
+      solar_irrads[4] = 1559.4555; // Red
+      solar_irrads[5] = 1342.0695; // Red Edge
+      solar_irrads[6] = 1069.7302; // NIR1
+      solar_irrads[7] = 861.2866;  // NIR2
+    } else if (n_bands_ == 4) {
+      solar_irrads[0] = 1974.2416; // Blue
+      solar_irrads[1] = 1856.4104; // Green
+      solar_irrads[2] = 1559.4555; // Red
+      solar_irrads[3] = 1069.7302; // NIR1
+    } else {
+      vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from metadata file " << meta_file << vcl_endl;;
+      return false;
+    }
+  }
+  else {
+    vcl_cerr << "ERROR Could not find known satellite name in: " << satellite_name_ << " from metafile " << meta_file << vcl_endl;;
+    vcl_cerr << "      Could not set solar irradiance for " << meta_file << vcl_endl;
+    return false;
+  }
+
+  // a solar irradiance has been found; scale it using Earth-Sun distance
+  double d = brad_sun_distance(t_.year, t_.month, t_.day, t_.hour, t_.min);
+  if (n_bands_ == 1) {
+    vcl_cout << "solar_irradiance_: " << solar_irrad << ", time: ";  this->print_time();  vcl_cout << '\n';
+    sun_irradiance_ = solar_irrad/(d*d);
+    vcl_cout << " after scaling with Earth-Sun distance: " << sun_irradiance_ << vcl_endl;
+  }
+  else {
+    assert(n_bands_ == solar_irrads.size());
+    for (unsigned ii = 0; ii < solar_irrads.size(); ii++)
+      vcl_cout << "solar_irradiance_values_[" << ii << "]: " << solar_irrads[ii] << vcl_endl;
+    vcl_cout << "time: ";  this->print_time();  vcl_cout << '\n';
+    sun_irradiance_values_.resize(n_bands_, 1500.0);
+    for (unsigned bandi = 0; bandi < n_bands_; bandi++)
+      sun_irradiance_values_[bandi] = solar_irrads[bandi]/(d*d);
+    vcl_cout << " .. after scaling with Earth-Sun distance..: " << d << "\n";
+    for (unsigned ii = 0; ii < sun_irradiance_values_.size(); ii++)
+      vcl_cout << "sun_irradiance_values_[" << ii << "]: " << sun_irradiance_values_[ii] << vcl_endl;
+  }
+
+  vcl_cout << " !!!!!!!!!! satellite name: " << satellite_name_ << " gsd: " << gsd_ << vcl_endl;
+  vcl_cout << *this;
   return true;
 }
 

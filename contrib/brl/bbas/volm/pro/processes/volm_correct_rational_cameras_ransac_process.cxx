@@ -511,8 +511,8 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
                                                          << "," << vcl_setprecision(12) << intersection.z()
                                                          << "], giving offset: ";
     vcl_cout << " --> camera translation: ";
-    for (unsigned i = 0; i < cam_trans_i.size(); i++) {
-      vcl_cout << "[" << cam_trans_i[i].x() << "," << cam_trans_i[i].y() << "]\t";
+    for (unsigned ii = 0; ii < cam_trans_i.size(); ii++) {
+      vcl_cout << "[" << cam_trans_i[ii].x() << "," << cam_trans_i[ii].y() << "]\t";
     }
     vcl_cout << '\n';
     cam_trans.push_back(cam_trans_i);

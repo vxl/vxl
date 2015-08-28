@@ -11,10 +11,13 @@ def read_nitf_metadata(nitf_filename, imd_folder=""):
   bvxm_batch.init_process("bradNITFReadMetadataProcess")
   bvxm_batch.set_input_string(0, nitf_filename)  # requires full path and name
   bvxm_batch.set_input_string(1, imd_folder)  # pass empty if meta is in img folder
-  bvxm_batch.run_process()
-  (id, type) = bvxm_batch.commit_output(0)
-  meta = dbvalue(id, type)
-  return meta
+  status =  bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    meta = dbvalue(id, type)
+    return meta
+  else:
+    return None
 
 # radiometrically normalize a sat image (cropped) based on its metadata
 def radiometrically_calibrate(cropped_image, meta):
@@ -243,6 +246,42 @@ def get_sat_name(mdata):
 def get_view_angles(mdata):
   sun_az, sun_el, year, month, day, hour, minutes, seconds, gsd, sat_name, view_az, view_el, band = get_metadata_info2(mdata)
   return view_az, view
+
+def get_image_coverage(mdata):
+  bvxm_batch.init_process("bradGetImageCoverageProcess")
+  bvxm_batch.set_input_from_db(0, mdata)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    ll_lon     = bvxm_batch.get_output_double(id)
+    bvxm_batch.remove_data(id)
+    (id, type) = bvxm_batch.commit_output(1)
+    ll_lat     = bvxm_batch.get_output_double(id)
+    bvxm_batch.remove_data(id)
+    (id, type) = bvxm_batch.commit_output(2)
+    ll_elev    = bvxm_batch.get_output_double(id)
+    bvxm_batch.remove_data(id)
+    (id, type) = bvxm_batch.commit_output(3)
+    ur_lon     = bvxm_batch.get_output_double(id)
+    bvxm_batch.remove_data(id)
+    (id, type) = bvxm_batch.commit_output(4)
+    ur_lat     = bvxm_batch.get_output_double(id)
+    bvxm_batch.remove_data(id)
+    (id, type) = bvxm_batch.commit_output(5)
+    ur_elev    = bvxm_batch.get_output_double(id)
+    bvxm_batch.remove_data(id)
+    return ll_lon, ll_lat, ll_elev, ur_lon, ur_lat, ur_elev
+  else:
+    return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+
+def get_cloud_coverage(mdata):
+  bvxm_batch.init_process("bradGetCloudCoverageProcess")
+  bvxm_batch.set_input_from_db(0, mdata)
+  bvxm_batch.run_process()
+  (id,type) = bvxm_batch.commit_output(0)
+  cloud_coverage = bvxm_batch.get_output_float(id)
+  bvxm_batch.remove_data(id)
+  return cloud_coverage
 
 #create a new image_metadata object
 def create_image_metadata(gain=1.0, offset=0.0, view_az = 0.0, view_el = 90.0, sun_az = 0.0, sun_el = 90.0, sun_irrad = None):

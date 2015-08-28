@@ -10,7 +10,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <brad/brad_image_metadata.h>
-
+#include <vul/vul_file.h>
 //: set input and output types
 bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
 {
@@ -43,11 +43,21 @@ bool brad_nitf_read_metadata_process(bprb_func_process& pro)
   vcl_string meta_folder = pro.get_input<vcl_string>(1);
 
   brad_image_metadata_sptr md = new brad_image_metadata;
-  if(!md->parse(nitf_img_name, meta_folder)) {
-    vcl_cout<<"nitf metadata parsing failed\n"<<vcl_endl;
-    return false;
+  
+  vcl_string ext = vul_file::extension(nitf_img_name);
+  if (ext.compare(".NTF") == 0 || ext.compare(".ntf") == 0) {
+    vcl_cout << "parse from metadata and image header: " << nitf_img_name << vcl_endl;
+    if (!md->parse(nitf_img_name, meta_folder)) {
+      vcl_cout<<"nitf metadata parsing failed\n"<<vcl_endl;
+      return false;
+    }
+  }
+  else {
+    if (!md->parse_from_meta_file(nitf_img_name)) {
+      vcl_cout << "nitf metadata parsing failed\n" << vcl_endl;
+      return false;
+    }
   }
   pro.set_output_val<brad_image_metadata_sptr>(0, md);
   return true;
 }
-
