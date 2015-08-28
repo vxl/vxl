@@ -354,6 +354,12 @@ void msm_cubic_bezier::smooth_open()
   unsigned n = bnode_.size();
   if (n==1) return;
   
+  if (n==2)  // Two points define a straight line
+  { 
+    bnode_[0].set_to_line(bnode_[1].p);
+    return;
+  }
+  
   // Set control points on first (n-1) nodes.
   // Only the node point is used for last spline node.
   
