@@ -229,8 +229,8 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 float4 float_rgb_tuple_interped   = interp_flow(abs_neighbors,rgb_params,source_p); //use the flow interp for float4s
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
                 curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
-                //                target_rgb_array[dataIndex] = curr_rgb_tuple;
-                target_rgb_array[dataIndex] = source_rgb_array[alpha_offset];
+                target_rgb_array[dataIndex] = curr_rgb_tuple;
+                //                target_rgb_array[dataIndex] = source_rgb_array[alpha_offset];
 
 #endif
 

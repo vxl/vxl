@@ -7,9 +7,9 @@ boxm2_vecf_ocl_transform_minimizer::boxm2_vecf_ocl_transform_minimizer(boxm2_sce
                                                                        boxm2_opencl_cache_sptr ocl_cache,
                                                                        vil_image_view<float> const& ref_img,
                                                                        vpgl_camera_double_sptr const& cam):
-  boxm2_vecf_ocl_ssd_func(3, ref_img.ni(), ref_img.nj())
+  boxm2_vecf_ocl_ssd_func(3, ref_img.ni(), ref_img.nj(), (new boxm2_vecf_ocl_transform_scene( source_scene, target_scene, ocl_cache )), target_scene, ocl_cache)
 {
-  tscn_ =new boxm2_vecf_ocl_transform_scene( source_scene, target_scene, ocl_cache );
+
   boxm2_vecf_ocl_ssd_func::set_reference_image(ref_img);
   boxm2_vecf_ocl_ssd_func::set_reference_camera(cam);
 }

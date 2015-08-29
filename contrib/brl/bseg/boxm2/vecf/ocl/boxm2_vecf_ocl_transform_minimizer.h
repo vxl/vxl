@@ -22,7 +22,7 @@ class boxm2_vecf_ocl_transform_minimizer : public boxm2_vecf_ocl_ssd_func
                                      vpgl_camera_double_sptr const& cam);
   bool minimize();
   void finish(){boxm2_vecf_ocl_ssd_func::finish();}
-  vil_image_view<float> opt_diff() const {return boxm2_vecf_ocl_ssd_func::diff_img(x_);}
+  vil_image_view<float> opt_diff() {return boxm2_vecf_ocl_ssd_func::diff_img(x_);}
   void error_surface_1d(unsigned vindx, double smin, double smax, double sinc);
   vnl_vector<double> minimizer() const{return x_;}
  private:

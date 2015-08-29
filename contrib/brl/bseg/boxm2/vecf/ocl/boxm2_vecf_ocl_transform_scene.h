@@ -16,8 +16,6 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
-#include <boxm2/ocl/algo/boxm2_ocl_expected_image_renderer.h>
-#include <boxm2/ocl/algo/boxm2_ocl_depth_renderer.h>
 #include <boxm2/vecf/ocl/boxm2_vecf_ocl_vector_field.h>
 //: Map a scene with Euclidean and anisotropic scale transforms.
 // the input transform is the inverse so that the target scene voxels
@@ -30,6 +28,12 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //: Constructor.
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& target_scene,
+                                 boxm2_opencl_cache_sptr ocl_cache,
+                                 vcl_string gray_app_id="",
+                                 vcl_string color_app_id="");
+
+  //constructor if target scene is not known at the time of creation
+  boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
                                  vcl_string gray_app_id="",
                                  vcl_string color_app_id="");
@@ -61,7 +65,8 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 
 
   //: warps using similarty transform
-  bool transform_1_blk_interp_trilin(vgl_rotation_3d<double>  rot,
+  bool transform_1_blk_interp_trilin(boxm2_scene_sptr target_scene,
+                                     vgl_rotation_3d<double>  rot,
                                      vgl_vector_3d<double> trans,
                                      vgl_vector_3d<double> scale,
                                      bool finish);
@@ -69,21 +74,9 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   //: warps using general vector field
   bool transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field, bool finish);
 
-  //:render the current state of the target scene leaving scene GPU buffers in place
-  // thus rendering can be faster since block buffer transfers are not needed
-  bool render_scene_appearance(vpgl_camera_double_sptr const & cam,
-                               vil_image_view<float>& expected_img, vil_image_view<float>& vis_img,
-                               unsigned ni, unsigned nj);
-
-  //:render the depth of the current state of the target scene leaving scene GPU buffers in place
-  bool render_scene_depth(vpgl_camera_double_sptr const & cam,
-                          vil_image_view<float>& expected_depth, vil_image_view<float>& vis_img,
-                          unsigned ni, unsigned nj);
  private:
-  bool init_render_args();
+  bool init_target_scene_buffers(boxm2_scene_sptr target_scene);
 
-  boxm2_ocl_expected_image_renderer renderer_;
-  boxm2_ocl_depth_renderer depth_renderer_;
 
  protected:
   //bool compile_trans_kernel();
