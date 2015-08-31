@@ -8,6 +8,7 @@ ADD_EXECUTABLE( msm_test_all
   test_shape_model.cxx
   test_curves.cxx
   test_param_limiters.cxx
+  test_cubic_bezier.cxx
 )
 TARGET_LINK_LIBRARIES( msm_test_all msm testlib )
 
@@ -17,6 +18,7 @@ ADD_TEST( msm_test_aligners ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_aligners
 ADD_TEST( msm_test_shape_model ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_shape_model)
 ADD_TEST( msm_test_curves ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_curves)
 ADD_TEST( msm_test_param_limiters ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_param_limiters)
+ADD_TEST( msm_test_cubic_bezier ${EXECUTABLE_OUTPUT_PATH}/msm_test_all test_cubic_bezier)
 
 ADD_EXECUTABLE( msm_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( msm_test_include msm )

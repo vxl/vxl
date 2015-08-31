@@ -6,6 +6,7 @@ DECLARE( test_aligners );
 DECLARE( test_shape_model );
 DECLARE( test_curves );
 DECLARE( test_param_limiters );
+DECLARE( test_cubic_bezier );
 
 void register_tests()
 {
@@ -15,6 +16,7 @@ void register_tests()
   REGISTER( test_shape_model );
   REGISTER( test_curves );
   REGISTER( test_param_limiters );
+  REGISTER( test_cubic_bezier );
 }
 
 
