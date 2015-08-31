@@ -512,6 +512,89 @@ void msm_cubic_bezier::equal_space(unsigned start, unsigned end, unsigned n_pts,
   }
 }
 
+//: Generate set of points along the curve, retaining control points.
+//  Creates sufficient intermediate points so that their spacing is approx_sep.
+// \param new_normals[i] the normal to the curve at new_pts[i]
+// \param control_pt_index[i] gives element of new_pts for control point i
+void msm_cubic_bezier::get_extra_points(double approx_sep, 
+                        vcl_vector<vgl_point_2d<double> >& new_pts,
+                        vcl_vector<vgl_vector_2d<double> >& new_normals,
+                        vcl_vector<unsigned>& control_pt_index) const
+{
+  // Compute number in each segment
+  unsigned n_nodes = size();
+  control_pt_index.resize(n_nodes);
+  control_pt_index[0]=0;  // First new_pt is control point zero
+  
+  unsigned n=n_nodes;
+  if (!closed_) n--;
+  vcl_vector<unsigned> n_per_seg(n);
+  unsigned n_new_pts=1;
+  for (unsigned i=0;i<n;++i)
+  {
+    // Compute number of points for segment starting at i (not including start pt)
+    double L = bnode_[i].approx_length(point((i+1)%n_nodes),5);
+    n_per_seg[i]=unsigned(L/approx_sep+0.5);
+    if (n_per_seg[i]<1) n_per_seg[i]=1;
+    n_new_pts+=n_per_seg[i];
+  }
+  if (closed_) n_new_pts-=1; // Avoid double counting first point
+
+  // == Compute intermediate points for each segment ==
+  new_pts.resize(n_new_pts);
+  new_normals.resize(n_new_pts);
+  
+  // Create lookup table s.t. length[i] gives dist around segment for t[i]
+  unsigned n_in_seg=5;
+  vcl_vector<double> length(n_in_seg+1),t(n_in_seg+1);
+  length[0]=0.0;t[0]=0.0;
+  double dt=1.0/n_in_seg;
+  unsigned index=0;
+  for (unsigned i=0;i<n;++i)
+  {
+    new_pts[index]=bnode_[i].p; 
+    new_normals[index]=normal(i,0);
+    control_pt_index[i]=index;
+    index++;
+    
+    if (n_per_seg[i]==1) continue;  // No new points in this segment
+
+    vgl_point_2d<double> p0=bnode_[i].p;
+    for (unsigned j=1;j<=n_in_seg;++j) 
+    {
+      t[j]=t[j-1]+dt;
+      vgl_point_2d<double> p1=point(i,t[j]);
+      length[j]=length[j-1]+(p1-p0).length();
+      p0=p1;
+    }
+    
+    // Use this lookup to compute intermediate points
+    double sep = length[n_in_seg]/n_per_seg[i];
+    unsigned k=0;
+    for (unsigned j=1;j<n_per_seg[i];++j)
+    {
+      double target_len = sep*j;
+
+      // Search through until find index,t wrapping target_len
+      while (length[k+1]<target_len) ++k;
+    
+      // Calculate proportion along this fragment
+      double L = length[k+1]-length[k];
+      double f = (target_len-length[k])/L;
+      double t1=(1.0-f)*t[k]+f*t[k+1];
+      new_pts[index] = point(i,t1); 
+      new_normals[index]=normal(i,t1);
+      index++;
+    }
+  }
+  if (!closed_)
+  {
+    // Add last node to open curve
+    new_pts[index]=point(n_nodes-1);
+    new_normals[index]=normal(n_nodes-1,0);
+    control_pt_index[n_nodes-1]=index;
+  }
+}
 
 //=======================================================================
 // Method: print

@@ -90,12 +90,29 @@ class msm_cubic_bezier
   //: Return tangent to curve at t (in [0,1]) in segment i of curve
   vgl_vector_2d<double> tangent(unsigned i, double t) const;
   
+  //: Return normal to curve at t (in [0,1]) in segment i of curve
+  //  tangent(i,t) rotated by 90 degrees, using (-t.y(),t.x());
+  vgl_vector_2d<double> normal(unsigned i, double t) const
+  {
+    vgl_vector_2d<double> v=tangent(i,t);
+    return vgl_vector_2d<double>(-v.y(),v.x());
+  }
+
   //: Create n_pts points equally spaced between start and end nodes (inclusive)
   //  new_pts[0]=point(start), new_pts[n_pts-1]=point(end)
-  //  For closed curves, use wrap-around (so if end<start, assume it wraps round)
+  //  For closed curves, use wrap-around (so if end<=start, assume it wraps round)
   //  To do the integration, each curve approximated by pieces of length no more than ~min_len
   void equal_space(unsigned start, unsigned end, unsigned n_pts, double min_len,
                    vcl_vector<vgl_point_2d<double> >& new_pts) const;
+                   
+  //: Generate set of points along the curve, retaining control points.
+  //  Creates sufficient intermediate points so that their spacing is approx_sep.
+  // \param new_normals[i] the normal to the curve at new_pts[i]
+  // \param control_pt_index[i] gives element of new_pts for control point i
+  void get_extra_points(double approx_sep, 
+                        vcl_vector<vgl_point_2d<double> >& new_pts,
+                        vcl_vector<vgl_vector_2d<double> >& new_normals,
+                        vcl_vector<unsigned>& control_pt_index) const;
 
   //: Print class to os
   void print_summary(vcl_ostream& os) const;
