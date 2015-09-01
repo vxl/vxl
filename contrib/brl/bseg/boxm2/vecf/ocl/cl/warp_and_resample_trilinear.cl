@@ -7,7 +7,7 @@ inline float alph(float p, float len){
   if(p>=1.0f) p = 0.999f;
   return -log(1-p)/len;
 }
-/* This is how the trilinear interpolation relative neighbor buffer is organized. Based on where a target cell is inverse warped */
+/* This is how the trilinear interpolation relative neighbor buffer is organized, based on the target cell's location */
 /*into the source scene, its absolute neighbors are determined from the relative neighbor buffer.*/
 /* rel_nbrs[0] = -1 -1 -1  rel_nbrs[2] = 1 -1 -1 */
 /* rel_nbrs[1] = -1  1 -1  rel_nbrs[3] = 1  1 -1 */
@@ -177,7 +177,7 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
 
                   bool in_bounds_x = (nbCenter.x > 0) && (nbCenter.x < source_scene_linfo->dims.x);
                   bool in_bounds_y = (nbCenter.y > 0) && (nbCenter.y < source_scene_linfo->dims.y);
-                  bool in_bounds_z =  (nbCenter.z > 0) && (nbCenter.z < source_scene_linfo->dims.z);
+                  bool in_bounds_z = (nbCenter.z > 0) && (nbCenter.z < source_scene_linfo->dims.z);
 
                   bool in_bounds  = in_bounds_x && in_bounds_y && in_bounds_z;
 

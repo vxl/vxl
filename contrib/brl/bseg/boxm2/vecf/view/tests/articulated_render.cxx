@@ -38,6 +38,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include "../../boxm2_vecf_orbit_scene.h"
 #include "../../boxm2_vecf_composite_head_model.h"
+#include "../../ocl/boxm2_vecf_ocl_composite_head_model.h"
 #include "../../boxm2_vecf_orbit_articulation.h"
 #include "../../boxm2_vecf_composite_head_model_articulation.h"
 #include "../boxm2_ocl_articulated_render_tableau.h"
@@ -163,6 +164,7 @@ int main(int argc, char ** argv)
     }else if (scene_t =="head"){
 
       boxm2_vecf_composite_head_model* composite_head_model = new boxm2_vecf_composite_head_model(articulated_scene_path, eye_model_path);
+      //      boxm2_vecf_ocl_composite_head_model* composite_head_model = new boxm2_vecf_ocl_composite_head_model(articulated_scene_path, eye_model_path,device,opencl_cache);
       boxm2_vecf_composite_head_model_articulation* head_model_articulation =new boxm2_vecf_composite_head_model_articulation();
       head_model_articulation->set_play_sequence("eyelid_open_and_close");
     vgl_vector_3d<double> look_dir(0.0, 0.0, 1.0);

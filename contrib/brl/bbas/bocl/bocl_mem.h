@@ -135,9 +135,9 @@ template<class T>
 bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, vcl_string type_string, bool blocking)
 {
   //buffer length
-  cl_uint len = this->num_bytes_ / static_cast<unsigned>(sizeof(val));
+  cl_uint len = static_cast<cl_uint>(this->num_bytes_) / static_cast<unsigned>(sizeof(val));
   vcl_size_t lThreads[2] = {64,1};
-  vcl_size_t gThreads[2] = {RoundUp(len,lThreads[0]), 1};
+  vcl_size_t gThreads[2] = {RoundUp(static_cast<size_t>(len), static_cast<int>(lThreads[0])), 1};
 
   //get command queue info
   cl_device_id dev_id;

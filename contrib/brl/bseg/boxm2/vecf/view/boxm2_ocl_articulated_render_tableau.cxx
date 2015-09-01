@@ -94,7 +94,6 @@ bool boxm2_ocl_articulated_render_tableau::init(bocl_device_sptr device,
     // set depth_scale_ and depth_offset_
     calibrate_depth_range();
     post_redraw();
-    play_index_ = 0;
     return true;
 }
 

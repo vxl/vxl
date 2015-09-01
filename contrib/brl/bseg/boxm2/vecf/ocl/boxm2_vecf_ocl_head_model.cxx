@@ -50,8 +50,9 @@ void boxm2_vecf_ocl_head_model::map_to_target(boxm2_scene_sptr target_scene)
   vgl_rotation_3d<double> id; id.set_identity();
   vgl_vector_3d<double> null; null.set(0, 0, 0);
   vgl_vector_3d<double> inv_scale = vgl_vector_3d<double>(1.0/this->scale_.x(),1.0/this->scale_.y(),1.0/this->scale_.z());
+  //   boxm2_vecf_ocl_transform_scene  tmp(base_model_,target_scene,this->opencl_cache_,"",color_apm_id_);
+   //   tmp.transform_1_blk_interp_trilin(target_scene,id, null, inv_scale,true);
   scene_transformer_.transform_1_blk_interp_trilin(target_scene,id, null, inv_scale,true);
-
 }
 
 void boxm2_vecf_ocl_head_model::clear_target(boxm2_scene_sptr target_scene)

@@ -26,14 +26,14 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 {
  public:
   //: Constructor.
-  boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
-                                 boxm2_scene_sptr& target_scene,
+  boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
+                                 boxm2_scene_sptr target_scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
                                  vcl_string gray_app_id="",
                                  vcl_string color_app_id="");
 
   //constructor if target scene is not known at the time of creation
-  boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr& source_scene,
+  boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
                                  vcl_string gray_app_id="",
                                  vcl_string color_app_id="");
@@ -73,8 +73,10 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 
   //: warps using general vector field
   bool transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field, bool finish);
-
- private:
+  boxm2_scene_sptr target_scene(){return target_scene_;}
+  boxm2_scene_sptr source_scene(){return source_scene_;}
+  boxm2_opencl_cache_sptr opencl_cache(){return opencl_cache_;}
+private:
   bool init_target_scene_buffers(boxm2_scene_sptr target_scene);
 
 
@@ -123,6 +125,8 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem_sptr centerZ_;
 
   // common stuff
+
+  bool target_initialized_;
   boxm2_scene_info* info_buffer_;
   int octree_depth_buff_;
   float output_buff_[1000];
@@ -141,7 +145,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   bocl_mem* blk_target_;
   bocl_mem* nobs_target_;
   bocl_mem* rgb_target_;
-  cl_command_queue queue_;
-};
+  cl_command_queue queue_;}
+  ;
 
 #endif
