@@ -65,7 +65,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
  boxm2_vecf_orbit_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0),
-                           eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false), boxm2_vecf_articulated_scene(){}
+                           eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false),target_blk_(0),target_data_extracted_(false),boxm2_vecf_articulated_scene(){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);
@@ -109,9 +109,6 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  void fill_block();
  //: initialize the full target block (not currently used )
  void fill_target_block();
- //: assign target cell centers that map to the source scene bounding box
- void assign_target_cell_centers();
-
  //: interpolate the alpha and appearance data around the vector field source location
  void interpolate_vector_field(vgl_point_3d<double> const& src, unsigned sindx, unsigned dindx, unsigned tindx,
                                 vcl_vector<vgl_point_3d<double> > & cell_centers,
@@ -282,6 +279,9 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
 private:
   bool extrinsic_only_;
   bool intrinsic_change_;
+  bool target_data_extracted_;
+ //: assign target cell centers that map to the source scene bounding box
+  void determine_target_box_cell_centers();
 };
 
 #endif // boxm2_vecf_orbit_scene_h_

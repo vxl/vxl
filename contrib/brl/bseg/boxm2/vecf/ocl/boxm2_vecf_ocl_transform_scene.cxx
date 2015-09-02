@@ -35,13 +35,13 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
         {
             app_type_ = BOXM2_MOG3_GREY;
             foundDataType = true;
-            options=" -D MOG_TYPE_8 ";
+            options="-D MOG_TYPE_8 ";
         }
         else if ( app_type == BOXM2_MOG3_GREY_16 )
         {
             app_type_ = BOXM2_MOG3_GREY_16;
             foundDataType = true;
-            options=" -D MOG_TYPE_16 ";
+            options="-D MOG_TYPE_16 ";
         }
     }
     if (!foundDataType) {
@@ -55,7 +55,7 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
     {
       color_app_type_id_ = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_app_id_);
       vcl_cout<<"found color data type "<<color_app_type_id_<< " in source scene"<<vcl_endl;
-      options +=" -D HAS_RGB ";
+      options +="-D HAS_RGB ";
     }
 
   }
@@ -185,7 +185,7 @@ bool boxm2_vecf_ocl_transform_scene::init_target_scene_buffers(boxm2_scene_sptr 
     return false;
   }
   if( color_app_type_id_ !="")
-    rgb_target_ = opencl_cache_->get_data(target_scene, *iter_blk_source,color_app_type_id_,true);
+    rgb_target_ = opencl_cache_->get_data(target_scene, *iter_blk_source,color_app_type_id_);
 
   target_initialized_ =true;
 
@@ -797,6 +797,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
 
    bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
    vcl_cout<<"good read is "<<good_read<<vcl_endl;
+   delete [] long_output_l;
    if(!good_read)
      return false;
    return true;

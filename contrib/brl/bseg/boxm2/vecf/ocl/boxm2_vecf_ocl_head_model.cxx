@@ -44,9 +44,6 @@ bool boxm2_vecf_ocl_head_model::get_data(boxm2_scene_sptr scene, boxm2_block_id 
 void boxm2_vecf_ocl_head_model::map_to_target(boxm2_scene_sptr target_scene)
 {
   intrinsic_change_ = false;
-  // for each block of the target scene
-
-
   vgl_rotation_3d<double> id; id.set_identity();
   vgl_vector_3d<double> null; null.set(0, 0, 0);
   vgl_vector_3d<double> inv_scale = vgl_vector_3d<double>(1.0/this->scale_.x(),1.0/this->scale_.y(),1.0/this->scale_.z());

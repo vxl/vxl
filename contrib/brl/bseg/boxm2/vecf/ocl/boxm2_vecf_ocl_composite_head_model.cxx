@@ -37,10 +37,6 @@ bool boxm2_vecf_ocl_composite_head_model::set_params(boxm2_vecf_articulated_para
   params_.l_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z_left);
   params_.r_orbit_params_.offset_ = vgl_vector_3d<double>(eye_offset_x + -eye_dist_x, eye_offset_y-y_off_orbit, eye_offset_z_right);
 
-  //currently fixed to the head look direction. This might change
-  // params_.l_orbit_params_.eye_pointing_dir_ = params_.look_dir_;
-  // params_.r_orbit_params_.eye_pointing_dir_ = params_.look_dir_; //assuming the person is not lazy eyed.
-
   //if the intrinsic eye parameters changed, clear target
   if(left_orbit_.vfield_params_change_check(params_.l_orbit_params_) || right_orbit_.vfield_params_change_check(params_.r_orbit_params_) ){
     boxm2_vecf_ocl_head_model::set_intrinsic_change(true);
@@ -66,8 +62,29 @@ void boxm2_vecf_ocl_composite_head_model::map_to_target(boxm2_scene_sptr target)
   }
   //orbit model
   right_orbit_.map_to_target(target);
-  left_orbit_.map_to_target(target);
+  left_orbit_.map_to_target (target);
+  this->update_gpu_target   (target);
+}
+void boxm2_vecf_ocl_composite_head_model::update_gpu_target(boxm2_scene_sptr target_scene)
+{
+  // for each block of the target scene
+  vcl_vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
 
-  if(need_to_clear_cache)
-    opencl_cache_->clear_cache();
+  for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
+       tblk != target_blocks.end(); ++tblk) {
+    bocl_mem* color_app_db =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
+    bocl_mem* vis_score    =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(color_apm_id_));
+    bocl_mem* alpha_db     =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    bocl_mem* gray_app_db  =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+
+
+    int status;
+    cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
+    color_app_db->write_to_buffer(queue);
+    alpha_db    ->write_to_buffer(queue);
+    gray_app_db ->write_to_buffer(queue);
+    vis_score   ->write_to_buffer(queue);
+    status = clFinish(queue);
+
+  } // for each target block
 }

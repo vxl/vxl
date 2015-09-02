@@ -16,7 +16,7 @@ public:
   boxm2_vecf_ocl_composite_head_model(vcl_string const& head_model_path, vcl_string const& eye_model_path,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache);
 
   void map_to_target(boxm2_scene_sptr target);
-
+  void update_gpu_target(boxm2_scene_sptr target_scene);
   bool set_params(boxm2_vecf_articulated_params const& params);
   boxm2_vecf_composite_head_parameters const& get_params() const {return params_;}
 private:
