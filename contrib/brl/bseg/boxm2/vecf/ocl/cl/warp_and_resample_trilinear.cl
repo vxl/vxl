@@ -20,8 +20,8 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                                                      __constant  float           * centerY,//1
                                                      __constant  float           * centerZ,//2
                                                      __constant  uchar           * bit_lookup,//3             //0-255 num bits lookup table
-                                                     __global  RenderSceneInfo * target_scene_linfo,//4
-                                                     __global  RenderSceneInfo * source_scene_linfo,//5
+                                                     __global  RenderSceneInfo   * target_scene_linfo,//4
+                                                     __global  RenderSceneInfo   * source_scene_linfo,//5
                                                      __global    int4            * target_scene_tree_array,//6       // tree structure for each block
                                                      __global    float           * target_scene_alpha_array,//7      // alpha for each block
                                                      __global    MOG_TYPE        * target_scene_mog_array,//8        // appearance for each block
@@ -29,19 +29,17 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                                                      __global    uchar8          * target_rgb_array,
                                                      __global    uchar8          * source_rgb_array,
 #endif
-                                                     __global    ushort          * target_scene_nobs_array,
 
                                                      __global    int4            * source_scene_tree_array,//9       // tree structure for each block
                                                      __global    float           * source_scene_alpha_array,//10      // alpha for each block
                                                      __global    MOG_TYPE        * source_scene_mog_array,//11        // appearance for each block
-                                                     __global    ushort          * source_scene_nobs_array,
                                                      //                                          __global    ushort4         * source_nobs_array,
                                                      __global    float           * translation,//12
                                                      __global    float           * rotation,//13
                                                      __global    float           * scale,//14
                                                      __global    int             * max_depth,//15               // coarsness or fineness
                                                      //at which voxels should be matched.
-                                                     __global    float8          * output,//16
+                                                     __global    float           * output,//16
                                                      __local     uchar           * cumsum_wkgp,//17
                                                      __local     uchar16         * local_trees_target,//18
                                                      __local     uchar16         * local_trees_source,
@@ -166,8 +164,6 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                   abs_neighbors[4].z = abs_neighbors[5].z =abs_neighbors[6].z = abs_neighbors[7].z = cell_center.z ; // z-top neighbor  is the  cell center
                 }
 
-                float8 out_local = output[dataIndex];
-                float* tmp_out =(float*) &out_local;
                 if (abs_neighbors[0].x == abs_neighbors[2].x || abs_neighbors[0].y == abs_neighbors[1].y || abs_neighbors[0].z == abs_neighbors[4].z )
                   continue;
                 int nb_count = 0; float sum = 0;
@@ -230,15 +226,10 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
                 curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
                 target_rgb_array[dataIndex] = curr_rgb_tuple;
-                //                target_rgb_array[dataIndex] = source_rgb_array[alpha_offset];
-
 #endif
 
                 target_scene_alpha_array[dataIndex] = alpha_interped;
                 target_scene_mog_array[dataIndex]   = mog_interped;
-                //                target_scene_nobs_array[dataIndex]  = source_scene_nobs_array[alpha_offset];
-                output[dataIndex] = out_local;
-
 
               }
             }

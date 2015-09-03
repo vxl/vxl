@@ -199,6 +199,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   //: assign appearance to eyelid voxels
   void paint_eyelid_crease();
   //: members
+
   boxm2_block* blk_;                     // the source block
   boxm2_block* target_blk_;              // the target block
   boxm2_data<BOXM2_ALPHA>* alpha_data_;  // source alpha database
@@ -213,6 +214,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   vcl_vector<cell_info> box_cell_centers_;       // cell centers in the target block
   boxm2_vecf_orbit_params params_;               // parameter struct
   bool is_right_;
+  vgl_vector_3d<double> estimated_look_dir_;
   // =============  eye ===============
   boxm2_data<BOXM2_PIXEL>* sphere_;      // is voxel a eye sphere point?
   boxm2_data<BOXM2_PIXEL>* iris_;        // is voxel an iris point
@@ -280,6 +282,7 @@ private:
   bool extrinsic_only_;
   bool intrinsic_change_;
   bool target_data_extracted_;
+
  //: assign target cell centers that map to the source scene bounding box
   void determine_target_box_cell_centers();
 };

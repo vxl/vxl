@@ -1,4 +1,3 @@
-
 #include "boxm2_vecf_ocl_transform_scene.h"
 //:
 // \file
@@ -76,19 +75,16 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
     target_scene_(target_scene),
      opencl_cache_(ocl_cache),
      grey_app_id_(gray_app_id), color_app_id_(color_app_id)
-
 {
   device_=opencl_cache_->get_device();
-    target_initialized_= false;
-    this->compile_trans_interp_kernel();
-    this->compile_trans_interp_trilin_kernel();
-    this->compile_trans_interp_vecf_trilin_kernel();
-    this->compile_compute_cell_centers_kernel();
-    this->init_ocl_trans();
-    if(!this->init_target_scene_buffers(this->target_scene_))
-      vcl_cout<<"target scene buffers failed to initialize"<<vcl_endl;
-
-
+  target_initialized_= false;
+  this->compile_trans_interp_kernel();
+  this->compile_trans_interp_trilin_kernel();
+  this->compile_trans_interp_vecf_trilin_kernel();
+  this->compile_compute_cell_centers_kernel();
+  this->init_ocl_trans();
+  if(!this->init_target_scene_buffers(this->target_scene_))
+    vcl_cout<<"target scene buffers failed to initialize"<<vcl_endl;
 }
 
 boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
@@ -99,17 +95,16 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
   :   source_scene_(source_scene),
      target_scene_(0),
      opencl_cache_(ocl_cache),
-     grey_app_id_(gray_app_id), color_app_id_(color_app_id)
-
+    grey_app_id_(gray_app_id), color_app_id_(color_app_id)
 {
-    device_=opencl_cache_->get_device();
-    target_initialized_= false;
+  device_=opencl_cache_->get_device();
+  target_initialized_= false;
 
-    this->compile_trans_interp_kernel();
-    this->compile_trans_interp_trilin_kernel();
-    this->compile_trans_interp_vecf_trilin_kernel();
-    this->compile_compute_cell_centers_kernel();
-    this->init_ocl_trans();
+  this->compile_trans_interp_kernel();
+  this->compile_trans_interp_trilin_kernel();
+  this->compile_trans_interp_vecf_trilin_kernel();
+  this->compile_compute_cell_centers_kernel();
+  this->init_ocl_trans();
 }
 
 boxm2_vecf_ocl_transform_scene::~boxm2_vecf_ocl_transform_scene()
@@ -167,7 +162,6 @@ bool boxm2_vecf_ocl_transform_scene::init_target_scene_buffers(boxm2_scene_sptr 
   //allow these buffers to be read every time in case the target scene changes
 
   alpha_target_     = opencl_cache_->get_data<BOXM2_ALPHA>(target_scene, *iter_blk_target,0, false);
-  nobs_target_      = opencl_cache_->get_data(target_scene, *iter_blk_target,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(color_app_id_) ,false);
 
   if (!good_buffers) {
     std::cerr << "Error allocating one or more opencl buffers" << std::endl;
@@ -268,20 +262,18 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
     centerX_ = new bocl_mem(device_->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
     centerY_ = new bocl_mem(device_->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
     centerZ_ = new bocl_mem(device_->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
-   bocl_mem_sptr output;
     centerX_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerY_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     centerZ_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // output buffer for debugging
 
-
      // bit lookup buffer
     boxm2_ocl_util::set_bit_lookup(lookup_arr_);
     lookup_=new bocl_mem(device_->context(), lookup_arr_, sizeof(cl_uchar)*256, "bit lookup buffer");
     lookup_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-    bocl_mem_sptr output_ = new bocl_mem(device_->context(),output_buff_, sizeof(float)*1000, "output" );
+    output_ = new bocl_mem(device_->context(),output_buff_, sizeof(float)*1000, "output" );
     output_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
     int status = 0;
@@ -337,7 +329,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
     rotation_buff = new float[9];
     scale_buff = new float[4];
   }
-   translation_buff[0]=  (double) trans.x();
+   translation_buff[0] = (double) trans.x();
    translation_buff[1] = (double) trans.y();
    translation_buff[2] = (double) trans.z();
    translation_buff[3] = 0.0;
@@ -708,16 +700,12 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    // get more information about the source block since it will actually be used.
    blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>  (source_scene_, *iter_blk_source,0,true);
-   nobs_source      = opencl_cache_->get_data(source_scene_, *iter_blk_source,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(color_app_id_),false);
 
    int alphaTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
-   int data_size_target = info_buffer_->data_buffer_length;
-   float* long_output_l = new float[8 * data_size_target];
+   vcl_size_t data_size_target = static_cast<vcl_size_t>(info_buffer_->data_buffer_length);
 
-   bocl_mem_sptr  output_fl = new bocl_mem(device_->context(), long_output_l, 8 * sizeof(float) * data_size_target, "output float 8" );
-   output_fl->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
-   //   output_fl->zero_gpu_buffer(queue_);
+
    bocl_mem_sptr blk_info_source_l  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info Source" );
    blk_info_source_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
    blk_info_source_l->write_to_buffer(queue_);
@@ -750,16 +738,14 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
      trans_interp_trilin_kern->set_arg(rgb_target_);
      trans_interp_trilin_kern->set_arg(rgb_source);
    }
-   trans_interp_trilin_kern->set_arg(nobs_target_);
    trans_interp_trilin_kern->set_arg(blk_source);
    trans_interp_trilin_kern->set_arg(alpha_source);
    trans_interp_trilin_kern->set_arg(mog_source);
-   trans_interp_trilin_kern->set_arg(nobs_source);
    trans_interp_trilin_kern->set_arg(translation_l.ptr());
    trans_interp_trilin_kern->set_arg(rotation_l.ptr());
    trans_interp_trilin_kern->set_arg(scalem_l.ptr());
    trans_interp_trilin_kern->set_arg(octree_depth_.ptr());
-   trans_interp_trilin_kern->set_arg(output_fl.ptr());
+   trans_interp_trilin_kern->set_arg(output_.ptr());
    trans_interp_trilin_kern->set_local_arg(local_threads[0]*10*sizeof(cl_uchar) );    // cumsum buffer,
    trans_interp_trilin_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees target
    trans_interp_trilin_kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees source
@@ -776,11 +762,10 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
      return false;
    mog_target_->read_to_buffer(queue_);
    alpha_target_->read_to_buffer(queue_);
-   nobs_target_->read_to_buffer(queue_);
    if(rgb_target_ && rgb_source){
      rgb_target_->read_to_buffer(queue_);
    }
-   output_fl->read_to_buffer(queue_);
+   //   output_->read_to_buffer(queue_);
    status = clFinish(queue_);
    trans_interp_trilin_kern->clear_args();
    // float* cpu_buff = (float*) output_f->cpu_buffer();
@@ -797,7 +782,6 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
 
    bool good_read = check_val(status, CL_SUCCESS, "READ FROM GPU FAILED: " + error_to_string(status));
    vcl_cout<<"good read is "<<good_read<<vcl_endl;
-   delete [] long_output_l;
    if(!good_read)
      return false;
    return true;

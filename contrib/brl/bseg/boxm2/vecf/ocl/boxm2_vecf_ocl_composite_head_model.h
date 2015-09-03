@@ -19,6 +19,12 @@ public:
   void update_gpu_target(boxm2_scene_sptr target_scene);
   bool set_params(boxm2_vecf_articulated_params const& params);
   boxm2_vecf_composite_head_parameters const& get_params() const {return params_;}
+  // retrieve the estimated look dir from imagery
+  vgl_vector_3d<double> get_estimated_look_dir(bool is_right)
+   { return is_right ? right_orbit_.estimated_look_dir_ : left_orbit_.estimated_look_dir_;}
+  //cache the estimated look dir from imagery
+  void set_estimated_look_dir(vgl_vector_3d<double>& l_dir, vgl_vector_3d<double>& r_dir)
+   {left_orbit_.estimated_look_dir_ =l_dir; right_orbit_.estimated_look_dir_ = r_dir; }
 private:
   boxm2_vecf_composite_head_parameters params_;
 
