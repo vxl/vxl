@@ -9,10 +9,12 @@ CONFIGURE_FILE(
 )
 
 # Copy the Eulerspiral lookup-table file to the BRL library folder
-CONFIGURE_FILE(
-  ${brl_SOURCE_DIR}/bbas/bvgl/algo/bvgl_eulerspiral_lookup_table.bvl
-  ${LIBRARY_OUTPUT_PATH}/bvgl_eulerspiral_lookup_table.bvl COPYONLY
-)
+if(${LIBRARY_OUTPUT_PATH})
+  CONFIGURE_FILE(
+    ${brl_SOURCE_DIR}/bbas/bvgl/algo/bvgl_eulerspiral_lookup_table.bvl
+    ${LIBRARY_OUTPUT_PATH}/bvgl_eulerspiral_lookup_table.bvl COPYONLY
+  )
+endif(${LIBRARY_OUTPUT_PATH})
 
 ADD_DEFINITIONS(-DBVGL_WHERE_BRL_LIB_DIR_H_EXISTS)
 INCLUDE_DIRECTORIES( ${brl_BINARY_DIR}/bbas/bvgl/algo/ )
