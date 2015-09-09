@@ -36,5 +36,5 @@ template <class T> class vgl_window_scan_iterator;
 template <class T> class vgl_cubic_spline_3d;
 template <class T> class vgl_cubic_spline_2d;
 template <class T> class vgl_pointset_3d;
-template <class T> class vgl_bounding_box;
+
 #endif // vgl_fwd_h_
