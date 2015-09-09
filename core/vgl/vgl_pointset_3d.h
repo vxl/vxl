@@ -19,7 +19,7 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_sstream.h>
-
+#include <vcl_string.h>
 template <class Type>
 class vgl_pointset_3d
 {
@@ -60,7 +60,7 @@ class vgl_pointset_3d
   void set_points_with_normals(vcl_vector<vgl_point_3d<Type> > const& points,
                                vcl_vector<vgl_vector_3d<Type> > const& normals)
   { points_ = points; normals_ = normals; has_normals_=true;}
-  
+
   bool set_point(unsigned i, vgl_point_3d<Type> const& p){
     if(i>=static_cast<unsigned>(points_.size())) return false;
     points_[i].set(p.x(), p.y(), p.z()); return true;
@@ -74,7 +74,7 @@ class vgl_pointset_3d
   bool operator==(const vgl_pointset_3d<Type> &spl) const;
 
   bool operator!=(vgl_pointset_3d<Type>const& spl) const { return !operator==(spl); }
-  
+
 };
 
 template <class Type>
@@ -168,12 +168,12 @@ vcl_istream&  operator>>(vcl_istream& istr, vgl_pointset_3d<Type>& ptset){
       isstr >> x >> c;
       if(c!=','){
         vcl_cout << "stream parse error\n";
-        return isstr;
+        return istr;
       }
       isstr >> y >> c;
       if(c!=','){
         vcl_cout << "stream parse error\n";
-        return isstr;
+        return istr;
       }
       if(!has_normals)
         isstr >> z;
@@ -181,19 +181,19 @@ vcl_istream&  operator>>(vcl_istream& istr, vgl_pointset_3d<Type>& ptset){
         isstr >> z >> c;
         if(c!=','){
           vcl_cout << "stream parse error\n";
-          return isstr;
+          return istr;
         }
       }
       if(has_normals){
         isstr >> nx >> c;
         if(c!=','){
           vcl_cout << "stream parse error\n";
-          return isstr;
+          return istr;
         }
         isstr >> ny >> c;
         if(c!=','){
           vcl_cout << "stream parse error\n";
-          return isstr;
+          return istr;
         }
         isstr >> nz;
       }
