@@ -26,7 +26,7 @@ SET( vgl_sources
   vgl_homg_point_2d.h            vgl_homg_point_2d.txx
   vgl_point_3d.h                 vgl_point_3d.txx
   vgl_homg_point_3d.h            vgl_homg_point_3d.txx
-
+  vgl_pointset_3d.h              
   # Lines
   vgl_line_2d.h                  vgl_line_2d.txx
   vgl_homg_line_2d.h             vgl_homg_line_2d.txx
@@ -48,6 +48,10 @@ SET( vgl_sources
   vgl_plane_3d.h                 vgl_plane_3d.txx
   vgl_homg_plane_3d.h            vgl_homg_plane_3d.txx
 
+  # Spline
+  vgl_cubic_spline_3d.h
+  vgl_cubic_spline_2d.h
+
   # Functions
   vgl_closest_point.h            vgl_closest_point.txx
   vgl_distance.h                 vgl_distance.txx
@@ -55,7 +59,7 @@ SET( vgl_sources
   vgl_area.h                     vgl_area.txx
   vgl_convex.h                   vgl_convex.txx
   vgl_intersection.h             vgl_intersection.txx
-
+  vgl_bounding_box.h             vgl_bounding_box.txx
   vgl_lineseg_test.h             vgl_lineseg_test.txx
   vgl_triangle_test.h            vgl_triangle_test.txx
   vgl_polygon_test.h             vgl_polygon_test.txx

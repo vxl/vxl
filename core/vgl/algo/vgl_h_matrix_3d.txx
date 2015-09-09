@@ -23,7 +23,7 @@ vgl_h_matrix_3d<T>::vgl_h_matrix_3d(vcl_vector<vgl_homg_point_3d<T> > const& poi
 {
   vnl_matrix<T> W;
   assert(points1.size() == points2.size());
-  unsigned int numpoints = points1.size();
+  unsigned int numpoints = static_cast<int>( points1.size());
   if (numpoints < 5)
   {
     vcl_cerr << "\nvhl_h_matrix_3d - minimum of 5 points required\n";
@@ -100,6 +100,32 @@ vgl_h_matrix_3d<T>::operator()(vgl_homg_point_3d<T> const& p) const
 }
 
 template <class T>
+vgl_pointset_3d<T> vgl_h_matrix_3d<T>::operator()(vgl_pointset_3d<T> const& ptset) const{
+  vgl_pointset_3d<T> ret;
+  bool has_norms = ptset.has_normals();
+  unsigned np = ptset.npts();
+  vcl_vector<vgl_point_3d<T> > pts;
+  vcl_vector<vgl_vector_3d<T> > normals;
+  for(unsigned i =0; i<np; ++i){
+    vgl_homg_point_3d<T> hp = (*this)(vgl_homg_point_3d<T>(ptset.p(i)));
+    pts.push_back(vgl_point_3d<T>(hp));
+    if(has_norms){
+      vgl_vector_3d<T> norm = ptset.n(i);
+      vgl_homg_point_3d<T> hn(norm.x(), norm.y(), norm.z(), 0.0);//direction vector
+      vgl_homg_point_3d<T> hhn = (*this)(hn);
+      vgl_vector_3d<T> hv(hhn.x(), hhn.y(), hhn.z());
+      normals.push_back(hv);
+    }
+  }
+  if(has_norms)
+    ret.set_points_with_normals(pts, normals);
+  else
+    ret.set_points(pts);
+  return ret;
+}
+               
+
+template <class T>
 vgl_homg_plane_3d<T>
 vgl_h_matrix_3d<T>::correlation(vgl_homg_point_3d<T> const& p) const
 {
@@ -129,6 +155,11 @@ vgl_h_matrix_3d<T>::preimage(vgl_homg_point_3d<T> const& p) const
 {
   vnl_vector_fixed<T,4> v = vnl_inverse(t12_matrix_) * vnl_vector_fixed<T,4>(p.x(), p.y(), p.z(), p.w());
   return vgl_homg_point_3d<T>(v[0], v[1], v[2], v[3]);
+}
+template <class T>
+vgl_pointset_3d<T> vgl_h_matrix_3d<T>::preimage(vgl_pointset_3d<T> const& ptset) const{
+  vgl_h_matrix_3d<T> hinv = this->get_inverse();
+  return hinv(ptset);
 }
 
 template <class T>
@@ -366,11 +397,12 @@ bool vgl_h_matrix_3d<T>::is_rotation() const
 template <class T>
 bool vgl_h_matrix_3d<T>::is_euclidean() const
 {
+  T eps = 10*vcl_numeric_limits<T>::epsilon();
   if ( t12_matrix_.get(3,0) != (T)0 ||
        t12_matrix_.get(3,1) != (T)0 ||
        t12_matrix_.get(3,2) != (T)0 ||
-       t12_matrix_.get(3,3) != (T)1 )
-    return false; // should not have a translation part
+       vcl_fabs(t12_matrix_.get(3,3)-T()1) <= eps)
+    return false; // should not have a projective part
 
   // use an error tolerance on the orthonormality constraint
   vnl_matrix_fixed<T,3,3> R = get_upper_3x3_matrix();
@@ -378,7 +410,17 @@ bool vgl_h_matrix_3d<T>::is_euclidean() const
   R(0,0) -= T(1);
   R(1,1) -= T(1);
   R(2,2) -= T(1);
-  return R.absolute_value_max() <= 10*vcl_numeric_limits<T>::epsilon();
+  return R.absolute_value_max() <= eps;
+}
+
+template <class T>
+bool vgl_h_matrix_3d<T>::is_affine() const{
+  if ( t12_matrix_.get(3,0) != (T)0 ||
+       t12_matrix_.get(3,1) != (T)0 ||
+       t12_matrix_.get(3,2) != (T)0 ||
+       vcl_fabs(t12_matrix_.get(3,3)) > 10*vcl_numeric_limits<T>::epsilon())
+    return false; // should not have a projective part
+  return !(this->is_euclidean());
 }
 
 template <class T>
@@ -413,6 +455,18 @@ vgl_h_matrix_3d<T>::get_upper_3x3_matrix() const
     for (unsigned c = 0; c<3; c++)
       R[r][c] = m.get(r,c);
   return R;
+}
+template <class T>
+void vgl_h_matrix_3d<T>::polar_decomposition(vnl_matrix_fixed<T, 3, 3>& S, vnl_matrix_fixed<T, 3, 3>& R) const{
+  vnl_matrix_fixed<T, 3, 3> up = this->get_upper_3x3_matrix();
+  vnl_matrix<T> M(up);
+  vnl_svd<T> svd(M);
+  vnl_matrix<T> U = svd.U();
+  vnl_matrix<T> W = svd.W();
+  vnl_matrix<T> V = svd.V();
+  R = vnl_matrix_fixed<T, 3, 3> ( U*V.transpose());
+  S = vnl_matrix_fixed<T, 3, 3> (V*W*V.transpose());
+  return;
 }
 
 template <class T>

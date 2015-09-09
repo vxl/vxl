@@ -1,5 +1,6 @@
 
 #include <vcl_fstream.h>
+#include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_fit_orbit.h"
 #include "boxm2_vecf_eyelid.h"
 #include "boxm2_vecf_eyelid_crease.h"
@@ -32,7 +33,7 @@ void boxm2_vecf_fit_orbit::fill_smid_map(){
   smid_map_["right_Nz"]=RIGHT_Nz;
   smid_map_["right_iris_radius"]=RIGHT_IRIS_RADIUS;
 }
-bool boxm2_vecf_fit_orbit::add_labeled_point(labeled_point lp){
+bool boxm2_vecf_fit_orbit::add_labeled_point(boxm2_vecf_labeled_point lp){
   vcl_map<vcl_string, mids>::iterator iit = smid_map_.find(lp.label_);
   if(iit == smid_map_.end() ){
     vcl_cout << "Measurement label " << lp.label_ << " doesn't exist\n";
@@ -59,90 +60,24 @@ bool boxm2_vecf_fit_orbit::add_labeled_point(labeled_point lp){
 // can ingest either format
 //
 bool boxm2_vecf_fit_orbit::read_anchor_file(vcl_string const& path){
-  vcl_ifstream istr(path.c_str());
-  if(!istr.is_open()){
-    vcl_cout << "Anchor file " << path << " not found\n";
-    return false;
-  }
   only_2d_data_ = false;
-    bool is_right = false;
-  // this loop finds the number of commas in a
-  // line from the file. Thus determining
-  // the second file format's  lines with scalar values
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > anchors;
-  while(true){
-    if(istr.eof())
-      break;
-    char buf[100];
-    istr.getline(buf,100);
-    vcl_string buf_str;
-    bool done = false;
-    unsigned comma_count = 0;
-    for(unsigned i =0; i<100&&!done; ++i){
-      char c = buf[i];
-      if(c == '\0'||c == '\n'){
-        done = true;
-        continue;
-      }else{
-        buf_str.push_back(c);
-        if(c == ',')
-          comma_count++;
-      }
-    }
-    // Now that the number of commas is
-    // known, the actual file parsing
-    // phase can exectute
-    vcl_stringstream isstr(buf_str);
-    double x, y, z;
-    unsigned char c;
-    vcl_string lab;
-    // the standard form with a 3-d point followed by a label
-    if(comma_count == 3){
-      isstr >> x >> c;
-      if(c!=',')
-        return false;
-      isstr >> y >> c;
-      if(c!=',')
-        return false;
-      isstr >> z >> c;
-      if(c!=',')
-        return false;
-      isstr >> lab;
-      if(lab=="") continue;
-      // determine if the file is for the
-      // right (or left) eye
-      vcl_size_t found=lab.find("right");
-      if (found!=vcl_string::npos)
-        is_right = true;
-      // add the labeled point to the map
-      vgl_point_3d<double> p(x,y,z);
-      anchors[lab].push_back(p);
-    }else if(comma_count == 1){// the scalar case
-      isstr >> x >> c >> lab;
-      if(c!=','||lab == "")
-        return false;
-      if(lab == "Diris"){
-        x /= 2;
-        lab = "left_iris_radius";
-        if(is_right)
-          lab = "right_iris_radius";
-        vgl_point_3d<double> p(x,x,x);
-        anchors[lab].push_back(p);
-      }else if(lab == "Nz"){
-        lab = "left_Nz";
-        vgl_point_3d<double> p(x,x,x);
-        anchors[lab].push_back(p);
-      }
-    }else if(buf_str != ""){
-      vcl_cout << "Bad file format line " << buf_str << '\n';
-      return false;
-    }
+  bool is_right = false;
+  vcl_size_t found=path.find("right");
+  if (found!=vcl_string::npos)
+    is_right = true;
+
+  // parse generic point with label file format
+  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > anchors;  
+  bool good = boxm2_vecf_labeled_point::read_points(path, anchors);
+  if(!good){
+    vcl_cout << "Parse of file " << path << " failed\n";
+    return false;
   }
   // now that the file is parsed the labeled points can be added to the
   // internal database, lpts_ (labeled points)
   for(vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > >::iterator ait = anchors.begin();
       ait != anchors.end(); ++ait){
-    const vcl_string& lab = ait->first;
+    vcl_string lab = ait->first;
     vcl_vector<vgl_point_3d<double> >& pts = ait->second;
     double x = 0.0, y= 0.0, z = 0.0;
     double np = 0.0;
@@ -155,7 +90,19 @@ bool boxm2_vecf_fit_orbit::read_anchor_file(vcl_string const& path){
     return false;
     }
     x /= np;      y /= np;  z /= np;
-    labeled_point lp(x, y, z, lab);
+    // special cases
+    if(lab == "Diris"){
+      lab = "left_iris_radius";
+      if(is_right)
+        lab = "right_iris_radius";
+      x*=0.5;y*=0.5;z*=0.5;
+    }
+    if(lab == "Nz"){
+      lab = "left_Nz";
+      if(is_right)
+        lab = "right_Nz";
+    } 
+    boxm2_vecf_labeled_point lp(x, y, z, lab);
     if(!this->add_labeled_point(lp))
       return false;
   }
@@ -194,7 +141,7 @@ bool boxm2_vecf_fit_orbit::add_dlib_anchor_part(vcl_map<vcl_string, vcl_vector<v
     const vgl_point_2d<double>& p1 = pts[1];
         //compute iris radius
     double d = 0.5*vcl_sqrt((p0.x()-p1.x())*(p0.x()-p1.x()) + (p0.y()-p1.y())*(p0.y()-p1.y()));
-    labeled_point lap(d, d, d, olabel);
+    boxm2_vecf_labeled_point lap(d, d, d, olabel);
     if(!this->add_labeled_point(lap))
       return false;
     return true;
@@ -207,7 +154,7 @@ bool boxm2_vecf_fit_orbit::add_dlib_anchor_part(vcl_map<vcl_string, vcl_vector<v
     return false;
   }
   // initialize the z coordinate to 0
-  labeled_point lp(p.x(), p.y(), 0.0, olabel);
+  boxm2_vecf_labeled_point lp(p.x(), p.y(), 0.0, olabel);
   if(!this->add_labeled_point(lp))
     return false;
   return true;
@@ -343,7 +290,7 @@ void boxm2_vecf_fit_orbit::normalize_eye_data(){
   left_params_.image_height_ = image_height_;
   right_params_.image_height_ = image_height_;
   // convert the database coordinates to mm
-  for(vcl_map<mids, labeled_point>::iterator lit = lpts_.begin();
+  for(vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit = lpts_.begin();
       lit != lpts_.end(); ++lit){
     vgl_point_3d<double>& p = lit->second.p3d_;
     p.set(p.x()*mm_per_pix,(image_height_- p.y())*mm_per_pix, p.z()*mm_per_pix);
@@ -361,7 +308,7 @@ void boxm2_vecf_fit_orbit::normalize_eye_data(){
 }
 bool boxm2_vecf_fit_orbit::left_eye_radius( double& rad){
   // find left eye medial canthus - corresponds to xmin
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_MEDIAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -382,7 +329,7 @@ bool boxm2_vecf_fit_orbit::left_eye_socket_radii_coefs( double& lateral_radius_c
   //double r = left_params_.lid_sph_.radius();
   double r = left_params_.eyelid_radius();//JLM
   double rsq = r*r;
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -494,7 +441,7 @@ bool boxm2_vecf_fit_orbit::left_eye_inferior_lid_thickness(vcl_string const& dat
 }
 
 bool boxm2_vecf_fit_orbit::set_left_iris_radius(){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_IRIS_RADIUS);
   if(lit == lpts_.end()){
     vcl_cout<<"left iris radius not found"<<vcl_endl;
@@ -505,7 +452,7 @@ bool boxm2_vecf_fit_orbit::set_left_iris_radius(){
   return true;
 }
 bool boxm2_vecf_fit_orbit::left_trans_x_from_lateral_canthus(double& trx){
-        vcl_map<mids, labeled_point>::iterator lit;
+        vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -516,7 +463,7 @@ bool boxm2_vecf_fit_orbit::left_trans_x_from_lateral_canthus(double& trx){
 }
 
 bool boxm2_vecf_fit_orbit::left_trans_y_from_lateral_canthus( double& tr_y){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -561,7 +508,7 @@ bool boxm2_vecf_fit_orbit::left_trans_z_from_sclera(vcl_string const& data_desc,
   return true;
 }
 bool boxm2_vecf_fit_orbit::left_eye_x_scale(double& left_x_scale){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -583,7 +530,7 @@ bool boxm2_vecf_fit_orbit::left_eye_x_scale(double& left_x_scale){
 }
 
 bool boxm2_vecf_fit_orbit::left_eye_y_scale(double& left_y_scale){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_INFERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -597,7 +544,7 @@ bool boxm2_vecf_fit_orbit::left_eye_y_scale(double& left_y_scale){
   return true;
 }
 bool boxm2_vecf_fit_orbit::left_eye_inferior_margin_t(double& left_inf_t){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_INFERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -610,7 +557,7 @@ bool boxm2_vecf_fit_orbit::left_eye_inferior_margin_t(double& left_inf_t){
   return true;
 }
 bool boxm2_vecf_fit_orbit::left_eye_superior_margin_t(double& superior_margin_t){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_SUPERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -624,7 +571,7 @@ bool boxm2_vecf_fit_orbit::left_eye_superior_margin_t(double& superior_margin_t)
 }
 
 bool boxm2_vecf_fit_orbit::left_eyelid_crease_scale_y(double& crease_scale_y){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_SUPERIOR_CREASE);
   if(lit == lpts_.end())
     return false;
@@ -639,7 +586,7 @@ bool boxm2_vecf_fit_orbit::left_eyelid_crease_scale_y(double& crease_scale_y){
 }
 
 bool boxm2_vecf_fit_orbit::left_mid_inferior_margin_z(double& marg_z){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(  LEFT_EYE_INFERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -659,7 +606,7 @@ bool boxm2_vecf_fit_orbit::left_mid_inferior_margin_z(double& marg_z){
 }
 
 bool boxm2_vecf_fit_orbit::left_mid_superior_margin_z(double& marg_z){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(  LEFT_EYE_SUPERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -679,7 +626,7 @@ bool boxm2_vecf_fit_orbit::left_mid_superior_margin_z(double& marg_z){
 }
 
 bool boxm2_vecf_fit_orbit::left_mid_eyelid_crease_z(double& crease_z){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_SUPERIOR_CREASE);
   if(lit == lpts_.end())
     return false;
@@ -699,7 +646,7 @@ bool boxm2_vecf_fit_orbit::left_mid_eyelid_crease_z(double& crease_z){
 }
 
 bool boxm2_vecf_fit_orbit::left_eye_superior_margin_crease_t(double& left_sup_crease_t){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_SUPERIOR_CREASE);
   if(lit == lpts_.end())
     return false;
@@ -718,7 +665,7 @@ bool boxm2_vecf_fit_orbit::left_eye_superior_margin_crease_t(double& left_sup_cr
 // the non-linear orbit parameter fitting algorithm
 bool boxm2_vecf_fit_orbit::left_ang_rad(double& ang_rad){
 // find left eye inner cusp - corresponds to xmin
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(LEFT_EYE_MEDIAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -870,7 +817,7 @@ void boxm2_vecf_fit_orbit::set_canthus_angle(bool is_right){
 }
 bool boxm2_vecf_fit_orbit::right_eye_radius( double& rad){
   // find right eye inner cusp - corresponds to xmin
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_MEDIAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -892,7 +839,7 @@ bool boxm2_vecf_fit_orbit::right_eye_socket_radii_coefs( double& lateral_radius_
   //double r = right_params_.lid_sph_.radius();
   double r = right_params_.eyelid_radius();
   double rsq = r*r;
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -1001,7 +948,7 @@ bool boxm2_vecf_fit_orbit::right_eye_inferior_lid_thickness(vcl_string const& da
 
 
 bool boxm2_vecf_fit_orbit::set_right_iris_radius(){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_IRIS_RADIUS);
   if(lit == lpts_.end()){
     vcl_cout<<"right iris radius not found"<<vcl_endl;
@@ -1013,7 +960,7 @@ bool boxm2_vecf_fit_orbit::set_right_iris_radius(){
 }
 
 bool boxm2_vecf_fit_orbit::right_trans_y_from_lateral_canthus( double& tr_y){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -1024,7 +971,7 @@ bool boxm2_vecf_fit_orbit::right_trans_y_from_lateral_canthus( double& tr_y){
 }
 
 bool boxm2_vecf_fit_orbit::right_trans_x_from_lateral_canthus(double& trx){
-        vcl_map<mids, labeled_point>::iterator lit;
+        vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -1069,7 +1016,7 @@ bool boxm2_vecf_fit_orbit::right_trans_z_from_sclera(vcl_string const& data_desc
   return true;
 }
 bool boxm2_vecf_fit_orbit::right_eye_x_scale(double& right_x_scale){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_LATERAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -1089,7 +1036,7 @@ bool boxm2_vecf_fit_orbit::right_eye_x_scale(double& right_x_scale){
 
 
 bool boxm2_vecf_fit_orbit::right_eye_y_scale(double& right_y_scale){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_INFERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -1103,7 +1050,7 @@ bool boxm2_vecf_fit_orbit::right_eye_y_scale(double& right_y_scale){
   return true;
 }
 bool boxm2_vecf_fit_orbit::right_eye_inferior_margin_t(double& right_inf_t){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_INFERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -1116,7 +1063,7 @@ bool boxm2_vecf_fit_orbit::right_eye_inferior_margin_t(double& right_inf_t){
   return true;
 }
 bool boxm2_vecf_fit_orbit::right_eye_superior_margin_t(double& superior_margin_t){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_SUPERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -1130,7 +1077,7 @@ bool boxm2_vecf_fit_orbit::right_eye_superior_margin_t(double& superior_margin_t
 }
 
 bool boxm2_vecf_fit_orbit::right_eyelid_crease_scale_y(double& crease_scale_y){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_SUPERIOR_CREASE);
   if(lit == lpts_.end())
     return false;
@@ -1145,7 +1092,7 @@ bool boxm2_vecf_fit_orbit::right_eyelid_crease_scale_y(double& crease_scale_y){
 }
 
 bool boxm2_vecf_fit_orbit::right_mid_inferior_margin_z(double& marg_z){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(  RIGHT_EYE_INFERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -1164,7 +1111,7 @@ bool boxm2_vecf_fit_orbit::right_mid_inferior_margin_z(double& marg_z){
   return true;
 }
 bool boxm2_vecf_fit_orbit::right_mid_superior_margin_z(double& marg_z){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(  RIGHT_EYE_SUPERIOR_MARGIN);
   if(lit == lpts_.end())
     return false;
@@ -1184,7 +1131,7 @@ bool boxm2_vecf_fit_orbit::right_mid_superior_margin_z(double& marg_z){
 }
 
 bool boxm2_vecf_fit_orbit::right_mid_eyelid_crease_z(double& crease_z){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_SUPERIOR_CREASE);
   if(lit == lpts_.end())
     return false;
@@ -1204,7 +1151,7 @@ bool boxm2_vecf_fit_orbit::right_mid_eyelid_crease_z(double& crease_z){
 }
 
 bool boxm2_vecf_fit_orbit::right_eye_superior_margin_crease_t(double& right_sup_crease_t){
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_SUPERIOR_CREASE);
   if(lit == lpts_.end())
     return false;
@@ -1224,7 +1171,7 @@ bool boxm2_vecf_fit_orbit::right_eye_superior_margin_crease_t(double& right_sup_
 // the non-linear orbit parameter fitting algorithm
 bool boxm2_vecf_fit_orbit::right_ang_rad(double& ang_rad){
 // find right eye inner cusp - corresponds to xmin
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   lit = lpts_.find(RIGHT_EYE_MEDIAL_CANTHUS);
   if(lit == lpts_.end())
     return false;
@@ -1576,7 +1523,7 @@ bool boxm2_vecf_fit_orbit::plot_orbit_data(vcl_string const& data_desc, vcl_vect
 bool boxm2_vecf_fit_orbit::display_anchors(vcl_ofstream& ostr, bool is_right){
   if(!ostr)
     return false;
-  vcl_map<mids, labeled_point>::iterator lit;
+  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
   boxm2_vecf_orbit_params params = left_params_;
   if(is_right)
     params = right_params_;

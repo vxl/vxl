@@ -11,6 +11,7 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -636,6 +637,7 @@ vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
   s.spherical_to_cartesian(elevation, azimuth, ret);
   return ret;
 }
+
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
 
@@ -676,4 +678,5 @@ template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \
 template  vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s, vgl_point_3d<T> const& p)
+
 #endif // vgl_closest_point_txx_

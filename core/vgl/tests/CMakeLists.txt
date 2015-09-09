@@ -24,8 +24,10 @@ ADD_EXECUTABLE( vgl_test_all
   test_plane_3d.cxx
   test_frustum_3d.cxx
   test_intersection.cxx
+  test_spline.cxx
+  test_pointset.cxx
 )
-TARGET_LINK_LIBRARIES( vgl_test_all vgl testlib )
+TARGET_LINK_LIBRARIES( vgl_test_all vgl vpl testlib )
 
 ADD_TEST( vgl_test_cartesian                      ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_cartesian )
 ADD_TEST( vgl_test_distance                       ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_distance )
@@ -48,6 +50,8 @@ ADD_TEST( vgl_test_ray_3d                         ${EXECUTABLE_OUTPUT_PATH}/vgl_
 ADD_TEST( vgl_test_plane_3d                       ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_plane_3d)
 ADD_TEST( vgl_test_frustum_3d                     ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_frustum_3d)
 ADD_TEST( vgl_test_intersection                   ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_intersection)
+ADD_TEST( vgl_test_spline                         ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_spline)
+ADD_TEST( vgl_test_pointset                       ${EXECUTABLE_OUTPUT_PATH}/vgl_test_all test_pointset)
 ADD_EXECUTABLE( vgl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vgl_test_include vgl )
 ADD_EXECUTABLE( vgl_test_template_include test_template_include.cxx )

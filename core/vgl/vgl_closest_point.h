@@ -325,4 +325,5 @@ vgl_point_3d<T> vgl_closest_point(vgl_point_3d<T> const& p,
 template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
                                   vgl_point_3d<T> const& p);
+
 #endif // vgl_closest_point_h_

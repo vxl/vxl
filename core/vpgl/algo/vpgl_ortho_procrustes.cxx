@@ -80,6 +80,11 @@ void vpgl_ortho_procrustes::compute()
   T[1][1]=1.0;
   T[2][2]=vnl_det<double>(temp);
   vnl_matrix_fixed<double, 3,3> rr = V*T*Ut;
+  double dt = vnl_det(rr);
+  if(dt<=0.0){
+    cannot_compute_ = true;
+    return;
+  }
   R_ = vgl_rotation_3d<double>(rr);
   t_ = (1.0/s_)*Cx - rr*Cy;
   //compute the mean square residual

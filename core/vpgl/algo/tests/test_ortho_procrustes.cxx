@@ -42,6 +42,9 @@ static void test_ortho_procrustes()
   vgl_rotation_3d<double> R = op.R();
   double s = op.s();
   double error = op.residual_mean_sq_error();
+  bool ok = op.compute_ok();
+  if(ok) vcl_cout << "Compute succeeded \n";
+  else vcl_cout << "Compute failed\n";
   vcl_cout << "Procrustes rotation\n" << R << '\n'
            << "Procrustes translation\n" << op.t() << '\n'
            << "scale = " << s << '\n'
@@ -56,6 +59,9 @@ static void test_ortho_procrustes()
   vgl_rotation_3d<double> R1 = op1.R();
   double s1 = op1.s();
   double error1 = op1.residual_mean_sq_error();
+  ok = op.compute_ok();
+  if(ok) vcl_cout << "Compute with error succeeded \n";
+  else vcl_cout << "Compute failed\n";
   vcl_cout << "Procrustes rotation\n" << R1 << '\n'
            << "Procrustes angle\n" << R1.angle() << '\n'
            << "Procrustes axis\n" << R1.axis() << '\n'

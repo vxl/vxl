@@ -10,19 +10,12 @@
 #include <vcl_string.h>
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
+#include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_orbit_params.h"
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vcl_map.h>
-//: a structure for holding a labeled 3-d point
-struct labeled_point{
-public:
-  labeled_point(){}
-  labeled_point(double x, double y, double z, vcl_string const& label):
-  p3d_(vgl_point_3d<double>(x,y,z)), label_(label){}
-  vgl_point_3d<double> p3d_;
-  vcl_string label_;
-};
+
 class boxm2_vecf_fit_orbit{
  public:
   // ids for orbit measurements
@@ -218,7 +211,7 @@ class boxm2_vecf_fit_orbit{
 
   // Accessors
   //: add a labeled point to lpts_
-  bool add_labeled_point(labeled_point lp);
+  bool add_labeled_point(boxm2_vecf_labeled_point lp);
 
   boxm2_vecf_orbit_params left_params() const  {return left_params_;}
   void set_left_params(boxm2_vecf_orbit_params const& params);
@@ -238,7 +231,7 @@ class boxm2_vecf_fit_orbit{
     return orbit_data_[smid_map_[data_desc]];}
 
   bool lab_point(vcl_string const& data_desc, vgl_point_3d<double>& pt){
-    vcl_map<mids, labeled_point>::iterator lit;
+    vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
     lit = lpts_.find(smid_map_[data_desc]);
     if(lit == lpts_.end())
       return false;
@@ -265,7 +258,7 @@ class boxm2_vecf_fit_orbit{
   //: map a string label to the correspondingenum value
   vcl_map<vcl_string, mids> smid_map_;
   //: a map of labeled points, e.g. left_eye_lateral_canthus
-  vcl_map<mids, labeled_point> lpts_;
+  vcl_map<mids, boxm2_vecf_labeled_point> lpts_;
 
   //: a map of contour point data,
   // e.g. points along the inferior margin

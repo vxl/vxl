@@ -24,6 +24,7 @@
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
+#include <vgl/vgl_pointset_3d.h>
 #include <vcl_vector.h>
 
 //: Return true if the two points intersect, i.e., coincide
@@ -300,8 +301,29 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
                                               vgl_polygon<T> const& poly){
   return vgl_intersection(poly, line);
 }
-
 // SEE vgl_clip.h to compute the intersection (as well as other boolean operations) of two vgl_polygons
+
+//: return the intersection of a pointset with a plane, given a tolerance tol
+//  the normal distance from the plane to the point is compared to the tolerance
+//  the points within tolerance are projected along the normal direction onto the plane 
+template <class T>
+vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const& plane, vgl_pointset_3d<T> const& ptset, T tol);
+
+template <class T>
+vgl_pointset_3d<T> vgl_intersection(vgl_pointset_3d<T> const& ptset, vgl_plane_3d<T> const& plane, T tol){
+  return vgl_intersection(plane, ptset, tol);}
+
+//: intersection of a box with the pointset
+template <class T>
+vgl_pointset_3d<T> vgl_intersection(vgl_box_3d<T> const& box, vgl_pointset_3d<T> const& ptset);
+
+template <class T>
+vgl_pointset_3d<T> vgl_intersection(vgl_pointset_3d<T> const& ptset, vgl_box_3d<T> const& box){
+  return vgl_intersection(box, ptset);}
+
+
+template <class T>
+vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const& plane, vgl_pointset_3d<T> const& ptset, T tol);
 
 #define VGL_INTERSECTION_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) extern "please include vgl/vgl_intersection.txx first"

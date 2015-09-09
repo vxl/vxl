@@ -23,6 +23,7 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_plane_3d.h>
+#include <vgl/vgl_pointset_3d.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
@@ -68,11 +69,16 @@ class vgl_h_matrix_3d
   vgl_homg_plane_3d<T> correlation(vgl_homg_point_3d<T> const& p) const;
   vgl_homg_point_3d<T> correlation(vgl_homg_plane_3d<T> const& l) const;
 
+  //: operate directly on a Euclidean pointset for convenience (no ideal points allowed)
+  vgl_pointset_3d<T> operator()(vgl_pointset_3d<T> const& ptset) const;
+
   //the following require computing the inverse homography
 
   //: Return the preimage of a transformed point: $p = {\tt H}^{-1} q$
   // (requires an inverse)
   vgl_homg_point_3d<T> preimage(vgl_homg_point_3d<T> const& q) const;
+  vgl_pointset_3d<T> preimage(vgl_pointset_3d<T> const& ptset) const;
+
   //: Return the transformed plane given by $m = {\tt H}^{-1} l$
   // (requires an inverse)
   vgl_homg_plane_3d<T> operator()(vgl_homg_plane_3d<T> const& l) const;
@@ -155,6 +161,7 @@ class vgl_h_matrix_3d
   bool is_rotation() const;
   bool is_identity() const;
   bool is_euclidean() const;
+  bool is_affine() const;
 
   //: Compute transform to projective basis given five points, no 4 of which coplanar
   // Transformation to projective basis (canonical frame)
@@ -187,6 +194,10 @@ class vgl_h_matrix_3d
   //: corresponds to translation for affine transformations
   vgl_homg_point_3d<T> get_translation() const;
   vnl_vector_fixed<T,3> get_translation_vector() const;
+
+  //: polar decomposition of the upper 3x3 matrix, M = S*R, where S is a symmetric matrix and R is an orthonormal matrix
+  // useful for interpreting affine transformations
+  void polar_decomposition(vnl_matrix_fixed<T, 3, 3>& S, vnl_matrix_fixed<T, 3, 3>& R) const;
 
   //: Load H from ASCII file.
   bool read(vcl_istream& s);

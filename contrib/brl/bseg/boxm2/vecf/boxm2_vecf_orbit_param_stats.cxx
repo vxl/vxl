@@ -212,7 +212,7 @@ bool boxm2_vecf_orbit_param_stats::plot_merged_margins(vcl_ofstream& os, unsigne
   return true;
 }
 void boxm2_vecf_orbit_param_stats::compute_feature_vectors(){
-  unsigned dim = 4;
+  unsigned dim = 12;
   for(vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > >::iterator mit = merged_inf_margin_.begin();
       mit != merged_inf_margin_.end(); ++mit){
     vcl_string pid = mit->first;
@@ -251,18 +251,16 @@ void boxm2_vecf_orbit_param_stats::compute_feature_vectors(){
         pmaxc = pc;
       }
     }
+    vnl_matrix<double> fv(dim,1,0.0);
+#if 0
     double alpha = (ys-yi)/pl.x();
     double zeta = 0.5*(pmaxc.z()-pl.z())/8.7;
     double kappa = (yc-ys)/ys;
     double eta = (pmaxs.z()-pmaxc.z())/pmaxs.z();
-    vnl_matrix<double> fv(dim,1,0.0);
     fv[0][0]= alpha;     fv[1][0]= zeta;
     fv[2][0]= kappa;     fv[3][0]= eta;
-#if 0
-    fv[0][0]=pm.x(); fv[1][0]=pm.y(); fv[2][0]= pm.z();
-    fv[3][0]=pl.x(); fv[4][0]=pl.y(); fv[5][0]= pl.z();
-    fv[6][0]=pmax.x(); fv[7][0]=pmax.y(); fv[8][0]= pmax.z();
-
+#endif
+#if 1
     fv[0][0]=pl.x(); fv[1][0]=pl.y(); fv[2][0]= pl.z();
     fv[3][0]=pmaxs.x(); fv[4][0]=pmaxs.y(); fv[5][0]= pmaxs.z();
     fv[6][0]=pmaxc.x(); fv[7][0]=pmaxc.y(); fv[8][0]= pmaxc.z();
@@ -273,7 +271,7 @@ void boxm2_vecf_orbit_param_stats::compute_feature_vectors(){
 }
 
 void boxm2_vecf_orbit_param_stats::compute_covariance_matrix(){
-  unsigned dim = 4; //dimension of the feature vector
+  unsigned dim = 12; //dimension of the feature vector
   // compute mean vector
   mean_ = vnl_matrix<double>(dim, 1, 0.0);
   double nv = 0.0;

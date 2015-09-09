@@ -6,7 +6,9 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_intersection.h>
-
+#include <vgl/vgl_pointset_3d.h>
+#include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_box_3d.h>
 void test_intersection()
 {
   vcl_cout << "*****************************\n"
@@ -45,6 +47,24 @@ void test_intersection()
   caseIV = caseIV && (((p1IV == pla)&&(p2IV == plb)) ||
 			((p1IV == plb)&&(p2IV == pla)));
   TEST("Lineseg intersects box (1 pt.)", caseIV, true);
+
+  // test intersection of plane with pointset
+  vgl_point_3d<double> p0(-10, 1.0, 1.0);
+  vgl_point_3d<double> p1(-0.1, 2.0, 3.0);
+  vgl_point_3d<double> p2(0.05, 5.0, 6.0);
+  vgl_point_3d<double> p3(1.0, 1.0, 1.0);
+  vgl_pointset_3d<double> ptset;
+  ptset.add_point(p0);ptset.add_point(p1); ptset.add_point(p2); ptset.add_point(p3);
+  vgl_vector_3d<double> n(1.0, 0.0, 0.0);
+  vgl_point_3d<double> org(0.0, 0.0, 0.0);
+  vgl_plane_3d<double> pl(n,org);
+  vgl_pointset_3d<double> psint = vgl_intersection<double>(pl, ptset, 1.0);
+  vcl_cout << psint << '\n';
+  TEST("Pointset intersect plane", psint.npts() == 2, true);
+  vgl_box_3d<double> box3;
+  box3.add(p1); box3.add(p2);
+  vgl_pointset_3d<double> bint = vgl_intersection<double>(box3, ptset);
+  TEST("Pointset intersect box", bint.npts() == 2, true);
 }
 
 

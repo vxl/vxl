@@ -24,6 +24,7 @@
 #include <vnl/vnl_double_4x4.h>
 #include <vnl/vnl_math.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_linear.h>
+#include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
 #include <vnl/vnl_det.h>
 
 static bool equals(double x[16], double y[16])
@@ -225,7 +226,89 @@ static void test_compute_linear_points()
   vcl_cout << " dist: " << dist << vcl_endl;
   TEST_NEAR("testing computed H2o", dist, 0.0, 5e-03);
 }
+static void test_compute_affine_points()
+{
+  vcl_cout << "\n=== Test the recovery of an affine homography using the linear algorithm ===\n";
+  vcl_vector<vgl_homg_point_3d<double> > points1, points2;
+  //setup the first set of points,  no 4 of them should be co-planar
+  vgl_homg_point_3d<double> p10(100.0, 50.0, 100.0), p11(100.0, 50.0, 200.0);
+  vgl_homg_point_3d<double> p12(200.0, 50.0, 200.0), p13(100.0, 200.0, 200.0);
 
+  vgl_homg_point_3d<double> p14(300.0, 25.0, 0.0), p15(350.0, 25.0, 0.0);
+  vgl_homg_point_3d<double> p16(300.0, 25.0, 250.0), p17(280.0, 100.0, 250.0);
+
+  vgl_homg_point_3d<double> p18(250.0, 75.0, 300.0), p19(250.0, 75.0, 0.0);
+
+
+  points1.push_back(p10); points1.push_back(p11); points1.push_back(p12);
+  points1.push_back(p13); points1.push_back(p14); points1.push_back(p15);
+  points1.push_back(p16); points1.push_back(p17); points1.push_back(p18);
+  points1.push_back(p19);
+
+  //: setup an initial homography
+  vgl_h_matrix_3d<double> H1; H1.set_identity().set_translation(5.0, 50.0, 150.0);
+  vgl_h_matrix_3d<double> H2; H2.set_identity().set_rotation_roll_pitch_yaw(45.0*vnl_math::pi_over_180, 15.0*vnl_math::pi_over_180, 10.0*vnl_math::pi_over_180);
+  vgl_h_matrix_3d<double> H3; H3.set_identity().set_scale(2.0);
+  // translate then rotate then scale
+  vgl_h_matrix_3d<double> gt_H = H3*H2*H1;
+
+  vcl_cout << "The gt transform\n" << gt_H << '\n';
+
+  //: transform the points
+  for (unsigned i = 0; i < points1.size(); i++)
+    points2.push_back(gt_H(points1[i]));
+
+  vgl_h_matrix_3d_compute_affine hmca;
+  vgl_h_matrix_3d<double> H = hmca.compute(points1, points2);
+
+  vcl_cout << "The resulting transform\n" << H << '\n';
+  
+  vnl_matrix_fixed<double, 3, 3> R, S;
+  H.polar_decomposition(S, R);
+  vcl_cout << "Rotation part\n " << R << '\n';
+  vcl_cout << "Symmetric part\n " << S << '\n';
+
+
+  vgl_homg_point_3d<double> p_test_hom(150.0, 75.0, 100.0);
+  vgl_point_3d<double> p_test(p_test_hom);
+  vgl_point_3d<double> p_test_mapped(gt_H(p_test_hom));
+  vgl_point_3d<double> p_test_mapped2(H(p_test_hom));
+  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << '\n'
+           << "maps: " << p_test_mapped2 << vcl_endl;
+
+  double dist = vgl_distance(p_test_mapped, p_test_mapped2);
+  vcl_cout << " dist: " << dist << vcl_endl;
+  TEST_NEAR("testing computed H", dist, 0.0, 5e-03);
+
+  //: setup a general affine homography
+  vnl_matrix_fixed<double, 4, 4> H_m;
+  H_m(0,0)=2.0; H_m(0,1)=1.5; H_m(0,2)=3.0; H_m(0,3)=4.0;
+  H_m(1,0)=3.0; H_m(1,1)=3.5; H_m(1,2)=4.0; H_m(1,3)=4.5;
+  H_m(2,0)=2.5; H_m(2,1)=1.5; H_m(2,2)=1.0; H_m(2,3)=5.0;
+  H_m(3,0)=0.0; H_m(3,1)=0.0; H_m(3,2)=0.0; H_m(3,3)=1.0;
+  vgl_h_matrix_3d<double> gt_H2(H_m);
+
+  vcl_cout << "The gt transform\n" << gt_H2 << '\n';
+
+  points2.clear();
+  //: transform the points
+  for (unsigned i = 0; i < points1.size(); i++)
+    points2.push_back(gt_H2(points1[i]));
+
+  vgl_h_matrix_3d_compute_affine hmca2;
+  vgl_h_matrix_3d<double> H2a = hmca2.compute(points1, points2);
+
+  vcl_cout << "The resulting transform\n" << H2a << '\n';
+
+  p_test_mapped = gt_H2(p_test_hom);
+  p_test_mapped2 = H2a(p_test_hom);
+  vcl_cout << "supposed to map: " << p_test << " to " << p_test_mapped << '\n'
+           << "maps: " << p_test_mapped2 << vcl_endl;
+
+  dist = vgl_distance(p_test_mapped, p_test_mapped2);
+  vcl_cout << " dist: " << dist << vcl_endl;
+  TEST_NEAR("testing computed H2a", dist, 0.0, 5e-03);
+}
 static void test_reflection_about_plane()
 {
   vgl_h_matrix_3d<double> H;
@@ -271,6 +354,8 @@ static void test_h_matrix_3d()
   test_rotation_about_axis();
   vcl_cout << "\n=============== test_compute_linear_points ================\n\n";
   test_compute_linear_points();
+  vcl_cout << "\n=============== test_compute_affine_points ================\n\n";
+  test_compute_affine_points();
   vcl_cout << "\n=============== test_reflection_about_plane ===============\n\n";
   test_reflection_about_plane();
 }

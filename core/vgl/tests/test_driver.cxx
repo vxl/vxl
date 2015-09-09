@@ -21,6 +21,8 @@ DECLARE( test_ray_3d );
 DECLARE( test_plane_3d );
 DECLARE( test_frustum_3d );
 DECLARE( test_intersection );
+DECLARE( test_spline );
+DECLARE( test_pointset );
 
 void
 register_tests()
@@ -46,6 +48,8 @@ register_tests()
   REGISTER( test_plane_3d );
   REGISTER( test_frustum_3d );
   REGISTER( test_intersection );
+  REGISTER( test_spline );
+  REGISTER( test_pointset );
 }
 
 DEFINE_MAIN;

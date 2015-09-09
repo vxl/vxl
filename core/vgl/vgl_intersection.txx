@@ -23,6 +23,7 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_tolerance.h>
+#include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_lineseg_test.txx>
 #include <vcl_vector.h>
 
@@ -448,7 +449,7 @@ unsigned int vgl_intersection(const vgl_box_2d<Type>& box,
 template <class T>
 bool vgl_intersection(vgl_box_2d<T> const& box,
                       vgl_line_segment_2d<T> const& line_seg,
-		      vgl_line_segment_2d<T>& int_line_seg){
+                      vgl_line_segment_2d<T>& int_line_seg){
   // check if both segment endpoints are inside the box
   const vgl_point_2d<T>& p1 = line_seg.point1();
   const vgl_point_2d<T>& p2 = line_seg.point2();
@@ -1102,6 +1103,46 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
   return ret;
 }
 
+//: find points that intersect the plane within the specified tolerance on normal distance to the plane.
+template <class T>
+vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const& plane, vgl_pointset_3d<T> const& ptset, T tol){
+  vgl_pointset_3d<T> ret;
+  bool hasn = ptset.has_normals();
+  unsigned npts = ptset.npts();
+  for(unsigned i = 0; i<npts; ++i){
+    vgl_point_3d<T> p = ptset.p(i);
+    vgl_point_3d<T> cp = vgl_closest_point(plane, p);
+    T d = static_cast<T>((p-cp).length());
+    if(d<tol){
+      if(hasn){
+        vgl_vector_3d<T> norm = ptset.n(i);
+        ret.add_point_with_normal(p, norm);
+      }else{
+        ret.add_point(p);
+      }
+    }
+  }
+  return ret;
+}
+template <class T>
+vgl_pointset_3d<T> vgl_intersection(vgl_box_3d<T> const& box, vgl_pointset_3d<T> const& ptset){
+  unsigned npts = ptset.npts();
+  vcl_vector<vgl_point_3d<T> > pts;
+  vcl_vector<vgl_vector_3d<T> > normals;
+  bool hasn = ptset.has_normals();
+  for(unsigned i = 0; i<npts; ++i){
+    vgl_point_3d<T> p = ptset.p(i);
+    if(box.contains(p)){
+      pts.push_back(p);
+      if(hasn)
+        normals.push_back(ptset.n(i));
+    }
+  }
+  if(hasn)
+    return vgl_pointset_3d<T>(pts, normals);
+  return vgl_pointset_3d<T>(pts);
+}
+
 // Instantiate those functions which are suitable for integer instantiation.
 #undef VGL_INTERSECTION_BOX_INSTANTIATE
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
@@ -1118,6 +1159,8 @@ template bool vgl_intersection(vgl_box_3d<T > const&,vgl_infinite_line_3d<T > co
 template bool vgl_intersection(vgl_box_3d<T > const&,vgl_ray_3d<T > const&,vgl_point_3d<T >&,vgl_point_3d<T >&)
 #undef VGL_INTERSECTION_INSTANTIATE
 #define VGL_INTERSECTION_INSTANTIATE(T) \
+template vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const&, vgl_pointset_3d<T> const&, T); \
+template vgl_pointset_3d<T> vgl_intersection(vgl_box_3d<T> const&, vgl_pointset_3d<T> const&); \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
 template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
