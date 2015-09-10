@@ -97,3 +97,10 @@ def import_triangle_mesh(scene, cache, ply_filename, occupied_prob=0.99):
   boxm2_batch.set_input_string(2,ply_filename)
   boxm2_batch.set_input_float(3,occupied_prob)
   boxm2_batch.run_process()
+
+def batch_compute_3d_points(scene, cache, stream_cache):
+  boxm2_batch.init_process("boxm2CppBatchCompute3dPoints")
+  boxm2_batch.set_input_from_db(0,scene)
+  boxm2_batch.set_input_from_db(1,cache)
+  boxm2_batch.set_input_from_db(2,stream_cache)
+  boxm2_batch.run_process()

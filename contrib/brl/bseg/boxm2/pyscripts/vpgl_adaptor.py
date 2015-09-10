@@ -1000,3 +1000,24 @@ def pers_cam_from_photo_overlay(lvcs,heading,tilt,roll,lat,lon,alt,fov_hor,fov_v
     (c_id,c_type) = boxm2_batch.commit_output(0)
     cam = dbvalue(c_id,c_type);
     return cam
+
+def create_perspective_camera_krt(k, r, t):
+  ''' Take a k(3x3), r(3x3), and t(3) numpy array and returns a database object
+
+      k, r, t can also be a flattened list
+  '''
+  if type(k) != list:
+    k = k.flatten().tolist()
+  if type(r) != list:
+    r = r.flatten().tolist()
+  if type(t) != list:
+    t = t.flatten().tolist()
+
+  boxm2_batch.init_process("vpglCreatePerspectiveCameraProcess5");
+  boxm2_batch.set_input_double_array(0, k);
+  boxm2_batch.set_input_double_array(1, r);
+  boxm2_batch.set_input_double_array(2, t);
+  boxm2_batch.run_process();
+  (db_id,db_type) = boxm2_batch.commit_output(0);
+  cam = dbvalue(db_id,db_type);
+  return cam;

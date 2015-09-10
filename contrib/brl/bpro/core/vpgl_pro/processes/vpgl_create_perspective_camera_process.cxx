@@ -8,9 +8,12 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
+#include <vgl/vgl_point_3d.h>
+#include <vgl/algo/vgl_rotation_3d.h>
 #include <vsl/vsl_binary_io.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <bpgl/algo/bpgl_transform_camera.h>
+#include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 
 //: Init function
 bool vpgl_create_perspective_camera_process_cons(bprb_func_process& pro)
@@ -319,5 +322,70 @@ bool vpgl_create_perspective_camera_from_kml_process(bprb_func_process& pro)
   out_cam.set_camera_center(vgl_point_3d<double>(cent_x, cent_y, alt));
   vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
+  return true;
+}
+
+//: Init function
+bool vpgl_create_perspective_camera_process5_cons(bprb_func_process& pro)
+{
+  bool ok=false;
+  vcl_vector<vcl_string> input_types(3);
+  // the revised K matrix (no skew)
+  input_types[0] = "bbas_1d_array_double_sptr";// K
+  input_types[1] = "bbas_1d_array_double_sptr";// R
+  input_types[2] = "bbas_1d_array_double_sptr";// t
+  ok = pro.set_input_types(input_types);
+  if (!ok) return ok;
+
+  vcl_vector<vcl_string> output_types(1);
+  output_types[0] = "vpgl_camera_double_sptr";  // output camera
+  ok = pro.set_output_types(output_types);
+  if (!ok) return ok;
+
+  return true;
+}
+
+//: Execute the process
+bool vpgl_create_perspective_camera_process5(bprb_func_process& pro)
+{
+   // Sanity check
+  if (!pro.verify_inputs()) {
+    vcl_cerr << "vpgl_scale_perspective_camera_process5: Invalid inputs\n";
+    return false;
+  }
+  // get the inputs
+
+  bbas_1d_array_double_sptr K_input = pro.get_input<bbas_1d_array_double_sptr>(0);
+  bbas_1d_array_double_sptr R_input = pro.get_input<bbas_1d_array_double_sptr>(1);
+  bbas_1d_array_double_sptr t_input = pro.get_input<bbas_1d_array_double_sptr>(2);
+
+
+  if(K_input->data_array.size() != 9 || 
+     R_input->data_array.size() != 9 || 
+     t_input->data_array.size() != 3)
+    return false;
+
+  vnl_matrix_fixed<double ,3,3> K_temp(0.0);
+  vnl_matrix_fixed<double ,3,3> R_temp(0.0);
+  vnl_vector_fixed<double ,3> t_temp(0.0);
+
+  for(int x=0; x<3; x++)
+  {
+    for(int y=0; y<3; y++)
+    {
+      K_temp[x][y] = K_input->data_array[x*3+y];
+      R_temp[x][y] = R_input->data_array[x*3+y];
+    }
+    t_temp[x] = t_input->data_array[x];
+  }
+
+  vpgl_calibration_matrix<double>K(K_temp);
+  vgl_rotation_3d<double>R(R_temp);
+  vgl_vector_3d<double>t(t_temp[0], t_temp[1], t_temp[2]);
+
+  vpgl_perspective_camera<double>* camera = new vpgl_perspective_camera<double>(K, R, t);
+
+  pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
+
   return true;
 }

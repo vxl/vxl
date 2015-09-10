@@ -64,4 +64,8 @@ DECLARE_FUNC_CONS(boxm2_cpp_normals_to_id_process);
 DECLARE_FUNC_CONS(boxm2_import_triangle_mesh_process);
 DECLARE_FUNC_CONS(boxm2_extract_point_cloud_process);
 DECLARE_FUNC_CONS(boxm2_export_oriented_point_cloud_process);
+
+DECLARE_FUNC_CONS(boxm2_cpp_batch_compute_3d_points_process);
+DECLARE_FUNC_CONS(boxm2_cpp_cast_3d_point_hypothesis_process);
+DECLARE_FUNC_CONS(boxm2_cpp_cast_3d_point_hypothesis_process2);
 #endif

@@ -1978,3 +1978,25 @@ def location_rank_in_pin_point(lon, lat, pin_point_kml):
   else:
     return 0
 
+def cast_3d_point(scene, cache, perspective_camera, generic_camera, 
+                  depth_image, variance_image, appearance_model_name):
+  boxm2_batch.init_process("boxm2CppCast3dPointHypothesisProcess");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_from_db(1, cache);
+  boxm2_batch.set_input_from_db(2, perspective_camera);
+  boxm2_batch.set_input_from_db(3, generic_camera);
+  boxm2_batch.set_input_from_db(4, depth_image);
+  boxm2_batch.set_input_from_db(5, variance_image);
+  boxm2_batch.set_input_string(6, appearance_model_name);
+  boxm2_batch.run_process();
+
+def cast_3d_point_pass2(scene,cache,generic_camera,appearance_model_name,
+                        cov_c_path,cov_v_path):
+  boxm2_batch.init_process("boxm2CppCast3dPointHypothesisProcess2");
+  boxm2_batch.set_input_from_db(0, scene);
+  boxm2_batch.set_input_from_db(1, cache);
+  boxm2_batch.set_input_from_db(2, generic_camera);
+  boxm2_batch.set_input_string(3, appearance_model_name);
+  boxm2_batch.set_input_string(4, cov_c_path);
+  boxm2_batch.set_input_string(5, cov_v_path);
+  boxm2_batch.run_process();
