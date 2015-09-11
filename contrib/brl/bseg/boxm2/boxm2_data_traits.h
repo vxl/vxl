@@ -132,9 +132,12 @@ static vcl_string prefix(boxm2_data_type data_type, vcl_string const& identifier
     case enum_val: \
       return boxm2_data_traits<enum_val>::prefix(identifier);
     BOXM2_DATATYPE_TABLE
+    default:
+      // switch fell through with no match
+      return "unknown";
 #undef X
   }
-  // switch fell through with no match
+  // should be unreachable.
   return "unknown";
 }
 
@@ -145,9 +148,12 @@ static vcl_size_t datasize(boxm2_data_type data_type) {
     case enum_val: \
       return boxm2_data_traits<enum_val>::datasize();
     BOXM2_DATATYPE_TABLE
+    default:
+      // switch fell through with no match
+      return 0;
 #undef X
   }
-  // switch fell through with no match
+  // should be unreachable.
   return 0;
 };
 
