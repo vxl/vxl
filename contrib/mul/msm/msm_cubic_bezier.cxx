@@ -591,7 +591,7 @@ void msm_cubic_bezier::get_extra_points(double approx_sep,
   {
     // Add last node to open curve
     new_pts[index]=point(n_nodes-1);
-    new_normals[index]=normal(n_nodes-1,0);
+    new_normals[index]=normal(n_nodes-2,1.0);
     control_pt_index[n_nodes-1]=index;
   }
 }
