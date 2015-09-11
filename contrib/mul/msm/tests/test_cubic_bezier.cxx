@@ -44,6 +44,9 @@ void test_cubic_bezier()
     TEST("Control pt index",control_pt_index[i],2*i);
   }
   
+  vcl_cout<<"Pt 5: "<<new_pts[5]<<" normal: "<<new_normals[5]<<vcl_endl;
+  vcl_cout<<"Last pt: "<<new_pts[6]<<" Last normal: "<<new_normals[6]<<vcl_endl;
+  
   bezier.get_extra_points(0.33,new_pts,new_normals,control_pt_index);
   TEST("Number of points",new_pts.size(),10);
 
