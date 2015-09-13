@@ -6,7 +6,7 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 class boxm2_vecf_ocl_appearance_extractor{
  public:
-  boxm2_vecf_ocl_appearance_extractor(boxm2_scene_sptr target_scene, boxm2_vecf_ocl_composite_head_model& source_model):scene_transformer_(target_scene,source_model.opencl_cache_,"",source_model.color_apm_id_),head_model_(source_model)
+  boxm2_vecf_ocl_appearance_extractor(boxm2_scene_sptr target_scene, boxm2_vecf_ocl_composite_head_model& source_model):scene_transformer_(target_scene,source_model.opencl_cache_,"",source_model.color_apm_id_,false,true),head_model_(source_model)
   {
     target_scene_ = target_scene;
 
@@ -33,6 +33,7 @@ class boxm2_vecf_ocl_appearance_extractor{
   void extract_iris_appearance(bool is_right , bool extract);
   void bump_up_vis_scores();
   void reset(bool is_right);
+  float8 weight_intesities(float vis_a,float vis_b,float8 int_A,float8 int_B, float8 mean);
   bool extract_data(boxm2_scene_sptr scene,boxm2_block_id& block,float * &alpha,gray_APM* &gray_app, color_APM* &color_app);
   boxm2_vecf_ocl_transform_scene scene_transformer_;
   color_APM to_apm_t(float8& apm_f){

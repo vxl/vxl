@@ -30,13 +30,17 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
                                  boxm2_scene_sptr target_scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
                                  vcl_string gray_app_id="",
-                                 vcl_string color_app_id="");
+                                 vcl_string color_app_id="",
+                                 bool do_alpha = true,
+                                 bool do_interp = true);
 
   //constructor if target scene is not known at the time of creation
   boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
                                  boxm2_opencl_cache_sptr ocl_cache,
                                  vcl_string gray_app_id="",
-                                 vcl_string color_app_id="");
+                                 vcl_string color_app_id="",
+                                 bool do_alpha = true,
+                                 bool do_interp = true);
 
   ~boxm2_vecf_ocl_transform_scene();
 
@@ -139,6 +143,7 @@ private:
   float * long_output;
   bocl_mem_sptr output_f;
   vcl_string grey_app_id_,color_app_id_;
+  bool do_alpha_,do_interp_;
 
   bocl_mem* alpha_target_;
   bocl_mem* mog_target_;

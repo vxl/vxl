@@ -87,8 +87,8 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
           //get the index into this cell data
           int dataIndex = data_index_cached(local_tree, i, bit_lookup, cumsum, &cumIndex) + data_index_root(local_tree); //gets absolute position
           // set intial values in case source is not accessed
-          target_scene_mog_array[dataIndex] = mog_init;
-          target_scene_alpha_array[dataIndex] = alpha_init;
+          /* target_scene_mog_array[dataIndex] = mog_init; */
+          /* target_scene_alpha_array[dataIndex] = alpha_init; */
 
           // transform coordinates to source scene
           float xg = target_scene_linfo->origin.x + ((float)index_x+centerX[i])*target_scene_linfo->block_len ;
@@ -135,7 +135,14 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 // here is where interpolation occurs
                 int currDepth = get_depth(i);
                 float side_len = 1.0f/((float)(1<<currDepth));
+                MOG_TYPE mog_original = source_scene_mog_array  [alpha_offset];
+                float  alpha_original = source_scene_alpha_array[alpha_offset];
+#ifdef DO_ALPHA
+                target_scene_alpha_array[dataIndex] = alpha_original;
+#endif
+                target_scene_mog_array[dataIndex]   = mog_original;
                 // source_lx /= side_len; source_ly /= side_len; source_lz /= side_len;
+#ifdef DO_INTERP
                 float alphas[8];
                 float params[8];
                 float4 abs_neighbors[8];
@@ -206,12 +213,10 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 }
 
                 // interpolate alpha over the source
-                MOG_TYPE mog_original = source_scene_mog_array  [alpha_offset];
+
                 CONVERT_FUNC_FLOAT8(mog_float,mog_original);
                 mog_float/=NORM; float exp_int_orig;
                 EXPECTED_INT(exp_int_orig,mog_float); //for debug
-
-                float  alpha_original = source_scene_alpha_array[alpha_offset];
                 MOG_TYPE mog_interped;
                 float alpha_interped = interp_generic_float(abs_neighbors,alphas,source_p);
 #ifdef MOG_TYPE_8
@@ -226,10 +231,13 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
                 curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
                 target_rgb_array[dataIndex] = curr_rgb_tuple;
-#endif
+#endif //rgb
 
+#ifdef DO_ALPHA
                 target_scene_alpha_array[dataIndex] = alpha_interped;
+#endif
                 target_scene_mog_array[dataIndex]   = mog_interped;
+#endif //interp
 
               }
             }

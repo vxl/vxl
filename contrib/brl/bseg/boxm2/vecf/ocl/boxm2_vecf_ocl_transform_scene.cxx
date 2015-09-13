@@ -69,12 +69,15 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
                                                                boxm2_scene_sptr target_scene,
                                                                boxm2_opencl_cache_sptr ocl_cache,
                                                                vcl_string gray_app_id,
-                                                               vcl_string color_app_id)
+                                                               vcl_string color_app_id,
+                                                               bool do_alpha,
+                                                               bool do_interp)
 
   : source_scene_(source_scene),
     target_scene_(target_scene),
-     opencl_cache_(ocl_cache),
-     grey_app_id_(gray_app_id), color_app_id_(color_app_id)
+    opencl_cache_(ocl_cache),
+    grey_app_id_(gray_app_id), color_app_id_(color_app_id),
+    do_alpha_(do_alpha),do_interp_(do_interp)
 {
   device_=opencl_cache_->get_device();
   target_initialized_= false;
@@ -90,12 +93,15 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
 boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
                                                                boxm2_opencl_cache_sptr ocl_cache,
                                                                vcl_string gray_app_id,
-                                                               vcl_string color_app_id)
+                                                               vcl_string color_app_id,
+                                                               bool do_alpha,
+                                                               bool do_interp)
 
-  :   source_scene_(source_scene),
+  :  source_scene_(source_scene),
      target_scene_(0),
      opencl_cache_(ocl_cache),
-    grey_app_id_(gray_app_id), color_app_id_(color_app_id)
+     grey_app_id_(gray_app_id), color_app_id_(color_app_id),
+     do_alpha_(do_alpha),do_interp_(do_interp)
 {
   device_=opencl_cache_->get_device();
   target_initialized_= false;
@@ -207,7 +213,11 @@ bool boxm2_vecf_ocl_transform_scene::compile_trans_interp_trilin_kernel()
   vcl_string options;
   // sets apptypesize_ and app_type
   get_scene_appearance(source_scene_, options);
-  vcl_cout<<" compiling trans kernel "<<vcl_endl;
+  if (do_alpha_)
+    options+=" -D DO_ALPHA ";
+  if(do_interp_)
+    options+=" -D DO_INTERP ";
+  vcl_cout<<" compiling trans kernel with options "<<options<< vcl_endl;
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   vcl_string vecf_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/vecf/ocl/cl/";
