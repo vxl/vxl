@@ -72,6 +72,16 @@ def gen_oriented_point_cloud(scene, cache, prob_t, norm_mag_t, filename):
     boxm2_batch.set_input_float(2, prob_t)
     boxm2_batch.set_input_float(3, norm_mag_t)
 
+def gen_error_point_cloud(scene,cache,filename,thresh = 0.3, color=True):
+    boxm2_batch.init_process("boxm2ExportErrorPointCloudProcess");
+    boxm2_batch.set_input_from_db(0,scene);
+    boxm2_batch.set_input_from_db(1,cache);
+    boxm2_batch.set_input_string(2,filename); #ply filename
+    boxm2_batch.set_input_float(3,thresh); #prob threshold
+    boxm2_batch.set_input_bool(4,color); 
+    #color the points using voxel world and also put the occupancy prob of the 
+    #voxel in the ply file
+    boxm2_batch.run_process();
 
 def export_stack(scene, cache, outdir, isopacityonly=True):
     boxm2_batch.init_process("boxm2ExportStackImagesProcess")
