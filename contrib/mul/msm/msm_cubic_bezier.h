@@ -83,6 +83,9 @@ class msm_cubic_bezier
   //: Return point for node i
   const vgl_point_2d<double>& point(unsigned i) const
   { return bnode_[i].p; }
+  
+  //: Return i-th curve segment description
+  const msm_cubic_bezier_node& segment(unsigned i) const { return bnode_[i]; }
 
   //: Return position at t (in [0,1]) in segment i of curve
   vgl_point_2d<double> point(unsigned i, double t) const;
