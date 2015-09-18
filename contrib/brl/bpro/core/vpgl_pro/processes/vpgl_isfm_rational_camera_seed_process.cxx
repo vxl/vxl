@@ -6,6 +6,9 @@
 //      Use a RANSAC scheme to find offsets for each camera using "inlier" correspondence
 //      Note that the input and output cameras are local rational cameras
 //
+//      This code was developed under contract #FA8650-13-C-1613 and is approved for public release.
+//      The case number for the approval is 88ABW-2014-1143.
+//
 // \verbatim
 //  Modifications
 //  Yi Dong, Aug, 2015, remove image dependency

@@ -7,6 +7,9 @@
 //       Use a RANSAC scheme to find offsets for each camera using "inlier" correspondences
 //       To improve back-projection accuracy, each correspondence will have its own initial guessing and search space 
 //
+//       This code was developed under contract #FA8650-13-C-1613 and is approved for public release.
+//       The case number for the approval is 88ABW-2014-1143.
+//
 // \verbatim
 //  Modifications
 //    Yi Dong, Aug, 2015, remove the track file to avoid using satellite original image

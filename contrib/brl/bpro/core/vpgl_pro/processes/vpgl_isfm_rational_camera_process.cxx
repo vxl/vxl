@@ -6,6 +6,9 @@
 //         some of the correspondences may be very poor/wrong but a majority is of good quality (i.e. corresponds to the same 3D point)
 //         Use a RANSAC scheme to find offsets for each camera using "inlier" correspondences
 //
+//         This code was developed under contract #FA8650-13-C-1613 and is approved for public release.
+//         The case number for the approval is 88ABW-2014-1143.
+//
 // \verbatim
 //  Modifications
 //   Yi Dong May 20, 2015 fix bugs due to invalid camera translation
