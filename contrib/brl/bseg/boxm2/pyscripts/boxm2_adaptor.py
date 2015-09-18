@@ -1533,7 +1533,7 @@ def generate_xyz_from_dem(scene, geotiff_dem, geoid_height, geocam=None,fill_in_
     z_img = 0;
   return x_img, y_img, z_img
 
-# Create x y z images from a DEM at the resolution of the scene
+# Create x y z images from a DEM at the resolution of the input DEM images
 def generate_xyz_from_dem2(scene, geotiff_dem, geoid_height, geocam=None,fill_in_value=-1.0):
   boxm2_batch.init_process("boxm2DemToXYZProcess2");
   boxm2_batch.set_input_from_db(0,scene);
@@ -2000,3 +2000,20 @@ def cast_3d_point_pass2(scene,cache,generic_camera,appearance_model_name,
   boxm2_batch.set_input_string(4, cov_c_path);
   boxm2_batch.set_input_string(5, cov_v_path);
   boxm2_batch.run_process();
+## process that find the minimum and maximum elevation from height map, for a give 2-d rectangluar region
+def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
+  boxm2_batch.init_process("volmFindMinMaxHeightPorcess")
+  boxm2_batch.set_input_double(0, ll_lon)
+  boxm2_batch.set_input_double(1, ll_lat)
+  boxm2_batch.set_input_double(2, ur_lon)
+  boxm2_batch.set_input_double(3, ur_lat)
+  boxm2_batch.set_input_string(4, dem_folder)
+  status = boxm2_batch.run_process()
+  if status:
+    (id, type) = boxm2_batch.commit_output(0)
+    min_elev = boxm2_batch.get_output_double(id)
+    (id, type) = boxm2_batch.commit_output(1)
+    max_elev = boxm2_batch.get_output_double(id)
+    return min_elev, max_elev
+  else:
+    return 0.0, 0.0

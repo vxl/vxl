@@ -20,6 +20,7 @@ bool bvxm_create_land_map_process_cons(bprb_func_process& pro)
   input_types_[4] = "bool";                       // option to ingest open street map points
   input_types_[5] = "bool";                       // option to ingest open street map road
   input_types_[6] = "bool";                       // option to ingest open street map region
+  input_types_[7] = "bool";                       // option to covert pixel value from original image pixel to pre-define geo-label
   // process generates 1 outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // land image
@@ -39,6 +40,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   bool       is_osm_pt        = pro.get_input<bool>(in_i++);
   bool       is_osm_rd        = pro.get_input<bool>(in_i++);
   bool       is_osm_rg        = pro.get_input<bool>(in_i++);
+  bool       is_convert       = pro.get_input<bool>(in_i++);
 
   // get scene parameters
   bvxm_world_params_sptr params = scene->get_params();
@@ -97,7 +99,10 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
         vit->cam->global_to_img(lon, lat, gz, u, v);
         unsigned uu = (unsigned)vcl_floor(u+0.5), vv = (unsigned)vcl_floor(v+0.5);
         if (uu < vit->ni && vv < vit->nj)
-          (*out_img)(i, j) = volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
+          if (is_convert)
+            (*out_img)(i, j) = volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
+          else
+            (*out_img)(i, j) = (*geo_img)(uu,vv);
       }
     }
   }

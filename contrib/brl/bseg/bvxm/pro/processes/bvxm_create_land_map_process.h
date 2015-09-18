@@ -34,7 +34,7 @@
 //: global variables and functions
 namespace bvxm_create_land_map_process_globals
 {
-  const unsigned n_inputs_  = 7;
+  const unsigned n_inputs_  = 8;
   const unsigned n_outputs_ = 1;
 }
 

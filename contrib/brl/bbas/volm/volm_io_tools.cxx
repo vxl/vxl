@@ -490,7 +490,7 @@ void volm_io_tools::load_geocover_imgs(vcl_string const& folder, vcl_vector<volm
   vcl_string file_glob = folder + "//*.tif";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn) {
     volm_img_info info;
-    volm_io_tools::load_geotiff_image(fn(), info, true);  // last argument true so load camera from the file name
+    volm_io_tools::load_geotiff_image(fn(), info, false);  // last argument true so load camera from the file name
     infos.push_back(info);
   }
 }

@@ -404,7 +404,7 @@ def generate_xyz_from_dem_multi(world, img_folder, geoid_height, fill_in_value=-
     z_img = 0;
   return x_img, y_img, z_img;
 
-def create_land_map(world, geo_folder, urban_folder, osm_folder, is_osm_pt, is_osm_region, is_osm_line):
+def create_land_map(world, geo_folder, urban_folder, osm_folder, is_osm_pt, is_osm_region, is_osm_line, is_convert=True):
   bvxm_batch.init_process("bvxmCreateLandMapProcess");
   bvxm_batch.set_input_from_db(0, world)
   bvxm_batch.set_input_string(1, geo_folder)
@@ -413,6 +413,7 @@ def create_land_map(world, geo_folder, urban_folder, osm_folder, is_osm_pt, is_o
   bvxm_batch.set_input_bool(4, is_osm_pt)
   bvxm_batch.set_input_bool(5, is_osm_line)
   bvxm_batch.set_input_bool(6, is_osm_region)
+  bvxm_batch.set_input_bool(7, is_convert)
   result = bvxm_batch.run_process();
   if result:
     (img_id, img_type) = bvxm_batch.commit_output(0)

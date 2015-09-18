@@ -212,7 +212,7 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
   float fill_in_value = pro.get_input<float>(i++);
   vpgl_camera_double_sptr cam = 0;
 
-  vcl_string file_glob = geotiff_folder + "//ASTGTM2_*.tif";
+  vcl_string file_glob = geotiff_folder + "//*.tif";
   vcl_vector<vcl_string> geotiff_img_names;
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn)
     geotiff_img_names.push_back(fn());
