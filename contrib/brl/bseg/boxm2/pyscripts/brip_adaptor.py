@@ -90,3 +90,21 @@ def solve_apply_gain_offset_constraints(mimg,timg,weight = 1.0, mimg_mask= None)
     (id, type) = boxm2_batch.commit_output(0);
     out_img = dbvalue(id, type);
   return out_img;
+
+###########################################################
+# Compute mutual information between two images
+###########################################################
+def image_mutual_info(image1, image2, min_val, max_val, n_bins):
+  boxm2_batch.init_process("bripImageMutualInfoProcess")
+  boxm2_batch.set_input_from_db(0, image1)
+  boxm2_batch.set_input_from_db(1, image2)
+  boxm2_batch.set_input_double(2, min_val)
+  boxm2_batch.set_input_double(3, max_val)
+  boxm2_batch.set_input_unsigned(4, n_bins)
+  status = boxm2_batch.run_process()
+  if status:
+    (id, type) = boxm2_batch.commit_output(0)
+    mutual_info = boxm2_batch.get_output_double(id)
+    return mutual_info
+  else:
+    return -1.0
