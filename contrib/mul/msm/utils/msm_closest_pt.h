@@ -78,7 +78,7 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
 inline msm_line_seg_pt msm_closest_seg_pt_on_curve(const msm_points& all_points,
                          const msm_curve& curve,
                          const vgl_point_2d<double>& pt,
-                         double sqr_dist)
+                         double& sqr_dist)
 {
   if (curve.size()==0)
   {
