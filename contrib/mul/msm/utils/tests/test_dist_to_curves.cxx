@@ -11,6 +11,7 @@
 // \brief Test msm_dist_to_curves functions
 
 #include <vcl_iostream.h>
+#include <msm/utils/msm_closest_pt.h>
 #include <msm/utils/msm_dist_to_curves.h>
 
 //=======================================================================
@@ -59,6 +60,34 @@ void test_dist_to_curves()
   TEST_NEAR("Distance to (-1,0.5) [Closed]",d,1.0,1e-6);
 
 
+  msm_line_seg_pt seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(0.3,-0.5),d);
+  TEST("seg1.i0",seg1.i0,0);
+  TEST("seg1.i1",seg1.i1,1);
+  TEST_NEAR("seg1.alpha",seg1.alpha,0.3,1e-6);
+  
+  seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(0.7,-0.5),d);
+  TEST("seg1.i0",seg1.i0,0);
+  TEST("seg1.i1",seg1.i1,1);
+  TEST_NEAR("seg1.alpha",seg1.alpha,0.7,1e-6);
+  
+  seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(1.1,-0.5),d);
+  TEST("seg1.i0",seg1.i0,0);
+  TEST("seg1.i1",seg1.i1,1);
+  TEST_NEAR("seg1.alpha",seg1.alpha,1.0,1e-6);
+ 
+  seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(-0.7,-0.5),d);
+  TEST("seg1.i0",seg1.i0,0);
+  TEST("seg1.i1",seg1.i1,-1);
+  TEST_NEAR("seg1.alpha",seg1.alpha,0.0,1e-6);
+
+  // Create a line
+  for (unsigned i=0;i<4;++i)
+    points.set_point(i,i,2*i);
+
+  seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(1.5,3.0),d);
+  TEST("seg1.i0",seg1.i0,1);
+  TEST("seg1.i1",seg1.i1,2);
+  TEST_NEAR("seg1.alpha",seg1.alpha,0.5,1e-6);
 }
 
 TESTMAIN(test_dist_to_curves);

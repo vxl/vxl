@@ -19,16 +19,16 @@ struct msm_line_seg_pt
   int i0, i1;
   double alpha;
   
-  //: Construct as undefined
+  //: 1 Construct as undefined
   msm_line_seg_pt() : i0(-1),i1(-1),alpha(0.0) {}
   
-  //: Construct as single point, index
+  //: 2 Construct as single point, index
   msm_line_seg_pt(int index) : i0(index),i1(-1),alpha(0.0) {}
   
   
   msm_line_seg_pt(int i0a, int i1a, double a) : i0(i0a)
   {
-    if (a==0) { alpha=0.0; i1a=-1; return; }
+    if (a==0) { alpha=0.0; i1=-1; return; }
     i1=i1a; alpha=a;
   }
   
@@ -59,19 +59,17 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
     return dp.sqr_length();  // pt is closest to pt0
   }
   double Lu2=u.sqr_length();
-  double pu2=pu*pu;
-  if (pu2>=Lu2)
+  if (pu>=Lu2)
   {
     alpha=1.0;
     return (pt-pt1).sqr_length(); // pt is closest to pt1
   }
   
   // pt is closest to some point between pt0 and pt1
-  double alpha2 = pu2/(Lu2*dp.sqr_length());
-  alpha = vcl_max(0.0,1.0-vcl_sqrt(alpha2));
+  alpha = pu/Lu2;
   
   // Use pythagorus  :   dp^2 = d^2 + sqr(pu/u.length)
-  return vcl_max(dp.sqr_length() - pu2/Lu2,0.0);
+  return vcl_max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
 }
 
 //: Compute the point on the poly-line given by curve to pt
