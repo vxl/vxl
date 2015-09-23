@@ -164,17 +164,21 @@ void test_rotation_3d()
   vnl_double_3 b(0.0, 0.0, 1.0),
                ap(vnl_math::sqrt1_2, 0.0, vnl_math::sqrt1_2), // vector of magnitude 1
                am(-1.0,  0.0, -1.0), // magnitude > 1, to test robustified constructor
-               a1(0.5773502692, -0.5773502692, 0.5773502692); // magnitude 1
+               a1(0.5773502692, -0.5773502692, 0.5773502692), // magnitude 1
+               a2(0,0,-1);  //  180 degree rotation, w/negative z component
   vgl_rotation_3d<double> r_abp(ap, b);
   vgl_rotation_3d<double> r_abm(am, b);
   vgl_rotation_3d<double> r_ab1(a1, b);
-  vnl_double_3 ap_to_b = r_abp*ap, am_to_b = r_abm*am, a1_to_b = r_ab1*a1;
+  vgl_rotation_3d<double> r_ab2(a2, b);
+  vnl_double_3 ap_to_b = r_abp*ap, am_to_b = r_abm*am, a1_to_b = r_ab1*a1, a2_to_b = r_ab2*a2;
   double errorp = (b - ap_to_b).squared_magnitude();
   TEST_NEAR("constructor from 2 vectors: rotate 45d around Y axis", errorp, 0.0, epsilon);
   double errorm = (b*vnl_math::sqrt2 - am_to_b).squared_magnitude();
   TEST_NEAR("constructor from 2 vectors: rotate 225d around Y axis", errorm, 0.0, epsilon);
   double error1 = (b - a1_to_b).squared_magnitude();
   TEST_NEAR("constructor from 2 vectors: from arbitrary point", error1, 0.0, epsilon);
+  double error2 = (b - a2_to_b).squared_magnitude();
+  TEST_NEAR("constructor from 2 vectors: 180 degree rotation", error2, 0.0, epsilon);
   vgl_vector_3d<float> ag(1.0f, 1.0f, 0.0f), bg(0.0f, 0.0f, float(vnl_math::sqrt2));
   vgl_rotation_3d<float> r_abg(ag, bg);
   vgl_vector_3d<float> ag_to_bg = r_abg*ag;
