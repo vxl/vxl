@@ -24,7 +24,7 @@
 class volm_desc_ex_land_only_indexer : public volm_desc_indexer
 {
 public:
-  static vcl_string& get_name();
+  static vcl_string get_name();
   
   //: Constructor
   volm_desc_ex_land_only_indexer(vcl_string const& index_folder,
