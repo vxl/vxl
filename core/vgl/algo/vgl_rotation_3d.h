@@ -106,8 +106,9 @@ class vgl_rotation_3d
       }
       else { // rotation axis not defined for rotation of pi
         // construct a vector v along the min component axis of a
-        double ax = static_cast<double>(a[0]),ay = static_cast<double>(a[1]),
-               az = static_cast<double>(a[2]);
+        double ax = vcl_fabs(static_cast<double>(a[0]));
+        double ay = vcl_fabs(static_cast<double>(a[1]));
+        double az = vcl_fabs(static_cast<double>(a[2]));
         vnl_vector_fixed<T,3> v(T(0));
         double amin = ax; v[0]=T(1);
         if (ay<amin) { amin = ay; v[0]=T(0); v[1]=T(1); }
