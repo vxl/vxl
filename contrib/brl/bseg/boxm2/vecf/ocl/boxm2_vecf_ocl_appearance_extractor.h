@@ -21,6 +21,44 @@ class boxm2_vecf_ocl_appearance_extractor{
       this->extract_orbit_appearance();
     head_model_.intrinsic_change_ = true;
   }
+  uchar8 rgb2yuv(uchar8& color) {
+    int R = static_cast<int>(color[0]);
+    int G = static_cast<int>(color[1]);
+    int B = static_cast<int>(color[2]);
+    uchar8 ret_val; ret_val.fill(0);
+    int   Y = ( (  66 * R + 129 * G +  25 * B + 128) >> 8) +  16;
+    int   U = ( ( -38 * R -  74 * G + 112 * B + 128) >> 8) + 128;
+    int   V = ( ( 112 * R -  94 * G -  18 * B + 128) >> 8) + 128;
+
+    ret_val[0] = (unsigned char) Y; ret_val[1] = (unsigned char) U ; ret_val[2] = (unsigned char) V;
+    return ret_val;
+  }
+#define clip(val) std::min ( 255, std::max (0, val) );
+  uchar8 yuv2rgb(uchar8& color) {
+    int Y = static_cast<int>(color[0]);
+    int U = static_cast<int>(color[1]);
+    int V = static_cast<int>(color[2]);
+    int C = Y - 16;
+    int D = U - 128;
+    int E = V - 128;
+    uchar8 ret_val; ret_val.fill(0);
+
+   int R = clip(( 298 * C           + 409 * E + 128) >> 8);
+   int G = clip(( 298 * C - 100 * D - 208 * E + 128) >> 8);
+   int B = clip(( 298 * C + 516 * D           + 128) >> 8);
+
+    ret_val[0] = (unsigned char) B; ret_val[1] = (unsigned char) G ; ret_val[2] = (unsigned char) R;
+    return ret_val;
+  }
+
+  inline void scale_appearance_in_place(uchar8& appearance,float  scale){
+    uchar8   yuv_app = rgb2yuv(appearance);
+    //    vcl_cout<<(int)(appearance[0])<<" "<<(int)(appearance[1])<<" "<<(int)(appearance[2])<<" ||| ";
+    yuv_app[0] = static_cast<unsigned char>(scale * (float) yuv_app[0] );
+    appearance = yuv2rgb(yuv_app);
+    //    vcl_cout<<(int)(appearance[0])<<" "<<(int)(appearance[1])<<" "<<(int)(appearance[2])<<vcl_endl;
+  }
+
  private:
   bool faux_,individual_appearance_,head_only_;
   void extract_orbit_appearance();
@@ -33,7 +71,7 @@ class boxm2_vecf_ocl_appearance_extractor{
   void extract_iris_appearance(bool is_right , bool extract);
   void bump_up_vis_scores();
   void reset(bool is_right);
-  float8 weight_intesities(float vis_a,float vis_b,float8 int_A,float8 int_B, float8 mean);
+  float8 weight_intesities(float& vis_a,float& vis_b,float8 int_A,float8 int_B, float8 mean,float8 meanB);
   bool extract_data(boxm2_scene_sptr scene,boxm2_block_id& block,float * &alpha,gray_APM* &gray_app, color_APM* &color_app);
   boxm2_vecf_ocl_transform_scene scene_transformer_;
   color_APM to_apm_t(float8& apm_f){
@@ -49,8 +87,8 @@ class boxm2_vecf_ocl_appearance_extractor{
   }
   boxm2_scene_sptr target_scene_;
   color_APM left_upper_lid_app_, right_upper_lid_app_, right_lower_lid_app_,left_lower_lid_app_, left_eyelid_crease_app_, right_eyelid_crease_app_, left_iris_app_,right_iris_app_, left_sclera_app_,right_sclera_app_,left_pupil_app_,right_pupil_app_;
-  float8 total_sclera_app_,total_pupil_app_,total_iris_app_;
-  float vis_sclera_,vis_pupil_,vis_iris_;
+  float8 total_sclera_app_,total_pupil_app_,total_iris_app_,total_upper_lid_app_,total_lower_lid_app_,total_eyelid_crease_app_;
+  float vis_sclera_,vis_pupil_,vis_iris_,vis_upper_lid_,vis_lower_lid_,vis_eyelid_crease_;
   vis_score_t * current_vis_score_;
   boxm2_vecf_ocl_composite_head_model& head_model_;
   vcl_vector<unsigned> vis_cells_;

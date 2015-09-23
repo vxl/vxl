@@ -10,6 +10,9 @@ void boxm2_vecf_ocl_appearance_extractor::reset(bool is_right){
   total_sclera_app_.fill(0); vis_sclera_ = 0.0f;
   total_pupil_app_.fill(0); vis_pupil_ =0.0f;
   total_iris_app_.fill(0); vis_iris_ = 0.0f;
+  total_lower_lid_app_.fill(0); vis_lower_lid_ = 0.0f;
+  total_upper_lid_app_.fill(0); vis_upper_lid_ = 0.0f;
+  total_eyelid_crease_app_.fill(0); vis_eyelid_crease_ = 0.0f;
 
 
   vcl_vector<boxm2_block_id> blocks = scene->get_block_ids();
@@ -134,7 +137,8 @@ void boxm2_vecf_ocl_appearance_extractor::extract_iris_appearance(bool is_right,
 
 
   float sum_vis = 0;
-  color_APM& curr_iris = is_right ? right_iris_app_ : left_iris_app_;
+  color_APM& curr_iris  = is_right ? right_iris_app_ : left_iris_app_;
+  color_APM& other_iris = is_right ? left_iris_app_  : right_iris_app_;
   color_APM final_iris_app;
 
   float8 weighted_sum; weighted_sum.fill(0);
@@ -163,8 +167,11 @@ void boxm2_vecf_ocl_appearance_extractor::extract_iris_appearance(bool is_right,
       if(!orbit.is_type_global(p, boxm2_vecf_orbit_scene::IRIS))
         continue;
       //is a sphere voxel cell so define the vector field
-      vgl_point_3d<double> mapped_p    =       rot * p + orbit_params.offset_ ;
-      vgl_point_3d<double> reflected_p = other_rot * p + the_other_orbit_params.offset_ ;
+       vgl_point_3d<double>    local_reflected_p = p;
+       local_reflected_p = vgl_point_3d<double>(-1 * local_reflected_p.x(), local_reflected_p.y(), local_reflected_p.z()) ;
+
+      vgl_point_3d<double>    mapped_p =       rot * p + orbit_params.offset_ ;
+      vgl_point_3d<double> reflected_p =       other_rot * local_reflected_p + the_other_orbit_params.offset_ ;
       // find closest sphere voxel cell
       vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
@@ -193,7 +200,8 @@ void boxm2_vecf_ocl_appearance_extractor::extract_iris_appearance(bool is_right,
             // float8 appearance = to_float8(target_color_data[target_data_idx]) * current_vis_score_[target_data_idx] + to_float8(curr_iris) * (1 - current_vis_score_[target_data_idx]);
             float8  appearance = weight_intesities(current_vis_score_[target_data_idx], current_vis_score_[reflected_target_data_idx],                                               to_float8(target_color_data[target_data_idx]),
                                                    to_float8(target_color_data[reflected_target_data_idx]),
-                                                   to_float8(curr_iris));
+                                                   to_float8(curr_iris),
+                                                   to_float8(other_iris));
 
             source_color_data[source_data_idx]=  faux_ ? color : to_apm_t(appearance);
 
@@ -241,7 +249,8 @@ void boxm2_vecf_ocl_appearance_extractor::extract_pupil_appearance(bool is_right
 
 
   float sum_vis = 0;
-  color_APM& curr_pupil = is_right ? right_pupil_app_ : left_pupil_app_;
+  color_APM& curr_pupil  = is_right ? right_pupil_app_ : left_pupil_app_;
+  color_APM& other_pupil = is_right ? left_pupil_app_  : right_pupil_app_;
   float8 weighted_sum; weighted_sum.fill(0);
 
   color_APM final_pupil_app;
@@ -270,8 +279,11 @@ void boxm2_vecf_ocl_appearance_extractor::extract_pupil_appearance(bool is_right
       if(!orbit.is_type_global(p, boxm2_vecf_orbit_scene::PUPIL))
         continue;
       //is a sphere voxel cell so define the vector field
-      vgl_point_3d<double> mapped_p    =       rot * p + orbit_params.offset_ ;
-      vgl_point_3d<double> reflected_p = other_rot * p + the_other_orbit_params.offset_ ;
+       vgl_point_3d<double>    local_reflected_p = p;
+       local_reflected_p = vgl_point_3d<double>(-1 * local_reflected_p.x(), local_reflected_p.y(), local_reflected_p.z()) ;
+
+      vgl_point_3d<double>    mapped_p =       rot * p + orbit_params.offset_ ;
+      vgl_point_3d<double> reflected_p =       other_rot * local_reflected_p + the_other_orbit_params.offset_ ;
       // find closest sphere voxel cell
       vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
@@ -302,7 +314,8 @@ void boxm2_vecf_ocl_appearance_extractor::extract_pupil_appearance(bool is_right
             //                     to_float8(curr_pupil)                    * (1 - current_vis_score_[target_data_idx]);
             float8  appearance = weight_intesities(current_vis_score_[target_data_idx], current_vis_score_[reflected_target_data_idx],                                               to_float8(target_color_data[target_data_idx]),
                                                    to_float8(target_color_data[reflected_target_data_idx]),
-                                                   to_float8(curr_pupil));
+                                                   to_float8(curr_pupil),
+                                                   to_float8(other_pupil));
             source_color_data[source_data_idx] =  faux_ ? color : to_apm_t(appearance);
           }
         }
@@ -349,7 +362,8 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eye_appearance(bool is_right, 
   vgl_rotation_3d<double> other_rot(Z, other_to_dir);
 
   float sum_vis = 0;
-  color_APM& curr_sclera = is_right ? right_sclera_app_ : left_sclera_app_;
+  color_APM& curr_sclera  = is_right ? right_sclera_app_ : left_sclera_app_;
+  color_APM& other_sclera = is_right ? left_sclera_app_  : right_sclera_app_;
   float8 weighted_sum; weighted_sum.fill(0);
 
   color_APM final_sclera_app;
@@ -381,8 +395,11 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eye_appearance(bool is_right, 
          orbit.is_type_global(p, boxm2_vecf_orbit_scene::PUPIL )    )
         continue;
       //is a sphere voxel cell so define the vector field
-      vgl_point_3d<double>    mapped_p = rot * p + orbit_params.offset_ ;
-      vgl_point_3d<double> reflected_p = other_rot * p + the_other_orbit_params.offset_ ;
+      vgl_point_3d<double>    local_reflected_p = p;
+       local_reflected_p = vgl_point_3d<double>(-1 * local_reflected_p.x(), local_reflected_p.y(), local_reflected_p.z()) ;
+
+      vgl_point_3d<double>    mapped_p =       rot * p + orbit_params.offset_ ;
+      vgl_point_3d<double> reflected_p =       other_rot * local_reflected_p + the_other_orbit_params.offset_ ;
       if((p-test_p).length()>0.01)
         vcl_cout<<"point difference is "<<p<<" "<<test_p<<vcl_endl;
       // find closest sphere voxel cell
@@ -401,6 +418,9 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eye_appearance(bool is_right, 
           target_blk->data_index( reflected_p, reflected_target_data_idx);
 
           unsigned source_data_idx = orbit.sphere_cell_data_index_[i];
+          unsigned other_source_data_idx = other_orbit.sphere_cell_data_index_[i];
+          if(source_data_idx - other_source_data_idx != 0)
+            vcl_cout<<" data indices are different "<<other_source_data_idx<<" "<<source_data_idx<<vcl_endl;
           uchar8 appearance = faux_ ? color : target_color_data[target_data_idx];
           source_app_data  [source_data_idx] = target_app_data[target_data_idx];
           double prob =1 - exp (- target_alpha_data[target_data_idx] * target_side_len);
@@ -411,12 +431,11 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eye_appearance(bool is_right, 
               sum_vis += current_vis_score_[target_data_idx];
             }
           }else{
-            // float8 appearance = to_float8(target_color_data[target_data_idx]) * current_vis_score_[target_data_idx] +
-            //                     to_float8(curr_sclera)                   * (1 - current_vis_score_[target_data_idx]);
-
-            float8  appearance = weight_intesities(current_vis_score_[target_data_idx], current_vis_score_[reflected_target_data_idx],                                               to_float8(target_color_data[target_data_idx]),
+            float8  appearance = weight_intesities(current_vis_score_[target_data_idx], current_vis_score_[reflected_target_data_idx],
+                                                   to_float8(target_color_data[target_data_idx]),
                                                    to_float8(target_color_data[reflected_target_data_idx]),
-                                                   to_float8(curr_sclera));
+                                                   to_float8(final_sclera_app),
+                                                   to_float8(other_sclera));
 
             source_color_data[source_data_idx]=  faux_ ? color : to_apm_t(appearance);
           }
@@ -435,18 +454,23 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eye_appearance(bool is_right, 
 void boxm2_vecf_ocl_appearance_extractor::extract_eyelid_crease_appearance(bool is_right, bool extract){
   vul_timer t;
   boxm2_vecf_composite_head_parameters const& head_params = head_model_.get_params();
-  boxm2_vecf_orbit_scene orbit; boxm2_vecf_orbit_params orbit_params;
+  boxm2_vecf_orbit_scene orbit,other_orbit; boxm2_vecf_orbit_params orbit_params, the_other_orbit_params;
   if (!is_right){
-    orbit =  head_model_.left_orbit_;
-    orbit_params = head_params.l_orbit_params_;
+          orbit =  head_model_.left_orbit_;
+    other_orbit =  head_model_.right_orbit_;
+    orbit_params           = head_params.l_orbit_params_;
+    the_other_orbit_params = head_params.r_orbit_params_;
   }else{
-    orbit = head_model_.right_orbit_;
-    orbit_params = head_params.r_orbit_params_;
+          orbit = head_model_.right_orbit_;
+    other_orbit = head_model_.left_orbit_;
+    orbit_params           = head_params.r_orbit_params_;
+    the_other_orbit_params = head_params.l_orbit_params_;
   }
   color_APM color =orbit.random_color();
   boxm2_scene_sptr source_model = orbit.scene();
   float sum_vis = 0;
-  color_APM& curr_eyelid_crease = is_right ? right_eyelid_crease_app_ : left_eyelid_crease_app_ ;
+  color_APM& curr_eyelid_crease  = is_right ? right_eyelid_crease_app_ : left_eyelid_crease_app_ ;
+  color_APM& other_eyelid_crease = is_right ? left_eyelid_crease_app_  : right_eyelid_crease_app_ ;
   float8 weighted_sum; weighted_sum.fill(0);
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
   unsigned n_source_cells = static_cast<unsigned>(orbit.eyelid_crease_cell_centers_.size());
@@ -465,11 +489,15 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eyelid_crease_appearance(bool 
       if(!orbit.is_type_global(p, boxm2_vecf_orbit_scene::EYELID_CREASE))
         continue;
       //is a sphere voxel cell so define the vector field
-      vgl_point_3d<double> mapped_p = (p + orbit_params.offset_) ;
+      vgl_point_3d<double> local_reflected = p;
       if (is_right){
-        vgl_vector_3d<double> flip(-2 * p.x(),0,0);
-        mapped_p = mapped_p + flip;
+        local_reflected =vgl_point_3d<double>(-1 * local_reflected.x(),  local_reflected.y() , local_reflected.z());
       }
+
+      //is a sphere voxel cell so define the vector field
+      vgl_point_3d<double> mapped_p = (local_reflected + orbit_params.offset_) ;
+      vgl_vector_3d<double> flip(-2 * mapped_p.x(),0,0);
+      vgl_point_3d <double> reflected_p = mapped_p + flip;
 
       vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
 
@@ -477,12 +505,13 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eyelid_crease_appearance(bool 
       for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
-          color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
+          color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx,reflected_target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
             vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
             return ;
           }
-          target_blk->data_index( mapped_p, target_data_idx);
+          target_blk->data_index(    mapped_p,           target_data_idx);
+          target_blk->data_index( reflected_p, reflected_target_data_idx);
           unsigned source_data_idx = orbit.eyelid_crease_cell_data_index_[i];
           double prob =1 - exp (- target_alpha_data[target_data_idx] * target_side_len);
           source_app_data[source_data_idx] = target_app_data[target_data_idx];
@@ -493,32 +522,49 @@ void boxm2_vecf_ocl_appearance_extractor::extract_eyelid_crease_appearance(bool 
               sum_vis += current_vis_score_[target_data_idx];
             }
           }else{
-            float8 appearance = to_float8(target_color_data[target_data_idx]) * current_vis_score_[target_data_idx] +
-                                to_float8(curr_eyelid_crease)            * (1 - current_vis_score_[target_data_idx]);
-            source_color_data[source_data_idx]=  faux_ ? color : to_apm_t(appearance);
+             float8  appearance = weight_intesities(current_vis_score_[target_data_idx], current_vis_score_[reflected_target_data_idx],
+                                                   to_float8(target_color_data[target_data_idx]),
+                                                   to_float8(target_color_data[reflected_target_data_idx]),
+                                                   to_float8(curr_eyelid_crease),
+                                                   to_float8(other_eyelid_crease));
+            source_color_data[source_data_idx] = faux_ ? color : to_apm_t(appearance);
           }
         }
       }
     }
   }
-  if(sum_vis != 0 && extract)
+  if(sum_vis != 0 && extract){
+    vis_eyelid_crease_       += sum_vis;
+    total_eyelid_crease_app_ += weighted_sum;
     weighted_sum /= sum_vis;
     curr_eyelid_crease = to_apm_t( weighted_sum );
+}
     //  vcl_cout<<"Extracted eyelid crease appearance in "<<t.real()/1000<<" seconds and sum_vis is "<<sum_vis<<vcl_endl;
 }
 
 void boxm2_vecf_ocl_appearance_extractor::extract_lower_lid_appearance(bool is_right,bool extract){
   vul_timer t;
   boxm2_vecf_composite_head_parameters const& head_params = head_model_.get_params();
-  boxm2_vecf_orbit_scene orbit; boxm2_vecf_orbit_params orbit_params;
-  color_APM& curr_lower_eyelid = is_right ? right_lower_lid_app_: left_lower_lid_app_;
-
+  boxm2_vecf_orbit_scene orbit,other_orbit; boxm2_vecf_orbit_params orbit_params, the_other_orbit_params;
   if (!is_right){
-    orbit =  head_model_.left_orbit_;
-    orbit_params = head_params.l_orbit_params_;
+          orbit =  head_model_.left_orbit_;
+    other_orbit =  head_model_.right_orbit_;
+    orbit_params           = head_params.l_orbit_params_;
+    the_other_orbit_params = head_params.r_orbit_params_;
   }else{
-    orbit = head_model_.right_orbit_;
-    orbit_params = head_params.r_orbit_params_;
+          orbit = head_model_.right_orbit_;
+    other_orbit = head_model_.left_orbit_;
+    orbit_params           = head_params.r_orbit_params_;
+    the_other_orbit_params = head_params.l_orbit_params_;
+  }
+  color_APM& curr_lower_eyelid  = is_right ? right_lower_lid_app_: left_lower_lid_app_;
+  color_APM& other_lower_eyelid = is_right ? left_lower_lid_app_ : right_lower_lid_app_;
+
+ color_APM final_lower_lid_app;
+  if(!extract && vis_lower_lid_!= 0 ){
+    float8 final_lower_lid_app_f = total_lower_lid_app_ / vis_lower_lid_;
+    final_lower_lid_app = to_apm_t(final_lower_lid_app_f);
+    curr_lower_eyelid =  individual_appearance_ ? curr_lower_eyelid : final_lower_lid_app;
   }
   color_APM color =orbit.random_color();
   boxm2_scene_sptr source_model = orbit.scene();
@@ -534,18 +580,20 @@ void boxm2_vecf_ocl_appearance_extractor::extract_lower_lid_appearance(bool is_r
       return;
     }
 
-
     for(unsigned i = 0; i< n_source_cells; ++i){
       vgl_point_3d<double> p = (orbit.lower_eyelid_cell_centers_[i]);
 
       if(!orbit.is_type_global(p, boxm2_vecf_orbit_scene::LOWER_LID))
         continue;
-      //is a sphere voxel cell so define the vector field
-      vgl_point_3d<double> mapped_p = (p + orbit_params.offset_) ;
+
+      vgl_point_3d<double> local_reflected = p;
       if (is_right){
-        vgl_vector_3d<double> flip(-2 * p.x(),0,0);
-        mapped_p = mapped_p + flip;
+        local_reflected =vgl_point_3d<double>(-1 * local_reflected.x(),  local_reflected.y() , local_reflected.z());
       }
+
+      //is a sphere voxel cell so define the vector field
+      vgl_point_3d <double> mapped_p = (local_reflected + orbit_params.offset_) ;
+      vgl_point_3d <double> reflected_p = vgl_point_3d<double>(-1 * mapped_p.x(),  mapped_p.y() , mapped_p.z());
 
       // find closest sphere voxel cell
       vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
@@ -554,12 +602,13 @@ void boxm2_vecf_ocl_appearance_extractor::extract_lower_lid_appearance(bool is_r
       for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
-          color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
+          color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx,reflected_target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
             vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
             return ;
           }
-          target_blk->data_index( mapped_p, target_data_idx);
+          target_blk->data_index(    mapped_p,           target_data_idx);
+          target_blk->data_index( reflected_p, reflected_target_data_idx);
           unsigned source_data_idx = orbit.lower_eyelid_cell_data_index_[i];
           source_app_data[source_data_idx] = target_app_data[target_data_idx];
 
@@ -573,9 +622,12 @@ void boxm2_vecf_ocl_appearance_extractor::extract_lower_lid_appearance(bool is_r
               sum_vis += current_vis_score_[target_data_idx];
             }
           }else{
-            float8 appearance = to_float8(target_color_data[target_data_idx]) * current_vis_score_[target_data_idx] +
-                                to_float8(curr_lower_eyelid)             * (1 - current_vis_score_[target_data_idx]);
-            source_color_data[source_data_idx]=  faux_ ? color : to_apm_t(appearance);
+         float8  appearance = weight_intesities(current_vis_score_[target_data_idx], current_vis_score_[reflected_target_data_idx],
+                                                   to_float8(target_color_data[target_data_idx]),
+                                                   to_float8(target_color_data[reflected_target_data_idx]),
+                                                   to_float8(curr_lower_eyelid),
+                                                   to_float8(other_lower_eyelid));
+            source_color_data[source_data_idx] = faux_ ? color : to_apm_t(appearance);
             vis_cells_.push_back(target_data_idx); //need to set the vis of this index to 1
           }
         }
@@ -583,6 +635,8 @@ void boxm2_vecf_ocl_appearance_extractor::extract_lower_lid_appearance(bool is_r
     }
   }
   if(sum_vis != 0 && extract){
+    vis_lower_lid_ += sum_vis;
+    total_lower_lid_app_ += weighted_sum;
     weighted_sum /= sum_vis;
     curr_lower_eyelid = to_apm_t( weighted_sum );
   }
@@ -592,26 +646,54 @@ void boxm2_vecf_ocl_appearance_extractor::extract_lower_lid_appearance(bool is_r
 void boxm2_vecf_ocl_appearance_extractor::extract_upper_lid_appearance(bool is_right,bool extract){
   vul_timer t;
   boxm2_vecf_composite_head_parameters const& head_params = head_model_.get_params();
-  boxm2_vecf_orbit_scene orbit; boxm2_vecf_orbit_params orbit_params;
-  uchar8 red,green; red.fill(0);green.fill(0); red[0] =255; green[1] = 255;
+  boxm2_vecf_orbit_scene orbit,other_orbit; boxm2_vecf_orbit_params orbit_params, the_other_orbit_params;
   if (!is_right){
-    orbit =  head_model_.left_orbit_;
-    orbit_params = head_params.l_orbit_params_;
+          orbit =  head_model_.left_orbit_;
+    other_orbit =  head_model_.right_orbit_;
+    orbit_params           = head_params.l_orbit_params_;
+    the_other_orbit_params = head_params.r_orbit_params_;
   }else{
-    orbit = head_model_.right_orbit_;
-    orbit_params = head_params.r_orbit_params_;
+          orbit = head_model_.right_orbit_;
+    other_orbit = head_model_.left_orbit_;
+    orbit_params           = head_params.r_orbit_params_;
+    the_other_orbit_params = head_params.l_orbit_params_;
   }
+
+
+  uchar8 red,blue; red.fill(0);blue.fill(0); red[0] =255; red[2]=255; blue[1] = 255;
   color_APM color =orbit.random_color();
-  color[0]=255; color[2]=0; color[4]=0;
 
   double dt = 0.95;
-  color_APM eyelid_color = is_right? red : green;
+  color_APM eyelid_color = is_right? red : blue;
   color[0]=0; color[1]=0; color[2]=255;
   float8 weighted_sum; weighted_sum.fill(0); float sum_vis =0.0f;
   boxm2_scene_sptr source_model = orbit.scene();
-  color_APM& curr_lower_lid = is_right ? right_lower_lid_app_ : left_lower_lid_app_ ;
-  color_APM& curr_upper_lid = is_right ? right_upper_lid_app_ : left_upper_lid_app_ ;
 
+  color_APM& curr_lower_lid      = is_right ? right_lower_lid_app_     : left_lower_lid_app_ ;
+  color_APM& curr_upper_lid      = is_right ? right_upper_lid_app_     : left_upper_lid_app_ ;
+  color_APM& curr_eyelid_crease  = is_right ? right_eyelid_crease_app_ : left_eyelid_crease_app_ ;
+
+  color_APM& other_lower_lid     = is_right ? left_lower_lid_app_     : right_lower_lid_app_ ;
+  color_APM& other_upper_lid     = is_right ? left_upper_lid_app_     : right_upper_lid_app_ ;
+  color_APM& other_eyelid_crease = is_right ? left_eyelid_crease_app_ : right_eyelid_crease_app_ ;
+
+  color_APM final_upper_lid_app,final_lower_lid_app,final_eyelid_crease_app;
+
+  if(!extract && vis_upper_lid_!= 0 ){
+    float8 final_upper_lid_app_f = total_upper_lid_app_ / vis_upper_lid_;
+    final_upper_lid_app = to_apm_t(final_upper_lid_app_f);
+    curr_upper_lid =  individual_appearance_ ? curr_upper_lid : final_upper_lid_app;
+  }
+
+  float8 final_lower_lid_app_f = total_lower_lid_app_ / vis_lower_lid_;
+  final_lower_lid_app = to_apm_t(final_lower_lid_app_f);
+
+  float8 final_eyelid_crease_app_f = total_eyelid_crease_app_ / vis_eyelid_crease_;
+  final_eyelid_crease_app = to_apm_t(final_eyelid_crease_app_f);
+
+
+  uchar8 curr_lower_lid_scaled     = final_lower_lid_app;
+  uchar8 curr_eyelid_crease_scaled = final_eyelid_crease_app;
   vcl_vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
   for (vcl_vector<boxm2_block_id>::iterator sblk = source_blocks.begin(); sblk != source_blocks.end(); ++sblk) {
@@ -636,7 +718,8 @@ void boxm2_vecf_ocl_appearance_extractor::extract_upper_lid_appearance(bool is_r
           vcl_cout<<"this left eyelid point "<<p<<" was not ok w.r.t label type"<<vcl_endl;
         continue;
         //#endif
-}
+      }
+
       if(!(source_blk->contains(p, loc_p) )){
 #if _DEBUG
         if(is_right)
@@ -661,12 +744,21 @@ void boxm2_vecf_ocl_appearance_extractor::extract_upper_lid_appearance(bool is_r
       if(!orbit.eyelid_geo_.valid_t(ti)){
         skip = true;
       }
-      vgl_point_3d<double> mapped_p = (p + orbit_params.offset_) ;
-      mapped_p += orbit.eyelid_geo_.vf(p.x(), tc, - dt);
+
       if (is_right){
-        vgl_vector_3d<double> flip(-2 * mapped_p.x(),0,0);
-        mapped_p += flip;
+        p =vgl_point_3d<double>(-1 * p.x(),  p.y() , p.z());
       }
+
+      float intensity_scale =  tc > 0.7f ? 0.8f : 1.0f;
+      curr_lower_lid_scaled[0]   = static_cast<unsigned char>((0.96 - tc) * final_eyelid_crease_app[0] +
+                                                                     (tc) * final_lower_lid_app    [0]);
+      curr_lower_lid_scaled[0] = static_cast<unsigned char>( intensity_scale * (float) curr_lower_lid_scaled[0] );
+
+
+      //is a sphere voxel cell so define the vector field
+      vgl_point_3d<double> mapped_p = (p + orbit_params.offset_) ;
+      vgl_vector_3d<double> flip(-2 * mapped_p.x(),0,0);
+      vgl_point_3d <double> reflected_p = mapped_p + flip;
 
 
       // find closest sphere voxel cell
@@ -676,13 +768,14 @@ void boxm2_vecf_ocl_appearance_extractor::extract_upper_lid_appearance(bool is_r
       for (vcl_vector<boxm2_block_id>::iterator tblk = target_blocks.begin(); tblk != target_blocks.end(); ++tblk) {
         boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene_, *tblk);
         if ( target_blk->contains( mapped_p, local_tree_coords, target_cell_center, target_side_len )) {
-          color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx;
+          color_APM   * target_color_data; gray_APM* target_app_data; float* target_alpha_data; unsigned target_data_idx, reflected_target_data_idx;
           if(!this->extract_data(target_scene_,*tblk,target_alpha_data,target_app_data,target_color_data)){
             vcl_cout<<"Data extraction failed for scene "<< target_scene_ << " in block "<<*tblk<<vcl_endl;
             return ;
           }
 
-          target_blk->data_index( mapped_p, target_data_idx);
+          target_blk->data_index(    mapped_p,           target_data_idx);
+          target_blk->data_index( reflected_p, reflected_target_data_idx);
           unsigned source_data_idx = orbit.eyelid_cell_data_index_[i];
           source_app_data  [source_data_idx] = target_app_data  [target_data_idx];
 
@@ -694,11 +787,14 @@ void boxm2_vecf_ocl_appearance_extractor::extract_upper_lid_appearance(bool is_r
               sum_vis += current_vis_score_[target_data_idx];
             }
           }else{
-            float8 appearance = to_float8(target_color_data[target_data_idx]) * current_vis_score_[target_data_idx] +
-                                to_float8(curr_lower_lid)                * (1 - current_vis_score_[target_data_idx]);
+            float8  appearance = weight_intesities(current_vis_score_[target_data_idx], current_vis_score_[reflected_target_data_idx],
+                                                   to_float8(target_color_data[target_data_idx]),
+                                                   to_float8(target_color_data[reflected_target_data_idx]),
+                                                   to_float8(curr_lower_lid_scaled),
+                                                   to_float8(other_lower_lid));
             source_color_data[source_data_idx]=  faux_ ? color : to_apm_t(appearance);
             if(skip)
-              source_color_data[source_data_idx]=  faux_ ? color: curr_lower_lid;
+              source_color_data[source_data_idx]=  faux_ ? color: curr_lower_lid_scaled;
             vis_cells_.push_back(target_data_idx); //need to set the vis of this index to 1
           }
         }
@@ -706,9 +802,11 @@ void boxm2_vecf_ocl_appearance_extractor::extract_upper_lid_appearance(bool is_r
     }
   }
   if(sum_vis != 0 && extract){
+    vis_upper_lid_ += sum_vis;
+    total_upper_lid_app_ += weighted_sum;
     weighted_sum /= sum_vis;
     curr_upper_lid = to_apm_t( weighted_sum );
-}
+  }
     //  vcl_cout<<"Extracted upper lid appearance in "<<t.real()/1000<<" seconds"<<vcl_endl;
 }
 void boxm2_vecf_ocl_appearance_extractor::bump_up_vis_scores(){
@@ -716,29 +814,28 @@ void boxm2_vecf_ocl_appearance_extractor::bump_up_vis_scores(){
     // current_vis_score_[*it] = 1;
 }
 
-float8 boxm2_vecf_ocl_appearance_extractor::weight_intesities(float vis_A,float vis_B,float8 int_A,float8 int_B,float8 mean){
+float8 boxm2_vecf_ocl_appearance_extractor::weight_intesities(float& vis_A,float& vis_B,float8 int_A,float8 int_B,float8 mean_A,float8 mean_B){
   bool the_dan_way = true;
-  float dominant_vis = vis_A > vis_B ? vis_A : vis_B;
+  float dominant_vis    = vis_A > vis_B ?  vis_A :  vis_B;
+  float8& dominant_mean = vis_A > vis_B ? mean_A : mean_B;
   float8 ret_val;
   if (the_dan_way){
-  float s = 10.0f;
-  float m = 1.1;
-  float v = 0.1f;
-  float inv_weight1 = 1.0/(1.0 + std::exp( -s * (vis_B - m * vis_A)));
-  float inv_weight2 = 1.0/(1.0 + std::exp( -s * (v - vis_A)));
-  float weight = 1.0f - inv_weight1 * inv_weight2;
-  float8 observed_intensity =  int_A * weight + int_B *  (1.0f - weight);
+    float s = 10.0f;
+    float m = 1.1;
+    float v = 0.6f;
+    float inv_weight1 = 1.0/(1.0 + std::exp( -s * (vis_B - m * vis_A)));
+    float inv_weight2 = 1.0/(1.0 + std::exp( -s * (v - vis_A)));
+    float weight = 1.0f - inv_weight1 * inv_weight2;
+    float8 observed_intensity =  int_A * weight + int_B *  (1.0f - weight);
 
 
 
-  inv_weight1 = 1.0/(1.0 + std::exp( -s * (1 - m * dominant_vis)));
-  inv_weight2 = 1.0/(1.0 + std::exp( -s * (v - dominant_vis)));
-  weight = 1.0f - inv_weight1 * inv_weight2;
-
-  ret_val = observed_intensity * weight + mean * (1.0f - weight);
+    s = 16 ; v = 0.3;
+    weight = 1.0/(1.0 + std::exp( -s * ( dominant_vis -v )));
+    ret_val = observed_intensity * weight + mean_A * (1.0f - weight);
 
   }else{
-    ret_val = vis_A * int_A + (1 - vis_A) * mean;
+    ret_val = vis_A * int_A + (1 - vis_A) * mean_A;
   }
   return ret_val;
 }

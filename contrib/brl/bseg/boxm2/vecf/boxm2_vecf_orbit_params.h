@@ -223,7 +223,7 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
   double image_height_;
   // internal voxel processing parameters
   double neighbor_radius() const {return 1.7320508075688772;}
-  double gauss_sigma() const {return 0.75;}
+  double gauss_sigma() const {return 3;}
   vgl_sphere_3d<double> sph_;
   vgl_sphere_3d<double> lid_sph_;
 };

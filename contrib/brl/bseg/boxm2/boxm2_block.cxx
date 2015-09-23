@@ -294,6 +294,9 @@ bool boxm2_block::contains(vgl_point_3d<double> const& global_pt, vgl_point_3d<d
   int index_x=(int)vcl_floor(local_tree_coords.x());
   int index_y=(int)vcl_floor(local_tree_coords.y());
   int index_z=(int)vcl_floor(local_tree_coords.z());
+  if(index_x >= this->trees_.get_row1_count() || index_y >= this->trees_.get_row2_count() || index_z>= this->trees_.get_row3_count())
+    return false;
+
   vnl_vector_fixed<unsigned char,16> treebits=trees_(index_x,index_y,index_z);
   boct_bit_tree tree(treebits.data_block(),max_level_);
   int bit_index=tree.traverse(local_tree_coords);

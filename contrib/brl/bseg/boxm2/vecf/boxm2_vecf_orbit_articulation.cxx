@@ -72,6 +72,33 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
    }
  }
  play_sequence_map_["dphi_articulation"] = dphi_articulation;
+//================== crazy rotation ==============================
+ vcl_vector<boxm2_vecf_orbit_params> rotation_articulation;
+ {
+   unsigned   num_frames  = 30;
+   vgl_vector_3d<double> look_dir_cur(0,0,-1);
+   vgl_vector_3d<double> look_dir_z(0,0,1);
+
+   vgl_rotation_3d<double> rotation(look_dir_z,look_dir_cur);
+   vgl_rotation_3d<double> identity(look_dir_z,look_dir_z);
+
+   vnl_quaternion<double> qa = rotation.as_quaternion();
+   vnl_quaternion<double> qb = identity.as_quaternion();
+   double cos_half_theta = qa.r()*qb.r() + qa.x()*qb.x() + qa.y()*qb.y() + qa.z()*qb.z();
+    double half_theta = std::acos(cos_half_theta);
+    double sin_half_theta = std::sin(half_theta);
+
+   for (unsigned i = 0; i<=num_frames; ++i) {
+   boxm2_vecf_orbit_params params;
+      double t = ((double)i)/num_frames;
+      vgl_vector_3d<double> q = look_dir_cur * std::sin((1-t)*half_theta) + look_dir_z * std::sin(t*half_theta);
+      q /= sin_half_theta;
+      params.eye_pointing_dir_ = q;
+
+      rotation_articulation.push_back(params);
+    }
+ }
+ play_sequence_map_["rotation_articulation"] = rotation_articulation;
 
   //==============add more articulations here=======================
 

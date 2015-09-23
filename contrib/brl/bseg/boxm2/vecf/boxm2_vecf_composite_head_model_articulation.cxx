@@ -270,8 +270,8 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
     head_params_local_cpy.l_orbit_params_.eyelid_dt_ = 0.9;
     head_params_local_cpy.r_orbit_params_.eyelid_dt_ = 0.9;
-
     vgl_vector_3d<double> look_dir_z(0.0, 0.0, 1.0);
+
     vgl_vector_3d<double>  l_look_dir_cur = head_params_local_cpy.l_orbit_params_.eye_pointing_dir_;
     vgl_vector_3d<double>  r_look_dir_cur = head_params_local_cpy.r_orbit_params_.eye_pointing_dir_;
 

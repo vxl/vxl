@@ -65,7 +65,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
  boxm2_vecf_orbit_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0),
-                           eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false),target_blk_(0),target_data_extracted_(false),boxm2_vecf_articulated_scene(){}
+                           eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false),target_blk_(0),target_data_extracted_(false),boxm2_vecf_articulated_scene(),sigma_(0.5f){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);
@@ -219,6 +219,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   boxm2_data<BOXM2_PIXEL>* sphere_;      // is voxel a eye sphere point?
   boxm2_data<BOXM2_PIXEL>* iris_;        // is voxel an iris point
   boxm2_data<BOXM2_PIXEL>* pupil_;       // is voxel a pupil point
+  boxm2_data<BOXM2_FLOAT>* radial_distance_;       // is voxel a pupil point
 
   vcl_vector<vgl_point_3d<double> > sphere_cell_centers_; // centers of spherical shell voxels
   vcl_vector<unsigned> sphere_cell_data_index_;           // corresponding data indices
@@ -282,6 +283,7 @@ private:
   bool extrinsic_only_;
   bool intrinsic_change_;
   bool target_data_extracted_;
+  float sigma_;
 
  //: assign target cell centers that map to the source scene bounding box
   void determine_target_box_cell_centers();

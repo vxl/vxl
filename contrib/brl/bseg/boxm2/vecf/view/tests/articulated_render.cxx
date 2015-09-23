@@ -157,8 +157,10 @@ int main(int argc, char ** argv)
 
       boxm2_vecf_orbit_scene* orbit_scene = new boxm2_vecf_orbit_scene(articulated_scene_path, true,true);
       boxm2_vecf_orbit_articulation* orbit_articulation =new boxm2_vecf_orbit_articulation();
-      orbit_articulation->set_play_sequence("dphi_articulation");
+      orbit_articulation->set_play_sequence("default");
       orbit_scene->set_target_background(dark_background);
+      boxm2_scene_sptr pula = orbit_scene->scene();
+      //      boxm2_lru_cache::instance()->write_to_disk(pula);
       bit_tableau->init(device, opencl_cache, orbit_scene, orbit_articulation,target_scene, ni, nj, pcam, "");
 
     }else if (scene_t =="head"){
