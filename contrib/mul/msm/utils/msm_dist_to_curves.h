@@ -20,12 +20,11 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
   double pu = u.x()*dp.x() + u.y()*dp.y();
   if (pu<=0) return dp.sqr_length();  // pt is closest to pt0
   double Lu2=u.sqr_length();
-  double pu2=pu*pu;
-  if (pu2>=Lu2) return (pt-pt1).sqr_length(); // pt is closest to pt1
+  if (pu>=Lu2) return (pt-pt1).sqr_length(); // pt is closest to pt1
   
   // pt is closest to some point between pt0 and pt1
   // Use pythagorus  :   dp^2 = d^2 + sqr(pu/u.length)
-  return vcl_max(dp.sqr_length() - pu2/Lu2,0.0);
+  return vcl_max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
 }
 
 //: Compute the distance between pt and nearest point on given curve
