@@ -401,7 +401,7 @@ bool vgl_h_matrix_3d<T>::is_euclidean() const
   if ( t12_matrix_.get(3,0) != (T)0 ||
        t12_matrix_.get(3,1) != (T)0 ||
        t12_matrix_.get(3,2) != (T)0 ||
-       vcl_fabs(t12_matrix_.get(3,3)-T(1)) <= eps)
+       vcl_fabs(t12_matrix_.get(3,3)-T(1)) > eps)
     return false; // should not have a projective part
 
   // use an error tolerance on the orthonormality constraint
