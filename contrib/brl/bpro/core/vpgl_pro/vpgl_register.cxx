@@ -67,6 +67,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_affine_camera_process, "vpglLoadAffineCameraProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_footprint_process, "vpglGeoFootprintProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_geo_footprint_process2, "vpglGeoFootprintProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_translate_geo_camera_process, "vpglTranslateGeoCameraProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_convert_geo_camera_to_generic_process, "vpglConvertGeoCameraToGenericProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_create_perspective_camera_from_kml_process, "vpglCreatePerspCameraFromKMLProcess");

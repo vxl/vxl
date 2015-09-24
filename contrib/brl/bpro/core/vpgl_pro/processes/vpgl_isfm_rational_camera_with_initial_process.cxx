@@ -1,4 +1,4 @@
-// This is contril/brl/bpro/core/vpgl_pro/processes
+// This is contrib/brl/bpro/core/vpgl_pro/processes
 #include <bprb/bprb_func_process.h>
 //:
 // \file

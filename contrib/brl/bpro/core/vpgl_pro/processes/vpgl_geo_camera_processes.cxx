@@ -265,6 +265,88 @@ bool vpgl_geo_footprint_process(bprb_func_process& pro)
   return true;
 }
 
+//: process to return the lower left and upper right corners of a geotiff image
+bool vpgl_geo_footprint_process2_cons(bprb_func_process& pro)
+{
+  // this process takes 4 inputs:
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");  // as read from a geotiff image header or from a tfw file
+  input_types.push_back("vcl_string");               // geotiff file, to determine image size
+  input_types.push_back("vcl_string");               // the filename of the kml file to write footprints to
+  input_types.push_back("bool");                     // put the tags do initialize and end the document, if writing only one file these are needed, otherwise add manually to the file
+  // this process takes 4 outputs:
+  vcl_vector<vcl_string> output_types;
+  output_types.push_back("double");                  // lower left  longitude
+  output_types.push_back("double");                  // lower left   latitude
+  output_types.push_back("double");                  // upper right longitude
+  output_types.push_back("double");                  // upper right  latitude
+  return pro.set_input_types(input_types) && pro.set_output_types(output_types);
+}
+
+bool vpgl_geo_footprint_process2(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Inputs!!!" << vcl_endl;
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  vpgl_camera_double_sptr cam  = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  vcl_string geotiff_filename  = pro.get_input<vcl_string>(in_i++);
+  vcl_string out_footprint_kml = pro.get_input<vcl_string>(in_i++);
+  bool write_kml               = pro.get_input<bool>(in_i++);
+
+  // get the image size
+  vil_image_resource_sptr img_res = vil_load_image_resource(geotiff_filename.c_str());
+  unsigned ni = img_res->ni();
+  unsigned nj = img_res->nj();
+  
+  // get the geo camera of the input image
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  if (!geocam) {
+    vcl_cerr << pro.name() << ": input camera is not valid!\n";
+    return false;
+  }
+
+  // obtain the lower left and upper right corner
+  double ll_lon, ll_lat;
+  geocam->img_to_global(0,  nj,  ll_lon, ll_lat);
+  double ur_lon, ur_lat;
+  geocam->img_to_global(ni,  0, ur_lon, ur_lat);
+
+  // generate kml if required
+  if (write_kml) {
+    vcl_ofstream ofs(out_footprint_kml.c_str());
+    if (!ofs.good()) {
+      vcl_cerr << pro.name() << ": Error opening " << out_footprint_kml << " for writing footprint!\n";
+      return false;
+    }
+    bkml_write::open_document(ofs);
+    vgl_box_2d<double> bbox(ll_lon, ur_lon, ll_lat, ur_lat);
+    vcl_cout << "bbox: " << bbox << vcl_endl;
+    vnl_double_2 ul(bbox.max_y(), bbox.min_x());
+    vnl_double_2 ur(bbox.max_y(), bbox.max_x());
+    vnl_double_2 ll(bbox.min_y(), bbox.min_x());
+    vnl_double_2 lr(bbox.min_y(), bbox.max_x());
+    vcl_string img_name = vul_file::strip_directory(geotiff_filename);
+    vcl_string desc     = geotiff_filename + " footPrint";
+    bkml_write::write_box(ofs, img_name, desc, ul, ur, ll, lr, 0, 255, 0);
+    bkml_write::close_document(ofs);
+    ofs.close();
+  }
+
+  // output
+  vcl_cout << " lower left: [" << ll_lon << "," << ll_lat << ']' << vcl_endl;
+  vcl_cout << "upper right: [" << ur_lon << "," << ur_lat << ']' << vcl_endl;
+  // generate output
+  unsigned out_i = 0;
+  pro.set_output_val<double>(out_i++, ll_lon);
+  pro.set_output_val<double>(out_i++, ll_lat);
+  pro.set_output_val<double>(out_i++, ur_lon);
+  pro.set_output_val<double>(out_i++, ur_lat);
+
+  return true;
+}
 
 bool vpgl_geo_cam_global_to_img_process_cons(bprb_func_process& pro)
 {

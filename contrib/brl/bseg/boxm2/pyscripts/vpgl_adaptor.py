@@ -681,6 +681,26 @@ def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=
     boxm2_batch.set_input_bool(3,init_finish);
     boxm2_batch.run_process();
 
+def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename="", write_kml=False):
+    boxm2_batch.init_process("vpglGeoFootprintProcess2")
+    boxm2_batch.set_input_from_db(0, geocam)
+    boxm2_batch.set_input_string(1, geotiff_filename)
+    boxm2_batch.set_input_string(2, out_kml_filename)
+    boxm2_batch.set_input_string(3, write_kml)
+    status = boxm2_batch.run_process()
+    if status:
+      (id, type) = boxm2_batch.commit_output(0)
+      ll_lon     = boxm2_batch.get_output_double(id)
+      (id, type) = boxm2_batch.commit_output(1)
+      ll_lat     = boxm2_batch.get_output_double(id)
+      (id, type) = boxm2_batch.commit_output(2)
+      ur_lon     = boxm2_batch.get_output_double(id)
+      (id, type) = boxm2_batch.commit_output(3)
+      ur_lat     = boxm2_batch.get_output_double(id)
+      return ll_lon, ll_lat, ur_lon, ur_lat
+    else:
+      return 0.0, 0.0, 0.0, 0.0
+
 def load_geotiff_cam(tfw_filename, lvcs=0, utm_zone=0, utm_hemisphere=0):
     boxm2_batch.init_process("vpglLoadGeoCameraProcess");
     boxm2_batch.set_input_string(0, tfw_filename);

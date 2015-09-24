@@ -560,6 +560,26 @@ def get_geocam_footprint(geocam, geotiff_filename, out_kml_filename,init_finish=
     bvxm_batch.set_input_bool(3,init_finish);
     bvxm_batch.run_process();
 
+def get_geocam_footprint2(geocam, geotiff_filename, out_kml = "", write_kml = False):
+    bvxm_batch.init_process("vpglGeoFootprintProcess2")
+    bvxm_batch.set_input_from_db(0, geocam)
+    bvxm_batch.set_input_string(1, geotiff_filename)
+    bvxm_batch.set_input_string(2, out_kml)
+    bvxm_batch.set_input_bool(3, write_kml)
+    status = bvxm_batch.run_process()
+    if status:
+      (id, type) = bvxm_batch.commit_output(0)
+      ll_lon = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(1)
+      ll_lat = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(2)
+      ur_lon = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(3)
+      ur_lat = bvxm_batch.get_output_double(id)
+      return ll_lon, ll_lat, ur_lon, ur_lat
+    else:
+      return 0.0, 0.0, 0.0, 0.0
+
 def load_geotiff_cam(tfw_filename, lvcs=0, utm_zone=0, utm_hemisphere=0):
     bvxm_batch.init_process("vpglLoadGeoCameraProcess");
     bvxm_batch.set_input_string(0, tfw_filename);
@@ -883,7 +903,6 @@ def utm_coords(lon, lat):
     northing = bvxm_batch.get_output_int(id);
     return x, y, utm_zone, northing
   else:
-    return 0.0, 0.0, 0, 0;
     return 0.0, 0.0, 0, 0;
 
 # get the world point (wgs84) given the image point and rational camera
