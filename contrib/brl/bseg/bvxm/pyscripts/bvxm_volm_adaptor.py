@@ -473,3 +473,27 @@ def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
     return min_elev, max_elev
   else:
     return 0.0, 0.0
+
+# process that generate normalized height map from multiple height map tiles created by bvxm 3-d reconstruction
+# the land cover image is used to define the ground pixel and coverage region
+def generate_ndsm(land_geocam, land_img_file, geo_index_txt, h_map_folder, ground_txt, dem_folder, max_h_limit = 254.0, window_size = 30):
+  bvxm_batch.init_process("volmNdsmGenearationProcess")
+  bvxm_batch.set_input_from_db(0, land_geocam)
+  bvxm_batch.set_input_string(1, land_img_file)
+  bvxm_batch.set_input_string(2, geo_index_txt)
+  bvxm_batch.set_input_string(3, h_map_folder)
+  bvxm_batch.set_input_unsigned(4, window_size)
+  bvxm_batch.set_input_float(5, max_h_limit)
+  bvxm_batch.set_input_string(6, ground_txt)
+  bvxm_batch.set_input_string(7, dem_folder)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_ndsm = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(1)
+    out_dsm = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(2)
+    out_cam = dbvalue(id, type)
+    return out_ndsm, out_dsm, out_cam
+  else:
+    return None, None, None

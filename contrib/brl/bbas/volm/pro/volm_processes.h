@@ -43,4 +43,5 @@ DECLARE_FUNC_CONS(volm_registration_error_process);
 DECLARE_FUNC_CONS(volm_stereo_height_fix_process);
 DECLARE_FUNC_CONS(volm_find_overlapping_sat_resources_process);
 DECLARE_FUNC_CONS(volm_find_intersecting_sat_resources_process);
+DECLARE_FUNC_CONS(volm_ndsm_generation_process);
 #endif
