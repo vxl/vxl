@@ -18,6 +18,7 @@
 #include <vnl/vnl_math.h>
 #include <vxl_config.h> // For vxl_byte
 #include <vimt3d/vimt3d_add_all_loaders.h>
+#include <vimt3d/vimt3d_save.h>
 
 void print_usage()
 {
@@ -184,7 +185,7 @@ int main(int argc, char** argv)
     vgl_vector_3d<double> dw = t(0,0,1)-p0;
     
     vil3d_image_view<float> resampled_image(ni,nj,nk);
-    vil3d_resample_trilinear(image3d.image(),resampled_image,
+    vil3d_resample_trilinear_edge_extend(image3d.image(),resampled_image,
                             p0.x(),p0.y(),p0.z(), du.x(),du.y(),du.z(),
                             dv.x(),dv.y(),dv.z(), dw.x(),dw.y(),dw.z(),
                             ni,nj,nk);
@@ -200,7 +201,7 @@ int main(int argc, char** argv)
       j_axis_projection(resampled_image,image2d);
     else
       k_axis_projection(resampled_image,image2d);
-    
+
     vcl_stringstream ss;
     ss<<output_path()<<"_";
     if (i<10) ss<<"0";
