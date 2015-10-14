@@ -1,3 +1,7 @@
+##- depends on OPENCL being found...
+##- include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+##- if(OPENCL_FOUND)
+
 add_executable( boxm2_vecf_test_all
   test_driver.cxx
   test_eye.cxx
@@ -17,10 +21,6 @@ add_executable( boxm2_vecf_test_all
   test_orbicularis_oris.cxx
 )
  target_link_libraries(boxm2_vecf_test_all ${VXL_LIB_PREFIX}testlib  boxm2_vecf brdb ${VXL_LIB_PREFIX}vpgl_algo vpgl_pro vil_pro sdet ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl )
-
-##- #depends on OPENCL being found...
-##- include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-##- if(OPENCL_FOUND)
 
 add_test( NAME boxm2_vecf_test_eye COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_eye  )
 add_test( NAME boxm2_vecf_test_orbit COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_orbit  )
