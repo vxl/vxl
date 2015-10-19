@@ -55,6 +55,65 @@ def query_cell_brdf(scene, cache, point, model_type):
     boxm2_batch.run_process()
 
 
+def query_cell_data(scene,cache,point): 
+    boxm2_batch.init_process("boxm2CppQueryCellDataProcess");
+    boxm2_batch.set_input_from_db(0, scene);
+    boxm2_batch.set_input_from_db(1, cache);
+    boxm2_batch.set_input_float(2, point[0]);
+    boxm2_batch.set_input_float(3, point[1]);
+    boxm2_batch.set_input_float(4, point[2]);
+    boxm2_batch.run_process();
+
+def get_index_from_3d_point(scene,cache,point): 
+    boxm2_batch.init_process("boxm2CppGetIndexFrom3dPointProcess");
+    boxm2_batch.set_input_from_db(0, scene);
+    boxm2_batch.set_input_from_db(1, cache);
+    boxm2_batch.set_input_float(2, point[0]);
+    boxm2_batch.set_input_float(3, point[1]);
+    boxm2_batch.set_input_float(4, point[2]);
+    boxm2_batch.run_process();
+
+    (id,type) = boxm2_batch.commit_output(0);
+    blk_i=boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(1);
+    blk_j=boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(2);
+    blk_k=boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
+
+    (id,type) = boxm2_batch.commit_output(3);
+    index=boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
+
+    return ((blk_i, blk_k, blk_j), index)
+
+def query_cell(scene,cache,point,model_name,model_type): 
+    #Point should be 3 len, for a x, y, z coordinate OR
+    #4 in lenght, blk_i, blk_j, blk_k, index
+
+    if len(point)==3:
+        (blk, index) = get_index_from_3d_point(scene,cache,point)
+        point = blk+(index,)
+
+    boxm2_batch.init_process("boxm2CppQueryCellProcess");
+    boxm2_batch.set_input_from_db(0, scene)
+    boxm2_batch.set_input_from_db(1, cache)
+    boxm2_batch.set_input_int(2, point[0])
+    boxm2_batch.set_input_int(3, point[1])
+    boxm2_batch.set_input_int(4, point[2])
+    boxm2_batch.set_input_int(5, point[3])
+    boxm2_batch.set_input_string(6, model_name)
+    boxm2_batch.set_input_string(7, model_type)
+    boxm2_batch.run_process();
+
+    (id,type) = boxm2_batch.commit_output(0);
+    data=boxm2_batch.get_bbas_1d_array_float(id);
+    boxm2_batch.remove_data(id);
+
+    return data
+  
 def probe_intensities(scene, cpu_cache, str_cache, point):
     boxm2_batch.init_process("boxm2CppBatchProbeIntensitiesProcess")
     boxm2_batch.set_input_from_db(0, scene)
