@@ -314,3 +314,122 @@ float volm_combine_height_map_process2_globals::median(vcl_vector<float> values)
   int s2 = size / 2;
   return size == 0 ? 0.0 : size%2 ? values[s2] : (values[s2]+values[s2-1])*0.5;
 }
+
+
+// process to mosaics a set of images that covers the given region
+// the input images need to be geotiff with geo_camera embedded in there headers
+namespace volm_combine_height_map_process3_globals
+{
+  unsigned n_inputs_ = 6;
+  unsigned n_output_ = 2;
+}
+
+bool volm_combine_height_map_process3_cons(bprb_func_process& pro)
+{
+  using namespace volm_combine_height_map_process3_globals;
+  // this process takes 6 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vcl_string";   // input image folder
+  input_types_[1] = "double";       // lower left lon
+  input_types_[2] = "double";       // lower left lat
+  input_types_[3] = "double";       // upper right lon
+  input_types_[4] = "double";       // upper right lat
+  input_types_[5] = "float";        // initialize the output image with this value
+  // this process takes 2 outputs
+  vcl_vector<vcl_string> output_types_(n_output_);
+  output_types_[0] = "vil_image_view_base_sptr";  // output image
+  output_types_[1] = "vpgl_camera_double_sptr";   // output geo camera
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool volm_combine_height_map_process3(bprb_func_process& pro)
+{
+  using namespace volm_combine_height_map_process3_globals;
+  // sanity check
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Inputs!\n";
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  vcl_string in_img_folder = pro.get_input<vcl_string>(in_i++);
+  double            ll_lon = pro.get_input<double>(in_i++);
+  double            ll_lat = pro.get_input<double>(in_i++);
+  double            ur_lon = pro.get_input<double>(in_i++);
+  double            ur_lat = pro.get_input<double>(in_i++);
+  float         init_value = pro.get_input<float>(in_i++);
+
+  // load all images in the height map folder
+  vcl_vector<volm_img_info> h_infos;
+  volm_io_tools::load_aster_dem_imgs(in_img_folder, h_infos);
+  if (h_infos.empty()) {
+    vcl_cerr << pro.name() << ": can not find any tif image in folder: " << in_img_folder << "!\n";
+    return false;
+  }
+  vcl_cout << h_infos.size() << " images are loaded from " << in_img_folder << vcl_endl;
+
+  // initialize an image that has same GSD as height map and same coverage of land cover image
+  double scale_x = h_infos[0].cam->trans_matrix()[0][0];
+  double scale_y = h_infos[0].cam->trans_matrix()[1][1];
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = scale_x;
+  trans_matrix[1][1] = scale_y;
+  trans_matrix[0][3] = ll_lon;
+  trans_matrix[1][3] = ur_lat;
+  vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, lvcs_dummy);
+  out_cam->set_scale_format(true);
+  double o_u, o_v;
+  out_cam->global_to_img(ur_lon, ll_lat, 0, o_u, o_v);
+  unsigned o_ni = vcl_ceil(o_u);
+  unsigned o_nj = vcl_ceil(o_v);
+  vil_image_view<float>* out_img = new vil_image_view<float>(o_ni, o_nj);
+  out_img->fill(init_value);
+
+  // obtain the overlapped resource
+  vgl_box_2d<double> region_box(ll_lon, ur_lon, ll_lat, ur_lat);
+  vcl_vector<volm_img_info> overlap_infos;
+  for (unsigned i = 0; i < h_infos.size(); i++)
+  {
+    if (vgl_intersection(region_box, h_infos[i].bbox).area() > 0)
+      overlap_infos.push_back(h_infos[i]);
+  }
+  if (overlap_infos.empty()) {
+    vcl_cout << "no image overlaps with given region: " << region_box << ", return an empty image" << vcl_endl;
+    pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_img));
+    pro.set_output_val<vpgl_camera_double_sptr>(1, out_cam);
+    return true;
+  }
+  vcl_cout << overlap_infos.size() << " images overlap with given region: " << region_box << vcl_endl;
+  vcl_cout << "Start to aggregate the images..." << vcl_endl;
+  for (unsigned i = 0; i < o_ni; i++)
+  {
+    for (unsigned j = 0; j < o_nj; j++)
+    {
+      double lon, lat;
+      out_cam->img_to_global(i, j, lon, lat);
+      bool found = false;
+      for (vcl_vector<volm_img_info>::iterator vit = overlap_infos.begin(); (vit != overlap_infos.end() && !found); ++vit) {
+        vgl_box_2d<double> bbox = vit->bbox;
+        bbox.expand_about_centroid(2E-5);
+        if (!bbox.contains(lon, lat))
+          continue;
+        double lon, lat;
+        out_cam->img_to_global(i, j, lon, lat);
+        double u, v;
+        vit->cam->global_to_img(lon, lat, 0.0, u, v);
+        unsigned uu = (unsigned)vcl_floor(u+0.5);
+        unsigned vv = (unsigned)vcl_floor(v+0.5);
+        if (uu < vit->ni && vv < vit->nj) {
+          found = true;
+          vil_image_view<float> h_img(vit->img_r);
+          (*out_img)(i,j) = h_img(uu, vv);
+        }
+      }
+    }
+  }
+  // output
+  pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_img));
+  pro.set_output_val<vpgl_camera_double_sptr>(1, out_cam);
+  return true;
+}

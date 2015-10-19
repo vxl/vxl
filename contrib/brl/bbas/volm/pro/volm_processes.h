@@ -36,6 +36,7 @@ DECLARE_FUNC_CONS(volm_generate_height_map_plot_process);
 DECLARE_FUNC_CONS(volm_satellite_pair_intersection_process);
 DECLARE_FUNC_CONS(volm_combine_height_map_process);
 DECLARE_FUNC_CONS(volm_combine_height_map_process2);
+DECLARE_FUNC_CONS(volm_combine_height_map_process3);
 DECLARE_FUNC_CONS(volm_extract_building_outlines_process);
 DECLARE_FUNC_CONS(volm_map_osm_onto_image_process2);
 DECLARE_FUNC_CONS(volm_map_osm_onto_image_process3);

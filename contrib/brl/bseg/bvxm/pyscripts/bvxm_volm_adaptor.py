@@ -497,3 +497,22 @@ def generate_ndsm(land_geocam, land_img_file, geo_index_txt, h_map_folder, groun
     return out_ndsm, out_dsm, out_cam
   else:
     return None, None, None
+
+## process to mosaics a set of images that covers the given region
+def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_value = -1.0):
+  bvxm_batch.init_process("volmCombineHeightMapProcess3")
+  bvxm_batch.set_input_string(0, in_img_folder)
+  bvxm_batch.set_input_double(1, ll_lon)
+  bvxm_batch.set_input_double(2, ll_lat)
+  bvxm_batch.set_input_double(3, ur_lon)
+  bvxm_batch.set_input_double(4, ur_lat)
+  bvxm_batch.set_input_float(5, init_value)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(1)
+    out_cam = dbvalue(id, type)
+    return out_img, out_cam
+  else:
+    return None, None

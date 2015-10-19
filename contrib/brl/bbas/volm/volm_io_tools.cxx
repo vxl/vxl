@@ -367,7 +367,6 @@ void volm_io_tools::load_geotiff_image(vcl_string filename, volm_img_info& info,
 
   info.img_r = vil_load(info.img_name.c_str());
   info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
-  vcl_cout << "image ni: " << info.ni << " nj: " << info.nj << vcl_endl;
   
   vpgl_geo_camera *cam;
   vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
@@ -377,7 +376,6 @@ void volm_io_tools::load_geotiff_image(vcl_string filename, volm_img_info& info,
   } else {
     vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());  
     vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
-    vcl_cout << cam->trans_matrix() << vcl_endl;
   }
 
   info.cam = cam; 
@@ -388,12 +386,9 @@ void volm_io_tools::load_geotiff_image(vcl_string filename, volm_img_info& info,
 
   vpgl_utm utm; int utm_zone; double x,y;
   utm.transform(lat, lon, x, y, utm_zone);
-  vcl_cout << " zone of ASTER DEM img: " << info.name << ": " << utm_zone << " from lower left corner!\n";
-
   cam->img_to_global(info.ni-1, 0.0, lon, lat);
   vgl_point_2d<double> upper_right(lon, lat);
   vgl_box_2d<double> bbox(lower_left, upper_right);
-  vcl_cout << "bbox: " << bbox << vcl_endl;
   info.bbox = bbox;
 }
 

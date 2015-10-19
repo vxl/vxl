@@ -46,6 +46,7 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_satellite_pair_intersection_process, "volmSatellitePairIntersectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_combine_height_map_process, "volmCombineHeightMapProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_combine_height_map_process2, "volmCombineHeightMapProcess2");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_combine_height_map_process3, "volmCombineHeightMapProcess3");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_extract_building_outlines_process, "volmExtractBuildinOutlinesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_osm_onto_image_process2, "volmMapOSMontoImageProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_map_osm_onto_image_process3, "volmMapOSMontoImageProcess3");
