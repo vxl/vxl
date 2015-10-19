@@ -256,6 +256,11 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path);
 template <class T>
 vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr);
 
+//: Creates a rational camera from a txt file
+// \relatesalso vpgl_rational_camera
+template <class T>
+vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path);
+
 #define VPGL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_rational_camera.txx first"
 
 

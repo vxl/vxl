@@ -91,6 +91,7 @@ DECLARE_FUNC_CONS(vpgl_convert_non_nadir_geo_camera_to_generic_process);
 DECLARE_FUNC_CONS(vpgl_get_generic_camera_ray_process);
 DECLARE_FUNC_CONS(vpgl_persp_cam_from_photo_overlay_process);
 DECLARE_FUNC_CONS(vpgl_affine_f_matrix_process);
+DECLARE_FUNC_CONS(vpgl_load_rational_camera_from_txt_process);
 
 DECLARE_FUNC_CONS(vpgl_isfm_rational_camera_process);
 DECLARE_FUNC_CONS(vpgl_isfm_rational_camera_seed_process);

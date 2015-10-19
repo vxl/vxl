@@ -616,6 +616,192 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
   return cam;
 }
 
+//: Creates a rational camera from a txt file
+// \relatesalso vpgl_rational_camera
+template <class T>
+vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
+{
+  vcl_ifstream istr;
+  istr.open(cam_path.c_str());
+  if (!istr.good()) {
+    vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
+    return 0;
+  }
+ 
+  vcl_vector<T> neu_u;
+  vcl_vector<T> den_u;
+  vcl_vector<T> neu_v;
+  vcl_vector<T> den_v;
+  T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
+
+  vcl_string input;
+  char bulk[100];
+
+  while (!istr.eof()) {
+    istr >> input;
+
+    if (input=="SAMP_SCALE:") {
+      //istr >> input;
+      istr >> u_scale;
+    }
+    if (input=="SAMP_OFF:") {
+      //istr >> input;
+      istr >> u_off;
+    }
+
+    if (input=="LINE_SCALE:") {
+      //istr >> input;
+      istr >> v_scale;
+    }
+    if (input=="LINE_OFF:") {
+      //istr >> input;
+      istr >> v_off;
+    }
+
+    if (input=="LONG_SCALE:") {
+      //istr >> input;
+      istr >> x_scale;
+    }
+    if (input=="LONG_OFF:") {
+      //istr >> input;
+      istr >> x_off;
+    }
+
+    if (input=="LAT_SCALE:") {
+      //istr >> input;
+      istr >> y_scale;
+    }
+    if (input=="LAT_OFF:") {
+      //istr >> input;
+      istr >> y_off;
+    }
+
+    if (input=="HEIGHT_SCALE:") {
+      //istr >> input;
+      istr >> z_scale;
+    }
+    if (input=="HEIGHT_OFF:") {
+      //istr >> input;
+      istr >> z_off;
+    }
+
+    T temp_dbl;
+    if (input=="LINE_NUM_COEFF_1:") {
+      //istr >> input;
+      //istr >> input;
+      istr >> temp_dbl;
+      neu_v.push_back(temp_dbl);  
+      for (int i=1; i<20; i++) {
+        istr >> input;
+        istr >> temp_dbl;
+        neu_v.push_back(temp_dbl);
+        istr.getline(bulk,200);
+      }
+    }
+
+    if (input=="LINE_DEN_COEFF_1:") {
+      //istr >> input;
+      //istr >> input;
+      istr >> temp_dbl;
+      den_v.push_back(temp_dbl);  
+      for (int i=1; i<20; i++) {
+        istr >> input;
+        istr >> temp_dbl;
+        den_v.push_back(temp_dbl);
+        istr.getline(bulk,200);
+      }
+    }
+
+    if (input=="SAMP_NUM_COEFF_1:") {
+      //istr >> input;
+      //istr >> input;
+      istr >> temp_dbl;
+      neu_u.push_back(temp_dbl);  
+      for (int i=1; i<20; i++) {
+        istr >> input;
+        istr >> temp_dbl;
+        neu_u.push_back(temp_dbl);
+        istr.getline(bulk,200);
+      }
+    }
+
+    if (input=="SAMP_DEN_COEFF_1:") {
+      //istr >> input;
+      //istr >> input;
+      istr >> temp_dbl;
+      den_u.push_back(temp_dbl);  
+      for (int i=1; i<20; i++) {
+        istr >> input;
+        istr >> temp_dbl;
+        den_u.push_back(temp_dbl);
+        istr.getline(bulk,200);
+      }
+      break;
+    }
+  }
+  
+  int map[20];
+  map[0]=19;
+  map[1]=9;
+  map[2]=15;
+  map[3]=18;
+  map[4]=6;
+  map[5]=8;
+  map[6]=14;
+  map[7]=3;
+  map[8]=12;
+  map[9]=17;
+  map[10]=5;
+  map[11]=0;
+  map[12]=4;
+  map[13]=7;
+  map[14]=1;
+  map[15]=10;
+  map[16]=13;
+  map[17]=2;
+  map[18]=11;
+  map[19]=16;
+
+  if ((neu_u.size() != 20) || (den_u.size() != 20)) {
+    vcl_cerr << "the input is not a valid rational camera\n";
+    return 0;
+  }
+
+  T temp_vector[20];
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = neu_u[j];
+  }
+  for (int j=0; j<20; j++) {
+    neu_u[map[j]] = temp_vector[j];
+  }
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = den_u[j];
+  }
+  for (int j=0; j<20; j++) {
+    den_u[map[j]] = temp_vector[j];
+  }
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = neu_v[j];
+  }
+  for (int j=0; j<20; j++) {
+    neu_v[map[j]] = temp_vector[j];
+  }
+  for (int j=0; j<20; j++) {
+    temp_vector[j] = den_v[j];
+  }
+  for (int j=0; j<20; j++) {
+    den_v[map[j]] = temp_vector[j];
+  }
+
+  vpgl_rational_camera<T>* cam = new vpgl_rational_camera<T>(neu_u, den_u, neu_v, den_v,
+                                                             x_scale, x_off, y_scale, y_off, z_scale, z_off,
+                                                             u_scale, u_off, v_scale, v_off);
+
+  istr.close();
+  return cam;
+}
+
+
 //: Read from stream
 template <class T>
 vcl_istream&  operator >>(vcl_istream& s, vpgl_rational_camera<T >& c )
@@ -634,6 +820,7 @@ template vcl_ostream& operator<<(vcl_ostream&, const vpgl_rational_camera<T >&);
 template vcl_istream& operator>>(vcl_istream&, vpgl_rational_camera<T >&); \
 template vpgl_rational_camera<T > * read_rational_camera(vcl_string); \
 template vpgl_rational_camera<T > * read_rational_camera(vcl_istream&); \
+template vpgl_rational_camera<T > * read_rational_camera_from_txt(vcl_string); \
 typedef vpgl_scale_offset<T > soff; \
 VCL_VECTOR_INSTANTIATE(soff)
 

@@ -124,6 +124,15 @@ def cart2sphere(cartPt, sCenter):
   el = math.acos(cartPt[2]/rad);
   return (math.degrees(az), math.degrees(el), rad);
 
+## to load the camera from a specially formatted txt file
+def load_rational_camera_from_txt(file_path) :
+  bvxm_batch.init_process("vpglLoadRationalCameraFromTXTProcess");
+  bvxm_batch.set_input_string(0, file_path);
+  bvxm_batch.run_process();
+  (id,type) = bvxm_batch.commit_output(0);
+  cam = dbvalue(id,type);
+  return cam;
+
 def load_rational_camera(file_path) :
   bvxm_batch.init_process("vpglLoadRationalCameraProcess");
   bvxm_batch.set_input_string(0, file_path);
