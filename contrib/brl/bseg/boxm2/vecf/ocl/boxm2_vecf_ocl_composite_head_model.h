@@ -5,10 +5,17 @@
 
 #include <boxm2/boxm2_scene.h>
 #include "../boxm2_vecf_orbit_scene.h"
+#include "boxm2_vecf_ocl_orbit_scene.h"
 #include "boxm2_vecf_ocl_head_model.h"
 #include "../boxm2_vecf_articulated_params.h"
 #include "../boxm2_vecf_composite_head_parameters.h"
 #include "../boxm2_vecf_articulated_scene.h"
+#define USE_ORBIT_CL
+#ifdef USE_ORBIT_CL
+#define ORBIT boxm2_vecf_ocl_orbit_scene
+#else
+#define ORBIT boxm2_vecf_orbit_scene
+#endif
 
 class boxm2_vecf_ocl_composite_head_model : public boxm2_vecf_ocl_head_model{
 friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor needs to signal a change to the original model when its apm is updated
@@ -25,11 +32,12 @@ public:
   //cache the estimated look dir from imagery
   void set_estimated_look_dir(vgl_vector_3d<double>& l_dir, vgl_vector_3d<double>& r_dir)
    {left_orbit_.estimated_look_dir_ =l_dir; right_orbit_.estimated_look_dir_ = r_dir; }
+  bool optimize_;
 private:
   boxm2_vecf_composite_head_parameters params_;
 
-  boxm2_vecf_orbit_scene right_orbit_;
-  boxm2_vecf_orbit_scene left_orbit_;
+  ORBIT right_orbit_;
+  ORBIT left_orbit_;
   vcl_string scene_path;
 };
 

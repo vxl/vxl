@@ -409,3 +409,44 @@ ushort traverse_three_lvl(__local uchar* tree,
   (*cell_minz) = floor(pointz) * (*cell_len);
   return bit_index;
 }
+int data_index_world_point(__global RenderSceneInfo * linfo,__global int4 * tree_array,
+                                                     __local uchar16* local_tree_array,
+                                                       unsigned lid,float4 world_point,
+                          float4 * cell_center,unsigned* data_index, unsigned* bit_index,
+                                                           __constant uchar* bit_lookup){
+
+  float4 origin = linfo->origin;
+  float4 blk_dims = convert_float4(linfo->dims) ;
+  float4 maxpoint = origin + convert_float4(linfo->dims) * linfo->block_len ;
+
+  if(world_point.x > origin.x && world_point.x < maxpoint.x &&
+     world_point.y > origin.y && world_point.y < maxpoint.y &&
+     world_point.z > origin.z && world_point.z < maxpoint.z ){
+
+    int s_sub_blk_x = (int) floor((world_point.x - origin.x)/(linfo->block_len)) ;
+    int s_sub_blk_y = (int) floor((world_point.y - origin.y)/(linfo->block_len)) ;
+    int s_sub_blk_z = (int) floor((world_point.z - origin.z)/(linfo->block_len)) ;
+
+    // convert to linear tree index
+    int s_tree_index = s_sub_blk_x * ( blk_dims.y)*
+      ( blk_dims.z) +s_sub_blk_y * (blk_dims.z)+s_sub_blk_z;
+
+    local_tree_array[lid] = as_uchar16(tree_array[s_tree_index]);
+    __local uchar * curr_tree_ptr = &local_tree_array[lid];
+
+    float source_lx = clamp((world_point.x - origin.x)/linfo->block_len - s_sub_blk_x,0.0f,1.0f);
+    float source_ly = clamp((world_point.y - origin.y)/linfo->block_len - s_sub_blk_y,0.0f,1.0f);
+    float source_lz = clamp((world_point.z - origin.z)/linfo->block_len - s_sub_blk_z,0.0f,1.0f);
+
+    float cell_minx,cell_miny,cell_minz,cell_len;
+    *bit_index = traverse_three(curr_tree_ptr,source_lx,source_ly,source_lz,
+                                &cell_minx,&cell_miny,&cell_minz,&cell_len);
+    *cell_center = ((float4) (cell_minx,cell_miny,cell_minz,0) + cell_len/2 + (float4)(s_sub_blk_x,s_sub_blk_y,s_sub_blk_z,0)) * linfo->block_len + origin;
+    *data_index = data_index_root(curr_tree_ptr)+data_index_relative(curr_tree_ptr,*bit_index,bit_lookup);
+    if( *data_index < linfo->data_len )
+      return 1;
+    else
+      return 0;
+  }
+  return 0;
+}

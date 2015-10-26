@@ -23,6 +23,7 @@ SET(boxm2_vecf_ocl_sources
     boxm2_vecf_ocl_composite_head_model.h       boxm2_vecf_ocl_composite_head_model.cxx
     boxm2_vecf_ocl_head_model.h                 boxm2_vecf_ocl_head_model.cxx
     boxm2_vecf_ocl_appearance_extractor.h       boxm2_vecf_ocl_appearance_extractor.cxx
+    boxm2_vecf_ocl_orbit_vector_field.h         boxm2_vecf_ocl_orbit_vector_field.cxx
 
    )
 

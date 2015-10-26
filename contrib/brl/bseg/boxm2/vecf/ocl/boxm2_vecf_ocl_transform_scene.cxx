@@ -715,7 +715,6 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
    vcl_size_t data_size_target = static_cast<vcl_size_t>(info_buffer_->data_buffer_length);
 
-
    bocl_mem_sptr blk_info_source_l  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info Source" );
    blk_info_source_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
    blk_info_source_l->write_to_buffer(queue_);

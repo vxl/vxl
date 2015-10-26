@@ -265,8 +265,6 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     vcl_vector<boxm2_vecf_composite_head_parameters > look_dir_articulation;
     vcl_vector<vgl_vector_3d<double> > emv;
     boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
-    boxm2_vecf_orbit_params& l_params = head_params_local_cpy.l_orbit_params_;
-    boxm2_vecf_orbit_params& r_params = head_params_local_cpy.r_orbit_params_;
 
     head_params_local_cpy.l_orbit_params_.eyelid_dt_ = 0.9;
     head_params_local_cpy.r_orbit_params_.eyelid_dt_ = 0.9;
@@ -294,14 +292,17 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
     for (unsigned i = 0; i<=num_frames; ++i) {
       double t = ((double)i)/num_frames;
-      vgl_vector_3d<double> l_q = l_look_dir_cur * std::sin((1-t)*l_half_theta) + look_dir_z * std::sin(t*l_half_theta);
-      l_q /= l_sin_half_theta;
+      vnl_quaternion<double> l_qu = l_qa * std::sin((1-t)*l_half_theta) + qb * std::sin(t*l_half_theta);
+      l_qu /= l_sin_half_theta;
 
-      vgl_vector_3d<double> r_q = r_look_dir_cur * std::sin((1-t)*r_half_theta) + look_dir_z * std::sin(t*r_half_theta);
-      r_q /= r_sin_half_theta;
+      vnl_quaternion<double> r_qu = r_qa * std::sin((1-t)*r_half_theta) + qb * std::sin(t*r_half_theta);
+      r_qu /= r_sin_half_theta;
 
-      l_params.eye_pointing_dir_ = l_q;
-      r_params.eye_pointing_dir_ = r_q;
+      vnl_matrix_fixed<double,3,3> interped_rot_r = vgl_rotation_3d<double>(r_qu).as_matrix();
+      vnl_matrix_fixed<double,3,3> interped_rot_l = vgl_rotation_3d<double>(l_qu).as_matrix();
+      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = vgl_vector_3d<double>(interped_rot_l.get(0,2),interped_rot_l.get(1,2),interped_rot_l.get(2,2));
+      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = vgl_vector_3d<double>(interped_rot_r.get(0,2),interped_rot_r.get(1,2),interped_rot_r.get(2,2));
+
       look_dir_articulation.push_back(head_params_local_cpy);
     }
 
@@ -327,6 +328,71 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     }
 
     play_sequence_map_["look_dir"] = look_dir_articulation;
+  }
+//============================== close while looking down ====================
+{
+    vcl_vector<boxm2_vecf_composite_head_parameters > eyelid_dt_close_look_dir_articulation;
+    //slowly close
+    boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
+
+    vgl_vector_3d<double> look_dir_down(0.0, -sin(15 * vnl_math::pi/180), cos(15 * vnl_math::pi/180));
+
+    vgl_vector_3d<double> Z(0.0,0.0,1);
+
+    vgl_vector_3d<double>  l_look_dir_cur = head_params_local_cpy.l_orbit_params_.eye_pointing_dir_;
+    vgl_vector_3d<double>  r_look_dir_cur = head_params_local_cpy.r_orbit_params_.eye_pointing_dir_;
+
+    vgl_rotation_3d<double> l_rotation(Z,l_look_dir_cur);
+    vgl_rotation_3d<double> r_rotation(Z,r_look_dir_cur);
+
+    vgl_rotation_3d<double> down(Z,look_dir_down);
+
+    vnl_quaternion<double> l_qa = l_rotation.as_quaternion();
+    vnl_quaternion<double> r_qa = r_rotation.as_quaternion();
+    vnl_quaternion<double> qb   = down.as_quaternion();
+
+
+    double l_cos_half_theta = l_qa.r()*qb.r() + l_qa.x()*qb.x() + l_qa.y()*qb.y() + l_qa.z()*qb.z();
+    double l_half_theta     = std::acos(l_cos_half_theta);
+    double l_sin_half_theta = std::sin(l_half_theta);
+
+    double r_cos_half_theta = r_qa.r()*qb.r() + r_qa.x()*qb.x() + r_qa.y()*qb.y() + r_qa.z()*qb.z();
+    double r_half_theta     = std::acos(r_cos_half_theta);
+    double r_sin_half_theta = std::sin(r_half_theta);
+
+    for(int i=0; i<1;i++){
+      double ddt = 0.9; unsigned  count = 0;
+      unsigned    num_frames = 10; double dt_incr =1.0/(30);
+      boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
+      for(double dt = ddt ; dt>=0 ; dt -= dt_incr){
+        double t = ((double)count)/num_frames;
+
+        count = count < num_frames ? count + 1 : count;
+        vnl_quaternion<double> l_qu = l_qa * std::sin((1-t)*l_half_theta) + qb * std::sin(t*l_half_theta);
+        l_qu /= l_sin_half_theta;
+
+        vnl_quaternion<double> r_qu = r_qa * std::sin((1-t)*r_half_theta) + qb * std::sin(t*r_half_theta);
+        r_qu /= r_sin_half_theta;
+
+        vnl_matrix_fixed<double,3,3> interped_rot_r = vgl_rotation_3d<double>(r_qu).as_matrix();
+        vnl_matrix_fixed<double,3,3> interped_rot_l = vgl_rotation_3d<double>(l_qu).as_matrix();
+        head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = vgl_vector_3d<double>(interped_rot_l.get(0,2),interped_rot_l.get(1,2),interped_rot_l.get(2,2));
+        head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = vgl_vector_3d<double>(interped_rot_r.get(0,2),interped_rot_r.get(1,2),interped_rot_r.get(2,2));
+        head_params_local_cpy.l_orbit_params_. eyelid_dt_ = dt;
+        head_params_local_cpy.r_orbit_params_ .eyelid_dt_ = dt;
+        eyelid_dt_close_look_dir_articulation.push_back(head_params_local_cpy);
+
+      }
+    }
+    //    pause
+    for (int i=0;i<30;i++){
+      boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
+      head_params_local_cpy.l_orbit_params_. eyelid_dt_ = 0.0;
+      head_params_local_cpy.r_orbit_params_ .eyelid_dt_ = 0.0;
+      eyelid_dt_close_look_dir_articulation.push_back(head_params_local_cpy);
+    }
+
+    play_sequence_map_["eyelid_close_and_look_dir"] = eyelid_dt_close_look_dir_articulation;
   }
 
 }

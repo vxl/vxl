@@ -214,6 +214,7 @@ void boxm2_vecf_orbit_scene::cache_cell_centers_from_anatomy_labels(){
   }
   vcl_cout << "Reset indices " << static_cast<double>(t.real())/1000.0 << " sec.\n";
 }
+// main constructor
 boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance,bool is_right):
   boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0)
 {
@@ -225,6 +226,7 @@ boxm2_vecf_orbit_scene::boxm2_vecf_orbit_scene(vcl_string const& scene_file, boo
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
+  this->has_background_ = false;
   if(has_background_){
     this->fill_block();
   }
@@ -1228,13 +1230,16 @@ bool boxm2_vecf_orbit_scene::vfield_params_change_check(const boxm2_vecf_orbit_p
   intrinsic_change |= fabs((float)this->params_.eyelid_crease_upper_intensity_ - (float)params.eyelid_crease_upper_intensity_) > tol;
   return intrinsic_change;
 }
-void boxm2_vecf_orbit_scene::reset_buffers(){
+void boxm2_vecf_orbit_scene::reset_buffers(bool color_only){
   vcl_vector<boxm2_block_id> blocks = base_model_->get_block_ids();
   boxm2_block_metadata mdata = base_model_->get_block_metadata_const(blocks[0]);
 
 
   app_data_      ->set_default_value(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), mdata);
   color_app_data_->set_default_value(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(), mdata);
+
+  if (color_only)
+    return;
   alpha_data_    ->set_default_value(boxm2_data_traits<BOXM2_ALPHA>::prefix(), mdata);
   sphere_        ->set_default_value(boxm2_data_traits<BOXM2_PIXEL>::prefix(), mdata);
   iris_          ->set_default_value(boxm2_data_traits<BOXM2_PIXEL>::prefix(), mdata);

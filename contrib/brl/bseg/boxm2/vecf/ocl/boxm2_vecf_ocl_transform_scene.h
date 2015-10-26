@@ -22,6 +22,10 @@
 // are mapped backwards to extract the data from the source
 // thus each target voxel is defined if the inverse transform lands on a
 // valid source voxel.
+
+class boxm2_vecf_ocl_transform_scene;
+typedef vbl_smart_ptr<boxm2_vecf_ocl_transform_scene> boxm2_vecf_ocl_transform_scene_sptr;
+
 class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
 {
  public:
@@ -80,6 +84,9 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
   boxm2_scene_sptr target_scene(){return target_scene_;}
   boxm2_scene_sptr source_scene(){return source_scene_;}
   boxm2_opencl_cache_sptr opencl_cache(){return opencl_cache_;}
+  bool get_scene_appearance(boxm2_scene_sptr scene,
+                            vcl_string&      options);
+
 private:
   bool init_target_scene_buffers(boxm2_scene_sptr target_scene);
 
@@ -91,8 +98,6 @@ private:
   bool compile_trans_interp_vecf_trilin_kernel();
   bool compile_compute_cell_centers_kernel();
   bool init_ocl_trans();
-  bool get_scene_appearance(boxm2_scene_sptr scene,
-                            vcl_string&      options);
 
   boxm2_opencl_cache_sptr  opencl_cache_;
   boxm2_scene_sptr target_scene_;

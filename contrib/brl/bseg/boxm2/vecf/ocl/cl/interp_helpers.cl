@@ -15,6 +15,9 @@ float interp_generic_float(float4* neighbors, float* probs, float4 p ){
   return dxyz;
 
 }
+
+//weights is a 6-vector
+
 uchar16 interp_mog_view_dep(float4* neighbors, uchar16* params,float4 p){
 
   float8 means[8],vars[8];
@@ -64,7 +67,7 @@ int16 interp_mog_view_dep_color(float4* neighbors, int16* params_compact,float4 
 
 }
 
-float4 interp_flow(float4* neighbors, float4* flow,float4 p){
+float4 interp_float4(float4* neighbors, float4* flow,float4 p){
   float4 dx00 = LERP(flow[0],flow[2],  p.x,neighbors[0].x,neighbors[2].x); // interp   between (x0,y0,z0) and (x1,y0,z0)
   float4 dx10 = LERP(flow[1],flow[3],  p.x,neighbors[1].x,neighbors[3].x); // interp   between (x0,y1,z0) and (x1,y1,z0)
   float4 dx01 = LERP(flow[4],flow[6],  p.x,neighbors[4].x,neighbors[6].x); // interp   between (x0,y0,z1) and (x0,y0,z1)
@@ -76,5 +79,76 @@ float4 interp_flow(float4* neighbors, float4* flow,float4 p){
   float4 dxyz = LERP( dxy0, dxy1,p.z,neighbors[0].z,neighbors[4].z);
 
   return dxyz;
+
+}
+
+inline float4 interp_float4_weights(float4* vals, float* weights ){
+  float4 ret_val = (float4)(0,0,0,0);
+  for (unsigned i=0;i<8;i++)
+    ret_val += vals[i] * weights[i];
+
+  return ret_val;
+}
+inline float interp_float_weights(float* vals, float* weights ){
+  float ret_val = 0;
+  for (unsigned i=0;i<8;i++)
+    ret_val += vals[i] * weights[i];
+    return ret_val;
+}
+
+int collect_neighbors_and_weights(float4* abs_neighbors,float* weights, float4 source_p,float4 cell_center,float side_len ){
+
+                float4 dP = source_p - cell_center;
+                float cell_len_rw  = side_len;
+                float a,b,c,d,e,f;
+                if(dP.x >= 0){ //source point is to the right of the cell center along x
+                  abs_neighbors[0].x = abs_neighbors[1].x =abs_neighbors[4].x = abs_neighbors[5].x = cell_center.x; // x-left neighbor is the cell center
+                  abs_neighbors[2].x = abs_neighbors[3].x =abs_neighbors[6].x = abs_neighbors[7].x = cell_center.x +cell_len_rw; // x-right neighbor  is the cell to the right of cell center
+                 a = (cell_len_rw - dP.x)/cell_len_rw;
+                 b = dP.x/cell_len_rw;
+                }else{ //source point is to the left of the cell center along x
+                  abs_neighbors[0].x = abs_neighbors[1].x =abs_neighbors[4].x = abs_neighbors[5].x = cell_center.x - cell_len_rw; // x-left neighbor is the cell to the left of cell center
+                  abs_neighbors[2].x = abs_neighbors[3].x =abs_neighbors[6].x = abs_neighbors[7].x = cell_center.x ; // x-right neighbor is the cell center
+                 a = - dP.x/cell_len_rw;
+                 b = (cell_len_rw + dP.x)/cell_len_rw;
+                }
+                if(dP.y >= 0){ //source point is to the right of the cell center along y
+                  abs_neighbors[0].y = abs_neighbors[2].y =abs_neighbors[4].y = abs_neighbors[6].y = cell_center.y; // y-left neighbor is the cell center
+                  abs_neighbors[1].y = abs_neighbors[3].y =abs_neighbors[5].y = abs_neighbors[7].y = cell_center.y +cell_len_rw; // y-right neighbor  is the cell to the right of cell center
+                 c = (cell_len_rw - dP.y)/cell_len_rw;
+                 d = dP.y/cell_len_rw;
+                }else{ //source point is to the left of the cell center along y
+                  abs_neighbors[0].y = abs_neighbors[2].y =abs_neighbors[4].y = abs_neighbors[6].y = cell_center.y -cell_len_rw; // y-left neighbor is the cell to the left of cell center
+                  abs_neighbors[1].y = abs_neighbors[3].y =abs_neighbors[5].y = abs_neighbors[7].y = cell_center.y; // y-right neighbor the cell center
+                  c = - dP.y/cell_len_rw;
+                  d = (cell_len_rw + dP.y)/cell_len_rw;
+                }
+                if(dP.z >= 0){ //source point is above the cell center along z
+                  abs_neighbors[0].z = abs_neighbors[1].z =abs_neighbors[2].z = abs_neighbors[3].z = cell_center.z; // z-bottom neighbor is the cell center
+                  abs_neighbors[4].z = abs_neighbors[5].z =abs_neighbors[6].z = abs_neighbors[7].z = cell_center.z +cell_len_rw; // z-top neighbor  is the cell on top of cell center
+                 e = (cell_len_rw - dP.z)/cell_len_rw;
+                 f = dP.z/cell_len_rw;
+
+                }else{ //source point is below the cell center along z
+                  abs_neighbors[0].z = abs_neighbors[1].z =abs_neighbors[2].z = abs_neighbors[3].z = cell_center.z -cell_len_rw; // z-bottom neighbor is the cell below cell center
+                  abs_neighbors[4].z = abs_neighbors[5].z =abs_neighbors[6].z = abs_neighbors[7].z = cell_center.z ; // z-top neighbor  is the  cell center
+                  e = - dP.z/cell_len_rw;
+                  f = (cell_len_rw + dP.z)/cell_len_rw;
+                }
+                weights[0] = a * c * e;  weights[4] = a * c * f;
+                weights[1] = a * d * e;  weights[5] = a * d * f;
+                weights[2] = b * c * e;  weights[6] = b * c * f;
+                weights[3] = b * d * e;  weights[7] = b * d * f;
+                if (abs_neighbors[0].x == abs_neighbors[2].x || abs_neighbors[0].y == abs_neighbors[1].y || abs_neighbors[0].z == abs_neighbors[4].z )
+                  return 0;
+                return 1;
+
+}
+float4 rotate_point(float4 point,__global float* rotation){
+  float r_x = (rotation[0]*point.x +rotation[1]*point.y + rotation[2]*point.z);
+  float r_y = (rotation[3]*point.x +rotation[4]*point.y + rotation[5]*point.z);
+  float r_z = (rotation[6]*point.x +rotation[7]*point.y + rotation[8]*point.z);
+  float4 retval= (float4)(r_x,r_y,r_z,0);
+  return retval;
 
 }

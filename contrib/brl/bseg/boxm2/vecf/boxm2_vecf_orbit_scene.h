@@ -195,7 +195,7 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   //: scan dense set of points on the spherical shell to define surface voxels
   void build_eyelid_crease();
   //reset appearance and alpha_buffers
-  void reset_buffers();
+  void reset_buffers(bool color_only = false);
   //: assign appearance to eyelid voxels
   void paint_eyelid_crease();
   //: members

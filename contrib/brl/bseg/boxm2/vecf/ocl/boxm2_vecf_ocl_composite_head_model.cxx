@@ -5,8 +5,15 @@ boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( vcl_st
   : boxm2_vecf_ocl_head_model(head_model_path,device,opencl_cache),
   params_()
 {
+#ifdef USE_ORBIT_CL
+  right_orbit_= boxm2_vecf_ocl_orbit_scene(eye_model_path,device,opencl_cache,false,true);
+  left_orbit_= boxm2_vecf_ocl_orbit_scene(eye_model_path,device,opencl_cache,false);
+  optimize_= true;
+#else
     right_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false,true);
     left_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false);
+    optimize_ = false;
+#endif
 }
 
 bool boxm2_vecf_ocl_composite_head_model::set_params(boxm2_vecf_articulated_params const& params)
@@ -54,6 +61,7 @@ void boxm2_vecf_ocl_composite_head_model::map_to_target(boxm2_scene_sptr target)
   //  vcl_cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << vcl_endl;
   // clear target
   bool need_to_clear_cache  = false;
+
   if (boxm2_vecf_ocl_head_model::intrinsic_change_){
     this->clear_target(target);
   // head model
@@ -63,7 +71,9 @@ void boxm2_vecf_ocl_composite_head_model::map_to_target(boxm2_scene_sptr target)
   //orbit model
   right_orbit_.map_to_target(target);
   left_orbit_.map_to_target (target);
+#ifndef USE_ORBIT_CL
   this->update_gpu_target   (target);
+#endif
 }
 void boxm2_vecf_ocl_composite_head_model::update_gpu_target(boxm2_scene_sptr target_scene)
 {

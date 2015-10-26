@@ -21,8 +21,8 @@ class boxm2_gauss_rgb_processor;
 class boxm2_mog6_view_processor;
 class boxm2_mog6_view_compact_processor;
 
-/** 
- * dec: Use the "X macro" pattern to define a table of enum values, string ids, and 
+/**
+ * dec: Use the "X macro" pattern to define a table of enum values, string ids, and
  * associated datatypes, and then use the table to actually create the enum and
  * specializations of the traits classes for each row of the table.  It is ugly, but not
  * as ugly as the many hundreds of lines of copy/pasted code duplication that it replaced.
@@ -71,7 +71,8 @@ class boxm2_mog6_view_compact_processor;
   X(BOXM2_DATA_INDEX, "boxm2_data_index", unsigned int) \
   X(BOXM2_RAY_DIR, "boxm2_ray_dir", (vnl_vector_fixed<float, 4>)) \
   X(BOXM2_CHAR8, "char8", (vnl_vector_fixed<unsigned char, 8>)) \
-  X(BOXM2_VEC3D, "boxm2_vec3d", (vnl_vector_fixed<float, 4>))
+  X(BOXM2_VEC3D, "boxm2_vec3d", (vnl_vector_fixed<float, 4>)) \
+  X(BOXM2_VECF_EYELID, "boxm2_vecf_eyelid", (vnl_vector_fixed<float, 16>))
 
 // The following two lines are a workaround that allows passing in of types that include
 // commas as macro arguments, as long as you enclose them in parentheses, e.g. (vcl_map<int,int>)
@@ -106,13 +107,13 @@ BOXM2_DATATYPE_TABLE
 
 // A Collection of functions mapping datatypes to properties.
 // There are handy if you don't know the enum val at compile time.
-class boxm2_data_info 
+class boxm2_data_info
 {
 public:
 
 // map string prefix to enum val
 // note that some prefixes are substrings of others.
-// this could be made more efficient by requiring that the table is sorted 
+// this could be made more efficient by requiring that the table is sorted
 // such that types that are substrings are listed last, but that is probably asking for trouble.
 static boxm2_data_type data_type(vcl_string const& prefix) {
   boxm2_data_type retval = BOXM2_UNKNOWN;

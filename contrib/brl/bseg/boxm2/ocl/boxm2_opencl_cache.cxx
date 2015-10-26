@@ -65,7 +65,7 @@ bool boxm2_opencl_cache::clear_cache()
       {
           bocl_mem* toDelete = blks->second;
           bytesInCache_ -= toDelete->num_bytes();
-#ifdef DEBUG
+#ifdef _DEBUG
           vcl_cout<<"Deleting block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
 #endif
           delete toDelete;

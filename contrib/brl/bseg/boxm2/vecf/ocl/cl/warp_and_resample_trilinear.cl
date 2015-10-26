@@ -145,55 +145,24 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
 #ifdef DO_INTERP
                 float alphas[8];
                 float params[8];
+                float weights[12];
                 float4 abs_neighbors[8];
                 float4 rgb_params[8];
-                float4 dP = source_p - cell_center;
                 float cell_len_rw  = cell_len * source_scene_linfo->block_len;
-                if(dP.x >= 0){ //source point is to the right of the cell center along x
-                  abs_neighbors[0].x = abs_neighbors[1].x =abs_neighbors[4].x = abs_neighbors[5].x = cell_center.x; // x-left neighbor is the cell center
-                  abs_neighbors[2].x = abs_neighbors[3].x =abs_neighbors[6].x = abs_neighbors[7].x = cell_center.x +cell_len_rw; // x-right neighbor  is the cell to the right of cell center
-                }else{ //source point is to the left of the cell center along x
-                  abs_neighbors[0].x = abs_neighbors[1].x =abs_neighbors[4].x = abs_neighbors[5].x = cell_center.x - cell_len_rw; // x-left neighbor is the cell to the left of cell center
-                  abs_neighbors[2].x = abs_neighbors[3].x =abs_neighbors[6].x = abs_neighbors[7].x = cell_center.x ; // x-right neighbor is the cell center
-                }
-                if(dP.y >= 0){ //source point is to the right of the cell center along y
-                  abs_neighbors[0].y = abs_neighbors[2].y =abs_neighbors[4].y = abs_neighbors[6].y = cell_center.y; // y-left neighbor is the cell center
-                  abs_neighbors[1].y = abs_neighbors[3].y =abs_neighbors[5].y = abs_neighbors[7].y = cell_center.y +cell_len_rw; // y-right neighbor  is the cell to the right of cell center
-                }else{ //source point is to the left of the cell center along y
-                  abs_neighbors[0].y = abs_neighbors[2].y =abs_neighbors[4].y = abs_neighbors[6].y = cell_center.y -cell_len_rw; // y-left neighbor is the cell to the left of cell center
-                  abs_neighbors[1].y = abs_neighbors[3].y =abs_neighbors[5].y = abs_neighbors[7].y = cell_center.y; // y-right neighbor the cell center
-                }
-                if(dP.z >= 0){ //source point is above the cell center along z
-                  abs_neighbors[0].z = abs_neighbors[1].z =abs_neighbors[2].z = abs_neighbors[3].z = cell_center.z; // z-bottom neighbor is the cell center
-                  abs_neighbors[4].z = abs_neighbors[5].z =abs_neighbors[6].z = abs_neighbors[7].z = cell_center.z +cell_len_rw; // z-top neighbor  is the cell on top of cell center
-                }else{ //source point is below the cell center along z
-                  abs_neighbors[0].z = abs_neighbors[1].z =abs_neighbors[2].z = abs_neighbors[3].z = cell_center.z -cell_len_rw; // z-bottom neighbor is the cell below cell center
-                  abs_neighbors[4].z = abs_neighbors[5].z =abs_neighbors[6].z = abs_neighbors[7].z = cell_center.z ; // z-top neighbor  is the  cell center
-                }
-
-                if (abs_neighbors[0].x == abs_neighbors[2].x || abs_neighbors[0].y == abs_neighbors[1].y || abs_neighbors[0].z == abs_neighbors[4].z )
+                int nbs_ok = collect_neighbors_and_weights(abs_neighbors,weights,source_p,cell_center, cell_len_rw);
+                if(!nbs_ok)
                   continue;
                 int nb_count = 0; float sum = 0;
                 for (unsigned i=0; i<8; i++){
+                  int neighborBitIndex, nb_data_index;
+                  float4 nb_cell_center;
+                  unsigned nb_point_ok = data_index_world_point(source_scene_linfo, source_scene_tree_array,
+                                                                neighbor_trees,lid,abs_neighbors[i],
+                                                                &nb_cell_center,
+                                                                &nb_data_index,
+                                                                &neighborBitIndex,bit_lookup);
+                  if (nb_point_ok){
 
-                  float4 nbCenter = (abs_neighbors[i] - source_scene_origin) / source_scene_linfo->block_len;
-
-                  bool in_bounds_x = (nbCenter.x > 0) && (nbCenter.x < source_scene_linfo->dims.x);
-                  bool in_bounds_y = (nbCenter.y > 0) && (nbCenter.y < source_scene_linfo->dims.y);
-                  bool in_bounds_z = (nbCenter.z > 0) && (nbCenter.z < source_scene_linfo->dims.z);
-
-                  bool in_bounds  = in_bounds_x && in_bounds_y && in_bounds_z;
-
-                  if (in_bounds){
-                    int blkI = calc_blkI( floor(nbCenter.x),
-                                          floor(nbCenter.y),
-                                          floor(nbCenter.z), source_scene_linfo->dims);
-
-                    (*neighbor_tree) = as_uchar16( source_scene_tree_array[blkI]);
-                    //get neighbor local center, traverse to it
-                    float4 locCenter = nbCenter - floor(nbCenter);
-                    int neighborBitIndex = (int)traverse_to(neighbor_tree,locCenter,source_depth);
-                    int nb_data_index = data_index_relative( neighbor_tree, neighborBitIndex, bit_lookup) + data_index_root(neighbor_tree);
                     alphas[i] = source_scene_alpha_array[nb_data_index] ;
                     nb_count++;
 #ifdef MOG_TYPE_8
@@ -205,7 +174,6 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                     CONVERT_FUNC_FLOAT8(rgb_tuple,source_rgb_array[nb_data_index]);
                     rgb_tuple/=NORM;
                     rgb_params[i].s0123 = rgb_tuple.s0123;
-
 #endif
                   }else{
                     alphas[i] =0.0; params[i]=0;
@@ -218,16 +186,16 @@ __kernel void warp_and_resample_trilinear_similarity(__constant  float          
                 mog_float/=NORM; float exp_int_orig;
                 EXPECTED_INT(exp_int_orig,mog_float); //for debug
                 MOG_TYPE mog_interped;
-                float alpha_interped = interp_generic_float(abs_neighbors,alphas,source_p);
+                float alpha_interped = interp_float_weights(alphas,weights);
 #ifdef MOG_TYPE_8
-                float expected_int   = interp_generic_float(abs_neighbors,params,source_p);
+                float expected_int   = interp_float_weights(params,weights);
                 uchar8 expected_int_interped  = (uchar8)((uchar)(expected_int * NORM), 32, 255, 0, 0, 0, 0, 0); // hack-city
                 CONVERT_FUNC_SAT_RTE(mog_interped, expected_int_interped);
 #endif
 
 #ifdef HAS_RGB
                 uchar8 curr_rgb_tuple = source_rgb_array[alpha_offset];
-                float4 float_rgb_tuple_interped   = interp_flow(abs_neighbors,rgb_params,source_p); //use the flow interp for float4s
+                float4 float_rgb_tuple_interped   = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
                 curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
                 target_rgb_array[dataIndex] = curr_rgb_tuple;
