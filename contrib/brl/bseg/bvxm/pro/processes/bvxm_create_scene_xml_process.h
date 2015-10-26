@@ -29,7 +29,7 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro);
 //: global variables
 namespace bvxm_create_scene_xml_large_scale_process_globals
 {
-  const unsigned n_inputs_  = 8;
+  const unsigned n_inputs_  = 9;
   const unsigned n_outputs_ = 1;
 }
 //: set input and output types

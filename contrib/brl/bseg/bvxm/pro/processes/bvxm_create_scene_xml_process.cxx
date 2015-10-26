@@ -101,6 +101,7 @@ bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro)
   input_types_[5] = "float";         // scene size
   input_types_[6] = "float";         // scene voxel size
   input_types_[7] = "float";         // the amount to be added on top of the terrain height (large enough to cover highest building)
+  input_types_[8] = "float";         // the amount to be subtracted on bottom of the terrain height (to overcome the height map inaccuracy)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "unsigned";     // number of scenes created
 
@@ -125,6 +126,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   float world_size_in = pro.get_input<float>(in_i++);
   float voxel_size    = pro.get_input<float>(in_i++);
   float height        = pro.get_input<float>(in_i++);
+  float height_sub    = pro.get_input<float>(in_i++);
 
   // find the bounding box from the given region
   vgl_polygon<double> poly = bkml_parser::parse_polygon(roi_kml);
@@ -225,7 +227,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     if (h_diff > height_dif_max)
       height_dif_max = h_diff;
     // create scene lvcs
-    vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left.y(), lower_left.x(), min, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+    vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lower_left.y(), lower_left.x(), min-height_sub, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
     // create scene based on leaf size in lat/lon
     vgl_point_3d<float> corner(0.0f, 0.0f, 0.0f);
     double lx, ly, lz;
