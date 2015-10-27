@@ -76,6 +76,8 @@ class boxm2_stream_cache: public vbl_ref_count
     //: in iterative mode, the files need to be closed and re-opened
     void close_streams();
 
+    template <boxm2_data_type T> int exists(boxm2_block_id bid);
+
   protected:
 
     //: hidden destructor (singleton class)

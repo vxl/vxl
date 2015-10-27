@@ -84,6 +84,11 @@ bool boxm2_cpp_batch_compute_3d_points_process(bprb_func_process& pro)
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     // we're assuming that we have enough RAM to store the whole output blocks
 
+    if(str_cache->exists<BOXM2_POINT>(*id)==0)
+      continue;
+    if(str_cache->exists<BOXM2_COVARIANCE>(*id)==0)
+      continue;
+
     //: alpha is only retrieved to get buf len, there is a problem in get_data_base_new: TODO: fix this, there should be no need to retrieve alpha
     boxm2_data_base *  alph = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     std::size_t buf_len = alph->buffer_length();
