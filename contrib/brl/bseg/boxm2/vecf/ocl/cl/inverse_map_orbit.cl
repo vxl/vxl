@@ -200,7 +200,6 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
                 float4 upper_lid_p = is_right[0] ? source_p_refl : source_p;
                 float t = compute_t(upper_lid_p.x,upper_lid_p.y,&eyelid_param);
                 mean_val = (0.96 - t) * total_app[5] + t * total_app[4]; //blend between crease and lower lid;
-
               }
               else
                 mean_val = mean_app [3]; //actual upper lid color
@@ -208,51 +207,72 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
 
 
             source_rgb_array[source_data_index] = convert_uchar8(weight_appearance(vis_A,vis_B,color_A,color_B,mean_val));
-#endif
+
 
             // here is where interp magic happens
-                        //#define DO_INTERP
+#define DO_INTERP
 #ifdef DO_INTERP
-              float alphas[8];
-              float params[8];
-              float weights[12];
+
+              float weights[8];
+              float weights_refl[8];
               float4 abs_neighbors[8];
               float4 rgb_params[8];
+              float4 abs_neighbors_refl[8];
 
               float cell_len_rw  = cell_len * target_scene_linfo->block_len;
-              int nbs_ok = collect_neighbors_and_weights(abs_neighbors,weights,target_p,cell_center, cell_len_rw);
-              if(!nbs_ok)
+              int nbs_ok         = collect_neighbors_and_weights(abs_neighbors,     weights,     target_p,     cell_center,      cell_len_rw);
+              int nbs_ok_refl    = collect_neighbors_and_weights(abs_neighbors_refl,weights_refl,target_p_refl,cell_center_refl, cell_len_rw);
+              if(!nbs_ok || !nbs_ok_refl)
                 continue;
               int nb_count = 0; float sum = 0;
               for (unsigned i=0; i<8; i++){
                 int neighborBitIndex, nb_data_index;
                 float4 nb_cell_center;
+                int neighborBitIndex_refl, nb_data_index_refl;
+                float4 nb_cell_center_refl;
+
                 unsigned nb_point_ok = data_index_world_point(target_scene_linfo, target_scene_tree_array,
                                                               neighbor_trees,lid,abs_neighbors[i],
                                                               &nb_cell_center,
                                                               &nb_data_index,
                                                               &neighborBitIndex,bit_lookup);
-                if (nb_point_ok){
-                  alphas[i] = target_scene_alpha_array[nb_data_index] ;
+                unsigned nb_point_ok_refl = data_index_world_point(target_scene_linfo, target_scene_tree_array,
+                                                              neighbor_trees,lid,abs_neighbors_refl[i],
+                                                              &nb_cell_center_refl,
+                                                              &nb_data_index_refl,
+                                                              &neighborBitIndex_refl,bit_lookup);
+
+                if (nb_point_ok && nb_point_ok_refl){
                   nb_count++;
-                  CONVERT_FUNC_FLOAT8(rgb_tuple,target_rgb_array[nb_data_index]);
+                  float vis_a = target_vis_array[nb_data_index];
+                  float vis_b = target_vis_array[nb_data_index_refl];
+                  float8 color_a =  convert_float8(target_rgb_array[nb_data_index]);
+                  float8 color_b =  convert_float8(target_rgb_array[nb_data_index_refl]);
+                  float8 rgb_tuple = weight_appearance(vis_a,vis_b,color_a,color_b,mean_val);
                   rgb_tuple/=NORM;
                   rgb_params[i].s0123 = rgb_tuple.s0123;
-
                 }else{
-                  alphas[i] = 0.0; params[i]=0;
+                  weights[i] = 0.0;
                 }
               }
-
+              if (nb_count< 8 && nb_count > 0){ //renormalize if we had a nan value
+                  float sum_w = 0;
+                  for(unsigned i=0 ; i<8 ; sum_w += weights[i++] );
+                  if( sum_w == 0)
+                    continue;
+                  for(unsigned i = 0; i<8 ; weights[i++] /= sum_w );
+                } else if ( nb_count == 0 )
+                   continue;
               // interpolate alpha over the source
               if(nb_count>0){
-                float alpha_interped = interp_generic_float(abs_neighbors,alphas,target_p);
                 uchar8 curr_rgb_tuple = target_rgb_array[target_data_index];
-                float4 float_rgb_tuple_interped  = interp_float4(abs_neighbors,rgb_params,target_p); //use the flow interp for float4s
+                float4 float_rgb_tuple_interped  = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
                 curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
-                source_rgb_array[source_data_index] = curr_rgb_tuple;}
+                source_rgb_array[source_data_index] = curr_rgb_tuple;
+              }
 #endif //interp
+#endif // DO_ANATOMY
             }
           }
         }

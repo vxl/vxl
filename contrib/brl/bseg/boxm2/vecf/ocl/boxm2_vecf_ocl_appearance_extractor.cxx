@@ -17,6 +17,7 @@ void boxm2_vecf_ocl_appearance_extractor::compile_kernels(){
   src_paths.push_back(source_dir     + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
   src_paths.push_back(vecf_source_dir + "interp_helpers.cl");
+  src_paths.push_back(vecf_source_dir + "eyelid_funcs.cl");
   src_paths.push_back(vecf_source_dir + "orbit_funcs.cl");
   src_paths.push_back(vecf_source_dir + "inverse_map_orbit.cl");
 

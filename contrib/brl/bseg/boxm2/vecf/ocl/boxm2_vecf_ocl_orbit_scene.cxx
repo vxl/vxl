@@ -32,6 +32,7 @@ bool boxm2_vecf_ocl_orbit_scene::compile_kernels()
   src_paths.push_back(source_dir     + "boxm2_ocl_helpers.cl");
   src_paths.push_back(vecf_source_dir + "interp_helpers.cl");
   src_paths.push_back(vecf_source_dir + "orbit_funcs.cl");
+  src_paths.push_back(vecf_source_dir + "eyelid_funcs.cl");
   src_paths.push_back(vecf_source_dir + "map_orbit_to_target.cl");
 
   if (is_right_)
@@ -901,6 +902,7 @@ void  boxm2_vecf_ocl_orbit_scene::inverse_vector_field_lower_eyelid(vcl_vector<v
         continue;
     }
     unsigned tindx = box_cell_centers_[i].data_index_;
+    eyelid_geo_.vf(0, 0, 0);
     source_pts_cpu[dindx][0] = p.x();     source_pts_cpu[dindx][1] = p.y();     source_pts_cpu[dindx][2] = p.z();
     target_pts_cpu[tindx][0] = p.x();     target_pts_cpu[tindx][1] = p.y();     target_pts_cpu[tindx][2] = p.z();
     valid[i]=static_cast<unsigned char>(2);

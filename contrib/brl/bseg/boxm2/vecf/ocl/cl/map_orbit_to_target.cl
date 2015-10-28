@@ -175,13 +175,12 @@ __kernel void map_orbit_to_target(                   __constant  float          
                     target_scene_alpha_array[target_data_index] = 0.0;
                     lidvoxel = 1;
                   }
-
                 }
                 // here is where interp magic happens
 #define DO_INTERP
 #ifdef DO_INTERP
-                float alphas[8];
-                float params[8];
+                float  alphas[8];
+                float  params[8];
                 float weights[8];
                 float4 abs_neighbors[8];
                 float4 rgb_params[8];
@@ -218,15 +217,15 @@ __kernel void map_orbit_to_target(                   __constant  float          
                     nb_count++;
 #ifdef MOG_TYPE_8
                     CONVERT_FUNC_FLOAT8(mog,source_scene_mog_array[nb_data_index]);
-                    mog/=NORM ;
+                    mog /= NORM ;
                     EXPECTED_INT(params[i],mog);
 #endif
 
                     CONVERT_FUNC_FLOAT8(rgb_tuple,source_rgb_array[nb_data_index]);
-                    rgb_tuple/=NORM;
+                    rgb_tuple /= NORM;
                     rgb_params[i].s0123 = rgb_tuple.s0123;
                   }else{
-                    alphas[i] = 0.0; params[i]=0; rgb_params[i] = (float4)(255,255,0,0);
+                    alphas [i] = 0.0; params[i]=0; rgb_params[i] = (float4)(255,255,0,0);
                     weights[i] = 0.0;
                   }
                 }
@@ -236,10 +235,9 @@ __kernel void map_orbit_to_target(                   __constant  float          
                   for(unsigned i=0 ; i<8 ; sum_w += weights[i++] );
                   if( sum_w == 0)
                     continue;
-                  for(unsigned i=0;i<8;weights[i++]/=sum_w );
-                }else if (nb_count == 0 )
+                  for(unsigned i = 0; i<8 ; weights[i++] /= sum_w );
+                } else if ( nb_count == 0 )
                    continue;
-
 
                 CONVERT_FUNC_FLOAT8(mog_float,mog_original);
                 mog_float/=NORM; float expected_int_orig;
@@ -255,6 +253,7 @@ __kernel void map_orbit_to_target(                   __constant  float          
                 for(unsigned i =0;i<8; i++){
                   mog_nb[i] =alphas[i];
                 }
+
                 output_color[source_data_index] = float_rgb_tuple_interped  * 255 ;
 #endif
                 uchar8 expected_int_interped  = (uchar8)((uchar)(expected_int * NORM), 32, 255, 0, 0, 0, 0, 0); // hack-city
@@ -262,14 +261,14 @@ __kernel void map_orbit_to_target(                   __constant  float          
 #endif
 
                 uchar8 curr_rgb_tuple = source_rgb_array[source_data_index];
-                float4 float_rgb_tuple_interped   = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
+                float4 float_rgb_tuple_interped  = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
 
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
 
-                  curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
-                  target_rgb_array[target_data_index] = curr_rgb_tuple;
-                  target_scene_alpha_array[target_data_index] = lidvoxel ? 0 : alpha_interped;
-                  target_scene_mog_array[target_data_index]   = mog_interped;
+                curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
+                target_rgb_array[target_data_index] = curr_rgb_tuple;
+                target_scene_alpha_array[target_data_index] = lidvoxel ? 0 : alpha_interped;
+                target_scene_mog_array[target_data_index]   = mog_interped;
 
 
 #endif //interp
