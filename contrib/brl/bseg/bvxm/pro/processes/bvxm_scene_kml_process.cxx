@@ -17,7 +17,8 @@ bool bvxm_scene_kml_process_cons(bprb_func_process& pro)
   input_types_[3] = "unsigned";                   // color index r
   input_types_[4] = "unsigned";                   // color index g
   input_types_[5] = "unsigned";                   // color index b
-  input_types_[6] = "vcl_string";                 // name of the scene
+  input_types_[6] = "unsigned";                   // color index a // controls transparency of the box as displayed in google earth, set = 255 for opaque box
+  input_types_[7] = "vcl_string";                 // name of the scene
   
   vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -39,6 +40,7 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
   unsigned r = pro.get_input<unsigned>(i++);
   unsigned g = pro.get_input<unsigned>(i++);
   unsigned b = pro.get_input<unsigned>(i++);
+  unsigned a = pro.get_input<unsigned>(i++);
   vcl_string name = pro.get_input<vcl_string>(i++);
 
   // obtain the bounding box for the scene region
@@ -84,14 +86,14 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
       box_info_t << "origin: " << ll_t[1] << "x" << ll_t[0];
       bkml_write::write_box(ofs, desc, box_info_t.str(), ul_t, ur_t, ll_t, lr_t, (unsigned char)r, (unsigned char)g, (unsigned char)b);
     }
-    bkml_write::write_box(ofs, name, box_info.str(), ul, ur, ll, lr, (unsigned char)r, (unsigned char)g, (unsigned char)b);
+    bkml_write::write_box(ofs, name, box_info.str(), ul, ur, ll, lr, (unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a);
     bkml_write::close_document(ofs);
     ofs.close();
   }
   else {
     vcl_ofstream ofs(kml_file.c_str());
     bkml_write::open_document(ofs);
-    bkml_write::write_box(ofs, name, box_info.str(), ul, ur, ll, lr, (unsigned char)r, (unsigned char)g, (unsigned char)b);
+    bkml_write::write_box(ofs, name, box_info.str(), ul, ur, ll, lr, (unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)a);
     bkml_write::close_document(ofs);
     ofs.close();
   }

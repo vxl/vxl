@@ -282,6 +282,27 @@ def image_mean(img):
   bvxm_batch.remove_data(id)
   return mean_val
 
+def image_mean(img):
+  bvxm_batch.init_process("vilImageMeanProcess")
+  bvxm_batch.set_input_from_db(0,img)
+  bvxm_batch.run_process()
+  (id,type) = bvxm_batch.commit_output(0)
+  mean_val = bvxm_batch.get_output_float(id)
+  bvxm_batch.remove_data(id)
+  return mean_val
+
+## n is the neighborhood to compute mean and variance, e.g. pass 5 for a 5x5 neighborhood to compute mean and variance of
+def compute_mean_and_variance_image(img,n):
+  bvxm_batch.init_process("vilMeanAndVarianceImageProcess")
+  bvxm_batch.set_input_from_db(0,img)
+  bvxm_batch.set_input_unsigned(1,n)
+  bvxm_batch.run_process()
+  (id,type) = bvxm_batch.commit_output(0)
+  img_mean = dbvalue(id,type)
+  (id,type) = bvxm_batch.commit_output(1)
+  img_var = dbvalue(id,type)
+  return img_mean, img_var
+
 def crop_image(img,i0,j0,ni,nj):
   bvxm_batch.init_process("vilCropImageProcess")
   bvxm_batch.set_input_from_db(0,img)
@@ -577,3 +598,4 @@ def remove_nitf_margin(img_res):
     return vi, vj, vni, vnj
   else:
     return 0, 0, 0, 0
+

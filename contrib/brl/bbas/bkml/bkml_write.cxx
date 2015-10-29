@@ -94,7 +94,7 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
       << "    <PolyStyle>\n"
       << "      <colorMode>normal</colorMode>\n"
       << "      <color>" << hex_color << "</color>\n"
-      << "      <fill>0</fill>\n"
+      << "      <fill>1</fill>\n"
       << "    </PolyStyle>\n"
       << "    <LineStyle>\n"
       << "      <colorMode>normal</colorMode>\n"
@@ -122,9 +122,9 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
 
 // write a box with color
 void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
-                           unsigned char const& r, unsigned char const& g, unsigned char const& b)
+                           unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a)
 {
-  vcl_string hex_color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+  vcl_string hex_color = rgb_color_to_hex_color((int)a, (int)r, (int)g, (int)b);
   bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, hex_color);
 }
 

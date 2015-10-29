@@ -67,6 +67,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_shadow_detection_process, "vilShadowDetectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_shadow_ridge_detection_process, "vilShadowRidgeDetectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_mean_and_variance_process, "vilImageMeanAndVarianceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_mean_and_variance_image_process, "vilMeanAndVarianceImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_image_normalise_process, "vilImageNormaliseProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_debayer_BGGR_to_RGB_process, "vilDebayerBGGRToRGBProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bil_create_arf_image_istream_process, "bilCreateArfImageIstreamProcess");
