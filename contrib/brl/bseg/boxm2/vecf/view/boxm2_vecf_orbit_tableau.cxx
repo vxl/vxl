@@ -37,6 +37,36 @@ bool boxm2_vecf_orbit_tableau::set_dlib_parts(vcl_string const& dlib_path){
 void boxm2_vecf_orbit_tableau::draw_orbit(bool is_right){
   // get parameter bounds and model to image transformation parameters
   boxm2_vecf_orbit_params params = left_params_;
+
+  bool export_points = export_fname_base_ == "" ? false : true;
+  vcl_ofstream * sup_points = 0;
+  vcl_ofstream * inf_points = 0;
+  vcl_ofstream * cre_points = 0;
+  if(export_points){
+    vcl_string sup_fname = is_right ? export_fname_base_+"/right_sup_points.txt" : export_fname_base_+"/left_sup_points.txt";
+    vcl_string inf_fname = is_right ? export_fname_base_+"/right_inf_points.txt" : export_fname_base_+"/left_inf_points.txt";
+    vcl_string cre_fname = is_right ? export_fname_base_+"/right_cre_points.txt" : export_fname_base_+"/left_cre_points.txt";
+    sup_points = new vcl_ofstream(sup_fname.c_str());
+    inf_points = new vcl_ofstream(inf_fname.c_str());
+    cre_points = new vcl_ofstream(cre_fname.c_str());
+    if(!sup_points->is_open()){
+      vcl_cout<<"point file" <<sup_fname<< " is not open"<<vcl_endl;
+      export_points = false;
+    } else
+      vcl_cout<<"Exporting superior margin points into "<<sup_fname<<vcl_endl;
+
+    if(!inf_points->is_open()){
+      vcl_cout<<"point file" <<inf_fname<< " is not open"<<vcl_endl;
+      export_points = false;
+    } else
+      vcl_cout<<"Exporting inferior margin points into "<<inf_fname<<vcl_endl;
+
+    if(!cre_points->is_open()){
+      vcl_cout<<"point file" <<cre_fname<< " is not open"<<vcl_endl;
+      export_points = false;
+    } else
+      vcl_cout<<"Exporting crease points into "<<cre_fname<<vcl_endl;
+  }
   if(is_right)
     params = right_params_;
   double xm_min = params.x_min()-10.0;
@@ -70,9 +100,13 @@ void boxm2_vecf_orbit_tableau::draw_orbit(bool is_right){
      y = (y+ytr)/mm_per_pix;
     y = image_height-y;
     vsol_pts.push_back(new vsol_point_2d(x, y));
+    if (export_points)
+        *cre_points<< x << " " << y <<vcl_endl;
   }
   vsol_polyline_2d_sptr cre_pline = new vsol_polyline_2d(vsol_pts);
   vsol_tab_->add_vsol_polyline_2d(cre_pline);
+
+
 
   vsol_pts.clear();
   for(int i = imin; i<=imax; ++ i){
@@ -83,6 +117,8 @@ void boxm2_vecf_orbit_tableau::draw_orbit(bool is_right){
     y = (y+ytr)/mm_per_pix;
     y = image_height-y;
     vsol_pts.push_back(new vsol_point_2d(x, y));
+    if (export_points)
+        *inf_points<< x << " " << y <<vcl_endl;
   }
   vsol_polyline_2d_sptr sup_pline = new vsol_polyline_2d(vsol_pts);
   vsol_tab_->add_vsol_polyline_2d(sup_pline);
@@ -96,10 +132,21 @@ void boxm2_vecf_orbit_tableau::draw_orbit(bool is_right){
     y = (y+ ytr)/mm_per_pix;
     y = image_height-y;
     vsol_pts.push_back(new vsol_point_2d(x, y));
+    if (export_points)
+        *sup_points<< x << " " << y <<vcl_endl;
   }
   vsol_polyline_2d_sptr inf_pline = new vsol_polyline_2d(vsol_pts);
   vsol_tab_->add_vsol_polyline_2d(inf_pline);
   vsol_tab_->post_redraw();
+  if (export_points){
+    sup_points->close();
+    inf_points->close();
+    cre_points->close();
+    delete sup_points;
+    delete inf_points;
+    delete cre_points;
+  }
+
 }
 void boxm2_vecf_orbit_tableau::draw_dlib_parts(bool is_right){
   vgui_style_sptr lat_style    = vgui_style::new_style(0.0f, 1.0f, 0.0f, 7.5f, 1.0f);
@@ -142,17 +189,17 @@ void boxm2_vecf_orbit_tableau::draw_dlib_parts(bool is_right){
   if(!inf_pts.size()){
     vcl_cout << "no " + infs << '\n';
     return;
-  } 
+  }
   sup_pts = fo_.orbit_data(sups);
   if(!sup_pts.size()){
     vcl_cout << "no " + sups << '\n';
     return;
-  } 
+  }
   crease_pts = fo_.orbit_data(creases);
   if(!crease_pts.size()){
     vcl_cout << "no " + creases << '\n';
     return;
-  } 
+  }
   // now draw the dlib points
   vsol_point_2d_sptr plc = new vsol_point_2d(lc.x(), lc.y());
   vsol_tab_->add_vsol_point_2d(plc, lat_style);
@@ -178,5 +225,3 @@ void boxm2_vecf_orbit_tableau::draw_dlib_parts(bool is_right){
     vsol_tab_->add_vsol_point_2d(p, crease_style);
     }
 }
-
-

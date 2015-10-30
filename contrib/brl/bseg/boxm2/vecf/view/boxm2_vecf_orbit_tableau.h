@@ -3,7 +3,7 @@
 #define boxm2_vecf_orbit_tableau_h
 //:
 // \file
-// \brief A tableau to view projections of the orbit model 
+// \brief A tableau to view projections of the orbit model
 // \author J.L. Mundy
 // \date July 21, 2015
 #include <vnl/vnl_math.h>
@@ -23,12 +23,16 @@ class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
   bool set_dlib_parts(vcl_string const& dlib_path);
   void draw_orbit(bool is_right);
   void draw_dlib_parts(bool is_right);
+  void set_points_filename(vcl_string fname){
+    export_fname_base_ = fname;
+  }
  private:
   bgui_image_tableau_sptr img_tab_;
   bgui_vsol2D_tableau_sptr vsol_tab_;
   boxm2_vecf_orbit_params left_params_;
   boxm2_vecf_orbit_params right_params_;
   boxm2_vecf_fit_orbit fo_;
+  vcl_string export_fname_base_;
 };
 
 //: declare smart pointer

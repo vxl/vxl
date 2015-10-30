@@ -57,18 +57,31 @@ int get_ranked_anatomy(unsigned  data_index,
 #define LOWER_LIDS     orbit->lower_lid     [data_index]
 #define EYELID_CREASES orbit->eyelid_crease [data_index]
 
-  if(LOWER_LIDS && !SPHERES && !EYELIDS)
-    return LOWER_LID;
-  if(SPHERES && !LOWER_LIDS && !EYELIDS)
+  /* if(LOWER_LIDS && !SPHERES && !EYELIDS) */
+  /*   return LOWER_LID; */
+  /* if(SPHERES && !LOWER_LIDS && !EYELIDS) */
+  /*   return SPHERE; */
+  /* if(LOWER_LIDS && !EYELIDS) // sphere and lower lid label */
+  /*   return LOWER_LID; */
+  /* if(SPHERES && !EYELIDS) // sphere and lower lid label */
+  /*   return SPHERE; */
+  /* if(EYELID_CREASES && !EYELIDS && !SPHERES) */
+  /*   return EYELID_CREASE; */
+  /* if (EYELIDS ) */
+  /*   return EYELID; */
+
+  if(SPHERES )
     return SPHERE;
-  if(LOWER_LIDS && !EYELIDS) // sphere and lower lid label
-    return LOWER_LID;
-  if(SPHERES && !EYELIDS) // sphere and lower lid label
-    return SPHERE;
-  if(EYELID_CREASES)
-    return EYELID_CREASE;
-  if (EYELIDS )
+  if(IRISES )
+    return IRIS;
+  if(PUPILS )
+    return PUPIL;
+  if(EYELIDS)
     return EYELID;
+  if(LOWER_LIDS) // sphere and lower lid label
+    return LOWER_LID;
+  if(EYELID_CREASES) // sphere and lower lid label
+    return EYELID_CREASE;
 #undef SPHERES
 #undef IRISES
 #undef PUPILS
