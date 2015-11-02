@@ -458,7 +458,10 @@ bool boxm2_scene::block_contains(vgl_point_3d<double> const& p, boxm2_block_id c
 
   vgl_point_3d<double> lorigin = md.local_origin_;
   vgl_box_3d<double> bbox(lorigin,lorigin+dims);
-  if (bbox.contains(p.x(), p.y(), p.z())) {
+  if (p.x() >= bbox.min_x() && p.x() < bbox.max_x() &&
+      p.y() >= bbox.min_y() && p.y() < bbox.max_y() &&
+      p.z() >= bbox.min_z() && p.z() < bbox.max_z())
+  {//Slightly different than bbox.contains, which was wrong on block boundary
     double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
     double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
     double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
