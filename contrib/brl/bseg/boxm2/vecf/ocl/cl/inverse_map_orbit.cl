@@ -30,6 +30,7 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
                                                      //at which voxels should be matched.
                                                      __global    float           * output,//16
                                                      __global    float           * eyelid_geo,//16
+                                                     __global    float           * dt,//16
 #ifdef ANATOMY_CALC
                                                      __global    float           * vis_accum,
 #else
@@ -108,41 +109,42 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
           unsigned target_data_index, bit_index, target_data_index_refl, bit_index_refl;
           unsigned point_ok,r_point_ok;   int lidvoxel = 0;
           float8 blank_val = (float8)(255,0,148,0,0,0,0,0);
+          float8 blank_val2 = (float8)(148,0,255,0,0,0,0,0);
           cell_center.s3=0;
-          if(sphere[source_data_index] && !eyelid[source_data_index] )
-              {
+          float t = 0;
+          if(eyelid[source_data_index]){
+              float4 moved_p = is_right[0] ? source_p_refl : source_p;
+              t = compute_t(moved_p.x,moved_p.y,&eyelid_param);
+              if(!is_valid_t( t - dt[0], &eyelid_param)){
+                lidvoxel = 1;
+              }
+              moved_p +=  lid_vf(moved_p.x, t, -dt[0],&eyelid_param);
+              target_p =  moved_p + offset;
+              target_p_refl = (float4)( - target_p.x, target_p.y, target_p.z, 0);
+            }
+
+          if(sphere[source_data_index]){
                 target_p      = rotate_point(source_p,rotation)             + offset;
                 target_p_refl = rotate_point(source_p_refl,other_rotation)  + other_offset;
                 //these don't
-              }
-            else if((eyelid[source_data_index]) && !sphere[source_data_index]){
-              float4 upper_lid_p = is_right[0] ? source_p_refl : source_p;
-              target_p = !is_right[0] ?  source_p + offset : source_p_refl + offset;
+          }
+
+          if (lower_lid[source_data_index] || eyelid_crease[source_data_index]){
+              target_p =  is_right[0] ? source_p_refl + offset : source_p + offset;
               target_p_refl = (float4)( - target_p.x, target_p.y, target_p.z, 0);
-              float t = compute_t(upper_lid_p.x,upper_lid_p.y,&eyelid_param);
-              if(!is_valid_t( t - 0.95, &eyelid_param)){
-                lidvoxel = 1;
-              }
-            }else if ( (eyelid[source_data_index] || lower_lid[source_data_index] || eyelid_crease[source_data_index])){
-              target_p = !is_right[0] ?  source_p + offset : source_p_refl + offset;
-              target_p_refl = (float4)( - target_p.x, target_p.y, target_p.z, 0);
-            }else{
-              source_rgb_array[source_data_index] = convert_uchar8(blank_val);
-              continue;
-}
-            point_ok = data_index_world_point(target_scene_linfo, target_scene_tree_array,
+            }
+
+          point_ok = data_index_world_point(target_scene_linfo, target_scene_tree_array,
                                               local_trees_target,lid,target_p,
                                               &cell_center,
                                               &target_data_index,
                                               &bit_index,bit_lookup);
-            r_point_ok = data_index_world_point(target_scene_linfo,  target_scene_tree_array,
+          r_point_ok = data_index_world_point(target_scene_linfo,  target_scene_tree_array,
                                                 reflected_local_trees_target,lid,target_p_refl,
                                                 &cell_center_refl,
                                                 &target_data_index_refl,
                                                 &bit_index_refl,bit_lookup);
-#ifdef ANATOMY_CALC
-          output[source_data_index] = source_scene_linfo->root_level;
-#endif
+
           if(bit_index >=0 && bit_index < MAX_CELLS_TARGET ){
             if(point_ok && r_point_ok){
             int currDepth = get_depth(bit_index);
@@ -152,64 +154,73 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
             float8 color_A =  convert_float8(target_rgb_array[target_data_index]);
             float8 color_B =  convert_float8(target_rgb_array[target_data_index_refl]);
             float8 mean_val = (float8)(29,255,107,0,0,0,0,0);
-            //            output[source_data_index] = vis_A;
-
+            if(iris[source_data_index] && !sphere[source_data_index])
+              output[source_data_index] = 1;
+            if(pupil[source_data_index] && !sphere[source_data_index])
+              output[source_data_index] = 2;
+            if(pupil[source_data_index] && !iris[source_data_index] && !sphere[source_data_index])
+              output[source_data_index] = 3;
+            int current_anatomy = get_ranked_anatomy(source_data_index,&orbit);
 
 #ifdef ANATOMY_CALC
-            if(is_anatomy(SPHERE,source_data_index, &orbit)){
+
+            if(current_anatomy == SPHERE){
               AtomicAdd(&vis_accum[SPHERE],vis_A);
               AtomicAddFloat8(&mean_app [SPHERE],color_A * vis_A);      }
 
-            if(is_anatomy(IRIS,source_data_index, &orbit)){
+
+            if(current_anatomy == IRIS){
               AtomicAdd(&vis_accum[IRIS],vis_A);
               AtomicAddFloat8(&mean_app [IRIS],color_A * vis_A);         }
 
-            if(is_anatomy(PUPIL,source_data_index,&orbit)){
+            if(current_anatomy == PUPIL){
               AtomicAdd(&vis_accum[PUPIL],vis_A);
               AtomicAddFloat8(&mean_app [PUPIL],color_A * vis_A);        }
 
-            if(is_anatomy(LOWER_LID,source_data_index,&orbit)){
-              AtomicAdd(&vis_accum[LOWER_LID],vis_A);
-              AtomicAddFloat8(&mean_app [LOWER_LID],color_A * vis_A);    }
 
-            if(is_anatomy(EYELID_CREASE,source_data_index, &orbit)){
-              AtomicAdd(&vis_accum[EYELID_CREASE],vis_A);
-              AtomicAddFloat8(&mean_app [EYELID_CREASE],color_A * vis_A);}
-
-            if(is_anatomy(EYELID, source_data_index, &orbit)){
+            if(current_anatomy == EYELID){
               float prob = 1 - exp( -target_scene_alpha_array[target_data_index] * cell_len * target_scene_linfo->block_len);
               if(prob > 0.8){
                 AtomicAdd(&vis_accum[EYELID],vis_A);
-                AtomicAddFloat8(&mean_app [EYELID],color_A * vis_A);               }
-            }
+                AtomicAddFloat8(&mean_app [EYELID],color_A * vis_A);
+              }                                                         }
+
+            if(current_anatomy == LOWER_LID){
+              AtomicAdd(&vis_accum[LOWER_LID],vis_A);
+              AtomicAddFloat8(&mean_app [LOWER_LID],color_A * vis_A);    }
+
+            if(current_anatomy == EYELID_CREASE ) {
+              AtomicAdd(&vis_accum[EYELID_CREASE],vis_A);
+              AtomicAddFloat8(&mean_app [EYELID_CREASE],color_A * vis_A);}
 #else
-            int anatomy = 1;
 
-            if(is_anatomy(SPHERE,source_data_index, &orbit)){
+            if(current_anatomy == SPHERE){
               mean_val = total_app[0];
-            }else if(is_anatomy(IRIS,source_data_index, &orbit)){
-                mean_val = total_app[1];
-            }else if(is_anatomy(PUPIL,source_data_index,&orbit)){
-                  mean_val = total_app[2];
-            }else if(is_anatomy(LOWER_LID,source_data_index,&orbit)){
-                    mean_val = total_app[4];
-            }else if(is_anatomy(EYELID_CREASE,source_data_index, &orbit)){
-              mean_val = total_app[5];
-            }else   if(is_anatomy(EYELID, source_data_index, &orbit)){
-              if( lidvoxel){
-                float4 upper_lid_p = is_right[0] ? source_p_refl : source_p;
-                float t = compute_t(upper_lid_p.x,upper_lid_p.y,&eyelid_param);
-                mean_val = (0.96 - t) * total_app[5] + t * total_app[4]; //blend between crease and lower lid;
-              }
-              else
-                mean_val = mean_app [3]; //actual upper lid color
             }
 
+            if(current_anatomy  == IRIS){
+                mean_val = total_app[1];
+            }
 
-            source_rgb_array[source_data_index] = convert_uchar8(weight_appearance(vis_A,vis_B,color_A,color_B,mean_val));
+            if(current_anatomy == PUPIL){
+              mean_val = total_app[2];
+            }
 
+            if(current_anatomy == EYELID){
+              if( lidvoxel ){
+                mean_val = (-dt[0] -  t) * total_app[5] + t * total_app[4]; //blend between crease and lower lid;
+              }else
+                mean_val = total_app [3]; //actual upper lid color
+            }
 
-            // here is where interp magic happens
+            if(current_anatomy == LOWER_LID){
+              mean_val = total_app[4];
+            }
+
+            if(current_anatomy == EYELID_CREASE){
+              mean_val = total_app[5];
+            }
+             source_rgb_array[source_data_index] = convert_uchar8(weight_appearance(vis_A,vis_B,color_A,color_B,mean_val));
 #define DO_INTERP
 #ifdef DO_INTERP
 
@@ -264,7 +275,7 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
                 } else if ( nb_count == 0 )
                    continue;
               // interpolate alpha over the source
-              if(nb_count>0){
+              if(nb_count>0 && !lidvoxel){
                 uchar8 curr_rgb_tuple = target_rgb_array[target_data_index];
                 float4 float_rgb_tuple_interped  = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city

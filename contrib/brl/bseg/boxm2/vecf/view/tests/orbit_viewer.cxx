@@ -39,9 +39,11 @@ int main(int argc, char ** argv)
     vcl_cout <<"base dir path "<< base_dir_path << " is not valid\n";
     return -1;
   }
+  bool export_points = true;
   good = vul_file::exists(points_path);
   if(!good){
     vcl_cout<<" points export file " << points_path << " is not valid; not exporting points\n";
+    export_points = false;
   }
   vcl_string left_param_path = base_dir_path + bid_str + "/" + bid_str + "_left_orbit_params.txt";
   vcl_string right_param_path = base_dir_path + bid_str + "/" + bid_str + "_right_orbit_params.txt";
@@ -79,10 +81,12 @@ int main(int argc, char ** argv)
   otab->draw_orbit(true);
   otab->draw_dlib_parts(false);
   otab->draw_dlib_parts(true);
-  unsigned w = 400, h = 340;
-  vcl_string title = "Orbit Display";
-  vgui_window* win = vgui::produce_window(w, h, title);
-  win->get_adaptor()->set_tableau(otab);
-  win->show();
-  vgui::run();
+  if (!export_points){
+    unsigned w = 400, h = 340;
+    vcl_string title = "Orbit Display";
+    vgui_window* win = vgui::produce_window(w, h, title);
+    win->get_adaptor()->set_tableau(otab);
+    win->show();
+    vgui::run();
+  }
 }

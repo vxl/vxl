@@ -897,8 +897,11 @@ bool boxm2_vecf_ocl_appearance_extractor::extract_appearance_one_pass(bool is_ri
   app[4] =  to_float8 (curr_lower_lid_app) ;       total_app[4] = final_lower_lid_app;
   app[5] =  to_float8 (curr_eyelid_crease_app) ;   total_app[5] = final_eyelid_crease_app;
 
+  vcl_cout<<" mean eyelid intensity "<<total_app[3][0]<<" "<<total_app[3][1]<<" "<<total_app[3][2]<<vcl_endl;
+
   float offset_buff  [4],other_offset_buff  [4];
   float rotation_buff[9],other_rotation_buff[9];
+  float curr_dt = - orbit_params.eyelid_dt_;
   bool good_buffs = true;
   unsigned char is_right_buf = is_right;
   vnl_vector_fixed<double, 3> other_to_dir(other_orbit_params.eye_pointing_dir_.x(),
@@ -948,6 +951,9 @@ bool boxm2_vecf_ocl_appearance_extractor::extract_appearance_one_pass(bool is_ri
 
    bocl_mem_sptr  is_right_cl = new bocl_mem(device_->context(), &is_right_buf, sizeof(char), " mean app buff " );
    good_buffs &=  is_right_cl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+   bocl_mem_sptr  dt_l = new bocl_mem(device_->context(), &curr_dt , sizeof(float), " dt buff " );
+   good_buffs &=  dt_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
 
    vcl_size_t local_threads[1]={64};
@@ -1020,6 +1026,7 @@ bool boxm2_vecf_ocl_appearance_extractor::extract_appearance_one_pass(bool is_ri
    map_to_source_kern->set_arg(orbit.lower_eyelid_base_);
    map_to_source_kern->set_arg(output_cl.ptr());
    map_to_source_kern->set_arg(orbit.eyelid_geo_cl_.ptr());
+   map_to_source_kern->set_arg(dt_l.ptr());
    map_to_source_kern->set_arg(total_app_l.ptr());
    map_to_source_kern->set_arg(mean_app_l.ptr());
    map_to_source_kern->set_arg(is_right_cl.ptr());
@@ -1099,6 +1106,7 @@ for(unsigned i = 0;i<6;i++){
                                      orbit_params.eye_pointing_dir_.z());
   vgl_rotation_3d<double> rot(Z, to_dir);
   vgl_rotation_3d<double> other_rot(Z, other_to_dir);
+  float curr_dt = - orbit_params.eyelid_dt_;
 
   offset_buff[0] = orbit_params.offset_.x();      other_offset_buff[0] = other_orbit_params.offset_.x();
   offset_buff[1] = orbit_params.offset_.y();      other_offset_buff[1] = other_orbit_params.offset_.y();
@@ -1138,6 +1146,8 @@ for(unsigned i = 0;i<6;i++){
    bocl_mem_sptr  is_right_cl = new bocl_mem(device_->context(), &is_right_buf, sizeof(char), " mean app buff " );
    good_buffs &=  is_right_cl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
+   bocl_mem_sptr  dt_l = new bocl_mem(device_->context(), &curr_dt , sizeof(float), " dt buff " );
+   good_buffs &=  dt_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
    vcl_size_t local_threads[1]={64};
    vcl_size_t global_threads[1]={1};
@@ -1205,6 +1215,7 @@ for(unsigned i = 0;i<6;i++){
    calc_mean_orbit_app_kern->set_arg(orbit.lower_eyelid_base_);
    calc_mean_orbit_app_kern->set_arg(output_cl.ptr());
    calc_mean_orbit_app_kern->set_arg(orbit.eyelid_geo_cl_.ptr());
+   calc_mean_orbit_app_kern->set_arg(dt_l.ptr());
    calc_mean_orbit_app_kern->set_arg(vis_l.ptr());
    calc_mean_orbit_app_kern->set_arg(mean_app_l.ptr());
    calc_mean_orbit_app_kern->set_arg(is_right_cl.ptr());
@@ -1221,17 +1232,17 @@ for(unsigned i = 0;i<6;i++){
     }
    vis_l->read_to_buffer(queue_);
    mean_app_l->read_to_buffer(queue_);
-//   output_cl->read_to_buffer(queue_);
+   output_cl->read_to_buffer(queue_);
    int status = clFinish(queue_);
    bool good_kern = check_val(status, CL_SUCCESS, "Calc Mean Orbit Kernel Failed: " + error_to_string(status));
    calc_mean_orbit_app_kern->clear_args();
 
    if(!good_kern)
      return false;
-   // for (unsigned i = 0;i < source_data_size ; i++){
-   //   if( output[i]!=0)
-   //     vcl_cout<<output[i]<<" ";
-   // }
+   for (unsigned i = 0;i < source_data_size ; i++){
+     if( output[i]!=0)
+       vcl_cout<<output[i]<<" ";
+   }
 
    float8 sclera   = vis[0]  != 0.0f ? app[0]/vis[0] : null; vis_sclera_        += vis[0];
    float8 iris     = vis[1]  != 0.0f ? app[1]/vis[1] : null; vis_iris_          += vis[1];

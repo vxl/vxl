@@ -26,6 +26,7 @@ __kernel void map_orbit_to_target(                   __constant  float          
                                                      __global    uchar           * eyelid_crease,
                                                      __global    uchar           * lower_lid,
                                                      __global    float           * eyelid_geo,//16
+                                                     __global    float           * dt,//16
                                                      //at which voxels should be matched.
 #ifdef DEBUG_CL
                                                      __global    float           * output,//16
@@ -127,36 +128,58 @@ __kernel void map_orbit_to_target(                   __constant  float          
             if(bit_index >=0 && bit_index < MAX_CELLS ){
               cell_center.s3=0;
               {
-                bool anatomy_present = sphere[source_data_index] || lower_lid[source_data_index] || eyelid[source_data_index] || eyelid_crease[source_data_index];
-                bool anatomy_present_refl = sphere[source_data_index] || lower_lid[source_data_index_refl] || eyelid[source_data_index_refl] || eyelid_crease[source_data_index_refl];
-                bool skip_pt = is_right? !anatomy_present_refl : !anatomy_present;
-                if (skip_pt)
-                  continue;
-
-                //if not working on a sphere voxel, reflect the point
-
                 //reflec the non sphere voxels ; make sure there is anatomy at the reflected data index
+                bool lidvoxel = false; bool has_anatomy = false;
+                float4 source_p_original  = source_p;
+                int bit_index_original = bit_index ;
+                int source_data_index_original = source_data_index;
+                int source_data_index_probe = is_right ? source_data_index_refl : source_data_index;
+                float4 cell_center_original = cell_center;
+                int anatomy_index = 6;
 
 
-                if(is_right && !sphere[source_data_index_refl]&& (lower_lid[source_data_index_refl] ||
-                   eyelid[source_data_index_refl] ||
-                   eyelid_crease[source_data_index_refl]) ){
-                    /* output[target_data_index] =  source_data_index - source_data_index_refl; */
-                    source_data_index = source_data_index_refl;
-                    bit_index   = bit_index_refl;
-                    source_p    = source_p_refl;
-                    cell_center = cell_center_refl;
-                }else  if( sphere[source_data_index]){
+                if( eyelid[source_data_index_probe] ){
+                  source_p          = is_right ? source_p_refl          : source_p_original ;
+                  source_data_index = is_right ? source_data_index_refl : source_data_index_original;
+                  bit_index         = is_right ? bit_index_refl         : bit_index_original;
+                  cell_center       = is_right ? cell_center_refl       : cell_center_original;
+                  float t = compute_t(source_p.x,source_p.y,&eyelid_param);
+                  has_anatomy = is_valid_t(t,&eyelid_param) ? true : false;
+                  if(!is_valid_t( t - dt[0], &eyelid_param)){
+                    lidvoxel = sphere[source_data_index_probe] ? false : true;
+                  }else{
+                    source_p = source_p + lid_vf(source_p.x, t, -dt[0],&eyelid_param);
+
+                    unsigned point_ok     = data_index_world_point(source_scene_linfo, source_scene_tree_array,
+                                                                   local_trees_source,lid,source_p,
+                                                                   &cell_center,
+                                                                   &source_data_index,
+                                                                   &bit_index,bit_lookup);
+                  }
+              }
+              if( sphere[source_data_index_original] ){
                   /* //we are on a sphere voxel so time to undo the rotation */
-                  source_p = rotate_point(source_p,rotation);
+                  source_p = rotate_point(source_p_original,rotation);
+                  has_anatomy = true;
                   unsigned point_ok = data_index_world_point(source_scene_linfo, source_scene_tree_array,
                                                      local_trees_source,lid,source_p,
                                                      &cell_center,
                                                      &source_data_index,
                                                      &bit_index,bit_lookup);
-              }
+
+              }if( eyelid_crease[source_data_index_probe] || lower_lid[source_data_index_probe] ){
+                  has_anatomy = true;
+                  source_p          = is_right ? source_p_refl          : source_p_original ;
+                  source_data_index = is_right ? source_data_index_refl : source_data_index_original;
+                  bit_index         = is_right ? bit_index_refl         : bit_index_original;
+                  cell_center       = is_right ? cell_center_refl       : cell_center_original;
+
+                }
+                if (!has_anatomy)
+                  continue;
 
                 int current_anatomy = get_ranked_anatomy(source_data_index,&orbit);
+
                 if (current_anatomy == 6)
                   continue;
                 int currDepth = get_depth(bit_index);
@@ -164,19 +187,12 @@ __kernel void map_orbit_to_target(                   __constant  float          
                 MOG_TYPE mog_original = source_scene_mog_array  [source_data_index];
                 float  alpha_original = source_scene_alpha_array[source_data_index];
                 uchar8 rgb_original   = source_rgb_array[source_data_index];
-                target_scene_alpha_array[target_data_index] = alpha_original;
+                target_scene_alpha_array[target_data_index] = lidvoxel ? 0 : alpha_original;
                 target_scene_mog_array[target_data_index]   = mog_original;
                 target_rgb_array[target_data_index] = rgb_original;
                 target_vis_array[target_data_index] = 1.0; // bump up vis score
-                int lidvoxel = 0;
-                if(eyelid[source_data_index] && !sphere[source_data_index] ){
-                  float t = compute_t(source_p.x,source_p.y,&eyelid_param);
-                  if(!is_valid_t( t - 0.95, &eyelid_param)){
-                    target_scene_alpha_array[target_data_index] = 0.0;
-                    lidvoxel = 1;
-                  }
-                }
-                // here is where interp magic happens
+
+                // here is where the interp magic happens
 #define DO_INTERP
 #ifdef DO_INTERP
                 float  alphas[8];
@@ -209,10 +225,8 @@ __kernel void map_orbit_to_target(                   __constant  float          
                                                                 &nb_data_index,
                                                                 &neighborBitIndex,bit_lookup);
 
-                  //bool nb_anatomy = is_similar_anatomy(nb_data_index,current_anatomy,&orbit);
-                  bool nb_anatomy = get_ranked_anatomy(nb_data_index,&orbit) == current_anatomy;
-                  bool nb_anatomy_present = sphere[nb_data_index] || lower_lid[nb_data_index] || eyelid[nb_data_index] || eyelid_crease[nb_data_index];
-                  if (nb_point_ok &&  nb_anatomy && nb_anatomy_present){
+                  bool nb_anatomy = is_anatomy(current_anatomy,nb_data_index,&orbit);
+                  if (nb_point_ok &&  nb_anatomy){
                     alphas[i] = source_scene_alpha_array[nb_data_index] ;
                     nb_count++;
 #ifdef MOG_TYPE_8
@@ -251,7 +265,7 @@ __kernel void map_orbit_to_target(                   __constant  float          
                 output[source_data_index] = alpha_interped;
                 __global    float* mog_nb = (__global float*) &output_mog[source_data_index];
                 for(unsigned i =0;i<8; i++){
-                  mog_nb[i] =alphas[i];
+                  mog_nb[i] = alphas[i];
                 }
 
                 output_color[source_data_index] = float_rgb_tuple_interped  * 255 ;

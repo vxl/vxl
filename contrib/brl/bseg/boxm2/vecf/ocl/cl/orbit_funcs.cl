@@ -24,19 +24,19 @@ bool is_anatomy(int anatomy_in,unsigned  data_index,
 #define EYELIDS        orbit->eyelid        [data_index]
 #define LOWER_LIDS     orbit->lower_lid     [data_index]
 #define EYELID_CREASES orbit->eyelid_crease [data_index]
+  if(anatomy_in == PUPIL)
+    return PUPILS;
+  if(anatomy_in == IRIS)
+    return IRISES;
   if(anatomy_in == SPHERE)
-    return   SPHERES && !IRISES && !PUPILS &&! EYELIDS;
-  else if(anatomy_in == IRIS)
-    return IRISES  &&  !PUPILS && !EYELIDS;
-  else if(anatomy_in == PUPIL)
-    return PUPILS && !EYELIDS;
-  else if(anatomy_in == LOWER_LID)
-    return LOWER_LIDS && !SPHERES && !EYELIDS;
-  else if(anatomy_in == EYELID_CREASE)
+    return SPHERES;
+  if(anatomy_in == LOWER_LID)
+    return LOWER_LIDS;
+  if(anatomy_in == EYELID_CREASE)
     return EYELID_CREASES;
-  else if (anatomy_in==EYELID)
+  if (anatomy_in==EYELID)
     return EYELIDS;
-  else
+
     return 0;
 #undef SPHERES
 #undef IRISES
@@ -57,40 +57,28 @@ int get_ranked_anatomy(unsigned  data_index,
 #define LOWER_LIDS     orbit->lower_lid     [data_index]
 #define EYELID_CREASES orbit->eyelid_crease [data_index]
 
-  /* if(LOWER_LIDS && !SPHERES && !EYELIDS) */
-  /*   return LOWER_LID; */
-  /* if(SPHERES && !LOWER_LIDS && !EYELIDS) */
-  /*   return SPHERE; */
-  /* if(LOWER_LIDS && !EYELIDS) // sphere and lower lid label */
-  /*   return LOWER_LID; */
-  /* if(SPHERES && !EYELIDS) // sphere and lower lid label */
-  /*   return SPHERE; */
-  /* if(EYELID_CREASES && !EYELIDS && !SPHERES) */
-  /*   return EYELID_CREASE; */
-  /* if (EYELIDS ) */
-  /*   return EYELID; */
-
-  if(SPHERES )
-    return SPHERE;
-  if(IRISES )
-    return IRIS;
-  if(PUPILS )
-    return PUPIL;
+int  ret_val = 6;
   if(EYELIDS)
-    return EYELID;
-  if(LOWER_LIDS) // sphere and lower lid label
-    return LOWER_LID;
-  if(EYELID_CREASES) // sphere and lower lid label
-    return EYELID_CREASE;
+    ret_val = EYELID;
+ if(SPHERES)
+    ret_val = SPHERE;
+  if(IRISES )
+    ret_val = IRIS;
+  if(PUPILS)
+    ret_val = PUPIL;
+  if(LOWER_LIDS)
+    ret_val = LOWER_LID;
+  if(EYELID_CREASES)
+    ret_val = EYELID_CREASE;
+
 #undef SPHERES
 #undef IRISES
 #undef PUPILS
 #undef EYELIDS
 #undef LOWER_LIDS
 #undef EYELID_CREASES
-   return 6;
+   return ret_val;
 }
-
 
 
 float8 weight_appearance(float vis_A, float vis_B, float8 int_A,float8 int_B,float8 mean_A){

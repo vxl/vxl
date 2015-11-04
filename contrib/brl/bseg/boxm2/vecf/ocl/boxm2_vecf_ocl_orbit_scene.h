@@ -306,7 +306,7 @@ private:
   bocl_mem* source_app_base_,*source_color_base_,*source_vis_base_,*source_nobs_base_,*source_alpha_base_;
   bocl_mem* sphere_base_,*eyelid_base_,*eyelid_crease_base_,*lower_eyelid_base_,*pupil_base_,*iris_base_;
   bocl_mem_sptr eyelid_crease_geo_cl_,eyelid_geo_cl_,lower_eyelid_geo_cl_;
-  float eyelid_cl_buf_[16];
+  float eyelid_cl_buf_[21];
   float eyelid_crease_cl_buf_[16];
   float lower_eyelid_cl_buf_[16];
   bocl_mem_sptr centerX_;

@@ -591,7 +591,7 @@ void boxm2_vecf_ocl_orbit_scene::recreate_eyelid(){
 
 
 void boxm2_vecf_ocl_orbit_scene::build_eyelid(){
-  double len = 4 * blk_->sub_block_dim().x();
+  double len = 2 * blk_->sub_block_dim().x();
   ;
   double d_thresh = params_.neighbor_radius()*len;
   double margin = params_.eyelid_radius() * 0.15;
@@ -1246,6 +1246,11 @@ void boxm2_vecf_ocl_orbit_scene::init_eyelids(){
   eyelid_cl_buf_[12] = this->params_.dphi_rad();
   eyelid_cl_buf_[13] = this->params_.eyelid_tmin_;
   eyelid_cl_buf_[14] = this->params_.eyelid_tmax_;
+  eyelid_cl_buf_[15] = this->params_.mid_superior_margin_z_;
+  eyelid_cl_buf_[16] = this->params_.mid_inferior_margin_z_;
+  eyelid_cl_buf_[17] = this->params_.medial_socket_radius();
+  eyelid_cl_buf_[18] = this->params_.lateral_socket_radius();
+  eyelid_cl_buf_[19] = this->params_.eyelid_radius();
 
   lower_eyelid_cl_buf_[10] = this->params_.scale_x();
   lower_eyelid_cl_buf_[11] = this->params_.scale_y();
@@ -1256,7 +1261,7 @@ void boxm2_vecf_ocl_orbit_scene::init_eyelids(){
   eyelid_crease_cl_buf_[12] = this->params_.dphi_rad();
   eyelid_crease_cl_buf_[13] = this->params_.eyelid_crease_scale_y();
 
-  eyelid_geo_cl_       = new bocl_mem(device_->context(), eyelid_cl_buf_ ,        sizeof(float)*16, " eyelid struct " );
+  eyelid_geo_cl_       = new bocl_mem(device_->context(), eyelid_cl_buf_ ,        sizeof(float)*21, " eyelid struct " );
  eyelid_crease_geo_cl_ = new bocl_mem(device_->context(), eyelid_crease_cl_buf_ , sizeof(float)*16, " eyelid crease struct " );
  lower_eyelid_geo_cl_  = new bocl_mem(device_->context(), lower_eyelid_cl_buf_ ,  sizeof(float)*16, "lower eyelid struct " );
 
@@ -1405,6 +1410,7 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(vcl_string&      options)
   offset_buff[0] = params_.offset_.x();
   offset_buff[1] = params_.offset_.y();
   offset_buff[2] = params_.offset_.z();
+  float curr_dt = -params_.eyelid_dt_;
   vnl_matrix_fixed<double, 3, 3> R = rot.inverse().as_matrix();
    rotation_buff[0] =(float) R(0,0);  rotation_buff[3] =(float) R(1,0);  rotation_buff[6] =(float) R(2,0);
    rotation_buff[1] =(float) R(0,1);  rotation_buff[4] =(float) R(1,1);  rotation_buff[7] =(float) R(2,1);
@@ -1415,6 +1421,9 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(vcl_string&      options)
 
    bocl_mem_sptr  offset_l = new bocl_mem(device_->context(), offset_buff, sizeof(float)*3, " offset " );
    good_buffs &=  offset_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+   bocl_mem_sptr  dt_l = new bocl_mem(device_->context(), &curr_dt , sizeof(float), " dt buff " );
+   good_buffs &=  dt_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
    vcl_size_t local_threads[1]={64};
    static vcl_size_t global_threads[1]={1};
@@ -1506,6 +1515,7 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(vcl_string&      options)
    map_to_target_kern->set_arg(eyelid_crease_base_);
    map_to_target_kern->set_arg(lower_eyelid_base_);
    map_to_target_kern->set_arg(eyelid_geo_cl_.ptr());
+   map_to_target_kern->set_arg(dt_l.ptr());
 #ifdef DEBUG_CL
    map_to_target_kern->set_arg(output_cl.ptr());
    map_to_target_kern->set_arg(nb_top_cl.ptr());
@@ -1538,7 +1548,7 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(vcl_string&      options)
 #endif
 
    int status = clFinish(queue_);
-   bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL (INTERP) FAILED: " + error_to_string(status));
+   bool good_kern = check_val(status, CL_SUCCESS, "ORBIT MAP TO TARGET KERNEL FAILED: " + error_to_string(status));
    map_to_target_kern->clear_args();
 
    if(!good_kern)
