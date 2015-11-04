@@ -272,6 +272,15 @@ class vgl_rotation_3d
 // ----------------------------------------------------------------
 
 template <class T>
+vcl_istream& operator>>(vcl_istream& s, vgl_rotation_3d<T> &R)
+{
+  vnl_quaternion<T> q;
+  s >> q;
+  R = vgl_rotation_3d<T>(q);
+  return s;
+}
+
+template <class T>
 vcl_ostream& operator<<(vcl_ostream& s, vgl_rotation_3d<T> const& R)
 {
   return s << R.as_quaternion();
