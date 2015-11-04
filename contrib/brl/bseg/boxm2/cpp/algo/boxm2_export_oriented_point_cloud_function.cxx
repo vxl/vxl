@@ -121,6 +121,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
   boxm2_data_traits<BOXM2_POINT>::datatype *   points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer();
   boxm2_data_traits<BOXM2_COVARIANCE>::datatype *  covs_data = (boxm2_data_traits<BOXM2_COVARIANCE>::datatype*) covariances->data_buffer();
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
+  boxm2_data_traits<BOXM2_ALPHA>::datatype     *   alpha_data   = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
 
   file << std::fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
@@ -139,7 +140,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
       vnl_vector_fixed<double, 3> axes;
       //vnl_vector_fixed<double, 3> eval;
       double LE, CE, exp_color;
-      if (!calculateProbOfPoint(scene, blk, points_data[currIdx], covs_data[currIdx], mog, alpha, prob, exp_color, axes, LE, CE))
+      if (!calculateProbOfPoint(scene, blk, points_data[currIdx], covs_data[currIdx], alpha_data[currIdx], prob, exp_color, axes, LE, CE))
         continue;
 
       if (prob >= prob_t)
@@ -224,8 +225,7 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
 bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm2_scene_sptr& scene, boxm2_block * blk,
                                                                       const vnl_vector_fixed<float, 4>& point,
                                                                       const vnl_vector_fixed<float, 9>& cov,
-                                                                      boxm2_data_base* mog,
-                                                                      boxm2_data_base* alpha,
+                                                                      const float& alpha,
                                                                       float& prob, double& color, vnl_vector_fixed<double, 3>& axes, double& LE, double& CE)
 {
   vgl_point_3d<double> local;
@@ -241,7 +241,7 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   //if (blk->block_id() != id)
   //  return false;
 
-  prob = 1.0;
+  calculateProbOfPoint(scene, blk, point, alpha, prob);
   // compute the eigenvalues
   vnl_matrix<double> pt_cov(3,3,0.0);
   pt_cov[0][0] = cov[0];
@@ -284,9 +284,13 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
   CE = CEx > CEy ? CEx : CEy;
 
   if (LE > 2.5)
+  {
     return false;
+  }
   if (CE > 2.5)
+  {
     return false;
+  }
 
   return true;
 }
@@ -341,7 +345,7 @@ void boxm2_export_oriented_point_cloud_function::writePLYHeaderOnlyPoints(std::o
        << "\nproperty float x\nproperty float y\nproperty float z\nproperty uchar red\nproperty uchar green\nproperty uchar blue\n"
        << "property float axes_a\nproperty float axes_b\nproperty float axes_c\n"
     // << "property float eval_x\nproperty float eval_y\nproperty eval_z\n"
-       << "property float LE\nproperty float CE\n"
+       << "property float le\nproperty float ce\n"
        << "property float prob\n"
        << "end_header\n"
        << ss.str();
