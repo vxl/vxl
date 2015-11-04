@@ -87,7 +87,44 @@ def get_index_from_3d_point(scene,cache,point):
     index=boxm2_batch.get_output_int(id);
     boxm2_batch.remove_data(id);
 
-    return ((blk_i, blk_k, blk_j), index)
+  return ((blk_i, blk_j, blk_k), index)
+
+def get_3d_point_from_index(scene,cache,block_index, index): 
+    #Warning, you probably shouldn't be doing this!
+    boxm2_batch.init_process("boxm2CppGet3dPointFromIndexProcess");
+    boxm2_batch.set_input_from_db(0, scene);
+    boxm2_batch.set_input_from_db(1, cache);
+    boxm2_batch.set_input_int(2, block_index[0]);
+    boxm2_batch.set_input_int(3, block_index[1]);
+    boxm2_batch.set_input_int(4, block_index[2]);
+    boxm2_batch.set_input_int(5, index);
+    boxm2_batch.run_process();
+
+    (id,type) = boxm2_batch.commit_output(0);
+    x=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(1);
+    y=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(2);
+    z=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
+
+    (id,type) = boxm2_batch.commit_output(3);
+    xs=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(4);
+    ys=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(5);
+    zs=boxm2_batch.get_output_float(id);
+    boxm2_batch.remove_data(id);
+    (id,type) = boxm2_batch.commit_output(6);
+    leaf=boxm2_batch.get_output_int(id);
+    boxm2_batch.remove_data(id);
+
+    return ((x, y, z), (xs, ys, zs), leaf)
+
 
 def query_cell(scene,cache,point,model_name,model_type): 
     #Point should be 3 len, for a x, y, z coordinate OR

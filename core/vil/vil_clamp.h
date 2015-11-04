@@ -104,7 +104,7 @@ inline void vil_clamp_below(vil_image_view<T>& src, T t, T v)
 template <class T>
 inline void vil_clamp_above(vil_image_view<T>& src, T t, T v)
 {
-   vcl_ptrdiff_t istepA=src.istep(), jstepA=src.jstep(), pstepA=src.planestep();
+   std::ptrdiff_t istepA=src.istep(), jstepA=src.jstep(), pstepA=src.planestep();
    T* planeA = src.top_left_ptr();
    for (unsigned int p=0; p<src.nplanes(); ++p,planeA+=pstepA)
    {

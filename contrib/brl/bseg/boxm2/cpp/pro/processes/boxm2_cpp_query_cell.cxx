@@ -7,7 +7,7 @@
 // \author Andy Neff
 // \date Oct 15 2015
 
-#include <vcl_fstream.h>
+#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/boxm2_scene.h>
@@ -36,7 +36,7 @@ bool boxm2_cpp_query_cell_process_cons(bprb_func_process& pro)
   bool ok=false;
  
   //process takes 7 inputs
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "int"; //blk_i
@@ -48,7 +48,7 @@ bool boxm2_cpp_query_cell_process_cons(bprb_func_process& pro)
   ok = pro.set_input_types(input_types_);
   if (!ok) return ok;
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0]="bbas_1d_array_float_sptr"; 
   ok = pro.set_output_types(output_types_);
   if (!ok) return ok;
@@ -77,7 +77,7 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   using namespace boxm2_cpp_query_cell_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -88,8 +88,8 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   int blk_j =pro.get_input<int>(i++);
   int blk_k =pro.get_input<int>(i++);
   int index =pro.get_input<int>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
-  vcl_string ident_type = pro.get_input<vcl_string>(i++);
+  std::string ident = pro.get_input<std::string>(i++);
+  std::string ident_type = pro.get_input<std::string>(i++);
 
   // set arguments
   // vgl_point_3d<double> local;
@@ -97,9 +97,9 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   // if (!scene->contains(vgl_point_3d<double>(x, y, z), id, local))
     // return false;
 
-  // int index_x=(int)vcl_floor(local.x());
-  // int index_y=(int)vcl_floor(local.y());
-  // int index_z=(int)vcl_floor(local.z());
+  // int index_x=(int)std::floor(local.x());
+  // int index_y=(int)std::floor(local.y());
+  // int index_z=(int)std::floor(local.z());
   // boxm2_block * blk=cache->get_block(scene, id);
   // boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
   // vnl_vector_fixed<unsigned char,16> treebits=blk->trees()(index_x,index_y,index_z);
@@ -109,7 +109,7 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   
   boxm2_data_base* data_base = cache->get_data_base(scene, id,ident);
   
-  vcl_vector<float> return_data;
+  std::vector<float> return_data;
   
   if (ident_type.compare("BOXM2_FLOAT16")==0)
   {

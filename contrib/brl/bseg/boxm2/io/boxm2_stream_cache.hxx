@@ -20,7 +20,7 @@ bool boxm2_stream_cache::open_streams(boxm2_stream_cache_datatype_helper_sptr h)
     unsigned long numBytes = vul_file::size(filename);
 
     if (!strs[i]->open_file(filename.c_str())) {
-      vcl_cerr<<"boxm2_stream_cache::get_next cannot open file "<<filename<<'\n';
+      std::cerr<<"boxm2_stream_cache::get_next cannot open file "<<filename<<std::endl;
       //throw 0;
       continue; //don't want to reset cell_cnt_ for non-existing files
     }
@@ -37,15 +37,15 @@ bool boxm2_stream_cache::open_streams(boxm2_stream_cache_datatype_helper_sptr h)
 template <boxm2_data_type T>
 int boxm2_stream_cache::exists(boxm2_block_id bid)
 { //Returns number of files that exist in stream for block bid
-  vcl_string data_type = boxm2_data_traits<T>::prefix();
-  vcl_vector<boxm2_stream_cache_helper_sptr>& strs = data_streams_[data_type];
+  std::string data_type = boxm2_data_traits<T>::prefix();
+  std::vector<boxm2_stream_cache_helper_sptr>& strs = data_streams_[data_type];
   int files_exist = 0;
   struct stat buffer;
 
   for (unsigned i = 0; i < identifier_list_.size(); i++) 
   {
-    vcl_string key = boxm2_data_traits<T>::prefix(identifier_list_[i]);
-    vcl_string filename = scene_->data_path() + key + "_" + bid.to_string() + ".bin";
+    std::string key = boxm2_data_traits<T>::prefix(identifier_list_[i]);
+    std::string filename = scene_->data_path() + key + "_" + bid.to_string() + ".bin";
 
     if (stat(filename.c_str(), &buffer) == 0)
       files_exist++;

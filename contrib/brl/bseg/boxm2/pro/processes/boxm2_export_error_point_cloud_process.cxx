@@ -9,7 +9,7 @@
 // \author Ozge C. Ozcanli 
 // \date April 18, 2012
 
-#include <vcl_fstream.h>
+#include <fstream>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_cache.h>
@@ -27,8 +27,8 @@ bool boxm2_export_error_point_cloud_process_cons(bprb_func_process& pro)
   using namespace boxm2_export_error_point_cloud_process_globals;
 
   //process takes 5 inputs 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "vcl_string"; //filename
@@ -46,7 +46,7 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
   using namespace boxm2_export_error_point_cloud_process_globals;
 
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The number of inputs should be " << n_inputs_<< std::endl;
     return false;
   }
 
@@ -54,26 +54,26 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  vcl_string output_filename = pro.get_input<vcl_string>(i++);
+  std::string output_filename = pro.get_input<std::string>(i++);
   float prob_t = pro.get_input<float>(i++);
   bool color_using_model = pro.get_input<bool>(i++);
 
   unsigned num_vertices = 0;
 
-  vcl_ofstream myfile;
+  std::ofstream myfile;
   myfile.open(output_filename.c_str());
 
   vgl_box_3d<double> bb = scene->bounding_box();
 
   //get data sizes
-  vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
-  vcl_size_t covTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_COVARIANCE>::prefix());
-  vcl_size_t alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-  vcl_size_t mogTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  std::size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+  std::size_t covTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_COVARIANCE>::prefix());
+  std::size_t alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  std::size_t mogTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   
   //zip through each block
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
-  vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+  std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
+  std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
@@ -84,9 +84,9 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
     
     boxm2_data_base * alph = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     int buffer_length = (int)(alph->buffer_length()/alphaTypeSize);
-    vcl_cout << "\nin blk: " << id << " data buf len: " << buffer_length << "\n";
+    std::cout << "\nin blk: " << id << " data buf len: " << buffer_length << std::endl;
 
-    vcl_cout << "Processing Block: "<<id<< " with prob t: " << prob_t << vcl_endl;
+    std::cout << "Processing Block: "<<id<< " with prob t: " << prob_t << std::endl;
 
     //specify size to make sure data is right size.
     boxm2_data_base * points = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_POINT>::prefix(), buffer_length*pointTypeSize,true);
@@ -98,9 +98,9 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
   myfile.flush();
   myfile.close();
 
-  vcl_ifstream myfile_input;
+  std::ifstream myfile_input;
   myfile_input.open(output_filename.c_str());
-  vcl_stringstream ss;
+  std::stringstream ss;
   ss << myfile_input.rdbuf();
   myfile_input.close();
   myfile.open(output_filename.c_str());
