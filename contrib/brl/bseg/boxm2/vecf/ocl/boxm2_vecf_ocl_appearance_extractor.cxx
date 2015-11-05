@@ -1,4 +1,3 @@
-
 #include "boxm2_vecf_ocl_appearance_extractor.h"
 #include <boct/boct_bit_tree.h>
 #include "../boxm2_vecf_composite_head_parameters.h"
@@ -1044,17 +1043,17 @@ bool boxm2_vecf_ocl_appearance_extractor::extract_appearance_one_pass(bool is_ri
 
 
    //   orbit.source_color_base_->read_to_buffer(queue_);
-//   output_cl->read_to_buffer(queue_);
+   output_cl->read_to_buffer(queue_);
    int status = clFinish(queue_);
    bool good_kern = check_val(status, CL_SUCCESS, "TRANSFORMATION KERNEL (INTERP) FAILED: " + error_to_string(status));
    map_to_source_kern->clear_args();
 
    if(!good_kern)
      return false;
-   // for (unsigned i = 0;i<source_data_size;i++){
-   //   if( output[i]!=0)
-   //     vcl_cout<<output[i]<<" ";
-   // }
+   for (unsigned i = 0;i<source_data_size;i++){
+     if( output[i]!=0)
+       vcl_cout<<output[i]<<" ";
+   }
 
    delete [] output;
    return true;
