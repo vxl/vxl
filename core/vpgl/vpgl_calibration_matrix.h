@@ -12,9 +12,11 @@
 //  Modifications
 //   May 08, 2004  Ricardo Fabbri  Added binary I/O support
 //   May 08, 2004  Ricardo Fabbri  Added == operator
+//   Jul 21, 2014  Peter Carr      Switching from x_scale & y_scale to aspect_ratio
 // \endverbatim
 //
 
+#include <vcl_deprecated.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -35,9 +37,11 @@ class vpgl_calibration_matrix
   virtual ~vpgl_calibration_matrix() {}
 
   //: Construct using all of the camera parameters.
-  // Must satisfy the following requirements: x,y_scales must be > 0, focal_length must be not equal to 0.
+  // Must satisfy the following requirements: pixel_aspect_ratio > 0, focal_length must be not equal to 0.
+  // The pixel aspect ratio is defined as the height of a pixel divided by its width, which is opposite
+  // of the usual convention for image aspect ratio.
   vpgl_calibration_matrix( T focal_length, const vgl_point_2d<T>& principal_point,
-                           T x_scale = (T)1, T y_scale = (T)1, T skew = (T)0 );
+                           T pixel_aspect_ratio = (T)1, T skew = (T)0 );
 
   //: Construct from a right upper triangular matrix whose decomposition into the calibration components makes sense.
   //  The supplied matrix can be a scalar multiple of such a matrix.
@@ -52,12 +56,22 @@ class vpgl_calibration_matrix
   void set_x_scale( T new_x_scale );
   void set_y_scale( T new_y_scale );
   void set_skew( T new_skew );
+    
+  //: Set pixel aspect ratio
+  // The pixel aspect ratio is defined as the height of a pixel divided by its width, which is opposite
+  // of the usual convention for image aspect ratio.
+  void set_pixel_aspect_ratio( T new_aspect_ratio );
 
   T focal_length() const { return focal_length_; }
   vgl_point_2d<T> principal_point() const { return principal_point_; }
-  T x_scale() const { return x_scale_; }
-  T y_scale() const { return y_scale_; }
+  T x_scale() const { VXL_DEPRECATED( "vpgl_calibration_matrix<T>::x_scale()" ); return 1; }
+  T y_scale() const { VXL_DEPRECATED( "vpgl_calibration_matrix<T>::y_scale()" ); return pixel_aspect_ratio_; }
   T skew() const { return skew_; }
+  
+  //: Get pixel aspect ratio
+  // The pixel aspect ratio is defined as the height of a pixel divided by its width, which is opposite
+  // of the usual convention for image aspect ratio.
+  T pixel_aspect_ratio() const { return pixel_aspect_ratio_; }
 
   //: Equality tests
   bool operator==(vpgl_calibration_matrix<T> const &that) const;
@@ -73,7 +87,7 @@ class vpgl_calibration_matrix
   //: The following is a list of the parameters in the calibration matrix.
   T focal_length_;
   vgl_point_2d<T> principal_point_;
-  T x_scale_, y_scale_, skew_;
+  T pixel_aspect_ratio_, skew_;
 };
 
 
