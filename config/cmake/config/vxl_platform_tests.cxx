@@ -1,3 +1,15 @@
+
+// Duplicated form vxl_config.h.in to break circular dependancy
+/* When using C++11 or greater, constexpr
+ * may be necessary for static const float initialization
+ * and is benificial in other cases where
+ * a value can be constant. */
+#if  __cplusplus >= 201103L
+# define VCL_CONSTEXPR constexpr
+#else
+# define VCL_CONSTEXPR const
+#endif
+
 //-------------------------------------
 
 #ifdef VCL_HAS_BOOL
@@ -240,8 +252,8 @@ int main() { return 0; }
 
 class A {
  public:
-  static const int x = 27;
-  static const bool y = false;
+  static VCL_CONSTEXPR int x = 27;
+  static VCL_CONSTEXPR bool y = false;
 };
 
 int main() { return A::x == 27 && !A::y ? 0 : 1; }
@@ -259,7 +271,7 @@ int main() { return A::x == 27 && !A::y ? 0 : 1; }
 class A
 {
  public:
-  static const int x = 27;
+  static VCL_CONSTEXPR int x = 27;
 };
 
 int f(const void* x) { return x?1:0; }
@@ -270,13 +282,21 @@ int main() { return f(&A::x); }
 
 #ifdef VCL_STATIC_CONST_INIT_FLOAT
 
+// If __cplusplus is greater than 201103 date, then floating point initialization is supported.
+#if ( defined(__GNUC__) && !defined(__clang__) ) || ( __cplusplus >= 201103L )
+// As stated in vxl/vcl/vcl_config_compiler.h.in
+// GCC allows this above, but with floating point types, ANSI doesn't.
+// Again, we'll use it if we've got it.
 class A {
  public:
-  static const float x = 27.0f;
-  static const double y = 27.0;
+  static VCL_CONSTEXPR float x = 27.0f;
+  static VCL_CONSTEXPR double y = 27.0;
 };
-
 int main() { return A::x == 27.0f && A::y == 27.0 ? 0 : 1; }
+#else
+  #error "VCL_STATIC_CONST_INIT_FLOAT only supported on gcc compilers (and c++0x).
+  int main() { return 1; }
+#endif
 #endif // VCL_STATIC_CONST_INIT_FLOAT
 
 //-------------------------------------
