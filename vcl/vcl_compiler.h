@@ -133,7 +133,9 @@
 #  endif
 
 // In future use VCL_VC_13_1 for 13.1, etc.
-#  if _MSC_VER >= 1600     // Visual Studio 2010 = Version 10.x
+#  if _MSC_VER >= 1700     // Visual Studio 2011 = Version 11.x
+#   define VCL_VC_11
+#  elif _MSC_VER >= 1600     // Visual Studio 2010 = Version 10.x
 #   define VCL_VC_10
 #  elif _MSC_VER >= 1500     // Visual Studio 2008 = Version 9.x
 #   define VCL_VC_9
