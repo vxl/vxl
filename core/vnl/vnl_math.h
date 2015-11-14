@@ -637,23 +637,23 @@ namespace vnl_math
  inline float              cube(float x)              { return x*x*x; }
  inline double             cube(double x)             { return x*x*x; }
 
- // sgn (sign in -1, 0, +1)
- inline int sgn(int x)       { return x?((x>0)?1:-1):0; }
- inline int sgn(long x)      { return x?((x>0)?1:-1):0; }
+// sgn (sign in -1, 0, +1)
+inline int sgn(int x)       { return x?((x>0)?1:-1):0; }
+inline int sgn(long x)      { return x?((x>0)?1:-1):0; }
 #if VCL_HAS_LONG_LONG
- inline int sgn(long long x) { return x?((x>0)?1:-1):0; }
+inline int sgn(long long x) { return x?((x>0)?1:-1):0; }
 #endif
- inline int sgn(float x)     { return (x != 0)?((x>0)?1:-1):0; }
- inline int sgn(double x)    { return (x != 0)?((x>0)?1:-1):0; }
+inline int sgn(float x)     { return (x != 0)?((x>0)?1:-1):0; }
+inline int sgn(double x)    { return (x != 0)?((x>0)?1:-1):0; }
 
- // sgn0 (sign in -1, +1 only, useful for reals)
- inline int sgn0(int x)         { return (x>=0)?1:-1; }
- inline int sgn0(long x)        { return (x>=0)?1:-1; }
+// sgn0 (sign in -1, +1 only, useful for reals)
+inline int sgn0(int x)         { return (x>=0)?1:-1; }
+inline int sgn0(long x)        { return (x>=0)?1:-1; }
 #if VCL_HAS_LONG_LONG
- inline int sgn0(long long x)   { return (x>=0)?1:-1; }
+inline int sgn0(long long x)   { return (x>=0)?1:-1; }
 #endif
- inline int sgn0(float x)       { return (x>=0)?1:-1; }
- inline int sgn0(double x)      { return (x>=0)?1:-1; }
+inline int sgn0(float x)       { return (x>=0)?1:-1; }
+inline int sgn0(double x)      { return (x>=0)?1:-1; }
 
  // squared_magnitude
  inline unsigned int       squared_magnitude(char               x) { return int(x)*int(x); }
