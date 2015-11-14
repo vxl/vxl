@@ -1,13 +1,13 @@
 /* lbfgsb-example1.f -- translated by f2c (version 20050501).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+        on Microsoft Windows system, link with libf2c.lib;
+        on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+        or, if you install libf2c.a in a standard place, with -lf2c -lm
+        -- in that order, at the end of the command line, as in
+                cc *.o -lf2c -lm
+        Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+                http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "v3p_netlib.h"
@@ -74,7 +74,7 @@
     integer m, n;
     doublereal u[1024], x[1024], t1, t2, wa[42584];
     integer nbd[1024], iwa[3072];
-    char task[60];
+    char task[60] = {0};
     doublereal factr;
     char csave[60];
     doublereal dsave[29];
@@ -124,11 +124,11 @@
     i__1 = n;
     for (i__ = 1; i__ <= i__1; i__ += 2) {
 /*<          nbd(i)=2 >*/
-	nbd[i__ - 1] = 2;
+        nbd[i__ - 1] = 2;
 /*<          l(i)=1.0d0 >*/
-	l[i__ - 1] = 1.;
+        l[i__ - 1] = 1.;
 /*<          u(i)=1.0d2 >*/
-	u[i__ - 1] = 100.;
+        u[i__ - 1] = 100.;
 /*<   10  continue >*/
 /* L10: */
     }
@@ -137,11 +137,11 @@
     i__1 = n;
     for (i__ = 2; i__ <= i__1; i__ += 2) {
 /*<          nbd(i)=2 >*/
-	nbd[i__ - 1] = 2;
+        nbd[i__ - 1] = 2;
 /*<          l(i)=-1.0d2 >*/
-	l[i__ - 1] = -100.;
+        l[i__ - 1] = -100.;
 /*<          u(i)=1.0d2 >*/
-	u[i__ - 1] = 100.;
+        u[i__ - 1] = 100.;
 /*<   12   continue >*/
 /* L12: */
     }
@@ -150,7 +150,7 @@
     i__1 = n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          x(i)=3.0d0 >*/
-	x[i__ - 1] = 3.;
+        x[i__ - 1] = 3.;
 /*<   14  continue >*/
 /* L14: */
     }
@@ -174,7 +174,7 @@ L111:
 /*     This is the call to the L-BFGS-B code. */
 /*<    >*/
     setulb_(&n, &m, x, l, u, nbd, &f, g, &factr, &pgtol, wa, iwa, task, &
-	    iprint, csave, lsave, isave, dsave);
+            iprint, csave, lsave, isave, dsave);
 /*<       if (task(1:2) .eq. 'FG') then >*/
     if (s_cmp(task, "FG", (ftnlen)2, (ftnlen)2) == 0) {
 /*        the minimization routine has returned to request the */
@@ -182,54 +182,54 @@ L111:
 /*        Compute function value f for the sample problem. */
 /*<          f=.25d0*(x(1)-1.d0)**2 >*/
 /* Computing 2nd power */
-	d__1 = x[0] - 1.;
-	f = d__1 * d__1 * .25;
+        d__1 = x[0] - 1.;
+        f = d__1 * d__1 * .25;
 /*<          do 20 i=2,n >*/
-	i__1 = n;
-	for (i__ = 2; i__ <= i__1; ++i__) {
+        i__1 = n;
+        for (i__ = 2; i__ <= i__1; ++i__) {
 /*<             f=f+(x(i)-x(i-1)**2)**2 >*/
 /* Computing 2nd power */
-	    d__2 = x[i__ - 2];
+            d__2 = x[i__ - 2];
 /* Computing 2nd power */
-	    d__1 = x[i__ - 1] - d__2 * d__2;
-	    f += d__1 * d__1;
+            d__1 = x[i__ - 1] - d__2 * d__2;
+            f += d__1 * d__1;
 /*<   20     continue >*/
 /* L20: */
-	}
+        }
 /*<          f=4.d0*f >*/
-	f *= 4.;
+        f *= 4.;
 /*        Compute gradient g for the sample problem. */
 /*<          t1=x(2)-x(1)**2 >*/
 /* Computing 2nd power */
-	d__1 = x[0];
-	t1 = x[1] - d__1 * d__1;
+        d__1 = x[0];
+        t1 = x[1] - d__1 * d__1;
 /*<          g(1)=2.d0*(x(1)-1.d0)-1.6d1*x(1)*t1 >*/
-	g[0] = (x[0] - 1.) * 2. - x[0] * 16. * t1;
+        g[0] = (x[0] - 1.) * 2. - x[0] * 16. * t1;
 /*<          do 22 i=2,n-1 >*/
-	i__1 = n - 1;
-	for (i__ = 2; i__ <= i__1; ++i__) {
+        i__1 = n - 1;
+        for (i__ = 2; i__ <= i__1; ++i__) {
 /*<             t2=t1 >*/
-	    t2 = t1;
+            t2 = t1;
 /*<             t1=x(i+1)-x(i)**2 >*/
 /* Computing 2nd power */
-	    d__1 = x[i__ - 1];
-	    t1 = x[i__] - d__1 * d__1;
+            d__1 = x[i__ - 1];
+            t1 = x[i__] - d__1 * d__1;
 /*<             g(i)=8.d0*t2-1.6d1*x(i)*t1 >*/
-	    g[i__ - 1] = t2 * 8. - x[i__ - 1] * 16. * t1;
+            g[i__ - 1] = t2 * 8. - x[i__ - 1] * 16. * t1;
 /*<   22     continue >*/
 /* L22: */
-	}
+        }
 /*<          g(n)=8.d0*t1 >*/
-	g[n - 1] = t1 * 8.;
+        g[n - 1] = t1 * 8.;
 /*          go back to the minimization routine. */
 /*<          goto 111 >*/
-	goto L111;
+        goto L111;
 /*<       endif >*/
     }
 
 /*<       if (task(1:5) .eq. 'NEW_X')  goto 111 >*/
     if (s_cmp(task, "NEW_X", (ftnlen)5, (ftnlen)5) == 0) {
-	goto L111;
+        goto L111;
     }
 /*        the minimization routine has returned with a new iterate, */
 /*         and we have opted to continue the iteration. */
