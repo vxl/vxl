@@ -16,8 +16,6 @@ void vcl_cassert_failure(char const *FILE, int LINE, char const *expr)
 // The gcc assert macro uses a function call __eprintf() which is defined
 // in gcc/libgcc2.c in the gcc sources.
 //
-// Note that this is fixing a problem with *gcc*, not the SunPro or
-// KAI compilers.
 extern "C" void
 __eprintf(char const *string, char const *expression,
           unsigned int line, char const *filename)

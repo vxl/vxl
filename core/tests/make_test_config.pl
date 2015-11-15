@@ -202,22 +202,7 @@ for $var_exp (
   'VXL_HAS_IEEEFP_H',
 
   # from vcl_compiler.h
-  'VCL_SUNPRO_CC',
-  'VCL_SUNPRO_CC_5',
-  'VCL_SUNPRO_CC_50',
-  'VCL_SUNPRO_CC_56',
   'VCL_GCC',
-  'VCL_GCC_295',
-  'VCL_EGCS',
-  'VCL_GCC_28',
-  'VCL_GCC_27',
-  'VCL_GCC_EGCS',
-  'VCL_GCC_3',
-  'VCL_GCC_30',
-  'VCL_GCC_31',
-  'VCL_GCC_32',
-  'VCL_GCC_33',
-  'VCL_GCC_34',
   'VCL_GCC_4',
   'VCL_GCC_40',
   'VCL_GCC_41',
@@ -226,27 +211,12 @@ for $var_exp (
   'VCL_GCC_51',
   'VCL_GCC_52',
   'VCL_GCC_53',
-  'VCL_BORLAND',
-  'VCL_BORLAND_55',
-  'VCL_BORLAND_56',
   'VCL_ICC',
-  'VCL_ICC_8',
-  'VCL_ICC_80',
-  'VCL_ICC_81',
   'VCL_WIN32',
   'VCL_VC',
   'VCL_VC_DOTNET',
   'VCL_VC_8',
   'VCL_VC_80',
-  'VCL_VC_7',
-  'VCL_VC_70',
-  'VCL_VC_71',
-  'VCL_VC_6',
-  'VCL_VC_60',
-  'VCL_VC_5',
-  'VCL_VC_50',
-  'VCL_KAI',
-  'VCL_METRO_WORKS',
   'GNU_LIBSTDCXX_V3',
 
   # from VXL CMake configuration files
@@ -279,21 +249,13 @@ for $var_exp (
   '__ECC',              # icc?
   '__INTEL_COMPILER',   # icc
   '__INTEL_CXXLIB_ICC', # icc using its own library?
-  '__BORLANDC__',       # bcc
-  '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
-  '__KCC',              # ???
-  '__MWERKS__',         # ???
-  '__MWKS__',           # Metrowerks CodeWarrior
-  '__BORLANDC__',       # Borland C++
-  '__WATCOMC__',        # Watcom C++
 
   # OS related
   '__CYGWIN__',         # cygwin
   '__MINGW32__',        # MinGW
   '_WIN32',             # windows
-  '__sgi',              # sgi
   '__alpha__',          # Alpha
   '__APPLE__',          # MacOS X
   'macintosh',          #

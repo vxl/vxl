@@ -5,6 +5,22 @@ aren't documented here, unless the bug-fix has a major observable
 effect.  If you change something in VXL, please document it here.
 
 ******************************
+VXL 1.19.0    - ???? 2015
+******************************
+     - Remove outdated compilers, and much of the convoluted logic necessary to
+       maintain them
+                - (Removed) All versions of GCC < 4.0
+                - (Removed) ICC < 11
+                - (Removed) METROWERKS
+                - (Removed) SunPro
+                - (Removed) SGI
+                - (Removed) Visual Studio 5,6,7,8
+                - (Removed) Como
+                - (Removed) Kai
+                - (Removed) VCL_STLPORT
+
+
+******************************
 VXL 1.18.0    - ???? 2012
 ******************************
       - Made vnl_math a namespace instead of a class with static data & methods

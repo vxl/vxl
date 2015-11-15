@@ -26,7 +26,7 @@ class vul_redirector_streambuf : public vcl_streambuf
   // SunPro 5.0 take char const *, which is
   // non-standard, but we have to live with it. A
   // better cpp test would be welcome. fsm.
-#if defined(__INTEL_COMPILER) || defined(VCL_SUNPRO_CC_5) || defined(VCL_KAI) || defined(VCL_BORLAND) || defined(VCL_GCC_3)
+#if defined(__INTEL_COMPILER)
   // RogueWave or ISO?
 # define xsputn_const const
 # define xsputn_sizet vcl_streamsize
