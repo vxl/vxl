@@ -2,19 +2,7 @@
 #define vcl_vector_h_
 
 #include "vcl_compiler.h"
-
-// -------------------- emulation
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_vector.h"
-
-// -------------------- sunpro 5.0
-#elif defined(VCL_SUNPRO_CC_50) && !defined(VCL_SUNPRO_CC_56)
-# include "sunpro/vcl_vector.h"
-
-// -------------------- iso
-#else
-# include "iso/vcl_vector.h"
-#endif
+#include "iso/vcl_vector.h"
 
 // Intel compiler's std::swap can't handle the special bit-iterator of
 // vector<bool>. But, on systems with newer GCCs, the Intel compiler

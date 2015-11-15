@@ -3,13 +3,7 @@
 
 #include "vcl_compiler.h"
 
-// -------------------- all emulation
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_functional.h"
-# undef vcl_functional_h_STD
-
-// -------------------- gcc with non-standard library
-#elif defined(VCL_GCC) && !defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
+#if defined(VCL_GCC) && !defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
 # include <function.h>
 # define vcl_functional_h_STD ::
 
@@ -46,37 +40,6 @@
 # define  vcl_constant_void_fun   vcl_functional_h_STD constant_void_fun
 # define  vcl_constant_unary_fun  vcl_functional_h_STD constant_unary_fun
 # define  vcl_constant_binary_fun vcl_functional_h_STD constant_binary_fun
-#endif
-
-
-#if 0 // who needs this? contact fsm if you do.
-// Fixes for SunPro and VisualC++ native STL :
-#if VCL_USE_NATIVE_STL
-# if defined(xxxVCL_SUNPRO_CC) || defined (_MSC_VER)
-// Select1st and Select2nd are extensions: they are not part of the standard.
-// fsm: So why do we need them?
-template <class _Pair>
-struct vcl_Select1st : public vcl_unary_function<_Pair, typename _Pair::first_type> {
-  typename _Pair::first_type const & operator()(_Pair const & __x) const {
-    return __x.first;
-  }
-};
- 
-template <class _Pair>
-struct vcl_Select2nd : public vcl_unary_function<_Pair, typename _Pair::second_type> {
-  typename _Pair::second_type const & operator()(_Pair const & __x) const {
-    return __x.second;
-  }
-};
-
-// Add select* to std.
-namespace std {
-  template <class _Pair>
-  struct select1st : public vcl_Select1st<_Pair> { };
-  template <class _Pair> struct select2nd : public vcl_Select2nd<_Pair> { };
-};
-# endif
-#endif
 #endif
 
 

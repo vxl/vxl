@@ -8,7 +8,7 @@
 
 //: VCL_USE_NATIVE_STL
 // Whether to use the compiler's STL.
-#define VCL_USE_NATIVE_STL @VCL_USE_NATIVE_STL@
+#define VCL_USE_NATIVE_STL 1
 
 // Whether new additions to the C++0x standard are available
 // and where they are found

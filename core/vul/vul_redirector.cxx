@@ -97,14 +97,7 @@ vul_redirector::~vul_redirector()
 
 int vul_redirector::sync_passthru()
 {
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-  // The default libraries these compilers come with are non-standard
-  // since they have no pubsync() method. According to standard, though,
-  // pubsync() just returns sync(), so :
-  return p->old_cerrbuf->sync();
-#else
   return p->old_cerrbuf->pubsync();
-#endif
 }
 
 vcl_streamsize vul_redirector::put_passthru(char const* buf, vcl_streamsize n)

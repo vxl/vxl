@@ -139,17 +139,6 @@
 #include <vcl_config_compiler.h>
 #include <vcl_config_headers.h>
 
-// This *needs* to come after vcl_config_headers.h
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-# if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_GCC_5)
-#  define GNU_LIBSTDCXX_V3 1
-# elif !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
-// One difference between v2 and v3 is that the former has
-// no <istream> header file whereas v3 has the lot.
-#  define GNU_LIBSTDCXX_V3 1
-# endif
-#endif
-
 // -------------------- default template parameters
 #if VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 # define VCL_DFL_TYPE_PARAM_STLDECL(A, a) class A = a

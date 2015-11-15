@@ -9,21 +9,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   unsigned major_count = 0;
   unsigned minor_count = 0;
 
-#ifdef VCL_SUNPRO_CC
-  ++compiler_count;
-#endif
-
-#ifdef VCL_SUNPRO_CC_5
-  ++major_count;
-#endif
-#ifdef VCL_SUNPRO_CC_50
-  ++minor_count;
-#endif
-#ifdef VCL_SUNPRO_CC_56
-  ++minor_count;
-#endif
-
-
 #ifdef VCL_GCC
   ++compiler_count;
 #endif

@@ -12,11 +12,6 @@ extern "C" int gettimeofday(struct timeval*, struct timezone*);
 # include <sys/timeb.h>
 # include <sys/times.h>
 
-#elif defined(GNU_LIBSTDCXX_V3)
-# define __restrict /* */
-# include <sys/time.h>
-# undef __restrict
-
 #elif !defined(VCL_NO_SYS_TIME_H)
 # include <sys/time.h>
 

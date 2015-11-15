@@ -7,15 +7,7 @@
 // so we need this for compilers where vcl_less is a macro.
 #include "vcl_functional.h"
 
-// -------------------- emulation
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_set.h"
-# include "emulation/vcl_multiset.h"
-
-// -------------------- iso
-#else
-# include "iso/vcl_set.h"
-#endif
+#include "iso/vcl_set.h"
 
 #define VCL_SET_INSTANTIATE extern "you must include vcl_set.txx first"
 #define VCL_MULTISET_INSTANTIATE extern "you must include vcl_set.txx first"
