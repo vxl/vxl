@@ -102,11 +102,6 @@
 
 #  include "internal/vcl_atomic_count_pthreads.h"
 
-// Similarly for SGI
-#elif defined(__sgi)
-
-#  include "internal/vcl_atomic_count_pthreads.h"
-
 #else
 
 // Use #define BOOST_DISABLE_THREADS to avoid the error

@@ -32,10 +32,7 @@ void vgui_qt_window::setup_widget(int w, int h, const char* title)
 
    setCentralWidget(frame);
 
-
-#ifndef __SGI_CC // SGI's iostream does not allow re-initialising
    vgui::out.rdbuf(statusbar.statusbuf);
-#endif
 }
 
 //-----------------------------------------------------------------------------

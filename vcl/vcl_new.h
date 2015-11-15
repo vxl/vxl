@@ -6,12 +6,9 @@
 
 #include "vcl_compiler.h"
 
-// -------------------- old SGI CC
-#if defined(VCL_SGI_CC_720)
-# include <new.h>
 
 // -------------------- gcc with old library
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include <new.h>
 
 // -------------------- old MSVC

@@ -35,24 +35,6 @@
 //
 // Add the corresponding test to tests/test_platform to make sure.
 
-#if defined(__sgi) && !defined(__GNUC__)
-# ifndef _COMPILER_VERSION
-#  define VCL_SGI_CC_6
-# else
-#  if (_COMPILER_VERSION >= 700)
-#   define VCL_SGI_CC_7
-#  else
-#   define VCL_SGI_CC_6
-#  endif
-#  if   (_COMPILER_VERSION >= 730)
-#   define VCL_SGI_CC_730
-#  elif (_COMPILER_VERSION >= 720)
-#   define VCL_SGI_CC_720
-#  endif
-#  define VCL_SGI_CC
-# endif
-#endif
-
 #if defined(__FreeBSD__)
 # define VCL_FREEBSD
 # ifndef _GLIBCXX_USE_C99

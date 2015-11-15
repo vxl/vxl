@@ -49,9 +49,6 @@ given below:
 
     FreeBSD 4.6    / Intel x86       / Gnu gcc 2.95.3
     HP-UX 10.20    / HP PA-RISC      / Gnu gcc 2.95.2
-    IRIX 5.3       / SGI Indy        / Gnu gcc 2.95.3   (see note *2)
-    IRIX 6.5       / SGI Onyx        / Gnu gcc 2.95.2   (see note *4)
-    IRIX 6.5       / SGI Onyx        / MIPSpro 7.3.1.1m (see note *4)
     Linux 2.0.33   / Intel x86       / Gnu gcc 2.7.2.1
     Linux 2.2.16   / Intel x86       / Gnu gcc 2.95.2
     Linux 2.4.19   / Intel x86       / Gnu gcc 3.2
@@ -98,15 +95,7 @@ Platform Notes
      config/Makefile.def, which is created by configure (see below).
 (*3) Requires -fpermissive when compiled with gcc due to the X11R5 header
      files which are not ANSI compliant.
-(*4) IRIX 6 users are recommended to consult SGI's Notes on building
-     Open Source software on IRIX, available from:
-     http://toolbox.sgi.com/TasteOfDT/public/freeware/shared/howto.html
-     In short, after running configure, the following modifications are required
-     in config/Makefile.def before DCMTK can be compiled:
-       - remove "-lsocket -lnsl" from LIBS
-     On IRIX, DCMTK should be built using GNU make (gmake), not with the IRIX
-     specific pmake/smake/make commands.
-(*5) MacOS X 10.1 requires DCMTK to be configured with --disable-threads
+(*4) MacOS X 10.1 requires DCMTK to be configured with --disable-threads
      because certain re-entrant Posix functions such as localtime_r
      are not available.
 

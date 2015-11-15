@@ -620,14 +620,6 @@ static void test_save_load_image()
 #endif
 
 
-  // SGI "iris" rgb
-#if 1
-  vil_test_image_type("iris", image8);
-  vil_test_image_type("iris", image16);
-  vil_test_image_type("iris", image3p);
-#endif
-
-
   // mit
 #if 1
 #ifdef BOOLEAN_MIT_WORKS // boolean doesn't work (yet)

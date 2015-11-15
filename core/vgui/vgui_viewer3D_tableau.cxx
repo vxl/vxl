@@ -227,7 +227,6 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
 
       add_quats(spindata->delta_r, lastpos.quat, this->token.quat);
 
-      // lastpos.quat = this->token.quat; // SGI CC can't do this.
       for (unsigned i=0; i<4; ++i) lastpos.quat[i] = this->token.quat[i];
 
       this->post_redraw();

@@ -609,11 +609,6 @@ test_file_format_read( int argc, char* argv[] )
   TEST("32-bit float grey little endian", CheckFile(CompareGreyFloat<float>(), "ff_grey_float_true.txt", "ff_grey_float_littleendian.viff" ), true);
   TEST("64-bit float grey little endian", CheckFile(CompareGreyFloat<double>(), "ff_grey_float_true.txt", "ff_grey_double_littleendian.viff" ), true);
 
-  vcl_cout << "SGI IRIS [iris]\n";
-  TEST("8-bit grey rle", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.iris" ), true);
-  TEST("16-bit grey verbatim", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit.iris" ), true);
-  TEST("8-bit RGB rle", CheckFile(ComparePlanes<vxl_byte,3>(), "ff_planar8bit_true.txt", "ff_rgb8bit.iris" ), true);
-
   vcl_cout << "MIT [mit]\n";
   TEST("8-bit grey", CheckFile(CompareGrey<vxl_byte>(), "ff_grey8bit_true.txt", "ff_grey8bit.mit" ), true);
   TEST("16-bit grey", CheckFile(CompareGrey<vxl_uint_16>(), "ff_grey16bit_true.txt", "ff_grey16bit.mit" ), true);

@@ -1,8 +1,8 @@
 #include <vcl_cassert.h>
-#ifndef VCL_SGI_CC_720 //SGI7.2.1
+
 #include <vcl_ciso646.h>
 #include <vcl_atomic_count.h>
-#endif
+
 #include <vcl_csetjmp.h>
 #include <vcl_cstdio.h>
 #include <vcl_ctime.h>
@@ -54,11 +54,6 @@
 #include <vcl_exception.h>
 #include <vcl_new.h>
 #include <vcl_stack.h>
-#ifndef VCL_SGI_CC_720 //SGI7.2.1
-#include <vcl_valarray.h>
-#include <vcl_numeric.h>
-#include <vcl_stdexcept.h>
-#endif
 #include <vcl_vector.h>
 #include <vcl_functional.h>
 
