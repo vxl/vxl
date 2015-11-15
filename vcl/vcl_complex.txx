@@ -14,8 +14,6 @@
 # include "gcc-295/vcl_complex.txx"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_complex.txx"
-#elif defined(VCL_SGI_CC)
-# include "sgi/vcl_complex.txx"
 #else
 # include "iso/vcl_complex.txx"
 #endif

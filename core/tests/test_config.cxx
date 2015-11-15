@@ -1158,46 +1158,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_SGI_CC ";
-#ifdef VCL_SGI_CC
-  vcl_cout << "is set to " << quote(VCL_SGI_CC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_6 ";
-#ifdef VCL_SGI_CC_6
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_6);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_7 ";
-#ifdef VCL_SGI_CC_7
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_7);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_730 ";
-#ifdef VCL_SGI_CC_730
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_730);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_720 ";
-#ifdef VCL_SGI_CC_720
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_720);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_SUNPRO_CC ";
 #ifdef VCL_SUNPRO_CC
   vcl_cout << "is set to " << quote(VCL_SUNPRO_CC);

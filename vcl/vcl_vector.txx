@@ -16,8 +16,6 @@
 # include "gcc-libstdcxx-v3/vcl_vector.txx"
 #elif defined(VCL_SUNPRO_CC) && !defined(VCL_SUNPRO_CC_56)
 # include "sunpro/vcl_vector.txx"
-#elif defined(VCL_SGI_CC)
-# include "sgi/vcl_vector.txx"
 #else
 # include "iso/vcl_vector.txx"
 #endif

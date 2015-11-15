@@ -2,8 +2,6 @@
 
 // ------------------------------------------------
 
-// this *does* work for SGI CC 7.2.1 -- fsm
-
 template <class T>
 struct X
 {

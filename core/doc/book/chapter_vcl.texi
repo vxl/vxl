@@ -150,8 +150,6 @@ catch up with the language standard, the answer is "all but the following":
 @item exceptions in core libraries.
 @item nested classes (not supported very well by MSVC)
 @item wide characters (not supported by FreeBSD).
-@item member templates (not supported by SGI CC 7.2.x).
-@item partial template specializations (not supported by SGI CC 7.2.x).
 @item non-type parameters in function templates (not supported by SunPro 5.0).
 @item default template parameters which depend on previous template parameters.
 @end itemize

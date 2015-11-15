@@ -819,6 +819,38 @@ struct behavior {
 
 };                                              /* End of `struct behavior'. */
 
+<<<<<<< 09268176ada4a85d45674f5efc936c96075bc0a4
+=======
+/* Pointer to a recently visited triangle.  Improves point location if       */
+/*   proximate points are inserted sequentially.                             */
+
+static struct triedge recenttri;
+
+
+/* Deal with point types that are not unsigned long                          */
+#ifdef _MSC_VER
+# if _MSC_VER <= 1200
+   typedef unsigned long intptr_t;
+# else
+#  include <stddef.h>
+#  include <stdlib.h> /* for malloc and friends */
+# endif
+#else
+# if defined(__alpha) /* there is no inttypes.h here */
+   typedef unsigned long intptr_t;
+# elif defined(__CYGWIN__)
+#  include <sys/types.h> /* for intptr_t on Cygwin */
+# elif defined(__BORLANDC__)
+#  if __BORLANDC__ < 0x0560
+    typedef unsigned long intptr_t;
+#  else
+#   include <stdint.h> /* for intptr_t on Borland 5.6. */
+#  endif
+# else
+#  include <inttypes.h> /* for intptr_t on e.g. Linux, Solaris */
+# endif
+#endif
+>>>>>>> STYLE: Remove SGI compiler support
 
 /*****************************************************************************/
 /*                                                                           */

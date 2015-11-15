@@ -16,8 +16,6 @@
 # include "gcc-libstdcxx-v3/vcl_set.txx"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_set.txx"
-#elif defined(VCL_SGI_CC)
-# include "sgi/vcl_set.txx"
 #else
 # include "iso/vcl_set.txx"
 #endif

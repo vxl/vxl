@@ -462,7 +462,7 @@ text { return ret; }
 
 //: VCL_OVERLOAD_CAST
 //
-// Some compilers (gcc 2.7.2.3 and SGI native 6.0) often won't perform
+// Some compilers (gcc 2.7.2.3) often won't perform
 // certain implicit casts. E.g. casting a templated derived class to a
 // templated base class (see above), or even realizing that
 // "template void foo(float const * const *, float * const *, int, int)"
