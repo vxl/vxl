@@ -286,6 +286,65 @@ char   vnl_huge_val(char)   { return 0x7f; }
 //----------------------------------------------------------------------
 namespace vnl_math
 {
+
+namespace
+{
+template <typename OutType, typename T> OutType hypot(T x, T y)
+{
+    T d1 = vnl_math::abs(x);
+    T d2 = vnl_math::abs(y);
+    T ret_val = vnl_math::max(d1,d2);
+    if (ret_val == 0)
+       {
+       return 0.0;
+       }
+
+    d2 = vnl_math::abs(x);
+    T d3 = vnl_math::abs(y);
+    d1 = vnl_math::min(d2,d3) / ret_val;
+
+
+    T r = d1 * d1;
+    T t = r + 4.0;
+    while (t != 4.0)
+    {
+        const T s = r / t;
+        const T u = s * 2. + 1.;
+        ret_val = u * ret_val;
+        d1 = s / u;
+        r = d1 * d1 * r;
+        t = r + 4.0;
+    }
+    return ret_val;
+}
+}
+
+int hypot(int x, int y)
+{
+  return hypot<int,double>(x,y);
+}
+
+float hypot(float x, float y)
+{
+  return hypot<float,double>(x,y);
+}
+
+double hypot(double x, double y)
+{
+  return hypot<double,double>(x,y);
+}
+
+long double hypot(long double x, long double y)
+{
+  return hypot<long double,long double>(x,y);
+}
+} // end namespace vnl_math
+
+
+
+//----------------------------------------------------------------------
+namespace vnl_math
+{
  double angle_0_to_2pi(double angle)
  {
   angle = vcl_fmod(angle, vnl_math::twopi);

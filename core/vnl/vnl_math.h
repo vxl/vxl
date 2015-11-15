@@ -588,6 +588,7 @@ namespace vnl_math
 #endif
  inline float              max(float x, float y)                           { return (x < y) ? y : x; }
  inline double             max(double x, double y)                         { return (x < y) ? y : x; }
+ inline long double        max(long double x, long double y)               { return (x < y) ? y : x; }
 
 
 #ifdef min
@@ -605,6 +606,7 @@ namespace vnl_math
 #endif
  inline float              min(float x, float y)                           { return (x > y) ? y : x; }
  inline double             min(double x, double y)                         { return (x > y) ? y : x; }
+ inline long double        min(long double x, long double y)               { return (x > y) ? y : x; }
 
 // If we must use windows.h, we should at least sanitise it first
 #ifndef NOMINMAX
@@ -674,11 +676,11 @@ inline int sgn0(double x)      { return (x>=0)?1:-1; }
  inline float  cuberoot(float  a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
  inline double cuberoot(double a) { return       (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
 
- // hypotenuse
- inline double      hypot(int         x, int         y) { return vcl_sqrt(double(x*x + y*y)); }
- inline float       hypot(float       x, float       y) { return float( vcl_sqrt(double(x*x + y*y)) ); }
- inline double      hypot(double      x, double      y) { return vcl_sqrt(x*x + y*y); }
- inline long double hypot(long double x, long double y) { return vcl_sqrt(x*x + y*y); }
+// hypotenuse
+extern int         hypot(int         x, int         y);
+extern float       hypot(float       x, float       y);
+extern double      hypot(double      x, double      y);
+extern long double hypot(long double x, long double y);
 
 } // end of namespace vnl_math
 
