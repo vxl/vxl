@@ -158,11 +158,7 @@ struct vgui_satellite_tableau : public vgui_tableau
 };
 
 //----------------------------------------------------------------------------
-#ifdef VCL_SUNPRO_CC_50
-# define quirk(x) , x
-#else
-# define quirk(x) /* */
-#endif
+# define quirk(x) /* */ //TODO: HANS Remove quirk, it is not longer needed since SUNPRO is gone
 
 template <class object, class data>
 struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_tableau_t<object, data> quirk(vgui_tableau_sptr)>

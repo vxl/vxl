@@ -505,7 +505,7 @@ void* operator new(vcl_size_t s)
 }
 
 void operator delete(void* s)
-#if defined(GNU_LIBSTDCXX_V3) || defined(VCL_SUNPRO_CC_5)
+#if defined(GNU_LIBSTDCXX_V3)
   throw()
 #endif
 {

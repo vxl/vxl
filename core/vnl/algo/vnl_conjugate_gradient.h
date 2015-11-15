@@ -68,9 +68,6 @@ class vnl_conjugate_gradient : public vnl_nonlinear_minimizer
 
   // Helpers-------------------------------------------------------------------
 
-#ifdef VCL_SUNPRO_CC
- public:
-#endif
   static double valuecomputer_( double *x, void* userdata);
   static void gradientcomputer_( double *g, double *x, void* userdata);
   static void valueandgradientcomputer_( double *v, double *g, double *x, void* userdata);

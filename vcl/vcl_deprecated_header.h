@@ -16,9 +16,6 @@
 // produced the warning, and then remove includes till it goes away....
 #pragma message( "" __FILE__ "(13):warning(from VXL): an unknown deprecated header has been included." )
 
-#elif defined(VCL_SUNPRO_CC)
-# error "deprecated"
-
 #else
 // # pragma warning deprecated
 #endif

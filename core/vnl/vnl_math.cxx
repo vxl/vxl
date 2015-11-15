@@ -53,10 +53,6 @@ extern "C" int finite(double);
 # define VNL_HAS_NO_FINITE
 #endif
 
-#ifdef VCL_SUNPRO_CC_5
-# include <math.h> // dont_vxl_filter: no HUGE_VAL or isnan() in <cmath>
-#endif
-
 // On Mac OS X Tiger in C++ the math.h header defines an inline __isnan
 // that gets compiled here into an internal-linkage symbol.  Then at
 // link time the relocation entry from libm.dylib confuses the linker

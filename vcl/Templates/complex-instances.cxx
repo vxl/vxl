@@ -118,15 +118,6 @@ do_inlines(double);
 do_inlines(long double);
 # endif
 
-// ---------- sunpro
-#elif defined(VCL_SUNPRO_CC)
-# define do_inlines(FLOAT) \
-template vcl_complex<FLOAT > vcl_conj<FLOAT >(vcl_complex<FLOAT > const &)
-
-do_inlines(float);
-do_inlines(double);
-do_inlines(long double);
-
 // ---------- ISO
 #else
 // ISO compilers are magic as far as instantiation goes.
