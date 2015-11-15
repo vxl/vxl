@@ -130,7 +130,7 @@ namespace vnl_math
   double angle_0_to_2pi(double angle);
   //: Convert an angle to [-Pi, Pi) range
   double angle_minuspi_to_pi(double angle);
-};
+}
 
 // We do not want to make assumptions about unknown types that happen
 // to have conversions to one of the fundamental types.  The templated
@@ -212,432 +212,426 @@ namespace vnl_math
  template <class T> bool isfinite(T);
 #endif
 
- // rnd_halfinttoeven  -- round towards nearest integer
- //         halfway cases are rounded towards the nearest even integer, e.g.
- //         rnd_halfinttoeven( 1.5) ==  2
- //         rnd_halfinttoeven(-1.5) == -2
- //         rnd_halfinttoeven( 2.5) ==  2
- //         rnd_halfinttoeven( 3.5) ==  4
- //
- // We assume that the rounding mode is not changed from the default
- // one (or at least that it is always restored to the default one).
-
 #if USE_SSE2_IMPL // Fast sse2 implementation
 
- inline int rnd_halfinttoeven(float  x)
- {
+// rnd_halfinttoeven  -- round towards nearest integer
+//         halfway cases are rounded towards the nearest even integer, e.g.
+//         rnd_halfinttoeven( 1.5) ==  2
+//         rnd_halfinttoeven(-1.5) == -2
+//         rnd_halfinttoeven( 2.5) ==  2
+//         rnd_halfinttoeven( 3.5) ==  4
+//
+// We assume that the rounding mode is not changed from the default
+// one (or at least that it is always restored to the default one).
+inline int rnd_halfinttoeven(float  x)
+{
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   return _mm_cvtss_si32(_mm_set_ss(x));
- }
+  return _mm_cvtss_si32(_mm_set_ss(x));
+}
 
- inline int rnd_halfinttoeven(double  x)
- {
+inline int rnd_halfinttoeven(double  x)
+{
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   return _mm_cvtsd_si32(_mm_set_sd(x));
- }
+  return _mm_cvtsd_si32(_mm_set_sd(x));
+}
 
 #elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
- inline int rnd_halfinttoeven(float  x)
- {
+inline int rnd_halfinttoeven(float  x)
+{
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   int r;
-   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-   return r;
- }
+  int r;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r;
+}
 
- inline int rnd_halfinttoeven(double  x)
- {
+inline int rnd_halfinttoeven(double  x)
+{
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   int r;
-   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-   return r;
- }
+  int r;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r;
+}
 
 #elif VC_USE_FAST_IMPL // Fast msvc asm implementation
 
- inline int rnd_halfinttoeven(float  x)
- {
-   int r;
-   __asm {
-     fld x
-     fistp r
-   }
-   return r;
- }
+inline int rnd_halfinttoeven(float  x)
+{
+  int r;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r;
+}
 
- inline int rnd_halfinttoeven(double  x)
- {
-   int r;
-   __asm {
-     fld x
-     fistp r
-   }
-   return r;
- }
+inline int rnd_halfinttoeven(double  x)
+{
+  int r;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r;
+}
 
 #else // Vanilla implementation
 
- inline int rnd_halfinttoeven(float  x)
- {
-   if (x>=0.f)
-   {
-      x+=0.5f;
-      const int r = static_cast<int>(x);
-      if ( x != static_cast<float>(r) ) return r;
-      return 2*(r/2);
-   }
-   else
-   {
-      x-=0.5f;
-      const int r = static_cast<int>(x);
-      if ( x != static_cast<float>(r) ) return r;
-      return 2*(r/2);
-   }
- }
+inline int rnd_halfinttoeven(float  x)
+{
+  if (x>=0.f)
+  {
+     x+=0.5f;
+     const int r = static_cast<int>(x);
+     if ( x != static_cast<float>(r) ) return r;
+     return 2*(r/2);
+  }
+  else
+  {
+     x-=0.5f;
+     const int r = static_cast<int>(x);
+     if ( x != static_cast<float>(r) ) return r;
+     return 2*(r/2);
+  }
+}
 
- inline int rnd_halfinttoeven(double x)
- {
-   if (x>=0.)
-   {
-      x+=0.5;
-      const int r = static_cast<int>(x);
-      if ( x != static_cast<double>(r) ) return r;
-      return 2*(r/2);
-   }
-   else
-   {
-      x-=0.5;
-      const int r = static_cast<int>(x);
-      if ( x != static_cast<double>(r) ) return r;
-      return 2*(r/2);
-   }
- }
+inline int rnd_halfinttoeven(double x)
+{
+  if (x>=0.)
+  {
+     x+=0.5;
+     const int r = static_cast<int>(x);
+     if ( x != static_cast<double>(r) ) return r;
+     return 2*(r/2);
+  }
+  else
+  {
+     x-=0.5;
+     const int r = static_cast<int>(x);
+     if ( x != static_cast<double>(r) ) return r;
+     return 2*(r/2);
+  }
+}
 
 #endif
 
- // rnd_halfintup  -- round towards nearest integer
- //         halfway cases are rounded upward, e.g.
- //         rnd_halfintup( 1.5) ==  2
- //         rnd_halfintup(-1.5) == -1
- //         rnd_halfintup( 2.5) ==  3
- //
- // Be careful: argument absolute value must be less than INT_MAX/2
- // for rnd_halfintup to be guaranteed to work.
- // We also assume that the rounding mode is not changed from the default
- // one (or at least that it is always restored to the default one).
 
 #if USE_SSE2_IMPL || GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
 
- inline int rnd_halfintup(float  x) { return rnd_halfinttoeven(2*x+0.5f)>>1; }
- inline int rnd_halfintup(double  x) { return rnd_halfinttoeven(2*x+0.5)>>1; }
+// rnd_halfintup  -- round towards nearest integer
+//         halfway cases are rounded upward, e.g.
+//         rnd_halfintup( 1.5) ==  2
+//         rnd_halfintup(-1.5) == -1
+//         rnd_halfintup( 2.5) ==  3
+//
+// Be careful: argument absolute value must be less than INT_MAX/2
+// for rnd_halfintup to be guaranteed to work.
+// We also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restored to the default one).
+
+inline int rnd_halfintup(float  x) { return rnd_halfinttoeven(2*x+0.5f)>>1; }
+inline int rnd_halfintup(double  x) { return rnd_halfinttoeven(2*x+0.5)>>1; }
 
 #else // Vanilla implementation
 
- inline int rnd_halfintup(float  x)
- {
-   x+=0.5f;
-   return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
- }
+inline int rnd_halfintup(float  x)
+{
+  x+=0.5f;
+  return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
+}
 
- inline int rnd_halfintup(double x)
- {
-   x+=0.5;
-   return static_cast<int>(x>=0.?x:(x==static_cast<int>(x)?x:x-1.));
- }
+inline int rnd_halfintup(double x)
+{
+  x+=0.5;
+  return static_cast<int>(x>=0.?x:(x==static_cast<int>(x)?x:x-1.));
+}
 
 #endif
-
- // rnd  -- round towards nearest integer
- //         halfway cases such as 0.5 may be rounded either up or down
- //         so as to maximize the efficiency, e.g.
- //         rnd_halfinttoeven( 1.5) ==  1 or  2
- //         rnd_halfinttoeven(-1.5) == -2 or -1
- //         rnd_halfinttoeven( 2.5) ==  2 or  3
- //         rnd_halfinttoeven( 3.5) ==  3 or  4
- //
- // We assume that the rounding mode is not changed from the default
- // one (or at least that it is always restored to the default one).
 
 #if  USE_SSE2_IMPL || GCC_USE_FAST_IMPL || VC_USE_FAST_IMPL
-
- inline int rnd(float  x) { return rnd_halfinttoeven(x); }
- inline int rnd(double  x) { return rnd_halfinttoeven(x); }
+// rnd  -- round towards nearest integer
+//         halfway cases such as 0.5 may be rounded either up or down
+//         so as to maximize the efficiency, e.g.
+//         rnd_halfinttoeven( 1.5) ==  1 or  2
+//         rnd_halfinttoeven(-1.5) == -2 or -1
+//         rnd_halfinttoeven( 2.5) ==  2 or  3
+//         rnd_halfinttoeven( 3.5) ==  3 or  4
+//
+// We assume that the rounding mode is not changed from the default
+// one (or at least that it is always restored to the default one).
+inline int rnd(float  x) { return rnd_halfinttoeven(x); }
+inline int rnd(double  x) { return rnd_halfinttoeven(x); }
 
 #else // Vanilla implementation
 
- inline int rnd(float  x) { return x>=0.f?static_cast<int>(x+.5f):static_cast<int>(x-.5f); }
- inline int rnd(double x) { return x>=0.0?static_cast<int>(x+0.5):static_cast<int>(x-0.5); }
+inline int rnd(float  x) { return x>=0.f?static_cast<int>(x+.5f):static_cast<int>(x-.5f); }
+inline int rnd(double x) { return x>=0.0?static_cast<int>(x+0.5):static_cast<int>(x-0.5); }
 
 #endif
 
- // floor -- round towards minus infinity
- //
- // Be careful: argument absolute value must be less than INT_MAX/2
- // for floor to be guaranteed to work.
- // We also assume that the rounding mode is not changed from the default
- // one (or at least that it is always restored to the default one).
-
 #if  USE_SSE2_IMPL // Fast sse2 implementation
+// floor -- round towards minus infinity
+//
+// Be careful: argument absolute value must be less than INT_MAX/2
+// for floor to be guaranteed to work.
+// We also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restored to the default one).
 
- inline int floor(float  x)
- {
+inline int floor(float  x)
+{
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
    return _mm_cvtss_si32(_mm_set_ss(2*x-.5f))>>1;
- }
+}
 
- inline int floor(double  x)
- {
+inline int floor(double  x)
+{
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
    return _mm_cvtsd_si32(_mm_set_sd(2*x-.5))>>1;
- }
+}
 
 #elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
- inline int floor(float  x)
- {
+inline int floor(float  x)
+{
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   int r;
-   x = 2*x-.5f;
-   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-   return r>>1;
- }
+  int r;
+  x = 2*x-.5f;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r>>1;
+}
 
- inline int floor(double  x)
- {
+inline int floor(double  x)
+{
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   int r;
-   x = 2*x-.5;
-   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-   return r>>1;
- }
+  int r;
+  x = 2*x-.5;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return r>>1;
+}
 
 #elif VC_USE_FAST_IMPL // Fast msvc asm implementation
 
- inline int floor(float  x)
- {
-   int r;
-   x = 2*x-.5f;
-   __asm {
-     fld x
-     fistp r
-   }
-   return r>>1;
- }
+inline int floor(float  x)
+{
+  int r;
+  x = 2*x-.5f;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r>>1;
+}
 
- inline int floor(double  x)
- {
-   int r;
-   x = 2*x-.5;
-   __asm {
-     fld x
-     fistp r
-   }
-   return r>>1;
- }
+inline int floor(double  x)
+{
+  int r;
+  x = 2*x-.5;
+  __asm {
+    fld x
+    fistp r
+  }
+  return r>>1;
+}
 
 #else // Vanilla implementation
 
- inline int floor(float  x)
- {
-   return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
- }
+inline int floor(float  x)
+{
+  return static_cast<int>(x>=0.f?x:(x==static_cast<int>(x)?x:x-1.f));
+}
 
- inline int floor(double x)
- {
-   return static_cast<int>(x>=0.0?x:(x==static_cast<int>(x)?x:x-1.0));
- }
+inline int floor(double x)
+{
+  return static_cast<int>(x>=0.0?x:(x==static_cast<int>(x)?x:x-1.0));
+}
 
 #endif
 
-
- // ceil -- round towards plus infinity
- //
- // Be careful: argument absolute value must be less than INT_MAX/2
- // for ceil to be guaranteed to work.
- // We also assume that the rounding mode is not changed from the default
- // one (or at least that it is always restored to the default one).
 
 #if  USE_SSE2_IMPL // Fast sse2 implementation
+// ceil -- round towards plus infinity
+//
+// Be careful: argument absolute value must be less than INT_MAX/2
+// for ceil to be guaranteed to work.
+// We also assume that the rounding mode is not changed from the default
+// one (or at least that it is always restored to the default one).
 
- inline int ceil(float  x)
- {
+inline int ceil(float  x)
+{
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-    return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
- }
+   return -(_mm_cvtss_si32(_mm_set_ss(-.5f-2*x))>>1);
+}
 
- inline int ceil(double  x)
- {
+inline int ceil(double  x)
+{
 # if defined(VNL_CHECK_FPU_ROUNDING_MODE) && defined(__GNUC__)
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-    return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
- }
+   return -(_mm_cvtsd_si32(_mm_set_sd(-.5-2*x))>>1);
+}
 
 #elif GCC_USE_FAST_IMPL // Fast gcc asm implementation
 
- inline int ceil(float  x)
- {
+inline int ceil(float  x)
+{
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   int r;
-   x = -.5f-2*x;
-   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-   return -(r>>1);
- }
+  int r;
+  x = -.5f-2*x;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return -(r>>1);
+}
 
- inline int ceil(double  x)
- {
+inline int ceil(double  x)
+{
 # ifdef VNL_CHECK_FPU_ROUNDING_MODE
-   assert(fegetround()==FE_TONEAREST);
+  assert(fegetround()==FE_TONEAREST);
 # endif
-   int r;
-   x = -.5-2*x;
-   __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
-   return -(r>>1);
- }
+  int r;
+  x = -.5-2*x;
+  __asm__ __volatile__ ("fistpl %0" : "=m"(r) : "t"(x) : "st");
+  return -(r>>1);
+}
 
 #elif VC_USE_FAST_IMPL // Fast msvc asm implementation
 
- inline int ceil(float  x)
- {
-   int r;
-   x = -.5f-2*x;
-   __asm {
-     fld x
-     fistp r
-   }
-   return -(r>>1);
- }
+inline int ceil(float  x)
+{
+  int r;
+  x = -.5f-2*x;
+  __asm {
+    fld x
+    fistp r
+  }
+  return -(r>>1);
+}
 
- inline int ceil(double  x)
- {
-   int r;
-   x = -.5-2*x;
-   __asm {
-     fld x
-     fistp r
-   }
-   return -(r>>1);
- }
+inline int ceil(double  x)
+{
+  int r;
+  x = -.5-2*x;
+  __asm {
+    fld x
+    fistp r
+  }
+  return -(r>>1);
+}
 
 #else // Vanilla implementation
 
- inline int ceil(float  x)
- {
-   return static_cast<int>(x<0.f?x:(x==static_cast<int>(x)?x:x+1.f));
- }
+inline int ceil(float  x)
+{
+  return static_cast<int>(x<0.f?x:(x==static_cast<int>(x)?x:x+1.f));
+}
 
- inline int ceil(double x)
- {
-   return static_cast<int>(x<0.0?x:(x==static_cast<int>(x)?x:x+1.0));
- }
+inline int ceil(double x)
+{
+  return static_cast<int>(x<0.0?x:(x==static_cast<int>(x)?x:x+1.0));
+}
 
 #endif
 
- // abs
- inline bool               abs(bool x)               { return x; }
- inline unsigned char      abs(unsigned char x)      { return x; }
- inline unsigned char      abs(signed char x)        { return x < 0 ? static_cast<unsigned char>(-x) : x; }
- inline unsigned char      abs(char x)               { return static_cast<unsigned char>(x); }
- inline unsigned short     abs(short x)              { return x < 0 ? static_cast<unsigned short>(-x) : x; }
- inline unsigned short     abs(unsigned short x)     { return x; }
- inline unsigned int       abs(int x)                { return x < 0 ? -x : x; }
- inline unsigned int       abs(unsigned int x)       { return x; }
- inline unsigned long      abs(long x)               { return x < 0L ? -x : x; }
- inline unsigned long      abs(unsigned long x)      { return x; }
+// abs
+inline bool               abs(bool x)               { return x; }
+inline unsigned char      abs(unsigned char x)      { return x; }
+inline unsigned char      abs(signed char x)        { return x < 0 ? static_cast<unsigned char>(-x) : x; }
+inline unsigned char      abs(char x)               { return static_cast<unsigned char>(x); }
+inline unsigned short     abs(short x)              { return x < 0 ? static_cast<unsigned short>(-x) : x; }
+inline unsigned short     abs(unsigned short x)     { return x; }
+inline unsigned int       abs(int x)                { return x < 0 ? -x : x; }
+inline unsigned int       abs(unsigned int x)       { return x; }
+inline unsigned long      abs(long x)               { return x < 0L ? -x : x; }
+inline unsigned long      abs(unsigned long x)      { return x; }
 #if VCL_HAS_LONG_LONG
- inline unsigned long long abs(long long x)          { return x < 0LL ? -x : x; }
- inline unsigned long long abs(unsigned long long x) { return x; }
+inline unsigned long long abs(long long x)          { return x < 0LL ? -x : x; }
+inline unsigned long long abs(unsigned long long x) { return x; }
 #endif
- inline float              abs(float x)              { return x < 0.0f ? -x : x; }
- inline double             abs(double x)             { return x < 0.0 ? -x : x; }
- inline long double        abs(long double x)        { return x < 0.0 ? -x : x; }
-
-#ifdef max
-  #undef max
-#endif
-
- // max
- inline int                max(int x, int y)                               { return (x > y) ? x : y; }
- inline unsigned int       max(unsigned int x, unsigned int y)             { return (x > y) ? x : y; }
- inline long               max(long x, long y)                             { return (x > y) ? x : y; }
- inline unsigned long      max(unsigned long x, unsigned long y)           { return (x > y) ? x : y; }
-#if VCL_HAS_LONG_LONG
- inline long long          max(long long x, long long y)                   { return (x > y) ? x : y; }
- inline unsigned long long max(unsigned long long x, unsigned long long y) { return (x > y) ? x : y; }
-#endif
- inline float              max(float x, float y)                           { return (x < y) ? y : x; }
- inline double             max(double x, double y)                         { return (x < y) ? y : x; }
- inline long double        max(long double x, long double y)               { return (x < y) ? y : x; }
-
-
-#ifdef min
-  #undef min
-#endif
-
- // min
- inline int                min(int x, int y)                               { return (x < y) ? x : y; }
- inline unsigned int       min(unsigned int x, unsigned int y)             { return (x < y) ? x : y; }
- inline long               min(long x, long y)                             { return (x < y) ? x : y; }
- inline unsigned long      min(unsigned long x, unsigned long y)           { return (x < y) ? x : y; }
-#if VCL_HAS_LONG_LONG
- inline long long          min(long long x, long long y)                   { return (x < y) ? x : y; }
- inline unsigned long long min(unsigned long long x, unsigned long long y) { return (x < y) ? x : y; }
-#endif
- inline float              min(float x, float y)                           { return (x > y) ? y : x; }
- inline double             min(double x, double y)                         { return (x > y) ? y : x; }
- inline long double        min(long double x, long double y)               { return (x > y) ? y : x; }
+inline float              abs(float x)              { return x < 0.0f ? -x : x; }
+inline double             abs(double x)             { return x < 0.0 ? -x : x; }
+inline long double        abs(long double x)        { return x < 0.0 ? -x : x; }
 
 // If we must use windows.h, we should at least sanitise it first
 #ifndef NOMINMAX
   #define NOMINMAX
 #endif
-
- // sqr (square)
- inline bool               sqr(bool x)               { return x; }
- inline int                sqr(int x)                { return x*x; }
- inline unsigned int       sqr(unsigned int x)       { return x*x; }
- inline long               sqr(long x)               { return x*x; }
- inline unsigned long      sqr(unsigned long x)      { return x*x; }
-#if VCL_HAS_LONG_LONG
- inline long long          sqr(long long x)          { return x*x; }
- inline unsigned long long sqr(unsigned long long x) { return x*x; }
+#ifdef max
+  #undef max
 #endif
- inline float              sqr(float x)              { return x*x; }
- inline double             sqr(double x)             { return x*x; }
 
- // cube
- inline bool               cube(bool x)               { return x; }
- inline int                cube(int x)                { return x*x*x; }
- inline unsigned int       cube(unsigned int x)       { return x*x*x; }
- inline long               cube(long x)               { return x*x*x; }
- inline unsigned long      cube(unsigned long x)      { return x*x*x; }
-#if VCL_HAS_LONG_LONG
- inline long long          cube(long long x)          { return x*x*x; }
- inline unsigned long long cube(unsigned long long x) { return x*x*x; }
+#ifdef min
+  #undef min
 #endif
- inline float              cube(float x)              { return x*x*x; }
- inline double             cube(double x)             { return x*x*x; }
+
+// max
+inline int                max(int x, int y)                               { return (x > y) ? x : y; }
+inline unsigned int       max(unsigned int x, unsigned int y)             { return (x > y) ? x : y; }
+inline long               max(long x, long y)                             { return (x > y) ? x : y; }
+inline unsigned long      max(unsigned long x, unsigned long y)           { return (x > y) ? x : y; }
+#if VCL_HAS_LONG_LONG
+inline long long          max(long long x, long long y)                   { return (x > y) ? x : y; }
+inline unsigned long long max(unsigned long long x, unsigned long long y) { return (x > y) ? x : y; }
+#endif
+inline float              max(float x, float y)                           { return (x < y) ? y : x; }
+inline double             max(double x, double y)                         { return (x < y) ? y : x; }
+inline long double        max(long double x, long double y)               { return (x < y) ? y : x; }
+
+// min
+inline int                min(int x, int y)                               { return (x < y) ? x : y; }
+inline unsigned int       min(unsigned int x, unsigned int y)             { return (x < y) ? x : y; }
+inline long               min(long x, long y)                             { return (x < y) ? x : y; }
+inline unsigned long      min(unsigned long x, unsigned long y)           { return (x < y) ? x : y; }
+#if VCL_HAS_LONG_LONG
+inline long long          min(long long x, long long y)                   { return (x < y) ? x : y; }
+inline unsigned long long min(unsigned long long x, unsigned long long y) { return (x < y) ? x : y; }
+#endif
+inline float              min(float x, float y)                           { return (x > y) ? y : x; }
+inline double             min(double x, double y)                         { return (x > y) ? y : x; }
+inline long double        min(long double x, long double y)               { return (x > y) ? y : x; }
+
+// sqr (square)
+inline bool               sqr(bool x)               { return x; }
+inline int                sqr(int x)                { return x*x; }
+inline unsigned int       sqr(unsigned int x)       { return x*x; }
+inline long               sqr(long x)               { return x*x; }
+inline unsigned long      sqr(unsigned long x)      { return x*x; }
+#if VCL_HAS_LONG_LONG
+inline long long          sqr(long long x)          { return x*x; }
+inline unsigned long long sqr(unsigned long long x) { return x*x; }
+#endif
+inline float              sqr(float x)              { return x*x; }
+inline double             sqr(double x)             { return x*x; }
+
+// cube
+inline bool               cube(bool x)               { return x; }
+inline int                cube(int x)                { return x*x*x; }
+inline unsigned int       cube(unsigned int x)       { return x*x*x; }
+inline long               cube(long x)               { return x*x*x; }
+inline unsigned long      cube(unsigned long x)      { return x*x*x; }
+#if VCL_HAS_LONG_LONG
+inline long long          cube(long long x)          { return x*x*x; }
+inline unsigned long long cube(unsigned long long x) { return x*x*x; }
+#endif
+inline float              cube(float x)              { return x*x*x; }
+inline double             cube(double x)             { return x*x*x; }
 
 // sgn (sign in -1, 0, +1)
 inline int sgn(int x)       { return x?((x>0)?1:-1):0; }
@@ -657,24 +651,24 @@ inline int sgn0(long long x)   { return (x>=0)?1:-1; }
 inline int sgn0(float x)       { return (x>=0)?1:-1; }
 inline int sgn0(double x)      { return (x>=0)?1:-1; }
 
- // squared_magnitude
- inline unsigned int       squared_magnitude(char               x) { return int(x)*int(x); }
- inline unsigned int       squared_magnitude(unsigned char      x) { return int(x)*int(x); }
- inline unsigned int       squared_magnitude(int                x) { return x*x; }
- inline unsigned int       squared_magnitude(unsigned int       x) { return x*x; }
- inline unsigned long      squared_magnitude(long               x) { return x*x; }
- inline unsigned long      squared_magnitude(unsigned long      x) { return x*x; }
+// squared_magnitude
+inline unsigned int       squared_magnitude(char               x) { return int(x)*int(x); }
+inline unsigned int       squared_magnitude(unsigned char      x) { return int(x)*int(x); }
+inline unsigned int       squared_magnitude(int                x) { return x*x; }
+inline unsigned int       squared_magnitude(unsigned int       x) { return x*x; }
+inline unsigned long      squared_magnitude(long               x) { return x*x; }
+inline unsigned long      squared_magnitude(unsigned long      x) { return x*x; }
 #if VCL_HAS_LONG_LONG
- inline unsigned long long squared_magnitude(long long          x) { return x*x; }
- inline unsigned long long squared_magnitude(unsigned long long x) { return x*x; }
+inline unsigned long long squared_magnitude(long long          x) { return x*x; }
+inline unsigned long long squared_magnitude(unsigned long long x) { return x*x; }
 #endif
- inline float              squared_magnitude(float              x) { return x*x; }
- inline double             squared_magnitude(double             x) { return x*x; }
- inline long double        squared_magnitude(long double        x) { return x*x; }
+inline float              squared_magnitude(float              x) { return x*x; }
+inline double             squared_magnitude(double             x) { return x*x; }
+inline long double        squared_magnitude(long double        x) { return x*x; }
 
- // cuberoot
- inline float  cuberoot(float  a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
- inline double cuberoot(double a) { return       (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
+// cuberoot
+inline float  cuberoot(float  a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
+inline double cuberoot(double a) { return       (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
 
 // hypotenuse
 extern int         hypot(int         x, int         y);
