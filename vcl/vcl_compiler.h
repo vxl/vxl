@@ -294,29 +294,6 @@
 # define VCL_INSTANTIATE_INLINE(symbol) /* */
 #endif
 
-// work-around to get template instantiation to work correctly with SunPro
-// check flag to turn on inlining
-#undef IUEi_STL_INLINE
-#if defined(INLINE_EXPLICIT_FLAG) && defined(VCL_SUNPRO_CC) && defined(INSTANTIATE_TEMPLATES)
-# define IUEi_STL_INLINE
-#else
-# define IUEi_STL_INLINE inline
-#endif
-
-   //--------------------------------------------------------------------------
-
-// work-around to deal with some cases where some compilers (and the standard)
-// requires an explicit typename qualifier. MSVC6.0 on the other had cannot cope
-// with a typename in those places.
-// VCL_DISAPPEARING_TYPENAME should only be used where either a hardcoded use
-// or abscence of "typename" does not work over all platforms.
-
-#if defined(VCL_VC_60) || !VCL_HAS_TYPENAME
-# define VCL_DISAPPEARING_TYPENAME /* */
-#else
-# define VCL_DISAPPEARING_TYPENAME typename
-#endif
-
 //--------------------------------------------------------------------------------
 
 #if VCL_FOR_SCOPE_HACK
