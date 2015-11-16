@@ -18,10 +18,6 @@
 // complex over other number types.
 
 
-// ---------- all emulation
-#if !VCL_USE_NATIVE_COMPLEX
-# include "emulation/vcl_complex.h"
-
 // ---------- Visual Studio 8 and 9
 #if defined(VCL_VC_9)
 # include "win32-vc8/vcl_complex.h"

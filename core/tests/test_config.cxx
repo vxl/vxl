@@ -798,14 +798,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_USE_NATIVE_COMPLEX ";
-#ifdef VCL_USE_NATIVE_COMPLEX
-  vcl_cout << "is set to " << quote(VCL_USE_NATIVE_COMPLEX);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_USE_IMPLICIT_TEMPLATES ";
 #ifdef VCL_USE_IMPLICIT_TEMPLATES
   vcl_cout << "is set to " << quote(VCL_USE_IMPLICIT_TEMPLATES);

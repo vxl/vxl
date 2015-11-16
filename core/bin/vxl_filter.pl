@@ -615,9 +615,6 @@ sub process_lines {
       s/\bdefined\(IUE_USE_NATIVE_STL\)/VCL_USE_NATIVE_STL/g;
       s/(\#\s*if)def\s+IUE_USE_NATIVE_STL\b/$1 VCL_USE_NATIVE_STL/g;
       s/(\#\s*if)ndef\s+IUE_USE_NATIVE_STL\b/$1 !VCL_USE_NATIVE_STL/g;
-      s/\bdefined\(IUE_USE_NATIVE_COMPLEX\)/VCL_USE_NATIVE_COMPLEX/g;
-      s/(\#\s*if)def\s+IUE_USE_NATIVE_COMPLEX\b/$1 VCL_USE_NATIVE_COMPLEX/g;
-      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_COMPLEX\b/$1 !VCL_USE_NATIVE_COMPLEX/g;
       s/\bIUE_STL_USE_ABBREVS\b/__STL_USE_ABBREVS/g;
 
       # classes and functions

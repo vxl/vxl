@@ -153,7 +153,6 @@ for $var_exp (
 
   # from vcl_config_manual.h
   'VCL_USE_NATIVE_STL',
-  'VCL_USE_NATIVE_COMPLEX',
   'VCL_USE_IMPLICIT_TEMPLATES',
 
   # from vxl_config.h
