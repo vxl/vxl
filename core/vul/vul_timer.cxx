@@ -46,11 +46,7 @@ struct vul_timer_data
   struct timeval real0;          // wall clock mark.
 #else
  vcl_clock_t usage0;
-# if defined(VCL_BORLAND)
- struct timeb real0;
-# else
  struct _timeb real0;
-# endif
 #endif
 };
 
@@ -101,11 +97,7 @@ void vul_timer::mark()
 #else
   // Win32 section
   data->usage0 = vcl_clock();
-# if defined(VCL_BORLAND)
-  ftime(&data->real0);
-# else
   _ftime(&data->real0);
-# endif
 #endif
 }
 
@@ -135,13 +127,8 @@ long vul_timer::real()
 
 #else
   // Win32 section
-# if defined(VCL_BORLAND)
-  struct timeb real_time;
-  ftime(&real_time);
-# else
   struct _timeb real_time;
   _ftime(&real_time);
-# endif
   s = long(real_time.time - data->real0.time);
   long ms = real_time.millitm - data->real0.millitm;
 

@@ -15,21 +15,10 @@
 
 // Macro for use inside a template to enforce a certain condition at
 // compile time.  This is adapted from boost.
-#if defined(__BORLANDC__)
-// Borland has problems with angle-brackets in conditions.
-# define RGTL_STATIC_ASSERT(condition) enum { \
-    RGTL_PP_JOIN(rgtl_static_assert_condition_, __LINE__) = (condition), \
-    RGTL_PP_JOIN(rgtl_static_assert_, __LINE__) = \
-      sizeof(::rgtl::STATIC_ASSERTION_FAILURE< \
-             (bool)RGTL_PP_JOIN(rgtl_static_assert_condition_, __LINE__) \
-             >) \
-  }
-#else
 # define RGTL_STATIC_ASSERT(condition) \
-  RGTL_STATIC_CONST(unsigned int, \
-    RGTL_PP_JOIN(rgtl_static_assert_, __LINE__) = \
-      sizeof(::rgtl::STATIC_ASSERTION_FAILURE<(bool)(condition)>))
-#endif
+RGTL_STATIC_CONST(unsigned int, \
+  RGTL_PP_JOIN(rgtl_static_assert_, __LINE__) = \
+    sizeof(::rgtl::STATIC_ASSERTION_FAILURE<(bool)(condition)>))
 #define RGTL_STATIC_ASSERT_USE() \
   static_cast<void>(RGTL_PP_JOIN(rgtl_static_assert_, __LINE__))
 namespace rgtl

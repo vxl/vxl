@@ -19,7 +19,7 @@
 #endif
 
 // Macro to define a compile-time constant.
-#if defined(_MSC_VER) && _MSC_VER <= 1300 || defined(__BORLANDC__)
+#if defined(_MSC_VER) && _MSC_VER <= 1300
 # define RGTL_STATIC_CONST(type, assignment) enum { assignment }
 #else
 # define RGTL_STATIC_CONST(type, assignment) static type const assignment
