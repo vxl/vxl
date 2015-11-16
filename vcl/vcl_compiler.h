@@ -63,37 +63,8 @@
 
 #if defined(__GNUC__) && !defined(__ICC) // icc 8.0 defines __GNUC__
 # define VCL_GCC
-# if (__GNUC__<=1)
+# if (__GNUC__<=4)
 #  error "forget it."
-# elif (__GNUC__==2)
-#  define VCL_GCC_2
-#  if (__GNUC_MINOR__>=100)
-#   error "I need some help here."
-#  elif (__GNUC_MINOR__>=95)
-#   define VCL_GCC_295
-#  elif (__GNUC_MINOR__>8)
-#   define VCL_EGCS
-#  elif (__GNUC_MINOR__>7)
-#   define VCL_GCC_28
-#  elif (__GNUC_MINOR__>6)
-#   define VCL_GCC_27
-#  endif
-#  if (__GNUC_MINOR__>7)
-#   define VCL_GCC_EGCS // so this is the union of EGCS, GCC_28 and GCC_295
-#  endif
-# elif (__GNUC__==3)
-#  define VCL_GCC_3
-#  if (__GNUC_MINOR__ > 3 )
-#   define VCL_GCC_34
-#  elif (__GNUC_MINOR__ > 2 )
-#   define VCL_GCC_33
-#  elif (__GNUC_MINOR__ > 1 )
-#   define VCL_GCC_32
-#  elif (__GNUC_MINOR__ > 0 )
-#   define VCL_GCC_31
-#  else
-#   define VCL_GCC_30
-#  endif
 # elif (__GNUC__==4)
 #  define VCL_GCC_4
 #  if (__GNUC_MINOR__ > 0 )
@@ -248,7 +219,7 @@
 
 // if the compiler doesn't understand "export", we just leave it out.
 // gcc and SunPro 5.0 understand it, but they ignore it noisily.
-#if !VCL_HAS_EXPORT||defined(VCL_EGCS)||defined(VCL_GCC_295)||defined(VCL_GCC_3)||defined(VCL_GCC_4)||defined(VCL_GCC_5)||defined(VCL_SUNPRO_CC_5)
+#if !VCL_HAS_EXPORT||defined(VCL_GCC_4)||defined(VCL_GCC_5)
 # define VCL_TEMPLATE_EXPORT /* ignore */
 #else
 # define VCL_TEMPLATE_EXPORT export

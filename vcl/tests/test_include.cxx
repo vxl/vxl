@@ -1,8 +1,6 @@
 #include <vcl_cassert.h>
-#ifndef VCL_SGI_CC_720 //SGI7.2.1
 #include <vcl_ciso646.h>
 #include <vcl_atomic_count.h>
-#endif
 #include <vcl_csetjmp.h>
 #include <vcl_cstdio.h>
 #include <vcl_ctime.h>
@@ -26,13 +24,9 @@
 #include <vcl_list.h>
 #include <vcl_ostream.h>
 #include <vcl_streambuf.h>
-#ifndef VCL_EGCS //egcs
 #include <vcl_bitset.h>
-#endif
 #include <vcl_ios.h>
-#ifndef VCL_GCC_295 //gcc2.95
 #include <vcl_locale.h>
-#endif
 #include <vcl_limits.h>
 #include <vcl_queue.h>
 #include <vcl_string.h>
