@@ -277,7 +277,7 @@
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function
-// declarations (i.e., EGCS, VC C++.NET 2003).
+// declarations (i.e., VC C++.NET 2003).
 
 //#define VCL_NULL_TMPL_ARGS /* <> */
 //#define VCL_NULL_TMPL_ARGS <>
@@ -517,44 +517,6 @@ text { return ret; }
 //
 #define VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER 1
 #define VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER 1
-
-// VCL_DFL_TYPE_PARAM_STLDECL(A, a) and VCL_DFL_TMPL_PARAM_STLDECL(A, a)
-// EGCS doesn't like definition of default types, viz:
-// \code
-//   template <class A = default> class vector;
-//   template <class A = default> class vector { ... };
-// \endcode
-// This macro is used to say "define if not previously defined, like
-// \code
-//   template <VCL_DFL_TYPE_PARAM_STLDECL(A,a)> class vector { ... };
-// \endcode
-
-//#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A = a
-//#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A /* = a */
-//#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) __DFL_TYPE_PARAM(A,a)
-//FIXME #define VCL_DFL_TYPE_PARAM_STLDECL(A,a) @VCL_DFL_TYPE_PARAM_STLDECL@
-//
-//#define VCL_DFL_TMPL_PARAM_STLDECL(A,a) A = a
-//#define VCL_DFL_TMPL_PARAM_STLDECL(A,a) A /* = a */
-//#define VCL_DFL_TMPL_PARAM_STLDECL(A,a) __STL_DFL_TMPL_PARAM(A,a)
-//FIXME #define VCL_DFL_TMPL_PARAM_STLDECL(A,a) @VCL_DFL_TMPL_PARAM_STLDECL@
-
-
-// VCL_DFL_TMPL_ARG(class)
-// Similarly, when instantiating a templated class with a default
-// template argument, some compilers don't like the redeclaration of
-// that argument, while others insist on it.
-// In such cases, specify the default argument as follows:
-// \code
-//   template class vector <int VCL_DFL_TMPL_ARG(default_iterator) >;
-// \endcode
-// (Note the missing comma after int: it is inside the macro.)
-
-//#define VCL_DFL_TMPL_ARG(classname) , classname
-//#define VCL_DFL_TMPL_ARG(classname) /* , classname */
-//#define VCL_DFL_TMPL_ARG(classname) __DFL_TMPL_ARG(classname)
-//FIXME #define VCL_DFL_TMPL_ARG(classname) @VCL_DFL_TMPL_ARG@
-
 
 //: VCL_SUNPRO_CLASS_SCOPE_HACK(A)
 //

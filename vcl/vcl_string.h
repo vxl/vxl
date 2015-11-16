@@ -16,11 +16,6 @@
 # include "iso/vcl_string.h"
 #endif
 
-//// who needs to know this?
-//#if defined(VCL_GCC_EGCS) || defined(VCL_SUNPRO_CC)
-//# define VCL_STRING_IS_TYPEDEF 1
-//#endif
-
 #define VCL_BASIC_STRING_INSTANTIATE \
 extern "include vcl_string.txx instead"
 

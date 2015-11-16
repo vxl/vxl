@@ -22,19 +22,8 @@ vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
   return is; \
 }
 
-// ---------- egcs
-#if defined(VCL_EGCS)
-# if !VCL_HAS_TEMPLATE_SYMBOLS
-template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<vnl_rational> const &);
-template vcl_complex<vnl_rational> operator/ (vcl_complex<vnl_rational>const&,vcl_complex<vnl_rational>const&);
-template vcl_complex<vnl_rational> operator/ (vcl_complex<vnl_rational>const&,vnl_rational);
-implement_rsh(vnl_rational);
-#include <std/complext.cc>
-template vcl_complex<vnl_rational>& __doadv<vnl_rational>(vcl_complex<vnl_rational>*, vcl_complex<vnl_rational> const&);
-# endif
-
 // ---------- gcc 2.95
-#elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 # define VCL_COMPLEX_INSTANTIATE_INLINE(x) template x
 template bool operator==(vcl_complex<vnl_rational>const&,vcl_complex<vnl_rational>const&);
