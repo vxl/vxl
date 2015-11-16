@@ -81,7 +81,7 @@ class mbl_cloneables_factory
   // An exception will be thrown if name does not exist.
   static vcl_auto_ptr<BASE > get_clone(const vcl_string & name)
   {
-    typedef VCL_DISAPPEARING_TYPENAME MAP::const_iterator IT;
+    typedef typename MAP::const_iterator IT;
 
     IT found = objects().find(name);
     const IT end = objects().end();
