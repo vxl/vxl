@@ -34,10 +34,6 @@
 
 #include <vxl_config.h> // for vxl_byte
 
-#ifdef VCL_VC_5
-#define vxl_byte int // this is a hack!!!  See the Description.
-#endif
-
 int
 main(int argc, char** argv)
 {

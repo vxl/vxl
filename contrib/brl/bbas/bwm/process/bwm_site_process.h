@@ -6,9 +6,7 @@
 #endif
 
 #if 0
-#if _MSC_VER > 1000
 # pragma once
-#endif // _MSC_VER > 1000
 #endif // 0
 
 #include "bwm_process.h"

@@ -25,24 +25,7 @@ class vpyr_2_tpyramid ;
 // to the true (and unique) types. As a workaround, we need a helper
 // class.
 
-#ifdef VCL_VC_6
-template<class N>
-struct helperN : public vmap_ptr_sequence< typename N::base_type >
-{
-  typedef typename N::base_type base_type;
-  helperN()
-  {
-  };
-
-  helperN(const vmap_ptr_sequence<base_type> & arg )
-    : vmap_ptr_sequence<base_type>( arg )
-  {
-  }
-};
-#define SEQUENCE_OF_BASE(T) helperN< T >
-#else
 #define SEQUENCE_OF_BASE(T) vmap_ptr_sequence< typename T :: base_type >
-#endif
 
 //:
 template <class V, class E, class F, class D>

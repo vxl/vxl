@@ -12,10 +12,6 @@
 
 #include <vcl_vector.h>
 
-#if defined(_MSC_VER) && _MSC_VER < 1400
-# define RGTL_CXX_WORKAROUND_DEPENDENT_TYPEDEF
-#endif
-
 template <typename LeafDataType>
 class rgtl_compact_tree_data_fixed_leaf_data_policy:
   public rgtl_leaf_data_value_policy_base

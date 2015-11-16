@@ -8,11 +8,7 @@
 #ifndef _MSC_VER
   ** error **
 #else 
-#  if _MSC_VER >=1300
 #    include "vc70/vcl_config_manual.h"
-#  else //_MSC_VER >=1200
-#    include "vc60/vcl_config_manual.h"
-#  endif
 #endif
 
 #endif // vcl_config_manual_h_config_win32_

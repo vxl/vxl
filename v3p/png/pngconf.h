@@ -199,7 +199,7 @@
 #    define PNGCAPI __watcall
 #  endif
 
-#  if defined(__GNUC__) || (defined (_MSC_VER) && (_MSC_VER >= 800))
+#  if defined(__GNUC__) || (defined (_MSC_VER))
 #    define PNGCAPI __cdecl
 #    if PNG_API_RULE == 1
 #      define PNGAPI __stdcall
@@ -221,22 +221,6 @@
 #  if defined(PNGAPI) && !defined(PNG_USER_PRIVATEBUILD)
    ERROR: PNG_USER_PRIVATEBUILD must be defined if PNGAPI is changed
 #  endif
-
-#  if (defined(_MSC_VER) && _MSC_VER < 800)
-    /* older Borland and MSC
-     * compilers used '__export' and required this to be after
-     * the type.
-     */
-#    ifndef PNG_EXPORT_TYPE
-#      define PNG_EXPORT_TYPE(type) type PNG_IMPEXP
-#    endif
-#    define PNG_DLL_EXPORT __export
-#  else /* newer compiler */
-#    define PNG_DLL_EXPORT __declspec(dllexport)
-#    ifndef PNG_DLL_IMPORT
-#      define PNG_DLL_IMPORT __declspec(dllimport)
-#    endif
-#  endif /* compiler */
 
 #else /* !Windows/x86 */
 #  if (defined(__IBMC__) || defined(__IBMCPP__)) && defined(__OS2__)

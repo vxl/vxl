@@ -23,7 +23,7 @@
 # include "emulation/vcl_complex.h"
 
 // ---------- Visual Studio 8 and 9
-#elif defined(VCL_VC_8) || defined(VCL_VC_9)
+#if defined(VCL_VC_9)
 # include "win32-vc8/vcl_complex.h"
 
 // ---------- ISO

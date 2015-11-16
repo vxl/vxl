@@ -63,7 +63,7 @@
 
 #if defined(__GNUC__) && !defined(__ICC) // icc 8.0 defines __GNUC__
 # define VCL_GCC
-# if (__GNUC__<=4)
+# if (__GNUC__ < 4)
 #  error "forget it."
 # elif (__GNUC__==4)
 #  define VCL_GCC_4
@@ -92,8 +92,8 @@
 # define VCL_WIN32
 # if defined(_MSC_VER)
 #  define VCL_VC
-#  if _MSC_VER >= 1300
-#   define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
+#  if _MSC_VER >= 1400
+#   define VCL_VC_DOTNET 1 // VC is at least version >= 8.0
 #  endif
 
 // In future use VCL_VC_13_1 for 13.1, etc.
@@ -103,26 +103,8 @@
 #   define VCL_VC_10
 #  elif _MSC_VER >= 1500     // Visual Studio 2008 = Version 9.x
 #   define VCL_VC_9
-#  elif _MSC_VER >= 1400   // .NET 2005 = Version 8.x
-#   define VCL_VC_8
-#   define VCL_VC80 1      // (deprecated)
-#  elif _MSC_VER >= 1300   // .NET 2003 = Version 7.x
-#   define VCL_VC_7
-#   if _MSC_VER >= 1310
-#    define VCL_VC_71      // Version 7.1
-#    define VCL_VC71 1     // (deprecated)
-#   else
-#    define VCL_VC_70      // Version 7.0
-#    define VCL_VC70 1     // (deprecated)
-#   endif
-#  elif _MSC_VER >= 1200   // pre- .NET, Version 6.x
-#   define VCL_VC_6
-#   define VCL_VC_60       // Version 6.0
-#   define VCL_VC60 1      // (deprecated)
 #  else
-#   define VCL_VC_5
-#   define VCL_VC_50       // Version 5.0
-#   define VCL_VC50 1      // (deprecated)
+#    error "UNKONWN _MSC_VER"
 #  endif
 # endif
 #endif
@@ -130,23 +112,16 @@
 // win32 or vc++ ?
 // awf hack alert:
 #ifdef VCL_VC
-#  ifdef VCL_VC_60
-#    pragma warning(disable:4786 4660 4661)
-#    pragma warning(disable:4786 4660 4355 4390)
-#  elif VCL_VC_DOTNET
 // 4786: 'identifier' : identifier was truncated to 'number' characters in the debug information
 // 4018: signed/unsigned mismatch
 // 4146: unary minus operator applied to unsigned type, result still unsigned
 // 4267: conversion related to size_t
 // 4355: 'this' : used in base member initializer list
-#    pragma warning(disable:4786 4355)
-#  endif
+#  pragma warning(disable:4786 4355)
 
 // Disable warnings about C standard library functions.
-#  if _MSC_VER >= 1400   // .NET 2005 = Version 8.x
-#   ifndef _CRT_SECURE_NO_DEPRECATE
-#    define _CRT_SECURE_NO_DEPRECATE 1
-#   endif
+#  ifndef _CRT_SECURE_NO_DEPRECATE
+#   define _CRT_SECURE_NO_DEPRECATE 1
 #  endif
 #endif
 
