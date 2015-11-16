@@ -156,6 +156,7 @@ void boxm2_vecf_eye_scene::reset_indices(){
     }
   }
 }
+
 boxm2_vecf_eye_scene::boxm2_vecf_eye_scene(vcl_string const& scene_file, bool initialize):
   base_model_(new boxm2_scene(scene_file)), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0)
 {
