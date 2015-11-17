@@ -51,7 +51,17 @@ bool vnl_lbfgsb::minimize(vnl_vector<double>& x)
   vnl_vector<double> gradient(n);
 
   // Working space.
-  vnl_vector<double> wa((2*m+4)*n + 12*m*m + 12*m);
+  // The total work space **wa** required by the new version is
+  //
+  //                    2*m*n + 11*m*m + 5*n + 8*m
+  //
+  vnl_vector<double> wa(2*m*n + 11*m*m + 5*n + 8*m);
+  //
+  // the previous version required:
+  //
+  //                   2*m*n + 12*m*m + 4*n + 12*m
+  //
+  //
   vnl_vector<long> iwa(3*n);
   char csave[60];
   long lsave[4];
@@ -150,7 +160,7 @@ bool vnl_lbfgsb::minimize(vnl_vector<double>& x)
         // function tolerance reached
         this->failure_code_ = CONVERGED_FTOL;
       }
-      else if (vcl_strncmp("CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      else if (vcl_strncmp("CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL",
                            task, 48) == 0)
       {
         // gradient tolerance reached

@@ -40,9 +40,9 @@ ENDIF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
 # Include necessary modules
 #
 
-INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CheckTypeSize.cmake)
+INCLUDE (CheckSymbolExists)
+INCLUDE (TestBigEndian)
+INCLUDE (CheckTypeSize)
 
 INCLUDE (${vxl_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
 #
@@ -389,12 +389,11 @@ ELSE(HAVE_UNISTD_H)
 ENDIF(HAVE_UNISTD_H)
 
 #
-# Check the address model of the build, i.e. 32-bit (4-byte) or 64-bit (8-byte). 
-# The type of size_t is directly related to address model on most machines and compilers.
-# Hence, we detect the size of size_t instead.  
+# Check the address model of the build, i.e. 32-bit (4-byte) or 64-bit (8-byte).
+# The type of void * is directly related to address model on most machines and compilers.
+# Hence, we use the size of void * instead.
 #
-check_type_size(size_t  VXL_SIZEOF_SIZE_T)
-MATH(EXPR VXL_ADDRESS_BITS 8*${VXL_SIZEOF_SIZE_T} )
+MATH(EXPR VXL_ADDRESS_BITS 8*${CMAKE_SIZEOF_VOID_P} )
 
 #
 # Check numeric_limits infinity stuff

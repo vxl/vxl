@@ -358,6 +358,21 @@ static void test_math()
   TEST("!isfinite(huge_val(double))", vnl_math::isfinite(vnl_huge_val(double())), false);
   TEST("!isfinite(huge_val(float))",  vnl_math::isfinite(vnl_huge_val(float())),  false);
 
+  //Test for math_sgn
+  TEST("vnl_math::sgn(+7)  ", vnl_math::sgn(+7),  1);
+  TEST("vnl_math::sgn(-7)  ", vnl_math::sgn(-7), -1);
+  TEST("vnl_math::sgn( 0)  ", vnl_math::sgn( 0),  0);
+
+  TEST("vnl_math::sgn(+7.0)  ", vnl_math::sgn(+7.0),  1);
+  TEST("vnl_math::sgn(-7.0)  ", vnl_math::sgn(-7.0), -1);
+  TEST("vnl_math::sgn(-0.0)  ", vnl_math::sgn(-0.0),  0);
+  TEST("vnl_math::sgn(+0.0)  ", vnl_math::sgn(-0.0),  0);
+
+  TEST("vnl_math::sgn(+7.0F)  ", vnl_math::sgn(+7.0F),  1);
+  TEST("vnl_math::sgn(-7.0F)  ", vnl_math::sgn(-7.0F), -1);
+  TEST("vnl_math::sgn(-0.0F)  ", vnl_math::sgn(-0.0F),  0);
+  TEST("vnl_math::sgn(+0.0F)  ", vnl_math::sgn(-0.0F),  0);
+
   vcl_cout << vcl_endl;
 
   // test vnl_math::angle_0_to_2pi() for "extreme values":

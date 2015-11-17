@@ -119,6 +119,13 @@
 #  else
 #   define VCL_GCC_40
 #  endif
+# elif (__GNUC__==5)
+#  define VCL_GCC_5
+#  if (__GNUC_MINOR__ > 0 )
+#   define VCL_GCC_51
+#  else
+#   define VCL_GCC_50
+#  endif
 # else
 #  error "Dunno about this gcc"
 # endif
@@ -133,7 +140,9 @@
 #  endif
 
 // In future use VCL_VC_13_1 for 13.1, etc.
-#  if _MSC_VER >= 1600     // Visual Studio 2010 = Version 10.x
+#  if _MSC_VER >= 1700     // Visual Studio 2011 = Version 11.x
+#   define VCL_VC_11
+#  elif _MSC_VER >= 1600     // Visual Studio 2010 = Version 10.x
 #   define VCL_VC_10
 #  elif _MSC_VER >= 1500     // Visual Studio 2008 = Version 9.x
 #   define VCL_VC_9
@@ -235,7 +244,7 @@
 
 // This *needs* to come after vcl_config_headers.h
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-# if defined(VCL_GCC_3) || defined(VCL_GCC_4)
+# if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_GCC_5)
 #  define GNU_LIBSTDCXX_V3 1
 # elif !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
 // One difference between v2 and v3 is that the former has

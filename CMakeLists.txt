@@ -90,6 +90,12 @@ if(BUILD_SHARED_LIBS)
   set(VXL_BUILD_SHARED TRUE)
 endif()
 
+# Use this variable in vxl_config.h to tell if it is a shared build
+set(VXL_BUILD_SHARED FALSE)
+if(BUILD_SHARED_LIBS)
+  set(VXL_BUILD_SHARED TRUE)
+endif()
+
 # Do platform-specific configuration.
 IF(NOT VXL_NO_CMAKE_CONFIGURE)
   SUBDIRS(config/cmake/config)
