@@ -106,7 +106,6 @@ __kernel void map_orbit_to_target(                   __constant  float          
           float txg = xg - translation[0];
           float tyg = yg - translation[1];
           float tzg = zg - translation[2];
-          float txg_reflected = - txg;
           float4 source_p           = (float4)( txg,tyg,tzg,0);
           float4 source_p_refl      = (float4)(-txg,tyg,tzg,0);
           float4 cell_center, cell_center_refl;
@@ -138,6 +137,17 @@ __kernel void map_orbit_to_target(                   __constant  float          
                 int anatomy_index = 6;
 
 
+              if( sphere[source_data_index_original] ){
+                  /* //we are on a sphere voxel so time to undo the rotation */
+                  source_p = rotate_point(source_p_original,rotation);
+                  has_anatomy = true;
+                  unsigned point_ok = data_index_world_point(source_scene_linfo, source_scene_tree_array,
+                                                     local_trees_source,lid,source_p,
+                                                     &cell_center,
+                                                     &source_data_index,
+                                                     &bit_index,bit_lookup);
+
+              }
                 if( eyelid[source_data_index_probe] ){
                   source_p          = is_right ? source_p_refl          : source_p_original ;
                   source_data_index = is_right ? source_data_index_refl : source_data_index_original;
@@ -155,19 +165,12 @@ __kernel void map_orbit_to_target(                   __constant  float          
                                                                    &cell_center,
                                                                    &source_data_index,
                                                                    &bit_index,bit_lookup);
+                    if(!point_ok)
+                      has_anatomy = false;
                   }
               }
-              if( sphere[source_data_index_original] ){
-                  /* //we are on a sphere voxel so time to undo the rotation */
-                  source_p = rotate_point(source_p_original,rotation);
-                  has_anatomy = true;
-                  unsigned point_ok = data_index_world_point(source_scene_linfo, source_scene_tree_array,
-                                                     local_trees_source,lid,source_p,
-                                                     &cell_center,
-                                                     &source_data_index,
-                                                     &bit_index,bit_lookup);
 
-              }if( eyelid_crease[source_data_index_probe] || lower_lid[source_data_index_probe] ){
+              if( eyelid_crease[source_data_index_probe] || lower_lid[source_data_index_probe] ){
                   has_anatomy = true;
                   source_p          = is_right ? source_p_refl          : source_p_original ;
                   source_data_index = is_right ? source_data_index_refl : source_data_index_original;
@@ -225,8 +228,8 @@ __kernel void map_orbit_to_target(                   __constant  float          
                                                                 &nb_data_index,
                                                                 &neighborBitIndex,bit_lookup);
 
-                  bool nb_anatomy = is_anatomy(current_anatomy,nb_data_index,&orbit);
-                  if (nb_point_ok &&  nb_anatomy){
+                  bool nb_anatomy = nb_point_ok ? is_anatomy(current_anatomy,nb_data_index,&orbit) : false;
+                  if ( nb_anatomy ){
                     alphas[i] = source_scene_alpha_array[nb_data_index] ;
                     nb_count++;
 #ifdef MOG_TYPE_8
@@ -258,6 +261,12 @@ __kernel void map_orbit_to_target(                   __constant  float          
                 EXPECTED_INT(expected_int_orig,mog_float); //for debug
                 MOG_TYPE mog_interped;
                 float alpha_interped = interp_float_weights(alphas,weights);
+
+                uchar8 curr_rgb_tuple = source_rgb_array[source_data_index];
+                float4 float_rgb_tuple_interped  = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
+
+                uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
+
 #ifdef MOG_TYPE_8
 
                 float expected_int   = interp_float_weights(params,weights);
@@ -274,14 +283,9 @@ __kernel void map_orbit_to_target(                   __constant  float          
                 CONVERT_FUNC_SAT_RTE(mog_interped, expected_int_interped);
 #endif
 
-                uchar8 curr_rgb_tuple = source_rgb_array[source_data_index];
-                float4 float_rgb_tuple_interped  = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
-
-                uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city
-
                 curr_rgb_tuple.s0123 = uchar_rgb_tuple_interped;
                 target_rgb_array[target_data_index] = curr_rgb_tuple;
-                target_scene_alpha_array[target_data_index] = lidvoxel ? 0 : alpha_interped;
+                target_scene_alpha_array[target_data_index] = lidvoxel  ? 0 : alpha_interped;
                 target_scene_mog_array[target_data_index]   = mog_interped;
 
 

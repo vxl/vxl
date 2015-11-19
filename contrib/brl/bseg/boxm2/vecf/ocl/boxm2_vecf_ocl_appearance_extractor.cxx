@@ -1,4 +1,3 @@
-
 #include "boxm2_vecf_ocl_appearance_extractor.h"
 #include <boct/boct_bit_tree.h>
 #include "../boxm2_vecf_composite_head_parameters.h"
@@ -987,7 +986,7 @@ bool boxm2_vecf_ocl_appearance_extractor::extract_appearance_one_pass(bool is_ri
    good_buffs &=  output_cl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
    if(!good_buffs)
      return false;
-   output_cl->zero_gpu_buffer(queue_);
+//   output_cl->zero_gpu_buffer(queue_);
    global_threads[0] = (unsigned) RoundUp(info_buffer_source->scene_dims[0]*info_buffer_source->scene_dims[1]*info_buffer_source->scene_dims[2],(int)local_threads[0]);
 
 
@@ -1180,7 +1179,7 @@ for(unsigned i = 0;i<6;i++){
    good_buffs &=  output_cl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
    if(!good_buffs)
      return false;
-   output_cl->zero_gpu_buffer(queue_);
+//   output_cl->zero_gpu_buffer(queue_);
 
      global_threads[0] = (unsigned) RoundUp(info_buffer_source->scene_dims[0]*info_buffer_source->scene_dims[1]*info_buffer_source->scene_dims[2],(int)local_threads[0]);
 
@@ -1232,17 +1231,17 @@ for(unsigned i = 0;i<6;i++){
     }
    vis_l->read_to_buffer(queue_);
    mean_app_l->read_to_buffer(queue_);
-   output_cl->read_to_buffer(queue_);
+//   output_cl->read_to_buffer(queue_);
    int status = clFinish(queue_);
    bool good_kern = check_val(status, CL_SUCCESS, "Calc Mean Orbit Kernel Failed: " + error_to_string(status));
    calc_mean_orbit_app_kern->clear_args();
 
    if(!good_kern)
      return false;
-   for (unsigned i = 0;i < source_data_size ; i++){
-     if( output[i]!=0)
-       vcl_cout<<output[i]<<" ";
-   }
+   // for (unsigned i = 0;i < source_data_size ; i++){
+   //   if( output[i]!=0)
+   //     vcl_cout<<output[i]<<" ";
+   // }
 
    float8 sclera   = vis[0]  != 0.0f ? app[0]/vis[0] : null; vis_sclera_        += vis[0];
    float8 iris     = vis[1]  != 0.0f ? app[1]/vis[1] : null; vis_iris_          += vis[1];

@@ -58,14 +58,14 @@ int get_ranked_anatomy(unsigned  data_index,
 #define EYELID_CREASES orbit->eyelid_crease [data_index]
 
 int  ret_val = 6;
-  if(EYELIDS)
-    ret_val = EYELID;
  if(SPHERES)
     ret_val = SPHERE;
   if(IRISES )
     ret_val = IRIS;
   if(PUPILS)
     ret_val = PUPIL;
+  if(EYELIDS)
+    ret_val = EYELID;
   if(LOWER_LIDS)
     ret_val = LOWER_LID;
   if(EYELID_CREASES)

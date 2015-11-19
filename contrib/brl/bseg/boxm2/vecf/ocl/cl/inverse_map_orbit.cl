@@ -117,8 +117,9 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
               t = compute_t(moved_p.x,moved_p.y,&eyelid_param);
               if(!is_valid_t( t - dt[0], &eyelid_param)){
                 lidvoxel = 1;
+              }else{
+                moved_p +=  lid_vf(moved_p.x, t, -dt[0],&eyelid_param);
               }
-              moved_p +=  lid_vf(moved_p.x, t, -dt[0],&eyelid_param);
               target_p =  moved_p + offset;
               target_p_refl = (float4)( - target_p.x, target_p.y, target_p.z, 0);
             }
@@ -154,13 +155,8 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
             float8 color_A =  convert_float8(target_rgb_array[target_data_index]);
             float8 color_B =  convert_float8(target_rgb_array[target_data_index_refl]);
             float8 mean_val = (float8)(29,255,107,0,0,0,0,0);
-            if(iris[source_data_index] && !sphere[source_data_index])
-              output[source_data_index] = 1;
-            if(pupil[source_data_index] && !sphere[source_data_index])
-              output[source_data_index] = 2;
-            if(pupil[source_data_index] && !iris[source_data_index] && !sphere[source_data_index])
-              output[source_data_index] = 3;
             int current_anatomy = get_ranked_anatomy(source_data_index,&orbit);
+
 
 #ifdef ANATOMY_CALC
 
@@ -193,6 +189,9 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
               AtomicAdd(&vis_accum[EYELID_CREASE],vis_A);
               AtomicAddFloat8(&mean_app [EYELID_CREASE],color_A * vis_A);}
 #else
+            float intensity_scale =  t > 0.7 ? 0.8 : 1.0;
+            float8 darker_lower_lid = total_app[4];
+            darker_lower_lid.x *= 0.6;
 
             if(current_anatomy == SPHERE){
               mean_val = total_app[0];
@@ -207,8 +206,9 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
             }
 
             if(current_anatomy == EYELID){
-              if( lidvoxel ){
-                mean_val = (-dt[0] -  t) * total_app[5] + t * total_app[4]; //blend between crease and lower lid;
+              if( lidvoxel && is_valid_t(t,&eyelid_param) ){
+                mean_val = darker_lower_lid;
+                mean_val.x = (0.95 -  t) * darker_lower_lid.x + t * total_app[4].x; //blend intensy component between crease and lower lid;
               }else
                 mean_val = total_app [3]; //actual upper lid color
             }
@@ -220,7 +220,11 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
             if(current_anatomy == EYELID_CREASE){
               mean_val = total_app[5];
             }
-             source_rgb_array[source_data_index] = convert_uchar8(weight_appearance(vis_A,vis_B,color_A,color_B,mean_val));
+            if (!lidvoxel){
+              source_rgb_array[source_data_index] = convert_uchar8(weight_appearance(vis_A,vis_B,color_A,color_B,mean_val));
+            }else{
+              source_rgb_array[source_data_index] = convert_uchar8(mean_val);
+            }
 #define DO_INTERP
 #ifdef DO_INTERP
 

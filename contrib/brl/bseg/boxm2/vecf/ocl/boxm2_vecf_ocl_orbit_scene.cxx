@@ -1560,7 +1560,7 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(vcl_string&      options)
    // }
    bool no_sphere =true;
    for(unsigned i=0,k=0;i<source_data_size  ;i+=1,k+=1){
-     if(sphere_->data()[i] &&!is_right_){
+     if(eyelid_->data()[i] && !is_right_ && output_color[4*i]>200){
        no_sphere = false;
        vgl_point_3d<double> p_src(nb_bot[i * 16+ 3],nb_bot[i * 16+ 7],nb_bot[i * 16+ 11]);
        vgl_point_3d<double> points[8];
