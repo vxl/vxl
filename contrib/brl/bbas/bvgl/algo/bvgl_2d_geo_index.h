@@ -76,13 +76,15 @@ public:
   static bool prune_tree(bvgl_2d_geo_index_node_sptr root, vgl_polygon<float> const& poly);
 
   //: write out kml file at given depth of the tree
-  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vcl_string explanation="location");
+  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vcl_string explanation="location", vcl_string name=" ");
   //: write out kml file for quadtree with non geo coordinates using given lvcs
-  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vpgl_lvcs_sptr const& lvcs, vcl_string explanation="location");
+  static void write_to_kml(bvgl_2d_geo_index_node_sptr root, unsigned const& depth, vcl_string const& kml_file, vpgl_lvcs_sptr const& lvcs,
+                           vcl_string explanation="location", vcl_string name = " ");
   //: write out kml file for the given node and its children
-  static void write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, vcl_string explanation="location");
+  static void write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth, 
+                                vcl_string explanation="location", vcl_string name = " ");
   static void write_to_kml_node(vcl_ofstream& ofs, bvgl_2d_geo_index_node_sptr n, unsigned const& current_depth, unsigned const& depth,
-                                vpgl_lvcs_sptr const& lvcs, vcl_string explanation="location");
+                                vpgl_lvcs_sptr const& lvcs, vcl_string explanation="location", vcl_string name = " ");
 
   //: write the quadtree structure into a text file, only the tree structure and not the content on the node
   static void write(bvgl_2d_geo_index_node_sptr root, vcl_string const& file_name, double const& min_size);

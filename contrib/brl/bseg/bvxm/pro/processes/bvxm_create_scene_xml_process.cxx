@@ -313,8 +313,9 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   bkml_write::open_document(ofs);
   for (unsigned i = 0; i < leaves.size(); i++) {
     bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
+    vcl_stringstream name;  name << "scene_" << i;
     vcl_stringstream description; description << "scene_" << i << "_urban_" << leaf_ptr->contents_;
-    bvgl_2d_geo_index::write_to_kml_node(ofs, leaves[i], 0, 0, description.str());
+    bvgl_2d_geo_index::write_to_kml_node(ofs, leaves[i], 0, 0, description.str(), name.str());
   }
   bkml_write::close_document(ofs);
   ofs.close();
