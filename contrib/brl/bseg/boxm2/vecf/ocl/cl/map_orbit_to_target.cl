@@ -228,8 +228,8 @@ __kernel void map_orbit_to_target(                   __constant  float          
                                                                 &nb_data_index,
                                                                 &neighborBitIndex,bit_lookup);
 
-                  bool nb_anatomy = is_anatomy(current_anatomy,nb_data_index,&orbit);
-                  if (nb_point_ok &&  nb_anatomy){
+                  bool nb_anatomy = nb_point_ok ? is_anatomy(current_anatomy,nb_data_index,&orbit) : false;
+                  if ( nb_anatomy ){
                     alphas[i] = source_scene_alpha_array[nb_data_index] ;
                     nb_count++;
 #ifdef MOG_TYPE_8
