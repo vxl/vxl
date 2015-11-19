@@ -550,47 +550,77 @@ def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
 
 # process that generate normalized height map from multiple height map tiles created by bvxm 3-d reconstruction
 # the land cover image is used to define the ground pixel and coverage region
+def generate_ndsm(ll_lon, ll_lat, ur_lon, ur_lat, img_size_ni, img_size_nj, geo_index_txt, h_map_folder, grd_map_folder, window_size = 20, max_h_limit = 254.0):
+  bvxm_batch.init_process("volmNdsmGenearationProcess")
+  bvxm_batch.set_input_double(0, ll_lon)
+  bvxm_batch.set_input_double(1, ll_lat)
+  bvxm_batch.set_input_double(2, ur_lon)
+  bvxm_batch.set_input_double(3, ur_lat)
+  bvxm_batch.set_input_unsigned(4, img_size_ni)
+  bvxm_batch.set_input_unsigned(5, img_size_nj)
+  bvxm_batch.set_input_string(6, geo_index_txt)
+  bvxm_batch.set_input_string(7, h_map_folder)
+  bvxm_batch.set_input_string(8, grd_map_folder)
+  bvxm_batch.set_input_unsigned(9, window_size)
+  bvxm_batch.set_input_float(10, max_h_limit)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_ndsm = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(1)
+    out_dsm = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(2)
+    grd_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(3)
+    out_cam = dbvalue(id, type)
+    return out_ndsm, out_dsm, grd_img, out_cam
+  else:
+    return None, None, None, None
 
+## process to estimate ground plane from a height map
+def dsm_ground_estimation(dsm_image, invalid_pixel = -1.0, window_size=20, sample_size = 10):
+  bvxm_batch.init_process("volmDsmGroundEstimationProcess")
+  bvxm_batch.set_input_from_db(0, dsm_image)
+  bvxm_batch.set_input_int(1,sample_size)
+  bvxm_batch.set_input_int(2,window_size)
+  bvxm_batch.set_input_float(3,invalid_pixel)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    grd_img = dbvalue(id, type)
+    return grd_img
+  else:
+    return None
 
-def generate_ndsm(land_geocam, land_img_file, geo_index_txt, h_map_folder, ground_txt, dem_folder, max_h_limit=254.0, window_size=30):
-    bvxm_batch.init_process("volmNdsmGenearationProcess")
-    bvxm_batch.set_input_from_db(0, land_geocam)
-    bvxm_batch.set_input_string(1, land_img_file)
-    bvxm_batch.set_input_string(2, geo_index_txt)
-    bvxm_batch.set_input_string(3, h_map_folder)
-    bvxm_batch.set_input_unsigned(4, window_size)
-    bvxm_batch.set_input_float(5, max_h_limit)
-    bvxm_batch.set_input_string(6, ground_txt)
-    bvxm_batch.set_input_string(7, dem_folder)
-    status = bvxm_batch.run_process()
-    if status:
-        (id, type) = bvxm_batch.commit_output(0)
-        out_ndsm = dbvalue(id, type)
-        (id, type) = bvxm_batch.commit_output(1)
-        out_dsm = dbvalue(id, type)
-        (id, type) = bvxm_batch.commit_output(2)
-        out_cam = dbvalue(id, type)
-        return out_ndsm, out_dsm, out_cam
-    else:
-        return None, None, None
+def dsm_ground_estimation_edge(dsm_image, edge_img, invalid_pixel = -1.0, sample_size = 10):
+  bvxm_batch.init_process("volmDsmGroundEstimationEdgeProcess")
+  bvxm_batch.set_input_from_db(0, dsm_image)
+  bvxm_batch.set_input_from_db(1, edge_img)
+  bvxm_batch.set_input_int(2, sample_size)
+  bvxm_batch.set_input_float(3, invalid_pixel)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    grd_img = dbvalue(id, type)
+    return grd_img
+  else:
+    return None
 
-# process to mosaics a set of images that covers the given region
-
-
-def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_value=-1.0):
-    bvxm_batch.init_process("volmCombineHeightMapProcess3")
-    bvxm_batch.set_input_string(0, in_img_folder)
-    bvxm_batch.set_input_double(1, ll_lon)
-    bvxm_batch.set_input_double(2, ll_lat)
-    bvxm_batch.set_input_double(3, ur_lon)
-    bvxm_batch.set_input_double(4, ur_lat)
-    bvxm_batch.set_input_float(5, init_value)
-    status = bvxm_batch.run_process()
-    if status:
-        (id, type) = bvxm_batch.commit_output(0)
-        out_img = dbvalue(id, type)
-        (id, type) = bvxm_batch.commit_output(1)
-        out_cam = dbvalue(id, type)
-        return out_img, out_cam
-    else:
-        return None, None
+## process to mosaics a set of images that covers the given region
+def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_value = -1.0):
+  bvxm_batch.init_process("volmCombineHeightMapProcess3")
+  bvxm_batch.set_input_string(0, in_img_folder)
+  bvxm_batch.set_input_double(1, ll_lon)
+  bvxm_batch.set_input_double(2, ll_lat)
+  bvxm_batch.set_input_double(3, ur_lon)
+  bvxm_batch.set_input_double(4, ur_lat)
+  bvxm_batch.set_input_float(5, init_value)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(1)
+    out_cam = dbvalue(id, type)
+    return out_img, out_cam
+  else:
+    return None, None

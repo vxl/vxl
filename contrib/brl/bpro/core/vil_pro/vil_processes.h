@@ -78,5 +78,5 @@ DECLARE_FUNC_CONS(vil_combine_planes_process2);
 DECLARE_FUNC_CONS(vil_histogram_equalize_process);
 DECLARE_FUNC_CONS(vil_invert_float_image_process);
 DECLARE_FUNC_CONS(vil_combine_palnes_8_bands_process);
-
+DECLARE_FUNC_CONS(vil_image_registration_process);
 #endif
