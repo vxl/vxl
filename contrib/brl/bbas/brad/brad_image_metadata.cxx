@@ -1121,7 +1121,11 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
     if (img_info.find("IKONOS") != vcl_string::npos || nitf_filename.find("IK") != vcl_string::npos) {
       solar_irrad = 1375.8;
       satellite_name_ = "IKONOS";
-    } else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos || satellite_name_.compare("OV-5") == 0 ) { // OZGE TODO: check this one
+    } 
+    else if (img_info.find("GeoEye-1") != vcl_string::npos || img_info.find("GEOEYE1") != vcl_string::npos || 
+               satellite_name_.compare("OV-5") == 0 || 
+               satellite_name_.compare("GE01") == 0 ) 
+    { // OZGE TODO: check this one
       // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
       solar_irrad = 1617;
       satellite_name_ = "GeoEye-1";
@@ -1139,12 +1143,13 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
         vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
         return false;
       }
-    } else if (img_info.find("QuickBird") != vcl_string::npos ||
-               nitf_filename.find("QB") != vcl_string::npos ||
-               nitf_filename.find("QuickBird") != vcl_string::npos ||
+    }
+    else if (img_info.find("QuickBird") != vcl_string::npos || 
+               nitf_filename.find("QB") != vcl_string::npos || 
+               nitf_filename.find("QuickBird") != vcl_string::npos || 
                img_info.find("QB02") != vcl_string::npos ||
-               satellite_name_.compare("QB02") == 0
-               ) {
+               satellite_name_.compare("QB02") == 0)
+    {
       solar_irrad = 1381.7;
       satellite_name_ = "QuickBird";
       if (n_bands_ == 1) {
@@ -1158,10 +1163,14 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
         vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
         return false;
       }
-    } else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos || satellite_name_.compare("WV01") == 0 ) {
+    }
+    else if (img_info.find("WorldView") != vcl_string::npos || nitf_filename.find("WV") != vcl_string::npos || satellite_name_.compare("WV01") == 0 )
+    {
       solar_irrad = 1580.814;
       satellite_name_ = "WorldView";
-    } else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos || satellite_name_.compare("WV02") == 0) {
+    }
+    else if (img_info.find("WorldView2") != vcl_string::npos || img_info.find("WV02") != vcl_string::npos || satellite_name_.compare("WV02") == 0)
+    {
       // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
       solar_irrad = 1580.814;
       satellite_name_ = "WorldView2";
@@ -1187,7 +1196,42 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
         vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
         return false;
       }
-    } else if (img_info.find("DigitalGlobe") != vcl_string::npos) {
+    }
+    else if (img_info.find("WorldView3") != vcl_string::npos || img_info.find("WV03") != vcl_string::npos || satellite_name_.compare("WV03") == 0)
+    {
+      // these values are from https://calval.cr.usgs.gov/wordpress/wp-content/uploads/JACIE2015_Kuester_V3.pdf.  Should check Digitial Globe for any updates
+      solar_irrad = 1583.58;
+      satellite_name_ = "WorldView3";
+      // CAUTION: The order in this vector, should be the order of the bands in the image and should be consistent with the order of gain vector.
+      // WorldView 3 Multi image has 8 bands, ordered as 'Coastal', 'Blue', 'Green', 'Yellow', 'Red', 'RedEdge', 'NIR1' and 'NIR2'
+      // WorldView 3 SWIR image should have 'SWIR1' to 'SWIR8'
+      if (n_bands_ == 1) {
+        // pass
+      } else if (n_bands_ == 8 && band_ == "MULTI") {
+        solar_irrads[0] = 1743.81;  // Coastal
+        solar_irrads[1] = 1971.48;  // Blue
+        solar_irrads[2] = 1856.26;  // Green
+        solar_irrads[3] = 1749.40;  // Yellow
+        solar_irrads[4] = 1555.11;  // Red
+        solar_irrads[5] = 1343.95;  // Red Edge
+        solar_irrads[6] = 1071.98;  // NIR 1
+        solar_irrads[7] = 863.296;  // NIR 2
+      } else if (n_bands_ == 8 && band_ == "SWIR")  {
+        solar_irrads[0] = 494.595;  // SWIR1
+        solar_irrads[1] = 261.494;  // SWIR2
+        solar_irrads[2] = 230.518;  // SWIR3
+        solar_irrads[3] = 196.766;  // SWIR4
+        solar_irrads[4] = 80.3650;  // SWIR5
+        solar_irrads[5] = 74.7211;  // SWIR6
+        solar_irrads[6] = 69.0430;  // SWIR7
+        solar_irrads[7] = 59.8224;  // SWIR8
+      } else {
+        vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
+        return false;
+      }
+    }
+    else if (img_info.find("DigitalGlobe") != vcl_string::npos)
+    {
       solar_irrad = 1580.814;
       satellite_name_ = "DigitalGlobe";  // which satellite when the name is DigitalGlobe??
       vcl_cerr << "WARNING satellite name is DigitalGlobe but cannot determine which satellite!! so sun irradiance values are not set properly (esp. for multi-spectral images)" << vcl_endl;
@@ -1259,7 +1303,7 @@ bool brad_image_metadata::parse_from_meta_file(vcl_string const& meta_file)
 
   // calculate the solar irradiance
   if (!parsed_fine) {
-    vcl_cerr << " Problems parsing meta-data file" << meta_file << "!\n";
+    vcl_cerr << " Problems parsing meta-data file " << meta_file << "!\n";
     return false;
   }
   for (unsigned i = 0; i < gains_.size(); i++) {
@@ -1271,7 +1315,8 @@ bool brad_image_metadata::parse_from_meta_file(vcl_string const& meta_file)
     solar_irrad = 1375.8;
     satellite_name_ = "IKNOOS";
   }
-  else if ( satellite_name_.find("OV-5") != vcl_string::npos || satellite_name_.find("GeoEye-1") != vcl_string::npos || satellite_name_.find("GEOEYE1") != vcl_string::npos)
+  else if ( satellite_name_.find("OV-5") != vcl_string::npos || satellite_name_.find("GeoEye-1") != vcl_string::npos 
+          || satellite_name_.find("GEOEYE1") != vcl_string::npos || satellite_name_.find("GE01") != vcl_string::npos )
   {
     // these values are from http://apollomapping.com/wp-content/user_uploads/2011/09/GeoEye1_Radiance_at_Aperture.pdf
     solar_irrad = 1617;
@@ -1306,11 +1351,13 @@ bool brad_image_metadata::parse_from_meta_file(vcl_string const& meta_file)
       return false;
     }
   }
-  else if ( satellite_name_.find("WV01") != vcl_string::npos || satellite_name_.find("WorldView") != vcl_string::npos ) {
+  else if ( satellite_name_.find("WV01") != vcl_string::npos || satellite_name_.find("WorldView") != vcl_string::npos )
+  {
     solar_irrad = 1580.814;
     satellite_name_ = "WorldView";
   }
-  else if ( satellite_name_.find("WV02") != vcl_string::npos || satellite_name_.find("WorldView2") != vcl_string::npos ) {
+  else if ( satellite_name_.find("WV02") != vcl_string::npos || satellite_name_.find("WorldView2") != vcl_string::npos )
+  {
     // these values are from http://www.digitalglobe.com/sites/default/files/Radiometric_Use_of_WorldView-2_Imagery%20(1).pdf
     solar_irrad = 1580.814;
     satellite_name_ = "WorldView2";
@@ -1332,6 +1379,39 @@ bool brad_image_metadata::parse_from_meta_file(vcl_string const& meta_file)
       solar_irrads[1] = 1856.4104; // Green
       solar_irrads[2] = 1559.4555; // Red
       solar_irrads[3] = 1069.7302; // NIR1
+    } else {
+      vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from metadata file " << meta_file << vcl_endl;;
+      return false;
+    }
+  }
+  else if (satellite_name_.find("WorldView3") != vcl_string::npos || satellite_name_.find("WV03") != vcl_string::npos)
+  {
+    // these values are from https://calval.cr.usgs.gov/wordpress/wp-content/uploads/JACIE2015_Kuester_V3.pdf.  Should check Digitial Globe for any updates
+    solar_irrad = 1583.58;
+    satellite_name_ = "WorldView3";
+    // CAUTION: The order in this vector, should be the order of the bands in the image and should be consistent with the order of gain vector.
+    // WorldView 3 Multi image has 8 bands, ordered as 'Coastal', 'Blue', 'Green', 'Yellow', 'Red', 'RedEdge', 'NIR1' and 'NIR2'
+    // WorldView 3 SWIR image should have 'SWIR1' to 'SWIR8'
+    if (n_bands_ == 1) {
+      // pass
+    } else if (n_bands_ == 8 && band_ == "MULTI") {
+      solar_irrads[0] = 1743.81;  // Coastal
+      solar_irrads[1] = 1971.48;  // Blue
+      solar_irrads[2] = 1856.26;  // Green
+      solar_irrads[3] = 1749.40;  // Yellow
+      solar_irrads[4] = 1555.11;  // Red
+      solar_irrads[5] = 1343.95;  // Red Edge
+      solar_irrads[6] = 1071.98;  // NIR 1
+      solar_irrads[7] = 863.296;  // NIR 2
+    } else if (n_bands_ == 8 && band_ == "SWIR")  {
+      solar_irrads[0] = 494.595;  // SWIR1
+      solar_irrads[1] = 261.494;  // SWIR2
+      solar_irrads[2] = 230.518;  // SWIR3
+      solar_irrads[3] = 196.766;  // SWIR4
+      solar_irrads[4] = 80.3650;  // SWIR5
+      solar_irrads[5] = 74.7211;  // SWIR6
+      solar_irrads[6] = 69.0430;  // SWIR7
+      solar_irrads[7] = 59.8224;  // SWIR8
     } else {
       vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from metadata file " << meta_file << vcl_endl;;
       return false;
