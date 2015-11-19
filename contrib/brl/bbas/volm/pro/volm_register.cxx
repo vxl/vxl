@@ -55,4 +55,6 @@ void volm_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_stereo_height_fix_process, "volmStereoHeightFixProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_find_intersecting_sat_resources_process, "volmFindIntersectingSatResourcesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_ndsm_generation_process, "volmNdsmGenearationProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_dsm_ground_plane_estimation_process, "volmDsmGroundEstimationProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, volm_dsm_ground_plane_estimation_edge_process, "volmDsmGroundEstimationEdgeProcess");
 }

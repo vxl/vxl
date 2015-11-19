@@ -45,4 +45,6 @@ DECLARE_FUNC_CONS(volm_stereo_height_fix_process);
 DECLARE_FUNC_CONS(volm_find_overlapping_sat_resources_process);
 DECLARE_FUNC_CONS(volm_find_intersecting_sat_resources_process);
 DECLARE_FUNC_CONS(volm_ndsm_generation_process);
+DECLARE_FUNC_CONS(volm_dsm_ground_plane_estimation_process);
+DECLARE_FUNC_CONS(volm_dsm_ground_plane_estimation_edge_process);
 #endif

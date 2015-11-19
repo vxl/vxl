@@ -315,19 +315,6 @@ def image_mean(img):
     return mean_val
 
 
-def image_mean(img):
-    bvxm_batch.init_process("vilImageMeanProcess")
-    bvxm_batch.set_input_from_db(0, img)
-    bvxm_batch.run_process()
-    (id, type) = bvxm_batch.commit_output(0)
-    mean_val = bvxm_batch.get_output_float(id)
-    bvxm_batch.remove_data(id)
-    return mean_val
-
-# n is the neighborhood to compute mean and variance, e.g. pass 5 for a
-# 5x5 neighborhood to compute mean and variance of
-
-
 def compute_mean_and_variance_image(img, n):
     bvxm_batch.init_process("vilMeanAndVarianceImageProcess")
     bvxm_batch.set_input_from_db(0, img)
@@ -649,18 +636,40 @@ def histogram_equalize(img):
 
 
 def remove_nitf_margin(img_res):
-    bvxm_batch.init_process("vilNITFRemoveMarginProcess")
-    bvxm_batch.set_input_from_db(0, img_res)
-    status = bvxm_batch.run_process()
-    if status:
-        (id, type) = bvxm_batch.commit_output(0)
-        vi = bvxm_batch.get_output_unsigned(id)
-        (id, type) = bvxm_batch.commit_output(1)
-        vj = bvxm_batch.get_output_unsigned(id)
-        (id, type) = bvxm_batch.commit_output(2)
-        vni = bvxm_batch.get_output_unsigned(id)
-        (id, type) = bvxm_batch.commit_output(3)
-        vnj = bvxm_batch.get_output_unsigned(id)
-        return vi, vj, vni, vnj
-    else:
-        return 0, 0, 0, 0
+  bvxm_batch.init_process("vilNITFRemoveMarginProcess")
+  bvxm_batch.set_input_from_db(0, img_res)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    vi  = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(1)
+    vj  = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(2)
+    vni = bvxm_batch.get_output_unsigned(id)
+    (id, type) = bvxm_batch.commit_output(3)
+    vnj = bvxm_batch.get_output_unsigned(id)
+    return vi, vj, vni, vnj
+  else:
+    return 0, 0, 0, 0
+
+# register a source image to a target image by explicitly minize the root-mean-square-error (RMSE) of pixel value difference
+def img_registration_by_rmse(src_img, tgr_img, sx, sy, pixel_res=1.0, invalid_pixel=-9999.0):
+  bvxm_batch.init_process("vilImageRegistrationProcess")
+  bvxm_batch.set_input_from_db(0, src_img)
+  bvxm_batch.set_input_from_db(1, tgr_img)
+  bvxm_batch.set_input_unsigned(2,sx)
+  bvxm_batch.set_input_unsigned(3,sy)
+  bvxm_batch.set_input_double(4, pixel_res)
+  bvxm_batch.set_input_float(5,invalid_pixel)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    rmse_x = bvxm_batch.get_output_double(id)
+    (id, type) = bvxm_batch.commit_output(1)
+    rmse_y = bvxm_batch.get_output_double(id)
+    (id, type) = bvxm_batch.commit_output(2)
+    rmse_z = bvxm_batch.get_output_double(id)
+    return rmse_x, rmse_y, rmse_z
+  else:
+    return -1.0, -1.0, -1.0
+  
