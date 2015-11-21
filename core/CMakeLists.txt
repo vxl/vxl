@@ -57,9 +57,9 @@ ENDIF (BUILD_CORE_IMAGING)
 #                                     # other deprecations that need further
 #                                     # review
 # Old image library (deprecated)
-IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
+IF (BUILD_CORE_IMAGING)
   add_subdirectory(vil1)
-ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
+ENDIF (BUILD_CORE_IMAGING)
 
 
 IF (BUILD_CORE_SERIALISATION)
@@ -84,11 +84,6 @@ IF (BUILD_CORE_SERIALISATION)
   IF (BUILD_CORE_IMAGING)
     add_subdirectory(vil/io)
   ENDIF (BUILD_CORE_IMAGING)
-
-  # I/O for the ld image library (deprecated):
-  IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-    add_subdirectory(vil1/io)
-  ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
 ENDIF (BUILD_CORE_SERIALISATION)
 
 
