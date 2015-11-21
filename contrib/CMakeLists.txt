@@ -69,11 +69,6 @@ ENDIF(BUILD_GEL)
 IF(BUILD_BRL)
   add_subdirectory(brl)
   IF(BUILD_GEL)
-  # since gel/vsrl depends on brl/bseg/sdet, it cannot be built before brl:
-  IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-    # Dense matcher
-    add_subdirectory(gel/vsrl)
-  ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
   IF (BUILD_TESTING)
     # since gel/vifa/tests depends on brl/bseg/sdet, it must be built after brl:
     add_subdirectory(gel/vifa/tests)
