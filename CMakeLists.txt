@@ -143,13 +143,6 @@ IF (VXL_LEGACY_ERROR_REPORTING)
   ADD_DEFINITIONS( -DVXL_LEGACY_ERROR_REPORTING )
 ENDIF (VXL_LEGACY_ERROR_REPORTING)
 
-
-
-# Options to build no longer maintained libraries.
-# It is still useful to have the dashboard check that they are correct,
-# but no-one is likely to work on improving test coverage or fixing memory leaks.
-OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" ${YES_FOR_DASHBOARD} )
-
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer.
 IF(WIN32)
