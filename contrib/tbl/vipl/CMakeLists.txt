@@ -68,12 +68,6 @@ IF (BUILD_CORE_NUMERICS)
       vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx     vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h
      )
 ENDIF (BUILD_CORE_NUMERICS)
-IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-  SET(vipl_sources ${vipl_sources}
-      section/vipl_filterable_section_container_generator_vil1_image.txx
-      accessors/vipl_accessors_vil1_image.txx     accessors/vipl_accessors_vil1_image.h
-     )
-ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
 # [only when INSTANTIATE_TEMPLATES not defined:]
@@ -96,9 +90,6 @@ ENDIF (BUILD_CORE_UTILITIES)
 IF (BUILD_CORE_NUMERICS)
   TARGET_LINK_LIBRARIES(vipl vnl)
 ENDIF (BUILD_CORE_NUMERICS)
-IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-  TARGET_LINK_LIBRARIES(vipl vil1)
-ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
 
 IF (BUILD_EXAMPLES)
   add_subdirectory(examples)

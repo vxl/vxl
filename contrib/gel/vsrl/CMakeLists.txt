@@ -4,7 +4,6 @@ doxygen_add_library(contrib/gel/vsrl
   DEPENDS
     contrib/brl/bseg/sdet
     contrib/gel/vgel
-    contrib/tbl/vepl1
     core/vgui
     core/vil1
     contrib/rpl/rsdl

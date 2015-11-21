@@ -32,12 +32,6 @@ IF (BUILD_CORE_IMAGING)
   TARGET_LINK_LIBRARIES( vipl_example1_threshold vipl vil )
 ENDIF (BUILD_CORE_IMAGING)
 
-# B. using vil1_image as 2D storage class:
-IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-  ADD_EXECUTABLE(vipl_example4_threshold example4_threshold.cxx)
-  TARGET_LINK_LIBRARIES( vipl_example4_threshold vipl vil1 )
-ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-
 # C. using vnl_matrix<T> as 2D storage class:
 IF (BUILD_CORE_NUMERICS)
   ADD_EXECUTABLE(vipl_example3_threshold example3_threshold.cxx)
