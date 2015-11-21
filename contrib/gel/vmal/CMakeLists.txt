@@ -17,15 +17,6 @@ SET(vmal_sources
 )
 AUX_SOURCE_DIRECTORY(Templates vmal_sources)
 
-# vmal_kl not compiled until old vidl dependency can be removed.
-#IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-#SET(vmal_sources ${vmal_sources}
-# vmal_kl.cxx                vmal_kl.h
-# vmal_kl_params.cxx         vmal_kl_params.h
-#)
-#ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-
-
  INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
  SET(vmal_sources ${vmal_sources}
  vmal_convert_osl.cxx       vmal_convert_osl.h
@@ -43,10 +34,6 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vmal ${vmal_sources})
 IF(BUILD_OXL)
  TARGET_LINK_LIBRARIES(vmal mvl osl vil)
 ENDIF(BUILD_OXL)
-
-IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
- TARGET_LINK_LIBRARIES(vmal vgel_kl)
-ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 TARGET_LINK_LIBRARIES(vmal vtol vnl_algo vil1 vnl vbl)
 
