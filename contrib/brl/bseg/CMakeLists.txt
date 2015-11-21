@@ -8,11 +8,6 @@ add_subdirectory(brip)
 # segmentation feature detection library
 add_subdirectory(sdet)
 
-# Markov Random Fields - This library is deprecated
-IF (NOT BUILD_NONDEPRECATED_ONLY)
-add_subdirectory(bmrf)
-ENDIF (NOT BUILD_NONDEPRECATED_ONLY)
-
 # segmentation view library
 add_subdirectory(segv)
 
