@@ -70,11 +70,6 @@ IF (BUILD_CORE_NUMERICS)
 ENDIF (BUILD_CORE_NUMERICS)
 
 ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
-# [only when INSTANTIATE_TEMPLATES not defined:]
-# AUX_SOURCE_DIRECTORY(Templates vipl_sources)
-# AUX_SOURCE_DIRECTORY(vipl_with_vbl_array_2d/Templates vipl_sources)
-# AUX_SOURCE_DIRECTORY(vipl_with_vnl_matrix/Templates vipl_sources)
-# AUX_SOURCE_DIRECTORY(vipl_with_section/Templates vipl_sources)
 
 ADD_LIBRARY(vipl ${vipl_sources})
 INSTALL_TARGETS(/lib vipl)
