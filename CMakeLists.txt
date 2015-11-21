@@ -91,14 +91,6 @@ SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_S
 # initial cache (set in the CTest script).
 OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" NO )
 
-# A variable to default some OPTIONs to YES for the dashboard, but to
-# NO for other builds.
-IF( BUILD_FOR_VXL_DASHBOARD )
-  SET( YES_FOR_DASHBOARD "YES" )
-ELSE( BUILD_FOR_VXL_DASHBOARD )
-  SET( YES_FOR_DASHBOARD "NO" )
-ENDIF( BUILD_FOR_VXL_DASHBOARD )
-
 # Use this variable in vxl_config.h to tell if it is a shared build
 set(VXL_BUILD_SHARED FALSE)
 if(BUILD_SHARED_LIBS)

@@ -10,7 +10,7 @@ doxygen_add_library(core/vgui
 
 # Default the dashboard builds to "YES" so that
 # we have some clients that try to compile vgui
-OPTION( BUILD_VGUI "Build VGUI" ${YES_FOR_DASHBOARD} )
+OPTION( BUILD_VGUI "Build VGUI" ${BUILD_FOR_VXL_DASHBOARD} )
 
 # Flag that determines if we were able to successfully build vgui.
 # Initialize to NO. Change below if yes.
