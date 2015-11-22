@@ -26,5 +26,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rsdl ${rsdl_sources})
 TARGET_LINK_LIBRARIES( rsdl vnl vbl )
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

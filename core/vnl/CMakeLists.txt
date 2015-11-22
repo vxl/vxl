@@ -271,11 +271,11 @@ INSTALL_TARGETS(/lib vnl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl ${vnl_sources})
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
+  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )

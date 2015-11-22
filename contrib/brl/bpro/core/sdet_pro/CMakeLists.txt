@@ -23,5 +23,5 @@ ADD_LIBRARY(sdet_pro ${sdet_pro_sources})
 TARGET_LINK_LIBRARIES(sdet_pro bprb brdb sdet vil_pro vil vgl vsl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

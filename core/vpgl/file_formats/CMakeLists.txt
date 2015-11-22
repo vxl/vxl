@@ -25,7 +25,7 @@ ADD_LIBRARY(vpgl_file_formats ${vpgl_file_formats_sources})
 TARGET_LINK_LIBRARIES(vpgl_file_formats vpgl vil vnl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib vpgl_file_formats)

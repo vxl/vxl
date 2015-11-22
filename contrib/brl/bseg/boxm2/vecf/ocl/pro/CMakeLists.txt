@@ -28,7 +28,7 @@ TARGET_LINK_LIBRARIES(boxm2_vecf_ocl_pro boxm2_vecf_ocl boct brdb vbl_io expatpp
 
 #tests
 IF( BUILD_TESTING )
-#  SUBDIRS(tests)
+#  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib boxm2_vecf_ocl_pro)

@@ -19,7 +19,7 @@ ADD_LIBRARY(bbgm_pro ${bbgm_pro_sources})
 TARGET_LINK_LIBRARIES(bbgm_pro bbgm bprb brdb bsta_algo bsta brip vidl vil vil_pro vbl_io vsl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

@@ -31,5 +31,5 @@ ENDIF(BUILD_OXL)
 TARGET_LINK_LIBRARIES(gkll vgel_kl vtol vil1 vbl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

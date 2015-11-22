@@ -46,7 +46,7 @@ IF(OPENCL_FOUND)
   TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_ocl boxm2_ocl_algo  bocl )
 ENDIF()
 # OpenCL support code
-SUBDIRS(ocl)
+add_subdirectory(ocl)
 
 
 #processes
@@ -60,5 +60,5 @@ subdirs(exe)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

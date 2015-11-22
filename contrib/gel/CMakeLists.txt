@@ -5,7 +5,7 @@ PROJECT( gel )
 doxygen_add_package(contrib/gel "GE Libraries")
 
 SET( GEL_INCLUDE_DIR ${gel_SOURCE_DIR} CACHE STATIC "GE package include files" )
-SET( GEL_INSTALL_INCLUDE_DIR 
+SET( GEL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/gel
   CACHE INTERNAL "GE package include files"
 )
@@ -14,42 +14,45 @@ INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
 
 # spatial objects
-SUBDIRS(vsol)
+add_subdirectory(vsol)
 
 # digital  geometry
-SUBDIRS(vdgl)
+add_subdirectory(vdgl)
 
 # topology
-SUBDIRS(vtol gst)
+add_subdirectory(vtol)
+add_subdirectory(gst)
 
 # van-duc region finder (ported from TargetJr)
-SUBDIRS(gevd)
+add_subdirectory(gevd)
 
 # matcher
-SUBDIRS(geml)
+add_subdirectory(geml)
 
 # Multi-view database
-SUBDIRS(gmvl)
+add_subdirectory(gmvl)
 
 # Kanade-Lucas-Tomasi feature tracker;
 IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-  SUBDIRS(vgel/kl vgel gkll)
+  add_subdirectory(vgel/kl)
+  add_subdirectory(vgel)
+  add_subdirectory(gkll)
 ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
 
 # Dense matcher
-SUBDIRS(vmal)
+add_subdirectory(vmal)
 
 # Triangulation code
-SUBDIRS(gtrl)
+add_subdirectory(gtrl)
 
 # octree stuff from Geoff's thesis
 IF(BUILD_OXL)
-  SUBDIRS(octree)
+  add_subdirectory(octree)
 ENDIF(BUILD_OXL)
 
 # photogrammetry in mrc/vpgl,
 # coordinate systems add-on in mrc/vcsl
-SUBDIRS(mrc)
+add_subdirectory(mrc)
 
 # Intensity face attributes (MPP)
-SUBDIRS(vifa)
+add_subdirectory(vifa)

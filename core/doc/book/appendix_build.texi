@@ -70,7 +70,7 @@ setting options in CMake.
 Examples given below are for simple applications and libraries.
 Guidelines for the top level VXL @file{CMakeLists.txt} file and
 intermediate @file{CMakeLists.txt} files (which include many
-@code{SUBDIRS} commands) are not given here.
+@code{add_subdirectory} commands) are not given here.
 
 There are many good examples of @file{CMakeLists.txt} files in the VXL
 source, but they are often in a state of flux.  The intention is for
@@ -288,13 +288,13 @@ TARGET_LINK_LIBRARIES( vfbl vnl_algo vul vil vcl )
 # depends on BUILD_TESTING.
 
 IF( BUILD_TESTING )
-  SUBDIRS( tests )
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 # Same goes for examples.
 
 IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
+  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )
 
 @end example
@@ -355,7 +355,7 @@ ENDIF(VXL_FOUND)
 # playing havoc with other users.
 
 # The rest of this CMakeLists.txt file could contain commands as seen
-# in the previous examples, or might just be SUBDIRS commands.
+# in the previous examples, or might just be add_subdirectory commands.
 
 # Remember that all CMake variables defining the VXL configuration
 # begin with "VXL_".  If you want to use VGUI in a client project you

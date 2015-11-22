@@ -22,16 +22,16 @@ SET(boxm_algo_sources
 ADD_LIBRARY(boxm_algo ${boxm_algo_sources})
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 TARGET_LINK_LIBRARIES(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl vgl_algo vgl vnl vul vbl vcl)
 
 #raytracing algorithms
-SUBDIRS(rt)
+add_subdirectory(rt)
 
 #splatting algorithms
-SUBDIRS(sp)
+add_subdirectory(sp)
 
 #processes
-SUBDIRS(pro)
+add_subdirectory(pro)

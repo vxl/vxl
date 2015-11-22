@@ -10,5 +10,5 @@ ADD_LIBRARY(bstm_pro  ${bstm_pro_sources})
 TARGET_LINK_LIBRARIES(bstm_pro bprb boxm2_util bstm bstm_io bstm_util boxm2_basic boct brdb vpgl vil vgl vul vbl vcl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

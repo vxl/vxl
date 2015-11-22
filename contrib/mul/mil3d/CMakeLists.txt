@@ -25,5 +25,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mil3d ${mil3d_sources})
 TARGET_LINK_LIBRARIES(mil3d mil vbl_io vnl_io vnl vgl vbl vsl)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

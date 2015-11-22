@@ -22,16 +22,16 @@ ADD_LIBRARY(bstm_ocl ${bstm_ocl_sources})
 TARGET_LINK_LIBRARIES(bstm_ocl bstm bstm_io bocl vpgl vil vcl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 #pro
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 #algo
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 #exe
-#SUBDIRS(exe)
+#add_subdirectory(exe)
 
 ENDIF(OPENCL_FOUND)

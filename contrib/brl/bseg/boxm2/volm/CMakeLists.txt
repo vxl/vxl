@@ -43,21 +43,21 @@ IF(EXPAT_FOUND)
     INSTALL_TARGETS(/lib boxm2_volm)
     INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_volm/ ${boxm2_volm_sources})
 
-    SUBDIRS(io)
+    add_subdirectory(io)
 
     IF( BUILD_TESTING )
-      SUBDIRS(tests)
+      add_subdirectory(tests)
     ENDIF( BUILD_TESTING )
 
-    SUBDIRS(exe)
+    add_subdirectory(exe)
 
     #pro
-    SUBDIRS(pro)
+    add_subdirectory(pro)
 
     #desc matcher
-    SUBDIRS(desc)
+    add_subdirectory(desc)
 
     #conf matcher
-    SUBDIRS(conf)
+    add_subdirectory(conf)
   ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)

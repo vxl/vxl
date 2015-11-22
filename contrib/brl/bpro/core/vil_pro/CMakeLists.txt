@@ -20,7 +20,7 @@ ADD_LIBRARY(vil_pro ${vil_pro_sources})
 TARGET_LINK_LIBRARIES(vil_pro bbas_pro bprb bil bil_algo brip sdet vil_algo vil_io vil vnl vul vsl bsta_vis)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib vil_pro)

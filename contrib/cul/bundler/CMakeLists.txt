@@ -26,7 +26,7 @@ SET(bundler_sources
 
     bundler_utils.h         bundler_utils.cxx
 
-    bundler_settings.h      
+    bundler_settings.h
     bundler_inters.h        bundler_inters.cxx
    )
 
@@ -35,5 +35,5 @@ ADD_LIBRARY(bundler ${bundler_sources})
 TARGET_LINK_LIBRARIES(bundler vpgl_algo bpgl_algo vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

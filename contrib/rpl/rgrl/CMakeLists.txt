@@ -173,9 +173,9 @@ TARGET_LINK_LIBRARIES( rgrl rrel rsdl vil3d vil vnl_algo vnl vbl vul)
 #ENDIF( ITK_FOUND )
 
 IF( BUILD_TESTING )
-  SUBDIRS( tests )
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
+  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )

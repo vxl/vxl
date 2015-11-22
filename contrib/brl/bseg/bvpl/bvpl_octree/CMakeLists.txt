@@ -50,16 +50,16 @@ ADD_LIBRARY(bvpl_octree ${bvpl_octree_sources})
 TARGET_LINK_LIBRARIES(bvpl_octree bvpl_kernels bvpl_functors bvpl_octree_sample bvrml boxm boct vnl_algo vnl_io vnl vgl vul vbl)
 
 #Binary io
-SUBDIRS(io)
+add_subdirectory(io)
 
 #Directory with python/c++ processes
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 # Octree samples needed by bvpl
-SUBDIRS(sample)
+add_subdirectory(sample)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 IF( CMAKE_USE_PTHREADS_INIT )

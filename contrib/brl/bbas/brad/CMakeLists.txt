@@ -16,7 +16,7 @@
       brad_phongs_model_est.h         brad_phongs_model_est.cxx
       brad_synoptic_function_1d.h     brad_synoptic_function_1d.cxx
       brad_image_metadata.h           brad_image_metadata.cxx
-      brad_atmospheric_parameters.h   brad_atmospheric_parameters.cxx 
+      brad_atmospheric_parameters.h   brad_atmospheric_parameters.cxx
       brad_image_atmospherics_est.h   brad_image_atmospherics_est.cxx
       brad_estimate_shadows.h         brad_estimate_shadows.cxx
      )
@@ -24,12 +24,12 @@
   ADD_LIBRARY(brad ${brad_sources} )
 
   TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vgl_algo vgl_io vnl_algo vgl vil vpgl vpgl_algo vbl_io vbl vpl vul )
-  
-  SUBDIRS(io)
+
+  add_subdirectory(io)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib brad)

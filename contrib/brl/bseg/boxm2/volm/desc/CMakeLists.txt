@@ -16,7 +16,7 @@ ADD_LIBRARY(boxm2_volm_desc ${boxm2_volm_desc_sources})
 TARGET_LINK_LIBRARIES(boxm2_volm_desc boxm2_volm boxm2 boxm2_io brip baio vpgl volm volm_desc vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 
-SUBDIRS(exe)
+add_subdirectory(exe)

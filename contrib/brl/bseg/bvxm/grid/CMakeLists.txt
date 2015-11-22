@@ -31,9 +31,9 @@ ADD_LIBRARY( bvxm_grid ${bvxm_grid_sources})
 
 TARGET_LINK_LIBRARIES( bvxm_grid vpgl vnl vil vil_algo vul vbl vsl vgl vgl_algo vil3d vil3d_algo vcl)
 
-SUBDIRS( io )
-SUBDIRS( pro )
+add_subdirectory(io)
+add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

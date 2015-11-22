@@ -50,7 +50,7 @@ SET(sdet_sources
     sdet_vrml_display.cxx                sdet_vrml_display.h
     sdet_texture_classifier.cxx          sdet_texture_classifier.h
     sdet_texture_classifier_params.cxx   sdet_texture_classifier_params.h
-    sdet_atmospheric_image_classifier.cxx 
+    sdet_atmospheric_image_classifier.cxx
     sdet_atmospheric_image_classifier.h
     sdet_graph_img_seg.cxx               sdet_graph_img_seg.h sdet_graph_img_seg_sptr.h
 # SEL Class
@@ -76,5 +76,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/sdet ${sdet_sources})
 TARGET_LINK_LIBRARIES(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl bvgl vnl_algo vnl vul vbl vbl_io bil_algo vsl vnl_io pdf1d)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

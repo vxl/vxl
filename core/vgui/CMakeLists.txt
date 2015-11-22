@@ -494,7 +494,7 @@ IF (wxWidgets_FOUND)
 
     OPTION(BUILD_VGUI_WX "Build extras for VGUI use in wxWidgets apps" NO)
     IF(BUILD_VGUI_WX)
-      SUBDIRS(wx)
+      add_subdirectory(wx)
     ENDIF(BUILD_VGUI_WX)
 
   ENDIF(VGUI_USE_WX)
@@ -573,11 +573,11 @@ IF (X11_FOUND)
 ENDIF (X11_FOUND)
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF (BUILD_EXAMPLES)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
 ENDIF (OPENGL_GLU_FOUND)

@@ -26,7 +26,7 @@ IF(EXPAT_FOUND)
   # Need vil_pro  only for the instantiation of brdb_value_t<vil_smart_ptr<vil_image_view_base> >
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

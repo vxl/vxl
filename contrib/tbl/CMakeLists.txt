@@ -13,13 +13,13 @@ SET( TBL_INSTALL_INCLUDE_DIR
 INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
 
-SUBDIRS(vipl)
+add_subdirectory(vipl)
 # Although this is the "image processing" library, it does not (necessary) depend on vil!
 # vil-specific implementations are in the "vepl" specialisation library,
 # and vil1-specific stuff is in vepl1:
 IF (BUILD_CORE_IMAGING)
-  SUBDIRS(vepl)
+  add_subdirectory(vepl)
 ENDIF (BUILD_CORE_IMAGING)
 IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-  SUBDIRS(vepl1)
+  add_subdirectory(vepl1)
 ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)

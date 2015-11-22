@@ -13,7 +13,7 @@ ADD_LIBRARY(boxm2_volm_conf ${boxm2_volm_conf_sources})
 TARGET_LINK_LIBRARIES(boxm2_volm_conf boxm2_volm boxm2 boxm2_io volm volm_conf vul vgl vcl)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 
-SUBDIRS(exe)
+add_subdirectory(exe)

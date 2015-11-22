@@ -39,7 +39,7 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt3d ${vimt3d_sources})
 TARGET_LINK_LIBRARIES(vimt3d vil3d_algo vil3d_io vil3d vimt mbl vnl_algo vgl vnl_io vnl vil vsl vul)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
-SUBDIRS(tools)
+add_subdirectory(tools)

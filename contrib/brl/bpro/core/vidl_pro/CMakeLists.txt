@@ -26,5 +26,5 @@ ADD_LIBRARY(vidl_pro ${vidl_pro_sources})
 TARGET_LINK_LIBRARIES(vidl_pro bprb brdb vidl vil_io vil vsl vul)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

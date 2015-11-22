@@ -50,9 +50,9 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl1 ${vepl1_sources})
 TARGET_LINK_LIBRARIES(vepl1 vipl vil1 ${CMAKE_THREAD_LIBS})
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF (BUILD_EXAMPLES)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

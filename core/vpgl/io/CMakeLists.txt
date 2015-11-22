@@ -20,5 +20,5 @@ INSTALL_TARGETS(/lib vpgl_io)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/io ${vpgl_io_sources})
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

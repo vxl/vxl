@@ -15,8 +15,8 @@ ADD_LIBRARY( bvxm_algo ${bvxm_algo_sources})
 
 TARGET_LINK_LIBRARIES( bvxm_algo bsta bvxm_grid_io boxm_util vnl vgl)
 
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

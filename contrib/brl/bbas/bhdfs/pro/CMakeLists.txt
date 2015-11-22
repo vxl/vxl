@@ -22,7 +22,7 @@ IF(EXPAT_FOUND)
   TARGET_LINK_LIBRARIES(bhdfs_pro bhdfs bprb vil_algo vil_io vil vpgl boxm2)
 
   IF(BUILD_TESTING)
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF(BUILD_TESTING)
 
 ENDIF(EXPAT_FOUND)

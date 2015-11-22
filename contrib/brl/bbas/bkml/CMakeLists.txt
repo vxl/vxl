@@ -32,10 +32,10 @@ IF(EXPAT_FOUND)
 ENDIF(EXPAT_FOUND)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
-#SUBDIRS(pro)
+#add_subdirectory(pro)
 
 INSTALL_TARGETS(/lib bkml)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bkml ${bkml_sources})

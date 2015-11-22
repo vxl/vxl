@@ -20,5 +20,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mil/algo ${mil_algo_sources
 TARGET_LINK_LIBRARIES(mil_algo mil mbl vnl vsl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

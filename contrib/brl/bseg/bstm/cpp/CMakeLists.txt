@@ -1,7 +1,7 @@
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 
 # cpp algo
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 # cpp pro
-SUBDIRS(pro)
+add_subdirectory(pro)

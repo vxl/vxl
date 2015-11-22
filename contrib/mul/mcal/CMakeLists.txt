@@ -25,7 +25,7 @@ ADD_LIBRARY(mcal ${mcal_sources})
 TARGET_LINK_LIBRARIES(mcal mbl)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
-#SUBDIRS(tools)
+#add_subdirectory(tools)

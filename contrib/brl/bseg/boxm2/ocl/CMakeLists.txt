@@ -32,17 +32,17 @@ INSTALL_TARGETS(/lib boxm2_ocl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl ${boxm2_ocl_sources})
 
 #pro
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 #exe
-SUBDIRS(exe)
+add_subdirectory(exe)
 
 #algo
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(OPENCL_FOUND)

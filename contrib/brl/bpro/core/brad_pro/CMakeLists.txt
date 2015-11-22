@@ -18,7 +18,7 @@ ADD_LIBRARY(brad_pro ${brad_pro_sources} )
 TARGET_LINK_LIBRARIES(brad_pro brad_io brad bprb brdb brip vbl_io vbl vil_pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib brad_pro)

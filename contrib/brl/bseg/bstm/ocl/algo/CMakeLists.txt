@@ -20,5 +20,5 @@ INSTALL_TARGETS(/lib bstm_ocl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/ocl/algo ${bstm_ocl_algo_sources})
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
