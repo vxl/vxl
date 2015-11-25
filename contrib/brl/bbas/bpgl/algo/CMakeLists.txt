@@ -39,11 +39,11 @@ IF(BUILD_RPL)
 ENDIF(BUILD_RPL)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 IF( BUILD_EXAMPLES )
-#  SUBDIRS( examples )
+#  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )
 
 INSTALL_TARGETS(/lib bpgl_algo)

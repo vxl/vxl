@@ -20,8 +20,8 @@ ADD_LIBRARY(bmdl  ${bmdl_sources})
 TARGET_LINK_LIBRARIES(bmdl vil_algo imesh vgl_algo vgl vnl vil)
 
 #process lib
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

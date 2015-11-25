@@ -31,5 +31,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bugl ${bugl_sources})
 TARGET_LINK_LIBRARIES(bugl vnl vgl_algo vgl vbl)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

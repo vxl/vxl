@@ -3,82 +3,82 @@
 # Mutual dependencies: brip --> sdet --> (vpro,segv)
 
 # float image operations
-SUBDIRS(brip)
+add_subdirectory(brip)
 
 # segmentation feature detection library
-SUBDIRS(sdet)
+add_subdirectory(sdet)
 
 # Markov Random Fields - This library is deprecated
 IF (NOT BUILD_NONDEPRECATED_ONLY)
-SUBDIRS(bmrf)
+add_subdirectory(bmrf)
 ENDIF (NOT BUILD_NONDEPRECATED_ONLY)
 
 # segmentation view library
-SUBDIRS(segv)
+add_subdirectory(segv)
 
 # segmentation application executables
-SUBDIRS(sbin)
+add_subdirectory(sbin)
 
 # background modeling
-SUBDIRS(bbgm)
+add_subdirectory(bbgm)
 
 # background modeling python interface
-SUBDIRS(bbgm_batch)
+add_subdirectory(bbgm_batch)
 
 # voxel world modeling
-SUBDIRS(bvxm)
+add_subdirectory(bvxm)
 
 # voxel world modeling python interface
-SUBDIRS(bvxm_batch)
+add_subdirectory(bvxm_batch)
 
 # Lidar modeling (segmentation and meshing)
-SUBDIRS(bmdl)
+add_subdirectory(bmdl)
 
 # Lidar modeling python interface
-SUBDIRS(bmdl_batch)
+add_subdirectory(bmdl_batch)
 
 # recognition library - uses background models of bbgm and/or bvxm
-SUBDIRS(brec)
+add_subdirectory(brec)
 
 # recognition library - python interface
-SUBDIRS(brec_batch)
+add_subdirectory(brec_batch)
 
 # octree
-SUBDIRS(boct)
+add_subdirectory(boct)
 
 # octree based modeling
-SUBDIRS(boxm)
+add_subdirectory(boxm)
 
 # updated, gpu compatible octree based modeling
-SUBDIRS(boxm2)
+add_subdirectory(boxm2)
 
 # updated, gpu compatible octree based modeling
-SUBDIRS(boxm2_batch)
+add_subdirectory(boxm2_batch)
 
 # octree based modeling python interface
-SUBDIRS(boxm_batch)
+add_subdirectory(boxm_batch)
 
 # voxel processing library
-SUBDIRS(bvpl)
+add_subdirectory(bvpl)
 
 # voxel processing library python interface
-SUBDIRS(bvpl_batch)
+add_subdirectory(bvpl_batch)
 
 # voxel processing library python interface for octrees
-SUBDIRS(bvpl_octree_batch)
+add_subdirectory(bvpl_octree_batch)
 
 # Brown affine patch library, SIFT keypoint & descriptor
-SUBDIRS(bapl)
+add_subdirectory(bapl)
 
 #the bridge lib to convert between boxm and boxm2 scenes
-SUBDIRS(boxm_bridge)
+add_subdirectory(boxm_bridge)
 
 #multi gpu library
-SUBDIRS(boxm2_multi)
+add_subdirectory(boxm2_multi)
 
-#space-time modeling 
-SUBDIRS(bstm)
-SUBDIRS(bstm_batch)
+#space-time modeling
+add_subdirectory(bstm)
+add_subdirectory(bstm_batch)
 
 #the bridge lib to convert between bvxm and boxm2 scenes
-SUBDIRS(bvxm_bridge)
+add_subdirectory(bvxm_bridge)

@@ -26,7 +26,7 @@ ADD_LIBRARY( bsta_algo ${bsta_algo_sources} )
 TARGET_LINK_LIBRARIES(bsta_algo bsta vnl_algo vnl vbl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib bsta_algo)

@@ -1,33 +1,33 @@
 # brl/bpro/core/CMakeLists.txt
 # main package for processing operations using core classes
 
-# vpgl process classes 
-SUBDIRS(vpgl_pro)
+# vpgl process classes
+add_subdirectory(vpgl_pro)
 
 # vil process classes
-SUBDIRS(vil_pro)
+add_subdirectory(vil_pro)
 
 # vidl process classes (note it is expected that vidl will go to core)
-SUBDIRS(vidl_pro)
+add_subdirectory(vidl_pro)
 
-# brip process classes 
-SUBDIRS(brip_pro)
+# brip process classes
+add_subdirectory(brip_pro)
 
-# vgl and bvgl process classes 
-SUBDIRS(bvgl_pro)
+# vgl and bvgl process classes
+add_subdirectory(bvgl_pro)
 
 # sdet process classes
-SUBDIRS(sdet_pro)
+add_subdirectory(sdet_pro)
 
 # bbas process classes
-SUBDIRS(bbas_pro)
+add_subdirectory(bbas_pro)
 
 #icam process class
-SUBDIRS(icam_pro)
+add_subdirectory(icam_pro)
 
 #ihog process class
-SUBDIRS(ihog_pro)
+add_subdirectory(ihog_pro)
 
 #brad process classes
-SUBDIRS(brad_pro)
+add_subdirectory(brad_pro)
 

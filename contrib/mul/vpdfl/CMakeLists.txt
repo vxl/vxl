@@ -42,5 +42,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vpdfl ${vpdfl_sources})
 TARGET_LINK_LIBRARIES(vpdfl mbl vnl_algo vnl_io vnl vsl vul)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

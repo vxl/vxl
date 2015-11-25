@@ -15,7 +15,7 @@ IF( PYTHON_FOUND )
   TARGET_LINK_LIBRARIES(bpro_batch bprb brdb bbas_pro ${PYTHON_LIBRARY})
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
 ENDIF( PYTHON_FOUND )

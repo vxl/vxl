@@ -90,5 +90,5 @@ INSTALL_TARGETS(/lib rgtl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgtl ${rgtl_sources})
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

@@ -58,8 +58,8 @@ TARGET_LINK_LIBRARIES( mvl2 vil vul ${AVIFILE_LIBRARIES} )
 
 IF (AVIFILE_FOUND)
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF (AVIFILE_FOUND)

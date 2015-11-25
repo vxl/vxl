@@ -20,7 +20,7 @@ ADD_LIBRARY(volm_conf ${volm_conf_sources})
 TARGET_LINK_LIBRARIES(volm_conf volm vgl_io vil vil_io vbl_io bkml bvgl bpgl vpgl vpgl_io vsol vbl vsl vul vnl bvrml depth_map vdgl sdet vtol bsol bvgl_algo)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 
-SUBDIRS(exe)
+add_subdirectory(exe)

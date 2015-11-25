@@ -38,5 +38,5 @@ ENDIF(EXPAT_FOUND)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

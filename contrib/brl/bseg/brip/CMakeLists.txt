@@ -48,5 +48,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/brip ${brip_sources})
 TARGET_LINK_LIBRARIES(brip gevd bsta bsol vsol vil1 vil_algo vil vgl_algo vgl vnl_algo vnl vbl vul vpgl bil_algo)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

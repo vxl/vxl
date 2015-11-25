@@ -24,5 +24,5 @@ ADD_LIBRARY(breg3d_pro ${breg3d_pro_sources})
 TARGET_LINK_LIBRARIES(breg3d_pro breg3d bprb vpgl_pro vpgl vpgl_io vil vil_io vnl vnl_io  vgl vgl_algo vsol brip brdb)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

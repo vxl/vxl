@@ -19,7 +19,7 @@ TARGET_LINK_LIBRARIES(boct vcl vgl vgl_io vnl_io vbl vnl)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib boct)

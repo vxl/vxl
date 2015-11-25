@@ -58,5 +58,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/clsfy ${clsfy_sources})
 TARGET_LINK_LIBRARIES(clsfy vpdfl mbl vnl_algo vnl_io vnl vbl vsl vul)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

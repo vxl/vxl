@@ -39,12 +39,12 @@ INSTALL_TARGETS(/lib vtol)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vtol ${vtol_sources})
 TARGET_LINK_LIBRARIES(vtol vdgl vsol vnl vbl vul ${CMAKE_THREAD_LIBS})
 
-SUBDIRS( algo )
+add_subdirectory(algo)
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF (BUILD_EXAMPLES)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

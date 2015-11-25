@@ -26,24 +26,24 @@ ADD_LIBRARY(boxm  ${boxm_sources})
 TARGET_LINK_LIBRARIES(boxm boct bsta brdb vgl_io vgl_xio vpgl vpgl_xio vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl_io vbl vsl vpl vcl)
 
 #processes
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 #util
-SUBDIRS(util)
+add_subdirectory(util)
 
 #samples
-SUBDIRS(sample)
+add_subdirectory(sample)
 
 #basic algorithms involving scenes
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 #basic structures
-SUBDIRS(basic)
+add_subdirectory(basic)
 
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

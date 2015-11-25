@@ -17,5 +17,5 @@ ADD_LIBRARY(ihog_pro ${ihog_pro_sources})
 TARGET_LINK_LIBRARIES(ihog_pro bprb ihog vnl vil vil_pro vbl_io)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

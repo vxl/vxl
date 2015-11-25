@@ -291,8 +291,8 @@ foreach my $dir (@DIRS)
           # I.e.: add .h files which are not explicitly present in makefile
         }
       }
-      %subdirs = () if (m/^\s*SUBDIRS\s*\:?\=/);
-      ++ $subdirs{$2} while (s/^\s*(SUBDIRS)\s*\+?\:?\=\s*(\S+)/$1+=/);
+      %subdirs = () if (m/^\s*add_subdirectory\s*\:?\=/);
+      ++ $subdirs{$2} while (s/^\s*(add_subdirectory)\s*\+?\:?\=\s*(\S+)/$1+=/);
       @aux_sources = split(/\s+/,$1) if (m/^\s*AUX_SOURCE_DIRECTORY\s*\:?\=\s*(.+)/);
       push @aux_sources, split(/\s+/,$1) if (m/^\s*AUX_SOURCE_DIRECTORY\s*\+\=\s*(.+)/);
     }
@@ -460,7 +460,7 @@ foreach my $dir (@DIRS)
     }
   }
   ++ $subdirs2{$1}
-    while ($cmakefile =~ s/\bSUBDIRS\s*\(\s*([^\s\)]+)/SUBDIRS(/);
+    while ($cmakefile =~ s/\badd_subdirectory\s*\(\s*([^\s\)]+)/add_subdirectory(/);
 
   next unless ($f || -f $makef || -f $cmakef);
   $f = "dsps/$dir/*.dsp" unless ($f);
@@ -639,20 +639,20 @@ foreach my $dir (@DIRS)
   }
   # at this point, %hsource has been emptied.
 
-  # === compare SUBDIRS lists (%subdirs, %subdirs2) ===
+  # === compare add_subdirectory lists (%subdirs, %subdirs2) ===
   foreach my $s (keys %subdirs2)
   {
     if ($subdirs2{$s} > 1) {
-      &duplicate_message("SUBDIRS($s)", $cmakef, '# !!')
+      &duplicate_message("add_subdirectory($s)", $cmakef, '# !!')
     }
     delete $subdirs2{$s};
     unless (exists $subdirs{$s})
     {
-      if (-d "$dir/$s") { &missing_message("SUBDIRS += $s", $makef); }
-      else              { &removing_message("SUBDIRS($s)", $cmakef, '# !!'); }
+      if (-d "$dir/$s") { &missing_message("add_subdirectory += $s", $makef); }
+      else              { &removing_message("add_subdirectory($s)", $cmakef, '# !!'); }
     }
     elsif ($subdirs{$s} > 1) {
-      &duplicate_message("SUBDIRS += $s", $makef, '# !!');
+      &duplicate_message("add_subdirectory += $s", $makef, '# !!');
     }
     delete $subdirs{$s};
   }
@@ -661,11 +661,11 @@ foreach my $dir (@DIRS)
   foreach my $s (keys %subdirs) # should be empty by now!
   {
     if ($subdirs{$s} > 1) {
-      &duplicate_message("SUBDIRS += $s", $makef, '# !!');
+      &duplicate_message("add_subdirectory += $s", $makef, '# !!');
     }
     delete $subdirs{$s};
-    if (-d "$dir/$s") { &missing_message("SUBDIRS($s)", $cmakef); }
-    else              { &removing_message("SUBDIRS += $s", $makef, '# !!'); }
+    if (-d "$dir/$s") { &missing_message("add_subdirectory($s)", $cmakef); }
+    else              { &removing_message("add_subdirectory += $s", $makef, '# !!'); }
   }
   # at this point, %subdirs has been emptied.
 }

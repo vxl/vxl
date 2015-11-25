@@ -9,10 +9,10 @@ INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${PRIP_INCLUDE_DIR})
 
 # Combinatorial Maps and Topological Maps handling
-SUBDIRS( vmap )
+add_subdirectory(vmap)
 
 # Digital Topology
-SUBDIRS( vdtop )
+add_subdirectory(vdtop)
 
 # Combinatorial Pyramids and Topological Pyramids handling
-SUBDIRS( vpyr )
+add_subdirectory(vpyr)

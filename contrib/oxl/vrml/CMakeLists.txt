@@ -13,5 +13,5 @@ ADD_LIBRARY(oxl_vrml ${vrml_sources})
 TARGET_LINK_LIBRARIES(oxl_vrml vul)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

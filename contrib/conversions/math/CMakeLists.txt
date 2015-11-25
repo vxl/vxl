@@ -1,7 +1,7 @@
 # conversions/math/CMakeLists.txt
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
 # These are the source files in this directory.

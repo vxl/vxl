@@ -10,7 +10,7 @@ ADD_DEFINITIONS(-DHAS_OPENCL=1)
 INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} ) 
+INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
 
 SET(boxm2_multi_sources
     boxm2_multi_cache.h         boxm2_multi_cache.cxx
@@ -22,16 +22,16 @@ ADD_LIBRARY(boxm2_multi  ${boxm2_multi_sources})
 TARGET_LINK_LIBRARIES(boxm2_multi boxm2 boxm2_ocl)
 
 #multi gpu implementations
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 #executables
-SUBDIRS(exe)
+add_subdirectory(exe)
 
 ##executables
-SUBDIRS(pro)
+add_subdirectory(pro)
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(OPENCL_FOUND)

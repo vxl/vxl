@@ -21,7 +21,7 @@ IF(EXPAT_FOUND)
   TARGET_LINK_LIBRARIES(bvpl_kernels_pro bvpl_kernels bvpl_kernels_io bvpl_octree bvpl_octree_io bsta bprb brdb bvpl vnl vul vbl_io)
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

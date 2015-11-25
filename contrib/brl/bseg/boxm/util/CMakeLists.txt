@@ -19,5 +19,5 @@ ADD_LIBRARY(boxm_util ${boxm_util_sources})
 TARGET_LINK_LIBRARIES(boxm_util boxm boxm_sample bvrml boct bsta vpgl_algo vnl_algo vgl_algo vpgl vnl_io vil vgl vnl vbl vcl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

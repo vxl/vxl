@@ -39,12 +39,12 @@ INSTALL_TARGETS(/lib vimt)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt ${vimt_sources})
 TARGET_LINK_LIBRARIES(vimt mbl vil_algo vgl vnl vil_io vil )
 
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 IF(BUILD_EXAMPLES)
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF(BUILD_EXAMPLES)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

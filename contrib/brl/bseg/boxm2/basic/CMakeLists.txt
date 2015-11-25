@@ -23,5 +23,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/basic ${boxm2_ba
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

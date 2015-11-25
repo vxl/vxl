@@ -24,7 +24,7 @@ ADD_LIBRARY(m23d ${m23d_sources})
 TARGET_LINK_LIBRARIES(m23d mbl)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
-#SUBDIRS(tools)
+#add_subdirectory(tools)

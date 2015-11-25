@@ -43,52 +43,52 @@ ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/cul/CMakeLists.txt )
 
 
 IF(BUILD_MUL)
-  SUBDIRS(mul)
+  add_subdirectory(mul)
 ENDIF(BUILD_MUL)
 
 IF(BUILD_RPL)
-  SUBDIRS(rpl)
+  add_subdirectory(rpl)
 ENDIF(BUILD_RPL)
 
 IF(BUILD_TBL)
-  SUBDIRS(tbl)
+  add_subdirectory(tbl)
 ENDIF(BUILD_TBL)
 
 IF(BUILD_OUL)
-  SUBDIRS(oul)
+  add_subdirectory(oul)
 ENDIF(BUILD_OUL)
 
 IF(BUILD_OXL)
-  SUBDIRS(oxl)
+  add_subdirectory(oxl)
 ENDIF(BUILD_OXL)
 
 IF(BUILD_GEL)
-  SUBDIRS(gel)
+  add_subdirectory(gel)
 ENDIF(BUILD_GEL)
 
 IF(BUILD_BRL)
-  SUBDIRS(brl)
+  add_subdirectory(brl)
   IF(BUILD_GEL)
   # since gel/vsrl depends on brl/bseg/sdet, it cannot be built before brl:
   IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
     # Dense matcher
-    SUBDIRS(gel/vsrl)
+    add_subdirectory(gel/vsrl)
   ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
   IF (BUILD_TESTING)
     # since gel/vifa/tests depends on brl/bseg/sdet, it must be built after brl:
-    SUBDIRS(gel/vifa/tests)
+    add_subdirectory(gel/vifa/tests)
   ENDIF (BUILD_TESTING)
   ENDIF(BUILD_GEL)
 ENDIF(BUILD_BRL)
 
 IF(BUILD_PRIP)
-  SUBDIRS(prip)
+  add_subdirectory(prip)
 ENDIF(BUILD_PRIP)
 
 IF(BUILD_CONVERSIONS)
-  SUBDIRS(conversions)
+  add_subdirectory(conversions)
 ENDIF(BUILD_CONVERSIONS)
 
 IF(BUILD_CUL)
-  SUBDIRS(cul)
+  add_subdirectory(cul)
 ENDIF(BUILD_CUL)

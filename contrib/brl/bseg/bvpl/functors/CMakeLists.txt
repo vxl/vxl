@@ -29,10 +29,10 @@ ADD_LIBRARY(bvpl_functors ${bvpl_functors_sources})
 TARGET_LINK_LIBRARIES(bvpl_functors bvpl_kernels)
 
 #Directory with python/c++ processes
-#SUBDIRS(pro)
+#add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

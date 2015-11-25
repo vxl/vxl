@@ -15,9 +15,9 @@ IF( EXPAT_FOUND )
   TARGET_LINK_LIBRARIES( expatpp ${EXPAT_LIBRARIES} )
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
-  
+
   INSTALL_TARGETS(/lib expatpp)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/b3p/expatpp/ ${expatpp_sources})
 

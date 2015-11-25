@@ -15,16 +15,9 @@ IF(UNIX)
   TARGET_LINK_LIBRARIES( netlib m )
 ENDIF(UNIX)
 
-IF(BUILD_TESTING)
-  SUBDIRS(tests)
-ENDIF(BUILD_TESTING)
-
-IF(BUILD_EXAMPLES)
-  SUBDIRS(examples)
-ENDIF(BUILD_EXAMPLES)
-
 # Allow sources in subdirectories to see the include files.
 INCLUDE_DIRECTORIES(${netlib_SOURCE_DIR})
+
 
 # Inform header files they are being included from a source inside the
 # v3p_netlib library.
@@ -467,3 +460,11 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/v3p/netlib ${v3p_netlib_sources})
 IF(UNIX)
   TARGET_LINK_LIBRARIES( v3p_netlib m )
 ENDIF(UNIX)
+
+IF(BUILD_TESTING)
+  add_subdirectory(tests)
+ENDIF(BUILD_TESTING)
+
+IF(BUILD_EXAMPLES)
+  add_subdirectory(examples)
+ENDIF(BUILD_EXAMPLES)

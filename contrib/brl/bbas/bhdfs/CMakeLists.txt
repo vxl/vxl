@@ -6,7 +6,7 @@
 # and then edit /etc/environment to contain the following:
 # CLASSPATH=$CLASSPATH:$TMP
 #  e.g. echo $CLASSPATH >> /etc/environment
-# 
+#
 #
 #
 INCLUDE( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
@@ -27,7 +27,7 @@ IF(HDFS_FOUND)
   ADD_LIBRARY(bhdfs ${bhdfs_sources} )
 
   TARGET_LINK_LIBRARIES(bhdfs ${HDFS_LIBRARIES})
-  
+
   IF(JAVA_AWT_LIBRARY)
     GET_FILENAME_COMPONENT(JAVA_LIB_DIR ${JAVA_AWT_LIBRARY} PATH)
     IF(EXISTS ${JAVA_LIB_DIR}/xawt)
@@ -40,8 +40,8 @@ IF(HDFS_FOUND)
   SET(CMAKE_SKIP_RPATH 0)
 
   #tests
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 
   #pro
-  SUBDIRS(pro)
+  add_subdirectory(pro)
 ENDIF(HDFS_FOUND)

@@ -344,7 +344,7 @@ ENDIF( DCMTK_HAVE_ZLIB )
 INSTALL_TARGETS( /lib dcmtk )
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF( VXL_BUILD_DCMTK )

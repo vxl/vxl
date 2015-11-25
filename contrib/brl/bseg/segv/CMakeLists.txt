@@ -39,7 +39,7 @@ IF(HAS_VGUI)
  TARGET_LINK_LIBRARIES(segv bgui vgui sdet bsol bvgl brip vpgl_file_formats vpgl vtol vdgl vsol vil vil_algo vil1 vnl vgl vul vbl)
 
  IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
  ENDIF (BUILD_TESTING)
 
 ENDIF(HAS_VGUI)

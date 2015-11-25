@@ -12,9 +12,9 @@ SET(bsta_sources
  bsta_histogram.txx        bsta_histogram.h       bsta_histogram_sptr.h     bsta_histogram.cxx
  bsta_joint_histogram_base.h
  bsta_joint_histogram.txx  bsta_joint_histogram.h bsta_joint_histogram_sptr.h
- bsta_joint_histogram_3d.txx      bsta_joint_histogram_3d.h 
+ bsta_joint_histogram_3d.txx      bsta_joint_histogram_3d.h
  bsta_joint_histogram_3d_base.h
- bsta_joint_histogram_3d_sptr.h  
+ bsta_joint_histogram_3d_sptr.h
  bsta_k_medoid.cxx         bsta_k_medoid.h
  bsta_k_means.cxx         bsta_k_means.h    bsta_k_means.txx
  bsta_otsu_threshold.txx   bsta_otsu_threshold.h
@@ -54,7 +54,7 @@ SET(bsta_sources
   bsta_beta.h      bsta_beta.txx
   bsta_beta_f1.h
   bsta_kent.h      bsta_kent.txx
-  bsta_spherical_histogram.h  bsta_spherical_histogram.txx 
+  bsta_spherical_histogram.h  bsta_spherical_histogram.txx
   bsta_random_wrapper.h  bsta_random_wrapper.cxx
 )
 
@@ -66,18 +66,18 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta ${bsta_sources})
 TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl_io vnl vgl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 
 # algorithms for statistical modeling
-SUBDIRS( algo )
+add_subdirectory(algo)
 
 # Binary I/O clip on library
-SUBDIRS( io )
+add_subdirectory(io)
 
 # Visualization Tools for various bsta constructs
-SUBDIRS( vis )
+add_subdirectory(vis)
 
 # process library
-SUBDIRS(pro)
+add_subdirectory(pro)

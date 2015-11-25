@@ -17,5 +17,5 @@ ADD_LIBRARY(brip_pro ${brip_pro_sources})
 TARGET_LINK_LIBRARIES(brip_pro bprb brdb brip vil_pro vil vsl bil_algo)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

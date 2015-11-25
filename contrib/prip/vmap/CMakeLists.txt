@@ -33,5 +33,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vmap ${vmap_sources})
 TARGET_LINK_LIBRARIES(vmap vcl)
 
 #IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 #ENDIF (BUILD_TESTING)

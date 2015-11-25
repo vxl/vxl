@@ -17,5 +17,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/geml ${geml_sources})
 TARGET_LINK_LIBRARIES(geml vil1 vnl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

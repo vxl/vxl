@@ -29,8 +29,8 @@ ADD_LIBRARY(bbgm  ${bbgm_sources})
 # add the required libraries into this list
 TARGET_LINK_LIBRARIES(bbgm bsta bsta_algo brip vnl_io vbl_io vsl vnl vil_algo vil vgl_algo vgl vbl)
 
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

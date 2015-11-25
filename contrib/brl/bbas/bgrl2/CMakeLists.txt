@@ -21,8 +21,8 @@ ADD_LIBRARY(bgrl2 ${bgrl2_sources})
 TARGET_LINK_LIBRARIES( bgrl2 vbl )
 
 #Algorithms on graphs
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

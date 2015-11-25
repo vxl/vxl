@@ -40,7 +40,7 @@ IF(EXPAT_FOUND)
       ENDIF(ZLIB_FOUND)
 
       IF( BUILD_TESTING )
-        SUBDIRS(tests)
+        add_subdirectory(tests)
       ENDIF( BUILD_TESTING )
 
     ENDIF(GEOTIFF_FOUND)
