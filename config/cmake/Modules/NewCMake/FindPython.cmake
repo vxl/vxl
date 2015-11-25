@@ -10,8 +10,9 @@
 # Flag that determines if we were able to successfully build Python.
 # Initialize to NO. Change below if yes.
 SET(PYTHON_FOUND "NO" CACHE INTERNAL "Was Python successfully built?" )
-
+set(Python_ADDITIONAL_VERSIONS 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2 2.3 2.4 2.5 2.6 2.7)
 INCLUDE( ${CMAKE_ROOT}/Modules/FindPythonLibs.cmake )
+
 IF(PYTHON_INCLUDE_DIR)
  IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
   # everything found
@@ -20,7 +21,7 @@ IF(PYTHON_INCLUDE_DIR)
   IF( WIN32 )
     FIND_PATH(PYTHON_PC_INCLUDE_PATH
       NAMES pyconfig.h
-    
+
       PATHS
       ${PYTHON_INCLUDE_DIRS}
       ${PYTHON_FRAMEWORK_INCLUDES}
@@ -34,7 +35,7 @@ IF(PYTHON_INCLUDE_DIR)
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\2.0\\InstallPath]/PC
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\1.6\\InstallPath]/PC
       [HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\1.5\\InstallPath]/PC
-    
+
       PATH_SUFFIXES
        python2.7
        python2.6
