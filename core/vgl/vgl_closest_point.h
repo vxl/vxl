@@ -24,7 +24,7 @@
 
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vcl_utility.h> // for vcl_pair<T,U>
-
+#include <vcl_limits.h>
 //: Closest point to \a (x,y) on the line segment \a (x1,y1)-(x2,y2)
 template <class T>
 void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
@@ -326,4 +326,12 @@ template <class T>
 vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
                                   vgl_point_3d<T> const& p);
 
+//: Return the closest point on a pointset \a ptset to a point \a p in 3D
+// \relatesalso vgl_point_3d. If ptset has normals, the closest point on the plane
+// passing trough the closest point is returned. If that planar point is further than dist away from
+// the closest point in ptset then the closest point in the ptset is returned.
+//
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p,
+                                  T dist = vcl_numeric_limits<T>::max());
 #endif // vgl_closest_point_h_
