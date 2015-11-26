@@ -23,6 +23,9 @@ SET(bvgl_sources
  bvgl_volume_of_intersection.h           bvgl_volume_of_intersection.txx
  bvgl_ray_pyramid.h                      bvgl_ray_pyramid.cxx
  bvgl_param_curve.h                      bvgl_param_curve.cxx
+ bvgl_cross_section.h                    bvgl_cross_section.cxx
+ bvgl_gen_cylinder.h                     bvgl_gen_cylinder.cxx	
+ bvgl_grid_index_3d.h                    bvgl_grid_index_3d.cxx		
 )
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 
@@ -41,7 +44,7 @@ ENDIF(EXPAT_FOUND)
 ADD_LIBRARY(bvgl ${bvgl_sources})
 INSTALL_TARGETS(/lib bvgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvgl ${bvgl_sources})
-TARGET_LINK_LIBRARIES(bvgl vsol vgl_algo vgl_io vgl vnl_algo vnl vil vbl)
+TARGET_LINK_LIBRARIES(bvgl bvrml vsol vgl_algo vgl_io vgl vnl_algo vnl vil vbl)
 IF(EXPAT_FOUND)
 TARGET_LINK_LIBRARIES(bvgl expatpp)
 ENDIF(EXPAT_FOUND)
