@@ -35,6 +35,6 @@ TARGET_LINK_LIBRARIES(bwm_extract_snippets  bwm_video vsol vnl vil vbl_io vpl vu
 
 INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 IF(HAS_VGUI)
-	ADD_EXECUTABLE(bwm_video_normalize_3d_corr bwm_video_normalize_3d_corr.cxx)
-	TARGET_LINK_LIBRARIES(bwm_video_normalize_3d_corr  bwm bwm_algo bwm_video vnl vpl vul)
+  ADD_EXECUTABLE(bwm_video_normalize_3d_corr bwm_video_normalize_3d_corr.cxx)
+  TARGET_LINK_LIBRARIES(bwm_video_normalize_3d_corr bwm bwm_algo bwm_video vnl vpl vsol vul)
 ENDIF(HAS_VGUI)
