@@ -48,7 +48,7 @@ IF (OPENGL_FOUND)
   # implementations
   INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
   INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-  INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindGTK2.cmake)
+  INCLUDE(${CMAKE_ROOT}/Modules/FindGTK2.cmake)
   INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindWin32SDK.cmake)
   IF(NOT MINGW)
     # MFC is not available in MinGW.
