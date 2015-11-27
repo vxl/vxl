@@ -13,6 +13,7 @@ IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
 IF(OPENCL_FOUND)
   INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
+  set( BOXM2_VOLM_PRO_LIBS boxm2_ocl)
 ENDIF(OPENCL_FOUND)
 
   SET(boxm2_volm_pro_sources
@@ -32,7 +33,9 @@ ENDIF(OPENCL_FOUND)
   INSTALL_TARGETS(/lib boxm2_volm_pro)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/volm/pro ${boxm2_volm_pro_sources})
 
-  TARGET_LINK_LIBRARIES(boxm2_volm_pro boxm2_volm boxm2_volm_io boxm2_io boxm2_util boxm2_cpp_algo boxm2_ocl bbas_pro bvgl sdet bprb brdb brip vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml)
+  TARGET_LINK_LIBRARIES(boxm2_volm_pro
+    boxm2_volm boxm2_volm_io boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip
+    vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml ${BOXM2_VOLM_PRO_LIBS})
 
 ENDIF(EXPAT_FOUND)
 
