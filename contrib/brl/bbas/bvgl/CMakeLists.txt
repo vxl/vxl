@@ -23,9 +23,6 @@ SET(bvgl_sources
  bvgl_volume_of_intersection.h           bvgl_volume_of_intersection.txx
  bvgl_ray_pyramid.h                      bvgl_ray_pyramid.cxx
  bvgl_param_curve.h                      # EMPTY FILE bvgl_param_curve.cxx
- bvgl_cross_section.h                    bvgl_cross_section.cxx
- bvgl_gen_cylinder.h                     bvgl_gen_cylinder.cxx	
- bvgl_grid_index_3d.h                    bvgl_grid_index_3d.cxx		
 )
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 
