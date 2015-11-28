@@ -29,16 +29,21 @@ class boxm2_block_metadata: public vbl_ref_count
 {
  public:
   // for std containers. Will result in uninitialized values!
-  boxm2_block_metadata() {}
-  boxm2_block_metadata( boxm2_block_id id,
-                        vgl_point_3d<double> local_origin,
-                        vgl_vector_3d<double> sub_block_dim,
-                        vgl_vector_3d<unsigned> sub_block_num,
-                        int init_level,
-                        int max_level,
-                        double max_mb,
-                        double p_init,
-                        int version = 1) : id_(id),
+  boxm2_block_metadata() : init_level_(0), //Iniitalize to reasonable defaults
+                           max_level_(0),
+                           max_mb_(0.0),
+                           p_init_(0.0),
+                           version_(1) {}
+
+  boxm2_block_metadata( const boxm2_block_id          id,
+                        const vgl_point_3d<double>    local_origin,
+                        const vgl_vector_3d<double>   sub_block_dim,
+                        const vgl_vector_3d<unsigned> sub_block_num,
+                        const int init_level,
+                        const int max_level,
+                        const double max_mb,
+                        const double p_init,
+                        const int version = 1) : id_(id),
                                           local_origin_(local_origin),
                                           sub_block_dim_(sub_block_dim),
                                           sub_block_num_(sub_block_num),
@@ -75,7 +80,7 @@ class boxm2_block_metadata: public vbl_ref_count
   int                     max_level_;    //each sub_blocks's max_level (default 4)
   double                  max_mb_;       //each total block mb
   double                  p_init_;       //initialize occupancy probs with this
-  int                     version_;
+  int                     version_;      // Only valid version numbers are 1 & 2
   //: bounding box for this block
   vgl_box_3d<double>      bbox();
   vgl_box_3d<double>      bbox(int x, int y, int z) {

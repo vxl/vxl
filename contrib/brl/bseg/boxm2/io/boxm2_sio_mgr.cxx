@@ -85,7 +85,8 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,b
     return NULL;
   }
   //instantiate new block
-  return new boxm2_block(block_id,data, bytes);
+  boxm2_block * returnboxm2_block = new boxm2_block(block_id,data, bytes);
+  return returnboxm2_block;
 }
 
 void boxm2_sio_mgr::save_block(vcl_string dir, boxm2_block* block)
