@@ -174,7 +174,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata data)
   long bytes_read = 0;
 
 //double dims[4];
-  int nums[4];
+  int nums[4]; nums[0]=0;//remove warning about unused variable
 
   if (version_==1)
   {
@@ -381,7 +381,6 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
            vgl_point_3d<double> localCenter = tree.cell_center(currBitIndex);
            vgl_point_3d<double> cellCenter(localCenter.x() + ix, localCenter.y()+ iy, localCenter.z() + iz);
 
-
            ci.depth_= curr_depth;
            ci.data_index_=currIdx;
            ci.side_length_= static_cast<float>(sub_block_dim_.x()/((float)(1<<ci.depth_)));
@@ -396,7 +395,7 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   return temp;
 }
 
-vcl_vector<vgl_point_3d<double> > boxm2_block::neighbors(vgl_point_3d<double> const& probe, double distance) const{
+vcl_vector<vgl_point_3d<double> > boxm2_block::sub_block_neighbors(vgl_point_3d<double> const& probe, double distance) const{
   vcl_vector<vgl_point_3d<double> > ret;
   double r = sub_block_dim_.x();//assume cubical tree subblock
   double dr = vcl_floor(distance/r) + r;// add r as margin for roundoff
@@ -417,6 +416,99 @@ vcl_vector<vgl_point_3d<double> > boxm2_block::neighbors(vgl_point_3d<double> co
         if(d<=distance)
           ret.push_back(p);
       }
+  return ret;
+}
+void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double distance, vcl_vector<vgl_point_3d<double> >& nbrs, vcl_vector<double>& nbr_edge_lengths, vcl_vector<unsigned>& data_indices, bool relative_distance) const{
+  nbrs.clear();
+  nbr_edge_lengths.clear();
+  data_indices.clear();
+  vgl_box_3d<double> gbox = this->bounding_box_global();
+  if(!gbox.contains(probe))
+    return;
+  // find the tree index that contains probe
+  vgl_vector_3d<double> v0 = probe-local_origin_;
+  double dx = v0.x()/sub_block_dim_.x(), dy = v0.y()/sub_block_dim_.y(), dz = v0.z()/sub_block_dim_.z();
+  int ix = static_cast<int>(vcl_floor(dx)), iy = static_cast<int>(vcl_floor(dy)), iz = static_cast<int>(vcl_floor(dz));
+
+  // find tree neighborhood radius and relative or absolute neighbor distance
+  int dri = static_cast<int>(distance/sub_block_dim_.x()) + 1;// add 1 as margin for roundoff
+  double cell_distance = distance;//absolute spatial distance
+  if(relative_distance){
+    vnl_vector_fixed<unsigned char, 16>  probe_tree = trees_(ix, iy, iz);
+    boct_bit_tree probe_bit_tree((unsigned char*) probe_tree.data_block(), max_level_);
+    vgl_point_3d<double> pt(dx-double(ix), dy-double(iy),dz-double(iz));
+    int bit_index = probe_bit_tree.traverse(pt);
+    double probe_len = probe_bit_tree.cell_len(bit_index);
+    dri = static_cast<int>(distance*probe_len) + 1;// add 1 to insure 3x3x3 search in neighboring trees
+    cell_distance = distance*probe_len*sub_block_dim_.x();//here the distance is scaled to size of probe cell
+  }
+  // find neighboring trees
+  for(int z = iz-dri; z<=iz+dri; ++z)
+    for(int y = iy-dri; y<=iy+dri; ++y)
+      for(int x = ix-dri; x<=ix+dri; ++x){
+        // check bounds  
+        if(x<int(0) || y<int(0) ||z<int(0) || x>=int(sub_block_num_.x()) || y>=int(sub_block_num_.y()) || z>=int(sub_block_num_.z()))
+          continue;
+        vnl_vector_fixed<unsigned char, 16>  tree = trees_(x, y, z);
+        boct_bit_tree bit_tree((unsigned char*) tree.data_block(), max_level_);
+
+        //compute global origin of tree sub_block
+        vgl_vector_3d<double> v(x*sub_block_dim_.x(), y*sub_block_dim_.y(), z*sub_block_dim_.z());
+        vgl_point_3d<double> subblock_origin = local_origin_ + v;
+
+        //iterate through leaves of the tree
+        vcl_vector<int> leafBits = bit_tree.get_leaf_bits();
+        for (vcl_vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
+          int currBitIndex = (*iter);
+          int data_indx = bit_tree.get_data_index(currBitIndex); //data index
+          vgl_point_3d<double> cell_pos = bit_tree.cell_center(currBitIndex);
+          vgl_vector_3d<double> cell_offset(cell_pos.x()*sub_block_dim_.x(), cell_pos.y()*sub_block_dim_.y(), cell_pos.z()*sub_block_dim_.z());
+          // global position of leaf cell center
+          vgl_point_3d<double> pos = subblock_origin + cell_offset; 
+          double side_len = bit_tree.cell_len(currBitIndex);
+          double d = (probe-pos).length();
+          if(d<=cell_distance){
+            nbrs.push_back(pos);
+            nbr_edge_lengths.push_back(side_len*sub_block_dim_.x());
+            data_indices.push_back(data_indx);
+          }
+        }
+      }
+}
+vcl_vector<vgl_point_3d<int> >  boxm2_block::sub_blocks_intersect_box(vgl_box_3d<double> const& box) const {
+  //vcl_cout << "Box " << box << '\n';
+  vcl_vector<vgl_point_3d<int> > ret;
+  vgl_point_3d<double> minp = box.min_point();
+  vgl_vector_3d<double> vmin= (minp-local_origin_);
+  double x_min = vmin.x()/sub_block_dim_.x(), y_min = vmin.y()/sub_block_dim_.y(), z_min = vmin.z()/sub_block_dim_.z();
+  int ix_min = static_cast<int>(vcl_floor(x_min)), iy_min = static_cast<int>(vcl_floor(y_min)), iz_min = static_cast<int>(vcl_floor(z_min));
+  vgl_point_3d<double> maxp = box.max_point();
+  vgl_vector_3d<double> vmax= (maxp-local_origin_);
+  double x_max = vmax.x()/sub_block_dim_.x(), y_max = vmax.y()/sub_block_dim_.y(), z_max = vmax.z()/sub_block_dim_.z();
+  int ix_max = static_cast<int>(vcl_floor(x_max)), iy_max = static_cast<int>(vcl_floor(y_max)), iz_max = static_cast<int>(vcl_floor(z_max));
+  ix_max++;   iy_max++;   iz_max++; // allow corners to intersect box
+  // modify box to include origins below min by 1 box length
+  vgl_point_3d<double> pmin(x_min-1.0, y_min-1.0, z_min-1.0);
+  vgl_point_3d<double> pmax(x_max, y_max, z_max);
+  vgl_box_3d<double> mbox;
+  mbox.add(pmin); mbox.add(pmax);
+  for(int x = ix_min; x<=ix_max; x++){
+    if(x<0 || x>=static_cast<int>(sub_block_num_.x()))
+      continue;
+    for(int y = iy_min; y<=iy_max; y++){
+      if(y<0 || y>=static_cast<int>(sub_block_num_.y()))
+        continue;
+      for(int z = iz_min; z<=iz_max; z++){
+        if(z<0 || z>=static_cast<int>(sub_block_num_.z()))
+          continue;
+        vgl_point_3d<int> p(x, y, z);
+        vgl_point_3d<double> pd(x, y, z);
+        //vcl_cout<< "pi " << p << " pd " << pd << '\n';
+        if(mbox.contains(pd))
+          ret.push_back(p);
+      }
+    }
+  }
   return ret;
 }
 //------------ I/O -------------------------------------------------------------
