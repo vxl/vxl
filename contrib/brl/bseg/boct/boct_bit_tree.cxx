@@ -357,6 +357,35 @@ int boct_bit_tree::depth_at(int index) const
   return int_log8(7*index+1);
 }
 
+int boct_bit_tree::depth(){
+
+  int max_depth = 3;
+  int tree_depth = 0;
+  vcl_list<unsigned> toVisit;//maintain a queue of nodes and
+  vcl_list<int> visit_depth;// node depth
+  toVisit.push_back(0);
+  visit_depth.push_back(0);
+  while (!toVisit.empty()) {
+    int currBitIndex = toVisit.front();
+    int currDepth = visit_depth.front();
+    if(currDepth>tree_depth){//cut search if max depth is reached.
+      tree_depth = currDepth;
+      if(tree_depth == max_depth)
+        return tree_depth;
+    }
+    toVisit.pop_front();
+    visit_depth.pop_front();
+    if ( !this->is_leaf(currBitIndex) ) {
+      unsigned firstChild = 8 * currBitIndex + 1;
+      for (int ci = 0; ci < 8; ++ci){
+        int cind = firstChild + ci;
+        toVisit.push_back(cind);
+        visit_depth.push_back(depth_at(cind));
+      }
+    }
+  }
+  return tree_depth;
+}
 #if 0
 //: gets and sets buffer pointers (located at bytes 12 and 13
 int boct_bit_tree::get_buffer_ptr()
