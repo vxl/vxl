@@ -1,13 +1,13 @@
-MESSAGE(FATAL_ERROR "VXL has moved!
-VXL is now hosted in a GitHub repository at:
- https://github.com/vxl/vxl
-Run:
- git config --unset remote.origin.pushurl
- git remote set-url origin https://github.com/vxl/vxl.git
- git fetch origin
- git checkout master
- git reset --hard origin/master
-")
+#MESSAGE(FATAL_ERROR "VXL has moved!
+#VXL is now hosted in a GitHub repository at:
+# https://github.com/vxl/vxl
+#Run:
+# git config --unset remote.origin.pushurl
+# git remote set-url origin https://github.com/vxl/vxl.git
+# git fetch origin
+# git checkout master
+# git reset --hard origin/master
+#")
 #
 # Root vxl
 #
