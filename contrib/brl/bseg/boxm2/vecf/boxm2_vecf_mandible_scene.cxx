@@ -681,6 +681,7 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
  }
 
 void boxm2_vecf_mandible_scene::map_to_target(boxm2_scene_sptr target_scene){
+  vul_timer t;
   // initially extract unrefined target data 
   if(!target_data_extracted_)
     this->extract_target_block_data(target_scene);
@@ -699,6 +700,7 @@ void boxm2_vecf_mandible_scene::map_to_target(boxm2_scene_sptr target_scene){
   this->inverse_vector_field(rot, invf, valid);
   this->apply_vector_field_to_target(invf, valid);
   target_data_extracted_  = true;
+  vcl_cout << "Map to target in " << t.real()/1000.0 << " secs\n";
 }
 
 

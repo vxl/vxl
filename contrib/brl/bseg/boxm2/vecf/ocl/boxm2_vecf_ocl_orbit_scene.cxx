@@ -420,7 +420,7 @@ void boxm2_vecf_ocl_orbit_scene::find_cell_neigborhoods(){
   for(unsigned i = 0; i<sphere_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = sphere_cell_centers_[i];
       unsigned indx_i = sphere_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->neighbors(p, distance);
+      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
