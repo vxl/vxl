@@ -11,9 +11,6 @@
 #include <vcl_limits.h>
 #include <vcl_set.h>
 #include <vul/vul_timer.h>
-static double gauss(double d, double sigma){
-  return vcl_exp((-0.5*d*d)/(sigma*sigma));
-}
 
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;
 // fill the background alpha and intensity values to be slightly dark
@@ -74,7 +71,7 @@ void boxm2_vecf_orbit_scene::extract_block_data(){
 
   vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
-  sigma_ = blk_->sub_block_dim().x();
+  sigma_ = static_cast<float>(blk_->sub_block_dim().x());
 
   boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   alpha_base->enable_write();
@@ -301,8 +298,8 @@ void boxm2_vecf_orbit_scene::cache_neighbors(){
         sphere_cell_data_index_.push_back(indx);
         data_index_to_cell_index_[indx]=static_cast<unsigned>(sphere_cell_centers_.size())-1;
         ;
-        float blending_factor = gauss(d,sigma_);
-        alpha_data_->data()[indx]= - vcl_log(1.0 - ( 0.95 ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+        float blending_factor = static_cast<float>(gauss(d,sigma_));
+        alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
         sphere_->data()[indx] = static_cast<pixtype>(true);
       }
     }
@@ -372,7 +369,7 @@ void boxm2_vecf_orbit_scene::find_cell_neigborhoods(){
   for(unsigned i = 0; i<sphere_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = sphere_cell_centers_[i];
       unsigned indx_i = sphere_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->neighbors(p, distance);
+      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
@@ -594,7 +591,7 @@ void boxm2_vecf_orbit_scene::find_eyelid_cell_neigborhoods(){
   for(unsigned i = 0; i<eyelid_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = eyelid_cell_centers_[i];
       unsigned indx_i = eyelid_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->neighbors(p, distance);
+      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
@@ -636,8 +633,8 @@ void boxm2_vecf_orbit_scene::build_eyelid(){
         eyelid_cell_data_index_.push_back(indx);
         eyelid_->data()[indx] = static_cast<pixtype>(true);
         eyelid_data_index_to_cell_index_[indx]=static_cast<unsigned>(eyelid_cell_centers_.size())-1;
-        float blending_factor = gauss(d,sigma_);
-        alpha_data_->data()[indx]= - vcl_log(1.0 - ( 0.95 ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+        float blending_factor = static_cast<float>(gauss(d,sigma_));
+        alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
       }
     }
   }
@@ -674,7 +671,7 @@ void boxm2_vecf_orbit_scene::find_lower_eyelid_cell_neigborhoods(){
   for(unsigned i = 0; i<lower_eyelid_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = lower_eyelid_cell_centers_[i];
       unsigned indx_i = lower_eyelid_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->neighbors(p, distance);
+      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
@@ -716,8 +713,8 @@ void boxm2_vecf_orbit_scene::build_lower_eyelid(){
           lower_eyelid_->data()[indx] = static_cast<pixtype>(true);
           lower_eyelid_data_index_to_cell_index_[indx]=
             static_cast<unsigned>(lower_eyelid_cell_centers_.size())-1;
-          float blending_factor = gauss(d,sigma_);
-          alpha_data_->data()[indx]= - vcl_log(1.0 - ( 0.95 ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+          float blending_factor = static_cast<float>(gauss(d,sigma_));
+          alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
         }
     }
   }
@@ -755,7 +752,7 @@ void boxm2_vecf_orbit_scene::find_eyelid_crease_cell_neigborhoods(){
   for(unsigned i = 0; i<eyelid_crease_cell_centers_.size(); i++){
       vgl_point_3d<double>& p = eyelid_crease_cell_centers_[i];
       unsigned indx_i = eyelid_crease_cell_data_index_[i];
-      vcl_vector<vgl_point_3d<double> > nbrs = blk_->neighbors(p, distance);
+      vcl_vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
       for(unsigned j =0; j<nbrs.size(); ++j){
         vgl_point_3d<double>& q = nbrs[j];
         unsigned indx_n;
@@ -796,8 +793,8 @@ void boxm2_vecf_orbit_scene::build_eyelid_crease(){
         eyelid_crease_cell_centers_.push_back(cell_center);
         eyelid_crease_cell_data_index_.push_back(indx);
         eyelid_crease_->data()[indx] = static_cast<pixtype>(true);
-        float blending_factor = gauss(d,sigma_);
-        alpha_data_->data()[indx]= - vcl_log(1.0 - ( 0.95 ))/ static_cast<float>(this->subblock_len()) * blending_factor;
+        float blending_factor = static_cast<float>(gauss(d,sigma_));
+        alpha_data_->data()[indx]= - vcl_log(1.0f - ( 0.95f ))/ static_cast<float>(this->subblock_len()) * blending_factor;
         eyelid_crease_data_index_to_cell_index_[indx]=
           static_cast<unsigned>(eyelid_crease_cell_centers_.size())-1;
       }

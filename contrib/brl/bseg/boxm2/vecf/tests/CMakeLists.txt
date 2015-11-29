@@ -4,8 +4,9 @@ ADD_EXECUTABLE( boxm2_vecf_test_all
   test_orbit.cxx
   test_fit_orbit.cxx
   test_fit_margin.cxx
-  test_pc_viewer.cxx
-  test_mandible.cxx
+  test_pc_viewer.cxx	
+  test_mandible.cxx	
+  test_cranium.cxx
  )
 TARGET_LINK_LIBRARIES(boxm2_vecf_test_all testlib  boxm2_vecf brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )
 
@@ -19,6 +20,7 @@ ADD_TEST( boxm2_vecf_test_fit_orbit      ${EXECUTABLE_OUTPUT_PATH}/boxm2_vecf_te
 ADD_TEST( boxm2_vecf_test_fit_margin      ${EXECUTABLE_OUTPUT_PATH}/boxm2_vecf_test_all  test_fit_margin  )
 ADD_TEST( boxm2_vecf_test_pc_viewer      ${EXECUTABLE_OUTPUT_PATH}/boxm2_vecf_test_all  test_pc_viewer  )
 ADD_TEST( boxm2_vecf_test_mandible      ${EXECUTABLE_OUTPUT_PATH}/boxm2_vecf_test_all  test_mandible  )
+ADD_TEST( boxm2_vecf_test_cranium      ${EXECUTABLE_OUTPUT_PATH}/boxm2_vecf_test_all  test_cranium  )
 
 #ADD_EXECUTABLE( boxm2_vecf_test_include test_include.cxx )
 #TARGET_LINK_LIBRARIES( boxm2_vecf_test_include boxm2_vecf )

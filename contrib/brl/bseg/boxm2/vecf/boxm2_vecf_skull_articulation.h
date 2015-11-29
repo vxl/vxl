@@ -1,19 +1,19 @@
-#ifndef boxm2_vecf_orbit_articulation_h_
-#define boxm2_vecf_orbit_articulation_h_
+#ifndef boxm2_vecf_skull_articulation_h_
+#define boxm2_vecf_skull_articulation_h_
 //:
 // \file
-// \brief  Articulation for the orbit model
+// \brief  Articulation for the skull model
 //
 // \author J.L. Mundy
-// \date   14 Apr 2015
+// \date   8 November 2015
 //
 #include "boxm2_vecf_scene_articulation.h"
-#include "boxm2_vecf_orbit_params.h"
+#include "boxm2_vecf_skull_params.h"
 
-class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
+class boxm2_vecf_skull_articulation : public boxm2_vecf_scene_articulation{
  public:
-  boxm2_vecf_orbit_articulation();
-  ~boxm2_vecf_orbit_articulation(){
+  boxm2_vecf_skull_articulation();
+  ~boxm2_vecf_skull_articulation(){
     params_.clear();
   }
 
@@ -32,9 +32,8 @@ class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
  boxm2_vecf_articulated_params& operator [] (unsigned i) {
    return params_[i] ; }
  private:
-  vcl_vector<boxm2_vecf_orbit_params> params_;
-  vcl_map<vcl_string,vcl_vector<boxm2_vecf_orbit_params> > play_sequence_map_;
-
+  vcl_vector<boxm2_vecf_skull_params> params_;
+  vcl_map<vcl_string,vcl_vector<boxm2_vecf_skull_params> > play_sequence_map_;
 
 };
-#endif// boxm2_vecf_orbit_articulation
+#endif// boxm2_vecf_skull_articulation

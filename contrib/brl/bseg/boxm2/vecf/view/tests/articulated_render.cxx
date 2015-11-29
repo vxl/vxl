@@ -37,9 +37,15 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 #include "../../boxm2_vecf_orbit_scene.h"
+#include "../../boxm2_vecf_mandible_scene.h"
+#include "../../boxm2_vecf_cranium_scene.h"
+#include "../../boxm2_vecf_skull_scene.h"
 #include "../../boxm2_vecf_composite_head_model.h"
 #include "../../ocl/boxm2_vecf_ocl_composite_head_model.h"
 #include "../../boxm2_vecf_orbit_articulation.h"
+#include "../../boxm2_vecf_mandible_articulation.h"
+#include "../../boxm2_vecf_cranium_articulation.h"
+#include "../../boxm2_vecf_skull_articulation.h"
 #include "../../boxm2_vecf_composite_head_model_articulation.h"
 #include "../boxm2_ocl_articulated_render_tableau.h"
 
@@ -61,6 +67,7 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> base_dir_path_arg(arglist, "-bdir", "Base model directory", "");
   vul_arg<vcl_string> model_path_arg(arglist, "-model", "model_xml_file", "");
   vul_arg<vcl_string> target_path_arg(arglist, "-target", "target_xml_file", "");
+  vul_arg<vcl_string> geo_path_arg(arglist, "-geo", "geometry_data_file", "");
   vul_arg<vcl_string> camera_path_arg(arglist, "-cam", "default camera", "");
   vul_arg<vcl_string> background_arg(arglist, "-bkgnd", "dark background", "true");
   vul_arg<vcl_string> scene_arg(arglist, "-scene_t", " which scene ", "eye");
@@ -70,6 +77,7 @@ int main(int argc, char ** argv)
   vcl_string base_dir_path = base_dir_path_arg();
   vcl_string model_path = model_path_arg();
   vcl_string target_path = target_path_arg();
+  vcl_string geo_path = geo_path_arg();
   vcl_string cam_path = camera_path_arg();
   bool dark_background = background_arg()=="true";
   vcl_string scene_t = scene_arg();
@@ -83,6 +91,7 @@ int main(int argc, char ** argv)
   }
   vcl_string articulated_scene_path = base_dir_path + model_path;
   vcl_string target_scene_path = base_dir_path + target_path;
+  vcl_string geometry_path = base_dir_path + geo_path;
   vcl_string eye_model_path = base_dir_path + "eye/eye.xml";
   vcl_string default_cam_path = base_dir_path + cam_path;
   // check for valid file paths
@@ -96,11 +105,15 @@ int main(int argc, char ** argv)
     vcl_cout << target_scene_path << " is not valid\n";
     return -1;
   }
-  good = vul_file::exists(default_cam_path);
+
+  good = (geo_path != "") && vul_file::exists(geometry_path);
   if(!good){
-    vcl_cout << default_cam_path << " is not valid\n";
+    vcl_cout << geometry_path << " is not valid\n";
     return -1;
   }
+
+  bool cam_path_exists = vul_file::exists(default_cam_path)&&cam_path!="";
+  
   unsigned ni = 1280, nj = 720;
   vcl_string device_name = "gpu";
     bocl_device_sptr  device( NULL );
@@ -127,15 +140,15 @@ int main(int argc, char ** argv)
 
 
     //create initial cam
-#if 0
+    vpgl_perspective_camera<double>* pcam = 0;
+    if(!cam_path_exists){
     double currInc = 0.0;//45.0
     double currRadius = 3.0*target_scene->bounding_box().height(); //2.0f;
     double currAz = 180.0;
-    vpgl_perspective_camera<double>* pcam;
     pcam = boxm2_util::construct_camera(currInc, currAz, currRadius, ni, nj,
                                         target_scene->bounding_box(), false);
-#endif
-    vpgl_perspective_camera<double>* pcam = new vpgl_perspective_camera<double>();
+    }else{
+    pcam = new vpgl_perspective_camera<double>();
     vcl_ifstream istr(default_cam_path.c_str());
     if(!istr.is_open()){
       vcl_cout << default_cam_path << " is not a valid camera path\n";
@@ -143,6 +156,7 @@ int main(int argc, char ** argv)
     }
     istr >> *pcam;
     istr.close();
+    }
     //create cache, grab singleton instance
     //boxm2_lru_cache::create(orbit_scene);
     boxm2_lru_cache::create(target_scene);
@@ -184,6 +198,40 @@ int main(int argc, char ** argv)
     composite_head_model->map_to_target(target_scene);
 
       bit_tableau->init(device, opencl_cache, composite_head_model, head_model_articulation,target_scene, ni, nj, pcam, "");
+    }else if(scene_t == "mandible"){
+
+      boxm2_vecf_mandible_scene* mandible_scene = new boxm2_vecf_mandible_scene(articulated_scene_path, geometry_path);
+      boxm2_vecf_mandible_articulation* mandible_articulation =new boxm2_vecf_mandible_articulation();
+      mandible_articulation->set_play_sequence("default");
+      mandible_scene->set_target_background(dark_background);
+      //boxm2_scene_sptr pula = mandible_scene->scene();
+      //      boxm2_lru_cache::instance()->write_to_disk(pula);
+      bit_tableau->init(device, opencl_cache, mandible_scene, mandible_articulation,target_scene, ni, nj, pcam, "");
+    }else if(scene_t == "cranium"||scene_t == "cranium_f"){
+
+      boxm2_vecf_cranium_scene* cranium_scene= 0;
+      if(scene_t == "cranium_f")
+           cranium_scene = new boxm2_vecf_cranium_scene(articulated_scene_path);
+      else
+       cranium_scene = new boxm2_vecf_cranium_scene(articulated_scene_path, geometry_path);
+
+      boxm2_vecf_cranium_articulation* cranium_articulation =new boxm2_vecf_cranium_articulation();
+      cranium_articulation->set_play_sequence("default");
+      cranium_scene->set_target_background(dark_background);
+          if(scene_t=="cranium"){
+        boxm2_scene_sptr crscn = cranium_scene->scene();
+        boxm2_lru_cache::instance()->write_to_disk(crscn);
+          }
+      bit_tableau->init(device, opencl_cache, cranium_scene, cranium_articulation,target_scene, ni, nj, pcam, "");
+
+    }else if(scene_t == "skull"){
+      boxm2_vecf_skull_scene* skull_scene = new boxm2_vecf_skull_scene(base_dir_path, geometry_path);
+      boxm2_vecf_skull_articulation* skull_articulation =new boxm2_vecf_skull_articulation();
+      skull_articulation->set_play_sequence("default");
+      skull_scene->set_target_background(dark_background);
+      //boxm2_scene_sptr crscn = skull_scene->scene();
+      //boxm2_lru_cache::instance()->write_to_disk(crscn);
+      bit_tableau->init(device, opencl_cache, skull_scene, skull_articulation,target_scene, ni, nj, pcam, "");
     }
       //create window, attach the new tableau and status bar
       vgui_window* win = vgui::produce_window(ni, nj, "OpenCl Volume Visualizer (Render)");

@@ -14,6 +14,7 @@
 // \author O. T. Biris
 // \date   2 Jul 2015
 //
+double gauss(double d, double sigma);
 typedef  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype gray_APM;
 typedef  boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype color_APM;
 typedef vnl_vector_fixed<double,8> double8;
