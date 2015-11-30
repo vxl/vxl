@@ -1,6 +1,7 @@
 #include "boxm2_vecf_mandible_scene.h"
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
+#include <boxm2/cpp/algo/boxm2_surface_distance_refine.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_quaternion.h>
@@ -21,6 +22,7 @@
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 // fill the background alpha and intensity values to be slightly dark
+// !!!!!this method only works for unrefined trees!!!
 void boxm2_vecf_mandible_scene::fill_block(){
   vgl_point_3d<double> orig = blk_->local_origin();
   vgl_vector_3d<double> dims = blk_->sub_block_dim();
@@ -47,6 +49,7 @@ void boxm2_vecf_mandible_scene::fill_block(){
     }
   }
 }
+// !!!!!this method only works for unrefined trees!!!
 // currently unused, except for display purposes
 void boxm2_vecf_mandible_scene::fill_target_block(){
   params_.app_[0]=static_cast<unsigned char>(10);
@@ -139,7 +142,8 @@ void boxm2_vecf_mandible_scene::extract_target_block_data(boxm2_scene_sptr targe
   target_nobs_base_  = boxm2_cache::instance()->get_data_base(target_scene,*iter_blk,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
   target_nobs_base_->enable_write();
   target_nobs_data_= reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs_base_->data_buffer());
-
+  // caution fill target block only works for unrefined target scenes
+  // should not be used after refinement!!!!
   if(has_background_){
     vcl_cout<< " Darkening background "<<vcl_endl;
     this->fill_target_block();
@@ -215,7 +219,7 @@ boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(vcl_string const& scene_fil
   target_nobs_base_(0),left_ramus_(0), left_angle_(0), body_(0), right_angle_(0), right_ramus_(0), intrinsic_change_(false)
 {
   mandible_geo_ = boxm2_vecf_mandible(geometry_file);
-  this->extrinsic_only_ = false;
+  this->extrinsic_only_ = true;
   target_blk_ = 0;
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
@@ -223,6 +227,15 @@ boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(vcl_string const& scene_fil
   this->has_background_ = false;
   this->build_mandible();
   this->paint_mandible();
+  vcl_vector<vcl_string> prefixes;
+  prefixes.push_back("alpha");
+  prefixes.push_back("boxm2_mog3_grey");
+  prefixes.push_back("boxm2_num_obs");
+  prefixes.push_back("boxm2_pixel_mandible");
+  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mandible_geo_, base_model_, prefixes);
+  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mandible_geo_, base_model_, prefixes);
+  //  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mandible_geo_, base_model_, prefixes);
+  this->rebuild();
  }
 
 boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(vcl_string const& scene_file, vcl_string const& geometry_file, vcl_string const& params_file_name):
@@ -231,17 +244,27 @@ boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(vcl_string const& scene_fil
 
   vcl_ifstream params_file(params_file_name.c_str());
   if (!params_file){
-    vcl_cout<<" could not open params file : "<<params_file_name<<vcl_endl;
-  }else{
-    params_file >> this->params_;
-
-    mandible_geo_ = boxm2_vecf_mandible(geometry_file);
-    boxm2_lru_cache::create(base_model_);
-    this->extract_block_data();
-    this->cache_cell_centers_from_anatomy_labels();
-    this->cache_neighbors();
-    this->extrinsic_only_ = true;
+    vcl_cout<<" could not open params file construction fails!: "<<params_file_name<<vcl_endl;
+    return;
   }
+  params_file >> this->params_;
+  this->extrinsic_only_ = true;
+  target_blk_ = 0;
+  target_data_extracted_ = false;
+  boxm2_lru_cache::create(base_model_);
+  this->extract_block_data();
+  this->has_background_ = false;
+  this->build_mandible();
+  this->paint_mandible();
+  vcl_vector<vcl_string> prefixes;
+  prefixes.push_back("alpha");
+  prefixes.push_back("boxm2_mog3_grey");
+  prefixes.push_back("boxm2_num_obs");
+  prefixes.push_back("boxm2_pixel_mandible");
+  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mandible_geo_, base_model_, prefixes);
+  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mandible_geo_, base_model_, prefixes);
+  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mandible_geo_, base_model_, prefixes);
+  this->rebuild();
 }
 void boxm2_vecf_mandible_scene::rebuild(){
 #if 0
@@ -321,8 +344,7 @@ void boxm2_vecf_mandible_scene::find_cell_neigborhoods(){
 }
 
  void boxm2_vecf_mandible_scene::recreate_mandible(){
-   this->create_mandible();
-   this->find_cell_neigborhoods();
+   this->rebuild();
  }
 
 void boxm2_vecf_mandible_scene::paint_mandible(){
@@ -380,8 +402,8 @@ bool boxm2_vecf_mandible_scene::is_type_global(vgl_point_3d<double> const& globa
 }
 
   bool boxm2_vecf_mandible_scene::find_nearest_data_index(boxm2_vecf_mandible_scene::anat_type type, vgl_point_3d<double> const& probe, double cell_len, unsigned& data_indx, int& found_depth) const{
-   //form a box around the probe with a radius of 1/2 the sub_block (tree) length
-    double r = 0.5*cell_len;//*params_.neighbor_radius();
+   //form a box around the probe with a radius of 1/2 the cell diagonal
+    double r = 0.5*cell_len*params_.neighbor_radius();
    vgl_point_3d<double> pmin(probe.x()-r, probe.y()-r, probe.z()-r);
    vgl_point_3d<double> pmax(probe.x()+r, probe.y()+r, probe.z()+r);
    vgl_box_3d<double> probe_box;
@@ -416,20 +438,23 @@ void  boxm2_vecf_mandible_scene::inverse_vector_field(vgl_rotation_3d<double> co
   vul_timer t;
   //really has to be the whole scene to take into account max rotation
   vgl_box_3d<double> bb = blk_->bounding_box_global();
+
+  //the target cell centers. the vector field could potentially be defined at all target points
   unsigned nt = static_cast<unsigned>(box_cell_centers_.size());
   vf.resize(nt);// initialized to 0
   valid.resize(nt, false);
+
   vgl_rotation_3d<double> inv_rot = rot.inverse();
   unsigned box_cnt = 0;
   for(unsigned i = 0; i<nt; ++i){
     vgl_point_3d<double> p = (box_cell_centers_[i].cell_center_)-params_.offset_;
-    if(!bb.contains(p))
+    vgl_point_3d<double> rp = inv_rot * p;// rotated point
+    if(!bb.contains(rp))
       continue;
+    //rp is inside source bounding box so define vector field
     box_cnt++;
     valid[i]=true;
-    //is a mandible voxel cell so define the vector field
-    vgl_point_3d<double> rp = inv_rot * p;
-    vf[i].set(rp.x() - p.x(), rp.y() - p.y(), rp.z() - p.z());// angle = 0.1
+    vf[i].set(rp.x() - p.x(), rp.y() - p.y(), rp.z() - p.z());
   }
   vcl_cout << "computed " << box_cnt << " pts "<< nt << " for mandible vector field in " << t.real()/1000.0 << " sec.\n";
 }
@@ -558,8 +583,7 @@ void boxm2_vecf_mandible_scene::apply_vector_field_to_target(vcl_vector<vgl_vect
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   boxm2_data_traits<BOXM2_ALPHA>::datatype alpha = 0.0f;
   unsigned n = static_cast<unsigned>(box_cell_centers_.size());
-  vcl_cout << "Applying vector field to " << n << " cells\n";
-  int valid_count = 0, n_alpha_gt_1 = 0;
+  int valid_count = 0;
   if(n==0)
     return;//shouldn't happen
   vul_timer t; 
@@ -573,7 +597,7 @@ void boxm2_vecf_mandible_scene::apply_vector_field_to_target(vcl_vector<vgl_vect
     //target cell center translated back to source box, and should be a mandible cell
     vgl_point_3d<double> trg_cent_in_source = box_cell_centers_[j].cell_center_-params_.offset_;
     double side_len = box_cell_centers_[j].side_length_;
-    int depth = box_cell_centers_[j].depth_;
+    int depth = box_cell_centers_[j].depth_;//for debug purposes
     unsigned tindx = box_cell_centers_[j].data_index_;
     vgl_point_3d<double> src = trg_cent_in_source + vf[j];//add inverse vector field
 
@@ -581,8 +605,8 @@ void boxm2_vecf_mandible_scene::apply_vector_field_to_target(vcl_vector<vgl_vect
     unsigned sindx, dindx;
     int found_depth;//for debug purposes
     if(!this->find_nearest_data_index(MANDIBLE, src, side_len, dindx, found_depth)){
-      app[0]=unsigned char(0);
-      alpha = 0.0f;
+      app[0]=unsigned char(0);//default to black
+      alpha = 0.0f;//default to no occlusion
       target_app_data_[tindx] = app;
       target_alpha_data_[tindx] = alpha;
       continue;
@@ -609,6 +633,8 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
     vcl_cout << "FATAL! - NULL target block\n";
     return;
   }
+  vul_timer t;
+  int count0 = 0, count1 = 0, count2 = 0, count3 = 0;
   vgl_rotation_3d<double> inv_rot = rot.inverse();
   vgl_box_3d<double> bb = blk_->bounding_box_global();
   int max_level = blk_->max_level();
@@ -631,20 +657,29 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
       y = origin.y()+iy*dims.y();
       for(unsigned iz = 0; iz<n.z(); ++iz){
         z = origin.z()+iz*dims.z();
-        // the origin of the sub_block (tree) at (ix, iy, iz)
-        vgl_point_3d<double> sub_block_origin(x, y, z);
-        // map the origin back to source by the offset
-        vgl_point_3d<double> origin_in_source = sub_block_origin-params_.offset_;
 
-        // get the axis-aligned target box in the source coordinate frame
-        vgl_point_3d<double> target_sub_block_corner_in_source(origin_in_source.x()+dims.x(),
-                                                               origin_in_source.y()+dims.y(),
-                                                               origin_in_source.z()+dims.z());
+        // the center of the sub_block (tree) at (ix, iy, iz)
+        vgl_point_3d<double> sub_block_center(x+0.5, y+0.5, z+0.5);
+
+        // map the origin back to source by the offset
+        vgl_point_3d<double> center_in_source = sub_block_center-params_.offset_;
+        // rotate the target center back to source
+        vgl_point_3d<double> rot_center_in_source = inv_rot*center_in_source;
+        // sub_block axis-aligned corners in source
+        vgl_point_3d<double> sbc_min(rot_center_in_source.x()-0.5*dims.x(),
+                                     rot_center_in_source.y()-0.5*dims.y(),
+                                     rot_center_in_source.z()-0.5*dims.z());
+                                     
+        vgl_point_3d<double> sbc_max(rot_center_in_source.x()+0.5*dims.x(),
+                                     rot_center_in_source.y()+0.5*dims.y(),
+                                     rot_center_in_source.z()+0.5*dims.z());
+
         vgl_box_3d<double> target_box_in_source;
-        target_box_in_source.add(origin_in_source);
-        target_box_in_source.add(target_sub_block_corner_in_source); 
+        target_box_in_source.add(sbc_min);
+        target_box_in_source.add(sbc_max); 
 
         // rotate the target box in source by the inverse rotation
+        // the box is rotated about its centroid
         vgl_orient_box_3d<double> target_obox(target_box_in_source, inv_rot.as_quaternion());
         vgl_box_3d<double> rot_target_box_in_source = target_obox.enclosing_box();
 
@@ -665,6 +700,11 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
           }
         }
         depths_to_match[ix][iy][iz]=max_depth;
+                if(max_depth == 0)      count0++;
+                else if(max_depth == 1) count1++;
+                else if(max_depth == 2) count2++;
+                else if(max_depth == 3) count3++;
+                  
         //record the deepest tree found
         if(max_depth>deepest_cell_depth){
           deepest_cell_depth = max_depth;
@@ -673,11 +713,13 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
     }
   }
   vcl_cout << "deepest cell depth in prerefine_target " << deepest_cell_depth << '\n';
+  vcl_cout << "count0 " << count0 << " count1 " << count1 << " count2 " << count2 << " count3 " << count3 << '\n';
 
   //fully refine the target trees to the required depth
   vcl_vector<vcl_string> prefixes;
   prefixes.push_back("alpha");  prefixes.push_back("boxm2_mog3_grey"); prefixes.push_back("boxm2_num_obs");
   boxm2_refine_block_multi_data_function(target_scene, target_blk_, prefixes, depths_to_match);
+  vcl_cout << "prefine in " << t.real() << " msec\n";
  }
 
 void boxm2_vecf_mandible_scene::map_to_target(boxm2_scene_sptr target_scene){

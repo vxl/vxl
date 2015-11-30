@@ -140,11 +140,11 @@ void test_mandible()
   prefixes.push_back("boxm2_num_obs");
   prefixes.push_back("boxm2_pixel_mandible");
   
-  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
-  boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
+  //boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
+  //boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
  // boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
  // boxm2_cache::instance()->write_to_disk();
-  mscene.rebuild();
+ // mscene.rebuild();
 #if 0  
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit = blocks.begin();
@@ -170,7 +170,7 @@ void test_mandible()
   if(!target)
     return;
   mscene.map_to_target(target);
-  boxm2_cache::instance()->write_to_disk();
+  // boxm2_cache::instance()->write_to_disk();
 #if 0
   vcl_map<boxm2_block_id, boxm2_block_metadata> tblocks = target->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bitrg = tblocks.begin();
