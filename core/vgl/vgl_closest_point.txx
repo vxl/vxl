@@ -1,6 +1,7 @@
 // This is core/vgl/vgl_closest_point.txx
 #ifndef vgl_closest_point_txx_
 #define vgl_closest_point_txx_
+#include <vcl_limits.h>
 //:
 // \file
 // \author Peter Vanroose, KULeuven, ESAT/PSI
@@ -658,14 +659,31 @@ vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset,
   vgl_point_3d<T> pc = ptset.p(iclose);
   if(!ptset.has_normals())
     return pc;
+  const vgl_vector_3d<T>& norm = ptset.n(iclose);
   //otherwise construct the plane and find closest point on that 
-  vgl_plane_3d<T> pl(ptset.n(iclose), pc);
-  vgl_point_3d<T> pc_plane = vgl_closest_point(pl, p);
-  T dp = static_cast<T>((pc_plane-pc).length());
-  if(dp>dist)
-    return pc;
-  return pc_plane;
+  if(vcl_numeric_limits<T>::is_integer){
+    // closest point can be templated over int so cast to double for plane computations
+    vgl_point_3d<double> pd(static_cast<double>(p.x()), static_cast<double>(p.y()), static_cast<double>(p.z()));
+    vgl_point_3d<double> pcd(static_cast<double>(pc.x()), static_cast<double>(pc.y()), static_cast<double>(pc.z()));
+
+    vgl_vector_3d<double> normd(static_cast<double>(norm.x()),static_cast<double>(norm.y()),static_cast<double>(norm.z()));
+    vgl_plane_3d<double> pld(normd, pcd);
+    vgl_point_3d<double> pc_planed = vgl_closest_point(pld, pd);
+    T dpd = static_cast<T>((pc_planed-pcd).length());
+    if(dpd>dist)
+      return pc;
+    vgl_point_3d<T> pc_plane_T(static_cast<T>(pc_planed.x()), static_cast<T>(pc_planed.y()), static_cast<T>(pc_planed.z()));
+    return pc_plane_T;
+  }else{
+    vgl_plane_3d<T> pl(norm, pc);
+    vgl_point_3d<T> pc_plane = vgl_closest_point(pl, p);
+    T dp = static_cast<T>((pc_plane-p).length());
+    if(dp>dist)
+      return pc;
+    return pc_plane;
+  }
 }
+
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
 

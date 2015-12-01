@@ -27,7 +27,7 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { CRANIUM, NO_TYPE};
- boxm2_vecf_cranium_scene(): source_model_exists_(false), alpha_data_(0), app_data_(0), nobs_data_(0), cranium_(0),target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false),target_blk_(0),target_data_extracted_(false),boxm2_vecf_articulated_scene(),sigma_(0.5f){}
+ boxm2_vecf_cranium_scene(): source_model_exists_(false), alpha_data_(0), app_data_(0), nobs_data_(0), cranium_data_(0),target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false),target_blk_(0),target_data_extracted_(false),boxm2_vecf_articulated_scene(),sigma_(0.5f){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);
@@ -44,8 +44,7 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
   void map_to_target(boxm2_scene_sptr target_scene);
 
   //: compute an inverse vector field for rotation of cranium
-  void inverse_vector_field(vgl_rotation_3d<double> const& rot, vcl_vector<vgl_vector_3d<double> >& vfield,
-                            vcl_vector<bool>& valid) const;
+  void inverse_vector_field(vcl_vector<vgl_vector_3d<double> >& vfield, vcl_vector<bool>& valid) const;
 
   //: test the anat_type (CRANIUM) of the voxel that contains a global point
   bool is_type_global(vgl_point_3d<double> const& global_pt, anat_type type) const;
@@ -72,8 +71,9 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
 
  void apply_vector_field_to_target(vcl_vector<vgl_vector_3d<double> > const& vf, vcl_vector<bool> const& valid);
 
- // find nearest cell and return the data index of the nearest cell
- bool find_nearest_data_index(boxm2_vecf_cranium_scene::anat_type type, vgl_point_3d<double> const& probe, unsigned& data_indx) const;
+ // find nearest cell and return the data index of the nearest cell (found depth is for debug, remove at some point)
+ bool boxm2_vecf_cranium_scene::find_nearest_data_index(boxm2_vecf_cranium_scene::anat_type type, vgl_point_3d<double> const& probe, double cell_len, unsigned& data_indx, int& found_depth) const;
+
  
   //re-create geometry according to params_
   void rebuild();
@@ -81,7 +81,8 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
   bool vfield_params_change_check(const boxm2_vecf_cranium_params& params);
   // store the neigbors of each cell for each anatomical component in a vector;
   void cache_neighbors();
-
+  // pre-refine the target scene
+  void prerefine_target(boxm2_scene_sptr target_scene);
  // ============   cranium methods ================
  //: construct manidble from parameters
  void create_cranium();
@@ -99,21 +100,33 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
 
   //: members
  boxm2_vecf_cranium cranium_geo_;
-  boxm2_block* blk_;                     // the source block
-  boxm2_block* target_blk_;              // the target block
-  boxm2_data<BOXM2_ALPHA>* alpha_data_;  // source alpha database
-  boxm2_data<BOXM2_MOG3_GREY>* app_data_;// source appearance database
-  boxm2_data<BOXM2_NUM_OBS>* nobs_data_;         // source nobs database
-  boxm2_data<BOXM2_ALPHA>* target_alpha_data_;   //target alpha database
-  boxm2_data<BOXM2_MOG3_GREY>* target_app_data_; //target appearance database
-  boxm2_data<BOXM2_NUM_OBS>* target_nobs_data_;  //target nobs
+  boxm2_block_sptr blk_;                     // the source block
+  boxm2_block_sptr target_blk_;              // the target block
+  // cached databases
+  // source dbs
+  boxm2_data_base* alpha_base_;
+  boxm2_data_base* app_base_;
+  boxm2_data_base* nobs_base_;
+  boxm2_data_base* cranium_base_;
+
+  // target dbs
+  boxm2_data_base* target_alpha_base_;
+  boxm2_data_base* target_app_base_;
+  boxm2_data_base* target_nobs_base_;
+
+  boxm2_data<BOXM2_ALPHA>::datatype* alpha_data_;  // source alpha database
+  boxm2_data<BOXM2_MOG3_GREY>::datatype* app_data_;// source appearance database
+  boxm2_data<BOXM2_NUM_OBS>::datatype* nobs_data_;         // source nobs database
+  boxm2_data<BOXM2_ALPHA>::datatype* target_alpha_data_;   //target alpha database
+  boxm2_data<BOXM2_MOG3_GREY>::datatype* target_app_data_; //target appearance database
+  boxm2_data<BOXM2_NUM_OBS>::datatype* target_nobs_data_;  //target nobs
   vcl_vector<cell_info> box_cell_centers_;       // cell centers in the target block
 
   boxm2_vecf_cranium_params params_;               // parameter struct
   // =============  manible ===============
-  boxm2_data<BOXM2_PIXEL>* cranium_;        // is voxel a cranium point
+  boxm2_data<BOXM2_PIXEL>::datatype* cranium_data_;        // is voxel a cranium point
 
-  vcl_vector<vgl_point_3d<double> > cranium_cell_centers_; // centers of spherical shell voxels
+  vcl_vector<vgl_point_3d<double> > cranium_cell_centers_; // centers of cranium cells
   vcl_vector<unsigned> cranium_cell_data_index_;           // corresponding data indices
   //      cell_index          cell_index
   vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each cranium voxel

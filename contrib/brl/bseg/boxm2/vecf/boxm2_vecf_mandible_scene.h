@@ -146,14 +146,15 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
   boxm2_block_sptr target_blk_;              // the target block
   // cached databases
   // source dbs
-   boxm2_data_base* alpha_base_;
-   boxm2_data_base* app_base_;
-   boxm2_data_base* nobs_base_;
-   boxm2_data_base* mandible_base_;
+  boxm2_data_base* alpha_base_;
+  boxm2_data_base* app_base_;
+  boxm2_data_base* nobs_base_;
+  boxm2_data_base* mandible_base_;
   // target dbs
   boxm2_data_base* target_alpha_base_;
   boxm2_data_base* target_app_base_;
   boxm2_data_base* target_nobs_base_;
+  // standard data buffers
   boxm2_data<BOXM2_ALPHA>::datatype* alpha_data_;  // source alpha database
   boxm2_data<BOXM2_MOG3_GREY>::datatype* app_data_;// source appearance database
   boxm2_data<BOXM2_NUM_OBS>::datatype* nobs_data_;         // source nobs database
@@ -165,7 +166,7 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
 
   boxm2_vecf_mandible_params params_;               // parameter struct
   // =============  mandible ===============
-  int mandible_size_;
+  int mandible_size_; // used for debug
   boxm2_data<BOXM2_PIXEL>::datatype* mandible_data_;        // is voxel a mandible point
   boxm2_data<BOXM2_PIXEL>* left_ramus_;      // is voxel a left_ramus point
   boxm2_data<BOXM2_PIXEL>* left_angle_;      // is voxel a left_angle point
@@ -174,7 +175,7 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
   boxm2_data<BOXM2_PIXEL>* right_ramus_;     // is voxel a right_ramus point
 
   //manible
-  vcl_vector<vgl_point_3d<double> > mandible_cell_centers_; // centers of spherical shell voxels
+  vcl_vector<vgl_point_3d<double> > mandible_cell_centers_; // centers of mandible voxels
   vcl_vector<unsigned> mandible_cell_data_index_;           // corresponding data indices
   //      cell_index          cell_index
   vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each mandible voxel

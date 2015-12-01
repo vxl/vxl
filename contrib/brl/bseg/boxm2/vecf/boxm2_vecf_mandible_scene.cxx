@@ -152,9 +152,6 @@ void boxm2_vecf_mandible_scene::extract_target_block_data(boxm2_scene_sptr targe
 
 // after loading the block initialize all the cell indices from the block labels, e.g., cell == LEFT_RAMUS, cell == LEFT_ANGLE, etc.
 void boxm2_vecf_mandible_scene::cache_cell_centers_from_anatomy_labels(){
-  int count = 0;
-  int count0 = 0, count1 = 0;
-  vul_timer t;
   vgl_box_3d<double> source_box = blk_->bounding_box_global();
   vcl_vector<cell_info> source_cell_centers = blk_->cells_in_box(source_box);
   for(vcl_vector<cell_info>::iterator cit = source_cell_centers.begin();
@@ -400,7 +397,7 @@ bool boxm2_vecf_mandible_scene::is_type_global(vgl_point_3d<double> const& globa
 }
   return this->is_type_data_index(indx, type);
 }
-
+// found depth is for debug purposes
   bool boxm2_vecf_mandible_scene::find_nearest_data_index(boxm2_vecf_mandible_scene::anat_type type, vgl_point_3d<double> const& probe, double cell_len, unsigned& data_indx, int& found_depth) const{
    //form a box around the probe with a radius of 1/2 the cell diagonal
     double r = 0.5*cell_len*params_.neighbor_radius();
