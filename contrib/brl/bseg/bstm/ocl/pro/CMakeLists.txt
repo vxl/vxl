@@ -12,7 +12,7 @@ SET(bstm_ocl_pro_sources
 AUX_SOURCE_DIRECTORY(processes bstm_ocl_pro_sources)
 
 ADD_LIBRARY(bstm_ocl_pro  ${bstm_ocl_pro_sources})
-TARGET_LINK_LIBRARIES(bstm_ocl_pro bstm_ocl bstm_ocl_algo  boct brdb vbl_io expatpp vpgl vgl vil vul vcl)
+TARGET_LINK_LIBRARIES(bstm_ocl_pro bstm_ocl bstm_ocl_algo boct brdb bprb vbl_io expatpp vpgl vgl vil vul vcl)
 
 INSTALL_TARGETS(/lib bstm_ocl_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/ocl/pro ${bstm_ocl_pro_sources})

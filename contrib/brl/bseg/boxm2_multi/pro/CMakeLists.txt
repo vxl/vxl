@@ -18,6 +18,6 @@ IF(EXPAT_FOUND)
   INSTALL_TARGETS(/lib boxm2_multi_pro)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_multi/pro ${boxm2_multi_pro_sources})
 
-  TARGET_LINK_LIBRARIES(boxm2_multi_pro boxm2_multi_algo)
+  TARGET_LINK_LIBRARIES(boxm2_multi_pro boxm2_multi_algo bprb)
 
 ENDIF(EXPAT_FOUND)
