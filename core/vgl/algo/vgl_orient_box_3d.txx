@@ -97,7 +97,7 @@ template <class Type>
 vgl_box_3d<Type> vgl_orient_box_3d<Type>::enclosing_box() const{
   vcl_vector<vgl_point_3d<Type> > crns = this->corners();
   vgl_box_3d<Type> ret;
-  for(vcl_vector<vgl_point_3d<Type> >::iterator cit = crns.begin();
+  for(typename vcl_vector<vgl_point_3d<Type> >::iterator cit = crns.begin();
       cit != crns.end(); ++cit)
     ret.add(*cit);
   return ret;
