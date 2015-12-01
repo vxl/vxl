@@ -38,10 +38,10 @@ class boxm2_refine_block_multi_data
                                 int buff_offset);
 
   //: move data into new location
-  int boxm2_refine_block_multi_data::move_data(boct_bit_tree& unrefined_tree,
-                                                        boct_bit_tree& refined_tree,
-                                                        vcl_vector<vcl_size_t> const& type_sizes,
-                                                        vcl_vector<char*>& new_bufs);
+  int move_data(boct_bit_tree& unrefined_tree,
+                boct_bit_tree& refined_tree,
+                vcl_vector<vcl_size_t> const& type_sizes,
+                vcl_vector<char*>& new_bufs);
   //: helper method
   int free_space(int startPtr, int endPtr);
 

@@ -10,7 +10,7 @@ typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
 uchar16 boxm2_refine_block_multi_data::fully_refined(int depth, int& data_size){
   uchar16 ret; data_size = 0;
-  ret.fill(unsigned char(0));
+  ret.fill((unsigned char)(0));
   if(depth >3){
     vcl_cout << "FATAL! - depth > 3\n";
     return ret;
@@ -20,20 +20,20 @@ uchar16 boxm2_refine_block_multi_data::fully_refined(int depth, int& data_size){
     return ret;
   }
   if(depth == 1){
-    ret[0]=unsigned char(1);
+    ret[0]=(unsigned char)(1);
     data_size = 9;
     return ret;
   }
   if(depth ==2){
-    ret[0]=unsigned char(1);
-    ret[1]=unsigned char(255);
+    ret[0]=(unsigned char)(1);
+    ret[1]=(unsigned char)(255);
     data_size = 73;
     return ret;
   }
   
-  ret[0]=unsigned char(1);
+  ret[0]=(unsigned char)(1);
   for(unsigned i=1; i<10; ++i)
-    ret[i]=unsigned char(255);
+    ret[i]=(unsigned char)(255);
   data_size = 585;
   return ret;
  
