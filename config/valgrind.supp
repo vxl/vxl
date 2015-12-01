@@ -203,3 +203,34 @@
    fun:_ZNKSt3__17num_putIcNS_19ostreambuf_iteratorIcNS_11char_traitsIcEEEEE6do_putES4_RNS_8ios_baseEcl
    fun:_ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEi
 }
+{
+   Long_Double_Infinity_Printing_1
+   Memcheck:Cond
+   fun:__vfprintf
+   fun:__v2printf
+   fun:vsprintf_l
+   fun:sprintf_l
+   fun:_ZNKSt3__17num_putIcNS_19ostreambuf_iteratorIcNS_11char_traitsIcEEEEE6do_putES4_RNS_8ios_baseEcl
+   fun:_ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEs
+   fun:_Z9print_hexIeENSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEET_
+   fun:_ZL9test_mathv
+   fun:_Z14test_math_mainiPPc
+   fun:_Z12testlib_mainiPPc
+   fun:main
+}
+{
+   Long_Double_Infinity_Printing_2
+   Memcheck:Value8
+   fun:__ultoa
+   fun:__vfprintf
+   fun:__v2printf
+   fun:vsprintf_l
+   fun:sprintf_l
+   fun:_ZNKSt3__17num_putIcNS_19ostreambuf_iteratorIcNS_11char_traitsIcEEEEE6do_putES4_RNS_8ios_baseEcl
+   fun:_ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEs
+   fun:_Z9print_hexIeENSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEET_
+   fun:_ZL9test_mathv
+   fun:_Z14test_math_mainiPPc
+   fun:_Z12testlib_mainiPPc
+   fun:main
+}

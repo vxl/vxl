@@ -1,10 +1,31 @@
 #include <vcl_iostream.h>
 #include <vcl_iomanip.h>
+#include <vcl_string.h>
 #include <vcl_limits.h> // for infinity()
 #include <vxl_config.h> // for VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h> // for vnl_math::abs(std::complex)
 #include <testlib/testlib_test.h>
+
+//Utility function for printing hex representations
+template<typename T>
+vcl_string print_hex(const T p)
+  {
+  vcl_stringstream str;
+  str << vcl_hex<<vcl_setfill('0')<<vcl_setw(2);
+  for(int i = 0; i < (16-sizeof(p) ); ++i)
+    {
+    str << ".." ;
+    }
+  for (int i=(sizeof(p) -1 ); i>=0; --i)
+    {
+    str<<vcl_setfill('0')<<vcl_setw(2);
+    const short curr_value = static_cast<short>( (reinterpret_cast<unsigned char const *>(&p))[i] );
+    str<<curr_value;
+    }
+  str<<vcl_dec;
+  return str.str();
+  }
 
 #if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 static
@@ -285,35 +306,28 @@ static void test_math()
              << "B. Fix VXL so that it can cope with the lack of a quiet NaN.\n" << vcl_endl;
   }
   // Create Inf and -Inf:
-  float pinf_f =   vcl_numeric_limits<float>::infinity();
-  float ninf_f = - vcl_numeric_limits<float>::infinity();
-  double pinf_d =   vcl_numeric_limits<double>::infinity();
-  double ninf_d = - vcl_numeric_limits<double>::infinity();
-  long double pinf_q =   vcl_numeric_limits<long double>::infinity();
-  long double ninf_q = - vcl_numeric_limits<long double>::infinity();
+  const float pinf_f =   vcl_numeric_limits<float>::infinity();
+  const float ninf_f = - vcl_numeric_limits<float>::infinity();
+  const double pinf_d =   vcl_numeric_limits<double>::infinity();
+  const double ninf_d = - vcl_numeric_limits<double>::infinity();
+  const long double pinf_q =   HUGE_VALL; //vcl_numeric_limits<long double>::infinity();
+  const long double ninf_q = - HUGE_VALL; //vcl_numeric_limits<long double>::infinity();
 
   // Create NaN
-  float qnan_f = vcl_numeric_limits<float>::quiet_NaN();
-  double qnan_d = vcl_numeric_limits<double>::quiet_NaN();
-  long double qnan_q = vcl_numeric_limits<long double>::quiet_NaN();
+  const float qnan_f = vcl_numeric_limits<float>::quiet_NaN();
+  const double qnan_d = vcl_numeric_limits<double>::quiet_NaN();
+  const long double qnan_q = vcl_numeric_limits<long double>::quiet_NaN();
 
-#define print_hex(p) \
-  vcl_hex<<vcl_setfill('0')<<vcl_setw(2)<<(short)reinterpret_cast<unsigned char*>(&p)[sizeof(p)-1]; \
-  for (unsigned int i=2; i<=sizeof(p); ++i) \
-    vcl_cout<<vcl_setfill('0')<<vcl_setw(2)<<(short)(reinterpret_cast<unsigned char*>(&p))[sizeof(p)-i]; \
-  vcl_cout<<vcl_dec
-
-  vcl_cout << "pinf_f = " << pinf_f << " = " << print_hex(pinf_f) << '\n'
-           << "ninf_f = " << ninf_f << " = " << print_hex(ninf_f) << '\n'
-           << "pinf_d = " << pinf_d << " = " << print_hex(pinf_d) << '\n'
-           << "ninf_d = " << ninf_d << " = " << print_hex(ninf_d) << '\n'
-           << "pinf_q = " << pinf_q << " = " << print_hex(pinf_q) << '\n'
-           << "ninf_q = " << ninf_q << " = " << print_hex(ninf_q) << '\n'
-           << "qnan_f = " << qnan_f << " = " << print_hex(qnan_f) << '\n'
-           << "qnan_d = " << qnan_d << " = " << print_hex(qnan_d) << '\n'
-           << "qnan_q = " << qnan_q << " = " << print_hex(qnan_q) << '\n'
+  vcl_cout << "pinf_f = " << pinf_f << " =  "<< print_hex(pinf_f) << "    sizeof " << sizeof(pinf_f) << '\n'
+           << "ninf_f = " << ninf_f << " = " << print_hex(ninf_f) << "    sizeof " << sizeof(ninf_f) << '\n'
+           << "pinf_d = " << pinf_d << " =  "<< print_hex(pinf_d) << "    sizeof " << sizeof(pinf_d) << '\n'
+           << "ninf_d = " << ninf_d << " = " << print_hex(ninf_d) << "    sizeof " << sizeof(ninf_d) << '\n'
+           << "pinf_q = " << pinf_q << " =  "<< print_hex(pinf_q) << "    sizeof " << sizeof(pinf_q) << '\n'
+           << "ninf_q = " << ninf_q << " = " << print_hex(ninf_q) << "    sizeof " << sizeof(ninf_q) << '\n'
+           << "qnan_f = " << qnan_f << " =  "<< print_hex(qnan_f) << "    sizeof " << sizeof(qnan_f) << '\n'
+           << "qnan_d = " << qnan_d << " =  "<< print_hex(qnan_d) << "    sizeof " << sizeof(qnan_d) << '\n'
+           << "qnan_q = " << qnan_q << " =  "<< print_hex(qnan_q) << "    sizeof " << sizeof(qnan_q) << '\n'
            << vcl_endl;
-#undef print_hex
 
 #ifndef __alpha__ // on alpha, infinity() == max()
   TEST("!isfinite(pinf_f)", vnl_math::isfinite(pinf_f), false);
