@@ -605,7 +605,7 @@ void boxm2_vecf_mandible_scene::apply_vector_field_to_target(vcl_vector<vgl_vect
     unsigned sindx, dindx;
     int found_depth;//for debug purposes
     if(!this->find_nearest_data_index(MANDIBLE, src, side_len, dindx, found_depth)){
-      app[0]=unsigned char(0);//default to black
+      app[0]=(unsigned char)(0);//default to black
       alpha = 0.0f;//default to no occlusion
       target_app_data_[tindx] = app;
       target_alpha_data_[tindx] = alpha;
