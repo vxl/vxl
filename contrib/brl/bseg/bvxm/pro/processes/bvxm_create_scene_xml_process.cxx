@@ -240,7 +240,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     scene_world << world_dir << "/scene_" << i;
     if (!(vul_file::exists(scene_world.str()) && vul_file::is_directory(scene_world.str())))
       if (!vul_file::make_directory(scene_world.str())) {
-        vcl_cerr << pro.name() << ": creating scene world folder " << scene_world << " failed!\n";
+        vcl_cerr << pro.name() << ": creating scene world folder " << scene_world.str() << " failed!\n";
         return false;
       }
     bvxm_world_params params;
