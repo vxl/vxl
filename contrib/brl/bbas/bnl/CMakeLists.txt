@@ -13,8 +13,8 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl ${bnl_sources})
 
 TARGET_LINK_LIBRARIES(bnl vnl vnl_algo)
 
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

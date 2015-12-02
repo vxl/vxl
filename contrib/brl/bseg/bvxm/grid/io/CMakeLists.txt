@@ -15,5 +15,5 @@ ADD_LIBRARY(bvxm_grid_io ${bvxm_grid_io_sources})
 TARGET_LINK_LIBRARIES(bvxm_grid_io bvxm_grid bvrml vsl vbl vil vil_io vnl vgl vbl_io vul)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

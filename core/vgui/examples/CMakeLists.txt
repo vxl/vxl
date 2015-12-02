@@ -90,13 +90,13 @@ IF(NOT MINGW)
   INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
 ENDIF(NOT MINGW)
 IF(VGUI_USE_MFC)
-   SUBDIRS( mfc_example )
+   add_subdirectory(mfc_example)
 ENDIF(VGUI_USE_MFC)
 
 # wxWidgets example
 #------------------
 IF(VGUI_USE_WX)
-  SUBDIRS(wx_example)
+  add_subdirectory(wx_example)
 ENDIF(VGUI_USE_WX)
 
 ENDIF( HAS_VGUI )

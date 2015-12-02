@@ -31,9 +31,9 @@ ADD_LIBRARY(mmn ${mmn_sources})
 TARGET_LINK_LIBRARIES(mmn mbl)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
 IF(BUILD_MUL_TOOLS)
-#  SUBDIRS(tools)
+#  add_subdirectory(tools)
 ENDIF(BUILD_MUL_TOOLS)

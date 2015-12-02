@@ -27,7 +27,7 @@ IF(VGUI_FOUND)
   TARGET_LINK_LIBRARIES(bstm_view bocl boxm2_view bstm_ocl_pro vgui bprb vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
 ENDIF(VGUI_FOUND)

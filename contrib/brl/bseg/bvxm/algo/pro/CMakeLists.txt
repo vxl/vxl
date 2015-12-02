@@ -20,7 +20,7 @@ INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bvxm_grid_pro boxm boct bprb brdb vul vbl)
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
  ENDIF(EXPATPP_FOUND)

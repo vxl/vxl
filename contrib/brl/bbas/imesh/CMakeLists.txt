@@ -25,10 +25,10 @@ ADD_LIBRARY(imesh  ${imesh_sources})
 TARGET_LINK_LIBRARIES(imesh vgl vul brdb vbl_io vbl)
 
 # Algorithms
-SUBDIRS( algo )
+add_subdirectory(algo)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib imesh)

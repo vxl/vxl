@@ -31,15 +31,15 @@ ADD_LIBRARY(bapl  ${bapl_sources})
 TARGET_LINK_LIBRARIES(bapl bpgl_algo vpgl_algo ipts vimt brip rrel vnl_algo vnl vil_algo vil_io vil vgl_algo vgl vbl_io vbl)
 
 #IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
+  add_subdirectory(examples)
 #ENDIF( BUILD_EXAMPLES )
 
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 
-SUBDIRS(pro)
+add_subdirectory(pro)
 
-SUBDIRS(io)
+add_subdirectory(io)
 

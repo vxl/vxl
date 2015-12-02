@@ -127,9 +127,10 @@ INSTALL_TARGETS(/lib mbl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
 IF (BUILD_MUL_TOOLS)
-  SUBDIRS(tools examples)
+  add_subdirectory(tools)
+  add_subdirectory(examples)
 ENDIF (BUILD_MUL_TOOLS)

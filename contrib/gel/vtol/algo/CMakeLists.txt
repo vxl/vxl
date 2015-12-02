@@ -13,5 +13,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vtol/algo ${vtol_algo_sourc
 TARGET_LINK_LIBRARIES( vtol_algo vtol vsol vdgl vil_algo vgl_algo vgl vil vbl )
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

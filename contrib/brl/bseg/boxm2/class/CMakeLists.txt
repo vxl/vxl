@@ -17,7 +17,7 @@ INSTALL_TARGETS(/lib boxm2_class)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_class/ ${boxm2_class_sources})
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
-SUBDIRS(exe)
+add_subdirectory(exe)

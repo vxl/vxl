@@ -22,12 +22,12 @@ ADD_LIBRARY(bvpl ${bvpl_sources})
 
 TARGET_LINK_LIBRARIES(bvpl bvpl_kernels bvpl_functors bvxm_grid bdgl bsta vnl vnl_io vil_algo vgl vpl vul vbl_io vsl vbl)
 
-SUBDIRS( pro )
-SUBDIRS( util )
-SUBDIRS( bvpl_octree )
-SUBDIRS( kernels )
-SUBDIRS( functors )
+add_subdirectory(pro)
+add_subdirectory(util)
+add_subdirectory(bvpl_octree)
+add_subdirectory(kernels)
+add_subdirectory(functors)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

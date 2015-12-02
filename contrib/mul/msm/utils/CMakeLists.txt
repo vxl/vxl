@@ -19,5 +19,5 @@ ADD_LIBRARY(msm_utils ${msm_utils_sources} )
 TARGET_LINK_LIBRARIES(msm_utils msm vgl)
 
 IF( BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING)

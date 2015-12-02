@@ -18,7 +18,7 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_update_based_dispersion.h         boxm2_ocl_update_based_dispersion.cxx
     boxm2_ocl_update_view_dep_app.h             boxm2_ocl_update_view_dep_app.cxx
     boxm2_ocl_update_view_dep_app_color.h       boxm2_ocl_update_view_dep_app_color.cxx
-    boxm2_ocl_update_auxQ.h						boxm2_ocl_update_auxQ.cxx
+    boxm2_ocl_update_auxQ.h                     boxm2_ocl_update_auxQ.cxx
     boxm2_ocl_update_sky.h                      boxm2_ocl_update_sky.cxx
     boxm2_ocl_update_max_vis.h                  boxm2_ocl_update_max_vis.cxx
     boxm2_ocl_update_vis_score.h                boxm2_ocl_update_vis_score.cxx
@@ -36,11 +36,11 @@ SET(boxm2_ocl_algo_sources
    )
 
 ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
+TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib boxm2_ocl_algo)

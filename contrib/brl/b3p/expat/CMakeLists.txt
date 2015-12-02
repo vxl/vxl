@@ -41,7 +41,7 @@ ADD_LIBRARY(expat ${expat_sources})
 INSTALL_TARGETS(/lib expat)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(NOT VXL_USING_NATIVE_EXPAT)

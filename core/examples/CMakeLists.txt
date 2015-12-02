@@ -3,4 +3,4 @@ ADD_EXECUTABLE(  example_create_image_vil
 )
 TARGET_LINK_LIBRARIES( example_create_image_vil vul vil )
 
-SUBDIRS( vnl_calc )
+add_subdirectory(vnl_calc)

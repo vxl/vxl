@@ -13,7 +13,7 @@ SET(boxm2_util_sources
     boxm2_detect_change_blobs.h     boxm2_detect_change_blobs.cxx
     boxm2_convert_nvm_txt.h         boxm2_convert_nvm_txt.cxx
    )
-  
+
 #no templates yet
 #AUX_SOURCE_DIRECTORY(Templates boxm2_io_sources)
 
@@ -25,5 +25,5 @@ INSTALL_TARGETS(/lib boxm2_util)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_util/ ${boxm2_util_sources})
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

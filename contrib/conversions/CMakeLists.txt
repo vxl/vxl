@@ -6,4 +6,8 @@ SET( CONVERSIONS_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib
 INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${CONVERSIONS_INCLUDE_DIR} )
 
-SUBDIRS(container geometry image math misc)
+add_subdirectory(container)
+add_subdirectory(geometry)
+add_subdirectory(image)
+add_subdirectory(math)
+add_subdirectory(misc)

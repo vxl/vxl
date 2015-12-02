@@ -54,8 +54,10 @@ TARGET_LINK_LIBRARIES( vil3d vil vul vsl vcl vnl )
 INSTALL_TARGETS(/lib vil3d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d ${vil3d_sources})
 
-SUBDIRS(algo io tools)
+add_subdirectory(algo)
+add_subdirectory(io)
+add_subdirectory(tools)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

@@ -36,10 +36,10 @@ AUX_SOURCE_DIRECTORY(Templates boxm_algo_rt_sources)
 ADD_LIBRARY(boxm_algo_rt ${boxm_algo_rt_sources})
 
 #processes
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 TARGET_LINK_LIBRARIES(boxm_algo_rt boxm boxm_sample boxm_sample_algo boxm_basic boxm_util vil vcl vgl vbl vgl_algo bsta vnl sdet brip vpgl vpgl_algo )

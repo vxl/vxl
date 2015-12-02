@@ -38,9 +38,19 @@ ADD_DEFINITIONS( ${OPENJPEG2_DEFINITIONS} )
 
 # Pass proper definition to preprocessor to generate shared lib
 ADD_LIBRARY(openjpeg2 ${OPENJPEG2_SRCS})
+
+find_library(VXL_MATH_LIBRARY_FOUND m)
+if(VXL_MATH_LIBRARY_FOUND)
+  # Math library is needed for many OpenJPEG functions.
+  # The previous behaviour assumed the linker had m available thus,
+  # didn't explicitly link it. On some systems though,
+  # specifying the link is required.
+  target_link_libraries(openjpeg2 m)
+endif()
+
 SET_TARGET_PROPERTIES(openjpeg2 PROPERTIES
-                      VERSION       2.0.0
-                      DEFINE_SYMBOL OPJ_EXPORTS)
+  VERSION       2.0.0
+  DEFINE_SYMBOL OPJ_EXPORTS)
 
 # Install library
 INSTALL_TARGETS(/lib openjpeg2)

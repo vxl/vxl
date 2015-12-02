@@ -13,10 +13,10 @@ SET(boxm_algo_sp_sources
 ADD_LIBRARY(boxm_algo_sp ${boxm_algo_sp_sources})
 
 #processes
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 TARGET_LINK_LIBRARIES(boxm_algo_sp boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl vgl_algo vgl vil vul vcl)

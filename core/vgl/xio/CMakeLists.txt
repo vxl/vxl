@@ -19,5 +19,5 @@ INSTALL_TARGETS(/lib vgl_xio)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/xio ${vgl_xio_sources})
 
 IF( BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING)

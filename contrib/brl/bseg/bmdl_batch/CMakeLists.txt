@@ -29,7 +29,7 @@ IF( PYTHON_FOUND )
         SET(bmdl_batch_sources
             reg_bmdl.cxx          reg_bmdl.h
            )
-        IF(NOT BUILD_POSITION_DEPENDENT_CODE) 
+        IF(NOT BUILD_POSITION_DEPENDENT_CODE)
           ADD_LIBRARY(bmdl_batch SHARED ${bmdl_batch_sources})
 
           IF(WIN32)
@@ -49,7 +49,7 @@ IF( PYTHON_FOUND )
           ENDIF(PYTHON_LIBRARIES)
 
           IF( BUILD_TESTING )
-            SUBDIRS(tests)
+            add_subdirectory(tests)
           ENDIF( BUILD_TESTING )
         ENDIF(NOT BUILD_POSITION_DEPENDENT_CODE)
       ENDIF(GEOTIFF_FOUND )

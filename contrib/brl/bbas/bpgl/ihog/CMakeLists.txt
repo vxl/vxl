@@ -23,12 +23,12 @@ ADD_LIBRARY(ihog  ${ihog_sources})
 TARGET_LINK_LIBRARIES(ihog vnl_algo vnl vil vgl_io vgl_algo vgl vil_algo vbl_io vbl vsl vul)
 
 IF( BUILD_EXAMPLES )
-#  SUBDIRS( examples )
+#  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )
 
 # Executable library
-SUBDIRS(exe)
+add_subdirectory(exe)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

@@ -61,5 +61,5 @@ TARGET_LINK_LIBRARIES(boxm2_cpp_algo
                       boxm2_cpp brad boct brdb expatpp vpgl bvgl imesh imesh_algo bsta_algo bsta vil_algo vil vgl_xio vgl vnl_algo vnl vul vbl_io vbl vsl vcl bvpl rply)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

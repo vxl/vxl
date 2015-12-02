@@ -27,11 +27,12 @@ AUX_SOURCE_DIRECTORY(Templates boxm2_ocl_pro_sources)
 AUX_SOURCE_DIRECTORY(processes boxm2_ocl_pro_sources)
 
 ADD_LIBRARY(boxm2_ocl_pro  ${boxm2_ocl_pro_sources} )
-TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl vgl vgl_xio vil vul vbl vsl vcl bvpl_kernels brad bsta_algo)
+TARGET_LINK_LIBRARIES(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl vgl vgl_xio vil vul vbl vsl vcl bvpl_kernels brad bsta_algo vpgl_pro)
+# Need vpgl_pro only for the instantiation of brdb_value_t<vbl_smart_ptr<vpgl_camera<double> > >
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib boxm2_ocl_pro)

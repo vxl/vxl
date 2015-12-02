@@ -16,9 +16,9 @@ ADD_LIBRARY(fhs ${fhs_sources})
 TARGET_LINK_LIBRARIES(fhs vimt vnl vil_algo vgl vsl)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)
 
 IF(BUILD_MUL_TOOLS)
-  SUBDIRS(tools)
+  add_subdirectory(tools)
 ENDIF(BUILD_MUL_TOOLS)

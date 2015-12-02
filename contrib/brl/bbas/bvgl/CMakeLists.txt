@@ -30,7 +30,7 @@ SET(bvgl_sources
 AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
 
 
-#find expatpp library for 
+#find expatpp library for
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
   INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
@@ -50,8 +50,8 @@ TARGET_LINK_LIBRARIES(bvgl expatpp)
 ENDIF(EXPAT_FOUND)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 # geometric algorithm related
-SUBDIRS( algo )
+add_subdirectory(algo)

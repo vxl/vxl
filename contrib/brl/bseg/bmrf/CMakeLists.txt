@@ -29,5 +29,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bmrf ${bmrf_sources})
 TARGET_LINK_LIBRARIES(bmrf bugl vtol vdgl gevd vnl_algo vil vgl vnl vul vnl_io vbl_io vsl vbl)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

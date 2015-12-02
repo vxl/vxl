@@ -20,7 +20,7 @@ IF(EXPAT_FOUND)
   TARGET_LINK_LIBRARIES(boxm_algo_sp_pro boxm boxm_algo_sp boxm_util bprb brdb brip sdet vsol vil_pro vil_io vil)
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

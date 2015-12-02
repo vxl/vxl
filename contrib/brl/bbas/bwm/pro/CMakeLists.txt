@@ -27,5 +27,5 @@ ADD_LIBRARY(bwm_pro ${bwm_pro_sources})
 TARGET_LINK_LIBRARIES( bwm_pro bprb brip bwm_io vul bwm_algo)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

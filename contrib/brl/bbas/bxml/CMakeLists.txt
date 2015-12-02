@@ -35,10 +35,10 @@ IF(EXPAT_FOUND)
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)
 
-SUBDIRS( bsvg )
+add_subdirectory(bsvg)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 #install the .h .txx and libs

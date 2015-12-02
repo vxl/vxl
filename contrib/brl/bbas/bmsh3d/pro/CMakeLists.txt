@@ -10,5 +10,5 @@ ADD_LIBRARY ( bmsh3d_pro ${bmsh3d_pro_sources} )
 TARGET_LINK_LIBRARIES ( bmsh3d_pro bmsh3d vul )
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

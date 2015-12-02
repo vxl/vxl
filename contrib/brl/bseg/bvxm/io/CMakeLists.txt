@@ -11,5 +11,5 @@ ADD_LIBRARY(bvxm_io ${bvxm_io_sources})
 TARGET_LINK_LIBRARIES(bvxm_io bvxm vsl vbl vil vil_io vbl_io)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

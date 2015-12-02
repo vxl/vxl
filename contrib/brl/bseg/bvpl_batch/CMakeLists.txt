@@ -38,7 +38,7 @@ IF( PYTHON_FOUND )
       ENDIF(PYTHON_LIBRARIES)
 
       IF( BUILD_TESTING )
-        SUBDIRS(tests)
+        add_subdirectory(tests)
       ENDIF( BUILD_TESTING )
 
     ENDIF(NOT BUILD_POSITION_DEPENDENT_CODE)

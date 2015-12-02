@@ -9,7 +9,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 
 SET(boxm2_ocl_reg_sources
     boxm2_ocl_reg_mutual_info.h                  boxm2_ocl_reg_mutual_info.cxx
-    boxm2_ocl_hierarchical_reg.h                 boxm2_ocl_hierarchical_reg.cxx   
+    boxm2_ocl_hierarchical_reg.h                 boxm2_ocl_hierarchical_reg.cxx
     boxm2_ocl_reg_points_to_volume_mutual_info.h  boxm2_ocl_reg_points_to_volume_mutual_info.cxx
     boxm2_ocl_hierarchical_points_to_volume_reg.h boxm2_ocl_hierarchical_points_to_volume_reg.cxx
    )
@@ -21,6 +21,6 @@ TARGET_LINK_LIBRARIES(boxm2_ocl_reg boxm2_io  boxm2_ocl bocl brip baio vpgl vnl 
 INSTALL_TARGETS(/lib boxm2_ocl_reg)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/reg/ocl/ ${boxm2_ocl_reg_sources})
 
-SUBDIRS(exe)
+add_subdirectory(exe)
 
 ENDIF(OPENCL_FOUND)

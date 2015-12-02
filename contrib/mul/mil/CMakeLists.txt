@@ -41,8 +41,8 @@ INSTALL_TARGETS(/lib mil)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mil ${mil_sources})
 TARGET_LINK_LIBRARIES(mil mbl vimt vnl vbl_io vgl vil1 vbl vsl)
 
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

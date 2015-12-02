@@ -5,12 +5,12 @@ INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)
 
 # Basic process classes
-SUBDIRS(bprb)
+add_subdirectory(bprb)
 
 # Brown core processing
-SUBDIRS(core)
+add_subdirectory(core)
 
 # Brown batch processing (Python)
-SUBDIRS(bpro_batch)
+add_subdirectory(bpro_batch)
 
 ENDIF(EXPAT_FOUND)

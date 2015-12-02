@@ -24,5 +24,5 @@ INSTALL_TARGETS(/lib brdb)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brdb/ ${brdb_sources})
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

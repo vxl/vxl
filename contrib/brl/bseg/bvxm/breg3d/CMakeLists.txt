@@ -20,10 +20,10 @@ IF(BUILD_MUL)
 
   TARGET_LINK_LIBRARIES(breg3d bvxm vpgl vpgl_algo ihog vsol brip brdb vil vnl vgl_algo vgl vnl_algo vnl_io vul)
 
-  SUBDIRS(pro)
+  add_subdirectory(pro)
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
 ENDIF(BUILD_MUL)
