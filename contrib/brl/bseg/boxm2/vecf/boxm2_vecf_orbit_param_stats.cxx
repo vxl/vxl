@@ -104,8 +104,8 @@ bool boxm2_vecf_orbit_param_stats::merge_margins_and_crease(){
     int left_imin = -1, left_imax = -1;
     bool success = boxm2_vecf_plot_orbit::plot_limits(left_inf_pts, left_sup_pts, left_imin, left_imax);
     if(!success){
-      vcl_cout << "Find left plot limits failed\n";
-      return false;
+      vcl_cout << "Find left plot limits failed for "<< pid << "\n";
+      continue;
     }
     // get left medial canthus (as origin)
     vgl_point_3d<double> plc_inf = left_inf_pts[left_imin];
