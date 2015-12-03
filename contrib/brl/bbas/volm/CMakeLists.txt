@@ -65,17 +65,17 @@ IF(EXPAT_FOUND)
     ENDIF(APPLE)
     TARGET_LINK_LIBRARIES(volm ${EXPATPP_LIBRARIES})
     # Base matcher, Proximity matcher, Visibility matcher related
-    SUBDIRS(desc)
+    add_subdirectory(desc)
 
     # 2-d, 3-d Configurational matcher related
-    SUBDIRS(conf)
+    add_subdirectory(conf)
 
     IF(BUILD_TESTING)
-      SUBDIRS(tests)
+      add_subdirectory(tests)
     ENDIF(BUILD_TESTING)
 
-    SUBDIRS(exe)
+    add_subdirectory(exe)
 
-    SUBDIRS(pro)
+    add_subdirectory(pro)
   ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)

@@ -34,9 +34,9 @@ IF(NETLIB_FOUND)
 ENDIF(NETLIB_FOUND)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF (BUILD_EXAMPLES)

@@ -2,7 +2,7 @@
 #define boxm2_vecf_orbit_articulation_h_
 //:
 // \file
-// \brief  Parameters for the orbit model
+// \brief  Articulation for the orbit model
 //
 // \author J.L. Mundy
 // \date   14 Apr 2015

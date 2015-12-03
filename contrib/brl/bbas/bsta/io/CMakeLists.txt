@@ -19,7 +19,7 @@ ADD_LIBRARY(bsta_io  ${bsta_io_sources})
 TARGET_LINK_LIBRARIES(bsta_io bsta vnl_io vbl_io vbl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib bsta_io)

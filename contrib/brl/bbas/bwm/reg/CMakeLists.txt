@@ -18,7 +18,7 @@ ADD_LIBRARY(bwm_reg ${bwm_reg_sources})
 TARGET_LINK_LIBRARIES( bwm_reg brip sdet vil vbl vgl vnl bsta bsol vsol vpgl vpgl_algo )
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 
 #install the .h .txx and libs

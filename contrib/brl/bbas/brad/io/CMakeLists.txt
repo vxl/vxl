@@ -11,7 +11,7 @@ ADD_LIBRARY(brad_io  ${brad_io_sources})
 TARGET_LINK_LIBRARIES(brad_io brad vnl_io vbl_io vbl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib brad_io)

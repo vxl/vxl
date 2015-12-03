@@ -20,5 +20,5 @@ TARGET_LINK_LIBRARIES(depth_map bpgl vpgl vpgl_io vpgl_algo vsol vnl_algo vnl vi
 
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

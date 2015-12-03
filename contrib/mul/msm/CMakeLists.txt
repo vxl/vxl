@@ -43,12 +43,12 @@ AUX_SOURCE_DIRECTORY(Templates msm_sources)
 ADD_LIBRARY(msm ${msm_sources} )
 TARGET_LINK_LIBRARIES(msm mcal vimt)
 
-SUBDIRS(utils)
+add_subdirectory(utils)
 
 IF (BUILD_MUL_TOOLS)
-  SUBDIRS(tools)
+  add_subdirectory(tools)
 ENDIF (BUILD_MUL_TOOLS)
 
 IF( BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING)

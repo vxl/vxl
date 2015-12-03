@@ -24,6 +24,6 @@ ADD_LIBRARY(icam  ${icam_sources})
 TARGET_LINK_LIBRARIES(icam vsph vpgl_io vpgl_algo vpgl vgl_algo vil_algo vnl_algo vgl_io vgl vnl vil vul vsl vbl_io vbl vcl)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 

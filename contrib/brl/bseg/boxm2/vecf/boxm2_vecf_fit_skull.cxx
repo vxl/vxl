@@ -150,11 +150,11 @@ bool boxm2_vecf_fit_skull::set_trans(){
     return false;
   const vgl_point_3d<double>& fint_tgt = lit->second.p3d_;// - cmv_;
 
-  //get source points and subtract canthus midpoint vector
-  vgl_point_3d<double> llc_src = params_.left_lateral_canthus_;// - params_.canth_mid_vect_;
-  vgl_point_3d<double> rlc_src = params_.right_lateral_canthus_;// - params_.canth_mid_vect_;
-  vgl_point_3d<double> mjaw_src = params_.mid_upper_jaw_;// - params_.canth_mid_vect_;
-  vgl_point_3d<double> fint_src = params_.forehead_intersection_;// - params_.canth_mid_vect_;
+  //get source points
+  vgl_point_3d<double> llc_src = params_.left_lateral_canthus_;
+  vgl_point_3d<double> rlc_src = params_.right_lateral_canthus_;
+  vgl_point_3d<double> mjaw_src = params_.mid_upper_jaw_;
+  vgl_point_3d<double> fint_src = params_.forehead_intersection_;
 
   vcl_vector<vgl_homg_point_3d<double> > source_pts, target_pts;
   source_pts.push_back(vgl_homg_point_3d<double>(llc_src)); source_pts.push_back(vgl_homg_point_3d<double>(rlc_src));
@@ -201,22 +201,3 @@ bool boxm2_vecf_fit_skull::transform_skull(vcl_string const& source_skull_path, 
   return true;
 }
 
-#if 0
-bool boxm2_vecf_fit_skull::set_roll_yaw_rotation(){
-  vcl_map<mids, boxm2_vecf_labeled_point>::iterator lit;
-  lit = lpts_.find(LEFT_LATERAL_CANTHUS);
-  if(lit == lpts_.end())
-    return false;
-  const vgl_point_3d<double>& llc = lit->second.p3d_;
-  lit = lpts_.find(RIGHT_LATERAL_CANTHUS);
-  if(lit == lpts_.end())
-    return false;
-  const vgl_point_3d<double>& rlc = lit->second.p3d_;
-  vgl_vector_3d<double> r_to_l = llc-rlc;
-  //find rotation that makes r_to_l parallel to the x axis
-  vgl_vector_3d<double> x_axis(1.0, 0.0, 0.0);
-  params_.roll_yaw_rotation_ = vgl_rotation_3d<double>(r_to_l, x_axis);
-  vcl_cout <<  params_.roll_yaw_rotation_.as_rodrigues() << '\n';
-  return true;
-}
-#endif

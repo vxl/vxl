@@ -23,14 +23,11 @@ class boxm2_vecf_fit_skull{
  boxm2_vecf_fit_skull(){fill_smid_map();}
 
   //: read a 3-d anchor file:
-  // canhi, forehead, jaw
+  // canthi, forehead, jaw
   bool read_anchor_file(vcl_string const& path);
 
   //: add a labeled point to lpts_
   bool add_labeled_point(boxm2_vecf_labeled_point lp);
-
-  //: find the combined roll and yaw angles
-  //  bool set_roll_yaw_rotation();
 
   //: find additional points from the specfied geometry
   bool compute_auxillary_points();
@@ -45,7 +42,7 @@ class boxm2_vecf_fit_skull{
   //: the map between string and enum
   void fill_smid_map();
 
-  //: map a string label to the correspondingenum value
+  //: map a string label to the corresponding enum value
   vcl_map<vcl_string, mids> smid_map_;
 
   //: a map of labeled points, e.g. left_eye_lateral_canthus

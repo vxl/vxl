@@ -135,10 +135,18 @@ class boxm2_block : public vbl_ref_count
   //: retrieve a vector of cell centers and other info inside the specified bounding box, both in global world coordinates
   vcl_vector<cell_info> cells_in_box(vgl_box_3d<double> const& global_box);
 
-  // find neigboring cell centers within a specified distance from probe, including the cell containing the probe
-  vcl_vector<vgl_point_3d<double> > neighbors(vgl_point_3d<double> const& probe, double distance) const;
+  // find neigboring sub_block cell centers within a specified distance from probe, including the cell containing the probe 
+  vcl_vector<vgl_point_3d<double> > sub_block_neighbors(vgl_point_3d<double> const& probe, double distance) const;
 
+  //: retrieve neighborhood of probe consisting of leaf cells. If relative_distance is true then the neighborhood distance
+  // is scaled according to the size of the cell containing the probe. Otherwise the distance is absolute, e.g. meters.
+  void leaf_neighbors(vgl_point_3d<double> const& probe, double distance, vcl_vector<vgl_point_3d<double> >& nbrs,
+                      vcl_vector<double>& nbr_edge_lengths, vcl_vector<unsigned>& data_indices, bool relative_distance = true) const;
   /////
+  //=== sub_block intersection methods ====//
+  ////
+  vcl_vector<vgl_point_3d<int> >  sub_blocks_intersect_box(vgl_box_3d<double> const& box) const;
+  ////
  private:
   unsigned recompute_num_cells();
   //: unique block id (currently 3D address)

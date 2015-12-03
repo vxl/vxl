@@ -13,7 +13,7 @@ IF( HAS_VGUI )
   TARGET_LINK_LIBRARIES(cvg_view vnl vnl_algo vbl_io vgui vpgl vgl vil vbl vul vsph)
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 
   #Create Executables

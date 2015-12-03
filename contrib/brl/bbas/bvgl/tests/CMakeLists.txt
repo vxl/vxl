@@ -6,6 +6,8 @@ SET(bvgl_test_sources
   test_bvgl_volume_of_intersection.cxx
   test_bvgl_ray_pyramid.cxx
   test_bvgl_intersection.cxx
+  test_gen_cylinder.cxx
+  test_grid_index_3d.cxx
 )
 
 #Make sure expat library is found
@@ -21,6 +23,8 @@ ADD_TEST(bvgl_test_changes                ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_al
 ADD_TEST(bvgl_test_volume_of_intersection ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_all test_bvgl_volume_of_intersection)
 ADD_TEST(bvgl_test_ray_pyramid            ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_all test_bvgl_ray_pyramid)
 ADD_TEST(bvgl_test_intersection           ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_all test_bvgl_intersection)
+ADD_TEST(bvgl_test_gen_cylinder           ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_all test_gen_cylinder)	
+ADD_TEST(bvgl_test_grid_index_3d          ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_all test_grid_index_3d)	
 
 IF(EXPAT_FOUND)
   ADD_TEST(bvgl_test_labelme_parser       ${EXECUTABLE_OUTPUT_PATH}/bvgl_test_all test_bvgl_labelme_parser)

@@ -17,7 +17,7 @@ SET(vsl_sources
   vsl_b_read_block_old.h
   vsl_stream.h
   vsl_block_binary_rle.h
-  
+
   vsl_binary_loader.txx vsl_binary_loader.h
   vsl_clipon_binary_loader.txx vsl_clipon_binary_loader.h
   vsl_complex_io.txx vsl_complex_io.h
@@ -42,5 +42,5 @@ INSTALL_TARGETS(/lib vsl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vsl ${vsl_sources})
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

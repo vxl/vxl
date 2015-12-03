@@ -26,5 +26,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bdgl ${bdgl_sources})
 TARGET_LINK_LIBRARIES(bdgl vdgl vsol vgl_algo vgl vnl_algo vnl)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)

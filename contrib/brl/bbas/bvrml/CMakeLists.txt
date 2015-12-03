@@ -10,10 +10,10 @@ ADD_LIBRARY(bvrml  ${bvrml_sources})
 TARGET_LINK_LIBRARIES(bvrml vgl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
-SUBDIRS(pro)
+add_subdirectory(pro)
 
 INSTALL_TARGETS(/lib bvrml)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvrml ${bvrml_sources})

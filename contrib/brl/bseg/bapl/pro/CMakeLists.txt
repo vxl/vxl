@@ -21,5 +21,5 @@ ADD_LIBRARY(bapl_pro ${bapl_pro_sources})
 TARGET_LINK_LIBRARIES(bapl_pro bapl bapl_io bprb brdb vil_pro vil_io vil vnl vul)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

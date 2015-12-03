@@ -53,6 +53,7 @@ static  double interp_generic_double(vgl_point_3d<double>* neighbors, double* pr
 
 
  protected:
+  static double gauss(double d, double sigma);
   bool has_background_;
   bool is_single_instance_;
   boxm2_scene_sptr base_model_;

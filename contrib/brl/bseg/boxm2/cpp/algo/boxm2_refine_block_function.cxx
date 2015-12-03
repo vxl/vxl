@@ -252,10 +252,10 @@ int boxm2_refine_block_function::move_data(boct_bit_tree& unrefined_tree,
       //move root data to new location
       int parentLevel = unrefined_tree.depth_at(pj);
       double side_len = block_len_ / double(1<<parentLevel);
-
+      int dataIndex = unrefined_tree.get_data_index(pj, false);
       alpha_cpy[newDataPtr]  = float(max_alpha_int_ / side_len); // (float(-vcl_log(1.0f - p_init_) / side_len));
 #if copy_parent_data_
-      mog_cpy[newDataPtr]    = mog_[oldDataPtr];
+      mog_cpy[newDataPtr]    = mog_[dataIndex];
 #else
       mog_cpy[newDataPtr]    = uchar8((uchar) 0);
 #endif

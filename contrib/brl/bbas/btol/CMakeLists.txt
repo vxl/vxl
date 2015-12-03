@@ -25,5 +25,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/btol ${btol_sources})
 TARGET_LINK_LIBRARIES(btol bsol vtol vdgl vsol vgl vnl)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

@@ -79,6 +79,9 @@ class boct_bit_tree
   //  Note that cumulative nodes = (1/7) * (8^(n+1) -1)
   int depth_at(int index) const;
 
+  //: returns depth of tree
+  int depth();
+
   //: returns value (0 or 1) of bit at given index (0,73);
   unsigned char bit_at(int index) const;
 
@@ -109,7 +112,6 @@ class boct_bit_tree
   static float         centerX[585];
   static float         centerY[585];
   static float         centerZ[585];
-
  private:
 
   //: Tree structure stored as "bits" = really a char array

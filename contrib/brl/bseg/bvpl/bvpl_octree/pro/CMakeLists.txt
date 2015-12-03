@@ -24,7 +24,7 @@ ADD_LIBRARY(bvpl_octree_pro ${bvpl_octree_pro_sources})
 TARGET_LINK_LIBRARIES(bvpl_octree_pro bvpl_octree_io bvpl_octree bvpl_kernels_io boxm boct boxm_algo_pro boxm_sample boxm_util bprb brdb vnl vul vbl_io)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

@@ -173,18 +173,26 @@ bool boxm2_ocl_articulated_render_tableau::handle(vgui_event const &e)
     return false;
     }
     if(articulated_scene_){
-      vcl_cout<<"apply vector field"<<vcl_endl;
-
-
+      unsigned nsa = static_cast<unsigned>(scene_articulation_->size());
       opencl_cache_->clear_cache();
-      articulated_scene_->set_params((*scene_articulation_)[play_index_]);
-      play_index_++;
-      if(play_index_ == scene_articulation_->size())
+      
+      if(nsa == 1){//no need to map to target after the first articulation
+        if(play_index_ == 0){
+          articulated_scene_->set_params((*scene_articulation_)[play_index_]);
+           vcl_cout<<"apply vector field"<<vcl_endl;
+          articulated_scene_->map_to_target(target_scene_);        
+          play_index_=1;
+        }
+      }else{
+                articulated_scene_->set_params((*scene_articulation_)[play_index_]);
+                 vcl_cout<<"apply vector field"<<vcl_endl;
+            articulated_scene_->map_to_target(target_scene_);          
+            play_index_++;
+          }
+     if(nsa>1&&play_index_ == nsa)
         play_index_ = 0;
-      articulated_scene_->map_to_target(target_scene_);
-      post_redraw();
-      e.origin->post_timer(0.2f, 1234);
-
+     post_redraw();
+     e.origin->post_timer(0.2f, 1234);
     }
   }
   if (boxm2_cam_tableau::handle(e)) {
@@ -358,7 +366,7 @@ bool boxm2_ocl_articulated_render_tableau::init_clgl()
                                       CL_MEM_WRITE_ONLY,
                                       pbuffer_,
                                       &status);
-  exp_img_ = new bocl_mem(device_->context(),  NULL, RoundUp(ni_,8)*RoundUp(nj_,8)*sizeof(GLubyte)*4, "exp image (gl) buffer");
+  exp_img_ = new bocl_mem(device_->context(),  NULL, static_cast<unsigned>(RoundUp(ni_,8)*RoundUp(nj_,8)*sizeof(GLubyte)*4), "exp image (gl) buffer");
   exp_img_->set_gl_buffer(clgl_buffer_);
 
   int img_dim_buff[4];

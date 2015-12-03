@@ -7,7 +7,6 @@
 // \author J.L. Mundy
 // \date   27 Mar 2015
 //
-#include <boxm2/boxm2_data_traits.h>
 #include "boxm2_vecf_articulated_params.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_iostream.h>
@@ -27,7 +26,7 @@ boxm2_vecf_orbit_params(): x_min_(-1.0634), x_max_(0.99), x_marg_(0.1), x_off_co
     brow_z_limit_(0.5), scale_x_coef_(0.0833333), scale_y_coef_(0.0833333), offset_(vgl_vector_3d<double>(0.0, 0.0, 0.0)),
     trans_x_(0.0) , trans_y_(0.0),trans_z_(0.0), eye_pointing_dir_(vgl_vector_3d<double>(0.0, 0.0, 1.0)),
     inferior_margin_xy_error_(0.0), inferior_margin_xyz_error_(0.0), superior_margin_xy_error_(0.0), superior_margin_xyz_error_(0.0),
-    superior_crease_xy_error_(0.0), superior_crease_xyz_error_(0.0), mm_per_pix_(0.1), image_height_(1000.0),superior_margin_t(0){
+    superior_crease_xy_error_(0.0), superior_crease_xyz_error_(0.0), mm_per_pix_(0.1), image_height_(1000.0), superior_margin_t(0) {
     app_.fill(static_cast<unsigned char>(0));
     app_[1]=static_cast<unsigned char>(32); app_[2] = static_cast<unsigned char>(255);
     init_sphere();
@@ -49,8 +48,6 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
     lower_eyelid_tmin_(lower_eyelid_tmin), lower_eyelid_tmax_(lower_eyelid_tmax),lower_eyelid_intensity_(lower_eyelid_intensity),
     eyelid_crease_tmin_(eyelid_crease_tmin), eyelid_crease_tmax_(eyelid_crease_tmax),eyelid_crease_lower_intensity_(eyelid_crease_lower_intensity),
     eyelid_crease_upper_intensity_(eyelid_crease_upper_intensity), eyelid_crease_ct_(eyelid_crease_ct), brow_angle_rad_(brow_angle_rad){
-    app_.fill(static_cast<unsigned char>(0));
-    app_[1]=static_cast<unsigned char>(32); app_[2] = static_cast<unsigned char>(255);
     init_sphere();
   }
 
@@ -223,9 +220,6 @@ boxm2_vecf_orbit_params(double xmin, double xmax, double x_margin, double eye_ra
   // image properties
   double mm_per_pix_;
   double image_height_;
-  // internal voxel processing parameters
-  double neighbor_radius() const {return 1.7320508075688772;}
-  double gauss_sigma() const {return 3;}
   vgl_sphere_3d<double> sph_;
   vgl_sphere_3d<double> lid_sph_;
 };

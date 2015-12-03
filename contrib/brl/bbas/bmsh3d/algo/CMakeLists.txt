@@ -16,7 +16,7 @@ ADD_LIBRARY( bmsh3d_algo  ${bmsh3d_algo_sources})
 TARGET_LINK_LIBRARIES( bmsh3d_algo bmsh3d rply vgl vnl vul)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 #install the .h .txx and libs

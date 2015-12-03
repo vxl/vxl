@@ -10,5 +10,5 @@ ADD_LIBRARY(bvpl_util_io ${bvpl_util_io_sources})
 TARGET_LINK_LIBRARIES(bvpl_util_io bvpl_util vbl_io vbl vsl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

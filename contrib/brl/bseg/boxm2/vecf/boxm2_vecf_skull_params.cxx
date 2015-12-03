@@ -17,3 +17,5 @@ void boxm2_vecf_skull_params::compute_auxillary_pts(){
     vcl_cout << "Intersection of ray with forehead plane - failed\n";
   }
 }
+vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_skull_params const& pr){return s;}
+vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_skull_params& pr){return s;}

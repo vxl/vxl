@@ -1,5 +1,10 @@
 #include "boxm2_vecf_articulated_scene.h"
 #include <boxm2/io/boxm2_lru_cache.h>
+
+double boxm2_vecf_articulated_scene::gauss(double d, double sigma){
+  return vcl_exp((-0.5*d*d)/(sigma*sigma));
+}
+
 void boxm2_vecf_articulated_scene::clear_target(boxm2_scene_sptr target_scene){
   vcl_string gray_APM_prefix  = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix();
   vcl_string color_APM_prefix = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix();

@@ -1,7 +1,7 @@
 # mul/msdi/CMakeLists.txt
 
 doxygen_add_library(contrib/mul/msdi
-  DEPENDS contrib/mul/msm contrib/mul/vimt 
+  DEPENDS contrib/mul/msm contrib/mul/vimt
   PACKAGE contrib/mul
   DESCRIPTION "Manchester's Shape Data Iterator Library"
 )
@@ -20,5 +20,5 @@ ADD_LIBRARY(msdi ${msdi_sources})
 TARGET_LINK_LIBRARIES(msdi msm)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

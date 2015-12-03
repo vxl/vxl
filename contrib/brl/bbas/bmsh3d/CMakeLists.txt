@@ -35,11 +35,11 @@ ADD_LIBRARY( bmsh3d  ${bmsh3d_sources})
 
 TARGET_LINK_LIBRARIES( bmsh3d vgl vgl_algo vnl vul)
 
-SUBDIRS( algo )
-SUBDIRS( pro )
-SUBDIRS( vis )
-SUBDIRS( tests )
-SUBDIRS( examples )
+add_subdirectory(algo)
+add_subdirectory(pro)
+add_subdirectory(vis)
+add_subdirectory(tests)
+add_subdirectory(examples)
 
 #install the .h .txx and libs
 INSTALL_TARGETS(/lib bmsh3d)

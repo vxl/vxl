@@ -18,5 +18,5 @@ ADD_LIBRARY(icam_pro ${icam_pro_sources})
 TARGET_LINK_LIBRARIES(icam_pro bprb icam vpgl_algo vpgl_io vpgl vnl vil_io vil vbl vsl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

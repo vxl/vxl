@@ -31,11 +31,11 @@ ADD_LIBRARY(bvpl_kernels ${bvpl_kernels_sources})
 TARGET_LINK_LIBRARIES(bvpl_kernels bxml bsvg bsta vgl_algo vgl vnl vbl)
 
 #Directory with python/c++ processes
-SUBDIRS( io )
-SUBDIRS(pro)
+add_subdirectory(io)
+add_subdirectory(pro)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF(EXPAT_FOUND)

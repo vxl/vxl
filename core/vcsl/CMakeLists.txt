@@ -69,9 +69,9 @@ doxygen_add_library(core/vcsl
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vcsl ${vcsl_sources})
 
   IF( BUILD_EXAMPLES )
-    SUBDIRS( examples )
+    add_subdirectory(examples)
   ENDIF( BUILD_EXAMPLES )
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )

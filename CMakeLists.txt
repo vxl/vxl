@@ -1,13 +1,13 @@
-MESSAGE(FATAL_ERROR "VXL has moved!
-VXL is now hosted in a GitHub repository at:
- https://github.com/vxl/vxl
-Run:
- git config --unset remote.origin.pushurl
- git remote set-url origin https://github.com/vxl/vxl.git
- git fetch origin
- git checkout master
- git reset --hard origin/master
-")
+#MESSAGE(FATAL_ERROR "VXL has moved!
+#VXL is now hosted in a GitHub repository at:
+# https://github.com/vxl/vxl
+#Run:
+# git config --unset remote.origin.pushurl
+# git remote set-url origin https://github.com/vxl/vxl.git
+# git fetch origin
+# git checkout master
+# git reset --hard origin/master
+#")
 #
 # Root vxl
 #
@@ -106,10 +106,6 @@ if(BUILD_SHARED_LIBS)
   set(VXL_BUILD_SHARED TRUE)
 endif()
 
-# Do platform-specific configuration.
-IF(NOT VXL_NO_CMAKE_CONFIGURE)
-  SUBDIRS(config/cmake/config)
-ENDIF(NOT VXL_NO_CMAKE_CONFIGURE)
 
 
 # Options to reduce build to just some core libraries
@@ -167,8 +163,8 @@ ELSE(WIN32)
   SET(VXL_USE_WIN_WCHAR_T 0)
 ENDIF(WIN32)
 
-# In order to be able to link vxl libraries into shared libraries on 64 bit linux, the -fPIC 
-# compiler flag must be added.  Only do this if we are on a x86_64 *nix platform, we're building 
+# In order to be able to link vxl libraries into shared libraries on 64 bit linux, the -fPIC
+# compiler flag must be added.  Only do this if we are on a x86_64 *nix platform, we're building
 # static libraries, and the user has not explicitly requested position dependent code.
 IF(UNIX)
   IF(NOT BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
@@ -182,17 +178,11 @@ IF(UNIX)
   ENDIF(NOT BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 ENDIF(UNIX)
 
-# Build the core vxl + support libraries
-SUBDIRS(vcl v3p core)
-
 # Optionally build the contributed libraries
 IF( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
   OPTION( BUILD_CONTRIB "Build the contributed libraries?" YES )
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
 
-IF( BUILD_CONTRIB AND BUILD_CORE_ALL)
-  SUBDIRS( contrib )
-ENDIF( BUILD_CONTRIB AND BUILD_CORE_ALL)
 
 # Use the old configure script if the cache tells us to do so.
 IF(VXL_NO_CMAKE_CONFIGURE)
@@ -242,5 +232,17 @@ ENDIF(VXL_NO_CMAKE_CONFIGURE)
 
 INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
-# This SUBDIRS command must be the last SUBDIRS command in this file
-SUBDIRS( config/cmake/export )
+# Do platform-specific configuration.
+IF(NOT VXL_NO_CMAKE_CONFIGURE)
+  add_subdirectory(config/cmake/config)
+ENDIF(NOT VXL_NO_CMAKE_CONFIGURE)
+# Build the core vxl + support libraries
+add_subdirectory(vcl)
+add_subdirectory(v3p)
+add_subdirectory(core)
+
+IF( BUILD_CONTRIB AND BUILD_CORE_ALL)
+  add_subdirectory(contrib)
+ENDIF( BUILD_CONTRIB AND BUILD_CORE_ALL)
+# This add_subdirectory command must be the last add_subdirectory command in this file
+add_subdirectory(config/cmake/export)

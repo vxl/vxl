@@ -54,10 +54,10 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/pdf1d ${pdf1d_sources})
 TARGET_LINK_LIBRARIES( pdf1d mbl vbl vnl_io vnl vsl )
 
 IF(BUILD_MUL_TOOLS)
-  SUBDIRS(tools)
+  add_subdirectory(tools)
 ENDIF(BUILD_MUL_TOOLS)
 
 
 IF( BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING)

@@ -33,9 +33,9 @@ IF(OPENCL_FOUND)
 
 #tests
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 #pro
-SUBDIRS(pro)
+add_subdirectory(pro)
 ENDIF(OPENCL_FOUND)

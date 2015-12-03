@@ -14,9 +14,12 @@ INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${OXL_INCLUDE_DIR})
 
 # These four libraries are mutually independent:
-SUBDIRS(mvl vrml osl)
+add_subdirectory(mvl)
+add_subdirectory(vrml)
+add_subdirectory(osl)
 
 # using vgui:
 IF( BUILD_VGUI )
-  SUBDIRS(xcv apps)
+  add_subdirectory(xcv)
+  add_subdirectory(apps)
 ENDIF( BUILD_VGUI )

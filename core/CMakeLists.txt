@@ -17,101 +17,95 @@ SET(global_sources
 
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core ${global_sources})
 
-# common test executable
-SUBDIRS(testlib)
-
-# Tests that check and output the vxl configuration
-IF( BUILD_TESTING )
-  SUBDIRS( tests )
-ENDIF( BUILD_TESTING )
-
-
 IF (BUILD_CORE_UTILITIES)
   # POSIX layer
-  SUBDIRS(vpl)
+  add_subdirectory(vpl)
 
   # utilities
-  SUBDIRS(vul)
+  add_subdirectory(vul)
 
   # "basics" (templates)
-  SUBDIRS(vbl)
+  add_subdirectory(vbl)
 ENDIF (BUILD_CORE_UTILITIES)
 
 
 # numerics
 IF (BUILD_CORE_NUMERICS)
-  SUBDIRS(vnl)
+  add_subdirectory(vnl)
 ENDIF (BUILD_CORE_NUMERICS)
 
 
 # geometry (including computational geometry)
 IF (BUILD_CORE_GEOMETRY)
-  SUBDIRS(vgl)
+  add_subdirectory(vgl)
 ENDIF (BUILD_CORE_GEOMETRY)
 
 
 IF (BUILD_CORE_IMAGING)
   # image
-  SUBDIRS(vil)
+  add_subdirectory(vil)
 
   IF (BUILD_CORE_NUMERICS)
-    SUBDIRS (vil/algo)
+    add_subdirectory (vil/algo)
   ENDIF (BUILD_CORE_NUMERICS)
 ENDIF (BUILD_CORE_IMAGING)
 
 
 # Old image library (deprecated)
 IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-  SUBDIRS(vil1)
+  add_subdirectory(vil1)
 ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
 
 
 IF (BUILD_CORE_SERIALISATION)
   # Fast Binary IO
-  SUBDIRS(vsl)
+  add_subdirectory(vsl)
 
   IF (BUILD_CORE_UTILITIES)
-    SUBDIRS(vul/io vbl/io)
+    add_subdirectory(vul/io)
+    add_subdirectory(vbl/io)
   ENDIF (BUILD_CORE_UTILITIES)
 
   IF (BUILD_CORE_NUMERICS)
-    SUBDIRS(vnl/io vnl/xio)
+    add_subdirectory(vnl/io)
+    add_subdirectory(vnl/xio)
   ENDIF (BUILD_CORE_NUMERICS)
 
   IF (BUILD_CORE_GEOMETRY)
-    SUBDIRS(vgl/io vgl/xio)
+    add_subdirectory(vgl/io)
+    add_subdirectory(vgl/xio)
   ENDIF (BUILD_CORE_GEOMETRY)
 
   IF (BUILD_CORE_IMAGING)
-    SUBDIRS(vil/io)
+    add_subdirectory(vil/io)
   ENDIF (BUILD_CORE_IMAGING)
 
   # I/O for the ld image library (deprecated):
   IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-    SUBDIRS(vil1/io)
+    add_subdirectory(vil1/io)
   ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
 ENDIF (BUILD_CORE_SERIALISATION)
 
 
 # coordinate systems
 IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
-  SUBDIRS(vcsl)
-  SUBDIRS(vpgl)
+  add_subdirectory(vcsl)
+  add_subdirectory(vpgl)
 ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
 
 
 # probability distributions
 IF (BUILD_CORE_PROBABILITY)
-  SUBDIRS( vpdl )
+  add_subdirectory(vpdl)
 ENDIF (BUILD_CORE_PROBABILITY)
 
 
 IF (BUILD_CORE_ALL)
 # multi-platform GUI toolkit
-  SUBDIRS(vgui)
+  add_subdirectory(vgui)
 
   IF(BUILD_EXAMPLES)
-    SUBDIRS(examples)
+    add_subdirectory(examples)
   ENDIF(BUILD_EXAMPLES)
 ENDIF (BUILD_CORE_ALL)
 
@@ -120,7 +114,16 @@ SET (CORE_VIDEO_FOUND NO CACHE INTERNAL "VXL core video libraries built")
 IF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
   OPTION (BUILD_CORE_VIDEO "Build VXL's core video libraries" YES)
   IF (BUILD_CORE_VIDEO)
-    SUBDIRS(vidl)
+    add_subdirectory(vidl)
     SET (CORE_VIDEO_FOUND YES CACHE INTERNAL "VXL core video libraries built")
   ENDIF (BUILD_CORE_VIDEO)
 ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
+
+# common test executable
+add_subdirectory(testlib)
+
+# Tests that check and output the vxl configuration
+IF( BUILD_TESTING )
+  add_subdirectory(tests)
+ENDIF( BUILD_TESTING )
+

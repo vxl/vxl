@@ -3,92 +3,92 @@
 # All libraries are mutually independent, except for bxml <-- bdgl
 
 # xml<->vxl conversion
-SUBDIRS(bxml)
+add_subdirectory(bxml)
 
 # Uncertainty geometry library
-SUBDIRS(bugl)
+add_subdirectory(bugl)
 
 # Additions to vnl
-SUBDIRS(bnl)
+add_subdirectory(bnl)
 
 # Brown Graph Library
-SUBDIRS(bgrl)
+add_subdirectory(bgrl)
 
 # Brown Templated Graph Library
-SUBDIRS(bgrl2)
+add_subdirectory(bgrl2)
 
 # Brown statistics library
-SUBDIRS(bsta)
+add_subdirectory(bsta)
 
 # Brown dynamic programming library
-SUBDIRS(bdpg)
+add_subdirectory(bdpg)
 
 # 3D mesh library
-SUBDIRS(bmsh3d)
+add_subdirectory(bmsh3d)
 
 # In memory relational database
-SUBDIRS(brdb)
+add_subdirectory(brdb)
 
 # Brown Imaging Library
-SUBDIRS(bil)
+add_subdirectory(bil)
 
 # Brown VRML utilities library
-SUBDIRS(bvrml)
+add_subdirectory(bvrml)
 
 # Brown opencl library
-SUBDIRS(bocl)
+add_subdirectory(bocl)
 
 # Brown asychronous IO library
-SUBDIRS(baio)
+add_subdirectory(baio)
 
 # Brown radiometry library
-SUBDIRS(brad)
+add_subdirectory(brad)
 
 # viewsphere Library
-  SUBDIRS(vsph)
+  add_subdirectory(vsph)
 
 # camera library
-  SUBDIRS (bpgl)
+  add_subdirectory (bpgl)
 
 IF( BUILD_GEL )
   # spatial object algorithms
-  SUBDIRS(bsol)
+  add_subdirectory(bsol)
 
   # topology algorithms
-  SUBDIRS(btol)
+  add_subdirectory(btol)
 
   # digital geometry algorithms
-  SUBDIRS(bdgl)
+  add_subdirectory(bdgl)
 
   # basic vgui classes
-  SUBDIRS(bgui)
+  add_subdirectory(bgui)
 
   # coin3D incorporated vgui classes
-  SUBDIRS(bgui3d)
+  add_subdirectory(bgui3d)
 
   # staged vgl development area
-  SUBDIRS(bvgl)
+  add_subdirectory(bvgl)
 
   # 3D modeling library
-  SUBDIRS(bwm)
+  add_subdirectory(bwm)
 
   # Indexed Mesh Library
-  SUBDIRS(imesh)
+  add_subdirectory(imesh)
 
 ENDIF( BUILD_GEL )
 
 # Brown hadoop library
-SUBDIRS(bhdfs)
+add_subdirectory(bhdfs)
 
 # Brown subjective logic library
-SUBDIRS(bsl)
+add_subdirectory(bsl)
 
 # Brown elastic curve matching library
-SUBDIRS(bcvr)
+add_subdirectory(bcvr)
 
 # Brown KML utilities library
-SUBDIRS(bkml)
+add_subdirectory(bkml)
 
 # volumetric matching tools
-SUBDIRS(volm)
+add_subdirectory(volm)
 

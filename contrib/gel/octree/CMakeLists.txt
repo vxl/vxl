@@ -17,5 +17,5 @@ INSTALL_TARGETS(/bin octree)
 TARGET_LINK_LIBRARIES(octree mvl vil1 vgl vnl vbl vul)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

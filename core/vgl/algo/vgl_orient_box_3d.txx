@@ -53,7 +53,7 @@ vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_point_3d<Type> const& p0,
 
 //: returns the 8 corner points of the box
 template <class Type>
-vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
+vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners() const
 {
   vcl_vector<vgl_point_3d<Type> > corner_points(8);
 
@@ -91,6 +91,16 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners()
                                            Type(p[2]) + box_.centroid_z());
   }
   return corner_points;
+}
+
+template <class Type>
+vgl_box_3d<Type> vgl_orient_box_3d<Type>::enclosing_box() const{
+  vcl_vector<vgl_point_3d<Type> > crns = this->corners();
+  vgl_box_3d<Type> ret;
+  for(typename vcl_vector<vgl_point_3d<Type> >::iterator cit = crns.begin();
+      cit != crns.end(); ++cit)
+    ret.add(*cit);
+  return ret;
 }
 
 //: Return true if \a (x,y,z) is inside this box

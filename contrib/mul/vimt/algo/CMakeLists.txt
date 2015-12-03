@@ -16,5 +16,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt/algo ${vimt_algo_sourc
 TARGET_LINK_LIBRARIES( vimt_algo vimt vil_algo vgl vcl )
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

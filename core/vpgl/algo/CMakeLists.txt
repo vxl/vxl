@@ -37,11 +37,11 @@ TARGET_LINK_LIBRARIES(vpgl_algo vpgl vpgl_file_formats vgl_algo vnl_algo vnl vgl
 
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
+  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )
 
 INSTALL_TARGETS(/lib vpgl_algo)

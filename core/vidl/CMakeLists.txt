@@ -162,12 +162,12 @@ IF( HAS_TEMPLATE_DEPTH_FLAG )
 ENDIF( HAS_TEMPLATE_DEPTH_FLAG )
 
 # vgui add on library
-SUBDIRS( gui )
+add_subdirectory(gui)
 
 IF( BUILD_TESTING )
-  SUBDIRS( tests )
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
+  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )

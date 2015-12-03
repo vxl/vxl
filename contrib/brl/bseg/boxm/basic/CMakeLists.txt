@@ -15,7 +15,7 @@ AUX_SOURCE_DIRECTORY(Templates boxm_basic_sources)
 ADD_LIBRARY(boxm_basic ${boxm_basic_sources})
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 TARGET_LINK_LIBRARIES(boxm_basic boxm boxm_util boxm_sample boxm_sample_algo boct vpgl vpgl_algo vgl_io vgl vil vul vbl_io vbl vcl)

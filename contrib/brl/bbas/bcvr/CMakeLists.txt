@@ -29,6 +29,6 @@ ADD_LIBRARY(bcvr  ${bcvr_sources})
 TARGET_LINK_LIBRARIES(bcvr bsol vdgl)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 

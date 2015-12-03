@@ -98,6 +98,10 @@ class boxm2_array_3d
   const_iterator begin() const { return element_[0][0]; }
   const_iterator end  () const { return begin() + size(); }
 
+  //: convert from 3-d indices to the linear index
+  size_type linear_index(size_type i1, size_type i2, size_type i3) const{
+    return (i1*row2_count_+i2)*row3_count_ + i3;
+  }
   // data_block will return all elements of the array in sequential storage.
   T      * data_block()       { return element_[0][0]; }
   T const* data_block() const { return element_[0][0]; }

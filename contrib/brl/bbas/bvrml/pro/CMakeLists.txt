@@ -19,7 +19,7 @@ ADD_LIBRARY(bvrml_pro ${bvrml_pro_sources} )
 TARGET_LINK_LIBRARIES(bvrml_pro boxm2_cpp bvrml vpgl_algo vpgl_io bprb rply )
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 INSTALL_TARGETS(/lib bvrml_pro)

@@ -29,19 +29,19 @@ INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
 
 # basic services package
-SUBDIRS(bbas)
+add_subdirectory(bbas)
 
 IF( BUILD_GEL )
   # segmentation package
-  SUBDIRS(bseg)
+  add_subdirectory(bseg)
 ENDIF( BUILD_GEL )
 
 # process libraries
-SUBDIRS(bpro)
+add_subdirectory(bpro)
 
 # 3rd party libraries
-SUBDIRS(b3p)
+add_subdirectory(b3p)
 
 # cvg library
-SUBDIRS(cvg)
+add_subdirectory(cvg)
 

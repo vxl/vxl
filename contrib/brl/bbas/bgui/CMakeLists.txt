@@ -47,11 +47,11 @@ ENDIF(HAS_BMRF)
  ENDIF(HAS_BMRF)
 
  IF(BUILD_EXAMPLES)
-   SUBDIRS(examples)
+   add_subdirectory(examples)
  ENDIF(BUILD_EXAMPLES)
 
  IF(BUILD_TESTING)
-   SUBDIRS(tests)
+   add_subdirectory(tests)
  ENDIF(BUILD_TESTING)
 
 ENDIF(HAS_VGUI)

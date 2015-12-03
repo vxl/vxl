@@ -1,6 +1,7 @@
 // This is core/vgl/vgl_closest_point.txx
 #ifndef vgl_closest_point_txx_
 #define vgl_closest_point_txx_
+#include <vcl_limits.h>
 //:
 // \file
 // \author Peter Vanroose, KULeuven, ESAT/PSI
@@ -23,6 +24,7 @@
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_ray_3d.h>
+#include <vgl/vgl_pointset_3d.h>
 #include <vcl_cassert.h>
 #include <vcl_cmath.h> // for std::abs(double)
 
@@ -638,6 +640,50 @@ vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s,
   return ret;
 }
 
+template <class T>
+vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset,
+                                  vgl_point_3d<T> const& p, T dist){
+  unsigned n = ptset.npts();
+  if(n == 0)
+    return vgl_point_3d<T>();
+  unsigned iclose = 0;
+  double d_close = 1.0/SMALL_DOUBLE;
+  for(unsigned i = 0; i<n; ++i){
+    vgl_point_3d<T> pi = ptset.p(i);
+    double d = (pi-p).length();
+    if(d<d_close){
+      d_close = d;
+      iclose = i;
+    }
+  }
+  vgl_point_3d<T> pc = ptset.p(iclose);
+  if(!ptset.has_normals())
+    return pc;
+  const vgl_vector_3d<T>& norm = ptset.n(iclose);
+  //otherwise construct the plane and find closest point on that 
+  if(vcl_numeric_limits<T>::is_integer){
+    // closest point can be templated over int so cast to double for plane computations
+    vgl_point_3d<double> pd(static_cast<double>(p.x()), static_cast<double>(p.y()), static_cast<double>(p.z()));
+    vgl_point_3d<double> pcd(static_cast<double>(pc.x()), static_cast<double>(pc.y()), static_cast<double>(pc.z()));
+
+    vgl_vector_3d<double> normd(static_cast<double>(norm.x()),static_cast<double>(norm.y()),static_cast<double>(norm.z()));
+    vgl_plane_3d<double> pld(normd, pcd);
+    vgl_point_3d<double> pc_planed = vgl_closest_point(pld, pd);
+    T dpd = static_cast<T>((pc_planed-pcd).length());
+    if(dpd>dist)
+      return pc;
+    vgl_point_3d<T> pc_plane_T(static_cast<T>(pc_planed.x()), static_cast<T>(pc_planed.y()), static_cast<T>(pc_planed.z()));
+    return pc_plane_T;
+  }else{
+    vgl_plane_3d<T> pl(norm, pc);
+    vgl_point_3d<T> pc_plane = vgl_closest_point(pl, p);
+    T dp = static_cast<T>((pc_plane-p).length());
+    if(dp>dist)
+      return pc;
+    return pc_plane;
+  }
+}
+
 #undef DIST_SQR_TO_LINE_SEG_2D
 #undef DIST_SQR_TO_LINE_SEG_3D
 
@@ -677,6 +723,6 @@ template vcl_pair<vgl_point_3d<T >,vgl_point_3d<T > > \
          vgl_closest_points(vgl_line_segment_3d<T >const&, vgl_line_segment_3d<T >const&, bool*); \
 template vgl_point_2d<T > vgl_closest_point(vgl_line_segment_2d<T > const&, vgl_point_2d<T > const&); \
 template vgl_point_3d<T > vgl_closest_point(vgl_line_segment_3d<T > const&, vgl_point_3d<T > const&); \
-template  vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s, vgl_point_3d<T> const& p)
-
+template vgl_point_3d<T> vgl_closest_point(vgl_sphere_3d<T> const& s, vgl_point_3d<T> const& p); \
+ template vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset, vgl_point_3d<T> const& p, T dist)
 #endif // vgl_closest_point_txx_

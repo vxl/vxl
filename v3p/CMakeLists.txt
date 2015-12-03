@@ -16,58 +16,58 @@ ENDIF (BORLAND)
 
 
 IF (BUILD_CORE_NUMERICS)
-  SUBDIRS(netlib)
+  add_subdirectory(netlib)
 ENDIF (BUILD_CORE_NUMERICS)
 
 IF (BUILD_VGUI OR BUILD_FOR_VXL_DASHBOARD)
-  SUBDIRS(Qv)
+  add_subdirectory(Qv)
 ENDIF (BUILD_VGUI OR BUILD_FOR_VXL_DASHBOARD)
 
 IF (BUILD_CORE_GEOMETRY)
   OPTION( VXL_FORCE_V3P_CLIPPER "Use V3P instead of any native Clipper library?" YES)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_CLIPPER )
-  SUBDIRS(clipper)
+  add_subdirectory(clipper)
 ENDIF (BUILD_CORE_GEOMETRY)
 
 IF (BUILD_CORE_IMAGING)
   OPTION( VXL_FORCE_V3P_ZLIB "Use V3P instead of any native ZLIB library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_ZLIB )
-  SUBDIRS(zlib)
+  add_subdirectory(zlib)
 
   OPTION( VXL_FORCE_V3P_BZLIB2 "Use V3P instead of any native BZip2 library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_BZLIB2 )
-  SUBDIRS(bzlib)
+  add_subdirectory(bzlib)
 
   OPTION( VXL_FORCE_V3P_JPEG "Use V3P instead of any native JPEG library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_JPEG )
-  SUBDIRS(jpeg)
-  
+  add_subdirectory(jpeg)
+
   OPTION( VXL_FORCE_V3P_J2K "Use V3P instead of any native JPEG2000 library? (WIN32 only)" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_J2K )
   # Use old CMake policy to avoid warning about directory without CMakeLists.txt
   CMAKE_POLICY(SET CMP0014 OLD)
-  SUBDIRS(j2k)
+  add_subdirectory(j2k)
 
   OPTION( VXL_FORCE_V3P_TIFF "Use V3P instead of any native TIFF library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_TIFF )
-  SUBDIRS(tiff)
+  add_subdirectory(tiff)
 
   OPTION( VXL_FORCE_V3P_GEOTIFF "Use V3P instead of any native GEOTIFF library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_GEOTIFF )
-  SUBDIRS(geotiff)
+  add_subdirectory(geotiff)
 
   OPTION( VXL_FORCE_V3P_PNG "Use V3P instead of any native PNG library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_PNG )
-  SUBDIRS(png)
-  
+  add_subdirectory(png)
+
   OPTION( VXL_FORCE_V3P_DCMTK "Use V3P instead of any native DCMTK library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_DCMTK )
-  SUBDIRS(dcmtk)
+  add_subdirectory(dcmtk)
 
   OPTION( VXL_FORCE_V3P_OPENJPEG2 "Use V3P instead of any native OpenJPEG v2 library?" NO)
   MARK_AS_ADVANCED( VXL_FORCE_V3P_OPENJPEG2 )
-  SUBDIRS(openjpeg2)
+  add_subdirectory(openjpeg2)
 
-  SUBDIRS(rply)
+  add_subdirectory(rply)
 
 ENDIF (BUILD_CORE_IMAGING)

@@ -1,3 +1,3 @@
 
 # CARMEN
-SUBDIRS(carmen_interface)
+add_subdirectory(carmen_interface)

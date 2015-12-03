@@ -13,7 +13,7 @@ IF(EXPAT_FOUND)
 ENDIF(EXPAT_FOUND)
 
 SET(bvgl_pro_sources
-    bvgl_processes.h  
+    bvgl_processes.h
     bvgl_register.h                    bvgl_register.cxx
 )
 
@@ -24,5 +24,5 @@ ADD_LIBRARY(bvgl_pro ${bvgl_pro_sources})
 TARGET_LINK_LIBRARIES(bvgl_pro bprb vil_pro bvgl bvgl_algo vil vil_io)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

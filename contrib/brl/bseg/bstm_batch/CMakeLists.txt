@@ -46,8 +46,8 @@ IF( PYTHON_FOUND )
         ADD_DEFINITIONS(-DHAS_OPENCL=1)
         TARGET_LINK_LIBRARIES(bstm_batch bocl_pro bstm_ocl bstm_ocl_pro boxm2_ocl_pro)
       ENDIF(OPENCL_FOUND)
-      
-      
+
+
       IF (PYTHON_DEBUG_LIBRARIES)
         TARGET_LINK_LIBRARIES( bstm_batch debug ${PYTHON_DEBUG_LIBRARY})
       ENDIF(PYTHON_DEBUG_LIBRARIES )
@@ -55,14 +55,14 @@ IF( PYTHON_FOUND )
       IF(PYTHON_LIBRARIES)
         TARGET_LINK_LIBRARIES( bstm_batch optimized ${PYTHON_LIBRARY})
       ENDIF(PYTHON_LIBRARIES)
-      
-      
+
+
       #install the .h .txx and libs
       INSTALL_TARGETS(/lib bstm_batch)
       INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm_batch/ ${bstm_batch_sources})
 
       IF( BUILD_TESTING )
-        SUBDIRS(tests)
+        add_subdirectory(tests)
       ENDIF( BUILD_TESTING )
     ENDIF (NOT BUILD_POSITION_DEPENDENT_CODE)
   ENDIF( EXPAT_FOUND )

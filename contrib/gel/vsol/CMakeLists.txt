@@ -68,9 +68,9 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vsol ${vsol_sources})
 TARGET_LINK_LIBRARIES(vsol vgl_algo vgl_io vgl vnl vbl_io vbl vsl vul vcl)
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF (BUILD_EXAMPLES)
 
 IF (BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF (BUILD_TESTING)

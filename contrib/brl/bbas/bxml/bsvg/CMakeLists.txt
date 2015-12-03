@@ -16,10 +16,10 @@ ADD_LIBRARY(bsvg ${bsvg_sources})
 TARGET_LINK_LIBRARIES( bsvg bxml )
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
-SUBDIRS( pro )
+add_subdirectory(pro)
 
 
 INSTALL_TARGETS(/lib bsvg)

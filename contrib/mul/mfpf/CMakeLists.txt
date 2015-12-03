@@ -73,9 +73,9 @@ ADD_LIBRARY(mfpf ${mfpf_sources} )
 TARGET_LINK_LIBRARIES(mfpf clsfy mipa)
 
 IF (BUILD_MUL_TOOLS)
-  SUBDIRS(tools)
+  add_subdirectory(tools)
 ENDIF (BUILD_MUL_TOOLS)
 
 IF( BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING)

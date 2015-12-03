@@ -22,8 +22,8 @@ ADD_LIBRARY(boxm_sample ${boxm_sample_sources})
 TARGET_LINK_LIBRARIES(boxm_sample boxm vgl_io bsta vil vgl vbl vsl vcl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 #processors for the samples
-SUBDIRS(algo)
+add_subdirectory(algo)

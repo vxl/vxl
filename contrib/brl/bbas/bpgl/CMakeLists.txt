@@ -19,19 +19,19 @@ ADD_LIBRARY(bpgl ${bpgl_sources})
 TARGET_LINK_LIBRARIES(bpgl brip vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl)
 
 # algorithms involving cameras
-SUBDIRS(algo)
+add_subdirectory(algo)
 
 # determine unknown camera parameters
-SUBDIRS(icam)
+add_subdirectory(icam)
 
 # image homography registration
-SUBDIRS(ihog)
+add_subdirectory(ihog)
 
 # reasoning about scenes from a single image
-SUBDIRS(depth_map)
+add_subdirectory(depth_map)
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF(BUILD_TESTING)
 
 INSTALL_TARGETS(/lib bpgl)

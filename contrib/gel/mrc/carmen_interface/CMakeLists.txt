@@ -11,7 +11,7 @@ ADD_EXECUTABLE(carmen_interface ${carmen_interface_sources})
 TARGET_LINK_LIBRARIES(carmen_interface vcl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 ENDIF (HAS_CARMEN)

@@ -12,5 +12,5 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d/io ${vil3d_io_sources
 TARGET_LINK_LIBRARIES( vil3d_io vil3d vil_io )
 
 IF( BUILD_TESTING)
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING)

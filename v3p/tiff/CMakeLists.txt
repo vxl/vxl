@@ -7,23 +7,23 @@ INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 IF(NOT VXL_USING_NATIVE_TIFF)
 
   INCLUDE( ${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake )
-  
-  
+
+
   INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
-  
+
   IF(ZLIB_FOUND)
     INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
     SET( LZW_SUPPORT 1 )
     SET( ZIP_SUPPORT 1 )
   ENDIF(ZLIB_FOUND)
-  
+
   INCLUDE( ${VXL_CMAKE_DIR}/FindJPEG.cmake )
-  
+
   IF(JPEG_FOUND)
     INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
     SET( JPEG_SUPPORT  1 )
   ENDIF(JPEG_FOUND)
-  
+
   SET( tiff_sources
   # Header files
     tiff.h
@@ -40,7 +40,7 @@ IF(NOT VXL_USING_NATIVE_TIFF)
     uvcode.h
     tif_fax3.h
     port.h
-  
+
   # source files
     tif_aux.c
     tif_close.c
@@ -82,7 +82,7 @@ IF(NOT VXL_USING_NATIVE_TIFF)
     tif_stream.cxx
   )
 
-  # put config header files in build tree      
+  # put config header files in build tree
   # For tif_config.h
   SET( HAVE_ASSERT_H    ${VCL_HAS_HEADER_ASSERT_H} )
   SET( HAVE_DLFCN_H     ${VCL_HAS_DLFCN_H} )
@@ -105,12 +105,12 @@ IF(NOT VXL_USING_NATIVE_TIFF)
   SET( HOST_BIGENDIAN   ${VXL_BIG_ENDIAN} )
   SET( HAVE_IEEEFP      ${VXL_HAS_IEEEFP_H} )
   SET( PIXARLOG_SUPPORT ${LZW_SUPPORT} )
-  
+
   IF(WIN32)
     #SET(HOST_FILLORDER "FILLORDER_LSB2MSB")
     IF( NOT CYGWIN )
       SET( USE_WIN32_FILEIO 1 )
-      
+
     ENDIF( NOT CYGWIN )
   ELSE(WIN32)
     #TODO
@@ -133,7 +133,7 @@ IF(NOT VXL_USING_NATIVE_TIFF)
   SET(TIFF_UINT64_FORMAT "%${_FORMAT_64BIT_PREFIX}u")
   SET(TIFF_SSIZE_FORMAT "%${_FORMAT_SSIZE_PREFIX}u")
   SET(TIFF_PTRDIFF_FORMAT "%${_FORMAT_SSIZE_PREFIX}d")
-  
+
   CONFIGURE_FILE(tif_config.h.in  ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h )
   CONFIGURE_FILE(tiffconf.h.in    ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h )
   INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
@@ -144,21 +144,21 @@ IF(NOT VXL_USING_NATIVE_TIFF)
     )
   ELSE(UNIX)
     IF(WIN32)
-  
+
       # Disable warnings on using unsecured CRT lib functions
       IF(MSVC)
         ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
         ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
       ENDIF(MSVC)
-  
-      # TODO  
+
+      # TODO
       # Copy WinCE files for Wince build
       # JBIG Compression is disabled by default
 
 
       # Extra options from nmake.opt files
-      
-      
+
+
       # Use console/terminal output for error output.
       # Without this def it will use MessageBoxA() instead.
       ADD_DEFINITIONS( -DTIF_PLATFORM_CONSOLE)
@@ -168,14 +168,14 @@ IF(NOT VXL_USING_NATIVE_TIFF)
       )
     ENDIF(WIN32)
   ENDIF(UNIX)
-  
-  
+
+
   ADD_LIBRARY( tiff ${tiff_sources} )
   INSTALL_TARGETS( /lib tiff )
   TARGET_LINK_LIBRARIES( tiff ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES})
-  
+
   IF( BUILD_TESTING)
-    SUBDIRS(test)
+    add_subdirectory(test)
   ENDIF( BUILD_TESTING)
 
 ENDIF(NOT VXL_USING_NATIVE_TIFF)

@@ -14,7 +14,7 @@ IF(VGUI_FOUND)
   INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
   INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/boxm2 )	
+  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/boxm2 )
   LINK_DIRECTORIES(${OPENGL_LIBRARY_DIR})
 
   SET(boxm2_vecf_view_sources
@@ -32,11 +32,11 @@ IF(VGUI_FOUND)
   TARGET_LINK_LIBRARIES(boxm2_vecf_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro vgui bprb vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
   #pro
-#  SUBDIRS(pro)
+#  add_subdirectory(pro)
 
   #tests
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+    add_subdirectory(tests)
   ENDIF( BUILD_TESTING )
 ENDIF(VGUI_FOUND)
 ENDIF(GLEW_FOUND)

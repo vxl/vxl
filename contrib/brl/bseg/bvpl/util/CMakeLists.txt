@@ -13,8 +13,8 @@ AUX_SOURCE_DIRECTORY(Templates bvpl_util_sources)
 ADD_LIBRARY(bvpl_util ${bvpl_util_sources})
 TARGET_LINK_LIBRARIES(bvpl_util bvpl brdb vil_algo vgl_io vgl vnl_io vnl vbl)
 
-SUBDIRS(io)
+add_subdirectory(io)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

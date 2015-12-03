@@ -26,7 +26,7 @@ SET( vgl_sources
   vgl_homg_point_2d.h            vgl_homg_point_2d.txx
   vgl_point_3d.h                 vgl_point_3d.txx
   vgl_homg_point_3d.h            vgl_homg_point_3d.txx
-  vgl_pointset_3d.h              
+  vgl_pointset_3d.h
   # Lines
   vgl_line_2d.h                  vgl_line_2d.txx
   vgl_homg_line_2d.h             vgl_homg_line_2d.txx
@@ -43,7 +43,7 @@ SET( vgl_sources
   vgl_polygon.h                  vgl_polygon.txx
   vgl_sphere_3d.h                vgl_sphere_3d.txx
   vgl_cylinder.h                 vgl_cylinder.txx
-  
+
   # Planes
   vgl_plane_3d.h                 vgl_plane_3d.txx
   vgl_homg_plane_3d.h            vgl_homg_plane_3d.txx
@@ -65,7 +65,7 @@ SET( vgl_sources
   vgl_polygon_test.h             vgl_polygon_test.txx
   vgl_triangle_3d.h              vgl_triangle_3d.cxx
   vgl_frustum_3d.h               vgl_frustum_3d.txx
-  
+
   vgl_region_scan_iterator.h
   vgl_triangle_scan_iterator.h   vgl_triangle_scan_iterator.txx
   vgl_window_scan_iterator.h     vgl_window_scan_iterator.txx
@@ -99,12 +99,12 @@ ENDIF( NOT BUILD_NONCOMMERCIAL )
 INSTALL_TARGETS(/lib vgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})
 
-SUBDIRS( algo )
+add_subdirectory(algo)
 
 IF( BUILD_EXAMPLES )
-  SUBDIRS( examples )
+  add_subdirectory(examples)
 ENDIF( BUILD_EXAMPLES )
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )

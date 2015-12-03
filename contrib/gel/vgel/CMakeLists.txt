@@ -31,9 +31,9 @@ ENDIF(BUILD_OXL)
 TARGET_LINK_LIBRARIES(vgel vgel_kl vtol vil vil1 vbl)
 
 IF( BUILD_TESTING )
-  SUBDIRS(tests)
+  add_subdirectory(tests)
 ENDIF( BUILD_TESTING )
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(examples)
+  add_subdirectory(examples)
 ENDIF (BUILD_EXAMPLES)

@@ -1,2 +1,2 @@
 # ./oxl/apps/CMakeLists.txt
-SUBDIRS( vxl_vrml_viewer )
+add_subdirectory(vxl_vrml_viewer)
