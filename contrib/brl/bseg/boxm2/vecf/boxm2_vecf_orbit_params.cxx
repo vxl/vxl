@@ -42,6 +42,8 @@ vcl_ostream&  operator<<(vcl_ostream& s, boxm2_vecf_orbit_params const& prc){
   s << "superior_margin_xyz_error: " << pr.superior_margin_xyz_error_<< '\n';
   s << "superior_crease_xy_error: " << pr.superior_crease_xy_error_<< '\n';
   s << "superior_crease_xyz_error: " << pr.superior_crease_xyz_error_<< '\n';
+  s << "look_dir: " << pr.eye_pointing_dir_.x() <<" "<<pr.eye_pointing_dir_.y()<<" "<<pr.eye_pointing_dir_.z()<< '\n';
+  s << "eyelid_dt: " << pr.eyelid_dt_ << '\n';
   return s;
 }
 

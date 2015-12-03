@@ -31,7 +31,9 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
                                                      __global    float           * output,//16
                                                      __global    float           * eyelid_geo,//16
                                                      __global    float           * dt,//16
+                                                     __global    float           * max_t_color,
 #ifdef ANATOMY_CALC
+
                                                      __global    float           * vis_accum,
 #else
                                                      __global    float8          * total_app,
@@ -105,22 +107,39 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
           float4 other_offset       = (float4)(other_translation[0],other_translation[1],other_translation[2],0) ;
           float4 source_p           = (float4)(  xg, yg, zg,0);
           float4 source_p_refl      = (float4)( -xg, yg, zg,0);
+
           float4 cell_center, cell_center_refl,target_p,target_p_refl;
           unsigned target_data_index, bit_index, target_data_index_refl, bit_index_refl;
+          unsigned source_data_index_refl, source_bit_index_refl,source_cell_center_refl;
+
           unsigned point_ok,r_point_ok;   int lidvoxel = 0;
           float8 blank_val = (float8)(255,0,148,0,0,0,0,0);
           float8 blank_val2 = (float8)(148,0,255,0,0,0,0,0);
           cell_center.s3=0;
           float t = 0;
+          float tol = 0.1;
+          bool eyelid_open = fabs(eyelid_param.t_max + dt[0]) < 0.01 ? true : false; //assumption that the eyelid is completely open
           if(eyelid[source_data_index]){
-              float4 moved_p = is_right[0] ? source_p_refl : source_p;
-              t = compute_t(moved_p.x,moved_p.y,&eyelid_param);
-              if(!is_valid_t( t - dt[0], &eyelid_param)){
-                lidvoxel = 1;
+            float4 moved_p;
+              t = compute_t(source_p.x,source_p.y,&eyelid_param);
+                float max = eyelid_param.t_max + tol;
+                float min = eyelid_param.t_min - tol;
+                float t_interp = (t - min ) * (eyelid_param.t_max + dt[0])/(max - min) - dt[0];
+              if( !is_valid_t(t,&eyelid_param,tol) && !is_valid_t(t_interp,&eyelid_param,tol)){
+                lidvoxel =1;
+                moved_p = is_right[0] ? source_p_refl : source_p; // no lid movement, reflect point
               }else{
-                moved_p +=  lid_vf(moved_p.x, t, -dt[0],&eyelid_param);
+                //expand the (t_min,t_max) interval by tol and map it to (dt,tmax); note that dt is a negative value here
+                moved_p =source_p + lid_vf(source_p.x, t_interp,dt[0], &eyelid_param); //update moved p with the lid vector field
+#ifdef ANATOMY_CALC
+                if(max_t_color[0] > t_interp)
+                   max_t_color[0] = t_interp;
+#endif
+                float4 moved_p_refl = (float4)(-moved_p.x,moved_p.y,moved_p.z,0);
+                moved_p = is_right[0] ? moved_p_refl : moved_p; // reflect the moved point if it's a right eye
               }
-              target_p =  moved_p + offset;
+
+              target_p =  moved_p + offset; // offset the source point into the target
               target_p_refl = (float4)( - target_p.x, target_p.y, target_p.z, 0);
             }
 
@@ -156,7 +175,6 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
             float8 color_B =  convert_float8(target_rgb_array[target_data_index_refl]);
             float8 mean_val = (float8)(29,255,107,0,0,0,0,0);
             int current_anatomy = get_ranked_anatomy(source_data_index,&orbit);
-
 
 #ifdef ANATOMY_CALC
 
@@ -206,11 +224,11 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
             }
 
             if(current_anatomy == EYELID){
-              if( lidvoxel && is_valid_t(t,&eyelid_param) ){
+              mean_val = total_app [3]; //actual upper lid color
+              if(eyelid_open){
                 mean_val = darker_lower_lid;
-                mean_val.x = (0.95 -  t) * darker_lower_lid.x + t * total_app[4].x; //blend intensy component between crease and lower lid;
-              }else
-                mean_val = total_app [3]; //actual upper lid color
+                mean_val.x = (eyelid_param.t_max - t) * total_app[5].x + t * darker_lower_lid.x; //blend between crease and lower lid;
+              }
             }
 
             if(current_anatomy == LOWER_LID){
@@ -220,11 +238,9 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
             if(current_anatomy == EYELID_CREASE){
               mean_val = total_app[5];
             }
-            if (!lidvoxel){
-              source_rgb_array[source_data_index] = convert_uchar8(weight_appearance(vis_A,vis_B,color_A,color_B,mean_val));
-            }else{
-              source_rgb_array[source_data_index] = convert_uchar8(mean_val);
-            }
+
+            source_rgb_array[source_data_index] = convert_uchar8(weight_appearance(vis_A,vis_B,color_A,color_B,mean_val));
+
 #define DO_INTERP
 #ifdef DO_INTERP
 
@@ -279,7 +295,7 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
                 } else if ( nb_count == 0 )
                    continue;
               // interpolate alpha over the source
-              if(nb_count>0 && !lidvoxel){
+              if(nb_count>0 && !eyelid_open){
                 uchar8 curr_rgb_tuple = target_rgb_array[target_data_index];
                 float4 float_rgb_tuple_interped  = interp_float4_weights(rgb_params,weights); //use the flow interp for float4s
                 uchar4 uchar_rgb_tuple_interped  = convert_uchar4_sat_rte(float_rgb_tuple_interped * NORM); // hack-city

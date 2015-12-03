@@ -225,6 +225,7 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
   boxm2_vecf_orbit_params params_;               // parameter struct
   bool is_right_;
   vgl_vector_3d<double> estimated_look_dir_;
+  double estimated_dt_;
   // =============  eye ===============
   boxm2_data<BOXM2_PIXEL>* sphere_;      // is voxel a eye sphere point?
   boxm2_data<BOXM2_PIXEL>* iris_;        // is voxel an iris point

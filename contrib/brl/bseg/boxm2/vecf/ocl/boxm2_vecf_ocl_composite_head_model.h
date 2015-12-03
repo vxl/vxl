@@ -32,6 +32,9 @@ public:
   //cache the estimated look dir from imagery
   void set_estimated_look_dir(vgl_vector_3d<double>& l_dir, vgl_vector_3d<double>& r_dir)
    {left_orbit_.estimated_look_dir_ =l_dir; right_orbit_.estimated_look_dir_ = r_dir; }
+  void set_estimated_dt(double dt_left, double  dt_right)
+   {left_orbit_.estimated_dt_ = dt_left; right_orbit_.estimated_dt_ = dt_right; }
+
   bool optimize_;
 private:
   boxm2_vecf_composite_head_parameters params_;

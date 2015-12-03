@@ -91,6 +91,7 @@ class boxm2_vecf_ocl_appearance_extractor{
   color_APM left_upper_lid_app_, right_upper_lid_app_, right_lower_lid_app_,left_lower_lid_app_, left_eyelid_crease_app_, right_eyelid_crease_app_, left_iris_app_,right_iris_app_, left_sclera_app_,right_sclera_app_,left_pupil_app_,right_pupil_app_;
   float8 total_sclera_app_,total_pupil_app_,total_iris_app_,total_upper_lid_app_,total_lower_lid_app_,total_eyelid_crease_app_;
   float vis_sclera_,vis_pupil_,vis_iris_,vis_upper_lid_,vis_lower_lid_,vis_eyelid_crease_;
+  float max_t_color;
   vis_score_t * current_vis_score_;
   boxm2_vecf_ocl_composite_head_model& head_model_;
   vcl_vector<unsigned> vis_cells_;
