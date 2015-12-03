@@ -18,8 +18,8 @@ typedef struct{
    float8 t0;
    float8 t1;
 } EyelidCrease;
-int is_valid_t(float t,__local Eyelid* eyelid){
-  float tolerance = 0.1;
+int is_valid_t(float t,__local Eyelid* eyelid,float tolerance){
+
   return (t>=(eyelid->t_min - tolerance) && t <= (eyelid->t_max + tolerance));
 }
 void eyelid_from_float_arr(__local Eyelid* eyelid , __global float* data){

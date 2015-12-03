@@ -12,7 +12,7 @@
 //
 #include <vcl_vector.h>
 #include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_point_3d.h> 
+#include <vgl/vgl_point_3d.h>
 #include <vcl_iosfwd.h>
 #include "boxm2_vecf_orbit_params.h"
 
@@ -28,19 +28,21 @@ class boxm2_vecf_fit_margins
   vgl_point_2d<double> lateral_canthus_;
   vgl_point_2d<double> medial_canthus_;
   bool is_right_;
+  bool estimate_t_;
  public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
- boxm2_vecf_fit_margins():is_right_(false),dphi_rad_(0.0) {}
+  boxm2_vecf_fit_margins():is_right_(false),dphi_rad_(0.0),estimate_t_(false) {}
 
  boxm2_vecf_fit_margins(vcl_vector<vgl_point_3d<double> >const& inferior_margin_pts,
                         vcl_vector<vgl_point_3d<double> >const& superior_margin_pts,
                         vcl_vector<vgl_point_3d<double> >const& superior_crease_pts,
                         vgl_point_3d<double> const& lateral_canthus,
                         vgl_point_3d<double> const& medial_canthus,
-                        bool is_right=false):
-  is_right_(is_right),dphi_rad_(0.0){
+                        bool is_right=false,
+                        bool estimate_t = false):
+   is_right_(is_right),dphi_rad_(0.0),estimate_t_(estimate_t){
     for(vcl_vector<vgl_point_3d<double> >::const_iterator pit = inferior_margin_pts.begin();
         pit != inferior_margin_pts.end(); ++pit)
       inferior_margin_pts_.push_back(vgl_point_2d<double>(pit->x(), pit->y()));
@@ -65,7 +67,7 @@ class boxm2_vecf_fit_margins
     opr_ = params;}
 
   //: find the skew-free affine transform that minimizes the squared error with
-  // respect to the margin points. 
+  // respect to the margin points.
   // returns the average distance from the points to the margin curves
   // error conditions are reported on outstream
   double fit(vcl_ostream* outstream=0, bool verbose=false);

@@ -30,12 +30,12 @@ bool is_anatomy(int anatomy_in,unsigned  data_index,
     return IRISES;
   if(anatomy_in == SPHERE)
     return SPHERES;
+  if (anatomy_in==EYELID)
+    return EYELIDS;
   if(anatomy_in == LOWER_LID)
     return LOWER_LIDS;
   if(anatomy_in == EYELID_CREASE)
     return EYELID_CREASES;
-  if (anatomy_in==EYELID)
-    return EYELIDS;
 
     return 0;
 #undef SPHERES

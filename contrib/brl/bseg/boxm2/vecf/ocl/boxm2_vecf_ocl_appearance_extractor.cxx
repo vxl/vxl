@@ -954,6 +954,8 @@ bool boxm2_vecf_ocl_appearance_extractor::extract_appearance_one_pass(bool is_ri
    bocl_mem_sptr  dt_l = new bocl_mem(device_->context(), &curr_dt , sizeof(float), " dt buff " );
    good_buffs &=  dt_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
+   bocl_mem_sptr  max_t_l = new bocl_mem(device_->context(), &max_t_color , sizeof(float), " max t color buff " );
+   good_buffs &=  max_t_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
    vcl_size_t local_threads[1]={64};
    vcl_size_t global_threads[1]={1};
@@ -1026,6 +1028,7 @@ bool boxm2_vecf_ocl_appearance_extractor::extract_appearance_one_pass(bool is_ri
    map_to_source_kern->set_arg(output_cl.ptr());
    map_to_source_kern->set_arg(orbit.eyelid_geo_cl_.ptr());
    map_to_source_kern->set_arg(dt_l.ptr());
+   map_to_source_kern->set_arg(max_t_l.ptr());
    map_to_source_kern->set_arg(total_app_l.ptr());
    map_to_source_kern->set_arg(mean_app_l.ptr());
    map_to_source_kern->set_arg(is_right_cl.ptr());
@@ -1094,6 +1097,7 @@ for(unsigned i = 0;i<6;i++){
 
   float offset_buff  [4],other_offset_buff  [4];
   float rotation_buff[9],other_rotation_buff[9];
+  max_t_color = 100;
   bool good_buffs = true;
   unsigned char is_right_buf = is_right;
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
@@ -1129,7 +1133,6 @@ for(unsigned i = 0;i<6;i++){
    bocl_mem_sptr  other_rotation_l = new bocl_mem(device_->context(), other_rotation_buff, sizeof(float)*9, " other_rotation " );
    good_buffs &=  other_rotation_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
-
    bocl_mem_sptr  offset_l = new bocl_mem(device_->context(), offset_buff, sizeof(float)*4, " offset " );
    good_buffs &=  offset_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
@@ -1147,6 +1150,10 @@ for(unsigned i = 0;i<6;i++){
 
    bocl_mem_sptr  dt_l = new bocl_mem(device_->context(), &curr_dt , sizeof(float), " dt buff " );
    good_buffs &=  dt_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
+   bocl_mem_sptr  max_t_l = new bocl_mem(device_->context(), &max_t_color , sizeof(float), " max t color buff " );
+   good_buffs &=  max_t_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
+
 
    vcl_size_t local_threads[1]={64};
    vcl_size_t global_threads[1]={1};
@@ -1215,6 +1222,7 @@ for(unsigned i = 0;i<6;i++){
    calc_mean_orbit_app_kern->set_arg(output_cl.ptr());
    calc_mean_orbit_app_kern->set_arg(orbit.eyelid_geo_cl_.ptr());
    calc_mean_orbit_app_kern->set_arg(dt_l.ptr());
+   calc_mean_orbit_app_kern->set_arg(max_t_l.ptr());
    calc_mean_orbit_app_kern->set_arg(vis_l.ptr());
    calc_mean_orbit_app_kern->set_arg(mean_app_l.ptr());
    calc_mean_orbit_app_kern->set_arg(is_right_cl.ptr());
@@ -1231,6 +1239,9 @@ for(unsigned i = 0;i<6;i++){
     }
    vis_l->read_to_buffer(queue_);
    mean_app_l->read_to_buffer(queue_);
+   max_t_l->read_to_buffer(queue_);
+   vcl_cout<<" max t color was determined to be " <<max_t_color<< " and t min and t max are  "<< orbit_params.eyelid_tmin_ <<" "<<orbit_params.eyelid_tmax_ << vcl_endl;
+   vcl_cout<<" dt is "<< -curr_dt<<vcl_endl;
 //   output_cl->read_to_buffer(queue_);
    int status = clFinish(queue_);
    bool good_kern = check_val(status, CL_SUCCESS, "Calc Mean Orbit Kernel Failed: " + error_to_string(status));

@@ -127,9 +127,10 @@ __kernel void map_orbit_to_target(                   __constant  float          
             if(bit_index >=0 && bit_index < MAX_CELLS ){
               cell_center.s3=0;
               {
-                //reflec the non sphere voxels ; make sure there is anatomy at the reflected data index
+                //reflect the non sphere voxels ; make sure there is anatomy at the reflected data index
                 bool lidvoxel = false; bool has_anatomy = false;
                 float4 source_p_original  = source_p;
+                float4 left_p             = is_right ? source_p_refl : source_p;
                 int bit_index_original = bit_index ;
                 int source_data_index_original = source_data_index;
                 int source_data_index_probe = is_right ? source_data_index_refl : source_data_index;
@@ -148,17 +149,19 @@ __kernel void map_orbit_to_target(                   __constant  float          
                                                      &bit_index,bit_lookup);
 
               }
-                if( eyelid[source_data_index_probe] ){
+                if( eyelid[source_data_index_probe]){
                   source_p          = is_right ? source_p_refl          : source_p_original ;
                   source_data_index = is_right ? source_data_index_refl : source_data_index_original;
                   bit_index         = is_right ? bit_index_refl         : bit_index_original;
                   cell_center       = is_right ? cell_center_refl       : cell_center_original;
-                  float t = compute_t(source_p.x,source_p.y,&eyelid_param);
-                  has_anatomy = is_valid_t(t,&eyelid_param) ? true : false;
-                  if(!is_valid_t( t - dt[0], &eyelid_param)){
-                    lidvoxel = sphere[source_data_index_probe] ? false : true;
+                  float t           = compute_t(source_p.x,source_p.y,&eyelid_param);
+                  float tolerance = 0.0;
+                  has_anatomy = is_valid_t(t,&eyelid_param,tolerance) ? true : false;
+                  if(!is_valid_t( t - dt[0], &eyelid_param,tolerance)){
+                    lidvoxel = sphere[source_data_index] ? false : true;
                   }else{
-                    source_p = source_p + lid_vf(source_p.x, t, -dt[0],&eyelid_param);
+                    source_p += lid_vf(source_p.x, t, -dt[0],&eyelid_param);
+                    //source_p = is_right? source_p_left_refl : source_p_left;
 
                     unsigned point_ok     = data_index_world_point(source_scene_linfo, source_scene_tree_array,
                                                                    local_trees_source,lid,source_p,
