@@ -4,7 +4,7 @@ SET (HAS_BGUI3D "NO")
 IF (BGUI3D_FOUND)
 
   # Find the Coin3D library
-  INCLUDE( ${MODULE_PATH}/NewCMake/FindCoin3D.cmake )
+  INCLUDE( ${CMAKE_ROOT}/Modules/FindCoin3D.cmake )
   
   IF (COIN3D_FOUND)
     INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )

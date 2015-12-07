@@ -17,14 +17,6 @@ SET( EXPAT_FIND_QUIETLY "YES" )
 INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/FindEXPAT.cmake )
 SET( EXPAT_FIND_QUIETLY )
 
-# Save the compiler settings so another project can import them.
-INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
-SET(VXL_BUILD_SETTINGS_FILE ${vxl_BINARY_DIR}/VXLBuildSettings.cmake)
-SET(VXL_EXPORT_BUILD_SETTINGS_FILE
-  ${CMAKE_INSTALL_PREFIX}/share/vxl/cmake/VXLBuildSettings.cmake
-)
-CMAKE_EXPORT_BUILD_SETTINGS(${VXL_BUILD_SETTINGS_FILE})
-
 # Save library dependencies.
 SET(VXL_CMAKE_DOXYGEN_DIR  ${vxl_SOURCE_DIR}/config/cmake/doxygen)
 SET(VXL_LIBRARY_DEPENDS_FILE ${vxl_BINARY_DIR}/VXLLibraryDepends.cmake)
