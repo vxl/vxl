@@ -9,17 +9,11 @@ compiler:
   - clang
 
 cache:
-  - ccache
-  - directories:
-    - $HOME/deps
+  directories:
+  - $HOME/deps
 
 before_script:
   - bash .travis/install-deps.sh
-
-addons:
-  apt:
-    packages:
-    - ccache
 
 script:
   - export PATH=$HOME/deps/bin:$PATH
