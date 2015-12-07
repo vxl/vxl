@@ -1,0 +1,26 @@
+#Travis CI configuration for VXL
+# See http://travis-ci.org/vxl/vxl
+
+sudo: false
+
+language: cpp
+compiler:
+  - gcc
+  - clang
+
+cache: ccache
+
+addons:
+  apt:
+    packages:
+    - ccache
+
+script:
+  - mkdir build
+  - mkdir $HOME/install
+  - cd build
+  - cmake -DCMAKE_INSTALL_PREFIX=$HOME/install
+          ../
+  - make -j2
+  - ctest
+  - make install
