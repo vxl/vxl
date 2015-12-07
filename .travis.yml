@@ -21,6 +21,7 @@ script:
   - mkdir $HOME/install
   - cd build
   - cmake -DCMAKE_INSTALL_PREFIX=$HOME/install
+          -DCMAKE_CXX_STANDARD=11
           ../
   - make -j2
   - ctest
