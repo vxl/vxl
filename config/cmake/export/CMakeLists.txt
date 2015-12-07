@@ -35,7 +35,6 @@ CONFIGURE_FILE(${VXL_CMAKE_DIR}/VXLConfig_export.cmake.in
 
 INSTALL(FILES
   ${vxl_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
-  ${vxl_BINARY_DIR}/VXLBuildSettings.cmake
   ${vxl_BINARY_DIR}/VXLLibraryDepends.cmake
   ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake
   ${VXL_CMAKE_DIR}/UseVXL.cmake
