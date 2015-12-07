@@ -20,7 +20,7 @@ IF (HAS_VGUI)
   IF (BUILD_BGUI3D)
 
     # Find the Coin3D library
-    INCLUDE( ${CMAKE_ROOT}/Modules/FindCoin3D.cmake )
+    find_package(Coin3D)
 
     IF (COIN3D_FOUND)
       INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )

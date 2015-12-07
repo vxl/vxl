@@ -17,7 +17,7 @@
 # If this FORCE variable is unset or is false, try to find a native library
 IF( VXL_FORCE_V3P_DCMTK )
 ELSE( VXL_FORCE_V3P_DCMTK )
-  INCLUDE( ${CMAKE_ROOT}/Modules/FindDCMTK.cmake )
+  find_package(DCMTK)
 ENDIF( VXL_FORCE_V3P_DCMTK )
 
 IF( DCMTK_FOUND )

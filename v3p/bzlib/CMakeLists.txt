@@ -5,7 +5,7 @@
 
 PROJECT( bzlib C )
 
-INCLUDE(${CMAKE_ROOT}/Modules/FindBZip2.cmake)
+find_package(BZip2)
 
 IF(NOT VXL_USING_NATIVE_BZLIB2)
 

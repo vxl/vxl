@@ -50,7 +50,7 @@ IF( ECW_FOUND )
     SET(VXL_USING_NATIVE_J2K "YES")
 ELSE( ECW_FOUND )
 INCLUDE(${MODULE_PATH}/NewCMake/FindWin32SDK.cmake)
-INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+find_package(MFC)
 
 SET(J2K_SOURCES_FOUND "NO")
 IF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h )

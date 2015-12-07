@@ -53,7 +53,7 @@ TARGET_LINK_LIBRARIES(basic_app vgui vul vbl)
 # The examples use the gtk adaptor (not the gtk2 adaptor), so
 # vgui must have been compiled with gtk1 support for these
 # to work.  They also require gktgl.
-INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
+find_package(GTK)
 IF(VGUI_USE_GTK)
 IF(GTK_GL_FOUND)
  INCLUDE_DIRECTORIES( ${GTK_INCLUDE_DIR} )
@@ -71,7 +71,7 @@ ENDIF(VGUI_USE_GTK)
 
 # GLUT examples
 #--------------
-INCLUDE( ${CMAKE_ROOT}/Modules/FindGLUT.cmake )
+find_package(GLUT)
 IF(GLUT_FOUND)
  TARGET_LINK_LIBRARIES( click_points ${GLUT_LIBRARIES} )
 
@@ -87,7 +87,7 @@ ENDIF (GLUT_FOUND)
 IF(NOT MINGW)
   # MFC is not available in MinGW.
   # This should be fixed in FindMFC.cmake and then this IF can be removed
-  INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+  find_package(MFC)
 ENDIF(NOT MINGW)
 IF(VGUI_USE_MFC)
    add_subdirectory(mfc_example)
