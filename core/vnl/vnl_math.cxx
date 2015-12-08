@@ -17,6 +17,15 @@
 #ifndef finitel
 # define finitel _finite
 #endif
+
+#elif VXL_C_MATH_HAS_ISFINITE || VXL_C_MATH_HAS_ISNAN
+# include<math.h>
+# if VXL_C_MATH_HAS_ISFINITE
+#    define finite  isfinite
+#    define finitef isfinite
+#    define finitel isfinite
+#  endif
+
 // # define isnan _isnan // PVr commented out: we don't want to redefine vnl::isnan ...
 #elif VXL_IEEEFP_HAS_FINITE
 # include <ieeefp.h>
@@ -53,24 +62,6 @@ extern "C" int finite(double);
 # define VNL_HAS_NO_FINITE
 #endif
 
-// On Mac OS X Tiger in C++ the math.h header defines an inline __isnan
-// that gets compiled here into an internal-linkage symbol.  Then at
-// link time the relocation entry from libm.dylib confuses the linker
-// because it thinks the entry applies to the static version of the
-// symbol.  We need to avoid use of the inline version by never
-// calling __isnan in C++ code.
-#if defined(__APPLE__)
-# include <Availability.h>
-# if MAC_OS_X_VERSION_MAX_ALLOWED == 1040
-#  include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
-#  if VXL_APPLE_HAS_ISNAND
-#   define isnan(x) __isnand((double)x)
-#  else
-#   define isnan(x) __inline_isnand((double)x)
-#  endif
-# endif
-#endif
-
 //--------------------------------------------------------------------------------
 namespace vnl_math
 {
@@ -83,14 +74,21 @@ namespace vnl_math
  bool isnan(double x) { return std::isnan(x); }
  //: Return true iff x is "Not a Number"
  bool isnan(long double x) { return std::isnan(x); }
+#elif VXL_C_MATH_HAS_ISNAN   // Use C99 versions
+ //: Return true iff x is "Not a Number"
+ bool isnan(float x) { return isnan(x) != 0; }
+ //: Return true iff x is "Not a Number"
+ bool isnan(double x) { return isnan(x) != 0; }
+ //: Return true iff x is "Not a Number"
+ bool isnan(long double x) { return isnan(x) != 0; }
 #elif defined(VCL_ICC)
 #include <mathimf.h> // defines isnanf, isnan, and isnanl
 //: Return true iff x is "Not a Number"
-bool isnan(float x) { return isnanf(x); }
+bool isnan(float x) { return isnanf(x) != 0; }
 //: Return true iff x is "Not a Number"
-bool isnan(double x) { return isnan(x); }
+bool isnan(double x) { return isnan(x) != 0; }
 //: Return true iff x is "Not a Number"
-bool isnan(long double x) { return isnanl(x); }
+bool isnan(long double x) { return isnanl(x) != 0; }
 #elif !defined(VNL_HAS_NO_FINITE) && !defined(__alpha__) && !defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
 bool isnan(float x) { return x != x; } // causes "floating exception" on alpha
@@ -148,30 +146,20 @@ bool isnan(long double x)
 }
 #endif
 
-// fsm
-// On linux noshared builds, with optimisation on, calling 'finite' within the
-// scope of vnl_math causes vnl_math::isinf to be called. This blows the stack.
-// Plausible theory : 'finite' is a preprocessor macro, defined in terms of a
-// macro called 'isinf'.
-// Doesn't seem to be an issue with ICC 8
-#if defined(isinf) && !defined(VCL_ICC_8)
-# if defined(__GNUC__) || defined(__INTEL_COMPILER)
-// I do not know if MW accepts #warning. Comment out the #undef if not.
-#  warning macro isinf is defined
-#  undef isinf
-# else
-// do not fail silently
-#  error macro isinf is defined
-# endif
-#endif
-
 #if VXL_CXX11
 //: Return true if x is neither NaN nor Inf.
-bool isfinite(float x) { return std::isfinite(x) != 0; }
+bool isfinite(float x) { return std::isfinite(x); }
 //: Return true if x is neither NaN nor Inf.
-bool isfinite(double x) { return std::isfinite(x) != 0; }
+bool isfinite(double x) { return std::isfinite(x); }
 //: Return true if x is neither NaN nor Inf.
-bool isfinite(long double x) { return std::isfinite(x) != 0; }
+bool isfinite(long double x) { return std::isfinite(x); }
+#elif VXL_C_MATH_HAS_ISFINITE //Use C99 version
+//: Return true if x is neither NaN nor Inf.
+bool isfinite(float x) { return isfinite(x) != 0; }
+//: Return true if x is neither NaN nor Inf.
+bool isfinite(double x) { return isfinite(x) != 0; }
+//: Return true if x is neither NaN nor Inf.
+bool isfinite(long double x) { return isfinite(x) != 0; }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is neither NaN nor Inf.
 bool isfinite(float x) { return finitef(x) != 0; }
@@ -194,18 +182,25 @@ bool isfinite(long double x)
 
 #if VXL_CXX11
 //: Return true if x is inf
-bool isinf(float x) { return std::isinf(x) != 0; }
+bool isinf(float x) { return std::isinf(x); }
 //: Return true if x is inf
-bool isinf(double x) { return std::isinf(x) != 0; }
+bool isinf(double x) { return std::isinf(x); }
 //: Return true if x is inf
-bool isinf(long double x) { return std::isinf(x) != 0; }
+bool isinf(long double x) { return std::isinf(x); }
+#elif VXL_C_MATH_HAS_ISINF // Use the C99 version
+//: Return true if x is inf
+bool isinf(float x) { return isinf(x) != 0; }
+//: Return true if x is inf
+bool isinf(double x) { return isinf(x) != 0; }
+//: Return true if x is inf
+bool isinf(long double x) { return isinf(x) != 0; }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
-bool isinf(float x) { return !finitef(x) && !isnan(x); }
+bool isinf(float x) { return ! ::isfinite(x) && ! ::isnan(x); }
 //: Return true if x is inf
-bool isinf(double x) { return !finite(x) && !isnan(x); }
+bool isinf(double x) { return ! ::isfinite(x) && ! ::isnan(x); }
 //: Return true if x is inf
-bool isinf(long double x) { return !finitel(x) && !isnan(x); }
+bool isinf(long double x) { return ! ::isfinite(x) && ! ::isnan(x); }
 #else
 // Assume IEEE floating point number representation
 bool isinf(float x) {return(bMe(&x,0x7f800000L,sz_f)&&!bMp(&x,0x007fffffL,sz_f))||bMp(&x,0x7fffffffL,sz_f)==0x7f7fffffL;}
@@ -216,6 +211,29 @@ bool isinf(long double x)
   else if (sizeof(long double) <= 12) return (bMe(&x,0xbfff7fffL,sz_l)||bMe(&x,0x4001ffffL,sz_l))&&!bMp(&x,0x40000000,sz_l-4);
   else return bMe(&x,0x7ff70000L,sz_l) && !bMp(&x,0x0008ffffL,sz_l);
 }
+#endif
+
+#if VXL_CXX11
+//: Return true if x is inf
+bool isnormal(float x) { return std::isnormal(x); }
+//: Return true if x is inf
+bool isnormal(double x) { return std::isnormal(x); }
+//: Return true if x is inf
+bool isnormal(long double x) { return std::isnormal(x); }
+#elif VXL_C_MATH_HAS_ISNORMAL // Use the C99 version
+//: Return true if x is inf
+bool isnormal(float x) { return isnormal(x) != 0; }
+//: Return true if x is inf
+bool isnormal(double x) { return isnormal(x) != 0; }
+//: Return true if x is inf
+bool isnormal(long double x) { return isnormal(x) != 0; }
+#else
+//: Return true if x is inf
+bool isnormal(float x) { return vnl_math::isfinite(x) && ( x != 0.0 ); }
+//: Return true if x is inf
+bool isnormal(double x) { return vnl_math::isfinite(x) && ( x != 0.0 ); }
+//: Return true if x is inf
+bool isnormal(long double x) { return vnl_math::isfinite(x) && (x != 0.0 ); }
 #endif
 
 } // end namespace vnl_math

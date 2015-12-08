@@ -1098,26 +1098,6 @@ int main() { MINIDUMP_EXCEPTION_INFORMATION dummy; return 0; }
 
 //-------------------------------------
 
-#ifdef VXL_APPLE_HAS_ISNAND
-#include <math.h>
-int main()
-{
-  __isnand(0.0);
-  return 0;
-}
-#endif // VXL_APPLE_HAS_ISNAND
-
-//-------------------------------------
-
-#ifdef VXL_APPLE_HAS_INLINE_ISNAND
-#include <math.h>
-int main()
-{
-  __inline_isnand(0.0);
-  return 0;
-}
-#endif // VXL_APPLE_HAS_INLINE_ISNAND
-
 //-------------------------------------
 #ifdef VXL_HAS_WIN_WCHAR_T
 

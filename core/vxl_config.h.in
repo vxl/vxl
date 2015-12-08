@@ -172,6 +172,12 @@
 /* true if <stdlib.h> declares srand48() */
 #define VXL_STDLIB_HAS_SRAND48    @VXL_STDLIB_HAS_SRAND48@
 
+/* Check for C99 versions of is[finite|inf|nan|normal] in <math.h> */
+#define VXL_C_MATH_HAS_ISFINITE @VXL_C_MATH_HAS_ISFINITE@
+#define VXL_C_MATH_HAS_ISINF    @VXL_C_MATH_HAS_ISINF@
+#define VXL_C_MATH_HAS_ISNAN    @VXL_C_MATH_HAS_ISNAN@
+#define VXL_C_MATH_HAS_ISNORMAL @VXL_C_MATH_HAS_ISNORMAL@
+
 /* true if <ieeefp.h> declares finite() */
 #define VXL_IEEEFP_HAS_FINITE     @VXL_IEEEFP_HAS_FINITE@
 
@@ -198,11 +204,6 @@
 
 /* true if <ieeefp.h> is available */
 #define VXL_HAS_IEEEFP_H          @VXL_HAS_IEEEFP_H@
-
-#ifdef __APPLE__
-/* true if in OsX <math.h> declares __isnand() */
-#define VXL_APPLE_HAS_ISNAND @VXL_APPLE_HAS_ISNAND@
-#endif
 
 /* true if <emmintrin.h> is available */
 #define VXL_HAS_EMMINTRIN_H   @VXL_HAS_EMMINTRIN_H@
