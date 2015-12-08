@@ -23,7 +23,7 @@ IF(NOT EXPAT_FOUND)
 
   # If this FORCE variable is unset or is FALSE, try to find a native library.
   IF( NOT VXL_FORCE_B3P_EXPAT )
-    INCLUDE( ${CMAKE_ROOT}/Modules/FindEXPAT.cmake )
+    find_package(EXPAT)
     IF(EXPAT_FOUND)
       SET(VXL_USING_NATIVE_EXPAT "YES")
     ENDIF(EXPAT_FOUND)

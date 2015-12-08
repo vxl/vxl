@@ -97,7 +97,7 @@ ENDIF(EXPAT_FOUND)
 IF(NOT MINGW)
   # MFC is not available in MinGW.
   # This should be fixed in FindMFC.cmake and then this IF can be removed
-  INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+  find_package(MFC)
 ENDIF(NOT MINGW)
 
 IF(MFC_FOUND)

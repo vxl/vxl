@@ -4,7 +4,7 @@ INCLUDE(${VXL_CMAKE_DIR}/FindNetlib.cmake)
 IF(NETLIB_FOUND)
   INCLUDE_DIRECTORIES(${NETLIB_INCLUDE_DIR})
 
-  INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+  find_package(X11)
   IF(X11_FOUND)
     INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
     ADD_EXECUTABLE(netlib_showme showme.c)

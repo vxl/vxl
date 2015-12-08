@@ -18,7 +18,7 @@ SET( VGUI_FOUND "NO" CACHE INTERNAL "Was vgui successfully built?" )
 
 IF( BUILD_VGUI )
 
-INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
+find_package(OpenGL)
 
 # Build here only if OpenGL is available:
 IF (OPENGL_FOUND)
@@ -33,27 +33,27 @@ IF (OPENGL_FOUND)
   IF(APPLE)
     OPTION(VGUI_USE_X11 "Use OpenGL for X11" NO)
     IF(VGUI_USE_X11)
-      INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+      find_package(X11)
     ENDIF(VGUI_USE_X11)
   ELSE(APPLE)
-    INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+    find_package(X11)
   ENDIF(APPLE)
   # Qv needed by vrml only
   INCLUDE(${VXL_CMAKE_DIR}/FindQv.cmake)
   # glut optionally used by vgui_text and by the glut toolkit
   # implementation
-  INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
+  find_package(GLUT)
 
   # The following are for the optional toolkit
   # implementations
-  INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
-  INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-  INCLUDE(${CMAKE_ROOT}/Modules/FindGTK2.cmake)
+  find_package(Qt)
+  find_package(GTK)
+  find_package(GTK2)
   INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindWin32SDK.cmake)
   IF(NOT MINGW)
     # MFC is not available in MinGW.
     # This should be fixed in FindMFC.cmake and then this IF can be removed
-    INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+    find_package(MFC)
   ENDIF(NOT MINGW)
 
   #SET(WXWIDGETS_USE_LIBS base core gl)

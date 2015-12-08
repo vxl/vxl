@@ -105,7 +105,7 @@ inline int vgui_glutExtensionSupported( const char* name )
 // source without determining if your system has glut. If you are
 // using CMake to build, then look at the FindGLUT module. Something like
 //
-//   INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
+//   find_package(GLUT)
 //   IF( GLUT_FOUND )
 //     INCLUDE_DIRECTORIES(${GLUT_INCLUDE_DIR})
 //     ADD_DEFINITIONS( -DHAS_GLUT)
