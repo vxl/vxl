@@ -226,6 +226,9 @@ T bsta_joint_histogram_3d<T>::p(unsigned a, unsigned b, unsigned c) const
 template <class T>
 T bsta_joint_histogram_3d<T>::p(T a, T b, T c) const
 {
+  if (!volume_valid_) {
+    compute_volume();
+  }
   int bina, binb, binc;
   if(!bin_at_val(a,b,c,bina,binb,binc))
     return 0;
