@@ -25,9 +25,6 @@ class bvxm_voxel_slab : public bvxm_voxel_slab_base
   bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz, bvxm_memory_chunk_sptr mem, T* first_voxel)
     : bvxm_voxel_slab_base(nx,ny,nz), first_voxel_(first_voxel), mem_(mem) {}
 
-  //: Copy Constructor
-  bvxm_voxel_slab(const bvxm_voxel_slab<T>& that);
-
   //: Pointer to first voxel in slab (voxel at (0,0,0))
   inline T* first_voxel() const { return first_voxel_;}
 

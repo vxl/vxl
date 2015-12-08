@@ -134,11 +134,6 @@ static void test_ekf_camera_optimizer()
   vox_world->expected_image<APM_MOG_GREY>(meta1,img1,mask);
   vox_world->expected_image<APM_MOG_GREY>(meta2,img2,mask);
 
-  // debug: write out images
-  vil_save(*img0,"C:/research/registration/output/expected0.tiff");
-  vil_save(*img1,"C:/research/registration/output/expected1.tiff");
-  vil_save(*img2,"C:/research/registration/output/expected2.tiff");
-
   // create a camera optimizer
   breg3d_ekf_camera_optimizer_state init_state(1e-3,center0,rot0,0.1,0.1);
   breg3d_ekf_camera_optimizer optimizer(20.0,20.0,0.01,0.01,0.01,0.01,false,true,false);
