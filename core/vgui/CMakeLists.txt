@@ -436,39 +436,45 @@ ENDIF (GTK_GL_FOUND)
 # GTK2
 ##################################################
 
+message("GTK2_INCLUDE_DIRS: ${GTK2_INCLUDE_DIRS}")
 IF (GTK2_FOUND)
 
-  OPTION(VGUI_USE_GTK2 "Should GTK2 support be compiled into vgui?" YES)
+  # We need to make sure we have the gl extension before building this component.
+  find_file(GTKGL gtk/gtkgl.h PATHS ${GTK2_INCLUDE_DIRS})
+  if (GTKGL)
+    OPTION(VGUI_USE_GTK2 "Should GTK2 support be compiled into vgui?" YES)
 
-  IF(VGUI_USE_GTK2)
+    IF(VGUI_USE_GTK2)
 
-    IF(VGUI_USE_GTK)
-       MESSAGE(SEND_ERROR "You cannot build against both GTK1 and"
-                          " GTK2 at the same time")
-    ENDIF(VGUI_USE_GTK)
+      IF(VGUI_USE_GTK)
+        MESSAGE(SEND_ERROR "You cannot build against both GTK1 and"
+          " GTK2 at the same time")
+      ENDIF(VGUI_USE_GTK)
 
 
-    # This puts the include directories and whatever compiler flags
-    # are necessary for GTK2
-    ADD_DEFINITIONS( ${GTK2_DEFINITIONS} )
+      # This puts the include directories and whatever compiler flags
+      # are necessary for GTK2
+      ADD_DEFINITIONS( ${GTK2_DEFINITIONS} )
+      include_directories(${GTK2_INCLUDE_DIRS})
 
-    SET(vgui_gtk2_sources
-      impl/gtk2/vgui_gtk2.cxx             impl/gtk2/vgui_gtk2.h
-      impl/gtk2/vgui_gtk2_adaptor.cxx     impl/gtk2/vgui_gtk2_adaptor.h
-      impl/gtk2/vgui_gtk2_dialog_impl.cxx impl/gtk2/vgui_gtk2_dialog_impl.h
-      impl/gtk2/vgui_gtk2_statusbar.cxx   impl/gtk2/vgui_gtk2_statusbar.h
-      impl/gtk2/vgui_gtk2_tag.cxx
-      impl/gtk2/vgui_gtk2_utils.cxx       impl/gtk2/vgui_gtk2_utils.h
-      impl/gtk2/vgui_gtk2_window.cxx      impl/gtk2/vgui_gtk2_window.h
-    )
+      SET(vgui_gtk2_sources
+        impl/gtk2/vgui_gtk2.cxx             impl/gtk2/vgui_gtk2.h
+        impl/gtk2/vgui_gtk2_adaptor.cxx     impl/gtk2/vgui_gtk2_adaptor.h
+        impl/gtk2/vgui_gtk2_dialog_impl.cxx impl/gtk2/vgui_gtk2_dialog_impl.h
+        impl/gtk2/vgui_gtk2_statusbar.cxx   impl/gtk2/vgui_gtk2_statusbar.h
+        impl/gtk2/vgui_gtk2_tag.cxx
+        impl/gtk2/vgui_gtk2_utils.cxx       impl/gtk2/vgui_gtk2_utils.h
+        impl/gtk2/vgui_gtk2_window.cxx      impl/gtk2/vgui_gtk2_window.h
+        )
 
-    SET( vgui_sources ${vgui_sources} ${vgui_gtk2_sources} )
+      SET( vgui_sources ${vgui_sources} ${vgui_gtk2_sources} )
 
-  ENDIF(VGUI_USE_GTK2)
+    ENDIF(VGUI_USE_GTK2)
+  endif(GTKGL)
 
 ENDIF (GTK2_FOUND)
 
-##################################################
+#########################################i#########
 # wxWidgets
 ##################################################
 
