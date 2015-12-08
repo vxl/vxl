@@ -652,24 +652,31 @@ def remove_nitf_margin(img_res):
   else:
     return 0, 0, 0, 0
 
-# register a source image to a target image by explicitly minize the root-mean-square-error (RMSE) of pixel value difference
-def img_registration_by_rmse(src_img, tgr_img, sx, sy, pixel_res=1.0, invalid_pixel=-9999.0):
+# register a source image to a target image by explicitly minimizing the root-mean-square-error (RMSE) of pixel value difference
+def img_registration_by_rmse(src_img, tgr_img, sx, sy, sz = 0.0, pixel_res=1.0, invalid_pixel=-9999.0, mask_img=None):
   bvxm_batch.init_process("vilImageRegistrationProcess")
   bvxm_batch.set_input_from_db(0, src_img)
   bvxm_batch.set_input_from_db(1, tgr_img)
   bvxm_batch.set_input_unsigned(2,sx)
   bvxm_batch.set_input_unsigned(3,sy)
-  bvxm_batch.set_input_double(4, pixel_res)
-  bvxm_batch.set_input_float(5,invalid_pixel)
+  bvxm_batch.set_input_double(4, sz)
+  bvxm_batch.set_input_double(5, pixel_res)
+  bvxm_batch.set_input_float(6,invalid_pixel)
+  if mask_img:
+    bvxm_batch.set_input_from_db(7,mask_img)
   status = bvxm_batch.run_process()
   if status:
     (id, type) = bvxm_batch.commit_output(0)
-    rmse_x = bvxm_batch.get_output_double(id)
+    trans_x = bvxm_batch.get_output_double(id)
     (id, type) = bvxm_batch.commit_output(1)
-    rmse_y = bvxm_batch.get_output_double(id)
+    trans_y = bvxm_batch.get_output_double(id)
     (id, type) = bvxm_batch.commit_output(2)
+    trans_z = bvxm_batch.get_output_double(id)
+    (id, type) = bvxm_batch.commit_output(3)
     rmse_z = bvxm_batch.get_output_double(id)
-    return rmse_x, rmse_y, rmse_z
+    (id, type) = bvxm_batch.commit_output(4)
+    var_z  = bvxm_batch.get_output_double(id)
+    return trans_x, trans_y, trans_z, rmse_z, var_z
   else:
-    return -1.0, -1.0, -1.0
+    return -1.0, -1.0, -1.0, -1.0, -1.0
   
