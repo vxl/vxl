@@ -196,11 +196,11 @@ bool isfinite(double x) { return _finite(x) != 0; }
 bool isfinite(long double x) { return _finitel(x) != 0 && !_isnanl(x); }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is neither NaN nor Inf.
-bool isfinite(float x) { return finitef(x) != 0; }
+bool isfinite(float x) { return isfinite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
-bool isfinite(double x) { return finite(x) != 0; }
+bool isfinite(double x) { return isfinite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
-bool isfinite(long double x) { return finitel(x) != 0; }
+bool isfinite(long double x) { return isfinite(x) != 0; }
 #else
 // Assume IEEE floating point number representation
 bool isfinite(float x) { return !bMe(&x,0x7f800000L,sz_f) && bMp(&x,0x7fffffffL,sz_f) != 0x7f7fffffL; }
@@ -230,11 +230,11 @@ bool isinf(double x) { return !_finite(x) && !isnan(x); }
 bool isinf(long double x) { return !_finitel(x) && !isnan(x); }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
-bool isinf(float x) { return !finitef(x) && !isnan(x); }
+bool isinf(float x) { return !isfinite(x) && !isnan(x); }
 //: Return true if x is inf
-bool isinf(double x) { return !finite(x) && !isnan(x); }
+bool isinf(double x) { return !isfinite(x) && !isnan(x); }
 //: Return true if x is inf
-bool isinf(long double x) { return !finitel(x) && !isnan(x); }
+bool isinf(long double x) { return !isfinite(x) && !isnan(x); }
 #else
 // Assume IEEE floating point number representation
 bool isinf(float x) {return(bMe(&x,0x7f800000L,sz_f)&&!bMp(&x,0x007fffffL,sz_f))||bMp(&x,0x7fffffffL,sz_f)==0x7f7fffffL;}
