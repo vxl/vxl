@@ -16,7 +16,7 @@
 
 SET(HDFS_FOUND "NO")
 
-INCLUDE (${CMAKE_ROOT}/Modules/FindJNI.cmake)
+find_package(JNI)
 
 IF (UNIX)
 

@@ -18,7 +18,7 @@ SET( VGUI_FOUND "NO" CACHE INTERNAL "Was vgui successfully built?" )
 
 IF( BUILD_VGUI )
 
-INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
+find_package(OpenGL)
 
 # Build here only if OpenGL is available:
 IF (OPENGL_FOUND)
@@ -33,27 +33,27 @@ IF (OPENGL_FOUND)
   IF(APPLE)
     OPTION(VGUI_USE_X11 "Use OpenGL for X11" NO)
     IF(VGUI_USE_X11)
-      INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+      find_package(X11)
     ENDIF(VGUI_USE_X11)
   ELSE(APPLE)
-    INCLUDE(${CMAKE_ROOT}/Modules/FindX11.cmake)
+    find_package(X11)
   ENDIF(APPLE)
   # Qv needed by vrml only
   INCLUDE(${VXL_CMAKE_DIR}/FindQv.cmake)
   # glut optionally used by vgui_text and by the glut toolkit
   # implementation
-  INCLUDE(${CMAKE_ROOT}/Modules/FindGLUT.cmake)
+  find_package(GLUT)
 
   # The following are for the optional toolkit
   # implementations
-  INCLUDE(${CMAKE_ROOT}/Modules/FindQt.cmake)
-  INCLUDE(${CMAKE_ROOT}/Modules/FindGTK.cmake)
-  INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindGTK2.cmake)
+  find_package(Qt)
+  find_package(GTK)
+  find_package(GTK2)
   INCLUDE(${VXL_CMAKE_DIR}/NewCMake/FindWin32SDK.cmake)
   IF(NOT MINGW)
     # MFC is not available in MinGW.
     # This should be fixed in FindMFC.cmake and then this IF can be removed
-    INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
+    find_package(MFC)
   ENDIF(NOT MINGW)
 
   #SET(WXWIDGETS_USE_LIBS base core gl)
@@ -436,39 +436,45 @@ ENDIF (GTK_GL_FOUND)
 # GTK2
 ##################################################
 
+message("GTK2_INCLUDE_DIRS: ${GTK2_INCLUDE_DIRS}")
 IF (GTK2_FOUND)
 
-  OPTION(VGUI_USE_GTK2 "Should GTK2 support be compiled into vgui?" YES)
+  # We need to make sure we have the gl extension before building this component.
+  find_file(GTKGL gtk/gtkgl.h PATHS ${GTK2_INCLUDE_DIRS})
+  if (GTKGL)
+    OPTION(VGUI_USE_GTK2 "Should GTK2 support be compiled into vgui?" YES)
 
-  IF(VGUI_USE_GTK2)
+    IF(VGUI_USE_GTK2)
 
-    IF(VGUI_USE_GTK)
-       MESSAGE(SEND_ERROR "You cannot build against both GTK1 and"
-                          " GTK2 at the same time")
-    ENDIF(VGUI_USE_GTK)
+      IF(VGUI_USE_GTK)
+        MESSAGE(SEND_ERROR "You cannot build against both GTK1 and"
+          " GTK2 at the same time")
+      ENDIF(VGUI_USE_GTK)
 
 
-    # This puts the include directories and whatever compiler flags
-    # are necessary for GTK2
-    ADD_DEFINITIONS( ${GTK2_DEFINITIONS} )
+      # This puts the include directories and whatever compiler flags
+      # are necessary for GTK2
+      ADD_DEFINITIONS( ${GTK2_DEFINITIONS} )
+      include_directories(${GTK2_INCLUDE_DIRS})
 
-    SET(vgui_gtk2_sources
-      impl/gtk2/vgui_gtk2.cxx             impl/gtk2/vgui_gtk2.h
-      impl/gtk2/vgui_gtk2_adaptor.cxx     impl/gtk2/vgui_gtk2_adaptor.h
-      impl/gtk2/vgui_gtk2_dialog_impl.cxx impl/gtk2/vgui_gtk2_dialog_impl.h
-      impl/gtk2/vgui_gtk2_statusbar.cxx   impl/gtk2/vgui_gtk2_statusbar.h
-      impl/gtk2/vgui_gtk2_tag.cxx
-      impl/gtk2/vgui_gtk2_utils.cxx       impl/gtk2/vgui_gtk2_utils.h
-      impl/gtk2/vgui_gtk2_window.cxx      impl/gtk2/vgui_gtk2_window.h
-    )
+      SET(vgui_gtk2_sources
+        impl/gtk2/vgui_gtk2.cxx             impl/gtk2/vgui_gtk2.h
+        impl/gtk2/vgui_gtk2_adaptor.cxx     impl/gtk2/vgui_gtk2_adaptor.h
+        impl/gtk2/vgui_gtk2_dialog_impl.cxx impl/gtk2/vgui_gtk2_dialog_impl.h
+        impl/gtk2/vgui_gtk2_statusbar.cxx   impl/gtk2/vgui_gtk2_statusbar.h
+        impl/gtk2/vgui_gtk2_tag.cxx
+        impl/gtk2/vgui_gtk2_utils.cxx       impl/gtk2/vgui_gtk2_utils.h
+        impl/gtk2/vgui_gtk2_window.cxx      impl/gtk2/vgui_gtk2_window.h
+        )
 
-    SET( vgui_sources ${vgui_sources} ${vgui_gtk2_sources} )
+      SET( vgui_sources ${vgui_sources} ${vgui_gtk2_sources} )
 
-  ENDIF(VGUI_USE_GTK2)
+    ENDIF(VGUI_USE_GTK2)
+  endif(GTKGL)
 
 ENDIF (GTK2_FOUND)
 
-##################################################
+#########################################i#########
 # wxWidgets
 ##################################################
 

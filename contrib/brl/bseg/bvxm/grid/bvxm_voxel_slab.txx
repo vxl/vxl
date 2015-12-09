@@ -22,14 +22,6 @@ bvxm_voxel_slab<T>::bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz)
   first_voxel_ = static_cast<T*>(mem_->data());
 }
 
-//: Copy constructor
-template<class T>
-bvxm_voxel_slab<T>::bvxm_voxel_slab(const bvxm_voxel_slab<T>& that)
-: bvxm_voxel_slab_base(that), mem_(0)
-{
-  operator=( that );
-}
-
 
 //: Fill view with given value
 template<class T>

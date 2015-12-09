@@ -39,7 +39,7 @@ class breg3d_ekf_camera_optimizer
                                            vcl_string apm_type = "apm_mog_grey", unsigned bin_idx = 0);
 
  protected:
-  breg3d_ekf_camera_optimizer() : homography_gen_(0) {}
+  //breg3d_ekf_camera_optimizer() : homography_gen_(0) {}
 
     breg3d_ekf_camera_optimizer_state optimize_once(bvxm_voxel_world_sptr const& vox_world,
                                            vil_image_view_base_sptr &prev_img, vil_image_view<float> &prev_mask,

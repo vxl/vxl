@@ -12,8 +12,7 @@
 # Root vxl
 #
 #   vxl-maintainers@lists.sf.net
-
-CMAKE_MINIMUM_REQUIRED(VERSION 2.5)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 
 # Support for CMake 2.6
 IF( COMMAND CMAKE_POLICY )
@@ -29,6 +28,12 @@ IF( POLICY CMP0042 )
 ENDIF()
 
 PROJECT(vxl)
+
+find_program( MEMORYCHECK_COMMAND valgrind )
+if(MEMORYCHECK_COMMAND)
+  set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --malloc-fill=0xFF" )
+  set( MEMORYCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/config/valgrind.supp" )
+endif()
 
 SET( LIBRARY_OUTPUT_PATH ${vxl_BINARY_DIR}/lib CACHE PATH
      "Output directory for the vxl libraries" )
