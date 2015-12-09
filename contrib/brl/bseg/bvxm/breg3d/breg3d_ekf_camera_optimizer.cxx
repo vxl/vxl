@@ -117,7 +117,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
       if (nits++ > max_iterations)
         break;
       // generate expected image to use as observation
-      vpgl_perspective_camera<double>* step_cam =
+      vpgl_camera_double_sptr step_cam =
         new vpgl_perspective_camera<double>(cam_est->get_calibration(),substep_state.get_point(),substep_state.get_rotation());
       // fill in metadata
       bvxm_image_metadata step_meta(vil_image_view_base_sptr(0),step_cam);

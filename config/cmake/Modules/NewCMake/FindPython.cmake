@@ -11,7 +11,7 @@
 # Initialize to NO. Change below if yes.
 SET(PYTHON_FOUND "NO" CACHE INTERNAL "Was Python successfully built?" )
 set(Python_ADDITIONAL_VERSIONS 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2 2.3 2.4 2.5 2.6 2.7)
-INCLUDE( ${CMAKE_ROOT}/Modules/FindPythonLibs.cmake )
+find_package(PythonLibs)
 
 IF(PYTHON_INCLUDE_DIR)
  IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)

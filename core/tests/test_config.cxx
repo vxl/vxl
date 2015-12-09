@@ -1350,6 +1350,46 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_GCC_5 ";
+#ifdef VCL_GCC_5
+  vcl_cout << "is set to " << quote(VCL_GCC_5);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_50 ";
+#ifdef VCL_GCC_50
+  vcl_cout << "is set to " << quote(VCL_GCC_50);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_51 ";
+#ifdef VCL_GCC_51
+  vcl_cout << "is set to " << quote(VCL_GCC_51);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_52 ";
+#ifdef VCL_GCC_52
+  vcl_cout << "is set to " << quote(VCL_GCC_52);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_53 ";
+#ifdef VCL_GCC_53
+  vcl_cout << "is set to " << quote(VCL_GCC_53);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_BORLAND ";
 #ifdef VCL_BORLAND
   vcl_cout << "is set to " << quote(VCL_BORLAND);
