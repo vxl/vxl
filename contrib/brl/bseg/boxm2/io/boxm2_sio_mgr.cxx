@@ -20,11 +20,12 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id, 
     //Read bytes into stream
     bytes = new char[numBytes];
     vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
-    myFile.read(bytes, numBytes);
     if (!myFile) {
     //vcl_cerr<<"boxm2_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
     return NULL;
     }
+
+    myFile.read(bytes, numBytes);
   }
   else if (fs_type == HDFS) {
     // lib bhdfs is needed for this case
@@ -60,11 +61,11 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,b
     //Read bytes into stream
     bytes = new char[numBytes];
     vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
-    myFile.read(bytes, numBytes);
     if (!myFile) {
       //vcl_cerr<<"boxm2_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
       return NULL;
     }
+    myFile.read(bytes, numBytes);
   }
   else if (fs_type == HDFS) {
     // lib bhdfs is needed for this case

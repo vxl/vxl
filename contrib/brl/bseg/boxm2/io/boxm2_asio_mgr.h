@@ -28,6 +28,7 @@ class boxm2_asio_mgr
     typedef vcl_map<boxm2_block_id, baio*>                block_list_t;
     typedef vcl_map<boxm2_block_id, boxm2_block*>         block_return_t;
     typedef vcl_map<boxm2_block_id, boxm2_data_base*>     data_ptr_list_t;
+    typedef vcl_map<boxm2_block_id, boxm2_block_metadata> metadata_list_t;
     typedef vcl_map<vcl_string, block_list_t>             data_list_t;
     typedef vcl_map<vcl_string, data_ptr_list_t >         data_return_t;
 
@@ -35,15 +36,15 @@ class boxm2_asio_mgr
     ~boxm2_asio_mgr();
 
     //: creates a BAIO object that loads block data from disk
-    void load_block(vcl_string dir, boxm2_block_id block_id);
+     void load_block(vcl_string dir, boxm2_block_id block_id,boxm2_block_metadata mdata);
 
     //: creates a BAIO object that saves block data to disk
     void save_block(vcl_string dir, boxm2_block* block );
 
     //: creates a BAIO object that loads data from disk
     template <boxm2_data_type data_type>
-    void load_block_data(vcl_string dir, boxm2_block_id block_id);
-    void load_block_data_generic(vcl_string dir, boxm2_block_id block_id, vcl_string type); 
+    void load_block_data(vcl_string dir, boxm2_block_id block_i);
+    void load_block_data_generic(vcl_string dir, boxm2_block_id block_id, vcl_string type);
 
     //: creates a BAIO object that saves data to disk
     template <boxm2_data_type data_type>
@@ -71,6 +72,7 @@ class boxm2_asio_mgr
 
     //: data list, first index by data_type string, then by block_id
     data_list_t load_data_list_;
+    metadata_list_t load_metadata_list_;
 
     //: list of asynchronous io saves
     block_list_t save_list_;

@@ -26,6 +26,7 @@ class boxm2_test_utils
     static void   delete_test_scene_from_disk(vcl_string dir="");
 
     static vcl_string   save_test_simple_scene(vcl_string filename= "test.xml");
+    static   vcl_map<boxm2_block_id,boxm2_block_metadata> generate_simple_metadata();
     static vcl_string   save_test_empty_scene();
     static bool create_test_simple_scene(boxm2_scene_sptr & scene);
     static void  test_block_equivalence(boxm2_block& a, boxm2_block& b);
@@ -33,6 +34,14 @@ class boxm2_test_utils
     template <boxm2_data_type data_type>
     static void test_data_equivalence(boxm2_data<data_type>& a, boxm2_data<data_type>& b);
     static vpgl_camera_double_sptr test_camera();
+    static const int init_level_ =1;
+    static const int max_level_ =4;
+    static const int treeLen_ = 64*64;
+    static const int numBuffers_ = 64;
+    static const int max_mb_ = 400;
+    static const int nums_[];
+    static const double dims_[];
+
 };
 
 

@@ -116,7 +116,8 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
       new_cache[id] = loaded;
     }
     else { // send an async request for this block (if it's on disk)
-      io_mgr_.load_block(scene_dir_, id);
+      boxm2_block_metadata data = scene_->get_block_metadata(id);
+      io_mgr_.load_block(scene_dir_, id, data);
     }
   }
 
@@ -372,4 +373,3 @@ vcl_ostream& operator<<(vcl_ostream &s, boxm2_nn_cache& scene)
   s << scene.to_string();
   return s;
 }
-

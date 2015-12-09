@@ -85,16 +85,20 @@ void test_asio_data()
 static void test_asio_blocks()
 {
   // load one block from disk with blocking (like we'd imagine startup)'
-  boxm2_block* loaded = boxm2_sio_mgr::load_block("", boxm2_block_id(0,0,0));
+  vcl_map<boxm2_block_id,boxm2_block_metadata> mdata = boxm2_test_utils::generate_simple_metadata();
+
+  boxm2_block* loaded = boxm2_sio_mgr::load_block("", boxm2_block_id(0,0,0),mdata[boxm2_block_id(0,0,0)]);
 
   // send some ASIO requests to ASIO manager
   boxm2_asio_mgr mgr;
-  mgr.load_block("", boxm2_block_id(0,0,1));
-  mgr.load_block("", boxm2_block_id(0,1,0));
-  mgr.load_block("", boxm2_block_id(0,1,1));
-  mgr.load_block("", boxm2_block_id(1,0,1));
-  mgr.load_block("", boxm2_block_id(1,1,0));
-  mgr.load_block("", boxm2_block_id(1,1,1));
+
+  mgr.load_block("", boxm2_block_id(0,0,1),mdata[boxm2_block_id(0,0,0)]);
+  mgr.load_block("", boxm2_block_id(0,1,0),mdata[boxm2_block_id(0,1,0)]);
+  mgr.load_block("", boxm2_block_id(0,1,1),mdata[boxm2_block_id(0,1,1)]);
+  mgr.load_block("", boxm2_block_id(1,0,0),mdata[boxm2_block_id(1,0,0)]);
+  mgr.load_block("", boxm2_block_id(1,0,1),mdata[boxm2_block_id(1,0,1)]);
+  mgr.load_block("", boxm2_block_id(1,1,0),mdata[boxm2_block_id(1,1,0)]);
+  mgr.load_block("", boxm2_block_id(1,1,1),mdata[boxm2_block_id(1,1,1)]);
 
   // check to see which block is ready, do some computation
   vcl_vector<boxm2_block*> block_list;

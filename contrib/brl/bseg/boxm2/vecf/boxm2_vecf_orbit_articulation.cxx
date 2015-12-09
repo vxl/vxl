@@ -100,6 +100,40 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
  }
  play_sequence_map_["rotation_articulation"] = rotation_articulation;
 
+vcl_vector<boxm2_vecf_orbit_params> template_1;
+ {
+   unsigned   num_frames  = 4;
+   vcl_vector<vgl_vector_3d<double> > emv;
+   //4 look directions
+    emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
+    emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
+    emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
+    emv.push_back(vgl_vector_3d<double>(0.26, 0.0, 0.968));
+
+
+
+    for (unsigned i = 0; i<4; ++i) {
+      boxm2_vecf_orbit_params params;
+      params.eye_pointing_dir_ = emv[i];
+      template_1.push_back(params);
+    }
+    //three eyelids
+    vgl_vector_3d<double> look_dir_z(0,0,1);
+    vcl_vector<double> dts;
+    dts.push_back(0.5);
+    dts.push_back(0);
+    dts.push_back(0.95);
+    for (unsigned i = 0; i<2; ++i) {
+      boxm2_vecf_orbit_params params;
+      params.eye_pointing_dir_ = look_dir_z;
+      params.eyelid_dt_ = dts[i];
+      template_1.push_back(params);
+    }
+
+ }
+ play_sequence_map_["template_articulation_1"] = template_1;
+
+
   //==============add more articulations here=======================
 
  vcl_vector<boxm2_vecf_orbit_params> new_articulation;

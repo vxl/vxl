@@ -49,7 +49,7 @@ boxm2_asio_mgr::~boxm2_asio_mgr()
 
 //: creates a BAIO object that loads/saves block data from disk
 // Make sure asio_mgr doesn't try to load a block that's already loading
-void boxm2_asio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
+void boxm2_asio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,boxm2_block_metadata mdata)
 {
   //if it's not already loading...
   if ( load_list_.find(block_id) == load_list_.end())
@@ -65,6 +65,7 @@ void boxm2_asio_mgr::load_block(vcl_string dir, boxm2_block_id block_id)
     baio* aio = new baio();
     aio->read(filepath, bytes, numBytes);
     load_list_[block_id] = aio;
+    load_metadata_list_[block_id] = mdata;
   }
 }
 
@@ -112,7 +113,7 @@ vcl_map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
       aio->close_file();
 
       // instantiate new block
-      boxm2_block*  blk = new boxm2_block(id, aio->buffer());
+      boxm2_block*  blk = new boxm2_block(id, load_metadata_list_[id],aio->buffer());
       toReturn[id] = blk;
 
       // remove iter from the load list/delete aio
