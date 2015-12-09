@@ -6,6 +6,8 @@
 #include <boxm2/boxm2_scene.h>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
+const int boxm2_test_utils::nums_[] = {64,64,64,0};
+const double boxm2_test_utils::dims_[] = {0.5,0.5,0.5,0};
 
 char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
                                                     int treeLen,
@@ -55,43 +57,50 @@ char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
     return bsize;
 }
 
+vcl_map<boxm2_block_id,boxm2_block_metadata> boxm2_test_utils::generate_simple_metadata(){
 
-void boxm2_test_utils::save_test_scene_to_disk()
-{
-  // ensure 8 test blocks and 8 data blocks are saved to disk
   vnl_random rand;
-  int nums[4] = { 64, 64, 64, 0 };
-  double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
-  int numBuffers = 64;
-  int treeLen    = 64*64;
-  int init_level = 1;
-  int max_level  = 4;
-  int max_mb     = 400;
+  vcl_map<boxm2_block_id, boxm2_block_metadata> mdata;
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
-        vgl_point_3d<double> local_origin = vgl_point_3d<double>(0,0,0) + vgl_vector_3d<double>((double)nums[0]*dims[0]*(double)i,
-                                                                                                (double)nums[0]*dims[0]*(double)j,
-                                                                                                (double)nums[0]*dims[0]*(double)k);
         boxm2_block_id id(i,j,k);
-        boxm2_block_metadata mdata(id,
-                                    local_origin,
-                                    vgl_vector_3d<double> (dims[0], dims[1],dims[2]),
-                                    vgl_vector_3d<unsigned>(nums[0],nums[1],nums[2]),
-                                    init_level,
-                                    max_level,
-                                    max_mb,
-                                    0.001,
-                                    2);
-        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers,
-                                                                      treeLen,
-                                                                      nums,
-                                                                      dims,
-                                                                      init_level,
-                                                                      max_level,
-                                                                      max_mb );
+        vgl_point_3d<double> local_origin = vgl_point_3d<double>(0,0,0) + vgl_vector_3d<double>((double)nums_[0]*dims_[0]*(double)id.i() ,
+                                                                                                (double)nums_[0]*dims_[0]*(double)id.j(),
+                                                                                                (double)nums_[0]*dims_[0]*(double)id.k());
+        mdata[id] = boxm2_block_metadata  (id,
+                                               local_origin,
+                                               vgl_vector_3d<double>(dims_[0],dims_[1],dims_[2]),
+                                               vgl_vector_3d<unsigned>(nums_[0],nums_[1],nums_[2]),
+                                               init_level_,
+                                               max_level_,
+                                               max_mb_,
+                                               0.001,2);
+      }
+    }
+  }
+  return mdata;
+}
+void boxm2_test_utils::save_test_scene_to_disk()
+{
+  // ensure 8 test blocks and 8 data blocks are saved to disk
+  vcl_map<boxm2_block_id,boxm2_block_metadata> mdata = generate_simple_metadata();
+  vnl_random rand;
+  for (int i=0; i<2; i++) {
+    for (int j=0; j<2; j++) {
+      for (int k=0; k<2; k++) {
+        boxm2_block_id id(i,j,k);
+        if (mdata.find(id)==mdata.end())
+          break;
+        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers_,
+                                                                      treeLen_,
+                                                                      const_cast<int*>(nums_),
+                                                                      const_cast<double*>(dims_),
+                                                                      mdata[id].init_level_,
+                                                                      mdata[id].max_level_,
+                                                                      mdata[id].max_mb_ );
 
-        boxm2_block b(id,mdata, stream);
+        boxm2_block b(id,mdata[id], stream);
 
         vcl_cout<<"saving test block for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block("", &b);
@@ -185,26 +194,7 @@ vcl_string boxm2_test_utils::save_test_empty_scene()
     vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
     vcl_string test_file = test_dir + "test.xml";
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
-    for (int i=0; i<2; i++) {
-        for (int j=0; j<2; j++) {
-            double big_block_side = 0.5;
-            boxm2_block_id id(i,j,0);
-            boxm2_block_metadata data;
-            data.id_ = id;
-            data.local_origin_ = vgl_point_3d<double>(big_block_side*i, big_block_side*j, 0.0);
-            data.sub_block_dim_ = vgl_vector_3d<double>(0.25, 0.25, 0.25);
-            data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 2);
-            data.init_level_ = 1;
-            data.max_level_ = 4;
-            data.max_mb_ = 400;
-            data.p_init_ = .001;
-            data.version_ = 1;
-            //push it into the map
-            blocks[id] = data;
-        }
-    }
-
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
   //create scene
   boxm2_scene scene;
   scene.set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
@@ -225,25 +215,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
     vcl_string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
     vcl_string test_file = test_dir + filename;
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
-    for (int i=0; i<1; i++) {
-        for (int j=0; j<1; j++) {
-            double big_block_side = 1;
-            boxm2_block_id id(i,j,0);
-            boxm2_block_metadata data;
-            data.id_ = id;
-            data.local_origin_ = vgl_point_3d<double>(big_block_side*i, big_block_side*j, 0.0);
-            data.sub_block_dim_ = vgl_vector_3d<double>(0.5, 0.5, 0.5);
-            data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 1);
-            data.init_level_ = 1;
-            data.max_level_ = 4;
-            data.max_mb_ = 400;
-            data.p_init_ = .001;
-
-            //push it into the map
-            blocks[id] = data;
-        }
-    }
+    vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
 
   //create scene
   boxm2_scene scene;
@@ -259,24 +231,17 @@ vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
 
   // ensure 8 test blocks and 8 data blocks are saved to disk
   vnl_random rand;
-  int nums[4] = { 2, 2, 1, 0 };
-  double dims[4] = { 0.5, 0.5, 0.5, 0.0 };
-  int numBuffers = 1;
-  int treeLen    = 2*2*1;
-  int init_level = 1;
-  int max_level  = 4;
-  int max_mb     = 400;
-  for (int i=0; i<1; i++) {
-    for (int j=0; j<1; j++) {
-      for (int k=0; k<1; k++) {
-        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers,
-                                                                      treeLen,
-                                                                      nums,
-                                                                      dims,
-                                                                      init_level,
-                                                                      max_level,
-                                                                      max_mb );
+  for (int i=0; i<2; i++) {
+    for (int j=0; j<2; j++) {
+      for (int k=0; k<2; k++) {
         boxm2_block_id id(i,j,k);
+        char* stream = boxm2_test_utils::construct_block_test_stream( numBuffers_,
+                                                                      treeLen_,
+                                                                      const_cast<int*>(nums_),
+                                                                      const_cast<double*>(dims_),
+                                                                      blocks[id].init_level_,
+                                                                      blocks[id].max_level_,
+                                                                      blocks[id].max_mb_ );
         boxm2_block b(id, stream);
 
         vcl_cout<<"saving test block for "<<id<<vcl_endl;
@@ -299,9 +264,9 @@ vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
   char * cbuffer = reinterpret_cast<char *>(carray);
   boxm2_data<BOXM2_ALPHA> test_data(buffer, array_size*sizeof(float), boxm2_block_id(0,0,0));
   boxm2_data<BOXM2_MOG3_GREY> test_mog(cbuffer, array_size*sizeof(uchar8), boxm2_block_id(0,0,0));
-  for (int i=0; i<1; i++) {
-    for (int j=0; j<1; j++) {
-      for (int k=0; k<1; k++) {
+  for (int i=0; i<2; i++) {
+    for (int j=0; j<2; j++) {
+      for (int k=0; k<2; k++) {
         boxm2_block_id id(boxm2_block_id(i,j,k));
         vcl_cout<<"saving alpha and mog3 test data for "<<id<<vcl_endl;
         boxm2_sio_mgr::save_block_data<BOXM2_ALPHA>(test_dir+"/", id, &test_data);
@@ -314,24 +279,7 @@ vcl_string boxm2_test_utils::save_test_simple_scene(vcl_string filename )
 }
 bool boxm2_test_utils::create_test_simple_scene(boxm2_scene_sptr & scene)
 {
-  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
-  for (int i=0; i<1; i++) {
-      for (int j=0; j<1; j++) {
-          double big_block_side = 1;
-          boxm2_block_id id(i,j,0);
-          boxm2_block_metadata data;
-          data.id_ = id;
-          data.local_origin_ = vgl_point_3d<double>(big_block_side*i, big_block_side*j, 0.0);
-          data.sub_block_dim_ = vgl_vector_3d<double>(0.5, 0.5, 0.5);
-          data.sub_block_num_ = vgl_vector_3d<unsigned>(2, 2, 1);
-          data.init_level_ = 1;
-          data.max_level_ = 4;
-          data.max_mb_ = 400;
-          data.p_init_ = .001;
-          //push it into the map
-          blocks[id] = data;
-      }
-  }
+  vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = generate_simple_metadata();
   scene = new boxm2_scene();
   scene->set_local_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));
   scene->set_rpc_origin(vgl_point_3d<double>(0.0, 0.0, 0.0));

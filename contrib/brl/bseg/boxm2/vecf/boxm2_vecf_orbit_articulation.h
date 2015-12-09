@@ -24,7 +24,7 @@ class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
      params_ = play_sequence_map_[seq_id];
      return true;
    }else{
-     vcl_cout<<"could not find play sequance "<<seq_id<<" in map. choosing default one"<<vcl_endl;
+     vcl_cout<<"could not find play sequence "<<seq_id<<" in map. choosing default one"<<vcl_endl;
      params_=play_sequence_map_["default"];
      return false;
    }

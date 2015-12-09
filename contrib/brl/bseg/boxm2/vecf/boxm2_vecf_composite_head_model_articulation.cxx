@@ -396,5 +396,42 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
 
     play_sequence_map_["eyelid_close_and_look_dir"] = eyelid_dt_close_look_dir_articulation;
   }
+ vcl_vector<boxm2_vecf_composite_head_parameters> template_1;
+ {
+   unsigned   num_frames  = 4;
+   vcl_vector<vgl_vector_3d<double> > emv;
+   //4 look directions
+    emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
+    emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
+    emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
+    emv.push_back(vgl_vector_3d<double>(0.26, 0.0, 0.968));
 
+
+
+    for (unsigned i = 0; i<4; ++i) {
+      boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
+      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = emv[i];
+      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = emv[i];
+      head_params_local_cpy.l_orbit_params_.eyelid_dt_ = 0.94;
+      head_params_local_cpy.r_orbit_params_.eyelid_dt_ = 0.94;
+
+      template_1.push_back(head_params_local_cpy);
+    }
+    //three eyelids
+    vgl_vector_3d<double> look_dir_z(0,0,1);
+    vcl_vector<double> dts;
+    dts.push_back(0.5);
+    dts.push_back(0);
+    dts.push_back(0.95);
+    for (unsigned i = 0; i<2; ++i) {
+    boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
+      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = look_dir_z;
+      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = look_dir_z;
+      head_params_local_cpy.l_orbit_params_.eyelid_dt_ = dts[i];
+      head_params_local_cpy.r_orbit_params_.eyelid_dt_ = dts[i];
+      template_1.push_back(head_params_local_cpy);
+    }
+
+ }
+ play_sequence_map_["template_articulation_1"] = template_1;
 }
