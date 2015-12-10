@@ -53,7 +53,7 @@ vgl_plane_3d<T>::vgl_plane_3d(vgl_vector_3d<T> const& n,
 
 template <class T>
 vgl_plane_3d<T>::vgl_plane_3d (vgl_ray_3d<T> const& r0,
-			       vgl_ray_3d<T> const& r1){
+                               vgl_ray_3d<T> const& r1){
   // check if the rays are parallel
   const vgl_vector_3d<T>& v0 = r0.direction();
   const vgl_vector_3d<T>& v1 = r1.direction();
@@ -71,7 +71,7 @@ vgl_plane_3d<T>::vgl_plane_3d (vgl_ray_3d<T> const& r0,
   // assert the rays are not skew
   bool not_skew = (parallel&&distinct) || (!parallel&&coincident);
   assert(not_skew);
-  
+
   // Case I: coincident
   if(coincident){
     vgl_vector_3d<T> norm = cross_product(v0, v1);
@@ -175,7 +175,11 @@ plane_coord_vectors(vgl_vector_3d<T>& uvec, vgl_vector_3d<T>& vvec) const
 {
   vgl_vector_3d<T> Y((T)0, (T)1, (T)0);
   vgl_vector_3d<T> n = this->normal();
-  T dp = (T)1 - vcl_fabs(dot_product(n, Y));
+
+  // Since we have an int Template definition, we need to static cast input so VS is happy.
+  // Note* currently there are only float and double Template defs. If long double is ever created,
+  // this cast will need to get expanded to prevent loss of precision issues.
+  T dp = (T)1 - vcl_fabs(static_cast<double>(dot_product(n, Y)));
   T tol = ((T)1)/((T)10);
   if (dp>tol)//ok to use the Y axis to form the coordinate system
   {
