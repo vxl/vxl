@@ -6,6 +6,9 @@
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for fabs
+#include "vgl_tolerance.h"
+#include "vgl_vector_3d.h"
+
 template <class Type>
 vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
                                                  vgl_point_3d<Type> const& p2)
@@ -20,25 +23,49 @@ template <class Type>
 void vgl_infinite_line_3d<Type>::
 compute_uv_vectors(vgl_vector_3d<Type>& u, vgl_vector_3d<Type>& v) const
 {
-  // define the plane coordinate system (u, v)
-  // v is given by the cross product of t with x, unless t is nearly
-  // parallel to x, in which case v is given by z X t.
-  vgl_vector_3d<Type> x(Type(1), Type(0), Type(0));
-  v = cross_product(t_,x);
-  Type vmag = static_cast<Type>(v.length());
-  double vmagd = static_cast<double>(vmag);
-  if (vmagd < 1.0e-8) {
-    vgl_vector_3d<Type> z(Type(0), Type(0), Type(1));
-    v = cross_product(z, t_);
-    vmag = static_cast<Type>(v.length());
-    assert(vmag>Type(0));
-    v/=vmag;
+  // start with u0 and v0 as the x and y axes, assuming direction z
+  vgl_vector_3d<Type> u0(Type(1),Type(0),Type(0));
+  vgl_vector_3d<Type> v0(Type(0),Type(1),Type(0));
+  vgl_vector_3d<Type> t0(Type(0),Type(0),Type(1));
+
+  // rotate u0 and v0 such that t0 aligns with t_
+  vgl_vector_3d<Type> tu = normalized(t_);
+  vgl_vector_3d<Type> rot_axis = cross_product(t0, tu);
+  double rot_mag = static_cast<double>(rot_axis.length());
+  rot_axis /= rot_mag;
+  const double pi = 3.14159265359;
+  double aa = 0.0; if (dot_product(t0, tu) < 0) { aa = pi; rot_axis=-rot_axis; }
+  // cross product of unit vectors is at most a unit vector:
+  if (rot_mag>1.0) rot_mag=1.0;
+  // if the vectors have the same direction, then set to identity rotation:
+  if (rot_mag < vgl_tolerance<double>::position)
+  {
+    // rotation magnitude is nearly 0
+    if (aa!=pi) {
+      // identity: no rotation of u0 and v0 needed.
+      u = u0;
+      v = v0;
+      return;
+    }
+    else { 
+      // 180 degree rotation: arbitrarily choose to rotate around the x axis.
+      u = u0;
+      v = -v0;
+      return;
+    }
   }
-  else v/=vmag;
-  // The other plane coordinate vector is perpendicular to both t and v
-  u = cross_product(v,t_);
-  Type umag = static_cast<Type>(u.length());
-  u/=umag;
+  // perform the rotations of u0 and v0 based on the quaternion formulation.
+  // There is some code duplication here from vnl_quaternion in order to avoid a vnl dependency.
+  double half_angle = 0.5*(vcl_asin(rot_mag)+aa);
+  Type s = Type(vcl_sin(half_angle));
+  vgl_vector_3d<Type> qim = s * rot_axis; // the imaginary component of the quaternion
+  Type qreal = vcl_cos(half_angle);  // the real component of the quaternion
+  // rotate u0 using quaternion rotation formula
+  vgl_vector_3d<Type> u0_i_x_v = cross_product(qim, u0);
+  u = u0 + u0_i_x_v * Type(2*qreal) - cross_product(u0_i_x_v, qim) * Type(2);
+  // rotate v0 using quaternion rotation formula
+  vgl_vector_3d<Type> v0_i_x_v = cross_product(qim, v0);
+  v = v0 + v0_i_x_v * Type(2*qreal) - cross_product(v0_i_x_v, qim) * Type(2);
 }
 
 template <class Type>

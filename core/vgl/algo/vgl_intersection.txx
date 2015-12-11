@@ -63,12 +63,12 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes)
   vnl_vector<double> t = svd.nullvector();
 
   double tx = t[0], ty = t[1], tz = t[2];
-
+  double atx = vcl_fabs(tx), aty = vcl_fabs(ty), atz = vcl_fabs(tz);
   // determine maximum component of t
   char component = 'x';
-  if (ty>tx&&ty>tz)
+  if (aty>atx&&aty>atz)
     component = 'y';
-  if (tz>tx&&tz>ty)
+  if (atz>atx&&atz>aty)
     component = 'z';
   vgl_point_3d<double> p0d;
   switch (component)
@@ -140,11 +140,12 @@ vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws,
   // the direction of the resulting line
   vnl_vector<double> t = svd.nullvector();
   double tx = t[0], ty = t[1], tz = t[2];
+  double atx = vcl_fabs(tx), aty = vcl_fabs(ty), atz = vcl_fabs(tz);
   // determine maximum component of t
   char component = 'x';
-  if (ty>tx&&ty>tz)
+  if (aty>atx&&aty>atz)
     component = 'y';
-  if (tz>tx&&tz>ty)
+  if (atz>atx&&atz>aty)
     component = 'z';
   vgl_point_3d<double> p0d;
   switch (component)
