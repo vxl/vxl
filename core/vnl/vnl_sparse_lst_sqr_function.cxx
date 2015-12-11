@@ -485,8 +485,12 @@ vnl_sparse_lst_sqr_function::fd_jac_Cij(int i, int j,
                                         double stepsize)
 {
   const unsigned int dim = c.size();
-  const unsigned int n = Cij.rows();
   assert(dim == number_of_params_c());
+  // if there are no C parameters, return early
+  if(dim == 0)
+    return;
+
+  const unsigned int n = Cij.rows();
   assert(n == number_of_residuals(i,j));
   assert(dim == Cij.columns());
 
