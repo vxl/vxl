@@ -9,31 +9,61 @@
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_stdexcept.h>
+#include <vcl_vector.h>
 #include <vcl_utility.h> // for make_pair
+#include <rsdl/rsdl_kd_tree.h>
+#include <rsdl/rsdl_point.h>
+
+
+vcl_vector<rsdl_point> convert_vgl_to_rsdl(vcl_vector<vgl_point_3d<double> > const& pts)
+{
+  vcl_vector<rsdl_point> pts_out;
+  for (vcl_vector<vgl_point_3d<double> >::const_iterator pit = pts.begin(); pit != pts.end(); ++pit) {
+    rsdl_point point(vnl_vector_fixed<double,3>(pit->x(), pit->y(), pit->z()), vnl_vector<double>());
+    pts_out.push_back(point);
+  }
+  return pts_out;
+}
 
 template<class F>
 boxm2_vecf_landmark_mapper<F>::
 boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
                            vcl_vector<vgl_point_3d<double> > const& control_pts_target,
-                           F weight_function
+                           F weight_function,
+                           int n_nearest
                            )
   : control_pts_source_(control_pts_source),
     control_pts_target_(control_pts_target),
-    weight_function_(weight_function)
-{}
+    weight_function_(weight_function),
+    n_nearest_(n_nearest),
+    source_kd_tree_(new rsdl_kd_tree(convert_vgl_to_rsdl(control_pts_source)))
+{
+  std::cout << "created kd tree containing " << control_pts_source.size() << " points." << std::endl;
+}
+
+template<class F>
+boxm2_vecf_landmark_mapper<F>::~boxm2_vecf_landmark_mapper()
+{
+  if(source_kd_tree_) {
+    delete source_kd_tree_;
+  }
+}
 
 template <class F>
 vgl_point_3d<double> boxm2_vecf_landmark_mapper<F>::operator() (vgl_point_3d<double> const& x) const
 {
+  rsdl_point query_point(vnl_vector_fixed<double,3>(x.x(), x.y(), x.z()), vnl_vector<double>());
+  vcl_vector< rsdl_point > closest_points;
+  vcl_vector< int > indices;
+  source_kd_tree_->n_nearest( query_point, n_nearest_, closest_points, indices );
+
   vgl_vector_3d<double> vec(0.0, 0.0, 0.0);
   double weight_sum = 0.0;
-  for (vcl_vector<vgl_point_3d<double> >::const_iterator 
-       spit=control_pts_source_.begin(), tpit = control_pts_target_.begin();
-       spit != control_pts_source_.end(); ++spit, ++tpit) {
-    double dist_sqrd = (*spit - x).sqr_length();
+  for (int n=0; n<n_nearest_; ++n) {
+    double dist_sqrd = (control_pts_source_[n] - x).sqr_length();
     double weight = weight_function_(dist_sqrd);
     weight_sum += weight;
-    vec += weight*(*tpit - *spit);
+    vec += weight*(control_pts_target_[n] - control_pts_source_[n]);
   }
   vec /= weight_sum;
   return x + vec;

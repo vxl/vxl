@@ -8,6 +8,9 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 
+// forward declare rsdl_kd_tree so we can use pointers to it
+class rsdl_kd_tree;
+
 #include "boxm2_vecf_vector_field.h"
 
 
@@ -18,14 +21,20 @@ class boxm2_vecf_landmark_mapper
   public:
   boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
                              vcl_vector<vgl_point_3d<double> > const& control_pts_target,
-                             F weight_function);
+                             F weight_function,
+                             int n_nearest = 3);
+
+  ~boxm2_vecf_landmark_mapper();
 
   vgl_point_3d<double> operator() (vgl_point_3d<double> const& x) const;
 
   private:
+
     const vcl_vector<vgl_point_3d<double> > control_pts_source_;
     const vcl_vector<vgl_point_3d<double> > control_pts_target_;
     F weight_function_;
+    int n_nearest_;
+    rsdl_kd_tree* source_kd_tree_;
 };
 
 template<class F>
