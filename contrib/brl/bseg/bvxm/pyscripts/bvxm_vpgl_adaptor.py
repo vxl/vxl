@@ -873,31 +873,30 @@ def affine_f_matrix(affine_cam1, affine_cam2, output_path):
     bvxm_batch.set_input_string(2, output_path)
     bvxm_batch.run_process()
 
-
-def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_rational_cam1, img2, local_rational_cam2, min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2):
-    bvxm_batch.init_process("vpglConstructHeightMapProcess")
-    bvxm_batch.set_input_from_db(0, img1)
-    bvxm_batch.set_input_from_db(1, local_rational_cam1)
-    bvxm_batch.set_input_string(2, img1_disp)
-    bvxm_batch.set_input_float(3, min_disparity)
-    bvxm_batch.set_input_from_db(4, img2)
-    bvxm_batch.set_input_from_db(5, local_rational_cam2)
-    bvxm_batch.set_input_double(6, min_x)
-    bvxm_batch.set_input_double(7, min_y)
-    bvxm_batch.set_input_double(8, min_z)
-    bvxm_batch.set_input_double(9, max_x)
-    bvxm_batch.set_input_double(10, max_y)
-    bvxm_batch.set_input_double(11, max_z)
-    bvxm_batch.set_input_string(12, path_H1)
-    bvxm_batch.set_input_string(13, path_H2)
-    bvxm_batch.run_process()
-    (id, type) = bvxm_batch.commit_output(0)
-    out_map = dbvalue(id, type)
-    (id, type) = bvxm_batch.commit_output(1)
-    disparity_map = dbvalue(id, type)
-    (id, type) = bvxm_batch.commit_output(2)
-    ortho_disp_map = dbvalue(id, type)
-    return out_map, disparity_map, ortho_disp_map
+def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_rational_cam1, img2, local_rational_cam2,
+                                        min_x, min_y, min_z, max_x, max_y, max_z, path_H1, path_H2, voxel_size):
+  bvxm_batch.init_process("vpglConstructHeightMapProcess");
+  bvxm_batch.set_input_from_db(0, img1);
+  bvxm_batch.set_input_from_db(1, local_rational_cam1);
+  bvxm_batch.set_input_string(2, img1_disp);
+  bvxm_batch.set_input_float(3, min_disparity);
+  bvxm_batch.set_input_from_db(4, img2);
+  bvxm_batch.set_input_from_db(5, local_rational_cam2);
+  bvxm_batch.set_input_double(6, min_x);
+  bvxm_batch.set_input_double(7, min_y);
+  bvxm_batch.set_input_double(8, min_z);
+  bvxm_batch.set_input_double(9, max_x);
+  bvxm_batch.set_input_double(10, max_y);
+  bvxm_batch.set_input_double(11, max_z);
+  bvxm_batch.set_input_double(12, voxel_size);
+  bvxm_batch.set_input_string(13, path_H1);
+  bvxm_batch.set_input_string(14, path_H2);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  out_map = dbvalue(id, type);
+  (id, type) = bvxm_batch.commit_output(1);
+  disparity_map = dbvalue(id, type);
+  return out_map, disparity_map
 
 # use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
 # note that the input 3-d box is in unit of wgs84 geo coordinates
