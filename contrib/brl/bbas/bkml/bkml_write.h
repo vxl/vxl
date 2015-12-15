@@ -41,7 +41,7 @@ class bkml_write
   //: Write a box with color, color is in hexadecimale format: 0 - 255 --> 00 to ff, aabbggrr --> alpha alpha, blue blue, gree green , red red.. alpha is the opacity, ffffffff is white fully opaque
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color);
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
-                        unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a = 0);
+                        unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a = 85);
 
   //: put a pin at the given location
   static void write_location(vcl_ofstream& ofs, vcl_string name, vcl_string description, double lat, double lon, double elev);
