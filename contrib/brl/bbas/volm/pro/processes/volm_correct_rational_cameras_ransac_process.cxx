@@ -503,8 +503,8 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       continue;
     }
     vcl_cout << i << " --> correspondence: ";
-    for (unsigned i = 0; i < corrs_i.size(); i++) {
-        vcl_cout << "[" << corrs_i[i].x() << "," << corrs_i[i].y() << "]\t";
+    for (unsigned ii = 0; ii < corrs_i.size(); ii++) {
+        vcl_cout << "[" << corrs_i[ii].x() << "," << corrs_i[ii].y() << "]\t";
     }
     vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y() 
                                                          << "," << vcl_setprecision(12) << intersection.x() 
