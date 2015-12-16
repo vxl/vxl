@@ -20,9 +20,10 @@ SET(vnl_io_sources
 AUX_SOURCE_DIRECTORY(Templates vnl_io_sources)
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
-                              PROPERTIES
-                              COMPILE_FLAGS -ftemplate-depth-35)
+  SET_SOURCE_FILES_PROPERTIES(
+    Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
+    PROPERTIES
+    COMPILE_FLAGS -ftemplate-depth-50)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vnl_io ${vnl_io_sources} )
