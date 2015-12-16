@@ -4,21 +4,205 @@
 
 #include <volm/volm_satellite_resources.h>
 #include <volm/volm_satellite_resources_sptr.h>
+#include <volm/volm_geo_index2.h>
 
+#include <bkml/bkml_write.h>
 #include <vul/vul_file.h>
+#include <vcl_where_root_dir.h>
 
+static volm_satellite_resources_sptr create_test_sat_res()
+{
+  vgl_box_2d<double> bbox(35.0, 37.0, 32.0, 33.0);
+  volm_satellite_resources_sptr res_sptr = new volm_satellite_resources(bbox, 0.25, false);
+  volm_satellite_resource res;
+  vcl_string name1 = "/path_to_img1/img_1.tif";
+  res.full_path_ = name1;
+  res.name_ = vul_file::strip_directory(name1);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(36.10513, 32.13166, 0.0);   res.meta_->upper_right_.set(36.40004, 32.51381, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  vcl_vector<vgl_point_2d<double> > footprint_corners;
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name2 = "/path_to_img2/img_2.tif";
+  res.full_path_ = name2;
+  res.name_ = vul_file::strip_directory(name2);
+  res.name_ = vul_file::strip_extension(res.name_);  res.meta_->satellite_name_ = "GeoEye-1";
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(36.03285, 32.14575, 0.0);   res.meta_->upper_right_.set(36.46879, 32.49186, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name3 = "/path_to_img3/img_3.tif";
+  res.full_path_ = name3;
+  res.name_ = vul_file::strip_directory(name3);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(36.08056, 32.14817, 0.0);   res.meta_->upper_right_.set(36.43067, 32.61172, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name4 = "/path_to_img4/img_4.tif";
+  res.full_path_ = name4;
+  res.name_ = vul_file::strip_directory(name4);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(36.10970, 32.05984, 0.0);   res.meta_->upper_right_.set(36.39290, 32.50900, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name5 = "/path_to_img5/img_5.tif";
+  res.full_path_ = name5;
+  res.name_ = vul_file::strip_directory(name5);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(35.98952, 32.19027, 0.0);   res.meta_->upper_right_.set(36.54515, 32.53180, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name6 = "/path_to_img6/img_6.tif";
+  res.full_path_ = name6;
+  res.name_ = vul_file::strip_directory(name6);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(35.94401, 32.16550, 0.0);   res.meta_->upper_right_.set(36.56926, 32.46338, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name7 = "/path_to_img7/img_7.tif";
+  res.full_path_ = name7;
+  res.name_ = vul_file::strip_directory(name7);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(36.09320, 32.12822, 0.0);   res.meta_->upper_right_.set(36.39953, 32.58570, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name8 = "/path_to_img8/img_8.tif";
+  res.full_path_ = name8;
+  res.name_ = vul_file::strip_directory(name8);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(35.98967, 32.14767, 0.0);   res.meta_->upper_right_.set(36.53007, 32.51360, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name9 = "/path_to_img9/img_9.tif";
+  res.full_path_ = name9;
+  res.name_ = vul_file::strip_directory(name9);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(36.03028, 32.15126, 0.0);   res.meta_->upper_right_.set(36.48835, 32.52314, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  vcl_string name10 = "/path_to_img10/img_10.tif";
+  res.full_path_ = name10;
+  res.name_ = vul_file::strip_directory(name10);
+  res.name_ = vul_file::strip_extension(res.name_);
+  res.meta_ = new brad_image_metadata();
+  res.meta_->lower_left_.set(36.00632, 32.13226, 0.0);   res.meta_->upper_right_.set(36.51066, 32.52135, 0.0);
+  res.meta_->gsd_ = 1.0f;  res.meta_->band_ = "PAN";  res.meta_->satellite_name_ = "GeoEye-1";
+  footprint_corners.clear();
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->lower_left_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->upper_right_.x(), res.meta_->upper_right_.y()));
+  footprint_corners.push_back(vgl_point_2d<double>(res.meta_->lower_left_.x(),  res.meta_->upper_right_.y()));
+  res.meta_->footprint_ = vgl_polygon<double>(footprint_corners);
+  res_sptr->resources_.push_back(res);
+
+  // add resources into tree
+  for (unsigned i = 0; i < res_sptr->resources_.size(); i++) {
+    vcl_vector<volm_geo_index2_node_sptr> leaves;
+    vgl_box_2d<double> satellite_footprint;
+    satellite_footprint.add(vgl_point_2d<double>(res_sptr->resources_[i].meta_->lower_left_.x(),  res_sptr->resources_[i].meta_->lower_left_.y()));
+    satellite_footprint.add(vgl_point_2d<double>(res_sptr->resources_[i].meta_->upper_right_.x(), res_sptr->resources_[i].meta_->upper_right_.y()));
+    volm_geo_index2::get_leaves(res_sptr->root_, leaves, satellite_footprint);
+    for (unsigned j = 0; j < leaves.size(); j++) {
+      volm_geo_index2_node<vcl_vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<vcl_vector<unsigned> >* >(leaves[j].ptr());
+      leaf_ptr->contents_.push_back(i);  // push this satellite image to this leave that intersects its footprint
+    }
+  }
+
+  return res_sptr;
+}
+
+static void create_a_test_kml(vcl_string const& kml_file)
+{
+  vgl_polygon<double> poly;
+  vcl_vector<vgl_point_2d<double> > points;
+  points.push_back(vgl_point_2d<double>(36.18825968469867,32.32497866643852));
+  points.push_back(vgl_point_2d<double>(36.22929773807768,32.34162986956272));
+  points.push_back(vgl_point_2d<double>(36.22927331990476,32.34222250106324));
+  points.push_back(vgl_point_2d<double>(36.19077105901775,32.34223021056664));
+  poly.push_back(points);
+  vcl_ofstream ofs(kml_file.c_str());
+  bkml_write::open_document(ofs);
+  bkml_write::write_polygon(ofs, poly, "footprint", "");
+  bkml_write::close_document(ofs);
+  return;
+}
 
 static void test_overlapping_resources()
 {
   // resource file created by create_satellite_resources.py, which calls 
-  vcl_string resource_file = "/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
-  vcl_string kml_file = "/mnt/finderdata/p1b_data/jordan-mafraq_seed_region.kml";
-
-  volm_satellite_resources_sptr res = new volm_satellite_resources();
-  vsl_b_ifstream is(resource_file);
-  if(!is) { assert(false); }
-  res->b_read(is);
-  is.close();
+  vcl_string kml_file = "./test_overlapping.kml";
+  create_a_test_kml(kml_file);
+  volm_satellite_resources_sptr res = create_test_sat_res();
   vcl_cout << "there are " << res->resources_size() << " resources in the file!\n";
 
   vcl_vector<vcl_string> overlapping_res;
@@ -28,19 +212,15 @@ static void test_overlapping_resources()
     vcl_cout << overlapping_res[i] << vcl_endl;
   }
   vcl_cout << vcl_endl;
+  
 }
 
 static void test_intersecting_resources()
 {
   // resource file created by create_satellite_resources.py, which calls 
-  vcl_string resource_file = "/home/sgrichar/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
-  vcl_string kml_file = "/home/sgrichar/mnt/finderdata/p1b_data/jordan-mafraq_seed_region.kml";
-
-  volm_satellite_resources_sptr res = new volm_satellite_resources();
-  vsl_b_ifstream is(resource_file);
-  if(!is) { assert(false); }
-  res->b_read(is);
-  is.close();
+  vcl_string kml_file = "./test_overlapping.kml";
+  create_a_test_kml(kml_file);
+  volm_satellite_resources_sptr res = create_test_sat_res();
   vcl_cout << "there are " << res->resources_size() << " resources in the file!\n";
 
   vcl_vector<vcl_string> overlapping_res;
@@ -55,14 +235,7 @@ static void test_intersecting_resources()
 static void test_compute_intersection()
 {
   // resource file created by create_satellite_resources.py, which calls 
-  vcl_string resource_file = "/home/sgrichar/mnt/finderdata/p1b_data/satellite_resources_wr3_ver3_all_images_no_ps.bin";
-  vcl_string kml_file = "/home/sgrichar/mnt/finderdata/p1b_data/jordan-mafraq_seed_region.kml";
-
-  volm_satellite_resources_sptr res = new volm_satellite_resources();
-  vsl_b_ifstream is(resource_file);
-  if(!is) { assert(false); }
-  res->b_read(is);
-  is.close();
+  volm_satellite_resources_sptr res = create_test_sat_res();
   vcl_cout << "there are " << res->resources_size() << " resources in the file!\n";
 
   vcl_vector<vgl_polygon<double> > footprints;
