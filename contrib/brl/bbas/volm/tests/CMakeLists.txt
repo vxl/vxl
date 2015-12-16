@@ -41,7 +41,9 @@ ADD_TEST(volm_test_osm_parser ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_osm_p
 ADD_TEST(volm_test_candidate_region_parser ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_candidate_region_parser)
 ADD_TEST(volm_test_osm_object ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_osm_object)
 ADD_TEST(volm_test_utils ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_utils)
-ADD_TEST(volm_test_find_overlapping ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_find_overlapping)
+ADD_TEST(volm_test_overlapping_resources ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_overlapping_resources)
+ADD_TEST(volm_test_intersecting_resources ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_intersecting_resources)
+ADD_TEST(volm_test_compute_intersection ${EXECUTABLE_OUTPUT_PATH}/volm_test_all test_compute_intersection)
 
 ADD_EXECUTABLE(volm_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(volm_test_include volm)
