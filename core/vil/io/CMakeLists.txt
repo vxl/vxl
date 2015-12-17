@@ -11,7 +11,7 @@ AUX_SOURCE_DIRECTORY(Templates vil_io_sources)
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(Templates/vsl_vector_io+vcl_vector+vil_image_view+float---.cxx
                               PROPERTIES
-                              COMPILE_FLAGS -ftemplate-depth-35)
+                              COMPILE_FLAGS -ftemplate-depth-50)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(vil_io ${vil_io_sources})
