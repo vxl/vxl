@@ -30,7 +30,7 @@
 #include <vul/vul_file.h>
 
 
-boxm2_scene::boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version)
+boxm2_scene::boxm2_scene(vcl_string const& data_path, vgl_point_3d<double> const& origin, int version)
 {
   local_origin_=origin;
   data_path_   = data_path;
@@ -71,7 +71,7 @@ boxm2_scene::boxm2_scene(const char* buffer)
 }
 
 //: initializes Scene from XML file
-boxm2_scene::boxm2_scene(vcl_string filename)
+boxm2_scene::boxm2_scene(vcl_string const& filename)
 {
   vcl_ifstream ifs;
   // we must throw an exception on failure in a constructor
@@ -168,7 +168,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_block_ids() const
 }
 
 boxm2_block_metadata boxm2_scene::
-get_block_metadata_const(boxm2_block_id id) const
+get_block_metadata_const(boxm2_block_id const& id) const
 {
   vcl_map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
@@ -413,7 +413,7 @@ boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vect
 }
 
 //: If a block contains a 3-d point, set the local coordinates of the point
-bool boxm2_scene::block_contains(vgl_point_3d<double> const& p, boxm2_block_id bid,
+bool boxm2_scene::block_contains(vgl_point_3d<double> const& p, boxm2_block_id const& bid,
                                  vgl_point_3d<double>& local_coords) const
 {
   boxm2_block_metadata md = this->get_block_metadata_const(bid);
@@ -462,7 +462,7 @@ void boxm2_scene::save_scene()
 }
 
 //: return a heap pointer to a scene info
-boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id id)
+boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id const& id)
 {
   if ( blocks_.find(id) == blocks_.end() )
   {
@@ -655,7 +655,7 @@ unsigned& boxm2_scene::get_count()
 }
 
 //: returns true if the scene has specified data type (simple linear search)
-bool boxm2_scene::has_data_type(vcl_string data_type)
+bool boxm2_scene::has_data_type(vcl_string const& data_type)
 {
   for (unsigned int i=0; i<appearances_.size(); ++i)
     if ( appearances_[i] == data_type )
@@ -682,7 +682,7 @@ bool boxm2_scene::is_block_visible(boxm2_block_metadata & data, vpgl_camera<doub
 // NON CLASS FUNCTIONS
 //---------------------------------------------------------------------
 //------------XML WRITE------------------------------------------------
-void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name)
+void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string const& name)
 {
   //open root tag
   vsl_basic_xml_element scene_elm(name);
