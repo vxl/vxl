@@ -40,6 +40,10 @@ vnl_brent_minimizer::~vnl_brent_minimizer()
 {
 }
 
+#if 0  // This function never uses teh value of fc, Assuming the function is not correctly implemented
+
+NOTE:  warning: Value stored to 'fc' is never read [clang-analyzer-deadcode.DeadStores]
+
 //: Find the minimum x of f(x) within a<= x <= c using pure golden section
 // The minimum x is the return value.
 // You need to provide a bracket for the minimum (a<b<c s.t. f(a)>f(b)<f(c).
@@ -122,6 +126,7 @@ double vnl_brent_minimizer::minimize_golden(double a, double b, double c,
   f_at_last_minimum_ = fb;
   return b;
 }
+#endif
 
 //: Find the minimum value of f(x) within a<= x <= c.
 // The minimum x is the return value.
