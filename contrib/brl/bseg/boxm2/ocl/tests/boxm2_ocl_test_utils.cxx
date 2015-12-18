@@ -42,6 +42,7 @@ void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene_sptr scene, float val1,
       data.max_level_ = 4;
       data.max_mb_ = 400;
       data.p_init_ = val1;
+      data.version_ = 2;
 
       //push it into the map
       blocks[id] = data;
@@ -61,6 +62,7 @@ void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene_sptr scene, float val1,
       data.max_level_ = 4;
       data.max_mb_ = 400;
       data.p_init_ = val2;
+      data.version_ = 2;
 
       //push it into the map
       blocks[id] = data;
@@ -106,6 +108,7 @@ bool boxm2_ocl_test_utils::create_test_simple_scene(boxm2_scene_sptr & scene)
           data.max_level_ = 4;
           data.max_mb_ = 400;
           data.p_init_ = .001;
+          data.version_ = 2;
           //push it into the map
           blocks[id] = data;
       }
@@ -158,7 +161,7 @@ void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene_sptr scene)
             int currIdx = bit_tree.get_data_index(currBitIndex);
             double side_len = 1.0 / (double) (1 << 3);
             float prob = 1.0f - vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
-            vcl_cout << "Leaf with index: " << currIdx << " has prob: " << prob << vcl_endl;
+            //vcl_cout << "Leaf with index: " << currIdx << " has prob: " << prob << vcl_endl;
           }
         }
       }

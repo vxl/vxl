@@ -124,7 +124,8 @@ void print_alphas(boxm2_block* blk, float* alphas, boxm2_block_metadata /*data*/
 //
 // Each outer cell will need the sub tree combo of the inner cell - and some
 // will store it as their own (will be the median).
-void test_inner_cluster(boxm2_block* blk,
+void test_inner_cluster(boxm2_scene_sptr scene,
+                        boxm2_block* blk,
                         boxm2_block_metadata& data,
                         bocl_device_sptr& device,
                         boxm2_opencl_cache_sptr& opencl_cache,
@@ -133,8 +134,6 @@ void test_inner_cluster(boxm2_block* blk,
                         cl_command_queue& queue)
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-
-  boxm2_scene_sptr scene = new boxm2_scene();
 
   int dataSize = 8+9;
   float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
@@ -262,7 +261,8 @@ void test_inner_cluster(boxm2_block* blk,
 // |_|_|_|_|_|_|
 // |_|_|_|_|_|_|
 //
-void test_outer_cluster(boxm2_block* blk,
+void test_outer_cluster(boxm2_scene_sptr scene,
+                        boxm2_block* blk,
                         boxm2_block_metadata& data,
                         bocl_device_sptr& device,
                         boxm2_opencl_cache_sptr& opencl_cache,
@@ -273,8 +273,6 @@ void test_outer_cluster(boxm2_block* blk,
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
   int dataSize = 8*(1+8+64) + 1;
   float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
-
-  boxm2_scene_sptr scene = new boxm2_scene();
 
   //set up fake trees
   int count = 0;
@@ -444,9 +442,9 @@ void test_filter_kernel()
 
   //RUN Tests
   vcl_cout<<"Testing inner cluster"<<vcl_endl;
-  test_inner_cluster(blk,data,device,opencl_cache,id,kern,queue);
+  test_inner_cluster(scene,blk,data,device,opencl_cache,id,kern,queue);
   vcl_cout<<"Testing outer clusters"<<vcl_endl;
-  test_outer_cluster(blk,data,device,opencl_cache,id,kern,queue);
+  test_outer_cluster(scene,blk,data,device,opencl_cache,id,kern,queue);
 }
 
 
