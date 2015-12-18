@@ -25,8 +25,8 @@ bool test_gauss_filter()
   //create a simple scene
   boxm2_scene_sptr scene = new boxm2_scene();
   float val1 = 0.3f, val2 = 0.6f;
-  boxm2_ocl_test_utils::create_edge_scene(scene.ptr(), val1, val2);
-  boxm2_ocl_test_utils::print_alpha_scene(scene.ptr());
+  boxm2_ocl_test_utils::create_edge_scene(scene, val1, val2);
+  boxm2_ocl_test_utils::print_alpha_scene(scene);
 
   //create a bvpl_kernel
   float axis_x = 1.0, axis_y = 0.0, axis_z = 0.0;
@@ -118,8 +118,8 @@ bool test_gauss_x_filter()
   boxm2_lru_cache::create(scene);
 
   float val1 = 0.3f, val2 = 0.6f;
-  boxm2_ocl_test_utils::create_edge_scene(scene.ptr(), val1, val2);
-  boxm2_ocl_test_utils::print_alpha_scene(scene.ptr());
+  boxm2_ocl_test_utils::create_edge_scene(scene, val1, val2);
+  boxm2_ocl_test_utils::print_alpha_scene(scene);
 
   //create a bvpl_kernel
   float axis_x = 1.0, axis_y = 0.0, axis_z = 0.0;
