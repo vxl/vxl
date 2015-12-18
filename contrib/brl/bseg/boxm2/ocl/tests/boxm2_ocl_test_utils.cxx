@@ -42,6 +42,7 @@ void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene_sptr scene, float val1,
       data.max_level_ = 4;
       data.max_mb_ = 400;
       data.p_init_ = val1;
+      data.version_ = 2;
 
       //push it into the map
       blocks[id] = data;
@@ -61,6 +62,7 @@ void boxm2_ocl_test_utils::create_edge_scene(boxm2_scene_sptr scene, float val1,
       data.max_level_ = 4;
       data.max_mb_ = 400;
       data.p_init_ = val2;
+      data.version_ = 2;
 
       //push it into the map
       blocks[id] = data;
@@ -106,6 +108,7 @@ bool boxm2_ocl_test_utils::create_test_simple_scene(boxm2_scene_sptr & scene)
           data.max_level_ = 4;
           data.max_mb_ = 400;
           data.p_init_ = .001;
+          data.version_ = 2;
           //push it into the map
           blocks[id] = data;
       }
