@@ -62,6 +62,7 @@ class node
   fptr3 func3;
   void  *param1;
   void  *param2;
+  node(): func1(NULL),func2(NULL),func3(NULL),param1(NULL),param2(NULL) {}
 };
 
 void ErrorExit(vcl_string const& expr, char const* t, unsigned long s)
@@ -292,7 +293,7 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
     n.param1 = new node();
     n.param2 = 0;
     for (i=j; i<l-1; ++i) if (expr[s+i] == ',') break;
-    if (n.func2) {
+    if ( n.func2 ) {
       n.param2 = new node();
       if (i>l-2) ErrorExit(expr, "function needs two arguments",s);
     }
