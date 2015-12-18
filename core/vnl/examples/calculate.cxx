@@ -343,7 +343,7 @@ vcl_string simplify(char const* str)
   // EXAMPLE:
   //     -2 * abs (32*pow(32,2)) + 7*32 -(8-32)
   // --> (-(2))*abs(32*pow(32,(2)))+(7)*32-((8)-32)
-  l = hierarchy_brackets(expr,0L,l); // put brackets according to o.p.
+  hierarchy_brackets(expr,0L,l); // put brackets according to o.p.
   // EXAMPLE:
   //     (-(2))*abs(32*pow(32,(2)))+(7)*32-((8)-32)
   // --> (((-(2))*abs(32*pow(32,(2))))+((7)*32))-((8)-32)
@@ -356,8 +356,8 @@ vnl_decnum calc(node *n)
   else if (!n->func1 && !n->func2 && !n->func3) return *(vnl_decnum*)(n->param1);
   else if (n->func3 && n->param1 && n->param2) return n->func3(calc((node*)n->param1),(unsigned long)calc((node*)n->param2));
   else if (n->param1 && n->param2) return n->func2(calc((node*)n->param1),calc((node*)n->param2));
-  else if (n->param1) return n->func1(calc((node*)n->param1));
-  else if (n->param2) return n->func1(calc((node*)n->param2));
+  else if (n->param1 && n->func1) return n->func1(calc((node*)n->param1));
+  else if (n->param2 && n->func1) return n->func1(calc((node*)n->param2));
   else ErrorExit("", "This should not happen!",0L);
   return vnl_decnum("0"); // never reached...
 }
