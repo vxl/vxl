@@ -95,7 +95,7 @@ bool test_gauss_gradients_filter()
 
               result = result && ( (vcl_abs(response_data[currIdx]-val1) < 1e-5) ||(vcl_abs(response_data[currIdx]-val2) < 1e-5) || (vcl_abs(response_data[currIdx]-0.0f) < 1e-5));
 
-              vcl_cout << "Leaf with index: " << currIdx << " has prob: " << response_data[currIdx] << vcl_endl;
+              //vcl_cout << "Leaf with index: " << currIdx << " has prob: " << response_data[currIdx] << vcl_endl;
             }
           }
         }

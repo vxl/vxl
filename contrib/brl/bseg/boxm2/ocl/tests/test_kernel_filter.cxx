@@ -38,7 +38,7 @@ bool test_gauss_filter()
   factory.set_angle(0.0);
 
   bvpl_kernel_sptr filter = new bvpl_kernel(factory.create());
-  filter->print();
+  //filter->print();
 
   //set up openCL
   bocl_manager_child &mgr = bocl_manager_child::instance();
@@ -97,7 +97,7 @@ bool test_gauss_filter()
 
             result = result && ( (vcl_abs(response_data[currIdx]-val1) < 1e-5) ||(vcl_abs(response_data[currIdx]-val2) < 1e-5) || (vcl_abs(response_data[currIdx]-0.0f) < 1e-5));
 
-            vcl_cout << " P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
+            //vcl_cout << " P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
           }
         }
       }
@@ -131,7 +131,7 @@ bool test_gauss_x_filter()
   factory.set_angle(0.0);
 
   bvpl_kernel_sptr filter = new bvpl_kernel(factory.create());
-  filter->print();
+  //filter->print();
 
   //set up openCL
   bocl_manager_child &mgr = bocl_manager_child::instance();
@@ -190,7 +190,7 @@ bool test_gauss_x_filter()
 
             result = result && ((vcl_abs(response_data[currIdx]-0.0f) < 1e-5));
 
-            vcl_cout << "P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
+            //vcl_cout << "P(leaf[" << currIdx << "])=" << response_data[currIdx] << vcl_endl;
           }
         }
       }

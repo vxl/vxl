@@ -88,9 +88,11 @@ static void lm_phongs_model(vnl_vector<double> & x,
   lm.set_verbose(true);
   lm.minimize(x);
 
+#if 0
   vcl_cout<<"\nSolution: "
           <<x[0]<<','<<x[1]<<','
           <<x[2]<<','<<x[3]<<','<<x[4] <<'\n';
+#endif
 }
 
 static void ocl_phongs_model(vnl_vector<float> & x,
