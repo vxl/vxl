@@ -6,7 +6,7 @@
 // \file
 #include <boxm2/boxm2_util.h>
 
-boxm2_block::boxm2_block(boxm2_block_id id, char* buff): version_(1)
+boxm2_block::boxm2_block(boxm2_block_id const& id, char* buff): version_(1)
 {
   block_id_ = id;
   buffer_ = buff;
@@ -15,7 +15,7 @@ boxm2_block::boxm2_block(boxm2_block_id id, char* buff): version_(1)
   n_cells_ =this->recompute_num_cells();
 }
 
-boxm2_block::boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buffer)
+boxm2_block::boxm2_block(boxm2_block_id const& id, boxm2_block_metadata const& data, char* buffer)
 {
   version_ = data.version_;
   init_level_ = data.init_level_;
@@ -31,7 +31,7 @@ boxm2_block::boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buf
   n_cells_ =this->recompute_num_cells();
 }
 
-boxm2_block::boxm2_block(boxm2_block_metadata data)
+boxm2_block::boxm2_block(boxm2_block_metadata const& data)
 {
   version_ = data.version_;
   block_id_ = data.id_;
@@ -140,7 +140,7 @@ bool boxm2_block::b_write(char* buff)
 //: initializes empty scene given
 // This method uses the max_mb parameter to determine how many data cells to
 // allocate.  MAX_MB is assumed to include blocks, alpha, mog3, num_obs and 16 byte aux data
-bool boxm2_block::init_empty_block(boxm2_block_metadata data)
+bool boxm2_block::init_empty_block(boxm2_block_metadata const& data)
 {
 #if 0 // unused constants
   //calc max number of bytes, data buffer length, and alpha init (consts)
