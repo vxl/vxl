@@ -34,9 +34,8 @@ boxm2_scene_parser::boxm2_scene_parser()
 
 bool boxm2_scene_parser::lvcs(vpgl_lvcs& lvcs)
 {
-  vpgl_lvcs::cs_names cs_name = vpgl_lvcs::str_to_enum(lvcs_cs_name_.data());
-  vpgl_lvcs::LenUnits len_unit;
-  vpgl_lvcs::AngUnits geo_unit;
+  const vpgl_lvcs::cs_names cs_name = vpgl_lvcs::str_to_enum(lvcs_cs_name_.data());
+  vpgl_lvcs::LenUnits len_unit = vpgl_lvcs::FEET;
    if (vcl_strcmp(lvcs_XYZ_unit_.data(), "feet")==0)
      len_unit = vpgl_lvcs::FEET;
    if (vcl_strcmp(lvcs_XYZ_unit_.data(), "meters")==0)
@@ -46,6 +45,7 @@ bool boxm2_scene_parser::lvcs(vpgl_lvcs& lvcs)
      return false;
    }
 
+  vpgl_lvcs::AngUnits geo_unit= vpgl_lvcs::RADIANS;
    if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "radians")==0)
      geo_unit = vpgl_lvcs::RADIANS;
    if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "degrees")==0)
@@ -89,7 +89,7 @@ void boxm2_scene_parser::init_params()
 // - scene level metadata
 //   * LVCS_TAG "lvcs"
 //   * LOCAL_ORIGIN_TAG "local_origin"
-//   * SCENE_PATHS_TAG "scene_paths" 
+//   * SCENE_PATHS_TAG "scene_paths"
 // - block level metadata
 //   * BLOCK_TAG "block"
 //   * BLOCK_ID_TAG "block_id"
@@ -182,10 +182,10 @@ boxm2_scene_parser::startElement(const char* name, const char** atts)
   //---------- BLOCK TAG -------------------------------------------------------
   else if (vcl_strcmp(name, BLOCK_TAG) == 0) {
     boxm2_block_metadata metadata;
-    int idi, idj, idk;
-    double ox, oy, oz;
-    double dim_x, dim_y, dim_z;
-    unsigned num_x, num_y, num_z;
+    int idi=0, idj=0, idk=0;
+    double ox=0.0, oy=0.0, oz=0.0;
+    double dim_x=0.0, dim_y=0.0, dim_z=0.0;
+    unsigned num_x=0, num_y=0, num_z=0;
 
     //iterate over attributes...
     for (int i=0; atts[i]; i+=2) {

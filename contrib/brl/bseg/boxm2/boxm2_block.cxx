@@ -83,7 +83,6 @@ bool boxm2_block::b_read(char* buff)
                                           sub_block_num_.y(),
                                           sub_block_num_.z(),
                                           treesBuff);
-    bytes_read += sizeof(uchar16)*sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
     return true;
   }
   else if (version_ == 2)

@@ -36,7 +36,7 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_RDONLY);
   if (fhandle < 0) {
-    vcl_cerr<<"baio (linux)::read could not open file"<<filename<<vcl_endl;
+    vcl_cerr<<"baio (unix)::read could not open file"<<filename<<vcl_endl;
     vcl_perror("open");
   }
 
@@ -46,7 +46,7 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   // 3. Allocate a data buffer for the aiocb request
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
-    vcl_cerr<<"baio (linux)::read could not assign buffer of size "<<BUFSIZE<<vcl_endl;
+    vcl_cerr<<"baio (unix)::read could not assign buffer of size "<<BUFSIZE<<vcl_endl;
     vcl_perror("malloc");
   }
 
@@ -58,7 +58,7 @@ bool baio::read(vcl_string filename, char* buff, long BUFSIZE)
   //5.  Call AIO_READ using my_aiocb struct
   int STATUS = aio_read( &(info_->my_aiocb) );
   if (STATUS < 0) {
-    vcl_cerr<<"baio (linux)::read throws error on aio_read: "<<STATUS<<vcl_endl;
+    vcl_cerr<<"baio (unix)::read throws error on aio_read: "<<STATUS<<vcl_endl;
     vcl_perror("aio_read");
   }
   return true;
@@ -70,7 +70,7 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_WRONLY | O_CREAT, 0666);
   if (fhandle < 0) {
-    vcl_cerr<<"baio (linux)::write could not open file: "<<filename<<vcl_endl;
+    vcl_cerr<<"baio (unix)::write could not open file: "<<filename<<vcl_endl;
     vcl_perror("open");
   }
 
@@ -80,7 +80,7 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   // 3. Allocate a data buffer for the aiocb request
   info_->my_aiocb.aio_buf = buff;
   if (!info_->my_aiocb.aio_buf) {
-    vcl_cerr<<"baio (linux)::write could not assign buffer of size "<<BUFSIZE<<vcl_endl;
+    vcl_cerr<<"baio (unix)::write could not assign buffer of size "<<BUFSIZE<<vcl_endl;
     vcl_perror("malloc");
   }
 
@@ -92,7 +92,7 @@ bool baio::write(vcl_string filename, char* buff, long BUFSIZE)
   //5.  Call AIO_READ using my_aiocb struct
   int STATUS = aio_write( &(info_->my_aiocb) );
   if (STATUS < 0) {
-    vcl_cerr<<"baio (linux)::write throws error on aio_read: "<<STATUS<<vcl_endl;
+    vcl_cerr<<"baio (unix)::write throws error on aio_read: "<<STATUS<<vcl_endl;
     vcl_perror("aio_read");
   }
   return true;
