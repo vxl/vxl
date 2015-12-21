@@ -68,10 +68,6 @@ package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/mul Man
 contrib/mul mbl    mbl_    build core/vnl core/vgl core/vsl
 # should be replaced by the following line or something along these lines:
 #contrib/mul mbl    mbl_    build core/vnl/io core/vnl/algo core/vgl/io core/vsl
-# Don't document mil or mil3d anymore, they are deprecated.
-# contrib/mul mil    mil_    build contrib/mul/mbl core/vnl core/vgl core/vbl/io core/vil1
-# contrib/mul mil/algo mil_  build contrib/mul/mil core/vnl
-# contrib/mul mil3d  mil3d_  build contrib/mul/mil
 contrib/mul pdf1d  pdf1d_  build contrib/mul/mbl core/vbl core/vnl
 # should be replaced by the following line or something along these lines:
 #contrib/mul pdf1d  pdf1d_  build contrib/mul/mbl core/vbl core/vnl/io
