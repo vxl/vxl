@@ -1,6 +1,5 @@
 #include <bgui/bgui_bargraph_clipon_tableau.h>
 #include <bgui/bgui_bargraph_clipon_tableau_sptr.h>
-#include <bgui/bgui_bmrf_soview2D.h>
 #include <bgui/bgui_graph_tableau.h>
 #include <bgui/bgui_graph_tableau_sptr.h>
 #include <bgui/bgui_histogram_tableau.h>
