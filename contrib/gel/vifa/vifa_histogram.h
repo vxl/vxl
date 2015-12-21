@@ -10,8 +10,6 @@
 //  This histogram is mainly a port from the old histogram class in TargetJr
 //  which resided in GeneralUtility/Basics.  In this initial version, not all
 //  the functionality is ported but it is intended to be useful.
-//  It is placed in vsrl right now because it is not determined yet where it
-//  should permanently live.
 //
 // \author Glen W. Brooksby
 // \date   14 April, 2003
