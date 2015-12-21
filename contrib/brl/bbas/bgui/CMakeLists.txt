@@ -30,11 +30,6 @@ IF(HAS_VGUI)
      bgui_graph_tableau.cxx            bgui_graph_tableau.h           bgui_graph_tableau_sptr.h
      bgui_image_utils.cxx              bgui_image_utils.h
     )
-IF(HAS_BMRF)
- SET(bgui_sources ${bgui_sources}
-     bgui_bmrf_soview2D.cxx            bgui_bmrf_soview2D.h
-    )
-ENDIF(HAS_BMRF)
 
  AUX_SOURCE_DIRECTORY(Templates bgui_sources)
  ADD_LIBRARY(bgui ${bgui_sources})
@@ -42,9 +37,6 @@ ENDIF(HAS_BMRF)
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgui ${bgui_sources})
 
  TARGET_LINK_LIBRARIES(bgui bsta vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vul vbl vcl)
- IF(HAS_BMRF)
-  TARGET_LINK_LIBRARIES(bgui bmrf)
- ENDIF(HAS_BMRF)
 
  IF(BUILD_EXAMPLES)
    add_subdirectory(examples)
