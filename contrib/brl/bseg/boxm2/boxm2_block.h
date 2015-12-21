@@ -43,15 +43,15 @@ class boxm2_block : public vbl_ref_count
  public:
 
   //: only available constructor - from directory and block_id
-  boxm2_block(boxm2_block_id id, char* buffer);
+  boxm2_block(boxm2_block_id const& id, char* buffer);
 
-  boxm2_block(boxm2_block_id id, boxm2_block_metadata data, char* buffer);
+  boxm2_block(boxm2_block_id const& id, boxm2_block_metadata const& data, char* buffer);
 
   //: creates empty block from metadata
-  boxm2_block(boxm2_block_metadata data);
+  boxm2_block(boxm2_block_metadata const& data);
 
   //: initializes empty block from metadata
-  bool init_empty_block(boxm2_block_metadata data);
+  bool init_empty_block(boxm2_block_metadata const& data);
 
   //: default destructor
   virtual ~boxm2_block() { if (buffer_) delete[] buffer_; }
@@ -80,7 +80,7 @@ class boxm2_block : public vbl_ref_count
   unsigned                  num_cells()         const { return n_cells_; }
   vgl_point_3d<double>      local_origin()      const { return local_origin_;}
   //: mutators
-  void set_block_id(boxm2_block_id id)  { block_id_ = id; }
+  void set_block_id(boxm2_block_id const& id)  { block_id_ = id; }
   void set_init_level(int level)        { init_level_ = level; }
   void set_max_level(int level)         { max_level_ = level; }
   void set_max_mb(int mb)               { max_mb_ = mb; }

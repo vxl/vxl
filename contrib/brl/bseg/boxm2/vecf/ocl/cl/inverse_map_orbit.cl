@@ -225,10 +225,10 @@ __kernel void map_to_source_and_extract_appearance(  __constant  float          
 
             if(current_anatomy == EYELID){
               mean_val = total_app [3]; //actual upper lid color
-              if(eyelid_open){
-                mean_val = darker_lower_lid;
-                mean_val.x = (eyelid_param.t_max - t) * total_app[5].x + t * darker_lower_lid.x; //blend between crease and lower lid;
-              }
+              /* if(eyelid_open){ */
+              /*   mean_val = darker_lower_lid; */
+              /*   mean_val.x = (eyelid_param.t_max - t) * total_app[5].x + t * darker_lower_lid.x; //blend between crease and lower lid; */
+              /* } */
             }
 
             if(current_anatomy == LOWER_LID){

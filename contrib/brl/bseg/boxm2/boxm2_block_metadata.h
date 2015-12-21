@@ -28,6 +28,7 @@
 class boxm2_block_metadata: public vbl_ref_count
 {
  public:
+  // for std containers. Will result in uninitialized values!
   boxm2_block_metadata() {}
   boxm2_block_metadata( boxm2_block_id id,
                         vgl_point_3d<double> local_origin,
