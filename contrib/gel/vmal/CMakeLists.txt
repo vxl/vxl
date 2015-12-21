@@ -1,7 +1,7 @@
 # gel/vmal/CMakeLists.txt
 
 doxygen_add_library(contrib/gel/vmal
-  DEPENDS contrib/gel/vgel contrib/oxl/osl
+  DEPENDS contrib/oxl/osl
   PACKAGE contrib/gel
   DESCRIPTION "Multi-View Line matching"
   )
