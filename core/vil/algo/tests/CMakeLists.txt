@@ -85,11 +85,6 @@ ADD_TEST( vil_algo_test_suppress_non_max_edges   ${EXECUTABLE_OUTPUT_PATH}/vil_a
 ADD_TEST( vil_algo_test_checker_board       ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_checker_board)
 ADD_TEST( vil_algo_test_quad_distance_function   ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_quad_distance_function)
 ADD_TEST( vil_algo_test_flood_fill          ${EXECUTABLE_OUTPUT_PATH}/vil_algo_test_all test_algo_flood_fill)
-  
-
-#ADD_EXECUTABLE( vil_mil_gauss_general_timings vil_mil_gauss_general_timings.cxx)
-#TARGET_LINK_LIBRARIES( vil_mil_gauss_general_timings vil_algo mil vpl vul mbl testlib vcl )
-#ADD_TEST( vil_mil_gauss_general_timings ${EXECUTABLE_OUTPUT_PATH}/vil_mil_gauss_general_timings )
 
 ADD_EXECUTABLE( vil_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vil_algo_test_include vil_algo )
