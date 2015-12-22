@@ -38,8 +38,6 @@ IF (OPENGL_FOUND)
   ELSE(APPLE)
     find_package(X11)
   ENDIF(APPLE)
-  # Qv needed by vrml only
-  INCLUDE(${VXL_CMAKE_DIR}/FindQv.cmake)
   # glut optionally used by vgui_text and by the glut toolkit
   # implementation
   find_package(GLUT)
@@ -208,15 +206,6 @@ IF( GLUT_FOUND )
 ENDIF( GLUT_FOUND )
 
 AUX_SOURCE_DIRECTORY(Templates vgui_sources)
-
-IF (QV_FOUND)
-  INCLUDE_DIRECTORIES(${QV_INCLUDE_DIR})
-  SET(vgui_sources ${vgui_sources}
-    vrml/vgui_vrml_draw_visitor.cxx  vrml/vgui_vrml_draw_visitor.h
-    vrml/vgui_vrml_tableau.cxx       vrml/vgui_vrml_tableau.h
-    vrml/vgui_vrml_texture_map.cxx   vrml/vgui_vrml_texture_map.h
-  )
-ENDIF (QV_FOUND)
 
 IF (MFC_FOUND)
   #SET(vgui_sources ${vgui_sources}
@@ -568,9 +557,6 @@ ENDIF (VGUI_USE_WX)
 IF (VGUI_USE_GLUT)
   TARGET_LINK_LIBRARIES(vgui ${GLUT_LIBRARIES})
 ENDIF (VGUI_USE_GLUT)
-IF (QV_FOUND)
-  TARGET_LINK_LIBRARIES(vgui ${QV_LIBRARIES})
-ENDIF (QV_FOUND)
 
 TARGET_LINK_LIBRARIES(vgui ${OPENGL_LIBRARIES})
 

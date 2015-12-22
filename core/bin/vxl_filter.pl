@@ -557,7 +557,6 @@ sub scan_for_hints {
            m/\bstrcat\s*\(\s*string\b/ ||  # "strcat\(string"
            m/\bstrcmp\s*\(\s*string\b/ ||  # "strcmp\(string"
            m/\bstrlen\s*\(\s*string\b/ ||  # "strlen\(string"
-           m/QV_NODE_ADD_FIELD/ ||         # libQv does not use <string>
            0) {
          $string_is_typename = 0;
          $string_is_identifier = 1;

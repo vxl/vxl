@@ -521,10 +521,6 @@ The PNG library is available.
 @itemx @bullet{} Preprocessor: none (could easily be added if and where needed)
 The Qt library is available.
 
-@item  @bullet{} CMake: @code{QV_FOUND} (Module file @file{FindQv.cmake})
-@itemx @bullet{} Preprocessor: @code{HAS_QV} (Occasionally defined where needed)
-The Qv library is available.
-
 @item  @bullet{} CMake: @code{TIFF_FOUND} (Module file @file{FindTIFF.cmake})
 @itemx @bullet{} Preprocessor: @code{HAS_TIFF} (Occasionally defined where needed)
 The TIFF library is available.
