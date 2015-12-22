@@ -1,17 +1,12 @@
 # This is contrib/CMakeLists.txt
 # Dependencies: mul --> (rpl,tbl);  oxl --> gel --> brl;  (gel,oxl) --> conversions
 
-
 IF( EXISTS ${vxl_SOURCE_DIR}/contrib/conversions/CMakeLists.txt )
   OPTION(BUILD_CONVERSIONS "Build the Conversions Examples?" YES)
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/conversions/CMakeLists.txt )
 
-set(BRL_DEFAULT YES)
-if (NOT VXL_BUILD_DASHBOARDS)
-  set(BRL_DEFAULT NO)
-endif()
 IF( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/CMakeLists.txt )
-  OPTION(BUILD_BRL "Build the Brown University library package?" ${BRL_DEFAULT})
+  OPTION(BUILD_BRL "Build the Brown University library package?" YES)
 ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/CMakeLists.txt )
 
 IF( EXISTS ${vxl_SOURCE_DIR}/contrib/gel/CMakeLists.txt )
