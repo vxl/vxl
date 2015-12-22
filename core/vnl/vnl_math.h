@@ -676,6 +676,28 @@ extern float       hypot(float       x, float       y);
 extern double      hypot(double      x, double      y);
 extern long double hypot(long double x, long double y);
 
+// truncated remainder
+inline int                remainder_truncated(int x, int y)                               { return x % y; }
+inline unsigned int       remainder_truncated(unsigned int x, unsigned int y)             { return x % y; }
+inline long               remainder_truncated(long x, long y)                             { return x % y; }
+inline unsigned long      remainder_truncated(unsigned long x, unsigned long y)           { return x % y; }
+inline long long          remainder_truncated(long long x, long long y)                   { return x % y; }
+inline unsigned long long remainder_truncated(unsigned long long x, unsigned long long y) { return x % y; }
+inline float              remainder_truncated(float x, float y)                           { return fmod(x,y); }
+inline double             remainder_truncated(double x, double y)                         { return fmod(x,y); }
+inline long double        remainder_truncated(long double x, long double y)               { return fmod(x,y); }
+
+// floored remainder
+inline int                remainder_floored(int x, int y)                               { return ((x % y) + y) % y; }
+inline unsigned int       remainder_floored(unsigned int x, unsigned int y)             { return x % y; }
+inline long               remainder_floored(long x, long y)                             { return ((x % y) + y) % y; }
+inline unsigned long      remainder_floored(unsigned long x, unsigned long y)           { return x % y; }
+inline long long          remainder_floored(long long x, long long y)                   { return ((x % y) + y) % y; }
+inline unsigned long long remainder_floored(unsigned long long x, unsigned long long y) { return x % y; }
+inline float              remainder_floored(float x, float y)                           { return fmod(fmod(x,y)+y,y); }
+inline double             remainder_floored(double x, double y)                         { return fmod(fmod(x,y)+y,y); }
+inline long double        remainder_floored(long double x, long double y)               { return fmod(fmod(x,y)+y,y); }
+
 } // end of namespace vnl_math
 
 #if VNL_CONFIG_LEGACY_METHODS // Legacy definitions, for backward compatibility; deprecated!
