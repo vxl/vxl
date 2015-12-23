@@ -78,17 +78,16 @@ bool boxm2_block::b_read(char* buff)
     sub_block_num_ = vgl_vector_3d<unsigned>(nums[0], nums[1], nums[2]);
 
     //4. setup big arrays (3d block of trees)
-    uchar16* treesBuff = (uchar16*) (buff+bytes_read);
+    uchar16* treesBuff = reinterpret_cast<uchar16*>(buff+bytes_read);
     trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                           sub_block_num_.y(),
                                           sub_block_num_.z(),
                                           treesBuff);
-    bytes_read += sizeof(uchar16)*sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
     return true;
   }
   else if (version_ == 2)
   {
-    uchar16* treesBuff = (uchar16*) (buff);
+    uchar16* treesBuff = reinterpret_cast<uchar16*>(buff);
     byte_count_ = sizeof(uchar16)* sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
     trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                           sub_block_num_.y(),
@@ -130,7 +129,6 @@ bool boxm2_block::b_write(char* buff)
 
     unsigned int nums[4] = {sub_block_num_.x(), sub_block_num_.y(), sub_block_num_.z(), 0 };
     vcl_memcpy(buff+bytes_written, nums, 4 * sizeof(unsigned int));
-    bytes_written += 4 * sizeof(int);
   }
   //the arrays themselves should be already in the char buffer, so no need to copy
   return true;
@@ -189,13 +187,11 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata const& data)
   sub_block_num_ = data.sub_block_num_;
 
   //4. setup big arrays (3d block of trees)
-  uchar16* treesBuff = (uchar16*) (buffer_+bytes_read);
+  uchar16* treesBuff = reinterpret_cast<uchar16*>(buffer_+bytes_read);
   trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                         sub_block_num_.y(),
                                         sub_block_num_.z(),
                                         treesBuff);
-  bytes_read += sizeof(uchar16)*sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
-
   //--- Now initialize blocks and their pointers --------- ---------------------
   //6. initialize blocks in order
   int tree_index = 0;
@@ -366,7 +362,7 @@ vcl_vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& global
   int index_y_max=(int)vcl_floor(local_y_max);
   int ny = static_cast<int>(trees_.get_row2_count());
   if(index_y_max >=ny) index_y_max = ny-1;
-  
+
   int index_z_max=(int)vcl_floor(local_z_max);
   int nz = static_cast<int>(trees_.get_row3_count());
   if(index_z_max >=nz) index_z_max = nz-1;
@@ -458,7 +454,7 @@ void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double dista
   for(int z = iz-dri; z<=iz+dri; ++z)
     for(int y = iy-dri; y<=iy+dri; ++y)
       for(int x = ix-dri; x<=ix+dri; ++x){
-        // check bounds  
+        // check bounds
         if(x<int(0) || y<int(0) ||z<int(0) || x>=int(sub_block_num_.x()) || y>=int(sub_block_num_.y()) || z>=int(sub_block_num_.z()))
           continue;
         vnl_vector_fixed<unsigned char, 16>  tree = trees_(x, y, z);
@@ -476,7 +472,7 @@ void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double dista
           vgl_point_3d<double> cell_pos = bit_tree.cell_center(currBitIndex);
           vgl_vector_3d<double> cell_offset(cell_pos.x()*sub_block_dim_.x(), cell_pos.y()*sub_block_dim_.y(), cell_pos.z()*sub_block_dim_.z());
           // global position of leaf cell center
-          vgl_point_3d<double> pos = subblock_origin + cell_offset; 
+          vgl_point_3d<double> pos = subblock_origin + cell_offset;
           double side_len = bit_tree.cell_len(currBitIndex);
           double d = (probe-pos).length();
           if(d<=cell_distance){

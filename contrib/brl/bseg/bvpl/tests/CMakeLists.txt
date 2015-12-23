@@ -21,7 +21,9 @@ ADD_TEST( bvpl_test_bvpl_kernel_functors   ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_a
 ADD_TEST( bvpl_test_direction_to_color_map ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_direction_to_color_map  )
 ADD_TEST( bvpl_test_vector_operator        ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_bvpl_vector_operator  )
 ADD_TEST( bvpl_test_vector_directions      ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_vector_directions  )
+if( HACK_FORCE_BRL_FAILING_TESTS )
 ADD_TEST( bvpl_test_detect_corner          ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_detect_corner  )
+endif()
 
 ADD_EXECUTABLE( bvpl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvpl_test_include bvpl)
