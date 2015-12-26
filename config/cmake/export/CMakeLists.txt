@@ -7,7 +7,6 @@
 
 # Needed to get non-cached variable settings used in VXLConfig.cmake.in
 INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
-INCLUDE( ${MODULE_PATH}/FindQv.cmake )
 INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
 INCLUDE( ${MODULE_PATH}/FindPNG.cmake )
 INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )

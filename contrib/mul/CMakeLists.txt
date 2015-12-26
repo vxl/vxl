@@ -35,11 +35,6 @@ add_subdirectory(msdi)
 add_subdirectory(mfpf)
 add_subdirectory(fhs)
 
-IF (BUILD_UNMAINTAINED_LIBRARIES)
-  add_subdirectory(mil)
-  add_subdirectory(mil3d)
-ENDIF (BUILD_UNMAINTAINED_LIBRARIES)
-
 OPTION(BUILD_MUL_TOOLS "Build the MUL tools?" YES)
 
 IF ( BUILD_MUL_TOOLS )

@@ -51,6 +51,11 @@ IF (BUILD_CORE_IMAGING)
 ENDIF (BUILD_CORE_IMAGING)
 
 
+##- if(NOT BUILD_NONDEPRECATED_ONLY)  ## NOTE THIS CAN NOT BE DEPRECATED
+#                                     # more discussion needed.
+#                                     # deprecating vil1 involves MANY
+#                                     # other deprecations that need further
+#                                     # review
 # Old image library (deprecated)
 IF (BUILD_CORE_IMAGING ) ## BRL still depends on vil1 AND NOT BUILD_NONDEPRECATED_ONLY)
   add_subdirectory(vil1)
@@ -79,11 +84,6 @@ IF (BUILD_CORE_SERIALISATION)
   IF (BUILD_CORE_IMAGING)
     add_subdirectory(vil/io)
   ENDIF (BUILD_CORE_IMAGING)
-
-  # I/O for the ld image library (deprecated):
-  IF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
-    add_subdirectory(vil1/io)
-  ENDIF (BUILD_CORE_IMAGING AND NOT BUILD_NONDEPRECATED_ONLY)
 ENDIF (BUILD_CORE_SERIALISATION)
 
 

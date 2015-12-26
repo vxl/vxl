@@ -91,14 +91,6 @@ SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_S
 # initial cache (set in the CTest script).
 OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" NO )
 
-# A variable to default some OPTIONs to YES for the dashboard, but to
-# NO for other builds.
-IF( BUILD_FOR_VXL_DASHBOARD )
-  SET( YES_FOR_DASHBOARD "YES" )
-ELSE( BUILD_FOR_VXL_DASHBOARD )
-  SET( YES_FOR_DASHBOARD "NO" )
-ENDIF( BUILD_FOR_VXL_DASHBOARD )
-
 # Use this variable in vxl_config.h to tell if it is a shared build
 set(VXL_BUILD_SHARED FALSE)
 if(BUILD_SHARED_LIBS)
@@ -119,7 +111,7 @@ OPTION( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" YES )
 OPTION( BUILD_CORE_UTILITIES "Build VXL's utility libraries" YES )
 OPTION( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" YES )
 OPTION( BUILD_CORE_IMAGING "Build VXL's imaging libraries" YES )
-OPTION( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" NO )
+OPTION( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
 IF(BUILD_CORE_NUMERICS)
   IF( BUILD_FOR_VXL_DASHBOARD )
     OPTION( BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" YES )
@@ -142,13 +134,6 @@ OPTION (VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than 
 IF (VXL_LEGACY_ERROR_REPORTING)
   ADD_DEFINITIONS( -DVXL_LEGACY_ERROR_REPORTING )
 ENDIF (VXL_LEGACY_ERROR_REPORTING)
-
-
-
-# Options to build no longer maintained libraries.
-# It is still useful to have the dashboard check that they are correct,
-# but no-one is likely to work on improving test coverage or fixing memory leaks.
-OPTION( BUILD_UNMAINTAINED_LIBRARIES "Build libraries that are no longer actively maintained?" ${YES_FOR_DASHBOARD} )
 
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer.

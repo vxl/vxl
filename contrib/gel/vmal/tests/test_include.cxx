@@ -2,8 +2,6 @@
 #include <vmal/vmal_convert_vtol.h>
 #include <vmal/vmal_dense_matching.h>
 #include <vmal/vmal_homog2d.h>
-#include <vmal/vmal_kl.h>
-#include <vmal/vmal_kl_params.h>
 #include <vmal/vmal_lines_correlation.h>
 #include <vmal/vmal_multi_view_data.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>
