@@ -219,7 +219,6 @@ PERFORM_CHECK_C_HEADER(sys/times.h VCL_HAS_SYS_TIME_H)
 PERFORM_CHECK_C_HEADER(sys/types.h VCL_HAS_SYS_TYPES_H)
 PERFORM_CHECK_C_HEADER(unistd.h   VCL_HAS_UNISTD_H)
 
-
 #
 # Check for new C++0x standard additions (including TR1)
 #
