@@ -26,7 +26,7 @@ MAIN( test_eulerspiral )
   START (" Test bvgl_eulerspiral class");
   vcl_cout << "Test Constructors" << vcl_endl;
   bvgl_eulerspiral es1 = bvgl_eulerspiral();
-  TEST("Default Constructor", &es1 != 0, true);
+  // this is always true TEST("Default Constructor", &es1 != 0, true);
   
   // construct from intrinsic params
   bvgl_eulerspiral es2 = bvgl_eulerspiral(vgl_point_2d< double >(0, 0), 0.0, 1, 1, 2);
