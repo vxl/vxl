@@ -6,6 +6,10 @@
 // \author Andrew Miller acm@computervisiongroup.com
 // \date  Jan 25, 2011
 //
+// \verbatim
+//  Modifications
+//   Yi Dong Dec, 2015 -- enlarge array size to avoid CL_DEVICE_EXTENSIONS query failure
+// \endverbatim
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 #include <vcl_string.h>

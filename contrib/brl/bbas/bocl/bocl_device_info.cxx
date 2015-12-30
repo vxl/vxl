@@ -11,6 +11,7 @@
 
 bocl_device_info::bocl_device_info(cl_device_id* device)
 {
+  is_nvidia_device_ = false;
   device_ = device;
   int status;
 
@@ -140,7 +141,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
     return;     
 
   //get device extension list
-  char extensions[512];
+  char extensions[2000];
   status = clGetDeviceInfo(*device_, CL_DEVICE_EXTENSIONS,  sizeof(extensions), (void*) extensions, NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_EXTENSIONS failed."))
     return;
