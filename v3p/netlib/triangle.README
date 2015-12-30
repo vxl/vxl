@@ -1,29 +1,27 @@
 Triangle
 A Two-Dimensional Quality Mesh Generator and Delaunay Triangulator.
-Version 1.3
+Version 1.6
 
 Show Me
 A Display Program for Meshes and More.
-Version 1.3
+Version 1.6
 
-Copyright 1996 Jonathan Richard Shewchuk
-School of Computer Science
-Carnegie Mellon University
-5000 Forbes Avenue
-Pittsburgh, Pennsylvania  15213-3891
-Please send bugs and comments to jrs@cs.cmu.edu
+Copyright 1993, 1995, 1997, 1998, 2002, 2005 Jonathan Richard Shewchuk
+2360 Woolsey #H
+Berkeley, California  94705-1927
+Please send bugs and comments to jrs@cs.berkeley.edu
 
-Created as part of the Archimedes project (tools for parallel FEM).
+Created as part of the Quake project (tools for earthquake simulation).
 Supported in part by NSF Grant CMS-9318163 and an NSERC 1967 Scholarship.
 There is no warranty whatsoever.  Use at your own risk.
 
 
 Triangle generates exact Delaunay triangulations, constrained Delaunay
-triangulations, and quality conforming Delaunay triangulations.  The
-latter can be generated with no small angles, and are thus suitable for
-finite element analysis.  Show Me graphically displays the contents of
-the geometric files used by Triangle.  Show Me can also write images in
-PostScript form.
+triangulations, conforming Delaunay triangulations, Voronoi diagrams, and
+high-quality triangular meshes.  The latter can be generated with no small
+or large angles, and are thus suitable for finite element analysis.
+Show Me graphically displays the contents of the geometric files used by
+Triangle.  Show Me can also write images in PostScript form.
 
 Information on the algorithms used by Triangle, including complete
 references, can be found in the comments at the beginning of the triangle.c
@@ -58,22 +56,31 @@ The files included in this distribution are:
   triangle.h       Include file for calling Triangle from another program.
   tricall.c        Sample program that calls Triangle.
   makefile         Makefile for compiling Triangle and Show Me.
-  A.poly           A sample data file.
+  A.poly           A sample input file.
 
-Triangle and Show Me are each a single portable C file.  The easiest way to
-compile them is to edit and use the included makefile.  Before compiling,
-read the makefile, which describes your options, and edit it accordingly.
-You should specify:
+Each of Triangle and Show Me is a single portable C file.  The easiest way
+to compile them is to edit and use the included makefile.  Before
+compiling, read the makefile, which describes your options, and edit it
+accordingly.  You should specify:
 
   The source and binary directories.
 
   The C compiler and level of optimization.
 
-  Do you want single precision or double?  Do you want to leave out some of
-  Triangle's features to reduce the size of the executable file?
-
   The "correct" directories for include files (especially X include files),
   if necessary.
+
+  Do you want single precision or double?  (The default is double.)  Do you
+  want to leave out some of Triangle's features to reduce the size of the
+  executable file?  Investigate the SINGLE, REDUCED, and CDT_ONLY symbols.
+
+  If yours is not a Unix system, define the NO_TIMER symbol to remove the
+  Unix-specific timing code.  Also, don't try to compile Show Me; it only
+  works with X Windows.
+
+  If you are compiling on an Intel x86 CPU and using gcc w/Linux or
+  Microsoft C, be sure to define the LINUX or CPU86 (for Microsoft) symbol
+  during compilation so that the exact arithmetic works right.
 
 Once you've done this, type "make" to compile the programs.  Alternatively,
 the files are usually easy to compile without a makefile:
@@ -86,41 +93,41 @@ or libraries, and you'll need to specify an include path or library path:
 
   cc -O -I/usr/local/include -o showme showme.c -L/usr/local/lib -lX11
 
-However, on other systems (like my workstation), the latter incantation
-will cause the wrong files to be read, and the Show Me mouse buttons won't
-work properly in the main window.  Hence, try the "-I" and "-L" switches
-ONLY if the compiler fails without it.  (If you're using the makefile, you
-may edit it to add this switch.)
-
-Some processors, possibly including Intel x86 family and Motorola 68xxx
+Some processors, including Intel x86 family and possibly Motorola 68xxx
 family chips, are IEEE conformant but have extended length internal
 floating-point registers that may defeat Triangle's exact arithmetic
-routines by failing to cause enough roundoff error!  Typically, there is
-a way to set these internal registers so that they are rounded off to
-IEEE single or double precision format.  If you have such a processor,
-you should check your C compiler or system manuals to find out how to
-configure these internal registers to the precision you are using.
-Otherwise, the exact arithmetic routines won't be exact at all.
-Unfortunately, I don't have access to any such systems, and can't give
-advice on how to configure them.  These problems don't occur on any
-workstations I am aware of.  However, Triangle's exact arithmetic hasn't
-a hope of working on machines like the Cray C90 or Y-MP, which are not
-IEEE conformant and have inaccurate rounding.
+routines by failing to cause enough roundoff error!  Typically, there is a
+way to set these internal registers so that they are rounded off to IEEE
+single or double precision format.  I believe (but I'm not certain) that
+Triangle has the right incantations for x86 chips, if you have gcc running
+under Linux (define the LINUX compiler symbol) or Microsoft C (define the
+CPU86 compiler symbol).
 
-Triangle and Show Me both produce their own documentation.  Complete
-instructions are printed by invoking each program with the `-h' switch:
+If you have a different processor or operating system, or if I got the
+incantations wrong, you should check your C compiler or system manuals to
+find out how to configure these internal registers to the precision you are
+using.  Otherwise, the exact arithmetic routines won't be exact at all.
+See http://www.cs.cmu.edu/~quake/robust.pc.html for details.  Triangle's
+exact arithmetic hasn't a hope of working on machines like the Cray C90 or
+Y-MP, which are not IEEE conformant and have inaccurate rounding.
+
+Triangle and Show Me have both text and HTML documentation.  The latter is
+illustrated.  Find it on the Web at
+
+  http://www.cs.cmu.edu/~quake/triangle.html
+  http://www.cs.cmu.edu/~quake/showme.html
+
+Complete text instructions are printed by invoking each program with the
+`-h' switch:
 
   triangle -h
   showme -h
 
 The instructions are long; you'll probably want to pipe the output to
-`more' or `lpr' or redirect it to a file.  Both programs give a short list
-of command line options if they are invoked without arguments (that is,
-just type `triangle' or `showme').  Alternatively, you may want to read
-the instructions on the World Wide Web.  The appropriate URLs are:
+`more' or `lpr' or redirect it to a file.
 
-  http://www.cs.cmu.edu/~quake/triangle.html
-  http://www.cs.cmu.edu/~quake/showme.html
+Both programs give a short list of command line options if they are invoked
+without arguments (that is, just type `triangle' or `showme').
 
 Try out Triangle on the enclosed sample file, A.poly:
 
@@ -154,7 +161,8 @@ Click the "Reset" button to see the full extent of the diagram.
 
 If you wish to call Triangle from another program, instructions for doing
 so are contained in the file `triangle.h' (but read Triangle's regular
-instructions first!).  Also look at `tricall.c', which provides an example.
+instructions first!).  Also look at `tricall.c', which provides an example
+of how to call Triangle.
 
 Type "make trilibrary" to create triangle.o, a callable object file.
 Alternatively, the object file is usually easy to compile without a
@@ -162,20 +170,29 @@ makefile:
 
   cc -DTRILIBRARY -O -c triangle.c
 
+Type "make distclean" to remove all the object and executable files created
+by make.
+
 ------------------------------------------------------------------------------
 
-If you use Triangle, and especially if you use it to accomplish real
-work, I would like very much to hear from you.  A short letter or email
-(to jrs@cs.cmu.edu) describing how you use Triangle will mean a lot to
-me.  The more people I know are using this program, the more easily I can
+If you use Triangle, and especially if you use it to accomplish real work,
+I would like very much to hear from you.  A short letter or email (to
+jrs@cs.berkeley.edu) describing how you use Triangle will mean a lot to me.
+The more people I know are using this program, the more easily I can
 justify spending time on improvements and on the three-dimensional
-successor to Triangle, which in turn will benefit you.  Also, I can put
-you on a list to receive email whenever a new version of Triangle is
-available.
+successor to Triangle, which in turn will benefit you.  Also, I can put you
+on a list to receive email whenever a new version of Triangle is available.
 
 If you use a mesh generated by Triangle or plotted by Show Me in a
-publication, please include an acknowledgment as well.
+publication, please include an acknowledgment as well.  And please spell
+Triangle with a capital `T'!  If you want to include a citation, use
+`Jonathan Richard Shewchuk, ``Triangle:  Engineering a 2D Quality Mesh
+Generator and Delaunay Triangulator,'' in Applied Computational Geometry:
+Towards Geometric Engineering (Ming C. Lin and Dinesh Manocha, editors),
+volume 1148 of Lecture Notes in Computer Science, pages 203-222,
+Springer-Verlag, Berlin, May 1996.  (From the First ACM Workshop on Applied
+Computational Geometry.)'
 
 
 Jonathan Richard Shewchuk
-July 20, 1996
+July 27, 2005
