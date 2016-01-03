@@ -9,9 +9,9 @@
 //
 // Be careful when modifying this file. In general, you need to make
 // sure that exactly one of the preprocessor flags is defined. For
-// example, if the compiler is GCC 3.4.2, then VCL_GCC should be
-// defined, VCL_GCC_3 should be defined, and VCL_GCC_34 should be
-// defined. Others, like VCL_GCC_33 *should not* be defined.
+// example, if the compiler is GCC 4.4.2, then VCL_GCC should be
+// defined, VCL_GCC_4 should be defined, and VCL_GCC_44 should be
+// defined. Others, like VCL_GCC_43 *should not* be defined.
 //
 // Note that this is most commonly implemented using a cascade of if
 // statements. Be careful to add your statements to the correct place
