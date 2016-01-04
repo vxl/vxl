@@ -427,9 +427,9 @@ advance()
     // grab the metadata from this packet if from the metadata stream
     else if (is_->packet_.stream_index==is_->data_index_)
     {
-      is_->metadata_.insert( is_->metadata_.end(), pkt.data, pkt.data+pkt.size);
+      is_->metadata_.insert( is_->metadata_.end(), is_->packet_.data, is_->packet_.data+is_->packet_.size);
     }
-    av_free_packet( &pkt );
+    av_free_packet( &is_->packet_ );
   }
 
   // From ffmpeg apiexample.c: some codecs, such as MPEG, transmit the
