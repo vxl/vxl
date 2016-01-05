@@ -366,22 +366,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_NUMERIC_LIMITS_HAS_INFINITY ";
-#ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
-  vcl_cout << "is set to " << quote(VCL_NUMERIC_LIMITS_HAS_INFINITY);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_PROCESSOR_HAS_INFINITY ";
-#ifdef VCL_PROCESSOR_HAS_INFINITY
-  vcl_cout << "is set to " << quote(VCL_PROCESSOR_HAS_INFINITY);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_CXX_HAS_HEADER_CASSERT ";
 #ifdef VCL_CXX_HAS_HEADER_CASSERT
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CASSERT);
@@ -497,14 +481,6 @@ void test_config()
   vcl_cout << "VCL_CXX_HAS_HEADER_CWCTYPE ";
 #ifdef VCL_CXX_HAS_HEADER_CWCTYPE
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CWCTYPE);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_CXX_HAS_HEADER_CFLOAT ";
-#ifdef VCL_CXX_HAS_HEADER_CFLOAT
-  vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CFLOAT);
 #else
   vcl_cout << "is not set";
 #endif
@@ -769,14 +745,6 @@ void test_config()
   vcl_cout << "VCL_CXX_HAS_HEADER_FUNCTIONAL ";
 #ifdef VCL_CXX_HAS_HEADER_FUNCTIONAL
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_FUNCTIONAL);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_CXX_HAS_HEADER_LIMITS ";
-#ifdef VCL_CXX_HAS_HEADER_LIMITS
-  vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_LIMITS);
 #else
   vcl_cout << "is not set";
 #endif
