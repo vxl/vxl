@@ -80,15 +80,8 @@
 //      are called driven by smart_ptr interface...
 //
 #include <vcl_config_manual.h>
-#if !defined(VCL_USE_ATOMIC_COUNT) || !VCL_USE_ATOMIC_COUNT
 
-typedef long int vcl_atomic_count;
-
-// I do not know when a pthread version is required
-//#elif defined(BOOST_AC_USE_PTHREADS)
-//#  include <boost/detail/atomic_count_pthreads.hpp>
-
-#elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
+#if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 
 # include "internal/vcl_atomic_count_gcc_x86.h"
 
