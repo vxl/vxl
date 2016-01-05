@@ -98,7 +98,6 @@ for $var_exp (
 
   # from vcl_config_headers.h
   'VCL_CXX_HAS_HEADER_CASSERT',
-  'VCL_CXX_HAS_HEADER_CISO646',
   'VCL_CXX_HAS_HEADER_CSETJMP',
   'VCL_CXX_HAS_HEADER_CSTDIO',
   'VCL_CXX_HAS_HEADER_CTIME',

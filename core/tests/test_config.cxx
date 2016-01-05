@@ -374,14 +374,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_CXX_HAS_HEADER_CISO646 ";
-#ifdef VCL_CXX_HAS_HEADER_CISO646
-  vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CISO646);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_CXX_HAS_HEADER_CSETJMP ";
 #ifdef VCL_CXX_HAS_HEADER_CSETJMP
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CSETJMP);
