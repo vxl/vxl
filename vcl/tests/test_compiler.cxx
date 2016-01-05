@@ -62,7 +62,6 @@ int test_compiler_main(int /*argc*/,char* /*argv*/[])
   return result;
 }
 
-#if defined(VCL_USE_IMPLICIT_TEMPLATES) && VCL_USE_IMPLICIT_TEMPLATES
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_algorithm.h>
@@ -118,7 +117,3 @@ bool operator==(mystery_type const &x, mystery_type const &y)
 
 bool operator< (mystery_type const &x, mystery_type const &y)
 { return (x.a <  y.b) || ((x.a == y.a) && (x.b < y.b)); }
-
-#else
-void vcl_test_implicit_instantiation(int) { }
-#endif

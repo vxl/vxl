@@ -7,8 +7,6 @@
 
 #define VCL_STACK_INSTANTIATE extern "you must include vcl_stack.txx first"
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "vcl_stack.txx"
-#endif
+#include "vcl_stack.txx"
 
 #endif // vcl_stack_h_

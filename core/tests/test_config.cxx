@@ -750,14 +750,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_USE_IMPLICIT_TEMPLATES ";
-#ifdef VCL_USE_IMPLICIT_TEMPLATES
-  vcl_cout << "is set to " << quote(VCL_USE_IMPLICIT_TEMPLATES);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VXL_LITTLE_ENDIAN ";
 #ifdef VXL_LITTLE_ENDIAN
   vcl_cout << "is set to " << quote(VXL_LITTLE_ENDIAN);

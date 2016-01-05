@@ -8,8 +8,6 @@
 #define VCL_LIST_INSTANTIATE \
 extern "include vcl_list.txx instead"
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "vcl_list.txx"
-#endif
+#include "vcl_list.txx"
 
 #endif // vcl_list_h_
