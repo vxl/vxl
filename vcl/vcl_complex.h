@@ -20,7 +20,7 @@
 
 // ---------- all emulation
 #if !VCL_USE_NATIVE_COMPLEX
-# include "emulation/vcl_complex.h"
+# error "NOT SUPPORTED.  VCL_USE_NATIVE_COMPLEX is hardcoded to 1"
 
 #elif defined(VCL_STLPORT)
 # include "stlport/vcl_complex.h"
