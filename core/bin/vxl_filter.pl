@@ -617,9 +617,6 @@ sub process_lines {
       s/\bIUE_SUNPRO_ALLOCATOR_HACK\b/VCL_SUNPRO_ALLOCATOR_HACK/g;
 
       s/\bIUE_STRING_IS_TYPEDEF\b/VCL_STRING_IS_TYPEDEF/g;
-      s/\bdefined\(IUE_USE_NATIVE_STL\)/VCL_USE_NATIVE_STL/g;
-      s/(\#\s*if)def\s+IUE_USE_NATIVE_STL\b/$1 VCL_USE_NATIVE_STL/g;
-      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_STL\b/$1 !VCL_USE_NATIVE_STL/g;
       s/\bdefined\(IUE_USE_NATIVE_COMPLEX\)/VCL_USE_NATIVE_COMPLEX/g;
       s/(\#\s*if)def\s+IUE_USE_NATIVE_COMPLEX\b/$1 VCL_USE_NATIVE_COMPLEX/g;
       s/(\#\s*if)ndef\s+IUE_USE_NATIVE_COMPLEX\b/$1 !VCL_USE_NATIVE_COMPLEX/g;

@@ -28,10 +28,7 @@
 
 #include "vcl_compiler.h"
 
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_rel_ops.h"
-
-#elif defined(VCL_GCC) && defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
+#if defined(VCL_GCC) && defined(VCL_CXX_HAS_HEADER_FUNCTIONAL)
 # include "vcl_utility.h"
 # if defined(VCL_GCC_30)
 using std::rel_ops::operator!=;

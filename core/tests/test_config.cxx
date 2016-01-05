@@ -790,14 +790,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_USE_NATIVE_STL ";
-#ifdef VCL_USE_NATIVE_STL
-  vcl_cout << "is set to " << quote(VCL_USE_NATIVE_STL);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_USE_NATIVE_COMPLEX ";
 #ifdef VCL_USE_NATIVE_COMPLEX
   vcl_cout << "is set to " << quote(VCL_USE_NATIVE_COMPLEX);

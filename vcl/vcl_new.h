@@ -6,12 +6,8 @@
 
 #include "vcl_compiler.h"
 
-// -------------------- emulation
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_new.h"
-
 // -------------------- old SGI CC
-#elif defined(VCL_SGI_CC_720)
+#if defined(VCL_SGI_CC_720)
 # include <new.h>
 
 // -------------------- gcc with old library
@@ -29,7 +25,6 @@
 #endif
 
 // Provide vcl_destroy() and vcl_construct() :
-#if VCL_USE_NATIVE_STL
 template <class T>
 inline
 void vcl_destroy(T *p) { p->~T(); }
@@ -37,7 +32,6 @@ void vcl_destroy(T *p) { p->~T(); }
 template <class U, class V>
 inline
 void vcl_construct(U * p, V const & value) { new (p) U(value); }
-#endif
 
 #define vcl_bad_alloc std::bad_alloc
 

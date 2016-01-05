@@ -3,12 +3,7 @@
 
 #include "vcl_compiler.h"
 
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_list.h"
-
-#else
-# include "iso/vcl_list.h"
-#endif
+#include "iso/vcl_list.h"
 
 #define VCL_LIST_INSTANTIATE \
 extern "include vcl_list.txx instead"

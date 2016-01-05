@@ -6,8 +6,6 @@
 
 #if VCL_USE_IMPLICIT_TEMPLATES
 # include "iso/vcl_deque.txx"
-#elif !VCL_USE_NATIVE_STL
-# include "emulation/vcl_deque.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_deque.txx"
 #elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
