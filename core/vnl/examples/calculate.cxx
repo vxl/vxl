@@ -62,6 +62,7 @@ class node
   fptr3 func3;
   void  *param1;
   void  *param2;
+  node(): func1(NULL),func2(NULL),func3(NULL),param1(NULL),param2(NULL) {}
 };
 
 void ErrorExit(vcl_string const& expr, char const* t, unsigned long s)
@@ -292,7 +293,7 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
     n.param1 = new node();
     n.param2 = 0;
     for (i=j; i<l-1; ++i) if (expr[s+i] == ',') break;
-    if (n.func2) {
+    if ( n.func2 ) {
       n.param2 = new node();
       if (i>l-2) ErrorExit(expr, "function needs two arguments",s);
     }
@@ -342,7 +343,7 @@ vcl_string simplify(char const* str)
   // EXAMPLE:
   //     -2 * abs (32*pow(32,2)) + 7*32 -(8-32)
   // --> (-(2))*abs(32*pow(32,(2)))+(7)*32-((8)-32)
-  l = hierarchy_brackets(expr,0L,l); // put brackets according to o.p.
+  hierarchy_brackets(expr,0L,l); // put brackets according to o.p.
   // EXAMPLE:
   //     (-(2))*abs(32*pow(32,(2)))+(7)*32-((8)-32)
   // --> (((-(2))*abs(32*pow(32,(2))))+((7)*32))-((8)-32)
@@ -355,8 +356,8 @@ vnl_decnum calc(node *n)
   else if (!n->func1 && !n->func2 && !n->func3) return *(vnl_decnum*)(n->param1);
   else if (n->func3 && n->param1 && n->param2) return n->func3(calc((node*)n->param1),(unsigned long)calc((node*)n->param2));
   else if (n->param1 && n->param2) return n->func2(calc((node*)n->param1),calc((node*)n->param2));
-  else if (n->param1) return n->func1(calc((node*)n->param1));
-  else if (n->param2) return n->func1(calc((node*)n->param2));
+  else if (n->param1 && n->func1) return n->func1(calc((node*)n->param1));
+  else if (n->param2 && n->func1) return n->func1(calc((node*)n->param2));
   else ErrorExit("", "This should not happen!",0L);
   return vnl_decnum("0"); // never reached...
 }

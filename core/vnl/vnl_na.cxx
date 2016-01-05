@@ -143,8 +143,9 @@ template <class T> inline void vnl_na_extract_type(vcl_istream &is, T& value)
       break;
     }
     else {
-      is.get(c); //Gobble up peeked character
-      oneToken << c;
+      vcl_stringstream::char_type pp=' ';
+      is.get(pp); //Gobble up peeked character
+      oneToken << pp;
     }
     ++char_processed_count;
   }
