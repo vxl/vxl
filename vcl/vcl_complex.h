@@ -22,44 +22,9 @@
 #if !VCL_USE_NATIVE_COMPLEX
 # include "emulation/vcl_complex.h"
 
-#elif defined(VCL_STLPORT)
-# include "stlport/vcl_complex.h"
-
-// ---------- Visual Studio 6
-#elif defined(VCL_VC_6)
-# include "win32-vc60/vcl_complex.h"
-
-// ---------- Visual Studio 7.0
-#elif defined(VCL_VC_70)
-# include "win32-vc70/vcl_complex.h"
-
 // ---------- Visual Studio 8 and 9
 #elif defined(VCL_VC_8) || defined(VCL_VC_9)
 # include "win32-vc8/vcl_complex.h"
-
-// ---------- SunPro compiler
-#elif defined(VCL_SUNPRO_CC)
-# include "sunpro/vcl_complex.h"
-
-// ---------- SGI 7*0
-#elif defined(VCL_SGI_CC_7) && _COMPILER_VERSION < 740
-#include  "sgi/vcl_complex.h"
-
-// ---------- MW
-#elif defined(VCL_METRO_WERKS)
-#include  "mwerks/vcl_complex.h"
-
-// ---------- GCC 2.95
-#elif defined(VCL_GCC_295)
-#include  "gcc-295/vcl_complex.h"
-
-// ---------- Borland 5.5
-#elif defined(VCL_BORLAND_55)
-# include "borland55/vcl_complex.h"
-
-// ---------- Borland 5.6
-#elif defined(VCL_BORLAND_56)
-#include  "borland56/vcl_complex.h"
 
 // ---------- ISO
 #else
@@ -67,7 +32,7 @@
 #endif
 
 
-# if !VCL_COMPLEX_POW_WORKS && !defined(VCL_SGI_CC_7)
+# if !VCL_COMPLEX_POW_WORKS
 #  undef vcl_pow
 #  define vcl_pow vcl_pow
 // several implementations of pow are wrong.

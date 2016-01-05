@@ -10,10 +10,6 @@
 #if !VCL_USE_NATIVE_STL
 # include "emulation/vcl_new.h"
 
-// -------------------- old SGI CC
-#elif defined(VCL_SGI_CC_720)
-# include <new.h>
-
 // -------------------- gcc with old library
 #elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include <new.h>

@@ -296,7 +296,7 @@ void vgui_glut_adaptor::register_static_callbacks()
   //  glutIdleFunc(idle_callback);
   //  glutTimerFunc(10,timer_callback,314159);
   glutSpecialFunc(special_callback);
-#if (GLUT_API_VERSION >= 4 || GLUT_XLIB_IMPLEMENTATION >= 13) && !defined(VCL_KAI) //wrong
+#if (GLUT_API_VERSION >= 4 || GLUT_XLIB_IMPLEMENTATION >= 13) //wrong
   glutKeyboardUpFunc(keyboard_up_callback);
   glutSpecialUpFunc(special_up_callback);
 #endif

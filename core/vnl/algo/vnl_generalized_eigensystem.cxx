@@ -11,9 +11,6 @@
 #include "vnl_generalized_eigensystem.h"
 
 #include <vcl_iostream.h>
-#ifdef VCL_SGI_CC_730
-# include <vcl_cmath.h>
-#endif
 
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/vnl_matlab_print.h>

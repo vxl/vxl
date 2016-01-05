@@ -404,9 +404,7 @@ struct table_init
     const vidl_pixel_format in_fmt = vidl_pixel_format(Fmt_Code/VIDL_PIXEL_FORMAT_ENUM_END);
     const vidl_pixel_format out_fmt = vidl_pixel_format(Fmt_Code%VIDL_PIXEL_FORMAT_ENUM_END);
     table_entry_init<in_fmt,out_fmt>::set_entry(table[in_fmt][out_fmt]);
-#if !defined(VCL_SGI_CC) // MIPS compiler for irix does not support template recursion...
     table_init<Fmt_Code-1>::populate(table);
-#endif
   }
 };
 

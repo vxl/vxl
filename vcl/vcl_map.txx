@@ -16,8 +16,6 @@
 # include "gcc-libstdcxx-v3/vcl_map.txx"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_map.txx"
-#elif defined(VCL_SGI_CC)
-# include "sgi/vcl_map.txx"
 #else
 # include "iso/vcl_map.txx"
 #endif

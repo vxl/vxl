@@ -82,13 +82,8 @@ vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& /*indent*/)
 //
 //  This should no longer be needed, since that static map was made a static
 //  inside the function indent_data() instead of a global one. - PVr.
-//  (B.t.w., purify on SGI's native compiler never showed a memory leak here.)
 void vsl_indent_clear_all_data()
 {
-#if 0 // no longer needed?
-  indent_data_map.clear();
-#endif
 }
-
 
 // removed explicit instantiation of map<void*, pair<int, int> > -- fsm.

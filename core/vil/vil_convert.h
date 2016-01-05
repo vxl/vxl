@@ -494,7 +494,7 @@ inline void vil_convert_rgb_to_grey(const vil_image_view<rgbP >&src,
                                     vil_image_view<outP >&dest,
                                     double rw=0.2125, double gw=0.7154, double bw=0.0721)
 {
-  vil_convert_rgb_to_grey_pixel<VCL_DISAPPEARING_TYPENAME rgbP::value_type, outP>
+  vil_convert_rgb_to_grey_pixel<typename rgbP::value_type, outP>
     func(rw, gw, bw);
   assert(src.nplanes() == 1);
   vil_transform2(src, dest, func);
