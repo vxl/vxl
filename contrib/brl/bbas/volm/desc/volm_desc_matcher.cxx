@@ -130,8 +130,8 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
   // check the distance from ground trugh location to the closest in geo_index
   if (leaf_gt) {
     gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
-    double x_dist = abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
-    double y_dist = abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
+    const double x_dist = vnl_math::abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
+    const double y_dist = vnl_math::abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
     vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
     double gt_dist = sqrt(gt_dist_vec.sqr_length());
   } 
