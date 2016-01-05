@@ -402,6 +402,12 @@ class vnl_matrix
   //: Return a vector with the content of the (main) diagonal
   vnl_vector<T> get_diagonal() const;
 
+  //: Flatten row-major (C-style)
+  vnl_vector<T> flatten_row_major() const;
+
+  //: Flatten column-major (Fortran-style)
+  vnl_vector<T> flatten_column_major() const;
+
   // ==== mutators ====
 
   //: Sets this matrix to an identity matrix, then returns "*this".
