@@ -199,7 +199,7 @@
 #    define PNGCAPI __watcall
 #  endif
 
-#  if defined(__GNUC__) || (defined (_MSC_VER) && (_MSC_VER >= 800))
+#  if defined(__GNUC__) || (defined (_MSC_VER))
 #    define PNGCAPI __cdecl
 #    if PNG_API_RULE == 1
 #      define PNGAPI __stdcall
@@ -221,23 +221,6 @@
 #  if defined(PNGAPI) && !defined(PNG_USER_PRIVATEBUILD)
    ERROR: PNG_USER_PRIVATEBUILD must be defined if PNGAPI is changed
 #  endif
-
-#  if (defined(_MSC_VER) && _MSC_VER < 800) ||\
-      (defined(__BORLANDC__) && __BORLANDC__ < 0x500)
-    /* older Borland and MSC
-     * compilers used '__export' and required this to be after
-     * the type.
-     */
-#    ifndef PNG_EXPORT_TYPE
-#      define PNG_EXPORT_TYPE(type) type PNG_IMPEXP
-#    endif
-#    define PNG_DLL_EXPORT __export
-#  else /* newer compiler */
-#    define PNG_DLL_EXPORT __declspec(dllexport)
-#    ifndef PNG_DLL_IMPORT
-#      define PNG_DLL_IMPORT __declspec(dllimport)
-#    endif
-#  endif /* compiler */
 
 #else /* !Windows/x86 */
 #  if (defined(__IBMC__) || defined(__IBMCPP__)) && defined(__OS2__)
@@ -467,29 +450,6 @@ typedef size_t png_size_t;
 /* Separate compiler dependencies (problem here is that zlib.h always
  * defines FAR. (SJT)
  */
-#ifdef __BORLANDC__
-#  if defined(__LARGE__) || defined(__HUGE__) || defined(__COMPACT__)
-#    define LDATA 1
-#  else
-#    define LDATA 0
-#  endif
-  /* GRR:  why is Cygwin in here?  Cygwin is not Borland C... */
-#  if !defined(__WIN32__) && !defined(__FLAT__) && !defined(__CYGWIN__)
-#    define PNG_MAX_MALLOC_64K /* only used in build */
-#    if (LDATA != 1)
-#      ifndef FAR
-#        define FAR __far
-#      endif
-#      define USE_FAR_KEYWORD
-#    endif   /* LDATA != 1 */
-         /* Possibly useful for moving data out of default segment.
-          * Uncomment it if you want. Could also define FARDATA as
-          * const if your compiler supports it. (SJT)
-#        define FARDATA FAR
-          */
-#  endif  /* __WIN32__, __FLAT__, __CYGWIN__ */
-#endif   /* __BORLANDC__ */
-
 
 /* Suggest testing for specific compiler first before testing for
  * FAR.  The Watcom compiler defines both __MEDIUM__ and M_I86MM,

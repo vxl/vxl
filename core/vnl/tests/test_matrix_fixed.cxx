@@ -27,7 +27,7 @@ int malloc_count = 0;
 // the one generated here, so this test fails - RWMC.
 // The test also fails for gcc 3.0 - PVr
 # define reset_count malloc_count = 0
-#if !defined(VCL_WIN32) && !defined(GNU_LIBSTDCXX_V3)
+#if !defined(VCL_WIN32)
 # define check_count TEST("mallocs",malloc_count<=1,true)
 #else
 # define check_count TEST("mallocs (no test)",true,true)
@@ -490,9 +490,6 @@ void test_matrix_fixed()
 
 void* operator new(vcl_size_t s)
   // [18.4.1] lib.new.delete
-#if defined(VCL_SUNPRO_CC_5) || defined(GNU_LIBSTDCXX_V3) || defined(VCL_KAI)
-  throw(std::bad_alloc)
-#endif
 {
   void *r = vcl_malloc(s);
 
@@ -505,9 +502,6 @@ void* operator new(vcl_size_t s)
 }
 
 void operator delete(void* s)
-#if defined(GNU_LIBSTDCXX_V3) || defined(VCL_SUNPRO_CC_5)
-  throw()
-#endif
 {
   if (verbose_malloc)
     vcl_printf("delete: %08lX\n", (unsigned long)s);

@@ -215,7 +215,6 @@ PERFORM_CHECK_C_HEADER(sys/times.h VCL_HAS_SYS_TIME_H)
 PERFORM_CHECK_C_HEADER(sys/types.h VCL_HAS_SYS_TYPES_H)
 PERFORM_CHECK_C_HEADER(unistd.h   VCL_HAS_UNISTD_H)
 
-
 #
 # Check for new C++0x standard additions (including TR1)
 #
@@ -311,7 +310,7 @@ SET_INVERT(VXL_LITTLE_ENDIAN "${VXL_BIG_ENDIAN}")
 # Values which are to be manually set
 #
 
-SET(VCL_USE_NATIVE_STL 1) # change if no
+SET(VCL_USE_NATIVE_STL 1)
 SET(VCL_USE_NATIVE_COMPLEX 1)
 SET(VCL_USE_IMPLICIT_TEMPLATES 1) # change if no
 SET(VCL_USE_ATOMIC_COUNT 1)

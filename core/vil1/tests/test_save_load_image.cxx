@@ -521,14 +521,6 @@ static void test_save_load_image()
   vil1_test_image_type("png", image24);
 #endif
 
-  // SGI "iris" rgb
-#if 1
-  vil1_test_image_type("iris", image8);
-  vil1_test_image_type("iris", image16);
-  vil1_test_image_type("iris", image3p);
-#endif
-
-
   // mit
 #if 1
   vil1_test_image_type("mit", image8);

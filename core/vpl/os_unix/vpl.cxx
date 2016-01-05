@@ -1,7 +1,7 @@
 // This is core/vpl/os_unix/vpl.cxx
 // Include system headers for UNIX-like operating system :
 #undef _XOPEN_SOURCE
-#define _XOPEN_SOURCE 1 // necessary on alpha and on SGI since otherwise
+#define _XOPEN_SOURCE 1 // necessary on alpha
 #undef _XOPEN_SOURCE_EXTENDED
 #define _XOPEN_SOURCE_EXTENDED 1 // usleep is not declared
 extern "C" {

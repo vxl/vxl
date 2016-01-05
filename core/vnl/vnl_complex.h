@@ -26,20 +26,6 @@
 
 namespace vnl_math
 {
- // these function could have been templated, if not for the
- // broken overload resolution of SGI CC 7.2.x -- fsm
-
-#define macro(T) \
- inline bool isnan(vcl_complex<T >const& z) { return isnan(vcl_real(z)) || isnan(vcl_imag(z)); } \
- inline bool isfinite(vcl_complex<T >const& z) { return isfinite(vcl_real(z)) && isfinite(vcl_imag(z)); } \
- inline T abs(vcl_complex<T > const& z) { return vcl_abs(z); } \
- inline vcl_complex<T > sqr(vcl_complex<T > const& z) { return z*z; } \
- inline T squared_magnitude(vcl_complex<T > const& z) { return vcl_norm(z); }
- macro(float)
- macro(double)
- macro(long double)
-#undef macro
-
 #if 0
  // isinf
  template <class T> inline
@@ -47,6 +33,18 @@ namespace vnl_math
  {
    return isinf(vcl_real(z)) || isinf(vcl_imag(z));
  }
+#else
+ // should consider making these function templated,
+#define type_macro(T) \
+ inline bool isnan(vcl_complex<T >const& z) { return isnan(vcl_real(z)) || isnan(vcl_imag(z)); } \
+ inline bool isfinite(vcl_complex<T >const& z) { return isfinite(vcl_real(z)) && isfinite(vcl_imag(z)); } \
+ inline T abs(vcl_complex<T > const& z) { return vcl_abs(z); } \
+ inline vcl_complex<T > sqr(vcl_complex<T > const& z) { return z*z; } \
+ inline T squared_magnitude(vcl_complex<T > const& z) { return vcl_norm(z); }
+ type_macro(float)
+ type_macro(double)
+ type_macro(long double)
+#undef type_macro
 #endif
 
 #ifdef NEED_COMPLEX_BIGNUM // should never be defined ;-)

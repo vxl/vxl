@@ -39,29 +39,11 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_STLPORT)
-# include "stlport/vcl_cmath.h"
-#elif defined(VCL_GCC)
-# include "gcc/vcl_cmath.h"
-#elif defined(VCL_SGI_CC)
-# include "sgi/vcl_cmath.h"
-#elif defined(VCL_VC_60)
-# include "win32-vc60/vcl_cmath.h"
-                            // C++ .NET 2003 is iso compliant
-#elif defined(VCL_VC_70)     // C++ .NET earlier than 2003 is not iso compliant
-# include "win32-vc70/vcl_cmath.h"
-#elif defined(VCL_VC_8) || defined(VCL_VC_9)     // C++ .NET earlier than 2003 is not iso compliant
+#if defined(VCL_VC_9) // C++ .NET earlier than 2003 is not iso compliant
 # include "win32-vc8/vcl_cmath.h"
-#elif defined(VCL_SUNPRO_CC)
-# include "sunpro/vcl_cmath.h"
-#elif defined(VCL_METRO_WERKS)
-# include "mwerks/vcl_cmath.h"
-#elif defined(VCL_BORLAND_55)
-# include "borland55/vcl_cmath.h"
 #else
 # include "iso/vcl_cmath.h"
 #endif
-
 
 #if !VCL_COMPLEX_POW_WORKS && !defined VCL_CMATH_POW_DECLARED
 // deal with corrections to pow(complex...)

@@ -32,11 +32,7 @@
 #include <vcl_iostream.h>
 #include <vil1/vil1_clamp.h>
 
-#ifdef VCL_SUNPRO_CC
-# define InLine inline
-#else
-# define InLine
-#endif
+# define InLine //TODO: HANS Remvoe InLIne now that SUNPRO is gone
 
 //: This is the appropriate pixel type for 24-bit colour images.
 //

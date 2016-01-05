@@ -287,7 +287,7 @@
 //: VCL_NULL_TMPL_ARGS
 //
 // Define to <> for compilers that require them in friend template function
-// declarations (i.e., EGCS, VC C++.NET 2003).
+// declarations (i.e., VC C++.NET 2003).
 
 //#define VCL_NULL_TMPL_ARGS /* <> */
 //#define VCL_NULL_TMPL_ARGS <>
@@ -462,7 +462,7 @@ text { return ret; }
 
 //: VCL_OVERLOAD_CAST
 //
-// Some compilers (gcc 2.7.2.3 and SGI native 6.0) often won't perform
+// Some compilers (gcc 2.7.2.3) often won't perform
 // certain implicit casts. E.g. casting a templated derived class to a
 // templated base class (see above), or even realizing that
 // "template void foo(float const * const *, float * const *, int, int)"
@@ -527,17 +527,6 @@ text { return ret; }
 //
 #define VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER @VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER@
 #define VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER @VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER@
-
-// VCL_DFL_TYPE_PARAM_STLDECL(A, a) and VCL_DFL_TMPL_PARAM_STLDECL(A, a)
-// EGCS doesn't like definition of default types, viz:
-// \code
-//   template <class A = default> class vector;
-//   template <class A = default> class vector { ... };
-// \endcode
-// This macro is used to say "define if not previously defined, like
-// \code
-//   template <VCL_DFL_TYPE_PARAM_STLDECL(A,a)> class vector { ... };
-// \endcode
 
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A = a
 //#define VCL_DFL_TYPE_PARAM_STLDECL(A,a) A /* = a */

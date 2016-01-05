@@ -798,14 +798,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_USE_NATIVE_COMPLEX ";
-#ifdef VCL_USE_NATIVE_COMPLEX
-  vcl_cout << "is set to " << quote(VCL_USE_NATIVE_COMPLEX);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_USE_IMPLICIT_TEMPLATES ";
 #ifdef VCL_USE_IMPLICIT_TEMPLATES
   vcl_cout << "is set to " << quote(VCL_USE_IMPLICIT_TEMPLATES);
@@ -1158,169 +1150,9 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_SGI_CC ";
-#ifdef VCL_SGI_CC
-  vcl_cout << "is set to " << quote(VCL_SGI_CC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_6 ";
-#ifdef VCL_SGI_CC_6
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_6);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_7 ";
-#ifdef VCL_SGI_CC_7
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_7);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_730 ";
-#ifdef VCL_SGI_CC_730
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_730);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SGI_CC_720 ";
-#ifdef VCL_SGI_CC_720
-  vcl_cout << "is set to " << quote(VCL_SGI_CC_720);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SUNPRO_CC ";
-#ifdef VCL_SUNPRO_CC
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SUNPRO_CC_5 ";
-#ifdef VCL_SUNPRO_CC_5
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_5);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SUNPRO_CC_50 ";
-#ifdef VCL_SUNPRO_CC_50
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_50);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SUNPRO_CC_56 ";
-#ifdef VCL_SUNPRO_CC_56
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_56);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_GCC ";
 #ifdef VCL_GCC
   vcl_cout << "is set to " << quote(VCL_GCC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_295 ";
-#ifdef VCL_GCC_295
-  vcl_cout << "is set to " << quote(VCL_GCC_295);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_EGCS ";
-#ifdef VCL_EGCS
-  vcl_cout << "is set to " << quote(VCL_EGCS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_28 ";
-#ifdef VCL_GCC_28
-  vcl_cout << "is set to " << quote(VCL_GCC_28);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_27 ";
-#ifdef VCL_GCC_27
-  vcl_cout << "is set to " << quote(VCL_GCC_27);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_EGCS ";
-#ifdef VCL_GCC_EGCS
-  vcl_cout << "is set to " << quote(VCL_GCC_EGCS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_3 ";
-#ifdef VCL_GCC_3
-  vcl_cout << "is set to " << quote(VCL_GCC_3);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_30 ";
-#ifdef VCL_GCC_30
-  vcl_cout << "is set to " << quote(VCL_GCC_30);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_31 ";
-#ifdef VCL_GCC_31
-  vcl_cout << "is set to " << quote(VCL_GCC_31);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_32 ";
-#ifdef VCL_GCC_32
-  vcl_cout << "is set to " << quote(VCL_GCC_32);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_33 ";
-#ifdef VCL_GCC_33
-  vcl_cout << "is set to " << quote(VCL_GCC_33);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_34 ";
-#ifdef VCL_GCC_34
-  vcl_cout << "is set to " << quote(VCL_GCC_34);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1390,57 +1222,9 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_BORLAND ";
-#ifdef VCL_BORLAND
-  vcl_cout << "is set to " << quote(VCL_BORLAND);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_BORLAND_55 ";
-#ifdef VCL_BORLAND_55
-  vcl_cout << "is set to " << quote(VCL_BORLAND_55);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_BORLAND_56 ";
-#ifdef VCL_BORLAND_56
-  vcl_cout << "is set to " << quote(VCL_BORLAND_56);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_ICC ";
 #ifdef VCL_ICC
   vcl_cout << "is set to " << quote(VCL_ICC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_ICC_8 ";
-#ifdef VCL_ICC_8
-  vcl_cout << "is set to " << quote(VCL_ICC_8);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_ICC_80 ";
-#ifdef VCL_ICC_80
-  vcl_cout << "is set to " << quote(VCL_ICC_80);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_ICC_81 ";
-#ifdef VCL_ICC_81
-  vcl_cout << "is set to " << quote(VCL_ICC_81);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1465,102 +1249,6 @@ void test_config()
   vcl_cout << "VCL_VC_DOTNET ";
 #ifdef VCL_VC_DOTNET
   vcl_cout << "is set to " << quote(VCL_VC_DOTNET);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_8 ";
-#ifdef VCL_VC_8
-  vcl_cout << "is set to " << quote(VCL_VC_8);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_80 ";
-#ifdef VCL_VC_80
-  vcl_cout << "is set to " << quote(VCL_VC_80);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_7 ";
-#ifdef VCL_VC_7
-  vcl_cout << "is set to " << quote(VCL_VC_7);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_70 ";
-#ifdef VCL_VC_70
-  vcl_cout << "is set to " << quote(VCL_VC_70);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_71 ";
-#ifdef VCL_VC_71
-  vcl_cout << "is set to " << quote(VCL_VC_71);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_6 ";
-#ifdef VCL_VC_6
-  vcl_cout << "is set to " << quote(VCL_VC_6);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_60 ";
-#ifdef VCL_VC_60
-  vcl_cout << "is set to " << quote(VCL_VC_60);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_5 ";
-#ifdef VCL_VC_5
-  vcl_cout << "is set to " << quote(VCL_VC_5);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_50 ";
-#ifdef VCL_VC_50
-  vcl_cout << "is set to " << quote(VCL_VC_50);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_KAI ";
-#ifdef VCL_KAI
-  vcl_cout << "is set to " << quote(VCL_KAI);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_METRO_WORKS ";
-#ifdef VCL_METRO_WORKS
-  vcl_cout << "is set to " << quote(VCL_METRO_WORKS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "GNU_LIBSTDCXX_V3 ";
-#ifdef GNU_LIBSTDCXX_V3
-  vcl_cout << "is set to " << quote(GNU_LIBSTDCXX_V3);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1750,22 +1438,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "__BORLANDC__ ";
-#ifdef __BORLANDC__
-  vcl_cout << "is set to " << quote(__BORLANDC__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__SUNPRO_CC ";
-#ifdef __SUNPRO_CC
-  vcl_cout << "is set to " << quote(__SUNPRO_CC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "_MSC_VER ";
 #ifdef _MSC_VER
   vcl_cout << "is set to " << quote(_MSC_VER);
@@ -1801,22 +1473,6 @@ void test_config()
   vcl_cout << "__MWKS__ ";
 #ifdef __MWKS__
   vcl_cout << "is set to " << quote(__MWKS__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__BORLANDC__ ";
-#ifdef __BORLANDC__
-  vcl_cout << "is set to " << quote(__BORLANDC__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__WATCOMC__ ";
-#ifdef __WATCOMC__
-  vcl_cout << "is set to " << quote(__WATCOMC__);
 #else
   vcl_cout << "is not set";
 #endif

@@ -92,7 +92,7 @@ void zmemzero(dest, len)
 #endif
 
 #ifdef __TURBOC__
-#if (defined( __BORLANDC__) || !defined(SMALL_MEDIUM)) && !defined(__32BIT__)
+#if ( !defined(SMALL_MEDIUM)) && !defined(__32BIT__)
 /* Small and medium model in Turbo C are for now limited to near allocation
  * with reduced MAX_WBITS and MAX_MEM_LEVEL
  */

@@ -2,9 +2,7 @@
 #define bwm_process_h_
 
 #ifdef _MSC_VER
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 #endif // _MSC_VER
 
 #if 0

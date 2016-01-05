@@ -3,7 +3,7 @@
 
 // MS compatible compilers support #pragma once
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER)
 # pragma once
 #endif
 //:
@@ -106,11 +106,6 @@ typedef long int vcl_atomic_count;
 
 // When building OSX universal binary, it could use pthread implementation.
 #elif defined(BOOST_HAS_PTHREADS) || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
-
-#  include "internal/vcl_atomic_count_pthreads.h"
-
-// Similarly for SGI
-#elif defined(__sgi)
 
 #  include "internal/vcl_atomic_count_pthreads.h"
 

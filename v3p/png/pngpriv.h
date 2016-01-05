@@ -246,7 +246,7 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
    /* Modern compilers support restrict, but assume not for anything not
     * recognized here:
     */
-#  if defined __GNUC__ || defined _MSC_VER || defined __WATCOMC__
+#  if defined __GNUC__ || defined _MSC_VER
 #     define PNG_RESTRICT restrict
 #  else
 #     define PNG_RESTRICT

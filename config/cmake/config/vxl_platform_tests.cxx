@@ -412,7 +412,6 @@ void copy_image(S const * const *src, T * const *dst, int, int) {}
 typedef unsigned char byte;
 
 void do_vision(int w, int h, byte **image_i, float **image_f) {
-  // SGI CC 7.21 fails here.
   copy_image(image_i, image_f, w, h);
 }
 

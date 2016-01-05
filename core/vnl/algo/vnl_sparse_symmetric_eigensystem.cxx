@@ -18,11 +18,7 @@
 
 static vnl_sparse_symmetric_eigensystem * current_system = 0;
 
-#ifdef VCL_SUNPRO_CC
-# define FUNCTION extern "C"
-#else
-# define FUNCTION static
-#endif
+# define FUNCTION static //TODO: HANS Remove FUNCTION now that SUNPRO is gone
 
 //------------------------------------------------------------
 //: Callback for multiplying our matrix by a number of vectors.

@@ -8,7 +8,7 @@
 #include <vcl_ctime.h>
 #include <vcl_cstdlib.h> // for rand/srand
 
-#if defined(VCL_BORLAND) || defined (VCL_VC) || defined(__MINGW32__)
+#if defined (VCL_VC) || defined(__MINGW32__)
 # include <vcl_cstdio.h> // for _tempnam on borland (and stlport5 with VC8)
 # include <Windows.h>
 #else
@@ -68,7 +68,7 @@
 vcl_string
 vul_temp_filename( )
 {
-#if defined(VCL_VC) || defined(VCL_BORLAND) || defined(__MINGW32__)
+#if defined(VCL_VC) || defined(__MINGW32__)
   char path[ _MAX_PATH ];
   char* file;
   if ( GetTempPath( _MAX_PATH, path ) == 0 )
@@ -78,11 +78,7 @@ vul_temp_filename( )
   // yet another file that will lie around if the caller doesn't use the generated
   // filename. And I don't trust the implementation enough to just unlink the file
   // before returning.
-# if defined(VCL_BORLAND_56)
-  file = std::_tempnam( path, "" );
-# else
   file = _tempnam( path, "" );
-# endif
   if ( file == 0 )
     return "";
   return file;

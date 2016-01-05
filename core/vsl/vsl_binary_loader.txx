@@ -77,30 +77,6 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
 }
 
-#ifdef VCL_SGI_CC
-// This specialisation is needed since otherwise the more general template
-// void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
-// would be used for const char*, which is not correct.
-// This specialisation must of course precede the more general definition.
-//
-// Note that this must be declared "inline", since this function is already
-// implemented (and exported) in vsl_binary_io.cxx; exporting it from here
-// as well would give linker errors (multiple definition of the same symbol).
-//
-// An alternative solution is a single inline definition in vsl_binary_io.h
-// This definition must be implemented identically to the one in
-// vsl_binary_io.h, otherwise there may be an I/O incompatibility.
-
-inline void vsl_b_write(vsl_b_ostream& bfs, const char* b)
-{
-  int i = -1;
-  do {
-     i++;
-     vsl_b_write(bfs,b[i]);
-  } while ( b[i] != 0 );
-}
-#endif
-
 // For pointer to baseclass types, but *not* for char* !
 template<class BaseClass>
 void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)

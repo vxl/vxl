@@ -33,44 +33,5 @@ V vil1_clamp_pixel(V const& b, double range_min, double range_max)
   return (b < V(range_min) ? V(range_min) : (b > V(range_max) ? V(range_max) : b));
 }
 
-// capes@robots : The functions below are deprecated.
-// Use the adaptor style or the vil1_clamp_pixel functions instead.
-#if 0
-//:
-// Default behaviour just returns value. Clamping of double to return byte is
-// also defined here. Other clamps, such as vil1_rgb<double> to vil1_rgb<byte>
-// may be defined in the appropriate places.
-//
-#if !defined(VCL_SGI_CC)
-template <class V, class U>
-inline
-U vil1_clamp(const V& b, U*)
-{
-   return U(b);
-}
-#endif
-
-inline
-unsigned char vil1_clamp(const float& d, unsigned char *)
-{
-  if (d > 255.0)
-    return 255;
-  else if (d < 0.0)
-    return 0;
-  else
-    return (unsigned char)d;
-}
-
-inline
-unsigned char vil1_clamp(const double& d, unsigned char *)
-{
-  if (d > 255.0)
-    return 255;
-  else if (d < 0.0)
-    return 0;
-  else
-    return (unsigned char)d;
-}
-#endif
 
 #endif // vil1_clamp_h_

@@ -9,12 +9,8 @@
 /* This should define: sizeof(), size_t, and ptrdiff_t */
 #if !VCL_CXX_HAS_HEADER_CSTDDEF
 # include <stddef.h>
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+#elif defined(VCL_GCC)
 # include <stddef.h>
-#elif defined(VCL_VC60)
-# include <cstddef>
-#elif defined(VCL_METRO_WERKS)
-# include <cstddef>
 #else
 # undef __size_t // this is a bug fix for HPPA
 # include "iso/vcl_cstddef.h"

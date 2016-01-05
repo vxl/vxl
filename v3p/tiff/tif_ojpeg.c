@@ -202,7 +202,7 @@ static const TIFFField ojpegFields[] = {
   a typedef for INT32, which causes a conflict.  MSVC does not include
   a conficting typedef given the headers which are included.
 */
-#if defined(__BORLANDC__) || defined(__MINGW32__)
+#if defined(__MINGW32__)
 # define XMD_H 1
 #endif
 

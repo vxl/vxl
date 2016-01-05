@@ -278,8 +278,7 @@ PMatrix PMatrix::read(vcl_istream& s)
 vnl_svd<double>* PMatrix::svd() const
 {
   if (svd_ == 0) {
-    // Need to make svd_ volatile for SGI g++ 2.7.2 optimizer bug.
-    svd_ = new vnl_svd<double>(p_matrix_.as_ref()); // mutable const
+    svd_ = new vnl_svd<double>(p_matrix_.as_ref());
   }
   return svd_;
 }

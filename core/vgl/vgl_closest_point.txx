@@ -35,23 +35,10 @@ static inline T square(T x) { return x*x; }
 // Consider numbers smaller than this to be zero
 const double SMALL_DOUBLE = 1e-12;
 
-
-// Borland has trouble deducing template types when parameters have
-// type const T instead of T. This occurs in
-// vgl_distance2_to_linesegment. The workaround is to make the T const
-// parameter a T parameter.
-//
-#ifdef VCL_BORLAND_55
-# define DIST_SQR_TO_LINE_SEG_2D( T, x1, y1, x2, y2, x, y ) \
-     vgl_distance2_to_linesegment(T(x1), T(y1), T(x2), T(y2), T(x), T(y) );
-# define DIST_SQR_TO_LINE_SEG_3D( T, x1, y1, z1, x2, y2, z2, x, y, z ) \
-     vgl_distance2_to_linesegment(T(x1), T(y1), T(z1), T(x2), T(y2), T(z2), T(x), T(y), T(z) );
-#else
 # define DIST_SQR_TO_LINE_SEG_2D( T, x1, y1, x2, y2, x, y ) \
      vgl_distance2_to_linesegment(x1, y1, x2, y2, x, y );
 # define DIST_SQR_TO_LINE_SEG_3D( T, x1, y1, z1, x2, y2, z2, x, y, z ) \
      vgl_distance2_to_linesegment(x1, y1, z1, x2, y2, z2, x, y, z );
-#endif
 
 
 template <class T>

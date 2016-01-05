@@ -158,30 +158,6 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (ref_insecp())      FILTER_IMPTR_DEC_REFCOUNT(ref_insecp()); // dec_refcount or kill it
   if (ref_ROA())         FILTER_IMPTR_DEC_REFCOUNT(ref_ROA()); // dec_refcount or kill it
   if (ref_inROA())       FILTER_IMPTR_DEC_REFCOUNT(ref_inROA()); // dec_refcount or kill it
-#if 0
-  for (int i=0; i< numinputs(); i++) {
-    if (ref_inf()[i]) { // no longer needed with smart pointers
-      FILTER_IMPTR_DEC_REFCOUNT(
-//    ((ImgIn*) (ref_inf()[i]))); //SGI CC doesn't like this...
-      *((ImgIn**)(ref_inf())+i)); //FIXME, cast cause inf is const Im**
-    }
-  }
-  //???  we did new (poor man's array) so we use delete????
-  if (ref_inf()) {
-    delete [] ref_inf();
-    // free up new'd space
-    ref_inf() = 0;
-  }
-  // delete the output and intermediate functions if they are filter-owned
-#if 0
-    if (FILTER_OWNED(hsoutput_state) && hsoutf)
-#else
-    if (ref_outf())
-#endif
-    {
-      FILTER_IMPTR_DEC_REFCOUNT(ref_outf());
-    }
-#endif
 #endif
 }
 
@@ -468,16 +444,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
   if (UNCHANGED(input_state()) || NOT_READY(input_state()))
     ref_input_state() = Ready;
   if ( 0 <= index && index < numinputs()) {
-#if 0
-    if (ref_inf()[index]) { // no longer needed for smart pointers
-      // FILTER_IMPTR_DEC_REFCOUNT(((ImgIn*)ref_inf()[index])); //SGI CC doesn't like this...
-      FILTER_IMPTR_DEC_REFCOUNT(*((ImgIn**)(ref_inf())+index)); // release old
-    }
-#endif
     ref_inf()[index] = fpointer;
-#if 0
-    if (fpointer) FILTER_IMPTR_INC_REFCOUNT(((ImgIn*)fpointer)); // mark new
-#endif
     return true;
   }
   // error if reaching this point:
