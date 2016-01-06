@@ -15,7 +15,7 @@ MAIN( test_biarc )
   START (" Test bvgl_biarc class");
   vcl_cout << "Test Constructors" << vcl_endl;
   bvgl_biarc biarc1 = bvgl_biarc();
-  TEST("Default Constructor", &biarc1 != 0, true);
+  // This must always be true TEST("Default Constructor", &biarc1 != 0, true);
   biarc1 = bvgl_biarc(vgl_point_2d<double >(0, 0), 0, vgl_point_2d< double >(5, 5), vnl_math::pi/2);
   bvgl_biarc biarc2 = bvgl_biarc(biarc1);
   bool test_copy = (biarc1.start() == biarc2.start()) && (biarc1.k1() == biarc2.k1())
