@@ -474,6 +474,12 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   //: Return a vector with the content of the (main) diagonal
   vnl_vector<T> get_diagonal() const;
 
+  //: Flatten row-major (C-style)
+  vnl_vector_fixed<T,num_rows*num_cols> flatten_row_major() const;
+
+  //: Flatten column-major (Fortran-style)
+  vnl_vector_fixed<T,num_rows*num_cols> flatten_column_major() const;
+
   // ==== mutators ====
 
   //: Sets this matrix to an identity matrix, then returns "*this".
