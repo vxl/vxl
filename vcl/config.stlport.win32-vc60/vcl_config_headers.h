@@ -8,7 +8,6 @@
 
 //: standard header files.
 #define VCL_CXX_HAS_HEADER_CASSERT    1
-#define VCL_CXX_HAS_HEADER_CISO646    1
 #define VCL_CXX_HAS_HEADER_CSETJMP    1
 #define VCL_CXX_HAS_HEADER_CSTDIO     1
 #define VCL_CXX_HAS_HEADER_CTIME      1
@@ -22,7 +21,6 @@
 #define VCL_CXX_HAS_HEADER_CSTDARG    1
 #define VCL_CXX_HAS_HEADER_CSTRING    1
 #define VCL_CXX_HAS_HEADER_CWCTYPE    1
-#define VCL_CXX_HAS_HEADER_CFLOAT     1
 #define VCL_CXX_HAS_HEADER_CMATH      1
 #define VCL_CXX_HAS_HEADER_CSTDDEF    1
 #define VCL_CXX_HAS_HEADER_ALGORITHM  1
@@ -56,10 +54,7 @@
 #define VCL_CXX_HAS_HEADER_STDEXCEPT  1
 #define VCL_CXX_HAS_HEADER_VECTOR     1
 #define VCL_CXX_HAS_HEADER_FUNCTIONAL 1
-#define VCL_CXX_HAS_HEADER_LIMITS     1
 #define VCL_CXX_HAS_HEADER_STRSTREAM  1
-
-#define VCL_CXX_HAS_HEADER_ISO646_H   1
 
 //--------------------------------------------------------------------------------
 

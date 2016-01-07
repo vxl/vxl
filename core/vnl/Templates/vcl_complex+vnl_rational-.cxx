@@ -22,13 +22,8 @@ vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
   return is; \
 }
 
-// ---------- emulation
-#if !VCL_USE_NATIVE_COMPLEX
-// ** make sure gcc 2.7 sees this **
-VCL_COMPLEX_INSTANTIATE(vnl_rational);
-
 // ---------- egcs
-# elif defined(VCL_EGCS)
+#if defined(VCL_EGCS)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<vnl_rational> const &);
 template vcl_complex<vnl_rational> operator/ (vcl_complex<vnl_rational>const&,vcl_complex<vnl_rational>const&);

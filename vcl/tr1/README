@@ -16,13 +16,6 @@ If your compiler is ISO compliant with TR1 extensions then
 #include "tr1/vcl_blah.h"
 #include "iso/vcl_blah.h"
 
-If your compiler is ISO compliant with no 0x support then
-
-#include "emulation/vcl_new_blah_related_files.h"
-#include "iso/vcl_blah.h"
-
-
-
 All of the .h files in this directory should look like this:
   #include <tr1/blah>
   #define vcl_generic_blah_tr1_STD std::tr1

@@ -20,7 +20,6 @@
 #define VCL_FIND_IF_INSTANTIATE(I, P) \
 //template I find_if(I, I, P)
 
-#if VCL_USE_NATIVE_STL
 #define VCL_SORT_INSTANTIATE(I, T) \
 template void std::__insertion_sort(I, I); \
 template I std::__unguarded_partition(I, I, T); \
@@ -33,9 +32,6 @@ template void std::sort_heap(I, I); \
 template void std::__make_heap(I, I, I, int*); \
 template void std::__adjust_heap(I, int, int, T); \
 template void std::__push_heap(I,int,int, T)
-#else
-#define VCL_SORT_INSTANTIATE(I, T)
-#endif
 #define VCL_SORT_INSTANTIATE_CMP(I, T, C)
 
 #endif // vcl_sgi_algorithm_txx_

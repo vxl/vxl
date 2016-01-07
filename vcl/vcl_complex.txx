@@ -6,8 +6,6 @@
 
 #if VCL_USE_IMPLICIT_TEMPLATES
 # include "iso/vcl_complex.txx"
-#elif !VCL_USE_NATIVE_COMPLEX
-# include "emulation/vcl_complex.txx"
 #elif defined(VCL_EGCS)
 # include "egcs/vcl_complex.txx"
 #elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)

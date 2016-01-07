@@ -54,15 +54,8 @@ vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
 }
 
 
-// ---------- emulation
-#if !VCL_USE_NATIVE_COMPLEX
-// ** make sure gcc 2.7 sees this **
-VCL_COMPLEX_INSTANTIATE(float);
-VCL_COMPLEX_INSTANTIATE(double);
-VCL_COMPLEX_INSTANTIATE(long double);
-
 // ---------- egcs
-# elif defined(VCL_EGCS)
+#if defined(VCL_EGCS)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 # define do_inlines(FLOAT) \
 template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<FLOAT > const &); \

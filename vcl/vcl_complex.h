@@ -18,11 +18,7 @@
 // complex over other number types.
 
 
-// ---------- all emulation
-#if !VCL_USE_NATIVE_COMPLEX
-# include "emulation/vcl_complex.h"
-
-#elif defined(VCL_STLPORT)
+#if defined(VCL_STLPORT)
 # include "stlport/vcl_complex.h"
 
 // ---------- Visual Studio 6
