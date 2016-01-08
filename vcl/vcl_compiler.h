@@ -209,11 +209,6 @@
 #  endif
 #endif
 
-#if defined(como4301) // Comeau C/C++ 4.3.0.1
-# define VCL_COMO
-#endif
-
-
 #if defined(__MWERKS__)
 // [sic]
 # define VCL_METRO_WERKS

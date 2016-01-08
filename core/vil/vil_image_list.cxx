@@ -8,14 +8,6 @@
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_load.h>
 
-#if defined(como4301) && defined(__linux__)
-# ifndef S_IFMT
-#  define S_IFMT 0170000
-# endif
-# ifndef S_IFDIR
-#  define S_IFDIR 0040000
-# endif
-#endif
 static bool il_verbose = false;
 bool vil_image_list::vil_is_directory(char const* fn)
 {
