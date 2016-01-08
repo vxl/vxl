@@ -268,10 +268,6 @@ SET( vcl_sources
   borland55/vcl_memory.h
   borland56/vcl_complex.h
 
-  mwerks/vcl_cmath.h
-  mwerks/vcl_complex.h
-  mwerks/vcl_cstdlib.h
-
   stlport/vcl_cmath.h
   stlport/vcl_complex.h
   stlport/vcl_cstdlib.h

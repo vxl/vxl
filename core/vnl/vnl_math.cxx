@@ -170,7 +170,7 @@ bool isnan(long double x)
 // macro called 'isinf'.
 // Doesn't seem to be an issue with ICC 8
 #if defined(isinf) && !defined(VCL_ICC_8)
-# if defined(__GNUC__) || defined(VCL_METRO_WERKS) || defined(__INTEL_COMPILER)
+# if defined(__GNUC__) || defined(__INTEL_COMPILER)
 // I do not know if MW accepts #warning. Comment out the #undef if not.
 #  warning macro isinf is defined
 #  undef isinf
