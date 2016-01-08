@@ -339,7 +339,25 @@ class vnl_vector
 
   //: Reverse the order of the elements
   //  Element i swaps with element size()-1-i
-  vnl_vector& flip();
+  vnl_vector<T>& flip();
+
+  //: Reverse the order of the elements from index b to 1-e, inclusive.
+  //  When b = 0 and e = size(), this is equivalent to flip();
+  vnl_vector<T>& flip(const unsigned int &b, const unsigned int &e);
+
+  //: Roll the vector forward by the specified shift.
+  //  The shift is cyclical, such that the elements which
+  //  are displaced from the end reappear at the beginning.
+  //  Negative shifts and shifts >= the length of the array are supported.
+  //  A new vector is returned; the underlying data is unchanged.
+  vnl_vector<T> roll(const int &shift) const;
+
+  //: Roll the vector forward by the specified shift.
+  //  The shift is cyclical, such that the elements which
+  //  are displaced from the end reappear at the beginning.
+  //  Negative shifts and shifts >= the length of the array are supported.
+  //  
+  vnl_vector& roll_inplace(const int &shift);
 
   //: Set this to that and that to this
   void swap(vnl_vector<T> & that);

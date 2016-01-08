@@ -140,11 +140,129 @@ void vnl_vector_test_int()
   }
   {
     int vvalues [] = {1,0,0,0};
-    vnl_vector<int> v (4,4,vvalues);
+    vnl_vector<int> v(4,4,vvalues);
     TEST("v.squared_magnitude", (v.squared_magnitude()==1), true);
     TEST("v.magnitude", (v.magnitude()==1), true);
     // normalize not sensible for ints
     //TEST("v.normalize", (v1 = 3 * v, v1.normalize(), v1), v);
+  }
+
+  //////////
+  // FLIP //
+  //////////
+
+  {
+  int vvalues [] = {0,1,2,3};
+  vnl_vector<int> v(4,4,vvalues);
+  TEST("v",
+       (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
+  v.flip();
+  TEST("v.flip()",
+       (3 == v[0] && 2 == v[1] && 1 == v[2] && 0 == v[3]), true);
+  v.flip(0,v.size());
+  TEST("v.flip(0,v.size())",
+       (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
+  v.flip(0,3);
+  TEST("v.flip(0,3)",
+       (2 == v[0] && 1 == v[1] && 0 == v[2] && 3 == v[3]), true);
+  v.flip(1,4);
+  TEST("v.flip(1,4)",
+       (2 == v[0] && 3 == v[1] && 0 == v[2] && 1 == v[3]), true);
+  }
+
+  //////////
+  // ROLL //
+  //////////
+
+  {
+  int vvalues [] = {0,1,2,3};
+  vnl_vector<int> v(4,4,vvalues);
+  vnl_vector<int> v_temp;
+
+  //
+  // Check special cases
+  //
+
+  v_temp = v;
+  TEST("v[0]",
+       (0 == v_temp[0] && 1 == v_temp[1] && 2 == v_temp[2] && 3 == v_temp[3]), true);
+  v_temp = v.roll(0);
+  TEST("v.roll(0)",
+       (0 == v_temp[0] && 1 == v_temp[1] && 2 == v_temp[2] && 3 == v_temp[3]), true);
+  v_temp = v.roll(v.size());
+  TEST("v.roll(v.size())",
+       (0 == v_temp[0] && 1 == v_temp[1] && 2 == v_temp[2] && 3 == v_temp[3]), true);
+  v_temp = v.roll(-v.size());
+  TEST("v.roll(-v.size())",
+       (0 == v_temp[0] && 1 == v_temp[1] && 2 == v_temp[2] && 3 == v_temp[3]), true);
+
+  //
+  // Check:
+  // -- Positive, in range
+  // -- Positive, out of range
+  // -- Negative, in range
+  // -- Negative, out of range
+  //
+
+  v_temp = v.roll(1); // Positive, in range
+  TEST("v.roll(1)",
+       (3 == v_temp[0] && 0 == v_temp[1] && 1 == v_temp[2] && 2 == v_temp[3]), true);
+  v_temp = v.roll(5); // Positive, in range
+  TEST("v.roll(5)",
+       (3 == v_temp[0] && 0 == v_temp[1] && 1 == v_temp[2] && 2 == v_temp[3]), true);
+  v_temp = v.roll(-1); // Positive, in range
+  TEST("v.roll(-1)",
+       (1 == v_temp[0] && 2 == v_temp[1] && 3 == v_temp[2] && 0 == v_temp[3]), true);
+  v_temp = v.roll(-5); // Positive, in range
+  TEST("v.roll(-5)",
+       (1 == v_temp[0] && 2 == v_temp[1] && 3 == v_temp[2] && 0 == v_temp[3]), true);
+  }
+
+  //////////////////
+  // ROLL INPLACE //
+  //////////////////
+
+  {
+  int vvalues [] = {0,1,2,3};
+  vnl_vector<int> v(4,4,vvalues);
+  vnl_vector<int> v_temp = v;
+
+  //
+  // Check special cases
+  //
+
+  TEST("v[0]",
+       (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
+  v.roll_inplace(0);
+  TEST("v.roll_inplace(0)",
+       (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
+  v.roll_inplace(v.size());
+  TEST("v.roll_inplace(v.size())",
+       (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
+  v.roll_inplace(-v.size());
+  TEST("v.roll_inplace(-v.size())",
+       (0 == v[0] && 1 == v[1] && 2 == v[2] && 3 == v[3]), true);
+
+  //
+  // Check:
+  // -- Positive, in range
+  // -- Positive, out of range
+  // -- Negative, in range
+  // -- Negative, out of range
+  //
+
+  v = v_temp, v.roll_inplace(1); // Positive, in range
+  TEST("v.roll_inplace(1)",
+       (3 == v[0] && 0 == v[1] && 1 == v[2] && 2 == v[3]), true);
+  v = v_temp, v.roll_inplace(5); // Positive, in range
+  TEST("v.roll_inplace(5)",
+       (3 == v[0] && 0 == v[1] && 1 == v[2] && 2 == v[3]), true);
+  v = v_temp, v.roll_inplace(-1); // Positive, in range
+  TEST("v.roll_inplace(-1)",
+       (1 == v[0] && 2 == v[1] && 3 == v[2] && 0 == v[3]), true);
+  v = v_temp, v.roll_inplace(-5); // Positive, in range
+  TEST("v.roll_inplace(-5)",
+       (1 == v[0] && 2 == v[1] && 3 == v[2] && 0 == v[3]), true);
   }
 }
 
