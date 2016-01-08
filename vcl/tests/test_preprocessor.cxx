@@ -182,10 +182,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   ++minor_count;
 #endif
 
-#ifdef VCL_METRO_WERKS
-  ++compiler_count;
-#endif
-
   int result = 0;
 
   vcl_cout << "Compiler brand uniquely identified: ";

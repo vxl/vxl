@@ -1438,14 +1438,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_METRO_WORKS ";
-#ifdef VCL_METRO_WORKS
-  vcl_cout << "is set to " << quote(VCL_METRO_WORKS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "GNU_LIBSTDCXX_V3 ";
 #ifdef GNU_LIBSTDCXX_V3
   vcl_cout << "is set to " << quote(GNU_LIBSTDCXX_V3);
@@ -1665,22 +1657,6 @@ void test_config()
   vcl_cout << "_COMPILER_VERSION ";
 #ifdef _COMPILER_VERSION
   vcl_cout << "is set to " << quote(_COMPILER_VERSION);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__MWERKS__ ";
-#ifdef __MWERKS__
-  vcl_cout << "is set to " << quote(__MWERKS__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__MWKS__ ";
-#ifdef __MWKS__
-  vcl_cout << "is set to " << quote(__MWKS__);
 #else
   vcl_cout << "is not set";
 #endif
