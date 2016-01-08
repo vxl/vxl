@@ -1630,14 +1630,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "__WATCOMC__ ";
-#ifdef __WATCOMC__
-  vcl_cout << "is set to " << quote(__WATCOMC__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "__CYGWIN__ ";
 #ifdef __CYGWIN__
   vcl_cout << "is set to " << quote(__CYGWIN__);
