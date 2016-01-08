@@ -391,25 +391,11 @@ inline void vnl_c_vector_construct(vcl_complex<float> *, vcl_size_t) { }
 inline void vnl_c_vector_construct(vcl_complex<double> *, vcl_size_t) { }
 inline void vnl_c_vector_construct(vcl_complex<long double> *, vcl_size_t) { }
 
-#ifdef __BORLANDC__
-// The compiler is confused
-# pragma option push -w-8057
-// Warning W8057 vnl/vnl_c_vector.txx 414:
-// Parameter 'p' is never used in function
-// vnl_c_vector_destruct<int>(int *,int)
-#endif
-
-
 template <class T> inline void vnl_c_vector_destruct(T *p, vcl_size_t n)
 {
   for (vcl_size_t i=0; i<n; ++i)
     (p+i)->~T();
 }
-
-#ifdef __BORLANDC__
-# pragma option pop
-#endif
-
 
 inline void vnl_c_vector_destruct(float *, vcl_size_t) { }
 inline void vnl_c_vector_destruct(double *, vcl_size_t) { }

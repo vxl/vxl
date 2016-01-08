@@ -10,8 +10,6 @@
 # include "win32-vc60/vcl_memory.h"
 #elif defined(VCL_GCC_295)
 # include "gcc-295/vcl_memory.h"
-#elif defined(VCL_BORLAND_55)
-# include "borland55/vcl_memory.h"
 #else
 
 # include "iso/vcl_memory.h"

@@ -153,18 +153,6 @@
 #   define VCL_VC_50       // Version 5.0
 #   define VCL_VC50 1      // (deprecated)
 #  endif
-# elif defined(__BORLANDC__)
-#  define VCL_BORLAND
-#  if __BORLANDC__ >= 0x0500
-#   define VCL_BORLAND_5
-#  endif
-#  if __BORLANDC__ >= 0x0570
-#   define VCL_BORLAND_57
-#  elif __BORLANDC__ >= 0x0560
-#   define VCL_BORLAND_56
-#  elif __BORLANDC__ >= 0x0550
-#   define VCL_BORLAND_55
-#  endif
 # endif
 #endif
 
@@ -286,15 +274,10 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 
 //----------------------------------------------------------------------------
 // Macros for safe-bool idiom.
-#ifdef VCL_BORLAND
-# define VCL_SAFE_BOOL_TRUE true
-# define VCL_SAFE_BOOL_DEFINE typedef bool safe_bool
-#else
 # define VCL_SAFE_BOOL_TRUE (&safe_bool_dummy::dummy)
 # define VCL_SAFE_BOOL_DEFINE \
    struct safe_bool_dummy { void dummy() {} }; \
    typedef void (safe_bool_dummy::* safe_bool)()
-#endif
 
 //----------------------------------------------------------------------------
 // Check if the compiler (claims to) support C++11.

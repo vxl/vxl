@@ -148,24 +148,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   ++minor_count;
 #endif
 
-
-#ifdef VCL_BORLAND
-  ++compiler_count;
-#endif
-
-#ifdef VCL_BORLAND_5
-  ++major_count;
-#endif
-#ifdef VCL_BORLAND_55
-  ++minor_count;
-#endif
-#ifdef VCL_BORLAND_56
-  ++minor_count;
-#endif
-#ifdef VCL_BORLAND_57
-  ++minor_count;
-#endif
-
 #ifdef VCL_ICC
   ++compiler_count;
 #endif

@@ -13,10 +13,6 @@
 #elif defined(VCL_SUNPRO_CC_5)
 # include <iosfwd> // <cstdio> breaks <iosfwd>
 # include "iso/vcl_cstdio.h"
-#elif defined(VCL_BORLAND_55)
-# include <stdio.h>
-# define vcl_generic_cstdio_STD /* */
-# include "generic/vcl_cstdio.h"
 #elif defined(VCL_CYGWIN_GCC)
 # define vcl_snprintf snprintf
 # include "vcl_cstddef.h" // for size_t
