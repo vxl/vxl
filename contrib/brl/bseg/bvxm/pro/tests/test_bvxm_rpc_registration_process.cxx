@@ -150,7 +150,7 @@ static void test_bvxm_rpc_registration_process()
     TEST("bprb_batch_process_manager::instance()->commit_output()", good, true);
     if (!good)
       return;
-  
+
     // check if the results are in DB
     brdb_query_aptr Q_cam = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
     brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", Q_cam);

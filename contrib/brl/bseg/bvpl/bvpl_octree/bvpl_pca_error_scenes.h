@@ -26,14 +26,14 @@ typedef vbl_smart_ptr<bvpl_pca_error_scenes> bvpl_pca_error_scenes_sptr;
 class bvpl_pca_error_scenes : public vbl_ref_count
 {
 public:
-  
+
   bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, vcl_string taylor_path, unsigned dim);
-  
+
   //: Return the error scene associated with a number of components used for reconstruction
   boxm_scene_base_sptr get_scene(unsigned ncomponent) {return scenes_[ncomponent];}
-    
+
 private:
   vcl_vector<boxm_scene_base_sptr> scenes_;
-  
+
 };
 #endif

@@ -21,16 +21,16 @@ template<class T>
 class vimt3d_image_3d_of : public vimt3d_image_3d
 {
 private:
-  
+
   vil3d_image_view<T> image_;
 
   //: Shallow equality tester.
   //  The parameter must be identical type to this.
   bool equals(const vimt_image &) const;
- 
+
 
 public:
-  
+
   //: Construct an empty one-plane image.
   vimt3d_image_3d_of() {}
 
@@ -43,11 +43,11 @@ public:
 
   //: Construct from a view and a world-to-image transform.
   // The underlying pixel data is not duplicated.
-  vimt3d_image_3d_of(const vil3d_image_view<T>& view, 
+  vimt3d_image_3d_of(const vil3d_image_view<T>& view,
                      const vimt3d_transform_3d& w2i)
     : vimt3d_image_3d(w2i), image_(view) {}
- 
-  
+
+
   //: Destructor
   virtual ~vimt3d_image_3d_of() {}
 
@@ -114,7 +114,7 @@ public:
 
 //=======================================================================
 //: True if the transforms and the actual image data are identical.
-// The image pointers need not be identical, 
+// The image pointers need not be identical,
 // provided that the underlying image data are the same.
 // \relatesalso vimt3d_image_3d_of<T>
 // \relatesalso vil3d_image_view

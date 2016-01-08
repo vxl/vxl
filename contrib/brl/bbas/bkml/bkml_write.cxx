@@ -129,7 +129,7 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
 }
 
 // write a polygon with color (only outerBoundary)
-void bkml_write::write_polygon(vcl_ofstream& ofs, vgl_polygon<double> const& poly, 
+void bkml_write::write_polygon(vcl_ofstream& ofs, vgl_polygon<double> const& poly,
                                vcl_string const& name,
                                vcl_string const& description,
                                double const& scale,  double const& line_width, double const& alpha,
@@ -315,7 +315,7 @@ void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
       << "</PhotoOverlay>\n" << vcl_endl;
 }
 
-void bkml_write::write_kml_style(vcl_ofstream& ofs, 
+void bkml_write::write_kml_style(vcl_ofstream& ofs,
                                  vcl_string style_name,
                                  double const& scale,
                                  double const& line_width,

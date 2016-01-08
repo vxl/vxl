@@ -63,7 +63,7 @@ static void proj_test()
   vbl_array_2d<vgl_ray_3d<double> > rays(nj,ni);
   for (unsigned j=0; j<nj; ++j) {
     for (unsigned i=0; i<ni; ++i) {
-      rays(j,i) = pcam.backproject_ray(i, j); 
+      rays(j,i) = pcam.backproject_ray(i, j);
     }
   }
   vpgl_generic_camera<double> gcam(rays);

@@ -45,12 +45,12 @@ typedef vbl_array_2d<vcl_vector<sdet_edgel*> >::const_iterator sdet_edgemap_cons
 class sdet_edgemap : public vbl_ref_count
 {
 public:
-  
+
   //: retinotopic map of edgels
-  vbl_array_2d<vcl_vector<sdet_edgel*> > edge_cells; 
-  
+  vbl_array_2d<vcl_vector<sdet_edgel*> > edge_cells;
+
   //: local list of edgels for easier traversal
-  vcl_vector<sdet_edgel*> edgels; 
+  vcl_vector<sdet_edgel*> edgels;
 
   //: edgel occupancy map (redundant structure)
   vbl_array_2d<bool> occupancy;
@@ -60,8 +60,8 @@ public:
 
   //: constructor2
   sdet_edgemap(int width, int height, vcl_vector<sdet_edgel*>& edgels) : edgels(0)
-  { 
-    edge_cells.resize(height, width); 
+  {
+    edge_cells.resize(height, width);
     for (unsigned i=0; i<edgels.size(); i++)
       insert(edgels[i]);
   }
@@ -107,14 +107,14 @@ public:
     //determine appropriate cell to put this token into
     int xx = sdet_round(e->pt.x());
     if(xx==0)
-	xx++;
+        xx++;
     if(xx>=width())
-	xx=width()-1;
+        xx=width()-1;
     int yy = sdet_round(e->pt.y());
     if(yy==0)
-	yy++;
+        yy++;
     if(yy>=height())
-	yy=height()-1;
+        yy=height()-1;
     insert(e, xx, yy);
   }
 };

@@ -122,7 +122,7 @@ TIFFWriteScanline(TIFF* tif, void* buf, uint32 row, uint16 sample)
         return (-1);
       tif->tif_flags |= TIFF_CODERSETUP;
     }
-        
+
     tif->tif_rawcc = 0;
     tif->tif_rawcp = tif->tif_rawdata;
 
@@ -207,7 +207,7 @@ TIFFWriteEncodedStrip(TIFF* tif, uint32 strip, void* data, tmsize_t cc)
     if (!TIFFGrowStrips(tif, 1, module))
       return ((tmsize_t) -1);
     td->td_stripsperimage =
-        TIFFhowmany_32(td->td_imagelength, td->td_rowsperstrip);  
+        TIFFhowmany_32(td->td_imagelength, td->td_rowsperstrip);
   }
   /*
    * Handle delayed allocation of data buffer.  This
@@ -394,7 +394,7 @@ TIFFWriteEncodedTile(TIFF* tif, uint32 tile, void* data, tmsize_t cc)
     tif->tif_rawcc = 0;
     tif->tif_rawcp = tif->tif_rawdata;
 
-  /* 
+  /*
    * Compute tiles per row & per column to compute
    * current row and column
    */
@@ -522,7 +522,7 @@ TIFFWriteCheck(TIFF* tif, int tiles, const char* module)
   }
 
         _TIFFFillStriles( tif );
-        
+
   /*
    * On the first write verify all the required information
    * has been setup and initialize any data structures that
@@ -539,7 +539,7 @@ TIFFWriteCheck(TIFF* tif, int tiles, const char* module)
     return (0);
   }
   if (tif->tif_dir.td_samplesperpixel == 1) {
-    /* 
+    /*
      * Planarconfiguration is irrelevant in case of single band
      * images and need not be included. We will set it anyway,
      * because this field is used in other parts of library even
@@ -667,13 +667,13 @@ TIFFAppendToStrip(TIFF* tif, uint32 strip, uint8* data, tmsize_t cc)
   if (td->td_stripoffset[strip] == 0 || tif->tif_curoff == 0) {
             assert(td->td_nstrips > 0);
 
-            if( td->td_stripbytecount[strip] != 0 
-                && td->td_stripoffset[strip] != 0 
+            if( td->td_stripbytecount[strip] != 0
+                && td->td_stripoffset[strip] != 0
                 && td->td_stripbytecount[strip] >= (uint64) cc )
             {
-                /* 
+                /*
                  * There is already tile data on disk, and the new tile
-                 * data we have will fit in the same space.  The only 
+                 * data we have will fit in the same space.  The only
                  * aspect of this that is risky is that there could be
                  * more data to append to this strip before we are done
                  * depending on how we are getting called.
@@ -687,8 +687,8 @@ TIFFAppendToStrip(TIFF* tif, uint32 strip, uint8* data, tmsize_t cc)
             }
             else
             {
-                /* 
-                 * Seek to end of file, and set that as our location to 
+                /*
+                 * Seek to end of file, and set that as our location to
                  * write this strip.
                  */
                 td->td_stripoffset[strip] = TIFFSeekFile(tif, 0, SEEK_END);
@@ -722,7 +722,7 @@ TIFFAppendToStrip(TIFF* tif, uint32 strip, uint8* data, tmsize_t cc)
 
         if( (int64) td->td_stripbytecount[strip] != old_byte_count )
             tif->tif_flags |= TIFF_DIRTYSTRIP;
-            
+
   return (1);
 }
 

@@ -198,7 +198,7 @@ void bil_blob_finder::longest_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>
 //: Get largest blob region in current image
 unsigned bil_blob_finder::largest_8con_region(vcl_vector<vil_chord>& region)
 {
-  region.resize(0); 
+  region.resize(0);
   vcl_vector<vil_chord> tmp_region;
   unsigned max_area=0;
   while (next_8con_region(tmp_region))
@@ -216,7 +216,7 @@ unsigned bil_blob_finder::largest_8con_region(vcl_vector<vil_chord>& region)
 //: Get largest blob region in current image
 unsigned bil_blob_finder::largest_4con_region(vcl_vector<vil_chord>& region)
 {
-  region.resize(0); 
+  region.resize(0);
   vcl_vector<vil_chord> tmp_region;
   unsigned max_area=0;
   while (next_4con_region(tmp_region))

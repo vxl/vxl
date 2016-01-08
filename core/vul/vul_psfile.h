@@ -85,7 +85,7 @@ class vul_psfile: public vcl_ofstream
 
  private:
   void compute_bounding_box();
-  
+
   void reset_postscript_header();
   void image_translate_and_scale();
   void object_translate_and_scale();

@@ -7,10 +7,10 @@
 // \author J.L. Mundy
 // \date Sept. 07, 2010
 // The depth transform, dt,  provides a mapping of image pixel values from the
-// source image to the destination camera frame. Each pixel location in the 
+// source image to the destination camera frame. Each pixel location in the
 // destination is mapped to the source and the intensity is bilinearly
 // interpolated to obtain the mapped destination pixel value. These values
-// are denoted as "samples" or "dest." A mask array or image is provided to 
+// are denoted as "samples" or "dest." A mask array or image is provided to
 // indicate which samples are valid. A sample is invalid if its dest pixel
 // coordinates map to a location outside the source image. A mask value of 1
 // indicates valid, and 0 invalid.

@@ -18,7 +18,7 @@
 #ifndef __geovalues_h_
 #define __geovalues_h_
 
-/* If code values are added or modified, the "GvCurrentMinorRev" 
+/* If code values are added or modified, the "GvCurrentMinorRev"
  * number should be incremented here. If new Keys are added, then the
  * GvCurrentRevision number should be incremented instead, and the
  * GvCurrentMinorRev should be reset to zero (see "geokeys.h").
@@ -26,7 +26,7 @@
  * In addition, any changes here should be reflected in "geo_names.c"
  *
  */
- 
+
 #define GvCurrentMinorRev  0  /* First Major Rev EPSG Code Release  */
 
 
@@ -45,25 +45,25 @@
  * The section numbers refer to the GeoTIFF Specification section
  * in which the code values are documented.
  */
- 
+
 /************************************************************
  *         6.3.1 GeoTIFF General Codes
  ************************************************************/
 
 /* 6.3.1.1 Model Type Codes */
 typedef enum {
-	ModelTypeProjected  = 1,  /* Projection Coordinate System */
-	ModelTypeGeographic = 2,  /* Geographic latitude-longitude System */
-	ModelTypeGeocentric = 3,   /* Geocentric (X,Y,Z) Coordinate System */
-	ModelProjected  = ModelTypeProjected,   /* alias */
-	ModelGeographic = ModelTypeGeographic,  /* alias */
-	ModelGeocentric = ModelTypeGeocentric   /* alias */
+        ModelTypeProjected  = 1,  /* Projection Coordinate System */
+        ModelTypeGeographic = 2,  /* Geographic latitude-longitude System */
+        ModelTypeGeocentric = 3,   /* Geocentric (X,Y,Z) Coordinate System */
+        ModelProjected  = ModelTypeProjected,   /* alias */
+        ModelGeographic = ModelTypeGeographic,  /* alias */
+        ModelGeocentric = ModelTypeGeocentric   /* alias */
 } modeltype_t;
 
 /* 6.3.1.2 Raster Type Codes */
 typedef enum {
-	RasterPixelIsArea   = 1,  /* Standard pixel-fills-grid-cell */
-	RasterPixelIsPoint  = 2   /* Pixel-at-grid-vertex */
+        RasterPixelIsArea   = 1,  /* Standard pixel-fills-grid-cell */
+        RasterPixelIsPoint  = 2   /* Pixel-at-grid-vertex */
 } rastertype_t;
 
 typedef enum {
@@ -113,7 +113,7 @@ typedef enum {
 
 
 typedef enum {
-	VDatumBase = 1
+        VDatumBase = 1
 } vdatum_t;
 
 #endif /* __geovalues_h_ */

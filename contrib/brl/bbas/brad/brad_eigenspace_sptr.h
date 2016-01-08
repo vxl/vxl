@@ -1,4 +1,4 @@
-#ifndef brad_eigenspace_sptr_h_ 
+#ifndef brad_eigenspace_sptr_h_
 #define brad_eigenspace_sptr_h_
 
 #include <vbl/vbl_smart_ptr.h>

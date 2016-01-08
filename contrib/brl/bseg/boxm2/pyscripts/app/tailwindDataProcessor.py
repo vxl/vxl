@@ -70,7 +70,7 @@ def convertcamera(srcFileName, dstFileName):
 		if(len(Cbae) == 3):
 			break;
 	filehandle.close();
-			
+
 
 	filehandleout = open(dstFileName,'w');
 
@@ -188,7 +188,7 @@ class TailwindPipelineRunner():
 	def moveData(self, stepNum):
 		pngRegex = re.compile('.+\.png', re.IGNORECASE)
 		camRegex = re.compile('.+\.txt', re.IGNORECASE)
-		
+
 		inputfile = self.config.inputListFile ;
 		filehandle = open(inputfile,'r');
 		# Create a directory called "jpeg" to store all the newly converted PNG files.
@@ -206,7 +206,7 @@ class TailwindPipelineRunner():
 			if re.search(camRegex, srcFileName) is not None :
 				fileName = os.path.basename(srcFileName)
 				newName = os.path.join(self.config.CAMDirName, fileName)
-				
+
 				copyFile(srcFileName,newName)
 				convertcamera(srcFileName,newName);
 				log("moved %s to %s." % (srcFileName, newName))
@@ -219,7 +219,7 @@ class TailwindPipelineRunner():
 			for i in range(0,len(p)):
 				pts.append(float(p[i]));
 			print pts;
-		
+
 		success = 0;
 		if(len(pts) == 6):
 			success = get_scene_from_box_cams(self.config.CAMDirName,pts[0],pts[1],pts[2],pts[3]-pts[0],pts[4]-pts[1],pts[5]-pts[2],".")
@@ -501,9 +501,9 @@ if __name__ == '__main__':
 		if o in ("-d", "--dryrun"):
 			dryrun = True
 		elif o in ("-i", "--inputlist"):
-			config.inputListFile = a			
+			config.inputListFile = a
 		elif o in ("-b", "--bbfile"):
-			config.bbFileName = a			
+			config.bbFileName = a
 		elif o in ("-e", "--exportdir"):
 			config.finalExportDirName = a
 		elif o in ("-r", "--randomize"):

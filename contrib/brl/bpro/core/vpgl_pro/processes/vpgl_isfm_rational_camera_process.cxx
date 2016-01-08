@@ -217,7 +217,7 @@ bool vpgl_isfm_rational_camera_process(bprb_func_process& pro)
              << " out of " << n << " correspondences, inlier cnts using pixel radius: " << pix_rad << ", "
              << " number of valid translation: " << cam_trans_new.size()
              << " inliers size: " << inliers[max_i].size() << "(" << max << ")"
-             << " average offset: " << sum 
+             << " average offset: " << sum
              << vcl_endl;
 
     // evaluate the correction error and inlier percentage

@@ -294,7 +294,7 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, vcl_vector<
     for (unsigned i = 0; i < root->children_.size(); i++) {
       if (!root->children_[i])    // the node has children but child i is empty
         continue;
-      else { 
+      else {
         get_leaves(root->children_[i], leaves, poly);    // check the intersection of child i and its following children with poly
         at_least_one_child = true;
       }

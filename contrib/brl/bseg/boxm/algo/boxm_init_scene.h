@@ -40,7 +40,7 @@ void boxm_init_scene(boxm_scene<boct_tree<short, T_data> > &scene)
   typedef boct_tree<short, T_data> tree_type;
   boxm_block_iterator<tree_type> iter(&scene);
   float dimx=(float)scene.block_dim().x();
-  
+
   for (; !iter.end(); iter++) {
     vgl_point_3d<int> index=iter.index();
     if (!scene.discover_block(index.x(),index.y(),index.z()))

@@ -42,15 +42,15 @@ class vpgl_geo_camera : public vpgl_camera<double>
   static bool init_geo_camera(vil_image_resource_sptr const geotiff_img,
                               vpgl_lvcs_sptr lvcs,
                               vpgl_geo_camera*& camera);
-  
-  //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise 
-  //  for 'S' use -lat and for 'W' -lon 
+
+  //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise
+  //  for 'S' use -lat and for 'W' -lon
   //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method
   static bool init_geo_camera(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
 
   // loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to positives in the global_to_img method as in the previous method
   static bool init_geo_camera_from_filename(vcl_string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
-  
+
   //: init using a tfw file, reads the transformation matrix from the tfw
   static bool init_geo_camera(vcl_string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
 
@@ -115,17 +115,17 @@ class vpgl_geo_camera : public vpgl_camera<double>
                      double& u, double& v) const;
 
   //: returns the corresponding geographical coordinates for a given pixel position (i,j)
-  //  the output global coord is UTM: x east, y north 
+  //  the output global coord is UTM: x east, y north
   void img_to_global_utm(const double i, const double j,
                          double& x, double& y) const;
 
   //: returns the corresponding pixel position for given geographical coordinates
   //  the input global coord is UTM: x east, for y north
-  void global_utm_to_img(const double x, const double y, int zone, double elev, 
+  void global_utm_to_img(const double x, const double y, int zone, double elev,
                          double& u, double& v) const;
 
   //: returns the corresponding utm location for the given local position
-  void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone); 
+  void local_to_utm(const double x, const double y, const double z, double& e, double& n, int& utm_zone);
 
   int utm_zone() { return utm_zone_; }
 
@@ -134,9 +134,9 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: returns the corresponding geographical coordinate (lon, lat, elev) for a given pixel position (i,j,k)
   //  Note: not yet implemented -- PVr, 16 aug 2012
   void img_to_wgs(unsigned i, unsigned j, unsigned k, double& lon, double& lat, double& elev);
-  
+
   vnl_matrix<double>  trans_matrix(){return trans_matrix_; }
-  
+
 #if 0
   //: returns the corresponding pixel position (i,j) for a given geographical coordinate (lon, lat)
   void wgs_to_img(double lon, double lat,
@@ -150,7 +150,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   void b_read(vsl_b_istream &is);
 
   //: Return IO version number;
-  short version() const { return 1; }  
+  short version() const { return 1; }
 
  private:
 

@@ -58,14 +58,14 @@ class volm_camera_space : public vbl_ref_count
                     double head_mid=0.0,  double head_radius=180.0, double head_inc=2.0,
                     double tilt_mid=90.0, double tilt_radius=20.0,  double tilt_inc=2.0,
                     double roll_mid=0.0,  double roll_radius=3.0,   double roll_inc=2.0);
-  
-  volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc, 
+
+  volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc,
                     double altitude,
                     unsigned ni, unsigned nj,
                     double head_mid=0.0,  double head_radius=180.0, double head_inc=2.0,
                     double tilt_mid=90.0, double tilt_radius=20.0,  double tilt_inc=2.0,
                     double roll_mid=0.0,  double roll_radius=3.0,   double roll_inc=2.0);
-  
+
   //: accessors
   double altitude() const {return altitude_;}
   //: image dimensions
@@ -87,16 +87,16 @@ class volm_camera_space : public vbl_ref_count
   double roll_inc() const {return roll_inc_;}
   unsigned n_roll() const {return n_roll_;}
 
-  double roll(unsigned roll_index) const 
+  double roll(unsigned roll_index) const
   { return (-roll_radius_ + roll_inc_*roll_index);}
 
-  double head(unsigned head_index) const 
+  double head(unsigned head_index) const
   { return (-head_radius_ + head_inc_*head_index);}
 
-  double tilt(unsigned tilt_index) const 
+  double tilt(unsigned tilt_index) const
   { return (-tilt_radius_ + tilt_inc_*tilt_index);}
 
-  double top_fov(unsigned fov_index) const 
+  double top_fov(unsigned fov_index) const
   { return top_fovs_[fov_index];}
 
   //: focal length space

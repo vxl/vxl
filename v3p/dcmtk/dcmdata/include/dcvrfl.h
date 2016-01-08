@@ -85,9 +85,9 @@ class DcmFloatingPointSingle
      */
     virtual void print(ostream &out,
                        const size_t flags = 0,
-		               const int level = 0,
-		               const char *pixelFileName = NULL,
-		               size_t *pixelCounter = NULL);
+                               const int level = 0,
+                               const char *pixelFileName = NULL,
+                               size_t *pixelCounter = NULL);
 
     /** get particular float value
      *  @param floatVal reference to result variable (cleared in case of error)
@@ -121,7 +121,7 @@ class DcmFloatingPointSingle
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition putFloat32(const Float32 floatVal,
-				                   const unsigned long pos = 0);
+                                                   const unsigned long pos = 0);
 
     /** set element value to given float array data
      *  @param floatVals floating point data to be set
@@ -129,7 +129,7 @@ class DcmFloatingPointSingle
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition putFloat32Array(const Float32 *floatVals,
-                    					const unsigned long numFloats);
+                                                            const unsigned long numFloats);
 
     /** set element value from the given character string.
      *  The input string is expected to be a backslash separated sequence of

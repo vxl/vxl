@@ -5,7 +5,7 @@
 //       Take a list of rational caemras and a list of 2-d image correspondences
 //       some of the correspondences may be very poor/wrong but a majority is of good quality (i.e. corresponds to the same 3D point)
 //       Use a RANSAC scheme to find offsets for each camera using "inlier" correspondences
-//       To improve back-projection accuracy, each correspondence will have its own initial guessing and search space 
+//       To improve back-projection accuracy, each correspondence will have its own initial guessing and search space
 //
 //       This code was developed under contract #FA8650-13-C-1613 and is approved for public release.
 //       The case number for the approval is 88ABW-2014-1143.
@@ -156,7 +156,7 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     trackimgids.push_back(ids);
     tracks.push_back(pts);
   }
-  
+
   vcl_cout << "correcting camera: " << uncorrectedcam << vcl_endl;
   vcl_cout << "number of tracks: " << n_track << vcl_endl;
   vcl_cout << "number of seed cameras: " << n_seeds << vcl_endl;
@@ -256,7 +256,7 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
 #if 0
   vcl_cout << " ================== back-projection ======================= " << vcl_endl;
   for (unsigned k = 0; k < cam_trans.size(); k++) {
-    vcl_cout << "image point: [" << img_points[k].x() << ',' << img_points[k].y() 
+    vcl_cout << "image point: [" << img_points[k].x() << ',' << img_points[k].y()
              << "], initial pt: [" << init_pts[k].x() << ',' << init_pts[k].y() << ',' << init_pts[k].z()
              << "], height range: [" << zmin_list[k] << ',' << zmax_list[k]
              << "], world point: [" << vcl_setprecision(10) << reconstructed_pts[k].x() << ',' << vcl_setprecision(10) << reconstructed_pts[k].y() << ','
@@ -315,7 +315,7 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
            << " out of " << n_track << " correspondences, inlier cnts using pixel radius: " << pixel_radius << ", "
            << " number of valid translation: " << cam_trans_new.size()
            << " inliers size: " << inliers[max_i].size() << "(" << max << ")"
-           << " average offset: " << sum 
+           << " average offset: " << sum
            << vcl_endl;
 
   // evaluate the correction error and inlier percentage
@@ -389,7 +389,7 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
     int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
     int crop_nj = corners[2].second.second-corners[0].second.second+1;
     vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = 0;
     j0 = corners[3].second.second;
@@ -404,12 +404,12 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
     int i0 = corners[0].second.first;
     int j0 = corners[0].second.second;
     int crop_ni = corners[3].second.first - corners[0].second.first + 1;
-    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second; 
+    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
     vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = corners[2].second.first;
-    j0 = 0; 
+    j0 = 0;
     crop_ni = corners[1].second.first - corners[2].second.first + 1;
     crop_nj = corners[2].second.second + 1;
     vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
@@ -422,21 +422,21 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
   int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
   int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
   vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the second image, image of corner 1
   i0 = 0;
   j0 = 0;
   crop_ni = corners[1].second.first + 1;
   crop_nj = corners[1].second.second + 1;
   vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the third image, image of corner 2
   i0 = corners[2].second.first;
   j0 = 0;
   crop_ni = infos[corners[2].first].first->ni() - corners[2].second.first;
   crop_nj = corners[2].second.second + 1;
   vpgl_isfm_rational_camera_with_initial_process_globals::crop_and_find_min_max(infos, corners[2].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the fourth image, image of corner 3
   i0 = 0;
   j0 = corners[3].second.second;

@@ -8,9 +8,9 @@ float __OVERLOADABLE__dot(float16 x, float16 y)
 
 float gauss_prob_density(const float x, const float mu, const float sigma)
 {
-  if(sigma <= 0.0f) 
-    return 1.0f; 
-  
+  if(sigma <= 0.0f)
+    return 1.0f;
+
   float ratio=(x - mu)/sigma;
   return 0.398942280f*exp(-0.5f*ratio*ratio)/sigma;
 }
@@ -19,9 +19,9 @@ float gauss_prob_density(const float x, const float mu, const float sigma)
 #if 0
 float16 gauss_prob_density_f16(float16 *x, float mu, float sigma)
 {
-  if(sigma <= 0.0f) 
-    return 1.0f; 
-  
+  if(sigma <= 0.0f)
+    return 1.0f;
+
   float16 ratio=(*x - mu)/sigma;
   return 0.398942280f*exp(-0.5f*ratio*ratio)/sigma;
 }
@@ -29,9 +29,9 @@ float16 gauss_prob_density_f16(float16 *x, float mu, float sigma)
 
 float16 gauss_prob_density_f16(float16 *x, float mu, float16 *sigma)
 {
-  //if(sigma <= 0.0f) 
-  //  return 1.0f; 
-  
+  //if(sigma <= 0.0f)
+  //  return 1.0f;
+
   float16 ratio=(*x - mu)/ *sigma;
   return 0.398942280f*exp(-0.5f*ratio*ratio)/ *sigma;
 }
@@ -41,17 +41,17 @@ float16 gauss_prob_density_f16(float16 *x, float mu, float16 *sigma)
 inline float gauss_prob_density_rgb(float4 x, float4 mu, float4 sigma)
 {
   if( any(sigma <= 0.0f) )
-    return 1.0f; 
-    
-  float4 pwr = (x-mu)*(x-mu) / (sigma*sigma); 
-  return 0.0634936359f*(1.0f/(sigma.x*sigma.y*sigma.z))*exp(-0.5f*(pwr.x+pwr.y+pwr.z)); 
+    return 1.0f;
+
+  float4 pwr = (x-mu)*(x-mu) / (sigma*sigma);
+  return 0.0634936359f*(1.0f/(sigma.x*sigma.y*sigma.z))*exp(-0.5f*(pwr.x+pwr.y+pwr.z));
   //return 0.398942280f*exp(-0.5f*(x.x - mu.x)*(x.x - mu.x)/(sigma.x*sigma.x))/sigma.x;
 }
 
-/* This mixture distribution function uses the value of the weights to 
- *determine the number of components. A weight of 0 indicates the 
+/* This mixture distribution function uses the value of the weights to
+ *determine the number of components. A weight of 0 indicates the
  *component is not used */
-float gauss_3_mixture_prob_density(float x, 
+float gauss_3_mixture_prob_density(float x,
                                    float mu0, float sigma0, float w0,
                                    float mu1, float sigma1, float w1,
                                    float mu2, float sigma2, float w2)
@@ -76,7 +76,7 @@ float gauss_3_mixture_prob_density(float x,
       if(sum_weights>0.0f)
           sum/=sum_weights;
   }
-  else 
+  else
       sum=1.0f;
 
 
@@ -84,7 +84,7 @@ float gauss_3_mixture_prob_density(float x,
 }
 
 
-//Calculates the value of a mixture of 2, 3-d gaussians with independent 
+//Calculates the value of a mixture of 2, 3-d gaussians with independent
 //dimensions.  A weight of 0 indicates that the component is not used...
 float gauss_2_mixture_rgb_prob_density(float4 x,
                                        float4 mu0, float4 sigma0, float w0,
@@ -104,14 +104,14 @@ float gauss_2_mixture_rgb_prob_density(float4 x,
       if(sum_weights>0.0f)
           sum/=sum_weights;
   }
-  else 
+  else
       sum=.5f;
-  return sum;  
+  return sum;
 }
 
 /*
  * update a single 1d gaussian with a sample. The gaussian parameters are
- * mutated in place. 
+ * mutated in place.
  *
  */
 void update_gauss(float x, float rho, float* mu, float* sigma,
@@ -126,16 +126,16 @@ void update_gauss(float x, float rho, float* mu, float* sigma,
 }
 
 /*
- * update a singel 3d (independent) gaussian with a sample.  params 
+ * update a singel 3d (independent) gaussian with a sample.  params
  * are mutated in place
  */
 void update_gauss_3d(float4 x, float rho, float4* mu, float4* sigma, float min_sigma)
 {
   float4 var = (*sigma)*(*sigma);
-  float4 diff = x-(*mu); 
+  float4 diff = x-(*mu);
   var = (1.0f-rho)*(var+rho*diff*diff);
   *mu = *mu + rho*diff;
-  *sigma = max(sqrt(var), min_sigma); 
+  *sigma = max(sqrt(var), min_sigma);
 }
 
 void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
@@ -144,7 +144,7 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
 {
   if((*w1)>0.0f && (*sigma1)>0.0f )
   {/* no need to sort */
- 
+
   float fa = (*w0)/(*sigma0), fb = (*w1)/(*sigma1);
   if((*w2)==0.0f || (*sigma2)==0.0f)
     if(fa<fb){/*only need to swap a and b*/
@@ -154,9 +154,9 @@ void sort_mix_3(float* mu0, float* sigma0, float* w0, short* Nobs0,
       *mu1 = tmu0; *sigma1 = tsig0; *w1 = tw0; *Nobs1 = n0;
       return ;
     }else return;
- 
+
   float fc = (*w2)/(*sigma2);
- 
+
   if(fa>=fb&&fb>=fc)/* [a b c ] - already sorted */
     return;
   if(fa<fb&&fb<fc)/* [c b a] - swap a and c */
@@ -209,20 +209,20 @@ void sort_mix_2(float4* mu0, float4* sigma0, float* w0, short* Nobs0,
 {
   /*  if second component exists, then sort */
   if( (*w1)>0.0f && all((*sigma1)>0.0f))
-  { 
+  {
     float4 fa = (*w0)/(*sigma0), fb = (*w1)/(*sigma1);
     float faSum = fa.x+fa.y+fa.z, fbSum = fb.x+fb.y+fb.z;
     if(faSum < fbSum) { /* if fa is less than fb swap em */
       float4 tmu0 = *mu0, tsigma0 = *sigma0;
-      float tw0 = *w0; 
-      short n0 = *Nobs0; 
-      *mu0 = *mu1; *sigma0 = *sigma1; *w0 = *w1; *Nobs0 = *Nobs1; 
-      *mu1 = tmu0; *sigma1 = tsigma0; *w1 = tw0; *Nobs1 = n0; 
+      float tw0 = *w0;
+      short n0 = *Nobs0;
+      *mu0 = *mu1; *sigma0 = *sigma1; *w0 = *w1; *Nobs0 = *Nobs1;
+      *mu1 = tmu0; *sigma1 = tsigma0; *w1 = tw0; *Nobs1 = n0;
     }
   }
 }
 
-void insert_gauss_3(float x, float init_weight, float init_sigma, int* match, 
+void insert_gauss_3(float x, float init_weight, float init_sigma, int* match,
                     float* mu0, float* sigma0, float* w0, short* Nobs0,
                     float* mu1, float* sigma1, float* w1, short* Nobs1,
                     float* mu2, float* sigma2, float* w2, short* Nobs2)
@@ -257,7 +257,7 @@ void insert_gauss_3(float x, float init_weight, float init_sigma, int* match,
     }
 }
 
-void insert_gauss_2(float4 x, float init_weight, float init_sigma, int* match, 
+void insert_gauss_2(float4 x, float init_weight, float init_sigma, int* match,
                     float4* mu0, float4* sigma0, float* w0, short* Nobs0,
                     float4* mu1, float4* sigma1, float* w1, short* Nobs1)
 {
@@ -282,13 +282,13 @@ void insert_gauss_2(float4 x, float init_weight, float init_sigma, int* match,
 }
 
 
-/* 
+/*
  *update a 1d gaussian mixture with a sample. The mixture parameters are
  * mutated in place. Note that the number of components can vary between
  * 0 and 3 as the updating proceeds. Initially, the mixture contains no
  * components. The number of observations for each component is Nobs(i).
 
- * The number of observations for the whole mixture is Nobs_mix. When 
+ * The number of observations for the whole mixture is Nobs_mix. When
 
  * a new component is inserted in the mixture, it is given a mean of x
  * and a sigma of min_sigma. The threshold t_match deterimines the maximum
@@ -300,7 +300,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
                             float* mu0, float* sigma0, float* w0, short* Nobs0,
                             float* mu1, float* sigma1, float* w1, short* Nobs1,
                             float* mu2, float* sigma2, float* w2, short* Nobs2,
-                            float* Nobs_mix) 
+                            float* Nobs_mix)
 {
   if(w>0.0f)
   {
@@ -308,11 +308,11 @@ void update_gauss_3_mixture(float x, float w, float t_match,
   (*Nobs_mix) += w;
   float alpha = w/(*Nobs_mix), tsq=t_match*t_match;
   float weight = 0.0f, rho = 0.0f;
-  
+
   /* test for a match of component 0 */
   if(*w0>0.0f && (*sigma0)>0.0f){
     weight = (1.0f-alpha)*(*w0);
-    if(match<0 && 
+    if(match<0 &&
        ((x-*mu0)*(x-*mu0)/((*sigma0)*(*sigma0))) < tsq){
       weight += alpha;
       (*Nobs0)++;
@@ -349,15 +349,15 @@ void update_gauss_3_mixture(float x, float w, float t_match,
   /* If there were no matches then insert a new component */
   if(match<0)
     insert_gauss_3(x, alpha, init_sigma, &match,
-                   mu0, sigma0, w0, Nobs0, 
+                   mu0, sigma0, w0, Nobs0,
                    mu1, sigma1, w1, Nobs1,
                    mu2, sigma2, w2, Nobs2);
 
   ///* If there is more than one component, sort the components with
-  // * respect to weight/sigma.  
+  // * respect to weight/sigma.
   // */
   //if(match>0)
-    sort_mix_3(mu0, sigma0, w0, Nobs0, 
+    sort_mix_3(mu0, sigma0, w0, Nobs0,
                mu1, sigma1, w1, Nobs1,
                mu2, sigma2, w2, Nobs2);
   }
@@ -369,7 +369,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
 //                            float* mu0, float* sigma0, float* w0, short* Nobs0,
 //                            float* mu1, float* sigma1, float* w1, short* Nobs1,
 //                            float* mu2, float* sigma2, float* w2, short* Nobs2,
-//                            float* Nobs_mix) 
+//                            float* Nobs_mix)
 //{
 //  if(w>0.0f)
 //  {
@@ -391,7 +391,7 @@ void update_gauss_3_mixture(float x, float w, float t_match,
 //      else
 //      {
 //          insert_gauss_3(x, rho, init_sigma, &match,
-//                          mu0, sigma0, w0, Nobs0, 
+//                          mu0, sigma0, w0, Nobs0,
 //                          mu1, sigma1, w1, Nobs1,
 //                          mu2, sigma2, w2, Nobs2);
 //      }
@@ -399,12 +399,12 @@ void update_gauss_3_mixture(float x, float w, float t_match,
 //}
 
 
-/* 
+/*
  *update a 3d gaussian mixture with a sample. The mixture parameters are
  * mutated in place. Note that the number of components can vary between
  * 0 and 2 as the updating proceeds. Initially, the mixture contains no
  * components. The number of observations for each component is Nobs(i).
- * The number of observations for the whole mixture is Nobs_mix. When 
+ * The number of observations for the whole mixture is Nobs_mix. When
  * a new component is inserted in the mixture, it is given a mean of x
  * and a sigma of min_sigma. The threshold t_match deterimines the maximum
  * Mahalanobis distance that the sample can have in order to be considered
@@ -414,7 +414,7 @@ void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
                                 float init_sigma, float min_sigma,
                                 float4* mu0, float4* sigma0, float* w0, short* Nobs0,
                                 float4* mu1, float4* sigma1, float* w1, short* Nobs1,
-                                float* Nobs_mix) 
+                                float* Nobs_mix)
 {
   if(w>0.0f)
   {
@@ -449,13 +449,13 @@ void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
     /* If there were no matches then insert a new component */
     if(match<0)
       insert_gauss_2(x, alpha, init_sigma, &match,
-                     mu0, sigma0, w0, Nobs0, 
+                     mu0, sigma0, w0, Nobs0,
                      mu1, sigma1, w1, Nobs1);
 
     ///* If there is more than one component, sort the components with
-    // * respect to weight/sigma.  
+    // * respect to weight/sigma.
     // */
-    sort_mix_2(mu0, sigma0, w0, Nobs0, 
+    sort_mix_2(mu0, sigma0, w0, Nobs0,
                mu1, sigma1, w1, Nobs1);
   }
 }
@@ -465,7 +465,7 @@ void update_gauss_2_mixture_rgb(float4 x, float w, float t_match,
  * insert a new component in the mixture. The mixture is assumed
  * to be sorted so that if w2>0 the third component is the one replaced.
  */
-void insert_gauss_32(float x, float init_weight, float init_sigma, int* match, 
+void insert_gauss_32(float x, float init_weight, float init_sigma, int* match,
                     float* mu0, float* sigma0, float* w0, short* Nobs0,
                     float* mu1, float* sigma1, float* w1, short* Nobs1,
                     float* mu2, float* sigma2, float* w2, short* Nobs2)
@@ -505,7 +505,7 @@ void update_gauss_3_mixture2(float x, float w, float t_match,
                             float* mu0, float* sigma0, float* w0, short* Nobs0,
                             float* mu1, float* sigma1, float* w1, short* Nobs1,
                             float* mu2, float* sigma2, float* w2, short* Nobs2,
-                            float* Nobs_mix) 
+                            float* Nobs_mix)
 {
   if(w>0.0f)
   {
@@ -513,11 +513,11 @@ void update_gauss_3_mixture2(float x, float w, float t_match,
   //(*Nobs_mix) += w;
   float alpha = w*0.3f, tsq=t_match*t_match;
   float weight = 0.0f, rho = 0.0f;
-  
+
   /* test for a match of component 0 */
   if(*w0>0.0f && (*sigma0)>0.0f){
     weight = /*(1.0f-alpha)*/(*w0);
-    if(match<0 && 
+    if(match<0 &&
        ((x-*mu0)*(x-*mu0)/((*sigma0)*(*sigma0))) < tsq){
       weight += alpha;
       (*Nobs0)++;
@@ -554,15 +554,15 @@ void update_gauss_3_mixture2(float x, float w, float t_match,
   /* If there were no matches then insert a new component */
   if(match<0)
     insert_gauss_32(x, w*0.1f, init_sigma, &match,
-                   mu0, sigma0, w0, Nobs0, 
+                   mu0, sigma0, w0, Nobs0,
                    mu1, sigma1, w1, Nobs1,
                    mu2, sigma2, w2, Nobs2);
 
   ///* If there is more than one component, sort the components with
-  // * respect to weight/sigma.  
+  // * respect to weight/sigma.
   // */
   //if(match>0)
-    sort_mix_3(mu0, sigma0, w0, Nobs0, 
+    sort_mix_3(mu0, sigma0, w0, Nobs0,
                mu1, sigma1, w1, Nobs1,
                mu2, sigma2, w2, Nobs2);
   }

@@ -18,7 +18,7 @@ bool vil_mask_image_using_ids_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // input 
+  input_types.push_back("vil_image_view_base_sptr");  // input
   input_types.push_back("vil_image_view_base_sptr");  // mask image
   input_types.push_back("unsigned");   // input id (all the other ids will be masked)
   ok = pro.set_input_types(input_types);
@@ -66,7 +66,7 @@ bool vil_mask_image_using_ids_process(bprb_func_process& pro)
       if (id == mask_image(i,j))
         out_image(i,j) = image(i,j);
     }
-  
+
   vil_image_view_base_sptr out_image_sptr = new vil_image_view<float>(out_image);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_image_sptr);
   return true;

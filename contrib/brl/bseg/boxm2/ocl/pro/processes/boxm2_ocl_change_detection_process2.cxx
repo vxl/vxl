@@ -62,7 +62,7 @@ bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
   brdb_value_sptr tfarfactor   = new brdb_value_t<float>(0.0001f);  //by default update alpha
 
   pro.set_input(7, tnearfactor);
-  pro.set_input(8, tfarfactor);  
+  pro.set_input(8, tfarfactor);
   return good;
 }
 

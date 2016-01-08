@@ -16,7 +16,7 @@ extern "C" {
 /* The following tokens may be returned by both XmlPrologTok and XmlContentTok */
 #define XML_TOK_NONE -4    /* The string to be scanned is empty */
 #define XML_TOK_TRAILING_CR -3 /* A CR at the end of the scan;
-                                  might be part of CRLF sequence */ 
+                                  might be part of CRLF sequence */
 #define XML_TOK_PARTIAL_CHAR -2 /* only part of a multibyte sequence */
 #define XML_TOK_PARTIAL -1 /* only part of a token */
 #define XML_TOK_INVALID 0
@@ -202,7 +202,7 @@ literals, comments and processing instructions.
 #endif /* XML_DTD */
 
 /* This is used for performing a 2nd-level tokenization on
-the content of a literal that has already been returned by XmlTok. */ 
+the content of a literal that has already been returned by XmlTok. */
 
 #define XmlLiteralTok(enc, literalType, ptr, end, nextTokPtr) \
   (((enc)->literalScanners[literalType])(enc, ptr, end, nextTokPtr))

@@ -107,7 +107,7 @@ class brad_eigenspace : public brad_eigenspace_base
                               bsta_joint_histogram_3d<float>& hist,
                               unsigned nit=256, unsigned njt=256);
 
-  
+
   //: update from a set of images, using a blocked cache
   bool update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
                              bsta_joint_histogram_3d<float>& hist,

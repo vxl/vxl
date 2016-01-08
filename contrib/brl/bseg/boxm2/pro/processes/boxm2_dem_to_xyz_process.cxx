@@ -115,7 +115,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   else {
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam); // FIXME leaking geocam. This pattern is everywhere...
   }
-  
+
   if (!geocam) {
     vcl_cerr << "In boxm2_dem_to_xyz_process() - the geocam could not be initialized!\n";
     return false;
@@ -183,7 +183,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
   // initialize the image by scene origin
-  double orig_lat, orig_lon, orig_elev; 
+  double orig_lat, orig_lon, orig_elev;
   out_img_x->fill(-10.0f);
   out_img_y->fill(-10.0f);
   out_img_z->fill(-1.0f);

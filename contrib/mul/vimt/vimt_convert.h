@@ -6,7 +6,7 @@
 //  \file
 //  \brief Various type conversion functions for vimt_image objects
 //  \author Tim Cootes
-// Note: There is a general rule that we should not duplicate 
+// Note: There is a general rule that we should not duplicate
 // vil classes or functions with trivial wrappers in vimt.
 // These conversion functions break that rule because they are
 // used so frequently.

@@ -449,36 +449,36 @@
 #   define spcCONCAT(prefix,suffix)        prefix ## suffix
 #   define spcQUOTE(x)                     # x
 #   define spcFUNC_NEEDS_FILE(func,file)   \
-		func ## _requires_ ## file ## _to_be_included_
+                func ## _requires_ ## file ## _to_be_included_
 #else
 #   define spcCONCAT(prefix,suffix)        prefix/**/suffix
 #   define spcQUOTE(x)                     "x"
 #   define spcFUNC_NEEDS_FILE(func,file)   \
-		func/**/_requires_/**/file/**/_to_be_included_
+                func/**/_requires_/**/file/**/_to_be_included_
 #endif
 
 #if defined(__cplusplus) || defined(c_plusplus)
     /*
      * Definitions for C++
      */
-#   define spcEXTERN		extern "C"
+#   define spcEXTERN                extern "C"
 #   define spcNO_ARGS
-#   define spcCONST		const
+#   define spcCONST                const
     typedef void *spGenericPtr;
 #else
 #ifdef __STDC__
     /*
      * Definitions for ANSI C
      */
-#   define spcEXTERN		extern
-#   define spcNO_ARGS		void
-#   define spcCONST		const
+#   define spcEXTERN                extern
+#   define spcNO_ARGS                void
+#   define spcCONST                const
     typedef void *spGenericPtr;
 #   else
     /*
      * Definitions for K&R C -- ignore function prototypes
      */
-#   define spcEXTERN		extern
+#   define spcEXTERN                extern
 #   define spcNO_ARGS
 #   define spcCONST
     typedef char *spGenericPtr;

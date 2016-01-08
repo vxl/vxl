@@ -17,7 +17,7 @@ namespace boxm2_ocl_filter_process_globals
     const unsigned n_inputs_ = 3;
     const unsigned n_outputs_ = 0;
 
-    void compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel); 
+    void compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel);
     static vcl_map<vcl_string,bocl_kernel* > kernels;
 }
 

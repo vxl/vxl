@@ -58,7 +58,7 @@ bool bapl_extract_keypoints_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> input_image(input_image_sptr);
 
   vil_image_resource_sptr grey_image_sptr;
-  if (input_image.nplanes() == 3) 
+  if (input_image.nplanes() == 3)
     grey_image_sptr = vil_new_image_resource_of_view( *vil_convert_to_grey_using_rgb_weighting ( input_image_sptr ) );
   else
     grey_image_sptr = vil_new_image_resource_of_view( input_image );
@@ -120,7 +120,7 @@ bool bapl_draw_keypoints_process_cons(bprb_func_process& pro)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // input image
-  input_types.push_back("bapl_keypoint_set_sptr"); 
+  input_types.push_back("bapl_keypoint_set_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -146,7 +146,7 @@ bool bapl_draw_keypoints_process(bprb_func_process& pro)
 
   bapl_keypoint_set_sptr key_set = pro.get_input<bapl_keypoint_set_sptr>(i++);
   vcl_vector< bapl_keypoint_sptr >& keypoints = key_set->keys_;
-  
+
   vil_image_view<vxl_byte> output_img(input_image.ni(), input_image.nj(), 3);
   vil_image_view<vxl_byte> output_img_r = vil_plane(output_img, 0);
   vil_image_view<vxl_byte> output_img_g = vil_plane(output_img, 1);
@@ -166,7 +166,7 @@ bool bapl_draw_keypoints_process(bprb_func_process& pro)
     if (ii >= 0 && jj >= 0 && ii < (int)output_img.ni() && jj < (int)output_img.nj())
       //if (kp->scale()>1.1)
         ipts_draw_cross(output_img_r, ii,jj,int(kp->scale()+0.5), vxl_byte(255) );
-        
+
   }
 
   vil_image_view_base_sptr output_img_sptr = new vil_image_view<vxl_byte>(output_img);
@@ -221,7 +221,7 @@ bool bapl_load_keypoints_process(bprb_func_process& pro)
   for (unsigned i = 0; i < keypoints.size(); i++) {
     keypoints[i]->set_id(i);
   }
-  
+
   bapl_keypoint_set_sptr key_set = new bapl_keypoint_set(keypoints);
   pro.set_output_val<bapl_keypoint_set_sptr>(0, key_set);
   return true;

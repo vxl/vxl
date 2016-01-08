@@ -234,7 +234,7 @@ class bvxm_voxel_world: public vbl_ref_count
   template<bvxm_voxel_type APM_T>
   bool heightmap(bvxm_image_metadata const& virtual_camera, vil_image_view<unsigned> &heightmap, unsigned bin_index = 0, unsigned scale_idx =0);
 
-  //: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho. 
+  //: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho.
   template<typename T>
   bool orthorectify(vil_image_view_base_sptr z_map, vpgl_camera_double_sptr z_map_camera, vil_image_view<T>& input_image, vpgl_camera_double_sptr input_camera, vil_image_view<T>& out_image, unsigned scale_idx=0);
 
@@ -2371,17 +2371,17 @@ bool bvxm_voxel_world::save_occupancy_raw(vcl_string filename,unsigned scale)
   return true;
 }
 
-//: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho. 
+//: use the ortho z map (given by method heightmap() ) of the scene to make an input image ortho.
 template <typename T>
-bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map, 
-                                    vpgl_camera_double_sptr z_map_camera, 
-                                    vil_image_view<T>& input_image, 
-                                    vpgl_camera_double_sptr input_camera, 
+bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
+                                    vpgl_camera_double_sptr z_map_camera,
+                                    vil_image_view<T>& input_image,
+                                    vpgl_camera_double_sptr input_camera,
                                     vil_image_view<T>& out_image, unsigned scale_idx)
 {
   // extract global parameters
   vgl_vector_3d<unsigned int> grid_size = params_->num_voxels(scale_idx);
-  
+
   // compute homographies from voxel planes to image coordinates and vise-versa.
   vcl_vector<vgl_h_matrix_2d<double> > H_plane_to_img;
   vcl_vector<vgl_h_matrix_2d<double> > H_img_to_plane;
@@ -2431,7 +2431,7 @@ bool bvxm_voxel_world::orthorectify(vil_image_view_base_sptr z_map,
 
     //vcl_stringstream s_temp; s_temp << "C:/projects/temp/temp_img_" << z << ".tif";
     //bvxm_util::write_slab_as_image(frame_backproj,s_temp.str());
-    
+
     typename bvxm_voxel_slab<T>::iterator frame_it = frame_backproj.begin();
     bvxm_voxel_slab<float>::iterator ortho_backproj_it = ortho_backproj.begin();
     typename bvxm_voxel_slab<T>::iterator out_slab_it = out_slab_temp.begin();

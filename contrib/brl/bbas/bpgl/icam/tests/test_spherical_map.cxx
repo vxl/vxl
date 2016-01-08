@@ -25,7 +25,7 @@ static void test_spherical_map()
    str0 << -5.71272  << ' ' << 2.69698  << ' ' << 18.3262  << '\n';
    vpgl_perspective_camera<double> C0;
    str0 >> C0;
-   
+
    vcl_stringstream str1;
    str1 << 1477.45 << ' '<< 0 << ' ' << 752 << '\n';
    str1 << 0 << ' '<< 1477.45 << ' ' << 500 << '\n';

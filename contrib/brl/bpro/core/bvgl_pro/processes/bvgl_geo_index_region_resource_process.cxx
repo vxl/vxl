@@ -65,7 +65,7 @@ bool bvgl_geo_index_region_resource_process(bprb_func_process& pro)
     if (vgl_intersection(bbox, leaves[i]->extent_).area() > 0)
       leaf_ids.push_back(i);
   }
-  
+
   // write it to file
   vcl_ofstream ofs(out_txt.c_str());
   if (!ofs.is_open()) {

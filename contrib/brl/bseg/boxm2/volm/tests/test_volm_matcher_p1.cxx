@@ -205,7 +205,7 @@ static void test_volm_matcher_p1()
     return;
   }
   TEST("volm pass 1 matcher execution", good, true);
-  
+
   // write out
   vcl_string out_score_bin = "./ps_1_scores_tile_0.bin";
   TEST("volm pass 1 matcher result output", obj_ps1_matcher.write_matcher_result(out_score_bin), true);

@@ -13,7 +13,7 @@
 //  Amir Tamrakar 11/15/06          Removed the link graph structures from this class to make it lighter
 //
 //  Ozge Can Ozcanli Jan 12, 2007   Added copy constructor
-//  Ricardo Fabbri Aug 03, 2009     Fixed copy constructor to clone appearance members, 
+//  Ricardo Fabbri Aug 03, 2009     Fixed copy constructor to clone appearance members,
 //                                  to avoid delete-ing unitialized memory.
 //  Ricardo Fabbri Aug 12, 2009     Added copy assignment, avoiding segfaults.
 //
@@ -51,15 +51,15 @@ public:
   double tangent;          ///< the orientation of the edgel
 
   //: the strength of the edgel (typically gradient magnitude)
-  double strength;         
+  double strength;
 
   //: second derivative of the image in the direction of the gradient
-  double deriv;            
+  double deriv;
 
   //: Harris Corner like measure to factor in the error in edge localization at
   // corners and junctions
-  double uncertainty;      
-  
+  double uncertainty;
+
   vgl_point_2d<int> gpt;   ///< hack to store the grid coordinates
 
   //: appearance information stored with the edgels
@@ -67,21 +67,21 @@ public:
   sdet_appearance* right_app; ///< appearance on the right side of the edgel
 
   //: default constructor
-  sdet_edgel() : 
-    id((unsigned)-1), 
-    pt(vgl_point_2d<double>(0,0)), 
-    tangent(0.0), 
-    strength(0.0), 
-    deriv(0.0), 
-    uncertainty(0.0), 
-    left_app(new sdet_intensity(0.0)), 
+  sdet_edgel() :
+    id((unsigned)-1),
+    pt(vgl_point_2d<double>(0,0)),
+    tangent(0.0),
+    strength(0.0),
+    deriv(0.0),
+    uncertainty(0.0),
+    left_app(new sdet_intensity(0.0)),
     right_app(new sdet_intensity(0.0)){}
-  
+
   //: constructor
   //
-  sdet_edgel(vgl_point_2d<double> new_pt, double tan, 
+  sdet_edgel(vgl_point_2d<double> new_pt, double tan,
       double conf=0.0, double der=0.0, double uncer=0.0,
-      sdet_appearance* lapp=new sdet_intensity(0.0), 
+      sdet_appearance* lapp=new sdet_intensity(0.0),
       sdet_appearance* rapp=new sdet_intensity(0.0));
 
   //: copy constructor
@@ -99,14 +99,14 @@ class sdet_edgel_chain
 {
 public:
   sdet_edgel_list edgels;
-  bool temp; //temp flag for the CFTG 
+  bool temp; //temp flag for the CFTG
 
   //: constructor
   sdet_edgel_chain(): edgels(0), temp(false){}
   ~sdet_edgel_chain(){}
 
   //: copy constructor
-  sdet_edgel_chain(const sdet_edgel_chain& chain): 
+  sdet_edgel_chain(const sdet_edgel_chain& chain):
     edgels(chain.edgels.size()), temp(false)
   {
     for (unsigned i=0; i<chain.edgels.size(); i++)
@@ -116,14 +116,14 @@ public:
   //merge two edge chains together (expect some overlap)
   void merge(sdet_edgel_chain* n_chain)
   {
-    //there are going to be some duplications 
+    //there are going to be some duplications
     //need to remove those elements
     bool found_last=false;
     sdet_edgel_list_iter lit = n_chain->edgels.begin();
     for(;lit!=n_chain->edgels.end();lit++){
       if ((*lit)==edgels.back())
         found_last=true;
-      
+
       if (found_last)
         edgels.push_back(*lit);
     }
@@ -136,7 +136,7 @@ public:
   }
 
   void append(sdet_edgel_list& n_chain)
-  { 
+  {
     int sizeofchain=n_chain.size();
     for (unsigned i=1; i<sizeofchain; i++)
       edgels.push_back(n_chain[i]);

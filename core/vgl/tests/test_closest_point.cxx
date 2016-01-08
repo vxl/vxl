@@ -227,7 +227,7 @@ static void test_line_segment_3d_closest_point()
   vcl_cout << "-----------------------------------------------------\n"
           << " Testing vgl_closest_point(line_segment_3d, point_3d)\n"
           << "-----------------------------------------------------\n";
- 
+
   vgl_point_3d<double> p, q;
   vgl_line_segment_3d<double> l(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(0,0,1));
 

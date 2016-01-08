@@ -39,7 +39,7 @@ bvxm_batch.set_input_from_db(1,cam_id);
 bvxm_batch.set_input_from_db(2,voxel_world_id);
 bvxm_batch.set_input_unsigned(3,0);
 bvxm_batch.run_process();
- 
+
 out_img_id = bvxm_batch.commit_output(0);
 mask_img_id = bvxm_batch.commit_output(1);
 ###################################################
@@ -71,7 +71,7 @@ for i in range(1,len(image_fnames),1):
     bvxm_batch.run_process();
     cam_id = bvxm_batch.commit_output(0);
   print cam_id;
-  # get a roi from the image 
+  # get a roi from the image
   bvxm_batch.init_process("bvxmRoiInitProcess");
   bvxm_batch.set_input_string(0,image_filename);
   bvxm_batch.set_input_from_db(1,cam_id);
@@ -81,10 +81,10 @@ for i in range(1,len(image_fnames),1):
   print statuscode;
   if statuscode:
     cropped_cam_id = bvxm_batch.commit_output(0);
-    cropped_image_id = bvxm_batch.commit_output(1);  
-    
+    cropped_image_id = bvxm_batch.commit_output(1);
+
     print cropped_image_id;
-    # RPC camera correction 
+    # RPC camera correction
     bvxm_batch.init_process("bvxmGenerateEdgeMapProcess");
     bvxm_batch.set_input_from_db(0,cropped_image_id);
     bvxm_batch.set_params_process(python_path + "edge_map_params.xml");
@@ -97,7 +97,7 @@ for i in range(1,len(image_fnames),1):
     bvxm_batch.set_input_from_db(2,cropped_image_id);
     statuscode=bvxm_batch.run_process();
     curr_scale_id = bvxm_batch.commit_output(0);
-     
+
     bvxm_batch.init_process("bvxmRpcRegistrationProcess");
     bvxm_batch.set_input_from_db(0,voxel_world_id);
     bvxm_batch.set_input_from_db(1,cropped_cam_id);
@@ -111,16 +111,16 @@ for i in range(1,len(image_fnames),1):
     bvxm_batch.run_process();
     cam_id = bvxm_batch.commit_output(0);
     voxel_image_id = bvxm_batch.commit_output(1);
-    
+
     print cam_id;
-    
+
     print("Saving Image");
     bvxm_batch.init_process("SaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,cropped_image_id);
     bvxm_batch.set_input_string(1,"./initial/ini"+str(i)+".png");
     bvxm_batch.run_process();
-    
-    
+
+
     map_type="10bins_1d_radial";
     print("Illumination Index");
     bvxm_batch.init_process("bvxmIllumIndexProcess");
@@ -131,11 +131,11 @@ for i in range(1,len(image_fnames),1):
     bvxm_batch.run_process();
     bin_id = bvxm_batch.commit_output(0);
     print bin_id;
-    
+
     app_type="apm_mog_grey";
-    
+
     print voxel_world_id;
-    
+
     # Normalizing images
     print(" Normalizing Image ");
     bvxm_batch.init_process("bvxmNormalizeImageProcess");
@@ -150,15 +150,15 @@ for i in range(1,len(image_fnames),1):
     normalized_img_id = bvxm_batch.commit_output(0);
     float1_id = bvxm_batch.commit_output(1);
     float2_id = bvxm_batch.commit_output(2);
-    
+
     print("Saving Image");
     bvxm_batch.init_process("SaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,normalized_img_id);
     bvxm_batch.set_input_string(1,"./normalized/normalized"+str(i)+".png");
     bvxm_batch.run_process();
-    
+
     curr_image_id=normalized_img_id;
-    
+
     print("Updating World");
     bvxm_batch.init_process("bvxmUpdateProcess");
     bvxm_batch.set_input_from_db(0,curr_image_id);
@@ -170,7 +170,7 @@ for i in range(1,len(image_fnames),1):
     bvxm_batch.run_process();
     out_img_id = bvxm_batch.commit_output(0);
     mask_img_id = bvxm_batch.commit_output(1);
-    
+
     print("Display changes");
     bvxm_batch.init_process("bvxmChangeDetectionDisplayProcess");
     bvxm_batch.set_params_process("./change_display_params.xml");
@@ -180,7 +180,7 @@ for i in range(1,len(image_fnames),1):
     bvxm_batch.run_process();
     change_img_id = bvxm_batch.commit_output(0);
     prob_img_id = bvxm_batch.commit_output(1);
-    
+
     print("Saving Image");
     bvxm_batch.init_process("SaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,change_img_id);
@@ -192,7 +192,7 @@ for i in range(1,len(image_fnames),1):
     bvxm_batch.set_input_from_db(0,prob_img_id);
     bvxm_batch.set_input_string(1,"./changes/prob_map"+str(i)+".png");
     bvxm_batch.run_process();
-    
+
     print("Writing World");
     bvxm_batch.init_process("bvxmSaveOccupancyRaw");
     bvxm_batch.set_input_from_db(0,voxel_world_id);

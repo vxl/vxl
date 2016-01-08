@@ -103,7 +103,7 @@ void boxm2_vecf_mandible_scene::extract_block_data(){
   mandible_base_->enable_write();
   mandible_data_ = reinterpret_cast<boxm2_data_traits<BOXM2_PIXEL>::datatype*>(mandible_base_->data_buffer());
   mandible_size_ = static_cast<int>(mandible_base_->buffer_length());
-#if 0  
+#if 0
   boxm2_data_base *  left_ramus_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_PIXEL>::prefix("left_ramus"));
   left_ramus_base->enable_write();
   left_ramus_=new boxm2_data<BOXM2_PIXEL>(left_ramus_base->data_buffer(),left_ramus_base->buffer_length(),left_ramus_base->block_id());
@@ -207,7 +207,7 @@ void boxm2_vecf_mandible_scene::cache_cell_centers_from_anatomy_labels(){
           right_ramus_cell_data_index_.push_back(indx);
           right_ramus_data_index_to_cell_index_[indx] = right_ramus_index;
         }
-#endif        
+#endif
   }
 }
 // main constructor
@@ -583,7 +583,7 @@ void boxm2_vecf_mandible_scene::apply_vector_field_to_target(vcl_vector<vgl_vect
   int valid_count = 0;
   if(n==0)
     return;//shouldn't happen
-  vul_timer t; 
+  vul_timer t;
   // iterate over the target cells and interpolate info from source
   for(unsigned j = 0; j<n; ++j){
 
@@ -666,14 +666,14 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
         vgl_point_3d<double> sbc_min(rot_center_in_source.x()-0.5*dims.x(),
                                      rot_center_in_source.y()-0.5*dims.y(),
                                      rot_center_in_source.z()-0.5*dims.z());
-                                     
+
         vgl_point_3d<double> sbc_max(rot_center_in_source.x()+0.5*dims.x(),
                                      rot_center_in_source.y()+0.5*dims.y(),
                                      rot_center_in_source.z()+0.5*dims.z());
 
         vgl_box_3d<double> target_box_in_source;
         target_box_in_source.add(sbc_min);
-        target_box_in_source.add(sbc_max); 
+        target_box_in_source.add(sbc_max);
 
         // rotate the target box in source by the inverse rotation
         // the box is rotated about its centroid
@@ -683,7 +683,7 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
         // the source blocks intersecting the rotated target box
         vcl_vector<vgl_point_3d<int> > int_sblks = blk_->sub_blocks_intersect_box(rot_target_box_in_source);
 
-        // iterate through each intersecting source tree and find the maximum tree depth 
+        // iterate through each intersecting source tree and find the maximum tree depth
         int max_depth = 0;
         for(vcl_vector<vgl_point_3d<int> >::iterator bit = int_sblks.begin();
             bit != int_sblks.end(); ++bit){
@@ -701,7 +701,7 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
                 else if(max_depth == 1) count1++;
                 else if(max_depth == 2) count2++;
                 else if(max_depth == 3) count3++;
-                  
+
         //record the deepest tree found
         if(max_depth>deepest_cell_depth){
           deepest_cell_depth = max_depth;
@@ -721,7 +721,7 @@ void boxm2_vecf_mandible_scene::prerefine_target(boxm2_scene_sptr target_scene, 
 
 void boxm2_vecf_mandible_scene::map_to_target(boxm2_scene_sptr target_scene){
   vul_timer t;
-  // initially extract unrefined target data 
+  // initially extract unrefined target data
   if(!target_data_extracted_)
     this->extract_target_block_data(target_scene);
   // set rotation from params
@@ -746,7 +746,7 @@ void boxm2_vecf_mandible_scene::map_to_target(boxm2_scene_sptr target_scene){
 bool boxm2_vecf_mandible_scene::set_params(boxm2_vecf_articulated_params const& params){
   try{
     boxm2_vecf_mandible_params const& params_ref = dynamic_cast<boxm2_vecf_mandible_params const &>(params);
-    intrinsic_change_ = this->vfield_params_change_check(params_ref); 
+    intrinsic_change_ = this->vfield_params_change_check(params_ref);
     params_ = boxm2_vecf_mandible_params(params_ref);
 #if _DEBUG
     vcl_cout<< "intrinsic change? "<<intrinsic_change_<<vcl_endl;

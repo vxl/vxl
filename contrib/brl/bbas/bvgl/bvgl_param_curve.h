@@ -10,7 +10,7 @@
 // \verbatim
 // Modifications
 // Aug 8 2005  Ricardo Fabbri: Changed convention of parametric query methods
-//   
+//
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
@@ -23,10 +23,10 @@
 //: A 2D parametric curve
 //
 //  Parametric curves are required to represent continuous curves
-//  and they enable sampling and calculation of basic differential 
+//  and they enable sampling and calculation of basic differential
 //  geometries.
 //
-//  bvgl_param_curve is the base class, various parametric curves 
+//  bvgl_param_curve is the base class, various parametric curves
 //  such as arcs, euler spirals, and polynomials shall derive from this base class.
 //
 //  A parametric curve has a start and an endpoint. It also enables parametric
@@ -42,7 +42,7 @@
 //
 //  Each derived curve could have a natural parameter which is not arclength. In
 //  that case, e.g. for sake of efficiency, that class could _also_ define a
-//  "point_at_xx" method where "xx" is a parameter name. 
+//  "point_at_xx" method where "xx" is a parameter name.
 //
 //  The same convention holds for tangent_at(s), curvature_at(s), and all other
 //  parametric functions.
@@ -73,7 +73,7 @@ class bvgl_param_curve
   //  Comparison is on the curve, two parametric curves are identical if their
   //  equations are equivalent
   virtual
-  bool operator==(bvgl_param_curve const& c) const {return this == &c; } 
+  bool operator==(bvgl_param_curve const& c) const {return this == &c; }
 
   //: Write "<dbvgl_param_curve> to stream"
   // \relates dbvgl_param_curve
@@ -85,7 +85,7 @@ class bvgl_param_curve
   //: length of parametric curve from start point to end point
   virtual double length() const = 0;
 
-  //: Get sample point at value s of a parameter along the curve, s within [0,1] 
+  //: Get sample point at value s of a parameter along the curve, s within [0,1]
   virtual vgl_point_2d<double> point_at(double s) const = 0;
 
   //: Get sample point at arclength s away from starting point
@@ -99,8 +99,8 @@ class bvgl_param_curve
 
   //: Gets tangent angle (in radian) in [0, 2PI) at parameter s within [0,1]
   virtual double tangent_angle_at(double s) const = 0;
-  
-  //: Gets tangent angle (in radian) in [0, 2PI)  at arclength s away 
+
+  //: Gets tangent angle (in radian) in [0, 2PI)  at arclength s away
   // from the starting point
   virtual double tangent_angle_at_length(double s) const = 0;
 

@@ -30,9 +30,9 @@ vil_image_view<double> mmn_order_cost(const vil_image_view<double>& c,
                                       unsigned v1, unsigned v2, unsigned v3);
 
 //: Make new view of data, with axes re-arranged. Inverse of mmn_order_cost
-//  The i-axis of c is associated with the node min(v1,v2,v3), 
+//  The i-axis of c is associated with the node min(v1,v2,v3),
 //  the j axis with mid(v1,v2,v3) and the k with max(v1,v2,v3)
-//  Returns image r, where r(i1,i2,i3) is the value associated 
+//  Returns image r, where r(i1,i2,i3) is the value associated
 //  with i1 on node v1, i2 on node v2 etc.
 vil_image_view<double> mmn_unorder_cost(const vil_image_view<double>& c,
                                         unsigned v1, unsigned v2, unsigned v3);

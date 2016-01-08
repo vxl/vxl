@@ -81,8 +81,8 @@ class bvrml_write
                                   const unsigned side = 0);
 
   // From http://www.lighthouse3d.com/vrml/tutorial/index.shtml?view:
-  // Orientation determines the direction at which the user is looking, 
-  // it specifies a rotation relative to the default orientation 
+  // Orientation determines the direction at which the user is looking,
+  // it specifies a rotation relative to the default orientation
   // which points along the Z axis in the negative direction.
   // default orientation is 0 0 1 0
   //
@@ -92,8 +92,8 @@ class bvrml_write
                               const T cx, const T cy, const T cz,//position
                               const T ox, const T oy, const T oz, const T rad, //orientation
                               const vcl_string& description);
-                              
-                              
+
+
 };
 
 

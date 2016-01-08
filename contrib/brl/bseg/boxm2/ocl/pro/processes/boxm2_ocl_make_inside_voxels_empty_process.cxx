@@ -297,7 +297,7 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
           gpu_time += kern->exec_time();
 
           //read normals and vis from gpu
-          alpha->read_to_buffer(queue);        
+          alpha->read_to_buffer(queue);
           status = clFinish(queue);
           check_val(status, MEM_FAILURE, "READ NORMALS FAILED: " + error_to_string(status));
 

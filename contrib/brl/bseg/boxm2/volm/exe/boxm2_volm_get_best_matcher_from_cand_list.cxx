@@ -41,7 +41,7 @@ unsigned zone_id(unsigned tile_id)
     return 18;
   else if(tile_id >= 8 && tile_id <= 13)
     return 18;
-  else 
+  else
     return 1000;
 }
 
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
   vcl_string log_file = out_dir + "/candidate_list_top_camera_log.xml";
   vcl_string rationale_folder = out_dir + "/rationale/";
   vul_file::make_directory(rationale_folder);
-  
+
   // load camera space
   if (!vul_file::exists(cam_bin())) {
     log << "ERROR: can not find camera_space binary: " << cam_bin() << '\n';
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
   vcl_cout << " ============================  START ========================= " << vcl_endl;
   // get candidate regions from candidate list file
   vgl_polygon<double> cand_regions = bkml_parser::parse_polygon(candlist_kml());
-  
+
   // for each candidate region, search for the best match
   unsigned num_regions = top_cam_num();
   if (top_cam_num() > cand_regions.num_sheets()) num_regions = cand_regions.num_sheets();

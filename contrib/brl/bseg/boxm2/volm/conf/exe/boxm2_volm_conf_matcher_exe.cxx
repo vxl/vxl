@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     vcl_cout << "Configuration Matcher will match the height of URGENT building footprints!!!!!!!!!!!!!!!!!!!!!!!!" << vcl_endl;
   }
   vcl_cout << "Distance tolerance is " << tol_in_pixel() << " pixels!!!!!!!!!!!!!!!!!!!!!!" << vcl_flush << vcl_endl;
-  
+
   // load the geo index locations
   vcl_stringstream file_name_pre;
   file_name_pre << geo_folder() << "/geo_index_tile_" << tile_id();
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 
       volm_conf_buffer<volm_conf_score> score_idx(buffer_capacity());
       score_idx.initialize_read(score_bin_file);
-      
+
       // load the candidate region
       bool is_cand = false;
       // load and check candidate region
@@ -430,7 +430,7 @@ int main(int argc, char** argv)
     vcl_cout << "  query has " << query->ncam() << " cameras" << vcl_endl;
     vcl_vector<vcl_string> cam_string = query->camera_strings();
     vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > > conf_objs_d_tol = query->conf_objects_d_tol();
-    vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects(); 
+    vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> > conf_objs = query->conf_objects();
     if (cam_string.size() < 10000) {
       for (unsigned i = 0; i < conf_objs.size(); i++) {
         vcl_cout << "   camera " << i << " : " << cam_string[i] << " has " << conf_objs[i].size() << " configurational objects" << vcl_endl;

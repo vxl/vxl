@@ -352,9 +352,9 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   vcl_string output_path  = pro.get_input<vcl_string>(2);
   float pix_rad = pro.get_input<float>(3);
   bool enforce_existing = pro.get_input<int>(4) == 1 ? true : false;
-  if (enforce_existing) 
+  if (enforce_existing)
     vcl_cout << "!!!!!!! enforce to have at least 2 existing images!!\n";
-  else 
+  else
     vcl_cout << "!!!!!!! DO NOT enforce to have at least 2 existing images!!\n";
 
   vcl_ifstream ifs(input_cams.c_str());
@@ -370,16 +370,16 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   vcl_vector<vcl_vector<vgl_point_2d<double> > > corrs;
   vcl_vector<vcl_string> out_cam_names;
 
-  while (!ifs.eof()) 
+  while (!ifs.eof())
   {
     vcl_string cam_name;
     ifs >> cam_name;
     if (cam_name.size() < 2) break;
     vcl_cout << "reading cam: " << cam_name << vcl_endl;
-    
+
     vcl_string out_cam_name = output_path + cam_name + "_corrected.rpb";
     vcl_cout << "out cam name: " << out_cam_name << vcl_endl;
-    
+
     // locate the cam in the resources
     //vcl_string img_path = res->full_path(cam_name);
     vcl_pair<vcl_string, vcl_string> img_path = res->full_path(cam_name);
@@ -388,11 +388,11 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       return false;
     }
     vcl_cout << img_path.first << vcl_endl;
-  
-    cam_names.push_back(img_path.first);  
+
+    cam_names.push_back(img_path.first);
     cam_sat_names.push_back(img_path.second);
     out_cam_names.push_back(out_cam_name);
-    
+
     vcl_vector<vgl_point_2d<double> > corrs_frame;
     for (unsigned int ii = 0; ii < n; ++ii) {
       double i, j;
@@ -403,7 +403,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     corrs.push_back(corrs_frame);
   }
   ifs.close();
-  
+
   if (!n) {
     vcl_cerr << "In vpgl_correct_rational_cameras_process2 - 0 correspondences in file: " << input_cams << "! returning without correcting any cams!\n";
     return false;
@@ -414,9 +414,9 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   vcl_vector<vcl_string> new_out_names;
   vcl_vector<vcl_string> new_sat_names;
   vcl_vector<vcl_vector<vgl_point_2d<double> > > new_corrs;
-  
+
   unsigned cnt_exists = 0;
-  
+
   // now determine which cameras already exist
   for (unsigned i = 0; i < out_cam_names.size(); i++) {
 
@@ -435,7 +435,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
       new_sat_names.push_back(cam_sat_names[i]);
       new_corrs.push_back(corrs[i]);
     } else {  // does not exist, then load the original camera and correct it
-      
+
       vpgl_rational_camera<double> *ratcam = load_cam_from_nitf(cam_names[i]);
       if ( !ratcam ) {
         vcl_cerr << "Failed to load rational camera from file" << cam_names[i] << '\n';
@@ -454,9 +454,9 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   }
 
   // distribute the weights
-  if (cnt_exists == 0) 
+  if (cnt_exists == 0)
     cam_weights.assign(cam_weights.size(), 1.0f/cams.size());
-  else { 
+  else {
     if (cnt_exists < 2) { // enforce to have at least two existing
       vcl_cerr << " If there a pre-existing cams, then there should be at least two!\n";
       return false;
@@ -467,7 +467,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   //  if (new_sat_names[0] == "GeoEye-1") {
   //    cams[0].save(out_cam_names[0]);
   //    return true;
-  //  } else 
+  //  } else
   //    return false;
   //}
 
@@ -479,8 +479,8 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   vcl_cout << "cams size: " << cams.size() << " corrs size: " << new_corrs.size() << vcl_endl;
   vcl_cout.flush();
 
-  
-  
+
+
   // adjust using each correspondence and save the offsets
   vcl_vector<vcl_vector<vgl_vector_2d<double> > > cam_trans;
   vcl_vector<unsigned> corrs_ids;
@@ -506,8 +506,8 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     for (unsigned ii = 0; ii < corrs_i.size(); ii++) {
         vcl_cout << "[" << corrs_i[ii].x() << "," << corrs_i[ii].y() << "]\t";
     }
-    vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y() 
-                                                         << "," << vcl_setprecision(12) << intersection.x() 
+    vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y()
+                                                         << "," << vcl_setprecision(12) << intersection.x()
                                                          << "," << vcl_setprecision(12) << intersection.z()
                                                          << "], giving offset: ";
     vcl_cout << " --> camera translation: ";
@@ -527,7 +527,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     vcl_cout << "out of " << n << " correspondences " << cam_trans.size() << " of them yielded corrections! exit without any corrections!\n";
     return false;
   }
-  
+
   // find the inliers
   vcl_vector<unsigned> inlier_cnts(cam_trans.size(), 0);
   vcl_vector<vcl_vector<unsigned> > inliers;
@@ -569,7 +569,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   for (unsigned j = 0; j < inliers[max_i].size(); j++)
     vcl_cout << inliers[max_i][j] << ' ';
   vcl_cout << '\n';
-  
+
   // use the correspondence with the most number of inliers to correct the cameras
   for (unsigned k = 0; k < cams.size(); k++) {
     double u_off,v_off;
@@ -599,7 +599,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
 
   vcl_cout << " after refinement: \n";
   for (unsigned i = 0; i < intersections.size(); i++)
-    vcl_cout << "after adjustment 3D intersection point: " << vcl_setprecision(12) << intersections[i].y() << "," << vcl_setprecision(12) << intersections[i].x() 
+    vcl_cout << "after adjustment 3D intersection point: " << vcl_setprecision(12) << intersections[i].y() << "," << vcl_setprecision(12) << intersections[i].x()
                                                            << "," << vcl_setprecision(12) << intersections[i].z()
                                                            << vcl_endl;
 
@@ -612,7 +612,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
     cams[i].set_image_offset(u_off + cam_trans_inliers[i].x(), v_off + cam_trans_inliers[i].y());
     cams[i].save(out_cam_names[i]);
   }
-  
+
   return true;
 }
 

@@ -7,9 +7,9 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
 bool icam_cylinder_map::closest_camera(vgl_ray_3d<double> const& cyl_ray,
-				       vgl_point_3d<double> const& p,
-				       unsigned& cam_index,
-				       double& u, double& v) const{
+                                       vgl_point_3d<double> const& p,
+                                       unsigned& cam_index,
+                                       double& u, double& v) const{
   cam_index = 0;
   vgl_point_3d<double> co = cyl_ray.origin();
   vgl_vector_3d<double> dir = cyl_ray.direction();
@@ -80,10 +80,10 @@ bool icam_cylinder_map::map_cylinder(){
       unsigned cam_index = 0;
       double u=0.0, v=0.0;
       if(!closest_camera(ray, pc, cam_index, u, v))
-	continue;
+        continue;
       int ui = static_cast<int>(u), vi = static_cast<int>(v);
       for(int p = 0; p<3; ++p)
-	cyl_map_(ith, iz, p) = images_[cam_index](ui, vi, p);
+        cyl_map_(ith, iz, p) = images_[cam_index](ui, vi, p);
     }
       vcl_cout << '.';
   }
@@ -93,10 +93,10 @@ bool icam_cylinder_map::map_cylinder(){
 
 bool icam_cylinder_map::
 render_map(vil_image_view<vxl_byte>const& backgnd,
-	   vpgl_camera_double_sptr const& cam,
-	   double theta, vil_image_view<vxl_byte>& img,
-	   double scale,
-	   float back_r, float back_g, float back_b)
+           vpgl_camera_double_sptr const& cam,
+           double theta, vil_image_view<vxl_byte>& img,
+           double scale,
+           float back_r, float back_g, float back_b)
 {
   double twopi = 2.0*vnl_math::pi;
   //requires perspective camera with calibration matrix
@@ -118,12 +118,12 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
   for(unsigned j = 0; j<nj; ++j)
     for(unsigned i = 0; i<ni; ++i)
       if(use_backgnd)
-	for(unsigned p = 0; p<3; ++p)
-	img(i, j, p)= backgnd(i,j,p);
+        for(unsigned p = 0; p<3; ++p)
+        img(i, j, p)= backgnd(i,j,p);
       else{
-	img(i,j,0) = back_r;
-	img(i,j,1) = back_g;
-	img(i,j,2) = back_b;
+        img(i,j,0) = back_r;
+        img(i,j,1) = back_g;
+        img(i,j,2) = back_b;
       }
   //scan the cylinder
   double height = upper_height_ + lower_height_;
@@ -139,9 +139,9 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       double th = ith*dth;
       double tth = th +theta;
       if(tth>=twopi)
-	tth -= twopi;
+        tth -= twopi;
       if(tth<0.0)
-	tth += twopi;
+        tth += twopi;
       int kth = static_cast<int>(tth/dth);
       double x = radius_*vcl_cos(th), y = radius_*vcl_sin(th);
       x+=ox; y+=oy;
@@ -150,37 +150,37 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       dir = normalize(dir);
       double dp = dot_product(dir, pvec);
       if(dp>0.0)
-	continue;
+        continue;
       double ud, vd;
-      cam->project(x, y, z, ud, vd);      
+      cam->project(x, y, z, ud, vd);
       ud -= pu; vd -= pv;
       ud *= scale;       vd *= scale;
       ud += pu*scale; vd += pv*scale;
       if(ud<0.0||vd<0.0||ud>=ni||vd>=nj)
-	continue;
+        continue;
       unsigned u = static_cast<unsigned>(ud+0.5), v = static_cast<unsigned>(vd+0.5);
       // interpolate in a 2x2 neighborhood
       for(unsigned p = 0; p<3; ++p){
-	double sum = 0.0;
-	sum += cyl_map_(kth, iz, p);
-	double w = 1.0;
-	if((kth+1)<n_theta_){
-	  sum += 0.25*cyl_map_(kth+1, iz,p);
-	  w+=0.25;
-	}
-	if((kth-1)>=0){
-	  sum += 0.25*cyl_map_(kth-1, iz,p);
-	  w+=0.25;
-	}
-	if((iz+1)<nz_){
-	  sum += 0.25*cyl_map_(kth, iz+1,p);
-	  w+=0.25;
-	}
-	if((iz-1)>=0){
-	  sum += 0.25*cyl_map_(kth, iz-1,p);
-	  w+=0.25;
-	}
-	img(u, v, p) = static_cast<vxl_byte>(sum/w); 
+        double sum = 0.0;
+        sum += cyl_map_(kth, iz, p);
+        double w = 1.0;
+        if((kth+1)<n_theta_){
+          sum += 0.25*cyl_map_(kth+1, iz,p);
+          w+=0.25;
+        }
+        if((kth-1)>=0){
+          sum += 0.25*cyl_map_(kth-1, iz,p);
+          w+=0.25;
+        }
+        if((iz+1)<nz_){
+          sum += 0.25*cyl_map_(kth, iz+1,p);
+          w+=0.25;
+        }
+        if((iz-1)>=0){
+          sum += 0.25*cyl_map_(kth, iz-1,p);
+          w+=0.25;
+        }
+        img(u, v, p) = static_cast<vxl_byte>(sum/w);
       }
     }
   }

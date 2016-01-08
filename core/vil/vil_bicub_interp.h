@@ -44,7 +44,7 @@ template<class T>
 double vil_bicub_interp_raw(double x, double y, const T* data,
                             vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep);
 
-                            
+
 //: Compute bicubic interpolation at (x,y), no bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  No bound checks are done.
@@ -57,7 +57,7 @@ inline double vil_bicub_interp_raw(double x, double y, const T* data,
 {
   return vil_bicub_interp_raw(x, y, data, xstep, ystep);
 }
-                            
+
 //: Compute bicubic interpolation at (x,y), with bound checks
 //  Image is nx * ny array of Ts. x,y element is data[xstep*x+ystep*y]
 //  If (x,y) is outside interpolatable image region, zero is returned.

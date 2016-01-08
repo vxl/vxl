@@ -61,7 +61,7 @@ void bsta_fit_gaussian(vcl_vector<T> const& samples, vcl_vector<T> const& sample
   if( (T)(1-weight_norm_sqrd_sum) > (T) 0 )
     var /= ((T)1 - weight_norm_sqrd_sum);
   else
-    var = (T) 0; 
+    var = (T) 0;
 
   gaussian.set_mean(mean);
   if(var > 0)

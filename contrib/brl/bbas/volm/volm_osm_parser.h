@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief A parser to read the open street map data from xml file
-// The format of open street map file (osm) follows general xml data format, which are well defined in http://wiki.openstreetmap.org/wiki/Elements 
+// The format of open street map file (osm) follows general xml data format, which are well defined in http://wiki.openstreetmap.org/wiki/Elements
 // Units are in lat, lon
 // \author Yi Dong
 // \date July 22, 2013

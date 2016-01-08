@@ -212,9 +212,9 @@ static void test_perspective_camera()
   str >> Pact;
   vgl_frustum_3d<double> fr_act = frustum(Pact, 0.5, 60.0);
   vgl_point_3d<double> pt_in(20.7763, 0.42938, 0.8249);
-  vgl_point_3d<double> pt_out(-20.0135,-1.3294,0.7445); 
+  vgl_point_3d<double> pt_out(-20.0135,-1.3294,0.7445);
   vcl_cout << "in " << pt_in<<" out " <<  pt_out <<'\n'
-	  << Pact <<'\n' << fr_act << '\n';
+          << Pact <<'\n' << fr_act << '\n';
   bool cont = fr_act.contains(pt_in);
   bool not_cont = !fr_act.contains(pt_out);
   TEST("point_in_actual_frustum", cont&&not_cont, true);

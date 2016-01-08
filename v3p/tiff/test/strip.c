@@ -3,23 +3,23 @@
 /*
  * Copyright (c) 2004, Andrey Kiselev  <dron@ak4719.spb.edu>
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -37,8 +37,8 @@
 int
 write_strips(TIFF *tif, const tdata_t array, const tsize_t size)
 {
-    tstrip_t	strip, nstrips;
-    tsize_t		stripsize, offset;
+    tstrip_t        strip, nstrips;
+    tsize_t                stripsize, offset;
 
     stripsize = TIFFStripSize(tif);
     if (!stripsize) {
@@ -53,7 +53,7 @@ write_strips(TIFF *tif, const tdata_t array, const tsize_t size)
         /*
          * Properly write last strip.
          */
-        tsize_t	bufsize = size - offset;
+        tsize_t        bufsize = size - offset;
         if (bufsize > stripsize)
             bufsize = stripsize;
 
@@ -71,9 +71,9 @@ write_strips(TIFF *tif, const tdata_t array, const tsize_t size)
 int
 read_strips(TIFF *tif, const tdata_t array, const tsize_t size)
 {
-    tstrip_t	strip, nstrips;
-    tsize_t		stripsize, offset;
-    tdata_t		buf = NULL;
+    tstrip_t        strip, nstrips;
+    tsize_t                stripsize, offset;
+    tdata_t                buf = NULL;
 
     stripsize = TIFFStripSize(tif);
     if (!stripsize) {
@@ -94,7 +94,7 @@ read_strips(TIFF *tif, const tdata_t array, const tsize_t size)
         /*
          * Properly read last strip.
          */
-        tsize_t	bufsize = size - offset;
+        tsize_t        bufsize = size - offset;
         if (bufsize > stripsize)
             bufsize = stripsize;
 
@@ -123,7 +123,7 @@ create_image_striped(const char *name, uint32 width, uint32 length,
               uint16 sampleformat, uint16 planarconfig,
               const tdata_t array, const tsize_t size)
 {
-    TIFF		*tif;
+    TIFF                *tif;
 
     /* Test whether we can write tags. */
     tif = TIFFOpen(name, "w");
@@ -187,15 +187,15 @@ read_image_striped(const char *name, uint32 width, uint32 length,
             uint16 sampleformat, uint16 planarconfig,
             const tdata_t array, const tsize_t size)
 {
-    TIFF		*tif;
-    uint16		value_u16;
-    uint32		value_u32;
+    TIFF                *tif;
+    uint16                value_u16;
+    uint32                value_u32;
 
     /* Test whether we can read written values. */
     tif = TIFFOpen(name, "r");
     if (!tif)
         goto openfailure;
-    
+
     if (TIFFIsTiled(tif)) {
         fprintf (stderr, "Can't read image %s, it is tiled.\n",
              name);
@@ -261,15 +261,15 @@ openfailure:
 int
 write_scanlines(TIFF *tif, const tdata_t array, const tsize_t size)
 {
-    uint32		length, row;
-    tsize_t		scanlinesize, offset;
+    uint32                length, row;
+    tsize_t                scanlinesize, offset;
         (void) size;
 
     if (!TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &length)) {
         fprintf (stderr, "Can't get tag %d.\n", TIFFTAG_IMAGELENGTH);
         return -1;
     }
-    
+
     scanlinesize = TIFFScanlineSize(tif);
     if (!scanlinesize) {
         fprintf (stderr, "Wrong size of scanline.\n");

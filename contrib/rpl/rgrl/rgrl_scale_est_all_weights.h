@@ -42,7 +42,7 @@ class rgrl_scale_est_all_weights
   bool
   compute_geometric_scale( double& return_scale,
                            rgrl_match_set const& match_set,
-                           bool use_signature_only, 
+                           bool use_signature_only,
                            bool penalize_scaling ) const;
 
   bool

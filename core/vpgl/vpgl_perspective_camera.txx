@@ -583,14 +583,14 @@ vgl_rotation_3d<T> vpgl_persp_cam_relative_orientation( const vpgl_perspective_c
 {
   vgl_vector_3d<T> p1 = cam1.principal_axis();
   vgl_vector_3d<T> p2 = cam2.principal_axis();
-  
+
   vgl_rotation_3d<T> R(p2, p1);
   return R;
 }
 
 template <class T>
 vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
-			  T d_near, T d_far){
+                          T d_near, T d_far){
 
   // normal of top face of the frustum
   vgl_vector_3d<T> norm = -cam.principal_axis();

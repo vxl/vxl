@@ -180,23 +180,23 @@ double vsol_polygon_2d::area(void) const
 //---------------------------------------------------------------------------
 //: Return the centroid of `this'
 //---------------------------------------------------------------------------
-// The centroid is computed by using Green's theorem to compute the 
+// The centroid is computed by using Green's theorem to compute the
 // area-weighted 1st moments of the polygon.
 //  Green's theorem relates the surface integral to the line integral around
-//  the boundary as:  
+//  the boundary as:
 //     Int(surface) x dxdy = 0.5 * Int(boundary) x*x dy
 //     Int(surface) y dxdy = 0.5 * Int(boundary) y*y dx
 //  The centroid is given by
 //     xc = Int(surface) x dxdy / Int(surface) dxdy  = Int(surface) x dxdy/area
 //     yc = Int(surface) y dxdy / Int(surface) dxdy  = Int(surface) y dxdy/area
-// 
+//
 //  For a polygon: with vertices x[i], y[i]
-//   0.5 * Int(boundary) x*x dy = 
+//   0.5 * Int(boundary) x*x dy =
 //   1/6 * Sum(i)( x[i+1] + x[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
-// 
-//   0.5 * Int(boundary) y*y dx = 
+//
+//   0.5 * Int(boundary) y*y dx =
 //   1/6 * Sum(i)( y[i+1] + y[i] ) * ( x[i] * y[i+1] - x[i+1] * y[i] )
-// 
+//
 //  In the case of degenerate polygons, where area == 0, return the average of
 //  the vertex locations.
 //
@@ -239,7 +239,7 @@ vsol_point_2d_sptr vsol_polygon_2d::centroid(void) const
     }
   return new vsol_point_2d(xsum/nverts, ysum/nverts);
 }
-    
+
 //---------------------------------------------------------------------------
 //: Is `this' convex ?
 // A polygon is convex if the direction of "turning" at every vertex is

@@ -37,14 +37,14 @@ bool sdet_exp_img_classifier_process(bprb_func_process& pro)
     return false;
   }
   // get inputs
-  sdet_texture_classifier_sptr tc_ptr = 
+  sdet_texture_classifier_sptr tc_ptr =
     pro.get_input<sdet_texture_classifier_sptr>(0);
   sdet_texture_classifier_params* tcp = static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
   sdet_atmospheric_image_classifier tc(*tcp);
   vcl_string texton_dict_path = pro.get_input<vcl_string>(1);
 
   //extract input image
-  vil_image_view_base_sptr view_ptr = 
+  vil_image_view_base_sptr view_ptr =
     pro.get_input<vil_image_view_base_sptr>(2);
   if (!view_ptr)
   {
@@ -55,7 +55,7 @@ bool sdet_exp_img_classifier_process(bprb_func_process& pro)
   vil_image_view<float> fview(view_ptr);
 
   //extract expected image
-  vil_image_view_base_sptr exp_ptr = 
+  vil_image_view_base_sptr exp_ptr =
     pro.get_input<vil_image_view_base_sptr>(3);
   if (!exp_ptr)
   {

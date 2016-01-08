@@ -87,7 +87,7 @@ T vgl_fit_sphere_3d<T>::fit_linear(vcl_ostream* errstream)
     if (errstream)
       *errstream << "No points to fit sphere\n";
     return T(-1);
-  } 
+  }
     // normalize the points
   vgl_norm_trans_3d<T> norm;
   if (!norm.compute_from_points(points_) && errstream) {
@@ -114,11 +114,11 @@ T vgl_fit_sphere_3d<T>::fit_linear(vcl_ostream* errstream)
     return T(-1);
   }
   T r = vcl_sqrt(r2);
-  
+
   vnl_matrix_fixed<T,4,4> H = norm.get_matrix();
   T scale = H[0][0];
   T tx = H[0][3];  T ty= H[1][3]; T tz= H[2][3];
-  
+
   // scale back to original coordinates
   T x0p = (x0-tx)/scale,  y0p = (y0-ty)/scale,  z0p = (z0-tz)/scale, rp = r/scale;
 
@@ -157,21 +157,21 @@ T vgl_fit_sphere_3d<T>::fit(vcl_ostream* outstream, bool verbose){
   T tx = H[0][3];  T ty= H[1][3]; T tz= H[2][3];
   // normalize linear fit sphere
   lin_radius *= scale;
-  // scale center 
+  // scale center
   vgl_point_3d<T> c = sphere_lin_.centre();
   T lin_x0 = scale*c.x()+tx,  lin_y0 = scale*c.y()+ty,  lin_z0 = scale*c.z()+tz;
-  
+
   vcl_vector<vgl_homg_point_3d<double> > pts;
   for(unsigned i = 0; i<n; ++i){
-    vgl_homg_point_3d<T> hp = norm(points_[i]);//normalize  
+    vgl_homg_point_3d<T> hp = norm(points_[i]);//normalize
     vgl_homg_point_3d<double> hpd(static_cast<double>(hp.x()),
                                   static_cast<double>(hp.y()),
                                   static_cast<double>(hp.z()),
                                   static_cast<double>(hp.w()));
     pts.push_back(hpd);
   }
-  sphere_residual_function srf(pts);  
-  vnl_levenberg_marquardt lm(srf);  
+  sphere_residual_function srf(pts);
+  vnl_levenberg_marquardt lm(srf);
 
   vnl_vector<double> x_init(4);
   x_init[0]=static_cast<double>(lin_x0);x_init[1]=static_cast<double>(lin_y0);
@@ -190,7 +190,7 @@ T vgl_fit_sphere_3d<T>::fit(vcl_ostream* outstream, bool verbose){
     T nr = static_cast<T>(x_init[3]);
     // scale back to original coordinates
     T x0p = (x0-tx)/scale,  y0p = (y0-ty)/scale,  z0p = (z0-tz)/scale, rp = nr/scale;
-    
+
     vgl_point_3d<T> cf(x0p, y0p, z0p);
     sphere_non_lin_.set_centre(cf);
     sphere_non_lin_.set_radius(rp);
@@ -209,7 +209,7 @@ T vgl_fit_sphere_3d<T>::fit(vcl_ostream* outstream, bool verbose){
 template <class T>
 vcl_vector<vgl_point_3d<T> > vgl_fit_sphere_3d<T>::get_points() const{
   vcl_vector<vgl_point_3d<T> > ret;
-  const unsigned n = static_cast<unsigned>(points_.size());  
+  const unsigned n = static_cast<unsigned>(points_.size());
   for (unsigned i=0; i<n; i++){
     vgl_point_3d<T> p(points_[i]);
     ret.push_back(p);

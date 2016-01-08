@@ -51,7 +51,7 @@
 
 /* Define as 0 or 1 according to the floating point format suported by the
    machine */
-/* Hard-coded to 1 (vxl actually doesn't think we have this header, but tiff 
+/* Hard-coded to 1 (vxl actually doesn't think we have this header, but tiff
    won't compile if this is not defined) */
 #define HAVE_IEEEFP 1
 

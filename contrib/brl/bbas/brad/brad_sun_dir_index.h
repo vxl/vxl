@@ -5,12 +5,12 @@
 // \file
 // \brief An index for sun direction vectors.
 //
-// A sun direction vector is assigned to a bin which is closest in 
+// A sun direction vector is assigned to a bin which is closest in
 // terms of the angle between the direction vector and the vector corresponding
-// to the center of a given bin. This relationship defines a set of 
+// to the center of a given bin. This relationship defines a set of
 // vectors forming a cone around the bin center vector.
 // Currently there is no limit on the cone angle, but a member,cone_half_angle,
-// is provided if future development requires a limit to the extent 
+// is provided if future development requires a limit to the extent
 // of a bin cone neighborhood.
 //
 // \author J. L. Mundy

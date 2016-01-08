@@ -44,6 +44,6 @@ std::wstring vul_expand_path/*cached*/(std::wstring path);
 //: Expand given path.
 std::wstring vul_expand_path_uncached (std::wstring path);
 
-#endif 
+#endif
 
 #endif // vul_expand_path_h_

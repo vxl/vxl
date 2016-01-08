@@ -20,7 +20,7 @@
 //   container for simplicity, January 01, 2012
 // \endverbatim
 
-//container for blocks to maintain a timestamp 
+//container for blocks to maintain a timestamp
 //note that the larger value of time corresponds to the newest block
 struct bcell
 {
@@ -43,7 +43,7 @@ struct bcell
  private:
   static unsigned long time_; //static timekeeper
 };
-// the ordering predicate for block birthdate. Oldest block is at 
+// the ordering predicate for block birthdate. Oldest block is at
 // blocks_.begin()
 class bcell_less
 {

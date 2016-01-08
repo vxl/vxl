@@ -19,7 +19,7 @@ class boxm2_ocl_update_max_vis
   public:
     static bool update_max_vis( boxm2_scene_sptr         scene,
                                 bocl_device_sptr         device,
-                                boxm2_opencl_cache_sptr  opencl_cache, 
+                                boxm2_opencl_cache_sptr  opencl_cache,
                                 vpgl_camera_double_sptr  cam,
                                 unsigned int ni,
                                 unsigned int nj,
@@ -42,7 +42,7 @@ class boxm2_ocl_update_cosine_angle
   public:
     static bool update_cosine_angle( boxm2_scene_sptr         scene,
                                 bocl_device_sptr         device,
-                                boxm2_opencl_cache_sptr  opencl_cache, 
+                                boxm2_opencl_cache_sptr  opencl_cache,
                                 vpgl_camera_double_sptr  cam,
                                 unsigned int ni,
                                 unsigned int nj,
@@ -65,7 +65,7 @@ class boxm2_ocl_update_surface_density
   public:
     static bool update_surface_density( boxm2_scene_sptr         scene,
                                         bocl_device_sptr         device,
-                                        boxm2_opencl_cache_sptr  opencl_cache, 
+                                        boxm2_opencl_cache_sptr  opencl_cache,
                                         vpgl_camera_double_sptr  cam,
                                         unsigned int ni,
                                         unsigned int nj,

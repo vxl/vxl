@@ -91,7 +91,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   //: compute filter responses for a given texture category training image
   bool compute_filter_bank(vil_image_view<float> const& img);
-  
+
   //: check the folder if already computed using the image name, otherwise compute and save
   bool compute_filter_bank_color_img(vcl_string const& filter_folder, vcl_string const& img_name);
 
@@ -132,7 +132,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
 
   //: extract trainig data for the pixels in the array
   bool compute_training_data(vcl_string const& category, vcl_vector<vcl_pair<int, int> >const& pixels);
-  //: extract filter outputs for the specified pixels 
+  //: extract filter outputs for the specified pixels
   bool compute_data(vcl_vector<vcl_pair<int, int> >const& pixels, vcl_vector<vnl_vector<double> >& data);
 
   //: compute textons with k_means for the specified texture category
@@ -178,7 +178,7 @@ class sdet_texture_classifier : public sdet_texture_classifier_params,
   int data_size(vcl_string const& cat);
   void add_training_data(vcl_string const& cat, vcl_vector<vnl_vector<double> >& data);
   bool get_training_data(vcl_string const& cat, vcl_vector<vnl_vector<double> >& data);
-  
+
   //: clear all the training data for all categories
   void clear_training_data() { training_data_.clear(); }
 

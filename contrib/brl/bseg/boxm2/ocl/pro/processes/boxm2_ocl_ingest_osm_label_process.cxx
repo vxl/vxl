@@ -3,7 +3,7 @@
 //:
 // \file
 // \brief A process for ingesting a open street map image in a 3-d scene
-//  Note that the open street map image is created by ingest osm labels onto a geo cover image and the type of 
+//  Note that the open street map image is created by ingest osm labels onto a geo cover image and the type of
 //  pre-defined osm land label should not exceed 254
 //
 // \author Yi Dong
@@ -56,7 +56,7 @@ namespace boxm2_ocl_ingest_osm_label_process_globals
                                      src_paths,
                                      "ingest_osm_label_map",   //kernel name
                                      options,               //options
-                                     "boxm2 opencl ingest osm label map"); 
+                                     "boxm2 opencl ingest osm label map");
     vec_kernels.push_back(ray_trace_kernel);
   }
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -76,7 +76,7 @@ bool boxm2_ocl_ingest_osm_label_process_cons(bprb_func_process& pro)
   input_types_[5] = "vil_image_view_base_sptr";
   input_types_[6] = "vil_image_view_base_sptr";
   input_types_[7] = "vcl_string"; // identifier of the output label_short data type, e.g. "land"
-  
+
   // process has no output
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
@@ -213,7 +213,7 @@ bool boxm2_ocl_ingest_osm_label_process(bprb_func_process& pro)
   vcl_size_t gThreads[] = {cl_ni,cl_nj};
 
   vcl_cout<<"Ingesting Label Img"<<vcl_endl;
-  
+
   // start ingestion block by block
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
@@ -266,7 +266,7 @@ bool boxm2_ocl_ingest_osm_label_process(bprb_func_process& pro)
   clReleaseCommandQueue(queue);
   delete ray_o_buff;
   delete label_buff;
-  
+
   delete [] ray_origins;
   delete [] labels;
   return true;

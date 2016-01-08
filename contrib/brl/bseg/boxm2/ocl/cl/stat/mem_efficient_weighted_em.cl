@@ -13,7 +13,7 @@
 
 #define SAMPLE_TYPE __private uchar
 #define SAMPLE2FLOAT(samp)  (convert_float(samp)/255.0f)
- 
+
 //: define EM weight type (may be different than GAUSS weight type
 #define EM_WEIGHT_TYPE __private float
 #define EM_WEIGHT2FLOAT(samp)  (samp)
@@ -48,7 +48,7 @@ float2 weighted_mean_var(SAMPLE_TYPE* obs, GAUSS_WEIGHT_TYPE* vis, int numSample
     sample_mean /= sum_weights;
   else
     return (float2)(0.0f);
-    
+
   //sum square differences for unbiased variance estimation
   float sum_sqr_diffs = 0.0f;
   float sum_sqr_weights = 0.0f;
@@ -62,7 +62,7 @@ float2 weighted_mean_var(SAMPLE_TYPE* obs, GAUSS_WEIGHT_TYPE* vis, int numSample
   //calculate unbiased weighted variance
   float sample_var = (sum_sqr_diffs / (1.0f - sum_sqr_weights) );
 
-  return (float2) (sample_mean, sample_var); 
+  return (float2) (sample_mean, sample_var);
 }
 
 //sort an MOG3 in place
@@ -91,20 +91,20 @@ void sort_mog3(float8* mog3)
 
 
 
-float8 weighted_gaussian(   SAMPLE_TYPE*    obs,     
-                            EM_WEIGHT_TYPE*  vis,     
+float8 weighted_gaussian(   SAMPLE_TYPE*    obs,
+                            EM_WEIGHT_TYPE*  vis,
                             const uint  numSamples,
                             const float min_sigma)
 {
   //initialize to pretty flat distribution
   float8 mog3 = 0;
-                           
-  float2 gauss_param = weighted_mean_var(obs, (GAUSS_WEIGHT_TYPE*)vis, numSamples);     
-  
+
+  float2 gauss_param = weighted_mean_var(obs, (GAUSS_WEIGHT_TYPE*)vis, numSamples);
+
   mog3.s0 = gauss_param.x;
   mog3.s1 = max(gauss_param.y, min_sigma);
   mog3.s2 = 1.0;
-  
+
   sort_mog3(&mog3);
   return mog3;
 }
@@ -121,17 +121,17 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
                         const float     weights_normalizer,
                         __global ushort4 *  num_iter)
 {
-  
+
   float log_likelihood = 0;
-  
+
   //EM Defines
   const uint  nmodes    = 3;
   const float big_sigma = (float) SQRT1_2;      // maximum possible std. dev for set of samples drawn from [0 1]
 
   //init with old mog
-  float8 mog3; 
-  
- 
+  float8 mog3;
+
+
   mog3 =  (float8) (  0.25, .06f, 1.0f/nmodes,  //mu0, sigma0, w0
                       0.5,  .06f, 1.0f/nmodes,  //mu1, sigma1, w1
                       0.75, .06f );             //mu2, sigma2
@@ -150,14 +150,14 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
     mog3.s7 = big_sigma;                  //sigma2
     return mog3;
   }
-  
-  
+
+
   // run EM algorithm to maximize expected probability of observations
   const short max_iterations  = 250;
   const float TOL = 5e-4f;
   float old_likelihood = 0.0;
-  
-  
+
+
   unsigned short i=0;
   for (; i<max_iterations; ++i) {
 
@@ -168,13 +168,13 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
     float mode_weight_sum0 = 0;
     float mode_weight_sum1 = 0;
     float curr_likelihood = 0.0;
-    
+
     float running_mean_mode0, running_mean_mode1, running_mean_mode2;
     float running_mean_mode0_old, running_mean_mode1_old, running_mean_mode2_old;
     float running_std_mode0, running_std_mode1, running_std_mode2;
     float running_weights_mode0, running_weights_mode1, running_weights_mode2;
-    
-  
+
+
     for (uint n=0; n<numSamples; ++n)
     {
       //get observation
@@ -185,29 +185,29 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
       float new_mode1_prob =  gauss_prob_density(obsN, mog3.s3, mog3.s4) * mog3.s5;
       float new_mode2_prob =  gauss_prob_density(obsN, mog3.s6, mog3.s7) * (1.0f-mog3.s2-mog3.s5);
       float total_prob = new_mode0_prob + new_mode1_prob + new_mode2_prob;
-      
+
       //get weight
       float visN = EM_WEIGHT2FLOAT(vis[n]) / weights_normalizer;
-      
-        
+
+
       //compute weighted expectations
-      if (total_prob > 1e-07) 
+      if (total_prob > 1e-07)
       {
-    
+
         //compute likelihood of data
         curr_likelihood += log(total_prob) * visN;
-      
+
         float weight_mode0 = new_mode0_prob * (visN / total_prob);
         float weight_mode1 = new_mode1_prob * (visN / total_prob);
         float weight_mode2 = new_mode2_prob * (visN / total_prob);
-        
+
         mode_weight_sum0 += weight_mode0;
         mode_weight_sum1 += weight_mode1;
-        
+
         total_weight_sum += weight_mode0 + weight_mode1 + weight_mode2;
-      
-      
-       
+
+
+
         //update running means/stds/weights
         if(n==0)
         {
@@ -219,15 +219,15 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
         {
             if(weight_mode0 > 0)
             {
-                running_weights_mode0 += weight_mode0; 
-                running_mean_mode0_old = running_mean_mode0; 
+                running_weights_mode0 += weight_mode0;
+                running_mean_mode0_old = running_mean_mode0;
                 running_mean_mode0 = running_mean_mode0_old + (obsN - running_mean_mode0_old) * (weight_mode0 / running_weights_mode0);
                 running_std_mode0 += weight_mode0 * (obsN - running_mean_mode0_old) * (obsN - running_mean_mode0);
             }
             if(weight_mode1 > 0)
             {
-                running_weights_mode1 += weight_mode1; 
-                running_mean_mode1_old = running_mean_mode1; 
+                running_weights_mode1 += weight_mode1;
+                running_mean_mode1_old = running_mean_mode1;
                 running_mean_mode1 = running_mean_mode1_old + (obsN - running_mean_mode1_old) * (weight_mode1 / running_weights_mode1);
                 running_std_mode1 += weight_mode1 * (obsN - running_mean_mode1_old) * (obsN - running_mean_mode1);
             }
@@ -236,29 +236,29 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
               running_weights_mode2 += weight_mode2;
               running_mean_mode2_old = running_mean_mode2;
               running_mean_mode2 = running_mean_mode2_old + (obsN - running_mean_mode2_old) * (weight_mode2 / running_weights_mode2);
-              running_std_mode2 += weight_mode2 * (obsN - running_mean_mode2_old) * (obsN - running_mean_mode2);              
+              running_std_mode2 += weight_mode2 * (obsN - running_mean_mode2_old) * (obsN - running_mean_mode2);
             }
         }
       }
     }
     //E step done.
 
-    
+
     // check for convergence
     if (fabs(old_likelihood - curr_likelihood) <  TOL)
       break;
     old_likelihood = curr_likelihood;
-    
-    
+
+
     //M step
-    
+
     // computed the weighted means and variances for each mode based on the probabilities
     mog3.s0 = running_mean_mode0;
     mog3.s1 = (running_weights_mode0 <= 0 ) ? min_sigma : clamp(sqrt( running_std_mode0 / running_weights_mode0), min_sigma, big_sigma);
-    
+
     mog3.s3 = running_mean_mode1;
     mog3.s4 = (running_weights_mode1 <= 0 ) ? min_sigma : clamp(sqrt( running_std_mode1 / running_weights_mode1), min_sigma, big_sigma);
-    
+
     mog3.s6 = running_mean_mode2;
     mog3.s7 = (running_weights_mode2 <= 0 ) ? min_sigma : clamp(sqrt( running_std_mode2 / running_weights_mode2), min_sigma, big_sigma);
 
@@ -269,17 +269,17 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
       mog3.s5 = mode_weight_sum1 / total_weight_sum;
     }
     //M step done.
-   
+
   }
-  
+
   (*num_iter).x = i;
-      
-      
+
+
   //post EM calculation
-  
+
   sort_mog3(&mog3);
   mog3 = clamp(mog3, 0.0f, 1.0f);
   return mog3;
- 
+
 }
 #endif

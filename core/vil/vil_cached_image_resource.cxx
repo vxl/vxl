@@ -8,7 +8,7 @@
 
 // Get a view that is the size of a block.
 // Uses the cache to retrieve frequently used blocks
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 vil_cached_image_resource::get_block( unsigned  block_index_i,
                                       unsigned  block_index_j ) const
 {

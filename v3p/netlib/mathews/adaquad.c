@@ -28,7 +28,7 @@ extern "C" {
 /*<       SUBROUTINE AdaptQuad(F,A,B,Tol,SRmat,Integral,ErrBdd,M,State) >*/
 /* Subroutine */ int adaptquad_(
   v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
-  doublereal *a, doublereal *b, 
+  doublereal *a, doublereal *b,
         doublereal *tol, doublereal *srmat, doublereal *integral, doublereal *
         errbdd, integer *m, integer *state)
 {
@@ -43,7 +43,7 @@ extern "C" {
     doublereal srvec[11];
     extern /* Subroutine */ int srule_(
       v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
-            doublereal *, doublereal *, 
+            doublereal *, doublereal *,
             doublereal *, doublereal *),
       refine_(v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
               integer *, doublereal * , integer *, integer *);
@@ -128,7 +128,7 @@ extern "C" {
     doublereal check;
     extern /* Subroutine */ int srule_(
       v3p_netlib_doublereal (*f)(v3p_netlib_doublereal*),
-      doublereal *, doublereal *, 
+      doublereal *, doublereal *,
             doublereal *, doublereal *);
     doublereal sr0vec[11], sr1vec[11], sr2vec[11];
 

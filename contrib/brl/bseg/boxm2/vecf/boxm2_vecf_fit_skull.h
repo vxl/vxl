@@ -19,7 +19,7 @@ class boxm2_vecf_fit_skull{
   // ids for skull measurements
   enum mids {LEFT_LATERAL_CANTHUS, RIGHT_LATERAL_CANTHUS, MID_UPPER_JAW, MID_FOREHEAD, MID_FOREHEAD_NORMAL,
              CANTHUS_MIDPOINT, FOREHEAD_INTERSECTION};
-  
+
  boxm2_vecf_fit_skull(){fill_smid_map();}
 
   //: read a 3-d anchor file:

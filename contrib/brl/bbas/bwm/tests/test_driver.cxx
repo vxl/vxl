@@ -2,7 +2,7 @@
 
 DECLARE(test_move_proj_plane);
 DECLARE(test_delaunay);
-  
+
 void
 register_tests()
 {

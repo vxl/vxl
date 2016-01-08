@@ -37,7 +37,7 @@ void vcl_construct(U * p, V const & value) { new (p) U(value); }
 
 #ifdef VCL_VC_60
 // Provide dummy set new handler
-// It should be possible to get set_new_handler to work eith VC6 - 
+// It should be possible to get set_new_handler to work eith VC6 -
 // but I don't have a working VC6 to test/debug it - IMS
 typedef void (__cdecl *new_handler)();
 inline new_handler __cdecl vcl_set_new_handler(new_handler) {return 0;}

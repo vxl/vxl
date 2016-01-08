@@ -2,14 +2,14 @@
 #define rsdl_bounding_box_h_
 //:
 // \file
-// \brief Bounds on a rectangular region over a  mix Cartesian and angular dimensions. 
+// \brief Bounds on a rectangular region over a  mix Cartesian and angular dimensions.
 // \author Chuck Stewart
 // \date June 2001
 //
 //  A very simple class to represent a rectangular region that is
 //  defined on coordinates that mix Cartesian and angular dimensions.
 //  This is used in the k-d tree algorithm.  Nc and Na must be
-//  non-negative and Nc+Na>0. 
+//  non-negative and Nc+Na>0.
 //
 //  This class is effectively "read-only" (except for an assignment
 //  operator).

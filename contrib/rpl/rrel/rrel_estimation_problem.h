@@ -139,9 +139,9 @@ class rrel_estimation_problem
   //  Currently it is only used in wgted random sampling search
   void set_similarity_weights( const vcl_vector<double>& wgts )
   { similarity_weights_ = wgts; }
-  
+
   //: Get similarity weights
-  const vcl_vector<double>& similarity_weights() const 
+  const vcl_vector<double>& similarity_weights() const
   { return similarity_weights_; }
 
   //: Compute the parameter vector and the normalised covariance matrix.

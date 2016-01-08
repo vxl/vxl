@@ -24,6 +24,6 @@ void vimt3d_add_all_loaders()
   vsl_add_to_binary_loader(vimt3d_image_3d_of<double>());
 
 // Allow vil3d_load with the vimt3d-specific .v3i and v3m formats.
-  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);  
-  vil3d_file_format::add_format(new vimt3d_vil3d_v3m_format);  
+  vil3d_file_format::add_format(new vimt3d_vil3d_v3i_format);
+  vil3d_file_format::add_format(new vimt3d_vil3d_v3m_format);
 }

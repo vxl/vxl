@@ -37,7 +37,7 @@ class bkml_write
   //: Write a box
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr);
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vgl_box_2d<double> bbox);
-  
+
   //: Write a box with color, color is in hexadecimale format: 0 - 255 --> 00 to ff, aabbggrr --> alpha alpha, blue blue, gree green , red red.. alpha is the opacity, ffffffff is white fully opaque
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color);
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
@@ -69,7 +69,7 @@ class bkml_write
                              unsigned char const& r = 255,
                              unsigned char const& g = 131,
                              unsigned char const& b = 250);
-                             
+
 
   //: Write a photooverlay without img and correct near parameter though)
   static void write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
@@ -115,7 +115,7 @@ class bkml_write
 
 
   //: Write a style include LineStyle and PolyStyle
-  static void write_kml_style(vcl_ofstream& ofs, 
+  static void write_kml_style(vcl_ofstream& ofs,
                               vcl_string style_name = "kml_style",
                               double const& scale = 1.0,
                               double const& line_width = 3.0,

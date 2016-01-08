@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     volm_io::write_status(out_folder,volm_io::EXE_ARGUMENT_ERROR);
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  volm_io_expt_params params; 
+  volm_io_expt_params params;
   params.read_params(params_file());
   volm_spherical_container_sptr sph = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
 
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
       vcl_cout << "\t name = " << (dm->sky()[i]->name())
                << ", depth = " << 254
                << ", orient = " << (int)query->sky_orient()
-               << ", land_id = " << dm->sky()[i]->land_id() 
+               << ", land_id = " << dm->sky()[i]->land_id()
                << ", land_name = " << volm_label_table::land_string(dm->sky()[i]->land_id())
                << ", land_fallback_category = ";
       volm_fallback_label::print_id(dm->sky()[i]->land_id());
@@ -117,7 +117,7 @@ int main(int argc, char** argv)
         vcl_cout << "\t name = " << dm->ground_plane()[i]->name()
                  << ", depth = " << dm->ground_plane()[i]->min_depth()
                  << ", orient = " << dm->ground_plane()[i]->orient_type()
-                 << ", land_id = " << dm->ground_plane()[i]->land_id() 
+                 << ", land_id = " << dm->ground_plane()[i]->land_id()
                  << ", land_name = " << volm_osm_category_io::volm_land_table[dm->ground_plane()[i]->land_id()].name_
                  << ", land_fallback = ";
         volm_fallback_label::print_id(dm->ground_plane()[i]->land_id());

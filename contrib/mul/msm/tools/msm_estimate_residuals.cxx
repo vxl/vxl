@@ -81,7 +81,7 @@ struct tool_params
 
   //: Ref. point indices used to define reference length.
   unsigned ref0,ref1;
-  
+
   //: Number of chunks in n-fold cross validation
   unsigned n_chunks;
 
@@ -196,7 +196,7 @@ struct msm_test_stats {
   mbl_stats_1d rel_d_stats;
   //: Stats of mean distance in model reference frame
   mbl_stats_1d ref_d_stats;
-  
+
   //: Stats of residual x in reference frame
   mbl_stats_1d ref_x_stats;
   //: Stats of residual y in reference frame
@@ -231,7 +231,7 @@ void test_model(const msm_shape_model& shape_model, int n_modes,
   vnl_vector<double> d,inv_pose;
   const msm_aligner& aligner = shape_model.aligner();
   msm_points points_in_ref, dpoints;
-  
+
   for (unsigned i=0;i<points.size();++i)
   {
     sm_inst.fit_to_points(points[i]);
@@ -245,13 +245,13 @@ void test_model(const msm_shape_model& shape_model, int n_modes,
       double ref_d = (points[i][ref0]-points[i][ref1]).length();
       stats.rel_d_stats.obs(100*d.mean()/ref_d);
     }
-    
+
     // Evaluate in the reference frame
     inv_pose=aligner.inverse(sm_inst.pose());
     aligner.apply_transform(points[i],inv_pose,points_in_ref);
     calc_point_distances(sm_inst.model_points(),points_in_ref,d);
     stats.ref_d_stats.obs(d.mean());
-    
+
     dpoints.vector()=points_in_ref.vector()-sm_inst.model_points().vector();
     for (unsigned j=0;j<dpoints.size();++j)
     {
@@ -272,7 +272,7 @@ void leave_some_out_tests(msm_shape_model_builder& builder,
   // Arrange to miss out consecutive examples.
   double chunk_size=double(points.size())/n_chunks;
   if (chunk_size<1) return;
-  
+
   for (unsigned ic=0;ic<n_chunks;++ic)
   {
     vcl_vector<msm_points> trn_set,test_set;
@@ -315,7 +315,7 @@ int main(int argc, char** argv)
     vcl_cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
-  
+
   image_list_params image_list;
   if (test_list_path()!="")
   {
@@ -340,7 +340,7 @@ int main(int argc, char** argv)
   msm_load_shapes(params.points_dir,params.points_names,shapes);
 
   vcl_vector<msm_test_stats> test_stats(params.max_modes+1);
-  
+
   if (test_list_path()!="")
   {
     vcl_cout<<"Testing on "<<image_list.points_names.size()<<" examples from "<<test_list_path()<<vcl_endl;
@@ -361,7 +361,7 @@ int main(int argc, char** argv)
     vcl_cout<<"Performing "<<params.n_chunks<<"-fold cross validation on "<<shapes.size()<<" examples from training set."<<vcl_endl;
     leave_some_out_tests(builder,shapes,params.ref0,params.ref1,params.n_chunks,test_stats);
   }
-  
+
   vcl_cout<<"NModes WorldMean   RefMean ";
   if (params.ref0!=params.ref1) vcl_cout<<"     RelMean(%)";
   vcl_cout<<"RefXSD RefYSD ";

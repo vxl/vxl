@@ -300,7 +300,7 @@ bool boxm2_ocl_update_with_alt_process(bprb_func_process& pro)
        }
        ++idx;
     }
-  } 
+  }
 
   //determine min/max i and j
   unsigned int min_i=1000000000, max_i=0;
@@ -424,7 +424,7 @@ bool boxm2_ocl_update_with_alt_process(bprb_func_process& pro)
           }
           ++idx;
         }
-      } 
+      }
       vis_image->write_to_buffer(queue);
       pre_image->write_to_buffer(queue);
       clFinish(queue);

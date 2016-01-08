@@ -49,13 +49,13 @@ bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
 
   vil_image_view<float> out_map(ni, nj);
   out_map.fill(0.0f);
-  
+
   vcl_string ply_glob=path+"/*.ply";
   vul_file_iterator ply_it(ply_glob.c_str());
   while (ply_it) {
     vcl_string name(ply_it());
     vcl_cout << " name: " << name << vcl_endl;
-    
+
     bmsh3d_mesh_mc *  bmesh = new bmsh3d_mesh_mc();
     bmsh3d_load_ply(bmesh,name.c_str());
     vcl_map <int, bmsh3d_face*>::iterator it = bmesh->facemap().begin();
@@ -64,7 +64,7 @@ bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
       bmsh3d_face* tmpF = (*it).second;
       vcl_vector<bmsh3d_vertex*> vertices;
       tmpF->get_ordered_Vs(vertices);
-      
+
       vgl_polygon<double> poly(1);
       double height = 0.0f;
       for (unsigned j = 0; j < vertices.size(); j++) {
@@ -73,7 +73,7 @@ bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
         height += vertices[j]->get_pt().z();
       }
       height /= vertices.size();
-      
+
       vgl_polygon_scan_iterator<double> psi(poly, false);
       for (psi.reset(); psi.next();) {
         int y = psi.scany();
@@ -108,7 +108,7 @@ bool volm_generate_height_map_plot_process_cons(bprb_func_process& pro)
   input_types.push_back("float");  // final height difference
   input_types.push_back("float");  // height increments
   input_types.push_back("float");  // fix the ground truth height
-  
+
   vcl_vector<vcl_string> output_types;
   output_types.push_back("bbas_1d_array_float_sptr");  // #correct rate
   output_types.push_back("bbas_1d_array_float_sptr");  // #height difs
@@ -168,14 +168,14 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
 
   float dif_mark = dif_final;
   unsigned int numPoints = 0;
-  
+
   for (float dif = dif_init;  dif <= dif_final; dif += dif_increments) {
     numPoints++;
   }
 
   bbas_1d_array_float * height_difs = new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * correct_rate = new bbas_1d_array_float(numPoints);
-  
+
   for (unsigned int pnt=0; pnt<numPoints; pnt++) {
     correct_rate->data_array[pnt]=0.0f;
   }
@@ -203,10 +203,10 @@ bool volm_generate_height_map_plot_process(bprb_func_process& pro)
               max_val_act = dif_actual_val;
             float dif_val = vcl_abs(dif_actual_val);
             if (dif_val <= dif) {
-              correct_rate->data_array[pnt]++; 
+              correct_rate->data_array[pnt]++;
               if (dif_mark == dif)
                 height_out(i,j) = vil_rgb<vxl_byte>(255,0,0);
-            } 
+            }
           } else {
             height_out_dif(i,j) = vcl_numeric_limits<float>::infinity();
           }

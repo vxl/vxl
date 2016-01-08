@@ -450,7 +450,7 @@ bool brad_image_metadata::parse_from_pvl_only(vcl_string const& filename)
       linestr >> cloud_coverage_percentage_;
       continue;
     }
-    // image footprint 
+    // image footprint
     if ((linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperRightCorner") != vcl_string::npos) ||
         (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("upperLeftCorner") != vcl_string::npos) ||
         (linestr.str().find("BEGIN_GROUP") != vcl_string::npos && linestr.str().find("lowerRightCorner") != vcl_string::npos) ||
@@ -1079,7 +1079,7 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
       }
     } else if (ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0) {  // pvl files also specify PAN gain even if it is a multi image (band 1 is PAN, 2-4 are multi)
       parsed_fine = parse_from_pvl(meta_filename);
-      if(parsed_fine) { 
+      if(parsed_fine) {
         gain_ = gains_[0].first;
         offset_ = gains_[0].second;
       }
@@ -1139,9 +1139,9 @@ bool brad_image_metadata::parse(vcl_string const& nitf_filename, vcl_string cons
         vcl_cerr << "ERROR unrecognized number of bands: " << n_bands_ << " from NITF " << nitf_filename << vcl_endl;;
         return false;
       }
-    } else if (img_info.find("QuickBird") != vcl_string::npos || 
-               nitf_filename.find("QB") != vcl_string::npos || 
-               nitf_filename.find("QuickBird") != vcl_string::npos || 
+    } else if (img_info.find("QuickBird") != vcl_string::npos ||
+               nitf_filename.find("QB") != vcl_string::npos ||
+               nitf_filename.find("QuickBird") != vcl_string::npos ||
                img_info.find("QB02") != vcl_string::npos ||
                satellite_name_.compare("QB02") == 0
                ) {
@@ -1245,7 +1245,7 @@ bool brad_image_metadata::parse_from_meta_file(vcl_string const& meta_file)
   else if (ext.compare(".PVL") == 0 || ext.compare(".pvl") == 0)  // parse PVL file
   {
     parsed_fine = parse_from_pvl_only(meta_file);
-    if(parsed_fine) { 
+    if(parsed_fine) {
       // the first gain value obtained from PVL is assumed to be the PAN band gain
       gain_ = gains_[0].first;
       offset_ = gains_[0].second;
@@ -1256,7 +1256,7 @@ bool brad_image_metadata::parse_from_meta_file(vcl_string const& meta_file)
     vcl_cout << "ERROR unrecognized metadata file format: " << ext << " in name: " << meta_file << "!\n";
     return false;
   }
-  
+
   // calculate the solar irradiance
   if (!parsed_fine) {
     vcl_cerr << " Problems parsing meta-data file" << meta_file << "!\n";

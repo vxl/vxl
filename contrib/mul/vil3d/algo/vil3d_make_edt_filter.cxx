@@ -10,8 +10,8 @@
 //: Compute filter for an exp. distance transform.
 // width_i gives the width at half maxima (in voxels) for the
 // exponential filter along i.
-void vil3d_make_edt_filter(double width_i, 
-                           double width_j, 
+void vil3d_make_edt_filter(double width_i,
+                           double width_j,
                            double width_k,
                            int r,
                            vil3d_structuring_element& se,

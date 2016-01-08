@@ -7,7 +7,7 @@
 
 void ihog_register::register_datatype()
 {
-  
+
 }
 
 void ihog_register::register_process()

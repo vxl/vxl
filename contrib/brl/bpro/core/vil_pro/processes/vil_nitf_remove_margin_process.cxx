@@ -101,7 +101,7 @@ bool vil_nitf_remove_margin_process(bprb_func_process& pro)
     vcl_cerr << pro.name() << ": entire image is invalid!\n";
     return false;
   }
-  
+
   // trimming from the bottom right
   found = false;
   unsigned bottom_i = ni, bottom_j = nj;

@@ -41,7 +41,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned>       tile_id("-tile", "ROI tile id", 9999);
   vul_arg<int>            leaf_id("-leaf", "leaf id to generate kml file from parsed candidate region", -1);
   vul_arg_parse(argc, argv);
-  
+
   // input check
   if (geo_folder().compare("") == 0 || out_folder().compare("") == 0)
   {
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
     bkml_write::open_document(ofs);
     // write out the kml file
     if (inner.num_sheets() == 0) {
-      
+
       vcl_stringstream name;
       name << "leaf_" << leaf_id() << "_cand_" << outer.num_sheets();
       bkml_write::write_polygon(ofs, outer, name.str(), "", 1.0, 3.0, 0.45, 0, 255, 0);
@@ -221,7 +221,7 @@ int main(int argc, char** argv)
         loc_name << "hyps_" << vcl_setprecision(6) << h_pt.x() << vcl_setprecision(6) << h_pt.y();
         bkml_write::write_location_as_box(ofs, h_pt.x(), h_pt.y(), h_pt.z(), loc_name.str(), "", 1E-5, 255, 131, 250);
       }
-      
+
     }
     else {
       vgl_point_3d<double> h_pt;
@@ -379,7 +379,7 @@ int main(int argc, char** argv)
     bkml_write::open_document(ofs);
     // write out the kml file
     if (inner.num_sheets() == 0) {
-      
+
       vcl_stringstream name;
       name << "leaf_" << leaf_id() << "_cand_" << outer.num_sheets();
       bkml_write::write_polygon(ofs, outer, name.str(), "", 1.0, 3.0, 0.45, 0, 255, 0);
@@ -408,7 +408,7 @@ int main(int argc, char** argv)
         loc_name << "hyps_" << vcl_setprecision(6) << h_pt.x() << vcl_setprecision(6) << h_pt.y();
         bkml_write::write_location_as_box(ofs, h_pt.x(), h_pt.y(), h_pt.z(), loc_name.str(), "", 1E-5, 255, 131, 250);
       }
-      
+
     }
     else {
       vgl_point_3d<double> h_pt;

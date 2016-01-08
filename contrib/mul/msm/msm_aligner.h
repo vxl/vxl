@@ -35,7 +35,7 @@ class msm_aligner
   virtual vnl_vector<double> inverse(const vnl_vector<double>&) const = 0;
 
   //: Apply the transformation to the given points
-  virtual void apply_transform(const msm_points& points, 
+  virtual void apply_transform(const msm_points& points,
                      const vnl_vector<double>& trans,
                      msm_points& new_points) const = 0;
 

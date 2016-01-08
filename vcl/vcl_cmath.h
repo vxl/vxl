@@ -1,13 +1,13 @@
 #ifndef vcl_cmath_h_
 #define vcl_cmath_h_
-//: 
+//:
 // \file
 // \brief Templated version of the C math library.
 // \date 23 Feb 2000
 // [26.5.6] In addition to the signatures from the C header
 // <math.h>, the C++ header <cmath> adds certain overloaded
 // forms of the usual double-precision functions.
-// The following signatures should be available for float, 
+// The following signatures should be available for float,
 // double and long double :
 //
 // \code

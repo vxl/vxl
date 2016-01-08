@@ -36,16 +36,16 @@ MACRO(CHECK_PROTOTYPE_EXISTS_CXX FUNC INCLUDE VARIABLE)
         TRY_COMPILE( CHECK_PROTOTYPE_EXISTS_CXX_RESULT
           ${CMAKE_BINARY_DIR}
           ${CHECK_PROTOTYPE_EXISTS_CXX_FILE}
-          CMAKE_FLAGS 
+          CMAKE_FLAGS
           -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_PROTOTYPE_EXISTS_CXX_FLAGS}
           OUTPUT_VARIABLE OUTPUT)
-        IF( CHECK_PROTOTYPE_EXISTS_CXX_RESULT ) 
-          FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log 
+        IF( CHECK_PROTOTYPE_EXISTS_CXX_RESULT )
+          FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
             "Determining if prototype ${FUNC} exists in ${FILE} "
             "failed with the following output:\n"
             "${OUTPUT}\n\n")
-        ELSE( CHECK_PROTOTYPE_EXISTS_CXX_RESULT ) 
-          FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log 
+        ELSE( CHECK_PROTOTYPE_EXISTS_CXX_RESULT )
+          FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
             "Determining if prototype ${FUNC} exists in ${FILE} "
             "passed with the following output:\n"
             "${OUTPUT}\n\n")

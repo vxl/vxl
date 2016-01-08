@@ -26,7 +26,7 @@ class boxm2_vecf_cranium{
  vgl_box_3d<double> bounding_box() const {return index_.bounding_box();}
  double surface_distance(vgl_point_3d<double> const& p) const {return index_.surface_distance(p);}
  //: the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
- // can be away from the closest point in the cross-section pointset. 
+ // can be away from the closest point in the cross-section pointset.
  double operator() (vgl_point_3d<double> p) const{ return index_.surface_distance(p);}
 
  //:for debug purposes

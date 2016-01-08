@@ -88,7 +88,7 @@ vcl_vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
                                                    const bxml_element& query)
 {
   vcl_vector<bxml_data_sptr> all_results;
-  
+
   if (head->type() != bxml_data::ELEMENT)
     return all_results;
   bxml_element* h_elm = static_cast<bxml_element*>(head.ptr());

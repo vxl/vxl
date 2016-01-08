@@ -40,14 +40,14 @@ int main(int argc, char** argv)
             <<in_pts_path()<<vcl_endl;
     return 1;
   }
-  
+
   vgl_box_2d<double> box = points.bounds();
 
   dest_points.set_point(0, box.min_x(),box.min_y());
   dest_points.set_point(1, box.max_x(),box.min_y());
   dest_points.set_point(2, box.max_x(),box.max_y());
   dest_points.set_point(3, box.min_x(),box.max_y());
-  
+
   if (!dest_points.write_text_file(dest_pts_path()))
   {
     vcl_cerr<<"Failed to write points to "

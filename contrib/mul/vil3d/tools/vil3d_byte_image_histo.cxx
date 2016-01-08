@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
   vcl_vector<double> histo(256);
   vil3d_histogram_byte(image3d,histo);
-  
+
   vcl_ofstream ofs(output_path().c_str());
   if (!ofs)
   {
@@ -81,6 +81,6 @@ int main(int argc, char** argv)
     ofs<<i<<" "<<histo[i]<<vcl_endl;
   ofs.close();
   vcl_cout<<"Histogram saved to "<<output_path()<<vcl_endl;
-  
+
   return 0;
 }

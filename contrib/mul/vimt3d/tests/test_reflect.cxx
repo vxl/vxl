@@ -56,7 +56,7 @@ static void test_reflect_int()
   vimt3d_image_3d_of<vxl_int_32> tempx, tempy, tempz;
   tempx.deep_copy(image);
   tempy.deep_copy(image);
-  tempz.deep_copy(image);  
+  tempz.deep_copy(image);
   vimt3d_reflect_x(tempx);
   vimt3d_reflect_y(tempy);
   vimt3d_reflect_z(tempz);
@@ -110,12 +110,12 @@ static void test_reflect_int()
       for (unsigned i=0; i<ni; ++i)
       {
         unsigned ri = ni-1-i;
-        
+
         // Check voxel data
         refl_i_ok = refl_i_ok && (tempx.image()(i, j, k) == image.image()(ri, j, k));
         refl_j_ok = refl_j_ok && (tempy.image()(i, j, k) == image.image()(i, rj, k));
         refl_k_ok = refl_k_ok && (tempz.image()(i, j, k) == image.image()(i, j, rk));
-        
+
         // Check transform
         // For the x-reflected image, the x-coord of each voxel's world position should be the exact
         // negative of the x-coord of the world position of the opposite voxel in the original image.

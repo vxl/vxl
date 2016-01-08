@@ -21,7 +21,7 @@ bool brad_sun_dir_bin_process_cons(bprb_func_process& pro)
   //output
   vcl_vector<vcl_string> output_types;
   output_types.push_back("int");  // the bin index
-  output_types.push_back("float"); // float 
+  output_types.push_back("float"); // float
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

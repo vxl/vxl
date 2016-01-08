@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
   segv_vil_segmentation_manager* segm=segv_vil_segmentation_manager::instance();
   segm->set_window(win);
   win->get_adaptor()->set_tableau(segm);
-  // Read a set of image file names with blank space separation 
+  // Read a set of image file names with blank space separation
   // to load before startup
   if(argc>=2)
     for(int i = 1; i<argc; ++i){

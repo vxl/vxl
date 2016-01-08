@@ -26,7 +26,7 @@ class boxm2_multi_store_aux
                             boxm2_multi_update_helper& helper);
 
     //static float store_aux_color( boxm2_multi_cache& cache,
-    //                              vil_image_view<vil_rgba<float> >& img, 
+    //                              vil_image_view<vil_rgba<float> >& img,
     //                              vgpl_camera_double_sptr cam,
     //                              boxm2_multi_update_helper& helper);
 

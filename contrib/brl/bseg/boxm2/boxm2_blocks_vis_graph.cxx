@@ -32,7 +32,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
         }
     }
 
-    
+
     // loop over each vis graph node and create necessary edges
     // each edge A->B represents the constraint that block A must be processed before
     // block B, i.e. block A is "in front of" block B from the perspective of cam
@@ -191,7 +191,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
           break;
         }
       }
-      
+
       if (min_incoming > 0) {
         vcl_cerr << "Warning: unable to find strict visibilty ordering of blocks." << vcl_endl;
       }
@@ -202,7 +202,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
       ordered_nodes_.push_back(next_node->id_);
 
       // decrement incoming edge count of all blocks behind this one
-      for (vcl_set<boxm2_block_vis_graph_node_sptr>::iterator sink_node_it = 
+      for (vcl_set<boxm2_block_vis_graph_node_sptr>::iterator sink_node_it =
            next_node->out_edges.begin(); sink_node_it != next_node->out_edges.end(); ++sink_node_it) {
         --(*sink_node_it)->num_incoming_edges_;
       }
@@ -213,7 +213,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(vcl_map<boxm2_block_id,boxm2_block_
     }
 }
 
-vcl_list<boxm2_block_vis_graph_node_sptr>::iterator 
+vcl_list<boxm2_block_vis_graph_node_sptr>::iterator
     boxm2_block_vis_graph::find(const boxm2_block_id & id, vcl_list<boxm2_block_vis_graph_node_sptr> & list_nodes )
 {
     vcl_list<boxm2_block_vis_graph_node_sptr>::iterator iter = list_nodes.begin();

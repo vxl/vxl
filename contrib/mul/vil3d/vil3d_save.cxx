@@ -116,7 +116,7 @@ bool vil3d_save_image_resource(const vil3d_image_resource_sptr &ir, char const* 
 //: Send a vil3d_image_view to disk, deducing format from filename
 //  Utility function, allowing definition of voxel widths in header info.
 // \relatesalso vil3d_image_view
-bool vil3d_save(const vil3d_image_view_base & im, 
+bool vil3d_save(const vil3d_image_view_base & im,
                 float voxel_width_i,
                 float voxel_width_j,
                 float voxel_width_k,

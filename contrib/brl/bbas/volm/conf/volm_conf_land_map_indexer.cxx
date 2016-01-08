@@ -389,7 +389,7 @@ void volm_conf_land_map_indexer::upsample_location_list(vcl_vector<vsol_point_2d
   for (vcl_vector<vsol_point_2d_sptr>::const_iterator vit = in_locs.begin();  vit != in_locs.end(); ++vit) {
     double lx, ly, lz;
     lvcs_->global_to_local((*vit)->x(), (*vit)->y(), ori_elev, vpgl_lvcs::wgs84, lx, ly, lz);
-    locs.push_back(new vsol_point_2d(lx, ly));  
+    locs.push_back(new vsol_point_2d(lx, ly));
   }
 
   // upsample the locations given density_
@@ -525,7 +525,7 @@ bool volm_conf_land_map_indexer::write_out_kml(vcl_string const& kml_file, doubl
   bkml_write::open_document(ofs);
   //// write out the bounding box
   //bkml_write::write_box(ofs, this->box_string(), "", bbox_);
-  // loop over all land type in database to 
+  // loop over all land type in database to
   for (volm_conf_loc_map::const_iterator mit = land_locs_.begin(); mit != land_locs_.end(); ++mit)
   {
     unsigned land_id = mit->first;

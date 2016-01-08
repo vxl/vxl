@@ -431,7 +431,7 @@ bool volm_io::read_camera(vcl_string kml_file,
     // use top_fov
     top_fov_dev = parser->top_fov_dev_;
   }
-  
+
   delete parser;
   vcl_fclose(xmlFile);
   return true;
@@ -655,7 +655,7 @@ bool volm_io::read_conf_query_tags(vcl_string xml_file,
     double height = -1.0;
     if (object_heights[i] != -1 && object_heights[i] != 0)
       height = object_heights[i] * floor_height;
-    
+
     vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(polys[i]);
     vgl_vector_3d<double> np;  // surface normal
     np.set(1.0, 1.0, 1.0);
@@ -812,7 +812,7 @@ unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & k
 
 float volm_io::scale_score_to_0_1_sig(float const& kl, float const& ku, float const& threshold, unsigned char pix_value)
 {
-  if (pix_value < 127) 
+  if (pix_value < 127)
     if (pix_value == 1)
       return 0.0f;
     else

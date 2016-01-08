@@ -76,7 +76,7 @@ bool bvpl_susan_opinion_operator_process(bprb_func_process& pro)
   vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(i++);
 
-  
+
   bvxm_voxel_grid<int > * in_dir_grid
       =dynamic_cast<bvxm_voxel_grid<int> *>(in_dir_grid_base.ptr());
   bvxm_voxel_grid<bvxm_opinion> * in_opn_grid
@@ -87,7 +87,7 @@ bool bvpl_susan_opinion_operator_process(bprb_func_process& pro)
   bvxm_voxel_grid<bvxm_opinion> * output_grid=new bvxm_voxel_grid<bvxm_opinion>(out_grid_path,in_dir_grid->grid_size());
   bvpl_susan_opinion_operator oper;
   oper.operate(in_dir_grid,in_opn_grid,kernel,output_grid);
-  
+
   pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, output_grid);
 
   return true;

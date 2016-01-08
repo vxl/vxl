@@ -50,7 +50,7 @@ static void test_filter_bank()
       clr = clr>255.0f ? 255.0f : clr;
       out(i,j,0) =  static_cast<unsigned char>(clr);
       out(i,j,1) =  static_cast<unsigned char>(g);
-      out(i,j,2) =  static_cast<unsigned char>(b); 
+      out(i,j,2) =  static_cast<unsigned char>(b);
     }
   vil_save(out, out_path.c_str());
 }

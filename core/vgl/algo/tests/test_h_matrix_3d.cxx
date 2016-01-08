@@ -262,7 +262,7 @@ static void test_compute_affine_points()
   vgl_h_matrix_3d<double> H = hmca.compute(points1, points2);
 
   vcl_cout << "The resulting transform\n" << H << '\n';
-  
+
   vnl_matrix_fixed<double, 3, 3> R, S;
   H.polar_decomposition(S, R);
   vcl_cout << "Rotation part\n " << R << '\n';

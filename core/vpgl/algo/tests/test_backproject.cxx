@@ -25,7 +25,7 @@ static void test_backproject()
   double sz = 5.0,   oz = 10.0;
   double su = 1000.0,ou = 500.0;
   double sv = 400.0, ov = 200.0;
-  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v, 
+  vpgl_rational_camera<double> rcam(neu_u, den_u, neu_v, den_v,
                                     sx, ox, sy, oy, sz, oz,
                                     su, ou, sv, ov);
 
@@ -51,7 +51,7 @@ static void test_backproject()
   TEST_NEAR("test projection p4", (img_pt-test_point4).length(), 0, 1e-8);
 
   vnl_double_4 plane(0.0, 0.0, 1.0, -10.0); // plane z=10
- 
+
   vnl_double_3 initial_guess(200.0, 150.0, 10.0);
   vcl_cout << "Initial X-Y Guess (" << initial_guess << ")\n";
 
@@ -61,7 +61,7 @@ static void test_backproject()
 
   vcl_cout << "X-Y Solution ("<< world_point <<") should be "<<p3<< '\n';
   TEST("X-Y plane backprojection convergence", success, true);
-  vgl_point_3d<double> wp; wp.set(world_point[0],world_point[1],world_point[2]); 
+  vgl_point_3d<double> wp; wp.set(world_point[0],world_point[1],world_point[2]);
   // beware: both p0 and p3 project to image_point
   TEST_NEAR("test simple backprojection x-y plane", vcl_min((wp-p0).length(), (wp-p3).length()), 0, 1e-8);
 
@@ -72,7 +72,7 @@ static void test_backproject()
                                           initial_guess, world_point);
   vcl_cout << "Y-Z Solution ("<< world_point <<") should be "<<p0<< '\n';
   TEST("Y-Z plane backprojection convergence", success, true);
-  wp.set(world_point[0],world_point[1],world_point[2]); 
+  wp.set(world_point[0],world_point[1],world_point[2]);
   TEST_NEAR("test simple backprojection y-z plane", vcl_min((wp-p0).length(), (wp-p3).length()), 0, 1e-8);
 
   plane = vnl_double_4(0.0, 1.0, 0.0, -100.0); // plane y=100
@@ -82,7 +82,7 @@ static void test_backproject()
                                           initial_guess, world_point);
   vcl_cout << "X-Z Solution ("<< world_point <<") should be "<<p4<< '\n';
   TEST("X-Z plane backprojection convergence", success, true);
-  wp.set(world_point[0],world_point[1],world_point[2]); 
+  wp.set(world_point[0],world_point[1],world_point[2]);
   // beware: both p0 and p4 project to image_point
   TEST_NEAR("test simple backprojection x-z plane", vcl_min((wp-p0).length(), (wp-p4).length()), 0, 1e-8);
 

@@ -515,7 +515,7 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
 
                 // compute normalized distance to line
                 double p = (point_r.transpose() * f_l).get(0,0);
-                double error = (1.0 / (f_l.get(0,0) * f_l.get(0,0) + f_l.get(1,0) * f_l.get(1,0)) + 
+                double error = (1.0 / (f_l.get(0,0) * f_l.get(0,0) + f_l.get(1,0) * f_l.get(1,0)) +
                                 1.0 / (f_r.get(0,0) * f_r.get(0,0) + f_r.get(1,0) * f_r.get(1,0))) * (p * p);
 
                 if ( error <= inlier_threshold) {

@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief A Parzen distribution with dimension 3 and float math type
-// \author J.L. Mundy 
+// \author J.L. Mundy
 // \date December 31, 2008
 
 #include "bsta_parzen_sphere.h"

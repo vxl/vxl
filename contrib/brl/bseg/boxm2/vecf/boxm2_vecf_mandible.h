@@ -37,7 +37,7 @@ class boxm2_vecf_mandible : public bvgl_gen_cylinder{
 
  //: offset axis curve in the curve normal direction
  boxm2_vecf_spline_field offset_axis(double offset);
- 
+
  //: adjust slope of ramus relative to nominal
  boxm2_vecf_spline_field tilt_ramus(double delta_z_at_condyle);
 
@@ -48,7 +48,7 @@ class boxm2_vecf_mandible : public bvgl_gen_cylinder{
  boxm2_vecf_mandible apply_vector_field(boxm2_vecf_spline_field const& field) const;
 
  //: the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
- // can be away from the closest point in the cross-section pointset. 
+ // can be away from the closest point in the cross-section pointset.
  double operator() (vgl_point_3d<double> p) const{ return bvgl_gen_cylinder::surface_distance(p, params_.planar_surface_dist_thresh_);}
 
  //:for debug purposes

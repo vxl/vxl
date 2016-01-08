@@ -12,7 +12,7 @@
 template <class Type>
 bool vgl_ray_3d<Type>::contains(const vgl_point_3d<Type>& p ) const
 {
-  vgl_point_3d<Type> pcls = vgl_closest_point(*this, p); 
+  vgl_point_3d<Type> pcls = vgl_closest_point(*this, p);
   Type len = static_cast<Type>(length(pcls-p));
   if(len*len > static_cast<Type>(10) * vcl_max(vgl_tolerance<Type>::position, p.x()*p.x()+p.y()*p.y()+p.z()*p.z()) * vgl_tolerance<Type>::position)
     return false;

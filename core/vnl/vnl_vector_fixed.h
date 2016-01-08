@@ -138,7 +138,7 @@ class vnl_vector_fixed
       #endif
       return;
     }
-    
+
     data_[0] = x0; data_[1] = x1;
   }
 

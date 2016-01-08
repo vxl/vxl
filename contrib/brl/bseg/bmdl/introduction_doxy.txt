@@ -3,9 +3,9 @@
 * This library is designed to extract 3-d surface meshes of buildings from
 * BuckEye style LIDAR data.  The input is a pair of GeoTiff images representing
 * first and last LIDAR return.  An optional third input image representing an
-* estimate of bare earth can be provided.  If not provided, a constant ground 
+* estimate of bare earth can be provided.  If not provided, a constant ground
 * elevation is estimated from the returns and used.  The detected buildings are
-* are saved in KML format for easy viewing in Google Earth.  
+* are saved in KML format for easy viewing in Google Earth.
 *
 * \section bmdl_overview Overview
 *

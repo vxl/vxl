@@ -41,7 +41,7 @@ class volm_spherical_query_region
   unsigned char max_depth() const {return max_depth_;}
   unsigned char order() const {return order_;}
   unsigned char nlcd_id() const {return nlcd_id_;}
-  
+
   void print(vcl_ostream& os) const;
 
  private:

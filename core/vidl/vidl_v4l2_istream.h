@@ -41,7 +41,7 @@ class vidl_v4l2_istream: public vidl_istream
     //: Return true if the stream support seeking
     virtual bool is_seekable() const {return false;}
 
-    //: Return the current frame number. 
+    //: Return the current frame number.
     virtual unsigned int frame_number() const{return frame_number_;}
 
     //: Return the number of frames if known
@@ -59,7 +59,7 @@ class vidl_v4l2_istream: public vidl_istream
 
     //: Return the frame rate (0.0 if unspecified)
     virtual double frame_rate() const { return dev.get_frame_rate(); }
-  
+
     //: Return the duration in seconds (0.0 if unknown)
     virtual double duration() const { return 0.0; }
 

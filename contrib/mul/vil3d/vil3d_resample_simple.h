@@ -16,8 +16,8 @@
 template <class T >
 void vil3d_resample_simple(const vil3d_image_view< T >& src_image,
                            vil3d_image_view< T >& dst_image,
-                           const double dx, 
-                           const double dy, 
+                           const double dx,
+                           const double dy,
                            const double dz);
 
 #endif // vil3d_resample_simple_h_

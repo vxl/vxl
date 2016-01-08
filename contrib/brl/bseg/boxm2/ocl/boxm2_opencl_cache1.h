@@ -62,15 +62,15 @@ class boxm2_opencl_cache1: public vbl_ref_count
     bocl_mem* get_data_new(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes = 0, bool read_only = true);
 
     //: returns a flat bocl_mem of a certain size
-    bocl_mem* alloc_mem(vcl_size_t num_bytes, void* cpu_buff=NULL, vcl_string id="bocl_mem in pool"); 
-    void      unref_mem(bocl_mem* mem); 
+    bocl_mem* alloc_mem(vcl_size_t num_bytes, void* cpu_buff=NULL, vcl_string id="bocl_mem in pool");
+    void      unref_mem(bocl_mem* mem);
     void      free_mem(bocl_mem* mem);
-    void      free_mem_pool(); 
+    void      free_mem_pool();
 
     //: empties out cache, deletes all bocl_mem*s
     bool clear_cache();
     //: calls clFinish so halts cpp code
-    bool finish_queue(); 
+    bool finish_queue();
 
     //: check if max_bytes_in_cache is hit and call clear_cache() if necessary
     bool clear_cache_if_necessary();
@@ -80,18 +80,18 @@ class boxm2_opencl_cache1: public vbl_ref_count
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
     void deep_replace_data(boxm2_block_id id, vcl_string type, bocl_mem* mem, bool read_only=true);
-    
+
     //: deep_remove_data removes this id and type from ocl cache, as well as the cpu cache
-    void deep_remove_data(boxm2_block_id id, vcl_string type, bool write_out=true); 
+    void deep_remove_data(boxm2_block_id id, vcl_string type, bool write_out=true);
 
     //: shallow_remove_data removes data with id and type from ocl cache only
     void shallow_remove_data(boxm2_block_id id, vcl_string type);
 
-    //: removes block data with id from opencl cache only, caution if block data changed: this method does not enqueu a read event before deletion! 
+    //: removes block data with id from opencl cache only, caution if block data changed: this method does not enqueu a read event before deletion!
     void shallow_remove_block(boxm2_block_id id);
 
     //: to string method prints out LRU order
-    vcl_string to_string(); 
+    vcl_string to_string();
 
   private:
 
@@ -102,9 +102,9 @@ class boxm2_opencl_cache1: public vbl_ref_count
     boxm2_cache1_sptr cpu_cache_;
 
     //: maximum number of blocks this cache will allow (eventually this will become smart)
-    void lru_push_front( boxm2_block_id id ); 
+    void lru_push_front( boxm2_block_id id );
     bool lru_remove_last(boxm2_block_id& id); //removes all data and block with this ID. returns false if lru is empty
-    vcl_list<boxm2_block_id> lru_order_; 
+    vcl_list<boxm2_block_id> lru_order_;
     unsigned int maxBlocksInCache;
     unsigned long bytesInCache_;
     unsigned long maxBytesInCache_;

@@ -154,7 +154,7 @@ vgui_slider_tableau::update_location( int newx, int newy )
     loc_ = last_loc_ + (newx - last_x_) / vp[2];
   } else {
     loc_ = last_loc_ + (newy - last_y_) / vp[3];
-  }    
+  }
   if( loc_ < 0.0f ) {
     loc_ = 0.0f;
   } else if( loc_ > 1.0f ) {

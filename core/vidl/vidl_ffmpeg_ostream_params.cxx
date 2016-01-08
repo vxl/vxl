@@ -13,7 +13,7 @@
 #include <vidl/vidl_config.h>
 
 #if VIDL_HAS_FFMPEG
-// some versions of FFMPEG require this definition before including 
+// some versions of FFMPEG require this definition before including
 // the headers for C++ compatibility
 #define __STDC_CONSTANT_MACROS
 #endif // VIDL_HAS_FFMPEG

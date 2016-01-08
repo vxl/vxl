@@ -7,15 +7,15 @@
 // \author J.L. Mundy
 // \brief A set of filter operations based on Gaussian derivatives
 //
-// Provides a set of 2nd derivative filter responses at each pixel over 
-// scale and orientation. The scale values are spaced at harmonic 
+// Provides a set of 2nd derivative filter responses at each pixel over
+// scale and orientation. The scale values are spaced at harmonic
 // intervals across the range. That is, the scale ratio is the nth root
 // of the scale range. The input image is downsampled to form the scale
-// pyramid. The anisotropic (in general) 2nd derivative filter is applied 
+// pyramid. The anisotropic (in general) 2nd derivative filter is applied
 // with the same max and min Gaussian standard deviations, lambda0,
 // and lambda1, at each level of the scale pyramid. At each level a search
 // over orientations is made and the maximum response is retained in the
-// filter response output. If the operator is isotropic, i.e., 
+// filter response output. If the operator is isotropic, i.e.,
 // lambda0 == lambda1, no search over orientations is carried out.
 // \verbatim
 //  Modifications
@@ -33,7 +33,7 @@ class brip_filter_bank
  public:
 
   brip_filter_bank(): ni_(0), nj_(0),n_levels_(0), scale_ratio_(1.0),
-    lambda0_(1.0f), lambda1_(1.0f), theta_interval_(0.0f), 
+    lambda0_(1.0f), lambda1_(1.0f), theta_interval_(0.0f),
     cutoff_ratio_(0.01f){}
 
   brip_filter_bank(unsigned n_levels, double scale_range, float lambda0,
@@ -63,7 +63,7 @@ class brip_filter_bank
   //: full set of filter responses
   vcl_vector<vil_image_view<float> > responses() const{
     return filter_responses_;}
-  //: save filter responses as individual images  
+  //: save filter responses as individual images
   bool save_filter_responses(vcl_string const& dir) const;
   bool load_filter_responses(vcl_string const& dir, unsigned n_levels);
 

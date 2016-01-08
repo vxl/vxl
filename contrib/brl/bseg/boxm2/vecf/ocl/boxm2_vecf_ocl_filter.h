@@ -21,14 +21,14 @@
 class boxm2_vecf_ocl_filter
 {
  public:
-  //: Constructor. 
+  //: Constructor.
   boxm2_vecf_ocl_filter(boxm2_scene_sptr& source_scene,
                                  boxm2_scene_sptr& temp_scene,
                                  boxm2_opencl_cache_sptr ocl_cache);
 
   ~boxm2_vecf_ocl_filter();
 
-  
+
   //: transform a scene of arbitrary size, block by block
   // no interpolation
   bool filter(vcl_vector<float> const& weights, unsigned num_iterations = 1);
@@ -46,7 +46,7 @@ class boxm2_vecf_ocl_filter
   int apptypesize_;//size of the appearance model in bytes
   vcl_string app_type_; //type of appearance
 
-  //filter kernel and args 
+  //filter kernel and args
   bocl_kernel * filter_kern;
   bocl_mem_sptr centerX;
   bocl_mem_sptr centerY;

@@ -8,7 +8,7 @@
 // \file
 // \brief Iterators over pixels in a frame
 //
-// \author Matt Leotta 
+// \author Matt Leotta
 // \date 16 Jan 2006
 //
 // This file contains the classes and functions to use pixel iterators
@@ -26,7 +26,7 @@
 
 //: Abstract pixel iterator base class
 // A concrete pixel iterator for each pixel format is
-// derived from this class (see vidl_pixel_format.txx) 
+// derived from this class (see vidl_pixel_format.txx)
 class vidl_pixel_iterator
 {
   public:

@@ -124,10 +124,10 @@ vcl_ostream& vgl_polygon<T>::print(vcl_ostream& os) const
       if (sheets_[s].size()==0)
         os << "(empty)";
       else{
-	os << " nverts = " << sheets_[s].size() << '\n';
-	for (unsigned int p = 0; p < sheets_[s].size(); ++p)
+        os << " nverts = " << sheets_[s].size() << '\n';
+        for (unsigned int p = 0; p < sheets_[s].size(); ++p)
         os << "( " << sheets_[s][p].x() << " , " << sheets_[s][p].y() << " ) ";
-	os << '\n';
+        os << '\n';
       }
     }
   }
@@ -151,7 +151,7 @@ vcl_istream& vgl_polygon<T>::read(vcl_istream& is){
     is >> s; // Sheet
     is >> k;
     is >> s; // nverts or empty
-	 if(s == "(empty)")
+         if(s == "(empty)")
       return is;
     is >> s;// =
     unsigned nv;
@@ -166,7 +166,7 @@ vcl_istream& vgl_polygon<T>::read(vcl_istream& is){
       vgl_point_2d<T> pt(x, y);
       sheets_[sh].push_back(pt);
     }
-  }    
+  }
   return is;
 }
 

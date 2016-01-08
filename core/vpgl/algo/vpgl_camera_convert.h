@@ -120,7 +120,7 @@ class vpgl_generic_camera_convert
   //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera
   static bool convert( vpgl_geo_camera& geocam, int ni, int nj, double height,
                        vpgl_generic_camera<double> & gen_cam, unsigned level = 0);
-  
+
   //: Convert a geocam (transformtaion matrix read from a geotiff header + an lvcs) to a generic camera using the specified ray direction (not necessarily nadir rays)
   //  basically creates a camera with parallel rays but the rays can be in any direction
   static bool convert( vpgl_geo_camera& geocam, int ni, int nj, double height, vgl_vector_3d<double>& dir,

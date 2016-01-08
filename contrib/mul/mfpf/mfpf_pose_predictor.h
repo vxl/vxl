@@ -15,7 +15,7 @@
 
 
 //: Types of 2D transformation
-// translation=(tx,ty), rigid=(tx,ty,A), 
+// translation=(tx,ty), rigid=(tx,ty,A),
 // zoom=(tx,ty,s), similarity = (tx,ty,scosA,ssinA)
 enum mfpf_pose_type { translation,rigid,zoom,similarity };
 
@@ -87,7 +87,7 @@ class mfpf_pose_predictor
   //: Which sort of transformation to use
   void set_pose_type(const mfpf_pose_type&);
 
-  //: Define region to be used 
+  //: Define region to be used
   void set(const vcl_vector<mbl_chord>& roi,
            double ref_x, double ref_y,
            short norm_method=1);

@@ -16,7 +16,7 @@ osl_edge::osl_edge(int n, osl_vertex *a, osl_vertex *b)
   : osl_edgel_chain(n)
   , v1(a)
   , v2(b)
-{ 
+{
 #if ALLOW_CORELEAKS
   ref();
 #endif
@@ -36,7 +36,7 @@ osl_edge::osl_edge(osl_edgel_chain const &ec, osl_vertex *a, osl_vertex *b)
   v2->ref();
 }
 
-osl_edge::~osl_edge() { 
+osl_edge::~osl_edge() {
 #if !ALLOW_CORELEAKS
   v1->unref();
   v2->unref();

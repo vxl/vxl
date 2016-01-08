@@ -8,7 +8,7 @@
 
 
 static void create_raw_image_stream()
-{    
+{
     vcl_string root = testlib_root_dir();
     vcl_string base = root + "/contrib/brl/bbas/bil/tests/file_read_data/";
     vcl_string rawFile = base+"test_raw_image_stream.raw";

@@ -209,7 +209,7 @@ struct vul_file
   { return strip_extension(filename.c_str()); }
 
 #endif
-  
+
   static vcl_time_t time_modified(char const* filename);
   static vcl_time_t time_modified(std::string const& filename) {
     return time_modified(filename.c_str());

@@ -206,7 +206,7 @@ bool brec_learner_layer_n_update_stats_process_cons(bprb_func_process& pro)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("brec_part_hierarchy_learner_sptr");      // learner instance
-  input_types.push_back("brec_part_hierarchy_detector_sptr");      // a detector instance 
+  input_types.push_back("brec_part_hierarchy_detector_sptr");      // a detector instance
   input_types.push_back("unsigned");      // n: layer id
   input_types.push_back("unsigned");      // k: class id
   input_types.push_back("vcl_string");      // output file to save histograms in matlab .m file format
@@ -237,7 +237,7 @@ bool brec_learner_layer_n_update_stats_process(bprb_func_process& pro)
 
   hl->layer_n_collect_stats(hd, n, k);
   hl->print_to_m_file_layer_n(output_file, k, false);
-  
+
   return true;
 }
 

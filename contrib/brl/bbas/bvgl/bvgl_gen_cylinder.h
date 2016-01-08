@@ -55,7 +55,7 @@ class bvgl_gen_cylinder{
 
  //: the total pointset contained in all the cross sections (may duplicate points)
  vgl_pointset_3d<double> aggregate_pointset() const;
- 
+
  //: displays for debugging purposes
  // may be specialized to segment the cylinder into regions
  virtual void display_axis_spline(vcl_ofstream& ostr) const;

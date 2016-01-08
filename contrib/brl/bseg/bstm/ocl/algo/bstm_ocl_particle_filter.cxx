@@ -23,7 +23,7 @@ bstm_ocl_particle_filter::bstm_ocl_particle_filter(bocl_device_sptr device, bstm
 {
   //get blocks that intersect the provided bounding box.
   //vcl_vector<bstm_block_id> relevant_blocks = scene_->get_block_ids(initial_bb, start_t);
-  
+
   //initially, each particle is the same bb
   vcl_vector<vgl_orient_box_3d<double> > initial_bbs;
 
@@ -452,7 +452,7 @@ void bstm_ocl_particle_filter::resample(unsigned prev_time, unsigned cur_time)
     resampled_inft.push_back( inft_[cur_time - start_t_][j-1]);
   }
 
-  //delete last 
+  //delete last
   bb_.pop_back();
   R_.pop_back();
   T_.pop_back();

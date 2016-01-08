@@ -53,7 +53,7 @@ void bwm_tableau_cam::create_polygon_mesh()
     return ;
   }
   vsol_polygon_3d_sptr poly3d;
-  
+
   //vgl_homg_plane_3d<double> plane(0,0,1,-740);
   //my_observer_->set_proj_plane(plane);
   //vcl_cout << "setting proj plane: " << plane << vcl_endl;
@@ -662,7 +662,7 @@ void bwm_tableau_cam::edit_region_weights()
     regions.push_back(dms.ground_plane()[0]);
   for (unsigned i = 0; i < objs.size(); i++)
     regions.push_back(objs[i]);
-  
+
   // for padding to align fields
   unsigned max_string_size = 0;
   for (vcl_vector<depth_map_region_sptr>::iterator rit = regions.begin(); rit != regions.end(); ++rit) {
@@ -713,7 +713,7 @@ void bwm_tableau_cam::save_depth_map_scene()
   // save depth_map_scene
   vcl_string path = bwm_utils::select_file();
   my_observer_->save_depth_map_scene(path);
-  
+
   // save associated weight parameters
   vcl_string dir = vul_file::dirname(path);
   vcl_string weight_file = dir + "/weight_param.txt";
@@ -735,7 +735,7 @@ vcl_vector<vcl_string> bwm_tableau_cam::set_land_types()
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
   vcl_string road_junction_txt = "./road_junction_category.txt";
   volm_osm_category_io::load_road_junction_table(road_junction_txt, road_junction_table);
-  
+
   for (vcl_map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
     m.insert(vcl_pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
 

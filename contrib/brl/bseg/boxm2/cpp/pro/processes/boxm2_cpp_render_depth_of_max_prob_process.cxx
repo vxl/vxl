@@ -54,7 +54,7 @@ bool boxm2_cpp_render_depth_of_max_prob_process_cons(bprb_func_process& pro)
 bool boxm2_cpp_render_depth_of_max_prob_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_render_depth_of_max_prob_process_globals;
-  
+
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
@@ -93,6 +93,6 @@ bool boxm2_cpp_render_depth_of_max_prob_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, exp_img);
   pro.set_output_val<vil_image_view_base_sptr>(1, prob_img);
   pro.set_output_val<vil_image_view_base_sptr>(2, vis_img);
-  
+
   return true;
 }

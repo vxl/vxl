@@ -15,7 +15,7 @@ void vil3d_fill_boundary(vil3d_image_view<bool>& image);
 //  labelling boundary pixels and background pixels
 //  that border the boundary.
 void label_boundary_and_bkg(vil3d_image_view<int> &image,
-                            int i,int j, int k, 
+                            int i,int j, int k,
                             int boundary_label,
                             int background_label);
 

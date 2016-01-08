@@ -98,7 +98,7 @@ static void vbl_test_batch_multimap2()
   bmmap2.assign(test_data.begin(), test_data.end());
   TEST("batch_multimap::assign && operator ==", bmmap == bmmap2, true);
 
- 
+
   vcl_stable_sort(test_data.begin(), test_data.end(), vbl_batch_multimap<int, vcl_string>::value_compare_t(vcl_less<int>()));
   bmmap2.assign_sorted(test_data.begin(), test_data.end());
   TEST("Check assign_sorted() kept stable sort value order",

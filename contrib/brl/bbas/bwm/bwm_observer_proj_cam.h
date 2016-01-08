@@ -43,7 +43,7 @@ class bwm_observer_proj_cam : public bwm_observer_cam
   vcl_ostream& print_camera(vcl_ostream& s);
   //: read various file formats for projective/perspective cameras.
   // include ni and nj to form default principal point.
-  static vpgl_camera<double>* 
+  static vpgl_camera<double>*
     read_camera(vcl_string cam_path, vcl_string subtype, unsigned ni = 0,
                 unsigned nj = 0);
 

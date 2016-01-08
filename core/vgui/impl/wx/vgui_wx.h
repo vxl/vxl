@@ -37,7 +37,7 @@ private:
 
   //: Destructor.
   virtual ~vgui_wx();
-  
+
   //: Initialize the wxWidgets GUI framework.
   virtual void init(int&, char**);
 

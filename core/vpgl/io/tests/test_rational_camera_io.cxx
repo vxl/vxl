@@ -30,7 +30,7 @@ static void test_rational_camera_io()
   vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v,
                                        sx, ox, sy, oy, sz, oz,
                                        su, ou, sv, ov);
-  
+
   vsl_b_ofstream bp_out("test_rational_camera_io.tmp");
   TEST("Created test_rational_camera_io.tmp for writing",(!bp_out), false);
   vsl_b_write(bp_out, rat_cam);

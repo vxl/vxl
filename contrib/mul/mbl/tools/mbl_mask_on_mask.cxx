@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   mbl_mask maskA, maskB;
   mbl_load_mask(maskA, maskA_filename().c_str());
   mbl_load_mask(maskB, maskB_filename().c_str());
-  
+
   try { mbl_mask_on_mask(maskA, maskB); }
   catch (vcl_exception & e)
   {

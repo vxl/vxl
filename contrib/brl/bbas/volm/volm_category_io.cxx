@@ -24,7 +24,7 @@ bool volm_land_layer::contains(vcl_string name)
 }
 
 
-// load the pre-defined transformation from nlcd/geo cover/osm to volm_land 
+// load the pre-defined transformation from nlcd/geo cover/osm to volm_land
 bool volm_osm_category_io::load_category_table(vcl_string const& filename,
                                                vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> & land_category_table)
 {
@@ -267,10 +267,10 @@ vcl_map<int, double> create_geo_cover_hyp_increments_for_roads()
   m[volm_osm_category_io::NLCD_SEDGE]              = 4;
   m[volm_osm_category_io::NLCD_CROPS]              = 10;
   m[volm_osm_category_io::NLCD_PASTURE]            = 10;
-  
+
   m[volm_osm_category_io::NLCD_EMERGENT_WETLAND]   = 4;
   m[volm_osm_category_io::NLCD_WOODY_WETLAND]      = 4;
-  
+
   m[volm_osm_category_io::NLCD_DEVELOPED_HIGH]     = 4;
   m[volm_osm_category_io::NLCD_DEVELOPED_MED]      = 4;
   m[volm_osm_category_io::NLCD_DEVELOPED_LOW]      = 4;

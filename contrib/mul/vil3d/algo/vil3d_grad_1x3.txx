@@ -23,9 +23,9 @@ void vil3d_grad_1x3_1dir(const srcT *src,
                          vcl_ptrdiff_t igrad, vcl_ptrdiff_t jgrad, vcl_ptrdiff_t kgrad,
                          unsigned ni, unsigned nj, unsigned nk, accumT /*dummy*/ )
 {
-  for (unsigned k=0;k<nk;++k)    
+  for (unsigned k=0;k<nk;++k)
     for (unsigned j=0;j<nj;++j)
-    {      
+    {
       const srcT* s = src + ksrc*k + jsrc*j;
       gradT* g = grad + kgrad*k + jgrad*j;
 
@@ -76,7 +76,7 @@ void vil3d_grad_1x3(const vil3d_image_view<srcT>& src,
                         src.istep(), src.jstep(), src.kstep(),
                         grad_k_plane.istep(), grad_k_plane.jstep(), grad_k_plane.kstep(),
                         ni, nj, nk-2, srcT());
-    
+
     vil3d_slice_jk(grad_i_plane,0).fill(0.0f);
     vil3d_slice_jk(grad_i_plane,ni-1).fill(0.0f);
     vil3d_slice_ik(grad_j_plane,0).fill(0.0f);

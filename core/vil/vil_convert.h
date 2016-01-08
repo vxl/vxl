@@ -479,7 +479,7 @@ inline void vil_convert_merge_alpha(const vil_image_view<inP>& src,
 
   for (unsigned j = 0; j < src.nj(); ++j)
     for (unsigned i = 0; i < src.ni(); ++i)
-      for (unsigned k = 0; k < nplanes-1; ++k)	
+      for (unsigned k = 0; k < nplanes-1; ++k)
       { vil_convert_round_pixel<double,outP>()(src(i,j,nplanes-1)/255.0*src(i,j,k), dest(i,j,k)); }
 }
 
@@ -1183,10 +1183,10 @@ inline vil_image_view<outP> vil_convert_to_grey_using_rgb_weighting(
 // \code
 // vil_image_view<vil_rgb<float> > =
 //   vil_convert_cast(
-//     float(), 
+//     float(),
 //     vil_convert_to_component_order(
 //       vil_convert_to_n_planes(
-//         3, 
+//         3,
 //         vil_load(filename)
 //       )
 //     )

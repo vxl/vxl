@@ -64,7 +64,7 @@ typedef enum {
     EXS_JPEGLSLossy = 24,
     EXS_DeflatedLittleEndianExplicit = 25,
     EXS_JPEG2000LosslessOnly = 26,
-    EXS_JPEG2000 = 27    
+    EXS_JPEG2000 = 27
 } E_TransferSyntax;
 
 
@@ -126,27 +126,27 @@ public:
     inline E_ByteOrder getByteOrder() const { return byteOrder; }
     inline const char* getXferName() const { return xferName; }
     inline const char* getXferID() const { return xferID; }
-    inline OFBool isLittleEndian() const 
-    { 
-        return byteOrder == EBO_LittleEndian; 
+    inline OFBool isLittleEndian() const
+    {
+        return byteOrder == EBO_LittleEndian;
     }
     inline OFBool isBigEndian() const { return byteOrder == EBO_BigEndian; }
     inline OFBool isImplicitVR() const { return vrType == EVT_Implicit; }
     inline OFBool isExplicitVR() const { return vrType == EVT_Explicit; }
-    inline OFBool isEncapsulated() const 
-    { 
-        return encapsulated == EJE_Encapsulated; 
+    inline OFBool isEncapsulated() const
+    {
+        return encapsulated == EJE_Encapsulated;
     }
     inline OFBool isNotEncapsulated() const
-    { 
-        return encapsulated == EJE_NotEncapsulated; 
+    {
+        return encapsulated == EJE_NotEncapsulated;
     }
     inline Uint32 getJPEGProcess8Bit() const { return JPEGProcess8; }
     inline Uint32 getJPEGProcess12Bit() const { return JPEGProcess12;}
     inline E_StreamCompression getStreamCompression() const { return streamCompression;}
 
-    /* return the number of bytes needed to describe the tag, length, VR 
-    ** and any reserved fields for this transfer syntax when encoding the 
+    /* return the number of bytes needed to describe the tag, length, VR
+    ** and any reserved fields for this transfer syntax when encoding the
     ** specified VR.
     */
     Uint32 sizeofTagHeader(DcmEVR evr);

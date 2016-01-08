@@ -4,7 +4,7 @@
 
 //:
 // \file
-// \brief 
+// \brief
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  9/27/09
 //

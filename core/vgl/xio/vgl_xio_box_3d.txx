@@ -12,7 +12,7 @@
 //: Binary save self to stream.
 template<class T>
 void x_write(vcl_ostream &os, const vgl_box_3d<T> & p, vcl_string element_name)
-{  
+{
     vsl_basic_xml_element xml_element(element_name);
     xml_element.add_attribute("min_x", p.min_x());
     xml_element.add_attribute("min_y", p.min_y());

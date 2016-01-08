@@ -1,5 +1,5 @@
 //:
-// \file 
+// \file
 // \brief This program prints out the mouse position when the left mouse button is pressed.
 // It goes to the next image (or exits) whenever the mouse position is at the bottom of the screen (lower 10 pixels).
 // \author Peter Vanroose

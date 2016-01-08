@@ -106,7 +106,7 @@ def estimate_radiance_values(image, sun_el, sun_dist, sensor_el, solar_irrad=Non
   ref_sun_facing = boxm2_batch.get_output_float(id)
   boxm2_batch.remove_data(id)
   return (airlight, ref_horizontal, ref_sun_facing)
-  
+
 def save_sun_index(output_file_name, longitude, latitude, year, hour, minute, radius):
   boxm2_batch.init_process("bradSaveSunIndexProcess");
   boxm2_batch.set_input_string(0,output_file_name);
@@ -118,7 +118,7 @@ def save_sun_index(output_file_name, longitude, latitude, year, hour, minute, ra
   boxm2_batch.set_input_int(6,radius);
   status = boxm2_batch.run_process();
   return status
-  
+
 def sun_dir_bin(meta,illum_bin_filename):
   boxm2_batch.init_process("bradSunDirBinProcess");
   boxm2_batch.set_input_from_db(0,meta);
@@ -137,7 +137,7 @@ def prob_as_expected(image,atomicity):
   (id,type) = boxm2_batch.commit_output(0)
   image_prob = dbvalue(id,type)
   return image_prob
-  
+
 def fuse_beliefs(image1,image2,atomicity):
   boxm2_batch.init_process("bslFusionProcess")
   boxm2_batch.set_input_from_db(0,image1)
@@ -184,7 +184,7 @@ def vrml_write_box(vrml_filename, bbox, is_wire, r, g, b):
   boxm2_batch.set_input_float(9,g);
   boxm2_batch.set_input_float(10,b);
   boxm2_batch.run_process();
-  
+
 def vrml_write_origin(vrml_filename, axis_len):
   boxm2_batch.init_process("bvrmlWriteOriginAndAxesProcess");
   boxm2_batch.set_input_string(0,vrml_filename);
@@ -202,7 +202,7 @@ def vrml_write_point(vrml_filename, coords, radius, r, g, b ):
   boxm2_batch.set_input_float(6, g); # green
   boxm2_batch.set_input_float(7, b); # blue
   boxm2_batch.run_process();
-  
+
 def vrml_write_line(vrml_filename, pt1_coords, pt2_coords, r, g, b ):
   boxm2_batch.init_process("bvrmlWriteLineProcess");
   boxm2_batch.set_input_string(0,vrml_filename);
@@ -216,7 +216,7 @@ def vrml_write_line(vrml_filename, pt1_coords, pt2_coords, r, g, b ):
   boxm2_batch.set_input_float(8, g); # green
   boxm2_batch.set_input_float(9, b); # blue
   boxm2_batch.run_process();
-  
+
 def vrml_filter_ply(vrml_filename, ply_file, points_file, dist_threshold,nearest=False):
   boxm2_batch.init_process("bvrmlFilteredPlyProcess");
   boxm2_batch.set_input_string(0,vrml_filename);
@@ -225,7 +225,7 @@ def vrml_filter_ply(vrml_filename, ply_file, points_file, dist_threshold,nearest
   boxm2_batch.set_input_float(3,dist_threshold);
   boxm2_batch.set_input_bool(4,nearest);
   boxm2_batch.run_process();
-  
+
 def initialize_rng(seed=0):
   boxm2_batch.init_process("bstaInitializeRandomSeedProcess");
   boxm2_batch.set_input_unsigned(0,seed);
@@ -233,7 +233,7 @@ def initialize_rng(seed=0):
   (id,type) = boxm2_batch.commit_output(0)
   rng = dbvalue(id,type)
   return rng
-  
+
 def load_joint_hist3d(filename):
   boxm2_batch.init_process("bstaLoadJointHist3dProcess");
   boxm2_batch.set_input_string(0,filename);
@@ -241,7 +241,7 @@ def load_joint_hist3d(filename):
   (h_id,h_type) = boxm2_batch.commit_output(0);
   h = dbvalue(h_id, h_type);
   return h
-  
+
 def texture_classifier_kernel_margin(dictionary):
   boxm2_batch.init_process("sdetTextureClassifierKernelMarginProcess");
   boxm2_batch.set_input_string(0,dictionary);
@@ -250,7 +250,7 @@ def texture_classifier_kernel_margin(dictionary):
   margin = boxm2_batch.get_output_int(m_id);
   boxm2_batch.remove_data(m_id);
   return margin;
-  
+
 def texture_classifier(tcl, dictionary, img, block_size=64):
   boxm2_batch.init_process("sdetTextureClassifierProcess");
   boxm2_batch.set_input_from_db(0, tcl);
@@ -261,7 +261,7 @@ def texture_classifier(tcl, dictionary, img, block_size=64):
   (img_id, img_type) = boxm2_batch.commit_output(0);
   img_classified = dbvalue(img_id, img_type);
   return img_classified
-  
+
 def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_interval,laplace_radius,gauss_radius,k,n_samples):
   boxm2_batch.init_process("sdetCreateTextureClassifierProcess");
   boxm2_batch.set_input_float(0,lambda0);
@@ -277,7 +277,7 @@ def create_texture_classifier(lambda0, lambda1,n_scales,scale_interval,angle_int
   (tclsf_id, tclsf_type)=boxm2_batch.commit_output(0);
   tclsf = dbvalue(tclsf_id, tclsf_type);
   return tclsf;
-  
+
 def texture_training(tclsf, image, exp_poly_path,texton_dict_path, name_of_category="mod", compute_textons=True):
   boxm2_batch.init_process("sdetTextureTrainingProcess");
   boxm2_batch.set_input_from_db(0,tclsf);
@@ -296,7 +296,7 @@ def print_texton_dictionary(tclsf, texton_dict_path, print_mode="inter_dist"):
   boxm2_batch.set_input_string(1,texton_dict_path);
   boxm2_batch.set_input_string(2,print_mode);
   boxm2_batch.run_process();
-  
+
 def texture_classifier_exp_img(tclsf, dict_expected, fimage, fexp, block_size=64):
   boxm2_batch.init_process("sdetExpImgClassifierProcess");
   boxm2_batch.set_input_from_db(0, tclsf);
@@ -318,13 +318,13 @@ def solve_gain_offset(model_image, test_image, test_mask):
   (map_image_id, map_image_type) = boxm2_batch.commit_output(0);
   map_image = dbvalue(map_image_id, map_image_type);
   return map_image
-  
+
 def triangulate_site_corrs(site_file, out_file):
   boxm2_batch.init_process("bwmTriangulateCorrProcess");
   boxm2_batch.set_input_string(0,site_file);
   boxm2_batch.set_input_string(1,out_file);
   boxm2_batch.run_process();
-  
+
 def generate_depth_maps(depth_scene_file, output_folder, output_name_prefix, downsampling_level=0):
   boxm2_batch.init_process("bpglGenerateDepthMapsProcess");
   boxm2_batch.set_input_string(0,depth_scene_file);
@@ -332,9 +332,9 @@ def generate_depth_maps(depth_scene_file, output_folder, output_name_prefix, dow
   boxm2_batch.set_input_string(2,output_folder);
   boxm2_batch.set_input_string(3,output_name_prefix);
   boxm2_batch.run_process();
-  
 
-  
-  
+
+
+
 
 

@@ -76,7 +76,7 @@ static void test_proj_camera()
   vgl_homg_point_2d<double> y3b = P1.project( l3.point_finite() );
   TEST_NEAR( "point backprojection", y3.x() * y3b.w(), y3b.x() * y3.w(), 1e-06 );
   vgl_ray_3d<double> r = P1.backproject_ray( y3);
-  vgl_point_3d<double> c(P1.camera_center()); 
+  vgl_point_3d<double> c(P1.camera_center());
   bool org = c==r.origin();
   vgl_vector_3d<double> dirr = r.direction();
   double dp = dot_product(l3.direction(), dirr);

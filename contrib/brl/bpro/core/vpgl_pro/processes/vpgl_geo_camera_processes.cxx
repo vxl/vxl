@@ -27,7 +27,7 @@ bool vpgl_load_geo_camera_process_cons(bprb_func_process& pro)
 
   bool good = pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
-  
+
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs;  // initialize lvcs to empty
   pro.set_input(1, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
 
@@ -300,7 +300,7 @@ bool vpgl_geo_footprint_process2(bprb_func_process& pro)
   vil_image_resource_sptr img_res = vil_load_image_resource(geotiff_filename.c_str());
   unsigned ni = img_res->ni();
   unsigned nj = img_res->nj();
-  
+
   // get the geo camera of the input image
   vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
   if (!geocam) {
@@ -389,7 +389,7 @@ bool vpgl_load_geo_camera_process2_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string"); // image name
   input_types.push_back("unsigned"); // image size ni
-  input_types.push_back("unsigned"); // nj 
+  input_types.push_back("unsigned"); // nj
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vpgl_camera_double_sptr");  //camera output
   return pro.set_input_types(input_types)
@@ -458,12 +458,12 @@ bool vpgl_load_geo_camera_process3(bprb_func_process& pro)
 
 
 
-//: construct the camera reading from a tfw file 
+//: construct the camera reading from a tfw file
 bool vpgl_save_geo_camera_tfw_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr"); 
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vpgl_camera_double_sptr");
+  input_types.push_back("vcl_string");
   vcl_vector<vcl_string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -480,7 +480,7 @@ bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
   // get the inputs
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
   vcl_string filename = pro.get_input<vcl_string>(1);
-  
+
   vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
   if (!geo_cam) {
     vcl_cerr << "vpgl_save_geo_camera_tfw_process: Cannot cast camera to a geo cam! Exiting!\n";
@@ -497,6 +497,6 @@ bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
   ofs << trans_matrix[0][3] << '\n';
   ofs << trans_matrix[1][3] << '\n';
   ofs.close();
-  
+
   return true;
 }

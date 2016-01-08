@@ -16,7 +16,7 @@ void bvxm_register::register_datatype()
 
 void bvxm_register::register_process()
 {
- 
+
   //Voxel world processes
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_create_voxel_world_process, "bvxmCreateVoxelWorldProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_detect_changes_process, "bvxmDetectChangesProcess");

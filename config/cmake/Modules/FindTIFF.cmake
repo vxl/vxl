@@ -28,7 +28,7 @@ IF( NOT TIFF_FOUND )
   # will not have the v3p tiff library, so make sure the headers
   # exist.
   #
-  
+
   IF( NOT TIFF_FOUND )
     IF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
 
@@ -36,8 +36,8 @@ IF( NOT TIFF_FOUND )
       SET( TIFF_INCLUDE_DIR ${tiff_BINARY_DIR} ${tiff_SOURCE_DIR})
       SET( TIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/tiff)
       SET( TIFF_LIBRARIES tiff )
-  
+
     ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
   ENDIF( NOT TIFF_FOUND )
-  
+
 ENDIF(NOT TIFF_FOUND)

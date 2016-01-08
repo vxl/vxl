@@ -163,12 +163,12 @@ line.
 
 @subsection Required arguments
 
-As shown in the example above, a very simple method to set an argument as 
+As shown in the example above, a very simple method to set an argument as
 obligatory is passing a @code{0} (or an empty string) as the flag string.
 If there are two or more arguments, the parser extracts these arguments
 using the order they appear on the command line.
 
-In that case, there is not a flag string. This method to provide obligatory 
+In that case, there is not a flag string. This method to provide obligatory
 arguments is very common (i.e. when you use operating system shells). However,
 if you have many arguments or want a more readable interface, you could prefer
 a required argument which includes a flag string.

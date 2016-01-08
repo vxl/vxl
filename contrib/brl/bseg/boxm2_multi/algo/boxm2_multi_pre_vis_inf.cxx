@@ -293,7 +293,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
   kern->set_local_arg( lthreads[0]*lthreads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
   float transfer_time = ttime.all();
 
- 
+
   //execute kernel
   kern->execute(queue, 2, lthreads, gThreads);
   //clear render kernel args so it can reset em on next execution

@@ -73,7 +73,7 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
 
 
     float t  = pro.get_input<float>(k++);
-    
+
     vgl_point_3d<double> p0(x0,y0,z0);
     vgl_point_3d<double> p1(x1,y1,z1);
     vgl_vector_3d<double > dir = p1-p0;

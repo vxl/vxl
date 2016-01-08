@@ -25,7 +25,7 @@ bool boxm2_scene_vrml_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -45,7 +45,7 @@ bool boxm2_scene_vrml_process(bprb_func_process& pro)
   bvrml_write::write_vrml_header(ofs);
 
   vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
-  
+
   // obtain the largest id along z direction
   int max_z_id = 0;
   for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit)

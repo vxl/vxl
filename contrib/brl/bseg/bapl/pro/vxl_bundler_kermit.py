@@ -43,7 +43,7 @@ for i in range(0,img_cnt,1):
   (id,type) = boxm_batch.commit_output(0);
   image = dbvalue(id,type);
   imgs.append(image);
-  
+
   boxm_batch.init_process("vilImageSizeProcess");
   boxm_batch.set_input_from_db(0, image);
   boxm_batch.run_process();
@@ -55,7 +55,7 @@ for i in range(0,img_cnt,1):
     sizes.append(ni);
   else:
     sizes.append(nj);
-    
+
 # set up the connectivity table to be used for computing tracks from the matches
 boxm_batch.init_process("baplCreateConnTableProcess");
 boxm_batch.set_input_int(0, img_cnt);
@@ -88,7 +88,7 @@ for i in range(0,img_cnt,1):
     boxm_batch.set_input_from_db(0,out_image);
     boxm_batch.set_input_string(1,out_img_name%i);
     boxm_batch.run_process();
-    
+
   # add the data for this image to the connectivity graph to enable track computation later
   boxm_batch.init_process("baplAddImageKeysProcess");
   boxm_batch.set_input_from_db(0, conn_table);
@@ -125,7 +125,7 @@ for ii in range(0, len(pairs), 1):
   boxm_batch.run_process();
   (id,type) = boxm_batch.commit_output(0);
   match_set = dbvalue(id,type);
-  
+
   boxm_batch.init_process("baplMatchDisplayProcess");
   boxm_batch.set_input_from_db(0, imgs[i]);
   boxm_batch.set_input_from_db(1, imgs[j]);
@@ -135,7 +135,7 @@ for ii in range(0, len(pairs), 1):
   out_img1 = dbvalue(id,type);
   (id,type) = boxm_batch.commit_output(1);
   out_img2 = dbvalue(id,type);
-  
+
   boxm_batch.init_process("vilSaveImageViewProcess");
   boxm_batch.set_input_from_db(0,out_img1);
   boxm_batch.set_input_string(1,out_match_img_name%(i,j));
@@ -145,7 +145,7 @@ for ii in range(0, len(pairs), 1):
   boxm_batch.set_input_from_db(0,out_img2);
   boxm_batch.set_input_string(1,out_match_img_name%(j,i));
   boxm_batch.run_process();
-  
+
   boxm_batch.init_process("baplRefineMatchProcess");
   boxm_batch.set_input_from_db(0, match_set);
   boxm_batch.set_input_float(1, outlier_thresholds[ii]);
@@ -153,7 +153,7 @@ for ii in range(0, len(pairs), 1):
   boxm_batch.run_process();
   (id,type) = boxm_batch.commit_output(0);
   refined_match_set = dbvalue(id,type);
-  
+
   boxm_batch.init_process("baplMatchDisplayProcess");
   boxm_batch.set_input_from_db(0, imgs[i]);
   boxm_batch.set_input_from_db(1, imgs[j]);
@@ -173,7 +173,7 @@ for ii in range(0, len(pairs), 1):
   boxm_batch.set_input_from_db(0,out_img2);
   boxm_batch.set_input_string(1,out_match_img_refined_name%(j,i));
   boxm_batch.run_process();
-  
+
   # add this match set to the connectivity graph
   boxm_batch.init_process("baplAddMatchSetProcess");
   boxm_batch.set_input_from_db(0, conn_table);
@@ -187,6 +187,6 @@ boxm_batch.set_input_string(1, out_video_site_file);      # edit file to add ima
 boxm_batch.run_process();
 
 
-  
-  
+
+
 

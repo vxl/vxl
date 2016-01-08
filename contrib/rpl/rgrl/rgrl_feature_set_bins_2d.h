@@ -7,7 +7,7 @@
 //
 // \verbatim
 //  Modifications
-//   Gehua Yang -- Modified from rgrl_feature_set_location class. 
+//   Gehua Yang -- Modified from rgrl_feature_set_location class.
 //      The reason is rsdl_bins has problems on finding k-nearest points
 // \endverbatim
 

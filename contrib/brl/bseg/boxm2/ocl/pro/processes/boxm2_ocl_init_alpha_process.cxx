@@ -163,7 +163,7 @@ bool boxm2_ocl_init_alpha_process(bprb_func_process& pro)
         opencl_cache->shallow_remove_data(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
     }
-    
+
     vcl_cout<<"Update Parents Alpha: "<<gpu_time<<vcl_endl;
     return true;
 }

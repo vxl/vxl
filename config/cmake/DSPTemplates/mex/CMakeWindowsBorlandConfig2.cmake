@@ -1,4 +1,4 @@
-# microsoft specific config file 
+# microsoft specific config file
 
 FIND_PATH(BCB_BIN_PATH bcc32.exe
   "C:/Program Files/Borland/CBuilder5/Bin"
@@ -16,7 +16,7 @@ SET (CMAKE_C_COMPILER ${BCB_BIN_PATH}/bcc32  CACHE FILEPATH
      "Name of C compiler used.")
 SET (CMAKE_CFLAGS  "-w- -whid -waus -wpar" CACHE STRING
      "Flags for C compiler.")
-SET (CMAKE_BUILD_TYPE Debug CACHE STRING 
+SET (CMAKE_BUILD_TYPE Debug CACHE STRING
 "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel")
 SET (CMAKE_CXX_FLAGS_RELEASE "-O2" CACHE STRING
         "Flags used by the compiler during release builds.)")

@@ -288,7 +288,7 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
   // obtain the median
   vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj);
   out_img->fill(-1.0f);
-  for (unsigned i = 0; i < ni; i++) 
+  for (unsigned i = 0; i < ni; i++)
   {
     for (unsigned j = 0; j < nj; j++)
     {

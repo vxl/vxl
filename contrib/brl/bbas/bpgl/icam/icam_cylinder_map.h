@@ -33,10 +33,10 @@ class icam_cylinder_map : public vbl_ref_count
  public:
   //: Constructors
   icam_cylinder_map(): n_theta_(0), nz_(0),origin_(vgl_point_3d<double>()),
-		       radius_(1.0), upper_height_(1.0), lower_height_(0.0){}
+                       radius_(1.0), upper_height_(1.0), lower_height_(0.0){}
   icam_cylinder_map(unsigned n_theta, unsigned nz,
-		    vgl_point_3d<double> const& pt, double radius,
-		    double h_upper, double h_lower = 0.0):
+                    vgl_point_3d<double> const& pt, double radius,
+                    double h_upper, double h_lower = 0.0):
   n_theta_(n_theta), nz_(nz), origin_(pt), radius_(radius),
     upper_height_(h_upper),lower_height_(h_lower){}
   //: Destructor
@@ -44,22 +44,22 @@ class icam_cylinder_map : public vbl_ref_count
 
   //: images must have RGB byte pixel type
   void set_data(vcl_vector<vil_image_view<vxl_byte> > const& images,
-		vcl_vector<vpgl_camera_double_sptr > const& cams){
+                vcl_vector<vpgl_camera_double_sptr > const& cams){
     images_ = images; cams_ = cams;}
     bool closest_camera(vgl_ray_3d<double> const& cyl_ray,
-			  vgl_point_3d<double> const& p,
-			  unsigned& cam_index,
-			  double& u, double& v) const;
+                          vgl_point_3d<double> const& p,
+                          unsigned& cam_index,
+                          double& u, double& v) const;
 
   bool map_cylinder();
   vil_image_view<vxl_byte> cyl_map() const{
     return cyl_map_;}
-  //assumes a color byte image 
+  //assumes a color byte image
   bool render_map(vil_image_view<vxl_byte>const& backgnd,
-		  vpgl_camera_double_sptr const& cam,
-		  double theta, vil_image_view<vxl_byte>& img,
-		  double scale = 1.0,
-		  float back_r = 0.0f, float back_g = 0.0f, float back_b = 255.0f);
+                  vpgl_camera_double_sptr const& cam,
+                  double theta, vil_image_view<vxl_byte>& img,
+                  double scale = 1.0,
+                  float back_r = 0.0f, float back_g = 0.0f, float back_b = 255.0f);
  protected:
   // number of samples in the map
   unsigned n_theta_;

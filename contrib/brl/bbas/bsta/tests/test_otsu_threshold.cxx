@@ -26,7 +26,7 @@ void test_otsu_threshold()
   h.upcount(96, 50);
   h.upcount(104, 10);
   h.upcount(112, 0);
-  
+
   vcl_cout << "Counts\n";
   for(unsigned i = 0; i<static_cast<unsigned>(bins); ++i)
     vcl_cout << "c[" << i << "] = " << h.counts(i) << '\n';
@@ -36,7 +36,7 @@ void test_otsu_threshold()
 
   TEST_NEAR("mean between bin indices"          , mean,           24.2963, 1e-4);
   TEST_NEAR("variance between bin indices", variance, 82.8752, 1e-4);
-  
+
 
   bsta_otsu_threshold<double> ot(h);
   unsigned t = ot.bin_threshold();
@@ -45,7 +45,7 @@ void test_otsu_threshold()
   double dt = ot.threshold();
   vcl_cout << "Otsu Threshold " << dt << '\n';
   TEST_NEAR("otsu_threshold"   , dt,  52 ,1e-06);
-  
+
 }
 
 TESTMAIN(test_otsu_threshold);

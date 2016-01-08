@@ -24,12 +24,12 @@ bool boxm2_write_scene_xml_process_cons(bprb_func_process& pro)
   //process takes 2 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
-  input_types_[1] = "vcl_string"; 
+  input_types_[1] = "vcl_string";
 
   // process has 1 output
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool ok = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  
+
   //default arguments - default filename is "scene"
   brdb_value_sptr filename = new brdb_value_t<vcl_string>("scene");
   pro.set_input(1, filename);
@@ -47,13 +47,13 @@ bool boxm2_write_scene_xml_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   boxm2_scene_sptr scene=pro.get_input<boxm2_scene_sptr>(i++);
-  vcl_string    filename=pro.get_input<vcl_string>(i++); 
+  vcl_string    filename=pro.get_input<vcl_string>(i++);
 
   //set xml path to reflect fname
-  vcl_string xmlPath = scene->xml_path(); 
-  vcl_string xmlDir = vul_file::dirname(xmlPath); 
-  scene->set_xml_path(xmlDir + "/" + filename + ".xml"); 
-  
+  vcl_string xmlPath = scene->xml_path();
+  vcl_string xmlDir = vul_file::dirname(xmlPath);
+  scene->set_xml_path(xmlDir + "/" + filename + ".xml");
+
   //make file and x_write to file
   vcl_ofstream ofile(scene->xml_path().c_str());
   x_write(ofile,(*scene.ptr()), "scene");

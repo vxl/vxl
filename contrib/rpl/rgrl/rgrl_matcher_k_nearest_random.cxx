@@ -40,7 +40,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   typedef rgrl_view::feature_vector feat_vector;
   typedef feat_vector::const_iterator feat_iter;
 
-  rgrl_match_set_sptr matches_sptr 
+  rgrl_match_set_sptr matches_sptr
     = new rgrl_match_set( from_set.type(), to_set.type(), from_set.label(), to_set.label() );
 
   //  get the features in the current view
@@ -59,14 +59,14 @@ compute_matches( rgrl_feature_set const&       from_set,
 
   // set up a vector of same from size to indicate which feature shall be used
   vcl_vector<bool> to_use( from.size(), true );
-  
+
   if( from.size() > max_num_ )
     generate_random_indices( to_use );
-  
+
   //  generate the matches for each feature of this feature type in the current region
   unsigned int k;
   feat_iter fitr;
-  for ( k=0, fitr = from.begin(); fitr != from.end(); ++fitr, ++k ) 
+  for ( k=0, fitr = from.begin(); fitr != from.end(); ++fitr, ++k )
     if( to_use[k] ) {
 
     rgrl_feature_sptr mapped = (*fitr)->transform( current_xform );
@@ -100,21 +100,21 @@ compute_matches( rgrl_feature_set const&       from_set,
 
 void
 rgrl_matcher_k_nearest_random::
-generate_random_indices( vcl_vector<bool>& to_use ) const 
+generate_random_indices( vcl_vector<bool>& to_use ) const
 {
   const unsigned size = to_use.size();
 
   // set all entries to false
   vcl_fill( to_use.begin(), to_use.end(), false );
-    
+
   unsigned num = 0;
   while( num < max_num_ ) {
-    
+
     unsigned index = random_.lrand32( size );
     // already marked?
     if( to_use[index] )
       continue;
-    
+
     // mark it
     // vcl_cout << index << ' ';
     to_use[index] = true;

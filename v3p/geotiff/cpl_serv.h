@@ -30,7 +30,7 @@
 #define CPL_SERV_H_INCLUDED
 
 /* ==================================================================== */
-/*	Standard include files.						*/
+/*        Standard include files.                                                */
 /* ==================================================================== */
 
 #include "geo_config.h"
@@ -63,23 +63,23 @@
 /*      Other standard services.                                        */
 /* ==================================================================== */
 #ifdef __cplusplus
-#  define CPL_C_START		extern "C" {
-#  define CPL_C_END		}
+#  define CPL_C_START                extern "C" {
+#  define CPL_C_END                }
 #else
 #  define CPL_C_START
 #  define CPL_C_END
 #endif
 
 #ifndef NULL
-#  define NULL	0
+#  define NULL        0
 #endif
 
 #ifndef FALSE
-#  define FALSE	0
+#  define FALSE        0
 #endif
 
 #ifndef TRUE
-#  define TRUE	1
+#  define TRUE        1
 #endif
 
 #ifndef MAX
@@ -109,26 +109,26 @@
 /*      VSI Services (just map directly onto Standard C services.       */
 /* ==================================================================== */
 
-#define VSIFOpen	fopen
-#define VSIFClose	fclose
-#define VSIFEof		feof
-#define VSIFPrintf	fprintf
-#define VSIFPuts	fputs
-#define VSIFPutc	fputc
-#define VSIFGets	fgets
-#define VSIRewind	rewind
+#define VSIFOpen        fopen
+#define VSIFClose        fclose
+#define VSIFEof                feof
+#define VSIFPrintf        fprintf
+#define VSIFPuts        fputs
+#define VSIFPutc        fputc
+#define VSIFGets        fgets
+#define VSIRewind        rewind
 #define VSIFSeek        fseek
 #define VSIFTell        ftell
 #define VSIFRead        fread
 
 #ifndef notdef
-#define VSICalloc(x,y)	_GTIFcalloc(x*y)
-#define VSIMalloc	_GTIFcalloc
-#define VSIFree	        _GTIFFree
+#define VSICalloc(x,y)        _GTIFcalloc(x*y)
+#define VSIMalloc        _GTIFcalloc
+#define VSIFree                _GTIFFree
 #define VSIRealloc      _GTIFrealloc
 #else
-#define VSICalloc(x,y)	(((char *) _GTIFcalloc(x*y+4)) + 4)
-#define VSIMalloc(x)	(((char *) _GTIFcalloc((x)+4)) + 4)
+#define VSICalloc(x,y)        (((char *) _GTIFcalloc(x*y+4)) + 4)
+#define VSIMalloc(x)        (((char *) _GTIFcalloc((x)+4)) + 4)
 #define VSIFree(x)      _GTIFFree(((char *) (x)) - 4)
 #define VSIRealloc(p,n) (((char *) _GTIFrealloc(((char *)p)-4,(n)+4)) + 4)
 #endif
@@ -149,7 +149,7 @@ void CPL_DLL *CPLCalloc( int, int );
 void CPL_DLL *CPLRealloc( void *, int );
 char CPL_DLL *CPLStrdup( const char * );
 
-#define CPLFree(x)	{ if( x != NULL ) VSIFree(x); }
+#define CPLFree(x)        { if( x != NULL ) VSIFree(x); }
 
 /* -------------------------------------------------------------------- */
 /*      Read a line from a text file, and strip of CR/LF.               */
@@ -199,14 +199,14 @@ CPL_C_END
 /*      Well known error codes.                                         */
 /* ==================================================================== */
 
-#define CPLE_AppDefined			1
-#define CPLE_OutOfMemory		2
-#define CPLE_FileIO			3
-#define CPLE_OpenFailed			4
-#define CPLE_IllegalArg			5
-#define CPLE_NotSupported		6
-#define CPLE_AssertionFailed		7
-#define CPLE_NoWriteAccess		8
+#define CPLE_AppDefined                        1
+#define CPLE_OutOfMemory                2
+#define CPLE_FileIO                        3
+#define CPLE_OpenFailed                        4
+#define CPLE_IllegalArg                        5
+#define CPLE_NotSupported                6
+#define CPLE_AssertionFailed                7
+#define CPLE_NoWriteAccess                8
 
 /*=====================================================================
                    Stringlist functions (strlist.c)

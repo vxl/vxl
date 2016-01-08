@@ -17,7 +17,7 @@
 
 //----------------------------------------------------------------------
 /** -= operator for images
- * 
+ *
  * An in place -= operator for images. Saves from having to copy any
  * data anywhere.
  *
@@ -45,7 +45,7 @@ vil1_memory_image_of<T> &operator -=
   // increment these pointers as needed to access each pixel. I
   // realise this isn't exactly the best OO style, but efficiency is
   // probably very important here.
-  T *im1_row, *im2_row; 
+  T *im1_row, *im2_row;
   int width = im1.width(), height = im1.height();
   for (int y=0; y<height; y++)
   {
@@ -63,7 +63,7 @@ vil1_memory_image_of<T> &operator -=
 
 //----------------------------------------------------------------------
 /** += operator for images for adding a constant factor
- * 
+ *
  * An in place += operator for images. Saves from having to copy any
  * data anywhere.
  *
@@ -95,7 +95,7 @@ vil1_memory_image_of<T> &operator +=
     for (int x=0; x<width; x++)
     {
       (*im1_row) += constant_add;
-      im1_row++; 
+      im1_row++;
     }
   }
 
@@ -105,7 +105,7 @@ vil1_memory_image_of<T> &operator +=
 
 //----------------------------------------------------------------------
 /** threshold_abs
- * 
+ *
  * Threshold the passed in image but in an abs manner. That is, a
  * pixel is set if abs(x-y)>threshold. Pixels which satisfy the
  * condition are set to their corresponding counterparts in the
@@ -122,7 +122,7 @@ vil1_memory_image_of<T> &operator +=
 
 template <class T> void threshold_abs
 (
-  vil1_memory_image_of<T> &image, 
+  vil1_memory_image_of<T> &image,
   vil1_memory_image_of<T> &source_vals,
   T threshold, T zero_val
 )
@@ -137,7 +137,7 @@ template <class T> void threshold_abs
     src_row = source_vals[y];
     for (int x=0; x<width; x++)
     {
-      if (((*image_row)<threshold)&&((*image_row)>-threshold)) 
+      if (((*image_row)<threshold)&&((*image_row)>-threshold))
         *image_row = zero_val;
       else *image_row = *src_row;
       image_row++; src_row++;
@@ -152,7 +152,7 @@ template <class T> void threshold_abs
  *
  * \param vil1_memory_image_of<T> &image: the source image.
  *
- * \param T min: the minimum value to use to initialise the search. 
+ * \param T min: the minimum value to use to initialise the search.
  * For unsigned chars this will probably be 0, but for signed ints it
  * might be -MAXINT, and for RGB could be rgb<0,0,0> etc.
  *
@@ -176,7 +176,7 @@ T max_val(const vil1_memory_image_of<T> &image, T min)
  *
  * \param vil1_memory_image_of<T> &image: the source image.
  *
- * \param T max: the maximum value to use to initialise the search. 
+ * \param T max: the maximum value to use to initialise the search.
  * For unsigned chars this will probably be 255, but for signed ints it
  * might be MAXINT, and for RGB could be rgb<255,255,255> etc.
  *
@@ -213,7 +213,7 @@ T min_val(const vil1_memory_image_of<T> &image, T max)
 
 template <class T> vil1_memory_image_of<T> *normalise_image
 (
-  const vil1_memory_image_of<T> &src, 
+  const vil1_memory_image_of<T> &src,
   T low, T high,
   T min, T max,
   T epsilon
@@ -221,7 +221,7 @@ template <class T> vil1_memory_image_of<T> *normalise_image
 {
   assert(high>low);
   assert(max>min);
-  vil1_memory_image_of<T> *ret = 
+  vil1_memory_image_of<T> *ret =
     new vil1_memory_image_of<T>(src.width(), src.height());
   T small = min_val(src, max);
   T large = max_val(src, min);
@@ -238,7 +238,7 @@ template <class T> vil1_memory_image_of<T> *normalise_image
         assert(((*ret)(x,y)>=low-epsilon)&&((*ret)(x,y)<=high+epsilon));
       }
   }
-  else 
+  else
   {
     for (int x=0; x<src.width(); x++)
       for (int y=0; y<src.height(); y++)

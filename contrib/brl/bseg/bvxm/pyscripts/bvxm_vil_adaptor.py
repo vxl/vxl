@@ -544,7 +544,7 @@ def combine_planes_8_bands(img_coastal, img_blue, img_green, img_yellow, img_red
     return out_img
   else:
     return 0;
-  
+
 
 def image_entropy(img, block_size = 5, bins = 16):
   bvxm_batch.init_process("vilBlockEntropyProcess");

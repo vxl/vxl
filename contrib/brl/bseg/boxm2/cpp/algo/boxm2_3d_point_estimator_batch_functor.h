@@ -32,7 +32,7 @@ class boxm2_3d_point_estimator_batch_functor
     id_ = output_pts->block_id();
     spt_bid_ = spt_bid;
     spt_data_index_ = spt_data_index;
-    
+
     return true;
   }
 
@@ -54,14 +54,14 @@ class boxm2_3d_point_estimator_batch_functor
       vcl_cout << "stream cache returns a vector of size: " << im_pts.size() << vcl_endl;
       vcl_cout << "pt initialized to: " << pt << vcl_endl;
       vcl_cout << "pts from stream cache:\n";
-      for (unsigned j = 0; j < im_pts.size(); j++) 
+      for (unsigned j = 0; j < im_pts.size(); j++)
         vcl_cout << im_pts[j] << vcl_endl;
       vcl_cout << "covariances from stream cache:\n";
-      for (unsigned j = 0; j < im_covs.size(); j++) 
+      for (unsigned j = 0; j < im_covs.size(); j++)
         vcl_cout << im_covs[j] << vcl_endl;
     }
 #endif
-    
+
     float w_sum = 0.0f;
     for (unsigned j = 0; j < im_pts.size(); j++) {
       float w = im_pts[j][3];
@@ -82,15 +82,15 @@ class boxm2_3d_point_estimator_batch_functor
 
     //: now create the jacobians and sum up the covariances for each point
     vnl_matrix<double> pt_cov(3,3,0.0);
-    vnl_matrix<double> jac(3,3,0.0); 
+    vnl_matrix<double> jac(3,3,0.0);
     vnl_matrix<double> temp(3,3,0.0);
     vnl_matrix<double> im_cov(3,3,0.0);
 
     for (unsigned j = 0; j < im_pts.size(); j++) {
       jac.fill(0.0); temp.fill(0.0);
-      
+
       im_cov[0][0] = im_covs[j][0]; im_cov[0][1] = im_covs[j][1]; im_cov[0][2] = im_covs[j][2];
-      im_cov[1][0] = im_covs[j][3]; im_cov[1][1] = im_covs[j][4]; im_cov[1][2] = im_covs[j][5]; 
+      im_cov[1][0] = im_covs[j][3]; im_cov[1][1] = im_covs[j][4]; im_cov[1][2] = im_covs[j][5];
       im_cov[2][0] = im_covs[j][6]; im_cov[2][1] = im_covs[j][7]; im_cov[2][2] = im_covs[j][8];
 
       float w = im_pts[j][3];
@@ -98,7 +98,7 @@ class boxm2_3d_point_estimator_batch_functor
       // jac transpose equals jac in this case
       temp = im_cov*jac;
       pt_cov += jac*temp;
-    }  
+    }
 
 #if DEBUG
     //if (index%1000000 == 0) {
@@ -129,7 +129,7 @@ class boxm2_3d_point_estimator_batch_functor
   }
 
  private:
-  
+
   boxm2_data<BOXM2_POINT>     * pts_data_;
   boxm2_data<BOXM2_COVARIANCE>     * covs_data_;
 

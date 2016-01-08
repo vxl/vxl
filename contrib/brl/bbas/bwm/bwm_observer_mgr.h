@@ -93,18 +93,18 @@ class bwm_observer_mgr
 
   //============ site to site correspondence methods ==============
   // methods for selecting correspondences between multiple sites
-  // observables provide the site string name. 3-d points are constructed 
+  // observables provide the site string name. 3-d points are constructed
   // from multiple views either as 3-d polygon vertices or polygon centroids.
 
   //: get all selected soviews to find the corresponding vertices or polygons
-  vcl_vector<bwm_observable_sptr> 
+  vcl_vector<bwm_observable_sptr>
     all_selected_observables(vcl_string const& soview_type) const;
 
   //: requires exactly two selected vertices each in a unique site
   // (NOT YET IMPLEMENTED)
   bool add_3d_corr_vertex();
 
-  //: requires exactly two selected polygons each in a unique site. 
+  //: requires exactly two selected polygons each in a unique site.
   //  Corresponds centroids of the polygons
   bool add_3d_corr_centroid();
 

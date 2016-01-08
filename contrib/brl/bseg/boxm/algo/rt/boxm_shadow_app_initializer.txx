@@ -14,7 +14,7 @@
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_shadow_app_initializer<T_loc,APM,AUX>::boxm_shadow_app_initializer(
-            boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene, 
+            boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
             vcl_vector<vcl_string> const& image_ids, float min_app_sigma,
             float shadow_prior, float shadow_mean, float shadow_sigma,
             bool verbose)
@@ -32,7 +32,7 @@ bool boxm_shadow_app_initializer<T_loc,APM,AUX>::initialize()
 
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
   typedef boct_tree<T_loc, aux_type > aux_tree_type;
-  
+
   vcl_vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {
     boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type> aux_scene(&scene_,image_ids_[i],boxm_aux_scene<T_loc, boxm_sample<APM>, aux_type>::LOAD);
@@ -91,9 +91,9 @@ bool boxm_shadow_app_initializer<T_loc,APM,AUX>::initialize()
       if(n_obs>1){
       vcl_vector<float> pre_vector(n_obs, 0.0f);
       vcl_vector<float> vis_vector(n_obs, 1.0f);
-      boxm_compute_shadow_appearance<APM>(obs_vector, pre_vector, 
-                                          vis_vector, data.appearance_, 
-                                          min_app_sigma_, shadow_prior_, 
+      boxm_compute_shadow_appearance<APM>(obs_vector, pre_vector,
+                                          vis_vector, data.appearance_,
+                                          min_app_sigma_, shadow_prior_,
                                           shadow_mean_, shadow_sigma_,
                                           verbose_);
       cell->set_data(data);
@@ -104,7 +104,7 @@ bool boxm_shadow_app_initializer<T_loc,APM,AUX>::initialize()
       aux_readers[i]->close();
     }
     iter++;
-  } 
+  }
   // clear the aux scenes
   for (unsigned i=0; i<aux_scenes.size(); i++)
     aux_scenes[i].clean_scene();

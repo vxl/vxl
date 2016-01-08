@@ -69,7 +69,7 @@ void test_transform()
  vcl_string img_path = base_dir_path + "putin_trans_rend.tiff";
   vil_save(exp, img_path.c_str());
   trs.transform_1_blk_interp(R, t, si, true);
-#endif   
+#endif
 
 #if 0
   int n = 1000;
@@ -109,4 +109,4 @@ void test_transform()
 }
 
 TESTMAIN( test_transform );
- 
+

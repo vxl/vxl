@@ -6,7 +6,7 @@
 
 #ifndef _MSC_VER
   ** error **
-#else 
+#else
 #  if _MSC_VER >=1300
 #    include "vc70/vxl_config.h"
 #  else //_MSC_VER >=1200

@@ -43,7 +43,7 @@ class vbl_sparse_array_base
   Map storage_;
 
  public:
-  
+
   typedef vcl_size_t size_type;
 
   //: Return contents at (i)

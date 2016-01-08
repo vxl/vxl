@@ -9,7 +9,7 @@
 #define vcl_generic_iostream_STD /* */
 #include "generic/vcl_iostream.h"
 
-inline vcl_istream& operator>>(vcl_istream& s, signed char& c) 
+inline vcl_istream& operator>>(vcl_istream& s, signed char& c)
 {
   char i;
   s >> i;

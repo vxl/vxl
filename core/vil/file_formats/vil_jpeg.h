@@ -71,7 +71,7 @@ class vil_jpeg_image : public vil_image_resource
 
   //: set the quality for compression
   void set_quality(int quality);
-  
+
  private:
   vil_jpeg_compressor   *jc;
   vil_jpeg_decompressor *jd;

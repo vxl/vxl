@@ -100,8 +100,8 @@ bool  boxm2_cpp_query_cell_data_process(bprb_func_process& pro)
   //intensity=(float)int_data_array[data_offset][0]/255.0f;
 
   float p=0.0f;
-  float intensity=0.0f; 
-  boxm2_util::query_point(scene, cache, vgl_point_3d<double>(x,y,z), p, intensity); 
+  float intensity=0.0f;
+  boxm2_util::query_point(scene, cache, vgl_point_3d<double>(x,y,z), p, intensity);
   pro.set_output_val<float>(0,p);
   pro.set_output_val<float>(1,intensity);
   return true;

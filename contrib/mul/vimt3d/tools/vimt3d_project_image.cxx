@@ -108,92 +108,92 @@ int main(int argc, char** argv)
   vimt3d_image_3d_of<float> image3d;
   bool use_mm=true;
   vimt3d_load(image_path(),image3d,use_mm);
-  
+
   if (image3d.image().size()==0)
   {
     vcl_cout<<"Failed to load image from "<<image_path()<<vcl_endl;
     return 1;
   }
-  
+
   vcl_cout<<"Image: "<<image3d<<vcl_endl;
-  
+
   // Compute Voxel sizes
   vimt3d_transform_3d i2w=image3d.world2im().inverse();
   double dx = (i2w(1,0,0)-i2w(0,0,0)).length();
   double dy = (i2w(0,1,0)-i2w(0,0,0)).length();
   double dz = (i2w(0,0,1)-i2w(0,0,0)).length();
   vcl_cout<<"Original voxels: "<<dx<<","<<dy<<","<<dz<<vcl_endl;
-  
+
   // Use smallest voxel width for cubic resampling
   double d = vcl_min(dx,vcl_min(dy,dz));
   if (voxel_width()!=0.0) d=voxel_width();
   vcl_cout<<"Resampling cubic voxels of width: "<<d<<vcl_endl;
-  
+
   // Image extent
   double wx = dx*image3d.image().ni();
   double wy = dy*image3d.image().nj();
   double wz = dz*image3d.image().nk();
-  
+
   // Size of image with cubic voxels covering same region
   unsigned ni=unsigned((1-2*bx())*wx/d+0.5);
   unsigned nj=unsigned((1-2*by())*wy/d+0.5);
   unsigned nk=unsigned((1-2*bz())*wz/d+0.5);
   vcl_cout<<"Resampled image: "<<ni<<"x"<<nj<<"x"<<nk<<vcl_endl;
-  
+
   float min_v,max_v;
   vil3d_math_value_range(image3d.image(),min_v,max_v);
   vcl_cout<<"Pixel range: ["<<min_v<<","<<max_v<<"]"<<vcl_endl;
-  
+
   if (min_v<value_threshold())
   {
     for (unsigned k=0;k<image3d.image().nk();++k)
       for (unsigned j=0;j<image3d.image().nj();++j)
         for (unsigned i=0;i<image3d.image().ni();++i)
-          if (image3d.image()(i,j,k)<value_threshold()) 
+          if (image3d.image()(i,j,k)<value_threshold())
             image3d.image()(i,j,k)=value_threshold();
   }
-    
+
   // Unit transformation from resampled image co-ords to image3d co-ords
   vimt3d_transform_3d t1;
   t1.set_zoom_only(d/dx,d/dy,d/dz,
                    bx()*wx+1e-6,by()*wy+1e-6,bz()*wz+1e-6);
-  
+
   vimt3d_transform_3d tc;  // Translate to centre
   tc.set_translation(0.5*ni,0.5*nj,0.5*nk);
 
   for (unsigned i=0;i<n_frames();++i)
   {
     double A=i*2.0*3.1415/n_frames();  // Radians
-    
+
     vimt3d_transform_3d rot;  // Apply rotation
-    
+
     if (axis_str()=="x")
       rot.set_rigid_body(A,0.0,0.0,  0.0,0.0,0.0);  // Rotation about x axis
     else if (axis_str()=="y")
       rot.set_rigid_body(0.0,A,0.0,  0.0,0.0,0.0);  // Rotation about y axis
-    else 
+    else
       rot.set_rigid_body(0.0,0.0,A,  0.0,0.0,0.0);  // Rotation about z axis
-    
-    
+
+
     vimt3d_transform_3d rot_about_centre = tc*rot*tc.inverse();
     vimt3d_transform_3d t = t1*rot_about_centre;
-      
+
     // Unit vectors along each direction
     vgl_point_3d<double> p0 = t(0,0,0);
     vgl_vector_3d<double> du = t(1,0,0)-p0;
     vgl_vector_3d<double> dv = t(0,1,0)-p0;
     vgl_vector_3d<double> dw = t(0,0,1)-p0;
-    
+
     vil3d_image_view<float> resampled_image(ni,nj,nk);
     vil3d_resample_trilinear_edge_extend(image3d.image(),resampled_image,
                             p0.x(),p0.y(),p0.z(), du.x(),du.y(),du.z(),
                             dv.x(),dv.y(),dv.z(), dw.x(),dw.y(),dw.z(),
                             ni,nj,nk);
-    
+
     // Project along k
     // Note - ignores voxel size
     vil_image_view<vxl_byte> image2d;
-    
+
     if (projection_dir()=="x")
       i_axis_projection(resampled_image,image2d);
     else
@@ -212,6 +212,6 @@ int main(int argc, char** argv)
     else
       vcl_cout<<"Failed to save to "<<out_path<<vcl_endl;
   }
-  
+
   return 0;
 }

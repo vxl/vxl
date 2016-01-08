@@ -8,16 +8,16 @@
 #include <vcl_cassert.h>
 
 //: Create filter such that d[a] is distance from origin of se[a]
-//  Pixel widths are (width_i,width_j,width_k).  Elements are 
-//  selected so that only voxels visited before in a raster scan 
+//  Pixel widths are (width_i,width_j,width_k).  Elements are
+//  selected so that only voxels visited before in a raster scan
 //  of the image are included.  Distance transforms require two
 //  passes, a forward and reverse pass.
 //
 //  Consider only voxels within 1 voxel (1 norm) of origin.
 //  Indexes (27-1)/2 = 13 voxels.
 void vil3d_make_distance_filter_r1(
-                           double width_i, 
-                           double width_j, 
+                           double width_i,
+                           double width_j,
                            double width_k,
                            vil3d_structuring_element& se,
                            vcl_vector<double>& d)
@@ -49,7 +49,7 @@ void vil3d_make_distance_filter_r1(
   se.set(pi,pj,pk);
 }
 
-static void vil3d_make_voxel_block(int r, 
+static void vil3d_make_voxel_block(int r,
                               vcl_vector<int>& pi,
                               vcl_vector<int>& pj,
                               vcl_vector<int>& pk,
@@ -101,15 +101,15 @@ static bool vil3d_offset_is_prime(int i,int j,int k,
 }
 
 //: Create filter such that d[a] is distance from origin of se[a]
-//  Pixel widths are (width_i,width_j,width_k).  Elements are 
-//  selected so that only voxels visited before in a raster scan 
+//  Pixel widths are (width_i,width_j,width_k).  Elements are
+//  selected so that only voxels visited before in a raster scan
 //  of the image are included.  Distance transforms require two
 //  passes, a forward and reverse pass.
 //
 //  Consider only voxels within r voxels (1 norm) of origin.
 void vil3d_make_distance_filter(
-                           double width_i, 
-                           double width_j, 
+                           double width_i,
+                           double width_j,
                            double width_k,
                            int r,
                            vil3d_structuring_element& se,

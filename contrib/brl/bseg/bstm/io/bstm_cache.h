@@ -59,7 +59,7 @@ class bstm_cache: public vbl_ref_count
 
   //: delete all the memory
   virtual void clear_cache() = 0;
-  
+
   //: return scene sptr
   virtual bstm_scene_sptr get_scene() { return scene_; }
 

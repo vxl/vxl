@@ -12,7 +12,7 @@ vcl_string boxm2_block_id::to_string() const
 
 
 //: scene output stream operator
-vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id const& id) 
+vcl_ostream& operator <<(vcl_ostream &s, boxm2_block_id const& id)
 {
   s << "id_" << id.i() << '_' << id.j() << '_' << id.k();
   return s;

@@ -48,7 +48,7 @@ class vbl_batch_compact_multimap
   {
    public:
     friend class vbl_batch_compact_multimap<key_type, value_type, key_compare>;
-  
+
     key_compare comp;
 
     input_compare(key_compare c): comp(c) { }

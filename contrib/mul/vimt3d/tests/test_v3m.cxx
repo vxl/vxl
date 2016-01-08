@@ -50,7 +50,7 @@ static void test_v3m()
     ir2->put_view(im2);
     dynamic_cast<vimt3d_vil3d_v3m_image&>(*ir2).set_world2im(tr2);
     // Save image as ir2 is destroyed.
-    
+
   }
 
   vil3d_image_resource_sptr ir3 = vil3d_load_image_resource(fname2.c_str());
@@ -64,11 +64,11 @@ static void test_v3m()
   TEST("vil3d_property_voxel_size is correct", size[0] == 0.5 &&
     size[1] == 0.5 && size[2] == 0.5, true);
   vpl_unlink(fname2.c_str());
-  
+
 
   vil3d_image_view<float> im4(3,4,5,6);
   mbl_stl_increments(im4.begin(), im4.end(), -200.0f);
-  
+
   vcl_string fname3 = vul_temp_filename() + ".v3m";
   {
     vil3d_image_resource_sptr ir4 = vil3d_new_image_resource(
@@ -81,7 +81,7 @@ static void test_v3m()
     tr4.set_zoom_only(2.0, -5.0, -5.0, -5.0);
     TEST("set_voxel_size()", ir4->set_voxel_size_mm(1.0f, 2.0f, 3.0f), true);
     // Save image as ir4 is destroyed.
-    
+
   }
 
   vil3d_image_resource_sptr ir5 = vil3d_load_image_resource(fname3.c_str());
@@ -93,9 +93,9 @@ static void test_v3m()
   TEST("get_property()", ir5->get_property(vil3d_property_voxel_size, size), true);
   TEST("vil3d_property_voxel_size is correct", size[0] == 0.001f &&
     size[1] == 0.002f && size[2] == 0.003f, true);
-  
+
   vpl_unlink(fname3.c_str());
-  
+
   // Try saving and loading empty vil3d image.
   vil3d_image_view<vxl_int_32> im6;
   vcl_string fname6 = vul_temp_filename() + ".v3m";

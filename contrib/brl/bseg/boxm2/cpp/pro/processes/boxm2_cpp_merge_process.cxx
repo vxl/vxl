@@ -32,7 +32,7 @@ bool boxm2_cpp_merge_process_cons(bprb_func_process& pro)
 
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  input_types_[0] = "boxm2_scene_sptr";   //scene to operate on 
+  input_types_[0] = "boxm2_scene_sptr";   //scene to operate on
   input_types_[1] = "boxm2_cache_sptr";   //cache with access to scene blocks
   input_types_[2] = "float";              //threshold occupancy probability (if all 8 children are below this, merge them)
 
@@ -43,7 +43,7 @@ bool boxm2_cpp_merge_process_cons(bprb_func_process& pro)
 
 bool boxm2_cpp_merge_process(bprb_func_process& pro)
 {
-  vul_timer t; 
+  vul_timer t;
   using namespace boxm2_cpp_merge_process_globals;
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
@@ -77,7 +77,7 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
     vcl_cout<<"BOXM2_CPP_MERGE_PROCESS ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  
+
   //iterate through each block, run merge function
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
@@ -100,7 +100,7 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
     boxm2_merge_block(scene, blk,datas, thresh, false);
     blk->enable_write(); // now cache will make sure that it is written to disc
   }
-  
+
   vcl_cout<<"  merge time: "<<t.all()/1000.0f<<" sec"<<vcl_endl;
   return true;
 }

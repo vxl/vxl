@@ -29,7 +29,7 @@
 # else
    extern void vcl_cassert_failure(char const *, int, char const *);
 #  define assert(x) do { if (!(x)) vcl_cassert_failure(__FILE__, __LINE__, #x); } while (false)
-# endif 
+# endif
 
 #else   // For all other compilers, include the standard C/CXX header
 

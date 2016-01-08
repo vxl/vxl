@@ -10,7 +10,7 @@
 class bwm_reg_utils {
  public:
   //Back project a set of 2d digital curves onto a 3-d plane
-static bool 
+static bool
   back_project_edges(vcl_vector<vsol_digital_curve_2d_sptr> const& edges_2d,
                      vpgl_rational_camera<double> const& rcam,
                      vgl_plane_3d<double> const& pl,
@@ -19,7 +19,7 @@ static bool
                      );
 
 //Forward project a set of 3d digital curves onto an image
-static 
+static
 void project_edges(vcl_vector<vsol_digital_curve_3d_sptr> const& edges_3d,
                    vpgl_rational_camera<double> const& rcam,
                    vcl_vector<vsol_digital_curve_2d_sptr>& edges_2d

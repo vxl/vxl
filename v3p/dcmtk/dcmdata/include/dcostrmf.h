@@ -78,7 +78,7 @@ public:
   /** processes as many bytes as possible from the given input block.
    *  @param buf pointer to memory block, must not be NULL
    *  @param buflen length of memory block
-   *  @return number of bytes actually processed. 
+   *  @return number of bytes actually processed.
    */
   virtual Uint32 write(const void *buf, Uint32 buflen);
 

@@ -62,10 +62,10 @@ class volm_spherical_container : public vbl_ref_count
 
   //: return the offset and depth of the last layer with given resolution
   void last_res(double res, unsigned int& offset, unsigned int& end_offset, double& depth);
-  
+
   //: return the offset and depth of the first layer with the given resolution
   void first_res(double res, unsigned int& offset, unsigned int& end_offset, double& depth);
-  
+
 protected:
   bool meshcurrentlayer(double d, double vc);
   vcl_vector<volm_voxel> voxels_;

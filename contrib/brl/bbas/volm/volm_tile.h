@@ -54,7 +54,7 @@ class volm_tile
    vgl_box_2d<double> bbox_double();
 
    void img_to_global(unsigned i, unsigned j, double& lon, double& lat);
-   
+
    bool global_to_img(double lon, double lat, unsigned& i, unsigned& j);
 
    //: create a kml file of the tile as a box and with circular marks throughout at every n pixels in each direction
@@ -90,7 +90,7 @@ class volm_tile
    //: calculate width of the tile
    double calculate_width();
    double calculate_height();
-   
+
    //: Binary save self to stream.
    void b_write(vsl_b_ostream &os) const;
 
@@ -98,9 +98,9 @@ class volm_tile
    void b_read(vsl_b_istream &is);
 
    //: Return IO version number;
-   short version() const { return 1; }  
-  
- public: 
+   short version() const { return 1; }
+
+ public:
   float lat_, lon_;  // lower left corner of the tile
   char hemisphere_;  // 'N' or 'S'
   char direction_;   // 'E' or 'W'

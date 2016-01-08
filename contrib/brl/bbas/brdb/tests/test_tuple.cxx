@@ -79,7 +79,7 @@ static void test_tuple()
   //////////////////////////////////////////////////////////////////
 
   vcl_cout << "Warning: Binary I/O test deactivated because of failures" <<vcl_endl;
-#if 0 
+#if 0
   vcl_cout << "out_tup: ";
   out_tup->print();
 

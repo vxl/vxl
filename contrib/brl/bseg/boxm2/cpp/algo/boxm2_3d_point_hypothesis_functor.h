@@ -10,17 +10,17 @@
 //#define DEBUG 1
 //#define DEBUG2 1
 
-// compute all the running sums 
+// compute all the running sums
 class boxm2_3d_point_hypothesis_functor
 {
  public:
   //: "default" constructor
   boxm2_3d_point_hypothesis_functor() {}
 
-  bool init_data(boxm2_data_base* alpha_data, boxm2_data_base* pts_data, 
-                 boxm2_data_base* sums_data, 
-                 vil_image_view<float> * depth_img, 
-                 vil_image_view<float> * var_img, 
+  bool init_data(boxm2_data_base* alpha_data, boxm2_data_base* pts_data,
+                 boxm2_data_base* sums_data,
+                 vil_image_view<float> * depth_img,
+                 vil_image_view<float> * var_img,
                  vpgl_perspective_camera<double> * pcam,
                  vpgl_generic_camera<double> * cam,
                  vbl_array_2d<vnl_matrix_fixed<double, 3, 3> >* Rss,
@@ -48,11 +48,11 @@ class boxm2_3d_point_hypothesis_functor
     float vis=(*vis_img_)(i,j);
     float md_s = (*depth_img_)(i,j);
     float var_d_s = (*var_img_)(i,j);
-    
+
     vgl_ray_3d<double> ray_ij = cam_->ray(i,j);
     vgl_vector_3d<double> v_s = ray_ij.direction();
     vnl_matrix_fixed<double, 3, 3> R_s = (*Rss_)[i][j];
-    
+
     // calculate point hypothesis
     boxm2_data<BOXM2_POINT>::datatype & pt=pts_data_->data()[index];
 #if DEBUG
@@ -63,29 +63,29 @@ class boxm2_3d_point_hypothesis_functor
       vcl_cout << "cam center: " << C_.x() << " " << C_.y() << " " << C_.z() << "\n";
     }
 #endif
-    
+
     pt[0] += float(vis*(C_.x() + md_s*v_s.x()));
     pt[1] += float(vis*(C_.y() + md_s*v_s.y()));
     pt[2] += float(vis*(C_.z() + md_s*v_s.z()));
-    
+
     //pt[0] += float(vis*(C_.x()));
     //pt[1] += float(vis*(C_.y()));
     //pt[2] += float(vis*(C_.z()));
-    
+
     pt[3] += vis;
-    
+
 
 #if DEBUG
-    //if (index%1000000 == 0) 
-    if (spt_bid_ == id_ && index == spt_data_index_) 
+    //if (index%1000000 == 0)
+    if (spt_bid_ == id_ && index == spt_data_index_)
       vcl_cout << "pt after update: " << pt << vcl_endl;
 #endif
 
     // calculate sums
     boxm2_data<BOXM2_FLOAT16>::datatype & sums=sums_data_->data()[index];
-    
+
     sums[0] += vis;
-    
+
     sums[1] += (float)(vis*md_s*R_s[0][0]);  // delP1/delv1
     sums[2] += (float)(vis*md_s*R_s[0][1]);  // delP1/delv2
     sums[3] += (float)(vis*md_s*R_s[0][2]);  // delP1/delv3
@@ -98,9 +98,9 @@ class boxm2_3d_point_hypothesis_functor
     sums[8] += (float)(vis*md_s*R_s[2][1]);  // delP3/delv2
     sums[9] += (float)(vis*md_s*R_s[2][2]);  // delP3/delv3
 
-    float delP1_delmd_s = (float)(vis*v_s.x()); 
-    float delP2_delmd_s = (float)(vis*v_s.y()); 
-    float delP3_delmd_s = (float)(vis*v_s.z()); 
+    float delP1_delmd_s = (float)(vis*v_s.x());
+    float delP2_delmd_s = (float)(vis*v_s.y());
+    float delP3_delmd_s = (float)(vis*v_s.z());
     sums[10] += delP1_delmd_s*delP1_delmd_s*var_d_s;
     sums[11] += delP1_delmd_s*delP2_delmd_s*var_d_s;
     sums[12] += delP1_delmd_s*delP3_delmd_s*var_d_s;
@@ -109,8 +109,8 @@ class boxm2_3d_point_hypothesis_functor
     sums[15] += delP3_delmd_s*delP3_delmd_s*var_d_s;
 
 #if DEBUG
-    //if (index%1000000 == 0) 
-    if (spt_bid_ == id_ && index == spt_data_index_) 
+    //if (index%1000000 == 0)
+    if (spt_bid_ == id_ && index == spt_data_index_)
       vcl_cout << "sums: " << sums << vcl_endl;
 #endif
 
@@ -144,8 +144,8 @@ class boxm2_3d_point_hypothesis_cov_functor
   //: "default" constructor
   boxm2_3d_point_hypothesis_cov_functor() {}
 
-  bool init_data(boxm2_data_base* covs_data, 
-                 boxm2_data_base* sums_data, 
+  bool init_data(boxm2_data_base* covs_data,
+                 boxm2_data_base* sums_data,
                  vnl_matrix_fixed<double, 3, 3> cov_C,
                  vnl_matrix_fixed<double, 3, 3> cov_v, boxm2_block_id spt_bid, int spt_data_index)
   {
@@ -174,13 +174,13 @@ class boxm2_3d_point_hypothesis_cov_functor
       vcl_cout << "cov matrix: \n" << cov_v_ << "\n";
     }
 #endif
-    
+
     vnl_matrix_fixed<double, 3, 3> out_cov(0.0), temp(0.0);
 
     //: build the camera center Jacobian
     vnl_matrix_fixed<double, 3, 3> jac(0.0);
     jac[0][0] = jac[1][1] = jac[2][2] = sums[0];  // weight of the hypothesis
-   
+
     //: the transpose of the jacobian is the same in this case
     temp = cov_C_*jac;
     out_cov = jac*temp;
@@ -195,15 +195,15 @@ class boxm2_3d_point_hypothesis_cov_functor
 
     //: build the orientation vector Jacobian
     jac.fill(0.0);
-    jac[0][0] = sums[1]; 
+    jac[0][0] = sums[1];
     jac[0][1] = sums[2];
     jac[0][2] = sums[3];
 
-    jac[1][0] = sums[4]; 
+    jac[1][0] = sums[4];
     jac[1][1] = sums[5];
     jac[1][2] = sums[6];
 
-    jac[2][0] = sums[7]; 
+    jac[2][0] = sums[7];
     jac[2][1] = sums[8];
     jac[2][2] = sums[9];
 
@@ -218,7 +218,7 @@ class boxm2_3d_point_hypothesis_cov_functor
     }
 #endif
 
-    //: add the portion due to depth variation 
+    //: add the portion due to depth variation
     temp.fill(0.0);
     temp[0][0] = sums[10]; temp[0][1] = sums[11]; temp[0][2] = sums[12];
     temp[1][0] = sums[11]; temp[1][1] = sums[13]; temp[1][2] = sums[14];

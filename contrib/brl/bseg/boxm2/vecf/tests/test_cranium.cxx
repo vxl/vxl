@@ -35,7 +35,7 @@ void test_cranium()
       vcl_cout<<"cranium scene file) does not exist"<<vcl_endl;
       return;
     }
-  
+
   vcl_string cranium_geo_path = scene_dir + "cranium_geo.txt";
   if(!vul_file::exists(cranium_geo_path))
     {
@@ -85,4 +85,4 @@ void test_cranium()
 #endif
 }
 TESTMAIN( test_cranium );
- 
+

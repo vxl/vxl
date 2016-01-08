@@ -56,7 +56,7 @@ class vgl_orient_box_3d
   vgl_box_3d<Type> const box() {return box_; }
 
   //: The axis-aligned box that encloses the oriented box
-  vgl_box_3d<Type> enclosing_box() const; 
+  vgl_box_3d<Type> enclosing_box() const;
 
   //: Return true if \a (x,y,z) is inside this box
   bool contains(Type const& x, Type const& y, Type const& z) const;

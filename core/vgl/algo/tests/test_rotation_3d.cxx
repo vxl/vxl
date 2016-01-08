@@ -54,7 +54,7 @@ static void test_conversions(const vgl_rotation_3d<double>& rot)
   if (diff4 > epsilon)
     vcl_cout << "Euler:  Rx=" << er[0]<< " Ry="<<er[1]<<" Rz="<<er[2] << vcl_endl;
   //Test the case of flipping the orientation of a vector (rotation by pi)
-  vgl_vector_3d<double> a(1.0, 1.0, 1.0), aflip(-1.0, -1.0, -1.0);  
+  vgl_vector_3d<double> a(1.0, 1.0, 1.0), aflip(-1.0, -1.0, -1.0);
   vgl_rotation_3d<double> flip(a, aflip);
   vgl_vector_3d<double> v = flip*a;
   vgl_vector_3d<double> null = v+a;
@@ -189,7 +189,7 @@ void test_rotation_3d()
 #define sqr(x) (x)*(x)
   error1 = sqr(double(r_abi.as_quaternion()[0]))
          + sqr(double(r_abi.as_quaternion()[1]))
-         + sqr(double(r_abi.as_quaternion()[2]) + vnl_math::sqrt1_2) 
+         + sqr(double(r_abi.as_quaternion()[2]) + vnl_math::sqrt1_2)
          + sqr(double(r_abi.as_quaternion()[3]) - vnl_math::sqrt1_2);
   TEST_NEAR("rotation is 90 deg in XY plane", error1, 0.0, epsilon);
 #if VXL_INT_64_IS_LONG

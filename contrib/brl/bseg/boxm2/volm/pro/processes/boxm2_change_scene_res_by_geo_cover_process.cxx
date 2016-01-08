@@ -77,7 +77,7 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   vcl_string fname = pro.get_input<vcl_string>(i++);
   int refine_coefficient = pro.get_input<int>(i++);
-  
+
   if (!(refine_coefficient == 0) && !(refine_coefficient & (refine_coefficient - 1)) && (refine_coefficient != 1) && (refine_coefficient != 2)) {
     vcl_cout << pro.name() << ": the refine coefficient need to be power of 2" << vcl_endl;
     return false;
@@ -87,7 +87,7 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": can not find image: " << fname << vcl_endl;
     return false;
   }
-  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str()); 
+  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str());
   vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr());
 
   // find the image bounding box
@@ -117,7 +117,7 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
   {
     boxm2_block_id blk_id = mit->first;
     boxm2_block_metadata md = mit->second;
-    
+
     // get the bounding box for current box and transfer it to geo coords
     vgl_box_3d<double> blk_box = md.bbox();
     double min_lon, min_lat, min_alt;
@@ -168,7 +168,7 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
       }
       // update the land cover for current column of blocks
       blk_land_cover.insert(vcl_pair<unsigned, volm_osm_category_io::geo_cover_values>(key, land_cover));
-      
+
     }
     else {
       land_cover = blk_land_cover.find(key)->second;
@@ -180,7 +180,7 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
     changed_scene_blks[blk_id] = md;
   }
   vcl_cout << " number of blocks whose max level changed " << cnt << vcl_endl;
-  
+
   // output
   i=0;  // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, changed_scene);

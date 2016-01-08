@@ -8,7 +8,7 @@
 
 #include "osl_canny_ox_params.h"
 
-osl_canny_ox_params::osl_canny_ox_params() 
+osl_canny_ox_params::osl_canny_ox_params()
   : sigma(1.0f)
   , max_width(50)
   , gauss_tail(0.0001f)

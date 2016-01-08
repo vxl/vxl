@@ -6,7 +6,7 @@
 //           basically paints the scene with the label image using the passed camera
 //         (boxm2_ocl_ingest_label_process inputs an x,y,z image and constructs the ray origins using these images)
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date Nov 18, 2013
 
 #include <vcl_fstream.h>
@@ -57,7 +57,7 @@ namespace boxm2_ocl_ingest_label_with_cam_process_globals
                                      src_paths,
                                      "ingest_label_map_with_dir",   //kernel name
                                      options,               //options
-                                     "boxm2 opencl ingest label map"); 
+                                     "boxm2 opencl ingest label map");
     vec_kernels.push_back(ray_trace_kernel);
   }
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -74,7 +74,7 @@ bool boxm2_ocl_ingest_label_with_cam_process_cons(bprb_func_process& pro)
   input_types_[3] = "vpgl_camera_double_sptr";      //input camera
   input_types_[4] = "vil_image_view_base_sptr";     // input label image
   input_types_[5] = "vcl_string";  // the identifier of the output label_short data type, e.g. "combined"
-  
+
   // process has no outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -100,7 +100,7 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr label_img = pro.get_input<vil_image_view_base_sptr>(i++);
   vcl_string out_ident = pro.get_input<vcl_string>(i++);  // identifier for the output label data blocks
-  
+
   unsigned int ni     = label_img->ni();
   unsigned int nj     = label_img->nj();
 
@@ -118,7 +118,7 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
 
   // form the ray buffer
   //cl_float* ray_origins    = new float[4*cl_ni*cl_nj];
-  
+
   cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
@@ -154,7 +154,7 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   //data_type += "_orientation";
   vcl_cout << " will read data blocks with type: " << data_type << vcl_endl;
   vcl_cout << " will ingest and write data blocks with type: " << out_data_type << " as output!\n";
-  
+
 
   size_t apptypesize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
   size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
@@ -216,13 +216,13 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
     //write the image values to the buffer
     vul_timer transfer;
     bocl_mem * blk           = opencl_cache->get_block(scene,*id);
-    
+
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment the next get_data, also see below
     //// get alpha to get size, TODO: Fix This!
     //bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
     //bocl_mem * label_data    = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
     bocl_mem* label_data       = opencl_cache->get_data(scene,*id,data_type,0,true);
-    
+
     bocl_mem * blk_info      = opencl_cache->loaded_block_info();
     transfer_time           += (float) transfer.all();
 
@@ -246,11 +246,11 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
     clFinish(queue);
     gpu_time += kern->exec_time();
     vcl_cout<<" Time "<<gpu_time<<vcl_endl;
-    
+
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment deep_replace, also change ingest_label_map.cl accordingly
     //label_data->read_to_buffer(queue);
     opencl_cache->deep_replace_data(scene,*id, out_data_type, label_data, false); // deep replace to output type where read_to_buffer is called
-    
+
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
 
@@ -273,7 +273,7 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   vil_save(test,"f:/test.tiff");
 #endif
   clReleaseCommandQueue(queue);
-  
+
   delete [] ray_origins;
   delete [] ray_directions;
   delete [] labels;

@@ -6,11 +6,11 @@
 // \file
 // \brief a processor for fitting conic segments to edges
 //
-//  This version does incremental 
-//  fitting to a chain of points and produces a 
-//  vcl_vector<vgl_conic_segments_2d>. The actual fitting algorithm is 
+//  This version does incremental
+//  fitting to a chain of points and produces a
+//  vcl_vector<vgl_conic_segments_2d>. The actual fitting algorithm is
 //  in vgl/algo and therefore should be of wider applicability.
-// 
+//
 // \author
 //  J.L. Mundy - June 22, 2005
 //
