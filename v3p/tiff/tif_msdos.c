@@ -27,7 +27,7 @@
 /*
  * TIFF Library MSDOS-specific Routines.
  */
-#if defined(__WATCOMC__) || defined(_MSC_VER)
+#if defined(_MSC_VER)
 #include <io.h>   /* for open, close, etc. function prototypes */
 #include <stdio.h>
 #endif

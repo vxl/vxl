@@ -267,7 +267,6 @@ for $var_exp (
   '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
-  '__WATCOMC__',        # Watcom C++
 
   # OS related
   '__CYGWIN__',         # cygwin
