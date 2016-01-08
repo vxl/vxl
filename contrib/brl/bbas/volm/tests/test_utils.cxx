@@ -5,7 +5,7 @@
 static void test_poly_contain_box()
 {
   // create input box and polygon
-  
+
   vgl_polygon<double> poly1;
   poly1.new_sheet();
   poly1.push_back(1.0, 2.0);   poly1.push_back(1.0, -1.0);  poly1.push_back(7.0, -1.0);  poly1.push_back(11.0, 9.0);

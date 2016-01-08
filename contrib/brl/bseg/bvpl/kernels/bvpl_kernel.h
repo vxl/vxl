@@ -84,7 +84,7 @@ class bvpl_kernel: public vbl_ref_count
       ++kernel_;
     }
   }
-  
+
   //: Return min and max values (kernel dispatch)
   float max_val();
   float min_val();
@@ -115,10 +115,10 @@ class bvpl_kernel: public vbl_ref_count
   unsigned id() const {return id_;}
 
   static unsigned get_next_id();
-  
+
   //: Set up access to the floating point kernel -- this should be made more elegantly
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > float_kernel_;
-  
+
  private:
   bvpl_kernel_iterator kernel_;
   //: Orientation axis

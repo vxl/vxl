@@ -48,17 +48,17 @@ class vidl_v4l2_control
     // \return ID (for example, V4L2_CID_BRIGHTNESS corresponds to brightness)
     int id() const { return ctrl_.id; }
     //: Control is read only
-    bool read_only() const 
-    { 
+    bool read_only() const
+    {
 #ifdef V4L2_CTRL_FLAG_READ_ONLY
-      return ctrl_.flags & V4L2_CTRL_FLAG_READ_ONLY; 
+      return ctrl_.flags & V4L2_CTRL_FLAG_READ_ONLY;
 #else
-      return false;    
+      return false;
 #endif
     }
     //: Control can change value of other controls
     bool affect_other_controls() const
-    { 
+    {
 #ifdef V4L2_CTRL_FLAG_UPDATE
       return ctrl_.flags & V4L2_CTRL_FLAG_UPDATE;
 #else
@@ -84,16 +84,16 @@ class vidl_v4l2_control_integer: public vidl_v4l2_control
     int step() const { return ctrl_.step; }
     //: Default value of this control
     int default_value() const { return ctrl_.default_value; }
-    //: Set the value of the control 
+    //: Set the value of the control
     // \param value to be set in range determined by driver
     void set(int value) const;
-    //: Change control 
+    //: Change control
     // \param value to be set in range 0-100
     void set_100 ( int value) const;
-    //: Get the value of the control 
+    //: Get the value of the control
     // \return value in range determined by driver
     int get() const { return get_value(); }
-    //: Get the value of the control 
+    //: Get the value of the control
     // \return value in range 0-100
     int get_100() const { return (get_value()-ctrl_.minimum)*100/(ctrl_.maximum-ctrl_.minimum); }
     //: A 1-line brief description
@@ -116,7 +116,7 @@ class vidl_v4l2_control_menu: public vidl_v4l2_control
     vcl_string get(unsigned int i) const { return items[i]; }
     //: Select item i
     void set(unsigned int i) const { if (i<n_items()) set_value((int) i); }
-    //: Get the value of the control 
+    //: Get the value of the control
     // \return index in the menu
     unsigned int get() const { return (unsigned int) get_value(); }
     //: Default value of this control
@@ -132,14 +132,14 @@ class vidl_v4l2_control_boolean: public vidl_v4l2_control
 {
   public:
     vidl_v4l2_control_boolean(const v4l2_queryctrl& ctr, int f): vidl_v4l2_control(ctr,f) {}
-    //: Set the value of the control 
+    //: Set the value of the control
     void set(bool v) const { set_value(v?1:0); }
-    //: Get the value of the control 
+    //: Get the value of the control
     bool get() const { return get_value(); }
     //: Default value of this control
     bool default_value() const { return ctrl_.default_value; }
     //: A 1-line brief description
-    virtual vcl_string description() const 
+    virtual vcl_string description() const
        { return "Control \""+name()+"\": boolean (default: "+(default_value()?"true":"false")+")"; }
     //: Reset control
     virtual void reset() const { set(default_value()); }

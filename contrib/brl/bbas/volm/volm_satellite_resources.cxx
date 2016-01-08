@@ -27,7 +27,7 @@
 void add_directories(vcl_string root, vcl_vector<vcl_string>& directories) {
   if (vul_file::is_directory(root))
     directories.push_back(root);
-  
+
   vcl_string glob = root + "/*"; // get everything directory or not
   vul_file_iterator file_it(glob.c_str());
   ++file_it;  // skip .
@@ -60,7 +60,7 @@ void volm_satellite_resources::add_resource(vcl_string name)
       {
           vcl_cout << "!!!!!!!!!!!!! cannot add: " << res.name_ << " with time: "; res.meta_->print_time();
           vcl_cout << " view: " << res.meta_->view_azimuth_ << ", " << res.meta_->view_elevation_;
-          vcl_cout << "already exists: \n"   << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time(); 
+          vcl_cout << "already exists: \n"   << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time();
           vcl_cout << " view: " << resources_[i].meta_->view_azimuth_ << ", " << resources_[i].meta_->view_elevation_;
           vcl_cout << " band of resources: " <<  resources_[i].meta_->band_ << " band trying to add: " << res.meta_->band_ << vcl_flush << vcl_endl;
           return;
@@ -73,7 +73,7 @@ void volm_satellite_resources::add_resource(vcl_string name)
 
 //: x is lon and y is lat in the bbox, construct bbox with min point to be lower left and max to be upper right and as axis aligned with North-East
 volm_satellite_resources::volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size, bool eliminate_same) : min_size_(min_size), bbox_(bbox), eliminate_same_(eliminate_same)
-{ 
+{
   this->construct_tree();
 }
 
@@ -84,7 +84,7 @@ void volm_satellite_resources::add_path(vcl_string path)
   add_directories(path, directories);
   if (!directories.size())
     return;
-  vcl_cout << "found " << directories.size() << " directories!\n"; 
+  vcl_cout << "found " << directories.size() << " directories!\n";
   unsigned start = resources_.size();
   for (unsigned i = 0; i < directories.size(); i++) {
     vcl_string glob = directories[i] + "/*.NTF";
@@ -92,15 +92,15 @@ void volm_satellite_resources::add_path(vcl_string path)
     while (file_it) {
       vcl_string name(file_it());
       //vcl_cout << name << "\n";
-      this->add_resource(name);    
+      this->add_resource(name);
       ++file_it;
-    }  
+    }
     glob = directories[i] + "/*.ntf";
     vul_file_iterator file_it2(glob.c_str());
     while (file_it2) {
       vcl_string name(file_it2());
       //vcl_cout << name << "\n";
-      this->add_resource(name);    
+      this->add_resource(name);
       ++file_it2;
     }
   }
@@ -174,7 +174,7 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
     if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WorldView2") == 0)
       ids.push_back(temp_ids[i]);
   }
-  
+
   vcl_vector<unsigned> temp_ids2;
   // find the ones that are not already in ids
   for (unsigned i = 0; i < temp_ids.size(); i++) {
@@ -190,7 +190,7 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
   }
   for (unsigned i = 0; i < temp_ids2.size(); i++)
     ids.push_back(temp_ids2[i]);
-    
+
 
 }
 //: query the resources in the given box and output the full paths to the given file
@@ -226,7 +226,7 @@ bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double
   return true;
 }
 
-//: query the resources in the given box and output the full paths of randomly selected seeds to the given file, 
+//: query the resources in the given box and output the full paths of randomly selected seeds to the given file,
 //  the order of satellites to select seeds from: GeoEye1, WorldView2, WorldView1 and then any others
 bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres)
 {
@@ -246,11 +246,11 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   possible_seeds["GeoEye-1"] = tmp;
   possible_seeds["WV01"] = tmp;
   possible_seeds["WV02"] = tmp;
-  possible_seeds["other"] = tmp;  
+  possible_seeds["other"] = tmp;
   for (unsigned i = 0; i < ids.size(); i++) {
     if (resources_[ids[i]].meta_->cloud_coverage_percentage_ < 1) {
       vcl_map<vcl_string, vcl_vector<unsigned> >::iterator iter = possible_seeds.find(resources_[ids[i]].meta_->satellite_name_);
-      if (iter != possible_seeds.end()) 
+      if (iter != possible_seeds.end())
         iter->second.push_back(ids[i]);
       else
         possible_seeds["other"].push_back(ids[i]);
@@ -265,7 +265,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
     }
   }
 #endif
-  
+
   vcl_vector<brad_image_metadata_sptr> selected_names;
 #if 0
   vcl_vector<vcl_string> names;
@@ -309,10 +309,10 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      done = true;
      break;
     }
-  } 
+  }
   if (!done) {
     for (unsigned i = 0; i < possible_seeds["WV02"].size(); i++) {
-     
+
      // first check if there is a satellite with the same time
      bool exists = false;
      for (unsigned k = 0; k < selected_names.size(); k++) {
@@ -323,7 +323,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      }
      if (exists) continue;
      selected_names.push_back(resources_[possible_seeds["WV02"][i]].meta_);
-      
+
      //ofs << resources_[possible_seeds["WV02"][i]].name_ << '\n';
      seed_paths.push_back(resources_[possible_seeds["WV02"][i]].name_);
      //vcl_cout << resources_[possible_seeds["WV02"][i]].name_ << '\n';
@@ -336,7 +336,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   }
   if (!done) {
     for (unsigned i = 0; i < possible_seeds["WV01"].size(); i++) {
-     
+
      // first check if there is a satellite with the same time
      bool exists = false;
      for (unsigned k = 0; k < selected_names.size(); k++) {
@@ -347,7 +347,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      }
      if (exists) continue;
      selected_names.push_back(resources_[possible_seeds["WV01"][i]].meta_);
-      
+
      //ofs << resources_[possible_seeds["WV01"][i]].name_ << '\n';
      seed_paths.push_back(resources_[possible_seeds["WV01"][i]].name_);
      //vcl_cout << resources_[possible_seeds["WV01"][i]].name_ << '\n';
@@ -360,7 +360,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   }
   if (!done) {
     for (unsigned i = 0; i < possible_seeds["other"].size(); i++) {
-     
+
      // first check if there is a satellite with the same time
      bool exists = false;
      for (unsigned k = 0; k < selected_names.size(); k++) {
@@ -371,7 +371,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      }
      if (exists) continue;
      selected_names.push_back(resources_[possible_seeds["other"][i]].meta_);
-      
+
      //ofs << resources_[possible_seeds["other"][i]].name_ << '\n';
      seed_paths.push_back(resources_[possible_seeds["other"][i]].name_);
      //vcl_cout << resources_[possible_seeds["other"][i]].name_ << '\n';
@@ -423,12 +423,12 @@ unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double low
         continue;
 
       vcl_cout << resources_[ids2[i]].name_ << ": ";
-      resources_[ids2[i]].meta_->print_time(); 
+      resources_[ids2[i]].meta_->print_time();
       vcl_cout << " azi: " << resources_[ids2[i]].meta_->sun_azimuth_ << " elev: " << resources_[ids2[i]].meta_->sun_elevation_ << " res: " << resources_[ids2[i]].meta_->gsd_ << vcl_endl;
       vcl_cout << resources_[ids2[j]].name_ << ": ";
-      resources_[ids2[j]].meta_->print_time(); 
+      resources_[ids2[j]].meta_->print_time();
       vcl_cout << " azi: " << resources_[ids2[j]].meta_->sun_azimuth_ << " elev: " << resources_[ids2[j]].meta_->sun_elevation_ << " res: " << resources_[ids2[j]].meta_->gsd_ << vcl_endl;
-      
+
       unsigned time_dif = resources_[ids2[i]].meta_->time_minute_dif(*(resources_[ids2[j]].meta_));
       if (time_dif > 0 && time_dif < 5) { // if taken less than 5 minute apart
         //ids.push_back(vcl_pair<unsigned, unsigned>(ids2[i], ids2[j]));
@@ -463,7 +463,7 @@ bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, 
     vcl_cerr << "In volm_satellite_resources::query_pairs_print_to_file() -- cannot open file: " << out_file << vcl_endl;
     return false;
   }
-  
+
   for (unsigned i = 0; i < ids.size(); i++) {
     ofs << resources_[ids[i].first].full_path_ << '\n';
     ofs << resources_[ids[i].second].full_path_ << "\n\n";
@@ -498,9 +498,9 @@ vcl_string volm_satellite_resources::find_pair(vcl_string const& name, double co
         else
           other_band = "PAN";
         vcl_vector<unsigned> ids;
-        this->query(resources_[i].meta_->lower_left_.x(), 
-                    resources_[i].meta_->lower_left_.y(), 
-                    resources_[i].meta_->upper_right_.x(), 
+        this->query(resources_[i].meta_->lower_left_.x(),
+                    resources_[i].meta_->lower_left_.y(),
+                    resources_[i].meta_->upper_right_.x(),
                     resources_[i].meta_->upper_right_.y(), other_band, ids,10.0);  // pass gsd_thres very high, only interested in finding all the images
         vcl_cout << " there are " << ids.size() << " resources that cover the image!\n";
         for (unsigned iii = 0; iii < ids.size(); iii++) {
@@ -512,10 +512,10 @@ vcl_string volm_satellite_resources::find_pair(vcl_string const& name, double co
           {
                   resources_[i].pair_ = resources_[ii].name_;
                   resources_[ii].pair_ = resources_[i].name_;
-                return resources_[ii].name_; 
+                return resources_[ii].name_;
           }
         }
-      } else 
+      } else
         return resources_[i].pair_;
      break;
     }
@@ -530,7 +530,7 @@ volm_satellite_resources::convert_to_global_footprints(vcl_vector<vgl_polygon<do
   footprints = lvcs_footprints;
 
   // rescale by GSD
-  for(vcl_vector<vgl_polygon<double> >::iterator it=footprints.begin(); 
+  for(vcl_vector<vgl_polygon<double> >::iterator it=footprints.begin();
       it!=footprints.end(); ++it) {
     vgl_polygon<double>& footprint = *it;
 
@@ -560,7 +560,7 @@ volm_satellite_resources::convert_to_global_footprints(vcl_vector<vgl_polygon<do
 }
 
 void
-volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, vcl_vector<vgl_polygon<double> >& lvcs_footprints, 
+volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, vcl_vector<vgl_polygon<double> >& lvcs_footprints,
   const vcl_vector<vgl_polygon<double> >& footprints, float downsample_factor)
 {
   lvcs_footprints.clear();
@@ -601,7 +601,7 @@ volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, vcl_
   }
 
   // rescale by GSD
-  for(vcl_vector<vgl_polygon<double> >::iterator it=lvcs_footprints.begin(); 
+  for(vcl_vector<vgl_polygon<double> >::iterator it=lvcs_footprints.begin();
       it!=lvcs_footprints.end(); ++it) {
     vgl_polygon<double>& footprint = *it;
 
@@ -616,7 +616,7 @@ volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, vcl_
 // this is creating a raster, so ensure the union of the footprints does not cover a huge area
 void
 volm_satellite_resources::compute_footprints_heatmap(vil_image_view<unsigned>& heatmap, vgl_box_2d<double>& image_window,
-  const vcl_vector<vgl_polygon<double> >& footprints) 
+  const vcl_vector<vgl_polygon<double> >& footprints)
 {
   // find the lower-left & upper-right coordinates to create the image region
   double min_x, min_y, max_x, max_y;
@@ -629,7 +629,7 @@ volm_satellite_resources::compute_footprints_heatmap(vil_image_view<unsigned>& h
     min_y = max_y = footprint[i][0].y();
   }
 
-  for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); 
+  for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin();
       it!=footprints.end(); ++it) {
     const vgl_polygon<double>& footprint = *it;
 
@@ -653,7 +653,7 @@ volm_satellite_resources::compute_footprints_heatmap(vil_image_view<unsigned>& h
   // define window as image size to prevent out-of-range in case of bad polygons
   image_window = vgl_box_2d<double>(min_x, max_x, min_y, max_y);
   vil_image_view<bool> object_mask;
-  for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); 
+  for(vcl_vector<vgl_polygon<double> >::const_iterator it=footprints.begin();
       it!=footprints.end(); ++it) {
     const vgl_polygon<double>& footprint = *it;
 
@@ -675,7 +675,7 @@ template<class T> struct index_cmp {
 };
 
 void
-volm_satellite_resources::query_resources(vcl_vector<vgl_polygon<double> >& footprints, vcl_vector<unsigned>& footprint_ids, 
+volm_satellite_resources::query_resources(vcl_vector<vgl_polygon<double> >& footprints, vcl_vector<unsigned>& footprint_ids,
   volm_satellite_resources_sptr res, const vcl_string& kml_file, const vcl_string& band, double gsd_thres)
 {
   // parse the polygon and construct its bounding box
@@ -721,7 +721,7 @@ volm_satellite_resources::query_resources(vcl_vector<vgl_polygon<double> >& foot
 }
 
 void
-volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res,
   const vcl_string& kml_file, float downsample_factor, const vcl_string& band, double gsd_thres)
 {
   // query_resources
@@ -742,7 +742,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<vcl_string>& o
 }
 
 void
-volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& overlapping_ids, 
+volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& overlapping_ids,
   const vcl_vector<vgl_polygon<double> >& footprints, float downsample_factor)
 {
   // be careful with coordinate transforms
@@ -762,7 +762,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
 
   // compute the set of highly overlapping regions
   float best_score = 0;
-  unsigned best_nimages = 0; 
+  unsigned best_nimages = 0;
   vgl_polygon<double> best_region_hull;
 
   vil_image_view<bool> mask;
@@ -776,7 +776,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
     char path[256];
     vcl_sprintf(path, "./masks/mask_%u.png", nimages);
     vil_save(dest, path);
-#endif 
+#endif
     // find regions in the mask
     vil_image_view<bool> to_process;
     to_process.deep_copy(mask);
@@ -786,9 +786,9 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
         if (!to_process(i,j)) {
           continue;
         }
-        // found a new region - extract all connected pixels 
-        // (i'm using vil_region_finder a little differently than it seems it was 
-        // designed; i'll keep track of what to process externally and use the 
+        // found a new region - extract all connected pixels
+        // (i'm using vil_region_finder a little differently than it seems it was
+        // designed; i'll keep track of what to process externally and use the
         // boolean_region_image as the binary mask).
         vil_region_finder<bool> region_finder(mask, vil_region_finder_4_conn);
         vcl_vector<unsigned> ri,rj;
@@ -797,7 +797,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
         vil_image_view<bool> region_mask;
         region_mask = region_finder.boolean_region_image();
         // mark all pixels in region as processed and compute mean score
-        for (vcl_vector<unsigned>::const_iterator rj_it=rj.begin(), ri_it=ri.begin(); 
+        for (vcl_vector<unsigned>::const_iterator rj_it=rj.begin(), ri_it=ri.begin();
             rj_it!=rj.end(); ++rj_it, ++ri_it) {
           to_process(*ri_it, *rj_it) = false;
         }
@@ -825,7 +825,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
   // find the image ids associated with the best scoring region
   //vcl_cout << "at least " << best_nimages << " footprints intersecting" << vcl_endl;
   //vcl_cout << best_region_hull << vcl_endl;
-  
+
   //vgl_point_2d<double> centroid = vgl_centroid(best_region_hull);
   // map image coordinates to lvcs coordinates
   //vgl_point_2d<double> lvcs_centroid(centroid.x()-lvcs_window.min_x(), centroid.y()-lvcs_window.min_y());
@@ -846,7 +846,7 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
   //  }
   //}
 
-  // unfortunately, there is no function to compute the intersection of two polygons, or even the 
+  // unfortunately, there is no function to compute the intersection of two polygons, or even the
   // intersection of a polygon and a box (there is a test for this, but it returns true/false, not
   // a polygon); so instead, i rasterize...
   // RE: not true anymore
@@ -921,9 +921,9 @@ volm_satellite_resources::rasterize(
     mask.set_size((int)vcl_ceil(bbox_clipped.width()), (int)vcl_ceil(bbox_clipped.height()), 1);
     mask.fill(false);
   }
-  // NOTE sgr - there is a bug/instability in vgl_polygon_scan_iterator that sometimes 
-  // causes a scanline of pixels outside the convex hull to be included in the mask. 
-  // setting this to false avoids the bug 
+  // NOTE sgr - there is a bug/instability in vgl_polygon_scan_iterator that sometimes
+  // causes a scanline of pixels outside the convex hull to be included in the mask.
+  // setting this to false avoids the bug
   const bool include_boundary = false;
   vgl_polygon_scan_iterator<double> polyIter(bounds, include_boundary, bbox_clipped);
   for (polyIter.reset(); polyIter.next(); ) {
@@ -946,7 +946,7 @@ volm_satellite_resources::compactness(vgl_polygon<double> const&poly, vil_image_
   vil_math_sum(region_mask_area, mask, 0);
 
   // region_mask_area <= region_hull_area
-  double compactness_score = region_hull_area * (region_mask_area / region_hull_area); 
+  double compactness_score = region_hull_area * (region_mask_area / region_hull_area);
 
   return compactness_score;
 }
@@ -961,7 +961,7 @@ volm_satellite_resources::calculate_convex_hull(vil_image_view<bool> const& mask
   vil_structuring_element strel;
   strel.set_to_disk(1.1); // set radius to 1.1 to make sure pixels dist 1 away are included
   vil_image_view<bool> mask_eroded(ni,nj);
-  // NOTE the erode operation could remove (very) thin elements 
+  // NOTE the erode operation could remove (very) thin elements
   vil_binary_erode(mask, mask_eroded, strel, vil_border_create_constant(mask, false));
 
   // find non-zero points
@@ -986,7 +986,7 @@ volm_satellite_resources::calculate_convex_hull(vil_image_view<bool> const& mask
   return poly;
 }
 
-// from http://www.drdobbs.com/the-standard-librarian-defining-iterato/184401331?pgno=3 and 
+// from http://www.drdobbs.com/the-standard-librarian-defining-iterato/184401331?pgno=3 and
 // http://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/lectures/iterators.html#example-simple-list-continued
 // with modifications
 class CombinatorGenerator
@@ -1035,7 +1035,7 @@ private:
     Combinator asg_;
 
     typedef Iterator self_type;
-  
+
     explicit Iterator(Combinator asg) : asg_(asg) { }
     // implicit copy constructor, copy assignment and destructor
     reference operator*() { return asg_.inds; }
@@ -1046,13 +1046,13 @@ private:
     bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
   };
 
-  struct ConstIterator : vcl_iterator<vcl_forward_iterator_tag, vcl_vector<unsigned>, 
+  struct ConstIterator : vcl_iterator<vcl_forward_iterator_tag, vcl_vector<unsigned>,
       vcl_ptrdiff_t, const vcl_vector<unsigned>*, const vcl_vector<unsigned>& >
   {
     Combinator asg_;
 
     typedef ConstIterator self_type;
-  
+
     explicit ConstIterator(Combinator asg) : asg_(asg) { }
     // implicit copy constructor, copy assignment and destructor
     // a non-const object calling begin() will return an iterator. implicitly
@@ -1092,7 +1092,7 @@ private:
 };
 
 void
-volm_satellite_resources::highly_intersecting_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+volm_satellite_resources::highly_intersecting_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res,
   const vcl_string& kml_file, int k, int l, const vcl_string& band, double gsd_thres)
 {
   // query_resources
@@ -1118,13 +1118,13 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<vcl_string>& 
 }
 
 void
-volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids, 
+volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids,
   const vcl_vector<vgl_polygon<double> >& footprints, unsigned k, unsigned l)
 {
   double max_area = 0.0;
   vcl_list<vcl_pair<vcl_vector<unsigned>, double> > areas;
   // could be memory inefficient; TODO prune
-  // RE only need to keep the previous level of indices (len(inds)-1) 
+  // RE only need to keep the previous level of indices (len(inds)-1)
   vcl_map<vcl_vector<unsigned>, vgl_polygon<double> > cache;
 
   unsigned n = footprints.size();
@@ -1137,7 +1137,7 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& ov
     CombinatorGenerator::const_iterator end=combs.end();
     for( ; it != end; ++it) {
       const vcl_vector<unsigned>& inds = *it;
-      //for(int i=0; i < inds.size(); ++i) 
+      //for(int i=0; i < inds.size(); ++i)
       //  vcl_cout << inds[i] << " ";
       //vcl_cout << vcl_endl;
 
@@ -1166,7 +1166,7 @@ volm_satellite_resources::highly_intersecting_resources(vcl_vector<unsigned>& ov
           intersection = cache[sub_inds];
           i++;
         }
-        // if the sub-index is not in the cache, it is because the intersection area was 
+        // if the sub-index is not in the cache, it is because the intersection area was
         // smaller than already observed, so just continue
         else {
           continue;

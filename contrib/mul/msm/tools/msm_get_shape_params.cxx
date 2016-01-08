@@ -188,11 +188,11 @@ int main(int argc, char** argv)
     write_bestfitpts = false;
   else
     vcl_cout << "Write best fit points to " << params.out_points_dir << vcl_endl;
-  
+
   vnl_vector<double> sd = shape_model.mode_var();
   for (unsigned i=0;i<sd.size();++i) sd[i]=vcl_sqrt(sd[i]);
   mbl_stats_1d mahal_stats;
-  
+
   for (unsigned i=0;i<shapes.size();++i)
   {
     sm_instance.fit_to_points(shapes[i]);
@@ -218,7 +218,7 @@ int main(int argc, char** argv)
       M += b[j]*b[j]/(sd[j]*sd[j]);
     }
     mahal_stats.obs(M);
-    
+
     ofs<<vcl_endl;
 
     // Write best fit points
@@ -240,7 +240,7 @@ int main(int argc, char** argv)
     }
   }
   ofs.close();
-  
+
   vcl_cout<<"Statistics of Mahalanobis distance: "<<mahal_stats<<vcl_endl;
 
   vcl_cout<<"Wrote parameters for "<<shapes.size()<<" shapes to "<<params.output_path<<vcl_endl;

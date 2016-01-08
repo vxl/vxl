@@ -47,7 +47,7 @@ struct opj_bio;
 /**
 Tag node
 */
-typedef struct opj_tgt_node 
+typedef struct opj_tgt_node
 {
   struct opj_tgt_node *parent;
   OPJ_INT32 value;
@@ -58,7 +58,7 @@ typedef struct opj_tgt_node
 /**
 Tag tree
 */
-typedef struct opj_tgt_tree 
+typedef struct opj_tgt_tree
 {
   OPJ_UINT32  numleafsh;
   OPJ_UINT32  numleafsv;
@@ -80,7 +80,7 @@ opj_tgt_tree_t *tgt_create(OPJ_UINT32 numleafsh, OPJ_UINT32 numleafsv);
 
 /**
  * Reinitialises a tag-tree from an exixting one.
- * 
+ *
  * @param	p_tree				the tree to reinitialize.
  * @param	p_num_leafs_h		the width of the array of leafs of the tree
  * @param	p_num_leafs_v		the height of the array of leafs of the tree

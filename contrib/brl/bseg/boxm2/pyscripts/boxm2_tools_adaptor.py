@@ -41,8 +41,8 @@ def get_info_along_ray(scene,cache,cam,u,v,prefix,identifier="") :
     return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d,res_array_1d, data_array_1d, nelems;
   else :
     return len_array_1d, alpha_array_1d, vis_array_1d ,tabs_array_1d,res_array_1d;
-    
-def query_cell_brdf(scene,cache,point,model_type): 
+
+def query_cell_brdf(scene,cache,point,model_type):
   boxm2_batch.init_process("boxm2CppQueryCellBrdfProcess");
   boxm2_batch.set_input_from_db(0, scene);
   boxm2_batch.set_input_from_db(1, cache);
@@ -51,7 +51,7 @@ def query_cell_brdf(scene,cache,point,model_type):
   boxm2_batch.set_input_float(4, point[2]);
   boxm2_batch.set_input_string(5, model_type);
   boxm2_batch.run_process();
-  
+
 def probe_intensities(scene, cpu_cache, str_cache, point):
   boxm2_batch.init_process("boxm2CppBatchProbeIntensitiesProcess");
   boxm2_batch.set_input_from_db(0,scene);
@@ -68,7 +68,7 @@ def probe_intensities(scene, cpu_cache, str_cache, point):
   visibilities=boxm2_batch.get_bbas_1d_array_float(id);
   boxm2_batch.remove_data(id);
   return intensities, visibilities
-  
+
 def extract_cell_centers(scene, cache, prob_thresh=0.0):
   if cache.type == "boxm2_cache_sptr" :
     boxm2_batch.init_process("boxm2ExtractPointCloudProcess");
@@ -76,10 +76,10 @@ def extract_cell_centers(scene, cache, prob_thresh=0.0):
     boxm2_batch.set_input_from_db(1,cache);
     boxm2_batch.set_input_float(2,prob_thresh); #prob t
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
-  
+
 def export_points_and_normals(scene, cache, file_out, save_aux=True, prob_thresh=0.0, vis_thresh=0.0, nmag_thresh=0.0, exp_thresh = 0.0, bbox_file=""):
   if cache.type == "boxm2_cache_sptr" :
     print("Exporting to oriented point cloud");
@@ -95,8 +95,8 @@ def export_points_and_normals(scene, cache, file_out, save_aux=True, prob_thresh
     #boxm2_batch.set_input_string(8, bbox_file); #bb filename
     boxm2_batch.set_input_string(7, bbox_file); #bb filename
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
 
 def add_aux_info_to_ply(scene, cache, file_in, file_out):
@@ -108,7 +108,7 @@ def add_aux_info_to_ply(scene, cache, file_in, file_out):
     boxm2_batch.set_input_string(2,file_in);
     boxm2_batch.set_input_string(3,file_out);  #output aux (prob, vis, normal magnitdue)
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
 

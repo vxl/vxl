@@ -163,7 +163,7 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   float app_model_weights[8] = {0};
   float4 viewdir = (float4)(ray_dx,ray_dy,ray_dz,0);
   compute_app_model_weights(app_model_weights, viewdir,&app_model_view_directions);
-  
+
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
   // BEGIN RAY TRACE
@@ -174,24 +174,24 @@ render_bit_scene( __constant  RenderSceneInfo    * linfo,
   float expint  = exp_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
   float max_omega     = max_omega_image[imIndex[llid]];
-  
+
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
   aux_args.app_model_weights = app_model_weights;
   aux_args.maxomega = &max_omega;
-  
 
-  
+
+
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
             linfo, tree_array,                                    //scene info
             local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info
-  
-   
-   
+
+
+
   //store the expected intensity (as UINT)
   exp_image[imIndex[llid]] =  expint;
   //store visibility at the end of this block

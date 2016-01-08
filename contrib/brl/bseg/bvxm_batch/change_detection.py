@@ -37,7 +37,7 @@ for i in range(0,len(image_fnames),1):
   for j in range(0,len(skip_list),1):
     if i==skip_list[j]:
       keep_moving = 1;
-  
+
   if keep_moving==1:
     continue;
 
@@ -45,7 +45,7 @@ for i in range(0,len(image_fnames),1):
   image_filename=image_filename[:-1];
   cam_name=cam_fnames[i];
   cam_name=cam_name[:-1];
-    
+
   if i<num_train:
     bvxm_batch.init_process("LoadRationalCameraProcess");
     bvxm_batch.set_input_string(0,cam_name);
@@ -57,7 +57,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.run_process();
     cam_id = bvxm_batch.commit_output(0);
 
-  # get a roi from the image 
+  # get a roi from the image
   bvxm_batch.init_process("bvxmRoiInitProcess");
   bvxm_batch.set_input_string(0,image_filename);
   bvxm_batch.set_input_from_db(1,cam_id);
@@ -66,8 +66,8 @@ for i in range(0,len(image_fnames),1):
   statuscode=bvxm_batch.run_process();
   if statuscode:
     cropped_cam_id = bvxm_batch.commit_output(0);
-    cropped_image_id = bvxm_batch.commit_output(1);  
-    uncertainty_id = bvxm_batch.commit_output(2);  
+    cropped_image_id = bvxm_batch.commit_output(1);
+    uncertainty_id = bvxm_batch.commit_output(2);
 
     print("Saving Image");
     bvxm_batch.init_process("SaveImageViewProcess");
@@ -90,7 +90,7 @@ for i in range(0,len(image_fnames),1):
     corrected_cam_id = bvxm_batch.commit_output(0);
     edge_image_id = bvxm_batch.commit_output(1);
     expected_edge_image_id = bvxm_batch.commit_output(2);
-    
+
     bvxm_batch.init_process("SaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,edge_image_id);
     bvxm_batch.set_input_string(1,str(i)+".edge_image.jpg");
@@ -99,8 +99,8 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.init_process("SaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,expected_edge_image_id);
     bvxm_batch.set_input_string(1,str(i)+".expected_edge_image.jpg");
-    bvxm_batch.run_process();    
-    
+    bvxm_batch.run_process();
+
     map_type="10bins_1d_radial";
     print("Illumination Index");
     bvxm_batch.init_process("bvxmIllumIndexProcess");

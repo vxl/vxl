@@ -73,7 +73,7 @@ sub wanted {
     if ($filename =~ /\.old/) {return;}
     if ($filename =~ /\.svn/) {return;}
 #    print "Found3 $filename\n";
-    
+
     if (mentions_vil($filename))
     {
         print "Fixing $filename\n";

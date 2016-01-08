@@ -1,7 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_create_multi_cache_process.cxx
 //:
 // \file
-// \brief  A process for creating cache. 
+// \brief  A process for creating cache.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
@@ -21,7 +21,7 @@ namespace boxm2_create_multi_cache_process_globals
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 1;
 }
-bool boxm2_create_multi_cache_process_cons(bprb_func_process& pro)  
+bool boxm2_create_multi_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_multi_cache_process_globals;
 
@@ -33,7 +33,7 @@ bool boxm2_create_multi_cache_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "boxm2_multi_cache_sptr";
-  
+
   brdb_value_sptr idx = new brdb_value_t<int>(1);
   pro.set_input(1, idx);
 
@@ -74,7 +74,7 @@ namespace boxm2_write_multi_cache_process_globals
   const unsigned n_inputs_ = 2;
   const unsigned n_outputs_ = 0;
 }
-bool boxm2_write_multi_cache_process_cons(bprb_func_process& pro)  
+bool boxm2_write_multi_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_write_multi_cache_process_globals;
 
@@ -86,7 +86,7 @@ bool boxm2_write_multi_cache_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 
-  
+
   brdb_value_sptr idx = new brdb_value_t<bool>(true);
   pro.set_input(1, idx);
 

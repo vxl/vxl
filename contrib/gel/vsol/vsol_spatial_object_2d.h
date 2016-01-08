@@ -59,7 +59,7 @@ class vsol_spatial_object_2d : public vsol_spatial_object
 {
  protected:
   // Data Members--------------------------------------------------------------
-  
+
  private:
   mutable vsol_box_2d_sptr bounding_box_; // rectangular bounding area
 

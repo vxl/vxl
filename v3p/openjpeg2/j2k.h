@@ -91,8 +91,8 @@ struct opj_event_mgr;
 /* UniPG>> */
 #ifdef USE_JPWL
 #define J2K_MS_EPC 0xff68	/**< EPC marker value (Part 11: JPEG 2000 for Wireless) */
-#define J2K_MS_EPB 0xff66	/**< EPB marker value (Part 11: JPEG 2000 for Wireless) */ 
-#define J2K_MS_ESD 0xff67	/**< ESD marker value (Part 11: JPEG 2000 for Wireless) */ 
+#define J2K_MS_EPB 0xff66	/**< EPB marker value (Part 11: JPEG 2000 for Wireless) */
+#define J2K_MS_ESD 0xff67	/**< ESD marker value (Part 11: JPEG 2000 for Wireless) */
 #define J2K_MS_RED 0xff69	/**< RED marker value (Part 11: JPEG 2000 for Wireless) */
 #endif /* USE_JPWL */
 #ifdef USE_JPSEC
@@ -105,8 +105,8 @@ struct opj_event_mgr;
 /* ----------------------------------------------------------------------- */
 
 /**
-Values that specify the status of the decoding process when decoding the main header. 
-These values may be combined with a | operator. 
+Values that specify the status of the decoding process when decoding the main header.
+These values may be combined with a | operator.
 */
 typedef enum
 {
@@ -121,24 +121,24 @@ typedef enum
 	J2K_DEC_STATE_DATA   = 0x0080, /**< the decoding process must not expect a EOC marker because the codestream is truncated */
 	J2K_DEC_STATE_ERR    = 0x8000,  /**< the decoding process has encountered an error */
 	J2K_DEC_STATE_EOC	 = 0x0100
-} 
+}
 J2K_DECODING_STATUS;
 
 /**
-Values that specify the status of the decoding process when decoding the main header. 
-These values may be combined with a | operator. 
+Values that specify the status of the decoding process when decoding the main header.
+These values may be combined with a | operator.
 */
 typedef enum
 {
 	J2K_ENC_STATE_NONE  =  0x0000, /**< a SOC marker is expected */
 	J2K_ENC_STATE_ENCODE  = 0x0001, /**< a SOC marker is expected */
-} 
+}
 J2K_ENCODING_STATUS;
 
-/** 
+/**
  * Type of data for storing the MCT data
  */
-typedef enum MCT_ELEMENT_TYPE 
+typedef enum MCT_ELEMENT_TYPE
 {
 	MCT_TYPE_INT16 = 0,		/** MCT data is stored as signed shorts*/
 	MCT_TYPE_INT32 = 1,		/** MCT data is stored as signed integers*/
@@ -146,14 +146,14 @@ typedef enum MCT_ELEMENT_TYPE
 	MCT_TYPE_DOUBLE = 3		/** MCT data is stored as doubles*/
 } J2K_MCT_ELEMENT_TYPE;
 
-/** 
+/**
  * Type of data for storing the MCT data
  */
-typedef enum MCT_ARRAY_TYPE 
+typedef enum MCT_ARRAY_TYPE
 {
-	MCT_TYPE_DEPENDENCY = 0,		
+	MCT_TYPE_DEPENDENCY = 0,
 	MCT_TYPE_DECORRELATION = 1,
-	MCT_TYPE_OFFSET = 2	
+	MCT_TYPE_OFFSET = 2
 } J2K_MCT_ARRAY_TYPE;
 
 
@@ -164,13 +164,13 @@ typedef enum MCT_ARRAY_TYPE
 /**
 Quantization stepsize
 */
-typedef struct opj_stepsize 
+typedef struct opj_stepsize
 {
 	/** exponent */
 	OPJ_UINT32 expn;
 	/** mantissa */
 	OPJ_UINT32 mant;
-} 
+}
 opj_stepsize_t;
 
 typedef struct opj_mct_data
@@ -197,7 +197,7 @@ opj_simple_mcc_decorrelation_data_t;
 /**
 Tile-component coding parameters
 */
-typedef struct opj_tccp 
+typedef struct opj_tccp
 {
 	/** coding style */
 	OPJ_UINT32 csty;
@@ -225,15 +225,15 @@ typedef struct opj_tccp
 	OPJ_UINT32 prch[J2K_MAXRLVLS];
 	/** the dc_level_shift **/
 	OPJ_INT32 m_dc_level_shift;
-} 
+}
 opj_tccp_t;
 
 /**
-Tile coding parameters : 
+Tile coding parameters :
 this structure is used to store coding/decoding parameters common to all
 tiles (information like COD, COC in main header)
 */
-typedef struct opj_tcp 
+typedef struct opj_tcp
 {
 	/** coding style */
 	OPJ_UINT32 csty;
@@ -286,7 +286,7 @@ typedef struct opj_tcp
 	OPJ_UINT32 m_nb_mcc_records;
 	/** the max number of mct records. */
 	OPJ_UINT32 m_nb_max_mcc_records;
-	
+
 
 
 	/***** FLAGS *******/
@@ -327,11 +327,11 @@ typedef struct opj_decoding_param
 	OPJ_UINT32 m_layer;
 }
 opj_decoding_param_t;
-	
+
 /**
 Coding parameters
 */
-typedef struct opj_cp 
+typedef struct opj_cp
 {
 	/** Size of the image in bits*/
 	/*int img_size;*/
@@ -425,7 +425,7 @@ typedef struct opj_j2k_dec
 {
 	/** locate in which part of the codestream the decoder is (main header, tile header, end) */
 	OPJ_UINT32 m_state;
-	/** 
+	/**
 	 * store decoding parameters common to all tiles (information like COD, COC in main header)
 	 */
 	opj_tcp_t *m_default_tcp;
@@ -449,13 +449,13 @@ typedef struct opj_j2k_enc
 {
 	/** Tile part number, regardless of poc, for each new poc, tp is reset to 1*/
 	OPJ_UINT32 m_current_poc_tile_part_number; // tp_num
-	
+
 	/** Tile part number currently coding, taking into account POC. m_current_tile_part_number holds the total number of tile parts while encoding the last tile part.*/
 	OPJ_UINT32 m_current_tile_part_number; //cur_tp_num
-	
+
 	/**
-	locate the start position of the TLM marker  
-	after encoding the tilepart, a jump (in j2k_write_sod) is done to the TLM marker to store the value of its length. 
+	locate the start position of the TLM marker
+	after encoding the tilepart, a jump (in j2k_write_sod) is done to the TLM marker to store the value of its length.
 	*/
 	OPJ_SIZE_T m_tlm_start;
 	/**
@@ -470,35 +470,35 @@ typedef struct opj_j2k_enc
 	/** Total num of tile parts in whole image = num tiles* num tileparts in each tile*/
 	/** used in TLMmarker*/
 	OPJ_UINT32 m_total_tile_parts;	 // totnum_tp
-	
+
 	/* encoded data for a tile */
 	OPJ_BYTE * m_encoded_tile_data;
-	
+
 	/* size of the encoded_data */
 	OPJ_UINT32 m_encoded_tile_size;
-	
+
 	/* encoded data for a tile */
 	OPJ_BYTE * m_header_tile_data;
-	
+
 	/* size of the encoded_data */
 	OPJ_UINT32 m_header_tile_data_size;
 
 
 } opj_j2k_enc_t;
 
-	
+
 
 
 /**
 JPEG-2000 codestream reader/writer
 */
-typedef struct opj_j2k 
+typedef struct opj_j2k
 {
 	union
 	{
 		opj_j2k_dec_t m_decoder;
 		opj_j2k_enc_t m_encoder;
-	} 
+	}
 	m_specific_param;
 
 	/** number of the tile curently concern by coding/decoding */
@@ -515,16 +515,16 @@ typedef struct opj_j2k
 
 	/** the list of validation procedures to follow to make sure the code is valid **/
 	struct opj_procedure_list *	m_validation_list;
-	
+
 	/** helper used to write the index file */
 	opj_codestream_info_t *cstr_info;
 
 	/** the current tile coder/decoder **/
 	struct opj_tcd *	m_tcd;
-	
+
 	OPJ_UINT32 m_is_decoder : 1;
-	
-} 
+
+}
 opj_j2k_t;
 
 /** @name Exported functions */
@@ -532,14 +532,14 @@ opj_j2k_t;
 /* ----------------------------------------------------------------------- */
 /**
  * Creates a J2K decompression structure.
- * 
+ *
  * @return a handle to a J2K decompressor if successful, NULL otherwise.
 */
 opj_j2k_t* j2k_create_decompress();
 
 /**
  * Destroys a jpeg2000 codec.
- * 
+ *
  * @param	p_j2k	the jpeg20000 structure to destroy.
  */
 void j2k_destroy (opj_j2k_t *p_j2k);
@@ -554,27 +554,27 @@ void j2k_destroy (opj_j2k_t *p_j2k);
  * @return true if the codec is valid.
  */
 bool j2k_start_compress(
-						opj_j2k_t *p_j2k, 
-						struct opj_stream_private *cio, 
+						opj_j2k_t *p_j2k,
+						struct opj_stream_private *cio,
 						struct opj_image * p_image,
 						struct opj_event_mgr * p_manager
 						);
 /**
- * Ends the compression procedures and possibiliy add data to be read after the 
+ * Ends the compression procedures and possibiliy add data to be read after the
  * codestream.
  */
 bool j2k_end_compress(opj_j2k_t *p_j2k, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
 
 /**
  * Sets up the decoder decoding parameters using user parameters.
- * Decoding parameters are stored in j2k->cp. 
- * 
+ * Decoding parameters are stored in j2k->cp.
+ *
  * @param	p_j2k			J2K codec
  * @param	p_parameters	decompression parameters
- * @deprecated	
+ * @deprecated
 */
 void j2k_setup_decoder(
-					   opj_j2k_t *p_j2k, 
+					   opj_j2k_t *p_j2k,
 					   struct opj_dparameters *p_parameters
 					   );
 /**
@@ -608,7 +608,7 @@ Decode an image from a JPEG-2000 codestream
 opj_image_t* j2k_decode(opj_j2k_t *j2k, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
 
 /**
- * Ends the decompression procedures and possibiliy add data to be read after the 
+ * Ends the decompression procedures and possibiliy add data to be read after the
  * codestream.
  */
 bool j2k_end_decompress(opj_j2k_t *j2k, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
@@ -630,8 +630,8 @@ Creates a J2K compression structure
 opj_j2k_t* j2k_create_compress();
 
 /**
-Setup the encoder parameters using the current image and using user parameters. 
-Coding parameters are returned in j2k->cp. 
+Setup the encoder parameters using the current image and using user parameters.
+Coding parameters are returned in j2k->cp.
 @param j2k J2K compressor handle
 @param parameters compression parameters
 @param image input filled image
@@ -655,9 +655,9 @@ bool j2k_write_tile (
 
 /**
  * Converts an enum type progression order to string type.
- * 
+ *
  * @param prg_order		the progression order to get.
- * 
+ *
  * @return	the string representation of the gicen progression order.
  */
 const char * j2k_convert_progression_order(OPJ_PROG_ORDER prg_order);
@@ -666,7 +666,7 @@ const char * j2k_convert_progression_order(OPJ_PROG_ORDER prg_order);
 /**
  * Encodes an image into a JPEG-2000 codestream
  */
-bool j2k_encode( 
+bool j2k_encode(
 					opj_j2k_t * p_j2k,
 					struct opj_stream_private *cio,
 					struct opj_event_mgr * p_manager
@@ -708,7 +708,7 @@ bool j2k_read_tile_header (
 					);
 /**
  * Sets the given area to be decoded. This function should be called right after opj_read_header and before any tile header reading.
- * 
+ *
  * @param	p_j2k			the jpeg2000 codec.
  * @param	p_start_x		the left position of the rectangle to decode (in image coordinates).
  * @param	p_end_x			the right position of the rectangle to decode (in image coordinates).
@@ -717,7 +717,7 @@ bool j2k_read_tile_header (
  * @param	p_manager		the user event manager
  *
  * @return	true			if the area could be set.
- */				
+ */
 bool j2k_set_decode_area(
 			opj_j2k_t *p_j2k,
 			OPJ_INT32 p_start_x,

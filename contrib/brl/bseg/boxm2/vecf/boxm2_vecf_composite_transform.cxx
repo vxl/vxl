@@ -18,7 +18,7 @@ boxm2_vecf_composite_transform(vcl_vector<boxm2_vecf_vector_field_base_sptr> xfo
 
 
 bool boxm2_vecf_composite_transform::
-compute_forward_transform(boxm2_scene_sptr source, 
+compute_forward_transform(boxm2_scene_sptr source,
                           boxm2_block_id const& blk_id,
                           const boxm2_data_traits<BOXM2_POINT>::datatype *source_pts,
                           boxm2_data_traits<BOXM2_POINT>::datatype *target_pts)

@@ -60,8 +60,8 @@ public:
 
   //: print method
   void print(vcl_ostream& os) const
-  {  
-    os << "volm_conf_object -- theta: " << theta_ << " (" << this->theta_in_deg() << " degree), dist: " << dist_ 
+  {
+    os << "volm_conf_object -- theta: " << theta_ << " (" << this->theta_in_deg() << " degree), dist: " << dist_
        << ", height: " << height_
        << ", land: " << (int)land_ << ")\n";
   }

@@ -90,8 +90,8 @@ bool jp2_skip_jp2c(
  * @return true if the JP2 Header box was successfully reconized.
 */
 bool jp2_read_jp2h(
-						opj_jp2_t *jp2,	
-						unsigned char * p_header_data, 
+						opj_jp2_t *jp2,
+						unsigned char * p_header_data,
 						unsigned int p_header_size,
 						struct opj_event_mgr * p_manager
 					);
@@ -113,35 +113,35 @@ static bool jp2_write_jp2c(
 
 /**
  * Reads a box header. The box is the way data is packed inside a jpeg2000 file structure.
- * 
+ *
  * @param	cio						the input stream to read data from.
  * @param	box						the box structure to fill.
  * @param	p_number_bytes_read		pointer to an int that will store the number of bytes read from the stream (shoul usually be 2).
  * @param	p_manager				user event manager.
- * 
+ *
  * @return	true if the box is reconized, false otherwise
 */
 static bool jp2_read_boxhdr(
 								opj_jp2_box_t *box,
-								OPJ_UINT32 * p_number_bytes_read, 
-								struct opj_stream_private *cio, 
+								OPJ_UINT32 * p_number_bytes_read,
+								struct opj_stream_private *cio,
 								struct opj_event_mgr * p_manager
 							);
 
 /**
  * Reads a box header. The box is the way data is packed inside a jpeg2000 file structure. Data is read from a character string
- * 
+ *
  * @param	p_data					the character string to read data from.
  * @param	box						the box structure to fill.
  * @param	p_number_bytes_read		pointer to an int that will store the number of bytes read from the stream (shoul usually be 2).
  * @param	p_box_max_size			the maximum number of bytes in the box.
- * 
+ *
  * @return	true if the box is reconized, false otherwise
 */
 static bool jp2_read_boxhdr_char(
 								opj_jp2_box_t *box,
-								OPJ_BYTE * p_data, 
-								OPJ_UINT32 * p_number_bytes_read, 
+								OPJ_BYTE * p_data,
+								OPJ_UINT32 * p_number_bytes_read,
 								OPJ_UINT32 p_box_max_size,
 								struct opj_event_mgr * p_manager
 							);
@@ -153,15 +153,15 @@ static bool jp2_read_boxhdr_char(
  * @param	jp2				the jpeg2000 file codec.
  * @param	p_header_size	the size of the data contained in the signature box.
  * @param	p_manager		the user event manager.
- * 
+ *
  * @return true if the file signature box is valid.
  */
 static bool jp2_read_jp(
-					opj_jp2_t *jp2,	
-					unsigned char * p_header_data, 
+					opj_jp2_t *jp2,
+					unsigned char * p_header_data,
 					unsigned int p_header_size,
 					struct opj_event_mgr * p_manager
-				 ); 
+				 );
 
 /**
  * Writes a jpeg2000 file signature box.
@@ -169,7 +169,7 @@ static bool jp2_read_jp(
  * @param	cio			the stream to write data to.
  * @param	jp2			the jpeg2000 file codec.
  * @param	p_manager	the user event manager.
- * 
+ *
  * @return true if writting was successful.
  */
 static bool jp2_write_jp(
@@ -184,7 +184,7 @@ static bool jp2_write_jp(
  * @param	cio			the stream to write data to.
  * @param	jp2			the jpeg2000 file codec.
  * @param	p_manager	the user event manager.
- * 
+ *
  * @return	true if writting was successful.
  */
 static bool jp2_write_ftyp(
@@ -200,30 +200,30 @@ static bool jp2_write_ftyp(
  * @param	jp2				the jpeg2000 file codec.
  * @param	p_header_size	the size of the data contained in the FTYP box.
  * @param	p_manager		the user event manager.
- * 
+ *
  * @return true if the FTYP box is valid.
  */
 static bool jp2_read_ftyp(
-							opj_jp2_t *jp2,	
-							unsigned char * p_header_data, 
+							opj_jp2_t *jp2,
+							unsigned char * p_header_data,
 							unsigned int p_header_size,
 							struct opj_event_mgr * p_manager
 						);
 
 /**
  * Reads a IHDR box - Image Header box
- * 
+ *
  * @param	p_image_header_data			pointer to actual data (already read from file)
  * @param	jp2							the jpeg2000 file codec.
  * @param	p_image_header_size			the size of the image header
  * @param	p_manager					the user event manager.
- * 
+ *
  * @return	true if the image header is valid, fale else.
  */
 static bool jp2_read_ihdr(
-							opj_jp2_t *jp2, 
-							unsigned char * p_image_header_data, 
-							unsigned int p_image_header_size, 
+							opj_jp2_t *jp2,
+							unsigned char * p_image_header_data,
+							unsigned int p_image_header_size,
 							struct opj_event_mgr * p_manager
 						  );
 
@@ -232,28 +232,28 @@ static bool jp2_read_ihdr(
  *
  * @param jp2					jpeg2000 file codec.
  * @param p_nb_bytes_written	pointer to store the nb of bytes written by the function.
- * 
+ *
  * @return	the data being copied.
 */
 static unsigned char * jp2_write_ihdr(
-								opj_jp2_t *jp2, 
+								opj_jp2_t *jp2,
 								unsigned int * p_nb_bytes_written
 							 );
 
 /**
  * Reads a Bit per Component box.
- * 
+ *
  * @param	p_bpc_header_data			pointer to actual data (already read from file)
  * @param	jp2							the jpeg2000 file codec.
  * @param	p_bpc_header_size			the size of the bpc header
  * @param	p_manager					the user event manager.
- * 
+ *
  * @return	true if the bpc header is valid, fale else.
  */
 static bool jp2_read_bpcc(
 							opj_jp2_t *jp2,
-							unsigned char * p_bpc_header_data, 
-							unsigned int p_bpc_header_size, 
+							unsigned char * p_bpc_header_data,
+							unsigned int p_bpc_header_size,
 							struct opj_event_mgr * p_manager
 						  );
 
@@ -263,11 +263,11 @@ static bool jp2_read_bpcc(
  *
  * @param	jp2						jpeg2000 file codec.
  * @param	p_nb_bytes_written		pointer to store the nb of bytes written by the function.
- * 
+ *
  * @return	the data being copied.
 */
 static unsigned char * jp2_write_bpcc(
-								opj_jp2_t *jp2, 
+								opj_jp2_t *jp2,
 								unsigned int * p_nb_bytes_written
 							 );
 
@@ -278,13 +278,13 @@ static unsigned char * jp2_write_bpcc(
  * @param	jp2							the jpeg2000 file codec.
  * @param	p_colr_header_size			the size of the color header
  * @param	p_manager					the user event manager.
- * 
+ *
  * @return	true if the bpc header is valid, fale else.
 */
 static bool jp2_read_colr(
 							opj_jp2_t *jp2,
-							unsigned char * p_colr_header_data, 
-							unsigned int p_colr_header_size, 
+							unsigned char * p_colr_header_data,
+							unsigned int p_colr_header_size,
 							struct opj_event_mgr * p_manager
 						  );
 
@@ -293,11 +293,11 @@ static bool jp2_read_colr(
  *
  * @param jp2					jpeg2000 file codec.
  * @param p_nb_bytes_written	pointer to store the nb of bytes written by the function.
- * 
+ *
  * @return	the data being copied.
 */
 static unsigned char *jp2_write_colr(
-								opj_jp2_t *jp2, 
+								opj_jp2_t *jp2,
 								unsigned int * p_nb_bytes_written
 							);
 
@@ -323,7 +323,7 @@ bool jp2_read_header_procedure(
  * @param	jp2					the jpeg2000 file codec to execute the procedures on.
  * @param	cio					the stream to execute the procedures on.
  * @param	p_manager			the user manager.
- * 
+ *
  * @return	true				if all the procedures were successfully executed.
  */
 static bool jp2_exec (
@@ -334,7 +334,7 @@ static bool jp2_exec (
 				  );
 /**
  * Finds the execution function related to the given box id.
- * 
+ *
  * @param	p_id	the id of the handler to fetch.
  *
  * @return	the given handler or NULL if it could not be found.
@@ -352,9 +352,9 @@ static void jp2_setup_encoding_validation (opj_jp2_t *jp2);
  */
 static void jp2_setup_header_writting (opj_jp2_t *jp2);
 
-/** 
+/**
  * The default validation procedure without any extension.
- * 
+ *
  * @param	jp2				the jpeg2000 codec to validate.
  * @param	cio				the input stream to validate.
  * @param	p_manager		the user event manager.
@@ -369,7 +369,7 @@ bool jp2_default_validation (
 
 /**
  * Finds the execution function related to the given box id.
- * 
+ *
  * @param	p_id	the id of the handler to fetch.
  *
  * @return	the given handler or NULL if it could not be found.
@@ -380,7 +380,7 @@ static const opj_jp2_header_handler_t * jp2_find_handler (
 
 /**
  * Finds the image execution function related to the given box id.
- * 
+ *
  * @param	p_id	the id of the handler to fetch.
  *
  * @return	the given handler or NULL if it could not be found.
@@ -390,13 +390,13 @@ static const opj_jp2_header_handler_t * jp2_img_find_handler (
 												);
 
 /**
- * Sets up the procedures to do on writting header after the codestream. 
+ * Sets up the procedures to do on writting header after the codestream.
  * Developpers wanting to extend the library can add their own writting procedures.
  */
 static void jp2_setup_end_header_writting (opj_jp2_t *jp2);
 
 /**
- * Sets up the procedures to do on reading header after the codestream. 
+ * Sets up the procedures to do on reading header after the codestream.
  * Developpers wanting to extend the library can add their own writting procedures.
  */
 static void jp2_setup_end_header_reading (opj_jp2_t *jp2);
@@ -408,7 +408,7 @@ static void jp2_setup_end_header_reading (opj_jp2_t *jp2);
 static void jp2_setup_decoding_validation (opj_jp2_t *jp2);
 
 /**
- * Sets up the procedures to do on reading header. 
+ * Sets up the procedures to do on reading header.
  * Developpers wanting to extend the library can add their own writting procedures.
  */
 static void jp2_setup_header_reading (opj_jp2_t *jp2);
@@ -417,14 +417,14 @@ static void jp2_setup_header_reading (opj_jp2_t *jp2);
 /*@}*/
 
 /* ----------------------------------------------------------------------- */
-const opj_jp2_header_handler_t jp2_header [] = 
+const opj_jp2_header_handler_t jp2_header [] =
 {
 	{JP2_JP,jp2_read_jp},
 	{JP2_FTYP,jp2_read_ftyp},
 	{JP2_JP2H,jp2_read_jp2h}
 };
 
-const opj_jp2_header_handler_t jp2_img_header [] = 
+const opj_jp2_header_handler_t jp2_img_header [] =
 {
 	{JP2_IHDR,jp2_read_ihdr},
 	{JP2_COLR,jp2_read_colr},
@@ -432,7 +432,7 @@ const opj_jp2_header_handler_t jp2_img_header [] =
 };
 /**
  * Finds the execution function related to the given box id.
- * 
+ *
  * @param	p_id	the id of the handler to fetch.
  *
  * @return	the given handler or 00 if it could not be found.
@@ -456,7 +456,7 @@ const opj_jp2_header_handler_t * jp2_find_handler (
 
 /**
  * Finds the image execution function related to the given box id.
- * 
+ *
  * @param	p_id	the id of the handler to fetch.
  *
  * @return	the given handler or 00 if it could not be found.
@@ -491,7 +491,7 @@ static const opj_jp2_header_handler_t * jp2_img_find_handler (
 bool jp2_read_header_procedure(
 					 opj_jp2_t *jp2,
 					 opj_stream_private_t *cio,
-					 opj_event_mgr_t * p_manager) 
+					 opj_event_mgr_t * p_manager)
 {
 	opj_jp2_box_t box;
 	unsigned int l_nb_bytes_read;
@@ -506,7 +506,7 @@ bool jp2_read_header_procedure(
 	assert(p_manager != 00);
 
 	l_current_data = (unsigned char*)opj_malloc(l_last_data_size);
-	
+
 	if
 		(l_current_data == 00)
 	{
@@ -581,23 +581,23 @@ bool jp2_read_header_procedure(
 			}
 		}
 	}
-        
+
         opj_free(l_current_data);
-        
+
 	return true;
 }
 
 /**
  * Reads a box header. The box is the way data is packed inside a jpeg2000 file structure.
- * 
+ *
  * @param	cio						the input stream to read data from.
  * @param	box						the box structure to fill.
  * @param	p_number_bytes_read		pointer to an int that will store the number of bytes read from the stream (should usually be 8).
  * @param	p_manager				user event manager.
- * 
+ *
  * @return	true if the box is reconized, false otherwise
 */
-bool jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_stream_private_t *cio, opj_event_mgr_t * p_manager) 
+bool jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_stream_private_t *cio, opj_event_mgr_t * p_manager)
 {
 	/* read header from file */
 	unsigned char l_data_header [8];
@@ -617,11 +617,11 @@ bool jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_st
 	/* process read data */
 	opj_read_bytes(l_data_header,&(box->length), 4);
 	opj_read_bytes(l_data_header+4,&(box->type), 4);
-	
+
 	// do we have a "special very large box ?"
 	// read then the XLBox
-	if 
-		(box->length == 1) 
+	if
+		(box->length == 1)
 	{
 		OPJ_UINT32 l_xl_part_size;
 		OPJ_UINT32 l_nb_bytes_read = opj_stream_read_data(cio,l_data_header,8,p_manager);
@@ -636,8 +636,8 @@ bool jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_st
 			return false;
 		}
 		opj_read_bytes(l_data_header,&l_xl_part_size, 4);
-		if 
-			(l_xl_part_size != 0) 
+		if
+			(l_xl_part_size != 0)
 		{
 			opj_event_msg(p_manager, EVT_ERROR, "Cannot handle box sizes higher than 2^32\n");
 			return false;
@@ -649,18 +649,18 @@ bool jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_st
 
 /**
  * Reads a box header. The box is the way data is packed inside a jpeg2000 file structure. Data is read from a character string
- * 
+ *
  * @param	p_data					the character string to read data from.
  * @param	box						the box structure to fill.
  * @param	p_number_bytes_read		pointer to an int that will store the number of bytes read from the stream (shoul usually be 2).
  * @param	p_box_max_size			the maximum number of bytes in the box.
- * 
+ *
  * @return	true if the box is reconized, false otherwise
 */
 static bool jp2_read_boxhdr_char(
 								opj_jp2_box_t *box,
 								OPJ_BYTE * p_data,
-								OPJ_UINT32 * p_number_bytes_read, 
+								OPJ_UINT32 * p_number_bytes_read,
 								OPJ_UINT32 p_box_max_size,
 								opj_event_mgr_t * p_manager
 							)
@@ -686,8 +686,8 @@ static bool jp2_read_boxhdr_char(
 
 	// do we have a "special very large box ?"
 	// read then the XLBox
-	if 
-		(box->length == 1) 
+	if
+		(box->length == 1)
 	{
 		unsigned int l_xl_part_size;
 		if
@@ -700,24 +700,24 @@ static bool jp2_read_boxhdr_char(
 		opj_read_bytes(p_data,&l_xl_part_size, 4);
 		p_data += 4;
 		*p_number_bytes_read += 4;
-		if 
-			(l_xl_part_size != 0) 
+		if
+			(l_xl_part_size != 0)
 		{
 			opj_event_msg(p_manager, EVT_ERROR, "Cannot handle box sizes higher than 2^32\n");
 			return false;
 		}
 		opj_read_bytes(p_data,&(box->length), 4);
 		*p_number_bytes_read += 4;
-		if 
-			(box->length == 0) 
+		if
+			(box->length == 0)
 		{
 			opj_event_msg(p_manager, EVT_ERROR, "Cannot handle box of undefined sizes\n");
 			return false;
 		}
-		
+
 	}
-	else if 
-		(box->length == 0) 
+	else if
+		(box->length == 0)
 	{
 		opj_event_msg(p_manager, EVT_ERROR, "Cannot handle box of undefined sizes\n");
 		return false;
@@ -733,18 +733,18 @@ static bool jp2_read_boxhdr_char(
  * @param	jp2				the jpeg2000 file codec.
  * @param	p_header_size	the size of the data contained in the signature box.
  * @param	p_manager		the user event manager.
- * 
+ *
  * @return true if the file signature box is valid.
  */
 bool jp2_read_jp(
-					opj_jp2_t *jp2,	
-					unsigned char * p_header_data, 
+					opj_jp2_t *jp2,
+					unsigned char * p_header_data,
 					unsigned int p_header_size,
 					opj_event_mgr_t * p_manager
-				 ) 
+				 )
 {
 	unsigned int l_magic_number;
-	
+
 	// preconditions
 	assert(p_header_data != 00);
 	assert(jp2 != 00);
@@ -756,7 +756,7 @@ bool jp2_read_jp(
 		opj_event_msg(p_manager, EVT_ERROR, "The signature box must be the first box in the file.\n");
 		return false;
 	}
-	
+
 
 	/* assure length of data is correct (4 -> magic number) */
 	if
@@ -765,11 +765,11 @@ bool jp2_read_jp(
 		opj_event_msg(p_manager, EVT_ERROR, "Error with JP signature Box size\n");
 		return false;
 	}
-	
+
 	// rearrange data
 	opj_read_bytes(p_header_data,&l_magic_number,4);
-	if 
-		(l_magic_number != 0x0d0a870a ) 
+	if
+		(l_magic_number != 0x0d0a870a )
 	{
 		opj_event_msg(p_manager, EVT_ERROR, "Error with JP Signature : bad magic number\n");
 		return false;
@@ -785,15 +785,15 @@ bool jp2_read_jp(
  * @param	jp2				the jpeg2000 file codec.
  * @param	p_header_size	the size of the data contained in the FTYP box.
  * @param	p_manager		the user event manager.
- * 
+ *
  * @return true if the FTYP box is valid.
  */
 bool jp2_read_ftyp(
-							opj_jp2_t *jp2,	
-							unsigned char * p_header_data, 
+							opj_jp2_t *jp2,
+							unsigned char * p_header_data,
 							unsigned int p_header_size,
 							opj_event_mgr_t * p_manager
-						) 
+						)
 {
 	unsigned int i;
 	unsigned int l_remaining_bytes;
@@ -809,7 +809,7 @@ bool jp2_read_ftyp(
 		opj_event_msg(p_manager, EVT_ERROR, "The ftyp box must be the second box in the file.\n");
 		return false;
 	}
-	
+
 	/* assure length of data is correct */
 	if
 		(p_header_size < 8)
@@ -817,13 +817,13 @@ bool jp2_read_ftyp(
 		opj_event_msg(p_manager, EVT_ERROR, "Error with FTYP signature Box size\n");
 		return false;
 	}
-	
+
 	opj_read_bytes(p_header_data,&jp2->brand,4);		/* BR */
 	p_header_data += 4;
 
 	opj_read_bytes(p_header_data,&jp2->minversion,4);		/* MinV */
 	p_header_data += 4;
-	
+
 	l_remaining_bytes = p_header_size - 8;
 
 	/* the number of remaining bytes should be a multiple of 4 */
@@ -849,8 +849,8 @@ bool jp2_read_ftyp(
 	}
 
 
-	for 
-		(i = 0; i < jp2->numcl; ++i) 
+	for
+		(i = 0; i < jp2->numcl; ++i)
 	{
 		opj_read_bytes(p_header_data,&jp2->cl[i],4);		/* CLi */
 		p_header_data += 4;
@@ -866,14 +866,14 @@ bool jp2_read_ftyp(
  * @param cio the stream to write data to.
  * @param	jp2			the jpeg2000 file codec.
  * @param p_manager the user event manager.
- * 
+ *
  * @return true if writting was successful.
  */
 bool jp2_write_jp (
 					opj_jp2_t *jp2,
 					opj_stream_private_t *cio,
 					opj_event_mgr_t * p_manager
-				   ) 
+				   )
 {
 	/* 12 bytes will be read */
 	unsigned char l_signature_data [12];
@@ -905,7 +905,7 @@ bool jp2_write_jp (
  * @param	cio			the stream to write data to.
  * @param	jp2			the jpeg2000 file codec.
  * @param	p_manager	the user event manager.
- * 
+ *
  * @return	true if writting was successful.
  */
 bool jp2_write_ftyp(
@@ -925,7 +925,7 @@ bool jp2_write_ftyp(
 	assert(p_manager != 00);
 
 	l_ftyp_data = (unsigned char *) opj_malloc(l_ftyp_size);
-	
+
 	if
 		(l_ftyp_data == 00)
 	{
@@ -948,12 +948,12 @@ bool jp2_write_ftyp(
 	opj_write_bytes(l_current_data_ptr, jp2->minversion,4); /* MinV */
 	l_current_data_ptr += 4;
 
-	for 
-		(i = 0; i < jp2->numcl; i++) 
+	for
+		(i = 0; i < jp2->numcl; i++)
 	{
 		opj_write_bytes(l_current_data_ptr, jp2->cl[i],4);	/* CL */
 	}
-	
+
 	l_result = (opj_stream_write_data(cio,l_ftyp_data,l_ftyp_size,p_manager) == l_ftyp_size);
 	if
 		(! l_result)
@@ -989,7 +989,7 @@ bool jp2_write_jp2h(
 
 	/* to store the data of the super box */
 	unsigned char l_jp2h_data [8];
-	
+
 	// preconditions
 	assert(cio != 00);
 	assert(jp2 != 00);
@@ -1011,7 +1011,7 @@ bool jp2_write_jp2h(
 		l_writers[0].handler = jp2_write_ihdr;
 		l_writers[1].handler = jp2_write_colr;
 	}
-	
+
 	/* write box header */
 	/* write JP2H type */
 	opj_write_bytes(l_jp2h_data+4,JP2_JP2H,4);
@@ -1051,7 +1051,7 @@ bool jp2_write_jp2h(
 
 	/* write super box size */
 	opj_write_bytes(l_jp2h_data,l_jp2h_size,4);
-	
+
 	/* write super box data on stream */
 	if
 		(opj_stream_write_data(cio,l_jp2h_data,8,p_manager) != 8)
@@ -1059,7 +1059,7 @@ bool jp2_write_jp2h(
 		opj_event_msg(p_manager, EVT_ERROR, "Stream error while writting JP2 Header box\n");
 		l_result = false;
 	}
-	
+
 	if
 		(l_result)
 	{
@@ -1103,8 +1103,8 @@ bool jp2_write_jp2h(
  * @return true if the JP2 Header box was successfully reconized.
 */
 bool jp2_read_jp2h(
-						opj_jp2_t *jp2,	
-						unsigned char * p_header_data, 
+						opj_jp2_t *jp2,
+						unsigned char * p_header_data,
 						unsigned int p_header_size,
 						opj_event_mgr_t * p_manager
 					)
@@ -1144,10 +1144,10 @@ bool jp2_read_jp2h(
 			return false;
 		}
 		l_current_handler = jp2_img_find_handler(box.type);
-		
+
 		l_current_data_size = box.length - l_box_size;
 		p_header_data += l_box_size;
-		
+
 		if
 			(l_current_handler != 00)
 		{
@@ -1170,19 +1170,19 @@ bool jp2_read_jp2h(
 
 /**
  * Reads a IHDR box - Image Header box
- * 
+ *
  * @param	p_image_header_data			pointer to actual data (already read from file)
  * @param	jp2							the jpeg2000 file codec.
  * @param	p_image_header_size			the size of the image header
  * @param	p_image_header_max_size		maximum size of the header, any size bigger than this value should result the function to output false.
  * @param	p_manager					the user event manager.
- * 
+ *
  * @return	true if the image header is valid, fale else.
  */
 bool jp2_read_ihdr(
-							opj_jp2_t *jp2, 
-							unsigned char * p_image_header_data, 
-							unsigned int p_image_header_size, 
+							opj_jp2_t *jp2,
+							unsigned char * p_image_header_data,
+							unsigned int p_image_header_size,
 							opj_event_mgr_t * p_manager
 						  )
 {
@@ -1203,7 +1203,7 @@ bool jp2_read_ihdr(
 	p_image_header_data += 4;
 	opj_read_bytes(p_image_header_data,&(jp2->numcomps),2);			/* NC */
 	p_image_header_data += 2;
-	
+
 	/* allocate memory for components */
 	jp2->comps = (opj_jp2_comps_t*) opj_malloc(jp2->numcomps * sizeof(opj_jp2_comps_t));
 	if
@@ -1230,16 +1230,16 @@ bool jp2_read_ihdr(
  *
  * @param jp2					jpeg2000 file codec.
  * @param p_nb_bytes_written	pointer to store the nb of bytes written by the function.
- * 
+ *
  * @return	the data being copied.
 */
 static unsigned char * jp2_write_ihdr(
-								opj_jp2_t *jp2, 
+								opj_jp2_t *jp2,
 								unsigned int * p_nb_bytes_written
 							 )
 {
 	unsigned char * l_ihdr_data,* l_current_ihdr_ptr;
-	
+
 	// preconditions
 	assert(jp2 != 00);
 	assert(p_nb_bytes_written != 00);
@@ -1254,7 +1254,7 @@ static unsigned char * jp2_write_ihdr(
 	memset(l_ihdr_data,0,22);
 
 	l_current_ihdr_ptr = l_ihdr_data;
-	
+
 	opj_write_bytes(l_current_ihdr_ptr,22,4);				/* write box size */
 	l_current_ihdr_ptr+=4;
 	opj_write_bytes(l_current_ihdr_ptr,JP2_IHDR, 4);		/* IHDR */
@@ -1282,11 +1282,11 @@ static unsigned char * jp2_write_ihdr(
  *
  * @param	jp2						jpeg2000 file codec.
  * @param	p_nb_bytes_written		pointer to store the nb of bytes written by the function.
- * 
+ *
  * @return	the data being copied.
 */
 unsigned char * jp2_write_bpcc(
-								opj_jp2_t *jp2, 
+								opj_jp2_t *jp2,
 								unsigned int * p_nb_bytes_written
 							 )
 {
@@ -1294,7 +1294,7 @@ unsigned char * jp2_write_bpcc(
 	/* room for 8 bytes for box and 1 byte for each component */
 	int l_bpcc_size = 8 + jp2->numcomps;
 	unsigned char * l_bpcc_data,* l_current_bpcc_ptr;
-	
+
 	// preconditions
 	assert(jp2 != 00);
 	assert(p_nb_bytes_written != 00);
@@ -1314,8 +1314,8 @@ unsigned char * jp2_write_bpcc(
 	opj_write_bytes(l_current_bpcc_ptr,JP2_BPCC,4);					/* BPCC */
 	l_current_bpcc_ptr += 4;
 
-	for 
-		(i = 0; i < jp2->numcomps; ++i) 
+	for
+		(i = 0; i < jp2->numcomps; ++i)
 	{
 		opj_write_bytes(l_current_bpcc_ptr, jp2->comps[i].bpcc, 1); /* write each component information */
 		++l_current_bpcc_ptr;
@@ -1326,19 +1326,19 @@ unsigned char * jp2_write_bpcc(
 
 /**
  * Reads a Bit per Component box.
- * 
+ *
  * @param	p_bpc_header_data			pointer to actual data (already read from file)
  * @param	jp2							the jpeg2000 file codec.
  * @param	p_bpc_header_size			pointer that will hold the size of the bpc header
  * @param	p_bpc_header_max_size		maximum size of the header, any size bigger than this value should result the function to output false.
  * @param	p_manager					the user event manager.
- * 
+ *
  * @return	true if the bpc header is valid, fale else.
  */
 bool jp2_read_bpcc(
 							opj_jp2_t *jp2,
-							unsigned char * p_bpc_header_data, 
-							unsigned int p_bpc_header_size, 
+							unsigned char * p_bpc_header_data,
+							unsigned int p_bpc_header_size,
 							opj_event_mgr_t * p_manager
 						  )
 {
@@ -1358,8 +1358,8 @@ bool jp2_read_bpcc(
 	}
 
 	// read info for each component
-	for 
-		(i = 0; i < jp2->numcomps; ++i) 
+	for
+		(i = 0; i < jp2->numcomps; ++i)
 	{
 		opj_read_bytes(p_bpc_header_data,&jp2->comps[i].bpcc ,1);	/* read each BPCC component */
 		++p_bpc_header_data;
@@ -1372,18 +1372,18 @@ bool jp2_read_bpcc(
  *
  * @param jp2					jpeg2000 file codec.
  * @param p_nb_bytes_written	pointer to store the nb of bytes written by the function.
- * 
+ *
  * @return	the data being copied.
 */
 unsigned char *jp2_write_colr(
-								opj_jp2_t *jp2, 
+								opj_jp2_t *jp2,
 								unsigned int * p_nb_bytes_written
 							)
 {
 	/* room for 8 bytes for box 3 for common data and variable upon profile*/
 	unsigned int l_colr_size = 11;
 	unsigned char * l_colr_data,* l_current_colr_ptr;
-	
+
 	// preconditions
 	assert(jp2 != 00);
 	assert(p_nb_bytes_written != 00);
@@ -1414,20 +1414,20 @@ unsigned char *jp2_write_colr(
 	l_current_colr_ptr += 4;
 	opj_write_bytes(l_current_colr_ptr,JP2_COLR,4);					/* BPCC */
 	l_current_colr_ptr += 4;
-	
+
 	opj_write_bytes(l_current_colr_ptr, jp2->meth,1);				/* METH */
 	++l_current_colr_ptr;
 	opj_write_bytes(l_current_colr_ptr, jp2->precedence,1);			/* PRECEDENCE */
 	++l_current_colr_ptr;
 	opj_write_bytes(l_current_colr_ptr, jp2->approx,1);				/* APPROX */
 	++l_current_colr_ptr;
-	
-	if 
-		(jp2->meth == 1) 
+
+	if
+		(jp2->meth == 1)
 	{
 		opj_write_bytes(l_current_colr_ptr, jp2->enumcs,4);			/* EnumCS */
-	} 
-	else 
+	}
+	else
 	{
 		opj_write_bytes(l_current_colr_ptr, 0, 1);						/* PROFILE (??) */
 	}
@@ -1443,13 +1443,13 @@ unsigned char *jp2_write_colr(
  * @param	p_colr_header_size			pointer that will hold the size of the color header
  * @param	p_colr_header_max_size		maximum size of the header, any size bigger than this value should result the function to output false.
  * @param	p_manager					the user event manager.
- * 
+ *
  * @return	true if the bpc header is valid, fale else.
 */
 bool jp2_read_colr(
 							opj_jp2_t * jp2,
-							unsigned char * p_colr_header_data, 
-							unsigned int p_colr_header_size, 
+							unsigned char * p_colr_header_data,
+							unsigned int p_colr_header_size,
 							opj_event_mgr_t * p_manager
 						  )
 {
@@ -1464,7 +1464,7 @@ bool jp2_read_colr(
 		opj_event_msg(p_manager, EVT_ERROR, "Bad BPCC header box (bad size)\n");
 		return false;
 	}
-	
+
 	opj_read_bytes(p_colr_header_data,&jp2->meth ,1);			/* METH */
 	++p_colr_header_data;
 
@@ -1473,10 +1473,10 @@ bool jp2_read_colr(
 
 	opj_read_bytes(p_colr_header_data,&jp2->approx ,1);			/* APPROX */
 	++p_colr_header_data;
-	
 
-	if 
-		(jp2->meth == 1) 
+
+	if
+		(jp2->meth == 1)
 	{
 		if
 			(p_colr_header_size != 7)
@@ -1506,17 +1506,17 @@ bool jp2_write_jp2c(
 				   opj_jp2_t *jp2,
 				   opj_stream_private_t *cio,
 				   opj_event_mgr_t * p_manager
-				   ) 
+				   )
 {
 	unsigned int j2k_codestream_exit;
 	unsigned char l_data_header [8];
-	
+
 	// preconditions
 	assert(jp2 != 00);
 	assert(cio != 00);
 	assert(p_manager != 00);
 	assert(opj_stream_has_seek(cio));
-	
+
 	j2k_codestream_exit = opj_stream_tell(cio);
 	opj_write_bytes(l_data_header,j2k_codestream_exit - jp2->j2k_codestream_offset,4); /* size of codestream */
 	opj_write_bytes(l_data_header + 4,JP2_JP2C,4);									   /* JP2C */
@@ -1527,7 +1527,7 @@ bool jp2_write_jp2c(
 		opj_event_msg(p_manager, EVT_ERROR, "Failed to seek in the stream.\n");
 		return false;
 	}
-	
+
 	if
 		(opj_stream_write_data(cio,l_data_header,8,p_manager) != 8)
 	{
@@ -1546,25 +1546,25 @@ bool jp2_write_jp2c(
 
 /**
  * Destroys a jpeg2000 file decompressor.
- * 
+ *
  * @param	jp2		a jpeg2000 file decompressor.
  */
-void jp2_destroy(opj_jp2_t *jp2) 
+void jp2_destroy(opj_jp2_t *jp2)
 {
 	if
-		(jp2) 
+		(jp2)
 	{
 		/* destroy the J2K codec */
 		j2k_destroy(jp2->j2k);
 		jp2->j2k = 00;
 		if
-			(jp2->comps) 
+			(jp2->comps)
 		{
 			opj_free(jp2->comps);
 			jp2->comps = 00;
 		}
 		if
-			(jp2->cl) 
+			(jp2->cl)
 		{
 			opj_free(jp2->cl);
 			jp2->cl = 00;
@@ -1593,11 +1593,11 @@ void jp2_destroy(opj_jp2_t *jp2)
 /* JP2 encoder interface                                             */
 /* ----------------------------------------------------------------------- */
 
-opj_jp2_t* jp2_create(bool p_is_decoder) 
+opj_jp2_t* jp2_create(bool p_is_decoder)
 {
 	opj_jp2_t *jp2 = (opj_jp2_t*)opj_malloc(sizeof(opj_jp2_t));
 	if
-		(jp2) 
+		(jp2)
 	{
 		memset(jp2,0,sizeof(opj_jp2_t));
 		/* create the J2K codec */
@@ -1611,7 +1611,7 @@ opj_jp2_t* jp2_create(bool p_is_decoder)
 			jp2->j2k = j2k_create_decompress();
 		}
 		if
-			(jp2->j2k == 00) 
+			(jp2->j2k == 00)
 		{
 			jp2_destroy(jp2);
 			return 00;
@@ -1644,7 +1644,7 @@ opj_jp2_t* jp2_create(bool p_is_decoder)
  * @param	jp2					the jpeg2000 file codec to execute the procedures on.
  * @param	cio					the stream to execute the procedures on.
  * @param	p_manager			the user manager.
- * 
+ *
  * @return	true				if all the procedures were successfully executed.
  */
 bool jp2_exec (
@@ -1695,7 +1695,7 @@ bool jp2_start_compress(opj_jp2_t *jp2,  struct opj_stream_private *cio,opj_imag
 
 	/* customization of the validation */
 	jp2_setup_encoding_validation (jp2);
-	
+
 	/* validation of the parameters codec */
 	if
 		(! jp2_exec(jp2,jp2->m_validation_list,cio,p_manager))
@@ -1744,7 +1744,7 @@ bool jp2_read_header(
 
 	/* customization of the validation */
 	jp2_setup_decoding_validation (jp2);
-	
+
 	/* customization of the encoding */
 	jp2_setup_header_reading(jp2);
 
@@ -1775,7 +1775,7 @@ bool jp2_read_header(
 }
 
 /**
- * Ends the decompression procedures and possibiliy add data to be read after the 
+ * Ends the decompression procedures and possibiliy add data to be read after the
  * codestream.
  */
 bool jp2_end_decompress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr_t * p_manager)
@@ -1799,7 +1799,7 @@ bool jp2_end_decompress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr
 
 
 /**
- * Ends the compression procedures and possibiliy add data to be read after the 
+ * Ends the compression procedures and possibiliy add data to be read after the
  * codestream.
  */
 bool jp2_end_compress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr_t * p_manager)
@@ -1902,7 +1902,7 @@ bool jp2_read_tile_header (
 }
 
 /**
- * Sets up the procedures to do on writting header after the codestream. 
+ * Sets up the procedures to do on writting header after the codestream.
  * Developpers wanting to extend the library can add their own writting procedures.
  */
 void jp2_setup_end_header_writting (opj_jp2_t *jp2)
@@ -1915,7 +1915,7 @@ void jp2_setup_end_header_writting (opj_jp2_t *jp2)
 }
 
 /**
- * Sets up the procedures to do on reading header. 
+ * Sets up the procedures to do on reading header.
  * Developpers wanting to extend the library can add their own writting procedures.
  */
 void jp2_setup_header_reading (opj_jp2_t *jp2)
@@ -1928,7 +1928,7 @@ void jp2_setup_header_reading (opj_jp2_t *jp2)
 }
 
 /**
- * Sets up the procedures to do on reading header after the codestream. 
+ * Sets up the procedures to do on reading header after the codestream.
  * Developpers wanting to extend the library can add their own writting procedures.
  */
 void jp2_setup_end_header_reading (opj_jp2_t *jp2)
@@ -1940,9 +1940,9 @@ void jp2_setup_end_header_reading (opj_jp2_t *jp2)
 }
 
 
-/** 
+/**
  * The default validation procedure without any extension.
- * 
+ *
  * @param	jp2				the jpeg2000 codec to validate.
  * @param	cio				the input stream to validate.
  * @param	p_manager		the user event manager.
@@ -1957,7 +1957,7 @@ bool jp2_default_validation (
 {
 	bool l_is_valid = true;
 	unsigned int i;
-	
+
 	// preconditions
 	assert(jp2 != 00);
 	assert(cio != 00);
@@ -1970,7 +1970,7 @@ bool jp2_default_validation (
 	l_is_valid &= (jp2->jp2_state == JP2_STATE_NONE);
 	/* make sure not reading a jp2h ???? WEIRD */
 	l_is_valid &= (jp2->jp2_img_state == JP2_IMG_STATE_NONE);
-	
+
 	/* POINTER validation */
 	/* make sure a j2k codec is present */
 	l_is_valid &= (jp2->j2k != 00);
@@ -1987,20 +1987,20 @@ bool jp2_default_validation (
 	/* height */
 	l_is_valid &= (jp2->w > 0);
 	/* precision */
-	for 
-		(i = 0; i < jp2->numcomps; ++i) 
+	for
+		(i = 0; i < jp2->numcomps; ++i)
 	{
 		l_is_valid &= (jp2->comps[i].bpcc > 0);
 	}
 	/* METH */
 	l_is_valid &= ((jp2->meth > 0) && (jp2->meth < 3));
-	
+
 
 
 	/* stream validation */
 	/* back and forth is needed */
 	l_is_valid &= opj_stream_has_seek(cio);
-	
+
 	return l_is_valid;
 
 }
@@ -2039,7 +2039,7 @@ void jp2_setup_header_writting (opj_jp2_t *jp2)
 	opj_procedure_list_add_procedure(jp2->m_procedure_list,(void*)jp2_write_ftyp );
 	opj_procedure_list_add_procedure(jp2->m_procedure_list,(void*)jp2_write_jp2h );
 	opj_procedure_list_add_procedure(jp2->m_procedure_list,(void*)jp2_skip_jp2c );
-	
+
 	/* DEVELOPER CORNER, insert your custom procedures */
 
 }
@@ -2074,12 +2074,12 @@ bool jp2_skip_jp2c(
 	return true;
 }
 
-struct opj_image * jp2_decode(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event_mgr * p_manager) 
+struct opj_image * jp2_decode(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event_mgr * p_manager)
 {
 	/* J2K decoding */
 	struct opj_image * image = j2k_decode(jp2->j2k, cio, p_manager);
 	if
-		(!image) 
+		(!image)
 	{
 		opj_event_msg(p_manager, EVT_ERROR, "Failed to decode J2K image\n");
 		return false;
@@ -2097,7 +2097,7 @@ struct opj_image * jp2_decode(opj_jp2_t *jp2, struct opj_stream_private *cio, st
 	return image;
 }
 
-void jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters, opj_image_t *image,opj_event_mgr_t * p_manager) 
+void jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters, opj_image_t *image,opj_event_mgr_t * p_manager)
 {
 	unsigned int i;
 	int depth_0, sign;
@@ -2118,7 +2118,7 @@ void jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters, opj_image_
 
 	/* setup the JP2 codec */
 	/* ------------------- */
-	
+
 	/* Profile box */
 
 	jp2->brand = JP2_JP2;	/* BR */
@@ -2146,7 +2146,7 @@ void jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters, opj_image_
 	jp2->C = 7;			/* C : Always 7 */
 	jp2->UnkC = 0;		/* UnkC, colorspace specified in colr box */
 	jp2->IPR = 0;		/* IPR, no intellectual property */
-	
+
 	/* BitsPerComponent box */
 
 	for (i = 0; i < image->numcomps; i++) {
@@ -2175,7 +2175,7 @@ void jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters, opj_image_
 
 }
 
-void jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters) 
+void jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters)
 {
 	if(!jp2 || !parameters)
 		return;
@@ -2194,7 +2194,7 @@ void jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters)
  * @param	p_manager		the user event manager
  *
  * @return	true			if the area could be set.
- */				
+ */
 bool jp2_set_decode_area(
 			opj_jp2_t *p_jp2,
 			OPJ_INT32 p_start_x,

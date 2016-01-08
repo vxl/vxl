@@ -19,11 +19,11 @@ class boxm2_ocl_update_sky
   public:
     static bool update_sky( boxm2_scene_sptr         scene,
                         bocl_device_sptr         device,
-                        boxm2_opencl_cache_sptr  opencl_cache, 
+                        boxm2_opencl_cache_sptr  opencl_cache,
                         vpgl_camera_double_sptr  cam,
                         vil_image_view_base_sptr sky_img);
 
-    
+
 
   private:
     //compile kernels and place in static map
@@ -42,9 +42,9 @@ class boxm2_ocl_update_sky2
 
     static bool accumulate_sky_evidence( boxm2_scene_sptr         scene,
                                           bocl_device_sptr         device,
-                                          boxm2_opencl_cache_sptr  opencl_cache, 
+                                          boxm2_opencl_cache_sptr  opencl_cache,
                                           vpgl_camera_double_sptr  cam,
-                                          vil_image_view_base_sptr sky_img);   
+                                          vil_image_view_base_sptr sky_img);
 
   private:
     //compile kernels and place in static map

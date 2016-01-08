@@ -164,7 +164,7 @@ class bwm_video_corr_processor
   //: compute the boolean mask defining which frames have correspondences
   void mask(unsigned& min_frame, unsigned& max_frame,
             vcl_vector<vcl_vector<bool> >& mask);
-  
+
   //: extract the float pixel windows for start and end frames used to find correspondences
   void compute_ab_corr_windows(unsigned match_radius,
                                vcl_vector<bool> const& mask_a,

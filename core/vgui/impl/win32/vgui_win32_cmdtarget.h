@@ -4,9 +4,9 @@
 // which is usually a long switch-case statement, We structure that code
 // using message-mapping technique employed by Microsoft Foundation Class.
 // To do this, a number of macros (DECLARE_MESSAGE_MAP, BEGIN_MESSAGE_MAP,
-// END_MESSAGE_MAP, ON_COMMAND), structures (WIN32_MSGMAP, 
-// WIN32_MSGMAP_ENTRY), and the class vgui_win32_cmdtarget (whose MFC 
-// counterpart is CCmdTarget) are defined here. In particular 
+// END_MESSAGE_MAP, ON_COMMAND), structures (WIN32_MSGMAP,
+// WIN32_MSGMAP_ENTRY), and the class vgui_win32_cmdtarget (whose MFC
+// counterpart is CCmdTarget) are defined here. In particular
 // vgui_win32_cmdtarget is the final stop of message processing.
 
 // TODO: vgui_win32_cmdtarget is not fully developed yet and for now not

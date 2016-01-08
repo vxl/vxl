@@ -6,7 +6,7 @@ Created on April 17, 2012
 Functions to run filters of a boxm2_scene
 """
 
-from boxm2_register import boxm2_batch, dbvalue; 
+from boxm2_register import boxm2_batch, dbvalue;
 import os
 
 #********************************************************************
@@ -23,13 +23,13 @@ def create_kernel_vector(factory_name, dir_type, dim_x, dim_y, dim_z, supp_x, su
     boxm2_batch.set_input_float(4,supp_y);
     boxm2_batch.set_input_float(5,supp_z);
     boxm2_batch.set_input_string(6,factory_name);
-    boxm2_batch.set_input_string(7,dir_type); 
+    boxm2_batch.set_input_string(7,dir_type);
     boxm2_batch.run_process();
     (id, type) = boxm2_batch.commit_output(0);
     filters = dbvalue(id, type);
 
     return filters;
-    
+
 def write_kernel_vector(filters, output_prefix):
     print("Creating Filtering Kernels");
     boxm2_batch.init_process("bvpl_write_generic_kernel_vector_process");
@@ -41,7 +41,7 @@ def write_kernel_vector(filters, output_prefix):
 #  Apply a vector of filters to a boxm2_scene
 #********************************************************************
 def apply_filters(scene, cache, device, filters) :
-  if cache.type == "boxm2_opencl_cache_sptr": 
+  if cache.type == "boxm2_opencl_cache_sptr":
     print("Filtering Scene");
     boxm2_batch.init_process("boxm2_ocl_kernel_vector_filter_process");
     boxm2_batch.set_input_from_db(0,device);
@@ -49,7 +49,7 @@ def apply_filters(scene, cache, device, filters) :
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,filters);
     return boxm2_batch.run_process();
-  else : 
+  else :
     print "ERROR: Cache type not recognized: ", cache.type;
     return False;
 
@@ -71,7 +71,7 @@ def apply_filters_cpp(scene, cpp_cache, prob_thres, filter_basename, filter_id, 
 #  Apply a vector of filters to a boxm2_scene
 #********************************************************************
 def interpolate_normals(scene, cache, device, filters) :
-  if cache.type == "boxm2_opencl_cache_sptr": 
+  if cache.type == "boxm2_opencl_cache_sptr":
     print("Interpolating Normal");
     boxm2_batch.init_process("boxm2_ocl_aggregate_normal_from_filter_vector_process");
     boxm2_batch.set_input_from_db(0,device);
@@ -79,15 +79,15 @@ def interpolate_normals(scene, cache, device, filters) :
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,filters);
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
-  
+
 #********************************************************************
 #  Flip normals towards direction of maximum visibility
-#********************************************************************   
-def flip_normals(scene, cache, device, use_sum=False) :  
-  if cache.type == "boxm2_opencl_cache_sptr": 
+#********************************************************************
+def flip_normals(scene, cache, device, use_sum=False) :
+  if cache.type == "boxm2_opencl_cache_sptr":
     print("Flipping Normal");
     boxm2_batch.init_process("boxm2OclFlipNormalsUsingVisProcess");
     boxm2_batch.set_input_from_db(0,device);
@@ -95,12 +95,12 @@ def flip_normals(scene, cache, device, use_sum=False) :
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_bool(3, use_sum);
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
-	
-def make_inside_empty(scene, cache, device, use_sum=False) :  
-  if cache.type == "boxm2_opencl_cache_sptr": 
+
+def make_inside_empty(scene, cache, device, use_sum=False) :
+  if cache.type == "boxm2_opencl_cache_sptr":
     print("Flipping Normal");
     boxm2_batch.init_process("boxm2OclMakeInsideVoxelsEmptyProcess");
     boxm2_batch.set_input_from_db(0,device);
@@ -108,21 +108,21 @@ def make_inside_empty(scene, cache, device, use_sum=False) :
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_bool(3, use_sum);
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
-    return False;	
-	
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+    return False;
+
 def update_parents_alpha(scene, cache, device) :
-  if cache.type == "boxm2_opencl_cache_sptr": 
+  if cache.type == "boxm2_opencl_cache_sptr":
     print("Update Parents Alpha");
     boxm2_batch.init_process("boxm2OclUpdateParentsAlphaProcess");
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
     boxm2_batch.set_input_from_db(2,cache);
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
-    return False;		
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
+    return False;
 def create_coarse_model(scene, cache, device, model_dir) :
   if cache.type == "boxm2_opencl_cache_sptr":
     print("Create a Coarser Scene");
@@ -137,17 +137,17 @@ def create_coarse_model(scene, cache, device, model_dir) :
     return False;
 
 def filter_scene_data(scene,cache,device,filters,filter_idx):
-  if cache.type == "boxm2_opencl_cache_sptr": 
+  if cache.type == "boxm2_opencl_cache_sptr":
     print("Filtering Scene Data");
     boxm2_batch.init_process("boxm2_ocl_filter_scene_data_process")
     boxm2_batch.set_input_from_db(0,device);
     boxm2_batch.set_input_from_db(1,scene);
     boxm2_batch.set_input_from_db(2,cache);
     boxm2_batch.set_input_from_db(3,filters);
-    boxm2_batch.set_input_int(4,filter_idx);    
+    boxm2_batch.set_input_int(4,filter_idx);
     return boxm2_batch.run_process();
-  else : 
-    print "ERROR: Cache type not recognized: ", cache.type; 
+  else :
+    print "ERROR: Cache type not recognized: ", cache.type;
     return False;
 
 def aggregate_normal_from_filter_vector(scene,cache,device,filter_vector):

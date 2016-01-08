@@ -3,7 +3,7 @@
 #define boxm2_vecf_plot_orbit_h
 //:
 // \file
-// \brief A tableau to view projections of the orbit model 
+// \brief A tableau to view projections of the orbit model
 // \author J.L. Mundy
 // \date July 25, 2015
 #include <vnl/vnl_math.h>

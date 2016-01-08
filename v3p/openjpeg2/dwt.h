@@ -53,7 +53,7 @@ struct opj_tccp;
 /*@{*/
 /* ----------------------------------------------------------------------- */
 /**
-Forward 5-3 wavelet tranform in 2-D. 
+Forward 5-3 wavelet tranform in 2-D.
 Apply a reversible DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 */
@@ -79,13 +79,13 @@ Get the norm of a wavelet function of a subband at a specified level for the rev
 */
 OPJ_FLOAT64 dwt_getnorm(OPJ_UINT32 level, OPJ_UINT32 orient);
 /**
-Forward 9-7 wavelet transform in 2-D. 
+Forward 9-7 wavelet transform in 2-D.
 Apply an irreversible DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 */
 bool dwt_encode_real(struct opj_tcd_tilecomp * tilec);
 /**
-Inverse 9-7 wavelet transform in 2-D. 
+Inverse 9-7 wavelet transform in 2-D.
 Apply an irreversible inverse DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 @param numres Number of resolution levels to decode
@@ -105,7 +105,7 @@ Get the norm of a wavelet function of a subband at a specified level for the irr
 */
 OPJ_FLOAT64 dwt_getnorm_real(OPJ_UINT32 level, OPJ_UINT32 orient);
 /**
-Explicit calculation of the Quantization Stepsizes 
+Explicit calculation of the Quantization Stepsizes
 @param tccp Tile-component coding parameters
 @param prec Precint analyzed
 */

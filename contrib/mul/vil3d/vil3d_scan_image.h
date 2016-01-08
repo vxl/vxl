@@ -40,7 +40,7 @@ inline void vil3d_scan_image(const vil3d_image_view<T >& im, Fn& f)
 
 //: Call f(im1(i,j,k,p),im2(i,j,k,p)) for every voxel in the images
 template <class T1, class T2, class Fn >
-inline void vil3d_scan_image(const vil3d_image_view<T1 >& im1, 
+inline void vil3d_scan_image(const vil3d_image_view<T1 >& im1,
                              const vil3d_image_view<T2 >& im2, Fn& f)
 {
   unsigned ni = im1.ni();

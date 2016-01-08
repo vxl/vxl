@@ -2,7 +2,7 @@
 // \file
 // \author Tim Cootes
 // \brief Calculate and apply 2D rigid transformations (translation + rotation)
-// Note: Alignment calculated by estimating optimal similarity transformation, 
+// Note: Alignment calculated by estimating optimal similarity transformation,
 // then discarding scale.
 
 #include "msm_rigid_aligner.h"
@@ -121,7 +121,7 @@ void msm_rigid_aligner::calc_transform(const msm_points& pts1,
     dot_sum += dpx*dtx + dpy*dty;
     xy_sum += dpx*dty - dpy*dtx;
   }
-  
+
   trans.set_size(3);
   trans[0] = vcl_atan2(xy_sum,dot_sum);
   double a=vcl_cos(trans[0]), b=vcl_sin(trans[0]);
@@ -269,7 +269,7 @@ void msm_rigid_aligner::calc_transform_wt_mat(
   trans.set_size(3);
   trans[0] = vcl_atan2(q[1],q[0]);
   double a=vcl_cos(trans[0]), b=vcl_sin(trans[0]);
-  
+
   // Include effects of translations by CoG
   trans[1] = q[2] + cog2.x() - (a*cog1.x() - b*cog1.y());
   trans[2] = q[3] + cog2.y() - (b*cog1.x() + a*cog1.y());

@@ -36,11 +36,11 @@ public:
 
 
   //: Construct from a view and optional world-to-image transform (takes copies of both).
-  explicit vimt_image_2d_of(const vil_image_view<T>& view, 
+  explicit vimt_image_2d_of(const vil_image_view<T>& view,
                    const vimt_transform_2d& w2i=vimt_transform_2d())
     : vimt_image_2d(w2i), image_(view) {}
 
-  
+
   //: Destructor
   virtual ~vimt_image_2d_of() {}
 

@@ -16,14 +16,14 @@
 class clsfy_random_forest : public clsfy_classifier_base
 {
   public:
-    
+
   //: Constructor
-    
-    clsfy_random_forest(); 
-    
+
+    clsfy_random_forest();
+
     virtual ~clsfy_random_forest();
 
-    
+
   //: Return the classification of the given probe vector.
     virtual unsigned classify(const vnl_vector<double> &input) const;
 
@@ -65,7 +65,7 @@ class clsfy_random_forest : public clsfy_classifier_base
     unsigned ntrees() const {return trees_.size();}
 
     void prune();
-    
+
     //Append the tres of forest2 onto this
     clsfy_random_forest& operator+=(const clsfy_random_forest& forest2);
 
@@ -76,7 +76,7 @@ class clsfy_random_forest : public clsfy_classifier_base
     friend void merge_sub_forests(const vcl_vector< clsfy_random_forest*>& sub_forests,
                            clsfy_random_forest& large_forest);
 
-    //: Merge the two input forests 
+    //: Merge the two input forests
     friend clsfy_random_forest operator+(const clsfy_random_forest& forest1,
                                          const clsfy_random_forest& forest2);
 
@@ -88,7 +88,7 @@ class clsfy_random_forest : public clsfy_classifier_base
                                          const vnl_vector<double> &input,
                                          const vcl_vector<vcl_vector<unsigned > >& oobIndices,
                                          unsigned this_index) const;
-    
+
 
     //: Return the classification of the given probe vector using out of bag trees only.
     //See also class_probabilities_oob

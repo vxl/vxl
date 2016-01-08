@@ -48,7 +48,7 @@ public:
     /** constructor
      *  @param iter reference to an object of the base class
      */
-    DcmDictEntryListIterator(const OFListIterator(DcmDictEntry*)& iter) 
+    DcmDictEntryListIterator(const OFListIterator(DcmDictEntry*)& iter)
     : OFListIterator(DcmDictEntry*)(iter) {}
 
     /// copy assignment operator
@@ -96,7 +96,7 @@ public:
           { init(NULL); }
 
     /** constructor, creates iterator to existing hash dictionary
-     *  @param d pointer to dictionary 
+     *  @param d pointer to dictionary
      *  @param atEnd if true, iterator points after last element
      *   of hash dictionary, otherwise iterator points to first element.
      */
@@ -105,21 +105,21 @@ public:
           { init(d, atEnd); }
 
     /// copy constructor
-    DcmHashDictIterator(const DcmHashDictIterator& i) 
+    DcmHashDictIterator(const DcmHashDictIterator& i)
       : dict(i.dict), hindex(i.hindex), iterating(i.iterating), iter(i.iter)
           { }
 
     /// copy assignment operator
-    DcmHashDictIterator& operator=(const DcmHashDictIterator& i) 
-        { dict = i.dict; hindex = i.hindex; 
+    DcmHashDictIterator& operator=(const DcmHashDictIterator& i)
+        { dict = i.dict; hindex = i.hindex;
         iterating = i.iterating; iter = i.iter; return *this; }
 
     /// comparison equality
-    OFBool operator==(const DcmHashDictIterator& x) const 
+    OFBool operator==(const DcmHashDictIterator& x) const
         { return (hindex == x.hindex) && (iter == x.iter); }
 
     /// comparison non-equality
-    OFBool operator!=(const DcmHashDictIterator& x) const 
+    OFBool operator!=(const DcmHashDictIterator& x) const
         { return (hindex != hindex) || (iter != x.iter); }
 
     /// dereferencing of iterator
@@ -142,7 +142,7 @@ private:
      */
     void init(const DcmHashDict *d, OFBool atEnd = OFFalse);
 
-    /** implements increment operator on hash dictionary 
+    /** implements increment operator on hash dictionary
      */
     void stepUp();
 
@@ -156,7 +156,7 @@ private:
     OFBool iterating;
 
     /// iterator for traversing a bucket in the hash table
-    DcmDictEntryListIterator iter;    
+    DcmDictEntryListIterator iter;
 };
 
 
@@ -227,9 +227,9 @@ private:
     /** compute hash value for given tag key
      *  @param k pointer to tag key
      *  @return hash value
-     */    
+     */
     int hash(const DcmTagKey* k) const;
-    
+
     /** inserts new entry into given list
      *  @param list list to add to
      *  @param e new element to add, will be deleted upon destruction of the hash table
@@ -253,7 +253,7 @@ private:
      */
     DcmDictEntry* findInList(DcmDictEntryList& list, const DcmTagKey& k, const char *privCreator) const;
 
-    /** array of (hash table size) pointers to DcmDictEntryList elements 
+    /** array of (hash table size) pointers to DcmDictEntryList elements
      *  implementing the different buckets of the hash table
      */
     DcmDictEntryList** hashTab;

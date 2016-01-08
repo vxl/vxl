@@ -58,7 +58,7 @@ int main( int nArgc, char ** papszArgv )
     int		i, bSingletons = FALSE;
 
     printf( "Content-type: text/html\n\n" );
-    
+
 /* -------------------------------------------------------------------- */
 /*      Parse the PATH_INFO.                                            */
 /* -------------------------------------------------------------------- */
@@ -186,7 +186,7 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
     while( (papszFields = CSVReadParseLine( fp )) != NULL )
     {
         int	bDisplay=TRUE, i;
-        
+
         nColCount = CSLCount( papszFields );
 
         for( i = 0; papszOptions != NULL && papszOptions[i] != NULL; i++ )
@@ -219,18 +219,18 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
             {
                 const char	*pszSubTable = NULL;
                 const char  *pszFieldName;
-                
+
                 if( panColumns[iCol] < 0
                     || panColumns[iCol] >= nColCount )
                     continue;
-                
+
                 pszFieldName = papszFieldNames[panColumns[iCol]];
 
                 if( bSingletons )
                 {
                     printf( "<td>%s\n", pszFieldName );
                 }
-                
+
 
                 if( EQUAL(pszFieldName,"PRIME_MERIDIAN_CODE") )
                     pszSubTable = "p_meridian";
@@ -248,7 +248,7 @@ CSV2HTML( const char * pszFilename, int nColumns, int * panColumns,
                     pszSubTable = "ellipsoid";
                 else if( EQUAL(pszFieldName,"COORD_TRF_METHOD_CODE") )
                     pszSubTable = "trf_method";
-                
+
                 if( pszSubTable != NULL )
                     printf( "<td><a href="
                             "\"/cgi-bin/csv2html/TABLE=%s/CODE=%s/\">"

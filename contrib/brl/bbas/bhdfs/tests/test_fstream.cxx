@@ -20,8 +20,8 @@ void test_fstream()
   //bhdfs_fstream_sptr fs = new bhdfs_fstream(test_file_name, "a");
   //bhdfs_fstream_sptr fs = new bhdfs_fstream(test_file_name, "r");
   TEST("open stream", fs->ok(), true);
-  
-  vcl_string buffer2 = "Hello, World!"; 
+
+  vcl_string buffer2 = "Hello, World!";
   TEST("write to stream", fs->write(buffer2.c_str(), buffer2.length()), 13);
 
   TEST("close stream", fs->close(), true);
@@ -36,7 +36,7 @@ void test_fstream()
   TEST("read from stream", fs2->read(buf, 1000), 13);
   TEST("read from stream", fs2->read(buf, 1000), 0);
 
-  fs2->close(); 
+  fs2->close();
 
 }
 

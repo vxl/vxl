@@ -10,8 +10,8 @@
 #include <vnl/algo/vnl_svd.h>
 
 const int TM_UNKNOWNS_COUNT = 16;
-const double DEGENERACY_THRESHOLD = 0.00001;  
-  
+const double DEGENERACY_THRESHOLD = 0.00001;
+
 
 //: Compute a 3D-to-3D homography using linear least squares.
 // Returns false if the calculation fails or there are fewer than five point
@@ -27,7 +27,7 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
   int n = p1.size();
   //transform the point sets and fill the design matrix
   vnl_matrix<double> D(n*6, TM_UNKNOWNS_COUNT);
-  
+
   int row = 0;
   for (int i = 0; i < n; i++) {
     //double x1 = p1[i].x(), x2 = p1[i].y(), x3 = p1[i].z(), x4 = p1[i].w();
@@ -35,34 +35,34 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
     double x1 = p2[i].x(), x2 = p2[i].y(), x3 = p2[i].z(), x4 = p2[i].w();
     double y1 = p1[i].x(), y2 = p1[i].y(), y3 = p1[i].z(), y4 = p1[i].w();
 
-    D(row, 0) = -x2*y1;   D(row, 1) = x1*y1;   D(row, 2) = 0;      D(row, 3) = 0;      
-    D(row, 4) = -x2*y2;   D(row, 5) = x1*y2;   D(row, 6) = 0;      D(row, 7) = 0;       
-    D(row, 8) = -x2*y3;   D(row, 9) = x1*y3;   D(row, 10) = 0;     D(row, 11) = 0;    
+    D(row, 0) = -x2*y1;   D(row, 1) = x1*y1;   D(row, 2) = 0;      D(row, 3) = 0;
+    D(row, 4) = -x2*y2;   D(row, 5) = x1*y2;   D(row, 6) = 0;      D(row, 7) = 0;
+    D(row, 8) = -x2*y3;   D(row, 9) = x1*y3;   D(row, 10) = 0;     D(row, 11) = 0;
     D(row, 12) = -x2*y4;  D(row, 13) = x1*y4;  D(row, 14) = 0;     D(row, 15) = 0;
     ++row;
-    D(row, 0) = -x3*y1;   D(row, 1) = 0;       D(row, 2) = x1*y1;  D(row, 3) = 0;      
-    D(row, 4) = -x3*y2;   D(row, 5) = 0;       D(row, 6) = x1*y2;  D(row, 7) = 0;       
-    D(row, 8) = -x3*y3;   D(row, 9) = 0;       D(row, 10) = x1*y3; D(row, 11) = 0;    
+    D(row, 0) = -x3*y1;   D(row, 1) = 0;       D(row, 2) = x1*y1;  D(row, 3) = 0;
+    D(row, 4) = -x3*y2;   D(row, 5) = 0;       D(row, 6) = x1*y2;  D(row, 7) = 0;
+    D(row, 8) = -x3*y3;   D(row, 9) = 0;       D(row, 10) = x1*y3; D(row, 11) = 0;
     D(row, 12) = -x3*y4;  D(row, 13) = 0;      D(row, 14) = x1*y4;   D(row, 15) = 0;
     ++row;
-    D(row, 0) = -x4*y1;   D(row, 1) = 0;       D(row, 2) = 0;      D(row, 3) = x1*y1;      
-    D(row, 4) = -x4*y2;   D(row, 5) = 0;       D(row, 6) = 0;      D(row, 7) = x1*y2;       
-    D(row, 8) = -x4*y3;   D(row, 9) = 0;       D(row, 10) = 0;     D(row, 11) = x1*y3;    
+    D(row, 0) = -x4*y1;   D(row, 1) = 0;       D(row, 2) = 0;      D(row, 3) = x1*y1;
+    D(row, 4) = -x4*y2;   D(row, 5) = 0;       D(row, 6) = 0;      D(row, 7) = x1*y2;
+    D(row, 8) = -x4*y3;   D(row, 9) = 0;       D(row, 10) = 0;     D(row, 11) = x1*y3;
     D(row, 12) = -x4*y4;  D(row, 13) = 0;      D(row, 14) = 0;     D(row, 15) = x1*y4;
     ++row;
-    D(row, 0) = 0;        D(row, 1) = -x4*y1;  D(row, 2) = 0;      D(row, 3) = x2*y1;      
-    D(row, 4) = 0;        D(row, 5) = -x4*y2;  D(row, 6) = 0;      D(row, 7) = x2*y2;       
-    D(row, 8) = 0;        D(row, 9) = -x4*y3;  D(row, 10) = 0;     D(row, 11) = x2*y3;    
+    D(row, 0) = 0;        D(row, 1) = -x4*y1;  D(row, 2) = 0;      D(row, 3) = x2*y1;
+    D(row, 4) = 0;        D(row, 5) = -x4*y2;  D(row, 6) = 0;      D(row, 7) = x2*y2;
+    D(row, 8) = 0;        D(row, 9) = -x4*y3;  D(row, 10) = 0;     D(row, 11) = x2*y3;
     D(row, 12) = 0;       D(row, 13) = -x4*y4; D(row, 14) = 0;     D(row, 15) = x2*y4;
     ++row;
-    D(row, 0) = 0;        D(row, 1) = 0;       D(row, 2) = -x4*y1;      D(row, 3) = x3*y1;      
-    D(row, 4) = 0;        D(row, 5) = 0;       D(row, 6) = -x4*y2;      D(row, 7) = x3*y2;       
-    D(row, 8) = 0;        D(row, 9) = 0;       D(row, 10) = -x4*y3;     D(row, 11) = x3*y3;    
+    D(row, 0) = 0;        D(row, 1) = 0;       D(row, 2) = -x4*y1;      D(row, 3) = x3*y1;
+    D(row, 4) = 0;        D(row, 5) = 0;       D(row, 6) = -x4*y2;      D(row, 7) = x3*y2;
+    D(row, 8) = 0;        D(row, 9) = 0;       D(row, 10) = -x4*y3;     D(row, 11) = x3*y3;
     D(row, 12) = 0;       D(row, 13) = 0;      D(row, 14) = -x4*y4;     D(row, 15) = x3*y4;
     ++row;
-    D(row, 0) = 0;        D(row, 1) = -x3*y1;       D(row, 2) = x2*y1;      D(row, 3) = 0;      
-    D(row, 4) = 0;        D(row, 5) = -x3*y2;       D(row, 6) = x2*y2;      D(row, 7) = 0;       
-    D(row, 8) = 0;        D(row, 9) = -x3*y3;       D(row, 10) = x2*y3;     D(row, 11) = 0;    
+    D(row, 0) = 0;        D(row, 1) = -x3*y1;       D(row, 2) = x2*y1;      D(row, 3) = 0;
+    D(row, 4) = 0;        D(row, 5) = -x3*y2;       D(row, 6) = x2*y2;      D(row, 7) = 0;
+    D(row, 8) = 0;        D(row, 9) = -x3*y3;       D(row, 10) = x2*y3;     D(row, 11) = 0;
     D(row, 12) = 0;       D(row, 13) = -x3*y4;      D(row, 14) = x2*y4;     D(row, 15) = 0;
     ++row;
   }

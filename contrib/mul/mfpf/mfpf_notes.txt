@@ -1,7 +1,7 @@
 To Do:
 - Optimise scale/angle in multi_search responses
   - discard any poses which are not at a local minima in both
-  - This seems to discard everything at present.  
+  - This seems to discard everything at present.
   - Need to revisit.
 - region_pdf_buider - memory overwrite somewhere?
 - region_pdf_builder - add shape (eg box/ellipse) flag
@@ -16,7 +16,7 @@ To Do:
   in mfpf_point_finder::refine_match (depends on size of object
 - radius() currently defined in model units - should it be in world
   units?
-- Tune refine_match algorithm 
+- Tune refine_match algorithm
    - Probably using too many iterations at present.
 
 - add switch for normalisation in region_pdf

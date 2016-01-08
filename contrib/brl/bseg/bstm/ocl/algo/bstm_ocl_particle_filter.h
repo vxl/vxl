@@ -4,10 +4,10 @@
 
 //:
 // \file
-// \brief   This class implements a particle filter based on mutual information. At each time step, the algorithm samples 
-//          a new set of particles/hypothesis (axis aligned bounding boxes for simplicity) by perturbing the particles  
-//          from the previous time step and evaluates a score based on MI. Next, the hypothesis are resampled to ensure 
-//          low ranking particles are eliminated.  
+// \brief   This class implements a particle filter based on mutual information. At each time step, the algorithm samples
+//          a new set of particles/hypothesis (axis aligned bounding boxes for simplicity) by perturbing the particles
+//          from the previous time step and evaluates a score based on MI. Next, the hypothesis are resampled to ensure
+//          low ranking particles are eliminated.
 
 
 #include <bstm/ocl/bstm_opencl_cache.h>
@@ -43,7 +43,7 @@ class bstm_ocl_particle_filter
   void init_ocl_minfo();
 
   void resample(unsigned prev_time, unsigned cur_time);
-  
+
   void eval_obs_density(unsigned prev_time, unsigned cur_time);
 
   void propagate_particles(unsigned prev_time, unsigned curr_time);
@@ -51,7 +51,7 @@ class bstm_ocl_particle_filter
   vcl_vector<double> eval_mi(unsigned prev_time, unsigned cur_time);
 
   vcl_vector<double> compute_mi_from_hist();
-  
+
   bool compile_kernel();
 
   vgl_vector_3d<double> velocity_estimate(unsigned prev2_time, unsigned prev_time);
@@ -62,7 +62,7 @@ class bstm_ocl_particle_filter
   vgl_rotation_3d<double> sample_rot(vgl_rotation_3d<double> rot, double kappa , double w_sigma );
 
 
-  //helper 
+  //helper
   void populate_blk_mapping(vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > & mapping, const vgl_box_3d<double>& aabb, const vgl_rotation_3d<double>& r,
                             const  vgl_vector_3d<double>& t, unsigned prev_time, unsigned curr_time);
 
@@ -102,7 +102,7 @@ class bstm_ocl_particle_filter
   cl_uint surf_nbins_;
   cl_uint app_nbins_;
   cl_uint app_view_dir_num_;
-  
+
   //bb
   vcl_vector< vcl_vector<vgl_orient_box_3d<double> > > bb_;
   //mean bounding box

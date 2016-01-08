@@ -74,44 +74,44 @@ bool boxm2_create_scene_mask_process(bprb_func_process& pro)
   bool only_ground_plane = pro.get_input<bool>(i++);
 
   vgl_box_3d<double> bbox = scene->bounding_box();
-  double x = bbox.min_point().x(); double y = bbox.min_point().y(); double z = bbox.min_point().z();  
-  double w = bbox.width(); double h = bbox.height(); double d = bbox.depth();  
+  double x = bbox.min_point().x(); double y = bbox.min_point().y(); double z = bbox.min_point().z();
+  double w = bbox.width(); double h = bbox.height(); double d = bbox.depth();
 
   vgl_polygon<double> poly(1); double u,v;
-  vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj); 
+  vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj);
   mask->fill(vxl_byte(0));
-  
+
   // put the ground plane first
   vcl_vector<vgl_point_2d<double> > vv;
-  camera->project(x, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
-  camera->project(x+w, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
-  camera->project(x, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));  
-  camera->project(x+w, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));  
+  camera->project(x, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+  camera->project(x+w, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+  camera->project(x, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+  camera->project(x+w, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
   poly = vgl_convex_hull(vv);
   fill_in(mask, poly); poly.clear(); poly.new_sheet();
-  
+
   if (!only_ground_plane) {
     vcl_cout << "in !only ground plane\n";
     //: front plane
-    camera->project(x, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
-    camera->project(x, y, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
-    camera->project(x+w, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));  
+    camera->project(x, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+    camera->project(x, y, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+    camera->project(x+w, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     camera->project(x+w, y, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     poly = vgl_convex_hull(vv);
     fill_in(mask, poly); poly.clear(); poly.new_sheet();
 
     //: right side plane
-    camera->project(x+w, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
-    camera->project(x+w, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));  
-    camera->project(x+w, y+h, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
+    camera->project(x+w, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+    camera->project(x+w, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+    camera->project(x+w, y+h, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     camera->project(x+w, y, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     poly = vgl_convex_hull(vv);
     fill_in(mask, poly); poly.clear(); poly.new_sheet();
-    
+
     //: back side plane
-    camera->project(x+w, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));  
-    camera->project(x+w, y+h, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
-    camera->project(x, y+h, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));  
+    camera->project(x+w, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+    camera->project(x+w, y+h, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
+    camera->project(x, y+h, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     camera->project(x, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     poly = vgl_convex_hull(vv);
     fill_in(mask, poly); poly.clear(); poly.new_sheet();
@@ -119,15 +119,15 @@ bool boxm2_create_scene_mask_process(bprb_func_process& pro)
     //: left side plane
     camera->project(x, y+h, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     camera->project(x, y+h, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
-    camera->project(x, y, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v)); 
+    camera->project(x, y, z+d, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     camera->project(x, y, z, u, v); vv.push_back(vgl_point_2d<double>(u,v));
     poly = vgl_convex_hull(vv);
     fill_in(mask, poly); poly.clear(); poly.new_sheet();
-  } 
+  }
 
   vil_image_view_base_sptr img_sptr = mask;
   pro.set_output_val<vil_image_view_base_sptr>(0,img_sptr);
-  
-  return true; 
+
+  return true;
 }
 

@@ -1,14 +1,14 @@
 #if NVIDIA
  #pragma OPENCL EXTENSION cl_khr_gl_sharing : enable
 #endif
-#ifdef MOG_TYPE_8 
+#ifdef MOG_TYPE_8
     #define MOG_TYPE uchar8
     #define NORM 255;
 #else
     #define MOG_TYPE uchar8
     #define NORM 255;
 #endif
-#ifdef MOG_TYPE_16 
+#ifdef MOG_TYPE_16
     #define MOG_TYPE ushort8
     #define NORM 65535;
 #endif
@@ -18,16 +18,16 @@
 // to supplement cast ray args
 typedef struct
 {
-  __global float* alpha; 
+  __global float* alpha;
   __global MOG_TYPE*  mog;
-  float* expint; 
-  float* vis; 
-  float* cum_vol; 
+  float* expint;
+  float* vis;
+  float* cum_vol;
   float* intensity_norm;
   float* weighted_int;
-  float* prob_surface; 
-  float  volume_scale; 
-} AuxArgs;  
+  float* prob_surface;
+  float  volume_scale;
+} AuxArgs;
 
 void cast_cone_ray( int i, int j,                                     //pixel information
                     float ray_ox, float ray_oy, float ray_oz,         //ray origin
@@ -37,16 +37,16 @@ void cast_cone_ray( int i, int j,                                     //pixel in
                     __global    int4               * tree_array,      //tree buffers (loaded as int4, but read as uchar16
                     __local     uchar16            * local_tree,      //local tree for traversing
                     __constant  uchar              * bit_lookup,      //0-255 num bits lookup table
-                   
-                    __constant  float              * centerX,     
-                    __constant  float              * centerY,      
-                    __constant  float              * centerZ,     
-                      
+
+                    __constant  float              * centerX,
+                    __constant  float              * centerY,
+                    __constant  float              * centerZ,
+
                     __local     uchar              * cumsum,          //cumulative sum helper for data pointer
                     __local     uchar              * visit_list,      //visit list for BFS, uses 10 chars per thread
                                 float              * vis,             //passed in as starting visibility
-                    AuxArgs aux_args ); 
-                    
+                    AuxArgs aux_args );
+
 __kernel
 void
 render_expected( __constant  RenderSceneInfo    * linfo,
@@ -60,11 +60,11 @@ render_expected( __constant  RenderSceneInfo    * linfo,
                   __global    float              * output,
                   __constant  uchar              * bit_lookup,
                   __global    float              * vis_image,
-                  
-                  __constant  float              * centerX,     
-                  __constant  float              * centerY,      
-                  __constant  float              * centerZ,      
-                  
+
+                  __constant  float              * centerX,
+                  __constant  float              * centerY,
+                  __constant  float              * centerZ,
+
                   __local     uchar16            * local_tree,
                   __local     uchar              * cumsum,        //cumulative sum helper for data pointer
                   __local     uchar              * to_visit)      //used as BFS visit list
@@ -80,7 +80,7 @@ render_expected( __constant  RenderSceneInfo    * linfo,
 
   // check to see if the thread corresponds to an actual pixel as in some
   // cases #of threads will be more than the pixels.
-  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w) 
+  if (i>=(*exp_image_dims).z || j>=(*exp_image_dims).w)
     return;
 
   //Store image index (may save a register).  Also initialize VIS and expected_int
@@ -90,45 +90,45 @@ render_expected( __constant  RenderSceneInfo    * linfo,
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
   //----------------------------------------------------------------------------
-  float4 ray_o = ray_origins[ imIndex ]; 
-  float4 ray_d = ray_directions[ imIndex ]; 
+  float4 ray_o = ray_origins[ imIndex ];
+  float4 ray_d = ray_directions[ imIndex ];
   float cone_half_angle = ray_d.w; ray_d.w = 0.0f;
   float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);  
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
 
   //----------------------------------------------------------------------------
   // we know i,j map to a point on the image, have calculated ray
-  // BEGIN RAY TRACE 
+  // BEGIN RAY TRACE
   //----------------------------------------------------------------------------
   float expint  = exp_image[imIndex];
   float vis     = vis_image[imIndex];
-  
-  float cum_vol = 0.0f; 
+
+  float cum_vol = 0.0f;
   float intensity_norm = 0.0f;;
   float weighted_int = 0.0f;
-  float prob_surface = 0.0f; 
-  
+  float prob_surface = 0.0f;
+
   //instantiate aux args
-  AuxArgs aux_args; 
-  aux_args.alpha  = alpha_array; 
+  AuxArgs aux_args;
+  aux_args.alpha  = alpha_array;
   aux_args.mog    = mixture_array;
   aux_args.expint = &expint;
   aux_args.vis    = &vis;
-  aux_args.cum_vol = &cum_vol; 
+  aux_args.cum_vol = &cum_vol;
   aux_args.intensity_norm = &intensity_norm;
   aux_args.weighted_int = &weighted_int;
-  aux_args.prob_surface = &prob_surface;  
+  aux_args.prob_surface = &prob_surface;
   aux_args.volume_scale = linfo->block_len*linfo->block_len*linfo->block_len;
-  
+
   cast_cone_ray( i, j,
                 ray_ox, ray_oy, ray_oz,
                 ray_dx, ray_dy, ray_dz, cone_half_angle,
                 linfo, tree_array,                                    //scene info
-                local_tree, bit_lookup, centerX, centerY, centerZ, 
+                local_tree, bit_lookup, centerX, centerY, centerZ,
                 cumsum, to_visit, &vis, aux_args);      //utility info
-                
+
   //store the expected intensity (as UINT)
-  exp_image[imIndex] =  expint; 
+  exp_image[imIndex] =  expint;
 
   //store visibility at the end of this block
   vis_image[imIndex] = vis;
@@ -141,7 +141,7 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
 
   //grab voxel alpha and intensity
   float alpha = aux_args.alpha[data_ptr];
-  
+
   //calculate the mean intensity
   uchar8 data = aux_args.mog[data_ptr];
   float w2=0.0f;
@@ -151,7 +151,7 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
                       (float)data.s3 * (float)data.s5 +
                       (float)data.s6 * w2;
   exp_intensity /= (255.0f*255.0f);
-  
+
   //probability that this voxel is occupied by surface
   float cell_occupancy_prob = (1.0 - exp(-alpha*volume) );
   (*aux_args.prob_surface) += (cell_occupancy_prob * volume);
@@ -159,34 +159,34 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
   //weighted intensity for this voxel
   (*aux_args.weighted_int) += cell_occupancy_prob * volume * exp_intensity;
   (*aux_args.intensity_norm) += cell_occupancy_prob * volume;
-  
-  (*aux_args.cum_vol) += volume; 
+
+  (*aux_args.cum_vol) += volume;
 }
 
 //once step cell is performed, compute ball properties
 void compute_ball_properties( AuxArgs aux_args )
 {
   if( *aux_args.intensity_norm > 1e-10 && *aux_args.cum_vol > 1e-10) {
-    
+
     //calculate ray/sphere occupancy prob
     float sphere_occ_prob = (*aux_args.prob_surface) / (*aux_args.cum_vol);
-    
+
     //calc expected int = weighted sum / weighted total volume
-    float expected_int = (*aux_args.weighted_int) / (*aux_args.intensity_norm); 
+    float expected_int = (*aux_args.weighted_int) / (*aux_args.intensity_norm);
 
     //expected intensity is Visibility * Weighted Intensity * Occupancy
-    float ei = (*aux_args.expint); 
-    float vis = (*aux_args.vis); 
+    float ei = (*aux_args.expint);
+    float vis = (*aux_args.vis);
     ei += vis * expected_int * sphere_occ_prob;
-    (*aux_args.expint) = ei;      
-    
+    (*aux_args.expint) = ei;
+
     //update visibility after all cells have accounted for
-    vis *= (1.0 - sphere_occ_prob); 
-    (*aux_args.vis) = vis; 
+    vis *= (1.0 - sphere_occ_prob);
+    (*aux_args.vis) = vis;
   }
-  
-  *aux_args.cum_vol = 0.0f; 
+
+  *aux_args.cum_vol = 0.0f;
   *aux_args.intensity_norm = 0.0f;
   *aux_args.weighted_int = 0.0f;
-  *aux_args.prob_surface = 0.0f;  
+  *aux_args.prob_surface = 0.0f;
 }

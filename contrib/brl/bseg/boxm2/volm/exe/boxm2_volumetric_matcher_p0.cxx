@@ -112,12 +112,12 @@ int main(int argc, char** argv)
     dms->b_read(dis);
     dis.close();
 
-    volm_io_expt_params camera_params; 
+    volm_io_expt_params camera_params;
     camera_params.read_params(cam_params());
     // check camera input file
     double heading, heading_dev, tilt, tilt_dev, roll, roll_dev;
     double tfov, top_fov_dev, altitude, lat, lon;
-    if (!volm_io::read_camera(cam_kml(), dms->ni(), dms->nj(), heading, heading_dev, 
+    if (!volm_io::read_camera(cam_kml(), dms->ni(), dms->nj(), heading, heading_dev,
         tilt, tilt_dev, roll, roll_dev, tfov, top_fov_dev, altitude, lat, lon)) {
             vcl_cout << "problem parsing camera kml file: " << cam_kml()<< '\n';
             return volm_io::EXE_ARGUMENT_ERROR;
@@ -126,8 +126,8 @@ int main(int argc, char** argv)
         = new volm_camera_space(tfov, top_fov_dev, camera_params.fov_inc, altitude, dms->ni(), dms->nj(),
                                  heading, heading_dev, camera_params.head_inc,
                                  tilt, tilt_dev, camera_params.tilt_inc,
-                                 roll, roll_dev, camera_params.roll_inc); 
-    volm_spherical_container_sptr sph 
+                                 roll, roll_dev, camera_params.roll_inc);
+    volm_spherical_container_sptr sph
         = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
     //: Create query here.
 
@@ -163,25 +163,25 @@ int main(int argc, char** argv)
         for(unsigned i = 0 ; i < hyp_leaf->hyps_->size(); i++)
         {
             int num_regions[5];
-            iconfig.read(reinterpret_cast<char*> (&num_regions[0]),sizeof(int)*5);          
+            iconfig.read(reinterpret_cast<char*> (&num_regions[0]),sizeof(int)*5);
             vcl_cout<<"Vals "<<num_regions[0]<<" "<<num_regions[1]<<" "<<num_regions[2]<<" "<<num_regions[3]<<vcl_endl;
             int numelements = num_regions[0]*6;
             float * boxes = new float[numelements];
             idata.read(reinterpret_cast<char*> (&boxes[0]),sizeof(float)*numelements);
-            
+
             {
                 volm_spherical_region_index region_index(boxes,num_regions[1],num_regions[2],num_regions[3],num_regions[4]);
                 volm_score_sptr score = new volm_score(leaf_id,i);
                 matcher.match(region_index,score);
                 score_all.push_back(score);
             }
-        } 
+        }
         leaf_id++;
     }
     vcl_stringstream out_fname_bin;
     out_fname_bin << out_folder() << "/ps_0_scores_tile_" << tile_id() << ".bin";
     vcl_cout<<"Size of scores "<<score_all.size()<<vcl_endl;
-    volm_score::write_scores(score_all, out_fname_bin.str());  
+    volm_score::write_scores(score_all, out_fname_bin.str());
     vcl_cout<<"Total time taken is "<<t.all()<<" seg time "<<ttime<<" # of intersections "<<matcher.count_<<vcl_endl;
     // finish everything successfully
     volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED);

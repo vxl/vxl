@@ -46,7 +46,7 @@ namespace volm_correct_rational_cameras_ransac_with_initial_process_globals
 {
   unsigned int n_inputs_  = 6;
   unsigned int n_outputs_ = 0;
-  
+
   //: return the overlapped region of multiple 2-d bounding box
   vgl_box_2d<double> intersection(vcl_vector<vgl_box_2d<double> > const& boxes);
 
@@ -101,7 +101,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
   vcl_string output_path = pro.get_input<vcl_string>(in_i++);
   float pix_rad          = pro.get_input<float>(in_i++);
   bool enforce_existing  = pro.get_input<bool>(in_i++);
-  
+
   if (enforce_existing)
     vcl_cout << "!!!!!!! enforce to have at least 2 existing images!\n";
   else
@@ -119,7 +119,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
     vcl_cerr << pro.name() << ": 0 correspondences in file: " << input_txt << "! returning without correcting any cams!\n";
     return false;
   }
-  
+
   vcl_cout << "will read: " << n << " correspondences for each frame from " << input_txt << vcl_endl;
   vcl_vector<vcl_string> cam_names;
   vcl_vector<vcl_string> in_cam_files;
@@ -141,7 +141,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
       vcl_cerr << pro.name() << ": Can not locate " << cam_name << " in satellite resources! exiting!\n";
       return false;
     }
-    
+
     cam_names.push_back(cam_name);
     in_cam_files.push_back(img_path.first);
     out_cam_files.push_back(out_cam_file);
@@ -259,8 +259,8 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
     for (unsigned i = 0; i < corrs_i.size(); i++) {
         vcl_cout << "[" << corrs_i[i].x() << "," << corrs_i[i].y() << "]\t";
     }
-    vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y() 
-                                                         << "," << vcl_setprecision(12) << intersection.x() 
+    vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y()
+                                                         << "," << vcl_setprecision(12) << intersection.x()
                                                          << "," << vcl_setprecision(12) << intersection.z()
                                                          << "], giving offset: ";
     vcl_cout << " --> camera translation: ";
@@ -357,7 +357,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
 #if 1
   vcl_cout << " after refinement: \n";
   for (unsigned i = 0; i < intersections.size(); i++)
-    vcl_cout << "after adjustment 3D intersection point: " << vcl_setprecision(12) << intersections[i].y() << "," << vcl_setprecision(12) << intersections[i].x() 
+    vcl_cout << "after adjustment 3D intersection point: " << vcl_setprecision(12) << intersections[i].y() << "," << vcl_setprecision(12) << intersections[i].x()
                                                            << "," << vcl_setprecision(12) << intersections[i].z()
                                                            << vcl_endl;
 #endif
@@ -457,7 +457,7 @@ bool volm_correct_rational_cameras_ransac_with_initial_process_globals::initial_
   }
   vgl_box_2d<double> overlap_region = volm_correct_rational_cameras_ransac_with_initial_process_globals::intersection(img_footprints);
 
-  // find the min and max height of the overlapped region 
+  // find the min and max height of the overlapped region
   double min_elev = 10000.0, max_elev = -10000.0;
   vgl_point_2d<double> lower_left = overlap_region.min_point();
   vgl_point_2d<double> upper_right = overlap_region.max_point();

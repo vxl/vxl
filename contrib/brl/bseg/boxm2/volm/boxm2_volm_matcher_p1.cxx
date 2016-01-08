@@ -210,7 +210,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
   // camera at each location
   //  Note the num_locs_to_kernel should never exceed the memory limitation of GPU card
 
-  
+
   unsigned ni;
   if (num_locs_to_kernel > 0)
     ni = num_locs_to_kernel;

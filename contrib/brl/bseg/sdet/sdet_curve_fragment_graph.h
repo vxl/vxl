@@ -33,9 +33,9 @@ public:
   vcl_vector<sdet_edgel_chain_list> pFrags; ///< parent curve fragments
 
   sdet_edgel_chain_list frags; ///< redundant single list of all fragments
-  
+
   //this is a hack (need to move this out of here into the storage class)
-  sdet_CFTG CFTG; ///< The Curve Fragment Topology Graph (CFTG) 
+  sdet_CFTG CFTG; ///< The Curve Fragment Topology Graph (CFTG)
 
   //: constructor
   sdet_curve_fragment_graph(int size=0): cFrags(size), pFrags(size){}
@@ -52,7 +52,7 @@ public:
 
   //: resize the graph
   void resize(unsigned size)
-  { 
+  {
     if (size!=cFrags.size()){
       clear();
       CFTG.clear();

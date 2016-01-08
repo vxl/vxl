@@ -6,12 +6,12 @@
 // \brief A wrap around for file operations in libdhfs to access hadoop's file system (HDFS)
 //
 //        Caution: data types are defined as follows in libdhfs
-//                 typedef int32_t   tSize; /// size of data for read/write io ops 
+//                 typedef int32_t   tSize; /// size of data for read/write io ops
 //                 typedef time_t    tTime; /// time type in seconds
 //                 typedef int64_t   tOffset;/// offset within the file
 //                 typedef uint16_t  tPort; /// port
 //        use casting accordingly when adding new methods, see definition of bhdfs_streampos below
-//     
+//
 // \author Ozge C. Ozcanli
 // \date Dec 01, 2011
 //
@@ -41,7 +41,7 @@ class bhdfs_fstream: public vbl_ref_count
   // implement an interface that is similar to vil_stream
   bool ok() const { return f_ != 0; }
   bhdfs_streampos write(void const* buf, bhdfs_streampos n);
-  
+
   //: just try to read, if not successful returns -1
   bhdfs_streampos read(void* buf, bhdfs_streampos n);
 

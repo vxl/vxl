@@ -9,7 +9,7 @@ template <class P>
 void display_tpyramid(const P & pyramid)
 {
   typename P::const_level_iterator i=pyramid.begin_level();
- 
+
   for (int j=0; i!=pyramid.end_level(); ++i, ++j)
   {
     vcl_cout<<"\n----------------\nlevel_type 0x"

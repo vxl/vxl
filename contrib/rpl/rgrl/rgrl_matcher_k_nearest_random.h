@@ -43,9 +43,9 @@ class rgrl_matcher_k_nearest_random
   rgrl_type_macro( rgrl_matcher_k_nearest_random, rgrl_matcher);
 
  protected:
- 
+
   void generate_random_indices( vcl_vector<bool>& to_use ) const;
-  
+
  protected:
   unsigned int          max_num_;
   mutable vnl_random   random_;

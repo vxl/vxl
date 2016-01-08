@@ -49,7 +49,7 @@ class boxm2_ocl_change_detection
                               vil_image_view_base_sptr  exp_img,
                               int                       n,
                               vcl_string                norm_type,
-                              bool                      pmax, 
+                              bool                      pmax,
                               vcl_string                identifier="",
                               vcl_size_t                startI=0,
                               vcl_size_t                startJ=0);

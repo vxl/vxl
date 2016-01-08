@@ -39,7 +39,7 @@ namespace
 {
   inline vxl_uint_32 byte_swap (vxl_uint_32 val)
   {
-    val = ((val << 8) & 0xFF00FF00 ) | ((val >> 8) & 0xFF00FF ); 
+    val = ((val << 8) & 0xFF00FF00 ) | ((val >> 8) & 0xFF00FF );
     return (val << 16) | (val >> 16);
   }
 
@@ -61,7 +61,7 @@ namespace
 
   //: reverse this (8-bit) byte
   // From http://graphics.stanford.edu/~seander/bithacks.html
-  inline char bit_reverse(char b) 
+  inline char bit_reverse(char b)
   {
     return (char)((((unsigned char)(b) * 0x0202020202ULL) & 0x010884422010ULL) % 1023);
   }
@@ -89,7 +89,7 @@ template <class IT> vxl_uint_32 vul_checksum_crc32x(IT p, IT end, vxl_uint_32 qu
     }
   }
   // After we have finished, result contains the remainer.
-  result = ~result;  //The complement of the remainder 
+  result = ~result;  //The complement of the remainder
 
   char* result_carray = reinterpret_cast<char*>(&result);
   result_carray[0] = bit_reverse(result_carray[0]);
@@ -97,7 +97,7 @@ template <class IT> vxl_uint_32 vul_checksum_crc32x(IT p, IT end, vxl_uint_32 qu
   result_carray[2] = bit_reverse(result_carray[2]);
   result_carray[3] = bit_reverse(result_carray[3]);
 
-  return result; 
+  return result;
 }
 
 

@@ -28,7 +28,7 @@ MAIN( test_roi )
   vil_image_view<vxl_byte> crop = vil_crop(scene,0,32,0,32);
 
   vil_save(region, "test_region.png");
-  
+
   testlib_test_begin("identity transformed ROI");
   testlib_test_perform(vil_image_view_deep_equality(region, crop));
 

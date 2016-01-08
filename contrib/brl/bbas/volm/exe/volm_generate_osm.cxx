@@ -37,7 +37,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> out_pre("-out_pre", "output file folder with file separator at the end", "");
   vul_arg<bool> read("-read", "option to read created geo_index2_osm and osm statistics for current tile", false);
   vul_arg<bool> is_kml("-k", "option to create kml file for volm_osm object", false);
-  
+
   vul_arg_parse(argc, argv);
 
   if (read()) {
@@ -124,7 +124,7 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   vcl_stringstream log;
   vcl_stringstream log_file;
   log_file << out_pre() << "/log_wr" << world_id() << "_tile_" << tile_id() << ".xml";
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
   // generate tiles
   vcl_vector<volm_tile> tiles;
   if (!volm_tile::generate_tiles(world_id(),tiles))
-  {  
+  {
     log << "ERROR: unknown roi world id: " << world_id() << '\n';
     error_report(log_file.str(), log.str());  return volm_io::EXE_ARGUMENT_ERROR;
   }

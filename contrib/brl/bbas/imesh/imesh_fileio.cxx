@@ -661,7 +661,7 @@ void imesh_write_vrml(vcl_ostream& os, const imesh_mesh& mesh)
 
   //close shape
   os << "}\n";
-  
+
   //close transform
   os << "}\n";
 }

@@ -69,7 +69,7 @@ class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
 
 
   // getting the window.
-  virtual vgui_window *get_window() const { return win_; } 
+  virtual vgui_window *get_window() const { return win_; }
 
   // various buffer behaviour.
   virtual void swap_buffers() { SwapBuffers(hdc_); }
@@ -102,7 +102,7 @@ class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
 
  protected:
   // Translate a win32 message into the corresponding VGUI event.
-  vgui_event translate_message(WPARAM wParam, LPARAM lParam, 
+  vgui_event translate_message(WPARAM wParam, LPARAM lParam,
                                vgui_event_type evtype = vgui_EVENT_NULL);
   // Translate a win32 key into the corresponding VGUI key
   void translate_key(UINT nChar, UINT nFlags, int *key, int *ascii_char);
@@ -111,7 +111,7 @@ class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
 
   HWND   hwnd_;  // main window handle
   HGLRC  hglrc_; // OpenGL rendering context
-  HDC    hdc_;   // device context 
+  HDC    hdc_;   // device context
   int    tid_;   // timer identifier
 
   vgui_window *win_; // the window that contains this adaptor
@@ -141,7 +141,7 @@ class vgui_win32_internal_timer
 {
  public:
   vgui_win32_internal_timer() : timer_id(0), callback_ptr(0) {}
-  vgui_win32_internal_timer(unsigned int id, void *p) 
+  vgui_win32_internal_timer(unsigned int id, void *p)
   : timer_id(id), callback_ptr(p) {}
 
   unsigned int timer_id;

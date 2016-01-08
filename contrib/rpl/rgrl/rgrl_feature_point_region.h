@@ -32,7 +32,7 @@ class rgrl_feature_point_region
   rgrl_type_macro( rgrl_feature_point_region, rgrl_feature_point );
 
   //: get pixels coordinates within the region
-  virtual void 
+  virtual void
   generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio );
 
   //: make a clone copy

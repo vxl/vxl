@@ -77,9 +77,9 @@ bool boxm2_ocl_paint_online_process(bprb_func_process& pro)
   }
 
   // iterate the scene block by block and write to output
-  vul_timer totalTime; 
+  vul_timer totalTime;
   boxm2_ocl_paint_online::paint_scene(scene,device,ocl_cache,img,cam);
-  vcl_cout<<"boxm2_ocl_paint_online_process:: Total time - "<<(float) totalTime.all()/1000.0f<<" sec"<<vcl_endl; 
+  vcl_cout<<"boxm2_ocl_paint_online_process:: Total time - "<<(float) totalTime.all()/1000.0f<<" sec"<<vcl_endl;
 
   return true;
 }

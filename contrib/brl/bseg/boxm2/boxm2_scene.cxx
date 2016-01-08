@@ -49,7 +49,7 @@ boxm2_scene::boxm2_scene(const char* buffer)
              << parser.XML_GetCurrentLineNumber() << '\n';
     return;
   }
-  
+
   //store data path
   data_path_ = parser.path();
   xml_path_  = data_path_ + "scene.xml";
@@ -76,7 +76,7 @@ boxm2_scene::boxm2_scene(vcl_string const& filename)
   vcl_ifstream ifs;
   // we must throw an exception on failure in a constructor
   ifs.exceptions(vcl_ifstream::failbit | vcl_ifstream::badbit);
-  ifs.open(filename.c_str()); 
+  ifs.open(filename.c_str());
   vcl_stringstream buffer;
   buffer << ifs.rdbuf();
 
@@ -92,7 +92,7 @@ boxm2_scene::boxm2_scene(vcl_string const& filename)
 
   //store data path
   if(parser.is_model_local_to_scene_path()) {
-    // to make the model (data) path relative to the scene file, 
+    // to make the model (data) path relative to the scene file,
     // set the 'is_model_local' bool attribute of the <scene_paths> tag
     vcl_string basepath = vul_file::dirname(filename); // cant return an empty string
     data_path_ = basepath + "/" + parser.path(); // not normalized, but thats ok
@@ -209,13 +209,13 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_affine_camera<double
   // visibility ordering is based on manhattan distance of block index from that of closest block.
   vcl_vector<boxm2_dist_id_pair> manhattan_distances;
   for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks_.begin();
-       iter != blocks_.end(); ++iter) 
+       iter != blocks_.end(); ++iter)
   {
     // dec: we would perform a visibility test here if we had ni,nj.
     //if(!this->is_block_visible(iter->second,*cam,ni,nj))
     //  continue;
-    
-    int manhattan_distance = vcl_abs(iter->first.i_ - closest_i) + 
+
+    int manhattan_distance = vcl_abs(iter->first.i_ - closest_i) +
                              vcl_abs(iter->first.j_ - closest_j) +
                              vcl_abs(iter->first.k_ - closest_k);
 
@@ -273,7 +273,7 @@ vcl_vector<boxm2_block_id> boxm2_scene::get_vis_blocks_opt(vpgl_perspective_came
     //for non-projective cameras there may not be a single center of projection
     //so instead get the ray origin farthest from the scene origin.
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter;
-    for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) 
+    for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
     {
         if(!this->is_block_visible(iter->second,*cam,ni,nj))
             continue;
@@ -434,7 +434,7 @@ bool boxm2_scene::block_contains(vgl_point_3d<double> const& p, boxm2_block_id c
   }
   return false;
 }
-    
+
 //: find the block containing the specified point, else return false
 //  Local coordinates are also returned
 bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,

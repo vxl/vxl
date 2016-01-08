@@ -6,12 +6,12 @@
 * object, which encodes the co-ordinates in a vector (x0,y0,x1,y1,...).
 *
 * Shape is defined as that variation in geometry which is invariant
-* to some class of transformations.  Usually one considers 
+* to some class of transformations.  Usually one considers
 * similarity transformations (scale, rotation and translation),
 * though others are also used.  To build a model from sets of shapes,
 * one first aligns the shapes to remove the effects of the global
 * transform.
-* 
+*
 * The alignment and representation of transformations
 * is encoded using the msm_aligner objects.
 *
@@ -34,10 +34,10 @@
 * the msm_shape_model_builder.
 *
 * An instance of a shape in the reference frame is defined by
-* the shape parameters, b.  
+* the shape parameters, b.
 * This is encoded in the msm_ref_shape_instance class.
 *
-* An instance of a shape in a target frame is defined by 
+* An instance of a shape in a target frame is defined by
 * - A set of shape parameters, b
 * - A pose (the parameters defining the model to world frame transform)
 * This information is encoded in the msm_shape_instance class.

@@ -40,7 +40,7 @@ class DcmStackNode
     DcmObject *objNodeValue;
 
  // --- declarations to avoid compiler warnings
- 
+
     DcmStackNode(const DcmStackNode &);
     DcmStackNode &operator=(const DcmStackNode &);
 
@@ -59,7 +59,7 @@ class DcmStack {
     unsigned long cardinality;
 
  // --- declarations to avoid compiler warnings
- 
+
     DcmStack &operator=(const DcmStack &);
 
 public:

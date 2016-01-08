@@ -72,10 +72,10 @@ bool opj_matrix_inversion_f(OPJ_FLOAT32 * pSrcMatrix,OPJ_FLOAT32 * pDestMatrix, 
 }
 
 
-/** 
+/**
  * LUP decomposition
  */
-bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT32 * p_swap_area,OPJ_UINT32 n) 
+bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT32 * p_swap_area,OPJ_UINT32 n)
 {
 	OPJ_UINT32 * tmpPermutations = permutations;
 	OPJ_UINT32 * dstPermutations;
@@ -91,8 +91,8 @@ bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT3
 	OPJ_UINT32 lStride = n-1;
 
 	//initialize permutations
-	for 
-		(i = 0; i < n; ++i) 
+	for
+		(i = 0; i < n; ++i)
 	{
     	*tmpPermutations++ = i;
 	}
@@ -101,21 +101,21 @@ bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT3
 
 	// now make a pivot with colum switch
 	tmpPermutations = permutations;
-	for 
-		(k = 0; k < lLastColum; ++k) 
+	for
+		(k = 0; k < lLastColum; ++k)
 	{
 		p = 0.0;
 
 		// take the middle element
 		lColumnMatrix = lTmpMatrix + k;
-		
+
 		// make permutation with the biggest value in the column
-		for 
-			(i = k; i < n; ++i) 
+		for
+			(i = k; i < n; ++i)
 		{
 			temp = ((*lColumnMatrix > 0) ? *lColumnMatrix : -(*lColumnMatrix));
-     		if 
-				(temp > p) 
+     		if
+				(temp > p)
 			{
      			p = temp;
      			k2 = i;
@@ -125,7 +125,7 @@ bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT3
      	}
 
      	// a whole rest of 0 -> non singular
-     	if 
+     	if
 			(p == 0.0)
 		{
     		return false;
@@ -157,7 +157,7 @@ bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT3
 		temp = *(lDestMatrix++);
 
 		// now compute up data (i.e. coeff up of the diagonal).
-     	for (i = offset; i < n; ++i) 
+     	for (i = offset; i < n; ++i)
 		{
 			//lColumnMatrix;
 			// divide the lower column elements by the diagonal value
@@ -166,7 +166,7 @@ bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT3
      		// p = matrix[i][k]
 			p = *lColumnMatrix / temp;
 			*(lColumnMatrix++) = p;
-     		for 
+     		for
 				(j = /* k + 1 */ offset; j < n; ++j)
 			{
 				// matrix[i][j] -= matrix[i][k] * matrix[k][j];
@@ -188,13 +188,13 @@ bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT3
 	}
     return true;
 }
-   		
 
 
-/** 
+
+/**
  * LUP solving
  */
-void opj_lupSolve (OPJ_FLOAT32 * pResult, OPJ_FLOAT32 * pMatrix, OPJ_FLOAT32 * pVector, OPJ_UINT32* pPermutations, OPJ_UINT32 n,OPJ_FLOAT32 * p_intermediate_data) 
+void opj_lupSolve (OPJ_FLOAT32 * pResult, OPJ_FLOAT32 * pMatrix, OPJ_FLOAT32 * pVector, OPJ_UINT32* pPermutations, OPJ_UINT32 n,OPJ_FLOAT32 * p_intermediate_data)
 {
 	OPJ_UINT32 i,j;
 	OPJ_FLOAT32 sum;
@@ -209,18 +209,18 @@ void opj_lupSolve (OPJ_FLOAT32 * pResult, OPJ_FLOAT32 * pMatrix, OPJ_FLOAT32 * p
 	OPJ_FLOAT32 * lGeneratedData;
 	OPJ_UINT32 * lCurrentPermutationPtr = pPermutations;
 
-	
+
 	lIntermediatePtr = p_intermediate_data;
 	lGeneratedData = p_intermediate_data + n - 1;
-	
-    for 
-		(i = 0; i < n; ++i) 
+
+    for
+		(i = 0; i < n; ++i)
 	{
        	sum = 0.0;
 		lCurrentPtr = p_intermediate_data;
 		lTmpMatrix = lLineMatrix;
-        for 
-			(j = 1; j <= i; ++j) 
+        for
+			(j = 1; j <= i; ++j)
 		{
 			// sum += matrix[i][j-1] * y[j-1];
         	sum += (*(lTmpMatrix++)) * (*(lCurrentPtr++));
@@ -236,15 +236,15 @@ void opj_lupSolve (OPJ_FLOAT32 * pResult, OPJ_FLOAT32 * pMatrix, OPJ_FLOAT32 * p
 	// and we take after the last point of the destination vector
 	lDestPtr = pResult + n;
 
-	for 
-		(i = n - 1; i != -1 ; --i) 
+	for
+		(i = n - 1; i != -1 ; --i)
 	{
 		sum = 0.0;
 		lTmpMatrix = lLineMatrix;
         u = *(lTmpMatrix++);
 		lCurrentPtr = lDestPtr--;
-        for 
-			(j = i + 1; j < n; ++j) 
+        for
+			(j = i + 1; j < n; ++j)
 		{
 			// sum += matrix[i][j] * x[j]
         	sum += (*(lTmpMatrix++)) * (*(lCurrentPtr++));
@@ -254,7 +254,7 @@ void opj_lupSolve (OPJ_FLOAT32 * pResult, OPJ_FLOAT32 * pMatrix, OPJ_FLOAT32 * p
 		lLineMatrix -= lStride;
 	}
 }
-    
+
 /** LUP inversion (call with the result of lupDecompose)
  */
 void opj_lupInvert (
@@ -272,15 +272,15 @@ void opj_lupInvert (
 	OPJ_FLOAT32 * lLineMatrix = pDestMatrix;
 	OPJ_UINT32 lSwapSize = n * sizeof(OPJ_FLOAT32);
 
-	for 
-		(j = 0; j < n; ++j) 
+	for
+		(j = 0; j < n; ++j)
 	{
 		lCurrentPtr = lLineMatrix++;
         memset(p_src_temp,0,lSwapSize);
     	p_src_temp[j] = 1.0;
 		opj_lupSolve(p_dest_temp,pSrcMatrix,p_src_temp, pPermutations, n , p_swap_area);
 
-		for 
+		for
 			(i = 0; i < n; ++i)
 		{
     		*(lCurrentPtr) = p_dest_temp[i];

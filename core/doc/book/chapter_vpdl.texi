@@ -82,19 +82,19 @@ The distribution class is an abstract base class.
 The most important functions it defines are:
 @table @code
 @item virtual T density (const vector &pt) const=0;
-Evaluate the unnormalized density at a point. 
+Evaluate the unnormalized density at a point.
 
 @item virtual T norm_const () const=0;
-The normalization constant for the density. 
+The normalization constant for the density.
 
 @item virtual T prob_density (const vector &pt) const;
 Evaluate the probability density at a point.
 Defaults to @code{density(pt) * norm_const()}.
 @end table
 
-These functions allow the density of the distribution to be evaluated 
+These functions allow the density of the distribution to be evaluated
 independently from the normalization constant.
-This is important because the normalization constant is sometimes 
+This is important because the normalization constant is sometimes
 expensive to compute and not required for some calculations.
 Furthermore, the normalization constant is independent of the evaluation point
 so it can be computed once in advance and reused.
@@ -109,13 +109,13 @@ Several other functions are defined on the distribution base class including:
 and @code{compute_covar}.
 All of these functions provide a polymorphic interface to probability distributions.
 However, in most cases, the @code{vpdl} classes are simply light wrappers around
-generic @code{vpdt} implementations that do the real work. 
+generic @code{vpdt} implementations that do the real work.
 
 One additional component of the polymorphic wrappers is a class hierarchy.
 In @code{vpdt}, the distribution classes need not have any inheritance relations,
-but in @code{vpdl} the currently implemented distributions are arranged into 
-the following class hierarchy.  Each top level class below is derived directly 
-from @code{vpdl_distribution} (template arguments are omitted). 
+but in @code{vpdl} the currently implemented distributions are arranged into
+the following class hierarchy.  Each top level class below is derived directly
+from @code{vpdl_distribution} (template arguments are omitted).
 
 @itemize @bullet
 @item @code{vpdl_gaussian_base} - a base class for all Gaussian varieties.

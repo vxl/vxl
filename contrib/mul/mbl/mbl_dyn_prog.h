@@ -24,11 +24,11 @@
 //
 class mbl_dyn_prog {
 private:
-     //: After search, links_(i,j) shows the best prior state 
+     //: After search, links_(i,j) shows the best prior state
      // (ie at i) leading to state j at time i+1
   vbl_array_2d<int> links_;
 
-    //: Workspace for running cost.  
+    //: Workspace for running cost.
     //  After search gives cost to get to each state in last row
   vnl_vector<double> running_cost_;
 
@@ -43,7 +43,7 @@ private:
     //  Size of c indicates maximum displacement between neighbouring
     //  states.
     //  If first_state>=0 then the first is constrained to that index value
-  void running_costs(const vnl_matrix<double>& W, 
+  void running_costs(const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost,
                int first_state);
 
@@ -62,8 +62,8 @@ public:
     //  If first_state>=0 then the first is constrained to that index value
     // \retval x  Optimal path
     // \return Total cost of given path
-  double solve(vcl_vector<int>& x, 
-               const vnl_matrix<double>& W, 
+  double solve(vcl_vector<int>& x,
+               const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost,
                int first_state=-1);
 
@@ -75,8 +75,8 @@ public:
     //  last states.
     // \retval x  Optimal path
     // \return Total cost of given path
-  double solve_loop(vcl_vector<int>& x, 
-               const vnl_matrix<double>& W, 
+  double solve_loop(vcl_vector<int>& x,
+               const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost);
 
 

@@ -30,7 +30,7 @@
 #include "osconfig.h"    /* make sure OS specific configuration is included first */
 
 /*
-** prepareCmdLineArgs 
+** prepareCmdLineArgs
 **
 ** Should do nothing on Unix OS's.
 ** On other OS's (e.g. MacOS with CW6) allows command line arguments
@@ -38,7 +38,7 @@
 **
 ** MT level: Thread unsafe!
 */
-void prepareCmdLineArgs(int& argc, char** argv, 
+void prepareCmdLineArgs(int& argc, char** argv,
 			const char* progname = "aProgram");
 
 

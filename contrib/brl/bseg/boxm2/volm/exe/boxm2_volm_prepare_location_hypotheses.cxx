@@ -82,7 +82,7 @@ int main(int argc,  char** argv)
     h->write_hypotheses_kml(scene, out_name_kml);
   }
 #endif
-  
+
   vcl_cout << "returning SUCCESS!\n";
   return volm_io::SUCCESS;
 }

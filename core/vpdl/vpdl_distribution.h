@@ -27,7 +27,7 @@
 // - For n == 0 the data types are vnl_vector<T> and vnl_matrix<T>
 //
 template<class T, unsigned int n=0>
-class vpdl_distribution 
+class vpdl_distribution
 {
  public:
   virtual ~vpdl_distribution() {}
@@ -39,7 +39,7 @@ class vpdl_distribution
   typedef typename vpdt_field_default<T,n>::type vector;
   //: the data type used for matrices
   typedef typename vpdt_field_traits<field_type>::matrix_type matrix;
- 
+
   //: Return the run time dimension, which does not equal \c n when \c n==0
   virtual unsigned int dimension() const = 0;
 
@@ -47,7 +47,7 @@ class vpdl_distribution
   virtual vpdl_distribution<T,n>* clone() const = 0;
 
   //: Evaluate the unnormalized density at a point
-  // \note This is not a probability density. 
+  // \note This is not a probability density.
   // To make this a probability multiply by norm_const()
   // \sa prob_density
   virtual T density(const vector& pt) const = 0;
@@ -119,7 +119,7 @@ T vpdl_compute_inverse_cdf(const vpdl_distribution<T,1>& dist, double p);
 
 //: probability density wrapper for vpdt
 template<class T, unsigned int n>
-inline T vpdt_prob_density(const vpdl_distribution<T,n>& d, 
+inline T vpdt_prob_density(const vpdl_distribution<T,n>& d,
                            const typename vpdt_field_default<T,n>::type& pt)
 {
   return d.prob_density(pt);
@@ -136,7 +136,7 @@ inline T vpdt_box_prob(const vpdl_distribution<T,n>& d,
 
 //: The log density wrapper for vpdt
 template<class T, unsigned int n>
-inline T vpdt_log_density(const vpdl_distribution<T,n>& d, 
+inline T vpdt_log_density(const vpdl_distribution<T,n>& d,
                           const typename vpdt_field_default<T,n>::type& pt)
 {
   return d.log_density(pt);
@@ -144,7 +144,7 @@ inline T vpdt_log_density(const vpdl_distribution<T,n>& d,
 
 //: The log probability density wrapper for vpdt
 template<class T, unsigned int n>
-inline T vpdt_log_prob_density(const vpdl_distribution<T,n>& d, 
+inline T vpdt_log_prob_density(const vpdl_distribution<T,n>& d,
                                const typename vpdt_field_default<T,n>::type& pt)
 {
   return d.log_prob_density(pt);

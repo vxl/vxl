@@ -49,8 +49,8 @@ X = C_inv*B(keep_c)
 
 
 % generate kernel and save them to file
-% file{1} = 
-% 
+% file{1} =
+%
 % fid = fopen('test.txt', 'w');
 
 

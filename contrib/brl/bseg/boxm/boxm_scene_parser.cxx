@@ -24,7 +24,7 @@ boxm_scene_parser::boxm_scene_parser()
   init_params();
 }
 
-bool boxm_scene_parser::lvcs(vpgl_lvcs& lvcs) { 
+bool boxm_scene_parser::lvcs(vpgl_lvcs& lvcs) {
   vpgl_lvcs::cs_names cs_name = vpgl_lvcs::str_to_enum(lvcs_cs_name_.data());
   vpgl_lvcs::LenUnits len_unit;
   vpgl_lvcs::AngUnits geo_unit;
@@ -46,7 +46,7 @@ bool boxm_scene_parser::lvcs(vpgl_lvcs& lvcs) {
      return false;
    }
 
-   lvcs = vpgl_lvcs(lvcs_origin_lat_,lvcs_origin_lon_,lvcs_origin_elev_, cs_name, 
+   lvcs = vpgl_lvcs(lvcs_origin_lat_,lvcs_origin_lon_,lvcs_origin_elev_, cs_name,
                   lvcs_lat_scale_, lvcs_lon_scale_, geo_unit, len_unit,
                   lvcs_local_origin_x_, lvcs_local_origin_y_, lvcs_theta_);
   return true;
@@ -87,7 +87,7 @@ void boxm_scene_parser::init_params()
   save_platform_independent_ = true;
   load_all_blocks_=false;
   p_init_=0.01f;
-  num_buffers_init_ = 0; 
+  num_buffers_init_ = 0;
   size_buffer_init_ = 0;
 }
 
@@ -143,7 +143,7 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
     for (int i=0; atts[i]; i+=2) {
 #if 0
         vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif 
+#endif
         if (vcl_strcmp(atts[i], "x") == 0)
         convert(atts[i+1], block_dim_x_);
       else if (vcl_strcmp(atts[i], "y") == 0)
@@ -156,7 +156,7 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
     for (int i=0; atts[i]; i+=2) {
 #if 0
         vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif 
+#endif
       if (vcl_strcmp(atts[i], "x_dimension") == 0)
         convert(atts[i+1], block_num_x_);
       else if (vcl_strcmp(atts[i], "y_dimension") == 0)
@@ -178,7 +178,7 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
   }
   else if (vcl_strcmp(name,APP_MODEL_TAG)== 0) {
     for (int i=0; atts[i]; i+=2) {
-#if 0 
+#if 0
         vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
 #endif
       if (vcl_strcmp(atts[i], "type") == 0)
@@ -234,37 +234,37 @@ boxm_scene_parser::startElement(const char* name, const char** atts)
       else if (vcl_strcmp(atts[i], "init") == 0)
         convert(atts[i+1], init_tree_level_);
     }
-  } 
+  }
   else if (vcl_strcmp(name, "p_init")==0) {
     for (int i=0; atts[i]; i+=2) {
-#if 0 
+#if 0
         vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
 #endif
     if (vcl_strcmp(atts[i], "val") == 0)
-        convert(atts[i+1], p_init_); 
+        convert(atts[i+1], p_init_);
     }
   }
-  
+
   else if (vcl_strcmp(name, "tree_init") == 0) {
     for (int i=0; atts[i]; i+=2) {
 #if 0
         vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif 
+#endif
       if (vcl_strcmp(atts[i], "num_buffers")==0)
-        convert(atts[i+1], num_buffers_init_);    
+        convert(atts[i+1], num_buffers_init_);
       if (vcl_strcmp(atts[i], "buff_size")==0)
         convert(atts[i+1], size_buffer_init_);
     }
   }
-  
+
   else if (vcl_strcmp(name, "max_mb") == 0) {
     for (int i=0; atts[i]; i+=2) {
 #if 0
         vcl_cout << "  Attr=" << atts[i] << "->" << atts[i+1] << vcl_endl;
-#endif       
-      if (vcl_strcmp(atts[i], "mb") == 0) 
+#endif
+      if (vcl_strcmp(atts[i], "mb") == 0)
         convert(atts[i+1], max_mb_);
     }
   }
-  
+
 }

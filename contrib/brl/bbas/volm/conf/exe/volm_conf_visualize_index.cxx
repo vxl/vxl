@@ -87,7 +87,7 @@ int main(int argc, char** argv)
 
   // write out the kml file
   vcl_stringstream kml_file;
-  kml_file << vul_file::strip_extension(bin_file_name) << '_' << vcl_setprecision(6) << vcl_fixed << leaf->hyps_->locs_[hyp_id].x() 
+  kml_file << vul_file::strip_extension(bin_file_name) << '_' << vcl_setprecision(6) << vcl_fixed << leaf->hyps_->locs_[hyp_id].x()
                                                        << '_' << vcl_setprecision(6) << vcl_fixed << leaf->hyps_->locs_[hyp_id].y() << ".kml";
   volm_conf_object::write_to_kml(leaf->hyps_->locs_[hyp_id].x(), leaf->hyps_->locs_[hyp_id].y(), values, kml_file.str());
 

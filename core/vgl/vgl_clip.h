@@ -10,7 +10,7 @@
 //                               Alan Murt's Generic Polygon Clipper)
 //   12 Oct 2002: Peter Vanroose: vgl_clip_line_to_box completely re-implemented
 //   14 Nov 2003: Peter Vanroose: made all functions templated
-//   27 May 2015: Scott Richardson: added another polygon clipper library (a wrapper 
+//   27 May 2015: Scott Richardson: added another polygon clipper library (a wrapper
 //                around Angus Johnson's Clipper library)
 // \endverbatim
 

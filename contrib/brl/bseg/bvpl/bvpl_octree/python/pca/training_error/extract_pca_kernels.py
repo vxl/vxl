@@ -36,11 +36,11 @@ if __name__=="__main__":
   if not os.path.isdir( pca_dir + "/"):
       os.makedirs( pca_dir + "/");
 
-  
+
   pca_dir = pca_dir + "/" +str(int(train_fraction*100));
   if not os.path.isdir( pca_dir + "/"):
      os.makedirs( pca_dir + "/");
-  
+
   print("Extracting Principal Components patches");
 
   print("Creating a Scene");
@@ -64,7 +64,7 @@ if __name__=="__main__":
   bvpl_octree_batch.set_input_int(7, 2);
   bvpl_octree_batch.set_input_int(8, 2);
   bvpl_octree_batch.run_process();
-  
+
   print ("Runing time for bvplDiscoverPCAFeaturesProcess:")
   print(time.time() - start_time);
 

@@ -21,7 +21,7 @@ bool vpgl_create_lvcs_process_cons(bprb_func_process& pro)
   input_types.push_back("double");
   input_types.push_back("double");
   input_types.push_back("double");
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

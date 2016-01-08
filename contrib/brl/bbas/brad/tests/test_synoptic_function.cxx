@@ -14,7 +14,7 @@ static void test_synoptic_function()
   for (unsigned i = 0; i<n; ++i){
     double s = sf.arc_length(i);
 
-    vcl_cout << s << ' ' << sf.intensity(i) 
+    vcl_cout << s << ' ' << sf.intensity(i)
              << ' ' << sf.cubic_interp_inten(s)<< ' ' << sf.vis(i) <<  '\n';
   }
   vcl_cout << "Fit Sigma " << sf.cubic_fit_sigma() <<'\n';

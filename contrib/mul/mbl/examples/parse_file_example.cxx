@@ -24,10 +24,10 @@ void print_usage()
   vcl_cout<<" double1: 35.24"<<vcl_endl;
 }
 
-struct parameter_data 
+struct parameter_data
 {
   vcl_string image_dir;
-  vcl_vector<vcl_string> image_names; 
+  vcl_vector<vcl_string> image_names;
   int int1;
   double double1;
 };
@@ -37,7 +37,7 @@ vcl_ostream& operator<<(vcl_ostream& os,
 {
   os<<"image_dir: "<<p.image_dir<<vcl_endl;
   os<<"image_names: {"<<vcl_endl;
-  for (unsigned i=0;i<p.image_names.size();++i) 
+  for (unsigned i=0;i<p.image_names.size();++i)
     os<<"  "<<p.image_names[i]<<vcl_endl;
   os<<"}"<<vcl_endl;
   os<<"int1: "<<p.int1<<vcl_endl;
@@ -56,20 +56,20 @@ bool parse_params(const vcl_string &param_path, parameter_data& params)
   }
 
   // Cycle through string and produce a map of properties
-  mbl_read_props_type props = mbl_read_props_ws(ifs); 
+  mbl_read_props_type props = mbl_read_props_ws(ifs);
 
   // Extract the properties
   if (props.find("image_dir")!=props.end())
   {
-    params.image_dir = props["image_dir"];  props.erase("image_dir"); 
+    params.image_dir = props["image_dir"];  props.erase("image_dir");
   }
   if (props.find("int1")!=props.end())
   {
-    params.int1 = vul_string_atoi(props["int1"]);  props.erase("int1"); 
+    params.int1 = vul_string_atoi(props["int1"]);  props.erase("int1");
   }
   if (props.find("double1")!=props.end())
   {
-    params.double1 = vul_string_atoi(props["double1"]);  props.erase("double1"); 
+    params.double1 = vul_string_atoi(props["double1"]);  props.erase("double1");
   }
 
   if (props.find("image_names")!=props.end())
@@ -78,7 +78,7 @@ bool parse_params(const vcl_string &param_path, parameter_data& params)
     vcl_string tag;
     in_ss>>tag;
     params.image_names.resize(0);  // Empty data
-    if (tag!="{") 
+    if (tag!="{")
     {
       vcl_cerr<<"Expected a {, got a "<<tag<<vcl_endl;
       return false;
@@ -94,7 +94,7 @@ bool parse_params(const vcl_string &param_path, parameter_data& params)
       vcl_cerr<<"Expected to find a }"<<vcl_endl;
       return false;
     }
-    props.erase("image_names"); 
+    props.erase("image_names");
   }
 
    // Check for unused props

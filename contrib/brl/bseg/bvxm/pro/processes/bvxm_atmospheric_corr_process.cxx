@@ -49,11 +49,11 @@ bool bvxm_atmospheric_corr_process(bprb_func_process& pro)
   }
 
   //get the inputs
-  vil_image_view_base_sptr input_img = 
+  vil_image_view_base_sptr input_img =
     pro.get_input<vil_image_view_base_sptr>(0);
 
   float sz = pro.get_input<float>(1);
-  
+
   //check inputs validity
   if (!input_img) {
     vcl_cout << pro.name() <<" :--  image  is null!\n";
@@ -97,13 +97,13 @@ bool bvxm_atmospheric_corr_process(bprb_func_process& pro)
       if(v>max) max = v;
       float_img(i,j) = v;
     }
-  
+
 #if 1
-  // 0 and 3 come from the relative refectances 
+  // 0 and 3 come from the relative refectances
   vil_image_view<float> float_stretch(ni_, nj_);
   vil_convert_stretch_range_limited<float>(float_img, float_stretch,
                                            0.0f, 3.0f, 0.0f, 255.0f);
-  vil_image_view<vxl_byte>* byte_output_img = 
+  vil_image_view<vxl_byte>* byte_output_img =
     new vil_image_view<vxl_byte>(ni_, nj_, nplanes_);
   vil_convert_cast(float_stretch, *byte_output_img);
 

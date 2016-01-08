@@ -40,7 +40,7 @@ void msm_points::set_size(unsigned n, double x, double y)
   v_.set_size(n*2);
   double* v=v_.data_block();
   double* v_end=v+2*n;
-  for (;v!=v_end;v+=2) 
+  for (;v!=v_end;v+=2)
   {
     v[0]=x; v[1]=y;
   }

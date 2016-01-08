@@ -273,13 +273,13 @@ VCL_VECTOR_INSTANTIATE(X *);
 
 The naming convention for such files is as follows:
 @itemize @bullet
-@item Take the full template instantiation, e.g. 
+@item Take the full template instantiation, e.g.
 @code{VSL_VECTOR_IO_INSTANTIATE( vcl_vector< vcl_pair< unsigned int, vxl_int_64 > > )}
-@item Strip the @code{_INSTANTIATE} and convert the Macro name to lowercase, e.g. 
+@item Strip the @code{_INSTANTIATE} and convert the Macro name to lowercase, e.g.
 @code{vsl_vector_io( vcl_vector< vcl_pair< unsigned int, vxl_int_64 > >)}
 @item Convert the macro's brackets @code{()} to angle brackets @code{<>} e.g.
 @code{vsl_vector_io< vcl_vector< vcl_pair< unsigned int, vxl_int_64 > > >}
-@item Replace '@code{unsigned *}' with '@code{u*}', i.e. '@code{unsigned int}' 
+@item Replace '@code{unsigned *}' with '@code{u*}', i.e. '@code{unsigned int}'
 with '@code{uint}', etc. e.g.
 @code{vsl_vector_io< vcl_vector< vcl_pair< uint, vxl_int_64 > > >}
 @item Strip '@code{vcl_}' prefixes from fixed width types. e.g.
@@ -287,7 +287,7 @@ with '@code{uint}', etc. e.g.
 @item Strip spaces and replace '@code{<}' with '@code{+}', '@code{>}' with
 '@code{-}', and '@code{,}' with '@code{.}' e.g.
 @code{vsl_vector_io+vcl_vector+vcl_pair+uint.uint---}
-@item 
+@item
 @end itemize
 
 If you are using the build system that comes with VXL and you aren't using

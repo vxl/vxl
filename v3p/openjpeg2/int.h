@@ -82,7 +82,7 @@ Clamp an integer inside an interval
 <ul>
 <li>Returns a if (min < a < max)
 <li>Returns max if (a > max)
-<li>Returns min if (a < min) 
+<li>Returns min if (a < min)
 </ul>
 */
 static INLINE OPJ_INT32  int_clamp(OPJ_INT32  a, OPJ_INT32  min, OPJ_INT32  max) {
@@ -145,7 +145,7 @@ Get logarithm of an integer and round downwards
 */
 static INLINE OPJ_UINT32  uint_floorlog2(OPJ_UINT32  a) {
 	OPJ_UINT32  l;
-	for (l = 0; a > 1; ++l) 
+	for (l = 0; a > 1; ++l)
 	{
 		a >>= 1;
 	}

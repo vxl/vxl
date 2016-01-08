@@ -46,7 +46,7 @@ class vmal_rectifier
 
   vmal_rectifier(vcl_vector< vnl_vector<double> >* pts0,
                  vcl_vector< vnl_vector<double> >* pts1,
-                 int ima_height, int ima_width);                 
+                 int ima_height, int ima_width);
 
   ~vmal_rectifier();
 
@@ -113,7 +113,7 @@ class vmal_rectifier
   void resample (vnl_double_3x3 H0, vnl_double_3x3 H1,
                  vil_image_view<vxl_byte> imgL,
                  vil_image_view<vxl_byte> imgR);
-  
+
   vil_image_view<vxl_byte>* GetRectifiedImageLeft() {return rectL;}
   vil_image_view<vxl_byte>* GetRectifiedImageRight() {return rectR;}
 

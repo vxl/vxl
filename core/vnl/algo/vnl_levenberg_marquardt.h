@@ -88,7 +88,7 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
   //  The cost function must provide a gradient.
   bool minimize_using_gradient  (vnl_vector<double>& x);
 
-  //: Calls minimize_using_gradient() or minimize_without_gradient(), 
+  //: Calls minimize_using_gradient() or minimize_without_gradient(),
   // depending on whether the cost function provides a gradient.
   bool minimize(vnl_vector<double>& x);
   bool minimize(vnl_vector_fixed<double,1>& x) { vnl_vector<double> y=x.extract(1); bool b=minimize(y); x=y; return b; }
@@ -103,7 +103,7 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
   void diagnose_outcome(vcl_ostream&) const;
 
   //: Return J'*J computed at last minimum.
-  //  it is an approximation of inverse of covariance 
+  //  it is an approximation of inverse of covariance
   vnl_matrix<double> const& get_JtJ();
 
  protected:

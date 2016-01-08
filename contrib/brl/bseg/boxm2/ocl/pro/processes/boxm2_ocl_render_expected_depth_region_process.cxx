@@ -137,7 +137,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   unsigned   nj = pro.get_input<unsigned>(i++);
 
   vcl_string identifier=device->device_identifier();
-  
+
   vcl_cerr << " --------------------- inside process --------------------------------------" << vcl_endl;
   vcl_cerr << " lon = " << lon << ", lat = " << lat << ", elev = " << elev << vcl_endl;
   vcl_cerr << " ni = " << ni << ", nj = " << nj << vcl_endl;
@@ -244,7 +244,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   vcl_vector<bvgl_2d_geo_index_node_sptr> leaves_all;
   bvgl_2d_geo_index::get_leaves(blk_id_tree_2d, leaves_all);
   for (unsigned i = 0; i < leaves_all.size(); i++) {
-    bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+    bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr =
       dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(leaves_all[i].ptr());
     leaf_ptr->contents_.clear();
   }
@@ -261,7 +261,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
     if (leaves.empty())
       continue;
     for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-      bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+      bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr =
         dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(leaves[l_idx].ptr());
       leaf_ptr->contents_.push_back(curr_blk_id);
     }

@@ -65,16 +65,16 @@ class vpgl_bundle_adjust
 
   //: Bundle Adjust
   //
-  // \param mask should have the same number of entries as \param cameras, 
-  // and each entry of \param mask should be the same size as 
-  // \param world_points. mask[i][j] is true if point j is visible from 
+  // \param mask should have the same number of entries as \param cameras,
+  // and each entry of \param mask should be the same size as
+  // \param world_points. mask[i][j] is true if point j is visible from
   // camera i
   //
-  // \param image_points and is a linear list of the 2D locations of the 
-  // 3D points as seen by the cameras. There is one image point for every 
-  // true in \param mask. The following piece of code shows the structure 
+  // \param image_points and is a linear list of the 2D locations of the
+  // 3D points as seen by the cameras. There is one image point for every
+  // true in \param mask. The following piece of code shows the structure
   // of \param image_points
-  // 
+  //
   // for( int c = 0; c < num_cameras; c++ ){
   //   for( int dp = 0; dp < num_world_points; dp++ ){
   //     if( mask[c][dp] )

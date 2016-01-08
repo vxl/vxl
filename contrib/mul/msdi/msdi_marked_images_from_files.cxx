@@ -82,7 +82,7 @@ void msdi_marked_images_from_files::set_convert_to_greyscale(bool b)
   grey_only_=b;
 }
 
-//: Scaling required to convert from units in image to desired world units 
+//: Scaling required to convert from units in image to desired world units
 // (e.g. 1000 for mm if image units are metres)
 // Only used if load_as_float_ is true.
 void msdi_marked_images_from_files::set_unit_scaling(float s)
@@ -102,9 +102,9 @@ const vimt_image_2d& msdi_marked_images_from_files::image()
   assert(index_ < (int)size());
   if (!image_ok_) get_image();
 
-  if (!load_as_float_)     
+  if (!load_as_float_)
     return image_;
-  else 
+  else
     return float_image_;
 }
 
@@ -115,17 +115,17 @@ const vimt_image_pyramid& msdi_marked_images_from_files::image_pyr()
   if (!image_ok_) get_image();
   if (!image_pyr_ok_)
   {
-    if (!load_as_float_)     
+    if (!load_as_float_)
     { pyr_builder_.build(image_pyr_,image_); }
-    else 
+    else
     { float_pyr_builder_.build(float_image_pyr_,float_image_); }
 
     image_pyr_ok_=true;
   }
 
-  if (!load_as_float_)     
+  if (!load_as_float_)
     return image_pyr_;
-  else 
+  else
     return float_image_pyr_;
 }
 
@@ -173,8 +173,8 @@ void msdi_marked_images_from_files::get_image()
   // Read in the image
   vcl_string image_path = image_dir_ + "/" + image_name_[index_];
 
-  if (!load_as_float_) 
-  { 
+  if (!load_as_float_)
+  {
     vimt_load_to_byte(image_path, image_, unit_scaling_);
 
     if (image_.image().size()==0)
@@ -189,10 +189,10 @@ void msdi_marked_images_from_files::get_image()
       image_.image() = grey_image;
     }
   }
-  else 
+  else
   {
     vimt_load(image_path.c_str(),float_image_,unit_scaling_);
-   
+
     if (float_image_.image().size()==0)
     {
       vcl_cerr<<"Empty image!\n";

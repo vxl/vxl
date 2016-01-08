@@ -78,18 +78,18 @@ bxml_data_sptr bvpl_edge3d_kernel_factory::xml_element()
 
   factory->set_attribute("min_x" , min_x_);
   factory->set_attribute("max_x" , max_x_);
-  
+
   factory->set_attribute("min_y" , min_y_);
   factory->set_attribute("max_y" , max_y_);
-  
-  
+
+
   factory->set_attribute("min_z" , min_z_);
   factory->set_attribute("max_z" , max_z_);
-  
+
   factory->set_attribute("axix_x", this->rotation_axis_[0]);
   factory->set_attribute("axix_y", this->rotation_axis_[1]);
   factory->set_attribute("axix_z", this->rotation_axis_[2]);
-  
+
   factory->set_attribute("angle", this->angle_);
   return factory;
 }

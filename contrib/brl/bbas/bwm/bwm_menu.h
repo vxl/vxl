@@ -25,9 +25,9 @@ class bwm_menu
   static void save_site() { bwm_site_mgr::instance()->save_site();}
   static void load_video_site()
     {bwm_site_mgr::instance()->load_video_site();}
-  static void save_video_site() 
+  static void save_video_site()
     { bwm_site_mgr::instance()->save_video_site();}
-  static void load_depth_map_scene() 
+  static void load_depth_map_scene()
     { bwm_site_mgr::instance()->load_depth_map_scene();}
   static void remove_tableau() {bwm_tableau_mgr::instance()->remove_tableau();}
   static void zoom_to_fit() {bwm_tableau_mgr::instance()->zoom_to_fit();}

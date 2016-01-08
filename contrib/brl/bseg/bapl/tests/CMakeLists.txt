@@ -7,7 +7,7 @@ ADD_EXECUTABLE( bapl_test_all
   test_matcher.cxx
   test_lowe_pyramid_set.cxx
   test_compute_tracks.cxx
-  test_match_keypoints.cxx 
+  test_match_keypoints.cxx
   test_dense_sift.cxx
 )
 

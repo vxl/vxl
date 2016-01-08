@@ -52,14 +52,14 @@ class brip_rect_mask
   static float ang_diff(ang_id aid0,ang_id aid1);
 
   //: Intersect '+' symbols of two masks of the same type
-  static bool intersect(mask_id mid, 
-                        ang_id aid0, 
+  static bool intersect(mask_id mid,
+                        ang_id aid0,
                         unsigned short i0, unsigned short j0,
                         ang_id aid1,
                         unsigned short i1, unsigned short j1);
   //: Intersect full domain of two masks of the same type (0, ni, 0-nj)
-  static bool intersect_domain(mask_id mid, 
-                               ang_id aid0, 
+  static bool intersect_domain(mask_id mid,
+                               ang_id aid0,
                                unsigned short i0, unsigned short j0,
                                ang_id aid1,
                                unsigned short i1, unsigned short j1);

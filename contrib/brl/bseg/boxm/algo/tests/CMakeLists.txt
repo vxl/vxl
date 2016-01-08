@@ -7,7 +7,7 @@ ADD_EXECUTABLE( boxm_algo_test_all
   test_boxm_scene_crop.cxx
   test_linear_operations.cxx
   test_remove_level0.cxx
-  
+
  )
 
 SET(boxm_algo_test_all_sources

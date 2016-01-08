@@ -26,7 +26,7 @@ static void test_gen_cylinder()
    }
    bvgl_gen_cylinder gc;
    gc.read_axis_spline(istr);
-   
+
    // read cross section points
    vcl_ifstream cistr(cross_path.c_str());
    if(!cistr){
@@ -46,7 +46,7 @@ static void test_gen_cylinder()
      return;
    }
    gc.display_axis_spline(vostr);
- 
+
    // display the cross section plane normals
    vcl_ofstream cnostr(cross_normal_display_path.c_str());
    if(!cnostr){

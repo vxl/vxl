@@ -245,9 +245,9 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 
   tif = TIFFFdOpen((int)fd, (mbname != NULL) ? mbname : "<unknown>",
        mode);
-  
+
   _TIFFfree(mbname);
-  
+
   if(!tif)
     close(fd);
   return tif;

@@ -22,7 +22,7 @@
 // pass the handle to the nitf image resource as a vil_image_resource_sptr
 // also pass the image location (i,j) and (width, height) as the ROI portion in the image to classify
 // this process crops a larger image to account for the margin needed for classification and runs the classification
-// then it only returns the ROI image as the output, so output image has size (width, height) 
+// then it only returns the ROI image as the output, so output image has size (width, height)
 
 //: initialize input and output types
 bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
@@ -32,7 +32,7 @@ bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
   input_types.push_back("sdet_texture_classifier_sptr"); //texton classifier
   input_types.push_back("vcl_string"); // path to dictionary
   input_types.push_back("vil_image_resource_sptr"); //input image resouce
-  input_types.push_back("unsigned");   // i 
+  input_types.push_back("unsigned");   // i
   input_types.push_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
   input_types.push_back("unsigned");   // width
   input_types.push_back("unsigned");   // height (widht, height) is the size of the ROI in terms of pixels
@@ -46,7 +46,7 @@ bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
   output_types.push_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
   output_types.push_back("vil_image_view_base_sptr");  // output id image  - a byte image
   output_types.push_back("vil_image_view_base_sptr");  // output rgb image - a rgb image associated with class id image
-  output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file 
+  output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file
   return pro.set_output_types(output_types);
 }
 
@@ -64,7 +64,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   sdet_atmospheric_image_classifier tc(*tcp);
   vcl_string texton_dict_path = pro.get_input<vcl_string>(1);
   tc.load_dictionary(texton_dict_path);
-  
+
   vcl_cout << "max filter radius in dictionary: " << tc.max_filter_radius() << vcl_endl;
   unsigned ntextons = tc.get_number_of_textons();
   vcl_cout << " testing using the dictionary with the number of textons: " << ntextons << "\n categories:\n";
@@ -73,7 +73,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
     vcl_cerr << "The number of categories is zero!! in the classifier dictionary!\n";
     return false;
   }
-  
+
   //vcl_string img_name = pro.get_input<vcl_string>(2);
   vil_image_resource_sptr image = pro.get_input<vil_image_resource_sptr>(2);
   unsigned i = pro.get_input<unsigned>(3);
@@ -81,7 +81,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   unsigned width = pro.get_input<unsigned>(5);
   unsigned height = pro.get_input<unsigned>(6);
 
-  tc.block_size_ = pro.get_input<unsigned>(7); 
+  tc.block_size_ = pro.get_input<unsigned>(7);
   vcl_string cat_ids_file = pro.get_input<vcl_string>(8);
   vcl_string first_category = pro.get_input<vcl_string>(9);
 
@@ -90,10 +90,10 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   //vcl_map<vcl_string, vil_rgb<vxl_byte> > cat_color_map;
   vcl_map<unsigned char, vil_rgb<vxl_byte> > cat_color_map;
   vcl_map<vcl_string, unsigned char> cat_id_map;
-  
+
   if (cat_ids_file.compare("") == 0) {
     /*first_category = cats[0];*/
-    for (unsigned kk = 0; kk < cats.size(); kk++) 
+    for (unsigned kk = 0; kk < cats.size(); kk++)
       cat_id_map[cats[kk]] = kk;
   } else {
     vcl_ifstream ifs(cat_ids_file.c_str());
@@ -108,7 +108,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
       ifs >> cat_name;
     }
   }
-  
+
   // check input of first_category
   if (cat_id_map.find(first_category) == cat_id_map.end()) {
     vcl_cout << pro.name() << ": can not find the input first category " << first_category << " among all categories!" << vcl_endl;
@@ -121,7 +121,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
     vcl_cout << iter->first << " " << (int)iter->second << vcl_endl;
     cats2.push_back(iter->first);
   }
-  tc.set_atmospheric_categories(cats2);    
+  tc.set_atmospheric_categories(cats2);
 
 
   //vil_image_resource_sptr image = vil_load_image_resource(img_name.c_str());
@@ -132,7 +132,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   }
   vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
   vcl_cout << " image size: ni: " << image->ni() << " nj: " << image->nj() << vcl_endl;
-  
+
   vcl_vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
   vil_nitf2_image_subheader* hdr = headers[0];
   unsigned number_of_bits = hdr->get_number_of_bits_per_pixel();
@@ -147,23 +147,23 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   unsigned large_crop_size_w = width+2*invalid;
   unsigned large_crop_size_h = height+2*invalid;
   int ii = i-invalid; int jj = j-invalid;
-  
+
   vil_image_view_base_sptr roi = bir->get_copy_view(ii, large_crop_size_w, jj, large_crop_size_h);
   if (!roi) {
     vcl_cerr << "cannot crop from image with size: " << image->ni() << " " << image->nj() << " at position (" << i << ", " << j << ") of size (" << width << ", " << height << ") with margin: " << invalid << vcl_endl;
     return false;
   }
   vil_image_view<vxl_uint_16> img(roi);
-      
-  vil_image_view<float> imgf(img.ni(), img.nj()); 
+
+  vil_image_view<float> imgf(img.ni(), img.nj());
   vil_convert_cast(img, imgf);
   vil_math_scale_values(imgf, 1.0f/2048.0f);
-      
+
   vil_image_view<float> outf = vil_crop(imgf, invalid, width, invalid, height);
   vcl_map<vcl_string, float> cat_percentage_map;
   vil_image_view<vxl_byte> class_img = tc.classify_image_blocks_qual2(imgf, cat_id_map,cat_percentage_map);
   vil_image_view<vxl_byte> out_class_img = vil_crop(class_img, invalid, width, invalid, height);
-  
+
   // transfer id map to color map
   vil_image_view<vil_rgb<vxl_byte> > out_rgb_img(out_class_img.ni(), out_class_img.nj());
   for (unsigned i = 0; i < out_class_img.ni(); i++)
@@ -191,7 +191,7 @@ bool sdet_texture_classify_satellite_clouds_process2_cons(bprb_func_process& pro
   input_types.push_back("sdet_texture_classifier_sptr"); //texton classifier
   input_types.push_back("vcl_string"); // path to dictionary
   input_types.push_back("vil_image_resource_sptr"); //input image resouce
-  input_types.push_back("unsigned");   // i 
+  input_types.push_back("unsigned");   // i
   input_types.push_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
   input_types.push_back("unsigned");   // width
   input_types.push_back("unsigned");   // height (widht, height) is the size of the ROI in terms of pixels
@@ -205,7 +205,7 @@ bool sdet_texture_classify_satellite_clouds_process2_cons(bprb_func_process& pro
   output_types.push_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
   output_types.push_back("vil_image_view_base_sptr");  // output id image  - a byte image
   output_types.push_back("vil_image_view_base_sptr");  // output rgb image - a rgb image associated with class id image
-  output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file 
+  output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file
   return pro.set_output_types(output_types);
 }
 
@@ -223,7 +223,7 @@ bool sdet_texture_classify_satellite_clouds_process2(bprb_func_process& pro)
   sdet_atmospheric_image_classifier tc(*tcp);
   vcl_string texton_dict_path = pro.get_input<vcl_string>(1);
   tc.load_dictionary(texton_dict_path);
-  
+
   vcl_cout << "max filter radius in dictionary: " << tc.max_filter_radius() << vcl_endl;
   unsigned ntextons = tc.get_number_of_textons();
   vcl_cout << " testing using the dictionary with the number of textons: " << ntextons << "\n categories:\n";

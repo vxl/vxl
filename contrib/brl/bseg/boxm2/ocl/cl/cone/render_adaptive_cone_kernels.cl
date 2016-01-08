@@ -215,7 +215,7 @@ render_adaptive_cone(__constant  RenderSceneInfo    * linfo,
   //store exp int for non active rays
   uchar thread_leader = master_threads[llid];
   in_image[imIndex] = expint[thread_leader];
-  vis_image[imIndex] = vis[thread_leader]; 
+  vis_image[imIndex] = vis[thread_leader];
 
 }
 
@@ -269,7 +269,7 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
   //weighted intensity for this voxel
   (*aux_args.weighted_int) += volume*exp_intensity; //cell_occupancy_prob * volume * exp_intensity;
   (*aux_args.vol_cum) += volume;
-  
+
   //update vis...
   float temp = exp(-volume*alpha);  //visibility of intersection of this cell and ball
   (*aux_args.vis_cum) *= temp;               //
@@ -279,7 +279,7 @@ void step_cell_cone(AuxArgs aux_args, int data_ptr, float volume)
 void compute_ball_properties( AuxArgs aux_args )
 {
   uchar llid = (uchar)(get_local_id(0) + get_local_size(0)*get_local_id(1));
-  int ray_level = aux_args.active_rays[llid]-1; 
+  int ray_level = aux_args.active_rays[llid]-1;
   if(ray_level >= 0) {
     if (*aux_args.vol_cum > 1e-10)
     {
@@ -296,7 +296,7 @@ void compute_ball_properties( AuxArgs aux_args )
       aux_args.expint[llid] = ei;
 
       //update visibility after all cells have accounted for
-      vis *= (*aux_args.vis_cum); 
+      vis *= (*aux_args.vis_cum);
       aux_args.vis[llid] = vis;
     }
   }
@@ -306,7 +306,7 @@ void compute_ball_properties( AuxArgs aux_args )
   *aux_args.intensity_norm = 0.0f;
   *aux_args.weighted_int = 0.0f;
   *aux_args.pi_cum = 0.0f;
-  *aux_args.vis_cum = 1.0f; 
+  *aux_args.vis_cum = 1.0f;
 }
 
 #endif // RENDER

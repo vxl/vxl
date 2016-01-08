@@ -153,7 +153,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
           continue;
         // go from geo coords wgs84 to local
         vgl_polygon<double> img_poly(1);
-        
+
         if (curr_id != volm_osm_category_io::volm_land_table_name["building"].id_ &&
             curr_id != volm_osm_category_io::volm_land_table_name["Open_Water"].id_
             )  // only ingest buildings and water if necessary

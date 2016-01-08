@@ -68,7 +68,7 @@ static void test_volm_wr3db_ind()
   for (unsigned i = 0; i < ind->buffer_size()-1; i++)
     ind2->get_next(vals2);
   ind2->get_next(vals2);
-  
+
   vcl_vector<unsigned char> vals_buf2(layer_size);
   ind2->get_next(vals_buf2);
   TEST("test index end", vals_buf2[0] == 'e', true);

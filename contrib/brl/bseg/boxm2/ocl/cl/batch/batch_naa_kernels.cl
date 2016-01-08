@@ -50,7 +50,7 @@ void batch_fit_normal_albedo_array(__global float * aux0,
       // one thread per test albedo
       float albedo = ((float)llid) / (float)n_local_threads;
       log_prob_sums[llid] = (float16)0;
-      for (int m=0; m < *num_obs; ++m) 
+      for (int m=0; m < *num_obs; ++m)
       {
          float pre_val = pre[m];
          float16 predicted = radiance_scales[m]*albedo + radiance_offsets[m];
@@ -73,14 +73,14 @@ void batch_fit_normal_albedo_array(__global float * aux0,
       barrier(CLK_LOCAL_MEM_FENCE);
 
       // single thread: determine best albedo per normal and normal probability dist.
-      if (llid == 0) 
+      if (llid == 0)
       {
          __global float16 *albedos = (__global float16 *)&(naa_apm_array[32*gid]);
          __global float16 *probs = (__global float16 *)&(naa_apm_array[32*gid + 16]);
 
          // search for best probability per normal
          float16 max_log_prob_sum = log_prob_sums[0];
-         for (int i=0; i<n_local_threads; ++i) 
+         for (int i=0; i<n_local_threads; ++i)
          {
             float albedo = ((float)i) / (float)n_local_threads;
             int16 is_best = log_prob_sums[i] > max_log_prob_sum;
@@ -90,11 +90,11 @@ void batch_fit_normal_albedo_array(__global float * aux0,
          // compute probability distribution of normal directions
          float16 normal_probs = exp(max_log_prob_sum);
          float prob_sum = dot(normal_probs,(float16)1.0);
-         if (prob_sum > 1e-10) 
+         if (prob_sum > 1e-10)
          {
             *probs = normal_probs / prob_sum;
          }
-         else 
+         else
          {
             *probs = (float16)(1.0/16.0);
          }

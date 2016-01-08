@@ -48,7 +48,7 @@ class DcmListNode {
     DcmObject *objNodeValue;
 
  // --- declarations to avoid compiler warnings
- 
+
     DcmListNode(const DcmListNode &);
     DcmListNode &operator=(const DcmListNode &);
 
@@ -80,7 +80,7 @@ class DcmList {
     unsigned long cardinality;
 
  // --- declarations to avoid compiler warnings
- 
+
     DcmList &operator=(const DcmList &);
     DcmList(const DcmList &newList);
 

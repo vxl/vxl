@@ -43,7 +43,7 @@ brad_sun_dir_index::brad_sun_dir_index(double longitude_deg, double latitude_deg
 }
 
 int brad_sun_dir_index::index(double geo_sun_azimuth,
-                              double geo_sun_elevation,double & min_angle) 
+                              double geo_sun_elevation,double & min_angle)
 {
   //convert to standard spherical coordinates
   double sphere_az = 90.0 - geo_sun_azimuth + 360.0;

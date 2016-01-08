@@ -122,7 +122,7 @@ class vgui_adaptor
 
   //: kill an existing timer
   virtual void kill_timer(int);
-  
+
   //: Bind the given modifier/button combination to the popup menu.
   virtual void bind_popups(vgui_modifier=vgui_MODIFIER_NULL, vgui_button=vgui_RIGHT);
 

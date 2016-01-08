@@ -46,21 +46,21 @@ print exh_search_rad;
 for line in sys.stdin:
   line = line.strip();
   words = line.split();
-  print words[0]; 
+  print words[0];
   print words[1];
-  
+
   boxm2_batch.init_process("bhdfsLoadImageViewProcess");
   boxm2_batch.set_input_string(0,words[0]);
   boxm2_batch.run_process();
   (imid, imtype) = boxm2_batch.commit_output(0);
   s_exp_img = dbvalue(imid, imtype);
-  
+
   boxm2_batch.init_process("bhdfsLoadImageViewProcess");
   boxm2_batch.set_input_string(0,words[1]);
   boxm2_batch.run_process();
   (imid, imtype) = boxm2_batch.commit_output(0);
   norm_image = dbvalue(imid, imtype);
-  
+
   # register the input image to the exp image, find the translation that needs to be added to img
   # so that mutual info is max with exp img of the world
   boxm2_batch.init_process("ihogRegisterTranslationalProcess");
@@ -74,18 +74,18 @@ for line in sys.stdin:
   ty = dbvalue(id,type);
   offset_x = boxm2_batch.get_output_double(tx.id);
   offset_y = boxm2_batch.get_output_double(ty.id);
-  
+
   [head, tail] = os.path.split(words[0]);
   [iname, ext] = os.path.splitext(tail);
-  
+
   off_fname = output_path + "/" + iname + "_offsets.txt";
   print off_fname;
-  
+
   boxm2_batch.init_process("bhdfsGenerateFileProcess");
   boxm2_batch.set_input_string(0, off_fname);
   boxm2_batch.set_input_string(1, str(offset_x) + " " + str(offset_y) + "\n");
   boxm2_batch.run_process();
-  
+
 mytime = time.clock();
 print "time passed: " + str(mytime) + " secs which is " + str(mytime/60) + " minutes.\n";
 

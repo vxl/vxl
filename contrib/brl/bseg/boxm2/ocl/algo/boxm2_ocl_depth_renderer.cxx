@@ -225,7 +225,7 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   }
 
   subblk_dim_ = 0.0f; // in case there are no visible blocks;
-  
+
   for (vcl_vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id) {
 
     boxm2_block_metadata mdata = scene_->get_block_metadata(*id);

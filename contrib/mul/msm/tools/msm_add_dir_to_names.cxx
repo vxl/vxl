@@ -121,7 +121,7 @@ int main(int argc, char** argv)
     vcl_cerr<<"Failed to open "<<out_path() <<" for output.\n";
     return 1;
   }
-  
+
   ofs<<"images: {"<<vcl_endl;
 
   for (unsigned i=0;i<params.image_names.size();++i)

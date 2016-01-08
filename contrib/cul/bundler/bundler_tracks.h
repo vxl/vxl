@@ -45,22 +45,22 @@ class bundler_tracks_match
   virtual void operator() (
       const bundler_inters_image_pair &to_match,
       bundler_inters_match_set &matches) = 0;
-}; 
+};
 
 
 //:
-// An abstract functor that takes in corresponding features between 
+// An abstract functor that takes in corresponding features between
 // two images, and refines them according to some thresholds.
 class bundler_tracks_refine
 {
  public:
   //: Performs the feature matching
   virtual void operator() (bundler_inters_match_set &matches) = 0;
-}; 
+};
 
 
 //:
-// An abstract functor that takes in all matched features between pairs 
+// An abstract functor that takes in all matched features between pairs
 // of images, and chains them together into tracks
 class bundler_tracks_chain_matches
 {

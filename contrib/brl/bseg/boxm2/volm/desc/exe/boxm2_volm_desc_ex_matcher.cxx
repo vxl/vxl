@@ -71,7 +71,7 @@ int main(int argc, char** argv)
     unsigned ni, nj;
     vcl_vector<volm_weight> weights;
     depth_map_scene_sptr dms = new depth_map_scene;
-    
+
     // load query
     if (!vul_file::exists(query_xml())) {  // load query from vxl file and weight from weight file
       world_region = world_str();
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
         return volm_io::EXE_ARGUMENT_ERROR;
       }
     }
-    
+
     vcl_string image_name = vul_file::strip_extension(query_name);
 
     // create tiles based on world_region
@@ -307,7 +307,7 @@ int main(int argc, char** argv)
     image_name << "p1b_test" << test_id() << "_"  << id();
   // run the existence matcher and generate probability map
   if (is_matcher()) {
-    // check the argument 
+    // check the argument
     if (depth_scene().compare("") == 0 || geo_hypo_folder().compare("") == 0 || weight_file().compare("") == 0 ||
         desc_index_folder().compare("") == 0 || out_folder().compare("") == 0 ||
         gt_file().compare("") == 0 || id() > 200 || test_id() == 0 || tile_id() == 100 || world_id() == 100)
@@ -321,8 +321,8 @@ int main(int argc, char** argv)
     vcl_stringstream err_log;
     vcl_stringstream err_log_file;
     err_log_file << out_folder() << "/err_log_tile_" << tile_id() << ".xml";
-    
-    
+
+
     // load the depth map scene
     if (!vul_file::exists(depth_scene())) {
       err_log << " ERROR: can not find depth map scene file" << depth_scene() << '\n';
@@ -375,7 +375,7 @@ int main(int argc, char** argv)
       error_report(err_log_file.str(), err_log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    
+
     // fetch the ground truth location
     if (!vul_file::exists(gt_file())) {
       err_log << " ERROR: can not find ground truth file" << gt_file() << '\n';
@@ -434,7 +434,7 @@ int main(int argc, char** argv)
     else {
       ex_matcher = new boxm2_volm_desc_ex_matcher(dms, params.radius, params.norients, params.nlands, 0);
     }
-    
+
     vcl_cout << " ex_matcher is " << ex_matcher->get_index_type_str() << vcl_endl;
 
     // create query
@@ -484,7 +484,7 @@ int main(int argc, char** argv)
     vcl_cout << "\t geo hypothesis folder: " << geo_hypo_folder() << vcl_endl;
     vcl_cout << "\t existence index folder: " << desc_index_folder() << vcl_endl;
     vcl_cout << "\t query image has " << query->get_area() << " bins" << vcl_endl;
-    
+
     if (gt_score != -1.0f)
       vcl_cout << "\t ground truth location is in tile " << tile_id() << " with score = " << gt_score << vcl_endl;
 

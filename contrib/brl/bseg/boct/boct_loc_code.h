@@ -48,7 +48,7 @@ class boct_loc_code
 
   //: returns true if the locational codes of test is equal to this
   bool isequal(const boct_loc_code * test);
-  
+
   //: returns true if the locational codes of test is equal to this
   bool isequal(const boct_loc_code & test);
 

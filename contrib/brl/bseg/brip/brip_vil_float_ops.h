@@ -170,7 +170,7 @@ class brip_vil_float_ops
                                   vbl_array_2d<bool>& mask,
                                   float cutoff_percentage = 0.01f,
                                   bool scale_invariant = false);
-                                  
+
   //: return a spherical mask and the coefficient matrix [kernel] for a symmetric gaussian distribution
   static void gaussian_kernel_mask(float lambda, vbl_array_2d<float>& kernel, vbl_array_2d<bool>& mask, float cutoff_percentage = 0.01f);
 
@@ -446,7 +446,7 @@ class brip_vil_float_ops
                    vil_image_view<float>& H,
                    vil_image_view<float>& S);
 
-  
+
 
   //: converts a byte-pixel image to float (I,H,S) image triple
   static void

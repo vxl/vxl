@@ -88,7 +88,7 @@ class bsta_gaussian_indep : public bsta_gaussian<T,n>
 
   //: Gradient vector at this point
   covar_type gradient(const vnl_vector_fixed<T,n>& pt) const;
-  
+
  protected:
   //: The diagonal covariance matrix stored as a vector
   covar_type diag_covar_;

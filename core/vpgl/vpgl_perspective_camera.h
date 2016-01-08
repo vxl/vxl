@@ -216,7 +216,7 @@ template <class T>
 vcl_vector<vpgl_perspective_camera<T> > cameras_from_directory(vcl_string dir, T);
 
 //: compute the frustrum of the camera view cone. The near plane
-//  the far plane distances are user defined. 
+//  the far plane distances are user defined.
 template <class T>
 vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
 			  T d_near, T d_far);

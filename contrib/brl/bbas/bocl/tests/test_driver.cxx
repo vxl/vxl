@@ -3,7 +3,7 @@
 DECLARE( test_global_io_bandwidth );
 DECLARE( test_command_queue );
 DECLARE( test_kernel );
-DECLARE( test_local_mem_access ); 
+DECLARE( test_local_mem_access );
 DECLARE( test_mem );
 
 void register_tests()

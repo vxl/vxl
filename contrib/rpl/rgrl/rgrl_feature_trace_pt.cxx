@@ -18,7 +18,7 @@ rgrl_feature_trace_pt()
     subspace_cached_( false ),
     length_( 0 ), radius_( 0 )
 {
-  
+
 }
 
 rgrl_feature_trace_pt::
@@ -184,18 +184,18 @@ write( vcl_ostream& os ) const
 {
   // tag
   os << "TRACE" << vcl_endl;
-  
+
   // dim
   os << location_.size() << vcl_endl;
-  
+
   // atributes
   os << location_ << "    " << scale_ << "\n"
-     << tangent_ << "\n" 
+     << tangent_ << "\n"
      << error_proj_ << vcl_endl;
 }
 
 //: read in feature
-bool 
+bool
 rgrl_feature_trace_pt::
 read( vcl_istream& is, bool skip_tag )
 {
@@ -203,10 +203,10 @@ read( vcl_istream& is, bool skip_tag )
 
     // skip empty lines
     rgrl_util_skip_empty_lines( is );
-    
+
     vcl_string str;
     vcl_getline( is, str );
-    
+
     // The token should appear at the beginning of line
     if ( str.find( "TRACE" ) != 0 ) {
       WarningMacro( "The tag is not TRACE. reading is aborted.\n" );
@@ -217,36 +217,36 @@ read( vcl_istream& is, bool skip_tag )
   // get dim
   int dim=-1;
   is >> dim;
-  
-  if( !is || dim<=0 ) 
+
+  if( !is || dim<=0 )
     return false;    // cannot get dimension
-    
+
   // get location
   location_.set_size( dim );
   is >> location_;
   if( !is )
     return false;   // cannot read location
-    
+
   // get scale
-  is >> scale_; 
+  is >> scale_;
   if( !is )
     return false;   // cannot read scale
 
   // get tangent
   tangent_.set_size( dim );
   is >> tangent_;
-  if( !is ) 
-    return false; 
-    
+  if( !is )
+    return false;
+
   // get error projector
   error_proj_.set_size( dim, dim );
   is >> error_proj_;
-  if( !is ) 
-    return false; 
-  
+  if( !is )
+    return false;
+
   //reset flag
   subspace_cached_ = false;
-  
+
   return true;
 }
 

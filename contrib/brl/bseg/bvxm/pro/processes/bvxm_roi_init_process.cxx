@@ -79,7 +79,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
 
   bvxm_world_params_sptr world_params = voxel_world->get_params();
 
-  
+
   vpgl_rational_camera<double>* rat_camera =
     dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
   if (!rat_camera) {
@@ -126,7 +126,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
     pro.set_output_val<float>(j++, uncertainty);
     return true;
   }
-  
+
 }
 
 //: roi_init function
@@ -172,7 +172,7 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
   bb = broi.clip_to_image_bounds(bb);
-  
+
   if (bb->width() <= 0 || bb->height() <= 0) {
     vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
@@ -183,7 +183,7 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
                         (unsigned int)bb->width(),
                         (unsigned int)bb->get_min_y(),
                         (unsigned int)bb->height());
-  
+
   if (!roi) {
     vcl_cerr << "bvxm_roi_init_process::roi_init()-- cannot get copy view from image!\n";
     return false;
@@ -307,7 +307,7 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
   bb->add_point(roi_box->min_x(), roi_box->min_y());
   bb->add_point(roi_box->max_x(), roi_box->max_y());
   bb = broi.clip_to_image_bounds(bb);
-  
+
   if (bb->width() <= 0 || bb->height() <= 0) {
     vcl_cerr << "bvxm_roi_init_process::roi_init()-- clipping box is out of image boundaries\n";
     return false;
@@ -318,7 +318,7 @@ bool bvxm_roi_init_process_globals::roi_init( vcl_string const& image_path,
                         (unsigned int)bb->width(),
                         (unsigned int)bb->get_min_y(),
                         (unsigned int)bb->height());
-  
+
   if (!roi) {
     vcl_cerr << "bvxm_roi_init_process::roi_init()-- cannot get copy view from image!\n";
     return false;

@@ -1,8 +1,8 @@
-# microsoft specific config file 
+# microsoft specific config file
 SET (WORDS_BIGENDIAN )
 SET (HAVE_LIMITS_H   1)
 SET (HAVE_UNISTD_H   1)
-SET (CMAKE_CXX_COMPILER  VC++60 CACHE STRING 
+SET (CMAKE_CXX_COMPILER  VC++60 CACHE STRING
      "Name of C++ compiler used.")
 SET (CMAKE_CXX_FLAGS_RELEASE "/MD /O2" CACHE STRING
         "Flags used by the compiler during release builds (/MD /Ob1 /Oi /Ot /Oy /Gs will produce slightly less optimized but smaller files)")

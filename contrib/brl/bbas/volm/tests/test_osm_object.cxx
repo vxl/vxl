@@ -122,7 +122,7 @@ static void test_osm_object_ids()
   vcl_cout << vcl_endl;
   vcl_vector<unsigned> line_ids_in = obj_sptr->line_ids();
   for (unsigned i = 0; i < line_ids_in.size(); i++)
-    vcl_cout << ' ' << line_ids_in[i]; 
+    vcl_cout << ' ' << line_ids_in[i];
   vcl_cout << vcl_endl;
   vcl_vector<unsigned> region_ids_in = obj_sptr->region_ids();
   for (unsigned i = 0; i < region_ids_in.size(); i++)
@@ -175,7 +175,7 @@ static void test_osm_object()
   osm_objects.write_osm_objects("./volm_osm_objects.bin");
 
   volm_osm_objects osm_objects_in("./volm_osm_objects.bin");
-  
+
   vcl_vector<volm_osm_object_point_sptr> loc_pts_in = osm_objects_in.loc_pts();
   vcl_cout << " ----------- location points ----------- " << vcl_endl;
   for (unsigned i = 0; i < loc_pts.size(); i++) {
@@ -202,7 +202,7 @@ static void test_osm_object()
 
   // test volm_osm_object_ids
   test_osm_object_ids();
-  
+
   vcl_string osm_file = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/tests/test.osm";
   if (vul_file::exists(osm_file))
     test_load_osm(osm_file);

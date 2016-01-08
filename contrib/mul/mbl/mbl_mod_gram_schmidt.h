@@ -36,7 +36,7 @@ void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
 //: Convert input basis {v} to orthonormal basis {e}
 // Each basis vector is a column of v, and likewise the orthonormal bases are returned as columns of e
 // The multipliers used to normalise each vector in {e} are returned in n.
-void mbl_mod_gram_schmidt( const vnl_matrix<double>& v, 
+void mbl_mod_gram_schmidt( const vnl_matrix<double>& v,
                            vnl_matrix<double>& e, vnl_vector<double>& n );
 
 #endif // mbl_mod_gram_schmidt_h_

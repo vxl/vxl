@@ -16,7 +16,7 @@
 //   theta_cap_  <= theta <=  (pi-theta_cap_)
 // the aziumuth range is:
 //  0 <= phi <= two_pi
-// 
+//
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>

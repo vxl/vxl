@@ -7,8 +7,8 @@
 //
 // \verbatim
 //  Modifications
-//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
-//      based on point location alone 
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature
+//      based on point location alone
 // \endverbatim
 
 #include <rsdl/rsdl_fwd.h>

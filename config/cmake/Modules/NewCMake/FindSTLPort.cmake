@@ -49,7 +49,7 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
 
 
 #
-# For GCC, should we consider using -nostdinc or -isystem to 
+# For GCC, should we consider using -nostdinc or -isystem to
 # point to the STLPort system header directory? It is quite
 # important that we get the STLPort C++ header files and not
 # those that come with GCC.

@@ -162,7 +162,7 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
     this->compute_texton_index();
   this->compute_filter_bank(image);
   unsigned dim = filter_responses_.n_levels();
-  
+
   int margin = static_cast<int>(this->max_filter_radius());
   int ni = static_cast<int>(image.ni());
   int nj = static_cast<int>(image.nj());
@@ -177,12 +177,12 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
   //number of pixels in a block
   unsigned block_area = block_size_*block_size_;
   float weight = 1.0f/static_cast<float>(block_area);
-  
-  for (vcl_map<vcl_string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++) 
+
+  for (vcl_map<vcl_string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++)
     cat_percentage_map[iter->first] = 0.0f;
-  
-  int max_j = margin > block_size_ ? nj-margin : nj-block_size_; 
-  int max_i = margin > block_size_ ? ni-margin : ni-block_size_; 
+
+  int max_j = margin > block_size_ ? nj-margin : nj-block_size_;
+  int max_i = margin > block_size_ ? ni-margin : ni-block_size_;
   unsigned nh = texton_index_.size();
   unsigned pix_count = 0;
   vcl_cout << "ni: " << ni << ", nj: " << nj << vcl_endl;
@@ -201,7 +201,7 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
           //i.e., sum h[i] = 1.0 so weight should typically be 1/Nupdates
           this->update_hist(temp, weight, h);
         }
-      
+
       // new method: just assign the highest prob class
       vcl_pair<vcl_string, float> class_prob = this->highest_prob_class(h);
       cat_percentage_map[class_prob.first] += block_area;
@@ -217,7 +217,7 @@ sdet_atmospheric_image_classifier::classify_image_blocks_qual2(vil_image_view<fl
     iter->second /= pix_count;
     iter->second *= 100.0;
   }
-  
+
   return prob;
 }
 

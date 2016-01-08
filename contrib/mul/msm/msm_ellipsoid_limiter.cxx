@@ -47,7 +47,7 @@ void msm_ellipsoid_limiter::set_acceptance(double prop,
     M_max_=0.0;
     return;
   }
-  
+
   M_max_ = msm_chi2_for_cum_prob(prop,n_modes);
 }
 

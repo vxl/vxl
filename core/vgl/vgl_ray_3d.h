@@ -55,7 +55,7 @@ class vgl_ray_3d
   //: Construct from a line 2 points direction from 1 to 2
   inline vgl_ray_3d(vgl_line_3d_2_points<Type> const& ls)
   {
-    p0_ = ls.point1(); t_ = ls.point2()-p0_; 
+    p0_ = ls.point1(); t_ = ls.point2()-p0_;
     t_ = t_/static_cast<Type>(t_.length());
   }
 
@@ -77,7 +77,7 @@ class vgl_ray_3d
 
   //: Assignment
   inline void set(vgl_point_3d<Type> const& p0, vgl_vector_3d<Type> const& direction)
-  { 
+  {
     p0_ = p0; t_ = direction;
     t_=t_/static_cast<Type>(t_.length());
   }
@@ -102,7 +102,7 @@ template <class Type>
 double angle(vgl_ray_3d<Type> const& r0, vgl_ray_3d<Type> const& r1)
 {
   return angle(r0.direction(), r1.direction());
-} 
+}
 #define VGL_RAY_3D_INSTANTIATE(T) extern "please include vgl/vgl_ray_3d.txx first"
 
 #endif // vgl_ray_3d_h_

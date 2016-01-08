@@ -49,7 +49,7 @@ void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
   just_ended_=false;
 
   if (identifier != identifier_stack_.back())
-    MBL_LOG(WARN, logger(), "set progress for identifier \"" << identifier << 
+    MBL_LOG(WARN, logger(), "set progress for identifier \"" << identifier <<
       "\" rather than most recently created identifier \"" << identifier_stack_.back() << '"');
 
   double a=0.0, b=1.0; // The lower and upper bound on the current value
@@ -69,7 +69,7 @@ void mbl_progress_hierarchy::on_set_progress(const vcl_string& identifier,
   }
   on_changed_progress(a);
 }
-  
+
 //: Called when end_progress() is called for a given identifier.
 //  Derived classes may take some action here.
 //  \param identifier The operation being monitored.

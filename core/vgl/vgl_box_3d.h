@@ -148,7 +148,7 @@ class vgl_box_3d
 
   //: Return upper right corner of box
   vgl_point_3d<Type> max_point() const;
-  
+
   //: Return the 8 vertices of the box
   vcl_vector<vgl_point_3d<Type> > vertices() const;
 

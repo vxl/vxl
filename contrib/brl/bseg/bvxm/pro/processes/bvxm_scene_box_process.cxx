@@ -45,7 +45,7 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
   bvxm_world_params_sptr params = voxel_world->get_params();
 
   vpgl_lvcs_sptr lvcs = params->lvcs();
-  
+
   double lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev;
   lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84,
                         lower_left_lon, lower_left_lat, lower_left_elev);
@@ -54,7 +54,7 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
   double dimz = params->num_voxels().z() * params->voxel_length();
   lvcs->local_to_global(params->corner().x() + dimx, params->corner().y() + dimy, params->corner().z() + dimz, vpgl_lvcs::wgs84,
                         upper_right_lon, upper_right_lat, upper_right_elev);
-  
+
   //Store outputs
   unsigned j = 0;
   pro.set_output_val<double>(j++, lower_left_lon);
@@ -99,10 +99,10 @@ bool bvxm_scene_origin_process(bprb_func_process& pro)
   bvxm_world_params_sptr params = voxel_world->get_params();
 
   vpgl_lvcs_sptr lvcs = params->lvcs();
-  
+
   double lower_left_lon, lower_left_lat, gz, upper_right_lon, upper_right_lat;
   lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84, lower_left_lon, lower_left_lat, gz);
-  
+
   //Store outputs
   unsigned j = 0;
   pro.set_output_val<double>(j++, lower_left_lon);

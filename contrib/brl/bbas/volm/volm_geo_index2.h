@@ -32,20 +32,20 @@ class volm_geo_index2_node : public volm_geo_index2_node_base
 public:
   //: Default constructor
   volm_geo_index2_node() {}
-  
+
   //: Constructor
   volm_geo_index2_node(vgl_box_2d<double> const& extent, volm_geo_index2_node_sptr& parent)
   {
-    extent_ = extent; 
+    extent_ = extent;
     parent_ = parent;
   }
-  
+
   volm_geo_index2_node(vgl_box_2d<double> const& extent)
   {
     extent_ = extent;
     parent_ = 0;
   }
-  
+
   //: Destructor
   ~volm_geo_index2_node() { }
 
@@ -109,11 +109,11 @@ public:
   //: return the leave that contains the given loc point
   static void get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point);
   static void get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point);
-  
+
   //: return the depth of quadtree at level node
   static unsigned depth(volm_geo_index2_node_sptr node);
 
-  
+
 
 };
 

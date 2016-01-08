@@ -107,7 +107,7 @@ typedef struct opj_tcd_cblk_dec {
   OPJ_UINT32 numnewpasses;		/* number of pass added to the code-blocks */
   OPJ_UINT32 numsegs;			/* number of segments */
   OPJ_UINT32 real_num_segs;
-  OPJ_UINT32 m_current_max_segs; 
+  OPJ_UINT32 m_current_max_segs;
 } opj_tcd_cblk_dec_t;
 
 /**
@@ -150,7 +150,7 @@ typedef struct opj_tcd_resolution {
 /**
 FIXME: documentation
 */
-typedef struct opj_tcd_tilecomp 
+typedef struct opj_tcd_tilecomp
 {
   OPJ_INT32 x0, y0, x1, y1;		/* dimension of component : left upper corner (x0, y0) right low corner (x1,y1) */
   OPJ_UINT32 numresolutions;		/* number of resolutions level */
@@ -179,16 +179,16 @@ typedef struct opj_tcd_tile {
 /**
 FIXME: documentation
 */
-typedef struct opj_tcd_image 
+typedef struct opj_tcd_image
 {
   opj_tcd_tile_t *tiles;		/* Tiles information */
-} 
+}
 opj_tcd_image_t;
 
 /**
 Tile coder/decoder
 */
-typedef struct opj_tcd 
+typedef struct opj_tcd
 {
 	/** Position of the tilepart flag in Progression order*/
 	OPJ_INT32 tp_pos;
@@ -244,44 +244,44 @@ void tcd_destroy(opj_tcd_t *tcd);
  * @param	p_image		raw image.
  * @param	p_cp		coding parameters.
  * @param	p_tile_no	current tile index to encode.
- * 
+ *
  * @return true if the encoding values could be set (false otherwise).
 */
 bool tcd_init(
-						opj_tcd_t *p_tcd, 
-						struct opj_image * p_image, 
+						opj_tcd_t *p_tcd,
+						struct opj_image * p_image,
 						struct opj_cp * p_cp
 					);
 
 
 /**
  * Allocates memory for decoding a specific tile.
- * 
+ *
  * @param	p_tcd		the tile decoder.
  * @param	p_image		the image to decode.
  * @param	p_cp		the decoding parameters.
- * @param	p_tile_no	the index of the tile received in sequence. This not necesseraly lead to the 
+ * @param	p_tile_no	the index of the tile received in sequence. This not necesseraly lead to the
  * tile at index p_tile_no.
  * @param	p_cstr_info	codestream info (if any).
- * 
+ *
  * @return	true if the remaining data is sufficient.s
  */
 bool tcd_init_decode_tile(
-							opj_tcd_t *p_tcd, 
+							opj_tcd_t *p_tcd,
 							OPJ_UINT32 p_tile_no
-							); 
+							);
 /**
  * Initialize the tile coder and may reuse some meory.
  * @param	p_tcd		TCD handle.
  * @param	p_image		raw image.
  * @param	p_cp		coding parameters.
  * @param	p_tile_no	current tile index to encode.
- * 
+ *
  * @return true if the encoding values could be set (false otherwise).
 */
 bool tcd_init_encode_tile
 							(
-							opj_tcd_t *p_tcd, 
+							opj_tcd_t *p_tcd,
 							OPJ_UINT32 p_tile_no
 							);
 
@@ -296,7 +296,7 @@ bool tcd_rateallocate(opj_tcd_t *tcd, OPJ_BYTE *dest, OPJ_UINT32 * p_data_writte
  * @param	p_dest			Destination buffer
  * @param	p_data_written	pointer to an int that is incremented by the number of bytes really written on p_dest
  * @param	p_len			Maximum length of the destination buffer
- * @param	p_cstr_info		Codestream information structure 
+ * @param	p_cstr_info		Codestream information structure
  * @return  true if the coding is successfull.
 */
 bool tcd_encode_tile(opj_tcd_t *p_tcd, OPJ_UINT32 p_tile_no, OPJ_BYTE *p_dest, OPJ_UINT32 * p_data_written, OPJ_UINT32 p_len, struct opj_codestream_info *p_cstr_info);

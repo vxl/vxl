@@ -847,7 +847,7 @@ double brad_expected_reflectance_chavez(double toa_radiance,
       return 0;
    }
    double reflectance = vnl_math::pi * (toa_radiance - airlight) / denom;
-   // some algorithms depend on "invalid" reflectances being returned in order to compute 
+   // some algorithms depend on "invalid" reflectances being returned in order to compute
    // constants A,B for reflectance = A*radiance + B  -DEC 7 Feb 2012
 #if 0
    if (reflectance > 1.0) {
@@ -892,7 +892,7 @@ double brad_radiance_variance_chavez(double reflectance,
    double sun_dot_norm = dot_product(sun_dir, normal);
    if (sun_dot_norm < 0)
       sun_dot_norm = 0.0;
-   
+
    // compute shape factor for surface
    double F = 1.0 - 0.5*vcl_sqrt(1.0 - normal.z()*normal.z());
    double dL_dskylight = F*reflectance*T_view/vnl_math::pi;

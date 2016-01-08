@@ -29,7 +29,7 @@ class sdet_symbolic_edge_linker_params : public gevd_param_mixin
 
   /*
    * Parameters
-   * 
+   *
    *                  nrad - Radius of neighborhood
    *                   gap - Maximum pixel distance to complete
    *            adap_uncer - Get uncertanty from edges
@@ -102,10 +102,10 @@ protected:
   bool b_use_all_cvlets_;
   unsigned app_usage_;
   double app_thresh_;
-  
+
   unsigned linkgraph_algo_;
   unsigned min_size_to_link_;
-  
+
   unsigned linking_algo_;
   unsigned num_link_iters_;
 

@@ -18,14 +18,14 @@
 #
 #  Author:  Andrew Hewett, Marco Eichelberg
 #
-#  Purpose: 
+#  Purpose:
 #  This is the global DICOM data dictionary for the dcmtk class library.
 #
-#  Last Update:      Author: amithaperera 
-#  Update Date:      Date: 2004/01/14 04:01:10 
-#  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dicom.dic,v 
-#  CVS/RCS Revision: Revision: 1.1 
-#  Status:           State: Exp 
+#  Last Update:      Author: amithaperera
+#  Update Date:      Date: 2004/01/14 04:01:10
+#  Source File:      Source: /cvsroot/vxl/vxl/v3p/dcmtk/dcmdata/libsrc/dicom.dic,v
+#  CVS/RCS Revision: Revision: 1.1
+#  Status:           State: Exp
 #
 #  This dictionary contains
 #   - the complete dictionary from the 2001 DICOM publication
@@ -40,8 +40,8 @@
 #
 # Entries may override existing entries.
 #
-# Each field must be separated by a single tab.  The tag values (gggg,eeee) 
-# must be in hexedecimal and must be surrounded by parentheses.  Repeating 
+# Each field must be separated by a single tab.  The tag values (gggg,eeee)
+# must be in hexedecimal and must be surrounded by parentheses.  Repeating
 # groups are represented by indicating the range (gggg-gggg,eeee).  By default
 # the repeating notation only represents even numbers.  A range where only
 # odd numbers are valid is represented using the notation (gggg-o-gggg,eeee).
@@ -669,13 +669,13 @@
 (0028,1199)	UI	PaletteColorLookupTableUID	1	dicom98
 # VR for (0028,1201) RedPaletteColorLookupTableData was "US or SS" with VM=1-n in DICOM93. Changed in DICOM96 (Supplement 5).
 # now it is defined as US 1-n or SS 1-n or OW 1
-(0028,1201)	OW	RedPaletteColorLookupTableData	1	dicom98 
+(0028,1201)	OW	RedPaletteColorLookupTableData	1	dicom98
 # VR for (0028,1202) GreenPaletteColorLookupTableData was "US or SS" with VM=1-n in DICOM93. Changed in DICOM96 (Supplement 5).
 # now it is defined as US 1-n or SS 1-n or OW 1
-(0028,1202)	OW	GreenPaletteColorLookupTableData	1	dicom98 
+(0028,1202)	OW	GreenPaletteColorLookupTableData	1	dicom98
 # VR for (0028,1203) BluePaletteColorLookupTableData was "US or SS" with VM=1-n in DICOM93. Changed in DICOM96 (Supplement 5).
 # now it is defined as US 1-n or SS 1-n or OW 1
-(0028,1203)	OW	BluePaletteColorLookupTableData	1	dicom98 
+(0028,1203)	OW	BluePaletteColorLookupTableData	1	dicom98
 (0028,1221)	OW	SegmentedRedPaletteColorLookupTableData	1	dicom98
 (0028,1222)	OW	SegmentedGreenPaletteColorLookupTableData	1	dicom98
 (0028,1223)	OW	SegmentedBluePaletteColorLookupTableData	1	dicom98
@@ -1796,8 +1796,8 @@
 (0020,0016)	IS	IntervalNumber	1	DICOM93
 (0020,0017)	IS	TimeSlotNumber	1	DICOM93
 (0020,0018)	IS	AngleNumber	1	DICOM93
-# Attribute (2040,0500) is retired by Correction Proposal 53. It is a duplicate of (2010,0510). 
-(2040,0500)	SQ	RETIRED_ReferencedImageBoxSequence	1	DICOM93 
+# Attribute (2040,0500) is retired by Correction Proposal 53. It is a duplicate of (2010,0510).
+(2040,0500)	SQ	RETIRED_ReferencedImageBoxSequence	1	DICOM93
 (6000-60ff,1100)	US	OverlayDescriptorGray	1	DICOM93
 (6000-60ff,1101)	US	OverlayDescriptorRed	1	DICOM93
 (6000-60ff,1102)	US	OverlayDescriptorGreen	1	DICOM93
@@ -1961,7 +1961,7 @@
 #
 # CP 251:
 (0040,0281)	SQ	PerformedProcedureStepDiscontinuationReasonCodeSequence	1	cp14
-# CP 260: 
+# CP 260:
 (0040,A301)	SQ	NumericValueQualifierCodeSequence	1	cp14
 #
 #---------------------------------------------------------------------------

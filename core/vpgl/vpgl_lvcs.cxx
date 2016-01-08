@@ -871,12 +871,12 @@ void vpgl_lvcs::write(vcl_ostream& strm)  // write just "read" would read
     strm << "feet ";
   else if (localXYZUnit_ == METERS)
     strm << "meters ";
-  
+
   if (geo_angle_unit_ == DEG)
     strm << "degrees\n";
   else if (geo_angle_unit_ == RADIANS)
     strm << "radians\n";
-  
+
   strm << localCSOriginLat_ << ' ' << localCSOriginLon_ << ' '  << localCSOriginElev_ << '\n';
   strm << "0.0 0.0\n";
   strm << lox_ << ' ' << loy_ << ' ' << theta_ << '\n';
@@ -972,19 +972,19 @@ void vpgl_lvcs::b_write( vsl_b_ostream& os ) const
 {
   vsl_b_write(os, version());
   vsl_b_write(os, (int)local_cs_name_);
-  vsl_b_write(os, localCSOriginLat_); 
-  vsl_b_write(os, localCSOriginLon_); 
+  vsl_b_write(os, localCSOriginLat_);
+  vsl_b_write(os, localCSOriginLon_);
   vsl_b_write(os, localCSOriginElev_);
-  vsl_b_write(os, lat_scale_);        
-  vsl_b_write(os, lon_scale_);        
-  vsl_b_write(os, (int)geo_angle_unit_);   
-  vsl_b_write(os, (int)localXYZUnit_);     
-  vsl_b_write(os, lox_);                
-  vsl_b_write(os, loy_);                
-  vsl_b_write(os, theta_);              
-  vsl_b_write(os, localUTMOrigin_X_East_);  
-  vsl_b_write(os, localUTMOrigin_Y_North_); 
-  vsl_b_write(os, localUTMOrigin_Zone_);      
+  vsl_b_write(os, lat_scale_);
+  vsl_b_write(os, lon_scale_);
+  vsl_b_write(os, (int)geo_angle_unit_);
+  vsl_b_write(os, (int)localXYZUnit_);
+  vsl_b_write(os, lox_);
+  vsl_b_write(os, loy_);
+  vsl_b_write(os, theta_);
+  vsl_b_write(os, localUTMOrigin_X_East_);
+  vsl_b_write(os, localUTMOrigin_Y_North_);
+  vsl_b_write(os, localUTMOrigin_Zone_);
 }
 
 
@@ -999,19 +999,19 @@ void vpgl_lvcs::b_read( vsl_b_istream& is )
    case 1:
      int val;
      vsl_b_read(is, val); local_cs_name_ = (vpgl_lvcs::cs_names)val;
-     vsl_b_read(is, localCSOriginLat_); 
-     vsl_b_read(is, localCSOriginLon_); 
+     vsl_b_read(is, localCSOriginLat_);
+     vsl_b_read(is, localCSOriginLon_);
      vsl_b_read(is, localCSOriginElev_);
-     vsl_b_read(is, lat_scale_);        
-     vsl_b_read(is, lon_scale_);        
+     vsl_b_read(is, lat_scale_);
+     vsl_b_read(is, lon_scale_);
      vsl_b_read(is, val);   geo_angle_unit_ = (vpgl_lvcs::AngUnits)val;
-     vsl_b_read(is, val);   localXYZUnit_ = (vpgl_lvcs::LenUnits)val;     
-     vsl_b_read(is, lox_);                
-     vsl_b_read(is, loy_);                
-     vsl_b_read(is, theta_);              
-     vsl_b_read(is, localUTMOrigin_X_East_);  
-     vsl_b_read(is, localUTMOrigin_Y_North_); 
-     vsl_b_read(is, localUTMOrigin_Zone_);    
+     vsl_b_read(is, val);   localXYZUnit_ = (vpgl_lvcs::LenUnits)val;
+     vsl_b_read(is, lox_);
+     vsl_b_read(is, loy_);
+     vsl_b_read(is, theta_);
+     vsl_b_read(is, localUTMOrigin_X_East_);
+     vsl_b_read(is, localUTMOrigin_Y_North_);
+     vsl_b_read(is, localUTMOrigin_Zone_);
     break;
 
    default:

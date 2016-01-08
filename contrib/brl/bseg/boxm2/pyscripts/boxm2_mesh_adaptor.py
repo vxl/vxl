@@ -7,7 +7,7 @@ def load_mesh(filename):
   (id, type) = boxm2_batch.commit_output(0);
   mesh = dbvalue(id, type);
   return mesh;
-  
+
 def gen_mesh(z_img,x_img,y_img,out_dir):
   boxm2_batch.init_process("boxm2ExportMeshProcess");
   boxm2_batch.set_input_from_db(0,z_img);

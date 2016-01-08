@@ -76,7 +76,7 @@ static void test_ray()
 
   vgl_plane_3d<double> outp;
 
-  vpgl_ray::plane_ray(lrcam,impt1,impt2,outp); 
+  vpgl_ray::plane_ray(lrcam,impt1,impt2,outp);
   err=dot_product<double>(outp.normal(),dir);
   TEST_NEAR("test local rational plane", err, 0.0, 1e-8);
 }

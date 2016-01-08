@@ -157,7 +157,7 @@ static void test_algo_blob()
 
   TEST("Count (U shape)", regions.size(), 1);
   TEST("Area (U shape)", vil_area(regions[0]), 13);
-  
+
 
 
 
@@ -175,7 +175,7 @@ static void test_algo_blob()
   TEST("Area (V shape 4-conn - 1)", vil_area(regions[0]), 1);
   TEST("Area (V shape 4-conn - 2)", vil_area(regions[1]), 1);
   TEST("Area (V shape 4-conn - 3)", vil_area(regions[2]), 1);
-  
+
   vil_blob_labels(image, vil_blob_8_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
   vil_print_all(vcl_cout, labels, 1);
@@ -199,7 +199,7 @@ static void test_algo_blob()
   TEST("Area (Cross shape 4-conn)", vil_area(regions[0]), 9);
   TEST("Count edge(Cross shape 4-conn)", edge_lists.size(), 1);
   TEST("Area edge(Cross shape 4-conn)", edge_lists[0].size(), 9);
-  
+
   vil_blob_labels(image, vil_blob_8_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
   vil_blob_labels_to_edge_labels(labels, vil_blob_8_conn, edge_labels);

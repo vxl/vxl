@@ -69,7 +69,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
     bocl_device_sptr    device    = ocl_cache->get_device();
 
     //grab vis and pre images that correspond
-    
+
     bocl_mem_sptr vis_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, NULL /*vis_img*/, "vis image buff");
     bocl_mem_sptr pre_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, NULL /*pre_img*/, "pre image buff");
     bocl_mem_sptr norm_mem = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, norm_image, "norm image buff");
@@ -110,7 +110,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
       pre_mems[i]->write_to_gpu_mem(queues[i], group.get_pre(i), cl_ni*cl_nj*sizeof(float));
       transfer_time += calc_beta_per_block(id, sub_scene, ocl_cache, queues[i], data_type, kerns[0],
                                            vis_mems[i], pre_mems[i], norm_mems[i], img_dims[i],ray_os[i], ray_ds[i],tnearfarptrs[i], out_imgs[i], lookups[i],lthreads, gThreads);
-      
+
     }
 
     //finish queues before moving on (Maybe read in AUX 2 and 3 here)
@@ -370,7 +370,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       ttime.mark();
       boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_block_id id = ids[i];
-      
+
       //write alpha, mog and num obs to disk
       bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id,0,false);
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());

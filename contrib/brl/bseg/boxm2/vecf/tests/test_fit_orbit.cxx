@@ -53,13 +53,13 @@ bool good = false;
 
   vcl_string cr_right_inferior_margin_path = cr_base_path + "cristina_right_inferior_margin.txt";
   cr_fo.load_orbit_data("right_eye_inferior_margin", cr_right_inferior_margin_path);
-  
+
   vcl_string cr_right_superior_margin_path = cr_base_path + "cristina_right_superior_margin.txt";
   cr_fo.load_orbit_data("right_eye_superior_margin", cr_right_superior_margin_path);
 
   vcl_string cr_right_superior_crease_path = cr_base_path + "cristina_right_superior_crease.txt";
   cr_fo.load_orbit_data("right_eye_superior_crease", cr_right_superior_crease_path);
- 
+
   vcl_string cr_right_vrml_path = cr_base_path + "cristina_right_orbit_plot.wrl";
   vcl_ofstream cr_rostr(cr_right_vrml_path.c_str());
   good = cr_fo.display_orbit_vrml(cr_rostr, true, show_model);
@@ -71,13 +71,13 @@ bool good = false;
 
   vcl_string cr_left_inferior_margin_path = cr_base_path + "cristina_left_inferior_margin.txt";
   cr_fo.load_orbit_data("left_eye_inferior_margin", cr_left_inferior_margin_path);
-  
+
   vcl_string cr_left_superior_margin_path = cr_base_path + "cristina_left_superior_margin.txt";
   cr_fo.load_orbit_data("left_eye_superior_margin", cr_left_superior_margin_path);
 
   vcl_string cr_left_superior_crease_path = cr_base_path + "cristina_left_superior_crease.txt";
   cr_fo.load_orbit_data("left_eye_superior_crease", cr_left_superior_crease_path);
- 
+
   vcl_string cr_left_vrml_path = cr_base_path + "cristina_left_orbit_plot.wrl";
   vcl_ofstream cr_lostr(cr_left_vrml_path.c_str());
   good = cr_fo.display_orbit_vrml(cr_lostr, false,show_model);
@@ -119,13 +119,13 @@ bool good = false;
 
   vcl_string p69_right_inferior_margin_path = p69_base_path + "patient_069_right_inferior_margin.txt";
   p69_fo.load_orbit_data("right_eye_inferior_margin", p69_right_inferior_margin_path);
-  
+
   vcl_string p69_right_superior_margin_path = p69_base_path + "patient_069_right_superior_margin.txt";
   p69_fo.load_orbit_data("right_eye_superior_margin", p69_right_superior_margin_path);
 
   vcl_string p69_right_superior_crease_path = p69_base_path + "patient_069_right_superior_crease.txt";
   p69_fo.load_orbit_data("right_eye_superior_crease", p69_right_superior_crease_path);
- 
+
   vcl_string p69_right_vrml_path = p69_base_path + "patient_069_right_orbit_plot.wrl";
   vcl_ofstream p69_rostr(p69_right_vrml_path.c_str());
   good = p69_fo.display_orbit_vrml(p69_rostr, true, show_model);
@@ -138,13 +138,13 @@ bool good = false;
 
   vcl_string p69_left_inferior_margin_path = p69_base_path + "patient_069_left_inferior_margin.txt";
   p69_fo.load_orbit_data("left_eye_inferior_margin", p69_left_inferior_margin_path);
-  
+
   vcl_string p69_left_superior_margin_path = p69_base_path + "patient_069_left_superior_margin.txt";
   p69_fo.load_orbit_data("left_eye_superior_margin", p69_left_superior_margin_path);
 
   vcl_string p69_left_superior_crease_path = p69_base_path + "patient_069_left_superior_crease.txt";
   p69_fo.load_orbit_data("left_eye_superior_crease", p69_left_superior_crease_path);
- 
+
   vcl_string p69_left_vrml_path = p69_base_path + "patient_069_left_orbit_plot.wrl";
   vcl_ofstream p69_lostr(p69_left_vrml_path.c_str());
   good = p69_fo.display_orbit_vrml(p69_lostr, false, show_model);
@@ -186,13 +186,13 @@ bool good = false;
 
   vcl_string p113_right_inferior_margin_path = p113_base_path + "patient_113_right_inferior_margin.txt";
   p113_fo.load_orbit_data("right_eye_inferior_margin", p113_right_inferior_margin_path);
-  
+
   vcl_string p113_right_superior_margin_path = p113_base_path + "patient_113_right_superior_margin.txt";
   p113_fo.load_orbit_data("right_eye_superior_margin", p113_right_superior_margin_path);
 
   vcl_string p113_right_superior_crease_path = p113_base_path + "patient_113_right_superior_crease.txt";
   p113_fo.load_orbit_data("right_eye_superior_crease", p113_right_superior_crease_path);
- 
+
   vcl_string p113_right_vrml_path = p113_base_path + "patient_113_right_orbit_plot.wrl";
   vcl_ofstream p113_rostr(p113_right_vrml_path.c_str());
   good = p113_fo.display_orbit_vrml(p113_rostr, true, show_model);
@@ -205,13 +205,13 @@ bool good = false;
 
   vcl_string p113_left_inferior_margin_path = p113_base_path + "patient_113_left_inferior_margin.txt";
   p113_fo.load_orbit_data("left_eye_inferior_margin", p113_left_inferior_margin_path);
-  
+
   vcl_string p113_left_superior_margin_path = p113_base_path + "patient_113_left_superior_margin.txt";
   p113_fo.load_orbit_data("left_eye_superior_margin", p113_left_superior_margin_path);
 
   vcl_string p113_left_superior_crease_path = p113_base_path + "patient_113_left_superior_crease.txt";
   p113_fo.load_orbit_data("left_eye_superior_crease", p113_left_superior_crease_path);
- 
+
   vcl_string p113_left_vrml_path = p113_base_path + "patient_113_left_orbit_plot.wrl";
   vcl_ofstream p113_lostr(p113_left_vrml_path.c_str());
   good = p113_fo.display_orbit_vrml(p113_lostr, false, show_model);
@@ -221,7 +221,7 @@ bool good = false;
   vcl_ofstream p113_lpstr(p113_left_param_path.c_str());
   p113_lpstr << p113_fo.left_params() << '\n';
   p113_lpstr.close();
-#endif //P113 
+#endif //P113
 #if bs00
   vcl_string bs00_base_path = "c:/Users/mundy/VisionSystems/Janus/experiments/Bosphorous/bs00_CAU_0/";
   boxm2_vecf_fit_orbit bs00_fo;
@@ -253,14 +253,14 @@ bool good = false;
 
   vcl_string bs00_right_inferior_margin_path = bs00_base_path + "bs00_right_inferior_margin.txt";
   bs00_fo.load_orbit_data("right_eye_inferior_margin", bs00_right_inferior_margin_path);
-  
+
   vcl_string bs00_right_superior_margin_path = bs00_base_path + "bs00_right_superior_margin.txt";
   bs00_fo.load_orbit_data("right_eye_superior_margin", bs00_right_superior_margin_path);
 
   vcl_string bs00_right_superior_crease_path = bs00_base_path + "bs00_right_superior_crease.txt";
   bs00_fo.load_orbit_data("right_eye_superior_crease", bs00_right_superior_crease_path);
 
-  
+
   vcl_string bs00_right_vrml_path = bs00_base_path + "bs00_right_orbit_plot.wrl";
   vcl_ofstream bs00_rostr(bs00_right_vrml_path.c_str());
   good = bs00_fo.display_orbit_vrml(bs00_rostr, true, show_model);
@@ -272,13 +272,13 @@ bool good = false;
 
   vcl_string bs00_left_inferior_margin_path = bs00_base_path + "bs00_left_inferior_margin.txt";
   bs00_fo.load_orbit_data("left_eye_inferior_margin", bs00_left_inferior_margin_path);
-  
+
   vcl_string bs00_left_superior_margin_path = bs00_base_path + "bs00_left_superior_margin.txt";
   bs00_fo.load_orbit_data("left_eye_superior_margin", bs00_left_superior_margin_path);
 
   vcl_string bs00_left_superior_crease_path = bs00_base_path + "bs00_left_superior_crease.txt";
   bs00_fo.load_orbit_data("left_eye_superior_crease", bs00_left_superior_crease_path);
- 
+
   vcl_string bs00_left_vrml_path = bs00_base_path + "bs00_left_orbit_plot.wrl";
   vcl_ofstream bs00_lostr(bs00_left_vrml_path.c_str());
   good = bs00_fo.display_orbit_vrml(bs00_lostr, false,show_model);
@@ -292,4 +292,4 @@ bool good = false;
 #endif //BUILD_FIT_ORBIT
 }
 TESTMAIN( test_fit_orbit );
- 
+

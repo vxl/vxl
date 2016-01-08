@@ -14,7 +14,7 @@ bool vil_stretch_image_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types(4);
-  input_types[0] = "vil_image_view_base_sptr";  
+  input_types[0] = "vil_image_view_base_sptr";
   input_types[1] = "float";   // min limit
   input_types[2] = "float";   // max limit
   input_types[3] = "vcl_string"; //output image pixel type:
@@ -50,11 +50,11 @@ bool vil_stretch_image_process(bprb_func_process& pro)
     vcl_cerr << "vil_stretch_image_process: invalid stretch limits\n";
       return false;
   }
-    
+
   vcl_string out_type = pro.get_input<vcl_string>(3);
   // retrieve float image
   vil_image_view_base_sptr fimage;
-  // if the src imagery is of type float then vil_convert_cast simply does a 
+  // if the src imagery is of type float then vil_convert_cast simply does a
   // shallow copy. so as not to modify the original imagery, make a deep copy
   if( vil_pixel_format_component_format(image->pixel_format()) ==
       VIL_PIXEL_FORMAT_FLOAT) {
@@ -70,8 +70,8 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   unsigned ni = fimg.ni(), nj = fimg.nj(), np = fimg.nplanes();
   if(out_type=="byte"){
     float scale = 255.0f/(max_limit-min_limit);
-    for(unsigned j = 0; j<nj; ++j) 
-      for(unsigned i = 0; i<ni; ++i) 
+    for(unsigned j = 0; j<nj; ++j)
+      for(unsigned i = 0; i<ni; ++i)
         for(unsigned p = 0; p<np; ++p){
           float v = scale*(fimg(i,j,p)-min_limit);
           if(v>255.0f) v= 255.0f; if(v<0.0f) v = 0.0f;
@@ -82,8 +82,8 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   }
   else if(out_type=="short"){
     float scale = 65536.0f/(max_limit-min_limit);
-    for(unsigned j = 0; j<nj; ++j) 
-      for(unsigned i = 0; i<ni; ++i) 
+    for(unsigned j = 0; j<nj; ++j)
+      for(unsigned i = 0; i<ni; ++i)
         for(unsigned p = 0; p<np; ++p){
           float v = scale*(fimg(i,j,p)-min_limit);
           if(v>65536.0f) v= 65536.0f; if(v<0.0f) v = 0.0f;
@@ -94,8 +94,8 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   }
   else if(out_type=="float"){
     float scale = 1.0f/(max_limit-min_limit);
-    for(unsigned j = 0; j<nj; ++j) 
-      for(unsigned i = 0; i<ni; ++i) 
+    for(unsigned j = 0; j<nj; ++j)
+      for(unsigned i = 0; i<ni; ++i)
         for(unsigned p = 0; p<np; ++p){
           float v = scale*(fimg(i,j,p)-min_limit);
           if(v>1.0f) v = 1.0f; if(v<0.0f) v=0.0f;
@@ -106,7 +106,7 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   else{
     vcl_cerr << "vil_stretch_image_process: unknown output type\n";
       return false;
-  }  
+  }
 
   return true;
 }

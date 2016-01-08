@@ -170,7 +170,7 @@ bool vil_geotiff_header::GCS_WGS84_MET_DEG()
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeGeographic) {
     void *value; int size; int length; tagtype_t ttype;
-    
+
     bool status = get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
     if (!status) {
       vcl_cerr << "Missing GeogLinearUnitsGeoKey (" << GeogLinearUnitsGeoKey << ") key!\n";
@@ -235,7 +235,7 @@ bool vil_geotiff_header::PCS_NAD83_UTM_zone(int &zone, GTIF_HEMISPH &hemisph)
     }
     zone = *val - 26900;
     hemisph = NORTH;
-    
+
     return true;
   }
   else {

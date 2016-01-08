@@ -9,7 +9,7 @@ namespace
   bool issorted(CI begin, CI end)
   {
     if (begin==end) return false; // Since it is for a test, empty is unexpected.
-    
+
     end--;
     for (; begin != end; ++begin)
     {
@@ -23,7 +23,7 @@ namespace
 static void vbl_test_batch_compact_multimap1()
 {
   vcl_vector<vcl_pair<vcl_string, int> > test_data;
-  
+
   // All these values should sort correctly even via their string values
   // assuming the char type is ascii.
   test_data.push_back(vcl_make_pair("3", 3));
@@ -33,13 +33,13 @@ static void vbl_test_batch_compact_multimap1()
   test_data.push_back(vcl_make_pair("-7", -7));
   test_data.push_back(vcl_make_pair("5", 5));
   test_data.push_back(vcl_make_pair("3", 3));
-  
-  
+
+
   vbl_batch_compact_multimap<vcl_string, int> bcmmap(test_data.begin(), test_data.end());
-  
+
   TEST("batch_compact_multimap sorted data set correctly", issorted(bcmmap.keys_begin(), bcmmap.keys_end()), true);
   TEST("batch_compact_multimap sorted data set correctly", issorted(bcmmap.values_begin(), bcmmap.values_end()), true);
-  
+
   TEST("batch_compact_multimap::size", bcmmap.size(), 7);
   TEST("batch_compact_multimap::find", *bcmmap.find("-7"), -7);
   TEST("batch_compact_multimap::find", bcmmap.find("-8"), bcmmap.values_end());
@@ -83,13 +83,13 @@ static void vbl_test_batch_compact_multimap2()
     test_data.push_back(vcl_make_pair(6, vcl_string("6")+c));
     test_data.push_back(vcl_make_pair(7, vcl_string("7")+c));
     test_data.push_back(vcl_make_pair(8, vcl_string("8")+c));
-  }  
-  
+  }
+
   vbl_batch_compact_multimap<int, vcl_string> bcmmap(test_data.begin(), test_data.end());
-  
+
   TEST("batch_compact_multimap sorted data set correctly", issorted(bcmmap.keys_begin(), bcmmap.keys_end()), true);
   TEST("batch_compact_multimap sorted data values are scrabled by default sort", issorted(bcmmap.values_begin(), bcmmap.values_end()), false);
-  
+
   TEST("batch_compact_multimap::size", bcmmap.size(), 82);
   TEST("batch_compact_multimap::find", *bcmmap.find(-7), "-7a");
   TEST("batch_compact_multimap::find", bcmmap.find(-8), bcmmap.values_end());

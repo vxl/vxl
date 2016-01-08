@@ -17,18 +17,18 @@ typedef struct
 void create_aux_rays(float4 d, float4* u)
 {
     d = normalize(d);
-    
+
     float4 m1;
     if(d.z != 0.0f)
         m1 = (float4)(1, 1, -(d.x+d.y)/d.z, 0);
     else if(d.y != 0.0f)
         m1 = (float4)(1, -(d.x+d.z)/d.y, 1, 0);
     else
-        m1 = (float4)(-(d.y+d.z)/d.x , 1, 1, 0);    
-    
+        m1 = (float4)(-(d.y+d.z)/d.x , 1, 1, 0);
+
     m1 = normalize(m1);
     float4 m2 = cross(d,m1);
-    
+
     float c = tan(radians(5.0f));
     u[0] = d + m1 * c;
     u[1] = d - m1 * c;
@@ -60,7 +60,7 @@ compute_vis(__constant  uint               * datasize_points,
         //get normal and point from global mem
         float4 ray_o = points[ gid ];
         float4 ray_d = normals[ gid ];
-        
+
         //check if there is a normal here
         if ( (ray_d.x == 0 && ray_d.y == 0 && ray_d.z ==0) || (ray_o.x == 0 && ray_o.y == 0 && ray_o.z == 0)) {
            vis_sphere[gid].sf = -1.0f; //flag to indicate there is no normal in this location.
@@ -95,17 +95,17 @@ compute_vis(__constant  uint               * datasize_points,
 
           float4 aux_rays[4];
           float vis_of_aux_rays[5];
-          
-          //loop thru directions          
+
+          //loop thru directions
           bool start;
           float vis;
           for (unsigned int i = 0; i < 12; i++)
           {
-            
+
             //setup ray
             start = !contain_point[0];
-            
-            
+
+
             vis = private_vis[i];
             aux_args.visibility = &(private_vis[i]);
             aux_args.start = &start;
@@ -118,14 +118,14 @@ compute_vis(__constant  uint               * datasize_points,
                       ray_dx, ray_dy, ray_dz,
                       linfo, tree_array,                               //scene info
                       local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);   //utility info
-                      
-            
-            //zip thru aux rays    
+
+
+            //zip thru aux rays
             create_aux_rays(directions[i],aux_rays);
-            for(unsigned  j = 0; j < 4; j++) 
+            for(unsigned  j = 0; j < 4; j++)
             {
                 start = !contain_point[0];
-                
+
                 vis_of_aux_rays[j] = vis;
                 aux_args.visibility = &(vis_of_aux_rays[j]);
                 aux_args.start = &start;
@@ -143,7 +143,7 @@ compute_vis(__constant  uint               * datasize_points,
             vis_of_aux_rays[4] = private_vis[i];
             sort_vector( vis_of_aux_rays, 5);
             private_vis[i] = vis_of_aux_rays[2];
-            
+
           }
 
           //transfer from private mem to global mem
@@ -222,16 +222,16 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
           private_vis[11] = vis_sphere[gid].sb;
 
           //compute max visibility in normal and opposite hemisphere
-          for (unsigned int i = 0; i < 12; i++) 
+          for (unsigned int i = 0; i < 12; i++)
           {
               calc_scene_ray_generic_cam(linfo, dummy, directions[i], &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
               if (dot((float4)(ray_dx,ray_dy,ray_dz,0), (float4)(normal_x,normal_y,normal_z,0)) > 0.0){
                   max_vis = (max_vis < private_vis[i]) ? private_vis[i] : max_vis;
-                  sum_vis+=private_vis[i]; 
+                  sum_vis+=private_vis[i];
               }
               else {
                   max_vis_flipped = (max_vis_flipped < private_vis[i]) ? private_vis[i] : max_vis_flipped;
-                  sum_vis_flipped+=private_vis[i]; 
+                  sum_vis_flipped+=private_vis[i];
               }
 
           }
@@ -242,16 +242,16 @@ decide_normal_dir(     __constant  RenderSceneInfo    * linfo,
             vis[gid] = sum_vis_flipped;
           }
           else {
-            normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);  
+            normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);
             vis[gid] = sum_vis;
           }
-           
+
   #else //use the max  visibility for the given hemisphere
           //flip if necessary
           if(max_vis_flipped > max_vis)
               normals[ gid ] = (float4)(-normal_x,-normal_y,-normal_z,normals[gid].w);
           else
-              normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);           
+              normals[ gid ] = (float4)(normal_x,normal_y,normal_z,normals[gid].w);
           //store max visibility
           vis[gid] = (max_vis_flipped > max_vis) ? max_vis_flipped : max_vis;
   #endif //USESUM
@@ -294,15 +294,15 @@ decide_inside_cell(     __constant  RenderSceneInfo    * linfo,
           private_vis[11] = vis_sphere[gid].sb;
 
           //compute max visibility in normal and opposite hemisphere
-          for (unsigned int i = 0; i < 12; i++) 
+          for (unsigned int i = 0; i < 12; i++)
           {
                   max_vis = (max_vis < private_vis[i]) ? private_vis[i] : max_vis;
-                  sum_vis+=private_vis[i]; 
+                  sum_vis+=private_vis[i];
           }
   #ifdef USESUM //use the sum of visibilities for the given hemisphere
-         
+
             vis[gid] = sum_vis;
-           
+
   #else //use the max  visibility for the given hemisphere
           vis[gid] =  max_vis;
   #endif //USESUM

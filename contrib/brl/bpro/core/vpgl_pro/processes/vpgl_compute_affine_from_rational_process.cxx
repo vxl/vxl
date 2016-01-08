@@ -51,7 +51,7 @@ bool vpgl_compute_affine_from_rat_process(bprb_func_process& pro)
   unsigned n_points = pro.get_input<unsigned>(i++);
   if (n_points <= 3)
     n_points = 10;   // make it minimum 10 points
-  
+
   if (!camera) {
     vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
     return false;
@@ -61,7 +61,7 @@ bool vpgl_compute_affine_from_rat_process(bprb_func_process& pro)
     vcl_cout << pro.name() <<" :--  Input camera is not a local rational camera!\n";
     return false;
   }
-  
+
   double width = max_x - min_x;
   double depth = max_y - min_y;
   double height = max_z - min_z;
@@ -70,7 +70,7 @@ bool vpgl_compute_affine_from_rat_process(bprb_func_process& pro)
   vcl_cout << " w: " << width << " d: " << depth << " h: " << height << '\n';
   vcl_vector< vgl_point_2d<double> > image_pts;
   vcl_vector< vgl_point_3d<double> > world_pts;
-  
+
   vnl_random rng;
   for (unsigned i = 0; i < n_points; i++) {
     vgl_point_3d<float> corner_world;
@@ -82,7 +82,7 @@ bool vpgl_compute_affine_from_rat_process(bprb_func_process& pro)
     camera->project(x,y,z,u,v);  // local rational camera has an lvcs, so it handles, local coord to global to image point projection internally
     image_pts.push_back(vgl_point_2d<double>(u,v));
   }
-  
+
   vpgl_affine_camera<double>* out_camera = vpgl_affine_rectification::compute_affine_cam(image_pts, world_pts);
   pro.set_output_val<vpgl_camera_double_sptr>(0, out_camera);
   return true;

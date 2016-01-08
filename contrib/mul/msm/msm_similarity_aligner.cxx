@@ -126,7 +126,7 @@ void msm_similarity_aligner::calc_transform(const msm_points& pts1,
     dot_sum += dpx*dtx + dpy*dty;
     xy_sum += dpx*dty - dpy*dtx;
   }
-  
+
   trans.set_size(4);
   double a=0,b=0;
   if (x2_sum>1e-8)

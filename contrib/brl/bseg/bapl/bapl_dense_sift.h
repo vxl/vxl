@@ -32,8 +32,8 @@ class bapl_dense_sift:public vbl_ref_count
  public:
   bapl_dense_sift():pyramid_valid_(false) {}
 
-  bapl_dense_sift(const vil_image_resource_sptr& image, 
-                  unsigned octave_size = 6, 
+  bapl_dense_sift(const vil_image_resource_sptr& image,
+                  unsigned octave_size = 6,
                   unsigned num_octaves = 1 );
 
   ~bapl_dense_sift() {}
@@ -52,7 +52,7 @@ class bapl_dense_sift:public vbl_ref_count
   //parameters := target image locations (vgl_point_2d<unsigned> > pts)
   bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints, vcl_vector<vgl_point_2d<unsigned> > const& pts );
 
-  //input := vector of keypoints with locations specified in the keypoint 
+  //input := vector of keypoints with locations specified in the keypoint
   //output := the modified keypoints
   bool make_keypoints( vcl_vector<bapl_lowe_keypoint_sptr>& keypoints );
 

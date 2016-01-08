@@ -49,10 +49,10 @@ void test_gram_schmidt()
     TEST_NEAR("mbl_gram_schmidt e0 and e1 orthogonal", dot_product(f0,f1), 0.0, 1e-8);
     TEST_NEAR("mbl_gram_schmidt e0 and e2 orthogonal", dot_product(f0,f2), 0.0, 1e-8);
     TEST_NEAR("mbl_gram_schmidt e1 and e2 orthogonal", dot_product(f1,f2), 0.0, 1e-8);
-    
+
     TEST_EQUAL("basis variants e0, f0", e0==f0, true);
     TEST_EQUAL("basis variants e1, f1", e1==f1, true);
-    TEST_EQUAL("basis variants e2, f2", e2==f2, true);    
+    TEST_EQUAL("basis variants e2, f2", e2==f2, true);
 }
 
 TESTMAIN(test_gram_schmidt);

@@ -5,7 +5,7 @@ IF (BGUI3D_FOUND)
 
   # Find the Coin3D library
   find_package(Coin3D)
-  
+
   IF (COIN3D_FOUND)
     INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
     SET( HAS_BGUI3D "YES" )

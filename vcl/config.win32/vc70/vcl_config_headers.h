@@ -1,7 +1,7 @@
 #ifndef vcl_config_headers_h_config_win32_vc70_
 #define vcl_config_headers_h_config_win32_vc70_
 
-// This file is *not* generated. 
+// This file is *not* generated.
 
 //--------------------------------------------------------------------------------
 

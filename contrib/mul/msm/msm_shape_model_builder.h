@@ -126,12 +126,12 @@ class msm_shape_model_builder
 
   //: Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
-  
+
   //: Initialise from a text stream.
   // Expects something like:
   // \verbatim
-  // { 
-  //   aligner: msm_similarity_aligner 
+  // {
+  //   aligner: msm_similarity_aligner
   //   param_limiter: msm_ellipsoid_limiter { accept_prop: 0.98 }
   //   min_modes: 0 max_modes: 49 var_prop: 0.98
   // }

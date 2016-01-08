@@ -4,14 +4,14 @@
 #if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_GCC_5) || defined(VCL_ICC) || defined(VCL_VC_8)
 
 // Apply explicit instantiation
-// ICC 8.1 has problems with the following 
-// implicit trigger function. There are weak 
+// ICC 8.1 has problems with the following
+// implicit trigger function. There are weak
 // symbols(V type) generated. But they did not
-// get through linking stage. 
+// get through linking stage.
 //
 typedef vcl_vector<float>::iterator Iter;
 RREL_UTIL_INSTANTIATE_RAN_ITER(float, Iter);
- 
+
 #else
 
 // Trigger this implicitly, because on many compilers, the

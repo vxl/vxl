@@ -12,7 +12,7 @@ unsigned volm_desc_land::n_bins = obtain_bin_size();
 #endif
 
 // Constructor - returns a descriptor with a histogram of all bins 0 if it cannot find the land type, e.g. pass -1 to get such a histogram
-volm_desc_land::volm_desc_land(int land_type_id, vcl_string const& id_type) 
+volm_desc_land::volm_desc_land(int land_type_id, vcl_string const& id_type)
 {
   name_ = "volm_desc_land";
   nbins_ = volm_osm_category_io::volm_land_table.size();

@@ -95,7 +95,7 @@ class brdb_value : public vbl_ref_count
   {
     vcl_cout << "Warning: calling binary write on parent value class, this value is not being saved" << vcl_endl;
   }
-  
+
 
  protected:
   //: Constructor

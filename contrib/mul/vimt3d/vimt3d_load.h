@@ -30,7 +30,7 @@ void vimt3d_load(const vcl_string& path,
     return;
   }
 
-  image.image() = vil3d_convert_cast(T(), 
+  image.image() = vil3d_convert_cast(T(),
                                      ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
   image.set_world2im(vimt3d_load_transform(ir,use_millimetres));

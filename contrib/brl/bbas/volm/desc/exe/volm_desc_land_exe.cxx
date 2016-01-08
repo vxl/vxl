@@ -28,7 +28,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> desc_index_folder("-desc", "folder to read the descriptor index of the tile", "");
   vul_arg<vcl_string> land_name("-land", "land id for test query image", "");
   vul_arg<bool> save_images("-save", "save out images or not", false);
-  
+
   // PARAMS for indexing
   vul_arg<vcl_string> lidar_folder("-lidar", "lidar folder to use for indexing", "");
   vul_arg<vcl_string> NLCD_folder("-nlcd", "NLCD folder to use for indexing", "");
@@ -39,12 +39,12 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> radii_string("-rad", "e.g. pass 100_500_1000 for radii of 100, 500 and 1000 meter to construct descriptors at each location", "");
   vul_arg<int> max_leaf_id ("-max", "maximum leaf id considered", 1000);
   vul_arg<int> min_leaf_id ("-min", "minimum leaf id considered", 0);
-  
+
   vul_arg_parse(argc, argv);
   vcl_cout << "argc: " << argc << vcl_endl;
 
   if (match()) {  // run the matcher
-    
+
     vcl_vector<volm_tile> tiles;
 
     if (world_str().compare("Chile")==0)             tiles = volm_tile::generate_p1b_wr1_tiles();
@@ -75,7 +75,7 @@ int main(int argc,  char** argv)
         vnl_random rng;
         m->create_random_prob_map(rng, geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()]);
         float thres = 0.5f;
-        m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10.0f, 127.0f, thres); 
+        m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10.0f, 127.0f, thres);
 
         volm_io::write_status(out_folder(), volm_io::SUCCESS);
         vcl_cout << "returning SUCCESS!\n";
@@ -105,12 +105,12 @@ int main(int argc,  char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     volm_desc_matcher_sptr m = new volm_desc_land_matcher(NLCD_folder(), query_img_info[img_info_id].first);
-    // create the query descriptor    
+    // create the query descriptor
     volm_desc_sptr query;
     if (land_name().compare("") != 0 && volm_osm_category_io::volm_land_table_name.find(land_name()) == volm_osm_category_io::volm_land_table_name.end()) {
       // create query descriptor based on NLCD
       query = m->create_query_desc();
-      vcl_cout << "will use the gt loc of the image " << img_id() 
+      vcl_cout << "will use the gt loc of the image " << img_id()
                << " which is: " << query_img_info[img_info_id].first.x()
                << " " << query_img_info[img_info_id].first.y() << " " << query_img_info[img_info_id].first.z() << "\n";
     }
@@ -125,16 +125,16 @@ int main(int argc,  char** argv)
 
     m->matcher(query, geo_hypo_folder(), desc_index_folder(), 1.0, tile_id());
     m->write_out(out_folder(), tile_id());
-    
+
     float gt_score;
     m->create_prob_map(geo_hypo_folder(), out_folder(), tile_id(), tiles[tile_id()], query_img_info[img_info_id].first, gt_score);
-    m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, thres); 
+    m->create_scaled_prob_map(out_folder(), tiles[tile_id()], tile_id(), 10, 200, thres);
 
     volm_io::write_status(out_folder(), volm_io::SUCCESS);
     vcl_cout << "returning SUCCESS!\n";
     return volm_io::SUCCESS;
 
-  } else {  // run the indexer 
+  } else {  // run the indexer
     volm_desc_indexer_sptr indexer;
 
     if (index_2d()) {
@@ -145,7 +145,7 @@ int main(int argc,  char** argv)
       }
 
       vcl_vector<double> radii;
-      
+
       char buf[1000];
       for (unsigned kk = 0; kk < radii_string().size(); kk++)
         buf[kk] = radii_string()[kk];
@@ -164,7 +164,7 @@ int main(int argc,  char** argv)
       }
       vcl_cout << '\n';
 
-      indexer = new volm_desc_ex_2d_indexer(maps_folder(), out_folder(), radii);  
+      indexer = new volm_desc_ex_2d_indexer(maps_folder(), out_folder(), radii);
     } else {
       indexer = new volm_desc_land_indexer(NLCD_folder(), out_folder());
     }
@@ -172,9 +172,9 @@ int main(int argc,  char** argv)
     if (!indexer->load_tile_hypos(geo_hypo_folder(), tile_id()))
       return volm_io::EXE_ARGUMENT_ERROR;
     indexer->index(1.0f, min_leaf_id(), max_leaf_id()); // buffer capacity is 1 gigabyte // saves the leaves of the tile at the end
-  
+
     return volm_io::SUCCESS;
   }
 
-  
+
 }

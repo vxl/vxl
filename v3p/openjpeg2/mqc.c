@@ -69,13 +69,13 @@ static void mqc_setbits(opj_mqc_t *mqc);
 /**
 FIXME: documentation ???
 @param mqc MQC handle
-@return 
+@return
 */
 static OPJ_INT32 mqc_mpsexchange(opj_mqc_t *mqc);
 /**
 FIXME: documentation ???
 @param mqc MQC handle
-@return 
+@return
 */
 static OPJ_INT32 mqc_lpsexchange(opj_mqc_t *mqc);
 /**
@@ -193,7 +193,7 @@ static opj_mqc_state_t mqc_states[47 * 2] = {
 	{0x5601, 1, &mqc_states[93], &mqc_states[93]},
 };
 
-/* 
+/*
 ==========================================================
    local functions
 ==========================================================
@@ -283,7 +283,7 @@ static OPJ_INT32 mqc_mpsexchange(opj_mqc_t *mqc) {
 		d = (*mqc->curctx)->mps;
 		*mqc->curctx = (*mqc->curctx)->nmps;
 	}
-	
+
 	return d;
 }
 
@@ -298,7 +298,7 @@ static OPJ_INT32 mqc_lpsexchange(opj_mqc_t *mqc) {
 		d = 1 - (*mqc->curctx)->mps;
 		*mqc->curctx = (*mqc->curctx)->nlps;
 	}
-	
+
 	return d;
 }
 
@@ -341,7 +341,7 @@ static void mqc_renormd(opj_mqc_t *mqc) {
 	} while (mqc->a < 0x8000);
 }
 
-/* 
+/*
 ==========================================================
    MQ-Coder interface
 ==========================================================
@@ -354,7 +354,7 @@ opj_mqc_t* mqc_create(void) {
 
 void mqc_destroy(opj_mqc_t *mqc) {
 	if
-		(mqc) 
+		(mqc)
 	{
 		opj_free(mqc);
 	}
@@ -391,7 +391,7 @@ void mqc_flush(opj_mqc_t *mqc) {
 	mqc_byteout(mqc);
 	mqc->c <<= mqc->ct;
 	mqc_byteout(mqc);
-	
+
 	if (*mqc->bp != 0xff) {
 		mqc->bp++;
 	}
@@ -421,9 +421,9 @@ void mqc_bypass_enc(opj_mqc_t *mqc, OPJ_UINT32 d) {
 
 OPJ_UINT32 mqc_bypass_flush_enc(opj_mqc_t *mqc) {
 	OPJ_BYTE bit_padding;
-	
+
 	bit_padding = 0;
-	
+
 	if (mqc->ct != 0) {
 		while (mqc->ct > 0) {
 			mqc->ct--;
@@ -435,7 +435,7 @@ OPJ_UINT32 mqc_bypass_flush_enc(opj_mqc_t *mqc) {
 		mqc->ct = 8;
 		mqc->c = 0;
 	}
-	
+
 	return 1;
 }
 
@@ -448,7 +448,7 @@ void mqc_reset_enc(opj_mqc_t *mqc) {
 
 OPJ_UINT32 mqc_restart_enc(opj_mqc_t *mqc) {
 	OPJ_UINT32 correction = 1;
-	
+
 	/* <flush part> */
 	OPJ_INT32 n = 27 - 15 - mqc->ct;
 	mqc->c <<= mqc->ct;
@@ -458,7 +458,7 @@ OPJ_UINT32 mqc_restart_enc(opj_mqc_t *mqc) {
 		mqc->c <<= mqc->ct;
 	}
 	mqc_byteout(mqc);
-	
+
 	return correction;
 }
 
@@ -476,14 +476,14 @@ void mqc_restart_init_enc(opj_mqc_t *mqc) {
 
 void mqc_erterm_enc(opj_mqc_t *mqc) {
 	OPJ_INT32 k = 11 - mqc->ct + 1;
-	
+
 	while (k > 0) {
 		mqc->c <<= mqc->ct;
 		mqc->ct = 0;
 		mqc_byteout(mqc);
 		k -= mqc->ct;
 	}
-	
+
 	if (*mqc->bp != 0xff) {
 		mqc_byteout(mqc);
 	}
@@ -492,7 +492,7 @@ void mqc_erterm_enc(opj_mqc_t *mqc) {
 void mqc_segmark_enc(opj_mqc_t *mqc) {
 	OPJ_UINT32 i;
 	mqc_setcurctx(mqc, 18);
-	
+
 	for (i = 1; i < 5; i++) {
 		mqc_encode(mqc, i % 2);
 	}

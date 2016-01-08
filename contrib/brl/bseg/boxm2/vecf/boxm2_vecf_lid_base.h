@@ -25,7 +25,7 @@ class boxm2_vecf_lid_base{
   void set_tmax(double t){t_max_ = t;}
 
   //: lid_base curves projected onto a plane perpendicular to the zaxis (x horizontal , t vertical)
-  virtual double gi(double xp, double t) const = 0; 
+  virtual double gi(double xp, double t) const = 0;
 
   //: z distance from eye sphere center where planar region starts
   virtual double zlim(double xp) const;
@@ -37,7 +37,7 @@ class boxm2_vecf_lid_base{
   virtual double z(double xp, double t) const = 0;
 
   //:spherical coordinates of lid_base curve
-  //: spherical radius of point x,t on lid_base curve 
+  //: spherical radius of point x,t on lid_base curve
   virtual double r(double xp, double t) const;
   //: spherical elevation of point x,t on lid_base curve
   virtual double theta(double xp, double t) const;

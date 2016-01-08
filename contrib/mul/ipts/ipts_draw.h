@@ -11,7 +11,7 @@
 //: Draws line between (i0,j0) and (i0+L,j0) (which may be outside image)
 //  Assumes single plane
 template<class T>
-inline void ipts_draw_i_line(vil_image_view<T>& image, 
+inline void ipts_draw_i_line(vil_image_view<T>& image,
                              int i0, int j0, unsigned L, T value)
 {
   int ilo = i0; if (ilo<0) ilo=0;
@@ -22,7 +22,7 @@ inline void ipts_draw_i_line(vil_image_view<T>& image,
 //: Draws line between (i0,j0) and (i0,j0+L) (which may be outside image)
 //  Assumes single plane
 template<class T>
-inline void ipts_draw_j_line(vil_image_view<T>& image, 
+inline void ipts_draw_j_line(vil_image_view<T>& image,
                              int i0, int j0, unsigned L, T value)
 {
   int jlo = j0; if (jlo<0) jlo=0;

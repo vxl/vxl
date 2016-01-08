@@ -40,7 +40,7 @@ bool vil_image_range_process(bprb_func_process& pro)
   vil_image_view<float> view_a = *(vil_convert_cast(float(), img_ptr_a));
 
   float min, max;
-  vil_math_value_range(view_a, min, max); 
+  vil_math_value_range(view_a, min, max);
   pro.set_output_val<float>(0, min);
   pro.set_output_val<float>(1, max);
   return true;

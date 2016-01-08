@@ -26,8 +26,8 @@ vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr &
                                                  float unit_scaling=1.0f);
 
 //: Load image from path into byte image
-// If input image is float or int16 then stretch values to byte 
-void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image, 
+// If input image is float or int16 then stretch values to byte
+void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image,
                        float unit_scaling);
 
 //: Load image from path into given image (forcing to given pixel type)
@@ -71,7 +71,7 @@ void vimt_load_as_grey_or_rgb(const vcl_string& path,
   // merge transparent plane in tiff and png images
   if ((strcmp(ir->file_format(), "tiff") == 0) || (strcmp(ir->file_format(), "png") == 0))
   {
-    if ((nplanes == 2) || (nplanes == 4))   
+    if ((nplanes == 2) || (nplanes == 4))
     {
       vil_image_view_base_sptr image_ref = new vil_image_view<vxl_byte>(image.image());
       vil_image_view<T> new_image_view = vil_convert_to_n_planes(nplanes-1, image_ref);

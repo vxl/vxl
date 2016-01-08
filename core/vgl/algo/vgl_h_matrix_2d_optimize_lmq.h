@@ -29,7 +29,7 @@ class vgl_h_matrix_2d_optimize_lmq : public vgl_h_matrix_2d_optimize
   //:the main routine for carrying out the optimization. (used by the others)
   bool optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                   vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                  vgl_h_matrix_2d<double> const& h_initial, 
+                  vgl_h_matrix_2d<double> const& h_initial,
                   vgl_h_matrix_2d<double>& h_optimized);
 
   //: compute from matched points

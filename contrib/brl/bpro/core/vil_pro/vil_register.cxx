@@ -13,8 +13,8 @@
 void vil_register::register_datatype()
 {
   REGISTER_DATATYPE(vil_image_view_base_sptr);
-  REGISTER_DATATYPE(bil_raw_image_istream_sptr); 
-  REGISTER_DATATYPE(bil_arf_image_istream_sptr); 
+  REGISTER_DATATYPE(bil_raw_image_istream_sptr);
+  REGISTER_DATATYPE(bil_arf_image_istream_sptr);
   REGISTER_DATATYPE(vil_image_resource_sptr);
 }
 
@@ -78,7 +78,7 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_EO_IR_combine_process, "vilEOIRCombineProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_truncate_image_process, "vilTruncateImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_grey_to_rgb_process, "vilGreyToRGBProcess");
-  
+
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_threshold_max_image_process, "vilThresholdMaxImageProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_threshold_image_region_process, "vilThresholdImageInsideProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_mask_image_using_ids_process, "vilMaskImageUsingIDsProcess");

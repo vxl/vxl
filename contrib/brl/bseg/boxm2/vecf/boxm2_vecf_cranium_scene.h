@@ -74,7 +74,7 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
  // find nearest cell and return the data index of the nearest cell (found depth is for debug, remove at some point)
  bool find_nearest_data_index(boxm2_vecf_cranium_scene::anat_type type, vgl_point_3d<double> const& probe, double cell_len, unsigned& data_indx, int& found_depth) const;
 
- 
+
   //re-create geometry according to params_
   void rebuild();
   //check for intrinsic parameter change

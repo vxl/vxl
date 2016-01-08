@@ -23,13 +23,13 @@ namespace bvpl_load_global_taylor_process_globals
 bool bvpl_load_global_taylor_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_load_global_taylor_process_globals ;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bvpl_global_taylor_sptr";
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -39,14 +39,14 @@ bool bvpl_load_global_taylor_process(bprb_func_process& pro)
 {
   typedef vbl_smart_ptr<bvpl_global_taylor<double, 10> > bvpl_global_taylor_sptr;
   using namespace bvpl_load_global_taylor_process_globals;
-  
+
   // get inputs
   vcl_string taylor_file = pro.get_input<vcl_string>(0);
   const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
   bvpl_global_taylor<double, 10> *global_taylor = new bvpl_global_taylor<double, 10>(taylor_file, kernel_names);
-  
+
   // store output
   pro.set_output_val<bvpl_global_taylor_sptr>(0, global_taylor);
-  
+
   return true;
 }

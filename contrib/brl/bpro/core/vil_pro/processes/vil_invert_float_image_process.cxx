@@ -40,7 +40,7 @@ bool vil_invert_float_image_process(bprb_func_process& pro)
         for (unsigned int i = 0; i < img->ni(); i++)
             for (unsigned int j = 0; j < img->nj(); j++)
                 (*oimg)(i, j) = (*img)(i, j) < 1.0 ? 1 - (*img)(i, j) : 0.0;
-        
+
         pro.set_output_val<vil_image_view_base_sptr>(0, oimg);
         return true;
     }

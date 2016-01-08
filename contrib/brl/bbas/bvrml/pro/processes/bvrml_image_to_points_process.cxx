@@ -30,7 +30,7 @@ bool bvrml_image_to_points_process_cons(bprb_func_process& pro)
   input_types_[2] = "vcl_string";  // name of the output file
   input_types_[3] = "float";
   input_types_[4] = "float";  // max height
-  
+
   //output
   vcl_vector<vcl_string> output_types_(1);
   output_types_[0] = "vil_image_view_base_sptr";
@@ -58,7 +58,7 @@ bool bvrml_image_to_points_process(bprb_func_process& pro)
   vcl_string fname = pro.get_input<vcl_string>(2);
   float thres = pro.get_input<float>(3);
   float max_height = pro.get_input<float>(4);
-  
+
   vcl_ofstream ofs(fname.c_str());
 
   bvrml_write::write_vrml_header(ofs);
@@ -78,7 +78,7 @@ bool bvrml_image_to_points_process(bprb_func_process& pro)
         out_img(i,j) = (vxl_byte)height;
       }
     }
-  
+
   ofs.close();
 
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(out_img));

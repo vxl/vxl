@@ -14,8 +14,8 @@ bool vpgl_load_affine_camera_process_cons(bprb_func_process& pro)
   //this process takes one input: the filename
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
-  input_types.push_back("double"); // view distance 
+  input_types.push_back("vcl_string");
+  input_types.push_back("double"); // view distance
   input_types.push_back("double"); // viewing direction (x)
   input_types.push_back("double"); // viewing direction (y)
   input_types.push_back("double"); // viewing direction (z)
@@ -36,7 +36,7 @@ bool vpgl_load_affine_camera_process_cons(bprb_func_process& pro)
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
+
   return true;
 
 }

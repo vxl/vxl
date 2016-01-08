@@ -21,7 +21,7 @@ class boxm2_create_mog_image_functor
     alpha_data_ = new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
     mog3_data_ = new boxm2_data<APM_TYPE>(datas[1]->data_buffer(),datas[1]->buffer_length(),datas[1]->block_id());
     nobs_data_ = new boxm2_data<BOXM2_NUM_OBS>(datas[2]->data_buffer(),datas[2]->buffer_length(),datas[2]->block_id());
-   
+
     mog_img_ = mog_img;
     vis_img_ = vis_img;
     return true;
@@ -49,7 +49,7 @@ class boxm2_create_mog_image_functor
 
     vis*=vcl_exp(-alpha*seg_len);
     (*vis_img_)(i,j)=vis;
-    
+
     return true;
   }
  private:

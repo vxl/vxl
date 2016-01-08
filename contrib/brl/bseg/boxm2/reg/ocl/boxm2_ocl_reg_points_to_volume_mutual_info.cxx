@@ -37,7 +37,7 @@ boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_reg_points_to_volume_mutua
     this->compile_kernel();
 
     this->init_ocl_minfo();
-  
+
 }
 
 boxm2_ocl_reg_points_to_volume_mutual_info::~boxm2_ocl_reg_points_to_volume_mutual_info()
@@ -110,8 +110,8 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(vgl_ro
     bocl_mem * global_accum = new bocl_mem(device_->context(), &accum, sizeof(float), "global accum" );
     global_accum->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
     float translation_buff[4];
-    translation_buff[0] = tx.x();        
-    translation_buff[1] = tx.y();        
+    translation_buff[0] = tx.x();
+    translation_buff[1] = tx.y();
     translation_buff[2] = tx.z();
     translation_buff[3] = 0.0;
 
@@ -152,7 +152,7 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(vgl_ro
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer_B->data_buffer_length = (int) (alpha_B->num_bytes()/alphaTypeSize);
 
-        bocl_mem* blk_info_B  = new bocl_mem(device_->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );   
+        bocl_mem* blk_info_B  = new bocl_mem(device_->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );
         blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
         kern->set_arg(centerX.ptr());

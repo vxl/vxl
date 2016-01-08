@@ -35,7 +35,7 @@
 
 int main(int argc, char ** argv)
 {
-     
+
   // initialize vgui
   // Ming: force option "--mfc-use-gl" to use gl
   //       so that it is MUCH faster if running on a
@@ -109,7 +109,7 @@ int main(int argc, char ** argv)
 
     //create cache, grab singleton instance
     boxm2_lru_cache::create(scene);
-    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device); 
+    boxm2_opencl_cache_sptr opencl_cache=new boxm2_opencl_cache(device);
 
       //create a new ocl_draw_glbuffer_tableau, window, and initialize it
       boxm2_ocl_render_tableau_new bit_tableau;
@@ -125,7 +125,7 @@ int main(int argc, char ** argv)
     //set vgui off
     GLboolean bGLEW = glewIsSupported("GL_VERSION_2_0  GL_ARB_pixel_buffer_object");
     vcl_cout << "GLEW is supported= " << bGLEW << vcl_endl;
-         
+
     return vgui::run();
 
 }

@@ -16,7 +16,7 @@
 // The relationship between signals at different times is:
 // x(k+1)      =  A(k)    *    x(k)   +   B(k)   *   u(k)   +   w(k)
 // signal         relation     signal     control    control    noise
-//                matrix                  matrix     signal 
+//                matrix                  matrix     signal
 //
 // Copyright (c) 1999 Brendan McCane
 // University of Otago, Dunedin, New Zealand
@@ -64,8 +64,8 @@ KalmanFilter::KalmanFilter(
   ):
   // initialise all the matrices etc
   num_signal_dimensions(ns), num_measurement_dimensions(nm),
-  num_control_dimensions(nc), A(Ai), H(Hi), B(Bi), 
-  x(x_initial), x_pred(x_initial), z(z_initial), 
+  num_control_dimensions(nc), A(Ai), H(Hi), B(Bi),
+  x(x_initial), x_pred(x_initial), z(z_initial),
   P(Pi), K(ns, nm)
 {
   // do some size checking
@@ -132,7 +132,7 @@ KalmanFilter::KalmanFilter(
 // \author Brendan McCane
 //----------------------------------------------------------------------
 KalmanFilter::KalmanFilter(
-  unsigned int ns, unsigned int nm, 
+  unsigned int ns, unsigned int nm,
   const vnl_matrix<double> &Ai,
   const vnl_matrix<double> &Hi,
   const vnl_matrix<double> &z_initial,
@@ -141,7 +141,7 @@ KalmanFilter::KalmanFilter(
   ):
   // initialise all the matrices etc
   num_signal_dimensions(ns), num_measurement_dimensions(nm),
-  num_control_dimensions(0), A(Ai), H(Hi), 
+  num_control_dimensions(0), A(Ai), H(Hi),
   x(x_initial), x_pred(x_initial), z(z_initial),
   P(Pi), K(ns, nm)
 {
@@ -249,7 +249,7 @@ void KalmanFilter::measurement_update(const vnl_matrix<double> &zk,
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
-vnl_matrix<double> 
+vnl_matrix<double>
 KalmanFilter::predict(const vnl_matrix<double> &Qk)
 {
   // do some checks
@@ -274,7 +274,7 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk)
 //: predict
 //
 // Calculate the next state given the current estimate and project the
-// error covariance matrix ahead in time as well. 
+// error covariance matrix ahead in time as well.
 //
 // \param Qk  the process error covariance matrix
 // \param uk  the control input
@@ -283,7 +283,7 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk)
 // \author Brendan McCane
 //----------------------------------------------------------------------
 
-vnl_matrix<double> 
+vnl_matrix<double>
 KalmanFilter::predict(const vnl_matrix<double> &Qk,
                       const vnl_matrix<double> &uk)
 {

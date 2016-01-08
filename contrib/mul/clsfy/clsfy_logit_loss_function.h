@@ -41,7 +41,7 @@ public:
   virtual double f(vnl_vector<double> const& v);
 
   //:  Calculate the gradient of f at parameter vector v.
-  virtual void gradf(vnl_vector<double> const& v, 
+  virtual void gradf(vnl_vector<double> const& v,
                      vnl_vector<double>& gradient);
 
   //: Compute f(v) and its gradient (if non-zero pointers supplied)
@@ -65,7 +65,7 @@ public:
   virtual double f(vnl_vector<double> const& v);
 
   //:  Calculate the gradient of f at parameter vector v.
-  virtual void gradf(vnl_vector<double> const& v, 
+  virtual void gradf(vnl_vector<double> const& v,
                      vnl_vector<double>& gradient);
 };
 

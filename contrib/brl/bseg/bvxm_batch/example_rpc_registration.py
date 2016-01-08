@@ -56,14 +56,14 @@ for i in range(0,len(image_fnames),1):
   for j in range(0,len(skip_list),1):
     if i==skip_list[j]:
       keep_moving = 1;
-  
+
   if keep_moving==1:
     continue;
-  
+
   str_pad = "";
   if i<10:
     str_pad = "0";
-  
+
   image_filename=image_fnames[i];
   cam_name=cam_fnames[i];
   print i;
@@ -73,7 +73,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.set_input_string(0,cam_name);
     bvxm_batch.run_process();
     (cam_id,cam_type)=bvxm_batch.commit_output(0);
-    
+
   else:
     bvxm_batch.init_process("vpglLoadRationalCameraNITFProcess");
     bvxm_batch.set_input_string(0,image_filename);
@@ -87,23 +87,23 @@ for i in range(0,len(image_fnames),1):
   bvxm_batch.set_input_from_db(2,world);
   bvxm_batch.set_params_process("bvxmRoiInitProcess.xml");
   statuscode=bvxm_batch.run_process();
-  
+
   print statuscode;
   if statuscode:
     (cropped_cam_id, cropped_cam_type) = bvxm_batch.commit_output(0);
     cropped_cam = dbvalue(cropped_cam_id, cropped_cam_type);
-    
-    (cropped_image_id, cropped_image_type) = bvxm_batch.commit_output(1);  
+
+    (cropped_image_id, cropped_image_type) = bvxm_batch.commit_output(1);
     cropped_image=dbvalue(cropped_image_id, cropped_image_type);
 
-    (uncertainty_id,uncertainty_type) = bvxm_batch.commit_output(2);  
+    (uncertainty_id,uncertainty_type) = bvxm_batch.commit_output(2);
     uncertainty = dbvalue(uncertainty_id,uncertainty_type);
 
     bvxm_batch.init_process("vilSaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,cropped_image);
     bvxm_batch.set_input_string(1,"output_cropped_image_"+str_pad+str(i)+".jpg");
     bvxm_batch.run_process();
-       
+
     bvxm_batch.init_process("bvxmDetectEdgesProcess");
     bvxm_batch.set_input_from_db(0,cropped_image);
     bvxm_batch.set_params_process("./bvxmDetectEdgesProcess.xml");
@@ -137,7 +137,7 @@ for i in range(0,len(image_fnames),1):
       cam = dbvalue(cam_id,cam_type);
       (expected_edge_image_id,expected_edge_image_type) = bvxm_batch.commit_output(1);
       expected_edge_image=dbvalue(expected_edge_image_id,expected_edge_image_type);
-      
+
       bvxm_batch.init_process("vilSaveImageViewProcess");
       bvxm_batch.set_input_from_db(0,expected_edge_image);
       bvxm_batch.set_input_string(1,"output_expected_edge_image_after_"+str_pad+str(i)+".jpg");
@@ -165,7 +165,7 @@ for i in range(0,len(image_fnames),1):
       nj=bvxm_batch.get_input_unsigned(nj_id);
       print ni,nj;
 
-      app_type="apm_mog_grey"; 
+      app_type="apm_mog_grey";
       bvxm_batch.init_process("bvxmCreateMOGImageProcess");
       bvxm_batch.set_params_process("./create_mog.xml");
       bvxm_batch.set_input_from_db(0,world);
@@ -231,10 +231,10 @@ for i in range(0,len(base_lines),1):
   for j in range(0,len(skip_list),1):
     if i==skip_list[j]:
       keep_moving = 1;
-  
+
   if keep_moving==1:
     continue;
-  
+
   line1= base_lines[i];
   base_offsets = map(float, line1.split()) ;
   #print base_offsets;

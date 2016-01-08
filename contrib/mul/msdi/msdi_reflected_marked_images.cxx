@@ -86,7 +86,7 @@ bool msdi_reflected_marked_images::next()
 {
   if (!marked_images_.next())
   {
-    if (first_pass_ && !only_reflect_) 
+    if (first_pass_ && !only_reflect_)
     {
       first_pass_=false;
       marked_images_.reset();

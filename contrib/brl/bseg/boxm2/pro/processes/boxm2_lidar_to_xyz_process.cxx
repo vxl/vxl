@@ -95,7 +95,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 #endif
   vpgl_geo_camera *cam;
   vpgl_geo_camera::init_geo_camera(tiff_fname, ni, nj, lvcs, cam);
-  
+
   double lon2, lat2;
   cam->img_to_global(ni, nj, lon2, lat2);
   vpgl_utm utm; double x, y; int zone; utm.transform(lat2, -lon2, x, y, zone);
@@ -125,7 +125,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
         continue;
       double lx, ly, lz;
       //if (img(i,j) <= 0) {
-      //  continue; 
+      //  continue;
       //}
       lvcs->global_to_local(lon2, lat2, img(i,j), vpgl_lvcs::wgs84, lx, ly, lz);
       vgl_point_3d<double> pt(lx, ly, lz);
@@ -152,9 +152,9 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
         (*out_img_x)(i,j) /= img_cnt(i,j);
         (*out_img_y)(i,j) /= img_cnt(i,j);
         (*out_img_z)(i,j) /= img_cnt(i,j);
-      } 
+      }
     }
-  
+
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
@@ -181,7 +181,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   //parse the filename to obtain bounding box
   vcl_string name = vul_file::strip_directory(fname);
   name = name.substr(name.find_first_of('_')+1, name.size());
-  
+
   vcl_string n_coords = name.substr(0, name.find_first_of('_'));
   vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
 
@@ -215,11 +215,11 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   vgl_point_2d<float> upper_right(upper_right_lon, upper_right_lat);
 
   vgl_box_2d<float> bbox(lower_left, upper_right);
-  
+
   // find scene bbox to see if it intersects with the image box -- WARNING: assumes that these boxes are small enough (both image and scene are small in area) so that Euclidean distances approximate the geodesic distances in geographic coordinates
   double min_lon, min_lat, gz, max_lon, max_lat;
-  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz); 
-  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz); 
+  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz);
+  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
   vgl_box_2d<float> sbbox((float)min_lon, (float)max_lon, (float)min_lat, (float)max_lat);
   //vcl_cout << " scene bbox in geo coords: " << sbbox << vcl_endl;
   if (vgl_intersection(bbox, sbbox).area() <= 0)
@@ -229,7 +229,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   }
   vcl_cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ingesting: " << fname << vcl_endl;
 
-  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str()); 
+  vil_image_view_base_sptr img_sptr = vil_load(fname.c_str());
 
   // the image can be float or short
   unsigned nii, nji;
@@ -260,7 +260,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
     if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
   }
   vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
-  
+
   double orig_lat, orig_lon, orig_elev; scene->lvcs().get_origin(orig_lat, orig_lon, orig_elev);
 
   // prepare an image for the finest resolution
@@ -306,7 +306,7 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
           (*out_img_z)(i,j) = (*img)(uu,vv)-(float)orig_elev;
       }
     }
-  
+
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
@@ -450,13 +450,13 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   return true;
 
 #if 0
-  volm_tile t(fname, 0, 0); // pass ni, nj as 0 cause just need to parse the name string 
+  volm_tile t(fname, 0, 0); // pass ni, nj as 0 cause just need to parse the name string
   vgl_box_2d<float> bbox = t.bbox();
-  
+
   // find scene bbox to see if it intersects with the image box -- WARNING: assumes that these boxes are small enough (both image and scene are small in area) so that Euclidean distances approximate the geodesic distances in geographic coordinates
   double min_lon, min_lat, gz, max_lon, max_lat;
-  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz); 
-  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz); 
+  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz);
+  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
   vgl_box_2d<float> sbbox((float)min_lon, (float)max_lon, (float)min_lat, (float)max_lat);
   //vcl_cout << " scene bbox in geo coords: " << sbbox << vcl_endl;
   if (vgl_intersection(bbox, sbbox).area() <= 0)
@@ -469,7 +469,7 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
     vcl_cout << "Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
     return false;
-  } 
+  }
   vil_image_view<vxl_byte> img(img_sptr);
   unsigned nii = img.ni(); unsigned nji = img.nj();
   vcl_cout << " image size: "<< nii << " x " << nji << vcl_endl;
@@ -480,7 +480,7 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   cam->img_to_global(nii, nji, lon2, lat2);
   vpgl_utm utm; double x, y; int zone; utm.transform(lat2, -lon2, x, y, zone);
   vcl_cout << "lower right corner in the image given by geocam is: " << lat2 << " N " << lon2 << " W " << " zone: " << zone << vcl_endl;
-  
+
   vcl_vector<boxm2_block_id> blks = scene->get_block_ids();
   // fetch the minimum voxel length
   float vox_length = 1E6;
@@ -524,7 +524,7 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
       if (uu > 0 && vv > 0 && uu < img.ni() && vv < img.nj())
         (*out_img_label)(i,j) = img(uu, vv);
     }
-  
+
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
@@ -637,7 +637,7 @@ bool boxm2_label_to_xyz_process2(bprb_func_process& pro)
   vcl_cout <<  "min_uu: " << min_uu << " min_vv: " << min_vv
            <<"\nmax_uu: " << max_uu << " max_vv: " << max_vv
            <<"\nmin_i: " << min_i << " min_j: " << min_j << " ni: " << ni << " nj: " << nj << vcl_endl;
-  
+
   boxm2_scene_info* info = scene->get_blk_metadata(blks[0]);
   float sb_length = info->block_len;
   vcl_cout <<"sb_length: " << sb_length << "!\n\n"

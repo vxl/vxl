@@ -29,8 +29,8 @@
 #include <mvl/TriTensor.h>
 
 // this executable takes a site file as input with a set of 2d image to image correspondences
-// and computes a) pairwise Fundamental matrices b) triple-wise trifocal tensor for consecutive frames, then creates output images with colored correspondences such that 
-//   the ones that violate FM are red and the ones that satisfy FM are blue 
+// and computes a) pairwise Fundamental matrices b) triple-wise trifocal tensor for consecutive frames, then creates output images with colored correspondences such that
+//   the ones that violate FM are red and the ones that satisfy FM are blue
 
 unsigned fg_plane = 0; // draw onto red plane
 unsigned bg_plane = 2; // draw onto blue plane
@@ -38,7 +38,7 @@ unsigned bg_plane = 2; // draw onto blue plane
 #include <vil/vil_view_as.h>
 
 void compute_FM_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
-                           vcl_vector<vpgl_perspective_camera<double> >& cams, 
+                           vcl_vector<vpgl_perspective_camera<double> >& cams,
                            vcl_vector<vil_image_view<float> >& imgs, double thres, vcl_string& out_folder)
 {
   // now for each frame pair, compute FM from camera matrices
@@ -49,13 +49,13 @@ void compute_FM_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
     // compute FM
     vpgl_fundamental_matrix<double> fm(cams[i-1], cams[i]);
     vcl_cout << "FM: \n" << fm << vcl_endl;
-    
+
     // retrieve the corrs of this pair
     vcl_vector<vcl_pair<vgl_point_2d<double>, vgl_point_2d<double> > > points;
     vcl_vector<unsigned> points_planes;
 
     for (unsigned ii = 0; ii < corrs.size(); ii++)
-    {  
+    {
       bwm_video_corr_sptr corr = corrs[ii];
       vcl_map<unsigned, vgl_point_2d<double> > matches = corr->matches();
       vcl_pair<vgl_point_2d<double>, vgl_point_2d<double> > pt;
@@ -76,7 +76,7 @@ void compute_FM_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
                  + vgl_homg_operators_2d<double>::perp_dist_squared( ll, vgl_homg_point_2d<double>( pt.second ) );
 
         vcl_cout << "val: " << val << vcl_endl;
-        if (val < thres) 
+        if (val < thres)
           points_planes.push_back(fg_plane);
         else
           points_planes.push_back(bg_plane);
@@ -84,9 +84,9 @@ void compute_FM_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
     }
 
     // create the output images
-    vil_image_view<vxl_byte> input_image_1, input_image_2; 
-    vil_convert_cast(imgs[i-1], input_image_1); 
-    vil_convert_cast(imgs[i], input_image_2); 
+    vil_image_view<vxl_byte> input_image_1, input_image_2;
+    vil_convert_cast(imgs[i-1], input_image_1);
+    vil_convert_cast(imgs[i], input_image_2);
 
     vil_image_view<vxl_byte> output_image_1_temp(input_image_1.ni(), input_image_1.nj(), 1);
     vil_convert_planes_to_grey(input_image_1,output_image_1_temp);
@@ -107,7 +107,7 @@ void compute_FM_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
     output_image_2_g.deep_copy(output_image_2_temp);
     output_image_1_b.deep_copy(output_image_1_temp);
     output_image_2_b.deep_copy(output_image_2_temp);
-    
+
     //output_image_1.deep_copy(input_image_1);
     //output_image_2.deep_copy(input_image_2);
 
@@ -144,7 +144,7 @@ void compute_FM_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
 }
 
 void compute_TFT_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
-                            vcl_vector<vpgl_perspective_camera<double> >& cams, 
+                            vcl_vector<vpgl_perspective_camera<double> >& cams,
                             vcl_vector<vil_image_view<float> >& imgs, double thres, vcl_string& out_folder)
 {
   // now for each frame triplet, compute TFT from camera matrices
@@ -158,13 +158,13 @@ void compute_TFT_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
     TriTensor TFT(C1, C2, C3);
 
     vcl_cout << "TFT: \n" << TFT << vcl_endl;
-    
+
     // retrieve the corrs of this pair
     vcl_vector< vcl_vector< vgl_point_2d<double> > > points;
     vcl_vector<unsigned> points_planes;
 
     for (unsigned ii = 0; ii < corrs.size(); ii++)
-    {  
+    {
       bwm_video_corr_sptr corr = corrs[ii];
       vcl_map<unsigned, vgl_point_2d<double> > matches = corr->matches();
       vgl_point_2d<double> pt1;
@@ -190,10 +190,10 @@ void compute_TFT_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
         //double min_dist = vgl_homg_operators_2d<double>::distance_squared(pt3_r, vgl_homg_point_2d<double>(pt3));
 
         vgl_homg_point_2d<double> pt2_r = TFT.image2_transfer_qd(vgl_homg_point_2d<double>(pt1), vgl_homg_point_2d<double>(pt3));
-        double min_dist = vgl_homg_operators_2d<double>::distance_squared(pt2_r, vgl_homg_point_2d<double>(pt2)); 
+        double min_dist = vgl_homg_operators_2d<double>::distance_squared(pt2_r, vgl_homg_point_2d<double>(pt2));
         vcl_cout << "min_dist: " << min_dist << vcl_endl;
-         
-        if (min_dist < thres) 
+
+        if (min_dist < thres)
           points_planes.push_back(fg_plane);
         else
           points_planes.push_back(bg_plane);
@@ -201,10 +201,10 @@ void compute_TFT_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
     }
 
     // create the output images
-    vil_image_view<vxl_byte> input_image_1, input_image_2, input_image_3; 
-    vil_convert_cast(imgs[i-2], input_image_1); 
-    vil_convert_cast(imgs[i-1], input_image_2); 
-    vil_convert_cast(imgs[i], input_image_3); 
+    vil_image_view<vxl_byte> input_image_1, input_image_2, input_image_3;
+    vil_convert_cast(imgs[i-2], input_image_1);
+    vil_convert_cast(imgs[i-1], input_image_2);
+    vil_convert_cast(imgs[i], input_image_3);
 
     vil_image_view<vxl_byte> output_image_1(input_image_1.ni(), input_image_1.nj(), 3);
     vil_image_view<vxl_byte> output_image_2(input_image_2.ni(), input_image_2.nj(), 3);
@@ -239,7 +239,7 @@ void compute_TFT_constraint(vcl_vector<bwm_video_corr_sptr>& corrs,
     vil_save(output_image_2, str2.str().c_str());
     vcl_stringstream str3; str3 << out_folder << "out_triplet_" << i-2 << "_" << i-1 << "_" << i << "img3.png";
     vil_save(output_image_3, str3.str().c_str());
-    
+
   }
 
 }
@@ -299,6 +299,6 @@ int main(int argc, char** argv)
   compute_FM_constraint(corrs, cams, imgs, thres(), out_folder());
   //compute_TFT_constraint(corrs, cams, imgs, thres(), out_folder());
 
-  
+
   return 0;
 }

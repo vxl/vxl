@@ -627,7 +627,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
     vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
     return 0;
   }
- 
+
   vcl_vector<T> neu_u;
   vcl_vector<T> den_u;
   vcl_vector<T> neu_v;
@@ -690,7 +690,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
-      neu_v.push_back(temp_dbl);  
+      neu_v.push_back(temp_dbl);
       for (int i=1; i<20; i++) {
         istr >> input;
         istr >> temp_dbl;
@@ -703,7 +703,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
-      den_v.push_back(temp_dbl);  
+      den_v.push_back(temp_dbl);
       for (int i=1; i<20; i++) {
         istr >> input;
         istr >> temp_dbl;
@@ -716,7 +716,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
-      neu_u.push_back(temp_dbl);  
+      neu_u.push_back(temp_dbl);
       for (int i=1; i<20; i++) {
         istr >> input;
         istr >> temp_dbl;
@@ -729,7 +729,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
-      den_u.push_back(temp_dbl);  
+      den_u.push_back(temp_dbl);
       for (int i=1; i<20; i++) {
         istr >> input;
         istr >> temp_dbl;
@@ -739,7 +739,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
       break;
     }
   }
-  
+
   int map[20];
   map[0]=19;
   map[1]=9;

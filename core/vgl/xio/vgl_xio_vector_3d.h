@@ -12,7 +12,7 @@
 
 //: XML save vgl_vector_3d to stream.
 template <class T>
-void x_write(vcl_ostream &os, const vgl_vector_3d<T> & v, 
+void x_write(vcl_ostream &os, const vgl_vector_3d<T> & v,
              vcl_string element_name="vgl_vector_3d");
 
 #endif // vgl_xio_vector_3d_h

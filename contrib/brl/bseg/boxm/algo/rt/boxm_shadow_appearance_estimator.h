@@ -9,15 +9,15 @@
 #endif
 
 template <boxm_apm_type APM>
-void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_datatype> const& obs, 
-                                    vcl_vector<float> const& pre, 
+void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::obs_datatype> const& obs,
+                                    vcl_vector<float> const& pre,
                                     vcl_vector<float> const& vis,
-                                    typename boxm_apm_traits<APM>::apm_datatype &model, 
+                                    typename boxm_apm_traits<APM>::apm_datatype &model,
                                     float min_app_sigma,
                                     float shadow_prior,
                                     float shadow_mean, float shadow_sigma,
                                     bool verbose = false)
-{ 
+{
   vcl_vector<float> obs_weights(vis.size(), 0.0f);
   vcl_vector<float> sh_density(vis.size(), 0.0f);
   //assume that the initial appearance distribution is uniform on [0 1]
@@ -32,10 +32,10 @@ void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::ob
   for(unsigned n = 0; n<obs.size(); ++n)
     {
       //2.0 x density since centered on zero
-      sh_density[n] = 
+      sh_density[n] =
         2.0f*boxm_simple_grey_processor::prob_density(shadow_dist, obs[n]);
       float neu = vis[n]*(1-shadow_prior);
-      float weight = 
+      float weight =
         neu/(neu + sh_density[n]*shadow_prior);
       obs_weights[n]=weight;
     }
@@ -86,9 +86,9 @@ void boxm_compute_shadow_appearance(vcl_vector<typename boxm_apm_traits<APM>::ob
       if(obs[n]>0) print = true;
       if(i<max_its&&print){
         vcl_cout << "converged after " << i << " iterations.\n";
-        vcl_cout << " initial mean = " << initial_mean << " final mean = " 
+        vcl_cout << " initial mean = " << initial_mean << " final mean = "
                  << model.color() << '\n';
-        vcl_cout << " initial sigma = " << initial_sigma << " final sigma = " 
+        vcl_cout << " initial sigma = " << initial_sigma << " final sigma = "
                  << model.sigma() << '\n';
       }else{ vcl_cout << "failed to converge\n";}
 

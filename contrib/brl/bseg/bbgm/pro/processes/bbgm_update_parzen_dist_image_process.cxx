@@ -54,9 +54,9 @@ bool bbgm_update_parzen_dist_image_process(bprb_func_process& pro)
   bbgm_image_sptr bgm = pro.get_input<bbgm_image_sptr>(0);
 
   //Retrieve update image
-  vil_image_view_base_sptr update_image =  
+  vil_image_view_base_sptr update_image =
     pro.get_input<vil_image_view_base_sptr>(1);
-  
+
   vil_image_view<float> img = *vil_convert_cast(float(), update_image);
   if (update_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
     vil_math_scale_values(img,1.0/255.0);

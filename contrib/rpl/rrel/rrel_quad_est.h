@@ -22,7 +22,7 @@ public:
   rrel_quad_est( const vcl_vector< vgl_point_2d<double> > & from_pts,
                    const vcl_vector< vgl_point_2d<double> > & to_pts );
 
-  //: Constructor with data pre-separated into arrays of independent and dependent variables. 
+  //: Constructor with data pre-separated into arrays of independent and dependent variables.
   rrel_quad_est( const vcl_vector< vnl_vector<double> > & from_pts,
                    const vcl_vector< vnl_vector<double> > & to_pts,
                    unsigned int dim = 2 );
@@ -31,13 +31,13 @@ public:
   virtual ~rrel_quad_est();
 
   //: Total number of data points.
-  unsigned int num_samples( ) const; 
+  unsigned int num_samples( ) const;
 
   //: organize into usual representation
-  vnl_vector<double> 
+  vnl_vector<double>
   trans( const vnl_vector<double>& params ) const;
 
-  vnl_matrix<double> 
+  vnl_matrix<double>
   A( const vnl_vector<double>& params ) const;
 
   //: Generate a parameter estimate from a minimal sample set.
@@ -48,13 +48,13 @@ public:
   void compute_residuals( const vnl_vector<double>& params,
                           vcl_vector<double>& residuals ) const;
 
-  //: \brief Weighted least squares parameter estimate. 
+  //: \brief Weighted least squares parameter estimate.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
                                    const vcl_vector<double>* weights=0 ) const;
 
 protected:
-  
+
   vcl_vector< vnl_vector<double> > from_pts_;
   vcl_vector< vnl_vector<double> > to_pts_;
 
@@ -63,5 +63,5 @@ protected:
   unsigned min_num_pts_;
   unsigned num_samples_;
 };
-  
+
 #endif

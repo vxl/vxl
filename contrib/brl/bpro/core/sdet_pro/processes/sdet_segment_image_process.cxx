@@ -58,16 +58,16 @@ bool sdet_segment_image_process(bprb_func_process& pro)
   vil_image_view<vil_rgb<vxl_byte> > out_img;
 
   if (input_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-    
+
     vcl_cout << "pixel format is BYTE, using weight_threshold: " << thres << vcl_endl;
     vil_image_view<vxl_byte> input_image(input_image_sptr);
     sdet_segment_img<vxl_byte>(input_image, margin, neigh, thres, sigma, min_size, out_img);
 
   } else if (input_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-    
+
     vcl_cout << "pixel format is FLOAT (assumes image is in [0,1]), using weight_threshold: " << thres << vcl_endl;
     vil_image_view<float> input_image(input_image_sptr);
-  
+
     //sdet_segment_img<float>(input_image, 10, 8, 0.1, 1, 50, out_img);
     sdet_segment_img<float>(input_image, margin, neigh, thres, sigma, min_size, out_img);
   }
@@ -123,20 +123,20 @@ bool sdet_segment_image_using_edge_map_process(bprb_func_process& pro)
   }
 
   vil_image_view<float> edge_img(input_edge_image_sptr);
-  
+
   vil_image_view<vil_rgb<vxl_byte> > out_img;
 
   if (input_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-    
+
     vcl_cout << "pixel format is BYTE, using weight_threshold: " << thres << vcl_endl;
     vil_image_view<vxl_byte> input_image(input_image_sptr);
     sdet_segment_img_using_edges<vxl_byte>(input_image, edge_img, margin, neigh, thres, sigma, min_size, out_img);
 
   } else if (input_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-    
+
     vcl_cout << "pixel format is FLOAT (assumes image is in [0,1]), using weight_threshold: " << thres << vcl_endl;
     vil_image_view<float> input_image(input_image_sptr);
-  
+
     //sdet_segment_img<float>(input_image, 10, 8, 0.1, 1, 50, out_img);
     sdet_segment_img_using_edges<float>(input_image, edge_img, margin, neigh, thres, sigma, min_size, out_img);
   }
@@ -194,7 +194,7 @@ bool sdet_segment_image_using_height_map_process(bprb_func_process& pro)
 
   vcl_cout << "!!!!!!!!!!! input height img ni: " << input_height_image_sptr->ni() << "  nj: " << input_height_image_sptr->nj() << vcl_endl;
   vil_image_view<float> height_image = vil_convert_cast(float(), input_height_image_sptr);
-  
+
   vil_image_view<vil_rgb<vxl_byte> > out_img;
 
   if (input_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
@@ -202,10 +202,10 @@ bool sdet_segment_image_using_height_map_process(bprb_func_process& pro)
     return false;
 
   } else if (input_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-    
+
     vcl_cout << "pixel format is FLOAT (assumes image is in [0,1]), using weight_threshold: " << thres << vcl_endl;
     vil_image_view<float> input_image(input_image_sptr);
-  
+
     //sdet_segment_img<float>(input_image, 10, 8, 0.1, 1, 50, out_img);
     sdet_segment_img2(input_image, height_image, margin, neigh, thres, sigma, sigma, min_size, out_img);
   }
@@ -265,14 +265,14 @@ bool sdet_segment_image_using_height_map_process2(bprb_func_process& pro)
 
   vcl_cout << "!!!!!!!!!!! input height img ni: " << input_height_image_sptr->ni() << "  nj: " << input_height_image_sptr->nj() << vcl_endl;
   vil_image_view<float> height_image = vil_convert_cast(float(), input_height_image_sptr);
-  
+
   vil_image_view<float> edge_img(input_edge_image_sptr);
   vil_math_truncate_range(edge_img, 0.05f, 1.0f);
   float min_h, max_h;
   vil_math_value_range(edge_img, min_h, max_h);
   vcl_cout << "edge image value range, min: " << min_h << " max: " << max_h << " normalizing to [0,1]!\n";
-  vil_math_scale_and_offset_values(edge_img, 1.0,-min_h); 
-  vil_math_scale_and_offset_values(edge_img, 1.0/(max_h-min_h),0); 
+  vil_math_scale_and_offset_values(edge_img, 1.0,-min_h);
+  vil_math_scale_and_offset_values(edge_img, 1.0/(max_h-min_h),0);
 
   vil_image_view<vil_rgb<vxl_byte> > out_img;
 
@@ -281,10 +281,10 @@ bool sdet_segment_image_using_height_map_process2(bprb_func_process& pro)
     return false;
 
   } else if (input_image_sptr->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-    
+
     vcl_cout << "pixel format is FLOAT (assumes image is in [0,1]), using weight_threshold: " << thres << vcl_endl;
     vil_image_view<float> input_image(input_image_sptr);
-    
+
     sdet_segment_img2_using_edges(input_image, height_image, edge_img, margin, neigh, thres, sigma, 0.0f, min_size, out_img);
   }
   // return the output edge image

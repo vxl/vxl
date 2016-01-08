@@ -403,7 +403,7 @@ bool vil_tiff_header::compute_pixel_format()
         // One special case is palette images
         // vil doesn't currently support color maps so need to convert to
         // regular three component RGB image (LATER)
-        if (photometric.val==PHOTOMETRIC_RGB /*&& samples_per_pixel.val==1 && 
+        if (photometric.val==PHOTOMETRIC_RGB /*&& samples_per_pixel.val==1 &&
             sample_format.val == 1*/) //only support unsigned
           switch (bbs)
           {

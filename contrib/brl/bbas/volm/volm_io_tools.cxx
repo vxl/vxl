@@ -29,7 +29,7 @@ bool near_eq_pt(vgl_point_2d<double> a, vgl_point_2d<double> b)
 }
 
 
-void volm_img_info::save_box_kml(vcl_string out_name) { 
+void volm_img_info::save_box_kml(vcl_string out_name) {
     vcl_ofstream ofs(out_name.c_str());
     bkml_write::open_document(ofs);
     bkml_write::write_box(ofs, name, "", bbox);
@@ -50,22 +50,22 @@ bool read_box(vcl_string bbox_file, vgl_box_2d<double>& bbox) {
   // top
   ifs.getline(buffer, 1000);
   vcl_stringstream top_edge_line(buffer);
-  top_edge_line >> dummy; top_edge_line >> dummy; top_edge_line >> dummy; 
+  top_edge_line >> dummy; top_edge_line >> dummy; top_edge_line >> dummy;
   top_edge_line >> top_lat;
   // bottom
   ifs.getline(buffer, 1000);
   vcl_stringstream bot_edge_line(buffer);
-  bot_edge_line >> dummy; bot_edge_line >> dummy; bot_edge_line >> dummy; 
+  bot_edge_line >> dummy; bot_edge_line >> dummy; bot_edge_line >> dummy;
   bot_edge_line >> bottom_lat;
   // left
   ifs.getline(buffer, 1000);
   vcl_stringstream left_edge_line(buffer);
-  left_edge_line >> dummy; left_edge_line >> dummy; left_edge_line >> dummy; 
+  left_edge_line >> dummy; left_edge_line >> dummy; left_edge_line >> dummy;
   left_edge_line >> left_lon;
   // right
   ifs.getline(buffer, 1000);
   vcl_stringstream right_edge_line(buffer);
-  right_edge_line >> dummy; right_edge_line >> dummy; right_edge_line >> dummy; 
+  right_edge_line >> dummy; right_edge_line >> dummy; right_edge_line >> dummy;
   right_edge_line >> right_lon;
 
   vgl_point_2d<double> lower_left(left_lon, bottom_lat);
@@ -80,9 +80,9 @@ bool volm_io_tools::load_naip_img(vcl_string const& img_folder, vcl_string const
   vcl_string filename = img_folder + "\\" + name;
   vcl_string img_name = filename + "\\" + name + ".tif";
   vcl_string tfw_name = filename + "\\" + name + ".tfw";
-  if (!vul_file::exists(tfw_name) || !vul_file::exists(img_name)) 
+  if (!vul_file::exists(tfw_name) || !vul_file::exists(img_name))
     return false;
-    
+
   info.name = name; info.img_name = img_name;
   vcl_string bbox_file = filename + "\\output_parameters.txt";
   if (!read_box(bbox_file, info.bbox)) {
@@ -92,8 +92,8 @@ bool volm_io_tools::load_naip_img(vcl_string const& img_folder, vcl_string const
   //vcl_cout << "NAIP bbox: " << info.bbox << vcl_endl;
   // figure out utm zone
   vpgl_utm utm; int utm_zone, zone_max; double xx, yy;
-  utm.transform(info.bbox.min_point().y(), info.bbox.min_point().x(), xx, yy, utm_zone); 
-  utm.transform(info.bbox.max_point().y(), info.bbox.max_point().x(), xx, yy, zone_max); 
+  utm.transform(info.bbox.min_point().y(), info.bbox.min_point().x(), xx, yy, utm_zone);
+  utm.transform(info.bbox.max_point().y(), info.bbox.max_point().x(), xx, yy, zone_max);
   if (utm_zone != zone_max) {
     vcl_cout << "!!!!!!!!!!!!!!!!!!!!!!!!!WARNING! img: " << img_name << " has min and max points in different UTM zones, using zone of min point!\n";
 
@@ -101,19 +101,19 @@ bool volm_io_tools::load_naip_img(vcl_string const& img_folder, vcl_string const
 
   vpgl_geo_camera *cam = 0;
   if (!vpgl_geo_camera::init_geo_camera(tfw_name, lvcs, utm_zone, northing, cam))
-    return false;    
+    return false;
   info.cam = cam;
 
   if (load_resource) {
     vil_image_resource_sptr img = vil_load_image_resource(img_name.c_str());
     vcl_cout << "ni: " << img->ni() <<" nj: " << img->nj() <<vcl_endl;
-    info.ni = img->ni(); info.nj = img->nj(); 
+    info.ni = img->ni(); info.nj = img->nj();
   }
   return true;
 }
 
 bool volm_io_tools::load_naip_imgs(vcl_string const& img_folder, vcl_vector<volm_img_info>& imgs, bool load_resource) {
- 
+
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
 
   vcl_string in_dir = img_folder + "*";
@@ -121,7 +121,7 @@ bool volm_io_tools::load_naip_imgs(vcl_string const& img_folder, vcl_vector<volm
     vcl_string filename = fn();
     //vcl_cout << "filename: " << filename << vcl_endl;
     vcl_string file = vul_file::strip_directory(filename);
-    
+
     volm_img_info info;
     if (load_naip_img(img_folder, file, lvcs, info, load_resource))
       imgs.push_back(info);
@@ -134,16 +134,16 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
                                   bool load_cam_from_tfw, vcl_string const& cam_tfw_file)
 {
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
-  
+
   if (load_image_resource) {
     info.img_r = vil_load(img_file.c_str());
-    info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
+    info.ni = info.img_r->ni(); info.nj = info.img_r->nj();
   } else {
     vil_image_view_base_sptr img_sptr = vil_load(img_file.c_str());
-    info.ni = img_sptr->ni(); info.nj = img_sptr->nj(); 
+    info.ni = img_sptr->ni(); info.nj = img_sptr->nj();
   }
 
-  info.name = vul_file::strip_directory(vul_file::strip_extension(img_file)); 
+  info.name = vul_file::strip_directory(vul_file::strip_extension(img_file));
   info.img_name = img_file;
 
   vpgl_geo_camera *cam = 0;
@@ -166,11 +166,11 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   }
   else
     info.cam = cam;
-  
+
   // obtain the bounding box of current image
   vcl_string name = vul_file::strip_directory(img_file);
   name = name.substr(name.find_first_of('_')+1, name.size());
-  
+
   vcl_string n_coords = name.substr(0, name.find_first_of('_'));
   vcl_string hemisphere, direction;
   vcl_size_t n = n_coords.find("N");
@@ -225,7 +225,7 @@ void volm_io_tools::load_lidar_imgs(vcl_string const& folder, vcl_vector<volm_im
 
 void volm_io_tools::load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos)
 {
-  vcl_string in_dir = folder + "*.tif*";  // sometimes .tif is written .tiff 
+  vcl_string in_dir = folder + "*.tif*";  // sometimes .tif is written .tiff
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
     volm_img_info info;
@@ -235,7 +235,7 @@ void volm_io_tools::load_nlcd_imgs(vcl_string const& folder, vcl_vector<volm_img
 }
 void volm_io_tools::load_imgs(vcl_string const& folder, vcl_vector<volm_img_info>& infos, bool load_image_resource, bool is_cam_global, bool load_cam_from_tfw)
 {
-  vcl_string in_dir = folder + "/*.tif";  // sometimes .tif is written .tiff 
+  vcl_string in_dir = folder + "/*.tif";  // sometimes .tif is written .tiff
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn) {
     vcl_string filename = fn();
     vcl_string cam_tfw_file = vul_file::strip_extension(filename) + ".tfw";
@@ -272,7 +272,7 @@ bool volm_io_tools::get_location_nlcd(vcl_vector<volm_img_info>& NLCD_imgs, doub
         found_it = true;
         break;
       }
-    }   
+    }
   }
   return found_it;
 }
@@ -366,20 +366,20 @@ void volm_io_tools::load_geotiff_image(vcl_string filename, volm_img_info& info,
   info.name = vul_file::strip_extension(info.name);
 
   info.img_r = vil_load(info.img_name.c_str());
-  info.ni = info.img_r->ni(); info.nj = info.img_r->nj(); 
-  
+  info.ni = info.img_r->ni(); info.nj = info.img_r->nj();
+
   vpgl_geo_camera *cam;
   vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
   if (load_cam_from_name) {
     vpgl_geo_camera::init_geo_camera_from_filename(filename, info.ni, info.nj, lvcs_dummy, cam); // constructs in global WGS84 (no distinction of N/S or W/E)
     vcl_cout << cam->trans_matrix() << vcl_endl;
   } else {
-    vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());  
+    vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
     vpgl_geo_camera::init_geo_camera(img_res, lvcs_dummy, cam);
   }
 
-  info.cam = cam; 
-    
+  info.cam = cam;
+
   double lat, lon;
   cam->img_to_global(0.0, info.nj-1, lon, lat);
   vgl_point_2d<double> lower_left(lon, lat);
@@ -414,7 +414,7 @@ bool volm_io_tools::load_satellite_height_map(vcl_string const& filename, volm_i
   info.img_name = filename;
   info.name = vul_file::strip_directory(info.img_name);
   info.name = vul_file::strip_extension(info.name);
-  
+
   info.img_r = vil_load(info.img_name.c_str());
   info.ni = info.img_r->ni();  info.nj = info.img_r->nj();
   vcl_cout << "satellite height image ni: " << info.ni << " nj: " << info.nj << vcl_endl;
@@ -504,7 +504,7 @@ void crop_and_find_min_max(vcl_vector<volm_img_info>& infos, unsigned img_id, in
 {
 #if 0
   vil_image_view<vxl_int_16> img(infos[img_id].img_r);
-  vil_image_view<vxl_int_16> img_crop = vil_crop(img, i0, crop_ni, j0, crop_nj); 
+  vil_image_view<vxl_int_16> img_crop = vil_crop(img, i0, crop_ni, j0, crop_nj);
   for (unsigned ii = 0; ii < img_crop.ni(); ii++)
     for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
       if (min > img_crop(ii, jj)) min = img_crop(ii, jj);
@@ -512,7 +512,7 @@ void crop_and_find_min_max(vcl_vector<volm_img_info>& infos, unsigned img_id, in
     }
 #endif
   if (vil_image_view<vxl_int_16>* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].img_r.ptr())) {
-    vil_image_view<vxl_int_16> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj); 
+    vil_image_view<vxl_int_16> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
     for (unsigned ii = 0; ii < img_crop.ni(); ii++)
       for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
         if (min > img_crop(ii, jj)) min = img_crop(ii, jj);
@@ -527,7 +527,7 @@ void crop_and_find_min_max(vcl_vector<volm_img_info>& infos, unsigned img_id, in
         if (max < img_crop(ii, jj)) max = img_crop(ii, jj);
       }
   }
-  
+
 
 }
 
@@ -538,8 +538,8 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
   vcl_vector<vgl_point_2d<double> > pts;
   pts.push_back(vgl_point_2d<double>(lower_left.x(), upper_right.y()));
   pts.push_back(vgl_point_2d<double>(upper_right.x(), lower_left.y()));
-  pts.push_back(lower_left); 
-  pts.push_back(upper_right); 
+  pts.push_back(lower_left);
+  pts.push_back(upper_right);
 
   for (unsigned k = 0; k < (unsigned)pts.size(); k++) {
     // find the image
@@ -577,7 +577,7 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
     int crop_ni = infos[corners[0].first].ni - corners[0].second.first;
     int crop_nj = corners[2].second.second-corners[0].second.second+1;
     crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = 0;
     j0 = corners[3].second.second;
@@ -592,12 +592,12 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
     int i0 = corners[0].second.first;
     int j0 = corners[0].second.second;
     int crop_ni = corners[3].second.first - corners[0].second.first + 1;
-    int crop_nj = infos[corners[0].first].nj - corners[0].second.second; 
+    int crop_nj = infos[corners[0].first].nj - corners[0].second.second;
     crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = corners[2].second.first;
-    j0 = 0; 
+    j0 = 0;
     crop_ni = corners[1].second.first - corners[2].second.first + 1;
     crop_nj = corners[2].second.second + 1;
     crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
@@ -610,28 +610,28 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
   int crop_ni = infos[corners[0].first].ni - corners[0].second.first;
   int crop_nj = infos[corners[0].first].nj - corners[0].second.second;
   crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the second image, image of corner 1
   i0 = 0;
   j0 = 0;
   crop_ni = corners[1].second.first + 1;
   crop_nj = corners[1].second.second + 1;
   crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the third image, image of corner 2
   i0 = corners[2].second.first;
   j0 = 0;
   crop_ni = infos[corners[2].first].ni - corners[2].second.first;
   crop_nj = corners[2].second.second + 1;
   crop_and_find_min_max(infos, corners[2].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the fourth image, image of corner 3
   i0 = 0;
   j0 = corners[3].second.second;
   crop_ni = corners[3].second.first + 1;
   crop_nj = infos[corners[3].first].nj - corners[3].second.second;
   crop_and_find_min_max(infos, corners[3].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   return true;
 }
 
@@ -685,7 +685,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, vcl_vect
     return false;
   for (unsigned i = 0; i < line_in.size(); i++)
     road.push_back(line_in[i]);
-  
+
   // find the intersection points
   for (unsigned i = 0; i < line_in.size(); i++) {
     vgl_point_2d<double> curr_pt = line_in[i];
@@ -831,7 +831,7 @@ void find_junctions(vgl_line_segment_2d<double> const& seg,
   }
 }
 
-unsigned count_line_start_from_cross(vgl_point_2d<double> const& cross_pt, 
+unsigned count_line_start_from_cross(vgl_point_2d<double> const& cross_pt,
                                      vcl_vector<vgl_point_2d<double> > const& rd,
                                      vcl_vector<vcl_vector<vgl_point_2d<double> > > const& net)
 {

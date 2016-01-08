@@ -95,7 +95,7 @@ boxm2_vecf_spline_field boxm2_vecf_mandible::tilt_ramus(double delta_z_at_condyl
       unit_x *= -1.0;
     vgl_vector_3d<double> curve_normal = cross_product(dpdt,unit_x);
     curve_normal/=curve_normal.length();
-    
+
     vgl_vector_3d<double> motion = curve_normal*dz/vcl_fabs(dot_product(curve_normal, unit_z));
     ret.push_back(motion);
   }
@@ -135,13 +135,13 @@ boxm2_vecf_spline_field  boxm2_vecf_mandible::tilt_body(double delta_y_at_chin) 
     // to achieve the required dy
     double dp_x = dot_product(dpdt, unit_x), dp_z = dot_product(dpdt, unit_z);
     if(vcl_fabs(dp_x)>vcl_fabs(dp_z)){
-    vgl_vector_3d<double> curve_normal = cross_product(dpdt,unit_z);  
+    vgl_vector_3d<double> curve_normal = cross_product(dpdt,unit_z);
     curve_normal/=curve_normal.length();
     motion= curve_normal*dy/vcl_fabs(dot_product(curve_normal, unit_y));
     }else{
       if(is_right)
         unit_x *= -1.0;
-      vgl_vector_3d<double> curve_normal = cross_product(dpdt,unit_x);  
+      vgl_vector_3d<double> curve_normal = cross_product(dpdt,unit_x);
       curve_normal/=curve_normal.length();
       motion= curve_normal*dy/vcl_fabs(dot_product(curve_normal, unit_y));
     }
@@ -181,9 +181,9 @@ void boxm2_vecf_mandible::display_axis_spline(vcl_ofstream& ostr) const{
         bit != boundary_knots_.end()&&!found;++bit)
       found = bit->second == i;
     if(found)
-      bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.0f, 1.0f);      
+      bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.0f, 1.0f);
     else
-      bvrml_write::write_vrml_sphere(ostr, sp, 0.0f, 1.0f, 0.0f);      
+      bvrml_write::write_vrml_sphere(ostr, sp, 0.0f, 1.0f, 0.0f);
   }
   // display the spline points
   for(double t = 0; t<=nd; t+=0.05){

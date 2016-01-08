@@ -26,13 +26,13 @@ public:
   typedef dist_type distribution_type;
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef vpdt_dimension_accessor<other_dist> other;
   };
-  
+
   //: The main function
   bool operator() ( const dist_type& d, return_type& retval ) const
   {
@@ -53,13 +53,13 @@ public:
   typedef dist_type distribution_type;
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef vpdt_mean_accessor<other_dist> other;
   };
-  
+
   //: The main function
   bool operator() ( const dist_type& d, return_type& retval ) const
   {
@@ -80,13 +80,13 @@ public:
   typedef dist_type distribution_type;
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef vpdt_covar_accessor<other_dist> other;
   };
-  
+
   //: The main function
   bool operator() ( const dist_type& d, return_type& retval ) const
   {
@@ -107,13 +107,13 @@ public:
   typedef dist_type distribution_type;
   //: is this functor valid for its distribution type
   static const bool valid_functor = true;
-  
+
   //: rebind this functor to another distribution type
-  template <class other_dist> 
+  template <class other_dist>
   struct rebind {
     typedef vpdt_norm_const_accessor<other_dist> other;
   };
-  
+
   //: The main function
   bool operator() ( const dist_type& d, return_type& retval ) const
   {

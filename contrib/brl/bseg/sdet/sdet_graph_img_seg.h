@@ -37,7 +37,7 @@ class sdet_graph_img_seg : public vbl_ref_count
 
    vcl_vector<vbl_edge>& get_edges() { return edges_; }
    unsigned node_cnt() { return node_cnt_; }
-      
+
    static void create_colors(vcl_vector<vil_rgb<vxl_byte> >& colors, int n_segments);
  protected:
    vil_image_view<int> pixel_ids_;
@@ -52,15 +52,15 @@ class sdet_graph_img_seg : public vbl_ref_count
 #include <vnl/vnl_random.h>
 
 // segment a single plane image using value difference of neighbor pixels, neigh = 4 for 4-neighborhood, or 8
-template <class T> 
+template <class T>
 void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, T weight_thres, float sigma, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
 {
   sdet_graph_img_seg* ss = new sdet_graph_img_seg(img.ni(), img.nj(), margin, neigh);
 
   // smooth the image
   vil_image_view<T> smoothed;
-  
-  if (sigma <= 0) 
+
+  if (sigma <= 0)
     smoothed = vil_copy_deep(img);
   else {
     // smooth source image using gaussian filter
@@ -78,13 +78,13 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
     double dif = c1-c0;
     edges[i].w_ = (float)vcl_sqrt(dif*dif);
   }
-    
-  vbl_disjoint_sets ds; 
+
+  vbl_disjoint_sets ds;
   ds.add_elements(ss->node_cnt());
-  
+
   // segment graph
   vbl_graph_partition(ds, edges, weight_thres);
-  
+
   // combine the segments with number of elements less than min_size
   // post process small components
   for (int i = 0; i < edges.size(); i++) {
@@ -114,7 +114,7 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
 
 
 // segment an image using an edge image as a helper, try to respect edges in forming the regions
-template <class T> 
+template <class T>
 void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<float> const& edge_img, unsigned margin, int neigh, T weight_thres, float sigma, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
 {
   // check if the input images are of the same size
@@ -127,8 +127,8 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
 
   // smooth the image
   vil_image_view<T> smoothed;
-  
-  if (sigma <= 0) 
+
+  if (sigma <= 0)
     smoothed = vil_copy_deep(img);
   else {
     // smooth source image using gaussian filter
@@ -149,16 +149,16 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
     double e0 = (double)edge_img(pix0.first, pix0.second);
     double e1 = (double)edge_img(pix1.first, pix1.second);
     //dif = e0-e1;
-    //edges[i].w_ += (float)vcl_sqrt(dif*dif); 
-    edges[i].w_ += ( e0 > e1 ? e0 : e1); 
+    //edges[i].w_ += (float)vcl_sqrt(dif*dif);
+    edges[i].w_ += ( e0 > e1 ? e0 : e1);
   }
-    
-  vbl_disjoint_sets ds; 
+
+  vbl_disjoint_sets ds;
   ds.add_elements(ss->node_cnt());
-  
+
   // segment graph
   vbl_graph_partition(ds, edges, weight_thres);
-  
+
   // combine the segments with number of elements less than min_size
   // post process small components
   for (int i = 0; i < edges.size(); i++) {
@@ -186,7 +186,7 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
   delete ss;
 }
 
-// segment an image using two features, takes two normalized feature images as dimension 1 and dimension 2, calculates Euclidean distance 
+// segment an image using two features, takes two normalized feature images as dimension 1 and dimension 2, calculates Euclidean distance
 // only works for float images in [0,1]
 // use sigma1 to smooth the first image and sigma2 to smooth the second image if needed, pass 0 if smoothing is not necessary
 void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> const& img2, unsigned margin, int neigh, float weight_thres, float sigma1, float sigma2, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img);

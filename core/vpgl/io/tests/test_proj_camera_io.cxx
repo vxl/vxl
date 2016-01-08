@@ -8,7 +8,7 @@
 static void test_proj_camera_io()
 {
   //--------------------------------------------------------------------------
-  
+
   vcl_cout << "Testing Projective camera" << vcl_endl;
 
   // Some matrices for testing.
@@ -37,7 +37,7 @@ static void test_proj_camera_io()
   TEST("recovery from binary read", p_cam_r.get_matrix(), random_matrix );
   // remove file:
   vpl_unlink("test_proj_camera_io.tmp");
-  
+
 }
 
 TESTMAIN(test_proj_camera_io);

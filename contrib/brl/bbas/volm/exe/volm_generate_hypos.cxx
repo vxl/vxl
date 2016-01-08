@@ -36,7 +36,7 @@ bool add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const
   for (unsigned mm = 0; mm < infos.size(); mm++) {
     if (infos[mm].contains(pt)) {
       double u,v;
-      infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v); 
+      infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
       if (infos[mm].valid_pixel(uu,vv)) {
@@ -91,13 +91,13 @@ bool add_hypo(volm_geo_index_node_sptr hyp_root, vcl_vector<volm_img_info> const
   return false;
 }
 
-int find_land_type(vcl_vector<volm_img_info>& geo_infos, vgl_point_2d<double>& pt) 
+int find_land_type(vcl_vector<volm_img_info>& geo_infos, vgl_point_2d<double>& pt)
 {
   int type = -1;
   for (unsigned mm = 0; mm < geo_infos.size(); mm++) {
      if (geo_infos[mm].contains(pt)) {
       double u,v;
-      geo_infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v); 
+      geo_infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)vcl_floor(u+0.5);
       int vv = (int)vcl_floor(v+0.5);
       if (geo_infos[mm].valid_pixel(uu,vv)) {
@@ -175,11 +175,11 @@ int main(int argc,  char** argv)
     poly.print(vcl_cout);
     vcl_vector<volm_tile> tiles;
     if (!volm_tile::generate_tiles(world_id(),tiles))
-    {  
+    {
       vcl_cerr << "Unknown world id: " << world_id() << vcl_endl;
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-     
+
     vcl_cout << " number of tiles: " << tiles.size() << vcl_endl;
     unsigned i = tile_id();
     if (i >= tiles.size()) {
@@ -249,7 +249,7 @@ int main(int argc,  char** argv)
       vcl_stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << i;
       vcl_cout << "writing hyps to: " << file_name4.str() << vcl_endl;
       volm_geo_index::write_hyps(hyp_root, file_name4.str());
-      
+
       // write the hypos in kml file
       vcl_vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
@@ -267,7 +267,7 @@ int main(int argc,  char** argv)
         return volm_io::EXE_ARGUMENT_ERROR;
       }
 
-      volm_osm_objects osm_objs; 
+      volm_osm_objects osm_objs;
       double min_size;
       vcl_stringstream file_name_pre;
       file_name_pre << osm_tree_folder() << "geo_index2_wr" << world_id() << "_tile_" << tile_id();
@@ -353,13 +353,13 @@ int main(int argc,  char** argv)
           int type_prev = find_land_type(geo_infos, points[0]);
           if (type_prev < 0)
             inc_in_sec = 4 * meter_to_sec;  // if unknown type, use the smallest possible interval to be safe
-          else 
+          else
             inc_in_sec = volm_osm_category_io::geo_land_hyp_increments[type_prev] * meter_to_sec;
           inc_in_sec_rad = inc_in_sec*inc_in_sec_radius_ratio;
           double remainder = 0.0;
           if ( loc_inside_region(poly, points[0].x(), points[0].y()) )
             add_hypo(hyp_root, infos, class_map_infos, points[0], inc_in_sec_rad, true);
-          for (unsigned kk = 1; kk < points.size(); kk++) {  
+          for (unsigned kk = 1; kk < points.size(); kk++) {
             double prev_x = points[kk-1].x();
             double prev_y = points[kk-1].y();
             int type = find_land_type(geo_infos, points[kk]);
@@ -385,7 +385,7 @@ int main(int argc,  char** argv)
 
             double inc_dy = inc_in_sec*sin;
             double inc_dx = inc_in_sec*cos;
-            
+
             // get rid of remainder first
             if (remainder < inc_in_sec) {
               double rem = inc_in_sec-remainder;
@@ -395,18 +395,18 @@ int main(int argc,  char** argv)
               double y = prev_y+inc_dy_rem;
               if ( loc_inside_region(poly, x, y) )
                 add_hypo(hyp_root, infos, class_map_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
-              prev_x = x; 
+              prev_x = x;
               prev_y = y;
               ds -= rem;
-            } 
+            }
 
             while (ds > inc_in_sec) {
               ds -= inc_in_sec;
               double x = prev_x+inc_dx;
               double y = prev_y+inc_dy;
-              if (loc_inside_region(poly, x, y)) 
+              if (loc_inside_region(poly, x, y))
                 add_hypo(hyp_root, infos, class_map_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, false);
-              prev_x = x; 
+              prev_x = x;
               prev_y = y;
             }
             type_prev = type;
@@ -415,7 +415,7 @@ int main(int argc,  char** argv)
         }
 
       }
-    
+
       unsigned r_cnt = volm_geo_index::hypo_size(hyp_root) ;
       vcl_cout << "\n root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
 
@@ -448,7 +448,7 @@ int main(int argc,  char** argv)
         volm_io_tools::load_satellite_height_imgs(in_folder(), infos, false, "");
       else
         volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
-      
+
       // load satellite classification 2d map to avoid locations on top of the buildings
       vcl_vector<volm_img_info> class_map_infos;
       volm_io_tools::load_imgs(land_class_map_folder(),class_map_infos, true, true, true);
@@ -847,7 +847,7 @@ int main(int argc,  char** argv)
               double y = prev_y+inc_dy_rem;
               if ( loc_inside_region(poly, x, y) )
                 add_hypo(hyp_root, lidar_infos, class_infos, vgl_point_2d<double>(x, y), inc_in_sec_rad, true);
-              prev_x = x; 
+              prev_x = x;
               prev_y = y;
               ds -= rem;
             }
@@ -870,7 +870,7 @@ int main(int argc,  char** argv)
       vcl_cout << "\nwriting hypos to: " << file_name4.str() << vcl_endl;
       volm_geo_index::write_hyps(hyp_root, file_name4.str());
       vcl_cout << volm_geo_index::hypo_size(hyp_root) << " locations are generated in tile " << t_id << vcl_endl;
-      
+
       vcl_vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
       for (unsigned jj = 0; jj < leaves.size(); jj++) {
@@ -896,7 +896,7 @@ int main(int argc,  char** argv)
       }
 
       double inc_in_meter = inc_in_sec*21/0.000202;
-      vcl_cout << "generate locations on land category: " << region_name() 
+      vcl_cout << "generate locations on land category: " << region_name()
                << " with location distance " << inc_in_meter << " meter. (" << inc_in_sec << " seconds)" << vcl_endl;
       // determine depth of the geo index depending on inc
       double size = nh()*inc_in_sec;
@@ -1129,7 +1129,7 @@ int main(int argc,  char** argv)
   }
   unsigned r_cnt = volm_geo_index::hypo_size(root) ;
   vcl_cout << " root " << i << " has total " << r_cnt << " hypotheses in its leaves!\n";
- 
+
   if (add_gt().compare("") != 0) {  // user passed the path to a text file with the gt locations
 
     // load the images

@@ -120,13 +120,13 @@ bool brip_vil_nitf_ops::scale_nitf_bits(vil_image_view<vxl_uint_16> const& in_im
     vil_math_value_range<vxl_uint_16>(temp_plane, min_val, max_val );
     int nbins = 100;
     bsta_histogram<double> hist((double)min_val,(double)max_val,nbins);
-    for (unsigned i = 0; i < output.ni(); i++) 
+    for (unsigned i = 0; i < output.ni(); i++)
       for (unsigned j = 0; j < output.nj(); j++)
         hist.upcount((double)temp_plane(i,j), 1.0);
 
     double smax_val = hist.value_with_area_above(0.0002);
     double smin_val = hist.value_with_area_below(0.0002);
-    for (unsigned i = 0; i < output.ni(); i++) 
+    for (unsigned i = 0; i < output.ni(); i++)
       for (unsigned j = 0; j < output.nj(); j++)
       {
         int scaledval = vcl_floor((float)(temp_plane(i,j)-smin_val)/(float)(smax_val-smin_val) * 255.0f);

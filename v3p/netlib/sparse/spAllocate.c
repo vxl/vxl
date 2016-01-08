@@ -551,7 +551,7 @@ RecordAllocation(
 
 
 /*
- *  ADD A BLOCK OF SLOTS TO ALLOCATION LIST     
+ *  ADD A BLOCK OF SLOTS TO ALLOCATION LIST
  *
  *  This routine increases the size of the allocation list.
  *

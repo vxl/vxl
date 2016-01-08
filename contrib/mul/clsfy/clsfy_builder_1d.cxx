@@ -37,7 +37,7 @@ bool clsfy_builder_1d::is_class(vcl_string const& s) const
 void clsfy_builder_1d::config(vcl_istream &as)
 {
   mbl_read_props_type props = mbl_read_props_ws(as);
-    
+
   // Check there are no unused properties
   mbl_read_props_look_for_unused_props("clsfy_builder_1d::config",
                                        props, mbl_read_props_type());
@@ -67,7 +67,7 @@ vcl_auto_ptr<clsfy_builder_1d> clsfy_builder_1d::new_builder(
   }
 
   ps->config(as);
-  
+
   return ps;
 }
 

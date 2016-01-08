@@ -13,7 +13,7 @@
  *    18 Sep 1995   -- Deprecated Integraph Matrix tag with new one.
  *                     Backward compatible support provided.  --NDR.
  */
- 
+
 #include "xtiffio.h"
 #include <stdio.h>
 #include "cpl_serv.h"
@@ -21,14 +21,14 @@
 /*  Tiff info structure.
  *
  *     Entry format:
- *        { TAGNUMBER, ReadCount, WriteCount, DataType, FIELDNUM, 
+ *        { TAGNUMBER, ReadCount, WriteCount, DataType, FIELDNUM,
  *          OkToChange, PassDirCountOnSet, AsciiName }
  *
  *     For ReadCount, WriteCount, -1 = unknown.
  */
 
 static const TIFFFieldInfo xtiffFieldInfo[] = {
-  
+
   /* XXX Insert Your tags here */
     { TIFFTAG_GEOPIXELSCALE,	-1,-1, TIFF_DOUBLE,	FIELD_CUSTOM,
       TRUE,	TRUE,	"GeoPixelScale" },
@@ -81,7 +81,7 @@ _XTIFFDefaultDirectory(TIFF *tif)
      * allow it to set up the rest of its own methods.
      */
 
-    if (_ParentExtender) 
+    if (_ParentExtender)
         (*_ParentExtender)(tif);
 }
 
@@ -94,10 +94,10 @@ static
 void _XTIFFInitialize(void)
 {
     static int first_time=1;
-	
+
     if (! first_time) return; /* Been there. Done that. */
     first_time = 0;
-	
+
     /* Grab the inherited method and install */
     _ParentExtender = TIFFSetTagExtender(_XTIFFDefaultDirectory);
 }
@@ -131,13 +131,13 @@ XTIFFOpen(const char* name, const char* mode)
     TIFF *tif;
 
     /* Set up the callback */
-    _XTIFFInitialize();	
-	
+    _XTIFFInitialize();
+
     /* Open the file; the callback will set everything up
      */
     tif = TIFFOpen(name, mode);
     if (!tif) return tif;
-	
+
     return tif;
 }
 
@@ -147,13 +147,13 @@ XTIFFFdOpen(int fd, const char* name, const char* mode)
     TIFF *tif;
 
     /* Set up the callback */
-    _XTIFFInitialize();	
+    _XTIFFInitialize();
 
     /* Open the file; the callback will set everything up
      */
     tif = TIFFFdOpen(fd, name, mode);
     if (!tif) return tif;
-	
+
     return tif;
 }
 
@@ -165,10 +165,10 @@ XTIFFClientOpen(const char* name, const char* mode, thandle_t thehandle,
 	    TIFFMapFileProc MFProvc, TIFFUnmapFileProc UMFProc )
 {
     TIFF *tif;
-    
+
     /* Set up the callback */
-    _XTIFFInitialize();	
-    
+    _XTIFFInitialize();
+
     /* Open the file; the callback will set everything up
      */
     tif = TIFFClientOpen(name, mode, thehandle,
@@ -176,9 +176,9 @@ XTIFFClientOpen(const char* name, const char* mode, thandle_t thehandle,
                          SProc, CProc,
                          SzProc,
                          MFProvc, UMFProc);
-    
+
     if (!tif) return tif;
-    
+
     return tif;
 }
 
@@ -186,7 +186,7 @@ XTIFFClientOpen(const char* name, const char* mode, thandle_t thehandle,
  * Close a file opened with XTIFFOpen().
  *
  * @param tif The file handle returned by XTIFFOpen().
- * 
+ *
  * If a GTIF structure was created with GTIFNew()
  * for this file, it should be freed with GTIFFree()
  * <i>before</i> calling XTIFFClose().

@@ -17,8 +17,8 @@ class rgrl_evaluator_ssd
 public:
   rgrl_evaluator_ssd() {}
   ~rgrl_evaluator_ssd() {}
-  
-  double evaluate( vcl_vector< double > const& a, 
+
+  double evaluate( vcl_vector< double > const& a,
                    vcl_vector< double > const& b,
                    vcl_vector< double > const& weight ) const;
 

@@ -16,7 +16,7 @@
 //:sets input and output types
 bool bpgl_generate_depth_maps_process_cons(bprb_func_process& pro)
 {
-  vcl_vector<vcl_string> input_types_(4); 
+  vcl_vector<vcl_string> input_types_(4);
   input_types_[0] = "vcl_string"; // the path to the binary stream for depth_scene object
   input_types_[1] = "unsigned";   // down sampling level to generate the depth maps
   input_types_[2] = "vcl_string"; // output folder
@@ -44,7 +44,7 @@ bool bpgl_generate_depth_maps_process(bprb_func_process& pro)
   unsigned level = pro.get_input<unsigned>(1);
   vcl_string output_folder = pro.get_input<vcl_string>(2);
   vcl_string name_prefix = pro.get_input<vcl_string>(3);
-  
+
   depth_map_scene scene;
   vsl_b_ifstream is(filename.c_str());
   if (!is) {
@@ -56,7 +56,7 @@ bool bpgl_generate_depth_maps_process(bprb_func_process& pro)
   unsigned cnt = 0;
   for (scene_depth_iterator iter = scene.begin(); iter != scene.end(); ++iter) {
     vil_image_view<float> depth_map = scene.depth_map(level);
-    vcl_stringstream ss; ss << cnt++; 
+    vcl_stringstream ss; ss << cnt++;
     vcl_string name = output_folder + "/" + name_prefix + "_" + ss.str() + ".tif";
     vil_save(depth_map, name.c_str());
   }

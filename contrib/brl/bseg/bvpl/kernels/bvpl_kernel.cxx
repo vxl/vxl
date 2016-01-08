@@ -108,7 +108,7 @@ bool bvpl_kernel::save_raw(vcl_string filename)
 
 float bvpl_kernel::min_val()
 {
-  
+
   kernel_.begin();
   float min = (float)((*kernel_).c_);
   while (!kernel_.isDone()){
@@ -121,7 +121,7 @@ float bvpl_kernel::min_val()
 
 float bvpl_kernel::max_val()
 {
-  
+
   kernel_.begin();
   float max = (float)((*kernel_).c_);
   while (!kernel_.isDone()){
@@ -143,35 +143,35 @@ bxml_data_sptr bvpl_kernel::xml_element()
   kernel->append_data(factory_data_);
   kernel->append_text("\n");
   kernel->set_attribute("voxel_length", voxel_length_);
-  
+
   return kernel;
 }
 
 bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
 {
   bxml_element query("bvpl_kernel");
-  
+
   bxml_data_sptr root = bxml_find_by_name(d, query);
   if (!root || root->type() != bxml_data::ELEMENT) {
     return NULL;
   }
   bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());
-  
+
   //get the variables
   double voxel_length =0.0f;
-  
+
   gp_root->get_attribute("voxel_length", voxel_length );
   //try each factory
   bvpl_kernel_sptr kernel = NULL;
-  
+
   kernel = bvpl_edge3d_kernel_factory::parse_xml_element(d);
-  
+
   if(kernel){
     kernel->set_voxel_length(voxel_length);
     return kernel;
   }
-  else 
+  else
     return NULL;
-  
-  
+
+
 }

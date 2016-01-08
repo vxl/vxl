@@ -8,7 +8,7 @@
 
 #include <vcl_vector.h>
 #include <vcl_functional.h>
-#include <vcl_algorithm.h> 
+#include <vcl_algorithm.h>
 
 //: A bounded priority queue
 // This is identical to a vcl_priority_queue, but

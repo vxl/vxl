@@ -22,19 +22,19 @@ class rgrl_converge_status
 public:
 
   enum converge_type { conv_on_going, converged, stagnated };
-  
+
   enum status_type { status_on_going, good_enough, failed, good_and_terminate };
 
   //: default ctor
   rgrl_converge_status( );
-  
+
   //: default ctor
-  rgrl_converge_status( converge_type conv, 
-                        status_type stat, 
-                        double error, 
+  rgrl_converge_status( converge_type conv,
+                        status_type stat,
+                        double error,
                         unsigned osc_count,
                         double error_diff );
-                        
+
 
   //:
   rgrl_converge_status( bool     has_converged,
@@ -68,22 +68,22 @@ public:
   //: return true is the current estimate is so good that registration can be terminated
   //
   bool is_good_and_should_terminate() const;
-  
+
   //: return converge enum
   converge_type current_converge() const;
-  
+
   //: return current status
   status_type  current_status() const;
 
   //: set current coverage
   void set_current_converge( converge_type c );
-  
+
   //: set current coverage
   void set_current_status( status_type s );
-  
+
   //: set objective value
   void set_objective_value( double obj );
-  
+
   //: Current value of the objective function
   //
   //  Lower is better.
@@ -94,7 +94,7 @@ public:
   //
   double error() const;
 
-  //: A signed difference between the error of the current status and the error of the previous. 
+  //: A signed difference between the error of the current status and the error of the previous.
   //
   double error_diff() const;
 
@@ -112,5 +112,5 @@ protected:
   unsigned oscillation_count_;
   double   error_diff_;
 };
-  
+
 #endif // rgrl_converge_status_h_

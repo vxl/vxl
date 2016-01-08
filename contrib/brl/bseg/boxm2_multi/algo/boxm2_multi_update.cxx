@@ -125,7 +125,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   vcl_cout<<"  pre_vis time: "<<pre_vis_time<<"  "<<stepTimer.all()<<vcl_endl;
   gpu_time += pre_vis_time;
 
-  
+
   //calculate cell beta, cell vis, and finally reduce each cell to new alphas
   stepTimer.mark();
   float update_cell_time = boxm2_multi_update_cell::update_cells(cache, img, cam, norm_img, helper);

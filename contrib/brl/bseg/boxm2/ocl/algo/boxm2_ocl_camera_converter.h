@@ -47,7 +47,7 @@ class boxm2_ocl_camera_converter
     //:
     // \todo make this a map of kernels (by device)
     static bocl_kernel* persp_to_generic_kernel;
-    static vcl_map<vcl_string, bocl_kernel*> kernels_; 
+    static vcl_map<vcl_string, bocl_kernel*> kernels_;
 };
 
 #endif // boxm2_ocl_convert_camera_h_

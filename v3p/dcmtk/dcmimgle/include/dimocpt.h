@@ -74,7 +74,7 @@ class DiMonoCopyTemplate
 
 
  private:
- 
+
     /** copy specified amount of pixel data
      *
      ** @param  pixel  array of pixel data to be copied

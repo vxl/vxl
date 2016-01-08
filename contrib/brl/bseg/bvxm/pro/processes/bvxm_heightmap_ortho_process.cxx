@@ -68,7 +68,7 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   double lower_right_lon, lower_right_lat, lower_right_elev;
   lvcs->local_to_global(lower_right.x(), lower_right.y(), lower_right.z(), vpgl_lvcs::wgs84, lower_right_lon, lower_right_lat, lower_right_elev);
   vcl_cout << "lower right corner in the image is: " << lower_right_lon << " lat: " << lower_right_lat << vcl_endl;
-  
+
   int ni = box.width();
   int nj = box.height();
   vnl_matrix<double> trans_matrix(4,4,0.0);
@@ -76,29 +76,29 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   // lvcs origin is not necessarily one of the corners of the scene
   trans_matrix[0][0] = (lower_right_lon-upper_left_lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lower_right_lat)/nj;
   trans_matrix[0][3] = upper_left_lon; trans_matrix[1][3] = upper_left_lat;
-  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs); 
+  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs);
   cam->set_scale_format(true);
-  vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
-  
+  vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);
+
   vil_image_view<unsigned> *dmap = new vil_image_view<unsigned>(ni, nj, 1);
   vil_image_view<float> *conf_map = new vil_image_view<float>(ni, nj, 1);
   world->heightmap(camera,*dmap, *conf_map);  // this method actually generates a depth not a height map
 
   // subtract from the scene height to get the height from scene floor
   float h = box.depth();
-  
+
   vcl_cout << "Using scene height: " << h << " to negate the depth map!\n";
   vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
   hmap->fill(0.0f);
-  for (int i = 0; i < ni; i++) 
-    for (int j = 0; j < nj; j++) 
+  for (int i = 0; i < ni; i++)
+    for (int j = 0; j < nj; j++)
       (*hmap)(i,j) = h-(*dmap)(i,j)+base_elev;
-    
+
   //store output
   pro.set_output_val<vil_image_view_base_sptr>(0, dmap);
   pro.set_output_val<vil_image_view_base_sptr>(1, hmap);
   pro.set_output_val<vil_image_view_base_sptr>(2, conf_map);
-  
+
   return true;
 }
 
@@ -154,23 +154,23 @@ bool bvxm_heightmap_exp_process(bprb_func_process& pro)
   lvcs->local_to_global(ray_trace_end.x(), ray_trace_end.y(), ray_trace_end.z(), vpgl_lvcs::wgs84, lon, lat, elev);
   float base_elev = (float)elev;
   vcl_cout << "!!!!!!!!!!!!!! base_elev: " << base_elev << vcl_endl;
-  
+
   vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
   vil_image_view<float> *var_map = new vil_image_view<float>(ni, nj, 1);
   float max_depth;
-  world->heightmap_exp(cam,*hmap, *var_map, max_depth);  
+  world->heightmap_exp(cam,*hmap, *var_map, max_depth);
 
   float max_val, min_val;
   vil_math_value_range(*hmap, min_val, max_val);
   vcl_cout << "!!!!!!!!!!! in height map min_val: " << min_val << " max_val: " << max_val << "!\n";
 
   vcl_cout << "!!!!!!!!!!! Using max_depth: " << max_depth << " to negate the depth map!\n";
-  for (unsigned i = 0; i < ni; i++) 
+  for (unsigned i = 0; i < ni; i++)
     for (unsigned j = 0; j < nj; j++) {
       (*hmap)(i,j) = max_depth-(*hmap)(i,j)+base_elev;
       (*var_map)(i,j) = vcl_sqrt((*var_map)(i,j));
     }
-    
+
   vil_math_value_range(*hmap, min_val, max_val);
   vcl_cout << "!!!!!!!!!!! in height map min_val: " << min_val << " max_val: " << max_val << "!\n";
 
@@ -222,9 +222,9 @@ bool bvxm_uncertainty_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
   unsigned ni = pro.get_input<unsigned>(i++);
   unsigned nj = pro.get_input<unsigned>(i++);
-  
+
   vil_image_view<float> *dmap = new vil_image_view<float>(ni, nj, 1);
-  world->uncertainty(cam,*dmap);  
+  world->uncertainty(cam,*dmap);
 
   //store output
   pro.set_output_val<vil_image_view_base_sptr>(0, dmap);

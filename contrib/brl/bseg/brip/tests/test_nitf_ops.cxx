@@ -43,9 +43,9 @@ static void test_nitf_ops( int argc, char* argv[] )
 
   vil_image_view<vxl_byte> out_byte(ni, nj);
   out_byte.fill(0);
-  
+
   TEST("Truncate nitf image to byte image", brip_vil_nitf_ops::truncate_nitf_bits(nitf_view, out_byte), true);
-  
+
   vcl_string out_byte_fname = "./out_byte.tif";
   vil_save(out_byte, out_byte_fname.c_str());
 
