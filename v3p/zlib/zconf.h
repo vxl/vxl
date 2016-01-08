@@ -89,12 +89,6 @@
 #  define NO_DUMMY_DECL
 #endif
 
-/* Old Borland C incorrectly complains about missing returns: */
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
-#  define NEED_DUMMY_RETURN
-#endif
-
-
 /* Maximum value for memLevel in deflateInit2 */
 #ifndef MAX_MEM_LEVEL
 #  ifdef MAXSEG_64K
@@ -151,7 +145,7 @@
 #    define FAR far
 #  endif
 #endif
-#if defined(__BORLANDC__) && (defined(__SMALL__) || defined(__MEDIUM__))
+#if defined(__MEDIUM__))
 #  ifndef __32BIT__
 #    define SMALL_MEDIUM
 #    define FAR _far
@@ -170,18 +164,6 @@
 #      define ZEXPORTVA  WINAPIV
 #    else
 #      define ZEXPORTVA  FAR _cdecl _export
-#    endif
-#  endif
-#  if defined (__BORLANDC__)
-#    if (__BORLANDC__ >= 0x0500) && defined (WIN32)
-#      include <windows.h>
-#      define ZEXPORT __declspec(dllexport) WINAPI
-#      define ZEXPORTRVA __declspec(dllexport) WINAPIV
-#    else
-#      if defined (_Windows) && defined (__DLL__)
-#        define ZEXPORT _export
-#        define ZEXPORTVA _export
-#      endif
 #    endif
 #  endif
 #endif

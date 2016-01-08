@@ -62,7 +62,7 @@ foreach my $dir (@DIRS)
   my @file_list = grep {! m/^(\..*|CVS|\.svn)$/} readdir(BASEDIR);
   closedir(BASEDIR);
   my @sd = ();
-  if    ($dir =~ m!\bvcl$!)   { @sd = qw(vcl_sys iso generic gcc egcs gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 win32-vc8 emulation borland55 borland56 stlport internal); }
+  if    ($dir =~ m!\bvcl$!)   { @sd = qw(vcl_sys iso generic gcc egcs gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 win32-vc8 emulation stlport internal); }
   elsif ($dir =~ m!\bvil(|1|3d)$!) { @sd = qw(file_formats); }
   elsif ($dir =~ m!\bvgl$!)   { @sd = qw(internals); }
   elsif ($dir =~ m!\bvpl$!)   { @sd = qw(os_unix os_win32); }

@@ -472,10 +472,6 @@ defined under Cygwin.
 @itemx @bullet{} Preprocessor: @code{__CYGWIN__} (gcc under Cygwin)
 The Cygwin API is present.
 
-@item  @bullet{} CMake: @code{BORLAND} (defined by CMake, not in a file)
-@itemx @bullet{} Preprocessor: [???]
-The Borland C++ compiler is being used.
-
 @item  @bullet{} CMake: @code{SOLARIS} (VXL top level @file{UseVXL.cmake} file)
 @itemx @bullet{} Preprocessor: [???]
 The OS is Solaris.  This variable is set in the top level

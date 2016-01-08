@@ -1286,30 +1286,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_BORLAND ";
-#ifdef VCL_BORLAND
-  vcl_cout << "is set to " << quote(VCL_BORLAND);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_BORLAND_55 ";
-#ifdef VCL_BORLAND_55
-  vcl_cout << "is set to " << quote(VCL_BORLAND_55);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_BORLAND_56 ";
-#ifdef VCL_BORLAND_56
-  vcl_cout << "is set to " << quote(VCL_BORLAND_56);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_ICC ";
 #ifdef VCL_ICC
   vcl_cout << "is set to " << quote(VCL_ICC);
@@ -1630,14 +1606,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "__BORLANDC__ ";
-#ifdef __BORLANDC__
-  vcl_cout << "is set to " << quote(__BORLANDC__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "__SUNPRO_CC ";
 #ifdef __SUNPRO_CC
   vcl_cout << "is set to " << quote(__SUNPRO_CC);
@@ -1657,14 +1625,6 @@ void test_config()
   vcl_cout << "_COMPILER_VERSION ";
 #ifdef _COMPILER_VERSION
   vcl_cout << "is set to " << quote(_COMPILER_VERSION);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__BORLANDC__ ";
-#ifdef __BORLANDC__
-  vcl_cout << "is set to " << quote(__BORLANDC__);
 #else
   vcl_cout << "is not set";
 #endif

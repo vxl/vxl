@@ -216,9 +216,6 @@ for $var_exp (
   'VCL_GCC_51',
   'VCL_GCC_52',
   'VCL_GCC_53',
-  'VCL_BORLAND',
-  'VCL_BORLAND_55',
-  'VCL_BORLAND_56',
   'VCL_ICC',
   'VCL_ICC_8',
   'VCL_ICC_80',
@@ -267,11 +264,9 @@ for $var_exp (
   '__ECC',              # icc?
   '__INTEL_COMPILER',   # icc
   '__INTEL_CXXLIB_ICC', # icc using its own library?
-  '__BORLANDC__',       # bcc
   '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
-  '__BORLANDC__',       # Borland C++
   '__WATCOMC__',        # Watcom C++
 
   # OS related

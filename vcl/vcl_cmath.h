@@ -52,8 +52,6 @@
 # include "win32-vc8/vcl_cmath.h"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_cmath.h"
-#elif defined(VCL_BORLAND_55)
-# include "borland55/vcl_cmath.h"
 #else
 # include "iso/vcl_cmath.h"
 #endif
