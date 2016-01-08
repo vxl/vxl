@@ -235,7 +235,6 @@ for $var_exp (
   'VCL_VC_60',
   'VCL_VC_5',
   'VCL_VC_50',
-  'VCL_KAI',
   'VCL_METRO_WORKS',
   'GNU_LIBSTDCXX_V3',
 
@@ -273,7 +272,6 @@ for $var_exp (
   '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
-  '__KCC',              # ???
   '__MWERKS__',         # ???
   '__MWKS__',           # Metrowerks CodeWarrior
   '__BORLANDC__',       # Borland C++

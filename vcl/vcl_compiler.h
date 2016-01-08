@@ -191,10 +191,6 @@
 #  endif
 #endif
 
-#if defined(__KCC) // KAI compiler
-# define VCL_KAI
-#endif
-
 #if defined(__CYGWIN__) // Cygwin GCC Compiler
 # define VCL_CYGWIN_GCC
 #endif
