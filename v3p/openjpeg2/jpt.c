@@ -39,16 +39,16 @@
  * @param p_value the data to update
  * @return the nb of bytes read or -1 if an io error occurred.
  */
-bool jpt_read_VBAS_info(opj_stream_private_t * p_cio, OPJ_UINT32 * p_nb_bytes_read, OPJ_UINT32 * p_value, opj_event_mgr_t * p_manager) 
+bool jpt_read_VBAS_info(opj_stream_private_t * p_cio, OPJ_UINT32 * p_nb_bytes_read, OPJ_UINT32 * p_value, opj_event_mgr_t * p_manager)
 {
 	OPJ_BYTE l_elmt;
 	OPJ_UINT32 l_nb_bytes_read = 0;
-	
+
 	// read data till the MSB of the current byte is 1.
 	// concatenate 7 bits of data, last bit is finish flag
 
 	// read data from the stream
-	
+
 	if
 		(opj_stream_read_data(p_cio,&l_elmt,1,p_manager) != 1)
 	{
@@ -58,8 +58,8 @@ bool jpt_read_VBAS_info(opj_stream_private_t * p_cio, OPJ_UINT32 * p_nb_bytes_re
 	++l_nb_bytes_read;
 
 	// is the MSB equal to 1 ?
-	while 
-		(l_elmt & 0x80) 
+	while
+		(l_elmt & 0x80)
 	{
 		// concatenate 7 bits of data, last bit is finish flag
 		*p_value = (*p_value  << 7) | (l_elmt & 0x7f);
@@ -78,10 +78,10 @@ bool jpt_read_VBAS_info(opj_stream_private_t * p_cio, OPJ_UINT32 * p_nb_bytes_re
 }
 
 /*
- * Initialize the value of the message header structure 
+ * Initialize the value of the message header structure
  *
  */
-void jpt_init_msg_header(opj_jpt_msg_header_t * header) 
+void jpt_init_msg_header(opj_jpt_msg_header_t * header)
 {
 	header->Id = 0;		/* In-class Identifier    */
 	header->last_byte = 0;	/* Last byte information  */
@@ -98,7 +98,7 @@ void jpt_init_msg_header(opj_jpt_msg_header_t * header)
  * Only parameters always present in message header
  *
  */
-void jpt_reinit_msg_header(opj_jpt_msg_header_t * header) 
+void jpt_reinit_msg_header(opj_jpt_msg_header_t * header)
 {
 	header->Id = 0;		/* In-class Identifier    */
 	header->last_byte = 0;	/* Last byte information  */
@@ -110,7 +110,7 @@ void jpt_reinit_msg_header(opj_jpt_msg_header_t * header)
  * Read the message header for a JPP/JPT - stream
  *
  */
-bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header, OPJ_UINT32 * p_nb_bytes_read, opj_event_mgr_t * p_manager) 
+bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header, OPJ_UINT32 * p_nb_bytes_read, opj_event_mgr_t * p_manager)
 {
 	OPJ_BYTE elmt, Class = 0, CSn = 0;
 	OPJ_UINT32 l_nb_bytes_read = 0;
@@ -118,7 +118,7 @@ bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header
 
 
 	jpt_reinit_msg_header(header);
-	
+
 	/* ------------- */
 	/* VBAS : Bin-ID */
 	/* ------------- */
@@ -153,7 +153,7 @@ bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header
 	}
 
 	/* see information on bits 'c' [p 10 : A.2.1 general, ISO/IEC FCD 15444-9] */
-	if 
+	if
 		(((elmt >> 4) & 0x01) == 1)
 	{
 		header->last_byte = 1;
@@ -161,7 +161,7 @@ bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header
 
 	/* In-class identifier */
 	header->Id |= (elmt & 0x0f);
-	if 
+	if
 		((elmt >> 7) == 1)
 	{
 		l_last_nb_bytes_read = 0;
@@ -177,7 +177,7 @@ bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header
 	/* ------------ */
 	/* VBAS : Class */
 	/* ------------ */
-	if (Class == 1) 
+	if (Class == 1)
 	{
 		header->Class_Id = 0;
 		l_last_nb_bytes_read = 0;
@@ -193,7 +193,7 @@ bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header
 	/* ---------- */
 	/* VBAS : CSn */
 	/* ---------- */
-	if (CSn == 1) 
+	if (CSn == 1)
 	{
 		header->CSn_Id = 0;
 		l_last_nb_bytes_read = 0;
@@ -233,7 +233,7 @@ bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header
 	/* ---------- */
 	/* VBAS : Aux */
 	/* ---------- */
-	if ((header->Class_Id & 0x01) == 1) 
+	if ((header->Class_Id & 0x01) == 1)
 	{
 		header->Layer_nb = 0;
 		if

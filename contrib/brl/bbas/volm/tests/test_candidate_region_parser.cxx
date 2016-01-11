@@ -19,7 +19,7 @@ static void test_candidate_region_parser()
 
   // obtain polygon with name "Region"
   vgl_polygon<double> poly_outer_region = volm_candidate_region_parser::parse_polygon(kml_file, "Region");
-  
+
   // obtain polygon with name "Overhead Overlay"
   vgl_polygon<double> poly_outer_overhead = volm_candidate_region_parser::parse_polygon(kml_file, "Overhead Overlay");
 
@@ -39,7 +39,7 @@ static void test_candidate_region_parser()
   vcl_cout << "Landmarks2:\n";
   for (unsigned i = 0; i < landmarks2.size(); i++)
     vcl_cout << '\t' << i << ": " << landmarks2[i] << '\n';
-  
+
   // print out the line
   vcl_cout << "Line:\n\t";
   for (unsigned i = 0; i < lines.size(); i++) {
@@ -65,7 +65,7 @@ static void test_candidate_region_parser()
   TEST("parse point with name \"Landmarks1\"", landmarks1.size(), 4);
   TEST("parse point with name \"Landmarks0\"", landmarks2.size(), 3);
   TEST("parse point with name \"None\"",  landmarks_none.size(), 0);
-  
+
   bool success = (lines.size() == 1) && (lines[0].size() == 6);
   TEST("parse line with name \"Region\"", success, true);
   TEST("parse polygon with name \"Region\"", poly_outer_region.num_sheets(), 2);

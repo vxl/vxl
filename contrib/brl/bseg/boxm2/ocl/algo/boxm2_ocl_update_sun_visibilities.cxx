@@ -41,7 +41,7 @@ void boxm2_ocl_update_sun_visibilities::compile_kernel(bocl_device_sptr device,v
 
 bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
                                                 bocl_device_sptr         device,
-                                                boxm2_opencl_cache_sptr  opencl_cache, 
+                                                boxm2_opencl_cache_sptr  opencl_cache,
                                                 boxm2_cache_sptr         cache,
                                                 vpgl_camera_double_sptr  sun_cam,
                                                 unsigned ni,

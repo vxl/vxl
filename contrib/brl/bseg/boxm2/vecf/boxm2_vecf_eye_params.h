@@ -27,8 +27,8 @@ boxm2_vecf_eye_params(double eye_radius, double iris_radius, double pupil_radius
     pupil_intensity_(pupil_intensity){
     app_.fill(static_cast<unsigned char>(0));
     app_[1]=static_cast<unsigned char>(32); app_[2] = static_cast<unsigned char>(255);
-  }  
-  
+  }
+
   double eye_radius_;
   double iris_radius_;
   double pupil_radius_;

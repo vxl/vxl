@@ -19,7 +19,7 @@
 #define GAMMA 14.0
 
 //: Function to find edges using a compass operator
-vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image, 
+vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
                               int n_wedges,double sigma,
                               double threshold,vil_image_view<float>& hist_grad);
 
@@ -49,11 +49,11 @@ double bil_bhat_dist(const bil_bin hist1[], const bil_bin hist2[]);
 
 
 //:
-// This code implements the basic Binary Splitting algorithm described in 
+// This code implements the basic Binary Splitting algorithm described in
 // the 1991 IEEE Trans. on Sig. Proc. article "Color Quantization of Images"
 // by Michael Orchard and Charles Bouman, pp. 2677-90.
 //
-// The input is a 1-D array of data points.  The #define'd constant CDIM 
+// The input is a 1-D array of data points.  The #define'd constant CDIM
 // holds the number of dimensions.  The output is a set of cluster centers
 // and is also a 1-D array.  The number of clusters is also returned.
 void bs(float *, int, int, int *, float **, int *);
@@ -69,7 +69,7 @@ class bil_signature
   bil_signature()
   {
     for (int i=0; i<NBINS; i++){
-      bins[i].value=0; 
+      bins[i].value=0;
       bins[i].weight=0;
       bins[i].wsum=0;
     }
@@ -78,21 +78,21 @@ class bil_signature
   ~bil_signature() {}
 
   //: The EMD dist is the default distance between two signatures
-  double operator-(const bil_signature& sig) const 
-  { 
-    //return bil_chi_sq_dist(bins, sig.bins); 
-    return bil_gray_EMD(bins, sig.bins); 
+  double operator-(const bil_signature& sig) const
+  {
+    //return bil_chi_sq_dist(bins, sig.bins);
+    return bil_gray_EMD(bins, sig.bins);
   }
 
   //: This operator sums two signatures
-  void operator +=(bil_signature const& sig) 
-  { 
+  void operator +=(bil_signature const& sig)
+  {
     for (int i=0; i<NBINS; i++){
       bins[i].weight += sig.bins[i].weight;
       bins[i].weight /= 2.0;
       bins[i].wsum += sig.bins[i].wsum;
       //renormalize
-      bins[i].value = sig.bins[i].wsum/bins[i].weight; 
+      bins[i].value = sig.bins[i].wsum/bins[i].weight;
     }
   }
 };

@@ -4,23 +4,23 @@
  * Copyright (c) 1997 Greg Ward Larson
  * Copyright (c) 1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler, Greg Larson and Silicon Graphics may not be used in any
  * advertising or publicity relating to the software without the specific,
  * prior written permission of Sam Leffler, Greg Larson and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER, GREG LARSON OR SILICON GRAPHICS BE LIABLE
  * FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -36,7 +36,7 @@
  * LogLuv image support uses the TIFF library to store 16 or 10-bit
  * log luminance values with 8 bits each of u and v or a 14-bit index.
  *
- * The codec can take as input and produce as output 32-bit IEEE float values 
+ * The codec can take as input and produce as output 32-bit IEEE float values
  * as well as 16-bit integer values.  A 16-bit luminance is interpreted
  * as a sign bit followed by a 15-bit integer that is converted
  * to and from a linear magnitude using the transformation:
@@ -965,7 +965,7 @@ LogLuv24fromXYZ(float XYZ[3], int em)
 static void
 Luv24toXYZ(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   float* xyz = (float*) op;
 
   while (n-- > 0) {
@@ -978,7 +978,7 @@ Luv24toXYZ(LogLuvState* sp, uint8* op, tmsize_t n)
 static void
 Luv24toLuv48(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   int16* luv3 = (int16*) op;
 
   while (n-- > 0) {
@@ -998,7 +998,7 @@ Luv24toLuv48(LogLuvState* sp, uint8* op, tmsize_t n)
 static void
 Luv24toRGB(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   uint8* rgb = (uint8*) op;
 
   while (n-- > 0) {
@@ -1013,7 +1013,7 @@ Luv24toRGB(LogLuvState* sp, uint8* op, tmsize_t n)
 static void
 Luv24fromXYZ(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   float* xyz = (float*) op;
 
   while (n-- > 0) {
@@ -1025,7 +1025,7 @@ Luv24fromXYZ(LogLuvState* sp, uint8* op, tmsize_t n)
 static void
 Luv24fromLuv48(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   int16* luv3 = (int16*) op;
 
   while (n-- > 0) {
@@ -1106,7 +1106,7 @@ LogLuv32fromXYZ(float XYZ[3], int em)
 static void
 Luv32toXYZ(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   float* xyz = (float*) op;
 
   while (n-- > 0) {
@@ -1118,7 +1118,7 @@ Luv32toXYZ(LogLuvState* sp, uint8* op, tmsize_t n)
 static void
 Luv32toLuv48(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   int16* luv3 = (int16*) op;
 
   while (n-- > 0) {
@@ -1136,7 +1136,7 @@ Luv32toLuv48(LogLuvState* sp, uint8* op, tmsize_t n)
 static void
 Luv32toRGB(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   uint8* rgb = (uint8*) op;
 
   while (n-- > 0) {
@@ -1151,7 +1151,7 @@ Luv32toRGB(LogLuvState* sp, uint8* op, tmsize_t n)
 static void
 Luv32fromXYZ(LogLuvState* sp, uint8* op, tmsize_t n)
 {
-  uint32* luv = (uint32*) sp->tbuf;  
+  uint32* luv = (uint32*) sp->tbuf;
   float* xyz = (float*) op;
 
   while (n-- > 0) {
@@ -1382,10 +1382,10 @@ LogLuvSetupDecode(TIFF* tif)
       tif->tif_decoderow = LogLuvDecode24;
       switch (sp->user_datafmt) {
       case SGILOGDATAFMT_FLOAT:
-        sp->tfunc = Luv24toXYZ;  
+        sp->tfunc = Luv24toXYZ;
         break;
       case SGILOGDATAFMT_16BIT:
-        sp->tfunc = Luv24toLuv48;  
+        sp->tfunc = Luv24toLuv48;
         break;
       case SGILOGDATAFMT_8BIT:
         sp->tfunc = Luv24toRGB;
@@ -1446,7 +1446,7 @@ LogLuvSetupEncode(TIFF* tif)
         sp->tfunc = Luv24fromXYZ;
         break;
       case SGILOGDATAFMT_16BIT:
-        sp->tfunc = Luv24fromLuv48;  
+        sp->tfunc = Luv24fromLuv48;
         break;
       case SGILOGDATAFMT_RAW:
         break;
@@ -1454,13 +1454,13 @@ LogLuvSetupEncode(TIFF* tif)
         goto notsupported;
       }
     } else {
-      tif->tif_encoderow = LogLuvEncode32;  
+      tif->tif_encoderow = LogLuvEncode32;
       switch (sp->user_datafmt) {
       case SGILOGDATAFMT_FLOAT:
-        sp->tfunc = Luv32fromXYZ;  
+        sp->tfunc = Luv32fromXYZ;
         break;
       case SGILOGDATAFMT_16BIT:
-        sp->tfunc = Luv32fromLuv48;  
+        sp->tfunc = Luv32fromLuv48;
         break;
       case SGILOGDATAFMT_RAW:
         break;
@@ -1472,7 +1472,7 @@ LogLuvSetupEncode(TIFF* tif)
   case PHOTOMETRIC_LOGL:
     if (!LogL16InitState(tif))
       break;
-    tif->tif_encoderow = LogL16Encode;  
+    tif->tif_encoderow = LogL16Encode;
     switch (sp->user_datafmt) {
     case SGILOGDATAFMT_FLOAT:
       sp->tfunc = L16fromY;
@@ -1647,12 +1647,12 @@ TIFFInitSGILog(TIFF* tif, int scheme)
    * NB: tif_decoderow & tif_encoderow are filled
    *     in at setup time.
    */
-  tif->tif_fixuptags = LogLuvFixupTags;  
+  tif->tif_fixuptags = LogLuvFixupTags;
   tif->tif_setupdecode = LogLuvSetupDecode;
   tif->tif_decodestrip = LogLuvDecodeStrip;
   tif->tif_decodetile = LogLuvDecodeTile;
   tif->tif_setupencode = LogLuvSetupEncode;
-  tif->tif_encodestrip = LogLuvEncodeStrip;  
+  tif->tif_encodestrip = LogLuvEncodeStrip;
   tif->tif_encodetile = LogLuvEncodeTile;
   tif->tif_close = LogLuvClose;
   tif->tif_cleanup = LogLuvCleanup;

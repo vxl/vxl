@@ -67,7 +67,7 @@ void bwm_reg_image::compute_region_of_interest(float sigma)
 {
     // project world point into the image as the center of the region of interest
   vgl_point_2d<double> center_point =  camera_.project(world_point_);
-  
+
   // convert to local coordinates since projection error is in meters
   double lx, ly, lz;
   lvcs_.global_to_local(world_point_.x(),world_point_.y(),
@@ -76,12 +76,12 @@ void bwm_reg_image::compute_region_of_interest(float sigma)
                         vpgl_lvcs::DEG,vpgl_lvcs::METERS);
 
   lx+=radius_; //deviation is roughly isotropic so x is as good as any
-  
+
   // convert back to geographic coordinates
   double lon, lat, elev;
   lvcs_.local_to_global(lx, ly, lz,vpgl_lvcs::wgs84, lon, lat ,elev,
                         vpgl_lvcs::DEG,vpgl_lvcs::METERS);
-  
+
   vgl_point_3d<double> radius_point_3d(lon, lat, elev);
 
   // get the deviated point in image space
@@ -91,15 +91,15 @@ void bwm_reg_image::compute_region_of_interest(float sigma)
   // the error in image coordinates
   double error_radius =
     vgl_distance<double>(radius_image_point, center_point);
-  
+
   // convert to an image roi
   unsigned ni = image_->ni(), nj = image_->nj();
   roi_ = brip_roi(ni, nj);
   double sigma_3 = 3.0*sigma;//account for smoothing kernel
   double xmin = center_point.x() -  error_radius - sigma_3;
-  double ymin = center_point.y() -  error_radius - sigma_3; 
-  double xmax = center_point.x() +  error_radius + sigma_3; 
-  double ymax = center_point.y() +  error_radius + sigma_3; 
+  double ymin = center_point.y() -  error_radius - sigma_3;
+  double xmax = center_point.x() +  error_radius + sigma_3;
+  double ymax = center_point.y() +  error_radius + sigma_3;
   // clip if outside image bounds
   if(xmin<0) xmin = 0;
   if(ymin<0) ymin = 0;
@@ -181,4 +181,4 @@ if(!edges_back_projected_)
  edges = edges_3d_;
  return true;
 }
-  
+

@@ -53,7 +53,7 @@ bool bvpl_compute_taylor_coefficients_process(bprb_func_process& pro)
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
   int dim = pro.get_input<int>(i++);
-  
+
   if (!vul_file::is_directory(taylor_dir))
     return false;
 
@@ -75,6 +75,6 @@ bool bvpl_compute_taylor_coefficients_process(bprb_func_process& pro)
     default:
       break;
   }
-  
+
   return true;
 }

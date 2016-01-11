@@ -40,9 +40,9 @@ class volm_spherical_region_query
   void construct_spherical_regions();
   volm_spherical_region set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
                                                   depth_map_region_sptr const& dm_region);
-  volm_spherical_region set_ground_from_depth_map_region(vpgl_perspective_camera<double> const& cam, 
+  volm_spherical_region set_ground_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
                                                        depth_map_region_sptr const& dm_region);
-  volm_spherical_region set_sky_from_depth_map_region(vpgl_perspective_camera<double> const& cam, 
+  volm_spherical_region set_sky_from_depth_map_region(vpgl_perspective_camera<double> const& cam,
                                                        depth_map_region_sptr const& dm_region);
   depth_map_scene_sptr dm_scene_;
   volm_camera_space_sptr cam_space_;
@@ -50,7 +50,7 @@ class volm_spherical_region_query
 
   //     roll index  regions on sphere
   vcl_map< unsigned, volm_spherical_regions_layer > sph_regions_;
- 
+
   double canonical_top_fov_ ;
   double canonical_head_    ;
   double canonical_tilt_    ;

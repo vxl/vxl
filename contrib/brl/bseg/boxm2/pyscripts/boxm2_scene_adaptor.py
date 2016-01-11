@@ -107,7 +107,7 @@ class boxm2_scene_adaptor(object):
         print "ERROR: Cache type not recognized: ", self.opencl_cache.type;
         return False;
 
- 
+
   def init_alpha(self, pinit=0.01, thresh = 1.0):
     cache = self.opencl_cache
     dev = self.device
@@ -406,7 +406,7 @@ class boxm2_scene_adaptor(object):
     elif device_string=="cpp" :
       median_filter(self.scene, self.cpu_cache, None);
 
-  # given the scene, chip the NITF and setup the camera 
+  # given the scene, chip the NITF and setup the camera
   def roi_init(self, NITF_path, camera, convert_to_8bit, params_fname, margin=0, clip_width=-1, clip_height=-1):
     return roi_init(NITF_path, camera, self.scene, convert_to_8bit, params_fname, margin, clip_width, clip_height)
 

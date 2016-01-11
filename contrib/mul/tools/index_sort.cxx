@@ -63,7 +63,7 @@ int main2(int argc, char*argv[])
   }
   ifs.close();
   MBL_LOG(INFO, logger(), "Loaded " << data.size() << " values.");
-  
+
   // Perform the index sort - default is ascending order
   vcl_vector<unsigned> indices;
   mbl_index_sort(data, indices);

@@ -166,7 +166,7 @@ vcl_istream& vgl_polygon<T>::read(vcl_istream& is){
       vgl_point_2d<T> pt(x, y);
       sheets_[sh].push_back(pt);
     }
-  }    
+  }
   return is;
 }
 

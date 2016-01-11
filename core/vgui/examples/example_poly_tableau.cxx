@@ -9,7 +9,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-int main(int argc,char **argv) 
+int main(int argc,char **argv)
 {
   vgui::init(argc,argv);
 

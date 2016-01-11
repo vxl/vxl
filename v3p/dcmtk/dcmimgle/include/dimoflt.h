@@ -20,7 +20,7 @@
  *  Author:  Joerg Riesmeier
  *
  *  Purpose: DicomMonochromeFlipTemplate (Header)
- * 
+ *
  */
 
 

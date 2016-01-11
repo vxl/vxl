@@ -4,7 +4,7 @@
 #define volm_desc_ex_h_
 //:
 // \file
-// \brief  A class to represent a location with a descriptor as an existence histogram of surfaces 
+// \brief  A class to represent a location with a descriptor as an existence histogram of surfaces
 //         with various land types and/or orientations etc at certain distance
 //
 // \author Yi Dong
@@ -60,7 +60,7 @@ public:
                unsigned const& norients = 3,
                unsigned const& nlands = volm_osm_category_io::volm_land_table.size(),
                unsigned char const& initial_mag = 0);
-  
+
   //: constructor from created index
   volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
                vcl_vector<unsigned char> const& index_combined,
@@ -71,7 +71,7 @@ public:
                unsigned char const& initial_mag = 0);
 
   //: simple constructor that only sets the number of bins
-  volm_desc_ex(unsigned ndists, unsigned norients, unsigned nlands, vcl_vector<double>& radius) : 
+  volm_desc_ex(unsigned ndists, unsigned norients, unsigned nlands, vcl_vector<double>& radius) :
     ndists_(ndists), norients_(norients), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); }
 
   //: destructor
@@ -144,7 +144,7 @@ private:
   unsigned norients_;
   unsigned nlands_;
   vcl_vector<double> radius_;
-  
+
 };
 
 #endif  // volm_desc_ex_h_

@@ -19,7 +19,7 @@ class boxm2_ocl_update_sun_visibilities
   public:
     static bool update( boxm2_scene_sptr         scene,
                         bocl_device_sptr         device,
-                        boxm2_opencl_cache_sptr  opencl_cache, 
+                        boxm2_opencl_cache_sptr  opencl_cache,
                         boxm2_cache_sptr cache,
                         vpgl_camera_double_sptr  sun_cam,
                         unsigned ni,

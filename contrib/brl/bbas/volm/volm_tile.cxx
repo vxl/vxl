@@ -44,7 +44,7 @@ volm_tile::volm_tile(vcl_string file_name, unsigned ni, unsigned nj) : ni_(ni), 
 {
   vcl_string name = vul_file::strip_directory(file_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
-  
+
   vcl_string n_coords = name.substr(0, name.find_first_of('_'));
   vcl_string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
 
@@ -554,7 +554,7 @@ bool volm_tile::global_to_img(double lon, double lat, unsigned& i, unsigned& j)
   cam_.global_to_img(lon, lat, dummy_elev, u, v);
   if (u < 0 || v < 0 || u >= this->ni_ || v >= this->nj_)
     return false;
-  i = (unsigned)vcl_floor( (int)(u*100+0.5)/100+0.5);  // truncation up to 0.01 floating precion 
+  i = (unsigned)vcl_floor( (int)(u*100+0.5)/100+0.5);  // truncation up to 0.01 floating precion
   j = (unsigned)vcl_floor( (int)(v*100+0.5)/100+0.5);  // this may be ceil cause image direction is in reverse in latitude
   if (j == this->nj_) j--;         // v may be larger than nj+0.5 due to the floating point precision
   return true;

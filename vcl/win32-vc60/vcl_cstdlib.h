@@ -25,7 +25,7 @@ inline int vcl_abs(int x) { return x >= 0 ? x : -x; }
 inline long vcl_abs(long x) { return x >= 0 ? x : -x; }
 inline long vcl_labs(long x) { return x >= 0 ? x : -x; }
 inline div_t vcl_div(int x, int y) { return ::div(x,y); }
-inline ldiv_t vcl_div(long x, long y) { return ::ldiv(x,y); }  
+inline ldiv_t vcl_div(long x, long y) { return ::ldiv(x,y); }
 inline ldiv_t vcl_ldiv(long x, long y) { return ::ldiv(x,y); }
 
 #endif // vcl_win32_vc60_cstdlib_h_

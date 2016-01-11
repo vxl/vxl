@@ -77,7 +77,7 @@ bool vpgl_rational_cam_img_to_global_process(bprb_func_process& pro)
   }
 
   vcl_cout << " rational camera type: " << rat_cam->type_name() << vcl_endl;
-  
+
   // use camera offset if initial gauss is not given
   if (init_lon < 0.0) {
     // generate the initial from camera offset
@@ -108,7 +108,7 @@ bool vpgl_rational_cam_img_to_global_process(bprb_func_process& pro)
   pro.set_output_val<double>(i++, lon);
   pro.set_output_val<double>(i++, lat);
   pro.set_output_val<double>(i++, elev);
-  
+
   return true;
 }
 
@@ -139,10 +139,10 @@ bool vpgl_rational_cam_nadirness_process(bprb_func_process& pro)
   // get the inputs
   unsigned i = 0;
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++);  // rational camera
-  double lat  = pro.get_input<double>(i++);                                
-  double lon  = pro.get_input<double>(i++);                                
+  double lat  = pro.get_input<double>(i++);
+  double lon  = pro.get_input<double>(i++);
   double elev = pro.get_input<double>(i++);
-  
+
   // get rational camera
   vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
   if (!rat_cam) {
@@ -154,7 +154,7 @@ bool vpgl_rational_cam_nadirness_process(bprb_func_process& pro)
   double u1, v1, u2, v2;
   rat_cam->project(lon, lat, elev, u1, v1);
   rat_cam->project(lon, lat, elev+10, u2, v2);
-  double dist = vcl_sqrt((u1-u2)*(u1-u2) + (v1-v2)*(v1-v2));  
+  double dist = vcl_sqrt((u1-u2)*(u1-u2) + (v1-v2)*(v1-v2));
   pro.set_output_val<double>(0, dist);
   return true;
 }

@@ -123,7 +123,7 @@ IF(APPLE)
     IF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
       MESSAGE(FATAL_ERROR "Neither the __isnand nor the __inline_isnand "
         "functions are available !")
-    ENDIF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})  
+    ENDIF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
   ENDIF(NOT ${VXL_APPLE_HAS_ISNAND})
 ENDIF(APPLE)
 

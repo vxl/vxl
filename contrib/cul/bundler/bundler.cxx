@@ -75,7 +75,7 @@ bool bundler_write_bundle_file(
     // Write the header
     int num_cameras = cameras.size();
     int num_points = points.size();
-    
+
     bundle_file << "# Bundle file v0.3\n"
                 << num_cameras << " " << num_points << "\n";
 
@@ -283,7 +283,7 @@ bool bundler_sfm::run_sfm_stage(
                 cameras_init.push_back((*cam)->camera);
             }
         }
-        
+
         vcl_vector<vgl_point_3d<double> > points_init;
 
         vcl_vector<bundler_inters_track_sptr>::const_iterator pt;

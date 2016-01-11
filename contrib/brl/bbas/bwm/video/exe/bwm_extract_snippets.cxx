@@ -80,7 +80,7 @@ static bool extract_snippets(vcl_string const& spatial_object_path,
     }
 
   }
-  else if(mode == "random") 
+  else if(mode == "random")
   {
     vnl_random rand;
     for(unsigned i=0; i<num_objects; i++)
@@ -173,7 +173,7 @@ int main(int argc, char** argv)
   //                                  are loaded from file
   //3. -snippet_output_dir: Output filepath
   //4. -number_sos(Optional): Number of spatial objects. Must be specified in
-  //                          random mode   
+  //                          random mode
 
   vul_arg<vcl_string> spatial_object_mode(arglist, "-spatial_object_mode",
     "spatial object mode", "");

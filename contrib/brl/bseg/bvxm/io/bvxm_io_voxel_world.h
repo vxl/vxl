@@ -20,7 +20,7 @@ void vsl_print_summary(vcl_ostream &os, const bvxm_voxel_world &world);
 void vsl_b_read(vsl_b_istream& is, bvxm_voxel_world* p);
 
 void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_world* &p);
- 
+
 void vsl_print_summary(vcl_ostream& os, const bvxm_voxel_world* &p);
 
 #endif

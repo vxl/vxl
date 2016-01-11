@@ -36,7 +36,7 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
         }
       }
       // iterate over the trees in each block
-      const boxm2_array_3d<vnl_vector_fixed<unsigned char, 16> > &trees = blk->trees();        
+      const boxm2_array_3d<vnl_vector_fixed<unsigned char, 16> > &trees = blk->trees();
       vgl_point_3d<double> orig = blk->local_origin();
       vgl_vector_3d<double> dims = blk->sub_block_dim();
       vgl_vector_3d<unsigned int> nums = blk->sub_block_num();
@@ -57,7 +57,7 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
               int data_offset = bit_tree.get_data_index(currBitIndex); //data index
               vgl_point_3d<double> cell_pos = bit_tree.cell_center(currBitIndex);
               vgl_vector_3d<double> cell_offset(cell_pos.x()*dims.x(), cell_pos.y()*dims.y(), cell_pos.z()*dims.z());
-              vgl_point_3d<double> pos = subblock_origin + cell_offset; 
+              vgl_point_3d<double> pos = subblock_origin + cell_offset;
               double side_len = bit_tree.cell_len(currBitIndex);
               // distance tolerance decreases with cell length
               double tol = distance_thresh*side_len*dims.x();

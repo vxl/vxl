@@ -4,9 +4,9 @@
 //:
 // \file
 // \brief  mask of 3D image
-//         Disregarding the shape, each mask also provides 
-//         a bounding box.  
-// 
+//         Disregarding the shape, each mask also provides
+//         a bounding box.
+//
 // \author Charlene Tsai
 // \date   Oct 2003
 // \verbatim

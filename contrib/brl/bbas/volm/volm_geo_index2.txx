@@ -39,7 +39,7 @@ void construct_sub_tree(volm_geo_index2_node_sptr parent, double const& min_size
   construct_sub_tree<Type>(c3, min_size);
   // lower right child
   p1 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2.0, parent->extent_.min_point().y());
-  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2.0); 
+  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2.0);
   vgl_box_2d<double> bbox4(p1, p2);
   volm_geo_index2_node_sptr c4 = new volm_geo_index2_node<Type>(bbox4, parent);
   construct_sub_tree<Type>(c4, min_size);
@@ -87,7 +87,7 @@ void construct_sub_tree_poly(volm_geo_index2_node_sptr parent, double const& min
   }
   // lower right child
   p1 = vgl_point_2d<double>(parent->extent_.min_point().x()+w/2, parent->extent_.min_point().y());
-  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2); 
+  p2 = vgl_point_2d<double>(parent->extent_.max_point().x(), parent->extent_.min_point().y()+h/2);
   vgl_box_2d<double> bbox4(p1, p2);
   if (vgl_intersection(bbox4, poly)) {
     volm_geo_index2_node_sptr c4 = new volm_geo_index2_node<Type>(bbox4, parent);

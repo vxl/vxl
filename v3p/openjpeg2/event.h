@@ -37,14 +37,14 @@ The functions in EVENT.C have for goal to send output messages (errors, warnings
 */
 /**
 Message handler object
-used for 
+used for
 <ul>
 <li>Error messages
 <li>Warning messages
 <li>Debugging messages
 </ul>
 */
-typedef struct opj_event_mgr 
+typedef struct opj_event_mgr
 {
 	/** Data to call the event manager upon */
 	void *			m_error_data;
@@ -71,7 +71,7 @@ typedef struct opj_event_mgr
 /*@{*/
 /* ----------------------------------------------------------------------- */
 /**
- * Writes formatted data to a string and send the string to a user callback. 
+ * Writes formatted data to a string and send the string to a user callback.
  * @param p_event_mgr the event manager to display messages.
  * @param event_type Event type of the message
  * @param fmt Format-control string (plus optionnal arguments)

@@ -53,7 +53,7 @@ bool boxm2_cpp_create_mog_image_process_cons(bprb_func_process& pro)
 
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   output_types_[0] = "bbgm_image_sptr";
-  
+
   bool good = pro.set_input_types(input_types_) &&
     pro.set_output_types(output_types_);
   // in case the 6th input is not set
@@ -166,7 +166,7 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
         (mog_functor,scene_info_wrapper->info,blk,cam,ni,nj);
     }
   }
-  
+
   typedef bsta_gauss_sf1 bsta_gauss1_t;
   typedef bsta_num_obs<bsta_gauss1_t> gauss_type1;
   typedef bsta_mixture<gauss_type1> mix_gauss_type1;
@@ -211,7 +211,7 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
 
   brdb_value_sptr output = new brdb_value_t<bbgm_image_sptr>(output_model);
   pro.set_output(0, output);
-  
+
   delete mog3_img;
   delete mog_img;
   return true;

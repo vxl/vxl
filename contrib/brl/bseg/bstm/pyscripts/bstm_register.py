@@ -1,9 +1,9 @@
 ############################################################################
 # Register Script to ensure bstm_batch processes are only registered once
 #
-# to use our boxm2 python binding, be sure to add: 
-#   <vxl_build_root>/lib/:<vxl_src_root>/contrib/brl/bseg/bstm/pyscripts/ 
-# to your PYTHONPATH environment variable.  
+# to use our boxm2 python binding, be sure to add:
+#   <vxl_build_root>/lib/:<vxl_src_root>/contrib/brl/bseg/bstm/pyscripts/
+# to your PYTHONPATH environment variable.
 #############################################################################
 import bstm_batch;
 bstm_batch.not_verbose();

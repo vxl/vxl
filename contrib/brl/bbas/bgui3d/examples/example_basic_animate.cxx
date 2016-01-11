@@ -21,7 +21,7 @@
 //
 // The following is loosly based on
 // "Hello, Cone" Using Engines (Example 2-2)
-// provided in "The Inventor Mentor" 
+// provided in "The Inventor Mentor"
 
 // Construct a simple scene
 void buildScene(SoGroup *root)
@@ -48,7 +48,7 @@ void buildScene(SoGroup *root)
   root->addChild(new SoCone);
 
   SbViewportRegion vpr(400,400);
-  myCamera->viewAll(root, vpr); 
+  myCamera->viewAll(root, vpr);
 }
 
 
@@ -81,5 +81,5 @@ int main(int argc, char** argv)
   tab3d->enable_idle();
 
   // Run the program
-  return vgui::run(); 
+  return vgui::run();
 }

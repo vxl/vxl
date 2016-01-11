@@ -9,7 +9,7 @@ DECLARE( test_beta_updater );
 DECLARE( test_rand_sampling );
 DECLARE( test_display_vrml );
 
-void 
+void
 register_tests()
 {
   REGISTER( test_fit_weibull );

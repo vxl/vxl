@@ -123,7 +123,7 @@ vgl_pointset_3d<T> vgl_h_matrix_3d<T>::operator()(vgl_pointset_3d<T> const& ptse
     ret.set_points(pts);
   return ret;
 }
-               
+
 
 template <class T>
 vgl_homg_plane_3d<T>
@@ -216,7 +216,7 @@ void vgl_h_matrix_3d<T>::get (vnl_matrix_fixed<T,4,4>* H) const
 template <class T>
 void vgl_h_matrix_3d<T>::get (vnl_matrix<T>* H) const
 {
-  VXL_DEPRECATED("vgl_h_matrix_3d<T>::get(vnl_matrix<T>*) const"); 
+  VXL_DEPRECATED("vgl_h_matrix_3d<T>::get(vnl_matrix<T>*) const");
   *H = t12_matrix_.as_ref(); // size 4x4
 }
 

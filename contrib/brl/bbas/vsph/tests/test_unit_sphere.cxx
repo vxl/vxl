@@ -14,7 +14,7 @@ static void test_unit_sphere()
   double point_angle = 30.0;//coarse for fast test
   double min_theta = 70.0;
   double max_theta = 120.0;
-  vsph_unit_sphere_sptr usph = 
+  vsph_unit_sphere_sptr usph =
     new vsph_unit_sphere(point_angle, min_theta, max_theta);
   unsigned n = usph->size();
   TEST("Number of vertices", n , 112);

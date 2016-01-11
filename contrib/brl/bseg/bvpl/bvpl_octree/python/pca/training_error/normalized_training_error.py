@@ -1,4 +1,4 @@
-# Computes normalized pca training error 
+# Computes normalized pca training error
 
 import bvpl_octree_batch;
 import os;
@@ -33,13 +33,13 @@ if __name__=="__main__":
   pca_dir = pca_dir + "/" +str(int(train_fraction*100));
   if not os.path.isdir( pca_dir + "/"):
      os.makedirs( pca_dir + "/");
-  
+
   start_time = time.time();
-  
+
   bvpl_octree_batch.init_process("bvplNormalizePCATrainingErrorProcess");
   bvpl_octree_batch.set_input_string(0,  pca_dir);
   bvpl_octree_batch.run_process();
-    
+
   print ("Runing time for bvplNormalizePCATrainingErrorProcess:")
   print(time.time() - start_time);
 

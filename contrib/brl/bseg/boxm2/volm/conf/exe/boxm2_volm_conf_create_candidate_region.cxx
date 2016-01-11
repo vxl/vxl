@@ -238,7 +238,7 @@ int main(int argc, char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     // generate a camera viewing volume, that is, heading direction +/- 15 degree
-    
+
     // put current candidate region into kml
     volm_candidate_list::write_kml_regions(ofs_kml, pin_pt_poly[i][0], pin_pt_center[i], heading_line, cam_viewing, pin_pt_landmarks[i], pin_pt_landmark_types[i], likelihood[i], rank++);
   }
@@ -448,7 +448,7 @@ int main(int argc, char** argv)
       return volm_io::EXE_ARGUMENT_ERROR;
     }
     // generate a camera viewing volume, that is, heading direction +/- 15 degree
-    
+
     // put current candidate region into kml
     volm_candidate_list::write_kml_regions(ofs_kml, pin_pt_poly[i][0], pin_pt_center[i], heading_line, cam_viewing, pin_pt_landmarks[i], pin_pt_landmark_types[i], likelihood[i], rank++);
   }

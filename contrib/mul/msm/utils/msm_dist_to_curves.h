@@ -21,7 +21,7 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
   if (pu<=0) return dp.sqr_length();  // pt is closest to pt0
   double Lu2=u.sqr_length();
   if (pu>=Lu2) return (pt-pt1).sqr_length(); // pt is closest to pt1
-  
+
   // pt is closest to some point between pt0 and pt1
   // Use pythagorus  :   dp^2 = d^2 + sqr(pu/u.length)
   return vcl_max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
@@ -36,10 +36,10 @@ inline double msm_dist_to_curve(const msm_points& all_points,
                          const vgl_point_2d<double>& pt)
 {
   if (curve.size()==0) return 0;
-  
+
   // If only one point, then find distance to it from pt
   if (curve.size()==1) return (all_points[curve[0]]-pt).length();
-  
+
   // Compute distance between each line segment and the point
   double min_d2=msm_sqr_dist_to_line_segment(all_points[curve[0]],all_points[curve[1]],pt);
   unsigned n=curve.size();
@@ -48,13 +48,13 @@ inline double msm_dist_to_curve(const msm_points& all_points,
     double d2 = msm_sqr_dist_to_line_segment(all_points[curve[i-1]],all_points[curve[i]],pt);
     if (d2<min_d2) min_d2=d2;
   }
-  
+
   if (!curve.open())
   {  // Curve is closed, so check segment joining point [n-1] to point [0]
     double d2 = msm_sqr_dist_to_line_segment(all_points[curve[n-1]],all_points[curve[0]],pt);
     if (d2<min_d2) min_d2=d2;
   }
-  
+
   return vcl_sqrt(min_d2);
 }
 
@@ -83,12 +83,12 @@ inline double msm_mean_dist_to_curves(const msm_points& ref_points,
   double sum=0.0;
   for (unsigned i=0;i<points.size();++i)
     sum += msm_dist_to_curves(ref_points,curves,points[i]);
-  
+
   return sum/points.size();
 }
 
 //: Find the mean of closest distance between each point in points and matching ref. curve
-//  Assumes points.size()==ref_points.size().  
+//  Assumes points.size()==ref_points.size().
 //  Goes through each point listed in curves and finds the closest distance to equivalent
 //  curve through ref_points.
 inline double msm_mean_dist_to_matching_curves(const msm_points& ref_points,
@@ -99,10 +99,10 @@ inline double msm_mean_dist_to_matching_curves(const msm_points& ref_points,
   if (points.size()==0) return 0.0;
   assert(ref_points.size()==points.size());
   assert(curves.max_index()<ref_points.size());
-  
+
   double sum=0.0;
   unsigned n_pts=0;
-  
+
   for (unsigned c=0;c<curves.size();++c)
   {
     // Compare each point on curve c through points, with curve c through ref_points

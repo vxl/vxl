@@ -3,7 +3,7 @@
 //:
 // \file
 //     process to generate a normalized height image for given input land cover image from series of height image tiles
-//     The input land cover image will have various land categories along with associated IDs and the specified ID is used 
+//     The input land cover image will have various land categories along with associated IDs and the specified ID is used
 //     to define the ground height.  The output height map shall have same resolution as input height map tiles
 //     Note that all input height image tiles are geotiff under WGS84 and the output image shall have same GSD as input height image tiles
 //
@@ -38,15 +38,15 @@ namespace volm_ndsm_generation_process_globals
   bool obtain_ground_pixels(vil_image_view<vxl_byte>* land_img,
                             vpgl_geo_camera* land_cam,
                             vil_image_view<float>* out_dsm,
-                            vpgl_geo_camera* h_cam, 
-                            unsigned const& start_ni, unsigned const& start_nj, 
+                            vpgl_geo_camera* h_cam,
+                            unsigned const& start_ni, unsigned const& start_nj,
                             unsigned const& end_ni,   unsigned const& end_nj,
                             vcl_vector<unsigned>& ground_ids,
-                            vcl_vector<float>& ground_heights, 
+                            vcl_vector<float>& ground_heights,
                             vil_image_view<vxl_byte>& ground_mask);
 
   // function to find ground height value from neighbor sub-pixels
-  float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window_min_height_map, 
+  float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window_min_height_map,
                         unsigned const& w_idx_i, unsigned const& w_idx_j, unsigned const& search_range);
 
   // function to find ground height value from neighbor sub-pixels
@@ -71,7 +71,7 @@ bool volm_ndsm_generation_process_cons(bprb_func_process& pro)
   input_types_[4] = "unsigned";                 // window size
   input_types_[5] = "float";                    // maximum height limit
   input_types_[6] = "vcl_string";               // a text file to define the land categories that can be treated as ground pixels
-  input_types_[7] = "vcl_string";               // ASTER DEM image folder, ensure the DEM images are converted to heights above WGS84 reference ellipsoid. 
+  input_types_[7] = "vcl_string";               // ASTER DEM image folder, ensure the DEM images are converted to heights above WGS84 reference ellipsoid.
   // this process takes 2 outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // normalized height image (byte image)
@@ -268,7 +268,7 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
       window_min_height_map.insert(vcl_pair<vcl_pair<unsigned, unsigned>, float>(window_key, ground_heights[0]));
     }
   }
-  
+
   if (window_min_height_map.empty()) {
     vcl_cout << pro.name() << ": can not find any ground pixels from land cover image!\n";
     return false;
@@ -314,7 +314,7 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
     }
   }
 
-  
+
   vil_image_view<float> grd_img1(o_ni, o_nj);
   grd_img1.fill(-1.0);
   for (vcl_map<vcl_pair<unsigned, unsigned>, float>::iterator mit = window_min_height_map.begin(); mit != window_min_height_map.end(); ++mit)
@@ -553,7 +553,7 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
         vcl_cerr << pro.name() << "Finding ground pixel failed for sub-pixel: (" << w_idx_i << ',' << w_idx_j << ")!\n";
         return false;
       }
-      
+
       if (ground_heights.size()) {
         // find the median height value
         vcl_sort(ground_heights.begin(), ground_heights.end());
@@ -687,11 +687,11 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
 bool volm_ndsm_generation_process_globals::obtain_ground_pixels(vil_image_view<vxl_byte>* land_img,
                                                                 vpgl_geo_camera* land_cam,
                                                                 vil_image_view<float>* out_dsm,
-                                                                vpgl_geo_camera* out_cam, 
-                                                                unsigned const& start_ni, unsigned const& start_nj, 
+                                                                vpgl_geo_camera* out_cam,
+                                                                unsigned const& start_ni, unsigned const& start_nj,
                                                                 unsigned const& end_ni,   unsigned const& end_nj,
                                                                 vcl_vector<unsigned>& ground_ids,
-                                                                vcl_vector<float>& ground_heights, 
+                                                                vcl_vector<float>& ground_heights,
                                                                 vil_image_view<vxl_byte>& ground_mask)
 {
   ground_heights.clear();
@@ -728,7 +728,7 @@ bool volm_ndsm_generation_process_globals::obtain_ground_pixels(vil_image_view<v
   return true;
 }
 
-float volm_ndsm_generation_process_globals::neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window_min_height_map, 
+float volm_ndsm_generation_process_globals::neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window_min_height_map,
                                                             unsigned const& w_idx_i, unsigned const& w_idx_j, unsigned const& search_range)
 {
   bool found_neigh_height = false;
@@ -777,7 +777,7 @@ bool volm_ndsm_generation_process_globals::neighbor_ground_height(unsigned const
   unsigned search_range = l_ni;
   if (search_range < l_nj)
     search_range = l_nj;
-  
+
   for (int radius = 1; (radius < (int)search_range && !found_neigh_height); radius++)
   {
     neigh_heights.clear();
@@ -810,7 +810,7 @@ bool volm_ndsm_generation_process_globals::neighbor_ground_height(unsigned const
 
   if (neigh_heights.empty())
     return false;
-  
+
   // return the minimum ground height value
 
   vcl_sort(neigh_heights.begin(), neigh_heights.end());

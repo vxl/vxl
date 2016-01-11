@@ -4,7 +4,7 @@
 #define volm_desc_ex_2d_matcher_h_
 //:
 // \file
-// \brief  A class to match query 2D existence descriptor to 2D existance indices  
+// \brief  A class to match query 2D existence descriptor to 2D existance indices
 //         Note anything further than 1000 m is completely ignored and the query is described by a volm_desc_ex_land_only descriptor
 //
 // \author Yi Dong
@@ -53,12 +53,12 @@ private:
     //: query depth_map_scene
   depth_map_scene_sptr  dms_;
   //volm_desc_sptr      query_;
-  
+
   //: parameters related to volumetric existence descriptor
   vcl_vector<double> radius_;
   unsigned           nlands_;
   unsigned char initial_mag_;
-  
+
   //: weight parameters
   vcl_vector<volm_weight> weights_;
   vcl_vector<float> weights_hist_;

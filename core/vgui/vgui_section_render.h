@@ -35,7 +35,7 @@ bool vgui_section_render(void const *pixels,
                          vbl_array_1d<float>* fGmap=0,
                          vbl_array_1d<float>* fBmap=0,
                          vbl_array_1d<float>* fAmap=0);
-                         
+
 
 bool vgui_view_render(void const *pixels,
                       unsigned w, unsigned h, // Size of image.
@@ -48,7 +48,7 @@ bool vgui_view_render(void const *pixels,
                       vbl_array_1d<float>* fGmap=0,
                       vbl_array_1d<float>* fBmap=0,
                       vbl_array_1d<float>* fAmap=0);
-                         
+
 
 
 #endif // vgui_section_render_h_

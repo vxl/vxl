@@ -59,7 +59,7 @@ void test_process_mains()
   TEST("Rendering Expected Image Initialized",good, true);
   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
   TEST("Rendering Expected Color Image Initialized",good, true);
- 
+
 }
 
 TESTMAIN( test_process_mains );

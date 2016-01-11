@@ -112,7 +112,7 @@ LZMASetupDecode(TIFF* tif)
   LZMAState* sp = DecoderState(tif);
 
   assert(sp != NULL);
-        
+
         /* if we were last encoding, terminate this mode */
   if (sp->state & LSTATE_INIT_ENCODE) {
       lzma_end(&sp->stream);
@@ -222,7 +222,7 @@ LZMADecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
 
         tif->tif_rawcp = (uint8 *)sp->stream.next_in; /* cast away const */
         tif->tif_rawcc = sp->stream.avail_in;
-        
+
   return 1;
 }
 

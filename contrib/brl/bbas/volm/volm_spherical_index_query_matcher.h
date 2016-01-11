@@ -25,7 +25,7 @@
 class volm_spherical_index_query_matcher
 {
 public:
-    volm_spherical_index_query_matcher(volm_spherical_region_index & index, 
+    volm_spherical_index_query_matcher(volm_spherical_region_index & index,
                                        volm_spherical_region_query & query,
                                        volm_camera_space_sptr & cam_space);
 

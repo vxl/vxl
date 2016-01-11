@@ -11,7 +11,7 @@
 // \date   21 Nov 99
 //
 //  Contains class  vgui_gtk_statusbar
-// 
+//
 // \verbatim
 //  Modifications
 //   13-SEP-2002 K.Y.McGaul - Changed to Doxygen style documentation.
@@ -30,7 +30,7 @@ class vgui_gtk_statusbar : public vgui_statusbar
  public:
   //: Constructor, creates a GTK status bar and displays it.
   vgui_gtk_statusbar();
- 
+
   //: Destructor.
  ~vgui_gtk_statusbar();
 

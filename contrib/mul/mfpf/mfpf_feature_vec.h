@@ -19,7 +19,7 @@ struct mfpf_feature
     double fit;
     mfpf_feature() {fit=0.0;}
     mfpf_feature(const mfpf_pose& p,double f):pose(p),fit(f) {}
-    
+
 };
 typedef vcl_vector<mfpf_feature > mfpf_feature_vec ;
 
@@ -48,7 +48,7 @@ inline void vsl_b_read(vsl_b_istream& bfs,
       vcl_cerr << "vsl_b_read(bfs,mfpf_feature): "
                << "Unexpected version number " << version << vcl_endl;
       vcl_abort();
-  }    
+  }
 }
 
 inline void mfpf_pose_set_to_feature_vec(const mfpf_pose_set& pose_set, mfpf_feature_vec& feature_vec)
@@ -67,7 +67,7 @@ inline void mfpf_pose_set_to_feature_vec(const mfpf_pose_set& pose_set, mfpf_fea
 inline void mfpf_feature_vec_to_pose_set(const mfpf_feature_vec& feature_vec, mfpf_pose_set& pose_set )
 {
     pose_set.poses.clear();    pose_set.fits.clear();
-    pose_set.poses.reserve(feature_vec.size()); pose_set.fits.reserve(feature_vec.size()); 
+    pose_set.poses.reserve(feature_vec.size()); pose_set.fits.reserve(feature_vec.size());
     mfpf_feature_vec::const_iterator featureIter=feature_vec.begin();
     mfpf_feature_vec::const_iterator featureIterEnd=feature_vec.end();
 

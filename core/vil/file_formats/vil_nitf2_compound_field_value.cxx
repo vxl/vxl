@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_compound_field_value.h"
@@ -79,8 +79,8 @@ bool vil_nitf2_date_time::read(vcl_istream& input, int field_width, bool& out_bl
   ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, day, blank); out_blank &= blank;
   if (field_width >= 10) {
     ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, hour, blank); out_blank &= blank;
-  } else { 
-    hour = 0; 
+  } else {
+    hour = 0;
   }
   if (field_width >= 12) {
     ok &= vil_nitf2_integer_formatter(2).read_vcl_stream(input, minute, blank); out_blank &= blank;
@@ -113,8 +113,8 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_date_time& dateTime)
 
 vcl_ostream& vil_nitf2_location_degrees::output(vcl_ostream& os) const
 {
-  os << '(' 
-     << vcl_fixed << lat_degrees << ", " 
+  os << '('
+     << vcl_fixed << lat_degrees << ", "
      << vcl_fixed << lon_degrees << ')';
   return os;
 }
@@ -133,9 +133,9 @@ bool vil_nitf2_location_degrees::read(vcl_istream& input, int field_width, bool&
 
 bool vil_nitf2_location_degrees::write(vcl_ostream& output, int field_width)
 {
-  // Could someone remind me again why I didn't just use printf and scanf 
+  // Could someone remind me again why I didn't just use printf and scanf
   // instead?
-  output << vcl_setw((field_width-1)/2) << vcl_fixed << vcl_showpos << vcl_internal 
+  output << vcl_setw((field_width-1)/2) << vcl_fixed << vcl_showpos << vcl_internal
          << vcl_setfill('0') <<  vcl_setprecision(precision) << lat_degrees
          << vcl_setw((field_width+1)/2) << vcl_fixed << vcl_showpos << vcl_internal
          << vcl_setfill('0') << vcl_setprecision(precision) << lon_degrees;
@@ -162,10 +162,10 @@ vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_location& loc)
 
 vcl_ostream& vil_nitf2_location_dmsh::output(vcl_ostream& os) const
 {
-  os << '(' 
-     << lat_degrees << ':' << lat_minutes    << ':' 
+  os << '('
+     << lat_degrees << ':' << lat_minutes    << ':'
      << lat_seconds << ':' << lat_hemisphere << ", "
-     << lon_degrees << ':' << lon_minutes    << ':' 
+     << lon_degrees << ':' << lon_minutes    << ':'
      << lon_seconds << ':' << lon_hemisphere << ')';
   return os;
 }
@@ -174,9 +174,9 @@ bool vil_nitf2_location_dmsh::read(vcl_istream& input, int /* field_width */, bo
 {
   bool blank;
   // Read latitude fields
-  bool    ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_degrees, blank); 
+  bool    ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_degrees, blank);
   if (out_blank) out_blank = blank;
-  if (ok) ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_minutes, out_blank); 
+  if (ok) ok = vil_nitf2_integer_formatter(2).read_vcl_stream(input, lat_minutes, out_blank);
   if (out_blank) out_blank = blank;
   if (ok) ok = vil_nitf2_double_formatter(3+sec_precision, sec_precision, false)
                .read_vcl_stream(input, lat_seconds, out_blank);

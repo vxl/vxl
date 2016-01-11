@@ -241,7 +241,7 @@ def write_generic_to_vrml(cam, out_file_name, level=0):
   bvxm_batch.set_input_string(1, out_file_name);
   bvxm_batch.set_input_unsigned(2, level);
   bvxm_batch.run_process();
-  
+
 #gets bounding box from a directory of cameras... (incomplete)_;
 def camera_dir_planar_bbox(dir_name) :
   bvxm_batch.init_process("vpglGetBoundingBoxProcess");

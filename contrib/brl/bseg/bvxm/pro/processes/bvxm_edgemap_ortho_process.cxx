@@ -66,7 +66,7 @@ bool bvxm_edgemap_ortho_process(bprb_func_process& pro)
   double lower_right_lon, lower_right_lat, lower_right_elev;
   lvcs->local_to_global(lower_right.x(), lower_right.y(), lower_right.z(), vpgl_lvcs::wgs84, lower_right_lon, lower_right_lat, lower_right_elev);
   vcl_cout << "lower right corner in the image is: " << lower_right_lon << " lat: " << lower_right_lat << vcl_endl;
-  
+
   int ni = box.width();
   int nj = box.height();
   vnl_matrix<double> trans_matrix(4,4,0.0);
@@ -74,22 +74,22 @@ bool bvxm_edgemap_ortho_process(bprb_func_process& pro)
   // lvcs origin is not necessarily one of the corners of the scene
   trans_matrix[0][0] = (lower_right_lon-upper_left_lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lower_right_lat)/nj;
   trans_matrix[0][3] = upper_left_lon; trans_matrix[1][3] = upper_left_lat;
-  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs); 
+  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs);
   cam->set_scale_format(true);
-  vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
+  vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);
 
    int num_observations = world->num_observations<EDGES>(0,scale);
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
 
   float n_normal = world->get_params()->edges_n_normal();
   vcl_cout << "n_normal: " << n_normal << '\n';
-  
+
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera);
   vil_image_view<float> *img_eei_f = new vil_image_view<float>(ni,nj,1);
   vil_image_view_base_sptr img_eei_f_sptr = img_eei_f;
-  
+
   bvxm_edge_ray_processor edge_proc(world);
   //edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
 
@@ -104,6 +104,6 @@ bool bvxm_edgemap_ortho_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_vb);
   pro.set_output_val<vil_image_view_base_sptr>(2, img_height);
   pro.set_output_val<vpgl_camera_double_sptr>(3, camera);
-  
+
   return true;
 }

@@ -71,7 +71,7 @@ plot_limits(vcl_vector<vgl_point_3d<double> > const& inf_pts, vcl_vector<vgl_poi
   for(int i =1; i<n&&!done; ++i)
     {
       double yinf = inf_pts[i].y(), ysup = sup_pts[i].y();
-      double cur_sign = yinf - ysup;      
+      double cur_sign = yinf - ysup;
       if(imin == -1 && cur_sign*pre_sign<0){//first sign change
         imin = i;
         pre_sign = cur_sign;

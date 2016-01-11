@@ -112,7 +112,7 @@ bool volm_candidate_list::top_locations(vcl_vector<vcl_vector<vgl_point_2d<int> 
     for (unsigned v_idx = 0; v_idx < n_verts; v_idx++)
       bbox.add(poly_[sh_idx][v_idx]);
     mymap points;
-    
+
     //vcl_cout << "\n bounding box are " << bbox << ", points are \n";
     for (int u = bbox.min_x(); u <= bbox.max_x(); u++) {
       for (int v = bbox.min_y(); v <= bbox.max_y(); v++) {

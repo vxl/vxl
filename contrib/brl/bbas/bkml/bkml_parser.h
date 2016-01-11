@@ -61,7 +61,7 @@ class bkml_parser : public expatpp
   //: parser to load the outer boundary of all defined polygons in the kml file (only parse the lat(y) and lon(x), elev ignored)
   static vgl_polygon<double> parse_polygon(vcl_string poly_kml_file);
 
-  //: parser to load the outer and inner boundary, the first n_out sheets are the outer boundary 
+  //: parser to load the outer and inner boundary, the first n_out sheets are the outer boundary
   //  and the following n_in sheets are the inner boundary
   static vgl_polygon<double> parse_polygon_with_inner(vcl_string poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inter,
                                                       unsigned& n_out, unsigned& n_in);
@@ -89,7 +89,7 @@ class bkml_parser : public expatpp
   vcl_vector<vcl_vector<vgl_point_3d<double> > > polyinner_;
   vcl_vector<vcl_vector<vgl_point_3d<double> > > linecord_;
   vcl_vector<vgl_point_3d<double> > points_;
-  
+
   vcl_string current_name_;
  private:
 
@@ -103,7 +103,7 @@ class bkml_parser : public expatpp
   //element parser
   vcl_string last_tag;
   vcl_string cord_tag_;
-  
+
 };
 
 

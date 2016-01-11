@@ -374,13 +374,13 @@ void msm_shape_model_builder::config_from_stream(vcl_istream &is)
 
   vcl_istringstream ss(s);
   mbl_read_props_type props = mbl_read_props_ws(ss);
-  
+
   vcl_string aligner_str = props.get_required_property("aligner");
   vcl_stringstream aligner_ss(aligner_str);
   vcl_auto_ptr<msm_aligner> aligner=msm_aligner::create_from_stream(aligner_ss);
   aligner_=aligner->clone();
- 
-  vcl_string param_limiter_str 
+
+  vcl_string param_limiter_str
       = props.get_optional_property("param_limiter",
                                     "msm_ellipsoid_limiter { accept_prop: 0.98 }");
   if (param_limiter_str!="-")

@@ -338,7 +338,7 @@ bool bwm_image_processor::crop_to_box(bgui_image_tableau_sptr const& img,
                                       vsol_box_2d_sptr const& roi,
                                       vil_image_resource_sptr& chip)
 {
-  
+
   vil_image_resource_sptr image = img->get_image_resource();
   if (!image||!image->ni()||!image->nj())
   {
@@ -347,7 +347,7 @@ bool bwm_image_processor::crop_to_box(bgui_image_tableau_sptr const& img,
   }
   double xmin = roi->get_min_x(), xmax = roi->get_max_x(),
     ymin = roi->get_min_y(), ymax=roi->get_max_y();
-  vcl_cout << "croping subset of image(" << image->ni() << ' ' 
+  vcl_cout << "croping subset of image(" << image->ni() << ' '
            << image->nj() << ")->org(" << xmin << ' ' << ymin << "):size("
            << xmax-xmin << ' ' << ymax-ymin << ")\n" << vcl_flush;
   brip_roi_sptr roi_ptr = new brip_roi(image->ni(), image->nj());

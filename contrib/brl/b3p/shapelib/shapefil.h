@@ -14,7 +14,7 @@
  * option is discussed in more detail in shapelib.html.
  *
  * --
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -103,7 +103,7 @@ extern "C" {
 #ifndef SHPAPI_CALL1
 #  define SHPAPI_CALL1(x)      x SHPAPI_CALL
 #endif
-    
+
 /************************************************************************/
 /*                             SHP Support.                             */
 /************************************************************************/
@@ -113,7 +113,7 @@ typedef	struct
     FILE	*fpSHX;
 
     int		nShapeType;				/* SHPT_* */
-    
+
     int		nFileSize;				/* SHP file */
 
     int         nRecords;
@@ -176,7 +176,7 @@ typedef struct
     int		nParts;
     int		*panPartStart;
     int		*panPartType;
-    
+
     int		nVertices;
     double	*padfX;
     double	*padfY;
@@ -255,16 +255,16 @@ typedef struct shape_tree_node
 
     int		nSubNodes;
     struct shape_tree_node *apsSubNode[MAX_SUBNODE];
-    
+
 } SHPTreeNode;
 
 typedef struct
 {
     SHPHandle   hSHP;
-    
+
     int		nMaxDepth;
     int		nDimension;
-    
+
     SHPTreeNode	*psRoot;
 } SHPTree;
 
@@ -319,7 +319,7 @@ typedef	struct
     int		nCurrentRecord;
     int		bCurrentRecordModified;
     char	*pszCurrentRecord;
-    
+
     int		bNoHeader;
     int		bUpdated;
 } DBFInfo;
@@ -350,7 +350,7 @@ int	SHPAPI_CALL
                    DBFFieldType eType, int nWidth, int nDecimals );
 
 DBFFieldType SHPAPI_CALL
-      DBFGetFieldInfo( DBFHandle psDBF, int iField, 
+      DBFGetFieldInfo( DBFHandle psDBF, int iField,
                        char * pszFieldName, int * pnWidth, int * pnDecimals );
 
 int SHPAPI_CALL
@@ -368,7 +368,7 @@ int     SHPAPI_CALL
       DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
 
 int SHPAPI_CALL
-      DBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, 
+      DBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField,
                                 int nFieldValue );
 int SHPAPI_CALL
       DBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField,
@@ -392,7 +392,7 @@ int SHPAPI_CALL
 
 DBFHandle SHPAPI_CALL
       DBFCloneEmpty(DBFHandle psDBF, const char * pszFilename );
- 
+
 void	SHPAPI_CALL
       DBFClose( DBFHandle hDBF );
 char    SHPAPI_CALL

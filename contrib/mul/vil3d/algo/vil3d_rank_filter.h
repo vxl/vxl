@@ -78,46 +78,46 @@ inline void vil3d_rank_filter(const vil3d_image_view<T>& src_image,
   int jhi = nj-1-element.max_j();
   int klo = -element.min_k();
   int khi = nk-1-element.max_k();
-  
+
   vcl_vector<T> value_wkspce;
-  
+
   // ========= Deal with edges ============
   //  i<ilo
   for (int i=0;i<ilo;++i)
     for (int j=0;j<nj;++j)
       for (int k=0;k<nk;++k)
         dest_image(i,j,k)=vil3d_sorted_value(src_image,0,element,i,j,k,value_wkspce,r);
-      
+
   //  i>ihi
   for (int i=ihi+1;i<ni;++i)
     for (int j=0;j<nj;++j)
       for (int k=0;k<nk;++k)
         dest_image(i,j,k)=vil3d_sorted_value(src_image,0,element,i,j,k,value_wkspce,r);
-  
+
   //  j<jlo
   for (int i=ilo;i<=ihi;++i)
     for (int j=0;j<jlo;++j)
       for (int k=0;k<nk;++k)
         dest_image(i,j,k)=vil3d_sorted_value(src_image,0,element,i,j,k,value_wkspce,r);
-  
+
   //  j>jhi
   for (int i=ilo;i<=ihi;++i)
     for (int j=jhi+1;j<nj;++j)
       for (int k=0;k<nk;++k)
         dest_image(i,j,k)=vil3d_sorted_value(src_image,0,element,i,j,k,value_wkspce,r);
- 
+
   //  k<klo
   for (int i=ilo;i<=ihi;++i)
     for (int j=jlo;j<=jhi;++j)
       for (int k=0;k<klo;++k)
         dest_image(i,j,k)=vil3d_sorted_value(src_image,0,element,i,j,k,value_wkspce,r);
- 
+
   //  k>khi
   for (int i=ilo;i<=ihi;++i)
     for (int j=jlo;j<=jhi;++j)
       for (int k=khi+1;k<nk;++k)
         dest_image(i,j,k)=vil3d_sorted_value(src_image,0,element,i,j,k,value_wkspce,r);
-  
+
   // Do the interior
   // No bounds checks in the interior, so we must make sure there is enough space in
   // the workspace.

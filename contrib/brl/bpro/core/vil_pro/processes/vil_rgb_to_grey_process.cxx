@@ -62,7 +62,7 @@ bool vil_rgb_to_grey_process(bprb_func_process& pro)
         vil_convert_planes_to_grey(img_view_plane,*img_view_grey);
         pro.set_output_val<vil_image_view_base_sptr>(0,img_view_grey);
         return true;
-      }   
+      }
     }
   }
   else {

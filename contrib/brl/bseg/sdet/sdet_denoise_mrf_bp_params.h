@@ -44,7 +44,7 @@ class sdet_denoise_mrf_bp_params : public gevd_param_mixin, public vbl_ref_count
   unsigned pyramid_levels_;
   float discontinuity_cost_;
   float truncation_cost_;
-  float kappa_; 
+  float kappa_;
   float lambda_;
 };
 

@@ -44,7 +44,7 @@ bool vil_image_mean_and_variance_process(bprb_func_process& pro)
         return false;
     }
 
-    vil_image_view_base_sptr baseSptr = 
+    vil_image_view_base_sptr baseSptr =
         pro.get_input<vil_image_view_base_sptr>(0);
 
     unsigned targetPlane = pro.get_input<unsigned>(1);
@@ -120,7 +120,7 @@ bool vil_mean_and_variance_image_process(bprb_func_process& pro)
 
     double mean = 0.0, var = 0.0;
 
-    for (int i = n_half; i < fview.ni()-n_half; i++) 
+    for (int i = n_half; i < fview.ni()-n_half; i++)
       for (int j = n_half; j < fview.nj()-n_half; j++) {
         mean = 0.0;
         var = 0.0;

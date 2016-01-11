@@ -18,7 +18,7 @@ ADD_EXECUTABLE( volm_evaluate_output_tiles
                 volm_evaluate_output_tiles.cxx
               )
 
-ADD_EXECUTABLE( volm_construct_cam_space_query 
+ADD_EXECUTABLE( volm_construct_cam_space_query
                 volm_construct_cam_space_query.cxx
               )
 
@@ -37,7 +37,7 @@ ADD_EXECUTABLE( volm_land_class_lidar
 ADD_EXECUTABLE( volm_prepare_landclass_images
                 volm_prepare_landclass_images.cxx
               )
-              
+
 ADD_EXECUTABLE( volm_create_osm_objects
                 volm_create_osm_objects.cxx
               )
@@ -53,19 +53,19 @@ ADD_EXECUTABLE( volm_create_bvxm_scenes
 ADD_EXECUTABLE( volm_sort_bvxm_scene_urban
                 volm_sort_bvxm_scene_urban.cxx
               )
-              
+
 ADD_EXECUTABLE( volm_create_osm_2d_map
                 volm_create_osm_2d_map.cxx
               )
-              
+
 ADD_EXECUTABLE( volm_refine_height_map
                 volm_refine_height_map.cxx
               )
-              
+
 ADD_EXECUTABLE( volm_create_osm_intersection_kml
                 volm_create_osm_intersection_kml.cxx
               )
-          
+
 ADD_EXECUTABLE( volm_create_osm_kml
                 volm_create_osm_kml.cxx
               )

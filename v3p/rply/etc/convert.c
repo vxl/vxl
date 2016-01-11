@@ -1,14 +1,14 @@
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <string.h> 
-#include <stdarg.h> 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
 #include "rply.h"
 
 /* internal function prototypes */
 static void error(const char *fmt, ...);
 static void help(void);
-static void parse_arguments(int argc, char **argv, 
-        e_ply_storage_mode *storage_mode, 
+static void parse_arguments(int argc, char **argv,
+        e_ply_storage_mode *storage_mode,
         const char **iname, const char **oname);
 static void setup_callbacks(p_ply iply, p_ply oply);
 
@@ -29,9 +29,9 @@ int main(int argc, char **argv)
     /* create output file */
     oply = ply_create(oname, storage_mode, NULL);
     if (!oply) error("Unable to create file '%s'", oname);
-    /* create elements and properties in output file and 
+    /* create elements and properties in output file and
      * setup callbacks for them in input file */
-    setup_callbacks(iply, oply); 
+    setup_callbacks(iply, oply);
     /* pass comments and obj_infos from input to output */
     value = NULL;
     while ((value = ply_get_next_comment(iply, value)))
@@ -53,19 +53,19 @@ int main(int argc, char **argv)
 
 /* prints an error message and exits */
 static void error(const char *fmt, ...)
-{   
+{
     va_list ap;
     va_start(ap, fmt);
     vfprintf(stderr, fmt, ap);
     va_end(ap);
     fprintf(stderr, "\n");
     exit(1);
-}               
+}
 
 /* prints the help message and exits */
 static void help(void)
 {
-    error("Usage:\n"  
+    error("Usage:\n"
             "    convert <option> <input> <output>\n"
             "Options:\n"
             "    -a, --ascii: convert to ascii format\n"
@@ -74,21 +74,21 @@ static void help(void)
 }
 
 /* parse command line parameters */
-static void parse_arguments(int argc, char **argv, 
-        e_ply_storage_mode *storage_mode, 
+static void parse_arguments(int argc, char **argv,
+        e_ply_storage_mode *storage_mode,
         const char **iname, const char **oname)
 {
     if (argc < 4) help();
-    if (strcmp(argv[1], "--ascii") == 0 || 
+    if (strcmp(argv[1], "--ascii") == 0 ||
             strcmp(argv[1], "-a") == 0)
         *storage_mode = PLY_ASCII;
-    else if (strcmp(argv[1], "--little-endian") == 0 || 
-            strcmp(argv[1], "-l") == 0) 
+    else if (strcmp(argv[1], "--little-endian") == 0 ||
+            strcmp(argv[1], "-l") == 0)
         *storage_mode = PLY_LITTLE_ENDIAN;
-    else if (strcmp(argv[1], "--big-endian") == 0 || 
-            strcmp(argv[1], "-b") == 0) 
+    else if (strcmp(argv[1], "--big-endian") == 0 ||
+            strcmp(argv[1], "-b") == 0)
         *storage_mode = PLY_BIG_ENDIAN;
-    else help(); 
+    else help();
     *iname = argv[2];
     *oname = argv[3];
 }
@@ -104,7 +104,7 @@ static int callback(p_ply_argument argument)
 }
 
 /* prepares the conversion */
-static void setup_callbacks(p_ply iply, p_ply oply) 
+static void setup_callbacks(p_ply iply, p_ply oply)
 {
     p_ply_element element = NULL;
     /* iterate over all elements in input file */
@@ -120,15 +120,15 @@ static void setup_callbacks(p_ply iply, p_ply oply)
         while ((property = ply_get_next_property(element, property))) {
             const char *property_name;
             e_ply_type type, length_type, value_type;
-            ply_get_property_info(property, &property_name, &type, 
+            ply_get_property_info(property, &property_name, &type,
                     &length_type, &value_type);
             /* setup input callback for this property */
-            if (!ply_set_read_cb(iply, element_name, property_name, callback, 
+            if (!ply_set_read_cb(iply, element_name, property_name, callback,
                     oply, 0))
-                error("Unable to setup input callback for property '%s'", 
+                error("Unable to setup input callback for property '%s'",
                         property_name);
             /* add this property to output file */
-            if (!ply_add_property(oply, property_name, type, length_type, 
+            if (!ply_add_property(oply, property_name, type, length_type,
                     value_type))
                 error("Unable to add output property '%s'", property_name);
         }

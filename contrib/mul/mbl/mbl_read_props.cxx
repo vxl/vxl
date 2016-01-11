@@ -20,7 +20,7 @@
 vcl_string mbl_read_props_type::get_required_property(const vcl_string &prop)
 {
   mbl_read_props_type::iterator it = this->find(prop);
-  if (it==this->end()) 
+  if (it==this->end())
     mbl_exception_error(mbl_exception_missing_property(prop));
   vcl_string result = it->second;
   this->erase(it);
@@ -36,12 +36,12 @@ vcl_string mbl_read_props_type::get_optional_property(const vcl_string &prop,
 {
   vcl_string result(def_value);
   mbl_read_props_type::iterator it = this->find(prop);
-  if (it!=this->end()) 
+  if (it!=this->end())
   {
     result = it->second;
     this->erase(it);
   }
-  return result;  
+  return result;
 }
 
 
@@ -212,7 +212,7 @@ mbl_read_props_type mbl_read_props(vcl_istream &afs)
 
             vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
             vcl_string::size_type pos;
-            
+
             while ((pos=str1.find(s)) != vcl_string::npos)
               str1.replace(pos,1,os.str());
 
@@ -392,7 +392,7 @@ mbl_read_props_type mbl_read_props_ws(vcl_istream &afs)
 
             vcl_ostringstream os; os << "&#" << (i<0?int(c):i) << ';';
             vcl_string::size_type pos;
-            
+
             while ((pos=str1.find(s)) != vcl_string::npos)
               str1.replace(pos,1,os.str());
 
@@ -472,7 +472,7 @@ void mbl_read_props_look_for_unused_props(
   const mbl_read_props_type &ignore)
 {
   mbl_read_props_type p2(props);
-  
+
   // Remove ignoreable properties
   for (mbl_read_props_type::const_iterator it=ignore.begin();
          it != ignore.end(); ++it)

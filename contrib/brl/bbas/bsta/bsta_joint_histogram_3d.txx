@@ -151,10 +151,10 @@ void bsta_joint_histogram_3d<T>::upcount(T a, T mag_a,
                                          T c, T mag_c)
 {
   int bin_a = -1, bin_b = -1, bin_c = -1;
-  
+
   if(!this->bin_at_val(a, b, c, bin_a, bin_b, bin_c))
     return;
-  
+
   counts_[bin_a][bin_b][bin_c] += mag_a + mag_b + mag_c;
   volume_valid_ = false;
 }
@@ -234,7 +234,7 @@ T bsta_joint_histogram_3d<T>::p(T a, T b, T c) const
     return 0;
   return counts_[bina][binb][binc]/volume_;
 }
-                                            
+
 
 template <class T>
 void bsta_joint_histogram_3d<T>::parzen(const T sigma)

@@ -68,7 +68,7 @@ bool boxm2_load_mesh_process(bprb_func_process& pro)
   imesh_read(mesh_filename, *(mesh.ptr()));
   vcl_cout<<"# of faces "<<mesh->num_faces()<<vcl_endl;
   pro.set_output_val<imesh_mesh_sptr>(0,mesh);
-  
+
 
   return true;
 }

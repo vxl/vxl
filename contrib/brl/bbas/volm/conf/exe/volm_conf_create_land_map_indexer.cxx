@@ -50,7 +50,7 @@ int main(int argc, char** argv)
   vul_arg<unsigned>   is_osm_road("-road", "option to put OSM road into database (default is false)", 1);
   vul_arg<unsigned>   is_osm_pts("-pts",   "option to put OSM location points into database (default is true)", 1);
   vul_arg<unsigned>   is_osm_regions("-region", "option to put OSM regions into database (default is true)", 1);
-  vul_arg<unsigned>   is_osm_junction("-junction","option to put OSM road intersection into database (default is true)", 1); 
+  vul_arg<unsigned>   is_osm_junction("-junction","option to put OSM road intersection into database (default is true)", 1);
   vul_arg_parse(argc, argv);
 
   // input check

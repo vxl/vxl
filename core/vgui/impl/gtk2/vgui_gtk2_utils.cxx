@@ -83,9 +83,9 @@ guint vgui_gtk2_utils::translate_key_reverse(vgui_key key)
     return char(key);
 
   if ( key >= 'a' && key <= 'z' )
-    return char(key+'A'-'a'); 
+    return char(key+'A'-'a');
 
-  switch ( key ) 
+  switch ( key )
   {
     // Function keys
     case vgui_F1:
@@ -123,7 +123,7 @@ guint vgui_gtk2_utils::translate_key_reverse(vgui_key key)
       gdk_key = GDK_Insert;
       break;
     default: // undefined
-      gdk_key = GDK_VoidSymbol; 
+      gdk_key = GDK_VoidSymbol;
       break;
   }
 
@@ -243,7 +243,7 @@ void vgui_gtk2_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
       gtk_widget_show(item);
 
       add_submenu(submenu, *menu[i].menu);
-      
+
       GtkWidget *tearoffitem= gtk_tearoff_menu_item_new();
       gtk_menu_prepend(GTK_MENU(submenu), tearoffitem);
       gtk_widget_show(tearoffitem);
@@ -325,7 +325,7 @@ void vgui_gtk2_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is
       gtk_widget_show(tearoffitem);
     }
 
-    
+
   }
 
 }

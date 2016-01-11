@@ -4,7 +4,7 @@
 //! \file
 //  \author Kieran O'Mahony
 //  \date 21 August 2007
-//  \brief Tolerances used throughout vgl when performing comparisons 
+//  \brief Tolerances used throughout vgl when performing comparisons
 #include <vgl/vgl_export.h>
 
 template <typename T>

@@ -11,16 +11,16 @@
 //  Only one elev hypothesis per location for now..
 //  keep only the locations that the scene covers
 void
-boxm2_volm_loc_hypotheses::add_dems(boxm2_scene_sptr scene, 
-                                    unsigned interval_i, unsigned interval_j, 
-                                    float altitude, 
-                                    vcl_vector<vil_image_view<float> >& dems, vcl_vector<vpgl_geo_camera*>& cams) 
+boxm2_volm_loc_hypotheses::add_dems(boxm2_scene_sptr scene,
+                                    unsigned interval_i, unsigned interval_j,
+                                    float altitude,
+                                    vcl_vector<vil_image_view<float> >& dems, vcl_vector<vpgl_geo_camera*>& cams)
 {
   vcl_cout << "tile lat: " << tile_.lat_ << " lon: " << tile_.lon_ << vcl_endl
            << "dem ni: " << dems[0].ni() << " nj: " << dems[0].nj() << vcl_endl;
 
   vgl_box_3d<double> sbox = scene->bounding_box();
-  
+
   for (unsigned int i = 0; i < tile_.ni_; i += interval_i)
     for (unsigned int j = 0; j < tile_.nj_; j += interval_j) {
       // fetch the global location from the tile using its transformation matrix saved in vpgl_geo_camera member
@@ -42,7 +42,7 @@ boxm2_volm_loc_hypotheses::add_dems(boxm2_scene_sptr scene,
         }
       }
       if (elev > 0) { // add this as a viable location hypotheses
-        this->add(scene, sbox, lon, lat, elev+altitude, i, j);      
+        this->add(scene, sbox, lon, lat, elev+altitude, i, j);
       }
     }
 }
@@ -72,9 +72,9 @@ bool boxm2_volm_loc_hypotheses::add(double lon, double lat, float cent_x, float 
   pixels_.push_back(vcl_pair<unsigned, unsigned>(i,j));
   return true;
 }
-  
-  
-  
+
+
+
 
 //: construct by reading from a binary file
 boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(vcl_string bin_file)
@@ -121,7 +121,7 @@ bool boxm2_volm_loc_hypotheses::write_hypotheses(vcl_string out_file)
   if (!os)
     return false;
   this->b_write(os);
-  os.close(); 
+  os.close();
   return true;
 }
 
@@ -132,8 +132,8 @@ void boxm2_volm_loc_hypotheses::b_write(vsl_b_ostream &os) const
   tile_.b_write(os);
   vsl_b_write(os, pixels_.size());
   for (unsigned i = 0; i < pixels_.size(); i++) {
-    vsl_b_write(os, pixels_[i].first);  
-    vsl_b_write(os, pixels_[i].second);  
+    vsl_b_write(os, pixels_[i].first);
+    vsl_b_write(os, pixels_[i].second);
   }
   vsl_b_write(os, locs_.size());
   for (unsigned i = 0; i < locs_.size(); i++) {
@@ -157,8 +157,8 @@ void boxm2_volm_loc_hypotheses::b_read(vsl_b_istream &is)
      vsl_b_read(is, s);
      pixels_.resize(s, vcl_pair<unsigned, unsigned>(0,0));
      for (unsigned i = 0; i < pixels_.size(); i++) {
-       vsl_b_read(is, pixels_[i].first); 
-       vsl_b_read(is, pixels_[i].second);  
+       vsl_b_read(is, pixels_[i].first);
+       vsl_b_read(is, pixels_[i].second);
      }
      vsl_b_read(is, s);
      locs_.resize(s);
@@ -192,12 +192,12 @@ bool boxm2_volm_loc_hypotheses::write_hypotheses_kml(boxm2_scene_sptr scene, vcl
     scene->lvcs().local_to_global(locs_[i].x(), locs_[i].y(), locs_[i].z(), vpgl_lvcs::wgs84, lon, lat, gz);
     vcl_stringstream str; str << "loc hypotheses " << i;
     vnl_double_2 ul(lat, lon); vnl_double_2 ur(lat+0.0005, lon); vnl_double_2 ll(lat, lon-0.0005); vnl_double_2 lr(lat+0.0005, lon-0.0005);
-    bkml_write::write_box(ofs, str.str(), str.str(), ul, ur, ll, lr); 
+    bkml_write::write_box(ofs, str.str(), str.str(), ul, ur, ll, lr);
   }
   bkml_write::close_document(ofs);
   return true;
 }
-  
+
 
 
 

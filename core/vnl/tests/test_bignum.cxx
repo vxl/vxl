@@ -30,13 +30,13 @@ static vnl_bignum factorial(int n)
 
 // Combinations (n choose k)
 static vnl_bignum Combinations(int n, int k)
-{ 
+{
   vnl_bignum CC(1);
   if (k >= n || k <= 0) return CC;
-  else 
+  else
   {
     for (int i = n; i > n - k; --i)
-      CC *= i; 
+      CC *= i;
     CC /= factorial(k);
     return CC;
   }

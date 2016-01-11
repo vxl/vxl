@@ -96,7 +96,7 @@ public:
     return data_ == rhs.data_;
   }
 
-// const vector API  
+// const vector API
 
   const_iterator begin() const { return data_.begin(); }
   const_iterator end() const { return data_.end(); }
@@ -106,7 +106,7 @@ public:
 // const map API
 
   //: Finds the beginning of a subsequence matching given \p key.
-  // /return iterator to the first element that equals \p key, or the 
+  // /return iterator to the first element that equals \p key, or the
   //   next greatest element if no match is found.
   const_iterator lower_bound(const key_type& key) const
   {
@@ -115,7 +115,7 @@ public:
   }
 
   //: Finds the one past the end of a subsequence matching given \p key.
-  // /return iterator to one past the last element that equals \p key, or to the 
+  // /return iterator to one past the last element that equals \p key, or to the
   //   next greatest element if no match is found.
   const_iterator upper_bound(const key_type& key) const
   {
@@ -139,15 +139,15 @@ public:
     else
       return it;
   }
-  
+
   //: Finds the number of elements with matching \p key,
   vcl_size_t count(const key_type& key) const
   {
     vcl_pair<const_iterator, const_iterator> range = equal_range(key);
     return range.second - range.first;
   }
-  
-  
+
+
 private:
   container_type data_;
 

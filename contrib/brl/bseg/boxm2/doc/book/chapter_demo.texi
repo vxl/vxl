@@ -1,16 +1,16 @@
 @chapsummary
-Render, update and refine gui-based demo in @code{boxm2} 
+Render, update and refine gui-based demo in @code{boxm2}
 @endchapsummary
 
 @section @code{boxm2_render_tableau}
-The bulk of the gui-based demo code is located in 
-@code{ocl/view/boxm2_render_tableau.h/cxx}. This tableau is initialized with 
+The bulk of the gui-based demo code is located in
+@code{ocl/view/boxm2_render_tableau.h/cxx}. This tableau is initialized with
 a @code{scene.xml} full path, a viewport size (ni,nj), a single initial camera
-vpgl_perspective_camera<double>*, a vector of camera file paths, and a vector of 
-image file paths.  
+vpgl_perspective_camera<double>*, a vector of camera file paths, and a vector of
+image file paths.
 
 @example
-  //: initialize tableau with scene_file, viewport size, initial cam,  
+  //: initialize tableau with scene_file, viewport size, initial cam,
   bool init(vcl_string scene_file,
             unsigned ni,
             unsigned nj,
@@ -19,22 +19,22 @@ image file paths.
             vcl_vector<vcl_string> img_files);
 @end example
 
-All events are handled in the virtual method @code{handle}: 
+All events are handled in the virtual method @code{handle}:
 @example
   //: virtual function handles mouse and keyboard actions
   virtual bool handle( vgui_event const& e );
 @end example
 
-After the tableau is initialized using the method above, the tableau must also 
-initialize an OpenGL context, some OpenCL objects, and some @code{boxm2} data 
-structures, which are handled in the following methods: 
+After the tableau is initialized using the method above, the tableau must also
+initialize an OpenGL context, some OpenCL objects, and some @code{boxm2} data
+structures, which are handled in the following methods:
 @example
   cl_context create_clgl_context();
   bool init_clgl();
 @end example
 
 
-The handle method is currently equipped to handle the following commands: 
+The handle method is currently equipped to handle the following commands:
 @itemize
 @item Mouse Dragging: rotates the camera around a focus point
 @item Middle Click Dragging:  zooms in or out in the current look vector
@@ -43,23 +43,23 @@ The handle method is currently equipped to handle the following commands:
 @item Keystroke 'D': refines the model, will display new cells as black
 @item Keystroke 'S': will write the model to disk
 @item Keystroke 'R': will return the camera to its initial position
-@item Keystroke 'X', 'Y', or 'Z': will move the camera to look straight down the 'X', 'Y', or 'Z' axis respectively  
-@item Keystroke 'C': will toggle to change detect mode on the images in the 
-      specified image directory.  While in change detect mode, keystroke 'N' will 
-      change the frame to the next image.  
+@item Keystroke 'X', 'Y', or 'Z': will move the camera to look straight down the 'X', 'Y', or 'Z' axis respectively
+@item Keystroke 'C': will toggle to change detect mode on the images in the
+      specified image directory.  While in change detect mode, keystroke 'N' will
+      change the frame to the next image.
 @end itemize
 
 
 @subsection Updating the voxel model
-The following is an outline of the updating procedure performed by the 
-tableau.  
+The following is an outline of the updating procedure performed by the
+tableau.
 
 @example
 //: updates given a random frame
 float boxm2_render_tableau::update_frame()
 {
   //choose random frame and corresponding camera (create portable sptrs)
-  vil_image_view<float>* floatimg = random_frame(); 
+  vil_image_view<float>* floatimg = random_frame();
   vil_image_view_base_sptr floatimg_sptr(floatimg);
   brdb_value_sptr brdb_inimg = new brdb_value_t<vil_image_view_base_sptr>(floatimg_sptr);
   vpgl_camera_double_sptr cam_sptr(pcam);

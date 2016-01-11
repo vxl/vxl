@@ -1,7 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_create_cache_process.cxx
 //:
 // \file
-// \brief  A process for creating cache. 
+// \brief  A process for creating cache.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
@@ -71,7 +71,7 @@ bool boxm2_create_cache1_process(bprb_func_process& pro)
     return false;
   }
   i=0;
-  
+
   // store scene smaprt pointer
   pro.set_output_val<boxm2_cache1_sptr>(i++, boxm2_cache1::instance());
   return true;
@@ -136,7 +136,7 @@ bool boxm2_create_cache_process(bprb_func_process& pro)
     return false;
   }
   i=0;
-  
+
   // store scene smaprt pointer
   pro.set_output_val<boxm2_cache_sptr>(i++, boxm2_cache::instance());
   return true;

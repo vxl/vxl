@@ -122,7 +122,7 @@ void _ProfSave(const OPJ_CHAR * pFileName)
 		return;
 	}
 
-	for 
+	for
 		(i=0;i<PGROUP_LASTGROUP;++i)
 	{
 		totalTime += group_list[i].total_time;
@@ -133,7 +133,7 @@ void _ProfSave(const OPJ_CHAR * pFileName)
 
 	proftracef(PGROUP_DWT,totalTime);
 	proftracef(PGROUP_T1,totalTime);
-	proftracef(PGROUP_T2,totalTime);	
+	proftracef(PGROUP_T2,totalTime);
 
    fputs("=== end of profile list ===\n\n", p);
 
@@ -147,7 +147,7 @@ void _ProfPrint(void)
 	OPJ_FLOAT64 totalTime = 0.;
 	OPJ_UINT32 i;
 
-	for 
+	for
 		(i=0;i<PGROUP_LASTGROUP;++i)
 	{
 		totalTime += group_list[i].total_time;

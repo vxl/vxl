@@ -283,7 +283,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   vcl_vector<bvgl_2d_geo_index_node_sptr> blk_leaves_all;
   bvgl_2d_geo_index::get_leaves(blk_2d_tree, blk_leaves_all);
   for (unsigned l_idx = 0; l_idx < blk_leaves_all.size(); l_idx++) {
-    bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+    bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr =
       dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(blk_leaves_all[i].ptr());
     leaf_ptr->contents_.clear();
   }
@@ -296,7 +296,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     if (leaves.empty())
       continue;
     for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-      bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr = 
+      bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* leaf_ptr =
         dynamic_cast<bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* >(leaves[l_idx].ptr());
       leaf_ptr->contents_.push_back(curr_blk_id);
     }

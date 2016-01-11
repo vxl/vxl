@@ -58,7 +58,7 @@ static void test_write()
     }
   }
   TEST("data read matches data", good, true);
-  
+
   //cleanup
   delete[] in_tester;
   delete[] out_tester;

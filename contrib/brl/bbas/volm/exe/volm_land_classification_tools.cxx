@@ -26,12 +26,12 @@
 #include <sdet/sdet_texture_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
 
-unsigned int northing = 0;  // WARNING: north hard-coded 
+unsigned int northing = 0;  // WARNING: north hard-coded
 
 struct img_info {
 public:
   bool intersects(vgl_polygon<double> poly) { return vgl_intersection(bbox, poly); }
-  void save_box_kml(vcl_string out_name) { 
+  void save_box_kml(vcl_string out_name) {
     vcl_ofstream ofs(out_name.c_str());
     bkml_write::open_document(ofs);
     bkml_write::write_box(ofs, name, "", bbox);
@@ -46,7 +46,7 @@ public:
 };
 
 void load_naip_imgs(vcl_string img_folder, vcl_vector<img_info>& imgs, int utm_zone) {
- 
+
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
 
   vcl_string in_dir = img_folder + "*";
@@ -56,7 +56,7 @@ void load_naip_imgs(vcl_string img_folder, vcl_vector<img_info>& imgs, int utm_z
     vcl_string file = vul_file::strip_directory(filename);
     vcl_string img_name = filename + "\\" + file + ".tif";
     //vcl_cout << img_name << "\n" << file << "\n"; vcl_cout.flush();
-      
+
     vcl_string tfw_name = filename + "\\" + file + ".tfw";
     //vcl_cout << tfw_name << vcl_endl; vcl_cout.flush();
     if (!vul_file::exists(tfw_name) || !vul_file::exists(img_name))
@@ -67,7 +67,7 @@ void load_naip_imgs(vcl_string img_folder, vcl_vector<img_info>& imgs, int utm_z
     vil_image_resource_sptr img = vil_load_image_resource(img_name.c_str());
     //vcl_cout << "ni: " << img->ni() <<" nj: " << img->nj() <<vcl_endl;
     img_info info; info.ni = img->ni(); info.nj = img->nj(); info.cam = cam; info.name = file; info.img_name = img_name;
-    
+
     double lat, lon;
     cam->img_to_global(0.0, img->nj()-1, lon, lat);
     vgl_point_2d<double> lower_left(lon, lat);
@@ -83,19 +83,19 @@ void load_naip_imgs(vcl_string img_folder, vcl_vector<img_info>& imgs, int utm_z
 void load_lidar_imgs(vcl_string img_folder, vcl_vector<img_info>& imgs) {
   vcl_string glob = img_folder + "/*.tif";
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
-  
+
   for (vul_file_iterator fit = glob;fit; ++fit) {
 
     vil_image_view_base_sptr img_sptr = vil_load(fit());
-    img_info info; 
-    info.ni = img_sptr->ni(); info.nj = img_sptr->nj(); 
-    info.name = vul_file::strip_directory(vul_file::strip_extension(fit())); 
+    img_info info;
+    info.ni = img_sptr->ni(); info.nj = img_sptr->nj();
+    info.name = vul_file::strip_directory(vul_file::strip_extension(fit()));
     info.img_name = fit();
 
     vpgl_geo_camera *cam;
     vpgl_geo_camera::init_geo_camera(fit(), info.ni, info.nj, lvcs, cam);
-    info.cam = cam; 
-    
+    info.cam = cam;
+
     double lat, lon;
     cam->img_to_global(0.0, info.nj-1, lon, lat);
     vgl_point_2d<double> lower_left(-lon, lat);
@@ -121,7 +121,7 @@ void prepare_site_file(vcl_string const& site_file, vcl_vector<vcl_string >& lid
         ofs << "<ImageTableau name=\"" << img_name[i] << "\" status=\"active\">\n"
             << "<imagePath>\n" << img_full[i] << "</imagePath>\n</ImageTableau>\n";
       }
-      
+
   ofs << "</Tableaus><Objects></Objects></BWM_SITE>\n";
   ofs.close();
 }
@@ -139,7 +139,7 @@ void collect_lidar_pixels(vpgl_lvcs_sptr lvcs, vcl_string const& mask_name, vcl_
   vgl_box_2d<double> bbox(lower_left, upper_right);
   vcl_cout << "for img: " << img_name << " bbox: " << bbox << vcl_endl;
 
-  for (unsigned i = 0; i < mask.ni(); i++) 
+  for (unsigned i = 0; i < mask.ni(); i++)
     for (unsigned j = 0; j < mask.nj(); j++) {
       if (mask(i,j) == 255) {
         pixels.push_back(vcl_pair<unsigned, unsigned>(i,j));
@@ -153,7 +153,7 @@ void collect_lidar_pixels(vpgl_lvcs_sptr lvcs, vcl_string const& mask_name, vcl_
 
 void enlarge_neighborhood(vcl_vector<vcl_pair<int, int> >& img_pixels, int ni, int nj, int n_size) {
   vcl_map<vcl_pair<int, int>, bool> pixel_map;
-  vcl_map<vcl_pair<int, int>, bool>::iterator iter;  
+  vcl_map<vcl_pair<int, int>, bool>::iterator iter;
   for (unsigned kk = 0; kk < img_pixels.size(); kk++) {
     int ii = img_pixels[kk].first;
     int jj = img_pixels[kk].second;
@@ -168,16 +168,16 @@ void enlarge_neighborhood(vcl_vector<vcl_pair<int, int> >& img_pixels, int ni, i
     for (int i = ii-n_size; i <= ii + n_size; i++)
       for (int j = jj - n_size; j <= jj + n_size; j++) {
         if (i < 0 || j < 0 || i >= ni || j >= nj)
-          continue; 
+          continue;
         vcl_pair<int, int> current_p(i, j);
         iter = pixel_map.find(current_p);
         if (iter == pixel_map.end())
           pixel_map[current_p] = true;
       }
   }
-  
+
   for (iter = pixel_map.begin(); iter != pixel_map.end(); iter++) {
-    if (iter->second) 
+    if (iter->second)
       img_pixels.push_back(iter->first);
   }
 
@@ -192,13 +192,13 @@ bool collect_img_pixels(vpgl_lvcs_sptr lvcs, int utm_zone, vcl_string const& mas
   if (!vpgl_geo_camera::init_geo_camera(img_tfw_name, lvcs, utm_zone, northing, cam))
     return false;
   int ni = mask.ni(); int nj = mask.nj();
-  double u,v; 
+  double u,v;
   for (unsigned kk = 0; kk < local_coords.size(); kk++) {
     cam->project(local_coords[kk].first, local_coords[kk].second, 0.0, u, v);
-    int uu = (int)vcl_floor(u + 0.5); 
+    int uu = (int)vcl_floor(u + 0.5);
     int vv = (int)vcl_floor(v + 0.5);
     if (uu >= 0 && vv >= 0 && uu < ni && vv < nj && mask(uu,vv) == 255) {
-      img_pixels.push_back(vcl_pair<int, int>(uu,vv)); 
+      img_pixels.push_back(vcl_pair<int, int>(uu,vv));
     }
   }
   vcl_cout << " collected: " << img_pixels.size() << " pixels from aerial image!\n";
@@ -223,7 +223,7 @@ bool read_training_img(vcl_string txt_file, vcl_vector<vcl_string>& names, vcl_v
 {
   vcl_ifstream ifs(txt_file.c_str());
   if (!vul_file::exists(txt_file) || !ifs.is_open()) {
-      
+
   }
   // there are 5 lines per object in this file
   while (!ifs.eof()) {
@@ -342,15 +342,15 @@ int main(int argc,  char** argv)
             vcl_cout << imgs[i].name <<" intersects: " << polys[j].second << " it's bbox: " << imgs[i].bbox << vcl_endl;
             vcl_stringstream file; file << out_folder() << "\\bbox_" << polys[j].second << "_img_" << imgs[i].name << ".kml";
             vcl_cout << " writing: " << file.str() << vcl_endl;
-            imgs[i].save_box_kml(file.str());  
-            img_full[j].push_back(imgs[i].img_name); 
+            imgs[i].save_box_kml(file.str());
+            img_full[j].push_back(imgs[i].img_name);
             img_name[j].push_back(imgs[i].name);
             vcl_cout << " img full has " << img_full[j].size() << " NAIP img!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
           }
         }
       }
     }
-    
+
     if (lidar_folder().compare("") != 0) {
       vcl_vector<img_info> lidar_imgs;
       load_lidar_imgs(lidar_folder(), lidar_imgs);
@@ -360,14 +360,14 @@ int main(int argc,  char** argv)
           if (lidar_imgs[i].intersects(polys[j].first)) {
             vcl_cout << lidar_imgs[i].name <<" intersects: " << polys[j].second << " it's bbox: " << lidar_imgs[i].bbox << vcl_endl;
             vcl_stringstream file; file << out_folder() << "\\bbox_" << polys[j].second << "_lidar_img_" << lidar_imgs[i].name << ".kml";
-            lidar_imgs[i].save_box_kml(file.str());  
-            lidar_full[j].push_back(lidar_imgs[i].img_name); 
+            lidar_imgs[i].save_box_kml(file.str());
+            lidar_full[j].push_back(lidar_imgs[i].img_name);
             lidar_name[j].push_back(lidar_imgs[i].name);
           }
         }
       }
     }
-    
+
     for (unsigned j = 0; j < polys.size(); j++) {
       vcl_stringstream site_file; site_file << in_poly() << "site_" << polys[j].second << "_zone_" << utm_zone() << ".xml";
       prepare_site_file(site_file.str(), lidar_full[j], lidar_name[j], img_full[j], img_name[j]);
@@ -375,7 +375,7 @@ int main(int argc,  char** argv)
   }
 
   if (train().compare("") != 0) {
-    
+
     if (class_name().compare("") == 0) {
       vcl_cout << " class name is not specified! exiting..\n"; return 0;
     }
@@ -420,12 +420,12 @@ int main(int argc,  char** argv)
         vcl_cerr << " problems collecting pixels from: " << imgs[ii].first << '\n';
         return -1;
       }
-      
+
       // now extract training samples in a neighborhood
       sdet_texture_classifier lidar_c((sdet_texture_classifier_params)tc);
       if (!lidar_c.compute_filter_bank_float_img(filter_folder(), lidar_folder() + lidar_imgs[ii].first + ".tif", lidar_max()))
         return 0;
-      lidar_c.compute_training_data(class_name(), lidar_pixels);  
+      lidar_c.compute_training_data(class_name(), lidar_pixels);
       vcl_vector<vnl_vector<double> > data;
       lidar_c.get_training_data(class_name(), data);
       tc.add_training_data(class_name(), data);
@@ -438,7 +438,7 @@ int main(int argc,  char** argv)
       vcl_vector<vnl_vector<double> > data2;
       naip_c.get_training_data(class_name(), data2);
       tc.add_training_data(class_name(), data2);
-      
+
       vcl_cout << " current # of training data in class " << class_name() << " is: " << tc.data_size(class_name()) << '\n';
       vcl_cout << "-------------------------------------------------------------\n";
     }
@@ -458,7 +458,7 @@ int main(int argc,  char** argv)
     unsigned ntextons = tc.get_number_of_textons();
     vcl_cout << " for the dictionary: " << name << ", the number of textons is: " << ntextons << '\n';
   }
-  
+
   vcl_cout << "total time: " << t.all()/1000 << " seconds = " << t.all()/(1000*60) << " mins.\n";
   return volm_io::SUCCESS;
 }

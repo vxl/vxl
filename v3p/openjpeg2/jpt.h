@@ -34,7 +34,7 @@
 @file jpt.h
 @brief JPT-stream reader (JPEG 2000, JPIP)
 
-JPT-stream functions are implemented in J2K.C. 
+JPT-stream functions are implemented in J2K.C.
 */
 #include "openjpeg.h"
 struct opj_stream_private;
@@ -42,14 +42,14 @@ struct opj_event_mgr;
 /**
 Message Header JPT stream structure
 */
-typedef struct opj_jpt_msg_header 
+typedef struct opj_jpt_msg_header
 {
 	/** In-class Identifier */
 	OPJ_UINT32 Id;
 	/** Last byte information */
-	OPJ_UINT32 last_byte;	
+	OPJ_UINT32 last_byte;
 	/** Class Identifier */
-	OPJ_UINT32 Class_Id;	
+	OPJ_UINT32 Class_Id;
 	/** CSn : index identifier */
 	OPJ_UINT32 CSn_Id;
 	/** Message offset */
@@ -63,7 +63,7 @@ typedef struct opj_jpt_msg_header
 /* ----------------------------------------------------------------------- */
 
 /**
-Initialize the value of the message header structure 
+Initialize the value of the message header structure
 @param header Message header structure
 */
 void jpt_init_msg_header(opj_jpt_msg_header_t * header);
@@ -75,8 +75,8 @@ void jpt_init_msg_header(opj_jpt_msg_header_t * header);
  * @param	p_manager	user event manager to display nice messages.
 */
 bool jpt_read_msg_header(
-		struct opj_stream_private * p_cio, 
-		opj_jpt_msg_header_t * p_header, 
+		struct opj_stream_private * p_cio,
+		opj_jpt_msg_header_t * p_header,
 		OPJ_UINT32 * p_nb_bytes_read,
 		struct opj_event_mgr * p_manager);
 

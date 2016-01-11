@@ -18,9 +18,9 @@ bool vil_map_image_binary_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -82,7 +82,7 @@ bool vil_map_image_binary_process(bprb_func_process& pro)
   }
   else //leave the image as float
     map_image = new vil_image_view<float>(dest);
- 
+
   pro.set_output_val<vil_image_view_base_sptr>(0, map_image);
   return true;
 }

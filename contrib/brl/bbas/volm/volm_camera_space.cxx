@@ -50,13 +50,13 @@ volm_camera_space(vcl_vector<double> const& top_fovs,double altitude,
 }
 
 volm_camera_space::
-volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc, 
+volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc,
                   double altitude,
                   unsigned ni, unsigned nj,
                   double head_mid,  double head_radius, double head_inc,
                   double tilt_mid, double tilt_radius,  double tilt_inc,
                   double roll_mid,  double roll_radius,   double roll_inc):
-  altitude_(altitude), ni_(ni), nj_(nj), 
+  altitude_(altitude), ni_(ni), nj_(nj),
   head_mid_(head_mid), head_radius_(head_radius), head_inc_(head_inc),
   tilt_mid_(tilt_mid), tilt_radius_(tilt_radius),tilt_inc_(tilt_inc),
   roll_mid_(roll_mid),roll_radius_(roll_radius),roll_inc_(roll_inc),
@@ -68,7 +68,7 @@ volm_camera_space(double top_fov_mid, double top_fov_rad, double top_fov_inc,
     if (right_fov > 89)  right_fov = 89;
     if (left_fov  < 1)   left_fov = 1;
     top_fovs_.push_back(right_fov);
-    if (left_fov != right_fov) 
+    if (left_fov != right_fov)
       top_fovs_.push_back(left_fov);
   }
   this->adjust_limits();
@@ -108,7 +108,7 @@ cam_angles volm_camera_space::camera_angles(unsigned cam_index) const
 
 double cam_angles::dif(cam_angles& b)
 {
-  return vcl_sqrt(vcl_pow(roll_ - b.roll_, 2.0) + vcl_pow(top_fov_ - b.top_fov_, 2.0) + 
+  return vcl_sqrt(vcl_pow(roll_ - b.roll_, 2.0) + vcl_pow(top_fov_ - b.top_fov_, 2.0) +
     vcl_pow(heading_ - b.heading_, 2.0) + vcl_pow(tilt_ - b.tilt_, 2.0) );
 }
 
@@ -353,7 +353,7 @@ void volm_camera_space::b_read(vsl_b_istream& is)
   }
 }
 int volm_camera_space::closest_index(cam_angles const& cangs){
-  
+
   camera_space_iterator cit = this->begin();
   double mind = vcl_numeric_limits<double>::max();
   int mindx = -1;

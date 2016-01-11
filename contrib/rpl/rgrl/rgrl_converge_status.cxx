@@ -16,13 +16,13 @@ rgrl_converge_status( )
     oscillation_count_( 0 ),
     error_diff_( -1.0 )
 {
-  
-}  
+
+}
 
 rgrl_converge_status::
-rgrl_converge_status( converge_type conv, 
-                      status_type stat, 
-                      double error, 
+rgrl_converge_status( converge_type conv,
+                      status_type stat,
+                      double error,
                       unsigned osc_count,
                       double error_diff )
   : conv_( conv ),
@@ -31,9 +31,9 @@ rgrl_converge_status( converge_type conv,
     oscillation_count_( osc_count ),
     error_diff_( error_diff )
 {
-  
-}  
- 
+
+}
+
 rgrl_converge_status::
 rgrl_converge_status( bool     in_has_converged,
                       bool     in_has_stagnated,
@@ -63,7 +63,7 @@ rgrl_converge_status( bool     in_has_converged,
 
   if( in_is_failed )
     status_ = failed;
-        
+
   assert( ! ( in_has_converged && in_has_stagnated ) );
 }
 
@@ -84,7 +84,7 @@ has_converged() const
 bool
 rgrl_converge_status::
 has_stagnated() const
-{ 
+{
   return conv_ == stagnated;
 }
 
@@ -124,14 +124,14 @@ current_status() const
   return status_;
 }
 
-void 
+void
 rgrl_converge_status::
 set_current_converge( converge_type c )
 {
   conv_ = c;
 }
 
-void 
+void
 rgrl_converge_status::
 set_current_status( status_type s )
 {

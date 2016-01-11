@@ -40,8 +40,8 @@ void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
   vil_image_view<bool> imga(change.ni(), change.nj()),
                        imgb(change.ni(), change.nj());
 
-  //dilate and erode once 
-  boxm2_util_dilate_erode(bool_image, imga); 
+  //dilate and erode once
+  boxm2_util_dilate_erode(bool_image, imga);
 
   //find blobs
   bil_blob_finder finder(imga);
@@ -59,11 +59,11 @@ void boxm2_util_detect_change_blobs(vil_image_view<float>& change,
       for (unsigned i=iter->ilo; i<iter->ihi+1; ++i)
         blob.add_pixel( PairType(i, iter->j) );
     }
-    
+
     //Only add blobs smaller than 400 pixels
     blobs.push_back(blob);
   }
-#if 0 
+#if 0
   vcl_cout<<"Found "<<blobs.size()<<" blobs"<<vcl_endl;
 #endif
 }
@@ -95,38 +95,38 @@ void boxm2_util_detect_blobs(const vil_image_view<bool>& imgIn,
 void boxm2_util_dilate_erode(const vil_image_view<bool>& imgIn,
                                    vil_image_view<bool>& imgOut)
 {
-  vil_image_view<bool> dest(imgIn.ni(), imgIn.nj()); 
+  vil_image_view<bool> dest(imgIn.ni(), imgIn.nj());
 
   //remove singletons
   boxm2_util_remove_singletons(imgIn, imgOut);
 
   //do a bunch of dilates
-  int numDilates = 1; 
+  int numDilates = 1;
   for(int i=0; i<numDilates; ++i) {
-    
+
     //dilate image
     vil_structuring_element selem;
     selem.set_to_disk(1.05);
     vil_binary_dilate(imgOut, dest, selem);
-        
+
     //erode image
     selem.set_to_disk(1.05);
     vil_binary_erode(dest, imgOut, selem);
   }
-  
-  //int numErodes = 3; 
+
+  //int numErodes = 3;
   //for(int i=0; i<numErodes; ++i) {
-    
+
     ////erode image
     //vil_structuring_element selem;
     //selem.set_to_disk(1.05);
     //vil_binary_erode(imgOut, dest, selem);
-        
+
     ////erode image
     //selem.set_to_disk(1.05);
     //vil_binary_erode(dest, imgOut, selem);
   //}
-  
+
 }
 
 //removes pixels that are surrounded by removed pixels

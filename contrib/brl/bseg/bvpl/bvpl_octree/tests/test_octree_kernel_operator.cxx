@@ -130,9 +130,9 @@ void scene_kernel_operator()
   //Create functor
   bvpl_edge_geometric_mean_functor<float> functor;
 
-  
+
   /***********Part1 operate on tree*******************/
-  
+
   //Create tree
   typedef boct_tree<short,float > tree_type;
   boct_tree<short,float> *tree = new boct_tree<short,float>(3);
@@ -141,20 +141,20 @@ void scene_kernel_operator()
 
   //operate on octree
   bvpl_octree_kernel_operator<float> oper(tree);
-  
-  
+
+
   //Create output trees
   boct_tree<short,float > *tree_out = tree->clone();
   tree_out->init_cells(0.0f);
   short level = 0;
   double cell_length = 1.0/(double)(1<<(tree->root_level() -level));
- 
+
   // void operate(F functor, bvpl_kernel_sptr kernel, tree_type* out_tree, short level, double cell_length)
   oper.operate(functor,kernel, tree_out, level, cell_length);
 
-   
+
   /***********Part2 operate on scene*******************/
-  
+
   vpgl_lvcs lvcs(33.33,44.44,10.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   vgl_point_3d<double> origin(10,10,20);
 
@@ -179,7 +179,7 @@ void scene_kernel_operator()
   //Create the output scenes
   boxm_scene<boct_tree<short,float> > scene_out(lvcs, origin, block_dim, world_dim);
   scene_out.set_paths(scene_path, "response_scene");
-  
+
   //operate on scene
   bvpl_scene_kernel_operator scene_oper;
   scene_oper.operate(scene,functor, kernel, scene_out);

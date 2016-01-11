@@ -74,7 +74,7 @@ static void test_extrema()
   brip_vil_float_ops::max_inscribed_rect(lambda0, lambda1, 90.0f, u_rect, v_rect);
   TEST_NEAR("Inscribed rectangle 90", u_rect, 1.9781584f, 0.1f);
 
-  //test fast extrema 
+  //test fast extrema
   lambda0 = 3.0f;
   lambda1 = 1.5f;
   im.fill(0.0f);
@@ -83,7 +83,7 @@ static void test_extrema()
   vcl_cout.precision(3);
 
   vcl_cout << " 2:1 theta = 0\n";
-  vil_image_view<float> res = 
+  vil_image_view<float> res =
     brip_vil_float_ops::fast_extrema(im, lambda0, lambda1, 0.0f);
   float max = 0;
   for(unsigned j = 14; j<18; ++j){
@@ -197,6 +197,6 @@ static void test_extrema()
   }
   vcl_cout << "----------\n";
 }
- 
+
 
 TESTMAIN(test_extrema);

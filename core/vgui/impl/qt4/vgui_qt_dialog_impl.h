@@ -84,7 +84,7 @@ class vgui_qt_colorchooser_impl : public QGroupBox
   ~vgui_qt_colorchooser_impl() {}
 
   vcl_string  color() const { return value_; }
-  
+
  private:
   void update_color_string();
 

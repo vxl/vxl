@@ -39,9 +39,9 @@ class sdet_sel : public sdet_sel_base
 public:
 
   //: constructor
-  sdet_sel<curve_model>(sdet_edgemap_sptr edgemap, 
-                         sdet_curvelet_map& cvlet_map, 
-                         sdet_edgel_link_graph& edge_link_graph, 
+  sdet_sel<curve_model>(sdet_edgemap_sptr edgemap,
+                         sdet_curvelet_map& cvlet_map,
+                         sdet_edgel_link_graph& edge_link_graph,
                          sdet_curve_fragment_graph& curve_frag_graph,
                          sdet_curvelet_params cvlet_params=sdet_curvelet_params()) :
       sdet_sel_base(edgemap, cvlet_map, edge_link_graph, curve_frag_graph, cvlet_params)
@@ -53,7 +53,7 @@ public:
   virtual ~sdet_sel<curve_model>(){}
 
   //: form a curve hypothesis of the appropriate model given a pair of edgels
-  inline curve_model* form_a_hypothesis(sdet_edgel* ref_e, sdet_edgel* e2, bool &ref_first, 
+  inline curve_model* form_a_hypothesis(sdet_edgel* ref_e, sdet_edgel* e2, bool &ref_first,
       bool forward=true, bool centered=true, bool leading=true)
   {
     // First check for consistency in the appearance information
@@ -68,7 +68,7 @@ public:
     //    a) (ref_e->e2)
     //    b) (e2->ref_e)
     //
-    
+
     const double ref_dir = sdet_vPointPoint(ref_e->pt, e2->pt); //reference dir (ref_e->e2)
 
     //ref centered grouping
@@ -116,7 +116,7 @@ public:
   virtual void form_an_edgel_pair(sdet_edgel* ref_e, sdet_edgel* e2);
   virtual void form_an_edgel_triplet(sdet_curvelet* /*p1*/, sdet_curvelet* /*p2*/){}
   virtual void form_an_edgel_quad(sdet_curvelet* /*t1*/, sdet_curvelet* /*t2*/){}
-  virtual void build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group, 
+  virtual void build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group,
       bool use_flag=false, bool forward=true,  bool centered=true, bool leading=true);
 
   //: check if two curvelets are consistent (is there an intersection in their curve bundles?)
@@ -128,13 +128,13 @@ public:
 
     bool consistent = new_cm->bundle_is_valid();
     //house cleaning
-    delete new_cm; 
-    
+    delete new_cm;
+
     return consistent;
   }
 
   //: form an edgel grouping from an ordered list of edgemap_->edgels
-  virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain, 
+  virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain,
       bool forward=true,  bool centered=true, bool leading=true);
 };
 
@@ -152,7 +152,7 @@ void sdet_sel<curve_model>::form_an_edgel_pair(sdet_edgel* ref_e, sdet_edgel* e2
   //form a hypothetical curve model from this pair
   bool ref_first;
   curve_model* cm = form_a_hypothesis(ref_e, e2, ref_first);
-  
+
   //if model is valid, form an edgel pair curvelet
   if (cm){
     sdet_curvelet* c1 = new sdet_curvelet(ref_e, cm);
@@ -164,15 +164,15 @@ void sdet_sel<curve_model>::form_an_edgel_pair(sdet_edgel* ref_e, sdet_edgel* e2
       c1->push_back(e2);
       c1->push_back(ref_e);
     }
-    
+
     //make links to the edgel-pair from the ref edgel
     curvelet_map_.add_curvelet(c1);
-  } 
+  }
 }
 
 //: form curvelets around the given edgel in a greedy fashion
 template <class curve_model>
-void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group, bool use_flag, 
+void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group, bool use_flag,
                                 bool forward, bool centered, bool leading)
 {
   // 1) construct a structure to temporarily hold the pairwise-hypotheses
@@ -183,7 +183,7 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
   unsigned const jj = sdet_round(eA->pt.y());
 
   unsigned const rad_sqr = rad_*rad_;
-  
+
   // 2) iterate over the neighboring cells around this edgel
   for (int xx=(int)ii-(int)nrad_; xx<=(int)(ii+nrad_) ; xx++){
     for (int yy=(int)jj-(int)nrad_; yy<=(int)(jj+nrad_) ; yy++){
@@ -238,8 +238,8 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
     vcl_deque<sdet_edgel*> cur_edgel_chain; //chain can grow either way
 
     //insert ref edgel first
-    cur_edgel_chain.push_back(eA); 
-      
+    cur_edgel_chain.push_back(eA);
+
     // 8)initialize the shrinking curve bundle from the cur hypothesis
     curve_model* cur_cm = static_cast<curve_model *>(eA_hyps[h1].cm);
 
@@ -287,12 +287,12 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
     }
 
     // 14) form a new curvelet and assign the curve bundle and the edgel chain to it...
-    //     ...if it passes a few tests : 
-    //                             (a) if it doesn't already exist and 
+    //     ...if it passes a few tests :
+    //                             (a) if it doesn't already exist and
     //                             (b) its a reasonable fit and
     //                             (c) its relatively symmetric
-    if (cur_edgel_chain.size()>2 && 
-        !curvelet_map_.does_curvelet_exist(eA, cur_edgel_chain) && 
+    if (cur_edgel_chain.size()>2 &&
+        !curvelet_map_.does_curvelet_exist(eA, cur_edgel_chain) &&
         cur_cm->curve_fit_is_reasonable(cur_edgel_chain, eA, dpos_))// &&
         //curvelet_is_balanced(eA, cur_edgel_chain))
     {
@@ -320,9 +320,9 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
 
 //: form an edgel grouping from an ordered list of edgels
 template <class curve_model>
-sdet_curvelet* 
-sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e, 
-    vcl_deque<sdet_edgel*> &edgel_chain, 
+sdet_curvelet*
+sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
+    vcl_deque<sdet_edgel*> &edgel_chain,
     bool forward,  bool centered, bool leading)
 {
   //1) Go over the edgels in the chain and attempt to form a curvelet from it
@@ -334,7 +334,7 @@ sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
   {
     if (edgel_chain[i] == ref_e)   continue;
     dist_order.insert(vcl_pair<double, unsigned>(vgl_distance(ref_e->pt, edgel_chain[i]->pt), i));
-  } 
+  }
 
   vcl_map<double, unsigned >::iterator it = dist_order.begin();
   for (; it!=dist_order.end(); it++)
@@ -344,18 +344,18 @@ sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
     //form a pairwise curve bundle between the current edgel and the ref edgel
     bool ref_first; //this is not used here
     curve_model* cm = form_a_hypothesis(ref_e, cur_e, ref_first, forward, centered, leading);
-    
+
     //if the bundle is legal intersect it with the current group's bundle
     if (cm && cm->bundle_is_valid())
     {
       //if this is the first pair, record it as the bundle of the grouping
       if (!chain_cm)
         chain_cm = cm;
-      else { 
+      else {
         //intersect it with the existing bundle
         curve_model* new_cm = chain_cm->intersect(cm);
         delete cm; //no use for this anymore
-        
+
         //if this intersection is valid, make it the chain's curve bundle
         if (new_cm->bundle_is_valid()){
           delete chain_cm;   //no use for this since it will be replaced
@@ -384,12 +384,12 @@ sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
   }
 
   sdet_curvelet* new_cvlet=0;
-  //if all the pairwise bundles intersect,  
+  //if all the pairwise bundles intersect,
   //form a new curvelet and assign the curve bundle and the edgel chain to it...
   if (chain_cm)
   {
     chain_cm->curve_fit_is_reasonable(edgel_chain, ref_e, dpos_); //this is just to find the centroid
-  
+
     new_cvlet = new sdet_curvelet(ref_e, chain_cm, forward);
 
     //add edgels

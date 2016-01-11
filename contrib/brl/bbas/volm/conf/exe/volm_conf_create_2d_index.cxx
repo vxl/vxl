@@ -36,7 +36,7 @@ int main(int argc, char** argv)
   // input check
   if (tile_id() == 9999 || geo_folder().compare("") == 0 || land_index_folder().compare("") == 0 || out_folder().compare("") == 0)
   {  vul_arg_display_usage_and_exit();  return volm_io::EXE_ARGUMENT_ERROR;  }
-  
+
   vcl_stringstream log_file;
   log_file << out_folder() << "/log_tile_" << tile_id() << "_leaf_" << min_leaf_id() << "_to_" << max_leaf_id() << ".xml";
   vcl_stringstream log;
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
   }
   vcl_cout << "\t " << indexer->loc_leaves().size() << " location leaves are loaded from geo location folder: " << geo_folder() << vcl_endl;
   vcl_cout << "\t create index from leaf " << min_leaf_id() << " to " << max_leaf_id() << vcl_endl;
-  
+
   unsigned num_locs = 0;
   for (unsigned i = 0; i < indexer->loc_leaves().size(); i++)
     num_locs += indexer->loc_leaves()[i]->hyps_->locs_.size();

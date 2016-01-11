@@ -30,7 +30,7 @@ vil3d_image_view<T> vil3d_crop(const vil3d_image_view<T>& im,
 //: Crop to a region of src.
 // \relatesalso vil3d_image_resource
 vil3d_image_resource_sptr vil3d_crop(const vil3d_image_resource_sptr &src,
-                                     unsigned i0, unsigned ni, 
+                                     unsigned i0, unsigned ni,
                                      unsigned j0, unsigned nj,
                                      unsigned k0, unsigned nk);
 
@@ -38,8 +38,8 @@ vil3d_image_resource_sptr vil3d_crop(const vil3d_image_resource_sptr &src,
 class vil3d_crop_image_resource : public vil3d_image_resource
 {
  public:
-  vil3d_crop_image_resource(vil3d_image_resource_sptr const&, 
-                            unsigned i0, unsigned ni, 
+  vil3d_crop_image_resource(vil3d_image_resource_sptr const&,
+                            unsigned i0, unsigned ni,
                             unsigned j0, unsigned nj,
                             unsigned k0, unsigned nk);
 
@@ -51,7 +51,7 @@ class vil3d_crop_image_resource : public vil3d_image_resource
   virtual enum vil_pixel_format pixel_format() const { return src_->pixel_format(); }
 
 
-  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i, 
+  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                    unsigned j0, unsigned n_j,
                                                    unsigned k0, unsigned n_k) const
   {
@@ -59,7 +59,7 @@ class vil3d_crop_image_resource : public vil3d_image_resource
     return src_->get_copy_view(i0+i0_, n_i, j0+j0_, n_j, k0+k0_, n_k);
   }
 
-  virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned n_i, 
+  virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
                                               unsigned j0, unsigned n_j,
                                               unsigned k0, unsigned n_k) const
   {

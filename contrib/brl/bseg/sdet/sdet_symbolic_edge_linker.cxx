@@ -32,8 +32,8 @@ void sdet_symbolic_edge_linker::apply(sdet_edgemap_sptr edgemap) {
   sdet_sel_sptr edge_linker;
 
   //The curvelet formation parameters
-  sdet_curvelet_params cvlet_params(sdet_curve_model::CC, 
-                                     nrad_, gap_, dt_, dx_, badap_uncer_, 
+  sdet_curvelet_params cvlet_params(sdet_curve_model::CC,
+                                     nrad_, gap_, dt_, dx_, badap_uncer_,
                                      token_len_, max_k_, max_gamma_,
                                      bCentered_grouping_,
                                      bBidirectional_grouping_);
@@ -73,7 +73,7 @@ void sdet_symbolic_edge_linker::apply(sdet_edgemap_sptr edgemap) {
     edge_linker = new sdet_sel_ES_perturbed(edgemap, CM, ELG, CFG, cvlet_params);
     break;
   }
-  
+
   //set appearance usage flags
   edge_linker->set_appearance_usage(app_usage_);
   edge_linker->set_appearance_threshold(app_thresh_);
@@ -88,10 +88,10 @@ void sdet_symbolic_edge_linker::apply(sdet_edgemap_sptr edgemap) {
     edge_linker->build_curvelets_greedy(max_size_to_group_, true);
     break;
   }
-  
+
   if (bFormCompleteCvletMap_)
     edge_linker->form_full_cvlet_map();
-  
+
   double group_time = t.real() / 1000.0;
   t.mark();
   vcl_cout << "Time taken to form groups and cunstruct curvelet map: " << group_time << " sec" << vcl_endl;
@@ -105,7 +105,7 @@ void sdet_symbolic_edge_linker::apply(sdet_edgemap_sptr edgemap) {
 
     //form the link graph
     edge_linker->construct_the_link_graph(min_size_to_link_, linkgraph_algo_);
-  
+
     //extract contours
     switch (linking_algo_) {
       case 1: // iteratively
@@ -118,10 +118,10 @@ void sdet_symbolic_edge_linker::apply(sdet_edgemap_sptr edgemap) {
   // By Yuliang Guo, Oct, 2010
     edge_linker->extract_regular_contours_from_the_link_graph();
 
-    if (bGetfinalcontours_){  
+    if (bGetfinalcontours_){
       edge_linker->Construct_Hypothesis_Tree();
       edge_linker->Disambiguation();
-      edge_linker->correct_CFG_topology(); 
+      edge_linker->correct_CFG_topology();
       edge_linker->Post_Process();
     }
     double link_time = t.real() / 1000.0;

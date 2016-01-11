@@ -59,7 +59,7 @@ static void test_volm_conf_buffer()
       }
       is_same = is_same && values[k][i].is_same(values_in[k][i]);
     }
-  
+
   TEST("buffer binary IO", is_same, true);
 
   return;

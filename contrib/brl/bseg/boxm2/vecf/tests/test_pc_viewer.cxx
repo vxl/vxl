@@ -18,7 +18,7 @@ void test_pc_viewer()
 {
 #ifdef BUILD_TEST_PC_VIEWER
   boxm2_vecf_point_cloud_orbit_viewer pcv;
-  vcl_string base_dir ="c:/Users/mundy/VisionSystems/Janus/experiments/Helena/"; 
+  vcl_string base_dir ="c:/Users/mundy/VisionSystems/Janus/experiments/Helena/";
   vcl_string pc_in_str = "linden/linden_sampled_points.txt";
   vcl_string pc_in_path = base_dir + pc_in_str;
   vcl_string pc_out_str = "linden/linden_sampled_points_orbit_disp.txt";
@@ -36,4 +36,4 @@ void test_pc_viewer()
 #endif
 }
 TESTMAIN( test_pc_viewer );
- 
+

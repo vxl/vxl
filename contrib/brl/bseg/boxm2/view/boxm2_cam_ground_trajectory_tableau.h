@@ -4,7 +4,7 @@
 //:
 // \file
 // \brief A tableau with a single camera that moves on a given trajectory
-// \author Vishal Jain 
+// \author Vishal Jain
 // \date Jan 14, 2014
 
 #include <vgui/vgui_tableau.h>

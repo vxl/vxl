@@ -5,7 +5,7 @@
 
 //: constructor
 sdet_curvelet_map::sdet_curvelet_map(sdet_edgemap_sptr EM,
-                                       sdet_curvelet_params params): 
+                                       sdet_curvelet_params params):
   EM_(EM), params_(params), map_(0)
 {}
 
@@ -18,7 +18,7 @@ sdet_curvelet_map::~sdet_curvelet_map()
 
 //: resize the graph
 void sdet_curvelet_map::resize(unsigned size)
-{ 
+{
   if (size!=map_.size())
     clear();
 
@@ -141,7 +141,7 @@ sdet_curvelet* sdet_curvelet_map::find_pair(sdet_edgel* ref, sdet_edgel* eA, sde
   sdet_curvelet_list_iter p_it = map_[ref->id].begin();
   for (; p_it != map_[ref->id].end(); p_it++){
     sdet_curvelet* p1 = (*p_it);
-    if (p1->edgel_chain.size()==2 && 
+    if (p1->edgel_chain.size()==2 &&
         p1->edgel_chain[0]==eA && p1->edgel_chain[1]==eB)
       return p1; //pair found
   }

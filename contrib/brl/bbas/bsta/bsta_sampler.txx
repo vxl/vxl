@@ -78,7 +78,7 @@ template <class T>
 bool bsta_sampler<T>::sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out)
 {
   //vnl_random rng;
-   
+
   return sample(jh, cnt, out, default_rand);
 }
 

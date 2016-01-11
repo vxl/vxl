@@ -24,7 +24,7 @@ static void test_calibration_matrix()
   M(1,2) = scale_factor*15;
   vpgl_calibration_matrix<double> K1b(M);
 
-  TEST_NEAR( "test equality of constructors 1", 
+  TEST_NEAR( "test equality of constructors 1",
              K1.get_matrix() == K1b.get_matrix(), true, 1e-06);
   TEST_NEAR( "test equality of constructors 2",
              K1.focal_length()*K1.x_scale() == K1b.focal_length()*K1b.x_scale() &&
@@ -35,7 +35,7 @@ static void test_calibration_matrix()
   vpgl_calibration_matrix<double> K2( focal_length, principal_point,
     x_scale, y_scale, skew );
   K1.set_focal_length( focal_length );
-  TEST_NEAR( "test focal length setter", 
+  TEST_NEAR( "test focal length setter",
              K1.get_matrix() == K2.get_matrix(), true, 1e-06);
 
   // Test the skew setter.
@@ -43,7 +43,7 @@ static void test_calibration_matrix()
   vpgl_calibration_matrix<double> K3( focal_length, principal_point,
     x_scale, y_scale, skew );
   K1.set_skew( skew );
-  TEST_NEAR( "test skew setter", 
+  TEST_NEAR( "test skew setter",
              K1.get_matrix() == K3.get_matrix(), true, 1e-06);
 
   // Test the x scale setter.
@@ -51,7 +51,7 @@ static void test_calibration_matrix()
   vpgl_calibration_matrix<double> K4( focal_length, principal_point,
     x_scale, y_scale, skew );
   K1.set_x_scale( x_scale );
-  TEST_NEAR( "test x_scale setter", 
+  TEST_NEAR( "test x_scale setter",
              K1.get_matrix() == K4.get_matrix(), true, 1e-06);
 
   // Test the principal point setter.
@@ -59,7 +59,7 @@ static void test_calibration_matrix()
   vpgl_calibration_matrix<double> K5( focal_length, principal_point,
     x_scale, y_scale, skew );
   K1.set_principal_point( principal_point );
-  TEST_NEAR( "test principal point setter", 
+  TEST_NEAR( "test principal point setter",
              K1.get_matrix() == K5.get_matrix(), true, 1e-06);
 
   // Test the y scale setter.
@@ -67,7 +67,7 @@ static void test_calibration_matrix()
   vpgl_calibration_matrix<double> K6( focal_length, principal_point,
     x_scale, y_scale, skew );
   K1.set_y_scale( y_scale );
-  TEST_NEAR( "test y_scale setter", 
+  TEST_NEAR( "test y_scale setter",
              K1.get_matrix() == K6.get_matrix(), true, 1e-06);
 }
 

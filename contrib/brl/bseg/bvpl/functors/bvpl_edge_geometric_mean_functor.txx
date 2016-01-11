@@ -27,7 +27,7 @@ void bvpl_edge_geometric_mean_functor<T>::init()
 template <class T>
 void bvpl_edge_geometric_mean_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 {
-  
+
   if (d.c_ > 0) {
     P1_ += vcl_log(val);
     n1_++;
@@ -47,15 +47,15 @@ T bvpl_edge_geometric_mean_functor<T>::result()
     init();
     return (T)0;
   }
-  
+
   P0_/=(T)n0_;
   P1_/=(T)n1_;
-  
+
   T result = vcl_exp(P0_+P1_);
-  
+
   //reset all variables
   init();
-  
+
   return result;
 }
 

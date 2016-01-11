@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #ifndef VIL_NITF2_COMPOUND_FIELD_VALUE_H
@@ -15,10 +15,10 @@
 //
 // NITF fields can represent built-in types like integer or vcl_string, and
 // compound types like date_time. Subclasses of vil_nitf2_compound_field_value, along with
-// built-in types, represent all the types of values that are passed back to 
-// clients. These types implement operator << (ostream&) to output themselves 
+// built-in types, represent all the types of values that are passed back to
+// clients. These types implement operator << (ostream&) to output themselves
 // in human-readable form. Some compound fields keep track of their precision.
-// By contrast, NITF file i/o is handled by corresponding Formatter classes, 
+// By contrast, NITF file i/o is handled by corresponding Formatter classes,
 // which clients should not need to know about.
 
 // Base class for NITF compound field types.
@@ -74,17 +74,17 @@ public:
   virtual bool write(vcl_ostream& output, int field_width) = 0;
 };
 
-// Geodetic location represented as a pair of signed degrees, with a 
+// Geodetic location represented as a pair of signed degrees, with a
 // specified precision.
 
 struct vil_nitf2_location_degrees : public vil_nitf2_location
 {
 public:
-  vil_nitf2_location_degrees(int precision) 
+  vil_nitf2_location_degrees(int precision)
     : vil_nitf2_location(format_degrees), precision(precision) {}
   bool read(vcl_istream& input, int field_width, bool& out_blank);
   bool write(vcl_ostream& output, int field_width);
-  double lat_degrees; 
+  double lat_degrees;
   double lon_degrees;
   int precision;
   vcl_ostream& output(vcl_ostream&) const;

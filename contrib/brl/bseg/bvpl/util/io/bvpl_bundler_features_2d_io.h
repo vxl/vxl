@@ -3,7 +3,7 @@
 #define BVPL_BUNDLER_FEATURES_2D_IO_H_
 //:
 // \file
-// \brief 
+// \brief
 // \author Brandon A. Mayer b.mayer1@gmail.com
 // \date  9/8/11
 //

@@ -18,7 +18,7 @@ use the "GTIFImport" routine, such as <a href="geotiff.html">geotifcp</a>.<p>
 
 The <b>-tfw</b> flag may be passed to force generation of an ESRI style .tfw
 file as well as the metadata file.  The ESRI world file is always given
-the same basename as the input file, with the extension .tfw.  If one 
+the same basename as the input file, with the extension .tfw.  If one
 exists already it will be overwritten.<p>
 
 The <b>-no_norm</b> flag will supress reporting of normalized parameters, and
@@ -48,7 +48,7 @@ followed by "*" or "*<number>" indicates multiple entries):<p>
       &lt;GeoTIFF_Info&gt; = &lt;GeoTIFF_Version&gt; + &lt;GeoTIFF_Revision&gt;
          &lt;GeoTIFF_Version&gt; = Version: + &lt;Single_Space&gt; + &lt;Version&gt; + &lt;Return&gt;
             &lt;Version&gt; = &lt;Integer&gt;
-         &lt;GeoTIFF_Revision&gt; = Revision: + 
+         &lt;GeoTIFF_Revision&gt; = Revision: +
                &lt;Single_Space&gt; + &lt;Major_Rev&gt; + &lt;Period&gt; + &lt;Minor_Rev&gt; + &lt;Return&gt;
                &lt;Major_Rev&gt; = &lt;Integer&gt;
                &lt;Minor_Rev&gt; = &lt;Integer&gt;
@@ -56,7 +56,7 @@ followed by "*" or "*<number>" indicates multiple entries):<p>
          &lt;Tag_Header&gt; = &lt;White_Space&gt; + Tagged_Information: + &lt;Return&gt;
          &lt;Tag_Trailer&gt; = &lt;White_Space&gt; + End_Of_Tags. + &lt;Return&gt;
          &lt;Tag_Entry&gt; = &lt;Tag_Entry_Header&gt; + &lt;Tag_Entry_Row&gt;*
-            &lt;Tag_Entry_Header&gt; = &lt;White_Space&gt; + 
+            &lt;Tag_Entry_Header&gt; = &lt;White_Space&gt; +
                      &lt;Tag_Name&gt; + &lt;Tag_Dimension&gt; + &lt;Colon&gt; + &lt;Return&gt;
                &lt;Tag_Dimension&gt;  = "(" + &lt;NRows&gt; + &lt;Comma&gt; + &lt;NCols&gt; + ")"
 		 	      &lt;NRows&gt; = &lt;Integer&gt;
@@ -66,7 +66,7 @@ followed by "*" or "*<number>" indicates multiple entries):<p>
          &lt;Key_Header&gt; = &lt;White_Space&gt; + Keyed_Information: + &lt;Return&gt;
          &lt;Key_Trailer&gt; = &lt;White_Space&gt; + End_Of_Keys. + &lt;Return&gt;
          &lt;Key_Entry&gt; = &lt;Key_Entry_Header&gt; + &lt;Key_Entry_Value&gt;
-            &lt;Key_Entry_Header&gt; = &lt;White_Space&gt; + 
+            &lt;Key_Entry_Header&gt; = &lt;White_Space&gt; +
                      &lt;Key_Name&gt; + &lt;Key_Dimension&gt; + &lt;Colon&gt; + &lt;Return&gt;
               &lt;Key_Dimension&gt; = "(" + &lt;Key_Format&gt; + &lt;Comma&gt; + &lt;Key_Count&gt; + ")"
             &lt;Key_Entry_Value&gt; = (&lt;Key_Value&gt; | &lt;Numeric_Value&gt; | &lt;Ascii_Value&gt;)
@@ -78,7 +78,7 @@ followed by "*" or "*<number>" indicates multiple entries):<p>
    &lt;Key_Value&gt; = All symbolic value names defined in GeoTIFF spec.
    &lt;Key_Format&gt; = (Short | Ascii | Double)
 </pre>
-   
+
 And for the pedantic:
 <pre>
    &lt;White_Space&gt; = (&lt;Single_Space&gt; | &lt;Tab&gt;)*
@@ -90,11 +90,11 @@ And for the pedantic:
    ...
 </pre>
 
-Following the formal metadata report, there is an optional (use -no_norm 
+Following the formal metadata report, there is an optional (use -no_norm
 to supress) report on the <i>normalized</i> projection parameters for the
 file.  This is an attempt to lookup PCS and GCS definitions to get detailed
 datum, ellipsoid, and projection definitions for the file.  In general it
-requires access to the EPSG CSV files to work properly.  The GEOTIFF_CSV 
+requires access to the EPSG CSV files to work properly.  The GEOTIFF_CSV
 environment variable can be used to point to directory containing the EPSG
 CSV files (normally distributed with libgeotiff, or this executable).  If
 GEOTIFF_CSV is not defined listgeo will look for a csv subdirectory, or
@@ -105,9 +105,9 @@ Following the normalized projection information listgeo will report the
 positions of the four corner coordinates, and if possible their lat/long
 equivelents.  The corner coordinates are reported for tiepoint+scale and
 transformation matrix formulations of GeoTIFF files, but not for multiple
-tiepoint formulations.  The lat/long coordinates are only available if 
-listgeo is compiled with PROJ.4, if the projection definition can be 
-normalized, and if it is a projection supported by the listgeo PROJ.4 
+tiepoint formulations.  The lat/long coordinates are only available if
+listgeo is compiled with PROJ.4, if the projection definition can be
+normalized, and if it is a projection supported by the listgeo PROJ.4
 binding.<p>
 
 Example (default output of listgeo):<p>
@@ -118,10 +118,10 @@ Geotiff_Information:
    Key_Revision: 1.0
    Tagged_Information:
       ModelTiepointTag (2,3):
-         0                0                0                
-         440720           3751320          0                
+         0                0                0
+         440720           3751320          0
       ModelPixelScaleTag (1,3):
-         60               60               0                
+         60               60               0
       End_Of_Tags.
    Keyed_Information:
       GTModelTypeGeoKey (Short,1): ModelTypeProjected
@@ -157,9 +157,9 @@ Center        ( 456080.000,3735960.000)  (117d28'27.39"W, 33d45'52.46"N)
 
 <h2>See Also:</h2>
 
-<ol> 
+<ol>
 <li>
-<a href="geotifcp.html">geotiffcp</a> - Copy TIFF installing GeoTIFF 
+<a href="geotifcp.html">geotiffcp</a> - Copy TIFF installing GeoTIFF
 metadata.<p>
 <li>
 <a href="http://www.remotesensing.org/geotiff/geotiff.html">

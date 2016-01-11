@@ -20,7 +20,7 @@
 //   object: { data: fruit1 }
 //   object: { data: fruit2 }
 // }
-// To parse this, require keyword="object:". 
+// To parse this, require keyword="object:".
 // For this example, on exit, items[1]=="{ data: fruit1 }", which could
 // be passed to mbl_read_props.
 // \endverbatim
@@ -40,7 +40,7 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
 //   object: thing1 { data: fruit1 }
 //   object: thing2 { data: fruit2 }
 // }
-// To parse this, require keyword="object:". 
+// To parse this, require keyword="object:".
 // For this example, on exit, items[1]=="thing1 { data: fruit1 }".
 // \endverbatim
 // Throws a mbl_exception_parse_error if it fails.

@@ -62,7 +62,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
  private:
   friend class bocl_manager<bocl_global_memory_bandwidth_manager>;
 
-  // don't allow users to create their own instance 
+  // don't allow users to create their own instance
   bocl_global_memory_bandwidth_manager()
     : program_(0),time_in_secs_(0.0f) {}
 

@@ -223,12 +223,12 @@ void xcv_segmentation::canny_ox()
   cox.detect_edges(img, &detected_edges);
 
   draw_edges(detected_edges, col, row);
-  
-  // Example code to save the edges 
+
+  // Example code to save the edges
   //vcl_ofstream ofs("/temp/1.txt");
   //for(vcl_list<osl_edge*>::const_iterator i=detected_edges.begin(); i!=detected_edges.end(); ++i)
   //	{
-  //		(*i)->write_ascii(ofs); 
+  //		(*i)->write_ascii(ofs);
   //		ofs << "\n";
   //	}
 }

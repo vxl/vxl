@@ -20,7 +20,7 @@
 //=========================================================================
 // For a given transform T, check that delta(p, q-p) == T(q)-T(p)
 //=========================================================================
-static bool delta_equiv(const vimt3d_transform_3d& T, 
+static bool delta_equiv(const vimt3d_transform_3d& T,
                         const vgl_point_3d<double>& p,
                         const vgl_point_3d<double>& q)
 {
@@ -28,7 +28,7 @@ static bool delta_equiv(const vimt3d_transform_3d& T,
   vgl_vector_3d<double> pq = T(q)-T(p);
   double dl = (dp-pq).length();
   bool equiv = (dl<1e-12);
-#ifndef NDEBUG  
+#ifndef NDEBUG
   if (!equiv)
   {
     vcl_cerr << "dp: " << dp << "\n";
@@ -279,7 +279,7 @@ static void test_the_transform(vimt3d_transform_3d& t)
 static void test_simplify(const vimt3d_transform_3d& input, const vimt3d_transform_3d& expected)
 {
   vcl_cout << "Testing Simplify\n";
-  
+
   vimt3d_transform_3d copy(input);
   copy.simplify();
 
@@ -367,7 +367,7 @@ static void test_set_matrix()
   TEST_NEAR("set_matrix and simplify of ZoomOnly", (M-N).fro_norm(), 0, 1e-12);
   TEST("set_matrix and simplify of ZoomOnly", T.form(), form);
 
-  // similarity  
+  // similarity
   form = vimt3d_transform_3d::Similarity;
   vimt3d_transform_3d S;
   S.set_similarity(sx, rx, ry, rz, tx, ty, tz);
@@ -378,7 +378,7 @@ static void test_set_matrix()
   TEST_NEAR("set_matrix and simplify of Similarity", (M-N).fro_norm(), 0, 1e-12);
   TEST("set_matrix and simplify of Similarity", T.form(), form);
 
-  // affine  
+  // affine
   form = vimt3d_transform_3d::Affine;
   vimt3d_transform_3d A;
   A.set_affine(sx, sy, sz, rx, ry, rz, tx, ty, tz);

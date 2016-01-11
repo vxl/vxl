@@ -3,7 +3,7 @@ ADD_EXECUTABLE( bvxm_algo_test_all
   test_merge_mog.cxx
   test_mog_norm.cxx
 # causes memory allocation errors (FIX_ME)
-#  test_boxm_scene_to_bvxm_grid.cxx 
+#  test_boxm_scene_to_bvxm_grid.cxx
 )
 
 TARGET_LINK_LIBRARIES( bvxm_algo_test_all bvxm_algo bvxm_grid testlib bsta)

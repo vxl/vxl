@@ -22,19 +22,19 @@ struct msm_cubic_bezier_node
 
   // Control points
   vgl_point_2d<double> c1,c2;
-  
+
   //: Return position at t (in [0,1]) given end point q
   vgl_point_2d<double> point(double t, const vgl_point_2d<double>& q) const;
-  
+
   //: Return tangent to curve at t (in [0,1]) given end point q
   vgl_vector_2d<double> tangent(double t, const vgl_point_2d<double>& q) const;
-  
+
   //: Estimate approximate length of curve by piece-wise linear curve with k extra points
   double approx_length(const vgl_point_2d<double>& q, unsigned k=3) const;
-  
+
   //: True if sufficiently straight, assuming q is end point.
   bool is_straight(const vgl_point_2d<double>& q, double thresh=0.01) const;
-  
+
   //: Set to a straight line from p to q
   void set_to_line(const vgl_point_2d<double>& q);
 
@@ -43,21 +43,21 @@ struct msm_cubic_bezier_node
 //: Basic implementation of a cubic poly-bezier
 //  Allows generation of a smooth curve through a set of points
 //  Implemented as a set of bezier nodes.
-//  Can either be open (so has n points, and n-1 bezier segments), 
+//  Can either be open (so has n points, and n-1 bezier segments),
 //  or closed (n points, n segments, with point n-1 linked to point 0).
-//  
+//
 class msm_cubic_bezier
 {
  private:
   //: List of nodes making up the curve
   vcl_vector<msm_cubic_bezier_node> bnode_;
-  
+
   //: Compute control points so as to generate a smooth open curve
   void smooth_open();
-  
+
   //: Compute control points so as to generate a smooth closed curve
   void smooth_closed();
-  
+
   //: True for closed curves
   bool closed_;
  public:
@@ -75,7 +75,7 @@ class msm_cubic_bezier
 
   //: Number of points defining the curve
   vcl_size_t size() const { return bnode_.size(); }
-  
+
     //: True for closed curves
   bool is_closed() const { return closed_; }
 
@@ -83,16 +83,16 @@ class msm_cubic_bezier
   //: Return point for node i
   const vgl_point_2d<double>& point(unsigned i) const
   { return bnode_[i].p; }
-  
+
   //: Return i-th curve segment description
   const msm_cubic_bezier_node& segment(unsigned i) const { return bnode_[i]; }
 
   //: Return position at t (in [0,1]) in segment i of curve
   vgl_point_2d<double> point(unsigned i, double t) const;
-  
+
   //: Return tangent to curve at t (in [0,1]) in segment i of curve
   vgl_vector_2d<double> tangent(unsigned i, double t) const;
-  
+
   //: Return normal to curve at t (in [0,1]) in segment i of curve
   //  tangent(i,t) rotated by 90 degrees, using (-t.y(),t.x());
   vgl_vector_2d<double> normal(unsigned i, double t) const
@@ -107,12 +107,12 @@ class msm_cubic_bezier
   //  To do the integration, each curve approximated by pieces of length no more than ~min_len
   void equal_space(unsigned start, unsigned end, unsigned n_pts, double min_len,
                    vcl_vector<vgl_point_2d<double> >& new_pts) const;
-                   
+
   //: Generate set of points along the curve, retaining control points.
   //  Creates sufficient intermediate points so that their spacing is approx_sep.
   // \param new_normals[i] the normal to the curve at new_pts[i]
   // \param control_pt_index[i] gives element of new_pts for control point i
-  void get_extra_points(double approx_sep, 
+  void get_extra_points(double approx_sep,
                         vcl_vector<vgl_point_2d<double> >& new_pts,
                         vcl_vector<vgl_vector_2d<double> >& new_normals,
                         vcl_vector<unsigned>& control_pt_index) const;

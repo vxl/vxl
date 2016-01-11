@@ -14,7 +14,7 @@ float render_expected_image( bstm_scene_sptr & scene,
                             cl_command_queue & queue,
                             vpgl_camera_double_sptr & cam,
                             bocl_mem_sptr & exp_image,
-                            bocl_mem_sptr & vis_image, 
+                            bocl_mem_sptr & vis_image,
                             bocl_mem_sptr & exp_img_dim,
                             vcl_string data_type,
                             bocl_kernel* kernel,
@@ -24,6 +24,6 @@ float render_expected_image( bstm_scene_sptr & scene,
                             int apptypesize,  float time,
                             vcl_string label_data_type = "", int label_apptypesize = 0, bool render_label = false);
 
-                            
+
 #endif // bstm_ocl_render_expected_image_function_h_
 

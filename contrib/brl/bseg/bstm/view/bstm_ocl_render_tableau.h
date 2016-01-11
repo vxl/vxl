@@ -78,14 +78,14 @@ class bstm_ocl_render_tableau : public bstm_cam_tableau
   GLuint pbuffer_;
   cl_mem clgl_buffer_;
   bocl_mem_sptr exp_img_;
-  bocl_mem_sptr exp_img_dim_; 
+  bocl_mem_sptr exp_img_dim_;
   //--Render, update, refine, save helper methods ------------------------------
   //func to render frame on GPU (returns gpu time)
   float render_frame();
 
   bool init_clgl();
   bool do_init_ocl;
-  
+
   bool render_trajectory_;
   bool render_label_;
 };

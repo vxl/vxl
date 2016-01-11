@@ -49,7 +49,7 @@ struct opj_event_mgr;
 /*@{*/
 /* ----------------------------------------------------------------------- */
 
-#if defined(OPJ_BIG_ENDIAN) 
+#if defined(OPJ_BIG_ENDIAN)
 	#if !defined(OPJ_LITTLE_ENDIAN)
 			#define opj_write_bytes		opj_write_bytes_BE
 			#define opj_read_bytes		opj_read_bytes_BE
@@ -75,7 +75,7 @@ struct opj_event_mgr;
 
 
 
-typedef enum  
+typedef enum
 {
 	opj_stream_e_output		= 0x1,
 	opj_stream_e_input		= 0x2,
@@ -93,23 +93,23 @@ typedef struct opj_stream_private
 	 * User data, be it files, ... The actual data depends on the type of the stream.
 	 */
 	void *					m_user_data;
-	
+
 	/**
 	 * Pointer to actual read function (NULL at the initialization of the cio.
 	 */
 	opj_stream_read_fn		m_read_fn;
-	
+
 	/**
 	 * Pointer to actual write function (NULL at the initialization of the cio.
 	 */
 	opj_stream_write_fn		m_write_fn;
-	
+
 	/**
 	 * Pointer to actual skip function (NULL at the initialization of the cio.
 	 * There is no seek function to prevent from back and forth slow procedures.
 	 */
 	opj_stream_skip_fn		m_skip_fn;
-	
+
 	/**
 	 * Pointer to actual seek function (if available).
 	 */
@@ -130,19 +130,19 @@ typedef struct opj_stream_private
 	OPJ_BYTE *					m_current_data;
 
 	OPJ_SIZE_T (* m_opj_skip)(struct opj_stream_private * ,OPJ_SIZE_T , struct opj_event_mgr *);
-	
+
 	bool (* m_opj_seek) (struct opj_stream_private * , OPJ_SIZE_T , struct opj_event_mgr *);
-	
+
 	/**
 	 * number of bytes containing in the buffer.
 	 */
 	OPJ_UINT32			m_bytes_in_buffer;
-	
+
 	/**
 	 * The number of bytes read/written.
 	 */
 	OPJ_SIZE_T			m_byte_offset;
-	
+
 	/**
 	 * The size of the buffer.
 	 */
@@ -152,8 +152,8 @@ typedef struct opj_stream_private
 	 * Flags to tell the status of the stream.
 	 */
 	OPJ_UINT32			m_status;
-	
-} 
+
+}
 opj_stream_private_t;
 
 
@@ -288,9 +288,9 @@ OPJ_SIZE_T opj_stream_skip (opj_stream_private_t * p_stream,OPJ_SIZE_T p_size, s
 
 /**
  * Tells the byte offset on the stream (similar to ftell).
- * 
+ *
  * @param		p_stream	the stream to get the information from.
- * 
+ *
  * @return		the current position o fthe stream.
  */
 OPJ_SIZE_T opj_stream_tell (const opj_stream_private_t * p_stream);

@@ -117,7 +117,7 @@ int main(int argc, char** argv)
     vcl_cerr<<"Failed to open "<<out_path() <<" for output.\n";
     return 1;
   }
-  
+
   ofs<<"// Shapes such that separation between point "
      <<ref_pt0()<<" and "<<ref_pt1()<<" is at least "<<min_sep()<<vcl_endl;
   ofs<<"image_dir: "<<params.image_dir<<vcl_endl;

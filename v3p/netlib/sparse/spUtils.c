@@ -170,7 +170,7 @@ static RealNumber ComplexCondition( MatrixPtr, RealNumber, int* );
  *  The algorithm used in this function was developed by Ken Kundert and
  *  Tom Quarles.
  *
- *  \param *  eMatrix 
+ *  \param *  eMatrix
  *      Pointer to the matrix to be preordered.
  */
 /*  >>> Local variables;
@@ -1076,7 +1076,7 @@ ComplexNumber Pivot, cDeterminant;
         }
         if (Matrix->NumberOfInterchangesIsOdd)
             CMPLX_NEGATE( cDeterminant );
-        
+
         *pDeterminant = cDeterminant.Real;
         *piDeterminant = cDeterminant.Imag;
     }
@@ -1422,14 +1422,14 @@ spPseudoCondition( spMatrix eMatrix )
  *  A.K. Cline, C.B. Moler, G.W. Stewart, J.H. Wilkinson.  An estimate
  *  for the condition number of a matrix.  SIAM Journal on Numerical
  *  Analysis.  Vol. 16, No. 2, pages 368-375, April 1979.
- *  
+ *
  *  J.J. Dongarra, C.B. Moler, J.R. Bunch, G.W. Stewart.  LINPACK
  *  User's Guide.  SIAM, 1979.
- *  
+ *
  *  Roger G. Grimes, John G. Lewis.  Condition number estimation for
  *  sparse matrices.  SIAM Journal on Scientific and Statistical
  *  Computing.  Vol. 2, No. 4, pages 384-388, December 1981.
- *  
+ *
  *  Dianne Prost O'Leary.  Estimating matrix condition numbers.  SIAM
  *  Journal on Scientific and Statistical Computing.  Vol. 1, No. 2,
  *  pages 205-209, June 1980.
@@ -1449,7 +1449,7 @@ spPseudoCondition( spMatrix eMatrix )
  */
 
 spREAL
-spCondition( 
+spCondition(
     spMatrix eMatrix,
     spREAL NormOfMatrix,
     int *pError
@@ -1934,7 +1934,7 @@ RealNumber Max = 0.0, AbsRowSum;
  *
  *  Using only the size of the matrix as an upper bound on \f$ m_{ij} \f$ and
  *  Barlow's bound, the user can estimate the size of the matrix error
- *  terms \f$ e_{ij} \f$ using the bound of Erisman and Reid.  spRoundoff() 
+ *  terms \f$ e_{ij} \f$ using the bound of Erisman and Reid.  spRoundoff()
  *  computes a tighter bound (with more work) based on work by Gear
  *  [3], \f$ |e_{ij}| < 1.01 u \rho (t c^3 + (1 + t)c^2) \f$ where
  *  \f$ t \f$ is the threshold and \f$ c \f$ is the maximum number of
@@ -2086,7 +2086,7 @@ register ElementPtr pElement, pDiag;
  */
 
 spREAL
-spRoundoff( 
+spRoundoff(
     spMatrix eMatrix,
     spREAL Rho
 )

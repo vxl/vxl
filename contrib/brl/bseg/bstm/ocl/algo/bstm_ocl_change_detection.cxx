@@ -1241,7 +1241,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
 
         //write info to disk
         change_prob->read_to_buffer(queue);
-    }   
+    }
 #endif
 
 

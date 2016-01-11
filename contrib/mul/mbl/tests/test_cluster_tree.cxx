@@ -31,7 +31,7 @@ void test_cluster_tree()
   unsigned nL = 3;
   vcl_vector<double> max_r(nL);
   double r0 = 2.001;
-  for (unsigned L=0;L<nL;++L) 
+  for (unsigned L=0;L<nL;++L)
   {
     max_r[L]=r0;  r0*=2.0;
     vcl_cout<<"L="<<L<<" max_r: "<<max_r[L]<<vcl_endl;

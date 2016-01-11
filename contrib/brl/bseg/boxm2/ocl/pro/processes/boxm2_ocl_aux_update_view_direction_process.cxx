@@ -137,7 +137,7 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     int status=0;
     cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
         CL_QUEUE_PROFILING_ENABLE,&status);
-    if (status!=0) 
+    if (status!=0)
         return false;
 
     vcl_string identifier=device->device_identifier();

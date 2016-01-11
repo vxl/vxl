@@ -142,7 +142,7 @@ static void test_fundamental_matrix()
   vpgl_fundamental_matrix<double> Fi = actual_f_matrix();
 
   vnl_double_3x3 error = Fi.get_matrix()-F4.get_matrix();
-  TEST_NEAR("Construct fundamental matrix from essential matrix", 
+  TEST_NEAR("Construct fundamental matrix from essential matrix",
             error.frobenius_norm(), 0, 1);
 }
 

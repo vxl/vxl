@@ -43,7 +43,7 @@ void vgui_text_put(const char* str, unsigned size)
     for (unsigned k=0; str[k]; ++k){
       int ic = static_cast<int>(str[k]);
       glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ic);
-    }   
+    }
   }else{
     for (unsigned k=0; str[k]; ++k){
       int ic = static_cast<int>(str[k]);

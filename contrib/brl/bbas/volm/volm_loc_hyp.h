@@ -69,7 +69,7 @@ class volm_loc_hyp : public vbl_ref_count
 
   //: Return IO version number;
   short version() const { return 2; }
-  
+
   //: release mem
   void release_memory() { locs_.clear(); }
 
@@ -77,7 +77,7 @@ class volm_loc_hyp : public vbl_ref_count
   void write_to_kml(vcl_string out_file, double size, bool const& write_as_dot = false);
 
  public:
-  // lon is x, lat is y 
+  // lon is x, lat is y
   vcl_vector<vgl_point_3d<double> > locs_;
   unsigned current_;
 };

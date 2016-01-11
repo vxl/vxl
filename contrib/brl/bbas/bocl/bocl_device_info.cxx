@@ -17,7 +17,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
 
   //get platform associated with device
   cl_platform_id platform;
-  status = clGetDeviceInfo(*device_, CL_DEVICE_PLATFORM, sizeof(platform), (void*) &platform, 0); 
+  status = clGetDeviceInfo(*device_, CL_DEVICE_PLATFORM, sizeof(platform), (void*) &platform, 0);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_PLATFORM failed."))
     return;
   char platform_name[512];
@@ -29,13 +29,13 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_PLATFORM_VERSION failed."))
     return;
   platform_version_ = vcl_string(platform_name);
-  
-  //get device name 
+
+  //get device name
   char device_string[1024];
   status = clGetDeviceInfo(*device_, CL_DEVICE_NAME, sizeof(device_string), &device_string, NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_NAME failed."))
     return;
-  device_name_ = vcl_string(device_string); 
+  device_name_ = vcl_string(device_string);
 
   //get Device Type
   status = clGetDeviceInfo(*device_,CL_DEVICE_TYPE,sizeof(device_type_),(void*) &device_type_,NULL);
@@ -47,14 +47,14 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
     return;
   device_vendor_ = vcl_string(device_string);
- 
+
   //store driver version
   status = clGetDeviceInfo(*device_, CL_DRIVER_VERSION, sizeof(device_string), &device_string, NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
     return;
-  driver_version_ = vcl_string(device_string); 
-    
-  
+  driver_version_ = vcl_string(device_string);
+
+
   //Get device max work gropu size
   status = clGetDeviceInfo(*device_,CL_DEVICE_MAX_WORK_GROUP_SIZE,sizeof(vcl_size_t),(void*)&max_work_group_size_,NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_WORK_GROUP_SIZE failed."))
@@ -83,12 +83,12 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_ulong), (void *)&max_mem_alloc_size_, NULL);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_MAX_MEM_ALLOC_SIZE failed."))
     return;
-    
-  //store max param size  
+
+  //store max param size
   status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(cl_ulong), (void *)&max_parameter_size_, NULL);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_MAX_PARAMETER_SIZE failed."))
     return;
-    
+
   //address bits (pointer size on device)
   status = clGetDeviceInfo(*device_, CL_DEVICE_ADDRESS_BITS, sizeof(addr_bits_), &addr_bits_, NULL);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_ADDRESS_BITS failed."))
@@ -130,15 +130,15 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   //get device image3d max width
   status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_WIDTH, sizeof(vcl_size_t), (void *)&image3d_max_width_, NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE3D_MAX_WIDTH failed."))
-    return;   
+    return;
   //get device image3d max height
   status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_HEIGHT, sizeof(vcl_size_t), (void *)&image3d_max_height_, NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE3D_MAX_HEIGHT failed."))
-    return;     
+    return;
   //get device image3d max width
   status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_DEPTH, sizeof(vcl_size_t), (void *)&image3d_max_depth_, NULL);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE3D_MAX_DEPTH failed."))
-    return;     
+    return;
 
   //get device extension list
   char extensions[2000];
@@ -148,10 +148,10 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   extensions_supported_ = vcl_string(extensions);
 
   //see if it is an NVIDIA device
-  is_nvidia_device_ = vcl_strstr(extensions_supported_.c_str(), "cl_nv_device_attribute_query") != NULL; 
+  is_nvidia_device_ = vcl_strstr(extensions_supported_.c_str(), "cl_nv_device_attribute_query") != NULL;
 
   //if it's an nvidia device, get nvidia specific attributes
-  if(is_nvidia_device_) 
+  if(is_nvidia_device_)
   {
       clGetDeviceInfo(*device_, CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV, sizeof(cl_uint), &compute_capability_major_, NULL);
       clGetDeviceInfo(*device_, CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV, sizeof(cl_uint), &compute_capability_minor_, NULL);
@@ -161,8 +161,8 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
       clGetDeviceInfo(*device_, CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV, sizeof(cl_bool), &exec_timeout_, NULL);
       clGetDeviceInfo(*device_, CL_DEVICE_INTEGRATED_MEMORY_NV, sizeof(cl_bool), &integrated_memory_, NULL);
   }
-  
-   
+
+
 #if 0  //other properties not yet stored
   // CL_DEVICE_MAX_MEM_ALLOC_SIZE
   cl_ulong max_mem_alloc_size;
@@ -191,7 +191,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
   cl_command_queue_properties queue_properties;
   clGetDeviceInfo(device, CL_DEVICE_QUEUE_PROPERTIES, sizeof(queue_properties), &queue_properties, NULL);
   if( queue_properties & CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE )
-      shrLogEx(iLogMode, 0, "  CL_DEVICE_QUEUE_PROPERTIES:\t\t%s\n", "CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE");    
+      shrLogEx(iLogMode, 0, "  CL_DEVICE_QUEUE_PROPERTIES:\t\t%s\n", "CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE");
   if( queue_properties & CL_QUEUE_PROFILING_ENABLE )
       shrLogEx(iLogMode, 0, "  CL_DEVICE_QUEUE_PROPERTIES:\t\t%s\n", "CL_QUEUE_PROFILING_ENABLE");
 #endif
@@ -201,7 +201,7 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
 //destructorrr
 bocl_device_info::~bocl_device_info()
 {
-  
+
 #if 0
   if (max_work_item_sizes_)
   {
@@ -221,16 +221,16 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
      << " Device Platform: " << info.platform_name_ << '\n'
      << " Device Platform Version: " << info.platform_version_ << '\n'
      << " Device Driver Version: " << info.driver_version_ << '\n'
-     << " Device Type: "; 
+     << " Device Type: ";
   if( info.device_type_ & CL_DEVICE_TYPE_CPU )
-      s << "CL_DEVICE_TYPE_CPU \n"; 
+      s << "CL_DEVICE_TYPE_CPU \n";
   if( info.device_type_ & CL_DEVICE_TYPE_GPU )
-      s << "CL_DEVICE_TYPE_GPU \n"; 
+      s << "CL_DEVICE_TYPE_GPU \n";
   if( info.device_type_ & CL_DEVICE_TYPE_ACCELERATOR )
-      s << "CL_DEVICE_TYPE_ACCELERATOR \n"; 
+      s << "CL_DEVICE_TYPE_ACCELERATOR \n";
   if( info.device_type_ & CL_DEVICE_TYPE_DEFAULT )
-      s << "CL_DEVICE_TYPE_DEFAULT \n"; 
-     
+      s << "CL_DEVICE_TYPE_DEFAULT \n";
+
   s  << " Number of compute units: " << info.max_compute_units_ << '\n'
      << " Maximum clock frequency: " << info.max_clock_freq_/1000.0 << " GHz\n"
      << " Total global memory: "<< info.total_global_memory_/1073741824.0 /* 2^30 */ << " GBytes\n"
@@ -249,20 +249,20 @@ vcl_ostream& operator <<(vcl_ostream &s, bocl_device_info& info)
      << " Max 3D image dim: (" << info.image3d_max_width_ << ',' << info.image3d_max_height_ << ',' << info.image3d_max_depth_ << ")\n"
      << " Device extensions: " << info.extensions_supported_ << '\n'
   ;
-  
+
   if(info.is_nvidia_device_)
   {
-    s << " NVIDIA Specific Device Properties: \n" 
+    s << " NVIDIA Specific Device Properties: \n"
       << "   CL_DEVICE_COMPUTE_CAPABILITY_NV: " << info.compute_capability_major_ << "." << info.compute_capability_minor_ << '\n'
       << "   NUMBER OF MULTIPROCESSORS: " << info.max_compute_units_ << '\n'
-      << "   CL_DEVICE_REGISTERS_PER_BLOCK_NV: " << info.regs_per_block_ << '\n'         
+      << "   CL_DEVICE_REGISTERS_PER_BLOCK_NV: " << info.regs_per_block_ << '\n'
       << "   CL_DEVICE_WARP_SIZE_NV: " << info.warp_size_ << '\n'
-      << "   CL_DEVICE_GPU_OVERLAP_NV: " << ((info.gpu_overlap_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'       
-      << "   CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV: " << ((info.exec_timeout_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'        
+      << "   CL_DEVICE_GPU_OVERLAP_NV: " << ((info.gpu_overlap_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'
+      << "   CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV: " << ((info.exec_timeout_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'
       << "   CL_DEVICE_INTEGRATED_MEMORY_NV: " << ((info.integrated_memory_ == CL_TRUE) ? "CL_TRUE" : "CL_FALSE") << '\n'
     ;
   }
-  
+
   return s;
 }
 

@@ -378,18 +378,18 @@ classify_image(vil_image_resource_sptr const& resc,
   unsigned ni = resc->ni(), nj = resc->nj();
   if(ni==0||nj==0||ni<nib_||nj<njb_) return false;
   unsigned nbi = ni/nib_, nbj = nj/njb_;
-  
+
   vil_image_view<float> out_r(nbi, nbj, 1);
   out_resc = vil_new_image_resource_of_view(out_r);
-  
+
   vil_image_view<float> out_orig(ni, nj, 1);
   out_resc_orig_size = vil_new_image_resource_of_view(out_orig);
-  
-  vil_blocked_image_resource_sptr bresc = 
+
+  vil_blocked_image_resource_sptr bresc =
     vil_new_blocked_image_facade(resc, nit, njt);
-  vil_blocked_image_resource_sptr cbresc = 
+  vil_blocked_image_resource_sptr cbresc =
     vil_new_cached_image_resource(bresc);
-  
+
   unsigned i0 = 0, j0 = 0;
   vil_image_view<float> temp(nib_, njb_);
   for(unsigned r = 0; r<nbj; ++r, j0+=njb_){
@@ -397,10 +397,10 @@ classify_image(vil_image_resource_sptr const& resc,
     vil_image_view<float> row(nbi, 1, 1);
     for(unsigned c = 0; c<nbi; ++c, i0+=nib_)
       {
-        vil_image_view_base_sptr view_ptr = 
+        vil_image_view_base_sptr view_ptr =
           cbresc->get_view(i0, nib_, j0, njb_);
         vil_image_view<float> fview = vil_convert_cast(float(), view_ptr);
-        vnl_vector<double> v = funct_(fview); 
+        vnl_vector<double> v = funct_(fview);
         float eig0 = static_cast<float>(dot_product(v, v0));
         float eig1 = static_cast<float>(dot_product(v, v1));
         float eig2 = static_cast<float>(dot_product(v, v2));

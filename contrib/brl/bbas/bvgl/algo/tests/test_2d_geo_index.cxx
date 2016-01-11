@@ -68,7 +68,7 @@ static void test_2d_geo_index()
   // create the tree from text
   double min_size1;
   bvgl_2d_geo_index_node_sptr root1 = bvgl_2d_geo_index::read_and_construct<vcl_vector<int> >(txt_file, min_size1);
-  
+
   // quickly locate the leaves that intersect with some rectangular region
   vgl_box_2d<float> region(0.3f,0.55f,0.3f,0.8f);
   leaves.clear();

@@ -26,8 +26,8 @@ void cast_ray_render_vis(int,int,float,float,float,float,float,float,
                          __constant RenderSceneInfo*, __global int4*,
                          __local uchar16*, __constant uchar *,__local uchar *,
                          float*, AuxArgs);
-              
-      
+
+
 void step_cell_compute_index(float depth,
                              float block_len,
                              __global float  * alpha_data,
@@ -72,23 +72,23 @@ compute_loc_index(
     //exp_depth_buf[ gid ] = -100.0f;
     //vis_buf[ gid ] = gid+1;
     //prob_buf[ 0 ] = 1000.0f;
-    
+
     if (gid >= *ray_size)
       return;
-      
-    float4 ray_d = directions[ gid ];    
-    
+
+    float4 ray_d = directions[ gid ];
+
     //declare ray
     float ray_ox, ray_oy, ray_oz, ray_dx, ray_dy, ray_dz;
     calc_scene_ray_generic_cam(linfo, *ray_o, ray_d, &ray_ox, &ray_oy, &ray_oz, &ray_dx, &ray_dy, &ray_dz);
-    
+
     float expdepth    = 0.0f;
     float expdepthsqr = 0.0f;
     float probsum     = prob_buf[ gid ];
     float vis_rec     = vis_buf[ gid ];
     float t           = t_infinity_buf[ gid ];
     float tfar_max = (*max_dist)/linfo->block_len;
-    
+
     AuxArgs aux_args;
     aux_args.alpha  = alpha_array;
     aux_args.expdepth = &expdepth;
@@ -103,8 +103,8 @@ compute_loc_index(
               ray_dx, ray_dy, ray_dz,
               linfo, tree_array,                                    //scene info
               local_tree, bit_lookup, cumsum, &vis, aux_args,0,MAXFLOAT);      //utility info*/
-              
-              
+
+
     cast_ray_render_vis( 1, 1,
                          ray_ox, ray_oy, ray_oz,
                          ray_dx, ray_dy, ray_dz,
@@ -126,8 +126,8 @@ __kernel void normalize_index_depth_kernel(
                                          __global    float              * sub_block_dim)
 {
     int gid=get_global_id(0);
-    
-    //normalize 
+
+    //normalize
     float prob   = prob_buf[gid];
     float mean   = exp_depth_buf[gid] + t_infinity_buf[gid]*prob;
     //float mean   =  exp_depth_buf[gid] + t_infinity_buf[gid]*prob * (*sub_block_dim);

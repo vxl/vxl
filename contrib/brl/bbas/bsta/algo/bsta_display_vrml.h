@@ -56,13 +56,13 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
   vcl_cout << "recon rot \n" << rot_temp.as_matrix() << '\n';
   vcl_cout << "Axis, angle " << axis << ' ' << ang << '\n';
 #endif
-  if(single) 
+  if(single)
       os << "#VRML V2.0 utf8\n";
   os << "Transform {\n";
   os << " translation " << mean[0] << ' ' << mean[1] << ' ' << mean[2] << '\n';
   os << " children [\n";
   os << "  Transform{\n";
-  os << "   rotation " << axis[0] << ' ' << axis[1] << ' ' 
+  os << "   rotation " << axis[0] << ' ' << axis[1] << ' '
      << axis[2] << ' ' << ang << '\n';
   os << "   children [\n";
   os << "    Transform{\n";
@@ -71,7 +71,7 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
   os << "     children [ \n";
   os << "      Shape {\n";
   os << "       appearance Appearance {\n";
-  os << "        material Material {diffuseColor "<< r << ' ' << g << ' ' 
+  os << "        material Material {diffuseColor "<< r << ' ' << g << ' '
      << b << " }\n";
   os << "      }\n";
   os << "       geometry Sphere {\n";

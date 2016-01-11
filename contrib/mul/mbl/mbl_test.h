@@ -85,7 +85,7 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
 // picked up by CTest and Dart.
 // We suggest formatting the measurement path as follows
 // "path/from/code/root/to/test_source_filename_minus_extension/MEASUREMENT_DESCRIPTION",
-// e.g. in the file "$CODE_SRC/algo/krr/tests/test_krr_optimise_model_parameters.cxx" 
+// e.g. in the file "$CODE_SRC/algo/krr/tests/test_krr_optimise_model_parameters.cxx"
 // \verbatim
 // mbl_test_save_measurement("algo/krr/tests/test_krr_optimise_model_parameters/Point_To_Point_RMS_Error",value);
 // \endverbatim

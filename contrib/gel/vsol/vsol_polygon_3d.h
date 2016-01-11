@@ -50,7 +50,7 @@ class vsol_polygon_3d : public vsol_region_3d
 
  public:
   //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing. 
+  //: Default constructor. Do nothing.
   //---------------------------------------------------------------------------
   vsol_polygon_3d(void);
 

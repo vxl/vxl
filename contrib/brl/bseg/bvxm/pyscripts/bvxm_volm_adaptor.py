@@ -186,7 +186,7 @@ def find_seed_sat_resources(res, poly_kml, downsample_factor, sat_res_file):
   bvxm_batch.init_process("volmFindOverlappingSatResourcesProcess")
   bvxm_batch.set_input_from_db(0,res);             # satellite resource
   bvxm_batch.set_input_string(1,poly_kml);         # kml polygon filename
-  bvxm_batch.set_input_float(2,downsample_factor); # factor by which to downsample resource footprints when 
+  bvxm_batch.set_input_float(2,downsample_factor); # factor by which to downsample resource footprints when
                                                    # computing the raster (smaller factor takes more time & memory)
   bvxm_batch.set_input_string(3,sat_res_file);     # output file to print the list (this will also save a kml version)
   bvxm_batch.run_process();
@@ -395,7 +395,7 @@ def combine_height_map(height_map_folder, poly_roi, out_folder, size_in_degree =
   bvxm_batch.set_input_float(3, size_in_degree);
   bvxm_batch.set_input_int(4, leaf_id);
   bvxm_batch.run_process();
-  
+
 # combine height maps by taking the median pixel values
 def combine_height_map2(height_map_folder, threshold):
   bvxm_batch.init_process("volmCombineHeightMapProcess2");
@@ -455,7 +455,7 @@ def stereo_h_map_fix(h_img, height_fix = 0.0):
   bvxm_batch.set_input_from_db(0,h_img)
   bvxm_batch.set_input_float(1, height_fix)
   bvxm_batch.run_process()
-  
+
 ## process that find the minimum and maximum elevation from height map, for a give 2-d rectangluar region
 def find_min_max_elev(ll_lon, ll_lat, ur_lon, ur_lat, dem_folder):
   bvxm_batch.init_process("volmFindMinMaxHeightPorcess")

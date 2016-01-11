@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Matthew Leotta
-// \brief Use static booleans to control template instantiation 
+// \brief Use static booleans to control template instantiation
 // \date March 16, 2009
 //
 // These functions are borrow from Boost

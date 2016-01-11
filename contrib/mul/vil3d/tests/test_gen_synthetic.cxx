@@ -21,7 +21,7 @@ inline bool all_pixels_are(const vil3d_image_view<T> & im, T v)
 }
 void test_gen_synthetic( )
 {
-  
+
   vil3d_file_format::add_format(new vil3d_gen_synthetic_format);
 
   {

@@ -55,7 +55,7 @@ typedef struct PROFILELIST
 	OPJ_UINT32   end;
     OPJ_UINT32   total_time;
     OPJ_UINT32   totalCalls;
-    OPJ_PROFILE_GROUP   section; 
+    OPJ_PROFILE_GROUP   section;
     const OPJ_CHAR     *sectionName; // string name of the profile group
 } OPJ_PROFILE_LIST;
 
@@ -76,7 +76,7 @@ void _ProfStop (OPJ_PROFILE_GROUP group);
 #define PROFSTART(group)
 #define PROFSTOP (group)
 #define PROFSAVE(file)
-#define PROFPRINT() 
+#define PROFPRINT()
 #endif // !_PROFILE
 
 //==============================================================================

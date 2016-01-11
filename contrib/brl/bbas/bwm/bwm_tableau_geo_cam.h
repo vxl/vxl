@@ -33,7 +33,7 @@ class bwm_tableau_geo_cam : public bwm_tableau_cam
 
  protected:
   bwm_observer_geo_cam* my_observer_;
-  vul_timer timer_; 
+  vul_timer timer_;
 };
 
 #endif

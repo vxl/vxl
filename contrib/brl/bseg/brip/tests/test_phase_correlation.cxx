@@ -25,7 +25,7 @@ static void test_phase_correlation_ortho()
   std::string path2 = base_path + "orth2.jpg";
   std::string path3 = base_path + "orth3.jpg";
   std::string path4 = base_path + "orth4.jpg";
-  
+
   std::string orth_corr_path_01 = base_path + "ortho_corr_01.tiff";
   std::string orth_corr_path_02 = base_path + "ortho_corr_02.tiff";
   std::string orth_corr_path_03 = base_path + "ortho_corr_03.tiff";

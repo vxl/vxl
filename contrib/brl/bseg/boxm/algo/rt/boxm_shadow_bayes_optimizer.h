@@ -15,7 +15,7 @@ class boxm_shadow_bayes_optimizer
 {
 public:
 
-  boxm_shadow_bayes_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene, 
+  boxm_shadow_bayes_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                               vcl_vector<vcl_string> const& image_ids,
                               float min_app_sigma,
                               float shadow_prior,

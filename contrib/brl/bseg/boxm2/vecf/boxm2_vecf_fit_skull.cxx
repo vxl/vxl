@@ -51,7 +51,7 @@ bool boxm2_vecf_fit_skull::add_labeled_point(boxm2_vecf_labeled_point lp){
 bool boxm2_vecf_fit_skull::read_anchor_file(vcl_string const& path){
 
   // parse generic point with label file format
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > anchors;  
+  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > anchors;
   bool good = boxm2_vecf_labeled_point::read_points(path, anchors);
   if(!good){
     vcl_cout << "Parse of file " << path << " failed\n";
@@ -93,7 +93,7 @@ bool boxm2_vecf_fit_skull::compute_auxillary_points(){
   if(lit == lpts_.end())
     return false;
   const vgl_point_3d<double>& fmid = lit->second.p3d_;
-  
+
   // midpoint of line joining the canthi
    lit = lpts_.find(LEFT_LATERAL_CANTHUS);
   if(lit == lpts_.end())
@@ -177,7 +177,7 @@ bool boxm2_vecf_fit_skull::set_trans(){
     vgl_point_3d<double> ts(hts), t(target_pts[i]);
     vcl_cout << vcl_setprecision(3) << ts << ' ' << t << ' ' << (t-ts).length() << '\n';
   }
-                                
+
   return true;
 }
 
@@ -187,16 +187,16 @@ bool boxm2_vecf_fit_skull::transform_skull(vcl_string const& source_skull_path, 
     if(!sistr)
       return false;
     sistr >> src_ptset;
- 
+
   sistr.close();
 
   trg_ptset = params_.trans_(src_ptset);
-  
+
   vcl_ofstream tostr(target_skull_path.c_str());
     if(!tostr)
       return false;
     tostr << trg_ptset;
- 
+
   tostr.close();
   return true;
 }

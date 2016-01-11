@@ -2,7 +2,7 @@
 		Frequently Asked Questions about zlib
 
 
-If your question is not there, please check the zlib home page 
+If your question is not there, please check the zlib home page
 http://www.zlib.org which may have more recent information.
 The lastest zlib FAQ is at http://www.gzip.org/zlib/zlib_faq.html
 
@@ -61,7 +61,7 @@ The lastest zlib FAQ is at http://www.gzip.org/zlib/zlib_faq.html
     If "make test" produces something like
 
        example.o(.text+0x154): undefined reference to `gzputc'
-      
+
     check that you don't have old files libz.* in /usr/lib, /usr/local/lib or
     /usr/X11R6/lib. Remove any old versions, then do "make install".
 

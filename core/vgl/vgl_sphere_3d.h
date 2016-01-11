@@ -64,7 +64,7 @@ class vgl_sphere_3d
   //: Calculate the end points of a line clipped by this sphere.
   bool clip(const vgl_line_3d_2_points<Type> & line,
             vgl_point_3d<Type> &p1, vgl_point_3d<Type> &p2) const;
-  
+
 
   //: convert point on sphere to Cartesian coordinates, angles in radians
   void spherical_to_cartesian(Type elevation_rad, Type azimuth_rad,
@@ -76,7 +76,7 @@ class vgl_sphere_3d
   //:find elevation and azimuth of closest point on the sphere to x,y,z
   void cartesian_to_spherical(Type x, Type y, Type z, Type& elevation_rad, Type& azimuth_rad) const;
   void cartesian_to_spherical(vgl_point_3d<Type> const& pt, Type& elevation_rad, Type& azimuth_rad) const;
-  
+
   //: Writes "<vgl_sphere_3d centre=vgl_point_3d<x,y,z> radius=r)>" to stream
   vcl_ostream& print(vcl_ostream& os) const;
 

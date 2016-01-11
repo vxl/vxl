@@ -35,11 +35,11 @@ class volm_candidate_list
                         unsigned threshold);
     //: destructor
     ~volm_candidate_list() {}
-    
+
     //: access
     vgl_polygon<int> cand_poly() { return poly_; }
     unsigned threshold()         { return thres_; }
-    
+
     //: number of sheets in candidate list
     unsigned num_of_regions() { return n_sheet_; }
 

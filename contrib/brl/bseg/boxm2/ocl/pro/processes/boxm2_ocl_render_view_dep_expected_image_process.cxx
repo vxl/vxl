@@ -251,7 +251,7 @@ bool boxm2_ocl_render_view_dep_expected_image_process(bprb_func_process& pro)
   opencl_cache->unref_mem(exp_image.ptr());
   opencl_cache->unref_mem(max_omega_image.ptr());
   opencl_cache->unref_mem(tnearfar_mem_ptr.ptr());
-  
+
   clReleaseCommandQueue(queue);
   i=0;
   // store scene smaprt pointer

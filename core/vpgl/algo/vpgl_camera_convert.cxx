@@ -841,7 +841,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   vcl_cout<<"(ni,nj)"<<ni<<","<<nj<<vcl_endl;
   int di = (ni+1)/2 +1,
       dj = (nj+1)/2 +1;
-  
+
   for (int i=1; i<n_levels; ++i)
   {
     vcl_cout<<"(di,dj)"<<di<<","<<dj<<vcl_endl;
@@ -868,12 +868,12 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
     // set rays at current pyramid level
     for (int j =0; j<nr[lev]; ++j) {
       int sj = static_cast<int>(scl[lev]*j);
-      if (sj>=nj) 
+      if (sj>=nj)
           sj = nj-1;
       for (int i =0;i<nc[lev]; ++i)
       {
         int si = static_cast<int>(scl[lev]*i);
-        if (si>=ni) 
+        if (si>=ni)
             si = ni-1;
         vgl_point_2d<double> ip(si,sj);
         vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
@@ -1003,13 +1003,13 @@ bool vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double>
       for (int j =0; j<nr[lev]; ++j) {
           int sj = offsetj+static_cast<int>(scl[lev]*j);
           //sj = (j == 0)? sj : sj -1;
-          //if (sj>=gnj) 
+          //if (sj>=gnj)
           //    sj =gnj;
           for (int i =0;i<nc[lev]; ++i)
           {
               int si =  offseti+ static_cast<int>(scl[lev]*i);
               //si = (i == 0)? si : si -1;
-              //if (si>=gni) 
+              //if (si>=gni)
               //    si = gni;
               vgl_point_2d<double> ip(si,sj);
               vgl_point_3d<double> prev_org(0.0,0.0,local_z_max);
@@ -1117,7 +1117,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
   vgl_point_3d<double> org(0.0, 0.0, local_z_max), endpt(0.0, 0.0, local_z_min);
   // initialize the ray pyramid
   // convert the required number of levels
-  
+
   int mindim = gni < gnj ? gni : gnj;
   int factor = 256;
   int n_levels  = 6;
@@ -1161,8 +1161,8 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           unsigned int nj = factor;
           unsigned int offsetj = bigj*factor;
           if(bigj == numj )
-              offsetj = gnj-factor;     
-          // vpgl_generic_camera expects pixels centered at integer values (pyramid_est is agnostic; 
+              offsetj = gnj-factor;
+          // vpgl_generic_camera expects pixels centered at integer values (pyramid_est is agnostic;
           // although, as uints, offseti and offsetj will center pixels on integers)
           if(!vpgl_generic_camera_convert::pyramid_est(rat_cam,ni,nj,offseti,offsetj,local_z_min, local_z_max,n_levels,nr, nc,scl,ray_pyr ))
               return false;

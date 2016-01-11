@@ -27,7 +27,7 @@
 #ifndef __FUNCTION_LIST_H
 #define __FUNCTION_LIST_H
 
-/** 
+/**
  * @file function_list.h
  * @brief Implementation of a list of procedures.
 
@@ -54,7 +54,7 @@ typedef void * opj_procedure;
 /**
  * A list of procedures.
 */
-typedef struct opj_procedure_list 
+typedef struct opj_procedure_list
 {
 	/**
 	 * The number of validation procedures.

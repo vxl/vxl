@@ -31,8 +31,8 @@ vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
   // construct the compression object :
   jpeg_create_compress(&jobj);
 
-  // Increase the amount of memory that can be used. 
-  // Default (1Mb) was too small.  
+  // Increase the amount of memory that can be used.
+  // Default (1Mb) was too small.
 #if defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 32
   jobj.mem->max_memory_to_use = 300 * 1024 * 1024;
 #elif defined(VXL_ADDRESS_BITS) && VXL_ADDRESS_BITS == 64

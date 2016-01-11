@@ -31,7 +31,7 @@ class wx_docview_doc : public wxDocument
   virtual ~wx_docview_doc() { }
 
   virtual bool OnCreate(const wxString& path, long flags);
-  
+
   vgui_tableau_sptr tableau() { return tableau_; }
 
  private:

@@ -32,7 +32,7 @@ bool boxm2_load_score_binary_process_cons(bprb_func_process& pro)
   input_types_[2] = "vcl_string";  // score file
   input_types_[3] = "vcl_string";  // output text file
   input_types_[4] = "unsigned";    // tile id
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

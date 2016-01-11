@@ -86,8 +86,8 @@ void mct_encode(
 /* </summary> */
 void mct_decode(
 		OPJ_INT32* restrict c0,
-		OPJ_INT32* restrict c1, 
-		OPJ_INT32* restrict c2, 
+		OPJ_INT32* restrict c1,
+		OPJ_INT32* restrict c2,
 		OPJ_UINT32 n)
 {
 	OPJ_UINT32 i;
@@ -166,13 +166,13 @@ OPJ_FLOAT64 mct_getnorm_real(OPJ_UINT32 compno) {
 
 bool mct_encode_custom(
 					   // MCT data
-					   OPJ_BYTE * pCodingdata, 
+					   OPJ_BYTE * pCodingdata,
 					   // size of components
-					   OPJ_UINT32 n, 
+					   OPJ_UINT32 n,
 					   // components
-					   OPJ_BYTE ** pData, 
+					   OPJ_BYTE ** pData,
 					   // nb of components (i.e. size of pData)
-					   OPJ_UINT32 pNbComp, 
+					   OPJ_UINT32 pNbComp,
 					   // tells if the data is signed
 					   OPJ_UINT32 isSigned)
 {
@@ -186,7 +186,7 @@ bool mct_encode_custom(
 	OPJ_INT32 ** lData = (OPJ_INT32 **) pData;
 	OPJ_UINT32 lMultiplicator = 1 << 13;
 	OPJ_INT32 * lMctPtr;
-	
+
 	lCurrentData = (OPJ_INT32 *) opj_malloc((pNbComp + lNbMatCoeff) * sizeof(OPJ_INT32));
 	if
 		(! lCurrentData)
@@ -200,7 +200,7 @@ bool mct_encode_custom(
 		lCurrentMatrix[i] = (OPJ_INT32) (*(lMct++) * lMultiplicator);
 	}
 	for
-		(i = 0; i < n; ++i) 
+		(i = 0; i < n; ++i)
 	{
 		lMctPtr = lCurrentMatrix;
 		for
@@ -227,13 +227,13 @@ bool mct_encode_custom(
 
 bool mct_decode_custom(
 					   // MCT data
-					   OPJ_BYTE * pDecodingData, 
+					   OPJ_BYTE * pDecodingData,
 					   // size of components
 					   OPJ_UINT32 n,
 					   // components
-					   OPJ_BYTE ** pData, 
+					   OPJ_BYTE ** pData,
 					   // nb of components (i.e. size of pData)
-					   OPJ_UINT32 pNbComp, 
+					   OPJ_UINT32 pNbComp,
 					   // tells if the data is signed
 					   OPJ_UINT32 isSigned)
 {
@@ -241,7 +241,7 @@ bool mct_decode_custom(
 	OPJ_UINT32 i;
 	OPJ_UINT32 j;
 	OPJ_UINT32 k;
-	
+
 	OPJ_FLOAT32 * lCurrentData = 00;
 	OPJ_FLOAT32 * lCurrentResult = 00;
 	OPJ_FLOAT32 ** lData = (OPJ_FLOAT32 **) pData;
@@ -255,7 +255,7 @@ bool mct_decode_custom(
 	lCurrentResult = lCurrentData + pNbComp;
 
 	for
-		(i = 0; i < n; ++i) 
+		(i = 0; i < n; ++i)
 	{
 		lMct = (OPJ_FLOAT32 *) pDecodingData;
 		for

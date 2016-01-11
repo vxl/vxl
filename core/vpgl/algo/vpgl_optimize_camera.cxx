@@ -170,7 +170,7 @@ vpgl_optimize_camera::opt_orient(const vpgl_perspective_camera<double>& camera,
 
   vpgl_orientation_lsqr lsqr_func(K,c,world_points,image_points);
   vnl_levenberg_marquardt lm(lsqr_func);
-  lm.set_trace(true);
+  //lm.set_trace(true);
   lm.minimize(w);
 
   return vpgl_perspective_camera<double>(K, c, vgl_rotation_3d<double>(w) );
@@ -195,7 +195,7 @@ vpgl_optimize_camera::opt_orient_pos(const vpgl_perspective_camera<double>& came
   vnl_vector<double> params(6);
   params[0]=w[0];  params[1]=w[1];  params[2]=w[2];
   params[3]=c.x();  params[4]=c.y();  params[5]=c.z();
-  lm.set_trace(true);
+  //lm.set_trace(true);
   lm.minimize(params);
   vnl_double_3 w_min(params[0],params[1],params[2]);
   vgl_homg_point_3d<double> c_min(params[3], params[4], params[5]);

@@ -50,9 +50,9 @@ int main(int argc, char** argv)
   }
   vcl_stringstream log_file;
   vcl_stringstream log;
-  
+
   log_file << scene_root() << "/log_sort_scene_urban.xml";
-  
+
   vcl_string lvcs_dir;
   if (lvcs_root().compare("") == 0)
     lvcs_dir = scene_root();
@@ -170,7 +170,7 @@ int main(int argc, char** argv)
     // create the image associated with current scene
     double box_lx, box_ly, box_lz;
     lvcs->global_to_local(lon_max, lat_max, 0, vpgl_lvcs::wgs84, box_lx, box_ly, box_lz);
-    
+
     unsigned ni = (unsigned)vcl_ceil(box_lx);
     unsigned nj = (unsigned)vcl_ceil(box_ly);
 #if 0

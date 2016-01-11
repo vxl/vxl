@@ -79,7 +79,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
     {
         if (!boxm2_point_util::axis_align_scene(corrs_,cams_))
             return;
-        pts_3d_.clear() ; 
+        pts_3d_.clear() ;
         for (unsigned i=0; i<corrs_.size(); ++i)
         {
             pts_3d_.push_back(corrs_[i]->world_pt());
@@ -112,7 +112,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(vcl_string nvm_file, vcl_string img_dir,boo
     //------------------------------------------------------------------------
 
     vgl_box_3d<double> bounding_box;
-    pts_3d_.clear() ; 
+    pts_3d_.clear() ;
     for (unsigned i=0; i<corrs_.size(); ++i)
     {
         bounding_box.add(corrs_[i]->world_pt());

@@ -657,7 +657,7 @@ all_selected_observables(vcl_string const& soview_type) const
     }
   }
 
- 
+
   return sel_obsbls;
 }
 

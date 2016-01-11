@@ -71,7 +71,7 @@ read( vcl_istream& is )
 
   typedef vcl_vector< rgrl_transformation_sptr >::const_iterator iter;
   for( iter i=xform_candidates_.begin(); i!=xform_candidates_.end(); ++i ) {
-    
+
     // make a copy of the transformation
     rgrl_transformation_sptr candidate = (*i)->clone();
     if( candidate->read( is) )
@@ -88,9 +88,9 @@ read( vcl_istream& is )
   //
   // NOTE: due to the use of find function, the order of the following is important
   //       If one tag is a subset of the other tag, then it must be after the other one.
-  //       For instance, AFFINE_NEW must be in front of AFFINE. Otherwise, 
+  //       For instance, AFFINE_NEW must be in front of AFFINE. Otherwise,
   //       it is read in as AFFINE
-  //       
+  //
   READ_THIS_TRANSFORMATION("TRANSLATION", rgrl_trans_translation)
   READ_THIS_TRANSFORMATION("SIMILARITY", rgrl_trans_similarity)
   READ_THIS_TRANSFORMATION("AFFINE", rgrl_trans_affine)

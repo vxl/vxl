@@ -26,7 +26,7 @@ bool vpgl_convert_local_rational_to_generic_process_cons(bprb_func_process& pro)
   input_types.push_back("unsigned");// nj
   input_types.push_back("float"); // min z
   input_types.push_back("float"); // max z
-  input_types.push_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image 
+  input_types.push_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image
   bool ok = pro.set_input_types(input_types);
 
   // in case the 4th input is not set
@@ -73,7 +73,7 @@ bool vpgl_convert_local_rational_to_generic_process(bprb_func_process& pro)
   if (!vpgl_generic_camera_convert::convert(*lrat_cam, (int)ni, (int)nj, gcam, min_z, max_z, level)) {
    vcl_cout<<"camera conversion failed\n"<<vcl_endl;
     return false;
-  } 
+  }
   vpgl_camera_double_sptr out = new vpgl_generic_camera<double>(gcam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, out);
   pro.set_output_val<unsigned>(1,gcam.cols());

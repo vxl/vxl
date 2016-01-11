@@ -110,7 +110,7 @@ class boxm2_scene : public vbl_ref_count
     //: visibility order using a ray given by origin and direction vector, the block needs to be in the front direction as given by this ray
     vcl_vector<boxm2_block_id>
     get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vector_3d<double> const& dir, double distance);
-    
+
     //: return all blocks with center less than dist from the given point
     vcl_vector<boxm2_block_id> get_vis_blocks(vgl_point_3d<double> const& pt, double dist);
 

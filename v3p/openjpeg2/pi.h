@@ -66,8 +66,8 @@ typedef struct opj_pi_comp {
   opj_pi_resolution_t *resolutions;
 } opj_pi_comp_t;
 
-/** 
-Packet iterator 
+/**
+Packet iterator
 */
 typedef struct opj_pi_iterator {
 	/** Enabling Tile part generation*/
@@ -77,11 +77,11 @@ typedef struct opj_pi_iterator {
 	/** layer step used to localize the packet in the include vector */
 	OPJ_UINT32 step_l;
 	/** resolution step used to localize the packet in the include vector */
-	OPJ_UINT32 step_r;	
+	OPJ_UINT32 step_r;
 	/** component step used to localize the packet in the include vector */
-	OPJ_UINT32 step_c;	
+	OPJ_UINT32 step_c;
 	/** precinct step used to localize the packet in the include vector */
-	OPJ_UINT32 step_p;	
+	OPJ_UINT32 step_p;
 	/** component that identify the packet */
 	OPJ_UINT32 compno;
 	/** resolution that identify the packet */
@@ -89,7 +89,7 @@ typedef struct opj_pi_iterator {
 	/** precinct that identify the packet */
 	OPJ_UINT32 precno;
 	/** layer that identify the packet */
-	OPJ_UINT32 layno;   
+	OPJ_UINT32 layno;
 	/** progression order change information */
 	struct opj_poc poc;
 	/** number of components in the image */
@@ -108,7 +108,7 @@ typedef struct opj_pi_iterator {
 /* ----------------------------------------------------------------------- */
 /**
  * Creates a packet iterator for encoding.
- * 
+ *
  * @param	p_image		the image being encoded.
  * @param	p_cp		the coding parameters.
  * @param	p_tile_no	index of the tile being encoded.
@@ -119,14 +119,14 @@ opj_pi_iterator_t *pi_initialise_encode(const struct opj_image *image,struct opj
 
 /**
  * Updates the encoding parameters of the codec.
- * 
+ *
  * @param	p_image		the image being encoded.
  * @param	p_cp		the coding parameters.
  * @param	p_tile_no	index of the tile being encoded.
 */
 void pi_update_encoding_parameters(
 										const struct opj_image *p_image,
-										struct opj_cp *p_cp, 
+										struct opj_cp *p_cp,
 										OPJ_UINT32 p_tile_no
 										);
 
@@ -134,7 +134,7 @@ void pi_update_encoding_parameters(
 
 /**
 Modify the packet iterator for enabling tile part generation
-@param pi Handle to the packet iterator generated in pi_initialise_encode  
+@param pi Handle to the packet iterator generated in pi_initialise_encode
 @param cp Coding parameters
 @param tileno Number that identifies the tile for which to list the packets
 @param tpnum Tile part number of the current tile
@@ -157,7 +157,7 @@ opj_pi_iterator_t *pi_create_decode(struct opj_image * image, struct opj_cp * cp
 
 /**
  * Destroys a packet iterator array.
- * 
+ *
  * @param	p_pi			the packet iterator array to destroy.
  * @param	p_nb_elements	the number of elements in the array.
  */
@@ -168,7 +168,7 @@ void pi_destroy(
 /**
 Modify the packet iterator to point to the next packet
 @param pi Packet iterator to modify
-@return Returns false if pi pointed to the last packet or else returns true 
+@return Returns false if pi pointed to the last packet or else returns true
 */
 bool pi_next(opj_pi_iterator_t * pi);
 

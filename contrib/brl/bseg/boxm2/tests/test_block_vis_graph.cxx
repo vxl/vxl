@@ -46,7 +46,7 @@ void test_block_vis_graph()
 {
   vbl_array_2d<vgl_ray_3d<double> > ray_array(2,2);
   ray_array(0,0) =   vgl_ray_3d<double>(vgl_point_3d<double>(0,0,100),vgl_vector_3d<double>(1,1,-100));
-  ray_array(0,1) =   vgl_ray_3d<double>(vgl_point_3d<double>(0,0,100),vgl_vector_3d<double>(3,1,-100));    
+  ray_array(0,1) =   vgl_ray_3d<double>(vgl_point_3d<double>(0,0,100),vgl_vector_3d<double>(3,1,-100));
   ray_array(1,0) =   vgl_ray_3d<double>(vgl_point_3d<double>(0,0,100),vgl_vector_3d<double>(1,3,-100));
   ray_array(1,1) =   vgl_ray_3d<double>(vgl_point_3d<double>(0,0,100),vgl_vector_3d<double>(3,3,-100));
   vpgl_generic_camera<double> gcam(ray_array);

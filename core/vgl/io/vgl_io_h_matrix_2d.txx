@@ -8,7 +8,7 @@
 #include <vsl/vsl_binary_io.h>
 
 //: Binary save vgl_h_matrix_2d to stream.
-template <class T> 
+template <class T>
 void vsl_b_write(vsl_b_ostream &bfs, const vgl_h_matrix_2d<T>& t)
 {
   static const short io_version_no = 1;
@@ -20,7 +20,7 @@ void vsl_b_write(vsl_b_ostream &bfs, const vgl_h_matrix_2d<T>& t)
 }
 
 //: Binary load vgl_h_matrix_2d from stream.
-template <class T> 
+template <class T>
 void vsl_b_read(vsl_b_istream &bfs, vgl_h_matrix_2d<T>& v)
 {
   if (!bfs) return;

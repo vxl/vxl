@@ -31,10 +31,10 @@ bool bvpl_create_generic_kernel_vector_process_cons(bprb_func_process& pro)
   //input[0]: Kernel length
   //input[1]: Kernel width
   //input[2]: Kernel thickness
-  //input[3]: Kernel support_x 
+  //input[3]: Kernel support_x
   //input[4]: Kernel support_y
   //input[5]: Kernel support_z
-  //input[6]: String : type of kernel 
+  //input[6]: String : type of kernel
   //input[4]: String : type of directions
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "float";
@@ -148,7 +148,7 @@ bool bvpl_write_generic_kernel_vector_process(bprb_func_process& pro)
     // sanity check
     vcl_cout << " kernel angle: " << k->angle() << " axis: " << k->axis() << " sum: " << k->cum_sum() << vcl_endl;
   }
-  
+
   return true;
 }
 

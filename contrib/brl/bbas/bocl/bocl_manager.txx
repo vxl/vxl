@@ -27,9 +27,9 @@ template <class T>
 T& bocl_manager<T>::instance()
 {
   /** Note that prior to C++11, this was not thread safe, as
-   * multiple simultaneous calls to instance() could result in 
-   * multiple calls to T's constructor.  Compilers implementing the 
-   * C++11 standard are now required to gaurantee only one call to T's 
+   * multiple simultaneous calls to instance() could result in
+   * multiple calls to T's constructor.  Compilers implementing the
+   * C++11 standard are now required to gaurantee only one call to T's
    * constructor.
    **/
   static T instance_;

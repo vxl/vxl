@@ -7,7 +7,7 @@
 * correspondence generators, robust transformation estimators, and
 * convergence testers. Multiple feature types may be used either
 * simultaneously or sequentially, and multiresolution is handled
-* naturally. 
+* naturally.
 *
 * class rgrl_feature_based_registration
 *  - the engine that represent the framework
@@ -23,10 +23,10 @@
 *
 * class rgrl_initializer
 *  - method to generate the initial transformation
-* 
+*
 * class rgrl_matcher
 *  - generating correspondences from the two image feature sets.
-* 
+*
 * class rgrl_estimator
 *  - estimating the spatial relationship that maps the moving image to
 *    the fixed image using the matches

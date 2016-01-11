@@ -6,7 +6,7 @@ boxm2_vecf_ocl_composite_transform(vcl_vector<boxm2_vecf_ocl_vector_field_sptr> 
   : xforms_(xforms)
 {
 }
-                                        
+
 //: compute vector field, writing to gpu cache
 bool boxm2_vecf_ocl_composite_transform::
 compute_forward_transform(boxm2_scene_sptr source,
@@ -20,7 +20,7 @@ compute_forward_transform(boxm2_scene_sptr source,
                                                       pts_source, pts_target, queue);
   // the remaining transforms take target pts as input
   for (unsigned i=1; i<xforms_.size(); ++i) {
-    result &= xforms_[i]->compute_forward_transform(source, blk_id, 
+    result &= xforms_[i]->compute_forward_transform(source, blk_id,
                                                     pts_target, pts_target, queue);
   }
   return result;

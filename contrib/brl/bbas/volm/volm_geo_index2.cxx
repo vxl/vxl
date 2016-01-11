@@ -190,11 +190,11 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
 {
   if (!root) // the node is empty
     return;
-  
+
   // check whether the polygon intersects with current root
   if (!vgl_intersection(root->extent_, poly)) // the node does not intersect with given polygon
     return;
-  
+
   // the node intersects with the polygon
   if (!root->children_.size()) {  // the node intersects with the polygon and has no child
     leaves.push_back(root);
@@ -204,7 +204,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, vcl_vector<volm
     for (unsigned i = 0; i < root->children_.size(); i++) {
       if (!root->children_[i])    // the node has children but child i is empty
         continue;
-      else { 
+      else {
         get_leaves(root->children_[i], leaves, poly);    // check the intersection of child i and its following children with poly
         at_least_one_child = true;
       }

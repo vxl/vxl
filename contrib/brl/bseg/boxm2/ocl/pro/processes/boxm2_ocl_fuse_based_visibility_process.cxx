@@ -159,6 +159,6 @@ bool boxm2_ocl_fuse_surface_density_process(bprb_func_process& pro)
   t.mark();
   boxm2_ocl_fuse_surface_density::fuse_surface_density(sceneA,sceneB, device, opencl_cache);
   vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
-  
+
   return true;
 }

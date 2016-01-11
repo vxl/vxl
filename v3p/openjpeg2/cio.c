@@ -274,7 +274,7 @@ opj_stream_t* OPJ_CALLCONV opj_stream_default_create(bool l_is_input)
 }
 
 /**
- * Destroys a stream created by opj_create_stream. This function does NOT close the abstract stream. If needed the user must 
+ * Destroys a stream created by opj_create_stream. This function does NOT close the abstract stream. If needed the user must
  * close its own implementation of the stream.
  */
 OPJ_API void OPJ_CALLCONV opj_stream_destroy(opj_stream_t* p_stream)
@@ -592,7 +592,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
 {
 	OPJ_SIZE_T l_skip_nb_bytes = 0;
 	OPJ_SIZE_T l_current_skip_nb_bytes = 0;
-	
+
 	if
 		(p_stream->m_bytes_in_buffer >= p_size)
 	{
@@ -613,7 +613,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
 		p_stream->m_byte_offset += l_skip_nb_bytes;
 		return l_skip_nb_bytes ? l_skip_nb_bytes : (OPJ_SIZE_T) -1;
 	}
-	
+
 	// the flag is not set, we copy data and then do an actual skip on the stream
 	if
 		(p_stream->m_bytes_in_buffer)
@@ -623,7 +623,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
 		p_size -= p_stream->m_bytes_in_buffer;
 		p_stream->m_bytes_in_buffer = 0;
 	}
-	
+
 	while
 		(p_size > 0)
 	{
@@ -663,7 +663,7 @@ OPJ_SIZE_T opj_stream_write_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_
 	{
 		return (OPJ_SIZE_T) -1;
 	}
-	
+
 	// we should flush data
 	l_is_written = opj_stream_flush (p_stream, p_event_mgr);
 	if
@@ -699,9 +699,9 @@ OPJ_SIZE_T opj_stream_write_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_
 
 /**
  * Tells the byte offset on the stream (similar to ftell).
- * 
+ *
  * @param		p_stream	the stream to get the information from.
- * 
+ *
  * @return		the current position o fthe stream.
  */
 OPJ_SIZE_T opj_stream_tell (const opj_stream_private_t * p_stream)
@@ -767,7 +767,7 @@ bool opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, 
 
 	p_stream->m_current_data = p_stream->m_stored_data;
 	p_stream->m_bytes_in_buffer = 0;
-	
+
 	if
 		(! p_stream->m_seek_fn(p_size,p_stream->m_user_data))
 	{

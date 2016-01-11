@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     vul_arg_display_usage_and_exit();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   // create depth_map_scene from label me file
   if (!vul_file::exists(label_xml()) || !vul_file::exists(category_file())) {
     vcl_cerr << "problem opening labelme xml file or category file --> " << label_xml() << vcl_endl;
@@ -129,7 +129,7 @@ int main(int argc, char** argv)
   // create volm_query
   volm_query_sptr query = new volm_query(cam_space, dms_bin_file, sph_shell, sph);
 
-  // save the volm_query 
+  // save the volm_query
   vcl_string query_bin_file = out_folder() + "/volm_query.bin";
   vsl_b_ofstream ofs(query_bin_file);
   query->write_data(ofs);
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
       vcl_cout << ')' << vcl_endl;
     }
   }
-  
+
   volm_io::write_status(out_folder(), volm_io::PRE_PROCESS_FINISHED, 30);
   return volm_io::PRE_PROCESS_FINISHED;
 }

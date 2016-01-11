@@ -56,7 +56,7 @@ class vsl_b_ostream
   // Calling this function may be required if you change the state of your program whilst
   // you are writing to the same vsl_b_ostream. If the program is at any risk of
   // reallocating the same memory to two different objects controlled by a smart pointer,
-  // then calling this function between writing then will prevent them being confused. 
+  // then calling this function between writing then will prevent them being confused.
   virtual void clear_serialisation_records();
 
 
@@ -315,7 +315,7 @@ inline void vsl_print_summary(vcl_ostream& os, const char* s )
 // the warning (C4244) completely, because it is a useful warning.
 // 08/20/2003: Added macro that defines whether or not attribute needs
 //             to be used. A new version of MS .NET compiler required this change.
-//             Add compilers as needed. This could be moved to vcl_compiler.h. 
+//             Add compilers as needed. This could be moved to vcl_compiler.h.
 //             [Nils Krahnstoever]
 #ifdef VCL_VC_DOTNET
 # define VCL_64BIT_ATTR __w64

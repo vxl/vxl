@@ -5,7 +5,7 @@ ADD_EXECUTABLE( icam_test_all
   test_minimizer.cxx
   test_icam_transform.cxx
   test_cylinder_map.cxx
-  test_spherical_map.cxx	
+  test_spherical_map.cxx
 )
 
 TARGET_LINK_LIBRARIES( icam_test_all icam depth_map vgl_algo vgl vnl vil vul testlib)

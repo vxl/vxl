@@ -13,7 +13,7 @@
 
 //: Adaptor which generates reflected versions of images/points
 //  Given a source msdi_marked_images, generates a reflected version
-//  of each image/points pair.  
+//  of each image/points pair.
 //  If only_reflect, then returns reflected version only.
 //  If not only_reflect, then return both reflected and original
 //  examples.

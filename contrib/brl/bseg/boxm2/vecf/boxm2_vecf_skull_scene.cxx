@@ -27,7 +27,7 @@ bool boxm2_vecf_skull_scene::set_params(boxm2_vecf_articulated_params const& par
 
 void boxm2_vecf_skull_scene::map_to_target(boxm2_scene_sptr target)
 {
-  
+
   // deal with mapping entire skull later -- FIXME !!
   // map components
   mandible_scene_->map_to_target(target);

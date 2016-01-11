@@ -36,7 +36,7 @@ class volm_conf_buffered_index : public vbl_ref_count
 
   // ================ access ========================
 
-  
+
   vcl_vector<unsigned>& length_vec() { return length_vec_; }
   unsigned current_id()  const { return current_id_; }
   unsigned global_current_id() const { return global_current_id_; }

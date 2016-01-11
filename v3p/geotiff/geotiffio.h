@@ -1,6 +1,6 @@
-/* 
+/*
  * geotiffio.h
- * 
+ *
  * Standard include file for geotiff, including all
  *  key and code definitions.
  */

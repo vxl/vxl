@@ -26,7 +26,7 @@ mfpf_log_lin_class_cost::~mfpf_log_lin_class_cost()
 }
 
 //: Define weights, bias and minp
-void mfpf_log_lin_class_cost::set(const vnl_vector<double>& wts, 
+void mfpf_log_lin_class_cost::set(const vnl_vector<double>& wts,
                                   double bias, double min_p)
 {
   wts_ =wts;

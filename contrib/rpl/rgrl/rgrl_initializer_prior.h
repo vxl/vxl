@@ -58,7 +58,7 @@ class rgrl_initializer_prior
 
   //: return number of initializations
   //  It is always 1 for prior
-  virtual int size() const 
+  virtual int size() const
   { return 1; }
 
   // Defines type-related functions

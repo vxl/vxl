@@ -54,7 +54,7 @@ class icam_cylinder_map : public vbl_ref_count
   bool map_cylinder();
   vil_image_view<vxl_byte> cyl_map() const{
     return cyl_map_;}
-  //assumes a color byte image 
+  //assumes a color byte image
   bool render_map(vil_image_view<vxl_byte>const& backgnd,
 		  vpgl_camera_double_sptr const& cam,
 		  double theta, vil_image_view<vxl_byte>& img,

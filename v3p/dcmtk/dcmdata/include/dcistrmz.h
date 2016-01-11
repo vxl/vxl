@@ -37,7 +37,7 @@ BEGIN_EXTERN_C
 END_EXTERN_C
 
 /** global flag defining the behaviour of the zlib decompressor.
- *  When true, the input stream is expected to be in deflated ZLIB format 
+ *  When true, the input stream is expected to be in deflated ZLIB format
  *  instead of deflated bitstream format (i.e. RFC 1950 instead of RFC 1951).
  *  Default is false, i.e. DICOM compliant behavior.
  */
@@ -84,24 +84,24 @@ public:
   /** reads as many bytes as possible into the given block.
    *  @param buf pointer to memory block, must not be NULL
    *  @param buflen length of memory block
-   *  @return number of bytes actually read. 
+   *  @return number of bytes actually read.
    */
   virtual Uint32 read(void *buf, Uint32 buflen);
 
   /** skips over the given number of bytes (or less)
    *  @param skiplen number of bytes to skip
-   *  @return number of bytes actually skipped. 
+   *  @return number of bytes actually skipped.
    */
   virtual Uint32 skip(Uint32 skiplen);
 
   /** resets the stream to the position by the given number of bytes.
    *  @param num number of bytes to putback. If the putback operation
-   *    fails, the producer status becomes bad. 
+   *    fails, the producer status becomes bad.
    */
   virtual void putback(Uint32 num);
 
   /** determines the producer from which the filter is supposed
-   *  to read it's input. Once a producer for the input filter has 
+   *  to read it's input. Once a producer for the input filter has
    *  been defined, it cannot be changed anymore during the lifetime
    *  of the object.
    *  @param producer reference to producer, must not be circular chain
@@ -129,14 +129,14 @@ private:
    *  @param buf pointer to input data
    *  @param number of bytes in buf
    *  @return number of bytes processed
-   */   
+   */
   Uint32 decompress(const void *buf, Uint32 buflen);
 
   /** reads and decompresses data from the producer
    *  until the producer suspends or the output ring buffer becomes full.
    */
   void fillOutputBuffer();
-  
+
   /** writes the content of the output ring buffer
    *  to the next filter stage until the output ring buffer
    *  becomes empty or the next filter stage becomes full
@@ -154,10 +154,10 @@ private:
   /** feed data from the input ring buffer to the compression
    *  codec until complete or the output ring buffer becomes full.
    *  Does not flush the output ring buffer.
-   *  @param finalize true if the content of the input ring buffer 
+   *  @param finalize true if the content of the input ring buffer
    *    constitutes the end of the input stream, i.e. the compression codec
    *    should be forced to flush its internal state.
-   */   
+   */
   void compressInputBuffer(OFBool finalize);
 
 

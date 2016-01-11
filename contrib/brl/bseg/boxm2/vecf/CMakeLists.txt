@@ -35,9 +35,9 @@ SET(boxm2_vecf_sources
     boxm2_vecf_composite_transform.h        boxm2_vecf_composite_transform.cxx
     boxm2_vecf_mandible.h                   boxm2_vecf_mandible.cxx
     boxm2_vecf_spline_field.h               boxm2_vecf_spline_field.cxx
-    boxm2_vecf_labeled_point.h              boxm2_vecf_labeled_point.cxx	
+    boxm2_vecf_labeled_point.h              boxm2_vecf_labeled_point.cxx
     boxm2_vecf_fit_skull.h                  boxm2_vecf_fit_skull.cxx
-    boxm2_vecf_mandible_params.h            boxm2_vecf_mandible_params.cxx		
+    boxm2_vecf_mandible_params.h            boxm2_vecf_mandible_params.cxx
     boxm2_vecf_mandible_scene.h             boxm2_vecf_mandible_scene.cxx
     boxm2_vecf_mandible_articulation.h      boxm2_vecf_mandible_articulation.cxx
     boxm2_vecf_cranium.h                    boxm2_vecf_cranium.cxx

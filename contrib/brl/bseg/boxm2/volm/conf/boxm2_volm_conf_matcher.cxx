@@ -306,7 +306,7 @@ bool boxm2_volm_conf_matcher::matching(vcl_vector<volm_conf_object> const& value
           if ( vit->dist() >= min_dist && vit->dist() <= max_dist )
             i_ref_objs.push_back(*vit);
         }
-        
+
       }
 
       // loop over each reference object in index to get a score for given reference object in index

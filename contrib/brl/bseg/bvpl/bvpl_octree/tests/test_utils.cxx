@@ -77,7 +77,7 @@ void clean_up()
   vul_file_iterator file_it("./*.bin");
   for (; file_it; ++file_it)
   {
-    vpl_unlink(file_it());// this deletes the file at file_it() 
+    vpl_unlink(file_it());// this deletes the file at file_it()
     //    vul_file::delete_file_glob(file_it());
   }
 }

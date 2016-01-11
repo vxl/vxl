@@ -34,7 +34,7 @@ unsigned int vidl_to_v4l2 (vidl_pixel_format pf)
     case VIDL_PIXEL_FORMAT_YUV_444P: return 0;
     case VIDL_PIXEL_FORMAT_YUV_422P: return  V4L2_PIX_FMT_YUV422P;
     case VIDL_PIXEL_FORMAT_YUV_420P: return  V4L2_PIX_FMT_YUV420;
-    case VIDL_PIXEL_FORMAT_YVU_420P: return  V4L2_PIX_FMT_YVU420; 
+    case VIDL_PIXEL_FORMAT_YVU_420P: return  V4L2_PIX_FMT_YVU420;
     case VIDL_PIXEL_FORMAT_YUV_411P: return  V4L2_PIX_FMT_YUV411P;
     case VIDL_PIXEL_FORMAT_YUV_410P: return  V4L2_PIX_FMT_YVU410;
     case VIDL_PIXEL_FORMAT_UYV_444: return 0;

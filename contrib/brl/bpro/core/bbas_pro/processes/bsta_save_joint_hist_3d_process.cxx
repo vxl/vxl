@@ -38,7 +38,7 @@ bool bsta_save_joint_hist_3d_process(bprb_func_process& pro)
     vcl_cout << "in save_joint_hist_3d_process, null joint_histogram_3d pointer\n";
     return false;
   }
-  
+
   vcl_string path = pro.get_input<vcl_string>(i++);
   vsl_b_ofstream os(path.c_str());
   if (!os) {

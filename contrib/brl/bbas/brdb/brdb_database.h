@@ -35,7 +35,7 @@ public:
   //: Constructor - create a database populated with relations
   brdb_database(vcl_vector<brdb_relation_sptr> relations, vcl_vector<vcl_string> relation_names);
 
-  //: get the number of relations 
+  //: get the number of relations
   int size() const;
 
   //: clear the database - this removes all relations
