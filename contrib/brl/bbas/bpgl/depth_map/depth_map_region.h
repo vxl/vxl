@@ -35,7 +35,7 @@ class depth_map_region : public vbl_ref_count
   //: default constructor
   depth_map_region();
   //: standard constructor for a plane that can be moved along the camera ray
-  depth_map_region(vsol_polygon_2d_sptr const& region, 
+  depth_map_region(vsol_polygon_2d_sptr const& region,
                    vgl_plane_3d<double> const& region_plane,
                    double const& min_depth, double const& max_depth,
                    vcl_string const& name,
@@ -46,7 +46,7 @@ class depth_map_region : public vbl_ref_count
 
 
   //: constructor for a fixed plane, e.g. the ground plane
-  depth_map_region(vsol_polygon_2d_sptr const& region, 
+  depth_map_region(vsol_polygon_2d_sptr const& region,
                    vgl_plane_3d<double> const& region_plane,
                    vcl_string const& name,
                    depth_map_region::orientation orient,
@@ -96,16 +96,16 @@ class depth_map_region : public vbl_ref_count
   //  depth is defined as distance on  the x-y plane in the direction
   //  of the camera ray through the region centroid. An assertion is
   //  thrown if the camera ray is perpendicular to the 3-d region normal
-  static vsol_polygon_3d_sptr 
-    region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d, 
+  static vsol_polygon_3d_sptr
+    region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
                     vgl_vector_3d<double> const& region_normal,
                     double depth, // plane is moved along ray to depth
                     vpgl_perspective_camera<double> const& cam);
 
   //: The 3-d region is fixed as in the case of the ground plane.
   // The 3-d vertices are the intersection of the camera rays with the plane.
-  static vsol_polygon_3d_sptr 
-    region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d, 
+  static vsol_polygon_3d_sptr
+    region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
                     vgl_plane_3d<double> const& region_plane,
                     vpgl_perspective_camera<double> const& cam);
 
@@ -113,18 +113,18 @@ class depth_map_region : public vbl_ref_count
   //  it returns false when the input camera can NOT project the defined 2-d ground to 3-d ground
   bool region_ground_2d_to_3d(vpgl_perspective_camera<double> const& cam);
 
-  //: The direction vector that is parallel to the ground plane and lies in the plane of the camera principal ray and the z axis. 
+  //: The direction vector that is parallel to the ground plane and lies in the plane of the camera principal ray and the z axis.
   //  Provides the normal to the plane perpendicular to the gound plane
   //  and orthogonal to the camera principal ray.
-  static vgl_vector_3d<double> 
+  static vgl_vector_3d<double>
     perp_ortho_dir(vpgl_perspective_camera<double> const& cam);
 
   //: changes the 2-d region so that points near the horizon move to the specified max depth.
   //  The proximity scale factor defines
-  //  a threshold on "near" as a factor times the distance to the 
-  //  point closest to the horizon. This approach is likely to be 
+  //  a threshold on "near" as a factor times the distance to the
+  //  point closest to the horizon. This approach is likely to be
   //  fragile if the ground plane region has a convex shape.
-  bool set_ground_plane_max_depth(double max_depth, 
+  bool set_ground_plane_max_depth(double max_depth,
                                   vpgl_perspective_camera<double> const& cam,
                                   double proximity_scale_factor);
 

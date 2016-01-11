@@ -1,6 +1,6 @@
 import bvpl_octree_batch
 import multiprocessing
-import Queue 
+import Queue
 import time
 
 class dbvalue:
@@ -16,22 +16,22 @@ class taylor_kernel_job():
         self.block_j = block_j;
         self.block_k = block_k;
         self.output_path = output_path;
-        
-        
+
+
 def execute_jobs(jobs, num_procs=5):
     work_queue=multiprocessing.Queue();
     result_queue=multiprocessing.Queue();
     for job in jobs:
         work_queue.put(job)
-    
+
     for i in range(num_procs):
         worker= taylor_kernel_worker(work_queue,result_queue)
         worker.start();
         print("worker with name ",worker.name," started!")
-        
-        
+
+
 class taylor_kernel_worker(multiprocessing.Process):
- 
+
     def __init__(self,work_queue,result_queue):
         # base class initialization
         multiprocessing.Process.__init__(self)
@@ -39,7 +39,7 @@ class taylor_kernel_worker(multiprocessing.Process):
         self.work_queue = work_queue
         self.result_queue = result_queue
         self.kill_received = False
-    
+
     def run(self):
         while not self.kill_received:
              # get a task
@@ -47,9 +47,9 @@ class taylor_kernel_worker(multiprocessing.Process):
                 job = self.work_queue.get_nowait()
             except Queue.Empty:
                 break
-            
+
             start_time = time.time();
-            
+
             print("Creating taylor kernel");
             bvpl_octree_batch.init_process("bvplLoadTaylorKernelProcess");
             bvpl_octree_batch.set_input_string(0, job.kernel_path);
@@ -67,8 +67,8 @@ class taylor_kernel_worker(multiprocessing.Process):
             bvpl_octree_batch.set_input_string(5,"algebraic");
             bvpl_octree_batch.set_input_string(6, job.output_path);
             bvpl_octree_batch.run_process();
-            
+
             print ("Runing time for worker:", self.name)
             print(time.time() - start_time);
-            
-            
+
+

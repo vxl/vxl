@@ -12,7 +12,7 @@
 //
 // - Function Name: mbl_read_int
 // - Synopsis:      int mbl_read_int(char* q_str, int default_int)
-// - Inputs:        q_str: A question 
+// - Inputs:        q_str: A question
 //                  default_int: Default answer
 //                  min_int: Min allowed value (optional)
 //                  max_int: Max allowed value (optional)

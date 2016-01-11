@@ -38,9 +38,9 @@ int main(int argc,  char** argv)
   double heading, heading_dev, tilt, tilt_dev, roll, roll_dev, altitude;
   double top_fov, top_fov_dev, lat, lon;
   if (!volm_io::read_camera(cam_file(), dm->ni(), dm->nj(), heading, heading_dev, tilt, tilt_dev, roll, roll_dev, top_fov, top_fov_dev, altitude, lat, lon)) {
-    volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);  
+    volm_io::write_status(out_folder(), volm_io::CAM_FILE_IO_ERROR);
   }
-  
+
 
   volm_io::write_status(out_folder(), volm_io::EXE_RUNNING, 0);
 

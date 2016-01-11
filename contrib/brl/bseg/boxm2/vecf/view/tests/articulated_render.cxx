@@ -113,7 +113,7 @@ int main(int argc, char ** argv)
   }
 
   bool cam_path_exists = vul_file::exists(default_cam_path)&&cam_path!="";
-  
+
   unsigned ni = 1280, nj = 720;
   vcl_string device_name = "gpu";
     bocl_device_sptr  device( NULL );

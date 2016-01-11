@@ -100,7 +100,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
       vgl_box_3d<double> scene_bbox = scene->bounding_box();
       vgl_box_2d<double> proj_bbox;
       double u,v;
-      
+
       geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
       geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
@@ -207,7 +207,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
       for (unsigned int j=0;j<cl_nj;++j) {
           for (unsigned int i=0;i<cl_ni;++i) {
               if ( i<mask_map->ni() && j<mask_map->nj() ) {
-                  if ( (*mask_map)(i,j)==0 ) 
+                  if ( (*mask_map)(i,j)==0 )
                       mask_buff[count] = 0;
                   else
                       mask_buff[count] = 1;
@@ -221,7 +221,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   mask_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
 
-  
+
   for (unsigned int i=0; i<kernels.size(); ++i)
   {
     for (vcl_vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
@@ -371,7 +371,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_sptr
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "vis_seg_len_main", seg_opts, "fusion::vis_seg_len_main");
   vec_kernels.push_back(seg_len);
 
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* update = new bocl_kernel();
   vcl_string update_opts = options + " -D UPDATE_MAX_VIS_SCORE";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_max_vis_score", update_opts, "fusion::update_max_vis_score");
@@ -456,7 +456,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
       vgl_box_3d<double> scene_bbox = scene->bounding_box();
       vgl_box_2d<double> proj_bbox;
       double u,v;
-      
+
       geocam->project(scene_bbox.min_x(), scene_bbox.min_y(), scene_bbox.min_z(), u, v);
       proj_bbox.add(vgl_point_2d<double>(u,v));
       geocam->project(scene_bbox.max_x(), scene_bbox.max_y(), scene_bbox.max_z(), u, v);
@@ -486,7 +486,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
                   double el_first = 0;
                   geocam->img_to_global(full_i, full_j,  lon, lat);
                   lvcs->global_to_local(lon,lat,el_first, vpgl_lvcs::wgs84, x, y, z_first);
-    
+
                   // start rays slightly above maximum height of model
                   float z_origin = float(scene_bbox.max_z()) + 1.0f;
                   ray_origins[count4+0] = float(x);
@@ -565,7 +565,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
       for (unsigned int j=0;j<cl_nj;++j) {
           for (unsigned int i=0;i<cl_ni;++i) {
               if ( i<mask_map->ni() && j<mask_map->nj() ) {
-                  if ( (*mask_map)(i,j)==0 ) 
+                  if ( (*mask_map)(i,j)==0 )
                       mask_buff[count] = 0;
                   else
                       mask_buff[count] = 1;
@@ -743,7 +743,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_device
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "view_normal_dot_main", seg_opts, "fusion::vis_seg_len_main");
   vec_kernels.push_back(seg_len);
 
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* update = new bocl_kernel();
   vcl_string update_opts = options + " -D UPDATE_AVG_VIEW_NORMAL_DOT";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_avg_view_normal_dot", update_opts, "fusion::update_avg_view_normal_dot");
@@ -877,8 +877,8 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   float* exp_depth_buf = new float[cl_ni*cl_nj];
   float* std_depth_buf = new float[cl_ni*cl_nj];
   int count  = 0;
-  for (unsigned int j=0;j<cl_nj;++j) 
-      for (unsigned int i=0;i<cl_ni;++i) 
+  for (unsigned int j=0;j<cl_nj;++j)
+      for (unsigned int i=0;i<cl_ni;++i)
           if ( i<exp_depth_img.ni() && j<exp_depth_img.nj() )
           {
               exp_depth_buf[count] = exp_depth_img(i,j);
@@ -913,7 +913,7 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   // set arguments
   vcl_vector<boxm2_block_id> vis_order;
-  if(cam->type_name() == "vpgl_geo_camera" ) 
+  if(cam->type_name() == "vpgl_geo_camera" )
   {
       vis_order= scene->get_block_ids(); // order does not matter for a top down orthographic camera  and axis aligned blocks
   }
@@ -1088,7 +1088,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(bocl_dev
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "accumulate_surface_density_main", seg_opts, "fusion::accumulate_surface_density_main");
   vec_kernels.push_back(seg_len);
 
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* update = new bocl_kernel();
   vcl_string update_opts = options + " -D UPDATE_AVG_SURFACE_DENSITY";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_avg_surface_density", update_opts, "fusion::update_avg_surface_density");

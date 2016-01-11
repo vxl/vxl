@@ -128,7 +128,7 @@ struct tool_params
 
   //: Point colour
   vcl_string point_colour;
-  
+
   //: Colour of background (or "none" for transparent)
   vcl_string background_colour;
 
@@ -198,12 +198,12 @@ void draw_mode(msm_shape_mode_view& mode_view,
   ss<<params.output_dir<<'/'<<params.base_name<<"_s"<<m<<".eps";
   mbl_eps_writer writer(ss.str().c_str(),
                         win_box.width(),win_box.height());
-  
+
   if (params.background_colour!="none")
   {
     writer.set_colour(params.background_colour);
     writer.draw_background_box();
-  } 
+  }
 
   unsigned n_shapes = mode_view.points().size();
   for (unsigned i=0;i<n_shapes;++i)
@@ -256,7 +256,7 @@ void draw_mode_frames(msm_shape_mode_view& mode_view,
     {
       writer.set_colour(params.background_colour);
       writer.draw_background_box();
-    } 
+    }
 
     writer.set_colour(params.point_colour);
     if (params.point_radius>0)

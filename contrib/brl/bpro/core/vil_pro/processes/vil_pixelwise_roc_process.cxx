@@ -187,8 +187,8 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
       if(!ignore)
       {
       if (truth)
-      { 
-       fn->data_array[pnt]++; 
+      {
+       fn->data_array[pnt]++;
       }// gt=true, class=false => false neg
       else
       {
@@ -207,7 +207,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
       else
         fp->data_array[pnt]++; // gt = false, class = true => false pos
     }
-  } 
+  }
 
   bbas_1d_array_float * tpr=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * fpr=new bbas_1d_array_float(numPoints);

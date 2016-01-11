@@ -35,7 +35,7 @@ class DcmOverlayData : public DcmPolymorphOBOW
 {
 public:
     DcmOverlayData(
-	const DcmTag & tag, 
+	const DcmTag & tag,
 	const Uint32 len = 0)
 	: DcmPolymorphOBOW(tag, len) {}
     DcmOverlayData(

@@ -42,6 +42,6 @@ bool boxm2_clear_opencl_cache_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   boxm2_opencl_cache_sptr ocl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  ocl_cache->clear_cache(); 
+  ocl_cache->clear_cache();
   return true;
 }

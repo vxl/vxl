@@ -68,7 +68,7 @@ struct opj_cparameters;
 /* ----------------------------------------------------------------------- */
 
 
-typedef enum 
+typedef enum
 {
 	JP2_STATE_NONE			= 0x0,
 	JP2_STATE_SIGNATURE		= 0x1,
@@ -80,28 +80,28 @@ typedef enum
 }
 JP2_STATE;
 
-typedef enum 
+typedef enum
 {
 	JP2_IMG_STATE_NONE			= 0x0,
 	JP2_IMG_STATE_UNKNOWN		= 0x80000000
 }
 JP2_IMG_STATE;
 
-/** 
+/**
 JP2 component
 */
-typedef struct opj_jp2_comps 
+typedef struct opj_jp2_comps
 {
-  unsigned int depth;		  
-  int sgnd;		   
+  unsigned int depth;
+  int sgnd;
   unsigned int bpcc;
-} 
+}
 opj_jp2_comps_t;
 
 /**
 JPEG-2000 file format reader/writer
 */
-typedef struct opj_jp2 
+typedef struct opj_jp2
 {
 	/** handle to the J2K codec  */
 	struct opj_j2k *j2k;
@@ -133,30 +133,30 @@ typedef struct opj_jp2
 	unsigned int jp2_state;
 	unsigned int jp2_img_state;
 
-} 
+}
 opj_jp2_t;
 
 /**
 JP2 Box
 */
-typedef struct opj_jp2_box 
+typedef struct opj_jp2_box
 {
   unsigned int length;
   unsigned int type;
-} 
+}
 opj_jp2_box_t;
 
-typedef struct opj_jp2_header_handler 
+typedef struct opj_jp2_header_handler
 {
 	/* marker value */
 	int id;
 	/* action linked to the marker */
 	bool (*handler) (opj_jp2_t *jp2,unsigned char * p_header_data, unsigned int p_header_size,struct opj_event_mgr * p_manager);
-} 
+}
 opj_jp2_header_handler_t;
 
 
-typedef struct opj_jp2_img_header_writer_handler 
+typedef struct opj_jp2_img_header_writer_handler
 {
 	/* action to perform */
 	unsigned char* (*handler) (opj_jp2_t *jp2,	unsigned int * p_data_size);
@@ -164,7 +164,7 @@ typedef struct opj_jp2_img_header_writer_handler
 	unsigned char *			m_data;
 	/* size of data */
 	unsigned int				m_size;
-} 
+}
 opj_jp2_img_header_writer_handler_t;
 
 
@@ -177,7 +177,7 @@ opj_jp2_img_header_writer_handler_t;
 
 /**
  * Creates a jpeg2000 file decompressor.
- * 
+ *
  * @return	an empty jpeg2000 file codec.
  */
 opj_jp2_t* jp2_create (bool p_is_decoder);
@@ -190,7 +190,7 @@ void jp2_destroy(opj_jp2_t *jp2);
 
 /**
 Setup the decoder decoding parameters using user parameters.
-Decoding parameters are returned in jp2->j2k->cp. 
+Decoding parameters are returned in jp2->j2k->cp.
 @param jp2 JP2 decompressor handle
 @param parameters decompression parameters
 */
@@ -205,8 +205,8 @@ void jp2_setup_decoder(opj_jp2_t *jp2, struct opj_dparameters *parameters);
 */
 struct opj_image* jp2_decode(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
 /**
-Setup the encoder parameters using the current image and using user parameters. 
-Coding parameters are returned in jp2->j2k->cp. 
+Setup the encoder parameters using the current image and using user parameters.
+Coding parameters are returned in jp2->j2k->cp.
 @param jp2 JP2 compressor handle
 @param parameters compression parameters
 @param image input filled image
@@ -224,7 +224,7 @@ void jp2_setup_encoder(opj_jp2_t *jp2, struct opj_cparameters *parameters, struc
 bool jp2_start_compress(opj_jp2_t *jp2,  struct opj_stream_private *cio,struct opj_image * p_image,struct opj_event_mgr * p_manager);
 
 /**
- * Ends the compression procedures and possibiliy add data to be read after the 
+ * Ends the compression procedures and possibiliy add data to be read after the
  * codestream.
  */
 bool jp2_end_compress(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
@@ -261,7 +261,7 @@ bool jp2_read_header(
 								struct opj_event_mgr * p_manager
 							);
 /**
- * Ends the decompression procedures and possibiliy add data to be read after the 
+ * Ends the decompression procedures and possibiliy add data to be read after the
  * codestream.
  */
 bool jp2_end_decompress(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
@@ -323,7 +323,7 @@ bool jp2_read_tile_header (
  * @param	p_manager		the user event manager
  *
  * @return	true			if the area could be set.
- */				
+ */
 bool jp2_set_decode_area(
 			opj_jp2_t *p_jp2,
 			OPJ_INT32 p_start_x,

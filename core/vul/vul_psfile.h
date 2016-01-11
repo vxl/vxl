@@ -37,7 +37,7 @@ class vul_psfile: public vcl_ofstream
 
   vul_psfile(char const* filename, bool debug_output=false);
   ~vul_psfile();
-  operator bool() { return reinterpret_cast<void*>(&output_filestream)!=(void*)0; }
+  operator bool() { return static_cast<bool>(output_filestream); }
 
   void set_paper_type(vul_psfile::paper_type type){printer_paper_type = type;}
   void set_paper_layout(vul_psfile::paper_layout layout) {printer_paper_layout = layout;}
@@ -85,7 +85,7 @@ class vul_psfile: public vcl_ofstream
 
  private:
   void compute_bounding_box();
-  
+
   void reset_postscript_header();
   void image_translate_and_scale();
   void object_translate_and_scale();

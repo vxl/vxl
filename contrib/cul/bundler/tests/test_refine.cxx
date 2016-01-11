@@ -67,8 +67,8 @@ static void test_refine(int argc, char** argv)
 
     // ------------------Consistency checks
 
-    // Check that a feature in side1 is only matched with 
-    // one feature in side2, and vice versa. We check this by 
+    // Check that a feature in side1 is only matched with
+    // one feature in side2, and vice versa. We check this by
     // seeing if each feature is unique in its list.
     vcl_vector<bundler_inters_feature_pair>::const_iterator i;
     for(i = matches.matches.begin(); i != matches.matches.end(); i++){

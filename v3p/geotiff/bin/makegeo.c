@@ -25,26 +25,26 @@ void main()
 	char *fname = "newgeo.tif";
 	TIFF *tif=(TIFF*)0;  /* TIFF-level descriptor */
 	GTIF *gtif=(GTIF*)0; /* GeoKey-level descriptor */
-	
+
 	tif=XTIFFOpen(fname,"w");
 	if (!tif) goto failure;
-	
+
 	gtif = GTIFNew(tif);
 	if (!gtif)
 	{
 		printf("failed in GTIFNew\n");
 		goto failure;
 	}
-	
+
 	SetUpTIFFDirectory(tif);
 	SetUpGeoKeys(gtif);
 	WriteImage(tif);
-	
+
 	GTIFWriteKeys(gtif);
 	GTIFFree(gtif);
 	XTIFFClose(tif);
 	exit (0);
-	
+
 failure:
 	printf("failure in makegeo\n");
 	if (tif) TIFFClose(tif);
@@ -57,7 +57,7 @@ void SetUpTIFFDirectory(TIFF *tif)
 {
 	double tiepoints[6]={0,0,0,130.0,32.0,0.0};
 	double pixscale[3]={1,1,0};
-	
+
 	TIFFSetField(tif,TIFFTAG_IMAGEWIDTH,    WIDTH);
 	TIFFSetField(tif,TIFFTAG_IMAGELENGTH,   HEIGHT);
 	TIFFSetField(tif,TIFFTAG_COMPRESSION,   COMPRESSION_NONE);
@@ -65,7 +65,7 @@ void SetUpTIFFDirectory(TIFF *tif)
 	TIFFSetField(tif,TIFFTAG_PLANARCONFIG,  PLANARCONFIG_CONTIG);
 	TIFFSetField(tif,TIFFTAG_BITSPERSAMPLE, 8);
 	TIFFSetField(tif,TIFFTAG_ROWSPERSTRIP,  20L);
-	
+
 	TIFFSetField(tif,TIFFTAG_GEOTIEPOINTS, 6,tiepoints);
 	TIFFSetField(tif,TIFFTAG_GEOPIXELSCALE, 3,pixscale);
 }
@@ -89,7 +89,7 @@ void WriteImage(TIFF *tif)
 {
 	int i;
 	char buffer[WIDTH];
-	
+
 	memset(buffer,0,(size_t)WIDTH);
 	for (i=0;i<HEIGHT;i++)
 		if (!TIFFWriteScanline(tif, buffer, i, 0))

@@ -4,7 +4,7 @@
 
 bool boxm_scene_base::load_scene(vcl_string filename, boxm_scene_parser& parser)
 {
-  
+
   if (filename.size() > 0) {
     vcl_FILE* xmlFile = vcl_fopen(filename.c_str(), "r");
     if (!xmlFile){

@@ -14,7 +14,7 @@
 // Initial version Sept. 25,  2015
 // \endverbatim
 // the current algorithm uses the Catmull-Rom spline
-// 
+//
 // The parameter s is used in estimating the first derivative of the
 // function at the ends of the interval:
 //  f'(0) = s*(f(1)-f(-1)), f'(1) = s*(f(2)-f(1));
@@ -51,7 +51,7 @@ class vgl_cubic_spline_2d
   { knots_ = knots; closed_curve_ = closed;}
   void set_s(Type s){s_ = s;}
 
-  //: maximum value of the spline parameter 
+  //: maximum value of the spline parameter
   Type max_t() const {return static_cast<Type>(knots_.size()-1);}
 
   //: Equality operator
@@ -71,7 +71,7 @@ class vgl_cubic_spline_2d
   void coefficients(Type vm1, Type v0, Type v1, Type v2, Type& a0, Type& a1, Type& a2, Type& a3) const;
 
   //: the indices for the knots bounding the interval containing t, u is the local parameter in the interval 0 -> 1
-  void knot_indices(Type t, unsigned& im1, unsigned& i0, unsigned& i1, unsigned& i2, Type& u) const; 
+  void knot_indices(Type t, unsigned& im1, unsigned& i0, unsigned& i1, unsigned& i2, Type& u) const;
 
 
   //: function value at t, where  0 <= t <= n-1 and n is the number of knots

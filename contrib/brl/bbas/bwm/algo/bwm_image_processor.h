@@ -22,7 +22,7 @@ class bwm_image_processor
                         vsol_polygon_2d_sptr p = 0);
 
   static void intensity_profile(bgui_image_tableau_sptr img,
-                                float start_col, float start_row, 
+                                float start_col, float start_row,
                                 float end_col, float end_row);
 
   static void range_map(bgui_image_tableau_sptr img);

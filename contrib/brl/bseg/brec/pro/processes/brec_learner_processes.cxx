@@ -148,7 +148,7 @@ bool brec_learner_layer_n_init_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types;
   input_types.push_back("brec_part_hierarchy_sptr");     // hierarchy whose layer n will be constructed
   input_types.push_back("unsigned");    // n : id of the layer to construct (hierarchy should contain n-1)
-  input_types.push_back("unsigned");   // k: number of classes 
+  input_types.push_back("unsigned");   // k: number of classes
   input_types.push_back("float");   // radius that is to be used to collect stats for existence of pairs as they appear within each others neighborhood
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
@@ -174,12 +174,12 @@ bool brec_learner_layer_n_init_process(bprb_func_process& pro)
   unsigned n = pro.get_input<unsigned>(i++);
   unsigned k = pro.get_input<unsigned>(i++);
   float rad = pro.get_input<float>(i++);
-  
+
   brec_part_hierarchy_learner_sptr hl = new brec_part_hierarchy_learner();
   hl->initialize_layer_n_as_pairs(h, n, k, rad);
-  
-  pro.set_output_val<brec_part_hierarchy_learner_sptr>(0, hl); 
-  
+
+  pro.set_output_val<brec_part_hierarchy_learner_sptr>(0, hl);
+
   return true;
 }
 
@@ -223,8 +223,8 @@ bool brec_learner_layer_n_fit_process(bprb_func_process& pro)
 
   hl->layer_n_fit_distributions(class_id, n, M);
   hl->print_to_m_file_layer_n(output_name, class_id, true);
-  
-  pro.set_output_val<brec_part_hierarchy_sptr>(0, hl->h_map_[class_id]); 
+
+  pro.set_output_val<brec_part_hierarchy_sptr>(0, hl->h_map_[class_id]);
 
   return true;
 }

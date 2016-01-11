@@ -75,7 +75,7 @@ vgl_point_2d<float> volm_conf_object::loc() const { return vgl_point_2d<float>(t
 
 bool volm_conf_object::is_same(volm_conf_object const& other)
 {
-  return (vcl_fabs(this->theta_ - other.theta() ) < EPSILON) && (vcl_fabs(this->dist_ - other.dist() ) < EPSILON) 
+  return (vcl_fabs(this->theta_ - other.theta() ) < EPSILON) && (vcl_fabs(this->dist_ - other.dist() ) < EPSILON)
           && (vcl_fabs(this->height_ - other.height() ) < EPSILON)
           && this->land_ == other.land();
 }
@@ -155,7 +155,7 @@ void volm_conf_object::b_read(vsl_b_istream& is)
   }
   else
   {
-    vcl_cout << "volm_conf_object: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << (int)this->version() 
+    vcl_cout << "volm_conf_object: binary read -- unknown binary io version: " << (int)ver << ", most updated version is " << (int)this->version()
              << vcl_flush << vcl_endl;
     return;
   }

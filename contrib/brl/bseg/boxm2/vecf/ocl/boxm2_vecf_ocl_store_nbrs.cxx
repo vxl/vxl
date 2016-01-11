@@ -95,13 +95,13 @@ bool boxm2_vecf_ocl_store_nbrs::init_ocl_store()
     mog_source = 0;
     return true;
 }
-// input is a block (source scene) output is the source scene with neighbor information 
+// input is a block (source scene) output is the source scene with neighbor information
 // neighbor existence and expected intensity of neighbors
 bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   vcl_cout << "inside augment_1_blk" << vcl_endl;
   int depth = 3;
   vcl_size_t local_threads[1]={64};
-  static vcl_size_t global_threads[1]={1};   
+  static vcl_size_t global_threads[1]={1};
 
   ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
   ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
@@ -109,9 +109,9 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   blk_source = opencl_cache_->get_block(source_scene_, *iter_blk);
   info_buffer = source_scene_->get_blk_metadata(*iter_blk);
-  blk_info_source  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );   
+  blk_info_source  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
   blk_info_source->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-  
+
   if(app_type_ == "boxm2_mog3_grey") {
     mog_source       = opencl_cache_->get_data<BOXM2_MOG3_GREY>(source_scene_, *iter_blk,0,true);
   }
@@ -136,7 +136,7 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   vcl_size_t exist_size = boxm2_data_traits<BOXM2_CHAR8>::datasize();
   vcl_size_t nbytes_nbr_exist = exist_size*nvox;
   nbr_exists = opencl_cache_->get_data_new(source_scene_, *iter_blk, boxm2_data_traits<BOXM2_CHAR8>::prefix("nbr_exist"), nbytes_nbr_exist, false);
-  // set kernel args  
+  // set kernel args
   kern->set_arg(centerX.ptr());
   kern->set_arg(centerY.ptr());
   kern->set_arg(centerZ.ptr());
@@ -151,7 +151,7 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   kern->set_arg(ocl_depth);
   kern->set_arg(output.ptr());
   kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local trees
-  kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local neighbor trees 
+  kern->set_local_arg(16*local_threads[0]*sizeof(unsigned char)); // local neighbor trees
   kern->execute( queue, 1, local_threads, global_threads);
   clFinish( queue);
   check_val(status, MEM_FAILURE, "EXECUTE FAILED: " + error_to_string(status));

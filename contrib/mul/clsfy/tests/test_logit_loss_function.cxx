@@ -28,7 +28,7 @@ void test_logit_loss_function()
   vnl_vector<double> class_id(n_egs);
 
   vnl_vector<double> mean1(n_dim,0.0),mean2(n_dim,1.1),var(n_dim,n_dim);
-  
+
   vpdfl_axis_gaussian pdf1,pdf2;
   pdf1.set(mean1,var);
   pdf2.set(mean2,var);

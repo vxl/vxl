@@ -77,7 +77,7 @@ extern "C" {
  *
  * Include file for extended projection definition normalization api.
  */
-    
+
 #define MAX_GTIF_PROJPARMS 	10
 
 /**
@@ -94,7 +94,7 @@ typedef struct {
 
     /** From GeographicTypeGeoKey tag.  For example GCS_WGS_84 or
         GCS_Voirol_1875_Paris.  Includes datum and prime meridian value. */
-    short	GCS;	      
+    short	GCS;
 
     /** From ProjLinearUnitsGeoKey.  For example Linear_Meter. */
     short	UOMLength;
@@ -107,7 +107,7 @@ typedef struct {
 
     /** One UOMAngle = UOMLengthInDegrees degrees. */
     double      UOMAngleInDegrees;
-    
+
     /** Datum from GeogGeodeticDatumGeoKey tag. For example Datum_WGS84 */
     short	Datum;
 
@@ -139,7 +139,7 @@ typedef struct {
     /** GeoTIFF identifier for underlying projection method.  While some of
       these values have corresponding vlaues in EPSG (Projection field),
       others do not.  For example CT_TransverseMercator. */
-    short	CTProjection;   
+    short	CTProjection;
 
     /** Number of projection parameters in ProjParm and ProjParmId. */
     int		nParms;
@@ -165,7 +165,7 @@ typedef struct {
 } GTIFDefn;
 
 int CPL_DLL GTIFGetPCSInfo( int nPCSCode, char **ppszEPSGName,
-                            short *pnProjOp, 
+                            short *pnProjOp,
                             short *pnUOMLengthCode, short *pnGeogCS );
 int CPL_DLL GTIFGetProjTRFInfo( int nProjTRFCode,
                                 char ** ppszProjTRFName,
@@ -189,7 +189,7 @@ int CPL_DLL GTIFGetUOMAngleInfo( int nUOMAngleCode,
                                  char **ppszUOMName,
                                  double * pdfInDegrees );
 double CPL_DLL GTIFAngleToDD( double dfAngle, int nUOMAngle );
-    
+
 
 /* this should be used to free strings returned by GTIFGet... funcs */
 void CPL_DLL GTIFFreeMemory( char * );
@@ -232,5 +232,5 @@ int  CPL_DLL  GTIFProj4FromLatLong( GTIFDefn *, int, double *, double * );
 #ifdef __cplusplus
 }
 #endif
-    
+
 #endif /* ndef GEO_NORMALIZE_H_INCLUDED */

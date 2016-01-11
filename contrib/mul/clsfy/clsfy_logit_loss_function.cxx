@@ -42,7 +42,7 @@ double clsfy_logit_loss_function::f(vnl_vector<double> const& v)
 }
 
   //:  Calculate the gradient of f at parameter vector v.
-void clsfy_logit_loss_function::gradf(vnl_vector<double> const& v, 
+void clsfy_logit_loss_function::gradf(vnl_vector<double> const& v,
                      vnl_vector<double>& gradient)
 {
   x_.reset();
@@ -133,7 +133,7 @@ double clsfy_quad_regulariser::f(vnl_vector<double> const& v)
 }
 
 //:  Calculate the gradient of f at parameter vector v.
-void clsfy_quad_regulariser::gradf(vnl_vector<double> const& v, 
+void clsfy_quad_regulariser::gradf(vnl_vector<double> const& v,
                      vnl_vector<double>& gradient)
 {
   gradient = (2*alpha_)*v;

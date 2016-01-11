@@ -43,7 +43,7 @@ InitParams(unsigned n_labels, unsigned n_iter, unsigned pyramid_levels,
   pyramid_levels_ = pyramid_levels;
   discontinuity_cost_ = discontinuity_cost;
   truncation_cost_ = truncation_cost;
-  kappa_ = kappa; 
+  kappa_ = kappa;
   lambda_ = lambda;
 }
 

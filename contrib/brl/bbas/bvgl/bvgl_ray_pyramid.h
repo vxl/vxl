@@ -21,7 +21,7 @@
 class bvgl_ray_pyramid //: public vbl_ref_count
 {
  public:
-  bvgl_ray_pyramid(vbl_array_2d<vgl_ray_3d<float> >& finest_level, unsigned numLevels); 
+  bvgl_ray_pyramid(vbl_array_2d<vgl_ray_3d<float> >& finest_level, unsigned numLevels);
   ~bvgl_ray_pyramid() {}
 
   // Data Access---------------------------------------------------------------
@@ -33,11 +33,11 @@ class bvgl_ray_pyramid //: public vbl_ref_count
   vbl_array_2d<vgl_ray_3d<float> > &      operator() (vcl_size_t scale)       { return pyramid_[scale]; }
 
  private:
-  vcl_vector<vbl_array_2d<vgl_ray_3d<float> > > pyramid_; 
-  vbl_array_2d<vgl_ray_3d<float> > scale_down(vbl_array_2d<vgl_ray_3d<float> >& toScale); 
-  
-  vcl_vector<vbl_array_2d<float> > angles_; 
-  
+  vcl_vector<vbl_array_2d<vgl_ray_3d<float> > > pyramid_;
+  vbl_array_2d<vgl_ray_3d<float> > scale_down(vbl_array_2d<vgl_ray_3d<float> >& toScale);
+
+  vcl_vector<vbl_array_2d<float> > angles_;
+
 };
 
 #endif // bvgl_ray_pyramid_h_

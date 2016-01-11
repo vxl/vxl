@@ -96,7 +96,7 @@ class vgui_easy2D_tableau : public vgui_displaylist2D_tableau
   //: Set the child tableau to be the given tableau.
   void set_child(vgui_tableau_sptr const&);
 
-  //: get the child tableau 
+  //: get the child tableau
   vgui_tableau_sptr child() const;
 
   //: Set the colour of objects to the given red, green, blue, alpha values.

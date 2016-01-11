@@ -254,12 +254,12 @@ static OPJ_BYTE t1_getspb(OPJ_UINT32 f) {
 	return lut_spb[(f & (T1_SIG_PRIM | T1_SGN)) >> 4];
 }
 
-static OPJ_INT16 t1_getnmsedec_sig(OPJ_UINT32 x, OPJ_UINT32 bitpos) 
+static OPJ_INT16 t1_getnmsedec_sig(OPJ_UINT32 x, OPJ_UINT32 bitpos)
 {
 	if (bitpos > T1_NMSEDEC_FRACBITS) {
 		return lut_nmsedec_sig[(x >> (bitpos - T1_NMSEDEC_FRACBITS)) & ((1 << T1_NMSEDEC_BITS) - 1)];
 	}
-	
+
 	return lut_nmsedec_sig0[x & ((1 << T1_NMSEDEC_BITS) - 1)];
 }
 
@@ -308,9 +308,9 @@ static void t1_enc_sigpass_step(
 {
 	OPJ_INT32 v;
 	OPJ_UINT32 flag;
-	
+
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
-	
+
 	flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
 	if ((flag & T1_SIG_OTH) && !(flag & (T1_SIG | T1_VISIT))) {
 		v = int_abs(*datap) & one ? 1 : 0;
@@ -345,10 +345,10 @@ static void t1_dec_sigpass_step(
 		OPJ_UINT32 vsc)
 {
 	OPJ_UINT32 v, flag;
-	
+
 	opj_raw_t *raw = t1->raw;	/* RAW component */
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
-	
+
 	flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
 	if ((flag & T1_SIG_OTH) && !(flag & (T1_SIG | T1_VISIT))) {
 		if (type == T1_TYPE_RAW) {
@@ -443,9 +443,9 @@ static void t1_enc_refpass_step(
 {
 	OPJ_INT32 v;
 	OPJ_UINT32 flag;
-	
+
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
-	
+
 	flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
 	if ((flag & (T1_SIG | T1_VISIT)) == T1_SIG) {
 		*nmsedec += t1_getnmsedec_ref(int_abs(*datap), bpno + T1_NMSEDEC_FRACBITS);
@@ -471,10 +471,10 @@ static void t1_dec_refpass_step(
 {
 	OPJ_INT32  t;
 	OPJ_UINT32 v,flag;
-	
+
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
 	opj_raw_t *raw = t1->raw;	/* RAW component */
-	
+
 	flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
 	if ((flag & (T1_SIG | T1_VISIT)) == T1_SIG) {
 		mqc_setcurctx(mqc, t1_getctxno_mag(flag));	/* ESSAI */
@@ -561,9 +561,9 @@ static void t1_enc_clnpass_step(
 {
 	OPJ_INT32 v;
 	OPJ_UINT32 flag;
-	
+
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
-	
+
 	flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
 	if (partial) {
 		goto LABEL_PARTIAL;
@@ -595,9 +595,9 @@ static void t1_dec_clnpass_step(
 {
 	OPJ_INT32 v;
 	OPJ_UINT32 flag;
-	
+
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
-	
+
 	flag = vsc ? ((*flagsp) & (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW | T1_SGN_S))) : (*flagsp);
 	if (partial) {
 		goto LABEL_PARTIAL;
@@ -625,9 +625,9 @@ static void t1_enc_clnpass(
 	OPJ_UINT32 i, j, k;
 	OPJ_INT32 one;
 	OPJ_UINT32 agg, runlen, vsc;
-	
+
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
-	
+
 	*nmsedec = 0;
 	one = 1 << (bpno + T1_NMSEDEC_FRACBITS);
 	for (k = 0; k < t1->h; k += 4) {
@@ -637,7 +637,7 @@ static void t1_enc_clnpass(
 					agg = !(MACRO_t1_flags(1 + k,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
 						|| MACRO_t1_flags(1 + k + 1,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
 						|| MACRO_t1_flags(1 + k + 2,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
-						|| (MACRO_t1_flags(1 + k + 3,1 + i) 
+						|| (MACRO_t1_flags(1 + k + 3,1 + i)
 						& (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW |	T1_SGN_S))) & (T1_SIG | T1_VISIT | T1_SIG_OTH));
 				} else {
 					agg = !(MACRO_t1_flags(1 + k,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
@@ -691,9 +691,9 @@ static void t1_dec_clnpass(
 	OPJ_INT32 half, oneplushalf;
 	OPJ_UINT32 agg, runlen, vsc;
 	OPJ_UINT32 segsym = cblksty & J2K_CCP_CBLKSTY_SEGSYM;
-	
+
 	opj_mqc_t *mqc = t1->mqc;	/* MQC component */
-	
+
 	one = 1 << bpno;
 	half = one >> 1;
 	oneplushalf = one | half;
@@ -704,7 +704,7 @@ static void t1_dec_clnpass(
 					agg = !(MACRO_t1_flags(1 + k,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
 						|| MACRO_t1_flags(1 + k + 1,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
 						|| MACRO_t1_flags(1 + k + 2,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
-						|| (MACRO_t1_flags(1 + k + 3,1 + i) 
+						|| (MACRO_t1_flags(1 + k + 3,1 + i)
 						& (~(T1_SIG_S | T1_SIG_SE | T1_SIG_SW |	T1_SGN_S))) & (T1_SIG | T1_VISIT | T1_SIG_OTH));
 				} else {
 					agg = !(MACRO_t1_flags(1 + k,1 + i) & (T1_SIG | T1_VISIT | T1_SIG_OTH)
@@ -749,7 +749,7 @@ static void t1_dec_clnpass(
 		/*
 		if (v!=0xa) {
 			opj_event_msg(t1->cinfo, EVT_WARNING, "Bad segmentation symbol %x\n", v);
-		} 
+		}
 		*/
 	}
 }				/* VSC and  BYPASS by Antonin */
@@ -773,7 +773,7 @@ static OPJ_FLOAT64 t1_getwmsedec(
 	{
 		w1 = mct_norms[compno];
 	}
-	if (qmfbid == 1) 
+	if (qmfbid == 1)
 	{
 		w2 = dwt_getnorm(level, orient);
 	} else {			/* if (qmfbid == 0) */
@@ -855,21 +855,21 @@ static void t1_encode_cblk(
 	}
 
 	cblk->numbps = max ? (int_floorlog2(max) + 1) - T1_NMSEDEC_FRACBITS : 0;
-	
+
 	bpno = cblk->numbps - 1;
 	passtype = 2;
-	
+
 	mqc_resetstates(mqc);
 	mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);
 	mqc_setstate(mqc, T1_CTXNO_AGG, 0, 3);
 	mqc_setstate(mqc, T1_CTXNO_ZC, 0, 4);
 	mqc_init_enc(mqc, cblk->data);
-	
+
 	for (passno = 0; bpno >= 0; ++passno) {
 		opj_tcd_pass_t *pass = &cblk->passes[passno];
 		OPJ_UINT32 correction = 3;
 		type = ((bpno < ((OPJ_INT32) (cblk->numbps) - 4)) && (passtype < 2) && (cblksty & J2K_CCP_CBLKSTY_LAZY)) ? T1_TYPE_RAW : T1_TYPE_MQ;
-		
+
 		switch (passtype) {
 			case 0:
 				t1_enc_sigpass(t1, bpno, orient, &nmsedec, type, cblksty);
@@ -884,12 +884,12 @@ static void t1_encode_cblk(
 					mqc_segmark_enc(mqc);
 				break;
 		}
-		
+
 		/* fixed_quality */
 		tempwmsedec = t1_getwmsedec(nmsedec, compno, level, orient, bpno, qmfbid, stepsize, numcomps,mct_norms) ;
 		cumwmsedec += tempwmsedec;
 		tile->distotile += tempwmsedec;
-		
+
 		/* Code switch "RESTART" (i.e. TERMALL) */
 		if ((cblksty & J2K_CCP_CBLKSTY_TERMALL)	&& !((passtype == 2) && (bpno - 1 < 0))) {
 			if (type == T1_TYPE_RAW) {
@@ -902,7 +902,7 @@ static void t1_encode_cblk(
 			}
 			pass->term = 1;
 		} else {
-			if (((bpno < ((OPJ_INT32) (cblk->numbps) - 4) && (passtype > 0)) 
+			if (((bpno < ((OPJ_INT32) (cblk->numbps) - 4) && (passtype > 0))
 				|| ((bpno == (cblk->numbps - 4)) && (passtype == 2))) && (cblksty & J2K_CCP_CBLKSTY_LAZY)) {
 				if (type == T1_TYPE_RAW) {
 					mqc_flush(mqc);
@@ -917,12 +917,12 @@ static void t1_encode_cblk(
 				pass->term = 0;
 			}
 		}
-		
+
 		if (++passtype == 3) {
 			passtype = 0;
 			bpno--;
 		}
-		
+
 		if (pass->term && bpno > 0) {
 			type = ((bpno < ((OPJ_INT32) (cblk->numbps) - 4)) && (passtype < 2) && (cblksty & J2K_CCP_CBLKSTY_LAZY)) ? T1_TYPE_RAW : T1_TYPE_MQ;
 			if (type == T1_TYPE_RAW)
@@ -930,21 +930,21 @@ static void t1_encode_cblk(
 			else
 				mqc_restart_init_enc(mqc);
 		}
-		
+
 		pass->distortiondec = cumwmsedec;
 		pass->rate = mqc_numbytes(mqc) + correction;	/* FIXME */
-		
+
 		/* Code-switch "RESET" */
 		if (cblksty & J2K_CCP_CBLKSTY_RESET)
 			mqc_reset_enc(mqc);
 	}
-	
+
 	/* Code switch "ERTERM" (i.e. PTERM) */
 	if (cblksty & J2K_CCP_CBLKSTY_PTERM)
 		mqc_erterm_enc(mqc);
 	else /* Default coding */ if (!(cblksty & J2K_CCP_CBLKSTY_LAZY))
 		mqc_flush(mqc);
-	
+
 	cblk->totalpasses = passno;
 
 	for (passno = 0; passno<cblk->totalpasses; passno++) {
@@ -955,7 +955,7 @@ static void t1_encode_cblk(
 		if((pass->rate>1) && (cblk->data[pass->rate - 1] == 0xFF)){
 			pass->rate--;
 		}
-		pass->len = pass->rate - (passno == 0 ? 0 : cblk->passes[passno - 1].rate);		
+		pass->len = pass->rate - (passno == 0 ? 0 : cblk->passes[passno - 1].rate);
 	}
 }
 
@@ -984,15 +984,15 @@ static void t1_decode_cblk(
 
 	bpno = roishift + cblk->numbps - 1;
 	passtype = 2;
-	
+
 	mqc_resetstates(mqc);
 	mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);
 	mqc_setstate(mqc, T1_CTXNO_AGG, 0, 3);
 	mqc_setstate(mqc, T1_CTXNO_ZC, 0, 4);
-	
+
 	for (segno = 0; segno < cblk->real_num_segs; ++segno) {
 		opj_tcd_seg_t *seg = &cblk->segs[segno];
-		
+
 		/* BYPASS mode */
 		type = ((bpno <= ((OPJ_INT32) (cblk->numbps) - 1) - 4) && (passtype < 2) && (cblksty & J2K_CCP_CBLKSTY_LAZY)) ? T1_TYPE_RAW : T1_TYPE_MQ;
 		/* FIXME: slviewer gets here with a null pointer. Why? Partially downloaded and/or corrupt textures? */
@@ -1004,7 +1004,7 @@ static void t1_decode_cblk(
 		} else {
 			mqc_init_dec(mqc, (*seg->data) + seg->dataindex, seg->len);
 		}
-		
+
 		for (passno = 0; passno < seg->real_num_passes; ++passno) {
 			switch (passtype) {
 				case 0:
@@ -1017,10 +1017,10 @@ static void t1_decode_cblk(
 					t1_dec_clnpass(t1, bpno+1, orient, cblksty);
 					break;
 			}
-			
+
 			if ((cblksty & J2K_CCP_CBLKSTY_RESET) && type == T1_TYPE_MQ) {
 				mqc_resetstates(mqc);
-				mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);				
+				mqc_setstate(mqc, T1_CTXNO_UNI, 0, 46);
 				mqc_setstate(mqc, T1_CTXNO_AGG, 0, 3);
 				mqc_setstate(mqc, T1_CTXNO_ZC, 0, 4);
 			}
@@ -1034,7 +1034,7 @@ static void t1_decode_cblk(
 
 /* ----------------------------------------------------------------------- */
 /**
- * Creates a new Tier 1 handle 
+ * Creates a new Tier 1 handle
  * and initializes the look-up tables of the Tier-1 coder/decoder
  * @return a new T1 handle if successful, returns NULL otherwise
 */
@@ -1070,17 +1070,17 @@ opj_t1_t* t1_create()
 
 /**
  * Destroys a previously created T1 handle
- * 
+ *
  * @param p_t1 Tier 1 handle to destroy
 */
-void t1_destroy(opj_t1_t *p_t1) 
+void t1_destroy(opj_t1_t *p_t1)
 {
 	if
-		(! p_t1) 
+		(! p_t1)
 	{
 		return;
 	}
-	
+
 	/* destroy MQC and RAW handles */
 	mqc_destroy(p_t1->mqc);
 	p_t1->mqc = 00;

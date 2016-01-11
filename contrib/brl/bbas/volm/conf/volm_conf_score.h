@@ -40,11 +40,11 @@ class volm_conf_score : public vbl_ref_count
    float theta_in_deg() const;
    //: return the angular value in degree relative to north
    float theta_to_north() const;
-   
+
 
    //: print
    void print(vcl_ostream& os) const
-   {  
+   {
      os << "boxm2_volm_conf_socre -- score: " << score_ << ", theta: " << theta_ << " (" << this->theta_in_deg() << " degree)" << vcl_endl;
    }
 

@@ -17,8 +17,8 @@
  * library (usually libtiff).
  */
 
-/* 
- *  Define public Tag names and values here 
+/*
+ *  Define public Tag names and values here
  */
 
 /* tags 33550 is a private tag registered to SoftDesk, Inc */
@@ -36,7 +36,7 @@
 #define TIFFTAG_GEODOUBLEPARAMS      34736
 #define TIFFTAG_GEOASCIIPARAMS       34737
 
-/* 
+/*
  *  Define Printing method flags. These
  *  flags may be passed in to TIFFPrintDirectory() to
  *  indicate that those particular field values should
@@ -69,7 +69,7 @@ extern TIFF CPL_DLL * XTIFFOpen(const char* name, const char* mode);
 extern TIFF CPL_DLL * XTIFFFdOpen(int fd, const char* name, const char* mode);
 extern void CPL_DLL XTIFFClose(TIFF *tif);
 
-extern TIFF CPL_DLL * XTIFFClientOpen(const char* name, const char* mode, 
+extern TIFF CPL_DLL * XTIFFClientOpen(const char* name, const char* mode,
                                       thandle_t thehandle,
                                       TIFFReadWriteProc, TIFFReadWriteProc,
                                       TIFFSeekProc, TIFFCloseProc,

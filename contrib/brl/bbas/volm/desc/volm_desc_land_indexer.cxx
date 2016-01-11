@@ -14,11 +14,11 @@ bool volm_desc_land_indexer::extract(double lat, double lon, double elev, vcl_ve
   unsigned char label = 0;
   bool found_it = volm_io_tools::get_location_nlcd(NLCD_imgs_, lat, lon, elev, label);
   volm_desc_sptr desc;
-  if (found_it) 
+  if (found_it)
     desc = new volm_desc_land(label);
   else
-    desc = new volm_desc_land(-1);  // pass -1 to get a histogram of all bins 0  
-  
+    desc = new volm_desc_land(-1);  // pass -1 to get a histogram of all bins 0
+
   desc->get_char_array(values);
   return true;
 }

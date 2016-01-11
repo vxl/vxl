@@ -32,7 +32,7 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
     vcl_cerr << " ERROR: can not open index parameter file: " << vul_file::strip_extension(index_file_name_pre.str()) << ".params\n";
     return false;
   }
-  
+
   volm_buffered_index_sptr ind = new volm_buffered_index(params.layer_size, buffer_capacity);
 
   // clear score_all_ to ensure the score_all_ only stores information for current tile
@@ -44,7 +44,7 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
     vcl_cerr << " ERROR: created query and loaded index have different descriptor\n";
     return false;
   }
-  
+
   // loop over all leaves to match each location with the query
   for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
     vcl_string index_file = index_file_name_pre.str() + "_" + leaves[l_idx]->get_string() + "_" + this->get_index_type_str() + ".bin";
@@ -61,7 +61,7 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
       // load the histogram for current location h_pt
       vcl_vector<unsigned char> values(params.layer_size);
       ind->get_next(values);
-      
+
       volm_desc_sptr index_desc = new volm_desc(values);
 #if 0
       vcl_cout << " location: " << h_pt << vcl_endl;
@@ -72,7 +72,7 @@ bool volm_desc_matcher::matcher(volm_desc_sptr const& query,
       // calculate score which measures the similarity of the query and index at current location
       float max_score = 0;
       max_score = this->score(query, index_desc);
-      // save the score 
+      // save the score
       vcl_vector<unsigned> cam_ids;
       cam_ids.push_back(0);
       score_all_.push_back(new volm_score(l_idx, h_idx, max_score, 0, cam_ids) );
@@ -134,7 +134,7 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
     const double y_dist = vnl_math::abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
     vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
     double gt_dist = sqrt(gt_dist_vec.sqr_length());
-  } 
+  }
   else {
     gt_closest = gt_loc;
   }
@@ -232,7 +232,7 @@ bool volm_desc_matcher::create_scaled_prob_map(vcl_string const& out_folder,
     for (unsigned j = 0; j < tile_img.nj(); j++)
       if (tile_img(i, j) >= 0)
         out_png(i,j) = volm_io::scale_score_to_1_255_sig(kl, ku, threshold, tile_img(i,j));
-  
+
   // save the image to specific folder
   vcl_stringstream prob_map_folder;
   //prob_map_folder << out_folder << "/ProbMap_scaled_" << threshold;
@@ -358,7 +358,7 @@ bool volm_desc_matcher::create_candidate_list(vcl_string const& prob_map_folder,
     for (unsigned i = 0 ; i < top_locs.size(); i++) {
       if (rank%100 == 0)
         vcl_cerr << " size = " << cand_map.size() << ", cnt = " << rank-1 << " score = " << mit->first << " --> tile = " << tile_idx << " sh_id = " << sh_idx
-                 << " --> top_locs = " << vcl_setprecision(10) << top_locs[i].x() << ", " << top_locs[i].y() << " top_score = " << top_loc_scores[i] << vcl_endl; 
+                 << " --> top_locs = " << vcl_setprecision(10) << top_locs[i].x() << ", " << top_locs[i].y() << " top_score = " << top_loc_scores[i] << vcl_endl;
     }
   }
   volm_candidate_list::close_kml_document(ofs_kml);

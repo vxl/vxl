@@ -17,22 +17,22 @@ sdet_graph_img_seg::sdet_graph_img_seg(unsigned ni, unsigned nj, unsigned margin
   int inner_i = ni-margin;
   int inner_j = nj-margin;
   node_cnt_ = 0;
-  for (int i = margin; i < inner_i; i++) 
+  for (int i = margin; i < inner_i; i++)
     for (int j = margin; j < inner_j; j++) {
       pixel_ids_(i,j) = node_cnt_;
       id_to_pix_[node_cnt_] = vcl_pair<unsigned, unsigned>(i,j);
       node_cnt_++;
-    } 
+    }
 
   // create edges "to the right"
-  for (int i = margin; i < inner_i-1; i++) 
+  for (int i = margin; i < inner_i-1; i++)
     for (int j = margin; j < inner_j; j++) {
       vbl_edge e(pixel_ids_(i, j), pixel_ids_(i+1,j), -1.0f);
       edges_.push_back(e);
     }
-  
+
   // create edges "to below"
-  for (int i = margin; i < inner_i; i++) 
+  for (int i = margin; i < inner_i; i++)
     for (int j = margin; j < inner_j-1; j++) {
       vbl_edge e(pixel_ids_(i, j), pixel_ids_(i,j+1), -1.0f);
       edges_.push_back(e);
@@ -40,20 +40,20 @@ sdet_graph_img_seg::sdet_graph_img_seg(unsigned ni, unsigned nj, unsigned margin
 
   if (neigh == 8) { // for now only two options (4 or 8 neighborhood) - if 8-neighborhood add more edges
     // create edges "to down-right"
-    for (int i = margin; i < inner_i-1; i++) 
+    for (int i = margin; i < inner_i-1; i++)
       for (int j = margin; j < inner_j-1; j++) {
         vbl_edge e(pixel_ids_(i, j), pixel_ids_(i+1,j+1), -1.0f);
         edges_.push_back(e);
       }
-  
+
     // create edges "to down-left"
-    for (int i = margin+1; i < inner_i; i++) 
+    for (int i = margin+1; i < inner_i; i++)
       for (int j = margin; j < inner_j-1; j++) {
         vbl_edge e(pixel_ids_(i, j), pixel_ids_(i-1,j+1), -1.0f);
         edges_.push_back(e);
       }
 
-  } 
+  }
 
 }
 
@@ -67,30 +67,30 @@ void sdet_graph_img_seg::create_colors(vcl_vector<vil_rgb<vxl_byte> >& colors, i
   }*/
   // create a unique color for each segment
   int r_init = 0, b_init = 255, g_init = 128;
-  int r_cnt = r_init, b_cnt = b_init, g_cnt = g_init, increment = 20; 
+  int r_cnt = r_init, b_cnt = b_init, g_cnt = g_init, increment = 20;
   for (int i = 0; i < n_segments; i++) {
     vil_rgb<vxl_byte> c((vxl_byte)r_cnt, (vxl_byte)g_cnt, (vxl_byte)b_cnt);
     colors.push_back(c);
     if (i%3 == 0) {
-      r_cnt += increment; 
-      if (r_cnt > 255) 
+      r_cnt += increment;
+      if (r_cnt > 255)
         r_cnt = ++r_init;
     } else if (i%3 == 1) {
-      b_cnt -= increment; 
-      if (b_cnt < 0) 
+      b_cnt -= increment;
+      if (b_cnt < 0)
         b_cnt = --b_init;
     } else if (i%3 == 2) {
-      g_cnt += increment; 
-      if (g_cnt > 255) 
-        g_cnt = ++g_init; 
-      if (g_init > 255) 
+      g_cnt += increment;
+      if (g_cnt > 255)
+        g_cnt = ++g_init;
+      if (g_init > 255)
         g_init = 0;
     }
   }
 
 }
 
-// segment an image using two features, takes two normalized feature images as dimension 1 and dimension 2, calculates Euclidean distance 
+// segment an image using two features, takes two normalized feature images as dimension 1 and dimension 2, calculates Euclidean distance
 // only works for float images in [0,1]
 // use sigma1 to smooth the first image and sigma2 to smooth the second image if needed, pass 0 if smoothing is not necessary
 void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> const& img2, unsigned margin, int neigh, float weight_thres, float sigma1, float sigma2, int min_size, vil_image_view<vil_rgb<vxl_byte> >& out_img)
@@ -105,8 +105,8 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
 
   // smooth the image
   vil_image_view<float> smoothed1, smoothed2;
-  
-  if (sigma1 <= 0) 
+
+  if (sigma1 <= 0)
     smoothed1 = vil_copy_deep(img1);
   else {
     // smooth source image using gaussian filter
@@ -114,7 +114,7 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
     vil_gauss_filter_5tap<float, float>(img1, smoothed1, gauss_params);
   }
 
-  if (sigma2 <= 0) 
+  if (sigma2 <= 0)
     smoothed2 = vil_copy_deep(img2);
   else {
     // smooth source image using gaussian filter
@@ -131,24 +131,24 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
     vcl_pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
     double c1 = (double)smoothed1(pix1.first, pix1.second);
     double dif = vcl_abs(c1-c0);
-    
+
     double h0 = (double)smoothed2(pix0.first, pix0.second);
     double h1 = (double)smoothed2(pix1.first, pix1.second);
     double dif2 = vcl_abs(h0-h1);
-    
+
     edges[i].w_ = (float)vcl_sqrt(dif*dif + dif2*dif2);
     /*if (dif < dif2)
       edges[i].w_ = (float)vcl_sqrt(dif*dif);
-    else 
+    else
       edges[i].w_ = (float)vcl_sqrt(dif2*dif2);*/
   }
-    
-  vbl_disjoint_sets ds; 
+
+  vbl_disjoint_sets ds;
   ds.add_elements(ss->node_cnt());
-  
+
   // segment graph
   vbl_graph_partition(ds, edges, weight_thres);
-  
+
   // combine the segments with number of elements less than min_size
   // post process small components
   for (int i = 0; i < edges.size(); i++) {
@@ -189,8 +189,8 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
 
   // smooth the image
   vil_image_view<float> smoothed1, smoothed2;
-  
-  if (sigma1 <= 0) 
+
+  if (sigma1 <= 0)
     smoothed1 = vil_copy_deep(img1);
   else {
     // smooth source image using gaussian filter
@@ -198,7 +198,7 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
     vil_gauss_filter_5tap<float, float>(img1, smoothed1, gauss_params);
   }
 
-  if (sigma2 <= 0) 
+  if (sigma2 <= 0)
     smoothed2 = vil_copy_deep(img2);
   else {
     // smooth source image using gaussian filter
@@ -214,25 +214,25 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
     vcl_pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
     double c1 = (double)smoothed1(pix1.first, pix1.second);
     double dif = c1-c0;
-    
+
     double h0 = (double)smoothed2(pix0.first, pix0.second);
     double h1 = (double)smoothed2(pix1.first, pix1.second);
     double dif2 = h0-h1;
-    
+
     edges[i].w_ = (float)vcl_sqrt(dif*dif + dif2*dif2);
 
     double e0 = (double)edge_img(pix0.first, pix0.second);
     double e1 = (double)edge_img(pix1.first, pix1.second);
-    edges[i].w_ += ( e0 > e1 ? e0 : e1); 
+    edges[i].w_ += ( e0 > e1 ? e0 : e1);
     //edges[i].w_ = (float)vcl_sqrt(dif*dif + dif2*dif2 + 100*(e0-e1)*(e0-e1));
   }
-    
-  vbl_disjoint_sets ds; 
+
+  vbl_disjoint_sets ds;
   ds.add_elements(ss->node_cnt());
-  
+
   // segment graph
   vbl_graph_partition(ds, edges, weight_thres);
-  
+
   // combine the segments with number of elements less than min_size
   // post process small components
   for (int i = 0; i < edges.size(); i++) {

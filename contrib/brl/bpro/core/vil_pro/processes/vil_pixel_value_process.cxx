@@ -99,7 +99,7 @@ bool vil_pixel_value_process(bprb_func_process& pro)
   }
   //otherwise it's messed up, return a null pointer
   vcl_cerr<<"Failed to recognize input image type\n";
-  
+
   pro.set_output_val<float>(0, -1.0f);
   return true;
 }

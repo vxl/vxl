@@ -20,7 +20,7 @@ ELSE( VXL_FORCE_V3P_ZLIB )
   FIND_PACKAGE( ZLIB QUIET )
 ENDIF( VXL_FORCE_V3P_ZLIB )
 
-  
+
 IF(ZLIB_FOUND)
 
   SET(VXL_USING_NATIVE_ZLIB "YES")
@@ -34,13 +34,13 @@ ELSE(ZLIB_FOUND)
   # will not have the v3p ZLIB library, so make sure the headers
   # exist.
   #
-  
+
   IF(EXISTS ${vxl_SOURCE_DIR}/v3p/zlib/zlib.h)
 
     SET( ZLIB_FOUND "YES" )
-    SET( ZLIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/zlib)  
-    SET( ZLIB_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/zlib)  
+    SET( ZLIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/zlib)
+    SET( ZLIB_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/zlib)
     SET( ZLIB_LIBRARIES z )
-  
+
   ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/zlib/zlib.h)
 ENDIF(ZLIB_FOUND)

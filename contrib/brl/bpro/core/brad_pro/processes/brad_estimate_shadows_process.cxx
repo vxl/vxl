@@ -33,7 +33,7 @@ bool brad_estimate_shadows_process_cons(bprb_func_process& pro)
    if (!pro.set_input_types(input_types_))
       return false;
 
-   //outputs: 
+   //outputs:
    //0: output image, pixel values = probability (density) of shadow
    vcl_vector<vcl_string> output_types_(1);
    output_types_[0] = "vil_image_view_base_sptr";
@@ -58,7 +58,7 @@ bool brad_estimate_shadows_process(bprb_func_process& pro)
    brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(1);
    brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(2);
    bool output_density = pro.get_input<bool>(3);
-   
+
    vil_image_view<float> *radiance_img = dynamic_cast<vil_image_view<float>*>(input_img.ptr());
    if (!radiance_img) {
       vcl_cerr << "ERROR: brad_estimate_shadows_process: input image is not a vil_image_view<float>" << vcl_endl;
@@ -70,7 +70,7 @@ bool brad_estimate_shadows_process(bprb_func_process& pro)
    bool result = false;
    if (output_density) {
      result = brad_estimate_shadow_prob_density(*radiance_img, *mdata, *atm_params, *shadow_probs);
-   } 
+   }
    else {
      result = brad_estimate_shadow_prob(*radiance_img, *mdata, *atm_params, *shadow_probs);
    }

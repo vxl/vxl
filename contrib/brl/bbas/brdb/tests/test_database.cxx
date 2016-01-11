@@ -47,7 +47,7 @@ static void test_database()
 
   TEST("Binary IO read and write", true, true);
 #endif
-  
+
   brdb_database_sptr test_db = generate_sample_database();
 
   TEST("construct", true, true);

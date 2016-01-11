@@ -72,7 +72,7 @@ int main(int argc, char** argv)
   }
 
   msm_points points, new_points;
-  
+
   vcl_string in_path = vcl_string(argv[2]);
   if (!points.read_text_file(in_path))
   {
@@ -83,9 +83,9 @@ int main(int argc, char** argv)
 
   vcl_vector<int> index;
   if (!load_index(argv[1],points.size(),index)) return 2;
-  
+
   vcl_cout<<"Loaded "<<index.size()<<" indices"<<vcl_endl;
-  
+
   // Create subset
   int n = index.size();
   vcl_vector<vgl_point_2d<double> > new_pts(n);
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
 
   new_points.set_points(new_pts);
 
-  vcl_string out_path = vcl_string(argv[3]);  
+  vcl_string out_path = vcl_string(argv[3]);
   if (!new_points.write_text_file(out_path))
   {
     vcl_cerr<<"Failed to write points to "<<out_path<<vcl_endl;

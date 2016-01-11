@@ -20,7 +20,7 @@ find_package(JNI)
 
 IF (UNIX)
 
-  IF (JAVA_INCLUDE_PATH) 
+  IF (JAVA_INCLUDE_PATH)
 
     FIND_PATH( HDFS_INCLUDE_PATH NAMES hdfs.h PATHS /usr/local/hadoop/src/c++/libhdfs )
     FIND_PATH( HDFS_LIBRARY_PATH libhdfs.so PATHS /usr/local/hadoop/c++/Linux-amd64-64/lib )

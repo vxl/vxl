@@ -56,7 +56,7 @@ volm_spherical_container::volm_spherical_container(float d_solid_ang, float voxe
   unsigned int N = (unsigned int)(d/vc);
   is_even = !(N%2);
   } // end of while
-  
+
   //: create the depth_interval_map_  [0,d1) --> 1, [d1,d2) --> 2, ... [dn,dmax) --> n , n can be 253 max
   unsigned int i = 0;
   for (vcl_map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
@@ -79,7 +79,7 @@ unsigned char volm_spherical_container::get_depth_interval(double value)
     iter--;
     return iter->second + 1;
   }
-  return iter->second;  
+  return iter->second;
 }
 
 bool volm_spherical_container::meshcurrentlayer(double d, double v)
@@ -275,9 +275,9 @@ void volm_spherical_container::draw_template_painted(vcl_string vrml_file_name, 
   bvrml_write::write_vrml_header(ofs);
   //draw_helper(ofs, dmin);
   // draw the extras
-  
+
   for (unsigned i = 0; i < ids.size(); i++) {
-    
+
     double x = vcl_fabs(voxels_[ids[i]].center_.x());
     double y = vcl_fabs(voxels_[ids[i]].center_.y());
     double z = vcl_fabs(voxels_[ids[i]].center_.z());
@@ -292,7 +292,7 @@ void volm_spherical_container::draw_template_painted(vcl_string vrml_file_name, 
       bvrml_write::write_vrml_wireframe_box(ofs, box, r, g, b, 1);
     }
   }
-  
+
   ofs.close();
 }
 
@@ -309,7 +309,7 @@ void volm_spherical_container::draw_template_vis_prob(vcl_string vrml_file_name,
     return;
   }
   for (unsigned i = 0; i < voxels_.size(); i++) {
-    
+
     double x = vcl_fabs(voxels_[i].center_.x());
     double y = vcl_fabs(voxels_[i].center_.y());
     double z = vcl_fabs(voxels_[i].center_.z());
@@ -320,12 +320,12 @@ void volm_spherical_container::draw_template_vis_prob(vcl_string vrml_file_name,
       double v_len = voxels_[i].resolution_;
       vgl_point_3d<double> vc(voxels_[i].center_.x(), voxels_[i].center_.y(), voxels_[i].center_.z());
       vgl_box_3d<double> box(vc, v_len, v_len, v_len, vgl_box_3d<double>::centre);
-      // VIS_OCC = 0, VIS_UNOCC = 1, NONVIS_UNKNOWN = 2 
+      // VIS_OCC = 0, VIS_UNOCC = 1, NONVIS_UNKNOWN = 2
       if (ids[i] == 0) {
         bvrml_write::write_vrml_box(ofs, box, 0.0f, 0.0f, 0.0f, 0.8f);  // 1 is completely transparent, 0 is completely opaque
         //bvrml_write::write_vrml_wireframe_box(ofs, box, 0.0f, 0.0f, 0.0f, 1.0f); // blacks will be visible and occupied
       } else if (ids[i] == 1) {
-        //bvrml_write::write_vrml_box(ofs, box, 0.0f, 0.0f, 1.0f, 0.9f);  
+        //bvrml_write::write_vrml_box(ofs, box, 0.0f, 0.0f, 1.0f, 0.9f);
         //bvrml_write::write_vrml_wireframe_box(ofs, box, 0.0f, 0.0f, 1.0f, 1.0f); // blues will be visible and unoccupied
       } else if (ids[i] == 2) {
         //bvrml_write::write_vrml_box(ofs, box, 0.0f, 0.0f, 0.0f, 1.0f);
@@ -333,7 +333,7 @@ void volm_spherical_container::draw_template_vis_prob(vcl_string vrml_file_name,
       }
     }
   }
-  
+
   ofs.close();
 }
 

@@ -77,7 +77,7 @@ typedef struct opj_mqc {
 /*@{*/
 /* ----------------------------------------------------------------------- */
 /**
-Create a new MQC handle 
+Create a new MQC handle
 @return Returns a new MQC handle if successful, returns NULL otherwise
 */
 opj_mqc_t* mqc_create(void);
@@ -93,7 +93,7 @@ Return the number of bytes written/read since initialisation
 */
 OPJ_UINT32 mqc_numbytes(opj_mqc_t *mqc);
 /**
-Reset the states of all the context of the coder/decoder 
+Reset the states of all the context of the coder/decoder
 (each context is set to a state where 0 and 1 are more or less equiprobable)
 @param mqc MQC handle
 */
@@ -130,15 +130,15 @@ Flush the encoder, so that all remaining data is written
 */
 void mqc_flush(opj_mqc_t *mqc);
 /**
-BYPASS mode switch, initialization operation. 
-JPEG 2000 p 505. 
+BYPASS mode switch, initialization operation.
+JPEG 2000 p 505.
 <h2>Not fully implemented and tested !!</h2>
 @param mqc MQC handle
 */
 void mqc_bypass_init_enc(opj_mqc_t *mqc);
 /**
-BYPASS mode switch, coding operation. 
-JPEG 2000 p 505. 
+BYPASS mode switch, coding operation.
+JPEG 2000 p 505.
 <h2>Not fully implemented and tested !!</h2>
 @param mqc MQC handle
 @param d The symbol to be encoded (0 or 1)

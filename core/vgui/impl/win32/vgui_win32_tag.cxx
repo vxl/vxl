@@ -19,7 +19,7 @@
 //   once = true;
 //   return value;
 // }
-// 
+//
 // int vgui_win32_tag_function_()
 
 vgui_tag(win32)

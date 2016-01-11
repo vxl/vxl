@@ -31,12 +31,12 @@ class rgrl_feature_face_pt
   virtual
   void write( vcl_ostream& os ) const;
 
-  virtual 
-  vnl_matrix<double> const& 
+  virtual
+  vnl_matrix<double> const&
   error_projector() const;
 
-  virtual 
-  vnl_matrix<double> const& 
+  virtual
+  vnl_matrix<double> const&
   error_projector_sqrt() const;
 
   virtual unsigned int num_constraints() const;

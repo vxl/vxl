@@ -335,7 +335,7 @@ void bwm_tableau_img::load_pointset_2d_ascii()
   if(r == 1.5f)
     r = 0.0f;
   vgui_style_sptr sty = vgui_style::new_style( r, 1.0f, 0.0f, 3.0, 2.0);
-  
+
   vgui_dialog load_dlg("Load Pointset");
   vcl_string ext, pt_filename;
   load_dlg.file("Point Filename", ext, pt_filename);

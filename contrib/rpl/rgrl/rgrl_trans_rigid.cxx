@@ -201,7 +201,7 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_rigid::
 inverse_transform( ) const
 {
@@ -223,7 +223,7 @@ rgrl_transformation_sptr
 rgrl_trans_rigid::
 scale_by( double scale ) const
 {
-  rgrl_transformation_sptr xform 
+  rgrl_transformation_sptr xform
     = new rgrl_trans_rigid( R_, trans_ * scale,
                             covar_ );
   xform->set_scaling_factors( this->scaling_factors() );
@@ -276,7 +276,7 @@ read( vcl_istream& is )
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_rigid::
 clone() const
 {

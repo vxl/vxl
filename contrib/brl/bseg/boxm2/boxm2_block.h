@@ -135,7 +135,7 @@ class boxm2_block : public vbl_ref_count
   //: retrieve a vector of cell centers and other info inside the specified bounding box, both in global world coordinates
   vcl_vector<cell_info> cells_in_box(vgl_box_3d<double> const& global_box);
 
-  // find neigboring sub_block cell centers within a specified distance from probe, including the cell containing the probe 
+  // find neigboring sub_block cell centers within a specified distance from probe, including the cell containing the probe
   vcl_vector<vgl_point_3d<double> > sub_block_neighbors(vgl_point_3d<double> const& probe, double distance) const;
 
   //: retrieve neighborhood of probe consisting of leaf cells. If relative_distance is true then the neighborhood distance

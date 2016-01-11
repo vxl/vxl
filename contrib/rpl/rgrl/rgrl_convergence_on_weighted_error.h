@@ -19,7 +19,7 @@ class rgrl_convergence_on_weighted_error
   rgrl_convergence_on_weighted_error( double tol );
 
   virtual ~rgrl_convergence_on_weighted_error();
-  
+
   rgrl_converge_status_sptr
   compute_status( rgrl_converge_status_sptr               prev_status,
                   rgrl_view                        const& prev_view,
@@ -30,7 +30,7 @@ class rgrl_convergence_on_weighted_error
 
   //: verify the final alignment
   virtual
-  rgrl_converge_status_sptr 
+  rgrl_converge_status_sptr
   verify( rgrl_transformation_sptr         const& xform_estimate,
           rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
           rgrl_set_of<rgrl_scale_sptr>     const& current_scales )const;

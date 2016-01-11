@@ -123,7 +123,7 @@ int main2(int argc, char*argv[])
     i0 = bbi()[0]; j0 = bbi()[1]; k0 = bbi()[2];
     ni = bbi()[3]-i0+1; nj = bbi()[4]-j0+1; nk = bbi()[5]-k0+1;
   }
-  
+
   // Validate the bbf argument - should be 6 doubles, specifying
   // lower corner fraction (fx0,fy0,fz0) and upper corner (fx1,fy1,fz1) of included voxels
   if (bbf.set())
@@ -139,7 +139,7 @@ int main2(int argc, char*argv[])
       vcl_cerr << "ERROR: -bbf argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth within [0,1]\n";
       return 1;
     }
-    fx0 = bbf()[0]; fy0 = bbf()[1]; fz0 = bbf()[2];    
+    fx0 = bbf()[0]; fy0 = bbf()[1]; fz0 = bbf()[2];
     fx1 = bbf()[3]; fy1 = bbf()[4]; fz1 = bbf()[5];
   }
 
@@ -158,7 +158,7 @@ int main2(int argc, char*argv[])
       vcl_cerr << "ERROR: -bbw argument should indicate the lower and upper corners of a 3D box with strictly positive width, height and depth.\n";
       return 1;
     }
-    x0 = bbw()[0]; y0 = bbw()[1]; z0 = bbw()[2];    
+    x0 = bbw()[0]; y0 = bbw()[1]; z0 = bbw()[2];
     x1 = bbw()[3]; y1 = bbw()[4]; z1 = bbw()[5];
   }
   // Validate the cw argument - should be 6 doubles, specifying
@@ -177,7 +177,7 @@ int main2(int argc, char*argv[])
       return 1;
     }
 
-    x0 = cw()[0]; y0 = cw()[1]; z0 = cw()[2];    
+    x0 = cw()[0]; y0 = cw()[1]; z0 = cw()[2];
     x1 = cw()[3]; y1 = cw()[4]; z1 = cw()[5];
   }
 
@@ -204,7 +204,7 @@ int main2(int argc, char*argv[])
 
   vimt3d_transform_3d w2i = vimt3d_load_transform(ir, use_mm());
   MBL_LOG(INFO, logger(), "Loaded input image transform");
-  
+
   if (bbf.set())
   {
     if (ignore_bounds_errors())
@@ -217,7 +217,7 @@ int main2(int argc, char*argv[])
       if (fz0 > 1) fz1=1;
     }
 
-    // Convert image fraction values to voxel numbers 
+    // Convert image fraction values to voxel numbers
 
     // Round lower bounds down
     i0 = static_cast<unsigned>(vcl_floor((ir->ni()-1)*fx0));
@@ -233,7 +233,7 @@ int main2(int argc, char*argv[])
   }
   if (bbw.set())
   {
-    // Convert world coords values to voxel numbers 
+    // Convert world coords values to voxel numbers
     vgl_point_3d<double> imlo = w2i(vgl_point_3d<double>(x0,y0,z0));
     vgl_point_3d<double> imhi = w2i(vgl_point_3d<double>(x1,y1,z1));
     imhi.set(imhi.x()*0.999999, imhi.y()*0.999999, imhi.z()*0.999999);
@@ -263,7 +263,7 @@ int main2(int argc, char*argv[])
   if (cw.set())
   {
 
-    // Convert world coords values to voxel numbers 
+    // Convert world coords values to voxel numbers
     vgl_box_3d<double> bb;
     bb.add(w2i.inverse()(0,0,0));
     bb.add(w2i.inverse()(ir->ni(),ir->nj(),ir->nk()));
@@ -273,7 +273,7 @@ int main2(int argc, char*argv[])
     bb.set_max_x(bb.max_x()-x1);
     bb.set_max_y(bb.max_y()-y1);
     bb.set_max_z(bb.max_z()-z1);
-    
+
     if (bb.is_empty())
     {
       vcl_cerr << "ERROR: -cw argument should specify cropping widths that do not overlap.\n";
@@ -356,7 +356,7 @@ int main2(int argc, char*argv[])
   transl.set_translation(-double(i0), -double(j0), -double(k0));
   w2i = transl*w2i;
   vimt3d_save_transform(ir2, w2i, use_mm());
-  
+
   if (logger().level()>=mbl_logger::DEBUG)
   {
     vgl_point_3d<double> img_orig_wc = w2i.inverse()(vgl_point_3d<double>(0,0,0));

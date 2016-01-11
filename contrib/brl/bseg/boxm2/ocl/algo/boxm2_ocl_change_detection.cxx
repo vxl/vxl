@@ -93,7 +93,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
                                                 vil_image_view_base_sptr  exp_img,
                                                 int                       n,
                                                 vcl_string                norm_type,
-                                                bool                      pmax, 
+                                                bool                      pmax,
                                                 vcl_string                identifier,
                                                 vcl_size_t                startI,
                                                 vcl_size_t                startJ)
@@ -1419,7 +1419,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     for (unsigned c=0;c<nj;c++)
         for (unsigned r=0;r<ni;r++)
          {
-             
+
              change_img(r,c) = 1/(1+change_image_buff[c*cl_ni+r]);
              vis_img(r,c) = vis_buff[c*cl_ni+r];
 

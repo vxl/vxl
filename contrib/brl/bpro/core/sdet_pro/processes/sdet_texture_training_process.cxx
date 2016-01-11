@@ -251,7 +251,7 @@ bool sdet_dump_vsol_binary_data_process(bprb_func_process& pro)
   sdet_texture_classifier_sptr tc_ptr = new sdet_texture_classifier(param);
   vcl_vector<vgl_polygon<double> > polys;
   polys = tc_ptr->load_polys(poly_path);
- 
+
   for (unsigned i = 0; i < polys.size(); i++) {
     for (unsigned j = 0; j < polys[i].num_sheets(); j++)
       for (unsigned k = 0; k < polys[i][j].size(); k++)

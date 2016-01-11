@@ -13,10 +13,10 @@ bool bvxm_scene_model_dir_process_cons(bprb_func_process& pro)
   using namespace bvxm_scene_model_dir_process_globals;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world sptr
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vcl_string";                // voxel world dir
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
 }
@@ -24,7 +24,7 @@ bool bvxm_scene_model_dir_process_cons(bprb_func_process& pro)
 bool bvxm_scene_model_dir_process(bprb_func_process& pro)
 {
   using namespace bvxm_scene_model_dir_process_globals;
-  
+
   // sanity check input
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
@@ -35,7 +35,7 @@ bool bvxm_scene_model_dir_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_world_params_sptr params = voxel_world->get_params();
-  
+
   vcl_string model_dir = params->model_dir();
 
   // store the output

@@ -20,7 +20,7 @@
 //global pointer to the rubberband tableau
 static vgui_easy2D_tableau_sptr easy = 0;
 static vgui_image_tableau_sptr itab = 0;
-static vgui_shell_tableau_sptr shell = 0;  
+static vgui_shell_tableau_sptr shell = 0;
 
 //the meunu callback functions
 static void range_mapping()
@@ -37,7 +37,7 @@ static void range_mapping()
   range_dialog.field("Gamma", gamma);
   range_dialog.checkbox("use GL Pixel Map", use_glPixelMap);
   range_dialog.checkbox("Cache Buffer", cache_buffer);
-  
+
 
   if(range_dialog.ask())
   {
@@ -52,14 +52,14 @@ static void range_mapping()
 
 static void background_color()
 {
-  static float r = 0, g =0, b = 0, a = 0; 
+  static float r = 0, g =0, b = 0, a = 0;
 
   vgui_dialog dialog("background color");
   dialog.field("Red", r);
   dialog.field("Green", g);
   dialog.field("Blue", b);
   dialog.field("Alpha", a);
-  
+
 
   if(dialog.ask())
   {

@@ -47,7 +47,7 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
     xform_index_( 0 )
 {
   rgrl_mask_box global_region( from_image_roi->bounding_box() );
-  init_view_ = new rgrl_view( from_image_roi, to_image_roi, 
+  init_view_ = new rgrl_view( from_image_roi, to_image_roi,
                               global_region, global_region,
                               xform_estimator, xform_estimate,
                               initial_resolution );
@@ -64,7 +64,7 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
     xform_index_( 0 )
 {
   rgrl_mask_box global_region( from_image_roi->bounding_box() );
-  init_view_ = new rgrl_view( from_image_roi, from_image_roi, 
+  init_view_ = new rgrl_view( from_image_roi, from_image_roi,
                               global_region, global_region, xform_estimator, xform_estimate,
                               initial_resolution );
   views_.push_back( init_view_ );

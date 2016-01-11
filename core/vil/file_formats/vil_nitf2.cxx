@@ -11,9 +11,9 @@ vil_nitf2::enum_log_level vil_nitf2::s_log_level = vil_nitf2::log_none;
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_image_subheader.h"
 
-void vil_nitf2::cleanup_static_members() 
+void vil_nitf2::cleanup_static_members()
 {
-  // Commented out to test whether this function is needed to avoid reported 
+  // Commented out to test whether this function is needed to avoid reported
   // memory leaks. We'll see what valgrid says.
   if( vil_nitf2_header::s_field_definitions_1 ) {
     delete vil_nitf2_header::s_field_definitions_1;

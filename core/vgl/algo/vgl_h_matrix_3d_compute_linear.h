@@ -6,7 +6,7 @@
 // \author Ozge C. Ozcanli
 // \date June 24, 2010
 //
-// vgl_h_matrix_3d_compute_linear uses the linear algorithm in point to point constructor of vgl_h_matrix_3d 
+// vgl_h_matrix_3d_compute_linear uses the linear algorithm in point to point constructor of vgl_h_matrix_3d
 // to calculate the homography which relates at least five 3D point correspondences.
 // no four of them should be co-planar
 //

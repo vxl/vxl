@@ -5,7 +5,7 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/expatpp/src_pp )
 #define COMPILED_FROM_DSP
 
 SET(test_sources
-    SimpleTest.cpp     
+    SimpleTest.cpp
 )
 
  ADD_EXECUTABLE(simpletest ${test_sources})
@@ -13,4 +13,4 @@ SET(test_sources
  TARGET_LINK_LIBRARIES(simpletest expatpp)
 
 
- 
+

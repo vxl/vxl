@@ -49,7 +49,7 @@ class boxm2_cam_tableau:  public vgui_tableau, public vgui_drag_mixin
 
     double scale_;
   //: trajectory for idle rendering
-  bool render_trajectory_; 
+  bool render_trajectory_;
   boxm2_trajectory* trajectory_;
   boxm2_trajectory::iterator cam_iter_;
 

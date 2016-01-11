@@ -55,7 +55,7 @@ public:
 
   //: constructor 1
   sdet_EHT(sdet_EHT_node* new_root=0): root(new_root) {}
-  
+
   //: constructor 2
   sdet_EHT(sdet_edgel* root_e){ root = new sdet_EHT_node(root_e); }
 
@@ -72,7 +72,7 @@ public:
 
       //: copy constructor
       path_iterator(const path_iterator& other) : ptr_(other.ptr_), cur_path_(other.cur_path_) {}
-      
+
       //operators
       sdet_EHT_node* operator*(){ return ptr_; }
       bool operator==(const path_iterator& other) { return ptr_ == other.ptr_; }
@@ -93,7 +93,7 @@ public:
         while (ptr_ && ptr_->children.size()>0)
           inc_ptr();
       }
-      
+
       void inc_ptr()
       {
         if (!ptr_)
@@ -137,7 +137,7 @@ public:
           for (; nit != parent->children.end(); nit++){
             if ((*nit)==cur){
               nit++;
-              
+
               //assert(cur->cvlet == cur_path_.back());
               cur_path_.pop_back(); //first remove the current cvlet from the path
 
@@ -167,7 +167,7 @@ public:
   //: Return an iterator to a null pointer (only at the very last leaf node)
   path_iterator path_end() { return path_iterator(0); }
 
-  //delete a subtree pointed to by the given iterator 
+  //delete a subtree pointed to by the given iterator
   void delete_subtree(path_iterator& it)
   {
     sdet_EHT_node* node_to_del = *it;
@@ -176,7 +176,7 @@ public:
     it--;
     while ((*it)->children.size()==1 && (*it)!=root){
       node_to_del = (*it);
-      it--;      
+      it--;
     }
 
     //now delete the subtree

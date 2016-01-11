@@ -183,7 +183,7 @@ bool brec_draw_hierarchy_process(bprb_func_process& pro)
   int N = pro.get_input<int>(i++);
 
   h->draw_to_ps(N, name, drawing_radius);
-  
+
   return true;
 }
 

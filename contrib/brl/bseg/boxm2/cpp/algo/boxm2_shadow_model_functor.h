@@ -18,7 +18,7 @@ public:
     //: "default" constructor
     boxm2_compute_ambient_functor() {}
 
-    bool init_data(boxm2_data_base *sunvis, 
+    bool init_data(boxm2_data_base *sunvis,
         boxm2_stream_cache_sptr str_cache,
         float & sunvis_weights,
         float & weighted_sunvis_intensities,

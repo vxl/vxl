@@ -41,7 +41,7 @@ bool bwm_world::add(bwm_observable_sptr obj)
       return false;
     ++it;
   }
-  objects_.push_back(obj); 
+  objects_.push_back(obj);
   return true;
 }
 // removes an observable from the world

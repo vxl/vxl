@@ -194,7 +194,7 @@ int main(int argc,  char** argv)
   vul_arg<vcl_string> out("-out", "experiment output root", "");
   vul_arg<unsigned> pass_id("-pass", "from pass 0 to pass 1", 1);
   vul_arg<unsigned> test_id("-test", "test1 or 2 or 3", 1);
-  vul_arg<unsigned> id("-id", "test image id",1000); 
+  vul_arg<unsigned> id("-id", "test image id",1000);
   vul_arg<float> kl ("-kl", "parameter for nonlinear score scaling", 200.0f);
   vul_arg<float> ku ("-ku", "parameter for nonlinear score scaling", 10.0f);
   vul_arg_parse(argc, argv);

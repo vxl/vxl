@@ -16,8 +16,8 @@ extern "C" {
 #include "v3p_netlib.h"
 
 /*<       SUBROUTINE ZGERU(M,N,ALPHA,X,INCX,Y,INCY,A,LDA) >*/
-/* Subroutine */ int zgeru_(integer *m, integer *n, doublecomplex *alpha, 
-	doublecomplex *x, integer *incx, doublecomplex *y, integer *incy, 
+/* Subroutine */ int zgeru_(integer *m, integer *n, doublecomplex *alpha,
+	doublecomplex *x, integer *incx, doublecomplex *y, integer *incy,
 	doublecomplex *a, integer *lda)
 {
     /* System generated locals */

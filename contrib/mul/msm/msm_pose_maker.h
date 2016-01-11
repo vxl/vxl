@@ -42,11 +42,11 @@ class msm_pose_maker
                       vcl_vector<vgl_vector_2d<double> >& dir) const;
 
   //: Compute mean distance between equivalent points, measured along normals to curves
-  //  d_i = abs dot((points2[i]-points1[i]),normal[i]) where normals are to curves 
+  //  d_i = abs dot((points2[i]-points1[i]),normal[i]) where normals are to curves
   //  through points1.
   //  Where normal not defined, use the absolute distance.
   double mean_normal_distance(const msm_points& points1, const msm_points& points2) const;
-  
+
   //: Print class to os
   void print_summary(vcl_ostream& os) const;
 

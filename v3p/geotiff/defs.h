@@ -9,5 +9,5 @@
 typedef const char * datafile_rows_t;
 typedef struct datafile_s {
   const char *name;
-  const datafile_rows_t **rows; 
+  const datafile_rows_t **rows;
 } datafile_t;

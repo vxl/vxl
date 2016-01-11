@@ -48,7 +48,7 @@ int main(int argc, char** argv)
   vul_arg<vcl_string> out_folder("-out", "output folder where score binary is stored", "");                   // matcher -- output folder
   vul_arg<bool>       logger("-logger", "designate one of the exes as logger", false);                        // matcher -- log file generation
   vul_arg_parse(argc, argv);
-  
+
   vcl_stringstream log;
   bool do_log = false;
   if (logger())
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
   volm_camera_space_sptr cam_space = new volm_camera_space();
   cam_space->b_read(ifs_cam);
   ifs_cam.close();
-  
+
   // load the volm_query
   vcl_cout << " sph_shell , point angle = " << sph_shell->point_angle() << " top_angle = " << sph_shell->top_angle() << vcl_endl;
 
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
     // create equal weight
     volm_weight::equal_weight(weights, dm);
   }
-  
+
   // screen output
   unsigned total_size = query->obj_based_query_size_byte();
   vcl_cout << "\n==================================================================================================\n"
@@ -307,7 +307,7 @@ int main(int argc, char** argv)
     vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
-    
+
   // write the score output binary
   vcl_cout << "\n==================================================================================================\n"
           << "\t\t  5. Generate output of pass 1 matcher for zone " << zone_id() << " and tile " << tile_id() << ", store it in\n"
@@ -324,7 +324,7 @@ int main(int argc, char** argv)
     vcl_cerr << log.str();
     return volm_io::MATCHER_EXE_FAILED;
   }
-  if (do_log)  
+  if (do_log)
     volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED);
   return volm_io::MATCHER_EXE_FINISHED;
 }

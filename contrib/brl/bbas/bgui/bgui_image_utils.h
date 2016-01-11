@@ -48,7 +48,7 @@ class bgui_image_utils
 
   //: Default range map based on default max min values
   bool default_range_map(vgui_range_map_params_sptr& rmp,
-                         double gamma = 1.0, bool invert = false, 
+                         double gamma = 1.0, bool invert = false,
                          bool gl_map = false, bool cache=true);
 
   //: Range map computed from the image histogram

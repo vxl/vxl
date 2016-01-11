@@ -26,7 +26,7 @@
 void clsfy_builder_base::config(vcl_istream &as)
 {
   mbl_read_props_type props = mbl_read_props_ws(as);
-    
+
   // Check there are no unused properties
   mbl_read_props_look_for_unused_props("clsfy_builder_base::config",
                                        props, mbl_read_props_type());
@@ -56,7 +56,7 @@ vcl_auto_ptr<clsfy_builder_base> clsfy_builder_base::new_builder(
   }
 
   ps->config(as);
-  
+
   return ps;
 }
 

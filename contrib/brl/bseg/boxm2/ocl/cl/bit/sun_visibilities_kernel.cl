@@ -10,7 +10,7 @@
 
 typedef struct
 {
-  __global float * alpha; 
+  __global float * alpha;
   __global int  * seg_len;
   __global int  * vis_array;
   __local  short2* ray_bundle_array;
@@ -39,11 +39,11 @@ void step_cell_seglen_vis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     (* aux_args.ray_vis) *= temp;
 
     // keep track of vis at last "empty" cell to prevent self-shadowing within uncertain regions
-    const float passthrough_prob_thresh = 0.9; 
+    const float passthrough_prob_thresh = 0.9;
     if (temp >= passthrough_prob_thresh) {
        *(aux_args.last_vis) = *(aux_args.ray_vis);
     }
-    
+
     //discretize and store beta and vis contribution
     int vis_int  = convert_int_rte(d * cell_vis * SEGLEN_FACTOR);
     atom_add(&aux_args.vis_array[data_ptr], vis_int);

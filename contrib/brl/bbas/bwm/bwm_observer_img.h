@@ -75,7 +75,7 @@ class bwm_observer_img : public bgui_vsol2D_tableau
   void copy();
 
   void paste(float x, float y);
-  
+
   void clear_objects();
   //: various types of selected objects
   bool get_selected_box(bgui_vsol_soview2D_polygon* &box);

@@ -683,12 +683,12 @@ template <class T>
 double  boxm_scene<T>::cell_length(unsigned level)
 {
   double local_cell_length = 1.0/(double)(1<<((this->max_tree_level_ -1) - level));
-  
+
   if ((vcl_abs(block_dim_.x() - block_dim_.y()) > 1.0e-7)   || (vcl_abs(block_dim_.x() - block_dim_.z()) > 1.0e-7)){
     vcl_cerr << "Warning: In boxm_scene::finest_cell_length, cells aren't cubical, returning length along x direction\n"
     << block_dim_.x() <<", " << block_dim_.y()<< ", " << block_dim_.x() << '\n';
   }
-  
+
   return local_cell_length * block_dim_.x();
 }
 
@@ -1184,19 +1184,19 @@ void boxm_scene<T>::leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boc
 {
   vgl_box_3d<double> valid_box = vgl_intersection(get_world_bbox(),box);
   cell_data.clear();
-  
+
   if (valid_box.is_empty()) {
     vcl_cout << "Warning in boxm_scene<T>::leaves_in_region: Region does not intersect scene\n";
     return;
   }
-  
+
   vgl_point_3d<double> min_point = valid_box.min_point();
   vgl_point_3d<double> max_point = valid_box.max_point();
-  
+
   // load blocks intersecting the region
   vgl_point_3d<int> min_idx;
   get_block_index(min_point, min_idx);
-  
+
   vgl_point_3d<int> max_idx;
   get_block_index(max_point, max_idx);
 #ifdef DEBUG
@@ -1204,7 +1204,7 @@ void boxm_scene<T>::leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boc
 #endif
   if (!load_blocks(min_idx, max_idx))
     return;
-  
+
   // traverse blocks. for each block get the cells intersects the portion of the region contained in the block
   for (int k = min_idx.z(); k <= max_idx.z(); k++)
   {
@@ -1214,7 +1214,7 @@ void boxm_scene<T>::leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boc
       {
         boxm_block<T>* block = blocks_(i,j,k);
         vgl_box_3d<double> local_box = vgl_intersection(get_block_bbox(i,j,k),box);
-        
+
         // subtract a little from the max point because octree cell are give by a half-closed interval [...).
         // if this is not done, the endpoint may be out of bounds
         vgl_box_3d<double> local_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
@@ -1225,12 +1225,12 @@ void boxm_scene<T>::leaves_data_in_region(vgl_box_3d<double> box, vcl_vector<boc
         vcl_vector<boct_tree_cell<loc_type, datatype>* > temp_cells;
         temp_cells.clear();
         tree->locate_region_leaves_global(local_box_exclusive, temp_cells);
-        
+
         typename vcl_vector<boct_tree_cell<loc_type, datatype>* >::iterator temp_cell_it = temp_cells.begin();
         for(; temp_cell_it!=temp_cells.end(); temp_cell_it++){
           cell_data.push_back(boct_cell_data<loc_type, datatype>(tree->global_centroid(*temp_cell_it),
                                                                 (*temp_cell_it)->level(), (*temp_cell_it)->data()));
-        }             
+        }
       }
     }
   }
@@ -1244,19 +1244,19 @@ void boxm_scene<T>::cell_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_
 {
   vgl_box_3d<double> valid_box = vgl_intersection(get_world_bbox(),box);
   cell_data.clear();
-  
+
   if (valid_box.is_empty()) {
     vcl_cout << "Warning in boxm_scene<T>::leaves_in_region: Region does not intersect scene\n";
     return;
   }
-  
+
   vgl_point_3d<double> min_point = valid_box.min_point();
   vgl_point_3d<double> max_point = valid_box.max_point();
-  
+
   // load blocks intersecting the region
   vgl_point_3d<int> min_idx;
   get_block_index(min_point, min_idx);
-  
+
   vgl_point_3d<int> max_idx;
   get_block_index(max_point, max_idx);
 #ifdef DEBUG
@@ -1264,7 +1264,7 @@ void boxm_scene<T>::cell_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_
 #endif
   if (!load_blocks(min_idx, max_idx))
     return;
-  
+
   // traverse blocks. for each block get the cells intersects the portion of the region contained in the block
   for (int k = min_idx.z(); k <= max_idx.z(); k++)
   {
@@ -1274,7 +1274,7 @@ void boxm_scene<T>::cell_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_
       {
         boxm_block<T>* block = blocks_(i,j,k);
         vgl_box_3d<double> local_box = vgl_intersection(get_block_bbox(i,j,k),box);
-        
+
         // subtract a little from the max point because octree cell are give by a half-closed interval [...).
         // if this is not done, the endpoint may be out of bounds
         vgl_box_3d<double> local_box_exclusive(local_box.min_point().x(), local_box.min_point().y(), local_box.min_point().z(),
@@ -1285,12 +1285,12 @@ void boxm_scene<T>::cell_data_in_region(vgl_box_3d<double> box, vcl_vector<boct_
         vcl_vector<boct_tree_cell<loc_type, datatype>* > temp_cells;
         temp_cells.clear();
         tree->locate_region_cells_global(local_box_exclusive, temp_cells, level);
-        
+
         typename vcl_vector<boct_tree_cell<loc_type, datatype>* >::iterator temp_cell_it = temp_cells.begin();
         for(; temp_cell_it!=temp_cells.end(); temp_cell_it++){
           cell_data.push_back(boct_cell_data<loc_type, datatype>(tree->global_centroid(*temp_cell_it),
                                                                  (*temp_cell_it)->level(), (*temp_cell_it)->data()));
-        }             
+        }
       }
     }
   }
@@ -1595,7 +1595,7 @@ template <class T>
 boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin(bool use_internal_cells)
 {
   use_internal_cells_= use_internal_cells;
-  
+
   // unload all blocks from memory
   block_iterator_.scene_->unload_active_blocks();
   block_iterator_.begin();
@@ -1665,12 +1665,12 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
       (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
       T *tree = (*block_iterator_)->get_tree();
       assert(tree != NULL);
-      
+
       if(use_internal_cells_)
         cells_=tree->all_cells();
       else
         cells_ = tree->leaf_cells();
-      
+
       cells_iterator_ = cells_.begin();
     }
   }

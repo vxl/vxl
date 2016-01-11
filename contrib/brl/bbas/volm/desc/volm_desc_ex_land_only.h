@@ -4,7 +4,7 @@
 #define volm_desc_ex_land_only_h_
 //:
 // \file
-// \brief  A class to represent a location with a descriptor as an existence histogram of surfaces 
+// \brief  A class to represent a location with a descriptor as an existence histogram of surfaces
 //         with various land type at certain distance (no orientation)
 //
 // \author Yi Dong
@@ -33,7 +33,7 @@ public:
   volm_desc_ex_land_only() {}
 
   //: simple constructor that only sets the number of bins
-  volm_desc_ex_land_only(unsigned ndists, unsigned nlands, vcl_vector<double>& radius) : 
+  volm_desc_ex_land_only(unsigned ndists, unsigned nlands, vcl_vector<double>& radius) :
     ndists_(ndists), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); name_ = "existence land only descriptor";}
 
 

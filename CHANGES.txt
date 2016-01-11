@@ -14,9 +14,9 @@ VXL 1.17.0    - June 2012
 ******************************
       - Moved the vxl photogrammetry library, vpgl, to core. vpgl supports a
         hierarchy of camera types including: projective, perspective and affine
-	projections from 3-d to 2-d. Also included is a class for the 
+	projections from 3-d to 2-d. Also included is a class for the
 	epipolar relationship between cameras, vpgl_fundamental_matrix. An
-	algorithm library is also provided, which implements standard 
+	algorithm library is also provided, which implements standard
 	operations such as bundle adjustment and backprojection.
 
       - Added transpose and conjugate_transpose methods to vnl_sparse_matrix
@@ -40,14 +40,14 @@ VXL 1.17.0    - June 2012
 
       - Missing data support in vil. In particular image sampling can now return
         return NA when off edge of image. Compatible with vnl_na.
-        
+
 ******************************
 VXL 1.16.0    - December 2010
 ******************************
 
       - generalized sparse symmetric eigensystem solver (A*x = lambda*B*x)
         added to vnl/algo/vnl_sparse_symmetric_eigensystem
-        
+
 ******************************
 VXL 1.15.0    - September 2010
 ******************************

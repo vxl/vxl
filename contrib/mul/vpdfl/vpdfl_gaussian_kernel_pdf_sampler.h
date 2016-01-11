@@ -22,7 +22,7 @@ class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base
 {
  protected:
   //: The random number generator
-  vnl_random rng_; 
+  vnl_random rng_;
  public:
 
   // Dflt ctor

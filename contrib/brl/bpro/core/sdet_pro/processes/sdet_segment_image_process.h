@@ -5,7 +5,7 @@
 // \file
 // \brief A process that takes a grayscale image and returns the superpixel image - uses Felzenswalb's graph based image segmentation algorithm
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date Sep 06, 2013
 // \verbatim
 //  Modifications

@@ -30,7 +30,7 @@ public:
   volm_conf_2d_indexer() : radius_(0.0), land_map_root_(0) { land_map_leaves_.clear(); }
   //: constructor by giving out_put folder, land map index folder and radius
   volm_conf_2d_indexer(double const& radius, vcl_string const& out_folder, vcl_string const& land_map_folder, unsigned const& tile_id);
-  
+
   ~volm_conf_2d_indexer() {}
 
   // ======================= access =========================

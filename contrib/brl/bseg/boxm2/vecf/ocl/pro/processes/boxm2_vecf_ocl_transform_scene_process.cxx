@@ -50,7 +50,7 @@ bool boxm2_vecf_ocl_transform_scene_process_cons(bprb_func_process& pro)
   input_types_[17] = "double";
   // process has 1 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
-  output_types_[0] = "boxm2_scene_sptr"; 
+  output_types_[0] = "boxm2_scene_sptr";
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -70,7 +70,7 @@ bool boxm2_vecf_ocl_transform_scene_process(bprb_func_process& pro)
   bocl_device_sptr device = cache->get_device();
   //translation vector
   vgl_vector_3d<double> trans;
-  trans.set(pro.get_input<double>(3), 
+  trans.set(pro.get_input<double>(3),
   pro.get_input<double>(4),
 	    pro.get_input<double>(5));
   //rotation matrix
@@ -80,9 +80,9 @@ bool boxm2_vecf_ocl_transform_scene_process(bprb_func_process& pro)
     for(int c = 0; c<3; ++c, i++)
       R[r][c] = pro.get_input<double>(i);
   vgl_rotation_3d<double> rot(R);
-  
+
   //diagonal elements of the scale matrix
-  vgl_vector_3d<double> scale; 
+  vgl_vector_3d<double> scale;
   scale.set(pro.get_input<double>(15),
 	  pro.get_input<double>(16),
 	  pro.get_input<double>(17));

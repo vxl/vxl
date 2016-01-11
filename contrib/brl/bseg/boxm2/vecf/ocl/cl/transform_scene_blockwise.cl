@@ -33,7 +33,7 @@ __kernel void transform_scene_blockwise(__constant  float           * centerX,//
     else if (max_depth[0] == 3)
       MAX_CELLS=585;
     //default values for empty cells
-    MOG_INIT(mog_init);    
+    MOG_INIT(mog_init);
     //-log(1.0f - init_prob)/side_length  init_prob = 0.001f
     float alpha_init = 0.001f/source_scene_linfo->block_len;
     //

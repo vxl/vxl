@@ -99,7 +99,7 @@ bool vil_binary_edge_detection_process(bprb_func_process& pro)
         if ( vcl_find(valid_edge_labels.begin(), valid_edge_labels.end(), edge_labels(i,j,k)) != valid_edge_labels.end())
           view_blobs(i,j,k) = 255;
 
-  // output 
+  // output
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(view_blobs));
 
   return true;

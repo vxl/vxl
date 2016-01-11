@@ -186,7 +186,7 @@ void SolveComplexMatrix();
 
 /* Forward elimination. Solves Lc = b.*/
     for (I = 1; I <= Size; I++)
-    {   
+    {
 /* This step of the elimination is skipped if Temp equals zero. */
         if ((Temp = Intermediate[I]) != 0.0)
         {   pPivot = Matrix->Diag[I];
@@ -498,7 +498,7 @@ void SolveComplexTransposedMatrix();
 
 /* Forward elimination. */
     for (I = 1; I <= Size; I++)
-    {   
+    {
 /* This step of the elimination is skipped if Temp equals zero. */
         if ((Temp = Intermediate[I]) != 0.0)
         {   pElement = Matrix->Diag[I]->NextInRow;

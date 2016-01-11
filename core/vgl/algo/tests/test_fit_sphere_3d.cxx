@@ -22,7 +22,7 @@ static void test_linear_fit_unit_sphere()
   vgl_point_3d<double> p7(-r, -r, -r);
   pts.push_back(p0);  pts.push_back(p1);  pts.push_back(p2);
   pts.push_back(p3);  pts.push_back(p4);  pts.push_back(p5);
-  pts.push_back(p6);  pts.push_back(p7); 
+  pts.push_back(p6);  pts.push_back(p7);
   vgl_fit_sphere_3d<double> fit_sph(pts);
   double error = fit_sph.fit_linear(&vcl_cout);
   TEST_NEAR("linear fit perfect unit sphere", error, 0.0, 1e-6);
@@ -43,7 +43,7 @@ static void test_linear_fit_unit_sphere_rand_error()
   vgl_point_3d<double> p7(-r, -r, -r);
   pts.push_back(p0);  pts.push_back(p1);  pts.push_back(p2);
   pts.push_back(p3);  pts.push_back(p4);  pts.push_back(p5);
-  pts.push_back(p6);  pts.push_back(p7); 
+  pts.push_back(p6);  pts.push_back(p7);
   // add random error (+-10%) to the points
   vnl_random ran;
   double e = 0.1;

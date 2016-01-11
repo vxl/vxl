@@ -253,7 +253,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
             ++count;
           }
       }
-      else if (vil_image_view<float> * mask_float = 
+      else if (vil_image_view<float> * mask_float =
                dynamic_cast<vil_image_view<float> * >(mask_img.ptr()) ) {
         int count = 0;
         for (unsigned int j=0;j<cl_nj;++j) {
@@ -282,7 +282,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
         return false;
       }
       in_image->write_to_buffer(queue);
-    } 
+    }
     else {
       // no mask
       int count = 0;

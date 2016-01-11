@@ -1,6 +1,6 @@
 This directory is for compilers that are ISO and provide TR1
 extensions for the upcoming C++0x standard.  This assumes
-the TR1 extensions for <blah> are in <tr1/blah> and defined in 
+the TR1 extensions for <blah> are in <tr1/blah> and defined in
 namespace std::tr1
 
 (in vcl_blah.h)

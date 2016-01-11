@@ -2,7 +2,7 @@
 #define volm_satellite_resources_h_
 //:
 // \file
-//  A class in the form of a quad tree to store/access all the satellite image resources 
+//  A class in the form of a quad tree to store/access all the satellite image resources
 //  other utilities using this class, e.g. to generate site.xml files to open in bwm_main
 //
 // Author     Ozge C. Ozcanli
@@ -48,10 +48,10 @@ class volm_satellite_resources : public vbl_ref_count
 
     //: x is lon and y is lat in the bbox, construct bbox with min point to be lower left and max to be upper right and as axis aligned with North-East
     volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size = 1.0, bool eliminate_same = false);
-    
+
     //: traverse the given path recursively and add each satellite resource
     void add_path(vcl_string path);
-    
+
     int resources_size() { return resources_.size(); }
 
     //: get a list of ids in the resources_ list that overlap the given rectangular region
@@ -59,10 +59,10 @@ class volm_satellite_resources : public vbl_ref_count
     //: query the resources in the given box and output the full paths to the given file
     bool query_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, unsigned& cnt, vcl_string& out_file, const vcl_string& band_str, double gsd_thres);
 
-    //: query the resources in the given box and output the full paths of randomly selected seeds to the given file, 
+    //: query the resources in the given box and output the full paths of randomly selected seeds to the given file,
     //  the order of satellites to select seeds from: GeoEye1, WorldView2, WorldView1 and then any others
     bool query_seeds_print_to_file(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, int n_seeds, unsigned& cnt, vcl_string& out_file, vcl_string& band_str, double gsd_thres);
-    
+
     //: get a list of pairs of ids in the resources_ list that are taken a few minutes apart from each other
     unsigned query_pairs(double lower_left_lon, double lower_left_lat, double upper_right_lon, double upper_right_lat, vcl_string& sat_name, float GSD_threshold, vcl_vector<vcl_pair<unsigned, unsigned> >& ids);
     //: query the resources in the given box and output the full paths of pairs to the given file
@@ -83,24 +83,24 @@ class volm_satellite_resources : public vbl_ref_count
         const vcl_vector<vgl_polygon<double> >& lvcs_footprints, float downsample_factor);
 
     // rasterise the footprints of each nitf into a heatmap
-    void compute_footprints_heatmap(vil_image_view<unsigned>& heatmap, vgl_box_2d<double>& image_window, 
+    void compute_footprints_heatmap(vil_image_view<unsigned>& heatmap, vgl_box_2d<double>& image_window,
         const vcl_vector<vgl_polygon<double> >& footprints);
 
-    void query_resources(vcl_vector<vgl_polygon<double> >& footprints, vcl_vector<unsigned>& footprint_ids, 
+    void query_resources(vcl_vector<vgl_polygon<double> >& footprints, vcl_vector<unsigned>& footprint_ids,
         volm_satellite_resources_sptr res, const vcl_string& kml_file, const vcl_string& band="PAN", double gsd_thres=10.0);
 
-    void highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+    void highly_overlapping_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res,
         const vcl_string& kml_file, float downsample_factor, const vcl_string& band="PAN", double gsd_thres=10.0);
 
     void highly_overlapping_resources(vcl_vector<unsigned>& overlapping_ids, const vcl_vector<vgl_polygon<double> >& footprints,
         float downsample_factor);
 
-    void highly_intersecting_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res, 
+    void highly_intersecting_resources(vcl_vector<vcl_string>& overlapping_res, volm_satellite_resources_sptr res,
         const vcl_string& kml_file, int k=3, int l=5, const vcl_string& band="PAN", double gsd_thres=10.0);
 
-    void highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids, 
+    void highly_intersecting_resources(vcl_vector<unsigned>& overlapping_ids,
         const vcl_vector<vgl_polygon<double> >& footprints, unsigned k=3, unsigned l=5);
-    
+
     void ind_combinations(vcl_vector<vcl_vector<unsigned> >& combs, unsigned N, unsigned K);
 
     //: return the full path of a satellite image given its name, if not found returns empty string
@@ -117,7 +117,7 @@ class volm_satellite_resources : public vbl_ref_count
     void b_read(vsl_b_istream& is);
 
     //: use the corresponding global reliability for each satellite when setting weights for camera correction
-    static vcl_map<vcl_string, float> satellite_geo_reliability;  
+    static vcl_map<vcl_string, float> satellite_geo_reliability;
 
 protected:
     void add_resource(vcl_string name);

@@ -33,7 +33,7 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
   // sort the radius to ensure the bin order
   vcl_sort(radius_.begin(), radius_.end());
   unsigned ndists = (unsigned)radius_.size() + 1;
-  
+
   double largest_rad = radius_[radius_.size()-1];  // this is in meters
 
   // create the ex_land_only descriptor
@@ -83,7 +83,7 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
   vcl_vector<double> radius = desc->radius();
   unsigned nbins = desc->nbins();
   weights_hist_.resize(nbins);
-  
+
   // ground
   if (!dms_->ground_plane().empty()) {
     vcl_vector<unsigned> grd_bin_id;

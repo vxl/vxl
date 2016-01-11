@@ -23,7 +23,7 @@
 // (better) do everything else you need to do then call wait_for_completion()
 // which will block in a multiprocessing-friendly way. Even if is_complete()
 // has returned true you must still call wait_for_completion() to determine
-// the completion status of the operation. 
+// the completion status of the operation.
 //
 // WARNING: Although you can instantiate multiple AsyncIO objects, only one
 // I/O op can be in progress at once within a process. This is because we get

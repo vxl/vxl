@@ -9,13 +9,13 @@
 
 #include <vnl/vnl_identity.h>
 
-//: Construct by copying the supplied indexer 
+//: Construct by copying the supplied indexer
 FileNameGeneratorBase::FileNameGeneratorBase()
 {
   indexer_ = vnl_identity<int>().Copy();
 }
 
-//: Construct by copying the supplied indexer 
+//: Construct by copying the supplied indexer
 FileNameGeneratorBase::FileNameGeneratorBase(const FileNameGeneratorBase::Indexer& indexer)
 {
   indexer_ = indexer.Copy();

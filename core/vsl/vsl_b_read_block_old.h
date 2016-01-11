@@ -8,7 +8,7 @@
 //
 // This file should only be used by existing binary io code that
 // wishes to maintain backwards compatibility with existing VSL files.
-// Users should have no reason to include this file. 
+// Users should have no reason to include this file.
 //
 
 #include <vxl_config.h>

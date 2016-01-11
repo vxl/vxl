@@ -152,7 +152,7 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       if(dp>0.0)
 	continue;
       double ud, vd;
-      cam->project(x, y, z, ud, vd);      
+      cam->project(x, y, z, ud, vd);
       ud -= pu; vd -= pv;
       ud *= scale;       vd *= scale;
       ud += pu*scale; vd += pv*scale;
@@ -180,7 +180,7 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
 	  sum += 0.25*cyl_map_(kth, iz-1,p);
 	  w+=0.25;
 	}
-	img(u, v, p) = static_cast<vxl_byte>(sum/w); 
+	img(u, v, p) = static_cast<vxl_byte>(sum/w);
       }
     }
   }

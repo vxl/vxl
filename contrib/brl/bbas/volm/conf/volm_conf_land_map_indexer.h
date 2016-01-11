@@ -51,7 +51,7 @@ public:
 
   //: constructor from a binary file
   volm_conf_land_map_indexer(vcl_string const& bin_file);
-  
+
   //: destructor
   ~volm_conf_land_map_indexer() {}
 

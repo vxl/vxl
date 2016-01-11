@@ -270,7 +270,7 @@ bool bgui_picker_tableau::handle(const vgui_event& e)
   //USE BUTTON_UP TO INITIALIZE, COMPETITION FOR BUTTON_DOWN on other tableaux
 
   //ENDER/LEAVB events cause trouble when moving across grid tableau panes
-  //image/viewer rendering is screwed up by this tableau issuing 
+  //image/viewer rendering is screwed up by this tableau issuing
   //DRAW_OVERLAY events to those tableaux
   if(e.type == vgui_ENTER || e.type == vgui_LEAVE)
     return false;

@@ -20,8 +20,8 @@ static void test_grad_1x3_1plane_byte(vil3d_image_view<vxl_byte>& image)
   unsigned nk = image.nk();
   vil3d_image_view<float> gradi(ni,nj,nk), gradj(ni,nj,nk), gradk(ni,nj,nk);
   vil3d_grad_1x3_1plane(image,gradi,gradj,gradk);
-  
-  
+
+
   TEST_NEAR("gradi(5,5,5)", gradi(5,5,5),  0.0f, 0.0001f);
   TEST_NEAR("gradj(5,5,5)", gradj(5,5,5),  0.0f, 0.0001f);
   TEST_NEAR("gradk(5,5,5)", gradk(5,5,5),  0.0f, 0.0001f);
@@ -31,7 +31,7 @@ static void test_grad_1x3_1plane_byte(vil3d_image_view<vxl_byte>& image)
   TEST_NEAR("gradi(6,5,5)", gradi(6,5,5),-50.0f, 0.0001f);
   TEST_NEAR("gradj(6,5,5)", gradj(6,5,5),  0.0f, 0.0001f);
   TEST_NEAR("gradk(6,5,5)", gradk(6,5,5),  0.0f, 0.0001f);
-  TEST_NEAR("gradi(5,4,5)", gradi(5,4,5),  0.0f, 0.0001f);  
+  TEST_NEAR("gradi(5,4,5)", gradi(5,4,5),  0.0f, 0.0001f);
   TEST_NEAR("gradj(5,4,5)", gradj(5,4,5), 50.0f, 0.0001f);
   TEST_NEAR("gradk(5,4,5)", gradk(5,4,5),  0.0f, 0.0001f);
   TEST_NEAR("gradi(5,5,4)", gradi(5,5,4),  0.0f, 0.0001f);
@@ -53,15 +53,15 @@ static void test_grad_1x3_byte(vil3d_image_view<vxl_byte>& image)
 
   vcl_cout << " ********SRC***********\n";
   vil3d_print_all(vcl_cout, image);
-      
+
   vcl_cout << " ********gradi***********\n";
   vil3d_print_all(vcl_cout, gradi);
   vcl_cout << " ********gradj***********\n";
   vil3d_print_all(vcl_cout, gradj);
   vcl_cout << " ********gradk***********\n";
   vil3d_print_all(vcl_cout, gradk);
-  
-  
+
+
   TEST_NEAR("gradi(5,5,5)", gradi(5,5,5),  0.0f, 0.0001f);
   TEST_NEAR("gradj(5,5,5)", gradj(5,5,5),  0.0f, 0.0001f);
   TEST_NEAR("gradk(5,5,5)", gradk(5,5,5),  0.0f, 0.0001f);

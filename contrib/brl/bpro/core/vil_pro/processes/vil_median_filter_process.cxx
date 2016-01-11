@@ -14,7 +14,7 @@ bool vil_median_filter_process_cons(bprb_func_process& pro)
   bool ok=false;
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");  //: original image
-  input_types.push_back("int");  //: square mask size 
+  input_types.push_back("int");  //: square mask size
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -44,7 +44,7 @@ bool vil_median_filter_process(bprb_func_process& pro)
   vil_image_view<float> orig_img(image);
   vil_image_view<float> out_img(image->ni(), image->nj());
   out_img.fill(0.0f);
-  
+
   vcl_vector<int> strel_vec_i, strel_vec_j;
   for (int i=-medfilt_halfsize; i <= medfilt_halfsize; ++i)
     for (int j=-medfilt_halfsize; j <= medfilt_halfsize; ++j) {

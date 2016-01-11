@@ -54,6 +54,6 @@ unsigned int bugl_curve_3d::get_fragment_size(unsigned int i) const
 {
   if (i+1<index_.size())
     return index_[i+1] - index_[i];
-  else 
+  else
     return data_.size() - index_[i];
 }

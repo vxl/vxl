@@ -18,23 +18,23 @@ struct msm_line_seg_pt
 {
   int i0, i1;
   double alpha;
-  
+
   //: 1 Construct as undefined
   msm_line_seg_pt() : i0(-1),i1(-1),alpha(0.0) {}
-  
+
   //: 2 Construct as single point, index
   msm_line_seg_pt(int index) : i0(index),i1(-1),alpha(0.0) {}
-  
-  
+
+
   msm_line_seg_pt(int i0a, int i1a, double a) : i0(i0a)
   {
     if (a==0) { alpha=0.0; i1=-1; return; }
     i1=i1a; alpha=a;
   }
-  
+
   vgl_point_2d<double> point(const vcl_vector<vgl_point_2d<double> >& pts) const
-  { 
-    if (i0<0) return vgl_point_2d<double>(); 
+  {
+    if (i0<0) return vgl_point_2d<double>();
     if (i1<0) return pts[i0];
     double b=1.0-alpha;
     return vgl_point_2d<double>(b*pts[i0].x()+alpha*pts[i1].x(),
@@ -53,7 +53,7 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
   vgl_vector_2d<double> u=pt1-pt0;
   vgl_vector_2d<double> dp=pt-pt0;
   double pu = u.x()*dp.x() + u.y()*dp.y();
-  if (pu<=0) 
+  if (pu<=0)
   {
     alpha=0.0;
     return dp.sqr_length();  // pt is closest to pt0
@@ -64,10 +64,10 @@ inline double msm_sqr_dist_to_line_segment(const vgl_point_2d<double>& pt0,
     alpha=1.0;
     return (pt-pt1).sqr_length(); // pt is closest to pt1
   }
-  
+
   // pt is closest to some point between pt0 and pt1
   alpha = pu/Lu2;
-  
+
   // Use pythagorus  :   dp^2 = d^2 + sqr(pu/u.length)
   return vcl_max(dp.sqr_length() - (pu*pu)/Lu2,0.0);
 }
@@ -85,21 +85,21 @@ inline msm_line_seg_pt msm_closest_seg_pt_on_curve(const msm_points& all_points,
     sqr_dist=9.9e9;
     return msm_line_seg_pt();
   }
-  
+
   // If only one point, then find distance to it from pt
   if (curve.size()==1)
   {
     sqr_dist = (all_points[curve[0]]-pt).sqr_length();
-    
+
     // Single point only
     return msm_line_seg_pt(curve[0]);
   }
-  
+
   // Compute distance between each line segment and the point
   double alpha;
   sqr_dist=msm_sqr_dist_to_line_segment(all_points[curve[0]],all_points[curve[1]],pt,alpha);
   msm_line_seg_pt best_seg_pt(curve[0],curve[1],alpha);
-  
+
   unsigned n=curve.size();
   for (unsigned i=2;i<n;++i)
   {
@@ -110,7 +110,7 @@ inline msm_line_seg_pt msm_closest_seg_pt_on_curve(const msm_points& all_points,
       best_seg_pt=msm_line_seg_pt(curve[i-1],curve[i],alpha);
     }
   }
-  
+
   if (!curve.open())
   {  // Curve is closed, so check segment joining point [n-1] to point [0]
     double d2 = msm_sqr_dist_to_line_segment(all_points[curve[n-1]],all_points[curve[0]],pt,alpha);
@@ -120,7 +120,7 @@ inline msm_line_seg_pt msm_closest_seg_pt_on_curve(const msm_points& all_points,
       best_seg_pt=msm_line_seg_pt(curve[n-1],curve[0],alpha);
     }
   }
-  
+
   return best_seg_pt;
 }
 

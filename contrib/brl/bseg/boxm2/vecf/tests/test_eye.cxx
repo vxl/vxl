@@ -36,7 +36,7 @@ void test_eye()
   boxm2_vecf_eye_scene* eye = new boxm2_vecf_eye_scene(eye_scene_path, init);
   if(init)
     boxm2_cache::instance()->write_to_disk();
- 
+
   boxm2_scene_sptr target_scene = new boxm2_scene(target_scene_path);
   boxm2_cache::instance()->add_scene(target_scene);
   eye->map_to_target(target_scene);
@@ -115,7 +115,7 @@ void test_eye()
   nobs_data->data()[indx] = nobs;
 #endif
 #endif
- 
+
   }
 TESTMAIN( test_eye );
- 
+

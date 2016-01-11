@@ -40,7 +40,7 @@ inline vimt3d_image_3d_of<T> vimt3d_from_image_2d(const vimt_image_2d_of<T>& img
   switch (form2d)
   {
    case vimt_transform_2d::Identity:
-    transf3d.set_identity(); 
+    transf3d.set_identity();
     break;
 
    case vimt_transform_2d::Translation:

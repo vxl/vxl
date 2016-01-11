@@ -281,7 +281,7 @@ bool bstm_scene::local_time(double const t,  double& local_time) const
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter) {
     if ((iter->second).contains_t(t,local_time))
       return true;
-    
+
   }
   return false;
 }

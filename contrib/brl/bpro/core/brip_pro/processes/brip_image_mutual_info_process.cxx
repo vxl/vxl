@@ -41,7 +41,7 @@ bool brip_image_mutual_info_process_cons(bprb_func_process& pro)
 bool brip_image_mutual_info_process(bprb_func_process& pro)
 {
   using namespace brip_image_mutual_info_process_globals;
-  
+
   // sanity check
   if (!pro.verify_inputs()) {
     vcl_cout << pro.name() << ": Wrong Inputs!!!" << vcl_endl;

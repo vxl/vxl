@@ -32,7 +32,7 @@ class sdet_symbolic_edge_linker : public sdet_symbolic_edge_linker_params
   sdet_curve_fragment_graph const & curve_fragment_graph() { return CFG; }
 
  private:
-  sdet_curvelet_map CM; 
+  sdet_curvelet_map CM;
   sdet_edgel_link_graph ELG;
   sdet_curve_fragment_graph CFG;
 };

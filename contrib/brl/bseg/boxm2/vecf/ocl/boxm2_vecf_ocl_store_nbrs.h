@@ -19,7 +19,7 @@
 //
 // input a scene block and output an augmented block with neigborhood information
 // current information is:
-// 1) the existence of each of the six neighbors       
+// 1) the existence of each of the six neighbors
 //     (x0 +- side_len, y0 +- side_len, z0 +-side_len)                   (uchar8)
 // 2) the expected intensity of each of the neighbors                    (uchar8)
 // 3) the probability derived from alpha stored in each of the neighbors (float8)
@@ -29,7 +29,7 @@
 class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
 {
  public:
-  //: Constructor. 
+  //: Constructor.
   boxm2_vecf_ocl_store_nbrs(boxm2_scene_sptr& source_scene,
                             boxm2_opencl_cache_sptr ocl_cache);
 

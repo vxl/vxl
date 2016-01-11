@@ -13,7 +13,7 @@
 //  D::d(T t1, T t2) is a measure of distance between two objects.
 //  It must obey the triangle inequality: D::d(t1,t2)<=D::d(t1,t3)+D::d(t2,t3).
 //
-//  The class is designed to allow fast location of the nearest 
+//  The class is designed to allow fast location of the nearest
 //  example in a set objects to a given new object.
 //  It represents the data as a
 //  set of key point positions, together with a list of indices into
@@ -44,7 +44,7 @@ class mbl_cluster_tree
   void empty();
 
   //: Append new object with index i and assign to clusters.
-  //  Assumes that new object data()[i] is available. 
+  //  Assumes that new object data()[i] is available.
   //  Deduce which clusters belongs to and add it.
   //  Create new clusters if further than max_r() from any.
   void add_object(unsigned i);
@@ -57,7 +57,7 @@ class mbl_cluster_tree
 
   //: Copy in data
   //  Empty existing clusters, then process every element of data
-  //  to create clusters, by calling add_object() 
+  //  to create clusters, by calling add_object()
   void set_data(const vcl_vector<T>& data);
 
   //: Add an extra element to data()

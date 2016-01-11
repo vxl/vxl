@@ -7,11 +7,11 @@
 // \brief a processor for fitting line segments to edges
 //
 //  This line fitting algorithm is based on the original Charlie Rothwell
-//  detector as ported by FSM in osl.  This version does incremental 
-//  fitting to a chain of points and produces a 
-//  vcl_vector<vgl_line_segments_2d>. The actual fitting algorithm is 
+//  detector as ported by FSM in osl.  This version does incremental
+//  fitting to a chain of points and produces a
+//  vcl_vector<vgl_line_segments_2d>. The actual fitting algorithm is
 //  in vgl/algo and therefore should be of wider applicability.
-// 
+//
 // \author
 //  J.L. Mundy - April 10, 2003
 //

@@ -1,7 +1,7 @@
 //:
 // \file
-// \brief executable to classify all the pixels in a single lidar image, 
-//        finds all the aerial images which overlap this image to create filter responses 
+// \brief executable to classify all the pixels in a single lidar image,
+//        finds all the aerial images which overlap this image to create filter responses
 //        run this exe in parallel to classify all lidar images
 // \author Ozge C. Ozcanli
 // \date Mar 01, 2013
@@ -86,9 +86,9 @@ int main(int argc,  char** argv)
     }
   }
   vcl_cout << " !!!!!! lidar intersects: " << intersection_imgs.size() << " imgs!\n";
-  
+
   vcl_string name = vul_file::strip_extension(test()) + "_dict.vsl";
-    
+
   sdet_texture_classifier_params dummy;
   sdet_texture_classifier tc(dummy);
   tc.load_dictionary(name);  // loads the params as well
@@ -103,7 +103,7 @@ int main(int argc,  char** argv)
     vcl_cout << "\t\t" << cats[kk] << " closest land type: " << volm_label_table::land_id[id].name_ << " color: " << volm_label_table::land_id[id].color_ << '\n';
     vcl_cout.flush();
   }
-    
+
   // process lidar img
   sdet_texture_classifier lidar_c((sdet_texture_classifier_params)tc);
   if (!lidar_c.compute_filter_bank_float_img(filter_folder(), lidar_file(), lidar_max())) {
@@ -149,43 +149,43 @@ int main(int argc,  char** argv)
       get_block(i, j, bb, l_pixels);
       vcl_vector<vnl_vector<double> > data;
       lidar_c.compute_data(l_pixels, data);
-          
+
       for (unsigned kk = 0; kk < intersection_imgs.size(); kk++) {
-        int img_ni = intersection_imgs[kk].ni; 
+        int img_ni = intersection_imgs[kk].ni;
         int img_nj = intersection_imgs[kk].nj;
-    
+
         //lvcs->global_to_local(-lon, lat, 0, vpgl_lvcs::wgs84, lx, ly, lz);
         //intersection_imgs[kk].cam->project(lx, ly, 0.0, u, v);
         intersection_imgs[kk].cam->global_to_img(-lon, lat, 0, u, v);
-        int uu = (int)vcl_floor(u + 0.5); 
+        int uu = (int)vcl_floor(u + 0.5);
         int vv = (int)vcl_floor(v + 0.5);
         if (uu >= 0 && vv >= 0 && uu < img_ni && vv < img_nj) {  // there is a correspondence
           //vcl_cout << i << ",j "; vcl_cout.flush();
           // now around img
           vcl_vector<vcl_pair<int, int> > img_pixels;
-          get_block(uu, vv, larger_neigh, img_pixels); // enlarge the neighborhood to account for misregistration 
-            
+          get_block(uu, vv, larger_neigh, img_pixels); // enlarge the neighborhood to account for misregistration
+
           // collect data from both images
           vcl_vector<vnl_vector<double> > data2;
           intersection_imgs_naip_c[kk]->compute_data(img_pixels, data2);
-            
+
           // create texton histogram and classify, use the same weight for all samples put into the histogram
           float weight = 1.0f/ (data.size() + data2.size());
           vcl_vector<float> hist(ntextons, 0.0f);
           tc.update_hist(data, weight, hist);
           tc.update_hist(data2, weight, hist);
           vcl_pair<vcl_string, float> hc = tc.highest_prob_class(hist);
-          out_rgb(i,j) = cat_color_map[hc.first];  
+          out_rgb(i,j) = cat_color_map[hc.first];
           out(i,j) = hc.second;
-          break;  
+          break;
         }
       }
-      
+
     }
     //vcl_cout << i << " ";
   }
   vcl_cout << '\n';
-  
+
   vcl_string out_name = out_folder() + lidar_info.name + "_outmap";
   vil_save(out, (out_name + ".tif").c_str());
   vil_save(out_rgb, (out_name + ".png").c_str());

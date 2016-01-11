@@ -189,7 +189,7 @@ cubic_compute_probability_of_image( __constant  RenderSceneInfo  *  linfo,
             aux_args);
 
   //expected image gets rendered
-  prob_image[imIndex[llid]]       = prob; 
+  prob_image[imIndex[llid]]       = prob;
   vis_image[imIndex[llid]]        = vis;
 }
 

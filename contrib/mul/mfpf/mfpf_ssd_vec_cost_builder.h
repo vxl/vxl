@@ -12,7 +12,7 @@
 
 //: Builder for mfpf_ssd_vec_cost objects.
 //  Computes mean and weights given the training data.
-//  Currently uses the mean absolute difference to estimate the 
+//  Currently uses the mean absolute difference to estimate the
 //  weights (rather than variance, which is not so robust).
 class mfpf_ssd_vec_cost_builder : public mfpf_vec_cost_builder
 {

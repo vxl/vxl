@@ -5,7 +5,7 @@
 // \file
 // \brief A planar cross section as part of a generalized cylinder representation
 // \author J. L. Mundy
-// \date November 2, 2015 
+// \date November 2, 2015
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>

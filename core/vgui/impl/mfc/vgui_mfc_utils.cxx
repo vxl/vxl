@@ -124,7 +124,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
   CWinApp *theapp = AfxGetApp();
   // Obtain the main window associated with it
   CWnd *window = theapp->GetMainWnd();
- 
+
   CMenu *menu_bar = new CMenu();
   menus_to_be_deleted.push_back(menu_bar);
   menu_bar->CreateMenu();
@@ -171,7 +171,7 @@ void vgui_mfc_utils::set_menu(const vgui_menu& menu)
 //  Make sure to call delete after its use otherwise MLK!!!
 CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
 {
-  //if there was a popup menu created before, 
+  //if there was a popup menu created before,
   //delete the callback functions from that menu
   if (!first_popup)
     delete_last_popup_menu_callbacks();
@@ -221,10 +221,10 @@ CMenu *vgui_mfc_utils::set_popup_menu(const vgui_menu &menu)
 void vgui_mfc_utils::delete_last_popup_menu_callbacks()
 {
   //Amir: Delete the callbacks that were created for the last popup menu
-  //      Without this step, the menu ids keep increasing everytime 
+  //      Without this step, the menu ids keep increasing everytime
   //      a popup menu is created. However, the menu servicing table has a
   //      predefined range of ids it can handle (see line 32 of vgui_mfc_mainfrm.cxx)
-  //      which means that after a while the popup menus just stop functioning. 
+  //      which means that after a while the popup menus just stop functioning.
   //      The local lab jargon for this event is "Menu timeout" :)
 
   //delete all the callbacks up to the last item count

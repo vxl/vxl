@@ -40,4 +40,4 @@ private:
   bool with_grad_;
 };
 
-#endif 
+#endif

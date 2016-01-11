@@ -15,11 +15,11 @@ volm_geo_index_node::~volm_geo_index_node()
 }
 
 vcl_string volm_geo_index_node::get_label_index_name(vcl_string const& geo_index_name_pre, vcl_string const& identifier)
-{ 
+{
   if (identifier.compare("") == 0)
-    return geo_index_name_pre + "_" + this->get_string() + "_index_label.bin"; 
+    return geo_index_name_pre + "_" + this->get_string() + "_index_label.bin";
   else
-    return geo_index_name_pre + "_" + this->get_string() + "_index_label_"+identifier+".bin"; 
+    return geo_index_name_pre + "_" + this->get_string() + "_index_label_"+identifier+".bin";
 }
 
 void construct_sub_tree(volm_geo_index_node_sptr parent, float min_size)
@@ -380,7 +380,7 @@ bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, d
       return true;
     }
   } else if (!root->children_.size()) { // it's a leaf
-    if (root->extent_.contains(lon, lat)) { 
+    if (root->extent_.contains(lon, lat)) {
       root->hyps_ = new volm_loc_hyp;
       root->hyps_->add(lat, lon, elev);
       return true;

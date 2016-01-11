@@ -1,4 +1,4 @@
-//PUBLIC RELEASE APPROVAL FROM AFRL 
+//PUBLIC RELEASE APPROVAL FROM AFRL
 //Case Number: RY-14-0126
 //PA Approval Number: 88ABW-2014-1143
 #ifndef boxm2_ocl_hierarchical_points_to_volume_reg_h_
@@ -25,7 +25,7 @@ class boxm2_ocl_hierarchical_points_to_volume_reg : public boxm2_ocl_reg_points_
  public:
   //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
   boxm2_ocl_hierarchical_points_to_volume_reg( boxm2_opencl_cache_sptr  & cache,
-                                               float *pts, 
+                                               float *pts,
                                                boxm2_scene_sptr sceneB,
                                                int npts,
                                                bocl_device_sptr device, bool do_vary_scale);
@@ -38,7 +38,7 @@ class boxm2_ocl_hierarchical_points_to_volume_reg : public boxm2_ocl_reg_points_
   vnl_vector<double> max_sample();
 
  // void convert_to_xform(vnl_vector<double> & x);
- 
+
 protected:
   bool generate_samples(int samplenum = 100);
   int numsamples_;

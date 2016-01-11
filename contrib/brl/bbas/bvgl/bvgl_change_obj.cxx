@@ -32,7 +32,7 @@ void bvgl_change_obj::centroid(double &x_cent, double &y_cent) const
       x_cent += poly_[s][si].x();
       y_cent += poly_[s][si].y();
     }
-    tot_size += poly_[s].size(); 
+    tot_size += poly_[s].size();
   }
   x_cent /= tot_size;
   y_cent /= tot_size;

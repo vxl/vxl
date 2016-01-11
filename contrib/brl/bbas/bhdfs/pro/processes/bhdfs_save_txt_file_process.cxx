@@ -4,7 +4,7 @@
 // \file
 // \brief A process to load a perspective camera via libdhfs to access hadoop's file system (HDFS)
 //
-//     
+//
 // \author Gamze Tunali
 // \date Sep15, 2012
 //

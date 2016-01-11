@@ -42,7 +42,7 @@ bool bsta_clone_joint_hist_3d_process(bprb_func_process& pro)
   }
   bsta_joint_histogram_3d<float>* h = dynamic_cast<bsta_joint_histogram_3d<float>*>(in_hist_ptr.ptr());
 
-  bsta_joint_histogram_3d<float>* h_clone  = 
+  bsta_joint_histogram_3d<float>* h_clone  =
     new bsta_joint_histogram_3d<float>(*h);
   h_clone->clear();
 

@@ -9,7 +9,7 @@
 // \verbatim
 //  Modifications
 //   Yi Dong May 1, 2014  -- add a bounding box of satellite viewpoint to speed up the process execution
-//   Ozge C. Ozcanli June 05, 2014 -- adding an option to use an ortho camera instead of a rational camera for the satellite view 
+//   Ozge C. Ozcanli June 05, 2014 -- adding an option to use an ortho camera instead of a rational camera for the satellite view
 //                                    DEMs or height maps can now be projected onto orthorectified satellite images or other types of ortho images
 //                                    input cam should be vpgl_geo_camera
 // \endverbatim
@@ -40,13 +40,13 @@ namespace volm_project_dem_to_sat_img_process_globals
   const unsigned n_outputs_ = 0;
 
   // function to project dem image pixel to satellite image pixel
-  bool project_dem_to_sat(vpgl_geo_camera const& dem_cam, vpgl_rational_camera<double>* sat_cam, 
+  bool project_dem_to_sat(vpgl_geo_camera const& dem_cam, vpgl_rational_camera<double>* sat_cam,
                           int const& dem_i,  int const& dem_j,  float const& dem_height,
                           int const& sat_ni, int const& sat_nj,
                           int& sat_img_i,    int& sat_img_j);
 
   // function to project dem image pixel to ortho image pixel
-  bool project_dem_to_ortho(vpgl_geo_camera const& dem_cam, vpgl_geo_camera* img_cam, 
+  bool project_dem_to_ortho(vpgl_geo_camera const& dem_cam, vpgl_geo_camera* img_cam,
                             int const& dem_i,  int const& dem_j,  float const& dem_height,
                             int const& img_ni, int const& img_nj,
                             int& img_i,    int& img_j);
@@ -66,7 +66,7 @@ bool volm_project_dem_to_sat_img_process_cons(bprb_func_process& pro)
   input_types_[6] = "double";                   // upper right lon of satellite region
   input_types_[7] = "double";                   // upper right lat of satellite region
   // process takes 0 input
-  vcl_vector<vcl_string> output_types_(n_outputs_); 
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 //: execute the process
@@ -88,7 +88,7 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
   double lower_left_lat  = pro.get_input<double>(in_i++);
   double upper_right_lon = pro.get_input<double>(in_i++);
   double upper_right_lat = pro.get_input<double>(in_i++);
-  
+
   vil_image_view<float>* sat_img = dynamic_cast<vil_image_view<float>*>(sat_img_sptr.ptr());
   if (!sat_img) {
     vcl_cout << pro.name() << ": The image pixel format, " << sat_img_sptr->pixel_format() << " is not supported!" << vcl_endl;
@@ -207,7 +207,7 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
   return true;
 }
 
-bool volm_project_dem_to_sat_img_process_globals::project_dem_to_sat(vpgl_geo_camera const& dem_cam, vpgl_rational_camera<double>* sat_cam, 
+bool volm_project_dem_to_sat_img_process_globals::project_dem_to_sat(vpgl_geo_camera const& dem_cam, vpgl_rational_camera<double>* sat_cam,
                                                                      int const& dem_i,  int const& dem_j,  float const& dem_height,
                                                                      int const& sat_ni, int const& sat_nj,
                                                                      int& sat_img_i,    int& sat_img_j)
@@ -245,7 +245,7 @@ bool volm_project_dem_to_sat_img_process_globals::project_dem_to_sat(vpgl_geo_ca
 
 
 // function to project dem image pixel to ortho image pixel
-bool volm_project_dem_to_sat_img_process_globals::project_dem_to_ortho(vpgl_geo_camera const& dem_cam, vpgl_geo_camera* img_cam, 
+bool volm_project_dem_to_sat_img_process_globals::project_dem_to_ortho(vpgl_geo_camera const& dem_cam, vpgl_geo_camera* img_cam,
                             int const& dem_i,  int const& dem_j,  float const& dem_height,
                             int const& img_ni, int const& img_nj,
                             int& img_i,    int& img_j)
@@ -257,7 +257,7 @@ bool volm_project_dem_to_sat_img_process_globals::project_dem_to_ortho(vpgl_geo_
   dem_cam.img_to_global(dem_i, dem_j, lon, lat);
   // project global coords to satellite image
   img_cam->global_to_img(lon, lat, dem_height, iu, iv);   // actually the dem_height does not matter in the ortho case
-  
+
   uu = (int)vcl_floor(iu+0.5);
   vv = (int)vcl_floor(iv+0.5);
 

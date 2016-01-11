@@ -42,7 +42,7 @@ opj_image_t* OPJ_CALLCONV opj_image_create(OPJ_UINT32 numcmpts, opj_image_cmptpa
 
 	image = (opj_image_t*) opj_malloc(sizeof(opj_image_t));
 	if
-		(image) 
+		(image)
 	{
 		memset(image,0,sizeof(opj_image_t));
 		image->color_space = clrspc;
@@ -50,7 +50,7 @@ opj_image_t* OPJ_CALLCONV opj_image_create(OPJ_UINT32 numcmpts, opj_image_cmptpa
 		/* allocate memory for the per-component information */
 		image->comps = (opj_image_comp_t*)opj_malloc(image->numcomps * sizeof(opj_image_comp_t));
 		if
-			(!image->comps) 
+			(!image->comps)
 		{
 			opj_image_destroy(image);
 			return 00;
@@ -69,7 +69,7 @@ opj_image_t* OPJ_CALLCONV opj_image_create(OPJ_UINT32 numcmpts, opj_image_cmptpa
 			comp->sgnd = cmptparms[compno].sgnd;
 			comp->data = (OPJ_INT32*) opj_calloc(comp->w * comp->h, sizeof(OPJ_INT32));
 			if
-				(!comp->data) 
+				(!comp->data)
 			{
 				opj_image_destroy(image);
 				return 00;
@@ -85,7 +85,7 @@ opj_image_t* OPJ_CALLCONV opj_image_tile_create(OPJ_UINT32 numcmpts, opj_image_c
 
 	image = (opj_image_t*) opj_malloc(sizeof(opj_image_t));
 	if
-		(image) 
+		(image)
 	{
 		memset(image,0,sizeof(opj_image_t));
 		image->color_space = clrspc;
@@ -93,7 +93,7 @@ opj_image_t* OPJ_CALLCONV opj_image_tile_create(OPJ_UINT32 numcmpts, opj_image_c
 		/* allocate memory for the per-component information */
 		image->comps = (opj_image_comp_t*)opj_malloc(image->numcomps * sizeof(opj_image_comp_t));
 		if
-			(!image->comps) 
+			(!image->comps)
 		{
 			opj_image_destroy(image);
 			return 00;
@@ -119,10 +119,10 @@ opj_image_t* OPJ_CALLCONV opj_image_tile_create(OPJ_UINT32 numcmpts, opj_image_c
 void OPJ_CALLCONV opj_image_destroy(opj_image_t *image) {
 	OPJ_UINT32 i;
 	if
-		(image) 
+		(image)
 	{
 		if
-			(image->comps) 
+			(image->comps)
 		{
 			/* image components */
 			for(i = 0; i < image->numcomps; i++) {
@@ -139,7 +139,7 @@ void OPJ_CALLCONV opj_image_destroy(opj_image_t *image) {
 
 /**
  * Updates the components of the image from the coding parameters.
- * 
+ *
  * @param p_image		the image to update.
  * @param p_cp			the coding parameters from which to update the image.
  */
@@ -154,10 +154,10 @@ void opj_image_comp_update(opj_image_t * p_image,const opj_cp_t * p_cp)
 	l_y0 = int_max(p_cp->ty0 , p_image->y0);
 	l_x1 = int_min(p_cp->tx0 + p_cp->tw * p_cp->tdx, p_image->x1);
 	l_y1 = int_min(p_cp->ty0 + p_cp->th * p_cp->tdy, p_image->y1);
-	
+
 	l_img_comp = p_image->comps;
-	for 
-		(i = 0; i < p_image->numcomps; ++i) 
+	for
+		(i = 0; i < p_image->numcomps; ++i)
 	{
 		l_comp_x0 = int_ceildiv(l_x0, l_img_comp->dx);
 		l_comp_y0 = int_ceildiv(l_y0, l_img_comp->dy);

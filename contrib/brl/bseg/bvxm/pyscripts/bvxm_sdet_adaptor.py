@@ -221,7 +221,7 @@ def generate_roc2(image, gt_pos_file, pos_sign = "low"):
   status = bvxm_batch.run_process()
   if status:
     (id, type) = bvxm_batch.commit_output(0)
-    threshold  = bvxm_batch.get_bbas_1d_array_float(id) 
+    threshold  = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(1)
     tp  = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(2)

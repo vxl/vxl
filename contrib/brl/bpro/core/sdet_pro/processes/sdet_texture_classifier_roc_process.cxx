@@ -158,9 +158,9 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     fn->data_array[k] = 0;
   }
 
-  // count 
+  // count
   for (unsigned ii = 0; ii < pos_pixels.size(); ii++) {
-    unsigned i = pos_pixels[ii].first; 
+    unsigned i = pos_pixels[ii].first;
     unsigned j = pos_pixels[ii].second;
     if (input_img(i, j) == positive_color) {
       for (unsigned k = 0; k < num_thresholds; k++)
@@ -176,7 +176,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     }
   }
   for (unsigned ii = 0; ii < neg_pixels.size(); ii++) {
-    unsigned i = neg_pixels[ii].first; 
+    unsigned i = neg_pixels[ii].first;
     unsigned j = neg_pixels[ii].second;
     if (input_img(i, j) == positive_color) {
       for (unsigned k = 0; k < num_thresholds; k++)
@@ -196,7 +196,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     tpr->data_array[pnt]= tp->data_array[pnt] / (tp->data_array[pnt] + fn->data_array[pnt]);
     fpr->data_array[pnt]= fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
   }
-  
+
   pro.set_output_val<bbas_1d_array_float_sptr>(0, tp);
   pro.set_output_val<bbas_1d_array_float_sptr>(1, tn);
   pro.set_output_val<bbas_1d_array_float_sptr>(2, fp);
@@ -312,7 +312,7 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
     vcl_cout << thresholds[i] << ' ';
   vcl_cout << vcl_flush << vcl_endl;
 
-  
+
   bbas_1d_array_float * tp=new bbas_1d_array_float(num_thresholds);
   bbas_1d_array_float * tn=new bbas_1d_array_float(num_thresholds);
   bbas_1d_array_float * fp=new bbas_1d_array_float(num_thresholds);

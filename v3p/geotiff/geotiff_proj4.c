@@ -114,7 +114,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
     double      dfFalseEasting, dfFalseNorthing;
 
     szProjection[0] = '\0';
-    
+
 /* ==================================================================== */
 /*      Translate the units of measure.                                 */
 /*                                                                      */
@@ -124,7 +124,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
 /* ==================================================================== */
     if( psDefn->UOMLength == Linear_Meter )
     {
-        strcpy( szUnits, "+units=m " ); 
+        strcpy( szUnits, "+units=m " );
     }
     else if( psDefn->UOMLength == Linear_Foot )
     {
@@ -165,20 +165,20 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
 /* -------------------------------------------------------------------- */
     dfFalseEasting = psDefn->ProjParm[5];
     dfFalseNorthing = psDefn->ProjParm[6];
-    
+
 /* ==================================================================== */
 /*      Handle general projection methods.                              */
 /* ==================================================================== */
- 
+
 /* -------------------------------------------------------------------- */
 /*      Geographic.                                                     */
 /* -------------------------------------------------------------------- */
     if(psDefn->Model==ModelTypeGeographic)
     {
         sprintf(szProjection+strlen(szProjection),"+proj=latlong ");
-        
+
     }
- 
+
 /* -------------------------------------------------------------------- */
 /*      UTM - special case override on transverse mercator so things    */
 /*      will be more meaningful to the user.                            */
@@ -189,7 +189,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  "+proj=utm +zone=%d ",
                  psDefn->Zone );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      Transverse Mercator                                             */
 /* -------------------------------------------------------------------- */
@@ -390,7 +390,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  dfFalseEasting,
                  dfFalseNorthing );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      EquidistantConic                                                */
 /* -------------------------------------------------------------------- */
@@ -406,7 +406,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  dfFalseEasting,
                  dfFalseNorthing );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      Robinson                                                        */
 /* -------------------------------------------------------------------- */
@@ -418,7 +418,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  dfFalseEasting,
                  dfFalseNorthing );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      VanDerGrinten                                                   */
 /* -------------------------------------------------------------------- */
@@ -430,7 +430,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  dfFalseEasting,
                  dfFalseNorthing );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      Sinusoidal                                                      */
 /* -------------------------------------------------------------------- */
@@ -442,7 +442,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  dfFalseEasting,
                  dfFalseNorthing );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      LambertConfConic_2SP                                            */
 /* -------------------------------------------------------------------- */
@@ -458,7 +458,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  dfFalseEasting,
                  dfFalseNorthing );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      LambertConfConic_1SP                                            */
 /* -------------------------------------------------------------------- */
@@ -474,7 +474,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  psDefn->ProjParm[5],
                  psDefn->ProjParm[6] );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      CT_CylindricalEqualArea                                         */
 /* -------------------------------------------------------------------- */
@@ -488,7 +488,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
                  psDefn->ProjParm[5],
                  psDefn->ProjParm[6] );
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      NewZealandMapGrid                                               */
 /* -------------------------------------------------------------------- */
@@ -496,7 +496,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
     {
         /* this appears to be an unsupported formulation with PROJ.4 */
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      Transverse Mercator - south oriented.                           */
 /* -------------------------------------------------------------------- */
@@ -504,7 +504,7 @@ char * GTIFGetProj4Defn( GTIFDefn * psDefn )
     {
         /* this appears to be an unsupported formulation with PROJ.4 */
     }
-    
+
 /* -------------------------------------------------------------------- */
 /*      ObliqueMercator (Hotine)                                        */
 /* -------------------------------------------------------------------- */
@@ -561,10 +561,10 @@ int GTIFProj4ToLatLong( GTIFDefn * psDefn, int nPoints,
     (void) nPoints;
     (void) padfX;
     (void) padfY;
-#ifdef DEBUG    
+#ifdef DEBUG
     fprintf( stderr,
              "GTIFProj4ToLatLong() - PROJ.4 support not compiled in.\n" );
-#endif    
+#endif
     return FALSE;
 }
 
@@ -575,10 +575,10 @@ int GTIFProj4FromLatLong( GTIFDefn * psDefn, int nPoints,
     (void) nPoints;
     (void) padfX;
     (void) padfY;
-#ifdef DEBUG    
+#ifdef DEBUG
     fprintf( stderr,
              "GTIFProj4FromLatLong() - PROJ.4 support not compiled in.\n" );
-#endif    
+#endif
     return FALSE;
 }
 #else
@@ -603,7 +603,7 @@ int GTIFProj4FromLatLong( GTIFDefn * psDefn, int nPoints,
     char	*pszProjection, **papszArgs;
     PJ		*psPJ;
     int		i;
-    
+
 /* -------------------------------------------------------------------- */
 /*      Get a projection definition.                                    */
 /* -------------------------------------------------------------------- */
@@ -615,7 +615,7 @@ int GTIFProj4FromLatLong( GTIFDefn * psDefn, int nPoints,
 /* -------------------------------------------------------------------- */
 /*      Parse into tokens for pj_init(), and initialize the projection. */
 /* -------------------------------------------------------------------- */
-    
+
     papszArgs = CSLTokenizeStringComplex( pszProjection, " +", TRUE, FALSE );
     free( pszProjection );
 
@@ -663,7 +663,7 @@ int GTIFProj4ToLatLong( GTIFDefn * psDefn, int nPoints,
     char	*pszProjection, **papszArgs;
     PJ		*psPJ;
     int		i;
-    
+
 /* -------------------------------------------------------------------- */
 /*      Get a projection definition.                                    */
 /* -------------------------------------------------------------------- */
@@ -675,7 +675,7 @@ int GTIFProj4ToLatLong( GTIFDefn * psDefn, int nPoints,
 /* -------------------------------------------------------------------- */
 /*      Parse into tokens for pj_init(), and initialize the projection. */
 /* -------------------------------------------------------------------- */
-    
+
     papszArgs = CSLTokenizeStringComplex( pszProjection, " +", TRUE, FALSE );
     free( pszProjection );
 

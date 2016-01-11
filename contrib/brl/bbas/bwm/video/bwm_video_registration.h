@@ -59,7 +59,7 @@ class bwm_video_registration
                               );
 
   //: Map input stream onto world plane and write out the homographies
-  static 
+  static
 bool register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
                                   vgl_plane_3d<double> const& world_plane,
                                   vsol_box_2d_sptr const& bounds,

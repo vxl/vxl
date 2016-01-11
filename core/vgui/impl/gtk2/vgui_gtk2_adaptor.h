@@ -12,9 +12,9 @@
 //
 // \verbatim
 //  Modifications
-//   07-JAN-2011 Lianqing Yu 
+//   07-JAN-2011 Lianqing Yu
 //   Change the way of connecting GDK events to the callback functions.
-//   In original code, all GDK events are connected to a single callback 
+//   In original code, all GDK events are connected to a single callback
 //   function. This results in the unavailability of GL context after
 //   adaptor initialization, and thus failure of OpenGL function calls.
 //   The new method fixes this bug.
@@ -111,15 +111,15 @@ class vgui_gtk2_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   struct internal_timer{
     gint real_id_;
     void* callback_ptr_;
-    
+
     internal_timer() : real_id_(0), callback_ptr_(0) { }
-    internal_timer(gint id, void* p) 
+    internal_timer(gint id, void* p)
     : real_id_(id), callback_ptr_(p) { }
   };
-    
+
   // map of timers currently in use
   vcl_map<int, internal_timer>  timers_;
-  
+
   // This is a place to store any menu passed in,
   // so that it doesn't go out of scope while the popup is on screen.
   static vgui_menu last_popup;

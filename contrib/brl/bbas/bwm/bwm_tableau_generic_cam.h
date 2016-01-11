@@ -33,7 +33,7 @@ class bwm_tableau_generic_cam : public bwm_tableau_cam
   void ray_image();
  protected:
   bwm_observer_generic_cam* my_observer_;
-  vul_timer timer_; 
+  vul_timer timer_;
 };
 
 #endif

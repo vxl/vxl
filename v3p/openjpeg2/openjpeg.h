@@ -61,9 +61,9 @@
 	#endif
 #endif /* __cplusplus */
 typedef unsigned int	OPJ_UINT32;
-typedef int		OPJ_INT32;	
-typedef unsigned short	OPJ_UINT16;	
-typedef short		OPJ_INT16;	
+typedef int		OPJ_INT32;
+typedef unsigned short	OPJ_UINT16;
+typedef short		OPJ_INT16;
 typedef char		OPJ_CHAR;
 typedef unsigned char	OPJ_BYTE;
 typedef unsigned int	OPJ_SIZE_T;
@@ -76,7 +76,7 @@ typedef float		OPJ_FLOAT32;
 #endif
 
 #define OPENJPEG_VERSION "1.2.0"
-/* 
+/*
 ==========================================================
    Compiler directives
 ==========================================================
@@ -87,7 +87,7 @@ typedef float		OPJ_FLOAT32;
 
 
 
-/* 
+/*
 ==========================================================
    Useful constant definitions
 ==========================================================
@@ -113,12 +113,12 @@ typedef float		OPJ_FLOAT32;
 #define JPWL_MAXIMUM_EPB_ROOM 65450 /**< Expect this maximum number of bytes for composition of EPBs */
 /* <<UniPG */
 
-/* 
+/*
 ==========================================================
    enum definitions
 ==========================================================
 */
-/** 
+/**
 Rsiz Capabilities
 */
 typedef enum RSIZ_CAPABILITIES {
@@ -128,8 +128,8 @@ typedef enum RSIZ_CAPABILITIES {
 	MCT = 0x8100
 } OPJ_RSIZ_CAPABILITIES;
 
-/** 
-Digital cinema operation mode 
+/**
+Digital cinema operation mode
 */
 typedef enum CINEMA_MODE {
 	OFF = 0,					/** Not Digital Cinema*/
@@ -138,8 +138,8 @@ typedef enum CINEMA_MODE {
 	CINEMA4K_24 = 3		/** 4K Digital Cinema at 24 fps*/
 }OPJ_CINEMA_MODE;
 
-/** 
-Progression order 
+/**
+Progression order
 */
 typedef enum PROG_ORDER {
 	PROG_UNKNOWN = -1,	/**< place-holder */
@@ -153,9 +153,9 @@ typedef enum PROG_ORDER {
 /**
 Supported image color spaces
 */
-typedef enum COLOR_SPACE {	
+typedef enum COLOR_SPACE {
 	CLRSPC_UNKNOWN = -1,	/**< not supported by the library */
-	CLRSPC_UNSPECIFIED = 0, /**< not specified in the codestream */ 
+	CLRSPC_UNSPECIFIED = 0, /**< not specified in the codestream */
 	CLRSPC_SRGB = 1,		/**< sRGB */
 	CLRSPC_GRAY = 2,		/**< grayscale */
 	CLRSPC_SYCC = 3			/**< YUV */
@@ -174,7 +174,7 @@ typedef enum CODEC_FORMAT {
 
 
 
-/* 
+/*
 ==========================================================
    event manager typedef definitions
 ==========================================================
@@ -183,14 +183,14 @@ typedef enum CODEC_FORMAT {
 /**
 Callback function prototype for events
 @param msg Event message
-@param client_data 
+@param client_data
 */
 typedef void (*opj_msg_callback) (const OPJ_CHAR *msg, void *client_data);
 
 
 
 
-/* 
+/*
 ==========================================================
    codec typedef definitions
 ==========================================================
@@ -199,7 +199,7 @@ typedef void (*opj_msg_callback) (const OPJ_CHAR *msg, void *client_data);
 /**
 Progression order changes
 */
-typedef struct opj_poc 
+typedef struct opj_poc
 {
 	/** Resolution num start, Component num start, given by POC */
 	OPJ_UINT32 resno0, compno0;
@@ -361,19 +361,19 @@ typedef struct opj_cparameters {
 Decompression parameters
 */
 typedef struct opj_dparameters {
-	/** 
-	Set the number of highest resolution levels to be discarded. 
-	The image resolution is effectively divided by 2 to the power of the number of discarded levels. 
+	/**
+	Set the number of highest resolution levels to be discarded.
+	The image resolution is effectively divided by 2 to the power of the number of discarded levels.
 	The reduce factor is limited by the smallest total number of decomposition levels among tiles.
-	if != 0, then original dimension divided by 2^(reduce); 
-	if == 0 or not used, image is decoded to the full resolution 
+	if != 0, then original dimension divided by 2^(reduce);
+	if == 0 or not used, image is decoded to the full resolution
 	*/
 	int cp_reduce;
-	/** 
-	Set the maximum number of quality layers to decode. 
+	/**
+	Set the maximum number of quality layers to decode.
 	If there are less quality layers than the specified number, all the quality layers are decoded.
-	if != 0, then only the first "layer" layers are decoded; 
-	if == 0 or not used, all the quality layers are decoded 
+	if != 0, then only the first "layer" layers are decoded;
+	if == 0 or not used, all the quality layers are decoded
 	*/
 	int cp_layer;
 
@@ -406,7 +406,7 @@ typedef struct opj_dparameters {
 	int jpwl_exp_comps;
 	/** maximum number of tiles */
 	int jpwl_max_tiles;
-	
+
 	/** use restrictive decoding ? */
 	OPJ_UINT32 m_use_restrict_decode : 1;
 	/*@}*/
@@ -420,7 +420,7 @@ typedef struct opj_dparameters {
 typedef void * opj_codec_t;
 
 
-/* 
+/*
 ==========================================================
    I/O stream typedef definitions
 ==========================================================
@@ -443,7 +443,7 @@ typedef bool (* opj_stream_seek_fn) (OPJ_SIZE_T p_nb_bytes, void * p_user_data) 
 
 typedef void * opj_stream_t;
 
-/* 
+/*
 ==========================================================
    image typedef definitions
 ==========================================================
@@ -475,13 +475,13 @@ typedef struct opj_image_comp {
 	int *data;
 	/** signed (1) / unsigned (0) */
 	OPJ_UINT32 sgnd : 1;
-	
+
 } opj_image_comp_t;
 
-/** 
+/**
 Defines image data and characteristics
 */
-typedef struct opj_image 
+typedef struct opj_image
 {
 	/** XOsiz: horizontal offset from the origin of the reference grid to the left side of the image area */
 	OPJ_INT32 x0;
@@ -523,7 +523,7 @@ typedef struct opj_image_comptparm {
 	int sgnd;
 } opj_image_cmptparm_t;
 
-/* 
+/*
 ==========================================================
    Information on the JPEG 2000 codestream
 ==========================================================
@@ -560,7 +560,7 @@ typedef struct opj_tp_info {
 } opj_tp_info_t;
 
 /**
-Index structure : information regarding tiles 
+Index structure : information regarding tiles
 */
 typedef struct opj_tile_info {
 	/** value of thresh for each layer by tile cfr. Marcela   */
@@ -664,7 +664,7 @@ extern "C" {
 #endif
 
 
-/* 
+/*
 ==========================================================
    openjpeg version
 ==========================================================
@@ -672,7 +672,7 @@ extern "C" {
 
 OPJ_API const OPJ_CHAR * OPJ_CALLCONV opj_version(void);
 
-/* 
+/*
 ==========================================================
    image functions definitions
 ==========================================================
@@ -689,11 +689,11 @@ OPJ_API opj_image_t* OPJ_CALLCONV opj_image_create(OPJ_UINT32 numcmpts, opj_imag
 
 /**
  * Creates an image without allocating memory for the image (used in the new version of the library).
- * 
+ *
  * @param	p_num_cmpts			the number of components
  * @param	p_cmpt_parms		the components parameters
  * @param	p_clr_spc			the image color space
- * 
+ *
  * @return	a new image structure if successful, NULL otherwise.
 */
 OPJ_API opj_image_t* OPJ_CALLCONV opj_image_tile_create(OPJ_UINT32 numcmpts, opj_image_cmptparm_t *cmptparms, OPJ_COLOR_SPACE clrspc);
@@ -704,7 +704,7 @@ Deallocate any resources associated with an image
 */
 OPJ_API void OPJ_CALLCONV opj_image_destroy(opj_image_t *image);
 
-/* 
+/*
 ==========================================================
    stream functions definitions
 ==========================================================
@@ -714,16 +714,16 @@ OPJ_API void OPJ_CALLCONV opj_image_destroy(opj_image_t *image);
  * Creates an abstract stream. This function does nothing except allocating memory and initializing the abstract stream.
  *
  * @param	l_is_reader		if set to true then the stream will be an input stream, an output stream else.
- * 
+ *
  * @return	a stream object.
 */
 OPJ_API opj_stream_t* OPJ_CALLCONV opj_stream_default_create(bool p_is_input);
 OPJ_API opj_stream_t* OPJ_CALLCONV opj_stream_create(OPJ_UINT32 p_size,bool p_is_input);
 
 /**
- * Destroys a stream created by opj_create_stream. This function does NOT close the abstract stream. If needed the user must 
+ * Destroys a stream created by opj_create_stream. This function does NOT close the abstract stream. If needed the user must
  * close its own implementation of the stream.
- * 
+ *
  * @param	p_stream	the stream to destroy.
  */
 OPJ_API void OPJ_CALLCONV opj_stream_destroy(opj_stream_t* p_stream);
@@ -775,7 +775,7 @@ OPJ_API opj_stream_t* OPJ_CALLCONV opj_stream_create_file_stream (FILE * p_file,
 
 
 
-/* 
+/*
 ==========================================================
    event manager functions definitions
 ==========================================================
@@ -786,7 +786,7 @@ OPJ_API bool OPJ_CALLCONV opj_set_error_handler(opj_codec_t * p_codec, opj_msg_c
 
 
 
-/* 
+/*
 ==========================================================
    codec functions definitions
 ==========================================================
@@ -812,7 +812,7 @@ OPJ_API void OPJ_CALLCONV opj_set_default_decoder_parameters(opj_dparameters_t *
 #endif
 /**
 Setup the decoder decoding parameters using user parameters.
-Decoding parameters are returned in j2k->cp. 
+Decoding parameters are returned in j2k->cp.
 @param dinfo decompressor handle
 @param parameters decompression parameters
 */
@@ -820,7 +820,7 @@ OPJ_API bool OPJ_CALLCONV opj_setup_decoder(opj_codec_t *dinfo, opj_dparameters_
 #endif
 
 /**
-Decode an image from a JPEG-2000 codestream 
+Decode an image from a JPEG-2000 codestream
 @param dinfo decompressor handle
 @param cio Input buffer stream
 @return Returns a decoded image if successful, returns NULL otherwise
@@ -829,14 +829,14 @@ OPJ_API opj_image_t* OPJ_CALLCONV opj_decode(opj_codec_t *p_decompressor, opj_st
 
 /**
  * Writes a tile with the given data.
- * 
+ *
  * @param	p_compressor		the jpeg2000 codec.
  * @param	p_tile_index		the index of the tile to write. At the moment, the tiles must be written from 0 to n-1 in sequence.
  * @param	p_data				pointer to the data to write. Data is arranged in sequence, data_comp0, then data_comp1, then ... NO INTERLEAVING should be set.
  * @param	p_data_size			this value os used to make sure the data being written is correct. The size must be equal to the sum for each component of tile_width * tile_height * component_size. component_size can be 1,2 or 4 bytes,
  *								depending on the precision of the given component.
  * @param	p_stream			the stream to write data to.
- * 
+ *
  * @return	true if the data could be written.
  */
 OPJ_API bool OPJ_CALLCONV opj_write_tile (
@@ -867,7 +867,7 @@ OPJ_API bool OPJ_CALLCONV opj_write_tile (
  * @param	p_stream		the stream to decode.
  * @return	true			if the tile header could be decoded. In case the decoding should end, the returned value is still true.
  *							returning false may be the result of a shortage of memory or an internal error.
- */				
+ */
 OPJ_API bool OPJ_CALLCONV opj_read_tile_header(
 					opj_codec_t *p_codec,
 					OPJ_UINT32 * p_tile_index,
@@ -892,7 +892,7 @@ OPJ_API bool OPJ_CALLCONV opj_read_tile_header(
  * @param	p_stream		the stream to decode.
  *
  * @return	true			if the data could be decoded.
- */				
+ */
 OPJ_API bool OPJ_CALLCONV opj_decode_tile_data(
 					opj_codec_t *p_codec,
 					OPJ_UINT32 p_tile_index,
@@ -903,7 +903,7 @@ OPJ_API bool OPJ_CALLCONV opj_decode_tile_data(
 
 /**
  * Sets the given area to be decoded. This function should be called right after opj_read_header and before any tile header reading.
- * 
+ *
  * @param	p_codec			the jpeg2000 codec.
  * @param	p_start_x		the left position of the rectangle to decode (in image coordinates).
  * @param	p_end_x			the right position of the rectangle to decode (in image coordinates).
@@ -911,7 +911,7 @@ OPJ_API bool OPJ_CALLCONV opj_decode_tile_data(
  * @param	p_end_y			the bottom position of the rectangle to decode (in image coordinates).
  *
  * @return	true			if the area could be set.
- */				
+ */
 OPJ_API bool OPJ_CALLCONV opj_set_decode_area(
 					opj_codec_t *p_codec,
 					OPJ_INT32 p_start_x,
@@ -943,7 +943,7 @@ Destroy a decompressor handle
 OPJ_API void OPJ_CALLCONV opj_destroy_codec(opj_codec_t * p_codec);
 
 /**
-Set encoding parameters to default values, that means : 
+Set encoding parameters to default values, that means :
 <ul>
 <li>Lossless
 <li>1 tile
@@ -967,7 +967,7 @@ OPJ_API void OPJ_CALLCONV opj_set_default_encoder_parameters(opj_cparameters_t *
 
 /**
  * Sets the MCT matrix to use.
- * 
+ *
  * @param	parameters		the parameters to change.
  * @param	pEncodingMatrix	the encoding matrix.
  * @param	p_dc_shift		the dc shift coefficients to use.
@@ -979,11 +979,11 @@ OPJ_API bool OPJ_CALLCONV opj_set_MCT(opj_cparameters_t *parameters,OPJ_FLOAT32 
 
 /**
  * Restricts the decoding to the given image area.
- * 
+ *
  * @param	parameters		the parameters to update.
  * @param	p_start_x		the starting x position of the area to decode.
  * @param	p_start_y		the starting y position of the area to decode.
- * @param	p_end_x			the x end position of the area to decode. 
+ * @param	p_end_x			the x end position of the area to decode.
  * @param	p_end_x			the y end position of the area to decode.
  */
 OPJ_API bool OPJ_CALLCONV opj_restrict_decoding (opj_dparameters_t *parameters,OPJ_INT32 p_start_x,OPJ_INT32 p_start_y,OPJ_INT32 p_end_x,OPJ_INT32 p_end_y);
@@ -995,7 +995,7 @@ OPJ_API bool OPJ_CALLCONV opj_restrict_decoding (opj_dparameters_t *parameters,O
 #warning "warning, opj_setup_encoder is deprecated"
 #endif
 /**
-Setup the encoder parameters using the current image and using user parameters. 
+Setup the encoder parameters using the current image and using user parameters.
 @param cinfo Compressor handle
 @param parameters Compression parameters
 @param image Input filled image
@@ -1005,7 +1005,7 @@ OPJ_API bool OPJ_CALLCONV opj_setup_encoder(opj_codec_t *cinfo, opj_cparameters_
 
 /**
  * Decodes an image header.
- * 
+ *
  * @param	p_codec			codec to use to decode the image.
  * @param	p_image			pointer to a previously created image.
  * @param	p_tile_x0		pointer to a value that will hold the reference point x0 of the tiling grid.
@@ -1068,7 +1068,7 @@ void _ProfPrint(void);
 #else
 #define PROFINIT()
 #define PROFSAVE(file)
-#define PROFPRINT() 
+#define PROFPRINT()
 #endif // !_PROFILE
 
 #ifdef __cplusplus

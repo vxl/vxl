@@ -121,7 +121,7 @@ typedef struct opj_t1 {
 /* ----------------------------------------------------------------------- */
 
 /**
- * Creates a new Tier 1 handle 
+ * Creates a new Tier 1 handle
  * and initializes the look-up tables of the Tier-1 coder/decoder
  * @return a new T1 handle if successful, returns NULL otherwise
 */
@@ -129,7 +129,7 @@ opj_t1_t* t1_create();
 
 /**
  * Destroys a previously created T1 handle
- * 
+ *
  * @param p_t1 Tier 1 handle to destroy
 */
 void t1_destroy(opj_t1_t *p_t1);

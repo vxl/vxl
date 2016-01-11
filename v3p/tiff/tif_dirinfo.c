@@ -276,7 +276,7 @@ exifFieldArray = { tfiatExif, 0, TIFFArrayCount(exifFields), exifFields };
 
 /*
  *  We have our own local lfind() equivelent to avoid subtle differences
- *  in types passed to lfind() on different systems. 
+ *  in types passed to lfind() on different systems.
  */
 
 static void *
@@ -539,7 +539,7 @@ _TIFFFindFieldByName(TIFF* tif, const char *field_name, TIFFDataType dt)
   key.field_name = (char *)field_name;
   key.field_type = dt;
 
-  ret = (const TIFFField **) 
+  ret = (const TIFFField **)
             td_lfind(&pkey, tif->tif_fields, &tif->tif_nfields,
                      sizeof(TIFFField *), tagNameCompare);
 
@@ -707,13 +707,13 @@ _TIFFCreateAnonField(TIFF *tif, uint32 tag, TIFFDataType field_type)
   }
   fld->field_subfields = NULL;
 
-  /* 
+  /*
    * note that this name is a special sign to TIFFClose() and
    * _TIFFSetupFields() to free the field
    */
   sprintf(fld->field_name, "Tag %d", (int) tag);
 
-  return fld;    
+  return fld;
 }
 
 /****************************************************************************

@@ -9,10 +9,10 @@
 // FIXME FIXME FIXME FIXME FIXME
 #define osl_IUDelete(p) /* delete p */
 
-//#define fsm_delete 0 == 
+//#define fsm_delete 0 ==
 #define fsm_delete delete
 
-//#define fsm_delete_array 0 == 
+//#define fsm_delete_array 0 ==
 #define fsm_delete_array delete []
 
 // Set this to 1 if you think it can avoid heap corruption, and

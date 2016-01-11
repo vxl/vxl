@@ -1,5 +1,5 @@
 //THIS IS update_naa_kernels.cl
-//Created March 3 2012  
+//Created March 3 2012
 //Implements kernels for updating with normal-albedo-array (naa) appearance model
 
 #pragma OPENCL EXTENSION cl_khr_global_int32_base_atomics: enable

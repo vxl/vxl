@@ -23,9 +23,9 @@ int main(int argc, char** argv)
   }
 
   msm_points points;
-  
+
   vcl_vector<vgl_point_2d<double> > pts, all_pts;
-  
+
   unsigned n_sets = argc-2;
   vcl_cout<<"Reading in "<<n_sets<<" sets of points."<<vcl_endl;
 
@@ -42,10 +42,10 @@ int main(int argc, char** argv)
     points.get_points(pts);
     for (unsigned j=0;j<pts.size();++j) all_pts.push_back(pts[j]);
   }
-  
+
   points.set_points(all_pts);
 
-  vcl_string out_path = vcl_string(argv[argc-1]);  
+  vcl_string out_path = vcl_string(argv[argc-1]);
   if (!points.write_text_file(out_path))
   {
     vcl_cerr<<"Failed to write points to "<<out_path<<vcl_endl;

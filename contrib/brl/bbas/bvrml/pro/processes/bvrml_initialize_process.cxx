@@ -23,7 +23,7 @@ bool bvrml_initialize_process_cons(bprb_func_process& pro)
 
   //output
   vcl_vector<vcl_string> output_types_(0);
-  
+
   bool good = pro.set_input_types(input_types_) &&
               pro.set_output_types(output_types_);
   return good;

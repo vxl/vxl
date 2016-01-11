@@ -5,17 +5,17 @@
 #include <vnl/vnl_random.h>
 #include <vcl_algorithm.h>
 boxm2_ocl_hierarchical_points_to_volume_reg::boxm2_ocl_hierarchical_points_to_volume_reg( boxm2_opencl_cache_sptr  & cache,
-                                                   float *pts, 
+                                                   float *pts,
                                                    boxm2_scene_sptr sceneB,
                                                    int npts,
                                                    bocl_device_sptr device, bool do_vary_scale):  boxm2_ocl_reg_points_to_volume_mutual_info(cache,pts,sceneB,device,npts, do_vary_scale), do_vary_scale_(do_vary_scale)
 {
-    
+
 }
 
 bool boxm2_ocl_hierarchical_points_to_volume_reg::init(vnl_vector<double> const& mu, vnl_vector<double> const & cov)
 {
-    mu_ = mu ; 
+    mu_ = mu ;
     cov_= cov;
     mu_cost_ = this->cost(mu_);
     vcl_cout<<"Mutual Information for current position is "<<mu_cost_<<vcl_endl;
@@ -45,24 +45,24 @@ bool boxm2_ocl_hierarchical_points_to_volume_reg::exhaustive()
             vcl_cout<<".";
             vcl_cout.flush();
             int searchwidth = numsamples_search_width[level];
-            vnl_vector<double> best_sample = iter->second; 
+            vnl_vector<double> best_sample = iter->second;
             int numsamples_per_best_particle = (int) vcl_pow((float)searchwidth,(float)params_to_vary);
             for(unsigned int sampleno = 0 ; sampleno < numsamples_per_best_particle; sampleno++)
-            {              
+            {
                 int cont=sampleno;
                 vnl_vector<double> curr_sample = best_sample;
                 for(unsigned k = 0; k <params_to_vary; k++)
                 {
-                    int t = params_to_vary - k - 1; 
+                    int t = params_to_vary - k - 1;
                     unsigned int var = cont/(unsigned int)vcl_pow((float)searchwidth,(float)t); // quotient
                     cont = cont - (unsigned int)vcl_pow((float)searchwidth,(float)t)*var;       // remainder
                     double offset = (2*((double)var/((double)searchwidth-1))-1)*cov[t];
-                    curr_sample[t] +=  offset; 
+                    curr_sample[t] +=  offset;
                 }
                 double minfo = this->cost(curr_sample, level) ;
                 mis.push_back(minfo);
                 samples_.push_back(curr_sample);
-            }            
+            }
         }
         vcl_cout<<vcl_endl;
         samples_sorted.clear();
@@ -81,7 +81,7 @@ vnl_vector<double> boxm2_ocl_hierarchical_points_to_volume_reg::max_sample()
         if(mis[i] > max_pdf)
         {
             max_pdf = mis[i];
-            max_sample = samples_[i]; 
+            max_sample = samples_[i];
         }
    return max_sample;
 }

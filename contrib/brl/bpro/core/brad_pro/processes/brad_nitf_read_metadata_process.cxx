@@ -43,7 +43,7 @@ bool brad_nitf_read_metadata_process(bprb_func_process& pro)
   vcl_string meta_folder = pro.get_input<vcl_string>(1);
 
   brad_image_metadata_sptr md = new brad_image_metadata;
-  
+
   vcl_string ext = vul_file::extension(nitf_img_name);
   if (ext.compare(".NTF") == 0 || ext.compare(".ntf") == 0) {
     vcl_cout << "parse from metadata and image header: " << nitf_img_name << vcl_endl;

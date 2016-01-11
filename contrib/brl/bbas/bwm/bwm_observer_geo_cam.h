@@ -39,7 +39,7 @@ class bwm_observer_geo_cam : public bwm_observer_cam
 
   vcl_ostream& print_camera(vcl_ostream& s);
 
-  static vpgl_camera<double>* 
+  static vpgl_camera<double>*
     read_camera(vcl_string cam_path);
 
  protected:

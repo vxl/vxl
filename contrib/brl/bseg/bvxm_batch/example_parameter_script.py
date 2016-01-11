@@ -25,13 +25,13 @@ bvxm_batch.init_process("bvxmLoadProjCameraProcess");
 bvxm_batch.set_input_string(0,camera_fnames[1]);
 bvxm_batch.run_process();
 cam_id = bvxm_batch.commit_output(0);
- 
+
 print("Loading Image");
 bvxm_batch.init_process("bvxmLoadImageViewProcess");
 bvxm_batch.set_input_string(0,image_fnames[1]);
 bvxm_batch.run_process();
 image_id = bvxm_batch.commit_output(0);
- 
+
 print("Normalize Image");
 bvxm_batch.init_process("bvxmNormalizeImageProcess");
 bvxm_batch.set_params_process("D:/projects/lockheed-voxel-world/bvxmNormalizeImageProcess.xml");
@@ -43,4 +43,4 @@ prob_img_id = bvxm_batch.commit_output(0);
 
 print("Done");
 
- 
+

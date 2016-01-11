@@ -10,7 +10,7 @@
 sdet_curvelet::sdet_curvelet(const sdet_curvelet& other)
 {
   //the edgels have to copied as links because curvelets are just groupings of the edgels
-  ref_edgel = other.ref_edgel;  
+  ref_edgel = other.ref_edgel;
   edgel_chain = other.edgel_chain;
 
   //but the curve model has to be deep copied
@@ -41,7 +41,7 @@ sdet_curvelet::sdet_curvelet(const sdet_curvelet& other)
 sdet_curvelet::sdet_curvelet(const sdet_curvelet& other, sdet_curve_model* cm)
 {
   //the edgels have to copied as links because curvelets are just groupings of the edgels
-  ref_edgel = other.ref_edgel;  
+  ref_edgel = other.ref_edgel;
   edgel_chain = other.edgel_chain;
 
   //do not copy the CB, just assign the ne passed to it
@@ -79,7 +79,7 @@ void sdet_curvelet::compute_properties(double R, double token_len)
   bool before_ref = true;
   for (unsigned i=0; i<edgel_chain.size()-1; i++){
     if (before_ref) { Lm += vgl_distance(edgel_chain[i]->pt, edgel_chain[i+1]->pt); num_before++; }
-    else            { Lp += vgl_distance(edgel_chain[i]->pt, edgel_chain[i+1]->pt); num_after++; } 
+    else            { Lp += vgl_distance(edgel_chain[i]->pt, edgel_chain[i+1]->pt); num_after++; }
 
     if (edgel_chain[i+1]==ref_edgel)
       before_ref = false;
@@ -92,7 +92,7 @@ void sdet_curvelet::compute_properties(double R, double token_len)
   //quality = (num_before+num_after)*token_len/length;
 
   //new quality measure (1/cost of the compatibility heauristic)
-  quality = 2/(alpha3*R/length + alpha4*length/token_len/edgel_chain.size()); 
+  quality = 2/(alpha3*R/length + alpha4*length/token_len/edgel_chain.size());
 }
 
 //: print info to file
@@ -129,7 +129,7 @@ vcl_list<sdet_edgel*> sdet_curvelet::child_chain()
 
         if(edgel_chain[i]->id==ref_edgel->id)
             flag=true;
-        
+
     }
     return return_chain;
 }

@@ -21,7 +21,7 @@ struct example_pyramid_tableau : public vgui_tableau
   vgui_image_tableau_new image_tab;
   vgui_parent_child_link pclink;
 
-  example_pyramid_tableau(vil1_image const &image) 
+  example_pyramid_tableau(vil1_image const &image)
     : level(0), pyr(image), pclink(this, image_tab) {
     image_tab->set_image(image);
   }
@@ -33,7 +33,7 @@ struct example_pyramid_tableau : public vgui_tableau
       glScalef(2, 2, 2);
 
     // Look for PageUp and PageDown events.
-    if (e.type == vgui_KEY_PRESS && e.key == vgui_PGUP) 
+    if (e.type == vgui_KEY_PRESS && e.key == vgui_PGUP)
     {
       ++level;
       if (level <= 5) {
@@ -45,10 +45,10 @@ struct example_pyramid_tableau : public vgui_tableau
         level = 5;
       return true;
     }
-    else if (e.type == vgui_KEY_PRESS && e.key == vgui_PGDN) 
+    else if (e.type == vgui_KEY_PRESS && e.key == vgui_PGDN)
     {
       --level;
-      if (level >= 0) 
+      if (level >= 0)
       {
         image_tab->set_image(pyr[level]);
         post_redraw();
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 {
   vgui::init(argc, argv);
 
-  if (argc != 2) 
+  if (argc != 2)
   {
     vcl_cerr << "need name of image" << vcl_endl;
     return 1;

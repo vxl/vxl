@@ -1962,7 +1962,7 @@ def load_score_binary(geo_hypo_folder, score_file, out_text, tile_id, candidate_
   boxm2_batch.set_input_string(3, out_text);
   boxm2_batch.set_input_unsigned(4, tile_id);
   boxm2_batch.run_process();
-  
+
 ## return the location rank in the pin-point region
 def location_rank_in_pin_point(lon, lat, pin_point_kml):
   boxm2_batch.init_process("boxm2LocationPinPointRanking");
@@ -1978,7 +1978,7 @@ def location_rank_in_pin_point(lon, lat, pin_point_kml):
   else:
     return 0
 
-def cast_3d_point(scene, cache, perspective_camera, generic_camera, 
+def cast_3d_point(scene, cache, perspective_camera, generic_camera,
                   depth_image, variance_image, appearance_model_name):
   boxm2_batch.init_process("boxm2CppCast3dPointHypothesisProcess");
   boxm2_batch.set_input_from_db(0, scene);

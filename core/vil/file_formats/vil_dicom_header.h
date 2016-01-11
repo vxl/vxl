@@ -465,7 +465,7 @@ struct vil_dicom_header_info
   // Non-standard info from Philips scanner
   vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_intercept_;    /*< The philips private intercept value */
   vil_dicom_header_type_of<vil_dicom_header_DS>::type philips_private_slope_;        /*< The philips private scale value */
- 
+
 };
 
 

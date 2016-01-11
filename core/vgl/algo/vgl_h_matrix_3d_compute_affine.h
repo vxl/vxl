@@ -29,7 +29,7 @@ class vgl_h_matrix_3d_compute_affine : public vgl_h_matrix_3d_compute
                             vcl_vector<vgl_homg_point_3d<double> > const& p2,
                             vnl_matrix<double>& M);
 
- 
+
  public:
    vgl_h_matrix_3d_compute_affine() {}
    int minimum_number_of_correspondences() const { return 4; }

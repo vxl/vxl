@@ -1,7 +1,7 @@
 // This is contrib/brl/bseg/boxm2/volm/conf/exe/boxm2_volm_create_prob_map.cxx
 //:
 // \file
-// \brief  executable to create probability map given configurational matcher output.  The 
+// \brief  executable to create probability map given configurational matcher output.  The
 //         output map has 30 by 30 meter resolution and pixel values are the height score in the space of 30x30 meters
 //
 // \author Yi Dong

@@ -36,7 +36,7 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
                               vcl_string               app_ident,
                               vcl_string               view_ident,
                               float resnearfactor ,
-                              float resfarfactor )                          
+                              float resfarfactor )
 {
   enum {
     UPDATE_SEGLEN = 0,
@@ -94,7 +94,7 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
 
   if(cam->type_name() == "vpgl_perspective_camera")
   {
-      
+
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       vcl_cout<<"Focal Length " << f<<vcl_endl;
       tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
@@ -344,7 +344,7 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
       {
           vcl_size_t ltr[2];
           ltr[0] = 64;
-          ltr[1] = 1;         
+          ltr[1] = 1;
           vcl_size_t gt[2];
           gt[0] = RoundUp(info_buffer->data_buffer_length,ltr[0]);
           gt[1] = 1;
@@ -582,7 +582,7 @@ bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene
       kern->set_arg( aux3_prev );
       kern->set_arg( aux3_curr );
       kern->set_arg( aux0_curr );
-      kern->set_arg( alpha );      
+      kern->set_arg( alpha );
       //execute kernel
       kern->execute(queue, 1, ltr, gtr);
       int status = clFinish(queue);
@@ -618,7 +618,7 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
       return false;
 
 
-  
+
   // compile the kernel if not already compiled
   vcl_vector<bocl_kernel*>& kernels = get_kernels(device,"");
   // bit lookup buffer
@@ -634,7 +634,7 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
   {
       //choose correct render kernel
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-      float pinit_buf[1];    
+      float pinit_buf[1];
       pinit_buf[0] = mdata.p_init_;
       bocl_mem * pinit=new bocl_mem(device->context(), pinit_buf, sizeof(float), "pinit");
       pinit->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);

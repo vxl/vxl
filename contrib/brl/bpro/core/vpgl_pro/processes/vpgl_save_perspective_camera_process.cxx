@@ -63,7 +63,7 @@ bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
   return true;
 }
 
-//: save projective camera's matrix with get_matrix() 
+//: save projective camera's matrix with get_matrix()
 bool vpgl_save_projective_camera_process_cons(bprb_func_process& pro)
 {
   //this process takes two inputs:

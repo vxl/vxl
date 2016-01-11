@@ -81,7 +81,7 @@ vgl_vector_3d<double> boxm2_vecf_eyelid_crease::socket_normal(double xp) const{
   if(xp>=0.0)
     s = (gi(xp,ct)-yz)/(ylat-yz);
   else
-    s = (gi(xp,ct)-yz)/(ymed-yz);    
+    s = (gi(xp,ct)-yz)/(ymed-yz);
   if(s<0.0) s = 0.0;
   if(s>1.0) s = 1.0;
   // note linear interpolation of the angles, not vectors
@@ -95,7 +95,7 @@ double boxm2_vecf_eyelid_crease::z(double xp, double t) const{
   double ct = opr_.eyelid_crease_ct_, z_ret = 0.0;
   if(t == ct)
     return z_socket(xp);
- 
+
   // if t is above the crease then return a slanted plane merging with the brow
   //                       dz
   // z(x,t) = zu(x, ct) + ----(y(xp,t)-y(xp, ct))
@@ -108,7 +108,7 @@ double boxm2_vecf_eyelid_crease::z(double xp, double t) const{
     double dz_dy = -usn.y()/c;
     double zv = z_socket(xp) + dz_dy*(gi(xp, t)-gi(xp,ct));
     double zm = z_socket(xp) + opr_.brow_z_limit_*opr_.eye_radius_;
-        
+
     z_ret = zv;
     if(zv>zm)
       z_ret = zm;
@@ -130,7 +130,7 @@ double boxm2_vecf_eyelid_crease::t0(double xp, double y) const{
   double temp = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
   temp = vcl_cos(dphi_rad_)*temp + vcl_sin(dphi_rad_)*xs;
   // note that the top of the upper eyelid must match bottom of the crease region (el_.gi)
-  double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0)); 
+  double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0));
   return ret;
 }
 
@@ -145,14 +145,14 @@ double boxm2_vecf_eyelid_crease::t(double xp, double y) const{
   double temp = dot_product(m, c0)*opr_.eyelid_crease_scale_y();
   temp = vcl_cos(dphi_rad_)*temp + vcl_sin(dphi_rad_)*xs;
   // note that the top of the upper eyelid must match bottom of the crease region (el_.gi)
-  double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0)); 
+  double ret = (-temp + y)/( -temp + el_.gi(xp, 0.0));
 
   return ret;
 }
 
 // theory of closest point - compute distance to eyelid sphere, compute distance to plane, take closest
 double boxm2_vecf_eyelid_crease::surface_distance(vgl_point_3d<double> const& p) const{
-          
+
   double ct = opr_.eyelid_crease_ct_;
   double t = this->t(p.x(), p.y());
   // if in the lower part of the crease region

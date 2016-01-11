@@ -369,7 +369,7 @@ float bstm_ocl_minfo_function::evaluate()
   //Compute the MI of app probabilities
   vcl_cout << "MI app: ";
 
-  
+
   float mi_app = 0.0f;
 
   float * app_hist = new float[app_nbins_* app_nbins_*app_view_dir_num_];

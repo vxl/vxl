@@ -179,7 +179,7 @@ class UncertainScene(boxm2_scene_adaptor):
 		print img;
 		print >> fd, "img_%05d"%i
     fd.close()
-		
+
     boxm2_batch.init_process("boxm2OclSynopticUpdateAlphaProcess");
     boxm2_batch.set_input_from_db(0,self.device);
     boxm2_batch.set_input_from_db(1,self.scene);
@@ -187,9 +187,9 @@ class UncertainScene(boxm2_scene_adaptor):
     boxm2_batch.set_input_unsigned(3,len(self.imgList));
     boxm2_batch.set_input_string(4,image_id_fname);
     boxm2_batch.run_process();
-    
+
     self.write_cache()
-	
+
   def batch_synoptic_alpha_update_one_atatime(self):
     """ Create synoptic function (cubic function) at each voxel """
     image_id_fname = self.model_dir + "/image_list.txt"
@@ -200,7 +200,7 @@ class UncertainScene(boxm2_scene_adaptor):
 			print >> fd, 1;
 			print >> fd, "img_%05d"%i
 			fd.close()
-			
+
 			boxm2_batch.init_process("boxm2OclSynopticUpdateAlphaProcess");
 			boxm2_batch.set_input_from_db(0,self.device);
 			boxm2_batch.set_input_from_db(1,self.scene);
@@ -208,7 +208,7 @@ class UncertainScene(boxm2_scene_adaptor):
 			boxm2_batch.set_input_unsigned(3,1);
 			boxm2_batch.set_input_string(4,image_id_fname);
 			boxm2_batch.run_process();
-    
+
 		self.write_cache()
 
   def render_uncertainty_map(self,ni,nj,ident="",cam_dir_1="",cam_dir_2=""):

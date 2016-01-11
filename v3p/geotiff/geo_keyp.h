@@ -68,22 +68,22 @@ struct gtiff {
    tiff_t*    gt_tif;      /* TIFF file descriptor  */
    TIFFMethod gt_methods;  /* TIFF i/o methods      */
    int        gt_flags;    /* file flags            */
-   
+
    pinfo_t    gt_version;  /* GeoTIFF Version       */
    pinfo_t    gt_rev_major;/* GeoKey Key Revision   */
    pinfo_t    gt_rev_minor;/* GeoKey Code Revision  */
-   
+
    int        gt_num_keys; /* number of keys        */
    GeoKey*    gt_keys;     /* array of keys         */
    int*       gt_keyindex; /* index of a key, if set*/
    int        gt_keymin;   /* smallest key set      */
    int        gt_keymax;   /* largest key set       */
-   
+
    pinfo_t*   gt_short;    /* array of SHORT vals   */
    double*    gt_double;   /* array of DOUBLE vals  */
    int        gt_nshorts;  /* number of SHORT vals  */
    int        gt_ndoubles; /* number of DOUBLE vals */
-};  
+};
 
 typedef enum {
 	FLAG_FILE_OPEN=1,

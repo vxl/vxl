@@ -56,7 +56,7 @@ class bwm_video_corr : public vbl_ref_count
 
   //: is there a match for the specified frame
   bool match(unsigned frame);
-  
+
   //: return matches map
   vcl_map<unsigned, vgl_point_2d<double> >& matches() { return matches_; }
 
@@ -92,7 +92,7 @@ class bwm_video_corr : public vbl_ref_count
   vgl_point_3d<double> world_pt() const { return world_pt_; }
 
   bool world_pt_valid() const { return world_pt_valid_; }
-  
+
   //: set 3-d point intensity
   void set_intensity(vgl_vector_3d<int> const& intensity)
   { intensity_ = intensity; }
@@ -113,7 +113,7 @@ class bwm_video_corr : public vbl_ref_count
   vcl_map<unsigned, vgl_point_2d<double> > matches_; // match in each frame
   bool world_pt_valid_;
   vgl_point_3d<double> world_pt_;
-  vgl_vector_3d<int>   intensity_; 
+  vgl_vector_3d<int>   intensity_;
 };
 
 #include <bwm/video/bwm_video_corr_sptr.h>

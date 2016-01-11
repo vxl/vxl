@@ -73,7 +73,7 @@ static char copyright[] =
 /*
  * Function declarations
  */
-#if spCOMPLEX 
+#if spCOMPLEX
 static int  FactorComplexMatrix( MatrixPtr );
 static void CreateInternalVectors( MatrixPtr );
 #endif
@@ -114,7 +114,7 @@ static void WriteStatus( MatrixPtr, int );
  *  diagonal terms of \a U are one.
  *
  *  \return
- *  The error code is returned.  Possible errors are \a spNO_MEMORY, 
+ *  The error code is returned.  Possible errors are \a spNO_MEMORY,
  *  \a spSINGULAR and \a spSMALL_PIVOT.
  *  Error is cleared upon entering this function.
  *
@@ -227,7 +227,7 @@ RealNumber LargestInCol;
         {   pPivot = Matrix->Diag[Step];
             LargestInCol = FindLargestInCol(pPivot->NextInCol);
             if ((LargestInCol * RelThreshold < ELEMENT_MAG(pPivot)))
-            {   
+            {
 #if spCOMPLEX
               if (Matrix->Complex)
                 ComplexRowColElimination( Matrix, pPivot );
@@ -293,7 +293,7 @@ RealNumber LargestInCol;
 #endif
         if(Matrix->Error>spFATAL)
           Size = 0;
-		
+
         if (Matrix->Error >= spFATAL) return Matrix->Error;
         UpdateMarkowitzNumbers( Matrix, pPivot );
 
@@ -515,7 +515,7 @@ ComplexNumber Mult, Pivot;
 /* Check for singular matrix. */
             Pivot = Dest[Step];
             if (CMPLX_1_NORM(Pivot) == 0.0) return ZeroPivot( Matrix, Step );
-            CMPLX_RECIPROCAL( *Matrix->Diag[Step], Pivot );  
+            CMPLX_RECIPROCAL( *Matrix->Diag[Step], Pivot );
         }
         else
         {   /* Update column using direct addressing scatter-gather. */
@@ -546,7 +546,7 @@ ComplexNumber Mult, Pivot;
 /* Check for singular matrix. */
             pElement = Matrix->Diag[Step];
             if (ELEMENT_MAG(pElement) == 0.0) return ZeroPivot( Matrix, Step );
-            CMPLX_RECIPROCAL( *pElement, *pElement );  
+            CMPLX_RECIPROCAL( *pElement, *pElement );
         }
     }
 
@@ -939,7 +939,7 @@ int  ExtRow;
  */
 
 static void
-MarkowitzProducts( 
+MarkowitzProducts(
     MatrixPtr Matrix,
     int Step
 )
@@ -1041,7 +1041,7 @@ register ElementPtr  ChosenPivot;
     {
 /*
  * Either no singletons exist or they weren't acceptable.  Take quick first
- * pass at searching diagonal.  First search for element on diagonal of 
+ * pass at searching diagonal.  First search for element on diagonal of
  * remaining submatrix with smallest Markowitz product, then check to see
  * if it okay numerically.  If not, QuicklySearchDiagonal fails.
  */
@@ -1115,7 +1115,7 @@ register ElementPtr  ChosenPivot;
  */
 
 static ElementPtr
-SearchForSingleton( 
+SearchForSingleton(
     MatrixPtr Matrix,
     int Step
 )
@@ -1338,7 +1338,7 @@ RealNumber  PivotMag;
  */
 
 static ElementPtr
-QuicklySearchDiagonal( 
+QuicklySearchDiagonal(
     MatrixPtr Matrix,
     int Step
 )
@@ -1702,7 +1702,7 @@ RealNumber  FindBiggestInColExclude();
  */
 
 static ElementPtr
-SearchDiagonal( 
+SearchDiagonal(
     MatrixPtr Matrix,
     register int Step
 )
@@ -2095,7 +2095,7 @@ RealNumber  Largest, Magnitude;
  */
 
 static void
-ExchangeRowsAndCols( 
+ExchangeRowsAndCols(
     MatrixPtr Matrix,
     ElementPtr pPivot,
     register int Step
@@ -2297,7 +2297,7 @@ ElementPtr  Element1, Element2;
  *
  *  Performs all required operations to exchange two columns. Those operations
  *  include: swap FirstInCol pointers, fixing up the NextInRow pointers,
- *  swapping column indexes in MatrixElements, and swapping Markowitz 
+ *  swapping column indexes in MatrixElements, and swapping Markowitz
  *  column counts.
  *
  *  >>> Arguments:

@@ -4,9 +4,9 @@
 *
 * \section intro Digital Topology
 *
-* This library provides algorithms and data structures that can be used to compute skeletons, watersheds and other 
+* This library provides algorithms and data structures that can be used to compute skeletons, watersheds and other
 * digital topology related results.
-* 
+*
 * Among provided algorithms, you can find :
 * - freeman codes and digital neighborhood structures which provide the basis for (efficiently) computing topological numbers, simplyhood of points, ...
 * - computation of homotopic and leveling kernels, as described in G. Bertrand, J. C. Everat and M. Couprie, "Image segmentation through operators based upon topology", Journal of Electronic Imaging, Vol. 6, N. 4, 395-405, 1997,

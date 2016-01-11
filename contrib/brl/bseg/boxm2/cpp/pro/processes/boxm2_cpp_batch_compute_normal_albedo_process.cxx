@@ -48,8 +48,8 @@ bool boxm2_cpp_batch_compute_normal_albedo_process_cons(bprb_func_process& pro)
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
-  input_types_[3] = "vcl_string"; 
-  input_types_[4] = "vcl_string"; 
+  input_types_[3] = "vcl_string";
+  input_types_[4] = "vcl_string";
 
   // process has 0 outputs:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
@@ -70,7 +70,7 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(1);
   boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(2);
-  
+
   vcl_string md_list_fname = pro.get_input<vcl_string>(3);
   vcl_string atm_list_fname = pro.get_input<vcl_string>(4);
 

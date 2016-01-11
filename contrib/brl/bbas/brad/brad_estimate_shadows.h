@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 //:
 // \file
-// \brief A collection of functions for estimating pixels in shadow in an image 
+// \brief A collection of functions for estimating pixels in shadow in an image
 // \author D. E. Crispell
 // \date February 17, 2012
 //

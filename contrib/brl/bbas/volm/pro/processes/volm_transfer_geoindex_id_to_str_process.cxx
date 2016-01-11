@@ -85,7 +85,7 @@ bool volm_transfer_geoindex_id_to_str_process2(bprb_func_process& pro)
     vcl_cout << "Error: " << pro.name() << ": the input number should be " << n_inputs_ << vcl_endl;
     return false;
   }
-  // get the input 
+  // get the input
   unsigned i = 0;
   float min_size = pro.get_input<float>(i++);
   vcl_string in_poly = pro.get_input<vcl_string>(i++);

@@ -34,7 +34,7 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, vcl_string change_
   return mask;
 }
 
-vil_image_view_base_sptr 
+vil_image_view_base_sptr
 bvgl_changes::create_mask_from_objs_all_types(unsigned ni, unsigned nj)
 {
   vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj);

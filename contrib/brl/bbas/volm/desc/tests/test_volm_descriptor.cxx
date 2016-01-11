@@ -115,7 +115,7 @@ static void test_volm_desc_ex()
   is_same = is_same && desc_in->nbins() == desc->nbins();
   float score = desc->similarity(desc_in);
   vcl_cout << " for two same histogram, similarity score is " << score << vcl_endl;
-  
+
 
   TEST ("beach bin should exist", desc->count(6), 1);
   TEST ("binary io is correct", is_same, true);
@@ -164,7 +164,7 @@ static void params_io()
 
 static void test_volm_descriptor()
 {
-  
+
 
   vcl_cout << "======================== test the land category histogram ================== " << vcl_endl;
   test_volm_desc_land();

@@ -22,13 +22,13 @@ IF ( NOT GEOTIFF_FOUND )
     ENDIF( GEOTIFF_FOUND )
   ENDIF( NOT VXL_FORCE_V3P_GEOTIFF )
 
-  
+
   #
   # At some point, in a "release" version, it is possible that someone
   # will not have the v3p geotiff library, so make sure the headers
   # exist.
   #
-    
+
   IF( NOT GEOTIFF_FOUND )
     IF(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
       # Use FIND_PATH here to allow the user to set the path to IGNORE
@@ -44,5 +44,5 @@ IF ( NOT GEOTIFF_FOUND )
 
     ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
   ENDIF( NOT GEOTIFF_FOUND )
-  
+
 ENDIF( NOT GEOTIFF_FOUND )

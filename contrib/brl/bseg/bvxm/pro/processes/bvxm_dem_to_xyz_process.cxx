@@ -25,7 +25,7 @@ bool bvxm_dem_to_xyz_process_cons(bprb_func_process& pro)
                                                // pass 0 if this coordinate difference can be ignored or fixed somewhere else
   input_types_[3] = "vpgl_camera_double_sptr"; // geocam if DEM image is not geotiff.  Pass 0 means the camera will be load from geotiff header
   input_types_[4] = "float";                   // height used to fill gap or invalid region in DEM
-  
+
   // process has 3 outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
@@ -187,7 +187,7 @@ bool bvxm_dem_to_xyz_process2_cons(bprb_func_process& pro)
   input_types_[2] = "double";                  // the height different used to transfer DEM geoid to lvcs wgs84 ellipsoid,
                                                // pass 0 if this coordinate difference can be ignored or fixed somewhere else
   input_types_[3] = "float";                   // height used to fill gap or invalid region in DEM
-  
+
   // process has 3 outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
@@ -220,7 +220,7 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
     vcl_cout << "ERROR: " << pro.name() << " -- NO dem images in given folder: " << geotiff_folder << vcl_endl;
     return false;
   }
-  
+
   // use previous process to generate output image
   vcl_vector<vil_image_view<float> > x_imgs;
   vcl_vector<vil_image_view<float> > y_imgs;

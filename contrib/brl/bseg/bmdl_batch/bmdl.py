@@ -8,7 +8,7 @@ bmdl_batch.register_processes();
 bmdl_batch.register_datatypes();
 
 ##########################################################################
-#Please replace your paths to the LIDAR images instead of first_return.tif, 
+#Please replace your paths to the LIDAR images instead of first_return.tif,
 #last_return.tif and ground.tif
 ###########################################################################
 print("Labeling the Lidar");

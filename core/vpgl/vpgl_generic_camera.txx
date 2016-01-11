@@ -214,7 +214,7 @@ void vpgl_generic_camera<T>::
         vgl_ray_3d<T> r = rays_[0][nearest_r-1][nearest_c];
         valid_inter = vgl_intersection(r, pl, ipt);
         if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
-        {  
+        {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(0.0, -1.0));
             horiz = true;
@@ -224,7 +224,7 @@ void vpgl_generic_camera<T>::
         vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c-1];
         valid_inter = vgl_intersection(r, pl, ipt);
         if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
-        { 
+        {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(-1.0, 0.0));
             vert = true;
@@ -235,7 +235,7 @@ void vpgl_generic_camera<T>::
         vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c+1];
         valid_inter = vgl_intersection(r, pl, ipt);
         if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
-        { 
+        {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(1.0, 0.0));
             vert = true;
@@ -246,7 +246,7 @@ void vpgl_generic_camera<T>::
         vgl_ray_3d<T> r = rays_[0][nearest_r+1][nearest_c];
         valid_inter = vgl_intersection(r, pl, ipt);
         if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
-        { 
+        {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(0.0, 1.0));
             horiz = true;
@@ -271,8 +271,8 @@ void vpgl_generic_camera<T>::
     T det = (v0v0*v1v1 - v0v1*v0v1);
     T one_over_det = static_cast<T>(1)/(v0v0*v1v1 - v0v1*v0v1);
     // b0 and b1 are rows of coordinate transformation matrix
-    vgl_vector_3d<T> b0 = one_over_det * (v1v1*v0 - v0v1*v1); 
-    vgl_vector_3d<T> b1 = one_over_det * (v0v0*v1 - v0v1*v0); 
+    vgl_vector_3d<T> b0 = one_over_det * (v1v1*v0 - v0v1*v1);
+    vgl_vector_3d<T> b1 = one_over_det * (v0v0*v1 - v0v1*v0);
     // x0,x1 are coordinates of p in the plane
     T x0 = dot_product(b0, vp), x1 = dot_product(b1, vp);
     // in image space

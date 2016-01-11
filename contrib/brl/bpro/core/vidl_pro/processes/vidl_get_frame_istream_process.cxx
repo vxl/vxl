@@ -14,14 +14,14 @@ bool vidl_get_frame_istream_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vidl_istream_sptr");   
+  input_types.push_back("vidl_istream_sptr");
   input_types.push_back("int");   // frame number to seek
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  
+  output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -33,7 +33,7 @@ bool vidl_get_frame_istream_process(bprb_func_process& pro)
     vcl_cout << "vidl_get_frame_istream_process: The input number should be 2" << vcl_endl;
     return false;
   }
- 
+
   unsigned i=0;
   vidl_istream_sptr i_stream = pro.get_input<vidl_istream_sptr>(i++);
 

@@ -4,7 +4,7 @@
 // \file
 // \brief  A process for ingesting a label image in a 3-d scene.
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date Jan 18, 2013
 
 #include <vcl_fstream.h>
@@ -55,7 +55,7 @@ namespace boxm2_ocl_ingest_label_process_globals
                                      src_paths,
                                      "ingest_label_map",   //kernel name
                                      options,               //options
-                                     "boxm2 opencl ingest label map"); 
+                                     "boxm2 opencl ingest label map");
     vec_kernels.push_back(ray_trace_kernel);
   }
   static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
@@ -166,7 +166,7 @@ bool boxm2_ocl_ingest_label_process(bprb_func_process& pro)
   data_type += "_orientation";
   vcl_cout << " will read data blocks with type: " << data_type << vcl_endl;
   vcl_cout << " will ingest and write data blocks with type: " << out_data_type << " as output!\n";
-  
+
 
   size_t apptypesize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
   size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
@@ -226,13 +226,13 @@ bool boxm2_ocl_ingest_label_process(bprb_func_process& pro)
     //write the image values to the buffer
     vul_timer transfer;
     bocl_mem * blk           = opencl_cache->get_block(scene,*id);
-    
+
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment the next get_data, also see below
     //// get alpha to get size, TODO: Fix This!
     //bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
     //bocl_mem * label_data    = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
     bocl_mem* label_data       = opencl_cache->get_data(scene,*id,data_type,0,true);
-    
+
     bocl_mem * blk_info      = opencl_cache->loaded_block_info();
     transfer_time           += (float) transfer.all();
 
@@ -255,11 +255,11 @@ bool boxm2_ocl_ingest_label_process(bprb_func_process& pro)
     clFinish(queue);
     gpu_time += kern->exec_time();
     vcl_cout<<" Time "<<gpu_time<<vcl_endl;
-    
+
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment deep_replace, also change ingest_label_map.cl accordingly
     //label_data->read_to_buffer(queue);
     opencl_cache->deep_replace_data(scene,*id, out_data_type, label_data, false); // deep replace to output type where read_to_buffer is called
-    
+
     //clear render kernel args so it can reset em on next execution
     kern->clear_args();
 
@@ -282,10 +282,10 @@ bool boxm2_ocl_ingest_label_process(bprb_func_process& pro)
   vil_save(test,"f:/test.tiff");
 #endif
   clReleaseCommandQueue(queue);
-  
+
   delete ray_o_buff;
   delete label_buff;
-  
+
   delete [] ray_origins;
   delete [] labels;
   return true;

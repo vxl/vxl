@@ -31,6 +31,8 @@
 #include <vcl_cstring.h> // memcpy()
 #include <vcl_cassert.h>
 #include <vcl_iosfwd.h>
+#include <vcl_exception.h>
+#include <vcl_stdexcept.h>
 #include "vnl_vector.h"
 #include "vnl_vector_ref.h"
 #include <vnl/vnl_c_vector.h>

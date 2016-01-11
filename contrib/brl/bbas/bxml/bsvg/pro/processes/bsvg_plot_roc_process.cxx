@@ -157,7 +157,7 @@ bool bsvg_plot_roc_process2(bprb_func_process& pro)
   }
 
   vcl_vector<float> xs, ys;
-  for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin(); 
+  for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin();
        iter != tpr_vals->data_array.end(); iter++, iter2++) {
     ys.push_back(*iter);
     xs.push_back(*iter2);
@@ -271,7 +271,7 @@ bool bsvg_roc_plot_add_process(bprb_func_process& pro)
     return false;
   }
   vcl_vector<float> xs, ys;
-  for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin(); 
+  for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin();
        iter != tpr_vals->data_array.end(); iter++, iter2++) {
     xs.push_back(*iter2);
     ys.push_back(*iter);

@@ -253,7 +253,7 @@ void volm_osm_parser::parse_lines(vcl_vector<vcl_vector<vgl_point_2d<double> > >
     vcl_cerr << XML_ErrorString(parser->XML_GetErrorCode()) << " at line " << parser->XML_GetCurrentColumnNumber() << '\n';
     delete parser;
   }
-  
+
   vcl_map<unsigned long long, vgl_point_2d<double> > nodes = parser->nodes_;
   vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > >::iterator mit = parser->way_keys_.begin();
 
@@ -298,7 +298,7 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
                                    vgl_polygon<double>& poly)
 {
   vcl_vector<unsigned long long>::iterator vit = way_ids.begin();
-  
+
   // check whether the ways are enclosed when there is only one way
   if (way_ids.size() == 1) {
     vcl_vector<unsigned long long> curr_line = get_line_from_way_id(way_ids[0], ways);
@@ -337,7 +337,7 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
         vcl_vector<unsigned long long> next_line = get_line_from_way_id(next_way_id, ways);
         unsigned long long p3 = *(next_line.begin());
         unsigned long long p4 = *(next_line.end()-1);
-        
+
         // connect to next line segment
         if (start == p3) {
           if (end == p4) {
@@ -440,7 +440,7 @@ void volm_osm_parser::parse_polygons(vcl_vector<vgl_polygon<double> >& polys,
   //vcl_map<unsigned long long, vcl_vector<unsigned long long> > ways = parser->ways_;
   vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > > way_keys = parser->way_keys_;
   vcl_map<unsigned long long, vcl_string > relation_type = parser->relation_types_;
-  
+
   // retrieve polygons from ways that have tags
   for (vcl_map<unsigned long long, vcl_vector<vcl_pair<vcl_string, vcl_string> > >::iterator mit = way_keys.begin();
        mit != way_keys.end(); ++mit)

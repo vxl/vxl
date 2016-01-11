@@ -43,7 +43,7 @@ static void test_construct()
   TEST_NEAR("width",  obox.width(),  5, 1e-12);
   TEST_NEAR("height", obox.height(), 5, 1e-12);
   TEST_NEAR("depth",  obox.depth(),  7, 1e-12);
-  
+
   vcl_vector<vgl_point_3d<double> > c = obox.corners();
   vcl_vector<vgl_point_3d<double> >::iterator pit = c.begin();
   TEST_NEAR("corner 1", (*pit - vgl_point_3d<double>(1,2,3)).length(), 0.0, 1e-12);

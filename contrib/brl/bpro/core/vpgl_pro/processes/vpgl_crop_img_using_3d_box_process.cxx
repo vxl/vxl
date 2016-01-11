@@ -38,11 +38,11 @@ namespace vpgl_crop_img_using_3d_box_process_globals
 }
 
 // === functions ===
-bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr &lvcs_sptr, 
-    const vgl_box_3d<double> &scene_bbox, double uncertainty, 
+bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr &lvcs_sptr,
+    const vgl_box_3d<double> &scene_bbox, double uncertainty,
     vgl_box_2d<double> &roi_box_2d);
 
-void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr, 
+void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr,
   const vsol_box_2d_sptr& bb, vpgl_local_rational_camera<double>& local_camera);
 
 
@@ -77,7 +77,7 @@ bool vpgl_crop_img_using_3d_box_process_cons(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
   pro.set_input(9, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
 
-  return good; 
+  return good;
 }
 
 // execute the process
@@ -130,7 +130,7 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
     return false;
   }
   vcl_cout << pro.name() << ": projected 2d roi box: " << roi_box_2d << " given uncertainty " << uncertainty << " meters." << vcl_endl;
-  
+
   // crop the image
   brip_roi broi(img_res_sptr->ni(), img_res_sptr->nj());
   vsol_box_2d_sptr bb = new vsol_box_2d();
@@ -201,7 +201,7 @@ bool vpgl_offset_cam_using_3d_box_process_cons(bprb_func_process& pro)
   brdb_value_sptr lvcs = new brdb_value_t<vpgl_lvcs_sptr>;
   pro.set_input(8, lvcs);
 
-  return good; 
+  return good;
 }
 
 // execute the process
@@ -286,7 +286,7 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   return true;
 }
 
-void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr, 
+void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr,
   const vsol_box_2d_sptr& bb, vpgl_local_rational_camera<double>& local_camera)
 {
   // calculate local camera offset from image bounding box
@@ -411,7 +411,7 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
     vgl_point_2d<double> p2d(u, v);
     roi_box_2d.add(p2d);
   }
-  
+
   vcl_cout << pro.name() << ": projected 2d roi box: " << roi_box_2d << vcl_endl;
 
   // crop the image
@@ -449,7 +449,7 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
   geocam->img_to_global(i0+ni-1, j0+nj-1, lonn, latn);
   double scalingx = (lonn - lon0)/(ni-1);
   double scalingy = (latn - lat0)/(nj-1);
-  
+
   vnl_matrix<double> trans_matrix(4,4,0.0);
   trans_matrix[0][0] = scalingx;
   trans_matrix[0][1] = 0.0;
@@ -578,7 +578,7 @@ bool vpgl_crop_img_using_3d_box_dem_process(bprb_func_process& pro)
   }
   double lower_left_elev = min;
   double upper_right_elev = max + box_height;
-  
+
   vcl_cout << pro.name() << " lower_left_elev: " << lower_left_elev << ", upper_right_elev: " << upper_right_elev << vcl_endl;
   // generate local lvcs to transfer camera offset coordinates
   double ori_lon, ori_lat, ori_elev;
@@ -675,7 +675,7 @@ bool vpgl_crop_img_using_3d_box_dem_process_globals::find_min_max_height(double 
     int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
     int crop_nj = corners[2].second.second-corners[0].second.second+1;
     crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = 0;
     j0 = corners[3].second.second;
@@ -690,12 +690,12 @@ bool vpgl_crop_img_using_3d_box_dem_process_globals::find_min_max_height(double 
     int i0 = corners[0].second.first;
     int j0 = corners[0].second.second;
     int crop_ni = corners[3].second.first - corners[0].second.first + 1;
-    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second; 
+    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
     crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = corners[2].second.first;
-    j0 = 0; 
+    j0 = 0;
     crop_ni = corners[1].second.first - corners[2].second.first + 1;
     crop_nj = corners[2].second.second + 1;
     crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
@@ -708,21 +708,21 @@ bool vpgl_crop_img_using_3d_box_dem_process_globals::find_min_max_height(double 
   int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
   int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
   crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the second image, image of corner 1
   i0 = 0;
   j0 = 0;
   crop_ni = corners[1].second.first + 1;
   crop_nj = corners[1].second.second + 1;
   crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the third image, image of corner 2
   i0 = corners[2].second.first;
   j0 = 0;
   crop_ni = infos[corners[2].first].first->ni() - corners[2].second.first;
   crop_nj = corners[2].second.second + 1;
   crop_and_find_min_max(infos, corners[2].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the fourth image, image of corner 3
   i0 = 0;
   j0 = corners[3].second.second;

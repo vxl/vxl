@@ -40,7 +40,7 @@ class rgrl_weighter_m_est
   //: set true if desires to weight more on distinct match
   void set_weight_more_on_distinct_match( bool flag )
   {    weight_more_on_distinct_match_ = flag; }
-  
+
   virtual
   void
   compute_weights( rgrl_scale const&  scale,
@@ -51,7 +51,7 @@ class rgrl_weighter_m_est
 
   // Auxiliary functions related to the m_est
   virtual
-  double 
+  double
   aux_sum_weighted_residuals( rgrl_scale const&  scale,
                               rgrl_match_set&    match_set,
                               rgrl_transformation const&  xform );
@@ -61,13 +61,13 @@ class rgrl_weighter_m_est
                       rgrl_match_set&    match_set,
                       rgrl_transformation const&  xform);
   virtual
-  double 
+  double
   aux_neg_log_likelihood( rgrl_scale const&  scale,
                           rgrl_match_set&    match_set,
                           rgrl_transformation const&  xform );
 
   virtual
-  double 
+  double
   aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
                               rgrl_match_set&    match_set,
                               rgrl_transformation const&  xform );

@@ -20,7 +20,7 @@ ADD_EXECUTABLE( vsl_test_all
   test_vlarge_block_io.cxx
   test_block_rle_io.cxx
 )
- 
+
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(test_map_io.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
@@ -42,7 +42,7 @@ ADD_TEST(vsl_test_string_io             ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all t
 ADD_TEST(vsl_test_vector_io             ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all test_vector_io)
 ADD_TEST(vsl_test_block_rle_io          ${EXECUTABLE_OUTPUT_PATH}/vsl_test_all test_block_rle_io)
 
-# Don't add test_vlarge_block_io to the automatic list. It does nasty things 
+# Don't add test_vlarge_block_io to the automatic list. It does nasty things
 # to memory which can result in wierd error messages, system lockup, and other
 # unpleasant behaviour on some platforms
 # The following manual tests have been tried.

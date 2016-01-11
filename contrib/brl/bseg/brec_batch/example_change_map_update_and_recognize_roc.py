@@ -47,7 +47,7 @@ for i in range(0,len(image_fnames),1):
 
   image_filename=image_fnames[i];
   image_filename=image_filename[:-1];
-  
+
   if i<num_cam:
     cam_name=cam_fnames[i];
     cam_name=cam_name[:-1];
@@ -60,8 +60,8 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.set_input_string(0,image_filename);
     bvxm_batch.run_process();
     orig_cam_id = bvxm_batch.commit_output(0);
- 
-  # get a roi from the image 
+
+  # get a roi from the image
   bvxm_batch.init_process("bvxmRoiInitProcess");
   bvxm_batch.set_input_string(0,image_filename);
   bvxm_batch.set_input_from_db(1,orig_cam_id);
@@ -71,11 +71,11 @@ for i in range(0,len(image_fnames),1):
   print statuscode;
   if statuscode:
     cropped_cam_id = bvxm_batch.commit_output(0);
-    cropped_image_id = bvxm_batch.commit_output(1); 
+    cropped_image_id = bvxm_batch.commit_output(1);
     uncertainty_id = bvxm_batch.commit_output(2);
 
     curr_scale = 0;
-    
+
     map_type="10bins_1d_radial";
     print("Illumination Index");
     bvxm_batch.init_process("bvxmIllumIndexProcess");
@@ -85,9 +85,9 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.set_input_unsigned(3,0);
     bvxm_batch.run_process();
     bin_id = bvxm_batch.commit_output(0);
-    
+
     app_type="apm_mog_grey";
-    
+
     if normalize_and_save==1:
       # Normalizing images
       print(" Normalizing Image ");
@@ -103,15 +103,15 @@ for i in range(0,len(image_fnames),1):
       normalized_img_id = bvxm_batch.commit_output(0);
       float1_id = bvxm_batch.commit_output(1);
       float2_id = bvxm_batch.commit_output(2);
-    
+
       print("Saving Image");
       bvxm_batch.init_process("SaveImageViewProcess");
       bvxm_batch.set_input_from_db(0,normalized_img_id);
       bvxm_batch.set_input_string(1,output_path+"normalized"+str(i)+".png");
       bvxm_batch.run_process();
-    
+
       curr_image_id=normalized_img_id;
-    
+
       print("Detect Changes");
       bvxm_batch.init_process("bvxmDetectChangesProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
@@ -153,7 +153,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.set_input_string(0,output_path+"density_mask"+str(i)+".bin");
       bvxm_batch.run_process();
       mask_img_id = bvxm_batch.commit_output(0);
-    
+
     print("Convert density to prob map");
     bvxm_batch.init_process("brecDensityToProbMapProcess");
     bvxm_batch.set_params_process("./density_to_prob_map_params.xml");
@@ -178,7 +178,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.set_input_from_db(0,gt_byte_id);
     bvxm_batch.set_input_string(1,output_path+"test_img_"+str(i)+"_gt.png");
     bvxm_batch.run_process();
-   
+
     npasses = 1;
     sigma = 0.05;
     print("Updating change map");
@@ -206,7 +206,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.run_process();
 
     # run the process to recognize structures
-    if i==0:  
+    if i==0:
       print("Recognize road-side structures of Type 2");
       bvxm_batch.init_process("brecRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
@@ -221,7 +221,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.set_input_from_db(0, out_road_img_id);
       bvxm_batch.set_input_string(1,output_path+"road_map_1_"+str(i)+".png");
       bvxm_batch.run_process();
-    
+
       print("Recognize Vehicles of Type 0");
       bvxm_batch.init_process("brecRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);
@@ -282,7 +282,7 @@ for i in range(0,len(image_fnames),1):
       bvxm_batch.set_input_from_db(0, out_b_img_id);
       bvxm_batch.set_input_string(1,output_path+"building_map_3_"+str(i)+".png");
       bvxm_batch.run_process();
-    
+
       print("Recognize building structure of Type 4");
       bvxm_batch.init_process("brecRecStructureProcess");
       bvxm_batch.set_input_from_db(0,curr_image_id);

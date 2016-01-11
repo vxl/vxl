@@ -11,14 +11,14 @@
 
 static void test_tile()
 {
-  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles(); 
+  vcl_vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
   // test the lower left corner
   TEST("tile 1", tiles[0].lat_, 37);
   TEST("tile 1", tiles[0].lon_, 118);
-  
+
   double lat, lon, elev;
   tiles[0].cam_.lvcs()->get_origin(lat, lon, elev);
-  
+
   // test img to global for tile at North hemisphere and West direction
   // Note that the tile boundary corresponds to pixel (1,1) to (3600,3600)
   // pixels from (0,0) to (0,3600) and pixels from (0,0) to (3600,0) are defined as overlaped region
@@ -43,7 +43,7 @@ static void test_tile()
   TEST("tile1 global to img", i+1, tiles[0].nj_);
   // for location out of current tile, it will return nothing
   TEST("tile1 global to img", tiles[0].global_to_img(lon2+5, lat2, i, j), false);
-  
+
   volm_tile tt(38, -117, tiles[0].scale_i_, tiles[0].scale_j_, tiles[0].ni_, tiles[0].nj_);
   TEST("tt global to img", tt.global_to_img(lon2, lat2, i, j), true);
   TEST("tt global to img", i, 0);
@@ -95,7 +95,7 @@ static void test_tile()
   vsl_b_ofstream ofs("test_tile.bin");
   tiles[0].b_write(ofs);
   ofs.close();
-  
+
   vsl_b_ifstream ifs("test_tile.bin");
   volm_tile t;
   t.b_read(ifs);

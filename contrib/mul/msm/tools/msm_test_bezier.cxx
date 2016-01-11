@@ -24,14 +24,14 @@ int main(int argc, char** argv)
 {
   // Create a square
   vcl_vector<vgl_point_2d<double> > pts(4);
-  
+
   pts[0].set(0,0);
   pts[1].set(0,1);
   pts[2].set(1,1);
   pts[3].set(1,0);
-  
+
   msm_cubic_bezier bezier(pts,true);
-  
+
   // Save resulting curve, using k points per segment
   // Test closed curve
   unsigned k=20;
@@ -47,10 +47,10 @@ int main(int argc, char** argv)
 
   ofs.close();
   vcl_cout<<"Points (closed) saved to bez_curve.txt"<<vcl_endl;
-  
-  
+
+
   msm_cubic_bezier open_bezier(pts,false);
-  
+
   // Save resulting curve, using k points per segment
   // Test open curve
   vcl_ofstream ofs3("bez_curve_open.txt");
@@ -75,12 +75,12 @@ int main(int argc, char** argv)
     M(i,(i+n-1)%n)=1.0; M(i,i)=4.0; M(i,(i+1)%n)=1.0;
   }
   vcl_cout<<"M: \n"<<M<<vcl_endl;
-  
+
   vnl_svd<double> svd(M);
   vcl_cout<<"Inverse: \n"<<svd.inverse()<<vcl_endl;
-  
+
   vcl_cout<<"Singular values:\n"<<svd.W()<<vcl_endl;
-  
+
   vnl_cholesky chol(M);
   vcl_cout<<"Inverse: \n"<<chol.inverse()<<vcl_endl;
 */
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
   // Generate equally spaced points
   vcl_vector<vgl_point_2d<double> > new_pts;
   bezier.equal_space(2,1, 17, 0.1, new_pts);
-  
+
   for (unsigned i=1;i<new_pts.size();++i)
     vcl_cout<<i<<" Length: "<<(new_pts[i]-new_pts[i-1]).length()<<vcl_endl;
 
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
   {
     ofs2<<new_pts[i].x()<<" "<<new_pts[i].y()<<vcl_endl;
   }
-  
+
 
 
   ofs2.close();

@@ -66,7 +66,7 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
     vimt3d_image_3d_of<vxl_byte>* image = new vimt3d_image_3d_of<vxl_byte>();
-    image->image() = vil3d_convert_cast(vxl_byte(), 
+    image->image() = vil3d_convert_cast(vxl_byte(),
                                       ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));
@@ -75,7 +75,7 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_INT_16)
   {
     vimt3d_image_3d_of<vxl_int_16>* image = new vimt3d_image_3d_of<vxl_int_16>();
-    image->image() = vil3d_convert_cast(vxl_int_16(), 
+    image->image() = vil3d_convert_cast(vxl_int_16(),
                                         ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));
@@ -84,7 +84,7 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_INT_32)
   {
     vimt3d_image_3d_of<vxl_int_32>* image = new vimt3d_image_3d_of<vxl_int_32>();
-    image->image() = vil3d_convert_cast(vxl_int_32(), 
+    image->image() = vil3d_convert_cast(vxl_int_32(),
                                         ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));
@@ -93,7 +93,7 @@ vimt3d_image_3d* vimt3d_load(const vcl_string& path, bool use_mm)
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_FLOAT)
   {
     vimt3d_image_3d_of<float>* image = new vimt3d_image_3d_of<float>();
-    image->image() = vil3d_convert_cast(float(), 
+    image->image() = vil3d_convert_cast(float(),
                                       ir->get_view(0,ir->ni(),0,ir->nj(),0,ir->nk()));
 
     image->set_world2im(vimt3d_load_transform(ir,use_mm));

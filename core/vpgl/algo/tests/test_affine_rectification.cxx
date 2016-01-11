@@ -34,7 +34,7 @@ static void test_affine_rect()
   vgl_homg_point_2d<double> er, el;
   FA.get_epipoles(er, el);
   vcl_cout << "er: " << er << " el: " << el << vcl_endl;
-  
+
   vnl_matrix_fixed<double, 1, 1> val = P2.transpose()*FAM*P1;
   vcl_cout << val[0][0] << vcl_endl;
   TEST("check computed f", vcl_abs(val[0][0]) < 0.01, true);
@@ -48,10 +48,10 @@ static void test_affine_rect()
   img_p1.push_back(p1); img_p2.push_back(p2);
   vnl_matrix_fixed<double, 3, 3> H1, H2;
   TEST("compute rectification", vpgl_affine_rectification::compute_rectification(FA, img_p1, img_p2, H1, H2), true);
-  
+
   vcl_cout << "\nH1:\n" << H1 << vcl_endl;
-  vcl_cout << "H2:\n" << H2 << vcl_endl;            
- 
+  vcl_cout << "H2:\n" << H2 << vcl_endl;
+
 }
 
 TESTMAIN(test_affine_rect);

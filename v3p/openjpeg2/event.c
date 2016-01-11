@@ -48,7 +48,7 @@ bool opj_event_msg(opj_event_mgr_t * p_event_mgr, OPJ_INT32 event_type, const OP
 	opj_msg_callback msg_handler = 00;
 	void * l_data = 00;
 
-	
+
 	if(p_event_mgr != 00) {
 		switch(event_type) {
 			case EVT_ERROR:

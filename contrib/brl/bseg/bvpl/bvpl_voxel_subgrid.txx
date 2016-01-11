@@ -54,12 +54,12 @@ template <class T>
 void bvpl_voxel_subgrid<T>::set_voxel_at(int x, int y, int z, T const &v)
 {
   vgl_point_3d<int> c = center_;
-  
+
   //are the z coordinates of bvxm_voxel grid are
   x = c.x()+x;
   y = c.y()+y;
   z = c.z()-z;
-  
+
   vgl_box_3d<int> slab_box(vgl_point_3d<int>(0,0,0), vgl_point_3d<int>(slab_.nx()-1,slab_.ny()-1,slab_.nz()-1));
   // make sure that the point is inside the box
   if (!box_.contains(x,y,z)){

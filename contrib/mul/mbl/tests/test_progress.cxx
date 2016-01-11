@@ -28,10 +28,10 @@ void test_progress()
            << "*******************************\n";
 
   mbl_progress_callback progress(&mbl_test_progress_callback);
-  
-  
+
+
   progress.set_estimated_iterations("L0", 3, "");
-  
+
   vcl_cout << "inc L0" << vcl_endl;
   vcl_cout << vcl_setprecision(16);
   progress.increment_progress("L0");
@@ -43,7 +43,7 @@ void test_progress()
   }
   TEST_NEAR("Progress is near middle", last_reported_progress, 0.375, 0.05);
   progress.end_progress("L1a");
-  
+
   vcl_cout << "inc L0" << vcl_endl;
   progress.increment_progress("L0");
   progress.set_estimated_iterations("L1b", 10, "");

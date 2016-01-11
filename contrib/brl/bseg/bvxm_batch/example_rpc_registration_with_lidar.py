@@ -118,14 +118,14 @@ for i in range(0,len(image_fnames),1):
   for j in range(0,len(skip_list),1):
     if i==skip_list[j]:
       keep_moving = 1;
-  
+
   if keep_moving==1:
     continue;
-  
+
   str_pad = "";
   if i<10:
     str_pad = "0";
-  
+
   image_filename=image_fnames[i];
   cam_name=cam_fnames[i];
   print i;
@@ -146,16 +146,16 @@ for i in range(0,len(image_fnames),1):
   if statuscode:
     (cropped_cam_id, cropped_cam_type) = bvxm_batch.commit_output(0);
     cropped_cam = dbvalue(cropped_cam_id, cropped_cam_type);
-    (cropped_image_id, cropped_image_type) = bvxm_batch.commit_output(1);  
+    (cropped_image_id, cropped_image_type) = bvxm_batch.commit_output(1);
     cropped_image=dbvalue(cropped_image_id, cropped_image_type);
-    (uncertainty_id,uncertainty_type) = bvxm_batch.commit_output(2);  
+    (uncertainty_id,uncertainty_type) = bvxm_batch.commit_output(2);
     uncertainty = dbvalue(uncertainty_id,uncertainty_type);
 
     bvxm_batch.init_process("vilSaveImageViewProcess");
     bvxm_batch.set_input_from_db(0,cropped_image);
     bvxm_batch.set_input_string(1,"output_cropped_image_"+str_pad+str(i)+".jpg");
     bvxm_batch.run_process();
-       
+
     bvxm_batch.init_process("bvxmDetectEdgesProcess");
     bvxm_batch.set_input_from_db(0,cropped_image);
     bvxm_batch.set_params_process("./bvxmDetectEdgesProcess.xml");
@@ -180,7 +180,7 @@ for i in range(0,len(image_fnames),1):
     cam = dbvalue(cam_id,cam_type);
     (expected_edge_image_id,expected_edge_image_type) = bvxm_batch.commit_output(1);
     expected_edge_image=dbvalue(expected_edge_image_id,expected_edge_image_type);
-    
+
     map_type="10bins_1d_radial";
     print("Illumination Index");
     bvxm_batch.init_process("bvxmIllumIndexProcess");
@@ -203,7 +203,7 @@ for i in range(0,len(image_fnames),1):
     nj=bvxm_batch.get_input_unsigned(nj_id);
     print ni,nj;
 
-    app_type="apm_mog_grey"; 
+    app_type="apm_mog_grey";
     bvxm_batch.init_process("bvxmCreateMOGImageProcess");
     bvxm_batch.set_params_process("./create_mog.xml");
     bvxm_batch.set_input_from_db(0,world);
@@ -216,7 +216,7 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.run_process();
     (voxel_slab_id,voxel_slab_type)= bvxm_batch.commit_output(0);
     voxel_slab=dbvalue(voxel_slab_id,voxel_slab_type);
-    
+
     # Normalizing images
     print(" Normalizing Image ");
     bvxm_batch.init_process("bvxmNormalizeImageProcess");
@@ -229,7 +229,7 @@ for i in range(0,len(image_fnames),1):
     normalized_img=dbvalue(normalized_img_id,normalized_img_type);
     (float1_id,float1_type)= bvxm_batch.commit_output(1);
     (float2_id,float2_type)= bvxm_batch.commit_output(2);
-    
+
     print("Updating World");
     bvxm_batch.init_process("bvxmUpdateProcess");
     bvxm_batch.set_input_from_db(0,normalized_img);
@@ -249,4 +249,4 @@ for i in range(0,len(image_fnames),1):
     bvxm_batch.set_input_unsigned(2,0);
     bvxm_batch.run_process();
 
-    
+

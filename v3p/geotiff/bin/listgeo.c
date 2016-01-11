@@ -22,8 +22,8 @@ static const char *CSVDirName = NULL;
 void Usage()
 
 {
-    printf( 
-        "%s", 
+    printf(
+        "%s",
         "Usage: listgeo [-d] [-tfw] [-proj4] [-no_norm] [-t tabledir] filename\n"
         "\n"
         "  -d: report lat/long corners in decimal degrees instead of DMS.\n"
@@ -31,7 +31,7 @@ void Usage()
         "  -proj4: Report PROJ.4 equivelent projection definition.\n"
         "  -no_norm: Don't report 'normalized' parameter values.\n"
         "  filename: Name of the GeoTIFF file to report on.\n" );
-        
+
     exit( 1 );
 }
 
@@ -75,12 +75,12 @@ int main(int argc, char *argv[])
         Usage();
 
     /*
-     * Open the file, read the GeoTIFF information, and print to stdout. 
+     * Open the file, read the GeoTIFF information, and print to stdout.
      */
 
     tif=XTIFFOpen(fname,"r");
     if (!tif) goto failure;
-	
+
     gtif = GTIFNew(tif);
     if (!gtif)
     {
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 
         goto Success;
     }
-	
+
     /* dump the GeoTIFF metadata to std out */
 
     GTIFPrint(gtif,0,0);
@@ -106,11 +106,11 @@ int main(int argc, char *argv[])
     if( norm_print_flag )
     {
         GTIFDefn	defn;
-        
+
         if( GTIFGetDefn( gtif, &defn ) )
         {
             int		xsize, ysize;
-            
+
             printf( "\n" );
             GTIFPrintDefn( &defn, stdout );
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
                 printf( "\n" );
                 printf( "PROJ.4 Definition: %s\n", GTIFGetProj4Defn(&defn));
             }
-            
+
             TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &xsize );
             TIFFGetField( tif, TIFFTAG_IMAGELENGTH, &ysize );
             GTIFPrintCorners( gtif, &defn, stdout, xsize, ysize, inv_flag, dec_flag );
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     GTIFFree(gtif);
     XTIFFClose(tif);
     return 0;
-		
+
   failure:
     fprintf(stderr,"failure in listgeo\n");
     if (tif) XTIFFClose(tif);
@@ -146,9 +146,9 @@ static const char *CSVFileOverride( const char * pszInput )
 
 #ifdef WIN32
     sprintf( szPath, "%s\\%s", CSVDirName, pszInput );
-#else    
+#else
     sprintf( szPath, "%s/%s", CSVDirName, pszInput );
-#endif    
+#endif
 
     return( szPath );
 }
@@ -192,7 +192,7 @@ static int GTIFReportACorner( GTIF *gtif, GTIFDefn *defn, FILE * fp_out,
     /* Try to transform the coordinate into PCS space */
     if( !GTIFImageToPCS( gtif, &x, &y ) )
         return FALSE;
-    
+
     x_saved = x;
     y_saved = y;
 
@@ -200,12 +200,12 @@ static int GTIFReportACorner( GTIF *gtif, GTIFDefn *defn, FILE * fp_out,
 
     if( defn->Model == ModelTypeGeographic )
     {
-	if (dec_flag) 
+	if (dec_flag)
 	{
 	    fprintf( fp_out, "(%s,", GTIFDecToDDec( x, "Long", 7 ) );
 	    fprintf( fp_out, "%s)\n", GTIFDecToDDec( y, "Lat", 7 ) );
-	} 
-	else 
+	}
+	else
 	{
 	    fprintf( fp_out, "(%s,", GTIFDecToDMS( x, "Long", 2 ) );
 	    fprintf( fp_out, "%s)\n", GTIFDecToDMS( y, "Lat", 2 ) );
@@ -217,12 +217,12 @@ static int GTIFReportACorner( GTIF *gtif, GTIFDefn *defn, FILE * fp_out,
 
         if( GTIFProj4ToLatLong( defn, 1, &x, &y ) )
         {
-	    if (dec_flag) 
+	    if (dec_flag)
 	    {
 		fprintf( fp_out, "  (%s,", GTIFDecToDDec( x, "Long", 7 ) );
 		fprintf( fp_out, "%s)", GTIFDecToDDec( y, "Lat", 7 ) );
-	    } 
-	    else 
+	    }
+	    else
 	    {
 		fprintf( fp_out, "  (%s,", GTIFDecToDMS( x, "Long", 2 ) );
 		fprintf( fp_out, "%s)", GTIFDecToDMS( y, "Lat", 2 ) );
@@ -236,7 +236,7 @@ static int GTIFReportACorner( GTIF *gtif, GTIFDefn *defn, FILE * fp_out,
     {
         fprintf( fp_out, "      inverse (%11.3f,%11.3f)\n", x_saved, y_saved );
     }
-    
+
     return TRUE;
 }
 
@@ -252,7 +252,7 @@ static void GTIFPrintCorners( GTIF *gtif, GTIFDefn *defn, FILE * fp_out,
         return;
     }
 
-    GTIFReportACorner( gtif, defn, fp_out, "Lower Left", 0.0, ysize, 
+    GTIFReportACorner( gtif, defn, fp_out, "Lower Left", 0.0, ysize,
                        inv_flag, dec_flag );
     GTIFReportACorner( gtif, defn, fp_out, "Upper Right", xsize, 0.0,
                        inv_flag, dec_flag );

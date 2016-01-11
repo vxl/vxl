@@ -622,9 +622,9 @@ inline void vil3d_math_integral_image(const vil3d_image_view<aT>& imA,
         sum += *voxelA;
         *voxelS = sum + voxelS[prev_j];
       }
-    }    
+    }
   }
- 
+
   // Go through from plane 2 to end and add values of voxels in plane
   // above to get the 3D integral image
   planeS = im_sum.origin_ptr() + 2*kstepS;
@@ -752,9 +752,9 @@ inline void vil3d_math_integral_sqr_image(const vil3d_image_view<aT>& imA,
         sum2 += sumT(*voxelA)*sumT(*voxelA);
         *voxelS2 = sum2 + voxelS2[prev_j2];
       }
-    }    
+    }
   }
- 
+
   // Go through from plane 2 to end and add values of voxels in plane
   // above to get the 3D integral image
   planeS = im_sum.origin_ptr() + 2*kstepS;

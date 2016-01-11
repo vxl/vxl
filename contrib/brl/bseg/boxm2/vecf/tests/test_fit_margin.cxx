@@ -54,13 +54,13 @@ bool good = false;
 
   vcl_string cr_right_inferior_margin_path = cr_base_path + "cristina_right_inferior_margin.txt";
   cr_fo.load_orbit_data("right_eye_inferior_margin", cr_right_inferior_margin_path);
-  
+
   vcl_string cr_right_superior_margin_path = cr_base_path + "cristina_right_superior_margin.txt";
   cr_fo.load_orbit_data("right_eye_superior_margin", cr_right_superior_margin_path);
 
   vcl_string cr_right_superior_crease_path = cr_base_path + "cristina_right_superior_crease.txt";
   cr_fo.load_orbit_data("right_eye_superior_crease", cr_right_superior_crease_path);
- 
+
   // non-linear fit
   vgl_point_3d<double> rlat, rmed;
   good = cr_fo.lab_point("right_eye_lateral_canthus", rlat);
@@ -74,7 +74,7 @@ bool good = false;
   cr_right_fmargs.set_initial_guess( cr_fo.right_params());
   cr_right_fmargs.fit(&vcl_cout, true);
   boxm2_vecf_orbit_params cr_rprm = cr_right_fmargs.orbit_parameters();
-   cr_fo.set_right_params(cr_rprm); 
+   cr_fo.set_right_params(cr_rprm);
   vcl_string cr_right_marg_path = cr_base_path + "cristina_right_margin_fit.txt";
   vcl_ofstream cr_rmstr(cr_right_marg_path.c_str());
   good = cr_right_fmargs.plot_orbit(cr_rmstr);
@@ -92,13 +92,13 @@ bool good = false;
 
   vcl_string cr_left_inferior_margin_path = cr_base_path + "cristina_left_inferior_margin.txt";
   cr_fo.load_orbit_data("left_eye_inferior_margin", cr_left_inferior_margin_path);
-  
+
   vcl_string cr_left_superior_margin_path = cr_base_path + "cristina_left_superior_margin.txt";
   cr_fo.load_orbit_data("left_eye_superior_margin", cr_left_superior_margin_path);
 
   vcl_string cr_left_superior_crease_path = cr_base_path + "cristina_left_superior_crease.txt";
   cr_fo.load_orbit_data("left_eye_superior_crease", cr_left_superior_crease_path);
- 
+
   // non-linear fit
   vgl_point_3d<double> llat, lmed;
   good = cr_fo.lab_point("left_eye_lateral_canthus", llat);
@@ -113,7 +113,7 @@ bool good = false;
   cr_left_fmargs.set_initial_guess( cr_fo.left_params());
   cr_left_fmargs.fit(&vcl_cout, true);
   boxm2_vecf_orbit_params cr_lprm = cr_left_fmargs.orbit_parameters();
-  cr_fo.set_left_params(cr_lprm); 
+  cr_fo.set_left_params(cr_lprm);
   vcl_string cr_left_marg_path = cr_base_path + "cristina_left_margin_fit.txt";
   vcl_ofstream cr_lmstr(cr_left_marg_path.c_str());
   good = cr_left_fmargs.plot_orbit(cr_lmstr);
@@ -160,20 +160,20 @@ bool good = false;
 
   vcl_string p69_right_inferior_margin_path = p69_base_path + "patient_069_right_inferior_margin.txt";
   p69_fo.load_orbit_data("right_eye_inferior_margin", p69_right_inferior_margin_path);
-  
+
   vcl_string p69_right_superior_margin_path = p69_base_path + "patient_069_right_superior_margin.txt";
   p69_fo.load_orbit_data("right_eye_superior_margin", p69_right_superior_margin_path);
 
   vcl_string p69_right_superior_crease_path = p69_base_path + "patient_069_right_superior_crease.txt";
   p69_fo.load_orbit_data("right_eye_superior_crease", p69_right_superior_crease_path);
- 
+
   // non-linear fit
   boxm2_vecf_fit_margins p69_right_fmargs(p69_fo.orbit_data("right_eye_inferior_margin"), p69_fo.orbit_data("right_eye_superior_margin"),
                                           p69_fo.orbit_data("right_eye_superior_crease"), true);
   p69_right_fmargs.set_initial_guess( p69_fo.right_params());
   p69_right_fmargs.fit(&vcl_cout, true);
   boxm2_vecf_orbit_params p69_rprm = p69_right_fmargs.orbit_parameters();
-  p69_fo.set_right_params(p69_rprm); 
+  p69_fo.set_right_params(p69_rprm);
   vcl_string p69_right_marg_path = p69_base_path + "patient_069_right_margin_fit.txt";
   vcl_ofstream p69_rmstr(p69_right_marg_path.c_str());
   good = p69_right_fmargs.plot_orbit(p69_rmstr);
@@ -191,13 +191,13 @@ bool good = false;
 
   vcl_string p69_left_inferior_margin_path = p69_base_path + "patient_069_left_inferior_margin.txt";
   p69_fo.load_orbit_data("left_eye_inferior_margin", p69_left_inferior_margin_path);
-  
+
   vcl_string p69_left_superior_margin_path = p69_base_path + "patient_069_left_superior_margin.txt";
   p69_fo.load_orbit_data("left_eye_superior_margin", p69_left_superior_margin_path);
 
   vcl_string p69_left_superior_crease_path = p69_base_path + "patient_069_left_superior_crease.txt";
   p69_fo.load_orbit_data("left_eye_superior_crease", p69_left_superior_crease_path);
- 
+
   // non-linear fit
   boxm2_vecf_fit_margins p69_left_fmargs(p69_fo.orbit_data("left_eye_inferior_margin"), p69_fo.orbit_data("left_eye_superior_margin"),
                                          p69_fo.orbit_data("left_eye_superior_crease") );
@@ -251,13 +251,13 @@ bool good = false;
 
   vcl_string p113_right_inferior_margin_path = p113_base_path + "patient_113_right_inferior_margin.txt";
   p113_fo.load_orbit_data("right_eye_inferior_margin", p113_right_inferior_margin_path);
-  
+
   vcl_string p113_right_superior_margin_path = p113_base_path + "patient_113_right_superior_margin.txt";
   p113_fo.load_orbit_data("right_eye_superior_margin", p113_right_superior_margin_path);
 
   vcl_string p113_right_superior_crease_path = p113_base_path + "patient_113_right_superior_crease.txt";
   p113_fo.load_orbit_data("right_eye_superior_crease", p113_right_superior_crease_path);
- 
+
   // non-linear fit
   boxm2_vecf_fit_margins p113_right_fmargs(p113_fo.orbit_data("right_eye_inferior_margin"), p113_fo.orbit_data("right_eye_superior_margin"), true);
   p113_right_fmargs.set_initial_guess( p113_fo.right_params());
@@ -283,13 +283,13 @@ bool good = false;
 
   vcl_string p113_left_inferior_margin_path = p113_base_path + "patient_113_left_inferior_margin.txt";
   p113_fo.load_orbit_data("left_eye_inferior_margin", p113_left_inferior_margin_path);
-  
+
   vcl_string p113_left_superior_margin_path = p113_base_path + "patient_113_left_superior_margin.txt";
   p113_fo.load_orbit_data("left_eye_superior_margin", p113_left_superior_margin_path);
 
   vcl_string p113_left_superior_crease_path = p113_base_path + "patient_113_left_superior_crease.txt";
   p113_fo.load_orbit_data("left_eye_superior_crease", p113_left_superior_crease_path);
- 
+
   // non-linear fit
   boxm2_vecf_fit_margins p113_left_fmargs(p113_fo.orbit_data("left_eye_inferior_margin"), p113_fo.orbit_data("left_eye_superior_margin"));
   p113_left_fmargs.set_initial_guess( p113_fo.left_params());
@@ -312,7 +312,7 @@ bool good = false;
   vcl_ofstream p113_lpstr(p113_left_param_path.c_str());
   p113_lpstr << p113_fo.left_params() << '\n';
   p113_lpstr.close();
-#endif //P113 
+#endif //P113
 #if bs00
   vcl_string bs00_base_path = "c:/Users/mundy/VisionSystems/Janus/experiments/Bosphorous/bs00_CAU_0/";
   boxm2_vecf_fit_orbit bs00_fo;
@@ -344,7 +344,7 @@ bool good = false;
 
   vcl_string bs00_right_inferior_margin_path = bs00_base_path + "bs00_right_inferior_margin.txt";
   bs00_fo.load_orbit_data("right_eye_inferior_margin", bs00_right_inferior_margin_path);
-  
+
   vcl_string bs00_right_superior_margin_path = bs00_base_path + "bs00_right_superior_margin.txt";
   bs00_fo.load_orbit_data("right_eye_superior_margin", bs00_right_superior_margin_path);
 
@@ -364,7 +364,7 @@ bool good = false;
   good = bs00_right_fmargs.plot_orbit(bs00_rmstr);
   bs00_rmstr.close();
   /////
-  
+
   vcl_string bs00_right_vrml_path = bs00_base_path + "bs00_right_orbit_plot.wrl";
   vcl_ofstream bs00_rostr(bs00_right_vrml_path.c_str());
   good = bs00_fo.display_orbit_vrml(bs00_rostr, true, show_model);
@@ -376,13 +376,13 @@ bool good = false;
 
   vcl_string bs00_left_inferior_margin_path = bs00_base_path + "bs00_left_inferior_margin.txt";
   bs00_fo.load_orbit_data("left_eye_inferior_margin", bs00_left_inferior_margin_path);
-  
+
   vcl_string bs00_left_superior_margin_path = bs00_base_path + "bs00_left_superior_margin.txt";
   bs00_fo.load_orbit_data("left_eye_superior_margin", bs00_left_superior_margin_path);
 
   vcl_string bs00_left_superior_crease_path = bs00_base_path + "bs00_left_superior_crease.txt";
   bs00_fo.load_orbit_data("left_eye_superior_crease", bs00_left_superior_crease_path);
- 
+
   // non-linear fit
   boxm2_vecf_fit_margins bs00_left_fmargs(bs00_fo.orbit_data("left_eye_inferior_margin"), bs00_fo.orbit_data("left_eye_superior_margin"));
   bs00_left_fmargs.set_initial_guess( bs00_fo.left_params());
@@ -410,4 +410,4 @@ bool good = false;
 #endif //BUILD_FIT_MARGIN
 }
 TESTMAIN( test_fit_margin );
- 
+

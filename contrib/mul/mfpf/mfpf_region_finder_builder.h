@@ -65,7 +65,7 @@ class mfpf_region_finder_builder : public mfpf_point_finder_builder
   //: lower bound on variance used in normalisation
   double var_min_;
 
-  //: lowest variance found so far in training set 
+  //: lowest variance found so far in training set
   double tvar_min_;
 
   //: If true reset var_min based on min in training set

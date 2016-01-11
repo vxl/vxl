@@ -12,7 +12,7 @@ bool vidl_close_ostream_process_cons(bprb_func_process& pro)
 {
   //input
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vidl_ostream_sptr");   
+  input_types.push_back("vidl_ostream_sptr");
   return pro.set_input_types(input_types);
 
   //no output
@@ -26,7 +26,7 @@ bool vidl_close_ostream_process(bprb_func_process& pro)
     vcl_cout << "vidl_close_ostream_process: invalid inputs" << vcl_endl;
     return false;
   }
- 
+
   unsigned i=0;
   vidl_ostream_sptr o_stream = pro.get_input<vidl_ostream_sptr>(i++);
 

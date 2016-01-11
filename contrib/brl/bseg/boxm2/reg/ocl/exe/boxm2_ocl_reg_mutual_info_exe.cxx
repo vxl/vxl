@@ -1,4 +1,4 @@
-//PUBLIC RELEASE APPROVAL FROM AFRL 
+//PUBLIC RELEASE APPROVAL FROM AFRL
 //Case Number: RY-14-0126
 //PA Approval Number: 88ABW-2014-1143
 //:
@@ -90,9 +90,9 @@ int main(int argc,  char** argv)
   bocl_device_sptr  device = mgr.gpus_[1];
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
 
-  vnl_vector<double> x(7,0.0);    
+  vnl_vector<double> x(7,0.0);
   vnl_vector<double> var(7,0.0);
-  x[6] = iscale();                
+  x[6] = iscale();
   if(xformAtoB_file() != "" )
   {
       vcl_ifstream ifile( xformAtoB_file().c_str() ) ;
@@ -109,20 +109,20 @@ int main(int argc,  char** argv)
       mat = mat/scale;
       vnl_matrix<double> matr(3,3);     mat.extract(matr);
       vgl_rotation_3d<double> r1(matr);
-      x[0] = mat[0][3];                
-      x[1] = mat[1][3];                
-      x[2] = mat[2][3];                
-      x[3] = r1.as_rodrigues()[0];   
-      x[4] = r1.as_rodrigues()[1];   
-      x[5] = r1.as_rodrigues()[2]; 
-      x[6] = scale;  
+      x[0] = mat[0][3];
+      x[1] = mat[1][3];
+      x[2] = mat[2][3];
+      x[3] = r1.as_rodrigues()[0];
+      x[4] = r1.as_rodrigues()[1];
+      x[5] = r1.as_rodrigues()[2];
+      x[6] = scale;
   }
-  var[0] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.x();  
-  var[1] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.y();  
-  var[2] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.z();  
-  var[3] = rotationangle()*0.0;  
-  var[4] = rotationangle();  
-  var[5] = rotationangle();  
+  var[0] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.x();
+  var[1] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.y();
+  var[2] = radius()*sceneA->blocks().begin()->second.sub_block_dim_.z();
+  var[3] = rotationangle()*0.0;
+  var[4] = rotationangle();
+  var[5] = rotationangle();
   var[6] = rscale();
 
   bool do_vary_scale = false;

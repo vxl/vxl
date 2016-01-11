@@ -59,7 +59,7 @@ void test_int()
   TEST("m0.set_diagonal(vnl_vector<int>))",
        (m0.set_diagonal(vnl_vector<int>(2,2,m0values)),
         (m0.get(0,0)==7 && m0.get(1,1)==9 && m0.get(0,1)==2 && m0.get(1,0)==2)), true);
-  
+
   // Flip the matrix, otherwise it is the same whichever way it is flattened
   m0.flipud();
   // | 2 9 |

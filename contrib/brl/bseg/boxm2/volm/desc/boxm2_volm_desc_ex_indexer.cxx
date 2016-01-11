@@ -76,7 +76,7 @@ bool volm_desc_ex_indexer::get_next()
   ind_comb_->initialize_read(index_comb_file);
 
   return true;
-  
+
 }
 
 bool volm_desc_ex_indexer::extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values)

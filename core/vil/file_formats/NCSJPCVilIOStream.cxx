@@ -6,7 +6,7 @@
 #undef max
 #undef min
 // Do not remove the following notice
-// Modifications approved for public release, distribution unlimited 
+// Modifications approved for public release, distribution unlimited
 // DISTAR Case 14074
 //
 
@@ -18,7 +18,7 @@ unsigned short CNCSJPCVilIOStream::mId = 0;//initialize static id variable
 CNCSJPCVilIOStream::CNCSJPCVilIOStream()
   : mVilStream( 0 ),
     mHomePos( -1 )
-{ 
+{
 }
 
 CNCSJPCVilIOStream::~CNCSJPCVilIOStream()

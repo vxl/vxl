@@ -33,7 +33,7 @@ void volm_vrml_io::display_spherical_region_layer_by_attrbute(vcl_ostream& str ,
         for (unsigned i = 0; i < iter->second.size(); ++i)
              volm_vrml_io::display_spherical_region_by_attrbute(str,regions[iter->second[i]],att,factor,tol);
 
- 
+
 }
 
 void volm_vrml_io::display_segment_sphere(vcl_ostream& str ,
@@ -48,7 +48,7 @@ void volm_vrml_io::display_segment_sphere(vcl_ostream& str ,
     for (; rit != sph->regions().end(); ++rit) {
         const vcl_vector<int>& pt_ids = rit->second;
         unsigned char val =(unsigned char) vcl_floor(sph->region_median(rit->first));
-        
+
         vgl_point_3d<double> pc((double) volm_vrml_io_data::color_codes[(val)%8][0], (double) volm_vrml_io_data::color_codes[(val)%8][1], (double) volm_vrml_io_data::color_codes[(val)%8][2]);
         if(val > 100)
         {
@@ -70,7 +70,7 @@ void volm_vrml_io::display_segment_sphere(vcl_ostream& str ,
         <<"geometry PointSet {\n"
         <<"coord Coordinate {\n"
         <<"point [\n";
- 
+
     for(unsigned i = 0; i < points.size(); i++)
         str<<points[i].x()<<" "<<points[i].y()<<" "<<points[i].z()<<",\n";
 
@@ -79,7 +79,7 @@ void volm_vrml_io::display_segment_sphere(vcl_ostream& str ,
        <<"color Color {\n"
        <<" color [ \n";
     for(unsigned i = 0; i < colors.size(); i++)
-        str<<colors[i].x()<<" "<<colors[i].y()<<" "<<colors[i].z()<<",\n"; 
+        str<<colors[i].x()<<" "<<colors[i].y()<<" "<<colors[i].z()<<",\n";
 
     str<<"                    ]\n"
        <<"         }\n"

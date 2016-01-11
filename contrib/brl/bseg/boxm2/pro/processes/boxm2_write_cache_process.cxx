@@ -1,7 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_write_cache_process.cxx
 //:
 // \file
-// \brief  Writes cache out to disk.  
+// \brief  Writes cache out to disk.
 //
 // \author Andrew Miller
 // \date May 26, 2011
@@ -55,7 +55,7 @@ bool boxm2_write_cache_process(bprb_func_process& pro)
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   bool clear_cache = pro.get_input<bool>(i++);
 
-  cache->write_to_disk(); 
+  cache->write_to_disk();
   if (clear_cache)
     cache->clear_cache();
   return true;

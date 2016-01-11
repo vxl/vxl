@@ -31,7 +31,7 @@ vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p);
 // \relatesalso vgl_plane_3d
 // \relatesalso vgl_infinite_line_3d
 template <class T>
-vgl_infinite_line_3d<T> 
+vgl_infinite_line_3d<T>
 vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes);
 
 //: Return the intersection line of a set of weighted planes, use list to distinguish from point return
