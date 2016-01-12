@@ -770,7 +770,7 @@ vidl_convert_wrap_in_view(vidl_frame const& frame)
   vcl_ptrdiff_t top_left_offset = 0;
 
   if (format == VIDL_PIXEL_FORMAT_BGR_24) {
-    top_left_offset = 3;
+    top_left_offset = 2;
     p_step = -1;
   }
 
