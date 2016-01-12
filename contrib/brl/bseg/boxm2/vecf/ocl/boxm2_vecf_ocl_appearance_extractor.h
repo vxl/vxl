@@ -19,7 +19,7 @@ class boxm2_vecf_ocl_appearance_extractor{
   void extract_appearance(bool faux=false,bool individual_color=true,bool head_only=false){
     this->faux_ = faux;
     this->individual_appearance_ = individual_color;
-    this->head_only_ = head_only_;
+    this->head_only_ = head_only;
     vis_cells_.clear();
     this->extract_head_appearance();
     if(!head_only)
