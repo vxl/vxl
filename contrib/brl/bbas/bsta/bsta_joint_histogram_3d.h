@@ -19,7 +19,7 @@
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
 #include <bsta/bsta_joint_histogram_3d_base.h>
-template <class T> class bsta_joint_histogram_3d : 
+template <class T> class bsta_joint_histogram_3d :
 public bsta_joint_histogram_3d_base
 {
  public:
@@ -32,8 +32,8 @@ public bsta_joint_histogram_3d_base
                     const T min_prob = 0.0);
 
   bsta_joint_histogram_3d(const T range_a, const unsigned nbins_a,
-                    const T range_b, const unsigned nbins_b, 
-                    const T range_c, const unsigned nbins_c, 
+                    const T range_b, const unsigned nbins_b,
+                    const T range_c, const unsigned nbins_c,
                     const T min_prob = 0.0);
 
   //:More general constructor defining a signed value range
@@ -67,7 +67,7 @@ public bsta_joint_histogram_3d_base
     return range_a_;}
 
   //: range for variable a
-  T range_a() const {return range_a_;}  
+  T range_a() const {return range_a_;}
  //: range for variable b
   T range_b() const {return range_b_;}
  //: range for variable c
@@ -146,7 +146,7 @@ public bsta_joint_histogram_3d_base
   bool bin_at_val(
     const T a, const T b, const T c,
     int& ia, int &ib, int& ic) const;
-    
+
 
   //: Find bin indices with largest count.
   //: Will return the first (lowest bin indices) in case of ties

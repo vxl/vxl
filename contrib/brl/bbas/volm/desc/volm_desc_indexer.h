@@ -42,7 +42,7 @@ public:
   virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values) = 0;
 
   virtual vcl_string get_index_type_str() = 0;
-  
+
   //: each driving indexer should overwrite with the size of the descriptor
   virtual unsigned layer_size() = 0;
 

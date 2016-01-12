@@ -8,7 +8,7 @@
 // \date Nov 2004
 // \verbatim
 // Modifications
-//   Dec. 2006 - Gehua Yang - move the function into a class and make it a static function. 
+//   Dec. 2006 - Gehua Yang - move the function into a class and make it a static function.
 //                            This is to allow user to add other local-defined transformations types.
 // \endverbatim
 

@@ -27,7 +27,7 @@ static void vbl_test_disjoint_sets()
   s.set_union(s.find_set(7),s.find_set(11));
   print_element_sets(s);
   int n0 = s.size(0), n2 = s.size(2),n4 = s.size(4),
-    n5 = s.size(5), n6 = s.size(6); 
+    n5 = s.size(5), n6 = s.size(6);
   bool good = n0==1&&n2==1&&n4==1&&n5==3&&n6==7;
   good = good && s.num_sets() == 5;
   TEST("disjoint set operations", good, true);

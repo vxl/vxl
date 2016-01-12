@@ -69,7 +69,7 @@ bool boxm2_import_point_cloud_process_cons(bprb_func_process& pro)
   // set default min depth for backwards compatibility
   brdb_value_sptr default_min_depth = new brdb_value_t<unsigned>(2);
   pro.set_input(3, default_min_depth);
-  
+
 }
 
 bool boxm2_import_point_cloud_process(bprb_func_process& pro)

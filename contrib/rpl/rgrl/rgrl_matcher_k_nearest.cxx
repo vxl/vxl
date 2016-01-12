@@ -63,7 +63,7 @@ compute_matches( rgrl_feature_set const&       from_set,
   feat_vector matching_features, pruned_set;
   matching_features.reserve( 10 );
   pruned_set.reserve( 10 );
-  
+
   matches_sptr->reserve( from.size() );
 
   //  generate the matches for each feature of this feature type in the current region

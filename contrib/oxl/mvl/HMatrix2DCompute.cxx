@@ -27,7 +27,7 @@ HMatrix2DCompute::compute_l(LineArray const&l1,
 
 bool
 HMatrix2DCompute::compute_pl(PointArray const&,
-                             PointArray const&, 
+                             PointArray const&,
                              LineArray const&,
                              LineArray const&,
                              HMatrix2D *)
@@ -110,7 +110,7 @@ HMatrix2DCompute::compute(PointArray const&p1,
 
 //--------------------------------------------------------------------------------
 
-bool 
+bool
 HMatrix2DCompute::compute(PairMatchSetCorner const &matches,
                           HMatrix2D *H)
 {
@@ -120,7 +120,7 @@ HMatrix2DCompute::compute(PairMatchSetCorner const &matches,
   return compute(pts1, pts2, H);
 }
 
-HMatrix2D 
+HMatrix2D
 HMatrix2DCompute::compute(PairMatchSetCorner const &matches)
 {
   HMatrix2D H;

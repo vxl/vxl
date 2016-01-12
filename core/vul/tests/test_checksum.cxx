@@ -12,7 +12,7 @@ void test_checksum()
            << " Testing vul_checksum\n"
            << "**********************\n";
 
- 
+
   // Test cases taken from IBM documentation of ippsCRC32C_8u function.
   // These test cases are used to confirm compatibility with independent implementation.
 
@@ -26,7 +26,7 @@ void test_checksum()
 
   char * datac = (char*) data;
   vxl_uint_32 checksum;
-  
+
   checksum = vul_checksum_crc32c(datac, datac+48);
   vcl_cout << "\nTest on 48 bytes of An iSCSI - SCSI Read (10) Command PDU: " << vcl_hex << checksum << vcl_endl;
   TEST("vul_checksum_crc32c", checksum, 0x563a96d9);
@@ -53,8 +53,8 @@ void test_checksum()
 
 
 
-  
-  
+
+
   // For golden values see,
   // http://www.lammertbies.nl/comm/info/crc-calculation.html
   // But results byte swapped.
@@ -74,14 +74,14 @@ void test_checksum()
   // This is the encoding of a zero polynomial.
   checksum = vul_checksum_crc32(datac, datac+4);
   vcl_cout << "\nTest on 4 bytes of 0xff: " << checksum << vcl_endl;
-  TEST("vul_checksum_crc32", checksum, 0xffffffff ); 
+  TEST("vul_checksum_crc32", checksum, 0xffffffff );
 
-  
+
   // This is the encoding of a longer zero polynomial. Only the first 32 bits are complemented.
   for( unsigned i=4; i<8; i++) data[i] = 0x00;
   checksum = vul_checksum_crc32(datac, datac+4);
   vcl_cout << "\nTest on 4 bytes of 0xff, then 4 of 0x00: " << checksum << vcl_endl;
-  TEST("vul_checksum_crc32", checksum, 0xffffffff ); 
+  TEST("vul_checksum_crc32", checksum, 0xffffffff );
 
 
   char boost_data[] = { 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39 };

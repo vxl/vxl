@@ -26,7 +26,7 @@ class mbl_file_data_collector : public mbl_data_collector<T>
   mbl_file_data_wrapper<T>* wrapper_;
 
  public:
- 
+
   //: Constructor
   mbl_file_data_collector( const vcl_string & path );
 

@@ -19,8 +19,8 @@
 
 //: Tableau for capturing OpenGL rendering to a video
 //
-//  After each draw events this tableau captures the current 
-//  OpenGL buffer and writes it as a frame of video to a vidl_ostream 
+//  After each draw events this tableau captures the current
+//  OpenGL buffer and writes it as a frame of video to a vidl_ostream
 class vidl_capture_tableau : public vgui_wrapper_tableau
 {
  public:
@@ -34,20 +34,20 @@ class vidl_capture_tableau : public vgui_wrapper_tableau
 
   //: Handle all events sent to this tableau
   bool handle( vgui_event const &e);
-  
+
   //: Set the output video stream
   void set_ostream(const vidl_ostream_sptr& os) { ostream_ = os; }
-  
+
   //: Prompt the user to set an ostream with a gui dialog
   void prompt_for_ostream();
-  
+
   //: Stop the video capture and close the ostream
   void close_ostream();
 
  protected:
   //: Destructor - called by vidl_capture_tableau_sptr.
   ~vidl_capture_tableau() { }
-  
+
   vidl_ostream_sptr ostream_;
 
 };
@@ -58,7 +58,7 @@ struct vidl_capture_tableau_new : public vidl_capture_tableau_sptr
   typedef vidl_capture_tableau_sptr base;
 
   //: Constructor - takes the single child tableau as a parameter.
-  vidl_capture_tableau_new(vgui_tableau_sptr const& child) 
+  vidl_capture_tableau_new(vgui_tableau_sptr const& child)
   : base(new vidl_capture_tableau(child)) { }
 };
 

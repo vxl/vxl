@@ -12,8 +12,8 @@
 
 //--------------------------------------------------------------------------------
 
-osl_vertex::osl_vertex(float x_, float y_, int id_) : x(x_), y(y_) { 
-  SetId(id_); 
+osl_vertex::osl_vertex(float x_, float y_, int id_) : x(x_), y(y_) {
+  SetId(id_);
 #if ALLOW_CORELEAKS
   ref();
 #endif

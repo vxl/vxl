@@ -32,7 +32,7 @@
 #include "dcxfer.h"   /* for E_StreamCompression */
 
 
-/** pure virtual abstract base class for consumers, i.e. the final node 
+/** pure virtual abstract base class for consumers, i.e. the final node
  *  of a filter chain in an output stream.
  */
 class DcmConsumer
@@ -75,7 +75,7 @@ public:
   /** processes as many bytes as possible from the given input block.
    *  @param buf pointer to memory block, must not be NULL
    *  @param buflen length of memory block
-   *  @return number of bytes actually processed. 
+   *  @return number of bytes actually processed.
    */
   virtual Uint32 write(const void *buf, Uint32 buflen) = 0;
 
@@ -88,7 +88,7 @@ public:
 };
 
 
-/** pure virtual abstract base class for output filters, i.e. 
+/** pure virtual abstract base class for output filters, i.e.
  *  intermediate nodes of a filter chain in an output stream.
  */
 class DcmOutputFilter: public DcmConsumer
@@ -101,7 +101,7 @@ public:
   }
 
   /** determines the consumer to which the filter is supposed
-   *  to write it's output.  Once a consumer for the output filter has 
+   *  to write it's output.  Once a consumer for the output filter has
    *  been defined, it cannot be changed anymore during the lifetime
    *  of the object.
    *  @param consumer reference to consumer, must not be circular chain
@@ -151,7 +151,7 @@ public:
   /** processes as many bytes as possible from the given input block.
    *  @param buf pointer to memory block, must not be NULL
    *  @param buflen length of memory block
-   *  @return number of bytes actually processed. 
+   *  @return number of bytes actually processed.
    */
   virtual Uint32 write(const void *buf, Uint32 buflen);
 

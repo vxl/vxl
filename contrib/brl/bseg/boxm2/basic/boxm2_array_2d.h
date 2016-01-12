@@ -27,8 +27,8 @@ class boxm2_array_2d
 
   //: Assignment
   boxm2_array_2d<T>& operator=(boxm2_array_2d<T> const &that) {
-    destruct(); 
-    construct(that.rows(), that.cols(), that.buffer_); 
+    destruct();
+    construct(that.rows(), that.cols(), that.buffer_);
     return *this;
   }
 

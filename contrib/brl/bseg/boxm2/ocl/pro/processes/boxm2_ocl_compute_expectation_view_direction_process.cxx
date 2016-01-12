@@ -50,7 +50,7 @@ namespace boxm2_ocl_compute_expectation_view_direction_process_globals
         bocl_kernel* accumulate_direction_kernel = new bocl_kernel();
         accumulate_direction_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "accumulate_direction_vectors", accumulate_opts, "accumulate_direction_vectors");
         vec_kernels.push_back(accumulate_direction_kernel);
-        
+
         vcl_string dispersion_opts = options + " -D COMPUTE_DISPERSION";
         bocl_kernel* compute_dispersion = new bocl_kernel();
         compute_dispersion->create_kernel(&device->context(),device->device_id(), src_paths, "compute_dispersion",dispersion_opts, "compute_dispersion");
@@ -72,7 +72,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process_cons(bprb_func_process
     input_types_[1] = "boxm2_scene_sptr";
     input_types_[2] = "boxm2_opencl_cache_sptr";
     input_types_[3] = "vcl_string";   // file with list of identifiers
-    input_types_[4] = "vcl_string";   // coordinate type  
+    input_types_[4] = "vcl_string";   // coordinate type
 
     // process has 1 output:
     // output[0]: scene sptr
@@ -112,7 +112,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
     int status=0;
     cl_command_queue queue = clCreateCommandQueue(device->context(),*(device->device_id()),
         CL_QUEUE_PROFILING_ENABLE,&status);
-    if (status!=0) 
+    if (status!=0)
         return false;
 
     vcl_string identifier=device->device_identifier();
@@ -125,7 +125,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
         kernels[identifier]=ks;
     }
     vcl_ifstream ifile( identifier_file.c_str() );
-    if(!ifile ) 
+    if(!ifile )
     {
         vcl_cout<<"Cannot open the files for suffixes "<<vcl_endl;
         return false;

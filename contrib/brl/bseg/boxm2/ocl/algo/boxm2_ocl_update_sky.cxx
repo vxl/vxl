@@ -214,7 +214,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr dev
     update_sky_kernel->create_kernel(&device->context(), device->device_id(), src_paths, "update_sky_main", seg_opts, "update_sky_main");
     vec_kernels.push_back(update_sky_kernel);
 
-   
+
     //store and return
     kernels_[identifier] = vec_kernels;
     return kernels_[identifier];
@@ -270,7 +270,7 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
 
   if(cam->type_name() == "vpgl_perspective_camera")
   {
-      
+
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       tnearfar[0] = f* scene->finest_resolution()/32 ;
       tnearfar[1] = f* scene->finest_resolution()/0.125 ;
@@ -559,7 +559,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr de
     vcl_string update_opts = options + " -D UPDATE_SKY2_MAIN  ";
     update_sky_main_kernel->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_sky_main", update_opts, "update_sky_main");
     vec_kernels.push_back(update_sky_main_kernel);
-   
+
     //store and return
     kernels_[identifier] = vec_kernels;
     return kernels_[identifier];

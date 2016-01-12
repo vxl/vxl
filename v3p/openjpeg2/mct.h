@@ -65,7 +65,7 @@ void mct_decode(OPJ_INT32 *c0, OPJ_INT32 *c1, OPJ_INT32 *c2, OPJ_UINT32 n);
 /**
 Get norm of the basis function used for the reversible multi-component transform
 @param compno Number of the component (0->Y, 1->U, 2->V)
-@return 
+@return
 */
 OPJ_FLOAT64 mct_getnorm(OPJ_UINT32 compno);
 
@@ -88,33 +88,33 @@ void mct_decode_real(OPJ_FLOAT32* c0, OPJ_FLOAT32* c1, OPJ_FLOAT32* c2, OPJ_UINT
 /**
 Get norm of the basis function used for the irreversible multi-component transform
 @param compno Number of the component (0->Y, 1->U, 2->V)
-@return 
+@return
 */
 OPJ_FLOAT64 mct_getnorm_real(OPJ_UINT32 compno);
 
 bool mct_encode_custom(
-					   // MCT data
-					   OPJ_BYTE * p_coding_data, 
-					   // size of components
-					   OPJ_UINT32 n, 
-					   // components
-					   OPJ_BYTE ** p_data, 
-					   // nb of components (i.e. size of p_data)
-					   OPJ_UINT32 p_nb_comp, 
-					   // tells if the data is signed
-					   OPJ_UINT32 is_signed);
+                                           // MCT data
+                                           OPJ_BYTE * p_coding_data,
+                                           // size of components
+                                           OPJ_UINT32 n,
+                                           // components
+                                           OPJ_BYTE ** p_data,
+                                           // nb of components (i.e. size of p_data)
+                                           OPJ_UINT32 p_nb_comp,
+                                           // tells if the data is signed
+                                           OPJ_UINT32 is_signed);
 
 bool mct_decode_custom(
-					   // MCT data
-					   OPJ_BYTE * pDecodingData, 
-					   // size of components
-					   OPJ_UINT32 n,
-					   // components
-					   OPJ_BYTE ** pData, 
-					   // nb of components (i.e. size of pData)
-					   OPJ_UINT32 pNbComp, 
-					   // tells if the data is signed
-					   OPJ_UINT32 isSigned);
+                                           // MCT data
+                                           OPJ_BYTE * pDecodingData,
+                                           // size of components
+                                           OPJ_UINT32 n,
+                                           // components
+                                           OPJ_BYTE ** pData,
+                                           // nb of components (i.e. size of pData)
+                                           OPJ_UINT32 pNbComp,
+                                           // tells if the data is signed
+                                           OPJ_UINT32 isSigned);
 
 void opj_calculate_norms(OPJ_FLOAT64 * pNorms,OPJ_UINT32 p_nb_comps,OPJ_FLOAT32 * pMatrix);
 

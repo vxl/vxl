@@ -10,8 +10,8 @@ typedef struct
   float* expdepth;
   float* expdepthsqr;
   float* probsum;
-  float* expint; 
-  float* vis; 
+  float* expint;
+  float* vis;
 } AuxArgs;
 
 //forward declare cast ray (so you can use it)
@@ -89,15 +89,15 @@ render_height_map(__constant  RenderSceneInfo    * linfo,
   float expint  = exp_image[imIndex[llid]];
   float probsum =prob_image[imIndex[llid]];
   float vis     = vis_image[imIndex[llid]];
-  float vis1 = vis; 
+  float vis1 = vis;
   AuxArgs aux_args;
   aux_args.alpha  = alpha_array;
   aux_args.mog = mixture_array;
   aux_args.expdepth = &expdepth;
   aux_args.expdepthsqr = &expdepthsqr;
   aux_args.probsum = &probsum;
-  aux_args.expint = &expint; 
-  aux_args.vis = &vis1; 
+  aux_args.expint = &expint;
+  aux_args.vis = &vis1;
   cast_ray( i, j,
             ray_ox, ray_oy, ray_oz,
             ray_dx, ray_dy, ray_dz,
@@ -110,7 +110,7 @@ render_height_map(__constant  RenderSceneInfo    * linfo,
   prob_image[imIndex[llid]] = (* aux_args.probsum);
   //store visibility at the end of this block
   vis_image[imIndex[llid]]  = vis;
-  exp_image[imIndex[llid]]  = expint; 
+  exp_image[imIndex[llid]]  = expint;
 }
 #endif // RENDER_HEIGHT_MAP
 
@@ -168,8 +168,8 @@ void ingest_height_map(__constant  RenderSceneInfo    * linfo,
   float ray_ox = 0.0f;float ray_oy = 0.0f;float ray_oz = 0.0f;
   float ray_dx = 0.0f;float ray_dy = 0.0f;float ray_dz = 0.0f;
 
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, 
-                             &ray_ox, &ray_oy, &ray_oz, 
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d,
+                             &ray_ox, &ray_oy, &ray_oz,
                              &ray_dx, &ray_dy, &ray_dz);
 
   ////----------------------------------------------------------------------------
@@ -240,7 +240,7 @@ void ingest_buckeye_dem(__constant  RenderSceneInfo    * linfo,
 
   float first_depth = a1_buff[imIndex[llid]];
   float last_depth = a2_buff[imIndex[llid]];
-    
+
   //----------------------------------------------------------------------------
   // Calculate ray origin, and direction
   // (make sure ray direction is never axis aligned)
@@ -252,8 +252,8 @@ void ingest_buckeye_dem(__constant  RenderSceneInfo    * linfo,
   float ray_ox = 0.0f;float ray_oy = 0.0f;float ray_oz = 0.0f;
   float ray_dx = 0.0f;float ray_dy = 0.0f;float ray_dz = 0.0f;
 
-  calc_scene_ray_generic_cam(linfo, ray_o, ray_d, 
-                             &ray_ox, &ray_oy, &ray_oz, 
+  calc_scene_ray_generic_cam(linfo, ray_o, ray_d,
+                             &ray_ox, &ray_oy, &ray_oz,
                              &ray_dx, &ray_dy, &ray_dz);
 
   ////----------------------------------------------------------------------------
@@ -268,8 +268,8 @@ void ingest_buckeye_dem(__constant  RenderSceneInfo    * linfo,
   // This happens sometimes, not sure why.
   if (first_depth > last_depth) {
     aux_args.first_depth = last_depth;
-    aux_args.last_depth = first_depth;  
-  } 
+    aux_args.last_depth = first_depth;
+  }
   else {
     aux_args.first_depth = first_depth;
     aux_args.last_depth = last_depth;

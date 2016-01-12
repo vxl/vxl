@@ -6,23 +6,23 @@
 
 Documentation Author: Niles Ritter
 Last Modified: 31 Jul 95
-  
-See: http://www.remotesensing.org/geotiff/api/index.html 
+
+See: http://www.remotesensing.org/geotiff/api/index.html
   for up to date API documentation
-  
+
 -------------------------------------------------------------
 Contents:
 
   1. The LibGeoTIFF library
-  
+
      1.1 Preliminaries
      1.2 Calling Sequences
-	 1.3 Examples
+         1.3 Examples
 
   2. The LibGeoTIFF Utilities
-  
+
      2.1 listgeo   - dump a GeoTIFF metadata file
-	 2.2 geotifcp  - install GeoTIFF from metadata
+         2.2 geotifcp  - install GeoTIFF from metadata
 
 -------------------------------------------------------------
 1. The LibGeoTIFF library
@@ -34,66 +34,66 @@ Contents:
 1.1.1 Compliance:
 
     ANSI-C:  The GeoTIFF library is fully ANSI compliant and
-	   should compile under any ANSI compiler. It is not guaranteed
-	   to compile under K&R compilers.
-	
-	C++:   All headers have the appropriate C++ bindings permitting
-	   the correct linkage to C++ routines.
-	   
+           should compile under any ANSI compiler. It is not guaranteed
+           to compile under K&R compilers.
+
+        C++:   All headers have the appropriate C++ bindings permitting
+           the correct linkage to C++ routines.
+
 -------------------
 1.1.2 Interfaces:
 
-	xtiffio.h: the primary interface header file for all TIFF
-				routines, using the extended GeoTIFF tags.
-				
-	geotiffio.h: the primary interface header file for all GTIF 
-				 routines, keys and code values.
+        xtiffio.h: the primary interface header file for all TIFF
+                                routines, using the extended GeoTIFF tags.
 
-	geotiff.h:  an interface header file for all GTIF 
-				 routines, if code values are not required.
+        geotiffio.h: the primary interface header file for all GTIF
+                                 routines, keys and code values.
 
-	geokeys.h:   defines all valid GEOTIFF GeoKeys.
-	
+        geotiff.h:  an interface header file for all GTIF
+                                 routines, if code values are not required.
+
+        geokeys.h:   defines all valid GEOTIFF GeoKeys.
+
 -------------------
 1.1.3 Defined macros:
 
   All of the tag, key and key-value symbolic names in the GeoTIFF spec are
   supported and defined by the inclusion of "geotiffio.h". In addition,
   the following useful values are defined:
-  
-	GvCurrentVersion:  The current GeoTIFF Directory version. Should always be 1.
-	GvCurrentRevision: The current GeoTIFF Key Revision.
-	GvCurrentMinorRev: The current GeoTIFF Key-Value (minor) Revision.
-	
-	KvUndefined:      The universal Key value for "undefined" items.
-	KvUserDefined:    The universal Key value for "user-defined" items.
 
-	
+        GvCurrentVersion:  The current GeoTIFF Directory version. Should always be 1.
+        GvCurrentRevision: The current GeoTIFF Key Revision.
+        GvCurrentMinorRev: The current GeoTIFF Key-Value (minor) Revision.
+
+        KvUndefined:      The universal Key value for "undefined" items.
+        KvUserDefined:    The universal Key value for "user-defined" items.
+
+
 -------------------
-1.1.4 Defined Types:  
+1.1.4 Defined Types:
 
-	TIFF             the type of a TIFF file descriptor (if LIBTIFF is used).
-	GTIF             the type of a GeoTIFF file descriptor.
-	GTIFPrintMethod  the type of a print method passed to GTIFPrint().
-	GTIFReadMethod   the type of a read method passed to GTIFImport().
-	geokey_t         the type of a GeoTIFF key variable.
-	tagtype_t        the type of a TIFF tag variable, such as TYPE_DOUBLE.
+        TIFF             the type of a TIFF file descriptor (if LIBTIFF is used).
+        GTIF             the type of a GeoTIFF file descriptor.
+        GTIFPrintMethod  the type of a print method passed to GTIFPrint().
+        GTIFReadMethod   the type of a read method passed to GTIFImport().
+        geokey_t         the type of a GeoTIFF key variable.
+        tagtype_t        the type of a TIFF tag variable, such as TYPE_DOUBLE.
 
 
 -------------------
 1.1.5 Key and Code Databases:
 
-	All geokeys are defined and named in the database file
-	"geokeys.inc", which in turn is included in "geokeys.h"
-	and several other files. The symbolic enumerated names are identical
-	to those used in the Appendix of the GeoTIFF spec.
-	
-	The geokey code values are stored in the other database files
-	having the ".inc" suffix, which in turn are all referenced by
-	the file "geovalues.h". The ones with names beginning with
-	"epsg_" are codes registered in the EPSG/POSC tables, while
-	those beginning with "geo_" are specific to GeoTIFF.
-	
+        All geokeys are defined and named in the database file
+        "geokeys.inc", which in turn is included in "geokeys.h"
+        and several other files. The symbolic enumerated names are identical
+        to those used in the Appendix of the GeoTIFF spec.
+
+        The geokey code values are stored in the other database files
+        having the ".inc" suffix, which in turn are all referenced by
+        the file "geovalues.h". The ones with names beginning with
+        "epsg_" are codes registered in the EPSG/POSC tables, while
+        those beginning with "geo_" are specific to GeoTIFF.
+
 
 -------------------------------------------------------------
 1.2 Calling Sequences
@@ -103,7 +103,7 @@ Contents:
 
 
 1.2.1.1  GTIFNew  -- Set up a new GeoTIFF file Descriptor
-	GTIF*     GTIFNew(void *tif);
+        GTIF*     GTIFNew(void *tif);
 
 GTIFNew() takes an existing TIFF file descriptor and creates
 a GTIF GeoTIFF file-I/O object for reading and writing
@@ -112,16 +112,16 @@ though it may be either read or write mode.
 
 
 1.2.1.2 GTIFFree
-	void      GTIFFree(GTIF *gtif);
+        void      GTIFFree(GTIF *gtif);
 
 Destroys the GeoTIFF file descriptor following reading or writing
 the keys.
 
 
 1.2.1.3 GTIFWriteKeys
-	int       GTIFWriteKeys(GTIF *gtif);
+        int       GTIFWriteKeys(GTIF *gtif);
 
-This routine must be called for a new GeoTIFF file after all of 
+This routine must be called for a new GeoTIFF file after all of
 the desired Keys are defined and set with GTIFSetKey(). This does
 not explicitly write anything out to the file, but it does call
 the TIFF-level routines to install the TIFF tag values, which
@@ -131,32 +131,32 @@ pure read or write is supported.
 
 
 1.2.1.4 GTIFDirectoryInfo
-	void      GTIFDirectoryInfo(GTIF *gtif, int *versions, int *keycount);
+        void      GTIFDirectoryInfo(GTIF *gtif, int *versions, int *keycount);
 
 Returns header information about the GeoTIFF file directory. The <versions>
 is an array of 3 integers, giving the GeoTIFF Version, followed by
 the major and minor revisions. The <keycount> argument returns the number
-of keys currently defined in this file. 
+of keys currently defined in this file.
 
 -------------------
-1.2.2 GeoKey Access 
+1.2.2 GeoKey Access
 
 
 1.2.2.1 GTIFKeyInfo
-	int       GTIFKeyInfo(GTIF *gtif, geokey_t key, int *size, tagtype_t* type);
+        int       GTIFKeyInfo(GTIF *gtif, geokey_t key, int *size, tagtype_t* type);
 
-Returns the number of values defined for key <key> if currently defined in the file, and 
+Returns the number of values defined for key <key> if currently defined in the file, and
 returns in <size> the size of individual key values, and the <type>. If the
 key is not defined, 0 is returned. You may pass in NULL pointers to any parameters
 you do not need (such as the type).
 
 
 1.2.2.1 GTIFKeyGet
-	int       GTIFKeyGet(GTIF *gtif, geokey_t key, void *val, int index, int count);
+        int       GTIFKeyGet(GTIF *gtif, geokey_t key, void *val, int index, int count);
 
 Accesses the key value(s). If there are multiple values (such as ASCII), they
 may be accessed individually, starting at <index> and returning <count> values.
-The total number of values accessed is returned. Note: unline TIFFGetField() 
+The total number of values accessed is returned. Note: unline TIFFGetField()
 memory is not allocated for multiple-value arrays such as ASCII. To get the
 length of an array call GTIFKeyInfo first, which returns the size and count
 of the data.  If the values are key-codes they should be declared of type
@@ -164,7 +164,7 @@ of the data.  If the values are key-codes they should be declared of type
 
 
 1.2.2.1 GTIFKeySet
-	int       GTIFKeySet(GTIF *gtif, geokey_t keyID, tagtype_t type, int count,...);
+        int       GTIFKeySet(GTIF *gtif, geokey_t keyID, tagtype_t type, int count,...);
 
 Defines and sets the specified key values. Note that this does not install the
 tag-level information in the file; to do that you must call GTIFWriteKeys().
@@ -174,28 +174,28 @@ values: doubles for floating point, strings for ASCII, and "geocode_t" for
 SHORT codes (the symbolic names may be used in most cases).
 
 
-1.2.3 Metadata Import-Export utilities 
+1.2.3 Metadata Import-Export utilities
 
-	void      GTIFPrint(GTIF *gtif, GTIFPrintMethod print, void *fd);
-	int       GTIFImport(GTIF *gtif, GTIFReadMethod scan, void *fd);
-	
-	char*     GTIFKeyName(geokey_t key);
-	char*     GTIFValueName(geokey_t key,int value);
-	char*     GTIFTypeName(tagtype_t type);
-	char*     GTIFTagName(int tag);
-	int       GTIFKeyCode(char * key);
-	int       GTIFValueCode(geokey_t key,char *value);
-	int       GTIFTypeCode(char *type);
-	int       GTIFTagCode(char *tag);
+        void      GTIFPrint(GTIF *gtif, GTIFPrintMethod print, void *fd);
+        int       GTIFImport(GTIF *gtif, GTIFReadMethod scan, void *fd);
+
+        char*     GTIFKeyName(geokey_t key);
+        char*     GTIFValueName(geokey_t key,int value);
+        char*     GTIFTypeName(tagtype_t type);
+        char*     GTIFTagName(int tag);
+        int       GTIFKeyCode(char * key);
+        int       GTIFValueCode(geokey_t key,char *value);
+        int       GTIFTypeCode(char *type);
+        int       GTIFTagCode(char *tag);
 
 The GTIFPrint() routine dumps a GeoTIFF metadata stream out to
 a specified file <fd>, either for human interpretation or for
 input to another program. If <fd> is NULL the data is written
-to the standard output.  
+to the standard output.
 
 The GTIFImport() routine performs the inverse; given a metadata file
 specified by <fd> (or stdin if <fd> is NULL) install the corresponding
-tags and keys into the current GeoTIFF file. Note that the 
+tags and keys into the current GeoTIFF file. Note that the
 import routine only calls GTIFKeySet(), and so it is up to the
 client program to call GTIFWriteKey() in order to explicitly
 write the keys out to the file.
@@ -212,7 +212,7 @@ an ASCII string name it tries to find the corresponding code,
 key or tag numerical value, in a case-sensitive manner. If the
 string is not recognized the value -1 is return (no valid codes
 are negative). For consistency, any strings of the form "Unknown-%d"
-where %d is a decimal integer will return the specified integer. 
+where %d is a decimal integer will return the specified integer.
 
 Note: be careful when assigning variables to GTIFxxxCode; for example,
 the geokey_t type is unsigned, and so if -1 is returned, this will
@@ -227,99 +227,99 @@ checking that the value is positive.
 
 A typical use of LIBGEOTIFF for creating a GeoTIFF file is
 
-	#include "xtiffio.h"  /* for TIFF */
-	#include "geotiffio.h" /* for GeoTIFF */
-	void main()
-	{
-		TIFF *tif=(TIFF*)0;  /* TIFF-level descriptor */
-		GTIF *gtif=(GTIF*)0; /* GeoKey-level descriptor */
-		
-		/* Open TIFF descriptor to write GeoTIFF tags */
-		tif=XTIFFOpen(fname,"w");  
-		if (!tif) goto failure;
-		
-		/* Open GTIF Key parser */
-		gtif = GTIFNew(tif);
-		if (!gtif) goto failure;
-		
-		/* Set up standar TIFF file */
-		TIFFSetField(tif,TIFFTAG_IMAGEWIDTH,    WIDTH);
-		/* set other TIFF tags and write out image ... */
-				
-		/* Set GeoTIFF information */
-		GTIFKeySet(gtif, GTModelTypeGeoKey, TYPE_SHORT, 1, ModelGeographic);
-		/* set other GeoTIFF keys ... */
-		
-		/* Store the keys into the TIFF Tags */
-		GTIFWriteKeys(gtif);
-		
-		/* get rid of the key parser */
-		GTIFFree(gtif);
-		
-		/* save and close the TIFF file descriptor */
-		XTIFFClose(tif);
-		
-		exit (0);
-	failure:
-		exit (-1);
-	}
+        #include "xtiffio.h"  /* for TIFF */
+        #include "geotiffio.h" /* for GeoTIFF */
+        void main()
+        {
+                TIFF *tif=(TIFF*)0;  /* TIFF-level descriptor */
+                GTIF *gtif=(GTIF*)0; /* GeoKey-level descriptor */
+
+                /* Open TIFF descriptor to write GeoTIFF tags */
+                tif=XTIFFOpen(fname,"w");
+                if (!tif) goto failure;
+
+                /* Open GTIF Key parser */
+                gtif = GTIFNew(tif);
+                if (!gtif) goto failure;
+
+                /* Set up standar TIFF file */
+                TIFFSetField(tif,TIFFTAG_IMAGEWIDTH,    WIDTH);
+                /* set other TIFF tags and write out image ... */
+
+                /* Set GeoTIFF information */
+                GTIFKeySet(gtif, GTModelTypeGeoKey, TYPE_SHORT, 1, ModelGeographic);
+                /* set other GeoTIFF keys ... */
+
+                /* Store the keys into the TIFF Tags */
+                GTIFWriteKeys(gtif);
+
+                /* get rid of the key parser */
+                GTIFFree(gtif);
+
+                /* save and close the TIFF file descriptor */
+                XTIFFClose(tif);
+
+                exit (0);
+        failure:
+                exit (-1);
+        }
 
 While a typical use of the code for reading tags is:
 
-	#include "xtiffio.h"  /* for TIFF */
-	#include "geotiffio.h" /* for GeoTIFF */
-	enum {VERSION=0,MAJOR,MINOR};
-	void main()
-	{
-		TIFF *tif=(TIFF*)0;  /* TIFF-level descriptor */
-		GTIF *gtif=(GTIF*)0; /* GeoKey-level descriptor */
-		int versions[3];
-		int cit_length;
-		geocode_t model;    /* all key-codes are of this type */
-		char *citation;
-		
-		/* Open TIFF descriptor to read GeoTIFF tags */
-		tif=XTIFFOpen(fname,"r");  
-		if (!tif) goto failure;
-		
-		/* Open GTIF Key parser; keys will be read at this time. */
-		gtif = GTIFNew(tif);
-		if (!gtif) goto failure;
+        #include "xtiffio.h"  /* for TIFF */
+        #include "geotiffio.h" /* for GeoTIFF */
+        enum {VERSION=0,MAJOR,MINOR};
+        void main()
+        {
+                TIFF *tif=(TIFF*)0;  /* TIFF-level descriptor */
+                GTIF *gtif=(GTIF*)0; /* GeoKey-level descriptor */
+                int versions[3];
+                int cit_length;
+                geocode_t model;    /* all key-codes are of this type */
+                char *citation;
 
-		/* Get the GeoTIFF directory info */
-		GTIFDirectoryInfo(gtif,versions,0);
-		if (versions[MAJOR] > 1)
-		{
-			printf("this file is too new for me\n"); goto failure;
-		}
-		if (!GTIFKeyGet(gtif, GTModelTypeGeoKey, &model, 0, 1))
-		{
-			printf("Yikes! no Model Type\n") goto failure;
-		}
-		
-		/* ASCII keys are variable-length; compute size */
-		cit_length = GTIFKeyInfo(gtif,GTCitationGeoKey,&size,&type);
-		if (cit_length > 0)
-		{
-			citation = malloc(size*cit_length);
-			if (!citation) goto failure;
-			GTIFKeyGet(gtif, GTCitationGeoKey, citation, 0, cit_length);
-			printf("Citation:%s\n",citation);
-		}
+                /* Open TIFF descriptor to read GeoTIFF tags */
+                tif=XTIFFOpen(fname,"r");
+                if (!tif) goto failure;
 
-		/* Get some TIFF info on this image */
-		TIFFGetField(tif,TIFFTAG_IMAGEWIDTH,    &width);
-		
-		/* get rid of the key parser */
-		GTIFFree(gtif);
-		
-		/* close the TIFF file descriptor */
-		XTIFFClose(tif);
-		
-		exit (0);
-	failure:
-		exit (-1);
-	}
+                /* Open GTIF Key parser; keys will be read at this time. */
+                gtif = GTIFNew(tif);
+                if (!gtif) goto failure;
+
+                /* Get the GeoTIFF directory info */
+                GTIFDirectoryInfo(gtif,versions,0);
+                if (versions[MAJOR] > 1)
+                {
+                        printf("this file is too new for me\n"); goto failure;
+                }
+                if (!GTIFKeyGet(gtif, GTModelTypeGeoKey, &model, 0, 1))
+                {
+                        printf("Yikes! no Model Type\n") goto failure;
+                }
+
+                /* ASCII keys are variable-length; compute size */
+                cit_length = GTIFKeyInfo(gtif,GTCitationGeoKey,&size,&type);
+                if (cit_length > 0)
+                {
+                        citation = malloc(size*cit_length);
+                        if (!citation) goto failure;
+                        GTIFKeyGet(gtif, GTCitationGeoKey, citation, 0, cit_length);
+                        printf("Citation:%s\n",citation);
+                }
+
+                /* Get some TIFF info on this image */
+                TIFFGetField(tif,TIFFTAG_IMAGEWIDTH,    &width);
+
+                /* get rid of the key parser */
+                GTIFFree(gtif);
+
+                /* close the TIFF file descriptor */
+                XTIFFClose(tif);
+
+                exit (0);
+        failure:
+                exit (-1);
+        }
 
 
 
@@ -337,13 +337,13 @@ readable, and may also be used as input to other programs which
 use the "GTIFImport" routine, such as geotifcp, below.
 
 The -tfw flag may be passed to force generation of an ESRI style .tfw
-file as well as the metadata file.  
+file as well as the metadata file.
 
 The -no_norm flag will supress reporting of normalized parameters, and
-reporting of corner points. 
+reporting of corner points.
 
 The "-t tabledir" flag overrides the programs concept of how to file the
-EPSG CSV files, causing it to look in directory "tabledir". 
+EPSG CSV files, causing it to look in directory "tabledir".
 
 ------------------------
 GeoTIFF Metadata Format:
@@ -363,7 +363,7 @@ followed by "*" or "*<number>" indicates multiple entries):
       <GeoTIFF_Info> = <GeoTIFF_Version> + <GeoTIFF_Revision>
          <GeoTIFF_Version> = Version: + <Single_Space> + <Version> + <Return>
             <Version> = <Integer>
-         <GeoTIFF_Revision> = Revision: + 
+         <GeoTIFF_Revision> = Revision: +
                <Single_Space> + <Major_Rev> + <Period> + <Minor_Rev> + <Return>
                <Major_Rev> = <Integer>
                <Minor_Rev> = <Integer>
@@ -371,17 +371,17 @@ followed by "*" or "*<number>" indicates multiple entries):
          <Tag_Header> = <White_Space> + Tagged_Information: + <Return>
          <Tag_Trailer> = <White_Space> + End_Of_Tags. + <Return>
          <Tag_Entry> = <Tag_Entry_Header> + <Tag_Entry_Row>*
-            <Tag_Entry_Header> = <White_Space> + 
+            <Tag_Entry_Header> = <White_Space> +
                      <Tag_Name> + <Tag_Dimension> + <Colon> + <Return>
                <Tag_Dimension>  = "(" + <NRows> + <Comma> + <NCols> + ")"
-		 	      <NRows> = <Integer>
-		 	      <NCols> = <Integer>
+                               <NRows> = <Integer>
+                               <NCols> = <Integer>
             <Tag_Entry_Row> = <White_Space> + <Double_Float>*<NCols> + <Return>
       <GeoTIFF_Keys> =  <Key_Header> + <Key_Entry>* + <Key_Trailer>
          <Key_Header> = <White_Space> + Keyed_Information: + <Return>
          <Key_Trailer> = <White_Space> + End_Of_Keys. + <Return>
          <Key_Entry> = <Key_Entry_Header> + <Key_Entry_Value>
-            <Key_Entry_Header> = <White_Space> + 
+            <Key_Entry_Header> = <White_Space> +
                      <Key_Name> + <Key_Dimension> + <Colon> + <Return>
               <Key_Dimension> = "(" + <Key_Format> + <Comma> + <Key_Count> + ")"
             <Key_Entry_Value> = (<Key_Value> | <Numeric_Value> | <Ascii_Value>)
@@ -392,7 +392,7 @@ followed by "*" or "*<number>" indicates multiple entries):
    <Key_Name> = All symbolic key names defined in GeoTIFF spec.
    <Key_Value> = All symbolic value names defined in GeoTIFF spec.
    <Key_Format> = (Short | Ascii | Double)
-   
+
 And for the pedantic:
    <White_Space> = (<Single_Space> | <Tab>)*
    <Double_Float> = <Mantissa><Exponent>
@@ -429,8 +429,8 @@ Geotiff_Information:
       GeogInvFlatteningGeoKey (Double,1): 300.8017
       End_Of_Keys.
    End_Of_Geotiff.
-   
-   
+
+
 -------------------------------------------------------------
 2.2 geotifcp  - Copy a TIFF file and install GeoTIFF info from metadata.
 
@@ -438,12 +438,12 @@ Syntax:   geotifcp [options] [-e esri_worldfile] [-g metadata] input output
 
 The program geotifcp is identical in function to the LIBTIFF program
 "tiffcp", with the additional feature that if the "-g <metadata>"
-option is used the GeoTIFF information from the file <metadata> 
-will be installed into the output file.  The "-e worldfile" option will 
+option is used the GeoTIFF information from the file <metadata>
+will be installed into the output file.  The "-e worldfile" option will
 override the tiepoint and scale information from the metadata file based
-on the contents of the ESRI worldfile. 
+on the contents of the ESRI worldfile.
 
-If the "-g" option is not used, the opposite effect occurs: all 
+If the "-g" option is not used, the opposite effect occurs: all
 GeoTIFF information is filtered out of the input file before being
 written to the new output file.
 

@@ -81,7 +81,7 @@ int main( int argc, char* argv[] )
 
   // Disable Borland's floating point exceptions.
 #if defined(VCL_BORLAND)
-  _control87(MCW_EM, MCW_EM);  
+  _control87(MCW_EM, MCW_EM);
 #endif // defined(VCL_BORLAND)
 
   DO_TEST(algorithm);

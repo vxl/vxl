@@ -34,7 +34,7 @@ void split_and_add(vcl_vector<vcl_string> & values, const vcl_string & string, c
   }
   vcl_string last = trim(string.substr(start));
   if (last.length() != 0) values.push_back(last);
-  
+
 }
 
 bool load_vals(vcl_vector<vcl_string> & values, const vcl_string & filename, const vcl_string & delim)

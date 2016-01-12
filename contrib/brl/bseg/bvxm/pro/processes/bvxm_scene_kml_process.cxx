@@ -19,7 +19,7 @@ bool bvxm_scene_kml_process_cons(bprb_func_process& pro)
   input_types_[5] = "unsigned";                   // color index b
   input_types_[6] = "unsigned";                   // color index a // controls transparency of the box as displayed in google earth, set = 255 for opaque box
   input_types_[7] = "vcl_string";                 // name of the scene
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -58,7 +58,7 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
 
   vgl_box_3d<double> bbox(low_left_lat, low_left_lon, low_left_alt, upp_rght_lat, upp_rght_lon, upp_rght_alt);
 
-  
+
   vnl_double_2 ll;  ll[0] = bbox.min_point().x();  ll[1] = bbox.min_point().y();  // low_left
   vnl_double_2 lr;  lr[0] = bbox.max_point().x();  lr[1] = bbox.min_point().y();  // low_right
   vnl_double_2 ur;  ur[0] = bbox.max_point().x();  ur[1] = bbox.max_point().y();  // upp_right

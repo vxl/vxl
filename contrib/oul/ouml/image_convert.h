@@ -13,14 +13,14 @@ vil1_memory_image_of<T2> *convert_image
 
 template <> vil1_memory_image_of<unsigned char> *
 convert_image<vil1_rgb<unsigned char>, unsigned char>
-( 
+(
   const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
   unsigned char &var
 );
 
 template <> vil1_memory_image_of<double> *
 convert_image<vil1_rgb<unsigned char>, double>
-( 
+(
   const vil1_memory_image_of<vil1_rgb<unsigned char> > &from,
   double &var
 );

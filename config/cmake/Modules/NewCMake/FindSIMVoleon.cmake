@@ -1,4 +1,4 @@
-# find SimVoleon library for Coin3D based Volume Rendering 
+# find SimVoleon library for Coin3D based Volume Rendering
 # Once done this will define
 #
 # SIMVOLEON_FOUND        - system has SIMVOLEON - volume rendering library
@@ -48,7 +48,7 @@ IF(COIN3D_FOUND)
       FIND_LIBRARY(SIMVOLEON_LIBRARY SimVoleon
         /usr/lib
         /usr/local/lib
-      )   
+      )
 
     ELSE(APPLE)
 
@@ -60,7 +60,7 @@ IF(COIN3D_FOUND)
       FIND_LIBRARY(SIMVOLEON_LIBRARY SimVoleon
         /usr/lib
         /usr/local/lib
-      )   
+      )
 
     ENDIF(APPLE)
 

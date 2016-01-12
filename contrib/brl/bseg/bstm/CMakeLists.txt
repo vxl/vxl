@@ -4,14 +4,14 @@ INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
 INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
 
 SET(bstm_sources bstm_block_metadata.h bstm_block_metadata.cxx
-	         bstm_time_tree.h bstm_time_tree.cxx
-		 bstm_scene.h bstm_scene.cxx
-		 bstm_scene_parser.h bstm_scene_parser.cxx
-		 bstm_data_base.h bstm_data_base.cxx
-		 bstm_block.h bstm_block.cxx
-		 bstm_data_traits.h
-		 bstm_time_block.h bstm_time_block.cxx
-		 bstm_util.cxx bstm_util.h)
+                 bstm_time_tree.h bstm_time_tree.cxx
+                 bstm_scene.h bstm_scene.cxx
+                 bstm_scene_parser.h bstm_scene_parser.cxx
+                 bstm_data_base.h bstm_data_base.cxx
+                 bstm_block.h bstm_block.cxx
+                 bstm_data_traits.h
+                 bstm_time_block.h bstm_time_block.cxx
+                 bstm_util.cxx bstm_util.h)
 
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 IF(EXPAT_FOUND)

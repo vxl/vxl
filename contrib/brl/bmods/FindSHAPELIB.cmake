@@ -2,7 +2,7 @@
 # Find an ShapeLib (shape files) library
 #
 #
-# This file is used to manage using either a natively provided shapelib library 
+# This file is used to manage using either a natively provided shapelib library
 # or the one in b3p if provided.
 #
 #
@@ -24,10 +24,10 @@ IF( VXL_FORCE_B3P_SHAPELIB )
   IF(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib/shapefil.h)
 
     SET( SHAPELIB_FOUND "YES" )
-    SET( SHAPELIB_LIBRARIES shapelib )  
+    SET( SHAPELIB_LIBRARIES shapelib )
     SET( SHAPELIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib)
     SET( SHAPELIB_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/shapelib)
-        
+
   ENDIF(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib/shapefil.h)
 
 ENDIF(VXL_FORCE_B3P_SHAPELIB)

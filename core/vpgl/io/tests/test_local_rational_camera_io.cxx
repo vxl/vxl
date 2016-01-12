@@ -30,7 +30,7 @@ static void test_local_rational_camera_io()
   vpgl_rational_camera<double> rat_cam(neu_u, den_u, neu_v, den_v,
                                        sx, ox, sy, oy, sz, oz,
                                        su, ou, sv, ov);
-  
+
   vpgl_lvcs lvcs(33.4447732, -114.3085932, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   vpgl_local_rational_camera<double> lrat_cam(lvcs, rat_cam);
 

@@ -27,7 +27,7 @@ namespace boxm_save_scene_raw_process_globals
 bool boxm_save_scene_raw_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_save_scene_raw_process_globals;
-  
+
   // process takes 4 inputs but has no outputs
   //input[0]: scene binary file
   //input[1]: output file (raw) path
@@ -38,7 +38,7 @@ bool boxm_save_scene_raw_process_cons(bprb_func_process& pro)
   input_types_[1] = "vcl_string";
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -46,19 +46,19 @@ bool boxm_save_scene_raw_process_cons(bprb_func_process& pro)
 bool boxm_save_scene_raw_process(bprb_func_process& pro)
 {
   using namespace boxm_save_scene_raw_process_globals;
-  
+
   if ( pro.n_inputs() < n_inputs_) {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get the inputs
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vcl_string filepath = pro.get_input<vcl_string>(i++);
   unsigned resolution =  pro.get_input<unsigned>(i++);
   unsigned whole = pro.get_input<unsigned>(i++);
-  
+
   // check the scene's app model
   if (scene_ptr->appearence_model() == BOXM_FLOAT)
   {
@@ -127,7 +127,7 @@ bool boxm_save_scene_raw_process(bprb_func_process& pro)
         boxm_save_scene_raw_general<short>(*scene, filepath + ".raw", resolution);
       }
     }
-  }  
+  }
   else {
     vcl_cout << "boxm_save_scene_raw_process: undefined APM type" << vcl_endl;
     return false;

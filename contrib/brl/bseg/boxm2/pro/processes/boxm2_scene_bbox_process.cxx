@@ -42,13 +42,13 @@ bool boxm2_scene_bbox_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get the inputs
   boxm2_scene_sptr   scene = pro.get_input<boxm2_scene_sptr>(0);
-  
+
   //bbox and write out min/max pts
-  vgl_box_3d<double> bbox = scene->bounding_box(); 
-  
+  vgl_box_3d<double> bbox = scene->bounding_box();
+
   // store outputs
   int i=0;
   pro.set_output_val<double>(i++, bbox.min_x());

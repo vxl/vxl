@@ -5,7 +5,7 @@
 // \file
 // \brief A class for generating an orthographic height map
 //        creates an orthographic vpgl_geo_camera first, then renders the height map using this camera
-//        WARNING: this process assumes that the world is compass-alinged 
+//        WARNING: this process assumes that the world is compass-alinged
 //
 //        -  Inputs:
 //             * bvxm_voxel_world_sptr
@@ -13,7 +13,7 @@
 //        -  Output:
 //             * vil_image_view_base_sptr   generated image
 //
-// \author  Ozge C. Ozcanli 
+// \author  Ozge C. Ozcanli
 // \date    Apr 03, 2013
 // \verbatim
 //  Modifications
@@ -21,7 +21,7 @@
 
 #include <bprb/bprb_func_process.h>
 
-// generate a heightmap with an ortho camera - generate a vpgl_geo_camera for the scene 
+// generate a heightmap with an ortho camera - generate a vpgl_geo_camera for the scene
 //: global variables
 namespace bvxm_heightmap_ortho_process_globals
 {
@@ -37,7 +37,7 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro);
 
 
 
-// generate an expected heightmap using the input camera 
+// generate an expected heightmap using the input camera
 namespace bvxm_heightmap_exp_process_globals
 {
   const unsigned n_inputs_ = 4;

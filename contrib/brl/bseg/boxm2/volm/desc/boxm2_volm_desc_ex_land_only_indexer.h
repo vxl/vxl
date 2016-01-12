@@ -25,7 +25,7 @@ class volm_desc_ex_land_only_indexer : public volm_desc_indexer
 {
 public:
   static vcl_string get_name();
-  
+
   //: Constructor
   volm_desc_ex_land_only_indexer(vcl_string const& index_folder,
                                  vcl_string const& out_index_folder,
@@ -41,7 +41,7 @@ public:
 
   //: Load the volm_geo_index for given tile
   virtual bool get_next();
-  
+
   //: extract histogram for a location
   virtual bool extract(double lat, double lon, double elev, vcl_vector<unsigned char>& values);
 
@@ -60,7 +60,7 @@ private:
   unsigned           nlands_;
   unsigned       layer_size_;
   unsigned char initial_mag_;
-  
+
 
   //: directory where the previous created indices is stored
   vcl_string index_folder_;

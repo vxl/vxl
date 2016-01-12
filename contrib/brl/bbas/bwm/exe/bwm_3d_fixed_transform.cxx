@@ -40,8 +40,8 @@ int main(int argc, char** argv)
   //Get Inputs
 
   vul_arg<vcl_string> site_files   ("-site_files", "a txt file with the name of site xml files at each line",  "");  // we need a site file for each 3d point in the gps file, the orders should be the same
-  vul_arg<vcl_string> site_sfm   ("-tmp", "",  ""); 
-  vul_arg<vcl_string> gps_file ("-gps", "gps text file (x y z in local coords per line)", "");  
+  vul_arg<vcl_string> site_sfm   ("-tmp", "",  "");
+  vul_arg<vcl_string> gps_file ("-gps", "gps text file (x y z in local coords per line)", "");
   vul_arg<vcl_string> output_cam_dir ("-out_cam_dir","directory to store cams", "");
 
   vcl_cout << " argc: " << argc << vcl_endl;
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
       site_names.push_back(name);
   }
   vcl_vector<bwm_video_corr_sptr> corrs;
-  vcl_string cam_path = ""; 
+  vcl_string cam_path = "";
   for (unsigned i = 0; i < site_names.size(); i++)
   {
     vcl_string file = site_names[i];
@@ -93,7 +93,7 @@ int main(int argc, char** argv)
     } else
       cam_path = cp.camera_path();
   }
-  
+
   unsigned n_pts = corrs.size();
   vcl_cout << "there are: " << n_pts << " corrs total in all the site files,expect to find this many 3d points in the gps file\n";
 
@@ -102,7 +102,7 @@ int main(int argc, char** argv)
     vcl_cerr << "ERROR: error opening gps file " << gps_file() << vcl_endl;
     return -1;
   }
-  
+
   vcl_vector<vnl_vector_fixed<double, 4> > pts_3d;
   for (unsigned int i=0; i<n_pts; ++i) {
     double gps_x, gps_y, gps_z;
@@ -118,11 +118,11 @@ int main(int argc, char** argv)
     return -1;
   }
   vcl_cout << " read " << pts_3d.size() << " 3d points, start computation..\n";
-  
+
   vcl_cout << "cam_path from site files: " << cam_path << vcl_endl;
   vcl_vector<vpgl_perspective_camera<double> > cams;
   vcl_vector<vcl_string> out_names;
-  unsigned cam_id = 0; 
+  unsigned cam_id = 0;
   bwm_video_cam_istream_sptr cstr = new bwm_video_cam_istream(cam_path);
   do {
     //vpgl_perspective_camera<double>* cam = cstr->read_camera();
@@ -140,7 +140,7 @@ int main(int argc, char** argv)
     else
       break;
   } while (true);
-  
+
   vcl_cout << "found: " << cams.size() << " cameras!\n";
   /*
   bwm_video_corr_processor cp_temp;
@@ -150,7 +150,7 @@ int main(int argc, char** argv)
   vcl_string cam_path_temp = cp_temp.camera_path();
 
   vcl_vector<vpgl_perspective_camera<double> > cams_temp;
-  cam_id = 0; 
+  cam_id = 0;
   bwm_video_cam_istream_sptr cstr_temp = new bwm_video_cam_istream(cam_path_temp);
   do {
     cstr_temp->advance();
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
     else
       break;
   } while (true);
-  
+
   vcl_cout << "found: " << cams_temp.size() << " temp cameras!\n";
 
   // now make the centers of input cams the centers of these temp cams  (sfm cams)
@@ -174,8 +174,8 @@ int main(int argc, char** argv)
     cams[i] = cnew;
   }*/
 
-  
-  // for each 3d point, there will be a vector of 2-d correspondences and cameras 
+
+  // for each 3d point, there will be a vector of 2-d correspondences and cameras
   vcl_vector< vcl_vector< vcl_pair<vnl_vector_fixed<double, 2>, unsigned> > > img_pt_corrs;  // so size img_pt_corrs = 3d_pts.size()
 
   for (unsigned i = 0; i < corrs.size(); i++)
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
 
     img_pt_corrs.push_back(pt_cams);
   }
-  
+
   vcl_vector<vpgl_perspective_camera<double>  > output_cams;
   /*if (!vpgl_camera_transform::compute_fixed_transformation(cams, img_pt_corrs, pts_3d, output_cams)) {
     vcl_cerr << " In bwm_3d_fixed_transform() - problems computing the transform!\n";
@@ -202,12 +202,12 @@ int main(int argc, char** argv)
     vcl_cerr << " In bwm_3d_fixed_transform() - problems computing the transform!\n";
     return -1;
   }
-  
+
   /*if (!vpgl_camera_transform::compute_initial_transformation_R(cams, img_pt_corrs, pts_3d, output_cams)) {
     vcl_cerr << " In bwm_3d_fixed_transform() - problems computing the transform!\n";
     return -1;
   }*/
-  
+
   if (output_cams.size() != out_names.size()) {
     vcl_cerr << " In bwm_3d_fixed_transform() - inconsistent output cam vector sizes!\n";
     return -1;
@@ -221,6 +221,6 @@ int main(int argc, char** argv)
 
   double t = timer.all();
   vcl_cout << "Finished! Time: " << t << " ms: " << t/1000 << " secs: " << t/(1000*60) << " mins." << vcl_endl;
-  
+
   return 0;
 }

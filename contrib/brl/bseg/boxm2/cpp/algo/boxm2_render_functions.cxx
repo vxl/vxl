@@ -21,7 +21,7 @@ void boxm2_render_expected_image( boxm2_scene_info * linfo,
     render_functor.init_data(datas,expected,vis);
     cast_ray_per_block<boxm2_render_exp_image_functor<BOXM2_MOG3_GREY> >
       (render_functor,linfo,blk_sptr,cam,roi_ni,roi_nj,roi_ni0,roi_nj0);
-  } 
+  }
   else if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != vcl_string::npos )
   {
     boxm2_render_exp_image_functor<BOXM2_GAUSS_GREY> render_functor;
@@ -42,7 +42,7 @@ void boxm2_render_cone_exp_image(boxm2_scene_info * linfo,
                                  unsigned int roi_ni0,
                                  unsigned int roi_nj0)
 {
-  vul_timer t; 
+  vul_timer t;
   boxm2_render_cone_functor render_functor;
   render_functor.init_data(datas,expected,vis);
   cast_cone_ray_per_block<boxm2_render_cone_functor>

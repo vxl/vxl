@@ -213,7 +213,7 @@ class boxm2_ray_probe_functor
       default: // do nothing
           {
               vcl_cout<<"Unknown data "<<vcl_endl;
-          
+
         break;
           }
     }

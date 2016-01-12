@@ -17,11 +17,11 @@ int main(int argc, char** argv)
     vcl_cerr << "Please specify the path to scene file (IV or VRML)\n";
     return -1;
   }
-  
+
   vcl_vector<vcl_string> files;
   for(int i=1; i<argc; ++i)
     files.push_back(argv[i]);
-  
+
   // initialize vgui
   vgui::init(argc, argv);
 

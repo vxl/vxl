@@ -64,7 +64,7 @@ private:
 
   /// private undefined copy constructor
   DcmPrivateTagCacheEntry(const DcmPrivateTagCacheEntry&);
-  
+
   /// private undefined copy assignment operator
   DcmPrivateTagCacheEntry& operator=(const DcmPrivateTagCacheEntry&);
 
@@ -108,7 +108,7 @@ private:
 
   /// private undefined copy constructor
   DcmPrivateTagCache(const DcmPrivateTagCache&);
-  
+
   /// private undefined copy assignment operator
   DcmPrivateTagCache& operator=(const DcmPrivateTagCache&);
 

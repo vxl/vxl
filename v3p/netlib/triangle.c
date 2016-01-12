@@ -3334,11 +3334,11 @@ struct behavior *b;
       for (j = STARTINDEX; argv[i][j] != '\0'; j++) {
         if (argv[i][j] == 'p') {
           b->poly = 1;
-	}
+        }
 #ifndef CDT_ONLY
         if (argv[i][j] == 'r') {
           b->refine = 1;
-	}
+        }
         if (argv[i][j] == 'q') {
           b->quality = 1;
           if (((argv[i][j + 1] >= '0') && (argv[i][j + 1] <= '9')) ||
@@ -3352,10 +3352,10 @@ struct behavior *b;
             }
             workstring[k] = '\0';
             b->minangle = (REAL) strtod(workstring, (char **) NULL);
-	  } else {
+          } else {
             b->minangle = 20.0;
-	  }
-	}
+          }
+        }
         if (argv[i][j] == 'a') {
           b->quality = 1;
           if (((argv[i][j + 1] >= '0') && (argv[i][j + 1] <= '9')) ||
@@ -3373,11 +3373,11 @@ struct behavior *b;
             if (b->maxarea <= 0.0) {
               printf("Error:  Maximum area must be greater than zero.\n");
               triexit(1);
-	    }
-	  } else {
+            }
+          } else {
             b->vararea = 1;
-	  }
-	}
+          }
+        }
         if (argv[i][j] == 'u') {
           b->quality = 1;
           b->usertest = 1;
@@ -3403,49 +3403,49 @@ struct behavior *b;
         }
         if (argv[i][j] == 'e') {
           b->edgesout = 1;
-	}
+        }
         if (argv[i][j] == 'v') {
           b->voronoi = 1;
-	}
+        }
         if (argv[i][j] == 'n') {
           b->neighbors = 1;
-	}
+        }
         if (argv[i][j] == 'g') {
           b->geomview = 1;
-	}
+        }
         if (argv[i][j] == 'B') {
           b->nobound = 1;
-	}
+        }
         if (argv[i][j] == 'P') {
           b->nopolywritten = 1;
-	}
+        }
         if (argv[i][j] == 'N') {
           b->nonodewritten = 1;
-	}
+        }
         if (argv[i][j] == 'E') {
           b->noelewritten = 1;
-	}
+        }
 #ifndef TRILIBRARY
         if (argv[i][j] == 'I') {
           b->noiterationnum = 1;
-	}
+        }
 #endif /* not TRILIBRARY */
         if (argv[i][j] == 'O') {
           b->noholes = 1;
-	}
+        }
         if (argv[i][j] == 'X') {
           b->noexact = 1;
-	}
+        }
         if (argv[i][j] == 'o') {
           if (argv[i][j + 1] == '2') {
             j++;
             b->order = 2;
           }
-	}
+        }
 #ifndef CDT_ONLY
         if (argv[i][j] == 'Y') {
           b->nobisect++;
-	}
+        }
         if (argv[i][j] == 'S') {
           b->steiner = 0;
           while ((argv[i][j + 1] >= '0') && (argv[i][j + 1] <= '9')) {
@@ -3489,7 +3489,7 @@ struct behavior *b;
         if ((argv[i][j] == 'h') || (argv[i][j] == 'H') ||
             (argv[i][j] == '?')) {
           info();
-	}
+        }
 #endif /* not TRILIBRARY */
       }
 #ifndef TRILIBRARY
@@ -6439,7 +6439,7 @@ REAL dheight;
   adxbdy = adx * bdy;
   bdxady = bdx * ady;
 
-  det = adheight * (bdxcdy - cdxbdy) 
+  det = adheight * (bdxcdy - cdxbdy)
       + bdheight * (cdxady - adxcdy)
       + cdheight * (adxbdy - bdxady);
 
@@ -11480,7 +11480,7 @@ FILE *polyfile;
       for (j = 0; j < 2; j++) {
         if ((end[j] < b->firstnumber) ||
             (end[j] >= b->firstnumber + m->invertices)) {
-          printf("Error:  Segment %ld has an invalid vertex index.\n", 
+          printf("Error:  Segment %ld has an invalid vertex index.\n",
                  segmentnumber);
           triexit(1);
         }
@@ -13115,7 +13115,7 @@ int regions;
         } else {
           printf("Spreading regional attributes.\n");
         }
-      } else { 
+      } else {
         printf("Spreading regional area constraints.\n");
       }
     }

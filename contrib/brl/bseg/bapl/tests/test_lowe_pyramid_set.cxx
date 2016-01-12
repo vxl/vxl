@@ -41,7 +41,7 @@ MAIN( test_lowe_pyramid_set )
     float y = 256;
     float ps = vcl_pow(2.0f,(float)(i/levels)-1);
     float scale = ps * (vcl_pow(2.0f,(i%levels)/float(levels)));
-    
+
     float actual_scale;
     vil_image_view<float> image = pyramids.dog_at(scale,&actual_scale);
     x /= actual_scale;  y /= actual_scale;

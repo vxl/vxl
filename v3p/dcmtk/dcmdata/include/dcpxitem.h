@@ -43,8 +43,8 @@ class DcmPixelItem : public DcmOtherByteOtherWord
 {
   protected:
     virtual OFCondition writeTagAndLength(DcmOutputStream & outStream,
-					  const E_TransferSyntax oxfer,
-					  Uint32 & writtenBytes) const;
+                                          const E_TransferSyntax oxfer,
+                                          Uint32 & writtenBytes) const;
   public:
     DcmPixelItem(const DcmTag &tag, const Uint32 len = 0);
     DcmPixelItem(const DcmPixelItem &old);

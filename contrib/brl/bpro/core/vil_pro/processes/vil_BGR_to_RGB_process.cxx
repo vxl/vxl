@@ -9,7 +9,7 @@
 #include<bil/algo/bil_debayer_image.h>
 //: Constructor
 // this process takes 1 input:
-// Rearrange the layers BGR to RGB 
+// Rearrange the layers BGR to RGB
 namespace vil_BGR_to_RGB_process_globals
 {
     const unsigned n_inputs_ =  1;

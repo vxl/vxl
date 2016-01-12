@@ -126,7 +126,7 @@ bool boxm2_ocl_update_based_dispersion::update(boxm2_scene_sptr              sce
   float tnearfar[2] = { 0.0f, 1000000} ;
   if(cam->type_name() == "vpgl_perspective_camera")
   {
-      
+
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
       tnearfar[1] = f* scene->finest_resolution()/resfarfactor ;
@@ -427,7 +427,7 @@ bool boxm2_ocl_update_based_dispersion::update(boxm2_scene_sptr              sce
         //mog variance, if 0.0f or less, then var will be learned
         bocl_mem_sptr mog_var_mem = new bocl_mem(device->context(), &mog_var, sizeof(mog_var), "update gauss variance");
         mog_var_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
-        
+
         local_threads[0] = 64;
         local_threads[1] = 1 ;
         global_threads[0] = (unsigned) RoundUp(mdata.sub_block_num_.x()*mdata.sub_block_num_.y()*mdata.sub_block_num_.z(),(int)local_threads[0]);
@@ -451,7 +451,7 @@ bool boxm2_ocl_update_based_dispersion::update(boxm2_scene_sptr              sce
         kern->set_arg( aux0_dir_z );
         kern->set_arg( aux0_vis_exp );
         kern->set_arg( ray_origin_ptr.ptr() );
-        
+
         kern->set_arg( up_alpha_mem.ptr() );
         kern->set_arg( mog_var_mem.ptr() );
         kern->set_arg( up_app_mem.ptr() );

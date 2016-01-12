@@ -289,7 +289,7 @@ int  *PrintOrdToIntRowMap, *PrintOrdToIntColMap;
 #if spCOMPLEX
             if (Matrix->Complex AND Data)
             {   if (Header)
-		    printf("    ");
+                    printf("    ");
                 for (J = StartCol; J <= StopCol; J++)
                 {   if (pImagElements[J - StartCol] != NULL)
                     {   printf(" %8.2gj",
@@ -331,8 +331,8 @@ int  *PrintOrdToIntRowMap, *PrintOrdToIntColMap;
         }
 
     /* Calculate and print sparsity and number of fill-ins created. */
-	printf("\nDensity = %2.2f%%.\n", ((double)ElementCount * 100.0)
-					 / (((double)Size * (double)Size)));
+        printf("\nDensity = %2.2f%%.\n", ((double)ElementCount * 100.0)
+                                         / (((double)Size * (double)Size)));
         if (NOT Matrix->NeedsOrdering)
             printf("Number of fill-ins = %1d.\n", Matrix->Fillins);
     }

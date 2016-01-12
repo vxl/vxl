@@ -332,7 +332,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
         kern->clear_args();
 
 
-      }	else if (i==UPDATE_COMPRESS)
+      }        else if (i==UPDATE_COMPRESS)
       {
         local_threads[0] = 64;
         local_threads[1] = 1 ;

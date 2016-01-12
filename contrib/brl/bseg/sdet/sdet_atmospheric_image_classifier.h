@@ -9,11 +9,11 @@
 //-----------------------------------------------------------------------------
 #include <sdet/sdet_texture_classifier.h>
 //
-// This classifier is based on learning textures for images with and without 
+// This classifier is based on learning textures for images with and without
 // significant atmospheric effects such as clouds and haze
 // The class assumes a set of categories associated with atmospheric-free
 // conditions such as urban, water, shadow, and two atmospheric categories:
-// cloud  and haze. This classifier then produces a color image quality 
+// cloud  and haze. This classifier then produces a color image quality
 // blocked image. The color pixel values in the output are assigned as:
 // red - belief the high atmospheric effects occur in the block
 // green - belief the the block is free of atmospheric effects
@@ -34,14 +34,14 @@ class sdet_atmospheric_image_classifier : public sdet_texture_classifier
   vil_image_view<vxl_byte> classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map, vcl_map<vcl_string, float>& cat_percentage_map);
 
   //: classify image quality based on expected model image and incoming image
-  // Assumes that textons have been computed for the model generating the 
+  // Assumes that textons have been computed for the model generating the
   // expected image of a scene. The image is then classified according to
-  // its similarity to the expected image, via the texton histogram for the 
-  // model. 
-  vil_image_view<float> 
+  // its similarity to the expected image, via the texton histogram for the
+  // model.
+  vil_image_view<float>
     classify_image_blocks_expected(vcl_string const& img_path,
                                    vcl_string const& exp_path);
-  vil_image_view<float> 
+  vil_image_view<float>
     classify_image_blocks_expected(vil_image_view<float> const& image,
                                    vil_image_view<float> const& exp);
  protected:

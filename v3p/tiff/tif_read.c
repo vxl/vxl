@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -51,10 +51,10 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
         uint64 read_offset;
         tmsize_t cc, to_read;
         /* tmsize_t bytecountm; */
-        
+
         if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
             return 0;
-        
+
         /*
          * Expand raw data buffer, if needed, to hold data
          * strip coming from file (perhaps should set upper
@@ -64,7 +64,7 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
         /* bytecountm=(tmsize_t) td->td_stripbytecount[strip]; */
         if (read_ahead*2 > tif->tif_rawdatasize) {
                 assert( restart );
-                
+
                 tif->tif_curstrip = NOSTRIP;
                 if ((tif->tif_flags & TIFF_MYBUFFER) == 0) {
                         TIFFErrorExt(tif->tif_clientdata, module,
@@ -90,7 +90,7 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
                 unused_data = tif->tif_rawdataloaded - (tif->tif_rawcp - tif->tif_rawdata);
         else
                 unused_data = 0;
-        
+
         if( unused_data > 0 )
         {
     assert((tif->tif_flags&TIFF_BUFFERMMAP)==0);
@@ -114,7 +114,7 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
         ** How much do we want to read?
         */
         to_read = tif->tif_rawdatasize - unused_data;
-        if( (uint64) to_read > td->td_stripbytecount[strip] 
+        if( (uint64) to_read > td->td_stripbytecount[strip]
             - tif->tif_rawdataoff - tif->tif_rawdataloaded )
         {
                 to_read = td->td_stripbytecount[strip]
@@ -140,12 +140,12 @@ TIFFFillStripPartial( TIFF *tif, int strip, tmsize_t read_ahead, int restart )
 #endif
                 return 0;
         }
-        
+
         tif->tif_rawdataoff = tif->tif_rawdataoff + tif->tif_rawdataloaded - unused_data ;
         tif->tif_rawdataloaded = unused_data + to_read;
 
         tif->tif_rawcp = tif->tif_rawdata;
-                        
+
         if (!isFillOrder(tif, td->td_fillorder) &&
             (tif->tif_flags & TIFF_NOBITREV) == 0) {
     assert((tif->tif_flags&TIFF_BUFFERMMAP)==0);
@@ -211,7 +211,7 @@ TIFFSeek(TIFF* tif, uint32 row, uint16 sample )
 #else
         whole_strip = 1;
 #endif
-        
+
         if( !whole_strip )
         {
                 read_ahead = tif->tif_scanlinesize * 16 + 5000;
@@ -222,7 +222,7 @@ TIFFSeek(TIFF* tif, uint32 row, uint16 sample )
          * only reading the first part.
          */
   if (strip != tif->tif_curstrip) { /* different strip, refill */
-                
+
                 if( whole_strip )
                 {
                         if (!TIFFFillStrip(tif, strip))
@@ -240,7 +240,7 @@ TIFFSeek(TIFF* tif, uint32 row, uint16 sample )
         */
         else if( !whole_strip )
         {
-                if( ((tif->tif_rawdata + tif->tif_rawdataloaded) - tif->tif_rawcp) < read_ahead 
+                if( ((tif->tif_rawdata + tif->tif_rawdataloaded) - tif->tif_rawcp) < read_ahead
                     && (uint64) tif->tif_rawdataoff+tif->tif_rawdataloaded < td->td_stripbytecount[strip] )
                 {
                         if( !TIFFFillStripPartial(tif,strip,read_ahead,0) )
@@ -269,14 +269,14 @@ TIFFSeek(TIFF* tif, uint32 row, uint16 sample )
                                 return (0);
                 }
   }
-        
+
   if (row != tif->tif_row) {
     /*
      * Seek forward to the desired row.
      */
 
                 /* TODO: Will this really work with partial buffers? */
-                
+
     if (!(*tif->tif_seek)(tif, row - tif->tif_row))
       return (0);
     tif->tif_row = row;
@@ -297,14 +297,14 @@ TIFFReadScanline(TIFF* tif, void* buf, uint32 row, uint16 sample)
      * Decompress desired row into user buffer.
      */
     e = (*tif->tif_decoderow)
-        (tif, (uint8*) buf, tif->tif_scanlinesize, sample);  
+        (tif, (uint8*) buf, tif->tif_scanlinesize, sample);
 
     /* we are now poised at the beginning of the next row */
     tif->tif_row = row + 1;
 
     if (e)
       (*tif->tif_postdecode)(tif, (uint8*) buf,
-          tif->tif_scanlinesize);  
+          tif->tif_scanlinesize);
   }
   return (e > 0 ? 1 : -1);
 }
@@ -368,7 +368,7 @@ TIFFReadRawStrip1(TIFF* tif, uint32 strip, void* buf, tmsize_t size,
 
     if (!_TIFFFillStriles( tif ))
         return ((tmsize_t)(-1));
-        
+
   assert((tif->tif_flags&TIFF_NOREADRAW)==0);
   if (!isMapped(tif)) {
     tmsize_t cc;
@@ -494,7 +494,7 @@ TIFFFillStrip(TIFF* tif, uint32 strip)
 
     if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
         return 0;
-        
+
   if ((tif->tif_flags&TIFF_NOREADRAW)==0)
   {
     uint64 bytecount = td->td_stripbytecount[strip];
@@ -573,7 +573,7 @@ TIFFFillStrip(TIFF* tif, uint32 strip)
                         tif->tif_rawdataoff = 0;
                         tif->tif_rawdataloaded = (tmsize_t) bytecount;
 
-      /* 
+      /*
        * When we have tif_rawdata reference directly into the memory mapped file
        * we need to be pretty careful about how we use the rawdata.  It is not
        * a general purpose working buffer as it normally otherwise is.  So we
@@ -615,7 +615,7 @@ TIFFFillStrip(TIFF* tif, uint32 strip)
 
                         tif->tif_rawdataoff = 0;
                         tif->tif_rawdataloaded = bytecountm;
-                        
+
       if (!isFillOrder(tif, td->td_fillorder) &&
           (tif->tif_flags & TIFF_NOBITREV) == 0)
         TIFFReverseBits(tif->tif_rawdata, bytecountm);
@@ -797,7 +797,7 @@ TIFFFillTile(TIFF* tif, uint32 tile)
 
     if (!_TIFFFillStriles( tif ) || !tif->tif_dir.td_stripbytecount)
         return 0;
-        
+
   if ((tif->tif_flags&TIFF_NOREADRAW)==0)
   {
     uint64 bytecount = td->td_stripbytecount[tile];
@@ -891,7 +891,7 @@ TIFFFillTile(TIFF* tif, uint32 tile)
 
                         tif->tif_rawdataoff = 0;
                         tif->tif_rawdataloaded = bytecountm;
-                        
+
       if (!isFillOrder(tif, td->td_fillorder) &&
           (tif->tif_flags & TIFF_NOBITREV) == 0)
         TIFFReverseBits(tif->tif_rawdata,
@@ -969,7 +969,7 @@ TIFFStartStrip(TIFF* tif, uint32 strip)
   if (tif->tif_flags&TIFF_NOREADRAW)
   {
     tif->tif_rawcp = NULL;
-    tif->tif_rawcc = 0;  
+    tif->tif_rawcc = 0;
   }
   else
   {

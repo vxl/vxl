@@ -163,7 +163,7 @@ void bkml_parser::charData(const XML_Char* s, int len)
     if (current_name_.compare("Camera Ground Truth") == 0) {
       vcl_stringstream str;
       for (int i =0; i<len; ++i) {
-        if (s[i] == ',') 
+        if (s[i] == ',')
           str << ' ';
         else
           str << s[i];
@@ -279,7 +279,7 @@ void bkml_parser::charData(const XML_Char* s, int len)
       if ((int)cord_end > len)
         len = (int)cord_end;
     }
-    
+
     for (unsigned int i=0; i<cord_end; ++i)
       str << s[i];
     vcl_vector<vgl_point_3d<double> > poly_verts;

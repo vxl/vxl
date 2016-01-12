@@ -15,7 +15,7 @@ bool vpgl_load_rational_camera_process_cons(bprb_func_process& pro)
   //this process takes one input: the filename
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -23,7 +23,7 @@ bool vpgl_load_rational_camera_process_cons(bprb_func_process& pro)
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
+
   return true;
 
 }
@@ -35,7 +35,7 @@ bool vpgl_load_rational_camera_process(bprb_func_process& pro)
     vcl_cout << "lvpgl_load_rational_camera_process: The input number should be 1" << vcl_endl;
     return false;
   }
-  
+
   // get the inputs
   vcl_string camera_filename = pro.get_input<vcl_string>(0);
 
@@ -46,7 +46,7 @@ bool vpgl_load_rational_camera_process(bprb_func_process& pro)
     ratcam = read_rational_camera<double>(camera_filename);
 
   }
-  
+
   if ( !ratcam.as_pointer() ) {
     vcl_cerr << "Failed to load rational camera from file" << camera_filename << vcl_endl;
     return false;
@@ -63,7 +63,7 @@ bool vpgl_load_rational_camera_from_txt_process_cons(bprb_func_process& pro)
   //this process takes one input: the filename
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -71,7 +71,7 @@ bool vpgl_load_rational_camera_from_txt_process_cons(bprb_func_process& pro)
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
+
   return true;
 
 }
@@ -83,7 +83,7 @@ bool vpgl_load_rational_camera_from_txt_process(bprb_func_process& pro)
     vcl_cout << "lvpgl_load_rational_camera_from_txt_process: The input number should be 1" << vcl_endl;
     return false;
   }
-  
+
   // get the inputs
   vcl_string camera_filename = pro.get_input<vcl_string>(0);
 

@@ -13,14 +13,14 @@ ELSE (NOT WIN32)
   SET(AVIFILE_FOUND "YES")
 ENDIF (NOT WIN32)
 
-IF (AVIFILE_FOUND) 
+IF (AVIFILE_FOUND)
 
   ADD_EXECUTABLE(
-    copy_image copy_image.cxx 
+    copy_image copy_image.cxx
   )
 
   ADD_EXECUTABLE(
-    mvl2_to_divx mvl2_to_divx.cxx 
+    mvl2_to_divx mvl2_to_divx.cxx
   )
 
-ENDIF (AVIFILE_FOUND) 
+ENDIF (AVIFILE_FOUND)

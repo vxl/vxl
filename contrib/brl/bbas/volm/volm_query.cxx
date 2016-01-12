@@ -171,17 +171,17 @@ volm_query::volm_query(vcl_string const& query_file, volm_camera_space_sptr cam_
                        volm_spherical_container_sptr const& sph)
 : cam_space_(cam_space), invalid_((unsigned char)255), sph_depth_(sph), sph_(sph_shell)
 {
-  
+
   //the discrete rays defined on the sphere as x, y, z
   vcl_cout << "depth_map_scene_file = " << depth_map_scene_file << vcl_endl;
 
   query_points_ = sph_->cart_points();
   query_size_ = (unsigned)query_points_.size();
-  
+
   // load the depth_map_scene from depth_map_scene binary
   dm_ = new depth_map_scene;
   vsl_b_ifstream dis(depth_map_scene_file.c_str());
-  
+
   dm_->b_read(dis);
   dis.close();
   // the dimensions of the depth image
@@ -934,7 +934,7 @@ void volm_query::depth_rgb_image(vcl_vector<unsigned char> const& values,
         color_id = vil_rgb<vxl_byte>(255,0,0);
       else if (values[pidx] == 254)            // sky --> blue
         color_id = vil_rgb<vxl_byte>(51,102,255);
-      else 
+      else
         color_id = volm_osm_category_io::volm_land_table[values[pidx]].color_;
         //color_id = volm_label_table::get_color(values[pidx]);
       this->draw_dot(out_img, query_points_[pidx], color_id, cam);

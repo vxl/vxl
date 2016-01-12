@@ -37,7 +37,7 @@ bool boxm2_scene_kml_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get the inputs
   boxm2_scene_sptr   scene = pro.get_input<boxm2_scene_sptr>(0);
   vpgl_lvcs lvcs = scene->lvcs();
@@ -46,27 +46,27 @@ bool boxm2_scene_kml_process(bprb_func_process& pro)
   vcl_ofstream ofs(kml_name.c_str());
   bkml_write::open_document(ofs);
   vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
-  
+
   for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) {
-    
+
     vgl_box_3d<double> box = iter->second.bbox();
 
     double lon, lat, elev;
     lvcs.local_to_global(box.min_x(), box.min_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 ll; ll[0] = lat; ll[1] = lon;
-    
+
     lvcs.local_to_global(box.max_x(), box.min_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 lr; lr[0] = lat; lr[1] = lon;
-    
+
     lvcs.local_to_global(box.max_x(), box.max_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 ur; ur[0] = lat; ur[1] = lon;
-    
+
     lvcs.local_to_global(box.min_x(), box.max_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
     vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
-    
+
     vcl_stringstream box_id;
-    box_id << iter->first.to_string() << ", max_level: " << iter->second.max_level_ 
-           << ", dim: " 
+    box_id << iter->first.to_string() << ", max_level: " << iter->second.max_level_
+           << ", dim: "
            << iter->second.sub_block_dim_.x() << "x" <<  iter->second.sub_block_dim_.y() << "x" <<  iter->second.sub_block_dim_.z();
     vcl_string desc = scene->data_path() + " block footprint";
     bkml_write::write_box(ofs, box_id.str(), desc, ul, ur, ll, lr);

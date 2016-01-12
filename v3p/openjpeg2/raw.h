@@ -45,27 +45,27 @@ with the corresponding mode switch.
 RAW encoding operations
 */
 typedef struct opj_raw {
-	/** temporary buffer where bits are coded or decoded */
-	OPJ_BYTE c;
-	/** number of bits already read or free to write */
-	OPJ_UINT32 ct;
-	/** maximum length to decode */
-	OPJ_UINT32 lenmax;
-	/** length decoded */
-	OPJ_UINT32 len;
-	/** pointer to the current position in the buffer */
-	OPJ_BYTE *bp;
-	/** pointer to the start of the buffer */
-	OPJ_BYTE *start;
-	/** pointer to the end of the buffer */
-	unsigned char *end;
+        /** temporary buffer where bits are coded or decoded */
+        OPJ_BYTE c;
+        /** number of bits already read or free to write */
+        OPJ_UINT32 ct;
+        /** maximum length to decode */
+        OPJ_UINT32 lenmax;
+        /** length decoded */
+        OPJ_UINT32 len;
+        /** pointer to the current position in the buffer */
+        OPJ_BYTE *bp;
+        /** pointer to the start of the buffer */
+        OPJ_BYTE *start;
+        /** pointer to the end of the buffer */
+        unsigned char *end;
 } opj_raw_t;
 
 /** @name Exported functions */
 /*@{*/
 /* ----------------------------------------------------------------------- */
 /**
-Create a new RAW handle 
+Create a new RAW handle
 @return Returns a new RAW handle if successful, returns NULL otherwise
 */
 opj_raw_t* raw_create(void);

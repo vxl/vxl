@@ -147,7 +147,7 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
       }
     }
   }
-  
+
   // modify the output images with mask values
   vcl_map<unsigned, vcl_pair<float, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > >::iterator mit;
   for (mit = sky_regions.begin();  mit != sky_regions.end(); ++mit) {
@@ -176,7 +176,7 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
 //    height, volume, area, confidence, cent_lon, cent_lat, lon_0, lat_0, ..., lon_i, lat_i, ..., lon_n, lat_n;
 bool volm_extract_building_outlines_process_cons(bprb_func_process& pro)
 {
- 
+
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // height map
   input_types.push_back("vil_image_view_base_sptr"); // classification map
@@ -218,7 +218,7 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
     vcl_cout << "volm_extract_building_outlines_process: The input image sizes are not compatible!" << vcl_endl;
     return false;
   }
-  
+
   // first make the class image binary
   vil_image_view<bool> class_img_binary(class_img.ni(), class_img.nj());
   vil_image_view<bool> class_img_binary_E(class_img.ni(), class_img.nj());
@@ -235,7 +235,7 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
       if ((class_img(i,j) == 34 || class_img(i,j) == 15) && height(i,j) > 5 && height(i,j) <= 10)
         class_img_binary(i,j) = true;
     }
-  
+
   vil_structuring_element se;
   se.set_to_disk(3);
   vil_binary_erode(class_img_binary,class_img_binary_E,se);
@@ -280,10 +280,10 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
   vcl_cout.flush();
 
   vcl_ofstream ofs(kml_filename.c_str());
-  bkml_write::open_document(ofs);  
+  bkml_write::open_document(ofs);
 
   vcl_ofstream ofs_csv(csv_filename.c_str());
-  
+
   for (unsigned i = 0; i < bldgs.size(); i++) {
     vgl_polygon<double> poly(1);
     double cent_lon = 0.0, cent_lat = 0.0;
@@ -302,10 +302,10 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
                             unsigned char const& r = 0,
                             unsigned char const& g = 255,
                             unsigned char const& b = 0);*/
-    
+
     // for csv each building is one line:   height, volume (=0.0 for now), area (=0.0 for now), confidence (=0.5 for now), cent_lon, cent_lat, lon_0, lat_0, ..., lon_i, lat_i, ..., lon_n, lat_n;
     ofs_csv << bldg_heights[i] << ",0.0,0.0,0.5," << cent_lon << ',' << cent_lat;
-    for (unsigned j = 0; j < bldgs[i].size(); j++) 
+    for (unsigned j = 0; j < bldgs[i].size(); j++)
       ofs_csv << ',' << bldgs[i][j].x() << ',' << bldgs[i][j].y();
     ofs_csv << '\n';
   }

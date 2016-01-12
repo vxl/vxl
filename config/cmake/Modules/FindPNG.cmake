@@ -30,7 +30,7 @@ IF(PNG_FOUND)
 
 ELSE(PNG_FOUND)
 
-  INCLUDE( ${MODULE_PATH}/FindZLIB.cmake ) 
+  INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
   IF(ZLIB_FOUND)
 
   #
@@ -38,14 +38,14 @@ ELSE(PNG_FOUND)
   # will not have the v3p png library, so make sure the headers
   # exist.
   #
-  
+
 
     IF(EXISTS ${vxl_SOURCE_DIR}/v3p/png/png.h)
 
       SET( PNG_FOUND "YES" )
       SET( PNG_LIBRARIES png)
       SET( PNG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/png ${ZLIB_INCLUDE_DIR} )
-      SET( PNG_INSTALL_INCLUDE_DIR 
+      SET( PNG_INSTALL_INCLUDE_DIR
         ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/png
         ${ZLIB_INSTALL_INCLUDE_DIR}
       )

@@ -44,7 +44,7 @@ static void save_indices(const vcl_vector<unsigned>& indices,
 int main2(int argc, char *argv[])
 {
   int ret_val=0;
-  
+
   vul_arg_base::set_help_precis("Convert a boolean mask to a list of zero-based indices.");
   vul_arg_base::set_help_description(
     "Convert a boolean mask to a list of zero-based indices.\n"

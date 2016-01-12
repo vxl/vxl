@@ -24,7 +24,7 @@
 // a `using' statement.
 //
 // See also http://gcc.gnu.org/ml/libstdc++/2001-01/msg00247.html
-#include <vcl_deprecated_header.h> 
+#include <vcl_deprecated_header.h>
 
 #include "vcl_compiler.h"
 

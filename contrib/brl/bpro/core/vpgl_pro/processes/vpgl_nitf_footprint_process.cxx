@@ -83,7 +83,7 @@ bool vpgl_nitf_footprint_process(bprb_func_process& pro)
     vcl_string nitf_id = vul_file::strip_directory(nitf_path);
     vcl_string desc = nitf_path + " footprint";
 
-    vcl_cout << "image " << desc << ":" << vcl_endl; 
+    vcl_cout << "image " << desc << ":" << vcl_endl;
     vcl_cout << "!!!! lower left lon: "  << meta.lower_left_.x()  << " lat: " << meta.lower_left_.y() << '\n';
     vcl_cout << "!!!! upper right lon: " << meta.upper_right_.x() << " lat: " << meta.upper_right_.y() << '\n';
     bkml_write::write_box(ofs, nitf_id, desc, ul, ur, ll, lr, (unsigned char)r, (unsigned char)g, (unsigned char)b);
@@ -138,8 +138,8 @@ bool vpgl_nitf_footprint_process2(bprb_func_process& pro)
     vcl_cerr << pro.name() << ": can not find input image file: " << img_file << "!\n";
     return false;
   }
-  
-  
+
+
   // load image metadata
   brad_image_metadata meta(img_file,metadatafolder);
   double lower_left_lon  = meta.lower_left_.x();
@@ -148,7 +148,7 @@ bool vpgl_nitf_footprint_process2(bprb_func_process& pro)
   double upper_right_lon = meta.upper_right_.x();
   double upper_right_lat = meta.upper_right_.y();
   double upper_right_elev = meta.upper_right_.z();
-  
+
   // create kml file
   if (is_kml)
   {

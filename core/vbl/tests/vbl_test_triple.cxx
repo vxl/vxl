@@ -20,7 +20,7 @@ void vbl_test_triple()
   TEST("vbl_triple assignment operator", t2.first == 7.0 && t2.second == 1 && t2.third == 3, true);
   TEST("vbl_triple compare", t != t2, true);
   TEST("vbl_triple compare", t < t2, true);
-  
+
   vcl_stringstream s;
   s << t;
   vbl_triple<double,int,int> t3;

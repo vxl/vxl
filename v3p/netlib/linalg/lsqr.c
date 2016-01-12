@@ -34,10 +34,10 @@ static integer c__2 = 2;
                      v3p_netlib_doublereal*,
                      void*),
         doublereal *
-        damp, integer *leniw, integer *lenrw, integer *iw, doublereal *rw, 
-        doublereal *u, doublereal *v, doublereal *w, doublereal *x, 
+        damp, integer *leniw, integer *lenrw, integer *iw, doublereal *rw,
+        doublereal *u, doublereal *v, doublereal *w, doublereal *x,
         doublereal *se, doublereal *atol, doublereal *btol, doublereal *
-        conlim, integer *itnlim, integer *nout, integer *istop, integer *itn, 
+        conlim, integer *itnlim, integer *nout, integer *istop, integer *itn,
         doublereal *anorm, doublereal *acond, doublereal *rnorm, doublereal *
         arnorm, doublereal *xnorm, void* userdata)
 {
@@ -50,14 +50,14 @@ static integer c__2 = 2;
 
     /* Local variables */
     integer i__;
-    doublereal t, z__, t1, t2, t3, cs, sn, cs1, cs2, sn1, sn2, phi, rho, tau, 
+    doublereal t, z__, t1, t2, t3, cs, sn, cs1, cs2, sn1, sn2, phi, rho, tau,
             psi, rhs, res1, res2, alfa, beta, zbar, ctol, rtol;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal test1, test2, test3, gamma;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *,
             integer *);
     doublereal delta, theta, bnorm;
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
+    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *,
             doublereal *, integer *);
     integer nconv, nstop;
     doublereal rhbar1, rhbar2, gambar, phibar, rhobar, bbnorm, ddnorm, dampsq,

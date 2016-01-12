@@ -3,7 +3,7 @@
 #define BVPL_BUNDLER_FEATURES_2D_H_
 //:
 // \file
-// \brief A class to store feature vectors derived from 
+// \brief A class to store feature vectors derived from
 // 3d bundler points.
 // \author Brandon A. Mayer b.mayer1@gmail.com
 // \date 8-September-2011
@@ -38,8 +38,8 @@ class bvpl_vgl_point_3d_coord_compare
 class bvpl_bundler_features_2d: public vbl_ref_count
 {
   public:
-    typedef vcl_map< vgl_point_3d<double>, 
-        vcl_map<unsigned, vnl_vector<double> >, 
+    typedef vcl_map< vgl_point_3d<double>,
+        vcl_map<unsigned, vnl_vector<double> >,
         bvpl_vgl_point_3d_coord_compare > point_view_feature_map_type;
 
     bvpl_bundler_features_2d() {}

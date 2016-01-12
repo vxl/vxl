@@ -43,7 +43,7 @@ class clsfy_binary_threshold_1d_gini_builder : public clsfy_binary_threshold_1d_
                             const vnl_vector<double>& inputs,
                             const vcl_vector<unsigned> &outputs) const;
 
- 
+
   //  Note that input "data" must be sorted to use this routine
   virtual double build_gini_from_sorted_data(clsfy_classifier_1d& classifier,
                                              const vcl_vector<vbl_triple<double,int,int> >& data) const;

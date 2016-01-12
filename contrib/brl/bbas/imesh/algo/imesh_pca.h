@@ -39,7 +39,7 @@ class imesh_pca_mesh : public imesh_mesh
 
   //: Copy Constructor
   imesh_pca_mesh(const imesh_pca_mesh& other);
-  
+
   //: Assignment operator
   imesh_pca_mesh& operator=(const imesh_pca_mesh& other);
 

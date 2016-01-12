@@ -36,7 +36,7 @@ public:
   virtual ~rrel_orthogonal_regression();
 
   //: Total number of samples
-  unsigned int num_samples( ) const; 
+  unsigned int num_samples( ) const;
 
   //: Generate a parameter estimate from a minimal sample set.
   bool fit_from_minimal_set( const vcl_vector<int>& point_indices,
@@ -56,7 +56,7 @@ public:  // testing / debugging utility
   void print_points() const;
 
 protected:
-  vnl_matrix<double> vars_; 
+  vnl_matrix<double> vars_;
 };
-  
+
 #endif

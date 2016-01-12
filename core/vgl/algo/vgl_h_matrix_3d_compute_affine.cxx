@@ -11,10 +11,10 @@
 #include <vcl_iomanip.h>
 
 const int TM_UNKNOWNS_COUNT = 9;
-const double DEGENERACY_THRESHOLD = 0.00001;  
-  
+const double DEGENERACY_THRESHOLD = 0.00001;
 
-//: Compute a 3D-to-3D affine transformation without translation 3 x 3 matrix 
+
+//: Compute a 3D-to-3D affine transformation without translation 3 x 3 matrix
 // Note: requires all finite points.
 // The algorithm finds the nullvector of the $3 n \times 9$ design matrix.
 
@@ -28,10 +28,10 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
   //fill the design matrix
   vnl_matrix<double> D(n*3, TM_UNKNOWNS_COUNT, 0.0);
   vnl_matrix<double> b(n*3, 1);
-  
+
   int row = 0;
   for (int i = 0; i < n; i++) {
-    vgl_homg_point_3d<double> hp1 = p1[i], hp2 = p2[i]; 
+    vgl_homg_point_3d<double> hp1 = p1[i], hp2 = p2[i];
     hp1.rescale_w(); hp2.rescale_w();
     double X1 = hp1.x(), X2 = hp1.y(), X3 = hp1.z();
     double x1 = hp2.x(), x2 = hp2.y(), x3 = hp2.z();

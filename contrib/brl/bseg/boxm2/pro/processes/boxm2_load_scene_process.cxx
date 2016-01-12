@@ -1,7 +1,7 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_load_scene_process.cxx
 //:
 // \file
-// \brief  A process for loading the scene. 
+// \brief  A process for loading the scene.
 //
 // \author Vishal Jain
 // \date Mar 10, 2011
@@ -94,7 +94,7 @@ bool boxm2_modify_scene_appearance_process(bprb_func_process& pro)
   vcl_string apptype2 = pro.get_input<vcl_string>(i++);
 
   vcl_vector<vcl_string> apps;
-  
+
   apps.push_back(apptype1);
   apps.push_back(apptype2);
   s->set_appearances(apps);

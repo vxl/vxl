@@ -15,14 +15,14 @@
 void bvpl_octree_register::register_datatype()
 {
   typedef vbl_smart_ptr<bvpl_global_taylor<double, 10> > bvpl_global_taylor_sptr;
-  
+
   REGISTER_DATATYPE(bvpl_taylor_scenes_map_sptr);
   REGISTER_DATATYPE(bvpl_pca_error_scenes_sptr);
   REGISTER_DATATYPE(bvpl_discover_pca_kernels_sptr);
   REGISTER_DATATYPE(bvpl_global_pca_125_sptr);
   REGISTER_DATATYPE(bvpl_global_taylor_sptr);
   REGISTER_DATATYPE(bvpl_global_corners_sptr);
-  
+
 }
 
 void bvpl_octree_register::register_process()
@@ -38,7 +38,7 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_pca_test_error_process, "bvplComputeTestErrorProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_scene_histogram_process, "bvplSceneHistorgramProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_grad_scene_to_bin_process, "bvplGradSceneToBinProcess");
-  
+
   //PCA related
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_discover_pca_features_process, "bvplDiscoverPCAFeaturesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_pca_error_scene_process, "bvplComputePCAErrorSceneProcess");
@@ -56,7 +56,7 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_pca_125_process, "bvplLoadGlobalPCA125Process");
   REG_PROCESS_FUNC_CONS2(bvpl_pca_global_proj_error_process);
   REG_PROCESS_FUNC_CONS2(bvpl_pca_global_add_error_process);
-  
+
   //Taylor related
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_taylor_scenes_process, "bvplLoadTaylorScenesProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_taylor_error_process, "bvplComputeTaylorErrorProcess");
@@ -67,14 +67,14 @@ void bvpl_octree_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_taylor_process, "bvplLoadGlobalTaylorProcess");
   REG_PROCESS_FUNC_CONS2(bvpl_taylor_global_proj_error_process);
   REG_PROCESS_FUNC_CONS2(bvpl_taylor_global_add_error_process);
-  
+
   //Corner related
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_threshold_corners_process, "bvplThresholdCornersProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_harris_measure_process, "bvplComputeHarrisMeasureProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_corners_process, "bvplLoadGlobalCornersProcess");  
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_load_global_corners_process, "bvplLoadGlobalCornersProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_corner_statistics_process, "bvplCornerStatisticsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_beaudet_measure_process, "bvplComputeBeaudetMeasureProcess");
-  
+
   //Steerable filters
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_init_sf_response_scene_process, "bvplInitSFResponseSceneProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvpl_compute_sf_raw_response_process, "bvplComputeSFRawResponseProcess");

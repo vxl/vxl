@@ -133,8 +133,8 @@ public:
     /** special write method for creation of digital signatures
      */
     virtual OFCondition writeSignatureFormat(DcmOutputStream & outStream,
-					 const E_TransferSyntax oxfer,
-					 const E_EncodingType enctype = EET_UndefinedLength);
+                                         const E_TransferSyntax oxfer,
+                                         const E_EncodingType enctype = EET_UndefinedLength);
 
     /** returns true if the current object may be included in a digital signature
      *  @return true if signable, false otherwise

@@ -16,7 +16,7 @@ bhdfs_manager_sptr bhdfs_manager::instance()
   return instance_;
 }
 //: hidden constructor
-bhdfs_manager::bhdfs_manager(vcl_string host_name, int port) 
+bhdfs_manager::bhdfs_manager(vcl_string host_name, int port)
 {
   fs_ = hdfsConnect(host_name.c_str(), port);
   if (!fs_) {
@@ -24,7 +24,7 @@ bhdfs_manager::bhdfs_manager(vcl_string host_name, int port)
     throw 0;
   }
 }
-bhdfs_manager::bhdfs_manager(vcl_string host_name, int port, vcl_string user_name) 
+bhdfs_manager::bhdfs_manager(vcl_string host_name, int port, vcl_string user_name)
 {
   fs_ = hdfsConnectAsUser(host_name.c_str(), port, user_name.c_str());
   if (!fs_) {
@@ -46,20 +46,20 @@ void bhdfs_manager::create(vcl_string host_name, int port, vcl_string user_name)
 }
 
 //: get the current working directory on hdfs
-vcl_string bhdfs_manager::get_working_dir() 
-{ 
+vcl_string bhdfs_manager::get_working_dir()
+{
   char buffer[256];
   hdfsGetWorkingDirectory(fs_, buffer, sizeof(buffer));
   return vcl_string (buffer);
 }
 
-//: delete the file, returns true on success, false on error. 
-bool bhdfs_manager::rm(vcl_string path) 
+//: delete the file, returns true on success, false on error.
+bool bhdfs_manager::rm(vcl_string path)
 {
   return hdfsDelete(fs_, path.c_str()) != -1;
 }
 
-//: create a directory, returns true on success, false on error. 
+//: create a directory, returns true on success, false on error.
 bool bhdfs_manager::create_dir(vcl_string path, short mode)
 {
   int val = hdfsCreateDirectory(fs_, path.c_str());
@@ -68,7 +68,7 @@ bool bhdfs_manager::create_dir(vcl_string path, short mode)
   return hdfsChmod(fs_, path.c_str(), mode) != -1;
 }
 
-//: check existence of a file or path, returns true on success, false on error. 
+//: check existence of a file or path, returns true on success, false on error.
 bool bhdfs_manager::exists(vcl_string path)
 {
   return hdfsExists(fs_, path.c_str()) != -1;
@@ -89,7 +89,7 @@ bool bhdfs_manager::copy_from_hdfs(vcl_string hdfs_file, vcl_string local_dir)
   if (!lfs) return false;
   return hdfsCopy(fs_, hdfs_file.c_str(), lfs, local_dir.c_str()) != -1;
 }
-  
+
 //: get a list of filenames in the given directory
 bool bhdfs_manager::get_dir_list(vcl_string dir, vcl_vector<vcl_string>& fnames)
 {
@@ -97,12 +97,12 @@ bool bhdfs_manager::get_dir_list(vcl_string dir, vcl_vector<vcl_string>& fnames)
   hdfsFileInfo* inf = hdfsListDirectory(fs_, dir.c_str(), &cnt);
   if (!inf || !cnt)
     return false;
-  
+
   fnames.clear();
   for (int i = 0; i < cnt; i++) {
     fnames.push_back(vcl_string(inf[i].mName));
   }
-  
+
   return true;
 }
 

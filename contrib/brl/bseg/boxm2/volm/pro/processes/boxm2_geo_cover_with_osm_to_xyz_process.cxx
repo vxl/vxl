@@ -41,7 +41,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process_cons(bprb_func_process& pro)
   input_types_[0] = "boxm2_scene_sptr";   // boxm2 scene
   input_types_[1] = "vcl_string";         // tiff geo cover image name
   input_types_[2] = "vcl_string";         // open street map road binary
-  
+
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // x image
   output_types_[1] = "vil_image_view_base_sptr";  // y image
@@ -79,8 +79,8 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   vcl_cout << "scene voxel length: " << vox_length << vcl_endl;
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
   double min_lon, min_lat, gz, max_lon, max_lat;
-  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz); 
-  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz); 
+  lvcs->local_to_global(scene_bbox.min_point().x(), scene_bbox.min_point().y(), 0, vpgl_lvcs::wgs84, min_lon, min_lat, gz);
+  lvcs->local_to_global(scene_bbox.max_point().x(), scene_bbox.max_point().y(), 0, vpgl_lvcs::wgs84, max_lon, max_lat, gz);
   vgl_box_2d<double> sbbox(min_lon, max_lon, min_lat, max_lat);
   vcl_cout << " scene bbox in geo coords: " << sbbox << vcl_endl;
 
@@ -94,7 +94,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     vcl_cout << " scene does not intersect with the image: " << img_fname << vcl_endl;
     return false;
   }
-  
+
   // load the geo_cover image
   if (!vul_file::exists(img_fname)) {
     vcl_cout << pro.name() << " can not find the image: " << img_fname << vcl_endl;
@@ -216,7 +216,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       for (int x = it.startx(); x <= it.endx(); ++x) {
         if ( x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
           if (curr_level > (*level_img)(x, y)) {
-            (*level_img)(x,y) = curr_level; 
+            (*level_img)(x,y) = curr_level;
             (*out_img_label)(x,y) = curr_id;
             (*out_class_img)(x,y) = curr_color;
           }
@@ -247,7 +247,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       for (int x = it.startx(); x <= it.endx(); ++x) {
         if ( x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
           if (curr_level > (*level_img)(x, y)) {
-            (*level_img)(x,y) = curr_level; 
+            (*level_img)(x,y) = curr_level;
             (*out_img_label)(x,y) = curr_id;
             (*out_class_img)(x,y) = curr_color;
           }
@@ -297,7 +297,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       for (int x = it.startx(); x <= it.endx(); ++x) {
         if ( x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
           if (curr_level > (*level_img)(x, y)) {
-            (*level_img)(x,y) = curr_level; 
+            (*level_img)(x,y) = curr_level;
             (*out_img_label)(x,y) = curr_id;
             (*out_class_img)(x,y) = curr_color;
           }
@@ -305,7 +305,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       }
     }
   }
-  vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl; 
+  vcl_cout << " number of osm regions ingested into geo cover: " << cnt << vcl_endl;
 
 #if 0 // use this when we have satellite data
   // ingest points (will occupy a single pixel)
@@ -329,13 +329,13 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     if (x >= 0 && y >= 0 && x < out_img_label->ni() && y < out_img_label->nj()) {
       if (curr_level > (*level_img)(x, y)) {
         cnt++;
-        (*level_img)(x,y) = curr_level; 
+        (*level_img)(x,y) = curr_level;
         (*out_img_label)(x,y) = curr_id;
         (*out_class_img)(x,y) = curr_color;
       }
     }
   }
-  vcl_cout << " number of osm points ingested into geo cover: " << cnt << vcl_endl; 
+  vcl_cout << " number of osm points ingested into geo cover: " << cnt << vcl_endl;
 #endif
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);

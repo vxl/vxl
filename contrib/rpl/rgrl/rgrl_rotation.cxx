@@ -16,7 +16,7 @@ void rgrl_rotation_3d_to_matrix(double const theta, double const alpha, double c
   R(2,0)=-cos_p*cos_t*sin_a+sin_p*sin_t;  R(2,1) = cos_p*sin_a*sin_t+cos_t*sin_p;  R(2,2)=cos_a*cos_p;
 }
 
-void rgrl_rotation_3d_from_matrix(vnl_matrix<double> const& R, 
+void rgrl_rotation_3d_from_matrix(vnl_matrix<double> const& R,
                                   double& phi, double& alpha, double& theta)
 {
   assert( R.rows()==3 && R.cols()==3 );
@@ -39,7 +39,7 @@ void rgrl_rotation_3d_from_matrix(vnl_matrix<double> const& R,
   {
     phi = vcl_atan( -1 * R(1,2) / R(2,2) ) + vnl_math::pi;
   }
-  
+
 }
 
 void rgrl_rotation_2d_to_matrix(double const theta, vnl_matrix<double> & R)

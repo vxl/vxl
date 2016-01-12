@@ -277,7 +277,7 @@ void vnl_levenberg_marquardt::lmder_lsqfun(long* n,     // I   Number of residua
           diff = ref_fJ(j,i) - finite_jac(j,i);
           diff = diff*diff;
           if ( diff > self->epsfcn ) {
-            vcl_cout << "Jac(" << i << ", " << j << ") diff: " << ref_fJ(j,i) 
+            vcl_cout << "Jac(" << i << ", " << j << ") diff: " << ref_fJ(j,i)
                      << "  " << finite_jac(j,i)
                      << "  " << ref_fJ(j,i)-finite_jac(j,i) << '\n';
           }

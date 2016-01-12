@@ -21,8 +21,8 @@ void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const 
     pdist.set_kappa(initial_kappa_);
     return;
   }
-  //  double minv = static_cast<double>(vcl_numeric_limits<math_t>::min()); 
-  double minv = static_cast<double>(0.00001); 
+  //  double minv = static_cast<double>(vcl_numeric_limits<math_t>::min());
+  double minv = static_cast<double>(0.00001);
   double r_bar = static_cast<double>(r_mag*alpha);
   assert(r_bar<=1.00001); //round off in vector normalization
   if(r_bar>1.0) r_bar = 1.0;
@@ -49,7 +49,7 @@ void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const 
     {
       double k = 1.0;
       double temp = (1.0-r_bar);
-      if(temp<minv) 
+      if(temp<minv)
         k = static_cast<double>(vcl_numeric_limits<math_t>::max());
       else
         k = 1.0/temp;

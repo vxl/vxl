@@ -1,7 +1,7 @@
 // This is brl/bbas/bhdfs/pro/processes/bhdfs_boxm2_load_scene_process.cxx
 //:
 // \file
-// \brief  A process for loading the scene from HDFS file system. 
+// \brief  A process for loading the scene from HDFS file system.
 //
 // \author Gamze Tunali
 // \date   Sep 16, 2012
@@ -48,7 +48,7 @@ bool bhdfs_boxm2_load_scene_process(bprb_func_process& pro)
   unsigned i = 0;
   vcl_string filename = pro.get_input<vcl_string>(i++);
 
-  
+
   boxm2_scene_parser parser;
 
   // load the XML from HDFS
@@ -76,7 +76,7 @@ bool bhdfs_boxm2_load_scene_process(bprb_func_process& pro)
   }
 
   boxm2_scene_sptr scene= new boxm2_scene(newbuf);
-   
+
   i=0;
   // store scene smart pointer
   pro.set_output_val<boxm2_scene_sptr>(i++, scene);

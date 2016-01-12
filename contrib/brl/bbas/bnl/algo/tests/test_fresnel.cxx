@@ -12,7 +12,7 @@ MAIN( test_fresnel )
 
   vcl_cout << "Test Fresnel integral:" << vcl_endl;
   double tol = 1e-8;
-  double x[] = {  
+  double x[] = {
    -1.000000000000000e+030,
    -1.000000000000000e+010,
    -1.000000000000000e+005,
@@ -70,9 +70,9 @@ MAIN( test_fresnel )
     9.999999999997533e-004,
     1.000000000000000e-005,
     1.000000000000000e-010
-    
+
   };
-  
+
   double matlab_fresnel_sin_x[] = {
    -5.000000000000000e-001,
    -4.999999999681690e-001,
@@ -117,6 +117,6 @@ MAIN( test_fresnel )
     TEST_NEAR("Test fresnel cosine", fc[i], matlab_fresnel_cos_x[i], tol);
     TEST_NEAR("Test fresnel sine", fs[i], matlab_fresnel_sin_x[i], tol);
   }
-  
+
   SUMMARY();
 }

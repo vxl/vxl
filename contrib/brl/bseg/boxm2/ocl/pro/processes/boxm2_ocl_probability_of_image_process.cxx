@@ -110,7 +110,7 @@ bool boxm2_ocl_probability_of_image_process_cons(bprb_func_process& pro)
   brdb_value_sptr tfarfactor   = new brdb_value_t<float>(0.0001f);  //by default update alpha
 
   pro.set_input(6, tnearfactor);
-  pro.set_input(7, tfarfactor);  
+  pro.set_input(7, tfarfactor);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
 }

@@ -65,7 +65,7 @@ static void test_save()
   image.image().set_size(2,3,4);
   image.set_world2im(tr_gold1);
   bool use_mm=true;
-  
+
   vimt3d_save("test_save2.v3i",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;
@@ -73,7 +73,7 @@ static void test_save()
     TEST("v3i image round-trip has same zoom transform",
          mbl_test_summaries_are_equal(loaded_image.world2im(), tr_gold1 ), true);
   }
-  
+
   vimt3d_save("test_save2.v3m",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;
@@ -90,9 +90,9 @@ static void test_save()
     TEST("hdr image round-trip has same zoom transform",
          mbl_test_summaries_are_equal(loaded_image.world2im(), image.world2im() ), true);
   }
- 
+
 // There is an inconsistency in the way that gipl deals with the origin
-  image.set_world2im(tr_gold2);  
+  image.set_world2im(tr_gold2);
   vimt3d_save("test_save2.gipl",image,use_mm);
   {
     vimt3d_image_3d_of<vxl_byte> loaded_image;

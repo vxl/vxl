@@ -15,9 +15,9 @@
 // basic bgui3d_tableau to render an Open Inventor
 // scene graph with a manipulator in vgui.
 //
-// The following is loosly based on 
+// The following is loosly based on
 // "Hello, Cone" with a Trackball Manipulator (Example 2-3)
-// provided in "The Inventor Mentor" 
+// provided in "The Inventor Mentor"
 
 // Construct a simple scene
 void buildScene(SoGroup *root)
@@ -41,7 +41,7 @@ void buildScene(SoGroup *root)
   root->addChild(new SoCone);
 
   SbViewportRegion vpr(400,400);
-  myCamera->viewAll(root, vpr); 
+  myCamera->viewAll(root, vpr);
 }
 
 

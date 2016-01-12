@@ -114,7 +114,7 @@ bool vil_threshold_max_image_process(bprb_func_process& pro)
     vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
     vil_image_view<float> fimg = *fimage;
 
-    float fmin = 0.0f; 
+    float fmin = 0.0f;
     float fmax = 0.0f;
 
 

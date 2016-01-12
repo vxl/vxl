@@ -41,7 +41,7 @@ inline void calc_cell_min( float* cell_minx, float* cell_miny, float* cell_minz,
 
 //intersect scene - calc tnear and tfar
 inline void intersect_block(float4 ray_o, float4 ray_d,
-                            __constant RenderSceneInfo* linfo, 
+                            __constant RenderSceneInfo* linfo,
                             float* tFar, float* tblock)
 {
   //get parameters tnear and tfar for the scene
@@ -73,22 +73,22 @@ void calc_cone_split(float r, float t, float alpha, float* new_r, float* tprime)
   float first = r*sin(alpha/2.0f) + t*cos(alpha/2.0f);
   float second = sqrt( r*(r+sin(alpha)) );
   (*tprime) =  (first + second) / denom;
- 
-  //calc new radius 
+
+  //calc new radius
   (*new_r) = (*tprime) * sin(alpha/2.0f);
 }
 
-//calculates the t and radius for a previous sphere, 
+//calculates the t and radius for a previous sphere,
 void prev_sphere(float currT, float currR, float* prevT, float* prevR)
 {
-  (*prevR) = currR * (currT-currR) / (currT+currR); 
-  (*prevT) = currT-currR-(*prevR); 
+  (*prevR) = currR * (currT-currR) / (currT+currR);
+  (*prevT) = currT-currR-(*prevR);
 }
 
 //calculates the t and radius value for next sphere
 void next_sphere(float currT, float currR, float* nextT, float* nextR)
 {
-  (*nextR) = currR * (currR + currT) / (currT - currR); 
-  (*nextT) = currT + currR + (*nextR); 
+  (*nextR) = currR * (currR + currT) / (currT - currR);
+  (*nextT) = currT + currR + (*nextR);
 }
 

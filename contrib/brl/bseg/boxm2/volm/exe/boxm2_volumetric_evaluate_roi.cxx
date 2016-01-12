@@ -31,7 +31,7 @@ int main(int argc, char** argv)
   vul_arg<double>        gt_lon("-lon",      "location longitude", 0.0);
   vul_arg<double>        gt_lat("-lat",      "location latitude", 0.0);
   vul_arg_parse(argc, argv);
-  
+
   // input check
   if (out().compare("") == 0 || world_id() == 9999 || is_same(gt_lon(),0.0) || is_same(gt_lat(),0.0) ) {
     vul_arg_display_usage_and_exit();

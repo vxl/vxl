@@ -66,7 +66,7 @@ static void test_geo_index2()
     u.transform(tiles[i].bbox_double().max_point().y(), tiles[i].bbox_double().max_point().x(), x, y, zone_id2);
     vcl_cout << " p1b_wr3_tile_" << i << " has utm zone " << zone_id << " and utm zone " << zone_id2 << vcl_endl;
   }
-  
+
   // wr4
   tiles.clear();
   tiles = volm_tile::generate_p1b_wr4_tiles();
@@ -179,7 +179,7 @@ static void test_geo_index2()
   TEST("get leaves method by polygon", leaves.size(), 2);
   vgl_point_2d<double> ref_pt(leaves[1]->extent_.min_point().x(), leaves[1]->extent_.min_point().y());
   vgl_box_2d<double> bbox(ref_pt.x()-0.5*min_size, ref_pt.x()+0.5*min_size, ref_pt.y()-0.5*min_size, ref_pt.y()+0.5*min_size);
-  
+
   leaves.clear();
   volm_geo_index2::get_leaves(root, leaves, bbox);
   vcl_cout << " \t given bounding box: \n\t";
@@ -264,7 +264,7 @@ static void test_geo_index2()
       ptr->contents_.write_hypotheses(hyp_file);
     }
   }
-  
+
   // load it
   volm_geo_index2_node_sptr root_locs_read = volm_geo_index2::read_and_construct<volm_loc_hyp>(txt_file, min_size_read);
   leaves.clear();

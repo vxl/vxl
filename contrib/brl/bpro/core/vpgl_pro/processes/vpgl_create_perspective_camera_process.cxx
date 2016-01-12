@@ -191,7 +191,7 @@ bool vpgl_create_perspective_camera_process4_cons(bprb_func_process& pro)
   bool ok=false;
   vcl_vector<vcl_string> input_types(7);
   input_types[0] = "vpgl_camera_double_sptr";// get everything from this camera
-  input_types[1] = "float";// center x  Except the center, and initialize orientation with respect to direction of motion 
+  input_types[1] = "float";// center x  Except the center, and initialize orientation with respect to direction of motion
   input_types[2] = "float";// center y
   input_types[3] = "float";// center z
   input_types[4] = "float"; // center x of next camera
@@ -241,7 +241,7 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
   /*vgl_vector_3d<double> l1 = pt2 - pt1;
   vgl_vector_3d<double> l2 = pt3 - pt2;
   double theta = inner_product(l1,l2);*/
-  
+
   double rad_to_deg = 180.0/vnl_math::pi;
   double px=pt1.x();
   double py=pt1.y();
@@ -251,7 +251,7 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
   double ny=pt3.y();
   double theta_c=vcl_atan2(cy-py,cx-px);
   double theta_n=vcl_atan2(ny-cy,nx-cx);
-  vcl_cout << "theta_c: " << theta_c*rad_to_deg << " theta_n: " << theta_n*rad_to_deg << " theta dif: " << (theta_c-theta_n)*rad_to_deg << vcl_endl; 
+  vcl_cout << "theta_c: " << theta_c*rad_to_deg << " theta_n: " << theta_n*rad_to_deg << " theta dif: " << (theta_c-theta_n)*rad_to_deg << vcl_endl;
   double theta = (theta_n - theta_c)/2.0;
   vcl_cout << "theta: " << theta << " which is: " << theta*rad_to_deg << " in degrees, using 5 degree which is: " << 5*vnl_math::pi/180.0 << " in radians!\n";
   //theta = -5*vnl_math::pi/180.0;
@@ -262,7 +262,7 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
 
   vpgl_perspective_camera<double> out_cam;
   out_cam.set_calibration(cam->get_calibration());
-  
+
   out_cam.set_rotation(composed_from_q*cam->get_rotation());
   out_cam.set_camera_center(pt2);
 
@@ -279,7 +279,7 @@ bool vpgl_create_perspective_camera_from_kml_process_cons(bprb_func_process& pro
   vcl_vector<vcl_string> input_types(10);
   input_types[0] = "unsigned";// ni
   input_types[1] = "unsigned";// nj
-  input_types[2] = "double";  // right field of view 
+  input_types[2] = "double";  // right field of view
   input_types[3] = "double";  // top field of view
   input_types[4] = "double";  // altitude
   input_types[5] = "double";  // heading
@@ -318,7 +318,7 @@ bool vpgl_create_perspective_camera_from_kml_process(bprb_func_process& pro)
   double cent_x = pro.get_input<double>(8);
   double cent_y = pro.get_input<double>(9);
 
-  vpgl_perspective_camera<double> out_cam = bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, right_fov, top_fov, 1.6, heading, tilt, roll);  
+  vpgl_perspective_camera<double> out_cam = bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, right_fov, top_fov, 1.6, heading, tilt, roll);
   out_cam.set_camera_center(vgl_point_3d<double>(cent_x, cent_y, alt));
   vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
@@ -360,8 +360,8 @@ bool vpgl_create_perspective_camera_process5(bprb_func_process& pro)
   bbas_1d_array_double_sptr t_input = pro.get_input<bbas_1d_array_double_sptr>(2);
 
 
-  if(K_input->data_array.size() != 9 || 
-     R_input->data_array.size() != 9 || 
+  if(K_input->data_array.size() != 9 ||
+     R_input->data_array.size() != 9 ||
      t_input->data_array.size() != 3)
     return false;
 

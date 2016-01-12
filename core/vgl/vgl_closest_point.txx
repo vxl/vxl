@@ -660,7 +660,7 @@ vgl_point_3d<T> vgl_closest_point(vgl_pointset_3d<T> const& ptset,
   if(!ptset.has_normals())
     return pc;
   const vgl_vector_3d<T>& norm = ptset.n(iclose);
-  //otherwise construct the plane and find closest point on that 
+  //otherwise construct the plane and find closest point on that
   if(vcl_numeric_limits<T>::is_integer){
     // closest point can be templated over int so cast to double for plane computations
     vgl_point_3d<double> pd(static_cast<double>(p.x()), static_cast<double>(p.y()), static_cast<double>(p.z()));

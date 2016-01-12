@@ -37,11 +37,11 @@ void brad_sun_pos(int year, int month, int day,
 double brad_sun_distance(int year, int month, int day, int hours=0, int minutes=0, int seconds=0);
 
 //: the range of the sun positions over an interval when observed at a range of times each day. Interval starts on January 1st in the given year and goes to the end of the last year plus interval_days. The observation time range is centered on obs_time.
-void brad_sun_direction_hist(int obs_time_year, int obs_time_hours, 
+void brad_sun_direction_hist(int obs_time_year, int obs_time_hours,
                              int obs_time_minutes, int obs_time_range_minutes,
                              int interval_years,
                              int interval_days,
-                             double longitude, double latitude, 
+                             double longitude, double latitude,
                              bsta_spherical_histogram<double>& hist);
 
 #endif

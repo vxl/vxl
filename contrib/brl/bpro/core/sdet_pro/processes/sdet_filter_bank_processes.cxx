@@ -52,7 +52,7 @@ bool sdet_extract_filter_bank_process(bprb_func_process& pro)
     vcl_cout << "problems computing filter bank on the image!\n";
     return false;
   }
-  
+
   return true;
 }
 
@@ -100,7 +100,7 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
     vil_image_view<vxl_byte> img_band = vil_plane(*img_ptr, n);
     vil_convert_stretch_range_limited(img_band, img_f, (vxl_byte)0, (vxl_byte)255, 0.0f, 1.0f);
   }else if (vil_image_view<float>* img_ptr = dynamic_cast<vil_image_view<float>*>(img_sptr.ptr())) {
-    vcl_cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes() 
+    vcl_cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes()
              << " with pixel format: " << img_ptr->pixel_format() << vcl_endl;
     img_f = vil_plane(*img_ptr, n);
   }else {
@@ -116,13 +116,13 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
   if (tni != img_f.ni() || tnj != img_f.nj()) {
     vcl_cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
     vcl_cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
-    
+
     vil_image_view<float> out_img(tni, tnj);
     vil_resample_bilin(img_f, out_img, tni, tnj);
     tc_ptr->add_gauss_response(out_img, folder, name, res_name, is_smooth);
   } else
     tc_ptr->add_gauss_response(img_f, folder, name, res_name, is_smooth);
-  
+
   return true;
 }
 
@@ -142,11 +142,11 @@ bool sdet_add_to_filter_bank_process2_cons(bprb_func_process& pro)
   return pro.set_output_types(output_types);
 }
 
-void band_ops(vil_image_view<float>& band1, vil_image_view<float>& band2, vil_image_view<float>&ratio) 
+void band_ops(vil_image_view<float>& band1, vil_image_view<float>& band2, vil_image_view<float>&ratio)
 {
   vil_image_view<float> dif(band1.ni(), band1.nj());
   vil_image_view<float> sum(band1.ni(), band1.nj());
-    
+
   vil_math_image_difference(band1, band2, dif);
   vil_math_image_sum(band1, band2, sum);
   vil_math_image_ratio(dif, sum, ratio);   // image values range in [-1,1]
@@ -179,13 +179,13 @@ bool sdet_add_to_filter_bank_process2(bprb_func_process& pro)
   vil_image_view<float> img_f(img_sptr);
   vcl_cout << " loaded image, ni: " << img_sptr->ni() << " " << img_sptr->nj() << " nplanes: " << img_f.nplanes()
            << " with pixel format: " << img_sptr->pixel_format() << vcl_endl;
-  
+
   unsigned tni = tc_ptr->filter_responses().ni();
   unsigned tnj = tc_ptr->filter_responses().nj();
   if (tni != img_f.ni() || tnj != img_f.nj()) {
     vcl_cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
     vcl_cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
-    
+
     vil_image_view<float> out_img(tni, tnj, img_f.nplanes());
     vil_resample_bilin(img_f, out_img, tni, tnj);
 
@@ -196,16 +196,16 @@ bool sdet_add_to_filter_bank_process2(bprb_func_process& pro)
     vil_image_view<float> band_nir = vil_plane(out_img, 3);
 
     vil_image_view<float> ratio(out_img.ni(), out_img.nj());
-    
+
     band_ops(band_nir, band_r, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "nir_r", false);  // last argument = false --> do not gaussian smooth this image
 
     band_ops(band_r, band_g, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "r_g", false);  // last argument = false --> do not gaussian smooth this image
-    
+
     band_ops(band_r, band_b, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "r_b", false);  // last argument = false --> do not gaussian smooth this image
-    
+
     band_ops(band_g, band_b, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "g_b", false);  // last argument = false --> do not gaussian smooth this image
 
@@ -217,26 +217,26 @@ bool sdet_add_to_filter_bank_process2(bprb_func_process& pro)
     vil_image_view<float> band_nir = vil_plane(img_f, 3);
 
     vil_image_view<float> ratio(img_f.ni(), img_f.nj());
-    
+
     band_ops(band_nir, band_r, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "nir_r", false);  // last argument = false --> do not gaussian smooth this image
-    
+
     band_ops(band_r, band_g, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "r_g", false);  // last argument = false --> do not gaussian smooth this image
-    
+
     band_ops(band_r, band_b, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "r_b", false);  // last argument = false --> do not gaussian smooth this image
-    
+
     band_ops(band_g, band_b, ratio);
     tc_ptr->add_gauss_response(ratio, folder, name, "g_b", false);  // last argument = false --> do not gaussian smooth this image
 
   }
-  
+
   return true;
 }
 
-//: this process extracts a series of filter responses from the input image (assumed to be properly scaled to [0,1]) 
-//  and adds each response as another layer to the other_responses_ of the passed classifier 
+//: this process extracts a series of filter responses from the input image (assumed to be properly scaled to [0,1])
+//  and adds each response as another layer to the other_responses_ of the passed classifier
 //  practically increases the dimension of the textons
 //  the params of the classifier instance are used
 bool sdet_add_responses_to_filter_bank_process_cons(bprb_func_process& pro)
@@ -281,19 +281,19 @@ bool sdet_add_responses_to_filter_bank_process(bprb_func_process& pro)
     vcl_cerr << " In sdet_add_responses_to_filter_bank_process(): the input image is NOT scaled to [0,1]!\n";
     return false;
   }
-  
+
   unsigned tni = tc_ptr->filter_responses().ni();
   unsigned tnj = tc_ptr->filter_responses().nj();
   if (tni != img_f.ni() || tnj != img_f.nj()) {
     vcl_cout << "filter responses have ni: " << tni << " nj: " << tnj << "..";
     vcl_cout << " input image has ni: " << img_f.ni() << " nj: " << img_f.nj() << "! resampling..\n";
-    
+
     vil_image_view<float> out_img(tni, tnj);
     vil_resample_bilin(img_f, out_img, tni, tnj);
     tc_ptr->add_filter_responses(out_img, folder, name, res_name);
   } else
     tc_ptr->add_filter_responses(img_f, folder, name, res_name);
-  
+
   return true;
 }
 

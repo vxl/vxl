@@ -30,59 +30,59 @@ void bvxm_world_param_parser::startElement(const char* name, const char** atts)
   //set active tag for charData
   active_tag_ = vcl_string(name);
 
-  if (active_tag_ == WORLD_DIR_TAG) 
-    for (int i=0; atts[i]; i+=2) 
-      if (vcl_strcmp(atts[i], "value") == 0) 
+  if (active_tag_ == WORLD_DIR_TAG)
+    for (int i=0; atts[i]; i+=2)
+      if (vcl_strcmp(atts[i], "value") == 0)
         world_dir_ = vcl_string(atts[i+1]);
-  
-  if (active_tag_ == LVCS_TAG) 
-    for (int i=0; atts[i]; i+=2) 
-      if (vcl_strcmp(atts[i], "value") == 0) 
+
+  if (active_tag_ == LVCS_TAG)
+    for (int i=0; atts[i]; i+=2)
+      if (vcl_strcmp(atts[i], "value") == 0)
         lvcs_path_ = vcl_string(atts[i+1]);
-  
+
   if (active_tag_ == CORNER_X_TAG )
-    for (int i=0; atts[i]; i+=2) 
-      if (vcl_strcmp(atts[i], "value") == 0) 
+    for (int i=0; atts[i]; i+=2)
+      if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), corner_x_);
   if (active_tag_ == CORNER_Y_TAG )
-    for (int i=0; atts[i]; i+=2) 
-      if (vcl_strcmp(atts[i], "value") == 0) 
+    for (int i=0; atts[i]; i+=2)
+      if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), corner_y_);
   if (active_tag_ == CORNER_Z_TAG )
-    for (int i=0; atts[i]; i+=2) 
-      if (vcl_strcmp(atts[i], "value") == 0) 
+    for (int i=0; atts[i]; i+=2)
+      if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), corner_z_);
 
   if (active_tag_ == DIM_X_TAG )
-    for (int i=0; atts[i]; i+=2) 
+    for (int i=0; atts[i]; i+=2)
       if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), voxel_dim_x_);
   if (active_tag_ == DIM_Y_TAG )
-    for (int i=0; atts[i]; i+=2) 
+    for (int i=0; atts[i]; i+=2)
       if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), voxel_dim_y_);
   if (active_tag_ == DIM_Z_TAG )
-    for (int i=0; atts[i]; i+=2) 
+    for (int i=0; atts[i]; i+=2)
       if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), voxel_dim_z_);
 
   if (active_tag_ == VOXEL_LENGTH_TAG )
-    for (int i=0; atts[i]; i+=2) 
+    for (int i=0; atts[i]; i+=2)
       if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), voxel_length_);
 
   if (active_tag_ == MIN_OCP_TAG )
-    for (int i=0; atts[i]; i+=2) 
+    for (int i=0; atts[i]; i+=2)
       if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), min_ocp_prob_);
 
   if (active_tag_ == MAX_OCP_TAG )
-    for (int i=0; atts[i]; i+=2) 
+    for (int i=0; atts[i]; i+=2)
       if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), max_ocp_prob_);
 
   if (active_tag_ == MAX_SCALE_TAG )
-    for (int i=0; atts[i]; i+=2) 
+    for (int i=0; atts[i]; i+=2)
       if (vcl_strcmp(atts[i], "value") == 0)
         bvxm_world_param_parser_convert(vcl_string(atts[i+1]), max_scale_);
 }
@@ -93,7 +93,7 @@ void bvxm_world_param_parser::endElement(const XML_Char* name)
 
 //Grabs data from points
 void bvxm_world_param_parser::charData(const XML_Char* s, int len)
-{ 
+{
 }
 
 bvxm_world_params_sptr bvxm_world_param_parser::create_bvxm_world_params()

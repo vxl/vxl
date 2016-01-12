@@ -81,7 +81,7 @@ public:
     friend ostream&   operator<<(ostream& s, const DcmTagKey& k);
 
     OFString toString() const;
-    
+
     /** returns true if a data element with the given tag key can
      *  be digitally signed, false otherwise
      *  @return true if signable, false otherwise
@@ -90,83 +90,83 @@ public:
 };
 
 
-/* 
-** inline versions of functions 
+/*
+** inline versions of functions
 */
 
 /* Constructors */
 
-inline  
+inline
 DcmTagKey::DcmTagKey()
   : group(0xffff),
     element(0xffff)
-{ 
+{
 }
 
-inline 
-DcmTagKey::DcmTagKey(const DcmTagKey& key) 
+inline
+DcmTagKey::DcmTagKey(const DcmTagKey& key)
   : group(key.group),
     element(key.element)
-{ 
+{
 }
 
-inline 
-DcmTagKey::DcmTagKey(Uint16 g, Uint16 e) 
+inline
+DcmTagKey::DcmTagKey(Uint16 g, Uint16 e)
   : group(g),
     element(e)
-{ 
+{
 }
 
 /* access methods */
 
-inline void 
-DcmTagKey::set(const DcmTagKey& key)    
-{ 
-    group = key.group; 
-    element = key.element; 
+inline void
+DcmTagKey::set(const DcmTagKey& key)
+{
+    group = key.group;
+    element = key.element;
 }
 
-inline void 
-DcmTagKey::set(Uint16 g, Uint16 e)      
-{ 
-    group = g; 
-    element = e; 
+inline void
+DcmTagKey::set(Uint16 g, Uint16 e)
+{
+    group = g;
+    element = e;
 }
 
-inline void 
-DcmTagKey::setGroup(Uint16 g)           
-{ 
-    group = g; 
+inline void
+DcmTagKey::setGroup(Uint16 g)
+{
+    group = g;
 }
 
-inline void 
-DcmTagKey::setElement(Uint16 e)                 
-{ 
-    element = e; 
+inline void
+DcmTagKey::setElement(Uint16 e)
+{
+    element = e;
 }
 
-inline Uint16 
-DcmTagKey::getGroup() const             
-{ 
-    return group; 
+inline Uint16
+DcmTagKey::getGroup() const
+{
+    return group;
 }
 
-inline Uint16 
-DcmTagKey::getElement() const           
-{ 
-    return element; 
+inline Uint16
+DcmTagKey::getElement() const
+{
+    return element;
 }
 
-inline DcmTagKey& 
-DcmTagKey::operator=(const DcmTagKey& key) 
-{ 
-    set(key); 
+inline DcmTagKey&
+DcmTagKey::operator=(const DcmTagKey& key)
+{
+    set(key);
     return *this;
 }
 
 /* Simple Hash Function */
 
-inline Uint32 
+inline Uint32
 DcmTagKey::hash() const
 {
     // generate simple hash code
@@ -175,75 +175,75 @@ DcmTagKey::hash() const
 
 /* Comparisons */
 
-inline int 
+inline int
 DcmTagKey::groupLT(const DcmTagKey& key) const
 {
     return (getGroup() < key.getGroup());
 }
 
-inline int 
+inline int
 DcmTagKey::groupGT(const DcmTagKey& key) const
 {
     return (getGroup() > key.getGroup());
 }
 
-inline int 
+inline int
 DcmTagKey::groupEQ(const DcmTagKey& key) const
 {
     return getGroup() == key.getGroup();
 }
 
-inline int 
+inline int
 DcmTagKey::elementLT(const DcmTagKey& key) const
 {
     return (getElement() < key.getElement());
 }
 
-inline int 
+inline int
 DcmTagKey::elementGT(const DcmTagKey& key) const
 {
     return (getElement() > key.getElement());
 }
 
-inline int 
+inline int
 DcmTagKey::elementEQ(const DcmTagKey& key) const
 {
     return getElement() == key.getElement();
 }
 
-inline int 
+inline int
 DcmTagKey::operator == (const DcmTagKey& key) const
-{ 
+{
     return ( groupEQ(key) && elementEQ(key) );
 }
 
-inline int 
+inline int
 DcmTagKey::operator != (const DcmTagKey& key) const
-{ 
-    return !(*this == key); 
+{
+    return !(*this == key);
 }
 
-inline int 
+inline int
 DcmTagKey::operator < (const DcmTagKey& key) const
-{ 
+{
     return (groupLT(key) || (groupEQ(key) && elementLT(key)));
 }
 
-inline int 
+inline int
 DcmTagKey::operator > (const DcmTagKey& key) const
-{ 
+{
     return (groupGT(key) || (groupEQ(key) && elementGT(key)));
 }
 
-inline int 
+inline int
 DcmTagKey::operator <= (const DcmTagKey& key) const
-{ 
+{
     return (*this < key) || (*this == key);
 }
 
-inline int 
+inline int
 DcmTagKey::operator >= (const DcmTagKey& key) const
-{ 
+{
     return (*this > key) || (*this == key);
 }
 

@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     vcl_cout << " WARNING: specified number of orientation types and specified number of land type considered" << vcl_endl;
   }
 
-  // obtain parameters of the wr3db 
+  // obtain parameters of the wr3db
   vcl_stringstream params_file;
   params_file << index_folder() << "geo_index_tile_" << tile_id() << "_index.params";
   boxm2_volm_wr3db_index_params params;
@@ -92,7 +92,7 @@ int main(int argc, char** argv)
       ex_indexer = new volm_desc_ex_indexer(index_folder(), out_index_folder(), radius(), depth_interval, index_layer_size, buffer_capacity(),
                                             norients(), nlands(), (unsigned char)0);
   }
-  
+
   vcl_cout << " \t Descriptor used: " << ex_indexer->get_index_type_str() << vcl_endl;
   vcl_cout << " \t Following parameters are used" << vcl_endl;
   vcl_cout << " \t\t radius = ";

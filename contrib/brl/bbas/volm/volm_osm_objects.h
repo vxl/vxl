@@ -68,7 +68,7 @@ public:
 
   //: version
   short version() const { return 1; }
-  
+
   //: binary IO write
   void b_write(vsl_b_ostream& os);
 

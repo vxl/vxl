@@ -158,7 +158,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   vcl_set<double> scale_set;
   scale_set.insert(scale_ur_x);  scale_set.insert(scale_ur_y);  scale_set.insert(scale_ll_x);  scale_set.insert(scale_ll_y);
   double min_size = *scale_set.begin();
-  
+
 
   // create 2-d quad-tree
   // each leaf refers to a bvxm scene and scene content is unban land ratio of the scene, if land mask is available, otherwise -1.0

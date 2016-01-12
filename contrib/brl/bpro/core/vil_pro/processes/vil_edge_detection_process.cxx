@@ -36,7 +36,7 @@ bool vil_edge_detection_process_cons(bprb_func_process& pro)
   input_types_[3] = "bool";                      // automatic_threshold (edge detection parameter)
   input_types_[4] = "bool";                      // junctionp (edge detection parameter)
   input_types_[5] = "bool";                      // aggressive_junction_closure (edge detection parameter)
-  
+
   // process takes 1 outputs
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // output edge map
@@ -59,7 +59,7 @@ bool vil_edge_detection_process(bprb_func_process& pro)
   bool automatic_threshold = pro.get_input<bool>(in_i++);
   bool junctionp = pro.get_input<bool>(in_i++);
   bool aggressive_junction_closure = pro.get_input<bool>(in_i++);
-  
+
   // input image validity
   vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
   if (!in_img) {
@@ -92,7 +92,7 @@ bool vil_edge_detection_process(bprb_func_process& pro)
   // generate output edge image
   vil_image_view<vxl_byte> edge_image(in_img->ni(), in_img->nj());
   edge_image.fill(0);
-  
+
   for (vcl_vector<vtol_edge_2d_sptr>::iterator vit = edges->begin();  vit != edges->end();  ++vit)
   {
     vdgl_digital_curve_sptr dc = ((*vit)->curve())->cast_to_vdgl_digital_curve();
@@ -122,7 +122,7 @@ bool vil_edge_detection_process(bprb_func_process& pro)
   }
   // output
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(edge_image));
-  
+
   return true;
 }
 

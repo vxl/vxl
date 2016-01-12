@@ -30,7 +30,7 @@ bool bvpl_discover_pca_features_process_cons(bprb_func_process& pro)
   input_types_[i++] = "boxm_scene_base_sptr";
   input_types_[i++] = "vcl_string";   //directory to save PCA matrices
   input_types_[i++] = "double";   //fraction of the total number of leaves
-  input_types_[i++] = "int";    // min and max of kernel 
+  input_types_[i++] = "int";    // min and max of kernel
   input_types_[i++] = "int";
   input_types_[i++] = "int";
   input_types_[i++] = "int";
@@ -64,7 +64,7 @@ bool bvpl_discover_pca_features_process(bprb_func_process& pro)
   int max_x = pro.get_input<int>(i++);
   int max_y = pro.get_input<int>(i++);
   int max_z = pro.get_input<int>(i++);
-  
+
 
   //check input's validity
   if (!scene_base.ptr()) {

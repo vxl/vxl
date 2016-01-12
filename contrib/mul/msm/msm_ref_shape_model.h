@@ -3,7 +3,7 @@
 //:
 // \file
 // \brief Contains mean/modes etc of a shape model in ref. frame
-// No information about global transformation 
+// No information about global transformation
 // - see msm_shape_model for that.
 // \author Tim Cootes
 
@@ -20,7 +20,7 @@
 //  Container to hold the components of a statistical shape model
 //  in the reference frame.
 //  Uses a linear model the shape variation.
-//  This has no information about the global transformation 
+//  This has no information about the global transformation
 //  (msm_aligner) - see msm_shape_model for that.
 //
 //  The associated msm_ref_shape_instance class contains functions to
@@ -74,7 +74,7 @@ class msm_ref_shape_model
   const vnl_vector<double>& mode_var() const { return mode_var_; }
 
   //: Current object which limits parameters
-  const msm_param_limiter& param_limiter() const 
+  const msm_param_limiter& param_limiter() const
   { return param_limiter_; }
 
   //: Current object which limits parameters (non-const)

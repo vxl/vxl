@@ -37,7 +37,7 @@ BEGIN_EXTERN_C
 END_EXTERN_C
 
 /** global flag defining the compression level for zlib (deflate) compression.
- *  Legal values are 0..9. Default is Z_DEFAULT_COMPRESSION which is defined 
+ *  Legal values are 0..9. Default is Z_DEFAULT_COMPRESSION which is defined
  *  to be 6 for the current zlib implementation.
  */
 extern OFGlobal<int> dcmZlibCompressionLevel;
@@ -85,7 +85,7 @@ public:
   /** processes as many bytes as possible from the given input block.
    *  @param buf pointer to memory block, must not be NULL
    *  @param buflen length of memory block
-   *  @return number of bytes actually processed. 
+   *  @return number of bytes actually processed.
    */
   virtual Uint32 write(const void *buf, Uint32 buflen);
 
@@ -97,7 +97,7 @@ public:
   virtual void flush();
 
   /** determines the consumer to which the filter is supposed
-   *  to write it's output.  Once a consumer for the output filter has 
+   *  to write it's output.  Once a consumer for the output filter has
    *  been defined, it cannot be changed anymore during the lifetime
    *  of the object.
    *  @param consumer reference to consumer, must not be circular chain
@@ -127,7 +127,7 @@ private:
    *    the end of the input stream, i.e. the compression codec
    *    should be forced to flush its internal state.
    *  @return number of bytes processed
-   */   
+   */
   Uint32 compress(const void *buf, Uint32 buflen, OFBool finalize);
 
   /** copies as much of the given block of data as possible
@@ -141,10 +141,10 @@ private:
   /** feed data from the input ring buffer to the compression
    *  codec until complete or the output ring buffer becomes full.
    *  Does not flush the output ring buffer.
-   *  @param finalize true if the content of the input ring buffer 
+   *  @param finalize true if the content of the input ring buffer
    *    constitutes the end of the input stream, i.e. the compression codec
    *    should be forced to flush its internal state.
-   */   
+   */
   void compressInputBuffer(OFBool finalize);
 
   /// pointer to consumer to which compressed output is written

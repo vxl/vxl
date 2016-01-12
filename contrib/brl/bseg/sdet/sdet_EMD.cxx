@@ -41,12 +41,12 @@ double sdet_gray_EMD(const sdet_bin dirt[], const sdet_bin hole[])
   int i = -1, j = -1;
   double leftoverdirt = 0.0, leftoverhole = 0.0, work = 0.0;
   double dirt_amt, hole_amt;
-  
+
   while (1) {
 
-    // Compute the amount of mass in the lowest numbered bin that hasn't 
-    // been moved yet from the piles of dirt 
-    if (leftoverdirt == 0.0) 
+    // Compute the amount of mass in the lowest numbered bin that hasn't
+    // been moved yet from the piles of dirt
+    if (leftoverdirt == 0.0)
     {
       //advance i to the next non-empty interval
       i++;
@@ -57,12 +57,12 @@ double sdet_gray_EMD(const sdet_bin dirt[], const sdet_bin hole[])
         return (work); //we're done
       else
         dirt_amt = dirt[i].weight;
-    } 
+    }
     else //use the amount that was left over from the last move
       dirt_amt = leftoverdirt;
 
-    // Do the same for the holes 
-    if (leftoverhole == 0.0) 
+    // Do the same for the holes
+    if (leftoverhole == 0.0)
     {
       //advance j to the next non-empty interval
       j++;
@@ -73,7 +73,7 @@ double sdet_gray_EMD(const sdet_bin dirt[], const sdet_bin hole[])
         return (work); //we're done
       else
         hole_amt = hole[j].weight;
-    } 
+    }
     else //use the amount that was left over from the last move
       hole_amt = leftoverhole;
 

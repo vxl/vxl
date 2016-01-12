@@ -35,7 +35,7 @@ bool get_top_cameras(unsigned const& tile_idx, vcl_string const& cam_bin,
                      vcl_vector<cam_angles>& top_cameras, vcl_vector<double>& right_fov)
 {
   unsigned top_size = top_locs.size();
-  
+
   // load the score
   vcl_stringstream score_file;
   score_file << score_folder + "/ps_1_scores_tile_" << tile_idx << ".bin";
@@ -43,7 +43,7 @@ bool get_top_cameras(unsigned const& tile_idx, vcl_string const& cam_bin,
     return false;
   vcl_vector<volm_score_sptr> scores;
   volm_score::read_scores(scores, score_file.str());
-  
+
   // load the volm_geo_hypo
   vcl_stringstream file_name_pre;
   file_name_pre << geo_hypo_folder << "/geo_index_tile_" << tile_idx;
@@ -54,7 +54,7 @@ bool get_top_cameras(unsigned const& tile_idx, vcl_string const& cam_bin,
   volm_geo_index::read_hyps(root, file_name_pre.str());
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(root, leaves);
-  
+
   // load the camera space
   if (!vul_file::exists(cam_bin))
     return false;
@@ -102,7 +102,7 @@ bool get_top_cameras(unsigned const& tile_idx, vcl_string const& cam_bin,
 
 bool create_camera_kml(unsigned const& top_id, double const& lon, double const& lat,
                        vcl_vector<volm_geo_index_node_sptr> const& leaves,
-                       volm_geo_index_node_sptr const& leaf, unsigned const& hypo_id, 
+                       volm_geo_index_node_sptr const& leaf, unsigned const& hypo_id,
                        vcl_string const& score_file, vcl_string const& out_dir,
                        volm_camera_space_sptr const& cam_space, unsigned ni, unsigned nj, double max_depth)
 {
@@ -135,7 +135,7 @@ bool create_camera_kml(unsigned const& top_id, double const& lon, double const& 
       vgl_vector_2d<double> gt_dist_vect(x_dist, y_dist);
       double dist = sqrt(gt_dist_vect.sqr_length());
       if (dist < min_dist) {
-        cam_id = (*vit)->max_cam_id_;  
+        cam_id = (*vit)->max_cam_id_;
         longitude = leaves[li]->hyps_->locs_[hi].x();
         latitude = leaves[li]->hyps_->locs_[hi].y();
       }
@@ -283,7 +283,7 @@ int main(int argc,  char** argv)
       double x, y;
       utm.transform(lat, lon, x, y, zone_id);
       vcl_cerr << " Top " << i << " locations " << lon << ',' << lat << " is in utm zone " << zone_id << " and tile " << tile_id << vcl_endl;
-      
+
       // construct the volm_geo_index
       vcl_string geo_hypo_folder = geo_hypo();
       vcl_stringstream file_name_pre;
@@ -363,7 +363,7 @@ int main(int argc,  char** argv)
         return volm_io::POST_PROCESS_FAILED;
       }
     } // end of loop over all top_locs
-    
+
     volm_io::write_composer_log(log_file, log.str());
     vcl_cerr << log.str() << vcl_endl;
     return volm_io::SUCCESS;
@@ -382,7 +382,7 @@ int main(int argc,  char** argv)
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   // obtain the query image size
   if (!vul_file::exists(query_img())) {
     log << "ERROR: can not find the test query image: " << query_img() << '\n';
@@ -506,7 +506,7 @@ int main(int argc,  char** argv)
       cand_map.insert(vcl_pair<unsigned, vcl_pair<unsigned, unsigned> >(region_score[sh_idx], pair));
     }
   }
-  
+
   vcl_cout << " create candidate list kml" << vcl_endl;
   // write the candidate list
   vcl_stringstream kml_name;
@@ -526,17 +526,17 @@ int main(int argc,  char** argv)
   vcl_string cam_kml = out_kml() + "/" + kml_name.str() + "-CANDIDATE.kml";
   vcl_ofstream ofs_kml(cam_kml.c_str());
   float thres_value = volm_io::scale_score_to_0_1_sig(kl(), ku(), thres_scale(), threshold());
-  
+
   if (gt_score() != 0.0f) {
     vcl_cerr << " ground truth score = " << gt_score() << " , threshold likelihood = " << thres_value << vcl_endl;
     if (gt_score() < thres_value) {
       log << " chosen threshold " << threshold() << " is larger than ground truth score, reduce its value\n";
-      vcl_cerr << log.str(); 
+      vcl_cerr << log.str();
       volm_io::write_post_processing_log(log_file, log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
   }
-  
+
   log << " there are " << cand_map.size() << " candidate regions given threshold = " << threshold() << " (likelihood = " << thres_value << ")\n";
   vcl_cerr << log.str();
   volm_io::write_post_processing_log(log_file, log.str());
@@ -582,12 +582,12 @@ int main(int argc,  char** argv)
     for (unsigned i = 0 ; i < top_locs.size(); i++) {
       if (rank%500 == 0)
         vcl_cerr << " size = " << cand_map.size() << ", cnt = " << rank-1 << " score = " << mit->first << " --> tile = " << tile_idx << " sh_id = " << sh_idx
-                 << " --> top_locs = " << vcl_setprecision(10) << top_locs[i].x() << ", " << top_locs[i].y() << " top_score = " << top_loc_scores[i] << vcl_endl; 
+                 << " --> top_locs = " << vcl_setprecision(10) << top_locs[i].x() << ", " << top_locs[i].y() << " top_score = " << top_loc_scores[i] << vcl_endl;
     }
 #endif
   }
   volm_candidate_list::close_kml_document(ofs_kml);
-  
+
 #if 0
   // screen output
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
@@ -596,7 +596,7 @@ int main(int argc,  char** argv)
   // best scores
   for (unsigned t_idx = 0; t_idx < n_tile; t_idx++) {
     vcl_vector<unsigned> scores;
-    if( !cand_lists[t_idx].region_score(scores)) 
+    if( !cand_lists[t_idx].region_score(scores))
       return volm_io::POST_PROCESS_FAILED;
     vcl_cout << " For tile " << t_idx << ", region scores = ";
     for (vcl_vector<unsigned>::iterator vit = scores.begin(); vit != scores.end(); ++vit)

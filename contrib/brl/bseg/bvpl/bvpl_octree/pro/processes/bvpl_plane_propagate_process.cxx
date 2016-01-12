@@ -38,23 +38,23 @@ struct ltstr
           return true;
       else if(p1.plane_.a()>p2.plane_.a())
           return false;
-      else 
+      else
       {
           if(p1.plane_.b()<p2.plane_.b())
               return true;
           else if(p1.plane_.b()>p2.plane_.b())
               return false;
-          else 
+          else
           {
               if(p1.plane_.c()<p2.plane_.c())
                   return true;
               else if(p1.plane_.c()>p2.plane_.c())
                   return false;
-              else 
+              else
               {
                   if(p1.plane_.d()<p2.plane_.d())
                       return true;
-                  else 
+                  else
                       return false;
               }
           }
@@ -104,7 +104,7 @@ bool bvpl_plane_propagate_process_cons(bprb_func_process& pro)
 bool bvpl_plane_propagate_process(bprb_func_process& pro)
 {
   using namespace bvpl_plane_propagate_process_globals;
-  
+
 
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
@@ -128,7 +128,7 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
        vcl_cerr << "error casting scene_base to scene\n";
        return false;
     }
-    
+
     boxm_scene<tree_type> *output_scene=new boxm_scene<tree_type>(*scene);
     output_scene->set_paths(scene_path, block_prefix);
     output_scene_sptr = output_scene;
@@ -144,7 +144,7 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
       }
     }
     bvpl_kernel_sptr kernel= new bvpl_kernel(k_iter, vnl_float_3(0,0,1), vnl_float_3(0,1,0), 0.0f, vgl_vector_3d<int>(3,3,3),min_pt,max_pt);
-    
+
     boxm_block_iterator<tree_type> iter(scene);
     boxm_block_iterator<tree_type> output_iter(output_scene);
     iter.begin();

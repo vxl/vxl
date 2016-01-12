@@ -38,7 +38,7 @@ namespace volm_registration_error_process_globals
   //: return the closest, along with the normal components, from a point to a line segment
   double closest_distance(vsol_point_2d_sptr const& p, vcl_vector<vsol_point_2d_sptr> const& point_set,
                           double& vec_x, double& vec_y);
-  
+
   double closest_distance(vcl_vector<vsol_point_2d_sptr> const& p_set1, vcl_vector<vsol_point_2d_sptr> const& p_set2,
                           vcl_vector<vcl_vector<double> >& vec_dist);
 }
@@ -71,7 +71,7 @@ bool volm_registration_error_process(bprb_func_process& pro)
     return false;
   }
   vsl_add_to_binary_loader(vsol_polyline_2d());
-  
+
   // get the inputs
   unsigned in_i = 0;
   vcl_string gt_file = pro.get_input<vcl_string>(in_i++);
@@ -156,7 +156,7 @@ bool volm_registration_error_process(bprb_func_process& pro)
     od *= res;
     vcl_cout << "line " << i << " has " << cor_line_vector.size() << " points and average distance is " << cd << " (correction) and "
              << od << " (original) " << vcl_endl;
-    
+
 #if 0
     vsol_polyline_2d_sptr cor_line = cor_lines[i];
     vsol_polyline_2d_sptr ori_line = ori_lines[i];
@@ -209,12 +209,12 @@ bool volm_registration_error_process(bprb_func_process& pro)
   double cor_mean, cor_std, ori_mean, ori_std;
   cor_mean = sum_cor / n_lines;
   ori_mean = sum_ori / n_lines;
-  
+
   cor_std = vcl_sqrt((sumsq_cor - cor_mean*cor_mean*n_lines) / (n_lines-1));
   ori_std = vcl_sqrt((sumsq_ori - ori_mean*ori_mean*n_lines) / (n_lines-1));
 
   // write out the distance vectors
-  
+
   if (cor_out_file.compare("") != 0)
   {
     vcl_cout << "write correction result into " << cor_out_file << vcl_endl;

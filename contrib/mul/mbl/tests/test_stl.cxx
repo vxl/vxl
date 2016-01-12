@@ -38,11 +38,11 @@ static void test_stl_common()
 
   unsigned l1_data[] = { 1, 2, 4, 4, 6 };
   unsigned l2_data[] = { 1, 3, 4, 4, 7 };
-  
+
   vcl_vector<unsigned> l1(l1_data, l1_data + sizeof(l1_data)/sizeof(unsigned));
   vcl_vector<unsigned> l2(l2_data, l2_data + sizeof(l2_data)/sizeof(unsigned));
 
-  
+
   typedef vcl_pair<vcl_vector<unsigned>::iterator,
     vcl_vector<unsigned>::iterator> it_pair_t;
 

@@ -6,8 +6,8 @@
 * \section Configuration Configuration
 *
 * It takes the configuration
-* file .qmvl2rc or the default 
-* file given by the environment 
+* file .qmvl2rc or the default
+* file given by the environment
 * variable QMVL2RC.
 *
-*/  
+*/

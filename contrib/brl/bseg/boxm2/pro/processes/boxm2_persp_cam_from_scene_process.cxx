@@ -52,9 +52,9 @@ bool boxm2_persp_cam_from_scene_process(bprb_func_process& pro)
   // get the scene bounding box
   vgl_box_3d<double> box = scene->bounding_box();
   vgl_point_3d<double> cam_center(xc, yc, zc);
-  vpgl_perspective_camera<double> cam = 
+  vpgl_perspective_camera<double> cam =
     bpgl_camera_from_box::persp_camera_from_box(box, cam_center, ni, nj);
-  
+
   //set the output
   pro.set_output_val<vpgl_camera_double_sptr>(0, new vpgl_perspective_camera<double>(cam));
   return true;

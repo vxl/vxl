@@ -95,7 +95,7 @@ vcl_vector<unsigned> volm_desc_ex_2d::bin_index(double const& distance, unsigned
 
 void volm_desc_ex_2d::set_count(unsigned const& bin, unsigned char const& count)
 {
-  // Note for same 
+  // Note for same
   if (bin < nbins_) h_[bin] += count;
 }
 

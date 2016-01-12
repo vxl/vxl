@@ -199,13 +199,13 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
   //
   vcl_vector<match_info> blank;
   matches_and_weights_.push_back( blank );
-  vcl_vector< vcl_vector< match_info > >::reverse_iterator back_it 
+  vcl_vector< vcl_vector< match_info > >::reverse_iterator back_it
     = matches_and_weights_.rbegin();
 
   const unsigned size = matching_to.size();
   back_it->reserve( size);
   for( unsigned i=0; i<size; ++i ) {
-    back_it->push_back( match_info( matching_to[i], geo_wgts[i], 
+    back_it->push_back( match_info( matching_to[i], geo_wgts[i],
                                     sig_wgts[i], cum_wgts[i] ) );
   }
 }
@@ -254,7 +254,7 @@ remap_only_location( rgrl_transformation const& trans )
   vcl_vector<rgrl_feature_sptr>::size_type i = 0;
   vnl_vector<double> mapped_loc;
   for ( ; i < from_features_.size(); ++i ) {
-    
+
     // remap only location
     trans.map_location( from_features_[i]->location(), mapped_loc );
     xformed_from_features_[i]->set_location( mapped_loc );
@@ -305,53 +305,53 @@ write( vcl_ostream& os ) const
 
   // size
   os << this->from_size() << vcl_endl;
-  
+
   for( FIter fi=this->from_begin(); fi!=this->from_end(); ++fi ) {
 
     // from feature
     fi.from_feature()->write( os );
-    
+
     // mapped feature
     fi.mapped_from_feature()->write( os );
-    
+
     // to size
     os << fi.size() << vcl_endl;
-    
+
     for( TIter ti=fi.begin(); ti!=fi.end(); ++ti )  {
-      os << ti.signature_weight() << ' ' 
-         << ti.geometric_weight() << ' ' 
+      os << ti.signature_weight() << ' '
+         << ti.geometric_weight() << ' '
          << ti.cumulative_weight() << vcl_endl;
-      
+
       // to feature
       ti.to_feature()->write( os );
     }
     os << vcl_endl;
   }
-  
+
   os << "\n\n";
   //return os;
-} 
+}
 
 //using anonymous namespace to restrict the use
 namespace{
   struct sort_node {
-  
+
     unsigned ind_;
     rgrl_feature_sptr fea_;
-  
+
     sort_node()
-      : ind_(0) 
+      : ind_(0)
     { }
 
-    sort_node( unsigned i, const rgrl_feature_sptr& f) 
-      : ind_(i), fea_(f) 
+    sort_node( unsigned i, const rgrl_feature_sptr& f)
+      : ind_(i), fea_(f)
     { }
-  
+
     bool operator<( const sort_node& rhs ) const
     {
-      const vnl_vector<double>&  loc = fea_->location(); 
-      const vnl_vector<double>&  rhs_loc = rhs.fea_->location(); 
-    
+      const vnl_vector<double>&  loc = fea_->location();
+      const vnl_vector<double>&  rhs_loc = rhs.fea_->location();
+
       if( loc[0] < rhs_loc[0] )
         return true;
       else if( loc[0] > rhs_loc[0] )
@@ -368,42 +368,42 @@ rgrl_match_set::
 write_sorted( vcl_ostream& os ) const
 {
   vcl_vector< sort_node > nodes;
-  
+
   for( unsigned i=0; i<from_features_.size(); ++i ){
     nodes.push_back( sort_node( i, from_features_[i] ) );
   }
   vcl_sort( nodes.begin(), nodes.end() );
 
   os << from_features_.size() << vcl_endl;
-    
+
   unsigned index;
   for( unsigned i=0; i<nodes.size(); ++i ){
-    
+
     index = nodes[i].ind_;
-    
+
     // output the index(th) match
     from_features_[index]->write( os );
     xformed_from_features_[index]->write( os );
-    
+
     const vcl_vector<match_info>& this_match = matches_and_weights_[index];
     // to size
     os << this_match.size() << vcl_endl;
-    
+
     typedef vcl_vector<match_info>::const_iterator MIter;
     for( MIter ti=this_match.begin(); ti!=this_match.end(); ++ti )  {
-      os << ti->signature_weight << ' ' 
-         << ti->geometric_weight << ' ' 
+      os << ti->signature_weight << ' '
+         << ti->geometric_weight << ' '
          << ti->cumulative_weight << vcl_endl;
-      
+
       // to feature
       ti->to_feature->write( os );
     }
     os << vcl_endl;
   }
-  
+
   os << "\n\n";
 }
-    
+
 //: stream input
 bool
 rgrl_match_set::
@@ -414,7 +414,7 @@ read( vcl_istream& is )
   vcl_vector<rgrl_feature_sptr>  tos;
   rgrl_feature_sptr from, mapped, one;
   bool to_set_feature_type = true;
-  
+
   // from size
   int from_size=-1;
   is >> from_size;
@@ -422,12 +422,12 @@ read( vcl_istream& is )
     vcl_cerr << "Error(" << __FILE__ <<"): cannot read from size" << vcl_endl;
     return false;
   }
-  
+
   for( int i=0; i<from_size; ++i ) {
-    
+
     // from feature
     from = rgrl_feature_reader::read( is );
-      
+
     // mapped feature
     mapped = rgrl_feature_reader::read( is );
     if( !is || !from || !mapped ) {
@@ -442,24 +442,24 @@ read( vcl_istream& is )
       vcl_cerr << "Error(" << __FILE__ <<"): cannot read to feature size" << vcl_endl;
       return false;
     }
-    
+
     // reset
     sig_wgts.clear();
     geo_wgts.clear();
     cum_wgts.clear();
     tos.clear();
-    
+
     for( int i=0; i<to_size; ++i ) {
       is >> sig >> geo >> cum;
       if( !is ) {
         vcl_cerr << "Error(" << __FILE__ <<"): cannot read wgts" << vcl_endl;
         return false;
       }
-      
+
       sig_wgts.push_back( sig );
       geo_wgts.push_back( geo );
       cum_wgts.push_back( cum );
-      
+
       one = rgrl_feature_reader( is );
       if( !is || !one ) {
         vcl_cerr << "Error(" << __FILE__ <<"): cannot read to features" << vcl_endl;
@@ -467,12 +467,12 @@ read( vcl_istream& is )
       }
       tos.push_back( one );
     }
-    
+
     // set feature type
     if( to_set_feature_type && !tos.empty() ) {
       //set flag
-      to_set_feature_type = false; 
-      
+      to_set_feature_type = false;
+
       from_type_ = &(from->type_id());
       to_type_ = &(tos[0]->type_id());
     }
@@ -481,15 +481,15 @@ read( vcl_istream& is )
     this->add_feature_matches_and_weights( from, mapped, tos, sig_wgts, geo_wgts, cum_wgts );
 
   }
-  
+
   // set num_constraints
   set_num_constraints_per_match();
-  
+
   return true;
 }
 
 //: stream output
-vcl_ostream& 
+vcl_ostream&
 operator<< ( vcl_ostream& os, rgrl_match_set const& set )
 {
   set.write( os );
@@ -497,7 +497,7 @@ operator<< ( vcl_ostream& os, rgrl_match_set const& set )
 }
 
 //: stream input
-vcl_istream& 
+vcl_istream&
 operator>> ( vcl_istream& is, rgrl_match_set& set )
 {
   bool ret = set.read( is );
@@ -763,7 +763,7 @@ rgrl_match_set_const_from_iterator( rgrl_match_set_from_iterator const& from_ite
   : match_set_( from_iter.match_set_ ),
     index_( from_iter.index_ )
 {
-  
+
 }
 
 rgrl_match_set_const_from_iterator&

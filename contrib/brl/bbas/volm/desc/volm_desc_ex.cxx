@@ -108,7 +108,7 @@ volm_desc_ex::volm_desc_ex(vcl_vector<unsigned char> const& index_dst,
       unsigned char orientation_value, label_value;
       volm_io_extract_values(index_combined[r_idx], orientation_value, label_value);
       double dist;
-      if (index_dst[r_idx] < depth_interval.size()) 
+      if (index_dst[r_idx] < depth_interval.size())
         dist = depth_interval[index_dst[r_idx]];
       else
         dist = depth_interval[depth_interval.size()-1];

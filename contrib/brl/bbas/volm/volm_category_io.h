@@ -1,7 +1,7 @@
 // This is brl/bbas/volm/volm_category_io.h
 #ifndef volm_category_io_h_
 #define volm_category_io_h_
-//: 
+//:
 // \file
 // \brief A io to read the pre-defined available land types for volumetric matcher related
 // \author Yi Dong
@@ -35,9 +35,9 @@ public:
                   : id_(id), name_(name), level_(level), color_(color), width_(width) {}
   volm_land_layer(unsigned char const& id, vcl_string const& name, unsigned char const& level, double const& width)
     : id_(id), name_(name), level_(level),
-      color_(bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2]), 
+      color_(bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2]),
       width_(width) {}
-                  
+
   //: destructor
   ~volm_land_layer() {}
 
@@ -46,7 +46,7 @@ public:
   //: screen print
   void print() const
   {
-    vcl_cout << " (id: " << (int)id_ << ", name: " << name_ 
+    vcl_cout << " (id: " << (int)id_ << ", name: " << name_
              << ", level: " << (int)level_ <<  ", width: " << width_ << ", color: " << color_ << ')';
   }
   //: land id
@@ -79,7 +79,7 @@ public:
                          GEO_AGRICULTURE_GENERAL = 7, GEO_AGRICULTURE_RICE = 8,
                          GEO_WETLAND = 9, GEO_MANGROVE = 10,
                          GEO_WATER = 11, GEO_ICE = 12, GEO_CLOUD = 13};
-  
+
   //: table to transfer open street map (osm) to volm available land table
   static bool load_category_table(vcl_string const& filename, vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer>& land_category_table);
 
@@ -107,7 +107,7 @@ public:
   //: table of all defined volm_land_layer from NLCD, GEO_COVER and OSM list (key is the land_layer name, note that the land name is unique)
   static volm_EXPORT_DATA vcl_map<vcl_string, volm_land_layer> volm_land_table_name;
 
-  //: use the corresponding increment during hypotheses generation, 
+  //: use the corresponding increment during hypotheses generation,
   //  the unit of the increments is in meters (user of this table shall convert to degrees if necessary depending on lat, lon of the area)
   static volm_EXPORT_DATA vcl_map<int, double> geo_land_hyp_increments;
 

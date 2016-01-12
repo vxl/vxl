@@ -13,7 +13,7 @@ static void test_sphere()
   vgl_sphere_3d<double> s;
   // Unit sphere, centered at the origin
   vgl_sphere_3d<double> u(0, 0, 0, 1.0);
-  
+
   TEST("default sphere is empty",  s.is_empty(), true);
   TEST("unit sphere is not empty", u.is_empty(), false);
 
@@ -39,7 +39,7 @@ static void test_sphere()
   // Test basic i/o
   vcl_cout << u << vcl_endl;
   vcl_ostringstream oss;
-  oss << u.centre().x() << " "  << u.centre().y() << " "  
+  oss << u.centre().x() << " "  << u.centre().y() << " "
       << u.centre().z() << " "  << u.radius();
   vcl_istringstream iss(oss.str());
   vgl_sphere_3d<double> v;

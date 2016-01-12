@@ -15,7 +15,7 @@ bool vil_truncate_image_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types(3);
-  input_types[0] = "vil_image_view_base_sptr";    
+  input_types[0] = "vil_image_view_base_sptr";
   input_types[1] = "float";   // min value
   input_types[2] = "float";   // max value
   ok = pro.set_input_types(input_types);
@@ -49,7 +49,7 @@ bool vil_truncate_image_process(bprb_func_process& pro)
     vcl_cerr << "vil_truncate_image_process: invalid truncate limits\n";
       return false;
   }
-    
+
   // retrieve float image
   vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
   vil_image_view<float> fimg = *fimage;

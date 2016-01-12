@@ -583,7 +583,7 @@ bool vidl_v4l2_device::close()
       stop_capturing();
     if (buffers)
       uninit_mmap();
-    for (unsigned int i=0;i<controls_.size();++i) delete controls_[i]; 
+    for (unsigned int i=0;i<controls_.size();++i) delete controls_[i];
     controls_.clear();
 
     last_error="";
@@ -614,7 +614,7 @@ unsigned int vidl_v4l2_device::current_input() const
 bool vidl_v4l2_device::set_input(unsigned int i)
 {
   if (current_input()==i)
-    return true; 
+    return true;
 
   if (!is_open()) reset();
   if (!is_open() || i>=n_inputs())

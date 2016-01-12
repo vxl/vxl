@@ -112,7 +112,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int data_buffer_length = (int) (alph->buffer_length()/alphaTypeSize);
 
- 
+
         vcl_vector<boxm2_data_base*> datas;
         datas.push_back(alph);
         if (prefix!="")
@@ -149,7 +149,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
 
         vis_array->data_array[i]=vis;
         vis*=vcl_exp(-seg_lengths[i]*alphas[i]);
-        
+
         res_depth_array->data_array[i] = abs_depth[i]*vcl_tan(cone_half_angle)*2;
         for (int j=0 ; j<nelems; ++j)
             data_to_return_array->data_array[i*nelems+j] = data_to_return[i*nelems+j];

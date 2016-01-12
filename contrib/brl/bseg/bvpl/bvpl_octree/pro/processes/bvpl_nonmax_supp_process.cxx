@@ -71,7 +71,7 @@ bool bvpl_nonmax_supp_process_cons(bprb_func_process& pro)
 bool bvpl_nonmax_supp_process(bprb_func_process& pro)
 {
   using namespace bvpl_nonmax_supp_process_globals;
-  
+
 
   // check number of inputs
   if (pro.n_inputs() != n_inputs_)
@@ -86,7 +86,7 @@ bool bvpl_nonmax_supp_process(bprb_func_process& pro)
   vcl_string block_prefix = pro.get_input<vcl_string>(2);
   vcl_string scene_filename = pro.get_input<vcl_string>(3);
   boxm_scene_base_sptr output_scene_sptr;
-  
+
   // only applies to the edge_line type of scenes
   if (scene_base->appearence_model() == BOXM_EDGE_LINE) {
     typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
@@ -96,7 +96,7 @@ bool bvpl_nonmax_supp_process(bprb_func_process& pro)
        vcl_cerr << "error casting scene_base to scene\n";
        return false;
     }
-    
+
     boxm_scene<tree_type> *output_scene=new boxm_scene<tree_type>(*scene);
     output_scene->set_paths(scene_path, block_prefix);
     output_scene_sptr = output_scene;
@@ -113,7 +113,7 @@ bool bvpl_nonmax_supp_process(bprb_func_process& pro)
       }
     }
     bvpl_kernel_sptr kernel= new bvpl_kernel(k_iter, vnl_float_3(0,0,1), vnl_float_3(0,1,0), 0.0f, vgl_vector_3d<int>(3,3,3),min_pt,max_pt);
-    
+
     boxm_block_iterator<tree_type> iter(scene);
     boxm_block_iterator<tree_type> output_iter(output_scene);
     iter.begin();
@@ -138,9 +138,9 @@ bool bvpl_nonmax_supp_process(bprb_func_process& pro)
         cell_type *output_cell=output_cells[i];
         vcl_vector<cell_type *> neighb_cells;
         oper.neighbors(kernel, cells[i], neighb_cells);
-        
+
         float residual = cell->data().residual_;
-        
+
         bool min=true;
         for (unsigned n=0; n<neighb_cells.size()&& min; n++) {
           cell_type *neighbor = neighb_cells[n];
@@ -153,11 +153,11 @@ bool bvpl_nonmax_supp_process(bprb_func_process& pro)
             if ( r < residual)
               min=false;
           }
-          
-          if (min) {   
+
+          if (min) {
             boxm_inf_line_sample<float> data = cell->data();
             output_cell->set_data(data);
-          } 
+          }
         }
       }
       output_block->delete_tree();

@@ -50,7 +50,7 @@ vgui_qt_adaptor::~vgui_qt_adaptor()
      delete ovl_helper;
    ovl_helper = 0;
    dispatch_to_tableau(vgui_DESTROY);
-   
+
    for(vcl_map<int, vgui_qt_internal_timer*>::iterator it = timers_.begin();
        it != timers_.end(); ++it){
       delete it->second;
@@ -108,7 +108,7 @@ void vgui_qt_adaptor::post_idle_request()
 void vgui_qt_adaptor::post_timer(float timeout, int name)
 {
    vcl_map<int, vgui_qt_internal_timer*>::iterator it = timers_.find( name );
-   if( it == timers_.end() )  
+   if( it == timers_.end() )
      timers_[name] = new vgui_qt_internal_timer(this,name);
    QTimer::singleShot(static_cast<int>(timeout), timers_[name], SLOT(activate()));
 }
@@ -222,8 +222,8 @@ void vgui_qt_adaptor::windowActivationChange (bool oldActive)
 }
 
 //------------------------------------------------------------------------------
-void vgui_qt_internal_timer::activate() 
-{ 
+void vgui_qt_internal_timer::activate()
+{
    if(adaptor){
       vgui_event e(vgui_TIMER);
       e.timer_id = id;

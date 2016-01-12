@@ -33,7 +33,7 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
                                                             ray_directions,
                                                             cl_ni, cl_nj,
                                                             i_min, j_min,
-							    create_ray_o_d_buffers);
+                                                            create_ray_o_d_buffers);
 #ifdef DEBUG
     vcl_cout<<"Camera Convert Time: "<<convTime<<" ms"<<vcl_endl;
 #endif
@@ -85,7 +85,7 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
                                                            unsigned cl_nj,
                                                            vcl_size_t i_min,
                                                            vcl_size_t j_min,
-							   bool create_ray_o_d_buffers)
+                                                           bool create_ray_o_d_buffers)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;

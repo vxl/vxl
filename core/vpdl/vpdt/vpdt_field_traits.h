@@ -7,7 +7,7 @@
 // \brief specialized template trait classes for properties of a field type
 // \date March 5, 2009
 //
-// Each type of object upon which you define a field for a probability 
+// Each type of object upon which you define a field for a probability
 // distribution requires a field traits class.  The field traits determine
 // the dimension, scalar type, field type, vector type, matrix type, etc to be used.
 //
@@ -26,11 +26,11 @@
 //: The field traits class (scalar)
 //  The default is to treat it as a 1-d (scalar) field
 template <class T>
-struct vpdt_field_traits 
+struct vpdt_field_traits
 {
   //: The compile time dimension of the field
   static const unsigned int dimension = 1;
-  //: The type used for scalar operations 
+  //: The type used for scalar operations
   typedef T scalar_type;
   //: the data type to represent a point in the field
   typedef T field_type;
@@ -38,7 +38,7 @@ struct vpdt_field_traits
   typedef T vector_type;
   //: the data type used for square matrices
   typedef T matrix_type;
-  
+
   //: use this to disambiguate templates
   typedef void type_is_scalar;
 };
@@ -51,15 +51,15 @@ struct vpdt_field_traits<vnl_vector_fixed<T,n> >
 {
   //: The compile time dimension of the field
   static const unsigned int dimension = n;
-  //: The type used for scalar operations 
-  typedef T scalar_type;  
+  //: The type used for scalar operations
+  typedef T scalar_type;
   //: the data type to represent a point in the field
   typedef vnl_vector_fixed<T,n> field_type;
   //: the data type used for vectors (difference between points)
   typedef vnl_vector_fixed<T,n> vector_type;
   //: the data type used for square matrices
   typedef vnl_matrix_fixed<T,n,n> matrix_type;
-  
+
   //: use this to disambiguate templates
   typedef void type_is_vector;
 };
@@ -73,7 +73,7 @@ struct vpdt_field_traits<vnl_vector<T> >
 {
   //: The compile time dimension of the field
   static const unsigned int dimension = 0;
-  //: The type used for scalar operations 
+  //: The type used for scalar operations
   typedef T scalar_type;
   //: the data type to represent a point in the field
   typedef vnl_vector<T> field_type;
@@ -81,7 +81,7 @@ struct vpdt_field_traits<vnl_vector<T> >
   typedef vnl_vector<T> vector_type;
   //: the data type used for square matrices
   typedef vnl_matrix<T> matrix_type;
-  
+
   //: use this to disambiguate templates
   typedef void type_is_vector;
 };

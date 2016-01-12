@@ -131,7 +131,7 @@ void vgl_h_matrix_1d<T>::get(vnl_matrix_fixed<T,2,2>* H) const
 template <class T>
 void vgl_h_matrix_1d<T>::get(vnl_matrix<T>* H) const
 {
-  VXL_DEPRECATED("vgl_h_matrix_1d<T>::get(vnl_matrix<T>*) const"); 
+  VXL_DEPRECATED("vgl_h_matrix_1d<T>::get(vnl_matrix<T>*) const");
   *H = t12_matrix_.as_ref(); // size 2x2
 }
 

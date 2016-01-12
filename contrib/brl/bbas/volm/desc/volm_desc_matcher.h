@@ -58,7 +58,7 @@ public:
   //: write the matcher scores
   bool write_out(vcl_string const& out_folder, unsigned const& tile_id);
 
-  //: generate probability map 
+  //: generate probability map
   bool create_prob_map(vcl_string const& geo_hypo_folder,
                        vcl_string const& out_folder,
                        unsigned const& tile_id,

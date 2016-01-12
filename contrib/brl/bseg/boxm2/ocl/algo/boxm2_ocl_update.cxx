@@ -121,7 +121,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
 
   if(cam->type_name() == "vpgl_perspective_camera")
   {
-      
+
       float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       tnearfar[0] = f* scene->finest_resolution()/resnearfactor ;
       tnearfar[1] = f* scene->finest_resolution()*resfarfactor ;
@@ -233,7 +233,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
               if ( i<img_view->ni() && j<img_view->nj() ) {
                       normimage(i,j)  = norm_buff[count];
                   }
-              
+
               ++count;
           }
           }

@@ -47,7 +47,7 @@ bool vidl_open_ostream_process(bprb_func_process& pro)
     //directory not present
     if (create_directory)
     {
-      if (!vul_file::make_directory_path(ostream_path)) 
+      if (!vul_file::make_directory_path(ostream_path))
         {
         vcl_cerr << "In vidl_open_ostream_process::execute() - "
                  << " can't make directory with path " << ostream_path << '\n';

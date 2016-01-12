@@ -316,7 +316,7 @@ bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadat
     for (; expected_edge_image_it != expected_edge_image.end(); ++expected_edge_image_it, ++edges_image_it, ++z_image_it) {
       //(*expected_edge_image_it) = vnl_math::max((*expected_edge_image_it),(*edges_image_it));
       if ((*expected_edge_image_it) < (*edges_image_it)) {
-        (*expected_edge_image_it) = (*edges_image_it); 
+        (*expected_edge_image_it) = (*edges_image_it);
         (*z_image_it) = (float)z;
       }
     }

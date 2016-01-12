@@ -32,7 +32,7 @@
 
 #ifndef __BIO_H
 #define __BIO_H
-/** 
+/**
 @file bio.h
 @brief Implementation of an individual bit input-output (BIO)
 
@@ -46,23 +46,23 @@ The functions in BIO.C have for goal to realize an individual bit input - output
 Individual bit input-output stream (BIO)
 */
 typedef struct opj_bio {
-	/** pointer to the start of the buffer */
-	OPJ_BYTE *start;
-	/** pointer to the end of the buffer */
-	OPJ_BYTE *end;
-	/** pointer to the present position in the buffer */
-	OPJ_BYTE *bp;
-	/** temporary place where each byte is read or written */
-	OPJ_UINT32 buf;
-	/** coder : number of bits free to write. decoder : number of bits read */
-	OPJ_UINT32 ct;
+        /** pointer to the start of the buffer */
+        OPJ_BYTE *start;
+        /** pointer to the end of the buffer */
+        OPJ_BYTE *end;
+        /** pointer to the present position in the buffer */
+        OPJ_BYTE *bp;
+        /** temporary place where each byte is read or written */
+        OPJ_UINT32 buf;
+        /** coder : number of bits free to write. decoder : number of bits read */
+        OPJ_UINT32 ct;
 } opj_bio_t;
 
 /** @name Exported functions */
 /*@{*/
 /* ----------------------------------------------------------------------- */
 /**
-Create a new BIO handle 
+Create a new BIO handle
 @return Returns a new BIO handle if successful, returns NULL otherwise
 */
 opj_bio_t* bio_create(void);
@@ -81,14 +81,14 @@ OPJ_UINT32 bio_numbytes(opj_bio_t *bio);
 Init encoder
 @param bio BIO handle
 @param bp Output buffer
-@param len Output buffer length 
+@param len Output buffer length
 */
 void bio_init_enc(opj_bio_t *bio, OPJ_BYTE *bp, OPJ_UINT32 len);
 /**
 Init decoder
 @param bio BIO handle
 @param bp Input buffer
-@param len Input buffer length 
+@param len Input buffer length
 */
 void bio_init_dec(opj_bio_t *bio, OPJ_BYTE *bp, OPJ_UINT32 len);
 /**
@@ -101,7 +101,7 @@ void bio_write(opj_bio_t *bio, OPJ_UINT32 v, OPJ_UINT32 n);
 /**
 Read bits
 @param bio BIO handle
-@param n Number of bits to read 
+@param n Number of bits to read
 @return Returns the corresponding read number
 */
 OPJ_UINT32 bio_read(opj_bio_t *bio, OPJ_UINT32 n);

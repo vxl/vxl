@@ -1,6 +1,6 @@
 /* miniZoomPan styles */
 
-.minizoompan 
+.minizoompan
 {
 background: #fff;
 position: relative; /* always set to relative or offset() won't work */

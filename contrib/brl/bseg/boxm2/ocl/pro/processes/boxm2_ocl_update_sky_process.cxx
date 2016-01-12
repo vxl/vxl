@@ -73,7 +73,7 @@ bool boxm2_ocl_update_sky_process(bprb_func_process& pro)
     boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
     vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
     vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-    
+
 
     vul_timer t;
     t.mark();

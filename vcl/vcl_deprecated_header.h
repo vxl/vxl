@@ -10,7 +10,7 @@
 # warning "deprecated"
 
 #elif defined(VCL_VC)
-// This warning is issued if your source file includes a deprecated 
+// This warning is issued if your source file includes a deprecated
 // header (e.g. vcl_strstream.h)  It can't figure out exactly where
 // the include came from, so you'll have to see which .cxx file
 // produced the warning, and then remove includes till it goes away....

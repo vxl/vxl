@@ -44,7 +44,7 @@ inline void vil3d_exp_filter_i(const vil3d_image_view<srcT>& src_im,
 }
 
 //: Apply exponential filter along each axis of src_im in turn
-//  Symmetric exponential filter of the form exp(c*|i|) applied. 
+//  Symmetric exponential filter of the form exp(c*|i|) applied.
 //  c=log(ki) along i, log(kj) along j, log(kk) along k.
 //  Uses fast recursive implementation.
 // \relatesalso vil_image_view

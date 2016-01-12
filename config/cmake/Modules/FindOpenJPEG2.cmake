@@ -21,7 +21,7 @@ if( NOT VXL_FORCE_V3P_OPENJPEG2 )
 
     find_path( OPENJPEG2_INCLUDE_DIR openjpeg.h )
 #    message(STATUS "Looking for openjpeg.h - ${OPENJPEG2_INCLUDE_DIR}")
- 
+
     if( OPENJPEG2_INCLUDE_DIR )
       #The opj_cio struct is only preset in the old v1 API
       set( CMAKE_REQUIRED_INCLUDES "${OPENJPEG2_INCLUDE_DIR}" )
@@ -36,7 +36,7 @@ if( NOT VXL_FORCE_V3P_OPENJPEG2 )
       endif(HAVE_STRUCT_OPJ_CIO)
 #      message(STATUS "Checking OpenJPEG header for v2 API - " ${OPENJPEG2_INCLUDE_V2})
     endif( OPENJPEG2_INCLUDE_DIR )
-  
+
     find_library( OPENJPEG2_LIBRARIES "libopenjpeg" )
 #    message(STATUS "Looking for libopenjpeg - ${OPENJPEG2_LIBRARIES}")
 

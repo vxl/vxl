@@ -16,7 +16,7 @@ bool brad_set_sun_angles_process_cons(bprb_func_process& pro)
   input_types.push_back("brad_image_metadata_sptr"); // image name
   input_types.push_back("float"); // sun azimuth
   input_types.push_back("float"); // sun elevation
-  
+
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -36,7 +36,7 @@ bool brad_set_sun_angles_process(bprb_func_process& pro)
   brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(0);
   float sun_az = pro.get_input<float>(1);
   float sun_el = pro.get_input<float>(2);
-  
+
   // set the sun angles
   mdata->sun_azimuth_ = sun_az;
   mdata->sun_elevation_ = sun_el;

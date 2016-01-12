@@ -77,7 +77,7 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
         pixels.push_back(vnl_vector_fixed<double, 2>((double)i, (double)j));
         values.push_back((*in_img)(i,j));
       }
-  
+
   // construct the rsdl_bin_2d to speed up pixel retrieval
   pt_type min_pt, max_pt, bin_sizes;
   min_pt[0] = 0.0;  max_pt[0] = (double)ni;
@@ -100,7 +100,7 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
   }
   vcl_cout << "Construct rsdl bin with bin size " << bin_sizes[0] << 'x' << bin_sizes[1] << vcl_endl;
   vcl_cout << "Start to interpolate the [" << ni << 'x' << nj << "] image given " << pixels.size() << " valid pixels and " << num_neighbors << " nearest neighbors";
-  
+
   vul_timer up_time;
   // for each pixel obtain its 4 nearest neighbors
   for (unsigned i = 0; i < ni; i++) {

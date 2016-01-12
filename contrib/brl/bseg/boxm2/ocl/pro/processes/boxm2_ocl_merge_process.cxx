@@ -24,8 +24,8 @@
 #define ALPHA_BEHAVIOR 0
 #define COPY_PARENT_BEHAVIOR 1
 #define COPY_INIT_BEHAVIOR 2
-#define ZERO_BEHAVIOR 3 
-        
+#define ZERO_BEHAVIOR 3
+
 
 namespace boxm2_ocl_merge_process_globals
 {
@@ -43,10 +43,10 @@ namespace boxm2_ocl_merge_process_globals
 
         //create refine trees kernel (refine trees deterministic.  MOG type is necessary
         // to define, but not used by the kernel - using default value here
-        merge_kernel->create_kernel( &device->context(), 
-                                     device->device_id(), 
+        merge_kernel->create_kernel( &device->context(),
+                                     device->device_id(),
                                      src_paths,
-                                     "merge_trees", 
+                                     "merge_trees",
                                      " -D MOG_TYPE_8 ",
                                      "boxm2 opencl merge trees (pass one)"); //kernel identifier (for error checking)
     }
@@ -58,10 +58,10 @@ namespace boxm2_ocl_merge_process_globals
         src_paths.push_back(source_dir + "basic/linked_list.cl");
         src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
         src_paths.push_back(source_dir + "bit/merge_bit_scene.cl");
-        merge_data_kernel->create_kernel( &device->context(), 
+        merge_data_kernel->create_kernel( &device->context(),
                                            device->device_id(),
-                                           src_paths, 
-                                           "merge_data", 
+                                           src_paths,
+                                           "merge_data",
                                            option,
                                            "boxm2 opencl merge data: " + option);
     }
@@ -133,7 +133,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
         vcl_cout<<" ERROR in initializing a queue"<<vcl_endl;
         return false;
     }
-    
+
     //set tree identifier and compile (indexes into merge tree kernel)
     vcl_string tree_identifier=identifier+"tree";
     if (kernels.find(tree_identifier)==kernels.end())
@@ -143,7 +143,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
         compile_merge_tree_kernel(device,tree_kernel);
         kernels[tree_identifier]=tree_kernel;
     }
-    
+
     //compile the move data kernel for each data type
     vcl_vector<vcl_string> data_types = scene->appearances();
     data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -158,7 +158,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             kernels[data_identifier]=data_kernel;
         }
     }
-    
+
     //set up buffers
     float prob_buff[1];
     prob_buff[0]=thresh;
@@ -180,7 +180,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
     {
-        boxm2_block_id currId = blk_iter->first; 
+        boxm2_block_id currId = blk_iter->first;
         vcl_cout<<"Merging block "<<currId<<vcl_endl;
         // Merge Method Summary:
         //  - NEED TO CLEAR OUT THE GPU CACHE BEFORE YOU START.. so you don't overwrite stuff accidentally...
@@ -198,7 +198,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
         opencl_cache->clear_cache();
         boxm2_block_metadata data = blk_iter->second;
         bocl_kernel* kern=kernels[tree_identifier];
-        
+
         ////////////////////////////////////////////////////////////////////////////
         // Step One... currently mimics C++ implementation
         //get id and refine block into tree copy, and calc vector of new tree sizes
@@ -229,7 +229,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             vcl_cout<<"  Merge STOP !!!"<<vcl_endl;
             continue;
         }
-        
+
         //set first kernel args
         kern->set_arg( blk_info );
         kern->set_arg( blk );
@@ -239,10 +239,10 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
         kern->set_arg( prob_thresh.ptr() );
         kern->set_arg( lookup.ptr() );
         kern->set_arg( cl_output.ptr() );
-        kern->set_local_arg( lThreads[0]*16*sizeof(cl_uchar) ); 
+        kern->set_local_arg( lThreads[0]*16*sizeof(cl_uchar) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
         kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
-        kern->set_local_arg( lThreads[0]*73*sizeof(cl_char) ); 
+        kern->set_local_arg( lThreads[0]*73*sizeof(cl_char) );
 
         //execute kernel
         kern->execute( queue, 2, lThreads, gThreads);
@@ -266,8 +266,8 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             sizebuff[i] = sizebuff[i-1];
         sizebuff[0] = 0;
         tree_sizes->write_to_buffer((queue));
-        
-        int dataLen = alpha->num_bytes()/sizeof(float); 
+
+        int dataLen = alpha->num_bytes()/sizeof(float);
         vcl_cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
                 <<"  Num Merged: "<<(dataLen-newDataSize)/8<<'\n'
                 <<"  Scan data sizes time: "<<scan_time.all()<<vcl_endl;
@@ -315,13 +315,13 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             bocl_mem* blk_info = opencl_cache->loaded_block_info();
 
             //determine swapping behavior
-            int behavior_buffer[1]; 
+            int behavior_buffer[1];
             if(data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix())
-              behavior_buffer[0] = ALPHA_BEHAVIOR; 
-            else 
+              behavior_buffer[0] = ALPHA_BEHAVIOR;
+            else
               behavior_buffer[0] = ZERO_BEHAVIOR;
             bocl_mem behavior(device->context(), behavior_buffer, sizeof(int), "swap data behavior buffer");
-            behavior.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR); 
+            behavior.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
             //set workspace
             vcl_size_t lThreads[] = {64, 1};
@@ -335,10 +335,10 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             kern->set_arg( dat );
             kern->set_arg( new_dat );
             kern->set_arg( prob_thresh.ptr());
-            kern->set_arg( &behavior ); 
+            kern->set_arg( &behavior );
             kern->set_arg( lookup.ptr() );
             kern->set_arg( cl_output.ptr() );
-            kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) ); 
+            kern->set_local_arg( lThreads[0]*10*sizeof(cl_uchar) );
             kern->set_local_arg( lThreads[0]*73*sizeof(cl_char) );
             kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );
             kern->set_local_arg( lThreads[0]*sizeof(cl_uchar16) );

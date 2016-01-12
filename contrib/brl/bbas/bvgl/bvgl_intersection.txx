@@ -7,7 +7,7 @@
 //
 //  implementation based on code from Tomas Akenine-Moller
 //  http://jgt.akpeters.com/papers/AkenineMoller01/tribox.html
-// 
+//
 //  \modifications
 //   11 June 2015 dec: incorporated bug fixes included in v3, available at: http://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/code/tribox3.txt
 //

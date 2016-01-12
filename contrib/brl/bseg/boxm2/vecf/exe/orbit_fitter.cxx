@@ -6,7 +6,7 @@
 #include "../boxm2_vecf_fit_margins.h"
 int main(int argc, char ** argv)
 {
-  
+
   vul_arg_info_list arglist;
   vul_arg<vcl_string> base_dir_path(arglist, "-bdir", "Base patient directory", "");
   vul_arg<vcl_string> patient_idstr(arglist, "-bid", "Patient id string", "");
@@ -89,7 +89,7 @@ int main(int argc, char ** argv)
     if(!good)
       return -1;
   }
-  
+
 /// right eye processing
   if(!from_dlib){
   good = fo.read_anchor_file(right_anchor_path);
@@ -117,8 +117,8 @@ int main(int argc, char ** argv)
     good = fo.read_dlib_part_file(right_dlib_path);
     if(!good)
       return -1;
-  }    
-  
+  }
+
   good= fo.set_left_iris_radius();
   if(!good)
     return false;
@@ -171,7 +171,7 @@ int main(int argc, char ** argv)
       return -1;
     }
     boxm2_vecf_orbit_params rprm = right_fmargs.orbit_parameters();
-    fo.set_right_params(rprm); 
+    fo.set_right_params(rprm);
     vcl_string right_marg_path = base_dir + patient_id +"_right_margin_fit.txt";
     vcl_ofstream rmstr(right_marg_path.c_str());
     good = right_fmargs.plot_orbit(rmstr);
@@ -225,12 +225,12 @@ int main(int argc, char ** argv)
       return -1;
     }
     boxm2_vecf_orbit_params lprm = left_fmargs.orbit_parameters();
-    fo.set_left_params(lprm); 
+    fo.set_left_params(lprm);
     vcl_string left_marg_path = base_dir + patient_id +"_left_margin_fit.txt";
     vcl_ofstream lmstr(left_marg_path.c_str());
     good = left_fmargs.plot_orbit(lmstr);
     lmstr.close();
-  } 
+  }
   // if image data set z values for margin and crease curve points
   if(fo.from_image_data()){
     good = fo.set_left_z_values();
@@ -257,9 +257,9 @@ int main(int argc, char ** argv)
   vcl_ofstream lrmstr(left_right_merge_path.c_str());
   good = fo.display_left_right_orbit_model_vrml(lrmstr);
   lrmstr.close();
-  
+
 
   return 0;
 }
 
- 
+

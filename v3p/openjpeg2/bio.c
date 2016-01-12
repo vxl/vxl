@@ -68,122 +68,122 @@ static bool bio_bytein(opj_bio_t *bio);
 
 /*@}*/
 
-/* 
+/*
 ==========================================================
    local functions
 ==========================================================
 */
 
 static bool bio_byteout(opj_bio_t *bio) {
-	bio->buf = (bio->buf << 8) & 0xffff;
-	bio->ct = bio->buf == 0xff00 ? 7 : 8;
-	if (bio->bp >= bio->end) {
-		return true;
-	}
-	*bio->bp++ = bio->buf >> 8;
-	return false;
+        bio->buf = (bio->buf << 8) & 0xffff;
+        bio->ct = bio->buf == 0xff00 ? 7 : 8;
+        if (bio->bp >= bio->end) {
+                return true;
+        }
+        *bio->bp++ = bio->buf >> 8;
+        return false;
 }
 
 static bool bio_bytein(opj_bio_t *bio) {
-	bio->buf = (bio->buf << 8) & 0xffff;
-	bio->ct = bio->buf == 0xff00 ? 7 : 8;
-	if (bio->bp >= bio->end) {
-		return true;
-	}
-	bio->buf |= *bio->bp++;
-	return false;
+        bio->buf = (bio->buf << 8) & 0xffff;
+        bio->ct = bio->buf == 0xff00 ? 7 : 8;
+        if (bio->bp >= bio->end) {
+                return true;
+        }
+        bio->buf |= *bio->bp++;
+        return false;
 }
 
 static void bio_putbit(opj_bio_t *bio, OPJ_UINT32 b) {
-	if (bio->ct == 0) {
-		bio_byteout(bio);
-	}
-	bio->ct--;
-	bio->buf |= b << bio->ct;
+        if (bio->ct == 0) {
+                bio_byteout(bio);
+        }
+        bio->ct--;
+        bio->buf |= b << bio->ct;
 }
 
 static OPJ_UINT32 bio_getbit(opj_bio_t *bio) {
-	if (bio->ct == 0) {
-		bio_bytein(bio);
-	}
-	bio->ct--;
-	return (bio->buf >> bio->ct) & 1;
+        if (bio->ct == 0) {
+                bio_bytein(bio);
+        }
+        bio->ct--;
+        return (bio->buf >> bio->ct) & 1;
 }
 
-/* 
+/*
 ==========================================================
    Bit Input/Output interface
 ==========================================================
 */
 
 opj_bio_t* bio_create(void) {
-	opj_bio_t *bio = (opj_bio_t*)opj_malloc(sizeof(opj_bio_t));
-	return bio;
+        opj_bio_t *bio = (opj_bio_t*)opj_malloc(sizeof(opj_bio_t));
+        return bio;
 }
 
 void bio_destroy(opj_bio_t *bio) {
-	if(bio) {
-		opj_free(bio);
-	}
+        if(bio) {
+                opj_free(bio);
+        }
 }
 
 OPJ_UINT32 bio_numbytes(opj_bio_t *bio) {
-	return (OPJ_UINT32)((bio->bp - bio->start));
+        return (OPJ_UINT32)((bio->bp - bio->start));
 }
 
 void bio_init_enc(opj_bio_t *bio, OPJ_BYTE *bp, OPJ_UINT32 len) {
-	bio->start = bp;
-	bio->end = bp + len;
-	bio->bp = bp;
-	bio->buf = 0;
-	bio->ct = 8;
+        bio->start = bp;
+        bio->end = bp + len;
+        bio->bp = bp;
+        bio->buf = 0;
+        bio->ct = 8;
 }
 
 void bio_init_dec(opj_bio_t *bio, OPJ_BYTE *bp, OPJ_UINT32 len) {
-	bio->start = bp;
-	bio->end = bp + len;
-	bio->bp = bp;
-	bio->buf = 0;
-	bio->ct = 0;
+        bio->start = bp;
+        bio->end = bp + len;
+        bio->bp = bp;
+        bio->buf = 0;
+        bio->ct = 0;
 }
 
 void bio_write(opj_bio_t *bio, OPJ_UINT32 v, OPJ_UINT32 n) {
-	OPJ_UINT32 i;
-	for (i = n - 1; i != -1 ; --i) {
-		bio_putbit(bio, (v >> i) & 1);
-	}
+        OPJ_UINT32 i;
+        for (i = n - 1; i != -1 ; --i) {
+                bio_putbit(bio, (v >> i) & 1);
+        }
 }
 
 OPJ_UINT32 bio_read(opj_bio_t *bio, OPJ_UINT32 n) {
-	OPJ_UINT32 i, v;
-	v = 0;
-	for (i = n - 1; i != -1 ; --i) {
-		v += bio_getbit(bio) << i;
-	}
-	return v;
+        OPJ_UINT32 i, v;
+        v = 0;
+        for (i = n - 1; i != -1 ; --i) {
+                v += bio_getbit(bio) << i;
+        }
+        return v;
 }
 
 bool bio_flush(opj_bio_t *bio) {
-	bio->ct = 0;
-	if (bio_byteout(bio)) {
-		return true;
-	}
-	if (bio->ct == 7) {
-		bio->ct = 0;
-		if (bio_byteout(bio)) {
-			return true;
-		}
-	}
-	return false;
+        bio->ct = 0;
+        if (bio_byteout(bio)) {
+                return true;
+        }
+        if (bio->ct == 7) {
+                bio->ct = 0;
+                if (bio_byteout(bio)) {
+                        return true;
+                }
+        }
+        return false;
 }
 
 bool bio_inalign(opj_bio_t *bio) {
-	bio->ct = 0;
-	if ((bio->buf & 0xff) == 0xff) {
-		if (bio_bytein(bio)) {
-			return true;
-		}
-		bio->ct = 0;
-	}
-	return false;
+        bio->ct = 0;
+        if ((bio->buf & 0xff) == 0xff) {
+                if (bio_bytein(bio)) {
+                        return true;
+                }
+                bio->ct = 0;
+        }
+        return false;
 }

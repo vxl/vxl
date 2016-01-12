@@ -16,7 +16,7 @@ namespace volm_vrml_io_data
                                       {1.0f,0.5f,1.0f},
                                       {1.0f,0.0f,0.0f},
                                       {0.5f,0.5f,1.0f},
-                                      {0.0f,0.0f,1.0f} };   
+                                      {0.0f,0.0f,1.0f} };
 }
 
 class volm_vrml_io

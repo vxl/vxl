@@ -5,7 +5,7 @@
 #include "../boxm2_vecf_fit_skull.h"
 int main(int argc, char ** argv)
 {
-  
+
   vul_arg_info_list arglist;
   vul_arg<vcl_string> base_dir_path(arglist, "-bdir", "Base directory", "");
   vul_arg<vcl_string> idstr(arglist, "-bid", " id string", "");
@@ -51,13 +51,13 @@ int main(int argc, char ** argv)
   if(!good){
     vcl_cout << "failed to compute auxillary points\n";
     return -1;
-  } 
+  }
 
   good = fs.set_trans();
   if(!good){
         vcl_cout << "failed to compute skull transform\n";
     return -1;
-  } 
+  }
   vcl_string source_path = base_dir + "skull/skull-top-2x-r-zeroaxis-samp-1.0-r35-norm.txt";
   vcl_string target_path = base_dir + id + "/" + id + "_trans_skull.txt";
   good = fs.transform_skull(source_path, target_path);
@@ -67,4 +67,4 @@ int main(int argc, char ** argv)
   return 0;
 }
 
- 
+

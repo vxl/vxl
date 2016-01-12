@@ -341,7 +341,7 @@ class mbl_logger_root
   // "file_output" and the filename or "stream_output" and the stream name.
   // The known stream names are "vcl_cout" and "vcl_cerr", and additional
   // names can be provided through \p stream_names.
-  // The 
+  // The
   //\verbatim
   // root: { level: INFO stream_output: test }
   // obj3: { level: INFO stream_output: vcl_cout }\n

@@ -66,7 +66,7 @@ void test_vsol_rectangle_2d()
   vsol_point_2d_sptr q1 =new vsol_point_2d(0.5+m,0.5);
   vsol_point_2d_sptr q2 =new vsol_point_2d(0.5,0.5+m);
   vsol_point_2d_sptr q3 =new vsol_point_2d(0.5-m,0.5);
-  
+
   TEST("vsol_rectangle_2d::p0()", near_eq(q0, t2->p0()), true);
   TEST("vsol_rectangle_2d::p1()", near_eq(q1, t2->p1()), true);
   TEST("vsol_rectangle_2d::p2()", near_eq(q2, t2->p2()), true);

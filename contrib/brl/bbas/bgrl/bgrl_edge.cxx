@@ -7,16 +7,16 @@
 
 
 //: Return a platform independent string identifying the class
-vcl_string 
-bgrl_edge::is_a() const 
-{ 
-  return "bgrl_edge"; 
+vcl_string
+bgrl_edge::is_a() const
+{
+  return "bgrl_edge";
 }
 
 
 //: Create a copy of the object on the heap.
 // The caller is responsible for deletion
-bgrl_edge* 
+bgrl_edge*
 bgrl_edge::clone() const
 {
   return new bgrl_edge(*this);

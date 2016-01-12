@@ -122,7 +122,7 @@ IF(APPLE)
     IF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
       MESSAGE(FATAL_ERROR "Neither the __isnand nor the __inline_isnand "
         "functions are available !")
-    ENDIF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})  
+    ENDIF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
   ENDIF(NOT ${VXL_APPLE_HAS_ISNAND})
 ENDIF(APPLE)
 
@@ -386,7 +386,7 @@ MATH(EXPR VXL_ADDRESS_BITS 8*${CMAKE_SIZEOF_VOID_P} )
 # Sanity Check numeric_limits infinity stuff
 #
 PERFORM_CHECK_HEADER(limits VCL_CXX_HAS_HEADER_LIMITS)
-IF(NOT VCL_CXX_HAS_HEADER_LIMITS) 
+IF(NOT VCL_CXX_HAS_HEADER_LIMITS)
   message(FATAL_ERROR "Compiler is required to have limits.h")
 else()
   PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_NUMERIC_LIMITS_HAS_INFINITY)
@@ -397,7 +397,7 @@ else()
 endif()
 unset(VCL_CXX_HAS_HEADER_LIMITS)
 
-IF(NOT VCL_CXX_HAS_HEADER_CFLOAT) 
+IF(NOT VCL_CXX_HAS_HEADER_CFLOAT)
   message(FATAL_ERROR "Compiler is required to have cfloat")
 else()
   PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_PROCESSOR_HAS_INFINITY)

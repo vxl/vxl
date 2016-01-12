@@ -37,7 +37,7 @@ ELSE( DCMTK_FOUND )
       ${dcmtk_SOURCE_DIR}/dcmimgle/include
     )
     SET( DCMTK_LIBRARIES dcmtk )
-    
+
   ENDIF( VXL_BUILD_DCMTK )
 
 ENDIF( DCMTK_FOUND )

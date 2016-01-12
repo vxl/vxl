@@ -26,17 +26,17 @@ SOURCEFILES=book.texi \
             chapter_io.texi \
             chapter_cpp.texi \
             chapter_ocl.texi \
-            chapter_demo.texi 
+            chapter_demo.texi
 
 all: book.html book.dvi
 
 thelot: book.info book.html book.dvi book.hpj
 
 ifdef aaa
-book.html: $(SOURCEFILES)  
+book.html: $(SOURCEFILES)
 	$(MAKEINFO) $(MAKEINFOFLAGS) book.texi --html -o $@ --number-sections
 else
-book.html: $(SOURCEFILES) 
+book.html: $(SOURCEFILES)
 	$(TEXI2HTML) book.texi -expand info -number -split chapter -no-section_navigation -frames
 endif
 
@@ -76,5 +76,5 @@ echo-%:
 	echo '$(@:echo-%=%)=$($(@:echo-%=%))'
 
 #removes html and dvi files
-clean: 
+clean:
 	rm -f *.html *.aux *.cp *.dvi *.fn *.ky *.log *.pg *.tmp *.toc *.tp *.vr

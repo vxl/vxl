@@ -28,10 +28,10 @@ void test_dist_to_curves()
   points.set_point(1, 1,0);
   points.set_point(2, 1,1);
   points.set_point(3, 0,1);
-  
+
   msm_curves open_curve(0,3);
   msm_curves closed_curve(0,3,false);
-  
+
   double d=msm_dist_to_curves(points,open_curve,vgl_point_2d<double>(2,0));
   TEST_NEAR("Distance to (2,0)",d,1.0,1e-6);
 
@@ -64,17 +64,17 @@ void test_dist_to_curves()
   TEST("seg1.i0",seg1.i0,0);
   TEST("seg1.i1",seg1.i1,1);
   TEST_NEAR("seg1.alpha",seg1.alpha,0.3,1e-6);
-  
+
   seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(0.7,-0.5),d);
   TEST("seg1.i0",seg1.i0,0);
   TEST("seg1.i1",seg1.i1,1);
   TEST_NEAR("seg1.alpha",seg1.alpha,0.7,1e-6);
-  
+
   seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(1.1,-0.5),d);
   TEST("seg1.i0",seg1.i0,0);
   TEST("seg1.i1",seg1.i1,1);
   TEST_NEAR("seg1.alpha",seg1.alpha,1.0,1e-6);
- 
+
   seg1 = msm_closest_seg_pt_on_curve(points,open_curve[0],vgl_point_2d<double>(-0.7,-0.5),d);
   TEST("seg1.i0",seg1.i0,0);
   TEST("seg1.i1",seg1.i1,-1);

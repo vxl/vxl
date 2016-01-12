@@ -22,7 +22,7 @@
 #include <vgl/vgl_point_3d.h> // forward declare vgl datatypes
 
 //: A 3D frustum is the portion of a solid (normally a cone or pyramid)
-// that lies between two parallel planes cutting it. 
+// that lies between two parallel planes cutting it.
 //
 template <class Type>
 class vgl_frustum_3d
@@ -35,16 +35,16 @@ class vgl_frustum_3d
   // the corner rays intersect in a common origin point, i.e., the apex
   // of the frustum cone. It is assumed the rays are in sorted order
   // around the cone surface, so that sequential rays are coplanar
-  // with a cone surface plane and the cross product r[i].dir X r[i+1].dir 
+  // with a cone surface plane and the cross product r[i].dir X r[i+1].dir
   // defines an outward-pointing normal. norm is the vector
   // perpendicular to the parallel frustum faces. d0 is the distance in
   // the norm vector dirction from the apex to the closest parallel face.
   // d1 the distance in the norm direction from the apex to the far face.
   //
   vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
-		 vgl_vector_3d<Type> const& norm, Type d0, Type d1);
+                 vgl_vector_3d<Type> const& norm, Type d0, Type d1);
 
-		 
+
   //: Equality test
   inline bool operator==(vgl_frustum_3d<Type> const& other) const;
 
@@ -57,7 +57,7 @@ class vgl_frustum_3d
 
   const vgl_plane_3d<Type>& near_plane() const
   {return surface_planes_[near_plane_];}
-  
+
   const vgl_plane_3d<Type>& far_plane() const
   {return surface_planes_[far_plane_];}
 
@@ -87,7 +87,7 @@ class vgl_frustum_3d
 
   // I/O-----------------------------------------------------------------------
 
-  
+
   // INTERNALS-----------------------------------------------------------------
  protected:
   // Data Members--------------------------------------------------------------

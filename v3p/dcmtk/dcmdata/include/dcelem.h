@@ -149,8 +149,8 @@ class DcmElement
      *  @return status, EC_Normal if successful, an error code otherwise
      */
     virtual OFCondition writeSignatureFormat(DcmOutputStream &outStream,
-					                         const E_TransferSyntax oxfer,
-					                         const E_EncodingType enctype = EET_UndefinedLength);
+                                                                 const E_TransferSyntax oxfer,
+                                                                 const E_EncodingType enctype = EET_UndefinedLength);
 
     virtual OFCondition clear();
 

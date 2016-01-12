@@ -40,7 +40,7 @@ boxm2_vecf_similarity_transform::make_forward_mapper(boxm2_scene_sptr source, bo
 }
 
 //: Create a function object that maps target pts to source pts.
-boxm2_vecf_similarity_transform_mapper 
+boxm2_vecf_similarity_transform_mapper
 boxm2_vecf_similarity_transform::make_inverse_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id)
 {
   vgl_rotation_3d<double> inv_rot = rot_.inverse();

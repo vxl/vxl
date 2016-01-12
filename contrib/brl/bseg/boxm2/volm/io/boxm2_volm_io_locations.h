@@ -19,7 +19,7 @@ void vsl_print_summary(vcl_ostream &os, const boxm2_volm_loc_hypotheses &loc_hyp
 void vsl_b_read(vsl_b_istream& is, boxm2_volm_loc_hypotheses* p);
 
 void vsl_b_write(vsl_b_ostream& os, const boxm2_volm_loc_hypotheses* &p);
- 
+
 void vsl_print_summary(vcl_ostream& os, const boxm2_volm_loc_hypotheses* &p);
 
 #endif

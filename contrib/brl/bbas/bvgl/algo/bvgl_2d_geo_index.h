@@ -59,14 +59,14 @@ public:
   static bvgl_2d_geo_index_node_sptr construct_tree(vgl_box_2d<double> const& bbox, double const& min_size);
   template <class Type>
   static bvgl_2d_geo_index_node_sptr construct_tree(vgl_box_2d<float> const& bbox, float const& min_size);
-  
+
   //: construct a tree with one polygon having multiple sheets, only keep the children intersecting with the polygon
   template <class Type>
   static bvgl_2d_geo_index_node_sptr construct_tree(vgl_box_2d<double> const& bbox, double const& min_size, vgl_polygon<double> const& poly);
   template <class Type>
   static bvgl_2d_geo_index_node_sptr construct_tree(vgl_box_2d<float> const& bbox, float const& min_size, vgl_polygon<float> const& poly);
 
-  //: create a tree from text file.  Note even if a child has zero pointer, it's order in the children array remains same such that the children 
+  //: create a tree from text file.  Note even if a child has zero pointer, it's order in the children array remains same such that the children
   //  have consistent clockwise geographic sequence
   template <class Type>
   static bvgl_2d_geo_index_node_sptr read_and_construct(vcl_string const& file_name, double& min_size);

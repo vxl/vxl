@@ -8,7 +8,7 @@ what are they for?
 ------------------
 It can be useful to have an overlay plane if one wants to make small changes
 to a frame buffer which is very expensive to render. Unfortunately, not all
-graphics hardware/toolkits support overlays planes, but overlays can be 
+graphics hardware/toolkits support overlays planes, but overlays can be
 emulated in a reasonable way using double buffering or some other auxiliary
 buffer.
 
@@ -21,7 +21,7 @@ There are several cases depending on what's available:
   and a glXSwapBuffers() is called to show them. To "clear the overlay" plane,
   the aux buffer is simply copied into the back buffer again. This is all fast
   because the aux buffer and the back buffer reside with the (X) client.
-  Implemented by capes@robots.ox.ac.uk who knows the X/Mesa details better 
+  Implemented by capes@robots.ox.ac.uk who knows the X/Mesa details better
   than I do.
 [2] with double buffering (no aux buffer).
   The current front buffer is copied to the current back buffer, and the
@@ -44,7 +44,7 @@ That's (almost) all there is to using overlays in vgui; your tableaux should
 just arrange to draw their overlays in response to vgui_DRAW_OVERLAY events.
   One slight caveat is that any tableau which maintains overlays should probably
 always post an overlay redraw() upon receiving a vgui_DRAW, even if the tableau
-performs no normal drawing. Because if the normal frame buffer is rerendered, 
+performs no normal drawing. Because if the normal frame buffer is rerendered,
 e.g. due to a zoom, the overlays probably have to be rerendered too.
 
 fsm

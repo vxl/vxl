@@ -93,7 +93,7 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<unsigned>& index)
 //: A comparator for general index sorting.
 // It will take any type of index on to any sort of container
 // so long as T container.operator[](index) const is defined.
-// 
+//
 // For example, a simple index sort can be done as follows.
 // \code
 //  vcl_vector<double> data (n);
@@ -110,7 +110,7 @@ template <class T, class INDEX=unsigned, class CONT = vcl_vector<T>,
   const CONT &data_;
   const CMP &cmp_;
   bool operator () (const INDEX &a, const INDEX &b) const
-  {  return cmp_(data_[a], data_[b]); } 
+  {  return cmp_(data_[a], data_[b]); }
 };
 
 

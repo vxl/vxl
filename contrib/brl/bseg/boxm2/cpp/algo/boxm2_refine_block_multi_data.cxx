@@ -30,13 +30,13 @@ uchar16 boxm2_refine_block_multi_data::fully_refined(int depth, int& data_size){
     data_size = 73;
     return ret;
   }
-  
+
   ret[0]=(unsigned char)(1);
   for(unsigned i=1; i<10; ++i)
     ret[i]=(unsigned char)(255);
   data_size = 585;
   return ret;
- 
+
 }
 
 //: initialize data base pointers and associated data buffers for each prefix (data type)
@@ -103,10 +103,10 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
           <<"] [max_alpha_int "<<max_alpha_int_
           <<"] [max level "<<max_level_
           <<']'<<vcl_endl;
-  
+
   //for debugging
   num_split_ = 0;
-  
+
   return true;
 }
 
@@ -133,7 +133,7 @@ bool boxm2_refine_block_multi_data::refine_deterministic(vcl_vector<vcl_string> 
       boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), max_level_);
 
       //3. refine tree locally (only updates refined_tree and returns new tree size)
-      boct_bit_tree refined_tree = this->refine_bit_tree(curr_tree, 0); 
+      boct_bit_tree refined_tree = this->refine_bit_tree(curr_tree, 0);
       int newSize = refined_tree.num_cells();
 
       //cache refined tree
@@ -388,7 +388,7 @@ int boxm2_refine_block_multi_data::move_data(boct_bit_tree& unrefined_tree,
       int parentLevel = unrefined_tree.depth_at(pj);
       double side_len = block_len_ / double(1<<parentLevel);
       int dataIndex = unrefined_tree.get_data_index(pj, false);
-      float nalpha = static_cast<float>(max_alpha_int_ / side_len); 
+      float nalpha = static_cast<float>(max_alpha_int_ / side_len);
       char* new_alpha = reinterpret_cast<char*>(&nalpha);
 #if COPY_PARENT_DATA
       for(int i = 0; i<static_cast<int>(n); ++i){
@@ -443,7 +443,7 @@ int boxm2_refine_block_multi_data::free_space(int startPtr, int endPtr)
 ////////////////////////////////////////////////////////////////////////////////
 void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
                                              boxm2_block_sptr blk,
-                                             vcl_vector<vcl_string> const& prefixes,          
+                                             vcl_vector<vcl_string> const& prefixes,
                                              float prob_thresh)
 {
   boxm2_refine_block_multi_data refine_block;

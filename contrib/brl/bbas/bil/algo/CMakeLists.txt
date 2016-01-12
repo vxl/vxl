@@ -26,7 +26,7 @@ SET( bil_algo_sources
      bil_blob_finder.cxx                bil_blob_finder.h
      bil_trace_4con_boundary.cxx        bil_trace_4con_boundary.h
      bil_trace_8con_boundary.cxx        bil_trace_8con_boundary.h
-	 bil_debayer_image.cxx				bil_debayer_image.h
+         bil_debayer_image.cxx                                bil_debayer_image.h
    )
 
 AUX_SOURCE_DIRECTORY(Templates bil_algo_sources)

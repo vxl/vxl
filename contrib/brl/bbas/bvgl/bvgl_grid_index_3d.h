@@ -32,7 +32,7 @@ class bvgl_grid_index_3d{
   double surface_distance(vgl_point_3d<double> const& p) const;
   //: accessors
   vgl_box_3d<double> bounding_box() const {return bbox_;}
-  unsigned npts() const {return npts_;}  
+  unsigned npts() const {return npts_;}
   bool has_normals() const {return has_normals_;}
 
  protected:

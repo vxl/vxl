@@ -16,14 +16,14 @@
 //  difference between the linear algorithm and the non-linear Levenberg Marquardt
 //  algorithm. Both options are available to suit specific applications. The
 //  non-linear algorithm first does a linear fit to obtain and inital guess.
-// 
+//
 // \verbatim
 //  Modifications
 //   none
 // \endverbatim
 
 // The linear algorithm seeks to minimize the error e = Sum|ri^2 - r^2|
-// expanding (xi-x0)^2 + (yi-y0)^2 + (zi-z0)^2 - r^2 
+// expanding (xi-x0)^2 + (yi-y0)^2 + (zi-z0)^2 - r^2
 // = rho - 2(xix0 + yiy0 + ziz0) + (xi^2 + yi^2 + zi^2)
 // where rho = (x0^2 + y0^2 + z0^2) - r^2
 //  form three matrices
@@ -32,7 +32,7 @@
 //         [        ...            ]            [        ...          ]         [z0 ]
 //                                                                              [rho]
 //  Then solve the linear system,  AP - B = 0, using SVD.
-// 
+//
 // For the non-linear algorithm, the residuals are ei = ri - r;
 // The Jacobian matrix is given by,
 //
@@ -41,8 +41,8 @@
 //             [                 ...                 ]
 //
 #include <vcl_vector.h>
-#include <vgl/vgl_point_3d.h> 
-#include <vgl/vgl_homg_point_3d.h> 
+#include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 #include <vcl_iosfwd.h>
 

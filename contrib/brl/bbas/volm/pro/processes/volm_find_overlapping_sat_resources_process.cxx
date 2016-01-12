@@ -36,12 +36,12 @@ bool volm_find_overlapping_sat_resources_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "volm_satellite_resources_sptr"; // satellite resource
   input_types_[1] = "vcl_string";                    // kml polygon filename
-  input_types_[2] = "float";                         // factor by which to downsample resource footprints when 
+  input_types_[2] = "float";                         // factor by which to downsample resource footprints when
                                                      // computing the raster (smaller factor takes more time & memory)
   input_types_[3] = "vcl_string";                    // output file to print the list
 
   // process takes 0 outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_); 
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -60,7 +60,7 @@ bool volm_find_overlapping_sat_resources_process(bprb_func_process& pro)
   vcl_string kml_file = pro.get_input<vcl_string>(1);
   float downsample_factor = pro.get_input<float>(2);
   vcl_string out_file = pro.get_input<vcl_string>(3);
-  
+
   vcl_vector<vcl_string> overlapping_res;
   res->highly_overlapping_resources(overlapping_res, res, kml_file, downsample_factor);
 

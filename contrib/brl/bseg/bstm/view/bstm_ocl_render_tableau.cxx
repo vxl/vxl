@@ -130,9 +130,9 @@ float bstm_ocl_render_tableau::render_frame()
     exp_img_->zero_gpu_buffer( queue_ );
     if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return -1.0f;
-    
+
     double scaled_time = scene_min_t_ + time_ * (scene_max_t_ - scene_min_t_);
-        
+
     //set up brdb_value_sptr arguments...
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device_);
     brdb_value_sptr brdb_scene = new brdb_value_t<bstm_scene_sptr>(scene_);
@@ -146,9 +146,9 @@ float bstm_ocl_render_tableau::render_frame()
     brdb_value_sptr brdb_time = new brdb_value_t<float>(scaled_time);
     brdb_value_sptr brdb_render_label = new brdb_value_t<bool>(render_label_);
 
-    
+
     //if scene has RGB data type, use color render process
-    bool good = true; 
+    bool good = true;
     if(scene_->has_data_type(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) )
       good = bprb_batch_process_manager::instance()->init_process("bstmOclRenderGlExpectedColorProcess");
     else
@@ -156,8 +156,8 @@ float bstm_ocl_render_tableau::render_frame()
 
     //set process args
     good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-    good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-    good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+    good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene
+    good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache);
     good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
     good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
     good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
@@ -166,7 +166,7 @@ float bstm_ocl_render_tableau::render_frame()
     good = good && bprb_batch_process_manager::instance()->set_input(8, brdb_time);   // time
     good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_render_label);   // render_label?
     good = good && bprb_batch_process_manager::instance()->run_process();
-    
+
 
     //grab float output from render gl process
     unsigned int time_id = 0;
@@ -183,11 +183,11 @@ float bstm_ocl_render_tableau::render_frame()
             << " didn't get value\n";
     }
     float time = value->val<float>();
-    
+
     //release gl buffer
     status = clEnqueueReleaseGLObjects(queue_, 1, &exp_img_->buffer(), 0, 0, 0);
     clFinish( queue_ );
-    
+
     return time;
 }
 
@@ -197,7 +197,7 @@ bool bstm_ocl_render_tableau::init_clgl()
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
   device_->context() = boxm2_view_utils::create_clgl_context(*(device_->device_id()));
-  opencl_cache_->set_context(device_->context()); 
+  opencl_cache_->set_context(device_->context());
 
   int status_queue=0;
   queue_ =  clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status_queue);

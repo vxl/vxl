@@ -40,9 +40,9 @@ class bwm_video_cam_istream : public vbl_ref_count
   //: Open a new stream using a file glob (see vul_file_iterator)
   // \note files are loaded in alphanumeric order by path name
   bool open(const vcl_string& glob);
-  
+
   //: Open a new stream using a vector of file paths
-  // \note all files are tested and only valid image files are retained 
+  // \note all files are tested and only valid image files are retained
   bool open(const vcl_vector<vcl_string>& paths);
 
   //: Close the stream

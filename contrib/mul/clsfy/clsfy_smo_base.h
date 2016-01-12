@@ -46,7 +46,7 @@ class clsfy_smo_base
   double b_;
 
   //: Cache KKT error values for unbound multipliers.
-  // \invariant a_i unbound => E_i = f(x_i) - y1 
+  // \invariant a_i unbound => E_i = f(x_i) - y1
   vcl_vector<double> error_cache_;
 
   //: Target values y_i

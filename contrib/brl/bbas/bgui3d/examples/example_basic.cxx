@@ -16,7 +16,7 @@
 //
 // The following is loosly based on
 // Basic "Hello, Cone" Program (Example 2-1)
-// provided in "The Inventor Mentor" 
+// provided in "The Inventor Mentor"
 
 // Construct a simple scene
 void buildScene(SoGroup *root)
@@ -37,7 +37,7 @@ void buildScene(SoGroup *root)
   root->addChild(new SoCone);
 
   SbViewportRegion vpr(400,400);
-  myCamera->viewAll(root, vpr); 
+  myCamera->viewAll(root, vpr);
 }
 
 

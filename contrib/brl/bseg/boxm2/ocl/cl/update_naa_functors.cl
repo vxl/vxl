@@ -31,7 +31,7 @@ void step_cell_aux_previs_naa(AuxArgs aux_args, int data_ptr, uchar llid, float 
         // take weighted average based on surface normal probabilities
         PI = dot(prediction_densities, *normal_weights);
     }
-    // store and update pre and vis 
+    // store and update pre and vis
     float pass_prob = exp(-alpha * seg_len_real);
     float vis_prob_end = (*aux_args.ray_vis) * pass_prob;
 

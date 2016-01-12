@@ -54,7 +54,7 @@ bool vgl_intersection(vgl_box_2d<T> const& box,
 template <class T>
 bool vgl_intersection(vgl_box_2d<T> const& box,
                       vgl_line_segment_2d<T> const& line,
-		      vgl_line_segment_2d<T>& int_line);
+                      vgl_line_segment_2d<T>& int_line);
 
 //: Returns the number of intersections of a line segment with a box, up to two are returned in p0 and p1.(warning! one intersection could be either p0 or p1)
 // \relatesalso vgl_line_segment_2d
@@ -73,8 +73,8 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
                                  vgl_line_3d_2_points<T> const& l2);
 
 //: Return the intersection point of segments of two concurrent lines. Returns false if the intersection point is not inside both line segments
-// \relatesalso vgl_line_segment_3d. 
-// 
+// \relatesalso vgl_line_segment_3d.
+//
 template <class T>
 bool vgl_intersection(vgl_line_segment_3d<T> const& l1,
                       vgl_line_segment_3d<T> const& l2,
@@ -305,7 +305,7 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
 
 //: return the intersection of a pointset with a plane, given a tolerance tol
 //  the normal distance from the plane to the point is compared to the tolerance
-//  the points within tolerance are projected along the normal direction onto the plane 
+//  the points within tolerance are projected along the normal direction onto the plane
 template <class T>
 vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const& plane, vgl_pointset_3d<T> const& ptset, T tol);
 

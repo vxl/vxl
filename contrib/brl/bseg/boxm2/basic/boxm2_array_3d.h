@@ -46,7 +46,7 @@ class boxm2_array_3d
 
   //: need to rethink = operator with only 1 data buffer
   boxm2_array_3d<T>& operator=(boxm2_array_3d<T> const& that) {
-    destruct(); 
+    destruct();
     construct(that.row1_count_, that.row2_count_, that.row3_count_, that.buffer_);
     return *this;
   }

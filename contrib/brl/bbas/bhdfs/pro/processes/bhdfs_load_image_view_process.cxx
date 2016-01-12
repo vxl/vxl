@@ -14,7 +14,7 @@ bool bhdfs_load_image_view_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -46,7 +46,7 @@ bool bhdfs_load_image_view_process(bprb_func_process& pro)
     vcl_cerr << "Failed to load image file: " << image_filename << vcl_endl;
     return false;
   }
-  
+
 
   i=0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, loaded_image);

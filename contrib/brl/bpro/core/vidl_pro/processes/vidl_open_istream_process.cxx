@@ -24,7 +24,7 @@ bool vidl_open_istream_process_cons(bprb_func_process& pro)
 
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("vidl_istream_sptr");  
+  output_types.push_back("vidl_istream_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -41,7 +41,7 @@ bool vidl_open_istream_process(bprb_func_process& pro)
   bool glob = false;
   if(vul_file::is_directory(istream_filename)) glob = true;
   else
-    for(vcl_string::const_iterator cit = istream_filename.begin(); 
+    for(vcl_string::const_iterator cit = istream_filename.begin();
       cit != istream_filename.end()&&!glob; ++cit)
       if(*cit=='*')
         glob = true;

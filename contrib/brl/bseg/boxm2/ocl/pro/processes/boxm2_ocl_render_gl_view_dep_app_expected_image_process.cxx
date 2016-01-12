@@ -184,7 +184,7 @@ bool boxm2_ocl_render_gl_view_dep_app_expected_image_process(bprb_func_process& 
  float tnearfar[2] = { 0.0f, 1000000} ;
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
- 
+
   // run expected image function
   vcl_cout << "Options in gl render: " << options << " and data type size: " << apptypesize << vcl_endl;
   float time = render_expected_image( scene, device, opencl_cache, queue,

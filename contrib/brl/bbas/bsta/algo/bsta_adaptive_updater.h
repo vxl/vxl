@@ -69,7 +69,7 @@ class bsta_mg_adaptive_updater
         mixture.set_weight(i, mixture.weight(i)*adjust);
     }
     init_gaussian_.set_mean(sample);
-    //The following statement was originally conditionally applied, which can 
+    //The following statement was originally conditionally applied, which can
     //insert a single component with weight == init_weight, not one.
     if(mixture.num_components()>0)
       mixture.insert(init_gaussian_,init_weight);

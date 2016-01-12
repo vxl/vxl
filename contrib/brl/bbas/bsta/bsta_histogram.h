@@ -34,7 +34,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
                  const T min_prob = 0.0);
 
   //:More general constructor specifying bin interval, delta
-  bsta_histogram(const unsigned int nbins, const T min, const T delta, 
+  bsta_histogram(const unsigned int nbins, const T min, const T delta,
                  const T min_prob = 0.0);
 
   //:construct from other histogram data
@@ -76,7 +76,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
   //: Total area under the histogram
   T area() const;
-  
+
   //: The area under the histogram up to (excluding) the given bin
   T cumulative_area(unsigned bin) const;
 
@@ -124,7 +124,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
 
  //: Increase the count of the bin corresponding to val by mag
   void upcount(T val, T mag);
-  
+
   //: Return the bin this element would fall on - it doesn't modify the current count
   int bin_at_val(T val);
 
@@ -152,12 +152,12 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   vcl_istream& read(vcl_istream&);
 
   void pretty_print(vcl_ostream& os = vcl_cout) const;
-  
+
   void print(vcl_ostream& os = vcl_cout) const;
 
   //: print as a matlab plot command
   void print_to_m(vcl_ostream& os = vcl_cout) const;
-  
+
   //: print x and y arrays
   void print_to_arrays(vcl_ostream& os = vcl_cout) const;
 

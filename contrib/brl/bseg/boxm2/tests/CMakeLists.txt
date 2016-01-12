@@ -23,7 +23,7 @@ endif()
 ADD_TEST( boxm2_test_wrappers            ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_wrappers  )
 ADD_TEST( boxm2_test_data                ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_data  )
 ADD_TEST( boxm2_test_block               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_block  )
-ADD_TEST( boxm2_test_block_vis_graph	 ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_block_vis_graph  )
+ADD_TEST( boxm2_test_block_vis_graph         ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_block_vis_graph  )
 
 ADD_EXECUTABLE( boxm2_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm2_test_include boxm2 boxm2_io boxm2_cpp )

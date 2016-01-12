@@ -15,7 +15,7 @@ FIND_PATH( FFMPEG_INCLUDE1_DIR ffmpeg/avcodec.h
 FIND_PATH( FFMPEG_INCLUDE2_DIR libavcodec/avcodec.h
   /usr/include
   /usr/local/include
-)   
+)
 IF( FFMPEG_INCLUDE1_DIR)
   SET (FFMPEG_INCLUDE_DIR ${FFMPEG_INCLUDE1_DIR} )
   SET( FFMPEG_FOUND_SEVERAL "NO" )
@@ -38,7 +38,7 @@ IF( FFMPEG_CONFIG )
   EXEC_PROGRAM( ${FFMPEG_CONFIG} ARGS "--libs avformat" OUTPUT_VARIABLE FFMPEG_LIBS )
   SET( FFMPEG_FOUND "YES" )
   SET( FFMPEG_LIBRARIES "${FFMPEG_LIBS}" )
-  
+
 ELSE( FFMPEG_CONFIG )
 
   FIND_LIBRARY( FFMPEG_avcodec_LIBRARY avcodec
@@ -54,7 +54,7 @@ ELSE( FFMPEG_CONFIG )
     /usr/lib64
     /usr/local/lib64
   )
-  
+
   FIND_LIBRARY( FFMPEG_avutil_LIBRARY avutil
     /usr/lib
     /usr/local/lib
@@ -68,7 +68,7 @@ ELSE( FFMPEG_CONFIG )
     /usr/lib64
     /usr/local/lib64
   )
-  
+
   IF( FFMPEG_avcodec_LIBRARY )
   IF( FFMPEG_avformat_LIBRARY )
 

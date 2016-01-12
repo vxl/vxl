@@ -27,7 +27,7 @@ static void test_loc_hyp()
   hyp.add(37.7082748413, -117.416511536, 1860.99194336);
 
   vcl_cout << "number of hypotheses: " << hyp.size() << " approx size on RAM: " << hyp.size()*sizeof(float)*3.0/(1024.0) << " KBs. " << vcl_endl;
-  
+
   // io test
   vcl_string hyp_file_name = "./loc_hyp_test.bin";
   vcl_string hyp_file_kml  = "./loc_hyp_test.kml";

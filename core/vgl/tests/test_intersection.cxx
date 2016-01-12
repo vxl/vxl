@@ -36,7 +36,7 @@ void test_intersection()
   vgl_point_2d<double> p1III(0.5,0.0), p2III(0.5, 1.0);
   vgl_point_2d<double> pla = lint.point1(), plb = lint.point2();
   caseIII = caseIII && (((p1III == pla)&&(p2III == plb)) ||
-			((p1III == plb)&&(p2III == pla)));
+                        ((p1III == plb)&&(p2III == pla)));
   TEST("Lineseg intersects box (2 pts.)", caseIII, true);
   // Case IV - line segment intersects box and cuts line at one point
   vgl_point_2d<double> p41(0.5, 0.5), p42(0.5, 1.5);
@@ -45,7 +45,7 @@ void test_intersection()
   vgl_point_2d<double> p1IV(0.5,0.5), p2IV(0.5, 1.0);
   pla = lint.point1(); plb = lint.point2();
   caseIV = caseIV && (((p1IV == pla)&&(p2IV == plb)) ||
-			((p1IV == plb)&&(p2IV == pla)));
+                        ((p1IV == plb)&&(p2IV == pla)));
   TEST("Lineseg intersects box (1 pt.)", caseIV, true);
 
   // test intersection of plane with pointset

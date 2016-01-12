@@ -40,10 +40,10 @@ void sdet_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_add_to_filter_bank_process, "sdetAddtoFilterBankProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classifier_roc_process, "sdetTextureClassifierROCProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classifier_roc_process2, "sdetTextureClassifierROCProcess2");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_add_to_filter_bank_process2, "sdetAddtoFilterBankProcess2"); 
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_add_to_filter_bank_process2, "sdetAddtoFilterBankProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classify_satellite_clouds_process, "sdetTextureClassifySatelliteCloudsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_texture_classify_satellite_clouds_process2, "sdetTextureClassifySatelliteCloudsProcess2");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_dump_vsol_binary_data_process, "sdetDumpVsolBinaryDataProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, sdet_add_responses_to_filter_bank_process, "sdetAddResponsestoFilterBankProcess");
-  
+
 }

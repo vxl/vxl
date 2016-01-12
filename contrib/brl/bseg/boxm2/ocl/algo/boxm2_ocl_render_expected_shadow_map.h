@@ -17,7 +17,7 @@ class boxm2_ocl_render_expected_shadow_map
 {
 public:
   static bool render(bocl_device_sptr device, boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache,
-                     vpgl_camera_double_sptr cam, unsigned ni, unsigned nj, vcl_string ident, vil_image_view<float> &rendered_img); 
+                     vpgl_camera_double_sptr cam, unsigned ni, unsigned nj, vcl_string ident, vil_image_view<float> &rendered_img);
 
 private:
 

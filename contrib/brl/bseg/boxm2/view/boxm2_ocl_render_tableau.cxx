@@ -22,7 +22,7 @@
 //: Constructor
 boxm2_ocl_render_tableau::boxm2_ocl_render_tableau()
 {
-  is_bw_ = false; 
+  is_bw_ = false;
   pbuffer_=0;
   ni_=640;
   nj_=480;
@@ -77,8 +77,8 @@ bool boxm2_ocl_render_tableau::init(bocl_device_sptr device,
     device_=device;
     do_init_ocl=true;
     render_trajectory_ = true;
-    trajectory_ = new boxm2_trajectory(30.0, 45.0, -1.0, scene_->bounding_box(), ni, nj); 
-    cam_iter_ = trajectory_->begin(); 
+    trajectory_ = new boxm2_trajectory(30.0, 45.0, -1.0, scene_->bounding_box(), ni, nj);
+    cam_iter_ = trajectory_->begin();
     render_depth_ = false;
     // set depth_scale_ and depth_offset_
     calibrate_depth_range();
@@ -114,14 +114,14 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
     }
     return true;
   }
-  
-  
+
+
   //toggle color - this is a hack to get color models to show as grey
   if (e.type == vgui_KEY_PRESS) {
     if (e.key == vgui_key('c')) {
       vcl_cout<<"Toggling b and w"<<vcl_endl;
-      is_bw_ = !is_bw_;  
-    } 
+      is_bw_ = !is_bw_;
+    }
     else if (e.key == vgui_key('d')) {
       vcl_cout << "Toggling depth and expected image" << vcl_endl;
       render_depth_ = !render_depth_;
@@ -130,7 +130,7 @@ bool boxm2_ocl_render_tableau::handle(vgui_event const &e)
       }
     }
   }
-  
+
   if (boxm2_cam_tableau::handle(e)) {
     return true;
   }
@@ -182,9 +182,9 @@ float boxm2_ocl_render_tableau::render_frame()
     exp_img_->zero_gpu_buffer( queue_ );
     if (!check_val(status,CL_SUCCESS,"clEnqueueAcquireGLObjects failed. (gl_image)"+error_to_string(status)))
         return -1.0f;
-    
+
     vcl_cout<<cam_<<vcl_endl;
-        
+
     //set up brdb_value_sptr arguments...
     brdb_value_sptr brdb_device = new brdb_value_t<bocl_device_sptr>(device_);
     brdb_value_sptr brdb_scene = new brdb_value_t<boxm2_scene_sptr>(scene_);
@@ -199,7 +199,7 @@ float boxm2_ocl_render_tableau::render_frame()
     brdb_value_sptr exp_img_dim = new brdb_value_t<bocl_mem_sptr>(exp_img_dim_);
     brdb_value_sptr ident = new brdb_value_t<vcl_string>(identifier_);
 
-    bool good = true; 
+    bool good = true;
     if (render_depth_) {
       // set the depth_offset_ and depth_scale_ values
       calibrate_depth_range();
@@ -207,18 +207,18 @@ float boxm2_ocl_render_tableau::render_frame()
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedDepthProcess");
       //set process args
       good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache);
       good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
       good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
       good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
-      good = good && bprb_batch_process_manager::instance()->set_input(8, brdb_depth_scale);   // depth scale 
+      good = good && bprb_batch_process_manager::instance()->set_input(8, brdb_depth_scale);   // depth scale
       good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_depth_offset);   // depth offset
     }
     else {
-    
+
       //if scene has RGB data type, use color render process
     if(scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) || scene_->has_data_type(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()))
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlViewDepExpectedImageProcess");
@@ -228,28 +228,28 @@ float boxm2_ocl_render_tableau::render_frame()
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedColorProcess");
     else
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderGlExpectedImageProcess");
-        
+
       //set process args
       good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
-      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene 
-      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache); 
+      good = good && bprb_batch_process_manager::instance()->set_input(1, brdb_scene); //  scene
+      good = good && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache);
       good = good && bprb_batch_process_manager::instance()->set_input(3, brdb_cam);// camera
       good = good && bprb_batch_process_manager::instance()->set_input(4, brdb_ni);  // ni for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(5, brdb_nj);   // nj for rendered image
       good = good && bprb_batch_process_manager::instance()->set_input(6, exp_img);   // exp image ( gl buffer)
       good = good && bprb_batch_process_manager::instance()->set_input(7, exp_img_dim);   // exp image dimensions
-      good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data 
-      
+      good = good && bprb_batch_process_manager::instance()->set_input(8, ident);   // string identifier to specify appearance data
+
       //hack for toggling
       if(is_bw_) {
-        brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(true); 
-        good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_is_bw); 
+        brdb_value_sptr brdb_is_bw = new brdb_value_t<bool>(true);
+        good = good && bprb_batch_process_manager::instance()->set_input(9, brdb_is_bw);
       }
     }
 
 
     good = good && bprb_batch_process_manager::instance()->run_process();
-    
+
     //grab float output from render gl process
     unsigned int time_id = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(0, time_id);
@@ -265,11 +265,11 @@ float boxm2_ocl_render_tableau::render_frame()
             << " didn't get value\n";
     }
     float time = value->val<float>();
-    
+
     //release gl buffer
     status = clEnqueueReleaseGLObjects(queue_, 1, &exp_img_->buffer(), 0, 0, 0);
     clFinish( queue_ );
-    
+
     return time;
 }
 
@@ -279,7 +279,7 @@ bool boxm2_ocl_render_tableau::init_clgl()
   //get relevant blocks
   vcl_cout<<"Data Path: "<<scene_->data_path()<<vcl_endl;
   device_->context() = boxm2_view_utils::create_clgl_context(*(device_->device_id()));
-  opencl_cache_->set_context(device_->context()); 
+  opencl_cache_->set_context(device_->context());
 
   int status_queue=0;
   queue_ =  clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status_queue);

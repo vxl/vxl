@@ -72,7 +72,7 @@ static void test_spline()
   vgl_cubic_spline_2d<double> spl2d(knots2d);
   double vxs2d = (spl2d(1.5)).x(), vx2d = 1.5,    ex2d = vcl_fabs(vxs2d-vx2d);
   double vys2d = (spl2d(1.5)).y(), vy2d = 2.8125, ey2d = vcl_fabs(vys2d-vy2d);
-  
+
   double error2d = ex2d+ey2d;
   TEST_NEAR("2d spline interpolation  (open)", error2d, 0.0, 1e-05);
   // test 2d I/O

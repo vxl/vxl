@@ -33,7 +33,7 @@ bvgl_grid_index_3d::bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned nz, vg
     p_grid_[ix][iy][iz].push_back(pi);
     npts_++;
     if(has_normals_)
-      n_grid_[ix][iy][iz].push_back(ptset.n(i));    
+      n_grid_[ix][iy][iz].push_back(ptset.n(i));
   }
 }
 

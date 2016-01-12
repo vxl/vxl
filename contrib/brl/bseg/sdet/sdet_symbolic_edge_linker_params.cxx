@@ -71,7 +71,7 @@ void sdet_symbolic_edge_linker_params::InitParams(double nrad, double gap, bool 
   linking_algo_ = linking_algo;
   num_link_iters_ = num_link_iters;
   bGetfinalcontours_ = get_final_contours;
-  
+
   switch(cvlet_type) //set the grouping flags from the choice of cvlet type
   {
     case 0: //Anchor Centered

@@ -83,7 +83,7 @@ register_tests()
   REGISTER( test_alignment );
   REGISTER( test_hungarian_algorithm );
   REGISTER( test_integrant );
-  REGISTER( test_bessel );  
+  REGISTER( test_bessel );
   REGISTER( test_crs_index );
   REGISTER( test_sparse_lst_sqr_function );
   REGISTER( test_sparse_matrix );

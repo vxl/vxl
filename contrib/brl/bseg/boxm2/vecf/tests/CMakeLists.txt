@@ -4,8 +4,8 @@ ADD_EXECUTABLE( boxm2_vecf_test_all
   test_orbit.cxx
   test_fit_orbit.cxx
   test_fit_margin.cxx
-  test_pc_viewer.cxx	
-  test_mandible.cxx	
+  test_pc_viewer.cxx
+  test_mandible.cxx
   test_cranium.cxx
  )
 TARGET_LINK_LIBRARIES(boxm2_vecf_test_all testlib  boxm2_vecf brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )

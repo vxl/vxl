@@ -52,7 +52,7 @@ void vil_sobel_1x3(const vil_image_view<srcT>& src,
   }
 }
 
-template<class srcT, class destT>    
+template<class srcT, class destT>
 void vil_sobel_1x3_1plane(const srcT* src,
                           vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
                           destT* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,

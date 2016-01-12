@@ -56,7 +56,7 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
   float height       = pro.get_input<float>(5);
   float depth        = pro.get_input<float>(6);
   vcl_string modeldir= pro.get_input<vcl_string>(7);
- 
+
   // get the scene bounding box
   vgl_box_3d<double> box(vgl_point_3d<double>(xmin,ymin,zmin),
                          vgl_point_3d<double>(xmin+width,ymin+height,zmin+depth));

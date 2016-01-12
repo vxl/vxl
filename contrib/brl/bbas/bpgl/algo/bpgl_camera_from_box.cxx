@@ -4,7 +4,7 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 
 vpgl_perspective_camera<double> bpgl_camera_from_box::
-persp_camera_from_box(vgl_box_3d<double> const & box, 
+persp_camera_from_box(vgl_box_3d<double> const & box,
                       vgl_point_3d<double> const& camera_center,
                       unsigned ni,
                       unsigned nj)
@@ -25,7 +25,7 @@ persp_camera_from_box(vgl_box_3d<double> const & box,
   //is not the same as the centroid of the projection.
   double ccu = cnt2.x()*(1-su)+su*cu;
   double ccv = cnt2.y()*(1-sv)+sv*cv;
-  K = vpgl_calibration_matrix<double>(1.0, vgl_point_2d<double>(ccu, ccv), su, sv);  
+  K = vpgl_calibration_matrix<double>(1.0, vgl_point_2d<double>(ccu, ccv), su, sv);
   C.set_calibration(K);
   return C;
 }

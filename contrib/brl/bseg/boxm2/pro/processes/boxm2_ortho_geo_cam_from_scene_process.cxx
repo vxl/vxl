@@ -47,7 +47,7 @@ bool boxm2_ortho_geo_cam_from_scene_process(bprb_func_process& pro)
 
   vpgl_lvcs lvcs = scene->lvcs();
   vgl_box_3d<double> bbox = scene->bounding_box();
-  
+
   // obtain the scene finest resolution
   // note that the sub block size is truncated to integer here
   vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
@@ -81,10 +81,10 @@ bool boxm2_ortho_geo_cam_from_scene_process(bprb_func_process& pro)
   trans_matrix[1][3] = upper_left_lat;
 
   vpgl_lvcs_sptr lvcs_ptr = new vpgl_lvcs(lvcs);
-  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs_ptr); 
+  vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs_ptr);
   cam->set_scale_format(true);
   vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);
-  
+
   vcl_cout << " the bounding box of the scene is: " << bbox << vcl_endl;
   vcl_cout << " scene finest voxel resolution is: " << res_x << " x " << res_y << vcl_endl;
   vcl_cout << " length in meters: " << ni << " x " << nj << vcl_endl;

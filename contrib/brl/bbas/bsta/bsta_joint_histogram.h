@@ -11,7 +11,7 @@
 //
 // \verbatim
 //  Modifications
-//   06/01/2010  Brandon A. Mayer. Added clear() function so that a single joint histogram 
+//   06/01/2010  Brandon A. Mayer. Added clear() function so that a single joint histogram
 //               instance may revert to the default constructor and be reused.
 //   06/01/2010  Brandon A. Mayer. Added mutual_information() function
 // \endverbatim
@@ -30,7 +30,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
                        const T min_prob = 0.0);
 
   bsta_joint_histogram(const T range_a, const unsigned int nbins_a,
-                       const T range_b, const unsigned int nbins_b, 
+                       const T range_b, const unsigned int nbins_b,
                        const T min_prob = 0.0);
   //:More general constructor defining a signed value range
   bsta_joint_histogram(const T min_a, const T max_a,
@@ -53,7 +53,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   T range() const {return range_a_;}
 
   //: range for variable a
-  T range_a() const {return range_a_;}  
+  T range_a() const {return range_a_;}
   //: range for variable b
   T range_b() const {return range_b_;}
   //: min value for variable a
@@ -91,7 +91,7 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   T mutual_information() const;
   T renyi_entropy() const;
   T entropy_marginal_a() const;
-  
+
   void print(vcl_ostream& os = vcl_cout) const;
 
   //: The average and variance bin value for row a using counts to compute probs

@@ -17,7 +17,7 @@ SET(boxm2_sources
     boxm2_util.h                  boxm2_util.cxx
     boxm2_normal_albedo_array.h   boxm2_normal_albedo_array.cxx
     boxm2_feature_vector.h        boxm2_feature_vector.cxx
-    boxm2_blocks_vis_graph.h	  boxm2_blocks_vis_graph.cxx
+    boxm2_blocks_vis_graph.h          boxm2_blocks_vis_graph.cxx
    )
 
 INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
