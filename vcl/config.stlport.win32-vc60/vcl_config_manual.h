@@ -3,8 +3,6 @@
 
 // This file is *not* generated.
 
-#define VCL_USE_IMPLICIT_TEMPLATES 1
-
 // Use STL port stl libraries.
 #define VCL_STLPORT 1
 

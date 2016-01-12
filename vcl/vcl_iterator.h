@@ -64,8 +64,6 @@
 // vc has no raw_storage_iterator
 #endif
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "vcl_iterator.txx"
-#endif
+#include "vcl_iterator.txx"
 
 #endif // vcl_iterator_h_
