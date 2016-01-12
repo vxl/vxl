@@ -126,7 +126,7 @@ bool volm_conf_query::create_conf_object()
     conf_objects_.push_back(conf_object);
     conf_objects_pixels_.push_back(conf_pixels);
   }
-  
+
   if (tol_in_pixel_ == 0)
   {
     for (unsigned cam_id =0;  cam_id < ncam_;  cam_id++)
@@ -242,7 +242,7 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
       continue;
     pt_pairs.insert(vcl_pair<float, float>(dist, phi));
 #if 0
-    vcl_cout << "\t\tpixel: " << x << "x" << y << " is under horizon, has ray " << cp 
+    vcl_cout << "\t\tpixel: " << x << "x" << y << " is under horizon, has ray " << cp
              << " and spherical coords: " << sp << " dist: " << dist << ", theta: " << sp.phi_ << vcl_flush << vcl_endl;
 #endif
 
@@ -253,7 +253,7 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
     return;
   min_dist = pt_pairs.begin()->first;
   phi = pt_pairs[min_dist];
-  
+
   i = pt_pixels[min_dist].first;
   j = pt_pixels[min_dist].second;
   //vcl_cout << "\t\tmin_dist: " << min_dist << ", phi: " << phi << ", pixel: " << i << "x" << j << vcl_flush << vcl_endl;
@@ -388,7 +388,7 @@ bool volm_conf_query::generate_top_views(vcl_string const& out_folder, vcl_strin
     float xo = half_ni, yo = half_nj;
     // plot camera center
     this->plot_dot_into_image(img, vgl_point_2d<double>(xo,yo), 0, 0, 0, 5.0);
-    
+
     vcl_map<vcl_string, volm_conf_object_sptr> conf_obj = conf_objects_[cam_id];
     for (vcl_map<vcl_string, volm_conf_object_sptr>::iterator mit = conf_obj.begin();  mit != conf_obj.end();  ++mit) {
       float xc = mit->second->dist() * vcl_cos(mit->second->theta());

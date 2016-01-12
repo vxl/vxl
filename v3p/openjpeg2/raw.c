@@ -31,59 +31,59 @@
 #include "raw.h"
 #include "opj_malloc.h"
 
-/* 
+/*
 ==========================================================
    local functions
 ==========================================================
 */
 
 
-/* 
+/*
 ==========================================================
    RAW encoding interface
 ==========================================================
 */
 
 opj_raw_t* raw_create(void) {
-	opj_raw_t *raw = (opj_raw_t*)opj_malloc(sizeof(opj_raw_t));
-	return raw;
+        opj_raw_t *raw = (opj_raw_t*)opj_malloc(sizeof(opj_raw_t));
+        return raw;
 }
 
 void raw_destroy(opj_raw_t *raw) {
-	if(raw) {
-		opj_free(raw);
-	}
+        if(raw) {
+                opj_free(raw);
+        }
 }
 
 OPJ_UINT32 raw_numbytes(opj_raw_t *raw) {
-	return (OPJ_UINT32)(raw->bp - raw->start);
+        return (OPJ_UINT32)(raw->bp - raw->start);
 }
 
 void raw_init_dec(opj_raw_t *raw, OPJ_BYTE *bp, OPJ_UINT32 len) {
-	raw->start = bp;
-	raw->lenmax = len;
-	raw->len = 0;
-	raw->c = 0;
-	raw->ct = 0;
+        raw->start = bp;
+        raw->lenmax = len;
+        raw->len = 0;
+        raw->c = 0;
+        raw->ct = 0;
 }
 
 OPJ_UINT32 raw_decode(opj_raw_t *raw) {
-	OPJ_UINT32 d;
-	if (raw->ct == 0) {
-		raw->ct = 8;
-		if (raw->len == raw->lenmax) {
-			raw->c = 0xff;
-		} else {
-			if (raw->c == 0xff) {
-				raw->ct = 7;
-			}
-			raw->c = *(raw->start + raw->len);
-			raw->len++;
-		}
-	}
-	raw->ct--;
-	d = (raw->c >> raw->ct) & 0x01;
-	
-	return d;
+        OPJ_UINT32 d;
+        if (raw->ct == 0) {
+                raw->ct = 8;
+                if (raw->len == raw->lenmax) {
+                        raw->c = 0xff;
+                } else {
+                        if (raw->c == 0xff) {
+                                raw->ct = 7;
+                        }
+                        raw->c = *(raw->start + raw->len);
+                        raw->len++;
+                }
+        }
+        raw->ct--;
+        d = (raw->c >> raw->ct) & 0x01;
+
+        return d;
 }
 

@@ -16,7 +16,6 @@
 #include <vipl/vipl_y_gradient.h>
 
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
-#include <vipl/accessors/vipl_accessors_vil1_image.h>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_with_section/accessors/vipl_accessors_section.h>
 #include <vipl/vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h>

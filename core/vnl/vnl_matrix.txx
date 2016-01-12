@@ -1041,6 +1041,26 @@ vnl_vector<T> vnl_matrix<T>::get_diagonal() const
   return v;
 }
 
+//: Flatten row-major (C-style)
+template <class T>
+vnl_vector<T> vnl_matrix<T>::flatten_row_major() const
+{
+  vnl_vector<T> v(this->num_rows * this->num_cols);
+  v.copy_in(this->data_block());
+  return v;
+}
+
+//: Flatten column-major (Fortran-style)
+template <class T>
+vnl_vector<T> vnl_matrix<T>::flatten_column_major() const
+{
+  vnl_vector<T> v(this->num_rows * this->num_cols);
+  for (unsigned int c = 0; c < this->num_cols; ++c)
+    for (unsigned int r = 0; r < this->num_rows; ++r)
+      v[c*this->num_cols+r] = this->data[r][c];
+  return v;
+}
+
 //--------------------------------------------------------------------------------
 
 //: Set row[row_index] to data at given address. No bounds check.

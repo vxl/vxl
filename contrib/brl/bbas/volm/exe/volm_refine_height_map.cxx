@@ -208,7 +208,7 @@ int main(int argc, char** argv)
     error(log_file.str(), log.str());
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  
+
   unsigned num_leaves = class_leaves.size();
   vcl_cout << "there are " << num_leaves << " class maps intersect with height map " << h_bbox << vcl_endl;
   for (unsigned l_idx = 0; l_idx < num_leaves; l_idx++)
@@ -729,7 +729,7 @@ static bool refine_building_by_median_divided(vil_image_view<float> const& h_img
 static float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const& window_height, unsigned const& w_idx_i, unsigned const& w_idx_j, unsigned const& w_size)
 {
   bool found_neigh_height = false;
-  
+
   unsigned num_nbrs = 8;
   vcl_vector<float> neigh_heights;
   for (int radius = 1; (radius < (int)w_size && !found_neigh_height); radius++)
@@ -749,10 +749,10 @@ static float neighbor_height(vcl_map<vcl_pair<unsigned, unsigned>, float> const&
     if (neigh_heights.size() != 0)
       found_neigh_height = true;
   }
-  
+
   if (neigh_heights.empty())
     return 0.0f;
-  
+
   float grd_height = 0.0f;
   for (unsigned i = 0; i < neigh_heights.size(); i++)
     grd_height += neigh_heights[i];

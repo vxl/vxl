@@ -4,6 +4,7 @@
 #include <vcl_iostream.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_infinite_line_3d.h>
+#include <vgl/vgl_distance.h>
 
 
 static void test_constructor()
@@ -26,16 +27,83 @@ static void test_constructor()
 
 static void test_operations()
 {
+  {
   vgl_vector_3d<double> t(0,0,1);
   vgl_point_3d<double> p(1,2,3), p0, pt;
   vgl_infinite_line_3d<double> inf_l(p, t);
   p0 = inf_l.point();
-  TEST("Closest point to origin", p0==vgl_point_3d<double>(1,2,0), true);
+  TEST_NEAR("Closest point to origin", vgl_distance(p0,vgl_point_3d<double>(1,2,0)), 0, 1e-6);
   pt = inf_l.point_t(1.0);
-  TEST("Parametric point ", pt==vgl_point_3d<double>(1,2,1), true);
+  TEST_NEAR("Parametric point ", vgl_distance(pt, vgl_point_3d<double>(1,2,1)), 0, 1e-6);
   vgl_point_3d<double> x(1.0, 2.0, -3.0);
   bool con = inf_l.contains(x);
   TEST("Contains ", con, true);
+  }
+
+  {
+  vgl_vector_3d<double> t(1,0,0);
+  vgl_point_3d<double> p(1,2,3), p0, pt;
+  vgl_infinite_line_3d<double> inf_l(p, t);
+  p0 = inf_l.point();
+  TEST_NEAR("Closest point to origin", vgl_distance(p0,vgl_point_3d<double>(0,2,3)), 0, 1e-6);
+  pt = inf_l.point_t(1.0);
+  TEST_NEAR("Parametric point ", vgl_distance(pt,vgl_point_3d<double>(1,2,3)), 0, 1e-6);
+  vgl_point_3d<double> x(-1.0, 2.0, 3.0);
+  bool con = inf_l.contains(x);
+  TEST("Contains ", con, true);
+  }
+
+  {
+  vgl_vector_3d<double> t(0,1,0);
+  vgl_point_3d<double> p(1,2,3), p0, pt;
+  vgl_infinite_line_3d<double> inf_l(p, t);
+  p0 = inf_l.point();
+  TEST_NEAR("Closest point to origin", vgl_distance(p0,vgl_point_3d<double>(1,0,3)), 0, 1e-6);
+  pt = inf_l.point_t(1.0);
+  TEST_NEAR("Parametric point ", vgl_distance(pt,vgl_point_3d<double>(1,1,3)), 0, 1e-6);
+  vgl_point_3d<double> x(1.0, -2.0, 3.0);
+  bool con = inf_l.contains(x);
+  TEST("Contains ", con, true);
+  }
+
+  {
+  vgl_vector_3d<double> t(0,0,-1);
+  vgl_point_3d<double> p(1,2,3), p0, pt;
+  vgl_infinite_line_3d<double> inf_l(p, t);
+  p0 = inf_l.point();
+  TEST_NEAR("Closest point to origin", vgl_distance(p0,vgl_point_3d<double>(1,2,0)), 0, 1e-6);
+  pt = inf_l.point_t(1.0);
+  TEST_NEAR("Parametric point ", vgl_distance(pt, vgl_point_3d<double>(1,2,1)), 0, 1e-6);
+  vgl_point_3d<double> x(1.0, 2.0, -3.0);
+  bool con = inf_l.contains(x);
+  TEST("Contains ", con, true);
+  }
+
+  {
+  vgl_vector_3d<double> t(-1,0,0);
+  vgl_point_3d<double> p(1,2,3), p0, pt;
+  vgl_infinite_line_3d<double> inf_l(p, t);
+  p0 = inf_l.point();
+  TEST_NEAR("Closest point to origin", vgl_distance(p0,vgl_point_3d<double>(0,2,3)), 0, 1e-6);
+  pt = inf_l.point_t(1.0);
+  TEST_NEAR("Parametric point ", vgl_distance(pt,vgl_point_3d<double>(1,2,3)), 0, 1e-6);
+  vgl_point_3d<double> x(-1.0, 2.0, 3.0);
+  bool con = inf_l.contains(x);
+  TEST("Contains ", con, true);
+  }
+
+  {
+  vgl_vector_3d<double> t(0,-1,0);
+  vgl_point_3d<double> p(1,2,3), p0, pt;
+  vgl_infinite_line_3d<double> inf_l(p, t);
+  p0 = inf_l.point();
+  TEST_NEAR("Closest point to origin", vgl_distance(p0,vgl_point_3d<double>(1,0,3)), 0, 1e-6);
+  pt = inf_l.point_t(1.0);
+  TEST_NEAR("Parametric point ", vgl_distance(pt,vgl_point_3d<double>(1,1,3)), 0, 1e-6);
+  vgl_point_3d<double> x(1.0, -2.0, 3.0);
+  bool con = inf_l.contains(x);
+  TEST("Contains ", con, true);
+  }
 }
 
 void test_infinite_line_3d()

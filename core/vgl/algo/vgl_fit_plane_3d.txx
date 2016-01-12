@@ -43,7 +43,7 @@ void vgl_fit_plane_3d<T>::add_point(const T x, const T y, const T z)
     if (errstream) *errstream << "Error Margin " << error_marg << '<' << min << ". Could not fit the points to a plane\n";
     return false;
   }
-  
+
   return true;
 }
 
@@ -112,7 +112,7 @@ T vgl_fit_plane_3d<T>::fit(vcl_ostream* errstream)
   c = s.get(2);
   d = s.get(3);
   plane_ = vgl_homg_plane_3d<T> (a, b, c, d);
-  
+
   return svd.sigma_min();
 }
 

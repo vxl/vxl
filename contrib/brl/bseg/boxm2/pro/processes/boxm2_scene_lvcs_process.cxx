@@ -37,11 +37,11 @@ bool boxm2_scene_lvcs_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
     return false;
   }
-  
+
   //get the inputs
   boxm2_scene_sptr   scene = pro.get_input<boxm2_scene_sptr>(0);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-  
+
   // store outputs
   int i=0;
   pro.set_output_val<vpgl_lvcs_sptr>(i++, lvcs);

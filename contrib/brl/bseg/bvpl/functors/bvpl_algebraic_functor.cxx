@@ -31,10 +31,10 @@ void bvpl_algebraic_functor::apply(const float& val, const bvpl_kernel_dispatch&
 float bvpl_algebraic_functor::result()
 {
   float result = result_;
-  
+
   //reset all variables
   init();
-  
+
   return result;
 }
 

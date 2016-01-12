@@ -42,7 +42,7 @@ bool volm_find_intersecting_sat_resources_process_cons(bprb_func_process& pro)
   input_types_[3] = "vcl_string";                    // output file to print the list
 
   // process takes 0 outputs
-  vcl_vector<vcl_string> output_types_(n_outputs_); 
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -61,7 +61,7 @@ bool volm_find_intersecting_sat_resources_process(bprb_func_process& pro)
   vcl_string kml_file = pro.get_input<vcl_string>(1);
   float max_intersecting_resources = pro.get_input<float>(2);
   vcl_string out_file = pro.get_input<vcl_string>(3);
-  
+
   vcl_vector<vcl_string> intersecting_res;
   res->highly_intersecting_resources(intersecting_res, res, kml_file, 3, max_intersecting_resources);
 

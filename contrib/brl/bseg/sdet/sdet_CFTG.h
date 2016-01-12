@@ -10,7 +10,7 @@
 //\verbatim
 //  Modifications
 //
-//    Amir Tamrakar  
+//    Amir Tamrakar
 //\endverbatim
 
 #include <vcl_vector.h>
@@ -49,7 +49,7 @@ public:
   vcl_vector<sdet_CFTG_link_list> pLinks; ///< parent links
 
   sdet_CFTG_link_list Links; ///< redundant single list of all links
-  
+
   //: constructor
   sdet_CFTG(int size=0): cLinks(size), pLinks(size){}
 
@@ -64,7 +64,7 @@ public:
 
   //: resize the graph
   void resize(unsigned size)
-  { 
+  {
     if (size!=cLinks.size())
       clear();
 
@@ -107,7 +107,7 @@ public:
     if (cur_Link){
       cur_Link->add_fragment(chain);
     }
-    else //otherwise create a new link and add it to it 
+    else //otherwise create a new link and add it to it
     {
       cur_Link = new sdet_CFTG_link(e1, e2);
       cur_Link->add_fragment(chain);

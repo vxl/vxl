@@ -51,7 +51,7 @@ int main(int argc,  char** argv)
   //make bocl manager (handles a lot of OpenCL stuff)
   bocl_manager_child &mgr = bocl_manager_child::instance();
 
-  
+
   //make a multicache
   if ( numGPU() > mgr.gpus_.size() ) {
     vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr.gpus_.size()<<" available"<<vcl_endl;

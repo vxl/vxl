@@ -82,7 +82,7 @@ ihog_transform_2d breg3d_gdbicp_homography_generator::compute_homography()
   int retval = vcl_system(command.str().c_str());
   if (retval) {
     vcl_cerr << "vcl_system(" << command.str()
-	     << ") returned " << retval << ".\n"
+             << ") returned " << retval << ".\n"
              << "  make sure " << gdbicp_command << " is in your path.\n";
     vul_file::change_directory(og_dir);
     return ihog_transform_2d();

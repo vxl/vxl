@@ -6,6 +6,7 @@
 // \author Andrew Miller
 // \date   26 Oct 2010
 //
+#include <vcl_cassert.h>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/vpgl_lvcs.h>
@@ -63,14 +64,14 @@ class boxm2_scene : public vbl_ref_count
     //: empty scene, needs to be initialized manually
     boxm2_scene() {boxm2_scene::get_count()++;}
 
-    boxm2_scene(vcl_string data_path, vgl_point_3d<double> const& origin, int version = 2);
+    boxm2_scene(vcl_string const& data_path, vgl_point_3d<double> const& origin, int version = 2);
 
     //: initializes the scene from the buffer that loaded an XML file in.
     // this is added for decoupling from the local filesystem to load the scene
     boxm2_scene(const char* buffer);
 
     //: initializes scene from xmlFile
-    boxm2_scene(vcl_string filename);
+    boxm2_scene(vcl_string const& filename);
 
     //: copy constructor
     boxm2_scene(boxm2_scene const& other_scene);
@@ -109,15 +110,15 @@ class boxm2_scene : public vbl_ref_count
     //: visibility order using a ray given by origin and direction vector, the block needs to be in the front direction as given by this ray
     vcl_vector<boxm2_block_id>
     get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vector_3d<double> const& dir, double distance);
-    
+
     //: return all blocks with center less than dist from the given point
     vcl_vector<boxm2_block_id> get_vis_blocks(vgl_point_3d<double> const& pt, double dist);
 
     //: return a heap pointer to a scene info
-    boxm2_scene_info* get_blk_metadata(boxm2_block_id id);
-    bool block_exists(boxm2_block_id id) const { return blocks_.find(id) != blocks_.end(); }
-    bool block_on_disk(boxm2_block_id id) const { return vul_file::exists( data_path_ + id.to_string() + ".bin"); }
-    bool data_on_disk(boxm2_block_id id, vcl_string data_type) {
+    boxm2_scene_info* get_blk_metadata(boxm2_block_id const& id);
+    bool block_exists(boxm2_block_id const& id) const { return blocks_.find(id) != blocks_.end(); }
+    bool block_on_disk(boxm2_block_id const& id) const { return vul_file::exists( data_path_ + id.to_string() + ".bin"); }
+    bool data_on_disk(boxm2_block_id const& id, vcl_string const& data_type) {
       return vul_file::exists(data_path_ + data_type + "_" + id.to_string() + ".bin");
     }
 
@@ -127,13 +128,17 @@ class boxm2_scene : public vbl_ref_count
 
     float finest_resolution();
     //: mutable reference
-    boxm2_block_metadata& get_block_metadata(boxm2_block_id id)
-      { return blocks_[id]; }
+    boxm2_block_metadata& get_block_metadata(boxm2_block_id const& id)
+    {
+        assert(blocks_.find(id) != blocks_.end());
+        return blocks_[id];
+    }
     //: const so return a copy
-    boxm2_block_metadata get_block_metadata_const(boxm2_block_id id) const;
+    boxm2_block_metadata get_block_metadata_const(boxm2_block_id const& id) const;
 
     //: return number of trees in block
-    int num_trees_in_block(boxm2_block_id id) {
+    int num_trees_in_block(boxm2_block_id const& id) {
+      assert(blocks_.find(id) != blocks_.end());
       boxm2_block_metadata& d = blocks_[id];
       return d.sub_block_num_.x() * d.sub_block_num_.y() * d.sub_block_num_.z();
     }
@@ -156,7 +161,7 @@ class boxm2_scene : public vbl_ref_count
     vgl_vector_3d<unsigned int>   scene_dimensions() const;
 
     //: If a block contains a 3-d point, set the local coordinates of the point
-    bool block_contains(vgl_point_3d<double> const& p, boxm2_block_id bid,
+    bool block_contains(vgl_point_3d<double> const& p, boxm2_block_id const& bid,
                         vgl_point_3d<double>& local_coords) const;
 
     //: If a scene contains a 3-d point, set the block id, else return false. The local coordinates of the point are also returned
@@ -174,7 +179,7 @@ class boxm2_scene : public vbl_ref_count
 
     //: appearance model accessor
     vcl_vector<vcl_string> appearances()  const { return appearances_; }
-    bool has_data_type(vcl_string data_type);
+    bool has_data_type(vcl_string const& data_type);
     int num_illumination_bins() const {return num_illumination_bins_;}
 
     //: scene version number
@@ -192,8 +197,8 @@ class boxm2_scene : public vbl_ref_count
     void set_num_illumination_bins(int num_bins) { this->num_illumination_bins_ = num_bins; }
 
     //: scene path mutators
-    void set_xml_path(vcl_string path)              { xml_path_ = path; }
-    void set_data_path(vcl_string path)             { data_path_ = path+"/"; }
+    void set_xml_path(vcl_string const& path)              { xml_path_ = path; }
+    void set_data_path(vcl_string const& path)             { data_path_ = path+"/"; }
 
   private:
     //: unique scene id
@@ -224,7 +229,7 @@ class boxm2_scene : public vbl_ref_count
 class boxm2_dist_id_pair
 {
   public:
-    boxm2_dist_id_pair(double dist, boxm2_block_id id) : dist_(dist), id_(id) {}
+    boxm2_dist_id_pair(double dist, boxm2_block_id const& id) : dist_(dist), id_(id) {}
     double dist_;
     boxm2_block_id id_;
 
@@ -237,7 +242,7 @@ class boxm2_dist_id_pair
 vcl_ostream& operator<<(vcl_ostream &s, boxm2_scene& scene);
 
 //: scene xml write function
-void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string name);
+void x_write(vcl_ostream &os, boxm2_scene& scene, vcl_string const& name);
 
 
 //--- IO read/write for sptrs--------------------------------------------------

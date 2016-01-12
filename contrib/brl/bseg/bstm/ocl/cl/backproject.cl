@@ -62,13 +62,13 @@ bool project(__global float16 * cam, float4 p3d, float2 * p2d)
 
 //utility method that uses backproject to output a single ray (6 floats) from a global cam
 //uses perspective camera
-bool calc_scene_ray(__constant RenderSceneInfo * linfo, 
-                    __global float16 * camera, 
+bool calc_scene_ray(__constant RenderSceneInfo * linfo,
+                    __global float16 * camera,
                     int i, int j,
                     float* ray_ox, float* ray_oy, float* ray_oz,
                     float* ray_dx, float* ray_dy, float* ray_dz)
 {
-  
+
   float4 ray_o = (float4) camera[2].s4567; ray_o.w = 1.0f;
   float4 ray_d = backproject(i, j, camera[0], camera[1], camera[2], ray_o);
   ray_o = ray_o - linfo->origin; ray_o.w = 1.0f; //translate ray o to zero out scene origin
@@ -85,13 +85,13 @@ bool calc_scene_ray(__constant RenderSceneInfo * linfo,
   //store float 3's
   *ray_ox = ray_o.x;     *ray_oy = ray_o.y;     *ray_oz = ray_o.z;
   *ray_dx = ray_d.x;     *ray_dy = ray_d.y;     *ray_dz = ray_d.z;
-  
+
   return true;
 }
 
 
-bool calc_scene_ray_generic_cam(__constant RenderSceneInfo * linfo, 
-                                float4 ray_o, float4 ray_d,  
+bool calc_scene_ray_generic_cam(__constant RenderSceneInfo * linfo,
+                                float4 ray_o, float4 ray_d,
                                 float* ray_ox, float* ray_oy, float* ray_oz,
                                 float* ray_dx, float* ray_dy, float* ray_dz)
 {
@@ -110,6 +110,6 @@ bool calc_scene_ray_generic_cam(__constant RenderSceneInfo * linfo,
   //store float 3's
   *ray_ox = ray_o.x;     *ray_oy = ray_o.y;     *ray_oz = ray_o.z;
   *ray_dx = ray_d.x;     *ray_dy = ray_d.y;     *ray_dz = ray_d.z;
-  
+
   return true;
 }

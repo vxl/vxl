@@ -24,7 +24,7 @@ bool vpgl_interpolate_perspective_cameras_process_cons(bprb_func_process& pro)
   input_types.push_back("unsigned"); // # of cameras
   input_types.push_back("vcl_string"); // output folder for interpolated cameras
 
-  
+
   bool ok = pro.set_input_types(input_types);
 
 
@@ -54,7 +54,7 @@ bool vpgl_interpolate_perspective_cameras_process(bprb_func_process& pro)
   }
   vpgl_perspective_camera<double> * pcam0 = dynamic_cast<vpgl_perspective_camera<double> *>(cam0.ptr()) ;
   vpgl_perspective_camera<double> * pcam1 = dynamic_cast<vpgl_perspective_camera<double> *>(cam1.ptr()) ;
-   if( pcam0 && pcam1) 
+   if( pcam0 && pcam1)
   {
       vcl_vector<vpgl_perspective_camera<double> >  cams;
       if(!bpgl_interpolate::interpolate(*pcam0, *pcam1, ncams , cams))
@@ -63,7 +63,7 @@ bool vpgl_interpolate_perspective_cameras_process(bprb_func_process& pro)
           return false;
       }
 
-      
+
       for(unsigned k = 0 ; k < cams.size(); k++)
       {
           vcl_ostringstream ss;

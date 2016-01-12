@@ -1,4 +1,3 @@
-
 #include <vcl_fstream.h>
 #include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_fit_orbit.h"
@@ -67,7 +66,7 @@ bool boxm2_vecf_fit_orbit::read_anchor_file(vcl_string const& path){
     is_right = true;
 
   // parse generic point with label file format
-  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > anchors;  
+  vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > anchors;
   bool good = boxm2_vecf_labeled_point::read_points(path, anchors);
   if(!good){
     vcl_cout << "Parse of file " << path << " failed\n";
@@ -101,7 +100,7 @@ bool boxm2_vecf_fit_orbit::read_anchor_file(vcl_string const& path){
       lab = "left_Nz";
       if(is_right)
         lab = "right_Nz";
-    } 
+    }
     boxm2_vecf_labeled_point lp(x, y, z, lab);
     if(!this->add_labeled_point(lp))
       return false;
@@ -1780,7 +1779,7 @@ bool boxm2_vecf_fit_orbit::display_left_right_orbit_model_vrml(vcl_ofstream& os)
   boxm2_vecf_orbit_params& lp = left_params_;
   boxm2_vecf_orbit_params& rp = right_params_;
 
-  // plot left eye 
+  // plot left eye
   double xm_min_left = lp.x_min()-10.0;
   double xm_max_left = lp.x_max()+10.0;
   vgl_vector_3d<double> vl(0.0, 0.0, lp.eyelid_radius());
@@ -1794,7 +1793,7 @@ bool boxm2_vecf_fit_orbit::display_left_right_orbit_model_vrml(vcl_ofstream& os)
     vcl_cout << "Find left plot limits failed\n";
     return false;
   }
-  // plot right eye 
+  // plot right eye
   double xm_min_right = rp.x_min()-10.0;
   double xm_max_right = rp.x_max()+10.0;
   vgl_vector_3d<double> vr(0.0, 0.0, rp.eyelid_radius());

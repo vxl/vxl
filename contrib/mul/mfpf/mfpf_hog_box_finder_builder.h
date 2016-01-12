@@ -38,7 +38,7 @@
 // // Alternative for shape and block normalise:
 // \verbatim
 //   shape: box { ni: 16 nj: 16 ref_x: 8 ref_y: 8 }
-// 
+//
 //  normaliser: mipa_ms_block_normaliser
   // {
   //   nscales: 2

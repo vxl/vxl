@@ -198,7 +198,7 @@ void write_pts_to_kml(vcl_ofstream& ofs, vcl_string const& key, vcl_string const
       }
     }
 #endif
-  
+
 }
 
 void write_lines_to_kml(vcl_ofstream& ofs, vcl_string const& key, vcl_string const& value,

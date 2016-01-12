@@ -366,33 +366,9 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_NUMERIC_LIMITS_HAS_INFINITY ";
-#ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
-  vcl_cout << "is set to " << quote(VCL_NUMERIC_LIMITS_HAS_INFINITY);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_PROCESSOR_HAS_INFINITY ";
-#ifdef VCL_PROCESSOR_HAS_INFINITY
-  vcl_cout << "is set to " << quote(VCL_PROCESSOR_HAS_INFINITY);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_CXX_HAS_HEADER_CASSERT ";
 #ifdef VCL_CXX_HAS_HEADER_CASSERT
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CASSERT);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_CXX_HAS_HEADER_CISO646 ";
-#ifdef VCL_CXX_HAS_HEADER_CISO646
-  vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CISO646);
 #else
   vcl_cout << "is not set";
 #endif
@@ -497,14 +473,6 @@ void test_config()
   vcl_cout << "VCL_CXX_HAS_HEADER_CWCTYPE ";
 #ifdef VCL_CXX_HAS_HEADER_CWCTYPE
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CWCTYPE);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_CXX_HAS_HEADER_CFLOAT ";
-#ifdef VCL_CXX_HAS_HEADER_CFLOAT
-  vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CFLOAT);
 #else
   vcl_cout << "is not set";
 #endif
@@ -774,41 +742,9 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_CXX_HAS_HEADER_LIMITS ";
-#ifdef VCL_CXX_HAS_HEADER_LIMITS
-  vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_LIMITS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_CXX_HAS_HEADER_STRSTREAM ";
 #ifdef VCL_CXX_HAS_HEADER_STRSTREAM
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_STRSTREAM);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_USE_NATIVE_STL ";
-#ifdef VCL_USE_NATIVE_STL
-  vcl_cout << "is set to " << quote(VCL_USE_NATIVE_STL);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_USE_NATIVE_COMPLEX ";
-#ifdef VCL_USE_NATIVE_COMPLEX
-  vcl_cout << "is set to " << quote(VCL_USE_NATIVE_COMPLEX);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_USE_IMPLICIT_TEMPLATES ";
-#ifdef VCL_USE_IMPLICIT_TEMPLATES
-  vcl_cout << "is set to " << quote(VCL_USE_IMPLICIT_TEMPLATES);
 #else
   vcl_cout << "is not set";
 #endif

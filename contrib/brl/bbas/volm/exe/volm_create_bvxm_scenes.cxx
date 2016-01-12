@@ -1,8 +1,8 @@
 //:
 // \file
-// \brief  executable to take a polygonal ROI and cover it with bvxm scenes with different lvcs's 
+// \brief  executable to take a polygonal ROI and cover it with bvxm scenes with different lvcs's
 //
-// \author Ozge C. Ozcanli 
+// \author Ozge C. Ozcanli
 // \date August 22, 2013
 // \verbatim
 //  Modifications
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
     lvcs_folder = out_folder();
   else
     lvcs_folder = lvcs_root();
-  
+
   vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly());
   vcl_cout << "outer poly  has: " << poly[0].size() << vcl_endl;
 
@@ -162,8 +162,8 @@ int main(int argc, char** argv)
 
 
 #if 0
-  
-  
+
+
   vcl_vector<volm_img_info> infos;
   volm_io_tools::load_aster_dem_imgs(in_folder(), infos);
   vcl_cout << " loaded " << infos.size() << " DEM tiles!\n";
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
     unsigned dim_z = (unsigned)vcl_ceil(dif+height());
     vgl_vector_3d<unsigned int> num_voxels(dim_xy, dim_xy, dim_z);
     bvxm_world_params params;
-    //params.set_params(name.str(), corner, num_voxels, voxel_size(), lvcs); 
+    //params.set_params(name.str(), corner, num_voxels, voxel_size(), lvcs);
     //params.set_params(out_folder().substr(0, out_folder().size()-1), corner, num_voxels, voxel_size(), lvcs);  // for now set model dir as out_folder
     // set bvxm_scene world parameters
     vcl_stringstream world_dir;

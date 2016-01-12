@@ -54,7 +54,7 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
     vcl_cout << pro.name() << " - invalid inputs " << vcl_endl;
     return false;
   }
-  
+
   // get the inputs
   // voxel world
   bvxm_voxel_world_sptr vox_world = pro.get_input<bvxm_voxel_world_sptr>(0);
@@ -77,13 +77,13 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
 
   float n_normal = vox_world->get_params()->edges_n_normal();
   vcl_cout << "n_normal: " << n_normal << '\n';
-  
+
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera_inp);
   vil_image_view<float> *img_eei_f = new vil_image_view<float>(ni,nj,1);
   vil_image_view_base_sptr img_eei_f_sptr = img_eei_f;
-  
+
   edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
 
   vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
@@ -92,6 +92,6 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
 
   pro.set_output_val<vil_image_view_base_sptr>(0, img_eei_f);
   pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_vb);
-  
+
   return true;
 }

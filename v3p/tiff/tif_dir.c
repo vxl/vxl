@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -90,7 +90,7 @@ static int
 setExtraSamples(TIFFDirectory* td, va_list ap, uint32* v)
 {
 /* XXX: Unassociated alpha data == 999 is a known Corel Draw bug, see below */
-#define EXTRASAMPLE_COREL_UNASSALPHA 999 
+#define EXTRASAMPLE_COREL_UNASSALPHA 999
 
   uint16* va;
   uint32 i;
@@ -107,7 +107,7 @@ setExtraSamples(TIFFDirectory* td, va_list ap, uint32* v)
        * XXX: Corel Draw is known to produce incorrect
        * ExtraSamples tags which must be patched here if we
        * want to be able to open some of the damaged TIFF
-       * files: 
+       * files:
        */
       if (va[i] == EXTRASAMPLE_COREL_UNASSALPHA)
         va[i] = EXTRASAMPLE_UNASSALPHA;
@@ -123,7 +123,7 @@ setExtraSamples(TIFFDirectory* td, va_list ap, uint32* v)
 }
 
 /*
- * Confirm we have "samplesperpixel" ink names separated by \0.  Returns 
+ * Confirm we have "samplesperpixel" ink names separated by \0.  Returns
  * zero if the ink names are not as expected.
  */
 static uint32
@@ -166,9 +166,9 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
 
   /*
    * We want to force the custom code to be used for custom
-   * fields even if the tag happens to match a well known 
+   * fields even if the tag happens to match a well known
    * one - important for reinterpreted handling of standard
-   * tag values in custom directories (ie. EXIF) 
+   * tag values in custom directories (ie. EXIF)
    */
   if (fip->field_bit == FIELD_CUSTOM) {
     standard_tag = 0;
@@ -565,11 +565,11 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
         goto end;
       }
 
-      if (fip->field_tag == TIFFTAG_DOTRANGE 
+      if (fip->field_tag == TIFFTAG_DOTRANGE
           && strcmp(fip->field_name,"DotRange") == 0) {
         /* TODO: This is an evil exception and should not have been
            handled this way ... likely best if we move it into
-           the directory structure with an explicit field in 
+           the directory structure with an explicit field in
            libtiff 4.1 and assign it a FIELD_ value */
         uint16 v[2];
         v[0] = (uint16)va_arg(ap, int);
@@ -665,7 +665,7 @@ _TIFFVSetField(TIFF* tif, uint32 tag, va_list ap)
   }
   if (status) {
     const TIFFField* fip=TIFFFieldWithTag(tif,tag);
-    if (fip)                
+    if (fip)
       TIFFSetFieldBit(tif, fip->field_bit);
     tif->tif_flags |= TIFF_DIRTYDIRECT;
   }
@@ -768,7 +768,7 @@ TIFFUnsetField(TIFF* tif, uint32 tag)
         int i;
 
         for (i = 0; i < td->td_customValueCount; i++) {
-                
+
             tv = td->td_customValues + i;
             if( tv->info->field_tag == tag )
                 break;
@@ -783,7 +783,7 @@ TIFFUnsetField(TIFF* tif, uint32 tag)
             td->td_customValueCount--;
         }
     }
-        
+
     tif->tif_flags |= TIFF_DIRTYDIRECT;
 
     return (1);
@@ -809,12 +809,12 @@ _TIFFVGetField(TIFF* tif, uint32 tag, va_list ap)
   int ret_val = 1;
   uint32 standard_tag = tag;
   const TIFFField* fip = TIFFFindField(tif, tag, TIFF_ANY);
-  
+
   /*
    * We want to force the custom code to be used for custom
-   * fields even if the tag happens to match a well known 
+   * fields even if the tag happens to match a well known
    * one - important for reinterpreted handling of standard
-   * tag values in custom directories (ie. EXIF) 
+   * tag values in custom directories (ie. EXIF)
    */
   if (fip->field_bit == FIELD_CUSTOM) {
     standard_tag = 0;
@@ -1039,7 +1039,7 @@ _TIFFVGetField(TIFF* tif, uint32 tag, va_list ap)
                && strcmp(fip->field_name,"DotRange") == 0) {
             /* TODO: This is an evil exception and should not have been
                handled this way ... likely best if we move it into
-               the directory structure with an explicit field in 
+               the directory structure with an explicit field in
                libtiff 4.1 and assign it a FIELD_ value */
             *va_arg(ap, uint16*) = ((uint16 *)tv->value)[0];
             *va_arg(ap, uint16*) = ((uint16 *)tv->value)[1];
@@ -1200,7 +1200,7 @@ TIFFFreeDirectory(TIFF* tif)
 #if defined(DEFER_STRILE_LOAD)
         _TIFFmemset( &(td->td_stripoffset_entry), 0, sizeof(TIFFDirEntry));
         _TIFFmemset( &(td->td_stripbytecount_entry), 0, sizeof(TIFFDirEntry));
-#endif        
+#endif
 }
 #undef CleanupField
 
@@ -1243,7 +1243,7 @@ TIFFCreateCustomDirectory(TIFF* tif, const TIFFFieldArray* infoarray)
   TIFFDefaultDirectory(tif);
 
   /*
-   * Reset the field definitions to match the application provided list. 
+   * Reset the field definitions to match the application provided list.
    * Hopefully TIFFDefaultDirectory() won't have done anything irreversable
    * based on it's assumption this is an image directory.
    */
@@ -1276,7 +1276,7 @@ TIFFDefaultDirectory(TIFF* tif)
   const TIFFFieldArray* tiffFieldArray;
 
   tiffFieldArray = _TIFFGetFields();
-  _TIFFSetupFields(tif, tiffFieldArray);   
+  _TIFFSetupFields(tif, tiffFieldArray);
 
   _TIFFmemset(td, 0, sizeof (*td));
   td->td_fillorder = FILLORDER_MSB2LSB;
@@ -1288,16 +1288,16 @@ TIFFDefaultDirectory(TIFF* tif)
   td->td_tilewidth = 0;
   td->td_tilelength = 0;
   td->td_tiledepth = 1;
-  td->td_stripbytecountsorted = 1; /* Our own arrays always sorted. */  
+  td->td_stripbytecountsorted = 1; /* Our own arrays always sorted. */
   td->td_resolutionunit = RESUNIT_INCH;
   td->td_sampleformat = SAMPLEFORMAT_UINT;
   td->td_imagedepth = 1;
   td->td_ycbcrsubsampling[0] = 2;
   td->td_ycbcrsubsampling[1] = 2;
   td->td_ycbcrpositioning = YCBCRPOSITION_CENTERED;
-  tif->tif_postdecode = _TIFFNoPostDecode;  
+  tif->tif_postdecode = _TIFFNoPostDecode;
   tif->tif_foundfield = NULL;
-  tif->tif_tagmethods.vsetfield = _TIFFVSetField;  
+  tif->tif_tagmethods.vsetfield = _TIFFVSetField;
   tif->tif_tagmethods.vgetfield = _TIFFVGetField;
   tif->tif_tagmethods.printdir = NULL;
   /*

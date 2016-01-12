@@ -24,7 +24,7 @@ public:
   //: the data type used for matrices
   typedef typename vpdt_field_traits<vector>::matrix_type matrix;
 
-  
+
   //: Destructor
   virtual ~vpdl_multi_cmp_dist() {}
 

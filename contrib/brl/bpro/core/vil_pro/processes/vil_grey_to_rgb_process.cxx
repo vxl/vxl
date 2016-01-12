@@ -46,7 +46,7 @@ namespace vil_grey_to_rgb_process_globals
 bool vil_grey_to_rgb_process_cons(bprb_func_process& pro)
 {
   using namespace vil_grey_to_rgb_process_globals;
-  
+
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";   // input grey image
   input_types_[1] = "vcl_string";                 // color code text file
@@ -59,7 +59,7 @@ bool vil_grey_to_rgb_process_cons(bprb_func_process& pro)
 bool vil_grey_to_rgb_process(bprb_func_process& pro)
 {
   using namespace vil_grey_to_rgb_process_globals;
-  
+
   if ( pro.n_inputs() < n_inputs_ ) {
     vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_ << vcl_endl;
     return false;
@@ -114,7 +114,7 @@ bool vil_grey_to_rgb_process(bprb_func_process& pro)
         color = vil_rgb<vxl_byte>(0,0,0);
       (*out_img)(i,j) = color;
     }
-  
+
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img);
   return true;
 }

@@ -1,5 +1,5 @@
 // vil_nitf2: Written by Harry Voorhees (hlv@) and Rob Radtke (rob@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
 #include "vil_nitf2_field_definition.h"
@@ -10,16 +10,16 @@
 //==============================================================================
 // Class vil_nitf2_field_definition_node
 
-vil_nitf2_field_definition* 
-vil_nitf2_field_definition_node::field_definition() 
-{ 
-  return is_field_definition() ? (vil_nitf2_field_definition*)this : 0; 
+vil_nitf2_field_definition*
+vil_nitf2_field_definition_node::field_definition()
+{
+  return is_field_definition() ? (vil_nitf2_field_definition*)this : 0;
 }
 
-vil_nitf2_field_definition_repeat_node* 
-vil_nitf2_field_definition_node::repeat_node() 
-{ 
-  return is_repeat_node() ? (vil_nitf2_field_definition_repeat_node*)this : 0; 
+vil_nitf2_field_definition_repeat_node*
+vil_nitf2_field_definition_node::repeat_node()
+{
+  return is_repeat_node() ? (vil_nitf2_field_definition_repeat_node*)this : 0;
 }
 
 //==============================================================================
@@ -35,13 +35,13 @@ vil_nitf2_field_definition(vcl_string tag,
                            vcl_string units,
                            vcl_string description)
   : vil_nitf2_field_definition_node(type_field),
-    tag(tag), 
+    tag(tag),
     pretty_name(pretty_name),
     formatter(formatter),
     blanks_ok(blanks_ok),
     width_functor(width_functor),
     condition_functor(condition_functor),
-    units(units), 
+    units(units),
     description(description)
 {
   assert(!tag.empty() && "vil_nitf2_field_definition:: null tag");
@@ -51,13 +51,13 @@ vil_nitf2_field_definition(vcl_string tag,
 vil_nitf2_field_definition_node* vil_nitf2_field_definition::copy() const
 {
   return new vil_nitf2_field_definition(
-    tag, 
-    pretty_name, 
-    formatter->copy(), 
-    blanks_ok, 
+    tag,
+    pretty_name,
+    formatter->copy(),
+    blanks_ok,
     width_functor ? width_functor->copy() : 0,
     condition_functor ? condition_functor->copy() : 0,
-    units, 
+    units,
     description);
 }
 
@@ -86,7 +86,7 @@ vil_nitf2_field_definitions::vil_nitf2_field_definitions(
   : vcl_list<vil_nitf2_field_definition_node*>()
 {
   for (vcl_list<vil_nitf2_field_definition_node*>::const_iterator it = that.begin();
-       it != that.end(); ++it) 
+       it != that.end(); ++it)
   {
     push_back((*it)->copy());
   }
@@ -104,17 +104,17 @@ vil_nitf2_field_definitions& vil_nitf2_field_definitions::field(
     vcl_string description)
 {
   push_back(new vil_nitf2_field_definition(
-                  tag, pretty_name, formatter, blanks_ok, 
+                  tag, pretty_name, formatter, blanks_ok,
                   width_functor, condition_functor, units, description));
   return *this;
 }
 
-vil_nitf2_field_definitions& 
-vil_nitf2_field_definitions::repeat(vil_nitf2_field_functor<int>* repeat_functor, 
-                                    vil_nitf2_field_definitions& field_definitions ) 
+vil_nitf2_field_definitions&
+vil_nitf2_field_definitions::repeat(vil_nitf2_field_functor<int>* repeat_functor,
+                                    vil_nitf2_field_definitions& field_definitions )
 {
-  push_back(new vil_nitf2_field_definition_repeat_node( 
-                  repeat_functor, 
+  push_back(new vil_nitf2_field_definition_repeat_node(
+                  repeat_functor,
                   new vil_nitf2_field_definitions(field_definitions)));
   return *this;
 }
@@ -131,8 +131,8 @@ vil_nitf2_field_definitions::~vil_nitf2_field_definitions()
 //==============================================================================
 // Class vil_nitf2_field_definition_repeat_node
 
-vil_nitf2_field_definition_node* 
-vil_nitf2_field_definition_repeat_node::copy() const 
+vil_nitf2_field_definition_node*
+vil_nitf2_field_definition_repeat_node::copy() const
 {
   return new vil_nitf2_field_definition_repeat_node(
     repeat_functor->copy(),

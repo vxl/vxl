@@ -139,19 +139,19 @@ vil_bmp_image::~vil_bmp_image()
   is_->unref();
 }
 
-unsigned vil_bmp_image::nplanes() const 
+unsigned vil_bmp_image::nplanes() const
 {
   return (core_hdr.bitsperpixel<24)?1:core_hdr.bitsperpixel/8;   // FIXME
 }
 
-unsigned vil_bmp_image::ni() const 
-{ 
-  return (core_hdr.width>=0)?core_hdr.width:-core_hdr.width;  // width is signed integer 
+unsigned vil_bmp_image::ni() const
+{
+  return (core_hdr.width>=0)?core_hdr.width:-core_hdr.width;  // width is signed integer
 }
 
-unsigned vil_bmp_image::nj() const 
+unsigned vil_bmp_image::nj() const
 {
-  return (core_hdr.height>=0)?core_hdr.height:-core_hdr.height; // height is signed integer 
+  return (core_hdr.height>=0)?core_hdr.height:-core_hdr.height; // height is signed integer
 }
 
 bool vil_bmp_image::read_header()
@@ -394,7 +394,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
     //
     rows_to_skip = nj() - (y0+ny);
     top_left_y0_in_mem = (ny-1)*want_bytes_per_raster;
-    ystep = -ystep; 
+    ystep = -ystep;
   }
   else
   {
@@ -451,7 +451,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
   }
   else if( core_hdr.bitsperpixel == 32 )
   {
-    // re-organize channel ordering from BGRA to RGBA. 
+    // re-organize channel ordering from BGRA to RGBA.
     // In other words,  swap B and R
     assert( (want_bytes_per_raster & 3) == 0 );  //  must be multiple of 4
     vxl_byte* data = reinterpret_cast<vxl_byte *>(buf->data());
@@ -464,7 +464,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
       vcl_swap(data[0], data[2]);
     }
 
-    np = 4; 
+    np = 4;
     plane_step = 1;
     top_left_plane0_in_mem = 0;
   }

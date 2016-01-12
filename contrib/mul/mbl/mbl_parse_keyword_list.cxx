@@ -39,7 +39,7 @@ void mbl_parse_keyword_list(vcl_istream& is, const vcl_string& keyword,
   {
     ss >> label;         // Next follows the parameters
 
-    if (label == "}") 
+    if (label == "}")
       continue;
 
     else if ( discard_comments && (label.substr(0,2) == "//") )
@@ -92,7 +92,7 @@ void mbl_parse_keyword_list2(vcl_istream& is, const vcl_string& keyword,
   {
     ss >> label;         // Next follows the parameters
 
-    if (label == "}") 
+    if (label == "}")
       continue;
 
     else if ( discard_comments && (label.substr(0,2) == "//") )

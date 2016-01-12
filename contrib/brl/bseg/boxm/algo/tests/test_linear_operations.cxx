@@ -73,7 +73,7 @@ void test_linear_operations()
 #ifdef DEBUG_LEAKS
   vcl_cerr << "Leaks at test_linear_operations " << boct_tree_cell<short, float >::nleaks() << vcl_endl;
 #endif
-  
+
   TEST("Output data is correct", result, true);
   clean_up();
 }

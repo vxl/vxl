@@ -110,7 +110,7 @@ int main(int argc, char** argv)
     vcl_cout<<"Output Camera directory does not exist"<<vcl_endl;
     return -1;
   }
-  
+
   vnl_matrix<double> pts0, pts1;
   vgl_rotation_3d<double> R;
   vnl_vector_fixed<double, 3> t;
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
     bwm_observer_mgr::load_3d_corrs(corrs_path(), corrs);
     // assume correspondences between two sites only
     unsigned n = corrs.size();
-    pts0.set_size(3,n); 
+    pts0.set_size(3,n);
     pts1.set_size(3,n);
     for (unsigned i = 0; i<n; ++i) {
       vcl_cout << *(corrs[i]);
@@ -147,7 +147,7 @@ int main(int argc, char** argv)
       filenames.push_back(fname);
     }
     vcl_sort(filenames.begin(), filenames.end());
-    
+
     vcl_string gps_fname = gps_file();
     vcl_ifstream gps_ifs(gps_fname.c_str());
     if (!gps_ifs.good()) {
@@ -187,13 +187,13 @@ int main(int argc, char** argv)
       if(!ifile)
       {
           vcl_cout<<"Error: Cannot open" <<xform_file()<<vcl_endl;
-          return -1;  
+          return -1;
       }
       ifile >> scale ;
       vnl_matrix<double> mat(4,4);
       ifile >> mat;
 
-      vnl_matrix<double> matr(3,3);  
+      vnl_matrix<double> matr(3,3);
       mat.extract(matr);
       matr = matr/scale;
 
@@ -231,6 +231,6 @@ int main(int argc, char** argv)
     vcl_ofstream os(out_file.c_str());
     os << tcam;
     os.close();
-  } 
+  }
   return 0;
 }

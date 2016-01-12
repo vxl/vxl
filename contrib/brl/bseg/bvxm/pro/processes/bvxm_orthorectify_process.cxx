@@ -64,7 +64,7 @@ bool bvxm_orthorectify_process(bprb_func_process& pro)
   }
   unsigned ni = ortho_height_img_sptr->ni();
   unsigned nj = ortho_height_img_sptr->nj();
-  
+
   if (input_img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
     vcl_cout << pro.name() << " -- only input images of type BYTE are supported for now! (easy to add support for others)\n";
     return false;
@@ -74,7 +74,7 @@ bool bvxm_orthorectify_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> input_img(input_img_sptr);
 
   vil_image_view<float> ortho_height_img(ortho_height_img_sptr);
-  
+
   // turn the absolute height image into a height from the scene ceiling
   // subtract from the scene height to get the height from scene floor
   bvxm_world_params_sptr params = world->get_params();
@@ -84,13 +84,13 @@ bool bvxm_orthorectify_process(bprb_func_process& pro)
   double lat, lon, elev;
   lvcs->get_origin(lat, lon, elev);
   float base_elev = (float)elev;
-  
+
   vcl_cout << "Using scene height: " << h << " and scene floor absolute height: " << base_elev << " to convert the absolute heights to heights from scene ceiling!\n";
   vil_image_view<float> ortho_depth_img(ni, nj, 1);
   ortho_depth_img.fill(0.0f);
-  
-  for (unsigned i = 0; i < ni; i++) 
-    for (unsigned j = 0; j < nj; j++) 
+
+  for (unsigned i = 0; i < ni; i++)
+    for (unsigned j = 0; j < nj; j++)
       ortho_depth_img(i,j) = h-(ortho_height_img(i,j)-base_elev);
 
   vil_image_view_base_sptr ortho_depth_sptr = new vil_image_view<float>(ortho_depth_img);

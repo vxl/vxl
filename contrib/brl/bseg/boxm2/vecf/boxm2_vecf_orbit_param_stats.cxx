@@ -12,11 +12,11 @@ void boxm2_vecf_orbit_param_stats::average_params(){
     boxm2_vecf_orbit_params& right_params = (pit->second).second;
     avg.eye_radius_= 0.5*(left_params.eye_radius_ + right_params.eye_radius_);
     devs_[pid]["eye_radius"]=vcl_fabs(left_params.eye_radius_-avg.eye_radius_);
-    avg.iris_radius_= 0.5*(left_params.iris_radius_ + right_params.iris_radius_); 
+    avg.iris_radius_= 0.5*(left_params.iris_radius_ + right_params.iris_radius_);
     devs_[pid]["iris_radius"]=vcl_fabs(left_params.iris_radius_-avg.iris_radius_);
     avg.medial_socket_radius_coef_ = 0.5*(left_params.medial_socket_radius_coef_ + right_params.medial_socket_radius_coef_);
     devs_[pid]["medial_socket_radius_coef"]=vcl_fabs(left_params.medial_socket_radius_coef_-avg.medial_socket_radius_coef_);
-    avg.lateral_socket_radius_coef_ = 0.5*(left_params.lateral_socket_radius_coef_ + right_params.lateral_socket_radius_coef_); 
+    avg.lateral_socket_radius_coef_ = 0.5*(left_params.lateral_socket_radius_coef_ + right_params.lateral_socket_radius_coef_);
     devs_[pid]["lateral_socket_radius_coef"]=vcl_fabs(left_params.lateral_socket_radius_coef_-avg.lateral_socket_radius_coef_);
     avg.inferior_lid_radius_offset_ = 0.5*(left_params.inferior_lid_radius_offset_ + right_params.inferior_lid_radius_offset_);
     devs_[pid]["inferior_lid_radius_offset"]=vcl_fabs(left_params.inferior_lid_radius_offset_-avg.inferior_lid_radius_offset_);
@@ -66,7 +66,7 @@ void boxm2_vecf_orbit_param_stats::print_xy_fitting_error(){
              << lp.superior_margin_xy_error_ << ' '
                    << lp.superior_crease_xy_error_ << ' '
              << rp.inferior_margin_xy_error_ << ' '
-                   << rp.superior_margin_xy_error_ << ' ' 
+                   << rp.superior_margin_xy_error_ << ' '
                    << rp.superior_crease_xy_error_ << '\n';
  }
 }
@@ -83,7 +83,7 @@ void boxm2_vecf_orbit_param_stats::print_xyz_fitting_error(){
              << lp.superior_margin_xyz_error_ << ' '
                    << lp.superior_crease_xyz_error_ << ' '
              << rp.inferior_margin_xyz_error_ << ' '
-                   << rp.superior_margin_xyz_error_ << ' ' 
+                   << rp.superior_margin_xyz_error_ << ' '
                    << rp.superior_crease_xyz_error_ << '\n';
  }
 }
@@ -94,7 +94,7 @@ bool boxm2_vecf_orbit_param_stats::merge_margins_and_crease(){
     boxm2_vecf_orbit_params lp = (pit->second).first;
     boxm2_vecf_orbit_params rp = (pit->second).second;
 
-    // plot left eye 
+    // plot left eye
     double xm_min_left = lp.x_min()-10.0;
     double xm_max_left = lp.x_max()+10.0;
     vcl_vector<vgl_point_3d<double> > left_inf_pts, left_sup_pts, left_crease_pts;
@@ -117,7 +117,7 @@ bool boxm2_vecf_orbit_param_stats::merge_margins_and_crease(){
 #endif
     // use sclera-derived z origin and palpebral x-y origin instead
     //vgl_vector_3d<double> vlc(0.0, 0.0, lp.eyelid_radius());
-    // plot right eye 
+    // plot right eye
     double xm_min_right = rp.x_min()-10.0;
     double xm_max_right = rp.x_max()+10.0;
     vcl_vector<vgl_point_3d<double> > right_inf_pts, right_sup_pts, right_crease_pts;

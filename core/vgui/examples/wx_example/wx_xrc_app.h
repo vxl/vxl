@@ -28,7 +28,7 @@ class wx_xrc_app : public wxApp
 
   //: Destructor.
   virtual ~wx_xrc_app() {}
-  
+
   //: Called on app initialization.
   virtual bool OnInit();
 

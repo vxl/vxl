@@ -1,7 +1,7 @@
 # v3p/tiff/test/CMakeLists.txt
 
 # Include the generated headers
-INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR}) 
+INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
 
 #MESSAGE("TIFF_INCLUDE_DIR=${TIFF_INCLUDE_DIR}; TIFF_LIBRARIES=${TIFF_LIBRARIES} ")
 
@@ -14,7 +14,7 @@ TARGET_LINK_LIBRARIES( tiff_long_tag  ${TIFF_LIBRARIES}  )
 ADD_EXECUTABLE( tiff_short_tag short_tag.c check_tag.c )
 TARGET_LINK_LIBRARIES( tiff_short_tag  ${TIFF_LIBRARIES}  )
 
-ADD_EXECUTABLE( tiff_strip_rw strip_rw.c  
+ADD_EXECUTABLE( tiff_strip_rw strip_rw.c
                 strip.c
                 test_arrays.c              test_arrays.h )
 TARGET_LINK_LIBRARIES( tiff_strip_rw  ${TIFF_LIBRARIES} )

@@ -5,7 +5,7 @@
 // \file
 // \brief A class for generating an orthographic edge map
 //        creates an orthographic vpgl_geo_camera first, then renders the edge map using this camera
-//        WARNING: this process assumes that the world is compass-alinged 
+//        WARNING: this process assumes that the world is compass-alinged
 //
 //        -  Inputs:
 //             * bvxm_voxel_world_sptr
@@ -13,7 +13,7 @@
 //        -  Output:
 //             * vil_image_view_base_sptr   generated image
 //
-// \author  Ozge C. Ozcanli 
+// \author  Ozge C. Ozcanli
 // \date    Aug 07, 2013
 // \verbatim
 //  Modifications
@@ -21,7 +21,7 @@
 
 #include <bprb/bprb_func_process.h>
 
-// generate an ortho camera - generate a vpgl_geo_camera for the scene 
+// generate an ortho camera - generate a vpgl_geo_camera for the scene
 //: global variables
 namespace bvxm_create_ortho_camera_process_globals
 {

@@ -42,7 +42,7 @@ bool bvpl_init_global_taylor_process(bprb_func_process& pro)
   //get inputs
   vcl_string taylor_dir = pro.get_input<vcl_string>(0);
   int dim = pro.get_input<int>(1);
- 
+
   switch (dim) {
     case 3:
     {
@@ -62,7 +62,7 @@ bool bvpl_init_global_taylor_process(bprb_func_process& pro)
       break;
   }
 
-  
-  
+
+
   return true;
 }

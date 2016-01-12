@@ -22,8 +22,8 @@ sdet_third_order_edge_det_params(const sdet_third_order_edge_det_params& dp)
 
 sdet_third_order_edge_det_params::
 sdet_third_order_edge_det_params(const double sigma, const double thresh,
-                                 const unsigned interp_factor, 
-                                 const unsigned pfit_type, 
+                                 const unsigned interp_factor,
+                                 const unsigned pfit_type,
                                  const unsigned grad_op,
                                  const unsigned conv_algo,
                                  const bool adapt_thresh)

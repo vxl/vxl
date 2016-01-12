@@ -2,7 +2,7 @@
 // \file
 // \brief Tool to reset a number of shape modes to 0 and save the updated point positions.
 // \author Claudia Lindner
-// Given a model and a set of shape points, selected shape modes are set to 0 and the 
+// Given a model and a set of shape points, selected shape modes are set to 0 and the
 // shape points are updated (excluding the reset modes).
 
 #include <mbl/mbl_read_props.h>
@@ -30,8 +30,8 @@ modes_to_reset: { 5 9 13 14 15 }
 //: Points to read in
 points_dir: /home/points/
 points: {
-  points1.pts 
-  points2.pts 
+  points1.pts
+  points2.pts
 }
 
 //: Updated points to be saved
@@ -101,7 +101,7 @@ void tool_params::read_from_file(const vcl_string& path)
 
   mbl_parse_string_list(props.get_required_property("points"),points_names);
 
-  try 
+  try
   {
     mbl_read_props_look_for_unused_props(
       "::read_from_file", props, mbl_read_props_type());
@@ -137,7 +137,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  // load shape model 
+  // load shape model
   msm_shape_model shape_model;
   if (!vsl_quick_file_load(shape_model,params.shape_model_path))
   {
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
     vcl_string pts_path = params.points_dir+"/"+params.points_names[ifile];
 
     if (!points.read_text_file(pts_path))
-    { 
+    {
       vcl_cerr<<"Failed to load in points from "<<pts_path<<vcl_endl;
       return 7;
     }

@@ -11,10 +11,10 @@ void bsta_histogram<char>::pretty_print(vcl_ostream& os) const
   << "delta: " << (int)delta_ << "\n"
   << "min_prob: " << (int)min_prob_ << "\n"
   << "min: " << (int)min_ << "\n"
-  << "max: " << (int)max_ << "\n" 
+  << "max: " << (int)max_ << "\n"
   << "counts: ";
   for (unsigned i = 0; i < counts_.size() ; i++)
     os << (int)counts_[i] << ' ';
-  
+
 }
 

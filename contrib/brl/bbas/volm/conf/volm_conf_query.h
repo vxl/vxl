@@ -62,7 +62,7 @@ public:
   vcl_vector<vcl_map<vcl_string, volm_conf_object_sptr> >& conf_objects() { return conf_objects_; }
   vcl_vector<vcl_map<vcl_string, vcl_pair<float, float> > >& conf_objects_d_tol() { return conf_objects_d_tol_; }
 
-  //: plot the configuration 
+  //: plot the configuration
   bool visualize_ref_objs(vcl_string const& in_img_file, vcl_string const& out_folder);
   //bool generate_top_views(vcl_string const& out_folder,  vcl_string const& filename_pre = "top_view");
   //: IO

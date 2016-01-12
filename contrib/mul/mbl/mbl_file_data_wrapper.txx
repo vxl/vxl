@@ -22,9 +22,9 @@ mbl_file_data_wrapper<T>::mbl_file_data_wrapper(vcl_string path)
             <<"file stream failed\n";
     vcl_abort();
   }
-  
+
   calc_data_size();
-  
+
   if ( size() > 0 )
     reset();
 }

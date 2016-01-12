@@ -8,8 +8,8 @@
 //
 // \verbatim
 //  Modifications
-//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature 
-//      based on point location alone 
+//   Chuck Stewart - 8 Nov 2005 - added versions of nearest_feature and k_nearest_feature
+//      based on point location alone
 // \endverbatim
 
 #include <vcl_vector.h>
@@ -39,7 +39,7 @@ class rgrl_feature_set_label
   //: return name
   vcl_string const& name() const
   { return name_; }
-  
+
   //:
   bool operator==( rgrl_feature_set_label const& other ) const;
 
@@ -71,11 +71,11 @@ class rgrl_feature_set
   //: set label
   void set_label( rgrl_feature_set_label const& label )
   { label_ = label; }
-  
+
   //: get label
   rgrl_feature_set_label const& label() const
   { return label_; }
-  
+
   //:  Return all the features
   //
   virtual

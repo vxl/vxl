@@ -23,11 +23,9 @@
 #include <vipl/filter/vipl_filter.txx>
 
 #include <vipl/accessors/vipl_accessors_vcl_vector.txx>
-#include <vipl/accessors/vipl_accessors_vil1_image.txx>
 #include <vipl/accessors/vipl_accessors_vil_image_view.txx>
 
 #include <vipl/section/vipl_filterable_section_container_generator_vcl_vector.txx>
-#include <vipl/section/vipl_filterable_section_container_generator_vil1_image.txx>
 #include <vipl/section/vipl_filterable_section_container_generator_vil_image_view.txx>
 #include <vipl/section/vipl_section_container.txx>
 #include <vipl/section/vipl_section_descriptor_2d.txx>

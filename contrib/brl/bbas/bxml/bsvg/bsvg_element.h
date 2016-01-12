@@ -1,4 +1,4 @@
-#ifndef bsvg_element_h_ 
+#ifndef bsvg_element_h_
 #define bsvg_element_h_
 //:
 // \file
@@ -6,7 +6,7 @@
 //
 //           files created in svg format may be rendered by any web browser.
 //
-//           So far, added basic shapes: rectangle, line, ellipse, polyline. 
+//           So far, added basic shapes: rectangle, line, ellipse, polyline.
 //           Other shapes supported by SVG can also be added such as polygon etc. Just subclass from bsvg_element class and write a constructor.
 //
 // \author Ozge C. Ozcanli (Brown)
@@ -96,7 +96,7 @@ class bsvg_polyline : public bsvg_element
 //  when long_arc = true plots the arc (end_angle, start_angle) (so goes the other way around the circle)
 class bsvg_splice : public bsvg_group
 {
- public: 
+ public:
   bsvg_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, bool long_arc = false);
 };
 

@@ -135,25 +135,25 @@ set_input_string(PyObject * /*self*/, PyObject *args)
 }
 
 PyObject *set_input_string_array(PyObject * /*self*/, PyObject *args){
-	int input;
-	PyObject *list;
-	if(!PyArg_ParseTuple(args, "iO:set_input_string_array", &input, &list))
-		return NULL;
+        int input;
+        PyObject *list;
+        if(!PyArg_ParseTuple(args, "iO:set_input_string_array", &input, &list))
+                return NULL;
 
-	if(!PyList_Check(list))
-		return Py_BuildValue("b", false);
+        if(!PyList_Check(list))
+                return Py_BuildValue("b", false);
 
-	unsigned int length=PyList_GET_SIZE(list);
+        unsigned int length=PyList_GET_SIZE(list);
 
-	bbas_1d_array_string_sptr sarray = new bbas_1d_array_string(length);
-	for(unsigned i = 0; i < length; ++i){
-		PyObject *obj = PyList_GetItem(list,i);
-		vcl_string s = static_cast<vcl_string>(PyString_AsString(obj));
-		sarray->data_array[i] = s;
-	}
-	brdb_value_sptr v = new brdb_value_t<bbas_1d_array_string_sptr>(sarray);
-	bool result = bprb_batch_process_manager::instance()->set_input(input,v);
-	return Py_BuildValue("b", result);
+        bbas_1d_array_string_sptr sarray = new bbas_1d_array_string(length);
+        for(unsigned i = 0; i < length; ++i){
+                PyObject *obj = PyList_GetItem(list,i);
+                vcl_string s = static_cast<vcl_string>(PyString_AsString(obj));
+                sarray->data_array[i] = s;
+        }
+        brdb_value_sptr v = new brdb_value_t<bbas_1d_array_string_sptr>(sarray);
+        bool result = bprb_batch_process_manager::instance()->set_input(input,v);
+        return Py_BuildValue("b", result);
 }
 
 PyObject *set_input_unsigned(PyObject * /*self*/, PyObject *args)

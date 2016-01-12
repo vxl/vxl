@@ -375,7 +375,7 @@ int main(int argc, char** argv)
     double x, y;
     vpgl_utm utm;
     utm.transform(samples[gt_id()].first.y(), samples[gt_id()].first.x(), x, y, gt_utm_id);
-    
+
     vcl_vector<volm_tile> tiles;
     if (samples[gt_id()].second.second == "desert")
       tiles = volm_tile::generate_p1_wr1_tiles();

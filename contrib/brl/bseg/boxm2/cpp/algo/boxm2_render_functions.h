@@ -17,7 +17,7 @@ void boxm2_render_expected_image( boxm2_scene_info * linfo,
                                   unsigned int roi_ni,
                                   unsigned int roi_nj,
                                   unsigned int roi_ni0=0,
-                                  unsigned int roi_nj0=0, vcl_string data_type = "boxm2_mog3_grey"); 
+                                  unsigned int roi_nj0=0, vcl_string data_type = "boxm2_mog3_grey");
 
 void boxm2_render_cone_exp_image(boxm2_scene_info * linfo,
                                 boxm2_block * blk_sptr,
@@ -28,7 +28,7 @@ void boxm2_render_cone_exp_image(boxm2_scene_info * linfo,
                                 unsigned int roi_ni,
                                 unsigned int roi_nj,
                                 unsigned int roi_ni0=0,
-                                unsigned int roi_nj0=0); 
+                                unsigned int roi_nj0=0);
 
 void boxm2_render_expected_depth( boxm2_scene_info * linfo,
                                   boxm2_block * blk_sptr,
@@ -40,7 +40,7 @@ void boxm2_render_expected_depth( boxm2_scene_info * linfo,
                                   unsigned int roi_ni,
                                   unsigned int roi_nj,
                                   unsigned int roi_ni0=0,
-                                  unsigned int roi_nj0=0); 
+                                  unsigned int roi_nj0=0);
 
 void boxm2_render_depth_of_max_prob( boxm2_scene_info * linfo,
                                      boxm2_block * blk_sptr,
@@ -52,7 +52,7 @@ void boxm2_render_depth_of_max_prob( boxm2_scene_info * linfo,
                                      unsigned int roi_ni,
                                      unsigned int roi_nj,
                                      unsigned int roi_ni0=0,
-                                     unsigned int roi_nj0=0); 
+                                     unsigned int roi_nj0=0);
 
 
 #endif  //boxm2_render_functions_h_

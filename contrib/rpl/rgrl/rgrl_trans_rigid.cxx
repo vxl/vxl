@@ -64,7 +64,7 @@ void rgrl_trans_rigid::set_translation(double tx, double ty)
 void rgrl_trans_rigid::set_rotation(double theta, double alpha, double phi)
 {
   assert ( trans_.size() == 3);
-	rgrl_rotation_3d_to_matrix(theta, alpha, phi, R_);
+        rgrl_rotation_3d_to_matrix(theta, alpha, phi, R_);
 }
 
 void rgrl_trans_rigid::set_rotation(double theta)
@@ -77,7 +77,7 @@ void rgrl_trans_rigid::set_rotation(double theta)
 void rgrl_trans_rigid::determine_angles(double& phi, double& alpha, double& theta) const
 {
   assert (trans_.size() == 3);
-	rgrl_rotation_3d_from_matrix(R_, phi, alpha, theta);
+        rgrl_rotation_3d_from_matrix(R_, phi, alpha, theta);
 }
 
 void rgrl_trans_rigid::determine_angles( double& theta ) const
@@ -201,7 +201,7 @@ inv_map( const vnl_vector<double>& to,
   from = svd.inverse()*to - svd.inverse()*trans_;
 }
 
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_rigid::
 inverse_transform( ) const
 {
@@ -223,7 +223,7 @@ rgrl_transformation_sptr
 rgrl_trans_rigid::
 scale_by( double scale ) const
 {
-  rgrl_transformation_sptr xform 
+  rgrl_transformation_sptr xform
     = new rgrl_trans_rigid( R_, trans_ * scale,
                             covar_ );
   xform->set_scaling_factors( this->scaling_factors() );
@@ -276,7 +276,7 @@ read( vcl_istream& is )
 }
 
 //: make a clone copy
-rgrl_transformation_sptr 
+rgrl_transformation_sptr
 rgrl_trans_rigid::
 clone() const
 {

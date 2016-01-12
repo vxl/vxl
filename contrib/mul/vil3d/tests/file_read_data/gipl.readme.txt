@@ -6,7 +6,7 @@ to 1000 and the background set to zero. I used to use this to check that my
 display software gets the 'half voxel' display position right. The standard
 origin for a gipl is the centre of the image, i.e. the centre of the cross.
 
-One other thing to bear in mind is that the byte order for gipl data is 
+One other thing to bear in mind is that the byte order for gipl data is
 always
 big endian.
 

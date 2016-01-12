@@ -42,15 +42,15 @@ void bvpl_edge_algebraic_mean_functor<T>::apply(T& val, bvpl_kernel_dispatch& d)
 template <class T>
 T bvpl_edge_algebraic_mean_functor<T>::result()
 {
-  
+
   P0_/=(T)n0_;
   P1_/=(T)n1_;
-  
+
   T result = P0_*P1_;
-  
+
   //reset all variables
   init();
-  
+
   return result;
 }
 

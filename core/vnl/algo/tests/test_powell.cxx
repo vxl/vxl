@@ -18,16 +18,16 @@
 //-------------------------------------------------------------------------
 // nD quadratic function with minimum at min{x[i]} = i;
 //-------------------------------------------------------------------------
-class vnl_test_powell_quadratic : public vnl_cost_function 
+class vnl_test_powell_quadratic : public vnl_cost_function
 {
  public:
   vnl_test_powell_quadratic(int n) : vnl_cost_function(n) {}
 
-  double f(const vnl_vector<double>& x) 
+  double f(const vnl_vector<double>& x)
   {
     assert((int)x.size()==dim);
     double sum = 0;
-    for (unsigned int i=0; i<x.size(); ++i) 
+    for (unsigned int i=0; i<x.size(); ++i)
       sum += (x[i]-i)*(x[i]-i);
     return sum;
   }
@@ -43,14 +43,14 @@ class vnl_test_powell_rosenbrock : public vnl_cost_function
  public:
   vnl_test_powell_rosenbrock() : vnl_cost_function(2) {}
 
-  double f(const vnl_vector<double>& x) 
+  double f(const vnl_vector<double>& x)
   {
     double a = 10*(x[1] - x[0]*x[0]);
     double b = 1 - x[0];
     return a*a + b*b;
   }
 
-  void gradf(const vnl_vector<double>& x, vnl_vector<double>& g) 
+  void gradf(const vnl_vector<double>& x, vnl_vector<double>& g)
   {
     double a = 10*(x[1] - x[0]*x[0]);
     double b = 1 - x[0];

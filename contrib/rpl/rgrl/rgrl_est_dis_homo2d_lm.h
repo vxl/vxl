@@ -13,7 +13,7 @@
 //
 //  NOTE:
 //    1. assume error projector has all eigen-values as one
-// 
+//
 class rgrl_est_dis_homo2d_lm
   : public rgrl_nonlinear_estimator
 {
@@ -49,16 +49,16 @@ public:
   //: change frome_centre
   void set_centres( vnl_vector<double> const& from_centre,
                     vnl_vector<double> const& to_centre );
-  
+
   //: to use analytical gradients or not
   void use_gradient( bool use_grad )
   { with_grad_ = use_grad; }
-  
+
 private:
 
   vnl_double_2 from_centre_, to_centre_;
-  
+
   bool with_grad_;
 };
 
-#endif 
+#endif

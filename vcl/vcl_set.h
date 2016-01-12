@@ -8,20 +8,11 @@
 #include "vcl_functional.h"
 
 // -------------------- emulation
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_set.h"
-# include "emulation/vcl_multiset.h"
-
-// -------------------- iso
-#else
-# include "iso/vcl_set.h"
-#endif
+#include "iso/vcl_set.h"
 
 #define VCL_SET_INSTANTIATE extern "you must include vcl_set.txx first"
 #define VCL_MULTISET_INSTANTIATE extern "you must include vcl_set.txx first"
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "vcl_set.txx"
-#endif
+#include "vcl_set.txx"
 
 #endif // vcl_set_h_

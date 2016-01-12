@@ -2,7 +2,7 @@ ADD_EXECUTABLE( boxm2_vecf_ocl_test_all
   test_driver.cxx
   test_transform.cxx
   test_store_nbrs.cxx
-  test_filter.cxx	
+  test_filter.cxx
  )
 
 

@@ -12,7 +12,7 @@ volm_osm_objects::volm_osm_objects(vcl_string const& osm_file, vcl_string const&
   vcl_map<vcl_pair<vcl_string, vcl_string>, volm_land_layer> osm_land_table;
   volm_osm_category_io::load_category_table(osm_to_volm_file, osm_land_table);
 
-  // load all open street map objects from 
+  // load all open street map objects from
   vcl_vector<vgl_point_2d<double> > osm_pts;
   vcl_vector<vcl_vector<vcl_pair<vcl_string, vcl_string> > > osm_pt_keys;
   volm_osm_parser::parse_points(osm_pts, osm_pt_keys, osm_file);
@@ -206,7 +206,7 @@ bool volm_osm_objects::write_lines_to_kml(vcl_string const& kml_file)
 {
   vcl_ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
-  
+
   // write the roads into kml
   unsigned cnt = 0;
   for (vcl_vector<volm_osm_object_line_sptr>::iterator vit = loc_lines_.begin(); vit != loc_lines_.end(); ++vit)

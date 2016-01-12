@@ -16,14 +16,14 @@ geometric_error( rgrl_feature const& other ) const
   return (this->location() - other.location()).pre_multiply( this->error_projector_sqrt() ).two_norm();
 }
 
-double 
+double
 rgrl_feature::
 geometric_error( rgrl_transformation const& xform, rgrl_feature const& other ) const
-{ 
+{
   vnl_vector<double> mapped;
   return (this->location() - other.location()).pre_multiply( this->error_projector_sqrt() ).two_norm();
 }
-  
+
 
 vnl_vector<double>
 rgrl_feature::

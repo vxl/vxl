@@ -50,7 +50,7 @@ const msm_points& msdi_points_subset::points()
   if (!points_ok_)
   {
     // Get subset
-    for (size_t i=0;i<index_.size();++i) 
+    for (size_t i=0;i<index_.size();++i)
       points_.set_point(i,marked_images_.points()[index_[i]]);
     points_ok_=true;
   }

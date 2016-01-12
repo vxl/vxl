@@ -106,7 +106,7 @@ bool boxm2_stream_cache_close_files_process_cons(bprb_func_process& pro)
   //process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_stream_cache_sptr";
-  
+
   // process has 0 output:
   vcl_vector<vcl_string>  output_types_(n_outputs_);
 

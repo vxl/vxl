@@ -90,7 +90,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
 
 void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, bool is_scale_x, float stroke_width)
 {
-  if (is_scale_x) 
+  if (is_scale_x)
     this->add_axes(x_min, x_max, y_min, y_max, stroke_width);
   else {
     float height_y = y_max - y_min;
@@ -169,7 +169,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     a2->set_stroke_color("black");
     this->add_element(a2);
   }
-  
+
 }
 
 void bsvg_plot::add_title(const vcl_string& t)

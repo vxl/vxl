@@ -61,7 +61,7 @@ void vil3d_grad_1x3_1plane(const vil3d_image_view<vxl_byte>& src_im,
   const vcl_ptrdiff_t gri_istep = grad_i.istep();
   const vcl_ptrdiff_t grj_istep = grad_j.istep();
   const vcl_ptrdiff_t grk_istep = grad_j.istep();
-  
+
   for (unsigned k=1;k<nk1;++k)
   {
     for (unsigned j=1;j<nj1;++j)

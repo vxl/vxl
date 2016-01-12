@@ -11,14 +11,14 @@
 //: initialization
 bool vpgl_convert_local_to_global_coordinates_array_process_cons(bprb_func_process& pro)
 {
-  //this process takes four inputs: 
+  //this process takes four inputs:
   // 0: (vpgl_lvcs) lvcs
   // 1: (double)  latitude
   // 2: (double)  longitude
   // 3: (double)  elevation
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vpgl_lvcs_sptr"); 
+  input_types.push_back("vpgl_lvcs_sptr");
   input_types.push_back("bbas_1d_array_double_sptr");
   input_types.push_back("bbas_1d_array_double_sptr");
   input_types.push_back("bbas_1d_array_double_sptr");
@@ -30,12 +30,12 @@ bool vpgl_convert_local_to_global_coordinates_array_process_cons(bprb_func_proce
   // 1: (double) y
   // 2: (double) z
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("bbas_1d_array_double_sptr");  
-  output_types.push_back("bbas_1d_array_double_sptr");  
-  output_types.push_back("bbas_1d_array_double_sptr");  
+  output_types.push_back("bbas_1d_array_double_sptr");
+  output_types.push_back("bbas_1d_array_double_sptr");
+  output_types.push_back("bbas_1d_array_double_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
+
   return true;
 
 }
@@ -54,7 +54,7 @@ bool vpgl_convert_local_to_global_coordinates_array_process(bprb_func_process& p
   bbas_1d_array_double_sptr y_lat_sptr = pro.get_input<bbas_1d_array_double_sptr>(2);
   bbas_1d_array_double_sptr z_alt_sptr = pro.get_input<bbas_1d_array_double_sptr>(3);
 
-  if(x_lon_sptr->data_array.size() != y_lat_sptr->data_array.size() || 
+  if(x_lon_sptr->data_array.size() != y_lat_sptr->data_array.size() ||
      x_lon_sptr->data_array.size() != z_alt_sptr->data_array.size())
     return false;
 
@@ -69,7 +69,7 @@ bool vpgl_convert_local_to_global_coordinates_array_process(bprb_func_process& p
                           *x_lon_it, *y_lat_it, *z_alt_it,
                           vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   }
- 
+
   pro.set_output_val<bbas_1d_array_double_sptr>(0, y_lat_sptr);
   pro.set_output_val<bbas_1d_array_double_sptr>(1, x_lon_sptr);
   pro.set_output_val<bbas_1d_array_double_sptr>(2, z_alt_sptr);

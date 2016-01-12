@@ -609,7 +609,7 @@ bool bgui_image_tableau::handle(vgui_event const &e)
     if(e.button == vgui_LEFT && capture_mouse_){
       vgui_projection_inspector p_insp;
       p_insp.window_to_image_coordinates(e.wx, e.wy, mouse_pos_[0],
-					 mouse_pos_[1]);
+                                         mouse_pos_[1]);
     }
   }
   else if (e.type == vgui_BUTTON_UP)

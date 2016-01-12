@@ -226,7 +226,7 @@ class vnl_bignum
   inline vnl_bignum abs() const { return operator<(0L) ? operator-() : *this; }
 
   // "+/-Inf" is represented as: count=1, data[0]=0, sign=+/-1 :
-  inline bool is_infinity() const { return count==1 && data[0]==0; }
+  inline bool is_infinity() const { return count==1 && data && data[0]==0; }
   inline bool is_plus_infinity() const { return is_infinity() && sign==1; }
   inline bool is_minus_infinity() const { return is_infinity() && sign==-1; }
 

@@ -36,7 +36,7 @@ void  mmn_parse_arcs(vcl_istream& is,
     {
         throw mbl_exception_parse_error("Expected '{' in mmn_parse_arcs");
     }
-  
+
     arcs.clear();
     vcl_string arcLabel("arc:");
     //Loop over each arc in the stream
@@ -44,7 +44,7 @@ void  mmn_parse_arcs(vcl_istream& is,
     {
         //Locate the next "arc:" keyword
         if(vcl_find(vcl_istream_iterator<vcl_string>(ss),
-                    vcl_istream_iterator<vcl_string>(),arcLabel) == 
+                    vcl_istream_iterator<vcl_string>(),arcLabel) ==
            vcl_istream_iterator<vcl_string>())
         {
             //No more arc: labels to be processed
@@ -104,7 +104,7 @@ void  mmn_parse_arcs(vcl_istream& is,
             error_msg+= strNodePair;
             throw mbl_exception_parse_error(error_msg);
         }
-        
+
         //Finally add the arc
         arcs.push_back(mmn_arc(nodeIter1->second,nodeIter2->second));
 

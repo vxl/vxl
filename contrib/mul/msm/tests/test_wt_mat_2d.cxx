@@ -45,7 +45,7 @@ void test_wt_mat_2d()
   RtMR=R.transpose()*M*R;
   msm_wt_mat_2d W3=W2.transform_by(a,b);
   TEST("Rt*W*R",W3==msm_wt_mat_2d(RtMR(0,0),RtMR(0,1),RtMR(1,1)),true);
-  
+
 }
 
 TESTMAIN(test_wt_mat_2d);

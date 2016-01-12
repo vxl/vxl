@@ -61,7 +61,7 @@ bool vpgl_export_cameras_to_nvm_process(bprb_func_process& pro)
                 *cams[k]->get_calibration().x_scale();
       vnl_quaternion<double> q = cams[k]->get_rotation().as_quaternion();
       vgl_point_3d<double> cc = cams[k]->get_camera_center();
-      
+
       ofile<<img_iter()<<" "<<f<<" "<<q.r()<<" "<<q.x()<<" "<<q.y()<<" "<<q.z()<<" "<<cc.x()<<" "<<cc.y()<<" "<<cc.z()<<" "<<0<<" "<<0<<vcl_endl;
 
       ++img_iter;

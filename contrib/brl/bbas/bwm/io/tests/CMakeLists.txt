@@ -1,6 +1,6 @@
 ADD_EXECUTABLE( bwm_io_test_all
                 test_driver.cxx
-		test_kml_parser.cxx
+                test_kml_parser.cxx
               )
 TARGET_LINK_LIBRARIES(bwm_io_test_all bwm_io testlib)
 

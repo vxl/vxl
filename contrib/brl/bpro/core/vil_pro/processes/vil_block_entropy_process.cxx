@@ -47,7 +47,7 @@ bool vil_block_entropy_process(bprb_func_process& pro)
   //float sigma = 1.0f;
   float sigma = 0.01f;
   vil_image_view<float> out_img = brip_vil_float_ops::entropy(size, size, 1, image_res, sigma, bins, true, false, false);
-  
+
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out_img));
   return true;
 }

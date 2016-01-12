@@ -126,7 +126,7 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
     vcl_cout << "!!!!!!! enforce to have at least 2 existing images!\n";
   else
     vcl_cout << "!!!!!!! DO NOT enforce to have at least 2 existing images!\n";
-  
+
   vgl_box_2d<double> overlap_region(lower_left_lon, upper_right_lon, lower_left_lat, upper_right_lat);
   if (overlap_region.is_empty()) {
     vcl_cerr << pro.name() << ": the pre-defined overlap region is empty!!\n";
@@ -172,7 +172,7 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
   }
   ifs.close();
 
-  // print out 
+  // print out
   for (unsigned i = 0; i < in_cam_files.size(); i++)
   {
     vcl_cout << "============ " << i << " ============" << vcl_endl;
@@ -308,8 +308,8 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
     for (unsigned i = 0; i < corrs_i.size(); i++) {
         vcl_cout << "[" << corrs_i[i].x() << "," << corrs_i[i].y() << "]\t";
     }
-    vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y() 
-                                                         << "," << vcl_setprecision(12) << intersection.x() 
+    vcl_cout << " --> project to 3D intersection point: [" << vcl_setprecision(12) << intersection.y()
+                                                         << "," << vcl_setprecision(12) << intersection.x()
                                                          << "," << vcl_setprecision(12) << intersection.z()
                                                          << "], giving offset: ";
     vcl_cout << " --> camera translation: ";
@@ -406,7 +406,7 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
 #if 0
   vcl_cout << " after refinement: \n";
   for (unsigned i = 0; i < intersections.size(); i++)
-    vcl_cout << "after adjustment 3D intersection point: " << intersections[i].y() << "," << intersections[i].x() 
+    vcl_cout << "after adjustment 3D intersection point: " << intersections[i].y() << "," << intersections[i].x()
                                                            << "," << intersections[i].z()
                                                            << vcl_endl;
 #endif
@@ -590,7 +590,7 @@ bool vpgl_isfm_rational_camera_seed_process_globals::find_min_max_height(double 
     int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
     int crop_nj = corners[2].second.second-corners[0].second.second+1;
     vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = 0;
     j0 = corners[3].second.second;
@@ -605,12 +605,12 @@ bool vpgl_isfm_rational_camera_seed_process_globals::find_min_max_height(double 
     int i0 = corners[0].second.first;
     int j0 = corners[0].second.second;
     int crop_ni = corners[3].second.first - corners[0].second.first + 1;
-    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second; 
+    int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
     vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-    
+
     // crop the second image
     i0 = corners[2].second.first;
-    j0 = 0; 
+    j0 = 0;
     crop_ni = corners[1].second.first - corners[2].second.first + 1;
     crop_nj = corners[2].second.second + 1;
     vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
@@ -623,21 +623,21 @@ bool vpgl_isfm_rational_camera_seed_process_globals::find_min_max_height(double 
   int crop_ni = infos[corners[0].first].first->ni() - corners[0].second.first;
   int crop_nj = infos[corners[0].first].first->nj() - corners[0].second.second;
   vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(infos, corners[0].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the second image, image of corner 1
   i0 = 0;
   j0 = 0;
   crop_ni = corners[1].second.first + 1;
   crop_nj = corners[1].second.second + 1;
   vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(infos, corners[1].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the third image, image of corner 2
   i0 = corners[2].second.first;
   j0 = 0;
   crop_ni = infos[corners[2].first].first->ni() - corners[2].second.first;
   crop_nj = corners[2].second.second + 1;
   vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(infos, corners[2].first, i0, j0, crop_ni, crop_nj, min, max);
-  
+
   // crop the fourth image, image of corner 3
   i0 = 0;
   j0 = corners[3].second.second;

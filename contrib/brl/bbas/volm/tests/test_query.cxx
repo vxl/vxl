@@ -86,7 +86,7 @@ static void test_query()
   float dmax = 3000.0f;
   float solid_angle = 2.0f;
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle, vmin, dmax);
-  
+
   // create spherical shell container
   float cap_angle = 180;
   float point_angle = 5;

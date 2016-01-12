@@ -5,8 +5,8 @@
   1. Select the face to be extruded
   2. Choose "Extrude" from pop up menu
   3. Use Shift + Right Mouse
- 
--Move in the camera direction: 
+
+-Move in the camera direction:
   1. Select one of the faces of the object
   2. Use Shift + Left Mouse
 

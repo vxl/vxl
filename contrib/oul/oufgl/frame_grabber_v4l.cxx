@@ -23,7 +23,7 @@
 #include <vcl_cstdlib.h> // for exit()
 #include <vcl_cstdio.h>
 
-FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_, 
+FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
                                          bool debug_, char *devname)
   : current(0), width(width_), height(height_), debug(debug_)
 {
@@ -145,10 +145,10 @@ void FrameGrabberV4lGrey::acquire_frame_synch()
   aio->wait_for_completion();
 
   // Alessandro reckons the following is needed for compatibility with
-  // >0.28 versions of the driver, but it seems to work fine without it. 
+  // >0.28 versions of the driver, but it seems to work fine without it.
 
-  struct Px_BufControl bufcontrol; 
-  ioctl(aio->getFd(), PX_IOCINFOBUF, &bufcontrol); 
+  struct Px_BufControl bufcontrol;
+  ioctl(aio->getFd(), PX_IOCINFOBUF, &bufcontrol);
   ioctl(aio->getFd(), PX_IOCDONEBUF, &bufcontrol);
 
   flip_current();
@@ -230,7 +230,7 @@ void FrameGrabberV4lGrey::flip_current()
   int length = im[current]->width()*sizeof(ImageContents);
   int width = im[current]->width();
   int height = im[current]->height();
-  ImageContents *temp_mem = new ImageContents[im[current]->width()]; 
+  ImageContents *temp_mem = new ImageContents[im[current]->width()];
   for (int i=0; i<limit; i++)
   {
     vcl_memcpy(temp_mem, contents[current]+i*width, length);

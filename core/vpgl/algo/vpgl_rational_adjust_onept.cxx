@@ -76,7 +76,7 @@ scatter_var(vcl_vector<vpgl_rational_camera<double> > const& cams,
     pb_pts.push_back(pb_pt);
   }
   double weight_sum = 0.0;
-  for (unsigned i = 0; i < n; i++) 
+  for (unsigned i = 0; i < n; i++)
   {
     double x = pb_pts[i].x(), y = pb_pts[i].y();
     xm+=cam_weights[i]*x; ym +=cam_weights[i]*y;
@@ -319,7 +319,7 @@ adjust(vcl_vector<vpgl_rational_camera<double> > const& cams,
 
 // pass a weight for each camera, the weights should add up to 1.0
 bool vpgl_rational_adjust_onept::
-  adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams, 
+  adjust_with_weights(vcl_vector<vpgl_rational_camera<double> > const& cams,
                       vcl_vector<float> weights,
                       vcl_vector<vgl_point_2d<double> > const& corrs,
                       vcl_vector<vgl_vector_2d<double> >& cam_translations,

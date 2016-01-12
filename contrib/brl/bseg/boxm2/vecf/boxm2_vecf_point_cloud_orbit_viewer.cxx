@@ -89,7 +89,7 @@ bool boxm2_vecf_point_cloud_orbit_viewer::save_point_cloud(vcl_string const& pc_
   if(!ostr){
     vcl_cout << "invalid point clould path " << pc_path << '\n';
     return false;
-  }    
+  }
   for(vcl_vector<cpoint>::const_iterator pit = pc_.begin();
       pit != pc_.end(); ++pit){
     const cpoint& p = (*pit);

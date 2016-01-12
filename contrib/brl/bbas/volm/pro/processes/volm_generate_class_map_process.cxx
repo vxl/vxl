@@ -44,9 +44,9 @@ bool volm_generate_class_map_process(bprb_func_process& pro)
   sdet_color_map[vcl_pair<vxl_byte, vcl_pair<vxl_byte, vxl_byte> >(191, vcl_pair<vxl_byte, vxl_byte>(184, 98))] = 31; // "road";
   sdet_color_map[vcl_pair<vxl_byte, vcl_pair<vxl_byte, vxl_byte> >(225, vcl_pair<vxl_byte, vxl_byte>(36, 147))] = 0; // "invalid"; // actually shadow in sdet
   sdet_color_map[vcl_pair<vxl_byte, vcl_pair<vxl_byte, vxl_byte> >(116, vcl_pair<vxl_byte, vxl_byte>(45, 119))] = 31; //"road"; // actually street in sdet
-  sdet_color_map[vcl_pair<vxl_byte, vcl_pair<vxl_byte, vxl_byte> >(41, vcl_pair<vxl_byte, vxl_byte>(234, 166))] = 243; //"tree"; 
-  
-  for (unsigned i = 0; i < img.ni(); i++) 
+  sdet_color_map[vcl_pair<vxl_byte, vcl_pair<vxl_byte, vxl_byte> >(41, vcl_pair<vxl_byte, vxl_byte>(234, 166))] = 243; //"tree";
+
+  for (unsigned i = 0; i < img.ni(); i++)
     for (unsigned j = 0; j < img.nj(); j++) {
       vcl_pair<vxl_byte, vcl_pair<vxl_byte, vxl_byte> > pp(img(i,j).r, vcl_pair<vxl_byte, vxl_byte>(img(i,j).g, img(i,j).b));
       vcl_map<vcl_pair<vxl_byte, vcl_pair<vxl_byte, vxl_byte> >, unsigned short>::iterator iter = sdet_color_map.find(pp);
@@ -55,8 +55,8 @@ bool volm_generate_class_map_process(bprb_func_process& pro)
       else
         out_img(i, j) = 0;  // map to invalid if undefined
     }
-    
-  
+
+
 
   vil_image_view_base_sptr out_img_sptr = new vil_image_view<unsigned short>(out_img);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_sptr);
@@ -106,7 +106,7 @@ bool volm_generate_color_class_map_process(bprb_func_process& pro)
       ifs >> cat_name;
     }
   }
-  
+
   for (unsigned i = 0; i < img.ni(); i++)
     for (unsigned j = 0; j < img.nj(); j++) {
       vcl_map<unsigned char, vil_rgb<vxl_byte> >::iterator mit = sdet_color_map.find(img(i,j));

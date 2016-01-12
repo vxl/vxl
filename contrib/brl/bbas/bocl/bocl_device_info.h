@@ -6,6 +6,10 @@
 // \author Andrew Miller acm@computervisiongroup.com
 // \date  Jan 25, 2011
 //
+// \verbatim
+//  Modifications
+//   Yi Dong Dec, 2015 -- enlarge array size to avoid CL_DEVICE_EXTENSIONS query failure
+// \endverbatim
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 #include <vcl_string.h>
@@ -33,18 +37,18 @@ class bocl_device_info
     bocl_device_info() {}
     bocl_device_info(cl_device_id* device);
     ~bocl_device_info();
-  
+
     //:Store a pointer to the cl_device_id
-    cl_device_id* device_; 
-  
+    cl_device_id* device_;
+
     //: device info
-    vcl_string device_name_; 
-    vcl_string device_vendor_; 
-    vcl_string extensions_supported_; 
-    vcl_string platform_name_; 
+    vcl_string device_name_;
+    vcl_string device_vendor_;
+    vcl_string extensions_supported_;
+    vcl_string platform_name_;
     vcl_string platform_version_;
-    vcl_string driver_version_; 
-    cl_device_type device_type_; 
+    vcl_string driver_version_;
+    cl_device_type device_type_;
     cl_uint addr_bits_;                     //!< Device Address Bits (pointer size)
     vcl_size_t max_work_group_size_;        //!< Max allowed work-items in a group
     cl_uint max_dimensions_;                //!< Max group dimensions allowed
@@ -63,10 +67,10 @@ class bocl_device_info
     vcl_size_t image3d_max_width_;          //!< Image3d Max Width
     vcl_size_t image3d_max_height_;         //!< Image3d Max Height
     vcl_size_t image3d_max_depth_;          //!< Image3d Max Depth
-    
-    
+
+
     //NVIDIA Specific Properties
-    bool is_nvidia_device_; 
+    bool is_nvidia_device_;
     cl_uint compute_capability_major_, compute_capability_minor_;
     cl_uint regs_per_block_;
     cl_uint warp_size_;

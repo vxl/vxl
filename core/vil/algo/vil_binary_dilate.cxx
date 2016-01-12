@@ -11,7 +11,7 @@ void vil_binary_dilate(const vil_image_view<bool>& src_image,
                        vil_image_view<bool>& dest_image,
                        const vil_structuring_element& element)
 {
-  vil_binary_dilate(src_image, dest_image, element, 
+  vil_binary_dilate(src_image, dest_image, element,
                     vil_border_create_constant(src_image, false));
 }
 

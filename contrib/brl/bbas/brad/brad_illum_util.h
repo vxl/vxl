@@ -104,8 +104,8 @@ void brad_display_illumination_space_vrml(vnl_matrix<double> illum_dirs,
                                           vnl_double_3(0,0,0));
 
 double brad_expected_radiance_chavez(double reflectance,
-                                     vgl_vector_3d<double> const& normal, 
-                                     brad_image_metadata const& md, 
+                                     vgl_vector_3d<double> const& normal,
+                                     brad_image_metadata const& md,
                                      brad_atmospheric_parameters const& atm);
 
 double brad_expected_radiance_chavez(double reflectance,

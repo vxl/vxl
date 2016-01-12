@@ -1,8 +1,8 @@
 /*
  * geo_names.c
  *
- *  This encapsulates all of the value-naming mechanism of 
- *  libgeotiff. 
+ *  This encapsulates all of the value-naming mechanism of
+ *  libgeotiff.
  *
  *  Written By: Niles Ritter
  */
@@ -38,13 +38,13 @@ static KeyInfo _tagInfo[] =  {
 static char *FindName(KeyInfo *info,int key)
 {
    static char errmsg[80];
-   
+
    while (info->ki_key>=0 && info->ki_key != key) info++;
 
    if (info->ki_key<0)
    {
-	   sprintf(errmsg,"Unknown-%d", key );
-	   return errmsg;
+           sprintf(errmsg,"Unknown-%d", key );
+           return errmsg;
    }
    return info->ki_name;
 }
@@ -67,38 +67,38 @@ char *GTIFTagName(int tag)
 char *GTIFValueName(geokey_t key, int value)
 {
    KeyInfo *info;
-   
+
    switch (key)
    {
-	/* All codes using linear/angular/whatever units */
-	case GeogLinearUnitsGeoKey: 
-	case ProjLinearUnitsGeoKey: 
-	case GeogAngularUnitsGeoKey: 
-	case GeogAzimuthUnitsGeoKey: 
-		                      info=_geounitsValue; break;
+        /* All codes using linear/angular/whatever units */
+        case GeogLinearUnitsGeoKey:
+        case ProjLinearUnitsGeoKey:
+        case GeogAngularUnitsGeoKey:
+        case GeogAzimuthUnitsGeoKey:
+                                      info=_geounitsValue; break;
 
-   	/* put other key-dependent lists here */
-	case GTModelTypeGeoKey:       info=_modeltypeValue; break;
-	case GTRasterTypeGeoKey:      info=_rastertypeValue; break;
-	case GeographicTypeGeoKey:    info=_geographicValue; break;
-	case GeogGeodeticDatumGeoKey: info=_geodeticdatumValue; break;
-	case GeogEllipsoidGeoKey:     info=_ellipsoidValue; break;
-	case GeogPrimeMeridianGeoKey: info=_primemeridianValue; break;
-	case ProjectedCSTypeGeoKey:   info=_pcstypeValue; break;
-	case ProjectionGeoKey:        info=_projectionValue; break;
-	case ProjCoordTransGeoKey:    info=_coordtransValue; break;
-	case VerticalCSTypeGeoKey:    info=_vertcstypeValue; break;
-	case VerticalDatumGeoKey:     info=_vdatumValue; break;
+           /* put other key-dependent lists here */
+        case GTModelTypeGeoKey:       info=_modeltypeValue; break;
+        case GTRasterTypeGeoKey:      info=_rastertypeValue; break;
+        case GeographicTypeGeoKey:    info=_geographicValue; break;
+        case GeogGeodeticDatumGeoKey: info=_geodeticdatumValue; break;
+        case GeogEllipsoidGeoKey:     info=_ellipsoidValue; break;
+        case GeogPrimeMeridianGeoKey: info=_primemeridianValue; break;
+        case ProjectedCSTypeGeoKey:   info=_pcstypeValue; break;
+        case ProjectionGeoKey:        info=_projectionValue; break;
+        case ProjCoordTransGeoKey:    info=_coordtransValue; break;
+        case VerticalCSTypeGeoKey:    info=_vertcstypeValue; break;
+        case VerticalDatumGeoKey:     info=_vdatumValue; break;
 
-	/* And if all else fails... */
-   	default:                      info = _csdefaultValue;break;
+        /* And if all else fails... */
+           default:                      info = _csdefaultValue;break;
    }
-   
+
    return FindName( info,value);
 }
 
-/* 
- * Inverse Utilities (name->code) 
+/*
+ * Inverse Utilities (name->code)
  */
 
 
@@ -108,14 +108,14 @@ static int FindCode(KeyInfo *info,char *key)
 
    if (info->ki_key<0)
    {
-	/* not a registered key; might be generic code */
-	if (!strncmp(key,"Unknown-",8))
-	{
-		int code=-1;
-		sscanf(key,"Unknown-%d",&code);
-		return code;
-	}
-	else return -1;
+        /* not a registered key; might be generic code */
+        if (!strncmp(key,"Unknown-",8))
+        {
+                int code=-1;
+                sscanf(key,"Unknown-%d",&code);
+                return code;
+        }
+        else return -1;
    }
    return info->ki_key;
 }
@@ -143,33 +143,33 @@ int GTIFTagCode(char *tag)
 int GTIFValueCode(geokey_t key, char *name)
 {
    KeyInfo *info;
-   
+
    switch (key)
    {
-	/* All codes using linear/angular/whatever units */
-	case GeogLinearUnitsGeoKey: 
-	case ProjLinearUnitsGeoKey: 
-	case GeogAngularUnitsGeoKey: 
-	case GeogAzimuthUnitsGeoKey: 
-		                      info=_geounitsValue; break;
+        /* All codes using linear/angular/whatever units */
+        case GeogLinearUnitsGeoKey:
+        case ProjLinearUnitsGeoKey:
+        case GeogAngularUnitsGeoKey:
+        case GeogAzimuthUnitsGeoKey:
+                                      info=_geounitsValue; break;
 
-   	/* put other key-dependent lists here */
-	case GTModelTypeGeoKey:       info=_modeltypeValue; break;
-	case GTRasterTypeGeoKey:      info=_rastertypeValue; break;
-	case GeographicTypeGeoKey:    info=_geographicValue; break;
-	case GeogGeodeticDatumGeoKey: info=_geodeticdatumValue; break;
-	case GeogEllipsoidGeoKey:     info=_ellipsoidValue; break;
-	case GeogPrimeMeridianGeoKey: info=_primemeridianValue; break;
-	case ProjectedCSTypeGeoKey:   info=_pcstypeValue; break;
-	case ProjectionGeoKey:        info=_projectionValue; break;
-	case ProjCoordTransGeoKey:    info=_coordtransValue; break;
-	case VerticalCSTypeGeoKey:    info=_vertcstypeValue; break;
-	case VerticalDatumGeoKey:     info=_vdatumValue; break;
+           /* put other key-dependent lists here */
+        case GTModelTypeGeoKey:       info=_modeltypeValue; break;
+        case GTRasterTypeGeoKey:      info=_rastertypeValue; break;
+        case GeographicTypeGeoKey:    info=_geographicValue; break;
+        case GeogGeodeticDatumGeoKey: info=_geodeticdatumValue; break;
+        case GeogEllipsoidGeoKey:     info=_ellipsoidValue; break;
+        case GeogPrimeMeridianGeoKey: info=_primemeridianValue; break;
+        case ProjectedCSTypeGeoKey:   info=_pcstypeValue; break;
+        case ProjectionGeoKey:        info=_projectionValue; break;
+        case ProjCoordTransGeoKey:    info=_coordtransValue; break;
+        case VerticalCSTypeGeoKey:    info=_vertcstypeValue; break;
+        case VerticalDatumGeoKey:     info=_vdatumValue; break;
 
-	/* And if all else fails... */
-   	default:                      info = _csdefaultValue;break;
+        /* And if all else fails... */
+           default:                      info = _csdefaultValue;break;
    }
-   
+
    return FindCode( info,name);
 }
 

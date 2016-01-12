@@ -5,7 +5,7 @@
 static void write_osm_samples()
 {
   // input file sample
-  // transformation from open_street_map to 
+  // transformation from open_street_map to
   vcl_string osm_land_file = "./osm_to_volm_land.txt";
   vcl_ofstream ofs_land(osm_land_file.c_str());
   // header
@@ -80,8 +80,8 @@ static void test_category_io()
   // print out the road junction table
   for (vcl_map<vcl_pair<int,int>, volm_land_layer>::iterator mit = volm_osm_category_io::road_junction_table.begin();
        mit != volm_osm_category_io::road_junction_table.end(); ++mit) {
-    vcl_cout << " id1 = " << mit->first.first  
-             << " id2 = " << mit->first.second 
+    vcl_cout << " id1 = " << mit->first.first
+             << " id2 = " << mit->first.second
              << " ---> id = " << (unsigned)mit->second.id_
              << " name = " << mit->second.name_
              << " level = " << mit->second.level_

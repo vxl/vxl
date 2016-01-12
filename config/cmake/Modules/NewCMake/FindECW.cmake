@@ -62,7 +62,7 @@ ENDIF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSUtil.h)
 ENDIF (EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h )
 
 
- 
+
 IF( WIN32 AND J2K_SOURCES_FOUND AND WIN32SDK_FOUND AND MFC_FOUND)
     SET( ECW_FOUND "YES" )
     SET( ECW_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/j2k/Source/include)

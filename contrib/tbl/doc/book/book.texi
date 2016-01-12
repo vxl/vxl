@@ -38,7 +38,6 @@ Copyright @copyright{} 2002-2013 VXL Contributors
 * Introduction::
 * eg::
 * vipl::
-* vepl1::
 * Concept Index::
 @end menu
 
@@ -59,21 +58,13 @@ Copyright @copyright{} 2002-2013 VXL Contributors
 @include chapter_examples.texi
 
 @comment ------------------------------------------------------------------
-@node    vipl, vepl1, eg, Top
+@node    vipl, eg, Top
 @comment node-name, next, previous,     up
 @chapter vipl: Templated Image Processing Library
 @cindex vipl
 @cindex Image Processing
 
 @include chapter_vipl.texi
-
-@comment ------------------------------------------------------------------
-@node    vepl1,   Concept Index, vipl, Top
-@comment node-name, next,           previous, up
-@chapter vepl1: Easy Image Processing Libary with vil1
-@cindex vepl1
-@cindex Image Processing
-
 @include chapter_vepl.texi
 
 @comment ------------------------------------------------------------------

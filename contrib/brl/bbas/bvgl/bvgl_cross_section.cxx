@@ -40,7 +40,7 @@ void bvgl_cross_section::display_cross_section_pts(vcl_ofstream& ostr) const{
     vgl_point_3d<double> p = ptset_.p(i);
     vgl_point_3d<float> pf(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
     vgl_sphere_3d<float> sp(pf, r);
-    bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.5f, 1.0f);      
+    bvrml_write::write_vrml_sphere(ostr, sp, 1.0f, 0.5f, 1.0f);
   }
 }
 void bvgl_cross_section::display_cross_section_plane( vcl_ofstream& ostr) const{

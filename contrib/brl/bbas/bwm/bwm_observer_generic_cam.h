@@ -38,7 +38,7 @@ class bwm_observer_generic_cam : public bwm_observer_cam
   virtual bool intersect_ray_and_plane(vgl_point_2d<double> img_point,
                                        vgl_plane_3d<double> plane,
                                        vgl_point_3d<double> &world_point);
-  
+
   vil_image_resource_sptr ray_image(int component, int level) const;
 
 

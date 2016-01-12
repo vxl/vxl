@@ -106,9 +106,9 @@ int  gpc_polygon_clip        (gpc_op           set_operation,
 
 void gpc_free_polygon        (gpc_polygon     *polygon);
 
-#if 0 /* These functions are not used in vgl_clip */ 
+#if 0 /* These functions are not used in vgl_clip */
 
-void gpc_read_polygon        (FILE            *infile_ptr, 
+void gpc_read_polygon        (FILE            *infile_ptr,
                               int              read_hole_flags,
                               gpc_polygon     *polygon);
 

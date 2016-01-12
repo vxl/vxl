@@ -25,7 +25,7 @@ bool volm_create_satellite_resources_process_cons(bprb_func_process& pro)
   input_types_[0] = "vcl_string";      // polygon file (kml) of ROI
   input_types_[1] = "float";           // leaf size
   input_types_[2] = "bool";    // if true: eliminate the images which have different names but 'same' extent and 'same' collection time up to seconds
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -70,9 +70,9 @@ bool volm_save_satellite_resources_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(2);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "vcl_string";      // output file to save as binar
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -106,8 +106,8 @@ bool volm_load_satellite_resources_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(1);
-  input_types_[0] = "vcl_string"; 
-  
+  input_types_[0] = "vcl_string";
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -144,17 +144,17 @@ bool volm_query_satellite_resources_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(10);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat
   input_types_[3] = "double";      // upper right lon
   input_types_[4] = "double";      // upper right lat
   input_types_[5] = "vcl_string";      // output file to print the list
-  input_types_[6] = "vcl_string";      // the band: PAN or MULTI 
+  input_types_[6] = "vcl_string";      // the band: PAN or MULTI
   input_types_[7] = "bool";      // if TRUE, pick seed images randomly with a certain order of satellites
   input_types_[8] = "int";       // number of seed images to pick, if not enough then creates from all available
   input_types_[9] = "double";       // GSD threshold in meters, any image with GSD more than this GSD will not be returned, e.g. pass 1 to eliminate images with pixel resolution more than 1 meter
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -183,7 +183,7 @@ bool volm_query_satellite_resources_process(bprb_func_process& pro)
   bool pick_seed = pro.get_input<bool>(7);
   int n_seeds = pro.get_input<int>(8);
   double gsd_thres = pro.get_input<double>(9);
-  
+
   unsigned cnt; bool out = false;
   if (!pick_seed) {
     out = res->query_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, cnt, out_file, band, gsd_thres);
@@ -209,7 +209,7 @@ bool volm_query_satellite_resources_kml_process_cons(bprb_func_process& pro)
   input_types_[5] = "int";                            // number of seed images to pick, if not enough then creates from all available
   input_types_[6] = "double";                         // GSD threshold in meters, any image with GSD more than this GSD will not be returned, e.g. pass 1 to eliminate images with pixel resolution more than 1 meter
 
-  // output 
+  // output
   vcl_vector<vcl_string> output_types_(1);
   output_types_[0] = "unsigned";  // return number of resources that intersect this region
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -267,7 +267,7 @@ bool volm_add_satellite_resources_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> input_types_(2);
   input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "vcl_string"; // folder -- will be traversed recursively to find NITF files and add to the resources
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -297,15 +297,15 @@ bool volm_pick_nadir_resource_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(8);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat
   input_types_[3] = "double";      // upper right lon
   input_types_[4] = "double";      // upper right lat
-  input_types_[5] = "vcl_string";      // the band: PAN or MULTI 
+  input_types_[5] = "vcl_string";      // the band: PAN or MULTI
   input_types_[6] = "vcl_string";      // satellite name
   input_types_[7] = "vcl_string";      // a folder where all the non-cloud images saved for current rectangular region
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -332,11 +332,11 @@ bool volm_pick_nadir_resource_process(bprb_func_process& pro)
   vcl_string band = pro.get_input<vcl_string>(5);
   vcl_string sat_name = pro.get_input<vcl_string>(6);
   vcl_string non_cloud_folder = pro.get_input<vcl_string>(7);
-  
+
   vcl_vector<unsigned> ids;
   res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids,10.0); // pass gsd_thres very high, only interested in finding all the images that intersect the box
   double largest_view_angle = -100.0;
-  unsigned id = 0;  
+  unsigned id = 0;
   for (unsigned i = 0; i < ids.size(); i++) {
     if (res->resources_[ids[i]].meta_->satellite_name_.compare(sat_name) == 0) {
       vcl_cout << "res: " << res->resources_[ids[i]].name_
@@ -370,12 +370,12 @@ bool volm_pick_nadir_resource_pair_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(9);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat
   input_types_[3] = "double";      // upper right lon
   input_types_[4] = "double";      // upper right lat
-  input_types_[5] = "vcl_string";      // the band: PAN or MULTI 
+  input_types_[5] = "vcl_string";      // the band: PAN or MULTI
   input_types_[6] = "vcl_string";      // satellite name
   input_types_[7] = "vcl_string";      // a folder where all the non-cloud images saved for current rectangular region
   input_types_[8] = "vcl_string";      // folder where the sorted PAN/MULTI pair list file will be stored
@@ -412,7 +412,7 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
   for (unsigned i = 0; i < ids.size(); i++)
     if (res->resources_[ids[i]].meta_->satellite_name_.compare(sat_name) == 0)
       band_res.insert(vcl_pair<double, unsigned>(res->resources_[ids[i]].meta_->view_elevation_, ids[i]));
-  
+
   // text file where the sorted PAN/MULTI pair will be stored
   vcl_string out_txt = out_folder + "/pan_multi_pair_list.txt";
   vcl_ofstream ofs(out_txt.c_str());
@@ -428,7 +428,7 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
     if (non_cloud_folder.compare("") != 0)
     {
       vcl_string non_cloud_img_band = non_cloud_folder + "/" + img_name  + "_cropped.tif";
-      vcl_cout << " view_angle = " << mit->first << " img_name = " << res->resources_[mit->second].full_path_ 
+      vcl_cout << " view_angle = " << mit->first << " img_name = " << res->resources_[mit->second].full_path_
              << " pair_name = " << res->full_path(pair_name).first
              << " non_cloud_img = " << non_cloud_img_band
              << vcl_endl;
@@ -469,7 +469,7 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": can not find any PAN/MULTI pair for current scene" << vcl_endl;
     return false;
   }
-  
+
   for (vcl_map<double, vcl_pair<vcl_string, vcl_string>, vcl_greater<double> >::iterator mit = pairs.begin(); mit != pairs.end(); ++mit)
     ofs << mit->first << " \t " << mit->second.first << " \t " << mit->second.second << vcl_endl;
   ofs.close();
@@ -541,9 +541,9 @@ bool volm_get_full_path_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(2);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
-  input_types_[1] = "vcl_string";      // satellite img name  
-  
+  input_types_[0] = "volm_satellite_resources_sptr";
+  input_types_[1] = "vcl_string";      // satellite img name
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -574,7 +574,7 @@ bool volm_find_res_pair_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(3);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "vcl_string";      // satellite img name  // only the name, don't need the full path
   input_types_[2] = "double";          // tolerance of footprint difference ( in meters)
   if (!pro.set_input_types(input_types_))
@@ -608,7 +608,7 @@ bool volm_find_res_pair_process(bprb_func_process& pro)
     pro.set_output_val<vcl_string>(1, "");
     pro.set_output_val<vcl_string>(2, "");
     return false;
-  } 
+  }
   vcl_pair<vcl_string, vcl_string> pp = res->full_path(pair_name);
   pro.set_output_val<vcl_string>(0, full.first);
   pro.set_output_val<vcl_string>(1, pair_name);
@@ -621,7 +621,7 @@ bool volm_find_satellite_pairs_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(8);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "double";      // lower left lon
   input_types_[2] = "double";      // lower left lat
   input_types_[3] = "double";      // upper right lon
@@ -629,7 +629,7 @@ bool volm_find_satellite_pairs_process_cons(bprb_func_process& pro)
   input_types_[5] = "vcl_string";      // output file to print the list
   input_types_[6] = "vcl_string";      // satellite name
   input_types_[7] = "float";       // GSD_threshold
-  
+
   if (!pro.set_input_types(input_types_))
     return false;
   //output
@@ -656,7 +656,7 @@ bool volm_find_satellite_pairs_process(bprb_func_process& pro)
   vcl_string out_file = pro.get_input<vcl_string>(5);
   vcl_string sat_name = pro.get_input<vcl_string>(6);
   float GSD_thres = pro.get_input<float>(7);
-  
+
   unsigned cnt = 0; bool out = false;
   out = res->query_pairs_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, GSD_thres, cnt, out_file, sat_name);
   pro.set_output_val<unsigned>(0, cnt);
@@ -669,7 +669,7 @@ bool volm_find_satellite_pairs_poly_process_cons(bprb_func_process& pro)
 {
   //inputs
   vcl_vector<vcl_string> input_types_(5);
-  input_types_[0] = "volm_satellite_resources_sptr"; 
+  input_types_[0] = "volm_satellite_resources_sptr";
   input_types_[1] = "vcl_string";      // kml file that gives the region of interest polygon
   input_types_[2] = "vcl_string";      // output file to print the list
   input_types_[3] = "vcl_string";      // satellite name
@@ -766,7 +766,7 @@ bool volm_satellite_pair_intersection_process(bprb_func_process& pro)
                            meta1.lower_left_.y(), meta1.upper_right_.y());
   vgl_box_2d<double> bbox2(meta2.lower_left_.x(), meta2.upper_right_.x(),
                            meta2.lower_left_.y(), meta2.upper_right_.y());
-  
+
   vgl_box_2d<double> intersection_bbox = vgl_intersection(bbox1, bbox2);
   double area = intersection_bbox.area();
 

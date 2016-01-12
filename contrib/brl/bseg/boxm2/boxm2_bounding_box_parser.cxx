@@ -64,19 +64,30 @@ boxm2_bounding_box_parser::startElement(const char* name, const char** atts)
     heights_[entity_id_][volume_id_] = height_;
   }
   else if (vcl_strcmp(name,VERT_TAG)== 0) {
-    double x,y,z;
-    int vertid;
+    double x=0.0;
+    double y=0.0;
+    double z=0.0;
     for (int i=0; atts[i]; i+=2) {
       if (vcl_strcmp(atts[i], "id") == 0)
+        {
+        int vertid;
         convert(atts[i+1], vertid);
+        }
       else if (vcl_strcmp(atts[i], "x") == 0)
+        {
         convert(atts[i+1], x);
+        }
       else if (vcl_strcmp(atts[i], "y") == 0)
+        {
         convert(atts[i+1], y);
+        }
       else if (vcl_strcmp(atts[i], "z") == 0)
+        {
         convert(atts[i+1], z);
+        }
     }
-    verts_[entity_id_][volume_id_].push_back(vgl_point_3d<double>(x,y,z));
+    const vgl_point_3d<double> temp(x,y,z);
+    verts_[entity_id_][volume_id_].push_back(temp);
   }
 }
 

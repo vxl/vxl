@@ -95,16 +95,16 @@ vcl_istream& vgl_sphere_3d<T>::read(vcl_istream& is)
 template <class Type>
 void vgl_sphere_3d<Type>::spherical_to_cartesian(Type elevation_rad, Type azimuth_rad,
                                                  Type& x, Type& y, Type& z) const{
- 
+
   double el = static_cast<double>(elevation_rad), az = static_cast<double>(azimuth_rad);
   double cx = static_cast<double>(c_.x()),cy =static_cast<double>(c_.y()), cz = static_cast<double>(c_.z());
   double r = static_cast<double>(r_);
   double se = vcl_sin(el), ce = vcl_cos(el);
   double sa = vcl_sin(az), ca = vcl_cos(az);
-  
+
   x = static_cast<Type>((r*se*ca)+cx);
   y = static_cast<Type>((r*se*sa)+cy);
-  z = static_cast<Type>((r*ce)+cz); 
+  z = static_cast<Type>((r*ce)+cz);
 
 }
 

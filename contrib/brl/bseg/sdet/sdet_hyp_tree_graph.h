@@ -35,17 +35,17 @@ public:
 
   //: destructor
   ~sdet_hyp_tree_node()
-  { 
+  {
     //cvlets are cloned from the CM to assign to the HTs so delete them
     delete cvlet;
-    cvlet = 0; 
+    cvlet = 0;
 
     //first remove this node from the parent's list (if it has a parent)
     if (parent)
       parent->children.remove(this);
-    
+
     parent = 0; //remove pointer to the parent
-    
+
     //delete all children
     while (children.size()>0)
       delete children.front();
@@ -73,14 +73,14 @@ public:
   int tree_id;
   sdet_hyp_tree_node* root;
   bool resolved;
-  sdet_hyp_tree_node* best_path; 
+  sdet_hyp_tree_node* best_path;
   double least_cost;
 
   //: default constructor
   sdet_hyp_tree(int id=-1): tree_id(id), root(0), resolved(false), best_path(0), least_cost(1000)  {}
 
   //: constructor given a root node
-  sdet_hyp_tree(sdet_hyp_tree_node* new_root, int id=-1) : 
+  sdet_hyp_tree(sdet_hyp_tree_node* new_root, int id=-1) :
     tree_id(id), root(new_root), resolved(false), best_path(0), least_cost(1000) {}
 
   //: destructor
@@ -94,7 +94,7 @@ public:
       iterator(sdet_hyp_tree_node* ptr) : ptr_(ptr) { if (ptr) cur_path_.push_back(ptr->cvlet); }
       //: copy constructor
       iterator(const iterator& other) : ptr_(other.ptr_), cur_path_(other.cur_path_) {}
-      
+
       //operators
       sdet_hyp_tree_node* operator*(){ return ptr_; }
       bool operator==(const iterator& other) { return ptr_ == other.ptr_; }
@@ -148,7 +148,7 @@ public:
           for (; nit != parent->children.end(); nit++){
             if ((*nit)==cur){
               nit++;
-              
+
               //assert(cur->cvlet == cur_path_.back());
               cur_path_.pop_back(); //first remove the current cvlet from the path
 
@@ -200,7 +200,7 @@ public:
   {
     //print all the paths and costs
     vcl_cout << "Current Hypothesis tree: TREE ID = " << this->tree_id << "----------------------------------------------------------" << vcl_endl;
-    
+
     //old implementation (with recursion)
     //vcl_list<sdet_curvelet*> CF;
     //next_node(root, CF);
@@ -218,7 +218,7 @@ public:
             vcl_cout << CF_list[i]->edgel_chain[j]->id << " ";
           vcl_cout << "* ";
         }
-        
+
         //also write out the cost
         vcl_cout << vcl_endl;
       }
@@ -241,7 +241,7 @@ public:
           vcl_cout << (*cvit)->edgel_chain[i]->id << " ";
         vcl_cout << "* ";
       }
-      
+
       //also write out the cost
       vcl_cout << vcl_endl;
 
@@ -272,15 +272,15 @@ public:
   void clear()
   {
     for (unsigned i=0; i<nodes.size(); i++){
-      nodes[i]->delete_tree(); 
+      nodes[i]->delete_tree();
     }
-    nodes.clear(); 
+    nodes.clear();
     CPL_links.clear();
     CPT_links.clear();
   }
 
   void insert_node(sdet_hyp_tree* new_node){nodes.push_back(new_node);  }
-  void insert_CPL_link(int HT1, int HT2) { CPL_links[HT1].insert(HT2); CPL_links[HT2].insert(HT1); } 
+  void insert_CPL_link(int HT1, int HT2) { CPL_links[HT1].insert(HT2); CPL_links[HT2].insert(HT1); }
   void remove_CPL_link(int HT1, int HT2) { CPL_links[HT1].erase(HT2); CPL_links[HT2].erase(HT1); }
 
   void insert_CPT_link(int HT1, int HT2) { CPT_links[HT1].insert(HT2); CPT_links[HT2].insert(HT1); }
@@ -302,9 +302,9 @@ public:
   sdet_edgel_labels(): labels(0), claimed(0){}
   ~sdet_edgel_labels(){ labels.clear(); claimed.clear(); }
 
-  void resize(unsigned size){ 
-    if (labels.size()!= size){ 
-      labels.resize(size); 
+  void resize(unsigned size){
+    if (labels.size()!= size){
+      labels.resize(size);
       claimed.resize(size);
     }
   }

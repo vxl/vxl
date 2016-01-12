@@ -17,7 +17,7 @@ bool vpgl_load_rational_camera_nitf_process_cons(bprb_func_process& pro)
   //this process takes one input: the filename
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -25,7 +25,7 @@ bool vpgl_load_rational_camera_nitf_process_cons(bprb_func_process& pro)
   output_types.push_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
-  
+
   return true;
 }
 

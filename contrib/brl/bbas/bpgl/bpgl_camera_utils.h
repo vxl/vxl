@@ -54,18 +54,18 @@ class bpgl_camera_utils
   static vcl_string get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll);
 
   static void camera_parameters(vpgl_perspective_camera<double> const& cam,
-				double& rodrigues_x, double& rodrigues_y,
-				double& rodriques_z, double& tx, double& ty,
-				double& tz, double& focal_length_u,
-				double& focal_length_v, double& principal_pt_u,
-				double& principal_pt_v);
+                                double& rodrigues_x, double& rodrigues_y,
+                                double& rodriques_z, double& tx, double& ty,
+                                double& tz, double& focal_length_u,
+                                double& focal_length_v, double& principal_pt_u,
+                                double& principal_pt_v);
 
   static bool camera_from_parameters(double rodrigues_x, double rodrigues_y,
-				     double rodriques_z, double tx, double ty,
-				     double tz, double focal_length_u,
-				     double focal_length_v,
-				     double principal_pt_u,
-				     double principal_pt_v,
-				     vpgl_perspective_camera<double>& cam);
+                                     double rodriques_z, double tx, double ty,
+                                     double tz, double focal_length_u,
+                                     double focal_length_v,
+                                     double principal_pt_u,
+                                     double principal_pt_v,
+                                     vpgl_perspective_camera<double>& cam);
 };
 #endif //bpgl_camera_utils_h_

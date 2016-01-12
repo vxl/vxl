@@ -7,7 +7,7 @@ The steps to make your own are
 2. Edit the myprojectView class to change its baseclass to
    vgui_mfc_adaptor.  Don't  forget to update the message maps
    in myprojectView.cpp
-3. Store the tableaux that your application will use in 
+3. Store the tableaux that your application will use in
    the myprojectDoc
 
 3.1. Add an OnCreate in the View to grab a tableau from the document.

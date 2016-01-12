@@ -64,7 +64,7 @@ void test_mandible()
   double dy_at_chin = 5.0;
   mand.tilt_body(dy_at_chin);
 #endif
-  
+
 #if 0
   vgl_point_3d<double> pt(-0.746202,-61.601116,78.412971),pc;
   vgl_point_3d<double> pto(-0.746202,-51.601116,78.412971),pco;
@@ -75,7 +75,7 @@ void test_mandible()
    //
    // deformation goes here
     // scale the mandible along x
-#if 0 
+#if 0
   double offset = 15.0;
   boxm2_vecf_spline_field field = mand.offset_axis(offset);
 
@@ -88,7 +88,7 @@ void test_mandible()
     return;
   }
   mand.display_axis_spline(vostr);
- 
+
    //
    // display the cross section plane normals
   vcl_ofstream cnostr(cross_normal_display_path.c_str());
@@ -119,7 +119,7 @@ void test_mandible()
       vcl_cout<<"mandible scene file) does not exist"<<vcl_endl;
       return;
     }
-  
+
   vcl_string mandible_geo_path = scene_dir + "mandible_geo.txt";
   if(!vul_file::exists(mandible_geo_path))
     {
@@ -128,7 +128,7 @@ void test_mandible()
     }
 
   //boxm2_vecf_mandible mand(mandible_geo_path);
-  
+
   boxm2_vecf_mandible_scene mscene(mandible_scene_path, mandible_geo_path);
   const boxm2_vecf_mandible& mand = mscene.mandible_geo();
   boxm2_scene_sptr scene = mscene.scene();
@@ -139,13 +139,13 @@ void test_mandible()
   prefixes.push_back("boxm2_mog3_grey");
   prefixes.push_back("boxm2_num_obs");
   prefixes.push_back("boxm2_pixel_mandible");
-  
+
   //boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
   //boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
  // boxm2_surface_distance_refine<boxm2_vecf_mandible>(mand, scene, prefixes);
  // boxm2_cache::instance()->write_to_disk();
  // mscene.rebuild();
-#if 0  
+#if 0
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator bit = blocks.begin();
   boxm2_block_id id = bit->first;
@@ -195,4 +195,4 @@ void test_mandible()
 #endif
 }
 TESTMAIN( test_mandible );
- 
+

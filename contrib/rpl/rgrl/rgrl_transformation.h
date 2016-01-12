@@ -123,7 +123,7 @@ class rgrl_transformation
   //: log of determinant of the covariance
   virtual double
   log_det_covar() const;
-  
+
   //:  set parameter covariance matrix
   void set_covar( const vnl_matrix<double>& covar );
 
@@ -145,10 +145,10 @@ class rgrl_transformation
   //: Return the jacobian of the transform
   //  use only as backward compatibility
   vnl_matrix<double> jacobian( vnl_vector<double> const& from_loc ) const;
-                                                                                      
+
   //: Compute jacobian w.r.t. location
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const = 0;
-  
+
   //:  transform the transformation for images of different resolution
   virtual rgrl_transformation_sptr scale_by( double scale ) const = 0;
 
@@ -193,11 +193,11 @@ class rgrl_transformation
   //: a slightly better way of computing log of determinant
   double
   log_det_sym_matrix( vnl_matrix<double> const& m ) const;
-  
+
   //: compute the log of determinant of the covariance when the matrix is rank deficient
   double
   log_det_covar_deficient( int rank ) const;
-  
+
  protected:
 
   //: covariance matrix

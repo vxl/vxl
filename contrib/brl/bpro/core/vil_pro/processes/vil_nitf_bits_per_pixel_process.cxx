@@ -12,7 +12,7 @@
 //: set input and output types
 bool vil_nitf_bits_per_pixel_process_cons(bprb_func_process& pro)
 {
-  //input, a path to an nitf image 
+  //input, a path to an nitf image
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string"); // 0 nitf path
   if (!pro.set_input_types(input_types))

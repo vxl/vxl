@@ -44,7 +44,7 @@ bvpl_gauss3d_x_kernel_factory::bvpl_gauss3d_x_kernel_factory(float s1, float s2,
 }
 #endif
 
-//: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2, s3. 
+//: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2, s3.
 //  The support can also be specified
 bvpl_gauss3d_x_kernel_factory::bvpl_gauss3d_x_kernel_factory(float s1, float s2, float s3, float supp1, float supp2, float supp3)
 {
@@ -79,7 +79,7 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
   typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
 
-  //This is the support of the kernel  
+  //This is the support of the kernel
   float min_x = -vcl_floor(supp1_*sigma1_+0.01f);
   float max_x =  vcl_floor(supp1_*sigma1_+0.01f);
   float min_y = -vcl_floor(supp2_*sigma2_+0.01f);
@@ -101,7 +101,7 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
       }
     }
   }
-  
+
   //normalize to L1 norm
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator k_it = canonical_kernel_.begin();
   float norm = 0.0;

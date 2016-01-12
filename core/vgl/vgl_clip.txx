@@ -153,7 +153,7 @@ namespace {
     for ( size_t s = 0; s < vgl_poly.num_sheets(); ++s ) {
       ClipperLib::Path path;
       for ( size_t p = 0; p < vgl_poly[s].size(); ++p ) {
-        ClipperLib::IntPoint pt((ClipperLib::cInt)((double)vgl_poly[s][p].x()*scale), 
+        ClipperLib::IntPoint pt((ClipperLib::cInt)((double)vgl_poly[s][p].x()*scale),
                                 (ClipperLib::cInt)((double)vgl_poly[s][p].y()*scale));
         path.push_back(pt);
       }
@@ -180,7 +180,7 @@ namespace {
 
 template <class T>
 void
-bounds(vgl_polygon<T> vgl_poly, T& min_x, T& max_x, T& min_y, T& max_y) 
+bounds(vgl_polygon<T> vgl_poly, T& min_x, T& max_x, T& min_y, T& max_y)
 {
   for (size_t s=0; s < vgl_poly.num_sheets(); ++s) {
     for (size_t p=0; p < vgl_poly[s].size(); ++p) {
@@ -302,7 +302,7 @@ vgl_clip(vgl_polygon<T> const& poly1, vgl_polygon<T> const& poly2, vgl_clip_type
   *p_retval = retval;
 
   add_clipper_to_vgl( result, p3, scale );
-  
+
 #else
   *p_retval = -1;
   vcl_fprintf(stdout,"WARNING: GPC is only free for non-commercial use -- assuming disjoint polygons.\n");

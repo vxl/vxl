@@ -63,7 +63,7 @@ bool boxm2_cpp_batch_compute_3d_points_process(bprb_func_process& pro)
   boxm2_block_id bid;
   int data_index;
 
-  // vgl_point_3d<double> point(309.583,251.252,258.228); 
+  // vgl_point_3d<double> point(309.583,251.252,258.228);
   // boxm2_block_id bid; int data_index; float side_len;
   // if (!boxm2_util::get_point_index(scene,cache,point,bid,data_index,side_len)) {
   //   vcl_cout << "Cannot locate the point: " << point << " in the scene!\n";
@@ -80,8 +80,8 @@ bool boxm2_cpp_batch_compute_3d_points_process(bprb_func_process& pro)
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
-    // we're assuming that we have enough RAM to store the whole output blocks 
-    
+    // we're assuming that we have enough RAM to store the whole output blocks
+
     //: alpha is only retrieved to get buf len, there is a problem in get_data_base_new: TODO: fix this, there should be no need to retrieve alpha
     boxm2_data_base *  alph = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     vcl_size_t buf_len = alph->buffer_length();

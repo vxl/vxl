@@ -33,7 +33,7 @@ bool boxm2_compute_sun_affine_camera_process_cons(bprb_func_process& pro)
   output_types_[0] = "vpgl_camera_double_sptr";// affine sun camera
   output_types_[1] = "unsigned";// number of pixels (x)
   output_types_[2] = "unsigned";// number of pixels (y)
-   
+
   result &= pro.set_output_types(output_types_);
 
   // set default for input[3], so as to not break old code
@@ -60,7 +60,7 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
 
   vgl_vector_3d<double> sun_dir_downwards;
   if (astro_coords){
-    vcl_cout << "Using Astronomical Coordinate System" << vcl_endl; 
+    vcl_cout << "Using Astronomical Coordinate System" << vcl_endl;
     double az_rads = vnl_math::pi/180 * azimuthal;
     double el_rads = vnl_math::pi/180 * elevation;
     sun_dir_downwards = -vgl_vector_3d<double>(vcl_cos(el_rads)*vcl_sin(az_rads),

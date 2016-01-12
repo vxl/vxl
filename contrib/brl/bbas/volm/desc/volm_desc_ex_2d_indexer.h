@@ -3,8 +3,8 @@
 #define volm_desc_ex_2d_indexer_h_
 //:
 // \file
-// \brief  A class to create a volm_desc_ex_land_only (existence) descriptor index using 2D classification maps of reference worlds at each location  
-//         In the 2D case, the distances are given as a set of radii, e.g. 100, 500 and 1000. 
+// \brief  A class to create a volm_desc_ex_land_only (existence) descriptor index using 2D classification maps of reference worlds at each location
+//         In the 2D case, the distances are given as a set of radii, e.g. 100, 500 and 1000.
 //         during indexing, anything further than 1000 m is completely ignored.
 //                    so during query descriptor generator to match to this index, in the query image, anything that is labeled further than 1000 m should be ignored as well
 //         similarly, in the 2D case, "sky" is not a valid land class to be considered for 'existence', so "sky" bin in the descriptor histogram will never be upcounted
@@ -32,7 +32,7 @@ public:
   static vcl_string& get_name();
 
   volm_desc_ex_2d_indexer(vcl_string const& input_folder,
-                          vcl_string const& out_index_folder, 
+                          vcl_string const& out_index_folder,
                           vcl_vector<double> const& radius,
                           unsigned const& nlands = volm_osm_category_io::volm_land_table.size());
 
@@ -52,7 +52,7 @@ public:
 
 public:
   vcl_vector<volm_img_info> classification_maps_;  // unsigned char images with id of the land types, the id in the value of entries in volm_label_table
-  
+
   unsigned nlands_;
   unsigned ndists_;
   vcl_vector<double> radius_;

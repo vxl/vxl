@@ -111,9 +111,9 @@ public:
     /** special write method for creation of digital signatures
      */
     virtual OFCondition writeSignatureFormat(DcmOutputStream & outStream,
-					 const E_TransferSyntax oxfer,
-					 const E_EncodingType enctype
-					 = EET_UndefinedLength);
+                                         const E_TransferSyntax oxfer,
+                                         const E_EncodingType enctype
+                                         = EET_UndefinedLength);
 
   /** appends a single compressed frame to this DICOM pixel sequence
    *  @param offsetList list containing offset table entries.

@@ -56,7 +56,7 @@ enum DcmDictRangeRestriction
 };
 
 
-/** each object of this class manages one entry of the 
+/** each object of this class manages one entry of the
  *  global DICOM data dictionary.
  */
 class DcmDictEntry: public DcmTagKey
@@ -74,10 +74,10 @@ public:
      *  @param doCopyStrings true if strings should be copied, false if only referenced
      *  @param pcreator private creator name, may be NULL (for standard tags)
      */
-    DcmDictEntry(Uint16 g, Uint16 e, DcmVR vr, 
+    DcmDictEntry(Uint16 g, Uint16 e, DcmVR vr,
         const char* nam, int vmMin, int vmMax,
-        const char* vers, OFBool doCopyStrings, 
-        const char* pcreator);        
+        const char* vers, OFBool doCopyStrings,
+        const char* pcreator);
 
     /** constructor for repeating tags
      *  @param g attribute tag group lower limit
@@ -94,12 +94,12 @@ public:
      */
     DcmDictEntry(Uint16 g, Uint16 e, Uint16 ug, Uint16 ue, DcmVR vr,
         const char* nam, int vmMin, int vmMax,
-        const char* vers, OFBool doCopyStrings, 
-        const char* pcreator);        
+        const char* vers, OFBool doCopyStrings,
+        const char* pcreator);
 
     /// copy constructor
     DcmDictEntry(const DcmDictEntry& e);
-    
+
     /// destructor
     ~DcmDictEntry();
 
@@ -107,8 +107,8 @@ public:
 
     /// returns VR object by value
     DcmVR getVR() const
-    { 
-        return valueRepresentation; 
+    {
+        return valueRepresentation;
     }
 
     /// returns VR code
@@ -141,7 +141,7 @@ public:
      */
     int privateCreatorMatch(const char *c) const
     {
-      return 
+      return
       (
         ((privateCreator == NULL) && (c == NULL)) ||
         (privateCreator && c && (0 == strcmp(privateCreator, c)))
@@ -327,7 +327,7 @@ public:
 
     /* set relations */
 
-    /** checks if this entry describes a true subset of tag range 
+    /** checks if this entry describes a true subset of tag range
      *  described by the given entry.
      *  @param e entry to compare with
      *  @return true if this object is subset of e
@@ -363,10 +363,10 @@ public:
 
 private:
 
-    /// private undefined copy assignment operator 
+    /// private undefined copy assignment operator
     DcmDictEntry &operator=(const DcmDictEntry &);
 
-    /** upper limit of repeating group and element (lower limit is inherited 
+    /** upper limit of repeating group and element (lower limit is inherited
      *   from DcmTagKey)
      */
     DcmTagKey upperKey;

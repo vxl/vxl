@@ -141,7 +141,7 @@ boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file)
   vul_timer t;
   this->rebuild();
   vcl_cout << "Create cranium scene in " << t.real()/1000.0 << "seconds\n";
-}  
+}
 
 boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file, vcl_string const& geometry_file):
   boxm2_vecf_articulated_scene(scene_file), source_model_exists_(false), alpha_data_(0), app_data_(0), nobs_data_(0), cranium_data_(0), intrinsic_change_(false)
@@ -334,7 +334,7 @@ void  boxm2_vecf_cranium_scene::inverse_vector_field(vcl_vector<vgl_vector_3d<do
   unsigned cnt = 0;
   for(unsigned i = 0; i<nt; ++i){
     vgl_point_3d<double> p = (box_cell_centers_[i].cell_center_)-params_.offset_;
-    vgl_point_3d<double> rp = p; //for later transformations 
+    vgl_point_3d<double> rp = p; //for later transformations
     if(!bb.contains(p))
       continue;
     cnt++;
@@ -432,7 +432,7 @@ void boxm2_vecf_cranium_scene::apply_vector_field_to_target(vcl_vector<vgl_vecto
     alpha = alpha_data_[dindx];
     target_app_data_[tindx] = app;
     target_alpha_data_[tindx] = alpha;
-    
+
 #if 0
     this->interpolate_vector_field(src, sindx, dindx, tindx,
                                    cranium_cell_centers_, cell_neighbor_cell_index_,
@@ -479,19 +479,19 @@ void boxm2_vecf_cranium_scene::prerefine_target(boxm2_scene_sptr target_scene){
         vgl_point_3d<double> sbc_min(center_in_source.x()-0.5*dims.x(),
                                      center_in_source.y()-0.5*dims.y(),
                                      center_in_source.z()-0.5*dims.z());
-                                     
+
         vgl_point_3d<double> sbc_max(center_in_source.x()+0.5*dims.x(),
                                      center_in_source.y()+0.5*dims.y(),
                                      center_in_source.z()+0.5*dims.z());
 
         vgl_box_3d<double> target_box_in_source;
         target_box_in_source.add(sbc_min);
-        target_box_in_source.add(sbc_max); 
+        target_box_in_source.add(sbc_max);
 
         // the source blocks intersecting the rotated target box
         vcl_vector<vgl_point_3d<int> > int_sblks = blk_->sub_blocks_intersect_box(target_box_in_source);
 
-        // iterate through each intersecting source tree and find the maximum tree depth 
+        // iterate through each intersecting source tree and find the maximum tree depth
         int max_depth = 0;
         for(vcl_vector<vgl_point_3d<int> >::iterator bit = int_sblks.begin();
             bit != int_sblks.end(); ++bit){
@@ -509,7 +509,7 @@ void boxm2_vecf_cranium_scene::prerefine_target(boxm2_scene_sptr target_scene){
                 else if(max_depth == 1) count1++;
                 else if(max_depth == 2) count2++;
                 else if(max_depth == 3) count3++;
-                  
+
         //record the deepest tree found
         if(max_depth>deepest_cell_depth){
           deepest_cell_depth = max_depth;
@@ -529,7 +529,7 @@ void boxm2_vecf_cranium_scene::prerefine_target(boxm2_scene_sptr target_scene){
 
 void boxm2_vecf_cranium_scene::map_to_target(boxm2_scene_sptr target_scene){
   vul_timer t;
-  // initially extract unrefined target data 
+  // initially extract unrefined target data
   if(!target_data_extracted_)
     this->extract_target_block_data(target_scene);
   // refine the target to match the source tree refinement
@@ -550,7 +550,7 @@ void boxm2_vecf_cranium_scene::map_to_target(boxm2_scene_sptr target_scene){
 bool boxm2_vecf_cranium_scene::set_params(boxm2_vecf_articulated_params const& params){
   try{
     boxm2_vecf_cranium_params const& params_ref = dynamic_cast<boxm2_vecf_cranium_params const &>(params);
-    intrinsic_change_ = this->vfield_params_change_check(params_ref); 
+    intrinsic_change_ = this->vfield_params_change_check(params_ref);
     params_ = boxm2_vecf_cranium_params(params_ref);
 #if _DEBUG
     vcl_cout<< "intrinsic change? "<<intrinsic_change_<<vcl_endl;
@@ -608,7 +608,7 @@ void boxm2_vecf_cranium_scene::determine_target_box_cell_centers(){
     vcl_cout << "Null source block -- FATAL!\n";
     return;
   }
-    
+
   vgl_box_3d<double> source_box = blk_->bounding_box_global();
   vgl_box_3d<double> offset_box(source_box.centroid() + params_.offset_ ,source_box.width(),source_box.height(),source_box.depth(),vgl_box_3d<double>::centre);
   if(target_blk_){
@@ -616,5 +616,5 @@ void boxm2_vecf_cranium_scene::determine_target_box_cell_centers(){
   }else{
    vcl_cout << "Null target block -- FATAL!\n";
     return;
-  } 
+  }
 }

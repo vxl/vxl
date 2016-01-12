@@ -16,9 +16,9 @@ bool vil_binary_image_op_process_cons(bprb_func_process& pro)
 {
   //this process takes three inputs and has one output
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vcl_string");
 
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image

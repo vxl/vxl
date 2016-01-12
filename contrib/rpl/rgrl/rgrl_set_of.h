@@ -42,16 +42,16 @@ public:
   void
   clear();
 
-  //: fill current set 
+  //: fill current set
   void fill( T const& item );
-  
+
   //: Same idea as std::vector::resize()
   void
   resize( unsigned n );
 
   //: is it an empty set?
   bool empty() const;
-  
+
 private:
   vcl_vector< T > data_;
 };

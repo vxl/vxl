@@ -3,7 +3,7 @@ PROJECT( dcmtk )
 # Since this a relatively big library, and because not many people will need
 # to read DICOM files, don't build it by default except for the dashboards
 
-OPTION( VXL_BUILD_DCMTK "Build the V3P DCMTK libraries for reading DICOM files?" ${YES_FOR_DASHBOARD} )
+OPTION( VXL_BUILD_DCMTK "Build the V3P DCMTK libraries for reading DICOM files?" ${BUILD_FOR_VXL_DASHBOARD} )
 
 IF( VXL_BUILD_DCMTK )
 

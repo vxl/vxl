@@ -91,12 +91,12 @@ write( vcl_ostream& os ) const
     os << ((geo_scale_type_==prior)?"PRIOR":"ESTIMATE") << vcl_endl;
     os << geometric_scale_ << vcl_endl;
   }
-  
+
   // write out signature covariance
   if( has_signature_inv_covar_ ) {
-    
+
     os << "SIGNATURE_INV_COVARIANCE" << vcl_endl;
-    os << signature_inv_covar_.rows() << " " 
+    os << signature_inv_covar_.rows() << " "
       << signature_inv_covar_.cols() << vcl_endl;
     os << signature_inv_covar_ << vcl_endl;
   }
@@ -112,37 +112,37 @@ read( vcl_istream& is )
   has_geometric_scale_ = false;
   has_signature_inv_covar_ = false;
 
-  // continue when stream does not reach the end 
+  // continue when stream does not reach the end
   // and when the scales are not all read
   while( is && !is.eof() && (!has_geometric_scale_ || !has_signature_inv_covar_))  {
     pos = is.tellg();
     vcl_getline( is, tag );
-    
+
     if( tag.empty() || tag.find_first_not_of( white_chars ) == vcl_string::npos )
       continue;
-    
+
     // geometric scale
     if( tag.find("GEOMETRIC_SCALE") != vcl_string::npos ) {
       if ( !has_geometric_scale_ && !has_signature_inv_covar_ ) {
         // get scale type
         vcl_string type_str;
         vcl_getline( is, type_str );
-        if( type_str.find("PRIOR") != vcl_string::npos ) 
+        if( type_str.find("PRIOR") != vcl_string::npos )
           geo_scale_type_ = prior;
-        else if( type_str.find("ESTIMATE") != vcl_string::npos ) 
+        else if( type_str.find("ESTIMATE") != vcl_string::npos )
           geo_scale_type_ = estimate;
         else {  // cannot handle
           WarningMacro( "Cannot parse this line for geometric scale type: " << type_str << vcl_endl );
           return false;
         }
-        
+
         // get scale
         is >> geometric_scale_;
         if( !is ) {
           WarningMacro( "Cannot parse geometric scale." << vcl_endl );
           return false;
         }
-        
+
         // set flag
         has_geometric_scale_ = true;
       } else {
@@ -154,14 +154,14 @@ read( vcl_istream& is )
         // signature covariance
         int nrow = -1;
         int ncol = -1;
-        
+
         // get number of rows and cols
         is >> nrow >> ncol;
         if( !is || nrow<=0 || ncol<=0 ) {
           WarningMacro( "Cannot parse the number of rows and columns." << vcl_endl );
           return false;
         }
-        
+
         signature_inv_covar_.set_size( nrow, ncol );
         is >> signature_inv_covar_;
 
@@ -169,7 +169,7 @@ read( vcl_istream& is )
           WarningMacro( "Cannot parse signature covariance" << vcl_endl );
           return false;
         }
-        
+
         // set the flag
         has_signature_inv_covar_ = true;
       } else {
@@ -181,7 +181,7 @@ read( vcl_istream& is )
       return false;
     }
   }
-  
+
   // succeeded
   return true;
 }

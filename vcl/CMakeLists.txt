@@ -190,54 +190,6 @@ SET( vcl_sources
   iso/vcl_typeinfo.h
   iso/vcl_valarray.h
 
-  emulation/vcl_limits.cxx            emulation/vcl_limits.h
-  emulation/vcl_string_instances.cxx
-  emulation/vcl_rbtree_instances.cxx
-  emulation/vcl_hashtable.cxx         emulation/vcl_hashtable.h
-  emulation/vcl_alloc.cxx             emulation/vcl_alloc.h
-  emulation/vcl_algorithm.txx         emulation/vcl_algorithm.h
-  emulation/vcl_complex.txx           emulation/vcl_complex.h
-  emulation/vcl_deque.txx             emulation/vcl_deque.h
-  emulation/vcl_functional.txx        emulation/vcl_functional.h
-  emulation/vcl_hash.txx
-  emulation/vcl_hash_map.txx          emulation/vcl_hash_map.h
-  emulation/vcl_iterator.txx          emulation/vcl_iterator.h
-  emulation/vcl_list.txx              emulation/vcl_list.h
-  emulation/vcl_map.txx               emulation/vcl_map.h
-  emulation/vcl_multimap.txx          emulation/vcl_multimap.h
-  emulation/vcl_rbtree.txx
-  emulation/vcl_set.txx               emulation/vcl_set.h
-  emulation/vcl_utility.txx           emulation/vcl_utility.h
-  emulation/vcl_vector.txx            emulation/vcl_vector.h
-  emulation/vcl_algobase.h
-  emulation/vcl_bool.h
-  emulation/vcl_bvector.h
-  emulation/vcl_ciso646.h
-  emulation/vcl_defalloc.h
-  emulation/vcl_functionx.h
-  emulation/vcl_hash_set.h
-  emulation/vcl_heap.h
-  emulation/vcl_multiset.h
-  emulation/vcl_new.h
-  emulation/vcl_pair.h
-  emulation/vcl_rel_ops.h
-  emulation/vcl_stack.h
-  emulation/vcl_stlfwd.h
-  emulation/vcl_tempbuf.h
-  emulation/vcl_tree.h
-
-  emulation/vcl_stlconf.h
-  emulation/egcs-stlconf.h
-  emulation/gcc-272-stlconf.h
-  emulation/gcc-2800-stlconf.h
-  emulation/gcc-281-stlconf.h
-  emulation/gcc-295-stlconf.h
-  emulation/sgi-CC-stlconf.h
-  emulation/sun-CC4.1-stlconf.h
-  emulation/sun-CC5.0-stlconf.h
-  emulation/win32-vc50-stlconf.h
-  emulation/stlcomp.h
-
   gcc/vcl_cmath.h
   gcc/vcl_cstdlib.h
   gcc-295/vcl_algorithm.txx

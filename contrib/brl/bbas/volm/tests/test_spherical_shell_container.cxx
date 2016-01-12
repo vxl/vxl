@@ -29,7 +29,7 @@ static void test_spherical_shell_container()
     vcl_cout << *p << vcl_endl;
 
   sph_shell->draw_template("./spherical_shell.vrml");
-  
+
   vsl_b_ofstream os("./temp.bin");
   sph_shell->b_write(os);
   os.close();

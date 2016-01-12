@@ -67,7 +67,7 @@ int main(int argc, char** argv)
       site_names.push_back(name);
   }
   vcl_vector<bwm_video_corr_sptr> corrs;
-  vcl_string cam_path = ""; 
+  vcl_string cam_path = "";
   for (unsigned i = 0; i < site_names.size(); i++)
   {
     vcl_string file = site_names[i];
@@ -90,14 +90,14 @@ int main(int argc, char** argv)
     } else
       cam_path = cp.camera_path();
   }
-  
+
   unsigned n_pts = corrs.size();
   vcl_cout << "there are: " << n_pts << " corrs total in all the site files\n";
 
   vcl_cout << "cam_path from site files: " << cam_path << vcl_endl;
   vcl_vector<vpgl_perspective_camera<double> > cams;
   //vcl_vector<vcl_string> out_names;
-  unsigned cam_id = 0; 
+  unsigned cam_id = 0;
   bwm_video_cam_istream_sptr cstr = new bwm_video_cam_istream(cam_path);
   do {
     //vpgl_perspective_camera<double>* cam = cstr->read_camera();
@@ -115,10 +115,10 @@ int main(int argc, char** argv)
     else
       break;
   } while (true);
-  
+
   vcl_cout << "found: " << cams.size() << " cameras!\n";
-  
-  // for each 3d point, there will be a vector of 2-d correspondences and cameras 
+
+  // for each 3d point, there will be a vector of 2-d correspondences and cameras
   vcl_vector< vcl_vector< vcl_pair<vnl_vector_fixed<double, 2>, unsigned> > > img_pt_corrs;  // so size img_pt_corrs = 3d_pts.size()
 
   for (unsigned i = 0; i < corrs.size(); i++)
@@ -143,7 +143,7 @@ int main(int argc, char** argv)
   input_correspondence_cov[1][1] = 1.0;
   input_correspondence_cov[2][2] = 1.0;
   vpgl_camera_transform::K_normalize_img_pts(cams, input_correspondence_cov, img_pt_corrs, img_pt_norm_corrs);
-  
+
   // compute (h,R) - base line vector and relative orientation matrix for each pair of cameras
   vgl_rotation_3d<double> R = vpgl_persp_cam_relative_orientation(cams[0], cams[1]);
   vgl_vector_3d<double> h = vpgl_persp_cam_base_line_vector(cams[0], cams[1]);
@@ -152,7 +152,7 @@ int main(int argc, char** argv)
   vcl_cout << "cam1 center: " << cams[1].get_camera_center() << "\n";
   vcl_cout << "base line vector: " << h << "\n";
   vcl_cout << "relative orientation: " << R.as_matrix() << "\n";
-  
+
   vgl_vector_3d<double> p0 = cams[0].principal_axis();
   vgl_vector_3d<double> p1 = cams[1].principal_axis();
 
@@ -179,13 +179,13 @@ int main(int argc, char** argv)
         largest = sys.D[k].real();
     }
     vcl_cout << " the angle of perturbation: " << vcl_sqrt(largest) << vcl_endl;
-     if (largest > max_angle)  
+     if (largest > max_angle)
        max_angle = largest;
-  }  
+  }
   vcl_cout << "the max angle of perturbation: " << max_angle << vcl_endl;
-    
+
   double t = timer.all();
   vcl_cout << "Finished! Time: " << t << " ms: " << t/1000 << " secs: " << t/(1000*60) << " mins." << vcl_endl;
-  
+
   return 0;
 }

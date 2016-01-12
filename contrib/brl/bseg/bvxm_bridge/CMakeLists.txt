@@ -11,12 +11,12 @@ IF(OPENCL_FOUND)
   IF(EXPAT_FOUND)
     INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
     INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-    
+
     # executable to convert a bvxm scene to a boxm2_scene
     ADD_EXECUTABLE( bvxm_to_boxm2_exe bvxm_to_boxm2.cxx  bvxm_to_boxm2.h)
     TARGET_LINK_LIBRARIES( bvxm_to_boxm2_exe boxm2 bvxm bvxm_io bvxm_grid_io bvxm_algo boxm2_io boct vnl vgl vul vbl vcl)
-  
+
   ENDIF(EXPAT_FOUND)
 
-  
+
 ENDIF(OPENCL_FOUND)

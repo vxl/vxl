@@ -28,9 +28,9 @@ void vimt_transform_util_2d( vgl_box_2d<double>& dest_box,
 void vimt_transform_util_2d( vcl_vector< vgl_point_2d<double> >& dest_pt_vec,
                              const vcl_vector< vgl_point_2d<double> >& src_pt_vec,
                                   const vimt_transform_2d& trans );
-                        
-     
 
-                                   
+
+
+
 #endif
 

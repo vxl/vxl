@@ -80,7 +80,7 @@
 
 inline float  vcl_abs(float x) { return x >= 0.0f ? x : -x; }
 inline double vcl_abs(double  x) { return x >= 0.0 ? x : -x; }
-inline long double vcl_abs(long double  x) { return x >= 0.0 ? x : -x; } 
+inline long double vcl_abs(long double  x) { return x >= 0.0 ? x : -x; }
 
 inline float vcl_acos( float f ) { return ::acosf(f); }
 inline double vcl_acos( double f ) { return ::acos(f); }

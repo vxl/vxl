@@ -216,7 +216,7 @@ bool vpgl_get_generic_camera_ray_process(bprb_func_process& pro)
     vcl_cout<<"Null camera input\n"<<vcl_endl;
     return false;
   }
-  
+
   unsigned u = pro.get_input<unsigned>(1);
   unsigned v = pro.get_input<unsigned>(2);
 

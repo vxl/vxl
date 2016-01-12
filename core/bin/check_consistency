@@ -94,7 +94,6 @@ foreach $f (@FILES)
                $f !~ m!/oufgl/(pxc200|bt848(-addons)?)\.h$! &&
                $f !~ m!\bgel/vgel/kl/.*\.h$! &&
                $f !~ m!\bvcl(/[^/]+)?/vcl_(c|[siof]+stream|io|strstream|streambuf)! &&
-               $f !~ m!\bvcl/emulation/!
               );
   study $file;
 
@@ -241,8 +240,6 @@ foreach $f (@FILES)
     next if ($j eq 'vcl_cstdio.h' && $f =~ m!/StdAfx\.h$!);
     next if ($j eq 'vcl_cmath.h' && $f =~ m!\bvcl/(vcl_cfloat|win32-vc60/vcl_complex)\.h$!);
     next if ($j eq 'vcl_cmath.h' && $f =~ m!\bvnl/algo/vnl_generalized_eigensystem\.cxx$!);
-    next if ($j eq 'vcl_cstdlib.h' && $f =~ m!\bvcl/emulation/vcl_algobase\.h$!);
-    next if ($j eq 'vcl_ctime.h' && $f =~ m!\bvcl/emulation/vcl_alloc\.h$!);
     next if ($j eq 'vcl_algorithm.h' && $f =~ m!\bvcl/gcc-295/vcl_deque\.txx$!);
     next if ($i =~ m!^(vnl|vil|vil1|vsl|vul|vpl|vgl|vgl_algo|vbl)_fwd$! || $i =~ m!^vgui_glu?x?t?$! || $i eq 'StdAfx');
     next if ($i =~ m!^mil_! && $f =~ m!\bmul/mil/mil_all\.h$!);
@@ -594,7 +591,6 @@ foreach $f (@FILES)
     if ($f !~ m!\bvcl/\S*vcl_\S+\.(h|txx)$! &&
         $file =~ m!^\s*(\#\s*include\s*\"([^\"]*)/[^\"]*\")! &&
         $2 ne "internals" && $2 ne ".." && $2 ne "../accessors" && $2 ne "os_unix" && $2 ne "vc70" &&
-        $1 ne "# include  \"emulation/vcl_limits.cxx\"");
   if ($cpp_file && $f !~ m!\bvcl/\S*vcl_\S+\.(h|txx)$! &&
       $file =~ m!\#\s*include\s*\<(assert|ctype|errno|float|iso646|limits|locale|math|setjmp|signal|stdarg|stddef|stdio|stdlib|string|time|wchar|wctype)\.h\>!) {
     $t=$1;

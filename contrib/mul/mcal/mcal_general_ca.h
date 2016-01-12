@@ -14,7 +14,7 @@
 #include <vcl_iosfwd.h>
 
 //: Class to perform general Component Analysis
-//  After an initial component analysis, this rotates pairs of 
+//  After an initial component analysis, this rotates pairs of
 //  basis vectors so as to optimise an objective function,
 //  which includes terms to do with the basis vectors themselves.
 //

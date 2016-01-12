@@ -46,7 +46,7 @@ void sdet_region_proc::set_image(vil1_image const& image,
     vcl_cout <<"In sdet_region_proc::set_image(.) - null input\n";
     return;
   }
-  
+
   if (box)
   {
     clip_ = vil1_image();
@@ -76,7 +76,7 @@ vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0
   if (box)
   {
     vclip_ = 0;
-    
+
     unsigned i0 = (unsigned)box->get_min_x(), j0 = (unsigned)box->get_min_y();
     unsigned n_i = ((unsigned)box->get_max_x())-i0;
     unsigned n_j = ((unsigned)box->get_max_y())-j0;
@@ -91,7 +91,7 @@ vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0
 bool sdet_region_proc::
 set_detector_image_vil1(sdet_detector& d)
 {
-  // Check the image 
+  // Check the image
   if (!image_ && !clip_)
     {
       vcl_cout << "In sdet_region_proc::extract_regions() -"
@@ -111,7 +111,7 @@ set_detector_image_vil1(sdet_detector& d)
 bool sdet_region_proc::
 set_detector_image_vil(sdet_detector& d)
 {
-  // Check the image resources 
+  // Check the image resources
   if (!vimage_ && !vclip_)
     {
       vcl_cout << "In sdet_region_proc::extract_regions() -"
@@ -168,7 +168,7 @@ void sdet_region_proc::extract_regions()
   else
     if(clip_)
       er.compute_edgel_regions(clip_, *edges, regions_);
-    else 
+    else
       er.compute_edgel_regions(image_, *edges, regions_);
   if (debug_)
     edge_image_ = er.GetEdgeImage(*edges);

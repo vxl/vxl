@@ -78,7 +78,7 @@ bool boxm2_cam_tableau::handle(vgui_event const &e)
   }
   if (e.type == vgui_KEY_PRESS && e.key == vgui_key('t')) {
     vcl_cout<<"rendering trajectory..."<<vcl_endl;
-    render_trajectory_ = true; 
+    render_trajectory_ = true;
     this->post_idle_request();
   }
 
@@ -86,28 +86,28 @@ bool boxm2_cam_tableau::handle(vgui_event const &e)
   else if (e.type == vgui_IDLE)
   {
     if(render_trajectory_) {
-      vpgl_camera_double_sptr& camSptr = *cam_iter_; 
-      vpgl_perspective_camera<double>* camPtr = (vpgl_perspective_camera<double>*) camSptr.ptr(); 
+      vpgl_camera_double_sptr& camSptr = *cam_iter_;
+      vpgl_perspective_camera<double>* camPtr = (vpgl_perspective_camera<double>*) camSptr.ptr();
       cam_ = *camPtr;
-    
+
       //increment cam iter
-      ++cam_iter_; 
+      ++cam_iter_;
       if(cam_iter_ == trajectory_->end())
-        cam_iter_ = trajectory_->begin(); 
-      
+        cam_iter_ = trajectory_->begin();
+
       //rerender
       this->post_redraw();
-      return true; 
+      return true;
     }
     else {
-      return false; 
+      return false;
     }
   }
   //see if drag should handle it
   event = e;
   if (vgui_drag_mixin::handle(e))
   {
-      render_trajectory_ = false; 
+      render_trajectory_ = false;
       return true;
   }
   if (vgui_tableau::handle(e))
@@ -161,14 +161,14 @@ bool boxm2_cam_tableau::mouse_drag(int x, int y, vgui_button button, vgui_modifi
     static const double angle_scale = 0.2;
     vgl_rotation_3d<double> Rx(cam_x * -dy * angle_scale);
     vgl_rotation_3d<double> Ry(cam_y * -dx * angle_scale);
-    
+
     // now compose all the transformations to get total movement of camera center
     vgl_h_matrix_3d<double> composed = T0.get_inverse() * Rx.as_h_matrix_3d() * Ry.as_h_matrix_3d() * T0;
 
     vgl_point_3d<double> new_center = composed * vgl_homg_point_3d<double>(cam_center);
     cam_.set_camera_center(new_center);
     cam_.look_at(stare_point_, vgl_vector_3d<double>(-cam_y[0], -cam_y[1], -cam_y[2]));
-   
+
     this->post_redraw();
     return true;
   }

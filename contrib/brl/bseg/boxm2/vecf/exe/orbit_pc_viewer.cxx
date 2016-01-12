@@ -8,7 +8,7 @@
 #include <vcl_fstream.h>
 int main(int argc, char ** argv)
 {
-  
+
   vul_arg_info_list arglist;
   vul_arg<vcl_string> base_dir_path(arglist, "-bdir", "Base patient directory", "");
   vul_arg<vcl_string> patient_idstr(arglist, "-pids", "Patient ids string", "");
@@ -37,7 +37,7 @@ int main(int argc, char ** argv)
                 else
                   endid = true;
         }
-          
+
     vcl_string left_param_path = base_dir + patient_id + "/" + patient_id + "_left_orbit_params.txt";
     vcl_string right_param_path = base_dir + patient_id + "/" + patient_id + "_right_orbit_params.txt";
     vcl_string pc_in_path = base_dir + patient_id + "/" + patient_id + "_sampled_points.txt";

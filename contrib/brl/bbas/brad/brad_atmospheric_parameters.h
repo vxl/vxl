@@ -2,7 +2,7 @@
 //:
 // \file
 // \brief Collection of atmospheric parameters needed for radiometric calculations
-// \author D. E. Crispell 
+// \author D. E. Crispell
 // \date January 28, 2012
 //
 //----------------------------------------------------------------------------
@@ -17,9 +17,9 @@
 class brad_atmospheric_parameters : public vbl_ref_count
 {
  public:
-   //: upwelled radiance 
+   //: upwelled radiance
    double airlight_; // units W m^-2 sr^-2 um^-2
-   //: downwelled irradiance 
+   //: downwelled irradiance
    double skylight_; // units W m^-2 um^-2
    //: optical depth of nadir path through atmosphere to ground
    double optical_depth_;

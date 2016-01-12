@@ -18,11 +18,7 @@
 // complex over other number types.
 
 
-// ---------- all emulation
-#if !VCL_USE_NATIVE_COMPLEX
-# include "emulation/vcl_complex.h"
-
-#elif defined(VCL_STLPORT)
+#if defined(VCL_STLPORT)
 # include "stlport/vcl_complex.h"
 
 // ---------- Visual Studio 6
@@ -124,8 +120,6 @@ inline vcl_complex<float > operator/(vcl_complex<float> const &z, double c) { re
 // bogus instantiation macro.
 #define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.txx instead"
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "vcl_complex.txx"
-#endif
+#include "vcl_complex.txx"
 
 #endif // vcl_complex_h_

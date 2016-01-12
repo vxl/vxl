@@ -60,9 +60,9 @@ int main(int argc, char ** argv)
     // need this on some toolkit implementations to get the window up.
 
     vul_arg_parse(argc, argv);
-        
+
     vcl_ifstream ifile(trajectory_file().c_str());
-    if(!ifile ) 
+    if(!ifile )
     {
         vcl_cout<<"Can't open trajectory file "<<trajectory_file()<<vcl_endl;
         return 0;
@@ -101,7 +101,7 @@ int main(int argc, char ** argv)
 
 
 
-    
+
     //create a new ocl_draw_glbuffer_tableau, window, and initialize it
     boxm2_ocl_render_trajectory_tableau_new bit_tableau;
     bit_tableau->init(device, opencl_cache, scene, ni(), nj(), pcam, identifier(), waypoints,second_scene_file());

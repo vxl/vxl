@@ -208,7 +208,7 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
   float subblk_dim = 0.0;
   // set arguments
   vcl_vector<boxm2_block_id> vis_order;
-  if(cam->type_name() == "vpgl_geo_camera" ) 
+  if(cam->type_name() == "vpgl_geo_camera" )
       vis_order= scene->get_block_ids(); // order does not matter for a top down orthographic camera  and axis aligned blocks
   else if(cam->type_name() == "vpgl_perspective_camera")
       vis_order= scene->get_vis_blocks_opt((vpgl_perspective_camera<double>*)cam.ptr(),ni,nj);

@@ -8,8 +8,8 @@
 #include <vcl_iostream.h>
 
 // Fresnel Integral computation adapted from Numerical recipes in C
-// eps   is the relative error; 
-// maxit is the maximum number of iterations allowed; 
+// eps   is the relative error;
+// maxit is the maximum number of iterations allowed;
 // fpmin is a number near the smallest representable floating-point number;
 // xmin  is the dividing line between using the series and continued fraction.
 
@@ -26,7 +26,7 @@
 // accuracy: 1e-8
 void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
   // the computation fails when x is outside [-1e8, 1e8]
-  // Fortunately, fresnel integrals converge when 
+  // Fortunately, fresnel integrals converge when
   // x goes to +-infinity
   if (x > 1e8 || x<-1e8)
   {
@@ -42,7 +42,7 @@ void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
   double fcos, fsin;
 
   ax= vcl_fabs(x);
-  if (ax < vcl_sqrt(fpmin)){ 
+  if (ax < vcl_sqrt(fpmin)){
     //Special case: avoid failure of convergence test because of undeflow.
     *fresnel_sin = 0.0;
     *fresnel_cos = ax;
@@ -58,7 +58,7 @@ void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
     odd = true;
     term = ax;
     n = 3;
-    for (k = 1; k <= maxit; k++){ 
+    for (k = 1; k <= maxit; k++){
       term *= fact/k;
       sum  += sign*term/n;
       test = vcl_fabs(sum) * eps;
@@ -72,13 +72,13 @@ void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
         sum = sums;
       }
 
-      if (term < test) 
+      if (term < test)
         break;
       odd = !odd;
       n += 2;
     }
 
-    if (k > maxit) 
+    if (k > maxit)
       vcl_cerr << "series failed in fresnel" << vcl_endl;
     fsin = sums;
     fcos = sumc;
@@ -104,11 +104,11 @@ void bnl_fresnel_integral(double x, double* fresnel_cos, double* fresnel_sin){
       if ((vcl_fabs(del.real()-1.0) + vcl_fabs(del.imag())) < eps)
         break;
     }
-    if (k > maxit) 
+    if (k > maxit)
       vcl_cerr << "cf failed in frenel" << vcl_endl;
 
     h = vcl_complex<double >(ax,-ax)*h;
-    cs = vcl_complex<double >(0.5,0.5)*(vcl_complex<double >(1.0,0.0) - 
+    cs = vcl_complex<double >(0.5,0.5)*(vcl_complex<double >(1.0,0.0) -
       vcl_complex<double >(vcl_cos(0.5*pix2), vcl_sin(0.5*pix2))*h );
     fcos = cs.real();
     fsin = cs.imag();

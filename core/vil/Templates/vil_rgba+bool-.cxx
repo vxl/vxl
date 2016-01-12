@@ -1,5 +1,5 @@
 // Do not remove the following notice
-// Modifications approved for public release, distribution unlimited 
+// Modifications approved for public release, distribution unlimited
 // DISTAR Case 14074
 //
 #include <vil/vil_rgba.txx>

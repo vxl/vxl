@@ -30,15 +30,15 @@ static integer c__80 = 80;
 
 /* ******************************************************** */
 /*<       SUBROUTINE APROD ( MODE, M, N, X, Y, LENIW, LENRW, IW, RW ) >*/
-/* Subroutine */ int aprod_(integer *mode, integer *m, integer *n, doublereal 
-        *x, doublereal *y, integer *leniw, integer *lenrw, integer *iw, 
+/* Subroutine */ int aprod_(integer *mode, integer *m, integer *n, doublereal
+        *x, doublereal *y, integer *leniw, integer *lenrw, integer *iw,
         doublereal *rw, void* userdata)
 {
     integer locd, locw, lochy, lochz;
-    extern /* Subroutine */ int aprod1_(integer *, integer *, doublereal *, 
-            doublereal *, doublereal *, doublereal *, doublereal *, 
-            doublereal *), aprod2_(integer *, integer *, doublereal *, 
-            doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int aprod1_(integer *, integer *, doublereal *,
+            doublereal *, doublereal *, doublereal *, doublereal *,
+            doublereal *), aprod2_(integer *, integer *, doublereal *,
+            doublereal *, doublereal *, doublereal *, doublereal *,
             doublereal *);
     (void)leniw;
     (void)lenrw;
@@ -86,8 +86,8 @@ static integer c__80 = 80;
 } /* aprod_ */
 
 /*<       SUBROUTINE APROD1( M, N, X, Y, D, HY, HZ, W ) >*/
-/* Subroutine */ int aprod1_(integer *m, integer *n, doublereal *x, 
-        doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz, 
+/* Subroutine */ int aprod1_(integer *m, integer *n, doublereal *x,
+        doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz,
         doublereal *w)
 {
     /* System generated locals */
@@ -95,7 +95,7 @@ static integer c__80 = 80;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int hprod_(integer *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int hprod_(integer *, doublereal *, doublereal *,
             doublereal *);
 
 /*<       INTEGER            M, N >*/
@@ -152,8 +152,8 @@ static integer c__80 = 80;
 } /* aprod1_ */
 
 /*<       SUBROUTINE APROD2( M, N, X, Y, D, HY, HZ, W ) >*/
-/* Subroutine */ int aprod2_(integer *m, integer *n, doublereal *x, 
-        doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz, 
+/* Subroutine */ int aprod2_(integer *m, integer *n, doublereal *x,
+        doublereal *y, doublereal *d__, doublereal *hy, doublereal *hz,
         doublereal *w)
 {
     /* System generated locals */
@@ -161,7 +161,7 @@ static integer c__80 = 80;
 
     /* Local variables */
     integer i__;
-    extern /* Subroutine */ int hprod_(integer *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int hprod_(integer *, doublereal *, doublereal *,
             doublereal *);
 
 /*<       INTEGER            M, N >*/
@@ -208,7 +208,7 @@ static integer c__80 = 80;
 } /* aprod2_ */
 
 /*<       SUBROUTINE HPROD ( N, HZ, X, Y ) >*/
-/* Subroutine */ int hprod_(integer *n, doublereal *hz, doublereal *x, 
+/* Subroutine */ int hprod_(integer *n, doublereal *hz, doublereal *x,
         doublereal *y)
 {
     /* System generated locals */
@@ -268,17 +268,17 @@ static integer c__80 = 80;
     doublereal d__1, d__2;
 
     /* Builtin functions */
-    double sin(doublereal), cos(doublereal), pow_di(doublereal *, integer *), 
+    double sin(doublereal), cos(doublereal), pow_di(doublereal *, integer *),
             sqrt(doublereal);
 
     /* Local variables */
     integer i__, j;
     doublereal t, alfa, beta;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-            integer *), hprod_(integer *, doublereal *, doublereal *, 
-            doublereal *), aprod1_(integer *, integer *, doublereal *, 
-            doublereal *, doublereal *, doublereal *, doublereal *, 
+    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *,
+            integer *), hprod_(integer *, doublereal *, doublereal *,
+            doublereal *), aprod1_(integer *, integer *, doublereal *,
+            doublereal *, doublereal *, doublereal *, doublereal *,
             doublereal *);
     doublereal dampsq, fourpi;
 
@@ -454,21 +454,21 @@ static integer c__80 = 80;
     doublereal atol, btol, etol;
     integer locw;
     extern int lstp_(integer *, integer *, integer *
-            , integer *, doublereal *, doublereal *, doublereal *, doublereal 
-            *, doublereal *, doublereal *, doublereal *, doublereal *, 
+            , integer *, doublereal *, doublereal *, doublereal *, doublereal
+            *, doublereal *, doublereal *, doublereal *, doublereal *,
             doublereal *);
     integer nout;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
     doublereal acond;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-            integer *), aprod_(integer *, integer *, integer *, doublereal *, 
+    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *,
+            integer *), aprod_(integer *, integer *, integer *, doublereal *,
             doublereal *, integer *, integer *, integer *, doublereal *,
             void*);
     doublereal anorm;
     integer lochy;
     doublereal enorm;
     integer lochz;
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
+    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *,
             doublereal *, integer *);
     doublereal rnorm;
     integer istop;
@@ -616,7 +616,7 @@ static integer c__80 = 80;
     arnorm = dnrm2_(n, v, &c__1);
 /*<       WRITE(NOUT, 2200) RNORM, ARNORM, XNORM >*/
 /*
- 2200 FORMAT(1P, ' Computed from  X ', 3E17.5) 
+ 2200 FORMAT(1P, ' Computed from  X ', 3E17.5)
 */
     printf(" Computed from  X %17.5e%17.5e%17.5e\n", rnorm, arnorm, xnorm);
 /*     Print the solution and standard error estimates from  LSQR. */
@@ -698,7 +698,7 @@ L900:
 {
     /* Local variables */
     doublereal zero;
-    extern /* Subroutine */ int test_(integer *, integer *, integer *, 
+    extern /* Subroutine */ int test_(integer *, integer *, integer *,
             integer *, doublereal *);
     doublereal damp1, damp2, damp3, damp4;
 

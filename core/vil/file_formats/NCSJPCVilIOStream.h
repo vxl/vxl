@@ -1,8 +1,8 @@
 // vil_j2k: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
-// Stellar Science Ltd. Co. (stellarscience.com) for 
+// Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 // Do not remove the following notice
-// Modifications approved for public release, distribution unlimited 
+// Modifications approved for public release, distribution unlimited
 // DISTAR Case 14074
 //
 #ifndef NCSJPCVILIOSTREAM_H
@@ -26,10 +26,10 @@
   *
   * 2) It is necessary to provide a unique string name to an open CNCSJPCIO
   *  stream. The original code always used the same name "VIL". The result is
-  * that all resources access the same J2K data, since the ecw library 
-  * accesses streams by name. Only one stream with the same name can exist, 
-  * which is the first one opened with that name. The fix is to provide a 
-  * unique name, based on a static unsigned short integer that is maintained 
+  * that all resources access the same J2K data, since the ecw library
+  * accesses streams by name. Only one stream with the same name can exist,
+  * which is the first one opened with that name. The fix is to provide a
+  * unique name, based on a static unsigned short integer that is maintained
   * and appended to the stream name prefix. JLM April 13, 2009
   */
 class CNCSJPCVilIOStream : public CNCSJPCIOStream
@@ -51,7 +51,7 @@ public:
 
   virtual bool NCS_FASTCALL Seek (INT64 offset, Origin origin = CURRENT);
 
-  virtual INT64 NCS_FASTCALL Tell(); 
+  virtual INT64 NCS_FASTCALL Tell();
 
   virtual INT64 NCS_FASTCALL Size();
 
@@ -66,11 +66,11 @@ protected:
   vil_stream* mVilStream;
   /**
     * This position is my home position (ie. mVilStream->tell() when it was
-    * passed into me).  All Seek()'s with an origin of START will be relative 
+    * passed into me).  All Seek()'s with an origin of START will be relative
     * to me.  Tell() is the position relative to this position etc.
     */
   vil_streampos mHomePos;
-  
+
   static unsigned short mId; /*unique id */
 };
 

@@ -15,7 +15,7 @@ bool vil_load_image_view_binary_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -40,7 +40,7 @@ bool vil_load_image_view_binary_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vcl_string image_filename = pro.get_input<vcl_string>(i++);
-  
+
   vsl_b_ifstream is(image_filename);
   vil_image_view_base_sptr loaded_image;
   vsl_b_read(is, loaded_image);

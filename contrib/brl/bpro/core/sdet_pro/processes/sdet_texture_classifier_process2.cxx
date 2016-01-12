@@ -26,7 +26,7 @@ bool sdet_texture_classifier_process2_cons(bprb_func_process& pro)
   // process takes 3 inputs:
   vcl_vector<vcl_string> input_types;
   input_types.push_back("sdet_texture_classifier_sptr"); //texton dictionary
-  //input_types.push_back("vil_image_view_base_sptr"); //input image 
+  //input_types.push_back("vil_image_view_base_sptr"); //input image
   input_types.push_back("unsigned");   //texture block size
   input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   if (!pro.set_input_types(input_types))
@@ -55,7 +55,7 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
   unsigned ntextons = dict->get_number_of_textons();
   vcl_cout << " testing using the dictionary with the number of textons: " << ntextons << "\n categories:\n";
   vcl_vector<vcl_string> cats = dict->get_dictionary_categories();
-  
+
   vcl_map<vcl_string, vil_rgb<vxl_byte> > cat_color_map;
   /*
   vnl_random rng(100);  // will always give the same colors
@@ -70,13 +70,13 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
   unsigned nj = dict->filter_responses().nj();
   vcl_cout << "filter bank already computed at the dictionary, ni: " << ni << " nj: " << nj << vcl_endl;
 
-  int bb = (int)(pro.get_input<unsigned>(1)); 
+  int bb = (int)(pro.get_input<unsigned>(1));
   int invalid = dict->max_filter_radius() + bb;
 
   vcl_map<vcl_string, unsigned char> cat_id_map;
   vcl_string cat_ids_file = pro.get_input<vcl_string>(2);
   if (cat_ids_file.compare("") == 0) {
-    for (unsigned kk = 0; kk < cats.size(); kk++) 
+    for (unsigned kk = 0; kk < cats.size(); kk++)
       cat_id_map[cats[kk]] = kk;
   } else {
     vcl_ifstream ifs(cat_ids_file.c_str());
@@ -99,7 +99,7 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
   vil_image_view<vil_rgb<vxl_byte> > out_rgb(ni, nj);
   vil_image_view<unsigned char> out_id(ni, nj);
   out.fill(0); out_rgb.fill(vil_rgb<vxl_byte>(0,0,0)); out_id.fill((unsigned char)0);
-  
+
   vil_image_view<int> texton_img(dict->filter_responses().ni(), dict->filter_responses().nj());
   texton_img.fill(0);
   dict->compute_textons_of_pixels(texton_img);
@@ -109,21 +109,21 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
   vcl_vector<float> hist(ntextons);
   for (int i = invalid; i < (int)ni-invalid; i++) {
     for (int j = invalid; j < (int)nj-invalid; j++) {
-      
+
       vcl_fill(hist.begin(), hist.end(), 0.0f);
       for (int ii = i-bb; ii < i+bb; ii++)
         for (int jj = j-bb; jj < j+bb; jj++) {
           int indx = texton_img(ii, jj);
           hist[indx]+=weight;// for example, counts are normalized to probability
         }
-      
+
       vcl_pair<vcl_string, float> hc = dict->highest_prob_class(hist);
-      out_rgb(i,j) = cat_color_map[hc.first];  
+      out_rgb(i,j) = cat_color_map[hc.first];
       out_id(i,j) = cat_id_map[hc.first];
       out(i,j) = hc.second;
     }
   }
-  
+
   // return the output image
   vil_image_view_base_sptr img_ptr = new vil_image_view<float>(out);
   pro.set_output_val<vil_image_view_base_sptr>(0, img_ptr);

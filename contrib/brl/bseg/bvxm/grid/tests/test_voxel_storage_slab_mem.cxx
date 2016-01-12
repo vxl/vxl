@@ -20,7 +20,7 @@ static void test_voxel_storage_slab_mem()
   storage.initialize_data(init_val);
   bool init_check = true;
   bool write_read_check = true;
-  
+
   // read in each slice, check that init_val was set, and fill with new value
   unsigned cnt = 0;
   for (unsigned i = 0; i < storage.nz(); i++) {

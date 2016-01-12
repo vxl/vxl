@@ -24,7 +24,7 @@ class volm_desc_ex_indexer : public volm_desc_indexer
 {
 public:
   static vcl_string&  get_name();
-  //: constructor 
+  //: constructor
   volm_desc_ex_indexer(vcl_string const& index_folder,
                        vcl_string const& out_index_folder,
                        vcl_vector<double> const& radius,
@@ -60,7 +60,7 @@ private:
   unsigned           nlands_;
   unsigned       layer_size_;
   unsigned char initial_mag_;
-  
+
 
   //: directory where the previous created indices is stored
   vcl_string index_folder_;

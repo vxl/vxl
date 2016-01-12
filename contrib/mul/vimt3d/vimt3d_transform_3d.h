@@ -137,7 +137,7 @@ class vimt3d_transform_3d
   // \param t_z  Translation in z
   void set_rigid_body(double r_x, double r_y, double r_z,
                       double t_x, double t_y, double t_z);
-  
+
   //: Sets the transformation to be rotation, followed by translation.
   // The transformation is separable affine.
   // \param unit_q  Unit quaternion defining rotation
@@ -157,7 +157,7 @@ class vimt3d_transform_3d
                       double r_x, double r_y, double r_z,
                       double t_x, double t_y, double t_z);
 
-  
+
   //: Sets the transformation to be similarity: scale, rotation, followed by translation.
   // The transformation is separable affine.
   // \param unit_q  Unit quaternion defining rotation

@@ -109,7 +109,7 @@ int main(int argc, char** argv)
   // find the road intersections
   unsigned n_lines = loc_lines.size();
   vcl_vector<vgl_point_2d<double> > all_cross_pts;
-  
+
   for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++)
   {
     // find the road that is inside current leaf
@@ -191,7 +191,7 @@ int main(int argc, char** argv)
   }
   vcl_stringstream log_file;
   vcl_stringstream log;
-  
+
   vul_timer t;
   t.mark();
 
@@ -313,11 +313,11 @@ int main(int argc, char** argv)
             all_cross_pts.push_back(cross_pts[c_idx]);
             all_cross_props.push_back(cross_props[c_idx]);
           }
-          
+
         }
       }
       vcl_cout << vcl_endl;
-      
+
     }  // end of loop over leaves
 
     // put all junctions into kml file

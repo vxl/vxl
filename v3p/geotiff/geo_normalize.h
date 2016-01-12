@@ -77,8 +77,8 @@ extern "C" {
  *
  * Include file for extended projection definition normalization api.
  */
-    
-#define MAX_GTIF_PROJPARMS 	10
+
+#define MAX_GTIF_PROJPARMS         10
 
 /**
  * Holds a definition of a coordinate system in normalized form.
@@ -87,85 +87,85 @@ extern "C" {
 typedef struct {
     /** From GTModelTypeGeoKey tag.  Can have the values ModelTypeGeographic
         or ModelTypeProjected. */
-    short	Model;
+    short        Model;
 
     /** From ProjectedCSTypeGeoKey tag.  For example PCS_NAD27_UTM_zone_3N.*/
-    short	PCS;
+    short        PCS;
 
     /** From GeographicTypeGeoKey tag.  For example GCS_WGS_84 or
         GCS_Voirol_1875_Paris.  Includes datum and prime meridian value. */
-    short	GCS;	      
+    short        GCS;
 
     /** From ProjLinearUnitsGeoKey.  For example Linear_Meter. */
-    short	UOMLength;
+    short        UOMLength;
 
     /** One UOMLength = UOMLengthInMeters meters. */
-    double	UOMLengthInMeters;
+    double        UOMLengthInMeters;
 
     /** The angular units of the GCS. */
     short       UOMAngle;
 
     /** One UOMAngle = UOMLengthInDegrees degrees. */
     double      UOMAngleInDegrees;
-    
+
     /** Datum from GeogGeodeticDatumGeoKey tag. For example Datum_WGS84 */
-    short	Datum;
+    short        Datum;
 
     /** Prime meridian from GeogPrimeMeridianGeoKey.  For example PM_Greenwich
         or PM_Paris. */
-    short	PM;
+    short        PM;
 
     /** Decimal degrees of longitude between this prime meridian and
         Greenwich.  Prime meridians to the west of Greenwich are negative. */
-    double	PMLongToGreenwich;
+    double        PMLongToGreenwich;
 
     /** Ellipsoid identifier from GeogELlipsoidGeoKey.  For example
         Ellipse_Clarke_1866. */
-    short	Ellipsoid;
+    short        Ellipsoid;
 
     /** The length of the semi major ellipse axis in meters. */
-    double	SemiMajor;
+    double        SemiMajor;
 
     /** The length of the semi minor ellipse axis in meters. */
-    double	SemiMinor;
+    double        SemiMinor;
 
     /** Projection id from ProjectionGeoKey.  For example Proj_UTM_11S. */
-    short	ProjCode;
+    short        ProjCode;
 
     /** EPSG identifier for underlying projection method.  From the EPSG
         TRF_METHOD table.  */
-    short	Projection;
+    short        Projection;
 
     /** GeoTIFF identifier for underlying projection method.  While some of
       these values have corresponding vlaues in EPSG (Projection field),
       others do not.  For example CT_TransverseMercator. */
-    short	CTProjection;   
+    short        CTProjection;
 
     /** Number of projection parameters in ProjParm and ProjParmId. */
-    int		nParms;
+    int                nParms;
 
     /** Projection parameter value.  The identify of this parameter
         is established from the corresponding entry in ProjParmId.  The
         value will be measured in meters, or decimal degrees if it is a
         linear or angular measure. */
-    double	ProjParm[MAX_GTIF_PROJPARMS];
+    double        ProjParm[MAX_GTIF_PROJPARMS];
 
     /** Projection parameter identifier.  For example ProjFalseEastingGeoKey.
         The value will be 0 for unused table entries. */
-    int		ProjParmId[MAX_GTIF_PROJPARMS]; /* geokey identifier,
+    int                ProjParmId[MAX_GTIF_PROJPARMS]; /* geokey identifier,
                                                    eg. ProjFalseEastingGeoKey*/
 
     /** Special zone map system code (MapSys_UTM_South, MapSys_UTM_North,
         MapSys_State_Plane or KvUserDefined if none apply. */
-    int		MapSys;
+    int                MapSys;
 
     /** UTM, or State Plane Zone number, zero if not known. */
-    int		Zone;
+    int                Zone;
 
 } GTIFDefn;
 
 int CPL_DLL GTIFGetPCSInfo( int nPCSCode, char **ppszEPSGName,
-                            short *pnProjOp, 
+                            short *pnProjOp,
                             short *pnUOMLengthCode, short *pnGeogCS );
 int CPL_DLL GTIFGetProjTRFInfo( int nProjTRFCode,
                                 char ** ppszProjTRFName,
@@ -189,7 +189,7 @@ int CPL_DLL GTIFGetUOMAngleInfo( int nUOMAngleCode,
                                  char **ppszUOMName,
                                  double * pdfInDegrees );
 double CPL_DLL GTIFAngleToDD( double dfAngle, int nUOMAngle );
-    
+
 
 /* this should be used to free strings returned by GTIFGet... funcs */
 void CPL_DLL GTIFFreeMemory( char * );
@@ -208,10 +208,10 @@ const char CPL_DLL *GTIFDecToDMS( double, const char *, int );
  * CSV files being found.
  */
 
-#define MapSys_UTM_North	-9001
-#define MapSys_UTM_South	-9002
-#define MapSys_State_Plane_27	-9003
-#define MapSys_State_Plane_83	-9004
+#define MapSys_UTM_North        -9001
+#define MapSys_UTM_South        -9002
+#define MapSys_State_Plane_27        -9003
+#define MapSys_State_Plane_83        -9004
 
 int CPL_DLL   GTIFMapSysToPCS( int MapSys, int Datum, int nZone );
 int CPL_DLL   GTIFMapSysToProj( int MapSys, int nZone );
@@ -232,5 +232,5 @@ int  CPL_DLL  GTIFProj4FromLatLong( GTIFDefn *, int, double *, double * );
 #ifdef __cplusplus
 }
 #endif
-    
+
 #endif /* ndef GEO_NORMALIZE_H_INCLUDED */

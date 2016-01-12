@@ -5,13 +5,13 @@
 #include <vgl/vgl_intersection.h>
 #include <vcl_iostream.h>
 #include <vcl_cmath.h> // for std::sqrt
-//: 
+//:
 template <class Type>
-vgl_frustum_3d<Type>:: 
+vgl_frustum_3d<Type>::
 vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
-	       vgl_vector_3d<Type> const& norm, Type d0, Type d1){
+               vgl_vector_3d<Type> const& norm, Type d0, Type d1){
 
-  //Construct cone bounding planes. Their surface normals point outward from 
+  //Construct cone bounding planes. Their surface normals point outward from
   //the interior of the frustum. It is assumed the rays are in order
   //around the boundaries of the parallel faces, so that adjacent rays
   //define the cone surface planes with outward pointing normals
@@ -85,7 +85,7 @@ vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
   else
     for(int i = 0; i<nc; ++i)
       faces_[near_plane_].push_back(i+far_indx);
-	
+
   // find the side cone planes and associated face verts
   // each side face has four vertices, two on the near face and two
   // on the far face
@@ -108,7 +108,7 @@ template <class Type>
 bool vgl_frustum_3d<Type>::operator==(vgl_frustum_3d<Type> const& other) const{
   // check addresses
   if(this == &other)
-    return true; 
+    return true;
   // check apex
   if(!(apex_ == other.apex()))
     return false;
@@ -178,9 +178,9 @@ bool vgl_frustum_3d<Type>::is_convex() const{
 template <class Type>
 bool vgl_frustum_3d<Type>::
 contains(Type const& x, Type const& y, Type const& z) const{
-  
+
   // the point must be on the inside of all the faces,
-  // assuming that the fustrum is a convex solid. 
+  // assuming that the fustrum is a convex solid.
   int n = static_cast<int>(surface_planes_.size());
   bool inside = true;
   for(int i = 0; i<n&&inside; ++i){
@@ -188,7 +188,7 @@ contains(Type const& x, Type const& y, Type const& z) const{
     Type c = surface_planes_[i].c(), d = surface_planes_[i].d();
     Type sign = a*x + b*y + c*z +d;
     inside = sign < vgl_tolerance<Type>::position;
-  }    
+  }
   return inside;
 }
 

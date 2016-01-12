@@ -24,7 +24,7 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> ftype("-f", "Filter type ( currently supports BGGR & GRBG )", "BGGR");
   vul_arg_parse(argc, argv);
   vil_image_view_base_sptr inimg_resc = vil_load(inimg().c_str());
-  if(inimg_resc->pixel_format() != VIL_PIXEL_FORMAT_BYTE) 
+  if(inimg_resc->pixel_format() != VIL_PIXEL_FORMAT_BYTE)
   {
       vcl_cout<<"Error: Image is not grayscale "<<vcl_endl;
       return -1;

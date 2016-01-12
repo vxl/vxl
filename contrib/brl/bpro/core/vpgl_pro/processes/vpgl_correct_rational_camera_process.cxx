@@ -93,7 +93,7 @@ bool vpgl_get_rational_camera_offsets_process(bprb_func_process& pro)
 
   // get the inputs
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
-  
+
   vpgl_local_rational_camera<double>* cam_local_rat = dynamic_cast<vpgl_local_rational_camera<double>*>(cam.ptr());
   if (!cam_local_rat) {
     vpgl_rational_camera<double>* cam_rational = dynamic_cast<vpgl_rational_camera<double>*>(cam.ptr());

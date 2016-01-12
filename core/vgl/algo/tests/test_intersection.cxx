@@ -406,11 +406,11 @@ static void test_poly_line_intersection()
   sh1.push_back(p10);   sh1.push_back(p11);
   sh1.push_back(p12);   sh1.push_back(p13);
   vgl_polygon<double> poly;
-  poly.push_back(sh0);   poly.push_back(sh1); 
+  poly.push_back(sh0);   poly.push_back(sh1);
   // test line with all line-edge intersections
   vgl_point_2d<double> p0(-20.0, 0.0), p1(20.0, 0.0);
   vgl_line_2d<double> line_a(p0, p1);
-  vcl_vector<vgl_point_2d<double> > inters = 
+  vcl_vector<vgl_point_2d<double> > inters =
     vgl_intersection<double>(poly, line_a);
   TEST("number of intersections, interior case", inters.size(), 4);
   double corrs=0.0;
@@ -422,7 +422,7 @@ static void test_poly_line_intersection()
   //check grazing intersection
   vgl_point_2d<double> pg0(-20.0, 1.0), pg1(20.0, 1.0);
   vgl_line_2d<double> line_g(pg0, pg1);
-  vcl_vector<vgl_point_2d<double> > ginter = 
+  vcl_vector<vgl_point_2d<double> > ginter =
     vgl_intersection<double>(line_g, poly);
   TEST("number of intersections, vertex case", ginter.size(), 4);
   double t = -ginter[2].x() + ginter[3].x()+ginter[2].y()+ginter[3].y();

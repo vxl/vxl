@@ -37,7 +37,7 @@ class boxm2_ocl_num_obs_renderer
     // persistant ocl and host buffers for efficiency
     cl_int img_dim_buff_[4];
     cl_float tnearfar_buff_[2];
-    
+
     cl_int prev_ni_;
     cl_int prev_nj_;
     cl_float* img_buff_;

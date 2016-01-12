@@ -23,7 +23,7 @@ class bsta_random_wrapper : public vbl_ref_count
  public:
    bsta_random_wrapper(unsigned long seed) : rng_(seed) {}
    bsta_random_wrapper() {}
-   
+
    vnl_random rng_;
 };
 

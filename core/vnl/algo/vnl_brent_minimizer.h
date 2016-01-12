@@ -65,6 +65,7 @@ class vnl_brent_minimizer : public vnl_nonlinear_minimizer
    //: Function evaluation at value returned by minimize(x)
   double f_at_last_minimum() const { return f_at_last_minimum_; }
 
+#if 0  // This function never uses teh value of fc, Assuming the function is not correctly implemented
   //: Find the minimum x of f(x) within a<= x <= c using pure golden section
   // \retval The position,x, of the minimum x.
   // You need to provide a bracket for the minimum (a<b<c s.t. f(a)>f(b)<f(c).
@@ -72,6 +73,7 @@ class vnl_brent_minimizer : public vnl_nonlinear_minimizer
   // Use f_at_last_minimum() to get function evaluation at the returned minima.
   double minimize_golden(double ax, double bx, double cx,
                          double fa, double fb, double fc);
+#endif
 
   //: Find the minimum value of f(x) within a<= x <= c.
   // \retval The position,x, of the minimum x.

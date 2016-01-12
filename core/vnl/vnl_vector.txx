@@ -715,12 +715,56 @@ template <class T>
 vnl_vector<T>&
 vnl_vector<T>::flip()
 {
-  for (unsigned i=0;i<num_elmts/2;i++) {
+  for (unsigned i=0;i<num_elmts/2;++i) {
     T tmp=data[i];
     data[i]=data[num_elmts-1-i];
     data[num_elmts-1-i]=tmp;
   }
   return *this;
+}
+
+template <class T>
+vnl_vector<T>&
+vnl_vector<T>::flip(const unsigned int &b, const unsigned int &e)
+{
+
+#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
+  assert (!(b > this->num_elmts || e > this->num_elmts || b > e));
+#endif
+
+  for (unsigned i=b;i<(e-b)/2+b;++i) {
+    T tmp=data[i];
+    const unsigned int endIndex = e - 1 - (i-b);
+    data[i]=data[endIndex];
+    data[endIndex]=tmp;
+  }
+  return *this;
+
+}
+
+template <class T>
+vnl_vector<T>
+vnl_vector<T>::roll(const int &shift) const
+{
+  vnl_vector<T> v(this->num_elmts);
+  const unsigned int wrapped_shift = shift % this->num_elmts;
+  if (0 == wrapped_shift)
+    return v.copy_in(this->data_block());
+  for (unsigned int i = 0; i < this->num_elmts; ++i)
+    {
+    v[(i + wrapped_shift)%this->num_elmts] = this->data_block()[i];
+    }
+  return v;
+}
+
+template <class T>
+vnl_vector<T>&
+vnl_vector<T>::roll_inplace(const int &shift)
+{
+  const unsigned int wrapped_shift = shift % this->num_elmts;
+  if (0 == wrapped_shift)
+    return *this;
+  return this->flip().flip(0,wrapped_shift).flip(wrapped_shift,this->num_elmts);
 }
 
 template <class T>

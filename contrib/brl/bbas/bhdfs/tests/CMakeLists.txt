@@ -7,12 +7,12 @@
 # and then edit /etc/environment to contain the following:
 # CLASSPATH=$CLASSPATH:$TMP
 #  e.g. echo $CLASSPATH >> /etc/environment
-# 
+#
 #
 
 ADD_EXECUTABLE( bhdfs_test_all
   test_driver.cxx
-  test_hadoop.cxx  # start hadoop and run this test to see if hadoop and vxl are hookep fine. 
+  test_hadoop.cxx  # start hadoop and run this test to see if hadoop and vxl are hookep fine.
   test_manager.cxx
   test_fstream.cxx
   test_vil_stream.cxx

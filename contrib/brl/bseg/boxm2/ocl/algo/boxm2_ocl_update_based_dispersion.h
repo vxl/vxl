@@ -19,12 +19,12 @@ class boxm2_ocl_update_based_dispersion
   public:
     static bool update( boxm2_scene_sptr         scene,
                         bocl_device_sptr         device,
-                        boxm2_opencl_cache_sptr  opencl_cache, 
+                        boxm2_opencl_cache_sptr  opencl_cache,
                         vpgl_camera_double_sptr  cam,
                         vil_image_view_base_sptr img,
                         vcl_string               in_identifier="",
-                        vil_image_view_base_sptr mask=NULL,  
-                        bool                     update_alpha = true, 
+                        vil_image_view_base_sptr mask=NULL,
+                        bool                     update_alpha = true,
                         float                    mog_var = -1.0f,
                         bool                     update_app = true,
                         float resnearfactor = 100000.0,
@@ -43,11 +43,11 @@ class boxm2_ocl_update_based_dispersion
     static float* prep_image_buffer(vil_image_view_base_sptr floatImg, bool isRGB, int& numFloats);
 
     //helper method to validate appearances
-    static bool validate_appearances(boxm2_scene_sptr scene, 
-                                     vcl_string& data_type, 
+    static bool validate_appearances(boxm2_scene_sptr scene,
+                                     vcl_string& data_type,
                                      int& appTypeSize,
-                                     vcl_string& nobs_type, 
-                                     vcl_string& options, 
+                                     vcl_string& nobs_type,
+                                     vcl_string& options,
                                      bool& isRGB);
 };
 

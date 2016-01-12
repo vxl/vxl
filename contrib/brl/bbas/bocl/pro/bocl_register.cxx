@@ -9,7 +9,7 @@
 #include <bocl/bocl_device.h>
 
 void bocl_register::register_datatype()
-{  
+{
 
     REGISTER_DATATYPE( bocl_device_sptr );
 

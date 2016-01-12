@@ -7,7 +7,7 @@ AGRICULTURE Cultivated_Crops
 WATER Open_Water
 ICE_SNOW Perennial_Ice/Snow
 ROAD roads
-MOUNTAIN_SKYLINE invalid 
+MOUNTAIN_SKYLINE invalid
 CROSS_INTERSECTION road_road
 T_INTERSECTION T_section
 RAILWAY_TRACKS railway

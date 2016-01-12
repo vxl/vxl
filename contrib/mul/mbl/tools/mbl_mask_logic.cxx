@@ -60,6 +60,6 @@ int main(int argc, char **argv)
     vcl_cout << "An unknown error occurred while carrying out the logic operation." << vcl_endl;
     return 1;
   }
-  
+
   mbl_save_mask(maskB, maskout_filename().c_str());
 }

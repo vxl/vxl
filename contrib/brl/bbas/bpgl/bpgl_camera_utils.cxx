@@ -187,10 +187,10 @@ vcl_string bpgl_camera_utils::get_string(double ni, double nj, double right_f, d
 }
 void bpgl_camera_utils::
 camera_parameters(vpgl_perspective_camera<double> const& cam,
-		  double& rodrigues_x, double& rodrigues_y,
-		  double& rodrigues_z, double& tx, double& ty,
-		  double& tz, double& focal_length_u, double& focal_length_v,
-		  double& principal_pt_u, double& principal_pt_v){
+                  double& rodrigues_x, double& rodrigues_y,
+                  double& rodrigues_z, double& tx, double& ty,
+                  double& tz, double& focal_length_u, double& focal_length_v,
+                  double& principal_pt_u, double& principal_pt_v){
 
     const vgl_rotation_3d<double>& R = cam.get_rotation();
     vnl_vector_fixed<double ,3> rod = R.as_rodrigues();
@@ -204,10 +204,10 @@ camera_parameters(vpgl_perspective_camera<double> const& cam,
 
 bool bpgl_camera_utils::
 camera_from_parameters(double rodrigues_x, double rodrigues_y,
-		       double rodrigues_z, double tx, double ty,
-		       double tz, double focal_length_u, double focal_length_v,
-		       double principal_pt_u, double principal_pt_v,
-		       vpgl_perspective_camera<double>& cam){
+                       double rodrigues_z, double tx, double ty,
+                       double tz, double focal_length_u, double focal_length_v,
+                       double principal_pt_u, double principal_pt_v,
+                       vpgl_perspective_camera<double>& cam){
   vnl_vector_fixed<double, 3> rod(rodrigues_x, rodrigues_y, rodrigues_z);
   double ang = rod.magnitude();
   if(ang<0.0 || ang>vnl_math::twopi)

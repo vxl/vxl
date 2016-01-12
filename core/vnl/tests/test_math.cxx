@@ -415,6 +415,188 @@ static void test_math()
   conv_eps = vnl_math::angle_minuspi_to_pi(-eps);
   vcl_cout << "conv_eps = " << conv_eps << vcl_endl;
   TEST("vnl_math::angle_minuspi_to_pi(-10eps)", conv_eps, -eps);
+
+  ///////////////
+  // TRUNCATED //
+  ///////////////
+
+  vcl_cout << "Truncated Remainder:" << vcl_endl;
+  // Truncated Remainder (% for integers, fmod for floating point)
+  // This behavior is most familiar to c++ programmers, but is unusual
+  // in mathematical terms.
+
+    {
+
+    vcl_cout << "+ +" << vcl_endl;
+
+    unsigned short x_short_u     = 7;
+    unsigned short y_short_u     = 2;
+      signed short x_short_s     = 7;
+      signed short y_short_s     = 2;
+    unsigned int   x_int_u       = 7;
+    unsigned int   y_int_u       = 2;
+      signed int   x_int_s       = 7;
+      signed int   y_int_s       = 2;
+    unsigned long  x_long_u      = 7;
+    unsigned long  y_long_u      = 2;
+      signed long  x_long_s      = 7;
+      signed long  y_long_s      = 2;
+    float          x_float       = 7;
+    float          y_float       = 2;
+    double         x_double      = 7;
+    double         y_double      = 2;
+    long double    x_long_double = 7;
+    long double    y_long_double = 2;
+
+    TEST("vnl_math::remainder_truncated(x_short_u    ,y_short_u    )",vnl_math::remainder_truncated(x_short_u    ,y_short_u    ),+1);
+    TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),+1);
+    TEST("vnl_math::remainder_truncated(x_int_u      ,y_int_u      )",vnl_math::remainder_truncated(x_int_u      ,y_int_u      ),+1);
+    TEST("vnl_math::remainder_truncated(x_int_s      ,y_int_s      )",vnl_math::remainder_truncated(x_int_s      ,y_int_s      ),+1);
+    TEST("vnl_math::remainder_truncated(x_long_u     ,y_long_u     )",vnl_math::remainder_truncated(x_long_u     ,y_long_u     ),+1);
+    TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),+1);
+    TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),+1);
+    TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),+1);
+    TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),+1);
+
+    vcl_cout << "+ -" << vcl_endl;
+
+    y_short_s     *= -1;
+    y_int_s       *= -1;
+    y_long_s      *= -1;
+    y_float       *= -1;
+    y_double      *= -1;
+    y_long_double *= -1;
+
+    TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),+1);
+    TEST("vnl_math::remainder_truncated(x_int_s      ,y_int_s      )",vnl_math::remainder_truncated(x_int_s      ,y_int_s      ),+1);
+    TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),+1);
+    TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),+1);
+    TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),+1);
+    TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),+1);
+
+    vcl_cout << "- -" << vcl_endl;
+
+    x_short_s     *= -1;
+    x_int_s       *= -1;
+    x_long_s      *= -1;
+    x_float       *= -1;
+    x_double      *= -1;
+    x_long_double *= -1;
+
+    TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),-1);
+    TEST("vnl_math::remainder_truncated(x_int_s      ,y_int_s      )",vnl_math::remainder_truncated(x_int_s      ,y_int_s      ),-1);
+    TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),-1);
+    TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),-1);
+    TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),-1);
+    TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),-1);
+
+    vcl_cout << "- +" << vcl_endl;
+
+    y_short_s     *= -1;
+    y_int_s       *= -1;
+    y_long_s      *= -1;
+    y_float       *= -1;
+    y_double      *= -1;
+    y_long_double *= -1;
+
+    TEST("vnl_math::remainder_truncated(x_short_s    ,y_short_s    )",vnl_math::remainder_truncated(x_short_s    ,y_short_s    ),-1);
+    TEST("vnl_math::remainder_truncated(x_int_s      ,y_int_s      )",vnl_math::remainder_truncated(x_int_s      ,y_int_s      ),-1);
+    TEST("vnl_math::remainder_truncated(x_long_s     ,y_long_s     )",vnl_math::remainder_truncated(x_long_s     ,y_long_s     ),-1);
+    TEST("vnl_math::remainder_truncated(x_float      ,y_float      )",vnl_math::remainder_truncated(x_float      ,y_float      ),-1);
+    TEST("vnl_math::remainder_truncated(x_double     ,y_double     )",vnl_math::remainder_truncated(x_double     ,y_double     ),-1);
+    TEST("vnl_math::remainder_truncated(x_long_double,y_long_double)",vnl_math::remainder_truncated(x_long_double,y_long_double),-1);
+    }
+
+  /////////////
+  // FLOORED //
+  /////////////
+
+  vcl_cout << "Floored Remainder:" << vcl_endl;
+  // This definition is identical to truncated_remainder for two positive arguments.
+  // When one or both of the arguments are negative, this attempts to mimick Python's modulus behavior.
+
+    {
+
+    vcl_cout << "+ +" << vcl_endl;
+
+    unsigned short x_short_u     = 7;
+    unsigned short y_short_u     = 2;
+      signed short x_short_s     = 7;
+      signed short y_short_s     = 2;
+    unsigned int   x_int_u       = 7;
+    unsigned int   y_int_u       = 2;
+      signed int   x_int_s       = 7;
+      signed int   y_int_s       = 2;
+    unsigned long  x_long_u      = 7;
+    unsigned long  y_long_u      = 2;
+      signed long  x_long_s      = 7;
+      signed long  y_long_s      = 2;
+    float          x_float       = 7;
+    float          y_float       = 2;
+    double         x_double      = 7;
+    double         y_double      = 2;
+    long double    x_long_double = 7;
+    long double    y_long_double = 2;
+
+    TEST("vnl_math::remainder_floored(x_short_u    ,y_short_u    )",vnl_math::remainder_floored(x_short_u    ,y_short_u    ),+1);
+    TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),+1);
+    TEST("vnl_math::remainder_floored(x_int_u      ,y_int_u      )",vnl_math::remainder_floored(x_int_u      ,y_int_u      ),+1);
+    TEST("vnl_math::remainder_floored(x_int_s      ,y_int_s      )",vnl_math::remainder_floored(x_int_s      ,y_int_s      ),+1);
+    TEST("vnl_math::remainder_floored(x_long_u     ,y_long_u     )",vnl_math::remainder_floored(x_long_u     ,y_long_u     ),+1);
+    TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),+1);
+    TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),+1);
+    TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),+1);
+    TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),+1);
+
+    vcl_cout << "+ -" << vcl_endl;
+
+    y_short_s     *= -1;
+    y_int_s       *= -1;
+    y_long_s      *= -1;
+    y_float       *= -1;
+    y_double      *= -1;
+    y_long_double *= -1;
+
+    TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),-1);
+    TEST("vnl_math::remainder_floored(x_int_s      ,y_int_s      )",vnl_math::remainder_floored(x_int_s      ,y_int_s      ),-1);
+    TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),-1);
+    TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),-1);
+    TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),-1);
+    TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),-1);
+
+    vcl_cout << "- -" << vcl_endl;
+
+    x_short_s     *= -1;
+    x_int_s       *= -1;
+    x_long_s      *= -1;
+    x_float       *= -1;
+    x_double      *= -1;
+    x_long_double *= -1;
+
+    TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),-1);
+    TEST("vnl_math::remainder_floored(x_int_s      ,y_int_s      )",vnl_math::remainder_floored(x_int_s      ,y_int_s      ),-1);
+    TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),-1);
+    TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),-1);
+    TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),-1);
+    TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),-1);
+
+    vcl_cout << "- +" << vcl_endl;
+
+    y_short_s     *= -1;
+    y_int_s       *= -1;
+    y_long_s      *= -1;
+    y_float       *= -1;
+    y_double      *= -1;
+    y_long_double *= -1;
+
+    TEST("vnl_math::remainder_floored(x_short_s    ,y_short_s    )",vnl_math::remainder_floored(x_short_s    ,y_short_s    ),+1);
+    TEST("vnl_math::remainder_floored(x_int_s      ,y_int_s      )",vnl_math::remainder_floored(x_int_s      ,y_int_s      ),+1);
+    TEST("vnl_math::remainder_floored(x_long_s     ,y_long_s     )",vnl_math::remainder_floored(x_long_s     ,y_long_s     ),+1);
+    TEST("vnl_math::remainder_floored(x_float      ,y_float      )",vnl_math::remainder_floored(x_float      ,y_float      ),+1);
+    TEST("vnl_math::remainder_floored(x_double     ,y_double     )",vnl_math::remainder_floored(x_double     ,y_double     ),+1);
+    TEST("vnl_math::remainder_floored(x_long_double,y_long_double)",vnl_math::remainder_floored(x_long_double,y_long_double),+1);
+    }
+
 }
 
 TESTMAIN(test_math);

@@ -80,7 +80,7 @@ template <class T>
 // Internal implementation
 template <class T>
   void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, vcl_size_t nelems);
-  
+
 /////////////////////////////////////////////////////////////////////////
 
 //: Write a block of signed ints to a vsl_b_ostream

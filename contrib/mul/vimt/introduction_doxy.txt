@@ -23,7 +23,7 @@
 * \section Expansion Expansion
 * There is nothing to stop you using the basic vimt_image class to provide
 * your own 2d image class. Two possible reasons for this would be to use a
-* much more general transform type, or to use a vil_image_resource as 
+* much more general transform type, or to use a vil_image_resource as
 * the underlying image type.
 
 

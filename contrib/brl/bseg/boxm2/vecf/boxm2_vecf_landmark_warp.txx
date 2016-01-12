@@ -36,7 +36,7 @@ boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_
     control_pts_target_(control_pts_target),
     weight_function_(weight_function),
     n_nearest_(n_nearest),
-    source_kd_tree_(new rsdl_kd_tree(convert_vgl_to_rsdl(control_pts_source)))
+    source_kd_tree_(new rsdl_kd_tree(convert_vgl_to_rsdl(control_pts_source), 0, n_nearest))
 {
   std::cout << "created kd tree containing " << control_pts_source.size() << " points." << std::endl;
 }
@@ -55,7 +55,9 @@ vgl_point_3d<double> boxm2_vecf_landmark_mapper<F>::operator() (vgl_point_3d<dou
   rsdl_point query_point(vnl_vector_fixed<double,3>(x.x(), x.y(), x.z()), vnl_vector<double>());
   vcl_vector< rsdl_point > closest_points;
   vcl_vector< int > indices;
-  source_kd_tree_->n_nearest( query_point, n_nearest_, closest_points, indices );
+  bool use_heap = true;
+  int max_leaves = -1;
+  source_kd_tree_->n_nearest( query_point, n_nearest_, closest_points, indices, use_heap, max_leaves );
 
   vgl_vector_3d<double> vec(0.0, 0.0, 0.0);
   double weight_sum = 0.0;

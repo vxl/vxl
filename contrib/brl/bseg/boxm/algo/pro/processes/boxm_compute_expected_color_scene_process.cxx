@@ -51,7 +51,7 @@ bool boxm_compute_expected_color_scene_process(bprb_func_process& pro)
   //get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
   float grey_offset = pro.get_input<float>(1);
-  
+
   //check input's validity
   if (!scene_base.ptr()) {
     vcl_cout <<  " :-- Scene is not valid!\n";

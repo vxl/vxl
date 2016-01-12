@@ -32,7 +32,7 @@ bool brip_truncate_nitf_bit_process_cons(bprb_func_process& pro)
   // output
   vcl_vector<vcl_string> output_types(n_outputs_);
   output_types[0] = "vil_image_view_base_sptr";  // output truncated image
-  
+
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 

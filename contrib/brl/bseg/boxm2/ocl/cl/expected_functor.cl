@@ -52,7 +52,7 @@ void step_cell_render(__global MOG_TYPE * cell_data,
     float16 mixture = cell_data[data_ptr];
 #endif
     float* mixture_array = (float*)(&mixture);
-    
+
     float weight_sum = 0.0f;
     for(short i= 0; i < 8; i++)
     {
@@ -64,11 +64,11 @@ void step_cell_render(__global MOG_TYPE * cell_data,
     if (weight_sum > 0.0f) {
         expected_int_cell /= weight_sum;
     }
-  }  
+  }
 
   float omega=(*vis) * (1.0f - diff_omega);
   (*vis) *= diff_omega;
-  (*expected_i)+=expected_int_cell*omega; 
+  (*expected_i)+=expected_int_cell*omega;
 }
 #endif //RENDER_VEW_DEP
 

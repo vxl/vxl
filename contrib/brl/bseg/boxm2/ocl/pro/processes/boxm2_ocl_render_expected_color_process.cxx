@@ -183,7 +183,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   img_dim_buff[1] = 0;   img_dim_buff[3] = nj;
   bocl_mem_sptr exp_img_dim=opencl_cache->alloc_mem(sizeof(int)*4,img_dim_buff,  "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   float tnearfar[2] = { 0.0f, 1000000} ;
   if(cam->type_name() == "vpgl_perspective_camera")
   {
@@ -197,7 +197,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   }
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-  
+
   float* max_omega_buff = new float[cl_ni*cl_nj];
   vcl_fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"max omega image buffer");

@@ -86,12 +86,12 @@ class vgui_gtk_adaptor : public vgui_adaptor, public vgui_adaptor_mixin
   struct internal_timer{
     gint real_id_;
     void* callback_ptr_;
-    
+
     internal_timer() : real_id_(0), callback_ptr_(0) { }
-    internal_timer(gint id, void* p) 
+    internal_timer(gint id, void* p)
     : real_id_(id), callback_ptr_(p) { }
   };
-    
+
   // map of timers currently in use
   vcl_map<int, internal_timer>  timers_;
 

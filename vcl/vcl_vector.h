@@ -3,14 +3,9 @@
 
 #include "vcl_compiler.h"
 
-// -------------------- emulation
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_vector.h"
-
 // -------------------- sunpro 5.0
-#elif defined(VCL_SUNPRO_CC_50) && !defined(VCL_SUNPRO_CC_56)
+#if defined(VCL_SUNPRO_CC_50) && !defined(VCL_SUNPRO_CC_56)
 # include "sunpro/vcl_vector.h"
-
 // -------------------- iso
 #else
 # include "iso/vcl_vector.h"
@@ -34,8 +29,6 @@ namespace std {
 
 #define VCL_VECTOR_INSTANTIATE extern "you must include vcl_vector.txx first"
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "vcl_vector.txx"
-#endif
+#include "vcl_vector.txx"
 
 #endif // vcl_vector_h_

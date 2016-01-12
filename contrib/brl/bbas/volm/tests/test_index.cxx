@@ -39,7 +39,7 @@ static void test_index()
   vcl_vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves(root2, leaves);
   TEST("leaves within the given polygon", leaves.size(), 5);
-  
+
 
   // io test
   volm_geo_index::write(root2, "./root2_index.txt", min_size);

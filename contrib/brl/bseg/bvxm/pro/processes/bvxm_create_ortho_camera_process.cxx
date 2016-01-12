@@ -65,7 +65,7 @@ bool bvxm_create_ortho_camera_process(bprb_func_process& pro)
   double lower_right_lon, lower_right_lat, lower_right_elev;
   lvcs->local_to_global(lower_right.x(), lower_right.y(), lower_right.z(), vpgl_lvcs::wgs84, lower_right_lon, lower_right_lat, lower_right_elev);
   vcl_cout << "lower right corner in the image is: " << lower_right_lon << " lat: " << lower_right_lat << vcl_endl;
-  
+
   vnl_matrix<double> trans_matrix(4,4,0.0);
 
   if (is_utm) {
@@ -101,9 +101,9 @@ bool bvxm_create_ortho_camera_process(bprb_func_process& pro)
     // lvcs origin is not necessarily one of the corners of the scene
     trans_matrix[0][0] = (lower_right_lon-upper_left_lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lower_right_lat)/nj;
     trans_matrix[0][3] = upper_left_lon; trans_matrix[1][3] = upper_left_lat;
-    vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs); 
+    vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs);
     cam->set_scale_format(true);
-    vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);  
+    vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);
 
     pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
     return true;

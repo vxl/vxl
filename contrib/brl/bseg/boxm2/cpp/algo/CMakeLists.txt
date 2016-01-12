@@ -52,7 +52,7 @@ SET(boxm2_cpp_algo_sources
     boxm2_import_triangle_mesh.h  boxm2_import_triangle_mesh.cxx
     boxm2_refine_block_function_with_labels.h boxm2_refine_block_function_with_labels.cxx
     boxm2_surface_distance_refine.h boxm2_surface_distance_refine.txx
-    boxm2_refine_block_multi_data.h  boxm2_refine_block_multi_data.cxx 
+    boxm2_refine_block_multi_data.h  boxm2_refine_block_multi_data.cxx
    )
 AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
 

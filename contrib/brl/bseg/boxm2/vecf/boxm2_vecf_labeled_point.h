@@ -19,7 +19,7 @@ boxm2_vecf_labeled_point(vgl_point_3d<double> const& p, vcl_string const& label)
   boxm2_vecf_labeled_point(double x, double y, double z, vcl_string const& label):
   p3d_(vgl_point_3d<double>(x,y,z)), label_(label){}
   static bool read_points(vcl_string const& path, vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > >& point_map);
-  //members  
+  //members
   vgl_point_3d<double> p3d_;
   vcl_string label_;
 };

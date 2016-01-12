@@ -69,8 +69,8 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
   vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
   vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
 
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());  
-  
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+
   bocl_kernel * kern = boxm2_ocl_fuse_based_visibility::get_kernels(device,"")[0];
   for (;iter_blks_A!=blocks_A.end() || iter_blks_B!=blocks_B.end(); iter_blks_A++,iter_blks_B++)
   {
@@ -85,8 +85,8 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
       bocl_mem* app_A     = opencl_cache->get_data<BOXM2_GAUSS_RGB>(sceneA, *iter_blks_A,0,false);
       boxm2_scene_info* info_buffer_A = sceneA->get_blk_metadata(*iter_blks_A);
       info_buffer_A->data_buffer_length = (int) (alpha_A->num_bytes()/alphaTypeSize);
-      bocl_mem* blk_info_A  = new bocl_mem(device->context(), info_buffer_A, sizeof(boxm2_scene_info), " Scene Info" );   
-      blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+      bocl_mem* blk_info_A  = new bocl_mem(device->context(), info_buffer_A, sizeof(boxm2_scene_info), " Scene Info" );
+      blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
       bocl_mem* blk_B       = opencl_cache->get_block(sceneB, *iter_blks_B);
       bocl_mem* alpha_B     = opencl_cache->get_data<BOXM2_ALPHA>(sceneB, *iter_blks_B,0,false);
@@ -94,7 +94,7 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
       bocl_mem* vis_score_B = opencl_cache->get_data<BOXM2_VIS_SCORE>(sceneB, *iter_blks_B,0,true);
       boxm2_scene_info* info_buffer_B = sceneB->get_blk_metadata(*iter_blks_B);
       info_buffer_B->data_buffer_length = (int) (alpha_B->num_bytes()/alphaTypeSize);
-      bocl_mem* blk_info_B  = new bocl_mem(device->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );   
+      bocl_mem* blk_info_B  = new bocl_mem(device->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );
       blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       global_threads[0] = (unsigned) RoundUp(info_buffer_A->scene_dims[0]*info_buffer_A->scene_dims[1]*info_buffer_A->scene_dims[2],(int)local_threads[0]);
 
@@ -171,7 +171,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_devi
   vcl_string options = opts;
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* fuse = new bocl_kernel();
   vcl_string update_opts = options + " -D VISIBILITY_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_visibility", update_opts, "fusion::fuse_blockwise_based_visibility");
@@ -228,8 +228,8 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
   vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
   vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
 
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());  
-  
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+
   bocl_kernel * kern = boxm2_ocl_fuse_based_orientation::get_kernels(device,"")[0];
   for (;iter_blks_A!=blocks_A.end() || iter_blks_B!=blocks_B.end(); iter_blks_A++,iter_blks_B++)
   {
@@ -245,8 +245,8 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
       bocl_mem* app_A     = opencl_cache->get_data<BOXM2_GAUSS_RGB>(sceneA, *iter_blks_A,0,false);
       boxm2_scene_info* info_buffer_A = sceneA->get_blk_metadata(*iter_blks_A);
       info_buffer_A->data_buffer_length = (int) (alpha_A->num_bytes()/alphaTypeSize);
-      bocl_mem* blk_info_A  = new bocl_mem(device->context(), info_buffer_A, sizeof(boxm2_scene_info), " Scene Info" );   
-      blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+      bocl_mem* blk_info_A  = new bocl_mem(device->context(), info_buffer_A, sizeof(boxm2_scene_info), " Scene Info" );
+      blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
       bocl_mem* blk_B       = opencl_cache->get_block(sceneB, *iter_blks_B);
       bocl_mem* alpha_B     = opencl_cache->get_data<BOXM2_ALPHA>(sceneB, *iter_blks_B,0,false);
@@ -255,7 +255,7 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
       bocl_mem* exp_B     = opencl_cache->get_data<BOXM2_EXPECTATION>(sceneB, *iter_blks_B,0,true,"normaldot");
       boxm2_scene_info* info_buffer_B = sceneB->get_blk_metadata(*iter_blks_B);
       info_buffer_B->data_buffer_length = (int) (alpha_B->num_bytes()/alphaTypeSize);
-      bocl_mem* blk_info_B  = new bocl_mem(device->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );   
+      bocl_mem* blk_info_B  = new bocl_mem(device->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );
       blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       global_threads[0] = (unsigned) RoundUp(info_buffer_A->scene_dims[0]*info_buffer_A->scene_dims[1]*info_buffer_A->scene_dims[2],(int)local_threads[0]);
 
@@ -334,7 +334,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_dev
   vcl_string options = opts;
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* fuse = new bocl_kernel();
   vcl_string update_opts = options + " -D ORIENTATION_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_orientation", update_opts, "fusion::fuse_blockwise_based_orientation");
@@ -393,8 +393,8 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
   vcl_vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
   vcl_vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
 
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());  
-  
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+
   bocl_kernel * kern = boxm2_ocl_fuse_surface_density::get_kernels(device,"")[0];
   for (;iter_blks_A!=blocks_A.end() || iter_blks_B!=blocks_B.end(); iter_blks_A++,iter_blks_B++)
   {
@@ -410,8 +410,8 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
       bocl_mem* app_A     = opencl_cache->get_data<BOXM2_GAUSS_RGB>(sceneA, *iter_blks_A,0,false);
       boxm2_scene_info* info_buffer_A = sceneA->get_blk_metadata(*iter_blks_A);
       info_buffer_A->data_buffer_length = (int) (alpha_A->num_bytes()/alphaTypeSize);
-      bocl_mem* blk_info_A  = new bocl_mem(device->context(), info_buffer_A, sizeof(boxm2_scene_info), " Scene Info" );   
-      blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);       
+      bocl_mem* blk_info_A  = new bocl_mem(device->context(), info_buffer_A, sizeof(boxm2_scene_info), " Scene Info" );
+      blk_info_A->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
       bocl_mem* blk_B       = opencl_cache->get_block(sceneB, *iter_blks_B);
       bocl_mem* alpha_B     = opencl_cache->get_data<BOXM2_ALPHA>(sceneB, *iter_blks_B,0,false);
@@ -420,7 +420,7 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
       bocl_mem* exp_B     = opencl_cache->get_data<BOXM2_EXPECTATION>(sceneB, *iter_blks_B,0,true,"surfacedensity");
       boxm2_scene_info* info_buffer_B = sceneB->get_blk_metadata(*iter_blks_B);
       info_buffer_B->data_buffer_length = (int) (alpha_B->num_bytes()/alphaTypeSize);
-      bocl_mem* blk_info_B  = new bocl_mem(device->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );   
+      bocl_mem* blk_info_B  = new bocl_mem(device->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );
       blk_info_B->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
       global_threads[0] = (unsigned) RoundUp(info_buffer_A->scene_dims[0]*info_buffer_A->scene_dims[1]*info_buffer_A->scene_dims[2],(int)local_threads[0]);
 
@@ -499,7 +499,7 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(bocl_devic
   vcl_string options = opts;
   //populate vector of kernels
   vcl_vector<bocl_kernel*> vec_kernels;
-  //may need DIFF LIST OF SOURCES FOR 
+  //may need DIFF LIST OF SOURCES FOR
   bocl_kernel* fuse = new bocl_kernel();
   vcl_string update_opts = options + " -D SURFACE_DENSITY_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_surface_density", update_opts, "fusion::fuse_blockwise_based_surface_density");

@@ -142,7 +142,7 @@ class bvgl_labelme_parser : public expatpp
   unsigned nlcd_id_;
   unsigned image_ni_;
   unsigned image_nj_;
-  
+
 
   //set active tag for parsing char data from different tags
   vcl_string active_tag_;

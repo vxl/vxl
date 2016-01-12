@@ -120,7 +120,7 @@ bool bvgl_set_change_type_process(bprb_func_process& pro)
     objs_new->add_obj(new_obj);
   }
   vcl_cout << "In bvgl_set_change_type_mask_process(), the size of the output change objects is: " << objs_new->size() << vcl_endl;
-  
+
   vsl_b_ofstream bof(output_file_name);
   objs_new->b_write(bof);
   bof.close();
@@ -143,7 +143,7 @@ bool bvgl_generate_mask_process2_cons(bprb_func_process& pro)
     output_types[0]= "vil_image_view_base_sptr"; // vxl_byte mask (with don't care areas)
     output_types[1]= "vil_image_view_base_sptr"; // bool mask (with changes true and other areas false)
     return pro.set_output_types(output_types);
-  } else 
+  } else
     return false;
 }
 

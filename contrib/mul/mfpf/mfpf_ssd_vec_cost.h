@@ -12,7 +12,7 @@
 class mfpf_ssd_vec_cost : public mfpf_vec_cost
 {
  private:
-  //: Mean for vector 
+  //: Mean for vector
   vnl_vector<double> mean_;
 
   //: Weights to apply to each element in sum

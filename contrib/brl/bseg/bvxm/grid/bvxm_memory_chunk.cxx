@@ -15,11 +15,11 @@ bvxm_memory_chunk::bvxm_memory_chunk() : data_(0), size_(0) {}
 bvxm_memory_chunk::bvxm_memory_chunk(vxl_uint_64 n)
 {
   data_ = new (std::nothrow)char[(unsigned)n];
-  
+
   if (data_ == 0) {
     vcl_cout << "bvxm_memory_chunk: Could not allocate data!" << vcl_endl;
   }
-  
+
   size_ = n;
 }
 

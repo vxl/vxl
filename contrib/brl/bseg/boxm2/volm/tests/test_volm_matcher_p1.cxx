@@ -182,10 +182,11 @@ static void test_volm_matcher_p1()
   // find the device that will be used
   bocl_manager_child &mgr = bocl_manager_child::instance();
   unsigned num_device = (unsigned)mgr.numGPUs();
-  TEST("GPU device is available", num_device!=0, true);
-  if (num_device == 0)
+  if (num_device == 0) {
+    vcl_cout << "Matcher requires GPU hardware, test terminates" << vcl_endl;
     return;
-
+  }
+  TEST("GPU device is available", num_device!=0, true);
   // run matcher
   vcl_string geo_folder = "./";
   vcl_string out_folder = "./";
@@ -198,8 +199,13 @@ static void test_volm_matcher_p1()
                                         cand_poly, mgr.gpus_[0], is_candidate, is_last_pass, out_folder, threshold,
                                         max_cam_per_loc, weights);
 
-  TEST("volm pass 1 matcher execution", obj_ps1_matcher.volm_matcher_p1(), true);
-  
+  bool good = obj_ps1_matcher.volm_matcher_p1();
+  if (!good) {
+    vcl_cout << "Matcher failed, may due to insufficient GPU memory" << vcl_endl;
+    return;
+  }
+  TEST("volm pass 1 matcher execution", good, true);
+
   // write out
   vcl_string out_score_bin = "./ps_1_scores_tile_0.bin";
   TEST("volm pass 1 matcher result output", obj_ps1_matcher.write_matcher_result(out_score_bin), true);

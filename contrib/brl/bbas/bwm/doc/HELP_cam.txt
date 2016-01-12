@@ -12,7 +12,7 @@
   2. Select the vertex on the face as a pivot (Left Mouse)
   3. Choose "Extrude" from pop up menu
   4. Pick the new position of the selected vertex (Left Mouse)
- 
+
 -Divide
   1. Select the Face
   2. Choose "Divide" from popup menu

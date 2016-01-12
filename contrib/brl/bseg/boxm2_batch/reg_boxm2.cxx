@@ -89,7 +89,7 @@ PyObject *
     vpgl_register::register_datatype();
     vil_register::register_datatype();
     bvgl_register::register_datatype();
-    brip_register::register_datatype(); 
+    brip_register::register_datatype();
     bvpl_kernels_register::register_datatype();
 #if defined(HAS_OPENCL) && HAS_OPENCL
     bocl_register::register_datatype();

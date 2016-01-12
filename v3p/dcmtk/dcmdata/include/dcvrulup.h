@@ -93,7 +93,7 @@ class DcmUnsignedLongOffset
 
   private:
 
-	/// private undefined copy assignment operator
+        /// private undefined copy assignment operator
     DcmUnsignedLongOffset &operator=(const DcmUnsignedLongOffset &);
 };
 

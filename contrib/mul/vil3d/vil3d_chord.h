@@ -51,7 +51,7 @@ public:
   bool operator==(const vil3d_chord& c) const;
 };
 
-//: Computes number of voxels in region 
+//: Computes number of voxels in region
 //  Assumes chords do not overlap
 inline unsigned vil3d_volume(const vcl_vector<vil3d_chord>& chords)
 {
@@ -99,7 +99,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs, const vil3d_chord& t)
 }
 
 //: Save
-inline void vsl_b_write(vsl_b_ostream& bfs, 
+inline void vsl_b_write(vsl_b_ostream& bfs,
                         const vcl_vector<vil3d_chord>& t)
 {
   vsl_b_write(bfs,unsigned(t.size()));

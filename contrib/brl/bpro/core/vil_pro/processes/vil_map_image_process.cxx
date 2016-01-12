@@ -18,8 +18,8 @@ bool vil_map_image_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  
-  input_types.push_back("vcl_string"); 
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

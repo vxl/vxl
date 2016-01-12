@@ -8,7 +8,7 @@
 // \verbatim
 //  Modifications
 //   Andrew Miller, 6 Jan 2012: factored code out to boxm2/ocl/algo/
-// \endverbatim 
+// \endverbatim
 #include <bprb/bprb_func_process.h>
 #include <boxm2/ocl/algo/boxm2_ocl_refine.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -44,7 +44,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
         vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
         return false;
     }
-    
+
     //get the inputs
     unsigned i = 0;
     bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
@@ -54,10 +54,10 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
     unsigned num_cells = boxm2_ocl_refine::refine_scene(device, scene, opencl_cache, thresh);
     vcl_cout<<"boxm2_ocl_refine_process num split: "<<num_cells<<vcl_endl;
-    
+
     //set output
     pro.set_output_val<int>(0, num_cells);
-    
+
     return true;
 }
 

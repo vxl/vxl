@@ -4,7 +4,7 @@
 // \file
 // \brief A process to load a perspective camera via libdhfs to access hadoop's file system (HDFS)
 //
-//     
+//
 // \author Gamze Tunali
 // \date Sep15, 2012
 //
@@ -68,7 +68,7 @@ bool bhdfs_load_perspective_camera_process(bprb_func_process& pro)
   vcl_stringstream iss(str);
   iss >> *pcam;
   vcl_cerr << "CAMERA=" << *pcam;
-  
+
   pro.set_output_val<vpgl_camera_double_sptr>(0, pcam);
 
   return true;

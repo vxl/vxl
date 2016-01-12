@@ -37,7 +37,7 @@ compute_matches( rgrl_feature_set const&       /*from_features*/,
   // from the pre-computed match_set
 
   rgrl_match_set_sptr
-    sub_match_set = new rgrl_match_set(match_set_->from_feature_type(), 
+    sub_match_set = new rgrl_match_set(match_set_->from_feature_type(),
                                        match_set_->to_feature_type(),
                                        match_set_->from_label(),
                                        match_set_->to_label());

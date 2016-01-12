@@ -207,7 +207,7 @@ void bvgl_gen_cylinder::display_axis_spline(vcl_ofstream& ostr) const{
     vgl_point_3d<double> p = knots[i];
     vgl_point_3d<float> pf(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
     vgl_sphere_3d<float> sp(pf, r);
-    bvrml_write::write_vrml_sphere(ostr, sp, 0.0f, 1.0f, 0.0f);      
+    bvrml_write::write_vrml_sphere(ostr, sp, 0.0f, 1.0f, 0.0f);
   }
   // display the spline points
   for(double t = 0; t<=nd; t+=0.05){

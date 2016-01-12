@@ -194,7 +194,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   if(ply_file != "")
   {
       vcl_ofstream ofile(ply_file.c_str() ) ;
-      if(! ofile ) 
+      if(! ofile )
       {
           vcl_cout<<"Could not open the output ply file "<<ply_file<<vcl_endl;
           return false;
@@ -203,7 +203,7 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
       ofile << "\nproperty float32 x\nproperty float32 y\nproperty float32 z";
       ofile << "\nend_header\n";
       ofile << vcl_fixed;
-      for (unsigned k = 0 ; k < pts3d.size(); k++) 
+      for (unsigned k = 0 ; k < pts3d.size(); k++)
           ofile <<pts3d[k].x() << ' ' << pts3d[k].y() << ' ' << pts3d[k].z()<<vcl_endl;
 
       ofile.close() ;

@@ -30,7 +30,7 @@ static void test_camera_to_vrml()
 
     vgl_vector_3d<double> res_axis;
     double res_angle;
-    boxm2_view_utils::convert_camera_to_vrml(pcam.principal_axis(), 
+    boxm2_view_utils::convert_camera_to_vrml(pcam.principal_axis(),
                                            vgl_vector_3d<double>(0,0,1),
                                            res_axis,res_angle);
 

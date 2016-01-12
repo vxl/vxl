@@ -45,14 +45,14 @@ in T1.C are used by some function in TCD.C.
 /* ----------------------------------------------------------------------- */
 #define T1_NMSEDEC_BITS 7
 
-#define T1_SIG_NE 0x0001	/**< Context orientation : North-East direction */
-#define T1_SIG_SE 0x0002	/**< Context orientation : South-East direction */
-#define T1_SIG_SW 0x0004	/**< Context orientation : South-West direction */
-#define T1_SIG_NW 0x0008	/**< Context orientation : North-West direction */
-#define T1_SIG_N 0x0010		/**< Context orientation : North direction */
-#define T1_SIG_E 0x0020		/**< Context orientation : East direction */
-#define T1_SIG_S 0x0040		/**< Context orientation : South direction */
-#define T1_SIG_W 0x0080		/**< Context orientation : West direction */
+#define T1_SIG_NE 0x0001        /**< Context orientation : North-East direction */
+#define T1_SIG_SE 0x0002        /**< Context orientation : South-East direction */
+#define T1_SIG_SW 0x0004        /**< Context orientation : South-West direction */
+#define T1_SIG_NW 0x0008        /**< Context orientation : North-West direction */
+#define T1_SIG_N 0x0010                /**< Context orientation : North direction */
+#define T1_SIG_E 0x0020                /**< Context orientation : East direction */
+#define T1_SIG_S 0x0040                /**< Context orientation : South direction */
+#define T1_SIG_W 0x0080                /**< Context orientation : West direction */
 #define T1_SIG_OTH (T1_SIG_N|T1_SIG_NE|T1_SIG_E|T1_SIG_SE|T1_SIG_S|T1_SIG_SW|T1_SIG_W|T1_SIG_NW)
 #define T1_SIG_PRIM (T1_SIG_N|T1_SIG_E|T1_SIG_S|T1_SIG_W)
 
@@ -81,8 +81,8 @@ in T1.C are used by some function in TCD.C.
 
 #define T1_NMSEDEC_FRACBITS (T1_NMSEDEC_BITS-1)
 
-#define T1_TYPE_MQ 0	/**< Normal coding using entropy coder */
-#define T1_TYPE_RAW 1	/**< No encoding the information is store under raw format in codestream (mode switch RAW)*/
+#define T1_TYPE_MQ 0        /**< Normal coding using entropy coder */
+#define T1_TYPE_RAW 1        /**< No encoding the information is store under raw format in codestream (mode switch RAW)*/
 
 /* ----------------------------------------------------------------------- */
 struct opj_common_struct;
@@ -100,18 +100,18 @@ typedef short flag_t;
 Tier-1 coding (coding of code-block coefficients)
 */
 typedef struct opj_t1 {
-	/** MQC component */
-	struct opj_mqc *mqc;
-	/** RAW component */
-	struct opj_raw *raw;
+        /** MQC component */
+        struct opj_mqc *mqc;
+        /** RAW component */
+        struct opj_raw *raw;
 
-	OPJ_INT32 *data;
-	flag_t *flags;
-	OPJ_UINT32 w;
-	OPJ_UINT32 h;
-	OPJ_UINT32 datasize;
-	OPJ_UINT32 flagssize;
-	OPJ_UINT32 flags_stride;
+        OPJ_INT32 *data;
+        flag_t *flags;
+        OPJ_UINT32 w;
+        OPJ_UINT32 h;
+        OPJ_UINT32 datasize;
+        OPJ_UINT32 flagssize;
+        OPJ_UINT32 flags_stride;
 } opj_t1_t;
 
 #define MACRO_t1_flags(x,y) t1->flags[((x)*(t1->flags_stride))+(y)]
@@ -121,7 +121,7 @@ typedef struct opj_t1 {
 /* ----------------------------------------------------------------------- */
 
 /**
- * Creates a new Tier 1 handle 
+ * Creates a new Tier 1 handle
  * and initializes the look-up tables of the Tier-1 coder/decoder
  * @return a new T1 handle if successful, returns NULL otherwise
 */
@@ -129,7 +129,7 @@ opj_t1_t* t1_create();
 
 /**
  * Destroys a previously created T1 handle
- * 
+ *
  * @param p_t1 Tier 1 handle to destroy
 */
 void t1_destroy(opj_t1_t *p_t1);

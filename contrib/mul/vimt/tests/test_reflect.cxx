@@ -90,11 +90,11 @@ static void test_reflect_int()
     for (unsigned i=0; i<ni; ++i)
     {
       unsigned ri = ni-1-i;
-      
+
       // Check pixel data
       refl_i_ok = refl_i_ok && (tempx.image()(i, j) == image.image()(ri, j));
       refl_j_ok = refl_j_ok && (tempy.image()(i, j) == image.image()(i, rj));
-      
+
       // Check transform
       // For the x-reflected image, the x-coord of each pixel's world position should be the exact
       // negative of the x-coord of the world position of the opposite pixel in the original image.

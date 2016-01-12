@@ -89,10 +89,10 @@ inline void vil3d_transform(const vil3d_image_view<inA >&srcA,
                            const vil3d_image_view<outP >&dest,
                            BinOp functor)
 {
-  assert(dest.ni() == srcA.ni() && srcA.nj() == dest.nj() 
+  assert(dest.ni() == srcA.ni() && srcA.nj() == dest.nj()
          && srcA.nk() == dest.nk()
          && srcA.nplanes() == dest.nplanes());
-  assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj() 
+  assert(srcB.ni() == srcA.ni() && srcA.nj() == srcB.nj()
          && srcA.nk() == srcB.nk()
          && srcA.nplanes() == srcB.nplanes());
   vil3d_image_view<outP >& nc_dest = const_cast<vil3d_image_view<outP >&>(dest);

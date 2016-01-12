@@ -22,7 +22,7 @@
 // same as used by Octave and R. Initial values of NA are stored as signalling NaNs, but
 // many uses will convert this to the non-signalling variant 0x7ff80000000007a2. vnl_isna()
 // will accept either variant.
-// 
+//
 // The single precision NA is stored as 0x7f8007a2. I cannot find any external support for
 // this or any other value for single precision NA. There is no automatic conversion between
 // the NA values during casting, promotion, etc. If you want to convert a float to double,

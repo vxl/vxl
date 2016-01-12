@@ -86,7 +86,7 @@ int main(int argc, char** argv)
                             << "_S" << scale_x << 'x' << scale_y << ".tif";
   out_img.fill(0);
   level_img.fill(0);
-  vcl_cout << " tile " << tile_id() << " has geo boundary " << leaf_bbox_geo 
+  vcl_cout << " tile " << tile_id() << " has geo boundary " << leaf_bbox_geo
                << " corresponding to image size " << out_img.ni() << 'x' << out_img.nj() << vcl_endl;
 
   // ingest osm regions
@@ -281,7 +281,7 @@ int main(int argc, char** argv)
   }
   vcl_stringstream log_file;
   vcl_stringstream log;
-  
+
   log_file << out_folder() << "/log_osm_2d_map_wr" << world_id() << ".xml";
 
   // create volm_geo_index2 from tile
@@ -360,7 +360,7 @@ int main(int argc, char** argv)
     unsigned nj = (unsigned)geo_img->nj();
     vil_image_view<vxl_byte> out_img(ni, nj, 1);
     out_img.fill(0);
-    
+
     // copy geo_cover images
     for (unsigned i = 0; i < ni; i++) {
       for (unsigned j = 0; j < nj; j++) {
@@ -428,7 +428,7 @@ int main(int argc, char** argv)
   }
   vcl_stringstream log_file;
   vcl_stringstream log;
-  
+
   log_file << out_folder() << "/log_osm_2d_map_wr" << world_id() << ".xml";
 
   // create volm_geo_index2 from tile
@@ -524,7 +524,7 @@ int main(int argc, char** argv)
     log << "ERROR: given tile id " << tile_id() << " does not exist\n";  error(log_file.str(), log.str());
     return false;
   }
-  // create 2d map 
+  // create 2d map
   for (unsigned t_idx = 0; t_idx < tile_size; t_idx++)
   {
     if (t_idx != tile_id())
@@ -570,7 +570,7 @@ int main(int argc, char** argv)
       // form bounding box for current leaf in local coordinate
       vgl_box_2d<double> leaf_bbox_geo = leaf->extent_;
       vgl_box_2d<double> leaf_bbox(0.0, box_lx, 0.0, box_ly);
-      
+
       // create an associate camera tfw for current image
       vnl_matrix<double> trans_matrix(4,4,0.0);
       trans_matrix[0][0] = scale_x/ni;
@@ -588,7 +588,7 @@ int main(int argc, char** argv)
       // create 2d image for current leaf
       vil_image_view<vxl_byte> out_img(ni, nj, 1);
       vil_image_view<vxl_byte> level_img(ni, nj, 1);
-      
+
       vcl_stringstream img_name;
       img_name << out_folder() << "/Sat2dMap_" << tiles[t_idx].hemisphere() << vcl_setprecision(12) << lat_min
                                << tiles[t_idx].direction() << vcl_setprecision(12) << lon_min
@@ -597,7 +597,7 @@ int main(int argc, char** argv)
       out_img.fill(0);
       level_img.fill(0);
 
-      vcl_cout << " tile " << t_idx << " leaf " << l_idx << " has geo boundary " << leaf_bbox_geo 
+      vcl_cout << " tile " << t_idx << " leaf " << l_idx << " has geo boundary " << leaf_bbox_geo
                << " corresponding to image size " << out_img.ni() << 'x' << out_img.nj() << vcl_endl;
 
       // ingest geo_cover for the image
@@ -733,7 +733,7 @@ int main(int argc, char** argv)
             for (unsigned i = 0; i < ni; i++) {
               //vcl_cout << "i = " << i << "," << vcl_flush;
               for (unsigned j = 0; j < nj; j++) {
-            
+
                 double lon, lat, gz;
                 float local_x = (float)(i+0+0.5);
                 float local_y = (float)(box_ly-j+0.5);
@@ -1024,7 +1024,7 @@ int main(int argc, char** argv)
   unsigned tile_size = tiles.size();
   volm_geo_index2_node_sptr root = volm_geo_index2::construct_tree<volm_osm_object_ids_sptr>(tiles[t_id], min_size(), roi_poly);
   vcl_cout << "Create geo index with min_size: " << min_size() << vcl_endl;
-  
+
   unsigned tree_depth = volm_geo_index2::depth(root);
   vcl_stringstream kml;  kml << out_folder() << "/p1a_" << world_str() << "_tile_" << t_id << "_depth_" << tree_depth << ".kml";
   volm_geo_index2::write_to_kml(root, tree_depth, kml.str());
@@ -1049,7 +1049,7 @@ int main(int argc, char** argv)
       }
     }
   }
-  
+
 
   // load Lidar images
   vcl_vector<volm_img_info> lidar_infos;
@@ -1140,7 +1140,7 @@ int main(int argc, char** argv)
                              << "_S" << scale_x << 'x' << scale_y << ".tif";
     out_img.fill(0);  level_img.fill(0);
     vcl_cout << "leaf " << l_idx << " has geo boundary " << leaf_bbox_geo << " --> image size " << out_img.ni() << 'x' << out_img.nj() << vcl_endl;
-    
+
     // obtain LIDAR images that intersect with current leaf
     vcl_vector<vcl_pair<vil_image_view<float>, vpgl_geo_camera*> > lidar_imgs;
     for (vcl_vector<volm_img_info>::iterator vit = lidar_infos.begin(); vit != lidar_infos.end(); ++vit) {

@@ -16,7 +16,7 @@ void mfpf_prune_overlaps(mfpf_point_finder& pf,
 //: Find list of poses overlapping given pose
 void mfpf_find_overlaps(mfpf_point_finder& pf,
                         const vcl_vector<mfpf_pose>& poses,
-                        const mfpf_pose& pose, 
+                        const mfpf_pose& pose,
                         vcl_vector<unsigned>& overlaps);
 
 //: Return true if pose overlaps with any of poses

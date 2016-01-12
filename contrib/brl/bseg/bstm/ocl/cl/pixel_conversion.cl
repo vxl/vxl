@@ -36,8 +36,8 @@ float4 yuv2rgb(float4 in)
   // the coefficient of the inverse are given here to higher precision
   // than typically used.  This allows for more accurate results when
   // working with floating point color representations
-  return (float4) ( in.x + 1.1402508551881f * in.z, 
+  return (float4) ( in.x + 1.1402508551881f * in.z,
                     in.x - 0.39473137491174f * in.y - 0.5808092090311f * in.z,
-                    in.x + 2.0325203252033f * in.y, 
+                    in.x + 2.0325203252033f * in.y,
                     0.0 );
 }

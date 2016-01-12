@@ -65,7 +65,7 @@ add_triangle( float x0, float y0, float z0,
               float x1, float y1, float z1,
               float x2, float y2, float z2 )
 {
-  vgui_triangle3D *obj = 
+  vgui_triangle3D *obj =
     new vgui_triangle3D( x0,y0,z0, x1,y1,z1, x2,y2,z2 );
 
   add(obj);

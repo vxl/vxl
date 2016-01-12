@@ -21,5 +21,4 @@ add_subdirectory(osl)
 # using vgui:
 IF( BUILD_VGUI )
   add_subdirectory(xcv)
-  add_subdirectory(apps)
 ENDIF( BUILD_VGUI )

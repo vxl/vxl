@@ -473,9 +473,9 @@ COLS_IN_ALPHA_INDEX    = 1
 
 IGNORE_PREFIX          = vxl_ vcl_ vpl_ vsl_ vul_ vbl_ vnl_ vgl_ vil_ vil1_ \
                          vil3d_ vimt_ vidl_ vidl_vil1_ vcsl_ vdgl_ vpgl_ vsol_ vtol_ \
-                         mbl_ mil_ mil3d_ oxp_ osl_ gst_ gevd_ mvl_ gmvl_ \
-                         geml_ vsrl_ gtrl_ vipl_ vepl_ vepl2_ vgui_ vgel_ \
-                         vmal_ pdf1d_ vpdfl_ clsfy_ gkll_ rrel_ rsdl_ \
+                         mbl_ oxp_ osl_ gst_ gevd_ mvl_ gmvl_ \
+                         geml_ gtrl_ vipl_ vepl_ vepl2_ vgui_ \
+                         vmal_ pdf1d_ vpdfl_ clsfy_ rrel_ rsdl_ \
                          ouel_ ouml_ jvid_
 
 #---------------------------------------------------------------------------
@@ -823,10 +823,10 @@ INCLUDE_FILE_PATTERNS  =
 
 PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS FREEVERSION ERROR_CHECKING \
              HAS_TIFF HAS_JPEG HAS_NETLIB HAS_PNG HAS_ZLIB HAS_GLUT HAS_QT \
-             VCL_HAS_BOOL=1 VCL_USE_NATIVE_STL=1 VCL_USE_NATIVE_COMPLEX=1 \
+             VCL_HAS_BOOL=1  \
              VCL_FOR_SCOPE_HACK=0 VCL_HAS_DYNAMIC_CAST=0 VCL_HAS_TYPENAME=1 \
              VCL_HAS_EXPORT=1 VCL_HAS_MUTABLE=1 VCL_HAS_EXPLICIT=1 \
-             VCL_USE_IMPLICIT_TEMPLATES=1 VCL_HAS_MEMBER_TEMPLATES=1 \
+             VCL_HAS_MEMBER_TEMPLATES=1 \
              VCL_CAN_DO_PARTIAL_SPECIALIZATION=1 VCL_NULL_TMPL_ARGS="<>" \
              VCL_DEFAULT_VALUE= VCL_DEFINE_SPECIALIZATION="template<>" \
              VCL_COMMA="," VCL_UNINSTANTIATE_SPECIALIZATION= \
@@ -865,17 +865,17 @@ PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS FREEVERSION ERROR_CHECKING \
              VXL_STDLIB_HAS_QSORT=1 VXL_STDLIB_HAS_LRAND48=1 \
              VXL_STDLIB_HAS_DRAND48=1 VXL_IEEEFP_HAS_FINITE=1 \
              VXL_C_MATH_HAS_FINITE=1 VXL_C_MATH_HAS_LROUND=1 \
-             VXL_C_MATH_HAS_SQRTF=1 
+             VXL_C_MATH_HAS_SQRTF=1
              VXL_UNISTD_USLEEP_IS_VOID=0 VXL_TWO_ARG_GETTIME=0 \
              VXL_HAS_IEEEFP_H=1 \
-             VCL_CXX_HAS_HEADER_CASSERT=1 VCL_CXX_HAS_HEADER_CISO646=1 \
+             VCL_CXX_HAS_HEADER_CASSERT=1 \
              VCL_CXX_HAS_HEADER_CSETJMP=1 VCL_CXX_HAS_HEADER_CSTDIO=1 \
              VCL_CXX_HAS_HEADER_CTIME=1 VCL_CXX_HAS_HEADER_CCTYPE=1 \
              VCL_CXX_HAS_HEADER_CLIMITS=1 VCL_CXX_HAS_HEADER_CSIGNAL=1 \
              VCL_CXX_HAS_HEADER_CSTDLIB=1 VCL_CXX_HAS_HEADER_CWCHAR=1 \
              VCL_CXX_HAS_HEADER_CERRNO=1 VCL_CXX_HAS_HEADER_CLOCALE=1 \
              VCL_CXX_HAS_HEADER_CSTDARG=1 VCL_CXX_HAS_HEADER_CSTRING=1 \
-             VCL_CXX_HAS_HEADER_CWCTYPE=1 VCL_CXX_HAS_HEADER_CFLOAT=1 \
+             VCL_CXX_HAS_HEADER_CWCTYPE=1 \
              VCL_CXX_HAS_HEADER_CMATH=1 VCL_CXX_HAS_HEADER_CSTDDEF=1 \
              VCL_CXX_HAS_HEADER_ALGORITHM=1 VCL_CXX_HAS_HEADER_IOMANIP=1 \
              VCL_CXX_HAS_HEADER_LIST=1 VCL_CXX_HAS_HEADER_OSTREAM=1 \
@@ -892,7 +892,7 @@ PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS FREEVERSION ERROR_CHECKING \
              VCL_CXX_HAS_HEADER_VALARRAY=1 VCL_CXX_HAS_HEADER_FSTREAM=1 \
              VCL_CXX_HAS_HEADER_ITERATOR=1 VCL_CXX_HAS_HEADER_NUMERIC=1 \
              VCL_CXX_HAS_HEADER_STDEXCEPT=1 VCL_CXX_HAS_HEADER_VECTOR=1 \
-             VCL_CXX_HAS_HEADER_FUNCTIONAL=1 VCL_CXX_HAS_HEADER_LIMITS=1 \
+             VCL_CXX_HAS_HEADER_FUNCTIONAL=1 \
              VCL_CXX_HAS_HEADER_STRSTREAM=1
 
 # If the MACRO_EXPANSION and EXPAND_PREDEF_ONLY tags are set to YES then

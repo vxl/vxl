@@ -3,7 +3,7 @@
 //:
 // \file
 // \brief  A process for exporting the scene as a point cloud in XYZ or PLY format along with color or grayscale information. The process expects datatypes BOXM2_POINT and BOXM2_NORMAL.
-//         The process can take as input a bounding box, specified as two points in a ply file. 
+//         The process can take as input a bounding box, specified as two points in a ply file.
 //
 // \author Vishal Jain
 // \date Aug 15, 2014
@@ -102,7 +102,7 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
       boxm2_data_base * mog;
       if( data_type == "boxm2_gauss_rgb")
          mog = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(identifier), data_buff_length * mogSize);
-      else 
+      else
           mog= cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier), data_buff_length * mogSize);
       boxm2_block_metadata data = blk_iter->second;
       if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")

@@ -75,7 +75,7 @@ resize( unsigned n )
 }
 
 template<typename T>
-void 
+void
 rgrl_set_of<T>::
 fill( T const& item )
 {

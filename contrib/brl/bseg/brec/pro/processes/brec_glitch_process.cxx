@@ -56,7 +56,7 @@ bool brec_glitch_process(bprb_func_process& pro)
   //: get input
   unsigned i = 0;
   vil_image_view_base_sptr temp = pro.get_input<vil_image_view_base_sptr>(i++);
-    
+
   vil_image_view<float> map = *vil_convert_cast(float(), temp);
   if (temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
     return false;
@@ -93,7 +93,7 @@ bool brec_glitch_process(bprb_func_process& pro)
               all_inside = false;
               break;
             }
-            
+
             if (i == 516 && j == 477) {
               vcl_cout << "map(" << ii << ", " << jj << "): " << map(ii, jj) << vcl_endl;
             }
@@ -166,16 +166,16 @@ bool brec_glitch_process(bprb_func_process& pro)
       }
     }
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out2)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(out2));
+
   float min, max;
   vil_math_value_range(out2, min, max);
   vcl_cout << "\t glitch map min: " << min << " max: " << max << vcl_endl;
   vil_image_view<vxl_byte> out_byte2(ni, nj, 1);
   vil_convert_stretch_range_limited(out2, out_byte2, 0.0f, max);
 
-  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out_byte2)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(1, new vil_image_view<vxl_byte>(out_byte2));
+
   //: normalize the g_b map
   for (unsigned j = 0; j<nj; ++j) {
     for (unsigned i = 0; i<ni; ++i) {
@@ -189,15 +189,15 @@ bool brec_glitch_process(bprb_func_process& pro)
     }
   }
 
-  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<float>(g_b)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(2, new vil_image_view<float>(g_b));
+
   vil_math_value_range(g_b, min, max);
   vcl_cout << "\t glitch normalized prob map min: " << min << " max: " << max << vcl_endl;
   vil_image_view<vxl_byte> out_byte3(ni, nj, 1);
   vil_convert_stretch_range_limited(g_b, out_byte3, 0.0f, max);
 
-  pro.set_output_val<vil_image_view_base_sptr>(3, new vil_image_view<vxl_byte>(out_byte3)); 
-  
+  pro.set_output_val<vil_image_view_base_sptr>(3, new vil_image_view<vxl_byte>(out_byte3));
+
   return true;
 }
 

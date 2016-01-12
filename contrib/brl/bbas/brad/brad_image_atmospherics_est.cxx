@@ -161,7 +161,7 @@ bool brad_estimate_atmospheric_parameters_multi(vil_image_view<float> const& rad
     // calculate optical depth
     double deg2rad = vnl_math::pi_over_180;
     double optical_depth = -vcl_log(vnl_math::pi / (mean_reflectance*mdata.sun_irradiance_values_[p]*vcl_sin(deg2rad*mdata.sun_elevation_)) * (radiance_mean-airlight));
-    
+
     if (constrain_atmospheric_params) {
       // Optical depth cannot be less than 0
       // in practice, we may not have reliable metadata, in which case the best we can hope for is
@@ -247,7 +247,7 @@ bool brad_estimate_reflectance_image_multi(vil_image_view<float> const& radiance
   {
     vil_image_view<float> img = vil_plane(radiance, p);
     vil_image_view<float> reflectance = vil_plane(reflectance_multi, p);
-    
+
     double T_sun  = vcl_exp(-atm_params.optical_depth_multi_[p] / vcl_sin(sun_el_rads));
     double T_view = vcl_exp(-atm_params.optical_depth_multi_[p] / vcl_sin(sat_el_rads));
 

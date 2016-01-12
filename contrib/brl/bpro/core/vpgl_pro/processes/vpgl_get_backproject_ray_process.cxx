@@ -49,7 +49,7 @@ bool vpgl_get_backproject_ray_processs(bprb_func_process& pro)
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
   float u = pro.get_input<float>(i++);
   float v = pro.get_input<float>(i++);
-  
+
 
   vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {

@@ -45,7 +45,7 @@ class btol_edge_algs
 
   //:Get the bounding box for a set of edges
   static vsol_box_2d bounding_box(vcl_vector<vtol_edge_2d_sptr>& edges);
-  
+
   //:Find the vertex closest to the specified position
   static vtol_vertex_2d_sptr closest_vertex(vtol_edge_2d_sptr const& e,
                                             const double x, const double y);

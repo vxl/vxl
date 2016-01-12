@@ -313,27 +313,27 @@ static void test_blocked_image_resource()
     vil_image_resource_sptr imgr = vil_load_image_resource(nitf_path.c_str());
     if (imgr)
       {
-	TEST("NITF blocked resource",
-	     imgr->get_property(vil_property_size_block_i, &sbi) &&
-	     imgr->get_property(vil_property_size_block_j, &sbj),
-	     true);
+        TEST("NITF blocked resource",
+             imgr->get_property(vil_property_size_block_i, &sbi) &&
+             imgr->get_property(vil_property_size_block_j, &sbj),
+             true);
       }
     else
       {
-	TEST("NITF resource ", false, true);
+        TEST("NITF resource ", false, true);
       }
     vil_blocked_image_resource_sptr bimgr = blocked_image_resource(imgr);
     if (bimgr)
       {
-	vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
-	for (unsigned bi = 0; bi<sbi; ++bi)
-	  for (unsigned bj = 0; bj<sbj; ++bj)
-	    vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
-	TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
+        vil_image_view<unsigned short> view = bimgr->get_block(0, 0);
+        for (unsigned bi = 0; bi<sbi; ++bi)
+          for (unsigned bj = 0; bj<sbj; ++bj)
+            vcl_cout << "NITF v(" << bi << ' ' << bj << ")=" << view(bi,bj) << '\n';
+        TEST("Test NITF ", view(1,0)==8191&&sbi==2, true);
       }
     else
       {
-	TEST("NITF blocked image resource", false, true);
+        TEST("NITF blocked image resource", false, true);
       }
   }else{
     TEST("NITF path not found", false, true);

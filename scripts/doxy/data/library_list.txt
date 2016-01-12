@@ -68,10 +68,6 @@ package: :pserver:anonymous@vxl.cvs.sourceforge.net:/cvsroot/vxl contrib/mul Man
 contrib/mul mbl    mbl_    build core/vnl core/vgl core/vsl
 # should be replaced by the following line or something along these lines:
 #contrib/mul mbl    mbl_    build core/vnl/io core/vnl/algo core/vgl/io core/vsl
-# Don't document mil or mil3d anymore, they are deprecated.
-# contrib/mul mil    mil_    build contrib/mul/mbl core/vnl core/vgl core/vbl/io core/vil1
-# contrib/mul mil/algo mil_  build contrib/mul/mil core/vnl
-# contrib/mul mil3d  mil3d_  build contrib/mul/mil
 contrib/mul pdf1d  pdf1d_  build contrib/mul/mbl core/vbl core/vnl
 # should be replaced by the following line or something along these lines:
 #contrib/mul pdf1d  pdf1d_  build contrib/mul/mbl core/vbl core/vnl/io
@@ -120,13 +116,9 @@ contrib/gel vtol   vtol_   build contrib/gel/vdgl core/vil
 contrib/gel gevd   gevd_   build contrib/gel/vtol core/vil1
 contrib/gel vifa   vifa_   build contrib/gel/gevd
 contrib/gel gmvl   gmvl_   build contrib/gel/vtol core/vil1
-contrib/gel vgel   vgel_   build contrib/gel/vtol core/vidl1 core/vidl_vil1 contrib/oxl/mvl
 contrib/gel geml   geml_   build core/vil1 core/vnl
 contrib/gel gtrl   gtrl_   build core/vbl v3p/netlib
 contrib/gel gst    gst_    build core/vbl
-contrib/gel vsrl   vsrl_   build contrib/brl/bseg/sdet contrib/gel/vgel contrib/tbl/vepl core/vgui core/vil1 contrib/rpl/rsdl
-contrib/gel gkll   gkll_   build contrib/gel/vgel
-contrib/gel vmal   vmal_   build contrib/gel/vgel contrib/oxl/osl
 contrib/gel jvid   jvid_   build core/vgui core/vidl_vil1
 contrib/gel/mrc vpgl vpgl_ build core/vcsl core/vgl core/vnl core/vbl
 

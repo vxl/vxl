@@ -112,18 +112,18 @@ class bxml_element : public bxml_data
     s >> value;
     return true;
   }
-  
-  
+
+
   //: Return the values of all attributes with a given name
   vcl_vector<vcl_string> attributes(const vcl_string& attr_name) const;
-  
+
   //: Specialization for vcl_string.
   bool get_attributea(const vcl_string& attr_name, vcl_vector<vcl_string>& values) const
   {
     values = this->attributes(attr_name);
     return true;
   }
-  
+
   //: Return the value of an attribute.
   // \see specialization for vcl_string.
   template <class T>
@@ -138,7 +138,7 @@ class bxml_element : public bxml_data
       T value_t;
       s >> value_t;
       values.push_back(value_t);
-      
+
     }
     return true;
   }

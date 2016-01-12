@@ -12,11 +12,11 @@ bool vil_convert_to_n_planes_process_cons(bprb_func_process& pro)
 {
   //this process takes two inputs:
   // input(0): the input image vil_image_view_base_sptr
-  // input(1): the number of planes in the output image 
+  // input(1): the number of planes in the output image
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("unsigned"); 
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("unsigned");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -55,11 +55,11 @@ bool vil_get_plane_process_cons(bprb_func_process& pro)
 {
   //this process takes two inputs:
   // input(0): the input image vil_image_view_base_sptr
-  // input(1): the plane id to return 
+  // input(1): the plane id to return
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); 
-  input_types.push_back("unsigned"); 
+  input_types.push_back("vil_image_view_base_sptr");
+  input_types.push_back("unsigned");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -122,7 +122,7 @@ bool vil_get_number_of_planes_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); 
+  input_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -192,7 +192,7 @@ bool vil_combine_planes_process(bprb_func_process& pro)
         img_out(i,j,1) = img_gg(i,j);
         img_out(i,j,2) = img_bb(i,j);
       }
-    
+
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img_out));
   } else if (img_r->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
     vil_image_view<vxl_byte> img_out(img_r->ni(), img_r->nj(), 3);
@@ -205,14 +205,14 @@ bool vil_combine_planes_process(bprb_func_process& pro)
         img_out(i,j,1) = img_gg(i,j);
         img_out(i,j,2) = img_bb(i,j);
       }
-    
+
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(img_out));
   } else {
     vcl_cerr << "In vil_get_plane_process() - for now only supports FLOAT format!\n";
     return false;
   }
 
-  
+
   return true;
 }
 
@@ -266,7 +266,7 @@ bool vil_combine_planes_process2(bprb_func_process& pro)
         img_out(i,j,2) = img_rr(i,j);
         img_out(i,j,3) = img_nirr(i,j);
       }
-    
+
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img_out));
   } else if (img_r->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
     vil_image_view<vxl_byte> img_out(img_r->ni(), img_r->nj(), 4);
@@ -281,14 +281,14 @@ bool vil_combine_planes_process2(bprb_func_process& pro)
         img_out(i,j,2) = img_rr(i,j);
         img_out(i,j,3) = img_nirr(i,j);
       }
-    
+
     pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(img_out));
   } else {
     vcl_cerr << "In vil_get_plane_process() - for now only supports FLOAT format!\n";
     return false;
   }
 
-  
+
   return true;
 }
 

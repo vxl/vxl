@@ -48,7 +48,7 @@ void test_static_const_definition()
 #undef ALL
 }
 
-extern "C" { long increment(long x) { return x+1; } }
+extern "C" { long double increment(long double x) { return x+1; } }
 
 void test_numeric_traits()
 {

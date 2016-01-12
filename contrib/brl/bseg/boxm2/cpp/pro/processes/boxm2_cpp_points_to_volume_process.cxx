@@ -44,7 +44,7 @@ bool boxm2_cpp_points_to_volume_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string>  output_types_(n_outputs_);
   bool good =pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
-  //default value 
+  //default value
   return good;
 }
 
@@ -63,7 +63,7 @@ bool boxm2_cpp_points_to_volume_process(bprb_func_process& pro)
   vcl_string point_file  = pro.get_input<vcl_string>(i++);
 
   //load point file
-  imesh_mesh points; 
+  imesh_mesh points;
   bool loaded = imesh_read( point_file, points);
   if(!loaded) {
     vcl_cout<<"points to volume could not load file: "<<point_file<<vcl_endl;

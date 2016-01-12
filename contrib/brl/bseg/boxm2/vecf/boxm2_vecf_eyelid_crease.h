@@ -8,7 +8,7 @@
 // \date   14 Apr 2015
 //
 // TODO - limit t_min so that the brow region doesn't jut out too far when the brow angle is increased.
-// 
+//
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_plane_3d.h>
@@ -45,7 +45,7 @@ class boxm2_vecf_eyelid_crease : public boxm2_vecf_lid_base{
 
   //: return 2nd order coefffiients weighted by t
   void blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const;
-  
+
   double ct_; //t value at crease, i.e. brow plane starts at crease
 
  private:

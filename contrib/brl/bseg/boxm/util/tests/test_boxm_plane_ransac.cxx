@@ -68,7 +68,7 @@ static void test_boxm_plane_ransac()
   boxm_plane_ransac<float>(planes, weights, l, residual, cell_global_box, threshold, ortho_thres, volume_ratio);
 
   TEST_NEAR("test_boxm_plane_ransac: found the right plane set",
-            (l.x0()-line.x0()).sqr_length() + (l.direction()-line.direction()).sqr_length(),
+            (l.point()-line.point()).sqr_length() + (l.direction()-line.direction()).sqr_length(),
             0.0f, 0.01f);
 }
 

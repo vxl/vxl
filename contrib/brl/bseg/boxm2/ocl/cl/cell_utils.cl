@@ -1,4 +1,4 @@
-//: Cell Utility functions. 
+//: Cell Utility functions.
 #define X_MIN (short4)(1,0,0,0);
 #define X_MAX (short4)(1,0,0,1);
 #define Y_MIN (short4)(0,1,0,0);
@@ -239,7 +239,7 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_max,
 
 #if 0
 //------------------------------------------------------------------------------
-// New Intersect Cell takes in ray origin, ray direction, cell min and cell 
+// New Intersect Cell takes in ray origin, ray direction, cell min and cell
 // dimension (doesn't not assume cubic volume).  Doesn't use cell_max
 // Lots of redundant code - everything here depends on RAY_D
 //------------------------------------------------------------------------------
@@ -278,7 +278,7 @@ int intersect_cell(float4 ray_o, float4 ray_d, float4 cell_min, float4 cell_dims
 }
 #endif
 //------------------------------------------------------------------------------
-// Optimized intersect cell takes in ray origin, ray direction, cell min and cell 
+// Optimized intersect cell takes in ray origin, ray direction, cell min and cell
 // dimension (doesn't not assume cubic volume).  Doesn't use cell_max
 // Lots of redundant code - everything here depends on RAY_D
 //------------------------------------------------------------------------------
@@ -311,7 +311,7 @@ int intersect_cell_opt(float4 ray_o, float4 ray_d, float4 ray_d_inv, float4 cell
 // Intersect scene takes in 3 floats for ray o, ray d, ray d inv
 //------------------------------------------------------------------------------
 void intersect_scene(float ray_ox, float ray_oy, float ray_oz,
-                     float ray_dx, float ray_dy, float ray_dz, 
+                     float ray_dx, float ray_dy, float ray_dz,
                      //float min_fx, float min_fy, float min_fz,
                      //float max_fx, float max_fy, float max_fz,
                      float4 min_face, float4 max_face,

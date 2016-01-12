@@ -25,14 +25,8 @@
 //
 // Note that there is no ISO forward_iterator<>; it's just called iterator<>.
 
-// ---------- emulation
-#if !VCL_USE_NATIVE_STL
-# include "emulation/vcl_iterator.h"
-# define vcl_iterator vcl_forward_iterator
-
-
 // ---------- later versions of gcc, e.g. egcs and 2.95
-#elif defined(VCL_GCC_EGCS) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_GCC_EGCS) && !defined(GNU_LIBSTDCXX_V3)
 # include <iterator.h>
 # define vcl_iterator_traits       /*std::*/iterator_traits
 # define vcl_iterator              /*non-std*/forward_iterator
@@ -70,8 +64,6 @@
 // vc has no raw_storage_iterator
 #endif
 
-#if VCL_USE_IMPLICIT_TEMPLATES
-# include "vcl_iterator.txx"
-#endif
+#include "vcl_iterator.txx"
 
 #endif // vcl_iterator_h_

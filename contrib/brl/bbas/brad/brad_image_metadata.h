@@ -59,7 +59,7 @@ class brad_image_metadata : public vbl_ref_count
   //vnl_double_2 lower_right_;
   vgl_polygon<double> footprint_;  // the (lon,lat) corner coordinates of the image. there is no 2.5D vgl_polygon, so ignore the height...
   vgl_point_3d<double> lower_left_;  // x is lon, y is lat  // lower_left corner of the 'extent' of the satellite image (not necessarily lower left corner of the image, since the image may be rotated in plane)
-  vgl_point_3d<double> upper_right_; 
+  vgl_point_3d<double> upper_right_;
   vgl_point_3d<double> cam_offset_;  // these are the lat, lon, elev coords of upper left corner of the image read from the RPC camera
   vcl_string band_;  // PAN or MULTI
   unsigned n_bands_;  // 1 for PAN, 4 or 8 for MULTI
@@ -78,7 +78,7 @@ class brad_image_metadata : public vbl_ref_count
   unsigned time_minute_dif(brad_image_metadata& other);
 
   void print_time() { vcl_cout << "Year: " << t_.year << " Month: " << t_.month << " Day: " << t_.day << " hour: " << t_.hour << " min: " << t_.min << " sec: " << t_.sec << "; "; }
-  
+
   //: compare the lat, lon bounding boxes. treat as Euclidean coordinate system, good for small boxes
   bool same_extent(brad_image_metadata& other);
 
@@ -93,14 +93,14 @@ class brad_image_metadata : public vbl_ref_count
 
   //: Parse QuickBird, WorldView IMD file to obtain all metadata without using image header
   bool parse_from_imd_only(vcl_string const& filename);
-  
+
   //: Parse GeoEye PVL file
   bool parse_from_pvl(vcl_string const& filename);
 
   //: Parse GeoEye PVL file to obtain all metadata without using image header
   bool parse_from_pvl_only(vcl_string const& filename);
-  
-  //: Parse the required params for normalization from a text file with a known format, 
+
+  //: Parse the required params for normalization from a text file with a known format,
   //  it can be used to calibrate images from any satellite if such files are created for each image of the satellite
   bool parse_from_txt(vcl_string const& filename, vcl_vector<double>& solar_irrads);
 };

@@ -66,7 +66,7 @@ int main2(int argc, char *argv[])
   );
 
   // Parse the program arguments
-  
+
   // These options are I/O and format-related
   vul_arg<vcl_string> in_file("-i", "input file containing scalar values (whitespace-separated); otherwise uses stdin", "");
   vul_arg<vcl_string> out_file("-o", "output file to append statistics; otherwise write to stdout", "");
@@ -115,7 +115,7 @@ int main2(int argc, char *argv[])
   if (data_vec.empty())
     do_error("Could not parse data file.");
   MBL_LOG(DEBUG, logger(), "data file contained " << data_vec.size() << " values.");
-  
+
   if (absolute())
   {
     for (unsigned i=0;i<data_vec.size();++i) data_vec[i]=vcl_abs(data_vec[i]);
@@ -183,7 +183,7 @@ int main2(int argc, char *argv[])
 
   // Use provided label if specified, otherwise use input filename (or empty string).
   vcl_string my_label = label.set() ? label() : in_file();
-  
+
   // Write statistics in 1 of multiple formats
   enum OutputFormat output_format = format()=="table" ? TABLE : LIST;
   switch (output_format)
@@ -205,19 +205,19 @@ int main2(int argc, char *argv[])
       if (os && os->good()) *os << my_label << sep();
       for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
       {
-        if (os && os->good()) 
+        if (os && os->good())
           *os << it->second << sep();
       }
       if (os && os->good()) *os << vcl_endl;
     }
     break;
-  
+
   default:
     {
       // List format
       for (vcl_map<vcl_string,double>::const_iterator it=stats.begin(); it!=stats.end(); ++it)
       {
-        if (os && os->good()) 
+        if (os && os->good())
         {
           *os <<  my_label << " " << it->first << ": " << it->second << "\n";
         }

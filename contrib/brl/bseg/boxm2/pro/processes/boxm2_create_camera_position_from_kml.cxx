@@ -78,7 +78,7 @@ bool boxm2_create_camera_from_kml_path_process(bprb_func_process& pro)
   }
   // transfer from global wgs84 to local lvcs
   vcl_vector<vgl_point_2d<double> > vp;
-  
+
   for(unsigned i=0; i<(unsigned)parser->linecord_[0].size(); i++){
     double local_x, local_y, local_z;
     vcl_cout << " geo_coord = " << parser->linecord_[0][i] << vcl_endl;
@@ -99,7 +99,7 @@ bool boxm2_create_camera_from_kml_path_process(bprb_func_process& pro)
       cam_pos.push_back(startp + ci * length * vs2e);
   }
   // add the last point along the path
-  cam_pos.push_back(vp[vp.size()-1]); 
+  cam_pos.push_back(vp[vp.size()-1]);
 
   // write it into the txt file
   vcl_ofstream ofs(out_path.c_str());

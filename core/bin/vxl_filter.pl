@@ -557,7 +557,6 @@ sub scan_for_hints {
            m/\bstrcat\s*\(\s*string\b/ ||  # "strcat\(string"
            m/\bstrcmp\s*\(\s*string\b/ ||  # "strcmp\(string"
            m/\bstrlen\s*\(\s*string\b/ ||  # "strlen\(string"
-           m/QV_NODE_ADD_FIELD/ ||         # libQv does not use <string>
            0) {
          $string_is_typename = 0;
          $string_is_identifier = 1;
@@ -618,12 +617,6 @@ sub process_lines {
       s/\bIUE_SUNPRO_ALLOCATOR_HACK\b/VCL_SUNPRO_ALLOCATOR_HACK/g;
 
       s/\bIUE_STRING_IS_TYPEDEF\b/VCL_STRING_IS_TYPEDEF/g;
-      s/\bdefined\(IUE_USE_NATIVE_STL\)/VCL_USE_NATIVE_STL/g;
-      s/(\#\s*if)def\s+IUE_USE_NATIVE_STL\b/$1 VCL_USE_NATIVE_STL/g;
-      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_STL\b/$1 !VCL_USE_NATIVE_STL/g;
-      s/\bdefined\(IUE_USE_NATIVE_COMPLEX\)/VCL_USE_NATIVE_COMPLEX/g;
-      s/(\#\s*if)def\s+IUE_USE_NATIVE_COMPLEX\b/$1 VCL_USE_NATIVE_COMPLEX/g;
-      s/(\#\s*if)ndef\s+IUE_USE_NATIVE_COMPLEX\b/$1 !VCL_USE_NATIVE_COMPLEX/g;
       s/\bIUE_STL_USE_ABBREVS\b/__STL_USE_ABBREVS/g;
 
       # classes and functions

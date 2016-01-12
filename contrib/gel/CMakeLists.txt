@@ -32,13 +32,6 @@ add_subdirectory(geml)
 # Multi-view database
 add_subdirectory(gmvl)
 
-# Kanade-Lucas-Tomasi feature tracker;
-IF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-  add_subdirectory(vgel/kl)
-  add_subdirectory(vgel)
-  add_subdirectory(gkll)
-ENDIF (BUILD_UNMAINTAINED_LIBRARIES OR BUILD_FOR_VXL_DASHBOARD)
-
 # Dense matcher
 add_subdirectory(vmal)
 

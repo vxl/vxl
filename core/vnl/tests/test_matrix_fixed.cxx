@@ -76,6 +76,9 @@ test_multiply()
 static
 void test_int()
 {
+  vcl_cout << "*********************************\n"
+           << "Testing vnl_matrix_fixed<int,x,x>\n"
+           << "*********************************" << vcl_endl;
   vnl_matrix_fixed<int,2,2> m0;
   TEST("vnl_matrix_fixed<int,2,2> m0", (m0.rows()==2 && m0.columns()==2), true);
   vnl_matrix_fixed<int,3,4> m1;
@@ -181,6 +184,16 @@ void test_int()
        ((m6*=m7),
         (m6.get(0,0)==19 && m6.get(0,1)==22 && m6.get(1,0)==43 && m6.get(1,1)==50)), true);
 
+  // | 19 22 |
+  // | 43 50 |
+  vnl_vector<int> flat;
+  TEST("m6.flatten_row_major()",
+       (flat = m6.flatten_row_major(),
+       (flat.get(0)==19 && flat.get(1)==22 && flat.get(2)==43 && flat.get(3)==50)), true);
+  TEST("m6.flatten_column_major()",
+       (flat = m6.flatten_column_major(),
+       (flat.get(0)==19 && flat.get(1)==43 && flat.get(2)==22 && flat.get(3)==50)), true);
+
   // additional tests
   int mvalues [] = {0,-2,2,0};
   vnl_int_2x2 m(mvalues); m0 = m;
@@ -213,6 +226,9 @@ void test_int()
 static
 void test_float()
 {
+  vcl_cout << "***********************************\n"
+           << "Testing vnl_matrix_fixed<float,x,x>\n"
+           << "***********************************" << vcl_endl;
   vnl_matrix_fixed<float,2,2> d0;
   TEST("vnl_matrix_fixed<float,2,2> d0", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix_fixed<float,3,4> d1;
@@ -313,6 +329,9 @@ void test_float()
 static
 void test_double()
 {
+  vcl_cout << "************************************\n"
+           << "Testing vnl_matrix_fixed<double,x,x>\n"
+           << "************************************" << vcl_endl;
   vnl_matrix_fixed<double,2,2> d0;
   TEST("vnl_matrix_fixed<double,2,2> d0", (d0.rows()==2 && d0.columns()==2), true);
   vnl_matrix_fixed<double,3,4> d1;

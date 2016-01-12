@@ -2,8 +2,8 @@
 
 //pick out data type
 bool boxm2_multi_util::get_scene_appearances(boxm2_scene_sptr    scene,
-                                             vcl_string&         data_type, 
-                                             vcl_string&         options, 
+                                             vcl_string&         data_type,
+                                             vcl_string&         options,
                                              int&                apptypesize)
 {
   bool foundDataType = false;
@@ -29,5 +29,5 @@ bool boxm2_multi_util::get_scene_appearances(boxm2_scene_sptr    scene,
     vcl_cout<<"boxm2_multi_util ERROR: scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<vcl_endl;
     return false;
   }
-  return true; 
+  return true;
 }

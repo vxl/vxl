@@ -33,10 +33,10 @@ ELSE(JPEG_FOUND)
   IF(EXISTS ${vxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
     SET( JPEG_FOUND "YES" )
-    SET( JPEG_LIBRARIES jpeg )  
+    SET( JPEG_LIBRARIES jpeg )
     SET( JPEG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/jpeg)
     SET( JPEG_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/jpeg)
-        
+
   ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
 ENDIF(JPEG_FOUND)

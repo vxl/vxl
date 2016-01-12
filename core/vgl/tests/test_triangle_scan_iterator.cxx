@@ -54,7 +54,7 @@ static void test_triangle_scan_iterator()
     // ..X.   with two connected components!
     // ..X.
     // ....  <= this scan line has no pixels
-    // ...X 
+    // ...X
     int points[5][2] = { {1,1},{2,1},{2,2},{2,3},{3,5} };
 
     vgl_triangle_scan_iterator<float> ti;

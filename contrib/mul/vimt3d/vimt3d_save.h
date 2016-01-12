@@ -21,7 +21,7 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
 //  Note that since this uses the vil3d_image_resource I/O scheme, it can only guarantee that the
 //  voxel size component of the world-to-image transform will be stored in full.   This is because
 //  some image formats only record the voxel size, not the origin or any rotations - the interface
-//  reverts to the lowest common set.  Those formats which can cope with translations will include 
+//  reverts to the lowest common set.  Those formats which can cope with translations will include
 //  this as well.  It was felt that it is safest to be consistent and never save rotations/shears,
 //  rather than have them arbitrarily saved/not saved depending on the image format chosen.
 bool vimt3d_save(const vcl_string& path,

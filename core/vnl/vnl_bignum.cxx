@@ -645,7 +645,12 @@ bool vnl_bignum::operator==(const vnl_bignum& rhs) const
     if (this->sign != rhs.sign) return false;   // Different sign implies !=
     if (this->count != rhs.count) return false; // Different size implies !=
     for (Counter i = 0; i < this->count; i++)   // Each data element the same?
-      if (this->data[i] != rhs.data[i]) return false; // No. Return !=
+      {
+      if ( ( ! this->data ) || ( ! rhs.data ) || (this->data[i] != rhs.data[i]))
+        {
+        return false; // No. Return !=
+        }
+      }
   }
   return true;                                    // Yes. Return ==
 }
@@ -896,8 +901,11 @@ void vnl_bignum::resize(short new_count)
 
   if (this->count <= new_count) {       // Copy old data into new
     short i = 0;
-    for (; i < this->count; i++)
-      new_data[i] = this->data[i];
+    if( this->data && new_data )
+      {
+      for (; i < this->count; i++)
+        new_data[i] = this->data[i];
+      }
     for (; i < new_count; i++)
       new_data[i] = 0;
   }
@@ -945,19 +953,25 @@ void add(const vnl_bignum& b1, const vnl_bignum& b2, vnl_bignum& sum)
   sum.resize(bmax->count);              // Allocate data for their sum
   unsigned long temp, carry = 0;
   Counter i = 0;
-  while (i < bmin->count) {             // Add, element by element.
-    // Add both elements and carry
-    temp = (unsigned long)b1.data[i] + (unsigned long)b2.data[i] + carry;
-    carry = temp/0x10000L;              // keep track of the carry
-    sum.data[i] = Data(temp);           // store sum
-    i++;                                // go to next element
-  }
-  while (i < bmax->count) {             // bmin has no more elements
-    temp = bmax->data[i] + carry;       // propagate the carry through
-    carry = temp/0x10000L;              // the rest of bmax's elements
-    sum.data[i] = Data(temp);           // store sum
-    i++;
-  }
+  if( b1.data )
+    {
+    while (i < bmin->count) {             // Add, element by element.
+      // Add both elements and carry
+      temp = (unsigned long)b1.data[i] + (unsigned long)b2.data[i] + carry;
+      carry = temp/0x10000L;              // keep track of the carry
+      sum.data[i] = Data(temp);           // store sum
+      i++;                                // go to next element
+    }
+    }
+  if( bmax->data )
+    {
+    while (i < bmax->count ) {             // bmin has no more elements
+      temp = bmax->data[i] + carry;       // propagate the carry through
+      carry = temp/0x10000L;              // the rest of bmax's elements
+      sum.data[i] = Data(temp);           // store sum
+      i++;
+    }
+    }
   if (carry) {                          // if carry left over
     sum.resize(bmax->count + 1);        //   allocate another word
     sum.data[bmax->count] = 1;          //   save the carry in it

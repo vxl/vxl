@@ -18,7 +18,7 @@ class vsph_sph_point_2d
 
   ~vsph_sph_point_2d() {}
 
-  void set(double theta, double phi, bool in_radians = true) 
+  void set(double theta, double phi, bool in_radians = true)
   { in_radians_ = in_radians; theta_=theta; phi_=phi; }
 
   bool operator==(const vsph_sph_point_2d &other) const;

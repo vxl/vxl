@@ -6,8 +6,8 @@
 // \date   March 2005
 // \verbatim
 //  Modifications
-//   Gehua Yang - Dec 2006 - change the base class to rgrl_matcher_k_nearest_adv. 
-//     This is to allow reuse of the old matches when the mapping difference 
+//   Gehua Yang - Dec 2006 - change the base class to rgrl_matcher_k_nearest_adv.
+//     This is to allow reuse of the old matches when the mapping difference
 //     is smaller than a threshold.
 // \endverbatim
 
@@ -62,8 +62,8 @@ class rgrl_matcher_k_nearest_pick_one
   add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
                          rgrl_view          const& current_view,
                          nodes_vec_iterator const& begin_iter,
-                         nodes_vec_iterator const& end_iter ); 
- 
+                         nodes_vec_iterator const& end_iter );
+
 };
 
 #endif // rgrl_matcher_k_nearest_pick_one_h_
