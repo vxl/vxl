@@ -1715,7 +1715,7 @@ c     ************
             info = -8
 	    return
          endif
-     	 pointr = head
+         pointr = head
      	 do 34 j = 1, col
        	    a1 = wa(j)
             a2 = theta*wa(col + j)
@@ -4090,4 +4090,3 @@ c
       end
 
 c====================== The end of dtrsl ===============================
-

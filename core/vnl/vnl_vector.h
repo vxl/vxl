@@ -356,7 +356,7 @@ class vnl_vector
   //  The shift is cyclical, such that the elements which
   //  are displaced from the end reappear at the beginning.
   //  Negative shifts and shifts >= the length of the array are supported.
-  //  
+  //
   vnl_vector& roll_inplace(const int &shift);
 
   //: Set this to that and that to this
