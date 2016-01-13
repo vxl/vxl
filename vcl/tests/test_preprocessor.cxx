@@ -9,25 +9,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   unsigned major_count = 0;
   unsigned minor_count = 0;
 
-#ifdef VCL_SGI_CC
-  ++compiler_count;
-#endif
-
-#ifdef VCL_SGI_CC_6
-  ++major_count;
-#endif
-
-#ifdef VCL_SGI_CC_7
-  ++major_count;
-#endif
-#ifdef VCL_SGI_CC_720
-  ++minor_count;
-#endif
-#ifdef VCL_SGI_CC_730
-  ++minor_count;
-#endif
-
-
 #ifdef VCL_SUNPRO_CC
   ++compiler_count;
 #endif

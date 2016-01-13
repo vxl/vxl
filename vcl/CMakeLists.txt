@@ -229,24 +229,6 @@ SET( vcl_sources
   egcs/vcl_utility.txx
   egcs/vcl_vector.txx
 
-  sgi/vcl_algorithm.txx
-  sgi/vcl_bitset.h
-  sgi/vcl_cmath.h
-  sgi/vcl_complex.txx               sgi/vcl_complex.h
-  sgi/vcl_cstdlib.h
-  sgi/vcl_deque.txx
-  sgi/vcl_functional.txx
-  sgi/vcl_iomanip.h
-  sgi/vcl_ios.h
-  sgi/vcl_iostream.h
-  sgi/vcl_iterator.txx
-  sgi/vcl_list.txx
-  sgi/vcl_map.txx
-  sgi/vcl_set.txx
-  sgi/vcl_string.txx                sgi/vcl_string.h
-  sgi/vcl_utility.txx
-  sgi/vcl_vector.txx
-
   sunpro/vcl_algorithm.txx
   sunpro/vcl_cmath.h
   sunpro/vcl_complex.txx            sunpro/vcl_complex.h

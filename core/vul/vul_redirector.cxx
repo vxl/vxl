@@ -6,19 +6,6 @@
 // \file
 
 #include <vcl_compiler.h>
-#if defined(VCL_SGI_CC)
-// urgh! there is no rdbuf() method for *setting* the stream buffer.
-// These headers are in the old style intentionally. We *want* to
-// include the old SGI headers as they are, without going through vcl.
-// These includes must come *before* vul_redirector.h !
-# include <memory.h>         // dont_vxl_filter
-# include <stddef.h>         // dont_vxl_filter
-# define private public
-# define protected public
-# include <iostream.h>       // dont_vxl_filter
-# undef private
-# undef protected
-#endif
 
 #include "vul_redirector.h"
 #include <vcl_iostream.h>
@@ -39,10 +26,7 @@ class vul_redirector_streambuf : public vcl_streambuf
   // SunPro 5.0 take char const *, which is
   // non-standard, but we have to live with it. A
   // better cpp test would be welcome. fsm.
-#if defined(VCL_SGI_CC)
-# define xsputn_const const
-# define xsputn_sizet int
-#elif defined(__INTEL_COMPILER) || defined(VCL_SUNPRO_CC_5) || defined(VCL_KAI) || defined(VCL_BORLAND) || defined(VCL_GCC_3)
+#if defined(__INTEL_COMPILER) || defined(VCL_SUNPRO_CC_5) || defined(VCL_KAI) || defined(VCL_BORLAND) || defined(VCL_GCC_3)
   // RogueWave or ISO?
 # define xsputn_const const
 # define xsputn_sizet vcl_streamsize
@@ -100,24 +84,13 @@ vul_redirector::vul_redirector(vcl_ostream& s):
   p->owner = this;
   p->buf = new vul_redirector_streambuf(p);
   p->old_cerrbuf = s.rdbuf();
-#if defined(VCL_SGI_CC)
-  s.bp = p->buf;
-  s.clear();
-#else
   s.rdbuf(p->buf);
-#endif
   p->s = &s;
 }
 
 vul_redirector::~vul_redirector()
 {
-#if defined(VCL_SGI_CC)
-  // see above
-  p->s->bp = p->old_cerrbuf;
-  p->s->clear();
-#else
   p->s->rdbuf(p->old_cerrbuf);
-#endif
   delete p->buf;
   delete p;
 }
@@ -128,9 +101,6 @@ int vul_redirector::sync_passthru()
   // The default libraries these compilers come with are non-standard
   // since they have no pubsync() method. According to standard, though,
   // pubsync() just returns sync(), so :
-  return p->old_cerrbuf->sync();
-#elif defined(VCL_SGI_CC)
-  // ditto
   return p->old_cerrbuf->sync();
 #else
   return p->old_cerrbuf->pubsync();

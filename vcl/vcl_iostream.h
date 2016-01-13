@@ -39,13 +39,7 @@
 // So we must avoid the old ones at any price.
 //
 // ------------------------------------------------------------
-
-#if defined(VCL_SGI_CC_720)
-# include "sgi/vcl_iostream.h"
-
-#else // -------------------- ISO
-# include "iso/vcl_iostream.h"
-#endif
+#include "iso/vcl_iostream.h"
 
    // -------------------- miscellaneous fixes which can go at the end: -------
 

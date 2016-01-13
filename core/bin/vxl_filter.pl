@@ -580,7 +580,6 @@ sub process_lines {
       # IUE_compiler.h -> vcl_compiler.h
       s/\bIUE_GCC/VCL_GCC/g;
       s/\bIUE_EGCS\b/VCL_EGCS/g;
-      s/\bIUE_SGI_CC/VCL_SGI_CC/g;
       s/\bIUE_SUNPRO/VCL_SUNPRO/g;
       s/\bIUE_WIN32\b/VCL_WIN32/g;
       s/\bIUE_VC50\b/VCL_VC_5/g;

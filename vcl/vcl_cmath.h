@@ -43,8 +43,6 @@
 # include "stlport/vcl_cmath.h"
 #elif defined(VCL_GCC)
 # include "gcc/vcl_cmath.h"
-#elif defined(VCL_SGI_CC)
-# include "sgi/vcl_cmath.h"
 #elif defined(VCL_VC_60)
 # include "win32-vc60/vcl_cmath.h"
                             // C++ .NET 2003 is iso compliant

@@ -317,7 +317,6 @@ ANU:
     freebsd with gcc 2.95.2
     windows with intel, VC 6.0
     linux with gcc 2.95.2, 3.0, egcs 2.91.66
-    SGI with MipsPro 7.2, 7.3
     Solaris with Sunpro 5.0, gcc 2.95.2, egcs 2.91.66
     HP with gcc 2.95.2
     Alpha with  gcc 2.95.2

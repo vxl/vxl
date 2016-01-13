@@ -98,7 +98,6 @@ $gmake_error = q/^g?make(\[\d+\])?: \*\*\* \[/;
 # gcc ... -o something.so
 
 ##############
-# SGI compiler
 # SunPro
 # CC ... -o something.o
 # cc ... -o something.o

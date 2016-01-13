@@ -131,15 +131,6 @@ bool vgui_enhance_tableau::handle(const vgui_event& e)
     {
       // get original offsets and scales
       vgui_matrix_state ms;
-#if defined(VCL_SGI_CC)
-      // expect the spurious warning:
-      //"vgui_enhance_tableau.cxx", line 113: remark(1552): variable "ms" was set but never used
-      // here.
-      {
-        vgui_matrix_state *ptr = &ms;
-        ptr = ptr;
-      }
-#endif
       vnl_matrix_fixed<double,4,4> M = ms.modelview_matrix();
       float sx = (float)M(0,0);
       float sy = (float)M(0,0);

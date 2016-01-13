@@ -192,11 +192,6 @@ for $var_exp (
   'VXL_HAS_IEEEFP_H',
 
   # from vcl_compiler.h
-  'VCL_SGI_CC',
-  'VCL_SGI_CC_6',
-  'VCL_SGI_CC_7',
-  'VCL_SGI_CC_730',
-  'VCL_SGI_CC_720',
   'VCL_SUNPRO_CC',
   'VCL_SUNPRO_CC_5',
   'VCL_SUNPRO_CC_50',

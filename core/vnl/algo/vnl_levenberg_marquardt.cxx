@@ -191,13 +191,6 @@ bool vnl_levenberg_marquardt::minimize_without_gradient(vnl_vector<double>& x)
                &info, this);
   end_error_ = fx.rms();
 
-#ifdef _SGI_CC_6_
-  // Something fundamentally odd about the switch below on SGI native... FIXME
-  vcl_cerr << "vnl_levenberg_marquardt: termination code = " << failure_code_ << vcl_endl;
-  // diagnose_outcome(vcl_cerr);
-  return 1;
-#endif
-
   // Translate status code
   switch ((int)failure_code_) {
   case 1: // ftol

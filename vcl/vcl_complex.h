@@ -37,10 +37,6 @@
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_complex.h"
 
-// ---------- SGI 7*0
-#elif defined(VCL_SGI_CC_7) && _COMPILER_VERSION < 740
-#include  "sgi/vcl_complex.h"
-
 // ---------- MW
 #elif defined(VCL_METRO_WERKS)
 #include  "mwerks/vcl_complex.h"
@@ -63,7 +59,7 @@
 #endif
 
 
-# if !VCL_COMPLEX_POW_WORKS && !defined(VCL_SGI_CC_7)
+# if !VCL_COMPLEX_POW_WORKS
 #  undef vcl_pow
 #  define vcl_pow vcl_pow
 // several implementations of pow are wrong.
