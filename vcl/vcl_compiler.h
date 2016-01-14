@@ -191,10 +191,6 @@
 #  endif
 #endif
 
-#if defined(__KCC) // KAI compiler
-# define VCL_KAI
-#endif
-
 #if defined(__CYGWIN__) // Cygwin GCC Compiler
 # define VCL_CYGWIN_GCC
 #endif
@@ -212,11 +208,6 @@
 #   endif
 #  endif
 #endif
-
-#if defined(como4301) // Comeau C/C++ 4.3.0.1
-# define VCL_COMO
-#endif
-
 
 #if defined(__MWERKS__)
 // [sic]

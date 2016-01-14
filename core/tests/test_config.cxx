@@ -1438,14 +1438,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_KAI ";
-#ifdef VCL_KAI
-  vcl_cout << "is set to " << quote(VCL_KAI);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_METRO_WORKS ";
 #ifdef VCL_METRO_WORKS
   vcl_cout << "is set to " << quote(VCL_METRO_WORKS);
@@ -1673,14 +1665,6 @@ void test_config()
   vcl_cout << "_COMPILER_VERSION ";
 #ifdef _COMPILER_VERSION
   vcl_cout << "is set to " << quote(_COMPILER_VERSION);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__KCC ";
-#ifdef __KCC
-  vcl_cout << "is set to " << quote(__KCC);
 #else
   vcl_cout << "is not set";
 #endif

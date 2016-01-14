@@ -166,12 +166,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   ++minor_count;
 #endif
 
-
-#ifdef VCL_KAI
-  ++compiler_count;
-#endif
-
-
 #ifdef VCL_ICC
   ++compiler_count;
 #endif
@@ -187,12 +181,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
 #ifdef VCL_ICC_82
   ++minor_count;
 #endif
-
-
-#ifdef VCL_COMO
-  ++compiler_count;
-#endif
-
 
 #ifdef VCL_METRO_WERKS
   ++compiler_count;
