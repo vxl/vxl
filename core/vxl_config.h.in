@@ -2,7 +2,6 @@
 #define vxl_config_h_
 
 /* this file either is or was generated from vxl_config.h.in */
-#
 /* -------------------- machine word characteristics */
 
 /* machine byte order */
