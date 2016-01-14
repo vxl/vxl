@@ -46,7 +46,7 @@ class vnl_diag_matrix_fixed
 
 
   //: Construct a diagonal matrix with diagonal elements equal to value.
-  vnl_diag_matrix_fixed(T const& value) : diagonal_(N, value) {}
+  vnl_diag_matrix_fixed(T const& value) : diagonal_(value) {}
 
   //: Construct a diagonal matrix from a vnl_vector_fixed.
   //  The vector elements become the diagonal elements.

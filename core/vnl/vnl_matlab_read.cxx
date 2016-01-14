@@ -15,7 +15,6 @@
 
 //--------------------------------------------------------------------------------
 
-// SGI needs??
 void vnl_read_bytes(vcl_istream &s, void *p, unsigned bytes)
 {
   s.read((char *)p, bytes);

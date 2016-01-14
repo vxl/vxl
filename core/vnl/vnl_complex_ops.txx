@@ -30,7 +30,8 @@ void vnl_complexify(T const *re, T const *im, vcl_complex<T> *dst, unsigned n)
 }
 
 template <class T>
-vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &v)
+vnl_vector<vcl_complex<T> >
+  vnl_complexify(vnl_vector<T> const &v)
 {
   vnl_vector<vcl_complex<T> > vc(v.size());
   vnl_complexify(v.begin(), vc.begin(), v.size());
@@ -38,7 +39,8 @@ vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &v)
 }
 
 template <class T>
-vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &re, vnl_vector<T> const &im)
+vnl_vector<vcl_complex<T> >
+  vnl_complexify(vnl_vector<T> const &re, vnl_vector<T> const &im)
 {
   assert(re.size() == im.size());
   vnl_vector<vcl_complex<T> > vc(re.size());
@@ -47,7 +49,8 @@ vnl_vector<vcl_complex<T> > vnl_complexify(vnl_vector<T> const &re, vnl_vector<T
 }
 
 template <class T>
-vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &M)
+vnl_matrix<vcl_complex<T> >
+  vnl_complexify(vnl_matrix<T> const &M)
 {
   vnl_matrix<vcl_complex<T> > Mc(M.rows(), M.cols());
   vnl_complexify(M.begin(), Mc.begin(), M.size());
@@ -55,7 +58,8 @@ vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &M)
 }
 
 template <class T>
-vnl_matrix<vcl_complex<T> > vnl_complexify(vnl_matrix<T> const &re, vnl_matrix<T> const &im)
+vnl_matrix<vcl_complex<T> >
+  vnl_complexify(vnl_matrix<T> const &re, vnl_matrix<T> const &im)
 {
   assert(re.rows() == im.rows());
   assert(re.cols() == im.cols());

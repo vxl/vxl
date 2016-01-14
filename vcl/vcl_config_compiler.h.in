@@ -87,6 +87,18 @@
 //----------------------------------------------------------------------
 // constant initializer issues.
 
+/* When using C++11 or greater, constexpr
+ * may be necessary for static const float initialization
+ * and is benificial in other cases where
+ * a value can be constant. */
+#if  __cplusplus >= 201103L
+# define VCL_CONSTEXPR constexpr
+# define VCL_CAN_STATIC_CONST_INIT_INT 1
+# define VCL_CAN_STATIC_CONST_INIT_FLOAT 1
+#else
+# define VCL_CONSTEXPR const
+#endif
+
 //: VCL_STATIC_CONST_INIT_INT_DECL(x)
 //
 // ANSI allows
@@ -462,7 +474,7 @@ text { return ret; }
 
 //: VCL_OVERLOAD_CAST
 //
-// Some compilers (gcc 2.7.2.3 and SGI native 6.0) often won't perform
+// Some compilers (gcc 2.7.2.3) often won't perform
 // certain implicit casts. E.g. casting a templated derived class to a
 // templated base class (see above), or even realizing that
 // "template void foo(float const * const *, float * const *, int, int)"

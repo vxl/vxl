@@ -356,24 +356,6 @@ void pnmscaleT<T, longT>::go()
 
 template struct pnmscaleT<unsigned char, long>;
 
-#if defined(VCL_SGI_CC)
-// fsm
-// "vil1_scale.cxx", line 263: error(1324): more than one operator "*" matches
-//           these operands:
-//             built-in operator "arithmetic * arithmetic"
-//             function template "operator*(double, const vil1_rgb<T> &)"
-//             operand types are: long * vil1_rgb<unsigned char>
-//                   gs[col] += longT(fracrowleft * (*xP));
-//                                                ^
-//           detected during instantiation of "void pnmscaleT<vil1_rgb<unsigned
-//                     char>, vil1_rgb<long>>::go()"
-static inline
-vil1_rgb<long> operator*(long const &a, vil1_rgb<unsigned char> const &b) {
-  return vil1_rgb<long>(a*long(b.r),
-                        a*long(b.g),
-                        a*long(b.b));
-}
-#endif
 template struct pnmscaleT<vil1_rgb<unsigned char>, vil1_rgb<long> >;
 
 void vil1_scale(vil1_image in, int newxsize, int newysize, vil1_image out)

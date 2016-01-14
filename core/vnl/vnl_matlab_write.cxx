@@ -20,7 +20,6 @@
 # define native_BYTE_ORDER vnl_matlab_header::vnl_BIG_ENDIAN
 #endif
 
-// SGI needs char * as first argument to vcl_ostream::write
 void vnl_write_bytes(vcl_ostream &s, void const *p, unsigned bytes)
 {
   s.write((char const *)p, bytes);

@@ -9,25 +9,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   unsigned major_count = 0;
   unsigned minor_count = 0;
 
-#ifdef VCL_SGI_CC
-  ++compiler_count;
-#endif
-
-#ifdef VCL_SGI_CC_6
-  ++major_count;
-#endif
-
-#ifdef VCL_SGI_CC_7
-  ++major_count;
-#endif
-#ifdef VCL_SGI_CC_720
-  ++minor_count;
-#endif
-#ifdef VCL_SGI_CC_730
-  ++minor_count;
-#endif
-
-
 #ifdef VCL_SUNPRO_CC
   ++compiler_count;
 #endif
@@ -167,30 +148,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   ++minor_count;
 #endif
 
-
-#ifdef VCL_BORLAND
-  ++compiler_count;
-#endif
-
-#ifdef VCL_BORLAND_5
-  ++major_count;
-#endif
-#ifdef VCL_BORLAND_55
-  ++minor_count;
-#endif
-#ifdef VCL_BORLAND_56
-  ++minor_count;
-#endif
-#ifdef VCL_BORLAND_57
-  ++minor_count;
-#endif
-
-
-#ifdef VCL_KAI
-  ++compiler_count;
-#endif
-
-
 #ifdef VCL_ICC
   ++compiler_count;
 #endif
@@ -205,16 +162,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
 #endif
 #ifdef VCL_ICC_82
   ++minor_count;
-#endif
-
-
-#ifdef VCL_COMO
-  ++compiler_count;
-#endif
-
-
-#ifdef VCL_METRO_WERKS
-  ++compiler_count;
 #endif
 
   int result = 0;

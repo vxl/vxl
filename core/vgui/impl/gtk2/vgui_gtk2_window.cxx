@@ -52,9 +52,7 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const char* title)
   gtk_window_set_title(GTK_WINDOW(window), title);
   gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 
-#ifndef __SGI_CC // SGI's iostream does not allow re-initialising
   vgui::out.rdbuf(static_cast<vgui_gtk2_statusbar*>(statusbar)->statusbuf);
-#endif
 
   gtk_signal_connect(GTK_OBJECT(window), "delete_event",
                      GTK_SIGNAL_FUNC(delete_event_callback),
@@ -80,9 +78,7 @@ vgui_gtk2_window::vgui_gtk2_window(int w, int h, const vgui_menu& menu, const ch
 
   set_menubar(menu);
 
-#ifndef __SGI_CC // SGI's iostream does not allow re-initialising
   vgui::out.rdbuf(static_cast<vgui_gtk2_statusbar*>(statusbar)->statusbuf);
-#endif
 
   gtk_signal_connect(GTK_OBJECT(window), "delete_event",
                      GTK_SIGNAL_FUNC(delete_event_callback),

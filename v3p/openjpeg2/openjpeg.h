@@ -69,7 +69,7 @@ typedef unsigned char        OPJ_BYTE;
 typedef unsigned int        OPJ_SIZE_T;
 typedef double                OPJ_FLOAT64;
 typedef float                OPJ_FLOAT32;
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_MSC_VER)
         typedef __int64                OPJ_INT64;
 #else
         typedef long long        OPJ_INT64;

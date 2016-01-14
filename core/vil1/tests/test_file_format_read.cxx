@@ -228,9 +228,6 @@ test_file_format_read( int argc, char* argv[] )
   TEST("8-bit RGB packbits", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_packbits.tif" ) ), true);
   TEST("16-bit RGB uncompressed", test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_uncompressed.tif" ) ), true);
 
-  vcl_cout << "SGI IRIS [iris]\n";
-  TEST("8-bit RGB rle", test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit.iris" ) ), true);
-
   vcl_cout << "Khoros VIFF [viff]\n";
   TEST("8-bit grey big endian", test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_bigendian.viff" ) ), true);
   TEST("8-bit RGB big endian", test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_bigendian.viff" ) ), true);

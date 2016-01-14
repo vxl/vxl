@@ -8,14 +8,6 @@
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_load.h>
 
-#if defined(como4301) && defined(__linux__)
-# ifndef S_IFMT
-#  define S_IFMT 0170000
-# endif
-# ifndef S_IFDIR
-#  define S_IFDIR 0040000
-# endif
-#endif
 static bool il_verbose = false;
 bool vil_image_list::vil_is_directory(char const* fn)
 {
@@ -24,9 +16,6 @@ bool vil_image_list::vil_is_directory(char const* fn)
 }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-#if defined(VCL_BORLAND_56)
-# include <stdint.h> /* for intptr_t on Borland 5.6. */
-#endif
 #include <io.h>
 vcl_vector<vcl_string> vil_image_list::files()
 {
@@ -34,7 +23,7 @@ vcl_vector<vcl_string> vil_image_list::files()
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   // This mess should go away soon.
-# if defined VCL_VC_6 || defined VCL_VC_5 || defined VCL_BORLAND_55 || defined __MINGW32__
+# if defined VCL_VC_6 || defined VCL_VC_5 || defined __MINGW32__
   typedef long handle_type;      // works with msvc6
 # else
   typedef intptr_t handle_type;  // not found by msvc6
@@ -42,11 +31,7 @@ vcl_vector<vcl_string> vil_image_list::files()
 
   handle_type handle;
   struct _finddata_t data;
-#ifdef VCL_BORLAND_55
-  handle = _findfirst(const_cast<char*>((directory_+"\\*").c_str()), &data);
-#else
   handle = _findfirst((directory_+"\\*").c_str(), &data);
-#endif
   if (handle<0)
     return temp;
   vcl_string s = data.name;

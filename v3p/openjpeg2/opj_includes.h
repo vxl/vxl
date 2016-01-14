@@ -69,8 +69,6 @@ Most compilers implement their own version of this keyword ...
                 #define INLINE __inline
         #elif defined(__GNUC__)
                 #define INLINE __inline__
-        #elif defined(__MWERKS__)
-                #define INLINE inline
         #else
                 /* add other compilers here ... */
                 #define INLINE
@@ -87,8 +85,8 @@ Most compilers implement their own version of this keyword ...
         #endif
 #endif
 
-/* MSVC and Borland C do not have lrintf */
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+/* MSVC does not have lrintf */
+#if defined(_MSC_VER)
 
 /* MSVC 64bits doesn't support _asm */
 #if !defined(_WIN64)

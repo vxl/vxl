@@ -19,16 +19,12 @@
 //: Declare pimpl, reset, and iteration routines for each OS
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 
-#if defined(VCL_BORLAND_56)
-# include <stdint.h> /* for intptr_t on Borland 5.6. */
-#endif
-
 #include <io.h>
 
 struct vul_file_iterator_data
 {
   struct _finddata_t data_;
-# if defined VCL_VC_6 || defined VCL_VC_5 || defined VCL_BORLAND_55 || defined __MINGW32__
+# if defined VCL_VC_6 || defined VCL_VC_5 || defined __MINGW32__
   typedef long handle_type;      // works with msvc6
 # else
   typedef intptr_t handle_type;  // not found by msvc6
