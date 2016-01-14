@@ -48,10 +48,6 @@ extern "C" int finite(double);
 # define finitef finite
 # define finitel finite
 
-#elif defined(VCL_BORLAND)
-# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
-# include <float.h>
-
 #else
 # warning finite() is not declared on this platform
 # define VNL_HAS_NO_FINITE
@@ -99,13 +95,6 @@ bool isnan(float x) { return isnanf(x); }
 bool isnan(double x) { return isnan(x); }
 //: Return true iff x is "Not a Number"
 bool isnan(long double x) { return isnanl(x); }
-#elif defined(VCL_BORLAND)
-//: Return true iff x is "Not a Number"
-bool isnan(float x) { return _isnan(x); }
-//: Return true iff x is "Not a Number"
-bool isnan(double x) { return _isnan(x); }
-//: Return true iff x is "Not a Number"
-bool isnan(long double x) { return _isnanl(x); }
 #elif !defined(VNL_HAS_NO_FINITE) && !defined(__alpha__) && !defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
 bool isnan(float x) { return x != x; } // causes "floating exception" on alpha & sgi
@@ -170,7 +159,7 @@ bool isnan(long double x)
 // macro called 'isinf'.
 // Doesn't seem to be an issue with ICC 8
 #if defined(isinf) && !defined(VCL_ICC_8)
-# if defined(__GNUC__) || defined(VCL_METRO_WERKS) || defined(__INTEL_COMPILER)
+# if defined(__GNUC__) || defined(__INTEL_COMPILER)
 // I do not know if MW accepts #warning. Comment out the #undef if not.
 #  warning macro isinf is defined
 #  undef isinf
@@ -187,13 +176,6 @@ bool isfinite(float x) { return std::isfinite(x) != 0; }
 bool isfinite(double x) { return std::isfinite(x) != 0; }
 //: Return true if x is neither NaN nor Inf.
 bool isfinite(long double x) { return std::isfinite(x) != 0; }
-#elif defined(VCL_BORLAND)
-//: Return true if x is neither NaN nor Inf.
-bool isfinite(float x) { return _finite(x) != 0; }
-//: Return true if x is neither NaN nor Inf.
-bool isfinite(double x) { return _finite(x) != 0; }
-//: Return true if x is neither NaN nor Inf.
-bool isfinite(long double x) { return _finitel(x) != 0 && !_isnanl(x); }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is neither NaN nor Inf.
 bool isfinite(float x) { return finitef(x) != 0; }
@@ -221,13 +203,6 @@ bool isinf(float x) { return std::isinf(x) != 0; }
 bool isinf(double x) { return std::isinf(x) != 0; }
 //: Return true if x is inf
 bool isinf(long double x) { return std::isinf(x) != 0; }
-#elif defined(VCL_BORLAND)
-//: Return true if x is inf
-bool isinf(float x) { return !_finite(x) && !isnan(x); }
-//: Return true if x is inf
-bool isinf(double x) { return !_finite(x) && !isnan(x); }
-//: Return true if x is inf
-bool isinf(long double x) { return !_finitel(x) && !isnan(x); }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
 bool isinf(float x) { return !finitef(x) && !isnan(x); }

@@ -28,7 +28,7 @@
  * TIFF Library Windows 3.x-specific Routines.
  */
 #include "tiffiop.h"
-#if defined(__WATCOMC__) || defined(__BORLANDC__) || defined(_MSC_VER)
+#if defined(_MSC_VER)
 #include <io.h>   /* for open, close, etc. function prototypes */
 #endif
 

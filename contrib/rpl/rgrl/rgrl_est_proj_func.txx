@@ -79,16 +79,7 @@ convert_parameters( vnl_vector<double>& params,
   for ( unsigned i=0; i<Tdim; ++i )
     to_centre_matrix( i, Tdim ) = -to_centre_[i];
 
-#ifndef VCL_BORLAND_55
   proj_matrix = to_centre_matrix * proj_matrix * from_centre_matrix;
-#else
-  // The Borland compiler can't automatically deduce the template
-  // parameters.
-  proj_matrix = vnl_matrix_fixed_mat_mat_mult<double,Tdim+1,Fdim+1,Fdim+1>(
-    vnl_matrix_fixed_mat_mat_mult<double,Tdim+1,Tdim+1,Fdim+1>(
-      to_centre_matrix, proj_matrix),
-    from_centre_matrix );
-#endif
 
   // find out which element in the projection matrix has largest value
   double max_val = 0;
@@ -133,16 +124,7 @@ uncentre_proj( vnl_matrix_fixed<double, Tdim+1, Fdim+1> const& proj ) const
   for ( unsigned i=0; i<Tdim; ++i )
     to_centre_matrix( i, Tdim ) = to_centre_[i];
 
-#ifndef VCL_BORLAND_55
   return to_centre_matrix * proj * from_centre_matrix;
-#else
-  // The Borland compiler can't automatically deduce the template
-  // parameters.
-  return vnl_matrix_fixed_mat_mat_mult<double,Tdim+1,Fdim+1,Fdim+1>(
-    vnl_matrix_fixed_mat_mat_mult<double,Tdim+1,Tdim+1,Fdim+1>(
-      to_centre_matrix, proj),
-    from_centre_matrix );
-#endif
 }
 
 template <unsigned int Tdim, unsigned int Fdim>

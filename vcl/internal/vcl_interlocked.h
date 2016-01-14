@@ -33,7 +33,7 @@
 
 //
 // Do we need this?
-#if defined( __BORLANDC__ ) || defined( VCL_INTERLOCKED_VC6 )
+#if defined( VCL_INTERLOCKED_VC6 )
 
 # define NOMINMAX
 # include <windows.h>

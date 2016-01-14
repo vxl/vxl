@@ -33,12 +33,6 @@
 
 #else   // For all other compilers, include the standard C/CXX header
 
-# ifdef VCL_METRO_WERKS
-// for some reason, MW's <cassert> doesn't have its own printf() and abort() declarations.
-#  include <vcl_cstdio.h>
-#  include <vcl_cstdlib.h>
-# endif
-
 # if !VCL_CXX_HAS_HEADER_CASSERT
 #  include <assert.h>
 # else

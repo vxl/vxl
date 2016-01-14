@@ -1286,30 +1286,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_BORLAND ";
-#ifdef VCL_BORLAND
-  vcl_cout << "is set to " << quote(VCL_BORLAND);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_BORLAND_55 ";
-#ifdef VCL_BORLAND_55
-  vcl_cout << "is set to " << quote(VCL_BORLAND_55);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_BORLAND_56 ";
-#ifdef VCL_BORLAND_56
-  vcl_cout << "is set to " << quote(VCL_BORLAND_56);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_ICC ";
 #ifdef VCL_ICC
   vcl_cout << "is set to " << quote(VCL_ICC);
@@ -1433,14 +1409,6 @@ void test_config()
   vcl_cout << "VCL_VC_50 ";
 #ifdef VCL_VC_50
   vcl_cout << "is set to " << quote(VCL_VC_50);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_METRO_WORKS ";
-#ifdef VCL_METRO_WORKS
-  vcl_cout << "is set to " << quote(VCL_METRO_WORKS);
 #else
   vcl_cout << "is not set";
 #endif
@@ -1638,14 +1606,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "__BORLANDC__ ";
-#ifdef __BORLANDC__
-  vcl_cout << "is set to " << quote(__BORLANDC__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "__SUNPRO_CC ";
 #ifdef __SUNPRO_CC
   vcl_cout << "is set to " << quote(__SUNPRO_CC);
@@ -1665,38 +1625,6 @@ void test_config()
   vcl_cout << "_COMPILER_VERSION ";
 #ifdef _COMPILER_VERSION
   vcl_cout << "is set to " << quote(_COMPILER_VERSION);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__MWERKS__ ";
-#ifdef __MWERKS__
-  vcl_cout << "is set to " << quote(__MWERKS__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__MWKS__ ";
-#ifdef __MWKS__
-  vcl_cout << "is set to " << quote(__MWKS__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__BORLANDC__ ";
-#ifdef __BORLANDC__
-  vcl_cout << "is set to " << quote(__BORLANDC__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__WATCOMC__ ";
-#ifdef __WATCOMC__
-  vcl_cout << "is set to " << quote(__WATCOMC__);
 #else
   vcl_cout << "is not set";
 #endif

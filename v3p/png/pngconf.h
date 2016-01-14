@@ -222,8 +222,7 @@
    ERROR: PNG_USER_PRIVATEBUILD must be defined if PNGAPI is changed
 #  endif
 
-#  if (defined(_MSC_VER) && _MSC_VER < 800) ||\
-      (defined(__BORLANDC__) && __BORLANDC__ < 0x500)
+#  if (defined(_MSC_VER) && _MSC_VER < 800)
     /* older Borland and MSC
      * compilers used '__export' and required this to be after
      * the type.
@@ -463,33 +462,6 @@ typedef size_t png_size_t;
  * have been made in zlib.  The USE_FAR_KEYWORD define triggers other
  * changes that are needed. (Tim Wegner)
  */
-
-/* Separate compiler dependencies (problem here is that zlib.h always
- * defines FAR. (SJT)
- */
-#ifdef __BORLANDC__
-#  if defined(__LARGE__) || defined(__HUGE__) || defined(__COMPACT__)
-#    define LDATA 1
-#  else
-#    define LDATA 0
-#  endif
-  /* GRR:  why is Cygwin in here?  Cygwin is not Borland C... */
-#  if !defined(__WIN32__) && !defined(__FLAT__) && !defined(__CYGWIN__)
-#    define PNG_MAX_MALLOC_64K /* only used in build */
-#    if (LDATA != 1)
-#      ifndef FAR
-#        define FAR __far
-#      endif
-#      define USE_FAR_KEYWORD
-#    endif   /* LDATA != 1 */
-         /* Possibly useful for moving data out of default segment.
-          * Uncomment it if you want. Could also define FARDATA as
-          * const if your compiler supports it. (SJT)
-#        define FARDATA FAR
-          */
-#  endif  /* __WIN32__, __FLAT__, __CYGWIN__ */
-#endif   /* __BORLANDC__ */
-
 
 /* Suggest testing for specific compiler first before testing for
  * FAR.  The Watcom compiler defines both __MEDIUM__ and M_I86MM,

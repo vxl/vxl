@@ -155,9 +155,6 @@ read_vcl_stream(vcl_istream& input, vil_nitf2_long& out_value, bool& out_blank)
 #if defined VCL_VC
   out_value = _strtoi64(cstr, &endp, 10);
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
-#elif defined VCL_BORLAND
-  out_value = _atoi64( cstr );
-  conversion_ok = true;                       //no error checking available
 #else
   out_value = ::strtoll(cstr, &endp, 10);     // in Standard C Library
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
