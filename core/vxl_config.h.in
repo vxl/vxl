@@ -226,8 +226,4 @@
 /* true if VXL is built shared */
 #cmakedefine VXL_BUILD_SHARED
 
-
-/* true if VXL is built shared */
-#cmakedefine VXL_BUILD_SHARED
-
 #endif /* vxl_config_h_ */
