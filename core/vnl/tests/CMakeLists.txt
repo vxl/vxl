@@ -8,6 +8,7 @@ ADD_EXECUTABLE( vnl_test_all
   test_bignum.cxx
   test_decnum.cxx
   test_complex.cxx
+  test_complexify.cxx
   test_inverse.cxx
   test_diag_matrix.cxx
   test_diag_matrix_fixed.cxx
@@ -63,6 +64,7 @@ TARGET_LINK_LIBRARIES(vnl_basic_operation_timings vnl)
 ADD_TEST( vnl_test_bignum                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_bignum                 )
 ADD_TEST( vnl_test_decnum                 ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_decnum                 )
 ADD_TEST( vnl_test_complex                ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_complex                )
+ADD_TEST( vnl_test_complexify             ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_complexify             )
 ADD_TEST( vnl_test_diag_matrix            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_diag_matrix            )
 ADD_TEST( vnl_test_diag_matrix_fixed      ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_diag_matrix_fixed      )
 ADD_TEST( vnl_test_file_matrix            ${EXECUTABLE_OUTPUT_PATH}/vnl_test_all test_file_matrix            )
