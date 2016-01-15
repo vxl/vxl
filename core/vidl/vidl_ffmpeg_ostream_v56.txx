@@ -1,16 +1,18 @@
-// This is core/vidl/vidl_ffmpeg_ostream_v0.11.txx
-#ifndef vidl_ffmpeg_ostream_v0_11_txx_
-#define vidl_ffmpeg_ostream_v0_11_txx_
+// This is core/vidl/vidl_ffmpeg_ostream_v56.txx
+#ifndef vidl_ffmpeg_ostream_v56_txx_
+#define vidl_ffmpeg_ostream_v56_txx_
+#pragma once
+
 #include "vidl_ffmpeg_ostream.h"
 //:
 // \file
+// \author Gehua Yang
 // \author Matt Leotta
 // \author Amitha Perera
 // \author David Law
-// \date   5 Feb 2013
+// \date   5 Jan 2015
 //
-// Update implementation based on FFMPEG release version 0.11
-// ffmpeg git hash 734cfa8e8bb66d7a5ae69066fdd219e0a517027d
+// Update implementation based on FFMPEG release version 2.8.4
 //
 //-----------------------------------------------------------------------------
 
@@ -594,4 +596,4 @@ write_frame(const vidl_frame_sptr& frame)
   return true;
 }
 
-#endif // vidl_ffmpeg_ostream_v0_11_txx_
+#endif // vidl_ffmpeg_ostream_v56_txx_

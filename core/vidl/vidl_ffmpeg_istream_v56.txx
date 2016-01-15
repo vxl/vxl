@@ -1,15 +1,17 @@
 // This is core/vidl/vidl_ffmpeg_istream_v0.9.txx
-#ifndef vidl_ffmpeg_istream_v0_9_txx_
-#define vidl_ffmpeg_istream_v0_9_txx_
+#ifndef vidl_ffmpeg_istream_v56_txx_
+#define vidl_ffmpeg_istream_v56_txx_
+#pragma once
+
 #include "vidl_ffmpeg_istream.h"
 //:
 // \file
+// \author Gehua Yang
 // \author Matt Leotta
 // \author Amitha Perera
-// \date   5 Feb 2013
+// \date   5 Jan 2015
 //
-// Update implementation based on FFMPEG release version 0.9
-// ffmpeg git hash f8d8c57fbb780d6e6e630f16d530f392b31faae
+// Update implementation based on FFMPEG release version 2.8.4
 
 //-----------------------------------------------------------------------------
 
@@ -587,4 +589,4 @@ seek_frame(unsigned int frame)
   }
 }
 
-#endif // vidl_ffmpeg_istream_v0_9_txx_
+#endif // vidl_ffmpeg_istream_v56_txx_
