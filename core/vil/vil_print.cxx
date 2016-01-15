@@ -103,9 +103,6 @@ VCL_DEFINE_SPECIALIZATION
 void vil_print_value(vcl_ostream& os, const vxl_uint_64& value, unsigned width/*=0*/)
 {
   if (width==0) width=8;
-#ifdef VCL_VC_6 // IMS. This Hack could be replaced by code which
-  os << "****"; // splits the 64bit int and does the right thing.
-#else
   if (value<10 && width > 1)       os<<'0';
   if (value<100 && width > 2)      os<<'0';
   if (value<1000 && width > 3)     os<<'0';
@@ -114,7 +111,6 @@ void vil_print_value(vcl_ostream& os, const vxl_uint_64& value, unsigned width/*
   if (value<1000000 && width > 6)  os<<'0';
   if (value<10000000 && width > 7) os<<'0';
   os<<value;
-#endif
 }
 
 //: Explicit overload for long
@@ -122,9 +118,6 @@ VCL_DEFINE_SPECIALIZATION
 void vil_print_value(vcl_ostream& os, const vxl_int_64& value, unsigned width/*=0*/)
 {
   if (width==0) width=8;
-#ifdef VCL_VC_6 // IMS. This Hack could be replaced by code which
-  os << "****"; // splits the 64bit int and does the right thing.
-#else
   vxl_int_64 v=value;
   if (v<0) { v=-v; os<<'-'; } else os<<' ';
   if (v<10 && width > 1)       os<<'0';
@@ -135,7 +128,6 @@ void vil_print_value(vcl_ostream& os, const vxl_int_64& value, unsigned width/*=
   if (v<1000000 && width > 6)  os<<'0';
   if (v<10000000 && width > 7) os<<'0';
   os<<v;
-#endif
 }
 
 #endif

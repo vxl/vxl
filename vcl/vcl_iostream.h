@@ -43,13 +43,6 @@
 
    // -------------------- miscellaneous fixes which can go at the end: -------
 
-// Need std::ios::nocreate to avoid creating an empty file on
-// attempts to read a non-existent one. Don't we? -- fsm
-#if defined(VCL_VC50)
-# undef  vcl_ios_in
-# define vcl_ios_in      (std::ios::in | std::ios::nocreate)
-#endif
-
 // It seems that VC++ can show strange behaviour without this include:
 #if defined(VCL_VC)
 # include <vcl_fstream.h>

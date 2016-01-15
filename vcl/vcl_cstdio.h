@@ -17,11 +17,7 @@
 # define vcl_snprintf snprintf
 # include "vcl_cstddef.h" // for size_t
 # include "iso/vcl_cstdio.h"
-#elif defined(VCL_VC60)
-# include <cstdio>
-# define vcl_generic_cstdio_STD /**/
-# include "generic/vcl_cstdio.h"
-#elif defined(VCL_VC_7)|| defined(VCL_VC_8)|| defined(VCL_VC_9) || defined(VCL_VC_10) || defined(VCL_VC_11)
+#elif defined(VCL_VC_8)|| defined(VCL_VC_9) || defined(VCL_VC_10) || defined(VCL_VC_11)
 # define vcl_snprintf _snprintf
 # include "vcl_cstddef.h" // for size_t
 # include "iso/vcl_cstdio.h"

@@ -19,12 +19,6 @@
 # include "gcc/vcl_cstdlib.h"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_cstdlib.h"
-#elif defined(VCL_VC_6)
-# include "win32-vc60/vcl_cstdlib.h"
-#elif defined(VCL_VC_71) // C++ .NET 2003 is iso compliant
-# include "iso/vcl_cstdlib.h"
-#elif defined(VCL_VC_70) // C++ .NET earlier than 2003 is not iso compliant
-# include "win32-vc70/vcl_cstdlib.h"
 #elif defined(VCL_VC_8) || defined(VCL_VC_9) // need to handle abs(__int64) correctly
 # include "win32-vc8/vcl_cstdlib.h"
 #else

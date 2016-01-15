@@ -6,8 +6,7 @@
 #undef vcl_auto_ptr
 
 // gcc 2.95 does not provide a correct implementation of
-// auto_ptr.  This implementation is copied from Brad King's
-// version in vcl/win32-vc60 -- Ian Scott
+// auto_ptr.
 
 // C++98 Standard Section 20.4.5 - Template class auto_ptr.
 template <class X>

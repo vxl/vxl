@@ -221,15 +221,6 @@ for $var_exp (
   'VCL_WIN32',
   'VCL_VC',
   'VCL_VC_DOTNET',
-  'VCL_VC_8',
-  'VCL_VC_80',
-  'VCL_VC_7',
-  'VCL_VC_70',
-  'VCL_VC_71',
-  'VCL_VC_6',
-  'VCL_VC_60',
-  'VCL_VC_5',
-  'VCL_VC_50',
   'GNU_LIBSTDCXX_V3',
 
   # from VXL CMake configuration files

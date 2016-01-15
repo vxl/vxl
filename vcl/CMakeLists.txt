@@ -232,19 +232,6 @@ SET( vcl_sources
   sunpro/vcl_utility.txx
   sunpro/vcl_vector.txx             sunpro/vcl_vector.h
 
-  win32-vc60/vcl_cmath.h
-  win32-vc60/vcl_complex.h
-  win32-vc60/vcl_cstdarg.h
-  win32-vc60/vcl_cstdlib.h
-  win32-vc60/vcl_memory.h
-  win32-vc60/vcl_string.h
-  win32-vc60/vcl_valarray.h
-
-  win32-vc70/vcl_cmath.h
-  win32-vc70/vcl_complex.h
-  win32-vc70/vcl_cstdlib.h
-  win32-vc70/vcl_valarray.h
-
   win32-vc8/vcl_cmath.h
   win32-vc8/vcl_complex.h
   win32-vc8/vcl_cstdlib.h
@@ -275,13 +262,6 @@ ADD_LIBRARY(vcl ${vcl_sources})
 
 # CMake can automatically figure out the compiler characteristics on
 # Windows too.  No need to do manual config.
-
-# IF(WIN32)
-#   IF(NOT CYGWIN)
-#     ADD_DEFINITIONS( -DBUILDING_VCL_DLL )
-#     INCLUDE_DIRECTORIES( config.win32 )
-#   ENDIF(NOT CYGWIN)
-# ENDIF(WIN32)
 
 IF(UNIX)
   TARGET_LINK_LIBRARIES( vcl m )

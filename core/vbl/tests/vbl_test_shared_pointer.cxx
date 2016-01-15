@@ -3,9 +3,6 @@
 */
 #include <testlib/testlib_test.h>
 
-// don't test shared_ptr on VC6 because it doesn't work.
-#ifndef VCL_VC_6
-
 #include <vcl_iostream.h>
 #include <vbl/vbl_shared_pointer.h>
 
@@ -147,14 +144,5 @@ static void vbl_test_shared_pointer()
   test_class();
   test_derived_class();
 }
-
-#else // if VCL_VC_6
-
-static void vbl_test_shared_pointer()
-{
-  vcl_cout << "Not tested: vbl_shared_ptr does not work on VC6\n";
-}
-
-#endif
 
 TESTMAIN(vbl_test_shared_pointer);
