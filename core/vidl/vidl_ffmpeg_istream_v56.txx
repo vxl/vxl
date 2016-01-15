@@ -477,7 +477,7 @@ vidl_ffmpeg_istream::current_frame()
 
     // If the pixel format is not recognized by vidl then convert the data into RGB_24
     vidl_pixel_format fmt = vidl_pixel_format_from_ffmpeg(enc->pix_fmt);
-    if (fmt == VIDL_PIXEL_FORMAT_UNKNOWN || fmt == VIDL_PIXEL_FORMAT_YUV_420P)
+    if (fmt == VIDL_PIXEL_FORMAT_UNKNOWN)
     {
       int size = width*height*3;
       if (!is_->contig_memory_)
