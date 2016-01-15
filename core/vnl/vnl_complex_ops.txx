@@ -29,43 +29,101 @@ void vnl_complexify(T const *re, T const *im, vcl_complex<T> *dst, unsigned n)
     dst[i] = vcl_complex<T>(re[i], im[i]);
 }
 
-template <class T>
-vnl_vector<vcl_complex<T> >
-  vnl_complexify(vnl_vector<T> const &v)
-{
-  vnl_vector<vcl_complex<T> > vc(v.size());
-  vnl_complexify(v.begin(), vc.begin(), v.size());
-  return vc;
-}
+// Real Alone:
+// - vnl_vector
+// - vnl_vector_fixed -- in header
+// - vnl_matrix
+// - vnl_matrix_fixed -- in header
+// - vnl_diag_matrix
+// - vnl_diag_matrix_fixed -- in header
+// - vnl_sym_matrix
 
 template <class T>
 vnl_vector<vcl_complex<T> >
-  vnl_complexify(vnl_vector<T> const &re, vnl_vector<T> const &im)
+  vnl_complexify(vnl_vector<T> const &R)
 {
-  assert(re.size() == im.size());
-  vnl_vector<vcl_complex<T> > vc(re.size());
-  vnl_complexify(re.begin(), im.begin(), vc.begin(), re.size());
-  return vc;
+  vnl_vector<vcl_complex<T> > C(R.size());
+  vnl_complexify(R.begin(), C.begin(), R.size());
+  return C;
 }
 
 template <class T>
 vnl_matrix<vcl_complex<T> >
-  vnl_complexify(vnl_matrix<T> const &M)
+  vnl_complexify(vnl_matrix<T> const &R)
 {
-  vnl_matrix<vcl_complex<T> > Mc(M.rows(), M.cols());
-  vnl_complexify(M.begin(), Mc.begin(), M.size());
-  return Mc;
+  vnl_matrix<vcl_complex<T> > C(R.rows(), R.cols());
+  vnl_complexify(R.begin(), C.begin(), R.size());
+  return C;
+}
+
+template <class T>
+vnl_diag_matrix<vcl_complex<T> >
+  vnl_complexify(vnl_diag_matrix<T> const& R)
+{
+  vnl_diag_matrix<vcl_complex<T> > C(R.rows(), R.cols());
+  vnl_complexify(R.begin(), C.begin(), R.size());
+  return C;
+}
+
+template <class T>
+vnl_sym_matrix<vcl_complex<T> >
+  vnl_complexify(vnl_sym_matrix<T> const& R)
+{
+  vnl_sym_matrix<vcl_complex<T> > C(R.size());
+  vnl_complexify(R.begin(), C.begin(), R.size());
+  return C;
+}
+
+//----------------------------------------------------------------------
+
+// Real + Imaginary:
+// - vnl_vector
+// - vnl_vector_fixed -- in header
+// - vnl_matrix
+// - vnl_matrix_fixed -- in header
+// - vnl_diag_matrix
+// - vnl_diag_matrix_fixed -- in header
+// - vnl_sym_matrix
+
+template <class T>
+vnl_vector<vcl_complex<T> >
+  vnl_complexify(vnl_vector<T> const &R, vnl_vector<T> const &I)
+{
+  assert(R.size() == I.size());
+  vnl_vector<vcl_complex<T> > C(R.size());
+  vnl_complexify(R.begin(), I.begin(), C.begin(), R.size());
+  return C;
 }
 
 template <class T>
 vnl_matrix<vcl_complex<T> >
-  vnl_complexify(vnl_matrix<T> const &re, vnl_matrix<T> const &im)
+  vnl_complexify(vnl_matrix<T> const &R, vnl_matrix<T> const &I)
 {
-  assert(re.rows() == im.rows());
-  assert(re.cols() == im.cols());
-  vnl_matrix<vcl_complex<T> > Mc(re.rows(), re.cols());
-  vnl_complexify(re.begin(), im.begin(), Mc.begin(), re.size());
-  return Mc;
+  assert(R.rows() == I.rows());
+  assert(R.cols() == I.cols());
+  vnl_matrix<vcl_complex<T> > C(R.rows(), R.cols());
+  vnl_complexify(R.begin(), I.begin(), C.begin(), R.size());
+  return C;
+}
+
+template <class T>
+vnl_diag_matrix<vcl_complex<T> >
+  vnl_complexify(vnl_diag_matrix<T> const &R, vnl_diag_matrix<T> const &I)
+{
+  assert(R.rows() == I.rows());
+  vnl_diag_matrix<vcl_complex<T> > C(R.rows());
+  vnl_complexify(R.begin(), I.begin(), C.begin(), R.size());
+  return C;
+}
+
+template <class T>
+vnl_sym_matrix<vcl_complex<T> >
+  vnl_complexify(vnl_sym_matrix<T> const &R, vnl_sym_matrix<T> const &I)
+{
+  assert(R.rows() == I.rows());
+  vnl_sym_matrix<vcl_complex<T> > C(R.rows());
+  vnl_complexify(R.begin(), I.begin(), C.begin(), R.size());
+  return C;
 }
 
 //----------------------------------------------------------------------
@@ -140,6 +198,10 @@ template vnl_vector<vcl_complex<T > > vnl_complexify(vnl_vector<T > const &); \
 template vnl_vector<vcl_complex<T > > vnl_complexify(vnl_vector<T > const &, vnl_vector<T > const &); \
 template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &); \
 template vnl_matrix<vcl_complex<T > > vnl_complexify(vnl_matrix<T > const &, vnl_matrix<T > const &); \
+template vnl_diag_matrix<vcl_complex<T > > vnl_complexify(vnl_diag_matrix<T > const &); \
+template vnl_diag_matrix<vcl_complex<T > > vnl_complexify(vnl_diag_matrix<T > const &,vnl_diag_matrix<T > const&); \
+template vnl_sym_matrix<vcl_complex<T > > vnl_complexify(vnl_sym_matrix<T > const &); \
+template vnl_sym_matrix<vcl_complex<T > > vnl_complexify(vnl_sym_matrix<T > const &,vnl_sym_matrix<T > const&); \
 \
 template void vnl_real(vcl_complex<T > const*, T*, unsigned int); \
 template void vnl_imag(vcl_complex<T > const*, T*, unsigned int); \
