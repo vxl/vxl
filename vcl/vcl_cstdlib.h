@@ -20,7 +20,7 @@
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_cstdlib.h"
 #elif defined(VCL_VC_9) // need to handle abs(__int64) correctly
-# include "win32-vc8/vcl_cstdlib.h"
+# include "win32-vc9/vcl_cstdlib.h"
 #else
 # include "iso/vcl_cstdlib.h"
 #endif

@@ -11,7 +11,7 @@
 # define vcl_valarray valarray
 
 #elif defined(VCL_VC_9)
-# include "win32-vc8/vcl_valarray.h"
+# include "win32-vc9/vcl_valarray.h"
 
 #else
 # include "iso/vcl_valarray.h"

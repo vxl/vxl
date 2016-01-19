@@ -232,10 +232,10 @@ SET( vcl_sources
   sunpro/vcl_utility.txx
   sunpro/vcl_vector.txx             sunpro/vcl_vector.h
 
-  win32-vc8/vcl_cmath.h
-  win32-vc8/vcl_complex.h
-  win32-vc8/vcl_cstdlib.h
-  win32-vc8/vcl_valarray.h
+  win32-vc9/vcl_cmath.h
+  win32-vc9/vcl_complex.h
+  win32-vc9/vcl_cstdlib.h
+  win32-vc9/vcl_valarray.h
 
   stlport/vcl_cmath.h
   stlport/vcl_complex.h

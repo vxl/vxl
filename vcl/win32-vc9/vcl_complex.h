@@ -1,5 +1,5 @@
-#ifndef vcl_win32_vc_8_complex_h_
-#define vcl_win32_vc_8_complex_h_
+#ifndef vcl_win32_vc_9_complex_h_
+#define vcl_win32_vc_9_complex_h_
 
 #include <complex>
 
@@ -19,4 +19,4 @@
 
 template <class T> inline T vcl_abs(const vcl_complex<T>& x) { return std::abs(x); }
 
-#endif // vcl_win32_vc_8_complex_h_
+#endif // vcl_win32_vc_9_complex_h_
