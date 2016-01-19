@@ -89,7 +89,6 @@ vnl_vector_fixed<T, M> vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M
 template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
-#define VNL_MATRIX_FIXED_VCL60_WORKAROUND /* no workaround. Phew. */
 
 //: Fixed size, stack-stored, space-efficient matrix.
 // vnl_matrix_fixed is a fixed-length, stack storage vector. It has
@@ -100,7 +99,7 @@ vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T
 // Read the overview documentation of vnl_vector_fixed.
 // The text there applies here.
 template <class T, unsigned int num_rows, unsigned int num_cols>
-class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
+class vnl_matrix_fixed
 {
   T data_[num_rows][num_cols]; // Local storage
 
@@ -735,9 +734,6 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
   void assert_size_internal(unsigned, unsigned) const;
 };
-
-#undef VNL_MATRIX_FIXED_VCL60_WORKAROUND
-
 
 // Make the operators below inline because (1) they are small and
 // (2) we then have less explicit instantiation trouble.

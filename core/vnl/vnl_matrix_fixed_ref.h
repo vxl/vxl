@@ -753,8 +753,6 @@ class vnl_matrix_fixed_ref : public vnl_matrix_fixed_ref_const<T,num_rows,num_co
 //--------------------------------------------------------------------------------
 };
 
-#undef VNL_MATRIX_FIXED_VCL60_WORKAROUND
-
   // Helper routines for arithmetic. These routines know the size from
   // the template parameters. The vector-vector operations are
   // element-wise.
