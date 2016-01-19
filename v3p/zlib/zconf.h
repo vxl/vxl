@@ -145,7 +145,7 @@
 #    define FAR far
 #  endif
 #endif
-#if defined(__MEDIUM__))
+#if defined(__MEDIUM__)
 #  ifndef __32BIT__
 #    define SMALL_MEDIUM
 #    define FAR _far
