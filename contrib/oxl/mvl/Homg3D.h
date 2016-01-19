@@ -38,7 +38,6 @@ class Homg3D : public Homg
  ~Homg3D() {}
 
   Homg3D& operator=(const Homg3D& that) { homg_vector_ = that.homg_vector_; return *this; }
-  // default ok. nope, egcs chokes
 
   // Data Access---------------------------------------------------------------
 

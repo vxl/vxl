@@ -3,14 +3,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC_which_one_question_mark)
-// egcs and 2.95 have <queue> -- fsm
-# include <stack.h>
-# define vcl_queue queue
-
-#else
-# include "iso/vcl_queue.h"
-#endif
+#include "iso/vcl_queue.h"
 
 #define VCL_QUEUE_INSTANTIATE(T) extern "you must #include vcl_queue.txx"
 #define VCL_PRIORITY_QUEUE_INSTANTIATE(T) extern "you must #include vcl_queue.txx"

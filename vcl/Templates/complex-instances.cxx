@@ -53,24 +53,8 @@ vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
   return is; \
 }
 
-
-// ---------- egcs
-#if defined(VCL_EGCS)
-# if !VCL_HAS_TEMPLATE_SYMBOLS
-# define do_inlines(FLOAT) \
-template vcl_ostream& operator<<(vcl_ostream &, vcl_complex<FLOAT > const &); \
-template vcl_complex<FLOAT > vcl_sqrt (vcl_complex<FLOAT >const& x); \
-template vcl_complex<FLOAT > operator / (vcl_complex<FLOAT >const&,vcl_complex<FLOAT >const&); \
-template vcl_complex<FLOAT > operator / (vcl_complex<FLOAT >const&,FLOAT); \
-implement_rsh(FLOAT)
-
-do_inlines(float);
-do_inlines(double);
-do_inlines(long double);
-# endif
-
 // ---------- gcc 2.95
-#elif defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 # define VCL_COMPLEX_INSTANTIATE_INLINE(x) template x
 # define do_inlines(FLOAT) \
