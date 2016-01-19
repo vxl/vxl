@@ -21,7 +21,7 @@
 #if defined(VCL_STLPORT)
 # include "stlport/vcl_complex.h"
 // ---------- Visual Studio 8 and 9
-#elif defined(VCL_VC_8) || defined(VCL_VC_9)
+#elif defined(VCL_VC_9)
 # include "win32-vc8/vcl_complex.h"
 
 // ---------- SunPro compiler

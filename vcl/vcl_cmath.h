@@ -43,7 +43,7 @@
 # include "stlport/vcl_cmath.h"
 #elif defined(VCL_GCC)
 # include "gcc/vcl_cmath.h"
-#elif defined(VCL_VC_8) || defined(VCL_VC_9)     // C++ .NET earlier than 2003 is not iso compliant
+#elif defined(VCL_VC_9)     // C++ .NET earlier than 2003 is not iso compliant
 # include "win32-vc8/vcl_cmath.h"
 #elif defined(VCL_SUNPRO_CC)
 # include "sunpro/vcl_cmath.h"

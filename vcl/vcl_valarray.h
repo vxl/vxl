@@ -10,7 +10,7 @@
 # include <valarray> // 2.95
 # define vcl_valarray valarray
 
-#elif defined(VCL_VC_8) || defined(VCL_VC_9)
+#elif defined(VCL_VC_9)
 # include "win32-vc8/vcl_valarray.h"
 
 #else

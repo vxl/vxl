@@ -1326,22 +1326,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_VC_8 ";
-#ifdef VCL_VC_8
-  vcl_cout << "is set to " << quote(VCL_VC_8);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_VC_80 ";
-#ifdef VCL_VC_80
-  vcl_cout << "is set to " << quote(VCL_VC_80);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "GNU_LIBSTDCXX_V3 ";
 #ifdef GNU_LIBSTDCXX_V3
   vcl_cout << "is set to " << quote(GNU_LIBSTDCXX_V3);
