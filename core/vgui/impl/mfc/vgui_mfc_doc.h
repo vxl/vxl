@@ -12,9 +12,9 @@
 //   Marko Bacic   27-JUL-2000   Initial version.
 // \endverbatim
 
-#if _MSC_VER > 1000
+#if defined(_MSC_VER)
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 class vgui_tableau;
 

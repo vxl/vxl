@@ -4,7 +4,7 @@
 
 vcl_FILE *vpl_fdopen(int fd, char const *mode)
 {
-#if defined(VCL_WIN32) && !defined(__CYGWIN__) && _MSC_VER >= 1400
+#if defined(VCL_WIN32) && !defined(__CYGWIN__)
   return _fdopen(fd, mode);
 #else
   return fdopen(fd, mode);

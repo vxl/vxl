@@ -92,9 +92,7 @@
 # define VCL_WIN32
 # if defined(_MSC_VER)
 #  define VCL_VC
-#  if _MSC_VER >= 1300
-#   define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
-#  endif
+#  define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
 
 // In future use VCL_VC_13_1 for 13.1, etc.
 #  if _MSC_VER >= 1700     // Visual Studio 2011 = Version 11.x
@@ -103,9 +101,6 @@
 #   define VCL_VC_10
 #  elif _MSC_VER >= 1500     // Visual Studio 2008 = Version 9.x
 #   define VCL_VC_9
-#  elif _MSC_VER >= 1400   // .NET 2005 = Version 8.x
-#   define VCL_VC_8
-#   define VCL_VC80 1      // (deprecated)
 #  else
 #   error "Invalid VCL_VC version"
 #  endif
@@ -116,11 +111,9 @@
 // awf hack alert:
 #ifdef VCL_VC
 // Disable warnings about C standard library functions.
-#  if _MSC_VER >= 1400   // .NET 2005 = Version 8.x
-#   ifndef _CRT_SECURE_NO_DEPRECATE
-#    define _CRT_SECURE_NO_DEPRECATE 1
-#   endif
-#  endif
+# ifndef _CRT_SECURE_NO_DEPRECATE
+#  define _CRT_SECURE_NO_DEPRECATE 1
+# endif
 #endif
 
 #if defined(__CYGWIN__) // Cygwin GCC Compiler
