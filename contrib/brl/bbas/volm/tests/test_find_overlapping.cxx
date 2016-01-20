@@ -208,9 +208,10 @@ static void test_overlapping_resources()
   vcl_vector<vcl_string> overlapping_res;
   res->highly_overlapping_resources(overlapping_res, res, kml_file, 100.0f);
 
-  for(int i=0; i < overlapping_res.size(); ++i) {
+  for (unsigned int i=0; i < overlapping_res.size(); ++i)
+    {
     vcl_cout << overlapping_res[i] << vcl_endl;
-  }
+    }
   vcl_cout << vcl_endl;
 
 }

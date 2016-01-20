@@ -180,7 +180,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   t.mark();
   //---- This instead of the reduce step ----
   //Norm image create on CPU
-  for (int c=0; c<cl_ni*cl_nj; ++c)
+  for (unsigned int c=0; c<cl_ni*cl_nj; ++c)
     norm_img[c] = visImg[c] + preImg[c];
 
   //grab accurate GPU time (includes transfers)
@@ -191,14 +191,15 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   vil_image_view<float> nimg(ni,nj), vimg(ni,nj), pimg(ni,nj);
   int c=0;
 
-  for (int j=0; j<cl_nj; ++j)
-    for (int i=0; i<cl_ni; ++i) {
-      if( i < ni && j < nj )
-    {
-      nimg(i,j) = norm_img[c];
-      vimg(i,j) = visImg[c];
-      pimg(i,j) = preImg[c];
-    }
+  for (unsigned int j=0; j<cl_nj; ++j)
+    for (unsigned int i=0; i<cl_ni; ++i)
+      {
+      if ( i < ni && j < nj )
+        {
+        nimg(i,j) = norm_img[c];
+        vimg(i,j) = visImg[c];
+        pimg(i,j) = preImg[c];
+        }
       c++;
     }
   vil_save(nimg, "e:/norm_image.tiff");

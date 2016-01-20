@@ -2119,21 +2119,21 @@ bool sdet_sel_base::is_EHT_path_legal(vcl_vector<sdet_edgel*>& edgel_chain)
   if (!cons) return false; //no good at the end point
 
   //2) By Yuliang, use the two lists, check if it is a path between which unambiguous contours linked
-  for(int i =0; i<S_link_end_nodes.size(); i++)
-  {
-      sdet_edgel* S_l_e = S_link_end_nodes[i];
+  for (unsigned int i =0; i<S_link_end_nodes.size(); ++i)
+    {
+    sdet_edgel* S_l_e = S_link_end_nodes[i];
     if(S_l_e == eE)
+      return false;
+    for (unsigned int j=0; j<E_link_end_nodes.size(); ++j)
+      {
+      sdet_edgel* E_l_e = E_link_end_nodes[j];
+      if(E_l_e == eS)
         return false;
-      for(int j=0; j<E_link_end_nodes.size(); j++)
-        {
-        sdet_edgel* E_l_e = E_link_end_nodes[j];
-        if(E_l_e == eS)
-            return false;
-        // the case two connected contours filling the path
-        if(E_l_e== S_l_e)
-            return false;
-        }
-  }
+      // the case two connected contours filling the path
+      if(E_l_e== S_l_e)
+        return false;
+      }
+    }
 
   // comment by Yuliang, in most cases, it is no need, because of short paths.
   //fit_polyarc_to_chain(&edgel_chain);
@@ -2684,254 +2684,426 @@ void sdet_sel_base::regular_contour_filter(){
 //New construction of Hypothesis Tree by Naman Kumar
 void sdet_sel_base::Construct_Hypothesis_Tree()
 {
-        regular_contour_filter();
-        int n1=0;
-        double d=0,dis=0,distance=0;
-        vcl_vector<sdet_edgel*> new_chain0,new_chain2,new_chain3,new_chain6,new_chain33;
-        sdet_edgel_chain* new_chain1=new sdet_edgel_chain();sdet_edgel_chain* new_chain4=new sdet_edgel_chain();
-        sdet_edgel_chain* test1=new sdet_edgel_chain();sdet_edgel_chain *chains=new sdet_edgel_chain();
-        sdet_edgel_chain* new_chain44=new sdet_edgel_chain();
-        double gap_thres=gap_;
-        vcl_cout << "Construction of Hypothesis Tree is in Progress!! " << vcl_endl;
-        //Calculating number of edges which are having degree as 1
-        for (int i=0; i<edgemap_->edgels.size(); i++)
-        {
-                sdet_edgel* eA1 = edgemap_->edgels[i];
-                new_chain0.push_back(eA1);
-                if ((curve_frag_graph_.pFrags[eA1->id].size() + curve_frag_graph_.cFrags[eA1->id].size()) ==1) new_chain1->edgels.push_back(eA1);
-                else new_chain2.push_back(eA1);
-        }
+  regular_contour_filter();
+  int n1=0;
+  double d=0,dis=0,distance=0;
+  vcl_vector<sdet_edgel*> new_chain0,new_chain2,new_chain3,new_chain6,new_chain33;
+  sdet_edgel_chain* new_chain1=new sdet_edgel_chain();
+  sdet_edgel_chain* new_chain4=new sdet_edgel_chain();
+  sdet_edgel_chain* test1=new sdet_edgel_chain();
+  sdet_edgel_chain *chains=new sdet_edgel_chain();
+  sdet_edgel_chain* new_chain44=new sdet_edgel_chain();
+  double gap_thres=gap_;
+  vcl_cout << "Construction of Hypothesis Tree is in Progress!! " << vcl_endl;
+  // Calculating number of edges with degree as 1
+  for (unsigned int i=0; i<edgemap_->edgels.size(); ++i)
+    {
+    sdet_edgel* eA1 = edgemap_->edgels[i];
+    new_chain0.push_back(eA1);
+    if ((curve_frag_graph_.pFrags[eA1->id].size() + curve_frag_graph_.cFrags[eA1->id].size()) ==1)
+      new_chain1->edgels.push_back(eA1);
+    else new_chain2.push_back(eA1);
+    }
 
-        //Calculating number of edges which are part of the contours and which are unused
-        sdet_edgel_chain_list_iter fit = curve_frag_graph_.frags.begin();
-        for(;fit!=curve_frag_graph_.frags.end();fit++)
+    //Calculating number of edges which are part of the contours and which are unused
+    sdet_edgel_chain_list_iter fit = curve_frag_graph_.frags.begin();
+    for (; fit!=curve_frag_graph_.frags.end(); ++fit)
+      {
+      sdet_edgel_chain *test1=*fit;
+      for (unsigned int d=0;d<test1->edgels.size();d++)
         {
-                sdet_edgel_chain *test1=*fit;
-                for(int d=0;d<test1->edgels.size();d++) {new_chain3.push_back(test1->edgels[d]);new_chain33.push_back(test1->edgels[d]);}
+        new_chain3.push_back(test1->edgels[d]);new_chain33.push_back(test1->edgels[d]);
         }
+      }
 
-        for(int i=0;i<new_chain0.size();i++)
+      for (unsigned int i=0; i<new_chain0.size(); ++i)
         {
-                for(int j=0;j<new_chain3.size();j++)
-                {
-                        if(new_chain0[i]!=new_chain3[j]) continue;
-                        else {n1=5; break;}
-                }
-                     if(n1==0) {new_chain4->edgels.push_back(new_chain0[i]);}
-                     else {n1=0; continue;}
+        for (unsigned int j=0; j<new_chain3.size(); ++j)
+          {
+          if(new_chain0[i]!=new_chain3[j]) continue;
+          else
+            {
+            n1=5;
+            break;
+            }
+          }
+          if (n1==0)
+            {
+            new_chain4->edgels.push_back(new_chain0[i]);
+            }
+          else
+            {
+            n1=0;
+            continue;
+            }
         }
         //Constucting the tree from end of an unambiguous chain and extending it till the end of edge chain
-        double cost1=gap_,cost2=10.0,cost3=gap_,d1=0.0,d2=0.0,d3=0,dx=0.0,dy=0.0,cost=1000.0,costc=0.0;int m1=0,m2=0,m3=0,m4=0,m5=0,m7=0,m8=0,m9=0;
-        sdet_edgel* ce=0;sdet_edgel* pe=0;sdet_edgel* ed=0;sdet_edgel* imp=0;sdet_edgel* im=0;
-        sdet_edgel_chain *c11=new sdet_edgel_chain();sdet_edgel_chain* xx=new sdet_edgel_chain();sdet_edgel_chain* end=new sdet_edgel_chain();
-        while(new_chain1->edgels.size()>0)
-            {
-                a: ;
-                if(new_chain1->edgels.size()==0) break;
-                ed=new_chain1->edgels[0];
-                new_chain1->edgels.pop_front();
-                for(int z=0;z<end->edgels.size();z++){if(ed==end->edgels[z]) goto a; else continue;}
-                sdet_edgel_chain* new_chain5 = new sdet_edgel_chain();
-                new_chain5->edgels.push_back(ed);xx->edgels.push_back(ed);
-                m4=0;m7=0;
-                double dis=0, distance=0;
-                //Forming the tree from the edge
-                while(1)
-                {
-                        sdet_edgel_list_iter eit1=new_chain4->edgels.begin(); sdet_edgel_list_iter eit2=new_chain4->edgels.begin();
-                         if(m4==0)
-                         {
-                                    if(curve_frag_graph_.cFrags[ed->id].size()==1)
-                                    {        sdet_edgel_chain_list_iter ccit = curve_frag_graph_.cFrags[ed->id].begin();
-                                         ce = (*ccit)->edgels[1];c11=*ccit;pe=ce;m7=1;
-                                        for (int j=1;j<c11->edgels.size();j++)
-                                        {dis=vgl_distance(c11->edgels[j]->pt,c11->edgels[j-1]->pt);if(dis>distance) distance=dis;}
-                                             distance=distance + 0.25;if(distance <=1) gap_=1; else if(distance <gap_thres) gap_=distance; else gap_=gap_thres;
-                                    }
-                                    else if(curve_frag_graph_.pFrags[ed->id].size()==1)
-                                   {        sdet_edgel_chain_list_iter pcit = curve_frag_graph_.pFrags[ed->id].begin();
-                                        ce = (*pcit)->edgels[(*pcit)->edgels.size()-2];c11=*pcit;pe=ce;m7=2;
-                                        for (int j=1;j<c11->edgels.size();j++)
-                                        {dis=vgl_distance(c11->edgels[j]->pt,c11->edgels[j-1]->pt);if(dis>distance) distance=dis;}
-                                             distance=distance + 0.25;if(distance <=1) gap_=1; else if(distance <gap_thres) gap_=distance; else gap_=gap_thres;
-                                    }m4=1;
-                         }
-                        // Used later
-                        if(m7==2){m8=c11->edgels.size()-5;if(m8<0) m8=0;m9=c11->edgels.size();}
-                        else if(m7==1) {m8=0;m9=5; if(m9>c11->edgels.size())m9=c11->edgels.size();}
-
-                        // Finding the closest unused edge
-                        costc=0.0;cost=10000.0;cost1=gap_;
-                        for(int j=0;j<new_chain4->edgels.size(); j++)
-                        {
-                                d1= vgl_distance(ed->pt,new_chain4->edgels[j]->pt);
-                                //Checking Localization, Orientation,etc..
-                                if(d1<cost1)
-                                {
-                                            vcl_vector<sdet_edgel*> dummy_chain;
-                                        sdet_edgel_chain* edgel_chain = new sdet_edgel_chain();
-                                          for(int i=0;i<new_chain5->edgels.size();i++)edgel_chain->edgels.push_back(new_chain5->edgels[i]);
-                                          edgel_chain->edgels.push_back(new_chain4->edgels[j]);
-                                          vcl_vector<sdet_edgel*> chain(edgel_chain->edgels.begin(),edgel_chain->edgels.end());
-                                          costc = compute_path_metric2(dummy_chain, chain, dummy_chain);
-                                          if(costc<cost)
-                                           {
-                                                 double d8=vgl_distance(new_chain4->edgels[j]->pt,ce->pt);
-                                                      double d9=vgl_distance(new_chain4->edgels[j]->pt,ed->pt);
-                                                double d0=vgl_distance(new_chain4->edgels[j]->pt,pe->pt);
-                                                double dx1 = ce->pt.x() - ed->pt.x();
-                                                double dy1 = ce->pt.y() - ed->pt.y();
-                                                double dx2 = ed->pt.x() - new_chain4->edgels[j]->pt.x();
-                                                double dy2 = ed->pt.y() - new_chain4->edgels[j]->pt.y();
-                                                double angle=((dx1*dx2 + dy1*dy2)/vcl_sqrt(dx1*dx1+dy1*dy1)/vcl_sqrt(dx2*dx2+dy2*dy2));
-                                                if(d0<d9) {++eit1;continue;}
-                                                if(d8<d9 || angle<0){++eit1;continue;}
-                                                imp=new_chain4->edgels[j];
-                                                cost=costc;
-                                                m1=1;
-                                                eit2=eit1;
-                                           }
-                                 }
-                                 else if(d1<cost2 && d1>1){cost2=d1;}
-                                 ++eit1;
-                          }
-
-                          m3=0;m5=0;cost3=gap_;
-                          // Finding the closest edge which is part of a fragment
-                          for(int t=0;t<new_chain3.size(); t++)
-                          {
-                                  if(new_chain3[t]==ed || new_chain3[t]==ce) continue;
-                                    d1= vgl_distance(ed->pt,new_chain3[t]->pt);
-                                if(d1<=cost3)
-                                {
-                                        //Dont consider the previous 5 edges present in parent/child fragment of the starting edge
-                                        for(int c=m8;c<m9;c++) {if(new_chain3[t]==c11->edgels[c]) goto z; else continue;}
-                                        //Dont use the edge which is part of the same tree again
-                                        for(int c=0;c<new_chain5->edgels.size();c++) {if(new_chain3[t]==new_chain5->edgels[c]) goto z; else continue;}
-                                        im=new_chain3[t];
-                                        cost3=d1;m5=1;
-                                        dx=vgl_distance(im->pt,ce->pt);
-                                        dy=vgl_distance(im->pt,ed->pt);
-                                }
-                                   z: ;
-                          }
-                              if(dx>dy && m5==1){m3=5;m1=1;imp=im;}
-                          if(m1==1)
-                          {
-                                   m2=1;m1=0;cost1=gap_;
-                                    ce=ed;ed=imp; xx->edgels.push_back(imp);new_chain5->edgels.push_back(imp);
-                                    if(m3==0){new_chain4->edgels.erase(eit2);new_chain3.push_back(imp);new_chain33.push_back(imp);}
-                                    if(m3!=0){m3=0;break;}
-                          }
-                          else if(cost2>1) break;
-                }
-                //No double contours within the same 2 end points.
-                if(m2==1) {if(c11->edgels.front()==c11->edgels.back()) continue;}
-                //Add the tree
-                new_chain5->temp = true;
-                curve_frag_graph_.CFTG.insert_fragment(new_chain5);
-                end->edgels.push_back(new_chain5->edgels.back());
-
-        }
-        sdet_edgel* edge1=0;sdet_edgel* edge2=0;sdet_edgel_chain *chain1=new sdet_edgel_chain();vcl_list<sdet_CFTG_link*> GD_list;
-        double p1=1.0;int p2=0,p3=0,p16=0;
-        sdet_CFTG_link_list_iter l_it = curve_frag_graph_.CFTG.Links.begin();                                                                                              for (; l_it != curve_frag_graph_.CFTG.Links.end(); l_it++) GD_list.push_back(*l_it);
-          while (GD_list.size()>0)
+      double cost1=gap_,cost2=10.0,cost3=gap_,d1=0.0,d2=0.0,d3=0,dx=0.0,dy=0.0,cost=1000.0,costc=0.0;
+      int m1=0,m2=0,m3=0,m4=0,m5=0,m7=0,m8=0,m9=0;
+      sdet_edgel* ce=0;sdet_edgel* pe=0;sdet_edgel* ed=0;sdet_edgel* imp=0;sdet_edgel* im=0;
+      sdet_edgel_chain *c11=new sdet_edgel_chain();
+      sdet_edgel_chain* xx=new sdet_edgel_chain();
+      sdet_edgel_chain* end=new sdet_edgel_chain();
+      while(new_chain1->edgels.size()>0)
+        {
+        a: ;
+        if (0 == new_chain1->edgels.size()) break;
+        ed=new_chain1->edgels[0];
+        new_chain1->edgels.pop_front();
+        for (unsigned int z=0; z<end->edgels.size(); ++z)
           {
-                    double distance1=0,distance2=0;
-                sdet_CFTG_link* cur_Link = GD_list.front();GD_list.pop_front();
-                    sdet_edgel_chain_list_iter f_it = cur_Link->cCFs.begin();sdet_edgel_chain* new_chain5=(*f_it);sdet_edgel* edge3=new_chain5->edgels.front();
-                gap_=1;
-                for(int i=0;i<new_chain5->edgels.size();i++)
+          if (ed==end->edgels[z]) goto a;
+          else continue;
+          }
+          sdet_edgel_chain* new_chain5 = new sdet_edgel_chain();
+          new_chain5->edgels.push_back(ed);xx->edgels.push_back(ed);
+          m4=0;m7=0;
+          double dis=0, distance=0;
+          //Forming the tree from the edge
+          while (1)
+            {
+            sdet_edgel_list_iter eit1=new_chain4->edgels.begin();
+            sdet_edgel_list_iter eit2=new_chain4->edgels.begin();
+            if (m4==0)
+              {
+              if (1 == curve_frag_graph_.cFrags[ed->id].size())
                 {
-                        sdet_edgel_chain *new_chain6a=new sdet_edgel_chain();
-                        p1=gap_;
-                        sdet_edgel_list_iter eit5=new_chain4->edgels.begin(); sdet_edgel_list_iter eit6=new_chain4->edgels.begin();
-                        for(int j=0;j<new_chain4->edgels.size();j++)
-                        {
-                                double p4=vgl_distance(new_chain5->edgels[i]->pt,new_chain4->edgels[j]->pt);
-                                if(p4<p1){edge1=new_chain4->edgels[j];p1=p4;p2=1;eit6=eit5;++eit5;}
-                                else {++eit5;continue;}
-                        }
-                        if(p2==1)
-                        {
-                                new_chain4->edgels.erase(eit6);
-                                sdet_edgel* edge4=0;p2=0;double p5=gap_;
-                                for(int b=0;b<new_chain5->edgels.size();b++)
-                                {
-                                        double p6=vgl_distance(edge1->pt,new_chain5->edgels[b]->pt);
-                                        if(p6<p5){edge2=new_chain5->edgels[b];p5=p6;}
-                                        else continue;
-                                }
-                                new_chain6a=new sdet_edgel_chain();new_chain6a->edgels.push_back(edge2);new_chain6a->edgels.push_back(edge1);
-                                int p7=0,p8=0,p9=0;
-                                if(curve_frag_graph_.cFrags[edge3->id].size()>=1)
-                                {sdet_edgel_chain_list_iter ccit = curve_frag_graph_.cFrags[edge3->id].begin();chain1=(*ccit);p7=1;}
-                                    else if(curve_frag_graph_.pFrags[edge3->id].size()>=1)
-                                     {sdet_edgel_chain_list_iter pcit = curve_frag_graph_.pFrags[edge3->id].begin();chain1=(*pcit);p7=2;}
-                                if(p7==2){p8=chain1->edgels.size()-5;if(p8<0) p8=0;p9=chain1->edgels.size();}
-                                else if(p7==1) {p8=0;p9=5; if(p9>chain1->edgels.size())p9=chain1->edgels.size();}
-                                while(1)
-                                {
-                                        double p10=gap_,p11=0.0;
-                                        sdet_edgel_list_iter eit3=new_chain4->edgels.begin();sdet_edgel_list_iter eit4=new_chain4->edgels.begin();
-                                        for(int a=0;a<new_chain4->edgels.size();a++)
-                                        {
-                                                p11= vgl_distance(edge1->pt,new_chain4->edgels[a]->pt);
-                                                if(p11<p10)
-                                                {
-                                                        double d8=vgl_distance(new_chain4->edgels[a]->pt,edge2->pt);
-                                                              double d9=vgl_distance(new_chain4->edgels[a]->pt,edge1->pt);
-                                                        double dx1 = edge1->pt.x() - edge2->pt.x(), dy1 = edge1->pt.y() - edge2->pt.y();
-                                                                double dx2=new_chain4->edgels[a]->pt.x()-edge1->pt.x();
-                                                        double dy2=new_chain4->edgels[a]->pt.y()-edge1->pt.y();
-                                                              if(d8<d9 || ((dx1*dx2 + dy1*dy2)/vcl_sqrt(dx1*dx1+dy1*dy1)/vcl_sqrt(dx2*dx2+dy2*dy2))<0.4)
-                                                        {++eit3;continue;}
-                                                        p10=p11;edge4=new_chain4->edgels[a];eit4=eit3;p2=1;
-                                                }
-                                                ++eit3;
-                                        }
-                                        double p12=gap_,p13=0,p14=0.0,p15=0.0;p16=0;sdet_edgel* edge5=0;
-                                        for(int t=0;t<new_chain3.size(); t++)
-                                          {
-                                                if(new_chain3[t]==edge1) continue;
-                                                p13= vgl_distance(edge1->pt,new_chain3[t]->pt);
-                                                       if(p13<=p12)
-                                                       {
-                                                           for(int c=p8;c<p9;c++) {if(new_chain3[t]==chain1->edgels[c])goto jump;else continue;}                                                                       for(int a=0;a<new_chain5->edgels.size();a++)
-                                                        {if(new_chain3[t]==new_chain5->edgels[a])goto jump; else continue;}
-                                                              for(int b=0;b<new_chain6a->edgels.size();b++)
-                                                        {if(new_chain3[t]==new_chain6a->edgels[b])goto jump;else continue;}
-                                                               edge5=new_chain3[t];p12=p13;p14=vgl_distance(edge5->pt,edge2->pt);
-                                                        p15=vgl_distance(edge5->pt,edge1->pt);
-                                                               p16=1;
-                                                      }
-                                                          jump: ;
-                                          }
-                                        if(p14>p15 && p16==1) {edge4=edge5;p2=1;}
-                                        if(p2==1)
-                                        {
-                                                new_chain6a->edgels.push_back(edge4);p3=1;p2=0;
-                                                if(p16==0){new_chain4->edgels.erase(eit4);new_chain3.push_back(edge4);edge2=edge1;edge1=edge4;}else break;
-                                        }
-                                        else break;
-                                }
-                                double p17=0,p18=0,p21=0;
-                                if(p3==1 && new_chain6a->edgels.size()>5)
-                                {
-                                        sdet_edgel* edge6=new_chain6a->edgels[new_chain6a->edgels.size()/2];
-                                        for(int i=0;i<new_chain33.size();i++)
-                                        {
-                                                p18=vgl_distance(edge6->pt,new_chain33[i]->pt);if(p18<1) p21=10;
-                                                if(p21==10){p17=1;break;}
-                                        }
-                                        if(p17==0){new_chain6a->temp = true;curve_frag_graph_.CFTG.insert_fragment(new_chain6a);}
-                                        p3=0;p2=0;p16=0,p3=0;
-                                }
-                        }
+                sdet_edgel_chain_list_iter ccit = curve_frag_graph_.cFrags[ed->id].begin();
+                ce = (*ccit)->edgels[1];c11=*ccit;pe=ce;m7=1;
+                for (unsigned int j=1; j<c11->edgels.size(); ++j)
+                  {
+                  dis=vgl_distance(c11->edgels[j]->pt,c11->edgels[j-1]->pt);
+                  if (dis>distance) distance=dis;
+                  }
+                distance=distance + 0.25;
+                if (distance <=1) gap_=1;
+                else if (distance <gap_thres) gap_=distance;
+                else gap_=gap_thres;
                 }
+              else if (1 == curve_frag_graph_.pFrags[ed->id].size())
+                {
+                sdet_edgel_chain_list_iter pcit = curve_frag_graph_.pFrags[ed->id].begin();
+                ce = (*pcit)->edgels[(*pcit)->edgels.size()-2];
+                c11=*pcit;
+                pe=ce;
+                m7=2;
+                for (unsigned int j=1; j<c11->edgels.size(); ++j)
+                   {
+                   dis=vgl_distance(c11->edgels[j]->pt,c11->edgels[j-1]->pt);
+                   if (dis>distance) distance=dis;
+                   }
+                distance=distance + 0.25;
+                if (distance <=1) gap_=1;
+                else if (distance <gap_thres) gap_=distance;
+                else gap_=gap_thres;
+                }
+              m4=1;
+              }
+              // Used later
+              if (m7==2)
+                {
+                m8=c11->edgels.size()-5;
+                if (m8<0) m8=0;
+                m9=c11->edgels.size();
+                }
+              else if(m7==1)
+                {
+                m8=0;
+                m9=5;
+                if (m9>c11->edgels.size())
+                  m9=c11->edgels.size();
+                }
+              // Finding the closest unused edge
+              costc=0.0;cost=10000.0;cost1=gap_;
+              for (unsigned int j=0; j<new_chain4->edgels.size(); ++j)
+                {
+                d1= vgl_distance(ed->pt,new_chain4->edgels[j]->pt);
+                //Checking Localization, Orientation,etc..
+                if (d1<cost1)
+                  {
+                  vcl_vector<sdet_edgel*> dummy_chain;
+                  sdet_edgel_chain* edgel_chain = new sdet_edgel_chain();
+                  for (unsigned int i=0; i<new_chain5->edgels.size(); ++i)
+                    edgel_chain->edgels.push_back(new_chain5->edgels[i]);
+                  edgel_chain->edgels.push_back(new_chain4->edgels[j]);
+                  vcl_vector<sdet_edgel*> chain(edgel_chain->edgels.begin(),edgel_chain->edgels.end());
+                  costc = compute_path_metric2(dummy_chain, chain, dummy_chain);
+                  if (costc<cost)
+                    {
+                    double d8=vgl_distance(new_chain4->edgels[j]->pt,ce->pt);
+                    double d9=vgl_distance(new_chain4->edgels[j]->pt,ed->pt);
+                    double d0=vgl_distance(new_chain4->edgels[j]->pt,pe->pt);
+                    double dx1 = ce->pt.x() - ed->pt.x();
+                    double dy1 = ce->pt.y() - ed->pt.y();
+                    double dx2 = ed->pt.x() - new_chain4->edgels[j]->pt.x();
+                    double dy2 = ed->pt.y() - new_chain4->edgels[j]->pt.y();
+                    double angle=((dx1*dx2 + dy1*dy2)/vcl_sqrt(dx1*dx1+dy1*dy1)/vcl_sqrt(dx2*dx2+dy2*dy2));
+                    if (d0<d9)
+                      {
+                      ++eit1;
+                      continue;
+                      }
+                    if (d8<d9 || angle<0)
+                      {
+                      ++eit1;
+                      continue;
+                      }
+                    imp=new_chain4->edgels[j];
+                    cost=costc;
+                    m1=1;
+                    eit2=eit1;
+                    }
+                  }
+                else if (d1<cost2 && d1>1)
+                  {
+                  cost2=d1;
+                  }
+                ++eit1;
+                }
+
+              m3=0;m5=0;cost3=gap_;
+              // Finding the closest edge which is part of a fragment
+              for (unsigned int t=0; t<new_chain3.size(); ++t)
+                {
+                if (new_chain3[t]==ed || new_chain3[t]==ce) continue;
+                d1 = vgl_distance(ed->pt,new_chain3[t]->pt);
+                if (d1<=cost3)
+                  {
+                  //Dont consider the previous 5 edges present in parent/child fragment of the starting edge
+                  for (int c=m8;c<m9;c++)
+                    {
+                    if (new_chain3[t]==c11->edgels[c]) goto z;
+                    else continue;
+                    }
+                  //Dont use the edge which is part of the same tree again
+                  for (unsigned int c=0; c<new_chain5->edgels.size(); ++c)
+                    {
+                    if (new_chain3[t]==new_chain5->edgels[c]) goto z;
+                    else continue;
+                    }
+                  im=new_chain3[t];
+                  cost3=d1;m5=1;
+                  dx=vgl_distance(im->pt,ce->pt);
+                  dy=vgl_distance(im->pt,ed->pt);
+                  }
+                z: ;
+                }
+              if (dx>dy && m5==1)
+                {
+                m3=5;
+                m1=1;
+                imp=im;
+                }
+              if (m1==1)
+                {
+                m2=1;
+                m1=0;
+                cost1=gap_;
+                ce=ed;
+                ed=imp;
+                xx->edgels.push_back(imp);
+                new_chain5->edgels.push_back(imp);
+                if (m3==0)
+                  {
+                  new_chain4->edgels.erase(eit2);
+                  new_chain3.push_back(imp);
+                  new_chain33.push_back(imp);
+                  }
+                if (m3!=0)
+                  {
+                  m3=0;
+                  break;
+                  }
+                }
+              else if (cost2>1) break;
+            }
+          //No double contours within the same 2 end points.
+          if (m2==1)
+            {
+            if (c11->edgels.front()==c11->edgels.back()) continue;
+            }
+          //Add the tree
+          new_chain5->temp = true;
+          curve_frag_graph_.CFTG.insert_fragment(new_chain5);
+          end->edgels.push_back(new_chain5->edgels.back());
+
         }
-        vcl_cout << "Hypothesis Tree Constructed!!" << vcl_endl;
+        sdet_edgel* edge1=0;
+        sdet_edgel* edge2=0;
+        sdet_edgel_chain *chain1=new sdet_edgel_chain();
+        vcl_list<sdet_CFTG_link*> GD_list;
+        double p1=1.0;
+        int p2=0,p3=0,p16=0;
+        sdet_CFTG_link_list_iter l_it = curve_frag_graph_.CFTG.Links.begin();
+        for (; l_it != curve_frag_graph_.CFTG.Links.end(); ++l_it)
+          GD_list.push_back(*l_it);
+        while (GD_list.size()>0)
+          {
+          double distance1=0,distance2=0;
+          sdet_CFTG_link* cur_Link = GD_list.front();GD_list.pop_front();
+          sdet_edgel_chain_list_iter f_it = cur_Link->cCFs.begin();
+          sdet_edgel_chain* new_chain5=(*f_it);
+          sdet_edgel* edge3=new_chain5->edgels.front();
+          gap_=1;
+          for (unsigned int i=0; i<new_chain5->edgels.size(); ++i)
+            {
+            sdet_edgel_chain *new_chain6a=new sdet_edgel_chain();
+            p1=gap_;
+            sdet_edgel_list_iter eit5=new_chain4->edgels.begin();
+            sdet_edgel_list_iter eit6=new_chain4->edgels.begin();
+            for (unsigned int j=0; j<new_chain4->edgels.size(); ++j)
+              {
+              double p4=vgl_distance(new_chain5->edgels[i]->pt,new_chain4->edgels[j]->pt);
+              if (p4<p1)
+                {
+                edge1=new_chain4->edgels[j];
+                p1=p4;
+                p2=1;
+                eit6=eit5;
+                ++eit5;
+                }
+              else
+                {
+                ++eit5;
+                continue;
+                }
+              }
+            if (p2==1)
+              {
+              new_chain4->edgels.erase(eit6);
+              sdet_edgel* edge4=0;p2=0;double p5=gap_;
+              for (unsigned int b=0; b<new_chain5->edgels.size(); ++b)
+                {
+                double p6=vgl_distance(edge1->pt,new_chain5->edgels[b]->pt);
+                if (p6<p5)
+                  {
+                  edge2=new_chain5->edgels[b];
+                  p5=p6;
+                  }
+                else continue;
+                }
+                new_chain6a=new sdet_edgel_chain();new_chain6a->edgels.push_back(edge2);new_chain6a->edgels.push_back(edge1);
+                int p7=0,p8=0,p9=0;
+                if (curve_frag_graph_.cFrags[edge3->id].size()>=1)
+                  {
+                  sdet_edgel_chain_list_iter ccit = curve_frag_graph_.cFrags[edge3->id].begin();
+                  chain1=(*ccit);
+                  p7=1;
+                  }
+                else if (curve_frag_graph_.pFrags[edge3->id].size()>=1)
+                  {
+                  sdet_edgel_chain_list_iter pcit = curve_frag_graph_.pFrags[edge3->id].begin();
+                  chain1=(*pcit);
+                  p7=2;
+                  }
+                if (p7==2)
+                  {
+                  p8=chain1->edgels.size()-5;
+                  if (p8<0) p8=0;
+                  p9=chain1->edgels.size();
+                  }
+                else if (p7==1)
+                  {
+                  p8=0;
+                  p9=5;
+                  if (p9>chain1->edgels.size()) p9=chain1->edgels.size();
+                  }
+                while (1)
+                  {
+                  double p10=gap_,p11=0.0;
+                  sdet_edgel_list_iter eit3=new_chain4->edgels.begin();sdet_edgel_list_iter eit4=new_chain4->edgels.begin();
+                  for (unsigned int a=0; a<new_chain4->edgels.size(); ++a)
+                    {
+                    p11= vgl_distance(edge1->pt,new_chain4->edgels[a]->pt);
+                    if (p11<p10)
+                      {
+                      double d8=vgl_distance(new_chain4->edgels[a]->pt,edge2->pt);
+                      double d9=vgl_distance(new_chain4->edgels[a]->pt,edge1->pt);
+                      double dx1 = edge1->pt.x() - edge2->pt.x(), dy1 = edge1->pt.y() - edge2->pt.y();
+                      double dx2=new_chain4->edgels[a]->pt.x()-edge1->pt.x();
+                      double dy2=new_chain4->edgels[a]->pt.y()-edge1->pt.y();
+                      if (d8<d9 || ((dx1*dx2 + dy1*dy2)/vcl_sqrt(dx1*dx1+dy1*dy1)/vcl_sqrt(dx2*dx2+dy2*dy2))<0.4)
+                        {
+                        ++eit3;
+                        continue;
+                        }
+                      p10=p11;edge4=new_chain4->edgels[a];eit4=eit3;p2=1;
+                      }
+                    ++eit3;
+                    }
+                    double p12=gap_,p13=0,p14=0.0,p15=0.0;p16=0;sdet_edgel* edge5=0;
+                    for (unsigned int t=0; t<new_chain3.size(); ++t)
+                      {
+                      if (new_chain3[t]==edge1) continue;
+                      p13= vgl_distance(edge1->pt,new_chain3[t]->pt);
+                      if (p13<=p12)
+                        {
+                        for (int c=p8; c<p9; ++c)
+                          {
+                          if (new_chain3[t]==chain1->edgels[c])
+                            goto jump;
+                          else continue;
+                          }
+                        for (unsigned int a=0; a<new_chain5->edgels.size(); ++a)
+                          {
+                          if (new_chain3[t]==new_chain5->edgels[a]) goto jump;
+                          else continue;
+                          }
+                        for (unsigned int b=0; b<new_chain6a->edgels.size(); ++b)
+                          {
+                          if (new_chain3[t]==new_chain6a->edgels[b]) goto jump;
+                          else continue;
+                          }
+                        edge5=new_chain3[t];p12=p13;p14=vgl_distance(edge5->pt,edge2->pt);
+                        p15=vgl_distance(edge5->pt,edge1->pt);
+                        p16=1;
+                        }
+                        jump: ;
+                      }
+                    if (p14>p15 && p16==1)
+                      {
+                      edge4=edge5;
+                      p2=1;
+                      }
+                    if (p2==1)
+                      {
+                      new_chain6a->edgels.push_back(edge4);p3=1;p2=0;
+                      if (p16==0)
+                        {
+                        new_chain4->edgels.erase(eit4);
+                        new_chain3.push_back(edge4);
+                        edge2=edge1;
+                        edge1=edge4;
+                        }
+                      else break;
+                      }
+                    else break;
+                  }
+                double p17=0,p18=0,p21=0;
+                if (p3==1 && new_chain6a->edgels.size()>5)
+                  {
+                  sdet_edgel* edge6=new_chain6a->edgels[new_chain6a->edgels.size()/2];
+                  for (unsigned int i=0; i<new_chain33.size(); ++i)
+                    {
+                    p18=vgl_distance(edge6->pt,new_chain33[i]->pt);
+                    if (p18<1) p21=10;
+                    if (p21==10)
+                      {
+                      p17=1;
+                      break;
+                      }
+                    }
+                  if (p17==0)
+                    {
+                    new_chain6a->temp = true;
+                    curve_frag_graph_.CFTG.insert_fragment(new_chain6a);
+                    }
+                  p3=0;p2=0;p16=0,p3=0;
+                  }
+              }
+            }
+          }
+          vcl_cout << "Hypothesis Tree Constructed!!" << vcl_endl;
 }
 
 // New Disambiguation Process by Naman Kumar
@@ -2966,42 +3138,73 @@ void sdet_sel_base::Post_Process()
 {
 
         sdet_edgel_chain* new_chain= new sdet_edgel_chain();
-        for (int i=0; i<edgemap_->edgels.size(); i++)
+        for (unsigned int i=0; i<edgemap_->edgels.size(); ++i)
             {
                 sdet_edgel* eA1 = edgemap_->edgels[i];
                     if ((curve_frag_graph_.pFrags[eA1->id].size() + curve_frag_graph_.cFrags[eA1->id].size()) ==1) new_chain->edgels.push_back(eA1);
             }
-            for(int j=0;j<new_chain->edgels.size();j++)
-            {
-                sdet_edgel* edge=new_chain->edgels[j]; sdet_edgel* edge2=0;sdet_edgel_chain* chain= new sdet_edgel_chain();sdet_edgel* edge3=0;
-                int n=0,number=0,num=0,diff=0;sdet_edgel* edge4=0;
-                if(curve_frag_graph_.cFrags[edge->id].size()==1)
-                    {
-                            n=1;sdet_edgel_chain_list_iter ccit = curve_frag_graph_.cFrags[edge->id].begin();chain=*ccit;
-                            edge2 = chain->edgels[1];if(chain->edgels.size()>2){number=1;edge3=chain->edgels[2];}diff=1;
+            for (unsigned int j=0; j<new_chain->edgels.size(); ++j)
+              {
+              sdet_edgel* edge=new_chain->edgels[j]; sdet_edgel* edge2=0;sdet_edgel_chain* chain= new sdet_edgel_chain();sdet_edgel* edge3=0;
+              int n=0,number=0,num=0,diff=0;sdet_edgel* edge4=0;
+              if (curve_frag_graph_.cFrags[edge->id].size()==1)
+                {
+                n=1;
+                sdet_edgel_chain_list_iter ccit = curve_frag_graph_.cFrags[edge->id].begin();
+                chain=*ccit;
+                edge2 = chain->edgels[1];
+                if (chain->edgels.size()>2)
+                  {
+                  number=1;
+                  edge3=chain->edgels[2];
+                  }
+                diff=1;
                 }
-                    else if(curve_frag_graph_.pFrags[edge->id].size()==1)
-                    {
-                            n=1;sdet_edgel_chain_list_iter pcit = curve_frag_graph_.pFrags[edge->id].begin();chain=*pcit;
-                            edge2 = chain->edgels[chain->edgels.size()-2];
-                            if(chain->edgels.size()>2){number=1;edge3=chain->edgels[chain->edgels.size()-3];}diff=2;
+              else if(curve_frag_graph_.pFrags[edge->id].size()==1)
+                {
+                n=1;sdet_edgel_chain_list_iter pcit = curve_frag_graph_.pFrags[edge->id].begin();chain=*pcit;
+                edge2 = chain->edgels[chain->edgels.size()-2];
+                if (chain->edgels.size()>2)
+                  {
+                  number=1;
+                  edge3=chain->edgels[chain->edgels.size()-3];
+                  }
+                diff=2;
                 }
-
                 sdet_edgel_chain_list_iter fit = curve_frag_graph_.frags.begin();
-                for(;fit!=curve_frag_graph_.frags.end();fit++)
-                    {sdet_edgel_chain *test1=*fit;if(test1==chain)continue;for(int d=0;d<test1->edgels.size();d++){if(edge==test1->edgels[d]) goto end;}}
-                if(n==1 && chain->edgels.size()>1 && ((curve_frag_graph_.pFrags[edge2->id].size() + curve_frag_graph_.cFrags[edge2->id].size()) >=1))
-                {
-                            curve_frag_graph_.extract_fragment(chain);
-                            if(diff==1) chain->edgels.pop_front();else if(diff==2) chain->edgels.pop_back();curve_frag_graph_.insert_fragment(chain);
-
-                }
+                for (;fit!=curve_frag_graph_.frags.end();++fit)
+                  {
+                  sdet_edgel_chain *test1=*fit;
+                  if (test1==chain) continue;
+                  for (unsigned int d=0; d<test1->edgels.size(); ++d)
+                    {
+                    if (edge==test1->edgels[d]) goto end;
+                    }
+                  }
+                if (n==1 && chain->edgels.size()>1 && ((curve_frag_graph_.pFrags[edge2->id].size() + curve_frag_graph_.cFrags[edge2->id].size()) >=1))
+                  {
+                  curve_frag_graph_.extract_fragment(chain);
+                  if (diff==1)
+                    chain->edgels.pop_front();
+                  else if (diff==2)
+                    chain->edgels.pop_back();
+                  curve_frag_graph_.insert_fragment(chain);
+                  }
                 else if(number==1 && chain->edgels.size()>1 && ((curve_frag_graph_.pFrags[edge3->id].size()+curve_frag_graph_.cFrags[edge3->id].size()) >=1))
-                {
-                            curve_frag_graph_.extract_fragment(chain);
-                        if(diff==1) {chain->edgels.pop_front();chain->edgels.pop_front();}
-                            else if(diff==2){chain->edgels.pop_back();chain->edgels.pop_back();}curve_frag_graph_.insert_fragment(chain);
-                }
-                       end: ;
-            }
+                  {
+                  curve_frag_graph_.extract_fragment(chain);
+                  if (diff==1)
+                    {
+                    chain->edgels.pop_front();
+                    chain->edgels.pop_front();
+                    }
+                  else if (diff==2)
+                    {
+                    chain->edgels.pop_back();
+                    chain->edgels.pop_back();
+                    }
+                  curve_frag_graph_.insert_fragment(chain);
+                  }
+                end: ;
+              }
 }

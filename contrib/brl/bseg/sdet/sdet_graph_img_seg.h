@@ -70,14 +70,15 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
 
   // set up the edge costs as color differences
   vcl_vector<vbl_edge>& edges = ss->get_edges();
-  for (unsigned i = 0; i < edges.size(); i++) {
+  for (unsigned int i = 0; i < edges.size(); ++i)
+    {
     vcl_pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
     double c0 = (double)smoothed(pix0.first, pix0.second);
     vcl_pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
     double c1 = (double)smoothed(pix1.first, pix1.second);
     double dif = c1-c0;
     edges[i].w_ = (float)vcl_sqrt(dif*dif);
-  }
+    }
 
   vbl_disjoint_sets ds;
   ds.add_elements(ss->node_cnt());
@@ -87,12 +88,13 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
 
   // combine the segments with number of elements less than min_size
   // post process small components
-  for (int i = 0; i < edges.size(); i++) {
-      int v0 = ds.find_set(edges[i].v0_);
-      int v1 = ds.find_set(edges[i].v1_);
-      if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
-          ds.set_union(v0, v1);
-  }
+  for (unsigned int i = 0; i < edges.size(); ++i)
+    {
+    int v0 = ds.find_set(edges[i].v0_);
+    int v1 = ds.find_set(edges[i].v1_);
+    if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
+      ds.set_union(v0, v1);
+    }
   vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
 
   out_img.set_size(img.ni(), img.nj());
@@ -103,11 +105,12 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
   // create unique colors for each set
   sdet_graph_img_seg::create_colors(colors, n_segments);
 
-  for (unsigned i = 0; i<ss->node_cnt(); i++) {
+  for (unsigned int i = 0; i<ss->node_cnt(); ++i)
+    {
     int comp = ds.find_set(i);
     vcl_pair<unsigned, unsigned> pix = ss->get_pixel(i);
     out_img(pix.first, pix.second) = colors[comp];
-  }
+    }
 
   delete ss;
 }
@@ -161,7 +164,7 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
 
   // combine the segments with number of elements less than min_size
   // post process small components
-  for (int i = 0; i < edges.size(); i++) {
+  for (unsigned int i = 0; i < edges.size(); i++) {
       int v0 = ds.find_set(edges[i].v0_);
       int v1 = ds.find_set(edges[i].v1_);
       if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))

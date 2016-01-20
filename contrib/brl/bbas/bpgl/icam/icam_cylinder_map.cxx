@@ -115,26 +115,29 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
     nj = static_cast<unsigned>(2.0*pv*scale);
   img.set_size(ni, nj, 3);
   bool use_backgnd = backgnd.ni()>0;
-  for(unsigned j = 0; j<nj; ++j)
-    for(unsigned i = 0; i<ni; ++i)
-      if(use_backgnd)
-        for(unsigned p = 0; p<3; ++p)
-        img(i, j, p)= backgnd(i,j,p);
-      else{
+  for (unsigned int j = 0; j<nj; ++j)
+    for (unsigned int i = 0; i<ni; ++i)
+      if (use_backgnd)
+        for (unsigned int p = 0; p<3; ++p)
+          img(i, j, p)= backgnd(i,j,p);
+      else
+        {
         img(i,j,0) = back_r;
         img(i,j,1) = back_g;
         img(i,j,2) = back_b;
-      }
+        }
   //scan the cylinder
   double height = upper_height_ + lower_height_;
   double ox=origin_.x(), oy=origin_.y(), oz = origin_.z();
   double dz = height/nz_;
   double dth = twopi/n_theta_;
-  for(int iz = 0; iz<nz_; ++iz){
+  for (unsigned int iz = 0; iz<nz_; ++iz)
+    {
     // determine ray origin
     double z = -lower_height_ + dz*iz + oz;
     vgl_point_3d<double> orig(ox, oy, z);
-    for(unsigned ith = 0; ith<n_theta_; ++ith){
+    for (unsigned ith = 0; ith<n_theta_; ++ith)
+      {
       //determine point on cylinder
       double th = ith*dth;
       double tth = th +theta;
@@ -156,33 +159,38 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       ud -= pu; vd -= pv;
       ud *= scale;       vd *= scale;
       ud += pu*scale; vd += pv*scale;
-      if(ud<0.0||vd<0.0||ud>=ni||vd>=nj)
+      if (ud<0.0||vd<0.0||ud>=ni||vd>=nj)
         continue;
       unsigned u = static_cast<unsigned>(ud+0.5), v = static_cast<unsigned>(vd+0.5);
       // interpolate in a 2x2 neighborhood
-      for(unsigned p = 0; p<3; ++p){
+      for(unsigned int p = 0; p<3; ++p)
+        {
         double sum = 0.0;
         sum += cyl_map_(kth, iz, p);
         double w = 1.0;
-        if((kth+1)<n_theta_){
+        if((kth+1)<n_theta_)
+          {
           sum += 0.25*cyl_map_(kth+1, iz,p);
           w+=0.25;
-        }
-        if((kth-1)>=0){
+          }
+        if((kth-1)>=0)
+          {
           sum += 0.25*cyl_map_(kth-1, iz,p);
           w+=0.25;
-        }
-        if((iz+1)<nz_){
+          }
+        if((iz+1)<nz_)
+          {
           sum += 0.25*cyl_map_(kth, iz+1,p);
           w+=0.25;
-        }
-        if((iz-1)>=0){
+          }
+        if((iz-1)>=0)
+          {
           sum += 0.25*cyl_map_(kth, iz-1,p);
           w+=0.25;
-        }
+          }
         img(u, v, p) = static_cast<vxl_byte>(sum/w);
+        }
       }
     }
-  }
  return true;
 }

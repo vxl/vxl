@@ -91,14 +91,14 @@ void bstm_ocl_minfo_function::init_ocl_minfo()
 
   //setup intensity histogram
   app_joint_histogram_buff = new cl_float[app_view_dir_num_ *app_nbins_*app_nbins_];
-  for (int k = 0; k<app_nbins_*app_nbins_* app_view_dir_num_; k++)
+  for (unsigned int k = 0; k<app_nbins_*app_nbins_* app_view_dir_num_; ++k)
     app_joint_histogram_buff[k] = 0;
   app_joint_hist_mem_  = new bocl_mem(device_->context(), app_joint_histogram_buff, sizeof(cl_uint)*app_nbins_*app_nbins_* app_view_dir_num_, " app joint histogram" );
   app_joint_hist_mem_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 
   //setup surface prob histogram
   surf_joint_histogram_buff = new cl_float[ surf_nbins_*surf_nbins_];
-  for (int k = 0; k<surf_nbins_*surf_nbins_ ; k++)
+  for (unsigned int k = 0; k<surf_nbins_*surf_nbins_ ; ++k)
     surf_joint_histogram_buff[k] = 0.0f;
   surf_joint_hist_mem_  = new bocl_mem(device_->context(), surf_joint_histogram_buff, sizeof(cl_float)*surf_nbins_*surf_nbins_ , " surf joint histogram" );
   surf_joint_hist_mem_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
@@ -109,7 +109,7 @@ void bstm_ocl_minfo_function::init_ocl_minfo()
   lookup_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // output buffer for debugging
-  for(unsigned i = 0; i < 1000;i ++) output_buff[i] = 0;
+  for (unsigned int i = 0; i < 1000; ++i) output_buff[i] = 0;
   output_ = new bocl_mem(device_->context(), output_buff, sizeof(cl_float)*1000, "output" );
   output_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 }
@@ -312,19 +312,19 @@ float bstm_ocl_minfo_function::evaluate()
 
   //Compute the MI of surface probabilities
   cl_float sum_surf_joint_hist = 0.0f;
-  for(int i = 0; i < surf_nbins_* surf_nbins_; i++)
+  for (unsigned int i = 0; i < surf_nbins_* surf_nbins_; ++i)
     sum_surf_joint_hist += surf_joint_histogram_buff[i];
-  for(int i = 0; i < surf_nbins_* surf_nbins_; i++)
+  for (unsigned int i = 0; i < surf_nbins_* surf_nbins_; ++i)
     surf_joint_histogram_buff[i] /= sum_surf_joint_hist;
 
 
   float * surf_histA = new float[surf_nbins_];
   float * surf_histB = new float[surf_nbins_];
 
-  for (int k = 0; k<surf_nbins_; k++)
-  {
+  for (unsigned int k = 0; k<surf_nbins_; ++k)
+    {
     surf_histA[k] = 0.0;  surf_histB[k] = 0.0;
-  }
+    }
   surf_histA[0] = surf_joint_histogram_buff[0] + surf_joint_histogram_buff[1];
   surf_histA[1] = surf_joint_histogram_buff[2] + surf_joint_histogram_buff[3];
   surf_histB[0] = surf_joint_histogram_buff[0] + surf_joint_histogram_buff[2];
@@ -343,24 +343,28 @@ float bstm_ocl_minfo_function::evaluate()
   */
 
   float surf_entropyA = 0;
-  for (int k = 0; k < surf_nbins_; k++) {
+  for (unsigned int k = 0; k < surf_nbins_; ++k)
+    {
     surf_entropyA += -(surf_histA[k]?surf_histA[k]*vcl_log(surf_histA[k]):0); // if prob=0 this value is defined as 0
-  }
+    }
   float surf_entropyB = 0;
-  for (int l = 0; l < surf_nbins_; l++) {
+  for (unsigned int l = 0; l < surf_nbins_; ++l)
+    {
     surf_entropyB += -(surf_histB[l]?surf_histB[l]*vcl_log(surf_histB[l]):0); // if prob=0 this value is defined as 0
-  }
+    }
   //delete[] surf_histA; delete[] surf_histB;
 
   vcl_cout << vcl_endl << "///////////////////////////////////////////////" << vcl_endl;
   float surf_entropyAB =  0.0; ;
-  for (int k = 0; k < surf_nbins_; k++) {
-    for (int l = 0; l < surf_nbins_; l++) {
+  for (unsigned int k = 0; k < surf_nbins_; ++k)
+    {
+    for (unsigned int l = 0; l < surf_nbins_; ++l)
+      {
       surf_entropyAB += -(surf_joint_histogram_buff[k*surf_nbins_+l]?surf_joint_histogram_buff[k*surf_nbins_+l]*vcl_log(surf_joint_histogram_buff[k*surf_nbins_+l]):0);
       vcl_cout << surf_joint_histogram_buff[k*surf_nbins_+l] << " ";
-    }
+      }
     vcl_cout << vcl_endl;
-  }
+    }
   vcl_cout << vcl_endl ;
   float mi_surf  = ( (surf_entropyA + surf_entropyB) /  surf_entropyAB); // /vnl_math::ln2;
   vcl_cout << "MI surf: " << mi_surf << vcl_endl;
@@ -376,58 +380,66 @@ float bstm_ocl_minfo_function::evaluate()
   float * app_histA = new float[app_nbins_];
   float * app_histB = new float[app_nbins_];
 
-  for(unsigned view_dir_num = 0; view_dir_num < app_view_dir_num_; view_dir_num++)
-  {
+  for (unsigned int view_dir_num = 0; view_dir_num < app_view_dir_num_; ++view_dir_num)
+    {
     cl_float sum_app_joint_hist = 0.0f;
-    for(int i = 0; i < app_nbins_* app_nbins_; i++) {
+    for (unsigned int i = 0; i < app_nbins_* app_nbins_; ++i)
+      {
       sum_app_joint_hist += app_joint_histogram_buff[ (app_nbins_* app_nbins_*view_dir_num) + i];
-    }
+      }
     //if the num is below a threshold, no apps here.
-    if(sum_app_joint_hist < 1e-07f)
+    if (sum_app_joint_hist < 1e-07f)
       continue;
 
-
-    for(int i = 0; i < app_nbins_* app_nbins_; i++)
+    for (unsigned int i = 0; i < app_nbins_* app_nbins_; ++i)
       app_hist[(app_nbins_* app_nbins_*view_dir_num) + i] =  app_joint_histogram_buff[(app_nbins_* app_nbins_*view_dir_num) + i] / sum_app_joint_hist;
 
 
-    for (int k = 0; k<app_nbins_; k++)
-    {
+    for (unsigned int k = 0; k<app_nbins_; ++k)
+      {
       app_histA[k] = 0.0;
       app_histB[k] = 0.0;
-    }
+      }
 
-    for (int k = 0; k < app_nbins_; k++) {
-      for (int l = 0; l < app_nbins_; l++) {
+    for (unsigned int k = 0; k < app_nbins_; ++k)
+      {
+      for (unsigned int l = 0; l < app_nbins_; ++l)
+        {
         app_histA[k]+=app_hist[(app_nbins_* app_nbins_*view_dir_num) + k*app_nbins_+l];
+        }
       }
-    }
-    for (int k = 0; k < app_nbins_; k++) {
-      for (int l = 0; l < app_nbins_; l++) {
+    for (unsigned int k = 0; k < app_nbins_; ++k)
+      {
+      for (unsigned int l = 0; l < app_nbins_; ++l)
+        {
         app_histB[k]+=app_hist[(app_nbins_* app_nbins_*view_dir_num) + l*app_nbins_+k];
+        }
       }
-    }
 
     float app_entropyA = 0;
-    for (int k = 0; k < app_nbins_; k++) {
+    for (unsigned int k = 0; k < app_nbins_; ++k)
+      {
       app_entropyA += -(app_histA[k]?app_histA[k]*vcl_log(app_histA[k]):0); // if prob=0 this value is defined as 0
-    }
+      }
     float app_entropyB = 0;
-    for (int l = 0; l < app_nbins_; l++) {
+    for (unsigned int l = 0; l < app_nbins_; ++l)
+      {
       app_entropyB += -(app_histB[l]?app_histB[l]*vcl_log(app_histB[l]):0); // if prob=0 this value is defined as 0
-    }
+      }
     //delete[] app_histA; delete[] app_histB;
 
     vcl_cout << vcl_endl << "///////////////////////////////////////////////" << vcl_endl;
     float app_entropyAB =  0.0; ;
-    for (int k = 0; k < app_nbins_; k++) {
-      for (int l = 0; l < app_nbins_; l++) {
+    for (unsigned int k = 0; k < app_nbins_; ++k)
+      {
+      for (unsigned int l = 0; l < app_nbins_; ++l)
+        {
         float val = app_hist[(app_nbins_* app_nbins_*view_dir_num) + k*app_nbins_+l];
         app_entropyAB += -(val?val*vcl_log(val):0);
         vcl_cout << val << " ";
-      }
+        }
       vcl_cout << vcl_endl;
-    }
+      }
     if(app_entropyAB > 0.0f)
       mi_app  += ( (app_entropyA + app_entropyB) / app_entropyAB) ;///vnl_math::ln2;
     vcl_cout << ( (app_entropyA + app_entropyB) / app_entropyAB)  << vcl_endl;

@@ -151,12 +151,13 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
 
   // combine the segments with number of elements less than min_size
   // post process small components
-  for (int i = 0; i < edges.size(); i++) {
-      int v0 = ds.find_set(edges[i].v0_);
-      int v1 = ds.find_set(edges[i].v1_);
-      if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
-          ds.set_union(v0, v1);
-  }
+  for (unsigned int i = 0; i < edges.size(); ++i)
+    {
+    int v0 = ds.find_set(edges[i].v0_);
+    int v1 = ds.find_set(edges[i].v1_);
+    if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
+      ds.set_union(v0, v1);
+    }
   vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
 
   out_img.set_size(img1.ni(), img1.nj());
@@ -235,12 +236,13 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
 
   // combine the segments with number of elements less than min_size
   // post process small components
-  for (int i = 0; i < edges.size(); i++) {
-      int v0 = ds.find_set(edges[i].v0_);
-      int v1 = ds.find_set(edges[i].v1_);
-      if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
-          ds.set_union(v0, v1);
-  }
+  for (unsigned int i = 0; i < edges.size(); ++i)
+    {
+    int v0 = ds.find_set(edges[i].v0_);
+    int v1 = ds.find_set(edges[i].v1_);
+    if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
+      ds.set_union(v0, v1);
+    }
   vcl_cout << " segmentation resulted in " << ds.num_sets() << " segments!\n";
 
   out_img.set_size(img1.ni(), img1.nj());

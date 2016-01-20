@@ -292,7 +292,6 @@ void bkml_parser::charData(const XML_Char* s, int len)
       str.ignore(128, ' ');
       vgl_point_3d<double> vpt(x,y,z);
       // check whether same point exists inside the poly_verts already
-      bool found = false;
       if (vcl_find(poly_verts.begin(), poly_verts.end(), vpt) == poly_verts.end())
         poly_verts.push_back(vpt);
       //else
