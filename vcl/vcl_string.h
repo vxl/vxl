@@ -9,9 +9,6 @@
 # undef  vcl_char_traits
 # define vcl_char_traits   string_char_traits
 
-#elif defined(VCL_VC60)
-# include "win32-vc60/vcl_string.h"
-
 #else
 # include "iso/vcl_string.h"
 #endif

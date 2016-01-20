@@ -11,8 +11,6 @@
 # include <stddef.h>
 #elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include <stddef.h>
-#elif defined(VCL_VC60)
-# include <cstddef>
 #else
 # undef __size_t // this is a bug fix for HPPA
 # include "iso/vcl_cstddef.h"

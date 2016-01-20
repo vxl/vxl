@@ -287,7 +287,7 @@ vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&
     break; }
    macro(VIL_PIXEL_FORMAT_BYTE, vxl_byte )
    macro(VIL_PIXEL_FORMAT_SBYTE , vxl_sbyte )
-#if VXL_HAS_INT_64 && !defined(VCL_VC_6)
+#if VXL_HAS_INT_64
    macro(VIL_PIXEL_FORMAT_UINT_64 , vxl_uint_64 )
    macro(VIL_PIXEL_FORMAT_INT_64 , vxl_int_64 )
 #endif

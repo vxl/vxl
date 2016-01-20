@@ -61,14 +61,6 @@ double vil_bicub_interp_unsafe(double x, double y, const T* data,
     return val;
 }
 
-// See the comments where this variable is used below.  If it is
-// necessary to get rid of this static variable we can try using a
-// volatile automatic variable defined in vil_bicub_interp_raw()
-// instead.  That should have the same effect.
-#ifdef VCL_VC_6
-static double vil_bicub_interp_raw_temp_hack = 0.0;
-#endif
-
 template<class T>
 double vil_bicub_interp_raw(double x, double y, const T* data,
                             vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
@@ -111,23 +103,6 @@ double vil_bicub_interp_raw(double x, double y, const T* data,
         val += s0*vil_I(-1,+0);
         val += s1*vil_I(+0,+0);
         val += s2*vil_I(+1,+0);
-
-#ifdef VCL_VC60
-        // On some hardware platforms, with optimization, MSVC 6.0
-        // miscompiles the computation of 'val' in this section of
-        // code.  It appears that the computation of 'val' is lumped
-        // into one large operation that is not handled properly,
-        // resulting in incorrect arithmetic.  The very similar
-        // section of code below, for the normx==0.0 case works fine.
-        // After a lot of experimentation I have found that if we
-        // force the compiler to split the computation of 'val' here
-        // into two parts by assigning 'val' to a static variable
-        // here, then the compilation and tests are OK.  In the past
-        // this bug was dealt with by turning optimization off for
-        // this file under MSVC, but this is a much better
-        // solution. --Fred Wheeler
-        vil_bicub_interp_raw_temp_hack = val;
-#endif
 
         val += s3*vil_I(+2,+0);
         val *= 0.5;

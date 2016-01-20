@@ -1,5 +1,5 @@
-#ifndef vcl_win32_vc_8_valarray_h_
-#define vcl_win32_vc_8_valarray_h_
+#ifndef vcl_win32_vc_9_valarray_h_
+#define vcl_win32_vc_9_valarray_h_
 
 // VC7 does not define abs functions correctly in  cstdlib.
 // The vcl versions of these headers declare the functions with vcl_
@@ -16,4 +16,4 @@
 
 template <class T> inline vcl_valarray<T> vcl_abs(const vcl_valarray<T>& x) { return std::abs(x); }
 
-#endif // vcl_win32_vc_8_valarray_h_
+#endif // vcl_win32_vc_9_valarray_h_

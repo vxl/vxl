@@ -6,9 +6,9 @@
 // \author Gamze Tunali, LEMS, Brown University
 // \date   16 Nov 2007
 
-#if _MSC_VER >= 1000
+#if defined(_MSC_VER)
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif
 
 // CDlgWnd - intercepts messages from child controls
 class CDlgWnd : public CWnd

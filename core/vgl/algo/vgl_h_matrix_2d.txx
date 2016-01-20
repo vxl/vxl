@@ -317,11 +317,7 @@ bool vgl_h_matrix_2d<T>::is_identity() const
 
 //-------------------------------------------------------------------
 template <class T>
-bool vgl_h_matrix_2d<T>::projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines
-#ifdef VCL_VC_6
-                                         ,int dummy // parameter to help useless compiler disambiguate different functions
-#endif
-                                         )
+bool vgl_h_matrix_2d<T>::projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines)
 {
   if (lines.size()!=4)
     return false;

@@ -581,8 +581,6 @@ sub process_lines {
       s/\bIUE_GCC/VCL_GCC/g;
       s/\bIUE_SUNPRO/VCL_SUNPRO/g;
       s/\bIUE_WIN32\b/VCL_WIN32/g;
-      s/\bIUE_VC50\b/VCL_VC_5/g;
-      s/\bIUE_VC60\b/VCL_VC_6/g;
 
       # defines from IUE_compiler :
       s/\bIUE_COMMA\b/VCL_COMMA/g;

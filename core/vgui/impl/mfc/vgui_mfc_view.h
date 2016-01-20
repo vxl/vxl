@@ -5,9 +5,9 @@
 // \file
 // \author  Oxford RRG
 
-#if _MSC_VER > 1000
+#if defined(_MSC_VER)
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 #include <vgui/impl/mfc/vgui_mfc_adaptor.h>
 

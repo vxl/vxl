@@ -2,9 +2,7 @@
 #include <vil/algo/vil_gauss_reduce.txx>
 
 //Explicit instantiation of the called single plane template functions also seems to be needed
-//by some compilers, notably VC6 Release builds
-//where not covered by one of the specialisations
-
+//by some compilers/where not covered by one of the specialisations
 
 template void vil_gauss_reduce_1plane(const vxl_uint_16* src_im,
                                       unsigned src_nx, unsigned src_ny,

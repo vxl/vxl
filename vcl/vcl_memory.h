@@ -6,9 +6,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_VC60)
-# include "win32-vc60/vcl_memory.h"
-#elif defined(VCL_GCC_295)
+#if defined(VCL_GCC_295)
 # include "gcc-295/vcl_memory.h"
 #else
 

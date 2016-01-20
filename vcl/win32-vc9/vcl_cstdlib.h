@@ -1,5 +1,5 @@
-#ifndef vcl_win32_vc_8_cstdlib_h_
-#define vcl_win32_vc_8_cstdlib_h_
+#ifndef vcl_win32_vc_9_cstdlib_h_
+#define vcl_win32_vc_9_cstdlib_h_
 
 #include <cstdlib>
 
@@ -15,4 +15,4 @@
 inline int vcl_abs(int x) { return abs(x); }
 inline long vcl_abs(long x) { return labs(x); }
 inline long long vcl_abs(long long x) { return _abs64(x); }
-#endif // vcl_win32_vc_8_cstdlib_h_
+#endif // vcl_win32_vc_9_cstdlib_h_

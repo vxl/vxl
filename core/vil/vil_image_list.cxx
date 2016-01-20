@@ -23,7 +23,7 @@ vcl_vector<vcl_string> vil_image_list::files()
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   // This mess should go away soon.
-# if defined VCL_VC_6 || defined VCL_VC_5 || defined __MINGW32__
+# if defined __MINGW32__
   typedef long handle_type;      // works with msvc6
 # else
   typedef intptr_t handle_type;  // not found by msvc6
