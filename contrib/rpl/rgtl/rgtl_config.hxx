@@ -11,8 +11,6 @@
 // \author Brad King
 // \date March 2007
 
-# define RGTL_TYPENAME typename
-
 // Macro to define a compile-time constant.
 # define RGTL_STATIC_CONST(type, assignment) static type const assignment
 
