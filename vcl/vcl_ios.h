@@ -7,10 +7,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC) && !VCL_CXX_HAS_HEADER_IOS
-# include "gcc-295/vcl_ios.h"
-
-#elif !VCL_CXX_HAS_HEADER_IOS
+#if !VCL_CXX_HAS_HEADER_IOS
 # include "vcl_iostream.h" // should do it
 # define vcl_generic_ios_STD /* */
 # include "generic/vcl_ios.h"

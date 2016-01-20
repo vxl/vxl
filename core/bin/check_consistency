@@ -240,7 +240,6 @@ foreach $f (@FILES)
     next if ($j eq 'vcl_cstdio.h' && $f =~ m!/StdAfx\.h$!);
     next if ($j eq 'vcl_cmath.h' && $f =~ m!\bvcl/(vcl_cfloat)\.h$!);
     next if ($j eq 'vcl_cmath.h' && $f =~ m!\bvnl/algo/vnl_generalized_eigensystem\.cxx$!);
-    next if ($j eq 'vcl_algorithm.h' && $f =~ m!\bvcl/gcc-295/vcl_deque\.txx$!);
     next if ($i =~ m!^(vnl|vil|vil1|vsl|vul|vpl|vgl|vgl_algo|vbl)_fwd$! || $i =~ m!^vgui_glu?x?t?$! || $i eq 'StdAfx');
     next if ($i =~ m!^mil_! && $f =~ m!\bmul/mil/mil_all\.h$!);
     next if ($j eq 'mil/mil_all.h' && $f =~ m!\bmul/mil/mil_add_all_loaders\.cxx$!);

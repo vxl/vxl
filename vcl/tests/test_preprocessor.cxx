@@ -28,41 +28,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   ++compiler_count;
 #endif
 
-#ifdef VCL_GCC_2
-  ++major_count;
-#endif
-#ifdef VCL_GCC_27
-  ++minor_count;
-#endif
-#ifdef VCL_GCC_28
-  ++minor_count;
-#endif
-#ifdef VCL_GCC_295
-  ++minor_count;
-#endif
-
-#ifdef VCL_GCC_3
-  ++major_count;
-#endif
-#ifdef VCL_GCC_30
-  ++minor_count;
-#endif
-#ifdef VCL_GCC_31
-  ++minor_count;
-#endif
-#ifdef VCL_GCC_32
-  ++minor_count;
-#endif
-#ifdef VCL_GCC_33
-  ++minor_count;
-#endif
-#ifdef VCL_GCC_34
-  ++minor_count;
-#endif
-#ifdef VCL_GCC_35
-  ++minor_count;
-#endif
-
 #ifdef VCL_GCC_4
   ++major_count;
 #endif

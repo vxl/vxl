@@ -192,21 +192,7 @@ SET( vcl_sources
 
   gcc/vcl_cmath.h
   gcc/vcl_cstdlib.h
-  gcc-295/vcl_algorithm.txx
-  gcc-295/vcl_complex.h               gcc-295/vcl_complex.txx
-  gcc-295/vcl_deque.txx
-  gcc-295/vcl_functional.txx
-  gcc-295/vcl_iterator.txx
-  gcc-295/vcl_list.txx
-  gcc-295/vcl_map.txx
-  gcc-295/vcl_memory.h
-  gcc-295/vcl_queue.txx
-  gcc-295/vcl_set.txx
-  gcc-295/vcl_string.txx
-  gcc-295/vcl_utility.txx
-  gcc-295/vcl_vector.txx
-  gcc-295/vcl_iomanip.h
-  gcc-295/vcl_ios.h
+
   gcc-libstdcxx-v3/vcl_algorithm.txx
   gcc-libstdcxx-v3/vcl_deque.txx
   gcc-libstdcxx-v3/vcl_functional.txx
