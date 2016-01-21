@@ -48,6 +48,7 @@ ENDIF(DIRECTSHOW_FOUND)
 SET(vidl_sources
     vidl_config.h.in
     vidl_pixel_format.h           vidl_pixel_format.cxx
+	vidl_export.h
     vidl_color.h                  vidl_color.cxx
     vidl_frame.h                  vidl_frame.cxx           vidl_frame_sptr.h
     vidl_pixel_iterator.h         vidl_pixel_iterator.cxx
