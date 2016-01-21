@@ -170,17 +170,8 @@ public:
     derived_arg1;
   typedef rgtl_compact_tree_data_fixed_node_data_policy<NodeDataType>
     derived_arg2;
-#ifndef RGTL_CXX_WORKAROUND_DEPENDENT_TYPEDEF
   typedef typename derived::leaf_data_type leaf_data_type;
   typedef typename derived::node_data_type node_data_type;
-#else
-private:
-  typedef typename derived::leaf_data_type leaf_data_type_;
-  typedef typename derived::node_data_type node_data_type_;
-public:
-  typedef typename self::leaf_data_type_ leaf_data_type;
-  typedef typename self::node_data_type_ node_data_type;
-#endif
   typedef typename derived::cell_index_type cell_index_type;
   typedef typename derived::child_index_type child_index_type;
   typedef typename derived::node_index_type node_index_type;
