@@ -45,6 +45,7 @@ DECLARE_FUNC_CONS(vpgl_convert_to_generic_camera_w_margin_process);
 DECLARE_FUNC_CONS(vpgl_compute_persp_cam_pa_covariance_process);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process2);
 DECLARE_FUNC_CONS(vpgl_get_perspective_cam_center_process);
+DECLARE_FUNC_CONS(vpgl_create_geo_camera_process);
 DECLARE_FUNC_CONS(vpgl_load_geo_camera_process);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process3);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process4);

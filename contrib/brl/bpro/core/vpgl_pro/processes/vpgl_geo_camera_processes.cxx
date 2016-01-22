@@ -13,6 +13,64 @@
 #include <vil/vil_load.h>
 #include <vul/vul_file.h>
 
+
+//: process to create a geo camera given its lower left corner and image size
+bool vpgl_create_geo_camera_process_cons(bprb_func_process& pro)
+{
+  // this process takes 7 inputs
+  vcl_vector<vcl_string> input_types_;
+  input_types_.push_back("double");          // lower left lon
+  input_types_.push_back("double");          // lower left lat
+  input_types_.push_back("double");          // upper right lon
+  input_types_.push_back("double");          // upper right lat
+  input_types_.push_back("unsigned");        // image size ni
+  input_types_.push_back("unsigned");        // image size nj
+  input_types_.push_back("vpgl_lvcs_sptr");  // camera lvcs, empty by default
+  // this process takes 1 output
+  vcl_vector<vcl_string> output_types_;
+  output_types_.push_back("vpgl_camera_double_sptr");  // camera output
+
+  // set default lvcs
+  vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
+  pro.set_input(6, new brdb_value_t<vpgl_lvcs_sptr>(lvcs));
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool vpgl_create_geo_camera_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Input!\n";
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  double ll_lon = pro.get_input<double>(in_i++);
+  double ll_lat = pro.get_input<double>(in_i++);
+  double ur_lon = pro.get_input<double>(in_i++);
+  double ur_lat = pro.get_input<double>(in_i++);
+  unsigned ni = pro.get_input<unsigned>(in_i++);
+  unsigned nj = pro.get_input<unsigned>(in_i++);
+  vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(in_i++);
+  if (ni == 0 || nj == 0) {
+    vcl_cerr << pro.name() << ": image size can not be zero -- ni: " << ni << ", nj: " << nj << "!\n";
+    return false;
+  }
+  double scale_x = (ur_lon - ll_lon) / ni;
+  double scale_y = (ll_lat - ur_lat) / nj;
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = scale_x;
+  trans_matrix[1][1] = scale_y;
+  trans_matrix[0][3] = ll_lon;
+  trans_matrix[1][3] = ur_lat;
+  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, lvcs);
+  out_cam->set_scale_format(true);
+
+  // output
+  pro.set_output_val<vpgl_camera_double_sptr>(0, out_cam);
+  return true;
+}
+
+
 //: initialization
 bool vpgl_load_geo_camera_process_cons(bprb_func_process& pro)
 {

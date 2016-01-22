@@ -701,6 +701,24 @@ def load_geotiff_from_header(filename, lvcs=0):
     return cam
 
 
+def create_geotiff_cam(ll_lon, ll_lat, ur_lon, ur_lat, ni, nj, lvcs = 0):
+  bvxm_batch.init_process("vpglCreateGeoCameraProcess")
+  bvxm_batch.set_input_double(0, ll_lon)
+  bvxm_batch.set_input_double(1, ll_lat)
+  bvxm_batch.set_input_double(2, ur_lon)
+  bvxm_batch.set_input_double(3, ur_lat)
+  bvxm_batch.set_input_unsigned(4, ni)
+  bvxm_batch.set_input_unsigned(5, nj)
+  if lvcs != 0:
+    bvxm_batch.set_input_from_db(6, lvcs)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    cam = dbvalue(id, type)
+    return cam
+  else:
+    return None
+
 def translate_geo_camera(geocam, x, y):
     bvxm_batch.init_process("vpglTranslateGeoCameraProcess")
     bvxm_batch.set_input_from_db(0, geocam)
