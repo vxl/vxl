@@ -3,36 +3,19 @@
 #define vidl_ffmpeg_convert_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
+#pragma once
 #endif
 //:
 // \file
 // \brief Use FFMPEG for optimized pixel format conversions
 //
 // \author Matt Leotta
-// \date 19 Jan 2006
+// \author Gehua Yang
+// \date 19 Jan 2016
 //
 
 #include "vidl_frame_sptr.h"
 #include "vidl_pixel_format.h"
-
-#include <vidl/vidl_config.h>
-extern "C" {
-#if FFMPEG_IN_SEVERAL_DIRECTORIES
-#ifndef __STDC_CONSTANT_MACROS
-#  define __STDC_CONSTANT_MACROS
-#endif
-#include <libavcodec/avcodec.h>
-#else
-#include <ffmpeg/avcodec.h>
-#endif
-}
-
-#if LIBAVCODEC_VERSION_MAJOR < 56
-//  The pixel format was named PixelFormat in old versions of FFMPeg.  
-//  Use a typedef to maintain backward compatibility
-typedef PixelFormat AVPixelFormat;
-#endif
-
 
 //: Convert the pixel format of a frame using FFMPEG
 //
@@ -43,15 +26,6 @@ typedef PixelFormat AVPixelFormat;
 bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
                                vidl_frame_sptr& out_frame);
 
-
-//: Find the vidl pixel format that matches a FFMPEG one
-vidl_pixel_format
-vidl_pixel_format_from_ffmpeg(AVPixelFormat ffmpeg_pix_fmt);
-
-
-//: Find the FFMPEG pixel format that matches a vidl one
-AVPixelFormat
-vidl_pixel_format_to_ffmpeg(vidl_pixel_format vidl_pix_fmt);
 
 #endif // vidl_ffmpeg_convert_h_
 

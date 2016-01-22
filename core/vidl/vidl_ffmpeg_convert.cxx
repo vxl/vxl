@@ -5,15 +5,33 @@
 //:
 // \file
 // \author Matt Leotta
-// \date   19 Jan 2006
+// \author Gehua Yang
+// \date 19 Jan 2016
 //
 //-----------------------------------------------------------------------------
 
 #include "vidl_ffmpeg_convert.h"
+#include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
+#include <vidl/vidl_config.h>
+extern "C" {
+#if FFMPEG_IN_SEVERAL_DIRECTORIES
+# include <libavcodec/version.h>
+# if LIBAVCODEC_VERSION_MAJOR >= 56
+#   include <libavutil/pixfmt.h>
+# else 
+#   ifndef __STDC_CONSTANT_MACROS
+#     define __STDC_CONSTANT_MACROS
+#   endif
+#   include <libavcodec/avcodec.h>
+# endif
+#else
+# include <ffmpeg/avcodec.h>
+#endif
+}
 
 #ifdef LIBAVFORMAT_BUILD
 #if LIBAVFORMAT_BUILD <= 4623
@@ -134,63 +152,3 @@ bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
   return true;
 }
 
-
-//: Find the vidl pixel format that matches a FFMPEG one
-vidl_pixel_format
-vidl_pixel_format_from_ffmpeg(AVPixelFormat ffmpeg_pix_fmt)
-{
-  switch (ffmpeg_pix_fmt)
-  {
-  case AV_PIX_FMT_YUV420P:   return VIDL_PIXEL_FORMAT_YUV_420P;
-  case AV_PIX_FMT_YUYV422:   return VIDL_PIXEL_FORMAT_YUYV_422;
-  case AV_PIX_FMT_RGB24:     return VIDL_PIXEL_FORMAT_RGB_24;
-  case AV_PIX_FMT_BGR24:     return VIDL_PIXEL_FORMAT_BGR_24;
-  case AV_PIX_FMT_YUV422P:   return VIDL_PIXEL_FORMAT_YUV_422P;
-  case AV_PIX_FMT_YUV444P:   return VIDL_PIXEL_FORMAT_YUV_444P;
-#ifdef AV_PIX_FMT_RGBA
-  case AV_PIX_FMT_RGBA:      return VIDL_PIXEL_FORMAT_RGBA_32;
-#endif
-  case AV_PIX_FMT_YUV410P:   return VIDL_PIXEL_FORMAT_YUV_410P;
-  case AV_PIX_FMT_YUV411P:   return VIDL_PIXEL_FORMAT_YUV_411P;
-  case AV_PIX_FMT_RGB565:    return VIDL_PIXEL_FORMAT_RGB_565;
-  case AV_PIX_FMT_RGB555:    return VIDL_PIXEL_FORMAT_RGB_555;
-  case AV_PIX_FMT_GRAY8:     return VIDL_PIXEL_FORMAT_MONO_8;
-  case AV_PIX_FMT_PAL8:      return VIDL_PIXEL_FORMAT_MONO_8;   //HACK: Treating 8-bit palette as greyscale image
-  case AV_PIX_FMT_MONOWHITE: return VIDL_PIXEL_FORMAT_MONO_1;
-  case AV_PIX_FMT_MONOBLACK: return VIDL_PIXEL_FORMAT_MONO_1;
-  case AV_PIX_FMT_UYVY422:   return VIDL_PIXEL_FORMAT_UYVY_422;
-  case AV_PIX_FMT_UYYVYY411: return VIDL_PIXEL_FORMAT_UYVY_411;
-  default: break;
-  }
-  return VIDL_PIXEL_FORMAT_UNKNOWN;
-}
-
-
-//: Find the FFMPEG pixel format that matches a vidl one
-AVPixelFormat
-vidl_pixel_format_to_ffmpeg(vidl_pixel_format vidl_pix_fmt)
-{
-  switch (vidl_pix_fmt)
-  {
-  case VIDL_PIXEL_FORMAT_RGB_24:   return AV_PIX_FMT_RGB24;
-  case VIDL_PIXEL_FORMAT_BGR_24:   return AV_PIX_FMT_BGR24;
-#ifdef AV_PIX_FMT_RGBA
-  case VIDL_PIXEL_FORMAT_RGBA_32:  return AV_PIX_FMT_RGBA;
-#endif
-  case VIDL_PIXEL_FORMAT_RGB_565:  return AV_PIX_FMT_RGB565;
-  case VIDL_PIXEL_FORMAT_RGB_555:  return AV_PIX_FMT_RGB555;
-  case VIDL_PIXEL_FORMAT_YUV_444P: return AV_PIX_FMT_YUV444P;
-  case VIDL_PIXEL_FORMAT_YUYV_422: return AV_PIX_FMT_YUYV422;
-  case VIDL_PIXEL_FORMAT_YUV_422P: return AV_PIX_FMT_YUV422P;
-  case VIDL_PIXEL_FORMAT_YUV_420P: return AV_PIX_FMT_YUV420P;
-  case VIDL_PIXEL_FORMAT_YUV_411P: return AV_PIX_FMT_YUV411P;
-  case VIDL_PIXEL_FORMAT_YUV_410P: return AV_PIX_FMT_YUV410P;
-  case VIDL_PIXEL_FORMAT_UYVY_422: return AV_PIX_FMT_UYVY422;
-  case VIDL_PIXEL_FORMAT_UYVY_411: return AV_PIX_FMT_UYYVYY411;
-  case VIDL_PIXEL_FORMAT_MONO_1:   return AV_PIX_FMT_MONOBLACK;
-  case VIDL_PIXEL_FORMAT_MONO_8:   return AV_PIX_FMT_GRAY8;
-  default: break;
-  }
-  vcl_cerr << "Warning: unknown FFMPeg pixel format type : " << vidl_pix_fmt << '\n';
-  return AV_PIX_FMT_NONE;
-}
