@@ -13,9 +13,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_STLPORT)
-# include "stlport/vcl_cstdlib.h"
-#elif defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
+#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
 # include "gcc/vcl_cstdlib.h"
 #elif defined(VCL_VC_9) // need to handle abs(__int64) correctly
 # include "win32-vc9/vcl_cstdlib.h"

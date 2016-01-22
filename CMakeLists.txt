@@ -55,7 +55,6 @@ SET(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
 
 INCLUDE( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
 INCLUDE( ${vxl_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
-# INCLUDE( ${vxl_SOURCE_DIR}/UseSTLPort.cmake )
 INCLUDE(${vxl_SOURCE_DIR}/config/cmake/doxygen/doxygen.cmake)
 
 # Copy the UseVXL.cmake file to the binary directory so that client

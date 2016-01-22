@@ -9,7 +9,7 @@
 #include <vcl_cstdlib.h> // for rand/srand
 
 #if defined (VCL_VC) || defined(__MINGW32__)
-# include <vcl_cstdio.h> // for _tempnam on borland (and stlport5 with VC8)
+# include <vcl_cstdio.h>
 # include <Windows.h>
 #else
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)

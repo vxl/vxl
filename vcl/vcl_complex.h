@@ -18,10 +18,8 @@
 // complex over other number types.
 
 
-#if defined(VCL_STLPORT)
-# include "stlport/vcl_complex.h"
 // ---------- Visual Studio 9
-#elif defined(VCL_VC_9)
+#if defined(VCL_VC_9)
 # include "win32-vc9/vcl_complex.h"
 // ---------- ISO
 #else
