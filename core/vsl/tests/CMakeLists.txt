@@ -25,22 +25,22 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET_SOURCE_FILES_PROPERTIES(test_map_io.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_TEST(vsl_test_indent                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_indent)
-ADD_TEST(vsl_test_binary_io             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_binary_io)
+ADD_TEST( NAME vsl_test_indent COMMAND $<TARGET_FILE:vsl_test_all> test_indent)
+ADD_TEST( NAME vsl_test_binary_io COMMAND $<TARGET_FILE:vsl_test_all> test_binary_io)
 
-ADD_TEST(vsl_test_arbitrary_length_int_conversion ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all
+ADD_TEST( NAME vsl_test_arbitrary_length_int_conversion COMMAND $<TARGET_FILE:vsl_test_all>
                                            test_arbitrary_length_int_conversion)
-ADD_TEST(vsl_test_clipon_polymorphic_io ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_clipon_polymorphic_io)
-ADD_TEST(vsl_test_complex_io            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_complex_io)
-ADD_TEST(vsl_test_deque_io              ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_deque_io)
-ADD_TEST(vsl_test_list_io               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_list_io)
-ADD_TEST(vsl_test_map_io                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_map_io)
-ADD_TEST(vsl_test_polymorphic_io        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_polymorphic_io)
-ADD_TEST(vsl_test_set_io                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_set_io)
-ADD_TEST(vsl_test_stack_io              ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_stack_io)
-ADD_TEST(vsl_test_string_io             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_string_io)
-ADD_TEST(vsl_test_vector_io             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_vector_io)
-ADD_TEST(vsl_test_block_rle_io          ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vsl_test_all test_block_rle_io)
+ADD_TEST( NAME vsl_test_clipon_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_clipon_polymorphic_io)
+ADD_TEST( NAME vsl_test_complex_io COMMAND $<TARGET_FILE:vsl_test_all> test_complex_io)
+ADD_TEST( NAME vsl_test_deque_io COMMAND $<TARGET_FILE:vsl_test_all> test_deque_io)
+ADD_TEST( NAME vsl_test_list_io COMMAND $<TARGET_FILE:vsl_test_all> test_list_io)
+ADD_TEST( NAME vsl_test_map_io COMMAND $<TARGET_FILE:vsl_test_all> test_map_io)
+ADD_TEST( NAME vsl_test_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_polymorphic_io)
+ADD_TEST( NAME vsl_test_set_io COMMAND $<TARGET_FILE:vsl_test_all> test_set_io)
+ADD_TEST( NAME vsl_test_stack_io COMMAND $<TARGET_FILE:vsl_test_all> test_stack_io)
+ADD_TEST( NAME vsl_test_string_io COMMAND $<TARGET_FILE:vsl_test_all> test_string_io)
+ADD_TEST( NAME vsl_test_vector_io COMMAND $<TARGET_FILE:vsl_test_all> test_vector_io)
+ADD_TEST( NAME vsl_test_block_rle_io COMMAND $<TARGET_FILE:vsl_test_all> test_block_rle_io)
 
 # Don't add test_vlarge_block_io to the automatic list. It does nasty things
 # to memory which can result in wierd error messages, system lockup, and other

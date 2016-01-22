@@ -8,8 +8,8 @@ ADD_EXECUTABLE( bpgl_test_all
 
 TARGET_LINK_LIBRARIES( bpgl_test_all bpgl testlib vgl vpgl vcl vnl)
 
-ADD_TEST(vpgl_test_segmented_rolling_shutter_camera ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_test_all test_segmented_rolling_shutter_camera)
-ADD_TEST(vpgl_test_camera_utils           ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_test_all test_camera_utils)
+ADD_TEST( NAME vpgl_test_segmented_rolling_shutter_camera COMMAND $<TARGET_FILE:bpgl_test_all> test_segmented_rolling_shutter_camera)
+ADD_TEST( NAME vpgl_test_camera_utils COMMAND $<TARGET_FILE:bpgl_test_all> test_camera_utils)
 
 ADD_EXECUTABLE( bpgl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bpgl_test_include bpgl)

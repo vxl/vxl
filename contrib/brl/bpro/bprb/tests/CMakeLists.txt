@@ -12,8 +12,8 @@ IF(EXPAT_FOUND)
   )
   TARGET_LINK_LIBRARIES( bprb_test_all bprb testlib expat expatpp)
 
-  ADD_TEST( bprb_test_process ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bprb_test_all test_process )
-  ADD_TEST( bprb_test_process_params ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bprb_test_all test_process_params )
+  ADD_TEST( NAME bprb_test_process COMMAND $<TARGET_FILE:bprb_test_all> test_process )
+  ADD_TEST( NAME bprb_test_process_params COMMAND $<TARGET_FILE:bprb_test_all> test_process_params )
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)
 

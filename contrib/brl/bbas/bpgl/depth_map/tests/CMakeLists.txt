@@ -7,7 +7,7 @@ ADD_EXECUTABLE( depth_map_test_all
 
 TARGET_LINK_LIBRARIES( depth_map_test_all depth_map testlib vpl )
 
-ADD_TEST(depth_map_test_depth_map ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/depth_map_test_all test_depth_map)
+ADD_TEST( NAME depth_map_test_depth_map COMMAND $<TARGET_FILE:depth_map_test_all> test_depth_map)
 
 ADD_EXECUTABLE(bpgl_depth_map_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(bpgl_depth_map_test_include depth_map)

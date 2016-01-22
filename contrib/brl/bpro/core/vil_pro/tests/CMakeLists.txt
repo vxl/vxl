@@ -10,8 +10,8 @@ IF(EXPAT_FOUND)
 
 TARGET_LINK_LIBRARIES(vil_pro_test_all testlib vil_pro bprb sdet vil expat expatpp)
 
-ADD_TEST( bpro_vil_test_convert_to_n_planes_process ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vil_pro_test_all test_vil_convert_to_n_planes_process )
-ADD_TEST( bpro_vil_test_crop_image_process          ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vil_pro_test_all test_vil_crop_image_process )
+ADD_TEST( NAME bpro_vil_test_convert_to_n_planes_process COMMAND $<TARGET_FILE:vil_pro_test_all> test_vil_convert_to_n_planes_process )
+ADD_TEST( NAME bpro_vil_test_crop_image_process COMMAND $<TARGET_FILE:vil_pro_test_all> test_vil_crop_image_process )
 
  ENDIF(EXPATPP_FOUND)
 ENDIF(EXPAT_FOUND)

@@ -7,8 +7,8 @@ ADD_EXECUTABLE( bil_test_all
 TARGET_LINK_LIBRARIES( bil_test_all bil vil vul testlib )
 SET( testdata_path ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
 
-ADD_TEST( bil_test_bounded_image_view ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_test_all test_bounded_image_view )
-ADD_TEST( bil_test_raw_image_istream  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_test_all test_raw_image_istream )
+ADD_TEST( NAME bil_test_bounded_image_view COMMAND $<TARGET_FILE:bil_test_all> test_bounded_image_view )
+ADD_TEST( NAME bil_test_raw_image_istream COMMAND $<TARGET_FILE:bil_test_all> test_raw_image_istream )
 
 ADD_EXECUTABLE(bil_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bil_test_include bil )

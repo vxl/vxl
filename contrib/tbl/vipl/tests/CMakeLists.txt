@@ -12,13 +12,13 @@ ADD_EXECUTABLE( vipl_test_all
 )
 TARGET_LINK_LIBRARIES( vipl_test_all vipl vil testlib )
 
-ADD_TEST(vipl_test_threshold            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vipl_test_all vipl_test_threshold)
-ADD_TEST(vipl_test_erode_disk           ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vipl_test_all vipl_test_erode_disk)
-ADD_TEST(vipl_test_gaussian_convolution ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vipl_test_all vipl_test_gaussian_convolution)
+ADD_TEST( NAME vipl_test_threshold COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_threshold)
+ADD_TEST( NAME vipl_test_erode_disk COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_erode_disk)
+ADD_TEST( NAME vipl_test_gaussian_convolution COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_gaussian_convolution)
 
 IF (BUILD_CORE_NUMERICS)
   TARGET_LINK_LIBRARIES( vipl_test_all vnl )
-  ADD_TEST(vipl_test_histogram            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vipl_test_all vipl_test_histogram)
+  ADD_TEST( NAME vipl_test_histogram COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_histogram)
 ENDIF (BUILD_CORE_NUMERICS)
 
 ADD_EXECUTABLE( vipl_test_include test_include.cxx )

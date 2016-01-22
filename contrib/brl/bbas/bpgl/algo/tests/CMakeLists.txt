@@ -18,15 +18,15 @@ CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/07JAN27.RPB ${CMAKE_CURRENT_BINARY_D
 
 # the ransac implementations use rpl/rrel
 IF(BUILD_RPL)
-ADD_TEST( bpgl_algo_test_fm_compute                  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_algo_test_all test_fm_compute )
+ADD_TEST( NAME bpgl_algo_test_fm_compute COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_fm_compute )
 ENDIF(BUILD_RPL)
 
-ADD_TEST( bpgl_algo_test_construct_cameras           ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_algo_test_all test_construct_cameras )
-ADD_TEST( bpgl_algo_test_optimize_camera             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_algo_test_all test_optimize_camera )
-ADD_TEST( bpgl_algo_test_interpolate                 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_algo_test_all test_interpolate )
-ADD_TEST( bpgl_algo_test_camera_homographies         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_algo_test_all test_camera_homographies )
-ADD_TEST( bpgl_algo_test_camera_from_box             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_algo_test_all test_camera_from_box )
-ADD_TEST( bpgl_algo_test_project                     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bpgl_algo_test_all test_project )
+ADD_TEST( NAME bpgl_algo_test_construct_cameras COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_construct_cameras )
+ADD_TEST( NAME bpgl_algo_test_optimize_camera COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_optimize_camera )
+ADD_TEST( NAME bpgl_algo_test_interpolate COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_interpolate )
+ADD_TEST( NAME bpgl_algo_test_camera_homographies COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_camera_homographies )
+ADD_TEST( NAME bpgl_algo_test_camera_from_box COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_camera_from_box )
+ADD_TEST( NAME bpgl_algo_test_project COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_project )
 
 ADD_EXECUTABLE( bpgl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bpgl_algo_test_include bpgl_algo )

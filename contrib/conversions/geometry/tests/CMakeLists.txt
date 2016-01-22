@@ -38,7 +38,7 @@ ADD_EXECUTABLE( conversions_geometry_test_all
   test_DigitalCurve_to_vdgl.cxx
 )
 
-ADD_TEST( conversions_test_osl_to_vdgl ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/conversions_geometry_test_all test_osl_to_vdgl )
-ADD_TEST( conversions_test_DigitalCurve_to_vdgl ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/conversions_geometry_test_all test_DigitalCurve_to_vdgl )
+ADD_TEST( NAME conversions_test_osl_to_vdgl COMMAND $<TARGET_FILE:conversions_geometry_test_all> test_osl_to_vdgl )
+ADD_TEST( NAME conversions_test_DigitalCurve_to_vdgl COMMAND $<TARGET_FILE:conversions_geometry_test_all> test_DigitalCurve_to_vdgl )
 
 ADD_EXECUTABLE( conversions_geometry_test_include test_include.cxx )

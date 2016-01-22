@@ -10,18 +10,18 @@ ADD_EXECUTABLE( testlib_test_all
 )
 TARGET_LINK_LIBRARIES( testlib_test_all testlib )
 
-ADD_TEST( testlib_assert     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testlib_test_all test_assert )
-ADD_TEST( testlib_macros     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testlib_test_all test_macros )
-ADD_TEST( testlib_args       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testlib_test_all test_args one two )
-ADD_TEST( testlib_root_dir   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testlib_test_all test_root_dir )
-ADD_TEST( testlib_all        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testlib_test_all all one two )
+ADD_TEST( NAME testlib_assert COMMAND $<TARGET_FILE:testlib_test_all> test_assert )
+ADD_TEST( NAME testlib_macros COMMAND $<TARGET_FILE:testlib_test_all> test_macros )
+ADD_TEST( NAME testlib_args COMMAND $<TARGET_FILE:testlib_test_all> test_args one two )
+ADD_TEST( NAME testlib_root_dir COMMAND $<TARGET_FILE:testlib_test_all> test_root_dir )
+ADD_TEST( NAME testlib_all COMMAND $<TARGET_FILE:testlib_test_all> all one two )
 
 ADD_EXECUTABLE( testlib_test_link
    test_link.cxx
 )
 TARGET_LINK_LIBRARIES( testlib_test_link testlib )
 
-ADD_TEST( testlib_test_link  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testlib_test_link )
+ADD_TEST( NAME testlib_test_link COMMAND $<TARGET_FILE:testlib_test_link> )
 
 ADD_EXECUTABLE( testlib_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( testlib_test_include testlib )
