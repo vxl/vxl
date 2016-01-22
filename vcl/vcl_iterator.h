@@ -27,9 +27,7 @@
 
 // ---------- ISO
 # include "iso/vcl_iterator.h"
-// SUNPRO 5 has no reverse_bidirectional_iterator
 // vc has no raw_storage_iterator
-
 #include "vcl_iterator.txx"
 
 #endif // vcl_iterator_h_

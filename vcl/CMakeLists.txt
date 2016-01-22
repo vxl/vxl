@@ -204,20 +204,6 @@ SET( vcl_sources
   gcc-libstdcxx-v3/vcl_utility.txx
   gcc-libstdcxx-v3/vcl_vector.txx
 
-  sunpro/vcl_algorithm.txx
-  sunpro/vcl_cmath.h
-  sunpro/vcl_complex.txx            sunpro/vcl_complex.h
-  sunpro/vcl_cstdlib.h
-  sunpro/vcl_deque.txx
-  sunpro/vcl_functional.txx
-  sunpro/vcl_iterator.txx           sunpro/vcl_iterator.h
-  sunpro/vcl_list.txx
-  sunpro/vcl_map.txx                sunpro/vcl_map.h
-  sunpro/vcl_set.txx
-  sunpro/vcl_stack.txx
-  sunpro/vcl_utility.txx
-  sunpro/vcl_vector.txx             sunpro/vcl_vector.h
-
   win32-vc9/vcl_cmath.h
   win32-vc9/vcl_complex.h
   win32-vc9/vcl_cstdlib.h

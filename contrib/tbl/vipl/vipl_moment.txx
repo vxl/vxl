@@ -11,11 +11,8 @@
 // but only for T=complex this makes a difference, and we don't want to
 // depend on vnl just for this alone.)
 
-#if !(defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
 // template code cannot see file statics.
-static
-#endif
-double power(double x, int y)
+static double power(double x, int y)
 {
   if (y == 0)
     return 1.0;
