@@ -7,7 +7,7 @@ ADD_EXECUTABLE( vgl_xio_test_all
 
 TARGET_LINK_LIBRARIES(vgl_xio_test_all vgl_xio testlib)
 
-ADD_TEST( vgl_test_xio      ${EXECUTABLE_OUTPUT_PATH}/vgl_xio_test_all test_vgl_xio )
+ADD_TEST( vgl_test_xio      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vgl_xio_test_all test_vgl_xio )
 
 ADD_EXECUTABLE(vgl_xio_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vgl_xio_test_include vgl_xio)

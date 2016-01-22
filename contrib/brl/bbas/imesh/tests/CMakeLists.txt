@@ -15,10 +15,10 @@ ADD_EXECUTABLE( imesh_test_all
 
 TARGET_LINK_LIBRARIES( imesh_test_all imesh imesh_algo vnl vgl testlib )
 
-ADD_TEST( imesh_test_intersect            ${EXECUTABLE_OUTPUT_PATH}/imesh_test_all test_intersect )
-ADD_TEST( imesh_test_detect               ${EXECUTABLE_OUTPUT_PATH}/imesh_test_all test_detect )
-ADD_TEST( imesh_test_kd_tree              ${EXECUTABLE_OUTPUT_PATH}/imesh_test_all test_kd_tree )
-ADD_TEST( imesh_test_imls_surface         ${EXECUTABLE_OUTPUT_PATH}/imesh_test_all test_imls_surface )
+ADD_TEST( imesh_test_intersect            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/imesh_test_all test_intersect )
+ADD_TEST( imesh_test_detect               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/imesh_test_all test_detect )
+ADD_TEST( imesh_test_kd_tree              ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/imesh_test_all test_kd_tree )
+ADD_TEST( imesh_test_imls_surface         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/imesh_test_all test_imls_surface )
 
 ADD_EXECUTABLE( imesh_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( imesh_test_include imesh )

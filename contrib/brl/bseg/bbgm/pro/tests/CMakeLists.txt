@@ -12,9 +12,9 @@ IF( EXPAT_FOUND )
 
 TARGET_LINK_LIBRARIES( bbgm_pro_test_all bbgm_pro bbgm bsta_algo bsta sdet vil_pro brdb vnl vil vpl testlib expat expatpp )
 
-ADD_TEST( bbgm_pro_test_io                 ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_io )
-ADD_TEST( bbgm_pro_test_update_dist_image  ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_update_dist_image )
-#ADD_TEST( bbgm_pro_test_neighborhood_ops   ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_neighborhood_ops )
+ADD_TEST( bbgm_pro_test_io                 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bbgm_pro_test_all test_io )
+ADD_TEST( bbgm_pro_test_update_dist_image  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bbgm_pro_test_all test_update_dist_image )
+#ADD_TEST( bbgm_pro_test_neighborhood_ops   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bbgm_pro_test_all test_neighborhood_ops )
  ENDIF( EXPATPP_FOUND )
 ENDIF( EXPAT_FOUND )
 

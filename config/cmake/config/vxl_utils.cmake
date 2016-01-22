@@ -50,7 +50,7 @@ MACRO(GENERATE_TEST_DRIVER LIB SOURCES)
   FOREACH(test ${tests_to_run})
     GET_FILENAME_COMPONENT(test_name ${test} NAME_WE)
     ADD_TEST(${LIB}_${test_name}
-      ${EXECUTABLE_OUTPUT_PATH}/${LIB}_test_driver
+      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${LIB}_test_driver
       ${test_name}
       ${${test_name}_args}
     )

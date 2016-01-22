@@ -9,9 +9,9 @@ ADD_EXECUTABLE( bvgl_algo_test_all
 
 TARGET_LINK_LIBRARIES( bvgl_algo_test_all bvgl_algo vsl vnl_algo bnl testlib )
 
-ADD_TEST( bvgl_algo_test_2d_geo_index ${EXECUTABLE_OUTPUT_PATH}/bvgl_algo_test_all test_2d_geo_index )
-ADD_TEST( bvgl_algo_test_biarc         ${EXECUTABLE_OUTPUT_PATH}/bvgl_algo_test_all test_biarc )
-ADD_TEST( bvgl_algo_test_eulerspiral   ${EXECUTABLE_OUTPUT_PATH}/bvgl_algo_test_all test_eulerspiral )
+ADD_TEST( bvgl_algo_test_2d_geo_index ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bvgl_algo_test_all test_2d_geo_index )
+ADD_TEST( bvgl_algo_test_biarc         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bvgl_algo_test_all test_biarc )
+ADD_TEST( bvgl_algo_test_eulerspiral   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bvgl_algo_test_all test_eulerspiral )
 
 ADD_EXECUTABLE( bvgl_algo_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvgl_algo_test_include bvgl_algo )

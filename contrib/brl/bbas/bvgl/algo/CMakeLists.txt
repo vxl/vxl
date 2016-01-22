@@ -2,19 +2,19 @@
 
 PROJECT(bvgl_algo)
 
-# Set up bvgl_where_brl_lib_dir.h to have a macro set to $LIBRARY_OUTPUT_PATH
+# Set up bvgl_where_brl_lib_dir.h to have a macro set to $CMAKE_LIBRARY_OUTPUT_DIRECTORY
 CONFIGURE_FILE(
   ${brl_SOURCE_DIR}/bbas/bvgl/algo/bvgl_where_brl_lib_dir.h.in
   ${brl_BINARY_DIR}/bbas/bvgl/algo/bvgl_where_brl_lib_dir.h ESCAPE_QUOTES
 )
 
 # Copy the Eulerspiral lookup-table file to the BRL library folder
-if(LIBRARY_OUTPUT_PATH)
+if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
   CONFIGURE_FILE(
     ${brl_SOURCE_DIR}/bbas/bvgl/algo/bvgl_eulerspiral_lookup_table.bvl
-    ${LIBRARY_OUTPUT_PATH}/bvgl_eulerspiral_lookup_table.bvl COPYONLY
+    ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/bvgl_eulerspiral_lookup_table.bvl COPYONLY
   )
-endif(LIBRARY_OUTPUT_PATH)
+endif(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
 
 ADD_DEFINITIONS(-DBVGL_WHERE_BRL_LIB_DIR_H_EXISTS)
 INCLUDE_DIRECTORIES( ${brl_BINARY_DIR}/bbas/bvgl/algo/ )
