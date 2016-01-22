@@ -4,6 +4,7 @@
 #pragma once
 
 #include "vidl_ffmpeg_ostream.h"
+#include "vidl_ffmpeg_pixel_format.h"
 //:
 // \file
 // \author Gehua Yang
