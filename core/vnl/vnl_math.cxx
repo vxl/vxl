@@ -93,7 +93,7 @@ bool isnan(double x) { return isnan(x); }
 bool isnan(long double x) { return isnanl(x); }
 #elif !defined(VNL_HAS_NO_FINITE) && !defined(__alpha__) && !defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
-bool isnan(float x) { return x != x; } // causes "floating exception" on alpha & sgi
+bool isnan(float x) { return x != x; } // causes "floating exception" on alpha
 //: Return true iff x is "Not a Number"
 bool isnan(double x) { return x != x; }
 //: Return true iff x is "Not a Number"

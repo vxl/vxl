@@ -1446,14 +1446,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "__sgi ";
-#ifdef __sgi
-  vcl_cout << "is set to " << quote(__sgi);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "__alpha__ ";
 #ifdef __alpha__
   vcl_cout << "is set to " << quote(__alpha__);
