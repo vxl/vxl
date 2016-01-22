@@ -180,10 +180,6 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   values = new double[n];
   for (int i=0; i<n; ++i) {
     values[i] = temp_vals[i];
-#if 0
-    vcl_cout << "value " << temp_vals[i]
-             << " accuracy " << temp_vals[i+n*2] << vcl_endl;
-#endif
     vnl_vector<double> vec(dim,0.0);
     for (int j=0; j<dim; ++j)
       vec[j] = temp_vecs[j + dim*i];

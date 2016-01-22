@@ -74,23 +74,6 @@ void test_sparse_matrix_double_io()
 
   vpl_unlink ("vnl_sparse_matrix_io.bvl.tmp");
 
-#if 0
-  bool test_result=true;
-  m_out.reset();
-  m_in.reset();
-
-  while (m_out.next() && m_in.next())
-  {
-    if (m_out.getrow()!=m_in.getrow()
-        || m_out.getcolumn() != m_in.getcolumn()
-        || m_out.value()!= m_in.value())
-    {
-      test_result=false;
-      break;
-    }
-  }
-#endif
-
   TEST ("m_out == m_in0",Compare(m_out,m_in0) , true);
   TEST ("m_out == m_in1",Compare(m_out,m_in1) , true);
   TEST ("m10000_out == m10000_in",Compare(m10000_out,m10000_in) , true);

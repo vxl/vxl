@@ -83,21 +83,6 @@ class vnl_matrix_ref : public vnl_matrix<T>
   // you'll be left with undefined behaviour.
   vnl_matrix_ref& non_const() { return *this; }
 
-#if 0
- private:
-  // Private operator new because deleting a pointer to
-  // one of these through a baseclass pointer will attempt
-  // to free this in-class memory.
-  // Therefore disallow newing of these -- if you're paying for
-  // one malloc, you can afford three.
-   // fsm: This was wrong for two reasons:
-   //  1. operator new may not return a null pointer.
-   //  2. it should be enabled for compilers that need it,
-   //     not disabled for compilers that don't need it.
-#include <vcl_new.h>
-  void* operator new(vcl_size_t) { return 0; }
-#endif
-
  private:
   //: Resizing is disallowed
   bool resize (unsigned int, unsigned int) { return false; }

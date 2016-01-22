@@ -84,24 +84,6 @@ static void test_ls()
   TEST_NEAR("Least squares residual", (A - T).squared_magnitude(), 0, 0.005);
 }
 
-#if 0 // temporarily unused
-static double test_fmatrix()
-{
-  double pdata[] = {
-    2, 0, 0, 0,
-    3, 10, 5, 5,
-    5, 12, 6, 6,
-  };
-  vnl_matrix<double> P(pdata, 3,4);
-  vnl_svd<double> svd(P);
-  vnl_matrix<double> N = svd.nullspace();
-  vcl_cout << "null(P) = " << N << vcl_endl
-           << "P * null(P) = " << P*N << vcl_endl;
-
-  return dot_product(P*N, P*N);
-}
-#endif // 0
-
 //: Test nullspace extraction of rank=2 3x4 matrix.
 static void test_pmatrix()
 {

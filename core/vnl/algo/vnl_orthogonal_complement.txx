@@ -16,14 +16,6 @@ vnl_matrix<T> vnl_orthogonal_complement(vnl_vector<T> const &v)
   return vnl_svd<T>(tmp).V().extract(n, n-1, 0, 1);
 }
 
-#if 0
-template <class T>
-vnl_matrix<T> vnl_orthogonal_complement(vnl_matrix<T> const &M)
-{
-  // TODO
-}
-#endif
-
 //--------------------------------------------------------------------------------
 
 #undef VNL_ORTHOGONAL_COMPLEMENT_INSTANTIATE

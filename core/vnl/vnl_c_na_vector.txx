@@ -159,19 +159,6 @@ template vcl_ostream& print_na_vector(vcl_ostream &,T const *,unsigned)
 #undef VNL_C_NA_VECTOR_INSTANTIATE_unordered
 #define VNL_C_NA_VECTOR_INSTANTIATE_unordered(T)
 
-#if 0
-VCL_DO_NOT_INSTANTIATE(T vnl_c_na_vector<T >::max_value(T const *, unsigned), T(0)); \
-VCL_DO_NOT_INSTANTIATE(T vnl_c_na_vector<T >::min_value(T const *, unsigned), T(0)); \
-VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_na_vector<T >::arg_max(T const *, unsigned), 0U); \
-VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_na_vector<T >::arg_min(T const *, unsigned), 0U); \
-VNL_C_NA_VECTOR_INSTANTIATE_norm(T, vnl_c_na_vector<T >::abs_t); \
-template class vnl_c_na_vector<T >; \
-VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_na_vector<T >::max_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_na_vector<T >::min_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_SPECIALIZATION(unsigned vnl_c_na_vector<T >::arg_max(T const *, unsigned)); \
-VCL_UNINSTANTIATE_SPECIALIZATION(unsigned vnl_c_na_vector<T >::arg_min(T const *, unsigned))
-#endif
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #undef VNL_C_NA_VECTOR_INSTANTIATE
 #define VNL_C_NA_VECTOR_INSTANTIATE(T) extern "no such macro; use e.g. VNL_C_NA_VECTOR_INSTANTIATE_ordered instead"

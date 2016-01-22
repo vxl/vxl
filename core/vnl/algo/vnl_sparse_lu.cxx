@@ -186,61 +186,6 @@ vnl_vector<double> vnl_sparse_lu::solve_transpose(vnl_vector<double> const& b)
   return ret;
 }
 
-// This routine might be eventually useful if other operations are to be done
-// after the factoring. Note that the routine spRowColOrder was
-// added to the sparse library (in spoutput.c).
-#if 0
-//: copy the matrix into a vnl_sparse_matrix
-vnl_sparse_matrix<double> vnl_sparse_lu::lu_matrix()
-{
-  unsigned n = A_.rows();
-  vnl_sparse_matrix<double> temp(n, n);
-  int error = 0;
-  spElement* pelement = 0;
-  if (!factored_)
-  {
-    error = spFactor(pmatrix_);
-    if (error != spOKAY)
-    {
-      vcl_cout << "In vnl_sparse_lu::lu_matrix() - factoring failed\n";
-      return temp;
-    }
-    factored_=true;
-  }
-  // get the row and column maps
-  int* row_map = new int[n+1];
-  int* col_map = new int[n+1];
-  spRowColOrder(pmatrix_, row_map, col_map);
-
-  // create inverse maps
-  int* inv_row_map = new int[n+1];
-  int* inv_col_map = new int[n+1];
-  for (unsigned i = 1; i<=n; ++i)
-  {
-    inv_row_map[row_map[i]]=i;
-    inv_col_map[col_map[i]]=i;
-  }
-
-  if (mode_==verbose || mode_==estimate_condition_verbose)
-    for (unsigned i = 1; i<=n; ++i)
-      vcl_cout << "inv_row_map[" << i << "]= " << inv_row_map[i]
-               << "    inv_col_map[" << i << "]= " << inv_col_map[i] << '\n';
-  for (unsigned r = 0; r<n; r++)
-    for (unsigned c = 0; c<n; c++)
-    {
-      pelement = spGetElement(pmatrix_, inv_row_map[r+1], inv_col_map[c+1]);
-      if (pelement)
-      {
-        double v = *pelement;
-        temp(r,c)= v;
-      }
-    }
-  delete [] row_map;
-  delete [] col_map;
-  return temp;
-}
-#endif
-
 //: Compute determinant.
 double vnl_sparse_lu::determinant()
 {

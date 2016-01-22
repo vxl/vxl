@@ -210,58 +210,6 @@ vnl_bignum::vnl_bignum(long double d)
   }
 }
 
-#if 0 // Old, original Texas Instruments implementation - PVr
-      // Left here for ducumentation purposes only!
-
-static bool is_decimal(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s < '1' || *s > '9') return false;
-  while (*s >= '0' && *s <= '9') ++s;
-  if (*s == 'l' || *s == 'L') ++s;
-  return *s == '\0';
-}
-
-static bool is_exponential(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s < '1' || *s > '9') return false;
-  while (*s >= '0' && *s <= '9') ++s;
-  if (*s != 'e' && *s != 'E') return false;
-  ++s;
-  if (*s < '1' || *s > '9') return false;
-  while (*s >= '0' && *s <= '9') ++s;
-  return *s == '\0';
-}
-
-static bool is_hexadecimal(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s != '0') return false;
-  ++s;
-  if (*s != 'x' && *s != 'X') return false;
-  ++s;
-  if ((*s < '0' || *s > '9') &&
-      (*s < 'a' || *s > 'f') &&
-      (*s < 'A' || *s > 'F')) return false;
-  while ((*s >= '0' && *s <= '9') ||
-         (*s >= 'a' && *s <= 'f') ||
-         (*s >= 'A' && *s <= 'F')) ++s;
-  if (*s == 'l' || *s == 'L') ++s;
-  return *s == '\0';
-}
-
-static bool is_octal(const char *s)
-{
-  if (*s == '+' || *s == '-') ++s;
-  if (*s != '0') return false;
-  while (*s >= '0' && *s <= '7') ++s;
-  if (*s == 'l' || *s == 'L') ++s;
-  return *s == '\0';
-}
-
-#else // new implementation, also to be used for operator>> - PVr
-
 static char rt[4096];
 static int rt_pos = 0;
 
@@ -373,8 +321,6 @@ static bool is_minus_inf(const char* s, vcl_istream** is = 0)
   if (rt_pos > 0) rt[++rt_pos] = '\0';
   return is ? true : c == '\0';
 }
-
-#endif // new implementation - PVr
 
 //: Creates a vnl_bignum from the character string representation.
 

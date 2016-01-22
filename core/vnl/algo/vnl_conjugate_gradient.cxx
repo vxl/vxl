@@ -16,29 +16,6 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_netlib.h>
 
-#if 0
-// external netlib function
-extern "C"
-int cg_( double *x,                     // IO start guess
-         double *e,                     // O max-norm of gradient
-         int    *it,                    // O number of iterations performed
-         double *step,                  // I step=0 make guess at first direction
-                                        // O step size along search direction for final iteration
-         double *t,                     // I tolerance (iterations stop when max-norm of gradient < t)
-         int *limit,                    // I maximum number of iterations
-         int *n,                        // I number of unknowns
-         int *m,                        // I number of iterations before renormalizing (normally m=n)
-         double value( double *x),      // I value(x) is cost at x
-         int grad( double *g,
-                   double *x),          // I grad(g,x) puts gradient into g at x
-         int both( double *v,
-                   double *g,
-                   double *x),          // I both(v,g,x) puts value in v and gradient in g at x
-         int pre( double *y,
-                  double *z),           // I preconditions (not necessarily needed) pre(y,z)
-         double *h );                   // I space to work size h = 3*n
-#endif
-
 /////////////////////////////////////
 
 vnl_conjugate_gradient::~vnl_conjugate_gradient()

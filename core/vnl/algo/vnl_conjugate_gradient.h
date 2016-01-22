@@ -73,13 +73,6 @@ class vnl_conjugate_gradient : public vnl_nonlinear_minimizer
   static void valueandgradientcomputer_( double *v, double *g, double *x, void* userdata);
   static void preconditioner_( double *out, double *in, void* userdata);
 
-#if 0
- protected:
-  void approximate_gradient( const vnl_vector<double> &x,
-                             vnl_vector<double> &g, const double step);
-  void approximate_hessian( const vnl_vector<double> &x,
-                            vnl_matrix<double> &h, const double step);
-#endif
 };
 
 #endif // vnl_conjugate_gradient_h_

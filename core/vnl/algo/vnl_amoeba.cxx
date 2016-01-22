@@ -118,21 +118,6 @@ double sorted_simplex_fdiameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simp
   return simplex[simplex.size()-1].fv - simplex[0].fv;
 }
 
-#if 0
-static
-double simplex_fdiameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
-{
-  // simplex assumed sorted, so fdiam is n - 0
-  double max = 0;
-  for (unsigned i = 1; i < simplex.size(); i++) {
-    double thismax = vnl_math::abs(simplex[0].fv - simplex[i].fv);
-    if (thismax > max)
-      max = thismax;
-  }
-  return max;
-}
-#endif
-
 static
 double simplex_diameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
 {

@@ -456,16 +456,6 @@ vnl_matrix<T>& vnl_matrix<T>::set_diagonal(vnl_vector<T> const& diag)
   return *this;
 }
 
-#if 0
-//: Assigns value to all elements of a matrix. O(m*n).
-
-template <class T>
-vnl_matrix<T>& vnl_matrix<T>::operator= (T const& value)
-{
-  return this->fill( value );
-}
-#endif // 0
-
 //: Copies all elements of rhs matrix into lhs matrix. O(m*n).
 // If needed, the arrays in lhs matrix are freed up, and new arrays are
 // allocated to match the dimensions of the rhs matrix.
@@ -617,34 +607,6 @@ vnl_matrix<T> operator- (T const& value, vnl_matrix<T> const& m)
   return result;
 }
 
-
-#if 0 // commented out
-//: Returns new matrix which is the product of m1 with m2, m1 * m2.
-// O(n^3). Number of columns of first matrix must match number of rows
-// of second matrix.
-
-template <class T>
-vnl_matrix<T> vnl_matrix<T>::operator* (vnl_matrix<T> const& rhs) const
-{
-#ifndef NDEBUG
-  if (this->num_cols != rhs.num_rows)           // dimensions do not match?
-    vnl_error_matrix_dimension("operator*",
-                               this->num_rows, this->num_cols,
-                               rhs.num_rows, rhs.num_cols);
-#endif
-  vnl_matrix<T> result(this->num_rows, rhs.num_cols); // Temp to store product
-  for (unsigned i = 0; i < this->num_rows; i++) {  // For each row
-    for (unsigned j = 0; j < rhs.num_cols; j++) {  // For each element in column
-      T sum = 0;
-      for (unsigned k = 0; k < this->num_cols; k++) // Loop over column values
-        sum += (this->data[i][k] * rhs.data[k][j]);     // Multiply
-      result(i,j) = sum;
-    }
-  }
-  return result;
-}
-#endif
-
 //: Returns new matrix which is the negation of THIS matrix.
 // O(m*n).
 
@@ -657,47 +619,6 @@ vnl_matrix<T> vnl_matrix<T>::operator- () const
       result.data[i][j] = - this->data[i][j];
   return result;
 }
-
-#if 0 // commented out
-//: Returns new matrix with elements of lhs matrix added with value.
-// O(m*n).
-
-template <class T>
-vnl_matrix<T> vnl_matrix<T>::operator+ (T const& value) const
-{
-  vnl_matrix<T> result(this->num_rows, this->num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      result.data[i][j] = (this->data[i][j] + value);   // Add scalar
-  return result;
-}
-
-
-//: Returns new matrix with elements of lhs matrix multiplied with value.
-// O(m*n).
-
-template <class T>
-vnl_matrix<T> vnl_matrix<T>::operator* (T const& value) const
-{
-  vnl_matrix<T> result(this->num_rows, this->num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      result.data[i][j] = (this->data[i][j] * value);   // Multiply
-  return result;
-}
-
-
-//: Returns new matrix with elements of lhs matrix divided by value. O(m*n).
-template <class T>
-vnl_matrix<T> vnl_matrix<T>::operator/ (T const& value) const
-{
-  vnl_matrix<T> result(this->num_rows, this->num_cols);
-  for (unsigned i = 0; i < this->num_rows; i++)    // For each row
-    for (unsigned j = 0; j < this->num_cols; j++)  // For each element in column
-      result.data[i][j] = (this->data[i][j] / value);   // Divide
-  return result;
-}
-#endif
 
 //: Return the matrix made by applying "f" to each element.
 template <class T>

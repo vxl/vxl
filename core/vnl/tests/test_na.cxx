@@ -22,10 +22,6 @@ template <class T> void test_na_type(T na_v, T qnan_v)
   TEST("isnan(1/NA2)", vnl_math::isnan(1.0f/na_v), true);
   TEST("isna(NA)", vnl_na_isna(vnl_na(T())), true);
   TEST("isna(NA2)", vnl_na_isna(na_v), true);
-#if 0
-  TEST("!isna(-NA2)", vnl_na_isna(-na_v), false);    // Can't rely on all compilers getting the same wrong answer for this: vs9 being the exception
-  TEST("isna(-1.0 * NA2)", vnl_na_isna(-1.0f * na_v), true);   // Can't rely on all compilers getting the same answer for this
-#endif
   TEST("isna(1/NA2)", vnl_na_isna(1.0f/na_v), true);
   TEST("!isfinite(NA)", !vnl_math::isfinite(na_v), true);
   TEST("!isinf(NA)", !vnl_math::isinf(na_v), true);
