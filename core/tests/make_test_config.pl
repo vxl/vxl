@@ -90,7 +90,6 @@ for $var_exp (
   'VCL_DEFAULT_TMPL_ARG(arg)',
   'VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER',
   'VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER',
-  'VCL_SUNPRO_CLASS_SCOPE_HACK(A)',
   'VCL_HAS_EXCEPTIONS',
   'VCL_HAS_NAMESPACES',
   'VCL_ALLOWS_NAMESPACE_STD',
@@ -192,10 +191,6 @@ for $var_exp (
   'VXL_HAS_IEEEFP_H',
 
   # from vcl_compiler.h
-  'VCL_SUNPRO_CC',
-  'VCL_SUNPRO_CC_5',
-  'VCL_SUNPRO_CC_50',
-  'VCL_SUNPRO_CC_56',
   'VCL_GCC',
   'VCL_GCC_4',
   'VCL_GCC_40',
@@ -244,7 +239,6 @@ for $var_exp (
   '__ECC',              # icc?
   '__INTEL_COMPILER',   # icc
   '__INTEL_CXXLIB_ICC', # icc using its own library?
-  '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
 

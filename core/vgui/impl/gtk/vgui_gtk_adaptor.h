@@ -10,11 +10,6 @@
 // \date   19 Dec 99
 // \brief  The GTK implementation of vgui_adaptor.
 
-#ifdef __SUNPRO_CC
-// <string> breaks if NULL is defined to "(void*)0".
-# include <vcl_string.h>
-#endif
-
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_adaptor_mixin.h>
 #include <vcl_map.h>

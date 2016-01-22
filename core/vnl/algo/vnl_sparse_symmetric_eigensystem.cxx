@@ -18,17 +18,11 @@
 
 static vnl_sparse_symmetric_eigensystem * current_system = 0;
 
-#ifdef VCL_SUNPRO_CC
-# define FUNCTION extern "C"
-#else
-# define FUNCTION static
-#endif
-
 //------------------------------------------------------------
 //: Callback for multiplying our matrix by a number of vectors.
 //  The input is p, which is an NxM matrix.
 //  This function returns q = A p, where A is the current sparse matrix.
-FUNCTION
+static
 void sse_op_callback(const long* n,
                      const long* m,
                      const double* p,
@@ -44,7 +38,7 @@ void sse_op_callback(const long* n,
 // If k=0, save the m columns of q as the (j-m+1)th through jth
 // vectors.  If k=1 then return the (j-m+1)th through jth vectors in
 // q.
-FUNCTION
+static
 void sse_iovect_callback(const long* n,
                          const long* m,
                          double* q,

@@ -87,11 +87,7 @@ int vnl_amoeba_SimplexCorner::compare(vnl_amoeba_SimplexCorner const& s1,
   return vnl_math::sgn(s1.fv - s2.fv);
 }
 
-#ifdef VCL_SUNPRO_CC
-extern "C"
-#else
 static
-#endif
 int compare_aux(const void * s1, const void * s2)
 {
   return vnl_amoeba_SimplexCorner::compare(*(const vnl_amoeba_SimplexCorner*)s1,
