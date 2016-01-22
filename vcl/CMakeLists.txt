@@ -217,17 +217,6 @@ SET( vcl_sources
   gcc-libstdcxx-v3/vcl_string.txx
   gcc-libstdcxx-v3/vcl_utility.txx
   gcc-libstdcxx-v3/vcl_vector.txx
-  egcs/vcl_algorithm.txx
-  egcs/vcl_complex.txx
-  egcs/vcl_deque.txx
-  egcs/vcl_functional.txx
-  egcs/vcl_iterator.txx
-  egcs/vcl_list.txx
-  egcs/vcl_map.txx
-  egcs/vcl_set.txx
-  egcs/vcl_string.txx
-  egcs/vcl_utility.txx
-  egcs/vcl_vector.txx
 
   sunpro/vcl_algorithm.txx
   sunpro/vcl_cmath.h

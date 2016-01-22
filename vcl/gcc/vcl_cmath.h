@@ -4,7 +4,7 @@
 #include "../iso/vcl_cmath.h"
 
 // 1.5 fix system header.
-#if defined (linux) && defined (__OPTIMIZE__)
+#if defined (__linux__) && defined (__OPTIMIZE__)
 // * avoid infinite recursion when calling vnl_math::isfinite().
 // * avoid symbol in object file being called vnl_math::_isinf.
 # undef isinf

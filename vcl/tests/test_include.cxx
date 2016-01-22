@@ -26,13 +26,9 @@
 #include <vcl_list.h>
 #include <vcl_ostream.h>
 #include <vcl_streambuf.h>
-#ifndef VCL_EGCS //egcs
 #include <vcl_bitset.h>
-#endif
 #include <vcl_ios.h>
-#ifndef VCL_GCC_295 //gcc2.95
 #include <vcl_locale.h>
-#endif
 #include <vcl_limits.h>
 #include <vcl_queue.h>
 #include <vcl_string.h>

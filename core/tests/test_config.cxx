@@ -1142,14 +1142,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_EGCS ";
-#ifdef VCL_EGCS
-  vcl_cout << "is set to " << quote(VCL_EGCS);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_GCC_28 ";
 #ifdef VCL_GCC_28
   vcl_cout << "is set to " << quote(VCL_GCC_28);
@@ -1161,14 +1153,6 @@ void test_config()
   vcl_cout << "VCL_GCC_27 ";
 #ifdef VCL_GCC_27
   vcl_cout << "is set to " << quote(VCL_GCC_27);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_GCC_EGCS ";
-#ifdef VCL_GCC_EGCS
-  vcl_cout << "is set to " << quote(VCL_GCC_EGCS);
 #else
   vcl_cout << "is not set";
 #endif

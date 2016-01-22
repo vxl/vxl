@@ -2,13 +2,6 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
-#if defined(VCL_EGCS)
-# if !VCL_HAS_TEMPLATE_SYMBOLS
-//template class smanip<int>;
-template vcl_ostream & operator<<(vcl_ostream &, smanip<int> const &);
-# endif
-#endif
-
 #if defined(VCL_GCC_295) && !defined(GNU_LIBSTDCXX_V3)
 # if !VCL_HAS_TEMPLATE_SYMBOLS
 //template class smanip<int>;
