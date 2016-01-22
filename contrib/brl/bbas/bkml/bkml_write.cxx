@@ -354,8 +354,7 @@ void bkml_write::write_polygon(vcl_ofstream& ofs,
   int alpha_int = (int)(alpha*255);
   vcl_string poly_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
 
-  unsigned num_region = polygon.size();
-  for (unsigned i = 0; i < polygon.size(); i++) {
+  for (unsigned i = 0; i < polygon.size(); ++i) {
     vgl_polygon<double> outer = polygon[i].first;
     vgl_polygon<double> inner = polygon[i].second;
     if (outer[0].empty())

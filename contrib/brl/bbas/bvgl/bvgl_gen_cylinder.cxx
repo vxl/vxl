@@ -6,9 +6,14 @@
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_cmath.h>
 #include <vcl_limits.h>
-bvgl_gen_cylinder::bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis, vcl_vector<bvgl_cross_section> const& cross_sects,
-                                     double cross_section_interval):
-  axis_(axis), cross_sections_(cross_sects), cross_section_interval_(cross_section_interval){
+bvgl_gen_cylinder
+::bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis,
+                    vcl_vector<bvgl_cross_section> const& cross_sects,
+                    double cross_section_interval):
+  cross_section_interval_(cross_section_interval),
+  axis_(axis),
+  cross_sections_(cross_sects)
+{
   for(vcl_vector<bvgl_cross_section>::const_iterator cit = cross_sects.begin();
       cit != cross_sects.end(); ++cit)
     bbox_.add(cit->bounding_box());

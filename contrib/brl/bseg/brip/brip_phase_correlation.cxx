@@ -11,9 +11,16 @@ static bool peak_greater(const peak& pa, const peak& pb){
   return pa.score_ > pb.score_;
 }
 
-brip_phase_correlation::brip_phase_correlation(vil_image_view<float> const&img0, vil_image_view<float> const&img1,
-                                               float gauss_sigma, int peak_radius, float alpha):
-  gauss_sigma_(gauss_sigma), peak_radius_(peak_radius), alpha_(alpha){
+brip_phase_correlation::
+brip_phase_correlation(vil_image_view<float> const&img0,
+                       vil_image_view<float> const&img1,
+                       float gauss_sigma,
+                       int peak_radius,
+                       float alpha):
+  alpha_(alpha),
+  peak_radius_(peak_radius),
+  gauss_sigma_(gauss_sigma)
+{
   float fill_value = 0.0f;
   int ni0 = img0.ni(), nj0 = img0.nj();
   int ni1 = img1.ni(), nj1 = img1.nj();

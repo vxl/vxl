@@ -30,7 +30,12 @@ class brad_image_metadata : public vbl_ref_count
   brad_image_metadata(vcl_string const& nitf_filename, vcl_string const& meta_folder = "");
 
   //: Default constructor
-  brad_image_metadata() : n_bands_(0), gsd_(-1.0), gain_(1.0), offset_(0.0) {}
+  brad_image_metadata() :
+    gain_(1.0),
+    offset_(0.0),
+    n_bands_(0),
+    gsd_(-1.0)
+  {}
 
   // position of sun relative to imaged location
   double sun_elevation_; // degrees above horizon

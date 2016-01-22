@@ -268,7 +268,6 @@ void vpgl_generic_camera<T>::
     T v0v0 = dot_product(v0,v0);
     T v0v1 = dot_product(v0,v1);
     T v1v1 = dot_product(v1,v1);
-    T det = (v0v0*v1v1 - v0v1*v0v1);
     T one_over_det = static_cast<T>(1)/(v0v0*v1v1 - v0v1*v0v1);
     // b0 and b1 are rows of coordinate transformation matrix
     vgl_vector_3d<T> b0 = one_over_det * (v1v1*v0 - v0v1*v1);

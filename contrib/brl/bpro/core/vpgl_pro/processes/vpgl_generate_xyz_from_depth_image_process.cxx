@@ -58,13 +58,15 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
   unsigned ni = depth_img->ni();
   unsigned nj = depth_img->nj();
 
-
   vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj);
   vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj);
   vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj);
-  if(vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr())) {
-    for(int u=0; u < ni; ++u) {
-      for(int v=0; v < nj; ++v) {
+  if(vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr()))
+    {
+    for (unsigned int u=0; u < ni; ++u)
+      {
+      for (unsigned int v=0; v < nj; ++v)
+        {
         vgl_ray_3d<double> ray = cam->backproject_ray(vgl_point_2d<double>(u,v));
         //vcl_cout<<ray.origin()<<vcl_endl;
         float t = (*depth_img)(u,v);
@@ -72,12 +74,15 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
         (*out_img_x)(u,v) = (float)pt3d.x();
         (*out_img_y)(u,v) = (float)pt3d.y();
         (*out_img_z)(u,v) = (float)pt3d.z();
+        }
       }
     }
-  }
-  else if(vpgl_generic_camera<double>* cam = dynamic_cast<vpgl_generic_camera<double>*>(cam_ptr.ptr())) {
-    for(int u=0; u < ni; ++u) {
-      for(int v=0; v < nj; ++v) {
+  else if(vpgl_generic_camera<double>* cam = dynamic_cast<vpgl_generic_camera<double>*>(cam_ptr.ptr()))
+    {
+    for (unsigned int u=0; u < ni; ++u)
+      {
+      for (unsigned int v=0; v < nj; ++v)
+        {
         vgl_ray_3d<double> ray = cam->ray(u,v);
         //vcl_cout<<ray.origin()<<vcl_endl;
         float t = (*depth_img)(u,v);
@@ -85,17 +90,20 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
         (*out_img_x)(u,v) = (float)pt3d.x();
         (*out_img_y)(u,v) = (float)pt3d.y();
         (*out_img_z)(u,v) = (float)pt3d.z();
+        }
       }
     }
-  }
-  else {
+  else
+    {
     vcl_cerr << "vpgl_generate_xyz_from_depth_image_process: couldn't cast camera\n";
     return false;
-  }
+    }
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
   pro.set_output_val<vil_image_view_base_sptr>(1, out_img_y);
   pro.set_output_val<vil_image_view_base_sptr>(2, out_img_z);
+
   return true;
+
 }
 
