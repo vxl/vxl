@@ -13,6 +13,7 @@
 #include "vidl_ffmpeg_convert.h"
 #include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
+#include <vcl_cassert.h>
 #include <vcl_cstring.h>
 #include <vcl_iostream.h>
 
@@ -96,10 +97,64 @@ extern "C" {
 
 //: Convert the pixel format of a frame using FFMPEG
 //
-// The \p in_frame->data() is converted from \p in_frame->pixel_format()
+// The \p in_frame.data() is converted from \p in_frame.pixel_format()
 // to \p out_frame->pixel_format() and stored in \p out_frame->data()
 // If the output frame data is not the correct size new memory
 // will be allocated
+bool vidl_ffmpeg_convert(vidl_frame const& in_frame,
+                         vidl_frame      & out_frame)
+{
+  AVPixelFormat in_fmt =
+    vidl_pixel_format_to_ffmpeg(in_frame.pixel_format());
+
+  AVPixelFormat out_fmt =
+    vidl_pixel_format_to_ffmpeg(out_frame.pixel_format());
+
+  if (in_fmt == AV_PIX_FMT_NONE || out_fmt == AV_PIX_FMT_NONE)
+    return false;
+
+  unsigned ni = in_frame.ni();
+  unsigned nj = in_frame.nj();
+  unsigned out_size = (unsigned)avpicture_get_size(out_fmt, ni, nj);
+
+  if (out_frame.size() != out_size ||
+      out_frame.ni() != ni ||
+      out_frame.nj() != nj ||
+      !out_frame.data())
+  {
+    //assert(typeid(out_frame) == typeid(vidl_memory_chunk_frame));  // must be the same type
+    //static_cast<vidl_memory_chunk_frame&>(out_frame)
+    //  = vidl_memory_chunk_frame(ni, nj, out_frame.pixel_format(),
+    //                            new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
+    return false;
+  }
+
+  AVPicture in_pic;
+  vcl_memset(&in_pic, 0, sizeof(in_pic));
+  avpicture_fill(&in_pic, (uint8_t*)in_frame.data(), in_fmt, ni, nj);
+
+  AVPicture out_pic;
+  vcl_memset(&out_pic, 0, sizeof(out_pic));
+  avpicture_fill(&out_pic, (uint8_t*)out_frame.data(), out_fmt, ni, nj);
+
+#if LIBAVCODEC_BUILD < ((52<<16)+(10<<8)+0)  // before ver 52.10.0
+  if (img_convert(&out_pic, out_fmt, &in_pic, in_fmt, ni, nj) < 0)
+    return false;
+#else
+  SwsContext* ctx = sws_getContext(ni, nj, in_fmt,
+                                   ni, nj, out_fmt,
+                                   SWS_BILINEAR,
+                                   NULL, NULL, NULL);
+  sws_scale(ctx,
+            in_pic.data, in_pic.linesize,
+            0, nj,
+            out_pic.data, out_pic.linesize);
+  sws_freeContext(ctx);
+#endif
+
+  return true;
+}
+
 bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
                          vidl_frame_sptr& out_frame)
 {
@@ -151,4 +206,3 @@ bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
 
   return true;
 }
-
