@@ -13,6 +13,7 @@
 //   Yi Dong --- Feb, 2013  added method to write Photo overlay
 //   Yi Dong --- Oct, 2014  added method to write Polygon with inner boundary
 //   Yi Dong --- Oct, 2014  added method to write a point as a 2-d box
+//   Yi Dong --- Dec, 2015  update box write method to have 'fill' option 
 // \endverbatim
 
 #include <vcl_fstream.h>
@@ -39,9 +40,11 @@ class bkml_write
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vgl_box_2d<double> bbox);
 
   //: Write a box with color, color is in hexadecimale format: 0 - 255 --> 00 to ff, aabbggrr --> alpha alpha, blue blue, gree green , red red.. alpha is the opacity, ffffffff is white fully opaque
-  static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color);
+  static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color,
+                        unsigned const& fill = 0);
   static void write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
-                        unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a = 85);
+                        unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a = 85,
+                        unsigned const& fill = 0);
 
   //: put a pin at the given location
   static void write_location(vcl_ofstream& ofs, vcl_string name, vcl_string description, double lat, double lon, double elev);
