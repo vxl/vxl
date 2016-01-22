@@ -19,6 +19,12 @@
 #include "vidl_pixel_format.h"
 #include "vidl_pixel_iterator.txx"
 #include "vidl_color.h"
+#include <vidl/vidl_config.h>
+#ifdef VIDL_HAS_FFMPEG
+// make use of the convert function using ffmpeg
+#include "vidl_ffmpeg_convert.h"
+#endif
+
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
 #include <vil/vil_memory_chunk.h>
@@ -487,9 +493,15 @@ bool vidl_convert_frame(vidl_frame const& in_frame,
     return false;
 
   // call the appropriate function in the conversion table
-  return conversion_table(in_frame, out_frame);
-}
+  bool const ret = conversion_table(in_frame, out_frame);
 
+#ifdef VIDL_HAS_FFMPEG
+  // Fall back to the function that utilizes ffmpeg's conversion
+  if (!ret)
+    return vidl_ffmpeg_convert(in_frame, out_frame);
+#endif // VIDL_HAS_FFMPEG
+  return ret;
+}
 
 //: Convert the pixel format of a frame
 //
