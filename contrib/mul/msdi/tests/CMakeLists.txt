@@ -6,7 +6,7 @@ ADD_EXECUTABLE( msdi_test_all
 )
 TARGET_LINK_LIBRARIES( msdi_test_all msdi testlib )
 
-ADD_TEST( msdi_test_reflected_marked_images ${EXECUTABLE_OUTPUT_PATH}/msdi_test_all test_reflected_marked_images)
+ADD_TEST( msdi_test_reflected_marked_images ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/msdi_test_all test_reflected_marked_images)
 
 ADD_EXECUTABLE( msdi_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( msdi_test_include msdi )

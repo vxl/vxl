@@ -39,8 +39,8 @@ TARGET_LINK_LIBRARIES( core_test_all testlib vcl )
 
 ADD_EXECUTABLE( vxl_test_include test_include.cxx )
 
-ADD_TEST( core_test_config ${EXECUTABLE_OUTPUT_PATH}/core_test_all test_config )
-ADD_TEST( core_test_build_info ${EXECUTABLE_OUTPUT_PATH}/core_test_all test_build_info )
+ADD_TEST( core_test_config ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/core_test_all test_config )
+ADD_TEST( core_test_build_info ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/core_test_all test_build_info )
 
 # a simple Dart notes file, in case test_build_info fails
 IF( COMMAND WRITE_FILE )
@@ -87,7 +87,7 @@ IF (CMAKE_MAJOR_VERSION EQUAL 2)
 ENDIF (CMAKE_MAJOR_VERSION EQUAL 2)
 
 
-ADD_TEST( cmake_config ${EXECUTABLE_OUTPUT_PATH}/vxl_echo nl
+ADD_TEST( cmake_config ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vxl_echo nl
           MAKECOMMAND: ${MYMAKECOMMAND} nl
           CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS} nl
           CMAKE_C_FLAGS: ${CMAKE_C_FLAGS} nl

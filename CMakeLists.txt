@@ -35,12 +35,12 @@ if(MEMORYCHECK_COMMAND)
   set( MEMORYCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/config/valgrind.supp" )
 endif()
 
-SET( LIBRARY_OUTPUT_PATH ${vxl_BINARY_DIR}/lib CACHE PATH
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${vxl_BINARY_DIR}/lib CACHE PATH
      "Output directory for the vxl libraries" )
 
-IF( NOT EXECUTABLE_OUTPUT_PATH )
-    SET( EXECUTABLE_OUTPUT_PATH "." )
-ENDIF( NOT EXECUTABLE_OUTPUT_PATH )
+IF( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
+    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "." )
+ENDIF( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
 
 
 # CMake support directory.
@@ -67,7 +67,7 @@ CONFIGURE_FILE( ${VXL_CMAKE_DIR}/CTestCustom.cmake
 SET( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
 
 # For use in client projects that call UseVXL.cmake
-SET (VXL_LIBRARY_PATH ${LIBRARY_OUTPUT_PATH} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
+SET (VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
 # Options to add extra compiler and linker flags
 #

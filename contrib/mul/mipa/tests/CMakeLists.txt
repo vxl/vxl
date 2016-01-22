@@ -8,9 +8,9 @@ ADD_EXECUTABLE( mipa_test_all
 )
 TARGET_LINK_LIBRARIES( mipa_test_all mipa testlib )
 
-ADD_TEST( mipa_test_sample_histo_boxes ${EXECUTABLE_OUTPUT_PATH}/mipa_test_all
+ADD_TEST( mipa_test_sample_histo_boxes ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/mipa_test_all
 test_sample_histo_boxes)
-ADD_TEST( mipa_test_vector_normalisers ${EXECUTABLE_OUTPUT_PATH}/mipa_test_all test_vector_normalisers)
+ADD_TEST( mipa_test_vector_normalisers ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/mipa_test_all test_vector_normalisers)
 
 ADD_EXECUTABLE( mipa_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( mipa_test_include mipa )

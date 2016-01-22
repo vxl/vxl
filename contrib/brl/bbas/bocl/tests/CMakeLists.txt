@@ -14,13 +14,13 @@ ADD_EXECUTABLE(bocl_test_all ${bocl_test_sources})
 
 TARGET_LINK_LIBRARIES( bocl_test_all bocl testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
 
-ADD_TEST( bocl_test_global_io_bandwidth    ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_global_io_bandwidth  )
+ADD_TEST( bocl_test_global_io_bandwidth    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bocl_test_all test_global_io_bandwidth  )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## This test is always segmentation faulting
-  ADD_TEST( bocl_test_command_queue          ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_command_queue  )
+  ADD_TEST( bocl_test_command_queue          ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bocl_test_all test_command_queue  )
 endif()
-ADD_TEST( bocl_test_kernel                 ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_kernel )
-ADD_TEST( bocl_test_local_mem_access       ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_local_mem_access )
-ADD_TEST( bocl_test_mem                    ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_mem )
+ADD_TEST( bocl_test_kernel                 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bocl_test_all test_kernel )
+ADD_TEST( bocl_test_local_mem_access       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bocl_test_all test_local_mem_access )
+ADD_TEST( bocl_test_mem                    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bocl_test_all test_mem )
 
 ADD_EXECUTABLE( bocl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bocl_test_include bocl)

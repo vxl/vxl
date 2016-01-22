@@ -7,7 +7,7 @@ ADD_EXECUTABLE( bsvg_test_all
 
 TARGET_LINK_LIBRARIES( bsvg_test_all bsvg testlib )
 
-ADD_TEST( bsvg_test_svg  ${EXECUTABLE_OUTPUT_PATH}/bsvg_test_all test_svg )
+ADD_TEST( bsvg_test_svg  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bsvg_test_all test_svg )
 
 ADD_EXECUTABLE( bsvg_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bsvg_test_include bsvg )

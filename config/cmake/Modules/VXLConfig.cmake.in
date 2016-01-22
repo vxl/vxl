@@ -29,7 +29,7 @@
 SET(VXL_BUILD_SETTINGS_FILE "@VXL_BUILD_SETTINGS_FILE@")
 
 # The VXL library directory.
-SET(VXL_LIBRARY_DIR "@LIBRARY_OUTPUT_PATH@")
+SET(VXL_LIBRARY_DIR "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
 
 # The VXL CMake support directory.
 # Clients projects should not use the Find*.cmake files in this directory.

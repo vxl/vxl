@@ -10,10 +10,10 @@ ADD_EXECUTABLE( vidl_test_all
 )
 TARGET_LINK_LIBRARIES( vidl_test_all vidl vil vul testlib )
 
-ADD_TEST( vidl_test_pixel_format             ${EXECUTABLE_OUTPUT_PATH}/vidl_test_all  test_pixel_format )
-ADD_TEST( vidl_test_pixel_iterator           ${EXECUTABLE_OUTPUT_PATH}/vidl_test_all  test_pixel_iterator )
-ADD_TEST( vidl_test_color                    ${EXECUTABLE_OUTPUT_PATH}/vidl_test_all  test_color )
-ADD_TEST( vidl_test_convert                  ${EXECUTABLE_OUTPUT_PATH}/vidl_test_all  test_convert )
+ADD_TEST( vidl_test_pixel_format             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vidl_test_all  test_pixel_format )
+ADD_TEST( vidl_test_pixel_iterator           ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vidl_test_all  test_pixel_iterator )
+ADD_TEST( vidl_test_color                    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vidl_test_all  test_color )
+ADD_TEST( vidl_test_convert                  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vidl_test_all  test_convert )
 
 ADD_EXECUTABLE( vidl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vidl_test_include vidl )
