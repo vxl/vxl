@@ -147,38 +147,68 @@ def read_CLIF07(indir, outdir, camnum, datatype="CLIF06"):
 
 
 def debayer(img):
-    bvxm_batch.init_process("vilDebayerBGGRToRGBProcess")
-    bvxm_batch.set_input_from_db(0, img)
-    bvxm_batch.run_process()
-    (id, type) = bvxm_batch.commit_output(0)
-    outimg = dbvalue(id, type)
-    return outimg
-# pixel wise roc process for change detection images
+  bvxm_batch.init_process("vilDebayerBGGRToRGBProcess")
+  bvxm_batch.set_input_from_db(0,img);
+  bvxm_batch.run_process();
+  (id, type) = bvxm_batch.commit_output(0);
+  outimg = dbvalue(id,type);
+  return outimg;
+#pixel wise roc process for change detection images
+def pixel_wise_roc(cd_img, gt_img, mask_img=None) :
+  bvxm_batch.init_process("vilPixelwiseRocProcess");
+  bvxm_batch.set_input_from_db(0,cd_img);
+  bvxm_batch.set_input_from_db(1,gt_img);
+  if mask_img:
+    bvxm_batch.set_input_from_db(2,mask_img);
+  bvxm_batch.run_process();
+  (id,type) = bvxm_batch.commit_output(0);
+  tp = bvxm_batch.get_bbas_1d_array_float(id);
+  (id,type) = bvxm_batch.commit_output(1);
+  tn = bvxm_batch.get_bbas_1d_array_float(id);
+  (id,type) = bvxm_batch.commit_output(2);
+  fp = bvxm_batch.get_bbas_1d_array_float(id);
+  (id,type) = bvxm_batch.commit_output(3);
+  fn = bvxm_batch.get_bbas_1d_array_float(id);
+  (id,type) = bvxm_batch.commit_output(4);
+  tpr = bvxm_batch.get_bbas_1d_array_float(id);
+  (id,type) = bvxm_batch.commit_output(5);
+  fpr = bvxm_batch.get_bbas_1d_array_float(id);
+  (id,type) = bvxm_batch.commit_output(6);
+  outimg = dbvalue(id,type);
+  #return tuple of true positives, true negatives, false positives, etc..
+  return (tp, tn, fp, fn, fpr, tpr, outimg);
 
-
-def pixel_wise_roc(cd_img, gt_img, mask_img=None):
-    bvxm_batch.init_process("vilPixelwiseRocProcess")
-    bvxm_batch.set_input_from_db(0, cd_img)
-    bvxm_batch.set_input_from_db(1, gt_img)
-    if mask_img:
-        bvxm_batch.set_input_from_db(2, mask_img)
-    bvxm_batch.run_process()
+# pixel wise roc process for classfication image
+def pixel_wise_roc2(class_img, gt_img, negative_gt_img = None, positive_sign = "high", mask_img=None):
+  bvxm_batch.init_process("vilPixelwiseRocProcess2")
+  bvxm_batch.set_input_from_db(0, class_img)
+  bvxm_batch.set_input_from_db(1, gt_img)
+  if negative_gt_img:
+    bvxm_batch.set_input_from_db(2, negative_gt_img)
+  if mask_img:
+    bvxm_batch.set_input_from_db(3, mask_img)
+  bvxm_batch.set_input_string(4, positive_sign)
+  status = bvxm_batch.run_process()
+  if status:
     (id, type) = bvxm_batch.commit_output(0)
-    tp = bvxm_batch.get_bbas_1d_array_float(id)
+    thres_out = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(1)
-    tn = bvxm_batch.get_bbas_1d_array_float(id)
+    tp = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(2)
-    fp = bvxm_batch.get_bbas_1d_array_float(id)
+    tn = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(3)
+    fp = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(4)
     fn = bvxm_batch.get_bbas_1d_array_float(id)
+    (id, type) = bvxm_batch.commit_output(5)
+    tpr = bvxm_batch.get_bbas_1d_array_float(id)
     (id, type) = bvxm_batch.commit_output(6)
-    outimg = dbvalue(id, type)
-    # return tuple of true positives, true negatives, false positives, etc..
-    return (tp, tn, fp, fn, outimg)
+    fpr = bvxm_batch.get_bbas_1d_array_float(id)
+    return thres_out, tp, tn, fp, fn, tpr, fpr
+  else:
+    return None, None, None, None, None, None, None
 
-# get image pixel value (always 0-1 float)
-
-
+#get image pixel value (always 0-1 float)
 def pixel(img, point):
     bvxm_batch.init_process("vilPixelValueProcess")
     bvxm_batch.set_input_from_db(0, img)
@@ -265,6 +295,19 @@ def threshold_image(img, value, threshold_above=True, id=255):
     mask = dbvalue(id, type)
     return mask
 
+def threshold_image_inside(img, min_thres, max_thres, threshold_inside=True):
+  bvxm_batch.init_process("vilThresholdImageInsideProcess")
+  bvxm_batch.set_input_from_db(0, img)
+  bvxm_batch.set_input_float(1, min_thres)
+  bvxm_batch.set_input_float(2, max_thres)
+  bvxm_batch.set_input_bool(3, threshold_inside)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    mask = dbvalue(id, type)
+    return mask
+  else:
+    return None
 
 def bvxm_stretch_image(img, min_value, max_value, output_type_str='float'):
     bvxm_batch.init_process("vilStretchImageProcess")
@@ -679,4 +722,16 @@ def img_registration_by_rmse(src_img, tgr_img, sx, sy, sz = 0.0, pixel_res=1.0, 
     return trans_x, trans_y, trans_z, rmse_z, var_z
   else:
     return -1.0, -1.0, -1.0, -1.0, -1.0
-  
+
+# Dilate a binary image using a disk structural element
+def dilate_image_disk(in_img, disk_size):
+  bvxm_batch.init_process("vilImageDilateDiskProcess")
+  bvxm_batch.set_input_from_db(0, in_img)
+  bvxm_batch.set_input_float(1, disk_size)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    return out_img
+  else:
+    return None
