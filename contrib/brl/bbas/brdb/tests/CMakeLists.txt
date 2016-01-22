@@ -13,15 +13,15 @@ ADD_EXECUTABLE( brdb_test_all
 
 TARGET_LINK_LIBRARIES( brdb_test_all brdb testlib )
 
-ADD_TEST( brdb_test_value             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/brdb_test_all test_value )
-ADD_TEST( brdb_test_tuple             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/brdb_test_all test_tuple )
+ADD_TEST( NAME brdb_test_value COMMAND $<TARGET_FILE:brdb_test_all> test_value )
+ADD_TEST( NAME brdb_test_tuple COMMAND $<TARGET_FILE:brdb_test_all> test_tuple )
 if( BUILD_FOR_VXL_DASHBOARD )
 ## This test always fails in travis builds
-ADD_TEST( brdb_test_relation          ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/brdb_test_all test_relation )
+ADD_TEST( NAME brdb_test_relation COMMAND $<TARGET_FILE:brdb_test_all> test_relation )
 endif()
-ADD_TEST( brdb_test_database          ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/brdb_test_all test_database )
-#ADD_TEST( brdb_test_database_manager  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/brdb_test_all test_database_manager )
-ADD_TEST( brdb_test_query             ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/brdb_test_all test_query )
+ADD_TEST( NAME brdb_test_database COMMAND $<TARGET_FILE:brdb_test_all> test_database )
+#ADD_TEST( NAME brdb_test_database_manager COMMAND $<TARGET_FILE:brdb_test_all> test_database_manager )
+ADD_TEST( NAME brdb_test_query COMMAND $<TARGET_FILE:brdb_test_all> test_query )
 
 AUX_SOURCE_DIRECTORY(Templates brdb_test_value)
 

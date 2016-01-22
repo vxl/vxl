@@ -15,13 +15,13 @@ ADD_EXECUTABLE( bil_algo_test_all
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/c.20.tif ${CMAKE_CURRENT_BINARY_DIR}/c.20.tif)
 
 TARGET_LINK_LIBRARIES( bil_algo_test_all bil_algo vil_algo vil vnl testlib )
-ADD_TEST( bil_algo_test_bil_wshed2d       ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_algo_test_all test_bil_wshed2d )
-ADD_TEST( bil_algo_test_bil_scale_image   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_algo_test_all test_bil_scale_image )
-ADD_TEST( bil_algo_test_bil_edt           ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_algo_test_all test_bil_edt )
-ADD_TEST( bil_algo_test_bil_cedt          ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_algo_test_all test_bil_cedt )
-ADD_TEST( bil_algo_test_bil_finite_differences          ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_algo_test_all test_bil_finite_differences )
-ADD_TEST( bil_algo_test_bil_finite_second_differences   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_algo_test_all test_bil_finite_second_differences )
-ADD_TEST( bil_algo_test_detect_ridges     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bil_algo_test_all test_bil_detect_ridges ${CMAKE_CURRENT_SOURCE_DIR} )
+ADD_TEST( NAME bil_algo_test_bil_wshed2d COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_wshed2d )
+ADD_TEST( NAME bil_algo_test_bil_scale_image COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_scale_image )
+ADD_TEST( NAME bil_algo_test_bil_edt COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_edt )
+ADD_TEST( NAME bil_algo_test_bil_cedt COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_cedt )
+ADD_TEST( NAME bil_algo_test_bil_finite_differences COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_finite_differences )
+ADD_TEST( NAME bil_algo_test_bil_finite_second_differences COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_finite_second_differences )
+ADD_TEST( NAME bil_algo_test_detect_ridges COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_detect_ridges ${CMAKE_CURRENT_SOURCE_DIR} )
 
 
 ADD_EXECUTABLE( bil_algo_test_include test_include.cxx )

@@ -23,19 +23,19 @@ ADD_EXECUTABLE( boxm2_ocl_test_all
 
 TARGET_LINK_LIBRARIES( boxm2_ocl_test_all testlib boxm2_ocl boxm2_ocl_pro boxm2_ocl_utils boxm2_cpp boxm2_cpp_algo boxm2_cpp_pro boxm2_pro brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )
 
-ADD_TEST( boxm2_ocl_test_refine                      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_refine  )
-ADD_TEST( boxm2_ocl_test_image_pyramid               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_image_pyramid  )
-ADD_TEST( boxm2_ocl_test_process_mains               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_process_mains  )
-ADD_TEST( boxm2_ocl_test_weighted_em                 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_weighted_em  )
+ADD_TEST( NAME boxm2_ocl_test_refine COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_refine  )
+ADD_TEST( NAME boxm2_ocl_test_image_pyramid COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_image_pyramid  )
+ADD_TEST( NAME boxm2_ocl_test_process_mains COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_process_mains  )
+ADD_TEST( NAME boxm2_ocl_test_weighted_em COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_weighted_em  )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## These tests are always failing on Mac
-ADD_TEST( boxm2_ocl_test_kernel_filter               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_kernel_filter )
-ADD_TEST( boxm2_ocl_test_kernel_vector_filter        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_kernel_vector_filter )
+ADD_TEST( NAME boxm2_ocl_test_kernel_filter COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_kernel_filter )
+ADD_TEST( NAME boxm2_ocl_test_kernel_vector_filter COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_kernel_vector_filter )
 endif()
-#ADD_TEST( boxm2_ocl_test_cubic_estimation           ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_cubic_estimation  )
-ADD_TEST( boxm2_ocl_test_ocl_cholesky                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_ocl_cholesky  )
-ADD_TEST( boxm2_ocl_test_ocl_levenberg_marquardt     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_ocl_levenberg_marquardt  )
-ADD_TEST( boxm2_ocl_test_ocl_lm_phongs_model     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_ocl_lm_phongs_model  )
-ADD_TEST( boxm2_ocl_test_opencl_cache2     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_ocl_test_all       test_opencl_cache2  )
+#ADD_TEST( NAME boxm2_ocl_test_cubic_estimation COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_cubic_estimation  )
+ADD_TEST( NAME boxm2_ocl_test_ocl_cholesky COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_ocl_cholesky  )
+ADD_TEST( NAME boxm2_ocl_test_ocl_levenberg_marquardt COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_ocl_levenberg_marquardt  )
+ADD_TEST( NAME boxm2_ocl_test_ocl_lm_phongs_model COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_ocl_lm_phongs_model  )
+ADD_TEST( NAME boxm2_ocl_test_opencl_cache2 COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_opencl_cache2  )
 
 
 ADD_EXECUTABLE( boxm2_ocl_test_include test_include.cxx )

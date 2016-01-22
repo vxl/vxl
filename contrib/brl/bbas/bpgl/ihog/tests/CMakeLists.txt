@@ -6,7 +6,7 @@ ADD_EXECUTABLE( ihog_test_all
 )
 
 TARGET_LINK_LIBRARIES( ihog_test_all ihog testlib vul vnl vgl vil)
-ADD_TEST( ihog_test_minimizer         ihog_test_all test_minimizer )
+ADD_TEST( NAME ihog_test_minimizer COMMAND $<TARGET_FILE:ihog_test_all> test_minimizer )
 
 ADD_EXECUTABLE( ihog_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( ihog_test_include ihog)

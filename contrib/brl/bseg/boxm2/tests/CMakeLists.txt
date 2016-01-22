@@ -13,17 +13,17 @@ ADD_EXECUTABLE( boxm2_test_all
 
 TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2_cpp_pro brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vul vpl )
 
-ADD_TEST( boxm2_test_scene               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_scene  )
-ADD_TEST( boxm2_test_cache               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_cache  )
-ADD_TEST( boxm2_test_cache2               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_cache2  )
+ADD_TEST( NAME boxm2_test_scene COMMAND $<TARGET_FILE:boxm2_test_all>  test_scene  )
+ADD_TEST( NAME boxm2_test_cache COMMAND $<TARGET_FILE:boxm2_test_all>  test_cache  )
+ADD_TEST( NAME boxm2_test_cache2 COMMAND $<TARGET_FILE:boxm2_test_all>  test_cache2  )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## These tests are always failing on Mac.  An infinite loop occurs in while statement
                                    ## due to failure in aio_read function on Mac.
-ADD_TEST( boxm2_test_io                  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_io  )
+ADD_TEST( NAME boxm2_test_io COMMAND $<TARGET_FILE:boxm2_test_all>  test_io  )
 endif()
-ADD_TEST( boxm2_test_wrappers            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_wrappers  )
-ADD_TEST( boxm2_test_data                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_data  )
-ADD_TEST( boxm2_test_block               ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_block  )
-ADD_TEST( boxm2_test_block_vis_graph         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/boxm2_test_all  test_block_vis_graph  )
+ADD_TEST( NAME boxm2_test_wrappers COMMAND $<TARGET_FILE:boxm2_test_all>  test_wrappers  )
+ADD_TEST( NAME boxm2_test_data COMMAND $<TARGET_FILE:boxm2_test_all>  test_data  )
+ADD_TEST( NAME boxm2_test_block COMMAND $<TARGET_FILE:boxm2_test_all>  test_block  )
+ADD_TEST( NAME boxm2_test_block_vis_graph COMMAND $<TARGET_FILE:boxm2_test_all>  test_block_vis_graph  )
 
 ADD_EXECUTABLE( boxm2_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( boxm2_test_include boxm2 boxm2_io boxm2_cpp )

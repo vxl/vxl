@@ -23,7 +23,7 @@ ADD_EXECUTABLE( conversions_image_test_all
   test_image_conversions.cxx
 )
 
-ADD_TEST( conversions_test_vil1_vbl_conversions ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/conversions_image_test_all test_vil1_vbl_conversions )
-ADD_TEST( conversions_test_image_conversions ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/conversions_image_test_all test_image_conversions )
+ADD_TEST( NAME conversions_test_vil1_vbl_conversions COMMAND $<TARGET_FILE:conversions_image_test_all> test_vil1_vbl_conversions )
+ADD_TEST( NAME conversions_test_image_conversions COMMAND $<TARGET_FILE:conversions_image_test_all> test_image_conversions )
 
 ADD_EXECUTABLE( conversions_image_test_include test_include.cxx )

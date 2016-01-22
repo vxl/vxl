@@ -9,8 +9,8 @@ ADD_EXECUTABLE ( bugl_test_all
 )
 TARGET_LINK_LIBRARIES( bugl_test_all bugl vgl_algo vgl vnl testlib )
 
-ADD_TEST( bugl_test_bugl                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bugl_test_all test_bugl)
-ADD_TEST( bugl_test_random_transform_2d ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bugl_test_all test_random_transform_set_2d)
+ADD_TEST( NAME bugl_test_bugl COMMAND $<TARGET_FILE:bugl_test_all> test_bugl)
+ADD_TEST( NAME bugl_test_random_transform_2d COMMAND $<TARGET_FILE:bugl_test_all> test_random_transform_set_2d)
 
 ADD_EXECUTABLE( bugl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES( bugl_test_include bugl)

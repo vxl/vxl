@@ -7,7 +7,7 @@ ADD_EXECUTABLE( vnl_xio_test_all
 
 TARGET_LINK_LIBRARIES(vnl_xio_test_all vnl_xio testlib)
 
-ADD_TEST( vnl_test_xio      ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vnl_xio_test_all test_vnl_xio )
+ADD_TEST( NAME vnl_test_xio COMMAND $<TARGET_FILE:vnl_xio_test_all> test_vnl_xio )
 
 ADD_EXECUTABLE(vnl_xio_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES(vnl_xio_test_include vnl_xio)

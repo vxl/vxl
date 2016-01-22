@@ -9,10 +9,10 @@ ADD_EXECUTABLE( vpdfl_test_all
   )
 TARGET_LINK_LIBRARIES( vpdfl_test_all vpdfl mbl vnl_io vsl vpl testlib )
 
-ADD_TEST( vpdfl_test_axis_gaussian ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vpdfl_test_all test_axis_gaussian )
-ADD_TEST( vpdfl_test_gaussian ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vpdfl_test_all test_gaussian )
-ADD_TEST( vpdfl_test_mixture ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vpdfl_test_all test_mixture )
-ADD_TEST( vpdfl_test_pc_gaussian ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/vpdfl_test_all test_pc_gaussian )
+ADD_TEST( NAME vpdfl_test_axis_gaussian COMMAND $<TARGET_FILE:vpdfl_test_all> test_axis_gaussian )
+ADD_TEST( NAME vpdfl_test_gaussian COMMAND $<TARGET_FILE:vpdfl_test_all> test_gaussian )
+ADD_TEST( NAME vpdfl_test_mixture COMMAND $<TARGET_FILE:vpdfl_test_all> test_mixture )
+ADD_TEST( NAME vpdfl_test_pc_gaussian COMMAND $<TARGET_FILE:vpdfl_test_all> test_pc_gaussian )
 
 ADD_EXECUTABLE( vpdfl_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( vpdfl_test_include vpdfl )

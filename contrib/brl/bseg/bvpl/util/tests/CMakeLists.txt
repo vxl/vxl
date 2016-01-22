@@ -6,7 +6,7 @@ ADD_EXECUTABLE( bvpl_util_test_all
 
 TARGET_LINK_LIBRARIES( bvpl_util_test_all testlib bvpl_util bvxm_grid_io vgl vul)
 
-ADD_TEST( bvpl_util_test_corner_finder   ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/bvpl_util_test_all test_corner_finder  )
+ADD_TEST( NAME bvpl_util_test_corner_finder COMMAND $<TARGET_FILE:bvpl_util_test_all> test_corner_finder  )
 
 ADD_EXECUTABLE( bvpl_util_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bvpl_util_test_include bvpl_util )
