@@ -6,11 +6,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC_295)
-# include <valarray> // 2.95
-# define vcl_valarray valarray
-
-#elif defined(VCL_VC_9)
+#if defined(VCL_VC_9)
 # include "win32-vc9/vcl_valarray.h"
 
 #else

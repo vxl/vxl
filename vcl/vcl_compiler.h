@@ -9,9 +9,9 @@
 //
 // Be careful when modifying this file. In general, you need to make
 // sure that exactly one of the preprocessor flags is defined. For
-// example, if the compiler is GCC 3.4.2, then VCL_GCC should be
-// defined, VCL_GCC_3 should be defined, and VCL_GCC_34 should be
-// defined. Others, like VCL_GCC_33 *should not* be defined.
+// example, if the compiler is GCC 5.3.0, then VCL_GCC should be
+// defined, VCL_GCC_5 should be defined, and VCL_GCC_53 should be
+// defined. Others, like VCL_GCC_51 *should not* be defined.
 //
 // Note that this is most commonly implemented using a cascade of if
 // statements. Be careful to add your statements to the correct place
@@ -141,11 +141,7 @@
 
 // This *needs* to come after vcl_config_headers.h
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-# if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_GCC_5)
-#  define GNU_LIBSTDCXX_V3 1
-# elif !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
-// One difference between v2 and v3 is that the former has
-// no <istream> header file whereas v3 has the lot.
+# if defined(VCL_GCC_4) || defined(VCL_GCC_5)
 #  define GNU_LIBSTDCXX_V3 1
 # endif
 #endif
