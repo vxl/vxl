@@ -276,7 +276,6 @@ bool volm_conf_land_map_indexer::add_locations(vcl_vector<vgl_point_2d<double> >
   if (!volm_io_tools::line_inside_the_box(bbox_, locs, locs_in))
     locs_in = locs;
   // upsample the input location lines to desired density
-  unsigned num_locs = locs_in.size();
   vcl_vector<vsol_point_2d_sptr> in_list;
   for (vcl_vector<vgl_point_2d<double> >::const_iterator vit = locs_in.begin(); vit != locs_in.end(); ++vit)
     in_list.push_back(new vsol_point_2d(*vit));
@@ -468,13 +467,12 @@ void volm_conf_land_map_indexer::write_out_kml_locs(vcl_ofstream& ofs,
                                                     vcl_vector<vgl_point_3d<double> > const& locations, unsigned char land_id,
                                                     double const& size,  bool const& is_write_as_dot) const
 {
-  unsigned num_locs = locations.size();
-  for (unsigned i = 0; i < num_locs; i++)
+  unsigned int num_locs = locations.size();
+  for (unsigned int i = 0; i < num_locs; ++i)
   {
     double lon = locations[i].x();
     double lat = locations[i].y();
     double height = locations[i].z();
-    unsigned char land = land_id;
     vcl_stringstream name;
     name << i << "_" << vcl_setprecision(6) << lon << '_' << vcl_setprecision(6) << lat
          << '_' << vcl_setprecision(6) << height

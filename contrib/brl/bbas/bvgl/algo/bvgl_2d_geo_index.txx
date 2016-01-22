@@ -112,7 +112,6 @@ bvgl_2d_geo_index_node_sptr bvgl_2d_geo_index::construct_tree(vgl_box_2d<float> 
   vcl_cout << "bounding box for bvgl_2d_geo_index root: " << bbox << vcl_endl;
   vgl_box_2d<double> bbox_double;
   bvgl_2d_geo_index::convert_box(bbox, bbox_double);
-  double min_sz_double = (double)min_size;
   bvgl_2d_geo_index_node_sptr root = new bvgl_2d_geo_index_node<Type>(bbox_double);
   // recursively add children
   construct_sub_tree<Type>(root, min_size);

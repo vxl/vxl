@@ -36,8 +36,6 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
   vpgl_invmap_cost_function cf(image_point, plane, cam);
   vnl_double_2 x1(0.000, 0.0000);
   cf.set_params(initial_guess, x1);
-  if (image_point[0] == 3712 && image_point[1] == 3456)
-      bool flag = true;
   vnl_amoeba amoeba(cf);
   amoeba.set_max_iterations(100000);
   amoeba.set_relative_diameter(relative_diameter);

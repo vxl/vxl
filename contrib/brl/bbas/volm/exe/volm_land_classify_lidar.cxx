@@ -131,7 +131,7 @@ int main(int argc,  char** argv)
 
   int bb = block();
   unsigned larger_neigh = bb+neighborhood_size();
-  double lon, lat, lx, ly, lz, u, v;
+  double lon, lat, u, v;
 
   vcl_cout << "lidar ni: " << lidar_info.ni << " nj: " << lidar_info.nj << "\n";
 

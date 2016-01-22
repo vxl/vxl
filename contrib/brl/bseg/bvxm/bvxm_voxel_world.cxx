@@ -643,10 +643,6 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   bvxm_util::write_slab_as_image(heightmap_rough,"./heightmap_rough.tiff");
 #endif
   // now clean up height map
-  unsigned n_smooth_iterations = 70;
-  float conf_thresh = 0.1f;
-  int medfilt_halfsize = 4;
-  float med_diff_thresh = 8.0;
 
   // convert confidence and heightmap to vil images
   //vil_image_view<float>* conf_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());

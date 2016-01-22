@@ -2409,10 +2409,9 @@ void sdet_sel_base::correct_CFG_topology()
   // going over the edgemap instead so that a node is visited only once and so that I
   // don't have to deal with iterator issues
 
-  for (unsigned i=0; i<edgemap_->edgels.size(); i++)
+  for (unsigned int i=0; i<edgemap_->edgels.size(); ++i)
   {
     sdet_edgel_chain *c1=0, *c2=0;
-    sdet_edgel* eA = edgemap_->edgels[i];
 
     int deg = curve_frag_graph_.pFrags[i].size()+ curve_frag_graph_.cFrags[i].size();
     if (deg<2)
@@ -2686,13 +2685,9 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
 {
   regular_contour_filter();
   int n1=0;
-  double d=0,dis=0,distance=0;
   vcl_vector<sdet_edgel*> new_chain0,new_chain2,new_chain3,new_chain6,new_chain33;
   sdet_edgel_chain* new_chain1=new sdet_edgel_chain();
   sdet_edgel_chain* new_chain4=new sdet_edgel_chain();
-  sdet_edgel_chain* test1=new sdet_edgel_chain();
-  sdet_edgel_chain *chains=new sdet_edgel_chain();
-  sdet_edgel_chain* new_chain44=new sdet_edgel_chain();
   double gap_thres=gap_;
   vcl_cout << "Construction of Hypothesis Tree is in Progress!! " << vcl_endl;
   // Calculating number of edges with degree as 1
@@ -2738,7 +2733,7 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
             }
         }
         //Constucting the tree from end of an unambiguous chain and extending it till the end of edge chain
-      double cost1=gap_,cost2=10.0,cost3=gap_,d1=0.0,d2=0.0,d3=0,dx=0.0,dy=0.0,cost=1000.0,costc=0.0;
+      double cost1=gap_,cost2=10.0,cost3=gap_,d1=0.0,dx=0.0,dy=0.0,cost=1000.0,costc=0.0;
       int m1=0,m2=0,m3=0,m4=0,m5=0,m7=0,m8=0,m9=0;
       sdet_edgel* ce=0;sdet_edgel* pe=0;sdet_edgel* ed=0;sdet_edgel* imp=0;sdet_edgel* im=0;
       sdet_edgel_chain *c11=new sdet_edgel_chain();
@@ -2939,8 +2934,8 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
           GD_list.push_back(*l_it);
         while (GD_list.size()>0)
           {
-          double distance1=0,distance2=0;
-          sdet_CFTG_link* cur_Link = GD_list.front();GD_list.pop_front();
+          sdet_CFTG_link* cur_Link = GD_list.front();
+          GD_list.pop_front();
           sdet_edgel_chain_list_iter f_it = cur_Link->cCFs.begin();
           sdet_edgel_chain* new_chain5=(*f_it);
           sdet_edgel* edge3=new_chain5->edgels.front();
@@ -3146,7 +3141,7 @@ void sdet_sel_base::Post_Process()
             for (unsigned int j=0; j<new_chain->edgels.size(); ++j)
               {
               sdet_edgel* edge=new_chain->edgels[j]; sdet_edgel* edge2=0;sdet_edgel_chain* chain= new sdet_edgel_chain();sdet_edgel* edge3=0;
-              int n=0,number=0,num=0,diff=0;sdet_edgel* edge4=0;
+              int n=0,number=0,diff=0;
               if (curve_frag_graph_.cFrags[edge->id].size()==1)
                 {
                 n=1;

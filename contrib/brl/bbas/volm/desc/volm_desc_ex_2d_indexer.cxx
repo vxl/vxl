@@ -135,7 +135,6 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, vcl_v
 
   for (vcl_map<unsigned, vcl_vector<vcl_pair<int, int> > >::iterator it = imgs_and_corners.begin(); it != imgs_and_corners.end(); it++) {
     vil_image_view<unsigned char> map(classification_maps_[it->first].img_r);
-    vpgl_geo_camera* cam = classification_maps_[it->first].cam;
     int min_i = it->second[0].first;
     int min_j = it->second[0].second;
     int max_i = it->second[1].first;

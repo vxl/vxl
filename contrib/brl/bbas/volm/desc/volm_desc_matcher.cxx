@@ -133,7 +133,6 @@ bool volm_desc_matcher::create_prob_map(vcl_string const& geo_hypo_folder,
     const double x_dist = vnl_math::abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
     const double y_dist = vnl_math::abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
     vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
-    double gt_dist = sqrt(gt_dist_vec.sqr_length());
   }
   else {
     gt_closest = gt_loc;
@@ -201,7 +200,6 @@ bool volm_desc_matcher::create_random_prob_map(vnl_random& rng, vcl_string const
       vgl_point_3d<double> h_pt;
       // loop over all locations in current leaf
       while (leaves[l_idx]->hyps_->get_next(0,1,h_pt)) {
-        unsigned h_idx = leaves[l_idx]->hyps_->current_-1;
         unsigned u, v;
         if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v) && tile_img(u,v) < 0) // this method checks the image boundaries
           tile_img(u,v) = (float)rng.drand32();

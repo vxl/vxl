@@ -186,7 +186,6 @@ vcl_map<vcl_string, volm_land_layer> load_tag_to_volm_land_table()
     if (volm_land_name.compare("invalid") != 0)
       m[tag_name] = volm_osm_category_io::volm_land_table_name[volm_land_name];
   }
-  unsigned cnt = 0;
   return m;
 }
 
