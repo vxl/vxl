@@ -17,6 +17,13 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 # Support for CMake 2.6
 IF( COMMAND CMAKE_POLICY )
   CMAKE_POLICY(SET CMP0003 NEW)
+  ####
+  # Remove warning by disabling test.  The proper fix
+  # will require careful effort.
+  # Documentation for what would be a better solution
+  # is given at https://github.com/vxl/vxl/issues/127
+  # and https://github.com/vxl/vxl/pull/122
+  CMAKE_POLICY(SET CMP0033 OLD)
 ENDIF( COMMAND CMAKE_POLICY )
 
 # CMake 2.8 stuff
