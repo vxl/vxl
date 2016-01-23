@@ -145,15 +145,6 @@ IF(UNIX)
 ENDIF(UNIX)
 
 
-
-# Use the old configure script if the cache tells us to do so.
-IF(VXL_NO_CMAKE_CONFIGURE)
-  IF(RUN_CONFIGURE)
-    EXEC_PROGRAM( ${vxl_SOURCE_DIR}/configure
-      ${vxl_BINARY_DIR} )
-  ENDIF(RUN_CONFIGURE)
-ENDIF(VXL_NO_CMAKE_CONFIGURE)
-
 # Some types of path names can cause havoc with regular expressions,
 # so avoid those.
 IF( ${vxl_BINARY_DIR} MATCHES  \\+ )
@@ -178,26 +169,10 @@ SET(VXLCORE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/core)
 SET(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
 SET(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/vcl)
 
-# Autoconf does not work on windows.  Use hardcoded results if not using
-# cmake to configure.
-IF(VXL_NO_CMAKE_CONFIGURE)
-  IF(WIN32)
-    IF(NOT CYGWIN)
-      SET(VCL_INCLUDE_DIR ${vxl_SOURCE_DIR}/vcl/config.win32 ${VCL_INCLUDE_DIR})
-      SET(VCL_INSTALL_INCLUDE_DIR
-        ${CMAKE_INSTALL_PREFIX}/include/vcl/config.win32
-        ${VCL_INSTALL_INCLUDE_DIR}
-      )
-    ENDIF(NOT CYGWIN)
-  ENDIF(WIN32)
-ENDIF(VXL_NO_CMAKE_CONFIGURE)
-
 INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
 # Do platform-specific configuration.
-IF(NOT VXL_NO_CMAKE_CONFIGURE)
-  add_subdirectory(config/cmake/config)
-ENDIF(NOT VXL_NO_CMAKE_CONFIGURE)
+add_subdirectory(config/cmake/config)
 
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS
