@@ -30,7 +30,10 @@ ADD_TEST( NAME rgrl_feature_region COMMAND $<TARGET_FILE:rgrl_test_all> test_fea
 ADD_TEST( NAME rgrl_feature_set COMMAND $<TARGET_FILE:rgrl_test_all> test_feature_set )
 ADD_TEST( NAME rgrl_match_set COMMAND $<TARGET_FILE:rgrl_test_all> test_match_set )
 ADD_TEST( NAME rgrl_spline COMMAND $<TARGET_FILE:rgrl_test_all> test_spline )
+if(0)  # The rgrl_estimtaor test failes too often to be enabled by default:
+## https://github.com/vxl/vxl/issues/96
 ADD_TEST( NAME rgrl_estimator COMMAND $<TARGET_FILE:rgrl_test_all> test_estimator )
+endif()
 ADD_TEST( NAME rgrl_convergence COMMAND $<TARGET_FILE:rgrl_test_all> test_convergence )
 ADD_TEST( NAME rgrl_scale_est COMMAND $<TARGET_FILE:rgrl_test_all> test_scale_est )
 ADD_TEST( NAME rgrl_initializer COMMAND $<TARGET_FILE:rgrl_test_all> test_initializer )
