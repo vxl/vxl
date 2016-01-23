@@ -1,20 +1,20 @@
 # This is contrib/brl/bseg/bvpl/util/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvpl )
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bseg/bvpl )
 
-SET(bvpl_util_sources
+set(bvpl_util_sources
     bvpl_corner_pair_finder.h    bvpl_corner_pair_finder.cxx
     bvpl_corner_search_functor.h bvpl_corner_search_functor.cxx
     bvpl_bundler_features_2d.h   bvpl_bundler_features_2d.cxx
    )
-AUX_SOURCE_DIRECTORY(Templates bvpl_util_sources)
+aux_source_directory(Templates bvpl_util_sources)
 
-ADD_LIBRARY(bvpl_util ${bvpl_util_sources})
-TARGET_LINK_LIBRARIES(bvpl_util bvpl brdb vil_algo vgl_io vgl vnl_io vnl vbl)
+add_library(bvpl_util ${bvpl_util_sources})
+target_link_libraries(bvpl_util bvpl brdb vil_algo vgl_io vgl vnl_io vnl vbl)
 
 add_subdirectory(io)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

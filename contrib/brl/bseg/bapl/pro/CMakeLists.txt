@@ -1,25 +1,25 @@
 # This is contrib/brl/bseg/bapl/pro/CMakeLists.txt
 # Brown Affine Patch Process Library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${GEL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR}/bseg/bvxm )
+include_directories( ${BRL_INCLUDE_DIR}/bseg/brec )
 
-SET(bapl_pro_sources
+set(bapl_pro_sources
     bapl_register.h      bapl_register.cxx
     bapl_processes.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates bapl_pro_sources)
-AUX_SOURCE_DIRECTORY(processes bapl_pro_sources)
+aux_source_directory(Templates bapl_pro_sources)
+aux_source_directory(processes bapl_pro_sources)
 
-ADD_LIBRARY(bapl_pro ${bapl_pro_sources})
-TARGET_LINK_LIBRARIES(bapl_pro bapl bapl_io bprb brdb vil_pro vil_io vil vnl vul)
+add_library(bapl_pro ${bapl_pro_sources})
+target_link_libraries(bapl_pro bapl bapl_io bprb brdb vil_pro vil_io vil vnl vul)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

@@ -6,60 +6,60 @@ doxygen_add_library(contrib/mul/mvl2
   DESCRIPTION "Classes for video file support"
   )
 
-SET(mvl2_sources
+set(mvl2_sources
     mvl2_video_writer.h
     mvl2_video_reader.h        mvl2_video_reader.cxx
     mvl2_video_from_sequence.h mvl2_video_from_sequence.cxx
 )
 
-IF (WIN32)
-  IF (NOT CYGWIN)
-    # Might be a good idea to SET (AVI_MS_NATIVE) here so below we
+if(WIN32)
+  if(NOT CYGWIN)
+    # Might be a good idea to set(AVI_MS_NATIVE) here so below we
     # can properly distinguish between MS native AVI support and AVI
     # support from AVIFile.
-    SET(AVIFILE_FOUND "YES")
-    SET(AVIFILE_LIBRARIES "vfw32")
-  ENDIF (NOT CYGWIN)
-ENDIF (WIN32)
+    set(AVIFILE_FOUND "YES")
+    set(AVIFILE_LIBRARIES "vfw32")
+  endif(NOT CYGWIN)
+endif(WIN32)
 
-IF (NOT AVIFILE_FOUND)
+if(NOT AVIFILE_FOUND)
   find_package(AVIFile)
-  IF(AVIFILE_FOUND)
-    INCLUDE_DIRECTORIES( ${AVIFILE_INCLUDE_DIR} )
-    ADD_DEFINITIONS (${AVIFILE_DEFINITIONS} )
-  ENDIF(AVIFILE_FOUND)
-ENDIF (NOT AVIFILE_FOUND)
+  if(AVIFILE_FOUND)
+    include_directories( ${AVIFILE_INCLUDE_DIR} )
+    add_definitions(${AVIFILE_DEFINITIONS} )
+  endif(AVIFILE_FOUND)
+endif(NOT AVIFILE_FOUND)
 
-IF (AVIFILE_FOUND)
-  SET(mvl2_sources ${mvl2_sources}
+if(AVIFILE_FOUND)
+  set(mvl2_sources ${mvl2_sources}
       mvl2_image_format_plugin.h mvl2_image_format_plugin.cxx
       mvl2_video_from_avi.h
       mvl2_video_to_avi.h
      )
-  IF (WIN32)
-    SET(mvl2_sources ${mvl2_sources}
+  if(WIN32)
+    set(mvl2_sources ${mvl2_sources}
         mvl2_video_from_avi_windows.h mvl2_video_from_avi_windows.cxx
         mvl2_video_to_avi_windows.h   mvl2_video_to_avi_windows.cxx
        )
-  ELSE (WIN32)
-    SET(mvl2_sources ${mvl2_sources}
+  else(WIN32)
+    set(mvl2_sources ${mvl2_sources}
         mvl2_video_from_avi_linux.h mvl2_video_from_avi_linux.cxx
         mvl2_video_to_avi_linux.h   mvl2_video_to_avi_linux.cxx
        )
-  ENDIF (WIN32)
-ELSE (AVIFILE_FOUND)
-  SET(AVIFILE_LIBRARIES "")
-ENDIF (AVIFILE_FOUND)
+  endif(WIN32)
+else(AVIFILE_FOUND)
+  set(AVIFILE_LIBRARIES "")
+endif(AVIFILE_FOUND)
 
-ADD_LIBRARY(mvl2 ${mvl2_sources})
-INSTALL_TARGETS(/lib mvl2)
+add_library(mvl2 ${mvl2_sources})
+install_targets(/lib mvl2)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mvl2 ${mvl2_sources})
-TARGET_LINK_LIBRARIES( mvl2 vil vul ${AVIFILE_LIBRARIES} )
+target_link_libraries( mvl2 vil vul ${AVIFILE_LIBRARIES} )
 
-IF (AVIFILE_FOUND)
-  IF( BUILD_TESTING )
+if(AVIFILE_FOUND)
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif( BUILD_TESTING )
 
   add_subdirectory(examples)
-ENDIF (AVIFILE_FOUND)
+endif(AVIFILE_FOUND)

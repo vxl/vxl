@@ -1,6 +1,6 @@
 # vxl/vil1/CMakeLists.txt
 
-SET( vil1_sources
+set( vil1_sources
   vil1_fwd.h
 
   # basic things
@@ -105,42 +105,42 @@ SET( vil1_sources
 # only, of course). We can then control the dependencies of vil1 to
 # link nsl before this vil1_network.
 #
-SET( vil1_network_sources
+set( vil1_network_sources
   # load image from URL
   vil1_stream_url.cxx                        vil1_stream_url.h
 )
 
 # vil1_stream_url not working on Apple MacOSX
-IF(NOT APPLE)
+if(NOT APPLE)
 # vil1_stream_url in separate library on Solaris
-  IF(SOLARIS)
-    ADD_LIBRARY(vil1_network ${vil1_network_sources})
-    INSTALL_TARGETS(lib/ vil1_network)
+  if(SOLARIS)
+    add_library(vil1_network ${vil1_network_sources})
+    install_targets(lib/ vil1_network)
     INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_network_sources})
-  ELSE(SOLARIS)
-    SET(vil1_sources ${vil1_sources} ${vil1_network_sources})
-  ENDIF(SOLARIS)
-ENDIF(NOT APPLE)
+  else(SOLARIS)
+    set(vil1_sources ${vil1_sources} ${vil1_network_sources})
+  endif(SOLARIS)
+endif(NOT APPLE)
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
-INCLUDE(${VXL_CMAKE_DIR}/FindJPEG.cmake)
-INCLUDE(${VXL_CMAKE_DIR}/FindPNG.cmake)
-INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+include(${VXL_CMAKE_DIR}/FindJPEG.cmake)
+include(${VXL_CMAKE_DIR}/FindPNG.cmake)
+include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 
-IF(PNG_FOUND)
-  INCLUDE_DIRECTORIES( ${PNG_INCLUDE_DIR})
-  ADD_DEFINITIONS( ${PNG_DEFINITIONS}  -DHAS_PNG=1 )
-  SET( vil1_sources ${vil1_sources}
+if(PNG_FOUND)
+  include_directories( ${PNG_INCLUDE_DIR})
+  add_definitions( ${PNG_DEFINITIONS}  -DHAS_PNG=1 )
+  set( vil1_sources ${vil1_sources}
     file_formats/vil1_png.cxx                  file_formats/vil1_png.h
   )
-ELSE(PNG_FOUND)
-  ADD_DEFINITIONS( -DHAS_PNG=0 )
-ENDIF(PNG_FOUND)
+else(PNG_FOUND)
+  add_definitions( -DHAS_PNG=0 )
+endif(PNG_FOUND)
 
-IF(JPEG_FOUND)
-  INCLUDE_DIRECTORIES( ${JPEG_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${JPEG_DEFINITIONS} -DHAS_JPEG=1 )
-  SET( vil1_sources ${vil1_sources}
+if(JPEG_FOUND)
+  include_directories( ${JPEG_INCLUDE_DIR} )
+  add_definitions( ${JPEG_DEFINITIONS} -DHAS_JPEG=1 )
+  set( vil1_sources ${vil1_sources}
     vil1_jpeglib.h
     file_formats/vil1_jpeg.cxx                  file_formats/vil1_jpeg.h
     file_formats/vil1_jpeg_source_mgr.cxx       file_formats/vil1_jpeg_source_mgr.h
@@ -148,54 +148,54 @@ IF(JPEG_FOUND)
     file_formats/vil1_jpeg_destination_mgr.cxx  file_formats/vil1_jpeg_destination_mgr.h
     file_formats/vil1_jpeg_compressor.cxx       file_formats/vil1_jpeg_compressor.h
   )
-ELSE(JPEG_FOUND)
-  ADD_DEFINITIONS( -DHAS_JPEG=0 )
-ENDIF(JPEG_FOUND)
+else(JPEG_FOUND)
+  add_definitions( -DHAS_JPEG=0 )
+endif(JPEG_FOUND)
 
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
-  ADD_DEFINITIONS( ${TIFF_DEFINITIONS} -DHAS_TIFF=1 )
-  SET( vil1_sources ${vil1_sources}
+if(TIFF_FOUND)
+  include_directories( ${TIFF_INCLUDE_DIR} )
+  add_definitions( ${TIFF_DEFINITIONS} -DHAS_TIFF=1 )
+  set( vil1_sources ${vil1_sources}
     file_formats/vil1_tiff.cxx                  file_formats/vil1_tiff.h
   )
-ELSE(TIFF_FOUND)
-  ADD_DEFINITIONS( -DHAS_TIFF=0 )
-ENDIF(TIFF_FOUND)
+else(TIFF_FOUND)
+  add_definitions( -DHAS_TIFF=0 )
+endif(TIFF_FOUND)
 
-AUX_SOURCE_DIRECTORY(Templates vil1_sources)
+aux_source_directory(Templates vil1_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(vil1_image_as.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(vil1_image_as.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(vil1 ${vil1_sources})
-INSTALL_TARGETS(/lib vil1)
+add_library(vil1 ${vil1_sources})
+install_targets(/lib vil1)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_sources})
 
-IF(JPEG_FOUND)
-  TARGET_LINK_LIBRARIES( vil1 ${JPEG_LIBRARIES} )
-ENDIF(JPEG_FOUND)
-IF(TIFF_FOUND)
-  TARGET_LINK_LIBRARIES( vil1 ${TIFF_LIBRARIES} )
-ENDIF(TIFF_FOUND)
-IF(PNG_FOUND)
-  TARGET_LINK_LIBRARIES( vil1 ${PNG_LIBRARIES} )
-ENDIF(PNG_FOUND)
+if(JPEG_FOUND)
+  target_link_libraries( vil1 ${JPEG_LIBRARIES} )
+endif(JPEG_FOUND)
+if(TIFF_FOUND)
+  target_link_libraries( vil1 ${TIFF_LIBRARIES} )
+endif(TIFF_FOUND)
+if(PNG_FOUND)
+  target_link_libraries( vil1 ${PNG_LIBRARIES} )
+endif(PNG_FOUND)
 
-TARGET_LINK_LIBRARIES( vil1 vcl )
+target_link_libraries( vil1 vcl )
 
-IF (NOT UNIX)
-  TARGET_LINK_LIBRARIES( vil1 ws2_32 )
-ENDIF (NOT UNIX)
+if(NOT UNIX)
+  target_link_libraries( vil1 ws2_32 )
+endif(NOT UNIX)
 
-IF(SOLARIS)
-  TARGET_LINK_LIBRARIES( vil1 nsl vil1_network socket )
-ENDIF(SOLARIS)
+if(SOLARIS)
+  target_link_libraries( vil1 nsl vil1_network socket )
+endif(SOLARIS)
 
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
-IF( BUILD_TESTING )
+endif( BUILD_EXAMPLES )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

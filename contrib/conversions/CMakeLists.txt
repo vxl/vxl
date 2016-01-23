@@ -1,10 +1,10 @@
-PROJECT( conversions )
+project( conversions )
 
-SET( CONVERSIONS_INCLUDE_DIR ${conversions_SOURCE_DIR} CACHE STATIC "Conversions Examples package include files" )
-SET( CONVERSIONS_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/conversions CACHE INTERNAL "Conversions Examples package include files" )
+set( CONVERSIONS_INCLUDE_DIR ${conversions_SOURCE_DIR} CACHE STATIC "Conversions Examples package include files" )
+set( CONVERSIONS_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/conversions CACHE INTERNAL "Conversions Examples package include files" )
 
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${CONVERSIONS_INCLUDE_DIR} )
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${CONVERSIONS_INCLUDE_DIR} )
 
 add_subdirectory(container)
 add_subdirectory(geometry)

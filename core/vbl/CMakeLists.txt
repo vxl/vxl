@@ -6,7 +6,7 @@ doxygen_add_library(core/vbl
   DESCRIPTION "Basic Template Library"
   )
 
-SET( vbl_sources
+set( vbl_sources
   vbl_fwd.h
 
   vbl_bool_ostream.cxx        vbl_bool_ostream.h
@@ -42,18 +42,18 @@ SET( vbl_sources
   vbl_edge.h                  vbl_edge.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vbl_sources)
+aux_source_directory(Templates vbl_sources)
 
-ADD_LIBRARY(vbl ${vbl_sources})
-TARGET_LINK_LIBRARIES( vbl vcl )
+add_library(vbl ${vbl_sources})
+target_link_libraries( vbl vcl )
 
-INSTALL_TARGETS(/lib vbl)
+install_targets(/lib vbl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl ${vbl_sources})
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif( BUILD_EXAMPLES )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

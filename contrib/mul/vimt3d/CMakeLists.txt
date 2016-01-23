@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/vimt3d
   DESCRIPTION "Polymorphic 3D image + transform library"
  )
 
-SET(vimt3d_sources
+set(vimt3d_sources
     vimt3d_transform_3d.h                 vimt3d_transform_3d.cxx
     vimt3d_image_3d_of.h                  vimt3d_image_3d_of.txx
     vimt3d_image_3d.h                     vimt3d_image_3d.cxx
@@ -31,15 +31,15 @@ SET(vimt3d_sources
     vimt3d_sample_transformed_blob.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates vimt3d_sources)
+aux_source_directory(Templates vimt3d_sources)
 
-ADD_LIBRARY(vimt3d ${vimt3d_sources})
-INSTALL_TARGETS(/lib vimt3d)
+add_library(vimt3d ${vimt3d_sources})
+install_targets(/lib vimt3d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt3d ${vimt3d_sources})
-TARGET_LINK_LIBRARIES(vimt3d vil3d_algo vil3d_io vil3d vimt mbl vnl_algo vgl vnl_io vnl vil vsl vul)
+target_link_libraries(vimt3d vil3d_algo vil3d_io vil3d vimt mbl vnl_algo vgl vnl_io vnl vil vsl vul)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif(BUILD_TESTING)
 
 add_subdirectory(tools)

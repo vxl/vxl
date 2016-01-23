@@ -1,8 +1,8 @@
 # basic radiometery library
 
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+  include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-  SET(brad_sources
+  set(brad_sources
       brad_illum_util.h               brad_illum_util.cxx
       brad_illum_cost_function.h
       brad_sun_pos.h                  brad_sun_pos.cxx
@@ -20,17 +20,17 @@
       brad_image_atmospherics_est.h   brad_image_atmospherics_est.cxx
       brad_estimate_shadows.h         brad_estimate_shadows.cxx
      )
-  AUX_SOURCE_DIRECTORY(Templates brad_sources)
-  ADD_LIBRARY(brad ${brad_sources} )
+  aux_source_directory(Templates brad_sources)
+  add_library(brad ${brad_sources} )
 
-  TARGET_LINK_LIBRARIES(brad  bsta vnl_io vnl vgl_algo vgl_io vnl_algo vgl vil vpgl vpgl_algo vbl_io vbl vpl vul )
+  target_link_libraries(brad  bsta vnl_io vnl vgl_algo vgl_io vnl_algo vgl vil vpgl vpgl_algo vbl_io vbl vpl vul )
 
   add_subdirectory(io)
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )
 
-INSTALL_TARGETS(/lib brad)
+install_targets(/lib brad)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad ${brad_sources})

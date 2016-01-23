@@ -1,48 +1,48 @@
 # This is contrib/brl/bseg/bmdl/pro/CMakeLists.txt
 # bmdl's Process Library
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
-IF(ZLIB_FOUND)
-  INCLUDE_DIRECTORIES( ${ZLIB_INCLUDE_DIR} )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p )
-  ADD_DEFINITIONS(-DHAS_ZLIB=1)
-ENDIF(ZLIB_FOUND)
+include( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
+if(ZLIB_FOUND)
+  include_directories( ${ZLIB_INCLUDE_DIR} )
+  include_directories( ${BRL_INCLUDE_DIR}/b3p )
+  add_definitions(-DHAS_ZLIB=1)
+endif(ZLIB_FOUND)
 
 # bprb depends on expat and bmdl_prodepends on bprb primarily
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
-  IF(TIFF_FOUND)
-    INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-    IF(GEOTIFF_FOUND)
-      INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-      INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-      INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-      INCLUDE_DIRECTORIES( ${TIFF_INCLUDE_DIR} )
-      INCLUDE_DIRECTORIES( ${GEOTIFF_INCLUDE_DIR} )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+  if(TIFF_FOUND)
+    include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+    if(GEOTIFF_FOUND)
+      include_directories( ${BRL_INCLUDE_DIR} )
+      include_directories( ${GEL_INCLUDE_DIR}/mrc )
+      include_directories( ${GEL_INCLUDE_DIR} )
+      include_directories( ${TIFF_INCLUDE_DIR} )
+      include_directories( ${GEOTIFF_INCLUDE_DIR} )
 
-      SET(bmdl_pro_sources
+      set(bmdl_pro_sources
           bmdl_processes.h
           bmdl_defs.h
           bmdl_register.h                  bmdl_register.cxx
          )
 
-      AUX_SOURCE_DIRECTORY(Templates bmdl_pro_sources)
-      AUX_SOURCE_DIRECTORY(processes bmdl_pro_sources)
+      aux_source_directory(Templates bmdl_pro_sources)
+      aux_source_directory(processes bmdl_pro_sources)
 
-      ADD_LIBRARY(bmdl_pro ${bmdl_pro_sources})
+      add_library(bmdl_pro ${bmdl_pro_sources})
 
-      TARGET_LINK_LIBRARIES(bmdl_pro bmdl bprb vil vil_io vpgl_file_formats vgl_io
+      target_link_libraries(bmdl_pro bmdl bprb vil vil_io vpgl_file_formats vgl_io
                             vsol brip vpgl_pro vgl vul vpl imesh_algo minizip)
 
-      IF(ZLIB_FOUND)
-         TARGET_LINK_LIBRARIES( bmdl_pro minizip )
-      ENDIF(ZLIB_FOUND)
+      if(ZLIB_FOUND)
+         target_link_libraries( bmdl_pro minizip )
+      endif(ZLIB_FOUND)
 
-      IF( BUILD_TESTING )
+      if( BUILD_TESTING )
         add_subdirectory(tests)
-      ENDIF( BUILD_TESTING )
+      endif( BUILD_TESTING )
 
-    ENDIF(GEOTIFF_FOUND)
-  ENDIF(TIFF_FOUND)
-ENDIF(EXPAT_FOUND)
+    endif(GEOTIFF_FOUND)
+  endif(TIFF_FOUND)
+endif(EXPAT_FOUND)

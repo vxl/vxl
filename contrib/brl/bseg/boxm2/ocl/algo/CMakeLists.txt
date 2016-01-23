@@ -1,8 +1,8 @@
 #depends on OPENCL being found...
-INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-SET(boxm2_ocl_algo_sources
+include_directories( ${OPENCL_INCLUDE_PATH} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR} )
+set(boxm2_ocl_algo_sources
     boxm2_ocl_render_expected_image.h           boxm2_ocl_render_expected_image.cxx
     boxm2_ocl_render_expected_image_function.h  boxm2_ocl_render_expected_image_function.cxx
     boxm2_ocl_camera_converter.h                boxm2_ocl_camera_converter.cxx
@@ -35,13 +35,13 @@ SET(boxm2_ocl_algo_sources
     boxm2_ocl_kernel_vector_filter.h            boxm2_ocl_kernel_vector_filter.cxx
    )
 
-ADD_LIBRARY(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
+add_library(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
+target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )
 
-INSTALL_TARGETS(/lib boxm2_ocl_algo)
+install_targets(/lib boxm2_ocl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/algo ${boxm2_ocl_algo_sources})

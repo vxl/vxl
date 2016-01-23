@@ -7,15 +7,15 @@ doxygen_add_library(contrib/brl/bbas/bgui
   DESCRIPTION "Brown VGUI Augmentation"
  )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${GEL_INCLUDE_DIR} )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-IF(HAS_VGUI)
- SET(bgui_sources
+if(HAS_VGUI)
+ set(bgui_sources
      bgui_vsol_soview2D.cxx            bgui_vsol_soview2D.h
      bgui_vsol2D_tableau.cxx           bgui_vsol2D_tableau.h          bgui_vsol2D_tableau_sptr.h
      bgui_vtol2D_tableau.cxx           bgui_vtol2D_tableau.h          bgui_vtol2D_tableau_sptr.h
@@ -31,19 +31,19 @@ IF(HAS_VGUI)
      bgui_image_utils.cxx              bgui_image_utils.h
     )
 
- AUX_SOURCE_DIRECTORY(Templates bgui_sources)
- ADD_LIBRARY(bgui ${bgui_sources})
- INSTALL_TARGETS(/lib bgui)
+ aux_source_directory(Templates bgui_sources)
+ add_library(bgui ${bgui_sources})
+ install_targets(/lib bgui)
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgui ${bgui_sources})
 
- TARGET_LINK_LIBRARIES(bgui bsta vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vul vbl vcl)
+ target_link_libraries(bgui bsta vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vul vbl vcl)
 
- IF(BUILD_EXAMPLES)
+ if(BUILD_EXAMPLES)
    add_subdirectory(examples)
- ENDIF(BUILD_EXAMPLES)
+ endif(BUILD_EXAMPLES)
 
- IF(BUILD_TESTING)
+ if(BUILD_TESTING)
    add_subdirectory(tests)
- ENDIF(BUILD_TESTING)
+ endif(BUILD_TESTING)
 
-ENDIF(HAS_VGUI)
+endif(HAS_VGUI)

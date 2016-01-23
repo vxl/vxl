@@ -1,30 +1,30 @@
 # brl/bpro/core/vpgl_pro/CMakeLists.txt
 # Brown vpgl processes
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+include_directories( ${GEL_INCLUDE_DIR})
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  include_directories(${EXPAT_INCLUDE_DIRS} )
+  include_directories(${EXPATPP_INCLUDE_DIRS} )
+ endif(EXPATPP_FOUND)
+endif(EXPAT_FOUND)
 
-SET( vpgl_pro_sources
+set( vpgl_pro_sources
   vpgl_processes.h
   vpgl_register.h      vpgl_register.cxx
 )
-AUX_SOURCE_DIRECTORY(Templates vpgl_pro_sources)
-AUX_SOURCE_DIRECTORY(processes vpgl_pro_sources)
+aux_source_directory(Templates vpgl_pro_sources)
+aux_source_directory(processes vpgl_pro_sources)
 
-ADD_LIBRARY(vpgl_pro ${vpgl_pro_sources})
-TARGET_LINK_LIBRARIES(vpgl_pro bprb vsph bpgl bpgl_algo vpgl_io vpgl vpgl_algo vnl vil vgl vbl_io vul bkml brad bbas_pro vsol)
+add_library(vpgl_pro ${vpgl_pro_sources})
+target_link_libraries(vpgl_pro bprb vsph bpgl bpgl_algo vpgl_io vpgl vpgl_algo vnl vil vgl vbl_io vul bkml brad bbas_pro vsol)
 
-INSTALL_TARGETS(/lib vpgl_pro)
+install_targets(/lib vpgl_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/vpgl_pro ${vpgl_pro_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

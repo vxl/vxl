@@ -11,13 +11,13 @@
 #XML Parser
 
 
-OPTION( VXL_FORCE_B3P_EXPAT "Use B3P instead of any native EXPAT library?" NO)
-MARK_AS_ADVANCED( VXL_FORCE_B3P_EXPAT )
+option( VXL_FORCE_B3P_EXPAT "Use B3P instead of any native EXPAT library?" NO)
+mark_as_advanced( VXL_FORCE_B3P_EXPAT )
 add_subdirectory(expat)
 add_subdirectory(expatpp)
 
-OPTION( VXL_FORCE_B3P_SHAPELIB "Use B3P instead of any native SHAPELIB library?" YES)
-MARK_AS_ADVANCED( VXL_FORCE_B3P_SHAPELIB )
+option( VXL_FORCE_B3P_SHAPELIB "Use B3P instead of any native SHAPELIB library?" YES)
+mark_as_advanced( VXL_FORCE_B3P_SHAPELIB )
 add_subdirectory(shapelib)
 
 add_subdirectory(minizip)

@@ -6,7 +6,7 @@ doxygen_add_library(core/vcsl
   DESCRIPTION "Spatial Coordinate Systems and Manipulation"
   )
 
-  SET( vcsl_sources
+  set( vcsl_sources
     vcsl_dimension.h vcsl_dimension_sptr.h
     vcsl_length.cxx vcsl_length.h vcsl_length_sptr.h
 
@@ -60,18 +60,18 @@ doxygen_add_library(core/vcsl
     vcsl_matrix_param.h vcsl_matrix_param_sptr.h
   )
 
-  AUX_SOURCE_DIRECTORY( Templates vcsl_sources )
+  aux_source_directory( Templates vcsl_sources )
 
-  ADD_LIBRARY( vcsl ${vcsl_sources} )
-  TARGET_LINK_LIBRARIES( vcsl vnl vbl )
+  add_library( vcsl ${vcsl_sources} )
+  target_link_libraries( vcsl vnl vbl )
 
-  INSTALL_TARGETS(/lib vcsl)
+  install_targets(/lib vcsl)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vcsl ${vcsl_sources})
 
-  IF( BUILD_EXAMPLES )
+  if( BUILD_EXAMPLES )
     add_subdirectory(examples)
-  ENDIF( BUILD_EXAMPLES )
+  endif( BUILD_EXAMPLES )
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif( BUILD_TESTING )

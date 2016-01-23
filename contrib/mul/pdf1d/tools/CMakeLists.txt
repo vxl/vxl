@@ -4,24 +4,24 @@
 #   Tim Cootes
 #
 
-LINK_LIBRARIES( pdf1d mbl vnl )
+link_libraries( pdf1d mbl vnl )
 
-ADD_EXECUTABLE(
+add_executable(
 pdf1d_test_overlap_pdf test_overlap_pdf.cxx
 )
 
-ADD_EXECUTABLE(
+add_executable(
 compare_kernel_estimates compare_kernel_estimates.cxx
 )
 
-ADD_EXECUTABLE(
+add_executable(
 pdf1d_select_n_mixtures select_n_mixtures.cxx
 )
 
-ADD_EXECUTABLE(
+add_executable(
 select_pdf select_pdf.cxx
 )
 
-ADD_EXECUTABLE(
+add_executable(
 plot_pdf_estimate plot_pdf_estimate.cxx
 )

@@ -1,7 +1,7 @@
 # This is brl/bsta/algo/CMakeLists.txt
 # The Brown Statistics Algorithms Library
 
-SET( bsta_algo_sources
+set( bsta_algo_sources
    bsta_gaussian_stats.h
    bsta_gaussian_updater.h
    bsta_mixture_functors.h
@@ -20,14 +20,14 @@ SET( bsta_algo_sources
    bsta_mvnrand.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates bsta_algo_sources)
+aux_source_directory(Templates bsta_algo_sources)
 
-ADD_LIBRARY( bsta_algo ${bsta_algo_sources} )
-TARGET_LINK_LIBRARIES(bsta_algo bsta vnl_algo vnl vbl)
+add_library( bsta_algo ${bsta_algo_sources} )
+target_link_libraries(bsta_algo bsta vnl_algo vnl vbl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )
 
-INSTALL_TARGETS(/lib bsta_algo)
+install_targets(/lib bsta_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta/algo ${bsta_algo_sources})

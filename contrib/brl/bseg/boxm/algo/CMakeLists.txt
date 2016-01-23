@@ -1,7 +1,7 @@
 # brl/bseg/boxm/algo/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
-SET(boxm_algo_sources
+include_directories( ${MUL_INCLUDE_DIR} )
+include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
+set(boxm_algo_sources
     boxm_compute_scene_statistics.h
     boxm_crop_scene.h
     boxm_fill_in_mesh.h
@@ -19,13 +19,13 @@ SET(boxm_algo_sources
     boxm_scene_levels_utils.h
    )
 
-ADD_LIBRARY(boxm_algo ${boxm_algo_sources})
+add_library(boxm_algo ${boxm_algo_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )
 
-TARGET_LINK_LIBRARIES(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl vgl_algo vgl vnl vul vbl vcl)
+target_link_libraries(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl vgl_algo vgl vnl vul vbl vcl)
 
 #raytracing algorithms
 add_subdirectory(rt)

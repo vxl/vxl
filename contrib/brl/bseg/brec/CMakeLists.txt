@@ -1,21 +1,21 @@
 # This is contrib/brl/bseg/brec/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/ )
-INCLUDE( ${VXL_CMAKE_DIR}/FindTIFF.cmake)
-IF(TIFF_FOUND)
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-  INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-  IF(GEOTIFF_FOUND)
-    INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
-  ENDIF(GEOTIFF_FOUND)
-ENDIF(TIFF_FOUND)
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR} )
+include_directories( ${MUL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/bsta )
+include_directories( ${BRL_INCLUDE_DIR}/bseg/ )
+include( ${VXL_CMAKE_DIR}/FindTIFF.cmake)
+if(TIFF_FOUND)
+  include_directories(${TIFF_INCLUDE_DIR})
+  include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+  if(GEOTIFF_FOUND)
+    include_directories(${GEOTIFF_INCLUDE_DIR})
+  endif(GEOTIFF_FOUND)
+endif(TIFF_FOUND)
 
-SET(brec_sources
+set(brec_sources
     brec_bayesian_propagation.h  brec_bayesian_propagation.cxx
     brec_param_estimation.h  brec_param_estimation.cxx
     brec_fg_bg_pair_density.h  brec_fg_bg_pair_density.cxx
@@ -38,14 +38,14 @@ SET(brec_sources
     brec_part_hierarchy_learner_sptr.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates brec_sources)
+aux_source_directory(Templates brec_sources)
 
-ADD_LIBRARY(brec ${brec_sources})
+add_library(brec ${brec_sources})
 
-TARGET_LINK_LIBRARIES(brec bvxm bbgm bsta_algo bgrl2 bsta bvgl bxml brip vil_algo vgl_algo vnl_algo vnl vgl vil vul vbl_io vbl)
+target_link_libraries(brec bvxm bbgm bsta_algo bgrl2 bsta bvgl bxml brip vil_algo vgl_algo vnl_algo vnl vgl vil vul vbl_io vbl)
 
 add_subdirectory(pro)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

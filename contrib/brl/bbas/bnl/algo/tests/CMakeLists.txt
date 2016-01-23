@@ -1,7 +1,7 @@
 # brl/bbas/bnl/algo/tests/CMakeLists.txt
 # Tests for bnl_algo library
 
-ADD_EXECUTABLE ( bnl_algo_test_all
+add_executable( bnl_algo_test_all
    # Driver source and utilities
    test_driver.cxx
 
@@ -10,10 +10,10 @@ ADD_EXECUTABLE ( bnl_algo_test_all
    test_fresnel.cxx
 )
 
-TARGET_LINK_LIBRARIES( bnl_algo_test_all bnl_algo vnl testlib )
+target_link_libraries( bnl_algo_test_all bnl_algo vnl testlib )
 
-ADD_TEST( NAME bnl_algo_test_legendre_polynomial COMMAND $<TARGET_FILE:bnl_algo_test_all> test_legendre_polynomial)
-ADD_TEST( NAME bnl_test_fresnel COMMAND $<TARGET_FILE:bnl_algo_test_all> test_fresnel )
+add_test( NAME bnl_algo_test_legendre_polynomial COMMAND $<TARGET_FILE:bnl_algo_test_all> test_legendre_polynomial)
+add_test( NAME bnl_test_fresnel COMMAND $<TARGET_FILE:bnl_algo_test_all> test_fresnel )
 
-ADD_EXECUTABLE( bnl_algo_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bnl_algo_test_include bnl_algo )
+add_executable( bnl_algo_test_include test_include.cxx )
+target_link_libraries( bnl_algo_test_include bnl_algo )

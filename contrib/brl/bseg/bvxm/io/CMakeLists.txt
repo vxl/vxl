@@ -1,15 +1,15 @@
 # contrib/brl/bseg/bvxm/io/CMakeLists.txt
 
-SET(bvxm_io_sources
+set(bvxm_io_sources
     bvxm_io_voxel_world.h  bvxm_io_voxel_world.cxx
     bvxm_io_world_params.h bvxm_io_world_params.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates bvxm_io_sources)
+aux_source_directory(Templates bvxm_io_sources)
 
-ADD_LIBRARY(bvxm_io ${bvxm_io_sources})
-TARGET_LINK_LIBRARIES(bvxm_io bvxm vsl vbl vil vil_io vbl_io)
+add_library(bvxm_io ${bvxm_io_sources})
+target_link_libraries(bvxm_io bvxm vsl vbl vil vil_io vbl_io)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

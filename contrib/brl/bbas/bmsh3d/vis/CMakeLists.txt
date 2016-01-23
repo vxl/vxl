@@ -1,13 +1,13 @@
 # 3D application
 # bbas/bmsh3d/vis/CMakeLists.txt
 
-INCLUDE( ${VXL_CMAKE_DIR}/UseBGUI3D.cmake )
+include( ${VXL_CMAKE_DIR}/UseBGUI3D.cmake )
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR} )
 
-IF (HAS_BGUI3D)
+if(HAS_BGUI3D)
 
-SET(bmsh3d_vis_sources
+set(bmsh3d_vis_sources
     bmsh3d_vis_utils.cxx        bmsh3d_vis_utils.h
     bmsh3d_vis_backpt.cxx       bmsh3d_vis_backpt.h
     bmsh3d_vis_vertex.cxx       bmsh3d_vis_vertex.h
@@ -16,9 +16,9 @@ SET(bmsh3d_vis_sources
     bmsh3d_vis_mesh.cxx         bmsh3d_vis_mesh.h
    )
 
-ADD_LIBRARY(bmsh3d_vis ${bmsh3d_vis_sources})
-TARGET_LINK_LIBRARIES( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro vnl vgl vul )
+add_library(bmsh3d_vis ${bmsh3d_vis_sources})
+target_link_libraries( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro vnl vgl vul )
 
 add_subdirectory(tests)
 
-ENDIF (HAS_BGUI3D)
+endif(HAS_BGUI3D)

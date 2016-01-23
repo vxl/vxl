@@ -1,21 +1,21 @@
-PROJECT( tbl )
+project( tbl )
 
 doxygen_add_book(contrib/tbl "The Image Processing Library")
 
 doxygen_add_package(contrib/tbl "Image Processing Libraries")
 
-SET( TBL_INCLUDE_DIR ${tbl_SOURCE_DIR} CACHE STATIC "TB package include files" )
-SET( TBL_INSTALL_INCLUDE_DIR
+set( TBL_INCLUDE_DIR ${tbl_SOURCE_DIR} CACHE STATIC "TB package include files" )
+set( TBL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/tbl
   CACHE INTERNAL "TB package include files"
 )
 
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${TBL_INCLUDE_DIR})
+include_directories(${VXLCORE_INCLUDE_DIR})
+include_directories(${TBL_INCLUDE_DIR})
 
 add_subdirectory(vipl)
 # Although this is the "image processing" library, it does not (necessary) depend on vil!
 # vil-specific implementations are in the "vepl" specialisation library,
-IF (BUILD_CORE_IMAGING)
+if(BUILD_CORE_IMAGING)
   add_subdirectory(vepl)
-ENDIF (BUILD_CORE_IMAGING)
+endif(BUILD_CORE_IMAGING)

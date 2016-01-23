@@ -1,6 +1,6 @@
 # prip/vdtop/CMakeLists.txt
 
-SET(vdtop_sources
+set(vdtop_sources
     vdtop_export.h
     vdtop_4_lower_homotopic_kernel.h
     vdtop_4_lower_leveling_kernel.h
@@ -26,11 +26,11 @@ SET(vdtop_sources
     vil_canny_deriche_grad_filter.h
 )
 
-ADD_LIBRARY(vdtop ${vdtop_sources})
-INSTALL_TARGETS(/lib vdtop)
+add_library(vdtop ${vdtop_sources})
+install_targets(/lib vdtop)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vdtop ${vdtop_sources})
-TARGET_LINK_LIBRARIES(vdtop vmap vil)
+target_link_libraries(vdtop vmap vil)
 
-#IF (BUILD_TESTING)
+#if(BUILD_TESTING)
   add_subdirectory(tests)
-#ENDIF (BUILD_TESTING)
+#endif(BUILD_TESTING)

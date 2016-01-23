@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( boxm2_multi_algo_tests_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boxm2_multi_algo_tests_include boxm2_multi_algo )
+add_executable( boxm2_multi_algo_tests_include test_include.cxx )
+target_link_libraries( boxm2_multi_algo_tests_include boxm2_multi_algo )

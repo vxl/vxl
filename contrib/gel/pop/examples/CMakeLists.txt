@@ -1,9 +1,9 @@
 # gel/pop/examples/CMakeLists.txt
 
-IF( WIN32 )
-  ADD_DEFINITIONS( -D_AFXDLL )
-  SET( CMAKE_MFC_FLAG 6 )
-ENDIF( WIN32 )
+if( WIN32 )
+  add_definitions( -D_AFXDLL )
+  set( CMAKE_MFC_FLAG 6 )
+endif( WIN32 )
 
-ADD_EXECUTABLE( pop_simple_exec pop_simple_exec.cxx )
-TARGET_LINK_LIBRARIES( pop_simple_exec pop)
+add_executable( pop_simple_exec pop_simple_exec.cxx )
+target_link_libraries( pop_simple_exec pop)

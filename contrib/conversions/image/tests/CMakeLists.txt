@@ -1,29 +1,29 @@
-LINK_LIBRARIES( vil1 vpl vul vbl testlib )
+link_libraries( vil1 vpl vul vbl testlib )
 
-SET(HAS_IMAGE "NO")
-IF(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
-  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/Image)
-  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/COOL)
-  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/Numerics)
-  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/GeneralUtility)
-  LINK_LIBRARIES( ImageClasses Basics Numerics )
-  SET(HAS_IMAGE "YES")
-ENDIF(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
+set(HAS_IMAGE "NO")
+if(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
+  include_directories(${vxl_SOURCE_DIR}/Image)
+  include_directories(${vxl_SOURCE_DIR}/COOL)
+  include_directories(${vxl_SOURCE_DIR}/Numerics)
+  include_directories(${vxl_SOURCE_DIR}/GeneralUtility)
+  link_libraries( ImageClasses Basics Numerics )
+  set(HAS_IMAGE "YES")
+endif(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
 
-IF(HAS_IMAGE)
-  ADD_DEFINITIONS(-DHAS_IMAGE=1)
-ELSE(HAS_IMAGE)
-  ADD_DEFINITIONS(-DHAS_NO_IMAGE=1)
-ENDIF(HAS_IMAGE)
+if(HAS_IMAGE)
+  add_definitions(-DHAS_IMAGE=1)
+else(HAS_IMAGE)
+  add_definitions(-DHAS_NO_IMAGE=1)
+endif(HAS_IMAGE)
 
-ADD_EXECUTABLE( conversions_image_test_all
+add_executable( conversions_image_test_all
   test_driver.cxx
 
   test_vil1_vbl_conversions.cxx
   test_image_conversions.cxx
 )
 
-ADD_TEST( NAME conversions_test_vil1_vbl_conversions COMMAND $<TARGET_FILE:conversions_image_test_all> test_vil1_vbl_conversions )
-ADD_TEST( NAME conversions_test_image_conversions COMMAND $<TARGET_FILE:conversions_image_test_all> test_image_conversions )
+add_test( NAME conversions_test_vil1_vbl_conversions COMMAND $<TARGET_FILE:conversions_image_test_all> test_vil1_vbl_conversions )
+add_test( NAME conversions_test_image_conversions COMMAND $<TARGET_FILE:conversions_image_test_all> test_image_conversions )
 
-ADD_EXECUTABLE( conversions_image_test_include test_include.cxx )
+add_executable( conversions_image_test_include test_include.cxx )

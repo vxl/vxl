@@ -5,46 +5,46 @@
 
 # header to tell test_build_info values of vxl_BUILD_DIR, BUILD_NAME,
 # and SITE from CMake
-CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
                 ${CMAKE_CURRENT_BINARY_DIR}/test_build_info.h
                 @ONLY IMMEDIATE)
 
 # needed for generated test_build_info.h
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 # these defines are set (possibly) so the core_test_config test can
 # report whether CMake has set these CMake variables
-IF( UNIX )
-  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_UNIX )
-ENDIF( UNIX )
-IF( CYGWIN )
-  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_CYGWIN )
-ENDIF( CYGWIN )
-IF( MINGW )
-  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_MINGW )
-ENDIF( MINGW )
-IF( WIN32 )
-  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_WIN32 )
-ENDIF( WIN32 )
-IF( APPLE )
-  ADD_DEFINITIONS( -DCMAKE_DEFINES_VARIABLE_APPLE )
-ENDIF( APPLE )
+if( UNIX )
+  add_definitions( -DCMAKE_DEFINES_VARIABLE_UNIX )
+endif( UNIX )
+if( CYGWIN )
+  add_definitions( -DCMAKE_DEFINES_VARIABLE_CYGWIN )
+endif( CYGWIN )
+if( MINGW )
+  add_definitions( -DCMAKE_DEFINES_VARIABLE_MINGW )
+endif( MINGW )
+if( WIN32 )
+  add_definitions( -DCMAKE_DEFINES_VARIABLE_WIN32 )
+endif( WIN32 )
+if( APPLE )
+  add_definitions( -DCMAKE_DEFINES_VARIABLE_APPLE )
+endif( APPLE )
 
-ADD_EXECUTABLE( core_test_all
+add_executable( core_test_all
   test_driver.cxx
   test_config.cxx
   test_build_info.cxx test_build_info.h.in
 )
-TARGET_LINK_LIBRARIES( core_test_all testlib vcl )
+target_link_libraries( core_test_all testlib vcl )
 
-ADD_EXECUTABLE( vxl_test_include test_include.cxx )
+add_executable( vxl_test_include test_include.cxx )
 
-ADD_TEST( NAME core_test_config COMMAND $<TARGET_FILE:core_test_all> test_config )
-ADD_TEST( NAME core_test_build_info COMMAND $<TARGET_FILE:core_test_all> test_build_info )
+add_test( NAME core_test_config COMMAND $<TARGET_FILE:core_test_all> test_config )
+add_test( NAME core_test_build_info COMMAND $<TARGET_FILE:core_test_all> test_build_info )
 
 # a simple Dart notes file, in case test_build_info fails
-IF( COMMAND WRITE_FILE )
-  WRITE_FILE(
+if( COMMAND WRITE_FILE )
+  write_file(
     "${vxl_BINARY_DIR}/Testing/HTML/TestingResults/Sites/${SITE}/${BUILDNAME}/BuildNameNotes.xml"
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     "<Site BuildName=\"${BUILDNAME}\" Name=\"${SITE}\">\n"
@@ -67,27 +67,27 @@ IF( COMMAND WRITE_FILE )
     "</BuildNameNotes>\n"
     "</Site>\n"
   )
-ENDIF( COMMAND WRITE_FILE )
+endif( COMMAND WRITE_FILE )
 
-ADD_EXECUTABLE( vxl_echo vxl_echo.cxx )
-TARGET_LINK_LIBRARIES( vxl_echo vcl )
-
-
-# Deal with unavailablility of FILE(TO_CMAKE_PATH ...)
-SET( MYMAKECOMMAND ${MAKECOMMAND})
-
-IF (CMAKE_MAJOR_VERSION GREATER 2)
- FILE(TO_CMAKE_PATH ${MAKECOMMAND} MYMAKECOMMAND)
-ENDIF (CMAKE_MAJOR_VERSION GREATER 2)
-
-IF (CMAKE_MAJOR_VERSION EQUAL 2)
-  IF (CMAKE_MINOR_VERSION  GREATER 3)
-     FILE(TO_CMAKE_PATH ${MAKECOMMAND} MYMAKECOMMAND)
-  ENDIF (CMAKE_MINOR_VERSION  GREATER 3)
-ENDIF (CMAKE_MAJOR_VERSION EQUAL 2)
+add_executable( vxl_echo vxl_echo.cxx )
+target_link_libraries( vxl_echo vcl )
 
 
-ADD_TEST( NAME cmake_config COMMAND $<TARGET_FILE:vxl_echo> nl
+# Deal with unavailablility of file(TO_CMAKE_PATH ...)
+set( MYMAKECOMMAND ${MAKECOMMAND})
+
+if(CMAKE_MAJOR_VERSION GREATER 2)
+ file(TO_CMAKE_PATH ${MAKECOMMAND} MYMAKECOMMAND)
+endif(CMAKE_MAJOR_VERSION GREATER 2)
+
+if(CMAKE_MAJOR_VERSION EQUAL 2)
+  if(CMAKE_MINOR_VERSION  GREATER 3)
+     file(TO_CMAKE_PATH ${MAKECOMMAND} MYMAKECOMMAND)
+  endif(CMAKE_MINOR_VERSION  GREATER 3)
+endif(CMAKE_MAJOR_VERSION EQUAL 2)
+
+
+add_test( NAME cmake_config COMMAND $<TARGET_FILE:vxl_echo> nl
           MAKECOMMAND: ${MYMAKECOMMAND} nl
           CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS} nl
           CMAKE_C_FLAGS: ${CMAKE_C_FLAGS} nl

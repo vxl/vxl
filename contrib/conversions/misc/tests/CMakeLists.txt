@@ -1,3 +1,3 @@
-LINK_LIBRARIES( testlib )
+link_libraries( testlib )
 
-ADD_EXECUTABLE( conversions_misc_test_include test_include.cxx )
+add_executable( conversions_misc_test_include test_include.cxx )
