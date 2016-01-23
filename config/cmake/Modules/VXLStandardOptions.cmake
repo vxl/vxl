@@ -3,7 +3,7 @@
 # This CMake module is included by vxl/CMakeLists.txt.  It adds
 # several vxl-standard testing and build options to the project:
 #
-#  BUILD_SHARED_LIBS
+#  VXL_BUILD_SHARED_LIBS
 #  BUILD_TESTING
 #  BUILD_EXAMPLES
 #  WARN_DEPRECATED
@@ -24,9 +24,9 @@
 INCLUDE(CTest)
 
 IF( WIN32 )
-  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
+  OPTION( VXL_BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
 ELSE( WIN32 )
-  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
+  OPTION( VXL_BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
 ENDIF( WIN32 )
 
 SET( SOLARIS 0 )
