@@ -1,20 +1,20 @@
 # contrib/brl/bseg/boxm/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
-SET(bstm_basic_sources
+set(bstm_basic_sources
     bstm_block_id.h      bstm_block_id.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates bstm_basic_sources)
+aux_source_directory(Templates bstm_basic_sources)
 
-ADD_LIBRARY(bstm_basic  ${bstm_basic_sources})
-TARGET_LINK_LIBRARIES(bstm_basic vcl)
+add_library(bstm_basic  ${bstm_basic_sources})
+target_link_libraries(bstm_basic vcl)
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib bstm_basic)
+install_targets(/lib bstm_basic)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/basic ${bstm_basic_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

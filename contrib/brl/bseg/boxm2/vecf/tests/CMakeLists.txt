@@ -1,4 +1,4 @@
-ADD_EXECUTABLE( boxm2_vecf_test_all
+add_executable( boxm2_vecf_test_all
   test_driver.cxx
   test_eye.cxx
   test_orbit.cxx
@@ -8,21 +8,21 @@ ADD_EXECUTABLE( boxm2_vecf_test_all
   test_mandible.cxx
   test_cranium.cxx
  )
-TARGET_LINK_LIBRARIES(boxm2_vecf_test_all testlib  boxm2_vecf brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )
+target_link_libraries(boxm2_vecf_test_all testlib  boxm2_vecf brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )
 
 ##- #depends on OPENCL being found...
-##- INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-##- IF(OPENCL_FOUND)
+##- include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+##- if(OPENCL_FOUND)
 
-ADD_TEST( NAME boxm2_vecf_test_eye COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_eye  )
-ADD_TEST( NAME boxm2_vecf_test_orbit COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_orbit  )
-ADD_TEST( NAME boxm2_vecf_test_fit_orbit COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_fit_orbit  )
-ADD_TEST( NAME boxm2_vecf_test_fit_margin COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_fit_margin  )
-ADD_TEST( NAME boxm2_vecf_test_pc_viewer COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_pc_viewer  )
-ADD_TEST( NAME boxm2_vecf_test_mandible COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_mandible  )
-ADD_TEST( NAME boxm2_vecf_test_cranium COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_cranium  )
+add_test( NAME boxm2_vecf_test_eye COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_eye  )
+add_test( NAME boxm2_vecf_test_orbit COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_orbit  )
+add_test( NAME boxm2_vecf_test_fit_orbit COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_fit_orbit  )
+add_test( NAME boxm2_vecf_test_fit_margin COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_fit_margin  )
+add_test( NAME boxm2_vecf_test_pc_viewer COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_pc_viewer  )
+add_test( NAME boxm2_vecf_test_mandible COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_mandible  )
+add_test( NAME boxm2_vecf_test_cranium COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_cranium  )
 
-#ADD_EXECUTABLE( boxm2_vecf_test_include test_include.cxx )
-#TARGET_LINK_LIBRARIES( boxm2_vecf_test_include boxm2_vecf )
+#add_executable( boxm2_vecf_test_include test_include.cxx )
+#target_link_libraries( boxm2_vecf_test_include boxm2_vecf )
 
-##- ENDIF(OPENCL_FOUND)
+##- endif(OPENCL_FOUND)

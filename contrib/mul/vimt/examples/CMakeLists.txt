@@ -1,10 +1,10 @@
 # mul/vimt/examples/CMakeLists.txt
 
-LINK_LIBRARIES( vimt_algo vimt vnl vil vgl vul )
+link_libraries( vimt_algo vimt vnl vil vgl vul )
 
-ADD_EXECUTABLE( vimt_example1 example1.cxx )
-ADD_EXECUTABLE( vimt_example2 example2.cxx )
-ADD_EXECUTABLE( vimt_example3 example3.cxx )
-ADD_EXECUTABLE( vimt_example4 example4.cxx )
-ADD_EXECUTABLE( make_dog_pyramid make_dog_pyramid.cxx )
-ADD_EXECUTABLE( vimt_rotate_image rotate_image.cxx )
+add_executable( vimt_example1 example1.cxx )
+add_executable( vimt_example2 example2.cxx )
+add_executable( vimt_example3 example3.cxx )
+add_executable( vimt_example4 example4.cxx )
+add_executable( make_dog_pyramid make_dog_pyramid.cxx )
+add_executable( vimt_rotate_image rotate_image.cxx )

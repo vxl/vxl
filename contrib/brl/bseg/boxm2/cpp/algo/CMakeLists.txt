@@ -1,8 +1,8 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply)
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${MUL_INCLUDE_DIR} )
+include_directories( ${VTHREEP_INCLUDE_DIR}/rply)
 
-SET(boxm2_cpp_algo_sources
+set(boxm2_cpp_algo_sources
     boxm2_cast_ray_function.h
     boxm2_cast_cone_ray_function.h   #boxm2_cast_adaptive_cone_ray_function.h
     boxm2_render_functions.h          boxm2_render_functions.cxx
@@ -54,12 +54,12 @@ SET(boxm2_cpp_algo_sources
     boxm2_surface_distance_refine.h boxm2_surface_distance_refine.txx
     boxm2_refine_block_multi_data.h  boxm2_refine_block_multi_data.cxx
    )
-AUX_SOURCE_DIRECTORY(Templates boxm2_cpp_algo_sources)
+aux_source_directory(Templates boxm2_cpp_algo_sources)
 
-ADD_LIBRARY(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
-TARGET_LINK_LIBRARIES(boxm2_cpp_algo
+add_library(boxm2_cpp_algo  ${boxm2_cpp_algo_sources})
+target_link_libraries(boxm2_cpp_algo
                       boxm2_cpp brad boct brdb expatpp vpgl bvgl imesh imesh_algo bsta_algo bsta vil_algo vil vgl_xio vgl vnl_algo vnl vul vbl_io vbl vsl vcl bvpl rply)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif(BUILD_TESTING)

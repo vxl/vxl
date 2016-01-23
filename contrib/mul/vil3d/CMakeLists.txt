@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/vil3d
   DESCRIPTION "3D image library"
   )
 
-SET(vil3d_sources
+set(vil3d_sources
     vil3d_property.h
     vil3d_image_view_base.h
     vil3d_image_view.h               vil3d_image_view.txx
@@ -46,18 +46,18 @@ SET(vil3d_sources
     file_formats/vil3d_gen_synthetic.h      file_formats/vil3d_gen_synthetic.cxx
     file_formats/vil3d_meta_image_format.h  file_formats/vil3d_meta_image_format.cxx
 )
-AUX_SOURCE_DIRECTORY(Templates vil3d_sources)
+aux_source_directory(Templates vil3d_sources)
 
-ADD_LIBRARY(vil3d ${vil3d_sources})
-TARGET_LINK_LIBRARIES( vil3d vil vul vsl vcl vnl )
+add_library(vil3d ${vil3d_sources})
+target_link_libraries( vil3d vil vul vsl vcl vnl )
 
-INSTALL_TARGETS(/lib vil3d)
+install_targets(/lib vil3d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d ${vil3d_sources})
 
 add_subdirectory(algo)
 add_subdirectory(io)
 add_subdirectory(tools)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

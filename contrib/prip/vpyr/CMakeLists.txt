@@ -1,6 +1,6 @@
 # prip/vpyr/CMakeLists.txt
 
-SET(vpyr_sources
+set(vpyr_sources
 
     # 2-pyramid
 
@@ -22,15 +22,15 @@ SET(vpyr_sources
    vpyr_top_tmap.txx             vpyr_top_tmap.h
 )
 
-ADD_LIBRARY(vpyr ${vpyr_sources})
-INSTALL_TARGETS(/lib vpyr)
+add_library(vpyr ${vpyr_sources})
+install_targets(/lib vpyr)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vpyr ${vpyr_sources})
-TARGET_LINK_LIBRARIES(vpyr vmap)
+target_link_libraries(vpyr vmap)
 
-#IF (BUILD_EXAMPLES)
+#if(BUILD_EXAMPLES)
   add_subdirectory(examples/simple_segmentation)
-#ENDIF (BUILD_EXAMPLES)
+#endif(BUILD_EXAMPLES)
 
-#IF (BUILD_TESTING)
+#if(BUILD_TESTING)
   add_subdirectory(tests)
-#ENDIF (BUILD_TESTING)
+#endif(BUILD_TESTING)

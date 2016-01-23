@@ -1,2 +1,2 @@
-ADD_EXECUTABLE(expat_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( expat_test_include expat )
+add_executable(expat_test_include test_include.cxx )
+target_link_libraries( expat_test_include expat )

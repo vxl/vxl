@@ -1,18 +1,18 @@
 # This brl/bbas/bugl/tests/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR} )
 
-ADD_EXECUTABLE ( bugl_test_all
+add_executable( bugl_test_all
   test_driver.cxx
   test_bugl.cxx
   test_random_transform_set_2d.cxx
 )
-TARGET_LINK_LIBRARIES( bugl_test_all bugl vgl_algo vgl vnl testlib )
+target_link_libraries( bugl_test_all bugl vgl_algo vgl vnl testlib )
 
-ADD_TEST( NAME bugl_test_bugl COMMAND $<TARGET_FILE:bugl_test_all> test_bugl)
-ADD_TEST( NAME bugl_test_random_transform_2d COMMAND $<TARGET_FILE:bugl_test_all> test_random_transform_set_2d)
+add_test( NAME bugl_test_bugl COMMAND $<TARGET_FILE:bugl_test_all> test_bugl)
+add_test( NAME bugl_test_random_transform_2d COMMAND $<TARGET_FILE:bugl_test_all> test_random_transform_set_2d)
 
-ADD_EXECUTABLE( bugl_test_include test_include.cxx)
-TARGET_LINK_LIBRARIES( bugl_test_include bugl)
-ADD_EXECUTABLE( bugl_test_template_include test_template_include.cxx)
-TARGET_LINK_LIBRARIES( bugl_test_template_include bugl)
+add_executable( bugl_test_include test_include.cxx)
+target_link_libraries( bugl_test_include bugl)
+add_executable( bugl_test_template_include test_template_include.cxx)
+target_link_libraries( bugl_test_template_include bugl)

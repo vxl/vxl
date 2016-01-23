@@ -6,17 +6,17 @@ doxygen_add_library(contrib/mul/mbl
   DESCRIPTION "Manchester's Basics Library"
   )
 
-SET( VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT  CACHE PATH "Where to store historical measurements")
-MARK_AS_ADVANCED(VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT)
+set( VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT  CACHE PATH "Where to store historical measurements")
+mark_as_advanced(VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT)
 
 # Set up mbl_config.h for VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT, etc.
-CONFIGURE_FILE(
+configure_file(
   ${vxl_SOURCE_DIR}/contrib/mul/mbl/mbl_config.h.in
   ${vxl_BINARY_DIR}/contrib/mul/mbl/mbl_config.h ESCAPE_QUOTES
 )
-INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/mul )
+include_directories( ${vxl_BINARY_DIR}/contrib/mul )
 
-SET(mbl_sources
+set(mbl_sources
   mbl_config.h.in
 
   mbl_add_all_loaders.cxx               mbl_add_all_loaders.h
@@ -114,23 +114,23 @@ SET(mbl_sources
   mbl_eps_writer.cxx                   mbl_eps_writer.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates mbl_sources)
+aux_source_directory(Templates mbl_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(mbl ${mbl_sources})
-TARGET_LINK_LIBRARIES(mbl vnl_io vnl_algo vgl_io vgl vbl_io vil_io vsl vnl vil vul vbl)
+add_library(mbl ${mbl_sources})
+target_link_libraries(mbl vnl_io vnl_algo vgl_io vgl vbl_io vil_io vsl vnl vil vul vbl)
 
-INSTALL_TARGETS(/lib mbl)
+install_targets(/lib mbl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif(BUILD_TESTING)
 
-IF (BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
   add_subdirectory(examples)
-ENDIF (BUILD_MUL_TOOLS)
+endif(BUILD_MUL_TOOLS)

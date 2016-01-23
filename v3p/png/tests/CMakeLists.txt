@@ -1,16 +1,16 @@
-INCLUDE(${VXL_CMAKE_DIR}/FindPNG.cmake)
+include(${VXL_CMAKE_DIR}/FindPNG.cmake)
 
-INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIR})
-IF (UNIX)
-  LINK_LIBRARIES(m)
-ENDIF (UNIX)
-ADD_DEFINITIONS(${PNG_DEFINITIONS} -DPNG_FREESTANDING_TESTS)
+include_directories(${PNG_INCLUDE_DIR})
+if(UNIX)
+  link_libraries(m)
+endif(UNIX)
+add_definitions(${PNG_DEFINITIONS} -DPNG_FREESTANDING_TESTS)
 
-ADD_EXECUTABLE(pngtest pngtest.c)
-TARGET_LINK_LIBRARIES(pngtest ${PNG_LIBRARIES})
+add_executable(pngtest pngtest.c)
+target_link_libraries(pngtest ${PNG_LIBRARIES})
 
-ADD_EXECUTABLE(pngvalid pngvalid.c)
-TARGET_LINK_LIBRARIES(pngvalid ${PNG_LIBRARIES})
+add_executable(pngvalid pngvalid.c)
+target_link_libraries(pngvalid ${PNG_LIBRARIES})
 
-ADD_TEST( NAME pngtest COMMAND $<TARGET_FILE:pngtest> ${CMAKE_CURRENT_SOURCE_DIR}/pngtest.png)
-ADD_TEST( NAME pngvalid COMMAND $<TARGET_FILE:pngvalid> )
+add_test( NAME pngtest COMMAND $<TARGET_FILE:pngtest> ${CMAKE_CURRENT_SOURCE_DIR}/pngtest.png)
+add_test( NAME pngvalid COMMAND $<TARGET_FILE:pngvalid> )

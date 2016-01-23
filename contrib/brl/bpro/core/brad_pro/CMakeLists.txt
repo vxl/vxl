@@ -1,25 +1,25 @@
 # brad's Process Library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-SET(brad_pro_sources
+set(brad_pro_sources
     brad_processes.h
     brad_register.h   brad_register.cxx
 )
-AUX_SOURCE_DIRECTORY(Templates brad_pro_sources)
-AUX_SOURCE_DIRECTORY(processes brad_pro_sources)
+aux_source_directory(Templates brad_pro_sources)
+aux_source_directory(processes brad_pro_sources)
 
-ADD_LIBRARY(brad_pro ${brad_pro_sources} )
+add_library(brad_pro ${brad_pro_sources} )
 
-TARGET_LINK_LIBRARIES(brad_pro brad_io brad bprb brdb brip vbl_io vbl vil_pro)
+target_link_libraries(brad_pro brad_io brad bprb brdb brip vbl_io vbl vil_pro)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )
 
-INSTALL_TARGETS(/lib brad_pro)
+install_targets(/lib brad_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/brad_pro ${brad_pro_sources})

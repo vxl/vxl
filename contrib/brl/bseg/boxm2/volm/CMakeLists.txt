@@ -1,23 +1,23 @@
 # This is contrib/brl/bseg/boxm2/volm/CMakeLists
 # volm depends on bkml and expat
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  IF(EXPATPP_FOUND)
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  if(EXPATPP_FOUND)
     #depends on OPENCL being found...
-    INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-    IF(OPENCL_FOUND)
-    ADD_DEFINITIONS(-DHAS_OPENCL=1)
-    INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-    ENDIF(OPENCL_FOUND)
+    include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+    if(OPENCL_FOUND)
+    add_definitions(-DHAS_OPENCL=1)
+    include_directories( ${OPENCL_INCLUDE_PATH} )
+    endif(OPENCL_FOUND)
 
     # contrib/brl/bseg/boxm2/volm/CMakeLists.txt
-    INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-    INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+    include_directories( ${GEL_INCLUDE_DIR} )
+    include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-    INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+    include_directories( ${BRL_INCLUDE_DIR}/bbas )
+    include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
-    SET(boxm2_volm_sources
+    set(boxm2_volm_sources
         boxm2_volm_locations.h boxm2_volm_locations.cxx
         boxm2_volm_locations_sptr.h
         boxm2_volm_wr3db_index.h        boxm2_volm_wr3db_index.cxx
@@ -25,29 +25,29 @@ IF(EXPAT_FOUND)
         boxm2_volm_matcher_p0.h         boxm2_volm_matcher_p0.cxx
        )
 
-    IF(OPENCL_FOUND)
-    SET(boxm2_volm_sources ${boxm2_volm_sources}
+    if(OPENCL_FOUND)
+    set(boxm2_volm_sources ${boxm2_volm_sources}
         boxm2_volm_matcher_p1.h         boxm2_volm_matcher_p1.cxx
        )
-    ENDIF(OPENCL_FOUND)
+    endif(OPENCL_FOUND)
 
-    AUX_SOURCE_DIRECTORY(Templates boxm2_volm_sources)
+    aux_source_directory(Templates boxm2_volm_sources)
 
-    ADD_LIBRARY(boxm2_volm ${boxm2_volm_sources})
-    TARGET_LINK_LIBRARIES(boxm2_volm boxm2 boxm2_io brip baio vpgl volm vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
-    IF(OPENCL_FOUND)
-    TARGET_LINK_LIBRARIES(boxm2_volm bocl)
-    ENDIF(OPENCL_FOUND)
+    add_library(boxm2_volm ${boxm2_volm_sources})
+    target_link_libraries(boxm2_volm boxm2 boxm2_io brip baio vpgl volm vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
+    if(OPENCL_FOUND)
+    target_link_libraries(boxm2_volm bocl)
+    endif(OPENCL_FOUND)
 
     #install the .h .txx and libs
-    INSTALL_TARGETS(/lib boxm2_volm)
+    install_targets(/lib boxm2_volm)
     INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_volm/ ${boxm2_volm_sources})
 
     add_subdirectory(io)
 
-    IF( BUILD_TESTING )
+    if( BUILD_TESTING )
       add_subdirectory(tests)
-    ENDIF( BUILD_TESTING )
+    endif( BUILD_TESTING )
 
     add_subdirectory(exe)
 
@@ -59,5 +59,5 @@ IF(EXPAT_FOUND)
 
     #conf matcher
     add_subdirectory(conf)
-  ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+  endif(EXPATPP_FOUND)
+endif(EXPAT_FOUND)

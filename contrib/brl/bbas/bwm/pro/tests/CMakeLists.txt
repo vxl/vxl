@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( bwm_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bwm_pro_test_include bwm_pro)
+add_executable( bwm_pro_test_include test_include.cxx )
+target_link_libraries( bwm_pro_test_include bwm_pro)

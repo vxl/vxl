@@ -1,19 +1,19 @@
 # ./mul/CMakeLists.txt
 
-PROJECT( mul )
+project( mul )
 
 doxygen_add_book(contrib/mul
   "Manchester University Library overview documentation")
 
 doxygen_add_package(contrib/mul "Manchester University Libraries")
 
-SET( VXL_MUL_INCLUDE_DIR ${mul_SOURCE_DIR} CACHE STATIC "Manchester University package include files" )
-SET( MUL_INCLUDE_DIR ${VXL_MUL_INCLUDE_DIR} CACHE STATIC "Deprecated variable giving Manchester University package include files" )
-SET( MUL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/mul CACHE INTERNAL "Manchester University package includes install path" )
+set( VXL_MUL_INCLUDE_DIR ${mul_SOURCE_DIR} CACHE STATIC "Manchester University package include files" )
+set( MUL_INCLUDE_DIR ${VXL_MUL_INCLUDE_DIR} CACHE STATIC "Deprecated variable giving Manchester University package include files" )
+set( MUL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/mul CACHE INTERNAL "Manchester University package includes install path" )
 
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${VXL_MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/mul )
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${VXL_MUL_INCLUDE_DIR} )
+include_directories( ${vxl_BINARY_DIR}/contrib/mul )
 
 
 add_subdirectory(mbl)
@@ -36,6 +36,6 @@ add_subdirectory(mfpf)
 add_subdirectory(fhs)
 
 
-IF ( BUILD_MUL_TOOLS )
+if( BUILD_MUL_TOOLS )
   add_subdirectory(tools)
-ENDIF ( BUILD_MUL_TOOLS )
+endif( BUILD_MUL_TOOLS )

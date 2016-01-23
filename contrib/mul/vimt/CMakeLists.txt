@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/vimt
   DESCRIPTION "Polymorphic image + transform library"
   )
 
-SET(vimt_sources
+set(vimt_sources
     vimt_image.cxx                                vimt_image.h
     vimt_transform_2d.cxx                         vimt_transform_2d.h
     vimt_transform_util_2d.cxx                    vimt_transform_util_2d.h
@@ -32,19 +32,19 @@ SET(vimt_sources
     vimt_add_all_binary_loaders.h                 vimt_add_all_binary_loaders.cxx
     vimt_fwd.h
 )
-AUX_SOURCE_DIRECTORY(Templates vimt_sources)
+aux_source_directory(Templates vimt_sources)
 
-ADD_LIBRARY(vimt ${vimt_sources})
-INSTALL_TARGETS(/lib vimt)
+add_library(vimt ${vimt_sources})
+install_targets(/lib vimt)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt ${vimt_sources})
-TARGET_LINK_LIBRARIES(vimt mbl vil_algo vgl vnl vil_io vil )
+target_link_libraries(vimt mbl vil_algo vgl vnl vil_io vil )
 
 add_subdirectory(algo)
 
-IF(BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF(BUILD_EXAMPLES)
+endif(BUILD_EXAMPLES)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif(BUILD_TESTING)

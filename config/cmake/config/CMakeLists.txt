@@ -1,8 +1,8 @@
 # vxl/config/cmake/config/CMakeLists.txt
 #
 
-PROJECT(vxl_config)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+project(vxl_config)
+cmake_minimum_required(VERSION 2.8.9)
 
 # When adding new configuration tests that cache results, please make
 # sure they honour VXL_UPDATE_CONFIGURATION: if this variable is ON,
@@ -15,8 +15,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
 # machine's configuration if you believe the test results are stale or
 # wrong.
 #
-OPTION( VXL_UPDATE_CONFIGURATION "Re-run the configuration tests to update cached results?" "OFF" )
-MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
+option( VXL_UPDATE_CONFIGURATION "Re-run the configuration tests to update cached results?" "OFF" )
+mark_as_advanced( VXL_UPDATE_CONFIGURATION )
 
 # The serial number below will allow the maintainers to force builds
 # to update cached results. Whenever you make a change that makes it
@@ -24,15 +24,15 @@ MARK_AS_ADVANCED( VXL_UPDATE_CONFIGURATION )
 # number. The format follows a DNS-style numbering: the current date
 # followed by a modification count within the day.
 #
-SET( VXL_CONFIG_SERIAL_CURRENT "2014-12-09-002" )
+set( VXL_CONFIG_SERIAL_CURRENT "2014-12-09-002" )
 
-IF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+if( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
-ELSE( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
-  SET( VXL_UPDATE_CONFIGURATION "ON" )
+else( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+  set( VXL_UPDATE_CONFIGURATION "ON" )
   # Record that we've done the new config.
-  SET( VXL_CONFIG_SERIAL_LAST ${VXL_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
-ENDIF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+  set( VXL_CONFIG_SERIAL_LAST ${VXL_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
+endif( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
 
 
 
@@ -40,11 +40,11 @@ ENDIF( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
 # Include necessary modules
 #
 
-INCLUDE (CheckSymbolExists)
-INCLUDE (TestBigEndian)
-INCLUDE (CheckTypeSize)
+include(CheckSymbolExists)
+include(TestBigEndian)
+include(CheckTypeSize)
 
-INCLUDE (${vxl_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
+include(${vxl_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
 #
 # Perform all the specific tests
 #
@@ -104,30 +104,30 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_DBGHELP_H)
 # specializations can be properly distinguished by top-level
 # cv-qualifiers.
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_DEFINE_SPECIALIZATION)
-IF(NOT VCL_DEFINE_SPECIALIZATION)
-  SET(CMAKE_REQUIRED_FLAGS "-DNOT_CONFORMING_SPECIALIZATION")
-ENDIF(NOT VCL_DEFINE_SPECIALIZATION)
+if(NOT VCL_DEFINE_SPECIALIZATION)
+  set(CMAKE_REQUIRED_FLAGS "-DNOT_CONFORMING_SPECIALIZATION")
+endif(NOT VCL_DEFINE_SPECIALIZATION)
   SET_BOOL(VCL_DEFINE_SPECIALIZATION "template <>" "/* template <> */")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CANNOT_SPECIALIZE_CV)
   SET_INVERT(VCL_CANNOT_SPECIALIZE_CV "${VCL_CANNOT_SPECIALIZE_CV}")
-SET(CMAKE_REQUIRED_FLAGS)
+set(CMAKE_REQUIRED_FLAGS)
 
 # Check if apple has __isnand or __inline_isnand
-IF(APPLE)
+if(APPLE)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_APPLE_HAS_ISNAND)
-  IF(NOT ${VXL_APPLE_HAS_ISNAND})
+  if(NOT ${VXL_APPLE_HAS_ISNAND})
     PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_APPLE_HAS_INLINE_ISNAND)
-    IF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
-      MESSAGE(FATAL_ERROR "Neither the __isnand nor the __inline_isnand "
+    if( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
+      message(FATAL_ERROR "Neither the __isnand nor the __inline_isnand "
         "functions are available !")
-    ENDIF( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
-  ENDIF(NOT ${VXL_APPLE_HAS_ISNAND})
-ENDIF(APPLE)
+    endif( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
+  endif(NOT ${VXL_APPLE_HAS_ISNAND})
+endif(APPLE)
 
 # Check if Windows have wchar_t defined
-IF(WIN32)
+if(WIN32)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_WIN_WCHAR_T)
-ENDIF(WIN32)
+endif(WIN32)
 
 
 # Test the ability of shared libraries to link to static vxl libriares
@@ -225,18 +225,18 @@ PERFORM_CHECK_HEADER(tr1/memory VCL_CXX_HAS_TR1)
 CHECK_TYPE_EXISTS_ZERO(std::shared_ptr<void> memory VCL_MEMORY_HAS_SHARED_PTR)
 CHECK_TYPE_EXISTS_ZERO(std::tr1::shared_ptr<void> tr1/memory VCL_TR1_MEMORY_HAS_SHARED_PTR)
 
-IF(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
-  OPTION(VCL_INCLUDE_CXX_0X "Enable C++0x standard extensions" ${BUILD_FOR_VXL_DASHBOARD})
-ELSE(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
-  SET(VCL_INCLUDE_CXX_0X 0)
-ENDIF(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
+if(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
+  option(VCL_INCLUDE_CXX_0X "Enable C++0x standard extensions" ${BUILD_FOR_VXL_DASHBOARD})
+else(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
+  set(VCL_INCLUDE_CXX_0X 0)
+endif(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
 
 # Make sure boolean values are (0,1) not (NO,YES)
-IF(VCL_INCLUDE_CXX_0X)
-  SET(VCL_INCLUDE_CXX_0X 1)
-ELSE(VCL_INCLUDE_CXX_0X)
-  SET(VCL_INCLUDE_CXX_0X 0)
-ENDIF(VCL_INCLUDE_CXX_0X)
+if(VCL_INCLUDE_CXX_0X)
+  set(VCL_INCLUDE_CXX_0X 1)
+else(VCL_INCLUDE_CXX_0X)
+  set(VCL_INCLUDE_CXX_0X 0)
+endif(VCL_INCLUDE_CXX_0X)
 
 
 
@@ -245,55 +245,55 @@ PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VXL_HAS_SSE2_HARDWARE_SUPPORT)
 
 # if no support right now, see if the support exists if some flags
 # are added.  This can be used to give the user some useful info.
-IF(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
-  IF(CMAKE_COMPILER_IS_GNUCXX)
-    SET(VXL_SSE_TEST_FLAG_BACKUP ${CMAKE_REQUIRED_FLAGS})
-    SET(CMAKE_REQUIRED_FLAGS " -msse2 ${VXL_SSE_TEST_FLAG_BACKUP} ")
+if(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    set(VXL_SSE_TEST_FLAG_BACKUP ${CMAKE_REQUIRED_FLAGS})
+    set(CMAKE_REQUIRED_FLAGS " -msse2 ${VXL_SSE_TEST_FLAG_BACKUP} ")
     PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE)
-    SET( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP
+    set( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP
       "The current compiler flags do not allow the SSE2 instructions to be used. "
       "It looks like if you add the flag '-msse2' you will be able to use the "
       "SSE2 instructions. If you make this change and still see this message, "
       " you may need to set VXL_UPDATE_CONFIGURATION to ON."
       CACHE INTERNAL "help string for how to enable SSE2 support" )
-    SET(CMAKE_REQUIRED_FLAGS ${VXL_SSE_TEST_FLAG_BACKUP})
-  ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-ENDIF(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
+    set(CMAKE_REQUIRED_FLAGS ${VXL_SSE_TEST_FLAG_BACKUP})
+  endif(CMAKE_COMPILER_IS_GNUCXX)
+endif(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
 
 
 #
 # Check for aligned dynamic memory allocation support, useful for sse
 #
 
-IF(VXL_HAS_EMMINTRIN_H)
+if(VXL_HAS_EMMINTRIN_H)
   # check for memory allocation operations
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_MM_MALLOC)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_ALIGNED_MALLOC)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_MINGW_ALIGNED_MALLOC)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_POSIX_MEMALIGN)
 
-ELSE(VXL_HAS_EMMINTRIN_H)
-  SET( VXL_HAS_MM_MALLOC 0 )
-  SET( VXL_HAS_ALIGNED_MALLOC 0 )
-  SET( VXL_HAS_MINGW_ALIGNED_MALLOC 0 )
-  SET( VXL_HAS_POSIX_MEMALIGN 0 )
-ENDIF(VXL_HAS_EMMINTRIN_H)
+else(VXL_HAS_EMMINTRIN_H)
+  set( VXL_HAS_MM_MALLOC 0 )
+  set( VXL_HAS_ALIGNED_MALLOC 0 )
+  set( VXL_HAS_MINGW_ALIGNED_MALLOC 0 )
+  set( VXL_HAS_POSIX_MEMALIGN 0 )
+endif(VXL_HAS_EMMINTRIN_H)
 
 
 #
 # Check complex pow stuff
 #
 
-IF(VCL_CXX_HAS_HEADER_COMPLEX)
+if(VCL_CXX_HAS_HEADER_COMPLEX)
   PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_COMPLEX_POW_WORKS)
-ENDIF(VCL_CXX_HAS_HEADER_COMPLEX)
+endif(VCL_CXX_HAS_HEADER_COMPLEX)
 
 
 
 # Tests of math.h may need math library on UNIX.
-IF(UNIX)
-  SET(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
-ENDIF(UNIX)
+if(UNIX)
+  set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
+endif(UNIX)
 
 PERFORM_C_CHECK_FUNCTION(sqrtf "math.h" VXL_C_MATH_HAS_SQRTF)
 PERFORM_C_CHECK_FUNCTION(finite "math.h" VXL_C_MATH_HAS_FINITE)
@@ -308,12 +308,12 @@ PERFORM_C_CHECK_FUNCTION(srand48 "stdlib.h" VXL_STDLIB_HAS_SRAND48)
 TEST_BIG_ENDIAN(VXL_BIG_ENDIAN)
 SET_INVERT(VXL_LITTLE_ENDIAN "${VXL_BIG_ENDIAN}")
 
-SET(VXL_TWO_ARG_GETTIME 0) # not used
+set(VXL_TWO_ARG_GETTIME 0) # not used
 
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_IMPLICIT_TEMPLATES)
-IF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
-  MESSAGE(FATAL_ERROR "Implicit template instantiation must be supported by the compiler.")
-ENDIF(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
+if(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
+  message(FATAL_ERROR "Implicit template instantiation must be supported by the compiler.")
+endif(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
 unset(VCL_CAN_DO_IMPLICIT_TEMPLATES)
 
 PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_CHAR_IS_SIGNED)
@@ -322,7 +322,7 @@ PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_CHAR_IS_SIGNED)
 # Check type sizes
 #
 
-SET(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
 
 # The types are listed in reverse order of preference. That is, the
 # last type is should be the most preferred type name.
@@ -336,18 +336,18 @@ DETERMINE_TYPE(IEEE_32  0 32  "long double;double;float")
 DETERMINE_TYPE(IEEE_64  0 64  "float;long double;double")
 DETERMINE_TYPE(IEEE_96  0 96  "float;double;long double")
 DETERMINE_TYPE(IEEE_128 0 128 "float;double;long double")
-IF (${VXL_INT_64} MATCHES "^long$")
-  SET(VXL_INT_64_IS_LONG 1)
-ELSE(${VXL_INT_64} MATCHES "^long$")
-  SET(VXL_INT_64_IS_LONG 0)
-ENDIF(${VXL_INT_64} MATCHES "^long$")
+if(${VXL_INT_64} MATCHES "^long$")
+  set(VXL_INT_64_IS_LONG 1)
+else(${VXL_INT_64} MATCHES "^long$")
+  set(VXL_INT_64_IS_LONG 0)
+endif(${VXL_INT_64} MATCHES "^long$")
 
 #
 # Check unistd stuff
 #
 
 CHECK_INCLUDE_FILE_CXX("unistd.h" HAVE_UNISTD_H)
-IF(HAVE_UNISTD_H)
+if(HAVE_UNISTD_H)
   CHECK_TYPE_EXISTS_ZERO(useconds_t "unistd.h" VXL_UNISTD_HAS_USECONDS_T)
   CHECK_TYPE_EXISTS_ZERO(intptr_t "unistd.h" VXL_UNISTD_HAS_INTPTR_T)
   CHECK_FUNCTION_EXISTS_ZERO(ualarm VXL_UNISTD_HAS_UALARM)
@@ -358,32 +358,32 @@ IF(HAVE_UNISTD_H)
   CHECK_FUNCTION_EXISTS_ZERO(tell VXL_UNISTD_HAS_TELL)
   CHECK_FUNCTION_EXISTS_ZERO(getpid VXL_UNISTD_HAS_GETPID)
   CHECK_FUNCTION_EXISTS_ZERO(gethostname VXL_UNISTD_HAS_GETHOSTNAME)
-ELSE(HAVE_UNISTD_H)
+else(HAVE_UNISTD_H)
   # If there is not unistd.h, assume windows and therefore hardcode results.
-  SET(VXL_UNISTD_HAS_USECONDS_T 0)
-  SET(VXL_UNISTD_HAS_INTPTR_T 0)
-  SET(VXL_UNISTD_HAS_UALARM 1)
-  SET(VXL_UNISTD_HAS_USLEEP 1)
-  SET(VXL_UNISTD_HAS_LCHOWN 1)
-  SET(VXL_UNISTD_HAS_PREAD 1)
-  SET(VXL_UNISTD_HAS_PWRITE 1)
-  SET(VXL_UNISTD_HAS_TELL 1)
-  SET(VXL_UNISTD_HAS_GETPID 1)
-  SET(VXL_UNISTD_HAS_GETHOSTNAME 1)
-ENDIF(HAVE_UNISTD_H)
+  set(VXL_UNISTD_HAS_USECONDS_T 0)
+  set(VXL_UNISTD_HAS_INTPTR_T 0)
+  set(VXL_UNISTD_HAS_UALARM 1)
+  set(VXL_UNISTD_HAS_USLEEP 1)
+  set(VXL_UNISTD_HAS_LCHOWN 1)
+  set(VXL_UNISTD_HAS_PREAD 1)
+  set(VXL_UNISTD_HAS_PWRITE 1)
+  set(VXL_UNISTD_HAS_TELL 1)
+  set(VXL_UNISTD_HAS_GETPID 1)
+  set(VXL_UNISTD_HAS_GETHOSTNAME 1)
+endif(HAVE_UNISTD_H)
 
 #
 # Check the address model of the build, i.e. 32-bit (4-byte) or 64-bit (8-byte).
 # The type of void * is directly related to address model on most machines and compilers.
 # Hence, we use the size of void * instead.
 #
-MATH(EXPR VXL_ADDRESS_BITS 8*${CMAKE_SIZEOF_VOID_P} )
+math(EXPR VXL_ADDRESS_BITS 8*${CMAKE_SIZEOF_VOID_P} )
 
 #
 # Sanity Check numeric_limits infinity stuff
 #
 PERFORM_CHECK_HEADER(limits VCL_CXX_HAS_HEADER_LIMITS)
-IF(NOT VCL_CXX_HAS_HEADER_LIMITS)
+if(NOT VCL_CXX_HAS_HEADER_LIMITS)
   message(FATAL_ERROR "Compiler is required to have limits.h")
 else()
   PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_NUMERIC_LIMITS_HAS_INFINITY)
@@ -394,7 +394,7 @@ else()
 endif()
 unset(VCL_CXX_HAS_HEADER_LIMITS)
 
-IF(NOT VCL_CXX_HAS_HEADER_CFLOAT)
+if(NOT VCL_CXX_HAS_HEADER_CFLOAT)
   message(FATAL_ERROR "Compiler is required to have cfloat")
 else()
   PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_PROCESSOR_HAS_INFINITY)
@@ -409,11 +409,11 @@ unset(VCL_CXX_HAS_HEADER_CFLOAT)
 # configure files
 #
 
-CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h)
-CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_headers.h)
-CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h)
-CONFIGURE_FILE(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h)
-CONFIGURE_FILE(${vxl_SOURCE_DIR}/core/vxl_config.h.in ${vxl_BINARY_DIR}/core/vxl_config.h)
+configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h)
+configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_headers.h)
+configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h)
+configure_file(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h)
+configure_file(${vxl_SOURCE_DIR}/core/vxl_config.h.in ${vxl_BINARY_DIR}/core/vxl_config.h)
 
 # Reset the update configuration flag
-SET( VXL_UPDATE_CONFIGURATION "OFF" CACHE BOOL "Re-run the configuration tests?" FORCE )
+set( VXL_UPDATE_CONFIGURATION "OFF" CACHE BOOL "Re-run the configuration tests?" FORCE )

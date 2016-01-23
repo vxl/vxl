@@ -7,23 +7,23 @@ doxygen_add_library(contrib/brl/bbas/bgrl
   DESCRIPTION "Brown Graph Library"
   )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${BRL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR}/bbas )
 
-SET(bgrl_sources
+set(bgrl_sources
     bgrl_vertex.cxx          bgrl_vertex.h           bgrl_vertex_sptr.h
     bgrl_edge.cxx            bgrl_edge.h             bgrl_edge_sptr.h
     bgrl_graph.cxx           bgrl_graph.h            bgrl_graph_sptr.h
     bgrl_search_func.cxx     bgrl_search_func.h      bgrl_search_func_sptr.h
 )
-AUX_SOURCE_DIRECTORY(Templates bgrl_sources)
+aux_source_directory(Templates bgrl_sources)
 
-ADD_LIBRARY(bgrl ${bgrl_sources})
-INSTALL_TARGETS(/lib bgrl)
+add_library(bgrl ${bgrl_sources})
+install_targets(/lib bgrl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgrl ${bgrl_sources})
 
-TARGET_LINK_LIBRARIES(bgrl vbl_io vbl vsl)
+target_link_libraries(bgrl vbl_io vbl vsl)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif(BUILD_TESTING)

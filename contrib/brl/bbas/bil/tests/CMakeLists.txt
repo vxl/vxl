@@ -1,16 +1,16 @@
-ADD_EXECUTABLE( bil_test_all
+add_executable( bil_test_all
   test_driver.cxx
   test_bounded_image_view.cxx
   test_raw_image_istream.cxx
 )
 
-TARGET_LINK_LIBRARIES( bil_test_all bil vil vul testlib )
-SET( testdata_path ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
+target_link_libraries( bil_test_all bil vil vul testlib )
+set( testdata_path ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
 
-ADD_TEST( NAME bil_test_bounded_image_view COMMAND $<TARGET_FILE:bil_test_all> test_bounded_image_view )
-ADD_TEST( NAME bil_test_raw_image_istream COMMAND $<TARGET_FILE:bil_test_all> test_raw_image_istream )
+add_test( NAME bil_test_bounded_image_view COMMAND $<TARGET_FILE:bil_test_all> test_bounded_image_view )
+add_test( NAME bil_test_raw_image_istream COMMAND $<TARGET_FILE:bil_test_all> test_raw_image_istream )
 
-ADD_EXECUTABLE(bil_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bil_test_include bil )
-ADD_EXECUTABLE(bil_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( bil_test_template_include bil )
+add_executable(bil_test_include test_include.cxx )
+target_link_libraries( bil_test_include bil )
+add_executable(bil_test_template_include test_template_include.cxx )
+target_link_libraries( bil_test_template_include bil )

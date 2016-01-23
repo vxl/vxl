@@ -4,17 +4,17 @@
 #   See the README file for more details, or refer to
 #   http://www.angusj.com/delphi/clipper.php
 
-PROJECT( clipper CXX )
+project( clipper CXX )
 
 if( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    ADD_DEFINITIONS( -Duse_int32 )
+    add_definitions( -Duse_int32 )
 endif( NOT CMAKE_SIZEOF_VOID_P EQUAL 8 )
 
-SET( clipper_sources
+set( clipper_sources
      clipper.cpp clipper.hpp
 )
 
-ADD_DEFINITIONS( -D_FILE_OFFSET_BITS )
+add_definitions( -D_FILE_OFFSET_BITS )
 
-ADD_LIBRARY( clipper ${clipper_sources} )
-INSTALL_TARGETS( /lib clipper )
+add_library( clipper ${clipper_sources} )
+install_targets( /lib clipper )

@@ -3,24 +3,24 @@
 #   Franck Bettinger
 #
 
-LINK_LIBRARIES( mvl2 mbl vil )
+link_libraries( mvl2 mbl vil )
 
-IF (NOT WIN32)
+if(NOT WIN32)
   find_package(AVIFile)
-  INCLUDE_DIRECTORIES( ${AVIFILE_INCLUDE_DIR} )
-  ADD_DEFINITIONS (${AVIFILE_DEFINITIONS} )
-ELSE (NOT WIN32)
-  SET(AVIFILE_FOUND "YES")
-ENDIF (NOT WIN32)
+  include_directories( ${AVIFILE_INCLUDE_DIR} )
+  add_definitions(${AVIFILE_DEFINITIONS} )
+else(NOT WIN32)
+  set(AVIFILE_FOUND "YES")
+endif(NOT WIN32)
 
-IF (AVIFILE_FOUND)
+if(AVIFILE_FOUND)
 
-  ADD_EXECUTABLE(
+  add_executable(
     copy_image copy_image.cxx
   )
 
-  ADD_EXECUTABLE(
+  add_executable(
     mvl2_to_divx mvl2_to_divx.cxx
   )
 
-ENDIF (AVIFILE_FOUND)
+endif(AVIFILE_FOUND)

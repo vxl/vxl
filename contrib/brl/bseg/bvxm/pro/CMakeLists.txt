@@ -2,34 +2,34 @@
 # bvxm's Process Library
 
 # bprb depends on expat and bvxm_pro depends on bprb primarily
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-  INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
-  IF(TIFF_FOUND)
-    INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-    INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-    IF(GEOTIFF_FOUND)
-      INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
-    ENDIF(GEOTIFF_FOUND)
-  ENDIF(TIFF_FOUND)
-  IF(EXPATPP_FOUND)
-    INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-    INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
-  ENDIF(EXPATPP_FOUND)
-  SET(bvxm_pro_sources
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  include_directories( ${EXPAT_INCLUDE_DIR} )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+  include_directories( ${BRL_INCLUDE_DIR}/bseg )
+  include_directories( ${GEL_INCLUDE_DIR}/mrc )
+  include_directories( ${GEL_INCLUDE_DIR})
+  include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+  if(TIFF_FOUND)
+    include_directories(${TIFF_INCLUDE_DIR})
+    include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+    if(GEOTIFF_FOUND)
+      include_directories(${GEOTIFF_INCLUDE_DIR})
+    endif(GEOTIFF_FOUND)
+  endif(TIFF_FOUND)
+  if(EXPATPP_FOUND)
+    include_directories(${EXPAT_INCLUDE_DIRS} )
+    include_directories(${EXPATPP_INCLUDE_DIRS} )
+  endif(EXPATPP_FOUND)
+  set(bvxm_pro_sources
       bvxm_processes.h
       bvxm_register.h    bvxm_register.cxx
      )
 
-  AUX_SOURCE_DIRECTORY(Templates bvxm_pro_sources)
+  aux_source_directory(Templates bvxm_pro_sources)
 
-  SET(bvxm_pro_sources ${bvxm_pro_sources}
+  set(bvxm_pro_sources ${bvxm_pro_sources}
     processes/bvxm_normalization_util.h               processes/bvxm_normalization_util.cxx
     processes/bvxm_illum_index_process.h              processes/bvxm_illum_index_process.cxx
     processes/bvxm_create_local_rpc_process.h         processes/bvxm_create_local_rpc_process.cxx
@@ -92,11 +92,11 @@ IF(EXPAT_FOUND)
     processes/bvxm_create_scene_xml_process.h         processes/bvxm_create_scene_xml_process.cxx
   )
 
-  ADD_LIBRARY(bvxm_pro ${bvxm_pro_sources})
+  add_library(bvxm_pro ${bvxm_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul brdb vbl_io bkml volm bvgl_algo)
+  target_link_libraries(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_io vil_pro vgl_algo vnl_algo vnl_io vnl vil_algo vil vgl vul brdb vbl_io bkml volm bvgl_algo)
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
-ENDIF(EXPAT_FOUND)
+  endif( BUILD_TESTING )
+endif(EXPAT_FOUND)

@@ -1,17 +1,17 @@
 # vtol/algo/CMakeLists.txt
 
-SET( vtol_algo_sources
+set( vtol_algo_sources
   vtol_extract_topology.h  vtol_extract_topology.cxx  vtol_extract_topology.txx
 # vtol_extract_topology_internals.h     vtol_extract_topology_internals.cxx
 )
 
-AUX_SOURCE_DIRECTORY( Templates vtol_algo_sources )
+aux_source_directory( Templates vtol_algo_sources )
 
-ADD_LIBRARY( vtol_algo ${vtol_algo_sources} )
-INSTALL_TARGETS(/lib vtol_algo)
+add_library( vtol_algo ${vtol_algo_sources} )
+install_targets(/lib vtol_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vtol/algo ${vtol_algo_sources})
-TARGET_LINK_LIBRARIES( vtol_algo vtol vsol vdgl vil_algo vgl_algo vgl vil vbl )
+target_link_libraries( vtol_algo vtol vsol vdgl vil_algo vgl_algo vgl vil vbl )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

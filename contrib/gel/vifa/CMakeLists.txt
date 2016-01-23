@@ -5,7 +5,7 @@ doxygen_add_library(contrib/gel/vifa
   PACKAGE contrib/gel
   )
 
-SET(vifa_sources
+set(vifa_sources
  vifa_typedefs.h
  vifa_bbox.h
  vifa_gaussian.cxx              vifa_gaussian.h
@@ -28,9 +28,9 @@ SET(vifa_sources
  vifa_int_faces_attr.cxx        vifa_int_faces_attr.h
  vifa_int_faces_adj_attr.cxx    vifa_int_faces_adj_attr.h
 )
-AUX_SOURCE_DIRECTORY(Templates vifa_sources)
+aux_source_directory(Templates vifa_sources)
 
-ADD_LIBRARY(vifa ${vifa_sources})
-INSTALL_TARGETS(/lib vifa)
+add_library(vifa ${vifa_sources})
+install_targets(/lib vifa)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vifa ${vifa_sources})
-TARGET_LINK_LIBRARIES(vifa gevd vtol vsol vdgl vnl vgl vbl vul vil vcl)
+target_link_libraries(vifa gevd vtol vsol vdgl vnl vgl vbl vul vil vcl)

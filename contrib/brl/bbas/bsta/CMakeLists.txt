@@ -6,7 +6,7 @@ doxygen_add_library(contrib/brl/bbas/bsta
   PACKAGE contrib/brl
   )
 
-SET(bsta_sources
+set(bsta_sources
  bsta_gauss.cxx            bsta_gauss.h
  bsta_histogram_base.h
  bsta_histogram.txx        bsta_histogram.h       bsta_histogram_sptr.h     bsta_histogram.cxx
@@ -58,16 +58,16 @@ SET(bsta_sources
   bsta_random_wrapper.h  bsta_random_wrapper.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates bsta_sources)
-ADD_LIBRARY(bsta  ${bsta_sources})
-INSTALL_TARGETS(/lib bsta)
+aux_source_directory(Templates bsta_sources)
+add_library(bsta  ${bsta_sources})
+install_targets(/lib bsta)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta ${bsta_sources})
 
-TARGET_LINK_LIBRARIES(bsta vnl_algo vbl vnl_io vnl vgl)
+target_link_libraries(bsta vnl_algo vbl vnl_io vnl vgl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )
 
 
 # algorithms for statistical modeling

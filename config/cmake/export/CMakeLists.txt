@@ -6,28 +6,28 @@
 # of the top level CMakeLists.txt file.
 
 # Needed to get non-cached variable settings used in VXLConfig.cmake.in
-INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
-INCLUDE( ${MODULE_PATH}/FindZLIB.cmake )
-INCLUDE( ${MODULE_PATH}/FindPNG.cmake )
-INCLUDE( ${MODULE_PATH}/FindJPEG.cmake )
-INCLUDE( ${MODULE_PATH}/FindTIFF.cmake )
-INCLUDE( ${MODULE_PATH}/FindGEOTIFF.cmake )
-SET( EXPAT_FIND_QUIETLY "YES" )
-INCLUDE( ${vxl_SOURCE_DIR}/contrib/brl/bmods/FindEXPAT.cmake )
-SET( EXPAT_FIND_QUIETLY )
+include( ${MODULE_PATH}/FindNetlib.cmake )
+include( ${MODULE_PATH}/FindZLIB.cmake )
+include( ${MODULE_PATH}/FindPNG.cmake )
+include( ${MODULE_PATH}/FindJPEG.cmake )
+include( ${MODULE_PATH}/FindTIFF.cmake )
+include( ${MODULE_PATH}/FindGEOTIFF.cmake )
+set( EXPAT_FIND_QUIETLY "YES" )
+include( ${vxl_SOURCE_DIR}/contrib/brl/bmods/FindEXPAT.cmake )
+set( EXPAT_FIND_QUIETLY )
 
 # Save library dependencies.
-SET(VXL_CMAKE_DOXYGEN_DIR  ${vxl_SOURCE_DIR}/config/cmake/doxygen)
+set(VXL_CMAKE_DOXYGEN_DIR  ${vxl_SOURCE_DIR}/config/cmake/doxygen)
 
 # Create the VXLConfig.cmake file for the build tree.
-CONFIGURE_FILE(${VXL_CMAKE_DIR}/VXLConfig.cmake.in
+configure_file(${VXL_CMAKE_DIR}/VXLConfig.cmake.in
                ${vxl_BINARY_DIR}/VXLConfig.cmake @ONLY IMMEDIATE)
 
-CONFIGURE_FILE(${VXL_CMAKE_DIR}/VXLConfig_export.cmake.in
+configure_file(${VXL_CMAKE_DIR}/VXLConfig_export.cmake.in
                ${vxl_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
                @ONLY IMMEDIATE)
 
-INSTALL(FILES
+install(FILES
   ${vxl_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
   ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake
   ${VXL_CMAKE_DIR}/UseVXL.cmake

@@ -6,7 +6,7 @@ doxygen_add_library(contrib/rpl/rrel
   DESCRIPTION "Robust Estimation Library"
   )
 
-SET(rrel_sources
+set(rrel_sources
  rrel_export.h                  rrel_fwd.h
  rrel_mlesac_obj.cxx            rrel_mlesac_obj.h
  rrel_ransac_obj.cxx            rrel_ransac_obj.h
@@ -41,20 +41,20 @@ SET(rrel_sources
  rrel_wls_obj.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates rrel_sources)
+aux_source_directory(Templates rrel_sources)
 
-ADD_LIBRARY(rrel ${rrel_sources})
+add_library(rrel ${rrel_sources})
 
-INSTALL_TARGETS(/lib rrel)
+install_targets(/lib rrel)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rrel ${rrel_sources})
-TARGET_LINK_LIBRARIES(rrel vnl_algo vnl vgl)
+target_link_libraries(rrel vnl_algo vnl vgl)
 
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${MUL_INCLUDE_DIR})
-IF (BUILD_EXAMPLES)
+include_directories(${VXLCORE_INCLUDE_DIR})
+include_directories(${MUL_INCLUDE_DIR})
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif(BUILD_EXAMPLES)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif(BUILD_TESTING)

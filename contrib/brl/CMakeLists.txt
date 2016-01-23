@@ -1,7 +1,7 @@
 # brl/CMakeLists.txt
 # Mutual dependencies:  bbas --> bseg  and  bbas --> bmvl
 
-PROJECT( brl )
+project( brl )
 
 doxygen_add_package(contrib/brl "Brown University Libraries")
 
@@ -10,9 +10,9 @@ doxygen_add_package(contrib/brl "Brown University Libraries")
 # Setting BRL_INCLUDE_DIR in this way allows #include <foo/foo.h> without
 # having to know the internal directory structure.
 # The root directory should be listed last in case anyone tries to append to this path
-SET( BRL_INCLUDE_DIR "${brl_SOURCE_DIR}/bbas;${brl_BINARY_DIR}/bbas;${brl_SOURCE_DIR}/bseg;${brl_SOURCE_DIR}/bpro;${brl_SOURCE_DIR}" CACHE STATIC "Brown University package include files" FORCE )
-SET( BRL_BINARY_DIR "${brl_BINARY_DIR}")
-SET( BRL_INSTALL_INCLUDE_DIR
+set( BRL_INCLUDE_DIR "${brl_SOURCE_DIR}/bbas;${brl_BINARY_DIR}/bbas;${brl_SOURCE_DIR}/bseg;${brl_SOURCE_DIR}/bpro;${brl_SOURCE_DIR}" CACHE STATIC "Brown University package include files" FORCE )
+set( BRL_BINARY_DIR "${brl_BINARY_DIR}")
+set( BRL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/bbas
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/bseg
@@ -21,20 +21,20 @@ SET( BRL_INSTALL_INCLUDE_DIR
 )
 
 # Location of brl's private FindXXX.cmake CMake modules.
-SET( BRL_CMAKE_DIR ${vxl_SOURCE_DIR}/contrib/brl/bmods )
+set( BRL_CMAKE_DIR ${vxl_SOURCE_DIR}/contrib/brl/bmods )
 # This is identical to BRL_CMAKE_DIR.  Perhaps we should eliminate BRL_MODULE_PATH?
-SET( BRL_MODULE_PATH ${vxl_SOURCE_DIR}/contrib/brl/bmods )
+set( BRL_MODULE_PATH ${vxl_SOURCE_DIR}/contrib/brl/bmods )
 
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR} )
 
 # basic services package
 add_subdirectory(bbas)
 
-IF( BUILD_GEL )
+if( BUILD_GEL )
   # segmentation package
   add_subdirectory(bseg)
-ENDIF( BUILD_GEL )
+endif( BUILD_GEL )
 
 # process libraries
 add_subdirectory(bpro)

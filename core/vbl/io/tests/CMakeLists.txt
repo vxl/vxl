@@ -1,8 +1,8 @@
 # This is core/vbl/io/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vbl_io testlib vpl )
+link_libraries( vbl_io testlib vpl )
 
-ADD_EXECUTABLE( vbl_io_test_all
+add_executable( vbl_io_test_all
   test_driver.cxx
   vbl_io_test_classes.cxx vbl_io_test_classes.h
   test_smart_ptr_io.cxx
@@ -15,16 +15,16 @@ ADD_EXECUTABLE( vbl_io_test_all
   golden_test_vbl_io.cxx
 )
 
-ADD_TEST( NAME vbl_io_test_smart_ptr_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_smart_ptr_io)
-ADD_TEST( NAME vbl_io_test_bounding_box_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_bounding_box_io)
-ADD_TEST( NAME vbl_io_test_array_1d_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_array_1d_io)
-ADD_TEST( NAME vbl_io_test_array_2d_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_array_2d_io)
-ADD_TEST( NAME vbl_io_test_array_3d_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_array_3d_io)
-ADD_TEST( NAME vbl_io_test_sparse_array_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_sparse_array_io)
-ADD_TEST( NAME vbl_io_test_triple_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_triple_io)
-ADD_TEST( NAME vbl_io_golden_test_vbl_io COMMAND $<TARGET_FILE:vbl_io_test_all> golden_test_vbl_io)
+add_test( NAME vbl_io_test_smart_ptr_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_smart_ptr_io)
+add_test( NAME vbl_io_test_bounding_box_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_bounding_box_io)
+add_test( NAME vbl_io_test_array_1d_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_array_1d_io)
+add_test( NAME vbl_io_test_array_2d_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_array_2d_io)
+add_test( NAME vbl_io_test_array_3d_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_array_3d_io)
+add_test( NAME vbl_io_test_sparse_array_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_sparse_array_io)
+add_test( NAME vbl_io_test_triple_io COMMAND $<TARGET_FILE:vbl_io_test_all> test_triple_io)
+add_test( NAME vbl_io_golden_test_vbl_io COMMAND $<TARGET_FILE:vbl_io_test_all> golden_test_vbl_io)
 
-ADD_EXECUTABLE( vbl_io_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vbl_io_test_include vbl_io )
-ADD_EXECUTABLE( vbl_io_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( vbl_io_test_template_include vbl_io )
+add_executable( vbl_io_test_include test_include.cxx )
+target_link_libraries( vbl_io_test_include vbl_io )
+add_executable( vbl_io_test_template_include test_template_include.cxx )
+target_link_libraries( vbl_io_test_template_include vbl_io )

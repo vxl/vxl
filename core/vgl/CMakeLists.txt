@@ -1,15 +1,15 @@
 # core/vgl/CMakeLists.txt
 
-IF( NOT BUILD_NONCOMMERCIAL )
-  INCLUDE(${VXL_CMAKE_DIR}/FindClipper.cmake)
-  IF(CLIPPER_FOUND)
-    ADD_DEFINITIONS( ${CLIPPER_DEFINITIONS} )
-    ADD_DEFINITIONS( -DHAS_CLIPPER )
-    INCLUDE_DIRECTORIES( ${CLIPPER_INCLUDE_DIR} )
-  ENDIF(CLIPPER_FOUND)
-ENDIF( NOT BUILD_NONCOMMERCIAL )
+if( NOT BUILD_NONCOMMERCIAL )
+  include(${VXL_CMAKE_DIR}/FindClipper.cmake)
+  if(CLIPPER_FOUND)
+    add_definitions( ${CLIPPER_DEFINITIONS} )
+    add_definitions( -DHAS_CLIPPER )
+    include_directories( ${CLIPPER_INCLUDE_DIR} )
+  endif(CLIPPER_FOUND)
+endif( NOT BUILD_NONCOMMERCIAL )
 
-SET( vgl_sources
+set( vgl_sources
   # General
   vgl_fwd.h                      vgl_export.h
   vgl_tolerance.h                vgl_tolerance.txx
@@ -73,38 +73,38 @@ SET( vgl_sources
   vgl_ellipse_scan_iterator.h    vgl_ellipse_scan_iterator.txx
 )
 
-IF( BUILD_NONCOMMERCIAL )
-  SET( vgl_sources ${vgl_sources}
+if( BUILD_NONCOMMERCIAL )
+  set( vgl_sources ${vgl_sources}
   # internals
   internals/gpc.h                internals/gpc.c
   )
-ENDIF( BUILD_NONCOMMERCIAL )
+endif( BUILD_NONCOMMERCIAL )
 
-AUX_SOURCE_DIRECTORY(Templates vgl_sources)
+aux_source_directory(Templates vgl_sources)
 
-ADD_LIBRARY(vgl ${vgl_sources})
-TARGET_LINK_LIBRARIES( vgl vcl )
+add_library(vgl ${vgl_sources})
+target_link_libraries( vgl vcl )
 
 doxygen_add_library(core/vgl
   #DEPENDS core/vsl core/vnl
   PACKAGE core
   DESCRIPTION "Geometry Library"
   )
-IF( NOT BUILD_NONCOMMERCIAL )
-  IF(CLIPPER_FOUND)
-    TARGET_LINK_LIBRARIES( vgl ${CLIPPER_LIBRARIES} )
-  ENDIF(CLIPPER_FOUND)
-ENDIF( NOT BUILD_NONCOMMERCIAL )
+if( NOT BUILD_NONCOMMERCIAL )
+  if(CLIPPER_FOUND)
+    target_link_libraries( vgl ${CLIPPER_LIBRARIES} )
+  endif(CLIPPER_FOUND)
+endif( NOT BUILD_NONCOMMERCIAL )
 
-INSTALL_TARGETS(/lib vgl)
+install_targets(/lib vgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})
 
 add_subdirectory(algo)
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif( BUILD_EXAMPLES )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

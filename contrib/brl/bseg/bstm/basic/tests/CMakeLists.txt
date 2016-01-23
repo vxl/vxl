@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( bstm_basic_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bstm_basic_test_include bstm_basic )
+add_executable( bstm_basic_test_include test_include.cxx )
+target_link_libraries( bstm_basic_test_include bstm_basic )

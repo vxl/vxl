@@ -1,17 +1,17 @@
 # ./gel/CMakeLists.txt
 
-PROJECT( gel )
+project( gel )
 
 doxygen_add_package(contrib/gel "GE Libraries")
 
-SET( GEL_INCLUDE_DIR ${gel_SOURCE_DIR} CACHE STATIC "GE package include files" )
-SET( GEL_INSTALL_INCLUDE_DIR
+set( GEL_INCLUDE_DIR ${gel_SOURCE_DIR} CACHE STATIC "GE package include files" )
+set( GEL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/gel
   CACHE INTERNAL "GE package include files"
 )
 
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR} )
 
 # spatial objects
 add_subdirectory(vsol)
@@ -39,9 +39,9 @@ add_subdirectory(vmal)
 add_subdirectory(gtrl)
 
 # octree stuff from Geoff's thesis
-IF(BUILD_OXL)
+if(BUILD_OXL)
   add_subdirectory(octree)
-ENDIF(BUILD_OXL)
+endif(BUILD_OXL)
 
 # photogrammetry in mrc/vpgl,
 # coordinate systems add-on in mrc/vcsl

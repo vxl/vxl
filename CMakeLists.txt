@@ -1,4 +1,4 @@
-#MESSAGE(FATAL_ERROR "VXL has moved!
+#message(FATAL_ERROR "VXL has moved!
 #VXL is now hosted in a GitHub repository at:
 # https://github.com/vxl/vxl
 #Run:
@@ -12,7 +12,7 @@
 # Root vxl
 #
 #   vxl-maintainers@lists.sf.net
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.9)
 
 # Support for CMake 2.6
 IF( COMMAND CMAKE_POLICY )
@@ -27,14 +27,14 @@ IF( COMMAND CMAKE_POLICY )
 ENDIF( COMMAND CMAKE_POLICY )
 
 # CMake 2.8 stuff
-SET( CMAKE_LEGACY_CYGWIN_WIN32 0 ) # Remove when CMake >= 2.8.4 is required
+set( CMAKE_LEGACY_CYGWIN_WIN32 0 ) # Remove when CMake >= 2.8.4 is required
 
 # Use @rpath on OS X
-IF( POLICY CMP0042 )
-  CMAKE_POLICY(SET CMP0042 NEW)
-ENDIF()
+if( POLICY CMP0042 )
+  cmake_policy(SET CMP0042 NEW)
+endif()
 
-PROJECT(vxl)
+project(vxl)
 
 include(CMakeDependentOption)
 
@@ -44,54 +44,54 @@ if(MEMORYCHECK_COMMAND)
   set( MEMORYCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/config/valgrind.supp" )
 endif()
 
-SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${vxl_BINARY_DIR}/lib CACHE PATH
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${vxl_BINARY_DIR}/lib CACHE PATH
      "Output directory for the vxl libraries" )
 
-IF( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
-    SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "." )
-ENDIF( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
+if( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "." )
+endif( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
 
 
 # CMake support directory.
-SET(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
+set(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
 
-INCLUDE( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
-INCLUDE( ${vxl_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
-INCLUDE(${vxl_SOURCE_DIR}/config/cmake/doxygen/doxygen.cmake)
+include( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
+include( ${vxl_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
+include(${vxl_SOURCE_DIR}/config/cmake/doxygen/doxygen.cmake)
 
 # Copy the UseVXL.cmake file to the binary directory so that client
 # projects don't need to find the source directory first. They can run
 # the UseVXL.cmake from the vxl binary directory, and determine the
 # vxl source directory by loading the cache.
-CONFIGURE_FILE( ${VXL_CMAKE_DIR}/UseVXL.cmake
+configure_file( ${VXL_CMAKE_DIR}/UseVXL.cmake
                 ${vxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
 
 # Copy CTestCustom.cmake to top of build tree
-CONFIGURE_FILE( ${VXL_CMAKE_DIR}/CTestCustom.cmake
+configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
   ${vxl_BINARY_DIR}/CTestCustom.cmake COPYONLY )
 
 # Location of VXL's FindXXX.cmake CMake modules.
 # This is identical to VXL_CMAKE_DIR.  Perhaps we should eliminate MODULE_PATH?
-SET( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
+set( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
 
 # For use in client projects that call UseVXL.cmake
-SET (VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
+set(VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
 # Options to add extra compiler and linker flags
 #
 # These options allow you to specify additional flags without
 # affecting the default flags for a particular platform or build type.
 # This is especially useful for adding extra warning flags.
-SET( VXL_EXTRA_CMAKE_C_FLAGS             CACHE STRING "Extra flags appended to CMAKE_C_FLAGS" )
-SET( VXL_EXTRA_CMAKE_CXX_FLAGS           CACHE STRING "Extra flags appended to CMAKE_CXX_FLAGS" )
-SET( VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS    CACHE STRING "Extra flags appended to CMAKE_EXE_LINKER_FLAGS" )
-SET( VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS CACHE STRING "Extra flags appended to CMAKE_MODULE_LINKER_FLAGS" )
-SET( VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS CACHE STRING "Extra flags appended to CMAKE_SHARED_LINKER_FLAGS" )
-SET( CMAKE_C_FLAGS             "${CMAKE_C_FLAGS} ${VXL_EXTRA_CMAKE_C_FLAGS}" )
-SET( CMAKE_CXX_FLAGS           "${CMAKE_CXX_FLAGS} ${VXL_EXTRA_CMAKE_CXX_FLAGS}" )
-SET( CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS}" )
-SET( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS}" )
-SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS}" )
+set( VXL_EXTRA_CMAKE_C_FLAGS             CACHE STRING "Extra flags appended to CMAKE_C_FLAGS" )
+set( VXL_EXTRA_CMAKE_CXX_FLAGS           CACHE STRING "Extra flags appended to CMAKE_CXX_FLAGS" )
+set( VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS    CACHE STRING "Extra flags appended to CMAKE_EXE_LINKER_FLAGS" )
+set( VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS CACHE STRING "Extra flags appended to CMAKE_MODULE_LINKER_FLAGS" )
+set( VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS CACHE STRING "Extra flags appended to CMAKE_SHARED_LINKER_FLAGS" )
+set( CMAKE_C_FLAGS             "${CMAKE_C_FLAGS} ${VXL_EXTRA_CMAKE_C_FLAGS}" )
+set( CMAKE_CXX_FLAGS           "${CMAKE_CXX_FLAGS} ${VXL_EXTRA_CMAKE_CXX_FLAGS}" )
+set( CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_EXE_LINKER_FLAGS}" )
+set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_MODULE_LINKER_FLAGS}" )
+set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS}" )
 
 
 #-------------------------------------------------------------------
@@ -99,70 +99,70 @@ SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_S
 
 # Optionally use old error reporting methods, rather than exceptions.
 # The main use is in vil which often uses/used null images to imply an error.
-OPTION (VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than exceptions?" ON)
-IF (VXL_LEGACY_ERROR_REPORTING)
-  ADD_DEFINITIONS( -DVXL_LEGACY_ERROR_REPORTING )
-ENDIF (VXL_LEGACY_ERROR_REPORTING)
+option(VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than exceptions?" ON)
+if(VXL_LEGACY_ERROR_REPORTING)
+  add_definitions( -DVXL_LEGACY_ERROR_REPORTING )
+endif(VXL_LEGACY_ERROR_REPORTING)
 
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer.
-IF(WIN32)
-  IF(VXL_HAS_WIN_WCHAR_T)
-    OPTION( VXL_USE_WIN_WCHAR_T "Build overloading functions that accept Windows wide char strings?" ON )
-    IF(VXL_USE_WIN_WCHAR_T)   # Force it to be 0/1
-      SET(VXL_USE_WIN_WCHAR_T 1)
-    ELSE(VXL_USE_WIN_WCHAR_T)
-      SET(VXL_USE_WIN_WCHAR_T 0)
-    ENDIF(VXL_USE_WIN_WCHAR_T)
-  ELSE(VXL_HAS_WIN_WCHAR_T)
-    SET(VXL_USE_WIN_WCHAR_T 0)
-  ENDIF(VXL_HAS_WIN_WCHAR_T)
-ELSE(WIN32)
+if(WIN32)
+  if(VXL_HAS_WIN_WCHAR_T)
+    option( VXL_USE_WIN_WCHAR_T "Build overloading functions that accept Windows wide char strings?" ON )
+    if(VXL_USE_WIN_WCHAR_T)   # Force it to be 0/1
+      set(VXL_USE_WIN_WCHAR_T 1)
+    else(VXL_USE_WIN_WCHAR_T)
+      set(VXL_USE_WIN_WCHAR_T 0)
+    endif(VXL_USE_WIN_WCHAR_T)
+  else(VXL_HAS_WIN_WCHAR_T)
+    set(VXL_USE_WIN_WCHAR_T 0)
+  endif(VXL_HAS_WIN_WCHAR_T)
+else(WIN32)
   # avoid empty macro definition
-  SET(VXL_USE_WIN_WCHAR_T 0)
-ENDIF(WIN32)
+  set(VXL_USE_WIN_WCHAR_T 0)
+endif(WIN32)
 
 # In order to be able to link vxl libraries into shared libraries on 64 bit linux, the -fPIC
 # compiler flag must be added.  Only do this if we are on a x86_64 *nix platform, we're building
 # static libraries, and the user has not explicitly requested position dependent code.
-IF(UNIX)
-  IF(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-    OPTION(BUILD_POSITION_DEPENDENT_CODE "Generate position dependent code (i.e. code cannot be used in shared library)" OFF)
-    MARK_AS_ADVANCED(BUILD_POSITION_DEPENDENT_CODE)
-    IF (NOT BUILD_POSITION_DEPENDENT_CODE)
+if(UNIX)
+  if(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+    option(BUILD_POSITION_DEPENDENT_CODE "Generate position dependent code (i.e. code cannot be used in shared library)" OFF)
+    mark_as_advanced(BUILD_POSITION_DEPENDENT_CODE)
+    if(NOT BUILD_POSITION_DEPENDENT_CODE)
       message(STATUS "Adding -fPIC compiler flag to generate position independent code.")
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-fPIC")
-      SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}-fPIC")
-    ENDIF(NOT BUILD_POSITION_DEPENDENT_CODE)
-  ENDIF(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-ENDIF(UNIX)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-fPIC")
+      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}-fPIC")
+    endif(NOT BUILD_POSITION_DEPENDENT_CODE)
+  endif(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+endif(UNIX)
 
 
 # Some types of path names can cause havoc with regular expressions,
 # so avoid those.
-IF( ${vxl_BINARY_DIR} MATCHES  \\+ )
-  MESSAGE(SEND_ERROR "You cannot have a + in your binary path")
-ENDIF( ${vxl_BINARY_DIR} MATCHES  \\+ )
-IF( ${vxl_SOURCE_DIR} MATCHES  \\+ )
-  MESSAGE(SEND_ERROR "You cannot have a + in your source path")
-ENDIF( ${vxl_SOURCE_DIR} MATCHES  \\+ )
+if( ${vxl_BINARY_DIR} MATCHES  \\+ )
+  message(SEND_ERROR "You cannot have a + in your binary path")
+endif( ${vxl_BINARY_DIR} MATCHES  \\+ )
+if( ${vxl_SOURCE_DIR} MATCHES  \\+ )
+  message(SEND_ERROR "You cannot have a + in your source path")
+endif( ${vxl_SOURCE_DIR} MATCHES  \\+ )
 
 # include CMakeListsLocal.txt from source directory if it exists
 # also include it from the binary dir if different from source dir
-IF( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
-  INCLUDE( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
-ELSE( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
-  INCLUDE( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
-  INCLUDE( ${vxl_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
-ENDIF( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
+if( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
+  include( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+else( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
+  include( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+  include( ${vxl_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
+endif( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
 
 # Standard include directories.
-SET(VXLCORE_INCLUDE_DIR ${vxl_BINARY_DIR}/core ${vxl_SOURCE_DIR}/core)
-SET(VXLCORE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/core)
-SET(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
-SET(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/vcl)
+set(VXLCORE_INCLUDE_DIR ${vxl_BINARY_DIR}/core ${vxl_SOURCE_DIR}/core)
+set(VXLCORE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/core)
+set(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
+set(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/vcl)
 
-INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
+include_directories(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
 # Do platform-specific configuration.
 add_subdirectory(config/cmake/config)
@@ -170,11 +170,11 @@ add_subdirectory(config/cmake/config)
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS
 # Options for selecting the core core libraries
-OPTION( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON )
-OPTION( BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
-OPTION( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON )
-OPTION( BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON )
-OPTION( BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON )
+option( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON )
+option( BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
+option( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON )
+option( BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON )
+option( BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON )
 
 # By default, build examples when building tests. Examples require most of the core libraries
 CMAKE_DEPENDENT_OPTION( BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING}
@@ -183,8 +183,8 @@ CMAKE_DEPENDENT_OPTION( BUILD_EXAMPLES "Should the examples be built?" ${BUILD_T
 # Option to specify whether this is a build for the dashboard.  Each
 # dashboard build should set BUILD_FOR_VXL_DASHBOARD to ON in the
 # initial cache (set in the CTest script).
-OPTION( BUILD_FOR_VXL_DASHBOARD "Enable deprecated code and known failing test?)" OFF )
-OPTION( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
+option( BUILD_FOR_VXL_DASHBOARD "Enable deprecated code and known failing test?)" OFF )
+option( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
 
 CMAKE_DEPENDENT_OPTION(BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON "BUILD_CORE_NUMERICS;BUILD_FOR_VXL_DASHBOARD" OFF)
 

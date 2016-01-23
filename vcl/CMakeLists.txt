@@ -1,26 +1,26 @@
 # vcl/CMakeLists.txt
 
-IF(WIN32)
+if(WIN32)
   # MSVC.NET produces lots of warnings like
   # "warning LNK4221: no public symbols found; archive member will be inaccessible"
   # that depend on subtle logic at compile time.
   # This is a bit indescriminate, but it may be the only feasible way to suppress them.
-  IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-    SET ( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
-    SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
-  ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-ENDIF(WIN32)
+  if(CMAKE_CXX_COMPILER MATCHES "^cl$")
+    set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
+    set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
+  endif(CMAKE_CXX_COMPILER MATCHES "^cl$")
+endif(WIN32)
 
 
-PROJECT( vcl )
+project( vcl )
 
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
-CONFIGURE_FILE(
+configure_file(
   ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
   ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
 )
 
-SET( vcl_sources
+set( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx     vcl_deprecated.h
 
@@ -224,21 +224,21 @@ SET( vcl_sources
 # so we shouldn't be explicitly instantiating anything.
 # This also avoid trouble where the instantiation hack conflict
 # with modern, more compliant compilers.
-#AUX_SOURCE_DIRECTORY(Templates vcl_sources)
+#aux_source_directory(Templates vcl_sources)
 
-ADD_LIBRARY(vcl ${vcl_sources})
+add_library(vcl ${vcl_sources})
 
 # CMake can automatically figure out the compiler characteristics on
 # Windows too.  No need to do manual config.
 
-IF(UNIX)
-  TARGET_LINK_LIBRARIES( vcl m )
-ENDIF(UNIX)
+if(UNIX)
+  target_link_libraries( vcl m )
+endif(UNIX)
 
 # Installation
-INSTALL_TARGETS(/lib vcl)
+install_targets(/lib vcl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/vcl ${vcl_sources})
 
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif( BUILD_TESTING)

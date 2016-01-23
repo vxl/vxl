@@ -1,6 +1,6 @@
 # mul/vil3d/algo/CMakeLists.txt
 
-SET(vil3d_algo_sources
+set(vil3d_algo_sources
   vil3d_gauss_reduce.h        vil3d_gauss_reduce.txx
   vil3d_threshold.h           vil3d_threshold.txx
   vil3d_grad_1x3.h            vil3d_grad_1x3.cxx           vil3d_grad_1x3.txx
@@ -34,13 +34,13 @@ SET(vil3d_algo_sources
   vil3d_rank_filter.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vil3d_algo_sources)
+aux_source_directory(Templates vil3d_algo_sources)
 
-ADD_LIBRARY(vil3d_algo ${vil3d_algo_sources})
-INSTALL_TARGETS(/lib vil3d_algo)
+add_library(vil3d_algo ${vil3d_algo_sources})
+install_targets(/lib vil3d_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d/algo ${vil3d_algo_sources})
-TARGET_LINK_LIBRARIES( vil3d_algo vil3d vil_algo vil vnl vgl )
+target_link_libraries( vil3d_algo vil3d vil_algo vil vnl vgl )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

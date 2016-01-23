@@ -1,13 +1,13 @@
 # bbas/bgrl2/algo/CMakeLists.txt
 
-SET( bgrl2_algo_sources
+set( bgrl2_algo_sources
   bgrl2_algs.cxx              bgrl2_algs.h
 )
 
-ADD_LIBRARY( bgrl2_algo  ${bgrl2_algo_sources})
+add_library( bgrl2_algo  ${bgrl2_algo_sources})
 
-TARGET_LINK_LIBRARIES( bgrl2_algo bgrl2 )
+target_link_libraries( bgrl2_algo bgrl2 )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )

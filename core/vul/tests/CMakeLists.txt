@@ -1,6 +1,6 @@
 # This is core/vul/tests/CMakeLists.txt
 
-SET(vul_test_sources
+set(vul_test_sources
   test_arg.cxx
   test_file_iterator.cxx
   test_vul_file.cxx
@@ -18,19 +18,19 @@ SET(vul_test_sources
   test_checksum.cxx
 )
 
-IF (NOT APPLE)
-  SET(vul_test_sources ${vul_test_sources}
+if(NOT APPLE)
+  set(vul_test_sources ${vul_test_sources}
     test_url.cxx
   )
-ENDIF(NOT APPLE)
+endif(NOT APPLE)
 
 GENERATE_TEST_DRIVER(vul vul_test_sources vul vpl testlib vcl)
 
-SET(vul_test_include_sources
+set(vul_test_include_sources
   ${vul_sources}
   ${vul_network_sources}
 )
 GENERATE_TEST_INCLUDE(vul vul_test_include_sources "vul/")
 
-ADD_EXECUTABLE( vul_try_reg_exp try_reg_exp.cxx )
-TARGET_LINK_LIBRARIES( vul_try_reg_exp vul vpl )
+add_executable( vul_try_reg_exp try_reg_exp.cxx )
+target_link_libraries( vul_try_reg_exp vul vpl )

@@ -6,7 +6,7 @@ doxygen_add_library(contrib/gel/gevd
   DESCRIPTION "Van-duc region finder"
   )
 
-SET(gevd_sources
+set(gevd_sources
                                 gevd_pixel.h
                                 gevd_xpixel.h
     gevd_detector.cxx           gevd_detector.h
@@ -28,15 +28,15 @@ SET(gevd_sources
     gevd_region_proc_params.cxx gevd_region_proc_params.h
 )
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(gevd_contour.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(gevd_contour.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif(CMAKE_COMPILER_IS_GNUCXX)
 
-ADD_LIBRARY(gevd ${gevd_sources})
-INSTALL_TARGETS(/lib gevd)
+add_library(gevd ${gevd_sources})
+install_targets(/lib gevd)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gevd ${gevd_sources})
-TARGET_LINK_LIBRARIES(gevd vtol vsol vdgl vil1 vil vnl vgl vbl vul)
+target_link_libraries(gevd vtol vsol vdgl vil1 vil vnl vgl vbl vul)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif(BUILD_TESTING)

@@ -50,7 +50,7 @@ add_subdirectory(brad)
 # camera library
   add_subdirectory (bpgl)
 
-IF( BUILD_GEL )
+if( BUILD_GEL )
   # spatial object algorithms
   add_subdirectory(bsol)
 
@@ -75,7 +75,7 @@ IF( BUILD_GEL )
   # Indexed Mesh Library
   add_subdirectory(imesh)
 
-ENDIF( BUILD_GEL )
+endif( BUILD_GEL )
 
 # Brown hadoop library
 add_subdirectory(bhdfs)

@@ -19,15 +19,15 @@
 # VXL_USING_NATIVE_EXPATPP - True if we are using an ExpatPP library provided outside vxl (or b3p)
 
 # If this FORCE variable is unset or is FALSE, try to find a native library.
-IF(NOT EXPAT_FOUND)
+if(NOT EXPAT_FOUND)
 
   # If this FORCE variable is unset or is FALSE, try to find a native library.
-  IF( NOT VXL_FORCE_B3P_EXPAT )
+  if( NOT VXL_FORCE_B3P_EXPAT )
     find_package(EXPAT)
-    IF(EXPAT_FOUND)
-      SET(VXL_USING_NATIVE_EXPAT "YES")
-    ENDIF(EXPAT_FOUND)
-  ENDIF( NOT VXL_FORCE_B3P_EXPAT )
+    if(EXPAT_FOUND)
+      set(VXL_USING_NATIVE_EXPAT "YES")
+    endif(EXPAT_FOUND)
+  endif( NOT VXL_FORCE_B3P_EXPAT )
 
 
   #
@@ -35,52 +35,52 @@ IF(NOT EXPAT_FOUND)
   # will not have the b3p expat library, so make sure the headers
   # exist.
   #
-  IF(NOT EXPAT_FOUND)
-    IF(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
-      SET( EXPAT_FOUND "YES" )
-      SET( EXPAT_LIBRARIES expat )
-      SET( EXPAT_LIBRARY expat )
-      SET( EXPAT_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
-      SET( EXPAT_INCLUDE_DIR  ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
-      SET( EXPAT_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expat)
-    ENDIF(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
-  ENDIF(NOT EXPAT_FOUND)
+  if(NOT EXPAT_FOUND)
+    if(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
+      set( EXPAT_FOUND "YES" )
+      set( EXPAT_LIBRARIES expat )
+      set( EXPAT_LIBRARY expat )
+      set( EXPAT_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
+      set( EXPAT_INCLUDE_DIR  ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
+      set( EXPAT_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expat)
+    endif(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
+  endif(NOT EXPAT_FOUND)
 
-ENDIF(NOT EXPAT_FOUND)
-#MARK_AS_ADVANCED(EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
+endif(NOT EXPAT_FOUND)
+#mark_as_advanced(EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
 
 
-IF(EXPAT_FOUND) # EXPATPP requires EXPAT
+if(EXPAT_FOUND) # EXPATPP requires EXPAT
 
-  FIND_PATH(EXPATPP_SYSTEM_INCLUDE_DIR NAMES expatpp.h )
-  FIND_LIBRARY(EXPATPP_SYSTEM_LIBRARY NAMES expatpp libexpatpp )
+  find_path(EXPATPP_SYSTEM_INCLUDE_DIR NAMES expatpp.h )
+  find_library(EXPATPP_SYSTEM_LIBRARY NAMES expatpp libexpatpp )
 
-  IF( EXPATPP_SYSTEM_INCLUDE_DIR AND EXPATPP_SYSTEM_LIBRARY )
-    SET(VXL_USING_NATIVE_EXPATPP "YES")
-    SET(EXPATPP_LIBRARIES ${EXPATPP_SYSTEM_LIBRARY})
-    SET(EXPATPP_INCLUDE_DIRS ${EXPATPP_SYSTEM_INCLUDE_DIR})
-  ELSE()
-    SET(VXL_USING_NATIVE_EXPATPP "NO")
-    IF(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp/expatpp.h)
-      SET( EXPATPP_FOUND "YES" )
-      SET( EXPATPP_LIBRARIES expatpp )
-      SET( EXPATPP_LIBRARY expatpp )
-      SET( EXPATPP_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp ${vxl_BINARY_DIR}/contrib/brl/b3p/expatpp )
-      SET( EXPATPP_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp ${vxl_BINARY_DIR}/contrib/brl/b3p/expatpp )
-      SET( EXPATPP_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expatpp)
-    ELSE()
+  if( EXPATPP_SYSTEM_INCLUDE_DIR AND EXPATPP_SYSTEM_LIBRARY )
+    set(VXL_USING_NATIVE_EXPATPP "YES")
+    set(EXPATPP_LIBRARIES ${EXPATPP_SYSTEM_LIBRARY})
+    set(EXPATPP_INCLUDE_DIRS ${EXPATPP_SYSTEM_INCLUDE_DIR})
+  else()
+    set(VXL_USING_NATIVE_EXPATPP "NO")
+    if(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp/expatpp.h)
+      set( EXPATPP_FOUND "YES" )
+      set( EXPATPP_LIBRARIES expatpp )
+      set( EXPATPP_LIBRARY expatpp )
+      set( EXPATPP_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp ${vxl_BINARY_DIR}/contrib/brl/b3p/expatpp )
+      set( EXPATPP_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/expatpp ${vxl_BINARY_DIR}/contrib/brl/b3p/expatpp )
+      set( EXPATPP_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expatpp)
+    else()
       unset(EXPATPP_LIBRARIES)
       unset(EXPATPP_INCLUDE_DIRS)
       unset(EXPAT_FOUND)
       unset(EXPATPP_FOUND)
-    ENDIF()
-  ENDIF()
+    endif()
+  endif()
 
-  INCLUDE(FindPackageHandleStandardArgs)
+  include(FindPackageHandleStandardArgs)
   FIND_PACKAGE_HANDLE_STANDARD_ARGS( EXPATPP FOUND_VAR EXPATPP_FOUND
              REQUIRED_VARS EXPATPP_LIBRARY EXPATPP_INCLUDE_DIR
              FAIL_MESSAGE "MISSING: "
      )
 
-ENDIF(EXPAT_FOUND)
-MARK_AS_ADVANCED(EXPATPP_INCLUDE_DIR EXPATPP_LIBRARY)
+endif(EXPAT_FOUND)
+mark_as_advanced(EXPATPP_INCLUDE_DIR EXPATPP_LIBRARY)

@@ -1,9 +1,9 @@
 # Brown view sphere directory
 # brl/bbas/vsph/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-SET(vsph_sources
+set(vsph_sources
     vsph_view_sphere.h       vsph_view_sphere.txx
     vsph_view_point.h
     vsph_spherical_coord.h   vsph_spherical_coord.cxx     vsph_spherical_coord_sptr.h
@@ -17,16 +17,16 @@ SET(vsph_sources
     vsph_grid_index_2d.h     vsph_grid_index_2d.cxx
     vsph_sph_cover_2d.h      vsph_sph_cover_2d.cxx
   )
-AUX_SOURCE_DIRECTORY(Templates vsph_sources)
+aux_source_directory(Templates vsph_sources)
 
-ADD_LIBRARY(vsph ${vsph_sources})
-TARGET_LINK_LIBRARIES(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl bpgl_algo bvrml)
+add_library(vsph ${vsph_sources})
+target_link_libraries(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl bpgl_algo bvrml)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif(BUILD_TESTING)
 
 
 
-INSTALL_TARGETS(/lib vsph)
+install_targets(/lib vsph)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/vsph ${vsph_sources})

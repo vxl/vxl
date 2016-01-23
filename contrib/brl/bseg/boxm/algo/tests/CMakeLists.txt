@@ -1,4 +1,4 @@
-ADD_EXECUTABLE( boxm_algo_test_all
+add_executable( boxm_algo_test_all
   test_driver.cxx
   test_fill_in_mesh.cxx
   test_save_scene_raw.cxx
@@ -10,22 +10,22 @@ ADD_EXECUTABLE( boxm_algo_test_all
 
  )
 
-SET(boxm_algo_test_all_sources
+set(boxm_algo_test_all_sources
     test_utils.h    test_utils.cxx
     )
 
-ADD_LIBRARY(boxm_algo_tests  ${boxm_algo_test_all_sources})
+add_library(boxm_algo_tests  ${boxm_algo_test_all_sources})
 
-TARGET_LINK_LIBRARIES( boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct testlib vnl_io vpgl vgl_algo vgl vpl vul vpgl imesh vcl)
-TARGET_LINK_LIBRARIES( boxm_algo_test_all boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct testlib vnl_io vpgl vgl_algo vgl vpl vul vpgl imesh vcl)
+target_link_libraries( boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct testlib vnl_io vpgl vgl_algo vgl vpl vul vpgl imesh vcl)
+target_link_libraries( boxm_algo_test_all boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct testlib vnl_io vpgl vgl_algo vgl vpl vul vpgl imesh vcl)
 
-ADD_TEST( NAME boxm_algo_test_fill_in_mesh COMMAND $<TARGET_FILE:boxm_algo_test_all> test_fill_in_mesh  )
-ADD_TEST( NAME boxm_algo_test_save_scene_raw COMMAND $<TARGET_FILE:boxm_algo_test_all> test_save_scene_raw  )
-ADD_TEST( NAME boxm_algo_test_upload_mesh COMMAND $<TARGET_FILE:boxm_algo_test_all> test_upload_mesh  )
-ADD_TEST( NAME boxm_algo_test_fill_internal_cells COMMAND $<TARGET_FILE:boxm_algo_test_all> test_boxm_fill_internal_cells  )
-ADD_TEST( NAME boxm_algo_test_scene_crop COMMAND $<TARGET_FILE:boxm_algo_test_all> test_boxm_scene_crop  )
-ADD_TEST( NAME boxm_algo_test_linear_operations COMMAND $<TARGET_FILE:boxm_algo_test_all> test_linear_operations )
-ADD_TEST( NAME boxm_algo_remove_level0 COMMAND $<TARGET_FILE:boxm_algo_test_all> test_remove_level0 )
+add_test( NAME boxm_algo_test_fill_in_mesh COMMAND $<TARGET_FILE:boxm_algo_test_all> test_fill_in_mesh  )
+add_test( NAME boxm_algo_test_save_scene_raw COMMAND $<TARGET_FILE:boxm_algo_test_all> test_save_scene_raw  )
+add_test( NAME boxm_algo_test_upload_mesh COMMAND $<TARGET_FILE:boxm_algo_test_all> test_upload_mesh  )
+add_test( NAME boxm_algo_test_fill_internal_cells COMMAND $<TARGET_FILE:boxm_algo_test_all> test_boxm_fill_internal_cells  )
+add_test( NAME boxm_algo_test_scene_crop COMMAND $<TARGET_FILE:boxm_algo_test_all> test_boxm_scene_crop  )
+add_test( NAME boxm_algo_test_linear_operations COMMAND $<TARGET_FILE:boxm_algo_test_all> test_linear_operations )
+add_test( NAME boxm_algo_remove_level0 COMMAND $<TARGET_FILE:boxm_algo_test_all> test_remove_level0 )
 
-ADD_EXECUTABLE( boxm_algo_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boxm_algo_test_include boxm_algo)
+add_executable( boxm_algo_test_include test_include.cxx )
+target_link_libraries( boxm_algo_test_include boxm_algo)
