@@ -51,11 +51,11 @@ ELSE(PNG_FOUND)
       )
 
       IF (CYGWIN)
-        IF(BUILD_SHARED_LIBS)
+        IF(VXL_BUILD_SHARED_LIBS)
            # No need to define PNG_USE_DLL here, because it's default for Cygwin.
-        ELSE(BUILD_SHARED_LIBS)
+        ELSE(VXL_BUILD_SHARED_LIBS)
           SET (PNG_DEFINITIONS  ${PNG_DEFINITIONS} -DPNG_STATIC)
-        ENDIF(BUILD_SHARED_LIBS)
+        ENDIF(VXL_BUILD_SHARED_LIBS)
       ENDIF (CYGWIN)
 
     ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/png/png.h)

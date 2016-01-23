@@ -88,13 +88,6 @@ SET( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_M
 SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS}" )
 
 
-# Use this variable in vxl_config.h to tell if it is a shared build
-set(VXL_BUILD_SHARED FALSE)
-if(BUILD_SHARED_LIBS)
-  set(VXL_BUILD_SHARED TRUE)
-endif()
-
-
 #-------------------------------------------------------------------
 #-- BUILD CONFIG OPTIONS
 
@@ -127,7 +120,7 @@ ENDIF(WIN32)
 # compiler flag must be added.  Only do this if we are on a x86_64 *nix platform, we're building
 # static libraries, and the user has not explicitly requested position dependent code.
 IF(UNIX)
-  IF(NOT BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+  IF(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
     OPTION(BUILD_POSITION_DEPENDENT_CODE "Generate position dependent code (i.e. code cannot be used in shared library)" OFF)
     MARK_AS_ADVANCED(BUILD_POSITION_DEPENDENT_CODE)
     IF (NOT BUILD_POSITION_DEPENDENT_CODE)
@@ -135,7 +128,7 @@ IF(UNIX)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-fPIC")
       SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}-fPIC")
     ENDIF(NOT BUILD_POSITION_DEPENDENT_CODE)
-  ENDIF(NOT BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+  ENDIF(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 ENDIF(UNIX)
 
 

@@ -1,9 +1,9 @@
 #ifndef VGL_EXPORT_H
 #define VGL_EXPORT_H
 
-#include <vxl_config.h> // get VXL_BUILD_SHARED
+#include <vxl_config.h> // get VXL_BUILD_SHARED_LIBS
 
-#ifndef VXL_BUILD_SHARED  // if not a shared build
+#ifndef VXL_BUILD_SHARED_LIBS  // if not a shared build
 # define VGL_EXPORT
 #else  // this is a shared build
 # ifdef vgl_EXPORTS  // if building this library
