@@ -20,4 +20,4 @@ if(EXPAT_FOUND)
 
   target_link_libraries(boxm2_multi_pro boxm2_multi_algo bprb)
 
-endif(EXPAT_FOUND)
+endif()

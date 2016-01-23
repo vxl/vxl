@@ -11,7 +11,7 @@ find_file(TESTLIB_VCL_WHERE_ROOT_DIR_H
 
 if(TESTLIB_VCL_WHERE_ROOT_DIR_H)
   add_definitions(-DVCL_WHERE_ROOT_DIR_H_EXISTS)
-endif(TESTLIB_VCL_WHERE_ROOT_DIR_H)
+endif()
 
 set( testlib_sources
 
@@ -35,4 +35,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/testlib ${testlib_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

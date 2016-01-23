@@ -16,7 +16,7 @@ if(OPENCL_FOUND)
     add_executable( bvxm_to_boxm2_exe bvxm_to_boxm2.cxx  bvxm_to_boxm2.h)
     target_link_libraries( bvxm_to_boxm2_exe boxm2 bvxm bvxm_io bvxm_grid_io bvxm_algo boxm2_io boct vnl vgl vul vbl vcl)
 
-  endif(EXPAT_FOUND)
+  endif()
 
 
-endif(OPENCL_FOUND)
+endif()

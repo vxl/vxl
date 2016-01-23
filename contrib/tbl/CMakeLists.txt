@@ -18,4 +18,4 @@ add_subdirectory(vipl)
 # vil-specific implementations are in the "vepl" specialisation library,
 if(BUILD_CORE_IMAGING)
   add_subdirectory(vepl)
-endif(BUILD_CORE_IMAGING)
+endif()

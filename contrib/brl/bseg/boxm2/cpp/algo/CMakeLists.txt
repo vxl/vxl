@@ -62,4 +62,4 @@ target_link_libraries(boxm2_cpp_algo
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

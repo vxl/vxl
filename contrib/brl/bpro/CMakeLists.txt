@@ -13,4 +13,4 @@ add_subdirectory(core)
 # Brown batch processing (Python)
 add_subdirectory(bpro_batch)
 
-endif(EXPAT_FOUND)
+endif()

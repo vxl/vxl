@@ -12,8 +12,8 @@ if(EXPAT_FOUND)
     include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
     if(GEOTIFF_FOUND)
       include_directories(${GEOTIFF_INCLUDE_DIR})
-    endif(GEOTIFF_FOUND)
-  endif(TIFF_FOUND)
+    endif()
+  endif()
 
   set(bvxm_grid_pro_sources
       bvxm_grid_processes.h
@@ -30,6 +30,6 @@ if(EXPAT_FOUND)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
-endif(EXPAT_FOUND)
+endif()

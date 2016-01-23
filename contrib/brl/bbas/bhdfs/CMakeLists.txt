@@ -32,11 +32,11 @@ if(HDFS_FOUND)
     get_filename_component(JAVA_LIB_DIR ${JAVA_AWT_LIBRARY} PATH)
     if(EXISTS ${JAVA_LIB_DIR}/xawt)
       link_directories(${JAVA_LIB_DIR}/xawt)
-    endif(EXISTS ${JAVA_LIB_DIR}/xawt)
+    endif()
     if(EXISTS ${JAVA_LIB_DIR}/client)
       link_directories(${JAVA_LIB_DIR}/client)
-    endif(EXISTS ${JAVA_LIB_DIR}/client)
-  endif(JAVA_AWT_LIBRARY)
+    endif()
+  endif()
   set(CMAKE_SKIP_RPATH 0)
 
   #tests
@@ -44,4 +44,4 @@ if(HDFS_FOUND)
 
   #pro
   add_subdirectory(pro)
-endif(HDFS_FOUND)
+endif()

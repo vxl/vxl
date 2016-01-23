@@ -110,7 +110,7 @@ if(NETLIB_FOUND)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
 
-endif(NETLIB_FOUND)
+endif()

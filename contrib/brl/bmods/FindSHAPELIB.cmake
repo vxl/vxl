@@ -28,6 +28,6 @@ if( VXL_FORCE_B3P_SHAPELIB )
     set( SHAPELIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib)
     set( SHAPELIB_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/shapelib)
 
-  endif(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib/shapefil.h)
+  endif()
 
-endif(VXL_FORCE_B3P_SHAPELIB)
+endif()

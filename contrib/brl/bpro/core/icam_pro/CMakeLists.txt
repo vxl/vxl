@@ -19,4 +19,4 @@ target_link_libraries(icam_pro bprb icam vpgl_algo vpgl_io vpgl vnl vil_io vil v
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

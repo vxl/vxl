@@ -22,16 +22,16 @@ if(BUILD_BGUI3D)
     include_directories( ${COIN3D_INCLUDE_DIR} )
     set( HAS_BGUI3D "YES" )
     add_definitions( -DHAS_BGUI3D )
-  endif(COIN3D_FOUND)
+  endif()
 
   # Find the SimVoleon library
   include( ${VXL_CMAKE_DIR}/NewCMake/FindSIMVoleon.cmake )
 
   if(SIMVOLEON_FOUND)
     include_directories( ${SIMVOLEON_INCLUDE_DIR} )
-  endif(SIMVOLEON_FOUND)
+  endif()
 
-endif(BUILD_BGUI3D)
+endif()
 
 # Flag that determines if we were able to successfully build bgui3d.
 # Initialize to NO. Change below if yes.
@@ -59,14 +59,14 @@ target_link_libraries(bgui3d ${COIN3D_LIBRARY} vgui vpgl vnl_algo vnl vgl_algo v
 
 if(SIMVOLEON_FOUND)
   target_link_libraries(bgui3d ${SIMVOLEON_LIBRARY})
-endif(SIMVOLEON_FOUND)
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 
-endif(HAS_BGUI3D)
+endif()

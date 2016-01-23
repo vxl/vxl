@@ -26,6 +26,6 @@ target_link_libraries(mcal mbl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 #add_subdirectory(tools)

@@ -11,4 +11,4 @@ target_link_libraries( bmsh3d_pro bmsh3d vul )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

@@ -12,4 +12,4 @@ target_link_libraries(bvxm_io bvxm vsl vbl vil vil_io vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

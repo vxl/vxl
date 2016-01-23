@@ -9,6 +9,6 @@ if(NETLIB_FOUND)
     include_directories(${X11_INCLUDE_DIR})
     add_executable(netlib_showme showme.c)
     target_link_libraries(netlib_showme ${X11_LIBRARIES})
-  endif(X11_FOUND)
+  endif()
 
-endif(NETLIB_FOUND)
+endif()

@@ -25,4 +25,4 @@ target_link_libraries(breg3d_pro breg3d bprb vpgl_pro vpgl vpgl_io vil vil_io vn
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

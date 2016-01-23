@@ -40,6 +40,6 @@ target_link_libraries(vimt3d vil3d_algo vil3d_io vil3d vimt mbl vnl_algo vgl vnl
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 add_subdirectory(tools)

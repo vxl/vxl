@@ -28,6 +28,6 @@ target_link_libraries(volm_desc volm bsta bsta_algo bsta_vis bsvg bvgl vsl vbl v
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 add_subdirectory(exe)

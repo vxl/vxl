@@ -17,7 +17,7 @@ include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(EXPAT_FOUND)
   include_directories( ${EXPAT_INCLUDE_DIR} )
   include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-endif(EXPAT_FOUND)
+endif()
 
 
 aux_source_directory(Templates bstm_sources)
@@ -27,11 +27,11 @@ target_link_libraries(bstm boxm2 bstm_basic vgl vnl_algo vnl)
 
 if(EXPAT_FOUND)
   target_link_libraries(bstm expatpp)
-endif(EXPAT_FOUND)
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #basic
 subdirs(basic)

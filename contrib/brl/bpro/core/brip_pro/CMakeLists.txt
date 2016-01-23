@@ -18,4 +18,4 @@ target_link_libraries(brip_pro bprb brdb brip vil_pro vil vsl bil_algo)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

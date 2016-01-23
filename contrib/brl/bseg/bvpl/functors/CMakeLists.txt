@@ -33,6 +33,6 @@ target_link_libraries(bvpl_functors bvpl_kernels)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
-endif(EXPAT_FOUND)
+endif()

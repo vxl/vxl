@@ -33,7 +33,7 @@ function(doxygen_module_has_changed _module _modname _changed)
   endif()
 
   set(${_changed} ${changed} PARENT_SCOPE)
-endfunction(doxygen_module_has_changed)
+endfunction()
 
 function(_print_header _index_html)
   set(title "VXL Documentation")
@@ -45,7 +45,7 @@ function(_print_header _index_html)
 <hr />"
     )
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_header)
+endfunction()
 
 function(_print_book_links _index_html)
   set(index_html "${${_index_html}}")
@@ -59,7 +59,7 @@ function(_print_book_links _index_html)
       )
   endforeach()
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_book_links)
+endfunction()
 
 function(_print_library_links _index_html)
   set(index_html "${${_index_html}}")
@@ -92,7 +92,7 @@ function(_print_library_links _index_html)
     endif()
   endforeach()
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_library_links)
+endfunction()
 
 function(_print_footer _index_html)
   set(index_html "${${_index_html}}")
@@ -137,7 +137,7 @@ on ${date}.
 </html>"
     )
   set(${_index_html} "${index_html}" PARENT_SCOPE)
-endfunction(_print_footer)
+endfunction()
 
 #---------------------------------------------------------------------
 # Initial configuration.

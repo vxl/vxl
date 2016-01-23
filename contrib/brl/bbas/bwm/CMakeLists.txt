@@ -14,17 +14,17 @@ include_directories( ${GEL_INCLUDE_DIR} )
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 if(DIRECTSHOW_FOUND)
 include_directories(${DIRECTSHOW_INCLUDE_DIRS})
-endif(DIRECTSHOW_FOUND)
+endif()
 
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 if(TIFF_FOUND)
   include_directories(${TIFF_INCLUDE_DIR})
-endif(TIFF_FOUND)
+endif()
 
 include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 if(GEOTIFF_FOUND)
   include_directories( ${GEOTIFF_INCLUDE_DIR} )
-endif(GEOTIFF_FOUND)
+endif()
 
 include( ${BRL_MODULE_PATH}/FindSHAPELIB.cmake )
 
@@ -90,15 +90,15 @@ if(EXPAT_FOUND)
        bwm_corr.cxx                     bwm_corr.h          bwm_corr_sptr.h
        bwm_3d_corr.cxx                  bwm_3d_corr.h       bwm_3d_corr_sptr.h
     )
-  endif(SHAPELIB_FOUND)
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+ endif()
+endif()
 
 if(NOT MINGW)
   # MFC is not available in MinGW.
   # This should be fixed in FindMFC.cmake and then this IF can be removed
   find_package(MFC)
-endif(NOT MINGW)
+endif()
 
 if(MFC_FOUND)
   # add stuff to use MFC in this executable
@@ -109,7 +109,7 @@ if(MFC_FOUND)
      process/bwm_process.cxx           process/bwm_process.h
      process/bwm_site_process.cxx      process/bwm_site_process.h
   )
-endif(MFC_FOUND)
+endif()
 
 aux_source_directory(Templates bwm_sources)
 
@@ -120,8 +120,8 @@ target_link_libraries( bwm bwm_video bwm_reg bwm_algo bwm_io vsph depth_map bsta
 if(EXPAT_FOUND)
   if(EXPATPP_FOUND)
     target_link_libraries(bwm volm)
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()
 
 add_subdirectory(algo)
 add_subdirectory(pro)
@@ -137,17 +137,17 @@ if(EXPAT_FOUND)
  if(EXPATPP_FOUND)
   if(WIN32)
    add_subdirectory(wxWidgets)
-  endif(WIN32)
+  endif()
   if(SHAPELIB_FOUND)
    add_subdirectory(exe)
    if( BUILD_TESTING )
     add_subdirectory(tests)
-   endif( BUILD_TESTING )
-  endif(SHAPELIB_FOUND)
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+   endif()
+  endif()
+ endif()
+endif()
 
-endif(HAS_VGUI)
+endif()
 
 
 add_subdirectory(video)

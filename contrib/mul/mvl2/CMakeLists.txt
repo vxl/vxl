@@ -19,16 +19,16 @@ if(WIN32)
     # support from AVIFile.
     set(AVIFILE_FOUND "YES")
     set(AVIFILE_LIBRARIES "vfw32")
-  endif(NOT CYGWIN)
-endif(WIN32)
+  endif()
+endif()
 
 if(NOT AVIFILE_FOUND)
   find_package(AVIFile)
   if(AVIFILE_FOUND)
     include_directories( ${AVIFILE_INCLUDE_DIR} )
     add_definitions(${AVIFILE_DEFINITIONS} )
-  endif(AVIFILE_FOUND)
-endif(NOT AVIFILE_FOUND)
+  endif()
+endif()
 
 if(AVIFILE_FOUND)
   set(mvl2_sources ${mvl2_sources}
@@ -41,15 +41,15 @@ if(AVIFILE_FOUND)
         mvl2_video_from_avi_windows.h mvl2_video_from_avi_windows.cxx
         mvl2_video_to_avi_windows.h   mvl2_video_to_avi_windows.cxx
        )
-  else(WIN32)
+  else()
     set(mvl2_sources ${mvl2_sources}
         mvl2_video_from_avi_linux.h mvl2_video_from_avi_linux.cxx
         mvl2_video_to_avi_linux.h   mvl2_video_to_avi_linux.cxx
        )
-  endif(WIN32)
-else(AVIFILE_FOUND)
+  endif()
+else()
   set(AVIFILE_LIBRARIES "")
-endif(AVIFILE_FOUND)
+endif()
 
 add_library(mvl2 ${mvl2_sources})
 install_targets(/lib mvl2)
@@ -59,7 +59,7 @@ target_link_libraries( mvl2 vil vul ${AVIFILE_LIBRARIES} )
 if(AVIFILE_FOUND)
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
   add_subdirectory(examples)
-endif(AVIFILE_FOUND)
+endif()

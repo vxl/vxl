@@ -25,5 +25,5 @@ target_link_libraries(icam vsph vpgl_io vpgl_algo vpgl vgl_algo vil_algo vnl_alg
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 

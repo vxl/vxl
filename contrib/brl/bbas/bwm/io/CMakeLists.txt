@@ -18,8 +18,8 @@ if(EXPAT_FOUND)
      bwm_io_kml_parser.cxx    bwm_io_kml_parser.h
      bwm_io_kml_camera.cxx     bwm_io_kml_camera.h
   )
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 add_library(bwm_io ${bwm_io_sources})
 
@@ -29,15 +29,15 @@ if(EXPAT_FOUND)
   target_link_libraries(bwm_io ${EXPAT_LIBRARIES})
   if(APPLE)
     target_link_libraries(bwm_io expat)
-  endif(APPLE)
+  endif()
   if(EXPATPP_FOUND)
     target_link_libraries(bwm_io ${EXPATPP_LIBRARIES})
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib bwm_io)

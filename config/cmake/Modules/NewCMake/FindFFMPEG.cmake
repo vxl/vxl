@@ -19,12 +19,12 @@ find_path( FFMPEG_INCLUDE2_DIR libavcodec/avcodec.h
 if( FFMPEG_INCLUDE1_DIR)
   set(FFMPEG_INCLUDE_DIR ${FFMPEG_INCLUDE1_DIR} )
   set( FFMPEG_FOUND_SEVERAL "NO" )
-endif( FFMPEG_INCLUDE1_DIR)
+endif()
 
 if( FFMPEG_INCLUDE2_DIR)
   set(FFMPEG_INCLUDE_DIR ${FFMPEG_INCLUDE2_DIR} )
   set( FFMPEG_FOUND_SEVERAL "YES" )
-endif( FFMPEG_INCLUDE2_DIR)
+endif()
 
 if( FFMPEG_INCLUDE_DIR )
 
@@ -39,7 +39,7 @@ if( FFMPEG_CONFIG )
   set( FFMPEG_FOUND "YES" )
   set( FFMPEG_LIBRARIES "${FFMPEG_LIBS}" )
 
-else( FFMPEG_CONFIG )
+else()
 
   find_library( FFMPEG_avcodec_LIBRARY avcodec
     /usr/lib
@@ -76,14 +76,14 @@ else( FFMPEG_CONFIG )
     set( FFMPEG_LIBRARIES ${FFMPEG_avformat_LIBRARY} ${FFMPEG_avcodec_LIBRARY} )
     if( FFMPEG_avutil_LIBRARY )
        set( FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} ${FFMPEG_avutil_LIBRARY} )
-    endif( FFMPEG_avutil_LIBRARY )
+    endif()
     if( FFMPEG_swscale_LIBRARY )
        set( FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} ${FFMPEG_swscale_LIBRARY} )
-    endif( FFMPEG_swscale_LIBRARY )
+    endif()
 
-  endif( FFMPEG_avformat_LIBRARY )
-  endif( FFMPEG_avcodec_LIBRARY )
+  endif()
+  endif()
 
-endif( FFMPEG_CONFIG )
+endif()
 
-endif( FFMPEG_INCLUDE_DIR )
+endif()

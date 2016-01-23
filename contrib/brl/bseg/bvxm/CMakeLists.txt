@@ -10,15 +10,15 @@ if(TIFF_FOUND)
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
     include_directories(${GEOTIFF_INCLUDE_DIR})
-  endif(GEOTIFF_FOUND)
-endif(TIFF_FOUND)
+  endif()
+endif()
 
 if(WIN32 AND VXL_USE_LFS)
 #This is a hack since win32 doesn't have transparent Large File Support.
 add_definitions( -DBVXM_USE_FSTREAM64 )
   # so we can include vil_stream_fstream64
 add_definitions( -DVIL_USE_FSTREAM64 )
-endif(WIN32 AND VXL_USE_LFS)
+endif()
 
 set(bvxm_sources
     bvxm_float_processor.h
@@ -46,7 +46,7 @@ if(EXPAT_FOUND)
   set(bvxm_sources ${bvxm_sources}
       bvxm_world_params_parser.h             bvxm_world_params_parser.cxx
      )
-endif(EXPAT_FOUND)
+endif()
 
 add_library( bvxm ${bvxm_sources})
 
@@ -54,7 +54,7 @@ target_link_libraries( bvxm bvxm_grid bsta bsta_algo vpgl vpgl_io vpgl_file_form
 
 if(EXPAT_FOUND)
 target_link_libraries(bvxm expatpp)
-endif(EXPAT_FOUND)
+endif()
 
 add_subdirectory(grid)
 add_subdirectory(io)
@@ -63,4 +63,4 @@ add_subdirectory(algo)
 add_subdirectory(breg3d)
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

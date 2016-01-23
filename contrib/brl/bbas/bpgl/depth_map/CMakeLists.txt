@@ -21,4 +21,4 @@ target_link_libraries(depth_map bpgl vpgl vpgl_io vpgl_algo vsol vnl_algo vnl vi
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

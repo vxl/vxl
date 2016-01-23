@@ -18,7 +18,7 @@ aux_source_directory(Templates rsdl_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/rsdl_bins_2d+double.int-.cxx PROPERTIES COMPILE_FLAGS -O1)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_library(rsdl ${rsdl_sources})
 install_targets(/lib rsdl)
@@ -27,4 +27,4 @@ target_link_libraries( rsdl vnl vbl )
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

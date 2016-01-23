@@ -23,7 +23,7 @@ if( PYTHON_FOUND )
 
     if(OPENCL_FOUND)
       include_directories( ${OPENCL_INCLUDE_PATH} )
-    endif(OPENCL_FOUND)
+    endif()
 
      set(boxm2_batch_sources
          reg_boxm2.h   reg_boxm2.cxx
@@ -34,59 +34,59 @@ if( PYTHON_FOUND )
       #library has to have different name depending on debug or release version.
       if(WIN32)
         set_target_properties(boxm2_batch PROPERTIES OUTPUT_NAME boxm2_batch DEBUG_POSTFIX _d SUFFIX .pyd)
-      endif(WIN32)
+      endif()
       if(APPLE)
         set_target_properties(boxm2_batch PROPERTIES OUTPUT_NAME boxm2_batch SUFFIX .so)
-      endif(APPLE)
+      endif()
       set_target_properties(boxm2_batch PROPERTIES PREFIX "")
 
       target_link_libraries(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro bvgl_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro)
       if(BOXM2_USE_VOLM)
         add_definitions(-DUSE_VOLM=1)
         target_link_libraries(boxm2_batch volm_pro)
-      endif(BOXM2_USE_VOLM)
+      endif()
       if(GLEW_FOUND AND HAS_VGUI AND OPENCL_FOUND)
         add_definitions(-DHAS_GLEW=1)
         target_link_libraries(boxm2_batch boxm2_view_pro )
-      endif(GLEW_FOUND AND HAS_VGUI AND OPENCL_FOUND)
+      endif()
 
       if(OPENCL_FOUND)
         add_definitions(-DHAS_OPENCL=1)
         target_link_libraries(boxm2_batch bocl_pro  boxm2_ocl_pro boxm2_multi_pro boxm2_vecf_ocl_pro)
         if(BOXM2_USE_VOLM)
              target_link_libraries(boxm2_batch boxm2_volm_pro boxm2_volm_io )
-        endif(BOXM2_USE_VOLM)
+        endif()
 
-      endif(OPENCL_FOUND)
+      endif()
 
       if(HDFS_FOUND)
         add_definitions(-DHAS_HDFS=1)
         target_link_libraries(boxm2_batch bhdfs_pro )
-      endif(HDFS_FOUND)
+      endif()
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( boxm2_batch debug ${PYTHON_DEBUG_LIBRARY})
-      endif(PYTHON_DEBUG_LIBRARIES )
+      endif()
 
       if(PYTHON_LIBRARIES)
         target_link_libraries( boxm2_batch optimized ${PYTHON_LIBRARY})
-      endif(PYTHON_LIBRARIES)
+      endif()
 
 
 
       if( BUILD_TESTING )
         add_subdirectory(tests)
-      endif( BUILD_TESTING )
+      endif()
 
       #install the .h .txx and libs
       install_targets(/lib boxm2_batch)
       INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_batch/ ${boxm2_batch_sources})
 
-    endif(NOT BUILD_POSITION_DEPENDENT_CODE)
-  endif( EXPAT_FOUND )
-endif( PYTHON_FOUND )
+    endif()
+  endif()
+endif()
 
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 if(DIRECTSHOW_FOUND)
   add_definitions(-DHAS_DIRECTSHOW)
-endif(DIRECTSHOW_FOUND)
+endif()

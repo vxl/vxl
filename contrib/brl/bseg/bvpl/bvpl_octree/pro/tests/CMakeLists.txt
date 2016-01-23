@@ -10,7 +10,7 @@ target_link_libraries( bvpl_octree_pro_test_all testlib bvpl_octree_pro bvpl_oct
 
 if(SEGFAULT_FIXED)
 add_test( NAME bvpl_octree_pro_plane_propagation_process COMMAND $<TARGET_FILE:bvpl_octree_pro_test_all> test_bvpl_plane_propagation_process)
-endif(SEGFAULT_FIXED)
+endif()
 
 add_executable( bvpl_octree_pro_test_include test_include.cxx )
 target_link_libraries( bvpl_octree_pro_test_include bvpl_octree_pro sdet )

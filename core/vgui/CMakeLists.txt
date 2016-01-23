@@ -31,10 +31,10 @@ if(OPENGL_FOUND)
     option(VGUI_USE_X11 "Use OpenGL for X11" NO)
     if(VGUI_USE_X11)
       find_package(X11)
-    endif(VGUI_USE_X11)
-  else(APPLE)
+    endif()
+  else()
     find_package(X11)
-  endif(APPLE)
+  endif()
   # glut optionally used by vgui_text and by the glut toolkit
   # implementation
   find_package(GLUT)
@@ -49,7 +49,7 @@ if(OPENGL_FOUND)
     # MFC is not available in MinGW.
     # This should be fixed in FindMFC.cmake and then this IF can be removed
     find_package(MFC)
-  endif(NOT MINGW)
+  endif()
 
   #set(WXWIDGETS_USE_LIBS base core gl)
   #find_package(wxWidgets)
@@ -59,7 +59,7 @@ if(OPENGL_FOUND)
   include_directories(${OPENGL_INCLUDE_DIR})
   if( GLUT_FOUND )
     include_directories(${GLUT_INCLUDE_DIR})
-  endif( GLUT_FOUND )
+  endif()
 
 set(vgui_sources
   vgui_fwd.h
@@ -200,7 +200,7 @@ if( GLUT_FOUND )
   set(vgui_sources ${vgui_sources}
     vgui_glut.cxx                    vgui_glut.h
   )
-endif( GLUT_FOUND )
+endif()
 
 aux_source_directory(Templates vgui_sources)
 
@@ -208,20 +208,20 @@ if(MFC_FOUND)
   #set(vgui_sources ${vgui_sources}
   #    internals/vgui_accelerate_mfc.cxx internals/vgui_accelerate_mfc.h
   #   )
-endif(MFC_FOUND)
+endif()
 
 if(X11_FOUND)
   include_directories(${X11_INCLUDE_DIR})
   set(vgui_sources ${vgui_sources}
       internals/vgui_accelerate_x11.cxx internals/vgui_accelerate_x11.h
      )
-endif(X11_FOUND)
+endif()
 
 if(MFC_FOUND)
   # add stuff to use MFC in this executable
   add_definitions( "-D_AFXDLL" )
   set(CMAKE_MFC_FLAG 2)
-endif(MFC_FOUND)
+endif()
 
 
 ######################################################################
@@ -257,22 +257,22 @@ if(GLUT_FOUND)
         set(vgui_glut_sources ${vgui_glut_sources}
           impl/glut/menu_hack_none.cxx
         )
-      else(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
+      else()
         set(vgui_glut_sources ${vgui_glut_sources}
           impl/glut/menu_hack_X11.cxx
         )
-      endif(EXISTS ${GLUT_INCLUDE_DIR}/GL/freeglut.h)
-    else(X11_FOUND AND NOT APPLE)
+      endif()
+    else()
       set(vgui_glut_sources ${vgui_glut_sources}
         impl/glut/menu_hack_none.cxx
       )
-    endif(X11_FOUND AND NOT APPLE)
+    endif()
 
     set( vgui_sources ${vgui_sources} ${vgui_glut_sources} )
 
-  endif(VGUI_USE_GLUT)
+  endif()
 
-endif(GLUT_FOUND)
+endif()
 
 ##################################################
 # Qt
@@ -283,24 +283,24 @@ if(QT_FOUND)
   option(VGUI_USE_QT "Should Qt support be compiled into vgui?" YES)
   if(QT3_INSTALLED AND QT4_INSTALLED)
     option(VGUI_USE_QT4 "Specify QT version" YES)
-  else(QT3_INSTALLED AND QT4_INSTALLED)
+  else()
      if(QT4_INSTALLED)
           set(VGUI_USE_QT4 YES)
-     else(QT4_INSTALLED)
+     else()
          set(VGUI_USE_QT4 NO)
-     endif(QT4_INSTALLED)
-  endif(QT3_INSTALLED AND QT4_INSTALLED)
+     endif()
+  endif()
   if(VGUI_USE_QT)
     if(QT4_INSTALLED AND VGUI_USE_QT4)
     include_directories(${QT_INCLUDE_DIR} ${QT_QT_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTCORE_INCLUDE_DIR}
                         ${QT_QTOPENGL_INCLUDE_DIR})
     add_definitions(-DQT3_SUPPORT_WARNINGS ${QT_DEFINITIONS} ${QT_USE_QTOPENGL})
     set(QT_SRCS_DIR impl/qt4)
-    else(QT4_INSTALLED AND VGUI_USE_QT4)
+    else()
     include_directories(${QT_INCLUDE_DIR})
     add_definitions(${QT_DEFINITIONS})
     set(QT_SRCS_DIR impl/qt)
-    endif(QT4_INSTALLED AND VGUI_USE_QT4)
+    endif()
 
     set(vgui_qt_sources
       ${QT_SRCS_DIR}/vgui_qt.cxx             ${QT_SRCS_DIR}/vgui_qt.h
@@ -323,11 +323,11 @@ if(QT_FOUND)
 
     if(CMAKE_COMPILER_IS_GNUCXX)
       set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/moc_vgui_qt_adaptor.cxx GENERATED PROPERTIES COMPILE_FLAGS -O0)
-    endif(CMAKE_COMPILER_IS_GNUCXX)
+    endif()
 
-  endif(VGUI_USE_QT)
+  endif()
 
-endif(QT_FOUND)
+endif()
 
 ##################################################
 # Win32SDK
@@ -352,9 +352,9 @@ if(WIN32SDK_FOUND)
 
     set( vgui_sources ${vgui_sources} ${vgui_win32sdk_sources} )
 
-  endif(VGUI_USE_WIN32SDK)
+  endif()
 
-endif(WIN32SDK_FOUND)
+endif()
 
 ##################################################
 # MFC
@@ -385,9 +385,9 @@ if(MFC_FOUND)
 
     set( vgui_sources ${vgui_sources} ${vgui_mfc_sources} )
 
-  endif(VGUI_USE_MFC)
+  endif()
 
-endif(MFC_FOUND)
+endif()
 
 ##################################################
 # GTK
@@ -413,9 +413,9 @@ if(GTK_GL_FOUND)
 
     set( vgui_sources ${vgui_sources} ${vgui_gtk_sources} )
 
-  endif(VGUI_USE_GTK)
+  endif()
 
-endif(GTK_GL_FOUND)
+endif()
 
 
 ##################################################
@@ -435,7 +435,7 @@ if(GTK2_FOUND)
       if(VGUI_USE_GTK)
         message(SEND_ERROR "You cannot build against both GTK1 and"
           " GTK2 at the same time")
-      endif(VGUI_USE_GTK)
+      endif()
 
 
       # This puts the include directories and whatever compiler flags
@@ -455,10 +455,10 @@ if(GTK2_FOUND)
 
       set( vgui_sources ${vgui_sources} ${vgui_gtk2_sources} )
 
-    endif(VGUI_USE_GTK2)
-  endif(GTKGL)
+    endif()
+  endif()
 
-endif(GTK2_FOUND)
+endif()
 
 #########################################i#########
 # wxWidgets
@@ -487,11 +487,11 @@ if(wxWidgets_FOUND)
     option(BUILD_VGUI_WX "Build extras for VGUI use in wxWidgets apps" NO)
     if(BUILD_VGUI_WX)
       add_subdirectory(wx)
-    endif(BUILD_VGUI_WX)
+    endif()
 
-  endif(VGUI_USE_WX)
+  endif()
 
-endif(wxWidgets_FOUND)
+endif()
 
 ######################################################################
 # END TOOLKIT IMPLEMENTATIONS
@@ -520,32 +520,32 @@ target_link_libraries(vgui vnl vil1 vil vgl vpl vbl vul)
 #imagehlp.dll is needed for directory browsing (vgui_dir_dialog)
 if(MFC_FOUND)
   target_link_libraries(vgui imagehlp)
-endif(MFC_FOUND)
+endif()
 
 # Dependencies created by the toolkit implementations
 
 if(VGUI_USE_QT)
   if(QT4_INSTALLED AND VGUI_USE_QT4)
     target_link_libraries(vgui ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY})
-  else(QT4_INSTALLED AND VGUI_USE_QT4)
+  else()
     target_link_libraries(vgui ${QT_LIBRARIES})
-  endif(QT4_INSTALLED AND VGUI_USE_QT4)
-endif(VGUI_USE_QT)
+  endif()
+endif()
 if(VGUI_USE_GTK)
   target_link_libraries(vgui ${GTK_LIBRARIES})
-endif(VGUI_USE_GTK)
+endif()
 if(VGUI_USE_GTK2)
   target_link_libraries(vgui ${GTK2_LIBRARIES})
-endif(VGUI_USE_GTK2)
+endif()
 if(VGUI_USE_WX)
   if(wxWidgets_LINK_DIRECTORIES)
     link_directories(${wxWidgets_LINK_DIRECTORIES})
-  endif(wxWidgets_LINK_DIRECTORIES)
+  endif()
 
   if(wxWidgets_LIBRARIES)
     target_link_libraries(vgui ${wxWidgets_LIBRARIES})
-  endif(wxWidgets_LIBRARIES)
-endif(VGUI_USE_WX)
+  endif()
+endif()
 
 # Basic vgui dependencies.
 # These should appear after the above, because most of
@@ -553,24 +553,24 @@ endif(VGUI_USE_WX)
 
 if(VGUI_USE_GLUT)
   target_link_libraries(vgui ${GLUT_LIBRARIES})
-endif(VGUI_USE_GLUT)
+endif()
 
 target_link_libraries(vgui ${OPENGL_LIBRARIES})
 
 if(X11_FOUND)
   target_link_libraries(vgui ${X11_LIBRARIES})
-endif(X11_FOUND)
+endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
-endif(OPENGL_GLU_FOUND)
-endif(OPENGL_FOUND)
+endif()
+endif()
 
 if( NOT CAN_BUILD_VGUI )
   # Dashboard builds will try to build vgui if possible,
@@ -580,7 +580,7 @@ if( NOT CAN_BUILD_VGUI )
                        "Make sure the OpenGL libraries "
                        "(GL and GLU) are specified correctly,\n"
                        "or set BUILD_VGUI to OFF." )
-  endif( NOT BUILD_FOR_VXL_DASHBOARD )
-endif( NOT CAN_BUILD_VGUI )
+  endif()
+endif()
 
-endif( BUILD_VGUI )
+endif()

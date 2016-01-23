@@ -26,4 +26,4 @@ target_link_libraries(bgrl vbl_io vbl vsl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

@@ -15,18 +15,18 @@ set( vpl_sources
 add_library(vpl ${vpl_sources})
 if(NOT WIN32)
   set_target_properties(vpl PROPERTIES COMPILE_FLAGS "-fPIC")
-endif(NOT WIN32)
+endif()
 
 target_link_libraries( vpl vcl )
 
 
 if(NOT UNIX)
   target_link_libraries( vpl ws2_32 vcl )
-endif(NOT UNIX)
+endif()
 
 install_targets(/lib vpl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpl ${vpl_sources})
 
 if( BUILD_TESTING)
   add_subdirectory(tests)
-endif( BUILD_TESTING)
+endif()

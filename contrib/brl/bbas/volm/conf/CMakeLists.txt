@@ -21,6 +21,6 @@ target_link_libraries(volm_conf volm vgl_io vil vil_io vbl_io bkml bvgl bpgl vpg
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 add_subdirectory(exe)

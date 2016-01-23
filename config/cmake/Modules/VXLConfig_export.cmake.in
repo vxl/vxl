@@ -18,9 +18,9 @@
 #  find_package(VXL)
 #  if(VXL_FOUND)
 #    include(${VXL_CMAKE_DIR}/UseVXL.cmake)
-#  else(VXL_FOUND)
+#  else()
 #    message("VXL_DIR should be set to the VXL build directory.")
-#  endif(VXL_FOUND)
+#  endif()
 #
 # See vxl/config/cmake/UseVXL.cmake for details.
 #

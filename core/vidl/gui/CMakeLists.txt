@@ -18,6 +18,6 @@ target_link_libraries( vidl_gui vidl vgui vil )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
-endif( HAS_VGUI )
+endif()

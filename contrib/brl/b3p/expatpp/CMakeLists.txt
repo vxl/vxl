@@ -5,9 +5,9 @@ if( EXPAT_FOUND )
 
   if( VXL_USING_NATIVE_EXPAT )
     include_directories( ${EXPAT_INCLUDE_DIR} )
-  else( VXL_USING_NATIVE_EXPAT )
+  else()
     include_directories( ${BRL_BINARY_DIR}/b3p/expat )
-  endif( VXL_USING_NATIVE_EXPAT )
+  endif()
 
   set( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
 
@@ -16,9 +16,9 @@ if( EXPAT_FOUND )
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
   install_targets(/lib expatpp)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/b3p/expatpp/ ${expatpp_sources})
 
-endif( EXPAT_FOUND )
+endif()

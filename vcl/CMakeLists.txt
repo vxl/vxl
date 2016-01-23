@@ -8,8 +8,8 @@ if(WIN32)
   if(CMAKE_CXX_COMPILER MATCHES "^cl$")
     set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
     set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
-  endif(CMAKE_CXX_COMPILER MATCHES "^cl$")
-endif(WIN32)
+  endif()
+endif()
 
 
 project( vcl )
@@ -233,7 +233,7 @@ add_library(vcl ${vcl_sources})
 
 if(UNIX)
   target_link_libraries( vcl m )
-endif(UNIX)
+endif()
 
 # Installation
 install_targets(/lib vcl)
@@ -241,4 +241,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/vcl ${vcl_sources})
 
 if( BUILD_TESTING)
   add_subdirectory(tests)
-endif( BUILD_TESTING)
+endif()

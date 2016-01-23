@@ -16,19 +16,19 @@ include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 # report whether CMake has set these CMake variables
 if( UNIX )
   add_definitions( -DCMAKE_DEFINES_VARIABLE_UNIX )
-endif( UNIX )
+endif()
 if( CYGWIN )
   add_definitions( -DCMAKE_DEFINES_VARIABLE_CYGWIN )
-endif( CYGWIN )
+endif()
 if( MINGW )
   add_definitions( -DCMAKE_DEFINES_VARIABLE_MINGW )
-endif( MINGW )
+endif()
 if( WIN32 )
   add_definitions( -DCMAKE_DEFINES_VARIABLE_WIN32 )
-endif( WIN32 )
+endif()
 if( APPLE )
   add_definitions( -DCMAKE_DEFINES_VARIABLE_APPLE )
-endif( APPLE )
+endif()
 
 add_executable( core_test_all
   test_driver.cxx
@@ -67,7 +67,7 @@ if( COMMAND WRITE_FILE )
     "</BuildNameNotes>\n"
     "</Site>\n"
   )
-endif( COMMAND WRITE_FILE )
+endif()
 
 add_executable( vxl_echo vxl_echo.cxx )
 target_link_libraries( vxl_echo vcl )
@@ -78,13 +78,13 @@ set( MYMAKECOMMAND ${MAKECOMMAND})
 
 if(CMAKE_MAJOR_VERSION GREATER 2)
  file(TO_CMAKE_PATH ${MAKECOMMAND} MYMAKECOMMAND)
-endif(CMAKE_MAJOR_VERSION GREATER 2)
+endif()
 
 if(CMAKE_MAJOR_VERSION EQUAL 2)
   if(CMAKE_MINOR_VERSION  GREATER 3)
      file(TO_CMAKE_PATH ${MAKECOMMAND} MYMAKECOMMAND)
-  endif(CMAKE_MINOR_VERSION  GREATER 3)
-endif(CMAKE_MAJOR_VERSION EQUAL 2)
+  endif()
+endif()
 
 
 add_test( NAME cmake_config COMMAND $<TARGET_FILE:vxl_echo> nl

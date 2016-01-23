@@ -20,7 +20,7 @@ target_link_libraries(boct vcl vgl vgl_io vnl_io vbl vnl)
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib boct)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boct ${boct_sources})

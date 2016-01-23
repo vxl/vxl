@@ -20,7 +20,7 @@ target_link_libraries(bvrml_pro boxm2_cpp bvrml vpgl_algo vpgl_io bprb rply )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib bvrml_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvrml/pro ${bvrml_pro_sources})

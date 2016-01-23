@@ -23,7 +23,7 @@ target_link_libraries(bprb brdb bxml vbl vsl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib bprb)

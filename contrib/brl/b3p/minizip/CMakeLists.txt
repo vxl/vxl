@@ -19,10 +19,10 @@ set( minizip_sources
 if(WIN32)
   set( minizip_sources ${minizip_sources}
        iowin32.c    iowin32.h)
-endif(WIN32)
+endif()
 
 add_library( minizip ${minizip_sources} )
 target_link_libraries(minizip z)
 install_targets( /lib minizip )
 
-endif(ZLIB_FOUND)
+endif()

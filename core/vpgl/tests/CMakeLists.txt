@@ -32,7 +32,7 @@ include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 if(GEOTIFF_FOUND)
   set(HAS_GEOTIFF 1 )
   include_directories(${GEOTIFF_INCLUDE_DIR})
-endif(GEOTIFF_FOUND)
+endif()
 
 add_executable( vpgl_test_include test_include.cxx )
 target_link_libraries( vpgl_test_include vpgl )

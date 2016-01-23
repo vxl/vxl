@@ -14,10 +14,10 @@ if( HAS_VGUI )
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
   #Create Executables
   add_executable( cvg_hemisphere_view cvg_hemisphere_view.cxx )
   target_link_libraries( cvg_hemisphere_view cvg_view vul vgui vil_pro vpgl_pro vsph)
 
-endif( HAS_VGUI )
+endif()

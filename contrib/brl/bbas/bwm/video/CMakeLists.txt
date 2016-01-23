@@ -22,8 +22,8 @@ if(EXPAT_FOUND)
      bwm_video_site_io.cxx         bwm_video_site_io.h
      bwm_video_corr_processor.cxx  bwm_video_corr_processor.h
   )
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 aux_source_directory(Templates bwm_video_sources)
 add_library(bwm_video ${bwm_video_sources})
@@ -34,12 +34,12 @@ if(EXPAT_FOUND)
   target_link_libraries( bwm_video vidl)
   if(EXPATPP_FOUND)
     target_link_libraries(bwm_video ${EXPATPP_LIBRARIES})
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 add_subdirectory(exe)
 

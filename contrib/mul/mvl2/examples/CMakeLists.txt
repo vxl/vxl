@@ -9,9 +9,9 @@ if(NOT WIN32)
   find_package(AVIFile)
   include_directories( ${AVIFILE_INCLUDE_DIR} )
   add_definitions(${AVIFILE_DEFINITIONS} )
-else(NOT WIN32)
+else()
   set(AVIFILE_FOUND "YES")
-endif(NOT WIN32)
+endif()
 
 if(AVIFILE_FOUND)
 
@@ -23,4 +23,4 @@ if(AVIFILE_FOUND)
     mvl2_to_divx mvl2_to_divx.cxx
   )
 
-endif(AVIFILE_FOUND)
+endif()

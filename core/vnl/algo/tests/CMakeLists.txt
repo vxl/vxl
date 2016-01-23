@@ -85,7 +85,7 @@ if(NETLIB_FOUND)
   add_test( NAME vnl_algo_test_svd COMMAND $<TARGET_FILE:vnl_algo_test_all> test_svd                     )
   add_test( NAME vnl_algo_test_svd_fixed COMMAND $<TARGET_FILE:vnl_algo_test_all> test_svd_fixed               )
   add_test( NAME vnl_algo_test_symmetric_eigensystem COMMAND $<TARGET_FILE:vnl_algo_test_all> test_symmetric_eigensystem   )
-endif(NETLIB_FOUND)
+endif()
 
 # GCC 2.95 has problems when compiling test_algo.cxx with "-O2" flag.
 # The solution is to turn off optimization for GCC < 3.0
@@ -94,10 +94,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     exec_program(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERSION)
     if(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
       set( VNL_COMPILER_IS_GNUCXX_2XX 1 CACHE INTERNAL "Are we using an version of gcc < 3.0")
-    else(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
+    else()
       set( VNL_COMPILER_IS_GNUCXX_2XX 0 CACHE INTERNAL "Are we using an version of gcc < 3.0")
-    endif(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
-  endif( VNL_COMPILER_IS_GNUCXX_2XX MATCHES "VNL_COMPILER_IS_GNUCXX_2XX")
+    endif()
+  endif()
 
   if(VNL_COMPILER_IS_GNUCXX_2XX)
     # We only need to remove "-O2" flag from test_algo.cxx.
@@ -105,9 +105,9 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     foreach(var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_DEBUG
                 CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL)
       string(REGEX REPLACE "-O2" "" "${var}" "${${var}}")
-    endforeach(var)
-  endif(VNL_COMPILER_IS_GNUCXX_2XX)
-endif( CMAKE_COMPILER_IS_GNUCXX )
+    endforeach()
+  endif()
+endif()
 
 add_executable( vnl_algo_test_include test_include.cxx )
 target_link_libraries( vnl_algo_test_include vnl_algo )

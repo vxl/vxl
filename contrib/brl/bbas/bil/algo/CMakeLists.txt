@@ -37,7 +37,7 @@ target_link_libraries( bil_algo vil_algo vil vnl_algo vnl vgl_algo vgl vbl vsol)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib bil_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bil/algo ${bil_algo_sources})

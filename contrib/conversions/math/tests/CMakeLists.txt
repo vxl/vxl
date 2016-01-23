@@ -6,26 +6,26 @@ if(EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
   include_directories(${vxl_SOURCE_DIR}/Numerics)
   link_libraries( TJCOOL )
   set(HAS_COOL "YES")
-endif( EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
+endif()
 
 set(HAS_NUMERICS "NO")
 if(EXISTS ${vxl_SOURCE_DIR}/Numerics/CMakeLists.txt )
   include_directories(${vxl_SOURCE_DIR}/Numerics)
   link_libraries( Numerics iue-math )
   set(HAS_NUMERICS "YES")
-endif(EXISTS ${vxl_SOURCE_DIR}/Numerics/CMakeLists.txt )
+endif()
 
 if(HAS_COOL)
   add_definitions(-DHAS_COOL=1)
-else(HAS_COOL)
+else()
   add_definitions(-DHAS_NO_COOL=1)
-endif(HAS_COOL)
+endif()
 
 if(HAS_NUMERICS)
   add_definitions(-DHAS_NUMERICS=1)
-else(HAS_NUMERICS)
+else()
   add_definitions(-DHAS_NO_NUMERICS=1)
-endif(HAS_NUMERICS)
+endif()
 
 add_executable( conversions_math_test_all
   test_driver.cxx

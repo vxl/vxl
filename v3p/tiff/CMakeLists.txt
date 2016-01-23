@@ -15,14 +15,14 @@ if(NOT VXL_USING_NATIVE_TIFF)
     include_directories( ${ZLIB_INCLUDE_DIR} )
     set( LZW_SUPPORT 1 )
     set( ZIP_SUPPORT 1 )
-  endif(ZLIB_FOUND)
+  endif()
 
   include( ${VXL_CMAKE_DIR}/FindJPEG.cmake )
 
   if(JPEG_FOUND)
     include_directories( ${JPEG_INCLUDE_DIR} )
     set( JPEG_SUPPORT  1 )
-  endif(JPEG_FOUND)
+  endif()
 
   set( tiff_sources
   # Header files
@@ -111,11 +111,11 @@ if(NOT VXL_USING_NATIVE_TIFF)
     if( NOT CYGWIN )
       set( USE_WIN32_FILEIO 1 )
 
-    endif( NOT CYGWIN )
-  else(WIN32)
+    endif()
+  else()
     #TODO
     # set(HOST_FILLORDER "FILLORDER_LSB2MSB")
-  endif(WIN32)
+  endif()
 
   # Figure out the format prefix for 64-bit integer
   # Info from http://www.viva64.com/en/k/0046/
@@ -124,11 +124,11 @@ if(NOT VXL_USING_NATIVE_TIFF)
   if(WIN32)
     set(_FORMAT_64BIT_PREFIX "I64")
     set(_FORMAT_SSIZE_PREFIX "I")
-  else(WIN32)
+  else()
     if(APPLE)
       set(_FORMAT_64BIT_PREFIX "l")
-    endif(APPLE)
-  endif(WIN32)
+    endif()
+  endif()
   set(TIFF_INT64_FORMAT "%${_FORMAT_64BIT_PREFIX}d")
   set(TIFF_UINT64_FORMAT "%${_FORMAT_64BIT_PREFIX}u")
   set(TIFF_SSIZE_FORMAT "%${_FORMAT_SSIZE_PREFIX}u")
@@ -142,14 +142,14 @@ if(NOT VXL_USING_NATIVE_TIFF)
     set( tiff_sources ${tiff_sources}
       tif_unix.c
     )
-  else(UNIX)
+  else()
     if(WIN32)
 
       # Disable warnings on using unsecured CRT lib functions
       if(MSVC)
         add_definitions(-D_CRT_SECURE_NO_DEPRECATE)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-      endif(MSVC)
+      endif()
 
       # TODO
       # Copy WinCE files for Wince build
@@ -166,8 +166,8 @@ if(NOT VXL_USING_NATIVE_TIFF)
         tif_win32.c
        #fax3sm_winnt.c
       )
-    endif(WIN32)
-  endif(UNIX)
+    endif()
+  endif()
 
 
   add_library( tiff ${tiff_sources} )
@@ -176,6 +176,6 @@ if(NOT VXL_USING_NATIVE_TIFF)
 
   if( BUILD_TESTING)
     add_subdirectory(test)
-  endif( BUILD_TESTING)
+  endif()
 
-endif(NOT VXL_USING_NATIVE_TIFF)
+endif()

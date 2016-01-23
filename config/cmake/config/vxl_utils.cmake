@@ -11,9 +11,9 @@ foreach(file ${ARGN})
     string(REGEX REPLACE "\\.in$" "" install_file ${file})
     get_filename_component(dir ${install_file} PATH)
     install_files(${prefix}/${dir} FILES ${install_file})
-  endif(${file} MATCHES "\\.(h|hxx|txx)(\\.in)?$")
-endforeach(file ${filelist})
-endmacro(INSTALL_NOBASE_HEADER_FILES)
+  endif()
+endforeach()
+endmacro()
 
 #---------------------------------------------------------------------
 # GENERATE_TEST_DRIVER(<lib> <sources> [<lib1> <lib2> ...])
@@ -52,8 +52,8 @@ macro(GENERATE_TEST_DRIVER LIB SOURCES)
     add_test( NAME ${LIB}_${test_name}
               COMMAND $<TARGET_FILE:${LIB}_test_driver> ${test_name} ${${test_name}_args}
             )
-  endforeach(test)
-endmacro(GENERATE_TEST_DRIVER)
+  endforeach()
+endmacro()
 
 #---------------------------------------------------------------------
 # GENERATE_TEST_INCLUDE(<lib> <sources> <prefix>)
@@ -72,8 +72,8 @@ macro(GENERATE_TEST_INCLUDE LIB SOURCES PREFIX)
     if(FILE_EXT STREQUAL ".h")
       set(CMAKE_CONFIGURABLE_FILE_CONTENT
           "${CMAKE_CONFIGURABLE_FILE_CONTENT}#include <${PREFIX}${FILE}>\n#include <${PREFIX}${FILE}>\n")
-    endif(FILE_EXT STREQUAL ".h")
-  endforeach(FILE)
+    endif()
+  endforeach()
 
   set(CMAKE_CONFIGURABLE_FILE_CONTENT
       "${CMAKE_CONFIGURABLE_FILE_CONTENT}\n\nint main(){return 0;}\n")
@@ -84,4 +84,4 @@ macro(GENERATE_TEST_INCLUDE LIB SOURCES PREFIX)
 
   add_executable(${LIB}_test_include ${CMAKE_CURRENT_BINARY_DIR}/test_include.cxx)
   target_link_libraries(${LIB}_test_include ${LIB})
-endmacro(GENERATE_TEST_INCLUDE)
+endmacro()

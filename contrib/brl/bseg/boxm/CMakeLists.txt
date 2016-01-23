@@ -44,9 +44,9 @@ add_subdirectory(basic)
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
-endif(EXPAT_FOUND)
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib boxm)

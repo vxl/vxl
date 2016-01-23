@@ -118,7 +118,7 @@ aux_source_directory(Templates mbl_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_library(mbl ${mbl_sources})
 target_link_libraries(mbl vnl_io vnl_algo vgl_io vgl vbl_io vil_io vsl vnl vil vul vbl)
@@ -128,9 +128,9 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
   add_subdirectory(examples)
-endif(BUILD_MUL_TOOLS)
+endif()

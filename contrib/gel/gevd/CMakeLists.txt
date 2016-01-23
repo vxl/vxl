@@ -30,7 +30,7 @@ set(gevd_sources
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(gevd_contour.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_library(gevd ${gevd_sources})
 install_targets(/lib gevd)
@@ -39,4 +39,4 @@ target_link_libraries(gevd vtol vsol vdgl vil1 vil vnl vgl vbl vul)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

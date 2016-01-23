@@ -18,6 +18,6 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_class/ ${boxm2_c
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 add_subdirectory(exe)

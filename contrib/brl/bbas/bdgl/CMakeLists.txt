@@ -27,4 +27,4 @@ target_link_libraries(bdgl vdgl vsol vgl_algo vgl vnl_algo vnl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

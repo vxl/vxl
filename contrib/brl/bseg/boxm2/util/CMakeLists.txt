@@ -26,4 +26,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_util/ ${boxm2_ut
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

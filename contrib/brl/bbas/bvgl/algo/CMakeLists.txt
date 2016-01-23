@@ -14,7 +14,7 @@ if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
     ${brl_SOURCE_DIR}/bbas/bvgl/algo/bvgl_eulerspiral_lookup_table.bvl
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/bvgl_eulerspiral_lookup_table.bvl COPYONLY
   )
-endif(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+endif()
 
 add_definitions(-DBVGL_WHERE_BRL_LIB_DIR_H_EXISTS)
 include_directories( ${brl_BINARY_DIR}/bbas/bvgl/algo/ )
@@ -41,4 +41,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvgl/algo ${bvgl_algo_
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

@@ -14,4 +14,4 @@ target_link_libraries( imesh_algo_test_all imesh imesh_algo vnl vgl testlib )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## This test always fails in travis builds, segfault during memory free operation
 add_test( NAME imesh_test_generate_mesh COMMAND $<TARGET_FILE:imesh_algo_test_all> test_generate_mesh)
 endif()
-endif(NETLIB_FOUND)
+endif()

@@ -10,7 +10,7 @@ set(HAS_DIRECTSHOW 0)
 if(DIRECTSHOW_FOUND)
   set(HAS_DIRECTSHOW 1)
   include_directories(${DIRECTSHOW_INCLUDE_DIRS})
-endif(DIRECTSHOW_FOUND)
+endif()
 
 set(vidl_pro_sources
     vidl_io_istream.h             vidl_io_istream.cxx
@@ -27,4 +27,4 @@ target_link_libraries(vidl_pro bprb brdb vidl vil_io vil vsl vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

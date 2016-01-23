@@ -40,7 +40,7 @@ target_link_libraries(vpgl vnl_algo vnl vgl_algo vgl vul vsl vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 add_subdirectory(algo)
 add_subdirectory(file_formats)

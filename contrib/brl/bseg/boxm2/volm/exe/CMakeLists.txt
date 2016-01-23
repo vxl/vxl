@@ -56,4 +56,4 @@ target_link_libraries( boxm2_volumetric_matcher_p1 boxm2_volm vbl vgl volm depth
 add_executable( boxm2_volumetric_matcher_p1_integration boxm2_volumetric_matcher_p1_integration.cxx)
 target_link_libraries( boxm2_volumetric_matcher_p1_integration boxm2_volm vbl vgl volm depth_map bvrml vpl)
 
-endif(OPENCL_FOUND)
+endif()

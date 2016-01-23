@@ -15,10 +15,10 @@
 
 # If this FORCE variable is unset or is FALSE, try to find a native library.
 if( VXL_FORCE_V3P_ZLIB )
-else( VXL_FORCE_V3P_ZLIB )
+else()
   # Suppress not found messages
   find_package( ZLIB QUIET )
-endif( VXL_FORCE_V3P_ZLIB )
+endif()
 
 
 if(ZLIB_FOUND)
@@ -27,7 +27,7 @@ if(ZLIB_FOUND)
   # All the other variables are set by CMake's FindZLIB. Don't
   # set them here.
 
-else(ZLIB_FOUND)
+else()
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -42,5 +42,5 @@ else(ZLIB_FOUND)
     set( ZLIB_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/zlib)
     set( ZLIB_LIBRARIES z )
 
-  endif(EXISTS ${vxl_SOURCE_DIR}/v3p/zlib/zlib.h)
-endif(ZLIB_FOUND)
+  endif()
+endif()

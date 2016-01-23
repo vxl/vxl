@@ -30,5 +30,5 @@ target_link_libraries(bcvr bsol vdgl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 

@@ -21,7 +21,7 @@ target_link_libraries(vil_pro bbas_pro bprb bil bil_algo brip sdet vil_algo vil_
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib vil_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/vil_pro ${vil_pro_sources})

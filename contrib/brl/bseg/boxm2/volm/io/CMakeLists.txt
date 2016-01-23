@@ -11,4 +11,4 @@ target_link_libraries(boxm2_volm_io boxm2_volm vsl vbl vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

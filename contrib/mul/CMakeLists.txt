@@ -38,4 +38,4 @@ add_subdirectory(fhs)
 
 if( BUILD_MUL_TOOLS )
   add_subdirectory(tools)
-endif( BUILD_MUL_TOOLS )
+endif()

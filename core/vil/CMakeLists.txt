@@ -17,9 +17,9 @@ if(PNG_FOUND)
   set( vil_sources ${vil_sources}
     file_formats/vil_png.cxx file_formats/vil_png.h
   )
-else(PNG_FOUND)
+else()
   set( HAS_PNG 0 )
-endif(PNG_FOUND)
+endif()
 
 include(${VXL_CMAKE_DIR}/FindJPEG.cmake)
 if(JPEG_FOUND)
@@ -33,9 +33,9 @@ if(JPEG_FOUND)
     file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
     file_formats/vil_jpeg_compressor.cxx      file_formats/vil_jpeg_compressor.h
   )
-else(JPEG_FOUND)
+else()
   set( HAS_JPEG 0 )
-endif(JPEG_FOUND)
+endif()
 
 ################################
 # JPEG 2000
@@ -52,9 +52,9 @@ if(ECW_FOUND)
   )
   include_directories(${ECW_INCLUDE_DIR})
   set( HAS_J2K 1 )
-else(ECW_FOUND)
+else()
   set( HAS_J2K 0 )
-endif(ECW_FOUND)
+endif()
 
 ##############################
 # JPEG2000 via OpenJPEG
@@ -70,9 +70,9 @@ if(OPENJPEG2_FOUND)
   )
   add_definitions( ${OPENJPEG2_DEFINITIONS} )
   set( HAS_OPENJPEG2 1 )
-else(OPENJPEG2_FOUND)
+else()
   set( HAS_OPENJPEG2 0 )
-endif(OPENJPEG2_FOUND)
+endif()
 
 set( HAS_TIFF 0 )
 set( HAS_GEOTIFF 0 )
@@ -93,8 +93,8 @@ if(TIFF_FOUND)
     set( vil_sources ${vil_sources}
       file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
     )
-  endif(GEOTIFF_FOUND)
-endif(TIFF_FOUND)
+  endif()
+endif()
 set( HAS_DCMTK 0 )
 include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
 if(DCMTK_FOUND)
@@ -107,7 +107,7 @@ if(DCMTK_FOUND)
     file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
     file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
   )
-endif(DCMTK_FOUND)
+endif()
 
 option(VIL_CONFIG_ENABLE_SSE2_ROUNDING
        "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
@@ -116,19 +116,19 @@ if( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
   if( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
     if( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
       message( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
-    endif( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
+    endif()
     message( SEND_ERROR "Cannot have VIL_CONFIG_ENABLE_SSE2_ROUNDING because"
                         " there is no SSE2 hardware or no compiler support enabled" )
     set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
-  endif( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
-endif( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
+  endif()
+endif()
 
 
 if(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
   set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 1)
-else(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
+else()
   set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
-endif(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
+endif()
 
 
 # Store the external library configurations in to the config file
@@ -277,13 +277,13 @@ if(WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
   set( vil_sources ${vil_sources}
     vil_stream_fstream64.cxx        vil_stream_fstream64.h
   )
-endif(WIN32 AND VXL_USE_LFS AND NOT CMAKE_CL_64)
+endif()
 
 aux_source_directory(Templates vil_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vil_na.cxx PROPERTIES COMPILE_FLAGS -O1)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 
 # Some versions of Solaris (at least 5.8) has a brain-dead mechanism
@@ -305,40 +305,40 @@ set( vil_network_sources
 if(NOT SOLARIS)
   add_library(vil ${vil_sources} ${vil_network_sources})
   install_targets(/lib vil)
-else(NOT SOLARIS)
+else()
   add_library(vil ${vil_sources})
   add_library(vil_network ${vil_network_sources})
   install_targets(/lib vil vil_network)
-endif(NOT SOLARIS)
+endif()
 
 if(JPEG_FOUND)
   target_link_libraries( vil ${JPEG_LIBRARIES} )
-endif(JPEG_FOUND)
+endif()
 if(TIFF_FOUND)
   target_link_libraries( vil ${TIFF_LIBRARIES})
-endif(TIFF_FOUND)
+endif()
 if(HAS_GEOTIFF)
   target_link_libraries( vil ${GEOTIFF_LIBRARIES})
-endif(HAS_GEOTIFF)
+endif()
 if(PNG_FOUND)
   target_link_libraries( vil ${PNG_LIBRARIES} )
-endif(PNG_FOUND)
+endif()
 if(DCMTK_FOUND)
   target_link_libraries( vil ${DCMTK_LIBRARIES} )
-endif(DCMTK_FOUND)
+endif()
 if(OPENJPEG2_FOUND)
   target_link_libraries( vil ${OPENJPEG2_LIBRARIES} )
-endif(OPENJPEG2_FOUND)
+endif()
 
 target_link_libraries( vil vcl )
 
 if(NOT UNIX)
   target_link_libraries( vil ws2_32 )
-endif(NOT UNIX)
+endif()
 
 if(SOLARIS)
   target_link_libraries( vil nsl vil_network socket )
-endif(SOLARIS)
+endif()
 
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil
   ${vil_sources}
@@ -347,14 +347,14 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil
 
 if(ECW_FOUND)
   target_link_libraries( vil ${ECW_LIBRARIES} )
-endif(ECW_FOUND)
+endif()
 if(OPENJPEG2_FOUND)
   target_link_libraries( vil ${OPENJPEG2_LIBRARIES} )
-endif(OPENJPEG2_FOUND)
+endif()
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

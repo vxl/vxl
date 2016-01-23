@@ -7,7 +7,7 @@ set( VTHREEP_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p CACHE S
 
 if(BUILD_CORE_NUMERICS)
   add_subdirectory(netlib)
-endif(BUILD_CORE_NUMERICS)
+endif()
 
 CMAKE_DEPENDENT_OPTION( VXL_FORCE_V3P_CLIPPER "Use V3P instead of any native Clipper library?" ON
                           "BUILD_CORE_GEOMETRY" OFF)
@@ -60,4 +60,4 @@ if(BUILD_CORE_IMAGING)
 
   add_subdirectory(rply)
 
-endif(BUILD_CORE_IMAGING)
+endif()

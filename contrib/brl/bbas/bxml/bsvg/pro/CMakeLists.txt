@@ -18,4 +18,4 @@ target_link_libraries(bsvg_pro bbas_pro bsvg bprb brdb vbl_io vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

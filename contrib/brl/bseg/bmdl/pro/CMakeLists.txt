@@ -6,7 +6,7 @@ if(ZLIB_FOUND)
   include_directories( ${ZLIB_INCLUDE_DIR} )
   include_directories( ${BRL_INCLUDE_DIR}/b3p )
   add_definitions(-DHAS_ZLIB=1)
-endif(ZLIB_FOUND)
+endif()
 
 # bprb depends on expat and bmdl_prodepends on bprb primarily
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
@@ -37,12 +37,12 @@ if(EXPAT_FOUND)
 
       if(ZLIB_FOUND)
          target_link_libraries( bmdl_pro minizip )
-      endif(ZLIB_FOUND)
+      endif()
 
       if( BUILD_TESTING )
         add_subdirectory(tests)
-      endif( BUILD_TESTING )
+      endif()
 
-    endif(GEOTIFF_FOUND)
-  endif(TIFF_FOUND)
-endif(EXPAT_FOUND)
+    endif()
+  endif()
+endif()

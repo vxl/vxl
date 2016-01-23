@@ -14,8 +14,8 @@ if(EXPAT_FOUND)
 
   add_test( NAME bprb_test_process COMMAND $<TARGET_FILE:bprb_test_all> test_process )
   add_test( NAME bprb_test_process_params COMMAND $<TARGET_FILE:bprb_test_all> test_process_params )
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 add_executable(bprb_test_include test_include.cxx)
 target_link_libraries(bprb_test_include bprb)

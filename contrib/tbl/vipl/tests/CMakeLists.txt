@@ -19,7 +19,7 @@ add_test( NAME vipl_test_gaussian_convolution COMMAND $<TARGET_FILE:vipl_test_al
 if(BUILD_CORE_NUMERICS)
   target_link_libraries( vipl_test_all vnl )
   add_test( NAME vipl_test_histogram COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_histogram)
-endif(BUILD_CORE_NUMERICS)
+endif()
 
 add_executable( vipl_test_include test_include.cxx )
 target_link_libraries( vipl_test_include vipl )

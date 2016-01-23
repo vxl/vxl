@@ -26,4 +26,4 @@ target_link_libraries( ouml vgl vnl_algo vnl_io vnl vil1 vsl vpl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

@@ -24,11 +24,11 @@ target_link_libraries(ihog vnl_algo vnl vil vgl_io vgl_algo vgl vil_algo vbl_io 
 
 if( BUILD_EXAMPLES )
 #  add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 
 # Executable library
 add_subdirectory(exe)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

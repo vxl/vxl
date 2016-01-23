@@ -18,11 +18,11 @@ elseif(APPLE)
   set(baio_sources ${baio_sources}
       baio_osx.cxx
      )
-else(WIN32)
+else()
   set(baio_sources ${baio_sources}
       baio_unix.cxx
      )
-endif(WIN32)
+endif()
 
 add_library(baio ${baio_sources})
 
@@ -30,7 +30,7 @@ if(APPLE)
     target_link_libraries(baio c)
 elseif(UNIX)
     target_link_libraries(baio rt)
-endif(APPLE)
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib baio)
@@ -39,4 +39,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/baio/ ${baio_sources})
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

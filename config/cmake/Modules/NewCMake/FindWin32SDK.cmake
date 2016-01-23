@@ -41,14 +41,14 @@ if( WIN32 )
   if( WIN32SDK_INCLUDE_DIR )
     if(WIN32SDK_LIBRARIES)
       set( WIN32SDK_FOUND "YES" )
-    endif(WIN32SDK_LIBRARIES)
-  endif( WIN32SDK_INCLUDE_DIR )
+    endif()
+  endif()
 
   mark_as_advanced(
     WIN32SDK_INCLUDE_DIR
     WIN32SDK_LIBRARIES
   )
 
-endif( WIN32 )
+endif()
 
 

@@ -11,7 +11,7 @@ if(BGUI3D_FOUND)
     set( HAS_BGUI3D "YES" )
     add_definitions( -DHAS_BGUI3D )
     link_libraries( ${COIN3D_LIBRARY} )
-  endif(COIN3D_FOUND)
+  endif()
 
   # Find the SimVoleon library
   include( ${MODULE_PATH}/NewCMake/FindSIMVoleon.cmake )
@@ -19,11 +19,11 @@ if(BGUI3D_FOUND)
   if(SIMVOLEON_FOUND)
     include_directories( ${SIMVOLEON_INCLUDE_DIR} )
     link_libraries( ${SIMVOLEON_LIBRARY} )
-  endif(SIMVOLEON_FOUND)
+  endif()
 
   include_directories( ${brl_INCLUDE_DIR} )
 
-endif(BGUI3D_FOUND)
+endif()
 
 # This case is for using BGUI3D in an external project
 if(VXL_BGUI3D_FOUND)
@@ -34,4 +34,4 @@ if(VXL_BGUI3D_FOUND)
   add_definitions( -DCOIN_NOT_DLL )
   set( HAS_BGUI3D "YES" )
 
-endif(VXL_BGUI3D_FOUND)
+endif()

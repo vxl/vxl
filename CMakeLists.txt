@@ -15,16 +15,16 @@
 cmake_minimum_required(VERSION 2.8.9)
 
 # Support for CMake 2.6
-IF( COMMAND CMAKE_POLICY )
-  CMAKE_POLICY(SET CMP0003 NEW)
+if( COMMAND CMAKE_POLICY )
+  cmake_policy(SET CMP0003 NEW)
   ####
   # Remove warning by disabling test.  The proper fix
   # will require careful effort.
   # Documentation for what would be a better solution
   # is given at https://github.com/vxl/vxl/issues/127
   # and https://github.com/vxl/vxl/pull/122
-  CMAKE_POLICY(SET CMP0033 OLD)
-ENDIF( COMMAND CMAKE_POLICY )
+  cmake_policy(SET CMP0033 OLD)
+endif()
 
 # CMake 2.8 stuff
 set( CMAKE_LEGACY_CYGWIN_WIN32 0 ) # Remove when CMake >= 2.8.4 is required
@@ -49,7 +49,7 @@ set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${vxl_BINARY_DIR}/lib CACHE PATH
 
 if( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
     set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "." )
-endif( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
+endif()
 
 
 # CMake support directory.
@@ -102,7 +102,7 @@ set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_S
 option(VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than exceptions?" ON)
 if(VXL_LEGACY_ERROR_REPORTING)
   add_definitions( -DVXL_LEGACY_ERROR_REPORTING )
-endif(VXL_LEGACY_ERROR_REPORTING)
+endif()
 
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer.
@@ -111,16 +111,16 @@ if(WIN32)
     option( VXL_USE_WIN_WCHAR_T "Build overloading functions that accept Windows wide char strings?" ON )
     if(VXL_USE_WIN_WCHAR_T)   # Force it to be 0/1
       set(VXL_USE_WIN_WCHAR_T 1)
-    else(VXL_USE_WIN_WCHAR_T)
+    else()
       set(VXL_USE_WIN_WCHAR_T 0)
-    endif(VXL_USE_WIN_WCHAR_T)
-  else(VXL_HAS_WIN_WCHAR_T)
+    endif()
+  else()
     set(VXL_USE_WIN_WCHAR_T 0)
-  endif(VXL_HAS_WIN_WCHAR_T)
-else(WIN32)
+  endif()
+else()
   # avoid empty macro definition
   set(VXL_USE_WIN_WCHAR_T 0)
-endif(WIN32)
+endif()
 
 # In order to be able to link vxl libraries into shared libraries on 64 bit linux, the -fPIC
 # compiler flag must be added.  Only do this if we are on a x86_64 *nix platform, we're building
@@ -133,28 +133,28 @@ if(UNIX)
       message(STATUS "Adding -fPIC compiler flag to generate position independent code.")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}-fPIC")
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}-fPIC")
-    endif(NOT BUILD_POSITION_DEPENDENT_CODE)
-  endif(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-endif(UNIX)
+    endif()
+  endif()
+endif()
 
 
 # Some types of path names can cause havoc with regular expressions,
 # so avoid those.
 if( ${vxl_BINARY_DIR} MATCHES  \\+ )
   message(SEND_ERROR "You cannot have a + in your binary path")
-endif( ${vxl_BINARY_DIR} MATCHES  \\+ )
+endif()
 if( ${vxl_SOURCE_DIR} MATCHES  \\+ )
   message(SEND_ERROR "You cannot have a + in your source path")
-endif( ${vxl_SOURCE_DIR} MATCHES  \\+ )
+endif()
 
 # include CMakeListsLocal.txt from source directory if it exists
 # also include it from the binary dir if different from source dir
 if( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
   include( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
-else( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
+else()
   include( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
   include( ${vxl_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
-endif( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
+endif()
 
 # Standard include directories.
 set(VXLCORE_INCLUDE_DIR ${vxl_BINARY_DIR}/core ${vxl_SOURCE_DIR}/core)

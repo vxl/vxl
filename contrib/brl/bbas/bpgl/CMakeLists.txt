@@ -32,7 +32,7 @@ add_subdirectory(depth_map)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 install_targets(/lib bpgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl ${bpgl_sources})

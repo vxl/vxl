@@ -13,7 +13,7 @@ install_files( /include/vxl/v3p/netlib .h triangle )
 
 if(UNIX)
   target_link_libraries( netlib m )
-endif(UNIX)
+endif()
 
 # Allow sources in subdirectories to see the include files.
 include_directories(${netlib_SOURCE_DIR})
@@ -417,8 +417,8 @@ if(CMAKE_COMPILER_IS_GNUCC)
     foreach(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
       string(REGEX REPLACE
         "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
-    endforeach(c)
-  endif("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
+    endforeach()
+  endif()
 
   # Disable buggy optimization on some source files.
   #set_source_files_properties(
@@ -451,7 +451,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
      blas/dlamch.c
      PROPERTIES COMPILE_FLAGS "-fno-gcse -ffloat-store"
     )
-endif(CMAKE_COMPILER_IS_GNUCC)
+endif()
 
 # Create a netlib library with mangled symbols.
 add_library(v3p_netlib ${v3p_netlib_sources})
@@ -459,12 +459,12 @@ install_targets( /lib v3p_netlib )
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/v3p/netlib ${v3p_netlib_sources})
 if(UNIX)
   target_link_libraries( v3p_netlib m )
-endif(UNIX)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()

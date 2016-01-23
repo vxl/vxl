@@ -16,4 +16,4 @@ target_link_libraries(bvxm_grid_io bvxm_grid bvrml vsl vbl vil vil_io vnl vgl vb
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

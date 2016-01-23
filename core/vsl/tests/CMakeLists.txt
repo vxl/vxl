@@ -23,7 +23,7 @@ add_executable( vsl_test_all
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(test_map_io.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_test( NAME vsl_test_indent COMMAND $<TARGET_FILE:vsl_test_all> test_indent)
 add_test( NAME vsl_test_binary_io COMMAND $<TARGET_FILE:vsl_test_all> test_binary_io)

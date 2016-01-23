@@ -49,4 +49,4 @@ target_link_libraries(brip gevd bsta bsol vsol vil1 vil_algo vil vgl_algo vgl vn
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

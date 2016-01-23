@@ -8,7 +8,7 @@ doxygen_add_library(contrib/gel/pop
 if(WIN32)
  add_definitions(-D_AFXDLL)
  set(CMAKE_MFC_FLAG 6)
-endif(WIN32)
+endif()
 
 set(pop_sources
     pop_edge.cxx                    pop_edge.h
@@ -34,8 +34,8 @@ target_link_libraries( pop vcl vnl vgl vnl_algo vgl_algo)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()

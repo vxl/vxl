@@ -27,7 +27,7 @@ target_link_libraries(bsta_algo bsta vnl_algo vnl vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib bsta_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta/algo ${bsta_algo_sources})

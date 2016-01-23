@@ -17,4 +17,4 @@ target_link_libraries( ouel vnl_algo vnl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

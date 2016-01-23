@@ -53,4 +53,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/algo ${vgl_algo_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

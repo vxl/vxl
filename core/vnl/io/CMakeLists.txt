@@ -24,7 +24,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
     PROPERTIES
     COMPILE_FLAGS -ftemplate-depth-50)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_library(vnl_io ${vnl_io_sources} )
 target_link_libraries( vnl_io vnl vsl )
@@ -34,4 +34,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/io ${vnl_io_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

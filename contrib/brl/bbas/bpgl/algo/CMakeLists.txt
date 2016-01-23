@@ -25,7 +25,7 @@ if(BUILD_RPL)
       bpgl_fm_compute_reg_ransac.h     bpgl_fm_compute_reg_ransac.cxx
       bpgl_fm_compute_affine_ransac.h  bpgl_fm_compute_affine_ransac.cxx
      )
-endif(BUILD_RPL)
+endif()
 
 
 aux_source_directory(Templates bpgl_algo_sources)
@@ -36,15 +36,15 @@ target_link_libraries(bpgl_algo bpgl vpgl vpgl_file_formats vsol vgl_algo vnl_al
 
 if(BUILD_RPL)
   target_link_libraries(bpgl_algo rrel)
-endif(BUILD_RPL)
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 if( BUILD_EXAMPLES )
 #  add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 
 install_targets(/lib bpgl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl/algo ${bpgl_algo_sources})

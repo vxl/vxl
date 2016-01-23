@@ -25,7 +25,7 @@ if( HAS_VGUI )
     #add_test( NAME vgui_test_drawpix_speed COMMAND $<TARGET_FILE:vgui_test_drawpix_speed> )
     add_executable( vgui_test_acceleration test_acceleration.cxx )
     #add_test( NAME vgui_test_acceleration COMMAND $<TARGET_FILE:vgui_test_acceleration> )
-  endif(X11_FOUND)
+  endif()
 
   add_executable( vgui_test_all
     test_driver.cxx
@@ -50,4 +50,4 @@ if( HAS_VGUI )
   add_executable( vgui_test_drawpix_speed2 test_drawpix_speed2.cxx )
   add_executable( vgui_test_rubberband_dialog test_rubberband_dialog.cxx )
 
-endif( HAS_VGUI )
+endif()

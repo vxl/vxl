@@ -24,7 +24,7 @@ target_link_libraries(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vc
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 
 

@@ -32,7 +32,7 @@ if(EXPAT_FOUND)
         boxm2_bounding_box_parser.h   boxm2_bounding_box_parser.cxx
        )
 
-endif(EXPAT_FOUND)
+endif()
 
 aux_source_directory(Templates boxm2_sources)
 
@@ -40,7 +40,7 @@ add_library(boxm2  ${boxm2_sources})
 target_link_libraries(boxm2 boxm2_basic boct brdb bsta vsph vbl_io vpgl vpgl_io vpgl_xio vpgl_algo vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl mcal bkml bvgl_algo)
 if(EXPAT_FOUND)
 target_link_libraries(boxm2 expatpp)
-endif(EXPAT_FOUND)
+endif()
 
 #basic
 subdirs(basic)
@@ -78,7 +78,7 @@ subdirs(vecf)
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib boxm2)

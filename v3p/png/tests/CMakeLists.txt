@@ -3,7 +3,7 @@ include(${VXL_CMAKE_DIR}/FindPNG.cmake)
 include_directories(${PNG_INCLUDE_DIR})
 if(UNIX)
   link_libraries(m)
-endif(UNIX)
+endif()
 add_definitions(${PNG_DEFINITIONS} -DPNG_FREESTANDING_TESTS)
 
 add_executable(pngtest pngtest.c)

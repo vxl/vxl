@@ -33,11 +33,11 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vmal ${vmal_sources})
 
 if(BUILD_OXL)
  target_link_libraries(vmal mvl osl vil)
-endif(BUILD_OXL)
+endif()
 
 target_link_libraries(vmal vtol vnl_algo vil1 vnl vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
-endif(BUILD_OXL)
+endif()
+endif()

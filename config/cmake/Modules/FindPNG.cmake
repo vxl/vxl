@@ -17,18 +17,18 @@
 
 # If this FORCE variable is unset or is FALSE, try to find a native library.
 if( VXL_FORCE_V3P_PNG )
-else( VXL_FORCE_V3P_PNG )
+else()
 # Suppress not found messages
   set( ZLIB_FIND_QUIETLY "YES" )
   find_package( PNG QUIET )
   set( ZLIB_FIND_QUIETLY )
-endif( VXL_FORCE_V3P_PNG )
+endif()
 
 if(PNG_FOUND)
 
   set(VXL_USING_NATIVE_PNG "YES")
 
-else(PNG_FOUND)
+else()
 
   include( ${MODULE_PATH}/FindZLIB.cmake )
   if(ZLIB_FOUND)
@@ -53,12 +53,12 @@ else(PNG_FOUND)
       if(CYGWIN)
         if(VXL_BUILD_SHARED_LIBS)
            # No need to define PNG_USE_DLL here, because it's default for Cygwin.
-        else(VXL_BUILD_SHARED_LIBS)
+        else()
           set(PNG_DEFINITIONS  ${PNG_DEFINITIONS} -DPNG_STATIC)
-        endif(VXL_BUILD_SHARED_LIBS)
-      endif(CYGWIN)
+        endif()
+      endif()
 
-    endif(EXISTS ${vxl_SOURCE_DIR}/v3p/png/png.h)
+    endif()
 
-  endif(ZLIB_FOUND)
-endif(PNG_FOUND)
+  endif()
+endif()

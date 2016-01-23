@@ -17,8 +17,8 @@ if(TIFF_FOUND)
     set( vpgl_file_formats_sources ${vpgl_file_formats_sources}
          vpgl_geo_camera.h         vpgl_geo_camera.cxx)
 
-  endif(GEOTIFF_FOUND)
-endif(TIFF_FOUND)
+  endif()
+endif()
 
 add_library(vpgl_file_formats ${vpgl_file_formats_sources})
 
@@ -26,7 +26,7 @@ target_link_libraries(vpgl_file_formats vpgl vil vnl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib vpgl_file_formats)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/file_formats ${vpgl_file_formats_sources})

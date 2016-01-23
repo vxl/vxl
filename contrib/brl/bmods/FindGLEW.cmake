@@ -24,7 +24,7 @@ if(WIN32)
     )
 
 
-  else(CYGWIN)
+  else()
 
     find_path( GLEW_INCLUDE_DIR GL/glew.h
       ${OPENGL_INCLUDE_DIR}
@@ -34,9 +34,9 @@ if(WIN32)
       ${OPENGL_LIBRARY_DIR}
     )
 
-  endif(CYGWIN)
+  endif()
 
-else(WIN32)
+else()
 
     find_path( GLEW_INCLUDE_DIR GL/glew.h
       /usr/include
@@ -62,14 +62,14 @@ else(WIN32)
             ${OPENGL_LIBRARY_DIR}
     )
 
-endif(WIN32)
+endif()
 
 set( GLEW_FOUND "NO" )
 if(GLEW_INCLUDE_DIR)
   if(GLEW_LIBRARY)
     set( GLEW_FOUND "YES" )
-  endif(GLEW_LIBRARY)
-endif(GLEW_INCLUDE_DIR)
+  endif()
+endif()
 
 mark_as_advanced(
   GLEW_INCLUDE_DIR

@@ -14,8 +14,8 @@ if(EXPAT_FOUND)
   set(bkml_sources ${bkml_sources}
      bkml_parser.cxx    bkml_parser.h
   )
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 add_library(bkml  ${bkml_sources})
 
@@ -25,15 +25,15 @@ if(EXPAT_FOUND)
   target_link_libraries(bkml ${EXPAT_LIBRARIES})
   if(APPLE)
     target_link_libraries(bkml expat)
-  endif(APPLE)
+  endif()
   if(EXPATPP_FOUND)
     target_link_libraries(bkml ${EXPATPP_LIBRARIES})
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #add_subdirectory(pro)
 

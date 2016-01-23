@@ -20,6 +20,6 @@ target_link_libraries(bbgm_pro bbgm bprb brdb bsta_algo bsta brip vidl vil vil_p
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
-endif(EXPAT_FOUND)
+endif()

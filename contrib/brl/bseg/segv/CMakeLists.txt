@@ -16,7 +16,7 @@ include_directories(${GEL_INCLUDE_DIR}/mrc/vpgl)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake )
 if(ECW_FOUND)
   include_directories(${ECW_INCLUDE_DIR})
-endif(ECW_FOUND)
+endif()
 # determines if vgui is built and opengl is available
 include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
@@ -40,6 +40,6 @@ if(HAS_VGUI)
 
  if(BUILD_TESTING)
   add_subdirectory(tests)
- endif(BUILD_TESTING)
+ endif()
 
-endif(HAS_VGUI)
+endif()

@@ -6,7 +6,7 @@ if(WIN32 AND VXL_USE_LFS)
 add_definitions( -DBVXM_USE_FSTREAM64 )
   # so we can include vil_stream_fstream64
 add_definitions( -DVIL_USE_FSTREAM64 )
-endif(WIN32 AND VXL_USE_LFS)
+endif()
 
 set(bvxm_grid_sources
     bvxm_memory_chunk.h               bvxm_memory_chunk.cxx
@@ -36,4 +36,4 @@ add_subdirectory(pro)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

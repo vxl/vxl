@@ -28,8 +28,8 @@ if(VGUI_FOUND)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
-endif(VGUI_FOUND)
-endif(GLEW_FOUND)
-endif(OPENCL_FOUND)
+endif()
+endif()
+endif()

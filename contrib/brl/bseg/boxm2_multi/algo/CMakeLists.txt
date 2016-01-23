@@ -18,5 +18,5 @@ target_link_libraries(boxm2_multi_algo boxm2_multi boxm2_ocl_algo)# boxm2_ocl bo
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 

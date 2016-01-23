@@ -110,7 +110,7 @@ aux_source_directory(Templates mvl_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(FMatrixComputeRobust.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_library(mvl ${mvl_sources})
 install_targets(/lib mvl)
@@ -119,8 +119,8 @@ target_link_libraries(mvl vil1 vnl_algo vnl vbl vgl vgl_algo vul)
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

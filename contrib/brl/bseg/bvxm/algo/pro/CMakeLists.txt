@@ -21,7 +21,7 @@ include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()

@@ -67,4 +67,4 @@ set( jpeg_sources
 add_library( jpeg ${jpeg_sources} )
 install_targets(/lib jpeg)
 
-endif(NOT VXL_USING_NATIVE_JPEG)
+endif()

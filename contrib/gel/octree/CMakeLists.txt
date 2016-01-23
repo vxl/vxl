@@ -18,4 +18,4 @@ target_link_libraries(octree mvl vil1 vgl vnl vbl vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

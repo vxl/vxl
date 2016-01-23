@@ -8,13 +8,13 @@ if(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
   include_directories(${vxl_SOURCE_DIR}/GeneralUtility)
   link_libraries( ImageClasses Basics Numerics )
   set(HAS_IMAGE "YES")
-endif(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )
+endif()
 
 if(HAS_IMAGE)
   add_definitions(-DHAS_IMAGE=1)
-else(HAS_IMAGE)
+else()
   add_definitions(-DHAS_NO_IMAGE=1)
-endif(HAS_IMAGE)
+endif()
 
 add_executable( conversions_image_test_all
   test_driver.cxx

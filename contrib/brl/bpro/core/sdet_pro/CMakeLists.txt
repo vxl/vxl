@@ -24,4 +24,4 @@ target_link_libraries(sdet_pro bprb brdb sdet vil_pro vil vgl vsl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
