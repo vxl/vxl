@@ -1,4 +1,3 @@
-
 # vxl/config/cmake/VXLConfig_export.cmake.in
 #   also configured by CMake to
 # @vxl_BINARY_DIR@/config/cmake/export/VXLConfig.cmake
@@ -28,11 +27,6 @@
 
 # The build settings file.
 SET(VXL_BUILD_SETTINGS_FILE "@VXL_EXPORT_BUILD_SETTINGS_FILE@")
-
-# The VXL library dependencies.
-IF(NOT VXL_NO_LIBRARY_DEPENDS)
-  INCLUDE("@VXL_INSTALL_LIBRARY_DEPENDS_FILE@")
-ENDIF(NOT VXL_NO_LIBRARY_DEPENDS)
 
 # The VXL library directory.
 SET(VXL_LIBRARY_DIR "@CMAKE_INSTALL_PREFIX@/lib")
