@@ -7,10 +7,6 @@ INCLUDE( ${BRL_MODULE_PATH}/FindGLEW.cmake )
 INCLUDE( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
 INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-
-OPTION(BOXM2_USE_VOLM "Inlcude Volm in boxm2_batch" YES)
-
-
 IF( PYTHON_FOUND )
   INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
   IF( EXPAT_FOUND )

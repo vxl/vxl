@@ -100,30 +100,34 @@ IF (BUILD_CORE_PROBABILITY)
 ENDIF (BUILD_CORE_PROBABILITY)
 
 
-IF (BUILD_CORE_ALL)
 # multi-platform GUI toolkit
+# Default the dashboard builds to "YES" so that
+# we have some clients that try to compile vgui
+CMAKE_DEPENDENT_OPTION( BUILD_VGUI "Build VGUI" OFF
+                         "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF )
+if(BUILD_VGUI)
   add_subdirectory(vgui)
+endif()
 
-  IF(BUILD_EXAMPLES)
-    add_subdirectory(examples)
-  ENDIF(BUILD_EXAMPLES)
-ENDIF (BUILD_CORE_ALL)
 
 # video
-SET (CORE_VIDEO_FOUND NO CACHE INTERNAL "VXL core video libraries built")
-IF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
-  OPTION (BUILD_CORE_VIDEO "Build VXL's core video libraries" YES)
-  IF (BUILD_CORE_VIDEO)
-    add_subdirectory(vidl)
-    SET (CORE_VIDEO_FOUND YES CACHE INTERNAL "VXL core video libraries built")
-  ENDIF (BUILD_CORE_VIDEO)
-ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_IMAGING)
+CMAKE_DEPENDENT_OPTION (BUILD_CORE_VIDEO "Build VXL's core video libraries" ON
+                        "BUILD_CORE_UTILITIES;BUILD_CORE_IMAGING" OFF)
+if (BUILD_CORE_VIDEO)
+  add_subdirectory(vidl)
+  SET (CORE_VIDEO_FOUND ON CACHE INTERNAL "VXL core video libraries built")
+else()
+  SET (CORE_VIDEO_FOUND OFF CACHE INTERNAL "VXL core video libraries built")
+endif ()
 
 # common test executable
 add_subdirectory(testlib)
 
 # Tests that check and output the vxl configuration
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif( BUILD_TESTING )
+if( BUILD_EXAMPLES )
+  add_subdirectory(examples)
+endif()
 
