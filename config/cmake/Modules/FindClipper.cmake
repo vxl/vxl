@@ -21,8 +21,8 @@ if( NOT CLIPPER_FOUND )
     find_package( CLIPPER QUIET )
     if( CLIPPER_FOUND )
       set(VXL_USING_NATIVE_CLIPPER "YES")
-    endif( CLIPPER_FOUND )
-  endif( NOT VXL_FORCE_V3P_CLIPPER )
+    endif()
+  endif()
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -38,7 +38,7 @@ if( NOT CLIPPER_FOUND )
       set( CLIPPER_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/clipper)
       set( CLIPPER_LIBRARIES clipper )
 
-    endif(EXISTS ${vxl_SOURCE_DIR}/v3p/clipper/clipper.hpp)
-  endif( NOT CLIPPER_FOUND )
+    endif()
+  endif()
 
-endif(NOT CLIPPER_FOUND)
+endif()

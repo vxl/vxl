@@ -17,4 +17,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/basic ${bstm_basi
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

@@ -16,15 +16,15 @@
 
 # If this FORCE variable is unset or is false, try to find a native library
 if( VXL_FORCE_V3P_DCMTK )
-else( VXL_FORCE_V3P_DCMTK )
+else()
   find_package(DCMTK)
-endif( VXL_FORCE_V3P_DCMTK )
+endif()
 
 if( DCMTK_FOUND )
 
   set( VXL_USING_NATIVE_DCMTK "YES" )
 
-else( DCMTK_FOUND )
+else()
 
   # If the v3p version exists and is being build, use it
   if( VXL_BUILD_DCMTK )
@@ -38,6 +38,6 @@ else( DCMTK_FOUND )
     )
     set( DCMTK_LIBRARIES dcmtk )
 
-  endif( VXL_BUILD_DCMTK )
+  endif()
 
-endif( DCMTK_FOUND )
+endif()

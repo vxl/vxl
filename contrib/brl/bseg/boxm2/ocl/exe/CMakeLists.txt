@@ -24,6 +24,6 @@ if(GLEW_FOUND)
   add_executable( boxm2_ocl_render_firstperson_view boxm2_ocl_render_firstperson_view.cxx )
   target_link_libraries( boxm2_ocl_render_firstperson_view boxm2 boxm2_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
- endif(VGUI_FOUND)
-endif(GLEW_FOUND)
+ endif()
+endif()
 

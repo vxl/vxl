@@ -17,6 +17,6 @@ target_link_libraries(boxm2_volm_desc boxm2_volm boxm2 boxm2_io brip baio vpgl v
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 add_subdirectory(exe)

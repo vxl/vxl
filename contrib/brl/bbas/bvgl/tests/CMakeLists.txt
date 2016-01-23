@@ -14,7 +14,7 @@ set(bvgl_test_sources
 include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(EXPAT_FOUND)
   set(bvgl_test_sources ${bvgl_test_sources} test_bvgl_labelme_parser.cxx)
-endif(EXPAT_FOUND)
+endif()
 
 add_executable(bvgl_test_all ${bvgl_test_sources})
 target_link_libraries(bvgl_test_all bvgl vgl vnl testlib)
@@ -28,7 +28,7 @@ add_test( NAME bvgl_test_grid_index_3d COMMAND $<TARGET_FILE:bvgl_test_all> test
 
 if(EXPAT_FOUND)
   add_test( NAME bvgl_test_labelme_parser COMMAND $<TARGET_FILE:bvgl_test_all> test_bvgl_labelme_parser)
-endif(EXPAT_FOUND)
+endif()
 
 add_executable( bvgl_test_include test_include.cxx )
 target_link_libraries( bvgl_test_include bvgl )

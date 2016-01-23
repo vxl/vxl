@@ -25,4 +25,4 @@ add_test( NAME boxm2_vecf_test_cranium COMMAND $<TARGET_FILE:boxm2_vecf_test_all
 #add_executable( boxm2_vecf_test_include test_include.cxx )
 #target_link_libraries( boxm2_vecf_test_include boxm2_vecf )
 
-##- endif(OPENCL_FOUND)
+##- endif()

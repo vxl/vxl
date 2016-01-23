@@ -9,7 +9,7 @@
 # but there are still traces at http://www.gdal.org/frmt_ecw.html and a
 # distribution at https://svn.zib.de/lenne3d/lib/libecw/current - IMS  7-Dec-2009.
 if( VXL_FORCE_V3P_J2K )
-else( VXL_FORCE_V3P_J2K )
+else()
 set( ECW_FOUND "NO" )
 
 find_path( ECW_INCLUDE_DIR NCSEcw.h
@@ -39,16 +39,16 @@ if( ECW_INCLUDE_DIR )
     set( ECW_FOUND "YES" )
     set( ECW_LIBRARIES ${ECW_ncsutil_LIBRARY} ${ECW_ncsecw_LIBRARY} )
 
-  endif( ECW_ncsecw_LIBRARY )
-  endif( ECW_ncsutil_LIBRARY )
+  endif()
+  endif()
 
 
-endif( ECW_INCLUDE_DIR )
-endif( VXL_FORCE_V3P_J2K )
+endif()
+endif()
 
 if( ECW_FOUND )
     set(VXL_USING_NATIVE_J2K "YES")
-else( ECW_FOUND )
+else()
 include(${MODULE_PATH}/NewCMake/FindWin32SDK.cmake)
 find_package(MFC)
 
@@ -57,9 +57,9 @@ if(EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h )
 if(EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSUtil.h)
 if(EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCScnet.h)
 set(J2K_SOURCES_FOUND "YES")
-endif(EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCScnet.h)
-endif(EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSUtil.h)
-endif(EXISTS ${vxl_SOURCE_DIR}/v3p/j2k/Source/include/NCSEcw.h )
+endif()
+endif()
+endif()
 
 
 
@@ -68,5 +68,5 @@ if( WIN32 AND J2K_SOURCES_FOUND AND WIN32SDK_FOUND AND MFC_FOUND)
     set( ECW_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/j2k/Source/include)
     set( ECW_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/j2k)
     set( ECW_LIBRARIES NCSEcw NCSUtil )
-  endif( WIN32 AND J2K_SOURCES_FOUND AND WIN32SDK_FOUND AND MFC_FOUND )
- endif( ECW_FOUND )
+  endif()
+ endif()

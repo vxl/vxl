@@ -9,8 +9,8 @@ if(EXPAT_FOUND)
   if(EXPATPP_FOUND)
     include_directories(${EXPAT_INCLUDE_DIRS} )
     include_directories(${EXPATPP_INCLUDE_DIRS} )
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()
 
 set(bvgl_pro_sources
     bvgl_processes.h
@@ -25,4 +25,4 @@ target_link_libraries(bvgl_pro bprb vil_pro bvgl bvgl_algo vil vil_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

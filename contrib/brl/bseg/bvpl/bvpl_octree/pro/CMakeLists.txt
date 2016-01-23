@@ -25,6 +25,6 @@ target_link_libraries(bvpl_octree_pro bvpl_octree_io bvpl_octree bvpl_kernels_io
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
-endif(EXPAT_FOUND)
+endif()

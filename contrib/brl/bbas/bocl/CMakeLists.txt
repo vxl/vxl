@@ -10,7 +10,7 @@ if(OPENCL_FOUND)
   CMAKE_DEPENDENT_OPTION(OPENCL_IS_PRE_V1.2 "OpenCL library version prior to 1.2" ON "BUILD_BRL;OPENCL_FOUND" OFF)
   if(OPENCL_IS_PRE_V1.2)
     add_definitions(-DOPENCL_IS_PRE_V12)
-  endif(OPENCL_IS_PRE_V1.2)
+  endif()
 
   set(bocl_sources
       bocl_manager.h      bocl_manager.txx  bocl_manager.cxx
@@ -34,8 +34,8 @@ if(OPENCL_FOUND)
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #pro
 add_subdirectory(pro)
-endif(OPENCL_FOUND)
+endif()

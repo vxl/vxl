@@ -18,4 +18,4 @@ target_link_libraries(ihog_pro bprb ihog vnl vil vil_pro vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

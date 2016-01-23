@@ -5,15 +5,15 @@ find_package(wxWidgets COMPONENTS base core gl)
 if(wxWidgets_FOUND)
   if(wxWidgets_INCLUDE_DIRS)
     include_directories(${wxWidgets_INCLUDE_DIRS})
-  endif(wxWidgets_INCLUDE_DIRS)
+  endif()
 
   if(wxWidgets_CXX_FLAGS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
-  endif(wxWidgets_CXX_FLAGS)
+  endif()
 
   if(wxWidgets_LINK_DIRECTORIES)
     link_directories(${wxWidgets_LINK_DIRECTORIES})
-  endif(wxWidgets_LINK_DIRECTORIES)
+  endif()
 
   # Simple example not using the Document/View architecture.
   set(wx_childview_example_sources
@@ -25,7 +25,7 @@ if(wxWidgets_FOUND)
   target_link_libraries(wx_childview_example vgui)
   if(wxWidgets_LIBRARIES)
     target_link_libraries(wx_childview_example ${wxWidgets_LIBRARIES})
-  endif(wxWidgets_LIBRARIES)
+  endif()
 
   # Document/View architecture example
   set(wx_docview_example_sources
@@ -39,7 +39,7 @@ if(wxWidgets_FOUND)
   target_link_libraries(wx_docview_example vgui)
   if(wxWidgets_LIBRARIES)
     target_link_libraries(wx_docview_example ${wxWidgets_LIBRARIES})
-  endif(wxWidgets_LIBRARIES)
+  endif()
 
 
   # Examples using vgui_wx
@@ -54,6 +54,6 @@ if(wxWidgets_FOUND)
     add_executable(wx_xrc_example WIN32 MACOSX_BUNDLE ${wx_xrc_example_sources})
     target_link_libraries(wx_xrc_example vgui_wx)
 
-  endif(BUILD_VGUI_WX AND wxWidgets_wxrc_EXECUTABLE)
+  endif()
 
-endif(wxWidgets_FOUND)
+endif()

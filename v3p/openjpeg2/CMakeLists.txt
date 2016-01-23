@@ -55,5 +55,5 @@ set_target_properties(openjpeg2 PROPERTIES
 # Install library
 install_targets(/lib openjpeg2)
 
-endif(NOT VXL_USING_NATIVE_OPENJPEG2)
+endif()
 

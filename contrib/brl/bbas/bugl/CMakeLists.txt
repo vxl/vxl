@@ -32,4 +32,4 @@ target_link_libraries(bugl vnl vgl_algo vgl vbl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

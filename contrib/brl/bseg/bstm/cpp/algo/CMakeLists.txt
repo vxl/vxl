@@ -19,4 +19,4 @@ target_link_libraries(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm bstm_io
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

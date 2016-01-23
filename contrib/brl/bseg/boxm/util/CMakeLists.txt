@@ -20,4 +20,4 @@ target_link_libraries(boxm_util boxm boxm_sample bvrml boct bsta vpgl_algo vnl_a
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

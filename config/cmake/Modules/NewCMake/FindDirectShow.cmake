@@ -45,7 +45,7 @@ if(MSVC)
           DOC "Where can the DirectShow quartz library be found"
           NO_DEFAULT_PATH
           )
-      else(CMAKE_CL_64)
+      else()
         find_library(DIRECTSHOW_STRMIIDS_LIBRARY strmiids
           "${DIRECTSHOW_INCLUDE_DIR}/../Lib"
           "${DIRECTSHOW_INCLUDE_DIR}/../Lib/x86"
@@ -58,10 +58,10 @@ if(MSVC)
           DOC "Where can the DirectShow quartz library be found"
           NO_DEFAULT_PATH
           )
-      endif(CMAKE_CL_64)
-    endif(DIRECTSHOW_INCLUDE_DIR)
-  endif(DIRECTX_INCLUDE_DIR)
-endif(MSVC)
+      endif()
+    endif()
+  endif()
+endif()
 
 if(DIRECTSHOW_INCLUDE_DIR)
 #---------------------------------------------------------------------
@@ -121,21 +121,21 @@ foreach(_CURRENT_VAR
   if(NOT "${_CURRENT_VAR}")
     set(${_NAME_UPPER}_FOUND FALSE)
     set(MISSING_VARS "${MISSING_VARS} ${_CURRENT_VAR}")
-  endif(NOT "${_CURRENT_VAR}")
-endforeach(_CURRENT_VAR)
+  endif()
+endforeach()
 
 if(${_NAME_UPPER}_FOUND)
   if(NOT ${_NAME}_FIND_QUIETLY)
     message(STATUS "Found ${_NAME}")
-  endif(NOT ${_NAME}_FIND_QUIETLY)
-else(${_NAME_UPPER}_FOUND)
+  endif()
+else()
   if(${_NAME}_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find ${_NAME} (missing: ${MISSING_VARS})")
-  else(${_NAME}_FIND_REQUIRED)
+  else()
     if(NOT ${_NAME}_FIND_QUIETLY)
       message(STATUS "Could NOT find ${_NAME} (missing: ${MISSING_VARS})")
-    endif(NOT ${_NAME}_FIND_QUIETLY)
-  endif(${_NAME}_FIND_REQUIRED)
-endif(${_NAME_UPPER}_FOUND)
+    endif()
+  endif()
+endif()
 
-endif(DIRECTSHOW_INCLUDE_DIR)
+endif()

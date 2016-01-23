@@ -15,15 +15,15 @@
 
 # If this FORCE variable is unset or is FALSE, try to find a native library.
 if( VXL_FORCE_V3P_JPEG )
-else( VXL_FORCE_V3P_JPEG )
+else()
   find_package( JPEG QUIET )
-endif( VXL_FORCE_V3P_JPEG )
+endif()
 
 if(JPEG_FOUND)
 
   set(VXL_USING_NATIVE_JPEG "YES")
 
-else(JPEG_FOUND)
+else()
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -37,6 +37,6 @@ else(JPEG_FOUND)
     set( JPEG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/jpeg)
     set( JPEG_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/jpeg)
 
-  endif(EXISTS ${vxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
+  endif()
 
-endif(JPEG_FOUND)
+endif()

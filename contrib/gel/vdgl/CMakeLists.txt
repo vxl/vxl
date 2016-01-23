@@ -29,4 +29,4 @@ target_link_libraries(vdgl vsol vgl_algo vgl vnl_algo vnl vbl_io vbl vsl vul vcl
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

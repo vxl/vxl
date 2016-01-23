@@ -28,7 +28,7 @@ set(xcv_sources
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(xcv_geometry.cxx PROPERTIES COMPILE_FLAGS "-O0 -ftemplate-depth-100")
   set_source_files_properties(xcv_multiview.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_executable(xcv ${xcv_sources})
 install_targets(/bin xcv)
@@ -36,6 +36,6 @@ target_link_libraries(xcv osl mvl vgui vgl vil1 vnl vul vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
-endif(HAS_VGUI)
+endif()

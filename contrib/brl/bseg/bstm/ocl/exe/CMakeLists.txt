@@ -11,6 +11,6 @@ if(GLEW_FOUND)
   add_executable( bstm_ocl_multi_render_view bstm_ocl_multi_render_view.cxx )
   target_link_libraries( bstm_ocl_multi_render_view boxm2 bstm_ocl_algo bstm_ocl_pro bstm_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
- endif(VGUI_FOUND)
-endif(GLEW_FOUND)
+ endif()
+endif()
 

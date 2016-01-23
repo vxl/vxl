@@ -20,25 +20,25 @@ if( PYTHON_FOUND )
       #In windows, library has to have different name depending on debug or release version.
       if(WIN32)
         set_target_properties(bvpl_octree_batch PROPERTIES OUTPUT_NAME bvpl_octree_batch DEBUG_POSTFIX _d SUFFIX .pyd)
-      endif(WIN32)
+      endif()
       if(APPLE) #This is because python only looks for .so
         set_target_properties(bvpl_octree_batch PROPERTIES OUTPUT_NAME bvpl_octree_batch SUFFIX .so)
-      endif(APPLE)
+      endif()
       set_target_properties(bvpl_octree_batch PROPERTIES PREFIX "")
 
       target_link_libraries(bvpl_octree_batch bvpl_octree_pro bvpl_kernels_pro bpro_batch boxm_pro boxm_algo_pro vpgl_io vpgl_pro vil_io vil_pro)
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( bvpl_octree_batch debug ${PYTHON_DEBUG_LIBRARY})
-      endif(PYTHON_DEBUG_LIBRARIES )
+      endif()
 
       if(PYTHON_LIBRARIES)
         target_link_libraries( bvpl_octree_batch optimized ${PYTHON_LIBRARY})
-      endif(PYTHON_LIBRARIES)
+      endif()
 
       if( BUILD_TESTING )
         add_subdirectory(tests)
-      endif( BUILD_TESTING )
-    endif(NOT BUILD_POSITION_DEPENDENT_CODE)
-  endif( EXPAT_FOUND )
-endif( PYTHON_FOUND )
+      endif()
+    endif()
+  endif()
+endif()

@@ -60,12 +60,12 @@ add_subdirectory(sample)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 if( CMAKE_USE_PTHREADS_INIT )
   add_definitions(-DBVPL_OCTREE_HAS_PTHREADS=1)
   set_target_properties(bvpl_octree PROPERTIES COMPILE_FLAGS -pthread)
   target_link_libraries(bvpl_octree pthread)
-endif( CMAKE_USE_PTHREADS_INIT )
+endif()
 
-endif(EXPAT_FOUND)
+endif()

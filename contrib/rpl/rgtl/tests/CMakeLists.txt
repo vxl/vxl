@@ -16,7 +16,7 @@ set(test_names
 set(test_srcs test_driver.cxx)
 foreach(name ${test_names})
   set(test_srcs ${test_srcs} test_${name}.cxx)
-endforeach(name)
+endforeach()
 
 # Create the test executable.
 add_executable(rgtl_test_all ${test_srcs})
@@ -25,7 +25,7 @@ target_link_libraries(rgtl_test_all rgtl vnl vul testlib)
 # Add the tests.
 foreach(name ${test_names})
   add_test( NAME rgtl_${name} COMMAND $<TARGET_FILE:rgtl_test_all> test_${name})
-endforeach(name)
+endforeach()
 
 add_executable( rgtl_test_include test_include.cxx )
 target_link_libraries( rgtl_test_include rgtl )

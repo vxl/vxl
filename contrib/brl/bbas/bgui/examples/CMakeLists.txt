@@ -9,4 +9,4 @@ if( HAS_VGUI )
 
  add_executable( basic03_image_tableau basic03_image_tableau.cxx)
  target_link_libraries(basic03_image_tableau bgui vgui vil)
-endif( HAS_VGUI )
+endif()

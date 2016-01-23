@@ -41,7 +41,7 @@ target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl vgl vil vul vnl_al
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib boxm2_ocl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/algo ${boxm2_ocl_algo_sources})

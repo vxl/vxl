@@ -14,7 +14,7 @@ if(EXPAT_FOUND)
 if(OPENCL_FOUND)
   include_directories( ${OPENCL_INCLUDE_PATH} )
   set( BOXM2_VOLM_PRO_LIBS boxm2_ocl)
-endif(OPENCL_FOUND)
+endif()
 
   set(boxm2_volm_pro_sources
       boxm2_volm_processes.h
@@ -25,7 +25,7 @@ endif(OPENCL_FOUND)
   if(OPENCL_FOUND)
     aux_source_directory(processes boxm2_volm_pro_sources)
     add_definitions(-DHAVE_OPENCL)
-  endif(OPENCL_FOUND)
+  endif()
 
   add_library(boxm2_volm_pro ${boxm2_volm_pro_sources})
 
@@ -37,9 +37,9 @@ endif(OPENCL_FOUND)
     boxm2_volm boxm2_volm_io boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip
     vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml ${BOXM2_VOLM_PRO_LIBS})
 
-endif(EXPAT_FOUND)
+endif()
 
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

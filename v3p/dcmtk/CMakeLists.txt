@@ -35,12 +35,12 @@ if( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
     file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
          "Checking for namespace std passed with the following output:\n"
          "${OUTPUT}\n\n" )
-  else( DCMTK_HAVE_STD_NAMESPACE )
+  else()
     file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
         "Checking for namespace std failed with the following output:\n"
         "${OUTPUT}\n\n" )
-  endif( DCMTK_HAVE_STD_NAMESPACE )
-endif( DCMTK_HAVE_STD_NAMESPACE MATCHES "DCMTK_HAVE_STD_NAMESPACE" )
+  endif()
+endif()
 
 
 CHECK_TYPE_SIZE( long DCMTK_SIZEOF_LONG )
@@ -141,26 +141,26 @@ CHECK_PROTOTYPE_EXISTS_CXX(
 # iostream.h, etc.
 if( DCMTK_HAVE_CASSERT )
   set( DCMTK_HAVE_STD_CXX_INCLUDES 1 )
-else( DCMTK_HAVE_CASSERT )
+else()
   set( DCMTK_HAVE_STD_CXX_INCLUDES )
-endif( DCMTK_HAVE_CASSERT )
+endif()
 
 include( ${VXL_CMAKE_DIR}/FindZLIB.cmake )
 if( ZLIB_FOUND )
   include_directories( ${ZLIB_INCLUDE_DIR} )
   set( DCMTK_HAVE_ZLIB 1 )
-else( ZLIB_FOUND )
+else()
   set( DCMTK_HAVE_ZLIB )
-endif( ZLIB_FOUND )
+endif()
 
 set( DCMTK_DCM_DICT_DEFAULT_PATH "${PROJECT_SOURCE_DIR}/dcmdata/libsrc/dicom.dic" )
 if( WIN32 )
   set( DCMTK_PATH_SEPARATOR "\\\\" )
   set( DCMTK_ENVIRONMENT_PATH_SEPARATOR ";" )
-else( WIN32 )
+else()
   set( DCMTK_PATH_SEPARATOR "/" )
   set( DCMTK_ENVIRONMENT_PATH_SEPARATOR ":" )
-endif( WIN32 )
+endif()
 
 if( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
   file(WRITE ${CMAKE_BINARY_DIR}/CMakeTmp/CheckIncludeMath.cxx
@@ -177,14 +177,14 @@ if( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
          "passed with the following output:\n"
          "${OUTPUT}\n\n" )
     set( DCMTK_INCLUDE_MATH_H_AS_CXX 1 CACHE INTERNAL "Can include math.h with extern C")
-  else( DCMTK_INCLUDE_MATH_H_AS_CXX )
+  else()
     file(APPEND ${CMAKE_BINARY_DIR}/CMakeOutput.log
          "Determining math.h as cxx"
          "failed with the following output:\n"
          "${OUTPUT}\n\n" )
     set( DCMTK_INCLUDE_MATH_H_AS_CXX "" CACHE INTERNAL "Can include math.h with extern C")
-  endif( DCMTK_INCLUDE_MATH_H_AS_CXX )
-endif( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
+  endif()
+endif()
 
 configure_file(
   ${PROJECT_SOURCE_DIR}/config/include/osconfig_cmake.h.in
@@ -210,19 +210,19 @@ if( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX MATCHES "DCMTK_CMAKE_COMPILER_IS_GNUCXX_2
     if(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
       message( STATUS "gcc 2.x")
       set( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 1 CACHE INTERNAL "Are we using an version of gcc < 3.0")
-    else(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
+    else()
       message( STATUS "gcc not 2.x")
       set( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX 0 CACHE INTERNAL "Are we using an version of gcc < 3.0")
-    endif(CMAKE_CXX_COMPILER_VERSION MATCHES ".*2\\.9[0-9]\\.[0-9].*")
-  endif( CMAKE_COMPILER_IS_GNUCXX )
-endif( DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX MATCHES "DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX")
+    endif()
+  endif()
+endif()
 
 if( CMAKE_COMPILER_IS_GNUCXX )
   if( NOT DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX )
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-cast-qual -Wno-unused-variable")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-cast-qual -Wno-unused-variable")
-  endif( NOT DCMTK_CMAKE_COMPILER_IS_GNUCXX_2XX )
-endif( CMAKE_COMPILER_IS_GNUCXX )
+  endif()
+endif()
 
 # ---------------------------------------------------------------------------
 # Source files
@@ -336,15 +336,15 @@ set( dcmtk_sources
 add_library( dcmtk ${dcmtk_sources} )
 if(WIN32)
   target_link_libraries( dcmtk Netapi32 )
-endif(WIN32)
+endif()
 if( DCMTK_HAVE_ZLIB )
   target_link_libraries( dcmtk ${ZLIB_LIBRARIES} )
-endif( DCMTK_HAVE_ZLIB )
+endif()
 
 install_targets( /lib dcmtk )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
-endif( VXL_BUILD_DCMTK )
+endif()

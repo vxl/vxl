@@ -6,13 +6,13 @@ if(EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
   include_directories(${vxl_SOURCE_DIR}/Numerics)
   link_libraries( TJCOOL )
   set(HAS_COOL "YES")
-endif( EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
+endif()
 
 if(HAS_COOL)
   add_definitions(-DHAS_COOL=1)
-else(HAS_COOL)
+else()
   add_definitions(-DHAS_NO_COOL=1)
-endif(HAS_COOL)
+endif()
 
 add_executable( conversions_container_test_all
   test_driver.cxx

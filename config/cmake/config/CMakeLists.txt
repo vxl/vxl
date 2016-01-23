@@ -28,11 +28,11 @@ set( VXL_CONFIG_SERIAL_CURRENT "2014-12-09-002" )
 
 if( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
   # The configuration is current
-else( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+else()
   set( VXL_UPDATE_CONFIGURATION "ON" )
   # Record that we've done the new config.
   set( VXL_CONFIG_SERIAL_LAST ${VXL_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
-endif( ${VXL_CONFIG_SERIAL_CURRENT} MATCHES "^${VXL_CONFIG_SERIAL_LAST}$" )
+endif()
 
 
 
@@ -106,7 +106,7 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_DBGHELP_H)
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_DEFINE_SPECIALIZATION)
 if(NOT VCL_DEFINE_SPECIALIZATION)
   set(CMAKE_REQUIRED_FLAGS "-DNOT_CONFORMING_SPECIALIZATION")
-endif(NOT VCL_DEFINE_SPECIALIZATION)
+endif()
   SET_BOOL(VCL_DEFINE_SPECIALIZATION "template <>" "/* template <> */")
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CANNOT_SPECIALIZE_CV)
   SET_INVERT(VCL_CANNOT_SPECIALIZE_CV "${VCL_CANNOT_SPECIALIZE_CV}")
@@ -120,14 +120,14 @@ if(APPLE)
     if( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
       message(FATAL_ERROR "Neither the __isnand nor the __inline_isnand "
         "functions are available !")
-    endif( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
-  endif(NOT ${VXL_APPLE_HAS_ISNAND})
-endif(APPLE)
+    endif()
+  endif()
+endif()
 
 # Check if Windows have wchar_t defined
 if(WIN32)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_WIN_WCHAR_T)
-endif(WIN32)
+endif()
 
 
 # Test the ability of shared libraries to link to static vxl libriares
@@ -227,16 +227,16 @@ CHECK_TYPE_EXISTS_ZERO(std::tr1::shared_ptr<void> tr1/memory VCL_TR1_MEMORY_HAS_
 
 if(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
   option(VCL_INCLUDE_CXX_0X "Enable C++0x standard extensions" ${BUILD_FOR_VXL_DASHBOARD})
-else(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
+else()
   set(VCL_INCLUDE_CXX_0X 0)
-endif(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
+endif()
 
 # Make sure boolean values are (0,1) not (NO,YES)
 if(VCL_INCLUDE_CXX_0X)
   set(VCL_INCLUDE_CXX_0X 1)
-else(VCL_INCLUDE_CXX_0X)
+else()
   set(VCL_INCLUDE_CXX_0X 0)
-endif(VCL_INCLUDE_CXX_0X)
+endif()
 
 
 
@@ -257,8 +257,8 @@ if(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
       " you may need to set VXL_UPDATE_CONFIGURATION to ON."
       CACHE INTERNAL "help string for how to enable SSE2 support" )
     set(CMAKE_REQUIRED_FLAGS ${VXL_SSE_TEST_FLAG_BACKUP})
-  endif(CMAKE_COMPILER_IS_GNUCXX)
-endif(NOT VXL_HAS_SSE2_HARDWARE_SUPPORT)
+  endif()
+endif()
 
 
 #
@@ -272,12 +272,12 @@ if(VXL_HAS_EMMINTRIN_H)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_MINGW_ALIGNED_MALLOC)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_POSIX_MEMALIGN)
 
-else(VXL_HAS_EMMINTRIN_H)
+else()
   set( VXL_HAS_MM_MALLOC 0 )
   set( VXL_HAS_ALIGNED_MALLOC 0 )
   set( VXL_HAS_MINGW_ALIGNED_MALLOC 0 )
   set( VXL_HAS_POSIX_MEMALIGN 0 )
-endif(VXL_HAS_EMMINTRIN_H)
+endif()
 
 
 #
@@ -286,14 +286,14 @@ endif(VXL_HAS_EMMINTRIN_H)
 
 if(VCL_CXX_HAS_HEADER_COMPLEX)
   PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_COMPLEX_POW_WORKS)
-endif(VCL_CXX_HAS_HEADER_COMPLEX)
+endif()
 
 
 
 # Tests of math.h may need math library on UNIX.
 if(UNIX)
   set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
-endif(UNIX)
+endif()
 
 PERFORM_C_CHECK_FUNCTION(sqrtf "math.h" VXL_C_MATH_HAS_SQRTF)
 PERFORM_C_CHECK_FUNCTION(finite "math.h" VXL_C_MATH_HAS_FINITE)
@@ -313,7 +313,7 @@ set(VXL_TWO_ARG_GETTIME 0) # not used
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_IMPLICIT_TEMPLATES)
 if(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
   message(FATAL_ERROR "Implicit template instantiation must be supported by the compiler.")
-endif(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
+endif()
 unset(VCL_CAN_DO_IMPLICIT_TEMPLATES)
 
 PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_CHAR_IS_SIGNED)
@@ -338,9 +338,9 @@ DETERMINE_TYPE(IEEE_96  0 96  "float;double;long double")
 DETERMINE_TYPE(IEEE_128 0 128 "float;double;long double")
 if(${VXL_INT_64} MATCHES "^long$")
   set(VXL_INT_64_IS_LONG 1)
-else(${VXL_INT_64} MATCHES "^long$")
+else()
   set(VXL_INT_64_IS_LONG 0)
-endif(${VXL_INT_64} MATCHES "^long$")
+endif()
 
 #
 # Check unistd stuff
@@ -358,7 +358,7 @@ if(HAVE_UNISTD_H)
   CHECK_FUNCTION_EXISTS_ZERO(tell VXL_UNISTD_HAS_TELL)
   CHECK_FUNCTION_EXISTS_ZERO(getpid VXL_UNISTD_HAS_GETPID)
   CHECK_FUNCTION_EXISTS_ZERO(gethostname VXL_UNISTD_HAS_GETHOSTNAME)
-else(HAVE_UNISTD_H)
+else()
   # If there is not unistd.h, assume windows and therefore hardcode results.
   set(VXL_UNISTD_HAS_USECONDS_T 0)
   set(VXL_UNISTD_HAS_INTPTR_T 0)
@@ -370,7 +370,7 @@ else(HAVE_UNISTD_H)
   set(VXL_UNISTD_HAS_TELL 1)
   set(VXL_UNISTD_HAS_GETPID 1)
   set(VXL_UNISTD_HAS_GETHOSTNAME 1)
-endif(HAVE_UNISTD_H)
+endif()
 
 #
 # Check the address model of the build, i.e. 32-bit (4-byte) or 64-bit (8-byte).

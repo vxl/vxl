@@ -23,7 +23,7 @@ target_link_libraries(bstm_ocl bstm bstm_io bocl vpgl vil vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #pro
 add_subdirectory(pro)
@@ -34,4 +34,4 @@ add_subdirectory(algo)
 #exe
 #add_subdirectory(exe)
 
-endif(OPENCL_FOUND)
+endif()

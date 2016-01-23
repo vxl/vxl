@@ -17,8 +17,8 @@ target_link_libraries(fhs vimt vnl vil_algo vgl vsl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-endif(BUILD_MUL_TOOLS)
+endif()

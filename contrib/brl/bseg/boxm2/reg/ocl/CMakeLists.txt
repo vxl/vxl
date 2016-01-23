@@ -23,4 +23,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/reg/ocl/ ${boxm2
 
 add_subdirectory(exe)
 
-endif(OPENCL_FOUND)
+endif()

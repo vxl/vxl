@@ -41,7 +41,7 @@ add_subdirectory(gtrl)
 # octree stuff from Geoff's thesis
 if(BUILD_OXL)
   add_subdirectory(octree)
-endif(BUILD_OXL)
+endif()
 
 # photogrammetry in mrc/vpgl,
 # coordinate systems add-on in mrc/vcsl

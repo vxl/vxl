@@ -32,12 +32,12 @@ target_link_libraries(bapl bpgl_algo vpgl_algo ipts vimt brip rrel vnl_algo vnl 
 
 #if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-#endif( BUILD_EXAMPLES )
+#endif()
 
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 add_subdirectory(pro)
 

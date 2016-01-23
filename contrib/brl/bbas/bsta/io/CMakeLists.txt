@@ -20,7 +20,7 @@ target_link_libraries(bsta_io bsta vnl_io vbl_io vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib bsta_io)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta/io ${bsta_io_sources})

@@ -29,8 +29,8 @@ target_link_libraries(vpyr vmap)
 
 #if(BUILD_EXAMPLES)
   add_subdirectory(examples/simple_segmentation)
-#endif(BUILD_EXAMPLES)
+#endif()
 
 #if(BUILD_TESTING)
   add_subdirectory(tests)
-#endif(BUILD_TESTING)
+#endif()

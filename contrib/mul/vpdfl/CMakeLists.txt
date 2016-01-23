@@ -43,4 +43,4 @@ target_link_libraries(vpdfl mbl vnl_algo vnl_io vnl vsl vul)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

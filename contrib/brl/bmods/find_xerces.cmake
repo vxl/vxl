@@ -23,9 +23,9 @@ if(XERCES_BXML_INCLUDE_PATH)
       set(HAS_XERCES "YES")
       include_directories( ${XERCES_BXML_INCLUDE_PATH} )
       set( XERCES_LIBRARIES ${XERCES_BXML_LIBRARY_PATH} )
-    endif(NOT HAS_XERCES)
-  endif(XERCES_BXML_LIBRARY_PATH)
-endif(XERCES_BXML_INCLUDE_PATH)
+    endif()
+  endif()
+endif()
 
 # this line used for transit phase
 find_path(XERCES_NEW_BXML_INCLUDE_PATH xercesc/dom/Dom.hpp
@@ -43,7 +43,7 @@ if(XERCES_NEW_BXML_INCLUDE_PATH)
       set(HAS_NEW_XERCES "YES")
       include_directories( ${XERCES_NEW_BXML_INCLUDE_PATH} )
       set( NEW_XERCES_LIBRARIES ${XERCES_NEW_BXML_LIBRARY_PATH} )
-    endif(NOT HAS_NEW_XERCES)
-  endif(XERCES_NEW_BXML_LIBRARY_PATH)
-endif(XERCES_NEW_BXML_INCLUDE_PATH)
+    endif()
+  endif()
+endif()
 

@@ -59,4 +59,4 @@ target_link_libraries(clsfy vpdfl mbl vnl_algo vnl_io vnl vbl vsl vul)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

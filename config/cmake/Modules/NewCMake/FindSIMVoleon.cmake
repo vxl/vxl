@@ -19,7 +19,7 @@ if(COIN3D_FOUND)
         /usr/local/lib
       )
 
-    else(CYGWIN)
+    else()
 
        find_path(SIMVOLEON_INCLUDE_DIR VolumeViz/nodes/SoVolumeRender.h
         "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Coin3D;InstallPath]/include"
@@ -32,13 +32,13 @@ if(COIN3D_FOUND)
 
        if(SIMVOLEON_LIBRARY)
          add_definitions( -DSIMVOLEON_NOT_DLL )
-       else(SIMVOLEON_LIBRARY)
+       else()
          set(SIMVOLEON_LIBRARY simvoleon2 CACHE STRING "SIMVoleon Library - Coin3D based Volume Rendering API")
-       endif(SIMVOLEON_LIBRARY)
+       endif()
 
-    endif(CYGWIN)
+    endif()
 
-  else(WIN32)
+  else()
     if(APPLE)
       find_path(SIMVOLEON_INCLUDE_DIR VolumeViz/nodes/SoVolumeRender.h
         /usr/include
@@ -50,7 +50,7 @@ if(COIN3D_FOUND)
         /usr/local/lib
       )
 
-    else(APPLE)
+    else()
 
       find_path(SIMVOLEON_INCLUDE_DIR VolumeViz/nodes/SoVolumeRender.h
         /usr/include
@@ -62,14 +62,14 @@ if(COIN3D_FOUND)
         /usr/local/lib
       )
 
-    endif(APPLE)
+    endif()
 
-  endif(WIN32)
+  endif()
 
-endif(COIN3D_FOUND)
+endif()
 
   set( SIMVOLEON_FOUND "NO" )
   if(SIMVOLEON_LIBRARY)
     set( SIMVOLEON_FOUND "YES" )
-  endif(SIMVOLEON_LIBRARY)
+  endif()
 

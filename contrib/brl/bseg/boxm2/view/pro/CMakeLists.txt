@@ -16,5 +16,5 @@ target_link_libraries(boxm2_view_pro boxm2_view vgui)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 

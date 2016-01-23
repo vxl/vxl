@@ -25,4 +25,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brdb/ ${brdb_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

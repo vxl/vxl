@@ -53,31 +53,31 @@ set( vul_network_sources
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 if(APPLE)
   add_library(vul ${vul_sources})
   install_targets(/lib vul)
-else(APPLE)
+else()
 
 if(NOT SOLARIS)
   add_library(vul ${vul_sources} ${vul_network_sources})
   install_targets(/lib vul)
-else(NOT SOLARIS)
+else()
   add_library(vul ${vul_sources})
   add_library(vul_network ${vul_network_sources})
   install_targets(/lib vul vul_network)
-endif(NOT SOLARIS)
+endif()
 
 if(NOT UNIX)
   target_link_libraries( vul ws2_32 )
-endif(NOT UNIX)
+endif()
 
 if(SOLARIS)
   target_link_libraries( vul nsl vul_network socket )
-endif(SOLARIS)
+endif()
 
-endif(APPLE)
+endif()
 
 target_link_libraries( vul vcl )
 
@@ -88,8 +88,8 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vul
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

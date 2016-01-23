@@ -24,4 +24,4 @@ add_definitions( -D_FILE_OFFSET_BITS -DBZ_DEBUG=0 )
 add_library( bzip2 ${bzlib2_sources} )
 install_targets( /lib bzip2 )
 
-endif(NOT VXL_USING_NATIVE_BZLIB2)
+endif()

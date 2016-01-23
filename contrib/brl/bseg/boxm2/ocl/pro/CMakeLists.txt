@@ -7,12 +7,12 @@ include_directories( ${BRL_INCLUDE_DIR} )
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 if(TIFF_FOUND)
   include_directories(${TIFF_INCLUDE_DIR})
-endif(TIFF_FOUND)
+endif()
 
 include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 if(GEOTIFF_FOUND)
   include_directories( ${GEOTIFF_INCLUDE_DIR} )
-endif(GEOTIFF_FOUND)
+endif()
 
 
 set(boxm2_ocl_pro_sources
@@ -33,7 +33,7 @@ target_link_libraries(boxm2_ocl_pro boxm2_ocl_algo boct brdb vbl_io expatpp vpgl
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib boxm2_ocl_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/pro ${boxm2_ocl_pro_sources})

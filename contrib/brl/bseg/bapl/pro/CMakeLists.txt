@@ -22,4 +22,4 @@ target_link_libraries(bapl_pro bapl bapl_io bprb brdb vil_pro vil_io vil vnl vul
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

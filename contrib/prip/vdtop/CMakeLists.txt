@@ -33,4 +33,4 @@ target_link_libraries(vdtop vmap vil)
 
 #if(BUILD_TESTING)
   add_subdirectory(tests)
-#endif(BUILD_TESTING)
+#endif()

@@ -62,7 +62,7 @@ if(EXPAT_FOUND)
     target_link_libraries(volm ${EXPAT_LIBRARIES})
     if(APPLE)
       target_link_libraries(volm expat)
-    endif(APPLE)
+    endif()
     target_link_libraries(volm ${EXPATPP_LIBRARIES})
     # Base matcher, Proximity matcher, Visibility matcher related
     add_subdirectory(desc)
@@ -72,10 +72,10 @@ if(EXPAT_FOUND)
 
     if(BUILD_TESTING)
       add_subdirectory(tests)
-    endif(BUILD_TESTING)
+    endif()
 
     add_subdirectory(exe)
 
     add_subdirectory(pro)
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()

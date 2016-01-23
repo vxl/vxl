@@ -14,4 +14,4 @@ target_link_libraries( vtol_algo vtol vsol vdgl vil_algo vgl_algo vgl vil vbl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

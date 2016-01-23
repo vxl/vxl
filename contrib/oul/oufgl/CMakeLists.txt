@@ -21,6 +21,6 @@ target_link_libraries( oufgl vil vil1 rt)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 add_subdirectory(examples)

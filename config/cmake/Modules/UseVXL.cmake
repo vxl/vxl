@@ -10,9 +10,9 @@
 #  find_package(VXL)
 #  if(VXL_FOUND)
 #    include(${VXL_CMAKE_DIR}/UseVXL.cmake)
-#  else(VXL_FOUND)
+#  else()
 #    message("VXL_DIR should be set to the VXL build directory.")
-#  endif(VXL_FOUND)
+#  endif()
 #
 # Read vxl/config/cmake/VXLConfig.cmake for the list of variables
 # provided.  The names have changed to reduce namespace pollution.
@@ -34,9 +34,9 @@
 #    set(VXL_PROVIDE_OLD_CACHE_NAMES 1)
 #    set(VXL_PROVIDE_STANDARD_OPTIONS 1)
 #    include(${VXL_CMAKE_DIR}/UseVXL.cmake)
-#  else(VXL_FOUND)
+#  else()
 #    message("VXL_DIR should be set to the VXL build directory.")
-#  endif(VXL_FOUND)
+#  endif()
 #
 # The old way to use VXL from an outside project with UseVXL.cmake is
 # also supported for backward-compatibility:
@@ -44,9 +44,9 @@
 #  set(VXL_BINARY_PATH "" CACHE PATH "VXL build directory (location of UseVXL.cmake)")
 #  if(VXL_BINARY_PATH)
 #    include(${VXL_BINARY_PATH}/UseVXL.cmake)
-#  else(VXL_BINARY_PATH)
+#  else()
 #    message("VXL_BINARY_PATH should be set to the VXL build directory (location of UseVXL.cmake)" )
-#  endif(VXL_BINARY_PATH)
+#  endif()
 #
 
 # If this file has been included directly by a user project instead of
@@ -62,8 +62,8 @@ if(NOT VXL_CONFIG_CMAKE)
     set(VXL_PROVIDE_OLD_CACHE_NAMES 1)
     set(VXL_PROVIDE_STANDARD_OPTIONS 1)
 
-  endif(VXL_BINARY_PATH)
-endif(NOT VXL_CONFIG_CMAKE)
+  endif()
+endif()
 
 # VXLConfig.cmake has now been included.  Use its settings.
 if(VXL_CONFIG_CMAKE)
@@ -74,8 +74,8 @@ if(VXL_CONFIG_CMAKE)
     if( VXL_IMPORT_BUILD_SETTINGS )
       include(${CMAKE_ROOT}/Modules/CMakeImportBuildSettings.cmake)
       CMAKE_IMPORT_BUILD_SETTINGS(${VXL_BUILD_SETTINGS_FILE})
-    endif( VXL_IMPORT_BUILD_SETTINGS )
-  endif(VXL_BUILD_SETTINGS_FILE)
+    endif()
+  endif()
 
   # Use the standard VXL include directories.
   include_directories(${VXL_VCL_INCLUDE_DIR} ${VXL_CORE_INCLUDE_DIR})
@@ -129,15 +129,15 @@ if(VXL_CONFIG_CMAKE)
 
     set(MODULE_PATH ${VXL_CMAKE_DIR})
     set(VXL_LIBRARY_PATH ${VXL_LIBRARY_DIR})
-  endif(VXL_PROVIDE_OLD_CACHE_NAMES)
+  endif()
 
   if(VXL_CMAKE_DOXYGEN_DIR)
     # Allow use of VXL's cmake/doxygen framework
     include(${VXL_CMAKE_DOXYGEN_DIR}/doxygen.cmake)
-  endif(VXL_CMAKE_DOXYGEN_DIR)
+  endif()
 
   if(VXL_PROVIDE_STANDARD_OPTIONS)
     # Provide the standard set of VXL CMake options to the project.
     include(${VXL_CMAKE_DIR}/VXLStandardOptions.cmake)
-  endif(VXL_PROVIDE_STANDARD_OPTIONS)
-endif(VXL_CONFIG_CMAKE)
+  endif()
+endif()

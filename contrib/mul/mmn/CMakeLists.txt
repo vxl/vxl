@@ -32,8 +32,8 @@ target_link_libraries(mmn mbl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 if(BUILD_MUL_TOOLS)
 #  add_subdirectory(tools)
-endif(BUILD_MUL_TOOLS)
+endif()

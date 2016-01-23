@@ -38,7 +38,7 @@ if(SEGFAULT_FIXED)
 add_test( NAME brip_test_extrema COMMAND $<TARGET_FILE:brip_test_all> test_extrema )
 add_test( NAME brip_test_filter_bank COMMAND $<TARGET_FILE:brip_test_all> test_filter_bank )
 add_test( NAME brip_test_gain_offset_solver COMMAND $<TARGET_FILE:brip_test_all> test_gain_offset_solver )
-endif(SEGFAULT_FIXED)
+endif()
 
 add_executable( brip_test_include test_include.cxx )
 target_link_libraries( brip_test_include brip )

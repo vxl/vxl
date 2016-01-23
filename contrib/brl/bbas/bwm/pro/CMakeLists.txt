@@ -18,8 +18,8 @@ if(EXPAT_FOUND)
   set(bwm_pro_sources ${bwm_pro_sources}
       processes/bwm_create_corr_file_process.cxx
      )
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 aux_source_directory(Templates bwm_pro_sources)
 
@@ -28,4 +28,4 @@ target_link_libraries( bwm_pro bprb brip bwm_io vul bwm_algo)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

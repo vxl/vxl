@@ -15,4 +15,4 @@ target_link_libraries(boxm_sample_algo boxm_sample boxm boxm_util bsta bsta_algo
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

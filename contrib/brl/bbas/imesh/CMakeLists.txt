@@ -29,7 +29,7 @@ add_subdirectory(algo)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib imesh)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/imesh/ ${imesh_sources})

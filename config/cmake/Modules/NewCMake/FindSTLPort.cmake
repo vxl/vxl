@@ -33,7 +33,7 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug")
           stlport_gcc_stldebug
     PATHS ${STLPORT_INSTALL_DIR}/lib
   )
-else(CMAKE_BUILD_TYPE MATCHES "Debug")
+else()
   # if we only have debug libraries, use them.
   # that is surely better than nothing.
   find_library( STLPORT_LIBRARIES
@@ -45,7 +45,7 @@ else(CMAKE_BUILD_TYPE MATCHES "Debug")
           stlport_gcc_stldebug
     PATHS ${STLPORT_INSTALL_DIR}/lib
   )
-endif(CMAKE_BUILD_TYPE MATCHES "Debug")
+endif()
 
 
 #
@@ -64,10 +64,10 @@ if( STLPORT_INCLUDE_DIR )
     if(UNIX)
       set( STLPORT_LIBRARIES
         ${STLPORT_LIBRARIES} pthread )
-    endif(UNIX)
+    endif()
 
-  endif( STLPORT_LIBRARIES )
-endif( STLPORT_INCLUDE_DIR )
+  endif()
+endif()
 
 mark_as_advanced(
   STLPORT_INCLUDE_DIR

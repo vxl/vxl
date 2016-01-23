@@ -2,7 +2,7 @@
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 # These are the source files in this directory.
 # Note that these are all header files, so no library is built here.

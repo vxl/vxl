@@ -26,8 +26,8 @@ if(NOT EXPAT_FOUND)
     find_package(EXPAT)
     if(EXPAT_FOUND)
       set(VXL_USING_NATIVE_EXPAT "YES")
-    endif(EXPAT_FOUND)
-  endif( NOT VXL_FORCE_B3P_EXPAT )
+    endif()
+  endif()
 
 
   #
@@ -43,10 +43,10 @@ if(NOT EXPAT_FOUND)
       set( EXPAT_INCLUDE_DIRS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
       set( EXPAT_INCLUDE_DIR  ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat ${vxl_BINARY_DIR}/contrib/brl/b3p/expat )
       set( EXPAT_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expat)
-    endif(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/expat/expat.h)
-  endif(NOT EXPAT_FOUND)
+    endif()
+  endif()
 
-endif(NOT EXPAT_FOUND)
+endif()
 #mark_as_advanced(EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
 
 
@@ -82,5 +82,5 @@ if(EXPAT_FOUND) # EXPATPP requires EXPAT
              FAIL_MESSAGE "MISSING: "
      )
 
-endif(EXPAT_FOUND)
+endif()
 mark_as_advanced(EXPATPP_INCLUDE_DIR EXPATPP_LIBRARY)

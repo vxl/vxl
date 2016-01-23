@@ -70,8 +70,8 @@ doxygen_add_library(core/vcsl
 
   if( BUILD_EXAMPLES )
     add_subdirectory(examples)
-  endif( BUILD_EXAMPLES )
+  endif()
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()

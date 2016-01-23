@@ -24,13 +24,13 @@ include_directories( ${BRL_INCLUDE_DIR}/b3p/shapelib)
       bwm_utils.cxx                  bwm_utils.h
      )
   add_definitions( -DHAS_SHAPELIB=1 )
-endif(SHAPELIB_FOUND)
+endif()
 
 # ERMAPPER JPEG2000 COMPRESSION SDK
 include( ${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake )
 if(ECW_FOUND)
   include_directories(${ECW_INCLUDE_DIR})
-endif(ECW_FOUND)
+endif()
 
 add_library(bwm_algo ${bwm_algo_sources})
 
@@ -38,7 +38,7 @@ target_link_libraries( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib bwm_algo)

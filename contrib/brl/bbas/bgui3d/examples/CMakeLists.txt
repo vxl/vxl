@@ -43,4 +43,4 @@ target_link_libraries(bgui3d_example_examiner_cylinders bgui3d vnl)
 add_executable(bgui3d_example_interact MACOSX_BUNDLE example_interact.cxx)
 target_link_libraries(bgui3d_example_interact bgui3d vgl)
 
-endif(HAS_BGUI3D)
+endif()

@@ -18,4 +18,4 @@ target_link_libraries(geml vil1 vnl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

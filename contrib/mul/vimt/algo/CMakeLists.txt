@@ -17,4 +17,4 @@ target_link_libraries( vimt_algo vimt vil_algo vgl vcl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

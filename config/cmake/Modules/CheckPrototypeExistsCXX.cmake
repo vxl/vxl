@@ -44,24 +44,24 @@ macro(CHECK_PROTOTYPE_EXISTS_CXX FUNC INCLUDE VARIABLE)
             "Determining if prototype ${FUNC} exists in ${FILE} "
             "failed with the following output:\n"
             "${OUTPUT}\n\n")
-        else( CHECK_PROTOTYPE_EXISTS_CXX_RESULT )
+        else()
           file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
             "Determining if prototype ${FUNC} exists in ${FILE} "
             "passed with the following output:\n"
             "${OUTPUT}\n\n")
           message(STATUS "    Found in ${FILE}")
           set( ${VARIABLE} 1 )
-        endif( CHECK_PROTOTYPE_EXISTS_CXX_RESULT )
+        endif()
 
-      endif( CHECK_PROTOTYPE_EXISTS_CXX_INCLUDE )
-    endforeach(FILE)
+      endif()
+    endforeach()
 
     if( ${VARIABLE} )
       message(STATUS "Looking for prototype of ${FUNC} - found")
       set(${VARIABLE} 1 CACHE INTERNAL "Have prototype ${VARIABLE}")
-    else(${VARIABLE})
+    else()
       message(STATUS "Looking for prototype of ${FUNC} - not found")
       set(${VARIABLE} "" CACHE INTERNAL "Have prototype ${VARIABLE}")
-    endif(${VARIABLE})
+    endif()
   endif()
-endmacro(CHECK_PROTOTYPE_EXISTS_CXX)
+endmacro()

@@ -34,7 +34,7 @@ add_subdirectory(bbas)
 if( BUILD_GEL )
   # segmentation package
   add_subdirectory(bseg)
-endif( BUILD_GEL )
+endif()
 
 # process libraries
 add_subdirectory(bpro)

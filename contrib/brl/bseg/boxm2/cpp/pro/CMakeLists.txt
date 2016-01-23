@@ -13,4 +13,4 @@ target_link_libraries(boxm2_cpp_pro boxm2_cpp_algo brad bbas_pro bbgm_pro bprb b
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

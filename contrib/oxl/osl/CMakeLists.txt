@@ -51,8 +51,8 @@ target_link_libraries(osl vnl_algo vnl vgl vil1 vbl)
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

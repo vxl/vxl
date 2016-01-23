@@ -17,7 +17,7 @@ add_executable( vtol_test_all
 )
 if(CMAKE_COMPILER_IS_GNUCXX)
  set_source_files_properties(test_cycle_processor.cxx PROPERTIES COMPILE_FLAGS -O1)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 target_link_libraries( vtol_test_all vtol_algo vtol vsol vdgl vnl vil vul testlib )
 

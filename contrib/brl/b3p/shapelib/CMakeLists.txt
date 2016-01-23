@@ -9,7 +9,7 @@ if(NOT VXL_USING_NATIVE_SHAPELIB)
   if(WIN32)
     add_definitions( -DXML_STATIC )
     add_definitions( -DCOMPILED_FROM_DSP )
-  endif(WIN32)
+  endif()
 
   #set the COMPILED_FROM_DSP definition
 
@@ -25,7 +25,7 @@ if(NOT VXL_USING_NATIVE_SHAPELIB)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
-endif(NOT VXL_USING_NATIVE_SHAPELIB)
+endif()
 

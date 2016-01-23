@@ -117,10 +117,10 @@ if(NOT APPLE)
     add_library(vil1_network ${vil1_network_sources})
     install_targets(lib/ vil1_network)
     INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_network_sources})
-  else(SOLARIS)
+  else()
     set(vil1_sources ${vil1_sources} ${vil1_network_sources})
-  endif(SOLARIS)
-endif(NOT APPLE)
+  endif()
+endif()
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
 include(${VXL_CMAKE_DIR}/FindJPEG.cmake)
@@ -133,9 +133,9 @@ if(PNG_FOUND)
   set( vil1_sources ${vil1_sources}
     file_formats/vil1_png.cxx                  file_formats/vil1_png.h
   )
-else(PNG_FOUND)
+else()
   add_definitions( -DHAS_PNG=0 )
-endif(PNG_FOUND)
+endif()
 
 if(JPEG_FOUND)
   include_directories( ${JPEG_INCLUDE_DIR} )
@@ -148,9 +148,9 @@ if(JPEG_FOUND)
     file_formats/vil1_jpeg_destination_mgr.cxx  file_formats/vil1_jpeg_destination_mgr.h
     file_formats/vil1_jpeg_compressor.cxx       file_formats/vil1_jpeg_compressor.h
   )
-else(JPEG_FOUND)
+else()
   add_definitions( -DHAS_JPEG=0 )
-endif(JPEG_FOUND)
+endif()
 
 if(TIFF_FOUND)
   include_directories( ${TIFF_INCLUDE_DIR} )
@@ -158,15 +158,15 @@ if(TIFF_FOUND)
   set( vil1_sources ${vil1_sources}
     file_formats/vil1_tiff.cxx                  file_formats/vil1_tiff.h
   )
-else(TIFF_FOUND)
+else()
   add_definitions( -DHAS_TIFF=0 )
-endif(TIFF_FOUND)
+endif()
 
 aux_source_directory(Templates vil1_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vil1_image_as.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_library(vil1 ${vil1_sources})
 install_targets(/lib vil1)
@@ -174,28 +174,28 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_sources})
 
 if(JPEG_FOUND)
   target_link_libraries( vil1 ${JPEG_LIBRARIES} )
-endif(JPEG_FOUND)
+endif()
 if(TIFF_FOUND)
   target_link_libraries( vil1 ${TIFF_LIBRARIES} )
-endif(TIFF_FOUND)
+endif()
 if(PNG_FOUND)
   target_link_libraries( vil1 ${PNG_LIBRARIES} )
-endif(PNG_FOUND)
+endif()
 
 target_link_libraries( vil1 vcl )
 
 if(NOT UNIX)
   target_link_libraries( vil1 ws2_32 )
-endif(NOT UNIX)
+endif()
 
 if(SOLARIS)
   target_link_libraries( vil1 nsl vil1_network socket )
-endif(SOLARIS)
+endif()
 
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

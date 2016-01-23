@@ -53,13 +53,13 @@ if(BUILD_CORE_IMAGING)
       section/vipl_filterable_section_container_generator_vil_image_view.txx
       accessors/vipl_accessors_vil_image_view.txx accessors/vipl_accessors_vil_image_view.h
      )
-endif(BUILD_CORE_IMAGING)
+endif()
 if(BUILD_CORE_UTILITIES)
   set(vipl_sources ${vipl_sources}
       vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_array_2d.txx
       vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.txx vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h
      )
-endif(BUILD_CORE_UTILITIES)
+endif()
 if(BUILD_CORE_NUMERICS)
   set(vipl_sources ${vipl_sources}
       vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.txx
@@ -67,7 +67,7 @@ if(BUILD_CORE_NUMERICS)
       vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_vector.txx
       vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx     vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h
      )
-endif(BUILD_CORE_NUMERICS)
+endif()
 
 add_definitions(-DINSTANTIATE_TEMPLATES)
 
@@ -78,18 +78,18 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vipl ${vipl_sources})
 # No unconditional library dependencies:
 if(BUILD_CORE_IMAGING)
   target_link_libraries(vipl vil)
-endif(BUILD_CORE_IMAGING)
+endif()
 if(BUILD_CORE_UTILITIES)
   target_link_libraries(vipl vbl)
-endif(BUILD_CORE_UTILITIES)
+endif()
 if(BUILD_CORE_NUMERICS)
   target_link_libraries(vipl vnl)
-endif(BUILD_CORE_NUMERICS)
+endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

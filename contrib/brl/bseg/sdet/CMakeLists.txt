@@ -77,4 +77,4 @@ target_link_libraries(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

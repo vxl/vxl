@@ -19,7 +19,7 @@ target_link_libraries(brad_pro brad_io brad bprb brdb brip vbl_io vbl vil_pro)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib brad_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/brad_pro ${brad_pro_sources})

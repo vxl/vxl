@@ -10,4 +10,4 @@ target_link_libraries( bgrl2_algo bgrl2 )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

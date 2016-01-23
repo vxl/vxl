@@ -23,7 +23,7 @@ target_link_libraries(boxm_sample boxm vgl_io bsta vil vgl vbl vsl vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #processors for the samples
 add_subdirectory(algo)

@@ -21,4 +21,4 @@ target_link_libraries( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro vnl vgl vul )
 
 add_subdirectory(tests)
 
-endif(HAS_BGUI3D)
+endif()

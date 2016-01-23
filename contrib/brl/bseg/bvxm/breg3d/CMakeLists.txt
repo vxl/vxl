@@ -24,6 +24,6 @@ if(BUILD_MUL)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
-endif(BUILD_MUL)
+endif()

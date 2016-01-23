@@ -9,7 +9,7 @@ include( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
 if(HDFS_FOUND)
   add_definitions(-DHAS_HDFS=1)
   include_directories( ${HDFS_INCLUDE_DIRS} )
-endif(HDFS_FOUND)
+endif()
 
 set(boxm2_io_sources
     boxm2_asio_mgr.h       boxm2_asio_mgr.cxx
@@ -32,7 +32,7 @@ target_link_libraries(boxm2_io boxm2 expatpp vpgl baio vpgl vgl_xio vgl vbl vul 
 
 if(HDFS_FOUND)
  target_link_libraries(boxm2_io bhdfs)
-endif(HDFS_FOUND)
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib boxm2_io)
@@ -40,4 +40,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/io ${boxm2_io_so
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

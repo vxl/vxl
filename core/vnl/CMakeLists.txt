@@ -18,10 +18,10 @@ option(VNL_CONFIG_THREAD_SAFE
 #if( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
 #  option(VNL_CONFIG_ENABLE_SSE2
 #    "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant)." ON)
-#else( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
+#else()
   option(VNL_CONFIG_ENABLE_SSE2
     "Enable Streaming SIMD Extensions 2 optimisations (hardware dependant). Currently broken. For use by VNL developers only." OFF)
-#endif( VXL_HAS_EMMINTRIN_H AND VXL_HAS_SSE2_HARDWARE_SUPPORT )
+#endif()
 
 option(VNL_CONFIG_ENABLE_SSE2_ROUNDING
   "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
@@ -30,12 +30,12 @@ if( VNL_CONFIG_ENABLE_SSE2_ROUNDING )
   if( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
     if( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
       message( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
-    endif( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
+    endif()
     message( SEND_ERROR "Cannot have VNL_CONFIG_ENABLE_SSE2_ROUNDING because"
                         " there is no SSE2 hardware support" )
     set(VNL_CONFIG_ENABLE_SSE2_ROUNDING 0)
-  endif( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
-endif( VNL_CONFIG_ENABLE_SSE2_ROUNDING )
+  endif()
+endif()
 
 
 mark_as_advanced(
@@ -48,29 +48,29 @@ mark_as_advanced(
 # Need to enforce 1/0 values for configuration.
 if(VNL_CONFIG_CHECK_BOUNDS)
   set(VNL_CONFIG_CHECK_BOUNDS 1)
-else(VNL_CONFIG_CHECK_BOUNDS)
+else()
   set(VNL_CONFIG_CHECK_BOUNDS 0)
-endif(VNL_CONFIG_CHECK_BOUNDS)
+endif()
 if(VNL_CONFIG_LEGACY_METHODS)
   set(VNL_CONFIG_LEGACY_METHODS 1)
-else(VNL_CONFIG_LEGACY_METHODS)
+else()
   set(VNL_CONFIG_LEGACY_METHODS 0)
-endif(VNL_CONFIG_LEGACY_METHODS)
+endif()
 if(VNL_CONFIG_THREAD_SAFE)
   set(VNL_CONFIG_THREAD_SAFE 1)
-else(VNL_CONFIG_THREAD_SAFE)
+else()
   set(VNL_CONFIG_THREAD_SAFE 0)
-endif(VNL_CONFIG_THREAD_SAFE)
+endif()
 if(VNL_CONFIG_ENABLE_SSE2)
   set(VNL_CONFIG_ENABLE_SSE2 1)
-else(VNL_CONFIG_ENABLE_SSE2)
+else()
   set(VNL_CONFIG_ENABLE_SSE2 0)
-endif(VNL_CONFIG_ENABLE_SSE2)
+endif()
 if(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
   set(VNL_CONFIG_ENABLE_SSE2_ROUNDING 1)
-else(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
+else()
   set(VNL_CONFIG_ENABLE_SSE2_ROUNDING 0)
-endif(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
+endif()
 configure_file(${vxl_SOURCE_DIR}/core/vnl/vnl_config.h.in
                ${vxl_BINARY_DIR}/core/vnl/vnl_config.h @ONLY IMMEDIATE)
 
@@ -258,11 +258,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   # gcc must have -msse2 option to enable sse2 support
   if(VNL_CONFIG_ENABLE_SSE2)
     add_definitions( -msse2 )
-  endif(VNL_CONFIG_ENABLE_SSE2)
+  endif()
   if(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
     add_definitions( -msse2 )
-  endif(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+  endif()
+endif()
 
 add_library(vnl ${vnl_sources})
 target_link_libraries( vnl vcl )
@@ -272,10 +272,10 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl ${vnl_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 add_subdirectory(algo)
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()

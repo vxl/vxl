@@ -30,7 +30,7 @@
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib brad)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad ${brad_sources})

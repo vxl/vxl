@@ -23,7 +23,7 @@ add_library(boxm_algo ${boxm_algo_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 target_link_libraries(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl vgl_algo vgl vnl vul vbl vcl)
 

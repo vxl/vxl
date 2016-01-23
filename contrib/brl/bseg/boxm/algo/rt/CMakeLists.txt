@@ -40,7 +40,7 @@ add_subdirectory(pro)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 target_link_libraries(boxm_algo_rt boxm boxm_sample boxm_sample_algo boxm_basic boxm_util vil vcl vgl vbl vgl_algo bsta vnl sdet brip vpgl vpgl_algo )
 

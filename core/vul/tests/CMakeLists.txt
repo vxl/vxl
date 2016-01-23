@@ -22,7 +22,7 @@ if(NOT APPLE)
   set(vul_test_sources ${vul_test_sources}
     test_url.cxx
   )
-endif(NOT APPLE)
+endif()
 
 GENERATE_TEST_DRIVER(vul vul_test_sources vul vpl testlib vcl)
 

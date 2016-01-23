@@ -38,7 +38,7 @@ if(EXPAT_FOUND)
   set(bvgl_sources ${bvgl_sources}
       bvgl_labelme_parser.h                   bvgl_labelme_parser.cxx
      )
-endif(EXPAT_FOUND)
+endif()
 
 #Create BVGL library
 add_library(bvgl ${bvgl_sources})
@@ -47,11 +47,11 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvgl ${bvgl_sources})
 target_link_libraries(bvgl bvrml vsol vgl_algo vgl_io vgl vnl_algo vnl vil vbl)
 if(EXPAT_FOUND)
 target_link_libraries(bvgl expatpp)
-endif(EXPAT_FOUND)
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 # geometric algorithm related
 add_subdirectory(algo)

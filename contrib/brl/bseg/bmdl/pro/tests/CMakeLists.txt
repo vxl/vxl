@@ -20,11 +20,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/classify_params.xml ${CMAKE_CURRENT_B
 
 if(SEGFAULT_FIXED)
 add_test( NAME bmdl_pro_classify_process COMMAND $<TARGET_FILE:bmdl_pro_test_all> test_bmdl_classify_process )
-endif(SEGFAULT_FIXED)
+endif()
 add_test( NAME bmdl_pro_trace_boundaries_process COMMAND $<TARGET_FILE:bmdl_pro_test_all> test_bmdl_trace_boundaries_process ${CMAKE_CURRENT_SOURCE_DIR} )
 add_test( NAME bmdl_pro_generate_mesh_process COMMAND $<TARGET_FILE:bmdl_pro_test_all> test_bmdl_generate_mesh_process    ${CMAKE_CURRENT_SOURCE_DIR} )
- endif( EXPATPP_FOUND )
-endif( EXPAT_FOUND )
+ endif()
+endif()
 
 add_executable( bmdl_pro_test_include test_include.cxx )
 target_link_libraries( bmdl_pro_test_include bmdl_pro bprb brdb vil vil_io vgl vgl_io vpgl)

@@ -22,7 +22,7 @@ if(NETLIB_FOUND)
   set(gtrl_sources ${gtrl_sources}
     gtrl_triangulation.cxx gtrl_triangulation.h
   )
-endif(NETLIB_FOUND)
+endif()
 
 add_library(gtrl ${gtrl_sources})
 install_targets(/lib gtrl)
@@ -31,12 +31,12 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gtrl ${gtrl_sources})
 target_link_libraries(gtrl vbl)
 if(NETLIB_FOUND)
   target_link_libraries(gtrl ${NETLIB_LIBRARIES})
-endif(NETLIB_FOUND)
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()

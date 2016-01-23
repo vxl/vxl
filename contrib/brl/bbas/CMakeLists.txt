@@ -75,7 +75,7 @@ if( BUILD_GEL )
   # Indexed Mesh Library
   add_subdirectory(imesh)
 
-endif( BUILD_GEL )
+endif()
 
 # Brown hadoop library
 add_subdirectory(bhdfs)

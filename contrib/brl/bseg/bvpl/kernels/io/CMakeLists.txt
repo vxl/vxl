@@ -11,4 +11,4 @@ target_link_libraries(bvpl_kernels_io bvpl_kernels vbl_io vsl vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

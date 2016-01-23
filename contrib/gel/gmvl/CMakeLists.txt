@@ -27,8 +27,8 @@ target_link_libraries(gmvl vtol vil1 vnl vbl vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()

@@ -22,9 +22,9 @@ target_link_libraries(ipts vimt_algo vimt vgl vil_algo vil)
 
 if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-endif(BUILD_MUL_TOOLS)
+endif()
 
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

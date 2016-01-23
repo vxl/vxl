@@ -19,8 +19,8 @@ if( NOT GEOTIFF_FOUND )
     include( ${MODULE_PATH}/NewCMake/FindGEOTIFF.cmake )
     if( GEOTIFF_FOUND )
       set(VXL_USING_NATIVE_GEOTIFF "YES")
-    endif( GEOTIFF_FOUND )
-  endif( NOT VXL_FORCE_V3P_GEOTIFF )
+    endif()
+  endif()
 
 
   #
@@ -40,9 +40,9 @@ if( NOT GEOTIFF_FOUND )
         set( GEOTIFF_FOUND "YES" )
         set( GEOTIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/geotiff)
         set( GEOTIFF_LIBRARIES geotiff )
-      endif( GEOTIFF_INCLUDE_DIR )
+      endif()
 
-    endif(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
-  endif( NOT GEOTIFF_FOUND )
+    endif()
+  endif()
 
-endif( NOT GEOTIFF_FOUND )
+endif()

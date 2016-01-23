@@ -14,7 +14,7 @@ set(vidl_player_sources
 add_executable(vidl_player MACOSX_BUNDLE ${vidl_player_sources})
 target_link_libraries(vidl_player vidl vidl_gui vul)
 
-endif( HAS_VGUI )
+endif()
 
 
 if( DIRECTSHOW_FOUND )
@@ -27,19 +27,19 @@ if(BUILD_MUL)
 include_directories( ${VXL_MUL_INCLUDE_DIR} )
 add_executable(vidl_dshow_live_example vidl_dshow_live_example.cxx)
 target_link_libraries(vidl_dshow_live_example vidl mbl)
-endif(BUILD_MUL)
-endif( DIRECTSHOW_FOUND )
+endif()
+endif()
 
 if( VIDEODEV_FOUND )
    add_executable(vidl_v4l_example  vidl_v4l_live_example.cxx)
    target_link_libraries(vidl_v4l_example vidl)
-endif( VIDEODEV_FOUND )
+endif()
 
 
 if( VIDEODEV2_FOUND )
    add_executable(vidl_v4l2_example  vidl_v4l2_live_example.cxx)
    target_link_libraries(vidl_v4l2_example vidl)
-endif( VIDEODEV2_FOUND )
+endif()
 
 
 add_executable( vidl_transcode_video

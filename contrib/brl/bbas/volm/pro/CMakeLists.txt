@@ -24,10 +24,10 @@ include_directories( ${VTHREEP_INCLUDE_DIR}/rply)
 
   if(BUILD_RPL)
     target_link_libraries(volm_pro rsdl)
-  endif(BUILD_RPL)
+  endif()
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
-endif(BUILD_RPL)
+endif()

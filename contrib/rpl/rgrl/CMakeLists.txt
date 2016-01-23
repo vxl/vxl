@@ -6,7 +6,7 @@ doxygen_add_library(contrib/rpl/rgrl
 
 if(vxl_SOURCE_DIR)
   set(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
-endif(vxl_SOURCE_DIR)
+endif()
 
 include_directories( ${VXL_MUL_INCLUDE_DIR} )
 include_directories( ${vxl_BINARY_DIR}/contrib/rpl )
@@ -170,12 +170,12 @@ target_link_libraries( rgrl rrel rsdl vil3d vil vnl_algo vnl vbl vul)
 #find_package( ITK )
 #if( ITK_FOUND )
 #    target_link_libraries( rgrl ITKCommon )
-#endif( ITK_FOUND )
+#endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()

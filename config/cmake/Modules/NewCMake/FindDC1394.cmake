@@ -25,7 +25,7 @@ if(APPLE AND DC1394_FOUND)
   set(DC1394_LIBRARIES ${DC1394_LIBRARIES}
                        "-framework CoreServices"
                        "-framework IOKit" )
-endif(APPLE AND DC1394_FOUND)
+endif()
 
 
 

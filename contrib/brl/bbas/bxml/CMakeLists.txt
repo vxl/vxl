@@ -21,8 +21,8 @@ if(EXPAT_FOUND)
   set( bxml_sources ${bxml_sources}
       bxml_read.cxx                bxml_read.h
   )
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 aux_source_directory(Templates bxml_sources)
 
@@ -32,14 +32,14 @@ target_link_libraries( bxml vbl_io vul vbl )
 if(EXPAT_FOUND)
  if(EXPATPP_FOUND)
   target_link_libraries( bxml ${EXPATPP_LIBRARIES})
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 add_subdirectory(bsvg)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib bxml)

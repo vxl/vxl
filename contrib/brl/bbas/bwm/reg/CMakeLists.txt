@@ -19,7 +19,7 @@ target_link_libraries( bwm_reg brip sdet vil vbl vgl vnl bsta bsol vsol vpgl vpg
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()
 
 #install the .h .txx and libs
 install_targets(/lib bwm_reg)

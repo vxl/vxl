@@ -15,15 +15,15 @@
 
 # If this FORCE variable is unset or is FALSE, try to find a native library.
 if( VXL_FORCE_V3P_MPEG2 )
-else( VXL_FORCE_V3P_MPEG2 )
+else()
   find_package( MPEG2 QUIET )
-endif( VXL_FORCE_V3P_MPEG2 )
+endif()
 
 if( MPEG2_FOUND )
 
   set(VXL_USING_NATIVE_MPEG2 "YES")
 
-else( MPEG2_FOUND )
+else()
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -47,6 +47,6 @@ else( MPEG2_FOUND )
       ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/mpeg2/include/mpeg2dec
     )
 
-  endif(EXISTS ${vxl_SOURCE_DIR}/v3p/mpeg2/include/mpeg2dec/mpeg2.h)
+  endif()
 
-endif( MPEG2_FOUND )
+endif()

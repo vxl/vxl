@@ -12,8 +12,8 @@ if(TIFF_FOUND)
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
     include_directories(${GEOTIFF_INCLUDE_DIR})
-  endif(GEOTIFF_FOUND)
-endif(TIFF_FOUND)
+  endif()
+endif()
 
 set(brec_sources
     brec_bayesian_propagation.h  brec_bayesian_propagation.cxx
@@ -48,4 +48,4 @@ add_subdirectory(pro)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

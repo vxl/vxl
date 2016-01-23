@@ -22,28 +22,28 @@ if( PYTHON_FOUND )
       if(WIN32)
         #library has to have different name depending on debug or release version.
         set_target_properties(brec_batch PROPERTIES OUTPUT_NAME brec_batch DEBUG_POSTFIX _d SUFFIX .pyd)
-      endif(WIN32)
+      endif()
       set_target_properties(brec_batch PROPERTIES PREFIX "")
 
       target_link_libraries(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro vbl vpgl_io vidl_pro vpgl_pro vil_io vil_pro)
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( brec_batch debug ${PYTHON_DEBUG_LIBRARY})
-      endif(PYTHON_DEBUG_LIBRARIES )
+      endif()
 
       if(PYTHON_LIBRARIES)
         target_link_libraries( brec_batch optimized ${PYTHON_LIBRARY})
-      endif(PYTHON_LIBRARIES)
+      endif()
 
       if( BUILD_TESTING )
         add_subdirectory(tests)
-      endif( BUILD_TESTING )
-    endif(NOT BUILD_POSITION_DEPENDENT_CODE)
+      endif()
+    endif()
 
-  endif( EXPAT_FOUND )
-endif( PYTHON_FOUND )
+  endif()
+endif()
 
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 if(DIRECTSHOW_FOUND)
   add_definitions(-DHAS_DIRECTSHOW)
-endif(DIRECTSHOW_FOUND)
+endif()

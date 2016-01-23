@@ -26,19 +26,19 @@ if(BUILD_CORE_UTILITIES)
 
   # "basics" (templates)
   add_subdirectory(vbl)
-endif(BUILD_CORE_UTILITIES)
+endif()
 
 
 # numerics
 if(BUILD_CORE_NUMERICS)
   add_subdirectory(vnl)
-endif(BUILD_CORE_NUMERICS)
+endif()
 
 
 # geometry (including computational geometry)
 if(BUILD_CORE_GEOMETRY)
   add_subdirectory(vgl)
-endif(BUILD_CORE_GEOMETRY)
+endif()
 
 
 if(BUILD_CORE_IMAGING)
@@ -47,8 +47,8 @@ if(BUILD_CORE_IMAGING)
 
   if(BUILD_CORE_NUMERICS)
     add_subdirectory (vil/algo)
-  endif(BUILD_CORE_NUMERICS)
-endif(BUILD_CORE_IMAGING)
+  endif()
+endif()
 
 
 ##- if(NOT BUILD_NONDEPRECATED_ONLY)  ## NOTE THIS CAN NOT BE DEPRECATED
@@ -59,7 +59,7 @@ endif(BUILD_CORE_IMAGING)
 # Old image library (deprecated)
 if(BUILD_CORE_IMAGING ) ## BRL still depends on vil1 AND NOT BUILD_NONDEPRECATED_ONLY)
   add_subdirectory(vil1)
-endif(BUILD_CORE_IMAGING)
+endif()
 
 
 if(BUILD_CORE_SERIALISATION)
@@ -69,35 +69,35 @@ if(BUILD_CORE_SERIALISATION)
   if(BUILD_CORE_UTILITIES)
     add_subdirectory(vul/io)
     add_subdirectory(vbl/io)
-  endif(BUILD_CORE_UTILITIES)
+  endif()
 
   if(BUILD_CORE_NUMERICS)
     add_subdirectory(vnl/io)
     add_subdirectory(vnl/xio)
-  endif(BUILD_CORE_NUMERICS)
+  endif()
 
   if(BUILD_CORE_GEOMETRY)
     add_subdirectory(vgl/io)
     add_subdirectory(vgl/xio)
-  endif(BUILD_CORE_GEOMETRY)
+  endif()
 
   if(BUILD_CORE_IMAGING)
     add_subdirectory(vil/io)
-  endif(BUILD_CORE_IMAGING)
-endif(BUILD_CORE_SERIALISATION)
+  endif()
+endif()
 
 
 # coordinate systems
 if(BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
   add_subdirectory(vcsl)
   add_subdirectory(vpgl)
-endif(BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
+endif()
 
 
 # probability distributions
 if(BUILD_CORE_PROBABILITY)
   add_subdirectory(vpdl)
-endif(BUILD_CORE_PROBABILITY)
+endif()
 
 
 # multi-platform GUI toolkit
@@ -126,7 +126,7 @@ add_subdirectory(testlib)
 # Tests that check and output the vxl configuration
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
 endif()

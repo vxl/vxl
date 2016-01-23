@@ -17,4 +17,4 @@ target_link_libraries(bvpl_octree_io bvpl_octree vbl_io vsl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

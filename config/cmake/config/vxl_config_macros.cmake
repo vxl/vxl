@@ -12,12 +12,12 @@ include(${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake)
 macro(PERFORM_CMAKE_TEST FILE TEST)
   if( VXL_UPDATE_CONFIGURATION )
     unset( ${TEST} )
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   if(NOT DEFINED "${TEST}")
     # Perform test
     if(CMAKE_REQUIRED_LIBRARIES)
       set(TEST_ADD_LIBRARIES "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
-    endif(CMAKE_REQUIRED_LIBRARIES)
+    endif()
     message(STATUS "Performing Test ${TEST}")
 
     if(CMAKE_CXX_STANDARD)
@@ -35,20 +35,20 @@ macro(PERFORM_CMAKE_TEST FILE TEST)
     if(${TEST})
       set(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION}")
       message(STATUS "Performing Test ${TEST} - Success")
-    else(${TEST})
+    else()
       message(STATUS "Performing Test ${TEST} - Failed")
       set(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION}")
       file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
                  "Performing Test ${TEST} failed with the following output:\n"
                  "${OUTPUT}\n")
-    endif(${TEST})
+    endif()
   else()
     # Have result
     #foreach(tst ${TEST})
     #  message("Test ${TEST} resulted in ${${tst}}")
-    #endforeach(tst ${TEST})
+    #endforeach()
   endif()
-endmacro(PERFORM_CMAKE_TEST FILE TEST)
+endmacro()
 
 #
 # Perform a custom VXL try compile test with status output
@@ -62,7 +62,7 @@ endmacro(PERFORM_CMAKE_TEST FILE TEST)
 macro(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
   if( VXL_UPDATE_CONFIGURATION )
     unset( ${TEST} )
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   if(NOT DEFINED "${TEST}")
     # Perform test
     set(MACRO_CHECK_FUNCTION_DEFINITIONS
@@ -70,7 +70,7 @@ macro(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
     if(CMAKE_REQUIRED_LIBRARIES)
       set(TEST_ADD_LIBRARIES
           "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
-    endif(CMAKE_REQUIRED_LIBRARIES)
+    endif()
     message(STATUS "Performing Test ${TEST}")
 
     try_compile(${TEST}
@@ -85,16 +85,16 @@ macro(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
     if(${TEST})
       set(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION}")
       message(STATUS "Performing Test ${TEST} - Success")
-    else(${TEST})
+    else()
       message(STATUS "Performing Test ${TEST} - Failed")
       set(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION}")
       file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
                  "Performing Test ${TEST} failed with the following output:\n"
                  "${OUTPUT}\n")
-    endif(${TEST})
+    endif()
   endif()
   file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/config/${DIR})
-endmacro(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
+endmacro()
 
 #
 # Perform the VXL specific try-run test with status output
@@ -106,7 +106,7 @@ endmacro(PERFORM_CMAKE_TEST_CUSTOM DIR TEST)
 macro(PERFORM_CMAKE_TEST_RUN FILE TEST)
   if( VXL_UPDATE_CONFIGURATION )
     unset( ${TEST} )
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   if(NOT DEFINED "${TEST}")
     # Perform test
     set(MACRO_CHECK_FUNCTION_DEFINITIONS
@@ -114,7 +114,7 @@ macro(PERFORM_CMAKE_TEST_RUN FILE TEST)
     if(CMAKE_REQUIRED_LIBRARIES)
       set(TEST_ADD_LIBRARIES
           "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
-    endif(CMAKE_REQUIRED_LIBRARIES)
+    endif()
     message(STATUS "Performing Test ${TEST}")
 
     try_run(${TEST} ${TEST}_COMPILED
@@ -130,27 +130,27 @@ macro(PERFORM_CMAKE_TEST_RUN FILE TEST)
         file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
                    "Performing Test ${TEST} failed with the following output:\n"
                    "${OUTPUT}\n")
-      else(${TEST})
+      else()
         set(${TEST} 1 CACHE INTERNAL "VXL test ${FUNCTION} (successful run)")
         message(STATUS "Performing Test ${TEST} - Success")
         file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
                    "Performing Test ${TEST} succeeded with the following output:\n"
                    "${OUTPUT}\n")
-      endif(${TEST})
-    else(${TEST}_COMPILED)
+      endif()
+    else()
       message(STATUS "Performing Try-Run Test ${TEST} - Test Compilation Failed")
       set(${TEST} 0 CACHE INTERNAL "Test ${FUNCTION} (failed to compile)")
       file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
                  "Performing Try-Run Test ${TEST} failed to compile with the following output:\n"
                  "${OUTPUT}\n")
-    endif(${TEST}_COMPILED)
+    endif()
   else()
     # Have result
     #foreach(tst ${TEST})
     #  message("Test ${TEST} resulted in ${${tst}}")
-    #endforeach(tst ${TEST})
+    #endforeach()
   endif()
-endmacro(PERFORM_CMAKE_TEST_RUN FILE TEST)
+endmacro()
 
 #
 # Check for include file and if not found, set variable to 0
@@ -159,23 +159,23 @@ endmacro(PERFORM_CMAKE_TEST_RUN FILE TEST)
 macro(PERFORM_CHECK_HEADER FILE VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   CHECK_INCLUDE_FILE_CXX(${FILE} ${VARIABLE})
   if("x${${VARIABLE}}" STREQUAL "x")
     set(${VARIABLE} 0)
   endif()
-endmacro(PERFORM_CHECK_HEADER FILE VARIABLE)
+endmacro()
 
 
 macro(PERFORM_CHECK_C_HEADER FILE VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   CHECK_INCLUDE_FILES(${FILE} ${VARIABLE})
   if("x${${VARIABLE}}" STREQUAL "x")
     set(${VARIABLE} 0)
   endif()
-endmacro(PERFORM_CHECK_C_HEADER FILE VARIABLE)
+endmacro()
 
 #
 # Check value of variable and if true, set to VALUE_TRUE, otherwise to
@@ -186,10 +186,10 @@ macro(SET_BOOL VAR VALUE_TRUE VALUE_FALSE)
   set(SET_BOOL_VAR "${VAR}")
   if(${SET_BOOL_VAR})
     set(${VAR} ${VALUE_TRUE})
-  else(${SET_BOOL_VAR})
+  else()
     set(${VAR} ${VALUE_FALSE})
-  endif(${SET_BOOL_VAR})
-endmacro(SET_BOOL VAR VALUE_TRUE VALUE_FALSE)
+  endif()
+endmacro()
 
 #
 # Set the variable to inverse of the given value
@@ -199,10 +199,10 @@ macro(SET_INVERT VAR VALUE)
   set(SET_INVERT_VAR "${VALUE}")
   if(SET_INVERT_VAR)
     set(${VAR} "0")
-  else(SET_INVERT_VAR)
+  else()
     set(${VAR} "1")
-  endif(SET_INVERT_VAR)
-endmacro(SET_INVERT VAR VALUE)
+  endif()
+endmacro()
 
 #
 # Check if the type exists (should really go to CMake/Modules)
@@ -211,18 +211,18 @@ endmacro(SET_INVERT VAR VALUE)
 macro(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset( ${VARIABLE} )
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   if(NOT DEFINED "${VARIABLE}")
     set(CHECK_TYPE_EXISTS_CONTENT "/* */\n")
     set(MACRO_CHECK_TYPE_EXISTS_FLAGS ${CMAKE_REQUIRED_FLAGS})
     if(CMAKE_REQUIRED_LIBRARIES)
       set(CHECK_TYPE_EXISTS_LIBS
           "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
-    endif(CMAKE_REQUIRED_LIBRARIES)
+    endif()
     foreach(FILE ${FILES})
       set(CHECK_TYPE_EXISTS_CONTENT
           "${CHECK_TYPE_EXISTS_CONTENT}#include <${FILE}>\n")
-    endforeach(FILE)
+    endforeach()
     set(CHECK_TYPE_EXISTS_CONTENT
         "${CHECK_TYPE_EXISTS_CONTENT}\nvoid cmakeRequireSymbol(${TYPE} dummy){(void)dummy;}\nint main()\n{return 0;\n}\n")
 
@@ -245,7 +245,7 @@ macro(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
            "exist passed with the following output:\n"
            "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.cxx:\n"
            "${CHECK_TYPE_EXISTS_CONTENT}\n")
-    else(${VARIABLE})
+    else()
       message(STATUS "Looking for ${TYPE} - not found.")
       set(${VARIABLE} "" CACHE INTERNAL "Have symbol ${TYPE}")
       file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
@@ -253,9 +253,9 @@ macro(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
            "exist failed with the following output:\n"
            "${OUTPUT}\nFile ${CMAKE_BINARY_DIR}/CMakeTmp/CheckTypeExists.c:\n"
            "${CHECK_TYPE_EXISTS_CONTENT}\n")
-    endif(${VARIABLE})
+    endif()
   endif()
-endmacro(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
+endmacro()
 
 #
 # Check if the type exists and if not make result 0
@@ -264,12 +264,12 @@ endmacro(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
 macro(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset( ${VARIABLE} )
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   CHECK_TYPE_EXISTS("${SYMBOL}" "${FILES}" "${VARIABLE}")
   if(NOT ${VARIABLE})
     set(${VARIABLE} 0)
-  endif(NOT ${VARIABLE})
-endmacro(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
+  endif()
+endmacro()
 
 #
 # Check if the function exists and if not make result 0
@@ -278,12 +278,12 @@ endmacro(CHECK_TYPE_EXISTS_ZERO SYMBOL FILES VARIABLE)
 macro(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   CHECK_FUNCTION_EXISTS("${FUNCTION}" "${VARIABLE}")
   if(NOT ${VARIABLE})
     set(${VARIABLE} 0)
-  endif(NOT ${VARIABLE})
-endmacro(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
+  endif()
+endmacro()
 
 #
 # Determine which C++ type matches the given size
@@ -292,7 +292,7 @@ endmacro(CHECK_FUNCTION_EXISTS_ZERO FUNCTION VARIABLE)
 macro( DETERMINE_TYPE VAR INTEGRAL_TYPE SIZE TYPE_LIST )
   if( VXL_UPDATE_CONFIGURATION )
     set( VXL_${VAR} "" )
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   # If we've tested this before, use the cached result and don't re-run
   if( NOT VXL_${VAR} )
     # We can't have IF commands on a macro parameter. For example,
@@ -322,21 +322,21 @@ macro( DETERMINE_TYPE VAR INTEGRAL_TYPE SIZE TYPE_LIST )
       if( COMPILE_RESULT )
         set( VXL_${VAR} ${TYPE} )
         set( VXL_HAS_${VAR} 1 )
-      else( COMPILE_RESULT )
+      else()
         file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
           "${MSG} Failed to compile with the following output:\n(FLAGS=${MACRO_DETERMINE_TYPE_FLAGS})\n${OUTPUT}\n")
-      endif( COMPILE_RESULT )
-    endforeach( TYPE )
+      endif()
+    endforeach()
     if( VXL_HAS_${VAR} )
       message( STATUS "${MSG} Found ${VXL_${VAR}}." )
-    else( VXL_HAS_${VAR} )
+    else()
       message( STATUS "${MSG} Not found." )
-    endif( VXL_HAS_${VAR} )
+    endif()
     # Cache the value to prevent a second run of the test
     set( VXL_${VAR} ${VXL_${VAR}} CACHE INTERNAL "VXL test result" )
     set( VXL_HAS_${VAR} ${VXL_HAS_${VAR}} CACHE INTERNAL "VXL test result" )
-  endif( NOT VXL_${VAR} )
-endmacro( DETERMINE_TYPE VAR SIZE TYPE_LIST )
+  endif()
+endmacro()
 
 
 #
@@ -346,11 +346,11 @@ endmacro( DETERMINE_TYPE VAR SIZE TYPE_LIST )
 macro(PERFORM_C_CHECK_FUNCTION SYMBOL FILE VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
-  endif( VXL_UPDATE_CONFIGURATION )
+  endif()
   CHECK_SYMBOL_EXISTS(${SYMBOL} ${FILE} ${VARIABLE})
   if(${VARIABLE})
     set(${VARIABLE} "1")
-  else(${VARIABLE})
+  else()
     set(${VARIABLE} "0")
-  endif(${VARIABLE})
-endmacro(PERFORM_C_CHECK_FUNCTION SYMBOL FILE VARIABLE)
+  endif()
+endmacro()

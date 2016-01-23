@@ -20,21 +20,21 @@ if(NETLIB_FOUND)
   include_directories( ${NETLIB_INCLUDE_DIR} )
   set(imesh_algo_sources ${imesh_algo_sources}
       imesh_generate_mesh.cxx     imesh_generate_mesh.h)
-endif(NETLIB_FOUND)
+endif()
 
 add_library( imesh_algo ${imesh_algo_sources} )
 
 if(NETLIB_FOUND)
 
 target_link_libraries( imesh_algo imesh vpgl bpgl bpgl_algo vgl_algo vgl vnl_algo vnl vil netlib)
-else(NETLIB_FOUND)
+else()
 target_link_libraries( imesh_algo imesh vpgl vgl_algo vgl vnl_algo vnl vil )
-endif(NETLIB_FOUND)
+endif()
 
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib imesh_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/imesh/algo/ ${imesh_algo_sources})

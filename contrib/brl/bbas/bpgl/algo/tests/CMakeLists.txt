@@ -19,7 +19,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/07JAN27.RPB ${CMAKE_CURRENT_BINARY_DI
 # the ransac implementations use rpl/rrel
 if(BUILD_RPL)
 add_test( NAME bpgl_algo_test_fm_compute COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_fm_compute )
-endif(BUILD_RPL)
+endif()
 
 add_test( NAME bpgl_algo_test_construct_cameras COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_construct_cameras )
 add_test( NAME bpgl_algo_test_optimize_camera COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_optimize_camera )

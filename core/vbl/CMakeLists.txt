@@ -52,8 +52,8 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl ${vbl_sources})
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

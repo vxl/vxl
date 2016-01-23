@@ -12,7 +12,7 @@ target_link_libraries(brad_io brad vnl_io vbl_io vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 install_targets(/lib brad_io)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad/io ${brad_io_sources})

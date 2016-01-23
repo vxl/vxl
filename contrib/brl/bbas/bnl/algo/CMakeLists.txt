@@ -12,5 +12,5 @@ target_link_libraries( bnl_algo vnl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 

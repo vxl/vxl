@@ -32,7 +32,7 @@ aux_source_directory(Templates vtol_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vtol_two_chain.cxx PROPERTIES COMPILE_FLAGS -O1)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 add_library(vtol ${vtol_sources})
 install_targets(/lib vtol)
@@ -43,8 +43,8 @@ add_subdirectory(algo)
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-endif(BUILD_EXAMPLES)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

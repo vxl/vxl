@@ -8,7 +8,7 @@ if(EXPAT_FOUND)
     if(OPENCL_FOUND)
     add_definitions(-DHAS_OPENCL=1)
     include_directories( ${OPENCL_INCLUDE_PATH} )
-    endif(OPENCL_FOUND)
+    endif()
 
     # contrib/brl/bseg/boxm2/volm/CMakeLists.txt
     include_directories( ${GEL_INCLUDE_DIR} )
@@ -29,7 +29,7 @@ if(EXPAT_FOUND)
     set(boxm2_volm_sources ${boxm2_volm_sources}
         boxm2_volm_matcher_p1.h         boxm2_volm_matcher_p1.cxx
        )
-    endif(OPENCL_FOUND)
+    endif()
 
     aux_source_directory(Templates boxm2_volm_sources)
 
@@ -37,7 +37,7 @@ if(EXPAT_FOUND)
     target_link_libraries(boxm2_volm boxm2 boxm2_io brip baio vpgl volm vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
     if(OPENCL_FOUND)
     target_link_libraries(boxm2_volm bocl)
-    endif(OPENCL_FOUND)
+    endif()
 
     #install the .h .txx and libs
     install_targets(/lib boxm2_volm)
@@ -47,7 +47,7 @@ if(EXPAT_FOUND)
 
     if( BUILD_TESTING )
       add_subdirectory(tests)
-    endif( BUILD_TESTING )
+    endif()
 
     add_subdirectory(exe)
 
@@ -59,5 +59,5 @@ if(EXPAT_FOUND)
 
     #conf matcher
     add_subdirectory(conf)
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()

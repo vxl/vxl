@@ -52,7 +52,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
  set_source_files_properties(test_rational.cxx PROPERTIES COMPILE_FLAGS -O1)
  set_source_files_properties(test_bignum.cxx PROPERTIES COMPILE_FLAGS -O3)
  set_source_files_properties(test_finite.cxx PROPERTIES COMPILE_FLAGS -O0)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
 target_link_libraries(vnl_test_all vnl testlib ${CMAKE_THREAD_LIBS})
 

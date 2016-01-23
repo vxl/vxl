@@ -11,7 +11,7 @@ target_link_libraries(bvrml vgl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 add_subdirectory(pro)
 

@@ -59,7 +59,7 @@ if(PYTHON_INCLUDE_DIR)
      PYTHON_PC_INCLUDE_PATH
     )
 
-  endif(WIN32)
+  endif()
 
- endif(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
-endif(PYTHON_INCLUDE_DIR)
+ endif()
+endif()

@@ -36,4 +36,4 @@ target_link_libraries(bundler vpgl_algo bpgl_algo vpgl vpgl_file_formats vsol vg
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

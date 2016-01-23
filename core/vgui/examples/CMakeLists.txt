@@ -66,8 +66,8 @@ if(GTK_GL_FOUND)
 
  add_executable( gtk3_vidl gtk3_vidl.cxx)
  target_link_libraries( gtk3_vidl ${GTK_LIBRARIES} )
-endif(GTK_GL_FOUND)
-endif(VGUI_USE_GTK)
+endif()
+endif()
 
 # GLUT examples
 #--------------
@@ -80,7 +80,7 @@ if(GLUT_FOUND)
 
  add_executable( glut2_raw glut2_raw.cxx )
  target_link_libraries( glut2_raw ${GLUT_LIBRARIES} )
-endif(GLUT_FOUND)
+endif()
 
 # MFC example
 #------------
@@ -88,15 +88,15 @@ if(NOT MINGW)
   # MFC is not available in MinGW.
   # This should be fixed in FindMFC.cmake and then this IF can be removed
   find_package(MFC)
-endif(NOT MINGW)
+endif()
 if(VGUI_USE_MFC)
    add_subdirectory(mfc_example)
-endif(VGUI_USE_MFC)
+endif()
 
 # wxWidgets example
 #------------------
 if(VGUI_USE_WX)
   add_subdirectory(wx_example)
-endif(VGUI_USE_WX)
+endif()
 
-endif( HAS_VGUI )
+endif()

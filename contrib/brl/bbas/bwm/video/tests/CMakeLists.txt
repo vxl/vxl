@@ -15,8 +15,8 @@ target_link_libraries(bwm_video_test_all bwm_video vpgl_algo vpgl vnl vgl_algo v
 add_test( NAME bwm_video_test_cam_iostream COMMAND $<TARGET_FILE:bwm_video_test_all> test_cam_iostream)
 add_test( NAME bwm_video_test_site_io COMMAND $<TARGET_FILE:bwm_video_test_all> test_video_site_io)
 add_test( NAME bwm_video_test_corr_processor COMMAND $<TARGET_FILE:bwm_video_test_all> test_video_corr_processor)
- endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+ endif()
+endif()
 
 add_executable(bwm_video_test_include test_include.cxx)
 target_link_libraries(bwm_video_test_include bwm_video)

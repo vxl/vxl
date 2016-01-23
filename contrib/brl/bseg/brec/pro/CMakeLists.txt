@@ -23,4 +23,4 @@ target_link_libraries(brec_pro brec bvxm_grid_io bbgm_pro bprb brip brdb sdet vp
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

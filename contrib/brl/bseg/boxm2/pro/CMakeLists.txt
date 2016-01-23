@@ -24,12 +24,12 @@ if(EXPAT_FOUND)
   if(TIFF_FOUND)
     include_directories(${TIFF_INCLUDE_DIR})
     set( HAS_TIFF 1 )
-  endif(TIFF_FOUND)
+  endif()
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
     include_directories(${GEOTIFF_INCLUDE_DIR})
     set(HAS_GEOTIFF 1 )
-  endif(GEOTIFF_FOUND)
+  endif()
 
   add_library(boxm2_pro ${boxm2_pro_sources})
 
@@ -41,6 +41,6 @@ if(EXPAT_FOUND)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
-  endif( BUILD_TESTING )
+  endif()
 
-endif(EXPAT_FOUND)
+endif()

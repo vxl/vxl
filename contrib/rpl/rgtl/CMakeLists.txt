@@ -91,4 +91,4 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgtl ${rgtl_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

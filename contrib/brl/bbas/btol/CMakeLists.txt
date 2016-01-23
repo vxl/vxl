@@ -26,4 +26,4 @@ target_link_libraries(btol bsol vtol vdgl vsol vgl vnl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
-endif(BUILD_TESTING)
+endif()

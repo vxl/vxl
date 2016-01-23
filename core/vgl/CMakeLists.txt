@@ -6,8 +6,8 @@ if( NOT BUILD_NONCOMMERCIAL )
     add_definitions( ${CLIPPER_DEFINITIONS} )
     add_definitions( -DHAS_CLIPPER )
     include_directories( ${CLIPPER_INCLUDE_DIR} )
-  endif(CLIPPER_FOUND)
-endif( NOT BUILD_NONCOMMERCIAL )
+  endif()
+endif()
 
 set( vgl_sources
   # General
@@ -78,7 +78,7 @@ if( BUILD_NONCOMMERCIAL )
   # internals
   internals/gpc.h                internals/gpc.c
   )
-endif( BUILD_NONCOMMERCIAL )
+endif()
 
 aux_source_directory(Templates vgl_sources)
 
@@ -93,8 +93,8 @@ doxygen_add_library(core/vgl
 if( NOT BUILD_NONCOMMERCIAL )
   if(CLIPPER_FOUND)
     target_link_libraries( vgl ${CLIPPER_LIBRARIES} )
-  endif(CLIPPER_FOUND)
-endif( NOT BUILD_NONCOMMERCIAL )
+  endif()
+endif()
 
 install_targets(/lib vgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})
@@ -103,8 +103,8 @@ add_subdirectory(algo)
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-endif( BUILD_EXAMPLES )
+endif()
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

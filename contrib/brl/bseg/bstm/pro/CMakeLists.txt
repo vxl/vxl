@@ -11,4 +11,4 @@ target_link_libraries(bstm_pro bprb boxm2_util bstm bstm_io bstm_util boxm2_basi
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()

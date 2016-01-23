@@ -23,8 +23,8 @@ if(EXPAT_FOUND)
     add_executable(bwm_video_normalize bwm_video_normalize.cxx)
     target_link_libraries(bwm_video_normalize  bwm_video vnl vpl vul expat expatpp)
 
-  endif(EXPATPP_FOUND)
-endif(EXPAT_FOUND)
+  endif()
+endif()
 
 
 add_executable(bwm_planar_reg_proc bwm_video_planar_reg_proc.cxx)
@@ -37,4 +37,4 @@ include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 if(HAS_VGUI)
   add_executable(bwm_video_normalize_3d_corr bwm_video_normalize_3d_corr.cxx)
   target_link_libraries(bwm_video_normalize_3d_corr bwm_video vgui)
-endif(HAS_VGUI)
+endif()

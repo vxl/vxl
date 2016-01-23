@@ -67,7 +67,7 @@ target_link_libraries(bsta vnl_algo vbl vnl_io vnl vgl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 
 # algorithms for statistical modeling

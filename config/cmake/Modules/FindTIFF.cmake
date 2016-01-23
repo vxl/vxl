@@ -19,8 +19,8 @@ if( NOT TIFF_FOUND )
     find_package( TIFF QUIET )
     if( TIFF_FOUND )
       set(VXL_USING_NATIVE_TIFF "YES")
-    endif( TIFF_FOUND )
-  endif( NOT VXL_FORCE_V3P_TIFF )
+    endif()
+  endif()
 
 
   #
@@ -37,7 +37,7 @@ if( NOT TIFF_FOUND )
       set( TIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/tiff)
       set( TIFF_LIBRARIES tiff )
 
-    endif(EXISTS ${vxl_SOURCE_DIR}/v3p/tiff/tiff.h)
-  endif( NOT TIFF_FOUND )
+    endif()
+  endif()
 
-endif(NOT TIFF_FOUND)
+endif()

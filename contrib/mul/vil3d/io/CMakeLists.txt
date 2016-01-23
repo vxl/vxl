@@ -13,4 +13,4 @@ target_link_libraries( vil3d_io vil3d vil_io )
 
 if( BUILD_TESTING)
   add_subdirectory(tests)
-endif( BUILD_TESTING)
+endif()

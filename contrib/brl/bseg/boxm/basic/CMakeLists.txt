@@ -16,6 +16,6 @@ add_library(boxm_basic ${boxm_basic_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
 
 target_link_libraries(boxm_basic boxm boxm_util boxm_sample boxm_sample_algo boct vpgl vpgl_algo vgl_io vgl vil vul vbl_io vbl vcl)

@@ -12,4 +12,4 @@ target_link_libraries( bapl_io bapl vbl vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
-endif( BUILD_TESTING )
+endif()
