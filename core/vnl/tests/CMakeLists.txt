@@ -16,7 +16,6 @@ ADD_EXECUTABLE( vnl_test_all
   test_finite.cxx
   test_math.cxx
   test_na.cxx
-  test_matlab.cxx
   test_matrix.cxx
   test_matrix_exp.cxx
   test_matrix_fixed.cxx
@@ -31,7 +30,6 @@ ADD_EXECUTABLE( vnl_test_all
   test_real_npolynomial.cxx
   test_resize.cxx
   test_rotation_matrix.cxx
-  test_sample.cxx
   test_sym_matrix.cxx
   test_transpose.cxx
   test_fastops.cxx
@@ -56,10 +54,22 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
  SET_SOURCE_FILES_PROPERTIES(test_finite.cxx PROPERTIES COMPILE_FLAGS -O0)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-TARGET_LINK_LIBRARIES(vnl_test_all vnl vpl vul testlib ${CMAKE_THREAD_LIBS})
+TARGET_LINK_LIBRARIES(vnl_test_all vnl testlib ${CMAKE_THREAD_LIBS})
+
+if(BUILD_CORE_UTILITIES)
+  ADD_EXECUTABLE( vnl_test_with_core_utils
+    test_driver_with_core_utils.cxx
+    test_matlab.cxx
+    test_sample.cxx
+  )
+  TARGET_LINK_LIBRARIES(vnl_test_with_core_utils vnl vpl vul testlib ${CMAKE_THREAD_LIBS})
+  ADD_TEST( NAME vnl_test_matlab COMMAND $<TARGET_FILE:vnl_test_with_core_utils> test_matlab                 )
+  ADD_TEST( NAME vnl_test_sample COMMAND $<TARGET_FILE:vnl_test_with_core_utils> test_sample                 )
+endif()
 
 ADD_EXECUTABLE(vnl_basic_operation_timings basic_operation_timings.cxx)
 TARGET_LINK_LIBRARIES(vnl_basic_operation_timings vnl)
+ADD_TEST( NAME vnl_basic_operation_timings COMMAND $<TARGET_FILE:vnl_basic_operation_timings>   )
 
 ADD_TEST( NAME vnl_test_bignum COMMAND $<TARGET_FILE:vnl_test_all> test_bignum                 )
 ADD_TEST( NAME vnl_test_decnum COMMAND $<TARGET_FILE:vnl_test_all> test_decnum                 )
@@ -71,7 +81,6 @@ ADD_TEST( NAME vnl_test_file_matrix COMMAND $<TARGET_FILE:vnl_test_all> test_fil
 ADD_TEST( NAME vnl_test_finite COMMAND $<TARGET_FILE:vnl_test_all> test_finite                 )
 ADD_TEST( NAME vnl_test_inverse COMMAND $<TARGET_FILE:vnl_test_all> test_inverse                )
 ADD_TEST( NAME vnl_test_math COMMAND $<TARGET_FILE:vnl_test_all> test_math                   )
-ADD_TEST( NAME vnl_test_matlab COMMAND $<TARGET_FILE:vnl_test_all> test_matlab                 )
 ADD_TEST( NAME vnl_test_matrix COMMAND $<TARGET_FILE:vnl_test_all> test_matrix                 )
 ADD_TEST( NAME vnl_test_matrix_exp COMMAND $<TARGET_FILE:vnl_test_all> test_matrix_exp             )
 ADD_TEST( NAME vnl_test_matrix_fixed COMMAND $<TARGET_FILE:vnl_test_all> test_matrix_fixed           )
@@ -86,7 +95,6 @@ ADD_TEST( NAME vnl_test_real_polynomial COMMAND $<TARGET_FILE:vnl_test_all> test
 ADD_TEST( NAME vnl_test_real_npolynomial COMMAND $<TARGET_FILE:vnl_test_all> test_real_npolynomial       )
 ADD_TEST( NAME vnl_test_resize COMMAND $<TARGET_FILE:vnl_test_all> test_resize                 )
 ADD_TEST( NAME vnl_test_rotation_matrix COMMAND $<TARGET_FILE:vnl_test_all> test_rotation_matrix        )
-ADD_TEST( NAME vnl_test_sample COMMAND $<TARGET_FILE:vnl_test_all> test_sample                 )
 ADD_TEST( NAME vnl_test_sym_matrix COMMAND $<TARGET_FILE:vnl_test_all> test_sym_matrix             )
 ADD_TEST( NAME vnl_test_transpose COMMAND $<TARGET_FILE:vnl_test_all> test_transpose              )
 ADD_TEST( NAME vnl_test_fastops COMMAND $<TARGET_FILE:vnl_test_all> test_fastops                )
