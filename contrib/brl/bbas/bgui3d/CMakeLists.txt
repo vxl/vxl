@@ -12,32 +12,26 @@ INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
 # determines if vgui is built and opengl is available
 INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-IF (HAS_VGUI)
-  # Optionally Build this library
-  OPTION(BUILD_BGUI3D "Build VGUI wrapper for Coin3d" NO)
+SET (HAS_BGUI3D "NO")
+IF (BUILD_BGUI3D)
 
-  SET (HAS_BGUI3D "NO")
-  IF (BUILD_BGUI3D)
+  # Find the Coin3D library
+  find_package(Coin3D)
 
-    # Find the Coin3D library
-    find_package(Coin3D)
+  IF (COIN3D_FOUND)
+    INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
+    SET( HAS_BGUI3D "YES" )
+    ADD_DEFINITIONS( -DHAS_BGUI3D )
+  ENDIF (COIN3D_FOUND)
 
-    IF (COIN3D_FOUND)
-      INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
-      SET( HAS_BGUI3D "YES" )
-      ADD_DEFINITIONS( -DHAS_BGUI3D )
-    ENDIF (COIN3D_FOUND)
+  # Find the SimVoleon library
+  INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindSIMVoleon.cmake )
 
-    # Find the SimVoleon library
-    INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindSIMVoleon.cmake )
+  IF (SIMVOLEON_FOUND)
+    INCLUDE_DIRECTORIES( ${SIMVOLEON_INCLUDE_DIR} )
+  ENDIF (SIMVOLEON_FOUND)
 
-    IF (SIMVOLEON_FOUND)
-      INCLUDE_DIRECTORIES( ${SIMVOLEON_INCLUDE_DIR} )
-    ENDIF (SIMVOLEON_FOUND)
-
-  ENDIF (BUILD_BGUI3D)
-
-ENDIF (HAS_VGUI)
+ENDIF (BUILD_BGUI3D)
 
 # Flag that determines if we were able to successfully build bgui3d.
 # Initialize to NO. Change below if yes.
