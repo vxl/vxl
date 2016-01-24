@@ -10,12 +10,6 @@
 
 #include "vcl_iostream.h" // to get vcl_ios_*
 
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-# include <streambuf.h>
-# define vcl_generic_streambuf_STD /* */
-# include "generic/vcl_streambuf.h"
-#else
-# include "iso/vcl_streambuf.h"
-#endif
+#include "iso/vcl_streambuf.h"
 
 #endif // vcl_streambuf_h_

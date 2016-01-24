@@ -1254,14 +1254,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "GNU_LIBSTDCXX_V3 ";
-#ifdef GNU_LIBSTDCXX_V3
-  vcl_cout << "is set to " << quote(GNU_LIBSTDCXX_V3);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VXL_WARN_DEPRECATED ";
 #ifdef VXL_WARN_DEPRECATED
   vcl_cout << "is set to " << quote(VXL_WARN_DEPRECATED);

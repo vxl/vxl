@@ -131,11 +131,6 @@
 #include <vcl_config_compiler.h>
 #include <vcl_config_headers.h>
 
-// This *needs* to come after vcl_config_headers.h
-#if defined(VCL_GCC) && !defined(__INTEL_COMPILER)
-#  define GNU_LIBSTDCXX_V3 1
-#endif
-
 // -------------------- default template parameters
 #if VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 # define VCL_DFL_TYPE_PARAM_STLDECL(A, a) class A = a
