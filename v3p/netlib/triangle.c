@@ -5880,7 +5880,7 @@ REAL permanent;
                                               temp32blen, temp32b, temp64);
       finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp64len,
                                               temp64, finother);
-      finswap = finnow; finnow = finother;
+      finnow = finother;
     }
   }
 
@@ -6388,7 +6388,7 @@ REAL permanent;
     wlength = scale_expansion_zeroelim(abtlen, abt, cdheighttail, w);
     finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w,
                                             finother);
-    finswap = finnow; finnow = finother;
+    finnow = finother;
   }
 
   return finnow[finlength - 1];
