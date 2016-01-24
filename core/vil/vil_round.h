@@ -25,9 +25,8 @@
 # endif
 #endif
 
-#define DEFINED_INTEL  ((defined(__i386__) || defined(__i386) || defined(__x86_64__) || defined(__x86_64)))
 // Turn on fast impl when using GCC on Intel-based machines
-#if defined(__GNUC__) && DEFINED_INTEL
+#if defined(__GNUC__) && ((defined(__i386__) || defined(__i386) || defined(__x86_64__) || defined(__x86_64)))
 # define GCC_USE_FAST_IMPL 1
 #else
 # define GCC_USE_FAST_IMPL 0
