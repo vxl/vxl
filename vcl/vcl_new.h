@@ -6,14 +6,7 @@
 
 #include "vcl_compiler.h"
 
-
-// -------------------- gcc with old library
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-# include <new.h>
-// -------------------- iso
-#else
-# include <new>
-#endif
+#include <new>
 
 // Provide vcl_destroy() and vcl_construct() :
 template <class T>

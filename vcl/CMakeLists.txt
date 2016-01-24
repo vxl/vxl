@@ -193,17 +193,6 @@ set( vcl_sources
   gcc/vcl_cmath.h
   gcc/vcl_cstdlib.h
 
-  gcc-libstdcxx-v3/vcl_algorithm.txx
-  gcc-libstdcxx-v3/vcl_deque.txx
-  gcc-libstdcxx-v3/vcl_functional.txx
-  gcc-libstdcxx-v3/vcl_iterator.txx
-  gcc-libstdcxx-v3/vcl_list.txx
-  gcc-libstdcxx-v3/vcl_map.txx
-  gcc-libstdcxx-v3/vcl_set.txx
-  gcc-libstdcxx-v3/vcl_string.txx
-  gcc-libstdcxx-v3/vcl_utility.txx
-  gcc-libstdcxx-v3/vcl_vector.txx
-
   win32-vc9/vcl_cmath.h
   win32-vc9/vcl_complex.h
   win32-vc9/vcl_cstdlib.h
