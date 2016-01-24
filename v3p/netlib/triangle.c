@@ -4962,7 +4962,7 @@ void exactinit()
 /*****************************************************************************/
 
 #ifdef ANSI_DECLARATORS
-int fast_expansion_sum_zeroelim(int elen, REAL *e, int flen, REAL *f, REAL *h)
+static int fast_expansion_sum_zeroelim(int elen, REAL *e, int flen, REAL *f, REAL *h)
 #else /* not ANSI_DECLARATORS */
 int fast_expansion_sum_zeroelim(elen, e, flen, f, h)  /* h cannot be e or f. */
 int elen;
@@ -5166,10 +5166,10 @@ REAL detsum;
   INEXACT REAL detleft, detright;
   REAL detlefttail, detrighttail;
   REAL det, errbound;
-  REAL B[4], C1[8], C2[12], D[16];
+  REAL B[4] = {0.}, C1[8] = {0.}, C2[12] = {0.}, D[16] = {0.};
   INEXACT REAL B3;
   int C1length, C2length, Dlength;
-  REAL u[4];
+  REAL u[4] = {0.};
   INEXACT REAL u3;
   INEXACT REAL s1, t1;
   REAL s0, t0;
@@ -5327,15 +5327,15 @@ REAL permanent;
   REAL bdxcdy0, cdxbdy0, cdxady0, adxcdy0, adxbdy0, bdxady0;
   REAL bc[4], ca[4], ab[4];
   INEXACT REAL bc3, ca3, ab3;
-  REAL axbc[8], axxbc[16], aybc[8], ayybc[16], adet[32];
+  REAL axbc[8], axxbc[16] ={0.}, aybc[8], ayybc[16] = {0.}, adet[32] = {0.};
   int axbclen, axxbclen, aybclen, ayybclen, alen;
-  REAL bxca[8], bxxca[16], byca[8], byyca[16], bdet[32];
+  REAL bxca[8], bxxca[16] = {0.}, byca[8], byyca[16] = {0.}, bdet[32] = {0.};
   int bxcalen, bxxcalen, bycalen, byycalen, blen;
-  REAL cxab[8], cxxab[16], cyab[8], cyyab[16], cdet[32];
+  REAL cxab[8], cxxab[16] = {0.}, cyab[8], cyyab[16] = {0.}, cdet[32] = {0.};
   int cxablen, cxxablen, cyablen, cyyablen, clen;
-  REAL abdet[64];
+  REAL abdet[64] = {0,};
   int ablen;
-  REAL fin1[1152], fin2[1152];
+  REAL fin1[1152] = {0.}, fin2[1152] = {0.};
   REAL *finnow, *finother, *finswap;
   int finlength;
 
@@ -5346,10 +5346,10 @@ REAL permanent;
   INEXACT REAL aa3, bb3, cc3;
   INEXACT REAL ti1, tj1;
   REAL ti0, tj0;
-  REAL u[4], v[4];
+  REAL u[4] = {0.}, v[4] = {0.};
   INEXACT REAL u3, v3;
-  REAL temp8[8], temp16a[16], temp16b[16], temp16c[16];
-  REAL temp32a[32], temp32b[32], temp48[48], temp64[64];
+  REAL temp8[8], temp16a[16] = {0.}, temp16b[16] = {0.}, temp16c[16] = {0.};
+  REAL temp32a[32] = {0.}, temp32b[32] = {0.}, temp48[48] = {0.}, temp64[64] = {0.};
   int temp8len, temp16alen, temp16blen, temp16clen;
   int temp32alen, temp32blen, temp48len, temp64len;
   REAL axtbb[8], axtcc[8], aytbb[8], aytcc[8];
@@ -5995,9 +5995,9 @@ REAL permanent;
   REAL bdxcdy0, cdxbdy0, cdxady0, adxcdy0, adxbdy0, bdxady0;
   REAL bc[4], ca[4], ab[4];
   INEXACT REAL bc3, ca3, ab3;
-  REAL adet[8], bdet[8], cdet[8];
+  REAL adet[8]={0.}, bdet[8]={0.}, cdet[8]={0.};
   int alen, blen, clen;
-  REAL abdet[16];
+  REAL abdet[16]={0.};
   int ablen;
   REAL *finnow, *finother, *finswap;
   REAL fin1[192], fin2[192];
@@ -6009,7 +6009,7 @@ REAL permanent;
   INEXACT REAL at_blarge, at_clarge;
   INEXACT REAL bt_clarge, bt_alarge;
   INEXACT REAL ct_alarge, ct_blarge;
-  REAL at_b[4], at_c[4], bt_c[4], bt_a[4], ct_a[4], ct_b[4];
+  REAL at_b[4]={0.}, at_c[4]={0.}, bt_c[4]={0.}, bt_a[4]={0.}, ct_a[4]={0.}, ct_b[4]={0.};
   int at_blen, at_clen, bt_clen, bt_alen, ct_alen, ct_blen;
   INEXACT REAL bdxt_cdy1, cdxt_bdy1, cdxt_ady1;
   INEXACT REAL adxt_cdy1, adxt_bdy1, bdxt_ady1;
@@ -6025,7 +6025,7 @@ REAL permanent;
   INEXACT REAL adxt_cdyt1, adxt_bdyt1, bdxt_adyt1;
   REAL bdxt_cdyt0, cdxt_bdyt0, cdxt_adyt0;
   REAL adxt_cdyt0, adxt_bdyt0, bdxt_adyt0;
-  REAL u[4], v[12], w[16];
+  REAL u[4]={0.}, v[12]={0.}, w[16]={0.};
   INEXACT REAL u3;
   int vlength, wlength;
   REAL negate;
