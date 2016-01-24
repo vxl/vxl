@@ -414,14 +414,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_CXX_HAS_HEADER_CSTDLIB ";
-#ifdef VCL_CXX_HAS_HEADER_CSTDLIB
-  vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CSTDLIB);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_CXX_HAS_HEADER_CWCHAR ";
 #ifdef VCL_CXX_HAS_HEADER_CWCHAR
   vcl_cout << "is set to " << quote(VCL_CXX_HAS_HEADER_CWCHAR);
