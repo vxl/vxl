@@ -312,7 +312,7 @@
 /*   compiler is smarter, feel free to replace the "int" with "void".        */
 /*   Not that it matters.                                                    */
 
-#define VOID int
+/*#define void int */
 
 /* Two constants for algorithms based on random sampling.  Both constants    */
 /*   have been chosen empirically to optimize their respective algorithms.   */
@@ -584,7 +584,7 @@ struct flipstacker {
 
 struct event {
   REAL xkey, ykey;                              /* Coordinates of the event. */
-  VOID *eventptr;      /* Can be a vertex or the location of a circle event. */
+  void *eventptr;      /* Can be a vertex or the location of a circle event. */
   int heapposition;              /* Marks this event's position in the heap. */
 };
 
@@ -629,11 +629,11 @@ struct splaynode {
 /*   number of records kept on deaditemstack.                                */
 
 struct memorypool {
-  VOID **firstblock, **nowblock;
-  VOID *nextitem;
-  VOID *deaditemstack;
-  VOID **pathblock;
-  VOID *pathitem;
+  void **firstblock, **nowblock;
+  void *nextitem;
+  void *deaditemstack;
+  void **pathblock;
+  void *pathitem;
   int alignbytes;
   int itembytes;
   int itemsperblock;
@@ -1424,17 +1424,17 @@ int status;
 }
 
 #ifdef ANSI_DECLARATORS
-VOID *trimalloc(int size)
+void *trimalloc(int size)
 #else /* not ANSI_DECLARATORS */
-VOID *trimalloc(size)
+void *trimalloc(size)
 int size;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  VOID *memptr;
+  void *memptr;
 
-  memptr = (VOID *) malloc((unsigned int) size);
-  if (memptr == (VOID *) NULL) {
+  memptr = (void *) malloc((unsigned int) size);
+  if (memptr == (void *) NULL) {
     printf("Error:  Out of memory.\n");
     triexit(1);
   }
@@ -1442,10 +1442,10 @@ int size;
 }
 
 #ifdef ANSI_DECLARATORS
-void trifree(VOID *memptr)
+void trifree(void *memptr)
 #else /* not ANSI_DECLARATORS */
 void trifree(memptr)
-VOID *memptr;
+void *memptr;
 #endif /* not ANSI_DECLARATORS */
 
 {
@@ -3862,12 +3862,12 @@ struct memorypool *pool;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  pool->firstblock = (VOID **) NULL;
-  pool->nowblock = (VOID **) NULL;
-  pool->nextitem = (VOID *) NULL;
-  pool->deaditemstack = (VOID *) NULL;
-  pool->pathblock = (VOID **) NULL;
-  pool->pathitem = (VOID *) NULL;
+  pool->firstblock = (void **) NULL;
+  pool->nowblock = (void **) NULL;
+  pool->nextitem = (void *) NULL;
+  pool->deaditemstack = (void *) NULL;
+  pool->pathblock = (void **) NULL;
+  pool->pathitem = (void *) NULL;
   pool->alignbytes = 0;
   pool->itembytes = 0;
   pool->itemsperblock = 0;
@@ -3903,16 +3903,16 @@ struct memorypool *pool;
 
   /* Set the currently active block. */
   pool->nowblock = pool->firstblock;
-  /* Find the first item in the pool.  Increment by the size of (VOID *). */
+  /* Find the first item in the pool.  Increment by the size of (void *). */
   alignptr = (unsigned long) (pool->nowblock + 1);
   /* Align the item on an `alignbytes'-byte boundary. */
-  pool->nextitem = (VOID *)
+  pool->nextitem = (void *)
     (alignptr + (unsigned long) pool->alignbytes -
      (alignptr % (unsigned long) pool->alignbytes));
   /* There are lots of unallocated items left in this block. */
   pool->unallocateditems = pool->itemsfirstblock;
   /* The stack of deallocated items is empty. */
-  pool->deaditemstack = (VOID *) NULL;
+  pool->deaditemstack = (void *) NULL;
 }
 
 /*****************************************************************************/
@@ -3949,12 +3949,12 @@ int alignment;
 {
   /* Find the proper alignment, which must be at least as large as:   */
   /*   - The parameter `alignment'.                                   */
-  /*   - sizeof(VOID *), so the stack of dead items can be maintained */
+  /*   - sizeof(void *), so the stack of dead items can be maintained */
   /*       without unaligned accesses.                                */
-  if (alignment > sizeof(VOID *)) {
+  if (alignment > sizeof(void *)) {
     pool->alignbytes = alignment;
   } else {
-    pool->alignbytes = sizeof(VOID *);
+    pool->alignbytes = sizeof(void *);
   }
   pool->itembytes = ((bytecount - 1) / pool->alignbytes + 1) *
                     pool->alignbytes;
@@ -3968,11 +3968,11 @@ int alignment;
   /* Allocate a block of items.  Space for `itemsfirstblock' items and one  */
   /*   pointer (to point to the next block) are allocated, as well as space */
   /*   to ensure alignment of the items.                                    */
-  pool->firstblock = (VOID **)
-    trimalloc(pool->itemsfirstblock * pool->itembytes + (int) sizeof(VOID *) +
+  pool->firstblock = (void **)
+    trimalloc(pool->itemsfirstblock * pool->itembytes + (int) sizeof(void *) +
               pool->alignbytes);
   /* Set the next block pointer to NULL. */
-  *(pool->firstblock) = (VOID *) NULL;
+  *(pool->firstblock) = (void *) NULL;
   poolrestart(pool);
 }
 
@@ -3990,9 +3990,9 @@ struct memorypool *pool;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  while (pool->firstblock != (VOID **) NULL) {
-    pool->nowblock = (VOID **) *(pool->firstblock);
-    trifree((VOID *) pool->firstblock);
+  while (pool->firstblock != (void **) NULL) {
+    pool->nowblock = (void **) *(pool->firstblock);
+    trifree((void *) pool->firstblock);
     pool->firstblock = pool->nowblock;
   }
 }
@@ -4004,43 +4004,43 @@ struct memorypool *pool;
 /*****************************************************************************/
 
 #ifdef ANSI_DECLARATORS
-VOID *poolalloc(struct memorypool *pool)
+void *poolalloc(struct memorypool *pool)
 #else /* not ANSI_DECLARATORS */
-VOID *poolalloc(pool)
+void *poolalloc(pool)
 struct memorypool *pool;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  VOID *newitem;
-  VOID **newblock;
+  void *newitem;
+  void **newblock;
   unsigned long alignptr;
 
   /* First check the linked list of dead items.  If the list is not   */
   /*   empty, allocate an item from the list rather than a fresh one. */
-  if (pool->deaditemstack != (VOID *) NULL) {
+  if (pool->deaditemstack != (void *) NULL) {
     newitem = pool->deaditemstack;               /* Take first item in list. */
-    pool->deaditemstack = * (VOID **) pool->deaditemstack;
+    pool->deaditemstack = * (void **) pool->deaditemstack;
   } else {
     /* Check if there are any free items left in the current block. */
     if (pool->unallocateditems == 0) {
       /* Check if another block must be allocated. */
-      if (*(pool->nowblock) == (VOID *) NULL) {
+      if (*(pool->nowblock) == (void *) NULL) {
         /* Allocate a new block of items, pointed to by the previous block. */
-        newblock = (VOID **) trimalloc(pool->itemsperblock * pool->itembytes +
-                                       (int) sizeof(VOID *) +
+        newblock = (void **) trimalloc(pool->itemsperblock * pool->itembytes +
+                                       (int) sizeof(void *) +
                                        pool->alignbytes);
-        *(pool->nowblock) = (VOID *) newblock;
+        *(pool->nowblock) = (void *) newblock;
         /* The next block pointer is NULL. */
-        *newblock = (VOID *) NULL;
+        *newblock = (void *) NULL;
       }
 
       /* Move to the new block. */
-      pool->nowblock = (VOID **) *(pool->nowblock);
+      pool->nowblock = (void **) *(pool->nowblock);
       /* Find the first item in the block.    */
-      /*   Increment by the size of (VOID *). */
+      /*   Increment by the size of (void *). */
       alignptr = (unsigned long) (pool->nowblock + 1);
       /* Align the item on an `alignbytes'-byte boundary. */
-      pool->nextitem = (VOID *)
+      pool->nextitem = (void *)
         (alignptr + (unsigned long) pool->alignbytes -
          (alignptr % (unsigned long) pool->alignbytes));
       /* There are lots of unallocated items left in this block. */
@@ -4050,7 +4050,7 @@ struct memorypool *pool;
     /* Allocate a new item. */
     newitem = pool->nextitem;
     /* Advance `nextitem' pointer to next free item in block. */
-    pool->nextitem = (VOID *) ((char *) pool->nextitem + pool->itembytes);
+    pool->nextitem = (void *) ((char *) pool->nextitem + pool->itembytes);
     pool->unallocateditems--;
     pool->maxitems++;
   }
@@ -4067,16 +4067,16 @@ struct memorypool *pool;
 /*****************************************************************************/
 
 #ifdef ANSI_DECLARATORS
-void pooldealloc(struct memorypool *pool, VOID *dyingitem)
+void pooldealloc(struct memorypool *pool, void *dyingitem)
 #else /* not ANSI_DECLARATORS */
 void pooldealloc(pool, dyingitem)
 struct memorypool *pool;
-VOID *dyingitem;
+void *dyingitem;
 #endif /* not ANSI_DECLARATORS */
 
 {
   /* Push freshly killed item onto stack. */
-  *((VOID **) dyingitem) = pool->deaditemstack;
+  *((void **) dyingitem) = pool->deaditemstack;
   pool->deaditemstack = dyingitem;
   pool->items--;
 }
@@ -4101,10 +4101,10 @@ struct memorypool *pool;
 
   /* Begin the traversal in the first block. */
   pool->pathblock = pool->firstblock;
-  /* Find the first item in the block.  Increment by the size of (VOID *). */
+  /* Find the first item in the block.  Increment by the size of (void *). */
   alignptr = (unsigned long) (pool->pathblock + 1);
   /* Align with item on an `alignbytes'-byte boundary. */
-  pool->pathitem = (VOID *)
+  pool->pathitem = (void *)
     (alignptr + (unsigned long) pool->alignbytes -
      (alignptr % (unsigned long) pool->alignbytes));
   /* Set the number of items left in the current block. */
@@ -4126,29 +4126,29 @@ struct memorypool *pool;
 /*****************************************************************************/
 
 #ifdef ANSI_DECLARATORS
-VOID *traverse(struct memorypool *pool)
+void *traverse(struct memorypool *pool)
 #else /* not ANSI_DECLARATORS */
-VOID *traverse(pool)
+void *traverse(pool)
 struct memorypool *pool;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  VOID *newitem;
+  void *newitem;
   unsigned long alignptr;
 
   /* Stop upon exhausting the list of items. */
   if (pool->pathitem == pool->nextitem) {
-    return (VOID *) NULL;
+    return (void *) NULL;
   }
 
   /* Check whether any untraversed items remain in the current block. */
   if (pool->pathitemsleft == 0) {
     /* Find the next block. */
-    pool->pathblock = (VOID **) *(pool->pathblock);
-    /* Find the first item in the block.  Increment by the size of (VOID *). */
+    pool->pathblock = (void **) *(pool->pathblock);
+    /* Find the first item in the block.  Increment by the size of (void *). */
     alignptr = (unsigned long) (pool->pathblock + 1);
     /* Align with item on an `alignbytes'-byte boundary. */
-    pool->pathitem = (VOID *)
+    pool->pathitem = (void *)
       (alignptr + (unsigned long) pool->alignbytes -
        (alignptr % (unsigned long) pool->alignbytes));
     /* Set the number of items left in the current block. */
@@ -4157,7 +4157,7 @@ struct memorypool *pool;
 
   newitem = pool->pathitem;
   /* Find the next item in the block. */
-  pool->pathitem = (VOID *) ((char *) pool->pathitem + pool->itembytes);
+  pool->pathitem = (void *) ((char *) pool->pathitem + pool->itembytes);
   pool->pathitemsleft--;
   return newitem;
 }
@@ -4392,7 +4392,7 @@ triangle *dyingtriangle;
   /* Mark the triangle as dead.  This makes it possible to detect dead */
   /*   triangles when traversing the list of all triangles.            */
   killtri(dyingtriangle);
-  pooldealloc(&m->triangles, (VOID *) dyingtriangle);
+  pooldealloc(&m->triangles, (void *) dyingtriangle);
 }
 
 /*****************************************************************************/
@@ -4438,7 +4438,7 @@ subseg *dyingsubseg;
   /* Mark the subsegment as dead.  This makes it possible to detect dead */
   /*   subsegments when traversing the list of all subsegments.          */
   killsubseg(dyingsubseg);
-  pooldealloc(&m->subsegs, (VOID *) dyingsubseg);
+  pooldealloc(&m->subsegs, (void *) dyingsubseg);
 }
 
 /*****************************************************************************/
@@ -4484,7 +4484,7 @@ vertex dyingvertex;
   /* Mark the vertex as dead.  This makes it possible to detect dead */
   /*   vertices when traversing the list of all vertices.            */
   setvertextype(dyingvertex, DEADVERTEX);
-  pooldealloc(&m->vertices, (VOID *) dyingvertex);
+  pooldealloc(&m->vertices, (void *) dyingvertex);
 }
 
 /*****************************************************************************/
@@ -4533,7 +4533,7 @@ struct badsubseg *dyingseg;
   /* Set subsegment's origin to NULL.  This makes it possible to detect dead */
   /*   badsubsegs when traversing the list of all badsubsegs             .   */
   dyingseg->subsegorg = (vertex) NULL;
-  pooldealloc(&m->badsubsegs, (VOID *) dyingseg);
+  pooldealloc(&m->badsubsegs, (void *) dyingseg);
 }
 
 #endif /* not CDT_ONLY */
@@ -4589,7 +4589,7 @@ int number;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  VOID **getblock;
+  void **getblock;
   char *foundvertex;
   unsigned long alignptr;
   int current;
@@ -4599,10 +4599,10 @@ int number;
 
   /* Find the right block. */
   if (current + m->vertices.itemsfirstblock <= number) {
-    getblock = (VOID **) *getblock;
+    getblock = (void **) *getblock;
     current += m->vertices.itemsfirstblock;
     while (current + m->vertices.itemsperblock <= number) {
-      getblock = (VOID **) *getblock;
+      getblock = (void **) *getblock;
       current += m->vertices.itemsperblock;
     }
   }
@@ -4630,10 +4630,10 @@ struct behavior *b;
 
 {
   pooldeinit(&m->triangles);
-  trifree((VOID *) m->dummytribase);
+  trifree((void *) m->dummytribase);
   if (b->usesegments) {
     pooldeinit(&m->subsegs);
-    trifree((VOID *) m->dummysubbase);
+    trifree((void *) m->dummysubbase);
   }
   pooldeinit(&m->vertices);
 #ifndef CDT_ONLY
@@ -4984,7 +4984,7 @@ REAL *h;
   enow = e[0];
   fnow = f[0];
   eindex = findex = 0;
-  if ((fnow > enow) == (fnow > -enow)) {
+  if ( (fnow > enow) == (fnow > -enow) ) {
     Q = enow;
     enow = e[++eindex];
   } else {
@@ -7650,7 +7650,7 @@ struct otri *searchtri;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  VOID **sampleblock;
+  void **sampleblock;
   char *firsttri;
   struct otri sampletri;
   vertex torg, tdest;
@@ -7756,7 +7756,7 @@ struct otri *searchtri;
     } while ((samplesleft > 0) && (totalsamplesleft > 0));
 
     if (totalsamplesleft > 0) {
-      sampleblock = (VOID **) *sampleblock;
+      sampleblock = (void **) *sampleblock;
       samplesleft = samplesperblock;
       totalpopulation -= population;
       population = TRIPERBLOCK;
@@ -10034,7 +10034,7 @@ struct behavior *b;
 
   /* Form the Delaunay triangulation. */
   divconqrecurse(m, b, sortarray, i, 0, &hullleft, &hullright);
-  trifree((VOID *) sortarray);
+  trifree((void *) sortarray);
 
   return removeghosts(m, b, &hullleft);
 }
@@ -10205,9 +10205,9 @@ struct behavior *b;
   }
   triangledealloc(m, finaledge.tri);
 
-  trifree((VOID *) m->infvertex1);  /* Deallocate the bounding box vertices. */
-  trifree((VOID *) m->infvertex2);
-  trifree((VOID *) m->infvertex3);
+  trifree((void *) m->infvertex1);  /* Deallocate the bounding box vertices. */
+  trifree((void *) m->infvertex2);
+  trifree((void *) m->infvertex3);
 
   return hullsize;
 }
@@ -10437,14 +10437,14 @@ struct event **freeevents;
   traversalinit(&m->vertices);
   for (i = 0; i < m->invertices; i++) {
     thisvertex = vertextraverse(m);
-    (*events)[i].eventptr = (VOID *) thisvertex;
+    (*events)[i].eventptr = (void *) thisvertex;
     (*events)[i].xkey = thisvertex[0];
     (*events)[i].ykey = thisvertex[1];
     eventheapinsert(*eventheap, i, *events + i);
   }
   *freeevents = (struct event *) NULL;
   for (i = maxevents - 1; i >= m->invertices; i--) {
-    (*events)[i].eventptr = (VOID *) *freeevents;
+    (*events)[i].eventptr = (void *) *freeevents;
     *freeevents = *events + i;
   }
 }
@@ -10546,7 +10546,7 @@ int *heapsize;
   if (eventvertex != (vertex) NULL) {
     deadevent = (struct event *) eventvertex;
     eventnum = deadevent->heapposition;
-    deadevent->eventptr = (VOID *) *freeevents;
+    deadevent->eventptr = (void *) *freeevents;
     *freeevents = deadevent;
     eventheapdelete(eventheap, *heapsize, eventnum);
     (*heapsize)--;
@@ -10648,7 +10648,7 @@ struct otri *searchtri;
     lefttree = splay(m, splaytree->lchild, searchpoint, searchtri);
     righttree = splay(m, splaytree->rchild, searchpoint, searchtri);
 
-    pooldealloc(&m->splaynodes, (VOID *) splaytree);
+    pooldealloc(&m->splaynodes, (void *) splaytree);
     if (lefttree == (struct splaynode *) NULL) {
       return righttree;
     } else if (righttree == (struct splaynode *) NULL) {
@@ -10841,7 +10841,7 @@ struct behavior *b;
   lprevself(righttri);
   bond(lefttri, righttri);
   firstvertex = (vertex) eventheap[0]->eventptr;
-  eventheap[0]->eventptr = (VOID *) freeevents;
+  eventheap[0]->eventptr = (void *) freeevents;
   freeevents = eventheap[0];
   eventheapdelete(eventheap, heapsize, 0);
   heapsize--;
@@ -10851,7 +10851,7 @@ struct behavior *b;
       triexit(1);
     }
     secondvertex = (vertex) eventheap[0]->eventptr;
-    eventheap[0]->eventptr = (VOID *) freeevents;
+    eventheap[0]->eventptr = (void *) freeevents;
     freeevents = eventheap[0];
     eventheapdelete(eventheap, heapsize, 0);
     heapsize--;
@@ -10959,7 +10959,7 @@ struct behavior *b;
         }
       }
     }
-    nextevent->eventptr = (VOID *) freeevents;
+    nextevent->eventptr = (void *) freeevents;
     freeevents = nextevent;
 
     if (check4events) {
@@ -10973,7 +10973,7 @@ struct behavior *b;
         newevent->xkey = m->xminextreme;
         newevent->ykey = circletop(m, leftvertex, midvertex, rightvertex,
                                    lefttest);
-        newevent->eventptr = (VOID *) encode(lefttri);
+        newevent->eventptr = (void *) encode(lefttri);
         eventheapinsert(eventheap, heapsize, newevent);
         heapsize++;
         setorg(lefttri, newevent);
@@ -10988,7 +10988,7 @@ struct behavior *b;
         newevent->xkey = m->xminextreme;
         newevent->ykey = circletop(m, leftvertex, midvertex, rightvertex,
                                    righttest);
-        newevent->eventptr = (VOID *) encode(farrighttri);
+        newevent->eventptr = (void *) encode(farrighttri);
         eventheapinsert(eventheap, heapsize, newevent);
         heapsize++;
         setorg(farrighttri, newevent);
@@ -11563,7 +11563,7 @@ FILE *polyfile;
     }
   }
 
-  trifree((VOID *) vertexarray);
+  trifree((void *) vertexarray);
   return hullsize;
 }
 
@@ -13155,7 +13155,7 @@ int regions;
     pooldeinit(&m->viri);
   }
   if (regions > 0) {
-    trifree((VOID *) regiontris);
+    trifree((void *) regiontris);
   }
 }
 
@@ -13676,7 +13676,7 @@ struct behavior *b;
         splitencsegs(m, b, 1);
       } else {
         /* Return the bad triangle to the pool. */
-        pooldealloc(&m->badtriangles, (VOID *) badtri);
+        pooldealloc(&m->badtriangles, (void *) badtri);
       }
     }
   }
@@ -13738,7 +13738,7 @@ struct behavior *b;
   /*   order elements.  This ensures that the primary nodes (at the     */
   /*   corners of elements) will occur earlier in the output files, and */
   /*   have lower indices, than the extra nodes.                        */
-  m->vertices.deaditemstack = (VOID *) NULL;
+  m->vertices.deaditemstack = (void *) NULL;
 
   traversalinit(&m->triangles);
   triangleloop.tri = triangletraverse(m);
@@ -15949,11 +15949,11 @@ char **argv;
 #ifndef TRILIBRARY
 #ifndef CDT_ONLY
   if (m.regions > 0) {
-    trifree((VOID *) regionarray);
+    trifree((void *) regionarray);
   }
 #endif /* not CDT_ONLY */
   if (m.holes > 0) {
-    trifree((VOID *) holearray);
+    trifree((void *) holearray);
   }
   if (b.geomview) {
     writeoff(&m, &b, b.offfilename, argc, argv);
