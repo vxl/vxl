@@ -11,7 +11,7 @@
 #include <vil/vil_math.h>
 
 #include <vcl_compiler.h>
-#if defined(VCL_VC) || defined(VCL_GCC_4) || defined(VCL_GCC_5) || defined(__INTEL_COMPILER)
+#if defined(VCL_VC) || defined(VCL_GCC) || defined(__INTEL_COMPILER)
 #define iostream_char char
 #else
 #define iostream_char unsigned char
