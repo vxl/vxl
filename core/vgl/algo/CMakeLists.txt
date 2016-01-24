@@ -1,9 +1,9 @@
 # vxl/vgl/algo/CMakeLists.txt
 
-PROJECT(vgl_algo)
+project(vgl_algo)
 
 
-SET( vgl_algo_sources
+set( vgl_algo_sources
   vgl_algo_fwd.h
   vgl_rtree.txx                            vgl_rtree.h
   vgl_orient_box_3d.txx                    vgl_orient_box_3d.h
@@ -43,14 +43,14 @@ SET( vgl_algo_sources
   vgl_h_matrix_3d_compute_linear.cxx       vgl_h_matrix_3d_compute_linear.h
   vgl_h_matrix_3d_compute_affine.cxx       vgl_h_matrix_3d_compute_affine.h
 )
-AUX_SOURCE_DIRECTORY(Templates vgl_algo_sources)
+aux_source_directory(Templates vgl_algo_sources)
 
-ADD_LIBRARY(vgl_algo ${vgl_algo_sources})
-TARGET_LINK_LIBRARIES( vgl_algo vgl vnl_algo vnl )
+add_library(vgl_algo ${vgl_algo_sources})
+target_link_libraries( vgl_algo vgl vnl_algo vnl )
 
-INSTALL_TARGETS(/lib vgl_algo)
+install_targets(/lib vgl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/algo ${vgl_algo_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

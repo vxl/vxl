@@ -9,7 +9,7 @@ PRE-REQUISITES
 The DICOM ToolKit (DCMTK) needs to be compiled with a C++ compiler.
 We recommend using the GNU-C++ compiler in versions higher than 2.7
 (most of the development was done using GNU-C++ 2.95 on Solaris 7).
-The software is also known to compile using the SUNPro C++ compiler,
+The software is also known to compile using the
 the IBM C Set++ compiler and the Microsoft Visual C++ compiler.
 
 Compatibility with other C++ compilers is unknown, however, we have

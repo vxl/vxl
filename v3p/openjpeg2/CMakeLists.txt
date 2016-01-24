@@ -1,11 +1,11 @@
-PROJECT(OpenJPEG C)
+project(OpenJPEG C)
 
-INCLUDE(${VXL_CMAKE_DIR}/FindOpenJPEG2.cmake)
+include(${VXL_CMAKE_DIR}/FindOpenJPEG2.cmake)
 
-IF(NOT VXL_USING_NATIVE_OPENJPEG2)
+if(NOT VXL_USING_NATIVE_OPENJPEG2)
 
 # Defines the source code for the library
-SET(OPENJPEG2_SRCS
+set(OPENJPEG2_SRCS
   bio.h            bio.c
   cio.h            cio.c
   dwt.h            dwt.c
@@ -34,10 +34,10 @@ SET(OPENJPEG2_SRCS
   tcd.h            tcd.c
   tgt.h            tgt.c
 )
-ADD_DEFINITIONS( ${OPENJPEG2_DEFINITIONS} )
+add_definitions( ${OPENJPEG2_DEFINITIONS} )
 
 # Pass proper definition to preprocessor to generate shared lib
-ADD_LIBRARY(openjpeg2 ${OPENJPEG2_SRCS})
+add_library(openjpeg2 ${OPENJPEG2_SRCS})
 
 find_library(VXL_MATH_LIBRARY_FOUND m)
 if(VXL_MATH_LIBRARY_FOUND)
@@ -48,12 +48,12 @@ if(VXL_MATH_LIBRARY_FOUND)
   target_link_libraries(openjpeg2 m)
 endif()
 
-SET_TARGET_PROPERTIES(openjpeg2 PROPERTIES
+set_target_properties(openjpeg2 PROPERTIES
   VERSION       2.0.0
   DEFINE_SYMBOL OPJ_EXPORTS)
 
 # Install library
-INSTALL_TARGETS(/lib openjpeg2)
+install_targets(/lib openjpeg2)
 
-ENDIF(NOT VXL_USING_NATIVE_OPENJPEG2)
+endif()
 

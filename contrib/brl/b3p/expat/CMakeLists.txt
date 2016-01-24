@@ -1,10 +1,10 @@
-PROJECT(expat C)
-#INCLUDE_REGULAR_EXPRESSION("^.*$")
+project(expat C)
+#include_regular_expression("^.*$")
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(NOT VXL_USING_NATIVE_EXPAT)
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(NOT VXL_USING_NATIVE_EXPAT)
 
-SET(expat_sources
+set(expat_sources
     xmlparse.c
     xmltok.c        xmltok.h
     xmlrole.c       xmlrole.h
@@ -21,27 +21,27 @@ SET(expat_sources
     expatDllConfig.h.in
    )
 
-INCLUDE(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+include(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
 TEST_BIG_ENDIAN(expat_BIGENDIAN)
 
-INCLUDE_DIRECTORIES(${expat_BINARY_DIR})
+include_directories(${expat_BINARY_DIR})
 
-IF(WIN32)
-  IF(NOT BUILD_SHARED_LIBS)
-    SET (CM_EXPAT_STATIC 1)
-  ENDIF(NOT BUILD_SHARED_LIBS)
-ENDIF(WIN32)
+if(WIN32)
+  if(NOT VXL_BUILD_SHARED_LIBS)
+    set(CM_EXPAT_STATIC 1)
+  endif()
+endif()
 
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h)
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h)
-CONFIGURE_FILE(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
-CONFIGURE_FILE(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
+configure_file(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h)
+configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h)
+configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
+configure_file(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
 
-ADD_LIBRARY(expat ${expat_sources})
-INSTALL_TARGETS(/lib expat)
+add_library(expat ${expat_sources})
+install_targets(/lib expat)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-ENDIF(NOT VXL_USING_NATIVE_EXPAT)
+endif()

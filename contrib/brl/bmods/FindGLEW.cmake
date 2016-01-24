@@ -6,15 +6,15 @@
 # GLEW_FOUND, If false, do not try to use GLEW.
 
 
-IF (WIN32)
+if(WIN32)
 
-  IF(CYGWIN)
+  if(CYGWIN)
 
-    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
+    find_path( GLEW_INCLUDE_DIR GL/glew.h
       ${OPENGL_INCLUDE_DIR}
     )
 
-    FIND_LIBRARY( GLEW_LIBRARY glew32
+    find_library( GLEW_LIBRARY glew32
       ${OPENGL_LIBRARY_DIR}
       /usr/lib64
       /usr/lib
@@ -24,21 +24,21 @@ IF (WIN32)
     )
 
 
-  ELSE(CYGWIN)
+  else()
 
-    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
+    find_path( GLEW_INCLUDE_DIR GL/glew.h
       ${OPENGL_INCLUDE_DIR}
     )
 
-    FIND_LIBRARY( GLEW_LIBRARY glew64
+    find_library( GLEW_LIBRARY glew64
       ${OPENGL_LIBRARY_DIR}
     )
 
-  ENDIF(CYGWIN)
+  endif()
 
-ELSE (WIN32)
+else()
 
-    FIND_PATH( GLEW_INCLUDE_DIR GL/glew.h
+    find_path( GLEW_INCLUDE_DIR GL/glew.h
       /usr/include
       /usr/include/GL
       /usr/local/include
@@ -51,7 +51,7 @@ ELSE (WIN32)
       ${OPENGL_INCLUDE_DIR}
     )
 
-    FIND_LIBRARY( GLEW_LIBRARY
+    find_library( GLEW_LIBRARY
       NAMES glew GLEW
       PATHS
             /usr/lib64
@@ -62,16 +62,16 @@ ELSE (WIN32)
             ${OPENGL_LIBRARY_DIR}
     )
 
-ENDIF (WIN32)
+endif()
 
-SET( GLEW_FOUND "NO" )
-IF(GLEW_INCLUDE_DIR)
-  IF(GLEW_LIBRARY)
-    SET( GLEW_FOUND "YES" )
-  ENDIF(GLEW_LIBRARY)
-ENDIF(GLEW_INCLUDE_DIR)
+set( GLEW_FOUND "NO" )
+if(GLEW_INCLUDE_DIR)
+  if(GLEW_LIBRARY)
+    set( GLEW_FOUND "YES" )
+  endif()
+endif()
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
   GLEW_INCLUDE_DIR
   GLEW_LIBRARY
 )

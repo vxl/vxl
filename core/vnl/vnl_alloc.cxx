@@ -125,14 +125,7 @@ char *vnl_alloc::end_free = 0;
 vcl_size_t vnl_alloc::heap_size = 0;
 
 vnl_alloc::obj *
-vnl_alloc::free_list[VNL_ALLOC_NFREELISTS] =
-{
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-};
-// The 32 zeros are necessary to make version 4.1 of the SunPro
-// compiler happy.  Otherwise it appears to allocate too little
-// space for the array.
+vnl_alloc::free_list[VNL_ALLOC_NFREELISTS] = { 0 };
 
 #ifdef TEST
 #include <vcl_iostream.h>

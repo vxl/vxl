@@ -1,10 +1,10 @@
 # bpgl/algo/CMakeLists.txt
 # Photogrammetry Algorithms Library.
 
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
+include_directories(${VXLCORE_INCLUDE_DIR})
+include_directories( ${GEL_INCLUDE_DIR} )
 
-SET( bpgl_algo_sources
+set( bpgl_algo_sources
   bpgl_construct_cameras.h         bpgl_construct_cameras.cxx
   bpgl_vsol_lens_warp.h            bpgl_vsol_lens_warp.cxx
   bpgl_list.h                      bpgl_list.txx
@@ -18,33 +18,33 @@ SET( bpgl_algo_sources
 )
 
 # the ransac implementations use rpl/rrel
-IF(BUILD_RPL)
-  INCLUDE_DIRECTORIES(${RPL_INCLUDE_DIR})
-  SET(bpgl_algo_sources ${bpgl_algo_sources}
+if(BUILD_RPL)
+  include_directories(${RPL_INCLUDE_DIR})
+  set(bpgl_algo_sources ${bpgl_algo_sources}
       bpgl_fm_compute_ransac.h         bpgl_fm_compute_ransac.cxx
       bpgl_fm_compute_reg_ransac.h     bpgl_fm_compute_reg_ransac.cxx
       bpgl_fm_compute_affine_ransac.h  bpgl_fm_compute_affine_ransac.cxx
      )
-ENDIF(BUILD_RPL)
+endif()
 
 
-AUX_SOURCE_DIRECTORY(Templates bpgl_algo_sources)
+aux_source_directory(Templates bpgl_algo_sources)
 
-ADD_LIBRARY(bpgl_algo ${bpgl_algo_sources})
+add_library(bpgl_algo ${bpgl_algo_sources})
 
-TARGET_LINK_LIBRARIES(bpgl_algo bpgl vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl)
+target_link_libraries(bpgl_algo bpgl vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl)
 
-IF(BUILD_RPL)
-  TARGET_LINK_LIBRARIES(bpgl_algo rrel)
-ENDIF(BUILD_RPL)
+if(BUILD_RPL)
+  target_link_libraries(bpgl_algo rrel)
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
 #  add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()
 
-INSTALL_TARGETS(/lib bpgl_algo)
+install_targets(/lib bpgl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl/algo ${bpgl_algo_sources})

@@ -1,6 +1,6 @@
 # brl/bseg/boxm/algo/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-SET(boxm_algo_rt_sources
+include_directories( ${MUL_INCLUDE_DIR} )
+set(boxm_algo_rt_sources
     boxm_change_probability_functor.h
     boxm_edge_tangent_updater.h             boxm_edge_tangent_updater.txx
     boxm_edge_updater.h                     boxm_edge_updater.txx
@@ -31,16 +31,16 @@ SET(boxm_algo_rt_sources
     dummy.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates boxm_algo_rt_sources)
+aux_source_directory(Templates boxm_algo_rt_sources)
 
-ADD_LIBRARY(boxm_algo_rt ${boxm_algo_rt_sources})
+add_library(boxm_algo_rt ${boxm_algo_rt_sources})
 
 #processes
 add_subdirectory(pro)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-TARGET_LINK_LIBRARIES(boxm_algo_rt boxm boxm_sample boxm_sample_algo boxm_basic boxm_util vil vcl vgl vbl vgl_algo bsta vnl sdet brip vpgl vpgl_algo )
+target_link_libraries(boxm_algo_rt boxm boxm_sample boxm_sample_algo boxm_basic boxm_util vil vcl vgl vbl vgl_algo bsta vnl sdet brip vpgl vpgl_algo )
 

@@ -1,9 +1,9 @@
 # vpgl/icam/CMakeLists.txt
 # image-based camera registration library
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 
-SET(icam_sources
+set(icam_sources
     icam_cost_func.cxx         icam_cost_func.h
     icam_minimizer.cxx         icam_minimizer.h
     icam_minimizer_params.h
@@ -18,12 +18,12 @@ SET(icam_sources
     icam_cylinder_map.h        icam_cylinder_map.cxx   icam_cylinder_map_sptr.h
     icam_spherical_map.h       icam_spherical_map.cxx  icam_spherical_map_sptr.h
    )
-AUX_SOURCE_DIRECTORY(Templates icam_sources)
+aux_source_directory(Templates icam_sources)
 
-ADD_LIBRARY(icam  ${icam_sources})
-TARGET_LINK_LIBRARIES(icam vsph vpgl_io vpgl_algo vpgl vgl_algo vil_algo vnl_algo vgl_io vgl vnl vil vul vsl vbl_io vbl vcl)
+add_library(icam  ${icam_sources})
+target_link_libraries(icam vsph vpgl_io vpgl_algo vpgl vgl_algo vil_algo vnl_algo vgl_io vgl vnl vil vul vsl vbl_io vbl vcl)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()
 

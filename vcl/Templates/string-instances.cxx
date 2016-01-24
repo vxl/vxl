@@ -3,10 +3,6 @@
 
 VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char> );
 
-#if defined(VCL_SUNPRO_CC)
-template class vcl_basic_string<char, vcl_char_traits<char> >;
-#endif
-
 // this should work for all compilers. by putting it in the
 // library we (a) get the implicit template instances it
 // needs and (b) make sure that it does work.

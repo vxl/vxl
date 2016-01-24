@@ -1,9 +1,9 @@
 #ifndef VOLM_EXPORT_H
 #define VOLM_EXPORT_H
 
-#include <vxl_config.h> // get VXL_BUILD_SHARED
+#include <vxl_config.h> // get VXL_BUILD_SHARED_LIBS
 
-#ifndef VXL_BUILD_SHARED  // if not a shared build
+#ifndef VXL_BUILD_SHARED_LIBS  // if not a shared build
 # define volm_EXPORT_DATA
 #else  // this is a shared build
 # ifdef volm_EXPORTS  // if building this library

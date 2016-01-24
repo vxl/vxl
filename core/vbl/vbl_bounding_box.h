@@ -21,11 +21,6 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 
-#if defined(VCL_SUNPRO_CC_50)
-// Non-type template parameters are not allowed for function templates.
-#endif
-
-
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // Helper class for vbl_bounding_box
 template <int DIM>

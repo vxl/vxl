@@ -1,29 +1,29 @@
 #bstm/ocl source dir
 
 #depends on OPENCL being found...
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-IF(OPENCL_FOUND)
+include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+if(OPENCL_FOUND)
 
-MESSAGE("BSTM FOUND OPENCL")
+message("BSTM FOUND OPENCL")
 
-ADD_DEFINITIONS(-DHAS_OPENCL=1)
-INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+add_definitions(-DHAS_OPENCL=1)
+include_directories( ${OPENCL_INCLUDE_PATH} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-SET(bstm_ocl_sources
+set(bstm_ocl_sources
     bstm_ocl_util.h         bstm_ocl_util.cxx
     bstm_opencl_cache.h     bstm_opencl_cache.cxx
     bstm_scene_info.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates bstm_ocl_sources)
+aux_source_directory(Templates bstm_ocl_sources)
 
-ADD_LIBRARY(bstm_ocl ${bstm_ocl_sources})
-TARGET_LINK_LIBRARIES(bstm_ocl bstm bstm_io bocl vpgl vil vcl)
+add_library(bstm_ocl ${bstm_ocl_sources})
+target_link_libraries(bstm_ocl bstm bstm_io bocl vpgl vil vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 #pro
 add_subdirectory(pro)
@@ -34,4 +34,4 @@ add_subdirectory(algo)
 #exe
 #add_subdirectory(exe)
 
-ENDIF(OPENCL_FOUND)
+endif()

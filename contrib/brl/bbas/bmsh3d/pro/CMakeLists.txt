@@ -1,14 +1,14 @@
 # This is bbas/bmsh3d/pro/CMakeLists.txt
 # Brown Mesh Processing library
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR} )
 
-SET ( bmsh3d_pro_sources
+set( bmsh3d_pro_sources
     bmsh3d_cmdpara.cxx         bmsh3d_cmdpara.h
 )
 
-ADD_LIBRARY ( bmsh3d_pro ${bmsh3d_pro_sources} )
-TARGET_LINK_LIBRARIES ( bmsh3d_pro bmsh3d vul )
+add_library( bmsh3d_pro ${bmsh3d_pro_sources} )
+target_link_libraries( bmsh3d_pro bmsh3d vul )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

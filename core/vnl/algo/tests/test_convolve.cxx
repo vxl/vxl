@@ -3,11 +3,12 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_int_2.h>
-#include <vul/vul_timer.h>
 
 #include <testlib/testlib_test.h>
 
 #include "test_util.h"
+
+#include <vcl_ctime.h>
 
 void test_convolve()
 {
@@ -45,35 +46,40 @@ void test_convolve()
   test_util_fill_random(k3.begin(), k3.end(), rng);
   const unsigned ntimes = 10; // repeat some expts to get more accurate timings.
   vnl_vector<double> r9;
-  vul_timer timer;
+  const vcl_clock_t timer_01 = vcl_clock();
   for (unsigned i=0; i < ntimes; ++i)
     r9 = vnl_convolve(l, k3);
-  int ms1 = timer.user();
+  const vcl_clock_t timer_02 = vcl_clock();
+  const int ms1 = (timer_02 - timer_01 )/ (CLOCKS_PER_SEC/1000);
   vcl_cout << "Done straightforward 10000x2000 convolution in " << ms1/double(ntimes) << " milliseconds\n";
 
   vnl_vector<double> r10;
-  timer.mark();
+  const vcl_clock_t timer_03 = vcl_clock();
   for (unsigned i=0; i < ntimes; ++i)
     r10 = vnl_convolve(l, k3, 16384);
-  int ms2 = timer.user();
+  const vcl_clock_t timer_04 = vcl_clock();
+  const int ms2 = ( timer_04 - timer_03)/ (CLOCKS_PER_SEC/1000);
+
   TEST_NEAR("vnl_convolve() with_fft(16384)", (r9-r10).two_norm(), 0.0, 1e-6);
   vcl_cout << "Done FFT-2-based 10000x2000 convolution in " << ms2/double(ntimes) << " milliseconds\n";
   TEST("vnl_convolve() timing: should be at least 2.5x faster", 5*ms2 < 2*ms1, true);
 
   vnl_vector<double> r11;
-  timer.mark();
+  const vcl_clock_t timer_05 = vcl_clock();
   for (unsigned i=0; i < ntimes; ++i)
     r11 = vnl_convolve(l, k3, 12800);
-  int ms3 = timer.user();
+  const vcl_clock_t timer_06 = vcl_clock();
+  const int ms3 = ( timer_06 - timer_05)/ (CLOCKS_PER_SEC/1000);
   TEST_NEAR("vnl_convolve() with_fft(12800)", (r9-r11).two_norm(), 0.0, 1e-6);
   vcl_cout << "Done FFT-2,5-based 10000x2000 convolution in " << ms3/double(ntimes) << " milliseconds\n";
   TEST("vnl_convolve() timing: should even be faster", 2*ms3 < 3*ms2, true);
 
   vnl_vector<double> r12;
-  timer.mark();
+  const vcl_clock_t timer_07 = vcl_clock();
   for (unsigned i=0; i < ntimes; ++i)
     r12 = vnl_convolve(l, k3, 27648);
-  int ms4 = timer.user();
+  const vcl_clock_t timer_08 = vcl_clock();
+  const int ms4 = ( timer_08 - timer_07)/ (CLOCKS_PER_SEC/1000);
   TEST_NEAR("vnl_convolve() with_fft(27648)", (r9-r12).two_norm(), 0.0, 1e-6);
   vcl_cout << "Done FFT-2,3-based 10000x2000 convolution in " << ms4/double(ntimes) << " milliseconds\n";
   TEST("vnl_convolve() timing: should be slower", 5*ms4 > 3*ms2, true);

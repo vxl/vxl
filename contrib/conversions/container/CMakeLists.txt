@@ -1,13 +1,13 @@
 # conversions/container/CMakeLists.txt
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()
 
 # These are the source files in this directory.
 # Note that these are all header files, so no library is built here.
 
-SET(container_sources
+set(container_sources
  CoolArray_to_CoolList.h
  CoolArray_to_vcl_list.h
  CoolArray_to_vcl_vector.h

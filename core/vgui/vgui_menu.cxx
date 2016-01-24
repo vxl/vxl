@@ -89,7 +89,7 @@ void vgui_menu::add(vcl_string const &n,
                     vgui_modifier modifiers)
 {
   im_here;
-  vgui_command* cfunc = new vgui_command_cfunc(f, client_data); //KYM fix for SunPro
+  vgui_command* cfunc = new vgui_command_cfunc(f, client_data);
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 
@@ -99,7 +99,7 @@ void vgui_menu::add(vcl_string const &n,
                     vgui_modifier modifiers)
 {
   im_here;
-  vgui_command* cfunc = new vgui_command_cfunc(f);  //KYM fix for SunPro
+  vgui_command* cfunc = new vgui_command_cfunc(f);
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 
