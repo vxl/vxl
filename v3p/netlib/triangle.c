@@ -6680,7 +6680,7 @@ unsigned int choices;
 
 {
   randomseed = (randomseed * 1366l + 150889l) % 714025l;
-  return randomseed / (714025l / choices + 1);
+  return ( randomseed * (choices + 1 ) )/ 714025l;
 }
 
 /********* Mesh quality testing routines begin here                  *********/
