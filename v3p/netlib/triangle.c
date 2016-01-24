@@ -5880,7 +5880,7 @@ REAL permanent;
                                               temp32blen, temp32b, temp64);
       finlength = fast_expansion_sum_zeroelim(finlength, finnow, temp64len,
                                               temp64, finother);
-      finswap = finnow; finnow = finother; finother = finswap;
+      finswap = finnow; finnow = finother;
     }
   }
 
@@ -6388,7 +6388,7 @@ REAL permanent;
     wlength = scale_expansion_zeroelim(abtlen, abt, cdheighttail, w);
     finlength = fast_expansion_sum_zeroelim(finlength, finnow, wlength, w,
                                             finother);
-    finswap = finnow; finnow = finother; finother = finswap;
+    finswap = finnow; finnow = finother;
   }
 
   return finnow[finlength - 1];
@@ -9492,7 +9492,6 @@ int axis;
     apex(checkedge, checkvertex);
     while (checkvertex[1] > farrightpt[1]) {
       lnext(checkedge, *farright);
-      farrightapex = farrightpt;
       farrightpt = checkvertex;
       sym(*farright, checkedge);
       apex(checkedge, checkvertex);
@@ -9591,7 +9590,6 @@ int axis;
         /*   bottommost).                                             */
         while (checkvertex[0] < farleftpt[0]) {
           lprev(checkedge, *farleft);
-          farleftapex = farleftpt;
           farleftpt = checkvertex;
           sym(*farleft, checkedge);
           apex(checkedge, checkvertex);
@@ -11778,7 +11776,7 @@ vertex endpoint2;
 
   /* Inserting the vertex may have caused edge flips.  We wish to rediscover */
   /*   the edge connecting endpoint1 to the new intersection vertex.         */
-  collinear = finddirection(m, b, splittri, endpoint1);
+  finddirection(m, b, splittri, endpoint1);
   dest(*splittri, rightvertex);
   apex(*splittri, leftvertex);
   if ((leftvertex[0] == endpoint1[0]) && (leftvertex[1] == endpoint1[1])) {
@@ -13193,7 +13191,7 @@ struct behavior *b;
   subsegloop.ss = subsegtraverse(m);
   while (subsegloop.ss != (subseg *) NULL) {
     /* If the segment is encroached, add it to the list. */
-    dummy = checkseg4encroach(m, b, &subsegloop);
+    checkseg4encroach(m, b, &subsegloop);
     subsegloop.ss = subsegtraverse(m);
   }
 }
@@ -13428,9 +13426,9 @@ int triflaws;
           m->steinerleft--;
         }
         /* Check the two new subsegments to see if they're encroached. */
-        dummy = checkseg4encroach(m, b, &currentenc);
+        checkseg4encroach(m, b, &currentenc);
         snextself(currentenc);
-        dummy = checkseg4encroach(m, b, &currentenc);
+        checkseg4encroach(m, b, &currentenc);
       }
 
       badsubsegdealloc(m, encloop);
@@ -15400,7 +15398,6 @@ struct behavior *b;
     aspecttable[i] = 0;
   }
 
-  worstaspect = 0.0;
   minaltitude = m->xmax - m->xmin + m->ymax - m->ymin;
   minaltitude = minaltitude * minaltitude;
   shortest = minaltitude;
