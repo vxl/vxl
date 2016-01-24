@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( icam_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( icam_pro_test_include icam_pro)
+add_executable( icam_pro_test_include test_include.cxx )
+target_link_libraries( icam_pro_test_include icam_pro)

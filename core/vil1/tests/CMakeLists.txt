@@ -1,6 +1,6 @@
 # This is core/vil1/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vil1_test_all
+add_executable( vil1_test_all
   test_driver.cxx
 
   test_vil.cxx
@@ -18,32 +18,32 @@ ADD_EXECUTABLE( vil1_test_all
   test_file_format_read.cxx
   test_resample.cxx
 )
-TARGET_LINK_LIBRARIES( vil1_test_all vil1 vil vpl vul testlib vcl )
+target_link_libraries( vil1_test_all vil1 vil vpl vul testlib vcl )
 
-ADD_TEST( vil1_test_flipud            ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_flipud )
-ADD_TEST( vil1_test_assign            ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_assign )
-ADD_TEST( vil1_test_interpolate       ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_interpolate )
-ADD_TEST( vil1_test_load              ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_load )
-ADD_TEST( vil1_test_load_gen          ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_load_gen )
-ADD_TEST( vil1_test_memory_image      ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_memory_image )
-ADD_TEST( vil1_test_memory_image_of   ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_memory_image_of )
-#ADD_TEST( vil1_test_save_load_image   ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_save_load_image )
-ADD_TEST( vil1_test_write_endian      ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_write_endian )
-ADD_TEST( vil1_test_colour_space      ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_colour_space )
-ADD_TEST( vil1_test_copy              ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_copy ${CMAKE_CURRENT_SOURCE_DIR}/square.pgm )
-ADD_TEST( vil1_test_file_format_read  ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
-ADD_TEST( vil1_test_resample          ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_resample ${CMAKE_CURRENT_SOURCE_DIR}/square.pgm )
-ADD_TEST( vil1_test_vil               ${EXECUTABLE_OUTPUT_PATH}/vil1_test_all test_vil ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+add_test( NAME vil1_test_flipud COMMAND $<TARGET_FILE:vil1_test_all> test_flipud )
+add_test( NAME vil1_test_assign COMMAND $<TARGET_FILE:vil1_test_all> test_assign )
+add_test( NAME vil1_test_interpolate COMMAND $<TARGET_FILE:vil1_test_all> test_interpolate )
+add_test( NAME vil1_test_load COMMAND $<TARGET_FILE:vil1_test_all> test_load )
+add_test( NAME vil1_test_load_gen COMMAND $<TARGET_FILE:vil1_test_all> test_load_gen )
+add_test( NAME vil1_test_memory_image COMMAND $<TARGET_FILE:vil1_test_all> test_memory_image )
+add_test( NAME vil1_test_memory_image_of COMMAND $<TARGET_FILE:vil1_test_all> test_memory_image_of )
+#add_test( NAME vil1_test_save_load_image COMMAND $<TARGET_FILE:vil1_test_all> test_save_load_image )
+add_test( NAME vil1_test_write_endian COMMAND $<TARGET_FILE:vil1_test_all> test_write_endian )
+add_test( NAME vil1_test_colour_space COMMAND $<TARGET_FILE:vil1_test_all> test_colour_space )
+add_test( NAME vil1_test_copy COMMAND $<TARGET_FILE:vil1_test_all> test_copy ${CMAKE_CURRENT_SOURCE_DIR}/square.pgm )
+add_test( NAME vil1_test_file_format_read COMMAND $<TARGET_FILE:vil1_test_all> test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
+add_test( NAME vil1_test_resample COMMAND $<TARGET_FILE:vil1_test_all> test_resample ${CMAKE_CURRENT_SOURCE_DIR}/square.pgm )
+add_test( NAME vil1_test_vil COMMAND $<TARGET_FILE:vil1_test_all> test_vil ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
-#ADD_EXECUTABLE( vil_vil1_compare_access_timings vil_vil1_compare_access_timings.cxx)
-#TARGET_LINK_LIBRARIES( vil_vil1_compare_access_timings vil_algo vil mbl vcl )
-#ADD_TEST( vil_vil1_compare_access_timings ${EXECUTABLE_OUTPUT_PATH}/vil_vil1_compare_access_timings )
+#add_executable( vil_vil1_compare_access_timings vil_vil1_compare_access_timings.cxx)
+#target_link_libraries( vil_vil1_compare_access_timings vil_algo vil mbl vcl )
+#add_test( NAME vil_vil1_compare_access_timings COMMAND $<TARGET_FILE:vil_vil1_compare_access_timings> )
 
-#ADD_EXECUTABLE( vil_vil1_compare_function_timings vil_vil1_compare_function_timings.cxx)
-#TARGET_LINK_LIBRARIES( vil_vil1_compare_function_timings vil1 mbl vcl )
-#ADD_TEST( vil_vil1_compare_function_timings ${EXECUTABLE_OUTPUT_PATH}/vil_vil1_compare_function_timings )
+#add_executable( vil_vil1_compare_function_timings vil_vil1_compare_function_timings.cxx)
+#target_link_libraries( vil_vil1_compare_function_timings vil1 mbl vcl )
+#add_test( NAME vil_vil1_compare_function_timings COMMAND $<TARGET_FILE:vil_vil1_compare_function_timings> )
 
-ADD_EXECUTABLE( vil1_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil1_test_include vil1 vil )
-ADD_EXECUTABLE( vil1_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( vil1_test_template_include vil1 vil )
+add_executable( vil1_test_include test_include.cxx )
+target_link_libraries( vil1_test_include vil1 vil )
+add_executable( vil1_test_template_include test_template_include.cxx )
+target_link_libraries( vil1_test_template_include vil1 vil )

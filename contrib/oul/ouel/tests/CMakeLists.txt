@@ -1,2 +1,2 @@
-ADD_EXECUTABLE(ouel_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( ouel_test_include ouel )
+add_executable(ouel_test_include test_include.cxx )
+target_link_libraries( ouel_test_include ouel )

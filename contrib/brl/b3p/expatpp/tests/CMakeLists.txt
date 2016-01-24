@@ -1,2 +1,2 @@
-ADD_EXECUTABLE(expatpp_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( expatpp_test_include expatpp )
+add_executable(expatpp_test_include test_include.cxx )
+target_link_libraries( expatpp_test_include expatpp )

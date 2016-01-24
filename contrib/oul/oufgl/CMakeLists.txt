@@ -6,7 +6,7 @@ doxygen_add_library(contrib/oul/oufgl
   DESCRIPTION "Frame grabber library (for linux)"
   )
 
-SET(oufgl_sources
+set(oufgl_sources
     frame_grabber_v4l.h    frame_grabber_v4l.cxx
     frame_grabber_vil.h    frame_grabber_vil.cxx
 
@@ -14,13 +14,13 @@ SET(oufgl_sources
     frame_grabber.h
 )
 
-ADD_LIBRARY(oufgl ${oufgl_sources})
-INSTALL_TARGETS(/lib oufgl)
+add_library(oufgl ${oufgl_sources})
+install_targets(/lib oufgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/oufgl ${oufgl_sources})
-TARGET_LINK_LIBRARIES( oufgl vil vil1 rt)
+target_link_libraries( oufgl vil vil1 rt)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 add_subdirectory(examples)

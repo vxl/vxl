@@ -1,13 +1,13 @@
 # contrib/brl/bseg/boxm/CMakeLists.txt
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
 
-INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+include_directories( ${EXPAT_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 
-SET(boxm_sources
+set(boxm_sources
     boxm_export.h
     boxm_block.txx                         boxm_block.h
     boxm_scene_base.cxx                    boxm_scene_base.h
@@ -19,11 +19,11 @@ SET(boxm_sources
     boxm_io_scene_base.h                   boxm_io_scene_base.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates boxm_sources)
+aux_source_directory(Templates boxm_sources)
 
-ADD_LIBRARY(boxm  ${boxm_sources})
+add_library(boxm  ${boxm_sources})
 
-TARGET_LINK_LIBRARIES(boxm boct bsta brdb vgl_io vgl_xio vpgl vpgl_xio vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl_io vbl vsl vpl vcl)
+target_link_libraries(boxm boct bsta brdb vgl_io vgl_xio vpgl vpgl_xio vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl_io vbl vsl vpl vcl)
 
 #processes
 add_subdirectory(pro)
@@ -42,12 +42,12 @@ add_subdirectory(basic)
 
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-ENDIF(EXPAT_FOUND)
+endif()
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib boxm)
+install_targets(/lib boxm)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm/ ${boxm_sources})

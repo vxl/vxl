@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( bsvg_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bsvg_pro_test_include bsvg_pro)
+add_executable( bsvg_pro_test_include test_include.cxx )
+target_link_libraries( bsvg_pro_test_include bsvg_pro)

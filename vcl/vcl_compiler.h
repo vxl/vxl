@@ -42,25 +42,6 @@
 # endif
 #endif
 
-#if defined(__SUNPRO_CC)
-# define VCL_SUNPRO_CC
-# if (__SUNPRO_CC>=0x500)
-#  if (__SUNPRO_CC>=0x560)
-#   define VCL_SUNPRO_CC_56
-#   undef VCL_SUNPRO_CC_50
-#  else
-#   define VCL_SUNPRO_CC_50
-#   undef VCL_SUNPRO_CC_56
-#  endif
-#  define VCL_SUNPRO_CC_5
-# else
-#  undef VCL_SUNPRO_CC_5
-# endif
-# ifdef INSTANTIATE_TEMPLATES
-#  define _RWSTD_COMPILE_INSTANTIATE
-# endif
-#endif
-
 #if defined(__GNUC__) && !defined(__ICC) // icc 8.0 defines __GNUC__
 # define VCL_GCC
 # if (__GNUC__ < 4)
@@ -82,6 +63,17 @@
 #   define VCL_GCC_51
 #  else
 #   define VCL_GCC_50
+#  endif
+# elif (__GNUC__==6)
+#  define VCL_GCC_6
+#  if (__GNUC_MINOR__ > 2 )
+#   define VCL_GCC_63
+#  elif (__GNUC_MINOR__ > 1 )
+#   define VCL_GCC_62
+#  elif (__GNUC_MINOR__ > 0 )
+#   define VCL_GCC_61
+#  else
+#   define VCL_GCC_60
 #  endif
 # else
 #  error "Dunno about this gcc"
@@ -140,10 +132,8 @@
 #include <vcl_config_headers.h>
 
 // This *needs* to come after vcl_config_headers.h
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-# if defined(VCL_GCC_4) || defined(VCL_GCC_5)
+#if defined(VCL_GCC) && !defined(__INTEL_COMPILER)
 #  define GNU_LIBSTDCXX_V3 1
-# endif
 #endif
 
 // -------------------- default template parameters
@@ -161,13 +151,11 @@
 
 #define VCL_DFL_TMPL_ARG(classname) , classname
 
-#define VCL_SUNPRO_ALLOCATOR_HACK(T) T VCL_SUNPRO_CLASS_SCOPE_HACK(std::allocator<T >)
-
    //-------------------- template instantiation ------------------------------
 
 // if the compiler doesn't understand "export", we just leave it out.
-// gcc and SunPro 5.0 understand it, but they ignore it noisily.
-#if !VCL_HAS_EXPORT||defined(VCL_GCC_4)||defined(VCL_GCC_5)
+// gcc understands it, but ignore it noisily.
+#if !VCL_HAS_EXPORT || defined(VCL_GCC)
 # define VCL_TEMPLATE_EXPORT /* ignore */
 #else
 # define VCL_TEMPLATE_EXPORT export

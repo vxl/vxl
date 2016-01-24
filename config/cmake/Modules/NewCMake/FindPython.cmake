@@ -9,17 +9,17 @@
 
 # Flag that determines if we were able to successfully build Python.
 # Initialize to NO. Change below if yes.
-SET(PYTHON_FOUND "NO" CACHE INTERNAL "Was Python successfully built?" )
+set(PYTHON_FOUND "NO" CACHE INTERNAL "Was Python successfully built?" )
 set(Python_ADDITIONAL_VERSIONS 1.5 1.6 1.7 1.8 1.9 2.0 2.1 2.2 2.3 2.4 2.5 2.6 2.7)
 find_package(PythonLibs)
 
-IF(PYTHON_INCLUDE_DIR)
- IF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
+if(PYTHON_INCLUDE_DIR)
+ if(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
   # everything found
-  SET(PYTHON_FOUND "YES" CACHE INTERNAL "Was Python successfully built?")
+  set(PYTHON_FOUND "YES" CACHE INTERNAL "Was Python successfully built?")
 
-  IF( WIN32 )
-    FIND_PATH(PYTHON_PC_INCLUDE_PATH
+  if( WIN32 )
+    find_path(PYTHON_PC_INCLUDE_PATH
       NAMES pyconfig.h
 
       PATHS
@@ -49,17 +49,17 @@ IF(PYTHON_INCLUDE_DIR)
        python1.5
     )
 
-    SET(PYTHON_INCLUDE_DIRS
+    set(PYTHON_INCLUDE_DIRS
       ${PYTHON_INCLUDE_DIR}
       ${PYTHON_PC_INCLUDE_PATH}
     )
-    #MESSAGE(${PYTHON_INCLUDE_DIRS})
+    #message(${PYTHON_INCLUDE_DIRS})
 
-    MARK_AS_ADVANCED(
+    mark_as_advanced(
      PYTHON_PC_INCLUDE_PATH
     )
 
-  ENDIF(WIN32)
+  endif()
 
- ENDIF(PYTHON_LIBRARY OR PYTHON_DEBUG_LIBRARY)
-ENDIF(PYTHON_INCLUDE_DIR)
+ endif()
+endif()

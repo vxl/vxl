@@ -1,6 +1,6 @@
 # This is core/testlib/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( testlib_test_all
+add_executable( testlib_test_all
    test_driver.cxx
 
    test_assert.cxx
@@ -8,20 +8,20 @@ ADD_EXECUTABLE( testlib_test_all
    test_args.cxx
    test_root_dir.cxx
 )
-TARGET_LINK_LIBRARIES( testlib_test_all testlib )
+target_link_libraries( testlib_test_all testlib )
 
-ADD_TEST( testlib_assert     ${EXECUTABLE_OUTPUT_PATH}/testlib_test_all test_assert )
-ADD_TEST( testlib_macros     ${EXECUTABLE_OUTPUT_PATH}/testlib_test_all test_macros )
-ADD_TEST( testlib_args       ${EXECUTABLE_OUTPUT_PATH}/testlib_test_all test_args one two )
-ADD_TEST( testlib_root_dir   ${EXECUTABLE_OUTPUT_PATH}/testlib_test_all test_root_dir )
-ADD_TEST( testlib_all        ${EXECUTABLE_OUTPUT_PATH}/testlib_test_all all one two )
+add_test( NAME testlib_assert COMMAND $<TARGET_FILE:testlib_test_all> test_assert )
+add_test( NAME testlib_macros COMMAND $<TARGET_FILE:testlib_test_all> test_macros )
+add_test( NAME testlib_args COMMAND $<TARGET_FILE:testlib_test_all> test_args one two )
+add_test( NAME testlib_root_dir COMMAND $<TARGET_FILE:testlib_test_all> test_root_dir )
+add_test( NAME testlib_all COMMAND $<TARGET_FILE:testlib_test_all> all one two )
 
-ADD_EXECUTABLE( testlib_test_link
+add_executable( testlib_test_link
    test_link.cxx
 )
-TARGET_LINK_LIBRARIES( testlib_test_link testlib )
+target_link_libraries( testlib_test_link testlib )
 
-ADD_TEST( testlib_test_link  ${EXECUTABLE_OUTPUT_PATH}/testlib_test_link )
+add_test( NAME testlib_test_link COMMAND $<TARGET_FILE:testlib_test_link> )
 
-ADD_EXECUTABLE( testlib_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( testlib_test_include testlib )
+add_executable( testlib_test_include test_include.cxx )
+target_link_libraries( testlib_test_include testlib )

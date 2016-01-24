@@ -105,31 +105,6 @@ void vnl_conjugate_gradient::preconditioner_( double *out, double *in, void* use
 }
 
 ///////////////////////////////////////
-
-// avoid anachronism warning from fussy compilers
-#ifdef VCL_SUNPRO_CC
-extern "C" double vnl_conjugate_gradient__valuecomputer_( double *x, void* userdata)
-{
-  return vnl_conjugate_gradient::valuecomputer_(x, userdata);
-}
-
-extern "C" void vnl_conjugate_gradient__gradientcomputer_( double *g, double *x, void* userdata)
-{
-  vnl_conjugate_gradient::gradientcomputer_(g,x, userdata);
-}
-
-extern "C" void vnl_conjugate_gradient__valueandgradientcomputer_( double *v, double *g, double *x, void* userdata)
-{
-  vnl_conjugate_gradient::valueandgradientcomputer_(v,g,x, userdata);
-}
-
-extern "C" void vnl_conjugate_gradient__preconditioner_( double *out, double *in, void* userdata)
-{
-  vnl_conjugate_gradient::preconditioner_(out,in, userdata);
-}
-
-#endif
-
 bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
 {
   double *xp = x.data_block();
@@ -155,17 +130,10 @@ bool vnl_conjugate_gradient::minimize( vnl_vector<double> &x)
        &maxfev,
        &number_of_unknowns,
        &number_of_unknowns,
-#ifdef VCL_SUNPRO_CC
-       vnl_conjugate_gradient__valuecomputer_,
-       vnl_conjugate_gradient__gradientcomputer_,
-       vnl_conjugate_gradient__valueandgradientcomputer_,
-       vnl_conjugate_gradient__preconditioner_,
-#else
        valuecomputer_,
        gradientcomputer_,
        valueandgradientcomputer_,
        preconditioner_,
-#endif
        workspace.data_block(),
        this,
        &error_code);

@@ -12,17 +12,17 @@
 # Additionally
 # VXL_USING_NATIVE_CLIPPER  - True if we are using a CLIPPER library provided outside vxl (or v3p)
 
-IF( NOT CLIPPER_FOUND )
+if( NOT CLIPPER_FOUND )
 
   # If this FORCE variable is unset or is FALSE, try to find a native library.
-  IF( NOT VXL_FORCE_V3P_CLIPPER )
+  if( NOT VXL_FORCE_V3P_CLIPPER )
     # ./FindGEOTIFF.cmake does this instead...
-    #INCLUDE( ${MODULE_PATH}/NewCMake/FindGEOTIFF.cmake )
-    FIND_PACKAGE( CLIPPER QUIET )
-    IF( CLIPPER_FOUND )
-      SET(VXL_USING_NATIVE_CLIPPER "YES")
-    ENDIF( CLIPPER_FOUND )
-  ENDIF( NOT VXL_FORCE_V3P_CLIPPER )
+    #include( ${MODULE_PATH}/NewCMake/FindGEOTIFF.cmake )
+    find_package( CLIPPER QUIET )
+    if( CLIPPER_FOUND )
+      set(VXL_USING_NATIVE_CLIPPER "YES")
+    endif()
+  endif()
 
   #
   # At some point, in a "release" version, it is possible that someone
@@ -30,15 +30,15 @@ IF( NOT CLIPPER_FOUND )
   # exist.
   #
 
-  IF( NOT CLIPPER_FOUND )
-    IF(EXISTS ${vxl_SOURCE_DIR}/v3p/clipper/clipper.hpp)
+  if( NOT CLIPPER_FOUND )
+    if(EXISTS ${vxl_SOURCE_DIR}/v3p/clipper/clipper.hpp)
 
-      SET( CLIPPER_FOUND "YES" )
-      SET( CLIPPER_INCLUDE_DIR ${clipper_BINARY_DIR} ${clipper_SOURCE_DIR})
-      SET( CLIPPER_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/clipper)
-      SET( CLIPPER_LIBRARIES clipper )
+      set( CLIPPER_FOUND "YES" )
+      set( CLIPPER_INCLUDE_DIR ${clipper_BINARY_DIR} ${clipper_SOURCE_DIR})
+      set( CLIPPER_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/clipper)
+      set( CLIPPER_LIBRARIES clipper )
 
-    ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/clipper/clipper.hpp)
-  ENDIF( NOT CLIPPER_FOUND )
+    endif()
+  endif()
 
-ENDIF(NOT CLIPPER_FOUND)
+endif()

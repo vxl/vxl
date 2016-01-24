@@ -1,13 +1,13 @@
 # This is core/vpl/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vpl_test_all
+add_executable( vpl_test_all
   test_driver.cxx
 
   test_unistd.cxx
 )
-TARGET_LINK_LIBRARIES( vpl_test_all vpl testlib vcl )
+target_link_libraries( vpl_test_all vpl testlib vcl )
 
-ADD_TEST( vpl_test_unistd   ${EXECUTABLE_OUTPUT_PATH}/vpl_test_all test_unistd ${SITE} )
+add_test( NAME vpl_test_unistd COMMAND $<TARGET_FILE:vpl_test_all> test_unistd ${SITE} )
 
-ADD_EXECUTABLE( vpl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vpl_test_include vpl )
+add_executable( vpl_test_include test_include.cxx )
+target_link_libraries( vpl_test_include vpl )

@@ -1,25 +1,25 @@
 # brl/bseg/bbgm/pro/CMakeLists.txt
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-SET(bbgm_pro_sources
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${GEL_INCLUDE_DIR} )
+set(bbgm_pro_sources
     bbgm_register.h                   bbgm_register.cxx
     bbgm_processes.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates bbgm_pro_sources)
-AUX_SOURCE_DIRECTORY(processes bbgm_pro_sources)
+aux_source_directory(Templates bbgm_pro_sources)
+aux_source_directory(processes bbgm_pro_sources)
 
-ADD_LIBRARY(bbgm_pro ${bbgm_pro_sources})
-TARGET_LINK_LIBRARIES(bbgm_pro bbgm bprb brdb bsta_algo bsta brip vidl vil vil_pro vbl_io vsl)
+add_library(bbgm_pro ${bbgm_pro_sources})
+target_link_libraries(bbgm_pro bbgm bprb brdb bsta_algo bsta brip vidl vil vil_pro vbl_io vsl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-ENDIF(EXPAT_FOUND)
+endif()
