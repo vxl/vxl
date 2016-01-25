@@ -7,7 +7,7 @@ doxygen_add_library(core/vpdl
   DESCRIPTION "Probability Distribution Library"
   )
 
-SET( vpdl_sources
+set( vpdl_sources
   vpdl_distribution.h      vpdl_distribution.txx
 
   vpdl_gaussian_base.h
@@ -45,14 +45,14 @@ SET( vpdl_sources
   vpdt/vpdt_mixture_detector.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vpdl_sources)
+aux_source_directory(Templates vpdl_sources)
 
-ADD_LIBRARY(vpdl ${vpdl_sources})
-TARGET_LINK_LIBRARIES( vpdl vnl_algo vnl )
+add_library(vpdl ${vpdl_sources})
+target_link_libraries( vpdl vnl_algo vnl )
 
-INSTALL_TARGETS(/lib vpdl)
+install_targets(/lib vpdl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpdl ${vpdl_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

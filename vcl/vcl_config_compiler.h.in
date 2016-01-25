@@ -567,24 +567,6 @@ text { return ret; }
 //FIXME #define VCL_DFL_TMPL_ARG(classname) @VCL_DFL_TMPL_ARG@
 
 
-//: VCL_SUNPRO_CLASS_SCOPE_HACK(A)
-//
-// Nice one.  Can't use std::vector<T> in a class on SunPro 5, must use
-// std::vector<T, std::allocator<T> >.  Of course, we cannot expect that other
-// compilers call the default allocator std::allocator<T>, so we must use
-// a macro.  I could call it something generic, like
-// VCL_CLASS_SCOPE_HACK, but to be honest, it's a sunpro problem,
-// they deserve the blame.
-// Usage (the comma is inside the macro) :
-// \code
-//    vector<T VCL_SUNPRO_CLASS_SCOPE_HACK(std::allocator<T >)>
-// \endcode
-
-//#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) /* , A */
-//#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) , A
-#define VCL_SUNPRO_CLASS_SCOPE_HACK(A) @VCL_SUNPRO_CLASS_SCOPE_HACK@
-
-
 //----------------------------------------------------------------------
 // exception and namespace issues
 

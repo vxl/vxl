@@ -1,8 +1,8 @@
 # ./tbl/vipl/tests/CMakeLists.txt
 
-ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+add_definitions(-DINSTANTIATE_TEMPLATES)
 
-ADD_EXECUTABLE( vipl_test_all
+add_executable( vipl_test_all
   test_driver.cxx        test_driver.h
 
   vipl_test_threshold.cxx
@@ -10,18 +10,18 @@ ADD_EXECUTABLE( vipl_test_all
   vipl_test_gaussian_convolution.cxx
   vipl_test_histogram.cxx   # uses vnl_vector as container; remove if BUILD_CORE_NUMERICS is OFF
 )
-TARGET_LINK_LIBRARIES( vipl_test_all vipl vil testlib )
+target_link_libraries( vipl_test_all vipl vil testlib )
 
-ADD_TEST(vipl_test_threshold            ${EXECUTABLE_OUTPUT_PATH}/vipl_test_all vipl_test_threshold)
-ADD_TEST(vipl_test_erode_disk           ${EXECUTABLE_OUTPUT_PATH}/vipl_test_all vipl_test_erode_disk)
-ADD_TEST(vipl_test_gaussian_convolution ${EXECUTABLE_OUTPUT_PATH}/vipl_test_all vipl_test_gaussian_convolution)
+add_test( NAME vipl_test_threshold COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_threshold)
+add_test( NAME vipl_test_erode_disk COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_erode_disk)
+add_test( NAME vipl_test_gaussian_convolution COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_gaussian_convolution)
 
-IF (BUILD_CORE_NUMERICS)
-  TARGET_LINK_LIBRARIES( vipl_test_all vnl )
-  ADD_TEST(vipl_test_histogram            ${EXECUTABLE_OUTPUT_PATH}/vipl_test_all vipl_test_histogram)
-ENDIF (BUILD_CORE_NUMERICS)
+if(BUILD_CORE_NUMERICS)
+  target_link_libraries( vipl_test_all vnl )
+  add_test( NAME vipl_test_histogram COMMAND $<TARGET_FILE:vipl_test_all> vipl_test_histogram)
+endif()
 
-ADD_EXECUTABLE( vipl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vipl_test_include vipl )
-ADD_EXECUTABLE( vipl_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( vipl_test_template_include vipl )
+add_executable( vipl_test_include test_include.cxx )
+target_link_libraries( vipl_test_include vipl )
+add_executable( vipl_test_template_include test_template_include.cxx )
+target_link_libraries( vipl_test_template_include vipl )

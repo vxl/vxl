@@ -7,7 +7,7 @@ doxygen_add_library(contrib/brl/bbas/imesh
   DESCRIPTION "Brown Indexed Mesh Library"
   )
 
-SET(imesh_sources
+set(imesh_sources
   imesh_vertex.cxx             imesh_vertex.h
   imesh_face.cxx               imesh_face.h
   imesh_half_edge.cxx          imesh_half_edge.h
@@ -18,19 +18,19 @@ SET(imesh_sources
   imesh_detection.cxx          imesh_detection.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates imesh_sources)
+aux_source_directory(Templates imesh_sources)
 
-ADD_LIBRARY(imesh  ${imesh_sources})
+add_library(imesh  ${imesh_sources})
 
-TARGET_LINK_LIBRARIES(imesh vgl vul brdb vbl_io vbl)
+target_link_libraries(imesh vgl vul brdb vbl_io vbl)
 
 # Algorithms
 add_subdirectory(algo)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-INSTALL_TARGETS(/lib imesh)
+install_targets(/lib imesh)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/imesh/ ${imesh_sources})
 

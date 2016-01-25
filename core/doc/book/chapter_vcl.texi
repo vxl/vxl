@@ -81,7 +81,7 @@ int main()
 @end example
 The alternative is somewhat scary.  It begins
 @smallexample
-#if defined(_WIN32) || (defined(__SUNPRO_CC) && (__SUNPRO_CC + 0) >= 0x500)
+#if defined(_WIN32)
 #include <string>
 #else
 #include ...
@@ -150,7 +150,6 @@ catch up with the language standard, the answer is "all but the following":
 @item exceptions in core libraries.
 @item nested classes (not supported very well by MSVC)
 @item wide characters (not supported by FreeBSD).
-@item non-type parameters in function templates (not supported by SunPro 5.0).
 @item default template parameters which depend on previous template parameters.
 @end itemize
 

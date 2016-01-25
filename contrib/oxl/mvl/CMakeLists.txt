@@ -6,7 +6,7 @@ doxygen_add_library(contrib/oxl/mvl
   DESCRIPTION "Multi-view epipolar geometry"
   )
 
-SET(mvl_sources
+set(mvl_sources
     AffineMetric.cxx                       AffineMetric.h
     ClosestImagePointFinder.cxx            ClosestImagePointFinder.h
     FDesignMatrix.cxx                      FDesignMatrix.h
@@ -106,21 +106,21 @@ SET(mvl_sources
     PairMatchSetMulti.h
     mvl_modify_handle.h
 )
-AUX_SOURCE_DIRECTORY(Templates mvl_sources)
+aux_source_directory(Templates mvl_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(FMatrixComputeRobust.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(FMatrixComputeRobust.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif()
 
-ADD_LIBRARY(mvl ${mvl_sources})
-INSTALL_TARGETS(/lib mvl)
+add_library(mvl ${mvl_sources})
+install_targets(/lib mvl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oxl/mvl ${mvl_sources})
-TARGET_LINK_LIBRARIES(mvl vil1 vnl_algo vnl vbl vgl vgl_algo vul)
+target_link_libraries(mvl vil1 vnl_algo vnl vbl vgl vgl_algo vul)
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

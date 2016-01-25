@@ -1,4 +1,4 @@
-ADD_EXECUTABLE( boxm_test_all
+add_executable( boxm_test_all
   test_driver.cxx
   test_binary_io.cxx
   test_block_iter.cxx
@@ -8,25 +8,25 @@ ADD_EXECUTABLE( boxm_test_all
   test_load_neighboring_blocks.cxx
  )
 
-SET(boxm_test_all_sources
+set(boxm_test_all_sources
     test_utils.h    test_utils.cxx
     )
 
-ADD_LIBRARY(boxm_tests  ${boxm_test_all_sources})
-TARGET_LINK_LIBRARIES(boxm_tests boxm boct testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
+add_library(boxm_tests  ${boxm_test_all_sources})
+target_link_libraries(boxm_tests boxm boct testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
 
-TARGET_LINK_LIBRARIES( boxm_test_all boxm_tests boxm boct testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/camera0.txt ${CMAKE_CURRENT_BINARY_DIR}/camera0.txt COPYONLY )
+target_link_libraries( boxm_test_all boxm_tests boxm boct testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/camera0.txt ${CMAKE_CURRENT_BINARY_DIR}/camera0.txt COPYONLY )
 
-ADD_TEST( boxm_test_binary_io               ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all    test_binary_io  )
-ADD_TEST( boxm_test_block_iter              ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all    test_block_iter  )
-#ADD_TEST( boxm_test_region_finder           ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all    test_region_finder )
+add_test( NAME boxm_test_binary_io COMMAND $<TARGET_FILE:boxm_test_all>    test_binary_io  )
+add_test( NAME boxm_test_block_iter COMMAND $<TARGET_FILE:boxm_test_all>    test_block_iter  )
+#add_test( NAME boxm_test_region_finder COMMAND $<TARGET_FILE:boxm_test_all>    test_region_finder )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## SEGFAULT when testing with ctest -j16 (perhaps files are shared between tests)
-ADD_TEST( boxm_test_cell_iterator           ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all    test_cell_iterator )
+add_test( NAME boxm_test_cell_iterator COMMAND $<TARGET_FILE:boxm_test_all>    test_cell_iterator )
 endif()
-ADD_TEST( boxm_test_load_neighboring_blocks ${EXECUTABLE_OUTPUT_PATH}/boxm_test_all    test_load_neighboring_blocks )
+add_test( NAME boxm_test_load_neighboring_blocks COMMAND $<TARGET_FILE:boxm_test_all>    test_load_neighboring_blocks )
 
-ADD_EXECUTABLE( boxm_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boxm_test_include boxm)
-ADD_EXECUTABLE( boxm_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( boxm_test_template_include boxm)
+add_executable( boxm_test_include test_include.cxx )
+target_link_libraries( boxm_test_include boxm)
+add_executable( boxm_test_template_include test_template_include.cxx )
+target_link_libraries( boxm_test_template_include boxm)

@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( bvxm_grid_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bvxm_grid_pro_test_include bvxm_grid_pro)
+add_executable( bvxm_grid_pro_test_include test_include.cxx )
+target_link_libraries( bvxm_grid_pro_test_include bvxm_grid_pro)

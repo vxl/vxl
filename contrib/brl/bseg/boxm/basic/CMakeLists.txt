@@ -1,6 +1,6 @@
 # brl/bseg/boxm/basic/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-SET(boxm_basic_sources
+include_directories( ${MUL_INCLUDE_DIR} )
+set(boxm_basic_sources
     boxm_block_vis_graph_iterator.h     boxm_block_vis_graph_iterator.txx
     boxm_block_vis_graph_node.h
     boxm_cell_vis_graph_iterator.h      boxm_cell_vis_graph_iterator.txx
@@ -10,12 +10,12 @@ SET(boxm_basic_sources
     boxm_util_data_types.h boxm_util_data_types.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates boxm_basic_sources)
+aux_source_directory(Templates boxm_basic_sources)
 
-ADD_LIBRARY(boxm_basic ${boxm_basic_sources})
+add_library(boxm_basic ${boxm_basic_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-TARGET_LINK_LIBRARIES(boxm_basic boxm boxm_util boxm_sample boxm_sample_algo boct vpgl vpgl_algo vgl_io vgl vil vul vbl_io vbl vcl)
+target_link_libraries(boxm_basic boxm boxm_util boxm_sample boxm_sample_algo boct vpgl vpgl_algo vgl_io vgl vil vul vbl_io vbl vcl)

@@ -12,15 +12,15 @@
 # Additionally
 # VXL_USING_NATIVE_GEOTIFF  - True if we are using a GEOTIFF library provided outside vxl (or v3p)
 
-IF ( NOT GEOTIFF_FOUND )
+if( NOT GEOTIFF_FOUND )
 
   # If this FORCE variable is unset or is FALSE, try to find a native library.
-  IF( NOT VXL_FORCE_V3P_GEOTIFF )
-    INCLUDE( ${MODULE_PATH}/NewCMake/FindGEOTIFF.cmake )
-    IF( GEOTIFF_FOUND )
-      SET(VXL_USING_NATIVE_GEOTIFF "YES")
-    ENDIF( GEOTIFF_FOUND )
-  ENDIF( NOT VXL_FORCE_V3P_GEOTIFF )
+  if( NOT VXL_FORCE_V3P_GEOTIFF )
+    include( ${MODULE_PATH}/NewCMake/FindGEOTIFF.cmake )
+    if( GEOTIFF_FOUND )
+      set(VXL_USING_NATIVE_GEOTIFF "YES")
+    endif()
+  endif()
 
 
   #
@@ -29,20 +29,20 @@ IF ( NOT GEOTIFF_FOUND )
   # exist.
   #
 
-  IF( NOT GEOTIFF_FOUND )
-    IF(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
+  if( NOT GEOTIFF_FOUND )
+    if(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
       # Use FIND_PATH here to allow the user to set the path to IGNORE
       # to disable geotiff support.
-      FIND_PATH(GEOTIFF_INCLUDE_DIR geotiff.h
+      find_path(GEOTIFF_INCLUDE_DIR geotiff.h
         ${vxl_SOURCE_DIR}/v3p/geotiff
       )
-      IF( GEOTIFF_INCLUDE_DIR )
-        SET( GEOTIFF_FOUND "YES" )
-        SET( GEOTIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/geotiff)
-        SET( GEOTIFF_LIBRARIES geotiff )
-      ENDIF( GEOTIFF_INCLUDE_DIR )
+      if( GEOTIFF_INCLUDE_DIR )
+        set( GEOTIFF_FOUND "YES" )
+        set( GEOTIFF_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_DIR}/include/vxl/v3p/geotiff)
+        set( GEOTIFF_LIBRARIES geotiff )
+      endif()
 
-    ENDIF(EXISTS ${vxl_SOURCE_DIR}/v3p/geotiff/geotiff.h)
-  ENDIF( NOT GEOTIFF_FOUND )
+    endif()
+  endif()
 
-ENDIF( NOT GEOTIFF_FOUND )
+endif()

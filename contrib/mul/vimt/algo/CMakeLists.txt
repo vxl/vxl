@@ -1,6 +1,6 @@
 # mul/vimt/algo/CMakeLists.txt
 
-SET( vimt_algo_sources
+set( vimt_algo_sources
   vimt_correlate_2d.h
   vimt_find_peaks.h
   vimt_find_troughs.h
@@ -10,11 +10,11 @@ SET( vimt_algo_sources
   vimt_dummy.cxx
 )
 
-ADD_LIBRARY(vimt_algo ${vimt_algo_sources})
-INSTALL_TARGETS(/lib vimt_algo)
+add_library(vimt_algo ${vimt_algo_sources})
+install_targets(/lib vimt_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt/algo ${vimt_algo_sources})
-TARGET_LINK_LIBRARIES( vimt_algo vimt vil_algo vgl vcl )
+target_link_libraries( vimt_algo vimt vil_algo vgl vcl )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

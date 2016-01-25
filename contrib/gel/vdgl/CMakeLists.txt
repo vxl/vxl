@@ -6,7 +6,7 @@ doxygen_add_library(contrib/gel/vdgl
   DESCRIPTION "Digital Geometry"
   )
 
-SET(vdgl_sources
+set(vdgl_sources
  vdgl_digital_curve.cxx       vdgl_digital_curve.h     vdgl_digital_curve_sptr.h
  vdgl_digital_region.cxx      vdgl_digital_region.h    vdgl_digital_region_sptr.h
  vdgl_edgel.cxx               vdgl_edgel.h
@@ -20,13 +20,13 @@ SET(vdgl_sources
  vdgl_ortho_regress.cxx       vdgl_ortho_regress.h     vdgl_OrthogRegress.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vdgl_sources)
+aux_source_directory(Templates vdgl_sources)
 
-ADD_LIBRARY(vdgl ${vdgl_sources})
-INSTALL_TARGETS(/lib vdgl)
+add_library(vdgl ${vdgl_sources})
+install_targets(/lib vdgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vdgl ${vdgl_sources})
-TARGET_LINK_LIBRARIES(vdgl vsol vgl_algo vgl vnl_algo vnl vbl_io vbl vsl vul vcl)
+target_link_libraries(vdgl vsol vgl_algo vgl vnl_algo vnl vbl_io vbl vsl vul vcl)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

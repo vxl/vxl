@@ -6,11 +6,11 @@ doxygen_add_library(contrib/brl/bbas/bvgl
   PACKAGE contrib/brl
   )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR})
+include_directories(${BRL_INCLUDE_DIR})
+include_directories(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${GEL_INCLUDE_DIR})
 
-SET(bvgl_sources
+set(bvgl_sources
  bvgl_articulated_poly.h bvgl_articulated_poly.cxx bvgl_articulated_poly_sptr.h
  bvgl_change_obj.h   bvgl_change_obj.cxx
  bvgl_change_obj_sptr.h
@@ -27,31 +27,31 @@ SET(bvgl_sources
  bvgl_gen_cylinder.h                     bvgl_gen_cylinder.cxx
  bvgl_grid_index_3d.h                    bvgl_grid_index_3d.cxx
 )
-AUX_SOURCE_DIRECTORY(Templates bvgl_sources)
+aux_source_directory(Templates bvgl_sources)
 
 
 #find expatpp library for
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
-  SET(bvgl_sources ${bvgl_sources}
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  include_directories( ${EXPAT_INCLUDE_DIR} )
+  include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+  set(bvgl_sources ${bvgl_sources}
       bvgl_labelme_parser.h                   bvgl_labelme_parser.cxx
      )
-ENDIF(EXPAT_FOUND)
+endif()
 
 #Create BVGL library
-ADD_LIBRARY(bvgl ${bvgl_sources})
-INSTALL_TARGETS(/lib bvgl)
+add_library(bvgl ${bvgl_sources})
+install_targets(/lib bvgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvgl ${bvgl_sources})
-TARGET_LINK_LIBRARIES(bvgl bvrml vsol vgl_algo vgl_io vgl vnl_algo vnl vil vbl)
-IF(EXPAT_FOUND)
-TARGET_LINK_LIBRARIES(bvgl expatpp)
-ENDIF(EXPAT_FOUND)
+target_link_libraries(bvgl bvrml vsol vgl_algo vgl_io vgl vnl_algo vnl vil vbl)
+if(EXPAT_FOUND)
+target_link_libraries(bvgl expatpp)
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 # geometric algorithm related
 add_subdirectory(algo)

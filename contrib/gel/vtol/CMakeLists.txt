@@ -6,7 +6,7 @@ doxygen_add_library(contrib/gel/vtol
   DESCRIPTION "1, 2 and 3D Topology representations"
   )
 
-SET(vtol_sources
+set(vtol_sources
  vtol_topology_object.cxx vtol_topology_object.h vtol_topology_object_sptr.h
  vtol_topology_cache.cxx  vtol_topology_cache.h  vtol_topology_cache_sptr.h
  vtol_list_functions.txx  vtol_list_functions.h
@@ -28,23 +28,23 @@ SET(vtol_sources
  vtol_macros.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vtol_sources)
+aux_source_directory(Templates vtol_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(vtol_two_chain.cxx PROPERTIES COMPILE_FLAGS -O1)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(vtol_two_chain.cxx PROPERTIES COMPILE_FLAGS -O1)
+endif()
 
-ADD_LIBRARY(vtol ${vtol_sources})
-INSTALL_TARGETS(/lib vtol)
+add_library(vtol ${vtol_sources})
+install_targets(/lib vtol)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vtol ${vtol_sources})
-TARGET_LINK_LIBRARIES(vtol vdgl vsol vnl vbl vul ${CMAKE_THREAD_LIBS})
+target_link_libraries(vtol vdgl vsol vnl vbl vul ${CMAKE_THREAD_LIBS})
 
 add_subdirectory(algo)
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

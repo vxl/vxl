@@ -2,7 +2,7 @@
 # Photogrammetry Algorithms Library.
 
 
-SET( vpgl_algo_sources
+set( vpgl_algo_sources
   vpgl_optimize_camera.h           vpgl_optimize_camera.cxx
   vpgl_camera_compute.h            vpgl_camera_compute.cxx
   vpgl_camera_convert.h             vpgl_camera_convert.cxx
@@ -29,20 +29,20 @@ SET( vpgl_algo_sources
   vpgl_camera_transform.h          vpgl_camera_transform.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
+aux_source_directory(Templates vpgl_algo_sources)
 
-ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
+add_library(vpgl_algo ${vpgl_algo_sources})
 
-TARGET_LINK_LIBRARIES(vpgl_algo vpgl vpgl_file_formats vgl_algo vnl_algo vnl vgl vil vul vbl)
+target_link_libraries(vpgl_algo vpgl vpgl_file_formats vgl_algo vnl_algo vnl vgl vil vul vbl)
 
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()
 
-INSTALL_TARGETS(/lib vpgl_algo)
+install_targets(/lib vpgl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/algo ${vpgl_algo_sources})

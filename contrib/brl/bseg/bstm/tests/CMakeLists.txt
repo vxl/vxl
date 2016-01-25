@@ -1,13 +1,13 @@
-ADD_EXECUTABLE( bstm_test_all
+add_executable( bstm_test_all
   test_driver.cxx
   test_block.cxx
   test_time_tree.cxx
  )
 
-TARGET_LINK_LIBRARIES( bstm_test_all testlib boxm2 boxm2_basic bstm boxm2_io bstm_io bstm_basic bstm_cpp_algo)
+target_link_libraries( bstm_test_all testlib boxm2 boxm2_basic bstm boxm2_io bstm_io bstm_basic bstm_cpp_algo)
 
-ADD_TEST( bstm_test_block      ${EXECUTABLE_OUTPUT_PATH}/bstm_test_all  test_block     )
-ADD_TEST( bstm_test_time_tree  ${EXECUTABLE_OUTPUT_PATH}/bstm_test_all  test_time_tree )
+add_test( NAME bstm_test_block COMMAND $<TARGET_FILE:bstm_test_all>  test_block     )
+add_test( NAME bstm_test_time_tree COMMAND $<TARGET_FILE:bstm_test_all>  test_time_tree )
 
-ADD_EXECUTABLE( bstm_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bstm_test_include bstm)
+add_executable( bstm_test_include test_include.cxx )
+target_link_libraries( bstm_test_include bstm)

@@ -90,7 +90,6 @@ for $var_exp (
   'VCL_DEFAULT_TMPL_ARG(arg)',
   'VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER',
   'VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER',
-  'VCL_SUNPRO_CLASS_SCOPE_HACK(A)',
   'VCL_HAS_EXCEPTIONS',
   'VCL_HAS_NAMESPACES',
   'VCL_ALLOWS_NAMESPACE_STD',
@@ -192,10 +191,6 @@ for $var_exp (
   'VXL_HAS_IEEEFP_H',
 
   # from vcl_compiler.h
-  'VCL_SUNPRO_CC',
-  'VCL_SUNPRO_CC_5',
-  'VCL_SUNPRO_CC_50',
-  'VCL_SUNPRO_CC_56',
   'VCL_GCC',
   'VCL_GCC_4',
   'VCL_GCC_40',
@@ -205,6 +200,11 @@ for $var_exp (
   'VCL_GCC_51',
   'VCL_GCC_52',
   'VCL_GCC_53',
+  'VCL_GCC_6',
+  'VCL_GCC_60',
+  'VCL_GCC_61',
+  'VCL_GCC_62',
+  'VCL_GCC_63',
   'VCL_ICC',
   'VCL_ICC_8',
   'VCL_ICC_80',
@@ -212,7 +212,6 @@ for $var_exp (
   'VCL_WIN32',
   'VCL_VC',
   'VCL_VC_DOTNET',
-  'GNU_LIBSTDCXX_V3',
 
   # from VXL CMake configuration files
   'VXL_WARN_DEPRECATED',
@@ -244,7 +243,6 @@ for $var_exp (
   '__ECC',              # icc?
   '__INTEL_COMPILER',   # icc
   '__INTEL_CXXLIB_ICC', # icc using its own library?
-  '__SUNPRO_CC',        # sun
   '_MSC_VER',           # msvc++
   '_COMPILER_VERSION',  # sgi
 

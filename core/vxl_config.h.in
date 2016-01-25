@@ -223,6 +223,6 @@
 #define VXL_USE_WIN_WCHAR_T @VXL_USE_WIN_WCHAR_T@
 
 /* true if VXL is built shared */
-#cmakedefine VXL_BUILD_SHARED
+#cmakedefine VXL_BUILD_SHARED_LIBS
 
 #endif /* vxl_config_h_ */

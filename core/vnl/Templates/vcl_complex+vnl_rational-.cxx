@@ -21,12 +21,3 @@ vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
   z = vcl_complex<T >(r, i); \
   return is; \
 }
-
-// ---------- sunpro
-#if defined(VCL_SUNPRO_CC)
-template vcl_complex<vnl_rational> vcl_conj<vnl_rational>(vcl_complex<vnl_rational> const &);
-
-// ---------- ISO
-#else
-// ISO compilers are magic as far as instantiation goes.
-#endif

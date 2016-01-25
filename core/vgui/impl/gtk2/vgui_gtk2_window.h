@@ -26,11 +26,6 @@
 //                             member window) that already has a child.
 // \endverbatim
 
-#ifdef __SUNPRO_CC
-// <string> breaks if NULL is defined to "(void*)0".
-# include <vcl_string.h>
-#endif
-
 #include <vgui/vgui_window.h>
 #include <vgui/vgui_menu.h>
 

@@ -10,7 +10,7 @@
 
 # Provide some common installation locations.
 # Otherwise, the user will have to specify it in the cache.
-FIND_PATH( STLPORT_INSTALL_DIR stlport/iostream
+find_path( STLPORT_INSTALL_DIR stlport/iostream
    /usr/local/STLPort-4.5.3
 )
 
@@ -19,24 +19,24 @@ FIND_PATH( STLPORT_INSTALL_DIR stlport/iostream
 # the subdirectory for libraries (../lib).
 
 
-FIND_PATH( STLPORT_INCLUDE_DIR iostream
+find_path( STLPORT_INCLUDE_DIR iostream
    ${STLPORT_INSTALL_DIR}/stlport
 )
 
 
-IF(CMAKE_BUILD_TYPE MATCHES "Debug")
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
   # "Debug" probably means we do not want the non-debug ones.
-  FIND_LIBRARY( STLPORT_LIBRARIES
+  find_library( STLPORT_LIBRARIES
     NAMES stlport_cygwin_debug
           stlport_cygwin_stldebug
           stlport_gcc_debug
           stlport_gcc_stldebug
     PATHS ${STLPORT_INSTALL_DIR}/lib
   )
-ELSE(CMAKE_BUILD_TYPE MATCHES "Debug")
+else()
   # if we only have debug libraries, use them.
   # that is surely better than nothing.
-  FIND_LIBRARY( STLPORT_LIBRARIES
+  find_library( STLPORT_LIBRARIES
     NAMES stlport_cygwin
           stlport_cygwin_debug
           stlport_cygwin_stldebug
@@ -45,7 +45,7 @@ ELSE(CMAKE_BUILD_TYPE MATCHES "Debug")
           stlport_gcc_stldebug
     PATHS ${STLPORT_INSTALL_DIR}/lib
   )
-ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
+endif()
 
 
 #
@@ -56,20 +56,20 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "Debug")
 #
 
 
-IF( STLPORT_INCLUDE_DIR )
-  IF( STLPORT_LIBRARIES )
-    SET( STLPORT_FOUND "YES" )
+if( STLPORT_INCLUDE_DIR )
+  if( STLPORT_LIBRARIES )
+    set( STLPORT_FOUND "YES" )
 
     # stlport_gcc needs pthread.
-    IF(UNIX)
-      SET( STLPORT_LIBRARIES
+    if(UNIX)
+      set( STLPORT_LIBRARIES
         ${STLPORT_LIBRARIES} pthread )
-    ENDIF(UNIX)
+    endif()
 
-  ENDIF( STLPORT_LIBRARIES )
-ENDIF( STLPORT_INCLUDE_DIR )
+  endif()
+endif()
 
-MARK_AS_ADVANCED(
+mark_as_advanced(
   STLPORT_INCLUDE_DIR
   STLPORT_INSTALL_DIR
   STLPORT_LIBRARIES

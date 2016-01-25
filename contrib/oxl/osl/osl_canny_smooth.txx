@@ -5,10 +5,6 @@
 //
 // Notes
 // -  if this file is not in Templates, gcc 2.7 does not instantiate.
-// -  even if this file is in Templates, SunPro 5.0 will fail to
-//    instantiate symbols whose signatures contain a parameter of
-//    the form "type * const *". hence the 'unpro_const' macro. fsm.
-//
 // \author fsm
 
 #include "osl_canny_smooth.h"
@@ -42,7 +38,7 @@ inline float as_float(vil1_rgb<unsigned char> const &v) { return v.grey(); }
 template <class T>
 void osl_canny_smooth_rothwell(T const * const *image_in, int xsize_, int ysize_,
                                float const *kernel_, int width_, int k_size_,
-                               float * unpro_const *smooth_)
+                               float * const *smooth_)
 {
   // temporary buffer.
   vil1_memory_image_of<float> tmp(ysize_, xsize_);
@@ -68,9 +64,9 @@ template <class T>
 void osl_canny_smooth_rothwell_adaptive(T const * const *image_, int /*xsize_*/, int /*ysize_*/,
                                         int x0, int y0, int image_size,
                                         float const *kernel_, int width_, int k_size_,
-                                        float * unpro_const *dx,
-                                        float * unpro_const *dy,
-                                        float * unpro_const *grad)
+                                        float * const *dx,
+                                        float * const *dy,
+                                        float * const *grad)
 {
   // Zero the derivative images
   for (int j=0; j<image_size; ++j)
@@ -129,7 +125,7 @@ void osl_canny_smooth_rothwell_adaptive(T const * const *image_, int /*xsize_*/,
 template <class T>
 void osl_canny_smooth(T const * const * image_in, int xsize_, int ysize_,
                       float const *kernel_, int width_, float const *sub_area_,
-                      float * unpro_const * image_out)
+                      float * const * image_out)
 {
   vil1_memory_image_of<float> tmp(ysize_, xsize_);
   tmp.fill(0);
@@ -210,14 +206,14 @@ void osl_canny_smooth(T const * const * image_in, int xsize_, int ysize_,
 #define OSL_CANNY_SMOOTH_INSTANTIATE(T) \
 template void osl_canny_smooth_rothwell(T const * const *image_in, int xsize_, int ysize_, \
                                         float const *kernel_, int width_, int k_size_, \
-                                        float * unpro_const *smooth_); \
+                                        float * const *smooth_); \
 template void osl_canny_smooth_rothwell_adaptive(T const * const *in, int xsize_, int ysize_, \
                                                  int x0, int y0, int image_size,  \
                                                  float const *kernel_, int width_, int k_size_, \
-                                                 float * unpro_const *dx, float * unpro_const *dy, float * unpro_const *grad); \
+                                                 float * const *dx, float * const *dy, float * const *grad); \
 template void osl_canny_smooth(T const * const *image_in, int xsize_, int ysize_, \
                                float const *kernel_, int width_, float const *sub_area_, \
-                               float * unpro_const * image_out)
+                               float * const * image_out)
 //VCL_INSTANTIATE_INLINE(float as_float(T const &));
 
 #endif // osl_canny_smooth_txx_

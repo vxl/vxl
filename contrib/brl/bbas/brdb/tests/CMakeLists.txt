@@ -1,6 +1,6 @@
 # brl/bbas/brdb/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( brdb_test_all
+add_executable( brdb_test_all
   test_driver.cxx
   sample_database.cxx    sample_database.h
   test_value.cxx
@@ -11,21 +11,21 @@ ADD_EXECUTABLE( brdb_test_all
   test_query.cxx
 )
 
-TARGET_LINK_LIBRARIES( brdb_test_all brdb testlib )
+target_link_libraries( brdb_test_all brdb testlib )
 
-ADD_TEST( brdb_test_value             ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_value )
-ADD_TEST( brdb_test_tuple             ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_tuple )
+add_test( NAME brdb_test_value COMMAND $<TARGET_FILE:brdb_test_all> test_value )
+add_test( NAME brdb_test_tuple COMMAND $<TARGET_FILE:brdb_test_all> test_tuple )
 if( BUILD_FOR_VXL_DASHBOARD )
 ## This test always fails in travis builds
-ADD_TEST( brdb_test_relation          ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_relation )
+add_test( NAME brdb_test_relation COMMAND $<TARGET_FILE:brdb_test_all> test_relation )
 endif()
-ADD_TEST( brdb_test_database          ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_database )
-#ADD_TEST( brdb_test_database_manager  ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_database_manager )
-ADD_TEST( brdb_test_query             ${EXECUTABLE_OUTPUT_PATH}/brdb_test_all test_query )
+add_test( NAME brdb_test_database COMMAND $<TARGET_FILE:brdb_test_all> test_database )
+#add_test( NAME brdb_test_database_manager COMMAND $<TARGET_FILE:brdb_test_all> test_database_manager )
+add_test( NAME brdb_test_query COMMAND $<TARGET_FILE:brdb_test_all> test_query )
 
-AUX_SOURCE_DIRECTORY(Templates brdb_test_value)
+aux_source_directory(Templates brdb_test_value)
 
-ADD_EXECUTABLE( brdb_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( brdb_test_include brdb )
-ADD_EXECUTABLE( brdb_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( brdb_test_template_include brdb )
+add_executable( brdb_test_include test_include.cxx )
+target_link_libraries( brdb_test_include brdb )
+add_executable( brdb_test_template_include test_template_include.cxx )
+target_link_libraries( brdb_test_template_include brdb )

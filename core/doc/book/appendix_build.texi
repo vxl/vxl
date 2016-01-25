@@ -433,11 +433,11 @@ one of these commands.  Here ``foobar'' is the name of the project
 (see Example 3).
 
 @example
-SET( LIBRARY_OUTPUT_PATH $@{foobar_BINARY_DIR@}/lib )
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY $@{foobar_BINARY_DIR@}/lib )
 @end example
 or
 @example
-SET( LIBRARY_OUTPUT_PATH /usr/local/lib )
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY /usr/local/lib )
 @end example
 
 @subsection CMake Variables and Preprocessor Macros

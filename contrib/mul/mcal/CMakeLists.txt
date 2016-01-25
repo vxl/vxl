@@ -1,5 +1,5 @@
 # mul/mcal/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${vxl_BINARY_DIR}/contrib/mul )
+include_directories( ${vxl_BINARY_DIR}/contrib/mul )
 
 doxygen_add_library(contrib/mul/mcal
   DEPENDS core/vnl/algo core/vnl contrib/mul/mbl
@@ -7,7 +7,7 @@ doxygen_add_library(contrib/mul/mcal
   DESCRIPTION "Manchester's Component Analysis Library"
 )
 
-SET(mcal_sources
+set(mcal_sources
   mcal_component_analyzer.cxx       mcal_component_analyzer.h
   mcal_pca.cxx                      mcal_pca.h
   mcal_trivial_ca.cxx               mcal_trivial_ca.h
@@ -19,13 +19,13 @@ SET(mcal_sources
 
   mcal_extract_mode.cxx             mcal_extract_mode.h
 )
-AUX_SOURCE_DIRECTORY(Templates mcal_sources)
+aux_source_directory(Templates mcal_sources)
 
-ADD_LIBRARY(mcal ${mcal_sources})
-TARGET_LINK_LIBRARIES(mcal mbl)
+add_library(mcal ${mcal_sources})
+target_link_libraries(mcal mbl)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()
 
 #add_subdirectory(tools)
