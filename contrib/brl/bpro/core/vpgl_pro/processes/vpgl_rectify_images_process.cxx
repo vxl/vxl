@@ -232,11 +232,7 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
   H2 = H*H2;
 
   vpgl_camera_double_sptr out_aff_camera1 = new vpgl_affine_camera<double>(H1*aff_camera1->get_matrix());
-  vpgl_affine_camera<double>* cam1_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera1.ptr());
-  //vcl_cout << "out affine cam1: \n" << cam1_ptr->get_matrix();
   vpgl_camera_double_sptr out_aff_camera2 = new vpgl_affine_camera<double>(H2*aff_camera2->get_matrix());
-  vpgl_affine_camera<double>* cam2_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera2.ptr());
-  //vcl_cout << "out affine cam2: \n" << cam2_ptr->get_matrix();
 
   vil_image_view_base_sptr out_img1sptr = new vil_image_view<float>(out_img1);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img1sptr);
@@ -403,11 +399,7 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
   out_image_size(img1_sptr->ni(), img1_sptr->nj(), H1, mini1, minj1, maxi1, maxj1);
 
   vpgl_camera_double_sptr out_aff_camera1 = new vpgl_affine_camera<double>(H1*aff_camera1->get_matrix());
-  vpgl_affine_camera<double>* cam1_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera1.ptr());
-  //vcl_cout << "out affine cam1: \n" << cam1_ptr->get_matrix();
   vpgl_camera_double_sptr out_aff_camera2 = new vpgl_affine_camera<double>(H2*aff_camera2->get_matrix());
-  vpgl_affine_camera<double>* cam2_ptr = dynamic_cast<vpgl_affine_camera<double>*>(out_aff_camera2.ptr());
-  //vcl_cout << "out affine cam2: \n" << cam2_ptr->get_matrix();
 
   vil_image_view_base_sptr out_img1sptr = new vil_image_view<float>(out_img1);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img1sptr);

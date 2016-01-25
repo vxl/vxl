@@ -128,10 +128,6 @@ static void test_volm_desc_ex()
     volm_desc_sptr desc_index = new volm_desc_ex(values_dst, values_combine, depth_interval, radius);
     /*desc_index->print();
     desc_index->visualize("./test_desc_ex_index.svg", 2);*/
-    float score_index = desc->similarity(desc_index);
-    /*if (i % 1000 == 0) {
-      vcl_cout << " i = " << i << " similarity score is " << score_index << vcl_endl;
-    }*/
   }
   vcl_cout << N << " location, visibility intersection takes " << time.all()/1000.0 << " seconds. " << vcl_endl;
 

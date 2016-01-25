@@ -35,6 +35,7 @@ bool bocl_init_manager_process(bprb_func_process& pro)
   using namespace bocl_init_manager_process_globals;
   // force bocl_manager to be created, if it hasn't been already
   // no need to actually return the result, as it is a singleton
-  bocl_manager_child &mgr =bocl_manager_child::instance();
+  bocl_manager_child &mgr = bocl_manager_child::instance();
+  (void)mgr; // Silence unused variable warning.
   return true;
 }

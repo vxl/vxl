@@ -1233,7 +1233,6 @@ void sdet_texture_classifier::create_samples_and_labels_from_training_data(vcl_v
     //histogram for the given category
     const vcl_string& cat = (*dit).first;
     const vcl_vector<vnl_vector<double> >& tdata = (*dit).second;
-    unsigned ndata  = tdata.size();
     //insert texton counts into the histogram
     for (vcl_vector<vnl_vector<double> >::const_iterator vit = tdata.begin(); vit != tdata.end(); ++vit) {
       samples.push_back(*vit);
@@ -1289,16 +1288,10 @@ float sdet_texture_classifier::prob_hist_intersection(vcl_vector<float> const& h
 {
   unsigned nt = texton_index_.size();
   float prob_sum = 0.0f;
-  float np = 0.0f;
   for (unsigned i = 0; i<nt; ++i) {
-    /*float w = texton_weights_[i];
-    np += w;
-    float vc = hc[i]*w, vh = hist[i]*w;
-    prob_sum += (vc<=vh)?vc:vh;*/
     float vc = hc[i], vh = hist[i];
     prob_sum += (vc<=vh)?vc:vh;
   }
-  //prob_sum /= np;
   return prob_sum;
 }
 

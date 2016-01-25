@@ -63,7 +63,6 @@ int main(int argc,  char** argv)
         return -1;
       }
       vil_image_view<vxl_byte> img(nlcd_img_infos[i].img_r);
-      unsigned nii = img.ni(); unsigned nji = img.nj();
 
       vcl_pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> pair(img, nlcd_img_infos[i].cam);
       nlcd_imgs.push_back(pair);

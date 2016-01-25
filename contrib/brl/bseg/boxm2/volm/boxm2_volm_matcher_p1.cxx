@@ -1786,7 +1786,6 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
           unsigned offset_id = k + no*cam_id;
           unsigned start_obj = obj_id_offset_buff_[offset_id];
           unsigned end_obj = obj_id_offset_buff_[offset_id+1];
-          unsigned min_k = obj_min_dist_buff_[k];
           unsigned lnd_start = k*(*fallback_size_buff_);
           unsigned lnd_end = (k+1)*(*fallback_size_buff_);
           float score_ord_k = 0.0f;
@@ -1805,14 +1804,14 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
               for (unsigned mu_id = 0; (mu_id < k && s_ord); mu_id++) {
                 float depth_d = depth_interval_[d];
                 float depth_m = mu[mu_id+mu_start_id];
-                if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
-                  s_ord = s_ord * ( depth_interval_[d] - mu[mu_id+mu_start_id] > -1E-5 );
+                if (depth_m*depth_m > 1E-7)
+                  s_ord = s_ord * ( depth_d - depth_m > -1E-5 );
               }
               for (unsigned mu_id = k+1; (mu_id < no && s_ord); mu_id++) {
                 float depth_d = depth_interval_[d];
                 float depth_m = mu[mu_id+mu_start_id];
-                if (mu[mu_id+mu_start_id]*mu[mu_id+mu_start_id] > 1E-7)
-                s_ord = s_ord * ( depth_interval_[d] - mu[mu_id+mu_start_id] < 1E-5 );
+                if (depth_m*depth_m > 1E-7)
+                s_ord = s_ord * ( depth_d - depth_m < 1E-5 );
               }
               if ( d > obj_min_dist_buff_[k] )
                 s_min = 1;
@@ -1821,8 +1820,8 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1_test_ori(unsigned n_ind,
               s_ord = 0;
             }
             // check the orientation score
-            unsigned char ind_ori, ind_lnd;
-            ind_ori = index_ori[id];  ind_lnd = index_lnd[id];
+            unsigned char ind_ori = index_ori[id];
+            unsigned char ind_lnd = index_lnd[id];
             //volm_io_extract_values(index_combine[id], ind_ori, ind_lnd);
             if ( ind_ori == obj_orient_buff_[k] && obj_orient_buff_[k] == 1)
               s_ori = 1;

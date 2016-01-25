@@ -13,7 +13,6 @@ bool icam_cylinder_map::closest_camera(vgl_ray_3d<double> const& cyl_ray,
   cam_index = 0;
   vgl_point_3d<double> co = cyl_ray.origin();
   vgl_vector_3d<double> dir = cyl_ray.direction();
-  double x = co.x(), y = co.y(), z = co.z();
   int imin = -1;
   unsigned i = 0;
   double dmin = vnl_numeric_traits<double>::maxval;

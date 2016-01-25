@@ -42,6 +42,7 @@ static void test_all()
   bgood = bgood && (cent == vgl_point_3d<double>(0.0, 0.0, 2.5));
   TEST("Frustum bounding box and centroid", bgood,  true);
   bool conv = f.is_convex();
+  vcl_cout << (conv ? "Convex" : "Nonconvex") << vcl_endl;
 }
 
 void test_frustum_3d()
