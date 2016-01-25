@@ -458,11 +458,6 @@ void test_matrix_fixed()
   check_count;
   vcl_printf("splork = [ %g %g %g ]\n", splork(0), splork(1), splork(2));
 
-  // This shouldn't compile...
-#if 0
-  vnl_matrix<double>* base = new vnl_double_3x3(datablock);
-#endif
-
   vcl_printf("Now watch the mallocs\n");
   vnl_matrix_ref<double> CX = X.as_ref();
   vnl_vector_ref<double> cv = v.as_ref();

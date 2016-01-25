@@ -14,102 +14,7 @@
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_math.h>
 
-#if 0 // commented out
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::add( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) + *(b++);
-}
-
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::add( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) + b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::sub( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) - *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::sub( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) - b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::sub( T a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = a - *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::mul( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) * *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::mul( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) * b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::div( const T* a, const T* b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) / *(b++);
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-void
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::div( const T* a, T b, T* r )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    *(r++) = *(a++) / b;
-}
-
-template<class T, unsigned nrows, unsigned ncols>
-bool
-vnl_matrix_fixed_ref_const<T,nrows,ncols>::equal( const T* a, const T* b )
-{
-  unsigned int count = nrows*ncols;
-  while ( count-- )
-    if ( *(a++) != *(b++) )  return false;
-  return true;
-}
-#endif // 0
-
 //------------------------------------------------------------
-
 
 template<class T, unsigned nrows, unsigned ncols>
 vnl_matrix_fixed_ref<T,nrows,ncols> const&
@@ -384,40 +289,6 @@ vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_n_columns (unsigned column, unsig
       result(r, c) = (*this)(r,column + c);
   return result;
 }
-
-#if 0 // commented out
-
-//: Create a vector out of row[row_index].
-template<class T, unsigned nrows, unsigned ncols>
-vnl_vector<T> vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_row(unsigned row_index) const
-{
-#if ERROR_CHECKING
-  if (row_index >= nrows)
-    vnl_error_matrix_row_index ("get_row", row_index);
-#endif
-
-  vnl_vector<T> v(ncols);
-  for (unsigned int j = 0; j < ncols; j++)    // For each element in row
-    v[j] = (*this)(row_index,j);
-  return v;
-}
-
-//: Create a vector out of column[column_index].
-template<class T, unsigned nrows, unsigned ncols>
-vnl_vector<T> vnl_matrix_fixed_ref_const<T,nrows,ncols>::get_column(unsigned column_index) const
-{
-#if ERROR_CHECKING
-  if (column_index >= ncols)
-    vnl_error_matrix_col_index ("get_column", column_index);
-#endif
-
-  vnl_vector<T> v(nrows);
-  for (unsigned int j = 0; j < nrows; j++)
-    v[j] = (*this)(j,column_index);
-  return v;
-}
-
-#endif // 0
 
 //: Return a vector with the content of the (main) diagonal
 template<class T, unsigned nrows, unsigned ncols>

@@ -364,9 +364,6 @@ static void test_math()
   TEST("!isnan(ninf_q)   ", vnl_math::isnan(ninf_q), false);
   TEST("!isfinite(qnan_q)", vnl_math::isfinite(qnan_q), false);
   TEST("!isinf(qnan_q)   ", vnl_math::isinf(qnan_q), false);
-#if 0 // even more nonstandard ...
-  TEST(" isnan(qnan_q)   ",  vnl_math::isnan(qnan_q));
-#endif // 0
 #endif // __ICC
 
   TEST("!isfinite(huge_val(double))", vnl_math::isfinite(vnl_huge_val(double())), false);

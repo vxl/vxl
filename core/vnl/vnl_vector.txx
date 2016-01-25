@@ -519,53 +519,6 @@ vnl_vector<T> vnl_vector<T>::operator- () const
   return result;
 }
 
-#if 0 // commented out
-//: Returns new vector which is the multiplication of matrix m with column vector v. O(m*n).
-
-template<class T>
-vnl_vector<T> operator* (vnl_matrix<T> const& m, vnl_vector<T> const& v)
-{
-#ifndef NDEBUG
-  if (m.columns() != v.size())                  // dimensions do not match?
-    vnl_error_vector_dimension ("operator*", m.columns(), v.size());
-#endif
-  vnl_vector<T> result(m.rows());               // Temporary
-  for (unsigned i = 0; i < m.rows(); i++) {     // For each index
-    result[i] = (T)0;                           // Initialize element value
-    for (unsigned k = 0; k < v.size(); k++)     // Loop over column values
-      result[i] += (m.get(i,k) * v[k]);         // Multiply
-  }
-  return result;
-}
-
-
-//: Returns new vector which is the multiplication of row vector v with matrix m. O(m*n).
-
-template<class T>
-vnl_vector<T> vnl_vector<T>::operator* (vnl_matrix<T> const&m) const
-{
-  // rick@aai: casting away const avoids the following error (using gcc272)
-  // at m.rows during instantiation of 'template class vnl_vector<double >;'
-  // "cannot lookup method in incomplete type `const vnl_matrix<double>`"
-  // For some reason, instantiating the following function prior to vnl_vector
-  // also avoids the error.
-  // template vnl_matrix<double> outer_product(vnl_vector<double> const&, vnl_vector<double> const&)
-
-#ifndef NDEBUG
-  if (num_elmts != m.rows())                    // dimensions do not match?
-    vnl_error_vector_dimension ("operator*", num_elmts, m.rows());
-#endif
-  vnl_vector<T> result(m.columns());            // Temporary
-  for (unsigned i = 0; i < m.columns(); i++) {  // For each index
-    result.data[i] = (T)0;                      // Initialize element value
-    for (unsigned k = 0; k < num_elmts; k++)    // Loop over column values
-      result.data[i] += (data[k] * m.get(k,i)); // Multiply
-  }
-  return result;
-}
-#endif
-
-
 //: Replaces elements with index beginning at start, by values of v. O(n).
 
 template<class T>

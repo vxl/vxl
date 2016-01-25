@@ -32,10 +32,6 @@
  *  Copyright (c) 1985-2003
  *  by Kenneth S. Kundert
  */
-#if 0
-static char copyright[] =
-    "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
-#endif
 /*
 Removed File IO routines to get rid of fopen warnings - JLM
 */

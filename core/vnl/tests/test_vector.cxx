@@ -77,14 +77,6 @@ void vnl_vector_test_int()
   TEST("v.min_value()", v.min_value(), -2);
   TEST("v.arg_max()",   v.arg_max(),   2);
   TEST("v.arg_min()",   v.arg_min(),   1);
-#if 0
-  TEST("v.abs()",
-       ((v1 = v.abs()),
-        (v1(0)==0 && v1(1)==2 && v1(2)==2 && v1(3)==0)), true);
-  TEST("v.sign()",
-       ((v1 = v.sign()),
-        (v1(0)==0 && v1(1)==-1 && v1(2)==1 && v1(3)==0)), true);
-#endif
   TEST("element_product(v,v)",
        ((v1 = element_product(v,v)),
         (v1(0)==0 && v1(1)==4 && v1(2)==4 && v1(3)==0)), true);
@@ -92,12 +84,6 @@ void vnl_vector_test_int()
        ((v2 = 2),
         (v1 = element_quotient(v,v2)),
         (v1(0)==0 && v1(1)==-1 && v1(2)==1 && v1(3)==0)), true);
-#if 0
-  TEST("v.update(v.abs())",
-       ((v1 = v.abs()),
-        (v2.update(v1)),
-        (v2==v1)), true);
-#endif
   TEST("v.extract(1,3)",
        ((v1 = v.extract(1,3)),
         (v1.size()==1 && v1(0)==v(3))), true);
@@ -284,9 +270,6 @@ void vnl_vector_test_float()
   TEST("vnl_vector<float> v1(2)", v1.size(), 2);
   vnl_vector<float> v2(2,2);
   TEST("vnl_vector<float> v2(2,2)", (v2.get(0)==2 && v2.get(1)==2), true);
-#if 0
-  TEST("v0.set_compare", (v0.set_compare(float_equal), true), true);
-#endif
 
   float vcvalues[2] = {1};
   vnl_vector<float> vc(2,2,vcvalues);
@@ -348,14 +331,6 @@ void vnl_vector_test_float()
   TEST("v.min_value()", v.min_value(), -2);
   TEST("v.arg_max()",   v.arg_max(),   2);
   TEST("v.arg_min()",   v.arg_min(),   1);
-#if 0
-  TEST("v.abs()",
-       ((v1 = v.abs()),
-        (v1(0)==0 && v1(1)==2 && v1(2)==2 && v1(3)==0)), true);
-  TEST("v.sign()",
-       ((v1 = v.sign()),
-        (v1(0)==0 && v1(1)==-1 && v1(2)==1 && v1(3)==0)), true);
-#endif
   TEST("element_product(v,v)",
        ((v1 = element_product(v,v)),
         (v1(0)==0 && v1(1)==4 && v1(2)==4 && v1(3)==0)), true);
@@ -363,12 +338,6 @@ void vnl_vector_test_float()
        ((v2 = 2),
         (v1 = element_quotient(v,v2)),
         (v1(0)==0 && v1(1)==-1 && v1(2)==1 && v1(3)==0)), true);
-#if 0
-  TEST("v.update(v.abs())",
-       ((v1 = v.abs()),
-        (v2.update(v1)),
-        (v2==v1)), true);
-#endif
   TEST("v.extract(1,3)",
        ((v1 = v.extract(1,3)),
         (v1.size()==1 && v1(0)==v(3))), true);
@@ -441,10 +410,6 @@ void vnl_vector_test_float()
     ang2 *= vnl_math::deg_per_rad; // == 180/pi
     vcl_cout << "angle(v1,v3) in degrees = " << ang2 << vcl_endl;
     TEST_NEAR("angle(v1,v3)", ang2, 135.0, 1e-6);
-#if 0
-    TEST("squared_distance_2d", squared_distance_2d(v1,v2), 2);
-    TEST("squared_distance_3d", squared_distance_3d(v1,v2), 2);
-#endif
     TEST_NEAR("mean", vnl_c_vector<float>::mean(v.begin(), v.size()), 2.0, 1e-6);
     TEST_NEAR("std", vnl_c_vector<float>::std(v.begin(), v.size()), 1.0, 1e-6);
   }
@@ -627,53 +592,6 @@ void vnl_vector_test_conversion()
     }
     TEST("block[i]==matrix(i)", check, true);
   }
-#if 0
-  {
-    // convert from a vnl_vector to a block array:
-    vnl_vector<double> v1 (12, 12,
-                           1.0,2.0,3.0, 4.0,5.0,6.0,
-                           7.0,8.0,9.0, 10.0,11.0,12.0);
-    const double* data = v1.data_block();
-    {
-      check = true;
-      for (int d = 0; d < 12; d++)
-     if (data[d] != d+1)
-       check = false;
-    }
-    TEST("(const double*) m.data_block", check, true);
-
-    typedef double block [12];
-    block& v2 = *((block*) data);
-    {
-      check = true;
-      for (int i = 0; i < 12; i++)
-        if (v1(i) != v2[i])
-          check = false;
-    }
-    TEST("matrix(i)==block[i]", check, true);
-
-    // convert from a block array to a vnl_vector:
-    block b1;
-    for (int i = 0; i < 12; i++)
-      b1[i] = i;
-    data = ((const double*) b1);             // & in ((const double*) &b1)
-    {                                                // is not needed
-      check = true;
-      for (int d = 0; d < 12; d++)
-     if (data[d] != d)
-       check = false;
-    }
-    TEST("(const double*) block", check, true);
-    vnl_vector<double> b2(data, 12);
-    {
-      check = true;
-    for (int i = 0; i < 12; i++)
-      if (b1[i] != b2(i))
-     check = false;
-    }
-    TEST("block[i]==matrix(i)", check, true);
-  }
-#endif
 }
 
 static void vnl_vector_test_io()

@@ -84,14 +84,6 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   result_norm_estimate_ = xnorm;
   A_condition_estimate_ = acond;
 
-#if 0
-  vcl_cerr << "A Fro norm estimate      = " << anorm << vcl_endl
-           << "A condition estimate     = " << acond << vcl_endl
-           << "Residual norm estimate   = " << rnorm << vcl_endl
-           << "A'(Ax - b) norm estimate = " << arnorm << vcl_endl
-           << "x norm estimate          = " << xnorm << vcl_endl;
-#endif
-
   // We should return the return code, as translate_return_code is public and
   // it is very misleading that the return code from this function can't be fed
   // into translate_return_code. (Brian Amberg)

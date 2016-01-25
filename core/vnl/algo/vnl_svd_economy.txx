@@ -85,10 +85,6 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
     vnl_matlab_print(vcl_cerr, M, "M", vnl_matlab_print_format_long);
     //    valid_ = false;
   }
-#if 0
-  else
-    valid_ = true;
-#endif
 
   for (int j = 0; j < mm; ++j)
     sv_[j] = vcl_abs(wspace(j)); // we get rid of complexness here.

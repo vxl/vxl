@@ -19,11 +19,6 @@ class vnl_definite_integral
 
   void set_fnct(vnl_integrant_fnct* f) { pfnct_ = f; }
 
-#if 0
-  //: integration from a to b, in n steps
-  virtual double integral(vnl_integrant_fnct *f, float a, float b, int n)=0;
-#endif
-
   // destructor
   virtual ~vnl_definite_integral() { pfnct_ = 0; }
 };

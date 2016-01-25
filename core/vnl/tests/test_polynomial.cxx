@@ -16,10 +16,6 @@ void test_polynomial_double()
   { vcl_stringstream testStream; testStream << f1;
     vcl_string expected = " X^3 +2 X^2 +3 X +4";
     TEST("f1 prints as X^3 +2 X^2 +3 X +4", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 
   for (int i=0;i<=f2.degree();++i) f2[i]=9.0-2*i; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
@@ -110,55 +106,31 @@ void test_polynomial_double()
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X +1";
     TEST("f4 prints as X +1", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 *= 2.0; // f4 = 2 X + 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 2 X +2";
     TEST("f4 prints as 2 X +2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 = -f4; // f4 = -2 X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " -2 X -2";
     TEST("f4 prints as -2 X -2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 1; // f4 = X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[0] = 0; // f4 = X
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 0; // f4 = 0
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 }
 
@@ -171,10 +143,6 @@ void test_polynomial_long()
   { vcl_stringstream testStream; testStream << f1;
     vcl_string expected = " X^3 +2 X^2 +3 X +4";
     TEST("f1 prints as X^3 +2 X^2 +3 X +4", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 
   for (int i=0;i<=f2.degree();++i) f2[i]=9-2*i; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
@@ -235,55 +203,31 @@ void test_polynomial_long()
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X +1";
     TEST("f4 prints as X +1", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 *= 2L; // f4 = 2 X + 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 2 X +2";
     TEST("f4 prints as 2 X +2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 = -f4; // f4 = -2 X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " -2 X -2";
     TEST("f4 prints as -2 X -2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 1L; // f4 = X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[0] = 0L; // f4 = X
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 0L; // f4 = 0
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 }
 
@@ -296,10 +240,6 @@ void test_polynomial_rational()
   { vcl_stringstream testStream; testStream << f1;
     vcl_string expected = " X^3 +1/2 X^2 +1/3 X +1/4";
     TEST("f1 prints as X^3 +1/2 X^2 +1/3 X +1/4", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 
   for (int i=0;i<=f2.degree();++i) f2[i]=9-2*i; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
@@ -389,55 +329,31 @@ void test_polynomial_rational()
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X +1/1";
     TEST("f4 prints as X +1/1", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 *= vnl_rational(2); // f4 = 2 X + 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 2/1 X +2/1";
     TEST("f4 prints as 2/1 X +2/1", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 = -f4; // f4 = -2 X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " -2/1 X -2/1";
     TEST("f4 prints as -2/1 X -2/1", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 1; // f4 = X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X -2/1";
     TEST("f4 prints as X -2/1", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[0] = 0; // f4 = X
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 0; // f4 = 0
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 }
 
@@ -450,10 +366,6 @@ void test_polynomial_decnum()
   { vcl_stringstream testStream; testStream << f1;
     vcl_string expected = " X^3 +2 X^2 +3 X +4";
     TEST("f1 prints as X^3 +2 X^2 +3 X +4", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 
   for (int i=0;i<=f2.degree();++i) f2[i]=9-2*i; // f2 = X^4 +3 X^3 +5 X^2 +7 X +9
@@ -514,55 +426,31 @@ void test_polynomial_decnum()
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X +1";
     TEST("f4 prints as X +1", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 *= vnl_decnum("2"); // f4 = 2 X + 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 2 X +2";
     TEST("f4 prints as 2 X +2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4 = -f4; // f4 = -2 X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " -2 X -2";
     TEST("f4 prints as -2 X -2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 1L; // f4 = X - 2
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X -2";
     TEST("f4 prints as X -2", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[0] = 0L; // f4 = X
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " X";
     TEST("f4 prints as X", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
   f4[1] = 0L; // f4 = 0
   { vcl_stringstream testStream; testStream << f4;
     vcl_string expected = " 0";
     TEST("f4 prints as 0", testStream.str(), expected);
-#if 0
-    vcl_cout << "Actual:\t\t\"" << testStream.str() << '"' << vcl_endl
-             << "Expected:\t\"" << expected << '"' << vcl_endl;
-#endif
   }
 }
 

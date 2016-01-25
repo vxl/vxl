@@ -202,10 +202,6 @@ void test_numeric_traits()
   TEST("vnl_numeric_traits<double>::maxval must be the largest possible", nr_of_ones, 8*sizeof(double)-2);
 
   x = (unsigned char*)(&ldm);
-#if 0
-      // See TODO below.  Do not set if not used.
-  nr_of_ones = 0;
-#endif
   vcl_cout << "vnl_numeric_traits<long double>::maxval has internal representation ";
 #if VXL_BIG_ENDIAN
   for (unsigned int i=0; i<sizeof(long double); ++i)
@@ -214,17 +210,9 @@ void test_numeric_traits()
 #endif
     for (int j=7; j>=0; --j) {
       int n = int(((x[i])>>j)&1);
-#if 0
-      // See TODO below.  Do not set if not used.
-      nr_of_ones += n;
-#endif
       vcl_cout << n;
     }
   vcl_cout << '\n';
-#if 0 // TODO - long double has non-standard length on different platforms
-  // there should only be 2 zeros in the representation: the sign bits of mantissa and of exponent:
-  TEST("vnl_numeric_traits<long double>::maxval must be the largest possible", nr_of_ones, 8*sizeof(long double)-2);
-#endif
 }
 
 TESTMAIN(test_numeric_traits);
