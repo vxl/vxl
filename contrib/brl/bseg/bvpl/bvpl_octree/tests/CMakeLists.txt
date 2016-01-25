@@ -1,6 +1,6 @@
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+include_directories( ${MUL_INCLUDE_DIR} )
 
-ADD_EXECUTABLE( bvpl_octree_test_all
+add_executable( bvpl_octree_test_all
   test_driver.cxx
   test_octree_kernel_operator.cxx
   test_octree_neighbors.cxx
@@ -12,24 +12,24 @@ ADD_EXECUTABLE( bvpl_octree_test_all
 #  test_gauss3D_steerable_filters.cxx
  )
 
-SET(bvpl_octree_test_all_sources
+set(bvpl_octree_test_all_sources
     test_utils.h    test_utils.cxx
    )
 
-ADD_LIBRARY(bvpl_octree_tests_util  ${bvpl_octree_test_all_sources})
+add_library(bvpl_octree_tests_util  ${bvpl_octree_test_all_sources})
 
-TARGET_LINK_LIBRARIES( bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
-TARGET_LINK_LIBRARIES( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
+target_link_libraries( bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
+target_link_libraries( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
 
-ADD_TEST( NAME bvpl_octree_test_kernel_operator COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_octree_kernel_operator  )
-ADD_TEST( NAME bvpl_octree_test_neighbors COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_octree_neighbors  )
-#ADD_TEST( NAME bvpl_octree_test_pca COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_pca_kernels )
-#ADD_TEST( NAME bvpl_octree_test_taylor_basis COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_taylor_basis )
-#ADD_TEST( NAME test_gauss3D_steerable_filters COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_gauss3D_steerable_filters )
+add_test( NAME bvpl_octree_test_kernel_operator COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_octree_kernel_operator  )
+add_test( NAME bvpl_octree_test_neighbors COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_octree_neighbors  )
+#add_test( NAME bvpl_octree_test_pca COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_pca_kernels )
+#add_test( NAME bvpl_octree_test_taylor_basis COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_taylor_basis )
+#add_test( NAME test_gauss3D_steerable_filters COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_gauss3D_steerable_filters )
 
-ADD_EXECUTABLE( bvpl_octree_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bvpl_octree_test_include bvpl_octree)
+add_executable( bvpl_octree_test_include test_include.cxx )
+target_link_libraries( bvpl_octree_test_include bvpl_octree)
 
-ADD_EXECUTABLE( bvpl_octree_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( bvpl_octree_test_template_include bvpl_octree)
+add_executable( bvpl_octree_test_template_include test_template_include.cxx )
+target_link_libraries( bvpl_octree_test_template_include bvpl_octree)
 

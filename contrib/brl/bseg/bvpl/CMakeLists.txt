@@ -1,11 +1,11 @@
 # This is contrib/brl/bseg/bvpl/CMakeLists.txt
-PROJECT(bvpl)
+project(bvpl)
 
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
-SET(bvpl_sources
+set(bvpl_sources
     bvpl_voxel_subgrid.h               bvpl_voxel_subgrid.txx
     bvpl_subgrid_iterator.h            bvpl_subgrid_iterator.txx
     bvpl_neighb_operator.h
@@ -16,11 +16,11 @@ SET(bvpl_sources
     bvpl_susan_opinion_operator.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates bvpl_sources)
+aux_source_directory(Templates bvpl_sources)
 
-ADD_LIBRARY(bvpl ${bvpl_sources})
+add_library(bvpl ${bvpl_sources})
 
-TARGET_LINK_LIBRARIES(bvpl bvpl_kernels bvpl_functors bvxm_grid bdgl bsta vnl vnl_io vil_algo vgl vpl vul vbl_io vsl vbl)
+target_link_libraries(bvpl bvpl_kernels bvpl_functors bvxm_grid bdgl bsta vnl vnl_io vil_algo vgl vpl vul vbl_io vsl vbl)
 
 add_subdirectory(pro)
 add_subdirectory(util)
@@ -28,6 +28,6 @@ add_subdirectory(bvpl_octree)
 add_subdirectory(kernels)
 add_subdirectory(functors)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

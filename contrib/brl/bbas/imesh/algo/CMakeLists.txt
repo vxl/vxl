@@ -1,9 +1,9 @@
 # brl/bbas/imesh/algo/CMakeLists.txt
 # indexed mesh library algorithms
-INCLUDE( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+include( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
-SET(imesh_algo_sources
+set(imesh_algo_sources
     imesh_transform.cxx          imesh_transform.h
     imesh_intersect.cxx          imesh_intersect.h
     imesh_operations.cxx         imesh_operations.h
@@ -14,27 +14,27 @@ SET(imesh_algo_sources
     imesh_render.cxx             imesh_render.h
     imesh_imls_surface.cxx       imesh_imls_surface.h imesh_imls_surface.txx
    )
-AUX_SOURCE_DIRECTORY(Templates imesh_algo_sources)
+aux_source_directory(Templates imesh_algo_sources)
 
-IF(NETLIB_FOUND)
-  INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
-  SET(imesh_algo_sources ${imesh_algo_sources}
+if(NETLIB_FOUND)
+  include_directories( ${NETLIB_INCLUDE_DIR} )
+  set(imesh_algo_sources ${imesh_algo_sources}
       imesh_generate_mesh.cxx     imesh_generate_mesh.h)
-ENDIF (NETLIB_FOUND)
+endif()
 
-ADD_LIBRARY( imesh_algo ${imesh_algo_sources} )
+add_library( imesh_algo ${imesh_algo_sources} )
 
-IF(NETLIB_FOUND)
+if(NETLIB_FOUND)
 
-TARGET_LINK_LIBRARIES( imesh_algo imesh vpgl bpgl bpgl_algo vgl_algo vgl vnl_algo vnl vil netlib)
-ELSE(NETLIB_FOUND)
-TARGET_LINK_LIBRARIES( imesh_algo imesh vpgl vgl_algo vgl vnl_algo vnl vil )
-ENDIF(NETLIB_FOUND)
+target_link_libraries( imesh_algo imesh vpgl bpgl bpgl_algo vgl_algo vgl vnl_algo vnl vil netlib)
+else()
+target_link_libraries( imesh_algo imesh vpgl vgl_algo vgl vnl_algo vnl vil )
+endif()
 
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-INSTALL_TARGETS(/lib imesh_algo)
+install_targets(/lib imesh_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/imesh/algo/ ${imesh_algo_sources})

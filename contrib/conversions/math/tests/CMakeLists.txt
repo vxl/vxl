@@ -1,33 +1,33 @@
-LINK_LIBRARIES( vnl vbl testlib )
+link_libraries( vnl vbl testlib )
 
-SET(HAS_COOL "NO")
-IF(EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
-  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/COOL)
-  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/Numerics)
-  LINK_LIBRARIES( TJCOOL )
-  SET(HAS_COOL "YES")
-ENDIF( EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
+set(HAS_COOL "NO")
+if(EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
+  include_directories(${vxl_SOURCE_DIR}/COOL)
+  include_directories(${vxl_SOURCE_DIR}/Numerics)
+  link_libraries( TJCOOL )
+  set(HAS_COOL "YES")
+endif()
 
-SET(HAS_NUMERICS "NO")
-IF(EXISTS ${vxl_SOURCE_DIR}/Numerics/CMakeLists.txt )
-  INCLUDE_DIRECTORIES(${vxl_SOURCE_DIR}/Numerics)
-  LINK_LIBRARIES( Numerics iue-math )
-  SET(HAS_NUMERICS "YES")
-ENDIF(EXISTS ${vxl_SOURCE_DIR}/Numerics/CMakeLists.txt )
+set(HAS_NUMERICS "NO")
+if(EXISTS ${vxl_SOURCE_DIR}/Numerics/CMakeLists.txt )
+  include_directories(${vxl_SOURCE_DIR}/Numerics)
+  link_libraries( Numerics iue-math )
+  set(HAS_NUMERICS "YES")
+endif()
 
-IF(HAS_COOL)
-  ADD_DEFINITIONS(-DHAS_COOL=1)
-ELSE(HAS_COOL)
-  ADD_DEFINITIONS(-DHAS_NO_COOL=1)
-ENDIF(HAS_COOL)
+if(HAS_COOL)
+  add_definitions(-DHAS_COOL=1)
+else()
+  add_definitions(-DHAS_NO_COOL=1)
+endif()
 
-IF(HAS_NUMERICS)
-  ADD_DEFINITIONS(-DHAS_NUMERICS=1)
-ELSE(HAS_NUMERICS)
-  ADD_DEFINITIONS(-DHAS_NO_NUMERICS=1)
-ENDIF(HAS_NUMERICS)
+if(HAS_NUMERICS)
+  add_definitions(-DHAS_NUMERICS=1)
+else()
+  add_definitions(-DHAS_NO_NUMERICS=1)
+endif()
 
-ADD_EXECUTABLE( conversions_math_test_all
+add_executable( conversions_math_test_all
   test_driver.cxx
 
   test_matrix_conversions.cxx
@@ -35,8 +35,8 @@ ADD_EXECUTABLE( conversions_math_test_all
   test_IUE_matrix_conversions.cxx
 )
 
-ADD_TEST( NAME conversions_test_matrix_conversions COMMAND $<TARGET_FILE:conversions_math_test_all> test_matrix_conversions )
-ADD_TEST( NAME conversions_test_CoolMatrix_conversions COMMAND $<TARGET_FILE:conversions_math_test_all> test_CoolMatrix_conversions )
-ADD_TEST( NAME conversions_test_IUE_matrix_conversions COMMAND $<TARGET_FILE:conversions_math_test_all> test_IUE_matrix_conversions )
+add_test( NAME conversions_test_matrix_conversions COMMAND $<TARGET_FILE:conversions_math_test_all> test_matrix_conversions )
+add_test( NAME conversions_test_CoolMatrix_conversions COMMAND $<TARGET_FILE:conversions_math_test_all> test_CoolMatrix_conversions )
+add_test( NAME conversions_test_IUE_matrix_conversions COMMAND $<TARGET_FILE:conversions_math_test_all> test_IUE_matrix_conversions )
 
-ADD_EXECUTABLE( conversions_math_test_include test_include.cxx )
+add_executable( conversions_math_test_include test_include.cxx )

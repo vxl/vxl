@@ -1,18 +1,18 @@
 # mul/mipa/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( mipa_test_all
+add_executable( mipa_test_all
   test_driver.cxx
 
   test_sample_histo_boxes.cxx
   test_vector_normalisers.cxx
 )
-TARGET_LINK_LIBRARIES( mipa_test_all mipa testlib )
+target_link_libraries( mipa_test_all mipa testlib )
 
-ADD_TEST( NAME mipa_test_sample_histo_boxes COMMAND $<TARGET_FILE:mipa_test_all>
+add_test( NAME mipa_test_sample_histo_boxes COMMAND $<TARGET_FILE:mipa_test_all>
 test_sample_histo_boxes)
-ADD_TEST( NAME mipa_test_vector_normalisers COMMAND $<TARGET_FILE:mipa_test_all> test_vector_normalisers)
+add_test( NAME mipa_test_vector_normalisers COMMAND $<TARGET_FILE:mipa_test_all> test_vector_normalisers)
 
-ADD_EXECUTABLE( mipa_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( mipa_test_include mipa )
-ADD_EXECUTABLE( mipa_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( mipa_test_template_include mipa )
+add_executable( mipa_test_include test_include.cxx )
+target_link_libraries( mipa_test_include mipa )
+add_executable( mipa_test_template_include test_template_include.cxx )
+target_link_libraries( mipa_test_template_include mipa )

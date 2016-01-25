@@ -1,12 +1,12 @@
 # vxl/vnl/algo/CMakeLists.txt
 
-PROJECT(vnl_algo)
+project(vnl_algo)
 
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
+include( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
 
 # most of vnl_algo is simply a wrapper around netlib, so we must have netlib.
-IF(NETLIB_FOUND)
+if(NETLIB_FOUND)
 
 # Direct netlib dependencies are:
 # vnl_chi_squared                  dchscdf_
@@ -31,9 +31,9 @@ IF(NETLIB_FOUND)
 # vnl_svd_fixed                    csvdc_ dsvdc_ ssvdc_ zsvdc_
 # vnl_symmetric_eigensystem        rs_
 
-  INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
+  include_directories( ${NETLIB_INCLUDE_DIR} )
 
-  SET( vnl_algo_sources
+  set( vnl_algo_sources
     vnl_algo_export.h
     vnl_algo_fwd.h
     vnl_netlib.h
@@ -98,19 +98,19 @@ IF(NETLIB_FOUND)
     vnl_adaptsimpson_integral.cxx vnl_adaptsimpson_integral.h
   )
 
-  AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
+  aux_source_directory(Templates vnl_algo_sources)
 
-  ADD_LIBRARY( vnl_algo ${vnl_algo_sources})
-  TARGET_LINK_LIBRARIES( vnl_algo ${NETLIB_LIBRARIES} vnl )
+  add_library( vnl_algo ${vnl_algo_sources})
+  target_link_libraries( vnl_algo ${NETLIB_LIBRARIES} vnl )
   include(GenerateExportHeader)
   generate_export_header(vnl_algo)
 
-  INSTALL_TARGETS(/lib vnl_algo)
+  install_targets(/lib vnl_algo)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/algo ${vnl_algo_sources})
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif()
 
 
-ENDIF(NETLIB_FOUND)
+endif()

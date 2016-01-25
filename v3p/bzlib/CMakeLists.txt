@@ -3,13 +3,13 @@
 #   This is the bzlib2 directory of v3p.  Current version is 1.0.5.
 #   See the README file for more details, or refer to http://bzip.org/
 
-PROJECT( bzlib C )
+project( bzlib C )
 
 find_package(BZip2)
 
-IF(NOT VXL_USING_NATIVE_BZLIB2)
+if(NOT VXL_USING_NATIVE_BZLIB2)
 
-SET( bzlib2_sources
+set( bzlib2_sources
      blocksort.c
      huffman.c
      crctable.c
@@ -19,9 +19,9 @@ SET( bzlib2_sources
      bzlib.c      bzlib.h  bzlib_private.h
 )
 
-ADD_DEFINITIONS( -D_FILE_OFFSET_BITS -DBZ_DEBUG=0 )
+add_definitions( -D_FILE_OFFSET_BITS -DBZ_DEBUG=0 )
 
-ADD_LIBRARY( bzip2 ${bzlib2_sources} )
-INSTALL_TARGETS( /lib bzip2 )
+add_library( bzip2 ${bzlib2_sources} )
+install_targets( /lib bzip2 )
 
-ENDIF(NOT VXL_USING_NATIVE_BZLIB2)
+endif()

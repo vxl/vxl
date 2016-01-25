@@ -1,17 +1,17 @@
 # gel/mrc/carmen_interface/CMakeLists.txt
 
-IF (HAS_CARMEN)
+if(HAS_CARMEN)
 
-SET(carmen_interface_sources
+set(carmen_interface_sources
  carmen_interface.cpp carmen_interface.h
  main.cpp
 )
 
-ADD_EXECUTABLE(carmen_interface ${carmen_interface_sources})
-TARGET_LINK_LIBRARIES(carmen_interface vcl)
+add_executable(carmen_interface ${carmen_interface_sources})
+target_link_libraries(carmen_interface vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-ENDIF (HAS_CARMEN)
+endif()

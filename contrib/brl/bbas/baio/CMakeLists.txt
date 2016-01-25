@@ -1,42 +1,42 @@
 # brl/bbas/baio/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
-SET(baio_sources
+set(baio_sources
     baio.h
    )
 
-IF(WIN32)
-  SET(baio_sources ${baio_sources}
+if(WIN32)
+  set(baio_sources ${baio_sources}
       baio_windows.cxx
      )
-ELSEIF(CYGWIN)
-  SET(baio_sources ${baio_sources}
+elseif(CYGWIN)
+  set(baio_sources ${baio_sources}
       baio_windows.cxx
      )
-ELSEIF(APPLE)
-  SET(baio_sources ${baio_sources}
+elseif(APPLE)
+  set(baio_sources ${baio_sources}
       baio_osx.cxx
      )
-ELSE(WIN32)
-  SET(baio_sources ${baio_sources}
+else()
+  set(baio_sources ${baio_sources}
       baio_unix.cxx
      )
-ENDIF(WIN32)
+endif()
 
-ADD_LIBRARY(baio ${baio_sources})
+add_library(baio ${baio_sources})
 
-IF(APPLE)
-    TARGET_LINK_LIBRARIES(baio c)
-ELSEIF(UNIX)
-    TARGET_LINK_LIBRARIES(baio rt)
-ENDIF(APPLE)
+if(APPLE)
+    target_link_libraries(baio c)
+elseif(UNIX)
+    target_link_libraries(baio rt)
+endif()
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib baio)
+install_targets(/lib baio)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/baio/ ${baio_sources})
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

@@ -1,7 +1,7 @@
 # This is mul/fhs/tools/CMakeLists.txt
 
-LINK_LIBRARIES( fhs mbl vimt_algo )
+link_libraries( fhs mbl vimt_algo )
 
-ADD_EXECUTABLE( find_matches find_matches.cxx )
-ADD_EXECUTABLE( mr_find_matches mr_find_matches.cxx )
-ADD_EXECUTABLE( fhs_match_tree_model fhs_match_tree_model.cxx )
+add_executable( find_matches find_matches.cxx )
+add_executable( mr_find_matches mr_find_matches.cxx )
+add_executable( fhs_match_tree_model fhs_match_tree_model.cxx )

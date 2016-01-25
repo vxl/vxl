@@ -64,6 +64,17 @@
 #  else
 #   define VCL_GCC_50
 #  endif
+# elif (__GNUC__==6)
+#  define VCL_GCC_6
+#  if (__GNUC_MINOR__ > 2 )
+#   define VCL_GCC_63
+#  elif (__GNUC_MINOR__ > 1 )
+#   define VCL_GCC_62
+#  elif (__GNUC_MINOR__ > 0 )
+#   define VCL_GCC_61
+#  else
+#   define VCL_GCC_60
+#  endif
 # else
 #  error "Dunno about this gcc"
 # endif
@@ -120,13 +131,6 @@
 #include <vcl_config_compiler.h>
 #include <vcl_config_headers.h>
 
-// This *needs* to come after vcl_config_headers.h
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-# if defined(VCL_GCC_4) || defined(VCL_GCC_5)
-#  define GNU_LIBSTDCXX_V3 1
-# endif
-#endif
-
 // -------------------- default template parameters
 #if VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 # define VCL_DFL_TYPE_PARAM_STLDECL(A, a) class A = a
@@ -146,7 +150,7 @@
 
 // if the compiler doesn't understand "export", we just leave it out.
 // gcc understands it, but ignore it noisily.
-#if !VCL_HAS_EXPORT||defined(VCL_GCC_4)||defined(VCL_GCC_5)
+#if !VCL_HAS_EXPORT || defined(VCL_GCC)
 # define VCL_TEMPLATE_EXPORT /* ignore */
 #else
 # define VCL_TEMPLATE_EXPORT export

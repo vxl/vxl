@@ -14,28 +14,28 @@
 #
 #
 
-SET(HDFS_FOUND "NO")
+set(HDFS_FOUND "NO")
 
 find_package(JNI)
 
-IF (UNIX)
+if(UNIX)
 
-  IF (JAVA_INCLUDE_PATH)
+  if(JAVA_INCLUDE_PATH)
 
-    FIND_PATH( HDFS_INCLUDE_PATH NAMES hdfs.h PATHS /usr/local/hadoop/src/c++/libhdfs )
-    FIND_PATH( HDFS_LIBRARY_PATH libhdfs.so PATHS /usr/local/hadoop/c++/Linux-amd64-64/lib )
-    FIND_LIBRARY( HDFS_LIBRARY NAMES libhdfs.so PATHS /usr/local/hadoop/c++/Linux-amd64-64/lib )
-    IF (HDFS_INCLUDE_PATH)
-      IF (HDFS_LIBRARY_PATH)
-        IF (HDFS_LIBRARY)
-          SET( HDFS_FOUND "YES")
-          SET( HDFS_INCLUDE_DIRS ${HDFS_INCLUDE_PATH} ${JNI_INCLUDE_DIRS} )
-          SET( HDFS_LIBRARIES ${HDFS_LIBRARY} ${JNI_LIBRARIES} )
-          MESSAGE( STATUS "Found HDFS" ${HDFS_INCLUDE_PATH} )
+    find_path( HDFS_INCLUDE_PATH NAMES hdfs.h PATHS /usr/local/hadoop/src/c++/libhdfs )
+    find_path( HDFS_LIBRARY_PATH libhdfs.so PATHS /usr/local/hadoop/c++/Linux-amd64-64/lib )
+    find_library( HDFS_LIBRARY NAMES libhdfs.so PATHS /usr/local/hadoop/c++/Linux-amd64-64/lib )
+    if(HDFS_INCLUDE_PATH)
+      if(HDFS_LIBRARY_PATH)
+        if(HDFS_LIBRARY)
+          set( HDFS_FOUND "YES")
+          set( HDFS_INCLUDE_DIRS ${HDFS_INCLUDE_PATH} ${JNI_INCLUDE_DIRS} )
+          set( HDFS_LIBRARIES ${HDFS_LIBRARY} ${JNI_LIBRARIES} )
+          message( STATUS "Found HDFS" ${HDFS_INCLUDE_PATH} )
 
-        ENDIF (HDFS_LIBRARY)
-      ENDIF (HDFS_LIBRARY_PATH)
-    ENDIF (HDFS_INCLUDE_PATH)
+        endif()
+      endif()
+    endif()
 
-  ENDIF (JAVA_INCLUDE_PATH)
-ENDIF (UNIX)
+  endif()
+endif()

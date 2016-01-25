@@ -200,6 +200,11 @@ for $var_exp (
   'VCL_GCC_51',
   'VCL_GCC_52',
   'VCL_GCC_53',
+  'VCL_GCC_6',
+  'VCL_GCC_60',
+  'VCL_GCC_61',
+  'VCL_GCC_62',
+  'VCL_GCC_63',
   'VCL_ICC',
   'VCL_ICC_8',
   'VCL_ICC_80',
@@ -207,7 +212,6 @@ for $var_exp (
   'VCL_WIN32',
   'VCL_VC',
   'VCL_VC_DOTNET',
-  'GNU_LIBSTDCXX_V3',
 
   # from VXL CMake configuration files
   'VXL_WARN_DEPRECATED',

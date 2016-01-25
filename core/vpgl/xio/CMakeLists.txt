@@ -1,15 +1,15 @@
 # vxl/vpgl/xio/CMakeLists.txt
 
-SET(vpgl_xio_sources
+set(vpgl_xio_sources
   vpgl_xio_lvcs.cxx   vpgl_xio_lvcs.h
 )
 
-ADD_LIBRARY(vpgl_xio ${vpgl_xio_sources} )
-TARGET_LINK_LIBRARIES( vpgl_xio vpgl vsl )
+add_library(vpgl_xio ${vpgl_xio_sources} )
+target_link_libraries( vpgl_xio vpgl vsl )
 
-INSTALL_TARGETS(/lib vpgl_xio)
+install_targets(/lib vpgl_xio)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/xio ${vpgl_xio_sources})
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

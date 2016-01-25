@@ -1,12 +1,12 @@
 # This is mul/vil3d/io/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vil3d_io_test_all
+add_executable( vil3d_io_test_all
   test_driver.cxx
   test_image_view_io.cxx
 )
-TARGET_LINK_LIBRARIES( vil3d_io_test_all vil3d_io vil3d vpl testlib )
+target_link_libraries( vil3d_io_test_all vil3d_io vil3d vpl testlib )
 
-ADD_TEST( NAME vil3d_io_test_image_view_io COMMAND $<TARGET_FILE:vil3d_io_test_all> test_image_view_io )
+add_test( NAME vil3d_io_test_image_view_io COMMAND $<TARGET_FILE:vil3d_io_test_all> test_image_view_io )
 
-ADD_EXECUTABLE( vil3d_io_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vil3d_io_test_include vil3d_io )
+add_executable( vil3d_io_test_include test_include.cxx )
+target_link_libraries( vil3d_io_test_include vil3d_io )

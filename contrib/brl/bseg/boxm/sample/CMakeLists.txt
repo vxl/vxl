@@ -1,6 +1,6 @@
 # brl/bseg/boxm/sample/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-SET(boxm_sample_sources
+include_directories( ${MUL_INCLUDE_DIR} )
+set(boxm_sample_sources
     boxm_edge_sample.h                        boxm_edge_sample.txx
     boxm_edge_tangent_sample.h                boxm_edge_tangent_sample.txx
     boxm_inf_line_sample.h                    boxm_inf_line_sample.txx
@@ -16,14 +16,14 @@ SET(boxm_sample_sources
     dummy.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates boxm_sample_sources)
+aux_source_directory(Templates boxm_sample_sources)
 
-ADD_LIBRARY(boxm_sample ${boxm_sample_sources})
-TARGET_LINK_LIBRARIES(boxm_sample boxm vgl_io bsta vil vgl vbl vsl vcl)
+add_library(boxm_sample ${boxm_sample_sources})
+target_link_libraries(boxm_sample boxm vgl_io bsta vil vgl vbl vsl vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 #processors for the samples
 add_subdirectory(algo)

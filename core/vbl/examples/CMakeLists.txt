@@ -1,14 +1,14 @@
 # core/vbl/examples/CMakeLists.txt
 
-SET( vbl_example_templates_sources
+set( vbl_example_templates_sources
   # empty
 )
-AUX_SOURCE_DIRECTORY( Templates vbl_example_templates_sources )
+aux_source_directory( Templates vbl_example_templates_sources )
 
-ADD_LIBRARY( vbl_example_templates ${vbl_example_templates_sources} )
-TARGET_LINK_LIBRARIES( vbl_example_templates vbl )
+add_library( vbl_example_templates ${vbl_example_templates_sources} )
+target_link_libraries( vbl_example_templates vbl )
 
-ADD_EXECUTABLE( vbl_smart_ptr_example
+add_executable( vbl_smart_ptr_example
   vbl_smart_ptr_example.cxx    vbl_smart_ptr_example.h
 )
-TARGET_LINK_LIBRARIES( vbl_smart_ptr_example vbl_example_templates vbl vcl )
+target_link_libraries( vbl_smart_ptr_example vbl_example_templates vbl vcl )

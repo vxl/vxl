@@ -1,6 +1,6 @@
 # gel/vsol/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vsol_test_all
+add_executable( vsol_test_all
   test_driver.cxx
   test_vsol_point_2d.cxx
   test_vsol_group_2d.cxx
@@ -20,25 +20,25 @@ ADD_EXECUTABLE( vsol_test_all
   test_vsol_tetrahedron.cxx
   test_vsol_io.cxx
 )
-TARGET_LINK_LIBRARIES( vsol_test_all vsol vnl vgl vbl_io vsl vpl testlib )
+target_link_libraries( vsol_test_all vsol vnl vgl vbl_io vsl vpl testlib )
 
-ADD_TEST( NAME vsol_test_point_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_point_2d)
-ADD_TEST( NAME vsol_test_group_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_group_2d)
-ADD_TEST( NAME vsol_test_line_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_line_2d)
-ADD_TEST( NAME vsol_test_conic_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_conic_2d)
-ADD_TEST( NAME vsol_test_triangle_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_triangle_2d)
-ADD_TEST( NAME vsol_test_rectangle_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_rectangle_2d)
-ADD_TEST( NAME vsol_test_polygon_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_polygon_2d)
-ADD_TEST( NAME vsol_test_digital_curve_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_digital_curve_2d)
-ADD_TEST( NAME vsol_test_digital_curve_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_digital_curve_3d)
-ADD_TEST( NAME vsol_test_point_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_point_3d)
-ADD_TEST( NAME vsol_test_group_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_group_3d)
-ADD_TEST( NAME vsol_test_line_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_line_3d)
-ADD_TEST( NAME vsol_test_triangle_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_triangle_3d)
-ADD_TEST( NAME vsol_test_rectangle_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_rectangle_3d)
-ADD_TEST( NAME vsol_test_polygon_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_polygon_3d)
-ADD_TEST( NAME vsol_test_tetrahedron COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_tetrahedron)
-ADD_TEST( NAME vsol_test_io COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_io)
+add_test( NAME vsol_test_point_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_point_2d)
+add_test( NAME vsol_test_group_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_group_2d)
+add_test( NAME vsol_test_line_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_line_2d)
+add_test( NAME vsol_test_conic_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_conic_2d)
+add_test( NAME vsol_test_triangle_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_triangle_2d)
+add_test( NAME vsol_test_rectangle_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_rectangle_2d)
+add_test( NAME vsol_test_polygon_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_polygon_2d)
+add_test( NAME vsol_test_digital_curve_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_digital_curve_2d)
+add_test( NAME vsol_test_digital_curve_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_digital_curve_3d)
+add_test( NAME vsol_test_point_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_point_3d)
+add_test( NAME vsol_test_group_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_group_3d)
+add_test( NAME vsol_test_line_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_line_3d)
+add_test( NAME vsol_test_triangle_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_triangle_3d)
+add_test( NAME vsol_test_rectangle_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_rectangle_3d)
+add_test( NAME vsol_test_polygon_3d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_polygon_3d)
+add_test( NAME vsol_test_tetrahedron COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_tetrahedron)
+add_test( NAME vsol_test_io COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_io)
 
-ADD_EXECUTABLE( vsol_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vsol_test_include vsol )
+add_executable( vsol_test_include test_include.cxx )
+target_link_libraries( vsol_test_include vsol )

@@ -1,9 +1,9 @@
 # contrib/brl/bbas/volm/desc/exe/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/ )
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/ )
 
-ADD_EXECUTABLE( volm_desc_land_exe
+add_executable( volm_desc_land_exe
                 volm_desc_land_exe.cxx
               )
 
-TARGET_LINK_LIBRARIES( volm_desc_land_exe volm_desc )
+target_link_libraries( volm_desc_land_exe volm_desc )

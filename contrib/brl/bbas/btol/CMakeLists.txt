@@ -6,11 +6,11 @@ doxygen_add_library(contrib/brl/bbas/btol
   PACKAGE contrib/brl
   )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${GEL_INCLUDE_DIR} )
 
-SET(btol_sources
+set(btol_sources
     dll.h
 
     btol_edge_algs.cxx     btol_edge_algs.h
@@ -18,12 +18,12 @@ SET(btol_sources
     btol_face_algs.cxx     btol_face_algs.h
 )
 
-ADD_LIBRARY(btol ${btol_sources})
-INSTALL_TARGETS(/lib btol)
+add_library(btol ${btol_sources})
+install_targets(/lib btol)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/btol ${btol_sources})
 
-TARGET_LINK_LIBRARIES(btol bsol vtol vdgl vsol vgl vnl)
+target_link_libraries(btol bsol vtol vdgl vsol vgl vnl)
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

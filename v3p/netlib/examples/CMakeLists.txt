@@ -1,14 +1,14 @@
-LINK_LIBRARIES(netlib)
+link_libraries(netlib)
 
-INCLUDE(${VXL_CMAKE_DIR}/FindNetlib.cmake)
-IF(NETLIB_FOUND)
-  INCLUDE_DIRECTORIES(${NETLIB_INCLUDE_DIR})
+include(${VXL_CMAKE_DIR}/FindNetlib.cmake)
+if(NETLIB_FOUND)
+  include_directories(${NETLIB_INCLUDE_DIR})
 
   find_package(X11)
-  IF(X11_FOUND)
-    INCLUDE_DIRECTORIES(${X11_INCLUDE_DIR})
-    ADD_EXECUTABLE(netlib_showme showme.c)
+  if(X11_FOUND)
+    include_directories(${X11_INCLUDE_DIR})
+    add_executable(netlib_showme showme.c)
     target_link_libraries(netlib_showme ${X11_LIBRARIES})
-  ENDIF(X11_FOUND)
+  endif()
 
-ENDIF(NETLIB_FOUND)
+endif()

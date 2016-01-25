@@ -1,20 +1,20 @@
 # basic/bxml/tests/CMakeLists.txt
 # Tests for bxml library
-IF( EXPAT_FOUND )
- IF(EXPATPP_FOUND)
-  ADD_EXECUTABLE( bxml_test_all
+if( EXPAT_FOUND )
+ if(EXPATPP_FOUND)
+  add_executable( bxml_test_all
    test_driver.cxx
    test_io.cxx
    test_find.cxx
   )
 
-  TARGET_LINK_LIBRARIES( bxml_test_all bxml testlib expat expatpp)
+  target_link_libraries( bxml_test_all bxml testlib expat expatpp)
 
-  ADD_TEST( NAME bxml_test_io COMMAND $<TARGET_FILE:bxml_test_all>
+  add_test( NAME bxml_test_io COMMAND $<TARGET_FILE:bxml_test_all>
                                  test_io ${CMAKE_CURRENT_SOURCE_DIR}/ )
-  ADD_TEST( NAME bxml_test_find COMMAND $<TARGET_FILE:bxml_test_all>
+  add_test( NAME bxml_test_find COMMAND $<TARGET_FILE:bxml_test_all>
                                  test_find ${CMAKE_CURRENT_SOURCE_DIR}/ )
- ENDIF( EXPATPP_FOUND )
-ENDIF( EXPAT_FOUND )
-ADD_EXECUTABLE( bxml_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bxml_test_include bxml )
+ endif()
+endif()
+add_executable( bxml_test_include test_include.cxx )
+target_link_libraries( bxml_test_include bxml )

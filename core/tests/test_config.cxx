@@ -1158,6 +1158,46 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
+  vcl_cout << "VCL_GCC_6 ";
+#ifdef VCL_GCC_6
+  vcl_cout << "is set to " << quote(VCL_GCC_6);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_60 ";
+#ifdef VCL_GCC_60
+  vcl_cout << "is set to " << quote(VCL_GCC_60);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_61 ";
+#ifdef VCL_GCC_61
+  vcl_cout << "is set to " << quote(VCL_GCC_61);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_62 ";
+#ifdef VCL_GCC_62
+  vcl_cout << "is set to " << quote(VCL_GCC_62);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
+  vcl_cout << "VCL_GCC_63 ";
+#ifdef VCL_GCC_63
+  vcl_cout << "is set to " << quote(VCL_GCC_63);
+#else
+  vcl_cout << "is not set";
+#endif
+  vcl_cout << vcl_endl;
+
   vcl_cout << "VCL_ICC ";
 #ifdef VCL_ICC
   vcl_cout << "is set to " << quote(VCL_ICC);
@@ -1209,14 +1249,6 @@ void test_config()
   vcl_cout << "VCL_VC_DOTNET ";
 #ifdef VCL_VC_DOTNET
   vcl_cout << "is set to " << quote(VCL_VC_DOTNET);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "GNU_LIBSTDCXX_V3 ";
-#ifdef GNU_LIBSTDCXX_V3
-  vcl_cout << "is set to " << quote(GNU_LIBSTDCXX_V3);
 #else
   vcl_cout << "is not set";
 #endif

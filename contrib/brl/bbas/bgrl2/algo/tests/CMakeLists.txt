@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( bgrl2_algo_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bgrl2_algo_test_include bgrl2_algo)
+add_executable( bgrl2_algo_test_include test_include.cxx )
+target_link_libraries( bgrl2_algo_test_include bgrl2_algo)

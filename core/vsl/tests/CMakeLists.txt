@@ -1,8 +1,8 @@
 # This is core/vsl/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vsl testlib vpl )
+link_libraries( vsl testlib vpl )
 
-ADD_EXECUTABLE( vsl_test_all
+add_executable( vsl_test_all
   test_driver.cxx
   test_indent.cxx
   test_binary_io.cxx
@@ -21,26 +21,26 @@ ADD_EXECUTABLE( vsl_test_all
   test_block_rle_io.cxx
 )
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(test_map_io.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(test_map_io.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif()
 
-ADD_TEST( NAME vsl_test_indent COMMAND $<TARGET_FILE:vsl_test_all> test_indent)
-ADD_TEST( NAME vsl_test_binary_io COMMAND $<TARGET_FILE:vsl_test_all> test_binary_io)
+add_test( NAME vsl_test_indent COMMAND $<TARGET_FILE:vsl_test_all> test_indent)
+add_test( NAME vsl_test_binary_io COMMAND $<TARGET_FILE:vsl_test_all> test_binary_io)
 
-ADD_TEST( NAME vsl_test_arbitrary_length_int_conversion COMMAND $<TARGET_FILE:vsl_test_all>
+add_test( NAME vsl_test_arbitrary_length_int_conversion COMMAND $<TARGET_FILE:vsl_test_all>
                                            test_arbitrary_length_int_conversion)
-ADD_TEST( NAME vsl_test_clipon_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_clipon_polymorphic_io)
-ADD_TEST( NAME vsl_test_complex_io COMMAND $<TARGET_FILE:vsl_test_all> test_complex_io)
-ADD_TEST( NAME vsl_test_deque_io COMMAND $<TARGET_FILE:vsl_test_all> test_deque_io)
-ADD_TEST( NAME vsl_test_list_io COMMAND $<TARGET_FILE:vsl_test_all> test_list_io)
-ADD_TEST( NAME vsl_test_map_io COMMAND $<TARGET_FILE:vsl_test_all> test_map_io)
-ADD_TEST( NAME vsl_test_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_polymorphic_io)
-ADD_TEST( NAME vsl_test_set_io COMMAND $<TARGET_FILE:vsl_test_all> test_set_io)
-ADD_TEST( NAME vsl_test_stack_io COMMAND $<TARGET_FILE:vsl_test_all> test_stack_io)
-ADD_TEST( NAME vsl_test_string_io COMMAND $<TARGET_FILE:vsl_test_all> test_string_io)
-ADD_TEST( NAME vsl_test_vector_io COMMAND $<TARGET_FILE:vsl_test_all> test_vector_io)
-ADD_TEST( NAME vsl_test_block_rle_io COMMAND $<TARGET_FILE:vsl_test_all> test_block_rle_io)
+add_test( NAME vsl_test_clipon_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_clipon_polymorphic_io)
+add_test( NAME vsl_test_complex_io COMMAND $<TARGET_FILE:vsl_test_all> test_complex_io)
+add_test( NAME vsl_test_deque_io COMMAND $<TARGET_FILE:vsl_test_all> test_deque_io)
+add_test( NAME vsl_test_list_io COMMAND $<TARGET_FILE:vsl_test_all> test_list_io)
+add_test( NAME vsl_test_map_io COMMAND $<TARGET_FILE:vsl_test_all> test_map_io)
+add_test( NAME vsl_test_polymorphic_io COMMAND $<TARGET_FILE:vsl_test_all> test_polymorphic_io)
+add_test( NAME vsl_test_set_io COMMAND $<TARGET_FILE:vsl_test_all> test_set_io)
+add_test( NAME vsl_test_stack_io COMMAND $<TARGET_FILE:vsl_test_all> test_stack_io)
+add_test( NAME vsl_test_string_io COMMAND $<TARGET_FILE:vsl_test_all> test_string_io)
+add_test( NAME vsl_test_vector_io COMMAND $<TARGET_FILE:vsl_test_all> test_vector_io)
+add_test( NAME vsl_test_block_rle_io COMMAND $<TARGET_FILE:vsl_test_all> test_block_rle_io)
 
 # Don't add test_vlarge_block_io to the automatic list. It does nasty things
 # to memory which can result in wierd error messages, system lockup, and other
@@ -57,7 +57,7 @@ ADD_TEST( NAME vsl_test_block_rle_io COMMAND $<TARGET_FILE:vsl_test_all> test_bl
 # x86_64, Linux 2.6, gcc 4.0.2, ulimit -v 2000000, test passes
 
 
-ADD_EXECUTABLE( vsl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vsl_test_include vsl )
-ADD_EXECUTABLE( vsl_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( vsl_test_template_include vsl )
+add_executable( vsl_test_include test_include.cxx )
+target_link_libraries( vsl_test_include vsl )
+add_executable( vsl_test_template_include test_template_include.cxx )
+target_link_libraries( vsl_test_template_include vsl )

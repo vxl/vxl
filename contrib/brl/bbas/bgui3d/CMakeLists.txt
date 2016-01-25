@@ -6,40 +6,40 @@ doxygen_add_library(contrib/brl/bbas/bgui3d
   DESCRIPTION "Brown 3D VGUI Extention Library (using Coin3D)"
  )
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
 # determines if vgui is built and opengl is available
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
-SET (HAS_BGUI3D "NO")
-IF (BUILD_BGUI3D)
+set(HAS_BGUI3D "NO")
+if(BUILD_BGUI3D)
 
   # Find the Coin3D library
   find_package(Coin3D)
 
-  IF (COIN3D_FOUND)
-    INCLUDE_DIRECTORIES( ${COIN3D_INCLUDE_DIR} )
-    SET( HAS_BGUI3D "YES" )
-    ADD_DEFINITIONS( -DHAS_BGUI3D )
-  ENDIF (COIN3D_FOUND)
+  if(COIN3D_FOUND)
+    include_directories( ${COIN3D_INCLUDE_DIR} )
+    set( HAS_BGUI3D "YES" )
+    add_definitions( -DHAS_BGUI3D )
+  endif()
 
   # Find the SimVoleon library
-  INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindSIMVoleon.cmake )
+  include( ${VXL_CMAKE_DIR}/NewCMake/FindSIMVoleon.cmake )
 
-  IF (SIMVOLEON_FOUND)
-    INCLUDE_DIRECTORIES( ${SIMVOLEON_INCLUDE_DIR} )
-  ENDIF (SIMVOLEON_FOUND)
+  if(SIMVOLEON_FOUND)
+    include_directories( ${SIMVOLEON_INCLUDE_DIR} )
+  endif()
 
-ENDIF (BUILD_BGUI3D)
+endif()
 
 # Flag that determines if we were able to successfully build bgui3d.
 # Initialize to NO. Change below if yes.
-SET(BGUI3D_FOUND "NO" CACHE INTERNAL "Was bgui3d successfully built?" )
+set(BGUI3D_FOUND "NO" CACHE INTERNAL "Was bgui3d successfully built?" )
 
 # If Coin3d was found and building bgui3d
-IF (HAS_BGUI3D)
-SET(bgui3d_sources
+if(HAS_BGUI3D)
+set(bgui3d_sources
     bgui3d.cxx                      bgui3d.h
     bgui3d_translate_event.cxx      bgui3d_translate_event.h
     bgui3d_file_io.cxx              bgui3d_file_io.h
@@ -53,20 +53,20 @@ SET(bgui3d_sources
     bgui3d_examiner_slider_tableau.cxx    bgui3d_examiner_slider_tableau.h    bgui3d_examiner_slider_tableau_sptr.h
    )
 
-ADD_LIBRARY(bgui3d  ${bgui3d_sources})
-SET(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )
-TARGET_LINK_LIBRARIES(bgui3d ${COIN3D_LIBRARY} vgui vpgl vnl_algo vnl vgl_algo vgl vul)
+add_library(bgui3d  ${bgui3d_sources})
+set(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )
+target_link_libraries(bgui3d ${COIN3D_LIBRARY} vgui vpgl vnl_algo vnl vgl_algo vgl vul)
 
-IF (SIMVOLEON_FOUND)
-  TARGET_LINK_LIBRARIES(bgui3d ${SIMVOLEON_LIBRARY})
-ENDIF (SIMVOLEON_FOUND)
+if(SIMVOLEON_FOUND)
+  target_link_libraries(bgui3d ${SIMVOLEON_LIBRARY})
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()
 
-ENDIF (HAS_BGUI3D)
+endif()
