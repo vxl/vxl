@@ -190,9 +190,6 @@ set( vcl_sources
   iso/vcl_typeinfo.h
   iso/vcl_valarray.h
 
-  gcc/vcl_cmath.h
-  gcc/vcl_cstdlib.h
-
   win32-vc9/vcl_cmath.h
   win32-vc9/vcl_complex.h
   win32-vc9/vcl_cstdlib.h
