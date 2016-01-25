@@ -243,7 +243,7 @@ vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(vcl_vector<vgui_tview_ta
   vcl_cerr << "vgui_tview_tableau::find_closest_icon() number of icons = " << icons.size() << '\n';
 #endif
 
-  float closest_dist /*quell SunPro warning*/= -1;
+  float closest_dist = -1;
   vgui_tableau_sptr closest;
 
   for (vcl_vector<icon>::const_iterator i_iter = icons.begin();

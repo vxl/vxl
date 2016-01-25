@@ -326,14 +326,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_SUNPRO_CLASS_SCOPE_HACK(A) ";
-#ifdef VCL_SUNPRO_CLASS_SCOPE_HACK
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CLASS_SCOPE_HACK(A));
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_HAS_EXCEPTIONS ";
 #ifdef VCL_HAS_EXCEPTIONS
   vcl_cout << "is set to " << quote(VCL_HAS_EXCEPTIONS);
@@ -1094,38 +1086,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VCL_SUNPRO_CC ";
-#ifdef VCL_SUNPRO_CC
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SUNPRO_CC_5 ";
-#ifdef VCL_SUNPRO_CC_5
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_5);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SUNPRO_CC_50 ";
-#ifdef VCL_SUNPRO_CC_50
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_50);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "VCL_SUNPRO_CC_56 ";
-#ifdef VCL_SUNPRO_CC_56
-  vcl_cout << "is set to " << quote(VCL_SUNPRO_CC_56);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VCL_GCC ";
 #ifdef VCL_GCC
   vcl_cout << "is set to " << quote(VCL_GCC);
@@ -1441,14 +1401,6 @@ void test_config()
   vcl_cout << "__INTEL_CXXLIB_ICC ";
 #ifdef __INTEL_CXXLIB_ICC
   vcl_cout << "is set to " << quote(__INTEL_CXXLIB_ICC);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
-  vcl_cout << "__SUNPRO_CC ";
-#ifdef __SUNPRO_CC
-  vcl_cout << "is set to " << quote(__SUNPRO_CC);
 #else
   vcl_cout << "is not set";
 #endif

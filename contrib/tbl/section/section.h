@@ -181,7 +181,6 @@ section<T,N>& section<T,N>::operator= (section<T,N> const& s)
   for (uint i=0; i<N; ++i) ROI_start[i]=s.ROI_start[i], ROI_end[i]=s.ROI_end[i];
   return *this;
 }
-#ifndef __SUNPRO_CC
 
 //: Returns part of this section, namely a slice of dimension dim.
 // When dim = the last dimension (the default), no new allocation is made;
@@ -212,7 +211,6 @@ section<T,N-1> Project(section<T,N> const& s, uint slice=0, int d=-1, bool copy=
   for (; i<N-1; ++i)t.ROI_start[i]=s.ROI_start[i+1],t.ROI_end[i]=s.ROI_end[i+1];
   return t;
 }
-#endif
 
 //: const iterator for a section<T,N>'s ROI, with optional additional ROI condition
 

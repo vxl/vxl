@@ -3,13 +3,8 @@
 
 #include "vcl_compiler.h"
 
-// -------------------- sunpro 5.0
-#if defined(VCL_SUNPRO_CC_50) && !defined(VCL_SUNPRO_CC_56)
-# include "sunpro/vcl_vector.h"
 // -------------------- iso
-#else
-# include "iso/vcl_vector.h"
-#endif
+#include "iso/vcl_vector.h"
 
 // Intel compiler's std::swap can't handle the special bit-iterator of
 // vector<bool>. But, on systems with newer GCCs, the Intel compiler

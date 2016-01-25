@@ -46,8 +46,6 @@ $debug = 0;
 while (<>)
 {
     # preprocessing
-    s/\bVCL_SUNPRO_CLASS_SCOPE_HACK\s*\([^()]*\)//g;
-    s/\bVCL_SUNPRO_ALLOCATOR_HACK\s*\(([^()]*)\)/$1/g;
     s/\bVCL_CAN_STATIC_CONST_INIT_(INT|FLOAT)\b/1/g;
     s/\bVCL_STATIC_CONST_INIT_(INT|FLOAT)\s*\(([^()]*)\)/= $2/g;
     s/\bVCL_DFL_TYPE_PARAM_STLDECL\s*\(([^,()]*),([^,()]*)\)/class $1 = $2 /g;

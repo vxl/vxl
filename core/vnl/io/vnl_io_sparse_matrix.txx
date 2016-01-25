@@ -65,14 +65,8 @@ template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vnl_sparse_matrix<T> & p)
 {
   typedef vnl_sparse_matrix_pair<T> pair_t;
-#if defined(VCL_SUNPRO_CC)
-  // SunPro is the broken one.
-  typedef vcl_vector < typename pair_t > row;
-  typedef vcl_vector < typename row > vnl_sparse_matrix_elements;
-#else
   typedef vcl_vector < pair_t > row;
   typedef vcl_vector < row > vnl_sparse_matrix_elements;
-#endif
 
   row rw;
   vnl_sparse_matrix<T> v=p;
@@ -101,14 +95,8 @@ void vsl_b_read(vsl_b_istream &is, vnl_sparse_matrix<T> & p)
   if (!is) return;
 
   typedef vnl_sparse_matrix_pair<T> pair_t;
-#if defined(VCL_SUNPRO_CC)
-  // SunPro is the broken one.
-  typedef vcl_vector < typename pair_t > row;
-  typedef vcl_vector < typename row > vnl_sparse_matrix_elements;
-#else
   typedef vcl_vector < pair_t > row;
   typedef vcl_vector < row > vnl_sparse_matrix_elements;
-#endif
 
   short ver;
   unsigned n_rows;

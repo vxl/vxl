@@ -12,12 +12,6 @@
 
 #include <vil1/vil1_image.h>
 
-#ifdef __SUNPRO_CC
-# define unpro_const /*const*/
-#else
-# define unpro_const const
-#endif
-
 // from (Rothwell) Canny
 void osl_canny_smooth_rothwell(vil1_image const &image,
                                float const *kernel_, int width_, int k_size_,
@@ -26,7 +20,7 @@ void osl_canny_smooth_rothwell(vil1_image const &image,
 template <class T>
 void osl_canny_smooth_rothwell(T const *const *in, int xsize_, int ysize_,
                                float const *kernel_, int width_, int k_size_,
-                               float * unpro_const *smooth_);
+                               float * const *smooth_);
 
 void osl_canny_smooth_rothwell_adaptive(vil1_image const &image,
                                         int x0, int y0, int image_size,
@@ -37,7 +31,7 @@ template <class T>
 void osl_canny_smooth_rothwell_adaptive(T const * const *in, int xsize_, int ysize_,
                                         int x0, int y0, int image_size,
                                         float const *kernel_, int width_, int k_size_,
-                                        float * unpro_const *dx, float * unpro_const *dy, float * unpro_const *grad);
+                                        float * const *dx, float * const *dy, float * const *grad);
 
 // from CannyOX
 void osl_canny_smooth(vil1_image const &in,
@@ -47,6 +41,6 @@ void osl_canny_smooth(vil1_image const &in,
 template <class T>
 void osl_canny_smooth(T const * const *in, int xsize_, int ysize_,
                       float const *kernel_, int width_, float const *sub_area_OX_,
-                      float * unpro_const * image_out);
+                      float * const * image_out);
 
 #endif // osl_canny_smooth_h_

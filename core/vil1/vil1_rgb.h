@@ -32,12 +32,6 @@
 #include <vcl_iostream.h>
 #include <vil1/vil1_clamp.h>
 
-#ifdef VCL_SUNPRO_CC
-# define InLine inline
-#else
-# define InLine
-#endif
-
 //: This is the appropriate pixel type for 24-bit colour images.
 //
 //    Currently also includes the following `utilities':
@@ -122,7 +116,7 @@ vil1_rgb_call(macro)
 # undef macro
 
 # define macro(S) \
-  InLine vil1_rgb<T>& operator=(vil1_rgb<S > const& that);
+  vil1_rgb<T>& operator=(vil1_rgb<S > const& that);
 vil1_rgb_call(macro)
 # undef macro
 #endif
