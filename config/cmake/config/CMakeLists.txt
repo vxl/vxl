@@ -399,12 +399,6 @@ unset(VCL_CXX_HAS_HEADER_LIMITS)
 
 if(NOT VCL_CXX_HAS_HEADER_CFLOAT)
   message(FATAL_ERROR "Compiler is required to have cfloat")
-else()
-  PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_PROCESSOR_HAS_INFINITY)
-  if(NOT VCL_PROCESSOR_HAS_INFINITY)
-    message(FATAL_ERROR "Compiler is required to have HAS_INFINITY")
-  endif()
-  unset(VCL_PROCESSOR_HAS_INFINITY)
 endif()
 unset(VCL_CXX_HAS_HEADER_CFLOAT)
 
