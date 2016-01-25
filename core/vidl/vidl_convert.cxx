@@ -20,7 +20,7 @@
 #include "vidl_pixel_iterator.txx"
 #include "vidl_color.h"
 #include <vidl/vidl_config.h>
-#ifdef VIDL_HAS_FFMPEG
+#if VIDL_HAS_FFMPEG
 // make use of the convert function using ffmpeg
 #include "vidl_ffmpeg_convert.h"
 #endif
@@ -495,7 +495,7 @@ bool vidl_convert_frame(vidl_frame const& in_frame,
   // call the appropriate function in the conversion table
   bool const ret = conversion_table(in_frame, out_frame);
 
-#ifdef VIDL_HAS_FFMPEG
+#if VIDL_HAS_FFMPEG
   // Fall back to the function that utilizes ffmpeg's conversion
   if (!ret)
     return vidl_ffmpeg_convert(in_frame, out_frame);
