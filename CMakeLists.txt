@@ -14,9 +14,11 @@
 #   vxl-maintainers@lists.sf.net
 cmake_minimum_required(VERSION 2.8.9)
 
-# Support for CMake 2.6
-if( COMMAND CMAKE_POLICY )
+# Set policies for cmake
+if( POLICY CMP0003 )
   cmake_policy(SET CMP0003 NEW)
+endif()
+if( POLICY CMP0033 )
   ####
   # Remove warning by disabling test.  The proper fix
   # will require careful effort.
@@ -25,10 +27,6 @@ if( COMMAND CMAKE_POLICY )
   # and https://github.com/vxl/vxl/pull/122
   cmake_policy(SET CMP0033 OLD)
 endif()
-
-# CMake 2.8 stuff
-set( CMAKE_LEGACY_CYGWIN_WIN32 0 ) # Remove when CMake >= 2.8.4 is required
-
 # Use @rpath on OS X
 if( POLICY CMP0042 )
   cmake_policy(SET CMP0042 NEW)
