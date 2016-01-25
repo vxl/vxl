@@ -260,33 +260,36 @@ namespace vnl_math
 
 namespace
 {
-template <typename OutType, typename T> OutType hypot(T x, T y)
+template <typename OutType, typename T> OutType hypot(const T x, const T y)
 {
-    T d1 = vnl_math::abs(x);
-    T d2 = vnl_math::abs(y);
-    T ret_val = vnl_math::max(d1,d2);
-    if (ret_val == 0)
+    T ret_val;
+    {
+    const T d1 = vnl_math::abs(x);
+    const T d2 = vnl_math::abs(y);
+    ret_val = vnl_math::max(d1,d2);
+    if (ret_val == static_cast<T>(0))
        {
-       return 0.0;
+       return static_cast<OutType>(0);
        }
-
-    d2 = vnl_math::abs(x);
-    T d3 = vnl_math::abs(y);
-    d1 = vnl_math::min(d2,d3) / ret_val;
-
+    }
+    {
+    const T d2 = vnl_math::abs(x);
+    const T d3 = vnl_math::abs(y);
+    T d1 = vnl_math::min(d2,d3) / ret_val;
 
     T r = d1 * d1;
     T t = r + 4.0;
     while (t != 4.0)
-    {
-        const T s = r / t;
-        const T u = s * 2. + 1.;
-        ret_val = u * ret_val;
-        d1 = s / u;
-        r = d1 * d1 * r;
-        t = r + 4.0;
+      {
+      const T s = r / t;
+      const T u = s * 2. + 1.;
+      ret_val = u * ret_val;
+      d1 = s / u;
+      r = d1 * d1 * r;
+      t = r + 4.0;
+      }
     }
-    return ret_val;
+    return static_cast<OutType>(ret_val);
 }
 }
 
