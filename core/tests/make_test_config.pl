@@ -240,13 +240,11 @@ for $var_exp (
   '__INTEL_COMPILER',   # icc
   '__INTEL_CXXLIB_ICC', # icc using its own library?
   '_MSC_VER',           # msvc++
-  '_COMPILER_VERSION',  # sgi
 
   # OS related
   '__CYGWIN__',         # cygwin
   '__MINGW32__',        # MinGW
   '_WIN32',             # windows
-  '__sgi',              # sgi
   '__alpha__',          # Alpha
   '__APPLE__',          # MacOS X
   'macintosh',          #

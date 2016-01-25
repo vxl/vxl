@@ -209,10 +209,6 @@ SET( vcl_sources
   win32-vc9/vcl_cstdlib.h
   win32-vc9/vcl_valarray.h
 
-  stlport/vcl_cmath.h
-  stlport/vcl_complex.h
-  stlport/vcl_cstdlib.h
-
   # The following shall not be used other than as reference count for smart pointers
   vcl_atomic_count.h
   internal/vcl_atomic_count_gcc.h
@@ -242,8 +238,6 @@ ENDIF(UNIX)
 # Installation
 INSTALL_TARGETS(/lib vcl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/vcl ${vcl_sources})
-
-# INCLUDE( ${vxl_SOURCE_DIR}/vcl/LinkSTLPort.cmake )
 
 IF( BUILD_TESTING)
   add_subdirectory(tests)

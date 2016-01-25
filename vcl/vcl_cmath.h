@@ -39,9 +39,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_STLPORT)
-# include "stlport/vcl_cmath.h"
-#elif defined(VCL_GCC)
+#if defined(VCL_GCC)
 # include "gcc/vcl_cmath.h"
 #elif defined(VCL_VC_9)     // C++ .NET earlier than 2003 is not iso compliant
 # include "win32-vc9/vcl_cmath.h"
