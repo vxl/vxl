@@ -143,7 +143,7 @@ void test_nullvector(char const *type, double max_err, T *, vnl_random &rng)
 
 static void test_speed(vnl_random& rng)
 {
-  int ms_heap, ms_stack, ms_nosvd;
+  int ms_heap;
   {
     double sum=0;
     const vcl_clock_t timer_01 = vcl_clock();
@@ -155,9 +155,10 @@ static void test_speed(vnl_random& rng)
       sum += svd.inverse().fro_norm();
     }
     const vcl_clock_t timer_02 = vcl_clock();
-    ms_heap =  ( timer_02 - timer_01)/ (CLOCKS_PER_SEC/1000);
+    ms_heap =  ( ( timer_02 - timer_01)*1000 ) /CLOCKS_PER_SEC;
     vcl_cout << "vnl_svd time for 10000 3x3 inversions: " << ms_heap << "ms." << vcl_endl;
   }
+  int ms_stack;
   {
     double sum=0;
     const vcl_clock_t timer_03 = vcl_clock();
@@ -169,9 +170,10 @@ static void test_speed(vnl_random& rng)
       sum += svd.inverse().fro_norm();
     }
     const vcl_clock_t timer_04 = vcl_clock();
-    ms_stack = ( timer_04 - timer_03)/ (CLOCKS_PER_SEC/1000);
+    ms_stack = ( ( timer_04 - timer_03)*1000 ) /CLOCKS_PER_SEC;
     vcl_cout << "vnl_svd_fixed time for 10000 3x3 inversions: " << ms_stack << "ms." << vcl_endl;
   }
+  int ms_nosvd;
   {
     double sum=0;
     const vcl_clock_t timer_05 = vcl_clock();
@@ -182,10 +184,13 @@ static void test_speed(vnl_random& rng)
       sum += vnl_inverse(A).fro_norm();
     }
     const vcl_clock_t timer_06 = vcl_clock();
-    ms_nosvd = ( timer_06 - timer_05)/ (CLOCKS_PER_SEC/1000);
+    ms_nosvd = ( ( timer_06 - timer_05)*1000 ) /CLOCKS_PER_SEC;
     vcl_cout << "(c.f. vnl_inverse no-SVD time for 10000 3x3 inversions: " << ms_nosvd << "ms.)" << vcl_endl;
   }
-  TEST("Stack memory SVD is faster than heap memory SVD", ms_stack <= ms_heap, true);
+  vcl_cout << "Stack Memory Time: " << ms_stack << " vs. Heap Memory Time: " << ms_heap << vcl_endl;
+  // This test should be allowed to fail.  The timing test above is not very good.  It
+  // confounds the random number generation and compares computations of different matricies.
+  // TEST("Stack memory SVD is faster than heap memory SVD", ms_stack <= ms_heap, true);
 }
 
 // Driver
