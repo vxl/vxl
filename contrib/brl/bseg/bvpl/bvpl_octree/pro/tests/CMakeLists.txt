@@ -9,7 +9,7 @@ ADD_EXECUTABLE( bvpl_octree_pro_test_all
 TARGET_LINK_LIBRARIES( bvpl_octree_pro_test_all testlib bvpl_octree_pro bvpl_octree boxm boxm_pro boxm_sample boxm_util boct bvpl bprb brdb sdet vul vcl)
 
 IF(SEGFAULT_FIXED)
-ADD_TEST( bvpl_octree_pro_plane_propagation_process  ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_pro_test_all test_bvpl_plane_propagation_process)
+ADD_TEST( NAME bvpl_octree_pro_plane_propagation_process COMMAND $<TARGET_FILE:bvpl_octree_pro_test_all> test_bvpl_plane_propagation_process)
 ENDIF(SEGFAULT_FIXED)
 
 ADD_EXECUTABLE( bvpl_octree_pro_test_include test_include.cxx )

@@ -12,9 +12,9 @@ IF( EXPAT_FOUND )
 
 TARGET_LINK_LIBRARIES( bbgm_pro_test_all bbgm_pro bbgm bsta_algo bsta sdet vil_pro brdb vnl vil vpl testlib expat expatpp )
 
-ADD_TEST( bbgm_pro_test_io                 ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_io )
-ADD_TEST( bbgm_pro_test_update_dist_image  ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_update_dist_image )
-#ADD_TEST( bbgm_pro_test_neighborhood_ops   ${EXECUTABLE_OUTPUT_PATH}/bbgm_pro_test_all test_neighborhood_ops )
+ADD_TEST( NAME bbgm_pro_test_io COMMAND $<TARGET_FILE:bbgm_pro_test_all> test_io )
+ADD_TEST( NAME bbgm_pro_test_update_dist_image COMMAND $<TARGET_FILE:bbgm_pro_test_all> test_update_dist_image )
+#ADD_TEST( NAME bbgm_pro_test_neighborhood_ops COMMAND $<TARGET_FILE:bbgm_pro_test_all> test_neighborhood_ops )
  ENDIF( EXPATPP_FOUND )
 ENDIF( EXPAT_FOUND )
 

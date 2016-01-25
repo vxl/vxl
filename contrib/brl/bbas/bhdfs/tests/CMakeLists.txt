@@ -21,11 +21,11 @@ ADD_EXECUTABLE( bhdfs_test_all
 
 TARGET_LINK_LIBRARIES( bhdfs_test_all bhdfs vil testlib )
 
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_manager )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_fstream )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_vil_stream )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_vil_save_load_image )
-ADD_TEST( bhdfs_test_manager ${EXECUTABLE_OUTPUT_PATH}/bhdfs_test_all test_hadoop )
+ADD_TEST( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_manager )
+ADD_TEST( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_fstream )
+ADD_TEST( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_vil_stream )
+ADD_TEST( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_vil_save_load_image )
+ADD_TEST( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_hadoop )
 
 ADD_EXECUTABLE( bhdfs_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( bhdfs_test_include bhdfs )

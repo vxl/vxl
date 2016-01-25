@@ -9,8 +9,8 @@ ADD_EXECUTABLE ( bgrl_test_all
 )
 TARGET_LINK_LIBRARIES( bgrl_test_all bgrl vpl vbl_io vsl testlib )
 
-ADD_TEST( bgrl_test_graph   ${EXECUTABLE_OUTPUT_PATH}/bgrl_test_all test_graph )
-ADD_TEST( bgrl_test_search  ${EXECUTABLE_OUTPUT_PATH}/bgrl_test_all test_search )
+ADD_TEST( NAME bgrl_test_graph COMMAND $<TARGET_FILE:bgrl_test_all> test_graph )
+ADD_TEST( NAME bgrl_test_search COMMAND $<TARGET_FILE:bgrl_test_all> test_search )
 
 ADD_EXECUTABLE( bgrl_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES( bgrl_test_include bgrl)

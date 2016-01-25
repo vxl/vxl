@@ -49,11 +49,9 @@ MACRO(GENERATE_TEST_DRIVER LIB SOURCES)
 
   FOREACH(test ${tests_to_run})
     GET_FILENAME_COMPONENT(test_name ${test} NAME_WE)
-    ADD_TEST(${LIB}_${test_name}
-      ${EXECUTABLE_OUTPUT_PATH}/${LIB}_test_driver
-      ${test_name}
-      ${${test_name}_args}
-    )
+    ADD_TEST( NAME ${LIB}_${test_name}
+              COMMAND $<TARGET_FILE:${LIB}_test_driver> ${test_name} ${${test_name}_args}
+            )
   ENDFOREACH(test)
 ENDMACRO(GENERATE_TEST_DRIVER)
 

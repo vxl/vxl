@@ -17,7 +17,7 @@ AUX_SOURCE_DIRECTORY(Templates bgrl2_test_sources)
 ADD_EXECUTABLE ( bgrl2_test_all ${bgrl2_test_sources})
 TARGET_LINK_LIBRARIES( bgrl2_test_all bgrl2 testlib vbl )
 
-ADD_TEST( bgrl2_test_graph   ${EXECUTABLE_OUTPUT_PATH}/bgrl2_test_all graph_test )
+ADD_TEST( NAME bgrl2_test_graph COMMAND $<TARGET_FILE:bgrl2_test_all> graph_test )
 
 ADD_EXECUTABLE( bgrl2_test_include test_include.cxx)
 TARGET_LINK_LIBRARIES( bgrl2_test_include bgrl2)

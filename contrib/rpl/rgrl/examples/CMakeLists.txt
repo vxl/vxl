@@ -72,55 +72,55 @@ TARGET_LINK_LIBRARIES( match_2d_multi testlib rgrl vil_algo vil vnl vbl vul)
 
 #*************************** regression tests ***************************
 
-ADD_TEST( rgrl_registration1_test ${EXECUTABLE_OUTPUT_PATH}/registration1
+ADD_TEST( NAME rgrl_registration1_test COMMAND $<TARGET_FILE:registration1>
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.txt )
 
-ADD_TEST( rgrl_registration2_test ${EXECUTABLE_OUTPUT_PATH}/registration2
+ADD_TEST( NAME rgrl_registration2_test COMMAND $<TARGET_FILE:registration2>
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0003.pgm.txt)
 
-ADD_TEST( rgrl_registration3_test ${EXECUTABLE_OUTPUT_PATH}/registration3
+ADD_TEST( NAME rgrl_registration3_test COMMAND $<TARGET_FILE:registration3>
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002_low.pgm.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0003.pgm.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0003_low.pgm.txt)
 
-ADD_TEST( rgrl_registration_simple_shapes_test ${EXECUTABLE_OUTPUT_PATH}/registration_simple_shapes )
+ADD_TEST( NAME rgrl_registration_simple_shapes_test COMMAND $<TARGET_FILE:registration_simple_shapes> )
 
-ADD_TEST( rgrl_registration_simple_shapes_outliers_test  ${EXECUTABLE_OUTPUT_PATH}/registration_simple_shapes_outliers )
+ADD_TEST( NAME rgrl_registration_simple_shapes_outliers_test COMMAND $<TARGET_FILE:registration_simple_shapes_outliers> )
 
-ADD_TEST( rgrl_registration_blackbox ${EXECUTABLE_OUTPUT_PATH}/registration_blackbox )
+ADD_TEST( NAME rgrl_registration_blackbox COMMAND $<TARGET_FILE:registration_blackbox> )
 
-ADD_TEST( rgrl_registration_landmark_test  ${EXECUTABLE_OUTPUT_PATH}/registration_landmark
+ADD_TEST( NAME rgrl_registration_landmark_test COMMAND $<TARGET_FILE:registration_landmark>
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0004.pgm.landmarks.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.landmarks.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/mask.png)
 
-ADD_TEST( rgrl_registration_retina_no_view_test  ${EXECUTABLE_OUTPUT_PATH}/registration_retina_no_view
+ADD_TEST( NAME rgrl_registration_retina_no_view_test COMMAND $<TARGET_FILE:registration_retina_no_view>
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.landmarks.invariant.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0004.pgm.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0004.pgm.landmarks.invariant.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/mask.png)
 
-ADD_TEST( rgrl_registration_range_data_test  ${EXECUTABLE_OUTPUT_PATH}/registration_range_data
+ADD_TEST( NAME rgrl_registration_range_data_test COMMAND $<TARGET_FILE:registration_range_data>
           ${CMAKE_CURRENT_SOURCE_DIR}/bun000.txt.out
           ${CMAKE_CURRENT_SOURCE_DIR}/bun045.txt.out )
 
-ADD_TEST( rgrl_registration_blackbox_range_data_test  ${EXECUTABLE_OUTPUT_PATH}/registration_range_data_blackbox
+ADD_TEST( NAME rgrl_registration_blackbox_range_data_test COMMAND $<TARGET_FILE:registration_range_data_blackbox>
           ${CMAKE_CURRENT_SOURCE_DIR}/dragonStandRight_0_normals.txt )
 
-ADD_TEST( rgrl_estimate_normals_3d_test ${EXECUTABLE_OUTPUT_PATH}/estimate_normals_3d
+ADD_TEST( NAME rgrl_estimate_normals_3d_test COMMAND $<TARGET_FILE:estimate_normals_3d>
           ${CMAKE_CURRENT_SOURCE_DIR}/IMG0002.pgm.txt IMG0002.pgm.out.txt )
 
-ADD_TEST( rgrl_pseudo_match_2d_test ${EXECUTABLE_OUTPUT_PATH}/match_2d
+ADD_TEST( NAME rgrl_pseudo_match_2d_test COMMAND $<TARGET_FILE:match_2d>
           1 ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1_face_features.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1.png
           ${CMAKE_CURRENT_SOURCE_DIR}/sigcube2.png
           -init ${CMAKE_CURRENT_SOURCE_DIR}/init_xform_flipped_y.txt
           -model affine )
 
-ADD_TEST( rgrl_pseudo_match_2d_mult_test ${EXECUTABLE_OUTPUT_PATH}/match_2d_multi
+ADD_TEST( NAME rgrl_pseudo_match_2d_mult_test COMMAND $<TARGET_FILE:match_2d_multi>
           1 ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1_face_features.txt
           ${CMAKE_CURRENT_SOURCE_DIR}/sigcube1.png
           ${CMAKE_CURRENT_SOURCE_DIR}/sigcube2.png

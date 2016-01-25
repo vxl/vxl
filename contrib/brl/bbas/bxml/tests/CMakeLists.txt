@@ -10,9 +10,9 @@ IF( EXPAT_FOUND )
 
   TARGET_LINK_LIBRARIES( bxml_test_all bxml testlib expat expatpp)
 
-  ADD_TEST( bxml_test_io       ${EXECUTABLE_OUTPUT_PATH}/bxml_test_all
+  ADD_TEST( NAME bxml_test_io COMMAND $<TARGET_FILE:bxml_test_all>
                                  test_io ${CMAKE_CURRENT_SOURCE_DIR}/ )
-  ADD_TEST( bxml_test_find     ${EXECUTABLE_OUTPUT_PATH}/bxml_test_all
+  ADD_TEST( NAME bxml_test_find COMMAND $<TARGET_FILE:bxml_test_all>
                                  test_find ${CMAKE_CURRENT_SOURCE_DIR}/ )
  ENDIF( EXPATPP_FOUND )
 ENDIF( EXPAT_FOUND )

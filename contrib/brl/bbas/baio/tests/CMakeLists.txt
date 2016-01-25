@@ -6,8 +6,8 @@ ADD_EXECUTABLE( baio_test_all
 
 TARGET_LINK_LIBRARIES( baio_test_all baio vnl vpl testlib)
 
-ADD_TEST( baio_test_read ${EXECUTABLE_OUTPUT_PATH}/baio_test_all test_read )
-ADD_TEST( baio_test_write ${EXECUTABLE_OUTPUT_PATH}/baio_test_all test_write )
+ADD_TEST( NAME baio_test_read COMMAND $<TARGET_FILE:baio_test_all> test_read )
+ADD_TEST( NAME baio_test_write COMMAND $<TARGET_FILE:baio_test_all> test_write )
 
 ADD_EXECUTABLE( baio_test_include test_include.cxx )
 TARGET_LINK_LIBRARIES( baio_test_include baio)
