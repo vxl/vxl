@@ -35,7 +35,6 @@ add_subdirectory(msdi)
 add_subdirectory(mfpf)
 add_subdirectory(fhs)
 
-OPTION(BUILD_MUL_TOOLS "Build the MUL tools?" YES)
 
 IF ( BUILD_MUL_TOOLS )
   add_subdirectory(tools)

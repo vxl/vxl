@@ -17,13 +17,8 @@ IF (BUILD_MUL)
   add_subdirectory(rgrl)
 ENDIF (BUILD_MUL)
 
-OPTION(BUILD_RPL_RGTL "Build Rensselaer Generic Tree Library (rgtl)" OFF)
-MARK_AS_ADVANCED(BUILD_RPL_RGTL)
 IF(BUILD_RPL_RGTL)
   add_subdirectory(rgtl)
-
-  OPTION(BUILD_RPL_RTVL "Build Rensselaer Tensor Voting Library (rtvl)" OFF)
-  MARK_AS_ADVANCED(BUILD_RPL_RTVL)
   IF(BUILD_RPL_RTVL)
     add_subdirectory(rtvl)
   ENDIF(BUILD_RPL_RTVL)

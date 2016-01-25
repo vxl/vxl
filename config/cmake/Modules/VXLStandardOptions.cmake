@@ -24,9 +24,9 @@
 INCLUDE(CTest)
 
 IF( WIN32 )
-  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" NO )
+  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
 ELSE( WIN32 )
-  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" NO )
+  OPTION( BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
 ENDIF( WIN32 )
 
 SET( SOLARIS 0 )
@@ -34,12 +34,10 @@ IF( CMAKE_SYSTEM MATCHES "SunOS.*" )
   SET( SOLARIS 1 )
 ENDIF( CMAKE_SYSTEM MATCHES "SunOS.*" )
 
-# By default, build examples when building tests.
-OPTION( BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING} )
 
-OPTION( WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" YES )
-OPTION( WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" YES )
-OPTION( WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" NO )
+OPTION( WARN_DEPRECATED "Enable runtime warnings for deprecated functions?" ON )
+OPTION( WARN_DEPRECATED_ONCE "Only warn once per function (if runtime warnings are enabled)?" ON )
+OPTION( WARN_DEPRECATED_ABORT "Abort on executing a deprecated function (if runtime warnings are enabled)?" OFF )
 
 MARK_AS_ADVANCED( WARN_DEPRECATED WARN_DEPRECATED_ONCE WARN_DEPRECATED_ABORT )
 

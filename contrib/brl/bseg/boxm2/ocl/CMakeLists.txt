@@ -1,5 +1,7 @@
 #boxm2/ocl source dir
-SET(BOXM2_OPENCL_SRC_DIR CACHE STRING "Location of OpenCL source files for brl/bseg/boxm2/ (defaults to source tree)" )
+if(BUILD_BRL)
+  SET(BOXM2_OPENCL_SRC_DIR CACHE STRING "Location of OpenCL source files for brl/bseg/boxm2/ (defaults to source tree)" )
+endif()
 
 # Set up boxm2_ocl_where_root_dir.h to have a macro set to $BOXM2_OPENCL_SRC_DIR
 CONFIGURE_FILE(

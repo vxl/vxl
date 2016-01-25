@@ -49,8 +49,7 @@ IF(NETLIB_FOUND)
     test_sparse_lm.cxx
   )
 
-  TARGET_LINK_LIBRARIES( vnl_algo_test_all vnl_algo vul testlib ${CMAKE_THREAD_LIBS} )
-
+  TARGET_LINK_LIBRARIES( vnl_algo_test_all vnl_algo testlib ${CMAKE_THREAD_LIBS} )
 
   ADD_TEST( NAME vnl_algo_test_algo COMMAND $<TARGET_FILE:vnl_algo_test_all> test_algo                    )
   ADD_TEST( NAME vnl_algo_test_amoeba COMMAND $<TARGET_FILE:vnl_algo_test_all> test_amoeba                  )

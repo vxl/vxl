@@ -36,6 +36,8 @@ ENDIF()
 
 PROJECT(vxl)
 
+include(CMakeDependentOption)
+
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
   set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --malloc-fill=0xFF" )
@@ -92,17 +94,6 @@ SET( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_M
 SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_SHARED_LINKER_FLAGS}" )
 
 
-# Option to specify whether this is a build for the dashboard.  Each
-# dashboard build should set BUILD_FOR_VXL_DASHBOARD to YES in the
-# initial cache (set in the CTest script).
-OPTION( BUILD_FOR_VXL_DASHBOARD "Is this a build for the dashboard?" NO )
-
-# Use this variable in vxl_config.h to tell if it is a shared build
-set(VXL_BUILD_SHARED FALSE)
-if(BUILD_SHARED_LIBS)
-  set(VXL_BUILD_SHARED TRUE)
-endif()
-
 # Use this variable in vxl_config.h to tell if it is a shared build
 set(VXL_BUILD_SHARED FALSE)
 if(BUILD_SHARED_LIBS)
@@ -110,33 +101,12 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 
-
-# Options to reduce build to just some core libraries
-OPTION( BUILD_CORE_NUMERICS "Build VXL's numerics libraries" YES )
-OPTION( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" YES )
-OPTION( BUILD_CORE_UTILITIES "Build VXL's utility libraries" YES )
-OPTION( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" YES )
-OPTION( BUILD_CORE_IMAGING "Build VXL's imaging libraries" YES )
-OPTION( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
-IF(BUILD_CORE_NUMERICS)
-  IF( BUILD_FOR_VXL_DASHBOARD )
-    OPTION( BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" YES )
-  ELSE( BUILD_FOR_VXL_DASHBOARD )
-    OPTION( BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" NO )
-  ENDIF( BUILD_FOR_VXL_DASHBOARD )
-ENDIF(BUILD_CORE_NUMERICS)
-SET (BUILD_CORE_ALL OFF CACHE INTERNAL "All Core libraries are being built")
-IF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
-  IF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
-    IF (BUILD_CORE_IMAGING)
-      SET (BUILD_CORE_ALL ON CACHE INTERNAL "All Core libraries are being built")
-    ENDIF (BUILD_CORE_IMAGING)
-  ENDIF (BUILD_CORE_UTILITIES AND BUILD_CORE_SERIALISATION)
-ENDIF (BUILD_CORE_GEOMETRY AND BUILD_CORE_NUMERICS)
+#-------------------------------------------------------------------
+#-- BUILD CONFIG OPTIONS
 
 # Optionally use old error reporting methods, rather than exceptions.
 # The main use is in vil which often uses/used null images to imply an error.
-OPTION (VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than exceptions?" YES)
+OPTION (VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than exceptions?" ON)
 IF (VXL_LEGACY_ERROR_REPORTING)
   ADD_DEFINITIONS( -DVXL_LEGACY_ERROR_REPORTING )
 ENDIF (VXL_LEGACY_ERROR_REPORTING)
@@ -145,7 +115,7 @@ ENDIF (VXL_LEGACY_ERROR_REPORTING)
 # type of which is wchar_t, each character is a 16-bit unsigned integer.
 IF(WIN32)
   IF(VXL_HAS_WIN_WCHAR_T)
-    OPTION( VXL_USE_WIN_WCHAR_T "Build overloading functions that accept Windows wide char strings?" YES )
+    OPTION( VXL_USE_WIN_WCHAR_T "Build overloading functions that accept Windows wide char strings?" ON )
     IF(VXL_USE_WIN_WCHAR_T)   # Force it to be 0/1
       SET(VXL_USE_WIN_WCHAR_T 1)
     ELSE(VXL_USE_WIN_WCHAR_T)
@@ -174,10 +144,6 @@ IF(UNIX)
   ENDIF(NOT BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
 ENDIF(UNIX)
 
-# Optionally build the contributed libraries
-IF( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
-  OPTION( BUILD_CONTRIB "Build the contributed libraries?" YES )
-ENDIF( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
 
 
 # Use the old configure script if the cache tells us to do so.
@@ -232,13 +198,38 @@ INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 IF(NOT VXL_NO_CMAKE_CONFIGURE)
   add_subdirectory(config/cmake/config)
 ENDIF(NOT VXL_NO_CMAKE_CONFIGURE)
+
+#-------------------------------------------------------------------
+#-- BUILD SELECTION OPTIONS
+# Options for selecting the core core libraries
+OPTION( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON )
+OPTION( BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
+OPTION( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON )
+OPTION( BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON )
+OPTION( BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON )
+
+# By default, build examples when building tests. Examples require most of the core libraries
+CMAKE_DEPENDENT_OPTION( BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING}
+                      "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF)
+
+# Option to specify whether this is a build for the dashboard.  Each
+# dashboard build should set BUILD_FOR_VXL_DASHBOARD to ON in the
+# initial cache (set in the CTest script).
+OPTION( BUILD_FOR_VXL_DASHBOARD "Enable deprecated code and known failing test?)" OFF )
+OPTION( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
+
+CMAKE_DEPENDENT_OPTION(BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON "BUILD_CORE_NUMERICS;BUILD_FOR_VXL_DASHBOARD" OFF)
+
 # Build the core vxl + support libraries
 add_subdirectory(vcl)
 add_subdirectory(v3p)
 add_subdirectory(core)
 
-IF( BUILD_CONTRIB AND BUILD_CORE_ALL)
+# Optionally build the contributed libraries
+if( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
+  CMAKE_DEPENDENT_OPTION(BUILD_CONTRIB "Build the contributed libraries?" ON "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF)
   add_subdirectory(contrib)
-ENDIF( BUILD_CONTRIB AND BUILD_CORE_ALL)
+endif()
+
 # This add_subdirectory command must be the last add_subdirectory command in this file
 add_subdirectory(config/cmake/export)
