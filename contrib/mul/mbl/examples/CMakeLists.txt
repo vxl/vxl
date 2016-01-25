@@ -1,5 +1,5 @@
 # This is mul/mbl/examples/CMakeLists.txt
 
-LINK_LIBRARIES( mbl vul )
+link_libraries( mbl vul )
 
-ADD_EXECUTABLE( parse_file_example parse_file_example.cxx )
+add_executable( parse_file_example parse_file_example.cxx )

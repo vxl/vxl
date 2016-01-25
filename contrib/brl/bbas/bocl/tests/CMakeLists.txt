@@ -1,4 +1,4 @@
-SET( bocl_test_sources
+set( bocl_test_sources
   test_driver.cxx
   test_global_io_bandwidth.cxx
   test_command_queue.cxx
@@ -9,20 +9,20 @@ SET( bocl_test_sources
   test_mem.cxx
   )
 
-AUX_SOURCE_DIRECTORY(Templates bocl_test_sources)
-ADD_EXECUTABLE(bocl_test_all ${bocl_test_sources})
+aux_source_directory(Templates bocl_test_sources)
+add_executable(bocl_test_all ${bocl_test_sources})
 
-TARGET_LINK_LIBRARIES( bocl_test_all bocl testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
+target_link_libraries( bocl_test_all bocl testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
 
-ADD_TEST( bocl_test_global_io_bandwidth    ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_global_io_bandwidth  )
+add_test( NAME bocl_test_global_io_bandwidth COMMAND $<TARGET_FILE:bocl_test_all> test_global_io_bandwidth  )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## This test is always segmentation faulting
-  ADD_TEST( bocl_test_command_queue          ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_command_queue  )
+  add_test( NAME bocl_test_command_queue COMMAND $<TARGET_FILE:bocl_test_all> test_command_queue  )
 endif()
-ADD_TEST( bocl_test_kernel                 ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_kernel )
-ADD_TEST( bocl_test_local_mem_access       ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_local_mem_access )
-ADD_TEST( bocl_test_mem                    ${EXECUTABLE_OUTPUT_PATH}/bocl_test_all test_mem )
+add_test( NAME bocl_test_kernel COMMAND $<TARGET_FILE:bocl_test_all> test_kernel )
+add_test( NAME bocl_test_local_mem_access COMMAND $<TARGET_FILE:bocl_test_all> test_local_mem_access )
+add_test( NAME bocl_test_mem COMMAND $<TARGET_FILE:bocl_test_all> test_mem )
 
-ADD_EXECUTABLE( bocl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bocl_test_include bocl)
-ADD_EXECUTABLE( bocl_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( bocl_test_template_include bocl)
+add_executable( bocl_test_include test_include.cxx )
+target_link_libraries( bocl_test_include bocl)
+add_executable( bocl_test_template_include test_template_include.cxx )
+target_link_libraries( bocl_test_template_include bocl)

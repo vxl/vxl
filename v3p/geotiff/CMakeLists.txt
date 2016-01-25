@@ -1,17 +1,17 @@
 # v3p/geotiff/CMakeLists.txt
 
-PROJECT( geotiff C )
+project( geotiff C )
 
-INCLUDE(${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+include(${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
 
-IF(NOT VXL_USING_NATIVE_GEOTIFF)
-INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
-#IF(TIFF_FOUND)
-#IF (EXISTS ${TIFF_INCLUDE_DIR}/tiffio.h)
+if(NOT VXL_USING_NATIVE_GEOTIFF)
+include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+#if(TIFF_FOUND)
+#if(EXISTS ${TIFF_INCLUDE_DIR}/tiffio.h)
 
- INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR} )
+ include_directories(${TIFF_INCLUDE_DIR} )
 
- SET( geotiff_sources
+ set( geotiff_sources
    cpl_serv.h
    defs.h
    geo_config.h
@@ -44,10 +44,10 @@ INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
  )
 
 
- ADD_LIBRARY( geotiff ${geotiff_sources} )
- INSTALL_TARGETS(/lib geotiff)
- TARGET_LINK_LIBRARIES(geotiff ${TIFF_LIBRARIES})
+ add_library( geotiff ${geotiff_sources} )
+ install_targets(/lib geotiff)
+ target_link_libraries(geotiff ${TIFF_LIBRARIES})
 
-#ENDIF (EXISTS ${TIFF_INCLUDE_DIR}/tiffio.h)
-#ENDIF(TIFF_FOUND)
-ENDIF(NOT VXL_USING_NATIVE_GEOTIFF)
+#endif()
+#endif()
+endif()

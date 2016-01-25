@@ -6,7 +6,7 @@ doxygen_add_library(contrib/oul/ouml
   DESCRIPTION "Miscellaneous things"
   )
 
-SET(ouml_sources
+set(ouml_sources
   eigenfaces.h       eigenfaces.cxx
   image_database.h   image_database.cxx
   polygon_mesh.h     polygon_mesh.cxx
@@ -19,11 +19,11 @@ SET(ouml_sources
   inlines.h
 )
 
-ADD_LIBRARY(ouml ${ouml_sources})
-INSTALL_TARGETS(/lib ouml)
+add_library(ouml ${ouml_sources})
+install_targets(/lib ouml)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/ouml ${ouml_sources})
-TARGET_LINK_LIBRARIES( ouml vgl vnl_algo vnl_io vnl vil1 vsl vpl )
+target_link_libraries( ouml vgl vnl_algo vnl_io vnl vil1 vsl vpl )
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

@@ -2,7 +2,7 @@
 # brl/bbas/bwm/video/CMakeLists.txt
 
 
-SET(bwm_video_sources
+set(bwm_video_sources
    bwm_video_export.h
    bwm_video_cam_istream.cxx     bwm_video_cam_istream.h   bwm_video_cam_istream_sptr.h
    bwm_video_cam_ostream.cxx     bwm_video_cam_ostream.h   bwm_video_cam_ostream_sptr.h
@@ -11,38 +11,38 @@ SET(bwm_video_sources
                                  bwm_video_site_io_defs.h
 )
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  include_directories(${EXPAT_INCLUDE_DIRS} )
+  include_directories(${EXPATPP_INCLUDE_DIRS} )
 
-  SET(bwm_video_sources ${bwm_video_sources}
+  set(bwm_video_sources ${bwm_video_sources}
      bwm_video_site_io.cxx         bwm_video_site_io.h
      bwm_video_corr_processor.cxx  bwm_video_corr_processor.h
   )
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+ endif()
+endif()
 
-AUX_SOURCE_DIRECTORY(Templates bwm_video_sources)
-ADD_LIBRARY(bwm_video ${bwm_video_sources})
+aux_source_directory(Templates bwm_video_sources)
+add_library(bwm_video ${bwm_video_sources})
 
-TARGET_LINK_LIBRARIES( bwm_video vidl bpgl bpgl_algo brip vil vbl vgl vul vpl vsl vgl_algo vnl_algo vnl bsta bsol vsol vpgl vpgl_algo)
+target_link_libraries( bwm_video vidl bpgl bpgl_algo brip vil vbl vgl vul vpl vsl vgl_algo vnl_algo vnl bsta bsol vsol vpgl vpgl_algo)
 
-IF(EXPAT_FOUND)
-  TARGET_LINK_LIBRARIES( bwm_video vidl)
-  IF(EXPATPP_FOUND)
-    TARGET_LINK_LIBRARIES(bwm_video ${EXPATPP_LIBRARIES})
-  ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+if(EXPAT_FOUND)
+  target_link_libraries( bwm_video vidl)
+  if(EXPATPP_FOUND)
+    target_link_libraries(bwm_video ${EXPATPP_LIBRARIES})
+  endif()
+endif()
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()
 
 add_subdirectory(exe)
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib bwm_video)
+install_targets(/lib bwm_video)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/video/ ${bwm_video_sources})

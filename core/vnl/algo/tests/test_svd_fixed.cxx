@@ -13,7 +13,7 @@
 #include <vnl/algo/vnl_svd_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vul/vul_timer.h>
+#include <vcl_ctime.h>
 
 
 template <class T, class S> static
@@ -143,11 +143,10 @@ void test_nullvector(char const *type, double max_err, T *, vnl_random &rng)
 
 static void test_speed(vnl_random& rng)
 {
-  vul_timer timer;
   int ms_heap, ms_stack, ms_nosvd;
   {
     double sum=0;
-    timer.mark();
+    const vcl_clock_t timer_01 = vcl_clock();
     vnl_matrix<double> A(3,3);
     for (unsigned count=0; count<10000; ++count)
     {
@@ -155,12 +154,13 @@ static void test_speed(vnl_random& rng)
       vnl_svd<double> svd(A);
       sum += svd.inverse().fro_norm();
     }
-    ms_heap = timer.user();
+    const vcl_clock_t timer_02 = vcl_clock();
+    ms_heap =  ( timer_02 - timer_01)/ (CLOCKS_PER_SEC/1000);
     vcl_cout << "vnl_svd time for 10000 3x3 inversions: " << ms_heap << "ms." << vcl_endl;
   }
   {
     double sum=0;
-    timer.mark();
+    const vcl_clock_t timer_03 = vcl_clock();
     vnl_matrix_fixed<double,3,3> A;
     for (unsigned count=0; count<10000; ++count)
     {
@@ -168,19 +168,21 @@ static void test_speed(vnl_random& rng)
       vnl_svd_fixed<double,3,3> svd(A);
       sum += svd.inverse().fro_norm();
     }
-    ms_stack = timer.user();
+    const vcl_clock_t timer_04 = vcl_clock();
+    ms_stack = ( timer_04 - timer_03)/ (CLOCKS_PER_SEC/1000);
     vcl_cout << "vnl_svd_fixed time for 10000 3x3 inversions: " << ms_stack << "ms." << vcl_endl;
   }
   {
     double sum=0;
-    timer.mark();
+    const vcl_clock_t timer_05 = vcl_clock();
     vnl_matrix_fixed<double,3,3> A;
     for (unsigned count=0; count<10000; ++count)
     {
       test_util_fill_random(A.begin(), A.end(), rng);
       sum += vnl_inverse(A).fro_norm();
     }
-    ms_nosvd = timer.user();
+    const vcl_clock_t timer_06 = vcl_clock();
+    ms_nosvd = ( timer_06 - timer_05)/ (CLOCKS_PER_SEC/1000);
     vcl_cout << "(c.f. vnl_inverse no-SVD time for 10000 3x3 inversions: " << ms_nosvd << "ms.)" << vcl_endl;
   }
   TEST("Stack memory SVD is faster than heap memory SVD", ms_stack <= ms_heap, true);

@@ -5,13 +5,13 @@ doxygen_add_library(contrib/oxl/vrml
   PACKAGE contrib/oxl
   )
 
-SET(vrml_sources
+set(vrml_sources
  vrml_out.cxx vrml_out.h
 )
 
-ADD_LIBRARY(oxl_vrml ${vrml_sources})
-TARGET_LINK_LIBRARIES(oxl_vrml vul)
+add_library(oxl_vrml ${vrml_sources})
+target_link_libraries(oxl_vrml vul)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

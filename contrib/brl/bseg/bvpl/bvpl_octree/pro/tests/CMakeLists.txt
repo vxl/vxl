@@ -1,16 +1,16 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvpl/bvpl_octree )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvpl/bvpl_octree/pro)
+include_directories( ${BRL_INCLUDE_DIR}/bseg/bvpl/bvpl_octree )
+include_directories( ${BRL_INCLUDE_DIR}/bseg/bvpl/bvpl_octree/pro)
 
-ADD_EXECUTABLE( bvpl_octree_pro_test_all
+add_executable( bvpl_octree_pro_test_all
   test_driver.cxx
   test_bvpl_plane_propagation_process.cxx
 )
 
-TARGET_LINK_LIBRARIES( bvpl_octree_pro_test_all testlib bvpl_octree_pro bvpl_octree boxm boxm_pro boxm_sample boxm_util boct bvpl bprb brdb sdet vul vcl)
+target_link_libraries( bvpl_octree_pro_test_all testlib bvpl_octree_pro bvpl_octree boxm boxm_pro boxm_sample boxm_util boct bvpl bprb brdb sdet vul vcl)
 
-IF(SEGFAULT_FIXED)
-ADD_TEST( bvpl_octree_pro_plane_propagation_process  ${EXECUTABLE_OUTPUT_PATH}/bvpl_octree_pro_test_all test_bvpl_plane_propagation_process)
-ENDIF(SEGFAULT_FIXED)
+if(SEGFAULT_FIXED)
+add_test( NAME bvpl_octree_pro_plane_propagation_process COMMAND $<TARGET_FILE:bvpl_octree_pro_test_all> test_bvpl_plane_propagation_process)
+endif()
 
-ADD_EXECUTABLE( bvpl_octree_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bvpl_octree_pro_test_include bvpl_octree_pro sdet )
+add_executable( bvpl_octree_pro_test_include test_include.cxx )
+target_link_libraries( bvpl_octree_pro_test_include bvpl_octree_pro sdet )

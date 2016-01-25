@@ -1,10 +1,10 @@
 # bpgl/ihog/CMakeLists.txt
 # image homography registration library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 
 
-SET(ihog_sources
+set(ihog_sources
    ihog_world_roi.cxx         ihog_world_roi.h          ihog_world_roi_sptr.h
    ihog_transform_2d.cxx      ihog_transform_2d.h       ihog_transform_2d_sptr.h
    ihog_minimizer.cxx         ihog_minimizer.h
@@ -16,19 +16,19 @@ SET(ihog_sources
    ihog_minfo_cost_func.cxx   ihog_minfo_cost_func.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates ihog_sources)
+aux_source_directory(Templates ihog_sources)
 
-ADD_LIBRARY(ihog  ${ihog_sources})
+add_library(ihog  ${ihog_sources})
 
-TARGET_LINK_LIBRARIES(ihog vnl_algo vnl vil vgl_io vgl_algo vgl vil_algo vbl_io vbl vsl vul)
+target_link_libraries(ihog vnl_algo vnl vil vgl_io vgl_algo vgl vil_algo vbl_io vbl vsl vul)
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
 #  add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()
 
 # Executable library
 add_subdirectory(exe)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

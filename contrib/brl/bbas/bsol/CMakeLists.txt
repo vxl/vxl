@@ -6,11 +6,11 @@ doxygen_add_library(contrib/brl/bbas/bsol
   PACKAGE contrib/brl
   )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${GEL_INCLUDE_DIR} )
 
-SET(bsol_sources
+set(bsol_sources
     dll.h
 
     bsol_hough_line_index.cxx   bsol_hough_line_index.h   bsol_hough_line_index_sptr.h
@@ -21,13 +21,13 @@ SET(bsol_sources
     bsol_point_index_2d.cxx     bsol_point_index_2d.h
     bsol_point_index_3d.cxx     bsol_point_index_3d.h
 )
-AUX_SOURCE_DIRECTORY(Templates bsol_sources)
+aux_source_directory(Templates bsol_sources)
 
-ADD_LIBRARY(bsol ${bsol_sources})
-INSTALL_TARGETS(/lib bsol)
+add_library(bsol ${bsol_sources})
+install_targets(/lib bsol)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsol ${bsol_sources})
-TARGET_LINK_LIBRARIES(bsol vsol vgl_algo vgl vnl vbl)
+target_link_libraries(bsol vsol vgl_algo vgl vnl vbl)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

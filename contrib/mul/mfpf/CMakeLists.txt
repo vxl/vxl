@@ -9,7 +9,7 @@ doxygen_add_library(contrib/mul/mfpf
   DESCRIPTION "Manchester's Point Finder Library"
 )
 
-SET(mfpf_sources
+set(mfpf_sources
   mfpf_add_all_loaders.h         mfpf_add_all_loaders.cxx
   mfpf_point_finder_builder.h    mfpf_point_finder_builder.cxx
   mfpf_edge_finder_builder.h     mfpf_edge_finder_builder.cxx
@@ -68,14 +68,14 @@ SET(mfpf_sources
   mfpf_pose_predictor_builder.h  mfpf_pose_predictor_builder.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates mfpf_sources)
-ADD_LIBRARY(mfpf ${mfpf_sources} )
-TARGET_LINK_LIBRARIES(mfpf clsfy mipa)
+aux_source_directory(Templates mfpf_sources)
+add_library(mfpf ${mfpf_sources} )
+target_link_libraries(mfpf clsfy mipa)
 
-IF (BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-ENDIF (BUILD_MUL_TOOLS)
+endif()
 
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

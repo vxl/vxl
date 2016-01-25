@@ -1,8 +1,8 @@
 # This is core/vbl/tests/CMakeLists.txt
 
-LINK_LIBRARIES( vbl testlib )
+link_libraries( vbl testlib )
 
-ADD_EXECUTABLE( vbl_test_all
+add_executable( vbl_test_all
   test_driver.cxx
   vbl_test_classes.cxx vbl_test_classes.h
   vbl_test_array_x.cxx vbl_test_array_x.h
@@ -25,25 +25,25 @@ ADD_EXECUTABLE( vbl_test_all
   vbl_test_disjoint_sets.cxx
 )
 
-ADD_TEST( vbl_test_bounding_box    ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_bounding_box )
-ADD_TEST( vbl_test_triple          ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_triple )
-ADD_TEST( vbl_test_quadruple       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_quadruple )
-ADD_TEST( vbl_test_qsort           ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_qsort )
-ADD_TEST( vbl_test_array           ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_array )
-ADD_TEST( vbl_test_bit_array       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_bit_array )
-ADD_TEST( vbl_test_sparse_array_2d ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_sparse_array_2d )
-ADD_TEST( vbl_test_sparse_array_3d ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_sparse_array_3d )
-ADD_TEST( vbl_test_batch_multimap  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_batch_multimap )
-ADD_TEST( vbl_test_batch_compact_multimap  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_batch_compact_multimap )
-ADD_TEST( vbl_test_smart_ptr       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_smart_ptr )
-ADD_TEST( vbl_test_ref_count       ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_ref_count )
-ADD_TEST( vbl_test_scoped_ptr      ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_scoped_ptr )
-ADD_TEST( vbl_test_shared_pointer  ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_shared_pointer )
-ADD_TEST( vbl_test_local_minima    ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_local_minima )
-ADD_TEST( vbl_test_attributes      ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_attributes )
-ADD_TEST( vbl_test_disjoint_sets      ${EXECUTABLE_OUTPUT_PATH}/vbl_test_all vbl_test_disjoint_sets )
+add_test( NAME vbl_test_bounding_box COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_bounding_box )
+add_test( NAME vbl_test_triple COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_triple )
+add_test( NAME vbl_test_quadruple COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_quadruple )
+add_test( NAME vbl_test_qsort COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_qsort )
+add_test( NAME vbl_test_array COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_array )
+add_test( NAME vbl_test_bit_array COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_bit_array )
+add_test( NAME vbl_test_sparse_array_2d COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_sparse_array_2d )
+add_test( NAME vbl_test_sparse_array_3d COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_sparse_array_3d )
+add_test( NAME vbl_test_batch_multimap COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_batch_multimap )
+add_test( NAME vbl_test_batch_compact_multimap COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_batch_compact_multimap )
+add_test( NAME vbl_test_smart_ptr COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_smart_ptr )
+add_test( NAME vbl_test_ref_count COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_ref_count )
+add_test( NAME vbl_test_scoped_ptr COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_scoped_ptr )
+add_test( NAME vbl_test_shared_pointer COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_shared_pointer )
+add_test( NAME vbl_test_local_minima COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_local_minima )
+add_test( NAME vbl_test_attributes COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_attributes )
+add_test( NAME vbl_test_disjoint_sets COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_disjoint_sets )
 
-ADD_EXECUTABLE( vbl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vbl_test_include vbl )
-ADD_EXECUTABLE( vbl_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( vbl_test_template_include vbl )
+add_executable( vbl_test_include test_include.cxx )
+target_link_libraries( vbl_test_include vbl )
+add_executable( vbl_test_template_include test_template_include.cxx )
+target_link_libraries( vbl_test_template_include vbl )

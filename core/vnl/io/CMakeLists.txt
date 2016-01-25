@@ -1,6 +1,6 @@
 # vxl/vnl/io/CMakeLists.txt
 
-SET(vnl_io_sources
+set(vnl_io_sources
   vnl_io_nonlinear_minimizer.cxx  vnl_io_nonlinear_minimizer.h
   vnl_io_real_npolynomial.cxx     vnl_io_real_npolynomial.h
   vnl_io_real_polynomial.cxx      vnl_io_real_polynomial.h
@@ -17,21 +17,21 @@ SET(vnl_io_sources
   vnl_io_matrix_fixed.txx         vnl_io_matrix_fixed.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vnl_io_sources)
+aux_source_directory(Templates vnl_io_sources)
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(
     Templates/vsl_vector_io+vcl_vector+vcl_vector+vnl_vector+double----.cxx
     PROPERTIES
     COMPILE_FLAGS -ftemplate-depth-50)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+endif()
 
-ADD_LIBRARY(vnl_io ${vnl_io_sources} )
-TARGET_LINK_LIBRARIES( vnl_io vnl vsl )
+add_library(vnl_io ${vnl_io_sources} )
+target_link_libraries( vnl_io vnl vsl )
 
-INSTALL(TARGETS vnl_io DESTINATION lib)
+install(TARGETS vnl_io DESTINATION lib)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/io ${vnl_io_sources})
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

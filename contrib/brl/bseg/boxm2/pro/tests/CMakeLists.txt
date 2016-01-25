@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( boxm2_pro_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boxm2_pro_test_include boxm2_pro)
+add_executable( boxm2_pro_test_include test_include.cxx )
+target_link_libraries( boxm2_pro_test_include boxm2_pro)

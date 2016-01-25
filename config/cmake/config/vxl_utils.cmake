@@ -5,15 +5,15 @@
 # If .in files are given, the .in extension is removed.
 #
 
-MACRO(INSTALL_NOBASE_HEADER_FILES prefix)
-FOREACH(file ${ARGN})
-  IF(${file} MATCHES "\\.(h|hxx|txx)(\\.in)?$")
-    STRING(REGEX REPLACE "\\.in$" "" install_file ${file})
-    GET_FILENAME_COMPONENT(dir ${install_file} PATH)
-    INSTALL_FILES(${prefix}/${dir} FILES ${install_file})
-  ENDIF(${file} MATCHES "\\.(h|hxx|txx)(\\.in)?$")
-ENDFOREACH(file ${filelist})
-ENDMACRO(INSTALL_NOBASE_HEADER_FILES)
+macro(INSTALL_NOBASE_HEADER_FILES prefix)
+foreach(file ${ARGN})
+  if(${file} MATCHES "\\.(h|hxx|txx)(\\.in)?$")
+    string(REGEX REPLACE "\\.in$" "" install_file ${file})
+    get_filename_component(dir ${install_file} PATH)
+    install_files(${prefix}/${dir} FILES ${install_file})
+  endif()
+endforeach()
+endmacro()
 
 #---------------------------------------------------------------------
 # GENERATE_TEST_DRIVER(<lib> <sources> [<lib1> <lib2> ...])
@@ -27,35 +27,33 @@ ENDMACRO(INSTALL_NOBASE_HEADER_FILES)
 # (e.g., test_arg_args).
 #
 # Example usage:
-#   SET(vil_test_sources
+#   set(vil_test_sources
 #     ...
 #     test_stream.cxx
 #     ...
 #   )
-#   SET(test_stream_args ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
+#   set(test_stream_args ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 #   GENERATE_TEST_DRIVER(vil vil_test_sources vil vpl vul testlib vcl)
 #---------------------------------------------------------------------
-MACRO(GENERATE_TEST_DRIVER LIB SOURCES)
-  CREATE_TEST_SOURCELIST(test_driver_sources ${LIB}_test_driver.cxx
+macro(GENERATE_TEST_DRIVER LIB SOURCES)
+  create_test_sourcelist(test_driver_sources ${LIB}_test_driver.cxx
     ${${SOURCES}}
   )
 
-  ADD_EXECUTABLE(${LIB}_test_driver ${test_driver_sources})
+  add_executable(${LIB}_test_driver ${test_driver_sources})
   # ***** what if ARGN is empty?
-  TARGET_LINK_LIBRARIES(${LIB}_test_driver ${ARGN})
+  target_link_libraries(${LIB}_test_driver ${ARGN})
 
-  SET(tests_to_run ${test_driver_sources})
-  LIST(REMOVE_ITEM tests_to_run ${LIB}_test_driver.cxx)
+  set(tests_to_run ${test_driver_sources})
+  list(REMOVE_ITEM tests_to_run ${LIB}_test_driver.cxx)
 
-  FOREACH(test ${tests_to_run})
-    GET_FILENAME_COMPONENT(test_name ${test} NAME_WE)
-    ADD_TEST(${LIB}_${test_name}
-      ${EXECUTABLE_OUTPUT_PATH}/${LIB}_test_driver
-      ${test_name}
-      ${${test_name}_args}
-    )
-  ENDFOREACH(test)
-ENDMACRO(GENERATE_TEST_DRIVER)
+  foreach(test ${tests_to_run})
+    get_filename_component(test_name ${test} NAME_WE)
+    add_test( NAME ${LIB}_${test_name}
+              COMMAND $<TARGET_FILE:${LIB}_test_driver> ${test_name} ${${test_name}_args}
+            )
+  endforeach()
+endmacro()
 
 #---------------------------------------------------------------------
 # GENERATE_TEST_INCLUDE(<lib> <sources> <prefix>)
@@ -67,23 +65,23 @@ ENDMACRO(GENERATE_TEST_DRIVER)
 # Example usage:
 #   GENERATE_TEST_INCLUDE(vil_io vil_io_sources "vil/io/")
 #---------------------------------------------------------------------
-MACRO(GENERATE_TEST_INCLUDE LIB SOURCES PREFIX)
-  SET(CMAKE_CONFIGURABLE_FILE_CONTENT "/* */\n")
-  FOREACH(FILE ${${SOURCES}})
-    GET_FILENAME_COMPONENT(FILE_EXT ${FILE} EXT)
-    IF(FILE_EXT STREQUAL ".h")
-      SET(CMAKE_CONFIGURABLE_FILE_CONTENT
+macro(GENERATE_TEST_INCLUDE LIB SOURCES PREFIX)
+  set(CMAKE_CONFIGURABLE_FILE_CONTENT "/* */\n")
+  foreach(FILE ${${SOURCES}})
+    get_filename_component(FILE_EXT ${FILE} EXT)
+    if(FILE_EXT STREQUAL ".h")
+      set(CMAKE_CONFIGURABLE_FILE_CONTENT
           "${CMAKE_CONFIGURABLE_FILE_CONTENT}#include <${PREFIX}${FILE}>\n#include <${PREFIX}${FILE}>\n")
-    ENDIF(FILE_EXT STREQUAL ".h")
-  ENDFOREACH(FILE)
+    endif()
+  endforeach()
 
-  SET(CMAKE_CONFIGURABLE_FILE_CONTENT
+  set(CMAKE_CONFIGURABLE_FILE_CONTENT
       "${CMAKE_CONFIGURABLE_FILE_CONTENT}\n\nint main(){return 0;}\n")
 
-  CONFIGURE_FILE("${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in"
+  configure_file("${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in"
                  "${CMAKE_CURRENT_BINARY_DIR}/test_include.cxx"
                  @ONLY IMMEDIATE)
 
-  ADD_EXECUTABLE(${LIB}_test_include ${CMAKE_CURRENT_BINARY_DIR}/test_include.cxx)
-  TARGET_LINK_LIBRARIES(${LIB}_test_include ${LIB})
-ENDMACRO(GENERATE_TEST_INCLUDE)
+  add_executable(${LIB}_test_include ${CMAKE_CURRENT_BINARY_DIR}/test_include.cxx)
+  target_link_libraries(${LIB}_test_include ${LIB})
+endmacro()

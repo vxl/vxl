@@ -1,9 +1,9 @@
 # core/vil/algo/CMakeLists.txt
 
-PROJECT(vil_algo)
+project(vil_algo)
 
 
-SET( vil_algo_sources
+set( vil_algo_sources
   vil_sobel_1x3.cxx                vil_sobel_1x3.h    vil_sobel_1x3.txx
   vil_sobel_3x3.cxx                vil_sobel_3x3.h    vil_sobel_3x3.txx
   vil_gauss_filter.cxx             vil_gauss_filter.h vil_gauss_filter.txx
@@ -54,18 +54,18 @@ SET( vil_algo_sources
                                    vil_flood_fill.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vil_algo_sources)
+aux_source_directory(Templates vil_algo_sources)
 
-ADD_LIBRARY(vil_algo ${vil_algo_sources})
+add_library(vil_algo ${vil_algo_sources})
 
-TARGET_LINK_LIBRARIES( vil_algo vil vnl_algo vnl vcl )
+target_link_libraries( vil_algo vil vnl_algo vnl vcl )
 
-INSTALL_TARGETS(/lib vil_algo)
+install_targets(/lib vil_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil/algo ${vil_algo_sources})
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
-IF( BUILD_TESTING )
+endif()
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

@@ -1,10 +1,10 @@
 # brl/bbas/bseg/sdet/tests/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas)
+include_directories( ${VXLCORE_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR}/bbas)
 
-ADD_EXECUTABLE(sdet_test_all
+add_executable(sdet_test_all
   test_driver.cxx
   test_detector.cxx
   test_region_proc.cxx
@@ -14,14 +14,14 @@ ADD_EXECUTABLE(sdet_test_all
   test_segmentation.cxx
   test_sel.cxx
 )
-TARGET_LINK_LIBRARIES(sdet_test_all sdet imesh_algo vtol vil1 vnl_algo vnl vgl vil testlib)
+target_link_libraries(sdet_test_all sdet imesh_algo vtol vil1 vnl_algo vnl vgl vil testlib)
 
-ADD_TEST(sdet_test_detector    ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_detector    ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
-ADD_TEST(sdet_test_region_proc ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
-ADD_TEST(sdet_test_gauss_fit   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_gauss_fit )
-ADD_TEST(sdet_test_denoise_mrf   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_denoise_mrf )
-ADD_TEST(sdet_test_denoise_mrf_bp   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_denoise_mrf_bp )
-ADD_TEST(sdet_test_segmentation   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_segmentation )
-ADD_TEST(sdet_test_sel   ${EXECUTABLE_OUTPUT_PATH}/sdet_test_all test_sel)
-ADD_EXECUTABLE(sdet_test_include test_include.cxx)
-TARGET_LINK_LIBRARIES(sdet_test_include sdet)
+add_test( NAME sdet_test_detector COMMAND $<TARGET_FILE:sdet_test_all> test_detector    ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
+add_test( NAME sdet_test_region_proc COMMAND $<TARGET_FILE:sdet_test_all> test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
+add_test( NAME sdet_test_gauss_fit COMMAND $<TARGET_FILE:sdet_test_all> test_gauss_fit )
+add_test( NAME sdet_test_denoise_mrf COMMAND $<TARGET_FILE:sdet_test_all> test_denoise_mrf )
+add_test( NAME sdet_test_denoise_mrf_bp COMMAND $<TARGET_FILE:sdet_test_all> test_denoise_mrf_bp )
+add_test( NAME sdet_test_segmentation COMMAND $<TARGET_FILE:sdet_test_all> test_segmentation )
+add_test( NAME sdet_test_sel COMMAND $<TARGET_FILE:sdet_test_all> test_sel)
+add_executable(sdet_test_include test_include.cxx)
+target_link_libraries(sdet_test_include sdet)

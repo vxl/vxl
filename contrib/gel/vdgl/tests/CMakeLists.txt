@@ -1,13 +1,13 @@
-ADD_EXECUTABLE( vdgl_test_all
+add_executable( vdgl_test_all
   test_driver.cxx
   test_vdgl.cxx
   test1_vdgl.cxx
   test_vdgl_io.cxx
 )
-TARGET_LINK_LIBRARIES( vdgl_test_all vsol vdgl vbl_io vsl vpl testlib )
+target_link_libraries( vdgl_test_all vsol vdgl vbl_io vsl vpl testlib )
 
-ADD_TEST(vdgl_test_vdgl  ${EXECUTABLE_OUTPUT_PATH}/vdgl_test_all test_vdgl)
-ADD_TEST(vdgl_test1_vdgl ${EXECUTABLE_OUTPUT_PATH}/vdgl_test_all test1_vdgl)
-ADD_TEST(vdgl_test_io    ${EXECUTABLE_OUTPUT_PATH}/vdgl_test_all test_vdgl_io)
+add_test( NAME vdgl_test_vdgl COMMAND $<TARGET_FILE:vdgl_test_all> test_vdgl)
+add_test( NAME vdgl_test1_vdgl COMMAND $<TARGET_FILE:vdgl_test_all> test1_vdgl)
+add_test( NAME vdgl_test_io COMMAND $<TARGET_FILE:vdgl_test_all> test_vdgl_io)
 
-ADD_EXECUTABLE( vdgl_test_include test_include.cxx )
+add_executable( vdgl_test_include test_include.cxx )
