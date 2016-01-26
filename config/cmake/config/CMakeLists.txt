@@ -285,10 +285,12 @@ if(UNIX)
   set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
 endif()
 
-PERFORM_C_CHECK_FUNCTION(isfinite "math.h" VXL_C_MATH_HAS_ISFINITE)
-PERFORM_C_CHECK_FUNCTION(isinf "math.h" VXL_C_MATH_HAS_ISINF)
-PERFORM_C_CHECK_FUNCTION(isnan "math.h" VXL_C_MATH_HAS_ISNAN)
-PERFORM_C_CHECK_FUNCTION(isnormal "math.h" VXL_C_MATH_HAS_ISNORMAL)
+# Check C++ <cmath> first, where the C++11 standard says these must be.
+include(${vxl_SOURCE_DIR}/config/cmake/config/CheckCXXExpressionCompiles.cmake) ## From VTK
+check_cxx_expression_compiles("std::isnan(0.0)" "cmath" VXL_HAS_STD_ISNAN)
+check_cxx_expression_compiles("std::isinf(0.0)" "cmath" VXL_HAS_STD_ISINF)
+check_cxx_expression_compiles("std::isfinite(0.0)" "cmath" VXL_HAS_STD_ISFINITE)
+check_cxx_expression_compiles("std::isnormal(0.0)" "cmath" VXL_HAS_STD_ISNORMAL)
 
 PERFORM_C_CHECK_FUNCTION(sqrtf "math.h" VXL_C_MATH_HAS_SQRTF)
 

@@ -18,12 +18,12 @@
 # define finitel _finite
 #endif
 
-#elif VXL_C_MATH_HAS_ISFINITE || VXL_C_MATH_HAS_ISNAN
+#elif VXL_HAS_STD_ISFINITE || VXL_HAS_STD_ISNAN ||  VXL_HAS_STD_ISNORMAL
 # include<math.h>
-# if VXL_C_MATH_HAS_ISFINITE
-#    define finite  isfinite
-#    define finitef isfinite
-#    define finitel isfinite
+# if VXL_HAS_STD_ISFINITE
+#    define finite  std::isfinite
+#    define finitef std::isfinite
+#    define finitel std::isfinite
 #  endif
 
 // # define isnan _isnan // PVr commented out: we don't want to redefine vnl::isnan ...
@@ -67,20 +67,13 @@ namespace vnl_math
 {
  //--------------------------------------------------------------------------------
  //: Return true iff x is "Not a Number"
-#if VXL_CXX11
+#if VXL_CXX11 || VXL_HAS_STD_ISNAN
  //: Return true iff x is "Not a Number"
  bool isnan(float x) { return std::isnan(x); }
  //: Return true iff x is "Not a Number"
  bool isnan(double x) { return std::isnan(x); }
  //: Return true iff x is "Not a Number"
  bool isnan(long double x) { return std::isnan(x); }
-#elif VXL_C_MATH_HAS_ISNAN   // Use C99 versions
- //: Return true iff x is "Not a Number"
- bool isnan(float x) { return isnan(x) != 0; }
- //: Return true iff x is "Not a Number"
- bool isnan(double x) { return isnan(x) != 0; }
- //: Return true iff x is "Not a Number"
- bool isnan(long double x) { return isnan(x) != 0; }
 #elif defined(VCL_ICC)
 #include <mathimf.h> // defines isnanf, isnan, and isnanl
 //: Return true iff x is "Not a Number"
@@ -146,20 +139,13 @@ bool isnan(long double x)
 }
 #endif
 
-#if VXL_CXX11
+#if VXL_CXX11 || VXL_HAS_STD_ISFINITE
 //: Return true if x is neither NaN nor Inf.
 bool isfinite(float x) { return std::isfinite(x); }
 //: Return true if x is neither NaN nor Inf.
 bool isfinite(double x) { return std::isfinite(x); }
 //: Return true if x is neither NaN nor Inf.
 bool isfinite(long double x) { return std::isfinite(x); }
-#elif VXL_C_MATH_HAS_ISFINITE //Use C99 version
-//: Return true if x is neither NaN nor Inf.
-bool isfinite(float x) { return isfinite(x) != 0; }
-//: Return true if x is neither NaN nor Inf.
-bool isfinite(double x) { return isfinite(x) != 0; }
-//: Return true if x is neither NaN nor Inf.
-bool isfinite(long double x) { return isfinite(x) != 0; }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is neither NaN nor Inf.
 bool isfinite(float x) { return finitef(x) != 0; }
@@ -180,20 +166,13 @@ bool isfinite(long double x)
 #endif
 
 
-#if VXL_CXX11
+#if VXL_CXX11 || VXL_HAS_STD_ISINF
 //: Return true if x is inf
 bool isinf(float x) { return std::isinf(x); }
 //: Return true if x is inf
 bool isinf(double x) { return std::isinf(x); }
 //: Return true if x is inf
 bool isinf(long double x) { return std::isinf(x); }
-#elif VXL_C_MATH_HAS_ISINF // Use the C99 version
-//: Return true if x is inf
-bool isinf(float x) { return isinf(x) != 0; }
-//: Return true if x is inf
-bool isinf(double x) { return isinf(x) != 0; }
-//: Return true if x is inf
-bool isinf(long double x) { return isinf(x) != 0; }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
 bool isinf(float x) { return ! ::isfinite(x) && ! ::isnan(x); }
@@ -213,20 +192,13 @@ bool isinf(long double x)
 }
 #endif
 
-#if VXL_CXX11
+#if VXL_CXX11 || VXL_HAS_STD_ISNORMAL
 //: Return true if x is inf
 bool isnormal(float x) { return std::isnormal(x); }
 //: Return true if x is inf
 bool isnormal(double x) { return std::isnormal(x); }
 //: Return true if x is inf
 bool isnormal(long double x) { return std::isnormal(x); }
-#elif VXL_C_MATH_HAS_ISNORMAL // Use the C99 version
-//: Return true if x is inf
-bool isnormal(float x) { return isnormal(x) != 0; }
-//: Return true if x is inf
-bool isnormal(double x) { return isnormal(x) != 0; }
-//: Return true if x is inf
-bool isnormal(long double x) { return isnormal(x) != 0; }
 #else
 //: Return true if x is inf
 bool isnormal(float x) { return vnl_math::isfinite(x) && ( x != 0.0 ); }
