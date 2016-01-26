@@ -31,8 +31,8 @@ boxm2_ocl_num_obs_renderer
                              vcl_string ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
-  render_success_(false),
-  buffers_allocated_(false)
+  buffers_allocated_(false),
+  render_success_(false)
 {
   device_ = ocl_cache->get_device();
   bool foundDataType = false;

@@ -37,7 +37,6 @@ public:
   double token_len_; ///< Length of the edgel token (puts bounds on legal curvature)
   double max_k_;  ///< maximum curvature of curves in the curve bundle
   double max_gamma_; ///< maximum curvature derivative of curves in the curve bundle
-
   unsigned nrad_; ///< the range of edgel cells to search (this should contain all edgels within rad_)
   double gap_;
   unsigned maxN_; ///< largest curvelet size to form
@@ -57,7 +56,6 @@ public:
                        bool bidir=false):
     C_type(ctype),
     rad_(rad),
-    gap_(gap),
     dtheta_(dtheta),
     dpos_(dpos),
     badap_uncer_(adap_uncer),
@@ -65,6 +63,7 @@ public:
     max_k_(max_k),
     max_gamma_(max_gamma),
     nrad_((unsigned) vcl_ceil(rad)+1),
+    gap_(gap),
     maxN_(2*nrad_),
     centered_(centered),
     bidirectional_(bidir)

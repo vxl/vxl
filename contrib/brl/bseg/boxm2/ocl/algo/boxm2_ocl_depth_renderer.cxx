@@ -31,8 +31,8 @@ boxm2_ocl_depth_renderer
                            vcl_string ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
-  render_success_(false),
-  buffers_allocated_(false)
+  buffers_allocated_(false),
+  render_success_(false)
 {
   device_ = ocl_cache->get_device();
   compile_kernels(device_);
@@ -58,8 +58,6 @@ boxm2_ocl_depth_renderer
 
   ray_origins_buff_ = new cl_float[4*cl_ni*cl_nj];
   ray_directions_buff_ = new cl_float[4*cl_ni*cl_nj];
-
-
 
   depth_image_ = opencl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float), depth_buff_,"depth image buffer");
   depth_image_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR);

@@ -28,13 +28,13 @@ public:
                                          int num_times,
                                          float p_thresh,
                                          bool refine_gpu) :
-    cache_(cache),
-    scene_(scene),
-    device_(device),
     p_thresh_(p_thresh),
     refine_gpu_(refine_gpu),
     filter_vector_(filter_vector),
-    num_times_(num_times)
+    num_times_(num_times),
+    cache_(cache),
+    scene_(scene),
+    device_(device)
   {
   vcl_vector<vcl_string> valid_types;
   valid_types.push_back("boxm2_mog6_view_compact");

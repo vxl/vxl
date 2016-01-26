@@ -72,14 +72,14 @@ public:
     sphere_(0),
     iris_(0),
     pupil_(0),
-    eyelid_(0),
     target_alpha_data_(0),
+    eyelid_(0),
     target_app_data_(0),
     target_nobs_data_(0),
-    extrinsic_only_(false),
     target_blk_(0),
-    target_data_extracted_(false),
+    extrinsic_only_(false),
     boxm2_vecf_articulated_scene(),
+    target_data_extracted_(false),
     sigma_(0.5f)
   {}
 

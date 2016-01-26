@@ -18,8 +18,8 @@ boxm2_volm_conf_matcher
                           float const& buffer_capacity) :
   query_(query),
   tile_id_(tile_id),
-  loc_leaves_(loc_leaves),
   index_folder_(index_folder),
+  loc_leaves_(loc_leaves),
   buffer_capacity_(buffer_capacity),
   cand_folder_(cand_folder),
   out_folder_(out_folder)
@@ -36,8 +36,8 @@ boxm2_volm_conf_matcher
                           float const& buffer_capacity,
                           unsigned tol_in_pixel) :
   tile_id_(tile_id),
-  loc_leaves_(loc_leaves),
   index_folder_(index_folder),
+  loc_leaves_(loc_leaves),
   buffer_capacity_(buffer_capacity),
   cand_folder_(cand_folder),
   out_folder_(out_folder)

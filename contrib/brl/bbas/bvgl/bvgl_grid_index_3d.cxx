@@ -25,10 +25,10 @@ bvgl_grid_index_3d
                      unsigned nz,
                      vgl_pointset_3d<double> ptset,
                      double thresh):
+  has_normals_(ptset.has_normals()),
   nx_(nx),
   ny_(ny),
   nz_(nz),
-  has_normals_(ptset.has_normals()),
   npts_(0),
   thresh_(thresh)
 {

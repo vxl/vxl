@@ -10,8 +10,8 @@ bstm_opencl_cache
   scene_(scene),
   bytesInCache_(0),
   block_info_(0),
-  device_(device),
-  block_info_t_(0)
+  block_info_t_(0),
+  device_(device)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
   unsigned long total_global_mem =  device->info().total_global_memory_;

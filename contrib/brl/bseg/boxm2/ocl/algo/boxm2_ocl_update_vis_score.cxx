@@ -46,10 +46,10 @@ boxm2_ocl_update_vis_score
                              bocl_device_sptr device,
                              boxm2_opencl_cache_sptr ocl_cache,
                              bool use_surface_normals) :
+  use_surface_normals_(use_surface_normals),
   scene_(scene),
   device_(device),
-  ocl_cache_(ocl_cache),
-  use_surface_normals_(use_surface_normals)
+  ocl_cache_(ocl_cache)
 {
   if (!compile_kernels()) {
     throw std::runtime_error("boxm2_ocl_update_vis_score: Failed to compile opencl kernels");
