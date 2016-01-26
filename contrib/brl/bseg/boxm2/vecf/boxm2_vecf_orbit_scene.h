@@ -60,21 +60,42 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_set.h>
 
-class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
+class boxm2_vecf_orbit_scene
+: public boxm2_vecf_articulated_scene
 {
- public:
+public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
- boxm2_vecf_orbit_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), iris_(0), pupil_(0),
-                           eyelid_(0), target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0), extrinsic_only_(false),target_blk_(0),target_data_extracted_(false),boxm2_vecf_articulated_scene(),sigma_(0.5f){}
+  boxm2_vecf_orbit_scene() :
+    alpha_data_(0),
+    app_data_(0),
+    nobs_data_(0),
+    sphere_(0),
+    iris_(0),
+    pupil_(0),
+    eyelid_(0),
+    target_alpha_data_(0),
+    target_app_data_(0),
+    target_nobs_data_(0),
+    extrinsic_only_(false),
+    target_blk_(0),
+    target_data_extracted_(false),
+    boxm2_vecf_articulated_scene(),
+    sigma_(0.5f)
+  {}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
-  boxm2_vecf_orbit_scene(vcl_string const& scene_file, bool is_single_instance = true, bool is_right = false);
+  boxm2_vecf_orbit_scene(vcl_string const& scene_file,
+                         bool is_single_instance = true,
+                         bool is_right = false);
 
-  boxm2_vecf_orbit_scene(vcl_string const& scene_file,vcl_string params_file, bool is_single_instance = true, bool is_right =false);
+  boxm2_vecf_orbit_scene(vcl_string const& scene_file,
+                         vcl_string params_file,
+                         bool is_single_instance = true,
+                         bool is_right =false);
 
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene);
@@ -83,7 +104,8 @@ class boxm2_vecf_orbit_scene : public boxm2_vecf_articulated_scene
   void extract_appearance_from_target(boxm2_scene_sptr target_scene);
 
   //: compute an inverse vector field for rotation of the eye globe
-  void inverse_vector_field_eye(vgl_rotation_3d<double> const& rot, vcl_vector<vgl_vector_3d<double> >& vfield,
+  void inverse_vector_field_eye(vgl_rotation_3d<double> const& rot,
+                                vcl_vector<vgl_vector_3d<double> >& vfield,
                                 vcl_vector<bool>& valid) const;
 
   //: compute an inverse vector field for opening/closing of the eyelid, (0.0 <= t <= 1.0)

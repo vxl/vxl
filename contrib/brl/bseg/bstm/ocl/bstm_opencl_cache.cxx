@@ -4,9 +4,14 @@
 //#define DEBUG
 
 //: scene/device constructor
-bstm_opencl_cache::bstm_opencl_cache(bstm_scene_sptr scene,
-                                       bocl_device_sptr device)
-: scene_(scene),  bytesInCache_(0), block_info_(0), device_(device),block_info_t_(0)
+bstm_opencl_cache
+::bstm_opencl_cache(bstm_scene_sptr scene,
+                    bocl_device_sptr device) :
+  scene_(scene),
+  bytesInCache_(0),
+  block_info_(0),
+  device_(device),
+  block_info_t_(0)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
   unsigned long total_global_mem =  device->info().total_global_memory_;
@@ -36,7 +41,9 @@ bstm_opencl_cache::bstm_opencl_cache(bstm_scene_sptr scene,
 
 //: sets a context in case the default context off the device is old
 // (this  is used for the tableau's shared cl_gl context)
-void bstm_opencl_cache::set_context(cl_context& context)
+void
+bstm_opencl_cache
+::set_context(cl_context& context)
 {
   context_ = &context;
   int status = clReleaseCommandQueue(q_);
@@ -52,7 +59,9 @@ void bstm_opencl_cache::set_context(cl_context& context)
   queue_ = &q_;
 }
 
-bool bstm_opencl_cache::clear_cache()
+bool
+bstm_opencl_cache
+::clear_cache()
 {
   // delete stored block info
   if (block_info_) {
@@ -131,7 +140,9 @@ bool bstm_opencl_cache::clear_cache()
   return true;
 }
 
-vcl_size_t bstm_opencl_cache::bytes_in_cache()
+vcl_size_t
+bstm_opencl_cache
+::bytes_in_cache()
 {
   // count up bytes in cache (like clearing, but no deleting...
   vcl_size_t count = 0;
@@ -173,7 +184,9 @@ vcl_size_t bstm_opencl_cache::bytes_in_cache()
   return count;
 }
 
-vcl_size_t bstm_opencl_cache::bytes_in_mem_pool()
+vcl_size_t
+bstm_opencl_cache
+::bytes_in_mem_pool()
 {
   // count up bytes in cache (like clearing, but no deleting...
   vcl_size_t count = 0;
@@ -189,7 +202,9 @@ vcl_size_t bstm_opencl_cache::bytes_in_mem_pool()
 }
 
 //: realization of abstract "get_block(block_id)"
-bocl_mem* bstm_opencl_cache::get_block(bstm_block_id id)
+bocl_mem*
+bstm_opencl_cache
+::get_block(bstm_block_id id)
 {
   //requesting block pushes it to the front of the list
   this->lru_push_front(id);
@@ -268,7 +283,9 @@ bocl_mem* bstm_opencl_cache::get_block(bstm_block_id id)
 
 
 //: realization of abstract "get_block(block_id)"
-bocl_mem* bstm_opencl_cache::get_time_block(bstm_block_id id)
+bocl_mem*
+bstm_opencl_cache
+::get_time_block(bstm_block_id id)
 {
   //requesting block pushes it to the front of the list
   this->lru_push_front(id);
@@ -335,7 +352,9 @@ bocl_mem* bstm_opencl_cache::get_time_block(bstm_block_id id)
 }
 
 
-bocl_mem* bstm_opencl_cache::get_block_info(bstm_block_id id)
+bocl_mem*
+bstm_opencl_cache
+::get_block_info(bstm_block_id id)
 {
   // clean up
   if (block_info_) {
@@ -356,7 +375,9 @@ bocl_mem* bstm_opencl_cache::get_block_info(bstm_block_id id)
 
 //: Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* bstm_opencl_cache::get_data(bstm_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
+bocl_mem*
+bstm_opencl_cache
+::get_data(bstm_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
   //push id to front of LRU list
   this->lru_push_front(id);
@@ -434,7 +455,9 @@ bocl_mem* bstm_opencl_cache::get_data(bstm_block_id id, vcl_string type, vcl_siz
 
 //: Get data new generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* bstm_opencl_cache::get_data_new(bstm_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
+bocl_mem*
+bstm_opencl_cache
+::get_data_new(bstm_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
   //push id to front of LRU list
   this->lru_push_front(id);
@@ -491,7 +514,9 @@ bocl_mem* bstm_opencl_cache::get_data_new(bstm_block_id id, vcl_string type, vcl
 // Methods for opencl objects not in the CPU cache (images, some aux data)
 //---------------------------------------------------------------------------
 //: returns a flat bocl_mem of a certain size
-bocl_mem* bstm_opencl_cache::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, vcl_string id)
+bocl_mem*
+bstm_opencl_cache
+::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, vcl_string id)
 {
   vcl_size_t totalBytes = this->bytes_in_cache()+num_bytes;
   if (totalBytes > maxBytesInCache_) {
@@ -521,7 +546,9 @@ bocl_mem* bstm_opencl_cache::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, vcl
   return data;
 }
 
-void bstm_opencl_cache::free_mem_pool()
+void
+bstm_opencl_cache
+::free_mem_pool()
 {
   vcl_map<bocl_mem*,vcl_size_t>::iterator iter;
   for (iter = mem_pool_.begin(); iter!=mem_pool_.end(); ++iter){
@@ -533,7 +560,9 @@ void bstm_opencl_cache::free_mem_pool()
 }
 
 //removes mem from pool, but still keeps it allocated
-void bstm_opencl_cache::unref_mem(bocl_mem* mem)
+void
+bstm_opencl_cache
+::unref_mem(bocl_mem* mem)
 {
   vcl_map<bocl_mem*,vcl_size_t>::iterator iter = mem_pool_.find(mem);
   if (iter != mem_pool_.end()){
@@ -541,7 +570,9 @@ void bstm_opencl_cache::unref_mem(bocl_mem* mem)
   }
 }
 
-void bstm_opencl_cache::free_mem(bocl_mem* mem)
+void
+bstm_opencl_cache
+::free_mem(bocl_mem* mem)
 {
   this->unref_mem(mem);
   delete mem;
@@ -554,7 +585,9 @@ void bstm_opencl_cache::free_mem(bocl_mem* mem)
 //: Deep data replace.
 // This replaces not only the data in the GPU cache, but
 // in the cpu cache as well (by creating a new one)
-void bstm_opencl_cache::deep_replace_data(bstm_block_id id, vcl_string type, bocl_mem* mem, bool read_only)
+void
+bstm_opencl_cache
+::deep_replace_data(bstm_block_id id, vcl_string type, bocl_mem* mem, bool read_only)
 {
   // instantiate new data block
   vcl_size_t numDataBytes = mem->num_bytes();
@@ -582,7 +615,9 @@ void bstm_opencl_cache::deep_replace_data(bstm_block_id id, vcl_string type, boc
 }
 
 //: deep remove data, removes from ocl cache as well
-void bstm_opencl_cache::deep_remove_data(bstm_block_id id, vcl_string type, bool write_out)
+void
+bstm_opencl_cache
+::deep_remove_data(bstm_block_id id, vcl_string type, bool write_out)
 {
   //find the data in this map
   vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
@@ -605,7 +640,9 @@ void bstm_opencl_cache::deep_remove_data(bstm_block_id id, vcl_string type, bool
 }
 
 //: shallow_remove_data removes data with id and type from ocl cache only
-void bstm_opencl_cache::shallow_remove_data(bstm_block_id id, vcl_string type)
+void
+bstm_opencl_cache
+::shallow_remove_data(bstm_block_id id, vcl_string type)
 {
   //find the data in this map
   vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
@@ -619,7 +656,9 @@ void bstm_opencl_cache::shallow_remove_data(bstm_block_id id, vcl_string type)
 }
 
 //: helper method, \returns a reference to correct data map (ensures one exists)
-vcl_map<bstm_block_id, bocl_mem*>& bstm_opencl_cache::cached_data_map(vcl_string prefix)
+vcl_map<bstm_block_id, bocl_mem*>&
+bstm_opencl_cache
+::cached_data_map(vcl_string prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_.find(prefix) == cached_data_.end() )
@@ -634,7 +673,9 @@ vcl_map<bstm_block_id, bocl_mem*>& bstm_opencl_cache::cached_data_map(vcl_string
 }
 
 //: helper method to insert into LRU list
-void bstm_opencl_cache::lru_push_front( bstm_block_id id )
+void
+bstm_opencl_cache
+::lru_push_front( bstm_block_id id )
 {
   //serach for it in the list, if it's there, delete it
   vcl_list<bstm_block_id>::iterator iter;
@@ -650,7 +691,9 @@ void bstm_opencl_cache::lru_push_front( bstm_block_id id )
 }
 
 //: helper to remove all data and block memory by ID
-bool bstm_opencl_cache::lru_remove_last(bstm_block_id &lru_id)
+bool
+bstm_opencl_cache
+::lru_remove_last(bstm_block_id &lru_id)
 {
   //grab and remove last element
   if (lru_order_.empty()) {
@@ -706,7 +749,9 @@ bool bstm_opencl_cache::lru_remove_last(bstm_block_id &lru_id)
   return true;
 }
 
-vcl_string bstm_opencl_cache::to_string()
+vcl_string
+bstm_opencl_cache
+::to_string()
 {
   vcl_stringstream s;
   s << "MB in cache: " << (vcl_size_t) this->bytes_in_cache()/1024.0f/1024.0f<<'\n'

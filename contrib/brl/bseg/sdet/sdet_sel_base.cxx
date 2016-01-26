@@ -13,24 +13,37 @@
 #include "sdet_edgemap.h"
 
 //: Constructor
-sdet_sel_base::sdet_sel_base(sdet_edgemap_sptr edgemap,
-                               sdet_curvelet_map& cvlet_map,
-                               sdet_edgel_link_graph& edge_link_graph,
-                               sdet_curve_fragment_graph& curve_frag_graph,
-                               sdet_curvelet_params cvlet_params) :
-edgemap_(edgemap), curvelet_map_(cvlet_map),
-edge_link_graph_(edge_link_graph), curve_frag_graph_(curve_frag_graph),
-nrows_(edgemap->height()), ncols_(edgemap->width()),
-app_usage_(0), app_thresh_(2),
-rad_(cvlet_params.rad_), gap_(cvlet_params.gap_),dtheta_(cvlet_params.dtheta_*vnl_math::pi/180), dpos_(cvlet_params.dpos_),
-badap_uncer_(cvlet_params.badap_uncer_),
-token_len_(cvlet_params.token_len_), max_k_(cvlet_params.max_k_), max_gamma_(cvlet_params.max_gamma_),
-nrad_((unsigned) vcl_ceil(rad_)+1), maxN_(2*nrad_),
-centered_(cvlet_params.centered_), bidir_(cvlet_params.bidirectional_),
-use_anchored_curvelets_(true),
-min_deg_to_link_(4),
-use_hybrid_(false),
-DHT_mode_(true), propagate_constraints(true)
+sdet_sel_base
+::sdet_sel_base(sdet_edgemap_sptr edgemap,
+                sdet_curvelet_map& cvlet_map,
+                sdet_edgel_link_graph& edge_link_graph,
+                sdet_curve_fragment_graph& curve_frag_graph,
+                sdet_curvelet_params cvlet_params) :
+  edgemap_(edgemap),
+  curvelet_map_(cvlet_map),
+  edge_link_graph_(edge_link_graph),
+  curve_frag_graph_(curve_frag_graph),
+  nrows_(edgemap->height()),
+  ncols_(edgemap->width()),
+  app_usage_(0),
+  app_thresh_(2),
+  rad_(cvlet_params.rad_),
+  gap_(cvlet_params.gap_),
+  dtheta_(cvlet_params.dtheta_*vnl_math::pi/180),
+  dpos_(cvlet_params.dpos_),
+  badap_uncer_(cvlet_params.badap_uncer_),
+  token_len_(cvlet_params.token_len_),
+  max_k_(cvlet_params.max_k_),
+  max_gamma_(cvlet_params.max_gamma_),
+  nrad_((unsigned) vcl_ceil(rad_)+1),
+  maxN_(2*nrad_),
+  centered_(cvlet_params.centered_),
+  bidir_(cvlet_params.bidirectional_),
+  use_anchored_curvelets_(true),
+  min_deg_to_link_(4),
+  use_hybrid_(false),
+  DHT_mode_(true),
+  propagate_constraints(true)
 {
   //save the parameters in the curvelet map
   curvelet_map_.set_edgemap(edgemap);
@@ -38,7 +51,8 @@ DHT_mode_(true), propagate_constraints(true)
 }
 
 //:destructor
-sdet_sel_base::~sdet_sel_base()
+sdet_sel_base
+::~sdet_sel_base()
 {
 }
 
@@ -47,7 +61,9 @@ sdet_sel_base::~sdet_sel_base()
 //********************************************************************//
 
 //: use the recommended sub-algorithms to extract final contour set (naive users should call this function)
-void sdet_sel_base::extract_image_contours()
+void
+sdet_sel_base
+::extract_image_contours()
 {
   //1) perform local edgel grouping
   set_appearance_usage(0); //do not use
@@ -67,7 +83,9 @@ void sdet_sel_base::extract_image_contours()
 }
 
 //: group pairs of edgels into curvelets
-void sdet_sel_base::build_pairs()
+void
+sdet_sel_base
+::build_pairs()
 {
   vcl_cout << "Building pairs ...";
   vcl_cout.flush();
@@ -116,7 +134,9 @@ void sdet_sel_base::build_pairs()
 
 
 //: form curvelets around each edgel in a greedy fashion
-void sdet_sel_base::build_curvelets_greedy(unsigned max_size_to_group,bool use_flag, bool clear_existing, bool verbose)
+void
+sdet_sel_base
+::build_curvelets_greedy(unsigned max_size_to_group,bool use_flag, bool clear_existing, bool verbose)
 {
   if (verbose){
     vcl_cout << "Building All Possible Curvelets (Greedy) ..." ;
@@ -178,7 +198,9 @@ void sdet_sel_base::build_curvelets_greedy(unsigned max_size_to_group,bool use_f
 
 
 //: form the full curvelet map (curvelet map lists all the curvelets it participated in and not just the ones anchored to it)
-void sdet_sel_base::form_full_cvlet_map()
+void
+sdet_sel_base
+::form_full_cvlet_map()
 {
   // This method forms a curvelet map which is a mapping from each edgel to all the
   // curvelets it participates in and not just the ones anchored to it
@@ -236,7 +258,9 @@ void sdet_sel_base::form_full_cvlet_map()
 }
 
 //: check to see if curvelets are balanced
-bool sdet_sel_base::curvelet_is_balanced(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain)
+bool
+sdet_sel_base
+::curvelet_is_balanced(sdet_edgel* ref_e, vcl_deque<sdet_edgel*> &edgel_chain)
 {
   //looks like this is one of the qualitites we need of an edgel grouping before it can qualify to be a curvelet
 
@@ -261,8 +285,9 @@ bool sdet_sel_base::curvelet_is_balanced(sdet_edgel* ref_e, vcl_deque<sdet_edgel
     return true;
 }
 
-
-void sdet_sel_base::recompute_curvelet_quality()
+void
+sdet_sel_base
+::recompute_curvelet_quality()
 {
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
   {
@@ -273,7 +298,9 @@ void sdet_sel_base::recompute_curvelet_quality()
 }
 
 //: prune the curvelets with gaps larger than the one specified
-void sdet_sel_base::prune_curvelets_by_gaps(double gap_threshold)
+void
+sdet_sel_base
+::prune_curvelets_by_gaps(double gap_threshold)
 {
   //go through the curvelet map and remove all the curvelets below threshold
 
@@ -306,7 +333,9 @@ void sdet_sel_base::prune_curvelets_by_gaps(double gap_threshold)
 }
 
 //: prune the curvelets with lengths (extent) smaller than the one specified
-void sdet_sel_base::prune_curvelets_by_length(double length_threshold)
+void
+sdet_sel_base
+::prune_curvelets_by_length(double length_threshold)
 {
   //go through the curvelet map and remove all the curvelets below threshold
 
@@ -334,7 +363,9 @@ void sdet_sel_base::prune_curvelets_by_length(double length_threshold)
 }
 
 //: prune the curvelets that are below the quality threshold and hence considered spurious
-void sdet_sel_base::prune_the_curvelets(double quality_threshold)
+void
+sdet_sel_base
+::prune_the_curvelets(double quality_threshold)
 {
   //go through the curvelet map and remove all the curvelets below threshold
 
@@ -360,7 +391,9 @@ void sdet_sel_base::prune_the_curvelets(double quality_threshold)
 }
 
 //: prne the curvelets that are not locally geometrically consistent (i.e., c1)
-void sdet_sel_base::prune_curvelets_by_c1_condition()
+void
+sdet_sel_base
+::prune_curvelets_by_c1_condition()
 {
   //Note: this is currently only meaningful for GENO style curvelets
   //goal: to locally do a test of viability beyond the local neighborhood by looking for viability across
@@ -411,9 +444,10 @@ void sdet_sel_base::prune_curvelets_by_c1_condition()
 
 }
 
-
 //: construct a simple link grpah by connectng edgels to all its neighbors
-void sdet_sel_base::construct_naive_link_graph(double proximity_threshold, double affinity_threshold)
+void
+sdet_sel_base
+::construct_naive_link_graph(double proximity_threshold, double affinity_threshold)
 {
   //1) clear the link graph and form a new one
   edge_link_graph_.clear();
@@ -467,7 +501,6 @@ void sdet_sel_base::construct_naive_link_graph(double proximity_threshold, doubl
       }
     }
   }
-
 }
 
 //: form the link graph from the existing edgel groupings
@@ -475,7 +508,9 @@ void sdet_sel_base::construct_naive_link_graph(double proximity_threshold, doubl
 // method = 1 : curve model consistency
 // method = 2 : reciprocal immediate links only
 // method = 3 : immediate links only
-void sdet_sel_base::construct_the_link_graph(unsigned min_group_size, int method)
+void
+sdet_sel_base
+::construct_the_link_graph(unsigned min_group_size, int method)
 {
   //1) clear the link graph and form a new one
   edge_link_graph_.clear();
@@ -535,7 +570,9 @@ void sdet_sel_base::construct_the_link_graph(unsigned min_group_size, int method
 }
 
 //: count the degree of overlap between pairs of curvelets at a link
-int sdet_sel_base::count_degree_overlap(sdet_link* link)
+int
+sdet_sel_base
+::count_degree_overlap(sdet_link* link)
 {
   int max_deg = 0;
 
@@ -572,7 +609,9 @@ int sdet_sel_base::count_degree_overlap(sdet_link* link)
 }
 
 //: count the degree of overlap between two curvelets
-int sdet_sel_base::count_degree_overlap(sdet_curvelet* cvlet1, sdet_curvelet* cvlet2, unsigned k1, unsigned k2)
+int
+sdet_sel_base
+::count_degree_overlap(sdet_curvelet* cvlet1, sdet_curvelet* cvlet2, unsigned k1, unsigned k2)
 {
   //ks are the indices into the edgel chain of the cvlets
   int cnt_overlap=0;
@@ -727,7 +766,9 @@ void sdet_sel_base::form_links_from_a_curvelet(sdet_edgel* eA, sdet_curvelet* cv
 }
 
 //: check to see if link between two edges is reciprocal (i.e., x-A->b-y && p-a->B-q)
-bool sdet_sel_base::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, unsigned min_group_size)
+bool
+sdet_sel_base
+::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, unsigned min_group_size)
 {
   bool link_found = false;
 
@@ -775,7 +816,9 @@ bool sdet_sel_base::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, unsigned 
 }
 
 //: check to see if link between two edges is reciprocal (i.e., x-A-b-y && p-a-B-q)
-bool sdet_sel_base::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* ref_e, unsigned min_group_size)
+bool
+sdet_sel_base
+::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* ref_e, unsigned min_group_size)
 {
   sdet_edgel *eC, *eN; //current edgel and neighboring edgel
 
@@ -809,7 +852,9 @@ bool sdet_sel_base::link_is_reciprocal(sdet_edgel* eA, sdet_edgel* eB, sdet_edge
 }
 
 //: check to see if link is reciprocal and supported by other edgels  (i.e., x-A->b-y && x-a->B-y)
-bool sdet_sel_base::link_is_supported(sdet_edgel* eA, sdet_edgel* eB, unsigned min_group_size)
+bool
+sdet_sel_base
+::link_is_supported(sdet_edgel* eA, sdet_edgel* eB, unsigned min_group_size)
 {
   bool link_found = false;
 
@@ -842,7 +887,9 @@ bool sdet_sel_base::link_is_supported(sdet_edgel* eA, sdet_edgel* eB, unsigned m
 
 
 //: check to see if link is reciprocal and supported by other edgels  (i.e., x-A->b-y && x-a->B-y)
-bool sdet_sel_base::link_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* eY,
+bool
+sdet_sel_base
+::link_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* eY,
                                        sdet_edgel* ref_e, unsigned min_group_size)
 {
   sdet_edgel *eC, *eN; //current edgel and neighboring edgel
@@ -898,7 +945,9 @@ bool sdet_sel_base::link_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel
 }
 
 //: check to see if this triplet is supported
-bool sdet_sel_base::triplet_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eY,
+bool
+sdet_sel_base
+::triplet_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_edgel* eY,
                                           unsigned min_group_size)
 {
   //we know eX-->eA-->eY exists, we need to verify that -eX-eA-eY exists for eX and eY.
@@ -957,7 +1006,9 @@ bool sdet_sel_base::triplet_is_supported(sdet_edgel* eX, sdet_edgel* eA, sdet_ed
   return cvlet_found;
 }
 
-void sdet_sel_base::prune_the_link_graph()
+void
+sdet_sel_base
+::prune_the_link_graph()
 {
   //prune the link graph of spurious links (ie links that cannot be extended)
   vcl_vector<sdet_link*> links_to_del;
@@ -979,7 +1030,9 @@ void sdet_sel_base::prune_the_link_graph()
 }
 
 //: make the link graph bidirectionally consistent
-void sdet_sel_base::make_link_graph_consistent()
+void
+sdet_sel_base
+::make_link_graph_consistent()
 {
   //this ought to be an iterative algorithm
   bool LG_consistent = false;
@@ -1017,7 +1070,9 @@ void sdet_sel_base::make_link_graph_consistent()
 }
 
 //: clear all contours
-void sdet_sel_base::clear_all_contours()
+void
+sdet_sel_base
+::clear_all_contours()
 {
   //reset linked flags on the link graph
   edge_link_graph_.linked.assign(edgemap_->edgels.size(), false);
@@ -1031,7 +1086,9 @@ void sdet_sel_base::clear_all_contours()
 
 // Extract image contours from the link graph by
 // extracting regular contours in successive stages
-void sdet_sel_base::extract_image_contours_from_the_link_graph(unsigned num_link_iters)
+void
+sdet_sel_base
+::extract_image_contours_from_the_link_graph(unsigned num_link_iters)
 {
   vcl_cout << "Extracting regular contours from the Link Graph..." ;
 
@@ -1101,7 +1158,9 @@ void sdet_sel_base::extract_image_contours_from_the_link_graph(unsigned num_link
 
 
 //: extract the regular contours from the link graph
-void sdet_sel_base::extract_regular_contours_from_the_link_graph()
+void
+sdet_sel_base
+::extract_regular_contours_from_the_link_graph()
 {
   //first remove any existing contours
   clear_all_contours();
@@ -1114,7 +1173,9 @@ void sdet_sel_base::extract_regular_contours_from_the_link_graph()
 }
 
 //: extract the one chains from a given link graph (from the primary link grpah of ELG)
-void sdet_sel_base::extract_one_chains_from_the_link_graph(sdet_edgel_link_graph& ELG)
+void
+sdet_sel_base
+::extract_one_chains_from_the_link_graph(sdet_edgel_link_graph& ELG)
 {
   //initialize the curve fragment map
   curve_frag_graph_.resize(edgemap_->edgels.size());
@@ -1214,7 +1275,9 @@ void sdet_sel_base::extract_one_chains_from_the_link_graph(sdet_edgel_link_graph
 
 
 //: determine if this links from the link grpah is valid
-bool sdet_sel_base::link_valid(sdet_link* link)
+bool
+sdet_sel_base
+::link_valid(sdet_link* link)
 {
 
   //if (link->deg_overlap >= min_deg_to_link_)
@@ -1242,7 +1305,9 @@ bool sdet_sel_base::link_valid(sdet_link* link)
 }
 
 //: determine if this link is bidirectional
-bool sdet_sel_base::link_bidirectional(sdet_link* link)
+bool
+sdet_sel_base
+::link_bidirectional(sdet_link* link)
 {
   unsigned src_id = link->pe->id;
   unsigned tar_id = link->ce->id;
@@ -1259,7 +1324,9 @@ bool sdet_sel_base::link_bidirectional(sdet_link* link)
 }
 
 //: connect pieces of contours that are connected but separated
-void sdet_sel_base::post_process_to_link_contour_fragments()
+void
+sdet_sel_base
+::post_process_to_link_contour_fragments()
 {
 
 }
@@ -1270,7 +1337,9 @@ void sdet_sel_base::post_process_to_link_contour_fragments()
 //***********************************************************************//
 
 //: construct a mapping between edgel ids and curve ids
-void sdet_sel_base::compile_edge_to_contour_mapping()
+void
+sdet_sel_base
+::compile_edge_to_contour_mapping()
 {
   //clear the mapping
   cId_.clear();
@@ -1298,7 +1367,9 @@ void sdet_sel_base::compile_edge_to_contour_mapping()
 }
 
 //: attempt to form curvelets from the traced contour fragments
-void sdet_sel_base::form_curvelets_from_contours(bool clear_existing)
+void
+sdet_sel_base
+::form_curvelets_from_contours(bool clear_existing)
 {
   if (clear_existing)
   {
@@ -1423,7 +1494,9 @@ void sdet_sel_base::form_curvelets_from_contours(bool clear_existing)
 }
 
 //: attempt to form curvelets from the traced contour fragments
-void sdet_sel_base::form_curvelets_from_contours(unsigned max_size_to_group)
+void
+sdet_sel_base
+::form_curvelets_from_contours(unsigned max_size_to_group)
 {
   //form a new curvelet map
   curvelet_map_.resize(edgemap_->num_edgels());
@@ -1509,7 +1582,9 @@ void sdet_sel_base::form_curvelets_from_contours(unsigned max_size_to_group)
 }
 
 //: Break contours at places where curvelets cannot form
-void sdet_sel_base::post_process_to_break_contours()
+void
+sdet_sel_base
+::post_process_to_break_contours()
 {
   //Assume that curvelets have been computed already and the link graph reflects all the links from the curvelets
 
@@ -1601,7 +1676,9 @@ void sdet_sel_base::post_process_to_break_contours()
 }
 
 //: evauate the qualities of curvelets using various functions
-void sdet_sel_base::evaluate_curvelet_quality(int method)
+void
+sdet_sel_base
+::evaluate_curvelet_quality(int method)
 {
   //for each edgel, for each curvelet, compute quality using the specified method
   for (unsigned i=0; i<edgemap_->edgels.size(); i++)
@@ -1658,7 +1735,9 @@ void sdet_sel_base::evaluate_curvelet_quality(int method)
 }
 
 //: method to look at the spread of differential estimates
-void sdet_sel_base::determine_accuracy_of_measurements()
+void
+sdet_sel_base
+::determine_accuracy_of_measurements()
 {
   //determine # of curvelets
   int cvlet_cnt=0;
@@ -1721,7 +1800,9 @@ void sdet_sel_base::determine_accuracy_of_measurements()
 }
 
 
-void sdet_sel_base::report_stats()
+void
+sdet_sel_base
+::report_stats()
 {
   vcl_cout << "======================================" << vcl_endl;
   vcl_cout << "Edge Linking Summary\n";
@@ -1857,12 +1938,15 @@ void sdet_sel_base::report_stats()
 #define Strength_Diff1 2.0
 #define Strength_Diff2 4.0
 
-sdet_EHT* sdet_sel_base::construct_hyp_tree(sdet_edgel* edge)
+sdet_EHT*
+sdet_sel_base
+::construct_hyp_tree(sdet_edgel* edge)
 {
-  if (edge_link_graph_.cLinks.size()==0){
+  if (edge_link_graph_.cLinks.size()==0)
+    {
     vcl_cout << "No Link Graph !" <<vcl_endl;
     return 0;
-  }
+    }
 
 
  //construct 2 HTs: one in the forward direction and one in the reverse direction ????  by yuliang no forword
@@ -1957,7 +2041,9 @@ sdet_EHT* sdet_sel_base::construct_hyp_tree(sdet_edgel* edge)
 }
 
 //: construct all possible EHTs from the terminal nodes and find legal contour paths
-void sdet_sel_base::construct_all_path_from_EHTs()
+void
+sdet_sel_base
+::construct_all_path_from_EHTs()
 {
   // modify by Yuliang, use a local filter for contours size 3 and 4 to prune some, and merge some continuous regular contours first
   regular_contour_filter();
@@ -2024,7 +2110,9 @@ void sdet_sel_base::construct_all_path_from_EHTs()
 }
 
 //: perform a geometric consistency check to determine whether a given temp path is valid
-bool sdet_sel_base::is_EHT_path_legal(vcl_vector<sdet_edgel*>& edgel_chain)
+bool
+sdet_sel_base
+::is_EHT_path_legal(vcl_vector<sdet_edgel*>& edgel_chain)
 {
   //what makes a path legal?
 
@@ -2141,9 +2229,11 @@ bool sdet_sel_base::is_EHT_path_legal(vcl_vector<sdet_edgel*>& edgel_chain)
 }
 
 //: New Quality Metric by Naman Kumar :: compute a path metric based on the Gap, Orientation, Strength and Size of the chain
-double sdet_sel_base::compute_path_metric2(vcl_vector<sdet_edgel*>& Pchain,
-                                           vcl_vector<sdet_edgel*>& Tchain,
-                                           vcl_vector<sdet_edgel*>& Cchain)
+double
+sdet_sel_base
+::compute_path_metric2(vcl_vector<sdet_edgel*>& Pchain,
+                       vcl_vector<sdet_edgel*>& Tchain,
+                       vcl_vector<sdet_edgel*>& Cchain)
 {
   double cost = 0.0;double ds=0;double dt=0;
 

@@ -27,16 +27,39 @@ class volm_conf_object : public vbl_ref_count
 {
 public:
   //: default constructor
-  volm_conf_object() : theta_(0.0f), dist_(0.0f), height_(0.0f), land_(0) {}
+  volm_conf_object() :
+    theta_(0.0f),
+    dist_(0.0f),
+    height_(0.0f),
+    land_(0)
+  {}
+
   //: constructor from location theta, dist, land_id
-  volm_conf_object(float  const& theta, float  const& dist, float  const& height, unsigned char const& land);
-  volm_conf_object(double const& theta, double const& dist, double const& height, unsigned char const& land);
+  volm_conf_object(float const& theta,
+                   float const& dist,
+                   float const& height,
+                   unsigned char const& land);
+
+  volm_conf_object(double const& theta,
+                   double const& dist,
+                   double const& height,
+                   unsigned char const& land);
+
   //: constructor from a 2-d points, a height value and land id
-  volm_conf_object(vgl_point_2d<float>  const& pt, float  const& height, unsigned char const& land);
-  volm_conf_object(vgl_point_2d<double> const& pt, double const& height, unsigned char const& land);
+  volm_conf_object(vgl_point_2d<float> const& pt,
+                   float const& height,
+                   unsigned char const& land);
+
+  volm_conf_object(vgl_point_2d<double> const& pt,
+                   double const& height,
+                   unsigned char const& land);
+
   //: constructor from a 3-d points (note the dist are the ground distance, i.e. calculated by pt.x() and pt.y())
-  volm_conf_object(vgl_point_3d<float>  const& pt, unsigned char const& land);
-  volm_conf_object(vgl_point_3d<double> const& pt, unsigned char const& land);
+  volm_conf_object(vgl_point_3d<float> const& pt,
+                   unsigned char const& land);
+
+  volm_conf_object(vgl_point_3d<double> const& pt,
+                   unsigned char const& land);
 
   //: destructor
   ~volm_conf_object() {}

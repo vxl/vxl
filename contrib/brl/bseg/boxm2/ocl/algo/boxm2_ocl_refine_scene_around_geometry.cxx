@@ -2,7 +2,11 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_function_with_labels.h>
 #include <vcl_where_root_dir.h>
-bool boxm2_ocl_refine_scene_around_geometry::compile_kernel(){
+
+bool
+boxm2_ocl_refine_scene_around_geometry
+::compile_kernel()
+{
   vcl_vector<vcl_string> src_paths;
   vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   vcl_string reg_source_dir = vcl_string(VCL_SOURCE_ROOT_DIR)+ "/contrib/brl/bseg/boxm2/reg/ocl/cl/";
@@ -25,7 +29,10 @@ bool boxm2_ocl_refine_scene_around_geometry::compile_kernel(){
 
 }
 
-bool boxm2_ocl_refine_scene_around_geometry::refine(){
+bool
+boxm2_ocl_refine_scene_around_geometry
+::refine()
+{
 
         if (!refine_gpu_)
                 for (unsigned i=0;i<num_times_;i++){
@@ -39,9 +46,12 @@ bool boxm2_ocl_refine_scene_around_geometry::refine(){
                         return this->refine_gpu();
         }
         return true;
-  }
+}
 
-bool boxm2_ocl_refine_scene_around_geometry::refine_cpp(){
+bool
+boxm2_ocl_refine_scene_around_geometry
+::refine_cpp()
+{
         vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene_->blocks();
         vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
@@ -87,11 +97,17 @@ bool boxm2_ocl_refine_scene_around_geometry::refine_cpp(){
         return true;
 }
 
-bool boxm2_ocl_refine_scene_around_geometry::refine_gpu(){
-
-        return false;
+bool
+boxm2_ocl_refine_scene_around_geometry
+::refine_gpu()
+{
+  return false;
 }
-bool boxm2_ocl_refine_scene_around_geometry::label_cells_for_refinement(){
+
+bool
+boxm2_ocl_refine_scene_around_geometry
+::label_cells_for_refinement()
+{
 
         int status;
         float gpu_time=0.0f;

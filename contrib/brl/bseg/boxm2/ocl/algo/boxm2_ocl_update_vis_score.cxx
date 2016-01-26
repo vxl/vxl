@@ -7,8 +7,9 @@
 #include <vul/vul_timer.h>
 #include <vcl_stdexcept.h>
 
-
-bool boxm2_ocl_update_vis_score::compile_kernels()
+bool
+boxm2_ocl_update_vis_score
+::compile_kernels()
 {
     vcl_vector<vcl_string> src_paths;
     vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -40,21 +41,27 @@ bool boxm2_ocl_update_vis_score::compile_kernels()
     return status;
 }
 
-boxm2_ocl_update_vis_score:: boxm2_ocl_update_vis_score(boxm2_scene_sptr scene,
-                                                        bocl_device_sptr device,
-                                                        boxm2_opencl_cache_sptr ocl_cache,
-                                                        bool use_surface_normals)
-  : scene_(scene), device_(device), ocl_cache_(ocl_cache), use_surface_normals_(use_surface_normals)
+boxm2_ocl_update_vis_score
+::boxm2_ocl_update_vis_score(boxm2_scene_sptr scene,
+                             bocl_device_sptr device,
+                             boxm2_opencl_cache_sptr ocl_cache,
+                             bool use_surface_normals) :
+  scene_(scene),
+  device_(device),
+  ocl_cache_(ocl_cache),
+  use_surface_normals_(use_surface_normals)
 {
   if (!compile_kernels()) {
     throw std::runtime_error("boxm2_ocl_update_vis_score: Failed to compile opencl kernels");
   }
 }
 
-bool boxm2_ocl_update_vis_score::run( vpgl_camera_double_sptr  cam,
-                                      unsigned ni,
-                                      unsigned nj,
-                                      vcl_string prefix_name )
+bool
+boxm2_ocl_update_vis_score
+::run(vpgl_camera_double_sptr cam,
+      unsigned ni,
+      unsigned nj,
+      vcl_string prefix_name )
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
@@ -268,7 +275,10 @@ bool boxm2_ocl_update_vis_score::run( vpgl_camera_double_sptr  cam,
   clReleaseCommandQueue(queue);
   return true;
 }
-void boxm2_ocl_update_vis_score::reset(vcl_string prefix_name){
+
+void
+boxm2_ocl_update_vis_score
+::reset(vcl_string prefix_name){
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);

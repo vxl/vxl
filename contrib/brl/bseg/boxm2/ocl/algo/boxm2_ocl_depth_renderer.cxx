@@ -25,15 +25,22 @@
 #include "boxm2_ocl_render_expected_image_function.h"
 #include <vul/vul_timer.h>
 
-
-boxm2_ocl_depth_renderer::boxm2_ocl_depth_renderer(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, vcl_string ident)
-  : scene_(scene), opencl_cache_(ocl_cache), render_success_(false), buffers_allocated_(false)
+boxm2_ocl_depth_renderer
+::boxm2_ocl_depth_renderer(boxm2_scene_sptr scene,
+                           boxm2_opencl_cache_sptr ocl_cache,
+                           vcl_string ident) :
+  scene_(scene),
+  opencl_cache_(ocl_cache),
+  render_success_(false),
+  buffers_allocated_(false)
 {
   device_ = ocl_cache->get_device();
   compile_kernels(device_);
 }
 
-bool boxm2_ocl_depth_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
+bool
+boxm2_ocl_depth_renderer
+::allocate_render_buffers(int cl_ni, int cl_nj)
 {
   if ( buffers_allocated_ && (prev_ni_ == cl_ni) && (prev_nj_ == cl_nj) ) {
     // can reuse old buffers
@@ -97,7 +104,9 @@ bool boxm2_ocl_depth_renderer::allocate_render_buffers(int cl_ni, int cl_nj)
   return true;
 }
 
-bool boxm2_ocl_depth_renderer::cleanup_render_buffers()
+bool
+boxm2_ocl_depth_renderer
+::cleanup_render_buffers()
 {
   if(!buffers_allocated_) {
     return false;
@@ -141,12 +150,15 @@ bool boxm2_ocl_depth_renderer::cleanup_render_buffers()
   return true;
 }
 
-boxm2_ocl_depth_renderer::~boxm2_ocl_depth_renderer()
+boxm2_ocl_depth_renderer
+::~boxm2_ocl_depth_renderer()
 {
   cleanup_render_buffers();
 }
 
-bool boxm2_ocl_depth_renderer::get_last_rendered(vil_image_view<float> &img)
+bool
+boxm2_ocl_depth_renderer
+::get_last_rendered(vil_image_view<float> &img)
 {
   if (render_success_) {
     img.deep_copy(depth_img_);
@@ -155,7 +167,9 @@ bool boxm2_ocl_depth_renderer::get_last_rendered(vil_image_view<float> &img)
   return false;
 }
 
-bool boxm2_ocl_depth_renderer::get_last_vis(vil_image_view<float> &vis_img)
+bool
+boxm2_ocl_depth_renderer
+::get_last_vis(vil_image_view<float> &vis_img)
 {
   if (render_success_) {
     vis_img.deep_copy( vis_img_ );
@@ -164,7 +178,9 @@ bool boxm2_ocl_depth_renderer::get_last_vis(vil_image_view<float> &vis_img)
   return false;
 }
 
-bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor, float farfactor)
+bool
+boxm2_ocl_depth_renderer
+::render(vpgl_camera_double_sptr camera, unsigned ni, unsigned nj, float nearfactor, float farfactor)
 {
   render_success_ = false;
 
@@ -308,7 +324,9 @@ bool boxm2_ocl_depth_renderer::render(vpgl_camera_double_sptr camera, unsigned n
   return true;
 }
 
-bool boxm2_ocl_depth_renderer::compile_kernels(bocl_device_sptr device)
+bool
+boxm2_ocl_depth_renderer
+::compile_kernels(bocl_device_sptr device)
 {
   {
     vcl_vector<vcl_string> src_paths;
