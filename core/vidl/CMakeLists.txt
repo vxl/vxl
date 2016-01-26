@@ -84,6 +84,8 @@ if( FFMPEG_FOUND )
                                      vidl_ffmpeg_ostream_v4.txx
       vidl_ffmpeg_istream_v0.9.txx   vidl_ffmpeg_ostream_v0.9.txx
                                      vidl_ffmpeg_ostream_v0.11.txx
+      vidl_ffmpeg_istream_v56.txx    vidl_ffmpeg_ostream_v56.txx
+      vidl_ffmpeg_pixel_format.h     vidl_ffmpeg_pixel_format.cxx
      )
 # Stub implementation, when ffmeg is not available
 else()
