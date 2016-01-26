@@ -243,62 +243,105 @@ public:
   boxm2_data<BOXM2_PIXEL>* pupil_;       // is voxel a pupil point
   boxm2_data<BOXM2_FLOAT>* radial_distance_;       // is voxel a pupil point
 
-  vcl_vector<vgl_point_3d<double> > sphere_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> sphere_cell_data_index_;           // corresponding data indices
+  // centers of spherical shell voxels
+  vcl_vector<vgl_point_3d<double> > sphere_cell_centers_;
+
+  // corresponding data indices
+  vcl_vector<unsigned> sphere_cell_data_index_;
+
   //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_cell_index_; // neighbors of each shell voxel
+  // neighbors of each shell voxel
+  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_cell_index_;
+
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > data_index_to_cell_index_;             // data index to shell index
+  // data index to shell index
+  vcl_map<unsigned, unsigned > data_index_to_cell_index_;
+
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_data_index_; // data index to neighbor data indices
+  // data index to neighbor data indices
+  vcl_map<unsigned, vcl_vector<unsigned> > cell_neighbor_data_index_;
 
-  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;               // center of iris cells
-  vcl_vector<unsigned> iris_cell_data_index_;                         // corresponding data index
+  // center of iris cells
+  vcl_vector<vgl_point_3d<double> > iris_cell_centers_;
 
-  vcl_vector<vgl_point_3d<double> > pupil_cell_centers_;              // center of pupil cells
-  vcl_vector<unsigned> pupil_cell_data_index_;                        // corresponding data index
+  // corresponding data index
+  vcl_vector<unsigned> iris_cell_data_index_;
+
+  // center of pupil cells
+  vcl_vector<vgl_point_3d<double> > pupil_cell_centers_;
+
+  // corresponding data index
+  vcl_vector<unsigned> pupil_cell_data_index_;
 
   //==== upper eyelid ======
   boxm2_vecf_eyelid eyelid_geo_;
 
   boxm2_data<BOXM2_PIXEL>* eyelid_;      // is voxel an eyelid point?
 
-  vcl_vector<vgl_point_3d<double> > eyelid_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> eyelid_cell_data_index_;           // corresponding data indices
-    //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_cell_neighbor_cell_index_; // neighbors of each shell voxel
+  // centers of spherical shell voxels
+  vcl_vector<vgl_point_3d<double> > eyelid_cell_centers_;
+
+  // corresponding data indices
+  vcl_vector<unsigned> eyelid_cell_data_index_;
+
+  //      cell_index          cell_index
+  // neighbors of each shell voxel
+  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_cell_neighbor_cell_index_;
+
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > eyelid_data_index_to_cell_index_;             // data index to shell index
+  // data index to shell index
+  vcl_map<unsigned, unsigned > eyelid_data_index_to_cell_index_;
+
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_cell_neighbor_data_index_; // data index to neighbor data indices
+  // data index to neighbor data indices
+  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_cell_neighbor_data_index_;
 
   //==== lower_eyelid ======
   boxm2_vecf_eyelid lower_eyelid_geo_;
 
-  boxm2_data<BOXM2_PIXEL>* lower_eyelid_;      // is voxel an eyelid point?
+  // is voxel an eyelid point?
+  boxm2_data<BOXM2_PIXEL>* lower_eyelid_;
 
-  vcl_vector<vgl_point_3d<double> > lower_eyelid_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> lower_eyelid_cell_data_index_;           // corresponding data indices
-    //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > lower_eyelid_cell_neighbor_cell_index_; // neighbors of each shell voxel
+  // centers of spherical shell voxels
+  vcl_vector<vgl_point_3d<double> > lower_eyelid_cell_centers_;
+
+  // corresponding data indices
+  vcl_vector<unsigned> lower_eyelid_cell_data_index_;
+
+  //      cell_index          cell_index
+  // neighbors of each shell voxel
+  vcl_map<unsigned, vcl_vector<unsigned> > lower_eyelid_cell_neighbor_cell_index_;
+
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > lower_eyelid_data_index_to_cell_index_;             // data index to shell index
+  // data index to shell index
+  vcl_map<unsigned, unsigned > lower_eyelid_data_index_to_cell_index_;
+
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > lower_eyelid_cell_neighbor_data_index_; // data index to neighbor data indices
+  // data index to neighbor data indices
+  vcl_map<unsigned, vcl_vector<unsigned> > lower_eyelid_cell_neighbor_data_index_;
 
   //==== eyelid crease ======
   boxm2_vecf_eyelid_crease eyelid_crease_geo_;
 
-  boxm2_data<BOXM2_PIXEL>* eyelid_crease_;      // is voxel an eyelid point?
+  // is voxel an eyelid point?
+  boxm2_data<BOXM2_PIXEL>* eyelid_crease_;
 
-  vcl_vector<vgl_point_3d<double> > eyelid_crease_cell_centers_; // centers of spherical shell voxels
-  vcl_vector<unsigned> eyelid_crease_cell_data_index_;           // corresponding data indices
-    //      cell_index          cell_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_cell_index_; // neighbors of each shell voxel
+  // centers of spherical shell voxels
+  vcl_vector<vgl_point_3d<double> > eyelid_crease_cell_centers_;
+  // corresponding data indices
+  vcl_vector<unsigned> eyelid_crease_cell_data_index_;
+
+  //      cell_index          cell_index
+  // neighbors of each shell voxel
+  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_cell_index_;
+
   //     data_index cell_index
-  vcl_map<unsigned, unsigned > eyelid_crease_data_index_to_cell_index_;             // data index to shell index
+  // data index to shell index
+  vcl_map<unsigned, unsigned > eyelid_crease_data_index_to_cell_index_;
+
   //      data_index          data_index
-  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_data_index_; // data index to neighbor data indices
+  // data index to neighbor data indices
+  vcl_map<unsigned, vcl_vector<unsigned> > eyelid_crease_cell_neighbor_data_index_;
   vnl_vector_fixed<unsigned char,8> random_color(bool yuv = true);
 
 private:
