@@ -889,40 +889,6 @@ int main() {
 
 //-------------------------------------
 
-#ifdef VCL_PROCESSOR_HAS_INFINITY
-// Does the processor actually have an infinity?
-
-// The Borland 5.5 defines DBL_MAX as _max_dble but only declares
-// _max_dble in the std namespace if we include <cfloag>.  Including
-// <float.h> moves _max_dble to the global namespace and allows the
-// DBL_MAX macro to work.
-#include <float.h>
-
-union u {  double d;  unsigned char c[8]; };
-
-int main()
-{
-  if (sizeof(double) != 8) return 1; // If you have an odd machine, then add
-  // your own construction of infinity.
-
-  u v;
-  // Can we generate an IEEE infinity artifically on a big-endian machine?
-  v.c[0] = 0x7f; v.c[1] = 0xf0;
-  v.c[2] = v.c[3] = v.c[4] = v.c[5] = v.c[6] = v.c[7] = 0x00;
-  if (v.d > DBL_MAX)
-    return 0;
-
-  // Can we generate an IEEE infinity artifically on a little-endian machine?
-  v.c[7] = 0x7f; v.c[6] = 0xf0;
-  v.c[0] = v.c[1] = v.c[2] = v.c[3] = v.c[4] = v.c[5] = 0x00;
-  if (v.d > DBL_MAX)
-    return 0;
-  return 1;
-}
-#endif // VCL_PROCESSOR_HAS_INFINITY
-
-//-------------------------------------
-
 #ifdef VCL_CANNOT_SPECIALIZE_CV
 // VCL_CANNOT_SPECIALIZE_CV is set to 1 if this fails to compile
 
@@ -1131,26 +1097,6 @@ int main() { MINIDUMP_EXCEPTION_INFORMATION dummy; return 0; }
 #endif // VXL_HAS_DBGHELP_H
 
 //-------------------------------------
-
-#ifdef VXL_APPLE_HAS_ISNAND
-#include <math.h>
-int main()
-{
-  __isnand(0.0);
-  return 0;
-}
-#endif // VXL_APPLE_HAS_ISNAND
-
-//-------------------------------------
-
-#ifdef VXL_APPLE_HAS_INLINE_ISNAND
-#include <math.h>
-int main()
-{
-  __inline_isnand(0.0);
-  return 0;
-}
-#endif // VXL_APPLE_HAS_INLINE_ISNAND
 
 //-------------------------------------
 #ifdef VXL_HAS_WIN_WCHAR_T

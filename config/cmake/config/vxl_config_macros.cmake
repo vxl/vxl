@@ -1,7 +1,8 @@
-include(${CMAKE_ROOT}/Modules/CheckIncludeFiles.cmake)
-include(${CMAKE_ROOT}/Modules/CheckIncludeFileCXX.cmake)
-include(${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake)
-
+include(CheckIncludeFiles)
+include(CheckIncludeFileCXX)
+include(CheckFunctionExists)
+include(CheckSymbolExists)
+include(CheckCXXSymbolExists)
 #
 # Perform the VXL specific test with status output
 #
@@ -347,7 +348,7 @@ macro(PERFORM_C_CHECK_FUNCTION SYMBOL FILE VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
   endif()
-  CHECK_SYMBOL_EXISTS(${SYMBOL} ${FILE} ${VARIABLE})
+  CHECK_CXX_SYMBOL_EXISTS(${SYMBOL} ${FILE} ${VARIABLE})
   if(${VARIABLE})
     set(${VARIABLE} "1")
   else()

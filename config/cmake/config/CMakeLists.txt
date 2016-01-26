@@ -112,23 +112,10 @@ PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CANNOT_SPECIALIZE_CV)
   SET_INVERT(VCL_CANNOT_SPECIALIZE_CV "${VCL_CANNOT_SPECIALIZE_CV}")
 set(CMAKE_REQUIRED_FLAGS)
 
-# Check if apple has __isnand or __inline_isnand
-if(APPLE)
-  PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_APPLE_HAS_ISNAND)
-  if(NOT ${VXL_APPLE_HAS_ISNAND})
-    PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_APPLE_HAS_INLINE_ISNAND)
-    if( NOT ${VXL_APPLE_HAS_INLINE_ISNAND})
-      message(FATAL_ERROR "Neither the __isnand nor the __inline_isnand "
-        "functions are available !")
-    endif()
-  endif()
-endif()
-
 # Check if Windows have wchar_t defined
 if(WIN32)
   PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VXL_HAS_WIN_WCHAR_T)
 endif()
-
 
 # Test the ability of shared libraries to link to static vxl libriares
 PERFORM_CMAKE_TEST_CUSTOM(vxl_shared_link_test VXL_PIC_COMPATIBLE)
@@ -298,7 +285,15 @@ if(UNIX)
   set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
 endif()
 
+# Check C++ <cmath> first, where the C++11 standard says these must be.
+include(${vxl_SOURCE_DIR}/config/cmake/config/CheckCXXExpressionCompiles.cmake) ## From VTK
+check_cxx_expression_compiles("std::isnan(0.0)" "cmath" VXL_HAS_STD_ISNAN)
+check_cxx_expression_compiles("std::isinf(0.0)" "cmath" VXL_HAS_STD_ISINF)
+check_cxx_expression_compiles("std::isfinite(0.0)" "cmath" VXL_HAS_STD_ISFINITE)
+check_cxx_expression_compiles("std::isnormal(0.0)" "cmath" VXL_HAS_STD_ISNORMAL)
+
 PERFORM_C_CHECK_FUNCTION(sqrtf "math.h" VXL_C_MATH_HAS_SQRTF)
+
 PERFORM_C_CHECK_FUNCTION(finite "math.h" VXL_C_MATH_HAS_FINITE)
 PERFORM_C_CHECK_FUNCTION(finitef "math.h" VXL_C_MATH_HAS_FINITEF)
 PERFORM_C_CHECK_FUNCTION(finitel "math.h" VXL_C_MATH_HAS_FINITEL)
@@ -399,12 +394,6 @@ unset(VCL_CXX_HAS_HEADER_LIMITS)
 
 if(NOT VCL_CXX_HAS_HEADER_CFLOAT)
   message(FATAL_ERROR "Compiler is required to have cfloat")
-else()
-  PERFORM_CMAKE_TEST_RUN(vxl_platform_tests.cxx VCL_PROCESSOR_HAS_INFINITY)
-  if(NOT VCL_PROCESSOR_HAS_INFINITY)
-    message(FATAL_ERROR "Compiler is required to have HAS_INFINITY")
-  endif()
-  unset(VCL_PROCESSOR_HAS_INFINITY)
 endif()
 unset(VCL_CXX_HAS_HEADER_CFLOAT)
 
