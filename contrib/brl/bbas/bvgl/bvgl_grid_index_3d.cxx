@@ -3,7 +3,11 @@
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vcl_limits.h>
-void bvgl_grid_index_3d::index(vgl_point_3d<double> const& p, unsigned& ix, unsigned& iy, unsigned& iz) const{
+
+void
+bvgl_grid_index_3d
+::index(vgl_point_3d<double> const& p, unsigned& ix, unsigned& iy, unsigned& iz) const
+{
   ix = static_cast<unsigned>(p.x()/delta_x_);
   iy = static_cast<unsigned>(p.y()/delta_y_);
   iz = static_cast<unsigned>(p.z()/delta_z_);
@@ -15,8 +19,19 @@ void bvgl_grid_index_3d::index(vgl_point_3d<double> const& p, unsigned& ix, unsi
     iz = nz_-1;
 }
 
-bvgl_grid_index_3d::bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned nz, vgl_pointset_3d<double> ptset, double thresh):
-  nx_(nx), ny_(ny), nz_(nz), has_normals_(ptset.has_normals()), npts_(0), thresh_(thresh){
+bvgl_grid_index_3d
+::bvgl_grid_index_3d(unsigned nx,
+                     unsigned ny,
+                     unsigned nz,
+                     vgl_pointset_3d<double> ptset,
+                     double thresh):
+  has_normals_(ptset.has_normals()),
+  nx_(nx),
+  ny_(ny),
+  nz_(nz),
+  npts_(0),
+  thresh_(thresh)
+{
   p_grid_ = vbl_array_3d<vcl_vector<vgl_point_3d<double> > >(nx, ny, nz);
   if(has_normals_)
     n_grid_ = vbl_array_3d<vcl_vector<vgl_vector_3d<double> > >(nx, ny, nz);
@@ -27,18 +42,22 @@ bvgl_grid_index_3d::bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned nz, vg
   delta_z_ = bbox_.depth()/dnz;
   unsigned ix =0, iy=0, iz =0;
   unsigned npts = ptset.npts();
-  for(unsigned i = 0; i<npts; ++i){
+  for (unsigned int i = 0; i<npts; ++i)
+    {
     vgl_point_3d<double> pi = ptset.p(i);
     this->index(pi, ix, iy, iz);
     p_grid_[ix][iy][iz].push_back(pi);
     npts_++;
     if(has_normals_)
       n_grid_[ix][iy][iz].push_back(ptset.n(i));
-  }
+    }
 }
 
 //: the point contained in the grid closest to p or optionally to the normal plane passing through the closest point
-bool bvgl_grid_index_3d::closest_point(vgl_point_3d<double> const& p, vgl_point_3d<double>& pc) const{
+bool
+bvgl_grid_index_3d
+::closest_point(vgl_point_3d<double> const& p, vgl_point_3d<double>& pc) const
+{
   if(!npts_)
     return false;
   unsigned ix =0, iy=0, iz =0;
@@ -81,7 +100,10 @@ bool bvgl_grid_index_3d::closest_point(vgl_point_3d<double> const& p, vgl_point_
 }
 
 //: the distance from p to the closest point or optionally its normal plane
-double bvgl_grid_index_3d::surface_distance(vgl_point_3d<double> const& p) const{
+double
+bvgl_grid_index_3d
+::surface_distance(vgl_point_3d<double> const& p) const
+{
   vgl_point_3d<double> pc;
   bool good = this->closest_point(p, pc);
   if(!good)

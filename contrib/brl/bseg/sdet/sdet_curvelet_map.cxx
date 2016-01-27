@@ -4,20 +4,26 @@
 #include "sdet_edgemap.h"
 
 //: constructor
-sdet_curvelet_map::sdet_curvelet_map(sdet_edgemap_sptr EM,
-                                       sdet_curvelet_params params):
-  EM_(EM), params_(params), map_(0)
+sdet_curvelet_map
+::sdet_curvelet_map(sdet_edgemap_sptr EM,
+                    sdet_curvelet_params params):
+  EM_(EM),
+  params_(params),
+  map_(0)
 {}
 
 //: destructor
-sdet_curvelet_map::~sdet_curvelet_map()
+sdet_curvelet_map
+::~sdet_curvelet_map()
 {
   clear(); //delete everything upon exit
   EM_=0; //delete the reference to the edgemap
 }
 
 //: resize the graph
-void sdet_curvelet_map::resize(unsigned size)
+void
+sdet_curvelet_map
+::resize(unsigned size)
 {
   if (size!=map_.size())
     clear();
@@ -27,7 +33,9 @@ void sdet_curvelet_map::resize(unsigned size)
 }
 
 //: clear the graph
-void sdet_curvelet_map::clear()
+void
+sdet_curvelet_map
+::clear()
 {
   clear_all_curvelets();
   map_.clear();
@@ -35,7 +43,9 @@ void sdet_curvelet_map::clear()
 }
 
 //: clear all the curvelets in the graph
-void sdet_curvelet_map::clear_all_curvelets()
+void
+sdet_curvelet_map
+::clear_all_curvelets()
 {
   vcl_set<sdet_curvelet*> deleted;
   //delete all the curvelets in the map
@@ -65,7 +75,9 @@ void sdet_curvelet_map::clear_all_curvelets()
 }
 
 //: add a curvelet to this edgel
-void sdet_curvelet_map::add_curvelet(sdet_curvelet* curvelet, bool dir)
+void
+sdet_curvelet_map
+::add_curvelet(sdet_curvelet* curvelet, bool dir)
 {
   if (dir)
     map_[curvelet->ref_edgel->id].push_back(curvelet);
@@ -74,7 +86,9 @@ void sdet_curvelet_map::add_curvelet(sdet_curvelet* curvelet, bool dir)
 }
 
 //: remove a curvelet from this edgel
-void sdet_curvelet_map::remove_curvelet(sdet_curvelet* curvelet)
+void
+sdet_curvelet_map
+::remove_curvelet(sdet_curvelet* curvelet)
 {
   //go over the list of curvelets of the ref edgel
   sdet_curvelet_list_iter c_it = map_[curvelet->ref_edgel->id].begin();
@@ -96,7 +110,9 @@ void sdet_curvelet_map::remove_curvelet(sdet_curvelet* curvelet)
 }
 
 //: delete all the curvelets formed by this edgel
-void sdet_curvelet_map::delete_all_curvelets(sdet_edgel* e)
+void
+sdet_curvelet_map
+::delete_all_curvelets(sdet_edgel* e)
 {
   sdet_curvelet_list_iter p_it = map_[e->id].begin();
   for (; p_it != map_[e->id].end(); p_it++)
@@ -112,7 +128,9 @@ void sdet_curvelet_map::delete_all_curvelets(sdet_edgel* e)
 }
 
 //: does the current curvelet exist?
-sdet_curvelet* sdet_curvelet_map::does_curvelet_exist(sdet_edgel* e, vcl_deque<sdet_edgel*> & chain)
+sdet_curvelet*
+sdet_curvelet_map
+::does_curvelet_exist(sdet_edgel* e, vcl_deque<sdet_edgel*> & chain)
 {
   //go over all the curvelets of the current size formed by the current edgel
   sdet_curvelet_list_iter cv_it = map_[e->id].begin();
@@ -135,7 +153,9 @@ sdet_curvelet* sdet_curvelet_map::does_curvelet_exist(sdet_edgel* e, vcl_deque<s
 }
 
 //: does the given edgel pair exist on the ref edgel?
-sdet_curvelet* sdet_curvelet_map::find_pair(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB)
+sdet_curvelet*
+sdet_curvelet_map
+::find_pair(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB)
 {
   //go over all the pairs formed by this edgel
   sdet_curvelet_list_iter p_it = map_[ref->id].begin();
@@ -149,7 +169,9 @@ sdet_curvelet* sdet_curvelet_map::find_pair(sdet_edgel* ref, sdet_edgel* eA, sde
 }
 
 //: does the given triplet exist on the ref edgel?
-sdet_curvelet* sdet_curvelet_map::find_triplet(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* eC)
+sdet_curvelet*
+sdet_curvelet_map
+::find_triplet(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* eC)
 {
   //go over all the triplets formed by this edgel
   sdet_curvelet_list_iter t_it = map_[ref->id].begin();
@@ -163,7 +185,9 @@ sdet_curvelet* sdet_curvelet_map::find_triplet(sdet_edgel* ref, sdet_edgel* eA, 
 }
 
 //: return largest curvelet formed at the given edgel
-sdet_curvelet* sdet_curvelet_map::largest_curvelet(sdet_edgel* e)
+sdet_curvelet*
+sdet_curvelet_map
+::largest_curvelet(sdet_edgel* e)
 {
   unsigned largest_size = 0;
   sdet_curvelet* largest_cvlet = 0;
@@ -179,5 +203,3 @@ sdet_curvelet* sdet_curvelet_map::largest_curvelet(sdet_edgel* e)
   }
   return largest_cvlet;
 }
-
-
