@@ -45,8 +45,6 @@ struct vul_timer_data
 #endif
 };
 
-#include <vxl_config.h> // VXL_TWO_ARG_GETTIME
-
 #include <vcl_climits.h>   // for CLK_TCK
 #include <vcl_iostream.h>
 
