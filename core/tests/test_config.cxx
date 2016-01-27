@@ -1062,14 +1062,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "VXL_TWO_ARG_GETTIME ";
-#ifdef VXL_TWO_ARG_GETTIME
-  vcl_cout << "is set to " << quote(VXL_TWO_ARG_GETTIME);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "VXL_HAS_IEEEFP_H ";
 #ifdef VXL_HAS_IEEEFP_H
   vcl_cout << "is set to " << quote(VXL_HAS_IEEEFP_H);

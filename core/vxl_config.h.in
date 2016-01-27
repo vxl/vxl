@@ -199,9 +199,6 @@
 /* true if usleep() returns void */
 #define VXL_UNISTD_USLEEP_IS_VOID @VXL_UNISTD_USLEEP_IS_VOID@
 
-/* true if gettime() takes two arguments */
-#define VXL_TWO_ARG_GETTIME       @VXL_TWO_ARG_GETTIME@
-
 /* true if <ieeefp.h> is available */
 #define VXL_HAS_IEEEFP_H          @VXL_HAS_IEEEFP_H@
 

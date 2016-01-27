@@ -186,7 +186,6 @@ for $var_exp (
   'VXL_C_MATH_HAS_SQRTF',
   'VXL_C_MATH_HAS_LROUND',
   'VXL_UNISTD_USLEEP_IS_VOID',
-  'VXL_TWO_ARG_GETTIME',
   'VXL_HAS_IEEEFP_H',
 
   # from vcl_compiler.h

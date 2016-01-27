@@ -306,8 +306,6 @@ PERFORM_C_CHECK_FUNCTION(srand48 "stdlib.h" VXL_STDLIB_HAS_SRAND48)
 TEST_BIG_ENDIAN(VXL_BIG_ENDIAN)
 SET_INVERT(VXL_LITTLE_ENDIAN "${VXL_BIG_ENDIAN}")
 
-set(VXL_TWO_ARG_GETTIME 0) # not used
-
 PERFORM_CMAKE_TEST(vxl_platform_tests.cxx VCL_CAN_DO_IMPLICIT_TEMPLATES)
 if(NOT VCL_CAN_DO_IMPLICIT_TEMPLATES)
   message(FATAL_ERROR "Implicit template instantiation must be supported by the compiler.")
