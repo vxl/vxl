@@ -16,6 +16,8 @@
 #include <vcl_iostream.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_3d.h>
+#include <vnl/vnl_math.h>
+#include <vgl/algo/vgl_line_2d_regression.h>
 
 namespace volm_dsm_ground_plane_estimation_process_globals
 {
@@ -240,8 +242,6 @@ bool volm_dsm_ground_plane_estimation_edge_process(bprb_func_process& pro)
     for (int j = N; j < nj-N; j+=N)
     {
       // find appropriate window size for current pixel
-      if ( i == 140 && j == 180)
-        int tmp = 1;
       int window_size = window_size_from_nearest_edge(edge_img, i, j, search_range);
       int s_i = i - window_size;  int e_i = i + window_size;
       if (s_i < 0)   s_i = 0;
@@ -268,10 +268,11 @@ bool volm_dsm_ground_plane_estimation_edge_process(bprb_func_process& pro)
     }
   }
   vcl_cout << pro.name() << ": Total image pixels: " << ni*nj << ", size of source pts: " << src_pts.size() << vcl_endl;
-  //for (unsigned i = 0; i < src_pts.size(); i++) {
-  //  vcl_cout << "source: " << src_pts[i].x() << " " << src_pts[i].y() << " " << src_pts[i].z() 
-  //           << "  dest: " << dst_pts[i].x() << " " << dst_pts[i].y() << " " << dst_pts[i].z() << vcl_endl;
-  //}
+  for (unsigned i = 0; i < src_pts.size(); i++) {
+    vcl_cout << "source: " << src_pts[i].x() << " " << src_pts[i].y() << " " << src_pts[i].z() 
+             << "  dest: " << dst_pts[i].x() << " " << dst_pts[i].y() << " " << dst_pts[i].z() << vcl_endl;
+  }
+
   // construct spline object
   mbl_thin_plate_spline_3d tps;
   tps.build(src_pts, dst_pts);
@@ -321,7 +322,474 @@ int volm_dsm_ground_plane_estimation_edge_process_globals::window_size_from_near
     }
   }
   if (!edge_window_size)
-    return 120;
-  edge_window_size += 120;
+    return 30;
+  edge_window_size += 30;
   return edge_window_size;
+}
+
+// Process to perform ground filtering using MGF algorithm
+// reference http://www.sciencedirect.com/science/article/pii/S0924271608000956
+namespace volm_dsm_ground_filter_mgf_process_globals
+{
+  const unsigned n_inputs_ = 5;
+  const unsigned n_outputs_ = 2;
+
+  bool nearest_ground_elev(vil_image_view<float> const& img,
+                           vil_image_view<vxl_byte> const& grd_mask,
+                           unsigned const& i, unsigned const& j,
+                           float& ground_elev);
+  // perform linear region along the scan line and remove mis-labeled ground pixel if their STD is 3 times
+  bool ground_linear_regression(vil_image_view<float> const& img,
+                                vil_image_view<vxl_byte>& grd_mask,
+                                bool const& is_horizontal,
+                                float const& neighbor_size = 100);
+
+}
+
+bool volm_dsm_ground_filter_mgf_process_cons(bprb_func_process& pro)
+{
+  using namespace volm_dsm_ground_filter_mgf_process_globals;
+  // this process takes 5 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";   // input DSM image
+  input_types_[1] = "float";                      // local window size
+  input_types_[2] = "float";                      // elevation threshold
+  input_types_[3] = "float";                      // slope threshold in degree
+  input_types_[4] = "float";                      // pixel resolution in meters.  default = 1.0 meter
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vil_image_view_base_sptr";  // filtered ground/non-ground image
+  output_types_[1] = "vil_image_view_base_sptr";  // interpolated ground digital elevation model
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
+{
+  using namespace volm_dsm_ground_filter_mgf_process_globals;
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Inputs!\n";
+    return false;
+  }
+  // get the inputs
+  unsigned in_i = 0;
+  vil_image_view_base_sptr dsm_img_res = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  float window_size = pro.get_input<float>(in_i++);
+  float elev_thres = pro.get_input<float>(in_i++);
+  float slop_thres_deg = pro.get_input<float>(in_i++);
+  float pixel_res  = pro.get_input<float>(in_i++);
+
+  // compute slope threshold
+  float slop_thres = vcl_tan(slop_thres_deg / vnl_math::deg_per_rad) * pixel_res;
+  // load the image
+  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(dsm_img_res.ptr());
+  if (!in_img) {
+    vcl_cerr << pro.name() << ": Unsupported image pixel format -- " << dsm_img_res->pixel_format() << ", only float is supported!\n";
+    return false;
+  }
+  unsigned ni = in_img->ni();
+  unsigned nj = in_img->nj();
+  if (ni < 2 || nj < 2) {
+    vcl_cerr << pro.name() << ": Input image is too small -- ni: " << ni << ", nj: " << nj << "!\n";
+    return false;
+  }
+  // compute slope along 4 scan line direction
+  float invalid_slope = -1E3f;
+  vil_image_view<float> lr_img(ni, nj);  // slope value scan from left to right
+  vil_image_view<float> rl_img(ni, nj);  // slope value scan from right to left
+  vil_image_view<float> tb_img(ni, nj);  // slope value scan from top to bottom
+  vil_image_view<float> bt_img(ni, nj);  // slope value scan from bottom to top
+  lr_img.fill(invalid_slope);
+  rl_img.fill(invalid_slope);
+  tb_img.fill(invalid_slope);
+  bt_img.fill(invalid_slope);
+
+  for (unsigned j = 0; j < nj; j++) {
+    for (unsigned i = 1; i < (ni-1); i++) {
+      lr_img(i,j) = (*in_img)(i,j) - (*in_img)(i-1,j);
+      rl_img(i,j) = (*in_img)(i,j) - (*in_img)(i+1,j);
+    }
+  }
+  for (unsigned j = 0; j < nj; j++) {
+    rl_img(0,j) = (*in_img)(0,j) - (*in_img)(1,j);
+    lr_img(ni-1, j) = (*in_img)(ni-1,j) - (*in_img)(ni-2,j);
+  }
+  for (unsigned i = 0; i < ni; i++) {
+    for (unsigned j = 1; j < (nj-1); j++) {
+      tb_img(i,j) = (*in_img)(i,j) - (*in_img)(i,j-1);
+      bt_img(i,j) = (*in_img)(i,j) - (*in_img)(i,j+1);
+    }
+  }
+  for (unsigned i = 0; i < ni; i++) {
+    tb_img(i, nj-1) = (*in_img)(i,nj-1) - (*in_img)(i,nj-2);
+    bt_img(i, 0) = (*in_img)(i,0) - (*in_img)(i,1);
+  }
+
+  vil_image_view<vxl_byte>* grd_mask = new vil_image_view<vxl_byte>(ni, nj);
+  grd_mask->fill(0);
+
+  // generate initial ground mask
+  unsigned nw_i = (unsigned)vcl_floor(ni/window_size + 0.5f);
+  unsigned nw_j = (unsigned)vcl_floor(nj/window_size + 0.5f);
+
+  // find minimum as ground pixel for each window
+  vcl_map<vcl_pair<unsigned, unsigned>, float> local_grd_elev;
+  vil_image_view<float> grd_tmp(ni, nj);
+  grd_tmp.fill(1E6);
+  for (unsigned widx_i = 0; widx_i < nw_i; widx_i++) {
+    unsigned s_ni, e_ni;
+    s_ni = widx_i * window_size;
+    e_ni = (widx_i+1) * window_size;
+    if (e_ni > ni)
+      e_ni = ni;
+    for (unsigned widx_j = 0; widx_j < nw_j; widx_j++) {
+      unsigned s_nj, e_nj;
+      s_nj = widx_j * window_size;
+      e_nj = (widx_j+1) * window_size;
+      if (e_nj > nj)
+        e_nj = nj;
+      float min_elev = 1.0e5f;
+      unsigned min_i = ni;
+      unsigned min_j = nj;
+      for (unsigned i = s_ni; i < e_ni; i++) {
+        for (unsigned j = s_nj; j < e_nj; j++) {
+          if ( (*in_img)(i,j) < min_elev ) {
+            min_elev = (*in_img)(i,j);
+            min_i = i; min_j = j;
+          }
+        }
+      }
+      //vcl_cout << "window: (" << widx_i << "," << widx_j << ") -- elev: " << min_elev << " at (" << min_i << "," << min_j << ")" << vcl_endl;
+      (*grd_mask)(min_i, min_j) = 127;  // ground
+      local_grd_elev.insert(vcl_pair<vcl_pair<unsigned, unsigned>, float>(vcl_pair<unsigned, unsigned>(widx_i, widx_j), min_elev));
+      for (unsigned i = s_ni; i < e_ni; i++)
+        for (unsigned j = s_nj; j < e_nj; j++)
+          grd_tmp(i,j) = min_elev;
+    }
+  }
+
+  vcl_cout << "Start MGF ground filtering with elevation threshold: " << elev_thres 
+           << ", slope threshold: " << slop_thres << "(" << slop_thres_deg << " degree), local neighbor size: "
+           << window_size << vcl_endl;
+  vcl_cout << "  scan from left to right..." << vcl_flush << vcl_endl;
+
+  // start left to right scan
+  for (unsigned j = 0; j < nj; j++)
+  {
+    for (unsigned i = 0; i < ni; i++) {
+      float elev = (*in_img)(i, j);
+      float elev_diff = elev - grd_tmp(i,j);
+      if (elev_diff > elev_thres) {
+        (*grd_mask)(i,j) = 255;  // non-ground
+        continue;
+      }
+      // check slope value from left to right
+      float lr_slope = lr_img(i,j);
+      if (lr_slope < invalid_slope+1)
+        continue;
+      if (lr_slope > slop_thres) {
+        (*grd_mask)(i,j) = 255;  // non-ground
+      }
+      else if (lr_slope <= slop_thres && lr_slope >= 0) {
+        (*grd_mask)(i,j) = (*grd_mask)(i-1,j);  // copy status of previous points
+      }
+      else {
+        // find the nearest ground plane height
+        float grd_elev;
+        if (!nearest_ground_elev(*in_img, *grd_mask, i, j, grd_elev)) {
+          vcl_cerr << pro.name() << ": search nearest ground height value failed for pixel (" << i << ',' << j << ") as scanning from left to right!\n";
+          return false;
+        }
+        float elev_diff_nearest = elev - grd_elev;
+        if (elev_diff_nearest > elev_thres)
+          (*grd_mask)(i,j) = 255;  // non-ground
+        else
+          (*grd_mask)(i,j) = 127;  // ground
+      }
+    }
+  }
+
+  // start right to left scan
+  vcl_cout << "  scan from right to left..." << vcl_flush << vcl_endl;
+  for (unsigned j = 0; j < nj; j++)
+  {
+    for (int i = ni-1; i >= 0; i--) {
+      float elev = (*in_img)(i, j);
+      float elev_diff = elev - grd_tmp(i,j);
+      if (elev_diff > elev_thres) {
+        (*grd_mask)(i,j) = 255;  // non-ground
+        continue;
+      }
+      // check slope value from right to left
+      float rl_slope = rl_img(i,j);
+      if (rl_slope < invalid_slope+1)  // keep previous status
+        continue;
+      if (rl_slope > slop_thres) {
+        (*grd_mask)(i,j) = 255;  // non-ground
+      }
+      else if (rl_slope >= 0 && rl_slope <= slop_thres) {
+        if ((*grd_mask)(i+1,j))
+          (*grd_mask)(i,j) = (*grd_mask)(i+1,j);  // copy status of previous points if previous point is not un-certain
+      }
+      else {
+        // find the nearest ground plane height
+        float grd_elev;
+        if (!nearest_ground_elev(*in_img, *grd_mask, i, j, grd_elev)) {
+          vcl_cerr << pro.name() << ": search nearest ground height value failed for pixel (" << i << ',' << j << ") as scanning from left to right!\n";
+          return false;
+        }
+        float elev_diff_nearest = elev - grd_elev;
+        if (elev_diff_nearest > elev_thres)
+          (*grd_mask)(i,j) = 255;  // non-ground
+        else
+          (*grd_mask)(i,j) = 127;  // ground
+      }
+    }
+  }
+
+  // perform linear regression along horizontal scan line
+  vcl_cout << "  perform linear regression along image row..." << vcl_flush << vcl_endl;
+  ground_linear_regression(*in_img, *grd_mask, true, 100);
+
+  // start top to bottom scan
+  vcl_cout << "  scan from top to bottom..." << vcl_flush << vcl_endl;
+  for (unsigned i = 0; i < ni; i++)
+  {
+    for (unsigned j = 0; j < nj; j++) {
+      float elev = (*in_img)(i, j);
+      float elev_diff = elev - grd_tmp(i,j);
+      if (elev_diff > elev_thres) {
+        (*grd_mask)(i,j) = 255;  // non-ground
+        continue;
+      }
+      // check slope value from top to bottom
+      float tb_slope = tb_img(i,j);
+      if (tb_slope < invalid_slope+1)  // keep previous status
+        continue;
+      if (tb_slope > slop_thres)  // non-ground (should be building edge)
+        (*grd_mask)(i,j) = 255;
+      else if (tb_slope >= 0 && tb_slope <= slop_thres) {
+        if ((*grd_mask)(i,j-1))
+          (*grd_mask)(i,j) = (*grd_mask)(i,j-1);  // copy status of previous point if previous point is not un-certain
+      }
+      else {
+        // find the nearest ground plane height
+        float grd_elev;
+        if (!nearest_ground_elev(*in_img, *grd_mask, i, j, grd_elev)) {
+          vcl_cerr << pro.name() << ": search nearest ground height value failed for pixel (" << i << ',' << j << ") as scanning from left to right!\n";
+          return false;
+        }
+        float elev_diff_nearest = elev - grd_elev;
+        if (elev_diff_nearest > elev_thres)
+          (*grd_mask)(i,j) = 255;  // non-ground
+        else
+          (*grd_mask)(i,j) = 127;  // ground
+      }
+    }
+  }
+
+  // start top to bottom scan
+  vcl_cout << "  scan from bottom to top..." << vcl_flush << vcl_endl;
+  for (unsigned i = 0; i < ni; i++)
+  {
+    for (int j = nj-1; j >= 0; j--) {
+      float elev = (*in_img)(i, j);
+      float elev_diff = elev - grd_tmp(i,j);
+      if (elev_diff > elev_thres) {
+        (*grd_mask)(i,j) = 255;  // non-ground
+        continue;
+      }
+      // check slope value from top to bottom
+      float bt_slope = bt_img(i,j);
+      if (bt_slope > slop_thres)  // non-ground (should be building edge)
+        (*grd_mask)(i,j) = 255;
+      else if (bt_slope >= 0 && bt_slope <= slop_thres) {
+        if ((*grd_mask)(i,j+1))
+          (*grd_mask)(i,j) = (*grd_mask)(i,j+1);  // copy status of previous point if previous point is not un-certain
+      }
+      else {
+        // find the nearest ground plane height
+        float grd_elev;
+        if (!nearest_ground_elev(*in_img, *grd_mask, i, j, grd_elev)) {
+          vcl_cerr << pro.name() << ": search nearest ground height value failed for pixel (" << i << ',' << j << ") as scanning from left to right!\n";
+          return false;
+        }
+        float elev_diff_nearest = elev - grd_elev;
+        if (elev_diff_nearest > elev_thres)
+          (*grd_mask)(i,j) = 255;  // non-ground
+        else
+          (*grd_mask)(i,j) = 127;  // ground
+      }
+    }
+  }
+
+  // perform linear regression along vertical scan line
+  vcl_cout << "  perform linear regression along image column..." << vcl_flush << vcl_endl;
+  ground_linear_regression(*in_img, *grd_mask, false, 100);
+
+  vcl_cout << "Start to generate ground DEM tile from filtering..." << vcl_flush << vcl_endl;
+  // generate ground image from ground mask -- tale minimum elevation points as sample points every 10 pixels
+  vcl_vector<vgl_point_3d<double> > src_pts, dst_pts;
+  int sample_size = (int)vcl_floor(10.0/pixel_res+0.5);
+  for (int r = sample_size; r < ni-sample_size; r += sample_size) {
+    for (int c = sample_size; c < nj-sample_size; c += sample_size) {
+      // find the minimum elevation among ground pixels
+      float min = 1E7f;
+      int pt_i, pt_j;
+      bool found = false;
+      for (int k = -sample_size; k < sample_size; k++) {
+        for (int m = -sample_size; m < sample_size; m++) {
+          int i = r + k;
+          int j = c + m;
+          if (i < 0 || j < 0 || i >= ni || j >= nj)
+            continue;
+          if ( (*grd_mask)(i,j) != 127)
+            continue;
+          if ( (*in_img)(i,j) < min) {
+            pt_i = i;  pt_j = j;
+            min = (*in_img)(i,j);
+            found = true;
+          }
+        }
+      }
+      if (found) {
+        vgl_point_3d<double> src_pt(r, c, (*in_img)(r,c));
+        vgl_point_3d<double> dst_pt(r, c, min);
+        src_pts.push_back(src_pt);
+        dst_pts.push_back(dst_pt);
+      }
+    }
+  }
+
+  unsigned grd_pt_cnt = 0;
+  for (unsigned i = 0; i < ni; i++)
+    for (unsigned j = 0; j < nj; j++)
+      if ( (*grd_mask)(i,j) == 127 )
+        grd_pt_cnt += 1;
+
+  vcl_cout << "  Total image pixels: " << ni*nj << ", number of ground pixels: " << grd_pt_cnt
+           << ", number of sampled ground pixels: " << src_pts.size() << vcl_endl;
+
+  // construct spline object
+  mbl_thin_plate_spline_3d tps;
+  tps.build(src_pts, dst_pts);
+
+  // apply to other points
+  vil_image_view<float>* grd_img = new vil_image_view<float>(ni, nj);
+  grd_img->fill(-1.0f);
+  for (unsigned i = 0; i < ni; i++) {
+    for (unsigned j = 0; j < nj; j++) {
+      vgl_point_3d<double> p(i,j,(*in_img)(i,j));
+      vgl_point_3d<double> new_p = tps(p);
+      (*grd_img)(i,j) = new_p.z();
+    }
+  }
+
+  // output
+  pro.set_output_val<vil_image_view_base_sptr>(0, grd_mask);
+  pro.set_output_val<vil_image_view_base_sptr>(1, grd_img);
+  return true;
+}
+
+bool volm_dsm_ground_filter_mgf_process_globals::nearest_ground_elev(vil_image_view<float> const& img,
+                                                                     vil_image_view<vxl_byte> const& grd_mask,
+                                                                     unsigned const& i, unsigned const& j,
+                                                                     float& ground_elev)
+{
+  if (img.ni() != grd_mask.ni() || img.nj() != grd_mask.nj())
+    return false;
+
+  unsigned ni = img.ni();
+  unsigned nj = img.nj();
+  int search_range = ni;
+  if (search_range > nj)
+    search_range = nj;
+
+  bool found = false;
+  for (int radius = 1; (radius < search_range); radius++)
+  {
+    int start_i = i - radius;  int end_i = i + radius;
+    int start_j = j - radius;  int end_j = j + radius;
+    for (int ii = start_i; (ii < end_i && !found); ii++) {
+      for (int jj = start_j; (jj < end_j && !found); jj++) {
+        if (ii < 0 || jj < 0 || ii >= ni || jj >= nj)
+          continue;
+        if ( grd_mask(ii,jj) == 127) {
+          found = true;
+          ground_elev = img(ii,jj);
+          return found;
+        }
+      }
+    }
+  }
+  return found;
+}
+
+bool volm_dsm_ground_filter_mgf_process_globals::ground_linear_regression(vil_image_view<float> const& img,
+                                                                          vil_image_view<vxl_byte>& grd_mask,
+                                                                          bool const& is_horizontal,
+                                                                          float const& neighbor_size)
+{
+  unsigned ni = img.ni();
+  unsigned nj = img.nj();
+  if (ni != grd_mask.ni() || nj != grd_mask.nj())
+    return false;
+  unsigned nw;
+  unsigned num_lines;
+  unsigned num_pts;
+  if (is_horizontal) {
+    num_lines = nj;
+    num_pts = ni;
+    nw = (unsigned)vcl_floor(ni/neighbor_size + 0.5);
+  }
+  else {
+    num_lines = ni;
+    num_pts = nj;
+    nw = (unsigned)vcl_floor(nj/neighbor_size + 0.5);
+  }
+  for (unsigned j = 0; j < num_lines; j++)
+  {
+    for (unsigned widx = 0; widx < nw; widx++) {
+      unsigned s_pt, e_pt;
+      s_pt = widx*neighbor_size; e_pt = (widx+1)*neighbor_size;
+      if (e_pt > num_pts) e_pt = num_pts;
+      // fit the line segment
+      vgl_line_2d_regression<float> reg;
+      vcl_vector<unsigned> grd_pts;
+      vcl_vector<float> grd_elevs;
+      for (unsigned i = s_pt; i < e_pt; i++) {
+        if (is_horizontal) {
+          if (grd_mask(i,j) == 127) {
+            reg.increment_partial_sums(i, img(i,j));
+            grd_pts.push_back(i);
+            grd_elevs.push_back(img(i,j));
+          }
+        } else {
+          if (grd_mask(j,i) == 127) {
+            reg.increment_partial_sums(i, img(j,i));
+            grd_pts.push_back(i);
+            grd_elevs.push_back(img(j,i));
+          }
+        }
+      }
+      reg.fit();
+      vgl_line_2d<float> line = reg.get_line();
+      double rms = reg.get_rms_error();
+      vcl_vector<unsigned> after_grd_pts;
+      vcl_vector<float> after_gre_elev;
+      // remove points that have more than three times of the standard deviation of the regression
+      for (unsigned k = 0; k < grd_pts.size(); k++) {
+        unsigned i = grd_pts[k];
+        float elev;
+        if (is_horizontal) elev = img(i,j);
+        else               elev = img(j,i);
+        float elev_est = (-line.a()*i-line.c()) / line.b();
+        float elev_diff = elev-elev_est;
+        if ((elev-elev_est) >= 0.2*rms) {
+          if (is_horizontal) grd_mask(i,j) = 255;
+          else               grd_mask(j,i) = 255;
+        }
+      }
+    } // end of loop along current line
+  } // end of all scan lines
+
+  return true;
 }

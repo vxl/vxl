@@ -6,8 +6,10 @@
 //
 //
 #include <bprb/bprb_parameters.h>
+#include <vgl/vgl_polygon.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
+#include <vil/vil_save.h>
 #include <volm/volm_osm_objects.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
@@ -26,6 +28,7 @@
 #include <vsl/vsl_vector_io.h>
 #include <bsol/bsol_algs.h>
 #include <bkml/bkml_write.h>
+#include <bkml/bkml_parser.h>
 //:
 //  Take an ortho image and its camera, a bin file with an osm object list, map the objects onto the image
 bool volm_map_osm_process_cons(bprb_func_process& pro)
@@ -1180,4 +1183,145 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
   }
 
   return hit;
+}
+
+// process to render an mask image that represent the OSM polygons stored in a kml file
+namespace volm_render_kml_polygon_mask_process_globals
+{
+  unsigned n_inputs_ = 7;
+  unsigned n_outputs_ = 1;
+
+  bool contains(vgl_polygon<double> const& poly, double const& ptx, double const& pty);
+}
+
+bool volm_render_kml_polygon_mask_process_globals::contains(vgl_polygon<double> const& poly, double const& ptx, double const& pty)
+{
+  // when poly sheets overlap, the poly.contain method will return false for pts located inside the overlapped region
+  // this function will returns true if the given point is inside any single sheet of the polygon
+  unsigned num_sheet = poly.num_sheets();
+  for (unsigned i = 0; i < num_sheet; i++) {
+    vgl_polygon<double> single_sheet_poly(poly[i]);
+    if (single_sheet_poly.contains(ptx, pty))
+      return true;
+  }
+  return false;
+}
+
+bool volm_render_kml_polygon_mask_process_cons(bprb_func_process& pro)
+{
+  using namespace volm_render_kml_polygon_mask_process_globals;
+  // this process takes 5 inputs
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "vil_image_view_base_sptr";  // input mask byte image to be write/modify
+  input_types_[1] = "double";                    // lower left lon
+  input_types_[2] = "double";                    // lower left lat
+  input_types_[3] = "double";                    // upper right lon
+  input_types_[4] = "double";                    // upper right lat
+  input_types_[5] = "vcl_string";                // polygon kml file
+  input_types_[6] = "unsigned";                  // pixel value
+  // this process takes 1 outputs
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "vpgl_camera_double_sptr";  // output geo camera for the image
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+}
+
+bool volm_render_kml_polygon_mask_process(bprb_func_process& pro)
+{
+  using namespace volm_render_kml_polygon_mask_process_globals;
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Inputs!\n";
+    return false;
+  }
+  // get inputs
+  unsigned in_i = 0;
+  vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  double ll_lon = pro.get_input<double>(in_i++);
+  double ll_lat = pro.get_input<double>(in_i++);
+  double ur_lon = pro.get_input<double>(in_i++);
+  double ur_lat = pro.get_input<double>(in_i++);
+  vcl_string poly_kml_file = pro.get_input<vcl_string>(in_i++);
+  unsigned mask_value = pro.get_input<unsigned>(in_i++);
+
+  // load the image
+  vil_image_view<vxl_byte>* image = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
+  if (!image) {
+    vcl_cerr << pro.name() << ": Unsupported image pixel type -- " << in_img_sptr->pixel_format() << ", only byte image is supported!\n";
+    return false;
+  }
+  // load the polygon
+  if (!vul_file::exists(poly_kml_file)) {
+    vcl_cerr << pro.name() << ": can not find polygon kml file " << poly_kml_file << "!\n";
+    return false;
+  }
+  vgl_polygon<double> poly = bkml_parser::parse_polygon(poly_kml_file);
+  vcl_cout << poly.num_sheets() << " sheets are loaded" << vcl_endl;
+
+  // compute the geo camera from image size
+  unsigned ni = image->ni();
+  unsigned nj = image->nj();
+
+  double scale_x =  (ur_lon - ll_lon)/ni;
+  double scale_y = -(ur_lat - ll_lat)/nj;
+  vnl_matrix<double> trans_matrix(4,4,0.0);
+  trans_matrix[0][0] = scale_x;
+  trans_matrix[1][1] = scale_y;
+  trans_matrix[0][3] = ll_lon;
+  trans_matrix[1][3] = ur_lat;
+  vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
+  vpgl_geo_camera* out_cam = new vpgl_geo_camera(trans_matrix, lvcs_dummy);
+  out_cam->set_scale_format(true);
+
+#if 0
+  // fill the image
+  vcl_cout << "update the image mask..." << vcl_flush << vcl_endl;
+  for (unsigned i = 0; i < ni; i++) {
+    if (i%1000 == 0)
+      vcl_cout << i << '.' << vcl_flush;
+    for (unsigned j = 0; j < nj; j++) {
+      double lon, lat;
+      out_cam->img_to_global(i, j, lon, lat);
+      if (contains(poly, lon, lat)) {
+        (*image)(i, j) = (unsigned char)mask_value;
+      }
+    }
+  }
+  vcl_cout << " DONE!" << vcl_endl;
+#endif 
+  // convert the input polygon to image domain
+  vcl_vector<vgl_polygon<double> > img_poly;
+  unsigned n_sheets = poly.num_sheets();
+  for (unsigned s_idx = 0; s_idx < n_sheets; s_idx++) {
+    unsigned n_vertices = poly[s_idx].size();
+    vgl_polygon<double> single_sheet_poly;
+    single_sheet_poly.new_sheet();
+    for (unsigned v_idx = 0; v_idx < n_vertices; v_idx++) {
+      double lon = poly[s_idx][v_idx].x();
+      double lat = poly[s_idx][v_idx].y();
+      double u, v;
+      out_cam->global_to_img(lon, lat, 0.0, u, v);
+      double ii = vcl_floor(u+0.5);
+      double jj = vcl_floor(v+0.5);
+      single_sheet_poly.push_back(ii, jj);
+    }
+    img_poly.push_back(single_sheet_poly);
+  }
+
+  // fill the image
+  for (unsigned ii = 0; ii < img_poly.size(); ii++)
+  {
+    vgl_polygon_scan_iterator<double> psi(img_poly[ii]);
+    for (psi.reset(); psi.next(); ) {
+      int j = psi.scany();
+      for (int i = psi.startx(); i <= psi.endx(); i++) {
+        if (i < 0 || j < 0 || i >= ni || j >= nj)
+          continue;
+        (*image)(i,j) = (unsigned char)(mask_value);
+      }
+    }
+  }
+
+  // output
+  pro.set_output_val<vpgl_camera_double_sptr>(0, out_cam);
+
+  return true;
 }

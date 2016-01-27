@@ -47,4 +47,10 @@ DECLARE_FUNC_CONS(volm_find_intersecting_sat_resources_process);
 DECLARE_FUNC_CONS(volm_ndsm_generation_process);
 DECLARE_FUNC_CONS(volm_dsm_ground_plane_estimation_process);
 DECLARE_FUNC_CONS(volm_dsm_ground_plane_estimation_edge_process);
+DECLARE_FUNC_CONS(volm_building_layer_extraction_process);
+DECLARE_FUNC_CONS(volm_layer_extraction_process);
+DECLARE_FUNC_CONS(volm_render_kml_polygon_mask_process);
+DECLARE_FUNC_CONS(volm_generate_kml_from_binary_image_process);
+DECLARE_FUNC_CONS(volm_downsample_binary_layer_process);
+DECLARE_FUNC_CONS(volm_dsm_ground_filter_mgf_process);
 #endif

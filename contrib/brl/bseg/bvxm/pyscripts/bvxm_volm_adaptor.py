@@ -606,6 +606,23 @@ def dsm_ground_estimation_edge(dsm_image, edge_img, invalid_pixel = -1.0, sample
   else:
     return None
 
+def dsm_mgf_ground_filtering(dsm_img, elev_thres, slope_thres, window_size = 3.0, pixel_res = 1.0):
+  bvxm_batch.init_process("volmDsmGroundFilterMGFProcess")
+  bvxm_batch.set_input_from_db(0, dsm_img)
+  bvxm_batch.set_input_float(1, window_size)
+  bvxm_batch.set_input_float(2, elev_thres)
+  bvxm_batch.set_input_float(3, slope_thres)
+  bvxm_batch.set_input_float(4, pixel_res)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    grd_mask = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(1)
+    grd_img  = dbvalue(id, type)
+    return grd_mask, grd_img
+  else:
+    return None, None
+
 ## process to mosaics a set of images that covers the given region
 def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_value = -1.0):
   bvxm_batch.init_process("volmCombineHeightMapProcess3")
@@ -624,3 +641,99 @@ def combine_geotiff_images(ll_lon, ll_lat, ur_lon, ur_lat, in_img_folder, init_v
     return out_img, out_cam
   else:
     return None, None
+
+## process to generate building layers from land cover image and height image
+def generate_building_layers(land_img, land_cam, height_img, height_cam, land_txt, min_h, max_h):
+  bvxm_batch.init_process("volmBuildingLayerExtractionProcess")
+  bvxm_batch.set_input_from_db(0, land_img)
+  bvxm_batch.set_input_from_db(1, land_cam)
+  bvxm_batch.set_input_from_db(2, height_img)
+  bvxm_batch.set_input_from_db(3, height_cam)
+  bvxm_batch.set_input_string(4, land_txt)
+  bvxm_batch.set_input_float(5, min_h)
+  bvxm_batch.set_input_float(6, max_h)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(1)
+    mask_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(2)
+    out_cam = dbvalue(id, type)
+    return out_img, mask_img, out_cam
+  else:
+    return None, None, None
+
+def generate_layers(land_img, land_cam, height_img, height_cam, land_txt, min_h, max_h, beta=10.0):
+  bvxm_batch.init_process("volmLayerExtractionProcess")
+  bvxm_batch.set_input_from_db(0, land_img)
+  bvxm_batch.set_input_from_db(1, land_cam)
+  bvxm_batch.set_input_from_db(2, height_img)
+  bvxm_batch.set_input_from_db(3, height_cam)
+  bvxm_batch.set_input_string(4, land_txt)
+  bvxm_batch.set_input_float(5, min_h)
+  bvxm_batch.set_input_float(6, max_h)
+  bvxm_batch.set_input_double(7, beta)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_prob_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(1)
+    out_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(2)
+    mask_img = dbvalue(id, type)
+    (id, type) = bvxm_batch.commit_output(3)
+    out_cam = dbvalue(id, type)
+    return out_prob_img, out_img, mask_img, out_cam
+  else:
+    return None, None, None, None
+
+## process to convert a polygons in KML to geotiff byte image
+## Note that this process will update the input image according to given polygon structures
+def render_kml_polygon_mask(in_kml, image, ll_lon, ll_lat, ur_lon, ur_lat, mask_value = 255):
+  bvxm_batch.init_process("volmRenderKmlPolygonMaskProcess")
+  bvxm_batch.set_input_from_db(0, image)
+  bvxm_batch.set_input_double(1, ll_lon)
+  bvxm_batch.set_input_double(2, ll_lat)
+  bvxm_batch.set_input_double(3, ur_lon)
+  bvxm_batch.set_input_double(4, ur_lat)
+  bvxm_batch.set_input_string(5, in_kml)
+  bvxm_batch.set_input_unsigned(6, mask_value)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    out_cam = dbvalue(id, type)
+    return out_cam
+  else:
+    return None
+
+## process to generate a kml file from a binary image
+def generate_kml_from_image(in_img, in_cam, out_kml, threshold = 127, r = 0, g = 255, b = 0):
+  bvxm_batch.init_process("volmGenerateKmlFromBinaryImageProcess")
+  bvxm_batch.set_input_from_db(0, in_img)
+  bvxm_batch.set_input_from_db(1, in_cam)
+  bvxm_batch.set_input_unsigned(2, threshold)
+  bvxm_batch.set_input_string(3, out_kml)
+  bvxm_batch.set_input_unsigned(4, r)
+  bvxm_batch.set_input_unsigned(5, g)
+  bvxm_batch.set_input_unsigned(6, b)
+  status = bvxm_batch.run_process()
+  if status:
+    (id, type) = bvxm_batch.commit_output(0)
+    n_connected_component = bvxm_batch.get_output_unsigned(id)
+    return n_connected_component
+  else:
+    return None
+
+## process to downsample a binary layer image
+def downsample_binary_layer(in_img, in_mask, in_cam, out_img, out_mask, out_cam):
+  bvxm_batch.init_process("volmDownsampleLayerImageProcess")
+  bvxm_batch.set_input_from_db(0, in_img)
+  bvxm_batch.set_input_from_db(1, in_mask)
+  bvxm_batch.set_input_from_db(2, in_cam)
+  bvxm_batch.set_input_from_db(3, out_img)
+  bvxm_batch.set_input_from_db(4, out_mask)
+  bvxm_batch.set_input_from_db(5, out_cam)
+  status = bvxm_batch.run_process()
+  return status 
+  
