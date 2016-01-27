@@ -376,7 +376,7 @@ void *DcmElement::getValue(const E_ByteOrder newByteOrder)
             /* if the value has not yet been loaded, do so now */
             if (!fValue)
                 errorFlag = loadValue();
-            /* íf everything is ok */
+            /* if everything is ok */
             if (errorFlag.good())
             {
                 /* if this element's value's byte ordering does not correspond to the */

@@ -6,13 +6,13 @@
 #endif
 //:
 // \file
-// \author Don Hamilton, Peter Tu, Peter Vanroose, François BERTEL, Franck Bettinger
+// \author Don Hamilton, Peter Tu, Peter Vanroose, Francois BERTEL, Franck Bettinger
 // \date   2000-02-16 Don HAMILTON, Peter TU - Creation
 //
 // \verbatim
 //  Modifications
 //   2000-02-29 Peter Vanroose    Several minor fixes
-//   2000-05-05 François BERTEL   Several minor bugs fixed
+//   2000-05-05 Francois BERTEL   Several minor bugs fixed
 //   2000-05-09 Peter Vanroose    dist_origin() re-implemented
 //   2000-12-01 Peter Vanroose    moved dist_origin() to vgl_distance.h
 //   2001-03-19 Franck Bettinger  added Manchester binary IO code

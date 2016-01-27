@@ -32,7 +32,7 @@ template <class IT> vxl_uint_32 vul_checksum_crc32(IT begin, IT end);
 
 
 // Copied from "Fast CRC32 in Software" R Black, 1994, http://www.cl.cam.ac.uk/research/srg/bluebook/21/crc/node6.html
-// Software original is copyright © 1993 Richard Black. All rights are reserved. You may use this code only if it includes a statement to that effect.
+// Software original is copyright (c) 1993 Richard Black. All rights are reserved. You may use this code only if it includes a statement to that effect.
 // Heavily modified to handle byte swapping and bit reversing issues, and implement CRC32C
 
 namespace

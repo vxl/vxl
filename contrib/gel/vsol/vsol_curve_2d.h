@@ -6,12 +6,12 @@
 // \brief Abstract curve in a 2D space
 //
 // \author
-//  François BERTEL
+//  Francois BERTEL
 //
 // \verbatim
 //  Modifications
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
-//   2000/04/27 François BERTEL Creation
+//   2000/04/27 Francois BERTEL Creation
 //   2002/04/22 Amir Tamrakar   Added POLYLINE type
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 //   2004/09/23 MingChing Chang fix name of cast_to functions and added endpoints_equal

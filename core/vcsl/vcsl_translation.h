@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Translation transformation
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 //   2002/01/28 Peter Vanroose - vcl_vector member vector_ changed to non-ptr

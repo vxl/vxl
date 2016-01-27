@@ -6,13 +6,13 @@
 // \file
 // \brief Point in 2D space
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-04-14
 //
 // \verbatim
 //  Modifications
-//   2000-04-14 François BERTEL Creation
-//   2000-05-12 François BERTEL Replacement of vnl_vector_fixed<double,2> by vnl_double_2
+//   2000-04-14 Francois BERTEL Creation
+//   2000-05-12 Francois BERTEL Replacement of vnl_vector_fixed<double,2> by vnl_double_2
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2000-09-18 Peter Tu        using vgl_point_2d instead of vnl_vector
 //   2001-06-30 Peter Vanroose  Added constructor from vgl_point_2d

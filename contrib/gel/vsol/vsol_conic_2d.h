@@ -14,12 +14,12 @@
 // and with non-homogeneous Euclidean 2D geometry terminology instead of
 // homogeneous 3-tuples.
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-04-28
 //
 // \verbatim
 //  Modifications
-//   2000-04-28 François BERTEL Creation
+//   2000-04-28 Francois BERTEL Creation
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001-08-29 Peter Vanroose  midpoint() added
 //   2001-08-29 Peter Vanroose  conic intersection added (implemented in vgl)

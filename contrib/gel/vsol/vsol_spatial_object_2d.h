@@ -24,7 +24,7 @@
 //           automatically updates the bounding volume if necessary.
 //   1996/12/16 Peter VANROOSE  made destructor protected
 //   2000/05/03 Peter TU        ported to vxl
-//   2000/05/10 François BERTEL add cast_to_group() because VXL is not compiled
+//   2000/05/10 Francois BERTEL add cast_to_group() because VXL is not compiled
 //                              with -frtti :-(
 //   2002/12/12 Peter Vanroose added cast_to_region()
 //   2003/01/08 Peter Vanroose made bounding box "mutable" and changed interface

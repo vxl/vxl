@@ -6,7 +6,7 @@
 // \date December 24, 2009
 //
 //  Adapted from code available at http://www.psa.es/sdg/sunpos.htm
-//  Posted by The Plataforma Solar de Almería (PSA), a solar energy laboratory.
+//  Posted by The Plataforma Solar de Almeria (PSA), a solar energy laboratory.
 //  sun_azimuth is measured in degrees clockwise from north
 //  sun_elevation is measured in degrees with zero on the local tangent plane
 //  and 90 degrees when the sun is directly overhead.

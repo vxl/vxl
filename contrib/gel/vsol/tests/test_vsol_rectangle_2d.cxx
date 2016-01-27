@@ -6,7 +6,7 @@
 //
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/05/08| François BERTEL          |Creation
+// 1.0     |2000/05/08| Francois BERTEL          |Creation
 // 1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 // 2.0     |2004/05/16| Joseph Mundy             |Reworked rectangle interface
 //*****************************************************************************

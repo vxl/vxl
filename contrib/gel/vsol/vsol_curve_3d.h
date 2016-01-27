@@ -6,11 +6,11 @@
 // \brief Abstract curve in a 3D space
 //
 // \author
-// François BERTEL
+// Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/05/03 François BERTEL Creation
+//   2000/05/03 Francois BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 //   2004/09/17 MingChing Chang Add cast_to stuffs and endpoints_equal()

@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Scale transformation
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/07/19 François BERTEL Creation.
+//   2000/07/19 Francois BERTEL Creation.
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 //   2002/01/28 Peter Vanroose - vcl_vector member scale_ changed to non-ptr
