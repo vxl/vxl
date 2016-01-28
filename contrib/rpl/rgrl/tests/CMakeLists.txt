@@ -30,7 +30,9 @@ add_test( NAME rgrl_feature_region COMMAND $<TARGET_FILE:rgrl_test_all> test_fea
 add_test( NAME rgrl_feature_set COMMAND $<TARGET_FILE:rgrl_test_all> test_feature_set )
 add_test( NAME rgrl_match_set COMMAND $<TARGET_FILE:rgrl_test_all> test_match_set )
 add_test( NAME rgrl_spline COMMAND $<TARGET_FILE:rgrl_test_all> test_spline )
-if(0)  # The rgrl_estimtaor test failes too often to be enabled by default:
+if(1)  
+# Gary in the process of fixing this issue. Need dashboard to assist
+# The rgrl_estimtaor test failes too often to be enabled by default:
 ## https://github.com/vxl/vxl/issues/96
 add_test( NAME rgrl_estimator COMMAND $<TARGET_FILE:rgrl_test_all> test_estimator )
 endif()
