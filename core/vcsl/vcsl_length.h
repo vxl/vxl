@@ -1,6 +1,6 @@
 #ifndef vcsl_length_h_
 #define vcsl_length_h_
-//:
+// :
 // \file
 // \brief Length dimension
 // \author Francois BERTEL
@@ -17,39 +17,39 @@
 #include <vcsl/vcsl_length_sptr.h>
 #include <vcsl/vcsl_unit_sptr.h>
 
-//: Length dimension
+// : Length dimension
 class vcsl_length
   : public vcsl_dimension
 {
-  //***************************************************************************
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor
   vcsl_length() {}
-
- public:
+public:
   // Destructor
   virtual ~vcsl_length() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Is `new_unit' a compatible unit for the dimension ?
+  // : Is `new_unit' a compatible unit for the dimension ?
   // Pure virtual function of vcsl_dimension
   virtual bool compatible_unit(vcsl_unit_sptr const& new_unit) const;
 
-  //: Return the standard unit associated to the dimension
+  // : Return the standard unit associated to the dimension
   // Pure virtual function of vcsl_dimension
   virtual vcsl_unit_sptr standard_unit() const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Singleton pattern
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Return the reference to the unique vcsl_length object
+  // : Return the reference to the unique vcsl_length object
   static vcsl_length_sptr instance();
+
 };
 
 #endif // vcsl_length_h_

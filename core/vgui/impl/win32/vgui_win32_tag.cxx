@@ -23,10 +23,9 @@
 // int vgui_win32_tag_function_()
 
 vgui_tag(win32)
-{
+  {
   vul_trace;
   vgui_win32::instance();
   vul_trace;
   return 0;
-}
-
+  }

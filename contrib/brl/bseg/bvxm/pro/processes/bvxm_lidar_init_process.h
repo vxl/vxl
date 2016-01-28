@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_lidar_init_process.h
 #ifndef bvxm_lidar_init_process_h_
 #define bvxm_lidar_init_process_h_
-//:
+// :
 // \file
 // \brief Functions  for clipping and image based on a 3D bounding box.
 //        -  Inputs:
@@ -34,34 +34,28 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 
-//: global variables/functions
+// : global variables/functions
 namespace bvxm_lidar_init_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 4;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 4;
 
-  // parameters identifying strings
-  const vcl_string param_mask_thresh_ = "mask_thresh";
+// parameters identifying strings
+const vcl_string param_mask_thresh_ = "mask_thresh";
 
-  // helper functions
-  bool lidar_init(vil_image_resource_sptr lidar,
-                  bvxm_world_params_sptr params,
-                  vil_image_view_base_sptr& roi,
-                  vpgl_geo_camera*& camera);
+// helper functions
+bool lidar_init(vil_image_resource_sptr lidar, bvxm_world_params_sptr params, vil_image_view_base_sptr& roi,
+                vpgl_geo_camera *& camera);
 
-  bool comp_trans_matrix(double sx1, double sy1, double sz1,
-                         vcl_vector<vcl_vector<double> > tiepoints,
-                         vnl_matrix<double>& trans_matrix);
+bool comp_trans_matrix(double sx1, double sy1, double sz1, vcl_vector<vcl_vector<double> > tiepoints,
+                       vnl_matrix<double>& trans_matrix);
 
-  bool gen_mask(vil_image_view_base_sptr roi_first,
-                vpgl_geo_camera* cam_first,
-                vil_image_view_base_sptr roi_second,
-                vpgl_geo_camera* cam_second,
-                vil_image_view_base_sptr& mask,
-                double thresh);
+bool gen_mask(vil_image_view_base_sptr roi_first, vpgl_geo_camera* cam_first, vil_image_view_base_sptr roi_second,
+              vpgl_geo_camera* cam_second, vil_image_view_base_sptr& mask, double thresh);
+
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_lidar_init_process_cons(bprb_func_process& pro);
 
 bool bvxm_lidar_init_process(bprb_func_process& pro);

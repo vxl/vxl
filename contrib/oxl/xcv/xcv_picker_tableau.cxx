@@ -1,6 +1,6 @@
 // This is oxl/xcv/xcv_picker_tableau.cxx
 #include "xcv_picker_tableau.h"
-//:
+// :
 //  \file
 // \author K.Y.McGaul
 //  See xcv_picker_tableau.h for a description of this file.
@@ -16,10 +16,10 @@
 
 xcv_picker_tableau::object_type xcv_picker_tableau::obj_type = none_enum;
 
-//========================================================================
-//: Constructor, takes a child tableau.
+// ========================================================================
+// : Constructor, takes a child tableau.
 xcv_picker_tableau::xcv_picker_tableau(vgui_tableau_sptr const& t)
-  :child_tab(this, t)
+  : child_tab(this, t)
 {
   use_event_ = false;
   pointx1 = pointy1 = pointx2 = pointy2 = 0;
@@ -28,14 +28,14 @@ xcv_picker_tableau::xcv_picker_tableau(vgui_tableau_sptr const& t)
   point_ret = true;
 }
 
-//========================================================================
-//: Destructor.
+// ========================================================================
+// : Destructor.
 xcv_picker_tableau::~xcv_picker_tableau()
 {
 }
 
-//========================================================================
-//: Gets a user selected point.
+// ========================================================================
+// : Gets a user selected point.
 //  This function grabs the event loop and will not return until a
 //  mouse down event occurs.
 //  Returns true if this is done with the left mouse button, otherwise false.
@@ -48,8 +48,10 @@ bool xcv_picker_tableau::pick_point(float* x, float* y)
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
-  while (!picking_completed)
+  while( !picking_completed )
+    {
     next();
+    }
 
   *x = pointx;
   *y = pointy;
@@ -57,29 +59,29 @@ bool xcv_picker_tableau::pick_point(float* x, float* y)
   return point_ret;
 }
 
-//========================================================================
-//: Draw a line to help the user pick it.
+// ========================================================================
+// : Draw a line to help the user pick it.
 void xcv_picker_tableau::draw_line()
 {
-  if (!FIRSTPOINT)  // there is no point in drawing till we have a first point
-  {
+  if( !FIRSTPOINT )  // there is no point in drawing till we have a first point
+    {
     glLineWidth(2);
-    glColor3f(1,1,1);
+    glColor3f(1, 1, 1);
 
     glBegin(GL_LINES);
     glVertex2f(pointx1, pointy1);
     glVertex2f(pointx2, pointy2);
     glEnd();
-  }
+    }
 }
 
-//========================================================================
-//: Gets a user selected line.
+// ========================================================================
+// : Gets a user selected line.
 //  This function grabs the event loop and will not return until two mouse
 //  down events occur.
 //  The parameters return the two points defining the line.
 void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
-  float* y2)
+                                   float* y2)
 {
   obj_type = line_enum;
   picking_completed = false;
@@ -87,8 +89,10 @@ void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
   vgui::flush();  // handle any pending events before we grab the event loop.
 
   // Grab event loop until picking is completed:
-  while (!picking_completed)
+  while( !picking_completed )
+    {
     next();
+    }
 
   *x1 = pointx1;
   *y1 = pointy1;
@@ -96,13 +100,13 @@ void xcv_picker_tableau::pick_line(float* x1, float* y1, float* x2,
   *y2 = pointy2;
 
   // Reset everything ready for the next pick:
-  FIRSTPOINT=true;
+  FIRSTPOINT = true;
   post_redraw();
   obj_type = none_enum;
 }
 
-//========================================================================
-//: Handles all events for this tableau.
+// ========================================================================
+// : Handles all events for this tableau.
 //  We grab events in this way rather than using a vgui_event_server because
 //  if we look at events outside the handle function then the gl state
 //  associated with those events will have changed.  This means for a
@@ -117,56 +121,63 @@ bool xcv_picker_tableau::handle(const vgui_event& event)
 
   use_event_ = true;
 
-  //---- Object type is point -----
-  if (obj_type == point_enum)
-  {
-    if (event.type == vgui_BUTTON_DOWN)
+  // ---- Object type is point -----
+  if( obj_type == point_enum )
     {
+    if( event.type == vgui_BUTTON_DOWN )
+      {
       vgui_projection_inspector p_insp;
       p_insp.window_to_image_coordinates(event.wx, event.wy, pointx, pointy);
 
-      if (event.button != vgui_LEFT)
-        point_ret= false;
+      if( event.button != vgui_LEFT )
+        {
+        point_ret = false;
+        }
       picking_completed = true;
+      }
     }
-  }
   // ---- Object type is line ----
-  if (obj_type == line_enum)
-  {
-    if (event.type == vgui_DRAW)
-      draw_line();
-    else if (event.type == vgui_MOTION)
+  if( obj_type == line_enum )
     {
+    if( event.type == vgui_DRAW )
+      {
+      draw_line();
+      }
+    else if( event.type == vgui_MOTION )
+      {
       vgui_projection_inspector p_insp;
       p_insp.window_to_image_coordinates(event.wx, event.wy, pointx2, pointy2);
       post_redraw();
-    }
-    else if (event.type == vgui_BUTTON_DOWN)
-    {
-      if (FIRSTPOINT)
+      }
+    else if( event.type == vgui_BUTTON_DOWN )
       {
+      if( FIRSTPOINT )
+        {
         vgui_projection_inspector p_insp;
         p_insp.window_to_image_coordinates(event.wx, event.wy,
-          pointx1, pointy1);
+                                           pointx1, pointy1);
         pointx2 = pointx1;
         pointy2 = pointy1;
-        FIRSTPOINT=false;
-      }
+        FIRSTPOINT = false;
+        }
       else
-      {
+        {
         picking_completed = true;
+        }
       }
     }
-  }
   return true;
 }
 
-//========================================================================
-//: Get next event in event loop
+// ========================================================================
+// : Get next event in event loop
 bool xcv_picker_tableau::next()
 {
   use_event_ = false;
-  while (!use_event_)
+  while( !use_event_ )
+    {
     vgui::run_one_event();
+    }
+
   return true;
 }

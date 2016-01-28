@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_bsta_histogram_io );
 
 void

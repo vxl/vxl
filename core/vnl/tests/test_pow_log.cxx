@@ -9,14 +9,17 @@
 // Beware of overflow!
 inline static int int_pow(int a, unsigned int b)
 {
-  if (b==0) return 1;
-  else if (b==1) return a;
+  if( b == 0 ) {return 1; }
+  else if( b == 1 )
+    {
+    return a;
+    }
   else
     {
-    long asquare = static_cast<long>(a)*static_cast<long>(a);
-    long r1      = static_cast<long>(int_pow(static_cast<int>(asquare),b/2));
-    long r2      = static_cast<long>(int_pow(a, b%2));
-    return static_cast<int>(r1*r2);
+    long asquare = static_cast<long>(a) * static_cast<long>(a);
+    long r1      = static_cast<long>(int_pow(static_cast<int>(asquare), b / 2) );
+    long r2      = static_cast<long>(int_pow(a, b % 2) );
+    return static_cast<int>(r1 * r2);
     }
 }
 
@@ -25,10 +28,16 @@ inline static int int_pow(int a, unsigned int b)
 // certainly in those cases where b is relatively small.
 inline static double int_pow(double a, int b)
 {
-  if (b==0) return 1;
-  else if (b==1) return a;
-  else if (b<0) return int_pow(1.0/a, -b);
-  else return int_pow(a*a,b/2) * int_pow(a, b%2);
+  if( b == 0 ) {return 1; }
+  else if( b == 1 )
+    {
+    return a;
+    }
+  else if( b < 0 )
+    {
+    return int_pow(1.0 / a, -b);
+    }
+  else {return int_pow(a * a, b / 2) * int_pow(a, b % 2); }
 }
 
 // An implementation for floor(log(a)/log(8)) with integer argument a;
@@ -38,9 +47,16 @@ inline static double int_pow(double a, int b)
 // makes no sense, but in that case a "very negative" value is returned.
 inline static int log8(unsigned int a)
 {
-  if (a==0) return -0x7fffffffL-1L; // stands for minus infinity
+  if( a == 0 )
+    {
+    return -0x7fffffffL - 1L;       // stands for minus infinity
+    }
   int r = 0;
-  while (a >= 8) ++r, a>>=3; // divide by 8
+  while( a >= 8 )
+    {
+    ++r, a >>= 3;            // divide by 8
+    }
+
   return r;
 }
 
@@ -53,7 +69,7 @@ static void test_int_pow()
   TEST("Odd exponent of -1", int_pow(-1, 12345U), -1);
   TEST("Large power of 2", int_pow(2, 30U), 0x40000000);
 #ifdef TEST_SIGNED_OVERFLOW // "signed overflow" might give compiler warnings or even worse ...
-  TEST("Power of 2 with overflow", int_pow(2, 31U), (int)(-0x80000000L));
+  TEST("Power of 2 with overflow", int_pow(2, 31U), (int)(-0x80000000L) );
   TEST("Power of 2 with even more overflow", int_pow(2, 32U), 0);
 #endif // TEST_SIGNED_OVERFLOW
   TEST("Just a \"random\" case...", int_pow(-19, 7U), -893871739);

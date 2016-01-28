@@ -36,19 +36,22 @@ vcl_complex<T> vcl_complex_instances_ticker(T *)
   vcl_complex<T> x = vcl_arg(z);
   x += vcl_conj(z);
   x -= vcl_abs(z);
-  x *= vcl_polar(T(3), T(4));
+  x *= vcl_polar(T(3), T(4) );
   x /= vcl_sqrt(z);
   return x + vcl_norm(z);
 }
-template vcl_complex<float > vcl_complex_instances_ticker(float  *);
+
+template vcl_complex<float> vcl_complex_instances_ticker(float  *);
+
 template vcl_complex<double> vcl_complex_instances_ticker(double *);
+
 template vcl_complex<long double> vcl_complex_instances_ticker(long double *);
 
 // macro to implement an operator>>, for compilers that need it.
-# define implement_rsh(T) \
-vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
-  T r, i; \
-  is >> r >> i; \
-  z = vcl_complex<T >(r, i); \
-  return is; \
-}
+#define implement_rsh(T) \
+  vcl_istream & operator>>(vcl_istream & is, vcl_complex<T> &z) { \
+    T r, i; \
+    is >> r >> i; \
+    z = vcl_complex<T>(r, i); \
+    return is; \
+    }

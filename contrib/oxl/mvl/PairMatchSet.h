@@ -2,9 +2,9 @@
 #ifndef PairMatchSet_h_
 #define PairMatchSet_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Set of pairs of integers
 //
@@ -26,7 +26,7 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
@@ -36,31 +36,37 @@ class PairMatchSet : public MatchSet
 {
   // Data Members--------------------------------------------------------------
   vcl_vector<int> matches_;
-  unsigned int match_count_;
- public:
+  unsigned int    match_count_;
+public:
   // Constants-----------------------------------------------------------------
   enum { use_existing = true };
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchSet(unsigned size = 0);
   PairMatchSet(const PairMatchSet& that);
-  PairMatchSet& operator=(const PairMatchSet& that);
+  PairMatchSet & operator=(const PairMatchSet& that);
 
   virtual ~PairMatchSet();
 
   // Data Control--------------------------------------------------------------
   void set_size(unsigned size);
+
   bool add_match(int i1, int i2);
+
   int  get_match_12(int i1) const;
+
   int  get_match_21(int i2) const;
+
   void clear_match_1(int i1);
+
   void set_identity();
 
   // Operations----------------------------------------------------------------
   unsigned int count() const { return match_count_; }
 
   void update_feature_match_data();
+
   void clear();
 
   void update(const vcl_vector<bool>& inliers);
@@ -77,37 +83,46 @@ class PairMatchSet : public MatchSet
   {
     VCL_SAFE_BOOL_DEFINE;
     const PairMatchSet* c_;
-    int match_index_;
-    int i1, i2;
-    bool full_only_;
-   public:
+    int                 match_index_;
+    int                 i1, i2;
+    bool                full_only_;
+public:
     iterator(bool full_only = true);
     iterator(const PairMatchSet& ccc, bool full_only = true);
-    iterator& operator=(const PairMatchSet& ccc);
+    iterator & operator=(const PairMatchSet& ccc);
+
     int get_i1() const { return i1; }
     int get_i2() const { return i2; }
     bool next();
-    iterator& operator ++ (/*prefix*/) { next(); return *this; }
+
+    iterator & operator ++(/*prefix*/) { next(); return *this; }
     bool isfull() const;
-    //: Return true if the iterator has not yet enumerated all matches.
+
+    // : Return true if the iterator has not yet enumerated all matches.
     operator safe_bool() const { return match_index_ < c_->size() ? VCL_SAFE_BOOL_TRUE : 0; }
-    //: Return false if the iterator has not yet enumerated all matches.
+    // : Return false if the iterator has not yet enumerated all matches.
     bool operator!() const { return match_index_ < c_->size() ? false : true; }
-   private:
-    iterator operator++ (int /*postfix*/);// { abort(); return *this; }
+private:
+    iterator operator++(int /*postfix*/); // { abort(); return *this; }
+
   };
   // ******* END ITERATOR
 
   // Input/Output--------------------------------------------------------------
   void print_brief(vcl_ostream& s) const;
+
   void print_brief() const;
+
   void write_ascii(vcl_ostream& s) const;
+
   bool read_ascii(vcl_istream& s);
 
-  friend vcl_ostream& operator<<(vcl_ostream& s, const PairMatchSet& cc);
-  friend vcl_istream& operator>>(vcl_istream& s, PairMatchSet& cc);
+  friend vcl_ostream & operator<<(vcl_ostream& s, const PairMatchSet& cc);
+
+  friend vcl_istream & operator>>(vcl_istream& s, PairMatchSet& cc);
 
   bool get_match(int at, int* i1, int* i2) const;
+
 };
 
 #endif // PairMatchSet_h_

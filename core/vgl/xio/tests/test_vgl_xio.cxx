@@ -12,7 +12,8 @@ static void test_xio_box_3d()
 
   vgl_box_3d<double> b3;
   x_write(s, b3);
-  TEST("XML I/O for box_3d<double>", s.str(),
+  TEST("XML I/O for box_3d<double>",
+       s.str(),
        "<vgl_box_3d min_x=\"1.000000\" min_y=\"1.000000\" min_z=\"1.000000\" max_x=\"0.000000\" max_y=\"0.000000\" max_z=\"0.000000\">\n</vgl_box_3d>\n");
 }
 
@@ -20,7 +21,7 @@ static void test_xio_point_2d()
 {
   vcl_stringstream s;
 
-  vgl_point_2d<double> p2(0.0,0.0);
+  vgl_point_2d<double> p2(0.0, 0.0);
   x_write(s, p2);
   TEST("XML I/O for vgl_point_2d<double>", s.str(),
        "<vgl_point_2d x=\"0.000000\" y=\"0.000000\">\n</vgl_point_2d>\n");
@@ -30,7 +31,7 @@ static void test_xio_point_3d()
 {
   vcl_stringstream s;
 
-  vgl_point_3d<double> p3(0.0,0.0,0.0);
+  vgl_point_3d<double> p3(0.0, 0.0, 0.0);
   x_write(s, p3);
   TEST("XML I/O for vgl_point_3d<double>", s.str(),
        "<vgl_point_3d x=\"0.000000\" y=\"0.000000\" z=\"0.000000\">\n</vgl_point_3d>\n");

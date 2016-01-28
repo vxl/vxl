@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_heightmap_process.h
 #ifndef bvxm_heightmap_process_h_
 #define bvxm_heightmap_process_h_
-//:
+// :
 // \file
 // \brief A class for generating a height map from a given camera viewpoint
 //        -  Inputs:
@@ -22,14 +22,14 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_heightmap_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 5;
+const unsigned n_outputs_ = 1;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_heightmap_process_cons(bprb_func_process& pro);
 
 // generates a height map from a given camera viewpoint

@@ -1,7 +1,7 @@
 // This is core/vil1/vil1_property.h
 #ifndef vil1_property_h_
 #define vil1_property_h_
-//:
+// :
 // \file
 //
 // There is no class called vil1_property.
@@ -72,16 +72,16 @@
 //
 // \author  fsm
 
-//: Indicate whether this is an in-memory image or an on-disk image
+// : Indicate whether this is an in-memory image or an on-disk image
 #define vil1_property_memory "memory"
 
-//: Indicate whether the first image row is the top or the bottom of the image
+// : Indicate whether the first image row is the top or the bottom of the image
 #define vil1_property_top_row_first "top row first"
 
-//: Indicate whether the first pixel in an image row is at left or at right
+// : Indicate whether the first pixel in an image row is at left or at right
 #define vil1_property_left_first "left first"
 
-//: Indicate that the colour cell order is B,G,R instead of the default R,G,B
+// : Indicate that the colour cell order is B,G,R instead of the default R,G,B
 #define vil1_property_component_order_is_BGR "component order is B,G,R"
 
 #endif // vil1_property_h_

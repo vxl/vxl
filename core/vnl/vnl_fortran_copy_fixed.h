@@ -2,9 +2,9 @@
 #ifndef vnl_fortran_copy_fixed_h_
 #define vnl_fortran_copy_fixed_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Convert row-stored matrix to column-stored
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -19,27 +19,25 @@
 //   Oct.2009 - Converted for a stack-storage fixed-size version
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix_fixed.h>
-//:  Convert row-stored matrix to column-stored.
+// :  Convert row-stored matrix to column-stored.
 //  Convert C format (row-stored) matrix to fortran format (column-stored) matrix.
 template <class T, unsigned R, unsigned C>
 class vnl_fortran_copy_fixed
 {
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   vnl_fortran_copy_fixed(vnl_matrix_fixed<T, R, C> const & M);
 
   // Operations----------------------------------------------------------------
-  operator T*() { return data; }
-
- protected:
+  operator T *() { return data; }
+protected:
   // Data Members--------------------------------------------------------------
-  T data[R*C];
-
- private:
+  T data[R * C];
+private:
   // Helpers-------------------------------------------------------------------
 };
 

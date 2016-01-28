@@ -1,9 +1,9 @@
-//-*- c++ -*-------------------------------------------------------------------
+// -*- c++ -*-------------------------------------------------------------------
 // Module: Minimization of Rosenbrock banana function
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 31 Aug 96
 // Converted to vxl by Peter Vanroose, February 2000
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_iostream.h>
 #include <vnl/vnl_double_2.h>
@@ -26,33 +26,39 @@
 
 class vnl_rosenbrock : public vnl_least_squares_function
 {
- public:
-  vnl_rosenbrock(): vnl_least_squares_function(2, 2, no_gradient) {}
+public:
+  vnl_rosenbrock() : vnl_least_squares_function(2, 2, no_gradient) {}
 
   void f(const vnl_vector<double>& x, vnl_vector<double>& fx)
   {
-    fx[0] = 10*(x[1] - x[0]*x[0]);
+    fx[0] = 10 * (x[1] - x[0] * x[0]);
     fx[1] = 1 - x[0];
   }
+
 };
 
 class vnl_rosenbrock_grad_cost_fun : public vnl_cost_function
 {
- public:
-  vnl_rosenbrock_grad_cost_fun(): vnl_cost_function(2) {}
+public:
+  vnl_rosenbrock_grad_cost_fun() : vnl_cost_function(2) {}
 
-  double f(const vnl_vector<double>& x) {
-    double a = 10*(x[1] - x[0]*x[0]);
+  double f(const vnl_vector<double>& x)
+  {
+    double a = 10 * (x[1] - x[0] * x[0]);
     double b = 1 - x[0];
-    return a*a + b*b;
+
+    return a * a + b * b;
   }
 
-  void gradf(const vnl_vector<double>& x, vnl_vector<double>& g) {
-    double a = 10*(x[1] - x[0]*x[0]);
+  void gradf(const vnl_vector<double>& x, vnl_vector<double>& g)
+  {
+    double a = 10 * (x[1] - x[0] * x[0]);
     double b = 1 - x[0];
-    g[0] = 2 * a * (-20*x[0]) - 2 * b;
+
+    g[0] = 2 * a * (-20 * x[0]) - 2 * b;
     g[1] = 20 * a;
   }
+
 };
 
 int main()
@@ -93,46 +99,46 @@ int main()
            << "    Evaluations: " << levmarq.get_num_evaluations() << vcl_endl;
   levmarq.diagnose_outcome();
 
-  {
+    {
     // Make a vnl_cost_function, and use vnl_amoeba
     vcl_cout << "** Amoeba (Nelder Meade downhill simplex)  **\n";
     vnl_least_squares_cost_function cf(&f);
-    vnl_amoeba amoeba(cf);
+    vnl_amoeba                      amoeba(cf);
     x = x0.as_ref();
     amoeba.minimize(x);
     vcl_cout << "Rosenbrock min of " << cf.f(x) << " at " << x << '\n'
              << "Evaluations: " << amoeba.get_num_evaluations() << vcl_endl;
-  }
-  {
+    }
+    {
     vcl_cout << "** Conjugate Gradient **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
-    vnl_conjugate_gradient cg(rcf);
+    vnl_conjugate_gradient       cg(rcf);
     x = x0.as_ref();
     cg.minimize(x);
     vcl_cout << "CG min of " << rcf.f(x) << " at " << x << vcl_endl;
     cg.diagnose_outcome();
-  }
+    }
 
-  {
+    {
     vcl_cout << "** LBFGS (Limited memory Broyden Fletcher Goldfarb Shanno) **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
-    vnl_lbfgs lbfgs(rcf);
+    vnl_lbfgs                    lbfgs(rcf);
     x = x0.as_ref();
     lbfgs.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
     vcl_cout << "L-BFGS min of " << lbfgs.get_end_error() << " at " << x << '\n'
              << "Evaluations: " << lbfgs.get_num_evaluations() << vcl_endl;
-  }
+    }
 
-  {
+    {
     vcl_cout << "** Powell (Powell's direction set method) **\n";
     vnl_rosenbrock_grad_cost_fun rcf;
-    vnl_powell powell(&rcf);
+    vnl_powell                   powell(&rcf);
     x = x0.as_ref();
     powell.minimize(x);
     //    assert(lbfgs.get_end_error() == rcf.f(x));
     vcl_cout << "Powell min of " << powell.get_end_error() << " at " << x << '\n'
              << "Evaluations: " << powell.get_num_evaluations() << vcl_endl;
-  }
+    }
   return 0;
 }

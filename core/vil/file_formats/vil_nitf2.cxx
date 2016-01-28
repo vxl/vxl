@@ -15,40 +15,46 @@ void vil_nitf2::cleanup_static_members()
 {
   // Commented out to test whether this function is needed to avoid reported
   // memory leaks. We'll see what valgrid says.
-  if( vil_nitf2_header::s_field_definitions_1 ) {
+  if( vil_nitf2_header::s_field_definitions_1 )
+    {
     delete vil_nitf2_header::s_field_definitions_1;
     vil_nitf2_header::s_field_definitions_1 = 0;
-  }
+    }
 
-  if( vil_nitf2_header::s_field_definitions_20 ) {
+  if( vil_nitf2_header::s_field_definitions_20 )
+    {
     delete vil_nitf2_header::s_field_definitions_20;
     vil_nitf2_header::s_field_definitions_20 = 0;
-  }
+    }
 
-  if( vil_nitf2_header::s_field_definitions_21 ) {
+  if( vil_nitf2_header::s_field_definitions_21 )
+    {
     delete vil_nitf2_header::s_field_definitions_21;
     vil_nitf2_header::s_field_definitions_21 = 0;
-  }
+    }
 
-  if( vil_nitf2_image_subheader::s_field_definitions_20 ) {
+  if( vil_nitf2_image_subheader::s_field_definitions_20 )
+    {
     delete vil_nitf2_image_subheader::s_field_definitions_20;
     vil_nitf2_image_subheader::s_field_definitions_20 = 0;
-  }
+    }
 
-  if( vil_nitf2_image_subheader::s_field_definitions_21 ) {
+  if( vil_nitf2_image_subheader::s_field_definitions_21 )
+    {
     delete vil_nitf2_image_subheader::s_field_definitions_21;
     vil_nitf2_image_subheader::s_field_definitions_21 = 0;
-  }
+    }
 
 }
 
 class vil_nitf2_auto_cleanup
 {
 public:
-   ~vil_nitf2_auto_cleanup()
-   {
-     vil_nitf2::cleanup_static_members();
-   }
+  ~vil_nitf2_auto_cleanup()
+  {
+    vil_nitf2::cleanup_static_members();
+  }
+
 };
 
 static vil_nitf2_auto_cleanup cleanup_object;

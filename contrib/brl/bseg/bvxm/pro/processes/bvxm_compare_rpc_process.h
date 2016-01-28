@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_compare_rpc_process.h
 #ifndef bvxm_compare_rpc_process_h_
 #define bvxm_compare_rpc_process_h_
-//:
+// :
 // \file
 // \brief A process for comparing rational cameras.
 //        -  Inputs:
@@ -26,18 +26,18 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_compare_rpc_process_globals
 {
-  // process takes 3 inputs and 0 outputs:
-  unsigned n_inputs_ = 3;
-  unsigned n_outputs_ = 0;
+// process takes 3 inputs and 0 outputs:
+unsigned n_inputs_ = 3;
+unsigned n_outputs_ = 0;
 }
 
-//: sets input and output types for  bvxm_compare_rpc_process
+// : sets input and output types for  bvxm_compare_rpc_process
 bool bvxm_compare_rpc_process_cons(bprb_func_process& pro);
 
-//: Execute the process
+// : Execute the process
 bool bvxm_compare_rpc_process(bprb_func_process& pro);
 
 #endif // bvxm_compare_rpc_process_h_

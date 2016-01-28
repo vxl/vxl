@@ -6,9 +6,9 @@
 #include <stack>
 
 #ifdef vcl_generic_stack_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_stack_STD std
+#  define vcl_generic_stack_STD std
 #endif
 
 #include "../generic/vcl_stack.h"

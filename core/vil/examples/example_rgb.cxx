@@ -10,7 +10,7 @@ int main()
   vil_image_view<vil_rgb<vxl_byte> > img = vil_load("../tests/file_read_data/ff_rgb8bit_ascii.ppm");
 
   // Access pixel (1,2) and print its value as an int.
-  vcl_cerr << "Pixel 1,2 = " << img(1,2) << vcl_endl;
+  vcl_cerr << "Pixel 1,2 = " << img(1, 2) << vcl_endl;
 
   return 0;
 }

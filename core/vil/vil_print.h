@@ -2,9 +2,9 @@
 #ifndef vil_print_h_
 #define vil_print_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Ian Scott, Tim Cootes.
 
@@ -12,19 +12,19 @@
 #include <vcl_iomanip.h>
 #include <vcl_iostream.h>
 
-//: How to print value in vil_print_all(image_view)
+// : How to print value in vil_print_all(image_view)
 // \relatesalso vil_image_view
-template<class T>
-void vil_print_value(vcl_ostream& s, const T& value, unsigned=0);
+template <class T>
+void vil_print_value(vcl_ostream& s, const T& value, unsigned = 0);
 
 // Specializations must be declared before use, so they need to be
 // declared here.
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-#define vil_print_declare_specialization( T ) \
+#  define vil_print_declare_specialization( T ) \
   VCL_DEFINE_SPECIALIZATION \
-  void vil_print_value(vcl_ostream& os, const T & value, unsigned)
+  void vil_print_value(vcl_ostream & os, const T &value, unsigned)
 
 vil_print_declare_specialization( bool );
 vil_print_declare_specialization( vxl_byte );
@@ -33,10 +33,10 @@ vil_print_declare_specialization( vxl_int_16 );
 vil_print_declare_specialization( vxl_uint_16 );
 vil_print_declare_specialization( vxl_int_32 );
 vil_print_declare_specialization( vxl_uint_32 );
-#if VXL_HAS_INT_64
+#  if VXL_HAS_INT_64
 vil_print_declare_specialization( vxl_int_64 );
 vil_print_declare_specialization( vxl_uint_64 );
-#endif
+#  endif
 vil_print_declare_specialization( float );
 vil_print_declare_specialization( double );
 vil_print_declare_specialization( vcl_complex<float> );
@@ -47,10 +47,10 @@ vil_print_declare_specialization( vil_rgb<vxl_int_16> );
 vil_print_declare_specialization( vil_rgb<vxl_uint_16> );
 vil_print_declare_specialization( vil_rgb<vxl_int_32> );
 vil_print_declare_specialization( vil_rgb<vxl_uint_32> );
-#if VXL_HAS_INT_64
+#  if VXL_HAS_INT_64
 vil_print_declare_specialization( vil_rgb<vxl_int_64> );
 vil_print_declare_specialization( vil_rgb<vxl_uint_64> );
-#endif
+#  endif
 vil_print_declare_specialization( vil_rgb<float> );
 vil_print_declare_specialization( vil_rgb<double> );
 vil_print_declare_specialization( vil_rgba<vxl_byte> );
@@ -59,44 +59,43 @@ vil_print_declare_specialization( vil_rgba<vxl_int_16> );
 vil_print_declare_specialization( vil_rgba<vxl_uint_16> );
 vil_print_declare_specialization( vil_rgba<vxl_int_32> );
 vil_print_declare_specialization( vil_rgba<vxl_uint_32> );
-#if VXL_HAS_INT_64
+#  if VXL_HAS_INT_64
 vil_print_declare_specialization( vil_rgba<vxl_int_64> );
 vil_print_declare_specialization( vil_rgba<vxl_uint_64> );
-#endif
+#  endif
 vil_print_declare_specialization( vil_rgba<float> );
 vil_print_declare_specialization( vil_rgba<double> );
 
-#undef vil_print_declare_specialization
+#  undef vil_print_declare_specialization
 
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
-
-//: Print all image data to os in a grid (rounds output to int)
+// : Print all image data to os in a grid (rounds output to int)
 // \relatesalso vil_image_view
-template<class T>
-inline void vil_print_all(vcl_ostream& os,const vil_image_view<T>& view, unsigned width=0)
+template <class T>
+inline void vil_print_all(vcl_ostream& os, const vil_image_view<T>& view, unsigned width = 0)
 {
-  if (!width) width = static_cast<unsigned>(os.width());
-  os<<view.is_a()<<' '<<view.nplanes()<<" planes, each "<<view.ni()<<" x "<<view.nj()
-    <<" istep: "<<(int)view.istep()<<' '
-    <<" jstep: "<<(int)view.jstep()<<' '
-    <<" planestep: "<<(int)view.planestep()<<'\n' << vcl_flush;
-  for (unsigned int p=0;p<view.nplanes();++p)
-  {
-    if (view.nplanes()>1) os<<"Plane "<<p<<":\n" << vcl_flush;
-    for (unsigned int j=0;j<view.nj();++j)
+  if( !width ) {width = static_cast<unsigned>(os.width() ); }
+  os << view.is_a() << ' ' << view.nplanes() << " planes, each " << view.ni() << " x " << view.nj()
+     << " istep: " << (int)view.istep() << ' '
+     << " jstep: " << (int)view.jstep() << ' '
+     << " planestep: " << (int)view.planestep() << '\n' << vcl_flush;
+  for( unsigned int p = 0; p < view.nplanes(); ++p )
     {
-      for (unsigned int i=0;i<view.ni();++i)
+    if( view.nplanes() > 1 ) {os << "Plane " << p << ":\n" << vcl_flush; }
+    for( unsigned int j = 0; j < view.nj(); ++j )
       {
-        os<<' '<<vcl_setw(width);
-        vil_print_value(os,view(i,j,p), width);
+      for( unsigned int i = 0; i < view.ni(); ++i )
+        {
+        os << ' ' << vcl_setw(width);
+        vil_print_value(os, view(i, j, p), width);
+        }
+      os << '\n' << vcl_flush;
       }
-      os<<'\n'<<vcl_flush;
     }
-  }
 }
 
-//: Print all image data to os in a grid
+// : Print all image data to os in a grid
 // \relatesalso vil_image_view
 void vil_print_all(vcl_ostream& os, vil_image_view_base_sptr const& view);
 

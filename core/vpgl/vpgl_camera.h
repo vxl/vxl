@@ -1,7 +1,7 @@
 // This is core/vpgl/vpgl_camera.h
 #ifndef vpgl_camera_h_
 #define vpgl_camera_h_
-//:
+// :
 // \file
 // \brief A general camera class.
 // \author Thomas Pollard
@@ -27,18 +27,19 @@
 template <class T>
 class vpgl_camera : public vbl_ref_count
 {
- public:
+public:
 
   vpgl_camera() {}
   virtual ~vpgl_camera() {}
 
-  //: class identity functions for casting
+  // : class identity functions for casting
   virtual vcl_string type_name() const { return "vpgl_camera"; }
-  vcl_string is_a() const {return type_name();}
-  bool is_class(vcl_string const& name) const {return type_name() == name;}
+  vcl_string is_a() const {return type_name(); }
+  bool is_class(vcl_string const& name) const {return type_name() == name; }
 
-  //: The generic camera interface. u represents image column, v image row.
+  // : The generic camera interface. u represents image column, v image row.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const = 0;
+
 };
 
 // convenience typedefs for smart pointers to abstract cameras

@@ -28,29 +28,33 @@ void draw_edge_geom(SoSeparator* root, const bmsh3d_edge* E,
   const bmsh3d_vertex* eV = E->eV();
 
   SoCoordinate3* coords = new SoCoordinate3;
-  coords->point.set1Value(0, float(sV->pt().x()), float(sV->pt().y()), float(sV->pt().z()));
-  coords->point.set1Value(1, float(eV->pt().x()), float(eV->pt().y()), float(eV->pt().z()));
+
+  coords->point.set1Value(0, float(sV->pt().x() ), float(sV->pt().y() ), float(sV->pt().z() ) );
+  coords->point.set1Value(1, float(eV->pt().x() ), float(eV->pt().y() ), float(eV->pt().z() ) );
   root->addChild(coords);
 
-  if (user_defined_class) {
+  if( user_defined_class )
+    {
     bmsh3dvis_edge_SoLineSet* lineSet = new bmsh3dvis_edge_SoLineSet(E);
     lineSet->setCoordinate3(coords);
     lineSet->numVertices.set1Value(0, 2);
     root->addChild(lineSet);
-  }
-  else {
+    }
+  else
+    {
     SoLineSet* lineSet = new SoLineSet;
     lineSet->numVertices.set1Value(0, 2);
     root->addChild(lineSet);
-  }
+    }
 }
 
-SoSeparator* draw_edge(bmsh3d_edge* E, const SbColor& color, const float width,
-                       const bool user_defined_class)
+SoSeparator * draw_edge(bmsh3d_edge* E, const SbColor& color, const float width,
+                        const bool user_defined_class)
 {
   SoSeparator* root = new SoSeparator;
   // Color
-  SoBaseColor *basecolor = new SoBaseColor;
+  SoBaseColor * basecolor = new SoBaseColor;
+
   basecolor->rgb = color;
   root->addChild(basecolor);
 

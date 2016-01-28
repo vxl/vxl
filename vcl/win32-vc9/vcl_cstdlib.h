@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 #ifndef vcl_abs
-# define vcl_abs vcl_abs
+#  define vcl_abs vcl_abs
 #endif
 
 #define vcl_generic_cstdlib_STD std

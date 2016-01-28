@@ -1,7 +1,7 @@
 // This is brl/bseg/brec/brec_part_hierarchy_learner.h
 #ifndef brec_part_hierarchy_learner_h_
 #define brec_part_hierarchy_learner_h_
-//:
+// :
 // \file
 // \brief class to build hierarchies for a given number of classes by estimating parameter distributions from labeled imgs and their background models
 //
@@ -53,112 +53,124 @@
 #include <brec/brec_part_hierarchy_detector_sptr.h>
 #include <vcl_utility.h>
 
-
 class brec_part_hierarchy_learner : public vbl_ref_count
 {
- public:
+public:
 
-   typedef bsta_sample_set<double,2>* sample_set_ptr;
-   typedef bsta_sample_set<double,2> sample_set;
-   typedef bsta_histogram<double>* hist_ptr;
-   typedef bsta_histogram<double> hist;
-   //typedef vcl_pair<sample_set_ptr,sample_set_ptr> sample_set_ptr_pair;
-   typedef vcl_pair<hist_ptr, hist_ptr> hist_ptr_pair;
-   //typedef vcl_map<unsigned, vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr_pair> > >* > layer_n_map;
-   typedef vcl_map<unsigned, vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > >* > layer_n_map;
-   typedef vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > > class_map;
+  typedef bsta_sample_set<double, 2> * sample_set_ptr;
+  typedef bsta_sample_set<double, 2>   sample_set;
+  typedef bsta_histogram<double> *     hist_ptr;
+  typedef bsta_histogram<double>       hist;
+  // typedef vcl_pair<sample_set_ptr,sample_set_ptr> sample_set_ptr_pair;
+  typedef vcl_pair<hist_ptr, hist_ptr> hist_ptr_pair;
+  // typedef vcl_map<unsigned, vcl_map<vcl_pair<unsigned, unsigned>, vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr_pair> > >* > layer_n_map;
+  typedef vcl_map<unsigned,
+                  vcl_map<vcl_pair<unsigned, unsigned>,
+                          vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > > *> layer_n_map;
+  typedef vcl_map<vcl_pair<unsigned, unsigned>,
+                  vcl_pair<brec_part_instance_sptr, vcl_pair<hist_ptr_pair, sample_set_ptr> > >            class_map;
 
-   brec_part_hierarchy_learner() : n_(10) {}
+  brec_part_hierarchy_learner() : n_(10) {}
 
-   void initialize_layer0_as_gaussians(int ndirs, float lambda_range, float lambda_inc, int n);
+  void initialize_layer0_as_gaussians(int ndirs, float lambda_range, float lambda_inc, int n);
 
-   ~brec_part_hierarchy_learner() {
-     for (unsigned i = 0; i < stats_layer0_.size(); i++) {
-       delete stats_layer0_[i].second;
-     }
-     stats_layer0_.clear();
+  ~brec_part_hierarchy_learner()
+  {
+    for( unsigned i = 0; i < stats_layer0_.size(); i++ )
+      {
+      delete stats_layer0_[i].second;
+      }
+    stats_layer0_.clear();
 
-     layer_n_map::iterator it;
-     for (it = stats_layer_n_.begin(); it != stats_layer_n_.end(); it++) {
-       class_map* v = it->second;
-       for (class_map::iterator itm = v->begin(); itm != v->end(); itm++)
-       {
-         delete (itm->second).second.first.first;
-         delete (itm->second).second.first.second;
-         delete (itm->second).second.second;
-         (itm->second).first = 0;
-       }
-       v->clear();
-       delete v;
-     }
-     stats_layer_n_.clear();
-   }
+    layer_n_map::iterator it;
+    for( it = stats_layer_n_.begin(); it != stats_layer_n_.end(); it++ )
+      {
+      class_map* v = it->second;
+      for( class_map::iterator itm = v->begin(); itm != v->end(); itm++ )
+        {
+        delete (itm->second).second.first.first;
+        delete (itm->second).second.first.second;
+        delete (itm->second).second.second;
+        (itm->second).first = 0;
+        }
+      v->clear();
+      delete v;
+      }
+    stats_layer_n_.clear();
+  }
 
   // assumes float img with values in [0,1] range
   // collect stats for foreground and background regions in the image using the fg_prob_img
   void layer0_collect_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask);
+
   void layer0_collect_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img);
 
   void layer0_fit_parametric_dist();
 
-  void layer0_collect_posterior_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img, vil_image_view<bool>& mask,
-                                      vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img);
+  void layer0_collect_posterior_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img,
+                                      vil_image_view<bool>& mask, vil_image_view<float>& mean_img,
+                                      vil_image_view<float>& std_dev_img);
+
   void layer0_collect_posterior_stats(vil_image_view<float>& inp, vil_image_view<float>& fg_prob_img,
                                       vil_image_view<float>& mean_img, vil_image_view<float>& std_dev_img);
 
-  //: create a part hierarchy of primitive parts which are added with respect to their average rho_ (posterior ratios)
+  // : create a part hierarchy of primitive parts which are added with respect to their average rho_ (posterior ratios)
   //  This will be used to construct layers 1 and above
   //  Clears \p stats_layer0_ and initializes \p stats_layer_n_
   brec_part_hierarchy_sptr layer0_rank_and_create_hierarchy(int N);
 
-  //: initialize learner to construct layer_n as pairs of layer_n-1 of the given hierarchy
+  // : initialize learner to construct layer_n as pairs of layer_n-1 of the given hierarchy
   //  Radius is used to initialize the histograms
   //  We use 8 bins for angle in [0, 2*pi] range and 8 bins for distance in [0,radius] range
   bool initialize_layer_n_as_pairs(brec_part_hierarchy_sptr h, unsigned layer_id, unsigned nclasses, float radius);
 
-  //: collect stats to construct parts of layer with layer_id using detected parts of layer_id-1
+  // : collect stats to construct parts of layer with layer_id using detected parts of layer_id-1
   //  Collect stats for a pair if they exist within radius pixels of each other
   bool layer_n_collect_stats(brec_part_hierarchy_detector_sptr hd, unsigned layer_id, unsigned class_id);
 
-  //: uses the joint histograms to fit gaussian distributions to distance for 8 orientations
+  // : uses the joint histograms to fit gaussian distributions to distance for 8 orientations
   //  Replaces the histograms with the fitted distributions' histograms
   bool layer_n_fit_distributions(unsigned class_id, unsigned layer_id, unsigned M);
 
-  vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*> >& stats_layer0() { return stats_layer0_; }
+  vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float> *> > & stats_layer0() { return stats_layer0_; }
 
   void print_to_m_file_layer0(vcl_string file_name);
+
   void print_to_m_file_layer0_fitted_dists(vcl_string file_name);
+
   void print_layer0();
 
   void print_to_m_file_layer_n(vcl_string file_name, unsigned class_id, bool print_set);
 
- public:
+public:
 
   // collect stats for each type of primitive part types
-  vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float>*> > stats_layer0_;
+  vcl_vector<vcl_pair<brec_part_instance_sptr, bsta_histogram<float> *> > stats_layer0_;
 
-  //: for each class, collect stats
+  // : for each class, collect stats
   layer_n_map stats_layer_n_;
-  float radius_;  // radius to search for pair compositions for layer_n
-  float d_bandwidth_;  // bandwidth to run mean-shift on 1D distance sample set
-  float a_bandwidth_;  // bandwidth to run mean-shift on 1D angle sample set
+  float       radius_;      // radius to search for pair compositions for layer_n
+  float       d_bandwidth_; // bandwidth to run mean-shift on 1D distance sample set
+  float       a_bandwidth_; // bandwidth to run mean-shift on 1D angle sample set
 
   unsigned type_cnt_;
 
-  //: a visualization parameter, set by initialize method according to the type of primitive initialized
+  // : a visualization parameter, set by initialize method according to the type of primitive initialized
   int n_;
 
   brec_part_hierarchy_sptr h_; // keep the current hierarchy for visualization purposes.
 
-  //: create a hierarchy instance for each class
+  // : create a hierarchy instance for each class
   vcl_map<unsigned, brec_part_hierarchy_sptr> h_map_;
 };
 
 // Binary io, NOT IMPLEMENTED, signatures defined to use brec_part_hierarchy_learner as a brdb_value
-void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy_learner const &hl);
-void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy_learner &hl);
+void vsl_b_write(vsl_b_ostream & os, brec_part_hierarchy_learner const & hl);
+
+void vsl_b_read(vsl_b_istream & is, brec_part_hierarchy_learner & hl);
+
 void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy_learner* hl);
-void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_learner* &hl);
+
+void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_learner * & hl);
 
 #endif // brec_part_hierarchy_learner_h_
-

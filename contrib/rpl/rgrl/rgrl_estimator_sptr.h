@@ -1,7 +1,7 @@
 #ifndef rgrl_estimator_sptr_h_
 #define rgrl_estimator_sptr_h_
 
-//:
+// :
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
@@ -10,6 +10,6 @@
 
 class rgrl_estimator;
 
-typedef vbl_smart_ptr< rgrl_estimator > rgrl_estimator_sptr;
+typedef vbl_smart_ptr<rgrl_estimator> rgrl_estimator_sptr;
 
 #endif // rgrl_estimator_sptr_h_

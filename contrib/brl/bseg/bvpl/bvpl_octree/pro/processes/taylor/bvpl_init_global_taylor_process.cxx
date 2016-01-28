@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \brief A process to init auxiliary scenes and other variables
 // \author Isabel Restrepo
@@ -11,58 +11,56 @@
 
 #include <bvpl/bvpl_octree/bvpl_global_taylor.h>
 
-//:global variables
+// :global variables
 namespace bvpl_init_global_taylor_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 2;
+const unsigned n_outputs_ = 0;
 }
 
-
-//:sets input and output types
+// :sets input and output types
 bool bvpl_init_global_taylor_process_cons(bprb_func_process& pro)
 {
-  using namespace bvpl_init_global_taylor_process_globals ;
+  using namespace bvpl_init_global_taylor_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string"; // path to taylor_global_info file
-  input_types_[1] = "int"; // dimension (3 for xyz derivatives, 10 for all 1st and 2nd order derivatives)
+  input_types_[1] = "int";        // dimension (3 for xyz derivatives, 10 for all 1st and 2nd order derivatives)
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-
-//:the process
+// :the process
 bool bvpl_init_global_taylor_process(bprb_func_process& pro)
 {
   using namespace bvpl_init_global_taylor_process_globals;
 
-  //get inputs
+  // get inputs
   vcl_string taylor_dir = pro.get_input<vcl_string>(0);
-  int dim = pro.get_input<int>(1);
+  int        dim = pro.get_input<int>(1);
 
-  switch (dim) {
-    case 3:
+  switch( dim )
     {
-      vcl_string kernel_names[] = {"Ix", "Iy", "Iz"};
+    case 3:
+      {
+      vcl_string                   kernel_names[] = {"Ix", "Iy", "Iz"};
       bvpl_global_taylor<float, 3> global_taylor(taylor_dir, kernel_names);
       global_taylor.init();
       break;
-    }
+      }
     case 10:
-    {
-      const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+      {
+      const vcl_string kernel_names[10] =
+       {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
       bvpl_global_taylor<double, 10> global_taylor(taylor_dir, kernel_names);
       global_taylor.init();
       break;
-    }
+      }
     default:
       break;
-  }
-
-
+    }
 
   return true;
 }

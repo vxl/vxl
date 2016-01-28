@@ -1,8 +1,8 @@
 // This is core/vil1/vil1_copy.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \brief Contains function vil1_copy()
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -12,7 +12,7 @@
 //  Modifications
 //   7 June 2001 - Peter Vanroose - fixed rowsize_bytes for 1-bit pixel type
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "vil1_copy.h"
 
@@ -22,14 +22,14 @@
 
 void vil1_copy(vil1_image const& in, vil1_image& out)
 {
-#define assert_dimension_equal(dim) assert(in.dim() == out.dim())
+#define assert_dimension_equal(dim) assert(in.dim() == out.dim() )
   assert_dimension_equal(height);
   assert_dimension_equal(width);
   assert_dimension_equal(bits_per_component);
   assert_dimension_equal(planes);
   assert_dimension_equal(components);
 #undef assert_dimension_equal
-//assert((in.components() * in.planes()) == (out.components() * out.planes()));
+// assert((in.components() * in.planes()) == (out.components() * out.planes()));
 
   int height = in.height();
   int width = in.width();
@@ -57,6 +57,7 @@ vil1_copy(vil1_image const& src)
 {
   vil1_memory_image dst( src.planes(), src.width(), src.height(), src.components(),
                          src.bits_per_component(), src.component_format() );
+
   vil1_copy( src, dst );
   return dst;
 }

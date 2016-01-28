@@ -18,19 +18,21 @@
 
 static void test_bmdl_trace_boundaries_process(int argc, char* argv[])
 {
-  REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_trace_boundaries_process, "bmdlTraceBoundariesProcess");
+  REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_trace_boundaries_process,
+                   "bmdlTraceBoundariesProcess");
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
   vcl_string image_base;
-  if ( argc >= 2 ) {
+  if( argc >= 2 )
+    {
     image_base = argv[1];
     image_base += "/";
-  }
+    }
 
-  //create vil_image_view_base_sptr
-  vcl_string label_img_path = image_base + "label.tif";
-  vil_image_view_base_sptr label = vil_load(label_img_path.c_str());
+  // create vil_image_view_base_sptr
+  vcl_string               label_img_path = image_base + "label.tif";
+  vil_image_view_base_sptr label = vil_load(label_img_path.c_str() );
 
   vcl_string polygons_path = "polygons.bin";
 
@@ -42,24 +44,25 @@ static void test_bmdl_trace_boundaries_process(int argc, char* argv[])
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->run_process();
 
-  TEST("run trace boundaries process", good ,true);
+  TEST("run trace boundaries process", good, true);
 
   // check the polygons size
   // read polygons
   vsl_b_ifstream os(polygons_path);
-  unsigned char ver; //version();
+  unsigned char  ver; // version();
   vsl_b_read(os, ver);
   unsigned int size;
   vsl_b_read(os, size);
-  vgl_polygon<double> polygon;
+  vgl_polygon<double>              polygon;
   vcl_vector<vgl_polygon<double> > boundaries;
-  for (unsigned i = 0; i < size; i++) {
+  for( unsigned i = 0; i < size; i++ )
+    {
     vsl_b_read(os, polygon);
     boundaries.push_back(polygon);
-  }
+    }
 
-  good = (boundaries.size()>0);
-  TEST("polygons are read successfully", good ,true);
+  good = (boundaries.size() > 0);
+  TEST("polygons are read successfully", good, true);
 }
 
 TESTMAIN_ARGS(test_bmdl_trace_boundaries_process);

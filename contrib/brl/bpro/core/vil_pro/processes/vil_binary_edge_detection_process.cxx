@@ -1,6 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_binary_edge_detection_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 //   Process to return edge pixels of a binary image using vil_blob
 
@@ -14,11 +14,11 @@
 
 namespace vil_binary_edge_detection_process_globals
 {
-  unsigned n_inputs_  = 4;
-  unsigned n_outputs_ = 1;
+unsigned n_inputs_  = 4;
+unsigned n_outputs_ = 1;
 }
 
-//: constructor
+// : constructor
 bool vil_binary_edge_detection_process_cons(bprb_func_process& pro)
 {
   using namespace vil_binary_edge_detection_process_globals;
@@ -35,47 +35,59 @@ bool vil_binary_edge_detection_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 
-//: execute the process
+// : execute the process
 bool vil_binary_edge_detection_process(bprb_func_process& pro)
 {
   // sanity check
-  if (!pro.verify_inputs())
+  if( !pro.verify_inputs() )
+    {
     return false;
+    }
   // get input
-  unsigned in_i = 0;
+  unsigned                 in_i = 0;
   vil_image_view_base_sptr img_ptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  unsigned max_size = pro.get_input<unsigned>(in_i++);
-  unsigned min_size = pro.get_input<unsigned>(in_i++);
-  unsigned threshold = pro.get_input<unsigned>(in_i++);
-  unsigned char thres_id = (unsigned char)threshold;
+  unsigned                 max_size = pro.get_input<unsigned>(in_i++);
+  unsigned                 min_size = pro.get_input<unsigned>(in_i++);
+  unsigned                 threshold = pro.get_input<unsigned>(in_i++);
+  unsigned char            thres_id = (unsigned char)threshold;
 
-  vil_image_view<bool>* view = dynamic_cast<vil_image_view<bool>*>(img_ptr.ptr());
-  if (!view) {
-    vil_image_view<bool> temp(img_ptr->ni(), img_ptr->nj(), img_ptr->nplanes());
+  vil_image_view<bool>* view = dynamic_cast<vil_image_view<bool> *>(img_ptr.ptr() );
+  if( !view )
+    {
+    vil_image_view<bool> temp(img_ptr->ni(), img_ptr->nj(), img_ptr->nplanes() );
     temp.fill(false);
-    vil_image_view<vxl_byte>* view_temp = dynamic_cast<vil_image_view<vxl_byte>*>(img_ptr.ptr());
-    if (!view_temp) {
+    vil_image_view<vxl_byte>* view_temp = dynamic_cast<vil_image_view<vxl_byte> *>(img_ptr.ptr() );
+    if( !view_temp )
+      {
       vcl_cerr << pro.name() << " input image pixel " << img_ptr->pixel_format() << " is not supported!\n";
       return false;
-    }
+      }
     // transfer byte image
-    for (unsigned i = 0; i < img_ptr->ni(); i++)
-      for (unsigned j = 0; j < img_ptr->nj(); j++)
-        for (unsigned k = 0; k < img_ptr->nplanes(); k++)
-          if ( (*view_temp)(i,j,k) == thres_id)
-            temp(i,j,k) = true;
+    for( unsigned i = 0; i < img_ptr->ni(); i++ )
+      {
+      for( unsigned j = 0; j < img_ptr->nj(); j++ )
+        {
+        for( unsigned k = 0; k < img_ptr->nplanes(); k++ )
+          {
+          if( (*view_temp)(i, j, k) == thres_id )
+            {
+            temp(i, j, k) = true;
+            }
+          }
+        }
+      }
     view = new vil_image_view<bool>(temp);
-  }
+    }
 
   // Closing the holes or gaps
   vil_structuring_element selem;
   selem.set_to_disk(1.0);
-  vil_image_view<bool> view_closed(view->ni(),view->nj());
-  vil_binary_closing(*view,view_closed,selem);
+  vil_image_view<bool> view_closed(view->ni(), view->nj() );
+  vil_binary_closing(*view, view_closed, selem);
 
   // Find the blob
-  vil_image_view<unsigned> blob_labels;
-  vil_image_view<unsigned> edge_labels;
+  vil_image_view<unsigned>        blob_labels;
+  vil_image_view<unsigned>        edge_labels;
   vcl_vector<vil_blob_pixel_list> edge_pixel_list;
   vil_blob_labels(*view, vil_blob_8_conn, blob_labels);
   vil_blob_labels_to_edge_labels(blob_labels, vil_blob_8_conn, edge_labels);
@@ -83,24 +95,35 @@ bool vil_binary_edge_detection_process(bprb_func_process& pro)
 
   // remove the edges that do not satisfy the desired size
   vcl_vector<unsigned> valid_edge_labels;
-  for (vcl_vector<vil_blob_pixel_list>::iterator vit = edge_pixel_list.begin(); vit != edge_pixel_list.end(); ++vit) {
-    if ( (*vit).size() > max_size || (*vit).size() < min_size )
+  for( vcl_vector<vil_blob_pixel_list>::iterator vit = edge_pixel_list.begin(); vit != edge_pixel_list.end(); ++vit )
+    {
+    if( (*vit).size() > max_size || (*vit).size() < min_size )
+      {
       continue;
-    unsigned label = edge_labels((*vit).begin()->first, (*vit).begin()->second);
+      }
+    unsigned label = edge_labels( (*vit).begin()->first, (*vit).begin()->second);
     valid_edge_labels.push_back(label);
-  }
+    }
 
-
-  vil_image_view<vxl_byte> view_blobs(view->ni(),view->nj());
+  vil_image_view<vxl_byte> view_blobs(view->ni(), view->nj() );
   view_blobs.fill(0);
-  for (unsigned i = 0; i < edge_labels.ni(); i++)
-    for (unsigned j = 0; j < edge_labels.nj(); j++)
-      for (unsigned k = 0; k < edge_labels.nplanes(); k++)
-        if ( vcl_find(valid_edge_labels.begin(), valid_edge_labels.end(), edge_labels(i,j,k)) != valid_edge_labels.end())
-          view_blobs(i,j,k) = 255;
+  for( unsigned i = 0; i < edge_labels.ni(); i++ )
+    {
+    for( unsigned j = 0; j < edge_labels.nj(); j++ )
+      {
+      for( unsigned k = 0; k < edge_labels.nplanes(); k++ )
+        {
+        if( vcl_find(valid_edge_labels.begin(), valid_edge_labels.end(),
+                     edge_labels(i, j, k) ) != valid_edge_labels.end() )
+          {
+          view_blobs(i, j, k) = 255;
+          }
+        }
+      }
+    }
 
   // output
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(view_blobs));
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<vxl_byte>(view_blobs) );
 
   return true;
 }

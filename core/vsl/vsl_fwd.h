@@ -1,7 +1,7 @@
 // This is core/vsl/vsl_fwd.h
 #ifndef vsl_fwd_h_
 #define vsl_fwd_h_
-//:
+// :
 // \file
 // \author Ian Scott
 

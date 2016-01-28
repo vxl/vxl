@@ -1,6 +1,6 @@
 #ifndef vipl_y_gradient_h_
 #define vipl_y_gradient_h_
-//:
+// :
 // \file
 // \brief Convolve image with vertical [-1 1] filter
 //
@@ -27,34 +27,36 @@
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-//: Convolve image with vertical [-1 1] filter
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_y_gradient : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+// : Convolve image with vertical [-1 1] filter
+template <class ImgIn, class ImgOut, class DataIn, class DataOut,
+          VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter)>
+class vipl_y_gradient : public vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>
 {
   // -+-+- data members: -+-+-
   // term to add to the gradient result:
- private: DataOut shift_;
- public: DataOut shift() const { return shift_; }
+private: DataOut shift_;
+public: DataOut shift() const { return shift_; }
   // scale factor to multiply the shifted gradient with:
- private: double scale_;
- public: double scale() const { return scale_; }
+private: double scale_;
+public: double scale() const { return scale_; }
 
   // -+-+- constructors/destructors: -+-+-
- public:
-  inline vipl_y_gradient(double s=1.0, DataOut h=DataOut())
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(),
-             shift_(h), scale_(s) {}
+public:
+  inline vipl_y_gradient(double s = 1.0, DataOut h = DataOut() )
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(),
+    shift_(h), scale_(s) {}
   inline vipl_y_gradient(vipl_y_gradient const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A),
-             shift_(A.shift()), scale_(A.scale()) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A),
+    shift_(A.shift() ), scale_(A.scale() ) {}
   inline ~vipl_y_gradient() {}
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();
+
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_y_gradient.txx"
+#  include "vipl_y_gradient.txx"
 #endif
 
 #endif // vipl_y_gradient_h_

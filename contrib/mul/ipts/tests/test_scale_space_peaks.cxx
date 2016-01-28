@@ -8,11 +8,11 @@ static void test_scale_space_peaks_float()
 {
   // Just check it compiles cleanly first
   vimt_image_2d_of<float> image;
-  image.image().set_size(10,10);
+  image.image().set_size(10, 10);
   image.image().fill(10);
-  image.image()(3,7)=18;  // One peak
+  image.image()(3, 7) = 18;  // One peak
   vcl_vector<vgl_point_3d<double> > peak_pts;
-  ipts_scale_space_peaks_2d(peak_pts,image,image,image,float(0),false);
+  ipts_scale_space_peaks_2d(peak_pts, image, image, image, float(0), false);
 }
 
 static void test_scale_space_peaks()

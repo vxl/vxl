@@ -2,7 +2,7 @@
 #ifndef osl_easy_canny_h_
 #define osl_easy_canny_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
 // .NAME osl_easy_canny
 // .INCLUDE osl/osl_easy_canny.h
@@ -16,9 +16,6 @@ class vil1_image;
 // 0: oxford
 // 1: rothwell1
 // 2: rothwell2
-void osl_easy_canny(int which_canny,
-                    vil1_image const &image,
-                    vcl_list<osl_edge*> *edges,
-                    double sigma = 0);
+void osl_easy_canny(int which_canny, vil1_image const & image, vcl_list<osl_edge *> * edges, double sigma = 0);
 
 #endif // osl_easy_canny_h_

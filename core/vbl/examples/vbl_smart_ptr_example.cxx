@@ -1,6 +1,6 @@
 // This is core/vbl/examples/vbl_smart_ptr_example.cxx
 
-//:
+// :
 // \file
 
 #include <vcl_iostream.h>
@@ -12,36 +12,39 @@
 // the "start of" and "end of" lines.  Here, for this example, everything is
 // put in a single file, which is a perfectly valid (but less standard) way.
 
-//== start of example_sp.h ==//
+// == start of example_sp.h ==//
 
-//: An example of how to make a smart pointer class.
+// : An example of how to make a smart pointer class.
 // A smart pointer can be made from any class that defines the methods ref()
 // and unref(), e.g., because it is derived from vbl_ref_count.
 class example_sp : public vbl_ref_count
 {
- public:
+public:
   example_sp() { vcl_cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
 
- ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
+  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
-  example_sp(example_sp const&) : vbl_ref_count()
+  example_sp(example_sp const &) : vbl_ref_count()
   {
     vcl_cout << "example_sp copy constructor, refcount=" << get_references() << '\n';
   }
 
-  friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
+  friend vcl_ostream & operator<<(vcl_ostream& os, example_sp const& e)
+  {
     int p = e.get_references();
-    if (p < 1000) os << "example_sp, refcount=" << p;
-    else          os << "example_sp, invalid";
+
+    if( p < 1000 ) {os << "example_sp, refcount=" << p; }
+    else {os << "example_sp, invalid"; }
     return os;
   }
+
 };
 
 typedef vbl_smart_ptr<example_sp> example_sp_sptr;
 
-//== end of example_sp.h ==//
+// == end of example_sp.h ==//
 
-//== start of first main program ==//
+// == start of first main program ==//
 
 void main1()
 {
@@ -49,10 +52,10 @@ void main1()
 
   vcl_cout << "example_sp starts\n";
   example_sp* ptr;
-  {
+    {
     example_sp_sptr sp; // refcount not incremented: no assignment yet
     vcl_cout << "example_sp_sptr created\n";
-    {
+      {
       ptr = new example_sp; // refcount not incremented: no smart pointer
       vcl_cout << *ptr << " created\n";
 
@@ -65,10 +68,10 @@ void main1()
       example_sp_sptr sp2 = sp; // copy constructor: refcount incremented
       vcl_cout << *sp << " copied to sp2" << *sp2 << '\n';
 
-    } // sp2 goes out of scope: refcount goes down
+      } // sp2 goes out of scope: refcount goes down
     vcl_cout << "Copy of " << *sp << " is now out of scope\n";
 
-  } // sp goes out of scope: refcount goes down
+    } // sp goes out of scope: refcount goes down
   vcl_cout << "Smart pointer of " << *ptr << " is now out of scope\n";
 
   vcl_cout << "Clearing list\n";
@@ -78,15 +81,15 @@ void main1()
   vcl_cout << "List copy of " << *ptr << " has been removed, ptr freed\n";
 }
 
-//== end of first main program ==//
+// == end of first main program ==//
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
-//== start of bigmatrix.h ==//
+// == start of bigmatrix.h ==//
 
 class bigmatrix_impl : public vbl_ref_count
 {
- public:
+public:
   double data[256][256];
   bigmatrix_impl() { vcl_cout << "bigmatrix_impl ctor\n"; }
   ~bigmatrix_impl() { vcl_cout << "bigmatrix_impl dtor\n"; }
@@ -95,29 +98,30 @@ class bigmatrix_impl : public vbl_ref_count
 class bigmatrix
 {
   vbl_smart_ptr<bigmatrix_impl> impl;
- public:
+public:
   double * operator[](unsigned i) { return impl->data[i]; }
 };
 
-//== end of bigmatrix.h ==//
+// == end of bigmatrix.h ==//
 
-//== start of second main program ==//
+// == start of second main program ==//
 
 void main2()
 {
   bigmatrix A, B, C;
 
   vcl_cout << "one million swaps..." << vcl_flush;
-  for (unsigned i=0; i<1000000; ++i) {
+  for( unsigned i = 0; i < 1000000; ++i )
+    {
     C = A;
     A = B;
     B = C;
-  }
+    }
   vcl_cout << "done\n";
 }
 
-//== end of second main program ==//
+// == end of second main program ==//
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 int main() { main1(); main2(); return 0; }

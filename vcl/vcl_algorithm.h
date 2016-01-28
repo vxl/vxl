@@ -5,12 +5,11 @@
 
 #include "iso/vcl_algorithm.h"
 
-
 #ifdef VCL_VC
-# undef  vcl_max
-# define vcl_max vcl_max
-# undef  vcl_min
-# define vcl_min vcl_min
+#  undef  vcl_max
+#  define vcl_max vcl_max
+#  undef  vcl_min
+#  define vcl_min vcl_min
 template <class T>
 inline T vcl_max(T const& a, T const& b)
 {
@@ -22,6 +21,7 @@ inline T vcl_min(T const& a, T const& b)
 {
   return (a < b) ? a : b;
 }
+
 #endif
 
 #include "vcl_algorithm.txx"

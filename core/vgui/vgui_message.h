@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_message.h
 #ifndef vgui_message_h_
 #define vgui_message_h_
-//:
+// :
 // \file
 // \author  fsm
 // \brief   Used to send messages from observables to observers.
@@ -30,7 +30,7 @@
 //   10-SEP-2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-//: Used to send messages from observables to observers.
+// : Used to send messages from observables to observers.
 //
 // example :
 //
@@ -81,23 +81,23 @@
 // \endcode
 class vgui_message
 {
- public:
+public:
   vgui_message() : from(0), user(0), data(0) {}
 
-  //: Pointer to sender.
+  // : Pointer to sender.
   //  When the message was broadcast from a vgui_observer
   //  via the notify() method, this will point to the observer.
-  const void *from;
+  const void * from;
 
-  //: This field must uniquely identify the type of message sent.
+  // : This field must uniquely identify the type of message sent.
   //  Usually it will point to some static POD somewhere.
-  const void *user;
+  const void * user;
 
-  //: Extra data can be packaged into this.
+  // : Extra data can be packaged into this.
   //  It is up to the sender of the message to ensure that 'data' can be
   //  safely cast to whatever the receiver expects when receiving a message
   //  with a particular value of 'user' set.
-  const void *data;
+  const void * data;
 };
 
 #endif // vgui_message_h_

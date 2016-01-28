@@ -2,7 +2,7 @@
 #ifndef bprb_process_sptr_h
 #define bprb_process_sptr_h
 
-//:
+// :
 // \file
 
 class bprb_process;

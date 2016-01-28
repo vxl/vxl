@@ -1,7 +1,7 @@
 // This is core/vnl/algo/vnl_adjugate.h
 #ifndef vnl_adjugate_h_
 #define vnl_adjugate_h_
-//:
+// :
 // \file
 // \author fsm and Peter Vanroose
 //  The adjoint matrix of a square matrix, sometimes also called the adjugate
@@ -17,12 +17,13 @@
 //  In contrast to the inverse matrix, however, calculating the adjoint matrix
 //  does not involve divisions, so the adjoint of an integer matrix is integer.
 
-template <class T> class vnl_matrix;
+template <class T>
+class vnl_matrix;
 
 template <class T>
-void vnl_adjugate(vnl_matrix<T> const &A, vnl_matrix<T> *out);
+void vnl_adjugate(vnl_matrix<T> const & A, vnl_matrix<T> * out);
 
 template <class T>
-vnl_matrix<T> vnl_adjugate(vnl_matrix<T> const &A);
+vnl_matrix<T> vnl_adjugate(vnl_matrix<T> const & A);
 
 #endif // vnl_adjugate_h_

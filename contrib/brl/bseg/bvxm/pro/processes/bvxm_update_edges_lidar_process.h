@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_update_edges_lidar_process.h
 #ifndef bvxm_update_edges_lidar_process_h_
 #define bvxm_update_edges_lidar_process_h_
-//:
+// :
 // \file
 // \brief A class for update process of edge probabilities in a voxel world using LiDAR data.
 //
@@ -15,11 +15,11 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_update_edges_lidar_process_globals
 {
-  const unsigned int n_inputs_ = 6;
-  const unsigned int n_outputs_ = 0;
+const unsigned int n_inputs_ = 6;
+const unsigned int n_outputs_ = 0;
 }
 
 bool bvxm_update_edges_lidar_process_cons(bprb_func_process& pro);

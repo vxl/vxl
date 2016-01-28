@@ -1,8 +1,8 @@
 #ifndef gevd_memory_mixin_h_
 #define gevd_memory_mixin_h_
 
-//=======================================================================
-//:
+// =======================================================================
+// :
 // \file
 // \brief Captures all functional details required to access a real computer memory
 //
@@ -22,16 +22,16 @@
 //   Peter Vanroose, Jul 97
 //    -  copy constructor re-added !?!
 // \endverbatim
-//=======================================================================
+// =======================================================================
 
 #include "gevd_status_mixin.h"
 
-//======================================================================//
+// ======================================================================//
 /* Status Variables.  Certain events are always errors, hence the error */
 /* bit is set for those events.  For events which might be errors but   */
 /* are not always, the error bit is left clear; the proper choice will  */
 /* be made at the time the event occurs.                                */
-//======================================================================//
+// ======================================================================//
 #define MM_PROTECTED_FLAGS      0x000001CE // bits that may not be altered
 //                                         // except by the buffer.
 // Error conditions
@@ -62,68 +62,89 @@
 
 #define MM_CREATION_FLAGS       0x00003E00 // Flags used at creation.
 
-//---------------------------------------------------------------------
+// ---------------------------------------------------------------------
 
 class gevd_memory_mixin : public gevd_status_mixin
 {
- private:
-  int size;               // amount of allocated memory (bytes).
-  int touched;            // amount of allocated space touched.
+private:
+  int            size;    // amount of allocated memory (bytes).
+  int            touched; // amount of allocated space touched.
   unsigned char* buffer;  // pointer to allocated memory
 
-  int curr_into;          // amount into the allocated memory (bytes)
-  unsigned char* current; // pointer to current place in memory.
+  int            curr_into; // amount into the allocated memory (bytes)
+  unsigned char* current;   // pointer to current place in memory.
 
   int offset;             // marked position in buffer.
-
- protected:
+protected:
   void                    SetMemoryPtr(int s, void* ib = 0);
 
-  inline unsigned char*   GetBufferPtr()  { return buffer;    }
-  const  unsigned char* GetBufferPtr() const { return buffer; }
-  inline unsigned char*   GetCurrentPtr() { return current;   }
+  inline unsigned char *   GetBufferPtr()  { return buffer;    }
+  const  unsigned char * GetBufferPtr() const { return buffer; }
+  inline unsigned char *   GetCurrentPtr() { return current;   }
   inline int              GetSize() const { return size;      }
-  inline void SetStatus(int x=0)  {gevd_status_mixin::SetStatus(x); }
-  inline void ClearStatus(int x=0) {gevd_status_mixin::ClearStatus(x);}
- public:
+  inline void SetStatus(int x = 0)  {gevd_status_mixin::SetStatus(x); }
+  inline void ClearStatus(int x = 0) {gevd_status_mixin::ClearStatus(x); }
+public:
   // Constructors and Destructors
   //
-  gevd_memory_mixin(int s = 0, void* ib = 0,
-                    unsigned int type = MM_READ|MM_WRITE);
+  gevd_memory_mixin(int s = 0, void* ib = 0, unsigned int type = MM_READ | MM_WRITE);
 
   virtual ~gevd_memory_mixin();
-  gevd_memory_mixin(gevd_memory_mixin const&);
+  gevd_memory_mixin(gevd_memory_mixin const &);
 
   // Methods for moving about the file.
   //
   int  GetOffset() const { return offset;      }
   void SetOffset()       { offset = curr_into; }
-#define min_(a,b) ((a)<(b)?a:b)
-  void SkipBytes(int b)  { int skip = min_(b,size-curr_into);
-                           current += skip; curr_into += skip;
-                           if (skip<b) SetStatus(MM_OVERFLOW);
-                           if (curr_into>touched)
-                             SetStatus(MM_DATA_OVERFLOW | MM_WARN);     }
+#define min_(a, b) ( (a) < (b) ? a : b)
+  void SkipBytes(int b)
+  {
+    int skip = min_(b, size - curr_into);
+
+    current += skip; curr_into += skip;
+    if( skip < b ) { SetStatus(MM_OVERFLOW); }
+    if( curr_into > touched )
+      {
+      SetStatus(MM_DATA_OVERFLOW | MM_WARN);
+      }
+  }
+
 #undef min_
-  void SkipToByte(int b) { if (b>size) SetStatus(MM_OVERFLOW);
-                                 else {if (b>touched)
-                                         SetStatus(MM_DATA_OVERFLOW|MM_WARN);
-                                       current = buffer + b;
-                                       curr_into = b;}                  }
+  void SkipToByte(int b)
+  {
+    if( b > size ) { SetStatus(MM_OVERFLOW); }
+    else
+      {
+      if( b > touched )
+        {
+        SetStatus(MM_DATA_OVERFLOW | MM_WARN);
+        }
+      current = buffer + b;
+      curr_into = b;
+      }
+  }
+
   void SkipToStart()     { current = buffer;        curr_into = 0;      }
-  void SkipToDataStart() { current = buffer+offset; curr_into = offset; }
+  void SkipToDataStart() { current = buffer + offset; curr_into = offset; }
 
   // Methods for reading and writing data.
   //
   int  ReadBytes(void* ib, int b);
+
   int  ReadBytes(void* ib, int b, int loc);
+
   int  ReadBytes(void* ib, int b, int* mapping);
+
   int  ReadBytes(void* ib, int b, int loc, int* mapping);
+
   int  WriteBytes(const void* ib, int b);
+
   int  WriteBytes(const void* ib, int b, int loc);
+
   void Clear();
+
 };
 
-//=======================================================================
+// =======================================================================
 
 #endif // gevd_memory_mixin_h_

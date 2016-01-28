@@ -1,6 +1,6 @@
 #ifndef gevd_fold_h_
 #define gevd_fold_h_
-//:
+// :
 // \file
 // \brief detection of fold profiles in the intensity image
 //
@@ -58,15 +58,15 @@
 //                          gevd_step.h.. Didn't want to affect global use of
 //                          DetectEdgels.
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>
 class gevd_bufferxy;
 
 class gevd_fold
 {
- public:
-  //: Save parameters and create workspace for detecting fold profiles.
+public:
+  // : Save parameters and create workspace for detecting fold profiles.
   // High frequency features are smoothed away by smooth_sigma.
   // Texture or white noise less than noise_sigma are not detected.
   // smooth_sigma = 0.5-2.0, 1.0 insures separation of independent folds >= 2.
@@ -78,17 +78,17 @@ class gevd_fold
   // then multiplied by contour_factor/junction_factor to obtain
   // thresholds for detecting contour/junction edges.
   //
-  gevd_fold(float smooth_sigma=1,       //!< spatial smoothing [0.5 2.0]
-            float noise_sigma=-0.5,     //!< sensor/texture intensity noise -[0 1]
-            float contour_factor=1.0,   //!< threshold factor for contour edgels
-            float junction_factor=1.5); //!< threshold factor for junction edgels
+  gevd_fold(float smooth_sigma = 1,       // !< spatial smoothing [0.5 2.0]
+            float noise_sigma = -0.5,     // !< sensor/texture intensity noise -[0 1]
+            float contour_factor = 1.0,   // !< threshold factor for contour edgels
+            float junction_factor = 1.5); // !< threshold factor for junction edgels
 
-  //: Free space allocated for detecting fold profiles.  Does nothing.
+  // : Free space allocated for detecting fold profiles.  Does nothing.
   ~gevd_fold() {}
 
   static gevd_bufferxy* null_bufferxy;
 
-  //: Detect fold profiles with ddG edge detector.
+  // : Detect fold profiles with ddG edge detector.
   // The image is convolved with a Gaussian to smooth away
   // high frequency noise, and insure separation of fold responses.
   // Then the largest absolute eigenvalue, and corresponding eigenvector
@@ -104,18 +104,16 @@ class gevd_fold
   // Return true if no exception.
   // J. Canny, A Computational Approach to Edge Detection,
   // IEEE Trans on PAMI, vol 8, no 6, Nov 1986.
-  bool DetectEdgels(const gevd_bufferxy& image, //!< float image
-                    gevd_bufferxy*& edgels, //!< strength = dG * I
-                    gevd_bufferxy*& direction, //!< direction % PI/4
-                    gevd_bufferxy*& locationx, //!< subpixel loc
-                    gevd_bufferxy*& locationy,
-                    bool peaks_only = false,
-                    bool valleys_only = false,
-                    bool transfer = false, //if true, fill mag and angle arrays
-                    gevd_bufferxy*& mag = null_bufferxy, // d2G magnitude
-                    gevd_bufferxy*& angle = null_bufferxy); //Gradient orientation
+  bool DetectEdgels(const gevd_bufferxy& image, // !< float image
+                    gevd_bufferxy *& edgels,    // !< strength = dG * I
+                    gevd_bufferxy *& direction, // !< direction % PI/4
+                    gevd_bufferxy *& locationx, // !< subpixel loc
+                    gevd_bufferxy *& locationy, bool peaks_only = false, bool valleys_only = false,
+                    bool transfer = false,                   // if true, fill mag and angle arrays
+                    gevd_bufferxy *& mag = null_bufferxy,    // d2G magnitude
+                    gevd_bufferxy *& angle = null_bufferxy); // Gradient orientation
 
-  //:
+  // :
   // Find junctions by searching for extensions of contours from
   // their dangling end points. Non maximum suppression insures that
   // contours have width < 2, and so we can find the left/right neighbors,
@@ -124,25 +122,24 @@ class gevd_fold
   // recovering the missing junction caused by NMS along only 1 direction.
   // The junctions are returned but are not set in the contour image,
   // to prevent incorrect tracing of stronger contours first.
-  int RecoverJunctions(const gevd_bufferxy& image, //!< iterative extension
-                       gevd_bufferxy& edgels, //!< from end points of contours
-                       gevd_bufferxy& direction,
-                       gevd_bufferxy& locationx, gevd_bufferxy& locationy,
-                       int*& junctionx, int*& junctiony);
+  int RecoverJunctions(const gevd_bufferxy& image, // !< iterative extension
+                       gevd_bufferxy& edgels,      // !< from end points of contours
+                       gevd_bufferxy& direction, gevd_bufferxy& locationx, gevd_bufferxy& locationy, int *& junctionx,
+                       int *& junctiony);
 
-  //: query stored/estimated noise sigma
+  // : query stored/estimated noise sigma
   // Return the standard deviation of raw noise, in the original image,
   // either estimated or given by the user. If the noise has not been
   // estimated, return 0.
   float NoiseSigma() const;
 
-  //: response of noise sigma to filter ddG
+  // : response of noise sigma to filter ddG
   // Compute response of white noise through the filter ddG, or
   // second-derivative of the Gaussian. Using a threshold of 3 times
   // this noise response would eliminate 99% of the noise edges.
   float NoiseResponse() const;
 
-  //: elongated/directional?
+  // : elongated/directional?
   // Return threshold for detecting contour or junction,
   // which is response of white gaussian noise, noise_sigma,
   // to fold edge detector, i.e. second-order derivative of Gaussian,
@@ -151,24 +148,23 @@ class gevd_fold
   // in a region of constant intensity, and no texture patterns.
   // Use short_factor*noise_sigma and smooth_sigma/2, when detecting
   // junctions, to account for multiple responses to fold edge detector.
-  float NoiseThreshold(bool shortp=false) const;
+  float NoiseThreshold(bool shortp = false) const;
 
-  //:
+  // :
   // Compute response of white noise through the filter ddG, or
   // second-derivative of the Gaussian. Using a threshold of 3 times
   // this noise response would eliminate 99% of the noise edges.
-  static float NoiseResponseToFilter(float noiseSigma,
-                                     float smoothSigma,
-                                     float filterFactor);
+  static float NoiseResponseToFilter(float noiseSigma, float smoothSigma, float filterFactor);
 
-  friend vcl_ostream& operator<<(vcl_ostream& os, const gevd_fold& st);
-  friend vcl_ostream& operator<<(vcl_ostream& os, gevd_fold& st);
+  friend vcl_ostream & operator<<(vcl_ostream& os, const gevd_fold& st);
 
- protected:
-  float smoothSigma;                   //!< spatial smoothing
-  float noiseSigma;                    //!< sensor/texture noise
-  float contourFactor, junctionFactor; //!< threshold factor for edgels
-  float filterFactor;                  //!< factor in convolution filter
+  friend vcl_ostream & operator<<(vcl_ostream& os, gevd_fold& st);
+
+protected:
+  float smoothSigma;                   // !< spatial smoothing
+  float noiseSigma;                    // !< sensor/texture noise
+  float contourFactor, junctionFactor; // !< threshold factor for edgels
+  float filterFactor;                  // !< factor in convolution filter
 };
 
 #endif // gevd_fold_h_

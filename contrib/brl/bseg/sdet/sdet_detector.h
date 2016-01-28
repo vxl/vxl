@@ -1,6 +1,6 @@
 #ifndef sdet_detector_h_
 #define sdet_detector_h_
-//:
+// :
 // \file
 // \brief non-display-based interface class
 //
@@ -69,7 +69,7 @@
 //             Moved most parameters up to sdet_detectorParams in
 //             order to unify the use of parameters.
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class gevd_bufferxy;
 
@@ -86,87 +86,88 @@ class gevd_bufferxy;
 
 class sdet_detector : public sdet_detector_params
 {
- public:
+public:
   // So far, not all parameters are included in the constructor.  These seem to
   // be the most important in controlling performance - JLM
   //
   sdet_detector(sdet_detector_params& params);
 
-  sdet_detector(vil1_image, float smoothSigma = 1.0, float noiseSigma =2.0,
-                float contourFactor = 1.0, float junctionFactor = 1.5,
-                int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
+  sdet_detector(vil1_image, float smoothSigma = 1.0, float noiseSigma = 2.0, float contourFactor = 1.0,
+                float junctionFactor = 1.5, int minLength = 6, float maxGap = 2.23606, float minJump = 1.0);
 
-  sdet_detector(vil_image_resource_sptr &, float smoothSigma = 1.0,
-                float noiseSigma =2.0, float contourFactor = 1.0,
-                float junctionFactor = 1.5, int minLength = 6,
-                float maxGap = 2.23606, float minJump=1.0);
+  sdet_detector(vil_image_resource_sptr &, float smoothSigma = 1.0, float noiseSigma = 2.0, float contourFactor = 1.0,
+                float junctionFactor = 1.5, int minLength = 6, float maxGap = 2.23606, float minJump = 1.0);
 
   ~sdet_detector();
 
   // External interfaces
-  //Step contour detection
+  // Step contour detection
   bool DoContour();
 
-  //Fold contour detection
-  void DoFoldContourDetector(vil1_image image,
-                             vcl_vector<vtol_edge_2d_sptr >& edgels);
+  // Fold contour detection
+  void DoFoldContourDetector(vil1_image image, vcl_vector<vtol_edge_2d_sptr>& edgels);
 
-  void DoFoldContourDetector(vil_image_resource_sptr const& image,
-                             vcl_vector<vtol_edge_2d_sptr >& edgels);
+  void DoFoldContourDetector(vil_image_resource_sptr const& image, vcl_vector<vtol_edge_2d_sptr>& edgels);
 
+  // Corner detection using curvature on edgel chains
+  // GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
 
-  //Corner detection using curvature on edgel chains
-  //GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
-
-  //Corner detection using curvature on edgel chains
-  void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels, vcl_vector<vtol_edge_2d_sptr >& out_edgels);
+  // Corner detection using curvature on edgel chains
+  void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr>& in_edgels, vcl_vector<vtol_edge_2d_sptr>& out_edgels);
 
   // internal interfaces
   bool DoFoldContour();
-  bool DoCorner( float angle = 10,      //!< smallest angle at corner
-                 float separation = 1,  //!< |mean1-mean2|/sigma
-                 int length = 5,        //!< min length to find cornersxo
-                 int cycle = 2,         //!< number of corners in a cycle
-                 int ndimension = 2);   //!< number of dimension
+
+  bool DoCorner( float angle = 10,      // !< smallest angle at corner
+                 float separation = 1,  // !< |mean1-mean2|/sigma
+                 int length = 5,        // !< min length to find cornersxo
+                 int cycle = 2,         // !< number of corners in a cycle
+                 int ndimension = 2);   // !< number of dimension
+
   bool DoStep();
+
   bool DoFold();
 
-  gevd_bufferxy* GetBufferFromImage(); //!< vil1 image conversion
-  gevd_bufferxy* GetBufferFromVilImage();//!< vil image conversion
+  gevd_bufferxy * GetBufferFromImage(); // !< vil1 image conversion
 
-  vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
-  vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
+  gevd_bufferxy * GetBufferFromVilImage();// !< vil image conversion
+
+  vcl_vector<vtol_vertex_2d_sptr> * GetVertices() {return vertices; }
+  vcl_vector<vtol_edge_2d_sptr> * GetEdges() {return edges; }
 
   bool get_vdgl_edges(vcl_vector<vdgl_digital_curve_sptr>& edges );
 
   bool get_vsol_edges(vcl_vector<vsol_digital_curve_2d_sptr>& edges );
-  //:The last type set is used in the execution if both types are valid
+
+  // :The last type set is used in the execution if both types are valid
   void SetImage(vil1_image img);
+
   void SetImage(vil_image_resource_sptr const& img);
+
   void SetImage(vil_image_resource_sptr const& img, brip_roi const& roi);
 
-  void print(vcl_ostream &strm=vcl_cout) const;
+  void print(vcl_ostream & strm = vcl_cout) const;
 
- protected:
-  void ClearData(); //!< clear buffer
+protected:
+  void ClearData(); // !< clear buffer
 
- protected:
-  bool use_vil_image;//there could be both types set on class
-  bool use_roi_;
-  vil1_image image;
+protected:
+  bool                    use_vil_image;// there could be both types set on class
+  bool                    use_roi_;
+  vil1_image              image;
   vil_image_resource_sptr vimage;
-  brip_roi roi_; //possible roi
-  float noise; //!< noise estimation/threshold
+  brip_roi                roi_;  // possible roi
+  float                   noise; // !< noise estimation/threshold
 
-  gevd_bufferxy *edgel,                      //!< output from DoStep
-    *direction, *locationx, *locationy, *grad_mag, *angle; //!< detect step/fold
-  int *junctionx, *junctiony, njunction; //!< junctions found
+  gevd_bufferxy * edgel,                                        // !< output from DoStep
+    * direction, * locationx, * locationy, * grad_mag, * angle; // !< detect step/fold
+  int * junctionx, * junctiony, njunction;                      // !< junctions found
 
-  vcl_vector<vtol_vertex_2d_sptr >* vertices;//!< network of linked
-  vcl_vector<vtol_edge_2d_sptr >* edges; //!< edges and vertices
+  vcl_vector<vtol_vertex_2d_sptr>* vertices; // !< network of linked
+  vcl_vector<vtol_edge_2d_sptr>*   edges;    // !< edges and vertices
 
-  float filterFactor;     //!< factor in convolution filter
-  float hysteresisFactor; //!< hysteresis factor
+  float filterFactor;     // !< factor in convolution filter
+  float hysteresisFactor; // !< hysteresis factor
   float noiseThreshold;
 };
 

@@ -2,9 +2,9 @@
 #ifndef vdgl_interpolator_h_
 #define vdgl_interpolator_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Represents a 2D interpolator for a vdgl_edgel_chain
 // \author Geoff Cross
@@ -28,10 +28,10 @@
 #include <vsol/vsol_point_2d_sptr.h>
 
 class vdgl_interpolator : public vul_timestamp,
-                          public vbl_ref_count
+  public vbl_ref_count
 {
-   // PUBLIC INTERFACE----------------------------------------------------------
- public:
+  // PUBLIC INTERFACE----------------------------------------------------------
+public:
 
   // Constructors/Destructors--------------------------------------------------
 
@@ -42,39 +42,47 @@ class vdgl_interpolator : public vul_timestamp,
 
   // Operators----------------------------------------------------------------
 
-  //: order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc.
+  // : order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc.
   virtual short order() const = 0;
-  //: interpolation 0th degree
-  virtual double get_x(double index)= 0;
-  virtual double get_y(double index)= 0;
 
-  //: interpolation 1st degree
+  // : interpolation 0th degree
+  virtual double get_x(double index) = 0;
+
+  virtual double get_y(double index) = 0;
+
+  // : interpolation 1st degree
   virtual double get_grad(double index) = 0;
-  virtual double get_theta(double index)= 0;
-  virtual double get_tangent_angle(double index)= 0;
 
-  //: interpolation 2nd degree
-  virtual double get_curvature(double index)= 0;
+  virtual double get_theta(double index) = 0;
 
-  //: integral
-  virtual double get_length()= 0;
+  virtual double get_tangent_angle(double index) = 0;
 
-  //: bounding box
-  virtual double get_min_x()= 0;
-  virtual double get_max_x()= 0;
-  virtual double get_min_y()= 0;
-  virtual double get_max_y()= 0;
+  // : interpolation 2nd degree
+  virtual double get_curvature(double index) = 0;
 
-  //: find closest point on the curve to the input point
-  virtual vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p ) = 0;
-  virtual double distance_curve_to_point ( vsol_point_2d_sptr p );
+  // : integral
+  virtual double get_length() = 0;
+
+  // : bounding box
+  virtual double get_min_x() = 0;
+
+  virtual double get_max_x() = 0;
+
+  virtual double get_min_y() = 0;
+
+  virtual double get_max_y() = 0;
+
+  // : find closest point on the curve to the input point
+  virtual vsol_point_2d_sptr closest_point_on_curve( vsol_point_2d_sptr p ) = 0;
+
+  virtual double distance_curve_to_point( vsol_point_2d_sptr p );
 
   // Data Access---------------------------------------------------------------
 
   vdgl_edgel_chain_sptr get_edgel_chain() const { return chain_; }
 
   // INTERNALS-----------------------------------------------------------------
- protected:
+protected:
   // Data Members--------------------------------------------------------------
 
   vdgl_edgel_chain_sptr chain_;

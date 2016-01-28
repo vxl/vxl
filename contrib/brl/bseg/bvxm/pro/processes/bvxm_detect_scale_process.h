@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/ bvxm_detect_scale_process.h
 #ifndef bvxm_detect_scale_process_h_
 #define bvxm_detect_scale_process_h_
-//:
+// :
 // \file
 //
 //  CAUTION: Input image is assumed to have type vxl_byte
@@ -17,17 +17,17 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: globals
+// : globals
 namespace bvxm_detect_scale_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 1;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_detect_scale_process_cons(bprb_func_process& pro);
 
-//: detects the scale of a voxel world
+// : detects the scale of a voxel world
 bool bvxm_detect_scale_process(bprb_func_process& pro);
 
 #endif // bvxm_detect_scale_process_h_

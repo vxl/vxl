@@ -6,4 +6,4 @@
 #include <boxm/sample/boxm_sample.h>
 
 typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
-VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type>*);
+VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type> *);

@@ -1,7 +1,7 @@
 // This is brl/bbas/bsta/bsta_gauss_sf2.h
 #ifndef bsta_gauss_sf2_h_
 #define bsta_gauss_sf2_h_
-//:
+// :
 // \file
 // \brief A Gaussian with uniform variance in 2-d with type float
 // \author Joseph L. Mundy
@@ -13,6 +13,6 @@
 
 #include "bsta_gaussian_sphere.h"
 
-typedef bsta_gaussian_sphere<float,2> bsta_gauss_sf2;
+typedef bsta_gaussian_sphere<float, 2> bsta_gauss_sf2;
 
 #endif // bsta_gauss_sf2_h_

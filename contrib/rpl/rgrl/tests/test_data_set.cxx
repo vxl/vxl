@@ -12,7 +12,6 @@ label( const char* name )
   return rgrl_feature_set_label( name );
 }
 
-
 static
 bool
 keys_at_res( rgrl_data_set const& ds,
@@ -23,19 +22,23 @@ keys_at_res( rgrl_data_set const& ds,
     ds.keys_at_resolution( resolution );
 
   bool okay = true;
-  if ( count != keys.size() ) {
+  if( count != keys.size() )
+    {
     okay = false;
-  } else {
-    for ( unsigned int i=0; i < count; ++i ) {
-      if ( keys[i].resolution != resolution ) {
+    }
+  else
+    {
+    for( unsigned int i = 0; i < count; ++i )
+      {
+      if( keys[i].resolution != resolution )
+        {
         okay = false;
+        }
       }
     }
-  }
 
   return okay;
 }
-
 
 bool
 check_have( rgrl_data_set const& ds,
@@ -45,7 +48,6 @@ check_have( rgrl_data_set const& ds,
   return ds.have( rgrl_data_set::key_type( res, label(name) ) );
 }
 
-
 rgrl_feature_set_sptr
 get( rgrl_data_set const& ds,
      const char* name,
@@ -53,7 +55,6 @@ get( rgrl_data_set const& ds,
 {
   return ds.get( rgrl_data_set::key_type( res, label(name) ) );
 }
-
 
 static void test_data_set()
 {

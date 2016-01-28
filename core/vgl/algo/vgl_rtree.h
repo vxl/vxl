@@ -2,55 +2,61 @@
 #ifndef vgl_rtree_h_
 #define vgl_rtree_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 // \brief Templated rtree class and associated classes and functions
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 // forward declare all classes.
-template <class V, class B, class C> class vgl_rtree_probe;
-template <class V, class B, class C> class vgl_rtree_node;
-template <class V, class B, class C> class vgl_rtree_iterator_base;
-template <class V, class B, class C> class vgl_rtree_iterator;
-template <class V, class B, class C> class vgl_rtree_const_iterator;
-template <class V, class B, class C> class vgl_rtree;
+template <class V, class B, class C>
+class vgl_rtree_probe;
+template <class V, class B, class C>
+class vgl_rtree_node;
+template <class V, class B, class C>
+class vgl_rtree_iterator_base;
+template <class V, class B, class C>
+class vgl_rtree_iterator;
+template <class V, class B, class C>
+class vgl_rtree_const_iterator;
+template <class V, class B, class C>
+class vgl_rtree;
 
-//: Function predicate object for querying the tree.
+// : Function predicate object for querying the tree.
 template <class V, class B, class C>
 class vgl_rtree_probe
 {
- public:
+public:
   virtual ~vgl_rtree_probe() { }
-  //: return true if the probe "meets" the given object.
-  virtual bool meets(V const &v) const { B b; C::init(b, v); return meets(b); }
-  virtual bool meets(B const &b) const =0;
+  // : return true if the probe "meets" the given object.
+  virtual bool meets(V const & v) const { B b; C::init(b, v); return meets(b); }
+  virtual bool meets(B const & b) const = 0;
+
 };
 
-//: max. number of Vs stored in a node.
+// : max. number of Vs stored in a node.
 // should be a template argument?
 #define vgl_rtree_MAX_VERTICES (8)
 
-//: max. number of children of a given node.
+// : max. number of children of a given node.
 // should be a template argument?
 #define vgl_rtree_MAX_CHILDREN (8)
 
-//: Represent a node in the rtree.
+// : Represent a node in the rtree.
 template <class V, class B, class C>
 class vgl_rtree_node
 {
- public:
+public:
   typedef vgl_rtree_node<V, B, C> node;
 
   // contains bound on all Vs in this node and below.
   B bounds;
 
   // pointer to parent. 0 if none.
-  node *parent;
-
+  node * parent;
 
   // number of vertex elements in this node and its children.
   unsigned total_vts;
@@ -61,7 +67,6 @@ class vgl_rtree_node
   // the elements are stored in this array.
   V vts[vgl_rtree_MAX_VERTICES];
 
-
   // 1 + number of nodes below this one.
   unsigned total_chs;
 
@@ -69,119 +74,127 @@ class vgl_rtree_node
   unsigned local_chs;
 
   // pointers to children are stored in this array.
-  node *chs[vgl_rtree_MAX_CHILDREN];
+  node * chs[vgl_rtree_MAX_CHILDREN];
 
   // -------------------- methods
 
-  vgl_rtree_node(node *parent, V const &v);
+  vgl_rtree_node(node * parent, V const & v);
   ~vgl_rtree_node();
 
   // get all Vs which meet the given region.
-  void get(B const &region, vcl_vector<V> &) const;
+  void get(B const & region, vcl_vector<V> &) const;
 
   // get all Vs whose bounds meet the given probe.
-  void get(vgl_rtree_probe<V, B, C> const &region, vcl_vector<V> &) const;
+  void get(vgl_rtree_probe<V, B, C> const & region, vcl_vector<V> &) const;
 
   // get all Vs.
-  void get_all(vcl_vector<V> &vs) const;
+  void get_all(vcl_vector<V> & vs) const;
 
   // find node containing a V equal to the given one.
-  bool find(V const &v, node **n, int *i) const;
-  bool find(B const &b, V const &v, node **n, int *i) const;
+  bool find(V const & v, node * * n, int * i) const;
+
+  bool find(B const & b, V const & v, node * * n, int * i) const;
 
   // add another V to the tree. return node it was added to.
-  node *add(V const &v);
+  node * add(V const & v);
 
   // remove ith vertex from node.
   void erase(unsigned int i);
 
   void print() const;
 
- private:
+private:
   friend class vgl_rtree_iterator_base<V, B, C>;
 
   // the following methods are not used by the vgl_rtree.
   unsigned int find_index_in_parent() const;
+
   void compute_bounds();
+
   void update_total_vts(int diff);
+
   void update_total_chs(int diff);
+
   void update_vertex_count(int diff);
-  void update_child_count (int diff);
+
+  void update_child_count(int diff);
+
 };
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
-//: Base class for both rtree iterators.
+// : Base class for both rtree iterators.
 template <class V, class B, class C>
 class vgl_rtree_iterator_base
 {
- public:
+public:
   typedef vgl_rtree_node<V, B, C> node;
-  node *current;
+  node *       current;
   unsigned int i;
 
-  vgl_rtree_iterator_base(node *root) : current(root), i(0) { }
+  vgl_rtree_iterator_base(node * root) : current(root), i(0) { }
   vgl_rtree_iterator_base() : current(0), i(0) { }
 
   void operator_pp();
+
   void operator_mm();
+
 };
 
 template <class V, class B, class C>
-bool operator==(vgl_rtree_iterator_base<V, B, C> const &a,
-                vgl_rtree_iterator_base<V, B, C> const &b);
+bool operator==(vgl_rtree_iterator_base<V, B, C> const & a, vgl_rtree_iterator_base<V, B, C> const & b);
 
 template <class V, class B, class C>
-inline bool operator!=(vgl_rtree_iterator_base<V, B, C> const &a,
-                       vgl_rtree_iterator_base<V, B, C> const &b)
+inline bool operator!=(vgl_rtree_iterator_base<V, B, C> const & a,
+                       vgl_rtree_iterator_base<V, B, C> const & b)
 { return !( a == b ); }
 
-//: Iterator for rtree.
+// : Iterator for rtree.
 template <class V, class B, class C>
 class vgl_rtree_iterator : public vgl_rtree_iterator_base<V, B, C>
 {
- public:
+public:
   typedef vgl_rtree_iterator_base<V, B, C> base;
-  typedef vgl_rtree_iterator<V, B, C> self;
-  typedef vgl_rtree_node<V, B, C> node;
+  typedef vgl_rtree_iterator<V, B, C>      self;
+  typedef vgl_rtree_node<V, B, C>          node;
 
-  vgl_rtree_iterator(node *root) : base(root) { }
+  vgl_rtree_iterator(node * root) : base(root) { }
   vgl_rtree_iterator() { }
 
-  V &operator*() const { return base::current->vts[base::i]; }
+  V & operator*() const { return base::current->vts[base::i]; }
 
-  self &operator++() { base::operator_pp(); return *this; }
-  self &operator--() { base::operator_mm(); return *this; }
+  self & operator++() { base::operator_pp(); return *this; }
+  self & operator--() { base::operator_mm(); return *this; }
 
   self operator++(int) { self tmp = *this; base::operator_pp(); return tmp; }
   self operator--(int) { self tmp = *this; base::operator_mm(); return tmp; }
 };
 
-//: const_iterator for rtree.
+// : const_iterator for rtree.
 template <class V, class B, class C>
 class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C>
 {
- public:
-  typedef vgl_rtree_iterator_base<V, B, C> base;
+public:
+  typedef vgl_rtree_iterator_base<V, B, C>  base;
   typedef vgl_rtree_const_iterator<V, B, C> self;
-  typedef vgl_rtree_node<V, B, C> node;
+  typedef vgl_rtree_node<V, B, C>           node;
 
-  vgl_rtree_const_iterator(node *root) : base(root) { }
-  vgl_rtree_const_iterator(vgl_rtree_iterator<V, B, C> const &that) : base(that) { }
+  vgl_rtree_const_iterator(node * root) : base(root) { }
+  vgl_rtree_const_iterator(vgl_rtree_iterator<V, B, C> const & that) : base(that) { }
   vgl_rtree_const_iterator() { }
 
-  V const &operator*() const { return base::current->vts[base::i]; }
+  V const & operator*() const { return base::current->vts[base::i]; }
 
-  self &operator++() { base::operator_pp(); return *this; }
-  self &operator--() { base::operator_mm(); return *this; }
+  self & operator++() { base::operator_pp(); return *this; }
+  self & operator--() { base::operator_mm(); return *this; }
 
   self operator++(int) { self tmp = *this; base::operator_pp(); return tmp; }
   self operator--(int) { self tmp = *this; base::operator_mm(); return tmp; }
 };
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
-//: Templated rtree class.
+// : Templated rtree class.
 // The rtree is templated over the element
 // type V, the type B of the bounding region used (e.g.
 // axis-aligned bounding boxes are common but there are other
@@ -242,19 +255,22 @@ class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C>
 template <class V, class B, class C>
 class vgl_rtree
 {
- public:
+public:
   vgl_rtree() : root(0) { }
-  ~vgl_rtree() {
-    if (root)
+  ~vgl_rtree()
+  {
+    if( root )
+      {
       delete root;
+      }
     root = 0;
   }
 
   //
   typedef vgl_rtree_probe<V, B, C> probe;
 
-  //: iterators
-  typedef vgl_rtree_iterator      <V, B, C> iterator;
+  // : iterators
+  typedef vgl_rtree_iterator<V, B, C>       iterator;
   typedef vgl_rtree_const_iterator<V, B, C> const_iterator;
 
   iterator       begin() { return root ? iterator(root) : iterator(); }
@@ -263,97 +279,127 @@ class vgl_rtree
   iterator       end() { return iterator(); }
   const_iterator end() const { return const_iterator(); }
 
-  //: add an element to the rtree.
-  void add(V const &v) {
-    if (root)
+  // : add an element to the rtree.
+  void add(V const & v)
+  {
+    if( root )
+      {
       root->add(v);
+      }
     else
-      root = new node(0/*parent*/, v);
+      {
+      root = new node(0 /*parent*/, v);
+      }
   }
 
-  //: remove one element from the rtree.
-  void remove(V const &v) {
-    if (root) {
+  // : remove one element from the rtree.
+  void remove(V const & v)
+  {
+    if( root )
+      {
       B tmp;
       C::init(tmp, v);
-      node *n;
-      int i;
-      if (root->find(tmp, v, &n, &i))
+      node * n;
+      int    i;
+      if( root->find(tmp, v, &n, &i) )
+        {
         n->erase(i);
+        }
 
-      if (root->total_vts == 0) {
+      if( root->total_vts == 0 )
+        {
         delete root;
         root = 0;
+        }
       }
-    }
   }
 
-  //: return true iff the rtree contains an element equal to v.
-  bool contains(V const &v) const {
-    node *n;
-    int i;
+  // : return true iff the rtree contains an element equal to v.
+  bool contains(V const & v) const
+  {
+    node * n;
+    int    i;
+
     return root ? root->find(v, &n, &i) : false;
   }
+
 #if 0
-  iterator       find(V const &v);
-  const_iterator find(V const &v) const;
+  iterator       find(V const & v);
+
+  const_iterator find(V const & v) const;
+
 #endif
 
-  //: erase the element pointed to by the iterator.
+  // : erase the element pointed to by the iterator.
   // may invalidate \e all iterators into the rtree.
-  void erase(iterator i) {
+  void erase(iterator i)
+  {
     i.current->erase(i.i);
-    if (root->total_vts == 0) {
+    if( root->total_vts == 0 )
+      {
       delete root;
       root = 0;
-    }
+      }
   }
 
-  //: get elements in the given region.
-  void get(B const &region, vcl_vector<V> &vs) const {
-    if (root)
+  // : get elements in the given region.
+  void get(B const & region, vcl_vector<V> & vs) const
+  {
+    if( root )
+      {
       root->get(region, vs);
+      }
   }
 
-  //: get elements which meet the given probe.
-  void get(vgl_rtree_probe<V, B, C> const &region, vcl_vector<V> &vs) const {
-    if (root)
+  // : get elements which meet the given probe.
+  void get(vgl_rtree_probe<V, B, C> const & region, vcl_vector<V> & vs) const
+  {
+    if( root )
+      {
       root->get(region, vs);
+      }
   }
 
-  //: get all elements in the tree.
-  void get_all(vcl_vector<V> &vs) const {
-    if (root)
+  // : get all elements in the tree.
+  void get_all(vcl_vector<V> & vs) const
+  {
+    if( root )
+      {
       root->get_all(vs);
+      }
   }
 
-  //: return true iff the tree has no elements.
-  bool empty() const {
-    return root ? root->total_vts==0 : true;
+  // : return true iff the tree has no elements.
+  bool empty() const
+  {
+    return root ? root->total_vts == 0 : true;
   }
 
-  //: return number of elements stored in the tree.
-  unsigned size() const {
+  // : return number of elements stored in the tree.
+  unsigned size() const
+  {
     return root ? root->total_vts : 0;
   }
 
-  //: return number of nodes used by the tree.
-  unsigned nodes() const {
+  // : return number of nodes used by the tree.
+  unsigned nodes() const
+  {
     return root ? root->total_chs : 0;
   }
 
   // for internal use only.
   typedef vgl_rtree_node<V, B, C> node;
-  node *secret_get_root() const { return root; } // for debugging purposes.
+  node * secret_get_root() const { return root; } // for debugging purposes.
 
-  void print() const {
+  void print() const
+  {
     root->print();
   }
 
- private:
-  node *root;
+private:
+  node * root;
   // disallow assignment
-  vgl_rtree<V, B, C>& operator=(vgl_rtree<V, B, C> const &) { return *this; }
+  vgl_rtree<V, B, C> & operator=(vgl_rtree<V, B, C> const &) { return *this; }
   vgl_rtree(vgl_rtree<V, B, C> const &) { }
 };
 

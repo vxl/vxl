@@ -2,15 +2,15 @@
 #ifndef vil_rgba_h_
 #define vil_rgba_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Templated four-value colour cell
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date 12 Nov 99
 
-//: This is the appropriate pixel type for RGBA colour images.
+// : This is the appropriate pixel type for RGBA colour images.
 // The purpose of rgba<T> is to provide an object which consists of four Ts arranged
 // in order and which can be referred to as 'R', 'G', 'B' and 'A'. Thus, if win32
 // does something funny when blitting an rgba bitmap to screen, that's up to the
@@ -25,12 +25,12 @@
 
 template <class T>
 struct vil_rgba
-{
- public:
+  {
+public:
   typedef T value_type;
 
   // The values.
-  T  r; T g; T b; T a;
+  T r; T g; T b; T a;
   inline T R() const { return r; }
   inline T G() const { return g; }
   inline T B() const { return b; }
@@ -38,93 +38,98 @@ struct vil_rgba
 
   vil_rgba() {}
 
-  //: Create grey (v,v,v,1) vil_rgba cell from value v.
+  // : Create grey (v,v,v,1) vil_rgba cell from value v.
   // This provides a conversion from T to vil_rgba<T>, needed by e.g. two constructors in IUE_filter.h.
-  vil_rgba(T v):
+  vil_rgba(T v) :
     r(v), g(v), b(v), a(1) {}
 
-  //: Construct from four values.
-  vil_rgba(T red, T green, T blue, T alpha = 1):
+  // : Construct from four values.
+  vil_rgba(T red, T green, T blue, T alpha = 1) :
     r(red), g(green), b(blue), a(alpha) {}
 
-  //: equality
+  // : equality
   inline bool operator==(vil_rgba<T> const& o) const
   {
-    return r==o.r && g==o.g && b==o.b && a==o.a;
+    return r == o.r && g == o.g && b == o.b && a == o.a;
   }
 
   // VC50 bombs with INTERNAL COMPILER ERROR on template member functions
 #if VCL_HAS_MEMBER_TEMPLATES
   template <class S>
-  vil_rgba(const vil_rgba<S>& that) {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
+  vil_rgba(const vil_rgba<S>& that)
+  {
+    r = ( (T)that.r);
+    g = ( (T)that.g);
+    b = ( (T)that.b);
+    a = ( (T)that.a);
   }
 
   template <class S>
-  vil_rgba<T>& operator=(const vil_rgba<S>& that) {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
+  vil_rgba<T> & operator=(const vil_rgba<S>& that)
+  {
+    r = ( (T)that.r);
+    g = ( (T)that.g);
+    b = ( (T)that.b);
+    a = ( (T)that.a);
     return *this;
   }
+
 #else
   // Special-case for dumb compilers.
   inline vil_rgba(const vil_rgba<double>& that)
   {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
+    r = ( (T)that.r);
+    g = ( (T)that.g);
+    b = ( (T)that.b);
+    a = ( (T)that.a);
   }
+
   inline vil_rgba(const vil_rgba<unsigned char>& that)
   {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
+    r = ( (T)that.r);
+    g = ( (T)that.g);
+    b = ( (T)that.b);
+    a = ( (T)that.a);
   }
 
-  inline vil_rgba<T>& operator=(const vil_rgba<double>& that)
+  inline vil_rgba<T> & operator=(const vil_rgba<double>& that)
   {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
+    r = ( (T)that.r);
+    g = ( (T)that.g);
+    b = ( (T)that.b);
+    a = ( (T)that.a);
     return *this;
   }
 
-  inline vil_rgba<T>& operator=(const vil_rgba<float>& that)
+  inline vil_rgba<T> & operator=(const vil_rgba<float>& that)
   {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
+    r = ( (T)that.r);
+    g = ( (T)that.g);
+    b = ( (T)that.b);
+    a = ( (T)that.a);
     return *this;
   }
 
-  inline vil_rgba<T>& operator=(const vil_rgba<unsigned char>& that)
+  inline vil_rgba<T> & operator=(const vil_rgba<unsigned char>& that)
   {
-    r=((T)that.r);
-    g=((T)that.g);
-    b=((T)that.b);
-    a=((T)that.a);
+    r = ( (T)that.r);
+    g = ( (T)that.g);
+    b = ( (T)that.b);
+    a = ( (T)that.a);
     return *this;
   }
+
 #endif
 
-  //: Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
-  T grey() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
+  // : Convert vil_rgba to gray using standard (.299, .587, .114) RGB weighting.
+  T grey() const { return T(0.5 + r * 0.299 + 0.587 * g + 0.114 * b); }
 
 #if 0 // deprecated -- use .grey() instead
-  operator T() const { return T(0.5+r*0.299+0.587*g+0.114*b); }
+  operator T() const { return T(0.5 + r * 0.299 + 0.587 * g + 0.114 * b); }
 #endif
-};
+  };
 
 #define VIL_RGBA_INSTANTIATE \
-extern "please include vil/vil_rgba.txx instead"
+  extern "please include vil/vil_rgba.txx instead"
 
 #endif // vil_rgba_h_

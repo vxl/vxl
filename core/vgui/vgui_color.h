@@ -2,9 +2,9 @@
 #ifndef vgui_color_h_
 #define vgui_color_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 // \brief  Easy functions which attempt to set the current color in both RGBA and color index mode
@@ -19,12 +19,19 @@
 #define vgui_color_BLACK  0, 0, 0
 
 void vgui_color_white();
+
 void vgui_color_yellow();
+
 void vgui_color_purple();
+
 void vgui_color_red();
+
 void vgui_color_cyan();
+
 void vgui_color_green();
+
 void vgui_color_blue();
+
 void vgui_color_black();
 
 #endif // vgui_color_h_

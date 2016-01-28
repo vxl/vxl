@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_shell_tableau.h
 #ifndef vgui_shell_tableau_h_
 #define vgui_shell_tableau_h_
-//:
+// :
 // \file
 // \author fsm
 // \brief  Tableau to go at the top of one's tableau hierarchy.
@@ -22,8 +22,7 @@
 #include <vgui/vgui_tview_launcher_tableau_sptr.h>
 #include <vgui/vgui_event_condition.h>
 
-
-//: Key bindings for vgui_shell_tableau
+// : Key bindings for vgui_shell_tableau
 //
 // The events are
 //
@@ -38,31 +37,31 @@
 //
 class vgui_shell_tableau_bindings
 {
- public:
-  //:
+public:
+  // :
   vgui_shell_tableau_bindings()
     : quit( default_quit ), close( default_close ), graph( default_graph ) {}
 
-  //:
-  vgui_shell_tableau_bindings& set_quit( vgui_event_condition cond )
+  // :
+  vgui_shell_tableau_bindings & set_quit( vgui_event_condition cond )
   { quit = cond; return *this; }
 
-  //:
-  vgui_shell_tableau_bindings& set_close( vgui_event_condition cond )
+  // :
+  vgui_shell_tableau_bindings & set_close( vgui_event_condition cond )
   { close = cond; return *this; }
 
-  vgui_shell_tableau_bindings& set_graph( vgui_event_condition cond )
+  vgui_shell_tableau_bindings & set_graph( vgui_event_condition cond )
   { graph = cond; return *this; }
 
-  //:
+  // :
   static void set_default_quit( vgui_event_condition cond )
   { default_quit = cond; }
 
-  //:
+  // :
   static void set_default_close( vgui_event_condition cond )
   { default_close = cond; }
 
-  //:
+  // :
   static void set_default_graph( vgui_event_condition cond )
   { default_graph = cond; }
 
@@ -75,8 +74,7 @@ class vgui_shell_tableau_bindings
   static vgui_event_condition default_graph;
 };
 
-
-//:  Tableau to go at the top of one's tableau hierarchy.
+// :  Tableau to go at the top of one's tableau hierarchy.
 //
 // A shell tableau is a handy collection of things one often wants
 // at the very top of one's tableau hierarchy. It is essentially an
@@ -95,56 +93,53 @@ class vgui_shell_tableau : public vgui_composite_tableau
 {
   typedef vgui_shell_tableau_bindings key_bindings_type;
 
-  bool do_quit;
-  bool enable_key_bindings;
-  key_bindings_type bindings;
-  vgui_clear_tableau_sptr clear;
+  bool                             do_quit;
+  bool                             enable_key_bindings;
+  key_bindings_type                bindings;
+  vgui_clear_tableau_sptr          clear;
   vgui_tview_launcher_tableau_sptr graph;
- public:
+public:
   vgui_shell_tableau() { init(); }
 
   vgui_shell_tableau(vgui_tableau_sptr const &);
-  vgui_shell_tableau(vgui_tableau_sptr const &,
-                     vgui_tableau_sptr const &);
-  vgui_shell_tableau(vgui_tableau_sptr const &,
-                     vgui_tableau_sptr const &,
-                     vgui_tableau_sptr const &);
-  vgui_shell_tableau(vgui_tableau_sptr const &,
-                     vgui_tableau_sptr const &,
-                     vgui_tableau_sptr const &,
+  vgui_shell_tableau(vgui_tableau_sptr const &, vgui_tableau_sptr const &);
+  vgui_shell_tableau(vgui_tableau_sptr const &, vgui_tableau_sptr const &, vgui_tableau_sptr const &);
+  vgui_shell_tableau(vgui_tableau_sptr const &, vgui_tableau_sptr const &, vgui_tableau_sptr const &,
                      vgui_tableau_sptr const &);
 
   bool handle(vgui_event const &);
+
   vcl_string type_name() const { return "vgui_shell_tableau"; }
 
   void get_popup(vgui_popup_params const &, vgui_menu &);
+
   void set_quit(bool on);
+
   void set_enable_key_bindings(bool on);
 
   vgui_clear_tableau_sptr get_clear() const { return clear; }
   vgui_tview_launcher_tableau_sptr get_graph() const { return graph; }
-
- protected:
-  ~vgui_shell_tableau();
-
- private:
+protected: ~vgui_shell_tableau();
+private:
   void init();
+
 };
 
-//: Create a smart-pointer to a vgui_shell_tableau.
+// : Create a smart-pointer to a vgui_shell_tableau.
 struct vgui_shell_tableau_new : public vgui_shell_tableau_sptr
-{
+  {
   typedef vgui_shell_tableau_sptr base;
   vgui_shell_tableau_new()
-    : base(new vgui_shell_tableau()) {}
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a)
-    : base(new vgui_shell_tableau(a)) {}
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b)
-    : base(new vgui_shell_tableau(a, b)) {}
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b,vgui_tableau_sptr const &c)
-    : base(new vgui_shell_tableau(a, b, c)) {}
-  vgui_shell_tableau_new(vgui_tableau_sptr const &a,vgui_tableau_sptr const &b,vgui_tableau_sptr const &c,vgui_tableau_sptr const&d)
-    : base(new vgui_shell_tableau(a, b, c, d)) {}
-};
+    : base(new vgui_shell_tableau() ) {}
+  vgui_shell_tableau_new(vgui_tableau_sptr const & a)
+    : base(new vgui_shell_tableau(a) ) {}
+  vgui_shell_tableau_new(vgui_tableau_sptr const & a, vgui_tableau_sptr const & b)
+    : base(new vgui_shell_tableau(a, b) ) {}
+  vgui_shell_tableau_new(vgui_tableau_sptr const & a, vgui_tableau_sptr const & b, vgui_tableau_sptr const & c)
+    : base(new vgui_shell_tableau(a, b, c) ) {}
+  vgui_shell_tableau_new(vgui_tableau_sptr const & a, vgui_tableau_sptr const & b, vgui_tableau_sptr const & c,
+                         vgui_tableau_sptr const& d)
+    : base(new vgui_shell_tableau(a, b, c, d) ) {}
+  };
 
 #endif // vgui_shell_tableau_h_

@@ -1,6 +1,6 @@
 #ifndef HMatrix1DCompute3Point_h_
 #define HMatrix1DCompute3Point_h_
-//:
+// :
 // \file
 //
 // HMatrix1DComputeLinear contains a method to calculate
@@ -14,13 +14,13 @@
 
 class HMatrix1DCompute3Point : public HMatrix1DCompute
 {
- public:
+public:
   HMatrix1DCompute3Point(void);
   ~HMatrix1DCompute3Point();
- protected:
-  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&,
-                         const vcl_vector<vgl_homg_point_1d<double> >&,
+protected:
+  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > &, const vcl_vector<vgl_homg_point_1d<double> > &,
                          HMatrix1D *);
+
 };
 
 #endif // HMatrix1DCompute3Point_h_

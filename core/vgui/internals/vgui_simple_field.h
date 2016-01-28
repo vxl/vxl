@@ -2,9 +2,9 @@
 #ifndef vgui_simple_field_h_
 #define vgui_simple_field_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Templated fields for dialog boxes.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -21,7 +21,7 @@
 #include <vcl_string.h>
 #include "vgui_dialog_field.h"
 
-//: Templated fields for dialog boxes.
+// : Templated fields for dialog boxes.
 //
 // vgui_simple_field is templated over the type of variable it stores.
 // The given template instances are all for fundamental types, but the
@@ -30,14 +30,15 @@
 template <class T>
 class vgui_simple_field : public vgui_dialog_field
 {
- public:
-  vgui_simple_field(const char *text,T &variable_to_modify);
+public:
+  vgui_simple_field(const char * text, T & variable_to_modify);
   ~vgui_simple_field();
 
   vcl_string current_value() const;
+
   bool update_value(const vcl_string &);
 
-  T &var;
+  T & var;
 };
 
 typedef vgui_simple_field<bool>   vgui_bool_field;

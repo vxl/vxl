@@ -1,5 +1,5 @@
 #include "volm_desc.h"
-//:
+// :
 // \file
 #include <bsta/vis/bsta_svg_tools.h>
 #include <vsl/vsl_vector_io.h>
@@ -12,8 +12,11 @@ float volm_desc::similarity(volm_desc_sptr other)
 unsigned int volm_desc::get_area()
 {
   unsigned area = 0;
-  for (unsigned int i=0; i<nbins_; i++)
-  { area = area + h_[i]; }
+
+  for( unsigned int i = 0; i < nbins_; i++ )
+    {
+    area = area + h_[i];
+    }
   return area;
 }
 
@@ -21,22 +24,23 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
 {
   // use bsvg_plot to visualize the bin
   // define the width and height from descriptor
-  float margin = 40.0f;
-  int font_size_label = 10;
-  float stroke_width = 2.0f;
-  float width = (float)nbins_ + 2*margin;
-  float height = 255.0f;
+  float     margin = 40.0f;
+  int       font_size_label = 10;
+  float     stroke_width = 2.0f;
+  float     width = (float)nbins_ + 2 * margin;
+  float     height = 255.0f;
   bsvg_plot pl(width, height);
+
   pl.set_font_size(font_size_label);
 
   vcl_stringstream msg1;
   msg1 << "nbins : " << nbins_;
 
   // add text msg
-  int font_size_text = 15;
-  bsvg_text* tmm1 = new bsvg_text(msg1.str());
+  int        font_size_text = 15;
+  bsvg_text* tmm1 = new bsvg_text(msg1.str() );
   tmm1->set_font_size(font_size_text);
-  tmm1->set_location(margin+(float)font_size_text, margin*0.5f);
+  tmm1->set_location(margin + (float)font_size_text, margin * 0.5f);
   pl.add_element(tmm1);
 
   // add axes
@@ -44,29 +48,32 @@ void volm_desc::visualize(vcl_string outfile, unsigned char const& y_max) const
 
   vcl_vector<float> ps;
   vcl_vector<float> x_labels;
-  for (unsigned i = 0; i < nbins_; i++) {
-    ps.push_back(float(h_[i]));
-    x_labels.push_back(float(i));
-  }
+  for( unsigned i = 0; i < nbins_; i++ )
+    {
+    ps.push_back(float(h_[i]) );
+    x_labels.push_back(float(i) );
+    }
   pl.add_bars(ps, "red");
 
   bxml_write(outfile, pl);
 }
-
 
 void volm_desc::print() const
 {
   vcl_cout << "descriptor name: " << name_ << '\n';
   vcl_cout << "number of total bins:" << nbins_ << '\n'
            << "counts: ";
-  for (unsigned i = 0; i < nbins_; i++)
+  for( unsigned i = 0; i < nbins_; i++ )
+    {
     vcl_cout << (int)h_[i] << ' ';
+    }
   vcl_cout << vcl_endl;
 }
 
 void volm_desc::b_write(vsl_b_ostream& os)
 {
   unsigned ver = this->version();
+
   vsl_b_write(os, ver);
   vsl_b_write(os, name_);
   vsl_b_write(os, nbins_);
@@ -76,17 +83,20 @@ void volm_desc::b_write(vsl_b_ostream& os)
 void volm_desc::b_read(vsl_b_istream& is)
 {
   unsigned ver;
+
   vsl_b_read(is, ver);
-  if (ver == 1) {
+  if( ver == 1 )
+    {
     vsl_b_read(is, name_);
     vsl_b_read(is, nbins_);
     h_.resize(nbins_);
     vsl_b_read(is, h_);
-  }
-  else {
+    }
+  else
+    {
     vcl_cout << "volm_descriptor -- unknown binary io version " << ver << '\n';
     return;
-  }
+    }
 }
 
 void volm_desc::get_char_array(vcl_vector<unsigned char>& values) const
@@ -94,5 +104,3 @@ void volm_desc::get_char_array(vcl_vector<unsigned char>& values) const
   values.resize(nbins_);
   values = h_;
 }
-
-

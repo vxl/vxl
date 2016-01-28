@@ -1,6 +1,6 @@
 #ifndef vnl_discrete_diff_h_
 #define vnl_discrete_diff_h_
-//:
+// :
 // \file
 // \brief Functions to compute jacobians of vnl_least_squares_functions
 //
@@ -30,42 +30,31 @@
 #include <vnl/vnl_matrix.h>
 class vnl_least_squares_function;
 
-//: forward differences
+// : forward differences
 //  \relatesalso vnl_least_squares_function
-bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
-                           double h,
-                           vnl_vector<double> const &x,
-                           vnl_matrix<double>       &J);
+bool vnl_discrete_diff_fwd(vnl_least_squares_function * lsf, double h, vnl_vector<double> const & x,
+                           vnl_matrix<double>       & J);
 
-//: forward differences
+// : forward differences
 //  \relatesalso vnl_least_squares_function
-bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
-                           vnl_vector<double> const &h,
-                           vnl_vector<double> const &x,
-                           vnl_matrix<double>       &J);
+bool vnl_discrete_diff_fwd(vnl_least_squares_function * lsf, vnl_vector<double> const & h, vnl_vector<double> const & x,
+                           vnl_matrix<double>       & J);
 
-//: forward differences
+// : forward differences
 //  \relatesalso vnl_least_squares_function
-bool vnl_discrete_diff_fwd(vnl_least_squares_function *lsf,
-                           vnl_vector<double> const &h,
-                           vnl_vector<double> const &x,
-                           vnl_vector<double> const &y,
-                           vnl_matrix<double>       &J);
+bool vnl_discrete_diff_fwd(vnl_least_squares_function * lsf, vnl_vector<double> const & h, vnl_vector<double> const & x,
+                           vnl_vector<double> const & y, vnl_matrix<double>       & J);
 
-//: symmetric differences
+// : symmetric differences
 //  \relatesalso vnl_least_squares_function
-bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
-                           double h,
-                           vnl_vector<double> const &x,
-                           vnl_matrix<double>       &J);
+bool vnl_discrete_diff_sym(vnl_least_squares_function * lsf, double h, vnl_vector<double> const & x,
+                           vnl_matrix<double>       & J);
 
-//: symmetric differences
+// : symmetric differences
 //  \relatesalso vnl_least_squares_function
-bool vnl_discrete_diff_sym(vnl_least_squares_function *lsf,
-                           vnl_vector<double> const &h,
-                           vnl_vector<double> const &x,
-                           vnl_matrix<double>       &J);
+bool vnl_discrete_diff_sym(vnl_least_squares_function * lsf, vnl_vector<double> const & h, vnl_vector<double> const & x,
+                           vnl_matrix<double>       & J);
 
-void vnl_discrete_diff_test_lsf(vnl_least_squares_function *lsf, vnl_vector<double> const &x);
+void vnl_discrete_diff_test_lsf(vnl_least_squares_function * lsf, vnl_vector<double> const & x);
 
 #endif // vnl_discrete_diff_h_

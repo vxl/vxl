@@ -1,44 +1,46 @@
 // This is core/vul/vul_psfile.cxx
 #include "vul_psfile.h"
-//:
+// :
 // \file
 
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
-#include <vcl_iomanip.h> // for setw()
+#include <vcl_iomanip.h>   // for setw()
 #include <vcl_algorithm.h> // for vcl_min()
 #include <vcl_cassert.h>
 
-#define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }
+#define RANGE(a, b, c) { if( a < b ) {a = b; } if( a > c ) {a = c; }}
 #define in_range(a) (a < 0x100)
-#define Hex4bit(a) ((char)((a<=9) ? (a+'0') : (a - 10 + 'a')))
+#define Hex4bit(a) ( (char)( (a <= 9) ? (a + '0') : (a - 10 + 'a') ) )
 
 static const float PIX2INCH = 72.0f;
-static bool debug = true;
+static bool        debug = true;
 
 // sizes of pages in inches
-static double paper_size[8][2] = {
-  { 8.500, 11.000}, // US NORMAL
-  { 8.268, 11.693}, // A4 210mm x 297mm
-  { 7.205, 10.118}, // B5 183mm x 257mm
-  {11.693, 16.535}, // A3 297mm x 420mm
-  { 8.500, 14.000}, // US LEGAL
-  {11.000, 17.000}, // B-size
-  { 3.875,  4.875}, // 4 by 5
-  { 0.945,  1.417}  // 35mm (24x36)
-};
+static double paper_size[8][2] =
+  {
+        { 8.500, 11.000}, // US NORMAL
+        { 8.268, 11.693}, // A4 210mm x 297mm
+        { 7.205, 10.118}, // B5 183mm x 257mm
+     {11.693, 16.535},    // A3 297mm x 420mm
+        { 8.500, 14.000}, // US LEGAL
+     {11.000, 17.000},    // B-size
+        { 3.875,  4.875}, // 4 by 5
+        { 0.945,  1.417}// 35mm (24x36)
+  };
 
 // size of l+r margin and t+b margin.  image is centered
-static double margins[8 ][2] = {
-  { 1.000, 1.000}, // US NORMAL
-  { 1.000, 1.000}, // A4
-  { 1.000, 1.000}, // B5
-  { 1.000, 1.000}, // A3
-  { 1.000, 1.000}, // US LEGAL
-  { 1.000, 1.000}, // B-size
-  { 0.275, 0.275}, // 4 by 5
-  { 0.078, 0.078}  // 35mm (24x36)
-};
+static double margins[8][2] =
+  {
+        { 1.000, 1.000}, // US NORMAL
+        { 1.000, 1.000}, // A4
+        { 1.000, 1.000}, // B5
+        { 1.000, 1.000}, // A3
+        { 1.000, 1.000}, // US LEGAL
+        { 1.000, 1.000}, // B-size
+        { 0.275, 0.275}, // 4 by 5
+        { 0.078, 0.078} // 35mm (24x36)
+  };
 
 // min and max value for PostScript paper size
 static float ps_minimum = 0.1f;
@@ -46,73 +48,75 @@ static float ps_maximum = 8.f;
 
 static const vcl_streampos HEADER_START(-1);
 
-//-----------------------------------------------------------------------------
-//: Default constructor.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Default constructor.
+// -----------------------------------------------------------------------------
 vul_psfile::vul_psfile(char const* f, bool dbg)
   : output_filestream(f),
-    fg_r(0), fg_g(0), fg_b(0),
-    bg_r(1), bg_g(1), bg_b(1),
-    line_width_(1),
-    scale_x(1.f), scale_y(1.f),
-    ox(0), oy(0), iw(0), ih(0),
-    iwf(1.0), ihf(1.0),
-    psizex(8.5), psizey(11),
-    pos_inx(4.25), pos_iny(5.5),
-    width(0), height(0),
-    filename(f),
-    printer_paper_type(vul_psfile::US_NORMAL),
-    printer_paper_orientation(vul_psfile::PORTRAIT),
-    printer_paper_layout(vul_psfile::CENTER),
-    reduction_factor(1),
-    doneps(false),
-    min_x(1000), min_y(1000),
-    max_x(-1000), max_y(-1000),
-    box_width(0), box_height(0),
-    translate_pos(-1L),
-    sobj_t_pos(-1L),
-    header_pos(HEADER_START),
-    graphics_prolog_exists(false),
-    exist_image(false),
-    exist_objs (false)
+  fg_r(0), fg_g(0), fg_b(0),
+  bg_r(1), bg_g(1), bg_b(1),
+  line_width_(1),
+  scale_x(1.f), scale_y(1.f),
+  ox(0), oy(0), iw(0), ih(0),
+  iwf(1.0), ihf(1.0),
+  psizex(8.5), psizey(11),
+  pos_inx(4.25), pos_iny(5.5),
+  width(0), height(0),
+  filename(f),
+  printer_paper_type(vul_psfile::US_NORMAL),
+  printer_paper_orientation(vul_psfile::PORTRAIT),
+  printer_paper_layout(vul_psfile::CENTER),
+  reduction_factor(1),
+  doneps(false),
+  min_x(1000), min_y(1000),
+  max_x(-1000), max_y(-1000),
+  box_width(0), box_height(0),
+  translate_pos(-1L),
+  sobj_t_pos(-1L),
+  header_pos(HEADER_START),
+  graphics_prolog_exists(false),
+  exist_image(false),
+  exist_objs(false)
 {
   debug = dbg;
-  if (debug) vcl_cout << "vul_psfile::vul_psfile\n";
+  if( debug ) {vcl_cout << "vul_psfile::vul_psfile\n"; }
   postscript_header();
 }
 
-//-----------------------------------------------------------------------------
-//: Destructor
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Destructor
+// -----------------------------------------------------------------------------
 vul_psfile::~vul_psfile()
 {
-  if (debug) vcl_cout << "vul_psfile::~vul_psfile\n";
+  if( debug ) {vcl_cout << "vul_psfile::~vul_psfile\n"; }
   reset_bounding_box();
-  if (!doneps)
+  if( !doneps )
+    {
     done();
+    }
 }
 
-
-//-----------------------------------------------------------------------------
-//: Rewrite output bounding box parameters.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Rewrite output bounding box parameters.
+// -----------------------------------------------------------------------------
 void vul_psfile::reset_bounding_box()
 {
   vcl_streampos temp_pos;
+
   temp_pos = output_filestream.tellp();
 
-  if (exist_image)
-  {
+  if( exist_image )
+    {
     // for image part
     output_filestream.seekp(translate_pos);
     image_translate_and_scale();
-  }
-  if (exist_objs)
-  {
+    }
+  if( exist_objs )
+    {
     // For Object part.
     output_filestream.seekp(sobj_t_pos);
     object_translate_and_scale();
-  }
+    }
 
   // reset Bounding Box parameters (the fourth line).
   output_filestream.seekp(header_pos);
@@ -120,131 +124,139 @@ void vul_psfile::reset_bounding_box()
   output_filestream.seekp(temp_pos);
 }
 
-//-----------------------------------------------------------------------------
-//: Recalculate bounding box and scale x and y (if necessary).
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Recalculate bounding box and scale x and y (if necessary).
+// -----------------------------------------------------------------------------
 void vul_psfile::compute_bounding_box()
 {
   box_width  = max_x - min_x;
   box_height = max_y - min_y;
 
-  if (printer_paper_orientation == vul_psfile::LANDSCAPE)
-  {
+  if( printer_paper_orientation == vul_psfile::LANDSCAPE )
+    {
     psizex = paper_size[printer_paper_type][1];
     psizey = paper_size[printer_paper_type][0];
-  }
+    }
   else
-  {
+    {
     psizex = paper_size[printer_paper_type][0];
     psizey = paper_size[printer_paper_type][1];
-  }
+    }
 
-  if (printer_paper_layout == vul_psfile::CENTER)
-  {
+  if( printer_paper_layout == vul_psfile::CENTER )
+    {
     double hsx = box_width  / PIX2INCH * scale_x * .5;
     double hsy = box_height / PIX2INCH * scale_y * .5;
 
     // from xv xvps.c subroutine: centerimage
-    pos_inx = psizex*.5 - hsx;
-    pos_iny = psizey*.5 - hsy;
+    pos_inx = psizex * .5 - hsx;
+    pos_iny = psizey * .5 - hsy;
 
     // make sure 'center' of image is still on page
-    RANGE(pos_inx, -hsx, psizex-hsx);
-    RANGE(pos_iny, -hsy, psizey-hsy);
+    RANGE(pos_inx, -hsx, psizex - hsx);
+    RANGE(pos_iny, -hsy, psizey - hsy);
 
     // round to integer .001ths of an inch
     pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) * .001;
     pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) * .001;
-  }
-  else if (printer_paper_layout == vul_psfile::MAX)
-  {
+    }
+  else if( printer_paper_layout == vul_psfile::MAX )
+    {
     double hsx = psizex - margins[printer_paper_type][0];
     double hsy = psizey - margins[printer_paper_type][1];
 
     // avoid division by 0:
-    if (box_width == 0) box_width = 1;
-    if (box_height == 0) box_height = 1;
+    if( box_width == 0 ) {box_width = 1; }
+    if( box_height == 0 ) {box_height = 1; }
 
     // choose the smaller scaling factor
-    scale_x = scale_y = (float)vcl_min(hsx/box_width, hsy/box_height) * PIX2INCH;
+    scale_x = scale_y = (float)vcl_min(hsx / box_width, hsy / box_height) * PIX2INCH;
 
-    RANGE(scale_x,ps_minimum,ps_maximum);
-    RANGE(scale_y,ps_minimum,ps_maximum);
+    RANGE(scale_x, ps_minimum, ps_maximum);
+    RANGE(scale_y, ps_minimum, ps_maximum);
 
-    pos_inx = psizex*.5 - box_width / PIX2INCH * scale_x *.5;
-    pos_iny = psizey*.5 - box_height/ PIX2INCH * scale_y *.5;
+    pos_inx = psizex * .5 - box_width / PIX2INCH * scale_x * .5;
+    pos_iny = psizey * .5 - box_height / PIX2INCH * scale_y * .5;
 
     // round to integer .001ths of an inch
     pos_inx = vcl_floor(pos_inx * 1000.0 + 0.5) * .001;
     pos_iny = vcl_floor(pos_iny * 1000.0 + 0.5) * .001;
-  }
+    }
 
   // printed image will have size iw,ih (in picas)
-  if (exist_image)
-  {
+  if( exist_image )
+    {
     iwf = width  * scale_x; iw = int(iwf + 0.5);
     ihf = height * scale_y; ih = int(ihf + 0.5);
-  }
-  if (exist_objs)
-  {
+    }
+  if( exist_objs )
+    {
     iw = int(box_width  * scale_x + 0.5);
     ih = int(box_height * scale_y + 0.5);
-  }
+    }
 
   // compute offset to bottom-left of image (in picas)
-  ox = int(pos_inx*PIX2INCH+0.5);
-  oy = int(pos_iny*PIX2INCH+0.5);
+  ox = int(pos_inx * PIX2INCH + 0.5);
+  oy = int(pos_iny * PIX2INCH + 0.5);
 
-  if (debug) vcl_cout << "vul_psfile::compute_bounding_box, box_width = "
-                      << box_width << ", box_height = " << box_height << '\n';
+  if( debug )
+    {
+    vcl_cout << "vul_psfile::compute_bounding_box, box_width = "
+             << box_width << ", box_height = " << box_height << '\n';
+    }
 }
 
-//-----------------------------------------------------------------------------
-//: Set Bounding Box Min and Max x, y.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Set Bounding Box Min and Max x, y.
+// -----------------------------------------------------------------------------
 void vul_psfile::set_min_max_xy(float xx, float yy)
 {
   int x = int(xx + 0.5);
   int y = int(yy + 0.5);
-  if (x < min_x)   min_x = x;
-  if (y < min_y)   min_y = y;
-  if (x > max_x)   max_x = x;
-  if (y > max_y)   max_y = y;
+
+  if( x < min_x ) {min_x = x; }
+  if( y < min_y ) {min_y = y; }
+  if( x > max_x ) {max_x = x; }
+  if( y > max_y ) {max_y = y; }
 }
 
-//-----------------------------------------------------------------------------
-//: Set Bounding Box Min and Max x, y.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Set Bounding Box Min and Max x, y.
+// -----------------------------------------------------------------------------
 void vul_psfile::set_min_max_xy(int x, int y)
 {
-  if (x < min_x)   min_x = x;
-  if (y < min_y)   min_y = y;
-  if (x > max_x)   max_x = x;
-  if (y > max_y)   max_y = y;
+  if( x < min_x ) {min_x = x; }
+  if( y < min_y ) {min_y = y; }
+  if( x > max_x ) {max_x = x; }
+  if( y > max_y ) {max_y = y; }
 }
 
-//-----------------------------------------------------------------------------
-//: Write 8 bit grey scale image.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Write 8 bit grey scale image.
+// -----------------------------------------------------------------------------
 void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int sizey)
 {
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "vul_psfile::print_greyscale_image, width = " << sizex
              << ", height = " << sizey  << ", reduction_factor = "
              << reduction_factor << '\n';
+    }
 
   exist_image = true;
   width = sizex;
   height = sizey;
-  set_parameters(sizex,sizey);
+  set_parameters(sizex, sizey);
   compute_bounding_box();
 
   // reduction factor should not be an expansion factor ...
-  if (reduction_factor < 1)
+  if( reduction_factor < 1 )
+    {
     reduction_factor = 1;
+    }
 
-  int new_width = (int)vcl_ceil(sizex/(double)reduction_factor); // round up
-  int new_height= (int)vcl_ceil(sizey/(double)reduction_factor);
+  int new_width = (int)vcl_ceil(sizex / (double)reduction_factor); // round up
+  int new_height = (int)vcl_ceil(sizey / (double)reduction_factor);
 
   output_filestream
     << "\n%%Page: 1 1\n\n% remember original state\n/origstate save def\n"
@@ -252,9 +264,11 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
     << "% define string to hold a scanline's worth of data\n"
     << "/pix " << new_width << " string def\n";
 
-  if (printer_paper_orientation == vul_psfile::LANDSCAPE)
+  if( printer_paper_orientation == vul_psfile::LANDSCAPE )
+    {
     output_filestream
-      << "% print in landscape mode\n90 rotate 0 " << int(-psizey*PIX2INCH) << " translate\n\n";
+      << "% print in landscape mode\n90 rotate 0 " << int(-psizey * PIX2INCH) << " translate\n\n";
+    }
   output_filestream << "% lower left corner\n";
   translate_pos = output_filestream.tellp();
   image_translate_and_scale();
@@ -264,82 +278,93 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
     << '[' << new_width << " 0 0 -" << new_height << " 0 " << new_height
     << "]  % mapping matrix\n{currentfile pix readhexstring pop}\nimage\n\n";
   const int linesize = 72;
-
   // write image data to output PostScript file
-  for (int j=0; j<new_height; j++)
-  {
-    int countrow = 0;
-    for (int i = 0; i < new_width; i++)
+  for( int j = 0; j < new_height; j++ )
     {
+    int countrow = 0;
+    for( int i = 0; i < new_width; i++ )
+      {
       int index;
 
-      if (reduction_factor == 1)
-        index = int(*(buffer + width * j + i));
+      if( reduction_factor == 1 )
+        {
+        index = int(*(buffer + width * j + i) );
+        }
       else // Reduce resolution of image if necessary
-      {
-        int pixel_number= (width * j + i) * reduction_factor;
-        index=0;
-        int number_of_pixels_sampled=0;
-        for (int m=0; m < reduction_factor;m++)
-          for (int n=0; n < reduction_factor;n++)
-            if (i*reduction_factor+m < width && j*reduction_factor+n < height)
+        {
+        int pixel_number = (width * j + i) * reduction_factor;
+        index = 0;
+        int number_of_pixels_sampled = 0;
+        for( int m = 0; m < reduction_factor; m++ )
+          {
+          for( int n = 0; n < reduction_factor; n++ )
             {
-              index += int(*(buffer + (pixel_number+m+n*width)));
+            if( i * reduction_factor + m < width && j * reduction_factor + n < height )
+              {
+              index += int(*(buffer + (pixel_number + m + n * width) ) );
               ++number_of_pixels_sampled;
+              }
             }
-        index/=number_of_pixels_sampled; // Average the pixel intensity value.
-      }
+          }
+        index /= number_of_pixels_sampled; // Average the pixel intensity value.
+        }
 
       // write hex pixel value
-      if (in_range(index))
-      {
-        char pixel[3];
+      if( in_range(index) )
+        {
+        char          pixel[3];
         unsigned char low4 = (unsigned char)  (index & 0x000f);
-        unsigned char high4 = (unsigned char) ((index & 0x00f0) >> 4);
+        unsigned char high4 = (unsigned char) ( (index & 0x00f0) >> 4);
         pixel[0] = Hex4bit(high4);
         pixel[1] = Hex4bit(low4);
         pixel[2] = '\0';
         output_filestream << pixel;
-      }
+        }
       else
+        {
         vcl_cout << " index out of range: " << index << '\n';
+        }
 
-      countrow+=2;
-      if (countrow >= linesize)
-      {
+      countrow += 2;
+      if( countrow >= linesize )
+        {
         countrow = 0;
         output_filestream << '\n';
+        }
       }
-    }
     output_filestream << '\n';
-  }
+    }
   output_filestream << "% stop using temporary dictionary\nend\n\n"
                     << "% restore original state\norigstate restore\n\n";
 }
 
-//-----------------------------------------------------------------------------
-//: Write 24 bit colour image.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Write 24 bit colour image.
+// -----------------------------------------------------------------------------
 void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
 {
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "vul_psfile::print_color_image, width = " << sizex
              << ", height = " << sizey  << ", reduction_factor = "
              << reduction_factor << '\n';
+    }
 
   const int bytes_per_pixel = 3;
   exist_image = true;
   width = sizex;
   height = sizey;
-  set_parameters(sizex,sizey);
+  set_parameters(sizex, sizey);
   compute_bounding_box();
 
   // reduction factor should not be an expansion factor ...
-  if (reduction_factor < 1)
+  if( reduction_factor < 1 )
+    {
     reduction_factor = 1;
+    }
 
-  int new_width = (int)vcl_ceil(sizex/(double)reduction_factor); // round up
-  int new_height= (int)vcl_ceil(sizey/(double)reduction_factor);
+  int new_width = (int)vcl_ceil(sizex / (double)reduction_factor); // round up
+  int new_height = (int)vcl_ceil(sizey / (double)reduction_factor);
 
   // This part uses xv outfile as a reference:
   output_filestream
@@ -355,9 +380,11 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
     << "/npixls 0 def\n"
     << "/rgbindx 0 def\n\n";
 
-  if (printer_paper_orientation == vul_psfile::LANDSCAPE)
+  if( printer_paper_orientation == vul_psfile::LANDSCAPE )
+    {
     output_filestream
-      << "% print in landscape mode\n90 rotate 0 " << int(-psizey*PIX2INCH) << " translate\n\n";
+      << "% print in landscape mode\n90 rotate 0 " << int(-psizey * PIX2INCH) << " translate\n\n";
+    }
   output_filestream << "% lower left corner\n";
   translate_pos = output_filestream.tellp();
   image_translate_and_scale();
@@ -417,72 +444,81 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
 
   // write image data into PostScript file.
   const int linesize = 72;
-
   // extract RGB data from pixel value and write it to output file
-  for (int j = 0; j < new_height;j++)
-  {
-    int countrow = 0;
-    for (int i = 0; i < new_width; i++)
+  for( int j = 0; j < new_height; j++ )
     {
-      for (int c = 0; c < bytes_per_pixel; ++c)
+    int countrow = 0;
+    for( int i = 0; i < new_width; i++ )
       {
+      for( int c = 0; c < bytes_per_pixel; ++c )
+        {
         // get RGB hex index.
         int index;
 
-        if (reduction_factor == 1)
-          index = int(*(data + (sizex*j+i) * bytes_per_pixel + c));
+        if( reduction_factor == 1 )
+          {
+          index = int(*(data + (sizex * j + i) * bytes_per_pixel + c) );
+          }
         else // Reduce image if necessary
-        {
-          int pixel_number= (sizex*j+i) * bytes_per_pixel * reduction_factor + c;
-          index=0;
-          int number_of_pixels_sampled=0;
-          for (int m=0; m < reduction_factor;m++)
-            for (int n=0; n < reduction_factor;n++)
-              if (i*reduction_factor+m < sizex && j*reduction_factor+n < sizey)
+          {
+          int pixel_number = (sizex * j + i) * bytes_per_pixel * reduction_factor + c;
+          index = 0;
+          int number_of_pixels_sampled = 0;
+          for( int m = 0; m < reduction_factor; m++ )
+            {
+            for( int n = 0; n < reduction_factor; n++ )
               {
-                index += int(*(data+(pixel_number+(m+n*sizex)*bytes_per_pixel)));
+              if( i * reduction_factor + m < sizex && j * reduction_factor + n < sizey )
+                {
+                index += int(*(data + (pixel_number + (m + n * sizex) * bytes_per_pixel) ) );
                 ++number_of_pixels_sampled;
+                }
               }
-          index/=number_of_pixels_sampled;  // average the pixel intensity
-        }
+            }
+          index /= number_of_pixels_sampled;  // average the pixel intensity
+          }
 
         // write RGC hex.
-        if (in_range(index))
-        {
-          char pixel[3];
+        if( in_range(index) )
+          {
+          char          pixel[3];
           unsigned char low4 = (unsigned char)  (index & 0x000f);
-          unsigned char high4 = (unsigned char) ((index & 0x00f0) >> 4);
+          unsigned char high4 = (unsigned char) ( (index & 0x00f0) >> 4);
           pixel[0] = Hex4bit(high4);
           pixel[1] = Hex4bit(low4);
           pixel[2] = '\0';
           output_filestream << pixel;
-        }
+          }
         else
+          {
           vcl_cout << " index out of range: " << index << '\n';
+          }
 
-        countrow+=2;
-        if (countrow >= linesize)
-        {
+        countrow += 2;
+        if( countrow >= linesize )
+          {
           countrow = 0;
           output_filestream << '\n';
+          }
         }
       }
-    }
     output_filestream << '\n';
-  }
+    }
 
   output_filestream << "% stop using temporary dictionary\nend\n\n"
                     << "% restore original state\norigstate restore\n\n";
 }
 
-//-----------------------------------------------------------------------------
-//: Set graphic coordinate (translate and rotate to local coordinate).
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Set graphic coordinate (translate and rotate to local coordinate).
+// -----------------------------------------------------------------------------
 void vul_psfile::graphic_header()
 {
-  if (printer_paper_orientation == vul_psfile::LANDSCAPE)
+  if( printer_paper_orientation == vul_psfile::LANDSCAPE )
+    {
     output_filestream << "% print in landscape mode\n90 rotate 0 "
-                      << int(-psizey*PIX2INCH) << " translate\n\n";
+                      << int(-psizey * PIX2INCH) << " translate\n\n";
+    }
 
   output_filestream.flush();
   // save streampos so we can come back and modify it.
@@ -491,19 +527,21 @@ void vul_psfile::graphic_header()
   object_translate_and_scale();
 }
 
-//-----------------------------------------------------------------------------
-//: Set Image translate and scale.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Set Image translate and scale.
+// -----------------------------------------------------------------------------
 void vul_psfile::image_translate_and_scale()
 {
-  int scale_height = int(height* scale_y);
+  int scale_height = int(height * scale_y);
   int scale_min_x  = int(min_x * scale_x);
   int scale_max_y  = int(max_y * scale_y);
 
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "vul_psfile::image_translate_and_scale, scale_height= "
              << scale_height << ", scale_min_x = " << scale_min_x
              << ", scale_max_y = " << scale_max_y << '\n';
+    }
 
   output_filestream << vcl_setw(6) << ox - scale_min_x << ' '
                     << vcl_setw(6) << oy + scale_max_y - scale_height << " translate\n"
@@ -512,14 +550,15 @@ void vul_psfile::image_translate_and_scale()
                     << vcl_setw(9) << ihf << " scale\n\n";
 }
 
-//-----------------------------------------------------------------------------
-//: Set object translate and scale.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Set object translate and scale.
+// -----------------------------------------------------------------------------
 void vul_psfile::object_translate_and_scale()
 {
   int scale_height = int(box_height * scale_y);
   int scale_min_x  = int(min_x * scale_x);
   int scale_min_y  = int(min_y * scale_y);
+
   // round to integer .01ths
   scale_x = vcl_floor(scale_x * 100.0f + 0.5f) * .01f;
   scale_y = vcl_floor(scale_y * 100.0f + 0.5f) * .01f;
@@ -531,33 +570,33 @@ void vul_psfile::object_translate_and_scale()
                     << "/originalCTM matrix currentmatrix def\n";
 }
 
-//-----------------------------------------------------------------------------
-//: Set ox, oy , iw, ih, iwf, ihf parameters for PostScript file use.
-//-----------------------------------------------------------------------------
-bool vul_psfile::set_parameters(int sizex,int sizey)
+// -----------------------------------------------------------------------------
+// : Set ox, oy , iw, ih, iwf, ihf parameters for PostScript file use.
+// -----------------------------------------------------------------------------
+bool vul_psfile::set_parameters(int sizex, int sizey)
 {
   width = sizex;
   height = sizey;
   // avoid division by 0 or other fancy things later on:
-  assert (width > 0 && height > 0);
+  assert(width > 0 && height > 0);
 
-  set_min_max_xy(0,0);
-  set_min_max_xy(width,height);
+  set_min_max_xy(0, 0);
+  set_min_max_xy(width, height);
   compute_bounding_box();
 
   return true;
 }
 
-//-----------------------------------------------------------------------------
-//: PostScript file header.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : PostScript file header.
+// -----------------------------------------------------------------------------
 void vul_psfile::postscript_header()
 {
-  if (header_pos != HEADER_START)
-  {
+  if( header_pos != HEADER_START )
+    {
     vcl_cerr << "vul_psfile: Header already set to " << long(header_pos) << '\n';
     return;
-  }
+    }
 
   output_filestream
     << "%!PS-Adobe-2.0 EPSF-2.0\n%%Title: " << filename.c_str()
@@ -567,30 +606,33 @@ void vul_psfile::postscript_header()
   reset_postscript_header();
 }
 
-
-//-----------------------------------------------------------------------------
-//: Reset PostScript header file
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Reset PostScript header file
+// -----------------------------------------------------------------------------
 void vul_psfile::reset_postscript_header()
 {
-  if (printer_paper_orientation == vul_psfile::LANDSCAPE)
+  if( printer_paper_orientation == vul_psfile::LANDSCAPE )
+    {
     output_filestream
-       << vcl_setw(6) << int(pos_iny*PIX2INCH+0.5) << ' '
-       << vcl_setw(6) << int(pos_inx*PIX2INCH+0.5) << ' '
-       << vcl_setw(6) << int(pos_iny*PIX2INCH+0.5)+ih << ' '
-       << vcl_setw(6) << int(pos_inx*PIX2INCH+0.5)+iw << '\n';
+      << vcl_setw(6) << int(pos_iny * PIX2INCH + 0.5) << ' '
+      << vcl_setw(6) << int(pos_inx * PIX2INCH + 0.5) << ' '
+      << vcl_setw(6) << int(pos_iny * PIX2INCH + 0.5) + ih << ' '
+      << vcl_setw(6) << int(pos_inx * PIX2INCH + 0.5) + iw << '\n';
+    }
   else
+    {
     output_filestream
-       << vcl_setw(6) << ox << ' '
-       << vcl_setw(6) << oy << ' '
-       << vcl_setw(6) << ox+iw << ' '
-       << vcl_setw(6) << oy+ih << '\n';
+      << vcl_setw(6) << ox << ' '
+      << vcl_setw(6) << oy << ' '
+      << vcl_setw(6) << ox + iw << ' '
+      << vcl_setw(6) << oy + ih << '\n';
+    }
   output_filestream << "%%Pages: 1\n%%DocumentFonts:\n%%EndComments\n";
 }
 
-//-----------------------------------------------------------------------------
-//: Utility program used in point(), line(), ellipse() and circle()
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Utility program used in point(), line(), ellipse() and circle()
+// -----------------------------------------------------------------------------
 void vul_psfile::sobj_rgb_params(char const* obj_str, bool filled)
 {
   print_graphics_prolog();
@@ -599,17 +641,17 @@ void vul_psfile::sobj_rgb_params(char const* obj_str, bool filled)
     << fg_r << ' ' << fg_g << ' ' << fg_b << " SetCFg\n"
     << bg_r << ' ' << bg_g << ' ' << bg_b << " SetCBg\n"
     << line_width_ << " setlinewidth\n"
-    << (filled ? "0": "none") << " SetP %I p n\n";
+    << (filled ? "0" : "none") << " SetP %I p n\n";
 }
 
-//-----------------------------------------------------------------------------
-//:  Add a line between the given points to the Postscript file.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// :  Add a line between the given points to the Postscript file.
+// -----------------------------------------------------------------------------
 void vul_psfile::line(float x1, float y1, float x2, float y2)
 {
   // set up bounding box.
-  set_min_max_xy(x1,y1);
-  set_min_max_xy(x2,y2);
+  set_min_max_xy(x1, y1);
+  set_min_max_xy(x2, y2);
   compute_bounding_box();
 
   print_graphics_prolog();
@@ -619,13 +661,13 @@ void vul_psfile::line(float x1, float y1, float x2, float y2)
                     << int(x2) << ' ' << int(y2) << " Line\nEnd\n";
 }
 
-//-----------------------------------------------------------------------------
-//: Add a point at the given coordinates to the Postscript file.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Add a point at the given coordinates to the Postscript file.
+// -----------------------------------------------------------------------------
 void vul_psfile::point(float x, float y, float point_size)
 {
   print_graphics_prolog();
-  set_min_max_xy(x,y);
+  set_min_max_xy(x, y);
   compute_bounding_box();
 
   this->sobj_rgb_params("Point", true);
@@ -634,58 +676,64 @@ void vul_psfile::point(float x, float y, float point_size)
   output_filestream << x << ' ' << y << ' ' << point_size << ' ' << point_size << " Elli\nEnd\n";
 }
 
-//-----------------------------------------------------------------------------
-//: Add an ellipse to the Postscript file.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Add an ellipse to the Postscript file.
+// -----------------------------------------------------------------------------
 void vul_psfile::ellipse(float x, float y, float a_axis, float b_axis, int angle)
 {
-  #ifndef PI // should already be defined in math.h - PVR
-  #define PI 3.14159265358979323846
-  #endif
-  const double radsperdeg = PI/180.0;
+#ifndef PI   // should already be defined in math.h - PVR
+#  define PI 3.14159265358979323846
+#endif
+  const double radsperdeg = PI / 180.0;
 
-  set_min_max_xy(int(x+a_axis*vcl_cos(angle*radsperdeg) + 0.5),
-                 int(y+a_axis*vcl_sin(angle*radsperdeg) + 0.5) );
-  set_min_max_xy(int(x-a_axis*vcl_cos(angle*radsperdeg) + 0.5),
-                 int(y-a_axis*vcl_sin(angle*radsperdeg) + 0.5) );
+  set_min_max_xy(int(x + a_axis * vcl_cos(angle * radsperdeg) + 0.5),
+                 int(y + a_axis * vcl_sin(angle * radsperdeg) + 0.5) );
+  set_min_max_xy(int(x - a_axis * vcl_cos(angle * radsperdeg) + 0.5),
+                 int(y - a_axis * vcl_sin(angle * radsperdeg) + 0.5) );
   compute_bounding_box();
 
   print_graphics_prolog();
   sobj_rgb_params("Ellipse", false);
-  if (angle)
+  if( angle )
+    {
     output_filestream << (int)x << ' ' << (int)y << " translate\n"
                       << -angle << " rotate\n0 0 " << (int)a_axis << ' '
                       << (int)b_axis << " Elli\nEnd\n";
+    }
   else
+    {
     output_filestream << (int)x << ' ' << (int)y << ' '
                       << (int)a_axis << ' ' << (int)b_axis << " Elli\nEnd\n";
+    }
 }
 
-//-----------------------------------------------------------------------------
-//: Add a circle with the given centre point and radius to the Postscript file.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : Add a circle with the given centre point and radius to the Postscript file.
+// -----------------------------------------------------------------------------
 void vul_psfile::circle(float x, float y, float radius)
 {
   // set up bounding box
-  set_min_max_xy(x+radius,y);
-  set_min_max_xy(x-radius,y);
-  set_min_max_xy(x,y+radius);
-  set_min_max_xy(x,y-radius);
+  set_min_max_xy(x + radius, y);
+  set_min_max_xy(x - radius, y);
+  set_min_max_xy(x, y + radius);
+  set_min_max_xy(x, y - radius);
   compute_bounding_box();
 
   print_graphics_prolog();
   sobj_rgb_params("Circle", false);
-  ellipse(x,y,radius,radius);
+  ellipse(x, y, radius, radius);
   output_filestream << "End\n";
 }
 
-//-----------------------------------------------------------------------------
-//: the defined procedure for PostScript script use.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// : the defined procedure for PostScript script use.
+// -----------------------------------------------------------------------------
 void vul_psfile::print_graphics_prolog()
 {
-  if (graphics_prolog_exists)
+  if( graphics_prolog_exists )
+    {
     return;
+    }
   exist_objs = true;
   output_filestream
     << "\n\n%%BeginTargetjrPrologue\n"
@@ -900,7 +948,8 @@ void vul_psfile::print_graphics_prolog()
     << "    bgred bggreen bgblue setrgbcolor\n"
     << "    eofill\n"
     << "    fgred fggreen fgblue setrgbcolor\n"
-    << "    w 0 gt h 0 gt and { l w add b translate w neg h scale w h true [w 0 0 h neg 0 h] { patternproc } imagemask } if\n"
+    <<
+  "    w 0 gt h 0 gt and { l w add b translate w neg h scale w h true [w 0 0 h neg 0 h] { patternproc } imagemask } if\n"
     << "  } ifelse\n"
     << "  grestore\n"
     << "  end\n"
@@ -942,7 +991,8 @@ void vul_psfile::print_graphics_prolog()
     << "    /patternRow y patternByteWidth mul patternByteLength mod def\n"
     << "    /patternRowString patternString patternRow patternByteWidth getinterval def\n"
     << "    /imageRow y imageByteWidth mul def\n"
-    << "    0 patternByteWidth imageByteWidth 1 sub { /x exch def imageString imageRow x add patternRowString putinterval } for\n"
+    <<
+  "    0 patternByteWidth imageByteWidth 1 sub { /x exch def imageString imageRow x add patternRowString putinterval } for\n"
     << "  } for\n"
     << "  imageString\n"
     << "  end\n"
@@ -1027,10 +1077,12 @@ void vul_psfile::print_graphics_prolog()
 
 void vul_psfile::done()
 {
-  if (debug) vcl_cout << "vul_psfile::done\n";
+  if( debug ) {vcl_cout << "vul_psfile::done\n"; }
   doneps = true;
-  if (graphics_prolog_exists)
+  if( graphics_prolog_exists )
+    {
     output_filestream << "end % TargetjrDict\n";
+    }
 
   output_filestream << "showpage\n%%Trailer\n";
 }

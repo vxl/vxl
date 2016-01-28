@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \author J.L. Mundy
 // \date 10/12/14
@@ -23,31 +23,31 @@ void test_filter()
 
   // Set up the scenes
   //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/putin_face/";
-        //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
-        //  vcl_string source_scene_path = base_dir_path + "filter_source_scene.xml";
+  //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
+  //  vcl_string source_scene_path = base_dir_path + "filter_source_scene.xml";
   //  vcl_string temp_scene_path = base_dir_path + "filter_temp_scene.xml";
-        vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
-        vcl_string source_scene_path = base_dir_path + "eye.xml";
-  if(!vul_file::exists(source_scene_path))
-  {
-      vcl_cout<<"One or both of the secene files do not exist"<<vcl_endl;
-      return;
-  }
+  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
+  vcl_string source_scene_path = base_dir_path + "eye.xml";
+
+  if( !vul_file::exists(source_scene_path) )
+    {
+    vcl_cout << "One or both of the secene files do not exist" << vcl_endl;
+    return;
+    }
   boxm2_scene_sptr source_scene = new boxm2_scene(source_scene_path);
   //  boxm2_scene_sptr temp_scene = new boxm2_scene(temp_scene_path);
   boxm2_scene_sptr temp_scene = source_scene->clone_no_disk();
   boxm2_lru_cache::create(source_scene);
 
-  bocl_manager_child &mgr = bocl_manager_child::instance();
-  unsigned gpu_idx = 1; //on JLM's alienware
-  bocl_device_sptr device = mgr.gpus_[gpu_idx];
+  bocl_manager_child &    mgr = bocl_manager_child::instance();
+  unsigned                gpu_idx = 1; // on JLM's alienware
+  bocl_device_sptr        device = mgr.gpus_[gpu_idx];
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
-  boxm2_vecf_ocl_filter f(source_scene, temp_scene, opencl_cache);
-  vcl_vector<float> coefs(8,0.125f);
-  coefs[0]=0.25f;   coefs[7]=0.0f;
+  boxm2_vecf_ocl_filter   f(source_scene, temp_scene, opencl_cache);
+  vcl_vector<float>       coefs(8, 0.125f);
+  coefs[0] = 0.25f;   coefs[7] = 0.0f;
   f.filter(coefs, 3);
 
 }
 
 TESTMAIN( test_filter );
-

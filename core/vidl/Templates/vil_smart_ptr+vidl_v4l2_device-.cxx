@@ -1,8 +1,10 @@
 #include <vil/vil_smart_ptr.txx>
 #include <vidl/vidl_config.h>
 #if VIDL_HAS_VIDEODEV2
-#include <vidl/vidl_v4l2_device.h>
+#  include <vidl/vidl_v4l2_device.h>
 #else
-struct vidl_v4l2_device { void ref() {} void unref() {} }; // dummy class
+struct vidl_v4l2_device { void ref() {}
+                          void unref() {}
+                          };                               // dummy class
 #endif
 VIL_SMART_PTR_INSTANTIATE(vidl_v4l2_device);

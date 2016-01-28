@@ -8,7 +8,7 @@
 
 int main()
 {
-  vcl_complex<double> c(3.0,4.0);
+  vcl_complex<double>              c(3.0, 4.0);
   vnl_vector<vcl_complex<double> > equation(2);
   // although the equation has three coefficients (1 for x^2, 0 for x and -c
   // as the constant coefficient), the highest order coefficient must always
@@ -19,7 +19,7 @@ int main()
   vcl_cout << "One square root of 3+4i is " << r.solns[0]
            << "\nThe other square root is " << r.solns[1] << vcl_endl;
 
-  vcl_complex<double> c4(-7.0,24.0);
+  vcl_complex<double>              c4(-7.0, 24.0);
   vnl_vector<vcl_complex<double> > eq(4);
   eq[0] = eq[1] = eq[2] = 0; eq[3] = -c4;
   vnl_cpoly_roots r4(eq);

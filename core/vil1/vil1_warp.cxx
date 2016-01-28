@@ -1,6 +1,6 @@
 // This is core/vil1/vil1_warp.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
 
 #include "vil1_warp.h"
@@ -22,26 +22,33 @@ vil1_image vil1_warp(vil1_image const& in, vil1_warp_mapping const& mapper,
   int ow = out_width  < 0 ? in.width()  : out_width;
   int oh = out_height < 0 ? in.height() : out_height;
 
-  if (vil1_pixel_format(in) == VIL1_BYTE) {
+  if( vil1_pixel_format(in) == VIL1_BYTE )
+    {
     vil1_memory_image_of<unsigned char> inimg(in);
     vil1_memory_image_of<unsigned char> outimg(ow, oh);
     vil1_warp_output_driven(inimg, outimg, mapper, i);
     return outimg;
 
-  } else if (vil1_pixel_format(in) == VIL1_RGB_BYTE) {
+    }
+  else if( vil1_pixel_format(in) == VIL1_RGB_BYTE )
+    {
     vil1_memory_image_of<vil1_rgb<unsigned char> > inimg(in);
     vil1_memory_image_of<vil1_rgb<unsigned char> > outimg(ow, oh);
     vil1_warp_output_driven(inimg, outimg, mapper, i);
     return outimg;
 
-  } else if (vil1_pixel_format(in) == VIL1_DOUBLE) {
+    }
+  else if( vil1_pixel_format(in) == VIL1_DOUBLE )
+    {
     vil1_memory_image_of<double> inimg(in);
     vil1_memory_image_of<double> outimg(ow, oh);
     vil1_warp_output_driven(inimg, outimg, mapper, i);
     return outimg;
 
-  } else {
+    }
+  else
+    {
     assert(0);
     return vil1_image();
-  }
+    }
 }

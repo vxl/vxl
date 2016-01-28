@@ -2,9 +2,9 @@
 #ifndef vil1_open_h_
 #define vil1_open_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief make a vil1_stream from a filename, an URL, etc.
 //
@@ -12,10 +12,10 @@
 //
 // \verbatim
 //  Modifications
-//\endverbatim
+// \endverbatim
 
 #include <vil1/vil1_stream.h>
 
-vil1_stream *vil1_open(char const* what, char const* how = "r");
+vil1_stream * vil1_open(char const* what, char const* how = "r");
 
 #endif // vil1_open_h_

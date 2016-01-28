@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_io );
 DECLARE( test_update_dist_image );
 #if 0
@@ -17,6 +16,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-
-

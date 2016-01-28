@@ -8,14 +8,14 @@
 
 static void test_segmentation(int argc, char * argv[])
 {
-  vil_image_view<vxl_byte> img(4,4);
-  img.fill(0); img(1,2) = 255;  img(2,2) = 255;
+  vil_image_view<vxl_byte> img(4, 4);
+  img.fill(0); img(1, 2) = 255;  img(2, 2) = 255;
   vil_image_view<vil_rgb<vxl_byte> > out_img;
   sdet_segment_img<vxl_byte>(img, 1, 8, (vxl_byte)100, 0, 0, out_img);
-  TEST("out img pix 0 is not the same as pix 1", out_img(1,1) != out_img(1,2), true);
-  TEST("out img pix 0 is not the same as pix 1", out_img(1,1) == out_img(2,1), true);
-  TEST("out img pix 0 is not the same as pix 1", out_img(2,2) != out_img(2,1), true);
-  TEST("out img pix 0 is not the same as pix 1", out_img(2,2) == out_img(1,2), true);
+  TEST("out img pix 0 is not the same as pix 1", out_img(1, 1) != out_img(1, 2), true);
+  TEST("out img pix 0 is not the same as pix 1", out_img(1, 1) == out_img(2, 1), true);
+  TEST("out img pix 0 is not the same as pix 1", out_img(2, 2) != out_img(2, 1), true);
+  TEST("out img pix 0 is not the same as pix 1", out_img(2, 2) == out_img(1, 2), true);
   /*
   vcl_string image_path = ".\\beach.png";
   vcl_cout << "Loading Image " << image_path << '\n';

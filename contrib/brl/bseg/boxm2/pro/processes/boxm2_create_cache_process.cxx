@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_create_cache_process.cxx
-//:
+// :
 // \file
 // \brief  A process for creating cache.
 //
@@ -14,24 +14,23 @@
 #include <boxm2/io/boxm2_lru_cache1.h>
 #include <boxm2/io/boxm2_nn_cache.h>
 
-
 namespace boxm2_create_cache1_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 1;
 }
 bool boxm2_create_cache1_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_cache1_process_globals;
 
-  //process takes 1 input
+  // process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "bool";
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "boxm2_cache_sptr";
   brdb_value_sptr idx = new brdb_value_t<bool>(true);
   pro.set_input(2, idx);
@@ -42,38 +41,43 @@ bool boxm2_create_cache1_process(bprb_func_process& pro)
 {
   using namespace boxm2_create_cache1_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  boxm2_scene_sptr scene= pro.get_input<boxm2_scene_sptr>(i++);
-  vcl_string cache_type= pro.get_input<vcl_string>(i++);
-  bool islocal= pro.get_input<bool>(i++);
-  if(cache_type=="lru")
-  {
-      vcl_cout<<"Create Cache"<<vcl_endl;
-      if(!islocal)
-          boxm2_lru_cache1::create(scene,HDFS);
-      else
-          boxm2_lru_cache1::create(scene,LOCAL);
+    }
+  // get the inputs
+  unsigned         i = 0;
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+  vcl_string       cache_type = pro.get_input<vcl_string>(i++);
+  bool             islocal = pro.get_input<bool>(i++);
+  if( cache_type == "lru" )
+    {
+    vcl_cout << "Create Cache" << vcl_endl;
+    if( !islocal )
+      {
+      boxm2_lru_cache1::create(scene, HDFS);
+      }
+    else
+      {
+      boxm2_lru_cache1::create(scene, LOCAL);
+      }
 
-  }
-  else if (cache_type=="nn")
-  {
-     // boxm2_nn_cache::create(scene);
+    }
+  else if( cache_type == "nn" )
+    {
+    // boxm2_nn_cache::create(scene);
 
-      return false;
-  }
+    return false;
+    }
   else
-  {
+    {
     return false;
-  }
-  i=0;
+    }
+  i = 0;
 
   // store scene smaprt pointer
-  pro.set_output_val<boxm2_cache1_sptr>(i++, boxm2_cache1::instance());
+  pro.set_output_val<boxm2_cache1_sptr>(i++, boxm2_cache1::instance() );
   return true;
 }
 
@@ -82,21 +86,21 @@ bool boxm2_create_cache1_process(bprb_func_process& pro)
 
 namespace boxm2_create_cache_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 1;
 }
 bool boxm2_create_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_create_cache_process_globals;
 
-  //process takes 3 inputs
+  // process takes 3 inputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";
   input_types_[2] = "bool";
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "boxm2_cache_sptr";
   brdb_value_sptr idx = new brdb_value_t<bool>(true);
   pro.set_input(2, idx);
@@ -107,38 +111,42 @@ bool boxm2_create_cache_process(bprb_func_process& pro)
 {
   using namespace boxm2_create_cache_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  boxm2_scene_sptr scene= pro.get_input<boxm2_scene_sptr>(i++);
-  vcl_string cache_type= pro.get_input<vcl_string>(i++);
-  bool islocal= pro.get_input<bool>(i++);
-  if(cache_type=="lru")
-  {
-      vcl_cout<<"Create Cache"<<vcl_endl;
-      if(!islocal)
-          boxm2_lru_cache::create(scene,HDFS);
-      else
-          boxm2_lru_cache::create(scene,LOCAL);
+    }
+  // get the inputs
+  unsigned         i = 0;
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+  vcl_string       cache_type = pro.get_input<vcl_string>(i++);
+  bool             islocal = pro.get_input<bool>(i++);
+  if( cache_type == "lru" )
+    {
+    vcl_cout << "Create Cache" << vcl_endl;
+    if( !islocal )
+      {
+      boxm2_lru_cache::create(scene, HDFS);
+      }
+    else
+      {
+      boxm2_lru_cache::create(scene, LOCAL);
+      }
 
-  }
-  else if (cache_type=="nn")
-  {
-     // boxm2_nn_cache::create(scene);
+    }
+  else if( cache_type == "nn" )
+    {
+    // boxm2_nn_cache::create(scene);
 
-      return false;
-  }
+    return false;
+    }
   else
-  {
+    {
     return false;
-  }
-  i=0;
+    }
+  i = 0;
 
   // store scene smaprt pointer
-  pro.set_output_val<boxm2_cache_sptr>(i++, boxm2_cache::instance());
+  pro.set_output_val<boxm2_cache_sptr>(i++, boxm2_cache::instance() );
   return true;
 }
-

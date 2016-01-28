@@ -1,7 +1,7 @@
 #ifndef rrel_trunc_quad_obj_h_
 #define rrel_trunc_quad_obj_h_
 
-//:
+// :
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \author Amitha Perera (perera@cs.rpi.edu)
@@ -9,7 +9,7 @@
 
 #include <rrel/rrel_m_est_obj.h>
 
-//: Truncated quadratic robust loss function.
+// : Truncated quadratic robust loss function.
 //  The objective function for the truncated quadratic M-estimator is
 //  \f[
 //    \rho(u) =
@@ -28,30 +28,30 @@
 
 class rrel_trunc_quad_obj : public rrel_m_est_obj
 {
- public:
-  //: Constructor.
+public:
+  // : Constructor.
   //  \a scale_mult * scale is the truncation threshold.
   rrel_trunc_quad_obj( double scale_mult = 2.0 );
 
-  //: Destructor.
+  // : Destructor.
   virtual ~rrel_trunc_quad_obj();
 
-  //: The robust loss function for the M-estimator.
+  // : The robust loss function for the M-estimator.
   virtual double rho( double u ) const;
 
-  //: The robust loss function for the M-estimator.
+  // : The robust loss function for the M-estimator.
   //  Overriding the overloaded version rho(u) hides the superclass'
   //  implementation of this version of rho(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
   virtual double rho( double r, double s ) const
-    { return rrel_m_est_obj::rho(r, s); }
+  { return rrel_m_est_obj::rho(r, s); }
 
-  //: The weight of the residual.
+  // : The weight of the residual.
   virtual double wgt( double u ) const;
 
-  //: Evaluate the objective function on heteroscedastic residuals.
+  // : Evaluate the objective function on heteroscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
@@ -59,9 +59,9 @@ class rrel_trunc_quad_obj : public rrel_m_est_obj
   virtual void wgt( vect_const_iter res_begin, vect_const_iter res_end,
                     vect_const_iter scale_begin,
                     vect_iter wgt_begin ) const
-    { rrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
+  { rrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
 
-  //: Computes the weights for homoscedastic residuals.
+  // : Computes the weights for homoscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
@@ -69,41 +69,40 @@ class rrel_trunc_quad_obj : public rrel_m_est_obj
   virtual void wgt( vect_const_iter begin, vect_const_iter end,
                     double scale,
                     vect_iter wgt_begin ) const
-    { rrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
+  { rrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
 
-  //: The weight of the residual.
+  // : The weight of the residual.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
   virtual double wgt( double r, double s ) const
-    { return rrel_m_est_obj::wgt(r, s); }
+  { return rrel_m_est_obj::wgt(r, s); }
 
-  //: Fast version of the wgt(u) computation.
+  // : Fast version of the wgt(u) computation.
   inline double wgt_fast( double u ) const;
 
-  //: Fast version of the rho(u) computation.
+  // : Fast version of the rho(u) computation.
   inline double rho_fast( double u ) const;
 
-
- private:
-  //: Squared threshold.
+private:
+  // : Squared threshold.
   double T_sqr_;
 };
-
 
 inline double
 rrel_trunc_quad_obj::rho_fast( double u ) const
 {
-  double u_sqr = u*u;
+  double u_sqr = u * u;
+
   return ( u_sqr < T_sqr_ ) ? u_sqr : T_sqr_;
 }
 
 inline double
 rrel_trunc_quad_obj::wgt_fast( double u ) const
 {
-  return ( u*u < T_sqr_ ) ? 1 : 0.0;
+  return ( u * u < T_sqr_ ) ? 1 : 0.0;
 }
 
 #endif // rrel_trunc_quad_obj_h_

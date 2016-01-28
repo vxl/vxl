@@ -1,6 +1,6 @@
 #ifndef vcl_atomic_count_gcc_x86_h_
 #define vcl_atomic_count_gcc_x86_h_
-//:
+// :
 // \file
 // \brief thread/SMP safe reference counter
 // \author www.boost.org
@@ -22,60 +22,59 @@
 
 class vcl_atomic_count
 {
- public:
+public:
 
-    explicit vcl_atomic_count( long v ) : value_( static_cast< int >( v ) ) {}
+  explicit vcl_atomic_count( long v ) : value_( static_cast<int>( v ) ) {}
 
-    void operator++()
+  void operator++()
+  {
+    __asm__
+    (
+      "lock\n\t"
+      "incl %0" :
+      "+m" ( value_ ) : // output (%0)
+      :                 // inputs
+      "cc"              // clobbers
+    );
+  }
+
+  long operator--()
+  {
+    return atomic_exchange_and_add( &value_, -1 ) - 1;
+  }
+
+  operator long() const
     {
-        __asm__
-        (
-            "lock\n\t"
-            "incl %0":
-            "+m"( value_ ): // output (%0)
-            : // inputs
-            "cc" // clobbers
-        );
+    return atomic_exchange_and_add( &value_, 0 );
     }
+private:
 
-    long operator--()
-    {
-        return atomic_exchange_and_add( &value_, -1 ) - 1;
-    }
+  vcl_atomic_count(vcl_atomic_count const &);
+  vcl_atomic_count & operator=(vcl_atomic_count const &);
 
-    operator long() const
-    {
-        return atomic_exchange_and_add( &value_, 0 );
-    }
+  mutable int value_;
+private:
 
- private:
+  static int atomic_exchange_and_add( int * pw, int dv )
+  {
+    // int r = *pw;
+    // *pw += dv;
+    // return r;
 
-    vcl_atomic_count(vcl_atomic_count const &);
-    vcl_atomic_count & operator=(vcl_atomic_count const &);
+    int r;
 
-    mutable int value_;
+    __asm__ __volatile__
+    (
+      "lock\n\t"
+      "xadd %1, %0" :
+      "+m" ( *pw ), "=r" ( r ) : // outputs (%0, %1)
+      "1" ( dv ) :               // inputs (%2 == %1)
+      "memory", "cc"             // clobbers
+    );
 
- private:
+    return r;
+  }
 
-    static int atomic_exchange_and_add( int * pw, int dv )
-    {
-        // int r = *pw;
-        // *pw += dv;
-        // return r;
-
-        int r;
-
-        __asm__ __volatile__
-        (
-            "lock\n\t"
-            "xadd %1, %0":
-            "+m"( *pw ), "=r"( r ): // outputs (%0, %1)
-            "1"( dv ): // inputs (%2 == %1)
-            "memory", "cc" // clobbers
-        );
-
-        return r;
-    }
 };
 
 #endif // #ifndef vcl_atomic_count_gcc_x86_h_

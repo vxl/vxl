@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 #include <testlib/testlib_test.h>
 #include <bhdfs/bhdfs_manager.h>
@@ -6,14 +6,16 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 
-//: Test bhdfs manager object
+// : Test bhdfs manager object
 void test_manager()
 {
-  if (!bhdfs_manager::exists())
+  if( !bhdfs_manager::exists() )
+    {
     bhdfs_manager::create(vcl_string("default"), 0);
+    }
 
   bhdfs_manager_sptr mins = bhdfs_manager::instance();
-  vcl_string cur_dir = mins->get_working_dir();
+  vcl_string         cur_dir = mins->get_working_dir();
   vcl_cout << "cur_dir " << cur_dir << vcl_endl;
   TEST("check manager opened FS fine ", mins->ok(), true);
 
@@ -24,10 +26,10 @@ void test_manager()
   TEST("open stream", fs->ok(), true);
 
   vcl_string buffer2 = "Hello, World!";
-  TEST("write to stream", fs->write(buffer2.c_str(), buffer2.length()), 13);
+  TEST("write to stream", fs->write(buffer2.c_str(), buffer2.length() ), 13);
   TEST("close stream", fs->close(), true);
 
-  //: create a local file
+  // : create a local file
   vcl_ofstream ofs("test2.txt", vcl_ios::out);
   ofs << "test\n";
   ofs.close();
@@ -37,8 +39,10 @@ void test_manager()
 
   vcl_vector<vcl_string> dir_list;
   TEST("get dir list", mins->get_dir_list(cur_dir + "/test", dir_list), true);
-  for (unsigned i = 0; i < dir_list.size(); i++)
+  for( unsigned i = 0; i < dir_list.size(); i++ )
+    {
     vcl_cout << dir_list[i] << vcl_endl;
+    }
   TEST("get dir list", dir_list.size() == 2, true);
   TEST("get dir list", dir_list[0].find("test2.txt") != vcl_string::npos, true);
   TEST("copy from hdfs", mins->copy_from_hdfs(dir_list[0], "."), true);

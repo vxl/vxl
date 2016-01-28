@@ -5,25 +5,23 @@
 IMPLEMENT_DYNAMIC_CLASS(wxVideoControlXmlHandler, wxXmlResourceHandler)
 
 wxVideoControlXmlHandler::wxVideoControlXmlHandler()
-: wxXmlResourceHandler()
+  : wxXmlResourceHandler()
 {
 }
 
-wxObject *wxVideoControlXmlHandler::DoCreateResource()
+wxObject * wxVideoControlXmlHandler::DoCreateResource()
 {
   wxVideoControl* panel =
-      new wxVideoControl(m_parentAsWindow,
-                         GetID(),
-                         GetPosition(), GetSize(),
-                         GetStyle(),
-                         GetName());
+    new wxVideoControl(m_parentAsWindow,
+                       GetID(),
+                       GetPosition(), GetSize(),
+                       GetStyle(),
+                       GetName() );
 
   return panel;
 }
 
-
-bool wxVideoControlXmlHandler::CanHandle(wxXmlNode *node)
+bool wxVideoControlXmlHandler::CanHandle(wxXmlNode * node)
 {
-  return IsOfClass(node, wxT("wxVideoControl"));
+  return IsOfClass(node, wxT("wxVideoControl") );
 }
-

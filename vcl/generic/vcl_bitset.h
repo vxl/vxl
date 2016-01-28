@@ -5,7 +5,7 @@
 
 // bitset
 #ifndef vcl_bitset
-#define vcl_bitset vcl_generic_bitset_STD :: bitset
+#  define vcl_bitset vcl_generic_bitset_STD::bitset
 #endif
 
 #endif // vcl_generic_bitset_h_

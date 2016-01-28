@@ -11,76 +11,73 @@
 #include <QLayout>
 #include <QFrame>
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void vgui_qt_window::setup_widget(int w, int h, const char* title)
 {
-   this->setWindowTitle(title);
-   this->resize(w,h);
+  this->setWindowTitle(title);
+  this->resize(w, h);
 
-   //QWidget* mainwidget = new QWidget(this);
+  // QWidget* mainwidget = new QWidget(this);
 
-   //Create a frame to store the GL widget
-   QFrame* frame = new QFrame (this);
-   QHBoxLayout* hlayout = new QHBoxLayout;
-   hlayout->setMargin(2);
-   frame->setLayout(hlayout);
-   frame->setFrameStyle (QFrame::Sunken | QFrame::StyledPanel);
+  // Create a frame to store the GL widget
+  QFrame*      frame = new QFrame(this);
+  QHBoxLayout* hlayout = new QHBoxLayout;
+  hlayout->setMargin(2);
+  frame->setLayout(hlayout);
+  frame->setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
 
-   //Create the GL widget and put it in the frame
-   adaptor = new vgui_qt_adaptor(frame);
-   hlayout->addWidget(adaptor);
+  // Create the GL widget and put it in the frame
+  adaptor = new vgui_qt_adaptor(frame);
+  hlayout->addWidget(adaptor);
 
-   setCentralWidget(frame);
+  setCentralWidget(frame);
 
-   vgui::out.rdbuf(statusbar.statusbuf);
+  vgui::out.rdbuf(statusbar.statusbuf);
 }
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 vgui_qt_window::vgui_qt_window(int w, int h, const char* title)
-:  QMainWindow(),
-   statusbar (this),
-   use_menubar(false),
-   use_statusbar(true)
+  :  QMainWindow(),
+  statusbar(this),
+  use_menubar(false),
+  use_statusbar(true)
 {
-   setup_widget(w, h, title);
+  setup_widget(w, h, title);
 }
 
-
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 vgui_qt_window::vgui_qt_window(int w, int h, const vgui_menu& menu, const char* title)
-:  QMainWindow(),
-   statusbar (this),
-   use_menubar(true),
-   use_statusbar(true)
+  :  QMainWindow(),
+  statusbar(this),
+  use_menubar(true),
+  use_statusbar(true)
 {
-   setup_widget(w, h, title);
-   set_menubar(menu);
+  setup_widget(w, h, title);
+  set_menubar(menu);
 }
 
-
-//--------------------------------------------------------------------------------
-void vgui_qt_window::set_menubar(const vgui_menu &menu)
+// --------------------------------------------------------------------------------
+void vgui_qt_window::set_menubar(const vgui_menu & menu)
 {
-   use_menubar = true;
-
-   for (unsigned int i=0; i < menu.size(); ++i)
-   {
-      if (menu[i].is_separator())
+  use_menubar = true;
+  for( unsigned int i = 0; i < menu.size(); ++i )
+    {
+    if( menu[i].is_separator() )
       {
-         menuBar()->addSeparator();
+      menuBar()->addSeparator();
       }
-      else if (menu[i].is_command())
+    else if( menu[i].is_command() )
       {
-         QAction* action = menuBar()->addAction(menu[i].name.c_str());
-         action->setShortcut(vgui_key_to_qt(menu[i].short_cut.key,
-                                            menu[i].short_cut.mod));
-         //commands_[action] = menu[i].cmnd;
+      QAction* action = menuBar()->addAction(menu[i].name.c_str() );
+      action->setShortcut(vgui_key_to_qt(menu[i].short_cut.key,
+                                         menu[i].short_cut.mod) );
+      // commands_[action] = menu[i].cmnd;
       }
-      else if (menu[i].is_submenu())
+    else if( menu[i].is_submenu() )
       {
-         vgui_qt_menu* qm = new vgui_qt_menu(*(menu[i].menu));
-         qm->setTitle(menu[i].name.c_str());
-         menuBar()->addMenu((QMenu*)qm);
+      vgui_qt_menu* qm = new vgui_qt_menu(*(menu[i].menu) );
+      qm->setTitle(menu[i].name.c_str() );
+      menuBar()->addMenu( (QMenu *)qm);
       }
-   }
+    }
 }

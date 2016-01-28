@@ -1,7 +1,7 @@
 // This is sdet/edge/sdet_edgemap_sptr.h
 #ifndef sdet_edgemap_sptr_h_
 #define sdet_edgemap_sptr_h_
-//:
+// :
 // \file
 // \brief Smart pointer to the edge map class
 // \author Amir Tamrakar

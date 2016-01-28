@@ -2,9 +2,9 @@
 #ifndef vnl_real_eigensystem_h_
 #define vnl_real_eigensystem_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Extract eigensystem of non-symmetric matrix M, using EISPACK
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -20,22 +20,21 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 
-//: Extract eigensystem of asymmetric matrix M, using the EISPACK routine
+// : Extract eigensystem of asymmetric matrix M, using the EISPACK routine
 //  vnl_eigensystem is a full-bore real eigensystem.  If your matrix
 //  is symmetric, it is \e much better to use \sa vnl_symmetric_eigensystem.
 
 class vnl_real_eigensystem
 {
- public:
+public:
   vnl_real_eigensystem(vnl_matrix<double> const& M);
-
- public:
+public:
   vnl_matrix<double> Vreal;
 
-  //: Output matrix of eigenvectors, which will in general be complex.
+  // : Output matrix of eigenvectors, which will in general be complex.
   vnl_matrix<vcl_complex<double> > V;
 
-  //: Output diagonal matrix of eigenvalues.
+  // : Output diagonal matrix of eigenvalues.
   vnl_diag_matrix<vcl_complex<double> > D;
 };
 

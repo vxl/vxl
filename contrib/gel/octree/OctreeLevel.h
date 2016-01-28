@@ -2,43 +2,43 @@
 #ifndef OctreeLevel_h_
 #define OctreeLevel_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author
 //     Geoffrey Cross, Oxford RRG, 11 May 99
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vbl/vbl_array_3d.h>
 
 class OctreeLevel
 {
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   OctreeLevel( const int = 0);
-  OctreeLevel( OctreeLevel *p);
+  OctreeLevel( OctreeLevel * p);
 
   // Data Access---------------------------------------------------------------
 
   int GetDepth() const { return depth; }
-  void SetNext( OctreeLevel *n) { next= n; }
+  void SetNext( OctreeLevel * n) { next = n; }
 
   // Data Control--------------------------------------------------------------
 
   void InheritFromAbove();
 
- protected:
+protected:
   // Data Members--------------------------------------------------------------
 
-  int depth;
-  int size;
+  int               depth;
+  int               size;
   vbl_array_3d<int> color;
 
-  OctreeLevel *next;
-  OctreeLevel *prev;
+  OctreeLevel * next;
+  OctreeLevel * prev;
 };
 
 #endif // OctreeLevel_h_

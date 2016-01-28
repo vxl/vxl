@@ -1,6 +1,6 @@
 #ifndef _HMatrix2DComputeLinear_h
 #define _HMatrix2DComputeLinear_h
-//:
+// :
 // \file
 //
 // HMatrix2DComputeLinear contains a linear method to calculate
@@ -20,13 +20,10 @@
 class HMatrix2DComputeLinear : public HMatrix2DCompute
 {
   bool allow_ideal_points_;
+protected:
+  bool compute_p(PointArray const &, PointArray const &, HMatrix2D* H);
 
- protected:
-  bool compute_p(PointArray const&,
-                 PointArray const&,
-                 HMatrix2D* H);
-
- public:
+public:
   HMatrix2DComputeLinear(bool allow_ideal_points = false);
   int minimum_number_of_correspondences() const { return 4; }
 };

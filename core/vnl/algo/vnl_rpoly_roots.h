@@ -2,9 +2,9 @@
 #ifndef vnl_rpoly_roots_h_
 #define vnl_rpoly_roots_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 //  \file
 //  \brief Finds roots of a real polynomial
 //  \author  Andrew W. Fitzgibbon, Oxford RRG
@@ -23,7 +23,7 @@
 
 class vnl_real_polynomial;
 
-//: Find the roots of a real polynomial.
+// : Find the roots of a real polynomial.
 //  Uses algorithm 493 from
 //  ACM Trans. Math. Software - the Jenkins-Traub algorithm, described
 //  by Numerical Recipes under "Other sure-fire techniques" as
@@ -35,10 +35,10 @@ class vnl_real_polynomial;
 
 class vnl_rpoly_roots
 {
- public:
+public:
 // Constructors/Destructors--------------------------------------------------
 
-  //: The constructor calculates the roots.
+  // : The constructor calculates the roots.
   // This is the most efficient interface
   // as all the result variables are initialized to the correct size.
   // The polynomial is $ a[0] x^d + a[1] x^{d-1} + \cdots + a[d] = 0 $.
@@ -48,46 +48,46 @@ class vnl_rpoly_roots
 
   vnl_rpoly_roots(const vnl_vector<double>& a);
 
-  //: Calculate roots of a vnl_real_polynomial. Same comments apply.
+  // : Calculate roots of a vnl_real_polynomial. Same comments apply.
   vnl_rpoly_roots(const vnl_real_polynomial& poly);
 
   // Operations----------------------------------------------------------------
 
-  //: Return i'th complex root
-  vcl_complex<double> operator [] (int i) const { return vcl_complex<double>(r_[i], i_[i]); }
+  // : Return i'th complex root
+  vcl_complex<double> operator [](int i) const { return vcl_complex<double>(r_[i], i_[i]); }
 
-  //: Complex vector of all roots.
+  // : Complex vector of all roots.
   vnl_vector<vcl_complex<double> > roots() const;
 
-  //: Real part of root I.
-  const double& real(int i) const { return r_[i]; }
+  // : Real part of root I.
+  const double & real(int i) const { return r_[i]; }
 
-  //: Imaginary part of root I.
-  const double& imag(int i) const { return i_[i]; }
+  // : Imaginary part of root I.
+  const double & imag(int i) const { return i_[i]; }
 
-  //: Vector of real parts of roots
-  vnl_vector<double>& real() { return r_; }
+  // : Vector of real parts of roots
+  vnl_vector<double> & real() { return r_; }
 
-  //: Vector of imaginary parts of roots
-  vnl_vector<double>& imag() { return i_; }
+  // : Vector of imaginary parts of roots
+  vnl_vector<double> & imag() { return i_; }
 
-  //: Return real roots only.
+  // : Return real roots only.
   //  Roots are real if the absolute value of their imaginary part is less than
   //  the optional argument TOL. TOL defaults to 1e-12 [untested]
   vnl_vector<double> realroots(double tol = 1e-12) const;
 
   // Computations--------------------------------------------------------------
 
-  //: Compute roots using Jenkins-Traub algorithm.
+  // : Compute roots using Jenkins-Traub algorithm.
   bool compute();
 
-  //: Compute roots using QR decomposition of companion matrix. [unimplemented]
+  // : Compute roots using QR decomposition of companion matrix. [unimplemented]
   bool compute_qr();
 
-  //: Compute roots using Laguerre algorithm. [unimplemented]
+  // : Compute roots using Laguerre algorithm. [unimplemented]
   bool compute_laguerre();
 
- protected:
+protected:
   // Data Members--------------------------------------------------------------
   vnl_vector<double> coeffs_;
 

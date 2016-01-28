@@ -1,6 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/util/bvpl_visualize_corner_pairs_process.cxx
 
-//:
+// :
 // \file
 // \brief A process to find corner pairs that are 90-rotated
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -25,11 +25,11 @@
 
 namespace bvpl_visualize_corner_pairs_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 5;
+const unsigned n_outputs_ = 0;
 }
 
-//:
+// :
 // Inputs:
 // * input[0]: The vector of corner pairs
 // * input[1]: The index of lines to be displayed
@@ -37,12 +37,11 @@ namespace bvpl_visualize_corner_pairs_process_globals
 // * input[3]: A flag to write vrml header and delete previous file or add info
 // * input[4]: Hue value for the lines -a float in [0 1]
 
-
 bool bvpl_visualize_corner_pairs_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_visualize_corner_pairs_process_globals;
 
-  //process takes 5 inputs but has no outputs
+  // process takes 5 inputs but has no outputs
   vcl_vector<vcl_string> input_types_(n_inputs_);
   vcl_vector<vcl_string> output_types_(n_outputs_);
   input_types_[0] = "bvpl_corner_pairs_sptr";
@@ -58,42 +57,49 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
 {
   using namespace bvpl_visualize_corner_pairs_process_globals;
 
-  if (pro.n_inputs() != n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() != n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
-  unsigned i = 0;
-  bvpl_corner_pairs_sptr pairs =pro.get_input<bvpl_corner_pairs_sptr>(i++);
+  // get inputs:
+  unsigned               i = 0;
+  bvpl_corner_pairs_sptr pairs = pro.get_input<bvpl_corner_pairs_sptr>(i++);
 #if 0
   unsigned lines_id =
 #endif
-                         pro.get_input<unsigned>(i++);
+  pro.get_input<unsigned>(i++);
   vcl_string vrml_path = pro.get_input<vcl_string>(i++);
-  bool write_header    = pro.get_input<bool>(i++);
-  float hue            = pro.get_input<float>(i++)*360.0f;
+  bool       write_header    = pro.get_input<bool>(i++);
+  float      hue            = pro.get_input<float>(i++) * 360.0f;
 
   vcl_ofstream os;
 
-  if (write_header) {
-    if (vul_file::exists(vrml_path.c_str()))
-      vpl_unlink(vrml_path.c_str());
+  if( write_header )
+    {
+    if( vul_file::exists(vrml_path.c_str() ) )
+      {
+      vpl_unlink(vrml_path.c_str() );
+      }
     os.open(vrml_path.c_str(), vcl_ios::out);
     bvrml_write::write_vrml_header(os);
-  }
-  else {
+    }
+  else
+    {
     os.open(vrml_path.c_str(), vcl_ios::app);
-  }
-   float r, g, b;
-   vil_colour_space_HSV_to_RGB<float>(hue,1.0f,255.0f,&r,&g,&b);
+    }
+  float r, g, b;
+  vil_colour_space_HSV_to_RGB<float>(hue, 1.0f, 255.0f, &r, &g, &b);
 #if 0
-   for (unsigned j=0; j<pairs->pairs_[lines_id].size(); ++j)
-     bvrml_write::write_vrml_line_segment(os, pairs->pairs_[lines_id][j],r/255.0,g/255.0,b/255.0,0);
-
-   for (unsigned j=0; j<pairs->boxes_[lines_id].size(); ++j)
-     bvxm_vrml_voxel_grid::write_vrml_box(os, pairs->boxes_[lines_id][j],r/255.0,g/255.0,b/255.0,0.9);
+  for( unsigned j = 0; j < pairs->pairs_[lines_id].size(); ++j )
+    {
+    bvrml_write::write_vrml_line_segment(os, pairs->pairs_[lines_id][j], r / 255.0, g / 255.0, b / 255.0, 0);
+    }
+  for( unsigned j = 0; j < pairs->boxes_[lines_id].size(); ++j )
+    {
+    bvxm_vrml_voxel_grid::write_vrml_box(os, pairs->boxes_[lines_id][j], r / 255.0, g / 255.0, b / 255.0, 0.9);
+    }
 #endif // 0
 
   return true;

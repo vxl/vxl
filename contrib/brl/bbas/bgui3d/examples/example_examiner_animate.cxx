@@ -16,16 +16,17 @@
 // scene graph with animation in vgui.
 
 // Construct a simple scene
-void buildScene(SoGroup *root)
+void buildScene(SoGroup * root)
 {
-  SoRotationXYZ *myRotXYZ = new SoRotationXYZ;
+  SoRotationXYZ * myRotXYZ = new SoRotationXYZ;
+
   root->addChild(myRotXYZ);
   myRotXYZ->axis = SoRotationXYZ::X;
-  SoElapsedTime *myCounter = new SoElapsedTime;
+  SoElapsedTime * myCounter = new SoElapsedTime;
   myRotXYZ->angle.connectFrom(&myCounter->timeOut);
 
   // Add a red material
-  SoMaterial *myMaterial = new SoMaterial;
+  SoMaterial * myMaterial = new SoMaterial;
   myMaterial->diffuseColor.setValue(1.0f, 0.0f, 0.0f);  // Red
   root->addChild(myMaterial);
 
@@ -33,8 +34,7 @@ void buildScene(SoGroup *root)
   root->addChild(new SoCone);
 }
 
-
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
   // initialize vgui
   vgui::init(argc, argv);
@@ -43,7 +43,7 @@ int main(int argc, char** argv)
   bgui3d_init();
 
   // create the scene graph root
-  SoSeparator *root = new SoSeparator;
+  SoSeparator * root = new SoSeparator;
   root->ref();
   buildScene(root);
 

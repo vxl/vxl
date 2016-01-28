@@ -1,4 +1,4 @@
-//: Aug 17, 2005 added by MingChing Chang
+// : Aug 17, 2005 added by MingChing Chang
 
 #ifndef mesh_tri_
 #define mesh_tri_
@@ -18,22 +18,21 @@
 /** whatever your own Vector implementation might be.           **/
 /*****************************************************************/
 
-
 #include <vcl_vector.h>  // Include STL vector class.
 
 class Vector2d
 {
- public:
+public:
   int id_;
 
-  Vector2d (float x,float y)
+  Vector2d(float x, float y)
   {
-    Set(x,y);
+    Set(x, y);
   }
 
-  Vector2d (float x,float y, int id)
+  Vector2d(float x, float y, int id)
   {
-    Set(x,y);
+    Set(x, y);
     id_ = id;
   }
 
@@ -41,47 +40,42 @@ class Vector2d
 
   float GetY(void) const { return mY; }
 
-  void  Set(float x,float y)
+  void  Set(float x, float y)
   {
     mX = x;
     mY = y;
   }
- private:
+
+private:
   float mX;
   float mY;
 };
 
 // Typedef an STL vector of vertices which are used to represent
 // a polygon/contour and a series of triangles.
-typedef vcl_vector< Vector2d > Vector2dVector;
-
+typedef vcl_vector<Vector2d> Vector2dVector;
 
 class Triangulate
 {
- public:
+public:
   // triangulate a contour/polygon, places results in STL vector
   // as series of triangles.
-  static bool Process(const Vector2dVector &contour,
-                      Vector2dVector &result);
+  static bool Process(const Vector2dVector & contour, Vector2dVector & result);
 
   // compute area of a contour/polygon
-  static float Area(const Vector2dVector &contour);
+  static float Area(const Vector2dVector & contour);
 
   // decide if point Px/Py is inside triangle defined by
   // (Ax,Ay) (Bx,By) (Cx,Cy)
-  static bool InsideTriangle(float Ax, float Ay,
-                             float Bx, float By,
-                             float Cx, float Cy,
-                             float Px, float Py);
+  static bool InsideTriangle(float Ax, float Ay, float Bx, float By, float Cx, float Cy, float Px, float Py);
 
- private:
-  static bool Snip(const Vector2dVector &contour,int u,int v,int w,int n,int *V);
+private:
+  static bool Snip(const Vector2dVector & contour, int u, int v, int w, int n, int * V);
+
 };
 
 #endif
 
-
 /**************************************************************************/
 /*** END OF HEADER FILE TRIANGULATE.H BEGINNING OF CODE TRIANGULATE.CPP ***/
 /**************************************************************************/
-

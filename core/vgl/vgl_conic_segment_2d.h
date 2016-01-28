@@ -2,9 +2,9 @@
 #ifndef vgl_conic_segment_2d_h_
 #define vgl_conic_segment_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author J.L. Mundy  June 18, 2005
 // \brief A curve segment with the geometry of a conic
@@ -98,99 +98,98 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 
-//: Represents a 2D conic segment using two points.
+// : Represents a 2D conic segment using two points.
 template <class Type>
 class vgl_conic_segment_2d
 {
-  //: One end of conic segment
+  // : One end of conic segment
   vgl_homg_point_2d<Type> p1_;
 
-  //: The other end of the conic segment
+  // : The other end of the conic segment
   vgl_homg_point_2d<Type> p2_;
 
-  //: The conic that represents the curve between point1 and point2
+  // : The conic that represents the curve between point1 and point2
   vgl_conic<Type> conic_;
 
-  //: Whether traversal is in counter-clockwise direction (the default) or not
+  // : Whether traversal is in counter-clockwise direction (the default) or not
   bool counterclockwise_;
-
- public:
-  //: Default constructor - does not initialise!
+public:
+  // : Default constructor - does not initialise!
   //  Use the set() method to make this conic segment useful.
   inline vgl_conic_segment_2d() {}
 
-  //: Copy constructor
+  // : Copy constructor
   inline vgl_conic_segment_2d(vgl_conic_segment_2d<Type> const& l)
-  : p1_(l.p1_), p2_(l.p2_), conic_(l.conic_),
+    : p1_(l.p1_), p2_(l.p2_), conic_(l.conic_),
     counterclockwise_(l.counterclockwise_) {}
 
-  //: Construct from two end points (homogeneous) and a conic
+  // : Construct from two end points (homogeneous) and a conic
   inline vgl_conic_segment_2d(vgl_homg_point_2d<Type> const& p1,
                               vgl_homg_point_2d<Type> const& p2,
                               vgl_conic<Type> const& co,
                               bool counterclockwise = true)
-  : p1_(p1), p2_(p2), conic_(co),
+    : p1_(p1), p2_(p2), conic_(co),
     counterclockwise_(counterclockwise) {}
 
-  //: Construct from two end points (Cartesian) and a conic
+  // : Construct from two end points (Cartesian) and a conic
   inline vgl_conic_segment_2d(vgl_point_2d<Type> const& p1,
                               vgl_point_2d<Type> const& p2,
                               vgl_conic<Type> const& co,
                               bool counterclockwise = true)
-  : p1_(p1.x(), p1.y(), (Type)1), p2_(p2.x(), p2.y(), (Type)1),
+    : p1_(p1.x(), p1.y(), (Type)1), p2_(p2.x(), p2.y(), (Type)1),
     conic_(co), counterclockwise_(counterclockwise) {}
 
-  //: Construct from a conic and two end points (homogeneous)
+  // : Construct from a conic and two end points (homogeneous)
   inline vgl_conic_segment_2d(vgl_conic<Type> const& co,
                               vgl_homg_point_2d<Type> const& p1,
                               vgl_homg_point_2d<Type> const& p2,
                               bool counterclockwise = true)
-  : p1_(p1), p2_(p2), conic_(co),
+    : p1_(p1), p2_(p2), conic_(co),
     counterclockwise_(counterclockwise) {}
 
-  //: Construct from a conic and two end points (Cartesian)
+  // : Construct from a conic and two end points (Cartesian)
   inline vgl_conic_segment_2d(vgl_conic<Type> const& co,
                               vgl_point_2d<Type> const& p1,
                               vgl_point_2d<Type> const& p2,
                               bool counterclockwise = true)
-  : p1_(p1.x(), p1.y(), (Type)1), p2_(p2.x(), p2.y(), (Type)1),
+    : p1_(p1.x(), p1.y(), (Type)1), p2_(p2.x(), p2.y(), (Type)1),
     conic_(co), counterclockwise_(counterclockwise) {}
 
-  //: Destructor
+  // : Destructor
   inline ~vgl_conic_segment_2d() {}
 
-  //: Normalise the direction of the segment to counterclockwise.
+  // : Normalise the direction of the segment to counterclockwise.
   //  This will also swap the end points if the direction is to be swapped.
-  void normalize() { if (!counterclockwise_) { counterclockwise_=true; swap_endpoints(); } }
+  void normalize() { if( !counterclockwise_ ) { counterclockwise_ = true; swap_endpoints(); } }
 
-  //: Interchange the two endpoints but keep the direction.
+  // : Interchange the two endpoints but keep the direction.
   //  This implies that now the conic segment contains those points of the conic
   //  which before did not belong to the conic segment! (Except for the two end
   //  points, of course.)
-  void swap_endpoints() { vgl_homg_point_2d<Type> p=p1_; p1_=p2_; p2_=p; }
+  void swap_endpoints() { vgl_homg_point_2d<Type> p = p1_; p1_ = p2_; p2_ = p; }
 
-  //: Change the direction of the conic section but keep the end points.
+  // : Change the direction of the conic section but keep the end points.
   //  This implies that now the conic segment contains those points of the conic
   //  which before did not belong to the conic segment! (Except for the two end
   //  points, of course.)
   void swap_direction() { counterclockwise_ = !counterclockwise_; }
 
-  //: The first end-point of the conic segment.
+  // : The first end-point of the conic segment.
   inline vgl_homg_point_2d<Type> point1() const { return p1_; } // return a copy
 
-  //: The second end-point of the conic segment.
+  // : The second end-point of the conic segment.
   inline vgl_homg_point_2d<Type> point2() const { return p2_; } // return a copy
 
-  //: The conic underlying the segment
+  // : The conic underlying the segment
   inline vgl_conic<Type> conic() const { return conic_; } // return a copy
 
-  //: The direction of the segment (clockwise or counterclockwise)
+  // : The direction of the segment (clockwise or counterclockwise)
   bool is_counterclockwise() const { return counterclockwise_; }
 
-  //: The direction of the segment (clockwise or counterclockwise)
+  // : The direction of the segment (clockwise or counterclockwise)
   bool is_clockwise() const { return !counterclockwise_; }
 
-  //: The equality comparison operator
+  // : The equality comparison operator
   //  Two conic segments are only identical if the underlying conic is identical
   //  and if direction and  both endpoints are identical, in the same order!
   //  Two conic segments with identical conic and identical end points but
@@ -201,46 +200,51 @@ class vgl_conic_segment_2d
   //  Note that two conic segments \e are equal if both the direction and the
   //  two end points are swapped. To normalize a conic segment such that its
   //  direction becomes counterclockwise, use the normalize() method.
-  inline bool operator==(vgl_conic_segment_2d<Type> const& l) const {
-    return this==&l ||
+  inline bool operator==(vgl_conic_segment_2d<Type> const& l) const
+  {
+    return this == &l ||
            (l.conic() == conic_ &&
             l.is_counterclockwise() == counterclockwise_ &&
             point1() == l.point1() &&
-            point2() == l.point2()) ||
+            point2() == l.point2() ) ||
            (l.conic() == conic_ &&
             l.is_counterclockwise() != counterclockwise_ &&
             point2() == l.point1() &&
-            point1() == l.point2());
+            point1() == l.point2() );
   }
 
-  //: The inequality comparison operator.
-  inline bool operator!=(vgl_conic_segment_2d<Type>const& other) const { return !operator==(other); }
+  // : The inequality comparison operator.
+  inline bool operator!=(vgl_conic_segment_2d<Type> const& other) const { return !operator==(other); }
 
-  //: (Re)initialise the conic segment by passing it its three "constructors"
+  // : (Re)initialise the conic segment by passing it its three "constructors"
   inline void set(vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2,
                   vgl_conic<Type> co, bool counterclockwise = true)
   { p1_ = p1; p2_ = p2; conic_ = co; counterclockwise_ = counterclockwise; }
 
-  //: (Re)initialise the conic segment by passing it its three "constructors"
+  // : (Re)initialise the conic segment by passing it its three "constructors"
   inline void set(vgl_conic<Type> co,
                   vgl_homg_point_2d<Type> const& p1, vgl_homg_point_2d<Type> const& p2,
                   bool counterclockwise = true)
   { p1_ = p1; p2_ = p2; conic_ = co; counterclockwise_ = counterclockwise; }
 
-  //: (Re)initialise the conic segment by passing it its three "constructors"
+  // : (Re)initialise the conic segment by passing it its three "constructors"
   inline void set(vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2,
                   vgl_conic<Type> co, bool counterclockwise = true)
-  { p1_.set(p1.x(), p1.y()); p2_.set(p2.x(), p2.y()); conic_ = co;
-    counterclockwise_ = counterclockwise; }
+  {
+    p1_.set(p1.x(), p1.y() ); p2_.set(p2.x(), p2.y() ); conic_ = co;
+    counterclockwise_ = counterclockwise;
+  }
 
-  //: (Re)initialise the conic segment by passing it its three "constructors"
+  // : (Re)initialise the conic segment by passing it its three "constructors"
   inline void set(vgl_conic<Type> co,
                   vgl_point_2d<Type> const& p1, vgl_point_2d<Type> const& p2,
                   bool counterclockwise = true)
-  { p1_.set(p1.x(), p1.y()); p2_.set(p2.x(), p2.y()); conic_ = co;
-    counterclockwise_ = counterclockwise; }
+  {
+    p1_.set(p1.x(), p1.y() ); p2_.set(p2.x(), p2.y() ); conic_ = co;
+    counterclockwise_ = counterclockwise;
+  }
 
-  //: Finds out whether this curve has a finite length.
+  // : Finds out whether this curve has a finite length.
   //  If the conic segment has an underlying ellipse, the segment is of course
   //  always finite. Otherwise, is_finite returns false whenever the segment
   //  passes through one of the points at infinity of the hyperbola or parabola.
@@ -250,24 +254,24 @@ class vgl_conic_segment_2d
   //  \todo not yet implemented
   bool is_finite() const { assert(!"Not yet implemented"); return true; }
 
-  //: Finds out whether the given point lies on the conic segment.
+  // : Finds out whether the given point lies on the conic segment.
   //  More specifically, lying on the segment implies lying on the conic.
   //  Moreover, the two endpoints (if effectively on the conic) will always
   //  lie on the segment. All other points of the conic lie either on this
   //  segment, or on the "swapped" segment, but never on both.
   //  \todo not yet implemented
-  bool contains(vgl_homg_point_2d<Type> const& /*pt*/) const { assert(!"Not yet implemented"); return false; }
+  bool contains(vgl_homg_point_2d<Type> const & /*pt*/) const { assert(!"Not yet implemented"); return false; }
 };
 
-//: Write to stream
+// : Write to stream
 // \relatesalso vgl_conic_segment_2d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_conic_segment_2d<Type>& c_s);
+vcl_ostream &  operator<<(vcl_ostream& s, const vgl_conic_segment_2d<Type>& c_s);
 
-//: Read from stream
+// : Read from stream
 // \relatesalso vgl_conic_segment_2d
 template <class Type>
-vcl_istream& operator>>(vcl_istream& is, vgl_conic_segment_2d<Type>& c_s);
+vcl_istream & operator>>(vcl_istream& is, vgl_conic_segment_2d<Type>& c_s);
 
 #define VGL_CONIC_SEGMENT_2D_INSTANTIATE(T) extern "please include vgl/vgl_conic_segment_2d.txx first"
 

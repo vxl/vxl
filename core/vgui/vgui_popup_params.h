@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_popup_params.h
 #ifndef vgui_popup_params_h_
 #define vgui_popup_params_h_
-//:
+// :
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Jan 00
@@ -14,10 +14,10 @@
 
 class vgui_popup_params
 {
- public:
+public:
   vgui_popup_params() : x(-1), y(-1), recurse(true), nested(false), defaults(false) {}
   // viewport coordinates of mouse when used to activate popup menu
-  int x,y;
+  int  x, y;
   bool recurse;
   bool nested;
   bool defaults;

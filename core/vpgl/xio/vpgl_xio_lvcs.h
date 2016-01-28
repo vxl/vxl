@@ -1,7 +1,7 @@
 // This is core/vpgl/xio/vpgl_xio_lvcs.h
 #ifndef vpgl_xio_lvcs_h
 #define vpgl_xio_lvcs_h
-//:
+// :
 // \file
 // \brief XML write a vpgl_lvcs
 //  Two functions which write a valid XML fragment to an ostream.
@@ -18,9 +18,8 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
-//: XML save vpgl_lvcs to stream.
+// : XML save vpgl_lvcs to stream.
 // \relatesalso vpgl_lvcs
-void x_write(vcl_ostream & os, vpgl_lvcs const& v,
-             vcl_string element_name="vpgl_lvcs");
+void x_write(vcl_ostream & os, vpgl_lvcs const& v, vcl_string element_name = "vpgl_lvcs");
 
 #endif // vpgl_xio_lvcs_h

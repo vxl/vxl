@@ -1,7 +1,7 @@
 // This is brl/bseg/bapl/bapl_connectivity_sptr.h
 #ifndef bapl_conn_table_sptr_h_
 #define bapl_conn_table_sptr_h_
-//:
+// :
 // \file
 // \brief Smart pointer to a bapl_conn_table
 // \author Ozge C. Ozcanli, (ozge@lems.brown.edu)

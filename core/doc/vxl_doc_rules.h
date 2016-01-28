@@ -25,7 +25,7 @@
 // This is core/doc/vxl_doc_rules.h
 #ifndef vxl_doc_rules_h_
 #define vxl_doc_rules_h_
-//:
+// :
 // \file
 // \brief give a brief description of the file.
 // \author Whoever, (erehwon)
@@ -44,7 +44,7 @@
 
 #include <parent_class.h> // includes go here; avoid unnecessary includes!
 
-//: Brief description of the class
+// : Brief description of the class
 // The long description starts here
 // \verbatim
 //  Everything between these tags is not formatted but kept "as is".
@@ -63,11 +63,10 @@
 
 class my_class : public parent_class
 {
-  //: Brief description of the member variable.
+  // : Brief description of the member variable.
   double my_value;
-
- public:
-  //: Brief description of method. Don't forget the colon, and don't continue on next line.
+public:
+  // : Brief description of method. Don't forget the colon, and don't continue on next line.
   // Do not leave any blank lines without the //, or doxygen
   // will think you have ended the documentation comment, and
   // started an ordinary code comment.
@@ -80,13 +79,14 @@ class my_class : public parent_class
   // documentation after using any of the advanced stuff.
   my_class();
 
-  //: Brief description of the enum.
+  // : Brief description of the enum.
   // Here comes the detailed description of the enum.
-  enum vxl_formats {
-    VXL_FLOAT,      //!< This is documentation for this element of the enum.
-    VXL_COMPLEX,    //!< This works for Doxygen only.
-    VXL_DOUBLE      //!< Remark the needed '!<' for this !
-  };
+  enum vxl_formats
+    {
+    VXL_FLOAT,      // !< This is documentation for this element of the enum.
+    VXL_COMPLEX,    // !< This works for Doxygen only.
+    VXL_DOUBLE      // !< Remark the needed '!<' for this !
+    };
 };
 
 #endif // vxl_doc_rules_h_

@@ -1,43 +1,45 @@
 // This is brl/bpro/core/vil_pro/processes/vil_histogram_equalize_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file  -- only works for byte images for now
 
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_histogram_equalise.h>
 
-//: Constructor
+// : Constructor
 bool vil_histogram_equalize_process_cons(bprb_func_process& pro)
 {
-  //input
-  bool ok=false;
+  // input
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types(1);
   input_types[0] = "vil_image_view_base_sptr";
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
-  //output
+  // output
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
   return true;
 }
 
-//: Execute the process
+// : Execute the process
 bool vil_histogram_equalize_process(bprb_func_process& pro)
 {
-  if(!pro.verify_inputs()){
+  if( !pro.verify_inputs() )
+    {
     vcl_cerr << "vil_histogram_equalize_process: Invalid inputs" << vcl_endl;
     return false;
-  }
+    }
 
-  //Retrieve image from input
+  // Retrieve image from input
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(0);
 
-  vil_image_view<vxl_byte> img(image);
-  vil_image_view_base_sptr out_img = new vil_image_view<vxl_byte> (img.ni(), img.nj(), img.nplanes());
+  vil_image_view<vxl_byte>  img(image);
+  vil_image_view_base_sptr  out_img = new vil_image_view<vxl_byte>(img.ni(), img.nj(), img.nplanes() );
   vil_image_view<vxl_byte>& out_img_ref = static_cast<vil_image_view<vxl_byte> &>(*out_img);
 
   out_img_ref.deep_copy(img);

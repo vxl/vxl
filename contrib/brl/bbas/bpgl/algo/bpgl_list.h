@@ -1,7 +1,7 @@
 // This is bbas/bpgl/algo/bpgl_list.h
 #ifndef bpgl_list_h_
 #define bpgl_list_h_
-//:
+// :
 // \file
 // \brief Write lists of cameras, homographies, fundamental matrices in a standard format
 //
@@ -15,13 +15,9 @@
 #include <vcl_vector.h>
 
 template <class T>
-bool bpgl_read_list(
-  vcl_vector<T>& list,
-  vcl_string file );
+bool bpgl_read_list(vcl_vector<T>& list, vcl_string file );
 
 template <class T>
-bool bpgl_write_list(
-  const vcl_vector<T>& list,
-  vcl_string file );
+bool bpgl_write_list(const vcl_vector<T>& list, vcl_string file );
 
 #endif // bpgl_list_h_

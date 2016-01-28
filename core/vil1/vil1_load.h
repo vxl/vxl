@@ -2,9 +2,9 @@
 #ifndef vil1_load_h_
 #define vil1_load_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief read an image from a file
 //
@@ -24,18 +24,18 @@
 // \verbatim
 //  Modifications
 //     011002 Peter Vanroose - vil1_load now respects top-is-first; vil1_load_raw not
-//\endverbatim
+// \endverbatim
 
 #include <vil1/vil1_fwd.h>
 #include <vil1/vil1_image.h>
 
-//: Load an image from a file, possibly performing expected conversions.
+// : Load an image from a file, possibly performing expected conversions.
 vil1_image vil1_load(char const* filename);
 
-//: Load raw from stream.
+// : Load raw from stream.
 vil1_image vil1_load_raw(vil1_stream *);
 
-//: Load raw from file (convenience).
+// : Load raw from file (convenience).
 vil1_image vil1_load_raw(char const *);
 
 #endif // vil1_load_h_

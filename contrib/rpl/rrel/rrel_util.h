@@ -1,14 +1,14 @@
 // This is rpl/rrel/rrel_util.h
 #ifndef rrel_util_h_
 #define rrel_util_h_
-//:
+// :
 //  \file
 //  \author Chuck Stewart
 //  \date   Summer 2001
 
 #include <vcl_iterator.h>
 
-//: \brief Compute the median absolute deviation (MAD) scale estimate of the residuals.
+// : \brief Compute the median absolute deviation (MAD) scale estimate of the residuals.
 //
 // Find the median absolve deviation (MAD) scale estimate of a set of
 // residuals.  Assume a Gaussian target distribution.  The input
@@ -23,21 +23,20 @@
 // \endcode
 //
 template <class O, class RanIter>
-O
-rrel_util_median_abs_dev_scale( const RanIter& begin,  const RanIter& end, int dof, O* );
+O rrel_util_median_abs_dev_scale( const RanIter& begin,  const RanIter& end, int dof, O * );
 
-//: Convenience function.
+// : Convenience function.
 // Calls the other rrel_util_median_abs_dev_scale() with a return type
 // of double.
 //
 template <class T>
 double
-rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof=1 )
+rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof = 1 )
 {
-  return rrel_util_median_abs_dev_scale( begin,  end, dof, (double*)0 );
+  return rrel_util_median_abs_dev_scale( begin,  end, dof, (double *)0 );
 }
 
-//: \brief Compute the scale using robustly weighted residuals.
+// : \brief Compute the scale using robustly weighted residuals.
 //
 //  Compute the scale using robustly weighted residuals. The dummy
 //  parameter is used to determine the return type. Internal
@@ -51,28 +50,27 @@ rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof=1 )
 // \endcode
 //
 template <class O, class InpIter>
-O
-rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residuals_end,
-                          const InpIter& weights_first, int dof, O* );
+O rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residuals_end, const InpIter& weights_first,
+                            int dof, O * );
 
 #if !VCL_TEMPLATE_MATCHES_TOO_OFTEN // not for compilers with overload problems
 
-//: Convenience function.
+// : Convenience function.
 // Calls the other rrel_util_weighted_scale() with a return type of
 // double.
 //
 template <class InpIter>
 inline double
 rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residuals_end,
-                          const InpIter& weights_first, int dof=1 )
+                          const InpIter& weights_first, int dof = 1 )
 {
   return rrel_util_weighted_scale( residuals_first, residuals_end,
-                                   weights_first, dof, (double*)0 );
+                                   weights_first, dof, (double *)0 );
 }
 
 #endif
 
-//: Compute the median and the scale (relative to the median).
+// : Compute the median and the scale (relative to the median).
 //
 //  Find the median and then, using the median of absolute
 //  deviations from the median, the scale.  Assume a Gaussian target
@@ -80,23 +78,17 @@ rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residua
 //  Random access iterators are required.
 //
 template <class T, class RanIter>
-void rrel_util_median_and_scale( RanIter first, RanIter last,
-                                 T& median, T& scale,
-                                 int dof=1 );
+void rrel_util_median_and_scale( RanIter first, RanIter last, T& median, T& scale, int dof = 1 );
 
-
-//: Compute the median and the scale (relative to the median).
+// : Compute the median and the scale (relative to the median).
 //
 //  Same as rrel_util_median_and_scale(), except that the input is
 //  copied first, and so is unchanged.
 //
 template <class T, class InpIter>
-void rrel_util_median_and_scale_copy( InpIter first, InpIter last,
-                                      T& median, T& scale,
-                                      int dof=1 );
+void rrel_util_median_and_scale_copy( InpIter first, InpIter last, T& median, T& scale, int dof = 1 );
 
-
-//: \brief Compute the center and half width of the narrowest interval containing half the points in the residuals.
+// : \brief Compute the center and half width of the narrowest interval containing half the points in the residuals.
 //
 //  Find the center and half width of the narrowest interval
 //  containing half the points in the input set of residuals, accessed
@@ -107,42 +99,33 @@ void rrel_util_median_and_scale_copy( InpIter first, InpIter last,
 //  signed values.
 //
 template <class T, class RanIter>
-void rrel_util_intercept_adjustment( RanIter first, RanIter last,
-                                     T & center, T & half_width,
-                                     int dof=1 );
+void rrel_util_intercept_adjustment( RanIter first, RanIter last, T & center, T & half_width, int dof = 1 );
 
-
-//: \brief Compute the center and half width of the narrowest interval containing half the points in the residuals.
+// : \brief Compute the center and half width of the narrowest interval containing half the points in the residuals.
 //
 //  Same as rrel_util_intercept_adjustment(), except that the input is
 //  copied first, and so is unchanged.
 //
 template <class T, class InpIter>
-void rrel_util_intercept_adjustment_copy( InpIter first, InpIter last,
-                                          T & center, T & half_width,
-                                          int dof=1 );
+void rrel_util_intercept_adjustment_copy( InpIter first, InpIter last, T & center, T & half_width, int dof = 1 );
 
-
-//: \brief Use the intercept adjustment technique to estimate the robust mean, standard deviation, and inlier fraction.
+// : \brief Use the intercept adjustment technique to estimate the robust mean, standard deviation, and inlier fraction.
 //
 template <class T, class RanIter>
-void rrel_util_intercept_adjust_stats( RanIter first, RanIter last,
-                                       T & robust_mean, T & robust_std, T & inlier_frac,
-                                       int dof=1 );
+void rrel_util_intercept_adjust_stats( RanIter first, RanIter last, T & robust_mean, T & robust_std, T & inlier_frac,
+                                       int dof = 1 );
 
-
-//: \brief Use the intercept adjustment technique to estimate the robust mean, standard deviation, and inlier fraction.
+// : \brief Use the intercept adjustment technique to estimate the robust mean, standard deviation, and inlier fraction.
 //
 //  Same as rrel_util_intercept_adjustment_stats(), except that the input is
 //  copied first, and so is unchanged.
 //
 template <class T, class InpIter>
-void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last,
-                                            T & robust_mean, T & robust_std, T & inlier_frac,
-                                            int dof=1 );
+void rrel_util_intercept_adjust_stats_copy( InpIter first, InpIter last, T & robust_mean, T & robust_std,
+                                            T & inlier_frac, int dof = 1 );
 
 #if defined(VCL_GCC)
-# include "rrel_util.txx"
+#  include "rrel_util.txx"
 #endif
 
 #endif // rrel_util_h_

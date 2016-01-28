@@ -1,6 +1,6 @@
 #ifndef bmsh3d_utils_h_
 #define bmsh3d_utils_h_
-//:
+// :
 // \file
 // \author Ming-Ching Chang
 // \date 2004-03-12
@@ -10,7 +10,7 @@
 
 #include "bmsh3d_fuzzy_boolean.h"
 
-//: Setting of level of details of debug info.
+// : Setting of level of details of debug info.
 //    0: off.
 //    1: only critical info.
 //    2: only important info.
@@ -19,36 +19,35 @@
 //    5: very verbose for debugging.
 #define bmsh3d_DEBUG   1
 
-  // ####################################################################
-  //    THE GUI ELEMENT (THAT SUPPORT CLICK-N-GETINFO)
-  // ####################################################################
+// ####################################################################
+//    THE GUI ELEMENT (THAT SUPPORT CLICK-N-GETINFO)
+// ####################################################################
 
-//: visualization element: contains one void* pointer to the visualization object
+// : visualization element: contains one void* pointer to the visualization object
 class vispt_elm
 {
- protected:
+protected:
   // pointer to the visualization object
   const void* vis_pointer_;
 
   // ====== Constructor/Destructor ======
-
- public:
+public:
   vispt_elm()  { vis_pointer_ = NULL; }
   virtual ~vispt_elm() {}
 
   // ====== Data access functions ======
 
-  void set_vis_pointer (const void* pointer) { vis_pointer_ = pointer; }
-  const void* vis_pointer() const { return vis_pointer_; }
+  void set_vis_pointer(const void* pointer) { vis_pointer_ = pointer; }
+  const void * vis_pointer() const { return vis_pointer_; }
 
-  //: Ming: don't make this function pure virtual. It eats up 4 bytes of mem for each derived object!
-  virtual void getInfo (vcl_ostringstream& /*ostrm*/) {}
+  // : Ming: don't make this function pure virtual. It eats up 4 bytes of mem for each derived object!
+  virtual void getInfo(vcl_ostringstream & /*ostrm*/) {}
 };
 
-//##########################################################
-//Color code to visualize several mesh objects.
+// ##########################################################
+// Color code to visualize several mesh objects.
 typedef enum
-{
+  {
   COLOR_NOT_SPECIFIED = 0,
   COLOR_BLACK         = 1,
   COLOR_RED           = 2,
@@ -76,8 +75,8 @@ typedef enum
   COLOR_GOLD          = 41,
   COLOR_SILVER        = 42,
   COLOR_RANDOM        = 50,
-} VIS_COLOR_CODE;
+  } VIS_COLOR_CODE;
 
-//##################################################################
+// ##################################################################
 
 #endif // bmsh3d_utils_h_

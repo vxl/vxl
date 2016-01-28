@@ -2,9 +2,9 @@
 #ifndef FMPlanarNonLinFun_h_
 #define FMPlanarNonLinFun_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief a class that contains the functions required for FMPlanarComputeLinear.
 //
@@ -16,7 +16,7 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
@@ -43,39 +43,38 @@ class FMPlanarNonLinFun : public vnl_least_squares_function
 
 #if 0 // unused ?!
   double outlier_distance_squared_;
-  int terminate_count_;
+  int    terminate_count_;
 #endif
 
   HomgMetric image_metric1_;
   HomgMetric image_metric2_;
-
- public:
-  //: Initialize object, will fit F to points1,2 using imagemetrics.
+public:
+  // : Initialize object, will fit F to points1,2 using imagemetrics.
   //  Rejecting points > outlier_distance_squared from epipolar lines
-  FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
-                    double outlier_distance_squared,
-                    vcl_vector<vgl_homg_point_2d<double> >& points1,
-                    vcl_vector<vgl_homg_point_2d<double> >& points2);
-  FMPlanarNonLinFun(const ImageMetric*, const ImageMetric*,
-                    double outlier_distance_squared,
-                    vcl_vector<HomgPoint2D>& points1,
-                    vcl_vector<HomgPoint2D>& points2);
+  FMPlanarNonLinFun(const ImageMetric *, const ImageMetric *, double outlier_distance_squared,
+                    vcl_vector<vgl_homg_point_2d<double> >& points1, vcl_vector<vgl_homg_point_2d<double> >& points2);
+  FMPlanarNonLinFun(const ImageMetric *, const ImageMetric *, double outlier_distance_squared,
+                    vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2);
 
   bool compute(FMatrixPlanar* F);
 
-  //: The virtual function from vnl_levenberg_marquardt
+  // : The virtual function from vnl_levenberg_marquardt
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
   // Helpers-------------------------------------------------------------------
- private:
+private:
   void fmatrix_to_params(const FMatrixPlanar& F, vnl_vector<double>& params);
+
   FMatrixPlanar params_to_fmatrix(const vnl_vector<double>& params);
 
   void fmatrix_to_params_awf(const FMatrixPlanar& F, vnl_vector<double>& params);
+
   FMatrixPlanar params_to_fmatrix_awf(const vnl_vector<double>& params);
 
   void fmatrix_to_params_mna(const FMatrixPlanar& F, vnl_vector<double>& params);
+
   FMatrixPlanar params_to_fmatrix_mna(const vnl_vector<double>& params);
+
 };
 
 #endif // FMPlanarNonLinFun_h_

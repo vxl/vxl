@@ -4,4 +4,4 @@
 
 typedef vxl_uint_16 word;
 
-VIL1_MEMORY_IMAGE_OF_INSTANTIATE(vil1_rgb<word>);
+VIL1_MEMORY_IMAGE_OF_INSTANTIATE(vil1_rgb<word> );

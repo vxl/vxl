@@ -13,14 +13,14 @@ void test_array_1d_io()
            << "******************************\n";
 
   //// test constructors, accessors
-  const int n = 50;
+  const int           n = 50;
   vbl_array_1d<float> v_out, v_in;
 
-  v_out.reserve(n+10);
-  for (int i=0; i<n; i++)
-  {
-    v_out.push_back(0.1f*i*i);
-  }
+  v_out.reserve(n + 10);
+  for( int i = 0; i < n; i++ )
+    {
+    v_out.push_back(0.1f * i * i);
+    }
 
   vsl_b_ofstream bfs_out("vbl_array_1d_test_io.bvl.tmp");
   TEST("Created vbl_array_1d_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -33,25 +33,31 @@ void test_array_1d_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vbl_array_1d_test_io.bvl.tmp");
+  vpl_unlink("vbl_array_1d_test_io.bvl.tmp");
 
-  //kym - double = not defined for vbl_array_1d
-  //TEST("v_out == v_in", v_out, v_in);
+  // kym - double = not defined for vbl_array_1d
+  // TEST("v_out == v_in", v_out, v_in);
 
   bool test_result = true;
-  if (v_out.size() != v_in.size())
-    test_result = false;
-  else if (v_out.capacity() != v_in.capacity())
-    test_result = false;
-  else
-  {
-    vcl_size_t array_size = v_out.size();
-    for (vcl_size_t i=0; i<array_size; i++)
+  if( v_out.size() != v_in.size() )
     {
-      if (v_out[i] != v_in[i])
-        test_result = false;
+    test_result = false;
     }
-  }
+  else if( v_out.capacity() != v_in.capacity() )
+    {
+    test_result = false;
+    }
+  else
+    {
+    vcl_size_t array_size = v_out.size();
+    for( vcl_size_t i = 0; i < array_size; i++ )
+      {
+      if( v_out[i] != v_in[i] )
+        {
+        test_result = false;
+        }
+      }
+    }
   TEST("v_out == v_in", test_result, true);
 
   vsl_print_summary(vcl_cout, v_in);

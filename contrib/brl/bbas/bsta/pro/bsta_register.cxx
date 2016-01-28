@@ -19,6 +19,8 @@ void bsta_register::register_datatype()
 
 void bsta_register::register_process()
 {
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsta_sigma_normalization_table_process, "bstaSigmaNormTableProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsta_initialize_random_seed_process, "bstaInitializeRandomSeedProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsta_sigma_normalization_table_process,
+                        "bstaSigmaNormTableProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bsta_initialize_random_seed_process,
+                        "bstaInitializeRandomSeedProcess");
 }

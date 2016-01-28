@@ -5,7 +5,7 @@
 #ifndef rgtl_serialize_vnl_double_3_hxx
 #define rgtl_serialize_vnl_double_3_hxx
 
-//:
+// :
 // \file
 // \brief Implement serialization for vnl_double_3.
 // \author Brad King
@@ -19,7 +19,7 @@
 template <class Serializer>
 void rgtl_serialize(Serializer& sr, vnl_double_3& self)
 {
-  sr & rgtl_serialize_base< vnl_vector_fixed<double,3> >(self);
+  sr & rgtl_serialize_base<vnl_vector_fixed<double, 3> >(self);
 }
 
 #endif

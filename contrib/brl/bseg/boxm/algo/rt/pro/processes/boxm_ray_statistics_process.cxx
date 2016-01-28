@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm/algo/rt/pro/processes/boxm_ray_statistics_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A process for describing the attributes of a scene
 //
@@ -22,33 +22,33 @@
 
 namespace boxm_ray_statistics_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 4;
+const unsigned n_outputs_ = 1;
 }
 
 bool boxm_ray_statistics_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_ray_statistics_process_globals;
 
-  //process takes 2 input
-  //input[0]: scene binary file
+  // process takes 2 input
+  // input[0]: scene binary file
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
   input_types_[1] = "vpgl_camera_double_sptr";
-  input_types_[2] = "unsigned";  //ni
-  input_types_[3] = "unsigned";  //nj
+  input_types_[2] = "unsigned";  // ni
+  input_types_[3] = "unsigned";  // nj
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bsta_histogram_sptr"; // No of rays per cell Histogram
-  //output_types_[1] = "bsta_histogram_sptr"; // Sigma Histogram
-  //output_types_[2] = "bsta_histogram_sptr"; // Level Histogram
-  //output_types_[3] = "unsigned";            // Number of leaves
+  // output_types_[1] = "bsta_histogram_sptr"; // Sigma Histogram
+  // output_types_[2] = "bsta_histogram_sptr"; // Level Histogram
+  // output_types_[3] = "unsigned";            // Number of leaves
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//: This process produces one output:
+// : This process produces one output:
 //  * The distribution of "Omega" values where Omega = 1-e^( alpha x length )
 //  The following three outputs are no longer present:
 //  * The distribution of "Sigma" values where Sigma is the std_dev of
@@ -60,48 +60,57 @@ bool boxm_ray_statistics_process(bprb_func_process& pro)
 {
   using namespace boxm_ray_statistics_process_globals;
 
-  if ( !pro.verify_inputs() ) {
+  if( !pro.verify_inputs() )
+    {
     vcl_cerr << pro.name() << ": invalid inputs\n";
     return false;
-  }
+    }
   // assign tree type
-  boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(0);
+  boxm_scene_base_sptr    scene_ptr = pro.get_input<boxm_scene_base_sptr>(0);
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(1);
-  unsigned ni = pro.get_input<unsigned>(2);
-  unsigned nj = pro.get_input<unsigned>(3);
+  unsigned                ni = pro.get_input<unsigned>(2);
+  unsigned                nj = pro.get_input<unsigned>(3);
 
-  if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-    if (!scene_ptr->multi_bin())
+  if( scene_ptr->appearence_model() == BOXM_APM_MOG_GREY )
     {
+    if( !scene_ptr->multi_bin() )
+      {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
+      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *>(scene_ptr.as_pointer() );
 
       bsta_histogram<float> num_rays_hist;
-      if (!compute_ray_statistics<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, cam_ptr,num_rays_hist,ni,nj))
+      if( !compute_ray_statistics<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, cam_ptr, num_rays_hist, ni, nj) )
+        {
         return false;
-      pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(num_rays_hist));    }
+        }
+      pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(num_rays_hist) );
+      }
     else
-    {
-      vcl_cerr<<"boxm_ray_statistics_process not yet implemented for multi-bin/Gaussian mixture\n";
+      {
+      vcl_cerr << "boxm_ray_statistics_process not yet implemented for multi-bin/Gaussian mixture\n";
       return false;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY)
-  {
-    if (!scene_ptr->multi_bin()) {
+  else if( scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY )
+    {
+    if( !scene_ptr->multi_bin() )
+      {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
+      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *>(scene_ptr.as_pointer() );
 
       bsta_histogram<float> num_rays_hist;
-      if (!compute_ray_statistics<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, cam_ptr,num_rays_hist,ni,nj))
+      if( !compute_ray_statistics<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, cam_ptr, num_rays_hist, ni, nj) )
+        {
         return false;
-      pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(num_rays_hist));
-    }
-    else {
-      vcl_cerr<<"boxm_ray_statistics_process not yet implemented for multi-bin/simple_grey\n";
+        }
+      pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(num_rays_hist) );
+      }
+    else
+      {
+      vcl_cerr << "boxm_ray_statistics_process not yet implemented for multi-bin/simple_grey\n";
       return false;
+      }
     }
-  }
 
   return true;
 }

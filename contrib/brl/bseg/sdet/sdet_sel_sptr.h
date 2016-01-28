@@ -1,7 +1,7 @@
 // This is brl/bseg/sdet/sdet_sel_sptr.h
 #ifndef sdet_sel_sptr_h_
 #define sdet_sel_sptr_h_
-//:
+// :
 // \file
 // \brief Smart pointer to a the symbolic edge linker
 // \author Amir Tamrakar

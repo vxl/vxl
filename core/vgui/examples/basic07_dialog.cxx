@@ -14,12 +14,12 @@
 // Make a vgui.dialog:
 static void test_dialog()
 {
-  static int int_value = 2;
-  static long long_value = 3;
-  static float float_value = 3.1f;
-  static double double_value = 4.2;
+  static int        int_value = 2;
+  static long       long_value = 3;
+  static float      float_value = 3.1f;
+  static double     double_value = 4.2;
   static vcl_string string_value = "dialog test";
-  static bool bool_value = true;
+  static bool       bool_value = true;
   static vcl_string inline_file_value = "/tmp/myfile_inline.txt";
   static vcl_string file_value = "/tmp/myfile.txt";
   static vcl_string regexp = "*.txt";
@@ -27,12 +27,13 @@ static void test_dialog()
   static vcl_string color_value = "red";
 
   static int choice_value = 1;
+
   vcl_vector<vcl_string> labels;
-  labels.push_back(vcl_string("fltk"));
-  labels.push_back(vcl_string("motif"));
-  labels.push_back(vcl_string("gtk"));
-  labels.push_back(vcl_string("glut"));
-  labels.push_back(vcl_string("glX"));
+  labels.push_back(vcl_string("fltk") );
+  labels.push_back(vcl_string("motif") );
+  labels.push_back(vcl_string("gtk") );
+  labels.push_back(vcl_string("glut") );
+  labels.push_back(vcl_string("glX") );
 
   vgui_dialog mydialog("My dialog");
   mydialog.field("int value", int_value);
@@ -47,8 +48,8 @@ static void test_dialog()
   mydialog.inline_color("inline color value", inline_color_value);
   mydialog.color("color value", color_value);
 
-  if (mydialog.ask())
-  {
+  if( mydialog.ask() )
+    {
     vcl_cerr << "OK pressed.\n";
     vcl_cerr << "int_value : " << int_value << vcl_endl;
     vcl_cerr << "long_value : " << long_value << vcl_endl;
@@ -61,7 +62,9 @@ static void test_dialog()
     vcl_cerr << "file_value: " << file_value << vcl_endl;
     vcl_cerr << "inline_color_value: " << inline_color_value << vcl_endl;
     vcl_cerr << "color_value: " << color_value << vcl_endl;
-  } else {
+    }
+  else
+    {
     vcl_cerr << "Cancel pressed.\n";
     vcl_cerr << "int_value : " << int_value << vcl_endl;
     vcl_cerr << "long_value : " << long_value << vcl_endl;
@@ -74,20 +77,21 @@ static void test_dialog()
     vcl_cerr << "file_value: " << file_value << vcl_endl;
     vcl_cerr << "inline_color_value: " << inline_color_value << vcl_endl;
     vcl_cerr << "color_value: " << color_value << vcl_endl;
-  }
+    }
 }
 
 static void test_dialog2()
 {
-  vgui_dialog mydialog("My dialog2");
-  vgui_image_tableau_new image("az32_10.tif");
+  vgui_dialog               mydialog("My dialog2");
+  vgui_image_tableau_new    image("az32_10.tif");
   vgui_viewer2D_tableau_new viewer(image);
+
   mydialog.inline_tableau(viewer, 512, 512);
 
   mydialog.message("A picture");
 
   vcl_string button_txt("close");
-  mydialog.set_ok_button(button_txt.c_str());
+  mydialog.set_ok_button(button_txt.c_str() );
   mydialog.set_cancel_button(0);
   mydialog.ask();
 }
@@ -96,23 +100,24 @@ static void test_dialog2()
 vgui_menu create_menus()
 {
   vgui_menu test;
+
   test.add("Dialog", test_dialog);
   test.add("Dialog2", test_dialog2);
 
   vgui_menu bar;
-  bar.add("Test",test);
+  bar.add("Test", test);
 
   return bar;
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char * * argv)
 {
-  vgui::init(argc,argv);
+  vgui::init(argc, argv);
 
-  vgui_image_tableau_new image(argc>1 ? argv[1] : "az32_10.tif");
+  vgui_image_tableau_new    image(argc > 1 ? argv[1] : "az32_10.tif");
   vgui_viewer2D_tableau_new viewer(image);
-  vgui_shell_tableau_new shell(viewer);
+  vgui_shell_tableau_new    shell(viewer);
 
   // Create a window with a menu, add the tableau and show it on screen:
-  return vgui::run(shell, image->width(), image->height(), create_menus());
+  return vgui::run(shell, image->width(), image->height(), create_menus() );
 }

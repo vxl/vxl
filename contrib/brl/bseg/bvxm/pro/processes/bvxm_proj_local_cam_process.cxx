@@ -1,6 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_proj_local_cam_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A class for clipping and image based on a 3D bounding box.
 //        -  Input:
@@ -34,28 +34,28 @@
 
 #include <bprb/bprb_parameters.h>
 
-//: globals variables and functions
+// : globals variables and functions
 namespace bvxm_proj_local_cam_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 2;
+const unsigned n_inputs_ = 4;
+const unsigned n_outputs_ = 2;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_proj_local_cam_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_proj_local_cam_process_globals;
 
-  //this process takes 4 inputs:
+  // this process takes 4 inputs:
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  unsigned  i=0;
-  input_types_[i++] = "vpgl_camera_double_sptr";   // rational camera
-  input_types_[i++] = "float";   // x
-  input_types_[i++] = "float";   // y
-  input_types_[i++] = "float";   // z
+  unsigned               i = 0;
+  input_types_[i++] = "vpgl_camera_double_sptr"; // rational camera
+  input_types_[i++] = "float";                   // x
+  input_types_[i++] = "float";                   // y
+  input_types_[i++] = "float";                   // z
 
-  //output
-  unsigned j = 0;
+  // output
+  unsigned               j = 0;
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[j++] = "float"; // u
   output_types_[j++] = "float"; // v
@@ -63,44 +63,44 @@ bool bvxm_proj_local_cam_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-
 bool bvxm_proj_local_cam_process(bprb_func_process& pro)
 {
   using namespace bvxm_proj_local_cam_process_globals;
-  //static const parameters
+  // static const parameters
   static const vcl_string error = "error";
 
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs:
   unsigned i = 0;
   // camera
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float X=0.0,Y=0.0,Z=0.0;
-  //voxel_world
+  float                   X = 0.0, Y = 0.0, Z = 0.0;
+  // voxel_world
   X = pro.get_input<float>(i++);
   Y = pro.get_input<float>(i++);
   Z = pro.get_input<float>(i++);
 
   vpgl_local_rational_camera<double>* rat_camera =
-    dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer());
-  if (!rat_camera) {
+    dynamic_cast<vpgl_local_rational_camera<double> *>(camera.as_pointer() );
+  if( !rat_camera )
+    {
     vcl_cerr << "The camera input is not a rational camera\n";
     return false;
-  }
+    }
 
-  double u=0,v=0;
-  rat_camera->project((double)X,(double)Y,(double)Z,u,v);
-  //Store outputs
+  double u = 0, v = 0;
+  rat_camera->project( (double)X, (double)Y, (double)Z, u, v);
+  // Store outputs
   unsigned j = 0;
   // update the camera and store
   pro.set_output_val<float>(j++, u);
   pro.set_output_val<float>(j++, v);
 
-  vcl_cout<<"(u,v):"<<u<<','<<v<<'\n';
+  vcl_cout << "(u,v):" << u << ',' << v << '\n';
   return true;
 }
-

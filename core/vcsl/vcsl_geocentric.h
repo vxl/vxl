@@ -1,6 +1,6 @@
 #ifndef vcsl_geocentric_h_
 #define vcsl_geocentric_h_
-//:
+// :
 // \file
 // \brief A specific geographic coordinate system
 // \author Francois BERTEL
@@ -14,7 +14,7 @@
 #include <vcsl/vcsl_geographic.h>
 #include <vcsl/vcsl_geocentric_sptr.h>
 
-//: A specific geographic coordinate system
+// : A specific geographic coordinate system
 // Intended to represent a location relative to the earth
 // 3D coordinate system that is intended to represent a location relative to
 // the earth, although its use is not restricted to earthbound coordinate
@@ -25,14 +25,13 @@
 class vcsl_geocentric
   : public vcsl_geographic
 {
-  //***************************************************************************
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor.
   vcsl_geocentric();
-
- public:
+public:
   // Destructor
   virtual ~vcsl_geocentric() {}
 };

@@ -4,7 +4,6 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-
 DECLARE_FUNC_CONS(bvpl_create_edge2d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_edge3d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_gauss3d_x_kernel_process);
@@ -19,7 +18,7 @@ DECLARE_FUNC_CONS(bvpl_create_gauss3d_kernel_process);
 DECLARE_FUNC_CONS(bvpl_create_generic_kernel_vector_process);
 DECLARE_FUNC_CONS(bvpl_write_generic_kernel_vector_process);
 
-//util
+// util
 DECLARE_FUNC_CONS(bvpl_create_wc_kernel_vector_process);
 
 #endif

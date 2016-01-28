@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
@@ -25,22 +25,26 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_random.h>
 
-
 void test_process_mains()
 {
   // Create scene from file
-  //register data types and process functions
+  // register data types and process functions
   DECLARE_FUNC_CONS(boxm2_ocl_update_process);
   DECLARE_FUNC_CONS(boxm2_ocl_refine_process);
   DECLARE_FUNC_CONS(boxm2_write_cache_process);
   DECLARE_FUNC_CONS(boxm2_ocl_render_expected_color_process);
   DECLARE_FUNC_CONS(boxm2_ocl_render_expected_image_process);
 
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_color_process, "boxm2OclRenderExpectedColorProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_process, "boxm2OclRenderExpectedImageProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_process, "boxm2OclUpdateProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_refine_process, "boxm2OclRefineProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_write_cache_process, "boxm2WriteCacheProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_color_process,
+                        "boxm2OclRenderExpectedColorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_expected_image_process,
+                        "boxm2OclRenderExpectedImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_process,
+                        "boxm2OclUpdateProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_refine_process,
+                        "boxm2OclRefineProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_write_cache_process,
+                        "boxm2WriteCacheProcess");
 
   REGISTER_DATATYPE(boxm2_cache_sptr);
   REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
@@ -50,15 +54,15 @@ void test_process_mains()
   REGISTER_DATATYPE(float);
 
   bool good = bprb_batch_process_manager::instance()->init_process("boxm2OclUpdateProcess");
-  TEST("Update Process Initialized",good, true);
+  TEST("Update Process Initialized", good, true);
   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRefineProcess");
-  TEST("Refine Process Initialized",good, true);
+  TEST("Refine Process Initialized", good, true);
   good = bprb_batch_process_manager::instance()->init_process("boxm2WriteCacheProcess");
-  TEST("Writing Cache Initialized",good, true);
+  TEST("Writing Cache Initialized", good, true);
   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
-  TEST("Rendering Expected Image Initialized",good, true);
+  TEST("Rendering Expected Image Initialized", good, true);
   good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-  TEST("Rendering Expected Color Image Initialized",good, true);
+  TEST("Rendering Expected Color Image Initialized", good, true);
 
 }
 

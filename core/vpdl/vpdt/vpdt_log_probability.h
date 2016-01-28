@@ -1,7 +1,7 @@
 // This is core/vpdl/vpdt/vpdt_log_probability.h
 #ifndef vpdt_log_probability_h_
 #define vpdt_log_probability_h_
-//:
+// :
 // \file
 // \author Matthew Leotta
 // \brief The basic functions for log of probability calculation
@@ -20,7 +20,7 @@
 #include <vnl/vnl_math.h>
 #include <vcl_limits.h>
 
-//: Compute the log of the unnormalized density
+// : Compute the log of the unnormalized density
 template <class dist>
 inline typename vpdt_dist_traits<dist>::scalar_type
 vpdt_log_density(const dist& d,
@@ -28,14 +28,15 @@ vpdt_log_density(const dist& d,
 {
   typedef typename vpdt_dist_traits<dist>::scalar_type T;
   T density = d.density(pt);
-  if (density <= T(0))
+  if( density <= T(0) )
+    {
     return vcl_numeric_limits<T>::infinity();
+    }
 
-  return static_cast<T>(vcl_log(density));
+  return static_cast<T>(vcl_log(density) );
 }
 
-
-//: Compute the log of the normalized probability density
+// : Compute the log of the normalized probability density
 template <class dist>
 inline typename vpdt_dist_traits<dist>::scalar_type
 vpdt_log_prob_density(const dist& d,
@@ -43,14 +44,15 @@ vpdt_log_prob_density(const dist& d,
 {
   typedef typename vpdt_dist_traits<dist>::scalar_type T;
   T norm = d.norm_const();
-  if (vnl_math::isinf(norm))
+  if( vnl_math::isinf(norm) )
+    {
     return -vcl_numeric_limits<T>::infinity();
+    }
 
-  return static_cast<T>(vcl_log(norm) + vpdt_log_density(d,pt));
+  return static_cast<T>(vcl_log(norm) + vpdt_log_density(d, pt) );
 }
 
-
-//: Compute the gradient of the log of the unnormalized density
+// : Compute the gradient of the log of the unnormalized density
 template <class dist>
 inline typename vpdt_dist_traits<dist>::scalar_type
 vpdt_gradient_log_density(const dist& d,
@@ -58,15 +60,15 @@ vpdt_gradient_log_density(const dist& d,
                           const typename vpdt_dist_traits<dist>::vector_type& g)
 {
   typedef typename vpdt_dist_traits<dist>::scalar_type T;
-  T density = d.gradient_density(pt,g);
-  if (density <= T(0)) {
-    vpdt_fill(g,T(0));
+  T density = d.gradient_density(pt, g);
+  if( density <= T(0) )
+    {
+    vpdt_fill(g, T(0) );
     return vcl_numeric_limits<T>::infinity();
-  }
+    }
 
   g /= density;
-  return static_cast<T>(vcl_log(density));
+  return static_cast<T>(vcl_log(density) );
 }
-
 
 #endif // vpdt_log_probability_h_

@@ -23,23 +23,23 @@ static void test_polygon_io()
   p_out.push_back(3.3f, 3.4f);
 
   vsl_b_ofstream bfs_out("vgl_polygon_test_io.bvl.tmp");
-  TEST ("Created vgl_polygon_test_io.bvl.tmp for writing",
-        (!bfs_out), false);
+  TEST("Created vgl_polygon_test_io.bvl.tmp for writing",
+       (!bfs_out), false);
   vsl_b_write(bfs_out, p_out);
   bfs_out.close();
 
   vsl_b_ifstream bfs_in("vgl_polygon_test_io.bvl.tmp");
-  TEST ("Opened vgl_polygon_test_io.bvl.tmp for reading", (!bfs_in), false);
+  TEST("Opened vgl_polygon_test_io.bvl.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, p_in);
-  TEST ("Finished reading file successfully", (!bfs_in), false);
+  TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vgl_polygon_test_io.bvl.tmp");
+  vpl_unlink("vgl_polygon_test_io.bvl.tmp");
 
-  TEST ("p_out == p_in",
-        p_out.num_sheets()==p_in.num_sheets() &&
-        p_out[0]==p_in[0] &&
-        p_out[1]==p_in[1] , true);
+  TEST("p_out == p_in",
+       p_out.num_sheets() == p_in.num_sheets() &&
+       p_out[0] == p_in[0] &&
+       p_out[1] == p_in[1], true);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;

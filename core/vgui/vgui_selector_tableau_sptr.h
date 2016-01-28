@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_selector_tableau_sptr.h
 #ifndef vgui_selector_tableau_sptr_h_
 #define vgui_selector_tableau_sptr_h_
-//:
+// :
 // \file
 // \author  Matthew Leotta (mleotta@lems.brown.edu)
 // \brief   Smart-pointer to a vgui_selector_tableau tableau.

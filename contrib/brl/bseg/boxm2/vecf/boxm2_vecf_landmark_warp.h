@@ -13,51 +13,47 @@ class rsdl_kd_tree;
 
 #include "boxm2_vecf_vector_field.h"
 
-
-//: helper class for mapping points from source to target and back
-template<class F>
+// : helper class for mapping points from source to target and back
+template <class F>
 class boxm2_vecf_landmark_mapper
 {
-  public:
+public:
   boxm2_vecf_landmark_mapper(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
-                             vcl_vector<vgl_point_3d<double> > const& control_pts_target,
-                             F weight_function,
+                             vcl_vector<vgl_point_3d<double> > const& control_pts_target, F weight_function,
                              int n_nearest = 3);
 
   ~boxm2_vecf_landmark_mapper();
 
-  vgl_point_3d<double> operator() (vgl_point_3d<double> const& x) const;
+  vgl_point_3d<double> operator()(vgl_point_3d<double> const& x) const;
 
-  private:
+private:
 
-    const vcl_vector<vgl_point_3d<double> > control_pts_source_;
-    const vcl_vector<vgl_point_3d<double> > control_pts_target_;
-    F weight_function_;
-    int n_nearest_;
-    rsdl_kd_tree* source_kd_tree_;
+  const vcl_vector<vgl_point_3d<double> > control_pts_source_;
+  const vcl_vector<vgl_point_3d<double> > control_pts_target_;
+  F                                       weight_function_;
+  int                                     n_nearest_;
+  rsdl_kd_tree*                           source_kd_tree_;
 };
 
-template<class F>
+template <class F>
 class boxm2_vecf_landmark_warp : public boxm2_vecf_vector_field<boxm2_vecf_landmark_mapper<F> >
 {
-  public:
-    boxm2_vecf_landmark_warp(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
-                             vcl_vector<vgl_point_3d<double> > const& control_pts_target,
-                             F weight_function);
+public:
+  boxm2_vecf_landmark_warp(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
+                           vcl_vector<vgl_point_3d<double> > const& control_pts_target, F weight_function);
+private:
+  typedef boxm2_vecf_landmark_mapper<F> MAPPER_T;
 
-  private:
-    typedef boxm2_vecf_landmark_mapper<F> MAPPER_T;
+  // : Create a function object that maps source pts to target pts.
+  virtual MAPPER_T make_forward_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id);
 
-    //: Create a function object that maps source pts to target pts.
-    virtual MAPPER_T make_forward_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id);
-    //: Create a function object that maps target pts to source pts.
-    virtual MAPPER_T make_inverse_mapper(boxm2_scene_sptr target, boxm2_block_id const& blk_id);
+  // : Create a function object that maps target pts to source pts.
+  virtual MAPPER_T make_inverse_mapper(boxm2_scene_sptr target, boxm2_block_id const& blk_id);
 
-    //: data
-    const vcl_vector<vgl_point_3d<double> > control_pts_source_;
-    const vcl_vector<vgl_point_3d<double> > control_pts_target_;
-    F weight_function_;
-
+  // : data
+  const vcl_vector<vgl_point_3d<double> > control_pts_source_;
+  const vcl_vector<vgl_point_3d<double> > control_pts_target_;
+  F                                       weight_function_;
 
 };
 

@@ -11,16 +11,14 @@ void test_real_polynomial_io()
            << "Testing vnl_real_polynomial io\n"
            << "******************************\n";
   //// test constructors, accessors
-  const int n = 10;
+  const int          n = 10;
   vnl_vector<double> v(n);
+  for( int i = 0; i < n; i++ )
+    {
+    v(i) = (double)(i * i);
+    }
 
-  for (int i=0; i<n; i++)
-  {
-      v(i) = (double)(i*i);
-  }
-
-  vnl_real_polynomial poly_out(v), poly_in0(0),poly_in1(v*2.0);
-
+  vnl_real_polynomial poly_out(v), poly_in0(0), poly_in1(v * 2.0);
 
   vsl_b_ofstream bfs_out("vnl_real_polynomial_test_io.bvl.tmp");
   TEST("Created vnl_real_polynomial_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -35,7 +33,7 @@ void test_real_polynomial_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vnl_real_polynomial_test_io.bvl.tmp");
+  vpl_unlink("vnl_real_polynomial_test_io.bvl.tmp");
 
   TEST("poly_out.coefficients() == poly_in0.coefficients()",
        poly_out.coefficients() == poly_in0.coefficients(), true);
@@ -45,6 +43,5 @@ void test_real_polynomial_io()
   vsl_print_summary(vcl_cout, poly_in0);
   vcl_cout << vcl_endl;
 }
-
 
 TESTMAIN(test_real_polynomial_io);

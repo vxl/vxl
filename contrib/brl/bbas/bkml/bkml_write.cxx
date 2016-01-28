@@ -1,5 +1,5 @@
 #include "bkml_write.h"
-//:
+// :
 // \file
 #include <vcl_cstdio.h>
 #include <vcl_iomanip.h>
@@ -7,7 +7,8 @@
 vcl_string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
 {
   vcl_string result;
-  char a[255];
+  char       a[255];
+
   vcl_snprintf(a, 255, "%.2x", alpha);
   result.append(a );
   char b[255];
@@ -22,7 +23,7 @@ vcl_string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
   return result;
 }
 
-//: Write KML header and open document tag
+// : Write KML header and open document tag
 void bkml_write::open_document(vcl_ofstream& str)
 {
   str << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -30,14 +31,15 @@ void bkml_write::open_document(vcl_ofstream& str)
   return;
 }
 
-//: end document tag
+// : end document tag
 void bkml_write::close_document(vcl_ofstream& str)
 {
   str << "</Document>\n</kml>\n";
 }
 
-//: Write a box
-void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr)
+// : Write a box
+void bkml_write::write_box(vcl_ofstream & ofs, vcl_string name, vcl_string description, vnl_double_2 ul,
+                           vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr)
 {
   ofs.precision(8);
   ofs << "<Placemark>\n"
@@ -73,19 +75,20 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
       << "</Placemark>\n" << vcl_endl;
 }
 
-//: kml requires lon, lat, elev in polygon definition
-void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vgl_box_2d<double> bbox)
+// : kml requires lon, lat, elev in polygon definition
+void bkml_write::write_box(vcl_ofstream & ofs, vcl_string name, vcl_string description, vgl_box_2d<double> bbox)
 {
   // in ul x is lat y is lon, in vgl bbox x is lon, y is lat so reverse
-  vnl_double_2 ul(bbox.max_y(), bbox.min_x());
-  vnl_double_2 ur(bbox.max_y(), bbox.max_x());
-  vnl_double_2 ll(bbox.min_y(), bbox.min_x());
-  vnl_double_2 lr(bbox.min_y(), bbox.max_x());
+  vnl_double_2 ul(bbox.max_y(), bbox.min_x() );
+  vnl_double_2 ur(bbox.max_y(), bbox.max_x() );
+  vnl_double_2 ll(bbox.min_y(), bbox.min_x() );
+  vnl_double_2 lr(bbox.min_y(), bbox.max_x() );
   bkml_write::write_box(ofs, name, description, ul, ur, ll, lr);
 }
 
-//: Write a box with color
-void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color)
+// : Write a box with color
+void bkml_write::write_box(vcl_ofstream & ofs, vcl_string name, vcl_string description, vnl_double_2 ul,
+                           vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, vcl_string hex_color)
 {
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n"
@@ -121,10 +124,12 @@ void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string descri
 }
 
 // write a box with color
-void bkml_write::write_box(vcl_ofstream &ofs, vcl_string name, vcl_string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
-                           unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a)
+void bkml_write::write_box(vcl_ofstream & ofs, vcl_string name, vcl_string description, vnl_double_2 ul,
+                           vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
+                           unsigned char const& r, unsigned char const& g, unsigned char const& b,
+                           unsigned char const& a)
 {
-  vcl_string hex_color = rgb_color_to_hex_color((int)a, (int)r, (int)g, (int)b);
+  vcl_string hex_color = rgb_color_to_hex_color( (int)a, (int)r, (int)g, (int)b);
   bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, hex_color);
 }
 
@@ -139,18 +144,24 @@ void bkml_write::write_polygon(vcl_ofstream& ofs, vgl_polygon<double> const& pol
   vcl_string line_color = rgb_color_to_hex_color(1, (int)r, (int)g, (int)b);
 
   // obtain polygon color
-  int alpha_int = (int)(alpha*255);
+  int        alpha_int = (int)(alpha * 255);
   vcl_string poly_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
 
   unsigned num_sheet = poly.num_sheets();
-  for (unsigned s_idx = 0; s_idx < num_sheet; s_idx++) {
+
+  for( unsigned s_idx = 0; s_idx < num_sheet; s_idx++ )
+    {
     vcl_vector<vgl_point_2d<double> > verts = poly[s_idx];
-    if (verts.empty())
+    if( verts.empty() )
+      {
       continue;
+      }
     ofs << "<Placemark>\n"
         << "  <name>" << name << "</name>\n";
-    if (description.compare("") != 0)
+    if( description.compare("") != 0 )
+      {
       ofs << "  <description>" << description << "</description>\n";
+      }
     ofs << "  <Style>\n"
         << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
         << "    <LineStyle> <color>" << line_color << "</color> <width>" << line_width << "</width> </LineStyle>\n"
@@ -165,37 +176,44 @@ void bkml_write::write_polygon(vcl_ofstream& ofs, vgl_polygon<double> const& pol
         << "    <outerBoundaryIs>\n"
         << "      <LinearRing>\n"
         << "        <coordinates>\n";
-    for (vcl_vector<vgl_point_2d<double> >::iterator vit = verts.begin(); vit != verts.end(); ++vit)
+    for( vcl_vector<vgl_point_2d<double> >::iterator vit = verts.begin(); vit != verts.end(); ++vit )
+      {
       ofs << "          " << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0\n";
+      }
     ofs << "          " << verts[0].x() << ',' << verts[0].y() << ",0\n";
     ofs << "        </coordinates>\n"
         << "      </LinearRing>\n"
         << "    </outerBoundaryIs>\n"
         << "  </Polygon>\n"
         << "</Placemark>\n";
-  }
+    }
 }
 
-//: write a path with color and line width
+// : write a path with color and line width
 void bkml_write::write_path(vcl_ofstream& ofs, vcl_vector<vgl_point_2d<double> > path,
-                         vcl_string const& name,
-                         vcl_string const& description,
-                         double const& scale,
-                         double const& line_width,
-                         double const& alpha,
-                         unsigned char const& r,
-                         unsigned char const& g,
-                         unsigned char const& b)
+                            vcl_string const& name,
+                            vcl_string const& description,
+                            double const& scale,
+                            double const& line_width,
+                            double const& alpha,
+                            unsigned char const& r,
+                            unsigned char const& g,
+                            unsigned char const& b)
 {
   // obtain line color
-  int alpha_int = (int)(alpha*255);
+  int        alpha_int = (int)(alpha * 255);
   vcl_string line_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
-  if (path.empty())
+
+  if( path.empty() )
+    {
     return;
+    }
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n";
-  if (description.compare("") != 0)
+  if( description.compare("") != 0 )
+    {
     ofs << "  <description>" << description << "</description>\n";
+    }
   ofs << "  <Style>\n"
       << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
       << "    <LineStyle> <color>" << line_color << "</color> <width>" << line_width << "</width> </LineStyle>\n"
@@ -203,22 +221,26 @@ void bkml_write::write_path(vcl_ofstream& ofs, vcl_vector<vgl_point_2d<double> >
   ofs << "  <LineString>\n"
       << "    <tessellate>1</tessellate>\n"
       << "      <coordinates>\n        ";
-  for (vcl_vector<vgl_point_2d<double> >::iterator vit = path.begin(); vit != path.end(); ++vit)
+  for( vcl_vector<vgl_point_2d<double> >::iterator vit = path.begin(); vit != path.end(); ++vit )
+    {
     ofs << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0 ";
+    }
   ofs << "      </coordinates>\n"
       << "  </LineString>\n"
       << "</Placemark>\n";
 }
 
-//: put a pin at the given location
-void bkml_write::write_location(vcl_ofstream &ofs, vcl_string name, vcl_string description, double lat, double lon, double elev)
+// : put a pin at the given location
+void bkml_write::write_location(vcl_ofstream & ofs, vcl_string name, vcl_string description, double lat, double lon,
+                                double elev)
 {
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n"
       << "  <description>" << description << "</description>\n"
       << "  <styleUrl>#m_ylw-pushpin</styleUrl>\n"
       << "  <Point>\n"
-      << "    <coordinates>" << vcl_setprecision(12) << lon << ", " << vcl_setprecision(12) << lat << ", " << elev << "</coordinates>\n"
+      << "    <coordinates>" << vcl_setprecision(12) << lon << ", " << vcl_setprecision(12) << lat << ", " << elev
+      << "</coordinates>\n"
       << "  </Point>\n"
       << "</Placemark>\n" << vcl_endl;
 }
@@ -232,10 +254,13 @@ void bkml_write::write_location(vcl_ofstream& ofs, vgl_point_2d<double> const& l
                                 unsigned char const& b)
 {
   vcl_string color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n";
-  if (description.compare("") != 0)
+  if( description.compare("") != 0 )
+    {
     ofs << "  <description>" << description << "</description>\n";
+    }
   ofs << "  <Style>\n"
       << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
       << "    <IconStyle> <scale>" << scale << "</scale> <color>" << color << "</color>\n"
@@ -243,7 +268,8 @@ void bkml_write::write_location(vcl_ofstream& ofs, vgl_point_2d<double> const& l
       << "    </IconStyle>\n"
       << "  </Style>\n"
       << "  <Point>\n"
-      << "    <coordinates>" << vcl_setprecision(12) << loc.x() << ',' << vcl_setprecision(12) << loc.y() << ",0</coordinates>\n";
+      << "    <coordinates>" << vcl_setprecision(12) << loc.x() << ',' << vcl_setprecision(12) << loc.y()
+      << ",0</coordinates>\n";
   ofs << "  </Point>\n"
       << "</Placemark>\n";
 }
@@ -253,10 +279,13 @@ void bkml_write::write_location(vcl_ofstream& ofs, double lat, double lon, doubl
                                 unsigned char const& r, unsigned char const& g, unsigned char const& b)
 {
   vcl_string color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
+
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n";
-  if (description.compare("") != 0)
+  if( description.compare("") != 0 )
+    {
     ofs << "  <description>" << description << "</description>\n";
+    }
   ofs << "  <Style>\n"
       << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
       << "    <IconStyle> <scale>" << scale << "</scale> <color>" << color << "</color>\n"
@@ -265,8 +294,8 @@ void bkml_write::write_location(vcl_ofstream& ofs, double lat, double lon, doubl
       << "  </Style>\n"
       << "  <Point>\n"
       << "    <coordinates>" << vcl_setprecision(12) << lon << ','
-                             << vcl_setprecision(12) << lat << ','
-                             << vcl_setprecision(12) << elev
+      << vcl_setprecision(12) << lat << ','
+      << vcl_setprecision(12) << elev
       << "</coordinates>\n";
   ofs << "  </Point>\n"
       << "</Placemark>\n";
@@ -279,10 +308,11 @@ void bkml_write::write_location_as_box(vcl_ofstream& ofs, double lon, double lat
                                        unsigned char const& r, unsigned char const& g, unsigned char const& b)
 {
   vnl_double_2 ul, ll, lr, ur;
+
   ll[0] = lat; ll[1] = lon;
-  ul[0] = lat+size; ul[1] = lon;
-  lr[0] = lat; lr[1] = lon+size;
-  ur[0] = lat+size; ur[1] = lon+size;
+  ul[0] = lat + size; ul[1] = lon;
+  lr[0] = lat; lr[1] = lon + size;
+  ur[0] = lat + size; ur[1] = lon + size;
   bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, r, g, b);
 }
 
@@ -291,9 +321,10 @@ void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
                                      double head, double tilt, double roll,
                                      double t_fov, double r_fov, double value)
 {
-  if (value != 0.0) {
+  if( value != 0.0 )
+    {
     ofs << "<value>" << value << "</value>\n";
-  }
+    }
   ofs << "<PhotoOverlay>\n"
       << "  <name>" << name << "</name>\n"
       << "  <Camera>\n"
@@ -306,9 +337,9 @@ void bkml_write::write_photo_overlay(vcl_ofstream& ofs, vcl_string name,
       << "    <altitudeMode>relativeToGround</altitudeMode>\n"
       << "  </Camera>\n"
       << "  <ViewVolume>\n"
-      << "    <leftFov>"   << -1*r_fov << "</leftFov>\n"
+      << "    <leftFov>"   << -1 * r_fov << "</leftFov>\n"
       << "    <rightFov>"  << r_fov    << "</rightFov>\n"
-      << "    <bottomFov>" << -1*t_fov << "</bottomFov>\n"
+      << "    <bottomFov>" << -1 * t_fov << "</bottomFov>\n"
       << "    <topFov>"    << t_fov    << "</topFov>\n"
       << "    <near></near>\n"
       << "  </ViewVolume>\n"
@@ -328,7 +359,7 @@ void bkml_write::write_kml_style(vcl_ofstream& ofs,
   vcl_string line_color = rgb_color_to_hex_color(1, (int)b, (int)r, (int)g);
 
   // obtain polygon color
-  int alpha_int = (int)(alpha*255);
+  int        alpha_int = (int)(alpha * 255);
   vcl_string poly_color = rgb_color_to_hex_color(alpha_int, (int)b, (int)g, (int)r);
 
   ofs << "<Style id=\"" << style_name << "\">\n"
@@ -346,23 +377,29 @@ void bkml_write::write_polygon(vcl_ofstream& ofs,
                                vcl_vector<vcl_pair<vgl_polygon<double>, vgl_polygon<double> > > const& polygon,
                                vcl_string const& name, vcl_string const& description,
                                double const& scale, double const& line_width,
-                               double const& alpha, unsigned char const& r, unsigned char const& g, unsigned char const& b)
+                               double const& alpha, unsigned char const& r, unsigned char const& g,
+                               unsigned char const& b)
 {
   // obtain line color
   vcl_string line_color = rgb_color_to_hex_color(255, (int)r, (int)g, (int)b);
   // obtain polygon color
-  int alpha_int = (int)(alpha*255);
+  int        alpha_int = (int)(alpha * 255);
   vcl_string poly_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
 
-  for (unsigned i = 0; i < polygon.size(); ++i) {
+  for( unsigned i = 0; i < polygon.size(); ++i )
+    {
     vgl_polygon<double> outer = polygon[i].first;
     vgl_polygon<double> inner = polygon[i].second;
-    if (outer[0].empty())
+    if( outer[0].empty() )
+      {
       continue;
+      }
     ofs << "<Placemark>\n"
         << "  <name>" << name << "</name>\n";
-    if (description.compare("") != 0)
+    if( description.compare("") != 0 )
+      {
       ofs << "  <description>" << description << "</description>\n";
+      }
     ofs << "  <Style>\n"
         << "    <LabelStyle> <scale>" << scale << "</scale> </LabelStyle>\n"
         << "    <LineStyle> <color>" << line_color << "</color> <width>" << line_width << "</width> </LineStyle>\n"
@@ -377,26 +414,32 @@ void bkml_write::write_polygon(vcl_ofstream& ofs,
         << "    <outerBoundaryIs>\n"
         << "      <LinearRing>\n"
         << "        <coordinates>";
-    for (vcl_vector<vgl_point_2d<double> >::iterator vit = outer[0].begin(); vit != outer[0].end(); ++vit)
+    for( vcl_vector<vgl_point_2d<double> >::iterator vit = outer[0].begin(); vit != outer[0].end(); ++vit )
+      {
       ofs << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0 ";
+      }
     ofs << vcl_setprecision(12) << outer[0][0].x() << ',' << vcl_setprecision(12) << outer[0][0].y() << ",0";
     ofs << "</coordinates>\n"
         << "      </LinearRing>\n"
         << "    </outerBoundaryIs>\n";
     // write out the inner boundary
-    for (unsigned in_idx = 0; in_idx < inner.num_sheets(); in_idx++) {
+    for( unsigned in_idx = 0; in_idx < inner.num_sheets(); in_idx++ )
+      {
       ofs << "    <innerBoundaryIs>\n"
           << "      <LinearRing>\n"
           << "        <coordinates>";
-      for (vcl_vector<vgl_point_2d<double> >::iterator vit = inner[in_idx].begin(); vit != inner[in_idx].end(); ++vit)
+      for( vcl_vector<vgl_point_2d<double> >::iterator vit = inner[in_idx].begin(); vit != inner[in_idx].end(); ++vit )
+        {
         ofs << vcl_setprecision(12) << vit->x() << ',' << vcl_setprecision(12) << vit->y() << ",0 ";
-      ofs << vcl_setprecision(12) << inner[in_idx][0].x() << ',' << vcl_setprecision(12) << inner[in_idx][0].y() << ",0";
+        }
+      ofs << vcl_setprecision(12) << inner[in_idx][0].x() << ',' << vcl_setprecision(12) << inner[in_idx][0].y()
+          << ",0";
       ofs << "</coordinates>\n"
           << "      </LinearRing>\n"
           << "    </innerBoundaryIs>\n";
-    }
+      }
     ofs << "  </Polygon>\n"
         << "</Placemark>\n";
-  }
+    }
   return;
 }

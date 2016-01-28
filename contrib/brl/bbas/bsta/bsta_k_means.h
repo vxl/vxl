@@ -1,7 +1,7 @@
 // This is brl/bbas/bsta/bsta_k_means.h
 #ifndef bsta_k_means_h
 #define bsta_k_means_h
-//:
+// :
 // \file
 // \author Ian Scott
 // \date 18-May-2001
@@ -14,7 +14,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 
-//: Find k cluster centres
+// : Find k cluster centres
 // Uses batch k-means clustering.
 // If you provide parameter partition, it will return the
 // cluster index for each data sample. The number of iterations
@@ -34,16 +34,15 @@
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
 template <class T>
-unsigned bsta_k_means(vcl_vector<vnl_vector<T> > &data, unsigned& k,
-                vcl_vector<vnl_vector<T> >* cluster_centres,
-                vcl_vector<unsigned> * partition =0 );
+unsigned bsta_k_means(vcl_vector<vnl_vector<T> > & data, unsigned& k, vcl_vector<vnl_vector<T> >* cluster_centres,
+                      vcl_vector<unsigned> * partition = 0 );
 
 template <class T, unsigned int n>
-  unsigned bsta_k_means(vcl_vector<vnl_vector_fixed<T, n> > &data, unsigned& k,
-               vcl_vector<vnl_vector_fixed<T, n> >* cluster_centres,
-               vcl_vector<unsigned> * partition =0 );
+unsigned bsta_k_means(vcl_vector<vnl_vector_fixed<T, n> > & data, unsigned& k, vcl_vector<vnl_vector_fixed<T,
+                                                                                                           n> >* cluster_centres,
+                      vcl_vector<unsigned> * partition = 0 );
 
-//: Find k cluster centres with weighted data
+// : Find k cluster centres with weighted data
 // Uses batch k-means clustering.
 // If you provide parameter partition, it will return the
 // cluster index for each data sample. The number of iterations
@@ -63,14 +62,12 @@ template <class T, unsigned int n>
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
 template <class T>
-unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > &data,
-                               unsigned& k,
-                               const vcl_vector<T>& wts,
-                               vcl_vector<vnl_vector<T> >* cluster_centres,
-                               vcl_vector<unsigned> * partition =0);
+unsigned bsta_k_means_weighted(vcl_vector<vnl_vector<T> > & data, unsigned& k, const vcl_vector<T>& wts,
+                               vcl_vector<vnl_vector<T> >* cluster_centres, vcl_vector<unsigned> * partition = 0);
 
 template <class T, unsigned int n>
-  unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
-                                 unsigned& k, const vcl_vector<T>& wts,
-                                 vcl_vector<vnl_vector_fixed<T,n> >* cluster_centres, vcl_vector<unsigned> * partition =0);
+unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T, n> > & data, unsigned& k, const vcl_vector<T>& wts,
+                               vcl_vector<vnl_vector_fixed<T, n> >* cluster_centres,
+                               vcl_vector<unsigned> * partition = 0);
+
 #endif // bsta_k_means_h

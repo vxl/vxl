@@ -9,17 +9,15 @@
 #include "rtvl_tensor.hxx"
 
 template <unsigned int N>
-class rtvl_tensor_d: public rtvl_tensor<N>
+class rtvl_tensor_d : public rtvl_tensor<N>
 {
 public:
   typedef rtvl_tensor<N> derived;
 
   /** Construct with a given tensor and its gradient.  */
-  rtvl_tensor_d(vnl_matrix_fixed<double, N, N> const& tensor,
-                vnl_matrix_fixed<double, N, N> const (&tensor_d)[N]);
+  rtvl_tensor_d(vnl_matrix_fixed<double, N, N> const& tensor, vnl_matrix_fixed<double, N, N> const (&tensor_d)[N]);
 
-  void saliency_d(unsigned int d,
-                  vnl_vector_fixed<double, N>& dsal) const;
+  void saliency_d(unsigned int d, vnl_vector_fixed<double, N>& dsal) const;
 
 private:
   vnl_matrix_fixed<double, N, N> const (&tensor_d_)[N];

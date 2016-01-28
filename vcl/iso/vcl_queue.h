@@ -6,9 +6,9 @@
 #include <queue>
 
 #ifdef vcl_generic_queue_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_queue_STD std
+#  define vcl_generic_queue_STD std
 #endif
 
 #include "../generic/vcl_queue.h"

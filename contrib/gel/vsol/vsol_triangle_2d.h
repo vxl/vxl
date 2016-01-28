@@ -1,8 +1,8 @@
 // This is gel/vsol/vsol_triangle_2d.h
 #ifndef vsol_triangle_2d_h_
 #define vsol_triangle_2d_h_
-//*****************************************************************************
-//:
+// *****************************************************************************
+// :
 // \file
 // \brief Triangle in 2D space.
 //
@@ -16,144 +16,145 @@
 //   2004-05-11 Joseph Mundy Implemented binary I/O
 //   2004-05-14 Peter Vanroose  Added describe()
 // \endverbatim
-//*****************************************************************************
+// *****************************************************************************
 
-//*****************************************************************************
+// *****************************************************************************
 // External declarations for values
-//*****************************************************************************
+// *****************************************************************************
 #include <vsol/vsol_polygon_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iosfwd.h>
 
-
 class vsol_triangle_2d : public vsol_polygon_2d
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Initialization
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Default Constructor - needed for binary I/O
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Default Constructor - needed for binary I/O
+  // ---------------------------------------------------------------------------
   vsol_triangle_2d();
 
-  //---------------------------------------------------------------------------
-  //: Constructor from 3 points
-  //---------------------------------------------------------------------------
-  vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
-                   const vsol_point_2d_sptr &new_p1,
-                   const vsol_point_2d_sptr &new_p2);
+  // ---------------------------------------------------------------------------
+  // : Constructor from 3 points
+  // ---------------------------------------------------------------------------
+  vsol_triangle_2d(const vsol_point_2d_sptr & new_p0, const vsol_point_2d_sptr & new_p1,
+                   const vsol_point_2d_sptr & new_p2);
 
-  //---------------------------------------------------------------------------
-  //: Copy constructor
-  //---------------------------------------------------------------------------
-  vsol_triangle_2d(const vsol_triangle_2d &other);
+  // ---------------------------------------------------------------------------
+  // : Copy constructor
+  // ---------------------------------------------------------------------------
+  vsol_triangle_2d(const vsol_triangle_2d & other);
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Destructor
+  // ---------------------------------------------------------------------------
   virtual ~vsol_triangle_2d();
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
+  // ---------------------------------------------------------------------------
+  // : Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  // ---------------------------------------------------------------------------
+  virtual vsol_spatial_object_2d * clone(void) const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Access
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return the first vertex
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the first vertex
+  // ---------------------------------------------------------------------------
   vsol_point_2d_sptr p0(void) const;
 
-  //---------------------------------------------------------------------------
-  //: Return the second vertex
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the second vertex
+  // ---------------------------------------------------------------------------
   vsol_point_2d_sptr p1(void) const;
 
-  //---------------------------------------------------------------------------
-  //: Return the last vertex
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the last vertex
+  // ---------------------------------------------------------------------------
   vsol_point_2d_sptr p2(void) const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Comparison
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Has `this' the same points than `other' in the same order ?
-  //---------------------------------------------------------------------------
-  virtual bool operator==(const vsol_triangle_2d &other) const;
-  inline bool operator!=(const vsol_triangle_2d &other)const{return !operator==(other);}
-  virtual bool operator==(const vsol_polygon_2d &other) const; // virtual of vsol_polygon_2d
+  // ---------------------------------------------------------------------------
+  // : Has `this' the same points than `other' in the same order ?
+  // ---------------------------------------------------------------------------
+  virtual bool operator==(const vsol_triangle_2d & other) const;
+
+  inline bool operator!=(const vsol_triangle_2d & other) const {return !operator==(other); }
+  virtual bool operator==(const vsol_polygon_2d & other) const; // virtual of vsol_polygon_2d
+
   virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return the area of `this'
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the area of `this'
+  // ---------------------------------------------------------------------------
   virtual double area(void) const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Element change
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Set the first vertex
-  //---------------------------------------------------------------------------
-  void set_p0(const vsol_point_2d_sptr &new_p0);
+  // ---------------------------------------------------------------------------
+  // : Set the first vertex
+  // ---------------------------------------------------------------------------
+  void set_p0(const vsol_point_2d_sptr & new_p0);
 
-  //---------------------------------------------------------------------------
-  //: Set the second vertex
-  //---------------------------------------------------------------------------
-  void set_p1(const vsol_point_2d_sptr &new_p1);
+  // ---------------------------------------------------------------------------
+  // : Set the second vertex
+  // ---------------------------------------------------------------------------
+  void set_p1(const vsol_point_2d_sptr & new_p1);
 
-  //---------------------------------------------------------------------------
-  //: Set the last vertex
-  //---------------------------------------------------------------------------
-  void set_p2(const vsol_point_2d_sptr &new_p2);
+  // ---------------------------------------------------------------------------
+  // : Set the last vertex
+  // ---------------------------------------------------------------------------
+  void set_p2(const vsol_point_2d_sptr & new_p2);
 
-  virtual vsol_triangle_2d* cast_to_triangle(void) { return this; }
-  virtual vsol_triangle_2d const* cast_to_triangle(void) const { return this; }
+  virtual vsol_triangle_2d * cast_to_triangle(void) { return this; }
+  virtual vsol_triangle_2d const * cast_to_triangle(void) const { return this; }
 
   // ==== Binary IO methods ======
 
-  //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  // : Binary save self to stream.
+  void b_write(vsl_b_ostream & os) const;
 
-  //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  // : Binary load self from stream.
+  void b_read(vsl_b_istream & is);
 
-  //: Return IO version number;
+  // : Return IO version number;
   short version() const;
 
-  //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  // : Print an ascii summary to the stream
+  void print_summary(vcl_ostream & os) const;
 
-  //: Return a platform independent string identifying the class
+  // : Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return "vsol_triangle_2d"; }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
+  // : Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const vcl_string& cls) const
-  { return cls==is_a() || vsol_polygon_2d::is_class(cls); }
+  { return cls == is_a() || vsol_polygon_2d::is_class(cls); }
 
-  //---------------------------------------------------------------------------
-  //: output description to stream
-  //---------------------------------------------------------------------------
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  // ---------------------------------------------------------------------------
+  // : output description to stream
+  // ---------------------------------------------------------------------------
+  void describe(vcl_ostream & strm, int blanking = 0) const;
+
 };
 
-//: Binary save vsol_triangle_2d* to stream.
-void vsl_b_write(vsl_b_ostream &os, const vsol_triangle_2d* p);
+// : Binary save vsol_triangle_2d* to stream.
+void vsl_b_write(vsl_b_ostream & os, const vsol_triangle_2d* p);
 
-//: Binary load vsol_triangle_2d* from stream.
-void vsl_b_read(vsl_b_istream &is, vsol_triangle_2d* &p);
+// : Binary load vsol_triangle_2d* from stream.
+void vsl_b_read(vsl_b_istream & is, vsol_triangle_2d * & p);
 
 #endif // vsol_triangle_2d_h_

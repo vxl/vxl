@@ -6,9 +6,9 @@
 #include <string>
 
 #ifdef vcl_generic_string_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_string_STD std
+#  define vcl_generic_string_STD std
 #endif
 
 #include "../generic/vcl_string.h"

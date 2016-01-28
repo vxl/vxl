@@ -1,8 +1,8 @@
 // This is core/vgui/vgui_displaybase_tableau.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   14 Sep 1999
@@ -64,66 +64,73 @@ void vgui_displaybase_tableau::set_selection_callback(vgui_displaybase_tableau_s
 void vgui_displaybase_tableau::add(vgui_soview* object)
 {
 #ifndef NDEBUG
-  vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
-  if (i == objects.end())
-  {
-#endif
-    objects.push_back(object);
-    vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( current_grouping );
-    if ( it == groupings.end() )
+  vcl_vector<vgui_soview *>::iterator i = vcl_find(objects.begin(), objects.end(), object);
+  if( i == objects.end() )
     {
-      vgui_displaybase_tableau_grouping temp;
-      temp.style = NULL;
-      temp.hide = false;
-      temp.color_override = false;
-      temp.line_width_override = false;
-      temp.point_size_override = false;
-      temp.objects.push_back( object );
-      groupings.insert( vcl_pair< vcl_string , vgui_displaybase_tableau_grouping >( current_grouping , temp ) );
+#endif
+  objects.push_back(object);
+  vcl_map<vcl_string, vgui_displaybase_tableau_grouping>::iterator it = groupings.find( current_grouping );
+  if( it == groupings.end() )
+    {
+    vgui_displaybase_tableau_grouping temp;
+    temp.style = NULL;
+    temp.hide = false;
+    temp.color_override = false;
+    temp.line_width_override = false;
+    temp.point_size_override = false;
+    temp.objects.push_back( object );
+    groupings.insert( vcl_pair<vcl_string, vgui_displaybase_tableau_grouping>( current_grouping, temp ) );
     }
-    else
-      it->second.objects.push_back( object );
-#ifndef NDEBUG
-  }
   else
-    vcl_cerr << "Warning: attempt to add an soview twice.\n";
+    {
+    it->second.objects.push_back( object );
+    }
+#ifndef NDEBUG
+}
+
+else
+  {
+  vcl_cerr << "Warning: attempt to add an soview twice.\n";
+  }
 #endif
 }
 
-void vgui_displaybase_tableau::remove(vgui_soview*& object)
+void vgui_displaybase_tableau::remove(vgui_soview *& object)
 {
-  if (object->get_id() == highlighted)
-  {
+  if( object->get_id() == highlighted )
+    {
     // if the point to be removed is the currently highlighted
     // one, zero out the 'highlighted' field. otherwise the
     // point will still be rendered when the pointer moves.
     highlighted = 0;
-  }
+    }
 
   // must first unselect the object, if it's selected
-  deselect( object->get_id());
+  deselect( object->get_id() );
 
-  vcl_vector<vgui_soview*>::iterator i = vcl_find(objects.begin(), objects.end(), object);
-  if (i != objects.end())
-  {
+  vcl_vector<vgui_soview *>::iterator i = vcl_find(objects.begin(), objects.end(), object);
+  if( i != objects.end() )
+    {
     objects.erase(i);
-  }
-
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
-        it != groupings.end(); it++ )  {
-    vcl_vector<vgui_soview*>::iterator a = vcl_find(it->second.objects.begin(), it->second.objects.end(), object);
-    if (a != it->second.objects.end()) {
+    }
+  for( vcl_map<vcl_string, vgui_displaybase_tableau_grouping>::iterator it = groupings.begin();
+       it != groupings.end(); it++ )
+    {
+    vcl_vector<vgui_soview *>::iterator a = vcl_find(it->second.objects.begin(), it->second.objects.end(), object);
+    if( a != it->second.objects.end() )
+      {
       it->second.objects.erase(a);
-      if ( it->second.objects.size() == 0 )  {
+      if( it->second.objects.size() == 0 )
+        {
         groupings.erase( it );
-      }
+        }
       delete object;
       break; // found obj, stop iterating
+      }
     }
-  }
 }
 
-//: clear all soviews from the display.
+// : clear all soviews from the display.
 //  The soviews must be deleted otherwise we have a big memory leak.
 //  It is not clear that the design intended that the creator of the
 //  soview is responsible for deleting it.  In any case, such management
@@ -135,22 +142,20 @@ void vgui_displaybase_tableau::clear()
 {
   highlighted = 0;
   deselect_all();
-
   // destroy the objects
-  for (vcl_vector<vgui_soview*>::iterator so_iter = objects.begin();
-       so_iter != objects.end(); ++so_iter)
-  {
+  for( vcl_vector<vgui_soview *>::iterator so_iter = objects.begin();
+       so_iter != objects.end(); ++so_iter )
+    {
     delete *so_iter;
-  }
+    }
 
   objects.clear();
-
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin() ;
-        it != groupings.end() ;
-        it++ )
-  {
+  for( vcl_map<vcl_string, vgui_displaybase_tableau_grouping>::iterator it = groupings.begin();
+       it != groupings.end();
+       it++ )
+    {
     it->second.objects.clear();
-  }
+    }
 
   groupings.clear();
 }
@@ -158,52 +163,69 @@ void vgui_displaybase_tableau::clear()
 void vgui_displaybase_tableau::draw_soviews_render()
 {
   vgui_macro_report_errors;
-  {
-    for (vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
+    {
+    for( vcl_map<vcl_string, vgui_displaybase_tableau_grouping>::iterator it = groupings.begin();
          it != groupings.end();
          it++ )
-    {
-      if ( ! it->second.hide )
       {
-        for (vcl_vector<vgui_soview*>::iterator so_iter= it->second.objects.begin();
-             so_iter != it->second.objects.end(); ++so_iter)
+      if( !it->second.hide )
         {
-          vgui_soview *so = *so_iter;
+        for( vcl_vector<vgui_soview *>::iterator so_iter = it->second.objects.begin();
+             so_iter != it->second.objects.end(); ++so_iter )
+          {
+          vgui_soview *   so = *so_iter;
           vgui_style_sptr style = so->get_style();
 
-          if ( ! it->second.style && style )
+          if( !it->second.style && style )
+            {
             style->apply_all();
-          else if ( ! style && it->second.style )
+            }
+          else if( !style && it->second.style )
+            {
             it->second.style->apply_all();
-          else if ( style && it->second.style )
-          {
-            if ( it->second.color_override )
+            }
+          else if( style && it->second.style )
+            {
+            if( it->second.color_override )
+              {
               it->second.style->apply_color();
+              }
             else
+              {
               style->apply_color();
+              }
 
-            if ( it->second.line_width_override )
+            if( it->second.line_width_override )
+              {
               it->second.style->apply_line_width();
+              }
             else
+              {
               style->apply_line_width();
+              }
 
-            if ( it->second.point_size_override )
+            if( it->second.point_size_override )
+              {
               it->second.style->apply_point_size();
+              }
             else
+              {
               style->apply_point_size();
-          }
+              }
+            }
 
-          if (is_selected(so->get_id()))
+          if( is_selected(so->get_id() ) )
+            {
             glColor3f(1.0f, 0.0f, 0.0f);
+            }
 
           so->draw();
-        }//  for all soviews
+          }//  for all soviews
+        }
       }
     }
-  }
   vgui_macro_report_errors;
 }
-
 
 void vgui_displaybase_tableau::draw_soviews_select()
 {
@@ -211,26 +233,25 @@ void vgui_displaybase_tableau::draw_soviews_select()
   glPushName(id);
 
   glPushName(0); // will be replaced by the id of each object
-
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
-        it != groupings.end();
-        it++ )
-  {
-    if ( ! it->second.hide )
+  for( vcl_map<vcl_string, vgui_displaybase_tableau_grouping>::iterator it = groupings.begin();
+       it != groupings.end();
+       it++ )
     {
-      for (vcl_vector<vgui_soview*>::iterator so_iter=it->second.objects.begin();
-           so_iter != it->second.objects.end(); ++so_iter)
+    if( !it->second.hide )
       {
+      for( vcl_vector<vgui_soview *>::iterator so_iter = it->second.objects.begin();
+           so_iter != it->second.objects.end(); ++so_iter )
+        {
         // only highlight if the so is selectable
         vgui_soview* so = *so_iter;
-        if ( so->get_selectable())
-        {
+        if( so->get_selectable() )
+          {
           so->load_name();
           so->draw_select();
-        }
-      }//  for all soviews
+          }
+        }//  for all soviews
+      }
     }
-  }
 
   // remove name of last object
   glPopName();
@@ -239,20 +260,25 @@ void vgui_displaybase_tableau::draw_soviews_select()
   glPopName();
 }
 
-
 bool vgui_displaybase_tableau::handle(const vgui_event& e)
 {
-  if (e.type == vgui_DRAW)
-  {
-    if (gl_mode == GL_SELECT)
+  if( e.type == vgui_DRAW )
+    {
+    if( gl_mode == GL_SELECT )
+      {
       draw_soviews_select();
+      }
     else
+      {
       draw_soviews_render();
+      }
 
     return true;
-  }
+    }
   else
+    {
     return vgui_tableau::handle(e);
+    }
 }
 
 bool vgui_displaybase_tableau::is_selected(unsigned iden)
@@ -261,21 +287,23 @@ bool vgui_displaybase_tableau::is_selected(unsigned iden)
   return result != selections.end();
 }
 
-vcl_vector<vgui_soview*> vgui_displaybase_tableau::get_selected_soviews() const
+vcl_vector<vgui_soview *> vgui_displaybase_tableau::get_selected_soviews() const
 {
-  vcl_vector<vgui_soview*> svs;
-  for (unsigned i=0; i<selections.size(); ++i)
-  {
-    svs.push_back(vgui_soview::id_to_object(selections[i]));
-  }
+  vcl_vector<vgui_soview *> svs;
+  for( unsigned i = 0; i < selections.size(); ++i )
+    {
+    svs.push_back(vgui_soview::id_to_object(selections[i]) );
+    }
   return svs;
 }
 
 vcl_vector<unsigned> vgui_displaybase_tableau::get_all_ids() const
 {
   vcl_vector<unsigned> ids;
-  for (unsigned int i=0; i< objects.size(); ++i)
-    ids.push_back(objects[i]->get_id());
+  for( unsigned int i = 0; i < objects.size(); ++i )
+    {
+    ids.push_back(objects[i]->get_id() );
+    }
 
   return ids;
 }
@@ -283,26 +311,26 @@ vcl_vector<unsigned> vgui_displaybase_tableau::get_all_ids() const
 bool vgui_displaybase_tableau::select(unsigned iden)
 {
   vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
-  if (result == selections.end())
-  {
+  if( result == selections.end() )
+    {
     // add selection to vcl_list
     selections.push_back(iden);
 
     // notify so's observers
     vgui_soview* so = vgui_soview::id_to_object(iden);
 
-    if ( so->get_selectable())
-    {
+    if( so->get_selectable() )
+      {
       vgui_message msg;
 #if 0
       msg.text = "soview select";
 #endif // 0
-      msg.user = (void const*) &vgui_soview::msg_select;
+      msg.user = (void const *) &vgui_soview::msg_select;
       so->notify(msg);
 
-      if (cb_) cb_->select(iden);
+      if( cb_ ) {cb_->select(iden); }
+      }
     }
-  }
 
   return true;
 }
@@ -310,8 +338,8 @@ bool vgui_displaybase_tableau::select(unsigned iden)
 bool vgui_displaybase_tableau::deselect(unsigned iden)
 {
   vcl_vector<unsigned>::iterator result = vcl_find(selections.begin(), selections.end(), iden);
-  if (result != selections.end())
-  {
+  if( result != selections.end() )
+    {
     // remove selection from vcl_list
     selections.erase(result);
 
@@ -321,11 +349,11 @@ bool vgui_displaybase_tableau::deselect(unsigned iden)
 #if 0
     msg.text = "soview deselect";
 #endif // 0
-    msg.user = (void const*) &vgui_soview::msg_deselect;
+    msg.user = (void const *) &vgui_soview::msg_deselect;
     so->notify(msg);
 
-    if (cb_) cb_->deselect(iden);
-  }
+    if( cb_ ) {cb_->deselect(iden); }
+    }
 
   return true;
 }
@@ -337,20 +365,19 @@ bool vgui_displaybase_tableau::deselect_all()
   // may actually change the selections
 
   vcl_vector<unsigned> oldselections = selections;
-
-  for (vcl_vector<unsigned>::iterator s_iter = oldselections.begin();
+  for( vcl_vector<unsigned>::iterator s_iter = oldselections.begin();
        s_iter != oldselections.end(); ++s_iter )
-  {
+    {
     unsigned iden = *s_iter;
 
     // notify so's observers
     vgui_soview* so = vgui_soview::id_to_object(iden);
     vgui_message msg;
-    msg.user = (void const*)&vgui_soview::msg_deselect;
+    msg.user = (void const *)&vgui_soview::msg_deselect;
     so->notify(msg);
 
-    if (cb_) cb_->deselect(iden);
-  }
+    if( cb_ ) {cb_->deselect(iden); }
+    }
 
   selections.clear();
   this->post_redraw();
@@ -358,50 +385,53 @@ bool vgui_displaybase_tableau::deselect_all()
   return true;
 }
 
-
-vgui_soview* vgui_displaybase_tableau::get_highlighted_soview()
+vgui_soview * vgui_displaybase_tableau::get_highlighted_soview()
 {
-    return vgui_soview::id_to_object(highlighted);
+  return vgui_soview::id_to_object(highlighted);
 }
 
-vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
+vgui_soview * vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
 {
-  for (vcl_vector<vgui_soview*>::iterator i = objects.begin() ;
-       i != objects.end() ; ++i)
-  {
+  for( vcl_vector<vgui_soview *>::iterator i = objects.begin();
+       i != objects.end(); ++i )
+    {
     // get id of soview
     unsigned soview_id = (*i)->get_id();
 #ifdef DEBUG
     vcl_cerr << "vgui_displaybase_tableau::contains_hit soview_id=" << soview_id << '\n';
 #endif
     vcl_vector<unsigned>::iterator ni = vcl_find(names.begin(), names.end(), soview_id);
-    if (ni != names.end())
+    if( ni != names.end() )
+      {
       return *i;
-  }
+      }
+    }
 
   return 0;
 }
 
-vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string t_name )
+vgui_displaybase_tableau_grouping * vgui_displaybase_tableau::get_grouping_ptr( vcl_string t_name )
 {
-  vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.find( t_name );
-  if ( it != groupings.end() )
-    return & it->second;
+  vcl_map<vcl_string, vgui_displaybase_tableau_grouping>::iterator it = groupings.find( t_name );
+  if( it != groupings.end() )
+    {
+    return &it->second;
+    }
   else
+    {
     return NULL;
+    }
 }
 
-vcl_vector< vcl_string > vgui_displaybase_tableau::get_grouping_names()
+vcl_vector<vcl_string> vgui_displaybase_tableau::get_grouping_names()
 {
-  vcl_vector< vcl_string > to_return;
-
-  for ( vcl_map< vcl_string , vgui_displaybase_tableau_grouping >::iterator it = groupings.begin();
-        it != groupings.end();
-        it++ )
-  {
+  vcl_vector<vcl_string> to_return;
+  for( vcl_map<vcl_string, vgui_displaybase_tableau_grouping>::iterator it = groupings.begin();
+       it != groupings.end();
+       it++ )
+    {
     to_return.push_back( it->first );
-  }
+    }
 
   return to_return;
 }
-

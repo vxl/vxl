@@ -1,11 +1,11 @@
 // This is core/vgui/examples/wx_example/wx_docview_app.cxx
-//=========================================================================
-//:
+// =========================================================================
+// :
 // \file
 // \brief  wxWidgets main application class.
 //
 // See wx_docview_app.h for details.
-//=========================================================================
+// =========================================================================
 
 #include "wx_docview_app.h"
 #include "wx_docview_frame.h"
@@ -14,16 +14,16 @@
 
 #include <vgui/vgui.h>
 
-//: Give wxWidgets the means to create a wx_docview_app object.
+// : Give wxWidgets the means to create a wx_docview_app object.
 IMPLEMENT_APP(wx_docview_app)
 
 wx_docview_app::wx_docview_app(void)
-  : doc_manager_(0)
-  , frame_(0)
+  : doc_manager_(0),
+  frame_(0)
 {
 }
 
-//: Initialize the application.
+// : Initialize the application.
 bool wx_docview_app::OnInit(void)
 {
   // select the vgui_wx toolkit
@@ -38,7 +38,7 @@ bool wx_docview_app::OnInit(void)
                     wxT("wx_docview_doc"),
                     wxT("wx_docview_view"),
                     CLASSINFO(wx_docview_doc),
-                    CLASSINFO(wx_docview_view));
+                    CLASSINFO(wx_docview_view) );
 
   doc_manager_->SetMaxDocsOpen(1);
 
@@ -60,7 +60,7 @@ bool wx_docview_app::OnInit(void)
   return true;
 }
 
-//: Initialize the application.
+// : Initialize the application.
 int wx_docview_app::OnExit(void)
 {
   delete doc_manager_;

@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_cloneables_factory.h
 #ifndef mbl_cloneables_factory_h
 #define mbl_cloneables_factory_h
-//:
+// :
 //  \file
 // \brief A general factory pattern.
 // \author Ian Scott.
@@ -14,8 +14,8 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_export.h>
 
-//=======================================================================
-//: A general factory pattern.
+// =======================================================================
+// : A general factory pattern.
 // After templating this on a base class, and loading in
 // a bunch of concrete instantiations of the derived classes,
 // you can create any of the derived classes simply from
@@ -42,34 +42,35 @@
 // assert(dynamic_cast<vimt_image_2d>(p));
 // \endcode
 
-
 template <class BASE>
 class mbl_cloneables_factory
 {
- private:
+private:
   typedef vcl_map<vcl_string, mbl_cloneable_ptr<BASE> > MAP;
 
-  //: Singleton array of names, and association concrete instantiations of BASE.
+  // : Singleton array of names, and association concrete instantiations of BASE.
+private:
 
- private:
-
-  //: Get singleton instance.
-  static MAP &objects()
+  // : Get singleton instance.
+  static MAP & objects()
   {
     static vcl_auto_ptr<MAP> objects_;
-    if (objects_.get() == 0)
+
+    if( objects_.get() == 0 )
+      {
       objects_.reset(new MAP);
+      }
 
     return *objects_;
   }
 
- public:
+public:
 
-  //: Add an object for later cloning by the factory.
+  // : Add an object for later cloning by the factory.
   // Use the object's class name via the is_a() member.
-  static void add(const BASE & object) { add(object, object.is_a()); }
+  static void add(const BASE & object) { add(object, object.is_a() ); }
 
-  //: Add an object for later cloning by the factory.
+  // : Add an object for later cloning by the factory.
   // If there already is an object called name, it will
   // be overwritten.
   static void add(const BASE & object, const vcl_string & name)
@@ -77,34 +78,37 @@ class mbl_cloneables_factory
     objects()[name] = object;
   }
 
-  //: Get a pointer to a new copy of the object identified by name.
+  // : Get a pointer to a new copy of the object identified by name.
   // An exception will be thrown if name does not exist.
-  static vcl_auto_ptr<BASE > get_clone(const vcl_string & name)
+  static vcl_auto_ptr<BASE> get_clone(const vcl_string & name)
   {
     typedef typename MAP::const_iterator IT;
 
-    IT found = objects().find(name);
+    IT       found = objects().find(name);
     const IT end = objects().end();
 
-    if (found == end)
-    {
-      vcl_ostringstream ss;
-      IT it = objects().begin();
-      if (!objects().empty())
+    if( found == end )
       {
+      vcl_ostringstream ss;
+      IT                it = objects().begin();
+      if( !objects().empty() )
+        {
         ss << it->first;
-        while ( ++it != end)
+        while( ++it != end )
+          {
           ss << ", " << it->first;
+          }
+        }
+      mbl_exception_error(mbl_exception_no_name_in_factory(name, ss.str() ) );
+      return vcl_auto_ptr<BASE>();
       }
-      mbl_exception_error(mbl_exception_no_name_in_factory(name, ss.str()));
-      return vcl_auto_ptr<BASE >();
-    }
-    return vcl_auto_ptr<BASE >(found->second->clone());
+    return vcl_auto_ptr<BASE>(found->second->clone() );
   }
+
 };
 
 // Macro to instantiate template, and initialise singleton data item.
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
-template class mbl_cloneables_factory< T >
+  template class mbl_cloneables_factory < T >
 
 #endif  // mbl_cloneables_factory_h

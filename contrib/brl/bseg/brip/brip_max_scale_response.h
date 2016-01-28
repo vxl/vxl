@@ -1,7 +1,7 @@
 // This is brl/bseg/brip/brip_max_scale_response.h
 #ifndef brip_scale_extrema_h_
 #define brip_scale_extrema_h_
-//:
+// :
 // \file
 // \brief Compute an image with values of scale according to maximum gradient matrix trace response
 // \author J. L. Mundy, March 18, 2008
@@ -24,38 +24,37 @@
 template <class T>
 class brip_max_scale_response
 {
- public:
-  //:compute pyramid from base
-  brip_max_scale_response( vil_image_view<T> const& base_image,
-                           double scale_ratio,
-                           double max_scale);
-  //: a pre-computed pyramid
+public:
+  // :compute pyramid from base
+  brip_max_scale_response( vil_image_view<T> const& base_image, double scale_ratio, double max_scale);
+  // : a pre-computed pyramid
   brip_max_scale_response( vcl_vector<vil_image_view<T> > const& pyramid);
 
-  //: The vector of image scales
-  vcl_vector<float> scales() const {return pyramid_scales_;}
+  // : The vector of image scales
+  vcl_vector<float> scales() const {return pyramid_scales_; }
 
-  //: A pyramid from a base image with scales according to this->scales()
+  // : A pyramid from a base image with scales according to this->scales()
   vcl_vector<vil_image_view<T> > image_pyramid(vil_image_view<T> const& base);
 
-  //: a single image with the natural scale at each pixel
+  // : a single image with the natural scale at each pixel
   vil_image_view<float> scale_base();
 
-  //: a pyramid of natural scales at each pixel
+  // : a pyramid of natural scales at each pixel
   vcl_vector<vil_image_view<float> > scale_pyramid();
 
-  //: a mask that is true if the natural scale of pixel at a pyramid level is the same as the scale of the pyramid level
+  // : a mask that is true if the natural scale of pixel at a pyramid level is the same as the scale of the pyramid level
   vcl_vector<vil_image_view<vxl_byte> > mask_pyramid();
 
-  //: for debugging purposes -- not normally used
-  vcl_vector<vil_image_view<float> > trace_pyramid() const {return trace_;}
- protected:
-  //internal functions
-  brip_max_scale_response(): trace_valid_(false){}
+  // : for debugging purposes -- not normally used
+  vcl_vector<vil_image_view<float> > trace_pyramid() const {return trace_; }
+protected:
+  // internal functions
+  brip_max_scale_response() : trace_valid_(false) {}
   void compute_trace_pyramid();
-  vcl_vector<float> pyramid_scales_;
+
+  vcl_vector<float>                  pyramid_scales_;
   vcl_vector<vil_image_view<float> > grey_pyramid_;
-  bool trace_valid_;
+  bool                               trace_valid_;
   vcl_vector<vil_image_view<float> > trace_;
 };
 

@@ -6,9 +6,9 @@
 #include <memory>
 
 #ifdef vcl_generic_memory_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_memory_STD std
+#  define vcl_generic_memory_STD std
 #endif
 
 #include "../generic/vcl_memory.h"

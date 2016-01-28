@@ -15,28 +15,31 @@ static void test_region_proc(int argc, char * argv[])
 {
   vcl_string root = testlib_root_dir();
   vcl_string image_path = root + "/contrib/brl/bseg/sdet/tests/jar-closeup.tif";
+
   vcl_cout << "Loading Image " << image_path << '\n';
-  vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str());
-  if (image)
-  {
+  vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str() );
+  if( image )
+    {
     static sdet_detector_params dp;
-    dp.noise_multiplier=1.0f;
-    dp.aggressive_junction_closure=1;
+    dp.noise_multiplier = 1.0f;
+    dp.aggressive_junction_closure = 1;
     sdet_region_proc_params rpp(dp);
-    sdet_region_proc rp(rpp);
+    sdet_region_proc        rp(rpp);
     rp.set_image_resource(image);
     rp.extract_regions();
     vcl_vector<vtol_intensity_face_sptr>& regions = rp.get_regions();
-    int n = regions.size();
+    int                                   n = regions.size();
     TEST_NEAR("nregions", n, 190, 5);
-    if (n>0)
-    {
+    if( n > 0 )
+      {
       vtol_intensity_face_sptr f = regions[0];
       TEST_NEAR("size of first region", f->Npix(), 41100, 50);
+      }
     }
-  }else{
+  else
+    {
     TEST("image could not be loaded - no fault", true, true);
-  }
+    }
 }
 
 TESTMAIN_ARGS(test_region_proc);

@@ -2,9 +2,9 @@
 #ifndef vpdfl_axis_gaussian_h
 #define vpdfl_axis_gaussian_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Multi-variate Gaussian PDF, with a diagonal covariance matrix
 // \author Tim Cootes
@@ -19,19 +19,20 @@
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_iosfwd.h>
 
-//: Multi-variate Gaussian PDF, with a diagonal covariance matrix
+// : Multi-variate Gaussian PDF, with a diagonal covariance matrix
 class vpdfl_axis_gaussian : public vpdfl_pdf_base
 {
-  double log_k_;
+  double             log_k_;
   vnl_vector<double> sd_;
 
   void calcLogK();
+
   void calcSD();
 
-  //: Calculate (x-mu)' * Sigma^-1 * (x-mu)
-  double dx_sigma_dx(const vnl_vector<double> &x) const;
+  // : Calculate (x-mu)' * Sigma^-1 * (x-mu)
+  double dx_sigma_dx(const vnl_vector<double> & x) const;
 
- public:
+public:
 
   // Dflt ctor
   vpdfl_axis_gaussian();
@@ -41,35 +42,32 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
 
   void set(const vnl_vector<double>& mean, const vnl_vector<double>& var);
 
-  //: Constant offset for log probability
+  // : Constant offset for log probability
   double log_k() const { return log_k_; }
 
-  //: SD for each dimension
-  const vnl_vector<double>& sd() const { return sd_; }
+  // : SD for each dimension
+  const vnl_vector<double> & sd() const { return sd_; }
 
-  //: Log of probability density at x
+  // : Log of probability density at x
   virtual double log_p(const vnl_vector<double>& x) const;
 
-  //: Gradient and value of PDF at x
+  // : Gradient and value of PDF at x
   //  Computes gradient of PDF at x, and returns the prob at x in p
-  virtual void gradient(vnl_vector<double>& g,
-                        const vnl_vector<double>& x,
-                        double& p) const;
+  virtual void gradient(vnl_vector<double>& g, const vnl_vector<double>& x, double& p) const;
 
-  //: Gradient and value of log(p(x)) at x
+  // : Gradient and value of log(p(x)) at x
   //  Computes gradient df/dx of f(x)=log(p(x)) at x.
   //  Result is vector of same dimensionality as x.
-  virtual void gradient_logp(vnl_vector<double>& g,
-                             const vnl_vector<double>& x) const;
+  virtual void gradient_logp(vnl_vector<double>& g, const vnl_vector<double>& x) const;
 
-  //: Create a sampler object on the heap
+  // : Create a sampler object on the heap
   // Caller is responsible for deletion.
-  virtual vpdfl_sampler_base* new_sampler() const;
+  virtual vpdfl_sampler_base * new_sampler() const;
 
-  //: Compute threshold for PDF to pass a given proportion
+  // : Compute threshold for PDF to pass a given proportion
   virtual double log_prob_thresh(double pass_proportion) const;
 
-  //: Compute nearest point to x which has a density above a threshold
+  // : Compute nearest point to x which has a density above a threshold
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
   //  directly towards the mean (i.e. to the nearest plausible point using a
   //  Mahalanobis distance) until log_p(x)=log_p_min.
@@ -77,27 +75,28 @@ class vpdfl_axis_gaussian : public vpdfl_pdf_base
   // \param log_p_min lower threshold for log_p(x)
   virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;
 
-  //: Version number for I/O
+  // : Version number for I/O
   short version_no() const;
 
-  //: Name of the class
+  // : Name of the class
   virtual vcl_string is_a() const;
 
-  //: Does the name of the class match the argument?
+  // : Does the name of the class match the argument?
   virtual bool is_class(vcl_string const& s) const;
 
-  //: Create a copy on the heap and return base class pointer.
+  // : Create a copy on the heap and return base class pointer.
   // Caller is responsible for deletion
-  virtual vpdfl_pdf_base* clone() const;
+  virtual vpdfl_pdf_base * clone() const;
 
-  //: Print class to os
+  // : Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-  //: Save class to binary file stream
+  // : Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-  //: Load class from binary file stream
+  // : Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
+
 };
 
 #endif // vpdfl_axis_gaussian_h

@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_edges_raw_process.h
 #ifndef bvxm_save_edges_raw_process_h_
 #define bvxm_save_edges_raw_process_h_
-//:
+// :
 // \file
 // \brief A process that saves the voxel world edge probability grid in a binary format readable by the Drishti volume rendering program
 //        (http://anusf.anu.edu.au/Vizlab/drishti/)

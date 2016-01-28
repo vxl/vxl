@@ -1,7 +1,7 @@
 // This is core/vpgl/algo/vpgl_fm_compute_2_point.h
 #ifndef vpgl_fm_compute_2_point_h_
 #define vpgl_fm_compute_2_point_h_
-//:
+// :
 // \file
 // \brief A 2 point algorithm for computing the fundamental matrix for translation from point correspondences
 // \author J. L. Mundy
@@ -23,20 +23,19 @@
 
 class vpgl_fm_compute_2_point
 {
- public:
-  //: If precondition = true, points are conditioned prior to computation.
+public:
+  // : If precondition = true, points are conditioned prior to computation.
   vpgl_fm_compute_2_point( bool precondition = true )
-  : precondition_(precondition) {}
+    : precondition_(precondition) {}
 
-  //: Compute from two sets of corresponding points.
+  // : Compute from two sets of corresponding points.
   // Put the resulting matrix into fm, return true if successful.
   // Points pr are associated with the RHS of the fundamental matrix
   // while the points pl are associated with the LHS.
-  bool compute( const vcl_vector< vgl_homg_point_2d<double> >& pr,
-                const vcl_vector< vgl_homg_point_2d<double> >& pl,
+  bool compute( const vcl_vector<vgl_homg_point_2d<double> >& pr, const vcl_vector<vgl_homg_point_2d<double> >& pl,
                 vpgl_fundamental_matrix<double>& fm );
 
- protected:
+protected:
   bool precondition_;
 };
 

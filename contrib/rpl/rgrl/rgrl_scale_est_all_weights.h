@@ -1,6 +1,6 @@
 #ifndef rgrl_scale_est_all_weights_h_
 #define rgrl_scale_est_all_weights_h_
-//:
+// :
 // \file
 // \brief
 // \author Chuck Stewart
@@ -11,7 +11,7 @@
 #include <vnl/vnl_matrix.h>
 class rgrl_match_set;
 
-//:
+// :
 // Weighted scale estimator that computes the scale as the sum of the
 // weighted residuals divided by the sum of weights. The weights can
 // come from either the geometric error, or signature error, or both.
@@ -26,29 +26,21 @@ class rgrl_match_set;
 class rgrl_scale_est_all_weights
   : public rgrl_scale_estimator_wgted
 {
- public:
+public:
   rgrl_scale_est_all_weights(  bool do_signature_scale = false );
 
-  rgrl_scale_sptr
-  estimate_weighted( rgrl_match_set const& match_set,
-                     rgrl_scale_sptr const& current_scales,
-                     bool use_signature_only =  false,
-                     bool penalize_scaling = false) const;
+  rgrl_scale_sptr estimate_weighted( rgrl_match_set const& match_set, rgrl_scale_sptr const& current_scales,
+                                     bool use_signature_only =  false, bool penalize_scaling = false) const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_scale_est_all_weights, rgrl_scale_estimator_wgted );
+private:
+  bool compute_geometric_scale( double& return_scale, rgrl_match_set const& match_set, bool use_signature_only,
+                                bool penalize_scaling ) const;
 
- private:
-  bool
-  compute_geometric_scale( double& return_scale,
-                           rgrl_match_set const& match_set,
-                           bool use_signature_only,
-                           bool penalize_scaling ) const;
+  bool compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const& match_set ) const;
 
-  bool
-  compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const& match_set ) const;
-
- private:
+private:
   bool do_signature_scale_;
 };
 

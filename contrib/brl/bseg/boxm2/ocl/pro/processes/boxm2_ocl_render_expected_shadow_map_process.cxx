@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_shadow_map_process.cxx
-//:
+// :
 // \file
 // \brief  A process for rendering the scene.
 //
@@ -16,28 +16,27 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vil/vil_image_view.h>
-//brdb stuff
+// brdb stuff
 #include <brdb/brdb_value.h>
 
-//directory utility
+// directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_shadow_map.h>
 
-
 namespace boxm2_ocl_render_expected_shadow_map_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 7;
+const unsigned n_outputs_ = 1;
 }
 
 bool boxm2_ocl_render_expected_shadow_map_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_shadow_map_process_globals;
 
-  //process takes 1 input
+  // process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -49,7 +48,7 @@ bool boxm2_ocl_render_expected_shadow_map_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -63,23 +62,23 @@ bool boxm2_ocl_render_expected_shadow_map_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_shadow_map_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+    }
+  // get the inputs
+  unsigned         i = 0;
+  bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
 
-  boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
+  boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned                ni = pro.get_input<unsigned>(i++);
+  unsigned                nj = pro.get_input<unsigned>(i++);
+  vcl_string              ident = pro.get_input<vcl_string>(i++);
 
-
-  vil_image_view<float> *exp_img = new vil_image_view<float>();
+  vil_image_view<float> *  exp_img = new vil_image_view<float>();
   vil_image_view_base_sptr exp_img_out = exp_img;
 
   boxm2_ocl_render_expected_shadow_map::render(device, scene, opencl_cache, cam, ni, nj, ident, *exp_img);

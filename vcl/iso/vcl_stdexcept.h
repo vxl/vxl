@@ -6,9 +6,9 @@
 #include <stdexcept>
 
 #ifdef vcl_generic_stdexcept_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_stdexcept_STD std
+#  define vcl_generic_stdexcept_STD std
 #endif
 
 #include "../generic/vcl_stdexcept.h"

@@ -1,7 +1,7 @@
 // This is core/vil/vil_pixel_format.h
 #ifndef vil_pixel_format_h_
 #define vil_pixel_format_h_
-//:
+// :
 // \file
 // \author Ian Scott.
 // Note that a vcl_complex<float> is thought of as a scalar
@@ -18,9 +18,9 @@
 #include <vcl_iosfwd.h>
 #include <vcl_complex.h>
 
-//: Describes the type of the concrete data.
+// : Describes the type of the concrete data.
 enum vil_pixel_format
-{
+  {
   VIL_PIXEL_FORMAT_UNKNOWN = 0,
 
 #if VXL_HAS_INT_64
@@ -66,31 +66,29 @@ enum vil_pixel_format
   VIL_PIXEL_FORMAT_RGBA_DOUBLE = 33,
 //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE = 34,
 
-//: vcl_complex<float> is a scalar for vil's purposes.
+// : vcl_complex<float> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_FLOAT = 35,
-//: vcl_complex<double> is a scalar for vil's purposes.
+// : vcl_complex<double> is a scalar for vil's purposes.
   VIL_PIXEL_FORMAT_COMPLEX_DOUBLE = 36,
 
 // Add values here and be careful to keep values in vil_pixel_format.cxx in sync
 // Don't forget to increase the end value. Also add to vil_convert_cast in vil_convert.h
 
   VIL_PIXEL_FORMAT_ENUM_END = 37
-};
+  };
 
-
-//: The pixel format enumeration corresponding to the C++ type.
+// : The pixel format enumeration corresponding to the C++ type.
 //
 template <class T>
-inline vil_pixel_format vil_pixel_format_of(T){return VIL_PIXEL_FORMAT_UNKNOWN;}
+inline vil_pixel_format vil_pixel_format_of(T) {return VIL_PIXEL_FORMAT_UNKNOWN; }
 
-
-//: The C++ type corresponding to an invalid pixel format
+// : The C++ type corresponding to an invalid pixel format
 //
 // See vil_pixel_format_type_of.
 //
-typedef void* vil_pixel_format_invalid_type;
+typedef void * vil_pixel_format_invalid_type;
 
-//: The C++ type corresponding to a pixel format enumeration.
+// : The C++ type corresponding to a pixel format enumeration.
 // Use like
 // \code
 //    typedef vil_pixel_format_type_of<VIL_PIXEL_FORMAT_BYTE>::type byte_type;
@@ -103,16 +101,15 @@ typedef void* vil_pixel_format_invalid_type;
 //
 template <vil_pixel_format pix_type>
 struct vil_pixel_format_type_of
-{
+  {
   typedef vil_pixel_format_invalid_type type;
   typedef vil_pixel_format_invalid_type component_type;
-};
+  };
 
-
-//: Get the vil_pixel_format value for a given type.
-#define vil_pixel_format_macro(T,C,V)\
-VCL_DEFINE_SPECIALIZATION inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) { return V; }\
-VCL_DEFINE_SPECIALIZATION struct vil_pixel_format_type_of<V> { typedef T type; typedef C component_type; }
+// : Get the vil_pixel_format value for a given type.
+#define vil_pixel_format_macro(T, C, V) \
+  VCL_DEFINE_SPECIALIZATION inline vil_pixel_format vil_pixel_format_of(T /*dummy*/) { return V; } \
+  VCL_DEFINE_SPECIALIZATION struct vil_pixel_format_type_of<V> { typedef T type; typedef C component_type; }
 
 #if VXL_HAS_INT_64
 vil_pixel_format_macro(vxl_uint_64, vxl_uint_64, VIL_PIXEL_FORMAT_UINT_64);
@@ -155,23 +152,23 @@ vil_pixel_format_macro(vil_rgba<float>,       float,       VIL_PIXEL_FORMAT_RGBA
 vil_pixel_format_macro(vil_rgba<double>,      double,      VIL_PIXEL_FORMAT_RGBA_DOUBLE);
 
 vil_pixel_format_macro(vcl_complex<float>, vcl_complex<float>, VIL_PIXEL_FORMAT_COMPLEX_FLOAT);
-vil_pixel_format_macro(vcl_complex<double>,vcl_complex<double>,VIL_PIXEL_FORMAT_COMPLEX_DOUBLE);
+vil_pixel_format_macro(vcl_complex<double>, vcl_complex<double>, VIL_PIXEL_FORMAT_COMPLEX_DOUBLE);
 
 #undef vil_pixel_format_macro
 
-//: Return the number of bytes used by each component of pixel format f
+// : Return the number of bytes used by each component of pixel format f
 unsigned vil_pixel_format_sizeof_components(enum vil_pixel_format f);
 
-//: Return the number of components in pixel format f
+// : Return the number of components in pixel format f
 unsigned vil_pixel_format_num_components(enum vil_pixel_format f);
 
-//: Return the format of each component of pixel format f
+// : Return the format of each component of pixel format f
 vil_pixel_format vil_pixel_format_component_format(enum vil_pixel_format f);
 
-//: Output a pretty string representing the pixel format.
-vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f);
+// : Output a pretty string representing the pixel format.
+vcl_ostream & operator <<(vcl_ostream & os, vil_pixel_format f);
 
-//: Convert a string into a pixel format.
+// : Convert a string into a pixel format.
 // This uses the same encoding as operator<<.
 vil_pixel_format vil_pixel_format_from_string(const char * s);
 

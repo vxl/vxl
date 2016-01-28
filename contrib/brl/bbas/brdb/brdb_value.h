@@ -1,7 +1,7 @@
 // This is brl/bbas/brdb/brdb_value.h
 #ifndef brdb_value_h_
 #define brdb_value_h_
-//:
+// :
 // \file
 // \brief The database value class
 // \author Matt Leotta
@@ -21,324 +21,327 @@
 #include <vsl/vsl_binary_io.h>
 
 // forward declaration
-template< class T > class brdb_value_t;
+template <class T>
+class brdb_value_t;
 
-//: This abstract class is the base class for database values
+// : This abstract class is the base class for database values
 class brdb_value : public vbl_ref_count
 {
- public:
+public:
 
-  //: Destructor
+  // : Destructor
   virtual ~brdb_value() {}
 
-  //: Return the actual value
-  template< class T >
+  // : Return the actual value
+  template <class T>
   T val() const
   {
-    const brdb_value_t<T>* type_val = dynamic_cast<const brdb_value_t<T>*>(this);
+    const brdb_value_t<T>* type_val = dynamic_cast<const brdb_value_t<T> *>(this);
+
     assert(type_val);
     return type_val->value();
   }
 
-
-  //: Assignment operator
-  template< class T >
-  brdb_value& operator = (const T& rhs)
+  // : Assignment operator
+  template <class T>
+  brdb_value & operator =(const T& rhs)
   {
-    assert(this->is_a() == brdb_value_t<T>::type());
-    this->assign(brdb_value_t<T>(rhs));
+    assert(this->is_a() == brdb_value_t<T>::type() );
+    this->assign(brdb_value_t<T>(rhs) );
     return *this;
   }
 
-  //: Create a copy of the object on the heap.
+  // : Create a copy of the object on the heap.
   // The caller is responsible for deletion
-  virtual brdb_value* clone() const = 0;
+  virtual brdb_value * clone() const = 0;
 
-  //: Return the string identifying this class
+  // : Return the string identifying this class
   virtual vcl_string is_a() const = 0;
 
-  //: Test for equality under polymorphism
+  // : Test for equality under polymorphism
   virtual bool eq(const brdb_value& other) const = 0;
 
-  //: Test for inequality (less than) under polymorphism
+  // : Test for inequality (less than) under polymorphism
   virtual bool lt(const brdb_value& other) const = 0;
 
-  //: Assign the value of /p other to this if the types are the same
+  // : Assign the value of /p other to this if the types are the same
   virtual bool assign(const brdb_value& other) = 0;
 
-  //: Print out the value
+  // : Print out the value
   virtual void print() const = 0;
 
-  //: Return a const reference to the global registry of database value classes
-  static vcl_map<vcl_string, const brdb_value*> const & registry() { return mut_registry(); }
+  // : Return a const reference to the global registry of database value classes
+  static vcl_map<vcl_string, const brdb_value *> const & registry() { return mut_registry(); }
 
-  //: Create static instances of this struct to register a database value class
-  struct registrar{
+  // : Create static instances of this struct to register a database value class
+  struct registrar
+    {
     registrar(const brdb_value* exemplar);
-  };
+    };
 
   friend struct registrar;
 
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // Binary I/O functions
 
-  //: binary io read value only
+  // : binary io read value only
   //  Handles only the value (without version or type info)
-  virtual void b_read_value(vsl_b_istream&)
+  virtual void b_read_value(vsl_b_istream &)
   {
     vcl_cout << "Warning: calling binary read on parent value class, this value is not being read" << vcl_endl;
   }
 
-  //: binary io write value only
+  // : binary io write value only
   //  Handles only the value (without version or type info)
-  virtual void b_write_value(vsl_b_ostream&)
+  virtual void b_write_value(vsl_b_ostream &)
   {
     vcl_cout << "Warning: calling binary write on parent value class, this value is not being saved" << vcl_endl;
   }
 
-
- protected:
-  //: Constructor
+protected:
+  // : Constructor
   brdb_value() {}
-  //: Copy Constructor
-  brdb_value(const brdb_value&) : vbl_ref_count() {}
+  // : Copy Constructor
+  brdb_value(const brdb_value &) : vbl_ref_count() {}
+private:
+  // : Return a reference to the global registry of database value classes
+  static vcl_map<vcl_string, const brdb_value *> & mut_registry();
 
- private:
-  //: Return a reference to the global registry of database value classes
-  static vcl_map<vcl_string, const brdb_value*> & mut_registry();
 };
 
-//: Equals operator
-inline bool operator == (const brdb_value& lhs,
-                         const brdb_value& rhs)
+// : Equals operator
+inline bool operator ==(const brdb_value& lhs,
+                        const brdb_value& rhs)
 {
-  assert(lhs.is_a() == rhs.is_a());
+  assert(lhs.is_a() == rhs.is_a() );
   return lhs.eq(rhs);
 }
 
-//: Not Equal operator
-inline bool operator != (const brdb_value& lhs,
-                         const brdb_value& rhs)
+// : Not Equal operator
+inline bool operator !=(const brdb_value& lhs,
+                        const brdb_value& rhs)
 {
-  assert(lhs.is_a() == rhs.is_a());
+  assert(lhs.is_a() == rhs.is_a() );
   return !lhs.eq(rhs);
 }
 
-//: Less than operator
-inline bool operator < (const brdb_value& lhs,
-                        const brdb_value& rhs)
+// : Less than operator
+inline bool operator <(const brdb_value& lhs,
+                       const brdb_value& rhs)
 {
-  assert(lhs.is_a() == rhs.is_a());
+  assert(lhs.is_a() == rhs.is_a() );
   return lhs.lt(rhs);
 }
-//: Less than operator
-inline bool operator <= (const brdb_value& lhs,
-                         const brdb_value& rhs)
+
+// : Less than operator
+inline bool operator <=(const brdb_value& lhs,
+                        const brdb_value& rhs)
 {
-  assert(lhs.is_a() == rhs.is_a());
+  assert(lhs.is_a() == rhs.is_a() );
   return !rhs.lt(lhs);
 }
 
-//: Greater than operator
-inline bool operator > (const brdb_value& lhs,
-                        const brdb_value& rhs)
+// : Greater than operator
+inline bool operator >(const brdb_value& lhs,
+                       const brdb_value& rhs)
 {
-  assert(lhs.is_a() == rhs.is_a());
+  assert(lhs.is_a() == rhs.is_a() );
   return rhs.lt(lhs);
 }
 
-//: Greater than or equal to operator
-inline bool operator >= (const brdb_value& lhs,
-                         const brdb_value& rhs)
+// : Greater than or equal to operator
+inline bool operator >=(const brdb_value& lhs,
+                        const brdb_value& rhs)
 {
-  assert(lhs.is_a() == rhs.is_a());
+  assert(lhs.is_a() == rhs.is_a() );
   return !lhs.lt(rhs);
 }
 
-//: A templated database value class
-template< class T >
+// : A templated database value class
+template <class T>
 class brdb_value_t : public brdb_value
 {
- public:
-  //: Default Constructor
+public:
+  // : Default Constructor
   brdb_value_t<T>() {}
 
-  //: Constructor
-  explicit brdb_value_t<T>(const T& value)
-   : value_(value) {}
+  // : Constructor
+  explicit brdb_value_t<T>(const T &value)
+  : value_(value) {}
 
-  //: Return the string identifying this class
+  // : Return the string identifying this class
   virtual vcl_string is_a() const { return get_type_string(); }
 
-  static vcl_string const& type() { return get_type_string(); }
+  static vcl_string const & type() { return get_type_string(); }
 
-  //: Clone
+  // : Clone
   virtual brdb_value * clone() const { return new brdb_value_t<T>(*this); }
 
-  //: Test for equality under polymorphism
+  // : Test for equality under polymorphism
   virtual bool eq(const brdb_value& other) const;
 
-  //: Test for inequality (less than) under polymorphism
+  // : Test for inequality (less than) under polymorphism
   virtual bool lt(const brdb_value& other) const;
 
-  //: Assign the value of /p other to this if the types are the same
+  // : Assign the value of /p other to this if the types are the same
   virtual bool assign(const brdb_value& other);
 
-  //: Return the string identifying this class
-  virtual void print() const { vcl_cout << value_ << "   ";}
+  // : Return the string identifying this class
+  virtual void print() const { vcl_cout << value_ << "   "; }
 
-  //: Return the value
+  // : Return the value
   T value() const { return value_; }
 
-  //: Conversion operator
+  // : Conversion operator
   operator T() const { return value_; }
 
-  //: Assignment operator
-  brdb_value_t<T>& operator = (const T& rhs) { value_ = rhs; return *this; }
-  //: Assignment operator
-  brdb_value_t<T>& operator = (const brdb_value_t<T>& rhs) { value_ = rhs.value_; return *this; }
+  // : Assignment operator
+  brdb_value_t<T> & operator =(const T& rhs) { value_ = rhs; return *this; }
+  // : Assignment operator
+  brdb_value_t<T> & operator =(const brdb_value_t<T>& rhs) { value_ = rhs.value_; return *this; }
 
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // Binary I/O functions
 
-  //: binary io read value only
+  // : binary io read value only
   //  Handles only the value (without version or type info)
   virtual void b_read_value(vsl_b_istream& is);
 
-  //: binary io write value only
+  // : binary io write value only
   //  Handles only the value (without version or type info)
   virtual void b_write_value(vsl_b_ostream& os) const;
 
- private:
-  //: The stored data
+private:
+  // : The stored data
   T value_;
 
-  //: The type identifier string for this class
-  static const vcl_string& get_type_string();
+  // : The type identifier string for this class
+  static const vcl_string & get_type_string();
+
 };
 
-template< class T >
-inline bool operator == (const brdb_value_t<T>& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator ==(const brdb_value_t<T>& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs.value() == rhs.value();
 }
 
-template< class T >
-inline bool operator == (const T& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator ==(const T& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs == rhs.value();
 }
 
-template< class T >
-inline bool operator == (const brdb_value_t<T>& lhs,
-                         const T& rhs)
+template <class T>
+inline bool operator ==(const brdb_value_t<T>& lhs,
+                        const T& rhs)
 {
   return lhs.value() == rhs;
 }
 
-template< class T >
-inline bool operator != (const brdb_value_t<T>& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator !=(const brdb_value_t<T>& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs.value() != rhs.value();
 }
 
-template< class T >
-inline bool operator != (const T& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator !=(const T& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs != rhs.value();
 }
 
-template< class T >
-inline bool operator != (const brdb_value_t<T>& lhs,
-                         const T& rhs)
+template <class T>
+inline bool operator !=(const brdb_value_t<T>& lhs,
+                        const T& rhs)
 {
   return lhs.value() != rhs;
 }
 
-template< class T >
-inline bool operator <= (const brdb_value_t<T>& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator <=(const brdb_value_t<T>& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs.value() <= rhs.value();
 }
 
-template< class T >
-inline bool operator <= (const T& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator <=(const T& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs <= rhs.value();
 }
 
-template< class T >
-inline bool operator <= (const brdb_value_t<T>& lhs,
-                         const T& rhs)
+template <class T>
+inline bool operator <=(const brdb_value_t<T>& lhs,
+                        const T& rhs)
 {
   return lhs.value() <= rhs;
 }
 
-template< class T >
-inline bool operator < (const brdb_value_t<T>& lhs,
-                        const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator <(const brdb_value_t<T>& lhs,
+                       const brdb_value_t<T>& rhs)
 {
   return lhs.value() < rhs.value();
 }
 
-template< class T >
-inline bool operator < (const T& lhs,
-                        const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator <(const T& lhs,
+                       const brdb_value_t<T>& rhs)
 {
   return lhs < rhs.value();
 }
 
-template< class T >
-inline bool operator < (const brdb_value_t<T>& lhs,
-                        const T& rhs)
+template <class T>
+inline bool operator <(const brdb_value_t<T>& lhs,
+                       const T& rhs)
 {
   return lhs.value() < rhs;
 }
 
-template< class T >
-inline bool operator >= (const brdb_value_t<T>& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator >=(const brdb_value_t<T>& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs.value() >= rhs.value();
 }
 
-template< class T >
-inline bool operator >= (const T& lhs,
-                         const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator >=(const T& lhs,
+                        const brdb_value_t<T>& rhs)
 {
   return lhs >= rhs.value();
 }
 
-template< class T >
-inline bool operator >= (const brdb_value_t<T>& lhs,
-                         const T& rhs)
+template <class T>
+inline bool operator >=(const brdb_value_t<T>& lhs,
+                        const T& rhs)
 {
   return lhs.value() >= rhs;
 }
 
-template< class T >
-inline bool operator > (const brdb_value_t<T>& lhs,
-                        const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator >(const brdb_value_t<T>& lhs,
+                       const brdb_value_t<T>& rhs)
 {
   return lhs.value() > rhs.value();
 }
 
-template< class T >
-inline bool operator > (const T& lhs,
-                        const brdb_value_t<T>& rhs)
+template <class T>
+inline bool operator >(const T& lhs,
+                       const brdb_value_t<T>& rhs)
 {
   return lhs > rhs.value();
 }
 
-template< class T >
-inline bool operator > (const brdb_value_t<T>& lhs,
-                        const T& rhs)
+template <class T>
+inline bool operator >(const brdb_value_t<T>& lhs,
+                       const T& rhs)
 {
   return lhs.value() > rhs;
 }

@@ -4,7 +4,6 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-
 DECLARE_FUNC_CONS(bbas_atmospheric_corr_process);
 DECLARE_FUNC_CONS(bbas_estimate_irradiance_process);
 DECLARE_FUNC_CONS(bbas_camera_angles_process);

@@ -5,7 +5,7 @@
 
 #ifndef rgtl_serialize_istream_hxx
 #define rgtl_serialize_istream_hxx
-//:
+// :
 // \file
 // \brief Load rgtl objects from a stream.
 // \author Brad King
@@ -17,73 +17,75 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cstddef.h>
 
-//: Serialization load object that reads from a stream.
+// : Serialization load object that reads from a stream.
 //  See rgtl_serialize.txt for serialization interface details.
 class rgtl_serialize_istream
 {
   VCL_SAFE_BOOL_DEFINE;
- public:
-  //: Mark this class as a serialization load direction.
+public:
+  // : Mark this class as a serialization load direction.
   typedef rgtl_serialize_direction_load serialize_direction;
 
-  //: Construct with a stream from which to read data.
+  // : Construct with a stream from which to read data.
   rgtl_serialize_istream(vcl_istream& is);
 
-  //: Safe conversion to a boolean type.
+  // : Safe conversion to a boolean type.
   operator safe_bool() const
-  { return this->okay()? VCL_SAFE_BOOL_TRUE : 0; }
+      { return this->okay() ? VCL_SAFE_BOOL_TRUE : 0; }
 
-  //: Read data from the input stream.
-  rgtl_serialize_istream& read(void* data, vcl_size_t length);
+  // : Read data from the input stream.
+  rgtl_serialize_istream & read(void* data, vcl_size_t length);
 
-  //: Get the current position in the stream.
+  // : Get the current position in the stream.
   vcl_size_t position();
- private:
+
+private:
   bool okay() const;
-  vcl_istream& stream_;
-  vcl_size_t buffer_left_;
-  vcl_size_t buffer_used_;
+
+  vcl_istream&              stream_;
+  vcl_size_t                buffer_left_;
+  vcl_size_t                buffer_used_;
   static unsigned int const buffer_size = 1024;
-  char buffer_[buffer_size];
+  char                      buffer_[buffer_size];
 };
 
-//: Provide "loader >> object" syntax
+// : Provide "loader >> object" syntax
 template <typename T>
-inline rgtl_serialize_istream& operator>>(rgtl_serialize_istream& rsr, T& x)
+inline rgtl_serialize_istream & operator>>(rgtl_serialize_istream& rsr, T& x)
 {
   return rsr & x;
 }
 
-//: Provide "serializer & object" syntax for arbitrary objects
+// : Provide "serializer & object" syntax for arbitrary objects
 template <typename T>
-rgtl_serialize_istream& operator&(rgtl_serialize_istream& rsr, T& x)
+rgtl_serialize_istream & operator&(rgtl_serialize_istream& rsr, T& x)
 {
   rgtl_serialize(rsr, x);
   return rsr;
 }
 
-//: Provide "serializer & array" syntax for array types
+// : Provide "serializer & array" syntax for array types
 template <typename T, unsigned int N>
-rgtl_serialize_istream& operator&(rgtl_serialize_istream& rsr, T(&x)[N])
+rgtl_serialize_istream & operator&(rgtl_serialize_istream& rsr, T(&x)[N])
 {
-  for (unsigned int i=0; i < N; ++i)
+  for( unsigned int i = 0; i < N; ++i )
     {
     rsr & x[i];
     }
   return rsr;
 }
 
-//: Poison "serializer & pointer" syntax for pointer types
+// : Poison "serializer & pointer" syntax for pointer types
 template <typename T>
-rgtl_serialize_istream& operator&(rgtl_serialize_istream& rsr, T*& x)
+rgtl_serialize_istream & operator&(rgtl_serialize_istream& rsr, T *& x)
 {
   rgtl_serialize_istream_does_not_support_pointers(x);
   return rsr;
 }
 
-//: Provide "serializer & object" syntax for primitive types
+// : Provide "serializer & object" syntax for primitive types
 #define RGTL_SERIALIZE_ISTREAM_DECL(T)                              \
-  rgtl_serialize_istream& operator&(rgtl_serialize_istream& rsr, T& x)
+  rgtl_serialize_istream & operator&(rgtl_serialize_istream & rsr, T & x)
 RGTL_SERIALIZE_ISTREAM_DECL(bool);
 RGTL_SERIALIZE_ISTREAM_DECL(char);
 RGTL_SERIALIZE_ISTREAM_DECL(signed char);

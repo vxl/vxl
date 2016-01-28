@@ -1,12 +1,12 @@
 #include "mmn_analyze_graph.h"
-//:
+// :
 // \file
 // \brief Analyze a graph to deduce the dependency order.
 // \author Tim Cootes
 
 #include "mmn_graph_rep1.h"
 
-//: Given a graph with n.size() nodes and arc.size() arcs, deduce dependencies
+// : Given a graph with n.size() nodes and arc.size() arcs, deduce dependencies
 //  If returns true, then dep is an ordered list of dependencies
 //  allowing us solve a minimisation problem one node at a time.
 //  If it returns false, then the graph cannot be decomposed into
@@ -22,7 +22,8 @@ bool mmn_analyze_graph(const vcl_vector<unsigned>& n,
                        unsigned& max_n_arcs)
 {
   mmn_graph_rep1 g;
-  g.build(n.size(),arc);
+
+  g.build(n.size(), arc);
   bool b = g.compute_dependancies(dep);
   max_arcs = g.max_n_arcs();
   return b;

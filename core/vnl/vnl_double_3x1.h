@@ -2,9 +2,9 @@
 #ifndef vnl_double_3x1_h_
 #define vnl_double_3x1_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 //  \file
 //  \brief 3x1 matrix of double
 //
@@ -14,10 +14,10 @@
 //  \author Peter Vanroose
 //  \date   1 April 2003
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix_fixed.h>
 
-typedef vnl_matrix_fixed<double,3,1> vnl_double_3x1;
+typedef vnl_matrix_fixed<double, 3, 1> vnl_double_3x1;
 
 #endif // vnl_double_3x1_h_

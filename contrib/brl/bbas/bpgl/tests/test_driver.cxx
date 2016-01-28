@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE(test_segmented_rolling_shutter_camera );
 DECLARE(test_camera_utils );
 
@@ -12,5 +11,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-

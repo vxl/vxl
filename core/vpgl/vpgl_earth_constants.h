@@ -1,6 +1,6 @@
 #ifndef VPGL_EARTH_CONSTANTS_H
 #define VPGL_EARTH_CONSTANTS_H
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //
 // \file
 // \brief Spheroid definitions for various standards
@@ -8,7 +8,7 @@
 // \date December 31, 2005
 //
 //   JLM - note the Earth constants are in meters
-//===========================================================================
+// ===========================================================================
 #include <vnl/vnl_math.h>
 
 /* MATH CONSTANTS */
@@ -29,7 +29,6 @@
 #define SIDEREAL_DAY 86400.0
 
 #define METERS_TO_FEET 3.280839895
-#define FEET_TO_METERS (1.0/3.280839895)
+#define FEET_TO_METERS (1.0 / 3.280839895)
 
-#endif //VPGL_EARTH_CONSTANTS_H
-
+#endif // VPGL_EARTH_CONSTANTS_H

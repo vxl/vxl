@@ -11,8 +11,8 @@
 // Inner parentheses are needed with quote() to protect empty definitions
 // and definitions that have commas
 // quote0() protects (") and quotes ("") the expanded argument
-#define quote0(x) #x
-#define quote(x) quote0((x))
+#define quote0(x) # x
+#define quote(x) quote0( (x) )
 
 void test_config()
 {
@@ -88,7 +88,7 @@ void test_config()
 
   vcl_cout << "VCL_DEFAULT_VALUE(x) ";
 #ifdef VCL_DEFAULT_VALUE
-  vcl_cout << "is set to " << quote(VCL_DEFAULT_VALUE(x));
+  vcl_cout << "is set to " << quote(VCL_DEFAULT_VALUE(x) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -104,7 +104,7 @@ void test_config()
 
   vcl_cout << "VCL_STATIC_CONST_INIT_INT_DECL(x) ";
 #ifdef VCL_STATIC_CONST_INIT_INT_DECL
-  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DECL(x));
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DECL(x) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -112,7 +112,7 @@ void test_config()
 
   vcl_cout << "VCL_STATIC_CONST_INIT_INT_DEFN(x) ";
 #ifdef VCL_STATIC_CONST_INIT_INT_DEFN
-  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DEFN(x));
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DEFN(x) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -136,7 +136,7 @@ void test_config()
 
   vcl_cout << "VCL_STATIC_CONST_INIT_FLOAT_DECL(x) ";
 #ifdef VCL_STATIC_CONST_INIT_FLOAT_DECL
-  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DECL(x));
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DECL(x) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -144,7 +144,7 @@ void test_config()
 
   vcl_cout << "VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) ";
 #ifdef VCL_STATIC_CONST_INIT_FLOAT_DEFN
-  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DEFN(x));
+  vcl_cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -216,7 +216,7 @@ void test_config()
 
   vcl_cout << "VCL_DO_NOT_INSTANTIATE(text,ret) ";
 #ifdef VCL_DO_NOT_INSTANTIATE
-  vcl_cout << "is set to " << quote(VCL_DO_NOT_INSTANTIATE(text,ret));
+  vcl_cout << "is set to " << quote(VCL_DO_NOT_INSTANTIATE(text, ret) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -224,7 +224,7 @@ void test_config()
 
   vcl_cout << "VCL_UNINSTANTIATE_SPECIALIZATION(symbol) ";
 #ifdef VCL_UNINSTANTIATE_SPECIALIZATION
-  vcl_cout << "is set to " << quote(VCL_UNINSTANTIATE_SPECIALIZATION(symbol));
+  vcl_cout << "is set to " << quote(VCL_UNINSTANTIATE_SPECIALIZATION(symbol) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -232,7 +232,7 @@ void test_config()
 
   vcl_cout << "VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) ";
 #ifdef VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION
-  vcl_cout << "is set to " << quote(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol));
+  vcl_cout << "is set to " << quote(VCL_UNINSTANTIATE_UNSEEN_SPECIALIZATION(symbol) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -248,7 +248,7 @@ void test_config()
 
   vcl_cout << "VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
 #ifdef VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER
-  vcl_cout << "is set to " << quote(VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
+  vcl_cout << "is set to " << quote(VCL_INSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -256,7 +256,7 @@ void test_config()
 
   vcl_cout << "VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) ";
 #ifdef VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER
-  vcl_cout << "is set to " << quote(VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol));
+  vcl_cout << "is set to " << quote(VCL_UNINSTANTIATE_STATIC_TEMPLATE_MEMBER(symbol) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -280,7 +280,7 @@ void test_config()
 
   vcl_cout << "VCL_OVERLOAD_CAST(T,x) ";
 #ifdef VCL_OVERLOAD_CAST
-  vcl_cout << "is set to " << quote(VCL_OVERLOAD_CAST(T,x));
+  vcl_cout << "is set to " << quote(VCL_OVERLOAD_CAST(T, x) );
 #else
   vcl_cout << "is not set";
 #endif
@@ -304,7 +304,7 @@ void test_config()
 
   vcl_cout << "VCL_DEFAULT_TMPL_ARG(arg) ";
 #ifdef VCL_DEFAULT_TMPL_ARG
-  vcl_cout << "is set to " << quote(VCL_DEFAULT_TMPL_ARG(arg));
+  vcl_cout << "is set to " << quote(VCL_DEFAULT_TMPL_ARG(arg) );
 #else
   vcl_cout << "is not set";
 #endif

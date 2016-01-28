@@ -8,5 +8,4 @@ void register_tests()
 
 }
 
-
 DEFINE_MAIN;

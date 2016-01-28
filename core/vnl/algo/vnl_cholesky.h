@@ -2,9 +2,9 @@
 #ifndef vnl_cholesky_h_
 #define vnl_cholesky_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Decomposition of symmetric matrix
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -20,7 +20,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: Decomposition of symmetric matrix.
+// : Decomposition of symmetric matrix.
 //  A class to hold the Cholesky decomposition of a symmetric matrix and
 //  use that to solve linear systems, compute determinants and inverses.
 //  The cholesky decomposition decomposes symmetric A = L*L.transpose()
@@ -32,25 +32,26 @@
 //  it might be a good idea to use vnl_svd instead.
 class vnl_cholesky
 {
- public:
-  //: Modes of computation.  See constructor for details.
-  enum Operation {
+public:
+  // : Modes of computation.  See constructor for details.
+  enum Operation
+    {
     quiet,
     verbose,
     estimate_condition
-  };
+    };
 
-  //: Make cholesky decomposition of M optionally computing the reciprocal condition number.
+  // : Make cholesky decomposition of M optionally computing the reciprocal condition number.
   vnl_cholesky(vnl_matrix<double> const& M, Operation mode = verbose);
- ~vnl_cholesky() {}
+  ~vnl_cholesky() {}
 
-  //: Solve LS problem M x = b
+  // : Solve LS problem M x = b
   vnl_vector<double> solve(vnl_vector<double> const& b) const;
 
-  //: Solve LS problem M x = b
+  // : Solve LS problem M x = b
   void solve(vnl_vector<double> const& b, vnl_vector<double>* x) const;
 
-  //: Compute determinant
+  // : Compute determinant
   double determinant() const;
 
   //   Compute inverse.  Not efficient.
@@ -59,41 +60,40 @@ class vnl_cholesky
   // to fix it.
   vnl_matrix<double> inverse() const;
 
-  //: Return lower-triangular factor.
+  // : Return lower-triangular factor.
   vnl_matrix<double> lower_triangle() const;
 
-  //: Return upper-triangular factor.
+  // : Return upper-triangular factor.
   vnl_matrix<double> upper_triangle() const;
 
-  //: Return the decomposition matrix
-  vnl_matrix<double> const& L_badly_named_method() const { return A_; }
+  // : Return the decomposition matrix
+  vnl_matrix<double> const & L_badly_named_method() const { return A_; }
 
-  //: A Success/failure flag
+  // : A Success/failure flag
   int rank_deficiency() const { return num_dims_rank_def_; }
 
-  //: Return reciprocal condition number (smallest/largest singular values).
+  // : Return reciprocal condition number (smallest/largest singular values).
   // As long as rcond()>sqrt(precision) the decomposition can be used for
   // solving equations safely.
   // Not calculated unless Operation mode at construction was estimate_condition.
   double rcond() const { return rcond_; }
 
-  //: Return computed nullvector.
+  // : Return computed nullvector.
   // Not calculated unless Operation mode at construction was estimate_condition.
   vnl_vector<double>      & nullvector()       { return nullvector_; }
-  vnl_vector<double> const& nullvector() const { return nullvector_; }
-
- protected:
+  vnl_vector<double> const & nullvector() const { return nullvector_; }
+protected:
   // Data Members--------------------------------------------------------------
   vnl_matrix<double> A_;
-  double rcond_;
-  long num_dims_rank_def_;
+  double             rcond_;
+  long               num_dims_rank_def_;
   vnl_vector<double> nullvector_;
-
- private:
-  //: Copy constructor - privatised to avoid it being used
+private:
+  // : Copy constructor - privatised to avoid it being used
   vnl_cholesky(vnl_cholesky const & that);
-  //: Assignment operator - privatised to avoid it being used
-  vnl_cholesky& operator=(vnl_cholesky const & that);
+  // : Assignment operator - privatised to avoid it being used
+  vnl_cholesky & operator=(vnl_cholesky const & that);
+
 };
 
 #endif // vnl_cholesky_h_

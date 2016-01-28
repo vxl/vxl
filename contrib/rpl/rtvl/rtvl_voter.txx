@@ -10,16 +10,15 @@
 
 #include "rtvl_tensor.hxx"
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
-rtvl_voter<N>::
-rtvl_voter(vnl_vector_fixed<double, N> const& voter_location,
-           rtvl_tensor<N> const& voter_tensor):
+rtvl_voter<N>::rtvl_voter(vnl_vector_fixed<double, N> const& voter_location,
+                          rtvl_tensor<N> const& voter_tensor) :
   location_(voter_location), tensor_(voter_tensor)
 {
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
 double
 rtvl_voter<N>::lambda(unsigned int d) const
@@ -27,7 +26,7 @@ rtvl_voter<N>::lambda(unsigned int d) const
   return this->tensor_.lambda(d);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
 typename rtvl_voter<N>::basis_const_reference
 rtvl_voter<N>::basis() const
@@ -35,16 +34,16 @@ rtvl_voter<N>::basis() const
   return this->tensor_.basis();
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
-vnl_vector_fixed<double, N> const&
+vnl_vector_fixed<double, N> const &
 rtvl_voter<N>::basis(unsigned int d) const
 {
   return this->tensor_.basis(d);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 #define RTVL_VOTER_INSTANTIATE(N) \
-  template class rtvl_voter<N>
+  template class rtvl_voter < N >
 
 #endif

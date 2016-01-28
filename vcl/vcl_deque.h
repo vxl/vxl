@@ -6,7 +6,7 @@
 #include "iso/vcl_deque.h"
 
 #define VCL_DEQUE_INSTANTIATE \
-extern "include vcl_deque.txx instead"
+  extern "include vcl_deque.txx instead"
 
 #include "vcl_deque.txx"
 

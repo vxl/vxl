@@ -1,7 +1,7 @@
 // This is brl/bbas/bsta/io/bsta_io_attributes.h
 #ifndef bsta_io_attributes_h_
 #define bsta_io_attributes_h_
-//:
+// :
 // \file
 // \brief Binary I/O for attributed distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
@@ -16,39 +16,39 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 
-//: Binary save bsta_attributes to stream.
+// : Binary save bsta_attributes to stream.
 template <class comp_>
 void
-vsl_b_write(vsl_b_ostream &os, const bsta_num_obs<comp_>& m)
+vsl_b_write(vsl_b_ostream & os, const bsta_num_obs<comp_>& m)
 {
-  comp_ n=static_cast<comp_>(m);
+  comp_ n = static_cast<comp_>(m);
 
-  //vcl_cout<<sizeof(n)<<' '<<sizeof(m)<<':';
-  vsl_b_write(os,n);
-  //vsl_b_write(os,(int)1);
-  vsl_b_write(os,m.num_observations);
+  // vcl_cout<<sizeof(n)<<' '<<sizeof(m)<<':';
+  vsl_b_write(os, n);
+  // vsl_b_write(os,(int)1);
+  vsl_b_write(os, m.num_observations);
 }
 
-//: Binary load bsta_attributes from stream.
+// : Binary load bsta_attributes from stream.
 template <class comp_>
 void
-vsl_b_read(vsl_b_istream &is, bsta_num_obs<comp_>& m)
+vsl_b_read(vsl_b_istream & is, bsta_num_obs<comp_>& m)
 {
   comp_ dstrb;
-  vsl_b_read(is,dstrb);
+
+  vsl_b_read(is, dstrb);
   // int a; vsl_b_read(is,a);
   m = bsta_num_obs<comp_>(dstrb);
-  vsl_b_read(is,m.num_observations);
+  vsl_b_read(is, m.num_observations);
 }
 
-//: Print summary
+// : Print summary
 template <class comp_>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_num_obs<comp_>& m)
+vsl_print_summary(vcl_ostream & os, const bsta_num_obs<comp_>& m)
 {
-  vsl_print_summary(os,static_cast<comp_>(m));
-  os << " with "<<m.num_observations<<" observations";
+  vsl_print_summary(os, static_cast<comp_>(m) );
+  os << " with " << m.num_observations << " observations";
 }
-
 
 #endif // bsta_io_attributes_h_

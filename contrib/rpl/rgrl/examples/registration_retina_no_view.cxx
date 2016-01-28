@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //
 // \latexonly
@@ -91,40 +91,45 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
-typedef vnl_vector_fixed<double,2>       vector_2d;
-typedef vcl_vector< rgrl_invariant_sptr> landmark_invaraint_vector;
+typedef vcl_vector<rgrl_feature_sptr>   feature_vector;
+typedef vnl_vector_fixed<double, 2>     vector_2d;
+typedef vcl_vector<rgrl_invariant_sptr> landmark_invaraint_vector;
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command
+class command_iteration_update : public rgrl_command
 {
- public:
+public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
-    execute( (const rgrl_object*) caller, event );
+    execute( (const rgrl_object *) caller, event );
   }
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
-      dynamic_cast<const rgrl_feature_based_registration*>(caller);
+      dynamic_cast<const rgrl_feature_based_registration *>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
 
-    if ( trans->is_type( rgrl_trans_similarity::type_id() ) ) {
-      rgrl_trans_similarity* sim_xform = rgrl_cast<rgrl_trans_similarity*>(trans);
-      vcl_cout<<"xform: A =\n"<<sim_xform->A()<<"t = "<<sim_xform->t()<<vcl_endl;}
-    else if ( trans->is_type( rgrl_trans_reduced_quad::type_id() ) ) {
-      rgrl_trans_reduced_quad* rq_xform = rgrl_cast<rgrl_trans_reduced_quad*>(trans);
-      vcl_cout<<"xform: Q =\n"<<rq_xform->Q()<<"A = "<<rq_xform->A()
-              <<"t = "<<rq_xform->t()<<vcl_endl;
-    }
-    else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
-      rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
-              <<"t = "<<q_xform->t()<<vcl_endl;
-    }
-    else vcl_cout<<"Unknown type"<<vcl_endl;
+    if( trans->is_type( rgrl_trans_similarity::type_id() ) )
+      {
+      rgrl_trans_similarity* sim_xform = rgrl_cast<rgrl_trans_similarity *>(trans);
+      vcl_cout << "xform: A =\n" << sim_xform->A() << "t = " << sim_xform->t() << vcl_endl;
+      }
+    else if( trans->is_type( rgrl_trans_reduced_quad::type_id() ) )
+      {
+      rgrl_trans_reduced_quad* rq_xform = rgrl_cast<rgrl_trans_reduced_quad *>(trans);
+      vcl_cout << "xform: Q =\n" << rq_xform->Q() << "A = " << rq_xform->A()
+               << "t = " << rq_xform->t() << vcl_endl;
+      }
+    else if( trans->is_type( rgrl_trans_quadratic::type_id() ) )
+      {
+      rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic *>(trans);
+      vcl_cout << "xform: Q =\n" << q_xform->Q() << "A = " << q_xform->A()
+               << "t = " << q_xform->t() << vcl_endl;
+      }
+    else {vcl_cout << "Unknown type" << vcl_endl; }
   }
+
 };
 
 void
@@ -133,23 +138,27 @@ read_feature_file( const char* filename,
 {
   vcl_ifstream istr( filename );
 
-  if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+  if( !istr )
+    {
+    vcl_cerr << "ERROR: Cannot open " << filename << '\n';
     return;
-  }
+    }
 
   vector_2d location;
   vector_2d direction;
 
   bool done = false;
-  while ( !done && istr ) {
-    if ( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
+  while( !done && istr )
+    {
+    if( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
+      {
       done = true;
-    else trace_points.push_back( new rgrl_feature_trace_pt(location.as_ref(), direction.as_ref()) );
-  }
+      }
+    else {trace_points.push_back( new rgrl_feature_trace_pt(location.as_ref(), direction.as_ref() ) ); }
+    }
 
   istr.close();
-  vcl_cout<<"There are "<<trace_points.size()<<" features"<<vcl_endl;
+  vcl_cout << "There are " << trace_points.size() << " features" << vcl_endl;
 }
 
 void
@@ -158,29 +167,34 @@ read_landmark_file( const char* filename,
 {
   vcl_ifstream istr( filename );
 
-  if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+  if( !istr )
+    {
+    vcl_cerr << "ERROR: Cannot open " << filename << '\n';
     return;
-  }
+    }
 
-  double angular_std = 5.5*vnl_math::pi_over_180;
-  double width_ratio_std = 4.5*vnl_math::pi_over_180;
+  double angular_std = 5.5 * vnl_math::pi_over_180;
+  double width_ratio_std = 4.5 * vnl_math::pi_over_180;
 
   vector_2d location;
   vector_2d direction1;
   vector_2d direction2;
   vector_2d direction3;
-  double width1, width2, width3;
+  double    width1, width2, width3;
 
   bool done = false;
-  while ( !done && istr ) {
-    if ( !(istr >> location[0] >> location[1] ) )
+  while( !done && istr )
+    {
+    if( !(istr >> location[0] >> location[1] ) )
+      {
       done = true;
-    else {
+      }
+    else
+      {
       // read in the directions and widths
-      istr >> direction1[0] >> direction1[1]>>width1;
-      istr >> direction2[0] >> direction2[1]>>width2;
-      istr >> direction3[0] >> direction3[1]>>width3;
+      istr >> direction1[0] >> direction1[1] >> width1;
+      istr >> direction2[0] >> direction2[1] >> width2;
+      istr >> direction3[0] >> direction3[1] >> width3;
       // Make sure all widths are at least 1
       width1 = vnl_math::max( 1.0, width1);
       width2 = vnl_math::max( 1.0, width2);
@@ -197,32 +211,34 @@ read_landmark_file( const char* filename,
 
       // If the single constellation was ambiguous create a copy with
       // the indices shifted to relieve the ambiguity
-      if ( single->is_ambiguous() ) {
+      if( single->is_ambiguous() )
+        {
         rgrl_invariant_single_landmark* copy =
           new rgrl_invariant_single_landmark( *single, angular_std, width_ratio_std );
         landmark_inv.push_back( copy );
+        }
       }
     }
-  }
 }
 
 int
 main( int argc, char* argv[] )
 {
-  if ( argc < 6 ) {
+  if( argc < 6 )
+    {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageTraceFile FixedImageLandmarkFile MovingImageTraceFile MovingImageLandmarkFile MaskImage\n";
     return 1;
-  }
+    }
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
 
   // Prepare feature sets
   //
-  feature_vector moving_set;
-  feature_vector fixed_set;
+  feature_vector            moving_set;
+  feature_vector            fixed_set;
   landmark_invaraint_vector moving_landmark_set;
   landmark_invaraint_vector fixed_landmark_set;
 
@@ -239,7 +255,7 @@ main( int argc, char* argv[] )
   rgrl_feature_set_sptr moving_feature_set;
   rgrl_feature_set_sptr fixed_feature_set;
 
-  const char* make_file_name = argv[5];
+  const char*              make_file_name = argv[5];
   vil_image_view<vxl_byte> mask_image;
   mask_image = vil_load(make_file_name);
   rgrl_mask_sptr mask = new rgrl_mask_2d_image( mask_image );
@@ -274,8 +290,8 @@ main( int argc, char* argv[] )
   rgrl_initializer_inv_indexing* inv_initializer =
     new rgrl_initializer_inv_indexing( moving_image_region,
                                        fixed_image_region );
-  double angular_std = 5.5*vnl_math::pi_over_180;
-  double nn_radius = angular_std * vcl_sqrt(11.0704);//95% chi-sqr uncertainty bound
+  double angular_std = 5.5 * vnl_math::pi_over_180;
+  double nn_radius = angular_std * vcl_sqrt(11.0704);// 95% chi-sqr uncertainty bound
   inv_initializer->add_data( fixed_landmark_set,
                              moving_landmark_set,
                              nn_radius );
@@ -293,7 +309,7 @@ main( int argc, char* argv[] )
 
   // Set up the reg algorithm
   //
-  //rgrl_view_based_registration reg( data, view_gen, conv_test );
+  // rgrl_view_based_registration reg( data, view_gen, conv_test );
   rgrl_feature_based_registration reg( data );
 
   reg.set_expected_max_geometric_scale(30);
@@ -301,19 +317,20 @@ main( int argc, char* argv[] )
   reg.penalize_scaling( true );
 
   // For debugging
-  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
+  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update() );
 
   reg.run( initializer );
 
   // Output Results
   //
-  if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+  if( reg.has_final_transformation() )
+    {
+    vcl_cout << "Final xform:" << vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
-    rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t ="<<q_xform->t()<<'\n'
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
-  }
+    rgrl_trans_quadratic*    q_xform = rgrl_cast<rgrl_trans_quadratic *>(trans);
+    vcl_cout << "Q =\n" << q_xform->Q() << "A = " << q_xform->A() << "t =" << q_xform->t() << '\n'
+             << "Final alignment error = " << reg.final_status()->error() << vcl_endl;
+    }
 
   // \latexonly
   //

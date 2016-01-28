@@ -2,56 +2,55 @@
 #ifndef vil1_save_h_
 #define vil1_save_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author    awf@robots.ox.ac.uk
 // \date 16 Feb 00
 //
-//\verbatim
+// \verbatim
 //  Modifications
 //     000216 AWF Initial version.
 //     011002 Peter Vanroose - vil1_save now respects top-is-first; vil1_save_raw not
-//\endverbatim
+// \endverbatim
 
 #include <vcl_string.h>
 class vil1_stream;
 #include <vil1/vil1_image.h>
 
-//: Send vil1_image to disk, deducing format from filename
-bool vil1_save(vil1_image const&, char const* filename);
+// : Send vil1_image to disk, deducing format from filename
+bool vil1_save(vil1_image const &, char const* filename);
 
-//: Send vil1_image to disk, given filename
+// : Send vil1_image to disk, given filename
 bool vil1_save(vil1_image, char const* filename, char const* file_format);
 
-//: Send vil1_image to disk, given filename; preserve byte order
-bool vil1_save_raw(vil1_image const&, char const* filename, char const* file_format);
+// : Send vil1_image to disk, given filename; preserve byte order
+bool vil1_save_raw(vil1_image const &, char const* filename, char const* file_format);
 
-//: Send vil1_image to outstream
+// : Send vil1_image to outstream
 bool vil1_save_raw(vil1_image const &, vil1_stream* outstream, char const* file_format = "pnm");
 
-//: Save raw unsigned chars, deducing format from filename
+// : Save raw unsigned chars, deducing format from filename
 void vil1_save_gray(unsigned char const* p, int w, int h, vcl_string const& fn);
 
-//: Save raw floats as gray.
+// : Save raw floats as gray.
 // No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void vil1_save_gray(float const* p, int w, int h, vcl_string const& fn);
 
-//: Save raw doubles as gray.
+// : Save raw doubles as gray.
 // No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
 void vil1_save_gray(double const* p, int w, int h, vcl_string const& fn);
 
-
-//: Save raw RGB, deducing format from filename
+// : Save raw RGB, deducing format from filename
 void vil1_save_rgb(unsigned char const* p, int w, int h, vcl_string const& fn);
 
-//: Save raw floats as RGB.  See vil1_save_gray.
+// : Save raw floats as RGB.  See vil1_save_gray.
 void vil1_save_rgb(float const* p, int w, int h, vcl_string const& fn);
 
-//: Save raw doubles as RGB.  See vil1_save_gray.
+// : Save raw doubles as RGB.  See vil1_save_gray.
 void vil1_save_rgb(double const* p, int w, int h, vcl_string const& fn);
 
 #endif // vil1_save_h_

@@ -2,7 +2,7 @@
 #ifndef bvpl_io_discover_pca_kernels_h
 #define bvpl_io_discover_pca_kernels_h
 
-//:
+// :
 // \file
 // \brief Binary IO for bvpl_discover_pca_kernels. Not implemented, only declared so it can be stored in the database
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -18,23 +18,18 @@
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 
-//: Binary save parameters to stream.
+// : Binary save parameters to stream.
 void vsl_b_write(vsl_b_ostream & os, bvpl_discover_pca_kernels const &);
 
+// : Binary load parameters from stream.
+void vsl_b_read(vsl_b_istream & is, bvpl_discover_pca_kernels & m);
 
-//: Binary load parameters from stream.
-void vsl_b_read(vsl_b_istream & is, bvpl_discover_pca_kernels &m);
-
-
-void vsl_print_summary(vcl_ostream &os, const bvpl_discover_pca_kernels &m);
-
+void vsl_print_summary(vcl_ostream & os, const bvpl_discover_pca_kernels & m);
 
 void vsl_b_read(vsl_b_istream& is, bvpl_discover_pca_kernels* m);
 
+void vsl_b_write(vsl_b_ostream& os, const bvpl_discover_pca_kernels * & m);
 
-void vsl_b_write(vsl_b_ostream& os, const bvpl_discover_pca_kernels* &m);
-
-void vsl_print_summary(vcl_ostream& os, const bvpl_discover_pca_kernels* &m);
-
+void vsl_print_summary(vcl_ostream& os, const bvpl_discover_pca_kernels * & m);
 
 #endif

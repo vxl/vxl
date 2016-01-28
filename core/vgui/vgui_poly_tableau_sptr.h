@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_poly_tableau_sptr.h
 #ifndef vgui_poly_tableau_sptr_h_
 #define vgui_poly_tableau_sptr_h_
-//:
+// :
 // \file
 // \brief  Smart-pointer to a vgui_poly_tableau tableau.
 //

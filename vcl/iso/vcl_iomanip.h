@@ -6,9 +6,9 @@
 #include <iomanip>
 
 #ifdef vcl_generic_iomanip_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_iomanip_STD std
+#  define vcl_generic_iomanip_STD std
 #endif
 
 #include "../generic/vcl_iomanip.h"

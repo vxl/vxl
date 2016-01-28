@@ -1,8 +1,8 @@
 // This is brl/bseg/sdet/sdet_fit_lines.h
 #ifndef sdet_fit_lines_h_
 #define sdet_fit_lines_h_
-//---------------------------------------------------------------------
-//:
+// ---------------------------------------------------------------------
+// :
 // \file
 // \brief a processor for fitting line segments to edges
 //
@@ -20,7 +20,7 @@
 //   <none>
 // \endverbatim
 //
-//-------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
@@ -30,27 +30,32 @@
 
 class sdet_fit_lines : public sdet_fit_lines_params
 {
- public:
-  //:Constructors/destructor
+public:
+  // :Constructors/destructor
   sdet_fit_lines(sdet_fit_lines_params& rpp);
 
   ~sdet_fit_lines();
-  //: Process methods
+  // : Process methods
   bool fit_lines();
+
   void clear();
-  //: Accessors
+
+  // : Accessors
   void set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges);
+
   vcl_vector<vsol_line_2d_sptr> get_line_segs();
+
   void get_line_segs(vcl_vector<vsol_line_2d_sptr>& lines);
+
   void get_line_segs(vcl_vector<vgl_line_segment_2d<double> >& lines);
 
- protected:
-  //:protected methods
+protected:
+  // :protected methods
 
-  //:members
-  bool segs_valid_;      //process state flag
-  vcl_vector<vtol_edge_2d_sptr> edges_;// the input edges
-  vgl_fit_lines_2d<double> fitter_;//the fitting class
+  // :members
+  bool                                     segs_valid_; // process state flag
+  vcl_vector<vtol_edge_2d_sptr>            edges_;      // the input edges
+  vgl_fit_lines_2d<double>                 fitter_;     // the fitting class
   vcl_vector<vgl_line_segment_2d<double> > line_segs_;
 };
 

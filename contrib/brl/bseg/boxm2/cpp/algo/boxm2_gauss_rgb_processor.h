@@ -1,7 +1,7 @@
 // This is brl/bseg/boxm2/cpp/algo/boxm2_gauss_rgb_processor.h
 #ifndef boxm2_gauss_rgb_processor_h_
 #define boxm2_gauss_rgb_processor_h_
-//:
+// :
 // \file
 // \brief A class for a GAUSS-RGB processor.
 //
@@ -15,10 +15,10 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_vector.h>
 
-class  boxm2_gauss_rgb_processor
+class boxm2_gauss_rgb_processor
 {
- public:
-     static vnl_vector_fixed<float,3>  expected_color( vnl_vector_fixed<unsigned char, 8>  mog);
+public:
+  static vnl_vector_fixed<float, 3>  expected_color( vnl_vector_fixed<unsigned char, 8>  mog);
 
 };
 

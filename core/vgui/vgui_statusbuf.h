@@ -2,9 +2,9 @@
 #ifndef vgui_statusbuf_h_
 #define vgui_statusbuf_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Statusbar buffer?
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -22,16 +22,17 @@ class vgui_statusbar;
 
 class vgui_statusbuf : public vcl_streambuf
 {
- public:
-  vgui_statusbuf (vgui_statusbar* s) { status = s; }
-  int sync ();
-  int overflow (int ch);
-  int underflow(){return 0;}
-  //int xsputn( char* text, int n);
-  //streamsize xsputn(char* text, streamsize n);
-  //streamsize xsputn(const char* text, streamsize n);
+public:
+  vgui_statusbuf(vgui_statusbar* s) { status = s; }
+  int sync();
 
- private:
+  int overflow(int ch);
+
+  int underflow() {return 0; }
+  // int xsputn( char* text, int n);
+  // streamsize xsputn(char* text, streamsize n);
+  // streamsize xsputn(const char* text, streamsize n);
+private:
   vgui_statusbar* status;
 };
 

@@ -2,4 +2,4 @@
 #include <vtol/vtol_list_functions.txx>
 #include <vcl_vector.txx>
 
-template vcl_vector<vtol_face*>* tagged_union(vcl_vector<vtol_face*>*);
+template vcl_vector<vtol_face *> * tagged_union(vcl_vector<vtol_face *> *);

@@ -6,9 +6,9 @@
 #include <tr1/memory>
 
 #ifdef vcl_generic_memory_tr1_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_memory_tr1_STD std::tr1
+#  define vcl_generic_memory_tr1_STD std::tr1
 #endif
 
 #include "../generic/vcl_memory_tr1.h"

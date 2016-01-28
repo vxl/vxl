@@ -1,6 +1,6 @@
 #ifndef boxm_algo_test_utils_h_
 #define boxm_algo_test_utils_h_
-//:
+// :
 // \file
 // \brief  A file containing utility functions for other tests
 // \author Isabel Restrepo
@@ -8,10 +8,11 @@
 
 #include <boxm/boxm_scene.h>
 
-void init_tree(boct_tree<short,float> *tree, unsigned i);
+void init_tree(boct_tree<short, float> * tree, unsigned i);
 
-boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx = 2,unsigned world_dimy = 2,unsigned world_dimz = 2,
-                                                   bool uniform = false, vcl_string scene_name = "test_scene");
+boxm_scene<boct_tree<short, float> > * create_scene(unsigned world_dimx = 2, unsigned world_dimy = 2,
+                                                    unsigned world_dimz = 2, bool uniform = false,
+                                                    vcl_string scene_name = "test_scene");
 
 void clean_up();
 

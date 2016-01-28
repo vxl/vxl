@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_mod_gram_schmidt.h
 #ifndef mbl_mod_gram_schmidt_h_
 #define mbl_mod_gram_schmidt_h_
-//:
+// :
 // \file
 // \brief Orthogonalise a basis using modified Gram-Schmidt (and normalise)
 // \author Martin Roberts
@@ -15,8 +15,8 @@
 
 #include <vnl/vnl_matrix.h>
 
-//=======================================================================
-//: Orthogonalise a basis using modified Gram-Schmidt
+// =======================================================================
+// : Orthogonalise a basis using modified Gram-Schmidt
 // Transform basis {vk} to orthonormal basis {ek} with k in range 1..N
 // \code
 // for j = 1 to N
@@ -28,15 +28,13 @@
 //  end
 // \endcode
 
-//: Convert input basis {v} to orthonormal basis {e}
+// : Convert input basis {v} to orthonormal basis {e}
 // Each basis vector is a column of v, and likewise the orthonormal bases are returned as columns of e
-void mbl_mod_gram_schmidt(const vnl_matrix<double>& v,
-                          vnl_matrix<double>& e);
+void mbl_mod_gram_schmidt(const vnl_matrix<double>& v, vnl_matrix<double>& e);
 
-//: Convert input basis {v} to orthonormal basis {e}
+// : Convert input basis {v} to orthonormal basis {e}
 // Each basis vector is a column of v, and likewise the orthonormal bases are returned as columns of e
 // The multipliers used to normalise each vector in {e} are returned in n.
-void mbl_mod_gram_schmidt( const vnl_matrix<double>& v,
-                           vnl_matrix<double>& e, vnl_vector<double>& n );
+void mbl_mod_gram_schmidt( const vnl_matrix<double>& v, vnl_matrix<double>& e, vnl_vector<double>& n );
 
 #endif // mbl_mod_gram_schmidt_h_

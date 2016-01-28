@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \brief  Example of text input/output windows.
 // \author Peter Vanroose
@@ -25,49 +25,55 @@ class example_flim_tableau : public vgui_tableau
 {
   bool handle(vgui_event const& e)
   {
-    if (e.type == vgui_DESTROY) {
+    if( e.type == vgui_DESTROY )
+      {
       vgui_dialog dialog("Farewell!");
       dialog.message("I am about to die!\nLast chance to save data would go here...");
       dialog.set_modal(true);
       dialog.ask();
       return true;
-    }
+      }
     else
+      {
       return false;
+      }
   }
+
   vcl_string type_name() const { return "example_flim_tableau"; }
 };
 
 typedef vgui_tableau_sptr_t<example_flim_tableau> example_flim_tableau_sptr;
 
 struct example_flim_tableau_new : public example_flim_tableau_sptr
-{
+  {
   typedef example_flim_tableau_sptr base;
-  example_flim_tableau_new() : base(new example_flim_tableau()) { }
-};
+  example_flim_tableau_new() : base(new example_flim_tableau() ) { }
+  };
 
 // -----------------------------------------------------------------------------
 // Now do some stuff...
-int main (int argc, char** argv)
+int main(int argc, char* * argv)
 {
   vgui::init(argc, argv);
 
-  if (argc < 2) {
+  if( argc < 2 )
+    {
     vcl_cerr << __FILE__ " : image_file argument required\n";
     vcl_abort();
-  }
+    }
 
   vil_image_view<vxl_byte> img = vil_load(argv[1]);
-  if (!img) {
+  if( !img )
+    {
     vcl_cerr << __FILE__ " : cannot load image from " << argv[1] << '\n';
     vcl_abort();
-  }
+    }
 
   vgui_image_tableau_new img_tab(img);
 
-  int wd=img.ni(), ht=img.nj();
+  int                   wd = img.ni(), ht = img.nj();
   vgui_text_tableau_new text_tab;
-  text_tab->add(wd*0.5f,ht*0.25f,"this is some text");
+  text_tab->add(wd * 0.5f, ht * 0.25f, "this is some text");
 
   example_flim_tableau_new flim_tab;
 

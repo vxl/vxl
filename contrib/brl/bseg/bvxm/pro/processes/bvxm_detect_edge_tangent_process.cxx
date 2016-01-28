@@ -1,6 +1,6 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_detect_edge_tangent_process.cxx
+// This is brl/bseg/bvxm/pro/processes/bvxm_detect_edge_tangent_process.cxx
 #include "bvxm_detect_edge_tangent_process.h"
-//:
+// :
 // \file
 
 #include <sdet/sdet_img_edge.h>
@@ -24,18 +24,20 @@
 #include <vtol/vtol_edge_2d.h>
 #include <vgl/vgl_line_2d.h>
 
-//: initialize input and output types
+// : initialize input and output types
 bool bvxm_detect_edge_tangent_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_detect_edge_tangent_process_globals;
   // process takes 1 input:
-  //input[0]: input grayscale image
-  //input[1]: string indicating the output format
+  // input[0]: input grayscale image
+  // input[1]: string indicating the output format
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
-  if (!pro.set_input_types(input_types_))
+  if( !pro.set_input_types(input_types_) )
+    {
     return false;
+    }
 
   // process has 1 output image with 3 bands:
   // output[0]: output edge image with 3 planes
@@ -58,34 +60,35 @@ bool bvxm_detect_edge_tangent_process_cons(bprb_func_process& pro)
   return pro.set_output_types(output_types_);
 }
 
-//: generates the edge map
+// : generates the edge map
 bool bvxm_detect_edge_tangent_process(bprb_func_process& pro)
 {
- using namespace bvxm_detect_edge_tangent_process_globals;
+  using namespace bvxm_detect_edge_tangent_process_globals;
 
-  if (!pro.verify_inputs())
-  {
+  if( !pro.verify_inputs() )
+    {
     vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
-  }
+    }
 
   // get inputs
   // image
   vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(0);
 
-  //check input validity
-  if (!input_image_sptr) {
-    vcl_cout << pro.name() <<" :-- null input image\n";
+  // check input validity
+  if( !input_image_sptr )
+    {
+    vcl_cout << pro.name() << " :-- null input image\n";
     return false;
-  }
+    }
 
   vil_image_view<vxl_byte> input_image =
     *vil_convert_cast(vxl_byte(), input_image_sptr);
 
   vcl_string out_type = pro.get_input<vcl_string>(1);
   // get parameters
-  double noise_multiplier=1.5, smooth=1.5;
-  bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
+  double noise_multiplier = 1.5, smooth = 1.5;
+  bool   automatic_threshold = false, junctionp = false, aggressive_junction_closure = false;
 
   pro.parameters()->get_value(param_noise_multiplier_, noise_multiplier);
   pro.parameters()->get_value(param_smooth_, smooth);
@@ -105,34 +108,41 @@ bool bvxm_detect_edge_tangent_process(bprb_func_process& pro)
                                        aggressive_junction_closure);
 
   // return the output edge image in pos_dir format
-  if (out_type=="pos_dir") {
-    pro.set_output_val<vil_image_view_base_sptr>(0,new vil_image_view<float>(edge_image));
+  if( out_type == "pos_dir" )
+    {
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(edge_image) );
     return true;
-  }
-  //else convert to line format
-  if (out_type == "line_2d") {
-    unsigned ni = edge_image.ni(), nj = edge_image.nj();
+    }
+  // else convert to line format
+  if( out_type == "line_2d" )
+    {
+    unsigned               ni = edge_image.ni(), nj = edge_image.nj();
     vil_image_view<float>* line_image = new vil_image_view<float>(ni, nj, 3);
     line_image->fill(-2.0f);
-    for (unsigned j = 0; j<nj; ++j)
-      for (unsigned i = 0; i<ni; ++i) {
-        float x = edge_image(i,j,0);
-        float y = edge_image(i,j,1);
-        if (x<0||y<0)
+    for( unsigned j = 0; j < nj; ++j )
+      {
+      for( unsigned i = 0; i < ni; ++i )
+        {
+        float x = edge_image(i, j, 0);
+        float y = edge_image(i, j, 1);
+        if( x < 0 || y < 0 )
+          {
           continue;
-        float angle = edge_image(i,j,2);
-        vgl_vector_2d<float> tangent(vcl_cos(angle), vcl_sin(angle));
-        vgl_point_2d<float> pt(x,y);
-        vgl_line_2d<float> l(pt, tangent);
-        float a = l.a(), b = l.b(), c = l.c();
-        float norm = vcl_sqrt(a*a+b*b);
-        a/=norm; b/=norm; c/=norm;
-        (*line_image)(i,j,0)= a;
-        (*line_image)(i,j,1)= b;
-        (*line_image)(i,j,2)= c;
+          }
+        float                angle = edge_image(i, j, 2);
+        vgl_vector_2d<float> tangent(vcl_cos(angle), vcl_sin(angle) );
+        vgl_point_2d<float>  pt(x, y);
+        vgl_line_2d<float>   l(pt, tangent);
+        float                a = l.a(), b = l.b(), c = l.c();
+        float                norm = vcl_sqrt(a * a + b * b);
+        a /= norm; b /= norm; c /= norm;
+        (*line_image)(i, j, 0) = a;
+        (*line_image)(i, j, 1) = b;
+        (*line_image)(i, j, 2) = c;
+        }
       }
     pro.set_output_val<vil_image_view_base_sptr>(0, line_image);
     return true;
-  }
+    }
   return false;
 }

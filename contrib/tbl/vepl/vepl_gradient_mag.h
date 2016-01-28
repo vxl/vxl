@@ -1,6 +1,6 @@
 #ifndef vepl_gradient_mag_h_
 #define vepl_gradient_mag_h_
-//:
+// :
 // \file
 // \brief gradient magnitude: sqrt of x_gradient square plus y_gradient square
 //
@@ -17,7 +17,7 @@
 
 #include <vil/vil_image_resource.h>
 
-//: gradient magnitude: sqrt of x_gradient square plus y_gradient square
-vil_image_resource_sptr vepl_gradient_mag(vil_image_resource_sptr , double scale=1.0, double shift=0.0);
+// : gradient magnitude: sqrt of x_gradient square plus y_gradient square
+vil_image_resource_sptr vepl_gradient_mag(vil_image_resource_sptr, double scale = 1.0, double shift = 0.0);
 
 #endif // vepl_gradient_mag_h_

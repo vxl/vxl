@@ -12,18 +12,17 @@ void test_matrix_double_io()
            << "Testing vnl_matrix<double> io\n"
            << "*****************************\n";
   //// test constructors, accessors
-  const int m = 10;
-  const int n = 6;
-  vnl_matrix<double> m_out(m, n), m_in1(m,n),m_in2;
-
-  for (int i=0; i<m; i++)
-  {
-    for (int j=0; j<n; j++)
+  const int          m = 10;
+  const int          n = 6;
+  vnl_matrix<double> m_out(m, n), m_in1(m, n), m_in2;
+  for( int i = 0; i < m; i++ )
     {
-      m_out(i,j) = (double)(i*j+i);
-      m_in1(i,j) = (double)(73);
+    for( int j = 0; j < n; j++ )
+      {
+      m_out(i, j) = (double)(i * j + i);
+      m_in1(i, j) = (double)(73);
+      }
     }
-  }
 
   vsl_b_ofstream bfs_out("vnl_matrix_test_double_io.bvl.tmp");
   TEST("Created vnl_matrix_test_double_io.bvl.tmp for writing",
@@ -39,7 +38,7 @@ void test_matrix_double_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vnl_matrix_test_double_io.bvl.tmp");
+  vpl_unlink("vnl_matrix_test_double_io.bvl.tmp");
 
   // m_in1 has content
   TEST("m_out == m_in1", m_out, m_in1);
@@ -50,11 +49,9 @@ void test_matrix_double_io()
   vcl_cout << vcl_endl;
 }
 
-
 void test_matrix_io()
 {
   test_matrix_double_io();
 }
-
 
 TESTMAIN(test_matrix_io);

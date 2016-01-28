@@ -2,9 +2,9 @@
 #ifndef gst_edge_2d_h_
 #define gst_edge_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 
@@ -15,14 +15,14 @@
 
 class gst_edge_2d : public vbl_ref_count
 {
- public:
+public:
   // constructor
   gst_edge_2d(gst_vertex_2d_sptr start, gst_vertex_2d_sptr end)
-  : start_(start), end_(end) {}
+    : start_(start), end_(end) {}
 
   // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
   gst_edge_2d(gst_edge_2d const& e)
-  : vbl_ref_count(), start_(e.start_), end_(e.end_) {}
+    : vbl_ref_count(), start_(e.start_), end_(e.end_) {}
 
   // getters (no setters)
 
@@ -30,16 +30,16 @@ class gst_edge_2d : public vbl_ref_count
   gst_vertex_2d_sptr get_end() const { return end_; }
 
   // operations
-  void flip() { gst_vertex_2d_sptr temp= start_; start_= end_; end_= temp; }
+  void flip() { gst_vertex_2d_sptr temp = start_; start_ = end_; end_ = temp; }
 
   // display
-  friend vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e);
+  friend vcl_ostream & operator<<( vcl_ostream & os, gst_edge_2d & e);
 
- protected:
+protected:
   gst_vertex_2d_sptr start_;
   gst_vertex_2d_sptr end_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e);
+vcl_ostream & operator<<( vcl_ostream & os, gst_edge_2d & e);
 
 #endif // gst_edge_2d_h_

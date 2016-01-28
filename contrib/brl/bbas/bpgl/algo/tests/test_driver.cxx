@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_optimize_camera );
 DECLARE( test_fm_compute );
 DECLARE( test_construct_cameras );

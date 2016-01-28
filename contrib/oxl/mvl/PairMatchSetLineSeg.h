@@ -2,9 +2,9 @@
 #ifndef PairMatchSetLineSeg_h_
 #define PairMatchSetLineSeg_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Matches between homogeneous line segments
 //
@@ -15,7 +15,7 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 09 Aug 96
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <mvl/PairMatchSet.h>
 class LineSegSet;
@@ -25,21 +25,21 @@ class PairMatchSetLineSeg : public PairMatchSet
 {
   LineSegSet* linesegs1_;
   LineSegSet* linesegs2_;
-
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
   PairMatchSetLineSeg();
   PairMatchSetLineSeg(LineSegSet& corners1, LineSegSet& corners2);
   ~PairMatchSetLineSeg();
 
   // Data Access---------------------------------------------------------------
-  LineSegSet* get_linesegs1() const { return linesegs1_; }
-  LineSegSet* get_linesegs2() const { return linesegs2_; }
+  LineSegSet * get_linesegs1() const { return linesegs1_; }
+  LineSegSet * get_linesegs2() const { return linesegs2_; }
 
   void extract_matches(vcl_vector<HomgLineSeg2D>& l1, vcl_vector<HomgLineSeg2D>& l2) const;
 
   // Data Control--------------------------------------------------------------
   void set(LineSegSet* lines1, LineSegSet* lines2);
+
 };
 
 #endif // PairMatchSetLineSeg_h_

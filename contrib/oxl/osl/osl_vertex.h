@@ -2,9 +2,9 @@
 #ifndef osl_vertex_h_
 #define osl_vertex_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 
@@ -12,7 +12,7 @@
 
 class osl_vertex : public osl_topology_base
 {
- public:
+public:
   float x, y;
   osl_vertex(float x_, float y_, int id_ = 0);
   ~osl_vertex();
@@ -20,7 +20,7 @@ class osl_vertex : public osl_topology_base
   float GetY() const { return y; }
 };
 
-bool operator==(osl_vertex const &a, osl_vertex const &b);
+bool operator==(osl_vertex const & a, osl_vertex const & b);
 
 // urgh
 typedef osl_vertex osl_Vertex;

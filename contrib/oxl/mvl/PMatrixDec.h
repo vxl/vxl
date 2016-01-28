@@ -2,9 +2,9 @@
 #ifndef PMatrixDec_h_
 #define PMatrixDec_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 //
 //   The PMatrixDec class is a subclass of PMatrix.
@@ -32,7 +32,7 @@
 //                         parameters, denoted by AlphaU, AlphaV, U0 & V0.
 // \endverbatim
 //
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
 #include <mvl/PMatrix.h>
@@ -45,29 +45,29 @@ class PMatrixDec : public PMatrix
   // J and D matrices
   vnl_matrix<double> j_matrix_;  // 3x3
   vnl_matrix<double> d_matrix_;  // 4x4
-
- public:
+public:
   // Constructors/Initializers/Destructors----------------------------------
   PMatrixDec(const vnl_matrix<double>& p_matrix);
   ~PMatrixDec();
 
   // Data Access------------------------------------------------------------
-  const vnl_matrix<double>& IntrinsicParameters () { return j_matrix_; }
-  const vnl_matrix<double>& ExtrinsicParameters () { return d_matrix_; }
+  const vnl_matrix<double> & IntrinsicParameters() { return j_matrix_; }
+  const vnl_matrix<double> & ExtrinsicParameters() { return d_matrix_; }
 
-  double GetAlphaU() const { return j_matrix_(0,0); }
-  double GetAlphaV() const { return j_matrix_(1,1); }
-  double GetU0() const { return j_matrix_(0,2); }
-  double GetV0() const { return j_matrix_(1,2); }
+  double GetAlphaU() const { return j_matrix_(0, 0); }
+  double GetAlphaV() const { return j_matrix_(1, 1); }
+  double GetU0() const { return j_matrix_(0, 2); }
+  double GetV0() const { return j_matrix_(1, 2); }
 
   // make tests for this class
   void Test();
 
-  friend vcl_ostream& operator<<(vcl_ostream& s, const PMatrixDec& P);
+  friend vcl_ostream & operator<<(vcl_ostream& s, const PMatrixDec& P);
 
   // INTERNALS---------------------------------------------------------------
- private:
+private:
   void Init();
+
 };
 
 #endif // PMatrixDec_h_

@@ -2,9 +2,9 @@
 #ifndef pop_geometric_cost_function_h_
 #define pop_geometric_cost_function_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief compute cost between an observable and an observation
 //
@@ -12,31 +12,30 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-//-------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
-#include<pop/pop_geometric_object.h>
+#include <pop/pop_geometric_object.h>
 
-//: base class for geometric cost methods
+// : base class for geometric cost methods
 class pop_geometric_cost_function
 {
- public:
-  //: constructor
-  pop_geometric_cost_function(pop_geometric_object *observable,
-                              pop_geometric_object *observation);
+public:
+  // : constructor
+  pop_geometric_cost_function(pop_geometric_object * observable, pop_geometric_object * observation);
 
-  //: destructor
+  // : destructor
   ~pop_geometric_cost_function();
 
-  //: this is the cost between two objects
+  // : this is the cost between two objects
 
   double cost();
 
- private:
+private:
   // the observable
-  pop_geometric_object *observable_;
+  pop_geometric_object * observable_;
 
   // the observation
-  pop_geometric_object *observation_;
+  pop_geometric_object * observation_;
 };
 
 #endif // pop_geometric_cost_function_h_

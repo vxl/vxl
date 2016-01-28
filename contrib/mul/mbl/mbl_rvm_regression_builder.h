@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_rvm_regression_builder.h
 #ifndef mbl_rvm_regression_builder_h_
 #define mbl_rvm_regression_builder_h_
-//:
+// :
 // \file
 // \brief Object to train Relevance Vector Machines for regression
 // \author Tim Cootes
@@ -11,42 +11,36 @@
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
 
-//=======================================================================
-//: Object to train Relevance Vector Machines for regression.
+// =======================================================================
+// : Object to train Relevance Vector Machines for regression.
 // Trains Relevance Vector Machines (see papers by Michael Tipping)
 // for regression.
 class mbl_rvm_regression_builder
 {
- private:
-  //: Record of mean weights
+private:
+  // : Record of mean weights
   vnl_vector<double> mean_wts_;
 
-  //: Record of covariance in weights
+  // : Record of covariance in weights
   vnl_matrix<double> S_;
 
-  //: Compute design matrix F from subset of elements in kernel matrix
+  // : Compute design matrix F from subset of elements in kernel matrix
   //  Uses gaussian distance expression with variance var
-  void design_matrix(const vnl_matrix<double>& kernel_matrix,
-                     const vcl_vector<int>& index,
-                     vnl_matrix<double>& F);
+  void design_matrix(const vnl_matrix<double>& kernel_matrix, const vcl_vector<int>& index, vnl_matrix<double>& F);
 
-  //: Perform one iteration of optimisation
-  bool update_step(const vnl_matrix<double>& design_matrix,
-                   const vnl_vector<double>& targets,
-                   const vcl_vector<int>& index0,
-                   const vcl_vector<double>& alpha0,
-                   double sqr_width0,
-                   vcl_vector<int>& index,
-                   vcl_vector<double>& alpha,
-                   double &error_var);
- public:
-  //: Dflt ctor
+  // : Perform one iteration of optimisation
+  bool update_step(const vnl_matrix<double>& design_matrix, const vnl_vector<double>& targets,
+                   const vcl_vector<int>& index0, const vcl_vector<double>& alpha0, double sqr_width0,
+                   vcl_vector<int>& index, vcl_vector<double>& alpha, double & error_var);
+
+public:
+  // : Dflt ctor
   mbl_rvm_regression_builder();
 
-  //: Destructor
+  // : Destructor
   virtual ~mbl_rvm_regression_builder();
 
-  //: Train RVM given a set of vectors and set of target values
+  // : Train RVM given a set of vectors and set of target values
   //  Resulting RVM has form f(x)=w[0]+sum w[i+1]K(x,data[index[i]])
   //  where K(x,y)=exp(-|x-y|^2/2var), and index.size() gives
   //  the number of the selected vectors.
@@ -58,14 +52,10 @@ class mbl_rvm_regression_builder
   // \param index returns indices of selected vectors
   // \param weights returns weights for selected vectors
   // \param error_var returns estimated error variance for resulting function
-  void gauss_build(mbl_data_wrapper<vnl_vector<double> >& data,
-                   double var,
-                   const vnl_vector<double>& targets,
-                   vcl_vector<int>& index,
-                   vnl_vector<double>& weights,
-                   double &error_var);
+  void gauss_build(mbl_data_wrapper<vnl_vector<double> >& data, double var, const vnl_vector<double>& targets,
+                   vcl_vector<int>& index, vnl_vector<double>& weights, double & error_var);
 
-  //: Train RVM given a distance matrix and set of target values
+  // : Train RVM given a distance matrix and set of target values
   //  Resulting RVM has form f(x)=w[0]+sum w[i+1]K(x,vec[index[i]])
   //  where K(x,y) is the kernel function, and index.size() gives
   //  the number of the selected vectors.
@@ -87,11 +77,9 @@ class mbl_rvm_regression_builder
   // \param index returns indices of selected vectors
   // \param weights returns weights for selected vectors
   // \param error_var returns estimated error variance for resulting function
-  void build(const vnl_matrix<double>& kernel_matrix,
-             const vnl_vector<double>& targets,
-             vcl_vector<int>& index,
-             vnl_vector<double>& weights,
-             double &error_var);
+  void build(const vnl_matrix<double>& kernel_matrix, const vnl_vector<double>& targets, vcl_vector<int>& index,
+             vnl_vector<double>& weights, double & error_var);
+
 };
 
 #endif

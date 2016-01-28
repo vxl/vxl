@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_import_triangle_mesh_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief  A process for exporting a texture mapped mesh of a scene
 //
@@ -16,24 +16,24 @@
 
 namespace boxm2_import_triangle_mesh_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 4;
+const unsigned n_outputs_ = 0;
 }
 
 bool boxm2_import_triangle_mesh_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_import_triangle_mesh_process_globals;
 
-  //process takes 3 inputs
-  int i=0;
+  // process takes 3 inputs
+  int                    i = 0;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[i++] = "boxm2_scene_sptr";  // scene
   input_types_[i++] = "boxm2_cache_sptr";
-  input_types_[i++] = "vcl_string";        // input mesh filename
-  input_types_[i++] = "float";  // prob. of cells that mesh intersects
+  input_types_[i++] = "vcl_string"; // input mesh filename
+  input_types_[i++] = "float";      // prob. of cells that mesh intersects
 
   // process has 0 output
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -41,28 +41,30 @@ bool boxm2_import_triangle_mesh_process_cons(bprb_func_process& pro)
 bool boxm2_import_triangle_mesh_process(bprb_func_process& pro)
 {
   using namespace boxm2_import_triangle_mesh_process_globals;
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
+  // get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(1);
-  vcl_string mesh_filename = pro.get_input<vcl_string>(2);
-  float occupied_prob = pro.get_input<float>(3);
+  vcl_string       mesh_filename = pro.get_input<vcl_string>(2);
+  float            occupied_prob = pro.get_input<float>(3);
 
 #if 0
-  bmsh3d_mesh  mesh;
-  bmsh3d_load_ply2(&mesh, ply_file.c_str());
+  bmsh3d_mesh mesh;
+  bmsh3d_load_ply2(&mesh, ply_file.c_str() );
 #else
   imesh_mesh mesh;
   imesh_read(mesh_filename, mesh);
 #endif
 
   bool status = boxm2_import_triangle_mesh(scene, cache, mesh, occupied_prob);
-  if (!status) {
+  if( !status )
+    {
     vcl_cerr << "ERROR: boxm2_import_triangle_mesh_process: import_triangle_mesh retured false!" << vcl_endl;
-  }
+    }
   return status;
 }

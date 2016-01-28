@@ -9,7 +9,7 @@ inline int svd_rank(vnl_matrix<double> const& M) { return vnl_svd<double>(M, 1e-
 void test_rank()
 {
   // 1x1 double
-  vnl_matrix<double> m11(1,1, 0.0); // all zero matrix
+  vnl_matrix<double> m11(1, 1, 0.0); // all zero matrix
   TEST("zero_1x1.vnl_svd().rank()", svd_rank(m11), 0);
   TEST("vnl_rank(zero_1x1)", vnl_rank(m11), 0);
   m11[0][0] = -3.0;
@@ -19,7 +19,7 @@ void test_rank()
   TEST("vnl_rank(-3_1x1, vnl_rank_column)", vnl_rank(m11, vnl_rank_column), 1);
 
   // 1x1 int
-  vnl_matrix<int> i11(1,1, 0); // all zero matrix
+  vnl_matrix<int> i11(1, 1, 0); // all zero matrix
   TEST("vnl_rank(int_zero_1x1)", vnl_rank(i11), 0);
   i11[0][0] = -3;
   TEST("vnl_rank(int_-3_1x1)", vnl_rank(i11), 1);
@@ -27,7 +27,7 @@ void test_rank()
   TEST("vnl_rank(int_-3_1x1, vnl_rank_column)", vnl_rank(i11, vnl_rank_column), 1);
 
   // 1x2 double
-  vnl_matrix<double> m12(1,2, 0.0); // all zero matrix
+  vnl_matrix<double> m12(1, 2, 0.0); // all zero matrix
   TEST("zero_1x2.vnl_svd().rank()", svd_rank(m12), 0);
   TEST("vnl_rank(zero_1x2)", vnl_rank(m12), 0);
   TEST("vnl_rank(zero_1x2, vnl_rank_row)", vnl_rank(m12, vnl_rank_row), 0);
@@ -44,7 +44,7 @@ void test_rank()
   TEST("vnl_rank(1-2_1x2, vnl_rank_column)", vnl_rank(m12, vnl_rank_column), 1);
 
   // 1x2 int
-  vnl_matrix<int> i12(1,2, 0); // all zero matrix
+  vnl_matrix<int> i12(1, 2, 0); // all zero matrix
   TEST("vnl_rank(int_zero_1x2)", vnl_rank(i12), 0);
   TEST("vnl_rank(int_zero_1x2, vnl_rank_row)", vnl_rank(i12, vnl_rank_row), 0);
   TEST("vnl_rank(int_zero_1x2, vnl_rank_column)", vnl_rank(i12, vnl_rank_column), 0);
@@ -58,7 +58,7 @@ void test_rank()
   TEST("vnl_rank(int_1-2_1x2, vnl_rank_column)", vnl_rank(i12, vnl_rank_column), 1);
 
   // 2x2 double
-  vnl_matrix<double> m22(2,2, 0.0); // all zero matrix
+  vnl_matrix<double> m22(2, 2, 0.0); // all zero matrix
   TEST("zero_2x2.vnl_svd().rank()", svd_rank(m22), 0);
   TEST("vnl_rank(zero_2x2)", vnl_rank(m22), 0);
   TEST("vnl_rank(zero_2x2, vnl_rank_row)", vnl_rank(m22, vnl_rank_row), 0);
@@ -90,7 +90,7 @@ void test_rank()
   TEST("vnl_rank(-4_12_-6_18_2x2, vnl_rank_column)", vnl_rank(m22, vnl_rank_column), 1);
 
   // 2x2 int
-  vnl_matrix<int> i22(2,2, 0); // all zero matrix
+  vnl_matrix<int> i22(2, 2, 0); // all zero matrix
   TEST("vnl_rank(int_zero_2x2)", vnl_rank(i22), 0);
   TEST("vnl_rank(int_zero_2x2, vnl_rank_row)", vnl_rank(i22, vnl_rank_row), 0);
   TEST("vnl_rank(int_zero_2x2, vnl_rank_column)", vnl_rank(i22, vnl_rank_column), 0);
@@ -116,7 +116,7 @@ void test_rank()
   TEST("vnl_rank(-4_12_-6_18_2x2, vnl_rank_column)", vnl_rank(i22, vnl_rank_column), 1);
 
   // 3x2 double
-  vnl_matrix<double> m32(3,2, 0.0); // all zero matrix
+  vnl_matrix<double> m32(3, 2, 0.0); // all zero matrix
   TEST("zero_3x2.vnl_svd().rank()", svd_rank(m32), 0);
   TEST("vnl_rank(zero_3x2)", vnl_rank(m32), 0);
   TEST("vnl_rank(zero_3x2, vnl_rank_row)", vnl_rank(m32, vnl_rank_row), 0);
@@ -146,7 +146,7 @@ void test_rank()
   TEST("vnl_rank(3x2)", vnl_rank(m32), 1);
 
   // 3x2 int
-  vnl_matrix<int> i32(3,2, 0); // all zero matrix
+  vnl_matrix<int> i32(3, 2, 0); // all zero matrix
   TEST("vnl_rank(zero_3x2)", vnl_rank(i32), 0);
   TEST("vnl_rank(zero_3x2, vnl_rank_row)", vnl_rank(i32, vnl_rank_row), 0);
   TEST("vnl_rank(zero_3x2, vnl_rank_column)", vnl_rank(i32, vnl_rank_column), 0);
@@ -170,7 +170,7 @@ void test_rank()
   TEST("vnl_rank(3x2)", vnl_rank(i32), 1);
 
   // 3x3 double
-  vnl_matrix<double> m33(3,3, 0.0); // all zero matrix
+  vnl_matrix<double> m33(3, 3, 0.0); // all zero matrix
   TEST("zero_3x3.vnl_svd().rank()", svd_rank(m33), 0);
   TEST("vnl_rank(zero_3x3)", vnl_rank(m33), 0);
   TEST("vnl_rank(zero_3x3, vnl_rank_row)", vnl_rank(m33, vnl_rank_row), 0);
@@ -198,7 +198,7 @@ void test_rank()
   TEST("vnl_rank(3x3)", vnl_rank(m33), 2);
 
   // 3x3 int
-  vnl_matrix<int> i33(3,3, 0); // all zero matrix
+  vnl_matrix<int> i33(3, 3, 0); // all zero matrix
   TEST("vnl_rank(int_3x3)", vnl_rank(i33), 0);
   TEST("vnl_rank(int_3x3, vnl_rank_row)", vnl_rank(i33, vnl_rank_row), 0);
   TEST("vnl_rank(int_3x3, vnl_rank_column)", vnl_rank(i33, vnl_rank_column), 0);

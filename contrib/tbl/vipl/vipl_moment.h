@@ -1,6 +1,6 @@
 #ifndef vipl_moment_h_
 #define vipl_moment_h_
-//:
+// :
 // \file
 // \brief computation of n-th order moment
 //
@@ -29,40 +29,43 @@
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-//: computation of n-th order moment
-template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_moment : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+// : computation of n-th order moment
+template <class ImgIn, class ImgOut, class DataIn, class DataOut,
+          VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter)>
+class vipl_moment : public vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>
 {
   // -+-+- data members: -+-+-
- private:
+private:
   int order_;
   int width_;
   int height_;
-  int& ref_order(){return order_;}
-  int& ref_width(){return width_;}
-  int& ref_height(){return height_;}
-  void put_order(int v){order_=v;}
-  void put_width(int v){width_=v;}
-  void put_height(int v){height_=v;}
- public:
-  int order() const {return order_;}
-  int width() const {return width_;}
-  int height() const {return height_;}
+  int & ref_order() {return order_; }
+  int & ref_width() {return width_; }
+  int & ref_height() {return height_; }
+  void put_order(int v) {order_ = v; }
+  void put_width(int v) {width_ = v; }
+  void put_height(int v) {height_ = v; }
+public:
+  int order() const {return order_; }
+  int width() const {return width_; }
+  int height() const {return height_; }
 
   // -+-+- constructors/destructors: -+-+-
- public:
-  inline vipl_moment(int n,int w=3,int h=3)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), order_(n), width_(w), height_(h) {}
+public:
+  inline vipl_moment(int n, int w = 3, int h = 3)
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(), order_(n), width_(w), height_(h) {}
   inline vipl_moment(vipl_moment const& A)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), order_(A.order()), width_(A.width()), height_(A.height()) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A), order_(A.order() ), width_(A.width() ), height_(
+      A.height() ) {}
   inline ~vipl_moment() {}
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();
+
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_moment.txx"
+#  include "vipl_moment.txx"
 #endif
 
 #endif // vipl_moment_h_

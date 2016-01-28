@@ -1,7 +1,7 @@
 // This is oxl/mvl/PMatrixEuclidean.h
 #ifndef PMatrixEuclidean_h_
 #define PMatrixEuclidean_h_
-//:
+// :
 // \file
 // \brief 3x4 projection matrix
 //
@@ -20,16 +20,16 @@
 
 class PMatrixEuclidean : public PMatrix
 {
- public:
+public:
   // Constructors/Initializers/Destructors-------------------------------------
   PMatrixEuclidean(void) {}
   ~PMatrixEuclidean(void) {}
 
   // Computations--------------------------------------------------------------
 
-  bool decompose_to_intrinsic_extrinsic_params (vnl_matrix<double> * /*camera_matrix*/,
-                                                vnl_matrix<double> * /*R*/,
-                                                vnl_vector<double> * /*t*/)
+  bool decompose_to_intrinsic_extrinsic_params(vnl_matrix<double> * /*camera_matrix*/,
+                                               vnl_matrix<double> * /*R*/,
+                                               vnl_vector<double> * /*t*/)
   { return false; } // FIXME: not yet implemented
 };
 

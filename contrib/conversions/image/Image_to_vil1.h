@@ -15,28 +15,29 @@ inline vil1_image Image_to_vil1(Image const* im)
   // First try to load directly from file.  This will give wrong results
   // when im was copied into memory from a file image and then modified.
   const char* name = im->GetName();
-  if (name && *name)
-  {
+
+  if( name && *name )
+    {
     vil1_image imo = vil1_load(name);
-    if (imo) return imo;
-  }
+    if( imo ) {return imo; }
+    }
   // was not able to open original file - probably this is an in-memory image:
-  int cmpts = (im->GetImageClass() == 'C') ? 3 : 1; // very rough ! FIXME
-  int width = im->GetSizeX();
-  int height = im->GetSizeY();
-  int bpc = im->GetBitsPixel() / cmpts;
+  int                   cmpts = (im->GetImageClass() == 'C') ? 3 : 1; // very rough ! FIXME
+  int                   width = im->GetSizeX();
+  int                   height = im->GetSizeY();
+  int                   bpc = im->GetBitsPixel() / cmpts;
   vil1_component_format format =
     (im->GetFormat() == 'A') ? VIL1_COMPONENT_FORMAT_IEEE_FLOAT :
     (im->GetFormat() == 'Y') ? VIL1_COMPONENT_FORMAT_COMPLEX :
-                               VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
-  if (im->GetBitsPixel() != bpc * cmpts)
-    { vcl_cerr << "Image_to_vil1: Error: pixel size\n"; return 0; }
+    VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
+  if( im->GetBitsPixel() != bpc * cmpts )
+        { vcl_cerr << "Image_to_vil1: Error: pixel size\n"; return 0; }
 
   vil1_memory_image imo(width, height, cmpts, bpc, format);
 
-  void* buf = im->GetSection((void*)0, 0, 0, width, height);
+  void* buf = im->GetSection( (void *)0, 0, 0, width, height);
   imo.put_section(buf, 0, 0, width, height);
-  delete[] (char*)buf;
+  delete[] (char *)buf;
   return imo;
 }
 

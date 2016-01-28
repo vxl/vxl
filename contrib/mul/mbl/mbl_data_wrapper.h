@@ -2,14 +2,14 @@
 #ifndef mbl_data_wrapper_h
 #define mbl_data_wrapper_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Tim Cootes
 // \brief A wrapper to provide access to sets of objects
 
-//: Base class for objects which can return a set of objects, one at a time
+// : Base class for objects which can return a set of objects, one at a time
 //  This is an iterator-like object.  However, unlike STL, generality is
 //  obtained by deriving from the class rather than providing a similar
 //  interface.
@@ -37,47 +37,48 @@
 
 #include <vcl_string.h>
 
-template<class T>
+template <class T>
 class mbl_data_wrapper
 {
- public:
-  //: Default constructor
+public:
+  // : Default constructor
   mbl_data_wrapper();
 
-  //: Default destructor
+  // : Default destructor
   virtual ~mbl_data_wrapper();
 
-  //: Number of objects available
+  // : Number of objects available
   virtual unsigned long size() const = 0;
 
-  //: Reset so that current() returns first object
+  // : Reset so that current() returns first object
   virtual void reset() = 0;
 
-  //: Return current object
-  virtual const T& current() = 0;
+  // : Return current object
+  virtual const T & current() = 0;
 
-  //: Move to next object, returning true if is valid
+  // : Move to next object, returning true if is valid
   virtual bool next() = 0;
 
-  //: Return current index
+  // : Return current index
   //  First example has index 0
-  virtual unsigned long index() const =0;
+  virtual unsigned long index() const = 0;
 
-  //: Move to element n
+  // : Move to element n
   //  First example has index 0
   virtual void set_index(unsigned long n);
 
-  //: Create copy on heap and return base pointer
+  // : Create copy on heap and return base pointer
   // This will create an independent iterator on the underlying data.
   // The original data is not copied.
   // Be careful of destruction of underlying data.
-  virtual mbl_data_wrapper< T >* clone() const = 0;
+  virtual mbl_data_wrapper<T> * clone() const = 0;
 
-  //: Name of the class
-  virtual vcl_string is_a() const =0;
+  // : Name of the class
+  virtual vcl_string is_a() const = 0;
 
-  //: True if this is (or is derived from) class named s
-  virtual bool is_class(vcl_string const& s) const =0;
+  // : True if this is (or is derived from) class named s
+  virtual bool is_class(vcl_string const& s) const = 0;
+
 };
 
 #endif // mbl_data_wrapper_h

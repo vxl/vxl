@@ -2,9 +2,9 @@
 #ifndef vgui_debug_tableau_h_
 #define vgui_debug_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Event-printing "tee" tableau.
 // \author awf@robots.ox.ac.uk
@@ -21,33 +21,33 @@
 #include "vgui_debug_tableau_sptr.h"
 #include <vgui/vgui_wrapper_tableau.h>
 
-//: Event-printing "tee" tableau.
+// : Event-printing "tee" tableau.
 //
 //  A vgui_tableau that prints events and then forwards them to a child.
 class vgui_debug_tableau : public vgui_wrapper_tableau
 {
- public:
-  //: Constructor - don't use this, use vgui_debug_tableau_new.
+public:
+  // : Constructor - don't use this, use vgui_debug_tableau_new.
   //  Takes the one and only child of this tableau.
   vgui_debug_tableau(vgui_tableau_sptr const& child);
 
-  //: Returns the type of this tableau ('vgui_debug_tableau').
+  // : Returns the type of this tableau ('vgui_debug_tableau').
   vcl_string type_name() const { return "vgui_debug_tableau"; }
-
- protected:
-  //: Destructor - called by vgui_debug_tableau_sptr.
+protected:
+  // : Destructor - called by vgui_debug_tableau_sptr.
   ~vgui_debug_tableau();
 
-  //: Handle events by printing them and then forwarding to the child tableau.
+  // : Handle events by printing them and then forwarding to the child tableau.
   bool handle(const vgui_event& e);
+
   int verbosity;
 };
 
-//: Creates a smart-pointer to a vgui_debug_tableau.
+// : Creates a smart-pointer to a vgui_debug_tableau.
 struct vgui_debug_tableau_new : public vgui_debug_tableau_sptr
-{
+  {
   typedef vgui_debug_tableau_sptr base;
-  vgui_debug_tableau_new(vgui_tableau_sptr const& child) : base(new vgui_debug_tableau(child)) { }
-};
+  vgui_debug_tableau_new(vgui_tableau_sptr const& child) : base(new vgui_debug_tableau(child) ) { }
+  };
 
 #endif // vgui_debug_tableau_h_

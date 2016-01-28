@@ -13,7 +13,7 @@ void test_triple_io()
            << "*************************************\n";
 
   //// test constructors, accessors
-  vbl_triple<double,int,int> v_out(4.0, -1, 5), v_in;
+  vbl_triple<double, int, int> v_out(4.0, -1, 5), v_in;
 
   vsl_b_ofstream bfs_out("vbl_triple_test_io.bvl.tmp");
   TEST("Created vbl_triple_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -32,7 +32,7 @@ void test_triple_io()
 
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
-  vsl_indent_clear_all_data ();
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_triple_io);

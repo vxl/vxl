@@ -4,4 +4,3 @@
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 BRDB_VALUE_INSTANTIATE(brad_image_metadata_sptr, "brad_image_metadata_sptr");
-

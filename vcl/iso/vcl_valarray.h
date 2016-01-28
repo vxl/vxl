@@ -6,9 +6,9 @@
 #include <valarray>
 
 #ifdef vcl_generic_valarray_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_valarray_STD std
+#  define vcl_generic_valarray_STD std
 #endif
 
 #include "../generic/vcl_valarray.h"

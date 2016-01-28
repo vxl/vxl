@@ -1,7 +1,7 @@
 // This is brl/bbas/bpgl/algo/bpgl_project.h
 #ifndef bpgl_project_h_
 #define bpgl_project_h_
-//:
+// :
 // \file
 // \brief Methods for projecting geometric structures onto the image
 // \author J. L. Mundy
@@ -15,17 +15,15 @@
 
 class bpgl_project
 {
- public:
+public: ~bpgl_project();
+  static vgl_box_2d<double> project_bounding_box(vpgl_perspective_camera<double>  cam, vgl_box_3d<double> const & box);
 
-    ~bpgl_project();
-    static vgl_box_2d<double> project_bounding_box(vpgl_perspective_camera<double>  cam,
-                                                   vgl_box_3d<double> const & box);
-    static vgl_box_2d<double> project_bounding_box(vpgl_affine_camera<double>  cam,
-                                                   vgl_box_3d<double> const & box);
-    static vgl_box_2d<double> project_bounding_box(vpgl_proj_camera<double>  cam,
-                                                   vgl_box_3d<double> const & box);
- private:
-  //: constructor private - static methods only
+  static vgl_box_2d<double> project_bounding_box(vpgl_affine_camera<double>  cam, vgl_box_3d<double> const & box);
+
+  static vgl_box_2d<double> project_bounding_box(vpgl_proj_camera<double>  cam, vgl_box_3d<double> const & box);
+
+private:
+  // : constructor private - static methods only
   bpgl_project();
 };
 

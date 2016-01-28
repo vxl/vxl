@@ -1,6 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_occupancy_vff_process.cxx
 #include "bvxm_save_occupancy_vff_process.h"
-//:
+// :
 // \file
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>
@@ -14,9 +14,9 @@ bool bvxm_save_occupancy_vff_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_save_occupancy_vff_process_globals;
   // process takes 3 inputs:
-  //input[0]: The voxel world
-  //input[1]: The filename to write to
-  //input[2]: Scale Index
+  // input[0]: The voxel world
+  // input[1]: The filename to write to
+  // input[2]: Scale Index
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
@@ -29,23 +29,24 @@ bool bvxm_save_occupancy_vff_process(bprb_func_process& pro)
 {
   using namespace bvxm_save_occupancy_vff_process_globals;
 
-  //check number of inputs
-  if (pro.n_inputs() < n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  // check number of inputs
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
-  unsigned i = 0;
+  // get the inputs
+  unsigned              i = 0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  vcl_string filename = pro.get_input<vcl_string>(i++);
-  unsigned scale_idx = pro.get_input<unsigned>(i++);
+  vcl_string            filename = pro.get_input<vcl_string>(i++);
+  unsigned              scale_idx = pro.get_input<unsigned>(i++);
 
-  if ( !world ){
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+  if( !world )
+    {
+    vcl_cout << pro.name() << " :--  Input 0  is not valid!\n";
     return false;
-  }
+    }
 
-  return world->save_occupancy_vff(filename,scale_idx);
+  return world->save_occupancy_vff(filename, scale_idx);
 }

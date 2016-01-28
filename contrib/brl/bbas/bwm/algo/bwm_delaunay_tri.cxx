@@ -1,5 +1,5 @@
 #include "bwm_delaunay_tri.h"
-//:
+// :
 // \file
 
 #include <vcl_complex.h>
@@ -12,50 +12,55 @@
 
 double bwm_delaunay_tri::EPSILON = 0.000001;
 
-//:  Return true if a point p is inside the circumcircle made up of the points p1(x1,y1), p2(x2,y2), p3(x3,y3)
+// :  Return true if a point p is inside the circumcircle made up of the points p1(x1,y1), p2(x2,y2), p3(x3,y3)
 //   The circumcircle centre is returned in c(xc,yc) and the radius r
 //   Note : A point on the edge is inside the circumcircle
 bool bwm_delaunay_tri::CircumCircle(vgl_point_2d<double> p,
                                     vgl_point_2d<double> p1,
                                     vgl_point_2d<double> p2,
                                     vgl_point_2d<double> p3,
-                                    vgl_point_2d<double>& c, double &r)
+                                    vgl_point_2d<double>& c, double & r)
 {
   double m1, m2, mx1, mx2, my1, my2;
   double dx, dy, rsqr, drsqr;
   double xc, yc;
 
   // Check for coincident points
-  if (vcl_abs(p1.y()-p2.y()) < EPSILON && vcl_abs(p2.y()-p3.y()) < EPSILON)
+  if( vcl_abs(p1.y() - p2.y() ) < EPSILON && vcl_abs(p2.y() - p3.y() ) < EPSILON )
+    {
     return false;
+    }
 
-  if (vcl_abs(p2.y()-p1.y()) < EPSILON) {
-    m2 = - (p3.x() - p2.x()) / (p3.y() - p2.y());
-    mx2 = (p2.x() + p3.x()) / 2.0;
-    my2 = (p2.y() + p3.y()) / 2.0;
-    xc = (p2.x() + p1.x()) / 2.0;
+  if( vcl_abs(p2.y() - p1.y() ) < EPSILON )
+    {
+    m2 = -(p3.x() - p2.x() ) / (p3.y() - p2.y() );
+    mx2 = (p2.x() + p3.x() ) / 2.0;
+    my2 = (p2.y() + p3.y() ) / 2.0;
+    xc = (p2.x() + p1.x() ) / 2.0;
     yc = m2 * (xc - mx2) + my2;
-    c = vgl_point_2d<double> (xc,yc);
-  }
-  else if (vcl_abs(p3.y() - p2.y()) < EPSILON) {
-    m1 = - (p2.x() - p1.x()) / (p2.y() - p1.y());
-    mx1 = (p1.x() + p2.x()) / 2.0;
-    my1 = (p1.y() + p2.y()) / 2.0;
-    xc = (p3.x() + p2.x()) / 2.0;
+    c = vgl_point_2d<double>(xc, yc);
+    }
+  else if( vcl_abs(p3.y() - p2.y() ) < EPSILON )
+    {
+    m1 = -(p2.x() - p1.x() ) / (p2.y() - p1.y() );
+    mx1 = (p1.x() + p2.x() ) / 2.0;
+    my1 = (p1.y() + p2.y() ) / 2.0;
+    xc = (p3.x() + p2.x() ) / 2.0;
     yc = m1 * (xc - mx1) + my1;
-    c = vgl_point_2d<double> (xc,yc);
-  }
-  else {
-    m1 = - (p2.x() - p1.x()) / (p2.y() - p1.y());
-    m2 = - (p3.x() - p2.x()) / (p3.y() - p2.y());
-    mx1 = (p1.x() + p2.x()) / 2.0;
-    mx2 = (p2.x() + p3.x()) / 2.0;
-    my1 = (p1.y() + p2.y()) / 2.0;
-    my2 = (p2.y() + p3.y()) / 2.0;
+    c = vgl_point_2d<double>(xc, yc);
+    }
+  else
+    {
+    m1 = -(p2.x() - p1.x() ) / (p2.y() - p1.y() );
+    m2 = -(p3.x() - p2.x() ) / (p3.y() - p2.y() );
+    mx1 = (p1.x() + p2.x() ) / 2.0;
+    mx2 = (p2.x() + p3.x() ) / 2.0;
+    my1 = (p1.y() + p2.y() ) / 2.0;
+    my2 = (p2.y() + p3.y() ) / 2.0;
     xc = (m1 * mx1 - m2 * mx2 + my2 - my1) / (m1 - m2);
     yc = m1 * (xc - mx1) + my1;
-    c = vgl_point_2d<double> (xc,yc);
-  }
+    c = vgl_point_2d<double>(xc, yc);
+    }
 
   dx = p2.x() - xc;
   dy = p2.y() - yc;
@@ -67,7 +72,7 @@ bool bwm_delaunay_tri::CircumCircle(vgl_point_2d<double> p,
   return drsqr <= rsqr;
 }
 
-//:  Triangulation subroutine
+// :  Triangulation subroutine
 //   Takes as input NV vertices in array pxyz
 //   Returned is a list of ntri triangular faces in the array v
 //   These triangles are arranged in a consistent clockwise order.
@@ -80,29 +85,28 @@ bool bwm_delaunay_tri::CircumCircle(vgl_point_2d<double> p,
 
 int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
                                   vcl_vector<vgl_point_3d<int> >& v,
-                                  int &ntri)
+                                  int & ntri)
 {
-  vcl_vector<bool> complete;
+  vcl_vector<bool>               complete;
   vcl_vector<vgl_point_2d<int> > edges;
   vcl_vector<vgl_point_2d<int> > p_EdgeTemp;
-  unsigned int nedge = 0;
-  unsigned int trimax, emax = 200;
-  bool inside;
-  vgl_point_2d<double> p, p1, p2, p3, c;
-  double r;
-  double xmin, xmax, ymin, ymax, xmid, ymid;
-  double dx, dy, dmax;
-
+  unsigned int                   nedge = 0;
+  unsigned int                   trimax, emax = 200;
+  bool                           inside;
+  vgl_point_2d<double>           p, p1, p2, p3, c;
+  double                         r;
+  double                         xmin, xmax, ymin, ymax, xmid, ymid;
+  double                         dx, dy, dmax;
 
   // sort the vertices on X
   vcl_qsort(&pxyz[0], pxyz.size(), sizeof pxyz[0], &bwm_delaunay_tri::XYZCompare);
 
-  //Allocate memory for the completeness list, flag for each triangle */
+  // Allocate memory for the completeness list, flag for each triangle */
   trimax = 4 * pxyz.size();
-  emax=trimax;
+  emax = trimax;
   complete.resize(trimax);
 
-  //Allocate memory for the edge list */
+  // Allocate memory for the edge list */
   edges.resize(emax);
 
   //  Find the maximum and minimum vertex bounds.
@@ -111,12 +115,13 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
   ymin = pxyz[0].y();
   xmax = xmin;
   ymax = ymin;
-  for (unsigned i = 1; i < pxyz.size(); i++) {
-    if (pxyz[i].x() < xmin) xmin = pxyz[i].x();
-    if (pxyz[i].x() > xmax) xmax = pxyz[i].x();
-    if (pxyz[i].y() < ymin) ymin = pxyz[i].y();
-    if (pxyz[i].y() > ymax) ymax = pxyz[i].y();
-  }
+  for( unsigned i = 1; i < pxyz.size(); i++ )
+    {
+    if( pxyz[i].x() < xmin ) {xmin = pxyz[i].x(); }
+    if( pxyz[i].x() > xmax ) {xmax = pxyz[i].x(); }
+    if( pxyz[i].y() < ymin ) {ymin = pxyz[i].y(); }
+    if( pxyz[i].y() > ymax ) {ymax = pxyz[i].y(); }
+    }
   dx = xmax - xmin;
   dy = ymax - ymin;
   dmax = (dx > dy) ? dx : dy;
@@ -129,105 +134,126 @@ int bwm_delaunay_tri::triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
   // vertex list. The supertriangle is the first triangle in
   // the triangle list.
   unsigned nv = pxyz.size();
-  v.resize(3*nv);
-  pxyz.push_back(vgl_point_3d<double>(xmid - 20 * dmax, ymid - dmax,0));
-  pxyz.push_back(vgl_point_3d<double>(xmid, ymid + 20 * dmax,0));
-  pxyz.push_back(vgl_point_3d<double>(xmid + 20 * dmax, ymid - dmax,0));
-  v[0].set(nv, nv+1, nv+2);
+  v.resize(3 * nv);
+  pxyz.push_back(vgl_point_3d<double>(xmid - 20 * dmax, ymid - dmax, 0) );
+  pxyz.push_back(vgl_point_3d<double>(xmid, ymid + 20 * dmax, 0) );
+  pxyz.push_back(vgl_point_3d<double>(xmid + 20 * dmax, ymid - dmax, 0) );
+  v[0].set(nv, nv + 1, nv + 2);
   complete[0] = false;
   ntri = 1;
-
   // Include each point one at a time into the existing mesh
-  for (unsigned i = 0; i < nv; i++)
-  {
-    p.set(pxyz[i].x(), pxyz[i].y());
+  for( unsigned i = 0; i < nv; i++ )
+    {
+    p.set(pxyz[i].x(), pxyz[i].y() );
     nedge = 0;
     // Set up the edge buffer.
     // If the point (xp,yp) lies inside the circumcircle then the
     // three edges of that triangle are added to the edge buffer
     // and that triangle is removed.
-    for (int j = 0; j < ntri; ++j)
-    {
-      if (complete[j])
+    for( int j = 0; j < ntri; ++j )
+      {
+      if( complete[j] )
+        {
         continue;
-      p1.set(pxyz[v[j].x()].x(), pxyz[v[j].x()].y());
-      p2.set(pxyz[v[j].y()].x(), pxyz[v[j].y()].y());
-      p3.set(pxyz[v[j].z()].x(), pxyz[v[j].z()].y());
-      inside = CircumCircle(p, p1, p2, p3, c, r);
-      if (c.x() + r < p.x())
-        complete[j] = true;
-        if (inside) {
-          // Check that we haven't exceeded the edge list size
-          if (nedge + 3 >= emax) {
-            emax += 100;
-            p_EdgeTemp.resize(emax);
-            for (unsigned int i = 0; i < nv; ++i) {
-              p_EdgeTemp[i] = edges[i];
-            }
-            edges.clear();
-            edges = p_EdgeTemp;
-          }
-          edges[nedge+0].set(v[j].x(), v[j].y());
-          edges[nedge+1].set(v[j].y(), v[j].z());
-          edges[nedge+2].set(v[j].z(), v[j].x());
-          nedge += 3;
-          v[j] = v[ntri-1];
-          complete[j] = complete[ntri-1];
-          --ntri;
-          --j;
         }
-    }
+      p1.set(pxyz[v[j].x()].x(), pxyz[v[j].x()].y() );
+      p2.set(pxyz[v[j].y()].x(), pxyz[v[j].y()].y() );
+      p3.set(pxyz[v[j].z()].x(), pxyz[v[j].z()].y() );
+      inside = CircumCircle(p, p1, p2, p3, c, r);
+      if( c.x() + r < p.x() )
+        {
+        complete[j] = true;
+        }
+      if( inside )
+        {
+        // Check that we haven't exceeded the edge list size
+        if( nedge + 3 >= emax )
+          {
+          emax += 100;
+          p_EdgeTemp.resize(emax);
+          for( unsigned int i = 0; i < nv; ++i )
+            {
+            p_EdgeTemp[i] = edges[i];
+            }
+          edges.clear();
+          edges = p_EdgeTemp;
+          }
+        edges[nedge + 0].set(v[j].x(), v[j].y() );
+        edges[nedge + 1].set(v[j].y(), v[j].z() );
+        edges[nedge + 2].set(v[j].z(), v[j].x() );
+        nedge += 3;
+        v[j] = v[ntri - 1];
+        complete[j] = complete[ntri - 1];
+        --ntri;
+        --j;
+        }
+      }
     // Tag multiple edges
     // Note: if all triangles are specified anticlockwise then all
     // interior edges are opposite pointing in direction.
-    for (unsigned j = 0; j+1 < nedge; ++j) {
-      for (unsigned k = j + 1; k < nedge; ++k) {
-       if ((edges[j].x() == edges[k].y()) && (edges[j].y() == edges[k].x())) {
+    for( unsigned j = 0; j + 1 < nedge; ++j )
+      {
+      for( unsigned k = j + 1; k < nedge; ++k )
+        {
+        if( (edges[j].x() == edges[k].y() ) && (edges[j].y() == edges[k].x() ) )
+          {
           edges[j].set(-1, -1);
           edges[k].set(-1, -1);
-        }
-         // Shouldn't need the following, see note above
-        if ((edges[j].x() == edges[k].x()) && (edges[j].y() == edges[k].y())) {
-         edges[j].set(-1, -1);
-         edges[k].set(-1, -1);
+          }
+        // Shouldn't need the following, see note above
+        if( (edges[j].x() == edges[k].x() ) && (edges[j].y() == edges[k].y() ) )
+          {
+          edges[j].set(-1, -1);
+          edges[k].set(-1, -1);
+          }
         }
       }
-    }
     // Form new triangles for the current point
     // Skipping over any tagged edges.
     // All edges are arranged in clockwise order.
-    for (unsigned j = 0; j < nedge; j++) {
-     if (edges[j].x() < 0 || edges[j].y() < 0)
-       continue;
-     v[ntri].set(edges[j].x(), edges[j].y(), i);
+    for( unsigned j = 0; j < nedge; j++ )
+      {
+      if( edges[j].x() < 0 || edges[j].y() < 0 )
+        {
+        continue;
+        }
+      v[ntri].set(edges[j].x(), edges[j].y(), i);
       complete[ntri] = false;
-     ntri++;
+      ntri++;
+      }
     }
-  }
   // Remove triangles with supertriangle vertices
   // These are triangles which have a vertex number greater than nv
-  for (int i = 0; i < ntri; ++i) {
-    if (v[i].x() >= (int)nv || v[i].y() >= (int)nv || v[i].z() >= (int)nv) {
-      v[i] = v[ntri-1];
+  for( int i = 0; i < ntri; ++i )
+    {
+    if( v[i].x() >= (int)nv || v[i].y() >= (int)nv || v[i].z() >= (int)nv )
+      {
+      v[i] = v[ntri - 1];
       --ntri;
       --i;
+      }
     }
-  }
-  v.erase(v.begin()+ntri, v.end());
+  v.erase(v.begin() + ntri, v.end() );
   return 0;
 }
 
-//: compares the X value of a 3D point
-int bwm_delaunay_tri::XYZCompare(const void *v1, const void *v2)
+// : compares the X value of a 3D point
+int bwm_delaunay_tri::XYZCompare(const void * v1, const void * v2)
 {
-  vgl_point_3d<double> *p1, *p2;
+  vgl_point_3d<double> * p1, * p2;
 
-  p1 = (vgl_point_3d<double>*)v1;
-  p2 = (vgl_point_3d<double>*)v2;
-  if (p1->x() < p2->x())
+  p1 = (vgl_point_3d<double> *)v1;
+  p2 = (vgl_point_3d<double> *)v2;
+  if( p1->x() < p2->x() )
+    {
     return -1;
-  else if (p1->x() > p2->x())
+    }
+  else if( p1->x() > p2->x() )
+    {
     return 1;
+    }
   else
+    {
     return 0;
+    }
 }

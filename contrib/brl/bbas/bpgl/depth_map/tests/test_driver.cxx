@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE(test_depth_map );
 
 void
@@ -10,5 +9,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-

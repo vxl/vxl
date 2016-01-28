@@ -2,9 +2,9 @@
 #ifndef PMatrixDecompCR_h_
 #define PMatrixDecompCR_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Decompose PMatrix into calibration + rotation
 //
@@ -21,21 +21,22 @@
 // Modifications:
 //   14-Nov-02, Peter Vanroose - make sure C(1,1) is nonnegative
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x4.h>
 class PMatrix;
 
 struct PMatrixDecompCR
-{
+  {
   vnl_double_3x3 C;
   vnl_double_3x4 Po;
 
   PMatrixDecompCR(PMatrix const& P, bool scale_C = true);
- private:
+private:
   PMatrixDecompCR(vnl_double_3x4 const& P_3x4, bool scale_C);
   void compute(vnl_double_3x4 const& P_3x4, bool scale_C);
-};
+
+  };
 
 #endif // PMatrixDecompCR_h_

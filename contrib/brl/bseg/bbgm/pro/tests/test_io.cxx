@@ -27,79 +27,94 @@
 
 namespace
 {
-  void init_random_image(vil_image_view<float>& img)
-  {
-    vnl_random rand;
-    for (unsigned int p=0; p<img.nplanes(); ++p)
-      for (unsigned int j=0; j<img.nj(); ++j)
-        for (unsigned int i=0; i<img.ni(); ++i)
-          img(i,j,p) = static_cast<float>(rand.drand32());
-  }
+void init_random_image(vil_image_view<float>& img)
+{
+  vnl_random rand;
 
-  void add_random_noise(vil_image_view<float>& img, float std)
-  {
-    vnl_random rand;
-    for (unsigned int p=0; p<img.nplanes(); ++p)
-      for (unsigned int j=0; j<img.nj(); ++j)
-        for (unsigned int i=0; i<img.ni(); ++i){
-          img(i,j) = img(i,j) + static_cast<float>(rand.normal()*std);
-          if (img(i,j,p)>1.0f) img(i,j,p) = 1.0f;
-          if (img(i,j,p)<0.0f) img(i,j,p) = 0.0f;
+  for( unsigned int p = 0; p < img.nplanes(); ++p )
+    {
+    for( unsigned int j = 0; j < img.nj(); ++j )
+      {
+      for( unsigned int i = 0; i < img.ni(); ++i )
+        {
+        img(i, j, p) = static_cast<float>(rand.drand32() );
         }
-  }
+      }
+    }
+}
+
+void add_random_noise(vil_image_view<float>& img, float std)
+{
+  vnl_random rand;
+
+  for( unsigned int p = 0; p < img.nplanes(); ++p )
+    {
+    for( unsigned int j = 0; j < img.nj(); ++j )
+      {
+      for( unsigned int i = 0; i < img.ni(); ++i )
+        {
+        img(i, j) = img(i, j) + static_cast<float>(rand.normal() * std);
+        if( img(i, j, p) > 1.0f ) { img(i, j, p) = 1.0f; }
+        if( img(i, j, p) < 0.0f ) { img(i, j, p) = 0.0f; }
+        }
+      }
+    }
+}
+
 };
 
 void test_io_function_2(void)
 {
   vcl_cout << "Starting test_io2\n";
-  const float window_size = 50.0;
+  const float        window_size = 50.0;
   const unsigned int max_components = 3;
-  const float init_var = 0.01f;
+  const float        init_var = 0.01f;
   const unsigned int ni = 640, nj = 480;
 
   float init_mean = 0.0f;
-  //float init_covar(init_var);
+  // float init_covar(init_var);
 
-  vil_image_view<float> img(ni,nj,1);
+  vil_image_view<float> img(ni, nj, 1);
   init_random_image(img);
 
-  typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
-  typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
-  typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1>      gauss_type;
+  typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss_type;
+  typedef bsta_num_obs<mix_gauss_type>      obs_mix_gauss_type;
 
-  bsta_gauss_sf1 init_gauss( init_mean, init_var );
+  bsta_gauss_sf1                         init_gauss( init_mean, init_var );
   bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
                                                   max_components,
                                                   window_size);
 
   bbgm_image_of<obs_mix_gauss_type>* mptr =
-    new bbgm_image_of<obs_mix_gauss_type>(ni,nj,obs_mix_gauss_type());
+    new bbgm_image_of<obs_mix_gauss_type>(ni, nj, obs_mix_gauss_type() );
 
-  update(*mptr,img,updater);
+  update(*mptr, img, updater);
 
   bbgm_image_sptr mp = mptr;
-  vcl_string source = mp->is_a();
+  vcl_string      source = mp->is_a();
   vcl_cout << "Starting save/read bbgm_image_sptr\n"
            << "Saving an image_of with type " << source << '\n';
-  bprb_process_sptr save_p= bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
-  brdb_value_sptr mv = new brdb_value_t<bbgm_image_sptr>(mp);
-  brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
-  bool good = save_p->set_input(0, pv);
+  bprb_process_sptr save_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
+  brdb_value_sptr   mv = new brdb_value_t<bbgm_image_sptr>(mp);
+  brdb_value_sptr   pv = new brdb_value_t<vcl_string>(vcl_string("./background.md") );
+  bool              good = save_p->set_input(0, pv);
   good = good && save_p->set_input(1, mv);
   good = good &&  save_p->execute();
   bprb_process_sptr load_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmLoadImageOfProcess");
-  good = good&& load_p->set_input(0, pv);
+  good = good && load_p->set_input(0, pv);
   good = good &&  load_p->execute();
   brdb_value_sptr iv = load_p->output(0);
-  if (!iv) good = false;
+  if( !iv ) {good = false; }
   vcl_string test;
-  if (good){
+  if( good )
+    {
     brdb_value_t<bbgm_image_sptr>* vp =
-    static_cast<brdb_value_t<bbgm_image_sptr>*>(iv.ptr());
+      static_cast<brdb_value_t<bbgm_image_sptr> *>(iv.ptr() );
     test = vp->value()->is_a();
-  }
+    }
   vcl_cout << "Retrieved image_of with type " << test << '\n';
-  good = good && source==test;
+  good = good && source == test;
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");
 }
@@ -108,61 +123,64 @@ static void test_io()
 {
   REGISTER_DATATYPE(vcl_string);
   REGISTER_DATATYPE( bbgm_image_sptr );
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_load_image_of_process, "bbgmLoadImageOfProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process,
+                        "bbgmSaveImageOfProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_load_image_of_process,
+                        "bbgmLoadImageOfProcess");
   vcl_cout << "Starting test_io\n";
   bbgm_loader::register_loaders();
-  const float window_size = 50.0;
+  const float        window_size = 50.0;
   const unsigned int max_components = 3;
-  const float init_var = 0.01f;
+  const float        init_var = 0.01f;
   const unsigned int ni = 640, nj = 480;
 
-  vnl_vector_fixed<float,3> init_mean(0.0f);
-  vnl_vector_fixed<float,3> init_covar(init_var);
+  vnl_vector_fixed<float, 3> init_mean(0.0f);
+  vnl_vector_fixed<float, 3> init_covar(init_var);
 
-  vil_image_view<float> img(ni,nj,3);
+  vil_image_view<float> img(ni, nj, 3);
   init_random_image(img);
 
-  typedef bsta_num_obs<bsta_gauss_if3> gauss_type;
-  typedef bsta_mixture_fixed<gauss_type,3> mix_gauss_type;
-  typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
+  typedef bsta_num_obs<bsta_gauss_if3>      gauss_type;
+  typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss_type;
+  typedef bsta_num_obs<mix_gauss_type>      obs_mix_gauss_type;
 
-  typedef bsta_num_obs<bsta_gauss_sf1> sph_gauss_type;
+  typedef bsta_num_obs<bsta_gauss_sf1>                         sph_gauss_type;
   typedef bsta_num_obs<bsta_mixture_fixed<sph_gauss_type, 3> > sph_mix_gauss_type_fixed;
 
-  bsta_gauss_if3 init_gauss( init_mean, init_covar );
+  bsta_gauss_if3                         init_gauss( init_mean, init_covar );
   bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,
                                                   max_components,
                                                   window_size);
 
   bbgm_image_of<obs_mix_gauss_type>* mptr =
-    new bbgm_image_of<obs_mix_gauss_type>(ni,nj,obs_mix_gauss_type());
+    new bbgm_image_of<obs_mix_gauss_type>(ni, nj, obs_mix_gauss_type() );
 
-  update(*mptr,img,updater);
+  update(*mptr, img, updater);
 
   bbgm_image_sptr mp = mptr;
-  vcl_string source = mp->is_a();
+  vcl_string      source = mp->is_a();
   vcl_cout << "Starting save/read bbgm_image_sptr\n"
            << "Saving an image_of with type " << source << '\n';
- bprb_process_sptr save_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
- bprb_process_sptr load_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmLoadImageOfProcess");
-  brdb_value_sptr mv = new brdb_value_t<bbgm_image_sptr>(mp);
-  brdb_value_sptr pv = new brdb_value_t<vcl_string>(vcl_string("./background.md"));
-  bool good = save_p->set_input(0, pv);
+  bprb_process_sptr save_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmSaveImageOfProcess");
+  bprb_process_sptr load_p = bprb_batch_process_manager::instance()->get_process_by_name("bbgmLoadImageOfProcess");
+  brdb_value_sptr   mv = new brdb_value_t<bbgm_image_sptr>(mp);
+  brdb_value_sptr   pv = new brdb_value_t<vcl_string>(vcl_string("./background.md") );
+  bool              good = save_p->set_input(0, pv);
   good = good && save_p->set_input(1, mv);
   good = good && save_p->execute();
   good = good && load_p->set_input(0, pv);
   good = good && load_p->execute();
   brdb_value_sptr iv = load_p->output(0);
-  if (!iv) good = false;
+  if( !iv ) {good = false; }
   vcl_string test;
-  if (good){
+  if( good )
+    {
     brdb_value_t<bbgm_image_sptr>* vp =
-    static_cast<brdb_value_t<bbgm_image_sptr>*>(iv.ptr());
+      static_cast<brdb_value_t<bbgm_image_sptr> *>(iv.ptr() );
     test = vp->value()->is_a();
-  }
+    }
   vcl_cout << "Retrieved image_of with type " << test << '\n';
-  good = good && source==test;
+  good = good && source == test;
   TEST("test save and load image_of", good, true);
   vpl_unlink("./background.md");
   test_io_function_2();

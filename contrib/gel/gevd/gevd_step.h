@@ -1,6 +1,6 @@
 #ifndef gevd_step_h_
 #define gevd_step_h_
-//:
+// :
 // \file
 // \brief detection of step profiles in the intensity image
 //
@@ -56,49 +56,49 @@
 //                         magnitude, grad_mag,  and gradient direction angle
 //                         buffer, angle, to cache between edgel detection phases.
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>
 class gevd_bufferxy;
 
 class gevd_step
 {
- public:
-  gevd_step(float smooth_sigma=1,       //!< spatial smoothing [0.5 2.0]
-            float noise_sigma=-0.5,     //!< sensor/texture intensity noise -[0 1]
-            float contour_factor=1.0,   //!< threshold factor for contour edgels
-            float junction_factor=1.5); //!< threshold factor for junction edgels
+public:
+  gevd_step(float smooth_sigma = 1,       // !< spatial smoothing [0.5 2.0]
+            float noise_sigma = -0.5,     // !< sensor/texture intensity noise -[0 1]
+            float contour_factor = 1.0,   // !< threshold factor for contour edgels
+            float junction_factor = 1.5); // !< threshold factor for junction edgels
   ~gevd_step();
 
-  bool DetectEdgels(const gevd_bufferxy& image, //!< float image
-                    gevd_bufferxy*& edgels, //!< strength = dG * I
-                    gevd_bufferxy*& direction, //!< direction % PI/4
-                    gevd_bufferxy*& locationx, //!< subpixel loc
-                    gevd_bufferxy*& locationy,
-                    gevd_bufferxy*& grad_mag, //!< Gradient magnitude
-                    gevd_bufferxy*& angle);    //!< Gradient orientation
-  int RecoverJunctions(const gevd_bufferxy& image, //!< iterative extension
-                       gevd_bufferxy& edgels, //!< from end points of contours
-                       gevd_bufferxy& direction,
-                       gevd_bufferxy& locationx, gevd_bufferxy& locationy,
-                       int*& junctionx, int*& junctiony);
+  bool DetectEdgels(const gevd_bufferxy& image,                            // !< float image
+                    gevd_bufferxy *& edgels,                               // !< strength = dG * I
+                    gevd_bufferxy *& direction,                            // !< direction % PI/4
+                    gevd_bufferxy *& locationx,                            // !< subpixel loc
+                    gevd_bufferxy *& locationy, gevd_bufferxy *& grad_mag, // !< Gradient magnitude
+                    gevd_bufferxy *& angle);                               // !< Gradient orientation
 
-  float NoiseSigma() const;     //!< query stored/estimated noise sigma
-  float NoiseResponse() const;  //!< response of noise sigma to filter ddG
-  float NoiseThreshold(bool shortp=false) const; //!< elongated/directional?
+  int RecoverJunctions(const gevd_bufferxy& image, // !< iterative extension
+                       gevd_bufferxy& edgels,      // !< from end points of contours
+                       gevd_bufferxy& direction, gevd_bufferxy& locationx, gevd_bufferxy& locationy, int *& junctionx,
+                       int *& junctiony);
 
-  static float NoiseResponseToFilter(const float noiseSigma,
-                                     const float smoothSigma,
-                                     const float filterFactor);
+  float NoiseSigma() const;     // !< query stored/estimated noise sigma
 
-  friend vcl_ostream& operator<<(vcl_ostream& os, const gevd_step& st);
-  friend vcl_ostream& operator<<(vcl_ostream& os, gevd_step& st);
+  float NoiseResponse() const;  // !< response of noise sigma to filter ddG
 
- protected:
-  float smoothSigma;                   //!< spatial smoothing
-  float noiseSigma;                    //!< sensor/texture noise
-  float contourFactor, junctionFactor; //!< threshold factor for edgels
-  float filterFactor;                  //!< factor in convolution filter
+  float NoiseThreshold(bool shortp = false) const; // !< elongated/directional?
+
+  static float NoiseResponseToFilter(const float noiseSigma, const float smoothSigma, const float filterFactor);
+
+  friend vcl_ostream & operator<<(vcl_ostream& os, const gevd_step& st);
+
+  friend vcl_ostream & operator<<(vcl_ostream& os, gevd_step& st);
+
+protected:
+  float smoothSigma;                   // !< spatial smoothing
+  float noiseSigma;                    // !< sensor/texture noise
+  float contourFactor, junctionFactor; // !< threshold factor for edgels
+  float filterFactor;                  // !< factor in convolution filter
 };
 
 #endif // gevd_step_h_

@@ -1,6 +1,6 @@
 #ifndef mbl_read_str_h_
 #define mbl_read_str_h_
-//:
+// :
 // \file
 // \brief  Asks question and waits for an answer.
 // \author Tim
@@ -12,7 +12,7 @@
 //   1.1   Tim   New version 4-Nov-98
 // \endverbatim
 
-//: Asks question and waits for an answer from standard input.
+// : Asks question and waits for an answer from standard input.
 //       If the answer is a non-empty string, returns it.
 //       If the answer is an empty vcl_string (return)
 //       then returns default.
@@ -41,7 +41,6 @@
 // mbl_read_str(Name,N_max_len,"Enter Name",Name);
 // \endcode
 
-char* mbl_read_str(char *reply, int max_str_len,
-                   const char *q_str, const char *default_str);
+char * mbl_read_str(char * reply, int max_str_len, const char * q_str, const char * default_str);
 
 #endif // mbl_read_str_h_

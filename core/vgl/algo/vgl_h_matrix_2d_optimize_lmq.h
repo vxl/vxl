@@ -1,6 +1,6 @@
 #ifndef vgl_h_matrix_2d_optimize_lmq_h_
 #define vgl_h_matrix_2d_optimize_lmq_h_
-//:
+// :
 // \file
 // \author  J.L. Mundy Jan 05, 2005
 // \brief contains class vgl_h_matrix_2d_optimize_lmq
@@ -18,39 +18,35 @@
 
 class vgl_h_matrix_2d_optimize_lmq : public vgl_h_matrix_2d_optimize
 {
- public:
-  //: Constructor from initial homography to be optimized
+public:
+  // : Constructor from initial homography to be optimized
   vgl_h_matrix_2d_optimize_lmq(vgl_h_matrix_2d<double> const& initial_h);
 
   int minimum_number_of_correspondences() const { return 5; }
+protected:  // -- internal utilities --
 
- protected: // -- internal utilities --
-
-  //:the main routine for carrying out the optimization. (used by the others)
+  // :the main routine for carrying out the optimization. (used by the others)
   bool optimize_h(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                  vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                  vgl_h_matrix_2d<double> const& h_initial,
+                  vcl_vector<vgl_homg_point_2d<double> > const& points2, vgl_h_matrix_2d<double> const& h_initial,
                   vgl_h_matrix_2d<double>& h_optimized);
 
-  //: compute from matched points
+  // : compute from matched points
   virtual
   bool optimize_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                  vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                  vgl_h_matrix_2d<double>& H);
+                  vcl_vector<vgl_homg_point_2d<double> > const& points2, vgl_h_matrix_2d<double>& H);
 
-  //:compute from matched lines
+  // :compute from matched lines
   virtual
   bool optimize_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                  vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                  vgl_h_matrix_2d<double>& H);
+                  vcl_vector<vgl_homg_line_2d<double> > const& lines2, vgl_h_matrix_2d<double>& H);
 
-  //:compute from matched points and lines
+  // :compute from matched points and lines
   virtual
   bool optimize_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                    vcl_vector<vgl_homg_point_2d<double> > const& points2,
                    vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                   vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                   vgl_h_matrix_2d<double>& H);
+                   vcl_vector<vgl_homg_line_2d<double> > const& lines2, vgl_h_matrix_2d<double>& H);
+
 };
 
 #endif // vgl_h_matrix_2d_optimize_lmq_h_

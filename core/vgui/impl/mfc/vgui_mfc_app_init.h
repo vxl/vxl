@@ -2,25 +2,24 @@
 #ifndef vgui_mfc_app_init_h_
 #define vgui_mfc_app_init_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author  Oxford RRG
 // \brief   Initializes the MFC CWinApp object.
 
 class vgui_mfc_app;
 
-//: Initialize MFC CWinApp object.
+// : Initialize MFC CWinApp object.
 // Place an object of type vgui_mfc_app_init in your main program
 // in order to set up the MFC stuff;
 class vgui_mfc_app_init
 {
- public:
+public:
   vgui_mfc_app_init();
   ~vgui_mfc_app_init();
-
- protected:
+protected:
   vgui_mfc_app* p;
 };
 

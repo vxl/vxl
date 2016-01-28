@@ -10,21 +10,21 @@
 
 #include <boxm/sample/boxm_edge_sample.h>
 
-template<class T_loc, class APM, class AUX>
+template <class T_loc, class APM, class AUX>
 class boxm_edge_updater
 {
- public:
-  boxm_edge_updater(boxm_scene<boct_tree<T_loc, boxm_edge_sample<APM> > > &scene,
+public:
+  boxm_edge_updater(boxm_scene<boct_tree<T_loc, boxm_edge_sample<APM> > > & scene,
                     vcl_vector<vcl_string> const& image_ids);
 
-  ~boxm_edge_updater(){}
+  ~boxm_edge_updater() {}
 
   bool add_cells();
 
- protected:
+protected:
   vcl_vector<vcl_string> image_ids_;
 
-  boxm_scene<boct_tree<T_loc, boxm_edge_sample<APM> > > &scene_;
+  boxm_scene<boct_tree<T_loc, boxm_edge_sample<APM> > > & scene_;
 };
 
 #endif

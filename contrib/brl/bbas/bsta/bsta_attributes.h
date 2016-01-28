@@ -1,7 +1,7 @@
 // This is brl/bbas/bsta/bsta_attributes.h
 #ifndef bsta_attributes_h_
 #define bsta_attributes_h_
-//:
+// :
 // \file
 // \brief Attributes for distributions
 // \author Matt Leotta (mleotta@lems.brown.edu)
@@ -19,85 +19,83 @@
 #include <vcl_iostream.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 
-//: Adds number of observations
+// : Adds number of observations
 template <class dist_>
 class bsta_num_obs : public dist_
 {
   typedef typename dist_::math_type T;
-
- public:
+public:
 
   typedef dist_ contained_type;
 
-  //: Constructor
-  bsta_num_obs<dist_>() : dist_(), num_observations(T(0)) {}
+  // : Constructor
+  bsta_num_obs<dist_>() : dist_(), num_observations(T(0) ) {}
 
-  //: Constructor - somewhat like a copy constructor
-  bsta_num_obs<dist_>(const dist_& d, const T& n_obs = T(0))
-    : dist_(d), num_observations(n_obs) {}
+  // : Constructor - somewhat like a copy constructor
+  bsta_num_obs<dist_>(const dist_ &d, const T& n_obs = T(0) )
+  : dist_(d), num_observations(n_obs) {}
 
-  //: The number of observations
+  // : The number of observations
   T num_observations;
 };
 
 template <class dist_>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline vcl_ostream & operator<<(vcl_ostream& os,
                                 bsta_num_obs<dist_> const& no)
 {
-  dist_ const& dist = static_cast<dist_ const&>(no);
+  dist_ const& dist = static_cast<dist_ const &>(no);
+
   os << "n_obs:" << no.num_observations << '\n'
-     << dist ;
+     << dist;
   return os;
 }
 
-//: for compatibility with vpdl/vpdt
+// : for compatibility with vpdl/vpdt
 template <class dist>
 struct vpdt_is_mixture<bsta_num_obs<dist> >
-{
+  {
   static const bool value = vpdt_is_mixture<dist>::value;
-};
+  };
 
-
-//: maintains a vector sum and number of observations needed for the von mises distribution
+// : maintains a vector sum and number of observations needed for the von mises distribution
 template <class dist_>
 class bsta_vsum_num_obs : public dist_
 {
-  typedef typename dist_::math_type T;
+  typedef typename dist_::math_type   T;
   typedef typename dist_::vector_type vect_t;
-
- public:
+public:
 
   typedef dist_ contained_type;
 
-  //: Constructor
-  bsta_vsum_num_obs<dist_>() : dist_(), num_observations(T(0)), vector_sum(vect_t(T(0))) {}
+  // : Constructor
+  bsta_vsum_num_obs<dist_>() : dist_(), num_observations(T(0) ), vector_sum(vect_t(T(0) ) ) {}
 
-  //: Constructor - somewhat like a copy constructor
-  bsta_vsum_num_obs<dist_>(const dist_& d, const vect_t & vsum = vect_t(T(0)), const T& n_obs = T(0))
+  // : Constructor - somewhat like a copy constructor
+  bsta_vsum_num_obs<dist_>(const dist_ &d, const vect_t & vsum = vect_t(T(0) ), const T& n_obs = T(0) )
   : dist_(d), num_observations(n_obs), vector_sum(vsum) {}
 
-  //: The number of observations
-  T num_observations;
+  // : The number of observations
+  T      num_observations;
   vect_t vector_sum;
 };
 
 template <class dist_>
-inline vcl_ostream& operator<< (vcl_ostream& os,
+inline vcl_ostream & operator<<(vcl_ostream& os,
                                 bsta_vsum_num_obs<dist_> const& vno)
 {
-  dist_ const& dist = static_cast<dist_ const&>(vno);
+  dist_ const& dist = static_cast<dist_ const &>(vno);
+
   os << "n_obs:" << vno.num_observations << '\n'
      << "vector_sum:" << vno.vector_sum << '\n'
-     << dist ;
+     << dist;
   return os;
 }
 
-//: for compatibility with vpdl/vpdt
+// : for compatibility with vpdl/vpdt
 template <class dist>
 struct vpdt_is_mixture<bsta_vsum_num_obs<dist> >
-{
+  {
   static const bool value = vpdt_is_mixture<dist>::value;
-};
-
+  };
 
 #endif // bsta_attributes_h_

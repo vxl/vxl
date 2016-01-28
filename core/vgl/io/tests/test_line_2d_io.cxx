@@ -12,7 +12,7 @@ void test_line_2d_double_io()
            << "******************************\n";
 
   //// test constructors, accessors
-  vgl_line_2d<double> p_out(1.2,3.4,5.6), p_in;
+  vgl_line_2d<double> p_out(1.2, 3.4, 5.6), p_in;
 
   vsl_b_ofstream bfs_out("vgl_line_2d_test_double_io.bvl.tmp");
   TEST("Created vgl_line_2d_test_double_io.bvl.tmp for writing", (!bfs_out), false);
@@ -25,11 +25,11 @@ void test_line_2d_double_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vgl_line_2d_test_double_io.bvl.tmp");
+  vpl_unlink("vgl_line_2d_test_double_io.bvl.tmp");
 
-  TEST("p_out == p_in", p_out.a()==p_in.a() &&
-                        p_out.b()==p_in.b() &&
-                        p_out.c()==p_in.c() , true);
+  TEST("p_out == p_in", p_out.a() == p_in.a() &&
+       p_out.b() == p_in.b() &&
+       p_out.c() == p_in.c(), true);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;

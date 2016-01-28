@@ -1,6 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_scene_box_process.cxx
 #include "bvxm_scene_box_process.h"
-//:
+// :
 // \file
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
@@ -8,14 +8,16 @@
 #include <vgl/vgl_point_2d.h>
 #include <bprb/bprb_parameters.h>
 
-//: set input and output types
+// : set input and output types
 bool bvxm_scene_box_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_scene_box_process_globals;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world spec
-  if (!pro.set_input_types(input_types_))
+  if( !pro.set_input_types(input_types_) )
+    {
     return false;
+    }
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "double"; // lower left lon
@@ -31,17 +33,18 @@ bool bvxm_scene_box_process_cons(bprb_func_process& pro)
 bool bvxm_scene_box_process(bprb_func_process& pro)
 {
   using namespace bvxm_scene_box_process_globals;
-  //static const parameters
+  // static const parameters
   static const vcl_string error = "error";
 
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs:
-  unsigned i = 0;
-  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  unsigned               i = 0;
+  bvxm_voxel_world_sptr  voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_world_params_sptr params = voxel_world->get_params();
 
   vpgl_lvcs_sptr lvcs = params->lvcs();
@@ -52,10 +55,11 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
   double dimx = params->num_voxels().x() * params->voxel_length();
   double dimy = params->num_voxels().y() * params->voxel_length();
   double dimz = params->num_voxels().z() * params->voxel_length();
-  lvcs->local_to_global(params->corner().x() + dimx, params->corner().y() + dimy, params->corner().z() + dimz, vpgl_lvcs::wgs84,
+  lvcs->local_to_global(params->corner().x() + dimx, params->corner().y() + dimy,
+                        params->corner().z() + dimz, vpgl_lvcs::wgs84,
                         upper_right_lon, upper_right_lat, upper_right_elev);
 
-  //Store outputs
+  // Store outputs
   unsigned j = 0;
   pro.set_output_val<double>(j++, lower_left_lon);
   pro.set_output_val<double>(j++, lower_left_lat);
@@ -67,14 +71,15 @@ bool bvxm_scene_box_process(bprb_func_process& pro)
   return true;
 }
 
-
-//: set input and output types
+// : set input and output types
 bool bvxm_scene_origin_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types_(1);
   input_types_[0] = "bvxm_voxel_world_sptr";     // voxel world spec
-  if (!pro.set_input_types(input_types_))
+  if( !pro.set_input_types(input_types_) )
+    {
     return false;
+    }
 
   vcl_vector<vcl_string> output_types_(3);
   output_types_[0] = "double"; // lower left lon
@@ -85,25 +90,27 @@ bool bvxm_scene_origin_process_cons(bprb_func_process& pro)
 
 bool bvxm_scene_origin_process(bprb_func_process& pro)
 {
-  //static const parameters
+  // static const parameters
   static const vcl_string error = "error";
 
-  if ( pro.n_inputs() < 1 ) {
+  if( pro.n_inputs() < 1 )
+    {
     vcl_cout << pro.name() << " The input number should be " << 1 << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs:
-  unsigned i = 0;
-  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  unsigned               i = 0;
+  bvxm_voxel_world_sptr  voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_world_params_sptr params = voxel_world->get_params();
 
   vpgl_lvcs_sptr lvcs = params->lvcs();
 
   double lower_left_lon, lower_left_lat, gz, upper_right_lon, upper_right_lat;
-  lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84, lower_left_lon, lower_left_lat, gz);
+  lvcs->local_to_global(params->corner().x(), params->corner().y(),
+                        params->corner().z(), vpgl_lvcs::wgs84, lower_left_lon, lower_left_lat, gz);
 
-  //Store outputs
+  // Store outputs
   unsigned j = 0;
   pro.set_output_val<double>(j++, lower_left_lon);
   pro.set_output_val<double>(j++, lower_left_lat);

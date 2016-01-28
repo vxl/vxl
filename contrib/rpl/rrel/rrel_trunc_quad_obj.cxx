@@ -2,15 +2,13 @@
 #include "rrel_trunc_quad_obj.h"
 
 rrel_trunc_quad_obj::rrel_trunc_quad_obj( double T )
-  : T_sqr_( T*T )
+  : T_sqr_( T * T )
 {
 }
-
 
 rrel_trunc_quad_obj::~rrel_trunc_quad_obj()
 {
 }
-
 
 double
 rrel_trunc_quad_obj::rho( double u ) const

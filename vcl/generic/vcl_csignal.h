@@ -5,15 +5,15 @@
 
 // sig_atomic_t
 #ifndef vcl_sig_atomic_t
-#define vcl_sig_atomic_t vcl_generic_csignal_STD :: sig_atomic_t
+#  define vcl_sig_atomic_t vcl_generic_csignal_STD::sig_atomic_t
 #endif
 // raise
 #ifndef vcl_raise
-#define vcl_raise vcl_generic_csignal_STD :: raise
+#  define vcl_raise vcl_generic_csignal_STD::raise
 #endif
 // signal
 #ifndef vcl_signal
-#define vcl_signal vcl_generic_csignal_STD :: signal
+#  define vcl_signal vcl_generic_csignal_STD::signal
 #endif
 
 #endif // vcl_generic_csignal_h_

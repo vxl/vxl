@@ -1,7 +1,7 @@
 // This is brl/bseg/bvpl/functors/bvpl_algebraic_functor.h
 #ifndef bvpl_algebraic_functor_h
 #define bvpl_algebraic_functor_h
-//:
+// :
 // \file
 // \brief A functor that multiplies the value to its weight and adds the result
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -16,20 +16,21 @@
 
 class bvpl_algebraic_functor
 {
- public:
+public:
   bvpl_algebraic_functor();
 
-  //: Apply a given operation to value \p val, depending on the dispatch character
+  // : Apply a given operation to value \p val, depending on the dispatch character
   void apply(const float& val, const bvpl_kernel_dispatch& d);
 
-  //: Returns the final operation of this functor
+  // : Returns the final operation of this functor
   float result();
 
- private:
+private:
 
   float result_;
 
-  //: Initializes class variables
+  // : Initializes class variables
   void init();
+
 };
 #endif

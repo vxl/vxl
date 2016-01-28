@@ -4,21 +4,21 @@
 #include <vxl_config.h> // get VXL_BUILD_SHARED_LIBS
 
 #ifndef VXL_BUILD_SHARED_LIBS  // if not a shared build
-# define RGRL_EXPORT
+#  define RGRL_EXPORT
 #else  // this is a shared build
-# ifdef rgrl_EXPORTS  // if building this library
-#  if defined(_WIN32) || defined(WIN32)
-#   define RGRL_EXPORT __declspec(dllexport)
-#  else
-#   define RGRL_EXPORT
+#  ifdef rgrl_EXPORTS // if building this library
+#    if defined(_WIN32) || defined(WIN32)
+#      define RGRL_EXPORT __declspec(dllexport)
+#    else
+#      define RGRL_EXPORT
+#    endif
+#  else // we are using this library and it is built shared
+#    if defined(_WIN32) || defined(WIN32)
+#      define RGRL_EXPORT __declspec(dllimport)
+#    else
+#      define RGRL_EXPORT
+#    endif
 #  endif
-# else // we are using this library and it is built shared
-#  if defined(_WIN32) || defined(WIN32)
-#   define RGRL_EXPORT __declspec(dllimport)
-#  else
-#   define RGRL_EXPORT
-#  endif
-# endif
 #endif
 
 #endif

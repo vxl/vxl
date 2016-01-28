@@ -2,27 +2,28 @@
 #ifndef PairMatchMultiStrength_h_
 #define PairMatchMultiStrength_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 //  \file
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "PairMatchMulti.h"
 
-//: not implemented
+// : not implemented
 class PairMatchMultiStrength : public PairMatchMulti
 {
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchMultiStrength();
   PairMatchMultiStrength(const PairMatchMultiStrength& that);
- ~PairMatchMultiStrength();
+  ~PairMatchMultiStrength();
 
-  PairMatchMultiStrength& operator=(const PairMatchMultiStrength& that);
+  PairMatchMultiStrength & operator=(const PairMatchMultiStrength& that);
+
 };
 
 #endif // PairMatchMultiStrength_h_

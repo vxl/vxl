@@ -1,8 +1,8 @@
 // This is brl/bbas/bsta/bsta_int_histogram_2d.h
 #ifndef bsta_int_histogram_2d_h_
 #define bsta_int_histogram_2d_h_
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief 1D and 2D integer Histograms with bucket width = 1
 //
@@ -28,7 +28,7 @@
 //  Modifications
 //   2007/04/23 Initial Version
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
@@ -36,53 +36,50 @@
 
 class bsta_int_histogram_2d
 {
- private:
-  unsigned int nbins_x_;
-  unsigned int nbins_y_;
-  unsigned int diag_;                               // # buckets in diagonal 1D hist
+private:
+  unsigned int                      nbins_x_;
+  unsigned int                      nbins_y_;
+  unsigned int                      diag_;          // # buckets in diagonal 1D hist
   vcl_vector<vcl_vector<long int> > counts_;        // the histogram buckets
+public:
 
- public:
-
-  //:default constructor that assumes all data values are positive constructor parameters:
+  // :default constructor that assumes all data values are positive constructor parameters:
   // \param nbins_x, \param nbins_y      # bins to create in this 2D histogram.
   bsta_int_histogram_2d(const unsigned int nbins_x, const unsigned int nbins_y);
 
   // destructor
-  ~bsta_int_histogram_2d() ;
+  ~bsta_int_histogram_2d();
 
   // The number of bins in the histogram
-  unsigned int nbins_x() const { return nbins_x_;}
-  unsigned int nbins_y() const { return nbins_y_;}
+  unsigned int nbins_x() const { return nbins_x_; }
+  unsigned int nbins_y() const { return nbins_y_; }
 
-  //: get the count in a given bin
+  // : get the count in a given bin
   long int get_count(const unsigned int binx, const unsigned int biny)
   { assert(binx < nbins_x_ && biny < nbins_y_); return counts_[biny][binx]; }
 
-  //: set the count in a given bin
+  // : set the count in a given bin
   void set_count(const unsigned int binx, const unsigned int biny, const long int count)
-  { if (binx<nbins_x_ && biny<nbins_y_) counts_[biny][binx] = count; }
+  { if( binx < nbins_x_ && biny < nbins_y_ ) {counts_[biny][binx] = count; }}
 
-  //: Total area under the histogram = total counts in histogram
+  // : Total area under the histogram = total counts in histogram
   unsigned long int get_area();
 
   // get highest value in histogram; returns max value; index of max is available in imax
-  unsigned long int get_max_val(unsigned int &imax_x, unsigned int &imax_y);
+  unsigned long int get_max_val(unsigned int & imax_x, unsigned int & imax_y);
 
-  //: Smooth the 2D histogram with a Parzen window of sigma
+  // : Smooth the 2D histogram with a Parzen window of sigma
   void parzen(const float sigma);
 
-  //: Form a "profile" histogram along the diagonal with max value normal to diagonal in buckets
-  void profile_histogram( bsta_int_histogram_1d &phist,
-                          bsta_int_histogram_1d &phist_x,
-                          bsta_int_histogram_1d &phist_y );
+  // : Form a "profile" histogram along the diagonal with max value normal to diagonal in buckets
+  void profile_histogram( bsta_int_histogram_1d & phist, bsta_int_histogram_1d & phist_x,
+                          bsta_int_histogram_1d & phist_y );
 
-  //: Find where peak drops to X% along normal on either front or rear edge of diagonal slope.
+  // : Find where peak drops to X% along normal on either front or rear edge of diagonal slope.
   //  Here the "front" is the top edge, "rear" is the bottom edge
-  bool find_edge( unsigned int peak_y, unsigned int peak_x,
-                  float newslope, float edgepct,
-                  unsigned int &edge_x, unsigned int &edge_y,
-                  bool front);
+  bool find_edge( unsigned int peak_y, unsigned int peak_x, float newslope, float edgepct, unsigned int & edge_x,
+                  unsigned int & edge_y, bool front);
+
 };
 
 #endif // bsta_int_histogram_2d_h_

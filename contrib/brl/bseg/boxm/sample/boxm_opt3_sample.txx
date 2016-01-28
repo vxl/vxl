@@ -12,7 +12,7 @@
 #include <bsta/io/bsta_io_gaussian_sphere.h>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
-//#include <boxm/boxm_mog_rgb_processor.h>
+// #include <boxm/boxm_mog_rgb_processor.h>
 
 template <boxm_apm_type APM>
 void boxm_opt3_sample<APM>::print(vcl_ostream& os) const
@@ -28,9 +28,9 @@ void boxm_opt3_sample<APM>::update_obs_dist(typename boxm_opt3_sample<APM>::obs_
 }
 
 template <boxm_apm_type APM>
-void vsl_b_write(vsl_b_ostream & os, boxm_opt3_sample<APM> const &sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_opt3_sample<APM> const & sample)
 {
-  vsl_b_write(os, sample.version_no());
+  vsl_b_write(os, sample.version_no() );
   vsl_b_write(os, sample.log_pass_prob_sum_);
   vsl_b_write(os, sample.seg_len_sum_);
   vsl_b_write(os, sample.weighted_vis_sum_);
@@ -38,55 +38,57 @@ void vsl_b_write(vsl_b_ostream & os, boxm_opt3_sample<APM> const &sample)
 }
 
 template <boxm_apm_type APM>
-void vsl_b_write(vsl_b_ostream & os, boxm_opt3_sample<APM> const * &sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_opt3_sample<APM> const * & sample)
 {
-  if (sample) {
+  if( sample )
+    {
     vsl_b_write(os, *sample);
-  }
+    }
 }
 
 template <boxm_apm_type APM>
-void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> &sample)
+void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> & sample)
 {
-  if (!is) return;
+  if( !is ) {return; }
 
   short version;
-  vsl_b_read(is,version);
-  switch (version)
-  {
-   case 1:
-    vsl_b_read(is, sample.log_pass_prob_sum_);
-    vsl_b_read(is, sample.seg_len_sum_);
-    vsl_b_read(is, sample.weighted_vis_sum_);
-    vsl_b_read(is, sample.obs_dist_);
-    break;
-   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_opt3_sample<APM>&)\n"
-             << "           Unknown version number "<< version << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-    break;
-  }
+  vsl_b_read(is, version);
+
+  switch( version )
+    {
+    case 1:
+      vsl_b_read(is, sample.log_pass_prob_sum_);
+      vsl_b_read(is, sample.seg_len_sum_);
+      vsl_b_read(is, sample.weighted_vis_sum_);
+      vsl_b_read(is, sample.obs_dist_);
+      break;
+    default:
+      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_opt3_sample<APM>&)\n"
+               << "           Unknown version number " << version << '\n';
+      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      break;
+    }
 }
 
 template <boxm_apm_type APM>
-void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> *&sample)
+void vsl_b_read(vsl_b_istream & is, boxm_opt3_sample<APM> *& sample)
 {
   vsl_b_read(is, *sample);
 }
 
 template <boxm_apm_type APM>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_opt3_sample<APM>& sample)
+vcl_ostream & operator <<(vcl_ostream& os, const boxm_opt3_sample<APM>& sample)
 {
   sample.print(os);
   return os;
 }
 
 #define BOXM_OPT3_SAMPLE_INSTANTIATE(T) \
-template class boxm_opt3_sample<T >; \
-template void vsl_b_write(vsl_b_ostream &, boxm_opt3_sample<T > const &); \
-template void vsl_b_write(vsl_b_ostream &, boxm_opt3_sample<T > const *&); \
-template void vsl_b_read(vsl_b_istream &, boxm_opt3_sample<T > &); \
-template void vsl_b_read(vsl_b_istream &, boxm_opt3_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_opt3_sample<T >&)
+  template class boxm_opt3_sample<T>; \
+  template void vsl_b_write(vsl_b_ostream &, boxm_opt3_sample<T> const &); \
+  template void vsl_b_write(vsl_b_ostream &, boxm_opt3_sample<T> const * &); \
+  template void vsl_b_read(vsl_b_istream &, boxm_opt3_sample<T> &); \
+  template void vsl_b_read(vsl_b_istream &, boxm_opt3_sample<T> *&); \
+  template vcl_ostream & operator <<(vcl_ostream &, const boxm_opt3_sample<T> &)
 
 #endif

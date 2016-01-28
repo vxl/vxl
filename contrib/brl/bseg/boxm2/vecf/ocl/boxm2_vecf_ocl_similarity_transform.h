@@ -11,11 +11,9 @@
 
 class boxm2_vecf_ocl_similarity_transform : public boxm2_vecf_ocl_vector_field_adaptor
 {
-  public:
-    boxm2_vecf_ocl_similarity_transform(vgl_rotation_3d<double> rot,
-                                        vgl_vector_3d<double> trans,
-                                        vgl_vector_3d<double> scale);
-
+public:
+  boxm2_vecf_ocl_similarity_transform(vgl_rotation_3d<double> rot, vgl_vector_3d<double> trans,
+                                      vgl_vector_3d<double> scale);
 
 };
 

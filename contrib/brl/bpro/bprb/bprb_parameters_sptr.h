@@ -2,7 +2,7 @@
 #ifndef bprb_parameters_sptr_h
 #define bprb_parameters_sptr_h
 
-//:
+// :
 // \file
 
 class bprb_parameters;

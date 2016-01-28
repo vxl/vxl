@@ -1,8 +1,8 @@
 // This is gel/gmvl/gmvl_connection.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 
@@ -20,7 +20,7 @@ gmvl_connection::~gmvl_connection()
 
 // input / output
 
-vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection &c)
+vcl_ostream & operator<<( vcl_ostream & os, const gmvl_connection & c)
 {
   return os << "<Connection n1=" << c.n1_.ptr() << " n2=" << c.n2_.ptr() << '>';
 }

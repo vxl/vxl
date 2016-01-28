@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \author Isabel Restrepo
 // \date 12-Apr-2011
@@ -12,24 +12,23 @@
 
 #include <vul/vul_file.h>
 
-//:global variables
+// :global variables
 namespace bvpl_compute_taylor_coefficients_process_globals
 {
-  const unsigned n_inputs_ = 6 ;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 6;
+const unsigned n_outputs_ = 0;
 }
 
-
-//:sets input and output types
+// :sets input and output types
 bool bvpl_compute_taylor_coefficients_process_cons(bprb_func_process& pro)
 {
-  using namespace bvpl_compute_taylor_coefficients_process_globals ;
+  using namespace bvpl_compute_taylor_coefficients_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
-  unsigned i = 0;
-  input_types_[i++] = "vcl_string" ;  //path of taylor_global_info.xml
-  input_types_[i++] = "int"; //scene id
-  input_types_[i++] = "int";  //block Indices
+  unsigned               i = 0;
+  input_types_[i++] = "vcl_string"; // path of taylor_global_info.xml
+  input_types_[i++] = "int";        // scene id
+  input_types_[i++] = "int";        // block Indices
   input_types_[i++] = "int";
   input_types_[i++] = "int";
   input_types_[i++] = "int"; // dimension (3 for xyz derivatives, 10 for all 1st and 2nd order derivatives)
@@ -39,42 +38,45 @@ bool bvpl_compute_taylor_coefficients_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-
-//:the process
+// :the process
 bool bvpl_compute_taylor_coefficients_process(bprb_func_process& pro)
 {
   using namespace bvpl_compute_taylor_coefficients_process_globals;
 
-  //get inputs
-  unsigned i = 0;
+  // get inputs
+  unsigned   i = 0;
   vcl_string taylor_dir = pro.get_input<vcl_string>(i++);
-  int scene_id = pro.get_input<int>(i++);
-  int block_i = pro.get_input<int>(i++);
-  int block_j = pro.get_input<int>(i++);
-  int block_k = pro.get_input<int>(i++);
-  int dim = pro.get_input<int>(i++);
+  int        scene_id = pro.get_input<int>(i++);
+  int        block_i = pro.get_input<int>(i++);
+  int        block_j = pro.get_input<int>(i++);
+  int        block_k = pro.get_input<int>(i++);
+  int        dim = pro.get_input<int>(i++);
 
-  if (!vul_file::is_directory(taylor_dir))
-    return false;
-
-  switch (dim) {
-    case 3:
+  if( !vul_file::is_directory(taylor_dir) )
     {
-      vcl_string kernel_names[] = {"Ix", "Iy", "Iz"};
+    return false;
+    }
+
+  switch( dim )
+    {
+    case 3:
+      {
+      vcl_string                   kernel_names[] = {"Ix", "Iy", "Iz"};
       bvpl_global_taylor<float, 3> global_taylor(taylor_dir, kernel_names);
       global_taylor.compute_taylor_coefficients(scene_id, block_i, block_j, block_k);
       break;
-    }
+      }
     case 10:
-    {
-      const vcl_string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
+      {
+      const vcl_string kernel_names[10] =
+       {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
       bvpl_global_taylor<double, 10> global_taylor(taylor_dir, kernel_names);
       global_taylor.compute_taylor_coefficients(scene_id, block_i, block_j, block_k);
       break;
-    }
+      }
     default:
       break;
-  }
+    }
 
   return true;
 }

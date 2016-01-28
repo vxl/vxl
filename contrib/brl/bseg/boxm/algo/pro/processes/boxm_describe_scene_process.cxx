@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_describe_scene_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A process for describing the attributes of a scene
 //
@@ -21,21 +21,21 @@
 
 namespace boxm_describe_scene_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 4;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 4;
 }
 
 bool boxm_describe_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_describe_scene_process_globals;
 
-  //process takes 1 input
-  //input[0]: scene binary file
+  // process takes 1 input
+  // input[0]: scene binary file
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm_scene_base_sptr";
 
   // process has 4 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "bsta_histogram_sptr"; // Omega Histogram
   output_types_[1] = "bsta_histogram_sptr"; // Sigma Histogram
   output_types_[2] = "bsta_histogram_sptr"; // Level Histogram
@@ -55,35 +55,40 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
 {
   using namespace boxm_describe_scene_process_globals;
 
-  if ( !pro.verify_inputs() ) {
+  if( !pro.verify_inputs() )
+    {
     vcl_cerr << pro.name() << ": invalid inputs\n";
     return false;
-  }
+    }
   unsigned n_leaves = 0;
-  //assign tree type
+  // assign tree type
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(0);
-  if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-    if (!scene_ptr->multi_bin())
+  if( scene_ptr->appearence_model() == BOXM_APM_MOG_GREY )
     {
-      vcl_cerr<<"boxm_describe_scene_process not yet implemented for Gaussian mixture\n";
-      return false;//not implemented
-    }
+    if( !scene_ptr->multi_bin() )
+      {
+      vcl_cerr << "boxm_describe_scene_process not yet implemented for Gaussian mixture\n";
+      return false;// not implemented
+      }
     else
-    {
-      vcl_cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/Gaussian mixture\n";
+      {
+      vcl_cerr << "boxm_describe_scene_process not yet implemented for multi-bin/Gaussian mixture\n";
       return false;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY)
-  {
-    if (!scene_ptr->multi_bin()) {
+  else if( scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY )
+    {
+    if( !scene_ptr->multi_bin() )
+      {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
+      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *>(scene_ptr.as_pointer() );
 
       bsta_histogram<float> omega_hist, sigma_hist, level_hist;
-      if (!compute_scene_statistics(*scene, omega_hist, sigma_hist,
-                                    level_hist, n_leaves))
+      if( !compute_scene_statistics(*scene, omega_hist, sigma_hist,
+                                    level_hist, n_leaves) )
+        {
         return false;
+        }
       vcl_cout << "Omega Hist\n";
       omega_hist.print_vals_prob();
       vcl_cout << "Sigma Hist\n";
@@ -91,16 +96,17 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
       vcl_cout << "Level Hist\n";
       level_hist.print_vals_prob();
       vcl_cout << "Number of Leaves " << n_leaves << '\n';
-      pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(omega_hist));
-      pro.set_output_val<bsta_histogram_sptr>(1, new bsta_histogram<float>(sigma_hist));
-      pro.set_output_val<bsta_histogram_sptr>(2, new bsta_histogram<float>(level_hist));
+      pro.set_output_val<bsta_histogram_sptr>(0, new bsta_histogram<float>(omega_hist) );
+      pro.set_output_val<bsta_histogram_sptr>(1, new bsta_histogram<float>(sigma_hist) );
+      pro.set_output_val<bsta_histogram_sptr>(2, new bsta_histogram<float>(level_hist) );
       pro.set_output_val<unsigned>(3, n_leaves);
-    }
-    else {
-      vcl_cerr<<"boxm_describe_scene_process not yet implemented for multi-bin/simple_grey\n";
+      }
+    else
+      {
+      vcl_cerr << "boxm_describe_scene_process not yet implemented for multi-bin/simple_grey\n";
       return false;
+      }
     }
-  }
 
   return true;
 }

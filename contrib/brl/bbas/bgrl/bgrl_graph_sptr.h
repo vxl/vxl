@@ -1,7 +1,7 @@
 // This is brl/bbas/bgrl/bgrl_graph_sptr.h
 #ifndef bgrl_graph_sptr_h_
 #define bgrl_graph_sptr_h_
-//:
+// :
 // \file
 // \brief A smart pointer to a bgrl_graph.
 // \author Matt Leotta, (mleotta@lems.brown.edu)

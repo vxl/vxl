@@ -1,10 +1,9 @@
-//:
+// :
 // \file
 #include "vil_viffheader.h"
 #include <string.h>
 
-
-//: Construct an image header
+// : Construct an image header
 // \param ncols - vil_image::ni()
 // \param nrows - vil_image::nj()
 // \param storage_type - similar to vil_image::pixel_format()
@@ -21,7 +20,7 @@ vil_viff_xvimage::vil_viff_xvimage(
   release = XV_IMAGE_REL_NUM;
   version = XV_IMAGE_VER_NUM;
   machine_dep = VFF_DEP_IEEEORDER; /* assume IEEE byte order */
-  memset(  reserve, 0, VIFF_HEADERSIZE-21*sizeof(vxl_sint_32)-520*sizeof(char)-4*sizeof(float));
+  memset(  reserve, 0, VIFF_HEADERSIZE - 21 * sizeof(vxl_sint_32) - 520 * sizeof(char) - 4 * sizeof(float) );
   memset(  trash, 0, 3L);
   memset(  comment, 0, VIL_VIFF_COMMENT_LENGTH);
   strncpy( comment, "vil_viff image writer output", 28); // must be <= 511 chars
@@ -53,26 +52,25 @@ vil_viff_xvimage::vil_viff_xvimage(
   fspare1 = 0;
   fspare2 = 0;
 
-  unsigned long image_data_n_bytes=0L; // dummy initialisation to avoid compiler warning
-  switch (storage_type)
-  {
-    case VFF_TYP_BIT:       image_data_n_bytes = (ncols+7)/8; break;
-    case VFF_TYP_2_BYTE:    image_data_n_bytes = ncols*2; break;
-    case VFF_TYP_4_BYTE:
-    case VFF_TYP_FLOAT:     image_data_n_bytes = ncols*4; break;
-    case VFF_TYP_DOUBLE:
-    case VFF_TYP_COMPLEX:   image_data_n_bytes = ncols*8; break;
-    case VFF_TYP_DCOMPLEX:  image_data_n_bytes = ncols*16; break;
-    default:                image_data_n_bytes = ncols*255; break;
-  }
-  image_data_n_bytes *= nrows*num_data_bands;
+  unsigned long image_data_n_bytes = 0L; // dummy initialisation to avoid compiler warning
 
+  switch( storage_type )
+    {
+    case VFF_TYP_BIT:       image_data_n_bytes = (ncols + 7) / 8; break;
+    case VFF_TYP_2_BYTE:    image_data_n_bytes = ncols * 2; break;
+    case VFF_TYP_4_BYTE:
+    case VFF_TYP_FLOAT:     image_data_n_bytes = ncols * 4; break;
+    case VFF_TYP_DOUBLE:
+    case VFF_TYP_COMPLEX:   image_data_n_bytes = ncols * 8; break;
+    case VFF_TYP_DCOMPLEX:  image_data_n_bytes = ncols * 16; break;
+    default:                image_data_n_bytes = ncols * 255; break;
+    }
+  image_data_n_bytes *= nrows * num_data_bands;
 
   imagedata = 0;
 }
 
 vil_viff_xvimage::vil_viff_xvimage()
 {
-  memset(this,0, sizeof(vil_viff_xvimage));
+  memset(this, 0, sizeof(vil_viff_xvimage) );
 }
-

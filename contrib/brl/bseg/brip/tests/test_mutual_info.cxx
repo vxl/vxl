@@ -14,61 +14,76 @@
 static void data(vcl_string const& path, vcl_vector<float>& x,
                  vcl_vector<float>& I)
 {
-  vcl_ifstream is(path.c_str());
-  unsigned npts;
+  vcl_ifstream is(path.c_str() );
+  unsigned     npts;
+
   is >> npts;
   float tx, tI;
-  for (unsigned i = 0; i<npts; ++i) {
+  for( unsigned i = 0; i < npts; ++i )
+    {
     is >> tx >> tI;
     x.push_back(tx);
-    I.push_back(tI/324.0f);
-  }
+    I.push_back(tI / 324.0f);
+    }
 }
 
 static bsta_histogram<float> compute_hist(vcl_vector<float> const& I)
 {
-  //compute mean intensity and direction
+  // compute mean intensity and direction
   unsigned npts = I.size();
-  float Im=0.0f;
-  for (unsigned i = 0; i<npts; ++i)
+  float    Im = 0.0f;
+
+  for( unsigned i = 0; i < npts; ++i )
+    {
     Im += I[i];
-  Im/= npts;
+    }
+  Im /= npts;
   bsta_histogram<float> h(1.0f, 25);
-  for (unsigned i = 0; i<npts; ++i)
+  for( unsigned i = 0; i < npts; ++i )
+    {
     //    h.upcount(vcl_fabs(I[i]-Im), 1.0f);
     h.upcount(I[i], 1.0f);
+    }
   return h;
 }
 
 static bsta_joint_histogram<float> compute_jhist(vcl_vector<float> const& x,
                                                  vcl_vector<float> const& I)
 {
-  //compute mean intensity and direction
+  // compute mean intensity and direction
   unsigned npts = x.size();
-  float Im=0.0f;
-  for (unsigned i = 0; i<npts; ++i)
+  float    Im = 0.0f;
+
+  for( unsigned i = 0; i < npts; ++i )
+    {
     Im += I[i];
-  Im/= npts;
+    }
+  Im /= npts;
 
   bsta_joint_histogram<float> h(420.0f, 20, 1.0f, 20);
-  bsta_histogram<float> h1(420.0f, 20);
-  for (unsigned k = 0; k<npts; ++k) {
+  bsta_histogram<float>       h1(420.0f, 20);
+  for( unsigned k = 0; k < npts; ++k )
+    {
     float xk = x[k], Ik = I[k];
-    float dI = vcl_fabs(Ik-Im);
+    float dI = vcl_fabs(Ik - Im);
     h.upcount(xk, 1.0f, dI, 1.0);
     //    h1.upcount(dx, 1.0f);
-  }
-#if 0
-  for (unsigned r = 0; r<20; r++)
-  for (unsigned c = 0; c<20; c++) {
-    float p = h.get_count(r, c);
-    float p1 = h1.counts(r);
-    if (p1) {
-      p /= p1;
-      h.set_count(r,c,p);
     }
-    else h.set_count(r,c,0.0f);
-  }
+#if 0
+  for( unsigned r = 0; r < 20; r++ )
+    {
+    for( unsigned c = 0; c < 20; c++ )
+      {
+      float p = h.get_count(r, c);
+      float p1 = h1.counts(r);
+      if( p1 )
+        {
+        p /= p1;
+        h.set_count(r, c, p);
+        }
+      else { h.set_count(r, c, 0.0f); }
+      }
+    }
 #endif
   return h;
 }
@@ -76,22 +91,24 @@ static bsta_joint_histogram<float> compute_jhist(vcl_vector<float> const& x,
 static void test_mutual_info()
 {
 
-  //generate some images
-  //--------------------------------------------
-  unsigned ni=256;
-  unsigned nj=256;
-  vil_image_view<vxl_byte> image1(ni,nj), image2(ni,nj);
-  for (unsigned j=0;j<nj;++j) {
-    for (unsigned i=0;i<ni;++i) {
-      image1(i,j) = vxl_byte((i+j)/2);
-      image2(i,j) = vxl_byte(i);
-    }
-  }
+  // generate some images
+  // --------------------------------------------
+  unsigned ni = 256;
+  unsigned nj = 256;
 
+  vil_image_view<vxl_byte> image1(ni, nj), image2(ni, nj);
+  for( unsigned j = 0; j < nj; ++j )
+    {
+    for( unsigned i = 0; i < ni; ++i )
+      {
+      image1(i, j) = vxl_byte( (i + j) / 2);
+      image2(i, j) = vxl_byte(i);
+      }
+    }
 
   // Test Entropy functions
-  //----------------------------------------------------
-  vcl_vector<double> hist1, hist2;
+  // ----------------------------------------------------
+  vcl_vector<double>              hist1, hist2;
   vcl_vector<vcl_vector<double> > hist3;
 
   double sum1 = brip_histogram(image1, hist1, 0, 255, 16);
@@ -109,13 +126,13 @@ static void test_mutual_info()
   TEST_NEAR("Self Joint Entropy", entropy1, entropy3, tol);
 
   // Test Mutual Information
-  //---------------------------------------------------------
+  // ---------------------------------------------------------
 
   double mi1 = brip_mutual_info(image1, image1, 0, 255, 16);
   double mi2 = brip_mutual_info(image1, image2, 0, 255, 16);
   double mi3 = brip_mutual_info(image2, image1, 0, 255, 16);
 
-  //vcl_cout << "MI1: " << mi1 <<  " MI2: " << mi2 << " MI3: " << mi3 << vcl_endl;
+  // vcl_cout << "MI1: " << mi1 <<  " MI2: " << mi2 << " MI3: " << mi3 << vcl_endl;
 
   TEST_NEAR("Mutual Information Commutative", mi2, mi3, 1e-9);
   TEST("Large Self Mutual Info", mi2 < mi1, true);

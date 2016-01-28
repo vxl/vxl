@@ -2,9 +2,9 @@
 #ifndef vnl_sparse_lst_sqr_function_h_
 #define vnl_sparse_lst_sqr_function_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Abstract base for sparse least squares functions
 // \author Matt Leotta (Brown)
@@ -20,7 +20,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_crs_index.h>
 
-//: Abstract base for sparse least squares functions.
+// : Abstract base for sparse least squares functions.
 //    vnl_sparse_lst_sqr_function is an abstract base for functions to be minimized
 //    by an optimizer.  To define your own function to be minimized, subclass
 //    from vnl_sparse_lst_sqr_function, and implement the pure virtual f (and
@@ -46,34 +46,32 @@
 //    parameters that are assumed to be fixed over all images.
 class vnl_sparse_lst_sqr_function
 {
- public:
-  enum  UseGradient {
+public:
+  enum  UseGradient
+    {
     no_gradient,
     use_gradient
-  };
-  enum  UseWeights {
+    };
+  enum  UseWeights
+    {
     no_weights,
     use_weights
-  };
+    };
   bool failure;
 
-  //: Construct vnl_sparse_lst_sqr_function.
+  // : Construct vnl_sparse_lst_sqr_function.
   // Assumes A consists of \p num_a parameters each of size \p num_params_per_a
   // Assumes B consists of \p num_b parameters each of size \p num_params_per_b
   // Assumes C consists of \p num_params_c parameters
   // Assumes there is a residual x_ij for all i and j, each of size \p num_residuals_per_e
   // The optional argument should be no_gradient if the gradf function has not
   // been implemented.  Default is use_gradient.
-  vnl_sparse_lst_sqr_function(unsigned int num_a,
-                              unsigned int num_params_per_a,
-                              unsigned int num_b,
-                              unsigned int num_params_per_b,
-                              unsigned int num_params_c,
-                              unsigned int num_residuals_per_e,
-                              UseGradient g = use_gradient,
+  vnl_sparse_lst_sqr_function(unsigned int num_a, unsigned int num_params_per_a, unsigned int num_b,
+                              unsigned int num_params_per_b, unsigned int num_params_c,
+                              unsigned int num_residuals_per_e, UseGradient g = use_gradient,
                               UseWeights w = no_weights);
 
-  //: Construct vnl_sparse_lst_sqr_function.
+  // : Construct vnl_sparse_lst_sqr_function.
   // Assumes A consists of \p num_a parameters each of size \p num_params_per_a
   // Assumes B consists of \p num_b parameters each of size \p num_params_per_b
   // Assumes C consists of \p num_params_c parameters
@@ -81,17 +79,13 @@ class vnl_sparse_lst_sqr_function
   // Assumes each available residual has size \p num_residuals_per_e
   // The optional argument should be no_gradient if the gradf function has not
   // been implemented.  Default is use_gradient.
-  vnl_sparse_lst_sqr_function(unsigned int num_a,
-                              unsigned int num_params_per_a,
-                              unsigned int num_b,
-                              unsigned int num_params_per_b,
-                              unsigned int num_params_c,
-                              const vcl_vector<vcl_vector<bool> >& xmask,
-                              unsigned int num_residuals_per_e,
+  vnl_sparse_lst_sqr_function(unsigned int num_a, unsigned int num_params_per_a, unsigned int num_b,
+                              unsigned int num_params_per_b, unsigned int num_params_c,
+                              const vcl_vector<vcl_vector<bool> >& xmask, unsigned int num_residuals_per_e,
                               UseGradient g = use_gradient,
                               UseWeights w = no_weights);
 
-  //: Construct vnl_sparse_lst_sqr_function.
+  // : Construct vnl_sparse_lst_sqr_function.
   // This constructor is the most general
   // \param a_sizes is a vector describing the number of parameters for each a_i
   // \param b_sizes is a vector describing the number of parameters for each b_j
@@ -101,12 +95,9 @@ class vnl_sparse_lst_sqr_function
   // xmask must be a_sizes.size() by b_sizes.size() and contain e_sizes.size() true entries
   // The optional argument should be no_gradient if the gradf function has not
   // been implemented.  Default is use_gradient.
-  vnl_sparse_lst_sqr_function(const vcl_vector<unsigned int>& a_sizes,
-                              const vcl_vector<unsigned int>& b_sizes,
-                              unsigned int num_params_c,
-                              const vcl_vector<unsigned int>& e_sizes,
-                              const vcl_vector<vcl_vector<bool> >& xmask,
-                              UseGradient g = use_gradient,
+  vnl_sparse_lst_sqr_function(const vcl_vector<unsigned int>& a_sizes, const vcl_vector<unsigned int>& b_sizes,
+                              unsigned int num_params_c, const vcl_vector<unsigned int>& e_sizes,
+                              const vcl_vector<vcl_vector<bool> >& xmask, UseGradient g = use_gradient,
                               UseWeights w = no_weights);
 
   virtual ~vnl_sparse_lst_sqr_function() {}
@@ -115,18 +106,16 @@ class vnl_sparse_lst_sqr_function
   void throw_failure() { failure = true; }
   void clear_failure() { failure = false; }
 
-  //: Compute all residuals.
+  // : Compute all residuals.
   //  Given the parameter vectors a, b, and c, compute the vector of residuals f.
   //  f has been sized appropriately before the call.
   //  The default implementation computes f by calling fij for each valid
   //  pair of i and j.  You do not need to overload this method unless you
   //  want to provide a more efficient implementation for your problem.
-  virtual void f(vnl_vector<double> const& a,
-                 vnl_vector<double> const& b,
-                 vnl_vector<double> const& c,
+  virtual void f(vnl_vector<double> const& a, vnl_vector<double> const& b, vnl_vector<double> const& c,
                  vnl_vector<double>& f);
 
-  //: Compute the sparse Jacobian in block form.
+  // : Compute the sparse Jacobian in block form.
   //  Given the parameter vectors a, b, and c, compute the set of block
   //  Jacobians Aij, Bij, and Cij.
   //  All Aij, Bij, and Cij have been sized appropriately before the call.
@@ -134,14 +123,11 @@ class vnl_sparse_lst_sqr_function
   //  jac_Aij, jac_Bij, and jac_Cij for each valid pair of i and j.
   //  You do not need to overload this method unless you want to provide
   //  a more efficient implementation for your problem.
-  virtual void jac_blocks(vnl_vector<double> const& a,
-                          vnl_vector<double> const& b,
-                          vnl_vector<double> const& c,
-                          vcl_vector<vnl_matrix<double> >& A,
-                          vcl_vector<vnl_matrix<double> >& B,
+  virtual void jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b, vnl_vector<double> const& c,
+                          vcl_vector<vnl_matrix<double> >& A, vcl_vector<vnl_matrix<double> >& B,
                           vcl_vector<vnl_matrix<double> >& C);
 
-  //: Compute the sparse Jacobian in block form using a finite difference approximation.
+  // : Compute the sparse Jacobian in block form using a finite difference approximation.
   //  Given the parameter vectors a, b and c, compute the set of block Jacobians
   //  Aij, Bij, and Cij.  The finite difference approximation is done independently
   //  at each block.  All Aij, Bij, and Cij have been sized appropriately before the call.
@@ -149,189 +135,143 @@ class vnl_sparse_lst_sqr_function
   //  jac_Aij, jac_Bij, and jac_Cij for each valid pair of i and j.
   //  You do not need to overload this method unless you want to provide
   //  a more efficient implementation for your problem.
-  virtual void fd_jac_blocks(vnl_vector<double> const& a,
-                             vnl_vector<double> const& b,
-                             vnl_vector<double> const& c,
-                             vcl_vector<vnl_matrix<double> >& A,
-                             vcl_vector<vnl_matrix<double> >& B,
-                             vcl_vector<vnl_matrix<double> >& C,
-                             double stepsize);
+  virtual void fd_jac_blocks(vnl_vector<double> const& a, vnl_vector<double> const& b, vnl_vector<double> const& c,
+                             vcl_vector<vnl_matrix<double> >& A, vcl_vector<vnl_matrix<double> >& B,
+                             vcl_vector<vnl_matrix<double> >& C, double stepsize);
 
-  //: If using weighted least squares, compute the weights for each i and j.
+  // : If using weighted least squares, compute the weights for each i and j.
   //  Return the weights in \a weights.
   //  The default implementation computes \a weights by calling
   //  compute_weight_ij for each valid pair of i and j.
   //  You do not need to overload this method unless you want to provide
   //  a more specialized implementation for your problem.
-  virtual void compute_weights(vnl_vector<double> const& a,
-                               vnl_vector<double> const& b,
-                               vnl_vector<double> const& c,
-                               vnl_vector<double> const& f,
-                               vnl_vector<double>& weights);
+  virtual void compute_weights(vnl_vector<double> const& a, vnl_vector<double> const& b, vnl_vector<double> const& c,
+                               vnl_vector<double> const& f, vnl_vector<double>& weights);
 
-  //: If using weighted least squares, apply the weights to residuals f.
+  // : If using weighted least squares, apply the weights to residuals f.
   //  The default implementation applies \a weights by calling
   //  apply_weight_ij for each valid pair of i and j.
   //  You do not need to overload this method unless you want to provide
   //  a more specialized implementation for your problem.
-  virtual void apply_weights(vnl_vector<double> const& weights,
-                             vnl_vector<double>& f);
+  virtual void apply_weights(vnl_vector<double> const& weights, vnl_vector<double>& f);
 
-  //: If using weighted least squares, apply the weights to residuals A, B, C.
+  // : If using weighted least squares, apply the weights to residuals A, B, C.
   //  The default implementation applies \a weights by calling
   //  apply_weight_ij for each valid pair of i and j.
   //  You do not need to overload this method unless you want to provide
   //  a more specialized implementation for your problem.
-  virtual void apply_weights(vnl_vector<double> const& weights,
-                             vcl_vector<vnl_matrix<double> >& A,
-                             vcl_vector<vnl_matrix<double> >& B,
-                             vcl_vector<vnl_matrix<double> >& C);
+  virtual void apply_weights(vnl_vector<double> const& weights, vcl_vector<vnl_matrix<double> >& A,
+                             vcl_vector<vnl_matrix<double> >& B, vcl_vector<vnl_matrix<double> >& C);
 
-  //: Compute the residuals from the ith component of a, the jth component of b.
+  // : Compute the residuals from the ith component of a, the jth component of b.
   //  Given the parameter vectors ai, bj, and c, compute the vector of residuals fij.
   //  fij has been sized appropriately before the call.
-  virtual void fij(int i, int j,
-                   vnl_vector<double> const& ai,
-                   vnl_vector<double> const& bj,
-                   vnl_vector<double> const& c,
-                   vnl_vector<double>& fij);
+  virtual void fij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj,
+                   vnl_vector<double> const& c, vnl_vector<double>& fij);
 
-  //: Calculate the Jacobian A_ij, given the parameter vectors a_i, b_j, and c.
-  virtual void jac_Aij(int i, int j,
-                       vnl_vector<double> const& ai,
-                       vnl_vector<double> const& bj,
-                       vnl_vector<double> const& c,
-                       vnl_matrix<double>& Aij);
+  // : Calculate the Jacobian A_ij, given the parameter vectors a_i, b_j, and c.
+  virtual void jac_Aij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj,
+                       vnl_vector<double> const& c, vnl_matrix<double>& Aij);
 
-  //: Calculate the Jacobian B_ij, given the parameter vectors a_i, b_j, and c.
-  virtual void jac_Bij(int i, int j,
-                       vnl_vector<double> const& ai,
-                       vnl_vector<double> const& bj,
-                       vnl_vector<double> const& c,
-                       vnl_matrix<double>& Bij);
+  // : Calculate the Jacobian B_ij, given the parameter vectors a_i, b_j, and c.
+  virtual void jac_Bij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj,
+                       vnl_vector<double> const& c, vnl_matrix<double>& Bij);
 
-  //: Calculate the Jacobian C_ij, given the parameter vectors a_i, b_j, and c.
-  virtual void jac_Cij(int i, int j,
-                       vnl_vector<double> const& ai,
-                       vnl_vector<double> const& bj,
-                       vnl_vector<double> const& c,
-                       vnl_matrix<double>& Cij);
+  // : Calculate the Jacobian C_ij, given the parameter vectors a_i, b_j, and c.
+  virtual void jac_Cij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj,
+                       vnl_vector<double> const& c, vnl_matrix<double>& Cij);
 
-  //: Use this to compute a finite-difference Jacobian A_ij
-  void fd_jac_Aij(int i, int j,
-                  vnl_vector<double> const& ai,
-                  vnl_vector<double> const& bj,
-                  vnl_vector<double> const& c,
-                  vnl_matrix<double>& Aij,
-                  double stepsize);
+  // : Use this to compute a finite-difference Jacobian A_ij
+  void fd_jac_Aij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj, vnl_vector<double> const& c,
+                  vnl_matrix<double>& Aij, double stepsize);
 
-  //: Use this to compute a finite-difference Jacobian B_ij
-  void fd_jac_Bij(int i, int j,
-                  vnl_vector<double> const& ai,
-                  vnl_vector<double> const& bj,
-                  vnl_vector<double> const& c,
-                  vnl_matrix<double>& Bij,
-                  double stepsize);
+  // : Use this to compute a finite-difference Jacobian B_ij
+  void fd_jac_Bij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj, vnl_vector<double> const& c,
+                  vnl_matrix<double>& Bij, double stepsize);
 
-  //: Use this to compute a finite-difference Jacobian C_ij
-  void fd_jac_Cij(int i, int j,
-                  vnl_vector<double> const& ai,
-                  vnl_vector<double> const& bj,
-                  vnl_vector<double> const& c,
-                  vnl_matrix<double>& Cij,
-                  double stepsize);
+  // : Use this to compute a finite-difference Jacobian C_ij
+  void fd_jac_Cij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj, vnl_vector<double> const& c,
+                  vnl_matrix<double>& Cij, double stepsize);
 
-  //: If using weighted least squares, compute the weight.
+  // : If using weighted least squares, compute the weight.
   //  Return the weight in \a weight.
   //  The default implementation sets weight = 1
-  virtual void compute_weight_ij(int i, int j,
-                                 vnl_vector<double> const& ai,
-                                 vnl_vector<double> const& bj,
-                                 vnl_vector<double> const& c,
-                                 vnl_vector<double> const& fij,
-                                 double& weight);
+  virtual void compute_weight_ij(int i, int j, vnl_vector<double> const& ai, vnl_vector<double> const& bj,
+                                 vnl_vector<double> const& c, vnl_vector<double> const& fij, double& weight);
 
-  //: If using weighted least squares, apply the weight to fij.
+  // : If using weighted least squares, apply the weight to fij.
   //  The default implementation multiplies fij by weight.
-  virtual void apply_weight_ij(int i, int j,
-                               double const& weight,
-                               vnl_vector<double>& fij);
+  virtual void apply_weight_ij(int i, int j, double const& weight, vnl_vector<double>& fij);
 
-  //: If using weighted least squares, apply the weight to Aij, Bij, Cij.
+  // : If using weighted least squares, apply the weight to Aij, Bij, Cij.
   //  The default implementation multiplies each matrix by weight.
-  virtual void apply_weight_ij(int i, int j,
-                               double const& weight,
-                               vnl_matrix<double>& Aij,
-                               vnl_matrix<double>& Bij,
+  virtual void apply_weight_ij(int i, int j, double const& weight, vnl_matrix<double>& Aij, vnl_matrix<double>& Bij,
                                vnl_matrix<double>& Cij);
 
-  //: Called after each LM iteration to print debugging etc.
-  virtual void trace(int iteration,
-                     vnl_vector<double> const& a,
-                     vnl_vector<double> const& b,
-                     vnl_vector<double> const& c,
-                     vnl_vector<double> const& e);
+  // : Called after each LM iteration to print debugging etc.
+  virtual void trace(int iteration, vnl_vector<double> const& a, vnl_vector<double> const& b,
+                     vnl_vector<double> const& c, vnl_vector<double> const& e);
 
-  //: Return the number of parameters of a_j
-  unsigned int number_of_params_a(int i) const { return indices_a_[i+1]-indices_a_[i]; }
+  // : Return the number of parameters of a_j
+  unsigned int number_of_params_a(int i) const { return indices_a_[i + 1] - indices_a_[i]; }
 
-  //: Return the number of parameters of b_i
-  unsigned int number_of_params_b(int j) const { return indices_b_[j+1]-indices_b_[j]; }
+  // : Return the number of parameters of b_i
+  unsigned int number_of_params_b(int j) const { return indices_b_[j + 1] - indices_b_[j]; }
 
-  //: Return the number of parameters of c
+  // : Return the number of parameters of c
   unsigned int number_of_params_c() const { return num_params_c_; }
 
-  //: Return the number of residuals in the kth residual vector.
-  unsigned int number_of_residuals(int k) const { return indices_e_[k+1]-indices_e_[k]; }
+  // : Return the number of residuals in the kth residual vector.
+  unsigned int number_of_residuals(int k) const { return indices_e_[k + 1] - indices_e_[k]; }
 
-  //: Return the number of residuals for x_ij.
+  // : Return the number of residuals for x_ij.
   unsigned int number_of_residuals(int i, int j) const
   {
-    int k = residual_indices_(i,j);
-    if (k<0) return 0;
-    else return number_of_residuals(k);
+    int k = residual_indices_(i, j);
+
+    if( k < 0 ) {return 0; }
+    else {return number_of_residuals(k); }
   }
 
-  //: return the index of aj in a
+  // : return the index of aj in a
   unsigned int index_a(int i) const { return indices_a_[i]; }
 
-  //: return the index of bj in b
+  // : return the index of bj in b
   unsigned int index_b(int j) const { return indices_b_[j]; }
 
-  //: return the index of ek in e
+  // : return the index of ek in e
   unsigned int index_e(int k) const { return indices_e_[k]; }
 
-  //: Return the number of subsets in \p a
-  unsigned int number_of_a() const { return (unsigned int)(indices_a_.size()-1); }
+  // : Return the number of subsets in \p a
+  unsigned int number_of_a() const { return (unsigned int)(indices_a_.size() - 1); }
 
-  //: Return the number of subsets in \p b
-  unsigned int number_of_b() const { return (unsigned int)(indices_b_.size()-1); }
+  // : Return the number of subsets in \p b
+  unsigned int number_of_b() const { return (unsigned int)(indices_b_.size() - 1); }
 
-  //: Return the number of residual vectors
-  unsigned int number_of_e() const { return (unsigned int)(indices_e_.size()-1); }
+  // : Return the number of residual vectors
+  unsigned int number_of_e() const { return (unsigned int)(indices_e_.size() - 1); }
 
-  //: Return true if the derived class has indicated that gradf has been implemented
+  // : Return true if the derived class has indicated that gradf has been implemented
   bool has_gradient() const { return use_gradient_; }
 
-  //: Return true if the derived class has indicated that
+  // : Return true if the derived class has indicated that
   //  \a apply_weights or \a apply_weight_ij have been implemented
   bool has_weights() const { return use_weights_; }
 
-  //: Return a const reference to the residual indexer
-  const vnl_crs_index& residual_indices() const { return residual_indices_; }
-
- protected:
-  vnl_crs_index residual_indices_;
+  // : Return a const reference to the residual indexer
+  const vnl_crs_index & residual_indices() const { return residual_indices_; }
+protected:
+  vnl_crs_index            residual_indices_;
   vcl_vector<unsigned int> indices_a_;
   vcl_vector<unsigned int> indices_b_;
-  unsigned int num_params_c_;
+  unsigned int             num_params_c_;
   vcl_vector<unsigned int> indices_e_;
 
   bool use_gradient_;
   bool use_weights_;
-
- private:
+private:
   void dim_warning(unsigned int n_unknowns, unsigned int n_residuals);
+
 };
 
 #endif // vnl_sparse_lst_sqr_function_h_

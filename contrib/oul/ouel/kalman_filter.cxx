@@ -1,6 +1,6 @@
 // This is oul/ouel/kalman_filter.cxx
 #include "kalman_filter.h"
-//:
+// :
 // \file
 // \brief kalman_filter.cc: A linear Kalman filter class
 //
@@ -21,15 +21,15 @@
 // Copyright (c) 1999 Brendan McCane
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 #include <vcl_cstdlib.h>
 #include <vcl_iostream.h>
 
 #include <vnl/algo/vnl_svd.h>
 
-//----------------------------------------------------------------------
-//: Constructor
+// ----------------------------------------------------------------------
+// : Constructor
 //
 // Initialises the necessary parameters and matrices
 //
@@ -51,17 +51,17 @@
 //
 // \todo   under development
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 KalmanFilter::KalmanFilter(
   unsigned int ns, unsigned int nm, unsigned int nc,
-  const vnl_matrix<double> &Ai,
-  const vnl_matrix<double> &Hi,
-  const vnl_matrix<double> &Bi,
-  const vnl_matrix<double> &z_initial,
-  const vnl_matrix<double> &x_initial,
-  const vnl_matrix<double> &Pi
-  ):
+  const vnl_matrix<double> & Ai,
+  const vnl_matrix<double> & Hi,
+  const vnl_matrix<double> & Bi,
+  const vnl_matrix<double> & z_initial,
+  const vnl_matrix<double> & x_initial,
+  const vnl_matrix<double> & Pi
+  ) :
   // initialise all the matrices etc
   num_signal_dimensions(ns), num_measurement_dimensions(nm),
   num_control_dimensions(nc), A(Ai), H(Hi), B(Bi),
@@ -69,50 +69,49 @@ KalmanFilter::KalmanFilter(
   P(Pi), K(ns, nm)
 {
   // do some size checking
-  if ((A.rows()!=num_signal_dimensions)||
-    (A.cols()!=num_signal_dimensions))
-  {
+  if( (A.rows() != num_signal_dimensions) ||
+      (A.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix A must be of size ns*ns\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((H.rows()!=num_measurement_dimensions)||
-    (H.cols()!=num_signal_dimensions))
-  {
+  if( (H.rows() != num_measurement_dimensions) ||
+      (H.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix H must be of size nm*ns\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((B.cols()!=num_control_dimensions)||
-    (B.rows()!=num_signal_dimensions))
-  {
+  if( (B.cols() != num_control_dimensions) ||
+      (B.rows() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix B must be of size ns*nc\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((x_pred.rows()!=num_signal_dimensions)||
-    (x_pred.cols()!=1))
-  {
+  if( (x_pred.rows() != num_signal_dimensions) ||
+      (x_pred.cols() != 1) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix x must be of size ns*1\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((Pi.rows()!=num_signal_dimensions)||
-    (Pi.cols()!=num_signal_dimensions))
-  {
+  if( (Pi.rows() != num_signal_dimensions) ||
+      (Pi.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix p_initial must be of size ns*1\n";
     vcl_exit(-1);
-  }
+    }
 }
 
-
-//----------------------------------------------------------------------
-//: Constructor
+// ----------------------------------------------------------------------
+// : Constructor
 //
 // Initialises the necessary parameters and matrices
 //
@@ -130,15 +129,15 @@ KalmanFilter::KalmanFilter(
 //
 // \todo   under development
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 KalmanFilter::KalmanFilter(
   unsigned int ns, unsigned int nm,
-  const vnl_matrix<double> &Ai,
-  const vnl_matrix<double> &Hi,
-  const vnl_matrix<double> &z_initial,
-  const vnl_matrix<double> &x_initial,
-  const vnl_matrix<double> &Pi
-  ):
+  const vnl_matrix<double> & Ai,
+  const vnl_matrix<double> & Hi,
+  const vnl_matrix<double> & z_initial,
+  const vnl_matrix<double> & x_initial,
+  const vnl_matrix<double> & Pi
+  ) :
   // initialise all the matrices etc
   num_signal_dimensions(ns), num_measurement_dimensions(nm),
   num_control_dimensions(0), A(Ai), H(Hi),
@@ -146,41 +145,41 @@ KalmanFilter::KalmanFilter(
   P(Pi), K(ns, nm)
 {
   // do some size checking
-  if ((A.rows()!=num_signal_dimensions)||
-    (A.cols()!=num_signal_dimensions))
-  {
+  if( (A.rows() != num_signal_dimensions) ||
+      (A.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix A must be of size ns*ns\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((H.rows()!=num_measurement_dimensions)||
-    (H.cols()!=num_signal_dimensions))
-  {
+  if( (H.rows() != num_measurement_dimensions) ||
+      (H.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix H must be of size nm*ns\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((x_pred.rows()!=num_signal_dimensions)||
-    (x_pred.cols()!=1))
-  {
+  if( (x_pred.rows() != num_signal_dimensions) ||
+      (x_pred.cols() != 1) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix x must be of size ns*1\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((Pi.rows()!=num_signal_dimensions)||
-    (Pi.cols()!=num_signal_dimensions))
-  {
+  if( (Pi.rows() != num_signal_dimensions) ||
+      (Pi.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman constructor:\n"
              << "\tMatrix p_initial must be of size ns*1\n";
     vcl_exit(-1);
-  }
+    }
 }
 
-//----------------------------------------------------------------------
-//: measurement_update
+// ----------------------------------------------------------------------
+// : measurement_update
 //
 // Calculate the Kalman gain, update the signal estimate from the last
 // time point using the previous estimate and the new measurement, and
@@ -191,53 +190,53 @@ KalmanFilter::KalmanFilter(
 //
 // \todo   under development
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-void KalmanFilter::measurement_update(const vnl_matrix<double> &zk,
-                                      const vnl_matrix<double> &Rk)
+void KalmanFilter::measurement_update(const vnl_matrix<double> & zk,
+                                      const vnl_matrix<double> & Rk)
 {
   // do some checks
-  if ((zk.rows()!=num_measurement_dimensions)||
-    (zk.cols()!=1))
-  {
+  if( (zk.rows() != num_measurement_dimensions) ||
+      (zk.cols() != 1) )
+    {
     vcl_cerr << "Error in Kalman measurement_update\n"
              << "\tzk must have dimensions nm*1\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((Rk.rows()!=num_measurement_dimensions)||
-    (Rk.cols()!=num_measurement_dimensions))
-  {
+  if( (Rk.rows() != num_measurement_dimensions) ||
+      (Rk.cols() != num_measurement_dimensions) )
+    {
     vcl_cerr << "Error in Kalman measurement_update\n"
              << "\tRk must have dimensions nm*nm\n";
     vcl_exit(-1);
-  }
+    }
 
   this->z = zk;
 
   // first calculate the Kalman gain
   vnl_matrix<double> Tmp(Rk);
 
-  Tmp += H*P*H.transpose();
+  Tmp += H * P * H.transpose();
 
   vnl_svd<double> Tmp2(Tmp);    // Singular value decomp inverse
 
-  K = P*H.transpose()*Tmp2.inverse();
+  K = P * H.transpose() * Tmp2.inverse();
 
   // update the signal estimate using the previous estimate plus the
   // measurement.
   // since zk = H*x + v, zk-H*x is an error estimate
-  x = x_pred + K*(zk-H*x_pred);
+  x = x_pred + K * (zk - H * x_pred);
 
   // update the error covariance
   vnl_matrix<double> ident(P);
   ident.set_identity();
 
-  P = (ident - K*H)*P;
+  P = (ident - K * H) * P;
 }
 
-//----------------------------------------------------------------------
-//: predict
+// ----------------------------------------------------------------------
+// : predict
 //
 // Calculate the next state given the current estimate and project the
 // error covariance matrix ahead in time as well. In this case, I am
@@ -247,31 +246,31 @@ void KalmanFilter::measurement_update(const vnl_matrix<double> &zk,
 //
 // \todo   under development
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 vnl_matrix<double>
-KalmanFilter::predict(const vnl_matrix<double> &Qk)
+KalmanFilter::predict(const vnl_matrix<double> & Qk)
 {
   // do some checks
-  if ((Qk.rows()!=num_signal_dimensions)||
-    (Qk.cols()!=num_signal_dimensions))
-  {
+  if( (Qk.rows() != num_signal_dimensions) ||
+      (Qk.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman predict\n"
              << "\tQk must have dimensions ns*ns\n";
     vcl_exit(-1);
-  }
+    }
 
   // estimate the new state
-  x_pred = A*x;
+  x_pred = A * x;
 
   // estimate the new error covariance matrix
-  P = A*P*A.transpose() + Qk;
+  P = A * P * A.transpose() + Qk;
 
   return x_pred;
 }
 
-//----------------------------------------------------------------------
-//: predict
+// ----------------------------------------------------------------------
+// : predict
 //
 // Calculate the next state given the current estimate and project the
 // error covariance matrix ahead in time as well.
@@ -281,40 +280,40 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk)
 //
 // \todo   under development
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 vnl_matrix<double>
-KalmanFilter::predict(const vnl_matrix<double> &Qk,
-                      const vnl_matrix<double> &uk)
+KalmanFilter::predict(const vnl_matrix<double> & Qk,
+                      const vnl_matrix<double> & uk)
 {
   // do some checks
-  if ((Qk.rows()!=num_signal_dimensions)||
-    (Qk.cols()!=num_signal_dimensions))
-  {
+  if( (Qk.rows() != num_signal_dimensions) ||
+      (Qk.cols() != num_signal_dimensions) )
+    {
     vcl_cerr << "Error in Kalman predict\n"
              << "\tQk must have dimensions ns*ns\n";
     vcl_exit(-1);
-  }
+    }
 
-  if ((uk.rows()!=num_control_dimensions)||
-    (uk.cols()!=1))
-  {
+  if( (uk.rows() != num_control_dimensions) ||
+      (uk.cols() != 1) )
+    {
     vcl_cerr << "Error in Kalman predict\n"
              << "\tuk must have dimensions nc*1\n";
     vcl_exit(-1);
-  }
+    }
 
   // estimate the new state
-  x_pred = A*x + B*uk;
+  x_pred = A * x + B * uk;
 
   // estimate the new error covariance matrix
-  P = A*P*A.transpose() + Qk;
+  P = A * P * A.transpose() + Qk;
 
   return x_pred;
 }
 
-//----------------------------------------------------------------------
-//: update_predict
+// ----------------------------------------------------------------------
+// : update_predict
 //
 // A wrapper function to both update the measurement and predict the
 // new state.
@@ -325,29 +324,29 @@ KalmanFilter::predict(const vnl_matrix<double> &Qk,
 //
 // \todo   under development
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 vnl_matrix<double> KalmanFilter::update_predict
 (
-  const vnl_matrix<double> &zk,
-  const vnl_matrix<double> &Rk,
-  const vnl_matrix<double> &Qk
+  const vnl_matrix<double> & zk,
+  const vnl_matrix<double> & Rk,
+  const vnl_matrix<double> & Qk
 )
 {
   measurement_update(zk, Rk);
   return predict(Qk);
 }
 
-//----------------------------------------------------------------------
-//: output operator
+// ----------------------------------------------------------------------
+// : output operator
 //
 // \param kf   the Kalman filter to output
 //
 // \todo   under development
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-vcl_ostream &operator<<(vcl_ostream &os, const KalmanFilter &kf)
+vcl_ostream & operator<<(vcl_ostream & os, const KalmanFilter & kf)
 {
   os << "Current state of Kalman Filter is:\n"
      << "estimate = " << kf.x.transpose()
@@ -357,7 +356,9 @@ vcl_ostream &operator<<(vcl_ostream &os, const KalmanFilter &kf)
      << "Kalman gain =\n" << kf.K
      << "A =\n" << kf.A
      << "H =\n" << kf.H;
-  if (kf.num_control_dimensions>0)
+  if( kf.num_control_dimensions > 0 )
+    {
     os << "B =\n" << kf.B;
+    }
   return os;
 }

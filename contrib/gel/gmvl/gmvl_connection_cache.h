@@ -2,9 +2,9 @@
 #ifndef gmvl_connection_cache_h_
 #define gmvl_connection_cache_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 
@@ -16,7 +16,7 @@
 
 class gmvl_connection_cache
 {
- public:
+public:
 
   // constructors / destructors
   gmvl_connection_cache();
@@ -27,19 +27,19 @@ class gmvl_connection_cache
 
   // clever accessors
   vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node) const { return cache_[node->ref_]; }
-  vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1,
-                                       const gmvl_node_sptr node2) const;
-  vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1,
-                                       const gmvl_node_sptr node2,
+  vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1, const gmvl_node_sptr node2) const;
+
+  vcl_vector<int> get_connected_nodes( const gmvl_node_sptr node1, const gmvl_node_sptr node2,
                                        const gmvl_node_sptr node3) const;
+
   vcl_vector<int> get_connected_nodes( const vcl_vector<gmvl_node_sptr> nodes) const;
 
   void rebuild();
 
   // input output
-  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
+  friend vcl_ostream & operator<<( vcl_ostream & os, const gmvl_connection_cache & c);
 
- protected:
+protected:
 
   // raw connections
   vcl_vector<gmvl_connection_sptr> connections_;
@@ -51,6 +51,6 @@ class gmvl_connection_cache
   vbl_bit_array_2d cachebool_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection_cache &c);
+vcl_ostream & operator<<( vcl_ostream & os, const gmvl_connection_cache & c);
 
 #endif // gmvl_connection_cache_h_

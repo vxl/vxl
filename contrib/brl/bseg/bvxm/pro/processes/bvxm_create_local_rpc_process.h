@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_create_local_rpc_process.h
 #ifndef bvxm_create_local_rpc_process_h_
 #define bvxm_create_local_rpc_process_h_
-//:
+// :
 // \file
 // \brief A process that takes a world model and rational camera and returns a local rational camera
 //  Inputs:
@@ -21,17 +21,17 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_create_local_rpc_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 2;
+const unsigned n_outputs_ = 1;
 }
 
-//: initialize input and output types
+// : initialize input and output types
 bool bvxm_create_local_rpc_process_cons(bprb_func_process& pro);
 
-//: process that takes a world model and rational camera and returns a local rational camera
+// : process that takes a world model and rational camera and returns a local rational camera
 bool bvxm_create_local_rpc_process(bprb_func_process& pro);
 
 #endif // bvxm_create_local_rpc_process_h_

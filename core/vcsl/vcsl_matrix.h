@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_matrix.h
 #ifndef vcsl_matrix_h_
 #define vcsl_matrix_h_
-//:
+// :
 // \file
 // \brief A coordinate transformation specified by a transformation matrix
 // \author Francois BERTEL
@@ -21,14 +21,14 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: A coordinate transformation specified by a transformation matrix
+// : A coordinate transformation specified by a transformation matrix
 class vcsl_matrix
-  :public vcsl_spatial_transformation
+  : public vcsl_spatial_transformation
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor
   vcsl_matrix() {}
@@ -36,43 +36,43 @@ class vcsl_matrix
   // Destructor
   virtual ~vcsl_matrix() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Is `this' invertible at time `time'?
+  // : Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
   virtual bool is_invertible(double time) const;
 
-  //: Is `this' correctly set ?
+  // : Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
   virtual bool is_valid() const
-  { return vcsl_spatial_transformation::is_valid() && this->duration()==matrix_.size(); }
+  { return vcsl_spatial_transformation::is_valid() && this->duration() == matrix_.size(); }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Transformation parameters
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Set the parameters of a static translation
+  // : Set the parameters of a static translation
   void set_static( vcsl_matrix_param_sptr new_matrix);
 
-  //: Set the direction vector variation along the time
-  void set_matrix(list_of_vcsl_matrix_param_sptr const& m) { matrix_=m; }
+  // : Set the direction vector variation along the time
+  void set_matrix(list_of_vcsl_matrix_param_sptr const& m) { matrix_ = m; }
 
   list_of_vcsl_matrix_param_sptr matrix_list() const { return matrix_; }
 
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  virtual vnl_vector<double> execute(const vnl_vector<double> & v, double time) const;
 
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  virtual vnl_vector<double> inverse(const vnl_vector<double> & v, double time) const;
 
- protected:
-  vnl_matrix<double> param_to_matrix(vcsl_matrix_param_sptr from,bool type) const;
+protected:
+  vnl_matrix<double> param_to_matrix(vcsl_matrix_param_sptr from, bool type) const;
+
   vnl_matrix<double> matrix_value(double time, bool type) const;
+
   list_of_vcsl_matrix_param_sptr matrix_;
 };
 

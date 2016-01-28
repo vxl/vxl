@@ -1,31 +1,31 @@
 // This is brl/bpro/core/vil_pro/processes/vil_rgb_to_grey_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_image_view_base.h>
 
-//:global variables
+// :global variables
 namespace vil_rgb_to_grey_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 1;
 }
 
-//: Constructor
+// : Constructor
 bool vil_rgb_to_grey_process_cons(bprb_func_process& pro)
 {
   using namespace vil_rgb_to_grey_process_globals;
 
-  //this process takes one input:
-  //input (0): the vil_image_view_base_sptr
+  // this process takes one input:
+  // input (0): the vil_image_view_base_sptr
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
 
-  //this process takes one output:
-  //output (0): the vil_image_view_base_sptr
+  // this process takes one output:
+  // output (0): the vil_image_view_base_sptr
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
@@ -36,39 +36,49 @@ bool vil_rgb_to_grey_process(bprb_func_process& pro)
 {
   using namespace vil_rgb_to_grey_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
+  // get the inputs
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(0);
 
-  if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-    if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr())) {
-      if (img_view->nplanes() > 1) {
-        vil_image_view<vxl_byte> *img_view_grey = new vil_image_view<vxl_byte>(img_view->ni(),img_view->nj(),1);
-        vil_convert_planes_to_grey(*img_view,*img_view_grey);
-        pro.set_output_val<vil_image_view_base_sptr>(0,img_view_grey);
+  if( image->pixel_format() == VIL_PIXEL_FORMAT_BYTE )
+    {
+    if( vil_image_view<unsigned char> * img_view = dynamic_cast<vil_image_view<unsigned char> *>(image.ptr() ) )
+      {
+      if( img_view->nplanes() > 1 )
+        {
+        vil_image_view<vxl_byte> * img_view_grey = new vil_image_view<vxl_byte>(img_view->ni(), img_view->nj(), 1);
+        vil_convert_planes_to_grey(*img_view, *img_view_grey);
+        pro.set_output_val<vil_image_view_base_sptr>(0, img_view_grey);
         return true;
+        }
       }
     }
-  }
-  else if (image->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
-    if (vil_image_view<vil_rgb<unsigned char> > *img_view_rgb = dynamic_cast<vil_image_view<vil_rgb<unsigned char> >*>(image.ptr())) {
-      vil_image_view<vxl_byte> *img_view_grey= new vil_image_view<vxl_byte>(img_view_rgb->ni(),img_view_rgb->nj(),1);
-      if (img_view_rgb->nplanes() == 1) {
+  else if( image->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE )
+    {
+    if( vil_image_view<vil_rgb<unsigned char> > * img_view_rgb =
+          dynamic_cast<vil_image_view<vil_rgb<unsigned char> > *>(image.ptr() ) )
+      {
+      vil_image_view<vxl_byte> * img_view_grey =
+        new vil_image_view<vxl_byte>(img_view_rgb->ni(), img_view_rgb->nj(), 1);
+      if( img_view_rgb->nplanes() == 1 )
+        {
         vil_image_view<vxl_byte> img_view_plane = vil_view_as_planes(*img_view_rgb);
-        vil_convert_planes_to_grey(img_view_plane,*img_view_grey);
-        pro.set_output_val<vil_image_view_base_sptr>(0,img_view_grey);
+        vil_convert_planes_to_grey(img_view_plane, *img_view_grey);
+        pro.set_output_val<vil_image_view_base_sptr>(0, img_view_grey);
         return true;
+        }
       }
     }
-  }
-  else {
-      vcl_cerr << "Error in vil_rgb_to_grey_process: Unsupported input image\n";
-      return false;
-  }
+  else
+    {
+    vcl_cerr << "Error in vil_rgb_to_grey_process: Unsupported input image\n";
+    return false;
+    }
 
   return false;
 }

@@ -21,18 +21,30 @@ void bapl_register::register_datatype()
 
 void bapl_register::register_process()
 {
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_extract_keypoints_process, "baplExtractKeypointsProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_load_keypoints_process, "baplLoadKeypointsProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_draw_keypoints_process, "baplDrawKeypointsProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_match_keypoints_process, "baplMatchKeypointsProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_match_display_process, "baplMatchDisplayProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_refine_match_process, "baplRefineMatchProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_create_conn_table_process, "baplCreateConnTableProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_add_match_set_process, "baplAddMatchSetProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_add_image_keys_process, "baplAddImageKeysProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_compute_tracks_process, "baplComputeTracksProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_load_match_process, "baplLoadMatchSetProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_write_match_process, "baplWriteMatchSetProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_extract_keypoints_process,
+                        "baplExtractKeypointsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_load_keypoints_process,
+                        "baplLoadKeypointsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_draw_keypoints_process,
+                        "baplDrawKeypointsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_match_keypoints_process,
+                        "baplMatchKeypointsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_match_display_process,
+                        "baplMatchDisplayProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_refine_match_process,
+                        "baplRefineMatchProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_create_conn_table_process,
+                        "baplCreateConnTableProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_add_match_set_process,
+                        "baplAddMatchSetProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_add_image_keys_process,
+                        "baplAddImageKeysProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_compute_tracks_process,
+                        "baplComputeTracksProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_load_match_process,
+                        "baplLoadMatchSetProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_write_match_process,
+                        "baplWriteMatchSetProcess");
 #if 0 // process seems to have disappeared from the processes subdirectory???
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bapl_dsift_sptr_process, "baplDsiftSptrProcess");
 #endif

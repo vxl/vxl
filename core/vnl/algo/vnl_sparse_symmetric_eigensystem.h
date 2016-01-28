@@ -2,9 +2,9 @@
 #ifndef vnl_sparse_symmetric_eigensystem_h_
 #define vnl_sparse_symmetric_eigensystem_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Find the eigenvalues of a sparse symmetric matrix
 // \author Rupert W. Curwen, GE CR&D
@@ -20,7 +20,7 @@
 #include <vnl/vnl_sparse_matrix.h>
 #include <vcl_vector.h>
 
-//: Find the eigenvalues of a sparse symmetric matrix
+// : Find the eigenvalues of a sparse symmetric matrix
 //  Solve the standard eigenproblem $A x = \lambda x$, or the
 //  generalized eigenproblem of $A x = \lambda B x$, where
 //  $A$ symmetric and sparse and, optionally, B sparse, symmetric,
@@ -35,15 +35,14 @@
 
 class vnl_sparse_symmetric_eigensystem
 {
- public:
+public:
   vnl_sparse_symmetric_eigensystem();
- ~vnl_sparse_symmetric_eigensystem();
+  ~vnl_sparse_symmetric_eigensystem();
 
   // Find n eigenvalue/eigenvectors of the eigenproblem A * x = lambda * x.
   // If smallest is true, will calculate the n smallest eigenpairs,
   // else the n largest.
-  int CalculateNPairs(vnl_sparse_matrix<double>& M, int n,
-                      bool smallest = true, long nfigures = 10);
+  int CalculateNPairs(vnl_sparse_matrix<double>& M, int n, bool smallest = true, long nfigures = 10);
 
   // Find n eigenvalue/eigenvectors of the eigenproblem A * x = lambda * B * x.
   // !smallest and !magnitude - compute the N largest (algebraic) eigenvalues
@@ -51,33 +50,34 @@ class vnl_sparse_symmetric_eigensystem
   // !smallest and  magnitude - compute the N largest (magnitude) eigenvalues
   //  smallest and  magnitude - compute the nev smallest (magnitude) eigenvalues
   // set sigma for shift/invert method
-  int CalculateNPairs(vnl_sparse_matrix<double>& A, vnl_sparse_matrix<double>& B, int nEV,
-                      double tolerance = 0, int numberLanczosVecs = 0,
-                      bool smallest = false, bool magnitude = true,
-                      int maxIterations = 0,
+  int CalculateNPairs(vnl_sparse_matrix<double>& A, vnl_sparse_matrix<double>& B, int nEV, double tolerance = 0,
+                      int numberLanczosVecs = 0, bool smallest = false, bool magnitude = true, int maxIterations = 0,
                       double sigma = 0.0);
 
   // Recover specified eigenvector after computation.  The argument
   // must be less than the requested number of eigenvectors.
   vnl_vector<double> get_eigenvector(int i) const;
+
   double get_eigenvalue(int i) const;
 
   // Used as a callback in solving.
   int CalculateProduct(int n, int m, const double* p, double* q);
+
   int SaveVectors(int n, int m, const double* q, int base);
+
   int RestoreVectors(int n, int m, double* q, int base);
 
- protected:
-  int nvalues;  // this is the size of the next two arrays.
+protected:
+  int                  nvalues; // this is the size of the next two arrays.
   vnl_vector<double> * vectors; // eigenvectors
-  double * values;              // eigenvalues
+  double *             values;  // eigenvalues
 
   // Matrix A of A*x = lambda*x (or lambda*B*x)
   vnl_sparse_matrix<double> * mat;
   // Matrix B of A*x = lambda*B*x
   vnl_sparse_matrix<double> * Bmat;
 
-  vcl_vector<double*> temp_store;
+  vcl_vector<double *> temp_store;
 };
 
 #endif // vnl_sparse_symmetric_eigensystem_h_

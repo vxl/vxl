@@ -1,7 +1,7 @@
-//This is brl/bseg/boxm/pro/processes/boxm_create_scene_process.cxx
+// This is brl/bseg/boxm/pro/processes/boxm_create_scene_process.cxx
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>
-//:
+// :
 // \file
 // \brief A process for creating a new boxm_scene when there is not a saved one.
 //        It receives the parameters from a parameter file in XML
@@ -29,15 +29,15 @@
 #include <boxm/sample/boxm_edge_tangent_sample.h>
 #include <boxm/sample/boxm_scalar_sample.h>
 
-//:global variables
+// :global variables
 namespace boxm_create_scene_process_globals
 {
-  //this process takes no inputs
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+// this process takes no inputs
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 1;
 }
 
-//:sets input and output types
+// :sets input and output types
 bool boxm_create_scene_process_cons(bprb_func_process& pro)
 {
   using namespace boxm_create_scene_process_globals;
@@ -51,7 +51,7 @@ bool boxm_create_scene_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//:creates a scene from parameters
+// :creates a scene from parameters
 bool boxm_create_scene_process(bprb_func_process& pro)
 {
   using namespace boxm_create_scene_process_globals;
@@ -59,156 +59,173 @@ bool boxm_create_scene_process(bprb_func_process& pro)
 
   boxm_scene_parser parser;
 
-  boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
+  boxm_scene_base_sptr scene_ptr = new boxm_scene_base();
   scene_ptr->load_scene(fname, parser);
-  vcl_cout << "Scene path: " << scene_ptr->filename()<< '\n'
-           << "Scene appearance: " <<scene_ptr->appearence_model()<< vcl_endl;
+  vcl_cout << "Scene path: " << scene_ptr->filename() << '\n'
+           << "Scene appearance: " << scene_ptr->appearence_model() << vcl_endl;
 
-  if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
-    if (!scene_ptr->multi_bin())
+  if( scene_ptr->appearence_model() == BOXM_APM_MOG_GREY )
     {
-      typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
-    }
-    else {
-      typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
+      }
+    else
+      {
+      typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
-      vcl_cout<<"Multi Bin set"<<vcl_endl;
+      vcl_cout << "Multi Bin set" << vcl_endl;
       scene_ptr = scene;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_APM_MOB_GREY) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BOXM_APM_MOB_GREY )
     {
-      typedef boct_tree<short,boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
+    else
+      {
+      vcl_cout << "Multi Bin for BOXM_APM_MOB_GREY is not defined yet" << vcl_endl;
+      }
     }
-    else {
-      vcl_cout<<"Multi Bin for BOXM_APM_MOB_GREY is not defined yet"<<vcl_endl;
-    }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BOXM_APM_SIMPLE_GREY )
     {
-      typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
-    }
+      }
 #if 0
-    else {
-      typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_SIMPLE_GREY> > tree_type;
+    else
+      {
+      typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_SIMPLE_GREY> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
-      vcl_cout<<"Multi Bin set"<<vcl_endl;
+      vcl_cout << "Multi Bin set" << vcl_endl;
       scene_ptr = scene;
-    }
-#endif
-  }
-  else if (scene_ptr->appearence_model() == BOXM_FLOAT) {
-      if (!scene_ptr->multi_bin())
-      {
-        typedef boct_tree<short,float> tree_type;
-        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
-        scene->load_scene(fname);
-        scene_ptr = scene;
-        vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;
       }
-  }
-  else if (scene_ptr->appearence_model() == VNL_FLOAT_3) {
-    if (!scene_ptr->multi_bin())
+#endif
+    }
+  else if( scene_ptr->appearence_model() == BOXM_FLOAT )
     {
-      typedef boct_tree<short,vnl_vector_fixed<float, 3> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, float> tree_type;
+      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      scene->load_scene(fname);
+      scene_ptr = scene;
+      vcl_cout << "Scene path: " << scene->filename() << vcl_endl;
+      }
+    }
+  else if( scene_ptr->appearence_model() == VNL_FLOAT_3 )
+    {
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, vnl_vector_fixed<float, 3> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
       vcl_cout << "Loading scene of type vnl_float_3" << '\n'
-               << "Scene path: " << scene->filename()<< vcl_endl;
+               << "Scene path: " << scene->filename() << vcl_endl;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == VNL_FLOAT_10) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == VNL_FLOAT_10 )
     {
-      typedef boct_tree<short,vnl_vector_fixed<float, 10> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, vnl_vector_fixed<float, 10> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
       vcl_cout << "Loading scene of type vnl_float_10" << '\n'
-               << "Scene path: " << scene->filename()<< vcl_endl;
+               << "Scene path: " << scene->filename() << vcl_endl;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_BOOL) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BOXM_BOOL )
     {
-      typedef boct_tree<short,bool> tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, bool> tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
-      vcl_cout << "Scene path: " << scene->filename()<< vcl_endl;
+      vcl_cout << "Scene path: " << scene->filename() << vcl_endl;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BSTA_MOG_F1) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BSTA_MOG_F1 )
     {
-      typedef boct_tree<short,boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype> tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BSTA_GAUSS_F1) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BSTA_GAUSS_F1 )
     {
-      typedef boct_tree<short,bsta_num_obs<bsta_gauss_sf1> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_EDGE_FLOAT) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BOXM_EDGE_FLOAT )
     {
-      typedef boct_tree<short,boxm_edge_sample<float> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, boxm_edge_sample<float> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BOXM_EDGE_LINE )
     {
-      typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, boxm_inf_line_sample<float> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_EDGE_TANGENT_LINE) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BOXM_EDGE_TANGENT_LINE )
     {
-      typedef boct_tree<short,boxm_edge_tangent_sample<float> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, boxm_edge_tangent_sample<float> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
+  else if( scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT )
+    {
     typedef boct_tree<short, boxm_scalar_sample<float> > tree_type;
     boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
     scene->load_scene(parser);
     scene_ptr = scene;
-  }
-  else {
+    }
+  else
+    {
     vcl_cerr << "boxm_create_scene_process: undefined APM type\n";
     return false;
-  }
+    }
 
-  //store output
+  // store output
   pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
 
   return true;

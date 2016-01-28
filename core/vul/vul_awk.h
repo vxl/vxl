@@ -2,9 +2,9 @@
 #ifndef vul_awk_h_
 #define vul_awk_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   17 May 97
@@ -19,12 +19,11 @@
 //                              backslash_continuation
 // \endverbatim
 
-
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
-//: The core of awk
+// : The core of awk
 // vul_awk reads lines from a vcl_istream and breaks them into whitespace-separated
 // fields.  Its primary advantage is that its name defines the semantics of
 // its methods---except that this C++ version uses zero-based fields.  The
@@ -56,59 +55,64 @@
 class vul_awk
 {
   VCL_SAFE_BOOL_DEFINE;
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
-  enum ModeFlags {
+  enum ModeFlags
+    {
     none = 0x00,
     verbose = 0x01,
     strip_comments = 0x02,
     backslash_continuations = 0x04
-  };
+    };
 
   vul_awk(vcl_istream& s, ModeFlags mode = none);
   ~vul_awk();
 
   // Operations----------------------------------------------------------------
 
-//: Return field i.  Counting starts at 0.
-  char const* operator[] (unsigned i) const {
-    if (i < fields_.size())
+// : Return field i.  Counting starts at 0.
+  char const * operator[](unsigned i) const
+  {
+    if( i < fields_.size() )
+      {
       return fields_[i];
+      }
     else
+      {
       return 0;
+      }
   }
 
-//: Return the current "record number", i.e. line number
+// : Return the current "record number", i.e. line number
   int NR() const { return line_number_; }
 
-//: Return the number of fields on this line.
-  int NF() const { return int(fields_.size()); }
+// : Return the number of fields on this line.
+  int NF() const { return int(fields_.size() ); }
 
-//: Return the entire line
-  char const* line() const { return (char const*)line_.c_str(); }
+// : Return the entire line
+  char const * line() const { return (char const *)line_.c_str(); }
 
-//: Return the remainder of the line, starting from field_number.
+// : Return the remainder of the line, starting from field_number.
 // (0 is from the first non-whitespace character)
-  char const* line_from(int field_number) const;
+  char const * line_from(int field_number) const;
 
-//: Return true if this line is not the last.
-  operator safe_bool () const
-    { return (!done_)? VCL_SAFE_BOOL_TRUE : 0; }
+// : Return true if this line is not the last.
+  operator safe_bool() const
+        { return (!done_) ? VCL_SAFE_BOOL_TRUE : 0; }
 
-//: Return false if this line is not the last.
+// : Return false if this line is not the last.
   bool operator!() const
-    { return done_; }
+  { return done_; }
 
-//: Advance to the next line
-  vul_awk& operator ++ () { next(); return *this; }
+// : Advance to the next line
+  vul_awk & operator ++() { next(); return *this; }
 
-//: Display error message, line number.
+// : Display error message, line number.
 // Also display optional field number and  char within field.
 
-  void error(vcl_ostream&, char const* message, int field = -1,
-             int char_within_field = 0);
+  void error(vcl_ostream &, char const* message, int field = -1, int char_within_field = 0);
 
- protected:
+protected:
   // Data Members--------------------------------------------------------------
   vcl_istream& fd_;
 
@@ -131,7 +135,8 @@ class vul_awk
   void next();
 
   vul_awk(const vul_awk& that);
-  vul_awk& operator=(const vul_awk& that);
+  vul_awk & operator=(const vul_awk& that);
+
 };
 
 #endif // vul_awk_h_

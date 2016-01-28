@@ -2,9 +2,9 @@
 #ifndef pop_edge_h_
 #define pop_edge_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief This is an edge/coordinate system transform in a coordinate system graph
 //
@@ -12,43 +12,43 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-//-------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
 class pop_vertex;
-#include<pop/pop_transform.h>
-#include<vcl_list.h>
+#include <pop/pop_transform.h>
+#include <vcl_list.h>
 
-//: A parameter that can be optimized
+// : A parameter that can be optimized
 class pop_edge
 {
- public:
-  //: constructor
+public:
+  // : constructor
   pop_edge();
 
-  //: destructor
+  // : destructor
   ~pop_edge();
 
-  //: set the first and second vertex
-  void set_vertex(pop_vertex *v1, pop_vertex *v2);
+  // : set the first and second vertex
+  void set_vertex(pop_vertex * v1, pop_vertex * v2);
 
-  //: set the transform
-  void set_transform(pop_transform *t);
+  // : set the transform
+  void set_transform(pop_transform * t);
 
-  //: get the transform
-  pop_transform* get_transform();
+  // : get the transform
+  pop_transform * get_transform();
 
-  //: help search to find a destination vertex
-  bool search(pop_vertex* destination, vcl_list<pop_edge*> &path);
+  // : help search to find a destination vertex
+  bool search(pop_vertex* destination, vcl_list<pop_edge *> & path);
 
- private:
+private:
   // the source vertex
-  pop_vertex *v1_;
+  pop_vertex * v1_;
 
   // the sink vertex
-  pop_vertex *v2_;
+  pop_vertex * v2_;
 
   // the transform
-  pop_transform *transform_;
+  pop_transform * transform_;
 };
 
 #endif // pop_edge_h_

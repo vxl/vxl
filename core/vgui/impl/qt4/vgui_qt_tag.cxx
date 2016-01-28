@@ -10,5 +10,4 @@ vgui_tag(qt) {
   vgui_qt::instance();
   vul_trace;
   return 0;
-}
-
+  }

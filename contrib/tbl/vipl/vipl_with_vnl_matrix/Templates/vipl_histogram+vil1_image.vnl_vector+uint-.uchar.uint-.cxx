@@ -9,5 +9,5 @@
 
 typedef vnl_vector<unsigned int> out_type;
 
-template class vipl_histogram<vil1_image,out_type,unsigned char,unsigned, vipl_trivial_pixeliter>;
+template class vipl_histogram<vil1_image, out_type, unsigned char, unsigned, vipl_trivial_pixeliter>;
 #endif

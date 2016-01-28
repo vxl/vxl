@@ -5,7 +5,7 @@
 #ifndef rgtl_object_once_hxx
 #define rgtl_object_once_hxx
 
-//:
+// :
 // \file
 // \brief Manage object visitation marks efficiently.
 // \author Brad King
@@ -15,39 +15,45 @@ class rgtl_serialize_access;
 
 #include <vcl_vector.h>
 
-//: Efficiently keep track of objects visited to avoid repeat visits.
+// : Efficiently keep track of objects visited to avoid repeat visits.
 class rgtl_object_once
 {
-  typedef unsigned int mark_type;
+  typedef unsigned int                     mark_type;
   typedef vcl_vector<mark_type>::size_type size_type;
 public:
-  //: Construct for zero objects.
+  // : Construct for zero objects.
   rgtl_object_once();
 
-  //: Construct for a fixed number of objects.
+  // : Construct for a fixed number of objects.
   rgtl_object_once(size_type n);
 
-  //: Set the number of objects to track.
+  // : Set the number of objects to track.
   void set_number_of_objects(size_type n);
 
-  //: Reset every object to not visited.
+  // : Reset every object to not visited.
   void reset() const;
 
-  //: Return whether to visit an object.  Marks the object as done.
+  // : Return whether to visit an object.  Marks the object as done.
   bool visit(size_type i) const;
 
-  //: Return whether an object has already been visited.
+  // : Return whether an object has already been visited.
   bool visited(size_type i) const;
 
 private:
   // TODO: Reimplement this to use per-object thread-local storage.
   mutable vcl_vector<mark_type> marks_;
-  mutable mark_type mark_;
+  mutable mark_type             mark_;
 
   friend class rgtl_serialize_access;
-  template <class Serializer> void serialize(Serializer& sr);
-  template <class Serializer> void serialize_load(Serializer& sr);
-  template <class Serializer> void serialize_save(Serializer& sr);
+  template <class Serializer>
+  void serialize(Serializer& sr);
+
+  template <class Serializer>
+  void serialize_load(Serializer& sr);
+
+  template <class Serializer>
+  void serialize_save(Serializer& sr);
+
 };
 
 #endif

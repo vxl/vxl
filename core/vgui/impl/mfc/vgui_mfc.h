@@ -2,9 +2,9 @@
 #ifndef vgui_mfc_h_
 #define vgui_mfc_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief   MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 // \author  awf@robots.ox.ac.uk
@@ -26,43 +26,49 @@ class vgui_mfc_window;
 class vgui_mfc_utils;
 class vgui_mfc_app;
 
-//: The MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
+// : The MFC (Microsoft Foundation Classes) implementation of vgui_toolkit.
 //
 // Provides functions for controlling the event loop.
 // Based upon vgui_gtk.
 class vgui_mfc : public vgui_toolkit
 {
- public:
+public:
   // singleton method
-  static vgui_mfc* instance();
+  static vgui_mfc * instance();
 
   virtual vcl_string name() const;
 
   virtual void run();
+
   virtual void run_one_event();
+
   virtual void run_till_idle();
+
   virtual void flush();
+
   virtual void quit();
-  virtual void add_event(const vgui_event&);
 
-  virtual vgui_window* produce_window(int width, int height, const vgui_menu& menubar,
-                                      const char* title="vgui mfc window");
+  virtual void add_event(const vgui_event &);
 
-  virtual vgui_window* produce_window(int width, int height,
-                                      const char* title="vgui mfc popup");
+  virtual vgui_window * produce_window(int width, int height, const vgui_menu& menubar,
+                                       const char* title = "vgui mfc window");
 
-  virtual vgui_dialog_impl* produce_dialog(const char* name);
+  virtual vgui_window * produce_window(int width, int height, const char* title = "vgui mfc popup");
 
-  virtual vgui_dialog_extensions_impl* produce_dialog_extension(const char* name);
+  virtual vgui_dialog_impl * produce_dialog(const char* name);
 
-  vgui_mfc_utils *utils;
- protected:
+  virtual vgui_dialog_extensions_impl * produce_dialog_extension(const char* name);
+
+  vgui_mfc_utils * utils;
+protected:
   vgui_mfc();
   ~vgui_mfc();
-  void init(int &, char **);
+  void init(int &, char * *);
+
   void uninit();
-  vgui_mfc_app* theApp_;
-  vcl_vector<vgui_window*> windows_to_delete;
+
+  vgui_mfc_app*             theApp_;
+  vcl_vector<vgui_window *> windows_to_delete;
 };
 
 #endif // vgui_mfc_h_

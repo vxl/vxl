@@ -2,9 +2,9 @@
 #ifndef vil1_jpeg_decompressor_h_
 #define vil1_jpeg_decompressor_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 
@@ -13,24 +13,24 @@ class vil1_stream;
 
 class vil1_jpeg_decompressor
 {
- public:
+public:
   struct jpeg_error_mgr         jerr;
   struct jpeg_decompress_struct jobj;
-  vil1_stream *stream;
+  vil1_stream *                 stream;
 
-  vil1_jpeg_decompressor(vil1_stream *s);
+  vil1_jpeg_decompressor(vil1_stream * s);
 
-  //:
+  // :
   // NB. does not delete the stream.
   ~vil1_jpeg_decompressor();
 
-  //:
+  // :
   // Do \e not delete the return value. Leave it alone.
   // The return value is zero on failure.
   // It should cost nothing to read the same scanline twice in succession.
-  JSAMPLE const *read_scanline(unsigned line);
+  JSAMPLE const * read_scanline(unsigned line);
 
- private:
+private:
   bool ready; // true if decompression has started but not finished.
   bool valid; // true if last scanline read was successful.
 
@@ -39,7 +39,7 @@ class vil1_jpeg_decompressor
   // after each call to jpeg_finish_decompress(). The symptom of not doing
   // so is a nasty heap corruption which only shows up later in unrelated
   // code.
-  JSAMPLE *biffer;   // pointer to scanline buffer.
+  JSAMPLE * biffer;   // pointer to scanline buffer.
 };
 
 #endif // vil1_jpeg_decompressor_h_

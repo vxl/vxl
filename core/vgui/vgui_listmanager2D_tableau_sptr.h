@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_listmanager2D_tableau_sptr.h
 #ifndef vgui_listmanager2D_tableau_sptr_h_
 #define vgui_listmanager2D_tableau_sptr_h_
-//:
+// :
 // \file
 // \author awf@robots.ox.ac.uk
 // \date   10 Sep 00

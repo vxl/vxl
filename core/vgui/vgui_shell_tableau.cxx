@@ -14,24 +14,23 @@ vgui_event_condition vgui_shell_tableau_bindings::default_quit  = vgui_event_con
 vgui_event_condition vgui_shell_tableau_bindings::default_close = vgui_event_condition( vgui_key('w'), vgui_ALT );
 vgui_event_condition vgui_shell_tableau_bindings::default_graph = vgui_event_condition( vgui_key('g'), vgui_SHIFT );
 
-
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0)
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0)
 {
   init();
   vgui_composite_tableau::add(t0);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
-                                       vgui_tableau_sptr const &t1)
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0,
+                                       vgui_tableau_sptr const & t1)
 {
   init();
   vgui_composite_tableau::add(t0);
   vgui_composite_tableau::add(t1);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
-                                       vgui_tableau_sptr const &t1,
-                                       vgui_tableau_sptr const &t2)
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0,
+                                       vgui_tableau_sptr const & t1,
+                                       vgui_tableau_sptr const & t2)
 {
   init();
   vgui_composite_tableau::add(t0);
@@ -39,10 +38,10 @@ vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
   vgui_composite_tableau::add(t2);
 }
 
-vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const &t0,
-                                       vgui_tableau_sptr const &t1,
-                                       vgui_tableau_sptr const &t2,
-                                       vgui_tableau_sptr const &t3)
+vgui_shell_tableau::vgui_shell_tableau(vgui_tableau_sptr const & t0,
+                                       vgui_tableau_sptr const & t1,
+                                       vgui_tableau_sptr const & t2,
+                                       vgui_tableau_sptr const & t3)
 {
   init();
   vgui_composite_tableau::add(t0);
@@ -69,53 +68,65 @@ vgui_shell_tableau::~vgui_shell_tableau()
   vgui_composite_tableau::remove(clear);
 }
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 #include <vgui/vgui_text_graph.h>
 
-bool vgui_shell_tableau::handle(vgui_event const &e)
+bool vgui_shell_tableau::handle(vgui_event const & e)
 {
-  if ( bindings.quit(e) ) {
+  if( bindings.quit(e) )
+    {
     e.origin->post_destroy();
     vgui::quit();
-  }
+    }
 
-  if ( bindings.close(e) ) {
+  if( bindings.close(e) )
+    {
     e.origin->post_destroy();
-  }
+    }
 
-  if ( bindings.graph(e) ) {
+  if( bindings.graph(e) )
+    {
     vgui_text_graph(vcl_cerr);
-  }
+    }
 
   // "draw" event : return true unless some child returns false.
-  if ( e.type==vgui_DRAW || e.type==vgui_DRAW_OVERLAY ) {
+  if( e.type == vgui_DRAW || e.type == vgui_DRAW_OVERLAY )
+    {
     bool retv = true;
-
-    for ( unsigned i=0; i<children.size(); ++i ) {
-      //PM.restore();
+    for( unsigned i = 0; i < children.size(); ++i )
+      {
+      // PM.restore();
 #ifdef DEBUG
       vcl_cerr << "DRAW";
 #endif
-      if ( active[i] && children[i] )
-        if ( !children[i]->handle(e) )
-          retv=false;
-    }
+      if( active[i] && children[i] )
+        {
+        if( !children[i]->handle(e) )
+          {
+          retv = false;
+          }
+        }
+      }
     return retv;
-  }
-
+    }
   // "normal" event : pass it on till handled.
-  for ( unsigned i=0; i < children.size(); ++i ) {
-    if (active[i] && children[i])
-      if ( children[i]->handle(e) )
+  for( unsigned i = 0; i < children.size(); ++i )
+    {
+    if( active[i] && children[i] )
+      {
+      if( children[i]->handle(e) )
+        {
         return true;
-  }
+        }
+      }
+    }
 
   // Noone was interested....
   return false;
 }
 
-void vgui_shell_tableau::get_popup(vgui_popup_params const &params, vgui_menu &menu)
+void vgui_shell_tableau::get_popup(vgui_popup_params const & params, vgui_menu & menu)
 {
   // add clear tableau
   clear->get_popup(params, menu);
@@ -124,10 +135,11 @@ void vgui_shell_tableau::get_popup(vgui_popup_params const &params, vgui_menu &m
   graph->get_popup(params, menu);
 
   menu.separator();
-
   // we skip the first two children.
-  for (unsigned i=2; i<children.size(); ++i)
+  for( unsigned i = 2; i < children.size(); ++i )
+    {
     children[i]->get_popup(params, menu);
+    }
 }
 
 // mimic the old behaviour. The old behaviour is: the graph condition
@@ -137,29 +149,33 @@ void vgui_shell_tableau::get_popup(vgui_popup_params const &params, vgui_menu &m
 void vgui_shell_tableau::set_quit(bool on)
 {
   do_quit = on;
-  if ( do_quit ) {
+  if( do_quit )
+    {
     bindings.set_quit( key_bindings_type::default_quit );
     bindings.set_close( key_bindings_type::default_close );
-  }
-  else {
+    }
+  else
+    {
     bindings.set_quit( vgui_event_condition() );
     bindings.set_close( vgui_event_condition() );
-  }
+    }
 }
 
 // mimic the old behaviour. See comment above.
 void vgui_shell_tableau::set_enable_key_bindings(bool on)
 {
   enable_key_bindings = on;
-  if ( enable_key_bindings ) {
+  if( enable_key_bindings )
+    {
     bindings.set_graph( key_bindings_type::default_graph );
     // enable quit and close bindings depending on current value of do_quit.
     this->set_quit( do_quit );
-  }
-  else {
+    }
+  else
+    {
     // disable all bindings
     bindings.set_quit( vgui_event_condition() );
     bindings.set_close( vgui_event_condition() );
     bindings.set_graph( vgui_event_condition() );
-  }
+    }
 }

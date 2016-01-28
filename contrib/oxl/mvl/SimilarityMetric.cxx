@@ -1,8 +1,8 @@
 // This is oxl/mvl/SimilarityMetric.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 
 #include "SimilarityMetric.h"
@@ -22,7 +22,7 @@
 #include <mvl/HomgLineSeg2D.h>
 #include <mvl/HomgOperator2D.h>
 
-//: Default constructor sets parameters for an identity transformation.
+// : Default constructor sets parameters for an identity transformation.
 SimilarityMetric::SimilarityMetric()
 {
   centre_x_ = 0;
@@ -33,7 +33,7 @@ SimilarityMetric::SimilarityMetric()
   make_matrices();
 }
 
-//: Create a SimilarityMetric that transforms according to (x,y) -> (x - cx, y - cy) * scale
+// : Create a SimilarityMetric that transforms according to (x,y) -> (x - cx, y - cy) * scale
 SimilarityMetric::SimilarityMetric(double cx, double cy, double scale)
 {
   centre_x_ = cx;
@@ -44,13 +44,13 @@ SimilarityMetric::SimilarityMetric(double cx, double cy, double scale)
   make_matrices();
 }
 
-//: Create a SimilarityMetric that transforms coordinates in the range (0..xsize, 0..ysize) to the square (-1..1, -1..1)
+// : Create a SimilarityMetric that transforms coordinates in the range (0..xsize, 0..ysize) to the square (-1..1, -1..1)
 SimilarityMetric::SimilarityMetric(int xsize, int ysize)
 {
   set_from_rectangle(xsize, ysize);
 }
 
-//: Set transform to "(x,y) -> (x - xsize/2, y - ysize/2) / ((xsize+ysize)/2)"
+// : Set transform to "(x,y) -> (x - xsize/2, y - ysize/2) / ((xsize+ysize)/2)"
 void SimilarityMetric::set_from_rectangle(int xsize, int ysize)
 {
   centre_x_ = xsize * 0.5;
@@ -61,7 +61,7 @@ void SimilarityMetric::set_from_rectangle(int xsize, int ysize)
   make_matrices();
 }
 
-//: Set transform to "(x,y) -> (x - cx, y - cy) * scale"
+// : Set transform to "(x,y) -> (x - cx, y - cy) * scale"
 // For example, (640 / 2, 480 / 2, 2.0 / (640 + 480))
 void SimilarityMetric::set_center_and_scale(double cx, double cy, double scale)
 {
@@ -75,51 +75,51 @@ void SimilarityMetric::set_center_and_scale(double cx, double cy, double scale)
 
 void SimilarityMetric::make_matrices()
 {
-  cond_matrix (0, 0) = inv_scale_;
-  cond_matrix (0, 1) = 0;
-  cond_matrix (0, 2) = centre_x_;
+  cond_matrix(0, 0) = inv_scale_;
+  cond_matrix(0, 1) = 0;
+  cond_matrix(0, 2) = centre_x_;
 
-  cond_matrix (1, 0) = 0;
-  cond_matrix (1, 1) = inv_scale_;
-  cond_matrix (1, 2) = centre_y_;
+  cond_matrix(1, 0) = 0;
+  cond_matrix(1, 1) = inv_scale_;
+  cond_matrix(1, 2) = centre_y_;
 
-  cond_matrix (2, 0) = 0;
-  cond_matrix (2, 1) = 0;
-  cond_matrix (2, 2) = 1.0;
+  cond_matrix(2, 0) = 0;
+  cond_matrix(2, 1) = 0;
+  cond_matrix(2, 2) = 1.0;
 
-  inv_cond_matrix (0, 0) = scale_;
-  inv_cond_matrix (0, 1) = 0;
-  inv_cond_matrix (0, 2) = -centre_x_ * scale_;
+  inv_cond_matrix(0, 0) = scale_;
+  inv_cond_matrix(0, 1) = 0;
+  inv_cond_matrix(0, 2) = -centre_x_ * scale_;
 
-  inv_cond_matrix (1, 0) = 0;
-  inv_cond_matrix (1, 1) = scale_;
-  inv_cond_matrix (1, 2) = -centre_y_ * scale_;
+  inv_cond_matrix(1, 0) = 0;
+  inv_cond_matrix(1, 1) = scale_;
+  inv_cond_matrix(1, 2) = -centre_y_ * scale_;
 
-  inv_cond_matrix (2, 0) = 0;
-  inv_cond_matrix (2, 1) = 0;
-  inv_cond_matrix (2, 2) = 1.0;
+  inv_cond_matrix(2, 0) = 0;
+  inv_cond_matrix(2, 1) = 0;
+  inv_cond_matrix(2, 2) = 1.0;
 }
 
-//: Destructor
+// : Destructor
 SimilarityMetric::~SimilarityMetric()
 {
 }
 
-//: One line printout
+// : One line printout
 void SimilarityMetric::print(char* msg) const
 {
-  vcl_cerr<<msg<<": SimilarityMetric ("<<centre_x_<<','<<centre_y_<<", "<<inv_scale_<<")\n";
+  vcl_cerr << msg << ": SimilarityMetric (" << centre_x_ << ',' << centre_y_ << ", " << inv_scale_ << ")\n";
 }
 
-//: One line printout
-vcl_ostream& SimilarityMetric::print(vcl_ostream& s) const
+// : One line printout
+vcl_ostream & SimilarityMetric::print(vcl_ostream& s) const
 {
-  return s<<"[SimilarityMetric ("<<centre_x_<<','<<centre_y_<<"), "<<inv_scale_ << ']';
+  return s << "[SimilarityMetric (" << centre_x_ << ',' << centre_y_ << "), " << inv_scale_ << ']';
 }
 
 // IMPLEMENTATION OF SimilarityMetric
 
-//: Convert 2D image point $(x,y)$ to homogeneous coordinates.
+// : Convert 2D image point $(x,y)$ to homogeneous coordinates.
 // The precise transformation is $(x,y) \rightarrow (x - cx, y - cy, f)$
 vgl_homg_point_2d<double> SimilarityMetric::image_to_homg(vgl_point_2d<double> const& p) const
 {
@@ -130,7 +130,7 @@ vgl_homg_point_2d<double> SimilarityMetric::image_to_homg(vgl_point_2d<double> c
   return vgl_homg_point_2d<double>(nx - centre_x_, ny - centre_y_, inv_scale_);
 }
 
-//: Convert 2D point $(x,y)$ to homogeneous coordinates.
+// : Convert 2D point $(x,y)$ to homogeneous coordinates.
 // The precise transformation is
 // $(x,y) \rightarrow (x - cx, y - cy, f)$
 HomgPoint2D SimilarityMetric::image_to_homg(double x, double y) const
@@ -142,16 +142,17 @@ HomgPoint2D SimilarityMetric::image_to_homg(double x, double y) const
   return HomgPoint2D(nx - centre_x_, ny - centre_y_, inv_scale_);
 }
 
-//: Convert conditioned point p to image coordinates
+// : Convert conditioned point p to image coordinates
 vgl_point_2d<double> SimilarityMetric::homg_to_image(vgl_homg_point_2d<double> const& p) const
 {
-  return vgl_point_2d<double>(p.x()/p.w()*inv_scale_+centre_x_, p.y()/p.w()*inv_scale_+centre_y_);
+  return vgl_point_2d<double>(p.x() / p.w() * inv_scale_ + centre_x_, p.y() / p.w() * inv_scale_ + centre_y_);
 }
 
-//: Decondition homogeneous point.
+// : Decondition homogeneous point.
 vnl_double_2 SimilarityMetric::homg_to_image(const HomgPoint2D& p) const
 {
-  double x,y;
+  double x, y;
+
   p.get_nonhomogeneous(x, y);
   x = x * inv_scale_;
   y = y * inv_scale_;
@@ -159,26 +160,26 @@ vnl_double_2 SimilarityMetric::homg_to_image(const HomgPoint2D& p) const
   return vnl_double_2(x + centre_x_, y + centre_y_);
 }
 
-//: Condition the 2D point p
+// : Condition the 2D point p
 HomgPoint2D SimilarityMetric::image_to_homg(const vnl_double_2& p) const
 {
   return image_to_homg(p[0], p[1]);
 }
 
-//: Transform homogeneous point to image coordinates, leaving it in homogeneous form.
+// : Transform homogeneous point to image coordinates, leaving it in homogeneous form.
 vgl_homg_point_2d<double> SimilarityMetric::homg_to_imagehomg(vgl_homg_point_2d<double> const& x) const
 {
   return cond_matrix * x;
 }
 
-//: Transform homogeneous point to image coordinates, leaving it in homogeneous form.
+// : Transform homogeneous point to image coordinates, leaving it in homogeneous form.
 HomgPoint2D SimilarityMetric::homg_to_imagehomg(const HomgPoint2D& x) const
 {
   // ho_cam2std_aspect_point
-  return HomgPoint2D(cond_matrix * x.get_vector());
+  return HomgPoint2D(cond_matrix * x.get_vector() );
 }
 
-//: Transform homogeneous point in image coordinates to conditioned coordinates.
+// : Transform homogeneous point in image coordinates to conditioned coordinates.
 vgl_homg_point_2d<double> SimilarityMetric::imagehomg_to_homg(vgl_homg_point_2d<double> const& x) const
 {
   // ho_std2cam_aspect_point
@@ -188,10 +189,10 @@ vgl_homg_point_2d<double> SimilarityMetric::imagehomg_to_homg(vgl_homg_point_2d<
 HomgPoint2D SimilarityMetric::imagehomg_to_homg(const HomgPoint2D& x) const
 {
   // ho_std2cam_aspect_point
-  return HomgPoint2D(inv_cond_matrix * x.get_vector());
+  return HomgPoint2D(inv_cond_matrix * x.get_vector() );
 }
 
-//: Compute distance (in image coordinates) between points supplied in conditioned coordinates.
+// : Compute distance (in image coordinates) between points supplied in conditioned coordinates.
 double SimilarityMetric::distance_squared(vgl_homg_point_2d<double> const& p1,
                                           vgl_homg_point_2d<double> const& p2) const
 {
@@ -201,10 +202,10 @@ double SimilarityMetric::distance_squared(vgl_homg_point_2d<double> const& p1,
   double x2 = p2.x() / p2.w();
   double y2 = p2.y() / p2.w();
 
-  return vnl_math::sqr (inv_scale_) * (vnl_math::sqr (x1 - x2) + vnl_math::sqr (y1 - y2));
+  return vnl_math::sqr(inv_scale_) * (vnl_math::sqr(x1 - x2) + vnl_math::sqr(y1 - y2) );
 }
 
-//: Compute distance (in image coordinates) between points supplied in conditioned coordinates.
+// : Compute distance (in image coordinates) between points supplied in conditioned coordinates.
 double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D const& p2) const
 {
   // ho_triveccam_noaspect_distance_squared
@@ -214,42 +215,44 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
   double x2 = p2.x() / p2.w();
   double y2 = p2.y() / p2.w();
 
-  return vnl_math::sqr (inv_scale_) * (vnl_math::sqr (x1 - x2) + vnl_math::sqr (y1 - y2));
+  return vnl_math::sqr(inv_scale_) * (vnl_math::sqr(x1 - x2) + vnl_math::sqr(y1 - y2) );
 }
 
-//: Get distance between a line segment and an infinite line.
+// : Get distance between a line segment and an infinite line.
 //  The metric used is the maximum of the two endpoint perp distances.
 double SimilarityMetric::distance_squared(vgl_line_segment_2d<double> const& segment,
                                           vgl_homg_line_2d<double> const& line) const
 {
-  return vnl_math::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
-                      this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point2()), line));
+  return vnl_math::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1() ), line),
+                       this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point2() ), line) );
 }
 
-//: Get distance between a line segment and an infinite line.
+// : Get distance between a line segment and an infinite line.
 //  The metric used is the maximum of the two endpoint perp distances.
 double SimilarityMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
   return vnl_math::max(this->perp_dist_squared(segment.get_point1(), line),
-                      this->perp_dist_squared(segment.get_point2(), line));
+                       this->perp_dist_squared(segment.get_point2(), line) );
 }
 
-//: Compute perpendicular distance (in image coordinates) from point to line (supplied in conditioned coordinates).
+// : Compute perpendicular distance (in image coordinates) from point to line (supplied in conditioned coordinates).
 double SimilarityMetric::perp_dist_squared(vgl_homg_point_2d<double> const& p,
                                            vgl_homg_line_2d<double> const& l) const
 {
-  if (p.ideal()) {
+  if( p.ideal() )
+    {
     vcl_cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
     return Homg::infinity;
-  }
+    }
 
-  if (l.ideal()) {
+  if( l.ideal() )
+    {
     vcl_cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
     return Homg::infinity;
-  }
+    }
 
-  double numerator = vnl_math::sqr(p.x()*l.a()+p.y()*l.b()+p.w()*l.c());
-  double denominator = (vnl_math::sqr(l.a()) + vnl_math::sqr(l.b())) * vnl_math::sqr(p.w() * scale_);
+  double numerator = vnl_math::sqr(p.x() * l.a() + p.y() * l.b() + p.w() * l.c() );
+  double denominator = (vnl_math::sqr(l.a() ) + vnl_math::sqr(l.b() ) ) * vnl_math::sqr(p.w() * scale_);
 
   return numerator / denominator;
 }
@@ -259,30 +262,32 @@ double SimilarityMetric::perp_dist_squared(HomgPoint2D const & p, HomgLine2D con
   // ho_triveccam_aspect_perpdistance_squared
 
   // pcp separated
-  if (p.ideal()) {
+  if( p.ideal() )
+    {
     vcl_cerr << "SimilarityMetric::perp_dist_squared -- point at infinity\n";
     return Homg::infinity;
-  }
+    }
 
-  if (l.ideal()) {
+  if( l.ideal() )
+    {
     vcl_cerr << "SimilarityMetric::perp_dist_squared -- line at infinity\n";
     return Homg::infinity;
-  }
+    }
 
-  double numerator = vnl_math::sqr(HomgOperator2D::dot(l, p));
-  double denominator = (vnl_math::sqr(l.x()) + vnl_math::sqr(l.y()))
+  double numerator = vnl_math::sqr(HomgOperator2D::dot(l, p) );
+  double denominator = (vnl_math::sqr(l.x() ) + vnl_math::sqr(l.y() ) )
     * vnl_math::sqr(p.w() * scale_);
 
   return numerator / denominator;
 }
 
-//: Multiply all components of the transform matrix by "s".
+// : Multiply all components of the transform matrix by "s".
 // This routine is likely to be used only by programs which need
 // special control over the exact form of their output.
 void SimilarityMetric::scale_matrices(double s)
 {
   cond_matrix *= s;
-  inv_cond_matrix *= (1/s);
+  inv_cond_matrix *= (1 / s);
 }
 
 bool SimilarityMetric::can_invert_distance() const

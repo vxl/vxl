@@ -2,10 +2,10 @@
 // Copyright (c) 1999 Brendan McCane
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 #ifndef OTAGO_kalman_filter__h_INCLUDED
 #define OTAGO_kalman_filter__h_INCLUDED
-//:
+// :
 // \file
 // \brief A linear Kalman filter class
 //
@@ -29,7 +29,7 @@
 //
 // Status: Completed
 // \author Brendan McCane
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
 #include <vcl_iosfwd.h>
@@ -68,58 +68,48 @@ class KalmanFilter
 
   // The Kalman gain matrix (ns*nm)
   vnl_matrix<double> K;
-
- public:
-  KalmanFilter(unsigned int ns, unsigned int nm, unsigned int nc,
-               const vnl_matrix<double> &Ai,
-               const vnl_matrix<double> &Hi,
-               const vnl_matrix<double> &Bi,
-               const vnl_matrix<double> &z_initial,
-               const vnl_matrix<double> &x_initial,
-               const vnl_matrix<double> &Pi);
+public:
+  KalmanFilter(unsigned int ns, unsigned int nm, unsigned int nc, const vnl_matrix<double> & Ai,
+               const vnl_matrix<double> & Hi, const vnl_matrix<double> & Bi, const vnl_matrix<double> & z_initial,
+               const vnl_matrix<double> & x_initial, const vnl_matrix<double> & Pi);
 
   // this version does not have a control input
-  KalmanFilter(unsigned int ns, unsigned int nm,
-               const vnl_matrix<double> &Ai,
-               const vnl_matrix<double> &Hi,
-               const vnl_matrix<double> &z_initial,
-               const vnl_matrix<double> &x_initial,
-               const vnl_matrix<double> &Pi);
+  KalmanFilter(unsigned int ns, unsigned int nm, const vnl_matrix<double> & Ai, const vnl_matrix<double> & Hi,
+               const vnl_matrix<double> & z_initial, const vnl_matrix<double> & x_initial,
+               const vnl_matrix<double> & Pi);
 
   // some utility functions
-  void set_initial_input(const vnl_matrix<double> &x_initial)
-    {x_pred = x_initial;}
+  void set_initial_input(const vnl_matrix<double> & x_initial)
+  {x_pred = x_initial; }
 
   // zk is the next input measurement
   // Rk is the measurement  error covariance matrix
   //    which is calculated from the noise distribution
-  void measurement_update(const vnl_matrix<double> &zk,
-                          const vnl_matrix<double> &Rk);
+  void measurement_update(const vnl_matrix<double> & zk, const vnl_matrix<double> & Rk);
 
   // Qk is the process error covariance matrix
   //    which is calculated from the noise distribution
   // The predicted value of x(k+1) is returned
-  vnl_matrix<double> predict(const vnl_matrix<double> &Qk);
+  vnl_matrix<double> predict(const vnl_matrix<double> & Qk);
 
   // Qk is the process error covariance matrix
   //    which is calculated from the noise distribution
   // uk is the control input
   // The predicted value of x(k+1) is returned
-  vnl_matrix<double> predict(const vnl_matrix<double> &Qk,
-                             const vnl_matrix<double> &uk);
+  vnl_matrix<double> predict(const vnl_matrix<double> & Qk, const vnl_matrix<double> & uk);
 
   // Do both measurement update and predict
-  vnl_matrix<double> update_predict(const vnl_matrix<double> &zk,
-                                    const vnl_matrix<double> &Rk,
-                                    const vnl_matrix<double> &Qk);
+  vnl_matrix<double> update_predict(const vnl_matrix<double> & zk, const vnl_matrix<double> & Rk,
+                                    const vnl_matrix<double> & Qk);
 
   // accessor functions
   // return the current signal estimate
-  inline vnl_matrix<double> estimate() const {return x;}
+  inline vnl_matrix<double> estimate() const {return x; }
   // return the current signal prediction
-  inline vnl_matrix<double> prediction() const {return x_pred;}
+  inline vnl_matrix<double> prediction() const {return x_pred; }
 
-  friend vcl_ostream &operator<<(vcl_ostream &os, const KalmanFilter &kf);
+  friend vcl_ostream & operator<<(vcl_ostream & os, const KalmanFilter & kf);
+
 };
 
 #endif // OTAGO_kalman_filter__h_INCLUDED

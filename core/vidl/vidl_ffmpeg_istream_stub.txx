@@ -2,7 +2,7 @@
 #ifndef vidl_ffmpeg_istream_stub_txx_
 #define vidl_ffmpeg_istream_stub_txx_
 #include "vidl_ffmpeg_istream.h"
-//:
+// :
 // \file
 // \brief A null implementation for the ffmpeg video reader
 //
@@ -12,9 +12,8 @@
 #include <vcl_string.h>
 
 struct vidl_ffmpeg_istream::pimpl
-{
-};
-
+  {
+  };
 
 vidl_ffmpeg_istream
 ::vidl_ffmpeg_istream()
@@ -22,10 +21,9 @@ vidl_ffmpeg_istream
 }
 
 vidl_ffmpeg_istream
-::vidl_ffmpeg_istream(const vcl_string& /*filename*/)
+::vidl_ffmpeg_istream(const vcl_string & /*filename*/)
 {
 }
-
 
 vidl_ffmpeg_istream
 ::~vidl_ffmpeg_istream()
@@ -34,18 +32,16 @@ vidl_ffmpeg_istream
 
 bool
 vidl_ffmpeg_istream
-::open(const vcl_string& /*filename*/)
+::open(const vcl_string & /*filename*/)
 {
   return false;
 }
-
 
 void
 vidl_ffmpeg_istream
 ::close()
 {
 }
-
 
 bool
 vidl_ffmpeg_istream
@@ -60,7 +56,6 @@ vidl_ffmpeg_istream
 {
   return false;
 }
-
 
 bool
 vidl_ffmpeg_istream
@@ -83,8 +78,7 @@ vidl_ffmpeg_istream
   return 0;
 }
 
-
-//: Return the width of each frame
+// : Return the width of each frame
 unsigned int
 vidl_ffmpeg_istream
 ::width() const
@@ -92,8 +86,7 @@ vidl_ffmpeg_istream
   return 0;
 }
 
-
-//: Return the height of each frame
+// : Return the height of each frame
 unsigned int
 vidl_ffmpeg_istream
 ::height() const
@@ -101,8 +94,7 @@ vidl_ffmpeg_istream
   return 0;
 }
 
-
-//: Return the pixel format
+// : Return the pixel format
 vidl_pixel_format
 vidl_ffmpeg_istream
 ::format() const
@@ -110,8 +102,7 @@ vidl_ffmpeg_istream
   return VIDL_PIXEL_FORMAT_UNKNOWN;
 }
 
-
-//: Return the frame rate (0.0 if unspecified)
+// : Return the frame rate (0.0 if unspecified)
 double
 vidl_ffmpeg_istream
 ::frame_rate() const
@@ -119,8 +110,7 @@ vidl_ffmpeg_istream
   return 0.0;
 }
 
-
-//: Return the duration in seconds (0.0 if unknown)
+// : Return the duration in seconds (0.0 if unknown)
 double
 vidl_ffmpeg_istream
 ::duration() const
@@ -128,14 +118,12 @@ vidl_ffmpeg_istream
   return 0.0;
 }
 
-
 bool
 vidl_ffmpeg_istream
 ::advance()
 {
   return false;
 }
-
 
 vidl_frame_sptr
 vidl_ffmpeg_istream
@@ -150,7 +138,6 @@ vidl_ffmpeg_istream
 {
   return vidl_frame_sptr();
 }
-
 
 bool
 vidl_ffmpeg_istream

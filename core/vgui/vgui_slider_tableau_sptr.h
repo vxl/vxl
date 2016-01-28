@@ -1,6 +1,6 @@
 #ifndef vgui_slider_tableau_sptr_h_
 #define vgui_slider_tableau_sptr_h_
-//:
+// :
 // \file
 // \author Amitha Perera
 // \date   Feb 2005

@@ -1,6 +1,6 @@
 #ifndef rgtl_tagged_vector_hxx
 #define rgtl_tagged_vector_hxx
-//:
+// :
 // \file
 // \brief STL vector wrapper with type-safe indexing
 // \author Brad King
@@ -19,52 +19,53 @@
 
 #include <vcl_vector.h>
 
-//: Wrap an STL vector and replace the indexing operators with tagged-indexing equivalents.
+// : Wrap an STL vector and replace the indexing operators with tagged-indexing equivalents.
 template <typename Tag, typename T>
-class rgtl_tagged_vector: protected vcl_vector<T>
+class rgtl_tagged_vector : protected vcl_vector<T>
 {
   // TODO: Use a mmap-ed file to allow very large vectors.
   typedef vcl_vector<T> derived;
- public:
-  //: Allow access to standard vector types.
-  typedef typename derived::size_type size_type;
-  typedef typename derived::value_type value_type;
-  typedef typename derived::iterator iterator;
-  typedef typename derived::const_iterator const_iterator;
-  typedef typename derived::reference reference;
+public:
+  // : Allow access to standard vector types.
+  typedef typename derived::size_type       size_type;
+  typedef typename derived::value_type      value_type;
+  typedef typename derived::iterator        iterator;
+  typedef typename derived::const_iterator  const_iterator;
+  typedef typename derived::reference       reference;
   typedef typename derived::const_reference const_reference;
 
-  //: Define the indexing type.
+  // : Define the indexing type.
   typedef rgtl_tagged_index<Tag> index_type;
 
-  //: Provide standard vector constructors.
-  rgtl_tagged_vector(): derived() {}
+  // : Provide standard vector constructors.
+  rgtl_tagged_vector() : derived() {}
   rgtl_tagged_vector(unsigned int length,
-                     T const& v = T()): derived(length, v) {}
+                     T const& v = T() ) : derived(length, v) {}
 
-  //: Indexing operators require the tagged index type.
+  // : Indexing operators require the tagged index type.
   reference operator[](index_type i)
   { return derived::operator[](i); }
   const_reference operator[](index_type i) const
   { return derived::operator[](i); }
 
-  //: Allow access to standard vector operations.
+  // : Allow access to standard vector operations.
   void push_back(T const& v) { derived::push_back(v); }
   size_type size() const { return derived::size(); }
-  void resize(index_type s) { return derived::resize(size_type(s)); }
+  void resize(index_type s) { return derived::resize(size_type(s) ); }
   iterator begin() { return derived::begin(); }
   iterator end() { return derived::end(); }
   const_iterator begin() const { return derived::begin(); }
   const_iterator end() const { return derived::end(); }
   void erase(iterator first, iterator last) { derived::erase(first, last); }
   void clear() { derived::clear(); }
- private:
+private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
   {
-    sr& rgtl_serialize_base<derived>(*this);
+    sr & rgtl_serialize_base<derived>(*this);
   }
+
 };
 
 #endif // rgtl_tagged_vector_hxx

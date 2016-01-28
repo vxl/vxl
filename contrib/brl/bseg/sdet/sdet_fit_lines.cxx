@@ -1,6 +1,6 @@
 // This is brl/bseg/sdet/sdet_fit_lines.cxx
 #include "sdet_fit_lines.h"
-//:
+// :
 // \file
 // \verbatim
 //  Modifications
@@ -17,14 +17,14 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 
-//---------------------------------------------------------------
+// ---------------------------------------------------------------
 // Constructors
 //
-//----------------------------------------------------------------
+// ----------------------------------------------------------------
 
-//: constructor from a parameter block (the only way)
+// : constructor from a parameter block (the only way)
 sdet_fit_lines::sdet_fit_lines(sdet_fit_lines_params& flp)
-  : sdet_fit_lines_params(flp), fitter_(vgl_fit_lines_2d<double>())
+  : sdet_fit_lines_params(flp), fitter_(vgl_fit_lines_2d<double>() )
 {
 }
 
@@ -33,17 +33,17 @@ sdet_fit_lines::~sdet_fit_lines()
 {
 }
 
-//-------------------------------------------------------------------------
-//: Set the edges to be processed
+// -------------------------------------------------------------------------
+// : Set the edges to be processed
 //
 void sdet_fit_lines::set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges)
 {
   segs_valid_ = false;
-  edges_=edges;
+  edges_ = edges;
 }
 
-//--------------------------------------------------------------------------
-//:
+// --------------------------------------------------------------------------
+// :
 //  Convert each digital curve to a set of vgl_point_2d<double> and add
 //  them to vgl linear regression fitter point set. A set of line segments
 //  are computed that fit the point set within a specified mean square
@@ -52,71 +52,84 @@ void sdet_fit_lines::set_edges(vcl_vector<vtol_edge_2d_sptr> const& edges)
 //
 bool sdet_fit_lines::fit_lines()
 {
-  if (segs_valid_)
+  if( segs_valid_ )
+    {
     return false;
-  if (!edges_.size())
+    }
+  if( !edges_.size() )
+    {
     return false;
+    }
   line_segs_.clear();
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
-  for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
-       eit != edges_.end(); eit++)
-  {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+  for( vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
+       eit != edges_.end(); eit++ )
+    {
+    vsol_curve_2d_sptr      c = (*eit)->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
-    if (!dc)
+    if( !dc )
+      {
       continue;
+      }
     vdgl_interpolator_sptr intp = dc->get_interpolator();
-    vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
+    vdgl_edgel_chain_sptr  ec = intp->get_edgel_chain();
     fitter_.clear();
     int nedgl = ec->size();
-    for (int i=0; i<nedgl; i++)
-    {
-      vgl_point_2d<double> p((*ec)[i].x(), (*ec)[i].y());
+    for( int i = 0; i < nedgl; i++ )
+      {
+      vgl_point_2d<double> p( (*ec)[i].x(), (*ec)[i].y() );
       fitter_.add_point(p);
-    }
+      }
 
     fitter_.fit();
 
     vcl_vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
-    for (vcl_vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
-         sit != segs.end(); sit++)
+    for( vcl_vector<vgl_line_segment_2d<double> >::iterator sit = segs.begin();
+         sit != segs.end(); sit++ )
+      {
       line_segs_.push_back(*sit);
-  }
+      }
+    }
   segs_valid_ = true;
   return true;
 }
 
-//-------------------------------------------------------------------------
-//: Get the line segments
+// -------------------------------------------------------------------------
+// : Get the line segments
 //
 vcl_vector<vsol_line_2d_sptr> sdet_fit_lines::get_line_segs()
 {
   vcl_vector<vsol_line_2d_sptr> ret;
-  if(!segs_valid_)
-    this->fit_lines();
-  for (vcl_vector<vgl_line_segment_2d<double> >::iterator sit=line_segs_.begin();
-         sit != line_segs_.end(); sit++)
+  if( !segs_valid_ )
     {
-      vsol_line_2d_sptr line = new vsol_line_2d(*sit);
-      // make sure the start point and end point of line are not the same
-      if ( line->length() != 0.0 )
-        ret.push_back(line);
+    this->fit_lines();
+    }
+  for( vcl_vector<vgl_line_segment_2d<double> >::iterator sit = line_segs_.begin();
+       sit != line_segs_.end(); sit++ )
+    {
+    vsol_line_2d_sptr line = new vsol_line_2d(*sit);
+    // make sure the start point and end point of line are not the same
+    if( line->length() != 0.0 )
+      {
+      ret.push_back(line);
+      }
     }
   return ret;
 }
+
 void sdet_fit_lines::get_line_segs(vcl_vector<vsol_line_2d_sptr>& lines)
 {
   lines = this->get_line_segs();
 }
-void sdet_fit_lines::
-get_line_segs(vcl_vector<vgl_line_segment_2d<double> >& lines)
+
+void sdet_fit_lines::get_line_segs(vcl_vector<vgl_line_segment_2d<double> >& lines)
 {
   lines = line_segs_;
 }
 
-//----------------------------------------------------------
-//: Clear internal storage
+// ----------------------------------------------------------
+// : Clear internal storage
 //
 void sdet_fit_lines::clear()
 {

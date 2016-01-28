@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \brief A process to load a taylor kernel from file
 // \author Isabel Restrepo
@@ -11,18 +11,17 @@
 
 #include <bvpl/kernels/bvpl_taylor_basis_factory.h>
 
-//:global variables
+// :global variables
 namespace bvpl_load_taylor_kernel_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 1;
 }
 
-
-//:sets input and output types
+// :sets input and output types
 bool bvpl_load_taylor_kernel_process_cons(bprb_func_process& pro)
 {
-  using namespace bvpl_load_taylor_kernel_process_globals ;
+  using namespace bvpl_load_taylor_kernel_process_globals;
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vcl_string";
@@ -33,22 +32,21 @@ bool bvpl_load_taylor_kernel_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-
-//:the process
+// :the process
 bool bvpl_load_taylor_kernel_process(bprb_func_process& pro)
 {
   using namespace bvpl_load_taylor_kernel_process_globals;
 
-  //get inputs
+  // get inputs
   vcl_string filename = pro.get_input<vcl_string>(0);
 
   vcl_cout << "Reading kernel file : " << filename << vcl_endl;
 
   bvpl_taylor_basis_factory factory(filename);
 
-  bvpl_kernel_sptr kernel = new bvpl_kernel(factory.create());
+  bvpl_kernel_sptr kernel = new bvpl_kernel(factory.create() );
 
-  //store output
+  // store output
   pro.set_output_val<bvpl_kernel_sptr>(0, kernel);
 
   return true;

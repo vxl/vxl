@@ -20,6 +20,7 @@ static void dummy()
 vgui_menu create_menus()
 {
   vgui_menu file;
+
   file.add("Open", dummy);
   file.add("Quit", dummy);
 
@@ -28,33 +29,34 @@ vgui_menu create_menus()
   image.add("Show histogram", dummy);
 
   vgui_menu bar;
-  bar.add("File",file);
-  bar.add("Image",image);
+  bar.add("File", file);
+  bar.add("Image", image);
 
   return bar;
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char * * argv)
 {
-  vgui::init(argc,argv);
-  if (argc <= 1)
-  {
+  vgui::init(argc, argv);
+
+  if( argc <= 1 )
+    {
     vcl_cerr << "Please give an image filename on the command line" << vcl_endl;
     return 0;
-  }
+    }
 
   // Load an image into an image tableau:
-  vgui_image_tableau_new image(argv[1]);
+  vgui_image_tableau_new    image(argv[1]);
   vgui_viewer2D_tableau_new viewer(image);
-  vgui_shell_tableau_new shell(viewer);
+  vgui_shell_tableau_new    shell(viewer);
 
   // Create a window and add the tableau:
-  vgui_window *win = vgui::produce_window(512, 512);
+  vgui_window * win = vgui::produce_window(512, 512);
   win->get_adaptor()->set_tableau(shell);
 
   // Add our menu items to the base pop-up (this menu appears when the
   // user clicks the right mouse button on the tableau:
-  win->get_adaptor()->include_in_popup(create_menus());
+  win->get_adaptor()->include_in_popup(create_menus() );
   win->get_adaptor()->bind_popups();
   win->show();
   return vgui::run();

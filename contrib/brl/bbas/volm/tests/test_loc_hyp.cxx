@@ -14,6 +14,7 @@ static void test_loc_hyp()
 {
   // create a location hyp and add certain number of locations
   volm_loc_hyp hyp;
+
   hyp.add(37.6763153076, -117.978889465, 1891.40698242);
   hyp.add(37.6763076782, -117.978881836, 1891.40698242);
   hyp.add(37.9629554749, -117.964019775, 1670.87597656);
@@ -26,7 +27,8 @@ static void test_loc_hyp()
   hyp.add(37.7084999084, -117.416664124, 1863.23205566);
   hyp.add(37.7082748413, -117.416511536, 1860.99194336);
 
-  vcl_cout << "number of hypotheses: " << hyp.size() << " approx size on RAM: " << hyp.size()*sizeof(float)*3.0/(1024.0) << " KBs. " << vcl_endl;
+  vcl_cout << "number of hypotheses: " << hyp.size() << " approx size on RAM: " << hyp.size() * sizeof(float) * 3.0
+  / (1024.0) << " KBs. " << vcl_endl;
 
   // io test
   vcl_string hyp_file_name = "./loc_hyp_test.bin";
@@ -35,29 +37,30 @@ static void test_loc_hyp()
   hyp.write_to_kml(hyp_file_kml, 0, true);
 
   volm_loc_hyp hyp2(hyp_file_name);
-  TEST("binary io test", hyp.size(), hyp2.size());
+  TEST("binary io test", hyp.size(), hyp2.size() );
 
   // point fetch methods
   vgl_point_3d<double> pt;
   hyp2.get_next(pt);
   vcl_cout << " first point is: " << pt << vcl_endl;
-  for (unsigned i = 1; i < hyp2.size(); i++)
+  for( unsigned i = 1; i < hyp2.size(); i++ )
+    {
     hyp2.get_next(pt);
+    }
   hyp2.get_next(pt);
   vcl_cout << " last point is:  " << pt << vcl_endl;
   TEST("got all points", hyp2.get_next(pt), false);
 
   // get the closest point
-  volm_loc_hyp hyp3(hyp_file_name);
-  double lat = 38.0, lon = -118.0;
-  unsigned hyp_id;
+  volm_loc_hyp         hyp3(hyp_file_name);
+  double               lat = 38.0, lon = -118.0;
+  unsigned             hyp_id;
   vgl_point_3d<double> closest_loc;
   hyp3.get_closest(lat, lon, closest_loc, hyp_id);
-  vcl_cout << " closest point to location " << lon << ", " << lat << " is: " << closest_loc << " (hyp id is " << hyp_id << ')' << vcl_endl;
+  vcl_cout << " closest point to location " << lon << ", " << lat << " is: " << closest_loc << " (hyp id is "
+           << hyp_id << ')' << vcl_endl;
   TEST("closest locs", hyp_id, 2);
 
-
 }
-
 
 TESTMAIN(test_loc_hyp);

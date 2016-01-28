@@ -1,6 +1,6 @@
 #ifndef vepl_histogram_h_
 #define vepl_histogram_h_
-//:
+// :
 // \file
 // \brief pixel value histogram of 2D image
 //
@@ -24,7 +24,7 @@
 #include <vil/vil_image_resource.h>
 #include <vcl_vector.h>
 
-//: pixel value histogram of 2D image, stored in a vector
+// : pixel value histogram of 2D image, stored in a vector
 vcl_vector<unsigned int> vepl_histogram(vil_image_resource_sptr );
 
 #endif // vepl_histogram_h_

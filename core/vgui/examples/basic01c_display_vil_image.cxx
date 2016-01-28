@@ -10,14 +10,15 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-int main(int argc, char **argv)
+int main(int argc, char * * argv)
 {
   vgui::init(argc, argv);
-  if (argc <= 1)
-  {
+
+  if( argc <= 1 )
+    {
     vcl_cerr << "Please give an image filename on the command line\n";
     return 1;
-  }
+    }
 
   // Except for the following two statements, this example is exactly
   // the same as basic01_display_image
@@ -29,11 +30,11 @@ int main(int argc, char **argv)
 
   vil_image_resource_sptr im = vil_load_image_resource(argv[1]);
 
-  if ( !im )
-  {
+  if( !im )
+    {
     vcl_cerr << "Could not load " << argv[1] << '\n';
     return 1;
-  }
+    }
 
   // Load image (given in the first command line param) into an image tableau.
   vgui_image_tableau_new image(im);
@@ -45,5 +46,5 @@ int main(int argc, char **argv)
   vgui_shell_tableau_new shell(viewer);
 
   // Create a window, add the tableau and show it on screen.
-  return vgui::run(shell, image->width(), image->height());
+  return vgui::run(shell, image->width(), image->height() );
 }

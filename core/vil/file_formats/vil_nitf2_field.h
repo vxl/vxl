@@ -20,7 +20,7 @@ class vil_nitf2_array_field;
 
 #include "vil_nitf2.h"
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // vil_nitf2_field is an instance of a single NITF field (or sequence of repeating
 // fields), including its definition and value, as read from (or to be written
 // to) a NITF file.
@@ -31,7 +31,7 @@ class vil_nitf2_array_field;
 //
 class vil_nitf2_field
 {
- public:
+public:
   // Return my identifier
   vcl_string tag() const;
 
@@ -45,31 +45,33 @@ class vil_nitf2_field
   virtual int num_dimensions() const = 0;
 
   // Downcast methods
-  vil_nitf2_scalar_field* scalar_field();
-  vil_nitf2_array_field* array_field();
+  vil_nitf2_scalar_field * scalar_field();
+
+  vil_nitf2_array_field * array_field();
 
   // Destructor
   virtual ~vil_nitf2_field() {}
 
   // Output to stream (required overload as a reminder to implement operator <<)
-  virtual vcl_ostream& output(vcl_ostream& os) const = 0;
+  virtual vcl_ostream & output(vcl_ostream& os) const = 0;
 
   // Return my element data type
   vil_nitf2::enum_field_type type() const;
 
   // Description of the field and pointers to the descriptions
   // of child nodes in the true
-  class field_tree {
-   public:
-    vcl_vector< vcl_string > columns;
-    vcl_vector< field_tree* > children;
+  class field_tree
+  {
+public:
+    vcl_vector<vcl_string>   columns;
+    vcl_vector<field_tree *> children;
     ~field_tree();
   };
 
   // Returns a field tree, which caller owns
-  virtual field_tree* get_tree() const;
+  virtual field_tree * get_tree() const;
 
- protected:
+protected:
   // Default constructor
   vil_nitf2_field(vil_nitf2_field_definition* definition) : m_definition(definition) {}
 
@@ -78,6 +80,6 @@ class vil_nitf2_field
 };
 
 // Output operator
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_field& field);
+vcl_ostream & operator <<(vcl_ostream& os, const vil_nitf2_field& field);
 
 #endif // VIL_NITF2_FIELD_H

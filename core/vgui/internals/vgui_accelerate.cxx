@@ -1,16 +1,16 @@
 // This is core/vgui/internals/vgui_accelerate.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author David Capel
 // \date   01 Apr 2000
 // \brief  See vgui_accelerate.h for a description of this file.
 
 #ifdef HAS_MFC
-#include <vgui/impl/mfc/StdAfx.h>
-extern CDC *vgui_mfc_adaptor_global_dc;
+#  include <vgui/impl/mfc/StdAfx.h>
+extern CDC * vgui_mfc_adaptor_global_dc;
 #endif
 
 #include "vgui_accelerate.h"
@@ -21,21 +21,22 @@ bool vgui_accelerate::vgui_no_acceleration = false;
 bool vgui_accelerate::vgui_mfc_acceleration = false;
 bool vgui_accelerate::vgui_doublebuffer = true;
 
-static int accelerator_level = 0;
+static int              accelerator_level = 0;
 static vgui_accelerate* vgui_accelerator = 0;
-vgui_accelerate* vgui_accelerate::instance()
+vgui_accelerate * vgui_accelerate::instance()
 {
-  if (!vgui_accelerator) vgui_accelerator = new vgui_accelerate;
+  if( !vgui_accelerator ) {vgui_accelerator = new vgui_accelerate; }
   return vgui_accelerator;
 }
 
 void vgui_accelerate::register_accelerator(vgui_accelerate* p, int level)
 {
-  if (level > accelerator_level) {
+  if( level > accelerator_level )
+    {
     delete vgui_accelerator;
     vgui_accelerator = p;
     accelerator_level = level;
-  }
+    }
 }
 
 // Default implementations (return false to indicate that a non-accelerated path was used.)
@@ -48,7 +49,7 @@ vgui_accelerate::vgui_glClear( GLbitfield mask )
 }
 
 bool
-vgui_accelerate::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels )
+vgui_accelerate::vgui_glDrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels )
 {
   glDrawPixels( width, height, format, type, pixels);
   return false;

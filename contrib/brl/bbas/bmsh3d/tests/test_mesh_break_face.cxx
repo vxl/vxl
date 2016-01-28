@@ -1,6 +1,6 @@
 // This is brl/bbas/bmsh3d/tests/test_mesh_break_face.cxx
 #include <testlib/testlib_test.h>
-//:
+// :
 // \file
 // \author Ming-Ching Chang
 // \date Nov 28, 2006.
@@ -12,10 +12,11 @@
 
 static void test_mesh_break_face()
 {
-  //Create the test mesh.
+  // Create the test mesh.
   bmsh3d_mesh_mc* M = new bmsh3d_mesh_mc;
 
   bmsh3d_vertex* v0 = M->_new_vertex();
+
   v0->get_pt().set(0, 0, 0);
   M->_add_vertex(v0);
 

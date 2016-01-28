@@ -3,6 +3,7 @@
 
 #include <vcl_compiler.h> // for export keyword
 
-template <class T> class vul_arg;
+template <class T>
+class vul_arg;
 
 #endif // vul_fwd_h_

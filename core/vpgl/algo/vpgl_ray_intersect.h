@@ -1,7 +1,7 @@
 // This is core/vpgl/algo/vpgl_ray_intersect.h
 #ifndef vpgl_ray_intersect_h_
 #define vpgl_ray_intersect_h_
-//:
+// :
 // \file
 // \brief Find the 3-d point closest to the intersection of rays from >= 2 cameras
 // \author J. L. Mundy
@@ -30,7 +30,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
 //
-//:
+// :
 // The image offsets of rational cameras typically must be adjusted to
 // compensate for errors in geographic alignment. This algorithm finds
 // a set of minimum translations that registers the input set of images.
@@ -40,53 +40,48 @@
 
 class vpgl_ray_intersect_lsqr : public vnl_least_squares_function
 {
- public:
-  //: Constructor
-  vpgl_ray_intersect_lsqr(vcl_vector<vpgl_camera<double>* > const& cams,
-                          vcl_vector<vgl_point_2d<double> > const& image_pts,
-                          unsigned num_residuals);
+public:
+  // : Constructor
+  vpgl_ray_intersect_lsqr(vcl_vector<vpgl_camera<double> *> const& cams,
+                          vcl_vector<vgl_point_2d<double> > const& image_pts, unsigned num_residuals);
 
-  //: Destructor
+  // : Destructor
   virtual ~vpgl_ray_intersect_lsqr() {}
 
-  //: The main function.
+  // : The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& intersection_point,
-                 vnl_vector<double>& image_errors);
+  virtual void f(vnl_vector<double> const& intersection_point, vnl_vector<double>& image_errors);
 
 #if 0
-  //: Called after each LM iteration to print debugging etc.
+  // : Called after each LM iteration to print debugging etc.
   virtual void trace(int iteration, vnl_vector<double> const& x, vnl_vector<double> const& fx);
-#endif
 
- protected:
-  vpgl_ray_intersect_lsqr();//not valid
-  vcl_vector<vpgl_camera<double>* > f_cameras_; //cameras
-  vcl_vector<vgl_point_2d<double> > f_image_pts_; //image points
+#endif
+protected:
+  vpgl_ray_intersect_lsqr();                      // not valid
+  vcl_vector<vpgl_camera<double> *> f_cameras_;   // cameras
+  vcl_vector<vgl_point_2d<double> > f_image_pts_; // image points
 };
 
 class vpgl_ray_intersect
 {
- public:
+public:
 
   vpgl_ray_intersect(unsigned dim);
   ~vpgl_ray_intersect() {}
 
-  //: Intersect the rays. return false if intersection fails
+  // : Intersect the rays. return false if intersection fails
   // Note image points are not homogeneous because require
   // finite points to measure projection error
-  bool intersect(vcl_vector<vpgl_camera<double>* > const& cams,
-                 vcl_vector<vgl_point_2d<double> > const& image_pts,
-                 vgl_point_3d<double> const& initial_intersection,
-                 vgl_point_3d<double>& intersection);
+  bool intersect(vcl_vector<vpgl_camera<double> *> const& cams, vcl_vector<vgl_point_2d<double> > const& image_pts,
+                 vgl_point_3d<double> const& initial_intersection, vgl_point_3d<double>& intersection);
 
- protected:
-  //members
-  unsigned dim_;
-  vcl_vector<vpgl_camera<double>* > f_cameras_; //cameras
-  vcl_vector<vgl_point_2d<double> > f_image_pts_; //image points
+protected:
+  // members
+  unsigned                          dim_;
+  vcl_vector<vpgl_camera<double> *> f_cameras_;   // cameras
+  vcl_vector<vgl_point_2d<double> > f_image_pts_; // image points
 };
-
 
 #endif // vpgl_ray_intersect_h_

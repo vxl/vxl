@@ -1,6 +1,6 @@
 #ifndef vbl_checked_delete_h_
 #define vbl_checked_delete_h_
-//:
+// :
 // \file
 // \author Amitha Perera
 // Checked delete function lifted from BOOST.
@@ -21,26 +21,26 @@
 //
 //  Modified from the original boost sources to fit the VXL restrictions.
 
-//: Checks that T is complete and deletes x.
+// : Checks that T is complete and deletes x.
 // Not to be used on arrays!
-template<class T>
+template <class T>
 inline
 void vbl_checked_delete(T * x)
 {
-    // intentionally complex - simplification causes regressions
-    typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
-    (void) sizeof(type_must_be_complete);
-    delete x;
+  // intentionally complex - simplification causes regressions
+  typedef char type_must_be_complete[sizeof(T) ? 1 : -1];
+  (void) sizeof(type_must_be_complete);
+  delete x;
 }
 
-//: Checks that T is complete and array deletes x.
-template<class T>
+// : Checks that T is complete and array deletes x.
+template <class T>
 inline
 void vbl_checked_delete_array(T * x)
 {
-    typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
-    (void) sizeof(type_must_be_complete);
-    delete [] x;
+  typedef char type_must_be_complete[sizeof(T) ? 1 : -1];
+  (void) sizeof(type_must_be_complete);
+  delete [] x;
 }
 
 #endif  // vbl_checked_delete_h_

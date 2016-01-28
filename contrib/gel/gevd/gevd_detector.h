@@ -1,6 +1,6 @@
 #ifndef gevd_detector_h_
 #define gevd_detector_h_
-//:
+// :
 // \file
 // \brief non-display-based interface class
 //
@@ -69,7 +69,7 @@
 //             Moved most parameters up to gevd_detectorParams in
 //             order to unify the use of parameters.
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class gevd_bufferxy;
 
@@ -83,65 +83,68 @@ class gevd_bufferxy;
 
 class gevd_detector : public gevd_detector_params
 {
- public:
+public:
   // So far, not all parameters are included in the constructor.  These seem to
   // be the most important in controlling performance - JLM
   //
   gevd_detector(gevd_detector_params& params);
-  gevd_detector(vil1_image, float smoothSigma = 1.0f, float noiseSigma = 2.0f,
-                float contourFactor = 1.0f, float junctionFactor = 1.5f,
-                int minLength = 6, float maxGap = 2.23606f, float minJump=1.0f);
+  gevd_detector(vil1_image, float smoothSigma = 1.0f, float noiseSigma = 2.0f, float contourFactor = 1.0f,
+                float junctionFactor = 1.5f, int minLength = 6, float maxGap = 2.23606f, float minJump = 1.0f);
   ~gevd_detector();
 
   // External interfaces
-  //Step contour detection
+  // Step contour detection
   bool DoContour();
 
-  //Fold contour detection
-  void DoFoldContourDetector(vil1_image image, vcl_vector<vtol_edge_2d_sptr >& edgels);
+  // Fold contour detection
+  void DoFoldContourDetector(vil1_image image, vcl_vector<vtol_edge_2d_sptr>& edgels);
 
-  //Corner detection using curvature on edgel chains
-  //GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
+  // Corner detection using curvature on edgel chains
+  // GEOFF  void  DoCornerDetector(vil1_image image, IUPointGroup& corners);
 
-  //Corner detection using curvature on edgel chains
-  void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr >& in_edgels, vcl_vector<vtol_edge_2d_sptr >& out_edgels);
+  // Corner detection using curvature on edgel chains
+  void  DoBreakCorners(vcl_vector<vtol_edge_2d_sptr>& in_edgels, vcl_vector<vtol_edge_2d_sptr>& out_edgels);
 
   // internal interfaces
   bool DoFoldContour();
-  bool DoCorner( float angle = 10,      //!< smallest angle at corner
-                 float separation = 1,  //!< |mean1-mean2|/sigma
-                 int length = 5,        //!< min length to find cornersxo
-                 int cycle = 2,         //!< number of corners in a cycle
-                 int ndimension = 2);   //!< number of dimension
+
+  bool DoCorner( float angle = 10,      // !< smallest angle at corner
+                 float separation = 1,  // !< |mean1-mean2|/sigma
+                 int length = 5,        // !< min length to find cornersxo
+                 int cycle = 2,         // !< number of corners in a cycle
+                 int ndimension = 2);   // !< number of dimension
+
   bool DoStep();
+
   bool DoFold();
 
-  gevd_bufferxy* GetBufferFromImage();
+  gevd_bufferxy * GetBufferFromImage();
 
-  vcl_vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
-  vcl_vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
+  vcl_vector<vtol_vertex_2d_sptr> * GetVertices() {return vertices; }
+  vcl_vector<vtol_edge_2d_sptr> * GetEdges() {return edges; }
   void SetImage(vil1_image img);
 
-  void print(vcl_ostream &strm=vcl_cout) const;
+  void print(vcl_ostream & strm = vcl_cout) const;
 
- protected:
+protected:
   void UnProtectLists();
-  void ClearData(); //!< clear buffer
 
- protected:
-  vil1_image image;
+  void ClearData(); // !< clear buffer
+
+protected:
+  vil1_image     image;
   gevd_bufferxy* image_float_buf_;
 
-  float noise; //!< noise estimation/threshold
+  float noise; // !< noise estimation/threshold
 
-  gevd_bufferxy *edgel,                      //!< output from DoStep
-    *direction, *locationx, *locationy, *grad_mag, *angle; //!< detect step/fold
-  int *junctionx, *junctiony, njunction; //!< junctions found
-  vcl_vector<vtol_vertex_2d_sptr >* vertices; //!< network of linked edges/vertices
-  vcl_vector<vtol_edge_2d_sptr >* edges;
+  gevd_bufferxy * edgel,                                              // !< output from DoStep
+    * direction, * locationx, * locationy, * grad_mag, * angle;       // !< detect step/fold
+  int *                            junctionx, * junctiony, njunction; // !< junctions found
+  vcl_vector<vtol_vertex_2d_sptr>* vertices;                          // !< network of linked edges/vertices
+  vcl_vector<vtol_edge_2d_sptr>*   edges;
 
-  float filterFactor;     //!< factor in convolution filter
-  float hysteresisFactor; //!< hysteresis factor
+  float filterFactor;     // !< factor in convolution filter
+  float hysteresisFactor; // !< hysteresis factor
   float noiseThreshold;
 };
 

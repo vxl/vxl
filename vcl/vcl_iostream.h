@@ -1,7 +1,7 @@
 // This is vcl/vcl_iostream.h
 #ifndef vcl_iostream_h_
 #define vcl_iostream_h_
-//:
+// :
 // \file
 // \brief Include compiler's <iostream.h> in a uniform way.
 // \author awf@robots.ox.ac.uk
@@ -41,11 +41,11 @@
 // ------------------------------------------------------------
 #include "iso/vcl_iostream.h"
 
-   // -------------------- miscellaneous fixes which can go at the end: -------
+// -------------------- miscellaneous fixes which can go at the end: -------
 
 // It seems that VC++ can show strange behaviour without this include:
 #if defined(VCL_VC)
-# include <vcl_fstream.h>
+#  include <vcl_fstream.h>
 #endif
 
 #endif // vcl_iostream_h_

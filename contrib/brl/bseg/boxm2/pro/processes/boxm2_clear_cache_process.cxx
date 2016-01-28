@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_clear_cache_process.cxx
-//:
+// :
 // \file
 // \brief  A process to clear cpu cache.
 //
@@ -14,40 +14,39 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/io/boxm2_nn_cache.h>
 
-
 namespace boxm2_clear_cache_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 0;
 }
 
 bool boxm2_clear_cache_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_clear_cache_process_globals;
 
-  //process takes 1 input
+  // process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_cache_sptr";
 
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_)
-      && pro.set_output_types(output_types_);
+         && pro.set_output_types(output_types_);
 }
 
 bool boxm2_clear_cache_process(bprb_func_process& pro)
 {
   using namespace boxm2_clear_cache_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The number of inputs should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  //get the inputs
-  unsigned i = 0;
+    }
+  // get the inputs
+  unsigned         i = 0;
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   cache->clear_cache();
   return true;
 }
-

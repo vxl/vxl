@@ -8,23 +8,24 @@
 #include <vul/vul_file.h>
 #include <vcl_sstream.h>
 
-bool bwm_tableau_rat_cam::handle(const vgui_event &e)
+bool bwm_tableau_rat_cam::handle(const vgui_event & e)
 {
   return bwm_tableau_cam::handle(e);
 }
 
-void bwm_tableau_rat_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
+void bwm_tableau_rat_cam::get_popup(vgui_popup_params const & params, vgui_menu & menu)
 {
   menu.clear();
 
   bwm_popup_menu pop(this);
-  vgui_menu submenu;
+  vgui_menu      submenu;
   pop.get_menu(menu);
 }
 
 void bwm_tableau_rat_cam::define_lvcs()
 {
   float x1, y1;
+
   pick_point(&x1, &y1);
   my_observer_->define_lvcs(x1, y1);
 }
@@ -32,6 +33,7 @@ void bwm_tableau_rat_cam::define_lvcs()
 void bwm_tableau_rat_cam::adjust_camera_offset()
 {
   float x1, y1;
+
   pick_point(&x1, &y1);
   vsol_point_2d_sptr img_point = new vsol_point_2d(x1, y1);
   my_observer_->adjust_camera_offset(img_point);
@@ -68,16 +70,18 @@ vcl_string bwm_tableau_rat_cam::save_camera()
   vcl_string cam_path = my_observer_->camera_path();
 
   // see if the camera is adjusted
-  if (my_observer_->camera_adjusted()) {
-    //need to save the new camera
-    vcl_string new_cam_path = vul_file::strip_extension(cam_path);
+  if( my_observer_->camera_adjusted() )
+    {
+    // need to save the new camera
+    vcl_string            new_cam_path = vul_file::strip_extension(cam_path);
     vcl_string::size_type pos = new_cam_path.find("_v", 0);
-    if (pos != vcl_string::npos) {
-      new_cam_path.erase(pos, new_cam_path.length()-1);
-    }
+    if( pos != vcl_string::npos )
+      {
+      new_cam_path.erase(pos, new_cam_path.length() - 1);
+      }
     vcl_stringstream strm;
     strm << vcl_fixed << timer_.real();
-    vcl_string str(strm.str());
+    vcl_string str(strm.str() );
     new_cam_path += "_v" + str + vul_file::extension(cam_path);
     my_observer_->camera().save(new_cam_path);
 
@@ -86,9 +90,10 @@ vcl_string bwm_tableau_rat_cam::save_camera()
     my_observer_->set_camera_adjusted(false);
 
     return new_cam_path;
-  }
-  else {
+    }
+  else
+    {
     vcl_cout << "bwm_tableau_rat_cam::save_camera -- Camera has not changed, not saving!" << vcl_endl;
     return cam_path;
-  }
+    }
 }

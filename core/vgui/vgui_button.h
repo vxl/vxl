@@ -2,9 +2,9 @@
 #ifndef vgui_button_h_
 #define vgui_button_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Enumeration of possible mouse buttons.
 //
@@ -16,14 +16,15 @@
 
 #include <vcl_iosfwd.h>
 
-//: Enumeration of possible mouse buttons.
-enum vgui_button {
-  vgui_BUTTON_NULL=0,
-  vgui_LEFT  =0x1,
-  vgui_MIDDLE=0x2,
-  vgui_RIGHT =0x4
-};
+// : Enumeration of possible mouse buttons.
+enum vgui_button
+  {
+  vgui_BUTTON_NULL = 0,
+  vgui_LEFT  = 0x1,
+  vgui_MIDDLE = 0x2,
+  vgui_RIGHT = 0x4
+  };
 
-vcl_ostream& operator<<(vcl_ostream& s, vgui_button b);
+vcl_ostream & operator<<(vcl_ostream& s, vgui_button b);
 
 #endif // vgui_button_h_

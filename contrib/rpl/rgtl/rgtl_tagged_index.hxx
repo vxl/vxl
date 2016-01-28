@@ -1,6 +1,6 @@
 #ifndef rgtl_tagged_index_hxx
 #define rgtl_tagged_index_hxx
-//:
+// :
 // \file
 // \brief Unsigned integer wrapper for type-safe indexing
 // \author Brad King
@@ -14,43 +14,45 @@
 #include "rgtl_serialize_access.hxx"
 #include <vcl_cstddef.h>
 
-//: Wraps an unsigned integer for use as an index.
+// : Wraps an unsigned integer for use as an index.
 //  The index is compatible only with other indexes using the same tag.
 //  Implicit conversions are disallowed.  This provides type-safe indexing.
 template <typename Tag>
 class rgtl_tagged_index
 {
- public:
-  //: The underlying index type.
+public:
+  // : The underlying index type.
   typedef vcl_size_t index_type;
 
-  //: Default construct to a zero index.
-  rgtl_tagged_index(): value_(0) {}
+  // : Default construct to a zero index.
+  rgtl_tagged_index() : value_(0) {}
 
-  //: Explicitly construct from an integer index.
-  explicit rgtl_tagged_index(index_type v): value_(v) {}
+  // : Explicitly construct from an integer index.
+  explicit rgtl_tagged_index(index_type v) : value_(v) {}
 
-  //: Implicitly retrieve the integer index value.
+  // : Implicitly retrieve the integer index value.
   operator index_type() const { return value_; }
 
-  //: Wrap some standard integer operators.
-  rgtl_tagged_index& operator++() { ++value_; return *this; }
-  rgtl_tagged_index& operator*=(index_type r)
+  // : Wrap some standard integer operators.
+  rgtl_tagged_index & operator++() { ++value_; return *this; }
+  rgtl_tagged_index & operator*=(index_type r)
   {
     value_ *= r;
     return *this;
   }
-  rgtl_tagged_index& operator|=(index_type r)
+
+  rgtl_tagged_index & operator|=(index_type r)
   {
     value_ |= r;
     return *this;
   }
+
   friend rgtl_tagged_index operator-(rgtl_tagged_index const& l, int r)
   {
     return rgtl_tagged_index(l.value_ - r);
   }
 
- private:
+private:
   index_type value_;
 
   friend class rgtl_serialize_access;
@@ -59,6 +61,7 @@ class rgtl_tagged_index
   {
     sr& value_;
   }
+
 };
 
 #endif // rgtl_tagged_index_hxx

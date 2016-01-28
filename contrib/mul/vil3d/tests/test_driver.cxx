@@ -39,7 +39,6 @@ DECLARE( test_algo_make_distance_filter );
 DECLARE( test_algo_exp_distance_transform );
 DECLARE( test_algo_find_blobs );
 
-
 void
 register_tests()
 {

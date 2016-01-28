@@ -1,22 +1,22 @@
 // This is core/vidl/vidl_v4l_params.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Brendan McCane
 // \date   16 Mar 2006
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "vidl_v4l_ulong_fix.h" // include first to fix linux/videodev.h ulong problem
 #include "vidl_v4l_params.h"
 #include "vidl_pixel_format.h"
 
-//: convert from vidl pixel format to v4l pixel format
+// : convert from vidl pixel format to v4l pixel format
 int vidl_v4l_params::vidlpf_to_v4lpf(vidl_pixel_format vid_pf)
 {
-    switch (vid_pf)
+  switch( vid_pf )
     {
     case VIDL_PIXEL_FORMAT_UNKNOWN: return -1;
     case VIDL_PIXEL_FORMAT_RGB_24: return VIDEO_PALETTE_RGB24;
@@ -43,10 +43,10 @@ int vidl_v4l_params::vidlpf_to_v4lpf(vidl_pixel_format vid_pf)
     }
 }
 
-//: convert from v4l pixel format to vidl pixel format
+// : convert from v4l pixel format to vidl pixel format
 vidl_pixel_format vidl_v4l_params::v4lpf_to_vidlpf(int v4l_pf)
 {
-    switch (v4l_pf)
+  switch( v4l_pf )
     {
     case VIDEO_PALETTE_RGB24: return VIDL_PIXEL_FORMAT_RGB_24;
     case VIDEO_PALETTE_RGB32: return VIDL_PIXEL_FORMAT_RGBA_32;
@@ -62,4 +62,3 @@ vidl_pixel_format vidl_v4l_params::v4lpf_to_vidlpf(int v4l_pf)
     default: return VIDL_PIXEL_FORMAT_UNKNOWN;
     }
 }
-

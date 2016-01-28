@@ -20,5 +20,4 @@ void run_test_vpdfl()
   test_pc_gaussian();
 }
 
-
 TESTLIB_DEFINE_MAIN(run_test_vpdfl);

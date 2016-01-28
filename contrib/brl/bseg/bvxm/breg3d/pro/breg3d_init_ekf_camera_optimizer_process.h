@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/breg3d/pro/breg3d_init_ekf_camera_optimizer_process.h
 #ifndef breg3d_init_ekf_camera_optimizer_process_h_
 #define breg3d_init_ekf_camera_optimizer_process_h_
-//:
+// :
 // \file
 // \brief A process that initializes the state of an extended kalman filter used for camera registration
 //
@@ -17,24 +17,29 @@
 
 class breg3d_init_ekf_camera_optimizer_process : public bprb_process
 {
- public:
+public:
 
-   breg3d_init_ekf_camera_optimizer_process();
+  breg3d_init_ekf_camera_optimizer_process();
 
-  //: Copy Constructor (no local data)
-  breg3d_init_ekf_camera_optimizer_process(const breg3d_init_ekf_camera_optimizer_process& other): bprb_process(*static_cast<const bprb_process*>(&other)){}
+  // : Copy Constructor (no local data)
+  breg3d_init_ekf_camera_optimizer_process(const breg3d_init_ekf_camera_optimizer_process& other) : bprb_process(
+      *static_cast<const bprb_process *>(&other) ) {}
 
-  ~breg3d_init_ekf_camera_optimizer_process(){}
+  ~breg3d_init_ekf_camera_optimizer_process() {}
 
-  //: Clone the process
-  virtual breg3d_init_ekf_camera_optimizer_process* clone() const {return new breg3d_init_ekf_camera_optimizer_process(*this);}
+  // : Clone the process
+  virtual breg3d_init_ekf_camera_optimizer_process * clone() const
+  {
+    return new breg3d_init_ekf_camera_optimizer_process(
+      *this);
+  }
 
-  virtual vcl_string name() const {return "breg3dInitEkfCameraOptimizer";}
+  virtual vcl_string name() const {return "breg3dInitEkfCameraOptimizer"; }
 
   bool init() { return true; }
   bool execute();
-  bool finish(){return true;}
-};
 
+  bool finish() {return true; }
+};
 
 #endif // breg3d_init_ekf_camera_optimizer_process_h_

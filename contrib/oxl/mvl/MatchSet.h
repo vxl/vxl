@@ -2,9 +2,9 @@
 #ifndef MatchSet_h_
 #define MatchSet_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Base class for correspondences
 //
@@ -22,14 +22,14 @@
 //  Modifications
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class MatchSet
 {
- public:
+public:
   enum { NoMatch = -1 };
 
-//: Return true if i is not the "NoMatch" value.
+// : Return true if i is not the "NoMatch" value.
   static inline bool matchp(int i) { return i != NoMatch; }
 
   MatchSet() {}

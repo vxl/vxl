@@ -1,7 +1,7 @@
 // This is core/vbl/io/vbl_io_smart_ptr.h
 #ifndef vbl_io_smart_ptr_h
 #define vbl_io_smart_ptr_h
-//:
+// :
 // \file
 // \brief Serialised binary IO functions for vbl_smart_ptr<T>
 // \author Ian Scott (Manchester)
@@ -60,16 +60,16 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_iosfwd.h>
 
-//: Binary save vbl_smart_ptr to stream.
+// : Binary save vbl_smart_ptr to stream.
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> & v);
 
-//: Binary load vbl_smart_ptr from stream.
+// : Binary load vbl_smart_ptr from stream.
 template <class T>
 void vsl_b_read(vsl_b_istream & is, vbl_smart_ptr<T> & v);
 
-//: Print human readable summary of object to a stream
+// : Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & b);
+void vsl_print_summary(vcl_ostream & os, const vbl_smart_ptr<T> & b);
 
 #endif // vbl_io_smart_ptr_h

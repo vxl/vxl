@@ -6,9 +6,9 @@
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 
-void bwm_plane_fitting_lsf::f(vnl_vector<double> const &x, vnl_vector< double > &fx)
+void bwm_plane_fitting_lsf::f(vnl_vector<double> const & x, vnl_vector<double> & fx)
 {
-  vcl_cerr << "------ d_ == " << x[0] <<"   ";
+  vcl_cerr << "------ d_ == " << x[0] << "   ";
   d_ = x[0];
   plane_.set(a_, b_, c_, d_);
 

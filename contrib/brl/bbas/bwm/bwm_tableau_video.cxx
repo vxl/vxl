@@ -7,17 +7,17 @@
 #include <vsl/vsl_binary_io.h>
 #include <bsta/io/bsta_io_histogram.h>
 
-bool bwm_tableau_video::handle(const vgui_event &e)
+bool bwm_tableau_video::handle(const vgui_event & e)
 {
   return bwm_tableau_cam::handle(e);
 }
 
-void bwm_tableau_video::get_popup(vgui_popup_params const &params, vgui_menu &menu)
+void bwm_tableau_video::get_popup(vgui_popup_params const & params, vgui_menu & menu)
 {
   menu.clear();
 
   bwm_popup_menu pop(this);
-  vgui_menu submenu;
+  vgui_menu      submenu;
   pop.get_menu(menu);
 }
 
@@ -34,10 +34,13 @@ void bwm_tableau_video::previous_frame()
 void bwm_tableau_video::seek()
 {
   static unsigned frame_num = 0;
-  vgui_dialog go_to_frame_dlg("Go to Frame");
+  vgui_dialog     go_to_frame_dlg("Go to Frame");
+
   go_to_frame_dlg.field("Frame Number", frame_num);
-  if (!go_to_frame_dlg.ask())
+  if( !go_to_frame_dlg.ask() )
+    {
     return;
+    }
   my_observer_->seek(frame_num);
 }
 
@@ -89,10 +92,13 @@ void bwm_tableau_video::add_match_at_vertex()
 void bwm_tableau_video::display_video_corrs()
 {
   static unsigned frame_num = 0;
-  vgui_dialog go_to_frame_dlg("Display Correspondences");
+  vgui_dialog     go_to_frame_dlg("Display Correspondences");
+
   go_to_frame_dlg.field("Frame Number", frame_num);
-  if (!go_to_frame_dlg.ask())
+  if( !go_to_frame_dlg.ask() )
+    {
     return;
+    }
   my_observer_->display_video_corrs(frame_num);
 }
 
@@ -123,24 +129,29 @@ void bwm_tableau_video::display_selected_world_pt()
 
 void bwm_tableau_video::extract_world_plane()
 {
-  vcl_string path = "";
-  vcl_string ext = "*.pl3d";
+  vcl_string  path = "";
+  vcl_string  ext = "*.pl3d";
   vgui_dialog plane_dlg("Extract World Plane(3 Sel. Corrs.)");
+
   plane_dlg.file("Plane file", ext, path);
-  if (!plane_dlg.ask())
+  if( !plane_dlg.ask() )
+    {
     return;
+    }
   vgl_plane_3d<double> plane;
-  if (!my_observer_->extract_world_plane(plane)) {
+  if( !my_observer_->extract_world_plane(plane) )
+    {
     vcl_cerr << "extract plane failed\n";
     return;
-  }
+    }
   vnl_double_4 pv;
-  pv[0]=plane.a();   pv[1]=plane.b();   pv[2]=plane.c();   pv[3]=plane.d();
-  vcl_ofstream os(path.c_str());
-  if (!os.is_open()) {
+  pv[0] = plane.a();   pv[1] = plane.b();   pv[2] = plane.c();   pv[3] = plane.d();
+  vcl_ofstream os(path.c_str() );
+  if( !os.is_open() )
+    {
     vcl_cerr << "invalid output path for plane\n";
     return;
-  }
+    }
   os << pv;
   os.close();
 }
@@ -149,82 +160,106 @@ void bwm_tableau_video::extract_neighborhoods()
 {
   static unsigned radius_x = 1;
   static unsigned radius_y = 1;
-  vcl_string path = "";
-  vcl_string ext = "*.nbh";
-  vgui_dialog nbh_dlg("Neighborhoods (select 2 corrs)");
+  vcl_string      path = "";
+  vcl_string      ext = "*.nbh";
+  vgui_dialog     nbh_dlg("Neighborhoods (select 2 corrs)");
+
   nbh_dlg.file("Neighborhood file", ext, path);
   nbh_dlg.field("Nbhd radius along x ", radius_x);
   nbh_dlg.field("Nbhd radius along y ", radius_y);
-  if (!nbh_dlg.ask())
+  if( !nbh_dlg.ask() )
+    {
     return;
+    }
   vcl_vector<vcl_vector<vnl_matrix<float> > > nhds;
-  if (!my_observer_->extract_neighborhoods(radius_x,radius_y,  nhds)) {
+  if( !my_observer_->extract_neighborhoods(radius_x, radius_y,  nhds) )
+    {
     vcl_cerr << "extract neighborhoods failed\n";
     return;
-  }
+    }
 
-  unsigned dimx = 2*radius_x+1;
-  unsigned dimy = 2*radius_y+1;
-  vcl_ofstream os(path.c_str());
-  if (!os.is_open()) {
+  unsigned     dimx = 2 * radius_x + 1;
+  unsigned     dimy = 2 * radius_y + 1;
+  vcl_ofstream os(path.c_str() );
+  if( !os.is_open() )
+    {
     vcl_cerr << "invalid output path for neighborhoods\n";
     return;
-  }
-  os << "dim: " << dimx <<' '<<dimy<< '\n';
+    }
+  os << "dim: " << dimx << ' ' << dimy << '\n';
   os << "n_tracks: " << nhds.size() << '\n';
-  for ( unsigned c = 0; c<nhds.size(); ++c)
-  {
+  for( unsigned c = 0; c < nhds.size(); ++c )
+    {
     os << "n_i: " << nhds[c].size() << '\n';
-    for (unsigned i = 0; i< nhds[c].size(); ++i)
+    for( unsigned i = 0; i < nhds[c].size(); ++i )
+      {
       os << nhds[c][i] << '\n';
-  }
+      }
+    }
   os.close();
 }
 
 void bwm_tableau_video::set_world_pt()
 {
   vgui_dialog dlg("3D World Point");
-  double lat, lon, elev;
-  dlg.field("Lat:",lat);
-  dlg.field("Lon:",lon);
-  dlg.field("Elev:",elev);
-  if (!dlg.ask())
+  double      lat, lon, elev;
+
+  dlg.field("Lat:", lat);
+  dlg.field("Lon:", lon);
+  dlg.field("Elev:", elev);
+  if( !dlg.ask() )
+    {
     return;
-  my_observer_->set_world_pt(lat,lon,elev);
+    }
+  my_observer_->set_world_pt(lat, lon, elev);
 }
 
 void bwm_tableau_video::extract_histograms()
 {
-  vcl_string path = "";
-  vcl_string ext = "*.*";
+  vcl_string  path = "";
+  vcl_string  ext = "*.*";
   vgui_dialog hist_dlg("Frame histograms");
+
   hist_dlg.file("Histogram file (binary)", ext, path);
-  if (!hist_dlg.ask())
+  if( !hist_dlg.ask() )
+    {
     return;
+    }
   vcl_vector<bsta_histogram<float>  > hists;
-  if (!my_observer_->extract_histograms(hists))
+  if( !my_observer_->extract_histograms(hists) )
+    {
     return;
+    }
   unsigned n = hists.size();
-  if (!n) return;
+  if( !n ) {return; }
   vsl_b_ofstream os(path);
-  if (!os)
+  if( !os )
+    {
     return;
+    }
   vsl_b_write(os, n);
-  for (unsigned i = 0; i<n; ++i)
+  for( unsigned i = 0; i < n; ++i )
+    {
     vsl_b_write(os, hists[i]);
+    }
 }
 
 void bwm_tableau_video::save_as_image_list()
 {
-  vcl_string path = "";
-  vcl_string ext = "";
+  vcl_string             path = "";
+  vcl_string             ext = "";
   vgui_dialog_extensions save_dlg("Save Video (Image List)");
+
   save_dlg.dir("Video Directory", ext, path);
   save_dlg.line_break();
-  if (!save_dlg.ask())
+  if( !save_dlg.ask() )
+    {
     return;
-  if (!my_observer_->save_as_image_list(path))
+    }
+  if( !my_observer_->save_as_image_list(path) )
+    {
     vcl_cerr << " Unable to save video as image list\n";
+    }
 }
 
 void bwm_tableau_video::clear_all_frames()

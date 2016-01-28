@@ -11,5 +11,4 @@ void register_tests()
   REGISTER( test_shadow_appearance );
 }
 
-
 DEFINE_MAIN;

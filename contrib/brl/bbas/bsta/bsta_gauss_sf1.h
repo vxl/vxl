@@ -1,7 +1,7 @@
 // This is brl/bbas/bsta/bsta_gauss_sf1.h
 #ifndef bsta_gauss_sf1_h_
 #define bsta_gauss_sf1_h_
-//:
+// :
 // \file
 // \brief A Gaussian in 1D with type float
 // \author Matt Leotta (mleotta@lems.brown.edu)
@@ -12,6 +12,6 @@
 
 #include "bsta_gaussian_sphere.h"
 
-typedef bsta_gaussian_sphere<float,1> bsta_gauss_sf1;
+typedef bsta_gaussian_sphere<float, 1> bsta_gauss_sf1;
 
 #endif // bsta_gauss_sf1_h_

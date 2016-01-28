@@ -2,7 +2,7 @@
 #ifndef bvpl_corner_pairs_io_h
 #define bvpl_corner_pairs_io_h
 
-//:
+// :
 // \file
 // \brief
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -17,26 +17,20 @@
 #include <vcl_iostream.h>
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 
-
 // Binary io, NOT IMPLEMENTED, signatures defined to use as a brdb_value
 
-//: Binary save parameters to stream.
-void vsl_b_write(vsl_b_ostream & os, bvpl_corner_pairs const &kernel);
+// : Binary save parameters to stream.
+void vsl_b_write(vsl_b_ostream & os, bvpl_corner_pairs const & kernel);
 
+// : Binary load parameters from stream.
+void vsl_b_read(vsl_b_istream & is, bvpl_corner_pairs & k);
 
-//: Binary load parameters from stream.
-void vsl_b_read(vsl_b_istream & is, bvpl_corner_pairs &k);
-
-
-void vsl_print_summary(vcl_ostream &os, const bvpl_corner_pairs &k);
-
+void vsl_print_summary(vcl_ostream & os, const bvpl_corner_pairs & k);
 
 void vsl_b_read(vsl_b_istream& is, bvpl_corner_pairs* k);
 
+void vsl_b_write(vsl_b_ostream& os, const bvpl_corner_pairs * & k);
 
-void vsl_b_write(vsl_b_ostream& os, const bvpl_corner_pairs* &k);
-
-void vsl_print_summary(vcl_ostream& os, const bvpl_corner_pairs* &k);
-
+void vsl_print_summary(vcl_ostream& os, const bvpl_corner_pairs * & k);
 
 #endif

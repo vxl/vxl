@@ -9,5 +9,4 @@ void register_tests()
   REGISTER( test_cell_vis_graph );
 }
 
-
 DEFINE_MAIN;

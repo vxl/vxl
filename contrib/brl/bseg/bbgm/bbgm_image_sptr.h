@@ -4,8 +4,6 @@
 #include <vbl/vbl_smart_ptr.h>
 #include <bbgm/bbgm_image_of.h>
 
-
-typedef vbl_smart_ptr<bbgm_image_base > bbgm_image_sptr;
+typedef vbl_smart_ptr<bbgm_image_base> bbgm_image_sptr;
 
 #endif
-

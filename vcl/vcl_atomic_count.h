@@ -4,9 +4,9 @@
 // MS compatible compilers support #pragma once
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
-# pragma once
+#  pragma once
 #endif
-//:
+// :
 // \file
 // \brief thread/SMP safe reference counter
 // \author www.boost.org
@@ -83,7 +83,7 @@
 
 #if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 
-# include "internal/vcl_atomic_count_gcc_x86.h"
+#  include "internal/vcl_atomic_count_gcc_x86.h"
 
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 
@@ -105,7 +105,7 @@
 #else
 
 // Use #define BOOST_DISABLE_THREADS to avoid the error
-#error Unrecognized threading platform
+#  error Unrecognized threading platform
 
 #endif
 

@@ -1,7 +1,7 @@
 // This is contrib/brl/bbas/bhdfs/bhdfs_fstream.h
 #ifndef bhdfs_fstream_h_
 #define bhdfs_fstream_h_
-//:
+// :
 // \file
 // \brief A wrap around for file operations in libdhfs to access hadoop's file system (HDFS)
 //
@@ -28,13 +28,13 @@
 
 #if VXL_HAS_INT_64
 typedef vxl_int_64 bhdfs_streampos;
-#else //VXL_HAS_INT_64
+#else // VXL_HAS_INT_64
 typedef vxl_int_32 bhdfs_streampos;
-#endif //VXL_HAS_INT_64
+#endif // VXL_HAS_INT_64
 
-class bhdfs_fstream: public vbl_ref_count
+class bhdfs_fstream : public vbl_ref_count
 {
- public:
+public:
   // supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
   bhdfs_fstream(vcl_string filename, char const* mode_flags);
 
@@ -42,23 +42,22 @@ class bhdfs_fstream: public vbl_ref_count
   bool ok() const { return f_ != 0; }
   bhdfs_streampos write(void const* buf, bhdfs_streampos n);
 
-  //: just try to read, if not successful returns -1
+  // : just try to read, if not successful returns -1
   bhdfs_streampos read(void* buf, bhdfs_streampos n);
 
-  //: return current offset in the file, -1 if error
+  // : return current offset in the file, -1 if error
   bhdfs_streampos tell() const;
 
   void seek(bhdfs_streampos position);
+
   bool close();
 
-  //: caution: libhdfs does not always return actual size, so may only return 0
+  // : caution: libhdfs does not always return actual size, so may only return 0
   bhdfs_streampos file_size() const;
 
- protected:
-  ~bhdfs_fstream();
-
- private:
-  hdfsFile f_;
+protected: ~bhdfs_fstream();
+private:
+  hdfsFile   f_;
   vcl_string fname_;
 
 };

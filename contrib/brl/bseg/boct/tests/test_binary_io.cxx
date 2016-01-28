@@ -8,37 +8,45 @@
 
 static void test_binary_io()
 {
-  boct_tree<short,vgl_point_3d<double> > *tree_in=new boct_tree<short,vgl_point_3d<double> >(6,3);
+  boct_tree<short, vgl_point_3d<double> > * tree_in = new boct_tree<short, vgl_point_3d<double> >(6, 3);
   tree_in->split();
-  vcl_vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves = tree_in->leaf_cells();
-  unsigned int num_leaves = 0;
-  for (unsigned i=0; i<leaves.size(); ++i) {
-    boct_tree_cell<short,vgl_point_3d<double> >* leaf = static_cast<boct_tree_cell<short,vgl_point_3d<double> >*>(leaves[i]);
-    if (leaf) { ++num_leaves; leaf->set_data(vgl_point_3d<double>(i,i,i)); }
-  }
+  vcl_vector<boct_tree_cell<short, vgl_point_3d<double> > *> leaves = tree_in->leaf_cells();
+  unsigned int                                               num_leaves = 0;
+  for( unsigned i = 0; i < leaves.size(); ++i )
+    {
+    boct_tree_cell<short,
+                   vgl_point_3d<double> >* leaf =
+      static_cast<boct_tree_cell<short, vgl_point_3d<double> > *>(leaves[i]);
+    if( leaf ) { ++num_leaves; leaf->set_data(vgl_point_3d<double>(i, i, i) ); }
+    }
 
-  //tree_in->print();
+  // tree_in->print();
   vsl_b_ofstream os("tree.bin");
-  bool save_internal_nodes = false;
+  bool           save_internal_nodes = false;
   tree_in->b_write(os, save_internal_nodes);
   os.close();
 
-  boct_tree<short,vgl_point_3d<double> > *tree_out=new boct_tree<short,vgl_point_3d<double> >();
-  vsl_b_ifstream is("tree.bin", vcl_ios_binary);
+  boct_tree<short, vgl_point_3d<double> > * tree_out = new boct_tree<short, vgl_point_3d<double> >();
+  vsl_b_ifstream                            is("tree.bin", vcl_ios_binary);
   tree_out->b_read(is);
-  TEST("Returns the correct level", tree_out->number_levels(), tree_in->number_levels());
-  //tree_out->print();
+  TEST("Returns the correct level", tree_out->number_levels(), tree_in->number_levels() );
+  // tree_out->print();
   leaves.empty();
   leaves = tree_out->leaf_cells();
-  TEST("No of Leaf Cells", num_leaves, leaves.size());
+  TEST("No of Leaf Cells", num_leaves, leaves.size() );
 
-  bool same=true;
-  for (unsigned i=0; i<leaves.size(); i++) {
-    boct_tree_cell<short,vgl_point_3d<double> >* leaf = static_cast<boct_tree_cell<short,vgl_point_3d<double> >*>(leaves[i]);
+  bool same = true;
+  for( unsigned i = 0; i < leaves.size(); i++ )
+    {
+    boct_tree_cell<short,
+                   vgl_point_3d<double> >* leaf =
+      static_cast<boct_tree_cell<short, vgl_point_3d<double> > *>(leaves[i]);
     vgl_point_3d<double> data = leaf->data();
-    if (data != vgl_point_3d<double>(i,i,i))
-      same=false;
-  }
+    if( data != vgl_point_3d<double>(i, i, i) )
+      {
+      same = false;
+      }
+    }
   TEST("The data at the leaf nodes are the same", same, true);
   vpl_unlink("tree.bin");
 }

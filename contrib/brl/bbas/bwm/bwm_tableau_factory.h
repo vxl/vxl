@@ -7,10 +7,11 @@
 
 class bwm_tableau_factory
 {
- public:
+public:
   bwm_tableau_factory() {}
   ~bwm_tableau_factory() {}
-  bwm_tableau_img* create_tableau(bwm_io_tab_config* tab);
+  bwm_tableau_img * create_tableau(bwm_io_tab_config* tab);
+
 };
 
 #endif // bwm_tableau_factory_h_

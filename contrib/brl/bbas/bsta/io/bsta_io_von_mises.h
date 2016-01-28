@@ -1,7 +1,7 @@
 // This is brl/bbas/bsta/io/bsta_io_von_mises.h
 #ifndef bsta_io_von_mises_h_
 #define bsta_io_von_mises_h_
-//:
+// :
 // \file
 // \brief Binary I/O for spherical parzen windows
 // \author Joseph L. Mundy
@@ -19,22 +19,22 @@
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vcl_iostream.h>
 
-//: Binary save bsta_von_mises to stream.
+// : Binary save bsta_von_mises to stream.
 template <class T, unsigned n>
 void
-vsl_b_write(vsl_b_ostream &os, const bsta_von_mises<T,n>& vm)
+vsl_b_write(vsl_b_ostream & os, const bsta_von_mises<T, n>& vm)
 {
-  vsl_b_write(os,vm.kappa());
+  vsl_b_write(os, vm.kappa() );
 
-  vsl_b_write(os,vm.mean());
+  vsl_b_write(os, vm.mean() );
 }
 
-//: Binary load bsta_von_mises from stream.
+// : Binary load bsta_von_mises from stream.
 template <class T, unsigned n>
 void
-vsl_b_read(vsl_b_istream &is, bsta_von_mises<T,n>& vm)
+vsl_b_read(vsl_b_istream & is, bsta_von_mises<T, n>& vm)
 {
-  typename bsta_parzen<T,n>::vector_type mean;
+  typename bsta_parzen<T, n>::vector_type mean;
   T kappa;
   vsl_b_read(is, kappa);
   vsl_b_read(is, mean);
@@ -42,13 +42,12 @@ vsl_b_read(vsl_b_istream &is, bsta_von_mises<T,n>& vm)
   vm.set_mean(mean);
 }
 
-//: Print summary
+// : Print summary
 template <class T, unsigned n>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_von_mises<T,n>& vm)
+vsl_print_summary(vcl_ostream & os, const bsta_von_mises<T, n>& vm)
 {
-  os << "von_mises  mean:"<<vm.mean()<<" n_samples"<<vm.size();
+  os << "von_mises  mean:" << vm.mean() << " n_samples" << vm.size();
 }
-
 
 #endif // bsta_io_von_mises_h_

@@ -1,6 +1,6 @@
 #ifndef rrel_tukey_obj_h_
 #define rrel_tukey_obj_h_
-//:
+// :
 // \file
 // \author Amitha Perera (perera@cs.rpi.edu)
 // \brief Beaton-Tukey loss function.
@@ -8,7 +8,7 @@
 #include <rrel/rrel_m_est_obj.h>
 #include <vnl/vnl_math.h>
 
-//: Beaton-Tukey biweight.
+// : Beaton-Tukey biweight.
 //  The cost function for the Beaton-Tukey biweight is
 //  \f[
 //    \rho(u) =
@@ -32,31 +32,31 @@
 
 class rrel_tukey_obj : public rrel_m_est_obj
 {
- public:
-  //: Constructor.
+public:
+  // : Constructor.
   //  \a B is the normalised residual value at which the cost becomes
   //  constant.
   rrel_tukey_obj( double B );
 
-  //: Destructor.
+  // : Destructor.
   virtual ~rrel_tukey_obj();
 
-  //: The robust loss function for the M-estimator.
+  // : The robust loss function for the M-estimator.
   virtual double rho( double u ) const;
 
-  //: The robust loss function for the M-estimator.
+  // : The robust loss function for the M-estimator.
   //  Overriding the overloaded version rho(u) hides the superclass'
   //  implementation of this version of rho(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
   virtual double rho( double r, double s ) const
-    { return rrel_m_est_obj::rho(r, s); }
+  { return rrel_m_est_obj::rho(r, s); }
 
-  //: The weight of the residual.
+  // : The weight of the residual.
   virtual double wgt( double u ) const;
 
-  //: Evaluate the objective function on heteroscedastic residuals.
+  // : Evaluate the objective function on heteroscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the  superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
@@ -64,9 +64,9 @@ class rrel_tukey_obj : public rrel_m_est_obj
   virtual void wgt( vect_const_iter res_begin, vect_const_iter res_end,
                     vect_const_iter scale_begin,
                     vect_iter wgt_begin ) const
-    { rrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
+  { rrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
 
-  //: Computes the weights for homoscedastic residuals.
+  // : Computes the weights for homoscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
@@ -74,43 +74,51 @@ class rrel_tukey_obj : public rrel_m_est_obj
   virtual void wgt( vect_const_iter begin, vect_const_iter end,
                     double scale,
                     vect_iter wgt_begin ) const
-    { rrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
+  { rrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
 
-  //: The weight of the residual.
+  // : The weight of the residual.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
   virtual double wgt( double r, double s ) const
-    { return rrel_m_est_obj::wgt(r, s); }
+  { return rrel_m_est_obj::wgt(r, s); }
 
-  //: Fast version of the wgt(u) computation.
+  // : Fast version of the wgt(u) computation.
   inline double wgt_fast( double u ) const;
 
-  //: Fast version of the rho(u) computation.
+  // : Fast version of the rho(u) computation.
   inline double rho_fast( double u ) const;
 
- private:
+private:
   double B_;
 };
 
 inline double
 rrel_tukey_obj::rho_fast( double u ) const
 {
-  if ( u < -B_ || u > B_ )
+  if( u < -B_ || u > B_ )
+    {
     return 1.0;
+    }
   else
-    return 1.0 - vnl_math::cube(1.0 - vnl_math::sqr(u/B_));
+    {
+    return 1.0 - vnl_math::cube(1.0 - vnl_math::sqr(u / B_) );
+    }
 }
 
 inline double
 rrel_tukey_obj::wgt_fast( double u ) const
 {
-  if ( u < -B_ || u > B_ )
+  if( u < -B_ || u > B_ )
+    {
     return 0.0;
+    }
   else
-    return vnl_math::sqr(1.0 - vnl_math::sqr(u/B_));
+    {
+    return vnl_math::sqr(1.0 - vnl_math::sqr(u / B_) );
+    }
 }
 
 #endif // rrel_tukey_obj_h_

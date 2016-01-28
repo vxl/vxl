@@ -1,6 +1,6 @@
 #ifndef HMatrix2DComputeMLESAC_h_
 #define HMatrix2DComputeMLESAC_h_
-//:
+// :
 // \file
 // \brief Robust HMatrix computation
 //
@@ -22,7 +22,7 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vgl/vgl_fwd.h>
 #include <mvl/HMatrix2DComputeRobust.h>
@@ -33,20 +33,17 @@
 
 class HMatrix2DComputeMLESAC : public HMatrix2DComputeRobust
 {
- public:
-  //: Initialize HMatrix2DComputeRobust object.
+public:
+  // : Initialize HMatrix2DComputeRobust object.
   HMatrix2DComputeMLESAC(double std);
   virtual ~HMatrix2DComputeMLESAC();
 
-  virtual double calculate_term(vcl_vector<double>& residuals,
-                                vcl_vector<bool>& inlier_list,
-                                int& count);
-  virtual double calculate_residual(HomgPoint2D& one,
-                                    HomgPoint2D& two,
-                                    HMatrix2D* F);
-  virtual double calculate_residual(vgl_homg_point_2d<double>& one,
-                                    vgl_homg_point_2d<double>& two,
-                                    HMatrix2D* F);
+  virtual double calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count);
+
+  virtual double calculate_residual(HomgPoint2D& one, HomgPoint2D& two, HMatrix2D* F);
+
+  virtual double calculate_residual(vgl_homg_point_2d<double>& one, vgl_homg_point_2d<double>& two, HMatrix2D* F);
+
 };
 
 #endif // HMatrix2DComputeMLESAC_h_

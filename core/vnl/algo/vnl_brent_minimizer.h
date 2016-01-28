@@ -2,9 +2,9 @@
 #ifndef vnl_brent_minimizer_h_
 #define vnl_brent_minimizer_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Tim Cootes
 // \date   Feb 2007
@@ -18,7 +18,7 @@
 
 struct vnl_brent_data;
 
-//: Brent 1D minimizer
+// : Brent 1D minimizer
 // Minimizes a 1D function using a cunning combination of golden section
 // and parabolic interpolation.  It does not require derivatives to be
 // supplied. It is guaranteed to find a minimum, and generally works
@@ -49,39 +49,38 @@ struct vnl_brent_data;
 // \endverbatim
 class vnl_brent_minimizer : public vnl_nonlinear_minimizer
 {
- protected:
+protected:
   vnl_cost_function* f_;
-     //: Function evaluation at value returned by minimize(x)
+  // : Function evaluation at value returned by minimize(x)
   double f_at_last_minimum_;
- public:
+public:
   vnl_brent_minimizer(vnl_cost_function& functor);
- ~vnl_brent_minimizer();
+  ~vnl_brent_minimizer();
 
-  //: Find a minimum of f(x) near to ax.
+  // : Find a minimum of f(x) near to ax.
   //  The evaluation of f(x) at the returned value can be obtained
   //  by a call to f_at_last_minimum();
   double minimize(double ax);
 
-   //: Function evaluation at value returned by minimize(x)
+  // : Function evaluation at value returned by minimize(x)
   double f_at_last_minimum() const { return f_at_last_minimum_; }
 
-  //: Find the minimum value of f(x) within a<= x <= c.
+  // : Find the minimum value of f(x) within a<= x <= c.
   // \retval The position,x, of the minimum x.
   // You need to provide a bracket for the minimum (a<b<c s.t. f(a)>f(b)<f(c).
   // The tolerance can be set using prior call to set_x_tolerance(tol).
   // Use f_at_last_minimum() to get function evaluation at the returned minima.
   double minimize_given_bounds(double ax, double bx, double cx);
 
-  //: Find the minimum value of f(x) within a<= x <= c.
+  // : Find the minimum value of f(x) within a<= x <= c.
   // \retval The position,x, of the minimum x.
   // You need to provide a bracket for the minimum (a<b<c s.t. f(a)>f(b)<f(c),
   // and the known value at b (fb=f(b)).
   // The tolerance can be set using prior call to set_x_tolerance(tol).
   // Use f_at_last_minimum() to get function evaluation at the returned minima.
-  double minimize_given_bounds_and_one_f(double ax, double bx, double cx,
-                                         double fb);
+  double minimize_given_bounds_and_one_f(double ax, double bx, double cx, double fb);
 
-  //: Find the minimum value of f(x) within a<= x <= c.
+  // : Find the minimum value of f(x) within a<= x <= c.
   // \retval The position,x, of the minimum x.
   // You need to provide a bracket for the minimum (a<b<c s.t. f(a)>f(b)<f(c)),
   // and the values fa=f(a), fb=f(b), fc=f(c). This avoids recalculating
@@ -90,8 +89,8 @@ class vnl_brent_minimizer : public vnl_nonlinear_minimizer
   //
   // The tolerance can be set using prior call to set_x_tolerance(tol).
   // Use f_at_last_minimum() to get function evaluation at the returned minima.
-  double minimize_given_bounds_and_all_f(double ax, double bx, double cx,
-                                         double fa, double fb, double fc);
+  double minimize_given_bounds_and_all_f(double ax, double bx, double cx, double fa, double fb, double fc);
+
 };
 
 #endif // vnl_brent_minimizer_h_

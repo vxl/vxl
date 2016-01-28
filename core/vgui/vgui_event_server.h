@@ -2,9 +2,9 @@
 #ifndef vgui_event_server_h_
 #define vgui_event_server_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Procedural event grabbing from a tableau
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -24,7 +24,7 @@
 #include <vgui/vgui_tableau_sptr.h>
 class vgui_event_server_interpose_tableau;
 
-//: Procedural event grabbing from a tableau
+// : Procedural event grabbing from a tableau
 //
 //  vgui_event_server allows you to grab events intended for a tableau in a
 //  procedural way, (i.e. in a "for" loop), in order to temporarily take control
@@ -41,30 +41,27 @@ class vgui_event_server_interpose_tableau;
 //   you could use it to get key presses! - kym
 class vgui_event_server
 {
- public:
-  //: Constructor - collects events from the given tableau.
-  vgui_event_server(vgui_tableau_sptr const&);
+public:
+  // : Constructor - collects events from the given tableau.
+  vgui_event_server(vgui_tableau_sptr const &);
 
   void reset();
 
-  //: Move on to the next event in the event queue.
+  // : Move on to the next event in the event queue.
   bool next();
 
-  void set_popup(const vgui_menu&);
+  void set_popup(const vgui_menu &);
 
-  //: Returns the last event.
+  // : Returns the last event.
   vgui_event last_event() { return last_event_; }
-
- protected:
- ~vgui_event_server();
-
- private:
+protected: ~vgui_event_server();
+private:
   friend class vgui_event_server_interpose_tableau;
   vgui_event_server_interpose_tableau* grabber_;
-  vgui_tableau_sptr grabber_reference_;
-  vgui_event last_event_;
-  bool use_event_;
-  vgui_menu menu;
+  vgui_tableau_sptr                    grabber_reference_;
+  vgui_event                           last_event_;
+  bool                                 use_event_;
+  vgui_menu                            menu;
 };
 
 #endif // vgui_event_server_h_

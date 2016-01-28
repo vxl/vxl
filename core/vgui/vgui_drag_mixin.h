@@ -2,9 +2,9 @@
 #ifndef vgui_drag_mixin_h_
 #define vgui_drag_mixin_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Simplifies the handling of drag events.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -19,7 +19,7 @@
 #include "vgui_event.h"
 #include "vgui_tableau.h"
 
-//: Simplifies the handling of drag events.
+// : Simplifies the handling of drag events.
 //
 //  A drag event occurs when the user moves the mouse with one of the
 //  mouse buttons pressed down.  In VGUI there is no vgui_DRAG event (there
@@ -36,20 +36,19 @@
 //  handle events.
 class vgui_drag_mixin
 {
-  //: Mouse button the user is pressing (vgui_BUTTON_NULL if none is pressed).
+  // : Mouse button the user is pressing (vgui_BUTTON_NULL if none is pressed).
   vgui_button last_down_button_;
-
- public:
-  //: Constructor - create a default vgui_drag_mixin.
+public:
+  // : Constructor - create a default vgui_drag_mixin.
   vgui_drag_mixin(void);
 
-  //: Destructor.
+  // : Destructor.
   virtual ~vgui_drag_mixin(void);
 
-  //: Look for drag events and pass them to mouse_drag().
-  virtual bool handle(vgui_event const&);
+  // : Look for drag events and pass them to mouse_drag().
+  virtual bool handle(vgui_event const &);
 
-  //: Called when the user is dragging the mouse.
+  // : Called when the user is dragging the mouse.
   virtual bool mouse_drag(int, int, vgui_button, vgui_modifier);
 };
 

@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_coordinate_system.h
 #ifndef vcsl_coordinate_system_h_
 #define vcsl_coordinate_system_h_
-//:
+// :
 // \file
 // \brief Abstract coordinate system
 // \author Francois BERTEL
@@ -21,19 +21,17 @@
 #include <vnl/vnl_vector.h>
 class vcsl_spatial;
 
-//: Abstract coordinate system
+// : Abstract coordinate system
 class vcsl_coordinate_system
   : public vbl_ref_count
 {
-  //***************************************************************************
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
-
- protected:
+  // ***************************************************************************
+protected:
   // Default constructor
   vcsl_coordinate_system() {}
-
- public:
+public:
   // Copy constructor
   vcsl_coordinate_system(vcsl_coordinate_system const& c)
     : vbl_ref_count(), axes_(c.axes_) {}
@@ -41,45 +39,43 @@ class vcsl_coordinate_system
   // Destructor
   virtual ~vcsl_coordinate_system() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Number of axes
-  int dimensionality() const { return int(axes_.size()); }
+  // : Number of axes
+  int dimensionality() const { return int(axes_.size() ); }
 
-  //: Is `i' an index on an axis ?
+  // : Is `i' an index on an axis ?
   bool valid_axis(unsigned int i) const { return i < axes_.size(); }
 
-  //: Return the axis `i'
+  // : Return the axis `i'
   //  REQUIRE: valid_axis(i)
   vcsl_axis_sptr axis(int i) const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
-  //***************************************************************************
-  virtual const vcsl_spatial *cast_to_spatial() const { return 0; }
+  // ***************************************************************************
+  virtual const vcsl_spatial * cast_to_spatial() const { return 0; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Conversion
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Convert `v', expressed with cs units, to standard units
+  // : Convert `v', expressed with cs units, to standard units
   //  REQUIRE: v.size()==dimensionality()
-  vnl_vector<double>
-  from_cs_to_standard_units(const vnl_vector<double> &v) const;
+  vnl_vector<double> from_cs_to_standard_units(const vnl_vector<double> & v) const;
 
-  //: Convert `v', expressed with standard units, to cs units
+  // : Convert `v', expressed with standard units, to cs units
   //  REQUIRE: v.size()==dimensionality()
-  vnl_vector<double>
-  from_standard_units_to_cs(const vnl_vector<double> &v) const;
+  vnl_vector<double> from_standard_units_to_cs(const vnl_vector<double> & v) const;
 
- protected:
-  //***************************************************************************
+protected:
+  // ***************************************************************************
   // Implementation
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: List of axes
+  // : List of axes
   vcl_vector<vcsl_axis_sptr> axes_;
 };
 

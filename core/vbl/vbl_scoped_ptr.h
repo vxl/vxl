@@ -1,6 +1,6 @@
 #ifndef vbl_scoped_ptr_h_
 #define vbl_scoped_ptr_h_
-//:
+// :
 // \file
 // \author Amitha Perera
 // \brief Scoped pointer lifted from BOOST.
@@ -20,7 +20,7 @@
 #include <vcl_compiler.h>
 #include <vbl/vbl_checked_delete.h>
 
-//:
+// :
 //  vbl_scoped_ptr mimics a built-in pointer except that it guarantees
 //  deletion of the object pointed to, either on destruction of the
 //  vbl_scoped_ptr or via an explicit reset(). vbl_scoped_ptr is a
@@ -50,80 +50,81 @@
 template <class T>
 class vbl_scoped_ptr
 {
- private:
+private:
   T* ptr_;
 
   // not copyable, not assignable.
-  vbl_scoped_ptr( vbl_scoped_ptr const& );
-  vbl_scoped_ptr& operator=( vbl_scoped_ptr const& );
+  vbl_scoped_ptr( vbl_scoped_ptr const & );
+  vbl_scoped_ptr & operator=( vbl_scoped_ptr const & );
 
   typedef vbl_scoped_ptr<T> this_type;
 
   VCL_SAFE_BOOL_DEFINE;
-
- public:
+public:
   typedef T element_type;
 
-  //:
+  // :
   explicit vbl_scoped_ptr( T* p = 0 )
     : ptr_(p) // never throws
   {
   }
 
-  //:
+  // :
   // T must be complete when this destructor is instantiated.
   ~vbl_scoped_ptr() // never throws
   {
     vbl_checked_delete(ptr_);
   }
 
-  //: Make this own \p p, releasing any existing pointer.
+  // : Make this own \p p, releasing any existing pointer.
   void reset( T* p = 0 ) // never throws
   {
     this_type(p).swap(*this);
   }
 
-  //:
-  T& operator*() const // never throws
+  // :
+  T & operator*() const // never throws
   {
     return *ptr_;
   }
 
-  //:
-  T* operator->() const // never throws
+  // :
+  T * operator->() const // never throws
   {
     return ptr_;
   }
 
-  //:
-  T* get_pointer() const // never throws
+  // :
+  T * get_pointer() const // never throws
   {
     return ptr_;
   }
 
-    // implicit conversion to "bool"
+  // implicit conversion to "bool"
 
-  //: Safe implicit conversion to bool.
+  // : Safe implicit conversion to bool.
   //
   // This allows for if (sp) type of usage.
-  operator safe_bool () const
-  {
+  operator safe_bool() const
+    {
     return ptr_ ? VCL_SAFE_BOOL_TRUE : 0;
-  }
+    }
 
-  //:
-  bool operator! () const // never throws
+  // :
+  bool operator!() const  // never throws
   {
     return ptr_ == 0;
   }
 
-  //:
+  // :
   void swap( vbl_scoped_ptr& b ) // never throws
   {
     T* tmp = b.ptr_;
+
     b.ptr_ = ptr_;
     ptr_ = tmp;
   }
+
 };
 
 #endif // vbl_scoped_ptr_h_

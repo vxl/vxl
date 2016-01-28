@@ -8,31 +8,27 @@
 
 #include "boxm2_vecf_ocl_vector_field.h"
 
-//: string a series of vector_field transforms together
-class boxm2_vecf_ocl_composite_transform: public boxm2_vecf_ocl_vector_field
+// : string a series of vector_field transforms together
+class boxm2_vecf_ocl_composite_transform : public boxm2_vecf_ocl_vector_field
 {
-  public:
-    //: constructor
-    boxm2_vecf_ocl_composite_transform(vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms);
+public:
+  // : constructor
+  boxm2_vecf_ocl_composite_transform(vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms);
 
-    //: compute forward transform
-    // Note that both pts_source and pts_target are defined for each cell in source scene using data type float4
-    virtual bool compute_forward_transform(boxm2_scene_sptr source,
-                                           boxm2_block_id const& blk_id,
-                                           bocl_mem* pts_source, // in
-                                           bocl_mem* pts_target, // out
-                                           cl_command_queue &queue);
+  // : compute forward transform
+  // Note that both pts_source and pts_target are defined for each cell in source scene using data type float4
+  virtual bool compute_forward_transform(boxm2_scene_sptr source, boxm2_block_id const& blk_id, bocl_mem* pts_source, // in
+                                         bocl_mem* pts_target,                                                        // out
+                                         cl_command_queue & queue);
 
-    //: compute inverse vector field, writing result to gpu cache
-    // Note that both pts_target and pts_source are defined for each cell in target scene using data type float4
-    virtual bool compute_inverse_transform(boxm2_scene_sptr target,
-                                           boxm2_block_id const& blk_id,
-                                           bocl_mem* pts_target, // in
-                                           bocl_mem* pts_source, // out
-                                           cl_command_queue &queue);
+  // : compute inverse vector field, writing result to gpu cache
+  // Note that both pts_target and pts_source are defined for each cell in target scene using data type float4
+  virtual bool compute_inverse_transform(boxm2_scene_sptr target, boxm2_block_id const& blk_id, bocl_mem* pts_target, // in
+                                         bocl_mem* pts_source,                                                        // out
+                                         cl_command_queue & queue);
 
-  private:
-    vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms_;
+private:
+  vcl_vector<boxm2_vecf_ocl_vector_field_sptr> xforms_;
 };
 
 #endif

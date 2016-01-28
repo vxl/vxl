@@ -2,7 +2,7 @@
 #ifndef vidl_ffmpeg_ostream_v2_txx_
 #define vidl_ffmpeg_ostream_v2_txx_
 #include "vidl_ffmpeg_ostream.h"
-//:
+// :
 // \file
 // \author Matt Leotta
 // \author Amitha Perera
@@ -10,7 +10,7 @@
 //
 // Updated for ffmpeg 51.49.0.
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "vidl_ffmpeg_init.h"
 #include "vidl_ffmpeg_convert.h"
@@ -22,25 +22,23 @@
 
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
-#include <libavformat/avformat.h>
+#  include <libavformat/avformat.h>
 #else
-#include <ffmpeg/avformat.h>
+#  include <ffmpeg/avformat.h>
 #endif
 }
 
-//-----------------------------------------------------------------------------
-
+// -----------------------------------------------------------------------------
 
 struct vidl_ffmpeg_ostream::pimpl
-{
+  {
   pimpl()
-  : fmt_cxt_( 0 ),
-  file_opened_( false ),
-  codec_opened_( false ),
-  cur_frame_( 0 ),
-  video_rc_eq_(NULL)
+    : fmt_cxt_( 0 ),
+    file_opened_( false ),
+    codec_opened_( false ),
+    cur_frame_( 0 ),
+    video_rc_eq_(NULL)
   { }
-
 
   AVFormatContext* fmt_cxt_;
   bool file_opened_;
@@ -48,22 +46,18 @@ struct vidl_ffmpeg_ostream::pimpl
   vil_memory_chunk_sptr bit_buf_;
   unsigned int cur_frame_;
   char* video_rc_eq_;
-};
+  };
 
+// -----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-
-
-//: Constructor
-vidl_ffmpeg_ostream::
-vidl_ffmpeg_ostream()
+// : Constructor
+vidl_ffmpeg_ostream::vidl_ffmpeg_ostream()
   : os_( new vidl_ffmpeg_ostream::pimpl )
 {
   vidl_ffmpeg_init();
 }
 
-
-//: Destructor
+// : Destructor
 vidl_ffmpeg_ostream::
 ~vidl_ffmpeg_ostream()
 {
@@ -71,22 +65,18 @@ vidl_ffmpeg_ostream::
   delete os_;
 }
 
-
-//: Constructor - opens a stream
-vidl_ffmpeg_ostream::
-vidl_ffmpeg_ostream(const vcl_string& filename,
-                    const vidl_ffmpeg_ostream_params& params)
+// : Constructor - opens a stream
+vidl_ffmpeg_ostream::vidl_ffmpeg_ostream(const vcl_string& filename,
+                                         const vidl_ffmpeg_ostream_params& params)
   : os_( new vidl_ffmpeg_ostream::pimpl ),
-    filename_(filename), params_(params)
+  filename_(filename), params_(params)
 {
   vidl_ffmpeg_init();
 }
 
-
-//: Open the stream
+// : Open the stream
 bool
-vidl_ffmpeg_ostream::
-open()
+vidl_ffmpeg_ostream::open()
 {
   // Close any open files
   close();
@@ -98,137 +88,152 @@ open()
   os_->fmt_cxt_ = av_alloc_format_context();
 
   AVOutputFormat* file_oformat = 0;
-  if ( params_.file_format_ == vidl_ffmpeg_ostream_params::GUESS ) {
+  if( params_.file_format_ == vidl_ffmpeg_ostream_params::GUESS )
+    {
     file_oformat = guess_format(NULL, filename_.c_str(), NULL);
-    if (!file_oformat) {
+    if( !file_oformat )
+      {
       vcl_cerr << "ffmpeg: Unable for find a suitable output format for "
                << filename_ << '\n';
       close();
       return false;
+      }
     }
-  } else {
+  else
+    {
     close();
     return false;
-  }
+    }
 
   os_->fmt_cxt_->oformat = file_oformat;
   os_->fmt_cxt_->nb_streams = 0;
 
   // Create stream
   AVStream* st = av_new_stream( os_->fmt_cxt_, 0 );
-  if ( !st ) {
+  if( !st )
+    {
     vcl_cerr << "ffmpeg: could not alloc stream\n";
     close();
     return false;
-  }
+    }
 
-  //os_->fmt_cxt_->nb_streams = 1;
+  // os_->fmt_cxt_->nb_streams = 1;
 
-  AVCodecContext *video_enc = st->codec;
+  AVCodecContext * video_enc = st->codec;
 
-  if ( vcl_strcmp(file_oformat->name, "mp4") != 0 ||
-       vcl_strcmp(file_oformat->name, "mov") != 0 ||
-       vcl_strcmp(file_oformat->name, "3gp") != 0 )
+  if( vcl_strcmp(file_oformat->name, "mp4") != 0 ||
+      vcl_strcmp(file_oformat->name, "mov") != 0 ||
+      vcl_strcmp(file_oformat->name, "3gp") != 0 )
+    {
     video_enc->flags |= CODEC_FLAG_GLOBAL_HEADER;
+    }
 
   video_enc->codec_type = CODEC_TYPE_VIDEO;
 
-  switch ( params_.encoder_ )
-  {
-   case vidl_ffmpeg_ostream_params::DEFAULT:
-    video_enc->codec_id = file_oformat->video_codec;
-    break;
-   case vidl_ffmpeg_ostream_params::MPEG4:
-    video_enc->codec_id = CODEC_ID_MPEG4;
-    break;
-   case vidl_ffmpeg_ostream_params::MPEG2VIDEO:
-    video_enc->codec_id = CODEC_ID_MPEG2VIDEO;
-    break;
-   case vidl_ffmpeg_ostream_params::MSMPEG4V2:
-    video_enc->codec_id = CODEC_ID_MSMPEG4V2;
-    break;
-   case vidl_ffmpeg_ostream_params::RAWVIDEO:
-    video_enc->codec_id = CODEC_ID_RAWVIDEO;
-    break;
-   case vidl_ffmpeg_ostream_params::LJPEG:
-    video_enc->codec_id = CODEC_ID_LJPEG;
-    break;
-   case vidl_ffmpeg_ostream_params::HUFFYUV:
-    video_enc->codec_id = CODEC_ID_HUFFYUV;
-    break;
-   case vidl_ffmpeg_ostream_params::DVVIDEO:
-    video_enc->codec_id = CODEC_ID_DVVIDEO;
-    break;
-   default:
-    vcl_cout << "ffmpeg: Unknown encoder type\n";
-    return false;
-  }
+  switch( params_.encoder_ )
+    {
+    case vidl_ffmpeg_ostream_params::DEFAULT:
+      video_enc->codec_id = file_oformat->video_codec;
+      break;
+    case vidl_ffmpeg_ostream_params::MPEG4:
+      video_enc->codec_id = CODEC_ID_MPEG4;
+      break;
+    case vidl_ffmpeg_ostream_params::MPEG2VIDEO:
+      video_enc->codec_id = CODEC_ID_MPEG2VIDEO;
+      break;
+    case vidl_ffmpeg_ostream_params::MSMPEG4V2:
+      video_enc->codec_id = CODEC_ID_MSMPEG4V2;
+      break;
+    case vidl_ffmpeg_ostream_params::RAWVIDEO:
+      video_enc->codec_id = CODEC_ID_RAWVIDEO;
+      break;
+    case vidl_ffmpeg_ostream_params::LJPEG:
+      video_enc->codec_id = CODEC_ID_LJPEG;
+      break;
+    case vidl_ffmpeg_ostream_params::HUFFYUV:
+      video_enc->codec_id = CODEC_ID_HUFFYUV;
+      break;
+    case vidl_ffmpeg_ostream_params::DVVIDEO:
+      video_enc->codec_id = CODEC_ID_DVVIDEO;
+      break;
+    default:
+      vcl_cout << "ffmpeg: Unknown encoder type\n";
+      return false;
+    }
 
   AVCodec* codec = avcodec_find_encoder( video_enc->codec_id );
-  if ( !codec )
-  {
+  if( !codec )
+    {
     vcl_cerr << "ffmpeg_writer:: couldn't find encoder for " << video_enc->codec_id << '\n';
     return false;
-  }
+    }
 
   video_enc->bit_rate = params_.bit_rate_ * 1000;
   video_enc->bit_rate_tolerance = params_.video_bit_rate_tolerance_;
   video_enc->time_base.num = 1000;
-  video_enc->time_base.den = int(params_.frame_rate_*1000);
+  video_enc->time_base.den = int(params_.frame_rate_ * 1000);
 
-  if ( codec && codec->supported_framerates )
-  {
-    AVRational const* p = codec->supported_framerates;
-    AVRational req = { video_enc->time_base.den, video_enc->time_base.num };
-    AVRational const* best = NULL;
-    AVRational best_error = { INT_MAX, 1 };
-    for (; p->den!=0; p++)
+  if( codec && codec->supported_framerates )
     {
-      AVRational error = av_sub_q(req, *p);
-      if ( error.num < 0 )   error.num *= -1;
-      if ( av_cmp_q( error, best_error ) < 0 )
+    AVRational const* p = codec->supported_framerates;
+    AVRational        req = { video_enc->time_base.den, video_enc->time_base.num };
+    AVRational const* best = NULL;
+    AVRational        best_error = { INT_MAX, 1 };
+    for( ; p->den != 0; p++ )
       {
-        best_error= error;
-        best= p;
+      AVRational error = av_sub_q(req, *p);
+      if( error.num < 0 ) {error.num *= -1; }
+      if( av_cmp_q( error, best_error ) < 0 )
+        {
+        best_error = error;
+        best = p;
+        }
       }
+    video_enc->time_base.den = best->num;
+    video_enc->time_base.num = best->den;
     }
-    video_enc->time_base.den= best->num;
-    video_enc->time_base.num= best->den;
-  }
 
   video_enc->width  = params_.ni_;
   video_enc->height = params_.nj_;
-  video_enc->sample_aspect_ratio = av_d2q(params_.frame_aspect_ratio_*params_.ni_/params_.nj_, 255);
+  video_enc->sample_aspect_ratio = av_d2q(params_.frame_aspect_ratio_ * params_.ni_ / params_.nj_, 255);
 
   // Our source is packed RGB. Use that if possible.
   video_enc->pix_fmt = PIX_FMT_RGB24;
-  if ( codec && codec->pix_fmts )
-  {
-    const enum PixelFormat* p= codec->pix_fmts;
-    for ( ; *p != -1; p++ )
+  if( codec && codec->pix_fmts )
     {
-      if ( *p == video_enc->pix_fmt )
+    const enum PixelFormat* p = codec->pix_fmts;
+    for( ; *p != -1; p++ )
+      {
+      if( *p == video_enc->pix_fmt )
+        {
         break;
-    }
-    if ( *p == -1 )
+        }
+      }
+    if( *p == -1 )
+      {
       video_enc->pix_fmt = codec->pix_fmts[0];
-  }
-  else if ( codec && ( codec->id == CODEC_ID_RAWVIDEO ||
+      }
+    }
+  else if( codec && ( codec->id == CODEC_ID_RAWVIDEO ||
                       codec->id == CODEC_ID_HUFFYUV ) )
-  {
+    {
     // these formats only support the YUV input image formats
     video_enc->pix_fmt = PIX_FMT_YUV420P;
-  }
+    }
 
-  if (!params_.intra_only_)
+  if( !params_.intra_only_ )
+    {
     video_enc->gop_size = params_.gop_size_;
+    }
   else
+    {
     video_enc->gop_size = 0;
-  if (params_.video_qscale_ || params_.same_quality_)
-  {
+    }
+  if( params_.video_qscale_ || params_.same_quality_ )
+    {
     video_enc->flags |= CODEC_FLAG_QSCALE;
     st->quality = FF_QP2LAMBDA * params_.video_qscale_;
-  }
+    }
   // if (bitexact)
   //   video_enc->flags |= CODEC_FLAG_BITEXACT;
 
@@ -244,83 +249,83 @@ open()
   video_enc->spatial_cplx_masking = params_.scplx_mask_;
   video_enc->temporal_cplx_masking = params_.tcplx_mask_;
   video_enc->p_masking = params_.p_mask_;
-  video_enc->quantizer_noise_shaping= params_.qns_;
+  video_enc->quantizer_noise_shaping = params_.qns_;
 
-  if (params_.use_umv_)
-  {
+  if( params_.use_umv_ )
+    {
     video_enc->flags |= CODEC_FLAG_H263P_UMV;
-  }
-  if (params_.use_ss_)
-  {
+    }
+  if( params_.use_ss_ )
+    {
     video_enc->flags |= CODEC_FLAG_H263P_SLICE_STRUCT;
-  }
-  if (params_.use_aic_)
-  {
+    }
+  if( params_.use_aic_ )
+    {
     video_enc->flags |= CODEC_FLAG_H263P_AIC;
-  }
-  if (params_.use_aiv_)
-  {
+    }
+  if( params_.use_aiv_ )
+    {
     video_enc->flags |= CODEC_FLAG_H263P_AIV;
-  }
-  if (params_.use_4mv_)
-  {
+    }
+  if( params_.use_4mv_ )
+    {
     video_enc->flags |= CODEC_FLAG_4MV;
-  }
-  if (params_.use_obmc_)
-  {
+    }
+  if( params_.use_obmc_ )
+    {
     video_enc->flags |= CODEC_FLAG_OBMC;
-  }
-  if (params_.use_loop_)
-  {
+    }
+  if( params_.use_loop_ )
+    {
     video_enc->flags |= CODEC_FLAG_LOOP_FILTER;
-  }
+    }
 
-  if (params_.use_part_)
-  {
+  if( params_.use_part_ )
+    {
     video_enc->flags |= CODEC_FLAG_PART;
-  }
-  if (params_.use_alt_scan_)
-  {
+    }
+  if( params_.use_alt_scan_ )
+    {
     video_enc->flags |= CODEC_FLAG_ALT_SCAN;
-  }
-  if (params_.use_trell_)
-  {
+    }
+  if( params_.use_trell_ )
+    {
     video_enc->flags |= CODEC_FLAG_TRELLIS_QUANT;
-  }
-  if (params_.use_scan_offset_)
-  {
+    }
+  if( params_.use_scan_offset_ )
+    {
     video_enc->flags |= CODEC_FLAG_SVCD_SCAN_OFFSET;
-  }
-  if (params_.closed_gop_)
-  {
+    }
+  if( params_.closed_gop_ )
+    {
     video_enc->flags |= CODEC_FLAG_CLOSED_GOP;
-  }
-  if (params_.use_qpel_)
-  {
+    }
+  if( params_.use_qpel_ )
+    {
     video_enc->flags |= CODEC_FLAG_QPEL;
-  }
-  if (params_.use_qprd_)
-  {
+    }
+  if( params_.use_qprd_ )
+    {
     video_enc->flags |= CODEC_FLAG_QP_RD;
-  }
-  if (params_.use_cbprd_)
-  {
+    }
+  if( params_.use_cbprd_ )
+    {
     video_enc->flags |= CODEC_FLAG_CBP_RD;
-  }
-  if (params_.b_frames_)
-  {
+    }
+  if( params_.b_frames_ )
+    {
     video_enc->max_b_frames = params_.b_frames_;
     video_enc->b_frame_strategy = 0;
     video_enc->b_quant_factor = 2.0;
-  }
-  if (params_.do_interlace_dct_)
-  {
+    }
+  if( params_.do_interlace_dct_ )
+    {
     video_enc->flags |= CODEC_FLAG_INTERLACED_DCT;
-  }
-  if (params_.do_interlace_me_)
-  {
+    }
+  if( params_.do_interlace_me_ )
+    {
     video_enc->flags |= CODEC_FLAG_INTERLACED_ME;
-  }
+    }
   video_enc->qmin = params_.video_qmin_;
   video_enc->qmax = params_.video_qmax_;
   video_enc->lmin = params_.video_lmin_;
@@ -332,8 +337,8 @@ open()
   video_enc->qcompress = params_.video_qcomp_;
 
   // delete when the stream is closed
-  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length()+1];
-  vcl_strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str());
+  os_->video_rc_eq_ = new char[params_.video_rc_eq_.length() + 1];
+  vcl_strcpy(os_->video_rc_eq_, params_.video_rc_eq_.c_str() );
   video_enc->rc_eq = os_->video_rc_eq_;
 
   video_enc->debug = params_.debug_;
@@ -343,8 +348,8 @@ open()
   video_enc->rc_max_rate = params_.video_rc_max_rate_;
   video_enc->rc_min_rate = params_.video_rc_min_rate_;
   video_enc->rc_buffer_size = params_.video_rc_buffer_size_;
-  video_enc->rc_buffer_aggressivity= params_.video_rc_buffer_aggressivity_;
-  video_enc->rc_initial_cplx= params_.video_rc_initial_cplx_;
+  video_enc->rc_buffer_aggressivity = params_.video_rc_buffer_aggressivity_;
+  video_enc->rc_initial_cplx = params_.video_rc_initial_cplx_;
   video_enc->i_quant_factor = params_.video_i_qfactor_;
   video_enc->b_quant_factor = params_.video_b_qfactor_;
   video_enc->i_quant_offset = params_.video_i_qoffset_;
@@ -353,41 +358,43 @@ open()
   video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
   video_enc->dct_algo = params_.dct_algo_;
   video_enc->idct_algo = params_.idct_algo_;
-  video_enc->me_threshold= params_.me_threshold_;
-  video_enc->mb_threshold= params_.mb_threshold_;
-  video_enc->intra_dc_precision= params_.intra_dc_precision_ - 8;
+  video_enc->me_threshold = params_.me_threshold_;
+  video_enc->mb_threshold = params_.mb_threshold_;
+  video_enc->intra_dc_precision = params_.intra_dc_precision_ - 8;
   video_enc->strict_std_compliance = params_.strict_;
   video_enc->error_rate = params_.error_rate_;
-  video_enc->noise_reduction= params_.noise_reduction_;
-  video_enc->scenechange_threshold= params_.sc_threshold_;
+  video_enc->noise_reduction = params_.noise_reduction_;
+  video_enc->scenechange_threshold = params_.sc_threshold_;
   video_enc->me_range = params_.me_range_;
-  video_enc->coder_type= params_.coder_;
-  video_enc->context_model= params_.context_;
-  video_enc->prediction_method= params_.predictor_;
+  video_enc->coder_type = params_.coder_;
+  video_enc->context_model = params_.context_;
+  video_enc->prediction_method = params_.predictor_;
 
-  if (params_.packet_size_)
-  {
-    video_enc->rtp_mode= 1;
-    video_enc->rtp_payload_size= params_.packet_size_;
-  }
+  if( params_.packet_size_ )
+    {
+    video_enc->rtp_mode = 1;
+    video_enc->rtp_payload_size = params_.packet_size_;
+    }
 
-  if (params_.do_psnr_)
-    video_enc->flags|= CODEC_FLAG_PSNR;
+  if( params_.do_psnr_ )
+    {
+    video_enc->flags |= CODEC_FLAG_PSNR;
+    }
 
   video_enc->me_method = params_.me_method_;
 
   /* two pass mode */
-  if (params_.do_pass_)
-  {
-    if (params_.do_pass_ == 1)
+  if( params_.do_pass_ )
     {
+    if( params_.do_pass_ == 1 )
+      {
       video_enc->flags |= CODEC_FLAG_PASS1;
-    }
+      }
     else
-    {
+      {
       video_enc->flags |= CODEC_FLAG_PASS2;
+      }
     }
-  }
 
   os_->fmt_cxt_->timestamp = 0;
   os_->fmt_cxt_->title[0] = '\0';
@@ -397,148 +404,153 @@ open()
 
   vcl_strncpy( os_->fmt_cxt_->filename, filename_.c_str(), 1023 );
 
-  if ( url_fopen( &os_->fmt_cxt_->pb, filename_.c_str(), URL_WRONLY) < 0 )
-  {
+  if( url_fopen( &os_->fmt_cxt_->pb, filename_.c_str(), URL_WRONLY) < 0 )
+    {
     vcl_cerr << "ffmpeg: couldn't open " << filename_ << " for writing\n";
     close();
     return false;
-  }
+    }
   os_->file_opened_ = true;
 
   AVFormatParameters fmt_param;
   vcl_memset( &fmt_param, 0, sizeof(fmt_param) );
-  if ( av_set_parameters( os_->fmt_cxt_, &fmt_param ) < 0 )
-  {
+  if( av_set_parameters( os_->fmt_cxt_, &fmt_param ) < 0 )
+    {
     vcl_cerr << "ffmpeg: invalid encoding parameter\n";
     close();
     return false;
-  }
+    }
 
-  //dump_format( os_->fmt_cxt_, 1, filename_, 1 );
+  // dump_format( os_->fmt_cxt_, 1, filename_, 1 );
 
-  if ( avcodec_open( video_enc, codec ) < 0 )
-  {
+  if( avcodec_open( video_enc, codec ) < 0 )
+    {
     vcl_cerr << "ffmpeg: couldn't open codec\n";
     close();
     return false;
-  }
+    }
   os_->codec_opened_ = true;
 
-  if ( av_write_header( os_->fmt_cxt_ ) < 0 )
-  {
+  if( av_write_header( os_->fmt_cxt_ ) < 0 )
+    {
     vcl_cerr << "ffmpeg: couldn't write header\n";
     close();
     return false;
-  }
+    }
 
   return true;
 }
 
-
-//: Close the stream
+// : Close the stream
 void
-vidl_ffmpeg_ostream::
-close()
+vidl_ffmpeg_ostream::close()
 {
   delete os_->video_rc_eq_;
   os_->video_rc_eq_ = NULL;
 
-  if ( os_->fmt_cxt_ ) {
+  if( os_->fmt_cxt_ )
+    {
 
-    if ( os_->file_opened_ ) {
+    if( os_->file_opened_ )
+      {
       av_write_trailer( os_->fmt_cxt_ );
       url_fclose( os_->fmt_cxt_->pb );
       os_->file_opened_ = false;
-    }
+      }
 
-    if ( os_->fmt_cxt_->nb_streams > 0 ) {
-      if ( os_->codec_opened_ ) {
-        for ( unsigned i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
+    if( os_->fmt_cxt_->nb_streams > 0 )
+      {
+      if( os_->codec_opened_ )
+        {
+        for( unsigned i = 0; i < os_->fmt_cxt_->nb_streams; ++i )
+          {
           AVCodecContext* codec = os_->fmt_cxt_->streams[i]->codec;
-          if ( codec->stats_in ) {
+          if( codec->stats_in )
+            {
             av_freep( codec->stats_in );
-          }
+            }
           avcodec_close( codec );
+          }
+        }
+      os_->codec_opened_ = false;
+      for( unsigned i = 0; i < os_->fmt_cxt_->nb_streams; ++i )
+        {
+        av_free( os_->fmt_cxt_->streams[i] );
         }
       }
-      os_->codec_opened_ = false;
-      for ( unsigned i = 0; i < os_->fmt_cxt_->nb_streams; ++i ) {
-        av_free( os_->fmt_cxt_->streams[i] );
-      }
-    }
 
     av_free( os_->fmt_cxt_ );
     os_->fmt_cxt_ = 0;
-  }
+    }
 }
 
-
-//: Return true if the stream is open for writing
+// : Return true if the stream is open for writing
 bool
-vidl_ffmpeg_ostream::
-is_open() const
+vidl_ffmpeg_ostream::is_open() const
 {
   return os_->file_opened_;
 }
 
-
-//: Write and image to the stream
+// : Write and image to the stream
 // \retval false if the image could not be written
 bool
-vidl_ffmpeg_ostream::
-write_frame(const vidl_frame_sptr& frame)
+vidl_ffmpeg_ostream::write_frame(const vidl_frame_sptr& frame)
 {
-  if (!is_open()) {
+  if( !is_open() )
+    {
     // resize to the first frame
-    params_.size(frame->ni(),frame->nj());
+    params_.size(frame->ni(), frame->nj() );
     open();
-  }
+    }
 
   AVCodecContext* codec = os_->fmt_cxt_->streams[0]->codec;
 
-  if ( unsigned( codec->width ) != frame->ni() ||
-       unsigned( codec->height ) != frame->nj() ) {
+  if( unsigned( codec->width ) != frame->ni() ||
+      unsigned( codec->height ) != frame->nj() )
+    {
     vcl_cerr << "ffmpeg: Input image has wrong size. Expecting ("
              << codec->width << 'x' << codec->height << "), got ("
              << frame->ni() << 'x' << frame->nj() << ")\n";
     return false;
-  }
+    }
 
+  PixelFormat fmt = vidl_pixel_format_to_ffmpeg(frame->pixel_format() );
 
-  PixelFormat fmt = vidl_pixel_format_to_ffmpeg(frame->pixel_format());
-
-  vidl_pixel_format target_fmt = vidl_pixel_format_from_ffmpeg(codec->pix_fmt);
-  static vidl_frame_sptr temp_frame = new vidl_shared_frame(NULL,frame->ni(),frame->nj(),target_fmt);
+  vidl_pixel_format      target_fmt = vidl_pixel_format_from_ffmpeg(codec->pix_fmt);
+  static vidl_frame_sptr temp_frame = new vidl_shared_frame(NULL, frame->ni(), frame->nj(), target_fmt);
 
   AVFrame out_frame;
   avcodec_get_frame_defaults( &out_frame );
 
   // The frame is in the correct format to encode directly
-  if ( codec->pix_fmt == fmt )
-  {
-    avpicture_fill((AVPicture*)&out_frame, (uint8_t*) frame->data(),
-                   fmt, frame->ni(), frame->nj());
-  }
+  if( codec->pix_fmt == fmt )
+    {
+    avpicture_fill( (AVPicture *)&out_frame, (uint8_t *) frame->data(),
+                    fmt, frame->ni(), frame->nj() );
+    }
   else
-  {
-    if (!temp_frame->data()) {
+    {
+    if( !temp_frame->data() )
+      {
       unsigned ni = frame->ni();
       unsigned nj = frame->nj();
-      unsigned out_size = vidl_pixel_format_buffer_size(ni,nj,target_fmt);
+      unsigned out_size = vidl_pixel_format_buffer_size(ni, nj, target_fmt);
       temp_frame = new vidl_memory_chunk_frame(ni, nj, target_fmt,
-                                               new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
-    }
-    // try conversion with FFMPEG functions
-    if (!vidl_ffmpeg_convert(frame, temp_frame)) {
-      // try conversion with vidl functions
-      if (!vidl_convert_frame(*frame, *temp_frame)) {
-        vcl_cout << "unable to convert " << frame->pixel_format() << " to "<<target_fmt<<vcl_endl;
-        return false;
+                                               new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE) );
       }
+    // try conversion with FFMPEG functions
+    if( !vidl_ffmpeg_convert(frame, temp_frame) )
+      {
+      // try conversion with vidl functions
+      if( !vidl_convert_frame(*frame, *temp_frame) )
+        {
+        vcl_cout << "unable to convert " << frame->pixel_format() << " to " << target_fmt << vcl_endl;
+        return false;
+        }
+      }
+    avpicture_fill( (AVPicture *)&out_frame, (uint8_t *) temp_frame->data(),
+                    codec->pix_fmt, frame->ni(), frame->nj() );
     }
-    avpicture_fill((AVPicture*)&out_frame, (uint8_t*) temp_frame->data(),
-                   codec->pix_fmt, frame->ni(), frame->nj());
-  }
 
   AVPacket pkt;
   av_init_packet( &pkt );
@@ -546,21 +558,26 @@ write_frame(const vidl_frame_sptr& frame)
 
   out_frame.pts = os_->cur_frame_;
 
-  int ret = avcodec_encode_video( codec, (uint8_t*)os_->bit_buf_->data(), os_->bit_buf_->size(), &out_frame );
+  int ret = avcodec_encode_video( codec, (uint8_t *)os_->bit_buf_->data(), os_->bit_buf_->size(), &out_frame );
 
-  if ( ret ) {
-    pkt.data = (uint8_t*)os_->bit_buf_->data();
+  if( ret )
+    {
+    pkt.data = (uint8_t *)os_->bit_buf_->data();
     pkt.size = ret;
-    if ( codec->coded_frame ) {
+    if( codec->coded_frame )
+      {
       pkt.pts = codec->coded_frame->pts;
-    }
-    if ( codec->coded_frame && codec->coded_frame->key_frame ) {
+      }
+    if( codec->coded_frame && codec->coded_frame->key_frame )
+      {
       pkt.flags |= PKT_FLAG_KEY;
-    }
+      }
     av_interleaved_write_frame( os_->fmt_cxt_, &pkt );
-  } else {
+    }
+  else
+    {
     return false;
-  }
+    }
 
   ++os_->cur_frame_;
   return true;

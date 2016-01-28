@@ -1,7 +1,7 @@
 // This is brl/bseg/bapl/bapl_lowe_keypoint_sptr.h
 #ifndef bapl_lowe_keypoint_sptr_h_
 #define bapl_lowe_keypoint_sptr_h_
-//:
+// :
 // \file
 // \brief Smart pointer to a Lowe keypoint
 // \author Matthew Leotta, (mleotta@lems.brown.edu)

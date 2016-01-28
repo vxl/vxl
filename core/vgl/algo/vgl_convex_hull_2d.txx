@@ -4,7 +4,7 @@
 
 #include <vcl_cstdlib.h> // vcl_qsort
 
-//:
+// :
 // \file
 // \brief two-dimensional convex hull
 // read points from stdin,
@@ -32,64 +32,73 @@
 // OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
 
 #if 0
-static void print_hull(double **P, int m)
+static void print_hull(double * * P, int m)
 {
-  for (int i=0; i<m; i++)
-    vcl_cout << (P[i]-points[0])/2) << ' ';
+  for( int i = 0; i < m; i++ )
+    {
+    vcl_cout << (P[i] - points[0]) / 2) << ' ';
+    }
   vcl_cout << vcl_endl;
 }
+
 #endif // 0
 
-static int ccw(double **P, int i, int j, int k)
+static int ccw(double * * P, int i, int j, int k)
 {
   double a = P[i][0] - P[j][0],
-         b = P[i][1] - P[j][1],
-         c = P[k][0] - P[j][0],
-         d = P[k][1] - P[j][1];
-  return a*d - b*c <= 0;   // true if points i, j, k counterclockwise
+    b = P[i][1] - P[j][1],
+    c = P[k][0] - P[j][0],
+    d = P[k][1] - P[j][1];
+
+  return a * d - b * c <= 0;   // true if points i, j, k counterclockwise
 }
 
+#define CMPM(c, A, B) \
+  v = (*(double * const *)A)[c] - (*(double * const *)B)[c]; \
+  if( v > 0 ) {return 1; } \
+  if( v < 0 ) return -1
 
-#define CMPM(c,A,B) \
-  v = (*(double*const*)A)[c] - (*(double*const*)B)[c];\
-  if (v>0) return 1;\
-  if (v<0) return -1
-
-static int cmpl(const void *a, const void *b)
+static int cmpl(const void * a, const void * b)
 {
   double v;
-  CMPM(0,a,b);
-  CMPM(1,b,a);
+
+  CMPM(0, a, b);
+  CMPM(1, b, a);
   return 0;
 }
+
 #undef CMPM
 
-static int cmph(const void *a, const void *b) {return cmpl(b,a);}
+static int cmph(const void * a, const void * b) {return cmpl(b, a); }
 
-
-static int make_chain(double** V, int n, int (*cmp)(const void*, const void*))
+static int make_chain(double* * V, int n, int (* cmp)(const void *, const void *) )
 {
-  vcl_qsort(V, n, sizeof(double*), cmp);
+  vcl_qsort(V, n, sizeof(double *), cmp);
   int s = 1;
-  for (int i=2; i<n; i++) {
-    while (s>=1 && ccw(V, i, s, s-1)) --s;
+  for( int i = 2; i < n; i++ )
+    {
+    while( s >= 1 && ccw(V, i, s, s - 1) )
+      {
+      --s;
+      }
+
     ++s;
     double* t = V[s]; V[s] = V[i]; V[i] = t;
-  }
+    }
   return s;
 }
 
-static int ch2d(double **P, int n)
+static int ch2d(double * * P, int n)
 {
   int u = make_chain(P, n, cmpl);         // make lower hull
-  if (!n) return 0;
+
+  if( !n ) {return 0; }
   P[n] = P[0];
-  return u+make_chain(P+u, n-u+1, cmph);  // make upper hull
+  return u + make_chain(P + u, n - u + 1, cmph);  // make upper hull
 }
 
 template <class T>
-vgl_convex_hull_2d<T>::
-vgl_convex_hull_2d (vcl_vector<vgl_point_2d<T> > const& points)
+vgl_convex_hull_2d<T>::vgl_convex_hull_2d(vcl_vector<vgl_point_2d<T> > const& points)
 {
   hull_valid_ = false;
   points_ = points;
@@ -98,37 +107,41 @@ vgl_convex_hull_2d (vcl_vector<vgl_point_2d<T> > const& points)
 template <class T>
 void vgl_convex_hull_2d<T>::compute_hull()
 {
-  //convert points to internal data structure
-  int N = points_.size();
-  double * array = new double[2*N];
-  double** points = new double*[N];
-  double** P = new double*[N+1];
-  for (int i = 0; i<N; i++)
-    points[i]=&array[2*i];
+  // convert points to internal data structure
+  int       N = points_.size();
+  double *  array = new double[2 * N];
+  double* * points = new double *[N];
+  double* * P = new double *[N + 1];
 
-  for (int n = 0; n<N; n++)
-  {
-    points[n][0]=(double)points_[n].x();
-    points[n][1]=(double)points_[n].y();
+  for( int i = 0; i < N; i++ )
+    {
+    points[i] = &array[2 * i];
+    }
+  for( int n = 0; n < N; n++ )
+    {
+    points[n][0] = (double)points_[n].x();
+    points[n][1] = (double)points_[n].y();
     P[n] = &points[n][0];
-  }
-  //the main hull routine
+    }
+  // the main hull routine
   int n_hull = ch2d(P, N);
 
-  //convert back to vgl_points
+  // convert back to vgl_points
   vcl_vector<vgl_point_2d<T> > temp;
-  for (int i = 0; i<n_hull; i++)
-  {
-    vgl_point_2d<T> p((T)P[i][0], (T)P[i][1]);
+  for( int i = 0; i < n_hull; i++ )
+    {
+    vgl_point_2d<T> p( (T)P[i][0], (T)P[i][1]);
     temp.push_back(p);
-  }
+    }
   // Do not add last point if it is identical to the first one - PVr
-  if (P[0][0] != P[n_hull][0] || P[0][1] != P[n_hull][1])
-    temp.push_back(vgl_point_2d<T>((T)P[n_hull][0], (T)P[n_hull][1]));
+  if( P[0][0] != P[n_hull][0] || P[0][1] != P[n_hull][1] )
+    {
+    temp.push_back(vgl_point_2d<T>( (T)P[n_hull][0], (T)P[n_hull][1]) );
+    }
 
-  //construct the hull polygon
+  // construct the hull polygon
   hull_ = vgl_polygon<T>(temp);
-  //clean up memory
+  // clean up memory
   delete [] array;
   delete [] points;
   delete [] P;
@@ -138,16 +151,18 @@ void vgl_convex_hull_2d<T>::compute_hull()
 template <class T>
 vgl_polygon<T> vgl_convex_hull_2d<T>::hull()
 {
-  if (!hull_valid_)
+  if( !hull_valid_ )
+    {
     this->compute_hull();
+    }
   return hull_;
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 #undef VGL_CONVEX_HULL_2D_INSTANTIATE
 #define VGL_CONVEX_HULL_2D_INSTANTIATE(T) \
 /* template vcl_ostream& operator<<(vcl_ostream& s, vgl_convex_hull_2d<T >const& h); */ \
 /* template vcl_istream& operator>>(vcl_istream& s, vgl_convex_hull_2d<T >& h); */ \
-template class vgl_convex_hull_2d<T >
+  template class vgl_convex_hull_2d < T >
 
 #endif // vgl_convex_hull_2d_txx_

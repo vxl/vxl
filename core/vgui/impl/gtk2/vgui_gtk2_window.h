@@ -2,9 +2,9 @@
 #ifndef vgui_gtk2_window_h_
 #define vgui_gtk2_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author  Robotics Research Group, University of Oxford
 // \date    18 Dec 99
@@ -31,15 +31,15 @@
 
 #include <gtk/gtk.h>
 
-//: The GTK implementation of vgui_window.
+// : The GTK implementation of vgui_window.
 //  Provides functions for manipulating a window.
 class vgui_gtk2_window : public vgui_window
 {
- public:
+public:
 
   vgui_gtk2_window(int w, int h, const vgui_menu& menu, const char* title);
   vgui_gtk2_window(int w, int h, const char* title);
- ~vgui_gtk2_window();
+  ~vgui_gtk2_window();
 
   bool use_menubar;
   bool use_statusbar;
@@ -47,28 +47,30 @@ class vgui_gtk2_window : public vgui_window
   void init();
 
   void show();
+
   void hide();
+
   void reshape(unsigned, unsigned);
+
   void set_title(vcl_string const &);
 
-  void set_menubar(const vgui_menu &menu);
+  void set_menubar(const vgui_menu & menu);
 
-  //: Returns the current adaptor (OpenGL widget holder).
-  vgui_adaptor* get_adaptor() { return adaptor; }
-  void set_adaptor(vgui_adaptor* a) { adaptor=a; }
+  // : Returns the current adaptor (OpenGL widget holder).
+  vgui_adaptor * get_adaptor() { return adaptor; }
+  void set_adaptor(vgui_adaptor* a) { adaptor = a; }
 
-  vgui_statusbar* get_statusbar() { return statusbar; }
+  vgui_statusbar * get_statusbar() { return statusbar; }
   void set_statusbar(bool) {}
 
   // gtk specific
-  vgui_adaptor *adaptor;
-  vgui_statusbar *statusbar;
+  vgui_adaptor *   adaptor;
+  vgui_statusbar * statusbar;
 
-  GtkWidget *window;
-  GtkWidget *box;
-  GtkWidget *menubar;
-
- private:
+  GtkWidget * window;
+  GtkWidget * box;
+  GtkWidget * menubar;
+private:
   // This is a place to store any menu passed in, so that it doesn't go out
   // of scope while the popup is on screen.
   vgui_menu* last_menubar; // <-- ask fsm about this.

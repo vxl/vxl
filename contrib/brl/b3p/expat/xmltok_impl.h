@@ -3,7 +3,8 @@ Copyright (c) 1998, 1999 Thai Open Source Software Center Ltd
 See the file COPYING for copying permission.
 */
 
-enum {
+enum
+  {
   BT_NONXML,
   BT_MALFORM,
   BT_LT,
@@ -32,7 +33,7 @@ enum {
   BT_DIGIT,
   BT_NAME,
   BT_MINUS,
-  BT_OTHER, /* known not to be a name or name start character */
+  BT_OTHER,    /* known not to be a name or name start character */
   BT_NONASCII, /* might be a name or name start character */
   BT_PERCNT,
   BT_LPAR,
@@ -41,6 +42,6 @@ enum {
   BT_PLUS,
   BT_COMMA,
   BT_VERBAR
-};
+  };
 
 #include <stddef.h>

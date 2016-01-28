@@ -5,68 +5,67 @@
 #include <vcl_cassert.h>
 #include <vcl_vector.h>
 
-//:
+// :
 // \file
 // \brief Function to find 4-connected boundary around thresholded region
 // \author Tim Cootes
 
-//: Move (i,j) to next point below threshold
+// : Move (i,j) to next point below threshold
 //  Start looking in direction dir (0=++x,1=++y,2=--x,3=--y)
 //  *p is current point (i,j).
 //  On exit (i,j) and p are updated to move to neighbour
-template<class T>
-inline void vil_next_point_below_thresh4(int& i,int& j,int& dir, const T* &p,
+template <class T>
+inline void vil_next_point_below_thresh4(int& i, int& j, int& dir, const T * & p,
                                          int ni1, int nj1,
-                                         vcl_ptrdiff_t istep,vcl_ptrdiff_t jstep,
+                                         vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep,
                                          T threshold)
 {
-  for (int k=0;k<4;++k)
-  {
-    switch ((dir+k)%4)
+  for( int k = 0; k < 4; ++k )
     {
+    switch( (dir + k) % 4 )
+      {
       case 0:   // Try at (i+1,j)
-        if (i<ni1 && p[istep]<=threshold) { ++i; p+=istep; dir=3; return; }
+        if( i < ni1 && p[istep] <= threshold ) { ++i; p += istep; dir = 3; return; }
       case 1:   // Try at (i,j+1)
-        if (j<nj1 && p[jstep]<=threshold) { ++j; p+=jstep; dir=0; return; }
+        if( j < nj1 && p[jstep] <= threshold ) { ++j; p += jstep; dir = 0; return; }
       case 2:   // Try at (i-1,j)
-        if (i>0 && p[-istep]<=threshold)  { --i; p-=istep; dir=1; return; }
+        if( i > 0 && p[-istep] <= threshold )  { --i; p -= istep; dir = 1; return; }
       case 3:   // Try at (i,j-1)
-        if (j>0 && p[-jstep]<=threshold)  { --j; p-=jstep; dir=2; return; }
+        if( j > 0 && p[-jstep] <= threshold )  { --j; p -= jstep; dir = 2; return; }
       default:
         break;
+      }
     }
-  }
 }
 
-//: Move (i,j) to next point above threshold
+// : Move (i,j) to next point above threshold
 //  Start looking in direction dir (0=++x,1=++y,2=--x,3=--y)
 //  *p is current point (i,j).
 //  On exit (i,j) and p are updated to move to neighbour
-template<class T>
-inline void vil_next_point_above_thresh4(int& i,int& j,int& dir, const T* &p,
+template <class T>
+inline void vil_next_point_above_thresh4(int& i, int& j, int& dir, const T * & p,
                                          int ni1, int nj1, vcl_ptrdiff_t istep, vcl_ptrdiff_t jstep,
                                          T threshold)
 {
-  for (int k=0;k<4;++k)
-  {
-    switch ((dir+k)%4)
+  for( int k = 0; k < 4; ++k )
     {
+    switch( (dir + k) % 4 )
+      {
       case (0):   // Try at (i+1,j)
-        if (i<ni1 && p[istep]>=threshold) { ++i; p+=istep; dir=3; return; }
+        if( i < ni1 && p[istep] >= threshold ) { ++i; p += istep; dir = 3; return; }
       case (1):   // Try at (i,j+1)
-        if (j<nj1 && p[jstep]>=threshold) { ++j; p+=jstep; dir=0; return; }
+        if( j < nj1 && p[jstep] >= threshold ) { ++j; p += jstep; dir = 0; return; }
       case (2):   // Try at (i-1,j)
-        if (i>0 && p[-istep]>=threshold)  { --i; p-=istep; dir=1; return; }
+        if( i > 0 && p[-istep] >= threshold )  { --i; p -= istep; dir = 1; return; }
       case (3):   // Try at (i,j-1)
-        if (j>0 && p[-jstep]>=threshold)  { --j; p-=jstep; dir=2; return; }
+        if( j > 0 && p[-jstep] >= threshold )  { --j; p -= jstep; dir = 2; return; }
       default:
         break;
+      }
     }
-  }
 }
 
-
-//: Find 4-connected boundary around thresholded region containing point
+// : Find 4-connected boundary around thresholded region containing point
 //  Assumes that (p0_i,p0_j) is a point in the image which satisfies
 //  the threshold (ie image(p0_i,p0_j)<=threshold).
 //  Searches for the boundary pixels (ie points which satisfy threshold
@@ -80,36 +79,44 @@ inline void vil_find_4con_boundary_below_threshold(vcl_vector<int>& bi,
                                                    int p0_i, int p0_j)
 {
   bi.resize(0); bj.resize(0);
-  int ni1 = image.ni()-1;
-  int nj1 = image.nj()-1;
-  vcl_ptrdiff_t istep = image.istep(), jstep=image.jstep();
+  int           ni1 = image.ni() - 1;
+  int           nj1 = image.nj() - 1;
+  vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep();
 
-  int i = p0_i, j = p0_j;
-  const T* p = &image(i,j);
-  assert(*p<=threshold);
+  int      i = p0_i, j = p0_j;
+  const T* p = &image(i, j);
+  assert(*p <= threshold);
 
   // Move to extremal point on boundary
-  while (i<ni1 && p[istep]<=threshold) {i++;p+=istep;}
+  while( i < ni1 && p[istep] <= threshold )
+    {
+    i++; p += istep;
+    }
+
   int dir = 1;
 
-  if (i==p0_i)
-  {
+  if( i == p0_i )
+    {
     // Initial point already on boundary - move to extreme j
-    while (j<nj1 && p[jstep]<=threshold) {j++;p+=jstep;}
-    dir = 2;
-  }
+    while( j < nj1 && p[jstep] <= threshold )
+      {
+      j++; p += jstep;
+      }
 
-  int i0 = i, j0=j;
+    dir = 2;
+    }
+
+  int i0 = i, j0 = j;
 
   do
-  {
+    {
     bi.push_back(i); bj.push_back(j);
-    vil_next_point_below_thresh4(i,j,dir,p,ni1,nj1,istep,jstep,threshold);
-  }
-  while (i!=i0 || j!=j0);
+    vil_next_point_below_thresh4(i, j, dir, p, ni1, nj1, istep, jstep, threshold);
+    }
+  while( i != i0 || j != j0 );
 }
 
-//: Find 4-connected boundary around thresholded region containing point
+// : Find 4-connected boundary around thresholded region containing point
 //  Assumes that (p0_i,p0_j) is a point in the image which satisfies
 //  the threshold (ie image(p0_i,p0_j)>=threshold).
 //  Searches for the boundary pixels (ie points which satisfy threshold
@@ -123,33 +130,41 @@ inline void vil_find_4con_boundary_above_threshold(vcl_vector<int>& bi,
                                                    int p0_i, int p0_j)
 {
   bi.resize(0); bj.resize(0);
-  int ni1 = image.ni()-1;
-  int nj1 = image.nj()-1;
-  vcl_ptrdiff_t istep = image.istep(), jstep=image.jstep();
+  int           ni1 = image.ni() - 1;
+  int           nj1 = image.nj() - 1;
+  vcl_ptrdiff_t istep = image.istep(), jstep = image.jstep();
 
-  int i = p0_i, j = p0_j;
-  const T* p = &image(i,j);
-  assert(*p>=threshold);
+  int      i = p0_i, j = p0_j;
+  const T* p = &image(i, j);
+  assert(*p >= threshold);
 
   // Move to extremal point on boundary
-  while (i<ni1 && p[istep]>=threshold) {i++;p+=istep;}
+  while( i < ni1 && p[istep] >= threshold )
+    {
+    i++; p += istep;
+    }
+
   int dir = 1;
 
-  if (i==p0_i)
-  {
+  if( i == p0_i )
+    {
     // Initial point already on boundary - move to extreme j
-    while (j<nj1 && p[jstep]>=threshold) {j++;p+=jstep;}
-    dir = 2;
-  }
+    while( j < nj1 && p[jstep] >= threshold )
+      {
+      j++; p += jstep;
+      }
 
-  int i0 = i, j0=j;
+    dir = 2;
+    }
+
+  int i0 = i, j0 = j;
 
   do
-  {
+    {
     bi.push_back(i); bj.push_back(j);
-    vil_next_point_above_thresh4(i,j,dir,p,ni1,nj1,istep,jstep,threshold);
-  }
-  while (i!=i0 || j!=j0);
+    vil_next_point_above_thresh4(i, j, dir, p, ni1, nj1, istep, jstep, threshold);
+    }
+  while( i != i0 || j != j0 );
 }
 
 #endif // vil_find_4con_boundary_h_

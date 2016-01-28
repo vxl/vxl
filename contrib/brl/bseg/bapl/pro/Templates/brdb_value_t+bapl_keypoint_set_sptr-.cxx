@@ -3,4 +3,3 @@
 
 BRDB_VALUE_INSTANTIATE(bapl_keypoint_set_sptr, "bapl_keypoint_set_sptr");
 BRDB_VALUE_INSTANTIATE(bapl_keypoint_match_set_sptr, "bapl_keypoint_match_set_sptr");
-

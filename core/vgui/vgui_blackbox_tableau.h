@@ -2,9 +2,9 @@
 #ifndef vgui_blackbox_tableau_h_
 #define vgui_blackbox_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Tableau for event record and playback.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -25,7 +25,7 @@
 #include <vgui/vgui_event.h>
 #include <vcl_vector.h>
 
-//: Tableau for event record and playback.
+// : Tableau for event record and playback.
 //
 // The user can control event recording and playback by pressing the
 // following keys inside the rendering area:
@@ -37,39 +37,39 @@
 // - `#'       clear events
 class vgui_blackbox_tableau : public vgui_wrapper_tableau
 {
- public:
-  //: Constructor - don't use this, use vgui_blackbox_tableau_new.
-  vgui_blackbox_tableau(vgui_tableau_sptr const&);
+public:
+  // : Constructor - don't use this, use vgui_blackbox_tableau_new.
+  vgui_blackbox_tableau(vgui_tableau_sptr const &);
 
-  //: Handle all events used by this tableau.
+  // : Handle all events used by this tableau.
   //  In particular, this tableau uses the key-strokes ',' (start/stop
   //  record), '.' (playback), 's' (playback w. dump), '/' (print
   //  events), '#' (clear events).
   //  Other events are passed to the child tableau.
   virtual bool handle(const vgui_event& event);
 
-  //: Return the name of this tableau ('vgui_blackbox_tableau').
+  // : Return the name of this tableau ('vgui_blackbox_tableau').
   virtual vcl_string type_name() const;
 
- protected:
-  //: Destructor - called by smart-pointer vgui_blackbox_tableau_sptr.
- ~vgui_blackbox_tableau();
+protected:
+  // : Destructor - called by smart-pointer vgui_blackbox_tableau_sptr.
+  ~vgui_blackbox_tableau();
 
-  //: True if events are being recorded.
+  // : True if events are being recorded.
   bool recording;
 
-  //: List of recorded events.
+  // : List of recorded events.
   vcl_vector<vgui_event> events;
 };
 
-//: Create a smart-pointer to a vgui_blackbox_tableau.
+// : Create a smart-pointer to a vgui_blackbox_tableau.
 struct vgui_blackbox_tableau_new : public vgui_blackbox_tableau_sptr
-{
+  {
   typedef vgui_blackbox_tableau_sptr base;
 
-  //: Constructor - creates a smart-pointer to a vgui_blackbox_tableau.
+  // : Constructor - creates a smart-pointer to a vgui_blackbox_tableau.
   //  Takes the single child tableau as a parameter.
-  vgui_blackbox_tableau_new(vgui_tableau_sptr const& a) : base(new vgui_blackbox_tableau(a)) { }
-};
+  vgui_blackbox_tableau_new(vgui_tableau_sptr const& a) : base(new vgui_blackbox_tableau(a) ) { }
+  };
 
 #endif // vgui_blackbox_tableau_h_

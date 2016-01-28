@@ -1,6 +1,6 @@
 // This is brl/bpro/core/brad_pro/processes/brad_train_histograms_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief global variables and functions
 
@@ -13,71 +13,82 @@
 
 namespace bbas_core_brad_train_hist
 {
-  template <class T>
-  bool hist_training_process(bbas_1d_array_string const& low_paths,
-                             bbas_1d_array_string const& high_paths,
-                             brad_eigenspace<T> & espace,
-                             double frac, unsigned nit, unsigned njt,
-                             bsta_joint_histogram_3d<float>& low_hist,
-                             bsta_joint_histogram_3d<float>& high_hist
-                            )
-  {
-    unsigned nlow = low_paths.data_array.size();
-    unsigned nbins = 20;
-    vcl_vector<vil_image_resource_sptr> low_resources;
-    for (unsigned i  = 0; i < nlow; ++i){
-      vil_image_resource_sptr temp =
-        vil_load_image_resource(low_paths.data_array[i].c_str());
-      if (!temp) return false;
-      low_resources.push_back(temp);
-    }
-    unsigned nhigh = high_paths.data_array.size();
-    vcl_vector<vil_image_resource_sptr> high_resources;
-    for (unsigned i  = 0; i < nhigh; ++i){
-      vil_image_resource_sptr temp =
-        vil_load_image_resource(high_paths.data_array[i].c_str());
-      if (!temp) return false;
-      high_resources.push_back(temp);
-    }
-    bsta_joint_histogram_3d<float> hist_init;
+template <class T>
+bool hist_training_process(bbas_1d_array_string const& low_paths,
+                           bbas_1d_array_string const& high_paths,
+                           brad_eigenspace<T> & espace,
+                           double frac, unsigned nit, unsigned njt,
+                           bsta_joint_histogram_3d<float>& low_hist,
+                           bsta_joint_histogram_3d<float>& high_hist
+                           )
+{
+  unsigned nlow = low_paths.data_array.size();
+  unsigned nbins = 20;
 
-    vcl_vector<vil_image_resource_sptr> resources = low_resources;
-    for (vcl_vector<vil_image_resource_sptr>::iterator rit = high_resources.begin();
-         rit != high_resources.end(); ++rit)
-      resources.push_back(*rit);
-    if (frac==1.0)
-      espace.init_histogram_blocked(resources, nbins, hist_init, nit, njt);
-    else
-      espace.init_histogram_rand(resources, nbins, hist_init, frac, nit, njt);
-    low_hist = hist_init;
-    high_hist = hist_init;
-    if (frac==1.0){
-      espace.update_histogram_blocked(low_resources, low_hist, nit, njt);
-      espace.update_histogram_blocked(high_resources, high_hist, nit, njt);
+  vcl_vector<vil_image_resource_sptr> low_resources;
+  for( unsigned i  = 0; i < nlow; ++i )
+    {
+    vil_image_resource_sptr temp =
+      vil_load_image_resource(low_paths.data_array[i].c_str() );
+    if( !temp ) { return false; }
+    low_resources.push_back(temp);
     }
-    else {
-      espace.update_histogram_rand(low_resources, low_hist, frac, nit, njt);
-      espace.update_histogram_rand(high_resources, high_hist, frac, nit, njt);
+  unsigned                            nhigh = high_paths.data_array.size();
+  vcl_vector<vil_image_resource_sptr> high_resources;
+  for( unsigned i  = 0; i < nhigh; ++i )
+    {
+    vil_image_resource_sptr temp =
+      vil_load_image_resource(high_paths.data_array[i].c_str() );
+    if( !temp ) { return false; }
+    high_resources.push_back(temp);
     }
-    return true;
-  }
+  bsta_joint_histogram_3d<float> hist_init;
+
+  vcl_vector<vil_image_resource_sptr> resources = low_resources;
+  for( vcl_vector<vil_image_resource_sptr>::iterator rit = high_resources.begin();
+       rit != high_resources.end(); ++rit )
+    {
+    resources.push_back(*rit);
+    }
+  if( frac == 1.0 )
+    {
+    espace.init_histogram_blocked(resources, nbins, hist_init, nit, njt);
+    }
+  else
+    {
+    espace.init_histogram_rand(resources, nbins, hist_init, frac, nit, njt);
+    }
+  low_hist = hist_init;
+  high_hist = hist_init;
+  if( frac == 1.0 )
+    {
+    espace.update_histogram_blocked(low_resources, low_hist, nit, njt);
+    espace.update_histogram_blocked(high_resources, high_hist, nit, njt);
+    }
+  else
+    {
+    espace.update_histogram_rand(low_resources, low_hist, frac, nit, njt);
+    espace.update_histogram_rand(high_resources, high_hist, frac, nit, njt);
+    }
+  return true;
 }
 
+}
 
-//: Constructor
+// : Constructor
 bool brad_train_histograms_process_cons(bprb_func_process& pro)
 {
   using namespace bbas_core_brad_train_hist;
-  //inputs
+  // inputs
   vcl_vector<vcl_string> input_types(6);
-  input_types[0]="brad_eigenspace_sptr"; //eigenspace
-  input_types[1]="bbas_1d_array_string_sptr"; //low atmos input images
-  input_types[2]="bbas_1d_array_string_sptr"; //high atmos input images
-  input_types[3]="double"; //fraction of image area to process
-  input_types[4]="unsigned";//number of cols in a tile
-  input_types[5]="unsigned";//number of rows in a tile
+  input_types[0] = "brad_eigenspace_sptr";      // eigenspace
+  input_types[1] = "bbas_1d_array_string_sptr"; // low atmos input images
+  input_types[2] = "bbas_1d_array_string_sptr"; // high atmos input images
+  input_types[3] = "double";                    // fraction of image area to process
+  input_types[4] = "unsigned";                  // number of cols in a tile
+  input_types[5] = "unsigned";                  // number of rows in a tile
 
-  //outputs
+  // outputs
   vcl_vector<vcl_string> output_types;
   output_types.push_back("bsta_joint_histogram_3d_base_sptr"); // low atmos hist
   output_types.push_back("bsta_joint_histogram_3d_base_sptr"); // high atmos hist
@@ -86,33 +97,37 @@ bool brad_train_histograms_process_cons(bprb_func_process& pro)
          pro.set_output_types(output_types);
 }
 
-//: Execute the process
+// : Execute the process
 bool brad_train_histograms_process(bprb_func_process& pro)
 {
   using namespace bbas_core_brad_train_hist;
   // Sanity check
-  if (pro.n_inputs()< 3) {
+  if( pro.n_inputs() < 3 )
+    {
     vcl_cout << "brad_train_histograms_process: The input number should be 1" << vcl_endl;
     return false;
-  }
+    }
   brad_eigenspace_sptr es_ptr = pro.get_input<brad_eigenspace_sptr>(0);
-  if (!es_ptr) {
+  if( !es_ptr )
+    {
     vcl_cout << "in train_histograms_process, null eigenspace pointer\n";
     return false;
-  }
+    }
   bbas_1d_array_string_sptr low_paths =
     pro.get_input<bbas_1d_array_string_sptr>(1);
 
   bbas_1d_array_string_sptr high_paths =
     pro.get_input<bbas_1d_array_string_sptr>(2);
 
-  double frac = pro.get_input<double>(3);
+  double   frac = pro.get_input<double>(3);
   unsigned nit = pro.get_input<unsigned>(4);
   unsigned njt = pro.get_input<unsigned>(5);
 
   bsta_joint_histogram_3d<float> low_hist;
   bsta_joint_histogram_3d<float> high_hist;
-  CAST_CALL_EIGENSPACE(es_ptr, hist_training_process(*low_paths,*high_paths, *ep,frac, nit, njt,low_hist, high_hist), "in train_histograms_process - training function failed")
+  CAST_CALL_EIGENSPACE(es_ptr, hist_training_process(*low_paths, *high_paths, *ep, frac, nit, njt, low_hist,
+                                                     high_hist),
+                       "in train_histograms_process - training function failed")
 
   bsta_joint_histogram_3d_sptr low_ptr = new bsta_joint_histogram_3d<float>(low_hist);
   pro.set_output_val<bsta_joint_histogram_3d_sptr>(0, low_ptr);
@@ -121,4 +136,3 @@ bool brad_train_histograms_process(bprb_func_process& pro)
   pro.set_output_val<bsta_joint_histogram_3d_sptr>(1, high_ptr);
   return true;
 }
-

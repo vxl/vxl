@@ -1,41 +1,42 @@
 // This is oxl/mvl/HomgLine3D.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 //  \file
 
 #include "HomgLine3D.h"
 #include <mvl/Homg3D.h>
 #include <vcl_iostream.h>
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Constructor
+// : Constructor
 HomgLine3D::HomgLine3D()
 {
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Constructor
-HomgLine3D::HomgLine3D( const HomgLine3D &that)
-  : point_finite_(that.point_finite_)
-  , point_infinite_(that.point_infinite_)
+// : Constructor
+HomgLine3D::HomgLine3D( const HomgLine3D & that)
+  : point_finite_(that.point_finite_),
+  point_infinite_(that.point_infinite_)
 {
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Constructor, initialise using the specified distinct points on the line.
-HomgLine3D::HomgLine3D (const HomgPoint3D& start,
-                        const HomgPoint3D& end)
+// : Constructor, initialise using the specified distinct points on the line.
+HomgLine3D::HomgLine3D(const HomgPoint3D& start,
+                       const HomgPoint3D& end)
 {
   // ho_quadvecstd_points2_to_line
   bool start_finite = start.w() != 0.0;
   bool end_finite = end.w() != 0.0;
 
-  if (start_finite && end_finite) {
+  if( start_finite && end_finite )
+    {
     point_finite_ = start;
 
     vnl_double_3 start_trivec = start.get_double3();
@@ -44,47 +45,53 @@ HomgLine3D::HomgLine3D (const HomgPoint3D& start,
     direction.normalize();
 
     point_infinite_.set(direction[0], direction[1], direction[2], 0.0);
-  } else if (end_finite) {
+    }
+  else if( end_finite )
+    {
     // Start infinite
     point_finite_ = end;
 
     const vnl_vector<double>& dir = start.get_vector().as_ref();
-    point_infinite_ = HomgPoint3D(dir / dir.magnitude());
-  } else {
+    point_infinite_ = HomgPoint3D(dir / dir.magnitude() );
+    }
+  else
+    {
     // End infinite -- just assign
     point_finite_ = start;
     const vnl_vector<double>& dir = end.get_vector().as_ref();
-    point_infinite_ = HomgPoint3D(dir / dir.magnitude());
-  }
+    point_infinite_ = HomgPoint3D(dir / dir.magnitude() );
+    }
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Destructor
+// : Destructor
 HomgLine3D::~HomgLine3D()
 {
 }
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //
-//: print to vcl_ostream
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& l)
+// : print to vcl_ostream
+vcl_ostream & operator<<(vcl_ostream& s, const HomgLine3D& l)
 {
   return s << "<HomgLine3D " << l.get_point_finite() << " dir " << l.get_point_infinite() << ">";
 }
 
-//: Push point2 off to infinity
+// : Push point2 off to infinity
 void HomgLine3D::force_point2_infinite()
 {
 }
 
-//: Return line direction as a 3-vector
+// : Return line direction as a 3-vector
 vnl_double_3 HomgLine3D::dir() const
 {
   const vnl_vector<double>& d = point_infinite_.get_vector().as_ref();
-  if (d[3] != 0) {
+
+  if( d[3] != 0 )
+    {
     vcl_cerr << *this;
     vcl_cerr << "*** HomgLine3D: Infinite point not at infinity!! ***\n";
-  }
+    }
   return vnl_double_3(d[0], d[1], d[2]);
 }

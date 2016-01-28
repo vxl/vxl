@@ -3,10 +3,11 @@
 
 class bsvg_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif  // bsvg_register_h_
-

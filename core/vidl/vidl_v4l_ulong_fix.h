@@ -1,7 +1,7 @@
 // This is core/vidl/vidl_v4l_ulong_fix.h
 #ifndef vidl_v4l2_ulong_fix_h_
 #define vidl_v4l2_ulong_fix_h_
-//:
+// :
 // \file
 // \brief Fix system bug where type ulong is not defined in linux/videodev.h on some Linux/GCC combinations.
 //
@@ -24,9 +24,9 @@
 // We could use this condition to limit use of this fix.
 // For now it is enabled for all - change if this fix causes any problems.
 
-#define __USE_MISC
+#  define __USE_MISC
 // including sys/types.h with this define will get ulong typedefed
-#include <sys/types.h>
+#  include <sys/types.h>
 
 #endif // VXL_VIDL_USE_ULONG_FIX
 

@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_io );
 DECLARE( test_find );
 
@@ -12,6 +11,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-
-

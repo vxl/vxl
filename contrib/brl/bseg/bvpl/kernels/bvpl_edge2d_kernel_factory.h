@@ -1,7 +1,7 @@
 // This is brl/bseg/bvpl/kernels/bvpl_edge2d_kernel_factory.h
 #ifndef bvpl_edge2d_kernel_h_
 #define bvpl_edge2d_kernel_h_
-//:
+// :
 // \file
 // \brief  A class for creating edge kernels. The edge lies on a single plane.
 // This class specializes bvpl_kernel_factory. Please refer to such class for usage details.
@@ -16,14 +16,13 @@
 #include "bvpl_kernel_factory.h"
 #include <vcl_iostream.h>
 
-
 class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
 {
- public:
-  //:Default Constructor
+public:
+  // :Default Constructor
   bvpl_edge2d_kernel_factory();
 
-  //: Constructs an edge of dimensions height*width. The canonical form of this edge is along the y-axis
+  // : Constructs an edge of dimensions height*width. The canonical form of this edge is along the y-axis
   // + + 0 - -
   // + + 0 - -
   // + + 0 - -
@@ -32,15 +31,14 @@ class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
 
   virtual ~bvpl_edge2d_kernel_factory() {}
 
-  //Height of edge
+  // Height of edge
   unsigned height() const { return height_; }
 
-  //Width of edge
+  // Width of edge
   unsigned width() const { return width_; }
+private:
 
- private:
-
-  //:Creates a 2d edge kernel
+  // :Creates a 2d edge kernel
   virtual void create_canonical();
 
   unsigned height_;
@@ -48,6 +46,5 @@ class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
 
   static const unsigned max_size_ = 71;
 };
-
 
 #endif

@@ -2,7 +2,7 @@
 #ifndef bvpl_pca_error_scenes_h
 #define bvpl_pca_error_scenes_h
 
-//:
+// :
 // \file
 // \brief A class to hold the smartpointers to pca error scenes
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -22,16 +22,15 @@ class bvpl_pca_error_scenes;
 
 typedef vbl_smart_ptr<bvpl_pca_error_scenes> bvpl_pca_error_scenes_sptr;
 
-//: A class to hold the smartpointers to response scenes and their corresponding names
+// : A class to hold the smartpointers to response scenes and their corresponding names
 class bvpl_pca_error_scenes : public vbl_ref_count
 {
 public:
 
   bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, vcl_string taylor_path, unsigned dim);
 
-  //: Return the error scene associated with a number of components used for reconstruction
-  boxm_scene_base_sptr get_scene(unsigned ncomponent) {return scenes_[ncomponent];}
-
+  // : Return the error scene associated with a number of components used for reconstruction
+  boxm_scene_base_sptr get_scene(unsigned ncomponent) {return scenes_[ncomponent]; }
 private:
   vcl_vector<boxm_scene_base_sptr> scenes_;
 

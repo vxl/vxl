@@ -1,3 +1,3 @@
 #include <brdb/brdb_value.txx>
 
-BRDB_VALUE_INSTANTIATE(double,"double");
+BRDB_VALUE_INSTANTIATE(double, "double");

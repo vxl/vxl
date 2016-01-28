@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \brief Example of creating, processing and using an image data object
 // \author Ian Scott
@@ -10,27 +10,25 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
 
-
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
-  if (argc < 2)
-  {
+  if( argc < 2 )
+    {
     vcl_cerr << "Specify an image filename\n";
     return 3;
-  }
+    }
 
-  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
-
+  vcl_cout << "Load " << argv[1] << " into an image data object\n";
 
   // This is how we quickly load an image view.
 
   vil_image_view<vxl_byte> b_im = vil_load(argv[1]);
 
-  if (!b_im)
-  {
-    vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
+  if( !b_im )
+    {
+    vcl_cerr << "Couldn't load " << argv[1] << vcl_endl;
     return 3;
-  }
+    }
 
   vil_print_all(vcl_cout, b_im);
 
@@ -39,7 +37,6 @@ int main(int argc, char** argv)
   // And then we save it.
 
   vil_save(b_im, "test.pbm");
-
 
   return 0;
 }

@@ -26,7 +26,7 @@ void test_complex_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_complex_io_test.bvl.tmp");
+  vpl_unlink("vsl_complex_io_test.bvl.tmp");
 
   TEST("vcl_complex<float> out == in", c_float_out, c_float_in);
 

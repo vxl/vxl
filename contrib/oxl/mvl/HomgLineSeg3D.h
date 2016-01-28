@@ -2,9 +2,9 @@
 #ifndef HomgLineSeg3D_h_
 #define HomgLineSeg3D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Homogeneous 3D line segment
 //
@@ -25,24 +25,26 @@ class HomgLineSeg3D : public HomgLine3D
   // Data Members--------------------------------------------------------------
   HomgPoint3D point1_;
   HomgPoint3D point2_;
-
- public:
+public:
   // Constructors/Initializers/Destructors-------------------------------------
 
-  HomgLineSeg3D ();
-  HomgLineSeg3D (const HomgPoint3D &point1, const HomgPoint3D& point2);
-  ~HomgLineSeg3D ();
+  HomgLineSeg3D();
+  HomgLineSeg3D(const HomgPoint3D & point1, const HomgPoint3D& point2);
+  ~HomgLineSeg3D();
 
   // Data Access---------------------------------------------------------------
 
   // get the line through the two points.
-  const HomgLine3D& get_line () const;
-  const HomgPoint3D& get_point1 () const;
-  const HomgPoint3D& get_point2 () const;
+  const HomgLine3D & get_line() const;
 
-  void set (const HomgPoint3D& point1, const HomgPoint3D& point2);
+  const HomgPoint3D & get_point1() const;
+
+  const HomgPoint3D & get_point2() const;
+
+  void set(const HomgPoint3D& point1, const HomgPoint3D& point2);
+
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg3D& );
+vcl_ostream & operator<<(vcl_ostream& s, const HomgLineSeg3D & );
 
 #endif // HomgLineSeg3D_h_

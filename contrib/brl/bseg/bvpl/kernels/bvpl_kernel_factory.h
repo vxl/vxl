@@ -1,7 +1,7 @@
 // This is brl/bseg/bvpl/kernels/bvpl_kernel_factory.h
 #ifndef bvpl_kernel_base_h
 #define bvpl_kernel_base_h
-//:
+// :
 // \file
 // \brief  A base class for 3D kernel. The kernel is fully described by a rotation axis and an angle
 //  The children of this classes must create a kernel on a "canonical form" i.e. with a default
@@ -42,74 +42,73 @@
 class bvpl_kernel_factory;
 typedef vbl_smart_ptr<bvpl_kernel_factory> bvpl_kernel_factory_sptr;
 
-
-//: A factory of bvpl_kernels
-class bvpl_kernel_factory: public vbl_ref_count
+// : A factory of bvpl_kernels
+class bvpl_kernel_factory : public vbl_ref_count
 {
- public:
-  //Default constructor. Initialize constant member variables
-  bvpl_kernel_factory(): canonical_rotation_axis_(vnl_float_3(1,0,0)), canonical_parallel_axis_(vnl_float_3(0,1,0)){}
+public:
+  // Default constructor. Initialize constant member variables
+  bvpl_kernel_factory() : canonical_rotation_axis_(vnl_float_3(1, 0, 0) ),
+    canonical_parallel_axis_(vnl_float_3(0, 1, 0) ) {}
 
   virtual ~bvpl_kernel_factory() {}
 
-  //: Returns a kernel described by class variables rotation_axis_, \p angle_
+  // : Returns a kernel described by class variables rotation_axis_, \p angle_
   //  The user can modified the axis and angle using set_rotation_axis() and set_angle()
   bvpl_kernel create();
 
-  //: Returns a kernel described by inputs; rotation_axis and angle
+  // : Returns a kernel described by inputs; rotation_axis and angle
   bvpl_kernel create(vnl_float_3 rotation_axis, float angle);
 
-  //: Sets the rotation axis of this kernel
+  // : Sets the rotation axis of this kernel
   void set_rotation_axis(vnl_float_3 rotation_axis);
 
-  //: Sets rotation angle of this kernel
-  void set_angle(float angle) { angle_ =angle; }
+  // : Sets rotation angle of this kernel
+  void set_angle(float angle) { angle_ = angle; }
 
-  //: Returns the current alignment axis
+  // : Returns the current alignment axis
   vnl_float_3 axis() const { return rotation_axis_; }
 
-  //: Return current rotation angle around axis()
+  // : Return current rotation angle around axis()
   float angle() const { return angle_; }
 
-  //: Returns angular resolution around rotation axis
+  // : Returns angular resolution around rotation axis
   float angular_resolution() const { return angular_resolution_; }
 
-  //: Return x-y-z maximum coordinate values
+  // : Return x-y-z maximum coordinate values
   vgl_point_3d<int> max_point() const { return max_point_; }
 
-  //: Return x-y-z minimum coordinate values
+  // : Return x-y-z minimum coordinate values
   vgl_point_3d<int> min_point() const { return min_point_; }
 
-  //: returns the rectangular dimensions around the kernel center
+  // : returns the rectangular dimensions around the kernel center
   vgl_vector_3d<int> dim();
 
-  //: Creates a vector of kernels as specified by func
+  // : Creates a vector of kernels as specified by func
   template <class F>
   bvpl_kernel_vector_sptr create_kernel_vector(F func);
 
-  //: Return an xml element
+  // : Return an xml element
   virtual bxml_data_sptr xml_element()
   {
     vcl_cout << "Calling xml write in parent class, xml data will be NULL" << vcl_endl;
     return NULL;
   }
 
-  virtual bvpl_kernel_factory_sptr self(){return this;}
-
- protected:
+  virtual bvpl_kernel_factory_sptr self() {return this; }
+protected:
 
   typedef vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_type;
 
-  //: The map of 3d positions and their symbols. This kernel has an axis of rotation, but it is always on zero-rotation position
+  // : The map of 3d positions and their symbols. This kernel has an axis of rotation, but it is always on zero-rotation position
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel_;
 
-  //: The map of 3d positions and their symbols in their canonical form (As specified by children)
+  // : The map of 3d positions and their symbols in their canonical form (As specified by children)
   vcl_vector<vcl_pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > canonical_kernel_;
 
-  //: The rotation axis for canonical edge
-  const vnl_float_3 canonical_rotation_axis_;//(1,0,0);
+  // : The rotation axis for canonical edge
+  const vnl_float_3 canonical_rotation_axis_;// (1,0,0);
 
-  //: Rotation axis of kernel_
+  // : Rotation axis of kernel_
   vnl_float_3 rotation_axis_;
 
   vnl_float_3 parallel_axis_;
@@ -117,56 +116,55 @@ class bvpl_kernel_factory: public vbl_ref_count
   // parallel_axis_ define a coordinate system for each kernel.
   // The vector (parallel_axis_ - rotation_axis_) defines the direction of the minor axis of the kernel
   // The zero-rotation for any rotation axis is that for which parallel_axis_ and rotation_axis_ have constant polar angle
-  const vnl_float_3 canonical_parallel_axis_;//(0,1,0);
+  const vnl_float_3 canonical_parallel_axis_;// (0,1,0);
 
-  //: Amounts rotation around rotation_axis_
+  // : Amounts rotation around rotation_axis_
   float angle_;
 
-  //: Dimensions of the 3D grid
+  // : Dimensions of the 3D grid
   vgl_point_3d<int> max_point_;
 
-  //: Dimensions of the 3D grid
+  // : Dimensions of the 3D grid
   vgl_point_3d<int> min_point_;
 
-  //: Angular resolutions
+  // : Angular resolutions
   float angular_resolution_;
 
-  //: Length of a voxel in global coordinates
+  // : Length of a voxel in global coordinates
   double voxel_length_;
 
-  //: Name that identifies the kernel e.g "edge3d", "gauss"
+  // : Name that identifies the kernel e.g "edge3d", "gauss"
   vcl_string factory_name_;
 
-  //: Creates canonical(default) kernel.
+  // : Creates canonical(default) kernel.
   //  It is described by a canonical axis of rotation and a canonical parallel axis
   //  This is the main function implemented by the children.
-  virtual void create_canonical()=0;
+  virtual void create_canonical() = 0;
 
-  //: Rounds coordinates of kernel to the nearest integer
+  // : Rounds coordinates of kernel to the nearest integer
   bvpl_kernel_iterator interpolate(kernel_type const& kernel);
 
-  //: Rotates "class-kernel_" around "class-rotation_axis_"  by an "angle"
+  // : Rotates "class-kernel_" around "class-rotation_axis_"  by an "angle"
   kernel_type rotate(float angle);
 
-  //: Rotates "class-kernel_" using the given rotation matrix
+  // : Rotates "class-kernel_" using the given rotation matrix
   kernel_type rotate(vgl_rotation_3d<float> R);
-};
 
+};
 
 template <class F>
 bvpl_kernel_vector_sptr bvpl_kernel_factory::create_kernel_vector(F func)
 {
-  vcl_vector<vnl_float_3> axes=func.get_axes();
-  vcl_vector<float> angles = func.get_angles();
+  vcl_vector<vnl_float_3> axes = func.get_axes();
+  vcl_vector<float>       angles = func.get_angles();
 
-  bvpl_kernel_vector_sptr vec_kernel=new bvpl_kernel_vector();
-
-  for (unsigned i=0;i<axes.size();i++)
-  {
+  bvpl_kernel_vector_sptr vec_kernel = new bvpl_kernel_vector();
+  for( unsigned i = 0; i < axes.size(); i++ )
+    {
     this->set_rotation_axis(axes[i]);
     this->set_angle(angles[i]);
-    vec_kernel->kernels_.push_back(new bvpl_kernel(this->create()));
-  }
+    vec_kernel->kernels_.push_back(new bvpl_kernel(this->create() ) );
+    }
   return vec_kernel;
 }
 

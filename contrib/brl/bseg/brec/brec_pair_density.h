@@ -1,6 +1,6 @@
 #ifndef brec_pair_density_h_
 #define brec_pair_density_h_
-//:
+// :
 // \file
 // \brief Base class for prob density of an intensity pair
 //
@@ -16,7 +16,7 @@
 
 class brec_pair_density
 {
- public:
+public:
 
   brec_pair_density() : sigma_(0.1) {}
   virtual ~brec_pair_density() {}
@@ -27,9 +27,8 @@ class brec_pair_density
 
   virtual vil_image_view<float> prob_density(vil_image_view<float>& obs);
 
- protected:
+protected:
   double sigma_;
 };
 
 #endif // brec_pair_density_h_
-

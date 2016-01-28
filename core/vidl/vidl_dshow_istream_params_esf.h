@@ -1,8 +1,8 @@
 // This is core/vidl/vidl_dshow_istream_params_esf.h
 #ifndef vidl_dshow_istream_params_esf_h_
 #define vidl_dshow_istream_params_esf_h_
-//=========================================================================
-//:
+// =========================================================================
+// :
 // \file
 // \brief  Euresys Source Filter (ESF) DirectShow istream parameter block.
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
@@ -11,7 +11,7 @@
 //  Modifications
 //   02/18/2006 - File created. (miguelf)
 // \endverbatim
-//=========================================================================
+// =========================================================================
 
 #include <vcl_string.h>
 #include <vcl_bitset.h>
@@ -23,8 +23,8 @@
 #include <initguid.h>
 #include <ESFilter.h>
 
-//-------------------------------------------------------------------------
-//: Param struct for DirectShow input streams using Euresys Source Filter.
+// -------------------------------------------------------------------------
+// : Param struct for DirectShow input streams using Euresys Source Filter.
 //
 // Enables the configuration of DirectShow Euresys source filters
 // (IESFilter) through the IESFProperties and IESFCompression interfaces.
@@ -34,25 +34,24 @@
 //   vidl_dshow_istream = vidl_dshow_istream(vidl_dshow_istream_params()
 //                                             .set_xxx(xxx));
 // \endcode
-//-------------------------------------------------------------------------
-class vidl_dshow_istream_params_esf //: public vidl_iostream_params
+// -------------------------------------------------------------------------
+class vidl_dshow_istream_params_esf // : public vidl_iostream_params
 {
- public:
-  //: Constructor - default
+public:
+  // : Constructor - default
   vidl_dshow_istream_params_esf();
 
-  //: Configure the source filter based on the parameters.
+  // : Configure the source filter based on the parameters.
   void configure_filter(const CComPtr<IBaseFilter>& source);
 
-  //: Print a list of parameters and proper value ranges.
+  // : Print a list of parameters and proper value ranges.
   static void print_parameter_help(const vcl_string& name);
 
-  //: Print a list of parameters and proper value ranges.
+  // : Print a list of parameters and proper value ranges.
   static void print_parameter_help(const CComPtr<IBaseFilter>& filter);
 
-  //: Set properties from a map(string,value).
-  vidl_dshow_istream_params_esf& set_properties(
-    const vcl_map<vcl_string,vcl_string>& props);
+  // : Set properties from a map(string,value).
+  vidl_dshow_istream_params_esf & set_properties(const vcl_map<vcl_string, vcl_string>& props);
 
   // Read accessor functions
   // - general params (all dshow_params should have)
@@ -65,32 +64,45 @@ class vidl_dshow_istream_params_esf //: public vidl_iostream_params
 
   // Write accessor functions.
   // - general params (all dshow_params should have)
-  vidl_dshow_istream_params_esf& set_register_in_rot(bool);
-  vidl_dshow_istream_params_esf& set_run_when_ready(bool);
-  vidl_dshow_istream_params_esf& set_save_graph_to(const vcl_string&);
-  vidl_dshow_istream_params_esf& set_device_name(const vcl_string&);
-  vidl_dshow_istream_params_esf& set_output_filename(const vcl_string&);
-  vidl_dshow_istream_params_esf& set_target_output_format(GUID);
-  // - IESFProperties specific (see Euresys Source Filter documentation)
-  vidl_dshow_istream_params_esf& set_video_standard(ESF_VIDEO_STANDARD,bool);
-  vidl_dshow_istream_params_esf& set_resolution(ESF_RESOLUTION,long,long);
-  vidl_dshow_istream_params_esf& set_capture_region_size(long,long);
-  vidl_dshow_istream_params_esf& set_capture_region_pos(long,long);
-  vidl_dshow_istream_params_esf& set_output_format(GUID);
-  vidl_dshow_istream_params_esf& set_capture_rate(double);
-  vidl_dshow_istream_params_esf& set_brightness(long);
-  vidl_dshow_istream_params_esf& set_contrast(long);
-  vidl_dshow_istream_params_esf& set_saturation(long);
-  // - IESFCompression specific (see Euresys Source Filter documentation)
-  vidl_dshow_istream_params_esf& set_bitrate_control(ESF_BITRATECONTROL);
-  vidl_dshow_istream_params_esf& set_average_bitrate(long);
-  vidl_dshow_istream_params_esf& set_video_quality(long);
-  vidl_dshow_istream_params_esf& set_gop_structure(ESF_GOPSTRUCTURE);
-  vidl_dshow_istream_params_esf& set_gop_size(long);
+  vidl_dshow_istream_params_esf & set_register_in_rot(bool);
 
- private:
+  vidl_dshow_istream_params_esf & set_run_when_ready(bool);
+
+  vidl_dshow_istream_params_esf & set_save_graph_to(const vcl_string &);
+
+  vidl_dshow_istream_params_esf & set_device_name(const vcl_string &);
+
+  vidl_dshow_istream_params_esf & set_output_filename(const vcl_string &);
+
+  vidl_dshow_istream_params_esf & set_target_output_format(GUID);
+  // - IESFProperties specific (see Euresys Source Filter documentation)
+  vidl_dshow_istream_params_esf & set_video_standard(ESF_VIDEO_STANDARD, bool);
+  vidl_dshow_istream_params_esf & set_resolution(ESF_RESOLUTION, long, long);
+  vidl_dshow_istream_params_esf & set_capture_region_size(long, long);
+
+  vidl_dshow_istream_params_esf & set_capture_region_pos(long, long);
+
+  vidl_dshow_istream_params_esf & set_output_format(GUID);
+  vidl_dshow_istream_params_esf & set_capture_rate(double);
+
+  vidl_dshow_istream_params_esf & set_brightness(long);
+
+  vidl_dshow_istream_params_esf & set_contrast(long);
+
+  vidl_dshow_istream_params_esf & set_saturation(long);
+
+  // - IESFCompression specific (see Euresys Source Filter documentation)
+  vidl_dshow_istream_params_esf & set_bitrate_control(ESF_BITRATECONTROL);
+  vidl_dshow_istream_params_esf & set_average_bitrate(long);
+
+  vidl_dshow_istream_params_esf & set_video_quality(long);
+
+  vidl_dshow_istream_params_esf & set_gop_structure(ESF_GOPSTRUCTURE);
+  vidl_dshow_istream_params_esf & set_gop_size(long);
+
+private:
   enum esf_property
-  {
+    {
     esf_property_video_standard = 0,
     esf_property_resolution,
     esf_property_capture_region_size,
@@ -106,51 +118,51 @@ class vidl_dshow_istream_params_esf //: public vidl_iostream_params
     esf_property_gop_structure,
     esf_property_gop_size,
     esf_property_enum_size // needs to be at the end
-  };
+    };
 
-  //: Flag param to be used in configure_filter.
+  // : Flag param to be used in configure_filter.
   vcl_bitset<esf_property_enum_size> is_property_changed_;
 
-  //: Enable remote graph viewing with GraphEdit.
+  // : Enable remote graph viewing with GraphEdit.
   bool register_in_rot_;
 
-  //: Immediately run graph after creating it, else wait for run command.
+  // : Immediately run graph after creating it, else wait for run command.
   bool run_when_ready_;
 
-  //: Write the filter graph to filename 'save_graph_to_'.
+  // : Write the filter graph to filename 'save_graph_to_'.
   vcl_string save_graph_to_;
 
-  //: Device name.
+  // : Device name.
   vcl_string device_name_;
 
-  //: If non-empty create file writing section in the filter_graph.
+  // : If non-empty create file writing section in the filter_graph.
   vcl_string output_filename_;
 
-  //: Target output format, as returned by current_frame.
+  // : Target output format, as returned by current_frame.
   GUID target_output_format_;
 
   // IESFProperties interface.
   ESF_VIDEO_STANDARD video_standard_;
-  bool is_monochrome_;
-  ESF_RESOLUTION resolution_;
-  long width_;
-  long height_;
-  long capture_region_size_x_;
-  long capture_region_size_y_;
-  long capture_region_pos_x_;
-  long capture_region_pos_y_;
-  GUID output_format_;
-  double capture_rate_;
-  long brightness_;
-  long contrast_;
-  long saturation_;
+  bool               is_monochrome_;
+  ESF_RESOLUTION     resolution_;
+  long               width_;
+  long               height_;
+  long               capture_region_size_x_;
+  long               capture_region_size_y_;
+  long               capture_region_pos_x_;
+  long               capture_region_pos_y_;
+  GUID               output_format_;
+  double             capture_rate_;
+  long               brightness_;
+  long               contrast_;
+  long               saturation_;
 
   // IESFCompression interface.
   ESF_BITRATECONTROL bitrate_control_;
-  long average_bitrate_;
-  long video_quality_;
-  ESF_GOPSTRUCTURE gop_structure_;
-  long gop_size_;
+  long               average_bitrate_;
+  long               video_quality_;
+  ESF_GOPSTRUCTURE   gop_structure_;
+  long               gop_size_;
 };
 
 #endif // vidl_dshow_istream_params_esf_h_

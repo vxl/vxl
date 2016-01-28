@@ -2,8 +2,8 @@
 #ifndef BSTA_INT_HISTOGRAM_1D_H_
 #define BSTA_INT_HISTOGRAM_1D_H_
 
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief 1D integer Histograms with bucket width = 1
 //
@@ -28,19 +28,18 @@
 //  Modifications
 //   2007/04/23 Initial Version
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 
 class bsta_int_histogram_1d
 {
- private:
-  unsigned int nbins_;
+private:
+  unsigned int         nbins_;
   vcl_vector<long int> counts_;
+public:
 
- public:
-
- // default constructor that assumes all data values are positive
+  // default constructor that assumes all data values are positive
   // constructor parameters:
   //   nbins_      # bins to create in this histogram.  Note that for 2-byte data the number
   //                 could be 0-65,535, it is usually much smaller,  1-byte data ranges
@@ -52,23 +51,24 @@ class bsta_int_histogram_1d
   ~bsta_int_histogram_1d();
 
   // The number of bins in the histogram
-  unsigned int get_nbins() const { return nbins_;}
+  unsigned int get_nbins() const { return nbins_; }
 
-  //: min,max of total range
+  // : min,max of total range
   unsigned int get_min_bin();
+
   unsigned int get_max_bin();
 
-  //: Get total area under the histogram = total counts in histogram
+  // : Get total area under the histogram = total counts in histogram
   unsigned long int get_area();
 
-  //: Get the count in a given bin
+  // : Get the count in a given bin
   long int get_count(unsigned int bin); // const??
 
-  //: Set the count for a given bin
+  // : Set the count for a given bin
   void set_count(const unsigned int bin, const long int val);
 
   // Get highest value in histogram; returns max value; index of max is available in imax
-  unsigned long int get_max_val(unsigned int &imax);
+  unsigned long int get_max_val(unsigned int & imax);
 
   // Trim off a fraction of the histogram at top and bottom ends.  Note that fractions
   //    should be less than 0.5, usually considerably less, eg usually 0.01 or less.
@@ -80,12 +80,13 @@ class bsta_int_histogram_1d
   // Zero out top n bins.
   void zero_high(unsigned n);
 
-  //: Smooth the histogram with a Parzen window of sigma
+  // : Smooth the histogram with a Parzen window of sigma
   void parzen(const float sigma);
 
   // Find the "significant peaks & vallwys in a histogram.  Here "significant" means there is
   //   a specified difference in height between the peak and the previous valley, or vice versa.
-  bool find_peaks( float perct, int &n_peaks, vcl_vector<unsigned int> &peaks);
+  bool find_peaks( float perct, int & n_peaks, vcl_vector<unsigned int> & peaks);
+
 };
 
 #endif // BSTA_INT_HISTOGRAM_1D_H_

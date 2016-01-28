@@ -1,12 +1,12 @@
 // This is core/vil1/file_formats/vil1_mit.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
 //
 // Author: Joris Schouteden
 // Created: 18 Feb 2000
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "vil1_mit.h"
 
@@ -56,27 +56,30 @@ static char const* vil1_mit_format_tag = "mit";
 // 00000000: 01 00 08 00 67 01 5A 01 6D 6D 6D 6D 6D 6D 6D 6D ....g.Z.mmmmmmmm
 // 00000010: 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D 6D mmmmmmmmmmmmmmmm
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-vil1_image_impl* vil1_mit_file_format::make_input_image(vil1_stream* is)
+vil1_image_impl * vil1_mit_file_format::make_input_image(vil1_stream* is)
 {
   is->seek(0L);
   int type = vil1_16bit_read_little_endian(is);
 
-  if (!(type == MIT_UNSIGNED ||
+  if( !(type == MIT_UNSIGNED ||
         type == MIT_RGB      ||
         type == MIT_HSB      ||
         type == MIT_CAP      ||
         type == MIT_SIGNED   ||
         type == MIT_FLOAT    ||
-        type == MIT_EDGE      ))
+        type == MIT_EDGE      ) )
+    {
     return 0;
+    }
 
   int bits_per_pixel = vil1_16bit_read_little_endian(is);
-  if (bits_per_pixel > 32) {
+  if( bits_per_pixel > 32 )
+    {
     vcl_cerr << "vil1_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << vcl_endl;
     return 0;
-  }
+    }
 
   /*int width =*/ vil1_16bit_read_little_endian(is);
   /*int height=*/ vil1_16bit_read_little_endian(is);
@@ -90,42 +93,46 @@ vil1_image_impl* vil1_mit_file_format::make_input_image(vil1_stream* is)
   return new vil1_mit_generic_image(is);
 }
 
-vil1_image_impl* vil1_mit_file_format::make_output_image(vil1_stream* is, int planes,
-                                                         int width,
-                                                         int height,
-                                                         int components,
-                                                         int bits_per_component,
-                                                         vil1_component_format format)
+vil1_image_impl * vil1_mit_file_format::make_output_image(vil1_stream* is, int planes,
+                                                          int width,
+                                                          int height,
+                                                          int components,
+                                                          int bits_per_component,
+                                                          vil1_component_format format)
 {
   return new vil1_mit_generic_image(is, planes, width, height, components, bits_per_component, format);
 }
 
-char const* vil1_mit_file_format::tag() const
+char const * vil1_mit_file_format::tag() const
 {
   return vil1_mit_format_tag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream* is):
+vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream* is) :
   is_(is)
 {
   is_->ref();
   read_header();
 }
 
-bool vil1_mit_generic_image::get_property(char const *tag, void *prop) const
+bool vil1_mit_generic_image::get_property(char const * tag, void * prop) const
 {
-  if (0==vcl_strcmp(tag, vil1_property_top_row_first))
-    return prop ? (*(bool*)prop) = true : true;
+  if( 0 == vcl_strcmp(tag, vil1_property_top_row_first) )
+    {
+    return prop ? (*(bool *)prop) = true : true;
+    }
 
-  if (0==vcl_strcmp(tag, vil1_property_left_first))
-    return prop ? (*(bool*)prop) = true : true;
+  if( 0 == vcl_strcmp(tag, vil1_property_left_first) )
+    {
+    return prop ? (*(bool *)prop) = true : true;
+    }
 
   return false;
 }
 
-char const* vil1_mit_generic_image::file_format() const
+char const * vil1_mit_generic_image::file_format() const
 {
   return vil1_mit_format_tag;
 }
@@ -135,29 +142,34 @@ vil1_mit_generic_image::vil1_mit_generic_image(vil1_stream* is, int planes,
                                                int height,
                                                int components,
                                                int bits_per_component,
-                                               vil1_component_format ):
+                                               vil1_component_format ) :
   is_(is)
 {
   is_->ref();
-  assert(planes==1);
+  assert(planes == 1);
   width_ = width;
   height_ = height;
   components_ = components;
   bits_per_component_ = bits_per_component;
   bits_per_pixel_ = bits_per_component_ * components_;
 
-  if (bits_per_component_ == 8 || bits_per_component_ == 16)
-  {
-    if (components_ == 3) type_ = 2;
-    else if (components_ == 1) type_ = 1;
-    else vcl_cerr << __FILE__ " : Can only write RGB or grayscale\n";
-  }
+  if( bits_per_component_ == 8 || bits_per_component_ == 16 )
+    {
+    if( components_ == 3 ) {type_ = 2; }
+    else if( components_ == 1 )
+      {
+      type_ = 1;
+      }
+    else {vcl_cerr << __FILE__ " : Can only write RGB or grayscale\n"; }
+    }
   else
-  {
-    if (components_ == 1) type_ = 6;
+    {
+    if( components_ == 1 ) {type_ = 6; }
     else
+      {
       vcl_cerr << __FILE__ " : Ah can only write 8 or 16 bit images\n";
-  }
+      }
+    }
 
   write_header();
 }
@@ -176,13 +188,24 @@ bool vil1_mit_generic_image::read_header()
   width_ = vil1_16bit_read_little_endian(is_);
   height_ = vil1_16bit_read_little_endian(is_);
 
-  if (type_ > 7 || type_ < 1)
+  if( type_ > 7 || type_ < 1 )
+    {
     return false;
+    }
 
-  if (type_ == 1) components_ = 1;   // gray
-  else if (type_ == 2) components_ = 3;  // rgb
-  else if (type_ == 6) components_ = 1;  // float
+  if( type_ == 1 )
+    {
+    components_ = 1;                 // gray
+    }
+  else if( type_ == 2 )
+    {
+    components_ = 3;                     // rgb
+    }
+  else if( type_ == 6 )
+    {
+    components_ = 1;                     // float
 
+    }
   return true;
 }
 
@@ -204,18 +227,16 @@ bool vil1_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 
   int skip = bytes_per_pixel() * (width_ - xs);
 
-  unsigned char *point = (unsigned char*)buf;
+  unsigned char * point = (unsigned char *)buf;
 
-  is_->seek(offset + (width_*y0*bytes_per_pixel()) + (x0*bytes_per_pixel()));
-
-
+  is_->seek(offset + (width_ * y0 * bytes_per_pixel() ) + (x0 * bytes_per_pixel() ) );
   // FIXME: BGR
-  for (int tely = 0; tely < ys; tely++)
-  {
-    is_->read(point, xs * bytes_per_pixel());
+  for( int tely = 0; tely < ys; tely++ )
+    {
+    is_->read(point, xs * bytes_per_pixel() );
     is_->seek(is_->tell() + skip);
-    point += (xs * bytes_per_pixel());
-  }
+    point += (xs * bytes_per_pixel() );
+    }
 
   return true;
 }
@@ -227,17 +248,16 @@ bool vil1_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs
   int skip = bytes_per_pixel() * (width_ - xs);
 
   vil1_streampos offset = 8;
-  is_->seek(offset + (width_*y0*bytes_per_pixel()) + (x0*bytes_per_pixel()));
+  is_->seek(offset + (width_ * y0 * bytes_per_pixel() ) + (x0 * bytes_per_pixel() ) );
 
-  const unsigned char* point = (const unsigned char*)buf;
-
+  const unsigned char* point = (const unsigned char *)buf;
   // FIXME: store as BGR
-  for (int tely = 0; tely < ys; tely++)
-  {
-    is_->write(point, xs * bytes_per_pixel());
+  for( int tely = 0; tely < ys; tely++ )
+    {
+    is_->write(point, xs * bytes_per_pixel() );
     is_->seek(is_->tell() + skip);
-    point += (xs * bytes_per_pixel());
-  }
+    point += (xs * bytes_per_pixel() );
+    }
 
   return true;
 }
@@ -245,5 +265,5 @@ bool vil1_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs
 vil1_image vil1_mit_generic_image::get_plane(unsigned int plane) const
 {
   assert(plane == 0);
-  return const_cast<vil1_mit_generic_image*>(this);
+  return const_cast<vil1_mit_generic_image *>(this);
 }

@@ -1,9 +1,9 @@
 #include "bstm_opencl_cache.h"
-//:
+// :
 // \file
-//#define DEBUG
+// #define DEBUG
 
-//: scene/device constructor
+// : scene/device constructor
 bstm_opencl_cache
 ::bstm_opencl_cache(bstm_scene_sptr scene,
                     bocl_device_sptr device) :
@@ -15,8 +15,11 @@ bstm_opencl_cache
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
   unsigned long total_global_mem =  device->info().total_global_memory_;
-  if(device->info().addr_bits_ == 32 && total_global_mem > (cl_ulong)4096000000)
+
+  if( device->info().addr_bits_ == 32 && total_global_mem > (cl_ulong)4096000000 )
+    {
     total_global_mem =   (cl_ulong)4096000000;
+    }
 
   maxBytesInCache_ = (unsigned long) (total_global_mem * .9);
 
@@ -34,12 +37,15 @@ bstm_opencl_cache
                             *device->device_id(),
                             CL_QUEUE_PROFILING_ENABLE,
                             &status);
-  if (!check_val(status,CL_SUCCESS,"bstm_opencl_cache:: failed in command queue creation " + error_to_string(status)))
+  if( !check_val(status, CL_SUCCESS,
+                 "bstm_opencl_cache:: failed in command queue creation " + error_to_string(status) ) )
+    {
     return;
+    }
   queue_ = &q_;
 }
 
-//: sets a context in case the default context off the device is old
+// : sets a context in case the default context off the device is old
 // (this  is used for the tableau's shared cl_gl context)
 void
 bstm_opencl_cache
@@ -47,15 +53,21 @@ bstm_opencl_cache
 {
   context_ = &context;
   int status = clReleaseCommandQueue(q_);
-  if (!check_val(status,CL_SUCCESS,"bstm_opencl_cache::set_context failed to release old queue " + error_to_string(status)))
+  if( !check_val(status, CL_SUCCESS,
+                 "bstm_opencl_cache::set_context failed to release old queue " + error_to_string(status) ) )
+    {
     return;
+    }
 
   q_ = clCreateCommandQueue(*context_,
                             *device_->device_id(),
                             CL_QUEUE_PROFILING_ENABLE,
                             &status);
-  if (!check_val(status,CL_SUCCESS,"bstm_opencl_cache::set_context failed in command queue creation " + error_to_string(status)))
+  if( !check_val(status, CL_SUCCESS,
+                 "bstm_opencl_cache::set_context failed in command queue creation " + error_to_string(status) ) )
+    {
     return;
+    }
   queue_ = &q_;
 }
 
@@ -64,76 +76,74 @@ bstm_opencl_cache
 ::clear_cache()
 {
   // delete stored block info
-  if (block_info_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+  if( block_info_ )
+    {
+    bstm_scene_info* buff = (bstm_scene_info *) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
-    block_info_=0;
-  }
+    block_info_ = 0;
+    }
 
-  if (block_info_t_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
+  if( block_info_t_ )
+    {
+    bstm_scene_info* buff = (bstm_scene_info *) block_info_t_->cpu_buffer();
     delete buff;
     delete block_info_t_;
-    block_info_t_=0;
-  }
-
+    block_info_t_ = 0;
+    }
 
   // delete blocks in cache
-  vcl_map<bstm_block_id, bocl_mem*>::iterator blks;
+  vcl_map<bstm_block_id, bocl_mem *>::iterator blks;
   // delete time blocks in cache
-  for (blks=cached_time_blocks_.begin(); blks!=cached_time_blocks_.end(); ++blks)
-  {
+  for( blks = cached_time_blocks_.begin(); blks != cached_time_blocks_.end(); ++blks )
+    {
     bocl_mem* toDelete = blks->second;
-    //toDelete->read_to_buffer( *queue_ );
+    // toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
 #ifdef DEBUG
-    vcl_cout<<"Deleting time block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
+    vcl_cout << "Deleting time block: " << toDelete->id() << "...size: " << toDelete->num_bytes() << vcl_endl;
 #endif
     delete toDelete;
-  }
+    }
   cached_time_blocks_.clear();
-
-
-  for (blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
-  {
+  for( blks = cached_blocks_.begin(); blks != cached_blocks_.end(); ++blks )
+    {
     bocl_mem* toDelete = blks->second;
-    //toDelete->read_to_buffer( *queue_ );
+    // toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
 #ifdef DEBUG
-    vcl_cout<<"Deleting block: "<<toDelete->id()<<"...size: "<<toDelete->num_bytes()<<vcl_endl;
+    vcl_cout << "Deleting block: " << toDelete->id() << "...size: " << toDelete->num_bytes() << vcl_endl;
 #endif
     delete toDelete;
-  }
+    }
   cached_blocks_.clear();
 
-
-
   // delete data from each cache
-  vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem*> >::iterator datas;
-  for (datas=cached_data_.begin(); datas!=cached_data_.end(); ++datas)
-  {
-    vcl_map<bstm_block_id, bocl_mem*>& data_map = datas->second;
-    vcl_map<bstm_block_id, bocl_mem*>::iterator data_blks;
-    for (data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
+  vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem *> >::iterator datas;
+  for( datas = cached_data_.begin(); datas != cached_data_.end(); ++datas )
     {
+    vcl_map<bstm_block_id, bocl_mem *>&          data_map = datas->second;
+    vcl_map<bstm_block_id, bocl_mem *>::iterator data_blks;
+    for( data_blks = data_map.begin(); data_blks != data_map.end(); ++data_blks )
+      {
       bocl_mem* toDelete = data_blks->second;
-      //toDelete->read_to_buffer( *queue_ );
+      // toDelete->read_to_buffer( *queue_ );
       bytesInCache_ -= toDelete->num_bytes();
       bstm_block_id bid = data_blks->first;
 #ifdef DEBUG
-      vcl_cout<<"Deleting data type: "<<datas->first<<" id "<<bid<<"..size: "<<toDelete->num_bytes()<<vcl_endl;
+      vcl_cout << "Deleting data type: " << datas->first << " id " << bid << "..size: " << toDelete->num_bytes()
+               << vcl_endl;
 #endif
       delete toDelete;
-    }
+      }
     data_map.clear();
 #ifdef DEBUG
-      vcl_cout<<"Deleted data type: "<<datas->first <<vcl_endl;
+    vcl_cout << "Deleted data type: " << datas->first << vcl_endl;
 #endif
-  }
+    }
   cached_data_.clear();
 
-  //clear LRU list
+  // clear LRU list
   lru_order_.clear();
 
   // notify exceptional case
@@ -147,40 +157,38 @@ bstm_opencl_cache
   // count up bytes in cache (like clearing, but no deleting...
   vcl_size_t count = 0;
 
-  vcl_map<bstm_block_id, bocl_mem*>::iterator blks;
-  for (blks=cached_blocks_.begin(); blks!=cached_blocks_.end(); ++blks)
-  {
+  vcl_map<bstm_block_id, bocl_mem *>::iterator blks;
+  for( blks = cached_blocks_.begin(); blks != cached_blocks_.end(); ++blks )
+    {
     bocl_mem* curr = blks->second;
     count += curr->num_bytes();
-  }
-
-  for (blks=cached_time_blocks_.begin(); blks!=cached_time_blocks_.end(); ++blks)
-  {
+    }
+  for( blks = cached_time_blocks_.begin(); blks != cached_time_blocks_.end(); ++blks )
+    {
     bocl_mem* curr = blks->second;
     count += curr->num_bytes();
-  }
-
+    }
 
   // count bstm_data mem sizes
-  vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem*> >::iterator datas;
-  for (datas=cached_data_.begin(); datas!=cached_data_.end(); ++datas)
-  {
-    vcl_map<bstm_block_id, bocl_mem*>& data_map = datas->second;
-    vcl_map<bstm_block_id, bocl_mem*>::iterator data_blks;
-    for (data_blks=data_map.begin(); data_blks!=data_map.end(); ++data_blks)
+  vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem *> >::iterator datas;
+  for( datas = cached_data_.begin(); datas != cached_data_.end(); ++datas )
     {
+    vcl_map<bstm_block_id, bocl_mem *>&          data_map = datas->second;
+    vcl_map<bstm_block_id, bocl_mem *>::iterator data_blks;
+    for( data_blks = data_map.begin(); data_blks != data_map.end(); ++data_blks )
+      {
       bocl_mem* curr = data_blks->second;
       count += curr->num_bytes();
+      }
     }
-  }
 
-  //count mem pool sizes
-  vcl_map<bocl_mem*, vcl_size_t>::iterator mems;
-  for (mems=mem_pool_.begin(); mems!=mem_pool_.end(); ++mems)
-  {
+  // count mem pool sizes
+  vcl_map<bocl_mem *, vcl_size_t>::iterator mems;
+  for( mems = mem_pool_.begin(); mems != mem_pool_.end(); ++mems )
+    {
     bocl_mem* curr = mems->first;
     count += curr->num_bytes();
-  }
+    }
   return count;
 }
 
@@ -191,70 +199,77 @@ bstm_opencl_cache
   // count up bytes in cache (like clearing, but no deleting...
   vcl_size_t count = 0;
 
-  //count mem pool sizes
-  vcl_map<bocl_mem*, vcl_size_t>::iterator mems;
-  for (mems=mem_pool_.begin(); mems!=mem_pool_.end(); ++mems)
-  {
+  // count mem pool sizes
+  vcl_map<bocl_mem *, vcl_size_t>::iterator mems;
+  for( mems = mem_pool_.begin(); mems != mem_pool_.end(); ++mems )
+    {
     bocl_mem* curr = mems->first;
     count += curr->num_bytes();
-  }
+    }
   return count;
 }
 
-//: realization of abstract "get_block(block_id)"
-bocl_mem*
+// : realization of abstract "get_block(block_id)"
+bocl_mem *
 bstm_opencl_cache
 ::get_block(bstm_block_id id)
 {
-  //requesting block pushes it to the front of the list
+  // requesting block pushes it to the front of the list
   this->lru_push_front(id);
 
   // then look for the block you're requesting
-  if ( cached_blocks_.find(id) != cached_blocks_.end() ) {
+  if( cached_blocks_.find(id) != cached_blocks_.end() )
+    {
     // load block info
     bstm_block* loaded = cpu_cache_->get_block(id);
-    if (block_info_) {
-       bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
-       delete buff;
-       delete block_info_;
-    }
-    bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
+    if( block_info_ )
+      {
+      bstm_scene_info* buff = (bstm_scene_info *) block_info_->cpu_buffer();
+      delete buff;
+      delete block_info_;
+      }
+    bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id) );
     info_buffer->tree_buffer_length = loaded->tree_buff_length();
     info_buffer->data_buffer_length = 65536;
     block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
     block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
     return cached_blocks_[id];
-  }
+    }
 
   // check to see which block to kick out
   // grab block from CPU cache and see if the GPU cache needs some cleaning
-  bstm_block* loaded = cpu_cache_->get_block(id);
+  bstm_block*              loaded = cpu_cache_->get_block(id);
   boxm2_array_3d<uchar16>& trees = loaded->trees();
-  vcl_size_t toLoadSize = trees.size()*sizeof(uchar16);
-  unsigned long totalBytes = this->bytes_in_cache() + toLoadSize;
-  if (totalBytes > maxBytesInCache_) {
+  vcl_size_t               toLoadSize = trees.size() * sizeof(uchar16);
+  unsigned long            totalBytes = this->bytes_in_cache() + toLoadSize;
+  if( totalBytes > maxBytesInCache_ )
+    {
 
 #ifdef DEBUG
-    vcl_cout<<"Loading Block "<<id<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
-            <<"    removing... ";
+    vcl_cout << "Loading Block " << id << " uses " << totalBytes << " out of  " << maxBytesInCache_ << vcl_endl
+             << "    removing... ";
 #endif
-    while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
-    {
+    while( this->bytes_in_cache() + toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
+      {
       bstm_block_id lru_id;
-      if (!this->lru_remove_last(lru_id)) {
-         vcl_cerr << "ERROR: bstm_opencl_cache::get_block(): lru is empty" << vcl_endl;
-         return (bocl_mem*)0;
+      if( !this->lru_remove_last(lru_id) )
+        {
+        vcl_cerr << "ERROR: bstm_opencl_cache::get_block(): lru is empty" << vcl_endl;
+        return (bocl_mem *)0;
+        }
+#ifdef DEBUG
+      vcl_cout << lru_id << " ... ";
+#endif
+      if( lru_id == id )
+        {
+        vcl_cout << "bstm_opencl_cache:: Single Block Size is too big for GPU RAM" << vcl_endl;
+        }
       }
+
 #ifdef DEBUG
-      vcl_cout<<lru_id<<" ... ";
+    vcl_cout << vcl_endl;
 #endif
-      if (lru_id == id)
-        vcl_cout<<"bstm_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
     }
-#ifdef DEBUG
-    vcl_cout<<vcl_endl;
-#endif
-  }
 
   // otherwise load it from disk with blocking
   bocl_mem* blk = new bocl_mem(*context_, trees.data_block(), toLoadSize, "3d trees buffer " + id.to_string() );
@@ -266,12 +281,13 @@ bstm_opencl_cache
 
   //////////////////////////////////////////////////////
   // load block info
-  if (block_info_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+  if( block_info_ )
+    {
+    bstm_scene_info* buff = (bstm_scene_info *) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
-  }
-  bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
+    }
+  bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id) );
   info_buffer->tree_buffer_length = loaded->tree_buff_length();
   info_buffer->data_buffer_length = 65536;
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
@@ -281,50 +297,55 @@ bstm_opencl_cache
   return blk;
 }
 
-
-//: realization of abstract "get_block(block_id)"
-bocl_mem*
+// : realization of abstract "get_block(block_id)"
+bocl_mem *
 bstm_opencl_cache
 ::get_time_block(bstm_block_id id)
 {
-  //requesting block pushes it to the front of the list
+  // requesting block pushes it to the front of the list
   this->lru_push_front(id);
 
   // then look for the block you're requesting
-  if ( cached_time_blocks_.find(id) != cached_time_blocks_.end() ) {
+  if( cached_time_blocks_.find(id) != cached_time_blocks_.end() )
+    {
     // load block info
     bstm_time_block* loaded = cpu_cache_->get_time_block(id);
-    if (block_info_t_) {
-       bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
-       delete buff;
-       delete block_info_t_;
-    }
-    bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
+    if( block_info_t_ )
+      {
+      bstm_scene_info* buff = (bstm_scene_info *) block_info_t_->cpu_buffer();
+      delete buff;
+      delete block_info_t_;
+      }
+    bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id) );
     info_buffer->tree_buffer_length = loaded->tree_buff_length();
     info_buffer->data_buffer_length = 65536;
     block_info_t_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
     block_info_t_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
     return cached_time_blocks_[id];
-  }
+    }
 
   // check to see which block to kick out
   // grab block from CPU cache and see if the GPU cache needs some cleaning
-  bstm_time_block* loaded = cpu_cache_->get_time_block(id);
+  bstm_time_block*        loaded = cpu_cache_->get_time_block(id);
   boxm2_array_1d<uchar8>& trees = loaded->time_trees();
-  vcl_size_t toLoadSize = trees.size()*sizeof(uchar8);
-  unsigned long totalBytes = this->bytes_in_cache() + toLoadSize;
-  if (totalBytes > maxBytesInCache_) {
-    while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
+  vcl_size_t              toLoadSize = trees.size() * sizeof(uchar8);
+  unsigned long           totalBytes = this->bytes_in_cache() + toLoadSize;
+  if( totalBytes > maxBytesInCache_ )
     {
+    while( this->bytes_in_cache() + toLoadSize > maxBytesInCache_ && !cached_blocks_.empty() )
+      {
       bstm_block_id lru_id;
-      if (!this->lru_remove_last(lru_id)) {
-         vcl_cerr << "ERROR: bstm_opencl_cache::get_block(): lru is empty" << vcl_endl;
-         return (bocl_mem*)0;
+      if( !this->lru_remove_last(lru_id) )
+        {
+        vcl_cerr << "ERROR: bstm_opencl_cache::get_block(): lru is empty" << vcl_endl;
+        return (bocl_mem *)0;
+        }
+      if( lru_id == id )
+        {
+        vcl_cout << "bstm_opencl_cache:: Single Block Size is too big for GPU RAM" << vcl_endl;
+        }
       }
-      if (lru_id == id)
-        vcl_cout<<"bstm_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
     }
-  }
 
   // otherwise load it from disk with blocking
   bocl_mem* blk = new bocl_mem(*context_, trees.begin(), toLoadSize, "1d trees buffer " + id.to_string() );
@@ -336,12 +357,13 @@ bstm_opencl_cache
 
   //////////////////////////////////////////////////////
   // load block info
-  if (block_info_t_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
+  if( block_info_t_ )
+    {
+    bstm_scene_info* buff = (bstm_scene_info *) block_info_t_->cpu_buffer();
     delete buff;
     delete block_info_t_;
-  }
-  bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id));
+    }
+  bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id) );
   info_buffer->tree_buffer_length = loaded->tree_buff_length();
   info_buffer->data_buffer_length = 65536;
   block_info_t_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
@@ -351,21 +373,21 @@ bstm_opencl_cache
   return blk;
 }
 
-
-bocl_mem*
+bocl_mem *
 bstm_opencl_cache
 ::get_block_info(bstm_block_id id)
 {
   // clean up
-  if (block_info_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+  if( block_info_ )
+    {
+    bstm_scene_info* buff = (bstm_scene_info *) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
-  }
+    }
 
   // get block info from scene/block
   bstm_scene_info* info_buffer = populate_scene_info( scene_->get_block_metadata(id) );
-  bstm_block* blk = cpu_cache_->get_block(id);
+  bstm_block*      blk = cpu_cache_->get_block(id);
   info_buffer->tree_buffer_length = blk->tree_buff_length();
   info_buffer->data_buffer_length = 65536;
   block_info_ = new bocl_mem(*context_, info_buffer, sizeof(bstm_scene_info), "scene info buffer");
@@ -373,76 +395,89 @@ bstm_opencl_cache
   return block_info_;
 }
 
-//: Get data generic
+// : Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem*
+bocl_mem *
 bstm_opencl_cache
 ::get_data(bstm_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
-  //push id to front of LRU list
+  // push id to front of LRU list
   this->lru_push_front(id);
 
   // grab a reference to the map of cached_data_
-  vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
+  vcl_map<bstm_block_id, bocl_mem *>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting
-  vcl_map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
-  if ( iter != data_map.end() ) {
-    if(num_bytes == 0 || iter->second->num_bytes() == num_bytes) // congrats you've found the data block in cache, update cache and return block
-      return iter->second;
-    else                                                        // congrats you've found the data block in cache, but it isn't the size you wanted, so delete it.
+  vcl_map<bstm_block_id, bocl_mem *>::iterator iter = data_map.find(id);
+  if( iter != data_map.end() )
     {
+    if( num_bytes == 0 || iter->second->num_bytes() == num_bytes ) // congrats you've found the data block in cache, update cache and return block
+      {
+      return iter->second;
+      }
+    else                                                        // congrats you've found the data block in cache, but it isn't the size you wanted, so delete it.
+      {
       delete iter->second;
       data_map.erase(iter);
+      }
     }
-  }
 
   // load data into CPU cache and check size to see if GPU cache needs cleaning
-  bstm_data_base* data_base = cpu_cache_->get_data_base(id,type,num_bytes,read_only);
+  bstm_data_base* data_base = cpu_cache_->get_data_base(id, type, num_bytes, read_only);
 
   vcl_size_t toLoadSize;
-  if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
+  if( num_bytes > 0 && data_base->buffer_length() != num_bytes )
+    {
     toLoadSize = num_bytes;
+    }
   else
+    {
     toLoadSize = data_base->buffer_length();
+    }
 
   // make enough space by kicking out blocks
   vcl_size_t totalBytes = this->bytes_in_cache() + toLoadSize;
-  if (totalBytes > maxBytesInCache_) {
-#ifdef DEBUG
-    vcl_cout<<"Loading data "<<id<<" type "<<type<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
-            <<"    removing... ";
-#endif
-    while ( this->bytes_in_cache()+toLoadSize*2 > maxBytesInCache_ && !data_map.empty() )
+  if( totalBytes > maxBytesInCache_ )
     {
+#ifdef DEBUG
+    vcl_cout << "Loading data " << id << " type " << type << " uses " << totalBytes << " out of  "
+             << maxBytesInCache_ << vcl_endl
+             << "    removing... ";
+#endif
+    while( this->bytes_in_cache() + toLoadSize * 2 > maxBytesInCache_ && !data_map.empty() )
+      {
       bstm_block_id lru_id;
-      if(!this->lru_remove_last(lru_id)) {
-         vcl_cerr << "ERROR: bstm_opencl_cache::get_data() : lru is empty" << vcl_endl;
-         return (bocl_mem*)0;
+      if( !this->lru_remove_last(lru_id) )
+        {
+        vcl_cerr << "ERROR: bstm_opencl_cache::get_data() : lru is empty" << vcl_endl;
+        return (bocl_mem *)0;
+        }
+#ifdef DEBUG
+      vcl_cout << lru_id << " ... ";
+#endif
+      if( lru_id == id )
+        {
+        vcl_cout << "bstm_opencl_cache:: Single Block Size is too big for GPU RAM" << vcl_endl;
+        }
       }
+
 #ifdef DEBUG
-      vcl_cout<<lru_id<<" ... ";
+    vcl_cout << vcl_endl;
 #endif
-      if (lru_id == id)
-        vcl_cout<<"bstm_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
     }
-#ifdef DEBUG
-    vcl_cout<<vcl_endl;
-#endif
-  }
 
   // data block isn't found...
   // if num bytes is specified and the data doesn't match, create empty buffer
-  if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
-  {
+  if( num_bytes > 0 && data_base->buffer_length() != num_bytes )
+    {
     bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
     data->create_buffer(CL_MEM_READ_WRITE);
-    this->deep_replace_data(id,type,data,read_only);
-    //data->zero_gpu_buffer(*queue_);
+    this->deep_replace_data(id, type, data, read_only);
+    // data->zero_gpu_buffer(*queue_);
     data_map[id] = data;
     bytesInCache_ += data->num_bytes();
     return data;
-  }
+    }
 
   // otherwise initialize buffer from CPU cache and return
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
@@ -452,54 +487,60 @@ bstm_opencl_cache
   return data;
 }
 
-
-//: Get data new generic
+// : Get data new generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem*
+bocl_mem *
 bstm_opencl_cache
 ::get_data_new(bstm_block_id id, vcl_string type, vcl_size_t num_bytes, bool read_only)
 {
-  //push id to front of LRU list
+  // push id to front of LRU list
   this->lru_push_front(id);
 
   // grab a reference to the map of cached_data_
-  vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
+  vcl_map<bstm_block_id, bocl_mem *>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting, if found, delete it.
-  vcl_map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
-  if ( iter != data_map.end() ) {
+  vcl_map<bstm_block_id, bocl_mem *>::iterator iter = data_map.find(id);
+  if( iter != data_map.end() )
+    {
     delete iter->second;
     data_map.erase(iter);
-  }
+    }
 
   // load new data into CPU cache and check size to see if GPU cache needs cleaning
-  bstm_data_base* data_base = cpu_cache_->get_data_base_new(id,type,num_bytes,read_only);
-  vcl_size_t toLoadSize = data_base->buffer_length();
+  bstm_data_base* data_base = cpu_cache_->get_data_base_new(id, type, num_bytes, read_only);
+  vcl_size_t      toLoadSize = data_base->buffer_length();
 
   // make enough space by kicking out blocks
   vcl_size_t totalBytes = this->bytes_in_cache() + toLoadSize;
-  if (totalBytes > maxBytesInCache_) {
-#ifdef DEBUG
-    vcl_cout<<"Loading data "<<id<<" type "<<type<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
-            <<"    removing... ";
-#endif
-    while ( this->bytes_in_cache()+toLoadSize > maxBytesInCache_ && !data_map.empty() )
+  if( totalBytes > maxBytesInCache_ )
     {
+#ifdef DEBUG
+    vcl_cout << "Loading data " << id << " type " << type << " uses " << totalBytes << " out of  "
+             << maxBytesInCache_ << vcl_endl
+             << "    removing... ";
+#endif
+    while( this->bytes_in_cache() + toLoadSize > maxBytesInCache_ && !data_map.empty() )
+      {
       bstm_block_id lru_id;
-      if (!this->lru_remove_last(lru_id)) {
-         vcl_cerr << "ERROR: bstm_opencl_cache::get_data_new() : lru is empty " << vcl_endl;
-         return (bocl_mem*)0;
+      if( !this->lru_remove_last(lru_id) )
+        {
+        vcl_cerr << "ERROR: bstm_opencl_cache::get_data_new() : lru is empty " << vcl_endl;
+        return (bocl_mem *)0;
+        }
+#ifdef DEBUG
+      vcl_cout << lru_id << " ... ";
+#endif
+      if( lru_id == id )
+        {
+        vcl_cout << "bstm_opencl_cache:: Single Block Size is too big for GPU RAM" << vcl_endl;
+        }
       }
+
 #ifdef DEBUG
-      vcl_cout<<lru_id<<" ... ";
+    vcl_cout << vcl_endl;
 #endif
-      if (lru_id == id)
-        vcl_cout<<"bstm_opencl_cache:: Single Block Size is too big for GPU RAM"<<vcl_endl;
     }
-#ifdef DEBUG
-    vcl_cout<<vcl_endl;
-#endif
-  }
 
   // initialize buffer from CPU cache and return
   bocl_mem* data = new bocl_mem(*context_, data_base->data_buffer(), data_base->buffer_length(), type);
@@ -509,38 +550,41 @@ bstm_opencl_cache
   return data;
 }
 
-
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // Methods for opencl objects not in the CPU cache (images, some aux data)
-//---------------------------------------------------------------------------
-//: returns a flat bocl_mem of a certain size
-bocl_mem*
+// ---------------------------------------------------------------------------
+// : returns a flat bocl_mem of a certain size
+bocl_mem *
 bstm_opencl_cache
 ::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, vcl_string id)
 {
-  vcl_size_t totalBytes = this->bytes_in_cache()+num_bytes;
-  if (totalBytes > maxBytesInCache_) {
-#ifdef DEBUG
-    vcl_cout<<"OCL cache alloc mem "<<" uses "<<totalBytes<<" out of  "<<maxBytesInCache_<<vcl_endl
-            <<"    removing... ";
-#endif
-    while ( this->bytes_in_cache()+num_bytes > maxBytesInCache_ )
+  vcl_size_t totalBytes = this->bytes_in_cache() + num_bytes;
+
+  if( totalBytes > maxBytesInCache_ )
     {
-      bstm_block_id lru_id;
-      if (!this->lru_remove_last(lru_id)) {
-         vcl_cerr << "ERROR: lru empty. unable to alloc buffer of requested size. " << vcl_endl;
-         return (bocl_mem*)0;
-      }
 #ifdef DEBUG
-      vcl_cout<<lru_id<<" ... ";
+    vcl_cout << "OCL cache alloc mem " << " uses " << totalBytes << " out of  " << maxBytesInCache_ << vcl_endl
+             << "    removing... ";
+#endif
+    while( this->bytes_in_cache() + num_bytes > maxBytesInCache_ )
+      {
+      bstm_block_id lru_id;
+      if( !this->lru_remove_last(lru_id) )
+        {
+        vcl_cerr << "ERROR: lru empty. unable to alloc buffer of requested size. " << vcl_endl;
+        return (bocl_mem *)0;
+        }
+#ifdef DEBUG
+      vcl_cout << lru_id << " ... ";
+#endif
+      }
+
+#ifdef DEBUG
+    vcl_cout << vcl_endl;
 #endif
     }
-#ifdef DEBUG
-    vcl_cout<<vcl_endl;
-#endif
-  }
 
-  //allocate mem
+  // allocate mem
   bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, id);
   mem_pool_[data] = num_bytes;
   return data;
@@ -550,24 +594,26 @@ void
 bstm_opencl_cache
 ::free_mem_pool()
 {
-  vcl_map<bocl_mem*,vcl_size_t>::iterator iter;
-  for (iter = mem_pool_.begin(); iter!=mem_pool_.end(); ++iter){
+  vcl_map<bocl_mem *, vcl_size_t>::iterator iter;
+  for( iter = mem_pool_.begin(); iter != mem_pool_.end(); ++iter )
+    {
     bocl_mem* toDelete = iter->first;
     delete toDelete;
     mem_pool_.erase(iter);
-  }
+    }
   mem_pool_.clear();
 }
 
-//removes mem from pool, but still keeps it allocated
+// removes mem from pool, but still keeps it allocated
 void
 bstm_opencl_cache
 ::unref_mem(bocl_mem* mem)
 {
-  vcl_map<bocl_mem*,vcl_size_t>::iterator iter = mem_pool_.find(mem);
-  if (iter != mem_pool_.end()){
+  vcl_map<bocl_mem *, vcl_size_t>::iterator iter = mem_pool_.find(mem);
+  if( iter != mem_pool_.end() )
+    {
     mem_pool_.erase(iter);
-  }
+    }
 }
 
 void
@@ -578,11 +624,10 @@ bstm_opencl_cache
   delete mem;
 }
 
-
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // deep replace/remove, removing or replacing the buffer in the cpu cache as well
-//------------------------------------------------------------------------------
-//: Deep data replace.
+// ------------------------------------------------------------------------------
+// : Deep data replace.
 // This replaces not only the data in the GPU cache, but
 // in the cpu cache as well (by creating a new one)
 void
@@ -592,159 +637,171 @@ bstm_opencl_cache
   // instantiate new data block
   vcl_size_t numDataBytes = mem->num_bytes();
 
-  //TODO: figure out consistent scheme to make this read_only or read_write
+  // TODO: figure out consistent scheme to make this read_only or read_write
   bstm_data_base* newData = new bstm_data_base(new char[numDataBytes], numDataBytes, id, read_only);
 
   // write bocl_mem data to cpu buffer
-  mem->set_cpu_buffer((void*) newData->data_buffer());
+  mem->set_cpu_buffer( (void *) newData->data_buffer() );
   mem->read_to_buffer( *queue_ );
 
   // do deep replace
   cpu_cache_->replace_data_base(id, type, newData);
 
   // now replace the mem in the GPU cache.. first delete existing
-  vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
-  vcl_map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
-  if ( iter != data_map.end() ) {
+  vcl_map<bstm_block_id, bocl_mem *>&          data_map = this->cached_data_map(type);
+  vcl_map<bstm_block_id, bocl_mem *>::iterator iter = data_map.find(id);
+  if( iter != data_map.end() )
+    {
     // release existing memory
     bocl_mem* toDelete = iter->second;
     delete toDelete;
     data_map.erase(iter);
-  }
+    }
   data_map[id] = mem;
 }
 
-//: deep remove data, removes from ocl cache as well
+// : deep remove data, removes from ocl cache as well
 void
 bstm_opencl_cache
 ::deep_remove_data(bstm_block_id id, vcl_string type, bool write_out)
 {
-  //find the data in this map
-  vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
-  vcl_map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
-  if ( iter != data_map.end() ) {
+  // find the data in this map
+  vcl_map<bstm_block_id, bocl_mem *>&          data_map = this->cached_data_map(type);
+  vcl_map<bstm_block_id, bocl_mem *>::iterator iter = data_map.find(id);
+  if( iter != data_map.end() )
+    {
     // release existing memory
     bocl_mem* toDelete = iter->second;
     delete toDelete;
     data_map.erase(iter);
-  }
+    }
 
-  //remove from cpu_cache_
+  // remove from cpu_cache_
   cpu_cache_->remove_data_base(id, type);
 #if 0
   remove from lru_order
   vcl_list<bstm_block_id>::iterator loc = vcl_find(lru_order_.begin(), lru_order_.end(), id);
-  if (loc != lru_order_.end())
+  if( loc != lru_order_.end() )
+    {
     lru_order_.erase(loc);
+    }
 #endif
 }
 
-//: shallow_remove_data removes data with id and type from ocl cache only
+// : shallow_remove_data removes data with id and type from ocl cache only
 void
 bstm_opencl_cache
 ::shallow_remove_data(bstm_block_id id, vcl_string type)
 {
-  //find the data in this map
-  vcl_map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
-  vcl_map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
-  if ( iter != data_map.end() ) {
+  // find the data in this map
+  vcl_map<bstm_block_id, bocl_mem *>&          data_map = this->cached_data_map(type);
+  vcl_map<bstm_block_id, bocl_mem *>::iterator iter = data_map.find(id);
+  if( iter != data_map.end() )
+    {
     // release existing memory
     bocl_mem* toDelete = iter->second;
     delete toDelete;
     data_map.erase(iter);
-  }
+    }
 }
 
-//: helper method, \returns a reference to correct data map (ensures one exists)
-vcl_map<bstm_block_id, bocl_mem*>&
+// : helper method, \returns a reference to correct data map (ensures one exists)
+vcl_map<bstm_block_id, bocl_mem *> &
 bstm_opencl_cache
 ::cached_data_map(vcl_string prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
-  if ( cached_data_.find(prefix) == cached_data_.end() )
-  {
-    vcl_map<bstm_block_id, bocl_mem*> dmap;
+  if( cached_data_.find(prefix) == cached_data_.end() )
+    {
+    vcl_map<bstm_block_id, bocl_mem *> dmap;
     cached_data_[prefix] = dmap;
-  }
+    }
 
   // grab a reference to the map of cached_data_ and return it
-  vcl_map<bstm_block_id, bocl_mem*>& data_map = cached_data_[prefix];
+  vcl_map<bstm_block_id, bocl_mem *>& data_map = cached_data_[prefix];
   return data_map;
 }
 
-//: helper method to insert into LRU list
+// : helper method to insert into LRU list
 void
 bstm_opencl_cache
 ::lru_push_front( bstm_block_id id )
 {
-  //serach for it in the list, if it's there, delete it
+  // serach for it in the list, if it's there, delete it
   vcl_list<bstm_block_id>::iterator iter;
-  for (iter=lru_order_.begin(); iter!=lru_order_.end(); ++iter) {
-    if ( *iter == id ) {
+  for( iter = lru_order_.begin(); iter != lru_order_.end(); ++iter )
+    {
+    if( *iter == id )
+      {
       lru_order_.erase(iter);
       break;
+      }
     }
-  }
 
-  //push to front of list
+  // push to front of list
   lru_order_.push_front(id);
 }
 
-//: helper to remove all data and block memory by ID
+// : helper to remove all data and block memory by ID
 bool
 bstm_opencl_cache
-::lru_remove_last(bstm_block_id &lru_id)
+::lru_remove_last(bstm_block_id & lru_id)
 {
-  //grab and remove last element
-  if (lru_order_.empty()) {
-     vcl_cerr << "ERROR: bstm_opencl_cache::lru_remove_last() : LRU is empty " << vcl_endl;
-     return false;
-  }
+  // grab and remove last element
+  if( lru_order_.empty() )
+    {
+    vcl_cerr << "ERROR: bstm_opencl_cache::lru_remove_last() : LRU is empty " << vcl_endl;
+    return false;
+    }
   lru_id = lru_order_.back();
   lru_order_.pop_back();
 
   // then look for the block to delete
-  vcl_map<bstm_block_id, bocl_mem*>::iterator blk = cached_blocks_.find(lru_id);
-  if ( blk != cached_blocks_.end() ) {
+  vcl_map<bstm_block_id, bocl_mem *>::iterator blk = cached_blocks_.find(lru_id);
+  if( blk != cached_blocks_.end() )
+    {
     bocl_mem* toDelete = blk->second;
-    //toDelete->read_to_buffer( *queue_ );
+    // toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
     cached_blocks_.erase(blk);
     delete toDelete;
-  }
-  else {
-    vcl_cout<<"bstm_opencl_cache::lru_remove_last failed to find last element of list"<<vcl_endl;
-  }
-
+    }
+  else
+    {
+    vcl_cout << "bstm_opencl_cache::lru_remove_last failed to find last element of list" << vcl_endl;
+    }
 
   // then look for the time block to delete
   blk = cached_time_blocks_.find(lru_id);
-  if ( blk != cached_time_blocks_.end() ) {
+  if( blk != cached_time_blocks_.end() )
+    {
     bocl_mem* toDelete = blk->second;
-    //toDelete->read_to_buffer( *queue_ );
+    // toDelete->read_to_buffer( *queue_ );
     bytesInCache_ -= toDelete->num_bytes();
     cached_time_blocks_.erase(blk);
     delete toDelete;
-  }
-  else {
-    vcl_cout<<"bstm_opencl_cache::lru_remove_last failed to find last element of list (time block) "<<vcl_endl;
-  }
+    }
+  else
+    {
+    vcl_cout << "bstm_opencl_cache::lru_remove_last failed to find last element of list (time block) " << vcl_endl;
+    }
 
-  //now look for data to delete
-  vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem*> >::iterator datas;
-  for (datas=cached_data_.begin(); datas!=cached_data_.end(); ++datas)
-  {
-    vcl_string data_type = datas->first;
-    vcl_map<bstm_block_id, bocl_mem*>& data_map = datas->second;
-    vcl_map<bstm_block_id, bocl_mem*>::iterator dat = data_map.find(lru_id);
-    if ( dat != data_map.end() ) {
+  // now look for data to delete
+  vcl_map<vcl_string, vcl_map<bstm_block_id, bocl_mem *> >::iterator datas;
+  for( datas = cached_data_.begin(); datas != cached_data_.end(); ++datas )
+    {
+    vcl_string                                   data_type = datas->first;
+    vcl_map<bstm_block_id, bocl_mem *>&          data_map = datas->second;
+    vcl_map<bstm_block_id, bocl_mem *>::iterator dat = data_map.find(lru_id);
+    if( dat != data_map.end() )
+      {
       bocl_mem* toDelete = dat->second;
-      //toDelete->read_to_buffer( *queue_ );
+      // toDelete->read_to_buffer( *queue_ );
       bytesInCache_ -= toDelete->num_bytes();
       data_map.erase(dat);
       delete toDelete;
+      }
     }
-  }
 
   return true;
 }
@@ -754,25 +811,26 @@ bstm_opencl_cache
 ::to_string()
 {
   vcl_stringstream s;
-  s << "MB in cache: " << (vcl_size_t) this->bytes_in_cache()/1024.0f/1024.0f<<'\n'
+
+  s << "MB in cache: " << (vcl_size_t) this->bytes_in_cache() / 1024.0f / 1024.0f << '\n'
     << "bstm_opencl_cache::order: ";
   vcl_list<bstm_block_id>::iterator iter;
-  for (iter=lru_order_.begin(); iter!=lru_order_.end(); ++iter)
-  {
+  for( iter = lru_order_.begin(); iter != lru_order_.end(); ++iter )
+    {
     bstm_block_id id = (*iter);
     s << id << ' ';
-  }
+    }
   s << vcl_endl;
   return s.str();
 }
 
 // === Dummy (empty) instantiations for binary I/O
 void vsl_b_write(vsl_b_ostream& os, bstm_opencl_cache const& scene) {}
-void vsl_b_write(vsl_b_ostream& os, const bstm_opencl_cache* &p) {}
+void vsl_b_write(vsl_b_ostream& os, const bstm_opencl_cache * & p) {}
 void vsl_b_write(vsl_b_ostream& os, bstm_opencl_cache_sptr& sptr) {}
 void vsl_b_write(vsl_b_ostream& os, bstm_opencl_cache_sptr const& sptr) {}
 
-void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache &scene) {}
+void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache & scene) {}
 void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache* p) {}
 void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache_sptr& sptr) {}
 void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache_sptr const& sptr) {}

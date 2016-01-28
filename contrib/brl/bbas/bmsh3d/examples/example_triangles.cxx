@@ -1,6 +1,6 @@
 // This is brl/bbas/bmsh3d/examples/example_triangles.cxx
 
-//:
+// :
 // \file
 //
 //  This example program demonstrates how to use the bmsh3d mesh library
@@ -34,51 +34,51 @@ int main()
            << "  and then add the face f1 to the mesh->\n"
            << "  The result is saved into a PLY2 file example_triangles.ply2." << vcl_endl;
 
-  bmsh3d_mesh* mesh = new bmsh3d_mesh ();
+  bmsh3d_mesh* mesh = new bmsh3d_mesh();
 
-  bmsh3d_vertex* v0 = mesh->_new_vertex ();
-  v0->set_pt (vgl_point_3d<double> (0, 0, 0));
-  mesh->_add_vertex (v0);
+  bmsh3d_vertex* v0 = mesh->_new_vertex();
+  v0->set_pt(vgl_point_3d<double>(0, 0, 0) );
+  mesh->_add_vertex(v0);
 
-  bmsh3d_vertex* v1 = mesh->_new_vertex ();
-  v1->set_pt (vgl_point_3d<double> (1, 0, 0));
-  mesh->_add_vertex (v1);
+  bmsh3d_vertex* v1 = mesh->_new_vertex();
+  v1->set_pt(vgl_point_3d<double>(1, 0, 0) );
+  mesh->_add_vertex(v1);
 
-  bmsh3d_vertex* v2 = mesh->_new_vertex ();
-  v2->set_pt (vgl_point_3d<double> (0, 2, 0));
-  mesh->_add_vertex (v2);
+  bmsh3d_vertex* v2 = mesh->_new_vertex();
+  v2->set_pt(vgl_point_3d<double>(0, 2, 0) );
+  mesh->_add_vertex(v2);
 
-  bmsh3d_edge* e01 = mesh->add_new_edge (v0, v1);
-  bmsh3d_edge* e12 = mesh->add_new_edge (v1, v2);
-  bmsh3d_edge* e20 = mesh->add_new_edge (v2, v0);
+  bmsh3d_edge* e01 = mesh->add_new_edge(v0, v1);
+  bmsh3d_edge* e12 = mesh->add_new_edge(v1, v2);
+  bmsh3d_edge* e20 = mesh->add_new_edge(v2, v0);
 
-  bmsh3d_face* f0 = mesh->_new_face ();
-  mesh->_add_face (f0);
+  bmsh3d_face* f0 = mesh->_new_face();
+  mesh->_add_face(f0);
 
-  _connect_F_E_end (f0, e01);
-  _connect_F_E_end (f0, e12);
-  _connect_F_E_end (f0, e20);
+  _connect_F_E_end(f0, e01);
+  _connect_F_E_end(f0, e12);
+  _connect_F_E_end(f0, e20);
 
-  //Now the first face f0 is complete. Continue to create the next face f1
-  bmsh3d_vertex* v3 = mesh->_new_vertex ();
-  v3->set_pt (vgl_point_3d<double> (2, 2, 1));
-  mesh->_add_vertex (v3);
+  // Now the first face f0 is complete. Continue to create the next face f1
+  bmsh3d_vertex* v3 = mesh->_new_vertex();
+  v3->set_pt(vgl_point_3d<double>(2, 2, 1) );
+  mesh->_add_vertex(v3);
 
-  bmsh3d_edge* e13 = mesh->add_new_edge (v1, v3);
-  bmsh3d_edge* e23 = mesh->add_new_edge (v2, v3);
+  bmsh3d_edge* e13 = mesh->add_new_edge(v1, v3);
+  bmsh3d_edge* e23 = mesh->add_new_edge(v2, v3);
 
-  bmsh3d_face* f1 = mesh->_new_face ();
-  mesh->_add_face (f1);
+  bmsh3d_face* f1 = mesh->_new_face();
+  mesh->_add_face(f1);
 
-  _connect_F_E_end (f1, e12);
-  _connect_F_E_end (f1, e23);
-  _connect_F_E_end (f1, e13);
+  _connect_F_E_end(f1, e12);
+  _connect_F_E_end(f1, e23);
+  _connect_F_E_end(f1, e13);
 
-  //We have create the mesh using halfedges which is topologically correct.
-  //Now setup the indexed-face-set (IFS) of it to enable visualization and file I/O.
-  mesh->build_IFS_mesh ();
+  // We have create the mesh using halfedges which is topologically correct.
+  // Now setup the indexed-face-set (IFS) of it to enable visualization and file I/O.
+  mesh->build_IFS_mesh();
 
-  bmsh3d_save_ply2 (mesh, "example_triangles.ply2");
+  bmsh3d_save_ply2(mesh, "example_triangles.ply2");
 
   delete mesh;
 }

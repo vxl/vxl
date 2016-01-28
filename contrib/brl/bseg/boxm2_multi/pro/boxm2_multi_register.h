@@ -3,9 +3,11 @@
 
 class boxm2_multi_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // boxm2_multi_register_h_

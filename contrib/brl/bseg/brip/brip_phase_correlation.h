@@ -1,7 +1,7 @@
 // This is brl/bseg/brip/brip_phase_correlation.h
 #ifndef brip_phase_correlation_h
 #define brip_phase_correlation_h
-//:
+// :
 // \file
 // \brief Find the translation between two images using phase correlation
 // \author J.L. Mundy
@@ -51,44 +51,47 @@
 #include <vcl_vector.h>
 
 // a struct for holding correlation peak info
-struct peak{
+struct peak
+  {
   float u_;
   float v_;
   float score_;
-};
+  };
 
 class brip_phase_correlation
 {
 
- public:
-  brip_phase_correlation(vil_image_view<float> const&img0, vil_image_view<float> const&img1,
-                         float gauss_sigma= 1.0f, int peak_radius = 2, float alpha = 0.5f);
+public:
+  brip_phase_correlation(vil_image_view<float> const& img0, vil_image_view<float> const& img1, float gauss_sigma = 1.0f,
+                         int peak_radius = 2, float alpha = 0.5f);
 
-  ~brip_phase_correlation(){}
+  ~brip_phase_correlation() {}
   bool compute();
+
   bool translation(float& tu, float& tv, float& confidence) const;
 
   // for debug purposes
   bool compute_ffts();
+
   bool compute_correlation_array();
+
   bool extract_correlation_peaks();
-  vil_image_view<float> img0() const {return img0_;}
-  vil_image_view<float> img1() const {return img1_;}
-  vil_image_view<float> mag0() const {return mag0_;}
-  vil_image_view<float> phase0() const {return phase0_;}
-  vil_image_view<float> mag1() const {return mag0_;}
-  vil_image_view<float> phase1() const {return phase0_;}
-  vil_image_view<float> correlation_array() const {return corr_;}
-  vil_image_view<float> corr_peaks() const {return corr_peaks_;}
 
-
- protected:
-  //parameters
+  vil_image_view<float> img0() const {return img0_; }
+  vil_image_view<float> img1() const {return img1_; }
+  vil_image_view<float> mag0() const {return mag0_; }
+  vil_image_view<float> phase0() const {return phase0_; }
+  vil_image_view<float> mag1() const {return mag0_; }
+  vil_image_view<float> phase1() const {return phase0_; }
+  vil_image_view<float> correlation_array() const {return corr_; }
+  vil_image_view<float> corr_peaks() const {return corr_peaks_; }
+protected:
+  // parameters
   float alpha_;
-  int peak_radius_;
+  int   peak_radius_;
   float gauss_sigma_;
 
-  brip_phase_correlation();//no default constructor
+  brip_phase_correlation();// no default constructor
   // compute a threshold using the Otsu algorithm
   float compute_threshold(vil_image_view<float> const& img) const;
 

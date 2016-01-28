@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_fill_internal_cells_process.cxx
-//:
+// :
 // \file
 // \brief process fills the internal cells of the octrees in the scene
 //
@@ -16,14 +16,13 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 
-
 namespace boxm_fill_internal_cells_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 1;
 }
 
-//: process takes 1 input and 1 output.
+// : process takes 1 input and 1 output.
 // input[0]: The input scene
 // output[0]: The output scene
 
@@ -44,30 +43,32 @@ bool boxm_fill_internal_cells_process(bprb_func_process& pro)
 {
   using namespace boxm_fill_internal_cells_process_globals;
 
-  if (pro.n_inputs() != n_inputs_)
-  {
+  if( pro.n_inputs() != n_inputs_ )
+    {
     vcl_cout << pro.name() << ": the number of inputs should be " << n_inputs_
              << " but instead it is " << pro.n_inputs() << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
+  // get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
 
-  //check input's validity
-  if (!scene_base.ptr()) {
+  // check input's validity
+  if( !scene_base.ptr() )
+    {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
-  }
+    }
 
-  if (boxm_scene<boct_tree<short, float> > *scene_in = dynamic_cast<boxm_scene<boct_tree<short, float> >* > (scene_base.as_pointer()))
-  {
+  if( boxm_scene<boct_tree<short,
+                           float> > * scene_in =
+        dynamic_cast<boxm_scene<boct_tree<short, float> > *>(scene_base.as_pointer() ) )
+    {
     boxm_fill_internal_cells<float> filler;
-    pro.set_output_val<boxm_scene_base_sptr>(0, filler.traverse_and_fill(scene_in));
+    pro.set_output_val<boxm_scene_base_sptr>(0, filler.traverse_and_fill(scene_in) );
     return true;
-  }
+    }
 
   vcl_cerr << "In boxm_fill_internal_cells_process: Unsupportted scene type\n";
   return false;
 }
-

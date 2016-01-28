@@ -2,9 +2,9 @@
 #ifndef vnl_rnpoly_solve_h_
 #define vnl_rnpoly_solve_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Solves for roots of system of real polynomials
 // \author Marc Pollefeys, ESAT-VISICS, K.U.Leuven
@@ -23,7 +23,7 @@
 #include <vnl/vnl_real_npolynomial.h>
 #include <vcl_vector.h>
 
-//: Solves for roots of system of real polynomials
+// : Solves for roots of system of real polynomials
 //  Calculates all the roots of a system of N polynomials in N variables
 //  through continuation.
 //  Adapted from the  PARALLEL CONTINUATION algorithm, written by Darrell
@@ -32,45 +32,42 @@
 class vnl_rnpoly_solve
 {
   // Data Members--------------------------------------------------------------
-  vcl_vector<vnl_real_npolynomial*> ps_;   // the input
-  vcl_vector<vnl_vector<double>*> r_; // the output (real part)
-  vcl_vector<vnl_vector<double>*> i_; // the output (imaginary part)
-
- public:
+  vcl_vector<vnl_real_npolynomial *> ps_; // the input
+  vcl_vector<vnl_vector<double> *>   r_;  // the output (real part)
+  vcl_vector<vnl_vector<double> *>   i_;  // the output (imaginary part)
+public:
 
   // Constructor---------------------------------------------------------------
 
-  //: The constructor already does all the calculations
-  inline vnl_rnpoly_solve(vcl_vector<vnl_real_npolynomial*> const& ps)
+  // : The constructor already does all the calculations
+  inline vnl_rnpoly_solve(vcl_vector<vnl_real_npolynomial *> const& ps)
     : ps_(ps) { compute(); }
 
   // Destructor----------------------------------------------------------------
 
- ~vnl_rnpoly_solve();
+  ~vnl_rnpoly_solve();
 
   // Operations----------------------------------------------------------------
 
-  //: Array of real parts of roots
-  inline vcl_vector<vnl_vector<double>*> real() { return r_; }
+  // : Array of real parts of roots
+  inline vcl_vector<vnl_vector<double> *> real() { return r_; }
 
-  //: Array of imaginary parts of roots
-  inline vcl_vector<vnl_vector<double>*> imag() { return i_; }
+  // : Array of imaginary parts of roots
+  inline vcl_vector<vnl_vector<double> *> imag() { return i_; }
 
-  //: Return real roots only.
+  // : Return real roots only.
   //  Roots are real if the absolute value of their imaginary part is less than
   //  the optional argument tol, which defaults to 1e-12 [untested]
-  vcl_vector<vnl_vector<double>*> realroots(double tol = 1e-12);
+  vcl_vector<vnl_vector<double> *> realroots(double tol = 1e-12);
 
   // Computations--------------------------------------------------------------
-
- private:
-  //: Compute roots using continuation algorithm.
+private:
+  // : Compute roots using continuation algorithm.
   bool compute();
 
-  void Read_Input(vcl_vector<unsigned int>& ideg,
-                  vcl_vector<unsigned int>& terms,
-                  vcl_vector<int>& polyn,
+  void Read_Input(vcl_vector<unsigned int>& ideg, vcl_vector<unsigned int>& terms, vcl_vector<int>& polyn,
                   vcl_vector<double>& coeff);
+
 };
 
 #endif // vnl_rnpoly_solve_h_

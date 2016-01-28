@@ -31,20 +31,24 @@
 #define image_nj 720
 
 template <class T>
-bool load_image(vcl_string const& path, vil_image_view<T>*& image)
+bool load_image(vcl_string const& path, vil_image_view<T> *& image)
 {
   vcl_cout << path.c_str() << vcl_endl;
-  vil_image_view_base_sptr base_img = vil_load(path.c_str(),true);
-  if (!base_img)
+  vil_image_view_base_sptr base_img = vil_load(path.c_str(), true);
+  if( !base_img )
+    {
     return false;
+    }
   else
+    {
     return load_image(base_img, image);
+    }
 }
 
 void create_view_sphere(icam_view_sphere_sptr& view_sphere)
 {
-  vgl_box_3d<double> world_bb(orig_x, orig_y, orig_z, orig_x+dim_x, orig_y+dim_y, orig_z+dim_z);
-  view_sphere =new icam_view_sphere(world_bb, radius);
+  vgl_box_3d<double> world_bb(orig_x, orig_y, orig_z, orig_x + dim_x, orig_y + dim_y, orig_z + dim_z);
+  view_sphere = new icam_view_sphere(world_bb, radius);
 
   // generate the view points-cameras
   view_sphere->create_view_points(elevation, view_angle, image_ni, image_nj);
@@ -53,9 +57,9 @@ void create_view_sphere(icam_view_sphere_sptr& view_sphere)
 static void test_minimizer()
 {
 #if 0 // need actual data (TO DO add test that doesn't)
-  vcl_string root_dir = testlib_root_dir();
+  vcl_string                        root_dir = testlib_root_dir();
   vcl_map<unsigned int, vcl_string> images, depth_images;
-  vcl_vector<vcl_string> camera_f;
+  vcl_vector<vcl_string>            camera_f;
 
   // view 0
   images[0] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/expected142.tiff";
@@ -72,7 +76,7 @@ static void test_minimizer()
   depth_images[2] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
   camera_f.push_back(root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/camera_00142.txt");
 
-  //view 3
+  // view 3
   images[3] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/frame_142.png";
   depth_images[3] = root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/depth_142.tif";
   camera_f.push_back(root_dir + "/contrib/gel/mrc/vpgl/tests/images/calibration/camera_00142.txt");
@@ -84,23 +88,23 @@ static void test_minimizer()
   create_view_sphere(view_sphere);
   // set cameras
   vcl_map<unsigned, vpgl_camera_double_sptr> cam_map;
-  for (unsigned i=0; i<camera_f.size(); i++) {
-    vcl_ifstream ifs(camera_f[i].c_str());
-    vpgl_perspective_camera<double>* cam=new vpgl_perspective_camera<double>();
+  for( unsigned i = 0; i < camera_f.size(); i++ )
+    {
+    vcl_ifstream                     ifs(camera_f[i].c_str() );
+    vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
     ifs >> *cam;
     cam_map[i] = cam;
-  }
+    }
   view_sphere->set_cameras(cam_map);
 
   view_sphere->set_images(images, depth_images);
-  icam_minimizer_params params;
-  vil_image_view<float> *source_img;
-  if (load_image<float>(source_file, source_img)) {
+  icam_minimizer_params   params;
+  vil_image_view<float> * source_img;
+  if( load_image<float>(source_file, source_img) )
+    {
     view_sphere->register_image(*source_img, params);
-  }
+    }
 #endif
 }
 
-
 TESTMAIN( test_minimizer );
-

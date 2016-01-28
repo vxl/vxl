@@ -2,9 +2,9 @@
 #ifndef vgui_mfc_window_h_
 #define vgui_mfc_window_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief   The mfc implementation of vgui_window
 // \author  Marko Bacic, Oxford RRG
@@ -29,59 +29,63 @@ class vgui_mfc_statusbar;
 #include <vgui/vgui_window.h>
 #include <afxwin.h>
 
-//: The MFC implementation of vgui_window.
+// : The MFC implementation of vgui_window.
 //  Based on vgui_glut_win.
 class vgui_mfc_window : public vgui_window
 {
- public:
-  //: Initialise window - common functionality called by all constructors.
-  void init_window(char const *title, vgui_menu const &menubar,
-                   bool has_menu, unsigned width, unsigned height, int posx, int posy);
+public:
+  // : Initialise window - common functionality called by all constructors.
+  void init_window(char const * title, vgui_menu const & menubar, bool has_menu, unsigned width, unsigned height,
+                   int posx, int posy);
 
-  //: Constructor for window without menubar.
-  vgui_mfc_window(char const *title, unsigned w, unsigned h,
-                  int posx =-1, int posy=-1);
+  // : Constructor for window without menubar.
+  vgui_mfc_window(char const * title, unsigned w, unsigned h, int posx = -1, int posy = -1);
 
-  //: Constructor for window with menubar.
-  vgui_mfc_window(unsigned w,unsigned h,vgui_menu const &menubar,
-                  char const *title);
+  // : Constructor for window with menubar.
+  vgui_mfc_window(unsigned w, unsigned h, vgui_menu const & menubar, char const * title);
 
-  //: Destructor - delete this vgui_mfc_window.
+  // : Destructor - delete this vgui_mfc_window.
   ~vgui_mfc_window();
 
-  void set_menubar(vgui_menu const &m);
+  void set_menubar(vgui_menu const & m);
 
-  //: Return the vgui_mfc_adaptor associated with this window.
-  vgui_adaptor *get_adaptor();
+  // : Return the vgui_mfc_adaptor associated with this window.
+  vgui_adaptor * get_adaptor();
 
-  //: Return the vgui_mfc_adaptor associated with this window.
-  vgui_statusbar *get_statusbar();
+  // : Return the vgui_mfc_adaptor associated with this window.
+  vgui_statusbar * get_statusbar();
 
   //
   void show();
+
   void hide();
+
   void iconify();
-  //: Enable horizontal scrollbar on window.
+
+  // : Enable horizontal scrollbar on window.
   void enable_hscrollbar(bool);
-  //: Enable vertical scrollbar on window.
+
+  // : Enable vertical scrollbar on window.
   void enable_vscrollbar(bool);
+
   void reshape(unsigned, unsigned);
-  void reposition(int,int);
+
+  void reposition(int, int);
+
   void set_title(vcl_string const &);
 
-  //: Set the position of the horizontal scrollbar, returns old position
+  // : Set the position of the horizontal scrollbar, returns old position
   virtual int set_hscrollbar(int pos);
 
-  //: Set the position of the vertical scrollbar, returns old position
+  // : Set the position of the vertical scrollbar, returns old position
   virtual int set_vscrollbar(int pos);
 
   POSITION pos1, pos2, pos3;
+private:
+  vgui_menu menubar;
 
- private:
-  vgui_menu          menubar;
-
-  vgui_mfc_adaptor   *mfcwin;
-  vgui_mfc_statusbar *statusbar;
+  vgui_mfc_adaptor *   mfcwin;
+  vgui_mfc_statusbar * statusbar;
 };
 
 #endif // vgui_mfc_window_h_

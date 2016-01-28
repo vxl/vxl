@@ -1,7 +1,7 @@
 #ifndef rgrl_trans_reader_h_
 #define rgrl_trans_reader_h_
 
-//:
+// :
 // \file
 // \author Gehua Yang, Chia-ling Tsai, Brad King
 // Smart reader to read in any transformation class
@@ -16,12 +16,13 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
-//: Reader class for smartly detecting various transformation classes
+// : Reader class for smartly detecting various transformation classes
 //  Users can also add user-defined classes, which takes priority before others
-class rgrl_trans_reader{
+class rgrl_trans_reader
+{
 
 public:
-  //: Read a transformation from input stream
+  // : Read a transformation from input stream
   //  IMPORTANCE:
   //   - Open transformation file in BINARY mode!
   //   - Stream Pos does not work in Windows when a UNIX ascii file is opened in text mode.
@@ -32,20 +33,19 @@ public:
   static
   rgrl_transformation_sptr read( vcl_istream& is );
 
-  //: Read a transformation from input file for convenience
+  // : Read a transformation from input file for convenience
   //
   static
   rgrl_transformation_sptr read( char const* fn );
 
-  //: add a transformation candidate
+  // : add a transformation candidate
   static
   void add_xform( rgrl_transformation_sptr );
-
 protected:
-  static vcl_vector< rgrl_transformation_sptr >   xform_candidates_;
+  static vcl_vector<rgrl_transformation_sptr> xform_candidates_;
 };
 
-//: stream input operator for reading a transformation
-vcl_istream& operator>>( vcl_istream& is, rgrl_transformation_sptr& sptr );
+// : stream input operator for reading a transformation
+vcl_istream & operator>>( vcl_istream& is, rgrl_transformation_sptr& sptr );
 
 #endif // rgrl_trans_reader_h_

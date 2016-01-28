@@ -1,8 +1,7 @@
-//:
+// :
 // \file
 // \author J.L. Mundy
 // \date 10/12/14
-
 
 #include <testlib/testlib_test.h>
 #include <vcl_fstream.h>
@@ -24,22 +23,23 @@ void test_store_nbrs()
   // Set up the scenes
   vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/eye/";
   //  vcl_string base_dir_path = "c:/Users/mundy/VisionSystems/Janus/experiments/vector_flow/mean_face/";
-  //vcl_string source_scene_path = base_dir_path + "source_scene.xml";
-    vcl_string source_scene_path = base_dir_path + "eye.xml";
-  if(!vul_file::exists(source_scene_path))
-  {
-      vcl_cout<<"source scene file does not exist"<<vcl_endl;
-      return;
-  }
+  // vcl_string source_scene_path = base_dir_path + "source_scene.xml";
+  vcl_string source_scene_path = base_dir_path + "eye.xml";
+
+  if( !vul_file::exists(source_scene_path) )
+    {
+    vcl_cout << "source scene file does not exist" << vcl_endl;
+    return;
+    }
   boxm2_scene_sptr source_scene = new boxm2_scene(source_scene_path);
   boxm2_lru_cache::create(source_scene);
 
-  bocl_manager_child &mgr = bocl_manager_child::instance();
-  unsigned gpu_idx = 1; //on JLM's alienware
-  bocl_device_sptr device = mgr.gpus_[gpu_idx];
-  boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
+  bocl_manager_child &      mgr = bocl_manager_child::instance();
+  unsigned                  gpu_idx = 1; // on JLM's alienware
+  bocl_device_sptr          device = mgr.gpus_[gpu_idx];
+  boxm2_opencl_cache_sptr   opencl_cache = new boxm2_opencl_cache(device);
   boxm2_vecf_ocl_store_nbrs snbrs(source_scene, opencl_cache);
   snbrs.augment_1_blk();
 }
-TESTMAIN( test_store_nbrs );
 
+TESTMAIN( test_store_nbrs );

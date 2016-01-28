@@ -6,9 +6,9 @@
 #include <utility>
 
 #ifdef vcl_generic_utility_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_utility_STD std
+#  define vcl_generic_utility_STD std
 #endif
 
 #include "../generic/vcl_utility.h"

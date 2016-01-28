@@ -1,6 +1,6 @@
 // This is core/vil/vil_math.cxx
 #include "vil_math.h"
-//:
+// :
 // \file
 // \author Amitha Perera.
 //
@@ -24,38 +24,46 @@ void vil_math_median(vxl_byte& median, const vil_image_view<vxl_byte>& im, unsig
   unsigned nj = im.nj();
 
   // special case the empty image.
-  if ( ni*nj == 0 ) {
+  if( ni * nj == 0 )
+    {
     median = 0;
     return;
-  }
+    }
 
   unsigned hist[256] = { 0 };
-  for (unsigned j=0;j<nj;++j) {
-    for (unsigned i=0;i<ni;++i) {
-      ++hist[ im(i,j,p) ];
+  for( unsigned j = 0; j < nj; ++j )
+    {
+    for( unsigned i = 0; i < ni; ++i )
+      {
+      ++hist[im(i, j, p)];
+      }
     }
-  }
 
-  unsigned tot = ni*nj;
+  unsigned tot = ni * nj;
   // Target is ceil(tot/2)
-  unsigned tgt = (tot+1) / 2;
+  unsigned tgt = (tot + 1) / 2;
   unsigned cnt = 0;
   unsigned idx = 0;
-  while ( cnt < tgt ) {
+  while( cnt < tgt )
+    {
     cnt += hist[idx];
     ++idx;
-  }
+    }
 
   // Test for halfway case
-  if ( cnt == tgt && tot % 2 == 0 ) {
+  if( cnt == tgt && tot % 2 == 0 )
+    {
     // idx is
-    unsigned lo = idx-1;
-    while ( hist[idx] == 0 ) {
+    unsigned lo = idx - 1;
+    while( hist[idx] == 0 )
+      {
       ++idx;
+      }
+
+    median = vxl_byte( (lo + idx) / 2);
     }
-    median = vxl_byte((lo+idx)/2);
-  }
-  else {
-    median = vxl_byte(idx-1);
-  }
+  else
+    {
+    median = vxl_byte(idx - 1);
+    }
 }

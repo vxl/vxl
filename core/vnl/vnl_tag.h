@@ -1,7 +1,7 @@
 // This is core/vnl/vnl_tag.h
 #ifndef vnl_tag_h_
 #define vnl_tag_h_
-//:
+// :
 // \file
 // \author fsm
 //

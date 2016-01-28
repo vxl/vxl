@@ -2,9 +2,9 @@
 #ifndef vgui_gtk2_h_
 #define vgui_gtk2_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   16 Sep 99
@@ -23,58 +23,55 @@
 //                             Moved menubar code to vgui_gtk2_window.
 // \endverbatim
 
-
 #include <vgui/vgui_toolkit.h>
 class vgui_gtk2_adaptor;
 class vgui_gtk2_window;
 
-
-//: The GTK+-2.0 implementation of vgui_toolkit.
+// : The GTK+-2.0 implementation of vgui_toolkit.
 //  Provides functions for controlling the event loop.
 //  For info on GTK see: http://www.gtk.org/
 class vgui_gtk2 : public vgui_toolkit
 {
- public:
-  //: Singleton method instance.
-  static vgui_gtk2* instance();
+public:
+  // : Singleton method instance.
+  static vgui_gtk2 * instance();
 
- protected:
-  //: Returns the name of the GUI toolkit ("gtk2").
+protected:
+  // : Returns the name of the GUI toolkit ("gtk2").
   virtual vcl_string name() const;
 
-  //: Run the event loop.
+  // : Run the event loop.
   virtual void run();
 
-  //: Run the next event.
+  // : Run the next event.
   virtual void run_one_event();
 
-  //: Run until there are no more events left in the event queue.
+  // : Run until there are no more events left in the event queue.
   virtual void run_till_idle();
 
-  //: Clear all events from the event queue.
+  // : Clear all events from the event queue.
   virtual void flush();
 
-  //: Quit the application.
+  // : Quit the application.
   virtual void quit();
 
-  //: Create a window with a menubar.
-  virtual vgui_window* produce_window(int width, int height,
-                                      const vgui_menu& menubar,
-                                      const char* title="vgui gtk window");
+  // : Create a window with a menubar.
+  virtual vgui_window * produce_window(int width, int height, const vgui_menu& menubar,
+                                       const char* title = "vgui gtk window");
 
-  //: Create a window.
-  virtual vgui_window* produce_window(int width, int height,
-                                      const char* title="vgui gtk popup");
+  // : Create a window.
+  virtual vgui_window * produce_window(int width, int height, const char* title = "vgui gtk popup");
 
-  //: Create a dialog box.
-  virtual vgui_dialog_impl* produce_dialog(const char* name);
+  // : Create a dialog box.
+  virtual vgui_dialog_impl * produce_dialog(const char* name);
 
- protected:
-  //: Default constructor.
+protected:
+  // : Default constructor.
   vgui_gtk2() {}
 
-  //: Initialise the implementation of vgui.
-  void init(int &, char **);
+  // : Initialise the implementation of vgui.
+  void init(int &, char * *);
+
 };
 
 #endif // vgui_gtk2_h_

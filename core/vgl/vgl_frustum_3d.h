@@ -2,9 +2,9 @@
 #ifndef vgl_frustum_3d_h
 #define vgl_frustum_3d_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief A polygonal cone truncated by parallel planes
 // \author J.L. Mundy
@@ -21,17 +21,17 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h> // forward declare vgl datatypes
 
-//: A 3D frustum is the portion of a solid (normally a cone or pyramid)
+// : A 3D frustum is the portion of a solid (normally a cone or pyramid)
 // that lies between two parallel planes cutting it.
 //
 template <class Type>
 class vgl_frustum_3d
 {
- public:
-  //: default constructor
- vgl_frustum_3d(): near_plane_(0), far_plane_(0), n_top_bot_face_verts_(0){}
+public:
+  // : default constructor
+  vgl_frustum_3d() : near_plane_(0), far_plane_(0), n_top_bot_face_verts_(0) {}
 
-  //: Construct the frustum from rays
+  // : Construct the frustum from rays
   // the corner rays intersect in a common origin point, i.e., the apex
   // of the frustum cone. It is assumed the rays are in sorted order
   // around the cone surface, so that sequential rays are coplanar
@@ -41,76 +41,73 @@ class vgl_frustum_3d
   // the norm vector dirction from the apex to the closest parallel face.
   // d1 the distance in the norm direction from the apex to the far face.
   //
-  vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
-                 vgl_vector_3d<Type> const& norm, Type d0, Type d1);
+  vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays, vgl_vector_3d<Type> const& norm, Type d0, Type d1);
 
-
-  //: Equality test
+  // : Equality test
   inline bool operator==(vgl_frustum_3d<Type> const& other) const;
 
   // Data Access---------------------------------------------------------------
-  const vgl_point_3d<Type>& apex() const{
-    return apex_;}
+  const vgl_point_3d<Type> & apex() const
+  {
+    return apex_;
+  }
 
-  const vcl_vector<vgl_plane_3d<Type> >& surface_planes() const
-  {return surface_planes_;}
+  const vcl_vector<vgl_plane_3d<Type> > & surface_planes() const
+  {return surface_planes_; }
 
-  const vgl_plane_3d<Type>& near_plane() const
-  {return surface_planes_[near_plane_];}
+  const vgl_plane_3d<Type> & near_plane() const
+  {return surface_planes_[near_plane_]; }
 
-  const vgl_plane_3d<Type>& far_plane() const
-  {return surface_planes_[far_plane_];}
+  const vgl_plane_3d<Type> & far_plane() const
+  {return surface_planes_[far_plane_]; }
 
-  const vcl_vector<vgl_point_3d<Type> >& verts() const
-  {return verts_;}
+  const vcl_vector<vgl_point_3d<Type> > & verts() const
+  {return verts_; }
 
-  const vcl_map<int, vcl_vector<int> >& faces() const
-  {return faces_;}
+  const vcl_map<int, vcl_vector<int> > & faces() const
+  {return faces_; }
 
   vgl_box_3d<Type> bounding_box() const;
 
-  //: Get the centroid point
+  // : Get the centroid point
   vgl_point_3d<Type> centroid() const;
 
-  //: test if the frustum is convex
+  // : test if the frustum is convex
   bool is_convex() const;
 
   // Data Control--------------------------------------------------------------
 
-  //: Return true iff the point p is inside this frustum
+  // : Return true iff the point p is inside this frustum
   // assumes that the frustum is a convex solid
   bool contains(vgl_point_3d<Type> const& p) const;
 
-  //: Return true if \a (x,y,z) is inside this frustum
+  // : Return true if \a (x,y,z) is inside this frustum
   // assumes that the frustum is a convex solid
   bool contains(Type const& x, Type const& y, Type const& z) const;
 
   // I/O-----------------------------------------------------------------------
 
-
   // INTERNALS-----------------------------------------------------------------
- protected:
+protected:
   // Data Members--------------------------------------------------------------
-  vgl_point_3d<Type> apex_;
+  vgl_point_3d<Type>  apex_;
   vgl_vector_3d<Type> norm_;
-  //: planes bounding the frustum volume including near and far plane
+  // : planes bounding the frustum volume including near and far plane
   vcl_vector<vgl_plane_3d<Type> > surface_planes_;
-  int near_plane_;
-  int far_plane_;
+  int                             near_plane_;
+  int                             far_plane_;
   vcl_vector<vgl_point_3d<Type> > verts_;
-  //: the number of verts in the top or bottom face
+  // : the number of verts in the top or bottom face
   int n_top_bot_face_verts_;
   // key corresponds to plane index, value is clockwise verts on face boundary
   // clockwise with respect the the face normal
   vcl_map<int, vcl_vector<int> > faces_;
 };
 
-//: Write frustum to stream
+// : Write frustum to stream
 // \relatesalso vgl_frustum_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_frustum_3d<Type> const& p);
-
-
+vcl_ostream &  operator<<(vcl_ostream& s, vgl_frustum_3d<Type> const& p);
 
 #define VGL_FRUSTUM_3D_INSTANTIATE(T) extern "please include vgl/vgl_frustum_3d.txx first"
 

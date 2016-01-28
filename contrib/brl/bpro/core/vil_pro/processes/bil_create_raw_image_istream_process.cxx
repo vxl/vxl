@@ -1,6 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/bil_create_raw_image_istream_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 
 #include <bprb/bprb_parameters.h>
@@ -10,128 +10,129 @@
 #include <bil/bil_raw_image_istream.h>
 #include <vcl_sstream.h>
 
-//: Constructor
+// : Constructor
 bool bil_create_raw_image_istream_process_cons(bprb_func_process& pro)
 {
-  //process takes 1 input
+  // process takes 1 input
   vcl_vector<vcl_string> input_types_(4);
-  input_types_[0] = "vcl_string"; //raw file
-  input_types_[1] = "int"; //raw file
-  input_types_[2] = "int"; //raw file
-  input_types_[3] = "int"; //raw file
+  input_types_[0] = "vcl_string"; // raw file
+  input_types_[1] = "int";        // raw file
+  input_types_[2] = "int";        // raw file
+  input_types_[3] = "int";        // raw file
 
   // process has 2 outputs
-  vcl_vector<vcl_string>  output_types_(2);
-  output_types_[0] = "bil_raw_image_istream_sptr";     //an initialized istream_sptr
+  vcl_vector<vcl_string> output_types_(2);
+  output_types_[0] = "bil_raw_image_istream_sptr";     // an initialized istream_sptr
   output_types_[1] = "int";
   return pro.set_input_types(input_types_)
-      && pro.set_output_types(output_types_);
+         && pro.set_output_types(output_types_);
 }
 
-
-//: Execute the process
+// : Execute the process
 bool bil_create_raw_image_istream_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()<1) {
+  if( pro.n_inputs() < 1 )
+    {
     vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << vcl_endl;
     return false;
-  }
-  //Retrieve filename from input
+    }
+  // Retrieve filename from input
   vcl_string raw_file = pro.get_input<vcl_string>(0);
-  int ni = pro.get_input<int>(1);
-  int nj = pro.get_input<int>(2);
-  int pixelsize = pro.get_input<int>(3);
+  int        ni = pro.get_input<int>(1);
+  int        nj = pro.get_input<int>(2);
+  int        pixelsize = pro.get_input<int>(3);
 
-  //: Constructor - from a file glob string
+  // : Constructor - from a file glob string
   bil_raw_image_istream_sptr stream;
-  if(ni > 0 && nj >0 && pixelsize > 0)
-  {
-      stream =  new bil_raw_image_istream();
-      stream->open(raw_file);//,ni,nj,pixelsize);
-  }
+  if( ni > 0 && nj > 0 && pixelsize > 0 )
+    {
+    stream =  new bil_raw_image_istream();
+    stream->open(raw_file);  // ,ni,nj,pixelsize);
+    }
   else
-       stream =  new bil_raw_image_istream(raw_file);
+    {
+    stream =  new bil_raw_image_istream(raw_file);
+    }
 
   pro.set_output_val<bil_raw_image_istream_sptr>(0, stream);
-  pro.set_output_val<int> (1, stream->num_frames());
+  pro.set_output_val<int>(1, stream->num_frames() );
   return true;
 }
 
-
-//---------------------------------------------------------------
+// ---------------------------------------------------------------
 // get next image from stream process
-//---------------------------------------------------------------
-//: Constructor
+// ---------------------------------------------------------------
+// : Constructor
 bool bil_read_frame_process_cons(bprb_func_process& pro)
 {
-  //process takes 1 input
+  // process takes 1 input
   vcl_vector<vcl_string> input_types_(1);
-  input_types_[0] = "bil_raw_image_istream_sptr"; //raw file
+  input_types_[0] = "bil_raw_image_istream_sptr"; // raw file
 
   // process has 1 output:
-  vcl_vector<vcl_string>  output_types_(1);
-  output_types_[0] = "vil_image_view_base_sptr";     //an initialized istream_sptr
-  //output_types_[1] = "unsigned";                     //time stamp
+  vcl_vector<vcl_string> output_types_(1);
+  output_types_[0] = "vil_image_view_base_sptr";     // an initialized istream_sptr
+  // output_types_[1] = "unsigned";                     //time stamp
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//: Execute the process
+// : Execute the process
 bool bil_read_frame_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()<1) {
+  if( pro.n_inputs() < 1 )
+    {
     vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 1" << vcl_endl;
     return false;
-  }
-  //Retrieve filename from input
+    }
+  // Retrieve filename from input
   bil_raw_image_istream_sptr stream = pro.get_input<bil_raw_image_istream_sptr>(0);
   vil_image_view_base_sptr   img    = stream->read_frame();
-  //unsigned                   time   = stream->time_stamp();
+  // unsigned                   time   = stream->time_stamp();
 
-  //out
+  // out
   pro.set_output_val<vil_image_view_base_sptr>(0, img);
-  //pro.set_output_val<unsigned>(1, time);
+  // pro.set_output_val<unsigned>(1, time);
   return true;
 }
 
-
-//---------------------------------------------------------------
+// ---------------------------------------------------------------
 // seek stream to a certain image
-//---------------------------------------------------------------
-//: Constructor
+// ---------------------------------------------------------------
+// : Constructor
 bool bil_seek_frame_process_cons(bprb_func_process& pro)
 {
-  //process takes 2 inputs
+  // process takes 2 inputs
   vcl_vector<vcl_string> input_types_(2);
-  input_types_[0] = "bil_raw_image_istream_sptr"; //raw file
-  input_types_[1] = "unsigned"; //frame to seek to
+  input_types_[0] = "bil_raw_image_istream_sptr"; // raw file
+  input_types_[1] = "unsigned";                   // frame to seek to
 
   // process has 2 outputs
-  vcl_vector<vcl_string>  output_types_(1);
-  output_types_[0] = "vil_image_view_base_sptr";     //an initialized istream_sptr
+  vcl_vector<vcl_string> output_types_(1);
+  output_types_[0] = "vil_image_view_base_sptr";     // an initialized istream_sptr
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//: Execute the process
+// : Execute the process
 bool bil_seek_frame_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()<2) {
+  if( pro.n_inputs() < 2 )
+    {
     vcl_cout << "bil_create_raw_image_istream_process: The number of inputs should be 2" << vcl_endl;
     return false;
-  }
+    }
 
-  //Retrieve filename from input
+  // Retrieve filename from input
   bil_raw_image_istream_sptr stream = pro.get_input<bil_raw_image_istream_sptr>(0);
   unsigned                   frame  = pro.get_input<unsigned>(1);
 
-      //seek, retrieve image, and output
+  // seek, retrieve image, and output
   stream->seek_frame(frame);
 
-  vil_image_view_base_sptr   img    = stream->current_frame();
-  //out
+  vil_image_view_base_sptr img    = stream->current_frame();
+  // out
   pro.set_output_val<vil_image_view_base_sptr>(0, img);
   return true;
 }
-

@@ -1,7 +1,7 @@
 // This is oxl/mvl/PMatrixAffine.h
 #ifndef PMatrixAffine_h_
 #define PMatrixAffine_h_
-//:
+// :
 // \file
 // \brief Affine 3x4 projection matrix
 //
@@ -19,7 +19,7 @@
 
 class PMatrixAffine : public PMatrix
 {
- public:
+public:
   PMatrixAffine(void) {}
   ~PMatrixAffine(void) {}
 };

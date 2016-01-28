@@ -16,8 +16,7 @@
 // scene graph with multiple roots and the same camera
 // in a vgui_grid_tableau.
 
-
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
   // initialize vgui
   vgui::init(argc, argv);
@@ -27,10 +26,10 @@ int main(int argc, char** argv)
 
   SoPerspectiveCamera* camera = new SoPerspectiveCamera;
   // create the scene graph root
-  SoSeparator *root1 = new SoSeparator;
+  SoSeparator * root1 = new SoSeparator;
   root1->ref();
 
-  SoSeparator *root2 = new SoSeparator;
+  SoSeparator * root2 = new SoSeparator;
   root2->ref();
 
   root1->addChild( camera );
@@ -48,10 +47,10 @@ int main(int argc, char** argv)
   root1->unref();
   root2->unref();
 
-  //Put the viewers into a grid
-  vgui_grid_tableau_sptr grid = new vgui_grid_tableau(2,1);
-  grid->add_at(tab3d_1, 0,0);
-  grid->add_at(tab3d_2, 1,0);
+  // Put the viewers into a grid
+  vgui_grid_tableau_sptr grid = new vgui_grid_tableau(2, 1);
+  grid->add_at(tab3d_1, 0, 0);
+  grid->add_at(tab3d_2, 1, 0);
 
   // Put the grid into a shell tableau at the top the hierarchy
   vgui_shell_tableau_new shell(grid);

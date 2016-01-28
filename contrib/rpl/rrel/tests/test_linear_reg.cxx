@@ -8,56 +8,56 @@
 
 #include <rrel/rrel_linear_regression.h>
 
-bool close(double,double);
+bool close(double, double);
 
 static void test_linear_reg()
 {
-  vnl_double_3 true_params(10.0,0.02,-0.1);
+  vnl_double_3 true_params(10.0, 0.02, -0.1);
   vnl_double_3 a = true_params;
 
-  const unsigned int num_pts=7;
+  const unsigned int num_pts = 7;
 
   //  Build LinearRegression objects exercising both constructors and
   //  the two different options for the first constructor.
-  vcl_vector< vnl_vector<double> > pts( num_pts );
-  vcl_vector< vnl_vector<double> > ind_vars( num_pts );
-  vcl_vector<double> rand_vars( num_pts );
-  vcl_vector<double> error( num_pts );
+  vcl_vector<vnl_vector<double> > pts( num_pts );
+  vcl_vector<vnl_vector<double> > ind_vars( num_pts );
+  vcl_vector<double>              rand_vars( num_pts );
+  vcl_vector<double>              error( num_pts );
 
-  double x = 1.0, y=-0.5; error[0]=-0.001;
-  double z= a[0] + a[1]*x + a[2]*y + error[0]; rand_vars[0] = z;
-  pts[0] = vnl_double_3(x,y,z).as_vector();
-  ind_vars[0] = vnl_double_3(1.0,x,y).as_vector();
+  double x = 1.0, y = -0.5; error[0] = -0.001;
+  double z = a[0] + a[1] * x + a[2] * y + error[0]; rand_vars[0] = z;
+  pts[0] = vnl_double_3(x, y, z).as_vector();
+  ind_vars[0] = vnl_double_3(1.0, x, y).as_vector();
 
-  x = 2.0;  y=4.0;  error[1]=0;
-  z = a[0] + a[1]*x + a[2]*y + error[1]; rand_vars[1] = z;
-  pts[1] = vnl_double_3(x,y,z).as_vector();
-  ind_vars[1] = vnl_double_3(1.0,x,y).as_vector();
+  x = 2.0;  y = 4.0;  error[1] = 0;
+  z = a[0] + a[1] * x + a[2] * y + error[1]; rand_vars[1] = z;
+  pts[1] = vnl_double_3(x, y, z).as_vector();
+  ind_vars[1] = vnl_double_3(1.0, x, y).as_vector();
 
-  x = 3.0;  y=1.0;  error[2]=0;
-  z = a[0] + a[1]*x + a[2]*y + error[2]; rand_vars[2] = z;
-  pts[2] = vnl_double_3(x,y,z).as_vector();
-  ind_vars[2] = vnl_double_3(1.0,x,y).as_vector();
+  x = 3.0;  y = 1.0;  error[2] = 0;
+  z = a[0] + a[1] * x + a[2] * y + error[2]; rand_vars[2] = z;
+  pts[2] = vnl_double_3(x, y, z).as_vector();
+  ind_vars[2] = vnl_double_3(1.0, x, y).as_vector();
 
-  x = -2.0;  y=3.0; error[3]=-0.0025;
-  z = a[0] + a[1]*x + a[2]*y + error[3]; rand_vars[3] = z;
-  pts[3] = vnl_double_3(x,y,z).as_vector();
-  ind_vars[3] = vnl_double_3(1.0,x,y).as_vector();
+  x = -2.0;  y = 3.0; error[3] = -0.0025;
+  z = a[0] + a[1] * x + a[2] * y + error[3]; rand_vars[3] = z;
+  pts[3] = vnl_double_3(x, y, z).as_vector();
+  ind_vars[3] = vnl_double_3(1.0, x, y).as_vector();
 
-  x = 2.0;  y=4.0;  error[4]=0.007;
-  z = a[0] + a[1]*x + a[2]*y + error[4]; rand_vars[4] = z;
-  pts[4] = vnl_double_3(x,y,z).as_vector();
-  ind_vars[4] = vnl_double_3(1.0,x,y).as_vector();
+  x = 2.0;  y = 4.0;  error[4] = 0.007;
+  z = a[0] + a[1] * x + a[2] * y + error[4]; rand_vars[4] = z;
+  pts[4] = vnl_double_3(x, y, z).as_vector();
+  ind_vars[4] = vnl_double_3(1.0, x, y).as_vector();
 
-  x = 5.0;  y=-4.0;  error[5]=0;
-  z = a[0] + a[1]*x + a[2]*y + error[5]; rand_vars[5] = z;
-  pts[5] = vnl_double_3(x,y,z).as_vector();
-  ind_vars[5] = vnl_double_3(1.0,x,y).as_vector();
+  x = 5.0;  y = -4.0;  error[5] = 0;
+  z = a[0] + a[1] * x + a[2] * y + error[5]; rand_vars[5] = z;
+  pts[5] = vnl_double_3(x, y, z).as_vector();
+  ind_vars[5] = vnl_double_3(1.0, x, y).as_vector();
 
-  x = 3.0;  y=-2.0;  error[6]=-0.004;
-  z = a[0] + a[1]*x + a[2]*y + error[6]; rand_vars[6] = z;
-  pts[6] = vnl_double_3(x,y,z).as_vector();
-  ind_vars[6] = vnl_double_3(1.0,x,y).as_vector();
+  x = 3.0;  y = -2.0;  error[6] = -0.004;
+  z = a[0] + a[1] * x + a[2] * y + error[6]; rand_vars[6] = z;
+  pts[6] = vnl_double_3(x, y, z).as_vector();
+  ind_vars[6] = vnl_double_3(1.0, x, y).as_vector();
 
   //
   //  The first set of tests are for the constructor, and parameter access methods.
@@ -76,10 +76,10 @@ static void test_linear_reg()
   lr2->print_points();
 #endif
 
-  TEST( "num_samples_to_instantiate (1)" , lr1->num_samples_to_instantiate(), 3);
-  TEST( "num_samples_to_instantiate (2)" , lr2->num_samples_to_instantiate(), 2);
-  TEST( "num_samples_to_instantiate (3)" , lr1->num_samples(), num_pts);
-  TEST( "num_data_points" , lr2->num_samples(), num_pts);
+  TEST( "num_samples_to_instantiate (1)", lr1->num_samples_to_instantiate(), 3);
+  TEST( "num_samples_to_instantiate (2)", lr2->num_samples_to_instantiate(), 2);
+  TEST( "num_samples_to_instantiate (3)", lr1->num_samples(), num_pts);
+  TEST( "num_data_points", lr2->num_samples(), num_pts);
   testlib_test_begin( "dtor (1)" );
   delete lr1;
   testlib_test_perform( true );
@@ -95,18 +95,18 @@ static void test_linear_reg()
   //
   //  The second set of tests uses just lr3 and tests FitFromMinimalSample
   //
-  vcl_vector<int> point_indices(3);
+  vcl_vector<int>    point_indices(3);
   vnl_vector<double> par;
 
   // should return false because 1&4 have same loc
   point_indices[0] = 1;  point_indices[1] = 2;   point_indices[2] = 4;
 
-  TEST( "fit_from_minimal_sample (1)", !lr3->fit_from_minimal_set(point_indices,par), true);
+  TEST( "fit_from_minimal_sample (1)", !lr3->fit_from_minimal_set(point_indices, par), true);
 
   // this one should work
   point_indices[2] = 5;
-  TEST("fit_from_minimal_sample (2)", lr3->fit_from_minimal_set(point_indices,par) &&
-                                      close( (par - true_params).magnitude(), 0 ), true);
+  TEST("fit_from_minimal_sample (2)", lr3->fit_from_minimal_set(point_indices, par) &&
+       close( (par - true_params).magnitude(), 0 ), true);
 
   //
   //  Test the residuals function.
@@ -114,8 +114,10 @@ static void test_linear_reg()
   vcl_vector<double> residuals( num_pts );
   lr3->compute_residuals( par, residuals );
   bool ok = true;
-  for ( unsigned int i=0; i<residuals.size() && ok; ++ i )
+  for( unsigned int i = 0; i < residuals.size() && ok; ++i )
+    {
     ok = close( residuals[i], error[i] );
+    }
   TEST("residuals", ok, true);
 
   //
@@ -132,16 +134,16 @@ static void test_linear_reg()
   // Ok.  This one should work.
   ok = lr3->weighted_least_squares_fit( par, cofact );
   vnl_vector<double> diff( par - true_params );
-  double scale = 0.003;  // rough hand guess
-  vnl_svd<double> svd_cof( cofact*scale*scale );
-  double err = vcl_sqrt(dot_product( diff * svd_cof.inverse(), diff )); // standardized error
+  double             scale = 0.003; // rough hand guess
+  vnl_svd<double>    svd_cof( cofact * scale * scale );
+  double             err = vcl_sqrt(dot_product( diff * svd_cof.inverse(), diff ) ); // standardized error
 #if 0
   vcl_cout << "estimated params: " << par
            << ";  true params: " << true_params << vcl_endl
            << "cofactor matrix:\n" << cofact
            << " error : " << err << vcl_endl;
 #endif
-  TEST( "weighted_least_squares_fit (ok) ", ok && err <2.5, true);
+  TEST( "weighted_least_squares_fit (ok) ", ok && err < 2.5, true);
 
   delete lr3;
 }

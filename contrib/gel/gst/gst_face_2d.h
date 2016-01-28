@@ -2,28 +2,27 @@
 #ifndef gst_face_2d_h_
 #define gst_face_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 
 #include <vcl_vector.h>
 #include "gst_polygon_2d_sptr.h"
 
-//: This class defines a simplified topology structure in 2D.
+// : This class defines a simplified topology structure in 2D.
 // It is light weight, and all interfacing should be done through the
 // face class
 
 class gst_face_2d
 {
- public:
+public:
 
   gst_face_2d( gst_polygon_2d_sptr polygon);
-  gst_face_2d( gst_polygon_2d_sptr polygon, const vcl_vector<gst_polygon_2d_sptr> &holes);
+  gst_face_2d( gst_polygon_2d_sptr polygon, const vcl_vector<gst_polygon_2d_sptr> & holes);
   ~gst_face_2d();
-
- protected:
+protected:
 
   // outside edge list
   gst_polygon_2d_sptr outside_;

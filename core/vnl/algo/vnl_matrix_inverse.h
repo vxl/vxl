@@ -2,9 +2,9 @@
 #ifndef vnl_matrix_inverse_h_
 #define vnl_matrix_inverse_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Calculates inverse of a matrix (wrapper around vnl_svd<double>)
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -17,7 +17,7 @@
 
 #include <vnl/algo/vnl_svd.h>
 
-//: Calculates inverse of a matrix (wrapper around vnl_svd<double>)
+// : Calculates inverse of a matrix (wrapper around vnl_svd<double>)
 //  vnl_matrix_inverse is a wrapper around vnl_svd<double> that allows
 //  you to write
 //  \code
@@ -32,12 +32,12 @@
 
 template <class T>
 struct vnl_matrix_inverse : public vnl_svd<T>
-{
-  vnl_matrix_inverse(vnl_matrix<T> const & M): vnl_svd<T>(M) { }
+  {
+  vnl_matrix_inverse(vnl_matrix<T> const & M) : vnl_svd<T>(M) { }
   ~vnl_matrix_inverse() {}
 
-  operator vnl_matrix<T> () const { return this->inverse(); }
-};
+  operator vnl_matrix<T>() const { return this->inverse(); }
+  };
 
 template <class T>
 inline

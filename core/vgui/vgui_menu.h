@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_menu.h
 #ifndef vgui_menu_h_
 #define vgui_menu_h_
-//:
+// :
 // \file
 // \brief  Representation of menus and menu items for pop-up and menubar menus.
 // \author fsm
@@ -26,10 +26,10 @@
 
 class vgui_menu;
 
-typedef void (*vgui_menu_callback)(void const* client_data);
-typedef void (*vgui_menu_callback_no_client_data)();
+typedef void (* vgui_menu_callback)(void const* client_data);
+typedef void (* vgui_menu_callback_no_client_data)();
 
-//: Representation of an item on a menu.
+// : Representation of an item on a menu.
 //
 // Definition of vgui_menu::item = vgui_menu_item.
 // \verbatim
@@ -49,48 +49,49 @@ typedef void (*vgui_menu_callback_no_client_data)();
 // . -----------
 // \endverbatim
 struct vgui_menu_item
-{
-  //: Constructor - create a default menu item.
+  {
+  // : Constructor - create a default menu item.
   vgui_menu_item();
 
-  //: Constructor - create menu item same as given item.
+  // : Constructor - create menu item same as given item.
   vgui_menu_item(vgui_menu_item const &);
 
-  //: Destructor
+  // : Destructor
   ~vgui_menu_item();
 
-  //: Name of item, "" for separators.
+  // : Name of item, "" for separators.
   vcl_string name;
 
-  //: Pointer to the command to be executed.
+  // : Pointer to the command to be executed.
   //  Non-zero for command items only.
   vgui_command_sptr cmnd;
 
-  //: Pointer to a submenu.
+  // : Pointer to a submenu.
   //  The object pointed to is owned (ie managed) by
   //  the menu. non-zero for submenu items only.
-  vgui_menu *menu;
+  vgui_menu * menu;
 
-  //: Description of keyboard shortcut (makes no sense for separators).
-  struct invocation {
+  // : Description of keyboard shortcut (makes no sense for separators).
+  struct invocation
+    {
     vgui_modifier mod;
     vgui_key key;
-  } short_cut;
+    } short_cut;
 
-  //: Return true if the item is a command (item which performs an action).
-  bool is_command()       const { return name!="" &&  (bool)cmnd && (menu == 0) && !is_toggle_button(); }
+  // : Return true if the item is a command (item which performs an action).
+  bool is_command()       const { return name != "" &&  (bool)cmnd && (menu == 0) && !is_toggle_button(); }
 
-  //: Returns true if the item is a sub-menu.
-  bool is_submenu()       const { return name!="" && !(bool)cmnd && (menu != 0) && !is_toggle_button(); }
+  // : Returns true if the item is a sub-menu.
+  bool is_submenu()       const { return name != "" && !(bool)cmnd && (menu != 0) && !is_toggle_button(); }
 
-  //: Returns true if the item is a toggle button.
+  // : Returns true if the item is a toggle button.
   bool is_toggle_button() const;
 
-  //: Returns true if the item is a separator.
-  bool is_separator()     const { return name=="" && !(bool)cmnd && (menu == 0) && !is_toggle_button(); }
-};
+  // : Returns true if the item is a separator.
+  bool is_separator()     const { return name == "" && !(bool)cmnd && (menu == 0) && !is_toggle_button(); }
+  };
 
-//: Representation of a menu for both pop-up and menubar menus.
+// : Representation of a menu for both pop-up and menubar menus.
 //
 // Building the menu:
 //
@@ -98,63 +99,53 @@ struct vgui_menu_item
 class vgui_menu
 {
   vcl_vector<vgui_menu_item> items;
-
- public:
-  //: Constructor - creates an empty menu.
+public:
+  // : Constructor - creates an empty menu.
   vgui_menu() {}
 
-  //: Constructor - creates a menu same as the given menu.
+  // : Constructor - creates a menu same as the given menu.
   vgui_menu(vgui_menu const &);
 
-  //: Make this menu equal to the given menu.
-  vgui_menu& operator=(vgui_menu const &);
+  // : Make this menu equal to the given menu.
+  vgui_menu & operator=(vgui_menu const &);
 
-  //: Destructor - clears the menu.
+  // : Destructor - clears the menu.
   ~vgui_menu() { clear(); }
 
-  //: Add given command to this menu.
-  void add(vcl_string const &,
-           vgui_command_sptr c,
-           vgui_key key =vgui_KEY_NULL,
-           vgui_modifier modifiers =vgui_MODIFIER_NULL);
+  // : Add given command to this menu.
+  void add(vcl_string const &, vgui_command_sptr c, vgui_key key = vgui_KEY_NULL,
+           vgui_modifier modifiers = vgui_MODIFIER_NULL);
 
-  //: Add given callback function to this menu.
-  void add(vcl_string const &,
-           vgui_menu_callback_no_client_data f,
-           vgui_key key =vgui_KEY_NULL,
-           vgui_modifier modifiers =vgui_MODIFIER_NULL);
+  // : Add given callback function to this menu.
+  void add(vcl_string const &, vgui_menu_callback_no_client_data f, vgui_key key = vgui_KEY_NULL,
+           vgui_modifier modifiers = vgui_MODIFIER_NULL);
 
-  //: Add callback function with client data to this menu.
-  void add(vcl_string const &,
-           vgui_menu_callback f,
-           void const *client_data,
-           vgui_key key =vgui_KEY_NULL,
-           vgui_modifier modifiers =vgui_MODIFIER_NULL);
+  // : Add callback function with client data to this menu.
+  void add(vcl_string const &, vgui_menu_callback f, void const * client_data, vgui_key key = vgui_KEY_NULL,
+           vgui_modifier modifiers = vgui_MODIFIER_NULL);
 
-  //: Add given submenu to this menu.
-  void add(vcl_string const &,
-           vgui_menu const &,
-           vgui_key key =vgui_KEY_NULL,
-           vgui_modifier modifiers =vgui_MODIFIER_NULL);
+  // : Add given submenu to this menu.
+  void add(vcl_string const &, vgui_menu const &, vgui_key key = vgui_KEY_NULL,
+           vgui_modifier modifiers = vgui_MODIFIER_NULL);
 
-  //: Add separator to this menu.
+  // : Add separator to this menu.
   void separator();        // a separator
 
-  //: Add the given menu to the end of this menu.
+  // : Add the given menu to the end of this menu.
   void include(vgui_menu const & that); // add 'that' to end of *this.
 
-  //: Empty this menu.
+  // : Empty this menu.
   void clear() { items.clear(); }
 
-  //: Return the number of items in this menu
-  unsigned size() const { return static_cast<unsigned>(items.size()); }
+  // : Return the number of items in this menu
+  unsigned size() const { return static_cast<unsigned>(items.size() ); }
 
-  //: Get the menu item using the [] index operator.
+  // : Get the menu item using the [] index operator.
   vgui_menu_item const & operator[](unsigned i) const { return items[i]; }
 };
 
-vcl_ostream & operator<<(vcl_ostream &,vgui_menu const &);
+vcl_ostream & operator<<(vcl_ostream &, vgui_menu const &);
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 #endif // vgui_menu_h_

@@ -1,7 +1,7 @@
 // This is mul/fhs/fhs_searcher.h
 #ifndef fhs_searcher_h_
 #define fhs_searcher_h_
-//:
+// :
 // \file
 // \author Tim Cootes
 // \brief Use F&H's DP style algorithm to search for global solutions
@@ -10,7 +10,7 @@
 #include <vgl/vgl_fwd.h> // for point_2d<T>
 #include <vimt/vimt_image_2d_of.h>
 
-//: Use F&H's DP style algorithm to search for global solutions to model match
+// : Use F&H's DP style algorithm to search for global solutions to model match
 //  Model consists of a set of features, together with a tree of neighbour
 //  relationships of the form pos(j) = pos(i) + (N(mx,var_x),N(my,var_y))
 //  where N(m,var) is a gaussian with mean m and variance var.
@@ -27,54 +27,52 @@
 //  Pictoral Structure Matching.
 class fhs_searcher
 {
- private:
-  //: Arcs defining neighbour relationships between features
+private:
+  // : Arcs defining neighbour relationships between features
   //  Ordered so that parents precede children
   vcl_vector<fhs_arc> arc_;
 
-  //: Scaling applied to shape cost (default 1.0)
+  // : Scaling applied to shape cost (default 1.0)
   double geom_wt_;
 
-  //: arc_to_j_[j] gives index of arc ending at given j
+  // : arc_to_j_[j] gives index of arc ending at given j
   vcl_vector<unsigned> arc_to_j_;
 
-  //: children_[i] gives list of child nodes of node i in tree
+  // : children_[i] gives list of child nodes of node i in tree
   vcl_vector<vcl_vector<unsigned> > children_;
 
-  //: Workspace for accumulated sum of responses
+  // : Workspace for accumulated sum of responses
   vcl_vector<vimt_image_2d_of<float> > sum_im_;
 
-  //: Workspace for sum of responses, transformed by distance function
+  // : Workspace for sum of responses, transformed by distance function
   vcl_vector<vimt_image_2d_of<float> > dist_im_;
 
-  //: pos_[i](x,y,0),pos_[i](x,y,1) is position of best response for (x,y)
+  // : pos_[i](x,y,0),pos_[i](x,y,1) is position of best response for (x,y)
   //  Result is in image co-ordinates.
   vcl_vector<vimt_image_2d_of<int> > pos_im_;
 
-  //: Combine responses for image im_index, given supplied feature_response for that node
-  void combine_responses(unsigned im_index,
-                         const vimt_image_2d_of<float>& feature_response);
+  // : Combine responses for image im_index, given supplied feature_response for that node
+  void combine_responses(unsigned im_index, const vimt_image_2d_of<float>& feature_response);
 
- public:
-  //: Default constructor
+public:
+  // : Default constructor
   fhs_searcher();
 
-  //: Set tree defining relationships between features
+  // : Set tree defining relationships between features
   //  Input arcs define neighbour relationships in any order.
   //  root_node defines which feature to be used as the root
   void set_tree(const vcl_vector<fhs_arc>& arcs, unsigned root_node);
 
-    //: Set scaling applied to shape cost (default 1.0)
+  // : Set scaling applied to shape cost (default 1.0)
   void set_geom_wt(double geom_wt);
 
-
-  //: Index of root node (set by last call to set_tree()
+  // : Index of root node (set by last call to set_tree()
   unsigned root_node() const;
 
-  //: Number of points represented
-  unsigned n_points() const { return arc_.size()+1; }
+  // : Number of points represented
+  unsigned n_points() const { return arc_.size() + 1; }
 
-  //: Perform global search
+  // : Perform global search
   //  Images of feature response supplied.  The transformation
   //  (world2im()) for each image can be used to indicate regions
   //  which don't necessarily overlap.  However, effective displacements
@@ -85,18 +83,18 @@ class fhs_searcher
   //  \param geom_wt is the weighting applied to the geometric component of the cost.
   void search(const vcl_vector<vimt_image_2d_of<float> >& feature_response);
 
-  //: Compute optimal position of all points given position of root
+  // : Compute optimal position of all points given position of root
   //  Assumes search() has been called first
-  void points_from_root(const vgl_point_2d<double>& root_pt,
-                        vcl_vector<vgl_point_2d<double> >& pts) const;
+  void points_from_root(const vgl_point_2d<double>& root_pt, vcl_vector<vgl_point_2d<double> >& pts) const;
 
-  //: Compute optimal position of all points
+  // : Compute optimal position of all points
   //  Assumes search() has been called first
   //  Returns cost at optimal position
   double best_points(vcl_vector<vgl_point_2d<double> >& pts) const;
 
-  //: Return final total cost image for root
-  const vimt_image_2d_of<float>& root_cost_image() const;
+  // : Return final total cost image for root
+  const vimt_image_2d_of<float> & root_cost_image() const;
+
 };
 
 #endif // fhs_searcher_h_

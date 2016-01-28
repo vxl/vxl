@@ -2,9 +2,9 @@
 #ifndef HomgLine3D_h_
 #define HomgLine3D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Homogeneous 3D Line
 //
@@ -22,16 +22,15 @@
 class HomgLine3D
 {
   // Data Members------------------------------------------------------------
-  HomgPoint3D point_finite_; //!< any finite point on the line
+  HomgPoint3D point_finite_; // !< any finite point on the line
   HomgPoint3D point_infinite_;
-
- public:
+public:
   // Constructors/Initializers/Destructors-----------------------------------
 
   HomgLine3D();
-  HomgLine3D(const HomgLine3D&);
-  HomgLine3D(const HomgPoint3D& point_finite,const HomgPoint3D& point_infinite);
- ~HomgLine3D();
+  HomgLine3D(const HomgLine3D &);
+  HomgLine3D(const HomgPoint3D& point_finite, const HomgPoint3D& point_infinite);
+  ~HomgLine3D();
 
   // Data Access-------------------------------------------------------------
   HomgPoint3D const & get_point_finite() const { return point_finite_; }
@@ -42,11 +41,14 @@ class HomgLine3D
 
   // Utility Methods---------------------------------------------------------
   void force_point2_infinite();
-  bool operator==(HomgLine3D const& p) const {
-    return point_finite_==p.point_finite_ && point_infinite_==p.point_infinite_;
+
+  bool operator==(HomgLine3D const& p) const
+  {
+    return point_finite_ == p.point_finite_ && point_infinite_ == p.point_infinite_;
   }
+
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLine3D& );
+vcl_ostream & operator<<(vcl_ostream& s, const HomgLine3D & );
 
 #endif // HomgLine3D_h_

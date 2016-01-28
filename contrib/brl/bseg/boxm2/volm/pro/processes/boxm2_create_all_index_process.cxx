@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/volm/pro/processes/boxm2_create_all_index_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief  A process for creating a depth interval, orientation and class label indices for each location hypothesis of a scene simultaneously.
 //  All the info is compressed into a single byte and saved.
@@ -28,82 +28,89 @@
 #include <boxm2/boxm2_data_base.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <boxm2/boxm2_util.h>
-//directory utility
+// directory utility
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 
 namespace boxm2_create_all_index_process_globals
 {
-  const unsigned n_inputs_ = 15;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 15;
+const unsigned n_outputs_ = 0;
 
-  void compile_kernel(bocl_device_sptr device,vcl_vector<bocl_kernel*> & vec_kernels)
-  {
-    //gather all render sources... seems like a lot for rendering...
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
-    src_paths.push_back(source_dir + "scene_info.cl");
-    src_paths.push_back(source_dir + "cell_utils.cl");
-    src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-    src_paths.push_back(source_dir + "basic/sort_vector.cl");
-    src_paths.push_back(source_dir + "backproject.cl");
-    src_paths.push_back(source_dir + "statistics_library_functions.cl");
-    src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths.push_back(source_dir + "bit/compute_index_label.cl");
-    src_paths.push_back(source_dir + "expected_functor.cl");  // for step_cell_render_max
-    src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
+void compile_kernel(bocl_device_sptr device, vcl_vector<bocl_kernel *> & vec_kernels)
+{
+  // gather all render sources... seems like a lot for rendering...
+  vcl_vector<vcl_string> src_paths;
+  vcl_string             source_dir = boxm2_ocl_util::ocl_src_root();
+  src_paths.push_back(source_dir + "scene_info.cl");
+  src_paths.push_back(source_dir + "cell_utils.cl");
+  src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+  src_paths.push_back(source_dir + "basic/sort_vector.cl");
+  src_paths.push_back(source_dir + "backproject.cl");
+  src_paths.push_back(source_dir + "statistics_library_functions.cl");
+  src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
+  src_paths.push_back(source_dir + "bit/compute_index_label.cl");
+  src_paths.push_back(source_dir + "expected_functor.cl");    // for step_cell_render_max
+  src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_vector<vcl_string> norm_src_paths;
-    norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
-    norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
+  vcl_vector<vcl_string> norm_src_paths;
+  norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
+  norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
 
-    //set kernel options
-    vcl_string options = " -D COMPINDEX_LABEL -D RENDER_VISIBILITY2 -D DETERMINISTIC -D SHORT ";
-    options += " -D STEP_CELL=step_cell_label_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
+  // set kernel options
+  vcl_string options = " -D COMPINDEX_LABEL -D RENDER_VISIBILITY2 -D DETERMINISTIC -D SHORT ";
+  options +=
+    " -D STEP_CELL=step_cell_label_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
 
-    bocl_kernel* compute_index = new bocl_kernel();
-    compute_index->create_kernel(&device->context(),device->device_id(), src_paths, "compute_index_label", options, "compute_index_label");
-    vec_kernels.push_back(compute_index);
+  bocl_kernel* compute_index = new bocl_kernel();
+  compute_index->create_kernel(&device->context(),
+                               device->device_id(), src_paths, "compute_index_label", options, "compute_index_label");
+  vec_kernels.push_back(compute_index);
 
-    //create normalize image kernel
-    bocl_kernel* norm_kernel=new bocl_kernel();
-    options += " -D RENDER ";
-    norm_kernel->create_kernel(&device->context(),device->device_id(), norm_src_paths, "normalize_render_kernel", options, "normalize render kernel");
-    vec_kernels.push_back(norm_kernel);
+  // create normalize image kernel
+  bocl_kernel* norm_kernel = new bocl_kernel();
+  options += " -D RENDER ";
+  norm_kernel->create_kernel(&device->context(),
+                             device->device_id(), norm_src_paths, "normalize_render_kernel", options,
+                             "normalize render kernel");
+  vec_kernels.push_back(norm_kernel);
 
+  // set depth inder kernel options
 
-    // set depth inder kernel options
+  vcl_vector<vcl_string> src_paths2;
+  src_paths2.push_back(source_dir + "scene_info.cl");
+  src_paths2.push_back(source_dir + "cell_utils.cl");
+  src_paths2.push_back(source_dir + "bit/bit_tree_library_functions.cl");
+  src_paths2.push_back(source_dir + "basic/sort_vector.cl");
+  src_paths2.push_back(source_dir + "backproject.cl");
+  src_paths2.push_back(source_dir + "statistics_library_functions.cl");
+  src_paths2.push_back(source_dir + "ray_bundle_library_opt.cl");
+  src_paths2.push_back(source_dir + "bit/compute_index.cl");
+  src_paths2.push_back(source_dir + "bit/cast_ray_bit.cl");
 
-    vcl_vector<vcl_string> src_paths2;
-    src_paths2.push_back(source_dir + "scene_info.cl");
-    src_paths2.push_back(source_dir + "cell_utils.cl");
-    src_paths2.push_back(source_dir + "bit/bit_tree_library_functions.cl");
-    src_paths2.push_back(source_dir + "basic/sort_vector.cl");
-    src_paths2.push_back(source_dir + "backproject.cl");
-    src_paths2.push_back(source_dir + "statistics_library_functions.cl");
-    src_paths2.push_back(source_dir + "ray_bundle_library_opt.cl");
-    src_paths2.push_back(source_dir + "bit/compute_index.cl");
-    src_paths2.push_back(source_dir + "bit/cast_ray_bit.cl");
+  vcl_string options2 = " -D COMPINDEX -D DETERMINISTIC";
+  options2 += " -D RENDER_VISIBILITY ";
+  options2 +=
+    " -D STEP_CELL=step_cell_compute_index(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
+  bocl_kernel* compute_index_depth = new bocl_kernel();
 
-    vcl_string options2 = " -D COMPINDEX -D DETERMINISTIC";
-    options2 += " -D RENDER_VISIBILITY ";
-    options2 += " -D STEP_CELL=step_cell_compute_index(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
-    bocl_kernel* compute_index_depth = new bocl_kernel();
+  compute_index_depth->create_kernel(&device->context(),
+                                     device->device_id(), src_paths2, "compute_loc_index", options2,
+                                     "compute_loc_index");
+  vec_kernels.push_back(compute_index_depth);
 
-    compute_index_depth->create_kernel(&device->context(),device->device_id(), src_paths2, "compute_loc_index", options2, "compute_loc_index");
-    vec_kernels.push_back(compute_index_depth);
+  // create normalize image kernel
+  bocl_kernel * norm_kernel_depth = new bocl_kernel();
+  norm_kernel_depth->create_kernel(&device->context(), device->device_id(), src_paths2,
+                                   "normalize_index_depth_kernel", options2,
+                                   "normalize_index_depth_kernel");   // kernel identifier (for error checking)
 
-    //create normalize image kernel
-    bocl_kernel * norm_kernel_depth=new bocl_kernel();
-    norm_kernel_depth->create_kernel(&device->context(),device->device_id(), src_paths2,
-                                     "normalize_index_depth_kernel", options2,
-                                     "normalize_index_depth_kernel"); //kernel identifier (for error checking)
+  vec_kernels.push_back(norm_kernel_depth);
 
-    vec_kernels.push_back(norm_kernel_depth);
+  return;
+}
 
-    return ;
-  }
-  static vcl_map<vcl_string,vcl_vector<bocl_kernel*> > kernels;
+static vcl_map<vcl_string, vcl_vector<bocl_kernel *> > kernels;
 }
 
 bool  boxm2_create_all_index_process_cons(bprb_func_process& pro)
@@ -114,20 +121,20 @@ bool  boxm2_create_all_index_process_cons(bprb_func_process& pro)
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
   input_types_[2] = "boxm2_opencl_cache_sptr";
-  input_types_[3] = "vcl_string"; // folder to read the geo index and the hypo files for each leaf node, pass the string with file separator at the end
-  input_types_[4] = "unsigned"; // the id of the tile to index
-  input_types_[5] = "float"; // elevation difference to adjust local heights, some scenes need a height adjustment according to their resolution
-  input_types_[6] = "float"; // minimum voxel resolution to create spherical container
-  input_types_[7] = "float"; // maximum distance in the world that the spherical container will cover
-  input_types_[8] = "float"; // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
-  input_types_[9] = "vcl_string"; // name of the binary file to read spherical rays
+  input_types_[3] = "vcl_string";  // folder to read the geo index and the hypo files for each leaf node, pass the string with file separator at the end
+  input_types_[4] = "unsigned";    // the id of the tile to index
+  input_types_[5] = "float";       // elevation difference to adjust local heights, some scenes need a height adjustment according to their resolution
+  input_types_[6] = "float";       // minimum voxel resolution to create spherical container
+  input_types_[7] = "float";       // maximum distance in the world that the spherical container will cover
+  input_types_[8] = "float";       // the solid angle for the spherical container, the resolution of the voxels will get coarser based on this angle
+  input_types_[9] = "vcl_string";  // name of the binary file to read spherical rays
   input_types_[10] = "vcl_string"; // name of output folder to save index binaries for each leaf node
-  input_types_[11] = "float"; // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
-  input_types_[12] = "float"; // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
-  input_types_[13] = "int"; // the leaf id of the tile, if passed as -1 then run on all leaves
-  input_types_[14] = "vcl_string";  // the identifier of the label_short data type, e.g. "orientation", "combined". pass "" if no identifier
+  input_types_[11] = "float";      // visibility threshold to declare a ray a sky ray, it's strictly very small if occupied, so could be as small as 0.3f
+  input_types_[12] = "float";      // buffer capacity on CPU RAM for the indices to be cached before being written to disc in chunks
+  input_types_[13] = "int";        // the leaf id of the tile, if passed as -1 then run on all leaves
+  input_types_[14] = "vcl_string"; // the identifier of the label_short data type, e.g. "orientation", "combined". pass "" if no identifier
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -136,32 +143,35 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
 {
   using namespace boxm2_create_all_index_process_globals;
 
-  vcl_size_t local_threads[2]={8,1};
-  vcl_size_t global_threads[2]={0,1};  // global threads size is to be determined later
+  vcl_size_t local_threads[2] = {8, 1};
+  vcl_size_t global_threads[2] = {0, 1};  // global threads size is to be determined later
 
-  //sanity check inputs
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  // sanity check inputs
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  float transfer_time=0.0f;
-  float gpu_time=0.0f;
+    }
+  float transfer_time = 0.0f;
+  float gpu_time = 0.0f;
 
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  //get the inputs
-  unsigned i = 0;
+    }
+  // get the inputs
+  unsigned         i = 0;
   bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
-  vcl_cout << " device: " << device->info().device_name_ << " total memory: " << device->info().total_global_memory_ << '\n'
+  vcl_cout << " device: " << device->info().device_name_ << " total memory: " << device->info().total_global_memory_
+           << '\n'
            << " max allowed work items in a group: " << device->info().max_work_group_size_ << '\n'
            << " max work item sizes in each dimensions: " << device->info().max_work_item_sizes_ << '\n';
-  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
-  vpgl_lvcs lvcs = scene->lvcs();
-  boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vcl_string geo_index_folder = pro.get_input<vcl_string>(i++);
-  unsigned tile_id = pro.get_input<unsigned>(i++);
+  boxm2_scene_sptr              scene = pro.get_input<boxm2_scene_sptr>(i++);
+  vpgl_lvcs                     lvcs = scene->lvcs();
+  boxm2_opencl_cache_sptr       opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vcl_string                    geo_index_folder = pro.get_input<vcl_string>(i++);
+  unsigned                      tile_id = pro.get_input<unsigned>(i++);
   boxm2_volm_wr3db_index_params params;
   params.start = 0;
   params.skip = 1;
@@ -171,44 +181,51 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   params.solid_angle = pro.get_input<float>(i++);
   vcl_string ray_file = pro.get_input<vcl_string>(i++);
   vcl_string out_index_folder = pro.get_input<vcl_string>(i++);
-  float vis_thres = pro.get_input<float>(i++);
-  float buffer_capacity = pro.get_input<float>(i++);
-  int leaf_id = pro.get_input<int>(i++);
+  float      vis_thres = pro.get_input<float>(i++);
+  float      buffer_capacity = pro.get_input<float>(i++);
+  int        leaf_id = pro.get_input<int>(i++);
   vcl_string ident = pro.get_input<vcl_string>(i++);
 
-  volm_spherical_container_sptr sph2 = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
-  vcl_cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size() << " with solid angle: " << params.solid_angle << " vmin: " << params.vmin << " dmax: " << params.dmax << vcl_endl;
+  volm_spherical_container_sptr sph2 = new volm_spherical_container(params.solid_angle, params.vmin, params.dmax);
+  vcl_cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size()
+           << " with solid angle: " << params.solid_angle << " vmin: " << params.vmin << " dmax: " << params.dmax
+           << vcl_endl;
 
   // read the geo index
   vcl_stringstream file_name_pre; file_name_pre << geo_index_folder << "geo_index_tile_" << tile_id;
   vcl_cout << "constructing: " << file_name_pre.str() << vcl_endl;
-  float min_size;
+  float                    min_size;
   volm_geo_index_node_sptr r = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
-  volm_geo_index::read_hyps(r, file_name_pre.str());
+  volm_geo_index::read_hyps(r, file_name_pre.str() );
   vcl_vector<volm_geo_index_node_sptr> leaves;
-  //volm_geo_index::get_leaves(r, leaves);
+  // volm_geo_index::get_leaves(r, leaves);
   volm_geo_index::get_leaves_with_hyps(r, leaves);
   vcl_stringstream out_file_name_pre; out_file_name_pre << out_index_folder << "geo_index_tile_" << tile_id;
-  if (!leaves.size()) {
+  if( !leaves.size() )
+    {
     vcl_cout << " there are no leaves in this tile!.. returning!\n";
     return true;
-  }
+    }
   else
+    {
     vcl_cout << " there are " << leaves.size() << " leaves with hyps in this tile!\n";
+    }
 
-  if (leaf_id >= (int)leaves.size()) {
-    vcl_cout << " leaf id: " << leaf_id << " is larger than the number of leaves: " << leaves.size() << ".. returning!\n";
+  if( leaf_id >= (int)leaves.size() )
+    {
+    vcl_cout << " leaf id: " << leaf_id << " is larger than the number of leaves: " << leaves.size()
+             << ".. returning!\n";
     return false;
-  }
+    }
 
-  int alphaTypeSize = (int)boxm2_data_traits<BOXM2_ALPHA>::datasize();
-  int apptypesize = (int)boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
+  int        alphaTypeSize = (int)boxm2_data_traits<BOXM2_ALPHA>::datasize();
+  int        apptypesize = (int)boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
   vcl_string data_type = boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix();
-  if (ident.size() > 0) data_type += "_" + ident;
+  if( ident.size() > 0 ) {data_type += "_" + ident; }
   vcl_cout << " indexing data blocks with type: " << data_type << vcl_endl;
 
   // read spherical shell container
-  vsl_b_ifstream ifs(ray_file);
+  vsl_b_ifstream                      ifs(ray_file);
   volm_spherical_shell_container_sptr sph_shell = new volm_spherical_shell_container;
   sph_shell->b_read(ifs);
   ifs.close();
@@ -216,64 +233,73 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   params.layer_size = (unsigned)sph_shell->get_container_size();
   int layer_size = (int)params.layer_size;
 
-  vcl_stringstream out_sph_namet; out_sph_namet << out_index_folder << "geo_index_tile_" << tile_id << "_index_label_sph_shell.vrml";
-  sph_shell->draw_template(out_sph_namet.str());
+  vcl_stringstream out_sph_namet;
+  out_sph_namet << out_index_folder << "geo_index_tile_" << tile_id << "_index_label_sph_shell.vrml";
+  sph_shell->draw_template(out_sph_namet.str() );
 
   // write the params file once to the folder
   vcl_stringstream out_params_file; out_params_file << out_index_folder << "geo_index_tile_" << tile_id << "_index";
   vcl_cout << "writing params to: " << out_params_file.str() + ".params";
-  if (!params.write_params_file(out_params_file.str())) { // the other index has the same params so don't write it
+  if( !params.write_params_file(out_params_file.str() ) ) // the other index has the same params so don't write it
+    {
     vcl_cerr << "Cannot write params file to " << out_params_file.str() + ".params!\n";
     return false;
-  }
+    }
 
   // adjust dmax if scene has very few blocks
   float dmax = params.dmax;
-  if (scene->get_block_ids().size() < 5)
-    dmax = (float)(scene->bounding_box().height()+scene->bounding_box().width());
+  if( scene->get_block_ids().size() < 5 )
+    {
+    dmax = (float)(scene->bounding_box().height() + scene->bounding_box().width() );
+    }
 
   global_threads[0] = RoundUp(layer_size, (int)local_threads[0]);
   vcl_cout << "layer_size: " << layer_size << ", # of global threads: " << global_threads[0] << '\n';
 
-  //cache size sanity check
-  long binCache = (long)(opencl_cache.ptr()->bytes_in_cache());
-  vcl_cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  // cache size sanity check
+  long binCache = (long)(opencl_cache.ptr()->bytes_in_cache() );
+  vcl_cout << "Update MBs in cache: " << binCache / (1024.0 * 1024.0) << vcl_endl;
 
   // create a command queue.
-  int status=0;
+  int              status = 0;
   cl_command_queue queue = clCreateCommandQueue( device->context(),
-                                                 *(device->device_id()),
+                                                 *(device->device_id() ),
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
-  if (status!=0)
+  if( status != 0 )
+    {
     return false;
+    }
 
   // compile the kernel if not already compiled
-  vcl_string identifier=device->device_identifier();
-  if (kernels.find(identifier)==kernels.end()) {
-    vcl_cout<<"===========Compiling kernels==========="<<vcl_endl;
-    vcl_vector<bocl_kernel*> ks;
-    compile_kernel(device,ks);
-    kernels[identifier]=ks;
-  }
+  vcl_string identifier = device->device_identifier();
+  if( kernels.find(identifier) == kernels.end() )
+    {
+    vcl_cout << "===========Compiling kernels===========" << vcl_endl;
+    vcl_vector<bocl_kernel *> ks;
+    compile_kernel(device, ks);
+    kernels[identifier] = ks;
+    }
 
   // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
-  bocl_mem* lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+  bocl_mem* lookup = new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar) * 256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // create directions buffer
-  cl_float* ray_dirs = new cl_float[4*layer_size];
+  cl_float*                         ray_dirs = new cl_float[4 * layer_size];
   vcl_vector<vgl_point_3d<double> > cart_points = sph_shell->cart_points();
-  for (int i = 0; i < layer_size; ++i) {
-    ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
-    ray_dirs[4*i+1] = (cl_float)cart_points[i].y();
-    ray_dirs[4*i+2] = (cl_float)cart_points[i].z();
-    ray_dirs[4*i+3] = 0.0f;
-  }
+  for( int i = 0; i < layer_size; ++i )
+    {
+    ray_dirs[4 * i] = (cl_float)cart_points[i].x();
+    ray_dirs[4 * i + 1] = (cl_float)cart_points[i].y();
+    ray_dirs[4 * i + 2] = (cl_float)cart_points[i].z();
+    ray_dirs[4 * i + 3] = 0.0f;
+    }
 
-  bocl_mem* ray_dir_buffer = new bocl_mem(device->context(), ray_dirs, sizeof(cl_float4)*layer_size, "ray directions buffer");
+  bocl_mem* ray_dir_buffer = new bocl_mem(
+      device->context(), ray_dirs, sizeof(cl_float4) * layer_size, "ray directions buffer");
   ray_dir_buffer->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   bocl_mem* ray_dim_mem = new bocl_mem(device->context(), &(layer_size), sizeof(int), "ray directions size");
@@ -288,9 +314,9 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   vcl_cout.flush();
   // get subblk dimension
   boxm2_block_metadata mdata = scene->get_block_metadata(blocks.begin()->first);
-  float subblk_dim = (float)mdata.sub_block_dim_.x();
+  float                subblk_dim = (float)mdata.sub_block_dim_.x();
   vcl_cout << "subblk_dim: " << subblk_dim << vcl_endl;
-  bocl_mem*  subblk_dim_mem=new bocl_mem(device->context(), &(subblk_dim), sizeof(float), "sub block dim buffer");
+  bocl_mem* subblk_dim_mem = new bocl_mem(device->context(), &(subblk_dim), sizeof(float), "sub block dim buffer");
   subblk_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
   vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> > order_cache;
@@ -300,53 +326,60 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   unsigned char sky_val = (unsigned char)254;
   unsigned char invalid_val = (unsigned char)253;
 
-  //zip through each location hypothesis
+  // zip through each location hypothesis
   vcl_vector<volm_geo_index_node_sptr> leaves2;
-  if (leaf_id < 0) leaves2 = leaves;
-  else leaves2.push_back(leaves[leaf_id]);
+  if( leaf_id < 0 ) {leaves2 = leaves; }
+  else {leaves2.push_back(leaves[leaf_id]); }
   vcl_cout << " will index " << leaves2.size() << " leaves!\n"; vcl_cout.flush();
-  for (unsigned li = 0; li < leaves2.size(); li++) {
-    if (!leaves2[li]->hyps_)
+  for( unsigned li = 0; li < leaves2.size(); li++ )
+    {
+    if( !leaves2[li]->hyps_ )
+      {
       continue;
-    vcl_cout << " will index " << volm_geo_index::hypo_size(leaves2[li]) << " indices in leaf: " << leaves2[li]->get_hyp_name("") << vcl_endl; vcl_cout.flush();
+      }
+    vcl_cout << " will index " << volm_geo_index::hypo_size(leaves2[li]) << " indices in leaf: "
+             << leaves2[li]->get_hyp_name("") << vcl_endl; vcl_cout.flush();
 
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    vcl_string index_file = leaves2[li]->get_label_index_name(out_file_name_pre.str(), ident);
-    if (!ind->initialize_write(index_file)) {
+    vcl_string                  index_file = leaves2[li]->get_label_index_name(out_file_name_pre.str(), ident);
+    if( !ind->initialize_write(index_file) )
+      {
       vcl_cerr << "Cannot initialize " << index_file << " for write!\n";
       return false;
-    }
+      }
 
     // for depth
     boxm2_volm_wr3db_index_sptr ind2 = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    vcl_string index_file2 = leaves2[li]->get_index_name(out_file_name_pre.str());
-    if (!ind2->initialize_write(index_file2)) {
+    vcl_string                  index_file2 = leaves2[li]->get_index_name(out_file_name_pre.str() );
+    if( !ind2->initialize_write(index_file2) )
+      {
       vcl_cerr << "Cannot initialize " << index_file2 << " for write!\n";
       return false;
-    }
+      }
 
     unsigned indexed_cnt = 0;
 
     vgl_point_3d<double> h_pt;
-    while (leaves2[li]->hyps_->get_next(0, 1, h_pt))
-    {
+    while( leaves2[li]->hyps_->get_next(0, 1, h_pt) )
+      {
 #ifdef DEBUG
       vcl_cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << vcl_endl;
 #endif
-      if (indexed_cnt%1000 == 0) vcl_cout << indexed_cnt << '.';
+      if( indexed_cnt % 1000 == 0 ) {vcl_cout << indexed_cnt << '.'; }
       double lx, ly, lz;
       lvcs.global_to_local(h_pt.x(), h_pt.y(), h_pt.z(), vpgl_lvcs::wgs84, lx, ly, lz);
-      //lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
-      lz = vcl_ceil(lz); // get ceil to get terrain height for world with res 1 m
-      lz = lz - elev_dif;  // the camera is elev dif above the terrain height
+      // lz = 2.0*(vcl_ceil(lz/2.0)); // round to next multiple of 2 meters // this is the height in the voxel model
+      lz = vcl_ceil(lz);  // get ceil to get terrain height for world with res 1 m
+      lz = lz - elev_dif; // the camera is elev dif above the terrain height
       vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
 
       // find its block
       vgl_point_3d<double> local;
-      if (!scene->block_contains(local_h_pt_d, curr_block, local))
-      {
-        if (!scene->contains(local_h_pt_d, curr_block, local)) {
+      if( !scene->block_contains(local_h_pt_d, curr_block, local) )
+        {
+        if( !scene->contains(local_h_pt_d, curr_block, local) )
+          {
 #ifdef DEBUG
           vcl_cerr << " Scene does not contain hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y()
                    << ' ' << local_h_pt_d << " writing empty array for it!\n";
@@ -357,8 +390,8 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
           ++indexed_cnt;
 
           continue;
+          }
         }
-      }
 
       cl_float loc_arr[4];
       loc_arr[0] = (cl_float)lx; loc_arr[1] = (cl_float)ly; loc_arr[2] = (cl_float)lz;
@@ -368,61 +401,85 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
 
       // Output Arrays
       float* buff = new float[layer_size];
-      for (int i=0;i<layer_size;++i) buff[i]=0.0f;
+      for( int i = 0; i < layer_size; ++i )
+        {
+        buff[i] = 0.0f;
+        }
       float* vis_buff = new float[layer_size];
-      for (int i=0;i<layer_size;++i) vis_buff[i]=1.0f;
+      for( int i = 0; i < layer_size; ++i )
+        {
+        vis_buff[i] = 1.0f;
+        }
       float* max_omega_buff = new float[layer_size];
       vcl_fill(max_omega_buff, max_omega_buff + layer_size, 0.0f);
 
-      bocl_mem* exp_image=new bocl_mem(device->context(),buff,layer_size*sizeof(float),"exp image buffer");
+      bocl_mem* exp_image = new bocl_mem(device->context(), buff, layer_size * sizeof(float), "exp image buffer");
       exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      bocl_mem* vis=new bocl_mem(device->context(),vis_buff,layer_size*sizeof(float),"visibility buffer");
+      bocl_mem* vis = new bocl_mem(device->context(), vis_buff, layer_size * sizeof(float), "visibility buffer");
       vis->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      bocl_mem* max_omega_image = new bocl_mem(device->context(),max_omega_buff,layer_size*sizeof(float), "max omega image buffer");
+      bocl_mem* max_omega_image = new bocl_mem(
+          device->context(), max_omega_buff, layer_size * sizeof(float), "max omega image buffer");
       max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
       // create depth interval Output Arrays
       float* buff2 = new float[layer_size];
-      for (int i=0;i<layer_size;++i) buff2[i]=0.0f;
+      for( int i = 0; i < layer_size; ++i )
+        {
+        buff2[i] = 0.0f;
+        }
       float* vis_buff2 = new float[layer_size];
-      for (int i=0;i<layer_size;++i) vis_buff2[i]=1.0f;
+      for( int i = 0; i < layer_size; ++i )
+        {
+        vis_buff2[i] = 1.0f;
+        }
       float* prob_buff = new float[layer_size];
-      for (int i=0;i<layer_size;++i) prob_buff[i]=0.0f;
+      for( int i = 0; i < layer_size; ++i )
+        {
+        prob_buff[i] = 0.0f;
+        }
       float* t_infinity_buff = new float[layer_size];
-      for (int i=0;i<layer_size;++i) t_infinity_buff[i]=0.0f;
+      for( int i = 0; i < layer_size; ++i )
+        {
+        t_infinity_buff[i] = 0.0f;
+        }
 
-      bocl_mem* exp_depth=new bocl_mem(device->context(),buff2,layer_size*sizeof(float),"exp depth buffer");
+      bocl_mem* exp_depth = new bocl_mem(device->context(), buff2, layer_size * sizeof(float), "exp depth buffer");
       exp_depth->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      bocl_mem* vis2=new bocl_mem(device->context(),vis_buff2,layer_size*sizeof(float),"visibility buffer");
+      bocl_mem* vis2 = new bocl_mem(device->context(), vis_buff2, layer_size * sizeof(float), "visibility buffer");
       vis2->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      bocl_mem* probs=new bocl_mem(device->context(),prob_buff,layer_size*sizeof(float),"vis x omega buffer");
+      bocl_mem* probs = new bocl_mem(device->context(), prob_buff, layer_size * sizeof(float), "vis x omega buffer");
       probs->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-      bocl_mem* t_infinity=new bocl_mem(device->context(),t_infinity_buff,layer_size*sizeof(float),"t infinity buffer");
+      bocl_mem* t_infinity = new bocl_mem(
+          device->context(), t_infinity_buff, layer_size * sizeof(float), "t infinity buffer");
       t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-
       vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
-      if (!(ord_iter != order_cache.end())) {
+      if( !(ord_iter != order_cache.end() ) )
+        {
         order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
-        if (order_cache.size() > 100) {// kick the first one
+        if( order_cache.size() > 100 ) // kick the first one
+          {
           vcl_map<boxm2_block_id, vcl_vector<boxm2_block_id> >::iterator to_kick = order_cache.begin();
-          if (to_kick->first != curr_block)
+          if( to_kick->first != curr_block )
+            {
             order_cache.erase(to_kick);
+            }
           else { ++to_kick; order_cache.erase(to_kick); }
+          }
         }
-      }
       vcl_vector<boxm2_block_id>& vis_blocks = order_cache[curr_block];
 
       vcl_vector<boxm2_block_id>::iterator blk_iter_inner;
-      for (blk_iter_inner = vis_blocks.begin(); blk_iter_inner != vis_blocks.end(); ++blk_iter_inner) {
+      for( blk_iter_inner = vis_blocks.begin(); blk_iter_inner != vis_blocks.end(); ++blk_iter_inner )
+        {
         boxm2_block_id id_inner = *blk_iter_inner;
 
-        //load tree and alpha
+        // load tree and alpha
         bocl_kernel* kern =  kernels[identifier][0];
 
         vul_timer transfer;
@@ -431,9 +488,10 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
 
-        bocl_mem* mog       = opencl_cache->get_data(scene, id_inner,data_type,0,true);
-#if 0 // was:
-        bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+        bocl_mem* mog       = opencl_cache->get_data(scene, id_inner, data_type, 0, true);
+#if 0   // was:
+        bocl_mem* mog       = opencl_cache->get_data(id_inner, data_type,
+                                                     alpha->num_bytes() / alphaTypeSize * apptypesize, true);
 #endif
         transfer_time += (float) transfer.all();
 
@@ -449,29 +507,31 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
         kern->set_arg( lookup  );
         kern->set_arg( vis );
         kern->set_arg( max_omega_image );
-        kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
-        kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+        kern->set_local_arg( local_threads[0] * local_threads[1] * sizeof(cl_uchar16) );    // local tree,
+        kern->set_local_arg( local_threads[0] * local_threads[1] * 10 * sizeof(cl_uchar) ); // cumsum buffer, imindex buffer
 
-        //execute kernel
-        if (!kern->execute(queue, 2, local_threads, global_threads)) {
+        // execute kernel
+        if( !kern->execute(queue, 2, local_threads, global_threads) )
+          {
           vcl_cerr << "INDEX KERNEL EXECUTE FAILED!\n";
           return false;
-        }
+          }
         int status = clFinish(queue);
-        if (status != 0) {
+        if( status != 0 )
+          {
           vcl_cerr << "status: " << status << "  INDEX EXECUTE FAILED: " + error_to_string(status) << '\n';
           return false;
-        }
+          }
         gpu_time += kern->exec_time();
         kern->clear_args();
 #if 0
-        opencl_cache->shallow_remove_data(id_inner,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        opencl_cache->shallow_remove_data(id_inner,data_type);
+        opencl_cache->shallow_remove_data(id_inner, boxm2_data_traits<BOXM2_ALPHA>::prefix() );
+        opencl_cache->shallow_remove_data(id_inner, data_type);
 #endif
 
         // run the depth interval kernel
         kern =  kernels[identifier][2];
-        //transfer_time += (float) transfer.all();
+        // transfer_time += (float) transfer.all();
 
         kern->set_arg( blk_info );
         kern->set_arg( ray_dir_buffer);
@@ -485,26 +545,28 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
         kern->set_arg( vis2 );
         kern->set_arg( probs );
         kern->set_arg( t_infinity );
-        kern->set_local_arg( local_threads[0]*local_threads[1]*sizeof(cl_uchar16) );//local tree,
-        kern->set_local_arg( local_threads[0]*local_threads[1]*10*sizeof(cl_uchar) ); //cumsum buffer, imindex buffer
+        kern->set_local_arg( local_threads[0] * local_threads[1] * sizeof(cl_uchar16) );    // local tree,
+        kern->set_local_arg( local_threads[0] * local_threads[1] * 10 * sizeof(cl_uchar) ); // cumsum buffer, imindex buffer
 
-        //execute kernel
-        if (!kern->execute(queue, 2, local_threads, global_threads)) {
+        // execute kernel
+        if( !kern->execute(queue, 2, local_threads, global_threads) )
+          {
           vcl_cerr << "INDEX KERNEL EXECUTE FAILED!\n";
           return false;
-        }
+          }
         status = clFinish(queue);
-        if (status != 0) {
+        if( status != 0 )
+          {
           vcl_cerr << "status: " << status << "  INDEX EXECUTE FAILED: " + error_to_string(status) << '\n';
           return false;
-        }
+          }
         gpu_time += kern->exec_time();
         kern->clear_args();
-      }
+        }
 
-      if (vis_blocks.size() != 0)  // normalize
-      {
-        bocl_kernel* normalize_kern= kernels[identifier][1];
+      if( vis_blocks.size() != 0 )  // normalize
+        {
+        bocl_kernel* normalize_kern = kernels[identifier][1];
         normalize_kern->set_arg( exp_image );
         normalize_kern->set_arg( vis );
         normalize_kern->set_arg( subblk_dim_mem );
@@ -512,18 +574,18 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
         clFinish(queue);
         gpu_time += normalize_kern->exec_time();
 
-        //clear render kernel args so it can reset em on next execution
+        // clear render kernel args so it can reset em on next execution
         normalize_kern->clear_args();
 
-        //read from gpu
+        // read from gpu
         exp_image->read_to_buffer(queue);
         vis->read_to_buffer(queue);
 
         status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "read to output buffers FAILED: " + error_to_string(status));
+        check_val(status, MEM_FAILURE, "read to output buffers FAILED: " + error_to_string(status) );
 
         // run depth interval normalization kernel
-        normalize_kern= kernels[identifier][3];
+        normalize_kern = kernels[identifier][3];
         normalize_kern->set_arg( exp_depth );
         normalize_kern->set_arg( vis2 );
         normalize_kern->set_arg( t_infinity );
@@ -532,52 +594,59 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
         clFinish(queue);
         gpu_time += normalize_kern->exec_time();
 
-        //clear render kernel args so it can reset em on next execution
+        // clear render kernel args so it can reset em on next execution
         normalize_kern->clear_args();
 
-        //read from gpu
+        // read from gpu
         exp_depth->read_to_buffer(queue);
         vis2->read_to_buffer(queue);
 
         status = clFinish(queue);
-        check_val(status, MEM_FAILURE, "read to output buffers FAILED: " + error_to_string(status));
-      }
-#if 0  //---> run on the world and print these values, then fix values array to reflect class labels and visualize
+        check_val(status, MEM_FAILURE, "read to output buffers FAILED: " + error_to_string(status) );
+        }
+#if 0  // ---> run on the world and print these values, then fix values array to reflect class labels and visualize
       vcl_cout << "exp depths after normalization:\n";
-      for (unsigned i = 0; i < layer_size; ++i) {
+      for( unsigned i = 0; i < layer_size; ++i )
+        {
         vcl_cout << buff[i] << " (" << vis_buff[i] << ") ";
-      }
+        }
       vcl_cout << vcl_endl;
 #endif
 
       // find each depth interval using spherical container
       vcl_vector<unsigned char> values2, values;
-      for (int i = 0; i < layer_size; ++i) {
+      for( int i = 0; i < layer_size; ++i )
+        {
         // check if sky
-        if (vis_buff2[i] > vis_thres) {
-          if (buff2[i] > 0) {  //  if the ray goes into the world vis stays 1 but depth stays 0 too, so don't confuse that with sky
+        if( vis_buff2[i] > vis_thres )
+          {
+          if( buff2[i] > 0 )    //  if the ray goes into the world vis stays 1 but depth stays 0 too, so don't confuse that with sky
+            {
             values2.push_back(sky_val);
             values.push_back(sky_val);
+            }
+          else
+            {
+            values2.push_back(invalid_val);   // pass an invalid depth interval, not a valid occupied surface, vis = 1 but depth = 0
+            values.push_back(invalid_val);
+            }
           }
-          else {
-              values2.push_back(invalid_val); // pass an invalid depth interval, not a valid occupied surface, vis = 1 but depth = 0
-              values.push_back(invalid_val);
-          }
-        }
-        else {
+        else
+          {
           // depth values are assumed to be in the interval
-          values2.push_back(sph2->get_depth_interval((double)buff2[i]));
+          values2.push_back(sph2->get_depth_interval( (double)buff2[i]) );
 
           // these are values in the interval [0-60]
-          values.push_back((unsigned char)buff[i]);
+          values.push_back( (unsigned char)buff[i]);
+          }
         }
-      }
 
 #if 0
       vcl_cout << "values array:\n";
-      for (unsigned i = 0; i < layer_size; i++) {
+      for( unsigned i = 0; i < layer_size; i++ )
+        {
         vcl_cout << (int)values[i] << ' ';
-      }
+        }
       vcl_cout << vcl_endl;
       sph_shell->draw_template("./test.vrml", values, 254);
 #endif
@@ -598,7 +667,7 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
       delete t_infinity;
 
       status = clFinish(queue);
-      check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
+      check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status) );
 
       delete [] buff;
       delete [] vis_buff;
@@ -608,21 +677,22 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
       delete [] vis_buff2;
       delete [] prob_buff;
       delete [] t_infinity_buff;
-    }
+      }
+
     ind->finalize();
     ind2->finalize();
-    //boxm2_volm_wr3db_index_params::write_size_file(index_file2, indexed_cnt);
+    // boxm2_volm_wr3db_index_params::write_size_file(index_file2, indexed_cnt);
 #if 0
     vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
-    for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
-    {
+    for( blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter )
+      {
       boxm2_block_id id = blk_iter->first;
-      opencl_cache->deep_remove_data(id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),false);
-      opencl_cache->deep_remove_data(id,data_type,false);
-    }
+      opencl_cache->deep_remove_data(id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), false);
+      opencl_cache->deep_remove_data(id, data_type, false);
+      }
 #endif // 0
     opencl_cache->clear_cache();
-  }
+    }
 
   delete ray_dir_buffer;
   delete ray_dim_mem;
@@ -632,17 +702,18 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
 #endif
 
   status = clFinish(queue);
-  check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status));
+  check_val(status, MEM_FAILURE, "release memory FAILED: " + error_to_string(status) );
 
   delete [] ray_dirs;
 
-  vcl_cout<<"\nGPU Execute time "<<gpu_time<<" ms = " << gpu_time/(1000.0*60.0) << " secs.\n"
-          <<"GPU Transfe time "<<transfer_time<<" ms = " << transfer_time/(1000.0*60.0) << " secs." << vcl_endl;
+  vcl_cout << "\nGPU Execute time " << gpu_time << " ms = " << gpu_time / (1000.0 * 60.0) << " secs.\n"
+           << "GPU Transfe time " << transfer_time << " ms = " << transfer_time / (1000.0 * 60.0) << " secs."
+           << vcl_endl;
   clReleaseCommandQueue(queue);
 
-  //cache size sanity check
-  binCache = (long)(opencl_cache.ptr()->bytes_in_cache());
-  vcl_cout<<"At the end of process MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+  // cache size sanity check
+  binCache = (long)(opencl_cache.ptr()->bytes_in_cache() );
+  vcl_cout << "At the end of process MBs in cache: " << binCache / (1024.0 * 1024.0) << vcl_endl;
 
   return true;
 }

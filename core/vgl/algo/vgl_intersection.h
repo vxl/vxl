@@ -1,7 +1,7 @@
 // This is core/vgl/algo/vgl_intersection.h
 #ifndef vgl_algo_intersection_h_
 #define vgl_algo_intersection_h_
-//:
+// :
 // \file
 // \brief Set of intersection functions
 // \author Jan 25, 2007 Gamze Tunali
@@ -22,33 +22,31 @@
 #include <vcl_vector.h>
 #include <vcl_list.h>
 
-//: Return the intersection point of vector of planes.
+// : Return the intersection point of vector of planes.
 // \relatesalso vgl_plane_3d
 template <class T>
 vgl_point_3d<T> vgl_intersection(const vcl_vector<vgl_plane_3d<T> >& p);
 
-//: Return the intersection line of a set of planes, use list to distinguish from point return
+// : Return the intersection line of a set of planes, use list to distinguish from point return
 // \relatesalso vgl_plane_3d
 // \relatesalso vgl_infinite_line_3d
 template <class T>
-vgl_infinite_line_3d<T>
-vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes);
+vgl_infinite_line_3d<T> vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes);
 
-//: Return the intersection line of a set of weighted planes, use list to distinguish from point return
+// : Return the intersection line of a set of weighted planes, use list to distinguish from point return
 // \relatesalso vgl_plane_3d
 // \relatesalso vgl_infinite_line_3d
 
 template <class T>
-bool
-vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws, vgl_infinite_line_3d<T>& line, T & residual);
+bool vgl_intersection(const vcl_list<vgl_plane_3d<T> >& planes, vcl_vector<T> ws, vgl_infinite_line_3d<T>& line,
+                      T & residual);
 
-//: Return true if the box and polygon intersect in 3-d, regions include boundaries
+// : Return true if the box and polygon intersect in 3-d, regions include boundaries
 // Polygon is represented as an ordered vector of 3-d points
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, vcl_list<vgl_point_3d<T> >& p);
-
 
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.txx first"
 

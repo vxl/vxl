@@ -6,9 +6,9 @@
 #include <set>
 
 #ifdef vcl_generic_set_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_set_STD std
+#  define vcl_generic_set_STD std
 #endif
 
 #include "../generic/vcl_set.h"

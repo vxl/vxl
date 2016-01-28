@@ -13,15 +13,16 @@ void test_array_2d_io()
            << "******************************\n";
 
   //// test constructors, accessors
-  const int array_rows = 8;
-  const int array_cols = 6;
+  const int         array_rows = 8;
+  const int         array_cols = 6;
   vbl_array_2d<int> v_out(array_rows, array_cols), v_in;
-
-  for (int i=0; i<array_rows; i++)
-  {
-    for (int j=0; j< array_cols; j++)
-      v_out(i,j) = i*j*j;
-  }
+  for( int i = 0; i < array_rows; i++ )
+    {
+    for( int j = 0; j < array_cols; j++ )
+      {
+      v_out(i, j) = i * j * j;
+      }
+    }
 
   vsl_b_ofstream bfs_out("vbl_array_2d_test_io.bvl.tmp");
   TEST("Created vbl_array_2d_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -34,32 +35,40 @@ void test_array_2d_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vbl_array_2d_test_io.bvl.tmp");
+  vpl_unlink("vbl_array_2d_test_io.bvl.tmp");
 
-  //kym - double = not defined for vbl_array_2d
-  //TEST("v_out == v_in", v_out, v_in);
+  // kym - double = not defined for vbl_array_2d
+  // TEST("v_out == v_in", v_out, v_in);
 
   bool test_result = true;
-  if (v_out.rows() != v_in.rows())
+  if( v_out.rows() != v_in.rows() )
+    {
     test_result = false;
-  else if (v_out.cols() != v_in.cols())
+    }
+  else if( v_out.cols() != v_in.cols() )
+    {
     test_result = false;
+    }
   else
-  {
+    {
     vcl_size_t array_rows = v_out.rows();
     vcl_size_t array_cols = v_out.cols();
-    for (vcl_size_t i=0; i<array_rows; i++)
-    {
-      for (vcl_size_t j=0; j<array_cols; j++)
-        if (v_out(i,j) != v_in(i,j))
+    for( vcl_size_t i = 0; i < array_rows; i++ )
+      {
+      for( vcl_size_t j = 0; j < array_cols; j++ )
+        {
+        if( v_out(i, j) != v_in(i, j) )
+          {
           test_result = false;
+          }
+        }
+      }
     }
-  }
   TEST("v_out == v_in", test_result, true);
 
   vsl_print_summary(vcl_cout, v_in);
   vcl_cout << vcl_endl;
-  vsl_indent_clear_all_data ();
+  vsl_indent_clear_all_data();
 }
 
 TESTMAIN(test_array_2d_io);

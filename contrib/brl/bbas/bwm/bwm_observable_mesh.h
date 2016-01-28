@@ -1,6 +1,6 @@
 #ifndef bwm_observable_mesh_h_
 #define bwm_observable_mesh_h_
-//:
+// :
 // \file
 
 #include "bwm_observable.h"
@@ -23,23 +23,23 @@ typedef enum { RoofSurface, WallSurface, None } BWM_FACE_LABEL;
 
 class bwm_observable_mesh : public bwm_observable
 {
- public:
+public:
 
   typedef enum { BWM_MESH_IMAGE_PROCESSING, BWM_MESH_FEATURE, BWM_MESH_TERRAIN } BWM_MESH_TYPES;
 
   virtual vcl_string type_name() const { return "bwm_observable_mesh"; }
 
-  //: constructors
+  // : constructors
   bwm_observable_mesh();
   bwm_observable_mesh(BWM_MESH_TYPES type);
   bwm_observable_mesh(bmsh3d_mesh_mc* object);
   bwm_observable_mesh(vsol_polygon_3d_sptr poly);
   bwm_observable_mesh(vgl_box_3d<double> box);
 
-  //: destructor
+  // : destructor
   virtual ~bwm_observable_mesh();
 
-  bwm_observable_mesh& operator=(bwm_observable_mesh& m);
+  bwm_observable_mesh & operator=(bwm_observable_mesh& m);
 
   void set_mesh_type(BWM_MESH_TYPES type) { mesh_type_ = type; }
 
@@ -57,10 +57,8 @@ class bwm_observable_mesh : public bwm_observable
 
   bwm_observable_sptr transform(vgl_h_matrix_3d<double> T_);
 
-  //:move along the rays through the vertices of a polygon so as to leave the camera projection unchanged
-  bool move_poly_in_optical_cone(vpgl_camera<double> * cam,
-                                 unsigned face_id,
-                                 double da);
+  // :move along the rays through the vertices of a polygon so as to leave the camera projection unchanged
+  bool move_poly_in_optical_cone(vpgl_camera<double> * cam, unsigned face_id, double da);
 
   void send_update();
 
@@ -68,26 +66,29 @@ class bwm_observable_mesh : public bwm_observable
 
   void extrude(int face_id, double dist);
 
-  bmsh3d_mesh_mc* get_object() { return object_; }
+  bmsh3d_mesh_mc * get_object() { return object_; }
 
   void set_object(bmsh3d_mesh_mc* obj);
+
   void set_object(vsol_polygon_3d_sptr poly, double dist);
+
   void set_object(vsol_polygon_3d_sptr poly);
 
   void move(vsol_polygon_3d_sptr poly);
+
   void move_extr_face(double dist);
+
   void move_normal_dir(double dist);
 
   void replace(bmsh3d_mesh_mc* obj);
 
-  void replace(vsol_polygon_3d &polygon);
+  void replace(vsol_polygon_3d & polygon);
 
   void attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly);
 
   vcl_map<int, vsol_polygon_3d_sptr> extract_faces();
 
-  vsol_polygon_3d_sptr extract_face(bmsh3d_face_mc* face,
-                                    vcl_vector<bmsh3d_vertex*> &vertices);
+  vsol_polygon_3d_sptr extract_face(bmsh3d_face_mc* face, vcl_vector<bmsh3d_vertex *> & vertices);
 
   vsol_polygon_3d_sptr extract_face(unsigned i);
 
@@ -101,9 +102,8 @@ class bwm_observable_mesh : public bwm_observable
 
   vsol_polygon_3d_sptr extract_bottom_face(void);
 
-  void divide_face(unsigned face_id, vgl_point_3d<double> l1, vgl_point_3d<double> l2,
-                   vgl_point_3d<double> p1, vgl_point_3d<double> l3,
-                   vgl_point_3d<double> l4, vgl_point_3d<double> p2);
+  void divide_face(unsigned face_id, vgl_point_3d<double> l1, vgl_point_3d<double> l2, vgl_point_3d<double> p1,
+                   vgl_point_3d<double> l3, vgl_point_3d<double> l4, vgl_point_3d<double> p2);
 
   bool is_poly_in(unsigned id, unsigned& index);
 
@@ -121,10 +121,9 @@ class bwm_observable_mesh : public bwm_observable
 
   void triangulate();
 
-  void create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices,
-                           vcl_vector<vgl_point_3d<int> > triangles);
+  void create_mesh_surface(vcl_vector<vgl_point_3d<double> > vertices, vcl_vector<vgl_point_3d<int> > triangles);
 
-  //SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode);
+  // SoSeparator* convert_coin3d(bool b_shape_hints, float transp, int colorcode);
 
   bwm_observable_sptr global_to_local(vpgl_lvcs* lvcs, double& min_z);
 
@@ -134,18 +133,18 @@ class bwm_observable_mesh : public bwm_observable
 
   void save(const char* filename);
 
- protected:
+protected:
   void notify_observers(vcl_string message_type);
 
-  //:useful for adjusting  the face vertices
-  bool single_face_with_vertices(unsigned face_id, vsol_polygon_3d_sptr& poly,
-                                 vcl_vector<bmsh3d_vertex*>& verts);
+  // :useful for adjusting  the face vertices
+  bool single_face_with_vertices(unsigned face_id, vsol_polygon_3d_sptr& poly, vcl_vector<bmsh3d_vertex *>& verts);
+
   bmsh3d_mesh_mc* object_;
 
   bmsh3d_face_mc* current_extr_face;
 
   // the pair is <face_id, inner_face_id> and it is mapped to the polygon id from the UI
-  //vcl_map<unsigned, vcl_pair<unsigned, unsigned> > inner_ids_;
+  // vcl_map<unsigned, vcl_pair<unsigned, unsigned> > inner_ids_;
 
   vcl_map<unsigned, BWM_FACE_LABEL> labels_;
 
@@ -153,17 +152,18 @@ class bwm_observable_mesh : public bwm_observable
 
   void create_mesh_HE(vsol_polygon_3d_sptr polygon, double dist, vcl_map<int, vsol_polygon_3d_sptr> inner_faces);
 
-  bmsh3d_face* create_inner_face(vsol_polygon_3d_sptr polygon);
+  bmsh3d_face * create_inner_face(vsol_polygon_3d_sptr polygon);
 
-  bmsh3d_face_mc* create_face(vsol_polygon_3d_sptr polygon);
+  bmsh3d_face_mc * create_face(vsol_polygon_3d_sptr polygon);
 
-  bmsh3d_face_mc* extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F);
+  bmsh3d_face_mc * extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F);
 
   void move_points_to_plane(bmsh3d_face_mc* face);
 
   void shrink_mesh(bmsh3d_mesh_mc* mesh, double dist);
 
   void print_faces();
+
 };
 
 #endif

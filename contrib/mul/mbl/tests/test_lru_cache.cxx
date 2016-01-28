@@ -14,13 +14,13 @@ void test_lru_cache()
   cache.insert(2, -2);
   cache.insert(3, -3);
 
-  TEST("Lookup 2 hits -1",*cache.lookup(2), -2);
-  TEST("Lookup 0 miss",cache.lookup(0), 0);
+  TEST("Lookup 2 hits -1", *cache.lookup(2), -2);
+  TEST("Lookup 0 miss", cache.lookup(0), 0);
   cache.insert(4, -4);
-  TEST("Lookup 1 miss",cache.lookup(1), 0);
+  TEST("Lookup 1 miss", cache.lookup(1), 0);
   cache.insert(5, -5);
-  TEST("Lookup 3 miss",cache.lookup(3), 0);
-  TEST("Lookup 2 hits -2",*cache.lookup(2), -2);
+  TEST("Lookup 3 miss", cache.lookup(3), 0);
+  TEST("Lookup 2 hits -2", *cache.lookup(2), -2);
 }
 
 TESTMAIN(test_lru_cache);

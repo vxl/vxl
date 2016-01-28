@@ -1,38 +1,38 @@
 #include <vcl_cstdio.h>
 #include <vcl_memory.h>
 
-#define ASSERT(x,y) if (!(x)) { vcl_printf("FAIL: " y "\n"); status = 1; }
+#define ASSERT(x, y) if( !(x) ) { vcl_printf("FAIL: " y "\n"); status = 1; }
 
 static int instances = 0;
 
 struct A
-{
+  {
   A() { ++instances; }
   ~A() { --instances; }
-  A* self() {return this; }
-};
+  A * self() {return this; }
+  };
 
-struct B: public A {};
+struct B : public A {};
 
 static int function_call(vcl_auto_ptr<A> a)
 {
-  return a.get()? 1:0;
+  return a.get() ? 1 : 0;
 }
 
-static A* get_A(A& a) { return &a; }
+static A * get_A(A& a) { return &a; }
 
-static vcl_auto_ptr<A> generate_auto_ptr () { return vcl_auto_ptr<A>(new A); }
+static vcl_auto_ptr<A> generate_auto_ptr() { return vcl_auto_ptr<A>(new A); }
 
-int test_memory_main(int /*argc*/,char* /*argv*/[])
+int test_memory_main(int /*argc*/, char * /*argv*/[])
 {
   int status = 0;
 
   // Keep everything in a subscope so we can detect leaks.
-  {
+    {
     vcl_auto_ptr<A> pa0;
-    vcl_auto_ptr<A> pa1(new A());
-    vcl_auto_ptr<B> pb1(new B());
-    vcl_auto_ptr<A> pa2(new B());
+    vcl_auto_ptr<A> pa1(new A() );
+    vcl_auto_ptr<B> pb1(new B() );
+    vcl_auto_ptr<A> pa2(new B() );
     vcl_auto_ptr<A> pa3(pb1);
 
     A* ptr = get_A(*pa1);
@@ -43,12 +43,12 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
            "auto_ptr does not return correct pointer from operator->");
 
     A* before = pa0.get();
-    pa0.reset(new A());
+    pa0.reset(new A() );
     ASSERT(pa0.get() && pa0.get() != before,
            "auto_ptr does not hold a new object after reset(new A())");
 
     before = pa0.get();
-    pa0.reset(new B());
+    pa0.reset(new B() );
     ASSERT(pa0.get() && pa0.get() != before,
            "auto_ptr does not hold a new object after reset(new B())");
 
@@ -64,11 +64,10 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
     ASSERT(copied, "auto_ptr did not receive ownership in called function");
     ASSERT(!pa2.get(), "auto_ptr did not release ownership to called function");
 
-
     pa3 = generate_auto_ptr();
     ASSERT(pa3.get(),
            "auto_ptr does not hold an object after assignment from factory function");
-  }
+    }
 
   ASSERT(instances == 0, "auto_ptr leaked an object");
 
@@ -76,13 +75,13 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
 #if VCL_INCLUDE_CXX_0X
   // reset instance count for shared pointer tests
   instances = 0;
-  {
+    {
     vcl_shared_ptr<A> spa0;
-    vcl_shared_ptr<A> spa1(new A());
-    vcl_shared_ptr<B> spb1(new B());
-    vcl_shared_ptr<A> spa2(new B());
+    vcl_shared_ptr<A> spa1(new A() );
+    vcl_shared_ptr<B> spb1(new B() );
+    vcl_shared_ptr<A> spa2(new B() );
     vcl_shared_ptr<A> spa3(spb1);
-    vcl_weak_ptr<A> wpa1(spa1);
+    vcl_weak_ptr<A>   wpa1(spa1);
 
     A* ptr = get_A(*spa1);
     ASSERT(ptr == spa1.get(),
@@ -92,9 +91,9 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
            "shared_ptr does not return correct pointer from operator->");
 
     // FIXME several more tests are needed here
-  }
+    }
 
-#endif //VCL_INCLUDE_CXX_0X
+#endif // VCL_INCLUDE_CXX_0X
 
   return status;
 }

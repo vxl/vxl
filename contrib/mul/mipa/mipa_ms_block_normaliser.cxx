@@ -1,5 +1,5 @@
 #include "mipa_ms_block_normaliser.h"
-//:
+// :
 // \file
 // \brief Class to independently normalise sub-blocks with a region at several (SIFT-like) scales
 // \author Martin Roberts
@@ -13,117 +13,120 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
 
-//=======================================================================
-//: Apply transform to texture vector
+// =======================================================================
+// : Apply transform to texture vector
 void mipa_ms_block_normaliser::normalise(vnl_vector<double>& v) const
 {
-    //Apply the base class normalisation to each scale in turn.
-    //It is assumed that the vector (v's) memory layout is lowest scale, then ordered by scale
-    // There may be an overall histogram left over at the end
+  // Apply the base class normalisation to each scale in turn.
+  // It is assumed that the vector (v's) memory layout is lowest scale, then ordered by scale
+  // There may be an overall histogram left over at the end
 
-    double* pDataForScale=v.data_block();
+  double* pDataForScale = v.data_block();
 
-    unsigned nTotal=0;
-    unsigned ni_region_low=ni_region_;
-    unsigned nj_region_low=nj_region_;
-    unsigned nc_per_block_low=nc_per_block_;
-    unsigned& ni_region=const_cast<unsigned&>(this->ni_region_);
-    unsigned& nj_region=const_cast<unsigned&>(this->nj_region_);
-    unsigned& nc_per_block=const_cast<unsigned&>(this->nc_per_block_);
-    for (unsigned iscale=0;iscale<nscales_;++iscale)
+  unsigned  nTotal = 0;
+  unsigned  ni_region_low = ni_region_;
+  unsigned  nj_region_low = nj_region_;
+  unsigned  nc_per_block_low = nc_per_block_;
+  unsigned& ni_region = const_cast<unsigned &>(this->ni_region_);
+  unsigned& nj_region = const_cast<unsigned &>(this->nj_region_);
+  unsigned& nc_per_block = const_cast<unsigned &>(this->nc_per_block_);
+
+  for( unsigned iscale = 0; iscale < nscales_; ++iscale )
     {
-        //Do each scale
-        unsigned nForScale=ni_region_ * nj_region_ * nA_;
-        vnl_vector_ref<double> vscale(nForScale,pDataForScale);
-        //Normalise this scale's sub-vector
-        mipa_block_normaliser::normalise(vscale);
+    // Do each scale
+    unsigned               nForScale = ni_region_ * nj_region_ * nA_;
+    vnl_vector_ref<double> vscale(nForScale, pDataForScale);
+    // Normalise this scale's sub-vector
+    mipa_block_normaliser::normalise(vscale);
 
-        //Increment sub-vector pointer and reduce number of elements for next scale
-        pDataForScale += nForScale;
-        ni_region/=2;
-        nj_region/=2;
-        nc_per_block/=2;
-        nTotal += nForScale;
+    // Increment sub-vector pointer and reduce number of elements for next scale
+    pDataForScale += nForScale;
+    ni_region /= 2;
+    nj_region /= 2;
+    nc_per_block /= 2;
+    nTotal += nForScale;
     }
-    if (include_overall_histogram_ && (nTotal+nA_) <= v.size())
+  if( include_overall_histogram_ && (nTotal + nA_) <= v.size() )
     {
-        vnl_vector_ref<double> vOverall(nA_,pDataForScale);
-        //Normalise the overall histogram
-        this->normaliser().normalise(vOverall);
+    vnl_vector_ref<double> vOverall(nA_, pDataForScale);
+    // Normalise the overall histogram
+    this->normaliser().normalise(vOverall);
     }
-    //Restore region cell count to that of lowest scale
-    ni_region = ni_region_low;
-    nj_region = nj_region_low;
-    nc_per_block = nc_per_block_low;
+  // Restore region cell count to that of lowest scale
+  ni_region = ni_region_low;
+  nj_region = nj_region_low;
+  nc_per_block = nc_per_block_low;
 }
 
-//=======================================================================
+// =======================================================================
 
 vcl_string mipa_ms_block_normaliser::is_a() const
 {
-    return vcl_string("mipa_ms_block_normaliser");
+  return vcl_string("mipa_ms_block_normaliser");
 }
 
-//=======================================================================
+// =======================================================================
 
-mipa_vector_normaliser* mipa_ms_block_normaliser::clone() const
+mipa_vector_normaliser * mipa_ms_block_normaliser::clone() const
 {
-    return new mipa_ms_block_normaliser(*this);
+  return new mipa_ms_block_normaliser(*this);
 }
 
-//=======================================================================
+// =======================================================================
 
 // required if data is present in this base class
 void mipa_ms_block_normaliser::print_summary(vcl_ostream& os) const
 {
-    os<<"mipa_ms_block_normaliser:\n"
-      <<"\tnscales:\t"<<nscales_
-      <<"\tinclude_overall_histogram:\t"<<include_overall_histogram_
-      <<'\n';
-    mipa_block_normaliser::print_summary(os);
+  os << "mipa_ms_block_normaliser:\n"
+     << "\tnscales:\t" << nscales_
+     << "\tinclude_overall_histogram:\t" << include_overall_histogram_
+     << '\n';
+  mipa_block_normaliser::print_summary(os);
 }
 
-//=======================================================================
+// =======================================================================
 
 // required if data is present in this base class
 void mipa_ms_block_normaliser::b_write(vsl_b_ostream& bfs) const
 {
-    const short version_no=1;
-    vsl_b_write(bfs, version_no);
+  const short version_no = 1;
 
-    vsl_b_write(bfs, nscales_);
-    vsl_b_write(bfs, include_overall_histogram_);
-    mipa_block_normaliser::b_write(bfs);
+  vsl_b_write(bfs, version_no);
+
+  vsl_b_write(bfs, nscales_);
+  vsl_b_write(bfs, include_overall_histogram_);
+  mipa_block_normaliser::b_write(bfs);
 }
 
-//=======================================================================
+// =======================================================================
 
 // required if data is present in this base class
 void mipa_ms_block_normaliser::b_read(vsl_b_istream& bfs)
 {
-    if (!bfs) return;
+  if( !bfs ) { return; }
 
-    short version;
-    vsl_b_read(bfs,version);
-    switch (version)
+  short version;
+  vsl_b_read(bfs, version);
+
+  switch( version )
     {
-        case (1):
-        {
-            vsl_b_read(bfs, nscales_);
-            vsl_b_read(bfs, include_overall_histogram_);
-            mipa_block_normaliser::b_read(bfs);
-        break;
-        default:
-            vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_ms_block_normaliser&)\n"
-                     << "           Unknown version number "<< version << '\n';
-            bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
-            return;
-        }
+    case (1):
+      {
+      vsl_b_read(bfs, nscales_);
+      vsl_b_read(bfs, include_overall_histogram_);
+      mipa_block_normaliser::b_read(bfs);
+      break;
+      default:
+        vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, mipa_ms_block_normaliser&)\n"
+                 << "           Unknown version number " << version << '\n';
+        bfs.is().clear(vcl_ios::badbit);     // Set an unrecoverable IO error on stream
+        return;
+      }
     }
 }
 
-//=======================================================================
-//: Initialise from a text stream.
+// =======================================================================
+// : Initialise from a text stream.
 // The next non-ws character in the stream should be a '{'
 // syntax
 // \verbatim
@@ -138,48 +141,46 @@ void mipa_ms_block_normaliser::b_read(vsl_b_istream& bfs)
 // \endverbatim
 
 void mipa_ms_block_normaliser::config_from_stream(
-    vcl_istream &is, const mbl_read_props_type &extra_props)
+  vcl_istream & is, const mbl_read_props_type & extra_props)
 {
-    vcl_string s = mbl_parse_block(is);
+  vcl_string s = mbl_parse_block(is);
 
+  vcl_istringstream   ss(s);
+  mbl_read_props_type props = mbl_read_props(ss);
 
-    vcl_istringstream ss(s);
-    mbl_read_props_type props = mbl_read_props(ss);
+  props = mbl_read_props_merge(props, extra_props, true);
 
-    props = mbl_read_props_merge(props, extra_props, true);
-
-    if (!(props["nscales"].empty()))
+  if( !(props["nscales"].empty() ) )
     {
-        vcl_string sfi=props["nscales"];
-        vcl_istringstream ssInner(sfi);
-        int n=0;
-        ssInner>>n;
-        if (ssInner.bad() || n<=0)
-        {
-            mbl_exception_parse_error x(vcl_string("mipa_ms_block_normaliser - string stream read error of nscales property"));
-            mbl_exception_error(x);
-        }
+    vcl_string        sfi = props["nscales"];
+    vcl_istringstream ssInner(sfi);
+    int               n = 0;
+    ssInner >> n;
+    if( ssInner.bad() || n <= 0 )
+      {
+      mbl_exception_parse_error x(vcl_string("mipa_ms_block_normaliser - string stream read error of nscales property") );
+      mbl_exception_error(x);
+      }
 
-        nscales_ =n;
+    nscales_ = n;
     }
-    props.erase("nscales");
+  props.erase("nscales");
 
-    if (!(props["include_overall_histogram"].empty()))
+  if( !(props["include_overall_histogram"].empty() ) )
     {
-        vcl_string strBool=props["include_overall_histogram"];
-        if (strBool=="true" || strBool=="TRUE" || strBool=="t" || strBool=="T" )
-        {
-            include_overall_histogram_ = true;
-        }
-        else
-        {
-            include_overall_histogram_ = false;
-        }
+    vcl_string strBool = props["include_overall_histogram"];
+    if( strBool == "true" || strBool == "TRUE" || strBool == "t" || strBool == "T" )
+      {
+      include_overall_histogram_ = true;
+      }
+    else
+      {
+      include_overall_histogram_ = false;
+      }
     }
-    props.erase("include_overall_histogram");
+  props.erase("include_overall_histogram");
 
-    vcl_string dummy;
-    vcl_istringstream ssDummy(dummy);
-    mipa_block_normaliser::config_from_stream(ssDummy,props);
+  vcl_string        dummy;
+  vcl_istringstream ssDummy(dummy);
+  mipa_block_normaliser::config_from_stream(ssDummy, props);
 }
-

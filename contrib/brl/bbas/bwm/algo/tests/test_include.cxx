@@ -9,7 +9,7 @@
 #include <bwm/algo/bwm_utm_lat_lon.h>
 
 #ifdef HAS_SHAPELIB
-#include <bwm/algo/bwm_shape_file.h>
+#  include <bwm/algo/bwm_shape_file.h>
 #endif
 
 int main() { return 0; }

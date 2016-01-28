@@ -17,9 +17,9 @@ int main()
 {
   // Use any SPD voter matrix.
   vnl_matrix_fixed<double, 2, 2> voter_matrix;
-  voter_matrix(0,0) = 0.2;
-  voter_matrix(1,0) = voter_matrix(0,1) = 0.1;
-  voter_matrix(1,1) = 1;
+  voter_matrix(0, 0) = 0.2;
+  voter_matrix(1, 0) = voter_matrix(0, 1) = 0.1;
+  voter_matrix(1, 1) = 1;
   vnl_vector_fixed<double, 2> voter_location(0.0);
 
   // Use "rtvl_tensor" to decompose the matrix.

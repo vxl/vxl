@@ -1,6 +1,6 @@
 // This is vcl/vcl_cstdlib.cxx
 
-//:
+// :
 // \file
 // \author fsm
 

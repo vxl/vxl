@@ -26,28 +26,38 @@ static void test_candidate_region_parser()
   // obtain polygon with inner boundary
   vgl_polygon<double> outer;
   vgl_polygon<double> inner;
-  unsigned n_out, n_in;
-  vgl_polygon<double> poly_all_region = volm_candidate_region_parser::parse_polygon_with_inner(kml_file, "Region", outer, inner, n_out, n_in);
+  unsigned            n_out, n_in;
+  vgl_polygon<double> poly_all_region = volm_candidate_region_parser::parse_polygon_with_inner(kml_file, "Region",
+                                                                                               outer, inner, n_out,
+                                                                                               n_in);
 
   // print out the point coordinates
   vcl_cout << "Landmarks0:\n";
-  for (unsigned i = 0; i < landmarks0.size(); i++)
+  for( unsigned i = 0; i < landmarks0.size(); i++ )
+    {
     vcl_cout << '\t' << i << ": " << landmarks0[i] << '\n';
+    }
   vcl_cout << "Landmarks1:\n";
-  for (unsigned i = 0; i < landmarks1.size(); i++)
+  for( unsigned i = 0; i < landmarks1.size(); i++ )
+    {
     vcl_cout << '\t' << i << ": " << landmarks1[i] << '\n';
+    }
   vcl_cout << "Landmarks2:\n";
-  for (unsigned i = 0; i < landmarks2.size(); i++)
+  for( unsigned i = 0; i < landmarks2.size(); i++ )
+    {
     vcl_cout << '\t' << i << ": " << landmarks2[i] << '\n';
+    }
 
   // print out the line
   vcl_cout << "Line:\n\t";
-  for (unsigned i = 0; i < lines.size(); i++) {
-    for (unsigned k = 0; k < lines[i].size(); k++) {
+  for( unsigned i = 0; i < lines.size(); i++ )
+    {
+    for( unsigned k = 0; k < lines[i].size(); k++ )
+      {
       vcl_cout << lines[i][k] << ' ';
-    }
+      }
     vcl_cout << "\n\t";
-  }
+    }
   vcl_cout << '\n';
 
   // print out the polygon
@@ -73,7 +83,7 @@ static void test_candidate_region_parser()
 
   success = (n_in == 1) && (n_out == 2);
   success = (outer.num_sheets() == n_out) && (inner.num_sheets() == n_in);
-  success = (poly_all_region.num_sheets() == (n_in + n_out));
+  success = (poly_all_region.num_sheets() == (n_in + n_out) );
   TEST("parse polygon with inner boundary", success, true);
   return;
 }

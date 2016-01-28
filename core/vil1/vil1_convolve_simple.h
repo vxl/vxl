@@ -1,14 +1,15 @@
 // This is core/vil1/vil1_convolve_simple.h
 #ifndef vil1_convolve_simple_h_
 #define vil1_convolve_simple_h_
-//:
+// :
 // \file
 // \brief Simple convolution functions
 // \author awf@robots.ox.ac.uk
 
-template <class T> class vil1_memory_image_of;
+template <class T>
+class vil1_memory_image_of;
 
-//: Convolution
+// : Convolution
 // This function assumes that the image types provide operator[] to
 // return a pointer (or something which behaves like one) to the y'th
 // raster.
@@ -26,12 +27,12 @@ template <class T> class vil1_memory_image_of;
 // -  O  : output image type
 
 template <class I1, class I2, class AC, class O>
-void vil1_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // input 1
-                          I2 const* const*  in2, unsigned w2, unsigned h2, // input 2
-                          AC *, // dummy
-                          O       * const*  out);                          // output
+void vil1_convolve_simple(I1 const * const*  in1, unsigned w1, unsigned h1, // input 1
+                          I2 const * const*  in2, unsigned w2, unsigned h2, // input 2
+                          AC *,                                             // dummy
+                          O       * const*  out);                           // output
 
-//: Convolution
+// : Convolution
 // This function performs some bounds checks on the given memory images
 // and then dispatches the convolution itself to the above function.
 //
@@ -43,16 +44,14 @@ void vil1_convolve_simple(I1 const* const*  in1, unsigned w1, unsigned h1, // in
 // $\displaystyle {\rm out}_{{\rm off}+k} = \sum_{i+j=k} a_{{\rm off}+i} b_{{\rm off}+j}$
 
 template <class I1, class I2, class AC, class O>
-void vil1_convolve_simple(// input 1
-                          vil1_memory_image_of<I1> const &IN1, // input 1
-                          int x1, int y1, unsigned w1, unsigned h1,
-                          vil1_memory_image_of<I2> const &IN2, // input 2
-                          int x2, int y2, unsigned w2, unsigned h2,
-                          AC *, //dummy
-                          vil1_memory_image_of<O>        &OUT, // output
-                          int xo, int yo);
+void vil1_convolve_simple(                                                        // input 1
+  vil1_memory_image_of<I1> const & IN1,                                           // input 1
+  int x1, int y1, unsigned w1, unsigned h1, vil1_memory_image_of<I2> const & IN2, // input 2
+  int x2, int y2, unsigned w2, unsigned h2, AC *,                                 // dummy
+  vil1_memory_image_of<O>        & OUT,                                           // output
+  int xo, int yo);
 
-//: Convolution
+// : Convolution
 // Like the previous function, except without bounds checking and
 // specified regions.
 //
@@ -64,9 +63,7 @@ void vil1_convolve_simple(// input 1
 // $\displaystyle {\rm out}_{{\rm off}+k} = \sum_{i+j=k} a_{{\rm off}+i} b_{{\rm off}+j}$
 
 template <class I1, class I2, class AC, class O>
-void vil1_convolve_simple(vil1_memory_image_of<I1> const &input1,
-                          vil1_memory_image_of<I2> const &input2,
-                          AC *, // dummy
-                          vil1_memory_image_of<O>        &output);
+void vil1_convolve_simple(vil1_memory_image_of<I1> const & input1, vil1_memory_image_of<I2> const & input2, AC *, // dummy
+                          vil1_memory_image_of<O>        & output);
 
 #endif // vil1_convolve_simple_h_

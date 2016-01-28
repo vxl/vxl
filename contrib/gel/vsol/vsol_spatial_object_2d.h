@@ -1,8 +1,8 @@
 // This is gel/vsol/vsol_spatial_object_2d.h
 #ifndef vsol_spatial_object_2d_h_
 #define vsol_spatial_object_2d_h_
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief Base class of 2D spatial entities (topology geometry group)
 //
@@ -40,7 +40,7 @@
 //                         classes. members related to id, flags and tag are moved to
 //                         newly-created vsol_flags_id class.
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_string.h>
 #include <vcl_iostream.h>
@@ -57,161 +57,172 @@ class vsol_group_2d;
 
 class vsol_spatial_object_2d : public vsol_spatial_object
 {
- protected:
+protected:
   // Data Members--------------------------------------------------------------
-
- private:
+private:
   mutable vsol_box_2d_sptr bounding_box_; // rectangular bounding area
-
- public:
+public:
   enum vsol_spatial_object_2d_type
-  {
-      SPATIAL_NO_TYPE=0,
-      TOPOLOGYOBJECT,
-      POINT,
-      CURVE,
-      REGION,
-      SPATIALGROUP,
-      VOLUME,
-      NUM_SPATIALOBJECT_TYPES
-  };
+    {
+    SPATIAL_NO_TYPE = 0,
+    TOPOLOGYOBJECT,
+    POINT,
+    CURVE,
+    REGION,
+    SPATIALGROUP,
+    VOLUME,
+    NUM_SPATIALOBJECT_TYPES
+    };
 
-  static const char *SpatialTypes[];
-  static const float eps;
+  static const char * SpatialTypes[];
+  static const float  eps;
 
   // Constructors/Destructors--------------------------------------------------
   virtual ~vsol_spatial_object_2d();
-
- protected:
-  //: constructor initializes basic vsol_spatial_object_2d attributes.
+protected:
+  // : constructor initializes basic vsol_spatial_object_2d attributes.
   //   bounding_box is set to NULL.
   vsol_spatial_object_2d();
   vsol_spatial_object_2d(vsol_spatial_object_2d const& other);
   void not_applicable(vcl_string const& message) const
   {
-      vcl_cerr <<message<<"() function call not applicable\tfor 2d spatial object "
-               <<get_name()<<" !\n";
+    vcl_cerr << message << "() function call not applicable\tfor 2d spatial object "
+             << get_name() << " !\n";
   }
 
- public:
+public:
   // Data Access---------------------------------------------------------------
 
-  //: get the spatial type
-  virtual vsol_spatial_object_2d_type spatial_type() const=0;
+  // : get the spatial type
+  virtual vsol_spatial_object_2d_type spatial_type() const = 0;
 
-  const char *get_name() const; // derived from spatial_type()
+  const char * get_name() const; // derived from spatial_type()
 
-  //: unprotect the object
+  // : unprotect the object
   void un_protect() { this->unref(); }
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
+  // ---------------------------------------------------------------------------
+  // : Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const=0;
+  // ---------------------------------------------------------------------------
+  virtual vsol_spatial_object_2d * clone() const = 0;
 
   // Binary I/O------------------------------------------------------------------
 
-  //: Return a platform independent string identifying the class
-  virtual vcl_string is_a() const=0;
+  // : Return a platform independent string identifying the class
+  virtual vcl_string is_a() const = 0;
 
-  //: Return IO version number;
+  // : Return IO version number;
   short version() const;
 
-  //: Binary save self to stream.
-  virtual void b_write(vsl_b_ostream &os) const;
+  // : Binary save self to stream.
+  virtual void b_write(vsl_b_ostream & os) const;
 
-  //: Binary load self from stream.
-  virtual void b_read(vsl_b_istream &is);
+  // : Binary load self from stream.
+  virtual void b_read(vsl_b_istream & is);
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const { describe(strm); }
-  virtual void describe(vcl_ostream& =vcl_cout, int /*blanking*/=0) const { not_applicable("describe"); }
+  virtual void print(vcl_ostream & strm = vcl_cout) const { describe(strm); }
+  virtual void describe(vcl_ostream & = vcl_cout, int /*blanking*/ = 0) const { not_applicable("describe"); }
 
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const&);
-  friend inline vcl_ostream &operator<<(vcl_ostream &, vsol_spatial_object_2d const*);
+  friend inline vcl_ostream & operator<<(vcl_ostream &, vsol_spatial_object_2d const &);
 
-  //Operators
-  virtual bool operator==(vsol_spatial_object_2d const& obj) const { return this==&obj; }
-  bool operator!=(vsol_spatial_object_2d const& obj) { return !(*this==obj); }
+  friend inline vcl_ostream & operator<<(vcl_ostream &, vsol_spatial_object_2d const *);
+
+  // Operators
+  virtual bool operator==(vsol_spatial_object_2d const& obj) const { return this == &obj; }
+  bool operator!=(vsol_spatial_object_2d const& obj) { return !(*this == obj); }
 
   // Data Control--------------------------------------------------------------
 
   vsol_box_2d_sptr get_bounding_box() const { check_update_bounding_box(); return bounding_box_; }
 
   double get_min_x() const;
+
   double get_max_x() const;
+
   double get_min_y() const;
+
   double get_max_y() const;
 
- protected:
-  //: make the bounding box empty; often first step in bounding box calculation
+protected:
+  // : make the bounding box empty; often first step in bounding box calculation
   void empty_bounding_box() const; // mutable const
-  //: set the bounding box; to be used in bounding box calculation
+
+  // : set the bounding box; to be used in bounding box calculation
   void set_bounding_box(vsol_box_2d_sptr const& box) const; // mutable const
-  //: set the bounding box to a single point, discarding the old bounding box
+
+  // : set the bounding box to a single point, discarding the old bounding box
   // This is a "const" method since the bounding box is a "mutable" data member:
   // calculating the bounding box does not change the object.
   void set_bounding_box(double x, double y) const;
-  //: add a point to the bounding box and take the convex union
+
+  // : add a point to the bounding box and take the convex union
   // This is a "const" method since the bounding box is a "mutable" data member:
   // calculating the bounding box does not change the object.
   void add_to_bounding_box(double x, double y) const;
-  //: set the existing bounding box to the convex union of it with the given box
+
+  // : set the existing bounding box to the convex union of it with the given box
   void add_to_bounding_box(vsol_box_2d_sptr const& box) const; // mutable const
-  //: grow to the largest dim. of this and \a box, i.e., take the convex union
-  void grow_minmax_bounds(vsol_box_2d_sptr const& b) const{ add_to_bounding_box(b); }
-  //: compute bounding box, do nothing in this case except touching the box
+
+  // : grow to the largest dim. of this and \a box, i.e., take the convex union
+  void grow_minmax_bounds(vsol_box_2d_sptr const& b) const { add_to_bounding_box(b); }
+  // : compute bounding box, do nothing in this case except touching the box
   virtual void compute_bounding_box() const;
-  //: Test consistency of bound
+
+  // : Test consistency of bound
   void check_update_bounding_box() const;
 
- public:
-  //---------------------------------------------------------------------------
-  //: The same behavior than dynamic_cast<>.
+public:
+  // ---------------------------------------------------------------------------
+  // : The same behavior than dynamic_cast<>.
   // Needed because VXL is not necessarily compiled with -frtti
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* cast_to_spatial_object() { return this; }
-  virtual vsol_spatial_object_2d const* cast_to_spatial_object() const{return this;}
+  // ---------------------------------------------------------------------------
+  virtual vsol_spatial_object_2d * cast_to_spatial_object() { return this; }
+  virtual vsol_spatial_object_2d const * cast_to_spatial_object() const {return this; }
 
-  virtual vtol_topology_object* cast_to_topology_object() {return 0;}
-  virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
+  virtual vtol_topology_object * cast_to_topology_object() {return 0; }
+  virtual vtol_topology_object const * cast_to_topology_object() const {return 0; }
 
-  virtual vsol_spatial_object_2d* cast_to_vsol_spatial_object() { return 0; }
-  virtual vsol_spatial_object_2d const* cast_to_vsol_spatial_object() const { return 0; }
-  virtual vsol_point_2d* cast_to_point() { return 0; }
-  virtual vsol_point_2d const* cast_to_point() const { return 0; }
-  virtual vsol_curve_2d *cast_to_curve() { return 0; }
-  virtual vsol_curve_2d const* cast_to_curve() const { return 0; }
-  virtual vsol_region_2d* cast_to_region() { return 0; }
-  virtual vsol_region_2d const* cast_to_region() const { return 0; }
-  virtual vsol_group_2d *cast_to_group() { return 0; }
-  virtual vsol_group_2d const* cast_to_group() const { return 0; }
+  virtual vsol_spatial_object_2d * cast_to_vsol_spatial_object() { return 0; }
+  virtual vsol_spatial_object_2d const * cast_to_vsol_spatial_object() const { return 0; }
+  virtual vsol_point_2d * cast_to_point() { return 0; }
+  virtual vsol_point_2d const * cast_to_point() const { return 0; }
+  virtual vsol_curve_2d * cast_to_curve() { return 0; }
+  virtual vsol_curve_2d const * cast_to_curve() const { return 0; }
+  virtual vsol_region_2d * cast_to_region() { return 0; }
+  virtual vsol_region_2d const * cast_to_region() const { return 0; }
+  virtual vsol_group_2d * cast_to_group() { return 0; }
+  virtual vsol_group_2d const * cast_to_group() const { return 0; }
 };
 
 // inline member functions
 
-inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const& so)
+inline vcl_ostream & operator<<(vcl_ostream & strm, vsol_spatial_object_2d const& so)
 {
   so.print(strm);
   return strm;
 }
 
-inline vcl_ostream &operator<<(vcl_ostream &strm, vsol_spatial_object_2d const* so)
+inline vcl_ostream & operator<<(vcl_ostream & strm, vsol_spatial_object_2d const* so)
 {
-  if (so)
+  if( so )
+    {
     so->print(strm);
+    }
   else
+    {
     strm << "NULL Spatial Object.\n";
+    }
   return strm;
 }
 
-//: Stream output operator for class pointer
+// : Stream output operator for class pointer
 inline void vsl_print_summary(vcl_ostream& os, vsol_spatial_object_2d const* so)
 {
   os << so;
 }
 
-//: Allows derived class to be loaded by base-class pointer
+// : Allows derived class to be loaded by base-class pointer
 //  A loader object exists which is invoked by calls
 //  of the form "vsl_b_read(os,base_ptr)".  This loads derived class
 //  objects from the disk, places them on the heap and

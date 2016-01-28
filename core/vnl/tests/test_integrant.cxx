@@ -4,8 +4,8 @@
 
 class my_test_integrant : public vnl_integrant_fnct
 {
- public:
-  double f_(double x) { return x/(1+x*x); }
+public:
+  double f_(double x) { return x / (1 + x * x); }
 };
 
 void test_integrant()

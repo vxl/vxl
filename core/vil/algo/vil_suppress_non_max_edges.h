@@ -1,7 +1,7 @@
 // This is core/vil/algo/vil_suppress_non_max_edges.h
 #ifndef vil_suppress_non_max_edges_h_
 #define vil_suppress_non_max_edges_h_
-//:
+// :
 // \file
 // \brief Given gradient image, compute magnitude and zero any non-maximal values
 // \author Tim Cootes
@@ -13,7 +13,7 @@
 
 #include <vil/vil_image_view.h>
 
-//: Given gradient images, computes magnitude image containing maximal edges
+// : Given gradient images, computes magnitude image containing maximal edges
 //  Computes magnitude image.  Zeros any below a threshold.
 //  Points with magnitude above a threshold are tested against gradient
 //  along normal to the edge and retained only if they are higher than
@@ -26,14 +26,11 @@
 //  but not if it is the same as two neighbours).
 //
 // \relatesalso vil_image_view
-template<class srcT, class destT>
-void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
-                                const vil_image_view<srcT>& grad_j,
-                                double grad_mag_threshold,
-                                vil_image_view<destT>& grad_mag);
+template <class srcT, class destT>
+void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i, const vil_image_view<srcT>& grad_j,
+                                double grad_mag_threshold, vil_image_view<destT>& grad_mag);
 
-
-//: Given gradient images, computes a subpixel edgemap with magnitudes and orientations
+// : Given gradient images, computes a subpixel edgemap with magnitudes and orientations
 //  Computes magnitude image.  Zeros any below a threshold.
 //  Points with magnitude above a threshold are tested against gradient
 //  along normal to the edge and retained only if they are higher than
@@ -63,10 +60,8 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
 //  but not if it is the same as two neighbours).
 //
 // \relatesalso vil_image_view
-template<class srcT, class destT>
-void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i,
-                                         const vil_image_view<srcT>& grad_j,
-                                         double grad_mag_threshold,
-                                         vil_image_view<destT>& grad_mag_orient_offset);
+template <class srcT, class destT>
+void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i, const vil_image_view<srcT>& grad_j,
+                                         double grad_mag_threshold, vil_image_view<destT>& grad_mag_orient_offset);
 
 #endif // vil_suppress_non_max_edges_h_

@@ -31,9 +31,9 @@ typedef vxl_int_32 vil_nitf2_long;
 //
 class vil_nitf2
 {
- public:
+public:
   // NITF field data types supported
-  enum enum_field_type { type_undefined=0,
+  enum enum_field_type { type_undefined = 0,
                          type_int, type_long_long, type_double,
                          type_char, type_string, type_binary,
                          type_location, type_date_time,
@@ -41,7 +41,7 @@ class vil_nitf2
 
   // Controls the level of detail of logging to vcl_cout.
   // All errors are logged to vcl_cerr, irrespective of log level.
-  enum enum_log_level { log_none=0, log_info, log_debug };
+  enum enum_log_level { log_none = 0, log_info, log_debug };
 
   // Logging level for all vil_nitf classes. This could be generalized to an
   // array, if different subsets of classes want their own logging levels.
@@ -55,12 +55,10 @@ class vil_nitf2
     * they are needed later
     */
   static void cleanup_static_members();
+
 };
 
-
-
-
 #define VIL_NITF2_LOG(LEVEL) \
-  if (vil_nitf2::s_log_level < vil_nitf2::LEVEL) ; else vcl_cout
+  if( vil_nitf2::s_log_level < vil_nitf2::LEVEL ) {; } else vcl_cout
 
 #endif // VIL_NITF2_H

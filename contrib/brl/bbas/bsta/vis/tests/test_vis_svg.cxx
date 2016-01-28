@@ -1,5 +1,5 @@
 // This is contrib/brl/bbas/bsta/vis/tests/test_vis_svg.cxx
-//:
+// :
 // \file
 // \brief Various tests for visualization of bsta histograms using SVG library
 // \author Ozge C. Ozcanli (Brown)
@@ -11,12 +11,15 @@
 static void test_vis_svg()
 {
   double range = 128.0;
-  int bins = 16;
-  double delta = range/bins;
+  int    bins = 16;
+  double delta = range / bins;
+
   bsta_histogram<double> h(range, bins);
-  double v = 0.0;
-  for (int b =0; b<bins; b++, v+=delta)
+  double                 v = 0.0;
+  for( int b = 0; b < bins; b++, v += delta )
+    {
     h.upcount(v, 1.0);
+    }
 
   write_svg<double>(h, "test.svg");
 }

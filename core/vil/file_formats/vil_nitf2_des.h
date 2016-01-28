@@ -26,48 +26,55 @@ public:
   ///read the des starting at stream's current position
   ///returns false if failed
   virtual bool read( vil_stream* stream );
-  //virtual bool write( vil_stream* stream );
+
+  // virtual bool write( vil_stream* stream );
 
   virtual ~vil_nitf2_des();
 
   // Sets out_value to the value of field specified by tag.
   // Returns 0 if such a field is not found or is of the wrong type.
-  template< class T >
+  template <class T>
   bool get_property(vcl_string tag, T& out_value) const
   {
-    if ( ! m_field_sequence1->get_value( tag, out_value ) && m_field_sequence2 ){
+    if( !m_field_sequence1->get_value( tag, out_value ) && m_field_sequence2 )
+      {
       return m_field_sequence2->get_value( tag, out_value );
-    }
+      }
   }
 
   // Sets out_value to the value of vcl_vector field element specified by tag and index.
   // Returns 0 if such a field is not found or is of the wrong type.
-  template< class T >
+  template <class T>
   bool get_property(vcl_string tag, int i, T& out_value) const
   {
-    if( ! m_field_sequence1->get_value( tag, i, out_value ) && m_field_sequence2 ){
+    if( !m_field_sequence1->get_value( tag, i, out_value ) && m_field_sequence2 )
+      {
       return m_field_sequence2->get_value( tag, i, out_value );
-    }
+      }
   }
 
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.
-  virtual vil_nitf2_field::field_tree* get_tree( int i = 0 ) const;
+  virtual vil_nitf2_field::field_tree * get_tree( int i = 0 ) const;
 
   // Call this function to register a DES with this class.  Once you've
   // done this, then this class will be able to parse your custom DES.
-  static vil_nitf2_field_definitions& define( vcl_string desId );
+  static vil_nitf2_field_definitions & define( vcl_string desId );
+
 protected:
-  typedef vcl_map<vcl_string, vil_nitf2_field_definitions*>
+  typedef vcl_map<vcl_string, vil_nitf2_field_definitions *>
     field_definition_map;
   static field_definition_map & all_definitions();
 
   static void add_shared_field_defs_1( vil_nitf2_field_definitions* defs );
+
   static void add_shared_field_defs_2( vil_nitf2_field_definitions* defs, int data_width );
-  static vil_nitf2_field_definitions* create_field_definitions( vil_nitf2_classification::file_version ver, int data_width);
+
+  static vil_nitf2_field_definitions * create_field_definitions( vil_nitf2_classification::file_version ver,
+                                                                 int data_width);
 
   vil_nitf2_field_sequence* m_field_sequence1;
   vil_nitf2_field_sequence* m_field_sequence2;
 };
 
-#endif //VIL_NITF2_DES_H
+#endif // VIL_NITF2_DES_H

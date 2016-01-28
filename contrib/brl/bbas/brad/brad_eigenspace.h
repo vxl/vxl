@@ -1,7 +1,7 @@
 // This is brl/bbas/brad/brad_eigenspace.h
 #ifndef brad_eigenspace_h
 #define brad_eigenspace_h
-//:
+// :
 // \file
 // \brief Process image regions to produce an eigensystem from feature vectors
 // \author J.L. Mundy
@@ -43,150 +43,134 @@
 template <class T>
 class brad_eigenspace : public brad_eigenspace_base
 {
- public:
+public:
   brad_eigenspace()
-  : nib_(0), njb_(0), covar_valid_(false), eigensystem_valid_(false) {}
+    : nib_(0), njb_(0), covar_valid_(false), eigensystem_valid_(false) {}
 
-  //: constructor with block size and functor
+  // : constructor with block size and functor
   brad_eigenspace(unsigned nib, unsigned njb, T funct)
-  : funct_(funct), nib_(nib), njb_(njb), covar_valid_(false), eigensystem_valid_(false) {}
+    : funct_(funct), nib_(nib), njb_(njb), covar_valid_(false), eigensystem_valid_(false) {}
 
   virtual ~brad_eigenspace() {}
 
-  virtual vcl_string feature_vector_type() {return funct_.type();}
+  virtual vcl_string feature_vector_type() {return funct_.type(); }
 
-  //: compute the covariance matrix from image resources
+  // : compute the covariance matrix from image resources
   bool compute_covariance_matrix(vcl_vector<vil_image_resource_sptr> const& rescs);
-    //: compute the covariance matrix from a random fraction of image resources
-  bool compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs, double frac = 1.0, unsigned nit=256, unsigned njt=256);
-  //: compute the covariance matrix using blocked image cache
-  bool compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nit=256, unsigned njt=256);
-  //: compute the eigensystem from the covariance matrix
+
+  // : compute the covariance matrix from a random fraction of image resources
+  bool compute_covariance_matrix_rand(vcl_vector<vil_image_resource_sptr> const& rescs, double frac = 1.0,
+                                      unsigned nit = 256, unsigned njt = 256);
+
+  // : compute the covariance matrix using blocked image cache
+  bool compute_covariance_matrix_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nit = 256,
+                                         unsigned njt = 256);
+
+  // : compute the eigensystem from the covariance matrix
   bool compute_eigensystem();
 
-  //: projection of image blocks onto the top three eigenvectors
-  bool compute_eigenimage(vil_image_resource_sptr const& resc,
-                          vcl_string const& output_path);
+  // : projection of image blocks onto the top three eigenvectors
+  bool compute_eigenimage(vil_image_resource_sptr const& resc, vcl_string const& output_path);
 
-  //: projection of image blocks onto the top three eigenvectors, per pixel. assumes input and output can fit in memory
-  bool compute_eigenimage_pixel(vil_image_view<float> const& input,
-                                vil_image_view<float>& eignimage);
+  // : projection of image blocks onto the top three eigenvectors, per pixel. assumes input and output can fit in memory
+  bool compute_eigenimage_pixel(vil_image_view<float> const& input, vil_image_view<float>& eignimage);
 
-  //: create and update an initial histogram of feature vectors projected onto the first three eigenvectors.Defines the min, max range of the histogram cells.
+  // : create and update an initial histogram of feature vectors projected onto the first three eigenvectors.Defines the min, max range of the histogram cells.
   // note, does not update the histogram counts
-  bool init_histogram(vil_image_resource_sptr const& resc, unsigned nbins,
+  bool init_histogram(vil_image_resource_sptr const& resc, unsigned nbins, bsta_joint_histogram_3d<float>& hist);
+
+  // : update an existing histogram from an image resource
+  bool update_histogram(vil_image_resource_sptr const& resc, bsta_joint_histogram_3d<float>& hist);
+
+  // : init from a set of images
+  bool init_histogram(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nbins,
                       bsta_joint_histogram_3d<float>& hist);
 
-  //: update an existing histogram from an image resource
-  bool update_histogram(vil_image_resource_sptr const& resc,
-                        bsta_joint_histogram_3d<float>& hist);
+  // : update from a set of images
+  bool update_histogram(vcl_vector<vil_image_resource_sptr> const& rescs, bsta_joint_histogram_3d<float>& hist);
 
-  //: init from a set of images
-  bool init_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
-                      unsigned nbins,
-                      bsta_joint_histogram_3d<float>& hist);
-  //: update from a set of images
-  bool update_histogram(vcl_vector<vil_image_resource_sptr> const& rescs,
-                        bsta_joint_histogram_3d<float>& hist);
+  // : init from a set of images, random selection of tiles
+  bool init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nbins,
+                           bsta_joint_histogram_3d<float>& hist, double frac = 1.0, unsigned nit = 256,
+                           unsigned njt = 256);
 
-  //: init from a set of images, random selection of tiles
-  bool init_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
-                           unsigned nbins,
-                           bsta_joint_histogram_3d<float>& hist,
-                           double frac = 1.0, unsigned nit=256,
-                           unsigned njt=256);
+  // : update from a set of images, random selection of tiles
+  bool update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs, bsta_joint_histogram_3d<float>& hist,
+                             double frac = 1.0, unsigned nit = 256, unsigned njt = 256);
 
-  //: update from a set of images, random selection of tiles
-  bool update_histogram_rand(vcl_vector<vil_image_resource_sptr> const& rescs,
-                             bsta_joint_histogram_3d<float>& hist,
-                             double frac = 1.0, unsigned nit=256,
-                             unsigned njt=256);
-    //: init from a set of images, using a blocked cache
-  bool init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
-                              unsigned nbins,
-                              bsta_joint_histogram_3d<float>& hist,
-                              unsigned nit=256, unsigned njt=256);
+  // : init from a set of images, using a blocked cache
+  bool init_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, unsigned nbins,
+                              bsta_joint_histogram_3d<float>& hist, unsigned nit = 256, unsigned njt = 256);
 
+  // : update from a set of images, using a blocked cache
+  bool update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs, bsta_joint_histogram_3d<float>& hist,
+                                unsigned nit = 256, unsigned njt = 256);
 
-  //: update from a set of images, using a blocked cache
-  bool update_histogram_blocked(vcl_vector<vil_image_resource_sptr> const& rescs,
-                             bsta_joint_histogram_3d<float>& hist,
-                             unsigned nit=256, unsigned njt=256);
-  //: classify an image as to atmospheric content, nit, njt are block size
-  bool classify_image(vil_image_resource_sptr const& resc,
-                      bsta_joint_histogram_3d<float> const& no_atmos,
-                      bsta_joint_histogram_3d<float> const& atmos,
-                      unsigned nit, unsigned njt,
+  // : classify an image as to atmospheric content, nit, njt are block size
+  bool classify_image(vil_image_resource_sptr const& resc, bsta_joint_histogram_3d<float> const& no_atmos,
+                      bsta_joint_histogram_3d<float> const& atmos, unsigned nit, unsigned njt,
                       vcl_string const& output_path);
-  bool classify_image(vil_image_resource_sptr const& resc,
-                      bsta_joint_histogram_3d<float> const& no_atmos,
-                      bsta_joint_histogram_3d<float> const& atmos,
-                      unsigned nit, unsigned njt,
-                      vil_image_resource_sptr& out_resc,
-                      vil_image_resource_sptr& out_resc_orig_size);
 
-  //: classify an image as to atmospheric content, nit, njt are block size, assumes the resulting image can fit in memory. uses a sliding window to classify each pixel.
-  bool classify_image_pixel(vil_image_view<float> const& image,
-                            bsta_joint_histogram_3d<float> const& no_atmos,
-                            bsta_joint_histogram_3d<float> const& atmos,
-                            float prob_ratio,
+  bool classify_image(vil_image_resource_sptr const& resc, bsta_joint_histogram_3d<float> const& no_atmos,
+                      bsta_joint_histogram_3d<float> const& atmos, unsigned nit, unsigned njt,
+                      vil_image_resource_sptr& out_resc, vil_image_resource_sptr& out_resc_orig_size);
+
+  // : classify an image as to atmospheric content, nit, njt are block size, assumes the resulting image can fit in memory. uses a sliding window to classify each pixel.
+  bool classify_image_pixel(vil_image_view<float> const& image, bsta_joint_histogram_3d<float> const& no_atmos,
+                            bsta_joint_histogram_3d<float> const& atmos, float prob_ratio,
                             vil_image_view<float>& class_image);
 
-  //: print sizes and other info (bool for calling consistency)
+  // : print sizes and other info (bool for calling consistency)
   bool print(vcl_ostream& os = vcl_cout) const;
 
-  //: accessors, setters
-  unsigned nib() const {return nib_;}
-  unsigned njb() const {return njb_;}
-  vnl_vector<double> mean() const {return mean_;}
-  vnl_matrix<double> covariance() const {return covar_;}
-  vnl_vector<double> eigenvalues() const {return eigenvalues_;}
-  vnl_matrix<double> eigenvectors() const {return eigenvectors_;}
-  T functor() const {return funct_;}
-  void set_nib(unsigned nib) {nib_=nib;}
-  void set_njb(unsigned njb) {njb_=njb;}
+  // : accessors, setters
+  unsigned nib() const {return nib_; }
+  unsigned njb() const {return njb_; }
+  vnl_vector<double> mean() const {return mean_; }
+  vnl_matrix<double> covariance() const {return covar_; }
+  vnl_vector<double> eigenvalues() const {return eigenvalues_; }
+  vnl_matrix<double> eigenvectors() const {return eigenvectors_; }
+  T functor() const {return funct_; }
+  void set_nib(unsigned nib) {nib_ = nib; }
+  void set_njb(unsigned njb) {njb_ = njb; }
   void set_mean_covar(vnl_vector<double> const& mean,
                       vnl_matrix<double> const& covar)
   { mean_ = mean; covar_ = covar; covar_valid_ = true; }
   void set_eigensystem(vnl_vector<double> const& eigv,
                        vnl_matrix<double> const& evecs)
-  { eigenvalues_=eigv; eigenvectors_=evecs; eigensystem_valid_ = true; }
-  void set_functor(T funct) {funct_ = funct;}
-
- private:
-  //: An instance of the functor
+  { eigenvalues_ = eigv; eigenvectors_ = evecs; eigensystem_valid_ = true; }
+  void set_functor(T funct) {funct_ = funct; }
+private:
+  // : An instance of the functor
   T funct_;
-  //: number of cols in view block
+  // : number of cols in view block
   unsigned nib_;
-  //: number of rows in view block
+  // : number of rows in view block
   unsigned njb_;
-  //: feature vector mean
+  // : feature vector mean
   vnl_vector<double> mean_;
-  //: feature vector covariance matrix
+  // : feature vector covariance matrix
   vnl_matrix<double> covar_;
-  //: eigenvalues of the covariance matrix
+  // : eigenvalues of the covariance matrix
   vnl_vector<double> eigenvalues_;
-  //: eigenvectors of the covariance matrix
+  // : eigenvectors of the covariance matrix
   vnl_matrix<double> eigenvectors_;
-  //: flags
+  // : flags
   bool covar_valid_;
   bool eigensystem_valid_;
 };
 
-//: Binary save brad_eigenspace to stream.
+// : Binary save brad_eigenspace to stream.
 template <class T>
-void vsl_b_write(vsl_b_ostream &os, const brad_eigenspace<T>& ep);
+void vsl_b_write(vsl_b_ostream & os, const brad_eigenspace<T>& ep);
 
-
-//: Binary load brad_eigenspace from stream.
+// : Binary load brad_eigenspace from stream.
 template <class T>
-void vsl_b_read(vsl_b_istream &is, brad_eigenspace<T>& fv);
+void vsl_b_read(vsl_b_istream & is, brad_eigenspace<T>& fv);
 
-
-//: Print summary
+// : Print summary
 template <class T>
-void
-vsl_print_summary(vcl_ostream &os, const brad_eigenspace<T>& fv);
+void vsl_print_summary(vcl_ostream & os, const brad_eigenspace<T>& fv);
 
 #include <brad/brad_eigenspace_sptr.h>
 

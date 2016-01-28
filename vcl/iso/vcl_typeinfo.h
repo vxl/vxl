@@ -6,9 +6,9 @@
 #include <typeinfo>
 
 #ifdef vcl_generic_typeinfo_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_typeinfo_STD std
+#  define vcl_generic_typeinfo_STD std
 #endif
 
 #include "../generic/vcl_typeinfo.h"

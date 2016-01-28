@@ -3,9 +3,11 @@
 
 class bhdfs_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // bhdfs_register_h_

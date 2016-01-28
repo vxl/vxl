@@ -2,9 +2,9 @@
 #ifndef FMatrixComputeNonLinear_h_
 #define FMatrixComputeNonLinear_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 //    FMatrixComputeNonLinear is a class that contains the functions required for
 //  two differing Non-Linear minimisations of the F Matrix:
@@ -14,7 +14,7 @@
 // \author
 //     David McKinnon, U.Q. 2/1/01
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
@@ -26,7 +26,7 @@
 
 class FMatrixComputeNonLinear : public vnl_least_squares_function
 {
- public:
+public:
 
   // Constructors/Destructors--------------------------------------------------
   FMatrixComputeNonLinear(PairMatchSetCorner* matches);
@@ -34,20 +34,21 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
   // Computations--------------------------------------------------------------
   // Calling this function results in the 36 parametrisations
   bool compute(FMatrix* F);
+
   // Calling this function results in the augmentation of the basis
   bool compute_basis(FMatrix* F, vcl_vector<int> basis);
 
   // The virtual function from vnl_levenberg_marquardt
   void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
 
- private:
+private:
   // Data Members--------------------------------------------------------------
-  int data_size_;
-  int terminate_count_;
-  PairMatchSetCorner& matches_;
-  int p_, q_, r_;
-  FMatrix F_orig_;
-  bool one_;
+  int                                    data_size_;
+  int                                    terminate_count_;
+  PairMatchSetCorner&                    matches_;
+  int                                    p_, q_, r_;
+  FMatrix                                F_orig_;
+  bool                                   one_;
   vcl_vector<vgl_homg_point_2d<double> > basis1_;
   vcl_vector<vgl_homg_point_2d<double> > basis2_;
   vcl_vector<vgl_homg_point_2d<double> > points1_;
@@ -55,9 +56,13 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
 
   // Helpers-------------------------------------------------------------------
   void fmatrix_to_params(const FMatrix& F, vnl_vector<double>& params);
+
   FMatrix params_to_fmatrix(const vnl_vector<double>& params);
-  void get_plan(int &r1, int &c1, int &r2, int &c2);
+
+  void get_plan(int & r1, int & c1, int & r2, int & c2);
+
   vnl_vector<double> calculate_residuals(FMatrix* F);
+
 };
 
 #endif // FMatrixComputeNonLinear_h_

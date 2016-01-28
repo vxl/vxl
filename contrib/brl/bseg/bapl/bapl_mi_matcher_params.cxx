@@ -1,6 +1,6 @@
 // This is brl/bseg/bapl/bapl_mi_matcher_params.cxx
 #include "bapl_mi_matcher_params.h"
-//:
+// :
 // \file
 
 #include <vcl_iostream.h>
@@ -14,16 +14,15 @@
 #define BAPL_MIN_SHEAR 0.0
 #define BAPL_MAX_SHEAR 89.9
 
-
-//: Constructor
+// : Constructor
 bapl_mi_matcher_params::bapl_mi_matcher_params(unsigned num_samples,
                                                double max_scale, double max_radius,
                                                double max_rotation, double max_shear)
- : num_samples_(num_samples), max_sx_(max_scale), max_sy_(max_scale), max_tx_(max_radius),
-   max_ty_(max_radius), max_rotation_ang_(max_rotation), max_shear_ang_(max_shear)
+  : num_samples_(num_samples), max_sx_(max_scale), max_sy_(max_scale), max_tx_(max_radius),
+  max_ty_(max_radius), max_rotation_ang_(max_rotation), max_shear_ang_(max_shear)
 {}
 
-//: Check the value of each member variable to see if it is in range
+// : Check the value of each member variable to see if it is in range
 bool
 bapl_mi_matcher_params::valid_range()
 {
@@ -35,24 +34,22 @@ bapl_mi_matcher_params::valid_range()
          max_shear_ang_ >= BAPL_MIN_SHEAR  &&  max_shear_ang_ <= BAPL_MAX_SHEAR;
 }
 
-
-//: Fix any parameters that are out of range
+// : Fix any parameters that are out of range
 void
 bapl_mi_matcher_params::correct_range()
 {
-  if (max_sx_ < BAPL_MIN_SCALE) max_sx_ = BAPL_MIN_SCALE;
-  if (max_sx_ > BAPL_MAX_SCALE) max_sx_ = BAPL_MAX_SCALE;
-  if (max_tx_ < BAPL_MIN_TRANS) max_tx_ = BAPL_MIN_TRANS;
-  if (max_tx_ > BAPL_MAX_TRANS) max_tx_ = BAPL_MAX_TRANS;
-  if (max_rotation_ang_ < BAPL_MIN_ROT) max_rotation_ang_ = BAPL_MIN_ROT;
-  if (max_rotation_ang_ > BAPL_MAX_ROT) max_rotation_ang_ = BAPL_MAX_ROT;
-  if (max_shear_ang_ < BAPL_MIN_SHEAR) max_shear_ang_ = BAPL_MIN_SHEAR;
-  if (max_shear_ang_ > BAPL_MAX_SHEAR) max_shear_ang_ = BAPL_MAX_SHEAR;
+  if( max_sx_ < BAPL_MIN_SCALE ) {max_sx_ = BAPL_MIN_SCALE; }
+  if( max_sx_ > BAPL_MAX_SCALE ) {max_sx_ = BAPL_MAX_SCALE; }
+  if( max_tx_ < BAPL_MIN_TRANS ) {max_tx_ = BAPL_MIN_TRANS; }
+  if( max_tx_ > BAPL_MAX_TRANS ) {max_tx_ = BAPL_MAX_TRANS; }
+  if( max_rotation_ang_ < BAPL_MIN_ROT ) {max_rotation_ang_ = BAPL_MIN_ROT; }
+  if( max_rotation_ang_ > BAPL_MAX_ROT ) {max_rotation_ang_ = BAPL_MAX_ROT; }
+  if( max_shear_ang_ < BAPL_MIN_SHEAR ) {max_shear_ang_ = BAPL_MIN_SHEAR; }
+  if( max_shear_ang_ > BAPL_MAX_SHEAR ) {max_shear_ang_ = BAPL_MAX_SHEAR; }
 }
 
-
-//: Output stream operator for printing the parameter values
-vcl_ostream& operator<<(vcl_ostream& os, bapl_mi_matcher_params const& p)
+// : Output stream operator for printing the parameter values
+vcl_ostream & operator<<(vcl_ostream& os, bapl_mi_matcher_params const& p)
 {
   os << "bapl_mi_matcher_params:\n[---\n"
      << "max scale x  " << p.max_sx_ << '\n'
@@ -64,4 +61,3 @@ vcl_ostream& operator<<(vcl_ostream& os, bapl_mi_matcher_params const& p)
      << "---]" << vcl_endl;
   return os;
 }
-

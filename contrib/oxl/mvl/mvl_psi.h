@@ -2,9 +2,9 @@
 #ifndef mvl_psi_h_
 #define mvl_psi_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 // You don't need to know what these functions are for.

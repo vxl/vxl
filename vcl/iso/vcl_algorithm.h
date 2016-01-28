@@ -6,9 +6,9 @@
 #include <algorithm>
 
 #ifdef vcl_generic_algorithm_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_algorithm_STD std
+#  define vcl_generic_algorithm_STD std
 #endif
 
 #include "../generic/vcl_algorithm.h"

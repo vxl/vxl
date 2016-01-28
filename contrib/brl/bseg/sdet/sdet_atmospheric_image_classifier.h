@@ -1,12 +1,12 @@
 #ifndef sdet_atmospheric_image_classifier_h_
 #define sdet_atmospheric_image_classifier_h_
-//:
+// :
 // \file
 // \brief A subclass of sdet_texture_classifier to determine image quality based on atmospheric effects such as clouds and haze
 //
 // \author J.L. Mundy
 // \date   January 28, 2012
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <sdet/sdet_texture_classifier.h>
 //
 // This classifier is based on learning textures for images with and without
@@ -21,35 +21,39 @@
 //
 class sdet_atmospheric_image_classifier : public sdet_texture_classifier
 {
- public:
-  sdet_atmospheric_image_classifier(sdet_texture_classifier_params const& params) : sdet_texture_classifier(params){}
+public:
+  sdet_atmospheric_image_classifier(sdet_texture_classifier_params const& params) : sdet_texture_classifier(params) {}
 
-  ~sdet_atmospheric_image_classifier(){};
-  //: typically the atmospheric categories are "cld" and "haz"
+  ~sdet_atmospheric_image_classifier() {};
+  // : typically the atmospheric categories are "cld" and "haz"
   void set_atmospheric_categories(vcl_vector<vcl_string> const& atmos_cats)
-    {atmos_categories_ = atmos_cats;}
-  //: image of atmospheric quality expressed as colors
+  {atmos_categories_ = atmos_cats; }
+  // : image of atmospheric quality expressed as colors
   vil_image_view<float> classify_image_blocks_qual(vcl_string const& img_path);
-  vil_image_view<float> classify_image_blocks_qual(vil_image_view<float> const& image);
-  vil_image_view<vxl_byte> classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string, unsigned char>& cat_id_map, vcl_map<vcl_string, float>& cat_percentage_map);
 
-  //: classify image quality based on expected model image and incoming image
+  vil_image_view<float> classify_image_blocks_qual(vil_image_view<float> const& image);
+
+  vil_image_view<vxl_byte> classify_image_blocks_qual2(vil_image_view<float> const& image, vcl_map<vcl_string,
+                                                                                                   unsigned char>& cat_id_map, vcl_map<vcl_string,
+                                                                                                                                       float>& cat_percentage_map);
+
+  // : classify image quality based on expected model image and incoming image
   // Assumes that textons have been computed for the model generating the
   // expected image of a scene. The image is then classified according to
   // its similarity to the expected image, via the texton histogram for the
   // model.
-  vil_image_view<float>
-    classify_image_blocks_expected(vcl_string const& img_path,
-                                   vcl_string const& exp_path);
-  vil_image_view<float>
-    classify_image_blocks_expected(vil_image_view<float> const& image,
-                                   vil_image_view<float> const& exp);
- protected:
-  void  category_quality_color_mix(vcl_map<vcl_string, float>& probs,
-                                   vnl_vector_fixed<float, 3> const& uncert,
+  vil_image_view<float> classify_image_blocks_expected(vcl_string const& img_path, vcl_string const& exp_path);
+
+  vil_image_view<float> classify_image_blocks_expected(vil_image_view<float> const& image,
+                                                       vil_image_view<float> const& exp);
+
+protected:
+  void  category_quality_color_mix(vcl_map<vcl_string, float>& probs, vnl_vector_fixed<float, 3> const& uncert,
                                    vnl_vector_fixed<float, 3>& color_mix);
+
   vcl_vector<vcl_string> atmos_categories_;
   bool atmos_cat(vcl_string const& cat);
-  };
+
+};
 
 #endif // sdet_atmospheric_image_classifier_h_

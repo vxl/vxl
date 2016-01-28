@@ -16,16 +16,16 @@ static void test_database_manager()
   // example: creating values, tuples and relations
   ////////////////////////////////////////////////////////////////////////////
 
-  vcl_vector<vcl_string> r1_names(3);
-  vcl_vector<vcl_string> r1_types(3);
+  vcl_vector<vcl_string>      r1_names(3);
+  vcl_vector<vcl_string>      r1_types(3);
   vcl_vector<brdb_tuple_sptr> r1_tuples(20);
 
-  vcl_vector<vcl_string> r2_names(2);
-  vcl_vector<vcl_string> r2_types(2);
+  vcl_vector<vcl_string>      r2_names(2);
+  vcl_vector<vcl_string>      r2_types(2);
   vcl_vector<brdb_tuple_sptr> r2_tuples(30);
 
-  vcl_vector<vcl_string> r3_names(2);
-  vcl_vector<vcl_string> r3_types(2);
+  vcl_vector<vcl_string>      r3_names(2);
+  vcl_vector<vcl_string>      r3_types(2);
   vcl_vector<brdb_tuple_sptr> r3_tuples(40);
 
   r1_names[0] = "ID";
@@ -35,24 +35,27 @@ static void test_database_manager()
   r1_types[0] = brdb_value_t<int>::type();
   r1_types[1] = brdb_value_t<vcl_string>::type();
   r1_types[2] = brdb_value_t<bool>::type();
-
-  for (int i=0; i<20; i++)
-  {
-    int ID = 100+i;
+  for( int i = 0; i < 20; i++ )
+    {
+    int              ID = 100 + i;
     vcl_stringstream SS;
     SS << "zhao_yong_" << i;
     vcl_string name;
     SS >> name;
     bool gender;
 
-    if (i%2)
+    if( i % 2 )
+      {
       gender = true;
+      }
     else
+      {
       gender = false;
+      }
 
     r1_tuples[i] = new brdb_tuple(ID, name, gender);
     r1_tuples[i]->print();
-  }
+    }
 
   brdb_relation_sptr r1 = new brdb_relation(r1_names, r1_tuples, r1_types);
 
@@ -61,15 +64,14 @@ static void test_database_manager()
 
   r2_types[0] = brdb_value_t<int>::type();
   r2_types[1] = brdb_value_t<double>::type();
-
-  for (int i=0; i<30; i++)
-  {
-    int ID = 100+i;
-    double age = 20.0+i*0.1;
+  for( int i = 0; i < 30; i++ )
+    {
+    int    ID = 100 + i;
+    double age = 20.0 + i * 0.1;
 
     r2_tuples[i] = new brdb_tuple(ID, age);
     r2_tuples[i]->print();
-  }
+    }
 
   brdb_relation_sptr r2 = new brdb_relation(r2_names, r2_tuples, r2_types);
 
@@ -78,10 +80,9 @@ static void test_database_manager()
 
   r3_types[0] = brdb_value_t<int>::type();
   r3_types[1] = brdb_value_t<vcl_string>::type();
-
-  for (int i=0; i<40; i++)
-  {
-    int ID = 100+i;
+  for( int i = 0; i < 40; i++ )
+    {
+    int              ID = 100 + i;
     vcl_stringstream SS;
     SS << "dempartment_" << i;
     vcl_string dept;
@@ -89,7 +90,7 @@ static void test_database_manager()
 
     r3_tuples[i] = new brdb_tuple(ID, dept);
     r3_tuples[i]->print();
-  }
+    }
 
   brdb_relation_sptr r3 = new brdb_relation(r3_names, r3_tuples, r3_types);
 
@@ -171,9 +172,10 @@ static void test_database_manager()
   brdb_database_manager::instance()->add_relation("department", r3);
   brdb_database_manager::instance()->print_database();
   TEST("add_relation()", true, true);
-
-  for (int i=0; i<30;i++)
-  brdb_database_manager::instance()->add_tuple("age", r2_tuples[i]);
+  for( int i = 0; i < 30; i++ )
+    {
+    brdb_database_manager::instance()->add_tuple("age", r2_tuples[i]);
+    }
   brdb_database_manager::instance()->print_database();
   TEST("add_relation()", true, true);
 
@@ -220,14 +222,14 @@ static void test_database_manager()
   // example: doing selecting on database relations;
   ////////////////////////////////////////////////////////////////////////////
   // define a query
-  brdb_query_sptr q1 = new brdb_query("name_gender", "ID", BT, 115);
+  brdb_query_sptr     q1 = new brdb_query("name_gender", "ID", BT, 115);
   brdb_selection_sptr s1;
   brdb_database_manager::instance()->select(q1, s1);
   s1->print();
   s1->delete_tuples();
   brdb_database_manager::instance()->print_database();
 
-  brdb_query_sptr q2 = new brdb_query("name_gender", "Name", BT, vcl_string("zhao_yong_5"));
+  brdb_query_sptr     q2 = new brdb_query("name_gender", "Name", BT, vcl_string("zhao_yong_5") );
   brdb_selection_sptr s2;
   brdb_database_manager::instance()->select(q2, s2);
   s2->print();
@@ -239,13 +241,13 @@ static void test_database_manager()
   ////////////////////////////////////////////////////////////////////////////
   // example: automatic update feature of the selection
   ////////////////////////////////////////////////////////////////////////////
-  brdb_query_sptr q1a = new brdb_query("name_gender", "ID", EQ, 102);
+  brdb_query_sptr     q1a = new brdb_query("name_gender", "ID", EQ, 102);
   brdb_selection_sptr s1a;
   brdb_database_manager::instance()->select(q1a, s1a);
-  brdb_query_sptr q1b = new brdb_query("name_gender", "ID", LT, 105);
+  brdb_query_sptr     q1b = new brdb_query("name_gender", "ID", LT, 105);
   brdb_selection_sptr s1b;
   brdb_database_manager::instance()->select(q1b, s1b);
-  brdb_query_sptr q1c = new brdb_query("name_gender", "ID", EQ, 103);
+  brdb_query_sptr     q1c = new brdb_query("name_gender", "ID", EQ, 103);
   brdb_selection_sptr s1c;
   brdb_database_manager::instance()->select(q1c, s1c);
   s1a->print();
@@ -262,7 +264,7 @@ static void test_database_manager()
   ////////////////////////////////////////////////////////////////////////////
   // define a query
   r2->print();
-  brdb_query_sptr q3 = new brdb_query(r2, "ID", LT, 115);
+  brdb_query_sptr     q3 = new brdb_query(r2, "ID", LT, 115);
   brdb_selection_sptr s3;
   brdb_database_manager::instance()->select(q3, s3);
   s3->print();
@@ -276,12 +278,12 @@ static void test_database_manager()
   ////////////////////////////////////////////////////////////////////////////
   // define a query
   r1->print();
-  brdb_query_sptr q4 = new brdb_query(r1, "ID", BT, 105);
+  brdb_query_sptr     q4 = new brdb_query(r1, "ID", BT, 105);
   brdb_selection_sptr s4;
   brdb_database_manager::instance()->select(q4, s4);
   s4->print();
 
-  brdb_query_sptr q5 = new brdb_query(s4, vcl_string("ID"), LT, 113);
+  brdb_query_sptr     q5 = new brdb_query(s4, vcl_string("ID"), LT, 113);
   brdb_selection_sptr s5;
   brdb_database_manager::instance()->select(q5, s5);
 
@@ -295,33 +297,32 @@ static void test_database_manager()
   // example: getting tuple from database
   ////////////////////////////////////////////////////////////////////////////
   // define a query
-  brdb_query_sptr q6 = new brdb_query("name_gender", "ID", EQ, 114);
+  brdb_query_sptr     q6 = new brdb_query("name_gender", "ID", EQ, 114);
   brdb_selection_sptr s6;
   brdb_database_manager::instance()->select(q6, s6);
   vcl_string get_name1;
-  bool get_gender1;
+  bool       get_gender1;
   brdb_database_manager::instance()->get(s6, "Name", get_name1);
   brdb_database_manager::instance()->get(s6, "Gender", get_gender1);
   vcl_cout << "ID: 104  Name:   " << get_name1 << "   Gender:   " << get_gender1 << vcl_endl;
   TEST("get()", true, true);
 
-  brdb_query_sptr q6_a = new brdb_query("name_gender", "ID", LT, 105);
+  brdb_query_sptr     q6_a = new brdb_query("name_gender", "ID", LT, 105);
   brdb_selection_sptr s6_a;
   brdb_database_manager::instance()->select(q6_a, s6_a);
   vcl_vector<vcl_string> get_names;
-
-  for (unsigned int i=0; i<s6_a->size(); i++)
-  {
+  for( unsigned int i = 0; i < s6_a->size(); i++ )
+    {
     vcl_string get_name_a;
     brdb_database_manager::instance()->get(s6_a, "Name", i, get_name_a);
     vcl_cout << get_name_a << "  ";
-  }
+    }
 
   ////////////////////////////////////////////////////////////////////////////
   // example: update tuple/values in database
   ////////////////////////////////////////////////////////////////////////////
   // define a query
-  brdb_query_sptr q7 = new brdb_query("name_gender", "ID", EQ, 104);
+  brdb_query_sptr     q7 = new brdb_query("name_gender", "ID", EQ, 104);
   brdb_selection_sptr s7;
   brdb_database_manager::instance()->select(q7, s7);
   brdb_tuple_sptr update_tuple = new brdb_tuple(104, vcl_string("monster"), true);
@@ -329,7 +330,7 @@ static void test_database_manager()
   brdb_database_manager::instance()->print_database();
 
   bool update_gender(false);
-  brdb_database_manager::instance()->update_selected_tuple_value(s7, "Name", vcl_string("zhao_yong_4"));
+  brdb_database_manager::instance()->update_selected_tuple_value(s7, "Name", vcl_string("zhao_yong_4") );
   brdb_database_manager::instance()->update_selected_tuple_value(s7, "Gender", update_gender);
   brdb_database_manager::instance()->print_database();
   TEST("update tuple/values", true, true);
@@ -337,7 +338,7 @@ static void test_database_manager()
   ////////////////////////////////////////////////////////////////////////////
   // example: get sql view
   ////////////////////////////////////////////////////////////////////////////
-  brdb_query_sptr q8 = new brdb_query("name_gender", "ID", BEQ, 104);
+  brdb_query_sptr     q8 = new brdb_query("name_gender", "ID", BEQ, 104);
   brdb_selection_sptr s8;
   brdb_database_manager::instance()->select(q8, s8);
   s8->print();
@@ -350,13 +351,13 @@ static void test_database_manager()
   ////////////////////////////////////////////////////////////////////////////
   // example: selection and/or/xor
   ////////////////////////////////////////////////////////////////////////////
-  brdb_query_sptr q9 = new brdb_query("age", "ID", LEQ, 125);
+  brdb_query_sptr     q9 = new brdb_query("age", "ID", LEQ, 125);
   brdb_selection_sptr s9;
   brdb_database_manager::instance()->select(q9, s9);
   vcl_cout << "s9: " << vcl_endl;
   s9->print();
 
-  brdb_query_sptr q10 = new brdb_query("age", "ID", BEQ, 120);
+  brdb_query_sptr     q10 = new brdb_query("age", "ID", BEQ, 120);
   brdb_selection_sptr s10;
   brdb_database_manager::instance()->select(q10, s10);
   vcl_cout << "s10: " << vcl_endl;
@@ -389,7 +390,7 @@ static void test_database_manager()
   s13 = s9 ^ s10;
   vcl_cout << "s13: " << vcl_endl;
   s13->print();
-  s14 = ~s9;
+  s14 = ~ s9;
   vcl_cout << "s14: " << vcl_endl;
   s14->print();
 
@@ -409,7 +410,7 @@ static void test_database_manager()
   // example: query by index
   ////////////////////////////////////////////////////////////////////////////
   brdb_database_manager::instance()->print_database();
-  brdb_query_sptr q15 = new brdb_query("age", 0);
+  brdb_query_sptr     q15 = new brdb_query("age", 0);
   brdb_selection_sptr s15;
   brdb_database_manager::instance()->select(q15, s15);
   s15->print();
@@ -420,7 +421,7 @@ static void test_database_manager()
   s15->print();
 
   s10->print();
-  brdb_query_sptr q16 = new brdb_query(s10, 2);
+  brdb_query_sptr     q16 = new brdb_query(s10, 2);
   brdb_selection_sptr s16;
   brdb_database_manager::instance()->select(q16, s16);
   s16->print();
@@ -430,7 +431,7 @@ static void test_database_manager()
   s16->print();
 
   r1->print();
-  brdb_query_sptr q17 = new brdb_query(r1, 4);
+  brdb_query_sptr     q17 = new brdb_query(r1, 4);
   brdb_selection_sptr s17;
   brdb_database_manager::instance()->select(q17, s17);
   s17->print();

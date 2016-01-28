@@ -5,7 +5,7 @@
 
 #ifndef rgtl_object_array_hxx
 #define rgtl_object_array_hxx
-//:
+// :
 // \file
 // \brief Abstract interface for an array of objects for spatial structures.
 // \author Brad King
@@ -13,7 +13,7 @@
 
 #include "rgtl_serialize_access.hxx"
 
-//: Abstract interface for an array of objects in D dimensions.
+// : Abstract interface for an array of objects in D dimensions.
 //
 // This interface is meant for use in defining a set of objects for
 // storage in a spatial structure.  A few simple operations are
@@ -22,25 +22,21 @@
 template <unsigned int D>
 class rgtl_object_array
 {
- public:
-  //: Virtual destructor.
+public:
+  // : Virtual destructor.
   virtual ~rgtl_object_array() {}
 
-  //: Get the number of objects in the array.
+  // : Get the number of objects in the array.
   virtual int number_of_objects() const = 0;
 
-  //: Check whether one object intersects another.
+  // : Check whether one object intersects another.
   virtual bool object_intersects_object(int idA, int idB) const = 0;
 
-  //: Check whether an object intersects an axis-aligned bounding box.
-  virtual bool object_intersects_box(int id,
-                                     double const center[D],
-                                     double const radius,
-                                     double const lower[D],
-                                     double const upper[D],
-                                     double const corners[1<<D][D]) const = 0;
+  // : Check whether an object intersects an axis-aligned bounding box.
+  virtual bool object_intersects_box(int id, double const center[D], double const radius, double const lower[D],
+                                     double const upper[D], double const corners[1 << D][D]) const = 0;
 
-  //: Compute the closest point on an object to the point given.
+  // : Compute the closest point on an object to the point given.
   //  Returns whether a closest point was computed and stored.
   //  If the closest point is farther than the given squared distance
   //  bound from the query point an implementation may optionally
@@ -52,7 +48,7 @@ class rgtl_object_array
                                     double y[D],
                                     double bound_squared) const = 0;
 
-  //: Compute the intersection of an object with a ray.
+  // : Compute the intersection of an object with a ray.
   //  If an intersection exists true is returned, "y" is set to the
   //  intersection point, and "s" is set to the scale between the
   //  vectors "direction" and "y - origin".  Otherwise false is
@@ -62,11 +58,12 @@ class rgtl_object_array
                                      double const direction[D],
                                      double y[D], double* s) const = 0;
 
-  //: Compute an axis-aligned bounding box around the objects.
+  // : Compute an axis-aligned bounding box around the objects.
   virtual void compute_bounds(double bounds[D][2]) const = 0;
- private:
+private:
   friend class rgtl_serialize_access;
-  template <class Serializer> void serialize(Serializer&) {}
+  template <class Serializer>
+  void serialize(Serializer &) {}
 };
 
 #endif

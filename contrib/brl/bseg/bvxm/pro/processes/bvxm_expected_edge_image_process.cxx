@@ -1,6 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_expected_edge_image_process.cxx
 #include "bvxm_expected_edge_image_process.h"
-//:
+// :
 // \file
 
 #include <bprb/bprb_func_process.h>
@@ -14,17 +14,17 @@
 #include <vpgl/algo/vpgl_backproject.h>
 #include <vcl_cstdio.h>
 
-//: set input and output types
+// : set input and output types
 bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_expected_edge_image_process_globals;
 
   // process takes 4 inputs:
-  //input[0]: The voxel world
-  //input[1]: The current camera
-  //input[2]: ni
-  //input[3]: nj
-  //input[4]: Scale of the image
+  // input[0]: The voxel world
+  // input[1]: The current camera
+  // input[2]: ni
+  // input[3]: nj
+  // input[4]: Scale of the image
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
@@ -32,8 +32,10 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
   input_types_[2] = "unsigned";
   input_types_[3] = "unsigned";
   input_types_[4] = "unsigned";
-  if (!pro.set_input_types(input_types_))
+  if( !pro.set_input_types(input_types_) )
+    {
     return false;
+    }
 
   // process has 2 outputs:
   // output[0]: Expected edge image (probabilities between 0 and 1, float)
@@ -44,16 +46,17 @@ bool bvxm_expected_edge_image_process_cons(bprb_func_process& pro)
   return pro.set_output_types(output_types_);
 }
 
-//:  optimizes rpc camera parameters based on edges
+// :  optimizes rpc camera parameters based on edges
 bool bvxm_expected_edge_image_process(bprb_func_process& pro)
 {
   using namespace bvxm_expected_edge_image_process_globals;
 
-  //check number of inputs
-  if ( !pro.verify_inputs()) {
+  // check number of inputs
+  if( !pro.verify_inputs() )
+    {
     vcl_cout << pro.name() << " - invalid inputs " << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs
   // voxel world
@@ -62,17 +65,17 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera_inp = pro.get_input<vpgl_camera_double_sptr>(1);
   bvxm_edge_ray_processor edge_proc(vox_world);
 
-  //vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
-  //unsigned ni = edge_image_sptr->ni();
-  //unsigned nj = edge_image_sptr->nj();
-  //vil_image_view<vxl_byte> edge_image(edge_image_sptr);
+  // vil_image_view_base_sptr edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
+  // unsigned ni = edge_image_sptr->ni();
+  // unsigned nj = edge_image_sptr->nj();
+  // vil_image_view<vxl_byte> edge_image(edge_image_sptr);
   unsigned ni = pro.get_input<unsigned>(2);
   unsigned nj = pro.get_input<unsigned>(3);
 
   // scale of image
   unsigned scale = pro.get_input<unsigned>(4);
 
-  int num_observations = vox_world->num_observations<EDGES>(0,scale);
+  int num_observations = vox_world->num_observations<EDGES>(0, scale);
   vcl_cout << "Number of observations in curren edge world: " << num_observations << '\n';
 
   float n_normal = vox_world->get_params()->edges_n_normal();
@@ -80,15 +83,14 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
 
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;
-  bvxm_image_metadata camera_metadata_inp(dummy_img,camera_inp);
-  vil_image_view<float> *img_eei_f = new vil_image_view<float>(ni,nj,1);
+  bvxm_image_metadata      camera_metadata_inp(dummy_img, camera_inp);
+  vil_image_view<float> *  img_eei_f = new vil_image_view<float>(ni, nj, 1);
   vil_image_view_base_sptr img_eei_f_sptr = img_eei_f;
 
-  edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
+  edge_proc.expected_edge_image(camera_metadata_inp, img_eei_f_sptr, n_normal, scale);
 
-  vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
-  brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei_f,*img_eei_vb,0.0f,255.0f);
-
+  vil_image_view<vxl_byte> * img_eei_vb = new vil_image_view<vxl_byte>(ni, nj, 1);
+  brip_vil_float_ops::normalize_to_interval<float, vxl_byte>(*img_eei_f, *img_eei_vb, 0.0f, 255.0f);
 
   pro.set_output_val<vil_image_view_base_sptr>(0, img_eei_f);
   pro.set_output_val<vil_image_view_base_sptr>(1, img_eei_vb);

@@ -19,5 +19,4 @@ void register_tests()
   REGISTER( test_cubic_bezier );
 }
 
-
 DEFINE_MAIN;

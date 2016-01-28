@@ -1,6 +1,6 @@
 // This is oxl/mvl/PMatrixComputeLinear.cxx
 #include "PMatrixComputeLinear.h"
-//:
+// :
 //  \file
 
 #include <vcl_vector.h>
@@ -10,9 +10,9 @@
 
 #include <mvl/PMatrix.h>
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //
-//: Compute a projection matrix using linear least squares.
+// : Compute a projection matrix using linear least squares.
 // Input is a list of 3D-2D point correspondences.
 //
 // Return false if the calculation fails or there are fewer than six point
@@ -34,16 +34,16 @@
 bool
 PMatrixComputeLinear::compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                               vcl_vector<vgl_homg_point_3d<double> > const& points2,
-                              PMatrix *P)
+                              PMatrix * P)
 {
   assert(P);
   assert(points1.size() >= 6);
-  assert(points2.size() == points1.size());
+  assert(points2.size() == points1.size() );
 
-  unsigned npts = points1.size();
+  unsigned           npts = points1.size();
   vnl_matrix<double> a_matrix(npts * 2, 12);
-
-  for (unsigned i = 0; i < npts; i++) {
+  for( unsigned i = 0; i < npts; i++ )
+    {
     vgl_homg_point_2d<double> const& u = points1[i];
     vgl_homg_point_3d<double> const& X = points2[i];
 
@@ -74,27 +74,28 @@ PMatrixComputeLinear::compute(vcl_vector<vgl_homg_point_2d<double> > const& poin
     a_matrix(row_index,  9) = -X.y() * u.y();
     a_matrix(row_index, 10) = -X.z() * u.y();
     a_matrix(row_index, 11) = -X.w() * u.y();
-  }
+    }
 
   a_matrix.normalize_rows();
   vnl_svd<double> svd(a_matrix);
 
-  P->set(svd.nullvector().data_block());
+  P->set(svd.nullvector().data_block() );
 
   return true;
 }
 
 bool
-PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2, PMatrix *P)
+PMatrixComputeLinear::compute(vcl_vector<HomgPoint2D> const& points1, vcl_vector<HomgPoint3D> const& points2,
+                              PMatrix * P)
 {
   assert(P);
   assert(points1.size() >= 6);
-  assert(points2.size() == points1.size());
+  assert(points2.size() == points1.size() );
 
-  unsigned npts = points1.size();
+  unsigned           npts = points1.size();
   vnl_matrix<double> a_matrix(npts * 2, 12);
-
-  for (unsigned i = 0; i < npts; i++) {
+  for( unsigned i = 0; i < npts; i++ )
+    {
     HomgPoint2D const& u = points1[i];
     HomgPoint3D const& X = points2[i];
 
@@ -125,12 +126,12 @@ PMatrixComputeLinear::compute (vcl_vector<HomgPoint2D> const& points1, vcl_vecto
     a_matrix(row_index,  9) = -X.y() * u.y();
     a_matrix(row_index, 10) = -X.z() * u.y();
     a_matrix(row_index, 11) = -X.w() * u.y();
-  }
+    }
 
   a_matrix.normalize_rows();
   vnl_svd<double> svd(a_matrix);
 
-  P->set(svd.nullvector().data_block());
+  P->set(svd.nullvector().data_block() );
 
   return true;
 }

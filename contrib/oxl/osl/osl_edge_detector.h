@@ -1,7 +1,7 @@
-//-*- c++ -*-------------------------------------------------------------------
+// -*- c++ -*-------------------------------------------------------------------
 #ifndef osl_edge_detector_h
 #define osl_edge_detector_h
-//:
+// :
 // \file
 // \brief Charlie's topological edge detector
 //
@@ -55,59 +55,66 @@
 //                       up to osl_edge_detector_params and added new syle
 //                       constructors and execution
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <osl/osl_canny_port.h>
 #include <osl/osl_edge_detector_params.h>
 #include <vil1/vil1_image.h>
 
 struct osl_edge_detector : public osl_edge_detector_params
-{
+  {
   osl_edge_detector(osl_edge_detector_params const &);
 
   ~osl_edge_detector();
 
-  void detect_edges(vil1_image const &image,
-                    vcl_list<osl_edge*> *edges,
-                    bool maintain_topology = true);
+  void detect_edges(vil1_image const & image, vcl_list<osl_edge *> * edges, bool maintain_topology = true);
 
- private:
+private:
   void Sub_pixel_interpolation();
-  void Thicken_threshold(int,int);
+
+  void Thicken_threshold(int, int);
+
   void Set_thresholds();
+
   void Fill_holes();
+
   void Thin_edges();
-  void Follow_curves(vcl_list<osl_edge*>*);
-  void Follow(int,int,vcl_list<int>*,vcl_list<int>*,vcl_list<float>*,int);
+
+  void Follow_curves(vcl_list<osl_edge *> *);
+
+  void Follow(int, int, vcl_list<int> *, vcl_list<int> *, vcl_list<float> *, int);
 
   void Find_junctions();
-  void Find_junction_clusters();
-  void Follow_junctions(int,int,vcl_list<int>*,vcl_list<int>*);
-  void Cluster_centre(vcl_list<int>&,vcl_list<int>&,int&,int&);
 
- private:
+  void Find_junction_clusters();
+
+  void Follow_junctions(int, int, vcl_list<int> *, vcl_list<int> *);
+
+  void Cluster_centre(vcl_list<int> &, vcl_list<int> &, int &, int &);
+
+private:
   unsigned int width_;  // The smoothing kernel width
   unsigned int k_size_; // The kernel is 2*width_+1s
-  float *kernel_;       // 1-Dimensional convolution kernel of size k_size
+  float * kernel_;      // 1-Dimensional convolution kernel of size k_size
 
-  unsigned int xstart_,ystart_; // The origin of the buffer in the image
-  unsigned int xsize_,ysize_;   // The width of the image buffer
+  unsigned int xstart_, ystart_; // The origin of the buffer in the image
+  unsigned int xsize_, ysize_;   // The width of the image buffer
 
-  float **dx_;         // Derivatives in x, and sub-pixel x coordinates
-  float **dy_;         // Derivatives in y, and sub-pixel y coordinates
-  float **grad_;       // Gradient image, and various other storage images
-  float **smooth_;     // Smoothed image.
+  float * * dx_;         // Derivatives in x, and sub-pixel x coordinates
+  float * * dy_;         // Derivatives in y, and sub-pixel y coordinates
+  float * * grad_;       // Gradient image, and various other storage images
+  float * * smooth_;     // Smoothed image.
 
   // Quite a few of the following could be done using hash tables
-  float **thin_;       // Gradient image after thinning
-  float **theta_;      // Orientation image
-  float **thresh_;     // Image of the different thresholds used (replacing low)
+  float * * thin_;       // Gradient image after thinning
+  float * * theta_;      // Orientation image
+  float * * thresh_;     // Image of the different thresholds used (replacing low)
 
-  int **dist_;         // Distance transform image
-  int **junction_;     // Image true only at junctions ends, and relevant lists
-  int **jx_,**jy_;     // Images of (x,y) coordinates of nearest cluster centre
-  vcl_list<int> *xjunc_,*yjunc_;
-  vcl_list<osl_Vertex*> *vlist_;   // The junction cluster centres
+  int * * dist_;         // Distance transform image
+  int * * junction_;     // Image true only at junctions ends, and relevant lists
+  int * * jx_, * * jy_;  // Images of (x,y) coordinates of nearest cluster centre
+  vcl_list<int> * xjunc_, * yjunc_;
+  vcl_list<osl_Vertex *> * vlist_;   // The junction cluster centres
 
   float jval_;        // A dummy junction intensity step value
   int chain_no_;      // A dummy variable used in following
@@ -115,10 +122,10 @@ struct osl_edge_detector : public osl_edge_detector_params
   int vertidcount_;   // A counter used for setting vertex identifiers
 
 // Added a histogram of edge gradient magnitudes - JLM May 1995
-  bool gradient_histogram_; // Do we need to compute one?
-  float max_gradient_; // Added May 1997 - JLM
+  bool gradient_histogram_;  // Do we need to compute one?
+  float max_gradient_;       // Added May 1997 - JLM
   int histogram_resolution_; // The number of buckets in the histogram
-  //Histogram* ghist_;
-};
+  // Histogram* ghist_;
+  };
 
 #endif // osl_edge_detector_h

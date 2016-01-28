@@ -1,6 +1,6 @@
 #ifndef mbl_index_sort_h_
 #define mbl_index_sort_h_
-//:
+// :
 // \file
 // \brief Algorithm to produce list of sorted data indices
 // \author Ian Scott
@@ -9,18 +9,19 @@
 #include <vcl_algorithm.h>
 #include <vcl_functional.h>
 
-//: Implementation class - Do No Use.
+// : Implementation class - Do No Use.
 template <class T>
 struct mbl_index_sort_cmp1
-{
-  const T *data;
-  bool operator () (const unsigned &a, const unsigned &b)
+  {
+  const T * data;
+  bool operator ()(const unsigned & a, const unsigned & b)
   {
     return data[a] < data[b];
   }
-};
 
-//: Sort n elements, giving the resulting order in index.
+  };
+
+// : Sort n elements, giving the resulting order in index.
 //  data[index[0]] is smallest element, data[index[n-1]] is largest
 template <class T>
 void mbl_index_sort(const T* data, int n, vcl_vector<int>& index)
@@ -29,12 +30,15 @@ void mbl_index_sort(const T* data, int n, vcl_vector<int>& index)
   c.data = data;
 
   index.resize(n);
-  for (int i =0;i < n; ++i) index[i] = i;
+  for( int i = 0; i < n; ++i )
+    {
+    index[i] = i;
+    }
 
   vcl_sort(index.begin(), index.end(), c);
 }
 
-//: Sort n elements, giving the resulting order in index.
+// : Sort n elements, giving the resulting order in index.
 //  data[index[0]] is smallest element, data[index[n-1]] is largest
 template <class T>
 void mbl_index_sort(const T* data, unsigned n, vcl_vector<unsigned>& index)
@@ -43,23 +47,27 @@ void mbl_index_sort(const T* data, unsigned n, vcl_vector<unsigned>& index)
   c.data = data;
 
   index.resize(n);
-  for (unsigned i =0;i < n; ++i) index[i] = i;
+  for( unsigned i = 0; i < n; ++i )
+    {
+    index[i] = i;
+    }
 
   vcl_sort(index.begin(), index.end(), c);
 }
 
-//: Implementation class - Do No Use.
+// : Implementation class - Do No Use.
 template <class T>
 struct mbl_index_sort_cmp2
-{
-  const vcl_vector<T> *data;
-  bool operator () (const unsigned &a, const unsigned &b)
+  {
+  const vcl_vector<T> * data;
+  bool operator ()(const unsigned & a, const unsigned & b)
   {
     return (*data)[a] < (*data)[b];
   }
-};
 
-//: Sort n elements, giving the resulting order in index
+  };
+
+// : Sort n elements, giving the resulting order in index
 //  data[index[0]] is smallest element, data[index[n-1]] is largest
 template <class T>
 void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
@@ -69,12 +77,15 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<int>& index)
 
   unsigned n = data.size();
   index.resize(n);
-  for (unsigned i =0;i < n; ++i) index[i] = i;
+  for( unsigned i = 0; i < n; ++i )
+    {
+    index[i] = i;
+    }
 
   vcl_sort(index.begin(), index.end(), c);
 }
 
-//: Sort n elements, giving the resulting order in index
+// : Sort n elements, giving the resulting order in index
 //  data[index[0]] is smallest element, data[index[n-1]] is largest
 //  \note to get a sorted list, apply sorted[i] = data[index[i]], for all i.
 template <class T>
@@ -85,12 +96,15 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<unsigned>& index)
 
   unsigned n = data.size();
   index.resize(n);
-  for (unsigned i =0;i < n; ++i) index[i] = i;
+  for( unsigned i = 0; i < n; ++i )
+    {
+    index[i] = i;
+    }
 
   vcl_sort(index.begin(), index.end(), c);
 }
 
-//: A comparator for general index sorting.
+// : A comparator for general index sorting.
 // It will take any type of index on to any sort of container
 // so long as T container.operator[](index) const is defined.
 //
@@ -101,17 +115,16 @@ void mbl_index_sort(const vcl_vector<T>& data, vcl_vector<unsigned>& index)
 //  ...
 //  vcl_sort(index.begin(), index.end(), mbl_index_sort_cmp<double>(data));
 // \endcode
-template <class T, class INDEX=unsigned, class CONT = vcl_vector<T>,
-  class CMP=vcl_less<T> >
-  struct mbl_index_sort_cmp: public vcl_binary_function<INDEX, INDEX, bool>
-{
-  explicit mbl_index_sort_cmp(const CONT &data, const CMP &c = CMP()):
+template <class T, class INDEX = unsigned, class CONT = vcl_vector<T>,
+          class CMP = vcl_less<T> >
+struct mbl_index_sort_cmp : public vcl_binary_function<INDEX, INDEX, bool>
+  {
+  explicit mbl_index_sort_cmp(const CONT & data, const CMP & c = CMP() ) :
     data_(data), cmp_(c) {}
-  const CONT &data_;
-  const CMP &cmp_;
-  bool operator () (const INDEX &a, const INDEX &b) const
+  const CONT & data_;
+  const CMP & cmp_;
+  bool operator ()(const INDEX & a, const INDEX & b) const
   {  return cmp_(data_[a], data_[b]); }
-};
-
+  };
 
 #endif // mbl_index_sort_h_

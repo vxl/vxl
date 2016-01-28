@@ -2,7 +2,6 @@
 
 DECLARE(test_array_dynamic_prg);
 
-
 void
 register_tests()
 {

@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_compare_3d_voxels_process.h
 #ifndef bvxm_compare_3d_voxels_process_h_
 #define bvxm_compare_3d_voxels_process_h_
-//:
+// :
 // \file
 // \author Vishal Jain
 // \date April 15, 2008
@@ -14,17 +14,17 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: globals
+// : globals
 namespace bvxm_compare_3d_voxels_process_globals
 {
-  const unsigned int n_inputs_ = 4;
-  const unsigned int n_outputs_ = 0;
+const unsigned int n_inputs_ = 4;
+const unsigned int n_outputs_ = 0;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_compare_3d_voxels_process_cons(bprb_func_process& pro);
 
-//: compares voxel worlds
+// : compares voxel worlds
 bool bvxm_compare_3d_voxels_process(bprb_func_process& pro);
 
 #endif // bvxm_compare_3d_voxels_process_h_

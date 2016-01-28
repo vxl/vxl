@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_scene_box_process.h
 #ifndef bvxm_scene_box_process_h_
 #define bvxm_scene_box_process_h_
-//:
+// :
 // \file
 // \brief A class that returns lower left lat, lon and upper right lat, lon of a scene
 //        -  Inputs:
@@ -21,14 +21,14 @@
 
 #include <bvxm/bvxm_world_params.h>
 
-//: globals variables and functions
+// : globals variables and functions
 namespace bvxm_scene_box_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 6;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 6;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_scene_box_process_cons(bprb_func_process& pro);
 
 bool bvxm_scene_box_process(bprb_func_process& pro);

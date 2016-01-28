@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //  This example program shows a typical use of the vipl_moment IP class on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
@@ -33,58 +33,58 @@
 #include <vcl_cmath.h> // for vcl_sqrt()
 
 #include <vxl_config.h> // for vxl_byte
-float square(float const& x) { return x*x; }
-void is_minus(float& x, float const& y) { x-=y; }
+float square(float const& x) { return x * x; }
+void is_minus(float& x, float const& y) { x -= y; }
 float squareroot(float const& x) { return vcl_sqrt(x); }
 
 int
-main(int argc, char** argv)
+main(int argc, char* * argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example_vipl_moment file_in file_out\n"; return 1; }
+  if( argc < 3 ) { vcl_cerr << "Syntax: example_vipl_moment file_in file_out\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if( !in ) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
-  vil_image_view<float> out(in.ni(),in.nj(),in.nplanes());
+  vil_image_view<float> out(in.ni(), in.nj(), in.nplanes() );
 
   // Intermediate image:
-  vil_image_view<float> tmp(in.ni(),in.nj(),in.nplanes());
+  vil_image_view<float> tmp(in.ni(), in.nj(), in.nplanes() );
 
   // The second moment filter.  result: E(X*X), into out.
-  vipl_moment<vil_image_view<vxl_byte>,vil_image_view<float>,vxl_byte,float> scnd_moment(2,5,5);
+  vipl_moment<vil_image_view<vxl_byte>, vil_image_view<float>, vxl_byte, float> scnd_moment(2, 5, 5);
   scnd_moment.put_in_data_ptr(&in);
   scnd_moment.put_out_data_ptr(&out);
   scnd_moment.filter();
 
   // The first moment filter.  result: E(X), into tmp.
-  vipl_moment<vil_image_view<vxl_byte>,vil_image_view<float>,vxl_byte,float> frst_moment(1,5,5);
+  vipl_moment<vil_image_view<vxl_byte>, vil_image_view<float>, vxl_byte, float> frst_moment(1, 5, 5);
   frst_moment.put_in_data_ptr(&in);
   frst_moment.put_out_data_ptr(&tmp);
   frst_moment.filter();
 
   // The monadic "square" point operator (input=output).  result: E(X)*E(X)
-  vipl_monadic<vil_image_view<float>,vil_image_view<float>,float,float> square_op(square);
+  vipl_monadic<vil_image_view<float>, vil_image_view<float>, float, float> square_op(square);
   square_op.put_in_data_ptr(&tmp);
   square_op.put_out_data_ptr(&tmp);
   square_op.filter();
 
   // The dyadic "is_minus" point operator.  result: E(X*X) - E(X)*E(X)
-  vipl_dyadic<vil_image_view<float>,vil_image_view<float>,float,float> minus_op(is_minus);
+  vipl_dyadic<vil_image_view<float>, vil_image_view<float>, float, float> minus_op(is_minus);
   minus_op.put_in_data_ptr(&tmp);
   minus_op.put_out_data_ptr(&out);
   minus_op.filter();
 
   // The monadic "square root" point operator (input = output)
-  vipl_monadic<vil_image_view<float>,vil_image_view<float>,float,float> sqrt_op(squareroot);
+  vipl_monadic<vil_image_view<float>, vil_image_view<float>, float, float> sqrt_op(squareroot);
   sqrt_op.put_in_data_ptr(&out);
   sqrt_op.put_out_data_ptr(&out);
   sqrt_op.filter();
 
   // vipl_convert to vxl_byte and write to PGM file:
-  vil_image_view<vxl_byte> pgm(in.ni(),in.nj(),in.nplanes());
-  vipl_convert<vil_image_view<float>,vil_image_view<vxl_byte>,float,vxl_byte> op;
+  vil_image_view<vxl_byte>                                                       pgm(in.ni(), in.nj(), in.nplanes() );
+  vipl_convert<vil_image_view<float>, vil_image_view<vxl_byte>, float, vxl_byte> op;
   op.put_in_data_ptr(&out);
   op.put_out_data_ptr(&pgm);
   op.filter();

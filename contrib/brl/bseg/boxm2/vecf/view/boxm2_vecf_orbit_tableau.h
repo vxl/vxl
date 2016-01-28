@@ -1,7 +1,7 @@
 // This is brl/bseg/boxm2/vecf/view/boxm2_vecf_orbit_tableau.h
 #ifndef boxm2_vecf_orbit_tableau_h
 #define boxm2_vecf_orbit_tableau_h
-//:
+// :
 // \file
 // \brief A tableau to view projections of the orbit model
 // \author J.L. Mundy
@@ -14,35 +14,43 @@
 #include <vecf/boxm2_vecf_fit_orbit.h>
 class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
 {
- public:
-  boxm2_vecf_orbit_tableau(){this->init();}
+public:
+  boxm2_vecf_orbit_tableau() {this->init(); }
   virtual ~boxm2_vecf_orbit_tableau() {}
   void init();
+
   void set_params(vcl_string const& param_path, bool is_right);
+
   bool set_image(vcl_string const& image_path);
+
   bool set_dlib_parts(vcl_string const& dlib_path);
+
   void draw_orbit(bool is_right);
+
   void draw_dlib_parts(bool is_right);
-  void set_points_filename(vcl_string fname){
+
+  void set_points_filename(vcl_string fname)
+  {
     export_fname_base_ = fname;
   }
- private:
-  bgui_image_tableau_sptr img_tab_;
+
+private:
+  bgui_image_tableau_sptr  img_tab_;
   bgui_vsol2D_tableau_sptr vsol_tab_;
-  boxm2_vecf_orbit_params left_params_;
-  boxm2_vecf_orbit_params right_params_;
-  boxm2_vecf_fit_orbit fo_;
-  vcl_string export_fname_base_;
+  boxm2_vecf_orbit_params  left_params_;
+  boxm2_vecf_orbit_params  right_params_;
+  boxm2_vecf_fit_orbit     fo_;
+  vcl_string               export_fname_base_;
 };
 
-//: declare smart pointer
+// : declare smart pointer
 typedef vgui_tableau_sptr_t<boxm2_vecf_orbit_tableau> boxm2_vecf_orbit_tableau_sptr;
 
-//: Create a smart-pointer to a boxm2_vecf_orbit_tableau tableau.
+// : Create a smart-pointer to a boxm2_vecf_orbit_tableau tableau.
 struct boxm2_vecf_orbit_tableau_new : public boxm2_vecf_orbit_tableau_sptr
-{
-  //: Constructor - create an empty vgui_easy3D_tableau.
+  {
+  // : Constructor - create an empty vgui_easy3D_tableau.
   typedef boxm2_vecf_orbit_tableau_sptr base;
   boxm2_vecf_orbit_tableau_new() : base( new boxm2_vecf_orbit_tableau ) { }
-};
+  };
 #endif // boxm2_vecf_orbit_tablea

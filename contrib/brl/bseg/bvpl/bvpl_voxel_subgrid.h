@@ -1,6 +1,6 @@
 #ifndef bvpl_voxel_subgrid_h
 #define bvpl_voxel_subgrid_h
-//:
+// :
 // \file
 // \brief A class to retrieve a subgrid within a bigger grid
 // \author Gamze Tunali
@@ -37,38 +37,38 @@
 
 class bvpl_subgrid_base
 {
- public:
+public:
   bvpl_subgrid_base(vgl_point_3d<int> center)
     : center_(center) {}
 
   virtual ~bvpl_subgrid_base() {}
 
   vgl_point_3d<int> center() const { return center_; }
-
- protected:
+protected:
   vgl_point_3d<int> center_;
 };
 
 template <class T>
 class bvpl_voxel_subgrid : public bvpl_subgrid_base
 {
- public:
-  bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab,
-                     vgl_point_3d<int> center,
-                     vgl_point_3d<int> max_point,
+public:
+  bvpl_voxel_subgrid(bvxm_voxel_slab<T>& slab, vgl_point_3d<int> center, vgl_point_3d<int> max_point,
                      vgl_point_3d<int> min_point);
 
   virtual ~bvpl_voxel_subgrid() {}
 
   bool voxel(int x, int y, int z, T& v);
+
   bool voxel(vgl_point_3d<int> p, T& v) { return voxel(p.x(), p.y(), p.z(), v); }
   void set_voxel(const T& v);
+
   void set_voxel_at(vgl_point_3d<int> p, T& v) { return set_voxel_at(p.x(), p.y(), p.z(), v); }
-  void set_voxel_at(int x, int y, int z, T const &v);
+  void set_voxel_at(int x, int y, int z, T const & v);
+
   T get_voxel();
 
- protected:
-  vgl_box_3d<int> box_;
+protected:
+  vgl_box_3d<int>    box_;
   bvxm_voxel_slab<T> slab_;
 };
 

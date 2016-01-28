@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_cvmatch );
 DECLARE( test_clsd_cvmatch );
 
@@ -12,5 +11,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-

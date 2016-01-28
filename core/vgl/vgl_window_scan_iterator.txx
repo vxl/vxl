@@ -6,6 +6,6 @@
 
 #undef VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE
 #define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) \
-template class vgl_window_scan_iterator<T >
+  template class vgl_window_scan_iterator < T >
 
 #endif // vgl_window_scan_iterator_txx_

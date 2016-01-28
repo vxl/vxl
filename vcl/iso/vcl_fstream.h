@@ -6,9 +6,9 @@
 #include <fstream>
 
 #ifdef vcl_generic_fstream_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_fstream_STD std
+#  define vcl_generic_fstream_STD std
 #endif
 
 #include "../generic/vcl_fstream.h"

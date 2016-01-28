@@ -1,11 +1,11 @@
 // This is core/vgui/examples/wx_example/wx_xrc_app.cxx
-//=========================================================================
-//:
+// =========================================================================
+// :
 // \file
 // \brief  wxWidgets main application class.
 //
 // See wx_xrc_app.h for details.
-//=========================================================================
+// =========================================================================
 
 #include "wx_xrc_app.h"
 #include "wx_xrc_frame.h"
@@ -14,11 +14,9 @@
 #include <wx/xrc/xmlres.h>
 #include <vgui/vgui.h>
 
-
 extern void InitXmlResource(); // defined in generated file
 
-
-//: Give wxWidgets the means to create a wx_xrc_app object.
+// : Give wxWidgets the means to create a wx_xrc_app object.
 IMPLEMENT_APP(wx_xrc_app)
 
 wx_xrc_app::wx_xrc_app(void)
@@ -26,7 +24,7 @@ wx_xrc_app::wx_xrc_app(void)
 {
 }
 
-//: Initialize the application.
+// : Initialize the application.
 bool wx_xrc_app::OnInit(void)
 {
   // select the vgui_wx toolkit
@@ -34,6 +32,7 @@ bool wx_xrc_app::OnInit(void)
 
   vgui_wx::InitVguiHandlers();
   wxXmlResource::Get()->InitAllHandlers();
+
   InitXmlResource();
 
   frame_ = new wx_xrc_frame(0,
@@ -47,7 +46,3 @@ bool wx_xrc_app::OnInit(void)
   // start the event loop
   return true;
 }
-
-
-
-

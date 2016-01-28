@@ -2,7 +2,7 @@
 #ifndef bsta_io_parzen_sphere_h_
 #define bsta_io_parzen_sphere_h_
 
-//:
+// :
 // \file
 // \brief Binary I/O for spherical parzen windows
 // \author Joseph L. Mundy
@@ -20,41 +20,40 @@
 #include <vsl/vsl_vector_io.h>
 #include <vcl_iostream.h>
 
-//: Binary save bsta_parzen_sphere to stream.
+// : Binary save bsta_parzen_sphere to stream.
 template <class T, unsigned n>
 void
-vsl_b_write(vsl_b_ostream &os, const bsta_parzen_sphere<T,n>& g)
+vsl_b_write(vsl_b_ostream & os, const bsta_parzen_sphere<T, n>& g)
 {
-  vsl_b_write(os,g.bandwidth());
+  vsl_b_write(os, g.bandwidth() );
 
-  typedef typename bsta_parzen<T,n>::vector_type vector_;
+  typedef typename bsta_parzen<T, n>::vector_type vector_;
 
   vcl_vector<vector_> samples = g.samples();
 
-  vsl_b_write(os,samples);
+  vsl_b_write(os, samples);
 }
 
-//: Binary load bsta_parzen_sphere from stream.
+// : Binary load bsta_parzen_sphere from stream.
 template <class T, unsigned n>
 void
-vsl_b_read(vsl_b_istream &is, bsta_parzen_sphere<T,n>& g)
+vsl_b_read(vsl_b_istream & is, bsta_parzen_sphere<T, n>& g)
 {
-  typedef typename bsta_parzen<T,n>::vector_type vector_;
+  typedef typename bsta_parzen<T, n>::vector_type vector_;
   vcl_vector<vector_> samples;
-  T bandwidth;
+  T                   bandwidth;
   vsl_b_read(is, bandwidth);
   vsl_b_read(is, samples);
   g.set_bandwidth(bandwidth);
   g.insert_samples(samples);
 }
 
-//: Print summary
+// : Print summary
 template <class T, unsigned n>
 void
-vsl_print_summary(vcl_ostream &os, const bsta_parzen_sphere<T,n>& g)
+vsl_print_summary(vcl_ostream & os, const bsta_parzen_sphere<T, n>& g)
 {
-  os << "parzen (sphere) mean:"<<g.mean()<<" n_samples"<<g.size();
+  os << "parzen (sphere) mean:" << g.mean() << " n_samples" << g.size();
 }
-
 
 #endif // bsta_io_parzen_sphere_h_

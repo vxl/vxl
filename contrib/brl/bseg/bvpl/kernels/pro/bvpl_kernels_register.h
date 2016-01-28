@@ -3,9 +3,11 @@
 
 class bvpl_kernels_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // bvpl_kernels_register_h_

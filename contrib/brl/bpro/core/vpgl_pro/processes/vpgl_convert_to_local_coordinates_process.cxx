@@ -1,6 +1,6 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_convert_to_local_coordinates_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 
 #include <bprb/bprb_parameters.h>
@@ -8,22 +8,23 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
-//: initialization
+// : initialization
 bool vpgl_convert_to_local_coordinates_process_cons(bprb_func_process& pro)
 {
-  //this process takes four inputs:
+  // this process takes four inputs:
   // 0: (string) lvcs filename
   // 1: (float)  latitude
   // 2: (float)  longitude
   // 3: (float)  elevation
-  bool ok=false;
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");
   input_types.push_back("float");
   input_types.push_back("float");
   input_types.push_back("float");
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   // outputs x,y,z in local coordinates
   // 0: (float) x
@@ -34,37 +35,40 @@ bool vpgl_convert_to_local_coordinates_process_cons(bprb_func_process& pro)
   output_types.push_back("float");
   output_types.push_back("float");
   ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   return true;
 
 }
 
-//: Execute the process
+// : Execute the process
 bool vpgl_convert_to_local_coordinates_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+  if( pro.n_inputs() != pro.input_types().size() )
+    {
+    vcl_cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be "
+             << pro.input_types().size() << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs
   vcl_string lvcs_filename = pro.get_input<vcl_string>(0);
-  float lat = pro.get_input<float>(1);
-  float lon = pro.get_input<float>(2);
-  float el = pro.get_input<float>(3);
+  float      lat = pro.get_input<float>(1);
+  float      lon = pro.get_input<float>(2);
+  float      el = pro.get_input<float>(3);
 
-  vpgl_lvcs lvcs;
-  vcl_ifstream ifs(lvcs_filename.c_str());
-  if(!ifs.good()) {
+  vpgl_lvcs    lvcs;
+  vcl_ifstream ifs(lvcs_filename.c_str() );
+  if( !ifs.good() )
+    {
     vcl_cerr << "Error opening lvcs filename " << lvcs_filename << vcl_endl;
     return false;
-  }
+    }
 
   lvcs.read(ifs);
 
-  double x,y,z;
-  lvcs.global_to_local(lon,lat,el, vpgl_lvcs::wgs84, x, y, z, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  double x, y, z;
+  lvcs.global_to_local(lon, lat, el, vpgl_lvcs::wgs84, x, y, z, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
   pro.set_output_val<float>(0, (float)x);
   pro.set_output_val<float>(1, (float)y);
@@ -73,22 +77,23 @@ bool vpgl_convert_to_local_coordinates_process(bprb_func_process& pro)
   return true;
 }
 
-//: initialization
+// : initialization
 bool vpgl_convert_to_local_coordinates_process2_cons(bprb_func_process& pro)
 {
-  //this process takes four inputs:
+  // this process takes four inputs:
   // 0: lvcs
   // 1: (float)  latitude
   // 2: (float)  longitude
   // 3: (float)  elevation
-  bool ok=false;
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vpgl_lvcs_sptr");
   input_types.push_back("float");
   input_types.push_back("float");
   input_types.push_back("float");
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   // outputs x,y,z in local coordinates
   // 0: (float) x
@@ -99,28 +104,30 @@ bool vpgl_convert_to_local_coordinates_process2_cons(bprb_func_process& pro)
   output_types.push_back("float");
   output_types.push_back("float");
   ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   return true;
 
 }
 
-//: Execute the process
+// : Execute the process
 bool vpgl_convert_to_local_coordinates_process2(bprb_func_process& pro)
 {
-  if (pro.n_inputs() != pro.input_types().size()) {
-    vcl_cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be " << pro.input_types().size() << vcl_endl;
+  if( pro.n_inputs() != pro.input_types().size() )
+    {
+    vcl_cout << "vpgl_convert_to_local_coordinates_process: The number of inputs should be "
+             << pro.input_types().size() << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(0);
-  float lat = pro.get_input<float>(1);
-  float lon = pro.get_input<float>(2);
-  float el = pro.get_input<float>(3);
+  float          lat = pro.get_input<float>(1);
+  float          lon = pro.get_input<float>(2);
+  float          el = pro.get_input<float>(3);
 
-  double x,y,z;
-  lvcs->global_to_local(lon,lat,el, vpgl_lvcs::wgs84, x, y, z, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  double x, y, z;
+  lvcs->global_to_local(lon, lat, el, vpgl_lvcs::wgs84, x, y, z, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
 
   pro.set_output_val<float>(0, (float)x);
   pro.set_output_val<float>(1, (float)y);
@@ -128,4 +135,3 @@ bool vpgl_convert_to_local_coordinates_process2(bprb_func_process& pro)
 
   return true;
 }
-

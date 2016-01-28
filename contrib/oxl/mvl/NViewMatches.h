@@ -2,9 +2,9 @@
 #ifndef NViewMatches_h_
 #define NViewMatches_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Multiple view matches with wildcards
 //
@@ -30,37 +30,40 @@
 //            matlab interaction.
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
 #include <vcl_vector.h>
 #include <vcl_iosfwd.h>
 
 struct NViewMatch : public vnl_vector<int>
-{
+  {
   // Constants
   enum { nomatch = -1 };
 
   // Constructors
   NViewMatch() {}
-  NViewMatch(int n): vnl_vector<int>(n, nomatch) {}
+  NViewMatch(int n) : vnl_vector<int>(n, nomatch) {}
 
   // Operations
   bool matches(const NViewMatch& b, int min_overlap) const;
-  void incorporate(const NViewMatch& b);
-  bool is_consistent(const NViewMatch& b) const;
-  int count_observations() const;
-};
 
-vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c);
+  void incorporate(const NViewMatch& b);
+
+  bool is_consistent(const NViewMatch& b) const;
+
+  int count_observations() const;
+
+  };
+
+vcl_ostream & operator<<(vcl_ostream& s, const NViewMatch& c);
 
 class NViewMatches : public vcl_vector<NViewMatch>
 {
   // Data Members--------------------------------------------------------------
   int nviews_;
   int min_overlap_;
-
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
   NViewMatches();
   NViewMatches(vcl_istream& s);
@@ -74,46 +77,55 @@ class NViewMatches : public vcl_vector<NViewMatch>
   // Operations----------------------------------------------------------------
   int nviews() const { return nviews_; }
 
-  bool load(vcl_istream&);
+  bool load(vcl_istream &);
+
   bool load(const char* filename);
 
-  bool save(vcl_ostream&);
+  bool save(vcl_ostream &);
+
   bool save(const char* filename);
 
   void clear();
 
   int count_matches(const NViewMatch& match);
+
   vcl_vector<int> get_matches(const NViewMatch& match);
+
   int incorporate_triplet(int base_view, int c1, int c2, int c3);
+
   int incorporate(const NViewMatch& matches);
+
   void remove_inconsistencies();
+
   NViewMatch make_triplet_match(int base_view, int c1, int c2, int c3);
+
 };
 
 class OffsetNViewMatch : public NViewMatch
 {
   int min_view_;
- public:
-  OffsetNViewMatch(int min_view, int max_view):
+public:
+  OffsetNViewMatch(int min_view, int max_view) :
     NViewMatch(max_view - min_view + 1),
     min_view_(min_view)
   {
   }
 
-  OffsetNViewMatch(const OffsetNViewMatch& that):
+  OffsetNViewMatch(const OffsetNViewMatch& that) :
     NViewMatch(that),
     min_view_(that.min_view_)
   {
   }
 
-  OffsetNViewMatch& operator=(const OffsetNViewMatch& that)
+  OffsetNViewMatch & operator=(const OffsetNViewMatch& that)
   {
     NViewMatch::operator=(that);
+
     min_view_ = that.min_view_;
     return *this;
   }
 
-  int& operator[] (int i) { return NViewMatch::operator[] (i - min_view_); }
+  int & operator[](int i) { return NViewMatch::operator[](i - min_view_); }
 };
 
 #endif // NViewMatches_h_

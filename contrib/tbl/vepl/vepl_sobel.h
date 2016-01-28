@@ -1,6 +1,6 @@
 #ifndef vepl_sobel_h_
 #define vepl_sobel_h_
-//:
+// :
 // \file
 // \brief Sobel convolution filter
 //
@@ -14,7 +14,7 @@
 
 #include <vil/vil_image_resource.h>
 
-//: Sobel convolution filter
+// : Sobel convolution filter
 vil_image_resource_sptr vepl_sobel(vil_image_resource_sptr );
 
 #endif // vepl_sobel_h_

@@ -1,7 +1,7 @@
 // This is mul/vimt/vimt_load.h
 #ifndef vimt_load_h_
 #define vimt_load_h_
-//:
+// :
 // \file
 // \author Martin Roberts, Ian Scott
 
@@ -12,99 +12,99 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vcl_cstring.h>
 
-//: Create a transform from the properties of image resource.
+// : Create a transform from the properties of image resource.
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
-vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr &im,
-                                      float unit_scaling=1.0f);
+vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr & im, float unit_scaling = 1.0f);
 
-//: Create a transform from the properties of image resource, assuming a right-hand world frame.
+// : Create a transform from the properties of image resource, assuming a right-hand world frame.
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
 // \note This version incorporates a reflection through the x-axis so that
 // the transform is put into a right-handed coordinate frame
 // (with y increasing from bottom to top of image).
-vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr &im,
-                                                 float unit_scaling=1.0f);
+vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr & im, float unit_scaling = 1.0f);
 
-//: Load image from path into byte image
+// : Load image from path into byte image
 // If input image is float or int16 then stretch values to byte
-void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image,
-                       float unit_scaling);
+void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& image, float unit_scaling);
 
-//: Load image from path into given image (forcing to given pixel type)
+// : Load image from path into given image (forcing to given pixel type)
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
-template<class T> inline
+template <class T>
+inline
 void vimt_load(const vcl_string& path,
                vimt_image_2d_of<T>& image,
-               float unit_scaling=1.0f)
+               float unit_scaling = 1.0f)
 {
-  vil_image_resource_sptr ir = vil_load_image_resource(path.c_str());
-  if (ir.ptr()==0)
-  {
-    image.image().set_size(0,0);
+  vil_image_resource_sptr ir = vil_load_image_resource(path.c_str() );
+
+  if( ir.ptr() == 0 )
+    {
+    image.image().set_size(0, 0);
     return;
-  }
-  image.image() = vil_convert_cast(T(),ir->get_view(0,ir->ni(),0,ir->nj()));
-  image.set_world2im(vimt_load_transform(ir, unit_scaling));
+    }
+  image.image() = vil_convert_cast(T(), ir->get_view(0, ir->ni(), 0, ir->nj() ) );
+  image.set_world2im(vimt_load_transform(ir, unit_scaling) );
 }
 
-
-//: Load image from path into given image (forcing to given pixel type), merging transparent planes
+// : Load image from path into given image (forcing to given pixel type), merging transparent planes
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
-template<class T> inline
+template <class T>
+inline
 void vimt_load_as_grey_or_rgb(const vcl_string& path,
-               vimt_image_2d_of<T>& image,
-               float unit_scaling=1.0f)
+                              vimt_image_2d_of<T>& image,
+                              float unit_scaling = 1.0f)
 {
-  vil_image_resource_sptr ir = vil_load_image_resource(path.c_str());
+  vil_image_resource_sptr ir = vil_load_image_resource(path.c_str() );
 
-  if (ir.ptr()==0)
-  {
-    image.image().set_size(0,0);
+  if( ir.ptr() == 0 )
+    {
+    image.image().set_size(0, 0);
     return;
-  }
+    }
 
-  image.image() = vil_convert_cast(T(),ir->get_view(0,ir->ni(),0,ir->nj()));
-  image.set_world2im(vimt_load_transform(ir, unit_scaling));
+  image.image() = vil_convert_cast(T(), ir->get_view(0, ir->ni(), 0, ir->nj() ) );
+  image.set_world2im(vimt_load_transform(ir, unit_scaling) );
 
   unsigned nplanes = image.image().nplanes();
 
   // merge transparent plane in tiff and png images
-  if ((strcmp(ir->file_format(), "tiff") == 0) || (strcmp(ir->file_format(), "png") == 0))
-  {
-    if ((nplanes == 2) || (nplanes == 4))
+  if( (strcmp(ir->file_format(), "tiff") == 0) || (strcmp(ir->file_format(), "png") == 0) )
     {
-      vil_image_view_base_sptr image_ref = new vil_image_view<vxl_byte>(image.image());
-      vil_image_view<T> new_image_view = vil_convert_to_n_planes(nplanes-1, image_ref);
+    if( (nplanes == 2) || (nplanes == 4) )
+      {
+      vil_image_view_base_sptr image_ref = new vil_image_view<vxl_byte>(image.image() );
+      vil_image_view<T>        new_image_view = vil_convert_to_n_planes(nplanes - 1, image_ref);
 
       vil_convert_merge_alpha(image.image(), new_image_view, nplanes);
-      image.image() = vil_convert_to_n_planes(nplanes-1, image_ref);
+      image.image() = vil_convert_to_n_planes(nplanes - 1, image_ref);
       image.image() = new_image_view;
+      }
     }
-  }
 }
 
-//: Load image from path into given image (forcing to given pixel type)
+// : Load image from path into given image (forcing to given pixel type)
 // \param unit_scaling is to convert from metres to desired world units (e.g. 1000 for mm)
 // \note This version incorporates a reflection through the x-axis so that
 // the transform is put into a right-handed coordinate frame
 // (with y increasing from bottom to top of image).
-template<class T> inline
+template <class T>
+inline
 void vimt_load_right_hand(const vcl_string& path,
                           vimt_image_2d_of<T>& image,
-                          float unit_scaling=1.0f)
+                          float unit_scaling = 1.0f)
 {
-  vil_image_resource_sptr ir = vil_load_image_resource(path.c_str());
-  if (ir.ptr()==0)
-  {
-    image.image().set_size(0,0);
+  vil_image_resource_sptr ir = vil_load_image_resource(path.c_str() );
+
+  if( ir.ptr() == 0 )
+    {
+    image.image().set_size(0, 0);
     return;
-  }
+    }
 
   image.image() = vil_convert_cast(T(),
-    ir->get_view(0,ir->ni(),0,ir->nj()));
+                                   ir->get_view(0, ir->ni(), 0, ir->nj() ) );
 
-  image.set_world2im(vimt_load_transform_right_hand(ir, unit_scaling));
+  image.set_world2im(vimt_load_transform_right_hand(ir, unit_scaling) );
 }
-
 
 #endif // vimt_load_h_

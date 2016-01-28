@@ -4,84 +4,95 @@
 #include <vcl_where_root_dir.h>
 #include <vnl/vnl_random.h>
 #include <vcl_algorithm.h>
-boxm2_ocl_hierarchical_points_to_volume_reg::boxm2_ocl_hierarchical_points_to_volume_reg( boxm2_opencl_cache_sptr  & cache,
-                                                   float *pts,
-                                                   boxm2_scene_sptr sceneB,
-                                                   int npts,
-                                                   bocl_device_sptr device, bool do_vary_scale):  boxm2_ocl_reg_points_to_volume_mutual_info(cache,pts,sceneB,device,npts, do_vary_scale), do_vary_scale_(do_vary_scale)
+boxm2_ocl_hierarchical_points_to_volume_reg::boxm2_ocl_hierarchical_points_to_volume_reg(
+  boxm2_opencl_cache_sptr  & cache,
+  float * pts,
+  boxm2_scene_sptr sceneB,
+  int npts,
+  bocl_device_sptr device,
+  bool do_vary_scale) :  boxm2_ocl_reg_points_to_volume_mutual_info(cache, pts, sceneB, device, npts, do_vary_scale),
+  do_vary_scale_(do_vary_scale)
 {
 
 }
 
 bool boxm2_ocl_hierarchical_points_to_volume_reg::init(vnl_vector<double> const& mu, vnl_vector<double> const & cov)
 {
-    mu_ = mu ;
-    cov_= cov;
-    mu_cost_ = this->cost(mu_);
-    vcl_cout<<"Mutual Information for current position is "<<mu_cost_<<vcl_endl;
-    return true;
+  mu_ = mu;
+  cov_ = cov;
+  mu_cost_ = this->cost(mu_);
+  vcl_cout << "Mutual Information for current position is " << mu_cost_ << vcl_endl;
+  return true;
 }
 
 bool boxm2_ocl_hierarchical_points_to_volume_reg::exhaustive()
 {
-    samples_.clear();
-    int nlevels = 4;
-    unsigned int numsamples_search_width[4] = {3,3,3,3}; // should be odd
-    unsigned int numbestparticales[4] = {1,1,1,1};
-    int params_to_vary = mu_.size() ;
-    if( !do_vary_scale_ )
-        params_to_vary -=1;
-    vcl_map<double,vnl_vector<double> > samples_sorted;
-    vnl_vector<double> cov = cov_;
-    samples_sorted[mu_cost_] =mu_;
-    for (unsigned int level = 0; level <nlevels; level++)
+  samples_.clear();
+  int          nlevels = 4;
+  unsigned int numsamples_search_width[4] = {3, 3, 3, 3}; // should be odd
+  unsigned int numbestparticales[4] = {1, 1, 1, 1};
+  int          params_to_vary = mu_.size();
+  if( !do_vary_scale_ )
     {
-        vcl_cout<<"Level #"<<level<<vcl_endl;
-        mis.clear();
-        samples_.clear();
-        vcl_map<double,vnl_vector<double> >::reverse_iterator iter = samples_sorted.rbegin();
-        for(unsigned int j = 0 ; j < numbestparticales[level] && iter!=samples_sorted.rend(); j++,iter++)
-        {
-            vcl_cout<<".";
-            vcl_cout.flush();
-            int searchwidth = numsamples_search_width[level];
-            vnl_vector<double> best_sample = iter->second;
-            int numsamples_per_best_particle = (int) vcl_pow((float)searchwidth,(float)params_to_vary);
-            for(unsigned int sampleno = 0 ; sampleno < numsamples_per_best_particle; sampleno++)
-            {
-                int cont=sampleno;
-                vnl_vector<double> curr_sample = best_sample;
-                for(unsigned k = 0; k <params_to_vary; k++)
-                {
-                    int t = params_to_vary - k - 1;
-                    unsigned int var = cont/(unsigned int)vcl_pow((float)searchwidth,(float)t); // quotient
-                    cont = cont - (unsigned int)vcl_pow((float)searchwidth,(float)t)*var;       // remainder
-                    double offset = (2*((double)var/((double)searchwidth-1))-1)*cov[t];
-                    curr_sample[t] +=  offset;
-                }
-                double minfo = this->cost(curr_sample, level) ;
-                mis.push_back(minfo);
-                samples_.push_back(curr_sample);
-            }
-        }
-        vcl_cout<<vcl_endl;
-        samples_sorted.clear();
-        for(unsigned i = 0 ; i <mis.size(); i++)
-            samples_sorted[mis[i]]=samples_[i];
-        vcl_cout<<"Mutual Infor for Max Sample"<<this->max_sample()-mu_<<" is "<<this->cost(this->max_sample(),level)<<vcl_endl;
-        cov = cov_/vcl_pow((float)2,(float)level+1);
+    params_to_vary -= 1;
     }
-    return true;
+  vcl_map<double, vnl_vector<double> > samples_sorted;
+  vnl_vector<double>                   cov = cov_;
+  samples_sorted[mu_cost_] = mu_;
+  for( unsigned int level = 0; level < nlevels; level++ )
+    {
+    vcl_cout << "Level #" << level << vcl_endl;
+    mis.clear();
+    samples_.clear();
+    vcl_map<double, vnl_vector<double> >::reverse_iterator iter = samples_sorted.rbegin();
+    for( unsigned int j = 0; j < numbestparticales[level] && iter != samples_sorted.rend(); j++, iter++ )
+      {
+      vcl_cout << ".";
+      vcl_cout.flush();
+      int                searchwidth = numsamples_search_width[level];
+      vnl_vector<double> best_sample = iter->second;
+      int                numsamples_per_best_particle = (int) vcl_pow( (float)searchwidth, (float)params_to_vary);
+      for( unsigned int sampleno = 0; sampleno < numsamples_per_best_particle; sampleno++ )
+        {
+        int                cont = sampleno;
+        vnl_vector<double> curr_sample = best_sample;
+        for( unsigned k = 0; k < params_to_vary; k++ )
+          {
+          int          t = params_to_vary - k - 1;
+          unsigned int var = cont / (unsigned int)vcl_pow( (float)searchwidth, (float)t);       // quotient
+          cont = cont - (unsigned int)vcl_pow( (float)searchwidth, (float)t) * var;             // remainder
+          double offset = (2 * ( (double)var / ( (double)searchwidth - 1) ) - 1) * cov[t];
+          curr_sample[t] +=  offset;
+          }
+        double minfo = this->cost(curr_sample, level);
+        mis.push_back(minfo);
+        samples_.push_back(curr_sample);
+        }
+      }
+    vcl_cout << vcl_endl;
+    samples_sorted.clear();
+    for( unsigned i = 0; i < mis.size(); i++ )
+      {
+      samples_sorted[mis[i]] = samples_[i];
+      }
+    vcl_cout << "Mutual Infor for Max Sample" << this->max_sample() - mu_ << " is " << this->cost(
+      this->max_sample(), level) << vcl_endl;
+    cov = cov_ / vcl_pow( (float)2, (float)level + 1);
+    }
+  return true;
 }
+
 vnl_vector<double> boxm2_ocl_hierarchical_points_to_volume_reg::max_sample()
 {
-    vnl_vector<double> max_sample( mu_.size(),0.0);
-    double max_pdf = 0.0;
-    for(unsigned i = 0 ; i < mis.size(); i++)
-        if(mis[i] > max_pdf)
-        {
-            max_pdf = mis[i];
-            max_sample = samples_[i];
-        }
-   return max_sample;
+  vnl_vector<double> max_sample( mu_.size(), 0.0);
+  double             max_pdf = 0.0;
+  for( unsigned i = 0; i < mis.size(); i++ )
+    {
+    if( mis[i] > max_pdf )
+      {
+      max_pdf = mis[i];
+      max_sample = samples_[i];
+      }
+    }
+  return max_sample;
 }

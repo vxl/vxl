@@ -17,57 +17,63 @@
 // A macro VCL_COMPLEX_INSTANTIATE(T) which allows you to instantiate
 // complex over other number types.
 
-
 // ---------- Visual Studio 9
 #if defined(VCL_VC_9)
-# include "win32-vc9/vcl_complex.h"
+#  include "win32-vc9/vcl_complex.h"
 // ---------- ISO
 #else
-# include "iso/vcl_complex.h"
+#  include "iso/vcl_complex.h"
 #endif
 
-
-# if !VCL_COMPLEX_POW_WORKS
+#if !VCL_COMPLEX_POW_WORKS
 #  undef vcl_pow
 #  define vcl_pow vcl_pow
 // several implementations of pow are wrong.
 // e.g. pow(complex<double>(-1.0,0.0), 0.5) returns (Nan, 0) rather than (0,1).
 
-template <class T> inline vcl_complex<T>
-  vcl_pow(const vcl_complex<T>& xin, int y)
+template <class T>
+inline vcl_complex<T>
+vcl_pow(const vcl_complex<T>& xin, int y)
 {
   vcl_complex<T> r = 1.0;
   vcl_complex<T> x = xin;
-  if (y < 0) {
+  if( y < 0 )
+    {
     y = -y;
-    x = ((T)1)/x; }
-  while (y) {
-    if (y & 1)   r *= x;
-    if (y >>= 1) x *= x; }
+    x = ( (T)1) / x;
+    }
+  while( y )
+    {
+    if( y & 1 ) {r *= x; }
+    if( y >>= 1 ) {x *= x; }}
+
   return r;
 }
 
-template <class T> inline vcl_complex<T>
-  vcl_pow(const vcl_complex<T>& x, const T& y)
+template <class T>
+inline vcl_complex<T>
+vcl_pow(const vcl_complex<T>& x, const T& y)
 {
-  return vcl_exp(y * vcl_log(x));
+  return vcl_exp(y * vcl_log(x) );
 }
 
-template <class T> inline vcl_complex<T>
-  vcl_pow(const T& x, const vcl_complex<T>& y)
+template <class T>
+inline vcl_complex<T>
+vcl_pow(const T& x, const vcl_complex<T>& y)
 {
-  return vcl_exp(y * vcl_log(vcl_complex<T>(x, T(0))));
+  return vcl_exp(y * vcl_log(vcl_complex<T>(x, T(0) ) ) );
 }
 
-template <class T> inline vcl_complex<T>
-  vcl_pow(const vcl_complex<T>& x, const vcl_complex<T>& y)
+template <class T>
+inline vcl_complex<T>
+vcl_pow(const vcl_complex<T>& x, const vcl_complex<T>& y)
 {
-  return vcl_exp(y * vcl_log(x));
+  return vcl_exp(y * vcl_log(x) );
 }
 
-# endif // !VCL_COMPLEX_POW_WORKS
+#endif // !VCL_COMPLEX_POW_WORKS
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 // bogus instantiation macro.
 #define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.txx instead"

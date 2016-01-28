@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_illum_index_process.h
 #ifndef bvxm_illum_index_process_h_
 #define bvxm_illum_index_process_h_
-//:
+// :
 // \file
 // \brief A class for illum_index process of a voxel world.
 //
@@ -16,17 +16,17 @@
 #include <bprb/bprb_func_process.h>
 #include <vcl_string.h>
 
-//: global variables
+// : global variables
 namespace bvxm_illum_index_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 4;
+const unsigned n_outputs_ = 1;
 
-  unsigned bin_index(vcl_string map_type, double sun_el, double sun_az,
-                     unsigned num_lat, unsigned num_long);
+unsigned bin_index(vcl_string map_type, double sun_el, double sun_az, unsigned num_lat, unsigned num_long);
+
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_illum_index_process_cons(bprb_func_process& pro);
 
 bool bvxm_illum_index_process(bprb_func_process& pro);

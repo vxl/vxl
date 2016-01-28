@@ -2,9 +2,9 @@
 #ifndef vbl_array_3dh
 #define vbl_array_3dh
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Contains class for templated 3d array
 // \author Paul Beardsley, Oxford University, UK
@@ -20,42 +20,39 @@
 //   Peter Vanroose 4 Jan. 2002 bug fix: 3rd arg row2_count_ --> row3_count_
 // \endverbatim
 
-
 #include <vcl_compiler.h>
 #include <vcl_cstddef.h>
 
 #ifdef __OPTIMIZE__
-# define RANGECHECK(i,j,k) ((void)0)
+#  define RANGECHECK(i, j, k) ( (void)0)
 #else
-# include <vcl_cassert.h>
-# define RANGECHECK(i,j,k) assert(((size_type)i < row1_count_) && \
-                   ((size_type)j < row2_count_) && ((size_type)k < row3_count_))
+#  include <vcl_cassert.h>
+#  define RANGECHECK(i, j, k) assert( ( (size_type)i < row1_count_) && \
+                                      ( (size_type)j < row2_count_) && ( (size_type)k < row3_count_) )
 #endif
 
-//: Templated 3-dimensional array
+// : Templated 3-dimensional array
 
 VCL_TEMPLATE_EXPORT template <class T>
 class vbl_array_3d
 {
- public:
+public:
   typedef vcl_size_t size_type;
-  typedef T element_type;
+  typedef T          element_type;
+private:
+  element_type * * * element_;
+  size_type          row1_count_;
+  size_type          row2_count_;
+  size_type          row3_count_;
+public:
+  typedef T *       iterator;
+  typedef T const * const_iterator;
 
- private:
-  element_type ***element_;
-  size_type row1_count_;
-  size_type row2_count_;
-  size_type row3_count_;
+  typedef T &       reference;
+  typedef T const & const_reference;
+public:
 
- public:
-  typedef T*       iterator;
-  typedef T const* const_iterator;
-
-  typedef T       &reference;
-  typedef T const &const_reference;
- public:
-
-  vbl_array_3d(): element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
+  vbl_array_3d() : element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
   {}
 
   vbl_array_3d(size_type n1, size_type n2, size_type n3)
@@ -72,81 +69,93 @@ class vbl_array_3d
   }
 
   vbl_array_3d(vbl_array_3d<T> const& that)
-  : element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
+    : element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
   {
-    if (that.element_) {
-      construct(that.row1_count_,that.row2_count_,that.row3_count_);
-      set(that.data_block());
-    }
+    if( that.element_ )
+      {
+      construct(that.row1_count_, that.row2_count_, that.row3_count_);
+      set(that.data_block() );
+      }
   }
 
-  ~vbl_array_3d () { destruct(); }
-  vbl_array_3d<T>& operator=(vbl_array_3d<T> const& that) {
+  ~vbl_array_3d() { destruct(); }
+  vbl_array_3d<T> & operator=(vbl_array_3d<T> const& that)
+  {
     resize(that.row1_count_, that.row2_count_, that.row3_count_);
-    set(that.data_block());
+    set(that.data_block() );
     return *this;
   }
 
-  //: Comparison
-  bool operator==(vbl_array_3d<T> const& that) const {
-    if (row1_count_ != that.row1_count_ ||
+  // : Comparison
+  bool operator==(vbl_array_3d<T> const& that) const
+  {
+    if( row1_count_ != that.row1_count_ ||
         row2_count_ != that.row2_count_ ||
-        row3_count_ != that.row3_count_)
+        row3_count_ != that.row3_count_ )
+      {
       return false;
+      }
     const_iterator i = this->begin();
     const_iterator j = that.begin();
-    while (i != this->end())
-    {
-      if (!(*i == *j)) // do not assume we have operator!=(T)
+    while( i != this->end() )
+      {
+      if( !(*i == *j) ) // do not assume we have operator!=(T)
+        {
         return false;
+        }
       ++i; ++j;
-    }
+      }
+
     return true;
   }
 
   // Data Access---------------------------------------------------------------
 
-  reference       operator() (size_type i1, size_type i2, size_type i3)
+  reference       operator()(size_type i1, size_type i2, size_type i3)
   {
-    RANGECHECK(i1,i2,i3);
-    return element_ [i1][i2][i3];
+    RANGECHECK(i1, i2, i3);
+    return element_[i1][i2][i3];
   }
 
-  const_reference operator() (size_type i1, size_type i2, size_type i3) const
+  const_reference operator()(size_type i1, size_type i2, size_type i3) const
   {
-    RANGECHECK(i1,i2,i3);
-    return element_ [i1][i2][i3];
+    RANGECHECK(i1, i2, i3);
+    return element_[i1][i2][i3];
   }
 
-  T      * const* operator[](size_type i1) { return element_[i1]; }
-  T const* const* operator[](size_type i1) const { return element_[i1]; }
+  T      * const * operator[](size_type i1) { return element_[i1]; }
+  T const * const * operator[](size_type i1) const { return element_[i1]; }
 
   // dimensions
-  size_type get_row1_count () const { return row1_count_; }
-  size_type get_row2_count () const { return row2_count_; }
-  size_type get_row3_count () const { return row3_count_; }
+  size_type get_row1_count() const { return row1_count_; }
+  size_type get_row2_count() const { return row2_count_; }
+  size_type get_row3_count() const { return row3_count_; }
 
   size_type size() const { return row1_count_ * row2_count_ * row3_count_; }
   size_type capacity() const { return size(); }
 
   // iterators
   iterator begin() { return element_[0][0]; }
-  iterator end  () { return begin() + size(); }
+  iterator end() { return begin() + size(); }
   const_iterator begin() const { return element_[0][0]; }
-  const_iterator end  () const { return begin() + size(); }
+  const_iterator end() const { return begin() + size(); }
 
   // data_block will return all elements of the array in sequential storage.
   T      * data_block()       { return element_[0][0]; }
-  T const* data_block() const { return element_[0][0]; }
+  T const * data_block() const { return element_[0][0]; }
 
   void resize(size_type n1, size_type n2, size_type n3); // no malloc unless size changes.
+
   void set(T const* array);
+
   void get(T* array) const;
+
   void fill(T const& value);
 
- protected:
+protected:
   void construct(size_type, size_type, size_type);
   void destruct();
+
 };
 
 #undef RANGECHECK
@@ -155,15 +164,15 @@ class vbl_array_3d
 // formatted I/O
 //
 #include <vcl_iosfwd.h>
-VCL_TEMPLATE_EXPORT template <class T> vcl_ostream& operator<<(vcl_ostream&,
-                                                  vbl_array_3d<T >const&);
+VCL_TEMPLATE_EXPORT template <class T>
+vcl_ostream & operator<<(vcl_ostream &, vbl_array_3d<T> const &);
 
-VCL_TEMPLATE_EXPORT template <class T> vcl_istream& operator>>(vcl_istream&,
-                                                  vbl_array_3d<T >&);
+VCL_TEMPLATE_EXPORT template <class T>
+vcl_istream & operator>>(vcl_istream &, vbl_array_3d<T> &);
 
 #define VBL_ARRAY_3D_INSTANTIATE \
-extern "please include vbl/vbl_array_3d.txx instead"
+  extern "please include vbl/vbl_array_3d.txx instead"
 #define VBL_ARRAY_3D_IO_INSTANTIATE \
-extern "please include vbl/vbl_array_3d.txx instead"
+  extern "please include vbl/vbl_array_3d.txx instead"
 
 #endif // vbl_array_3dh

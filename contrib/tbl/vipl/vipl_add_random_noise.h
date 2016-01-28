@@ -1,6 +1,6 @@
 #ifndef vipl_add_random_noise_h_
 #define vipl_add_random_noise_h_
-//:
+// :
 // \file
 // \brief add random noise to all pixels
 //
@@ -32,37 +32,41 @@
 // \example examples/example_add_random_noise.cxx
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
-#include <vnl/vnl_sample.h> // random number generator
+#include <vnl/vnl_sample.h>             // random number generator
 
 enum vipl_random_noise_type { UNIFORM_NOISE, GAUSSIAN_NOISE, EXPONENTIAL_NOISE };
 
-//: add random noise to all pixels
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_add_random_noise : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+// : add random noise to all pixels
+template <class ImgIn, class ImgOut, class DataIn, class DataOut,
+          VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter)>
+class vipl_add_random_noise : public vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>
 {
   // -+-+- data members: -+-+-
- private: vipl_random_noise_type type_;
- public: vipl_random_noise_type type() const { return type_; }
- private: double maxdev_;
- public: double maxdev() const { return maxdev_; }
- private: bool clipping_;
- public: bool clipping() const { return clipping_; }
+private: vipl_random_noise_type type_;
+public: vipl_random_noise_type type() const { return type_; }
+private: double maxdev_;
+public: double maxdev() const { return maxdev_; }
+private: bool clipping_;
+public: bool clipping() const { return clipping_; }
 
   // -+-+- constructors/destructors: -+-+-
- public:
-  inline vipl_add_random_noise(vipl_random_noise_type t = GAUSSIAN_NOISE, double m=5, int s=12345, bool clip=false)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), type_(t), maxdev_(m), clipping_(clip)
-  { if (s==12345) vnl_sample_reseed(); else vnl_sample_reseed(s); }
+public:
+  inline vipl_add_random_noise(vipl_random_noise_type t = GAUSSIAN_NOISE, double m = 5, int s = 12345,
+                               bool clip = false)
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(), type_(t), maxdev_(m), clipping_(clip)
+  { if( s == 12345 ) {vnl_sample_reseed(); } else {vnl_sample_reseed(s); }}
 
   inline vipl_add_random_noise(vipl_add_random_noise const& A)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), type_(A.type()), maxdev_(A.maxdev()), clipping_(A.clipping()) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A), type_(A.type() ), maxdev_(A.maxdev() ), clipping_(
+      A.clipping() ) {}
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();
+
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_add_random_noise.txx"
+#  include "vipl_add_random_noise.txx"
 #endif
 
 #endif // vipl_add_random_noise_h_

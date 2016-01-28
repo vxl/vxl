@@ -1,6 +1,6 @@
 #ifndef vipl_monadic_h_
 #define vipl_monadic_h_
-//:
+// :
 // \file
 // \brief apply any (fixed) function to all pixels
 //
@@ -30,30 +30,32 @@
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-//: apply any (fixed) function to all pixels
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_monadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+// : apply any (fixed) function to all pixels
+template <class ImgIn, class ImgOut, class DataIn, class DataOut,
+          VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter)>
+class vipl_monadic : public vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>
 {
- public:
-  typedef DataOut (*MonadicFunction)(DataIn const&);
+public:
+  typedef DataOut (* MonadicFunction)(DataIn const &);
   // -+-+- data members: -+-+-
- private: MonadicFunction func_;
- public: MonadicFunction func() const { return func_; }
+private: MonadicFunction func_;
+public: MonadicFunction func() const { return func_; }
 
   // -+-+- constructors/destructors: -+-+-
- public:
+public:
   inline vipl_monadic(MonadicFunction f)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(), func_(f) {}
   inline vipl_monadic(vipl_monadic const& A)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), func_(A.func()) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A), func_(A.func() ) {}
   inline ~vipl_monadic() {}
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();
+
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_monadic.txx"
+#  include "vipl_monadic.txx"
 #endif
 
 #endif // vipl_monadic_h_

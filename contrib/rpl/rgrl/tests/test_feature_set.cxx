@@ -11,11 +11,11 @@
 
 #include "test_util.h"
 
-
-namespace {
+namespace
+{
 
 bool
-in_vec_2( vcl_vector< rgrl_feature_sptr > const& vec,
+in_vec_2( vcl_vector<rgrl_feature_sptr> const& vec,
           rgrl_feature_sptr p1,
           rgrl_feature_sptr p2 )
 {
@@ -25,9 +25,9 @@ in_vec_2( vcl_vector< rgrl_feature_sptr > const& vec,
 }
 
 void
-test_feature_set_location_2( )
+test_feature_set_location_2()
 {
-  vcl_vector< rgrl_feature_sptr > points, results;
+  vcl_vector<rgrl_feature_sptr> points, results;
 
   points.push_back( pf( vec2d( 0, 0 ) ) );  // 0
   points.push_back( pf( vec2d( 1, 0 ) ) );  // 1
@@ -36,17 +36,22 @@ test_feature_set_location_2( )
   points.push_back( pf( vec2d( 4, 3 ) ) );  // 4
 
   rgrl_feature_set_sptr set_sptr;
-  for ( unsigned i=0; i<3; ++i )
-  {
-    if ( i==1 )
+  for( unsigned i = 0; i < 3; ++i )
+    {
+    if( i == 1 )
+      {
       set_sptr = new rgrl_feature_set_location<2>( points );
-    else if ( i==2 )
+      }
+    else if( i == 2 )
+      {
       set_sptr = new rgrl_feature_set_bins<2>( points );
+      }
     else
+      {
       set_sptr = new rgrl_feature_set_bins_2d( points );
+      }
 
-
-    TEST("Set type is correct", (set_sptr->type()==rgrl_feature_point::type_id())!=0, true );
+    TEST("Set type is correct", (set_sptr->type() == rgrl_feature_point::type_id() ) != 0, true );
 
     rgrl_mask_box roi( 2 );
 
@@ -105,13 +110,13 @@ test_feature_set_location_2( )
     set_sptr->k_nearest_features( results, pf( vec2d( 0.6, 0.6 ) ), 2 );
     TEST("Nearest 2, from middle",
          in_vec_2( results, points[2], points[1] ), true);
-  }
+    }
 }
 
 void
-test_feature_set_location_3( )
+test_feature_set_location_3()
 {
-  vcl_vector< rgrl_feature_sptr > points, results;
+  vcl_vector<rgrl_feature_sptr> points, results;
 
   points.push_back( pf( vec3d( 0, 0, 0 ) ) );  // 0
   points.push_back( pf( vec3d( 1, 0, 0 ) ) );  // 1
@@ -120,15 +125,18 @@ test_feature_set_location_3( )
   points.push_back( pf( vec3d( 4, 3, 6 ) ) );  // 4
 
   rgrl_feature_set_sptr set_sptr;
-  for ( unsigned i=0; i<2; ++i )
-  {
-    if ( i )
+  for( unsigned i = 0; i < 2; ++i )
+    {
+    if( i )
+      {
       set_sptr = new rgrl_feature_set_location<3>( points );
+      }
     else
+      {
       set_sptr = new rgrl_feature_set_bins<3>( points );
+      }
 
-
-    TEST("Set type is correct", (set_sptr->type()==rgrl_feature_point::type_id())!=0, true );
+    TEST("Set type is correct", (set_sptr->type() == rgrl_feature_point::type_id() ) != 0, true );
 
     rgrl_mask_box roi( 3 );
 
@@ -149,7 +157,6 @@ test_feature_set_location_3( )
     results.clear();
     set_sptr->features_in_region( results, roi );
     TEST("In empty box", results.size(), 0 );
-
 
     results.clear();
     set_sptr->features_within_radius( results, pf( vec3d( 0, 0, 0 ) ), 1.01 );
@@ -187,8 +194,8 @@ test_feature_set_location_3( )
     results.clear();
     set_sptr->k_nearest_features( results, pf( vec3d( 0.6, 0.6, 0.4 ) ), 2 );
     TEST("Nearest 2, from middle",
-         in_vec_2( results, points[2], points[1] ) , true);
-  }
+         in_vec_2( results, points[2], points[1] ), true);
+    }
 }
 
 } // end anonymous namespace

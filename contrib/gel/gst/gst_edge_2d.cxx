@@ -1,8 +1,8 @@
 // This is gel/gst/gst_edge_2d.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 
@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 
 // output
-vcl_ostream &operator<<( vcl_ostream &os, gst_edge_2d &e)
+vcl_ostream & operator<<( vcl_ostream & os, gst_edge_2d & e)
 {
   return os << '<' << e.start_.ptr() << ',' << e.end_.ptr() << '>';
 }

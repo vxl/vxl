@@ -1,6 +1,6 @@
 #ifndef segv_vtol2D_tableau_sptr_h_
 #define segv_vtol2D_tableau_sptr_h_
-//:
+// :
 // \file
 // \author J.L. Mundy
 // \date   November 28, 2002

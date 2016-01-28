@@ -8,7 +8,6 @@ DECLARE( test_bil_finite_differences);
 DECLARE( test_bil_finite_second_differences);
 DECLARE( test_bil_detect_ridges);
 
-
 void
 register_tests()
 {

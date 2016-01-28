@@ -6,9 +6,9 @@
 #include <cctype>
 
 #ifdef vcl_generic_cctype_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cctype_STD std
+#  define vcl_generic_cctype_STD std
 #endif
 
 #include "../generic/vcl_cctype.h"

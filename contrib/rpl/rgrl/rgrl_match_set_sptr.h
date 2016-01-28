@@ -5,6 +5,6 @@
 
 class rgrl_match_set;
 
-typedef vbl_smart_ptr< rgrl_match_set >  rgrl_match_set_sptr;
+typedef vbl_smart_ptr<rgrl_match_set> rgrl_match_set_sptr;
 
 #endif // rgrl_match_set_sptr_h_

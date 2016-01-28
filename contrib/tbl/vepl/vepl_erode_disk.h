@@ -1,6 +1,6 @@
 #ifndef vepl_erode_disk_h_
 #define vepl_erode_disk_h_
-//:
+// :
 // \file
 // \brief morphological erosion with circular element
 //
@@ -28,7 +28,7 @@
 
 #include <vil/vil_image_resource.h>
 
-//: morphological erosion with circular element of supplied radius
-vil_image_resource_sptr vepl_erode_disk(vil_image_resource_sptr , float radius);
+// : morphological erosion with circular element of supplied radius
+vil_image_resource_sptr vepl_erode_disk(vil_image_resource_sptr, float radius);
 
 #endif // vepl_erode_disk_h_

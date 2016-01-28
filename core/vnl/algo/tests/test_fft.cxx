@@ -19,6 +19,7 @@
 void test_fft_1d(unsigned int N)
 {
   vnl_random rng;
+
   vnl_vector<vcl_complex<double> > signal(N);
   test_util_fill_random(signal.begin(), signal.end(), rng);
 
@@ -41,6 +42,7 @@ void test_fft_1d(unsigned int N)
 void test_fft_2d(unsigned int M, unsigned int N)
 {
   vnl_random rng;
+
   vnl_matrix<vcl_complex<double> > signal(M, N);
   test_util_fill_random(signal.begin(), signal.end(), rng);
 
@@ -52,7 +54,7 @@ void test_fft_2d(unsigned int M, unsigned int N)
   fft.fwd_transform(tmp);
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
-  fft.bwd_transform(tmp); tmp /= (M*N);
+  fft.bwd_transform(tmp); tmp /= (M * N);
   vnl_matlab_print(vcl_cout, tmp, "tmp");
 
   double err = (tmp - signal).fro_norm();
@@ -66,4 +68,4 @@ void test_fft()
   test_fft_2d(25, 30);
 }
 
-TESTMAIN (test_fft);
+TESTMAIN(test_fft);

@@ -1,13 +1,13 @@
 #ifndef rrel_lts_obj_h_
 #define rrel_lts_obj_h_
-//:
+// :
 // \file
 // \author Chuck Stewart (stewart@cs.rpi.edu)
 // \brief The Least-Trimmed-Squares (LTS) objective function
 
 #include <rrel/rrel_objective.h>
 
-//: The Least-Trimmed-Squares (LTS) objective function.
+// : The Least-Trimmed-Squares (LTS) objective function.
 //  The Least-Trimmed-of-Squares algorithm was defined in a 1984
 //  Journal of the American Statistical Association paper by Peter
 //  Rousseeuw (vol 79, pp 871-880).  (See Stewart, "Robust Parameter
@@ -21,8 +21,8 @@
 
 class rrel_lts_obj : public rrel_objective
 {
- public:
-  //: Constructor.
+public:
+  // : Constructor.
   //  \a num_sam_inst is the minimum number of samples needed for
   //  a unique parameter estimate. That is, num_sam_inst should be set
   //  to rrel_estimation_problem::num_samples_to_instantiate(). \a
@@ -31,32 +31,30 @@ class rrel_lts_obj : public rrel_objective
   //  maximum expected fraction of outliers. If the maximum expected
   //  fraction of outliers is not known, then the MUSE objective
   //  function should be used.
-  rrel_lts_obj( unsigned int num_sam_inst, double inlier_frac=0.5 );
+  rrel_lts_obj( unsigned int num_sam_inst, double inlier_frac = 0.5 );
 
   ~rrel_lts_obj();
 
-  //: Evaluate the objective function on heteroscedastic residuals.
+  // : Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter /* scale is unused */,
-                      vnl_vector<double>* = 0 /* param vector is unused */ ) const;
+                      vnl_vector<double> * = 0 /* param vector is unused */ ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.
+  // : Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter begin, vect_const_iter end,
-                      double = 0 /* scale is unused */,
-                      vnl_vector<double>* = 0 /* param vector is unused */ ) const;
+  virtual double fcn( vect_const_iter begin, vect_const_iter end, double = 0 /* scale is unused */,
+                      vnl_vector<double> * = 0 /* param vector is unused */ ) const;
 
-  //: False.
+  // : False.
   //  The LTS objective is based on order statistics, and does not
   //  require any scale parameter, estimated or otherwise.
   virtual bool requires_prior_scale() const
-    { return false; }
-
- protected:
-  //: Number of samples needed for a unique fit = number of dependent residuals.
+  { return false; }
+protected:
+  // : Number of samples needed for a unique fit = number of dependent residuals.
   unsigned int num_sam_inst_;
-  double inlier_frac_;
+  double       inlier_frac_;
 };
 
 #endif

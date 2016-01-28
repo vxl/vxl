@@ -1,6 +1,6 @@
 #ifndef vepl_monadic_h_
 #define vepl_monadic_h_
-//:
+// :
 // \file
 // \brief apply any (fixed) function to all pixels
 //
@@ -24,13 +24,13 @@
 
 #include <vil/vil_image_resource.h>
 
-//: replace pixels by their absolute value
+// : replace pixels by their absolute value
 vil_image_resource_sptr vepl_monadic_abs(vil_image_resource_sptr );
-//: replace pixels by their square root
+// : replace pixels by their square root
 vil_image_resource_sptr vepl_monadic_sqrt(vil_image_resource_sptr );
-//: replace pixels by their square
+// : replace pixels by their square
 vil_image_resource_sptr vepl_monadic_sqr(vil_image_resource_sptr );
-//: replace pixels by a linear distortion
-vil_image_resource_sptr vepl_monadic_shear(vil_image_resource_sptr , double shift, double scale);
+// : replace pixels by a linear distortion
+vil_image_resource_sptr vepl_monadic_shear(vil_image_resource_sptr, double shift, double scale);
 
 #endif // vepl_monadic_h_

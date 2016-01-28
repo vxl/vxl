@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \author Andrew Miller
 // \date May 24, 2011
@@ -33,83 +33,100 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <brdb/brdb_value.h>
 
-
 void print_probs(boxm2_block* blk, float* alphas, boxm2_block_metadata data, int /*dataSize*/)
 {
-  //print in 3x3
+  // print in 3x3
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
   vcl_cout.precision(4);
   vcl_cout.setf(vcl_ios_fixed, vcl_ios_floatfield);   // floatfield set to fixed
-  for (int j=0; j<3; ++j) {
-    vcl_cout<<'|';
+  for( int j = 0; j < 3; ++j )
+    {
+    vcl_cout << '|';
 
     float side_len = 1.0f;
-    for (int i=0; i<3; ++i) {
-      float prob=0.0f;
-      uchar16 tree = blk->trees()(i,j,0);
-      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
-      int idx = bit_tree.get_data_ptr();
+    for( int i = 0; i < 3; ++i )
+      {
+      float         prob = 0.0f;
+      uchar16       tree = blk->trees()(i, j, 0);
+      boct_bit_tree bit_tree( (unsigned char *) tree.data_block(), 3 );
+      int           idx = bit_tree.get_data_ptr();
 
-      if ( bit_tree.is_leaf(0) ) {
-        prob = 1.0 - vcl_exp(-alphas[idx] * data.sub_block_dim_.x());
-      }
-      else {
-        float totalAlpha = 0.0f;
-        for (int ci=0; ci<8; ++ci) {
-          if ( bit_tree.is_leaf(ci+1) ) {
-            side_len = 1.0/2.0f;
-            totalAlpha += alphas[ci+1];
-          }
-          else {
-            int giStart = (ci+1)*8+1;
-            side_len = 1.0/4.0;
-            for (int gi=0; gi<8; ++gi)
-              totalAlpha += alphas[giStart+gi];
-          }
+      if( bit_tree.is_leaf(0) )
+        {
+        prob = 1.0 - vcl_exp(-alphas[idx] * data.sub_block_dim_.x() );
         }
-        prob = 1.0-vcl_exp(-totalAlpha * data.sub_block_dim_.x() * side_len);
+      else
+        {
+        float totalAlpha = 0.0f;
+        for( int ci = 0; ci < 8; ++ci )
+          {
+          if( bit_tree.is_leaf(ci + 1) )
+            {
+            side_len = 1.0 / 2.0f;
+            totalAlpha += alphas[ci + 1];
+            }
+          else
+            {
+            int giStart = (ci + 1) * 8 + 1;
+            side_len = 1.0 / 4.0;
+            for( int gi = 0; gi < 8; ++gi )
+              {
+              totalAlpha += alphas[giStart + gi];
+              }
+            }
+          }
+        prob = 1.0 - vcl_exp(-totalAlpha * data.sub_block_dim_.x() * side_len);
+        }
+      vcl_cout << '(' << i << ',' << j << ") = " << prob << '|';
       }
-      vcl_cout<<'('<<i<<','<<j<<") = "<<prob<<'|';
+    vcl_cout << vcl_endl;
     }
-    vcl_cout<<vcl_endl;
-  }
 }
 
 void print_alphas(boxm2_block* blk, float* alphas, boxm2_block_metadata /*data*/, int /*dataSize*/)
 {
-  //print in 3x3
+  // print in 3x3
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
   vcl_cout.precision(4);
   vcl_cout.setf(vcl_ios_fixed, vcl_ios_floatfield);   // floatfield set to fixed
-  for (int j=0; j<3; ++j) {
-    vcl_cout<<'|';
-    for (int i=0; i<3; ++i) {
+  for( int j = 0; j < 3; ++j )
+    {
+    vcl_cout << '|';
+    for( int i = 0; i < 3; ++i )
+      {
 
-      float prob=0.0f;
-      uchar16 tree = blk->trees()(i,j,0);
-      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
-      int idx = bit_tree.get_data_ptr();
-      if ( bit_tree.is_leaf(0) ) {
+      float         prob = 0.0f;
+      uchar16       tree = blk->trees()(i, j, 0);
+      boct_bit_tree bit_tree( (unsigned char *) tree.data_block(), 3 );
+      int           idx = bit_tree.get_data_ptr();
+      if( bit_tree.is_leaf(0) )
+        {
         prob = alphas[idx];
-      }
-      else {
-        float totalAlpha = 0.0f;
-        for (int ci=0; ci<8; ++ci) {
-          if ( bit_tree.is_leaf(ci+1) ) {
-            totalAlpha += alphas[ci+1];
-          }
-          else {
-            int giStart = (ci+1)*8 + 1;
-            for (int gi=0; gi<8; ++gi)
-              totalAlpha += alphas[giStart+gi];
-          }
         }
+      else
+        {
+        float totalAlpha = 0.0f;
+        for( int ci = 0; ci < 8; ++ci )
+          {
+          if( bit_tree.is_leaf(ci + 1) )
+            {
+            totalAlpha += alphas[ci + 1];
+            }
+          else
+            {
+            int giStart = (ci + 1) * 8 + 1;
+            for( int gi = 0; gi < 8; ++gi )
+              {
+              totalAlpha += alphas[giStart + gi];
+              }
+            }
+          }
         prob = totalAlpha;
+        }
+      vcl_cout << '(' << i << ',' << j << ") = " << prob << '|';
       }
-      vcl_cout<<'('<<i<<','<<j<<") = "<<prob<<'|';
+    vcl_cout << vcl_endl;
     }
-    vcl_cout<<vcl_endl;
-  }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -135,87 +152,98 @@ void test_inner_cluster(boxm2_scene_sptr scene,
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
-  int dataSize = 8+9;
-  float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
-  boxm2_array_3d<uchar16> trees=blk->trees_copy();
-  //set up fake trees
+  int                     dataSize = 8 + 9;
+  float*                  alphas = new float[dataSize]; // 8 single cell trees, one 8 leaf + node tree
+  boxm2_array_3d<uchar16> trees = blk->trees_copy();
+  // set up fake trees
   int count = 0;
-  for (int i=0; i<3; ++i) {
-    for (int j=0; j<3; ++j) {
-      uchar16 tree = trees(i,j,0);
-      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
+  for( int i = 0; i < 3; ++i )
+    {
+    for( int j = 0; j < 3; ++j )
+      {
+      uchar16       tree = trees(i, j, 0);
+      boct_bit_tree bit_tree( (unsigned char *) tree.data_block(), 3 );
 
-      //make middle one complex
-      if (i==1 && j==1) {
+      // make middle one complex
+      if( i == 1 && j == 1 )
+        {
         bit_tree.set_data_ptr(count);
         bit_tree.set_bit_at(0, true);
-        for (int cell=0; cell<9; ++cell)
-          alphas[count+cell] = 1/32.0;
-        count+=9;
-      }
+        for( int cell = 0; cell < 9; ++cell )
+          {
+          alphas[count + cell] = 1 / 32.0;
+          }
+        count += 9;
+        }
       else
-      {
-        alphas[count] = (1)/4.0;
-        //alphas[count] = 8.0f;
+        {
+        alphas[count] = (1) / 4.0;
+        // alphas[count] = 8.0f;
         bit_tree.set_bit_at(0, false);
         bit_tree.set_data_ptr(count);
         count++;
-      }
+        }
 
-      //store tree in blk
+      // store tree in blk
       vcl_memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
-      trees(i,j,0) = tree;
+      trees(i, j, 0) = tree;
+      }
     }
-  }
   blk->set_trees(trees);
-  vcl_cout<<"Original probs ----------------------"<<vcl_endl;
+  vcl_cout << "Original probs ----------------------" << vcl_endl;
   print_probs(blk, alphas, data, dataSize);
-  vcl_cout<<"Original alphas"<<vcl_endl;
+  vcl_cout << "Original alphas" << vcl_endl;
   print_alphas(blk, alphas, data, dataSize);
-  vcl_cout<<"-------------------------------------\n\n";
+  vcl_cout << "-------------------------------------\n\n";
 #ifdef DEBUG
-  for (int i=0; i<dataSize; ++i)
-    vcl_cout<<"alpha "<<i<<':'<<alphas[i]<<vcl_endl;
+  for( int i = 0; i < dataSize; ++i )
+    {
+    vcl_cout << "alpha " << i << ':' << alphas[i] << vcl_endl;
+    }
 #endif // DEBUG
   /////////////////////////////////////////////////////////////////////////////
-  //Prep opencl buffers and run kernel
+  // Prep opencl buffers and run kernel
   /////////////////////////////////////////////////////////////////////////////
-  //get opencl buffers
-  bocl_mem* alpha_buffer = new bocl_mem(device->context(), alphas, dataSize*sizeof(float), "old alpha buffer");
-  alpha_buffer->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
+  // get opencl buffers
+  bocl_mem* alpha_buffer = new bocl_mem(device->context(), alphas, dataSize * sizeof(float), "old alpha buffer");
+  alpha_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  float* new_alpha_buffer = new float[ dataSize ];
+  float* new_alpha_buffer = new float[dataSize];
   vcl_fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
-  bocl_mem* new_alphas = new bocl_mem(device->context(), new_alpha_buffer,  dataSize*sizeof(float), "filtered alpha buffer ");
-  new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
+  bocl_mem* new_alphas = new bocl_mem(
+      device->context(), new_alpha_buffer,  dataSize * sizeof(float), "filtered alpha buffer ");
+  new_alphas->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //grab the block out of the cache as well
-  bocl_mem* blk_mem = opencl_cache->get_block(scene,id);
+  // grab the block out of the cache as well
+  bocl_mem* blk_mem = opencl_cache->get_block(scene, id);
   bocl_mem* blk_info = opencl_cache->loaded_block_info();
   blk_mem->write_to_buffer(queue);
 
-  //Get helper buffers
+  // Get helper buffers
   // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
-  bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+  bocl_mem_sptr lookup = new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar) * 256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  //center buffers
-  bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-  bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-  bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+  // center buffers
+  bocl_mem_sptr centerX = new bocl_mem(
+      device->context(), boct_bit_tree::centerX, sizeof(cl_float) * 585, "centersX lookup buffer");
+  bocl_mem_sptr centerY = new bocl_mem(
+      device->context(), boct_bit_tree::centerY, sizeof(cl_float) * 585, "centersY lookup buffer");
+  bocl_mem_sptr centerZ = new bocl_mem(
+      device->context(), boct_bit_tree::centerZ, sizeof(cl_float) * 585, "centersZ lookup buffer");
   centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  //set workspace
+  // set workspace
   vcl_size_t lThreads[] = {1, 1, 1};
   vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                             RoundUp(data.sub_block_num_.y(), lThreads[1]),
                             RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
-  //make it a reference so the destructor isn't called at the end...
+  // make it a reference so the destructor isn't called at the end...
   kern->set_arg( blk_info );
   kern->set_arg( blk_mem );
   kern->set_arg( alpha_buffer );
@@ -224,34 +252,34 @@ void test_inner_cluster(boxm2_scene_sptr scene,
   kern->set_arg( centerX.ptr() );
   kern->set_arg( centerY.ptr() );
   kern->set_arg( centerZ.ptr() );
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*10*sizeof(cl_uchar) ); //cumsum (10 bytes per local thread
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_uchar16) );  //local trees (uchar16 per local thread)
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_uchar16) );  //neighbor trees (uchar16 per local thread)
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_float4)*6 );  //local neighbor points 6*float4 per local thread)
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * 10 * sizeof(cl_uchar) ); // cumsum (10 bytes per local thread
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * sizeof(cl_uchar16) );    // local trees (uchar16 per local thread)
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * sizeof(cl_uchar16) );    // neighbor trees (uchar16 per local thread)
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * sizeof(cl_float4) * 6 ); // local neighbor points 6*float4 per local thread)
 
-  //execute kernel
+  // execute kernel
   kern->execute( queue, 3, lThreads, gThreads);
   clFinish( queue);
   kern->clear_args();
 
-  //check on output
-  vcl_cout<<"New probs::::"<<vcl_endl;
+  // check on output
+  vcl_cout << "New probs::::" << vcl_endl;
   new_alphas->read_to_buffer(queue);
   print_probs(blk, new_alpha_buffer, data, dataSize);
 
-  vcl_cout<<"New alphas:::"<<vcl_endl;
+  vcl_cout << "New alphas:::" << vcl_endl;
   print_alphas(blk, new_alpha_buffer, data, dataSize);
-
-
-  for (int i=0; i<dataSize; ++i)
-    vcl_cout<<"Newalpha: "<<new_alpha_buffer[i]<<vcl_endl;
+  for( int i = 0; i < dataSize; ++i )
+    {
+    vcl_cout << "Newalpha: " << new_alpha_buffer[i] << vcl_endl;
+    }
 
   delete[] new_alpha_buffer;
   delete[] alphas;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//Inverted test
+// Inverted test
 // set up data array, set up looks like this:
 //  ___ ___ ___
 // |_|_|_|_|_|_|
@@ -271,86 +299,97 @@ void test_outer_cluster(boxm2_scene_sptr scene,
                         cl_command_queue& queue)
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
-  int dataSize = 8*(1+8+64) + 1;
-  float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
+  int    dataSize = 8 * (1 + 8 + 64) + 1;
+  float* alphas = new float[dataSize]; // 8 single cell trees, one 8 leaf + node tree
 
-  //set up fake trees
-  int count = 0;
-  boxm2_array_3d<uchar16> trees=blk->trees_copy();
-  for (int i=0; i<3; ++i) {
-    for (int j=0; j<3; ++j) {
-      uchar16 tree = trees(i,j,0);
-      boct_bit_tree bit_tree( (unsigned char*) tree.data_block(), 3 );
+  // set up fake trees
+  int                     count = 0;
+  boxm2_array_3d<uchar16> trees = blk->trees_copy();
+  for( int i = 0; i < 3; ++i )
+    {
+    for( int j = 0; j < 3; ++j )
+      {
+      uchar16       tree = trees(i, j, 0);
+      boct_bit_tree bit_tree( (unsigned char *) tree.data_block(), 3 );
 
-      //make middle one simple
-      if (i==1 && j==1) {
+      // make middle one simple
+      if( i == 1 && j == 1 )
+        {
         alphas[count] = .5;
-        //alphas[count] = 8.0f;
+        // alphas[count] = 8.0f;
         bit_tree.set_bit_at(0, false);
         bit_tree.set_data_ptr(count);
         count++;
-      }
+        }
       else
-      {
+        {
         bit_tree.set_data_ptr(count);
         bit_tree.set_bit_at(0, true);
-        for (int c=0; c<8; ++c) bit_tree.set_bit_at(c+1, true);
-        for (int cell=0; cell<(1+8+64); ++cell) {
-          alphas[count+cell] = 1.0/16.0;
+        for( int c = 0; c < 8; ++c )
+          {
+          bit_tree.set_bit_at(c + 1, true);
+          }
+        for( int cell = 0; cell < (1 + 8 + 64); ++cell )
+          {
+          alphas[count + cell] = 1.0 / 16.0;
+          }
+        count += (1 + 8 + 64);
         }
-        count += (1+8+64);
-      }
-      //store tree in blk
+      // store tree in blk
       vcl_memcpy( tree.data_block(), bit_tree.get_bits(), 16 );
-      trees(i,j,0) = tree;
+      trees(i, j, 0) = tree;
+      }
     }
-  }
   blk->set_trees(trees);
-  vcl_cout<<"Original probs ----------------------"<<vcl_endl;
+  vcl_cout << "Original probs ----------------------" << vcl_endl;
   print_probs(blk, alphas, data, dataSize);
-  vcl_cout<<"Original alphas"<<vcl_endl;
+  vcl_cout << "Original alphas" << vcl_endl;
   print_alphas(blk, alphas, data, dataSize);
-  vcl_cout<<"-------------------------------------\n\n";
+  vcl_cout << "-------------------------------------\n\n";
 
   ////////////////////////////////////////////////////////////////////////////
-  //Prep opencl buffers and run kernel
+  // Prep opencl buffers and run kernel
   /////////////////////////////////////////////////////////////////////////////
-  //get opencl buffers
-  bocl_mem_sptr alpha_buffer = new bocl_mem(device->context(), alphas, dataSize*sizeof(float), "old alpha buffer");
-  alpha_buffer->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
+  // get opencl buffers
+  bocl_mem_sptr alpha_buffer = new bocl_mem(device->context(), alphas, dataSize * sizeof(float), "old alpha buffer");
+  alpha_buffer->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  float* new_alpha_buffer = new float[ dataSize ];
+  float* new_alpha_buffer = new float[dataSize];
   vcl_fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
-  bocl_mem_sptr new_alphas = new bocl_mem(device->context(), new_alpha_buffer,  dataSize*sizeof(float), "filtered alpha buffer ");
-  new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
+  bocl_mem_sptr new_alphas = new bocl_mem(
+      device->context(), new_alpha_buffer,  dataSize * sizeof(float), "filtered alpha buffer ");
+  new_alphas->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  //grab the block out of the cache as well
-  bocl_mem* blk_mem = opencl_cache->get_block(scene,id);
+  // grab the block out of the cache as well
+  bocl_mem* blk_mem = opencl_cache->get_block(scene, id);
   bocl_mem* blk_info = opencl_cache->loaded_block_info();
   blk_mem->write_to_buffer(queue);
 
-  //Get helper buffers
+  // Get helper buffers
   // bit lookup buffer
   cl_uchar lookup_arr[256];
   boxm2_ocl_util::set_bit_lookup(lookup_arr);
-  bocl_mem_sptr lookup=new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar)*256, "bit lookup buffer");
+  bocl_mem_sptr lookup = new bocl_mem(device->context(), lookup_arr, sizeof(cl_uchar) * 256, "bit lookup buffer");
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  //center buffers
-  bocl_mem_sptr centerX = new bocl_mem(device->context(), boct_bit_tree::centerX, sizeof(cl_float)*585, "centersX lookup buffer");
-  bocl_mem_sptr centerY = new bocl_mem(device->context(), boct_bit_tree::centerY, sizeof(cl_float)*585, "centersY lookup buffer");
-  bocl_mem_sptr centerZ = new bocl_mem(device->context(), boct_bit_tree::centerZ, sizeof(cl_float)*585, "centersZ lookup buffer");
+  // center buffers
+  bocl_mem_sptr centerX = new bocl_mem(
+      device->context(), boct_bit_tree::centerX, sizeof(cl_float) * 585, "centersX lookup buffer");
+  bocl_mem_sptr centerY = new bocl_mem(
+      device->context(), boct_bit_tree::centerY, sizeof(cl_float) * 585, "centersY lookup buffer");
+  bocl_mem_sptr centerZ = new bocl_mem(
+      device->context(), boct_bit_tree::centerZ, sizeof(cl_float) * 585, "centersZ lookup buffer");
   centerX->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerY->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
-  //set workspace
+  // set workspace
   vcl_size_t lThreads[] = {1, 1, 1};
   vcl_size_t gThreads[] = { RoundUp(data.sub_block_num_.x(), lThreads[0]),
                             RoundUp(data.sub_block_num_.y(), lThreads[1]),
                             RoundUp(data.sub_block_num_.z(), lThreads[2]) };
 
-  //make it a reference so the destructor isn't called at the end...
+  // make it a reference so the destructor isn't called at the end...
   kern->set_arg( blk_info );
   kern->set_arg( blk_mem );
   kern->set_arg( alpha_buffer.ptr() );
@@ -359,22 +398,22 @@ void test_outer_cluster(boxm2_scene_sptr scene,
   kern->set_arg( centerX.ptr() );
   kern->set_arg( centerY.ptr() );
   kern->set_arg( centerZ.ptr() );
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*10*sizeof(cl_uchar) ); //cumsum (10 bytes per local thread
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_uchar16) );  //local trees (uchar16 per local thread)
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_uchar16) );  //neighbor trees (uchar16 per local thread)
-  kern->set_local_arg( lThreads[0]*lThreads[1]*lThreads[2]*sizeof(cl_float4)*6 );  //local neighbor points 6*float4 per local thread)
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * 10 * sizeof(cl_uchar) ); // cumsum (10 bytes per local thread
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * sizeof(cl_uchar16) );    // local trees (uchar16 per local thread)
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * sizeof(cl_uchar16) );    // neighbor trees (uchar16 per local thread)
+  kern->set_local_arg( lThreads[0] * lThreads[1] * lThreads[2] * sizeof(cl_float4) * 6 ); // local neighbor points 6*float4 per local thread)
 
-  //execute kernel
+  // execute kernel
   kern->execute( queue, 3, lThreads, gThreads);
   clFinish( queue);
   kern->clear_args();
 
-  //check on output
-  vcl_cout<<"New probs::::"<<vcl_endl;
+  // check on output
+  vcl_cout << "New probs::::" << vcl_endl;
   new_alphas->read_to_buffer(queue);
   print_probs(blk, new_alpha_buffer, data, dataSize);
 
-  vcl_cout<<"New alphas:::"<<vcl_endl;
+  vcl_cout << "New alphas:::" << vcl_endl;
   print_alphas(blk, new_alpha_buffer, data, dataSize);
 
   delete[] new_alpha_buffer;
@@ -383,69 +422,71 @@ void test_outer_cluster(boxm2_scene_sptr scene,
 
 void test_filter_kernel()
 {
-  //----------------------------------------------------------------------------
-  //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
-  //----------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------
+  // --- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
+  // ----------------------------------------------------------------------------
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
   DECLARE_FUNC_CONS(boxm2_ocl_filter_process);
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_filter_process, "boxm2OclFilterProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_filter_process,
+                        "boxm2OclFilterProcess");
 
-  //REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
+  // REGISTER_DATATYPE(boxm2_opencl_cache_sptr);
   REGISTER_DATATYPE(boxm2_scene_sptr);
   REGISTER_DATATYPE(bocl_device_sptr);
 
-  bocl_manager_child &mgr = bocl_manager_child::instance();
-  if (mgr.gpus_.size()==0)
+  bocl_manager_child & mgr = bocl_manager_child::instance();
+  if( mgr.gpus_.size() == 0 )
+    {
     return;
+    }
 
   bocl_device_sptr device = mgr.gpus_[0];
-  bocl_kernel* kern = new bocl_kernel();
-  boxm2_ocl_filter_process_globals::compile_filter_kernel(device,kern);
+  bocl_kernel*     kern = new bocl_kernel();
+  boxm2_ocl_filter_process_globals::compile_filter_kernel(device, kern);
 
   // create a command queue.
-  int status=0;
+  int              status = 0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),
-                                                *(device->device_id()),
-                                                CL_QUEUE_PROFILING_ENABLE,&status);
+                                                *(device->device_id() ),
+                                                CL_QUEUE_PROFILING_ENABLE, &status);
 
-  //manufacture scene information
+  // manufacture scene information
   boxm2_scene_sptr scene = new boxm2_scene();
-  scene->set_local_origin( vgl_point_3d<double>(0,0,0) );
+  scene->set_local_origin( vgl_point_3d<double>(0, 0, 0) );
 
-  //set scene block information
+  // set scene block information
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks;
-  boxm2_block_id id(0,0,0);
-  boxm2_block_metadata data( id,                           //id
-                             vgl_point_3d<double>(0,0,0),  //local_origin
-                             vgl_vector_3d<double>(1.0, 1.0, 1.0), //sub_block_dim
-                             vgl_vector_3d<unsigned>(3,3,1),  //sub block num
-                             1,   //initlevel
-                             3,   //max level
-                             100,  //max mb
-                             0.0); //Pinit starts out at 0 (will create 0 alphas?
+  boxm2_block_id                                id(0, 0, 0);
+  boxm2_block_metadata                          data( id,                                   // id
+                                                      vgl_point_3d<double>(0, 0, 0),        // local_origin
+                                                      vgl_vector_3d<double>(1.0, 1.0, 1.0), // sub_block_dim
+                                                      vgl_vector_3d<unsigned>(3, 3, 1),     // sub block num
+                                                      1,                                    // initlevel
+                                                      3,                                    // max level
+                                                      100,                                  // max mb
+                                                      0.0);                                 // Pinit starts out at 0 (will create 0 alphas?
   blocks[id] = data;
   scene->set_blocks(blocks);
 
   // list of appearance models/observation models used by this scene
   vcl_vector<vcl_string> appearances;
-  appearances.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  appearances.push_back(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() );
   scene->set_appearances(appearances);
 
-  //grab boxm2_scene_info
+  // grab boxm2_scene_info
   /* boxm2_scene_info* info = */ scene->get_blk_metadata(id);
 
-  //instantiate a cache to grab the first block
+  // instantiate a cache to grab the first block
   boxm2_lru_cache::create(scene);
-  boxm2_block* blk = boxm2_cache::instance()->get_block(scene,id);
+  boxm2_block* blk = boxm2_cache::instance()->get_block(scene, id);
 
   boxm2_opencl_cache_sptr opencl_cache = new boxm2_opencl_cache(device);
 
-  //RUN Tests
-  vcl_cout<<"Testing inner cluster"<<vcl_endl;
-  test_inner_cluster(scene,blk,data,device,opencl_cache,id,kern,queue);
-  vcl_cout<<"Testing outer clusters"<<vcl_endl;
-  test_outer_cluster(scene,blk,data,device,opencl_cache,id,kern,queue);
+  // RUN Tests
+  vcl_cout << "Testing inner cluster" << vcl_endl;
+  test_inner_cluster(scene, blk, data, device, opencl_cache, id, kern, queue);
+  vcl_cout << "Testing outer clusters" << vcl_endl;
+  test_outer_cluster(scene, blk, data, device, opencl_cache, id, kern, queue);
 }
-
 
 TESTMAIN( test_filter_kernel );

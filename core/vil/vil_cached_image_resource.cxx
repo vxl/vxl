@@ -1,6 +1,6 @@
 // This is core/vil/vil_cached_image_resource.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
 
 #include "vil_cached_image_resource.h"
@@ -13,16 +13,20 @@ vil_cached_image_resource::get_block( unsigned  block_index_i,
                                       unsigned  block_index_j ) const
 {
   // check if the block is already in the buffer
-   vil_image_view_base_sptr blk;
-  if (cache_.get_block(block_index_i, block_index_j, blk))
+  vil_image_view_base_sptr blk;
+
+  if( cache_.get_block(block_index_i, block_index_j, blk) )
+    {
     return blk;
+    }
   // no - so get the block from the resource
   blk = bir_->get_block(block_index_i, block_index_j);
-  if (!blk)
+  if( !blk )
+    {
     return blk; // get block failed
+    }
   // put the block in the cache (cast away const since we are just caching)
-  vil_cached_image_resource* non_const = (vil_cached_image_resource*)this;
+  vil_cached_image_resource* non_const = (vil_cached_image_resource *)this;
   non_const->cache_.add_block(block_index_i, block_index_j, blk);
   return blk;
 }
-

@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // vil_nitf2: Written by Rob Radtke (rob@) and Harry Voorhees (hlv@) of
 // Stellar Science Ltd. Co. (stellarscience.com) for
@@ -23,17 +23,17 @@ class vil_nitf2_des;
 
 class vil_nitf2_file_format : public vil_file_format
 {
- public:
-  virtual char const *tag() const;
-  virtual vil_image_resource_sptr make_input_image(vil_stream *vs);
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                    unsigned nx,
-                                                    unsigned ny,
-                                                    unsigned nplanes,
+public:
+  virtual char const * tag() const;
+
+  virtual vil_image_resource_sptr make_input_image(vil_stream * vs);
+
+  virtual vil_image_resource_sptr make_output_image(vil_stream* vs, unsigned nx, unsigned ny, unsigned nplanes,
                                                     enum vil_pixel_format);
+
 };
 
-//: Class for reading NITF 2.1 imagery files.
+// : Class for reading NITF 2.1 imagery files.
 // It works just like any other vil_image_resource class except that it does
 // support retrieving multiple images from the same file.
 // Call nimages() to find out how many images are in this resource, and then call
@@ -70,8 +70,8 @@ class vil_nitf2_file_format : public vil_file_format
 //
 class vil_nitf2_image : public vil_blocked_image_resource
 {
- public:
-  //: Instantiate an image resource, but doesn't read anything.
+public:
+  // : Instantiate an image resource, but doesn't read anything.
   // You'll want to call parse_headers() before you do anything with me
   // (eg. before you ask for any image data).
   // If that returns false, then I am invalid and useless to you in every way.
@@ -80,27 +80,29 @@ class vil_nitf2_image : public vil_blocked_image_resource
 
   virtual ~vil_nitf2_image();
 
-  //:return the image info of the current image
+  // :return the image info of the current image
   virtual unsigned nplanes() const;
-  virtual unsigned ni() const;
-  virtual unsigned nj() const;
-  virtual enum vil_pixel_format pixel_format () const;
 
-  //: Block size in columns
+  virtual unsigned ni() const;
+
+  virtual unsigned nj() const;
+
+  virtual enum vil_pixel_format pixel_format() const;
+
+  // : Block size in columns
   virtual unsigned size_block_i() const;
 
-  //: Block size in rows
+  // : Block size in rows
   virtual unsigned size_block_j() const;
 
-  //: Number of blocks in image width
+  // : Number of blocks in image width
   virtual unsigned n_block_i() const;
 
-  //: Number of blocks in image height
+  // : Number of blocks in image height
   virtual unsigned n_block_j() const;
 
-  //: returns "nitf vM.N"
+  // : returns "nitf vM.N"
   char const * file_format() const;
-
 
   // is the current image JPEG 2000 compressed
   bool is_jpeg_2000_compressed() const;
@@ -115,37 +117,37 @@ class vil_nitf2_image : public vil_blocked_image_resource
   // spec's built in optimization for obtaining decimated versions of large images.  This function
   // does.  Well, more accurately, it can.  It depends on the implementation of the s_decode_jpeg_2000()
   // function you've provided.
-  virtual vil_image_view_base_sptr get_copy_view_decimated_j2k( unsigned i0, unsigned ni,
-                                                                unsigned j0, unsigned nj,
+  virtual vil_image_view_base_sptr get_copy_view_decimated_j2k( unsigned i0, unsigned ni, unsigned j0, unsigned nj,
                                                                 double i_factor, double j_factor ) const;
+
   virtual vil_image_view_base_sptr get_copy_view_decimated_j2k( double i_factor, double j_factor ) const
   { return get_copy_view_decimated_j2k( 0, ni(), 0, nj(), i_factor, j_factor ); }
 
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
-  virtual vil_image_view_base_sptr get_copy_view( ) const
+  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const;
+
+  virtual vil_image_view_base_sptr get_copy_view() const
   { return get_copy_view( 0, ni(), 0, nj() ); }
 
-  virtual bool put_view (const vil_image_view_base& /* im */, unsigned /* i0 */, unsigned /* j0 */ )
+  virtual bool put_view(const vil_image_view_base & /* im */, unsigned /* i0 */, unsigned /* j0 */ )
   { return false; }
 
   virtual bool put_block(unsigned  /*block_index_i*/, unsigned  /*block_index_j*/,
-                         const vil_image_view_base& /*blk*/ )
+                         const vil_image_view_base & /*blk*/ )
   { return false; }
 
   virtual vil_image_view_base_sptr get_block( unsigned int blockIndexX, unsigned int blockIndexY ) const;
 
-  virtual bool get_property (char const *tag, void *property_value=0) const;
+  virtual bool get_property(char const * tag, void * property_value = 0) const;
 
-  //const vil_nitf2_header& getFileHeader() const;
-  const vcl_vector< vil_nitf2_image_subheader* >& get_image_headers() const
+  // const vil_nitf2_header& getFileHeader() const;
+  const vcl_vector<vil_nitf2_image_subheader *> & get_image_headers() const
   { return m_image_headers; }
-  const vil_nitf2_header& get_header() const
+  const vil_nitf2_header & get_header() const
   { return m_file_header; }
-  const vcl_vector< vil_nitf2_des* >& get_des() const
+  const vcl_vector<vil_nitf2_des *> & get_des() const
   { return m_des; }
 
-  //:
+  // :
   //  Since the VIL API (eg. get_view()) for retrieving image data
   //  doesn't support files with multiple images, clients will
   //  need to call this function to tell get_view() which image to read in.
@@ -157,31 +159,31 @@ class vil_nitf2_image : public vil_blocked_image_resource
   //  Note: By default, the first image is always used.  If you don't call this
   //  function at all, then you will only see the first image in a given file.
   virtual void set_current_image( unsigned int index );
+
   virtual unsigned int current_image() const;
+
   virtual unsigned int nimages() const;
 
   bool parse_headers();
+
   vil_nitf2_classification::file_version file_version() const;
 
-  //:
+  // :
   // All instances of vil_nitf2_image will use s_decode_jpeg_2000() to decode
   // JPEG 2000 streams if you set the function.  If unset, then the library
   // will not be able to read JPEG 2000 compressed NITF files.
   //
-  static vil_image_view_base_sptr ( *s_decode_jpeg_2000 )( vil_stream* vs,
-                                                           unsigned i0, unsigned ni,
-                                                           unsigned j0, unsigned nj,
-                                                           double i_factor, double j_factor );
+  static vil_image_view_base_sptr ( * s_decode_jpeg_2000 )( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0,
+                                                            unsigned nj, double i_factor, double j_factor );
 
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.
-  virtual vil_nitf2_field::field_tree* get_tree() const;
+  virtual vil_nitf2_field::field_tree * get_tree() const;
 
- protected:
+protected:
   virtual vil_image_view_base_sptr get_block_j2k( unsigned int blockIndexX, unsigned int blockIndexY ) const;
-  virtual vil_image_view_base_sptr get_copy_view_uncompressed(unsigned i0, unsigned ni,
-                                                              unsigned j0, unsigned nj) const;
 
+  virtual vil_image_view_base_sptr get_copy_view_uncompressed(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const;
 
   // Returns the offset (in bytes) from the beginning of the NITF file
   // to the beginning of the specified portion of the NITF stream.  For example:
@@ -195,7 +197,9 @@ class vil_nitf2_image : public vil_blocked_image_resource
   // beginning of the NITF stream to the beginning of the fourth image segment's
   // data section.  You'd better make sure there is at least four image segments before
   // you call this.
-  vil_streampos get_offset_to( vil_nitf2_header::section_type sec, vil_nitf2_header::portion_type por, unsigned int index = 0 ) const;
+  vil_streampos get_offset_to( vil_nitf2_header::section_type sec, vil_nitf2_header::portion_type por,
+                               unsigned int index = 0 ) const;
+
   // Returns the offset (in bytes) from the beginning of section_type 'sec' and the beginning of the specified portion
   // (subheader or data).  If more then one of these segments exist, then use 'index' to select which one you want.
   vil_streampos size_to( vil_nitf2_header::section_type sec, vil_nitf2_header::portion_type por, int index ) const;
@@ -203,26 +207,26 @@ class vil_nitf2_image : public vil_blocked_image_resource
   // Returns the overall offset to the specified image/block/band combination.
   // If this block isn't present in the stream (ie. it's all blank), then
   // I'll return 0;
-  vil_streampos get_offset_to_image_data_block_band( unsigned int imageIndex,
-                                                     unsigned int blockIndexX,
-                                                     unsigned int blockIndexY,
-                                                     int bandIndex ) const;
+  vil_streampos get_offset_to_image_data_block_band( unsigned int imageIndex, unsigned int blockIndexX,
+                                                     unsigned int blockIndexY, int bandIndex ) const;
 
-  //main file header
+  // main file header
   vil_nitf2_header m_file_header;
-  //image header(s)
-  vcl_vector< vil_nitf2_image_subheader* > m_image_headers;
+  // image header(s)
+  vcl_vector<vil_nitf2_image_subheader *> m_image_headers;
   void clear_image_headers();
-  const vil_nitf2_image_subheader* current_image_header() const;
-  //DESs (if any)
-  vcl_vector< vil_nitf2_des* > m_des;
+
+  const vil_nitf2_image_subheader * current_image_header() const;
+
+  // DESs (if any)
+  vcl_vector<vil_nitf2_des *> m_des;
   void clear_des();
 
-  vil_stream* m_stream;
+  vil_stream*  m_stream;
   unsigned int m_current_image_index;
 };
 
-//: This function does a lot of work for \sa byte_align_data().
+// : This function does a lot of work for \sa byte_align_data().
 // It will strip one value of ni bits and return it as a value of type T
 // (with zero padding on the MSBs).
 // Both io and ni are lengths (in bits - not bytes).
@@ -230,37 +234,47 @@ class vil_nitf2_image : public vil_blocked_image_resource
 // \param i0: Offset (in bits - not bytes) from in_val[0].  This will be the start
 //            of the bits extracted from in_val.
 // \param ni: number of bits (starting from i0) that will be extracted from in_val.
-template< class T >
+template <class T>
 T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
 {
-  unsigned int sample_offset = i0 / ( sizeof(T)*8 );
-  unsigned int bit_offset = i0 % ( sizeof(T)*8 );
+  unsigned int sample_offset = i0 / ( sizeof(T) * 8 );
+  unsigned int bit_offset = i0 % ( sizeof(T) * 8 );
 
   unsigned int strip_left = bit_offset;
-  int strip_right = ( sizeof( T ) * 8 ) - ( bit_offset + ni );
-  T temp = in_val[sample_offset];
-  if ( strip_left > 0 ){
-    //strip off the appropriate bits from the vcl_left (replacing them with zeros)
+  int          strip_right = ( sizeof( T ) * 8 ) - ( bit_offset + ni );
+  T            temp = in_val[sample_offset];
+
+  if( strip_left > 0 )
+    {
+    // strip off the appropriate bits from the vcl_left (replacing them with zeros)
     temp = temp << strip_left;
     temp = temp >> strip_left;
-  }
-  if ( strip_right > 0 ){
-    //strip off the appropriate bits from the vcl_right
-    //the bit shift operator wasn't having the correct effect, so that'w
-    //why the for loop
-    for ( int i = 0 ; i < strip_right ; i++ ) temp /= 2;
-    //temp = temp >> strip_right;
-  }
-  else if ( strip_right < 0 ){
-    //we didn't have enough bits in the first element of the in_val array
-    //need to get some from the next element
-    for ( int i = 0 ; i < (-strip_right) ; i++ ) temp *= 2;
-    temp += get_bits<T>( in_val+sample_offset+1, 0, -strip_right );
-  }
+    }
+  if( strip_right > 0 )
+    {
+    // strip off the appropriate bits from the vcl_right
+    // the bit shift operator wasn't having the correct effect, so that'w
+    // why the for loop
+    for( int i = 0; i < strip_right; i++ )
+      {
+      temp /= 2;
+      }
+    // temp = temp >> strip_right;
+    }
+  else if( strip_right < 0 )
+    {
+    // we didn't have enough bits in the first element of the in_val array
+    // need to get some from the next element
+    for( int i = 0; i < (-strip_right); i++ )
+      {
+      temp *= 2;
+      }
+    temp += get_bits<T>( in_val + sample_offset + 1, 0, -strip_right );
+    }
   return temp;
 }
 
-//: This function will byte align the data in in_data and store the result in out_data.
+// : This function will byte align the data in in_data and store the result in out_data.
 // For example, let's say that you had in_data is of type unsigned char
 // and contains the following data: 110010111001111010000110.
 // In other words:
@@ -313,21 +327,24 @@ T get_bits( const T* in_val, unsigned int i0, unsigned int ni )
 //
 // Note that there is a specialization for the bool case which just casts it to an 8 bit quantity then calls
 // this same function.  This is because the logic in get_bits<> doesn't work for the bool case.
-template< class T >
-T* byte_align_data( T* in_data, unsigned int num_samples, unsigned int in_bits_per_sample, T* out_data )
+template <class T>
+T * byte_align_data( T* in_data, unsigned int num_samples, unsigned int in_bits_per_sample, T* out_data )
 {
-  assert( in_bits_per_sample < sizeof(T)*8 );
+  assert( in_bits_per_sample < sizeof(T) * 8 );
 
-  //grab each value from the bitstream (in_data) that we need... one at a time
+  // grab each value from the bitstream (in_data) that we need... one at a time
   unsigned int bit_offset = 0;
-  for ( unsigned int o = 0 ; o < num_samples ; o++ ){
+  for( unsigned int o = 0; o < num_samples; o++ )
+    {
     out_data[o] = get_bits<T>( in_data, bit_offset, in_bits_per_sample );
-    bit_offset+=in_bits_per_sample;
-  }
+    bit_offset += in_bits_per_sample;
+    }
 
   return out_data;
 }
 
-template<> bool* byte_align_data<bool>( bool* in_data, unsigned int num_samples, unsigned int in_bits_per_sample, bool* out_data );
+template <>
+bool * byte_align_data<bool>( bool* in_data, unsigned int num_samples, unsigned int in_bits_per_sample,
+                              bool* out_data );
 
 #endif // VIL_NITF2_IMAGE_H

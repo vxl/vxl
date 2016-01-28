@@ -1,5 +1,5 @@
-//These instantiations are all together because, if one class is created, the other ones are needed
-//Please leave them together.
+// These instantiations are all together because, if one class is created, the other ones are needed
+// Please leave them together.
 #include <bvxm/grid/bvxm_voxel_grid.txx>
 #include <bvxm/grid/bvxm_voxel_slab.txx>
 #include <bvxm/grid/bvxm_voxel_slab_iterator.txx>

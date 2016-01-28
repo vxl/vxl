@@ -1,6 +1,6 @@
 // This is gel/pop/pop_parameter.cxx
 #include "pop_parameter.h"
-//:
+// :
 // \file
 
 pop_parameter::pop_parameter()
@@ -13,7 +13,7 @@ pop_parameter::pop_parameter()
   std_ = 1.0;
 }
 
-//: destructor
+// : destructor
 pop_parameter::~pop_parameter()
 {
 }

@@ -2,9 +2,9 @@
 #ifndef osl_fit_circle_h_
 #define osl_fit_circle_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  least-squares fit of N points to a circle
 //
@@ -24,40 +24,39 @@
 
 class osl_fit_circle
 {
- public:
-    //: Construct from list of 2d points of double
-    osl_fit_circle(const vcl_list<vgl_point_2d<double> > &points);
+public:
+  // : Construct from list of 2d points of double
+  osl_fit_circle(const vcl_list<vgl_point_2d<double> > & points);
 
-    //: Construct from edgel chain (use only raw edge coordinates)
-    osl_fit_circle(const osl_edgel_chain& chain);
+  // : Construct from edgel chain (use only raw edge coordinates)
+  osl_fit_circle(const osl_edgel_chain& chain);
 
-    // Accessors
+  // Accessors
 
-    //: get center of circle as vgl_point_2d
-    const vgl_point_2d<double>& center() const { return center_; }
+  // : get center of circle as vgl_point_2d
+  const vgl_point_2d<double> & center() const { return center_; }
 
-    //: Get radius of circle as double
-    double radius() const { return radius_; }
+  // : Get radius of circle as double
+  double radius() const { return radius_; }
 
-    //: If error() returns true, there was an error during calculation.
-    // Normally because of wrong or insufficient input data.
-    bool error() const { return error_; }
+  // : If error() returns true, there was an error during calculation.
+  // Normally because of wrong or insufficient input data.
+  bool error() const { return error_; }
 
-    //: Returns the maximum difference between the points and the calculated circle
-    // (length of longest tangent from point to circle)
-    double max_diff() const { return max_diff_; }
+  // : Returns the maximum difference between the points and the calculated circle
+  // (length of longest tangent from point to circle)
+  double max_diff() const { return max_diff_; }
 
-    //: Return the average difference between the points and the calculated circle
-    // (average of length of tangents from points to circle)
-    double avg_diff() const { return avg_diff_; }
+  // : Return the average difference between the points and the calculated circle
+  // (average of length of tangents from points to circle)
+  double avg_diff() const { return avg_diff_; }
+protected:
+  void calculate(const vcl_list<vgl_point_2d<double> > & points);
 
- protected:
-    void calculate(const vcl_list<vgl_point_2d<double> > &points);
-
-    bool error_; // error flag
-    double max_diff_, avg_diff_;
-    double radius_;
-    vgl_point_2d<double> center_;
+  bool                 error_; // error flag
+  double               max_diff_, avg_diff_;
+  double               radius_;
+  vgl_point_2d<double> center_;
 };
 
 #endif // osl_fit_circle_h_

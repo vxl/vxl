@@ -1,5 +1,5 @@
 #include <testlib/testlib_test.h>
-//:
+// :
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
@@ -32,16 +32,16 @@ test_data_empty()
 
   testlib_test_begin("empty data subdivide");
   tree_type::child_index_type c0;
-  tree_type::cell_index_type root;
+  tree_type::cell_index_type  root;
   tree.subdivide(root);
-  tree.subdivide(tree.get_child(root, c0));
+  tree.subdivide(tree.get_child(root, c0) );
   testlib_test_perform(tree.has_children(root) &&
-                       tree.has_children(tree.get_child(root, c0)));
+                       tree.has_children(tree.get_child(root, c0) ) );
 
   testlib_test_begin("empty data collapse");
-  tree.collapse(tree.get_child(root, c0));
+  tree.collapse(tree.get_child(root, c0) );
   tree.collapse(root);
-  testlib_test_perform(!tree.has_children(root));
+  testlib_test_perform(!tree.has_children(root) );
 }
 
 static void
@@ -54,18 +54,18 @@ test_data_fixed()
 
   testlib_test_begin("fixed data subdivide");
   tree_type::child_index_type c0;
-  tree_type::cell_index_type root;
+  tree_type::cell_index_type  root;
   tree.subdivide(root);
   tree_type::cell_index_type child0 = tree.get_child(root, c0);
   tree.subdivide(child0);
   tree_type::cell_index_type grandchild0 = tree.get_child(child0, c0);
   testlib_test_perform(tree.has_children(root) &&
-                       tree.has_children(child0));
+                       tree.has_children(child0) );
 
   testlib_test_begin("fixed data parents");
   testlib_test_perform(!tree.get_parent(root) &&
                        root == tree.get_parent(child0) &&
-                       child0 == tree.get_parent(grandchild0));
+                       child0 == tree.get_parent(grandchild0) );
 
   testlib_test_begin("fixed data store node");
   float nd = 1.2f;
@@ -96,7 +96,7 @@ test_data_fixed()
   testlib_test_begin("fixed data collapse");
   tree.collapse(child0);
   tree.collapse(root);
-  testlib_test_perform(!tree.has_children(root));
+  testlib_test_perform(!tree.has_children(root) );
 }
 
 static void test_compact_tree_data_fixed()

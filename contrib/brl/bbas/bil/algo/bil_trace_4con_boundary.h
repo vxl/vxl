@@ -1,6 +1,6 @@
 #ifndef bil_trace_4con_boundary_h_
 #define bil_trace_4con_boundary_h_
-//:
+// :
 // \file
 // \brief Function to trace 4-connected boundary around region in bool image
 // \author Tim Cootes
@@ -8,7 +8,7 @@
 #include <vil/vil_image_view.h>
 #include <vcl_vector.h>
 
-//: Trace 4-connected boundary around region in boolean image
+// : Trace 4-connected boundary around region in boolean image
 //  Assumes that (i0,j0) is a boundary point.
 //  Searches for the boundary pixels and runs around until it gets back to beginning.
 //  On exit the boundary points are given by (bi[k],bj[k])
@@ -19,9 +19,7 @@
 // to the other side of the blob.
 // \sa bil_trace_8con_boundary
 // \relatesalso vil_image_view
-void bil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj,
-                             const vil_image_view<bool>& image,
-                             int i0, int j0);
-
+void bil_trace_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj, const vil_image_view<bool>& image, int i0,
+                             int j0);
 
 #endif // bil_trace_4con_boundary_h_

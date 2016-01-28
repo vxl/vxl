@@ -1,6 +1,6 @@
 #ifndef boxm2_vis_probe_functor_h
 #define boxm2_vis_probe_functor_h
-//:
+// :
 // \file
 
 #include <boxm2/boxm2_data_traits.h>
@@ -8,27 +8,28 @@
 
 class boxm2_vis_probe_functor
 {
- public:
-  //: "default" constructor
+public:
+  // : "default" constructor
   boxm2_vis_probe_functor() {}
 
-  bool init_data(vcl_vector<boxm2_data_base*> & datas, float * vis)
+  bool init_data(vcl_vector<boxm2_data_base *> & datas, float * vis)
   {
-    alpha_data_=new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(),datas[0]->buffer_length(),datas[0]->block_id());
+    alpha_data_ =
+      new boxm2_data<BOXM2_ALPHA>(datas[0]->data_buffer(), datas[0]->buffer_length(), datas[0]->block_id() );
     vis_ = vis;
     return true;
   }
 
-  inline bool step_cell(float seg_len,int index,unsigned i, unsigned j, float abs_depth = 0.0)
+  inline bool step_cell(float seg_len, int index, unsigned i, unsigned j, float abs_depth = 0.0)
   {
-    boxm2_data<BOXM2_ALPHA>::datatype alpha=alpha_data_->data()[index];
-    (*vis_)*=vcl_exp(-alpha*seg_len);
+    boxm2_data<BOXM2_ALPHA>::datatype alpha = alpha_data_->data()[index];
+    (*vis_) *= vcl_exp(-alpha * seg_len);
     return true;
   }
- private:
-  boxm2_data<BOXM2_ALPHA> * alpha_data_;
-  float * vis_;
-};
 
+private:
+  boxm2_data<BOXM2_ALPHA> * alpha_data_;
+  float *                   vis_;
+};
 
 #endif

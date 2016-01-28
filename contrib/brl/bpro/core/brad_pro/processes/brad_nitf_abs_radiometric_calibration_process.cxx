@@ -1,5 +1,5 @@
-//This is brl/bpro/core/brad_pro/processes/brad_nitf_abs_radiometric_calibration_process.cxx
-//:
+// This is brl/bpro/core/brad_pro/processes/brad_nitf_abs_radiometric_calibration_process.cxx
+// :
 // \file
 //   Satellite images usually require an absolute radiometric calibration:
 //      http://www.digitalglobe.com/downloads/QuickBird_technote_raduse_v1.pdf
@@ -19,14 +19,16 @@
 
 #include <brad/brad_image_metadata.h>
 
-//: set input and output types
+// : set input and output types
 bool brad_nitf_abs_radiometric_calibration_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr"); // cropped satellite image,
   input_types.push_back("brad_image_metadata_sptr");
-  if (!pro.set_input_types(input_types))
+  if( !pro.set_input_types(input_types) )
+    {
     return false;
+    }
 
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr"); // bits/pixel
@@ -35,13 +37,13 @@ bool brad_nitf_abs_radiometric_calibration_process_cons(bprb_func_process& pro)
 
 bool brad_nitf_abs_radiometric_calibration_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs()<1)
-  {
+  if( pro.n_inputs() < 1 )
+    {
     vcl_cout << pro.name() << " The input number should be " << 1 << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
+  // get the inputs
   vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
   brad_image_metadata_sptr md = pro.get_input<brad_image_metadata_sptr>(1);
 
@@ -51,25 +53,28 @@ bool brad_nitf_abs_radiometric_calibration_process(bprb_func_process& pro)
   vil_math_value_range(img, min_val, max_val);
   vcl_cout << pro.name() << ": before calibration img min: " << min_val << " max: " << max_val << vcl_endl;
 
-  //: calibrate
-  if (img.nplanes() == 1) {
+  // : calibrate
+  if( img.nplanes() == 1 )
+    {
     vil_math_scale_and_offset_values(img, md->gain_, md->offset_);
-  }
-  else if (img.nplanes() >= 4)
-  {  // a multi-spectral image 4 or 8 bands
-    for (unsigned ii = 0; ii < img.nplanes(); ii++) {
-      vil_image_view<float> band = vil_plane(img, ii);
-      vil_math_scale_and_offset_values(band, md->gains_[ii+1].first, md->gains_[ii+1].second);  // assuming gains_[0] is PAN band's gain (brad_image_metadata parses from metadata files and creates gains_ vector accordingly)
     }
-  }
+  else if( img.nplanes() >= 4 )
+    { // a multi-spectral image 4 or 8 bands
+    for( unsigned ii = 0; ii < img.nplanes(); ii++ )
+      {
+      vil_image_view<float> band = vil_plane(img, ii);
+      vil_math_scale_and_offset_values(band, md->gains_[ii + 1].first, md->gains_[ii + 1].second);  // assuming gains_[0] is PAN band's gain (brad_image_metadata parses from metadata files and creates gains_ vector accordingly)
+      }
+    }
   else
+    {
     return false;
+    }
 
   vil_math_value_range(img, min_val, max_val);
   vcl_cout << pro.name() << "after calibration img min: " << min_val << " max: " << max_val << vcl_endl;
 
-  //output date time info
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img));
+  // output date time info
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(img) );
   return true;
 }
-

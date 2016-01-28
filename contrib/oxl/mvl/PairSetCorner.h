@@ -2,9 +2,9 @@
 #ifndef PairSetCorner_h_
 #define PairSetCorner_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Copy matches out of PairMatchSetCorner
 //
@@ -14,7 +14,7 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 15 Sep 96
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <mvl/HomgPoint2D.h>
@@ -22,7 +22,7 @@
 
 class PairSetCorner
 {
- public:
+public:
   vcl_vector<HomgPoint2D> points1;
   vcl_vector<HomgPoint2D> points2;
 

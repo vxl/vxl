@@ -1,127 +1,145 @@
 // This is gel/gevd/gevd_memory_mixin.cxx
 #include "gevd_memory_mixin.h"
-//:
+// :
 // \file
 
 #include <vcl_cstring.h>   // memset() and memcpy() live here
 #include <vcl_algorithm.h>
 
-//=========================================================================
-//=========================================================================
+// =========================================================================
+// =========================================================================
 
-//====================================================================
+// ====================================================================
 // Constructor.  Modified @ 6/11/91 gbs
-//====================================================================
+// ====================================================================
 gevd_memory_mixin::gevd_memory_mixin(int s, void* ib, unsigned int type)
 {
   size      = s;
   curr_into = 0;
   offset    = 0;
-  SetStatus((type&MM_CREATION_FLAGS));
+  SetStatus( (type & MM_CREATION_FLAGS) );
 
-  if ((ib == 0) && (s>0))
-  {
+  if( (ib == 0) && (s > 0) )
+    {
     touched = 0;
     buffer  = new unsigned char[size];
 
     // If desired, zero out the buffer and set the touched
     // flag to indicate that all data is valid.
     //
-    if (GetStatusCode() & MM_CLEAR)
-    {
+    if( GetStatusCode() & MM_CLEAR )
+      {
       vcl_memset(buffer, 0, size); // corrected by PVr.
       touched = size;
-    }
+      }
 
     // If we allocate a buffer and MM_PROTECTED is set,
     // we must clear it so that it can be deallocated.
     //
     ClearStatus(MM_PROTECTED);
 
-    if (!buffer)
-    {
+    if( !buffer )
+      {
       SetStatus(MM_MEMORY_ERROR);
       size = 0;
+      }
     }
-  }
   else
-  {
+    {
     touched = size;
-    buffer  = (unsigned char*)ib;
-    if (!buffer)
-      SetStatus(MM_NIL_BUFFER|MM_WARN);
+    buffer  = (unsigned char *)ib;
+    if( !buffer )
+      {
+      SetStatus(MM_NIL_BUFFER | MM_WARN);
+      }
     else
-      SetStatus(MM_PROTECTED|MM_FOREIGN_BLOCK|MM_DIRTY);
-  }
+      {
+      SetStatus(MM_PROTECTED | MM_FOREIGN_BLOCK | MM_DIRTY);
+      }
+    }
   current = buffer;
 }
 
 gevd_memory_mixin::gevd_memory_mixin(gevd_memory_mixin const& m)
- : gevd_status_mixin(), size(m.GetSize()), touched(size), curr_into(0), offset(0)
+  : gevd_status_mixin(), size(m.GetSize() ), touched(size), curr_into(0), offset(0)
 {
   buffer  = new unsigned char[size];
   vcl_memcpy(buffer, m.GetBufferPtr(), size);
   current = buffer;
-  SetStatus((m.Stat()&MM_CREATION_FLAGS));
+  SetStatus( (m.Stat() & MM_CREATION_FLAGS) );
   ClearStatus(MM_PROTECTED);
-  if (!buffer)
-  {
+  if( !buffer )
+    {
     SetStatus(MM_MEMORY_ERROR);
     size = 0;
-  }
+    }
 }
 
 gevd_memory_mixin::~gevd_memory_mixin()
 {
-  if (!(GetStatusCode()&MM_PROTECTED))
+  if( !(GetStatusCode() & MM_PROTECTED) )
+    {
     delete [] buffer;
+    }
 }
 
 int
 gevd_memory_mixin::ReadBytes(void* ib, int b)
 {
-  if ((ib == 0) || !(GetStatusCode()&MM_READ))
+  if( (ib == 0) || !(GetStatusCode() & MM_READ) )
+    {
     return 0;
+    }
   int num_b;
-  if ((num_b=vcl_min(b, touched-curr_into)) < 0) num_b = 0;
-  if (num_b<b)
+  if( (num_b = vcl_min(b, touched - curr_into) ) < 0 ) {num_b = 0; }
+  if( num_b < b )
+    {
     SetStatus(MM_DATA_OVERFLOW);
+    }
   else
-    ClearStatus(MM_ERROR|MM_WARN);
-  vcl_memcpy(ib, current,num_b);
+    {
+    ClearStatus(MM_ERROR | MM_WARN);
+    }
+  vcl_memcpy(ib, current, num_b);
   current   += num_b;
   curr_into += num_b;
   return num_b;
 }
 
-//====================================================================
-//: Read b bytes from location loc to buffer ib.  New @ 6/11/91 gbs
-//====================================================================
+// ====================================================================
+// : Read b bytes from location loc to buffer ib.  New @ 6/11/91 gbs
+// ====================================================================
 int
 gevd_memory_mixin::ReadBytes(void* ib, int b, int loc)
 {
-  if ((ib == 0) || !(GetStatusCode()&MM_READ))
+  if( (ib == 0) || !(GetStatusCode() & MM_READ) )
+    {
     return 0;
+    }
 
   //
   // loc is always relative to offset, so modify...
   //
   loc += offset;
   int num_b;
-  if (loc<offset)
-  {
+  if( loc < offset )
+    {
     SetStatus(MM_UNDERFLOW);
     num_b = 0;
-  }
+    }
   else
-  {
-    num_b = vcl_min(b+loc, touched) - loc;
-    if (num_b<b)
+    {
+    num_b = vcl_min(b + loc, touched) - loc;
+    if( num_b < b )
+      {
       SetStatus(MM_OVERFLOW);
+      }
     else
-      ClearStatus(MM_ERROR|MM_WARN);
-  }
-  vcl_memcpy(ib, buffer+loc,num_b);
+      {
+      ClearStatus(MM_ERROR | MM_WARN);
+      }
+    }
+  vcl_memcpy(ib, buffer + loc, num_b);
   current = buffer + (curr_into += num_b);
   return num_b;
 }
@@ -129,55 +147,71 @@ gevd_memory_mixin::ReadBytes(void* ib, int b, int loc)
 int
 gevd_memory_mixin::ReadBytes(void* ib, int b, int* mapping)
 {
-  if ((ib == 0) || !(GetStatusCode()&MM_READ))
+  if( (ib == 0) || !(GetStatusCode() & MM_READ) )
+    {
     return 0;
+    }
   int num_b;
-  if ((num_b=vcl_min(b, touched-curr_into)) < 0) num_b = 0;;
-  if (num_b<b)
+  if( (num_b = vcl_min(b, touched - curr_into) ) < 0 ) {num_b = 0; };
+  if( num_b < b )
+    {
     SetStatus(MM_OVERFLOW);
+    }
   else
-    ClearStatus(MM_ERROR|MM_WARN);
-  char* ibt = (char*)ib;
-  for (int i = 0; i<num_b; i++)
+    {
+    ClearStatus(MM_ERROR | MM_WARN);
+    }
+  char* ibt = (char *)ib;
+  for( int i = 0; i < num_b; i++ )
+    {
     *(ibt++) = (char)mapping[*(current++)];
+    }
   curr_into += num_b;
   return num_b;
 }
 
-//====================================================================
-//: Read b bytes from loc to ib, thru mapping.  New @ 6/11/91 gbs
-//====================================================================
+// ====================================================================
+// : Read b bytes from loc to ib, thru mapping.  New @ 6/11/91 gbs
+// ====================================================================
 int
 gevd_memory_mixin::ReadBytes(void* ib, int b, int loc, int* mapping)
 {
-  if ((ib == 0) || !(GetStatusCode()&MM_READ))
+  if( (ib == 0) || !(GetStatusCode() & MM_READ) )
+    {
     return 0;
+    }
   //
   // loc is always relative to offset, so modify...
   //
   loc += offset;
   int num_b;
-  if (loc<offset)
-  {
+  if( loc < offset )
+    {
     SetStatus(MM_UNDERFLOW);
     num_b = 0;
-  }
+    }
   else
-  {
-    num_b = vcl_min(b+loc, size) - loc;
-  }
-  if (num_b<b)
+    {
+    num_b = vcl_min(b + loc, size) - loc;
+    }
+  if( num_b < b )
+    {
     SetStatus(MM_OVERFLOW);
+    }
   else
-    ClearStatus(MM_ERROR|MM_WARN);
-  if (loc<size && !(MM_UNDERFLOW & GetStatusCode()))
-  {
+    {
+    ClearStatus(MM_ERROR | MM_WARN);
+    }
+  if( loc < size && !(MM_UNDERFLOW & GetStatusCode() ) )
+    {
     current   = buffer + loc;
-    curr_into = vcl_min(loc+num_b,size);
-  }
-  char* ibt = (char*)ib;
-  for (int i = 0; i<num_b; i++)
+    curr_into = vcl_min(loc + num_b, size);
+    }
+  char* ibt = (char *)ib;
+  for( int i = 0; i < num_b; i++ )
+    {
     *(ibt++) = (char)mapping[*(current++)];
+    }
   return num_b;
 }
 
@@ -187,52 +221,56 @@ gevd_memory_mixin::SetMemoryPtr(int s, void* ib)
   // If status is MM_FIXED, we are not allowed to replace
   // the buffer with a new one...
   //
-  if (GetStatusCode()&MM_FIXED)
-  {
+  if( GetStatusCode() & MM_FIXED )
+    {
     SetStatus(MM_ERROR);
     return;
-  }
+    }
 
-  if (!(GetStatusCode()&MM_PROTECTED)) delete buffer;
+  if( !(GetStatusCode() & MM_PROTECTED) ) {delete buffer; }
   size      = s;
   curr_into = 0;
   offset    = 0;
   ClearStatus();
-  SetStatus(MM_READ|MM_WRITE);
+  SetStatus(MM_READ | MM_WRITE);
 
-  if ((ib == 0) && (s>0))
-  {
+  if( (ib == 0) && (s > 0) )
+    {
     touched = 0;
     buffer  = new unsigned char[size];
 
     // If desired, zero out the buffer and set the touched
     // flag to indicate that all data is valid.
-    if (GetStatusCode() & MM_CLEAR)
-    {
+    if( GetStatusCode() & MM_CLEAR )
+      {
       vcl_memset(buffer, 0, size); // corrected by PVr.
       touched = size;
-    }
+      }
 
     // If we allocate a buffer and MM_PROTECTED is set,
     // we must clear it so that it can be deallocated.
     //
     ClearStatus(MM_PROTECTED);
 
-    if (!buffer)
-    {
+    if( !buffer )
+      {
       SetStatus(MM_MEMORY_ERROR);
       size = 0;
+      }
     }
-  }
   else
-  {
+    {
     touched = size;
-    buffer  = (unsigned char*)ib;
-    if (!buffer)
-      SetStatus(MM_NIL_BUFFER|MM_WARN);
+    buffer  = (unsigned char *)ib;
+    if( !buffer )
+      {
+      SetStatus(MM_NIL_BUFFER | MM_WARN);
+      }
     else
-      SetStatus(MM_PROTECTED|MM_FOREIGN_BLOCK|MM_DIRTY);
-  }
+      {
+      SetStatus(MM_PROTECTED | MM_FOREIGN_BLOCK | MM_DIRTY);
+      }
+    }
 
   current = buffer;
 }
@@ -240,28 +278,34 @@ gevd_memory_mixin::SetMemoryPtr(int s, void* ib)
 int
 gevd_memory_mixin::WriteBytes(const void* ib, int b)
 {
-  if (!(GetStatusCode()&MM_WRITE))
+  if( !(GetStatusCode() & MM_WRITE) )
+    {
     return 0;
-  int num_b = vcl_min(b, size-curr_into);
-  vcl_memcpy(current, ib,num_b);
-  if (num_b<b)
+    }
+  int num_b = vcl_min(b, size - curr_into);
+  vcl_memcpy(current, ib, num_b);
+  if( num_b < b )
+    {
     SetStatus(MM_OVERFLOW);
+    }
   else
-    ClearStatus(MM_ERROR|MM_WARN);
+    {
+    ClearStatus(MM_ERROR | MM_WARN);
+    }
   /* touched = curr_into += num_b; */ // << Massive brain damage!!!!!
   // What if the buffer already has valid data and we are
   // just writing over some of it, like we do in export!!!!
 
-  curr_into += num_b;                  // fixed 11/1/91 ajh
+  curr_into += num_b;                      // fixed 11/1/91 ajh
   touched = vcl_max( touched, curr_into ); //
 
   current   += num_b;
   return num_b;
 }
 
-//====================================================================
-//: Write b bytes to location loc from buffer ib.  New @ 6/11/91 gbs
-//====================================================================
+// ====================================================================
+// : Write b bytes to location loc from buffer ib.  New @ 6/11/91 gbs
+// ====================================================================
 int
 gevd_memory_mixin::WriteBytes(const void* ib, int b, int loc)
 {
@@ -270,28 +314,28 @@ gevd_memory_mixin::WriteBytes(const void* ib, int b, int loc)
   //
   loc += offset;
   int num_b;
-  if (loc<offset)
-  {
+  if( loc < offset )
+    {
     SetStatus(MM_UNDERFLOW);
     num_b = 0;
-  }
+    }
   else
-  {
-    num_b = vcl_min(b+loc, size) - loc;
-  }
-  if (num_b<b) SetStatus(MM_OVERFLOW);
-  if (loc<size && !(MM_UNDERFLOW & GetStatusCode()))
-  {
-    vcl_memcpy(buffer+loc,ib,num_b);
-    curr_into = vcl_min(loc+num_b,size);
+    {
+    num_b = vcl_min(b + loc, size) - loc;
+    }
+  if( num_b < b ) {SetStatus(MM_OVERFLOW); }
+  if( loc < size && !(MM_UNDERFLOW & GetStatusCode() ) )
+    {
+    vcl_memcpy(buffer + loc, ib, num_b);
+    curr_into = vcl_min(loc + num_b, size);
     current   = buffer + curr_into;
-  }
+    }
   return num_b;
 }
 
-//====================================================================
-//: Clear the memory and reset all of the appropriate variables.
-//====================================================================
+// ====================================================================
+// : Clear the memory and reset all of the appropriate variables.
+// ====================================================================
 void
 gevd_memory_mixin::Clear()
 {
@@ -299,5 +343,5 @@ gevd_memory_mixin::Clear()
   curr_into = 0;
   current = buffer;
   offset = 0;
-  vcl_memset((char*)buffer,0,size);
+  vcl_memset( (char *)buffer, 0, size);
 }

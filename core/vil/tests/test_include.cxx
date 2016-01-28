@@ -108,26 +108,26 @@
 #include <vil/file_formats/vil_viffheader.h>
 // Only the following ones need library-specific #includes:
 #if HAS_J2K
-#include <vil/file_formats/vil_j2k_image.h>
-#include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
-#include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
-#include <vil/file_formats/NCSJPCVilIOStream.h>
+#  include <vil/file_formats/vil_j2k_image.h>
+#  include <vil/file_formats/vil_j2k_nitf2_pyramid_image_resource.h>
+#  include <vil/file_formats/vil_j2k_pyramid_image_resource.h>
+#  include <vil/file_formats/NCSJPCVilIOStream.h>
 #endif
 #if HAS_OPENJPEG2
-#include <vil/file_formats/vil_openjpeg.h>
-#include <vil/file_formats/vil_openjpeg_pyramid_image_resource.h>
+#  include <vil/file_formats/vil_openjpeg.h>
+#  include <vil/file_formats/vil_openjpeg_pyramid_image_resource.h>
 #endif
 #if HAS_DCMTK
-#include <vil/file_formats/vil_dicom.h>
-#include <vil/file_formats/vil_dicom_header.h>
-#include <vil/file_formats/vil_dicom_stream.h>
+#  include <vil/file_formats/vil_dicom.h>
+#  include <vil/file_formats/vil_dicom_header.h>
+#  include <vil/file_formats/vil_dicom_stream.h>
 #endif
 #if HAS_TIFF
-#include <vil/file_formats/vil_tiff.h>
-#include <vil/file_formats/vil_tiff_header.h>
-#if HAS_GEOTIFF
-#include <vil/file_formats/vil_geotiff_header.h>
-#endif
+#  include <vil/file_formats/vil_tiff.h>
+#  include <vil/file_formats/vil_tiff_header.h>
+#  if HAS_GEOTIFF
+#    include <vil/file_formats/vil_geotiff_header.h>
+#  endif
 #endif
 
 int main() { return 0; }

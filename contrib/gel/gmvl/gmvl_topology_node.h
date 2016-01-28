@@ -1,7 +1,7 @@
 // This is gel/gmvl/gmvl_topology_node.h
 #ifndef gmvl_topology_node_h_
 #define gmvl_topology_node_h_
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 //
@@ -15,13 +15,12 @@
 
 class gmvl_topology_node : public gmvl_node
 {
- public:
-  gmvl_topology_node( vtol_topology_object_sptr t) : topology_(t) { type_="gmvl_topology_node"; }
+public:
+  gmvl_topology_node( vtol_topology_object_sptr t) : topology_(t) { type_ = "gmvl_topology_node"; }
   ~gmvl_topology_node() {}
 
   vtol_topology_object_sptr get() const { return topology_; }
-
- protected:
+protected:
   vtol_topology_object_sptr topology_;
 };
 

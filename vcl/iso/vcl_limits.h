@@ -6,9 +6,9 @@
 #include <limits>
 
 #ifdef vcl_generic_limits_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_limits_STD std
+#  define vcl_generic_limits_STD std
 #endif
 
 #include "../generic/vcl_limits.h"

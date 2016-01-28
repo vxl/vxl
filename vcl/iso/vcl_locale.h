@@ -6,9 +6,9 @@
 #include <locale>
 
 #ifdef vcl_generic_locale_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_locale_STD std
+#  define vcl_generic_locale_STD std
 #endif
 
 #include "../generic/vcl_locale.h"

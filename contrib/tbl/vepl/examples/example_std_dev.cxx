@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //  This example program shows a typical use of the vepl_moment function on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
@@ -23,17 +23,17 @@
 #include <vxl_config.h> // for vxl_byte
 
 int
-main(int argc, char** argv)
+main(int argc, char* * argv)
 {
-  if (argc < 3)
-  {
+  if( argc < 3 )
+    {
     vcl_cerr << "Syntax: example_vepl_moment file_in file_out\n";
     return 1;
-  }
+    }
 
   // The input image:
   vil_image_resource_sptr in = vil_load_image_resource(argv[1]); // any type
-  in = vepl_convert(in, 0.f); // dummy second argument ==> conversion to float
+  in = vepl_convert(in, 0.f);                                    // dummy second argument ==> conversion to float
 
   // The second moment filter.  result: E(X*X).
   vil_image_resource_sptr out = vepl_moment(in, 2, 5, 5);
@@ -52,10 +52,14 @@ main(int argc, char** argv)
 
   // vepl_convert to ubyte and write to PGM file:
   out = vepl_convert(out, (vxl_byte)0);
-  if (vil_save_image_resource(out, argv[2], "pnm"))
-    vcl_cout << "Written standard-deviation image to PNM image "<< argv[2]<< '\n';
+  if( vil_save_image_resource(out, argv[2], "pnm") )
+    {
+    vcl_cout << "Written standard-deviation image to PNM image " << argv[2] << '\n';
+    }
   else
+    {
     vcl_cout << "Could not write standard-deviation image as PNM to " << argv[2] << '\n';
+    }
 
   return 0;
 }

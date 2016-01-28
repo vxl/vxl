@@ -3,9 +3,9 @@
 #define vgui_button_field_h_
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author  Lianqing Yu
 // \brief   button control in a dialog.
@@ -18,16 +18,16 @@
 #include "vgui_dialog_field.h"
 #include <vgui/vgui_command_sptr.h>
 
-//: button control in a dialog.
+// : button control in a dialog.
 //
 // vgui_button_field is a dialog field implementation that holds
 // information of a button control. Usually it contains a button label
 // and/or an icon/bitmap shown on the button.
 class vgui_button_field : public vgui_dialog_field
 {
- public:
-  vgui_button_field(vgui_command_sptr c, const char *txt)
-  : vgui_dialog_field(txt ? txt : ""), cmnd(c) {}
+public:
+  vgui_button_field(vgui_command_sptr c, const char * txt)
+    : vgui_dialog_field(txt ? txt : ""), cmnd(c) {}
 
   ~vgui_button_field() {}
 

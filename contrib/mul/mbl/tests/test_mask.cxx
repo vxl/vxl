@@ -10,19 +10,20 @@
 
 unsigned mask4_to_number(const mbl_mask & r)
 {
-  return (r[0] ? 8 : 0) +
-         (r[1] ? 4 : 0) +
-         (r[2] ? 2 : 0) +
-         (r[3] ? 1 : 0);
+  return (r[0] ? 8 : 0)
+         + (r[1] ? 4 : 0)
+         + (r[2] ? 2 : 0)
+         + (r[3] ? 1 : 0);
 }
 
 vcl_string number_to_fourbit(unsigned n)
 {
   vcl_stringstream ss;
-  for (int i = 3; i >= 0; --i)
-  {
-    ss << ((n >> i) & 1);
-  }
+
+  for( int i = 3; i >= 0; --i )
+    {
+    ss << ( (n >> i) & 1);
+    }
   return ss.str();
 }
 
@@ -40,19 +41,18 @@ void setup_default_masks(mbl_mask & m1, mbl_mask & m2)
 void setup_default_values(vcl_vector<unsigned> & v1, vcl_vector<unsigned> & v2)
 {
   v1.resize(5); v2.resize(5);
-  for (unsigned i = 0 ; i < 5 ; ++i)
-  {
+  for( unsigned i = 0; i < 5; ++i )
+    {
     v1[i] = i;
-    v2[i] = 10+i;
-  }
+    v2[i] = 10 + i;
+    }
 }
 
 void test_mask()
 {
   // workspace
   vcl_vector<unsigned> v1, v2, v_tgt;
-  mbl_mask m1, m2, m_op;
-
+  mbl_mask             m1, m2, m_op;
 
   // Test mask IO
   vcl_cout << "\nTesting mbl_mask IO" << vcl_endl;
@@ -68,11 +68,16 @@ void test_mask()
   fout.close();
   bool failed_load = false;
   m2.clear();
-  try         { mbl_load_mask(m2, "mbl_mask_test_badmask.txt"); }
-  catch (...) { failed_load = true; }
+  try
+    {
+    mbl_load_mask(m2, "mbl_mask_test_badmask.txt");
+    }
+  catch( ... )
+    {
+    failed_load = true;
+    }
   TEST("Expected fail to load badly formatted file", failed_load, true);
   TEST("Mask empty after file load fail", m2.empty(), true);
-
 
   // Test mbl_apply_mask(mask,vector)
   vcl_cout << "\nTesting mbl_apply_mask(mask,vector) version" << vcl_endl;
@@ -93,11 +98,16 @@ void test_mask()
   m1.resize(3);
   v_tgt = v1;
   bool failed_application = false;
-  try         { mbl_apply_mask(m1, v1); }
-  catch (...) { failed_application = true; }
+  try
+    {
+    mbl_apply_mask(m1, v1);
+    }
+  catch( ... )
+    {
+    failed_application = true;
+    }
   TEST("Expected fail of apply mask where lengths differ", failed_application, true);
   TEST("Values invariant on failure of mask application", (v1 == v_tgt), true);
-
 
   // Test mbl_apply_mask(mask,vector,vector)
   vcl_cout << "\nTesting mbl_apply_mask(mask,vector,vector) version" << vcl_endl;
@@ -118,8 +128,14 @@ void test_mask()
   m1.resize(3);
   v_tgt = v1;
   failed_application = false;
-  try         { mbl_apply_mask(m1, v1); }
-  catch (...) { failed_application = true; }
+  try
+    {
+    mbl_apply_mask(m1, v1);
+    }
+  catch( ... )
+    {
+    failed_application = true;
+    }
   TEST("Expected fail of apply mask where lengths differ", failed_application, true);
   TEST("Values invariant on failure of mask application", (v1 == v_tgt), true);
 
@@ -132,16 +148,21 @@ void test_mask()
   v_tgt.push_back(0); // see definition of m1 above for relationship values->target
   v_tgt.push_back(3);
   v_tgt.push_back(4);
-  mbl_apply_mask(m1, v1.begin(), v1.end(), vcl_inserter(result, result.begin()));
+  mbl_apply_mask(m1, v1.begin(), v1.end(), vcl_inserter(result, result.begin() ) );
   TEST("Application of mask using insert iterator method", (result == v_tgt), true);
   failed_application = false;
   result.clear();
   m1.resize(4);
-  try         { mbl_apply_mask(m1, v1.begin(), v1.end(), vcl_inserter(result, result.begin())); }
-  catch (...) { failed_application = true; }
+  try
+    {
+    mbl_apply_mask(m1, v1.begin(), v1.end(), vcl_inserter(result, result.begin() ) );
+    }
+  catch( ... )
+    {
+    failed_application = true;
+    }
   TEST("Expected fail of apply mask where lengths differ", failed_application, true);
   TEST("Values invariant on failure of mask application", result.empty(), true);
-
 
   // Test mbl_mask_logic
   vcl_cout << "\nTesting mbl_mask_logic" << vcl_endl;
@@ -151,32 +172,50 @@ void test_mask()
   m1.push_back(true); m2.push_back(false);
   m1.push_back(true); m2.push_back(true);
   bool logic_success = true;
-  for (unsigned rule = 0 ; rule < 16 ; ++rule)
-  {
+  for( unsigned rule = 0; rule < 16; ++rule )
+    {
     m_op = m2;
-    mbl_mask_logic(m1, m_op, number_to_fourbit(rule));
-    logic_success &= (rule == mask4_to_number(m_op));
-  }
+    mbl_mask_logic(m1, m_op, number_to_fourbit(rule) );
+    logic_success &= (rule == mask4_to_number(m_op) );
+    }
   TEST("Correctness of general logical operations", logic_success, true);
   logic_success = true;
-  m_op = m2; mbl_mask_logic_and(m1,m_op); logic_success &= (mask4_to_number(m_op) == 1);
-  m_op = m2; mbl_mask_logic_nand(m1,m_op); logic_success &= (mask4_to_number(m_op) == 14);
-  m_op = m2; mbl_mask_logic_nor(m1,m_op); logic_success &= (mask4_to_number(m_op) == 8);
-  m_op = m2; mbl_mask_logic_or(m1,m_op); logic_success &= (mask4_to_number(m_op) == 7);
-  m_op = m2; mbl_mask_logic_xnor(m1,m_op); logic_success &= (mask4_to_number(m_op) == 9);
-  m_op = m2; mbl_mask_logic_xor(m1,m_op); logic_success &= (mask4_to_number(m_op) == 6);
+  m_op = m2; mbl_mask_logic_and(m1, m_op); logic_success &= (mask4_to_number(m_op) == 1);
+  m_op = m2; mbl_mask_logic_nand(m1, m_op); logic_success &= (mask4_to_number(m_op) == 14);
+  m_op = m2; mbl_mask_logic_nor(m1, m_op); logic_success &= (mask4_to_number(m_op) == 8);
+  m_op = m2; mbl_mask_logic_or(m1, m_op); logic_success &= (mask4_to_number(m_op) == 7);
+  m_op = m2; mbl_mask_logic_xnor(m1, m_op); logic_success &= (mask4_to_number(m_op) == 9);
+  m_op = m2; mbl_mask_logic_xor(m1, m_op); logic_success &= (mask4_to_number(m_op) == 6);
   TEST("Correctness of specific logical operations", logic_success, true);
 
   // Test failures of mbl_mask_logic
   unsigned failed_logic = 0;
   m_op = m2;
-  try         { mbl_mask_logic(m1, m_op, "010"); } // wrong length op string
-  catch (...) { failed_logic++; }
-  try         { mbl_mask_logic(m1, m_op, "01B0"); } // bad op string format
-  catch (...) { failed_logic++; }
+  try
+    {
+    mbl_mask_logic(m1, m_op, "010");
+    }                                              // wrong length op string
+  catch( ... )
+    {
+    failed_logic++;
+    }
+  try
+    {
+    mbl_mask_logic(m1, m_op, "01B0");
+    }                                               // bad op string format
+  catch( ... )
+    {
+    failed_logic++;
+    }
   m1.push_back(false); // mismatched mask lengths
-  try         { mbl_mask_logic(m1, m_op, "0110"); }
-  catch (...) { failed_logic++; }
+  try
+    {
+    mbl_mask_logic(m1, m_op, "0110");
+    }
+  catch( ... )
+    {
+    failed_logic++;
+    }
   TEST("Expected fails for invalid logic ops", (failed_logic == 3), true);
   TEST("Result invariant on failure of mask logic", (m2 == m_op), true);
 
@@ -190,16 +229,22 @@ void test_mask()
   v_tgt[2] = v1[2];
   v_tgt[3] = v2[3];
   v_tgt[4] = v2[4];
-  mbl_mask_merge_values(m1, v1.begin(), v1.end(), v2.begin(), v2.end(), v2.begin());
-  TEST("Correctness of values according to mask", (v2==v_tgt), true);
+  mbl_mask_merge_values(m1, v1.begin(), v1.end(), v2.begin(), v2.end(), v2.begin() );
+  TEST("Correctness of values according to mask", (v2 == v_tgt), true);
 
   // Test failure of merge operation
   setup_default_values(v1, v2);
   v_tgt = v2;
   m1.resize(4);
   bool merge_failed = false;
-  try         { mbl_mask_merge_values(m1, v1.begin(), v1.end(), v2.begin(), v2.end(), v2.begin()); }
-  catch (...) { merge_failed = true; }
+  try
+    {
+    mbl_mask_merge_values(m1, v1.begin(), v1.end(), v2.begin(), v2.end(), v2.begin() );
+    }
+  catch( ... )
+    {
+    merge_failed = true;
+    }
   TEST("Expected fail of merge values where lengths differ", merge_failed, true);
   TEST("Values invariant on failure of merge operation", v2 == v_tgt, true);
 
@@ -210,8 +255,8 @@ void test_mask()
   m1[1] = false; m2[1] = true;  m_op[1] = false;
   m1[2] = true;  m2[2] = false; m_op[2] = false;
   m1[3] = false; m2[3] = true;  m_op[3] = true;
-                 m2[4] = false; m_op[4] = false;
-                 m2[5] = true;  m_op[5] = false;
+  m2[4] = false; m_op[4] = false;
+  m2[5] = true;  m_op[5] = false;
 
   mbl_mask_on_mask(m1, m2);
   TEST("Correctness of mask-on-mask operation", (m2 == m_op), true);
@@ -225,8 +270,14 @@ void test_mask()
   m2[5] = true;
   m_op = m2;
   bool mask_mask_failure = false;
-  try         { mbl_mask_on_mask(m1, m2); }
-  catch (...) { mask_mask_failure = true; }
+  try
+    {
+    mbl_mask_on_mask(m1, m2);
+    }
+  catch( ... )
+    {
+    mask_mask_failure = true;
+    }
   TEST("Expected fail of mask-on-mask due to count mismatch", mask_mask_failure, true);
   TEST("Result invariant on failure of mask-on-mask operation", (m2 == m_op), true);
 
@@ -254,24 +305,24 @@ void test_mask()
 
   // Test mbl_mask_to_indices() and mbl_indices_to_mask()
   vcl_cout << "\nTesting mbl mask-indices conversions" << vcl_endl;
-  const unsigned n=10;
-  mbl_mask mask_true(n, false);
-  mask_true[1]=true; mask_true[3]=true; mask_true[6]=true; mask_true[8]=true;
+  const unsigned n = 10;
+  mbl_mask       mask_true(n, false);
+  mask_true[1] = true; mask_true[3] = true; mask_true[6] = true; mask_true[8] = true;
   vcl_vector<unsigned> inds, inds_true;
   inds_true.push_back(1); inds_true.push_back(3); inds_true.push_back(6); inds_true.push_back(8);
   mbl_mask_to_indices(mask_true, inds);
-  TEST("mbl_mask_to_indices()", inds==inds_true, true);
+  TEST("mbl_mask_to_indices()", inds == inds_true, true);
   mbl_mask mask;
   mbl_indices_to_mask(inds_true, n, mask);
-  TEST("mbl_indices_to_mask()", mask==mask_true, true);
+  TEST("mbl_indices_to_mask()", mask == mask_true, true);
 
   // Test mbl_replace_using_mask(mask,src1,src2,dst)
-  {
+    {
     mbl_mask mask(2);
     mask[0] = false;
     mask[1] = true;
-    vcl_vector<unsigned> src1(2,1);
-    vcl_vector<unsigned> src2(1,2);
+    vcl_vector<unsigned> src1(2, 1);
+    vcl_vector<unsigned> src2(1, 2);
     vcl_vector<unsigned> dst;
     mbl_replace_using_mask( mask, src1, src2, dst );
 
@@ -280,10 +331,10 @@ void test_mask()
     replace_ok = replace_ok && ( dst[1] == 2 );
 
     TEST("mbl_replace_using_mask", replace_ok, true);
-  }
+    }
 
   // test vsl read write
-  {
+    {
     mbl_mask mask1(5);
     mask1[0] = false;
     mask1[1] = true;
@@ -292,30 +343,30 @@ void test_mask()
     mask1[4] = true;
 
     vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
-    vsl_b_write(bout,mask1);
+    vsl_b_write(bout, mask1);
     bout.close();
 
-    mbl_mask mask2;
+    mbl_mask       mask2;
     vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
-    vsl_b_read(bin,mask2);
+    vsl_b_read(bin, mask2);
     bout.close();
-    TEST("mbl_mask vsl binary IO write/read  consistent ", mask1==mask2 , true);
-  }
+    TEST("mbl_mask vsl binary IO write/read  consistent ", mask1 == mask2, true);
+    }
 
   // test vsl read write of mask for empty mask
-  {
+    {
     mbl_mask mask1;
 
     vsl_b_ofstream bout("./mbl_masl_test_vsl.bvl");
-    vsl_b_write(bout,mask1);
+    vsl_b_write(bout, mask1);
     bout.close();
 
-    mbl_mask mask2;
+    mbl_mask       mask2;
     vsl_b_ifstream bin("./mbl_masl_test_vsl.bvl");
-    vsl_b_read(bin,mask2);
+    vsl_b_read(bin, mask2);
     bout.close();
-    TEST("mbl_mask vsl binary IO write/read consistent for empty mask ", mask1==mask2 , true);
-  }
+    TEST("mbl_mask vsl binary IO write/read consistent for empty mask ", mask1 == mask2, true);
+    }
 }
 
 TESTMAIN(test_mask);

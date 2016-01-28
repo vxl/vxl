@@ -1,6 +1,6 @@
 #ifndef rgrl_fwd_h_
 #define rgrl_fwd_h_
-//:
+// :
 // \file
 // \brief forward declarations of rgrl classes
 // \date 04 Aug 2004
@@ -70,9 +70,12 @@ class rgrl_weighter;
 class rgrl_weighter_m_est;
 class rgrl_weighter_unit;
 
-template<unsigned N> class rgrl_feature_set_location;
-template<unsigned N> class rgrl_feature_set_bins;
+template <unsigned N>
+class rgrl_feature_set_location;
+template <unsigned N>
+class rgrl_feature_set_bins;
 
-template<typename T> class rgrl_set_of;
+template <typename T>
+class rgrl_set_of;
 
 #endif

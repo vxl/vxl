@@ -7,4 +7,4 @@
 
 typedef unsigned char byte;
 
-VIL1_MEMORY_IMAGE_OF_INSTANTIATE(vil1_rgb<byte>);
+VIL1_MEMORY_IMAGE_OF_INSTANTIATE(vil1_rgb<byte> );

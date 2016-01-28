@@ -1,6 +1,6 @@
 // This is brl/bpro/core/bvgl_pro/processes/bvgl_intersection_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // processes to operate intersection operation available in vgl core
 
@@ -10,14 +10,14 @@
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>
 
-
-//: a process to return the intersection of multiple 2d rectangular boxes loaded from kml
+// : a process to return the intersection of multiple 2d rectangular boxes loaded from kml
 namespace bvgl_2d_box_intersection_process_globals
 {
-  unsigned n_inputs_   = 2;
-  unsigned n_outputs_ = 4;
+unsigned n_inputs_   = 2;
+unsigned n_outputs_ = 4;
 
-  vgl_box_2d<double> intersection(vcl_vector<vgl_box_2d<double> > const& boxes);
+vgl_box_2d<double> intersection(vcl_vector<vgl_box_2d<double> > const& boxes);
+
 }
 
 bool bvgl_2d_box_intersection_process_cons(bprb_func_process& pro)
@@ -40,68 +40,81 @@ bool bvgl_2d_box_intersection_process(bprb_func_process& pro)
 {
   using namespace bvgl_2d_box_intersection_process_globals;
   // sanity check
-  if (!pro.verify_inputs()) {
+  if( !pro.verify_inputs() )
+    {
     vcl_cerr << pro.name() << ": Wrong Inputs!!!\n";
     return false;
-  }
+    }
 
   // get the inputs
-  unsigned in_i = 0;
+  unsigned   in_i = 0;
   vcl_string in_kml  = pro.get_input<vcl_string>(in_i++);
   vcl_string out_kml = pro.get_input<vcl_string>(in_i++);
 
-  if (!vul_file::exists(in_kml)) {
+  if( !vul_file::exists(in_kml) )
+    {
     vcl_cerr << pro.name() << ": can not find input kml file: " << in_kml << "!\n";
     return false;
-  }
+    }
 
   // parse the boxes from input kml
-  vgl_polygon<double> poly = bkml_parser::parse_polygon(in_kml);
+  vgl_polygon<double>             poly = bkml_parser::parse_polygon(in_kml);
   vcl_vector<vgl_box_2d<double> > boxes;
-  unsigned n_sheet = poly.num_sheets();
-  for (unsigned i = 0; i < n_sheet; i++) {
+  unsigned                        n_sheet = poly.num_sheets();
+  for( unsigned i = 0; i < n_sheet; i++ )
+    {
     vgl_box_2d<double> bbox;
-    for (unsigned v_idx = 0; v_idx < poly[i].size(); v_idx++)
+    for( unsigned v_idx = 0; v_idx < poly[i].size(); v_idx++ )
+      {
       bbox.add(poly[i][v_idx]);
+      }
     boxes.push_back(bbox);
-  }
+    }
 
   // find the intersection by iteration
   vgl_box_2d<double> inc_box;
-  if (boxes.size() == 1)
+  if( boxes.size() == 1 )
+    {
     inc_box = boxes[0];
+    }
   else
+    {
     inc_box = intersection(boxes);
+    }
 
-  if (inc_box.is_empty()) {
+  if( inc_box.is_empty() )
+    {
     vcl_cerr << "there is no intersection among the " << boxes.size() << " boxes!\n";
     return false;
-  }
+    }
   double lower_left_lon  = inc_box.min_x();
   double lower_left_lat  = inc_box.min_y();
   double upper_right_lon = inc_box.max_x();
   double upper_right_lat = inc_box.max_y();
 
   // generate kml if necessary
-  if (out_kml.compare("") != 0) {
-    vcl_ofstream ofs(out_kml.c_str());
-    if (!ofs) {
+  if( out_kml.compare("") != 0 )
+    {
+    vcl_ofstream ofs(out_kml.c_str() );
+    if( !ofs )
+      {
       vcl_cerr << pro.name() << ": failed to open output stream: " << out_kml << vcl_endl;
       return false;
-    }
-    else {
+      }
+    else
+      {
       bkml_write::open_document(ofs);
       vgl_polygon<double> inc_poly;
       inc_poly.new_sheet();
-      inc_poly.push_back(inc_box.min_x(), inc_box.max_y());
-      inc_poly.push_back(inc_box.max_x(), inc_box.max_y());
-      inc_poly.push_back(inc_box.max_x(), inc_box.min_y());
-      inc_poly.push_back(inc_box.min_x(), inc_box.min_y());
+      inc_poly.push_back(inc_box.min_x(), inc_box.max_y() );
+      inc_poly.push_back(inc_box.max_x(), inc_box.max_y() );
+      inc_poly.push_back(inc_box.max_x(), inc_box.min_y() );
+      inc_poly.push_back(inc_box.min_x(), inc_box.min_y() );
       bkml_write::write_polygon(ofs, inc_poly, "box_intersection", "box_intersection");
       bkml_write::close_document(ofs);
       ofs.close();
+      }
     }
-  }
   // generate outputs
   unsigned out_i = 0;
   pro.set_output_val<double>(out_i++, lower_left_lon);
@@ -115,15 +128,20 @@ bool bvgl_2d_box_intersection_process(bprb_func_process& pro)
 // iteration to obtain the intersections of multiple boxes
 vgl_box_2d<double> bvgl_2d_box_intersection_process_globals::intersection(vcl_vector<vgl_box_2d<double> > const& boxes)
 {
-  if (boxes.size() == 2) {
+  if( boxes.size() == 2 )
+    {
     return vgl_intersection(boxes[0], boxes[1]);
-  }
+    }
   vcl_vector<vgl_box_2d<double> > new_boxes;
-  vgl_box_2d<double> box = vgl_intersection(boxes[0], boxes[1]);
-  if (box.is_empty())
+  vgl_box_2d<double>              box = vgl_intersection(boxes[0], boxes[1]);
+  if( box.is_empty() )
+    {
     return box;
+    }
   new_boxes.push_back(box);
-  for (unsigned i = 2; i < boxes.size(); i++)
+  for( unsigned i = 2; i < boxes.size(); i++ )
+    {
     new_boxes.push_back(boxes[i]);
+    }
   return bvgl_2d_box_intersection_process_globals::intersection(new_boxes);
 }

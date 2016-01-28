@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_create_normalized_image_process.h
 #ifndef bvxm_create_normalized_image_process_h_
 #define bvxm_create_normalized_image_process_h_
-//:
+// :
 // \file
 // \brief A class to create a contrast normalized image using the input gain and offset values
 //
@@ -16,17 +16,17 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_create_normalized_image_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 1;
 }
 
-//: sets input and output types for bvxm_create_normalized_image_process
+// : sets input and output types for bvxm_create_normalized_image_process
 bool bvxm_create_normalized_image_process_cons(bprb_func_process& pro);
 
-//: create a normalize image
+// : create a normalize image
 bool bvxm_create_normalized_image_process(bprb_func_process& pro);
 
 #endif // bvxm_create_normalized_image_process_h_

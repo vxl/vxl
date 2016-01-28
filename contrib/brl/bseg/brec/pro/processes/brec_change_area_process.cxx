@@ -1,6 +1,6 @@
 // This is brl/bseg/brec/pro/processes/brec_change_area_process.cxx
 
-//:
+// :
 // \file
 // \brief A class to find expected area over the whole image for a given prob map
 //
@@ -18,15 +18,16 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 
-//: Constructor
+// : Constructor
 bool brec_change_area_process_cons(bprb_func_process& pro)
 {
-  bool ok=false;
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
+  input_types.push_back("vil_image_view_base_sptr"); // input probability frame
+  input_types.push_back("vil_image_view_base_sptr"); // input probability frame's mask
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   vcl_vector<vcl_string> output_types;
   output_types.push_back("float");  // expected area
@@ -35,21 +36,24 @@ bool brec_change_area_process_cons(bprb_func_process& pro)
   return ok;
 }
 
-//: Execute the process
+// : Execute the process
 bool brec_change_area_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()< 2){
+  if( pro.n_inputs() < 2 )
+    {
     vcl_cerr << "In brec_change_area_process - invalid inputs\n";
     return false;
-  }
+    }
 
   // get the inputs
-  unsigned i = 0;
+  unsigned                 i = 0;
   vil_image_view_base_sptr temp = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<float> map = *vil_convert_cast(float(), temp);
-  if (temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT)
+  vil_image_view<float>    map = *vil_convert_cast(float(), temp);
+  if( temp->pixel_format() != VIL_PIXEL_FORMAT_FLOAT )
+    {
     return false;
+    }
   unsigned ni = map.ni(), nj = map.nj();
 
   temp = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -60,18 +64,20 @@ bool brec_change_area_process(bprb_func_process& pro)
 
   float sum = 0.0f;
   float count = 0.0f;
-  for (unsigned j = 0; j<nj; ++j)
-    for (unsigned i = 0; i<ni; ++i)
+  for( unsigned j = 0; j < nj; ++j )
     {
-      if (input_mask(i,j)) {
-        sum += map(i,j);
+    for( unsigned i = 0; i < ni; ++i )
+      {
+      if( input_mask(i, j) )
+        {
+        sum += map(i, j);
         count += 1.0f;
+        }
       }
     }
 
   pro.set_output_val<float>(0, sum);
-  pro.set_output_val<float>(1, (sum/count)*100.0f);
+  pro.set_output_val<float>(1, (sum / count) * 100.0f);
 
   return true;
 }
-

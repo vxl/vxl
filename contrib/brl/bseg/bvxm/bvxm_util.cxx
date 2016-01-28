@@ -26,18 +26,22 @@
 #include <vcl_string.h>
 #include <vcl_vector.h>
 
-bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> &Ks, vcl_vector<vnl_double_3x3> &Rs, vcl_vector<vnl_double_3x1> &Ts)
+bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> & Ks,
+                             vcl_vector<vnl_double_3x3> & Rs, vcl_vector<vnl_double_3x1> & Ts)
 {
-  vcl_ifstream file_inp(filename.c_str());
-  if (!file_inp.good()) {
-    vcl_cerr << "error opening file "<< filename <<'\n';
+  vcl_ifstream file_inp(filename.c_str() );
+
+  if( !file_inp.good() )
+    {
+    vcl_cerr << "error opening file " << filename << '\n';
     return false;
-  }
+    }
   unsigned ncameras;
 
   file_inp >> ncameras;
-  for (unsigned i=0; i < ncameras; i++) {
-    vnl_double_3x3 K,R;
+  for( unsigned i = 0; i < ncameras; i++ )
+    {
+    vnl_double_3x3 K, R;
     vnl_double_3x1 T;
     file_inp >> K;
     file_inp >> R;
@@ -45,224 +49,251 @@ bool bvxm_util::read_cameras(const vcl_string filename, vcl_vector<vnl_double_3x
     Ks.push_back(K);
     Rs.push_back(R);
     Ts.push_back(T);
-  }
+    }
   file_inp.close();
 
   return true;
 }
 
-
-bool bvxm_util::write_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> &Ks, vcl_vector<vnl_double_3x3> &Rs, vcl_vector<vnl_double_3x1> &Ts)
+bool bvxm_util::write_cameras(const vcl_string filename, vcl_vector<vnl_double_3x3> & Ks,
+                              vcl_vector<vnl_double_3x3> & Rs, vcl_vector<vnl_double_3x1> & Ts)
 {
-  vcl_ofstream file_out(filename.c_str());
-  if (!file_out.good()) {
-    vcl_cerr << "error opening file "<< filename <<'\n';
+  vcl_ofstream file_out(filename.c_str() );
+
+  if( !file_out.good() )
+    {
+    vcl_cerr << "error opening file " << filename << '\n';
     return false;
-  }
+    }
   unsigned ncameras = Ks.size();
 
   file_out << ncameras << vcl_endl << vcl_endl;
-  for (unsigned i=0; i < ncameras; i++) {
+  for( unsigned i = 0; i < ncameras; i++ )
+    {
     file_out << Ks[i] << '\n'
              << Rs[i] << '\n'
              << Ts[i] << '\n'
              << vcl_endl;
-  }
+    }
   file_out.close();
 
   return true;
 }
 
-
-void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, unsigned ny_out, vnl_matrix<unsigned> &xvals, vnl_matrix<unsigned> &yvals, vnl_matrix<float> &weights)
+void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, unsigned ny_out,
+                                 vnl_matrix<unsigned> & xvals, vnl_matrix<unsigned> & yvals,
+                                 vnl_matrix<float> & weights)
 {
   // perform bilinear interpolation.
-  vnl_matrix_fixed<float,3,3> H;
-  vnl_matrix_fixed<double,3,3> Hd = invH.get_matrix();
+  vnl_matrix_fixed<float, 3, 3>  H;
+  vnl_matrix_fixed<double, 3, 3> Hd = invH.get_matrix();
   // convert H to a float matrix
-  vnl_matrix_fixed<float,3,3>::iterator Hit = H.begin();
-  vnl_matrix_fixed<double,3,3>::iterator Hdit = Hd.begin();
-  for (; Hit != H.end(); ++Hit, ++Hdit)
+  vnl_matrix_fixed<float, 3, 3>::iterator  Hit = H.begin();
+  vnl_matrix_fixed<double, 3, 3>::iterator Hdit = Hd.begin();
+  for( ; Hit != H.end(); ++Hit, ++Hdit )
+    {
     *Hit = (float)(*Hdit);
+    }
 
   unsigned npix_out = nx_out * ny_out;
 
-  vnl_matrix<float> pix_out_homg(3,npix_out);
-  unsigned col_idx = 0;
-  for (unsigned y=0; y<ny_out; ++y) {
-    for (unsigned x=0; x<nx_out; ++x, ++col_idx) {
-      pix_out_homg.set_column(col_idx,vnl_vector_fixed<float,3>((float)x,(float)y,1.0f).as_ref());
+  vnl_matrix<float> pix_out_homg(3, npix_out);
+  unsigned          col_idx = 0;
+  for( unsigned y = 0; y < ny_out; ++y )
+    {
+    for( unsigned x = 0; x < nx_out; ++x, ++col_idx )
+      {
+      pix_out_homg.set_column(col_idx, vnl_vector_fixed<float, 3>( (float)x, (float)y, 1.0f).as_ref() );
+      }
     }
-  }
-  vnl_matrix<float> pix_in_homg = H*pix_out_homg;
-  xvals.set_size(4,npix_out);
-  yvals.set_size(4,npix_out);
-  weights.set_size(4,npix_out);
-
-  for (unsigned n=0; n<npix_out; ++n) {
+  vnl_matrix<float> pix_in_homg = H * pix_out_homg;
+  xvals.set_size(4, npix_out);
+  yvals.set_size(4, npix_out);
+  weights.set_size(4, npix_out);
+  for( unsigned n = 0; n < npix_out; ++n )
+    {
     // normalize homogeneous coordinate
     float pix_in_x = pix_in_homg[0][n] / pix_in_homg[2][n];
     float pix_in_y = pix_in_homg[1][n] / pix_in_homg[2][n];
     // calculate weights and pixel values
     unsigned x0 = (unsigned)vcl_floor(pix_in_x);
     unsigned x1 = (unsigned)vcl_ceil(pix_in_x);
-    float x0_weight = (float)x1 - pix_in_x;
-    float x1_weight = 1.0f - (float)x0_weight;
+    float    x0_weight = (float)x1 - pix_in_x;
+    float    x1_weight = 1.0f - (float)x0_weight;
     unsigned y0 = (unsigned)vcl_floor(pix_in_y);
     unsigned y1 = (unsigned)vcl_ceil(pix_in_y);
-    float y0_weight = (float)y1 - pix_in_y;
-    float y1_weight = 1.0f - (float)y0_weight;
-    xvals.set_column(n,vnl_vector_fixed<unsigned,4>(x0,x0,x1,x1).as_ref());
-    yvals.set_column(n,vnl_vector_fixed<unsigned,4>(y0,y1,y0,y1).as_ref());
-    weights.set_column(n,vnl_vector_fixed<float,4>(x0_weight*y0_weight,
-                                                   x0_weight*y1_weight,
-                                                   x1_weight*y0_weight,
-                                                   x1_weight*y1_weight).as_ref());
-  }
+    float    y0_weight = (float)y1 - pix_in_y;
+    float    y1_weight = 1.0f - (float)y0_weight;
+    xvals.set_column(n, vnl_vector_fixed<unsigned, 4>(x0, x0, x1, x1).as_ref() );
+    yvals.set_column(n, vnl_vector_fixed<unsigned, 4>(y0, y1, y0, y1).as_ref() );
+    weights.set_column(n, vnl_vector_fixed<float, 4>(x0_weight * y0_weight,
+                                                     x0_weight * y1_weight,
+                                                     x1_weight * y0_weight,
+                                                     x1_weight * y1_weight).as_ref() );
+    }
 }
-
 
 vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_sptr image)
 {
-  vil_image_view<float>*img_view_float = new vil_image_view<float>(image->ni(),image->nj(),image->nplanes());
+  vil_image_view<float>* img_view_float = new vil_image_view<float>(image->ni(), image->nj(), image->nplanes() );
 
-  if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
-  {
-    vil_image_view<unsigned char> *img_view_char = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr());
-    vil_convert_cast<unsigned char,float>(*img_view_char,*img_view_float);
-  }
-  else if (image->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
-  {
-    img_view_float = dynamic_cast<vil_image_view<float>*>(image.ptr());
-  }
+  if( image->pixel_format() == VIL_PIXEL_FORMAT_BYTE )
+    {
+    vil_image_view<unsigned char> * img_view_char = dynamic_cast<vil_image_view<unsigned char> *>(image.ptr() );
+    vil_convert_cast<unsigned char, float>(*img_view_char, *img_view_float);
+    }
+  else if( image->pixel_format() == VIL_PIXEL_FORMAT_FLOAT )
+    {
+    img_view_float = dynamic_cast<vil_image_view<float> *>(image.ptr() );
+    }
 
-  vil_image_view<float> output((int)vcl_floor((float)img_view_float->ni()/2),
-                               (int)vcl_floor((float)img_view_float->nj()/2),
-                               img_view_float->nplanes());
+  vil_image_view<float> output( (int)vcl_floor( (float)img_view_float->ni() / 2),
+                                (int)vcl_floor( (float)img_view_float->nj() / 2),
+                                img_view_float->nplanes() );
 
 #if 0
   vil_image_view<unsigned char>* img_view_out
-    = bvxm_multiscale_util::half_resolution(*img_view_float,0.359375f);
+    = bvxm_multiscale_util::half_resolution(*img_view_float, 0.359375f);
 
-  float min_b,max_b;
-  vil_math_value_range(*img_view_float,min_b,max_b);
+  float min_b, max_b;
+  vil_math_value_range(*img_view_float, min_b, max_b);
 #endif // 0
 
-  vil_resample_bilin<float,float>(*img_view_float,output,output.ni(),output.nj());
-  vil_image_view<unsigned char>* img_view_out = new vil_image_view<unsigned char>(output.ni(),output.nj(),output.nplanes());
+  vil_resample_bilin<float, float>(*img_view_float, output, output.ni(), output.nj() );
+  vil_image_view<unsigned char>* img_view_out = new vil_image_view<unsigned char>(output.ni(),
+                                                                                  output.nj(), output.nplanes() );
   img_view_out->fill(0);
-
-  for (unsigned p=0; p<output.nplanes(); p++)
-    for (unsigned i=0;i<output.ni();i++)
-      for (unsigned j=0;j<output.nj();j++)
+  for( unsigned p = 0; p < output.nplanes(); p++ )
+    {
+    for( unsigned i = 0; i < output.ni(); i++ )
       {
-        if (output(i,j,p)>255.0)
-          (*img_view_out)(i,j,p)=255;
-        else if (output(i,j,p)<0.0)
-          (*img_view_out)(i,j,p)=0;
+      for( unsigned j = 0; j < output.nj(); j++ )
+        {
+        if( output(i, j, p) > 255.0 )
+          {
+          (*img_view_out)(i, j, p) = 255;
+          }
+        else if( output(i, j, p) < 0.0 )
+          {
+          (*img_view_out)(i, j, p) = 0;
+          }
         else
-          (*img_view_out)(i,j,p)=static_cast<vxl_byte>(output(i,j)+0.5);
+          {
+          (*img_view_out)(i, j, p) = static_cast<vxl_byte>(output(i, j) + 0.5);
+          }
 
-        //vcl_cout<<(*img_view_out)(i,j);
+        // vcl_cout<<(*img_view_out)(i,j);
+        }
       }
+    }
   ////vil_convert_stretch_range_limited<float>(output,*img_view_out,min_b,max_b);
-  vil_image_view_base_sptr return_img=img_view_out;
+  vil_image_view_base_sptr return_img = img_view_out;
   return return_img;
 }
 
-
-vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale)
+vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr camera, unsigned int scale)
 {
-  if ( vpgl_local_rational_camera<double>* rat_camera = dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer()))
-  {
-    vpgl_local_rational_camera<double>* new_rat_camera=new vpgl_local_rational_camera<double>(*rat_camera);
-    double u_s,v_s;
-    float factor=  1.0f / float(1 << scale);
-    rat_camera->image_scale(u_s,v_s);
-    new_rat_camera->set_image_scale(u_s*factor,v_s*factor);
+  if( vpgl_local_rational_camera<double>* rat_camera =
+        dynamic_cast<vpgl_local_rational_camera<double> *>(camera.as_pointer() ) )
+    {
+    vpgl_local_rational_camera<double>* new_rat_camera = new vpgl_local_rational_camera<double>(*rat_camera);
+    double                              u_s, v_s;
+    float                               factor =  1.0f / float(1 << scale);
+    rat_camera->image_scale(u_s, v_s);
+    new_rat_camera->set_image_scale(u_s * factor, v_s * factor);
 
-    double u_off,v_off;
-    rat_camera->image_offset(u_off,v_off);
-    new_rat_camera->set_image_offset(u_off*factor,v_off*factor);
+    double u_off, v_off;
+    rat_camera->image_offset(u_off, v_off);
+    new_rat_camera->set_image_offset(u_off * factor, v_off * factor);
 
     return new_rat_camera;
-  }
+    }
   else
-  {
+    {
     return NULL;
-  }
+    }
 }
 
-vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale)
+vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sptr camera, unsigned int scale)
 {
-  if ( vpgl_perspective_camera<double>* persp_camera =    dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer()))
-  {
-    vpgl_perspective_camera<double>* new_persp_camera=new vpgl_perspective_camera<double>(*persp_camera);
-    vnl_matrix_fixed<double,3,4> camera_matrix = persp_camera->get_matrix();
-    vnl_matrix_fixed<double,3,3> scale_matrix;
+  if( vpgl_perspective_camera<double>* persp_camera =
+        dynamic_cast<vpgl_perspective_camera<double> *>(camera.as_pointer() ) )
+    {
+    vpgl_perspective_camera<double>* new_persp_camera = new vpgl_perspective_camera<double>(*persp_camera);
+    vnl_matrix_fixed<double, 3, 4>   camera_matrix = persp_camera->get_matrix();
+    vnl_matrix_fixed<double, 3, 3>   scale_matrix;
     scale_matrix.fill(0.0);
-    float factor=  1.0f / float(1 << scale);
+    float factor =  1.0f / float(1 << scale);
 
-    scale_matrix.put(0,0,1*factor);
-    scale_matrix.put(1,1,1*factor);
-    scale_matrix.put(2,2,1.0);
+    scale_matrix.put(0, 0, 1 * factor);
+    scale_matrix.put(1, 1, 1 * factor);
+    scale_matrix.put(2, 2, 1.0);
 
-    vnl_matrix_fixed<double,3,4> new_camera_matrix = scale_matrix*camera_matrix;
+    vnl_matrix_fixed<double, 3, 4> new_camera_matrix = scale_matrix * camera_matrix;
 
     new_persp_camera->set_matrix(new_camera_matrix);
     return new_persp_camera;
-  }
+    }
   else
-  {
+    {
     return NULL;
-  }
+    }
 }
 
-void bvxm_util::logical_and(bvxm_voxel_slab<bool> const& s1, bvxm_voxel_slab<bool> const& s2, bvxm_voxel_slab<bool> &result)
+void bvxm_util::logical_and(bvxm_voxel_slab<bool> const& s1, bvxm_voxel_slab<bool> const& s2,
+                            bvxm_voxel_slab<bool> & result)
 {
   // check sizes
-  if ( (result.nx() != s1.nx()) || (result.nx() != s2.nx()) ||
-       (result.ny() != s1.ny()) || (result.ny() != s2.ny()) ||
-       (result.nz() != s1.nz()) || (result.nz() != s2.nz()) ) {
+  if( (result.nx() != s1.nx() ) || (result.nx() != s2.nx() ) ||
+      (result.ny() != s1.ny() ) || (result.ny() != s2.ny() ) ||
+      (result.nz() != s1.nz() ) || (result.nz() != s2.nz() ) )
+    {
     vcl_cerr << "error: sizes of slabs to AND do not match.\n";
     return;
-  }
+    }
 
   bvxm_voxel_slab<bool>::const_iterator s1_it = s1.begin(), s2_it = s2.begin();
-  bvxm_voxel_slab<bool>::iterator result_it = result.begin();
-  for (; result_it != result.end(); ++s1_it, ++s2_it, ++result_it) {
+  bvxm_voxel_slab<bool>::iterator       result_it = result.begin();
+  for( ; result_it != result.end(); ++s1_it, ++s2_it, ++result_it )
+    {
     *result_it = *s1_it && *s2_it;
-  }
+    }
   return;
 }
 
-int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs, vpgl_camera_double_sptr camera)
+int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs,
+                                                         vpgl_camera_double_sptr camera)
 {
   // estimate the offset search size in the image space
-  vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
+  vgl_box_3d<double> box_uncertainty(-uncertainty, -uncertainty, -uncertainty, uncertainty, uncertainty,
+                                     uncertainty);
   vcl_vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
-  vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
-
-  for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
+  vgl_box_2d<double>*               roi_uncertainty = new vgl_box_2d<double>();
+  for( unsigned i = 0; i < box_uncertainty_corners.size(); i++ )
+    {
     vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
     vgl_point_3d<double> curr_pt;
-    if (camera->type_name()=="vpgl_local_rational_camera") {
-      curr_pt.set(curr_corner.x(),curr_corner.y(),curr_corner.z());
-    }
-    else if (camera->type_name()=="vpgl_rational_camera") {
+    if( camera->type_name() == "vpgl_local_rational_camera" )
+      {
+      curr_pt.set(curr_corner.x(), curr_corner.y(), curr_corner.z() );
+      }
+    else if( camera->type_name() == "vpgl_rational_camera" )
+      {
       double lon, lat, gz;
       lvcs->local_to_global(curr_corner.x(), curr_corner.y(), curr_corner.z(),
                             vpgl_lvcs::wgs84, lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
       curr_pt.set(lon, lat, gz);
-    }
+      }
     else // dummy initialisation, to avoid compiler warning
+      {
       curr_pt.set(-1e99, -1e99, -1.0);
+      }
 
-    double curr_u,curr_v;
-    camera->project(curr_pt.x(),curr_pt.y(),curr_pt.z(),curr_u,curr_v);
-    vgl_point_2d<double> p2d_uncertainty(curr_u,curr_v);
+    double curr_u, curr_v;
+    camera->project(curr_pt.x(), curr_pt.y(), curr_pt.z(), curr_u, curr_v);
+    vgl_point_2d<double> p2d_uncertainty(curr_u, curr_v);
     roi_uncertainty->add(p2d_uncertainty);
-  }
+    }
 
-  return vnl_math::ceil(0.5*vnl_math::max(roi_uncertainty->width(),roi_uncertainty->height()));
+  return vnl_math::ceil(0.5 * vnl_math::max(roi_uncertainty->width(), roi_uncertainty->height() ) );
 }

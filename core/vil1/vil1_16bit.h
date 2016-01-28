@@ -2,9 +2,9 @@
 #ifndef vil1_16bit_h_
 #define vil1_16bit_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief read/write integers to/from vil1_stream
 //
@@ -23,9 +23,11 @@
 class vil1_stream;
 
 unsigned vil1_16bit_read_big_endian(vil1_stream *);
+
 unsigned vil1_16bit_read_little_endian(vil1_stream *);
 
 void vil1_16bit_write_big_endian(vil1_stream *, unsigned);
+
 void vil1_16bit_write_little_endian(vil1_stream *, unsigned);
 
 #endif // vil1_16bit_h_

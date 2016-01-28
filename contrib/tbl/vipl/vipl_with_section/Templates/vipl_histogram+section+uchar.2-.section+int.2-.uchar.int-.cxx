@@ -4,5 +4,5 @@
 #include "../accessors/vipl_accessors_section.h"
 #include <vipl/vipl_histogram.txx>
 
-template class vipl_histogram<section<unsigned char,2>,section<int,2>,unsigned char,int, vipl_trivial_pixeliter>;
+template class vipl_histogram<section<unsigned char, 2>, section<int, 2>, unsigned char, int, vipl_trivial_pixeliter>;
 #endif

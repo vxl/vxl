@@ -10,9 +10,9 @@
 #include <vcl_climits.h>
 #include <vcl_csignal.h>
 #include <vcl_cstdlib.h>
-#ifndef __FreeBSD__ //FreeBSD4
-#include <vcl_cwchar.h>
-#include <vcl_cwctype.h>
+#ifndef __FreeBSD__ // FreeBSD4
+#  include <vcl_cwchar.h>
+#  include <vcl_cwctype.h>
 #endif
 #include <vcl_cerrno.h>
 #include <vcl_clocale.h>
@@ -37,7 +37,7 @@
 #include <vcl_map.h>
 #include <vcl_set.h>
 #if VCL_CXX_HAS_HEADER_TYPEINFO
-#include <vcl_typeinfo.h>
+#  include <vcl_typeinfo.h>
 #endif
 #include <vcl_deque.h>
 #include <vcl_iostream.h>

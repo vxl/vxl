@@ -1,8 +1,8 @@
 // This is core/vidl/vidl_exception.h
 #ifndef vidl_exception_h_
 #define vidl_exception_h_
-//=========================================================================
-//:
+// =========================================================================
+// :
 // \file
 // \brief  Exceptions thrown by vidl.
 // \author Miguel A. Figueroa-Villanueva (miguelf at ieee dot org)
@@ -22,16 +22,17 @@
 //                and extensions to Paul's code. (miguelfv)
 // \endverbatim
 //
-//=========================================================================
+// =========================================================================
 
 #include <vcl_iostream.h>
 #include <vcl_string.h>
 
-//-------------------------------------------------------------------------
-//: Throw an exception indicating a definite problem.
+// -------------------------------------------------------------------------
+// : Throw an exception indicating a definite problem.
 // If exceptions have been disabled, this function will abort.
-//-------------------------------------------------------------------------
-template <class T> void vidl_exception_error(T exception)
+// -------------------------------------------------------------------------
+template <class T>
+void vidl_exception_error(T exception)
 {
   vcl_cerr << "\nERROR: " << exception.what() << vcl_endl;
 
@@ -42,11 +43,12 @@ template <class T> void vidl_exception_error(T exception)
 #endif
 }
 
-//-------------------------------------------------------------------------
-//: Throw an exception indicating a potential problem.
+// -------------------------------------------------------------------------
+// : Throw an exception indicating a potential problem.
 // If exceptions have been disabled, this function will return.
-//-------------------------------------------------------------------------
-template <class T> void vidl_exception_warning(T exception)
+// -------------------------------------------------------------------------
+template <class T>
+void vidl_exception_warning(T exception)
 {
   vcl_cerr << "\nWARNING: " << exception.what() << vcl_endl;
 
@@ -55,27 +57,26 @@ template <class T> void vidl_exception_warning(T exception)
 #endif
 }
 
-//-------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // The list of exceptions.
-//-------------------------------------------------------------------------
-//: Base class of all vidl exceptions.
+// -------------------------------------------------------------------------
+// : Base class of all vidl exceptions.
 class vidl_exception
 {
- public:
+public:
   explicit vidl_exception(const vcl_string& msg) : msg_(msg) {}
   virtual ~vidl_exception() {}
 
-  virtual const vcl_string& what() const { return msg_; }
-
- private:
+  virtual const vcl_string & what() const { return msg_; }
+private:
   vcl_string msg_;
 };
 
-//: Base class for all the DShow related vidl exceptions.
+// : Base class for all the DShow related vidl exceptions.
 struct vidl_dshow_exception : public vidl_exception
-{
+  {
   explicit vidl_dshow_exception(const vcl_string& msg)
     : vidl_exception("DShow: " + msg) {}
-};
+  };
 
 #endif // vidl_exception_h_

@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_graph.h
 #ifndef vcsl_graph_h_
 #define vcsl_graph_h_
-//:
+// :
 // \file
 // \brief Spatial coordinate system transformation graph
 // \author Francois BERTEL
@@ -20,17 +20,17 @@
 #include <vcsl/vcsl_spatial_sptr.h>
 #include <vcl_vector.h>
 
-//: Spatial coordinate system transformation graph
+// : Spatial coordinate system transformation graph
 // Graph where nodes are spatial coordinate systems and arrows are
 // transformations. Only the nodes are in the graph class. The transformations
 // are in the spatial coordinates systems
 class vcsl_graph
-  :public vbl_ref_count
+  : public vbl_ref_count
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor
   vcsl_graph() {}
@@ -41,50 +41,50 @@ class vcsl_graph
   // Destructor
   ~vcsl_graph() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Measurement
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Number of coordinate systems
-  unsigned int count() const { return (unsigned int)(vertices_.size()); }
+  // : Number of coordinate systems
+  unsigned int count() const { return (unsigned int)(vertices_.size() ); }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Has `this' `cs' as node ?
-  bool has(const vcsl_spatial_sptr &cs) const;
+  // : Has `this' `cs' as node ?
+  bool has(const vcsl_spatial_sptr & cs) const;
 
-  //: Is `index' valid in the list of the spatial coordinate systems ?
+  // : Is `index' valid in the list of the spatial coordinate systems ?
   bool valid_index(unsigned int index) const { return index < count(); }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Access
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Spatial coordinate system number `index'
+  // : Spatial coordinate system number `index'
   //  REQUIRE: valid_index(index)
   vcsl_spatial_sptr item(unsigned int index) const;
 
-  //: Add `cs' in `this'
+  // : Add `cs' in `this'
   //  REQUIRE: !has(cs)
-  void put(const vcsl_spatial_sptr &cs);
+  void put(const vcsl_spatial_sptr & cs);
 
-  //: Remove `cs' from `this'
+  // : Remove `cs' from `this'
   //  REQUIRE: has(cs)
-  void remove(const vcsl_spatial_sptr &cs);
+  void remove(const vcsl_spatial_sptr & cs);
 
-  //***************************************************************************
+  // ***************************************************************************
   // Basic operations
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Set the flag `reached' to false for each spatial coordinate system.
+  // : Set the flag `reached' to false for each spatial coordinate system.
   //  Used by the search path algorithm
   void init_vertices() const;
 
- protected:
+protected:
 
-  //: Vertices of the graph: all the spatial coordinate systems
+  // : Vertices of the graph: all the spatial coordinate systems
   vcl_vector<vcsl_spatial_sptr> vertices_;
 };
 

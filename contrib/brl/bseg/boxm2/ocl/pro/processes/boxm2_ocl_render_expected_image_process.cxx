@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_render_expected_image_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief  A process for rendering the scene.
 //
@@ -16,28 +16,27 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>
-//brdb stuff
+// brdb stuff
 #include <brdb/brdb_value.h>
 
-//directory utility
+// directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/algo/boxm2_ocl_render_expected_image.h>
 #include <vul/vul_timer.h>
 
-
 namespace boxm2_ocl_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 2;
+const unsigned n_inputs_ = 9;
+const unsigned n_outputs_ = 2;
 }
 
 bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_image_process_globals;
 
-  //process takes 1 input
+  // process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -50,7 +49,7 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[8] = "float"; // far factor ( minimum # of pixels should map to the finest voxel )
 
   // process has 2 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   output_types_[1] = "vil_image_view_base_sptr";
 
@@ -70,23 +69,23 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_render_expected_image_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
+    }
+  // get the inputs
+  unsigned         i = 0;
+  bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
 
-  boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
-  vcl_string ident = pro.get_input<vcl_string>(i++);
-  float   nearfactor   = pro.get_input<float>(i++);
-  float   farfactor    = pro.get_input<float>(i++);
-
+  boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned                ni = pro.get_input<unsigned>(i++);
+  unsigned                nj = pro.get_input<unsigned>(i++);
+  vcl_string              ident = pro.get_input<vcl_string>(i++);
+  float                   nearfactor   = pro.get_input<float>(i++);
+  float                   farfactor    = pro.get_input<float>(i++);
 
   vil_image_view<float> exp_img(ni, nj, 1);
   vil_image_view<float> vis_img(ni, nj, 1);
@@ -94,62 +93,70 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   vul_timer t;
   t.mark();
   bool ret = true;
-  //TODO Factor this out to a utility function
-  //make sure this image small enough (or else carve it into image pieces)
+  // TODO Factor this out to a utility function
+  // make sure this image small enough (or else carve it into image pieces)
   const vcl_size_t MAX_PIXELS = 16777216;
-  if (ni*nj > MAX_PIXELS) {
-    vcl_size_t sni = RoundUp(ni, 16);
-    vcl_size_t snj = RoundUp(nj, 16);
+  if( ni * nj > MAX_PIXELS )
+    {
+    vcl_size_t   sni = RoundUp(ni, 16);
+    vcl_size_t   snj = RoundUp(nj, 16);
     unsigned int numSegI = 1;
     unsigned int numSegJ = 1;
-    while ( sni*snj*2 > MAX_PIXELS ) {
+    while( sni * snj * 2 > MAX_PIXELS )
+      {
       sni /= 2;
       snj /= 2;
       ++numSegI;
       ++numSegJ;
-    }
+      }
+
     sni = RoundUp(sni, 16);
     snj = RoundUp(snj, 16);
-
-    //run update for each image make sure to input i/j
-    for (unsigned int i=0; i<=numSegI; ++i) {
-      for (unsigned int j=0; j<=numSegJ; ++j) {
-        if(!ret) {
+    // run update for each image make sure to input i/j
+    for( unsigned int i = 0; i <= numSegI; ++i )
+      {
+      for( unsigned int j = 0; j <= numSegJ; ++j )
+        {
+        if( !ret )
+          {
           vcl_cout << pro.name() << " failed" << vcl_endl;
           return false;
-        }
+          }
 
-        //make sure the view doesn't extend past the original image
+        // make sure the view doesn't extend past the original image
         vcl_size_t startI = (vcl_size_t) i * sni;
         vcl_size_t startJ = (vcl_size_t) j * snj;
         vcl_size_t endI = vcl_min(startI + sni, (vcl_size_t) ni);
         vcl_size_t endJ = vcl_min(startJ + snj, (vcl_size_t) nj);
-        if (endI <= startI || endJ <= startJ)
+        if( endI <= startI || endJ <= startJ )
+          {
           break;
-        vcl_cout<<"Getting patch: ("<<startI<<','<<startJ<<") -> ("<<endI<<','<<endJ<<')'<<vcl_endl;
+          }
+        vcl_cout << "Getting patch: (" << startI << ',' << startJ << ") -> (" << endI << ',' << endJ << ')' << vcl_endl;
 
-        unsigned int chunkNI = endI-startI;
-        unsigned int chunkNJ = endJ-startJ;
+        unsigned int          chunkNI = endI - startI;
+        unsigned int          chunkNJ = endJ - startJ;
         vil_image_view<float> exp_view = vil_crop(exp_img, startI, chunkNI, startJ, chunkNJ);
         vil_image_view<float> vis_view = vil_crop(vis_img, startI, chunkNI, startJ, chunkNJ);
 
-        //run update
+        // run update
         ret = boxm2_ocl_render_expected_image::render(exp_view, vis_view, scene, device, opencl_cache, cam, ident,
-          chunkNI, chunkNJ, nearfactor, farfactor, startI, startJ);
+                                                      chunkNI, chunkNJ, nearfactor, farfactor, startI, startJ);
+        }
       }
     }
-  }
-  else { //otherwise just run a normal update with one image
+  else   // otherwise just run a normal update with one image
+    {
     ret = boxm2_ocl_render_expected_image::render(exp_img, vis_img, scene, device, opencl_cache, cam, ident,
-      ni, nj, nearfactor, farfactor);
-  }
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+                                                  ni, nj, nearfactor, farfactor);
+    }
+  vcl_cout << "Total time taken is " << t.all() << vcl_endl;
 
-  if(!ret) return false;
+  if( !ret ) {return false; }
 
-  i=0;
+  i = 0;
   // store scene smart pointer
-  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<float>(exp_img));
-  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<float>(vis_img));
+  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<float>(exp_img) );
+  pro.set_output_val<vil_image_view_base_sptr>(i++, new vil_image_view<float>(vis_img) );
   return true;
 }

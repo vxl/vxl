@@ -1,8 +1,8 @@
 // This is core/vil1/file_formats/vil1_bmp_file_header.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author fsm
 
@@ -28,7 +28,7 @@ vil1_bmp_file_header::vil1_bmp_file_header()
   bitmap_offset = 0;
 }
 
-void vil1_bmp_file_header::print(vcl_ostream &s) const
+void vil1_bmp_file_header::print(vcl_ostream & s) const
 {
   s << "vil1_bmp_file_header:\n"
     << "  magic   : " << vcl_hex
@@ -41,18 +41,18 @@ void vil1_bmp_file_header::print(vcl_ostream &s) const
     << vcl_dec << vcl_endl;
 }
 
-void vil1_bmp_file_header::read(vil1_stream *s)
+void vil1_bmp_file_header::read(vil1_stream * s)
 {
-  if (s->read(&magic, sizeof(magic)) == 0) {magic[0] = magic[1] = 0;}
+  if( s->read(&magic, sizeof(magic) ) == 0 ) {magic[0] = magic[1] = 0; }
   file_size = vil1_32bit_read_little_endian(s);
   reserved1 = vil1_16bit_read_little_endian(s);
   reserved2 = vil1_16bit_read_little_endian(s);
   bitmap_offset = vil1_32bit_read_little_endian(s);
 }
 
-void vil1_bmp_file_header::write(vil1_stream *s) const
+void vil1_bmp_file_header::write(vil1_stream * s) const
 {
-  s->write(&magic, sizeof(magic));
+  s->write(&magic, sizeof(magic) );
   vil1_32bit_write_little_endian(s, file_size);
   vil1_16bit_write_little_endian(s, reserved1);
   vil1_16bit_write_little_endian(s, reserved2);
@@ -61,7 +61,6 @@ void vil1_bmp_file_header::write(vil1_stream *s) const
 
 bool vil1_bmp_file_header::signature_valid() const
 {
-  return
-    magic[0] == BMP_SIGNATURE_BYTE_0 &&
-    magic[1] == BMP_SIGNATURE_BYTE_1;
+  return magic[0] == BMP_SIGNATURE_BYTE_0 &&
+         magic[1] == BMP_SIGNATURE_BYTE_1;
 }

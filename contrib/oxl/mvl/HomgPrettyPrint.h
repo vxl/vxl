@@ -2,9 +2,9 @@
 #ifndef HomgPrettyPrint_h_
 #define HomgPrettyPrint_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 12 Oct 97
@@ -14,14 +14,13 @@
 //   971012 AWF Initial version.
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class HomgPrettyPrint
 {
   // Data Members--------------------------------------------------------------
   bool last_pretty_;
-
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   HomgPrettyPrint(bool new_value) { last_pretty_ = pretty; pretty = new_value; }

@@ -2,9 +2,9 @@
 #ifndef vil1_scale_intensities_image_impl_h_
 #define vil1_scale_intensities_image_impl_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 
 #include <vil1/vil1_image_impl.h>
@@ -13,7 +13,7 @@
 
 class vil1_scale_intensities_image_impl : public vil1_image_impl
 {
- public:
+public:
   vil1_scale_intensities_image_impl(vil1_image const& src, double scale, double shift)
     : base(src), scale_(scale), shift_(shift) {}
 
@@ -26,20 +26,20 @@ class vil1_scale_intensities_image_impl : public vil1_image_impl
 
   vil1_image get_plane(unsigned int p) const;
 
-  bool get_section(void *buf, int x0, int y0, int w, int h) const;
-  bool put_section(void const *buf, int x0, int y0, int w, int h);
+  bool get_section(void * buf, int x0, int y0, int w, int h) const;
 
-  //: Return the name of the class
+  bool put_section(void const * buf, int x0, int y0, int w, int h);
+
+  // : Return the name of the class
   virtual vcl_string is_a() const { return "vil1_scale_intensities_image_impl"; }
 
-  //: Return true if the name of the class matches the argument
+  // : Return true if the name of the class matches the argument
   virtual bool is_class(vcl_string const& s) const
-  { return s==is_a() || vil1_image_impl::is_class(s); }
-
- private:
+  { return s == is_a() || vil1_image_impl::is_class(s); }
+private:
   vil1_image base;
-  double scale_;
-  double shift_;
+  double     scale_;
+  double     shift_;
 };
 
 #endif // vil1_scale_intensities_image_impl_h_

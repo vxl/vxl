@@ -15,33 +15,38 @@ static void test_detector(int argc, char * argv[])
 {
   vcl_string root = testlib_root_dir();
   vcl_string image_path = root + "/contrib/brl/bseg/sdet/tests/jar-closeup.tif";
-   vcl_cout << "Loading Image " << image_path << '\n';
-  vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str());
-  if (image)
-  {
+
+  vcl_cout << "Loading Image " << image_path << '\n';
+  vil_image_resource_sptr image = vil_load_image_resource(image_path.c_str() );
+  if( image )
+    {
     sdet_detector_params dp;
-    dp.noise_multiplier= 1;
-    dp.aggressive_junction_closure=1;
+    dp.noise_multiplier = 1;
+    dp.aggressive_junction_closure = 1;
     sdet_detector det(dp);
     det.SetImage(image);
     det.DoContour();
     vcl_vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-    int n = 0;
-    if (edges)
+    int                            n = 0;
+    if( edges )
+      {
       n = edges->size();
+      }
     vcl_cout << "nedges = " << n << '\n';
-    TEST("nedges is around 648", n>=647 && n<=650, true);
-    if (n)
-    {
+    TEST("nedges is around 648", n >= 647 && n <= 650, true);
+    if( n )
+      {
       vtol_edge_2d_sptr e = (*edges)[0];
-      int x = int(e->v1()->cast_to_vertex_2d()->x());
-      int y = int(e->v1()->cast_to_vertex_2d()->y());
+      int               x = int(e->v1()->cast_to_vertex_2d()->x() );
+      int               y = int(e->v1()->cast_to_vertex_2d()->y() );
       vcl_cout << "v(" << x << ' ' << y << ")\n";
-      TEST("(x,y) is (229,235)", x==229&&y==235, true);
+      TEST("(x,y) is (229,235)", x == 229 && y == 235, true);
+      }
     }
-  }else{
+  else
+    {
     TEST("image could not be loaded so no fault", true, true);
-  }
+    }
 }
 
 TESTMAIN_ARGS(test_detector);

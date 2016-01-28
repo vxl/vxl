@@ -2,15 +2,15 @@
 #ifndef vsl_indent_h_
 #define vsl_indent_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Tim Cootes
 
 #include <vcl_iosfwd.h>
 
-//: Put indents into output streams, to produce more legible printed output
+// : Put indents into output streams, to produce more legible printed output
 //  Its use is best described by example:
 // \code
 // vcl_cout<<vsl_indent()<<"No Indent\n";
@@ -89,25 +89,25 @@ class vsl_indent
 {
 };
 
-//: Increments current indent for given stream
+// : Increments current indent for given stream
 void vsl_indent_inc(vcl_ostream& os);
 
-//: Decrements current indent for given stream
+// : Decrements current indent for given stream
 void vsl_indent_dec(vcl_ostream& os);
 
-//: Set number of spaces per increment step
-void vsl_indent_set_tab(vcl_ostream& os,int);
+// : Set number of spaces per increment step
+void vsl_indent_set_tab(vcl_ostream& os, int);
 
-//: Number of spaces per increment step
+// : Number of spaces per increment step
 int vsl_indent_tab(vcl_ostream& os);
 
-//: Set indentation to zero
+// : Set indentation to zero
 void vsl_indent_clear(vcl_ostream& os);
 
-//: Outputs current indent to os
-vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& indent);
+// : Outputs current indent to os
+vcl_ostream & operator<<(vcl_ostream& os, const vsl_indent& indent);
 
-//: Tidy up the internal indent map to remove potential memory leaks
+// : Tidy up the internal indent map to remove potential memory leaks
 //  The details of indents for each stream are stored in a static
 //  map.  When testing for memory leaks, this is flagged, creating
 //  lots of noise in the output of memory leak checkers.

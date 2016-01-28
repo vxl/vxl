@@ -1,8 +1,8 @@
 // This is core/vil1/file_formats/vil1_bmp_info_header.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author fsm
 
@@ -23,17 +23,17 @@ vil1_bmp_info_header::vil1_bmp_info_header()
   colorcount = 0;
 }
 
-void vil1_bmp_info_header::read(vil1_stream *s)
+void vil1_bmp_info_header::read(vil1_stream * s)
 {
   compression = vil1_32bit_read_little_endian(s);
   bitmap_size = vil1_32bit_read_little_endian(s);
   horiz_res   = vil1_32bit_read_little_endian(s);
   verti_res   = vil1_32bit_read_little_endian(s);
-  colormapsize= vil1_32bit_read_little_endian(s);
+  colormapsize = vil1_32bit_read_little_endian(s);
   colorcount  = vil1_32bit_read_little_endian(s);
 }
 
-void vil1_bmp_info_header::write(vil1_stream *s) const
+void vil1_bmp_info_header::write(vil1_stream * s) const
 {
   vil1_32bit_write_little_endian(s, compression);
   vil1_32bit_write_little_endian(s, bitmap_size);
@@ -43,7 +43,7 @@ void vil1_bmp_info_header::write(vil1_stream *s) const
   vil1_32bit_write_little_endian(s, colorcount);
 }
 
-void vil1_bmp_info_header::print(vcl_ostream &s) const
+void vil1_bmp_info_header::print(vcl_ostream & s) const
 {
   s << "vil1_bmp_info_header:\n"
     << "  compression  : " << compression << vcl_endl

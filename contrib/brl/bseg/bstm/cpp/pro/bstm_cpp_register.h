@@ -3,9 +3,11 @@
 
 class bstm_cpp_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // bstm_cpp_register_h_

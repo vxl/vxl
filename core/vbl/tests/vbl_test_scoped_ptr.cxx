@@ -3,11 +3,11 @@
 #include <vbl/vbl_scoped_ptr.h>
 
 struct some_class
-{
+  {
   static int count;
   some_class() { ++count; }
   ~some_class() { --count; }
-};
+  };
 
 int some_class::count = 0;
 
@@ -27,10 +27,10 @@ static void vbl_test_scoped_ptr()
 
   TEST( "New count = 2", some_class::count, 2 );
 
-  {
+    {
     vbl_scoped_ptr<some_class> ptr3( new some_class() );
     TEST( "Nested count = 3", some_class::count, 3 );
-  }
+    }
 
   TEST( "Back again, count = 2", some_class::count, 2 );
 

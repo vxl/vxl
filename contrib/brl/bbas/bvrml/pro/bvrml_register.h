@@ -3,9 +3,11 @@
 
 class bvrml_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // bvrml_register_h_

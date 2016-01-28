@@ -1,6 +1,6 @@
 #ifndef bwm_delaunay_tri_h_
 #define bwm_delaunay_tri_h_
-//:
+// :
 // \file
 // \brief Delaunay triangulation for a set of 3D points.
 //   Triangulation happens in 2D by only using (x,y) component and moving them back to 3D
@@ -21,24 +21,21 @@
 
 class bwm_delaunay_tri
 {
- public:
+public:
   bwm_delaunay_tri() {}
   ~bwm_delaunay_tri() {}
 
-  int triangulate(vcl_vector<vgl_point_3d<double> >& pxyz,
-                  vcl_vector<vgl_point_3d<int> >& v,
-                  int &ntri);
- private:
+  int triangulate(vcl_vector<vgl_point_3d<double> >& pxyz, vcl_vector<vgl_point_3d<int> >& v, int & ntri);
+
+private:
 
   static double EPSILON;
 
-  bool CircumCircle(vgl_point_2d<double> p,
-                    vgl_point_2d<double> p1,
-                    vgl_point_2d<double> p2,
-                    vgl_point_2d<double> p3,
-                    vgl_point_2d<double> &c, double &r);
+  bool CircumCircle(vgl_point_2d<double> p, vgl_point_2d<double> p1, vgl_point_2d<double> p2, vgl_point_2d<double> p3,
+                    vgl_point_2d<double> & c, double & r);
 
-  static int XYZCompare(const void *v1, const void *v2);
+  static int XYZCompare(const void * v1, const void * v2);
+
 };
 
 #endif

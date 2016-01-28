@@ -14,13 +14,14 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_cstdlib.h>
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
-rtvl_weight_smooth<N>::rtvl_weight_smooth(double gs, unsigned int n):
+rtvl_weight_smooth<N>::rtvl_weight_smooth(double gs, unsigned int n) :
   derived(gs)
 {
-  cos_power = 2*n;
-  switch(n)
+  cos_power = 2 * n;
+
+  switch( n )
     {
     // n ==> 2*n-1
     case 1: this->intpow = rtvl_intpow_impl<double, 1>::compute; break;
@@ -35,20 +36,20 @@ rtvl_weight_smooth<N>::rtvl_weight_smooth(double gs, unsigned int n):
     }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
 double
 rtvl_weight_smooth<N>
 ::compute_flat(rtvl_terms<N> const& terms)
 {
   z = terms.vlen / geodesic_scale;
-  if(z < 3)
+  if( z < 3 )
     {
-    double zm3 = z-3;
-    double zm3p2 = zm3*zm3;
-    zm3p3 = zm3p2*zm3;
-    zm3p4 = zm3p3*zm3;
-    return z*z*zm3p4/16;
+    double zm3 = z - 3;
+    double zm3p2 = zm3 * zm3;
+    zm3p3 = zm3p2 * zm3;
+    zm3p4 = zm3p3 * zm3;
+    return z * z * zm3p4 / 16;
     }
   else
     {
@@ -56,16 +57,16 @@ rtvl_weight_smooth<N>
     }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
 void
 rtvl_weight_smooth<N>
 ::compute_flat_d(rtvl_terms<N> const& terms,
                  vnl_vector_fixed<double, N>& dwflat)
 {
-  if(z < 3)
+  if( z < 3 )
     {
-    dwflat = terms.vhat*(z*(zm3p4 + 2*z*zm3p3)/(8*geodesic_scale));
+    dwflat = terms.vhat * (z * (zm3p4 + 2 * z * zm3p3) / (8 * geodesic_scale) );
     }
   else
     {
@@ -73,7 +74,7 @@ rtvl_weight_smooth<N>
     }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
 double
 rtvl_weight_smooth<N>
@@ -81,10 +82,10 @@ rtvl_weight_smooth<N>
 {
   cos_theta_2nm1 = intpow(terms.cos_theta);
   wangle = terms.cos_theta * cos_theta_2nm1;
-  return terms.wflat*wangle;
+  return terms.wflat * wangle;
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int N>
 void
 rtvl_weight_smooth<N>
@@ -92,12 +93,12 @@ rtvl_weight_smooth<N>
                    vnl_vector_fixed<double, N>& dwcurve)
 {
   vnl_vector_fixed<double, N> dwangle =
-    terms.dtheta * (-terms.sin_theta*cos_power*cos_theta_2nm1);
-  dwcurve = terms.dwflat*wangle + dwangle*terms.wflat;
+    terms.dtheta * (-terms.sin_theta * cos_power * cos_theta_2nm1);
+  dwcurve = terms.dwflat * wangle + dwangle * terms.wflat;
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 #define RTVL_WEIGHT_SMOOTH_INSTANTIATE(N) \
-  template class rtvl_weight_smooth<N>
+  template class rtvl_weight_smooth < N >
 
 #endif

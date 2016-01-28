@@ -20,23 +20,23 @@ DECLARE( test_affine_rect );
 
 void register_tests()
 {
-REGISTER( test_fm_compute );
-REGISTER( test_camera_compute );
-REGISTER( test_camera_convert );
-REGISTER( test_lens_warp_mapper );
-REGISTER( test_backproject );
-REGISTER( test_ray );
-REGISTER( test_ray_intersect );
-REGISTER( test_optimize_camera )
-REGISTER( test_ortho_procrustes );
-REGISTER( test_rational_adjust_onept );
-REGISTER( test_rational_adjust );
-REGISTER( test_em_compute_5_point );
-REGISTER( test_triangulate );
-REGISTER( test_bundle_adjust );
-REGISTER( test_ba_fixed_k_lsqr );
-REGISTER( test_ba_shared_k_lsqr );
-REGISTER( test_affine_rect );
+  REGISTER( test_fm_compute );
+  REGISTER( test_camera_compute );
+  REGISTER( test_camera_convert );
+  REGISTER( test_lens_warp_mapper );
+  REGISTER( test_backproject );
+  REGISTER( test_ray );
+  REGISTER( test_ray_intersect );
+  REGISTER( test_optimize_camera )
+  REGISTER( test_ortho_procrustes );
+  REGISTER( test_rational_adjust_onept );
+  REGISTER( test_rational_adjust );
+  REGISTER( test_em_compute_5_point );
+  REGISTER( test_triangulate );
+  REGISTER( test_bundle_adjust );
+  REGISTER( test_ba_fixed_k_lsqr );
+  REGISTER( test_ba_shared_k_lsqr );
+  REGISTER( test_affine_rect );
 
 }
 

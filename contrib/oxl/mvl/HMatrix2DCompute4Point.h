@@ -1,8 +1,8 @@
 #ifndef _HMatrix2DCompute4Point_h
 #define _HMatrix2DCompute4Point_h
 
-//--------------------------------------------------------------
-//:
+// --------------------------------------------------------------
+// :
 // \file
 //
 // HMatrix2DComputeLinear contains a linear method to calculate
@@ -19,14 +19,13 @@
 
 #include "HMatrix2DCompute.h"
 
-class HMatrix2DCompute4Point : public HMatrix2DCompute {
+class HMatrix2DCompute4Point : public HMatrix2DCompute
+{
 public:
   int minimum_number_of_correspondences() const { return 4; }
-
 protected:
-  bool compute_p(PointArray const &,
-                 PointArray const &,
-                 HMatrix2D *);
+  bool compute_p(PointArray const &, PointArray const &, HMatrix2D *);
+
 };
 
 #endif // _HMatrix2DCompute4Point_h

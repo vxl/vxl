@@ -1,13 +1,13 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_scene_model_dir_process.cxx
 #include "bvxm_scene_model_dir_process.h"
-//:
+// :
 // \file
 #include <bvxm/bvxm_voxel_world.h>
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_util.h>
 #include <bprb/bprb_parameters.h>
 
-//: set input and output type
+// : set input and output type
 bool bvxm_scene_model_dir_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_scene_model_dir_process_globals;
@@ -26,14 +26,15 @@ bool bvxm_scene_model_dir_process(bprb_func_process& pro)
   using namespace bvxm_scene_model_dir_process_globals;
 
   // sanity check input
-  if ( pro.n_inputs() < n_inputs_ ) {
+  if( pro.n_inputs() < n_inputs_ )
+    {
     vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
   // get the input
-  unsigned i = 0;
-  bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  unsigned               i = 0;
+  bvxm_voxel_world_sptr  voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_world_params_sptr params = voxel_world->get_params();
 
   vcl_string model_dir = params->model_dir();

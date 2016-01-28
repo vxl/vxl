@@ -1,7 +1,7 @@
 // This is brl/bbas/volm/volm_osm_object_line.h
 #ifndef volm_osm_object_line_h_
 #define volm_osm_object_line_h_
-//:
+// :
 // \file
 // \brief  A class to represent a line object obtained from open street map
 //
@@ -26,41 +26,41 @@ typedef vbl_smart_ptr<volm_osm_object_line> volm_osm_object_line_sptr;
 class volm_osm_object_line : public vbl_ref_count
 {
 public:
-  //: default constructor
-  volm_osm_object_line() : prop_(0, "invalid", 0, 0.0, vil_rgb<vxl_byte>(0,0,0)) { line_.clear(); }
+  // : default constructor
+  volm_osm_object_line() : prop_(0, "invalid", 0, 0.0, vil_rgb<vxl_byte>(0, 0, 0) ) { line_.clear(); }
 
-  //: constructor
+  // : constructor
   volm_osm_object_line(volm_land_layer prop, vcl_vector<vgl_point_2d<double> > line) : prop_(prop), line_(line) {}
 
-  //: accessors
-  vcl_vector<vgl_point_2d<double> >& line() { return line_; }
+  // : accessors
+  vcl_vector<vgl_point_2d<double> > & line() { return line_; }
   volm_land_layer prop() const { return prop_; }
 
-  //: screen print
+  // : screen print
   void print();
 
   // ===========  binary I/O ================
 
-  //: version
-  unsigned version() const {return 1;}
+  // : version
+  unsigned version() const {return 1; }
 
-  //: binary IO write
+  // : binary IO write
   void b_write(vsl_b_ostream& os);
 
-  //: binary IO read
+  // : binary IO read
   void b_read(vsl_b_istream& is);
 
 private:
-  //: location propterties
+  // : location propterties
   volm_land_layer prop_;
 
-  //: coords of the point location in format of wgs84, x -- lon, y -- lat
+  // : coords of the point location in format of wgs84, x -- lon, y -- lat
   vcl_vector<vgl_point_2d<double> > line_;
 };
 
 void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_line* rptr);
 
-void vsl_b_read(vsl_b_istream& is, volm_osm_object_line*& rptr);
+void vsl_b_read(vsl_b_istream& is, volm_osm_object_line *& rptr);
 
 void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_line_sptr& sptr);
 

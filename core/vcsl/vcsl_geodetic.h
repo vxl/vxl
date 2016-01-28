@@ -1,6 +1,6 @@
 #ifndef vcsl_geodetic_h_
 #define vcsl_geodetic_h_
-//:
+// :
 // \file
 // \brief Coordinate system to represent a location relative to the earth
 // \author Francois BERTEL
@@ -15,7 +15,7 @@
 #include <vcsl/vcsl_geographic.h>
 #include <vcsl/vcsl_geodetic_sptr.h>
 
-//: 3D coordinate system intended to represent a location relative to the earth.
+// : 3D coordinate system intended to represent a location relative to the earth.
 // Although its use is not restricted to earthbound coordinate systems.
 // The geodetic latitude is the angle made by a line to the center of the
 // ellipsoid with the equatorial plane. The coordinates of a point are
@@ -25,14 +25,13 @@
 class vcsl_geodetic
   : public vcsl_geographic
 {
-  //***************************************************************************
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor.
   vcsl_geodetic() {}
-
- public:
+public:
   // Destructor
   virtual ~vcsl_geodetic() {}
 };

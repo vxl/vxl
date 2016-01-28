@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_eigen_sym_matrix );
 DECLARE( test_gaussian_sphere );
 DECLARE( test_gaussian_indep );

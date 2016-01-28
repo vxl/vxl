@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_sun_visibilities_process.cxx
-//:
+// :
 // \file
 // \brief  A process for updating a color model
 //
@@ -12,7 +12,7 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/ocl/algo/boxm2_ocl_update_sun_visibilities.h>
-//brdb stuff
+// brdb stuff
 #include <brdb/brdb_value.h>
 
 #include <bocl/bocl_device.h>
@@ -20,15 +20,15 @@
 
 namespace boxm2_ocl_update_sun_visibilities_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_  = 8;
+const unsigned n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_sun_visibilities_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_sun_visibilities_process_globals;
 
-  //process takes 1 input
+  // process takes 1 input
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bocl_device_sptr";
   input_types_[1] = "boxm2_scene_sptr";
@@ -41,7 +41,7 @@ bool boxm2_ocl_update_sun_visibilities_process_cons(bprb_func_process& pro)
 
   // process has 1 output:
   // output[0]: scene sptr
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -49,21 +49,22 @@ bool boxm2_ocl_update_sun_visibilities_process(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_sun_visibilities_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs: device, scene, opencl_cache, cam, img
-  unsigned argIdx = 0;
-  bocl_device_sptr          device       = pro.get_input<bocl_device_sptr>(argIdx++);
-  boxm2_scene_sptr          scene        = pro.get_input<boxm2_scene_sptr>(argIdx++);
-  boxm2_opencl_cache_sptr   opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(argIdx++);
-  boxm2_cache_sptr          cache        = pro.get_input<boxm2_cache_sptr>(argIdx++);
-  vpgl_camera_double_sptr   cam          = pro.get_input<vpgl_camera_double_sptr>(argIdx++);
-  unsigned                  ni           = pro.get_input<unsigned>(argIdx++);
-  unsigned                  nj           = pro.get_input<unsigned>(argIdx++);
-  vcl_string                prefix_name  = pro.get_input<vcl_string>(argIdx++);
+  // get the inputs: device, scene, opencl_cache, cam, img
+  unsigned                argIdx = 0;
+  bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(argIdx++);
+  boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(argIdx++);
+  boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(argIdx++);
+  boxm2_cache_sptr        cache        = pro.get_input<boxm2_cache_sptr>(argIdx++);
+  vpgl_camera_double_sptr cam          = pro.get_input<vpgl_camera_double_sptr>(argIdx++);
+  unsigned                ni           = pro.get_input<unsigned>(argIdx++);
+  unsigned                nj           = pro.get_input<unsigned>(argIdx++);
+  vcl_string              prefix_name  = pro.get_input<vcl_string>(argIdx++);
 
   return boxm2_ocl_update_sun_visibilities::update(scene, device, opencl_cache, cache, cam, ni, nj, prefix_name);
 }

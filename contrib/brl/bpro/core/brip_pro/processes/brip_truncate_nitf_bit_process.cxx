@@ -1,6 +1,6 @@
 // This is brl/bpro/core/brip_pro/processes/brip_truncate_nitf_bit_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief  process to ignored desired bits from the vxl_unit_16 nitf images
 // \verbatim
@@ -11,16 +11,14 @@
 #include <brip/brip_vil_nitf_ops.h>
 #include <vil/vil_image_view_base.h>
 
-
-
-//: global variables
+// : global variables
 namespace brip_truncate_nitf_bit_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 1;
 }
 
-//: constructor
+// : constructor
 bool brip_truncate_nitf_bit_process_cons(bprb_func_process& pro)
 {
   using namespace brip_truncate_nitf_bit_process_globals;
@@ -36,61 +34,73 @@ bool brip_truncate_nitf_bit_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 
-//: execute the process
+// : execute the process
 bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
 {
   using namespace brip_truncate_nitf_bit_process_globals;
 
   // sanity check
-  if (pro.n_inputs() != n_inputs_) {
+  if( pro.n_inputs() != n_inputs_ )
+    {
     vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
   // get the input
-  unsigned i = 0;
+  unsigned                 i = 0;
   vil_image_view_base_sptr in_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  bool is_byte = pro.get_input<bool>(i++);
-  bool is_scale = pro.get_input<bool>(i++);
-  if (in_img_ptr->pixel_format() != VIL_PIXEL_FORMAT_UINT_16) {
+  bool                     is_byte = pro.get_input<bool>(i++);
+  bool                     is_scale = pro.get_input<bool>(i++);
+  if( in_img_ptr->pixel_format() != VIL_PIXEL_FORMAT_UINT_16 )
+    {
     vcl_cout << pro.name() << ": Unsupported Pixel Format = " << in_img_ptr->pixel_format() << vcl_endl;
     return false;
-  }
+    }
 
-  vil_image_view<vxl_uint_16>* in_img = static_cast<vil_image_view<vxl_uint_16>*>(in_img_ptr.as_pointer());
-  unsigned ni = in_img->ni();
-  unsigned nj = in_img->nj();
-  unsigned np = in_img->nplanes();
+  vil_image_view<vxl_uint_16>* in_img = static_cast<vil_image_view<vxl_uint_16> *>(in_img_ptr.as_pointer() );
+  unsigned                     ni = in_img->ni();
+  unsigned                     nj = in_img->nj();
+  unsigned                     np = in_img->nplanes();
   // being truncation
-  if (is_byte) {
+  if( is_byte )
+    {
     vcl_cout << "truncate to byte image" << vcl_endl;
     // truncate the input 16 bits image to a byte image by ignoring the most significant 5 bits and less significant 3 bits
-    vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni,nj,np);
-    if (is_scale) {
-      if (!brip_vil_nitf_ops::scale_nitf_bits(*in_img, *out_img)) {
-        vcl_cout << pro.name() << ": scale nitf image from " << in_img_ptr->pixel_format() << " to " << out_img->pixel_format() << " failed!" << vcl_endl;
+    vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni, nj, np);
+    if( is_scale )
+      {
+      if( !brip_vil_nitf_ops::scale_nitf_bits(*in_img, *out_img) )
+        {
+        vcl_cout << pro.name() << ": scale nitf image from " << in_img_ptr->pixel_format() << " to "
+                 << out_img->pixel_format() << " failed!" << vcl_endl;
         return false;
+        }
       }
-    }
-    else {
-      if (!brip_vil_nitf_ops::truncate_nitf_bits(*in_img, *out_img)) {
-        vcl_cout << pro.name() << ": truncate nitf image from " << in_img_ptr->pixel_format() << " to " << out_img->pixel_format() << " failed!" << vcl_endl;
+    else
+      {
+      if( !brip_vil_nitf_ops::truncate_nitf_bits(*in_img, *out_img) )
+        {
+        vcl_cout << pro.name() << ": truncate nitf image from " << in_img_ptr->pixel_format() << " to "
+                 << out_img->pixel_format() << " failed!" << vcl_endl;
+        }
       }
-    }
     // output
-    pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_img));
+    pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_img) );
     return true;
-  }
-  else {
+    }
+  else
+    {
     vcl_cout << "truncate to short image" << vcl_endl;
     // truncate the input image by ignoring the most significant 5 bits
     vil_image_view<vxl_uint_16>* out_img = new vil_image_view<vxl_uint_16>(ni, nj, np);
-    if (!brip_vil_nitf_ops::truncate_nitf_bits(*in_img, *out_img)) {
-      vcl_cout << pro.name() << ": truncating image from " << in_img->pixel_format() << " to " << out_img->pixel_format() << " failed!" << vcl_endl;
+    if( !brip_vil_nitf_ops::truncate_nitf_bits(*in_img, *out_img) )
+      {
+      vcl_cout << pro.name() << ": truncating image from " << in_img->pixel_format() << " to "
+               << out_img->pixel_format() << " failed!" << vcl_endl;
       return false;
-    }
+      }
     // output
-    pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_img));
+    pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(out_img) );
     return true;
-  }
+    }
 }

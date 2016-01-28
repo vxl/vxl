@@ -1,4 +1,4 @@
-//: \file
+// : \file
 //  \author Ian Scott
 //  \date 16 Dec 2009
 //  \brief Program to split a 3d image into blocks.
@@ -19,69 +19,77 @@
 #include <vcl_exception.h>
 #include <vcl_iostream.h>
 
-//=========================================================================
+// =========================================================================
 // Static function to create a static logger when first required
-//=========================================================================
-static mbl_logger& logger()
+// =========================================================================
+static mbl_logger & logger()
 {
   static mbl_logger l("mul.tools.image3d_split");
+
   return l;
 }
 
-
-//========================================================================
+// ========================================================================
 // Actual main function
-//========================================================================
-int main2(int argc, char*argv[])
+// ========================================================================
+int main2(int argc, char* argv[])
 {
-  const bool use_millimeters=false;
+  const bool use_millimeters = false;
 
   // Parse the program arguments
   vul_arg_base::set_help_precis("Divide a volume image in smaller pieces.");
+
   vul_arg<vcl_string> img_src(0, "input image filename");
   vul_arg<vcl_string> img_dst(0, "output image file-stem");
-  vul_arg<vcl_string> max_voxels_arg(0, "Max number of voxels in an output image. (Suffix k=1000, kb=1024, M=1e6, G=1e9 etc.)");
-  vul_arg<vcl_string> replace_str("-I", "Replace this string in the filestem with the split numbering. Default puts it at end.");
-  vul_arg<vcl_string> output_format_arg("-f", "Format of output images (e.g. v3i, dcm, gipl.) Guesses from filestem by default.");
+  vul_arg<vcl_string> max_voxels_arg(0,
+                                     "Max number of voxels in an output image. (Suffix k=1000, kb=1024, M=1e6, G=1e9 etc.)");
+  vul_arg<vcl_string> replace_str("-I",
+                                  "Replace this string in the filestem with the split numbering. Default puts it at end.");
+  vul_arg<vcl_string> output_format_arg("-f",
+                                        "Format of output images (e.g. v3i, dcm, gipl.) Guesses from filestem by default.");
   vul_arg<bool> split_z("-z", "Split along z-plane boundaries, default is rough cubes.");
   vul_arg<bool> label_seq("-s", "Number output images sequentially, default is according to x,y,z pos");
 //  vul_arg<bool> ("-t", "Try to keep all images roughly same size - Default keeps all bu last ones identically sized.");
   vul_arg_parse(argc, argv);
 
-  unsigned long max_voxels = (unsigned long) vul_string_atof_withsuffix(max_voxels_arg());
-  if (max_voxels==0) vul_arg_base::display_usage_and_exit("Bad maximum number of voxels");
-
+  unsigned long max_voxels = (unsigned long) vul_string_atof_withsuffix(max_voxels_arg() );
+  if( max_voxels == 0 ) {vul_arg_base::display_usage_and_exit("Bad maximum number of voxels"); }
 
   // Determine the output filetype
   vcl_string output_format;
-  if (!output_format_arg.set())
-  {
+  if( !output_format_arg.set() )
+    {
     vul_reg_exp re("([^A-Za-z0-9])$");
-    vcl_string filename_test;
-    if (re.find(img_dst()))
-      filename_test = img_dst().substr(0, re.start()); // strip trailing "._, "etc;
+    vcl_string  filename_test;
+    if( re.find(img_dst() ) )
+      {
+      filename_test = img_dst().substr(0, re.start() ); // strip trailing "._, "etc;
+      }
     else
+      {
       filename_test = img_dst();
-    output_format = vil3d_save_guess_file_format(filename_test.c_str());
-  }
+      }
+    output_format = vil3d_save_guess_file_format(filename_test.c_str() );
+    }
   else
+    {
     output_format = output_format_arg();
+    }
   MBL_LOG(INFO, logger(), "Output format: " << output_format);
-
 
   // Load the image.
 
   vimt3d_add_all_loaders();
 
-  vil3d_image_resource_sptr ir = vil3d_load_image_resource(img_src().c_str());
-  if (!ir)
-  {
+  vil3d_image_resource_sptr ir = vil3d_load_image_resource(img_src().c_str() );
+  if( !ir )
+    {
     vcl_cerr << "ERROR: Failed to load input image resource\n";
     return 1;
-  }
+    }
 
-  MBL_LOG(INFO, logger(), "Loaded input image_resource: " << ir->ni() << " x " <<
-          ir->nj() << " x " << ir->nk() << " x " << ir->nplanes());
+  MBL_LOG(INFO, logger(), "Loaded input image_resource: " << ir->ni() << " x "
+                                                          << ir->nj() << " x " << ir->nk() << " x " << ir->nplanes() );
 
   vimt3d_transform_3d w2i = vimt3d_load_transform(ir, use_millimeters);
 
@@ -94,144 +102,155 @@ int main2(int argc, char*argv[])
   unsigned blockwidth_i, blockwidth_j, blockwidth_k;
   unsigned blockcount_i, blockcount_j, blockcount_k;
 
-  if (split_z())
-  {
-    if (max_voxels < ni*nj)
+  if( split_z() )
     {
+    if( max_voxels < ni * nj )
+      {
       vcl_cerr << "ERROR: More voxels in single plane than " << max_voxels << '\n';
       return 3;
-    }
+      }
 
     blockwidth_i = ni;
     blockwidth_j = nj;
     blockcount_i = 1;
     blockcount_j = 1;
-    blockwidth_k = vcl_min(nk,  max_voxels / (ni*nj));
-    blockcount_k = (nk+blockwidth_k-1) / blockwidth_k;
-  }
+    blockwidth_k = vcl_min(nk,  max_voxels / (ni * nj) );
+    blockcount_k = (nk + blockwidth_k - 1) / blockwidth_k;
+    }
   else
-  {
+    {
     blockwidth_k = vcl_min<unsigned long>(nk,
-                                          vnl_math::rnd(vnl_math::cuberoot(static_cast<double>(max_voxels))) );
-    blockcount_k = (nk+blockwidth_k-1) / blockwidth_k;
+                                          vnl_math::rnd(vnl_math::cuberoot(static_cast<double>(max_voxels) ) ) );
+    blockcount_k = (nk + blockwidth_k - 1) / blockwidth_k;
     blockwidth_j = vcl_min<unsigned long>(nj,
-                                          vnl_math::rnd(vcl_sqrt(static_cast<double>(max_voxels/blockwidth_k))));
-    blockcount_j = (nj+blockwidth_j-1) / blockwidth_j;
-    blockwidth_i = vcl_min<unsigned long>(ni,  max_voxels / (blockwidth_k*blockwidth_j));
-    blockcount_i = (ni+blockwidth_i-1) / blockwidth_i;
-  }
+                                          vnl_math::rnd(vcl_sqrt(static_cast<double>(max_voxels / blockwidth_k) ) ) );
+    blockcount_j = (nj + blockwidth_j - 1) / blockwidth_j;
+    blockwidth_i = vcl_min<unsigned long>(ni,  max_voxels / (blockwidth_k * blockwidth_j) );
+    blockcount_i = (ni + blockwidth_i - 1) / blockwidth_i;
+    }
 
-  MBL_LOG(INFO, logger(), "block sizes: " << blockwidth_i << ',' << blockwidth_i <<
-          ',' << blockwidth_k << " block counts: " << blockcount_i << ',' << blockcount_i <<
-          ',' << blockcount_k);
-
+  MBL_LOG(INFO,
+          logger(), "block sizes: " << blockwidth_i << ',' << blockwidth_i
+                                    << ',' << blockwidth_k << " block counts: " << blockcount_i << ',' << blockcount_i
+                                    << ',' << blockcount_k);
 
   // Figure out output filename pattern.
 
   vcl_string filename_pattern;
 
-  if (label_seq())
+  if( label_seq() )
+    {
     filename_pattern = vul_sprintf("%%0%dd",
                                    vnl_math::floor( vcl_log10( static_cast<double>(
-                                     blockcount_i*blockcount_j*blockcount_k )))+1 );
+                                                                 blockcount_i * blockcount_j * blockcount_k ) ) ) + 1 );
+    }
   else
-    filename_pattern = vul_sprintf("%%0%dd%%0%dd%%0%dd",
-                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_i)))+1,
-                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_j)))+1,
-                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_k)))+1 );
-
-  if (replace_str.set())
-  {
-    vcl_string::size_type n = img_dst().find(replace_str());
-    if (n==vcl_string::npos)
     {
+    filename_pattern = vul_sprintf("%%0%dd%%0%dd%%0%dd",
+                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_i) ) ) + 1,
+                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_j) ) ) + 1,
+                                   vnl_math::floor(vcl_log10(static_cast<double>(blockcount_k) ) ) + 1 );
+    }
+
+  if( replace_str.set() )
+    {
+    vcl_string::size_type n = img_dst().find(replace_str() );
+    if( n == vcl_string::npos )
+      {
       vcl_cerr << "ERROR: Could not find replace string \"" << replace_str()
                << "\" in \"" << img_dst() << "\"\n";
       return 3;
+      }
+    filename_pattern = img_dst().substr(0, n) + filename_pattern
+      + img_dst().substr(n + replace_str().size() );
     }
-    filename_pattern = img_dst().substr(0, n) + filename_pattern +
-      img_dst().substr(n+replace_str().size());
-  }
   else
-    filename_pattern = img_dst() + filename_pattern;
-
-
-  unsigned k0=0;
-  for (unsigned k=0; k<blockcount_k; ++k)
-  {
-    unsigned klen = vcl_min<unsigned long>(nk, k0+blockwidth_k)-k0; // Handle truncated last block.
-    unsigned j0=0;
-    for (unsigned j=0; j<blockcount_j; ++j)
     {
-      unsigned jlen = vcl_min<unsigned long>(nj, j0+blockwidth_j)-j0;
-      unsigned i0=0;
-      for (unsigned i=0; i<blockcount_i; ++i)
+    filename_pattern = img_dst() + filename_pattern;
+    }
+
+  unsigned k0 = 0;
+  for( unsigned k = 0; k < blockcount_k; ++k )
+    {
+    unsigned klen = vcl_min<unsigned long>(nk, k0 + blockwidth_k) - k0; // Handle truncated last block.
+    unsigned j0 = 0;
+    for( unsigned j = 0; j < blockcount_j; ++j )
       {
-        unsigned ilen = vcl_min<unsigned long>(ni, i0+blockwidth_i)-i0;
+      unsigned jlen = vcl_min<unsigned long>(nj, j0 + blockwidth_j) - j0;
+      unsigned i0 = 0;
+      for( unsigned i = 0; i < blockcount_i; ++i )
+        {
+        unsigned ilen = vcl_min<unsigned long>(ni, i0 + blockwidth_i) - i0;
 
         vil3d_image_view_base_sptr block = ir->get_copy_view(i0, ilen, j0, jlen, k0, klen);
 
         vcl_string filename;
-        if (label_seq())
+        if( label_seq() )
+          {
           filename = vul_sprintf(filename_pattern.c_str(),
-                                 i + j*blockcount_i + k*blockcount_i*blockcount_j );
+                                 i + j * blockcount_i + k * blockcount_i * blockcount_j );
+          }
         else
+          {
           filename = vul_sprintf(filename_pattern.c_str(), i, j, k);
+          }
 
         vil3d_image_resource_sptr ir2 = vil3d_new_image_resource(
-          filename.c_str(), ilen, jlen, klen, block->nplanes(),
-          block->pixel_format(), output_format.c_str());
-        if (!ir2)
-        {
+            filename.c_str(), ilen, jlen, klen, block->nplanes(),
+            block->pixel_format(), output_format.c_str() );
+        if( !ir2 )
+          {
           vcl_cerr << "ERROR: Failed to create output image resource\n";
           return 2;
-        }
+          }
         vimt3d_transform_3d trans;
-        trans.set_translation(-double(i0), -double(j0), -double(k0));
-        vimt3d_save_transform(ir2, trans*w2i, use_millimeters);
+        trans.set_translation(-double(i0), -double(j0), -double(k0) );
+        vimt3d_save_transform(ir2, trans * w2i, use_millimeters);
 
-        vimt3d_vil3d_v3i_image* v3i_ir2 = dynamic_cast<vimt3d_vil3d_v3i_image *>(ir2.as_pointer());
-        if (v3i_ir2)
-          v3i_ir2->set_world2im(trans*w2i);
+        vimt3d_vil3d_v3i_image* v3i_ir2 = dynamic_cast<vimt3d_vil3d_v3i_image *>(ir2.as_pointer() );
+        if( v3i_ir2 )
+          {
+          v3i_ir2->set_world2im(trans * w2i);
+          }
         else
-          vimt3d_save_transform(ir2, trans*w2i, true);
+          {
+          vimt3d_save_transform(ir2, trans * w2i, true);
+          }
 
         ir2->put_view(*block);
 
         i0 += ilen;
-      }
+        }
       j0 += jlen;
-    }
+      }
     k0 += klen;
-  }
+    }
 
   return 0;
 }
 
-
-//========================================================================
+// ========================================================================
 // Exception-handling wrapper around main function
-//========================================================================
-int main(int argc, char*argv[])
+// ========================================================================
+int main(int argc, char* argv[])
 {
   // Initialize the logger
   mbl_logger::root().load_log_config_file();
 
   try
-  {
+    {
     main2(argc, argv);
-  }
-  catch (vcl_exception& e)
-  {
+    }
+  catch( vcl_exception& e )
+    {
     vcl_cout << "caught exception " << e.what() << vcl_endl;
     return 3;
-  }
-  catch (...)
-  {
+    }
+  catch( ... )
+    {
     vcl_cout << "caught unknown exception" << vcl_endl;
     return 3;
-  }
-
+    }
 
   return 0;
 }

@@ -1,10 +1,8 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE(test_cam_iostream);
 DECLARE(test_video_site_io);
 DECLARE(test_video_corr_processor);
-
 
 void
 register_tests()

@@ -1,7 +1,7 @@
 // This is mul/vil3d/algo/vil3d_anisotropic_filter.h
 #ifndef vil3d_anisotropic_filter_h_
 #define vil3d_anisotropic_filter_h_
-//:
+// :
 // \file
 // \brief Functions to apply anisotropic filters to 3D images.
 //
@@ -17,9 +17,8 @@
 #include <vil3d/vil3d_print.h>
 #include <vcl_iostream.h>
 
-
-//========================================================================
-//: Function to apply 3 different 1D filters to a 3D image.
+// ========================================================================
+// : Function to apply 3 different 1D filters to a 3D image.
 // \param src     The source image.
 // \retval dest   The destination image (of type <float>).
 // \param filter  The filter to apply in each direction.
@@ -31,7 +30,7 @@
 // \param work2   Workspace image (assumed to be correct size).
 // \note The returned image <float> can be converted to the source type
 // by a subsequent call to vil3d_convert_round() or vil3d_convert-cast().
-//========================================================================
+// ========================================================================
 template <class T>
 inline
 void vil3d_anisotropic_filter(const vil3d_image_view<T>& src,
@@ -45,18 +44,17 @@ void vil3d_anisotropic_filter(const vil3d_image_view<T>& src,
                               vil3d_image_view<float>& work2)
 {
   vil3d_convolve_1d(src,  work1, &(filter.x()[c.x()]),
-                    lo.x(), hi.x(), float(), cbo.x(), cbo.x());
+                    lo.x(), hi.x(), float(), cbo.x(), cbo.x() );
 
   vil3d_image_view<float> work2_jki = vil3d_switch_axes_jki(work2);
 
   vil3d_convolve_1d(vil3d_switch_axes_jki(work1), work2_jki,
-    &(filter.y()[c.y()]), lo.y(), hi.y(), float(), cbo.y(), cbo.y());
+                    &(filter.y()[c.y()]), lo.y(), hi.y(), float(), cbo.y(), cbo.y() );
 
   vil3d_image_view<float> dest_kij = vil3d_switch_axes_kij(dest);
 
   vil3d_convolve_1d(vil3d_switch_axes_kij(work2), dest_kij,
-    &(filter.z()[c.z()]), lo.z(), hi.z(), float(), cbo.z(), cbo.z());
-
+                    &(filter.z()[c.z()]), lo.z(), hi.z(), float(), cbo.z(), cbo.z() );
 
   ////////////////////////////////////////////////////////////////////////
   //
@@ -90,15 +88,14 @@ void vil3d_anisotropic_filter(const vil3d_image_view<T>& src,
   ////////////////////////////////////////////////////////////////////////
 }
 
-
-//========================================================================
-//: Generates 3 Gaussian filters, 1 for each dimension.
+// ========================================================================
+// : Generates 3 Gaussian filters, 1 for each dimension.
 // \param sd      The width of the Gaussian (in voxel widths) for each dimension.
 // \retval filter The 3 filters.
 // \retval c      The (absolute) index of the centre tap of each filter.
 // \retval lo     The (relative) index of the lowest tap of each filter.
 // \retval hi     The (relative) index of the highest tap of each filter.
-//========================================================================
+// ========================================================================
 inline
 void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
                                      vgl_vector_3d<vcl_vector<double> >& filter,
@@ -108,29 +105,28 @@ void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
 {
   // Size of filters (number of "taps") - filter should be ~ 7*sd wide
   vgl_vector_3d<unsigned> nt;
-  nt.x_ = vnl_math::rnd(7.0*sd.x());
-  nt.y_ = vnl_math::rnd(7.0*sd.y());
-  nt.z_ = vnl_math::rnd(7.0*sd.z());
+  nt.x_ = vnl_math::rnd(7.0 * sd.x() );
+  nt.y_ = vnl_math::rnd(7.0 * sd.y() );
+  nt.z_ = vnl_math::rnd(7.0 * sd.z() );
 
   // Temporary fix - force filters to have odd number of taps.
   // Not sure why, but even-numbered filters cause strange errors.
-  if (nt.x_%2==0) nt.x_++;
-  if (nt.y_%2==0) nt.y_++;
-  if (nt.z_%2==0) nt.z_++;
+  if( nt.x_ % 2 == 0 ) {nt.x_++; }
+  if( nt.y_ % 2 == 0 ) {nt.y_++; }
+  if( nt.z_ % 2 == 0 ) {nt.z_++; }
 
   // Is nt even?
-  if (nt.x()%2==0 || nt.y()%2==0 || nt.z()%2==0)
-  {
+  if( nt.x() % 2 == 0 || nt.y() % 2 == 0 || nt.z() % 2 == 0 )
+    {
     vcl_cout << "------------------------------------------------------\n"
              << "Warning: filter size is even: this may cause problems.\n"
-             << nt.x() << '\t' << nt.y()<< '\t' << nt.z() << '\n'
+             << nt.x() << '\t' << nt.y() << '\t' << nt.z() << '\n'
              << "------------------------------------------------------\n"
              << vcl_endl;
-  }
-
+    }
 
   // Centre (absolute) tap of filter (or just past centre if even length)
-  c = nt/2;
+  c = nt / 2;
 
   // Lowest (relative) tap of filter
   lo.x_ = -(int)c.x();
@@ -138,22 +134,21 @@ void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
   lo.z_ = -(int)c.z();
 
   // Highest (relative) tap of filter (depends whether filter length is odd)
-  hi.x_ = c.x() +1 -(nt.x()%2);
-  hi.y_ = c.y() +1 -(nt.y()%2);
-  hi.z_ = c.z() +1 -(nt.z()%2);
+  hi.x_ = c.x() + 1 - (nt.x() % 2);
+  hi.y_ = c.y() + 1 - (nt.y() % 2);
+  hi.z_ = c.z() + 1 - (nt.z() % 2);
 
   // Create a suitable 1D Gaussian filter for each dimension
-  filter.x_.resize(nt.x());
-  filter.y_.resize(nt.y());
-  filter.z_.resize(nt.z());
+  filter.x_.resize(nt.x() );
+  filter.y_.resize(nt.y() );
+  filter.z_.resize(nt.z() );
   vil_gauss_filter_gen_ntap(sd.x(), 0, filter.x_);
   vil_gauss_filter_gen_ntap(sd.y(), 0, filter.y_);
   vil_gauss_filter_gen_ntap(sd.z(), 0, filter.z_);
 }
 
-
-//========================================================================
-//: A convenience function to generate and apply an anisotropic Gaussian filter to a 3D image.
+// ========================================================================
+// : A convenience function to generate and apply an anisotropic Gaussian filter to a 3D image.
 // \param src     The source image.
 // \retval dest   The destination (filtered) image.
 // \param sd      The width of the Gaussian (in voxel widths) for each dimension.
@@ -165,7 +160,7 @@ void vil3d_generate_gaussian_filters(const vgl_vector_3d<double>& sd,
 //                type as the source.
 // \sa            vil3d_generate_gaussian_filters()
 // \sa            vil3d_anisotropic_filter()
-//========================================================================
+// ========================================================================
 template <class T>
 inline
 void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
@@ -177,9 +172,9 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
 {
   // Generate Gaussian filters suitable for each dimension
   vgl_vector_3d<vcl_vector<double> > filter;
-  vgl_vector_3d<unsigned> c;
-  vgl_vector_3d<int> lo;
-  vgl_vector_3d<int> hi;
+  vgl_vector_3d<unsigned>            c;
+  vgl_vector_3d<int>                 lo;
+  vgl_vector_3d<int>                 hi;
   vil3d_generate_gaussian_filters(sd, filter, c, lo, hi);
 
   // Specify the convolution boundary option for each dimension
@@ -190,10 +185,8 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
   // Apply the filters
   vil3d_anisotropic_filter(src, work3, filter, c, lo, hi, cbo, work1, work2);
 
-
   // Convert the results to destination type
   vil3d_convert_round(work3, dest);
-
 
   ////////////////////////////////////////////////////////////////////////
   //
@@ -220,6 +213,5 @@ void vil3d_anisotropic_gaussian_filter(const vil3d_image_view<T>& src,
   //
   //////////////////////////////////////////////////////////////////////////
 }
-
 
 #endif // vil3d_anisotropic_filter_h_

@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h
 #ifndef bvxm_voxel_grid_opinion_basic_ops_h
 #define bvxm_voxel_grid_opinion_basic_ops_h
-//:
+// :
 // \file
 // \brief set of basic grid operations
 //
@@ -21,6 +21,8 @@
 
 void bvxm_expectation_opinion_voxel_grid(bvxm_voxel_grid<bvxm_opinion> * grid_in_base,
                                          bvxm_voxel_grid<float> * grid_out_base);
+
 void bvxm_belief_opinion_voxel_grid(bvxm_voxel_grid<bvxm_opinion> * grid_in_base,
                                     bvxm_voxel_grid<float> * grid_out_base);
+
 #endif

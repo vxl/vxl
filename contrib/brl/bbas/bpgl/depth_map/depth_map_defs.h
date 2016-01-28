@@ -1,7 +1,7 @@
-//This is brl/bbas/bpgl/depth_map/depth_map_defs.h
+// This is brl/bbas/bpgl/depth_map/depth_map_defs.h
 #ifndef depth_map_defs_h_
 #define depth_map_defs_h_
-//:
+// :
 // \file
 // \brief Definitions for region attribute properties
 //
@@ -49,5 +49,4 @@
 #define vrt_g 0.0f
 #define vrt_b 1.0f
 
-
-#endif //depth_map_defs_h_
+#endif // depth_map_defs_h_

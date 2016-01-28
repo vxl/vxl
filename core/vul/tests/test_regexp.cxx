@@ -1,7 +1,7 @@
 // This is core/vul/tests/test_regexp.cxx
 #include <vul/vul_reg_exp.h>
 #include <testlib/testlib_test.h>
-//:
+// :
 // \file
 // \brief  Thorough testing of class vul_reg_exp (regular expression matching)
 // \author Peter Vanroose, KULeuven, ESAT/PSI
@@ -39,8 +39,8 @@ void test_regexp()
 
   vul_reg_exp r2(r1);
   TEST("vul_reg_exp r2(r1);", 0, 0);
-  TEST("r1==r2", r1==r2, true);
-  TEST("r2==r1", r2==r1, true);
+  TEST("r1==r2", r1 == r2, true);
+  TEST("r2==r1", r2 == r1, true);
   TEST("r2.deep_equal(r1)", r2.deep_equal(r1), true);
   TEST("r1.deep_equal(r2)", r1.deep_equal(r2), true);
   TEST("r2.find(strng)", r2.find(strng), true);
@@ -55,10 +55,10 @@ void test_regexp()
   TEST("r1.deep_equal(r2)", r1.deep_equal(r2), true);
   TEST("r2.find(\"Another Test string\tto matchstring.\")",
        r2.find("Another Test string\tto matchstring."), true);
-  TEST("r1==r2", r1==r2, true);
-  TEST("r2==r1", r2==r1, true);
-  TEST("r1!=r2", r1!=r2, false);
-  TEST("r2!=r1", r2!=r1, false);
+  TEST("r1==r2", r1 == r2, true);
+  TEST("r2==r1", r2 == r1, true);
+  TEST("r1!=r2", r1 != r2, false);
+  TEST("r2!=r1", r2 != r1, false);
   TEST("r2.deep_equal(r1)", r2.deep_equal(r1), false);
   TEST("r1.deep_equal(r2)", r1.deep_equal(r2), false);
 
@@ -71,11 +71,11 @@ void test_regexp()
   TEST("r3.compile(\"hELl\")", 0, 0);
   const char * strng2 = "o, hELlo";
   TEST("r3.find(strng2)", r3.find(strng2), true);
-  TEST("r1==r3", r1==r3, false);
+  TEST("r1==r3", r1 == r3, false);
   TEST("r1.deep_equal(r3)", r1.deep_equal(r3), false);
   TEST("r3.start()", r3.start(), 3);
   TEST("r3.end()", r3.end(), 7);
-  vul_reg_exp r4(r3);
+  vul_reg_exp  r4(r3);
   const char * strng3 = "I don't think it's here";
   TEST("r3.find(strng3)", r3.find(strng3), false);
   TEST("r4==r3", r4, r3);
@@ -85,7 +85,7 @@ void test_regexp()
 
   vcl_cout << "\n\tTESTS FOR compile AND find WITH VARIOUS REGULAR EXPRESSIONS.\n";
 
-//:
+// :
 // A regular expression allows a programmer to specify complex patterns that
 // can be searched for and matched against the character string of a std::string
 // object.  In its simplest case, a regular expression is a sequence of
@@ -121,7 +121,7 @@ void test_regexp()
   vcl_cout << "\nTESTS FOR REGULAR EXPRESSIONS WITH ^\n";
 
   const char * s = "str at front";
-  vul_reg_exp rxp("^str");
+  vul_reg_exp  rxp("^str");
   TEST("vul_reg_exp rxp(^str)", 0, 0);
   TEST("rxp.find(\"str at front\")", rxp.find(s), true);
   TEST("rxp.start() == 0", rxp.start(), 0);
@@ -234,7 +234,7 @@ void test_regexp()
   rxp.compile("(..p).*d(..p)");
   TEST("rxp.compile(\"(..p).*d(..p)\")", 0, 0);
   TEST("rxp.find(\"rep drepa qrepb\")", rxp.find(s), true);
-  TEST("rxp.match(1) == rxp.match(2)", rxp.match(1), rxp.match(2));
+  TEST("rxp.match(1) == rxp.match(2)", rxp.match(1), rxp.match(2) );
   TEST("rxp.start()", rxp.start(), 0);
   TEST("rxp.end()", rxp.end(), 8);
   TEST("rxp.find(\"rap drepa qrapb\")", rxp.find("rap drepa qrapb"), true);
@@ -247,7 +247,7 @@ void test_regexp()
   rxp.compile("(..p).*d(..p)?");
   TEST("rxp.compile(\"(..p).*d(..p)?\")", 0, 0);
   TEST("rxp.find(\"rep drepa qrepb\")", rxp.find(s), true);
-  TEST("rxp.match(1) == rxp.match(2)", rxp.match(1), rxp.match(2));
+  TEST("rxp.match(1) == rxp.match(2)", rxp.match(1), rxp.match(2) );
   TEST("rxp.find(\"rep dreba qrepb\")", rxp.find("rep dreba qrepb"), true);
   TEST("rxp.match(1) != rxp.match(2)", rxp.match(1) == rxp.match(2), false);
   TEST("rxp.match(2) == \"\"", rxp.match(2), "");

@@ -6,9 +6,9 @@
 #include <ios>
 
 #ifdef vcl_generic_ios_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_ios_STD std
+#  define vcl_generic_ios_STD std
 #endif
 
 #include "../generic/vcl_ios.h"

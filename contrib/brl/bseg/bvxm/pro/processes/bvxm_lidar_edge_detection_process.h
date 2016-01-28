@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_lidar_edge_detection_process.h
 #ifndef bvxm_lidar_edge_detection_process_h_
 #define bvxm_lidar_edge_detection_process_h_
-//:
+// :
 // \file
 // \brief A class for generating LiDAR edges given a LiDAR image pair.
 //        -  Inputs:
@@ -24,17 +24,17 @@
 #include <bprb/bprb_func_process.h>
 #include <vcl_string.h>
 
-//: global variables/functions
+// : global variables/functions
 namespace bvxm_lidar_edge_detection_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ =3;
+const unsigned n_inputs_ = 2;
+const unsigned n_outputs_ = 3;
 
-  // set parameter identifying strings
-  const vcl_string param_thresh_diff_ =  "threshold_edge_difference";
+// set parameter identifying strings
+const vcl_string param_thresh_diff_ =  "threshold_edge_difference";
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_lidar_edge_detection_process_cons(bprb_func_process& pro);
 
 bool bvxm_lidar_edge_detection_process(bprb_func_process& pro);

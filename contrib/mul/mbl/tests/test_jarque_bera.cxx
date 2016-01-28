@@ -11,24 +11,23 @@ void test_jarque_bera()
            << " Testing mbl_jarque_bera\n"
            << "*************************\n";
 
-  const unsigned n = 200;
-  vnl_random rng(9667566ul);
+  const unsigned     n = 200;
+  vnl_random         rng(9667566ul);
   vcl_vector<double> x(n);
-  for (unsigned i=0; i!=n; ++i)
-  {
-    x[i] = rng.drand32()*10 + 2;
-  }
+  for( unsigned i = 0; i != n; ++i )
+    {
+    x[i] = rng.drand32() * 10 + 2;
+    }
 
-  TEST_NEAR("mbl_jarque_bera (flat pdf)", mbl_jarque_bera(x.begin(), x.end()),
-    2.155e-4, 10-6);
-
-  for (unsigned i=0; i!=n; ++i)
-  {
-    x[i] = rng.normal()*10 + 2;
-  }
-  vcl_cout << "mbl_jarque_bera (gauss_data)" << mbl_jarque_bera(x.begin(), x.end()) << vcl_endl;
-  TEST_NEAR("mbl_jarque_bera (gauss pdf)", mbl_jarque_bera(x.begin(), x.end()),
-    0.6100, 10-3);
+  TEST_NEAR("mbl_jarque_bera (flat pdf)", mbl_jarque_bera(x.begin(), x.end() ),
+            2.155e-4, 10 - 6);
+  for( unsigned i = 0; i != n; ++i )
+    {
+    x[i] = rng.normal() * 10 + 2;
+    }
+  vcl_cout << "mbl_jarque_bera (gauss_data)" << mbl_jarque_bera(x.begin(), x.end() ) << vcl_endl;
+  TEST_NEAR("mbl_jarque_bera (gauss pdf)", mbl_jarque_bera(x.begin(), x.end() ),
+            0.6100, 10 - 3);
 }
 
 TESTMAIN(test_jarque_bera);

@@ -16,12 +16,19 @@ void boxm_register::register_datatype()
 void boxm_register::register_process()
 {
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_load_scene_process, "boxmLoadSceneProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_create_scene_process, "boxmCreateSceneProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_proj_local_cam_process,"boxmProjLocalCamProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_camera_viewing_scene_process,"boxmCameraViewingSceneProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_construct_scene_from_image_process, "boxmConstructSceneFromImageProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_upload_mesh_process,"boxmUploadMeshProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_clean_scene_process,"boxmCleanSceneProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_force_write_blocks_process,"boxmForceWriteBlocksProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_create_scene_process,
+                        "boxmCreateSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_proj_local_cam_process,
+                        "boxmProjLocalCamProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_camera_viewing_scene_process,
+                        "boxmCameraViewingSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_construct_scene_from_image_process,
+                        "boxmConstructSceneFromImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_upload_mesh_process,
+                        "boxmUploadMeshProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_clean_scene_process,
+                        "boxmCleanSceneProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_force_write_blocks_process,
+                        "boxmForceWriteBlocksProcess");
 
 }

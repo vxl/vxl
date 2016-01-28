@@ -7,7 +7,7 @@
 #include <vul/vul_timer.h>
 #include <vcl_fstream.h>
 
-#if 0 // Commented out
+#if 0                                                                      // Commented out
 const vcl_string config_file = "core/vidl/examples/config.dshow.logitech"; // config.euresys.vid1
 #endif
 
@@ -25,13 +25,13 @@ int main()
   vidl_dshow_live_istream<vidl_dshow_istream_params> test(
     vidl_dshow_istream_params()
     .set_device_name("Logitech QuickCam PTZ")
-    .set_properties(mbl_read_props(vcl_ifstream(config_file.c_str())))
+    .set_properties(mbl_read_props(vcl_ifstream(config_file.c_str() ) ) )
     );
 
   vidl_dshow_live_istream<vidl_dshow_istream_params_esf> test1(
     vidl_dshow_istream_params_esf()
     .set_device_name("Euresys PICOLO DILIGENT sn/29 - VID1")
-    .set_properties(mbl_read_props(vcl_ifstream(config_file.c_str())))
+    .set_properties(mbl_read_props(vcl_ifstream(config_file.c_str() ) ) )
     );
 #else
   vidl_dshow_live_istream<vidl_dshow_istream_params> test;
@@ -49,20 +49,21 @@ int main()
     );
 #endif // 0
 
-  vidl_image_list_ostream test_out("./dump","%05d","bmp");
+  vidl_image_list_ostream test_out("./dump", "%05d", "bmp");
 
   vul_timer timer;
-  int i = 150;
-  while ( test.advance()
-          //   test1.advance()
-          //&& test2.advance()
-          //&& test3.advance()
-          && --i)
-  {
+  int       i = 150;
+  while( test.advance()
+         //   test1.advance()
+         // && test2.advance()
+         // && test3.advance()
+         && --i )
+    {
     vcl_cout << "Grabbing: " << i << vcl_endl;
     test.current_frame();
-    test_out.write_frame(test.current_frame());
-  }
+    test_out.write_frame(test.current_frame() );
+    }
+
   timer.print(vcl_cout);
 
   return 0;

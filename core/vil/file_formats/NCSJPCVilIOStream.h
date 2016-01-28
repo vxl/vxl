@@ -47,17 +47,17 @@ public:
 
   virtual CNCSError Close();
 
-  virtual bool NCS_FASTCALL Seek ();
+  virtual bool NCS_FASTCALL Seek();
 
-  virtual bool NCS_FASTCALL Seek (INT64 offset, Origin origin = CURRENT);
+  virtual bool NCS_FASTCALL Seek(INT64 offset, Origin origin = CURRENT);
 
   virtual INT64 NCS_FASTCALL Tell();
 
   virtual INT64 NCS_FASTCALL Size();
 
-  virtual bool NCS_FASTCALL Read (void* buffer, UINT32 count);
+  virtual bool NCS_FASTCALL Read(void* buffer, UINT32 count);
 
-  virtual bool NCS_FASTCALL Write (void* buffer, UINT32 count);
+  virtual bool NCS_FASTCALL Write(void* buffer, UINT32 count);
 
 protected:
   /**
@@ -74,4 +74,4 @@ protected:
   static unsigned short mId; /*unique id */
 };
 
-#endif //NCSJPCVILIOSTREAM_H
+#endif // NCSJPCVILIOSTREAM_H

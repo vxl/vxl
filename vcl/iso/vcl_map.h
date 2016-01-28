@@ -6,9 +6,9 @@
 #include <map>
 
 #ifdef vcl_generic_map_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_map_STD std
+#  define vcl_generic_map_STD std
 #endif
 
 #include "../generic/vcl_map.h"

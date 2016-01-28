@@ -14,31 +14,31 @@ extern "C" {
 #include <vxl_config.h> // for VXL_UNISTD_*
 
 char *
-vpl_getcwd( char *buf, vcl_size_t buf_size )
+vpl_getcwd( char * buf, vcl_size_t buf_size )
 {
   return getcwd( buf, buf_size );
 }
 
 int
-vpl_mkdir( const char *dir, unsigned short mode )
+vpl_mkdir( const char * dir, unsigned short mode )
 {
   return mkdir( dir, (mode_t)mode );
 }
 
 int
-vpl_rmdir( const char *dir )
+vpl_rmdir( const char * dir )
 {
   return rmdir( dir );
 }
 
 int
-vpl_chdir( const char *dir )
+vpl_chdir( const char * dir )
 {
   return chdir( dir );
 }
 
 int
-vpl_unlink( const char *file )
+vpl_unlink( const char * file )
 {
   return unlink( file );
 }
@@ -53,20 +53,20 @@ int
 vpl_usleep( unsigned int t )
 {
   // some implementations require argument to usleep < 1000000 :
-  if (t > 1000000) sleep( t/1000000 ); t %= 1000000;
+  if( t > 1000000 ) {sleep( t / 1000000 ); } t %= 1000000;
 #if VXL_UNISTD_HAS_USLEEP
- #if VXL_UNISTD_USLEEP_IS_VOID
+#  if VXL_UNISTD_USLEEP_IS_VOID
   usleep( t ); return 0;
- #else
+#  else
   return usleep( t );
- #endif
+#  endif
 #else
   return 0;
 #endif
 }
 
 unsigned
-vpl_getpid( )
+vpl_getpid()
 {
 #if VXL_UNISTD_HAS_GETPID
   return getpid();
@@ -76,10 +76,11 @@ vpl_getpid( )
 }
 
 int
-vpl_putenv ( const char * envvar )
+vpl_putenv( const char * envvar )
 {
   char * storage_space = strdup(envvar); // This causes a memory leak
-                                         // but this can't be helped
+
+  // but this can't be helped
   // Why copy the string? putenv is meant to take a const char* of the
   // form "name=value". Also, putenv is neither ANSI C nor ANSI C++, but
   // is often present in stdlib on most Unix-like systems. -- AGAP.
@@ -89,12 +90,12 @@ vpl_putenv ( const char * envvar )
 }
 
 int
-vpl_gethostname(char *name, size_t len)
+vpl_gethostname(char * name, size_t len)
 {
 #if VXL_UNISTD_HAS_GETHOSTNAME
   return gethostname(name, len);
 #else
-  if (len) *name=0;
+  if( len ) {*name = 0; }
   return -1;
 #endif
 }

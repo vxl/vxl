@@ -2,9 +2,9 @@
 #ifndef HomgMatchPoint3D2D_h_
 #define HomgMatchPoint3D2D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief A match between a 3D and 2D point
 //
@@ -17,21 +17,23 @@
 class HomgMatchPoint3D2D
 {
   // Data Members------------------------------------------------------------
-    HomgPoint2D point2D_;
-    HomgPoint3D point3D_;
-
- public:
+  HomgPoint2D point2D_;
+  HomgPoint3D point3D_;
+public:
   // Constructors/Initializers/Destructors-----------------------------------
 
-  HomgMatchPoint3D2D ();
-  HomgMatchPoint3D2D (HomgPoint3D *point3D_ptr, HomgPoint2D *point2D_ptr);
-  ~HomgMatchPoint3D2D ();
+  HomgMatchPoint3D2D();
+  HomgMatchPoint3D2D(HomgPoint3D * point3D_ptr, HomgPoint2D * point2D_ptr);
+  ~HomgMatchPoint3D2D();
 
   // Data Access-------------------------------------------------------------
 
-  HomgPoint3D get_point3D (void);
-  HomgPoint2D get_point2D (void);
-  void set (HomgPoint3D *point3D_ptr, HomgPoint2D *point2D_ptr);
+  HomgPoint3D get_point3D(void);
+
+  HomgPoint2D get_point2D(void);
+
+  void set(HomgPoint3D * point3D_ptr, HomgPoint2D * point2D_ptr);
+
 };
 
 #endif // HomgMatchPoint3D2D_h_

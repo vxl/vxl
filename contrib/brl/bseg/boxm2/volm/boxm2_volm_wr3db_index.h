@@ -1,7 +1,7 @@
-//This is brl/bseg/boxm2/volm/boxm2_volm_wr3db_index.h
+// This is brl/bseg/boxm2/volm/boxm2_volm_wr3db_index.h
 #ifndef boxm2_volm_wr3db_index_h_
 #define boxm2_volm_wr3db_index_h_
-//:
+// :
 // \file
 // \brief  A class to index a given voxel world for fast matching to volumetric queries
 //         for each location hypothesis, keep a vector of values given by the spherical shell container
@@ -42,87 +42,94 @@
 
 class boxm2_volm_wr3db_index_params
 {
-  public:
-    boxm2_volm_wr3db_index_params() : start(0), skip(1), vmin(-1.0), dmax(-1.0), solid_angle(-1.0), layer_size(0) {}
+public:
+  boxm2_volm_wr3db_index_params() : start(0), skip(1), vmin(-1.0), dmax(-1.0), solid_angle(-1.0), layer_size(0) {}
 
-    // text i/o
-    bool write_params_file(vcl_string index_file_name);
-    bool read_params_file(vcl_string index_file_name);
+  // text i/o
+  bool write_params_file(vcl_string index_file_name);
 
-    // text i/o
-    static bool write_size_file(vcl_string index_file_name, unsigned long size);
-    static bool read_size_file(vcl_string index_file_name, unsigned long& size);
+  bool read_params_file(vcl_string index_file_name);
 
-    static bool query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2);
+  // text i/o
+  static bool write_size_file(vcl_string index_file_name, unsigned long size);
 
-  public:
-    unsigned start;
-    unsigned skip;
-    float vmin;
-    float dmax;
-    float solid_angle;
-    unsigned layer_size;
+  static bool read_size_file(vcl_string index_file_name, unsigned long& size);
+
+  static bool query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2);
+
+public:
+  unsigned start;
+  unsigned skip;
+  float    vmin;
+  float    dmax;
+  float    solid_angle;
+  unsigned layer_size;
 
 };
 
 class boxm2_volm_wr3db_index : public vbl_ref_count
 {
-  public:
-    enum combinations { VIS_OCC = 0, VIS_UNOCC = 1, NONVIS_UNKNOWN = 2 };
-    enum mode { READ = 0, WRITE = 1, NOT_INITIALIZED = 2 };
+public:
+  enum combinations { VIS_OCC = 0, VIS_UNOCC = 1, NONVIS_UNKNOWN = 2 };
+  enum mode { READ = 0, WRITE = 1, NOT_INITIALIZED = 2 };
 
-    //: layer_size is the size of index array for each hypothesis, buffer_capacity is the max GBs on RAM for this class to use
-    boxm2_volm_wr3db_index(unsigned layer_size, float buffer_capacity);
-    ~boxm2_volm_wr3db_index();
+  // : layer_size is the size of index array for each hypothesis, buffer_capacity is the max GBs on RAM for this class to use
+  boxm2_volm_wr3db_index(unsigned layer_size, float buffer_capacity);
+  ~boxm2_volm_wr3db_index();
 
-    //: io as chunks of data to a set of files in the specified folder
-    bool initialize_read(vcl_string file_name);
-    bool initialize_write(vcl_string file_name);
-    bool finalize();
+  // : io as chunks of data to a set of files in the specified folder
+  bool initialize_read(vcl_string file_name);
 
-    //: return the max number of indices on active cache
-    unsigned int buffer_size() { return buffer_size_; }
-    unsigned int current_id() { return current_id_; }
-    unsigned int current_global_id() { return current_global_id_; }
-    unsigned int layer_size() { return layer_size_; }
+  bool initialize_write(vcl_string file_name);
 
-    //: just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known,
-    //  caller is responsible to keep the ordering consistent with the hypotheses ordering
-    bool add_to_index(vcl_vector<uchar>& values);
-    //: caller is responsible to pass a valid array of size layer_size
-    bool add_to_index(uchar* values);
+  bool finalize();
 
-    //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc
-    //  caller is responsible to resize values array to layer_size before passing to this method
-    bool get_next(vcl_vector<uchar>& values);
-    //: caller is responsible to pass a valid array of size at least layer_size, if size>layer_size, fill the rest with zeros
-    bool get_next(uchar* values, unsigned size);
+  // : return the max number of indices on active cache
+  unsigned int buffer_size() { return buffer_size_; }
+  unsigned int current_id() { return current_id_; }
+  unsigned int current_global_id() { return current_global_id_; }
+  unsigned int layer_size() { return layer_size_; }
 
-    //: binary io
-    bool close_file(vcl_string out_file);
+  // : just appends to the end of the current active buffer, nothing about which location hypothesis these values correspond is known,
+  //  caller is responsible to keep the ordering consistent with the hypotheses ordering
+  bool add_to_index(vcl_vector<uchar>& values);
 
-    //: inflate an index value array and return a vector of chars whose values are one of the combinations VIS_OCC, VIS_UNOCC, NONVIS_UNKNOWN
-    static bool inflate_index_vis_and_prob(vcl_vector<uchar>& values, volm_spherical_container_sptr cont, vcl_vector<char>& vis_prob);
+  // : caller is responsible to pass a valid array of size layer_size
+  bool add_to_index(uchar* values);
 
-  protected:
-    unsigned int read_to_buffer(uchar* buf);
+  // : retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc
+  //  caller is responsible to resize values array to layer_size before passing to this method
+  bool get_next(vcl_vector<uchar>& values);
 
-    unsigned int layer_size_;     // number of values in an index, this is given by the spherical shell container
-    unsigned int buffer_size_;
-    unsigned int current_id_;     // id on the active buffer
-    unsigned int current_global_id_;  // global id on the entire index object
-    mode m_;
-    vcl_string file_name_;
+  // : caller is responsible to pass a valid array of size at least layer_size, if size>layer_size, fill the rest with zeros
+  bool get_next(uchar* values, unsigned size);
 
-    uchar *active_buffer_;
+  // : binary io
+  bool close_file(vcl_string out_file);
 
-    unsigned long file_size_;
-    unsigned long read_so_far_;
-    unsigned int active_buffer_size_;  // during reading there may be less than buffer_size_ on the active cache
+  // : inflate an index value array and return a vector of chars whose values are one of the combinations VIS_OCC, VIS_UNOCC, NONVIS_UNKNOWN
+  static bool inflate_index_vis_and_prob(vcl_vector<uchar>& values, volm_spherical_container_sptr cont,
+                                         vcl_vector<char>& vis_prob);
 
-    //vcl_fstream f_obj_; // had issues on Linux..
-    vcl_ifstream if_obj_;
-    vcl_ofstream of_obj_;
+protected:
+  unsigned int read_to_buffer(uchar* buf);
+
+  unsigned int layer_size_;       // number of values in an index, this is given by the spherical shell container
+  unsigned int buffer_size_;
+  unsigned int current_id_;        // id on the active buffer
+  unsigned int current_global_id_; // global id on the entire index object
+  mode         m_;
+  vcl_string   file_name_;
+
+  uchar * active_buffer_;
+
+  unsigned long file_size_;
+  unsigned long read_so_far_;
+  unsigned int  active_buffer_size_;   // during reading there may be less than buffer_size_ on the active cache
+
+  // vcl_fstream f_obj_; // had issues on Linux..
+  vcl_ifstream if_obj_;
+  vcl_ofstream of_obj_;
 };
 
 #endif  // boxm2_volm_wr3db_index_h_

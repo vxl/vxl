@@ -2,9 +2,9 @@
 #ifndef vsl_clipon_binary_loader_h_
 #define vsl_clipon_binary_loader_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 
 #include <vsl/vsl_binary_loader_base.h>
@@ -12,7 +12,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-//: Class to load objects by baseclass pointer using `clipon' classes
+// : Class to load objects by baseclass pointer using `clipon' classes
 // An example of a singleton design pattern for loading
 // a DerivedClass from a stream into a BaseClass*.
 // All we are given is a BaseClass* into which
@@ -74,80 +74,81 @@
 // To indicate a null pointer (0), the string "VSL_NULL_PTR" is saved
 // to the stream.
 // All loader singletons can be deleted using vsl_delete_all_loaders()
-template<class BaseClass, class BaseClassIO>
+template <class BaseClass, class BaseClassIO>
 class vsl_clipon_binary_loader : public vsl_binary_loader_base
 {
-  //: the singleton object
-  static vsl_clipon_binary_loader<BaseClass,BaseClassIO>* instance_;
+  // : the singleton object
+  static vsl_clipon_binary_loader<BaseClass, BaseClassIO>* instance_;
 
-  //: List of object loaders
-  vcl_vector<BaseClassIO*> object_io_;
+  // : List of object loaders
+  vcl_vector<BaseClassIO *> object_io_;
 
-  //: Return index associated with given object name
+  // : Return index associated with given object name
   int index_for_name(const vcl_string& name) const;
 
- public:
-  //: Constructor
+public:
+  // : Constructor
   vsl_clipon_binary_loader() {}
 
-  //: Destructor
+  // : Destructor
   ~vsl_clipon_binary_loader();
 
-  //: Returns the instance variable for the singleton.
-  static vsl_clipon_binary_loader<BaseClass,BaseClassIO>& instance();
+  // : Returns the instance variable for the singleton.
+  static vsl_clipon_binary_loader<BaseClass, BaseClassIO> & instance();
 
-  //: Remove all example objects
+  // : Remove all example objects
   void make_empty();
 
-  //: Add example object to list of those that can be loaded
+  // : Add example object to list of those that can be loaded
   void add( const BaseClassIO& b);
 
-  //: Return current list of individual IO objects
-  const vcl_vector<BaseClassIO*>& object_io() const { return object_io_; }
+  // : Return current list of individual IO objects
+  const vcl_vector<BaseClassIO *> & object_io() const { return object_io_; }
 
-  //: Return IO object for given named class
+  // : Return IO object for given named class
   //  Aborts if not available
-  const BaseClassIO& object_io(const vcl_string& name) const;
+  const BaseClassIO & object_io(const vcl_string& name) const;
 
-  //: Return IO object that can deal with given class
-  const BaseClassIO& io_for_class(const BaseClass& b) const;
+  // : Return IO object that can deal with given class
+  const BaseClassIO & io_for_class(const BaseClass& b) const;
 
-  //: Reads object from stream and sets base class pointer
+  // : Reads object from stream and sets base class pointer
   //  Determines which derived class object on stream belongs
   //  to, loads it and sets b to be a pointer to it.
   //  (Class must be one given to Loader by the add method).
   //  If is indicates a NULL pointer, b will be set to NULL.
   //  If b not initially NULL, *b will be deleted.
-  void read_object( vsl_b_istream& is, BaseClass*& b);
+  void read_object( vsl_b_istream& is, BaseClass *& b);
 
-  //: Writes object to stream given base class pointer
+  // : Writes object to stream given base class pointer
   //  Determines which derived class object is
   //  and calls the appropriate write function.
   //  (Class must be one given to Loader by the add method).
   //  If b==0, a suitable string will be saved
   void write_object( vsl_b_ostream& is, const BaseClass* b);
 
-  //: Prints summary of object state to stream given base class pointer
+  // : Prints summary of object state to stream given base class pointer
   //  Determines which derived class object is
   //  and calls the appropriate print summary function.
   //  (Class must be one given to Loader by the add method).
   //  If b==0, a suitable string will be saved
   void print_object_summary( vcl_ostream& os, const BaseClass* b);
+
 };
 
-
 #if 0
-//: Loads object and sets base class pointer
+// : Loads object and sets base class pointer
 //  Determines which derived class object on bfs belongs
 //  to, loads it and sets b to be a pointer to it.
 //  (Class must be one given to Loader by the append method).
 //  If bfs indicates a NULL pointer, b will be set to NULL.
 //  If b not initially NULL, *b will be deleted.
-inline void vsl_b_read( vsl_b_istream& bfs, BaseClass*& b)
+inline void vsl_b_read( vsl_b_istream& bfs, BaseClass *& b)
 {
-  vsl_clipon_binary_loader<BaseClass,BaseClassIO>::
-    instance().load_object(bfs,b);
+  vsl_clipon_binary_loader<BaseClass, BaseClassIO>::
+  instance().load_object(bfs, b);
 }
+
 #endif // 0
 
 #endif // vsl_clipon_binary_loader_h_

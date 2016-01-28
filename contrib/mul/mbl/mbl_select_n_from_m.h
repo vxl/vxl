@@ -1,13 +1,13 @@
 #ifndef mbl_select_n_from_m_h_
 #define mbl_select_n_from_m_h_
-//:
+// :
 // \file
 // \brief A class which returns an N element subset of the integers [0..M-1]
 // \author Tim Cootes
 
 #include <mbl/mbl_random_n_from_m.h>
 
-//: A class which returns an N element subset of the integers [0..M-1]
+// : A class which returns an N element subset of the integers [0..M-1]
 // By default it systematically steps through all combinations of choosing
 // N integers from a set of 0..M-1
 // Thus when N=1 repeated calls to subset() return 1,2,3,4,...,M
@@ -29,51 +29,51 @@
 // \endcode
 class mbl_select_n_from_m
 {
- private:
+private:
   unsigned int n_;
   unsigned int m_;
-  bool is_done_;
-  bool use_random_;
+  bool         is_done_;
+  bool         use_random_;
 
   vcl_vector<int> index_;
   vcl_vector<int> not_index_;
 
   mbl_random_n_from_m random_;
+public:
 
- public:
-
-  //: Dflt ctor
+  // : Dflt ctor
   mbl_select_n_from_m();
 
-  //: Construct to select n from m
+  // : Construct to select n from m
   mbl_select_n_from_m(unsigned int n, unsigned int m);
 
-  //: Construct to select n from m
+  // : Construct to select n from m
   void set_n_m(unsigned int new_n, unsigned int new_m);
 
-  //: If true then use random subsets
+  // : If true then use random subsets
   void use_random(bool flag);
 
-  //: Reseed randomiser
+  // : Reseed randomiser
   void reseed(long);
 
-  //: Reset to first example. Returns true if there is a valid first example.
+  // : Reset to first example. Returns true if there is a valid first example.
   bool reset();
 
-  //: Generate next set.  Return true until all combinations exhausted.
+  // : Generate next set.  Return true until all combinations exhausted.
   bool next();
 
-  //: Returns true when all sets enumerated
+  // : Returns true when all sets enumerated
   //  Never returns true when random subsets being chosen
   bool is_done() const { return is_done_; }
 
-  //: Current subset of n from m.
+  // : Current subset of n from m.
   //  is_done() should not be true when this function is being called
-  const vcl_vector<int>& subset() const;
+  const vcl_vector<int> & subset() const;
 
-  //: Sub-set not chosen (m-n) from m.
+  // : Sub-set not chosen (m-n) from m.
   //  is_done() should not be true when this function is being called
-  const vcl_vector<int>& complement();
+  const vcl_vector<int> & complement();
+
 };
 
 #endif // mbl_select_n_from_m_h_

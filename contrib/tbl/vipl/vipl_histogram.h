@@ -1,7 +1,7 @@
 // This is tbl/vipl/vipl_histogram.h
 #ifndef vipl_histogram_h_
 #define vipl_histogram_h_
-//:
+// :
 // \file
 // \brief pixel value histogram of 2D image
 //
@@ -18,7 +18,7 @@
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-//: Pixel value histogram of 2D image.
+// : Pixel value histogram of 2D image.
 //   This image processing class creates a pixel value histogram of a 2D image
 //   and writes it into a "1D" image (actually a row of a 2D image).
 //   It is implemented using the vipl filters,
@@ -72,57 +72,60 @@
 //   consistency and allow one to chose which "column" in the 2D output image
 //   was used to store the histogram.
 //
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+template <class ImgIn, class ImgOut, class DataIn, class DataOut,
+          VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter)>
+class vipl_histogram : public vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>
 {
   // -+-+- data members: -+-+-
- public: DataIn scalein_;
- public: DataIn scalein() const { return scalein_; }
- public: DataIn shiftin_;
- public: DataIn shiftin() const { return shiftin_; }
- public: DataOut scaleout_;
- public: DataOut scaleout() const { return scaleout_; }
+public: DataIn scalein_;
+public: DataIn scalein() const { return scalein_; }
+public: DataIn shiftin_;
+public: DataIn shiftin() const { return shiftin_; }
+public: DataOut scaleout_;
+public: DataOut scaleout() const { return scaleout_; }
 
   // the column of 2D "image" do we store the histogram
- public: int indexout_;
- public: int indexout() const { return indexout_; }
- public: bool checkrange_;
- public: bool checkrange() const { return checkrange_; }
+public: int indexout_;
+public: int indexout() const { return indexout_; }
+public: bool checkrange_;
+public: bool checkrange() const { return checkrange_; }
 
   // -+-+- constructors/destructors: -+-+-
- public:
-  inline vipl_histogram(DataIn si=1, DataIn shi=0, DataOut so=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
-           , scalein_(si)
-           , shiftin_(shi)
-           , scaleout_(so)
-           , indexout_(0)
-           , checkrange_(0)
-      {
-        this->put_is_input_driven(true); // get sections from input
-      }
+public:
+  inline vipl_histogram(DataIn si = 1, DataIn shi = 0, DataOut so = 1)
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(),
+    scalein_(si),
+    shiftin_(shi),
+    scaleout_(so),
+    indexout_(0),
+    checkrange_(0)
+  {
+    this->put_is_input_driven(true);     // get sections from input
+  }
 
   inline vipl_histogram(vipl_histogram const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A)
-           , scalein_(A.scalein())
-           , shiftin_(A.shiftin())
-           , scaleout_(A.scaleout())
-           , indexout_(A.indexout_)
-           , checkrange_(A.checkrange_)
-      {
-        this->put_is_input_driven(true); // get sections from input
-      }
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A),
+    scalein_(A.scalein() ),
+    shiftin_(A.shiftin() ),
+    scaleout_(A.scaleout() ),
+    indexout_(A.indexout_),
+    checkrange_(A.checkrange_)
+  {
+    this->put_is_input_driven(true);     // get sections from input
+  }
+
   inline ~vipl_histogram() {}
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
 
-  //: Use the preop stage to zero this histogram.
+  // : Use the preop stage to zero this histogram.
   bool section_preop();
+
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_histogram.txx"
+#  include "vipl_histogram.txx"
 #endif
 
 #endif // vipl_histogram_h_

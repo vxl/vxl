@@ -1,7 +1,7 @@
 // This is brl/bbas/bwm/bwm_command_macros.h
 #ifndef bwm_command_macros_h_
 #define bwm_command_macros_h_
-//:
+// :
 // \file
 // \brief This file defines vgui_command classes for bwm
 // \author Gamze Tunali (gtunali@brown.edu)
@@ -17,15 +17,18 @@
 
 // Macros
 #define MENU_LOAD_TABLEAU(name, tableau_type, menu) menu.add( name, \
-  bwm_tableau_mgr::instance()->load_tableau_by_type(tableau_type).as_pointer())
+                                                              bwm_tableau_mgr::instance()->load_tableau_by_type( \
+                                                                tableau_type).as_pointer() )
 
 #define MENU_ADD_PROCESS_NAME(name, process_name,  menu) menu.add( name, \
-  bwm_process_mgr::instance()->load_process(process_name).as_pointer())
+                                                                   bwm_process_mgr::instance()->load_process( \
+                                                                     process_name).as_pointer() )
 
 #define MENU_TAB_ADD_PROCESS(name, process_name, menu, tab) menu.add(name, \
-  bwm_process_mgr::instance()->load_tab_process(process_name, tab).as_pointer())
+                                                                     bwm_process_mgr::instance()->load_tab_process( \
+                                                                       process_name, tab).as_pointer() )
 
 #define MENU_MENU_ADD_PROCESS(process_name, menu) \
   bwm_process_mgr::instance()->load_menu_process(process_name, menu).as_pointer()
 
-#endif //bwm_command_macros_h_
+#endif // bwm_command_macros_h_

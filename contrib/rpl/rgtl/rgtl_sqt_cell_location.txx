@@ -9,22 +9,22 @@
 
 #include <vcl_iostream.h>
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_sqt_cell_location<D>
-::rgtl_sqt_cell_location(unsigned int face): derived(), face_(face)
+::rgtl_sqt_cell_location(unsigned int face) : derived(), face_(face)
 {
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_sqt_cell_location<D>
-::rgtl_sqt_cell_location(derived const& d, unsigned int face):
+::rgtl_sqt_cell_location(derived const& d, unsigned int face) :
   derived(d), face_(face)
 {
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_sqt_cell_location<D>
 rgtl_sqt_cell_location<D>::get_child(child_index_type child_index) const
@@ -33,41 +33,44 @@ rgtl_sqt_cell_location<D>::get_child(child_index_type child_index) const
                                 this->face_);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 bool operator<(rgtl_sqt_cell_location<D> const& l,
                rgtl_sqt_cell_location<D> const& r)
 {
-  typedef typename rgtl_sqt_cell_location<D>::derived const& super;
+  typedef typename rgtl_sqt_cell_location<D>::derived const & super;
 
   // Order by face first.
-  if(l.face() < r.face()) { return true; }
-  else if(l.face() > r.face()) { return false; }
+  if( l.face() < r.face() ) { return true; }
+  else if( l.face() > r.face() )
+    {
+    return false;
+    }
 
   // Use the cell ordering within a face.
   return static_cast<super>(l) < static_cast<super>(r);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 bool operator==(rgtl_sqt_cell_location<D> const& l,
                 rgtl_sqt_cell_location<D> const& r)
 {
-  typedef typename rgtl_sqt_cell_location<D>::derived const& super;
-  if(l.face() != r.face()) { return false; }
+  typedef typename rgtl_sqt_cell_location<D>::derived const & super;
+  if( l.face() != r.face() ) { return false; }
   return static_cast<super>(l) == static_cast<super>(r);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
-vcl_ostream& operator<<(vcl_ostream& os, rgtl_sqt_cell_location<D> const& cell)
+vcl_ostream & operator<<(vcl_ostream& os, rgtl_sqt_cell_location<D> const& cell)
 {
   // Decompose the face index into axis and side.
-  unsigned int axis = cell.face()>>1;
-  unsigned int side = cell.face()&1;
+  unsigned int axis = cell.face() >> 1;
+  unsigned int side = cell.face() & 1;
 
   // Print the face axis.
-  switch(axis)
+  switch( axis )
     {
     case 0: os << "X"; break;
     case 1: os << "Y"; break;
@@ -76,21 +79,18 @@ vcl_ostream& operator<<(vcl_ostream& os, rgtl_sqt_cell_location<D> const& cell)
     }
 
   // Print the face side.
-  os << (side? "+" : "-");
+  os << (side ? "+" : "-");
 
   // Print the quad-tree cell location.
-  typedef typename rgtl_sqt_cell_location<D>::derived const& super;
+  typedef typename rgtl_sqt_cell_location<D>::derived const & super;
   return os << static_cast<super>(cell);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 #define RGTL_SQT_CELL_LOCATION_INSTANTIATE(D) \
-  template class rgtl_sqt_cell_location< D >; \
-  template bool operator<(rgtl_sqt_cell_location< D > const&, \
-                          rgtl_sqt_cell_location< D > const&); \
-  template bool operator==(rgtl_sqt_cell_location< D > const&, \
-                           rgtl_sqt_cell_location< D > const&); \
-  template vcl_ostream& operator<<(vcl_ostream&, \
-                                   rgtl_sqt_cell_location< D > const&)
+  template class rgtl_sqt_cell_location<D>; \
+  template bool operator<(rgtl_sqt_cell_location<D> const &, rgtl_sqt_cell_location<D> const &); \
+  template bool operator==(rgtl_sqt_cell_location<D> const &, rgtl_sqt_cell_location<D> const &); \
+  template vcl_ostream & operator<<(vcl_ostream &, rgtl_sqt_cell_location<D> const &)
 
 #endif

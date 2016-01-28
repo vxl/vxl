@@ -1,5 +1,5 @@
 // This is contrib/brl/bseg/boxm2/volm/exe/boxm2_volumetric_pinpoint.cxx
-//:
+// :
 // \file
 // \executable to generate pin-pointed candidate regions given the volm_matcher score binary
 // \author Yi Dong
@@ -33,59 +33,71 @@ static void error_report(vcl_string const& error_file, vcl_string const& error_m
 
 // check whether the given point is inside the polygon (avoid using polygon contain method because we may have overlapped sheets)
 static bool is_contained(vgl_polygon<double> const& polygon, vgl_point_3d<double> const& pt);
+
 // generate a circle (points of lat/lon) given the center (lat/lon) and the radius value (in meters)
-static bool generate_pin_point_circle(vgl_point_3d<double> const& center, double const& radius, vcl_vector<vgl_point_2d<double> >& circle);
+static bool generate_pin_point_circle(vgl_point_3d<double> const& center, double const& radius,
+                                      vcl_vector<vgl_point_2d<double> >& circle);
+
 // obtain camera angles from camera space and camera id
-static bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni, unsigned const& nj, vcl_vector<unsigned> cam_ids,
-                                   vcl_vector<cam_angles>& top_cameras, vcl_vector<double>& right_fovs);
+static bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni, unsigned const& nj,
+                                   vcl_vector<unsigned> cam_ids, vcl_vector<cam_angles>& top_cameras,
+                                   vcl_vector<double>& right_fovs);
 
 class pin_pt_loc
 {
 public:
   // constructor
-  pin_pt_loc() : loc_(vgl_point_3d<double>(0.0,0.0,0.0)), cam_id_(0) {}
+  pin_pt_loc() : loc_(vgl_point_3d<double>(0.0, 0.0, 0.0) ), cam_id_(0) {}
   pin_pt_loc(vgl_point_3d<double> const& loc, unsigned const& cam_id) : loc_(loc), cam_id_(cam_id) {}
   // destructor
   ~pin_pt_loc() {}
 
   vgl_point_3d<double> loc_;
-  unsigned cam_id_;
+  unsigned             cam_id_;
   void print()
-  { vcl_cout << " loc = [" << vcl_setprecision(5) << vcl_fixed << loc_.x() << ", "
-                          << vcl_setprecision(5) << vcl_fixed << loc_.y() << "], cam_id = " << cam_id_ << '\n';
+  {
+    vcl_cout << " loc = [" << vcl_setprecision(5) << vcl_fixed << loc_.x() << ", "
+             << vcl_setprecision(5) << vcl_fixed << loc_.y() << "], cam_id = " << cam_id_ << '\n';
   }
+
 };
 
-//typedef vcl_multimap<float, pin_pt_loc, vcl_greater<float> > mymap;
+// typedef vcl_multimap<float, pin_pt_loc, vcl_greater<float> > mymap;
 
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
-  vul_arg<vcl_string> out_kml("-out", "output kml file which stores the pin-pointed locations","");
-  vul_arg<vcl_string> world_str("-world", "ROI world string, can be desert/coast/Chile/India/Jordan/Philippines/Taiwan","");
+  vul_arg<vcl_string> out_kml("-out", "output kml file which stores the pin-pointed locations", "");
+  vul_arg<vcl_string> world_str("-world", "ROI world string, can be desert/coast/Chile/India/Jordan/Philippines/Taiwan",
+                                "");
   vul_arg<vcl_string> score_folder("-score", "folder where score binaries reside", "");
-  vul_arg<bool>       is_cam("-is_cam", "option to choose whether we write the camera into kml as photo overlay", false);
-  vul_arg<vcl_string> cam_bin("-cam", "camera space binary","");
+  vul_arg<bool>       is_cam("-is_cam", "option to choose whether we write the camera into kml as photo overlay",
+                             false);
+  vul_arg<vcl_string> cam_bin("-cam", "camera space binary", "");
   vul_arg<vcl_string> query_img("-img", "query image size", "");
   vul_arg<vcl_string> geo_folder("-geo", "geo location database", "");
-  vul_arg<vcl_string> candidate_list("-cand", "candidate list used during matching for search space reduction, if existed","");
+  vul_arg<vcl_string> candidate_list("-cand",
+                                     "candidate list used during matching for search space reduction, if existed", "");
   vul_arg<double>     radius("-radius", "pin-point circle radius (in meter)", 100.0);
   vul_arg<unsigned>   num_top_locs("-num-locs", "number of desired pinning points", 100);
   vul_arg<vcl_string> score_str("-score-str", "string for different score binary filename", "ps_1");
   vul_arg_parse(argc, argv);
 
   // input check
-  if (out_kml().compare("") == 0 || world_str().compare("") == 0 || score_folder().compare("") == 0 || geo_folder().compare("") == 0)
-  {
+  if( out_kml().compare("") == 0 || world_str().compare("") == 0 || score_folder().compare("") == 0 ||
+      geo_folder().compare("") == 0 )
+    {
     vul_arg_display_usage_and_exit();  return volm_io::EXE_ARGUMENT_ERROR;
-  }
-  if (is_cam()) {
-    if (cam_bin().compare("") == 0 || query_img().compare("") == 0) {
+    }
+  if( is_cam() )
+    {
+    if( cam_bin().compare("") == 0 || query_img().compare("") == 0 )
+      {
       vcl_cerr << " to generate camera photo overlay, query image and camera space binary is required!\n";
       return volm_io::EXE_ARGUMENT_ERROR;
+      }
     }
-  }
 
-  vcl_string log_file = vul_file::strip_extension(out_kml()) + ".xml";
+  vcl_string       log_file = vul_file::strip_extension(out_kml() ) + ".xml";
   vcl_stringstream log;
   vcl_cout << "log_file = " << log_file << vcl_endl;
   vcl_cout << "out_kml = " << out_kml() << vcl_endl;
@@ -97,145 +109,184 @@ int main(int argc, char** argv)
 
   // generate tiles
   vcl_vector<volm_tile> tiles;
-  if (world_str().compare("desert") == 0)            tiles = volm_tile::generate_p1_wr1_tiles();
-  else if (world_str().compare("coast") == 0)        tiles = volm_tile::generate_p1_wr2_tiles();
-  else if (world_str().compare("Chile") == 0)        tiles = volm_tile::generate_p1b_wr1_tiles();
-  else if (world_str().compare("India") == 0)        tiles = volm_tile::generate_p1b_wr2_tiles();
-  else if (world_str().compare("Jordan") == 0)       tiles = volm_tile::generate_p1b_wr3_tiles();
-  else if (world_str().compare("Philippines") == 0)  tiles = volm_tile::generate_p1b_wr4_tiles();
-  else if (world_str().compare("Taiwan") == 0)       tiles = volm_tile::generate_p1b_wr5_tiles();
-  else {
+  if( world_str().compare("desert") == 0 ) {tiles = volm_tile::generate_p1_wr1_tiles(); }
+  else if( world_str().compare("coast") == 0 )
+    {
+    tiles = volm_tile::generate_p1_wr2_tiles();
+    }
+  else if( world_str().compare("Chile") == 0 )
+    {
+    tiles = volm_tile::generate_p1b_wr1_tiles();
+    }
+  else if( world_str().compare("India") == 0 )
+    {
+    tiles = volm_tile::generate_p1b_wr2_tiles();
+    }
+  else if( world_str().compare("Jordan") == 0 )
+    {
+    tiles = volm_tile::generate_p1b_wr3_tiles();
+    }
+  else if( world_str().compare("Philippines") == 0 )
+    {
+    tiles = volm_tile::generate_p1b_wr4_tiles();
+    }
+  else if( world_str().compare("Taiwan") == 0 )
+    {
+    tiles = volm_tile::generate_p1b_wr5_tiles();
+    }
+  else
+    {
     log << "ERROR: unknown world region, should be \" desert, coast, Chile, India, Jordan, Philippines, Taiwan\"\n";
-    error_report(log_file, log.str());
+    error_report(log_file, log.str() );
     return volm_io::EXE_ARGUMENT_ERROR;
-  }
+    }
 
   // check whether we have candidate list for the given query
-  bool is_candidate = false;
+  bool                is_candidate = false;
   vgl_polygon<double> cand_poly;
-  if (vul_file::exists(candidate_list())) {
+  if( vul_file::exists(candidate_list() ) )
+    {
     is_candidate = true;
-    cand_poly = bkml_parser::parse_polygon(candidate_list());
+    cand_poly = bkml_parser::parse_polygon(candidate_list() );
     vcl_cout << "parse candidate list from file: " << candidate_list() << vcl_endl;
     vcl_cout << "number of sheet in the candidate poly: " << cand_poly.num_sheets() << vcl_endl;
-  }
+    }
 
   // loop over each tile to load the score and sort them
   vcl_cout << "Start to sort all matched locations based on their matching score" << vcl_endl;
   vcl_multimap<float, pin_pt_loc, vcl_greater<float> > score_map;
-  unsigned cnt=0;
-  for (unsigned t_idx = 0; t_idx < tiles.size(); t_idx++) {
+  unsigned                                             cnt = 0;
+  for( unsigned t_idx = 0; t_idx < tiles.size(); t_idx++ )
+    {
     volm_tile tile = tiles[t_idx];
     // load the geo location database
     vcl_stringstream file_name_pre;
     file_name_pre << geo_folder() << "geo_index_tile_" << t_idx;
     // no geo location for current tile, skip
-    if (!vul_file::exists(file_name_pre.str() + ".txt"))
+    if( !vul_file::exists(file_name_pre.str() + ".txt") )
+      {
       continue;
-    float min_size;
+      }
+    float                    min_size;
     volm_geo_index_node_sptr hyp_root = volm_geo_index::read_and_construct(file_name_pre.str() + ".txt", min_size);
-    volm_geo_index::read_hyps(hyp_root, file_name_pre.str());
-    if (is_candidate)
+    volm_geo_index::read_hyps(hyp_root, file_name_pre.str() );
+    if( is_candidate )
+      {
       volm_geo_index::prune_tree(hyp_root, cand_poly);
+      }
     vcl_vector<volm_geo_index_node_sptr> leaves;
     volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
-    vcl_cout << "For tile " << t_idx << ", location database is loaded with " << leaves.size() << " leaves having locations" << vcl_endl;
+    vcl_cout << "For tile " << t_idx << ", location database is loaded with " << leaves.size()
+             << " leaves having locations" << vcl_endl;
     // load score binary from output folder
     vcl_stringstream score_bin;
     score_bin << score_folder() << score_str() << "_scores_tile_" << t_idx << ".bin";
-    if (!vul_file::exists(score_bin.str())) {
+    if( !vul_file::exists(score_bin.str() ) )
+      {
       vcl_cout << " score file: " << score_bin.str() << " does NOT exist, ignore..." << vcl_endl;
       continue;
-    }
+      }
     cnt++;
     vcl_vector<volm_score_sptr> scores;
-    volm_score::read_scores(scores, score_bin.str());
+    volm_score::read_scores(scores, score_bin.str() );
     // sort all the score data
     vcl_cout << scores.size() << " scores is loaded from " << score_bin.str() << vcl_endl;
     unsigned total_ind = (unsigned)scores.size();
-    for (unsigned i = 0; i < total_ind; i++) {
-      vgl_point_3d<double> h_pt = leaves[scores[i]->leaf_id_]->hyps_->locs_[scores[i]->hypo_id_];
-      vcl_pair<float, pin_pt_loc> tmp_pair(scores[i]->max_score_, pin_pt_loc(h_pt, scores[i]->max_cam_id_));
+    for( unsigned i = 0; i < total_ind; i++ )
+      {
+      vgl_point_3d<double>        h_pt = leaves[scores[i]->leaf_id_]->hyps_->locs_[scores[i]->hypo_id_];
+      vcl_pair<float, pin_pt_loc> tmp_pair(scores[i]->max_score_, pin_pt_loc(h_pt, scores[i]->max_cam_id_) );
       score_map.insert(tmp_pair);
+      }
     }
-  }
 
   // generate pin point locations from sorted score map
   vcl_cout << "There are " << score_map.size() << " locations has been matched from " << cnt << " tiles" << vcl_endl;
 #if 0
   cnt = 0;
-  for (vcl_map<float, pin_pt_loc>::iterator mit = score_map.begin();  mit != score_map.end();  ++mit) {
+  for( vcl_map<float, pin_pt_loc>::iterator mit = score_map.begin();  mit != score_map.end();  ++mit )
+    {
     vcl_cout << "rank: " << cnt++ << ", score = " << mit->first;  mit->second.print();
-  }
+    }
 #endif
-  vcl_cout << "Start to generate " << num_top_locs() << " pin points out of " << score_map.size() << " matched locations..." << vcl_flush << vcl_endl;
-  vgl_polygon<double> pin_pt_poly;  // contains all the pin point region.  Each sheet represents a pin-pointed circle in wgs84 unit
-  vcl_vector<vgl_point_2d<double> > top_locs;
-  vcl_vector<float> likelihood;
-  vcl_vector<unsigned> cam_ids;
+  vcl_cout << "Start to generate " << num_top_locs() << " pin points out of " << score_map.size()
+           << " matched locations..." << vcl_flush << vcl_endl;
+  vgl_polygon<double>                                            pin_pt_poly; // contains all the pin point region.  Each sheet represents a pin-pointed circle in wgs84 unit
+  vcl_vector<vgl_point_2d<double> >                              top_locs;
+  vcl_vector<float>                                              likelihood;
+  vcl_vector<unsigned>                                           cam_ids;
   vcl_multimap<float, pin_pt_loc, vcl_greater<float> >::iterator mit = score_map.begin();
-  while (pin_pt_poly.num_sheets() < num_top_locs() && mit != score_map.end())
-  {
+  while( pin_pt_poly.num_sheets() < num_top_locs() && mit != score_map.end() )
+    {
     // check whether the location has been in the pin-pointed region
-    if (is_contained(pin_pt_poly, mit->second.loc_)) {
-      //vcl_cout << "location " << mit->second.loc_ << " is inside the created pinpoint region, ignored..." << vcl_endl;
+    if( is_contained(pin_pt_poly, mit->second.loc_) )
+      {
+      // vcl_cout << "location " << mit->second.loc_ << " is inside the created pinpoint region, ignored..." << vcl_endl;
       ++mit;
       continue;
-    }
+      }
     // generate a pin-point region for current location
     likelihood.push_back(mit->first);
     cam_ids.push_back(mit->second.cam_id_);
-    top_locs.push_back(vgl_point_2d<double>(mit->second.loc_.x(), mit->second.loc_.y()));
+    top_locs.push_back(vgl_point_2d<double>(mit->second.loc_.x(), mit->second.loc_.y() ) );
     vcl_vector<vgl_point_2d<double> > circle;
-    if (!generate_pin_point_circle(mit->second.loc_, radius(), circle))
-    {
+    if( !generate_pin_point_circle(mit->second.loc_, radius(), circle) )
+      {
       log << "ERROR: generating pin point circle for location " << mit->second.loc_ << " failed!\n";
-      error_report(log_file, log.str());
+      error_report(log_file, log.str() );
       return volm_io::EXE_ARGUMENT_ERROR;
-    }
+      }
     pin_pt_poly.push_back(circle);
     ++mit;
-  }
+    }
 
-  vcl_cout << pin_pt_poly.num_sheets() << " pin points are created out of " << score_map.size() << " matcher locations" << vcl_endl;
+  vcl_cout << pin_pt_poly.num_sheets() << " pin points are created out of " << score_map.size()
+           << " matcher locations" << vcl_endl;
 
   vcl_vector<cam_angles> top_cameras;
-  vcl_vector<double> right_fovs;
-  if (is_cam())
-  {
+  vcl_vector<double>     right_fovs;
+  if( is_cam() )
+    {
     // load camera space
-    if (!vul_file::exists(cam_bin())) {
+    if( !vul_file::exists(cam_bin() ) )
+      {
       log << "ERROR: can not find camera space binary: " << cam_bin() << '\n';
-      error_report(log_file, log.str());
+      error_report(log_file, log.str() );
       return volm_io::EXE_ARGUMENT_ERROR;
-    }
-    vsl_b_ifstream cam_ifs(cam_bin());
+      }
+    vsl_b_ifstream         cam_ifs(cam_bin() );
     volm_camera_space_sptr cam_space = new volm_camera_space();
     cam_space->b_read(cam_ifs);
     cam_ifs.close();
     // load query image
-    vil_image_resource_sptr query_image = vil_load_image_resource(query_img().c_str());
-    unsigned ni = query_image->ni();  unsigned nj = query_image->nj();
-    if (!generate_camera_angles(cam_space, ni, nj, cam_ids, top_cameras, right_fovs)) {
+    vil_image_resource_sptr query_image = vil_load_image_resource(query_img().c_str() );
+    unsigned                ni = query_image->ni();  unsigned nj = query_image->nj();
+    if( !generate_camera_angles(cam_space, ni, nj, cam_ids, top_cameras, right_fovs) )
+      {
       log << "ERROR: obtain camera angle from camera space failed!, check camera ids in score binary\n";
-      error_report(log_file, log.str());
+      error_report(log_file, log.str() );
       return volm_io::EXE_ARGUMENT_ERROR;
+      }
     }
-  }
-  else {
-    for (unsigned i = 0; i < pin_pt_poly.num_sheets(); i++) {
-      top_cameras.push_back(cam_angles(0.0, 1.0, 0.0, 90.0));
+  else
+    {
+    for( unsigned i = 0; i < pin_pt_poly.num_sheets(); i++ )
+      {
+      top_cameras.push_back(cam_angles(0.0, 1.0, 0.0, 90.0) );
       right_fovs.push_back(1.0);
+      }
     }
-  }
 
   // write the pin-point to kml file
-  vcl_ofstream ofs_kml(out_kml().c_str());
-  vcl_string kml_name = vul_file::strip_extension(vul_file::strip_directory(out_kml()));
-  volm_candidate_list::open_kml_document(ofs_kml, kml_name, (float)num_top_locs());
+  vcl_ofstream ofs_kml(out_kml().c_str() );
+  vcl_string   kml_name = vul_file::strip_extension(vul_file::strip_directory(out_kml() ) );
+  volm_candidate_list::open_kml_document(ofs_kml, kml_name, (float)num_top_locs() );
   unsigned rank = 0;
-  for (unsigned i = 0; i < pin_pt_poly.num_sheets(); i++)
-    volm_candidate_list::write_kml_regions(ofs_kml, pin_pt_poly[i], top_locs[i], top_cameras[i], right_fovs[i], likelihood[i], rank++);
+  for( unsigned i = 0; i < pin_pt_poly.num_sheets(); i++ )
+    {
+    volm_candidate_list::write_kml_regions(ofs_kml, pin_pt_poly[i], top_locs[i], top_cameras[i], right_fovs[i],
+                                           likelihood[i], rank++);
+    }
   volm_candidate_list::close_kml_document(ofs_kml);
 
   return volm_io::SUCCESS;
@@ -243,54 +294,60 @@ int main(int argc, char** argv)
 
 bool is_contained(vgl_polygon<double> const& polygon, vgl_point_3d<double> const& pt)
 {
-  vgl_point_2d<double> pt_2d(pt.x(), pt.y());
-  for (unsigned i = 0; i < polygon.num_sheets(); i++)
-  {
+  vgl_point_2d<double> pt_2d(pt.x(), pt.y() );
+  for( unsigned i = 0; i < polygon.num_sheets(); i++ )
+    {
     vgl_polygon<double> single_sheet(polygon[i]);
-    if (single_sheet.contains(pt_2d))
+    if( single_sheet.contains(pt_2d) )
+      {
       return true;
-  }
+      }
+    }
   return false;
 }
 
-bool generate_pin_point_circle(vgl_point_3d<double> const& center, double const& radius, vcl_vector<vgl_point_2d<double> >& circle)
+bool generate_pin_point_circle(vgl_point_3d<double> const& center, double const& radius,
+                               vcl_vector<vgl_point_2d<double> >& circle)
 {
   // construct a local lvcs
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(center.y(), center.x(), 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
-  double deg_to_rad = vnl_math::pi/180.0;
-  double d_theta = 6 * deg_to_rad;
-  double theta = 0;
-  while (theta < vnl_math::twopi)
-  {
+  double         deg_to_rad = vnl_math::pi / 180.0;
+  double         d_theta = 6 * deg_to_rad;
+  double         theta = 0;
+
+  while( theta < vnl_math::twopi )
+    {
     double dx = radius * vcl_cos(theta);
     double dy = radius * vcl_sin(theta);
-    double lon ,lat, gz;
+    double lon, lat, gz;
     lvcs->local_to_global(dx, dy, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
-    circle.push_back(vgl_point_2d<double>(lon, lat));
+    circle.push_back(vgl_point_2d<double>(lon, lat) );
     theta += d_theta;
-  }
+    }
+
   return true;
 }
 
-bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni, unsigned const& nj, vcl_vector<unsigned> cam_ids,
+bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni, unsigned const& nj,
+                            vcl_vector<unsigned> cam_ids,
                             vcl_vector<cam_angles>& top_cameras, vcl_vector<double>& right_fovs)
 {
   top_cameras.clear();
   right_fovs.clear();
-  for (unsigned i = 0; i < cam_ids.size(); i++)
-  {
+  for( unsigned i = 0; i < cam_ids.size(); i++ )
+    {
     cam_angles cam_ang = cam_space->camera_angles(cam_ids[i]);
-    double head = (cam_ang.heading_ < 0) ? cam_ang.heading_ + 360.0 : cam_ang.heading_;
-    double tilt = (cam_ang.tilt_ < 0) ? cam_ang.tilt_ + 360 : cam_ang.tilt_;
-    double roll;
-    if (cam_ang.roll_ * cam_ang.roll_ < 1E-10) roll = 0;
-    else                                       roll = cam_ang.roll_;
+    double     head = (cam_ang.heading_ < 0) ? cam_ang.heading_ + 360.0 : cam_ang.heading_;
+    double     tilt = (cam_ang.tilt_ < 0) ? cam_ang.tilt_ + 360 : cam_ang.tilt_;
+    double     roll;
+    if( cam_ang.roll_ * cam_ang.roll_ < 1E-10 ) {roll = 0; }
+    else {roll = cam_ang.roll_; }
     double tfov = cam_ang.top_fov_;
     double tv_rad = tfov / vnl_math::deg_per_rad;
     double ttr = vcl_tan(tv_rad);
     double rfov = vcl_atan( ni * ttr / nj) * vnl_math::deg_per_rad;
-    top_cameras.push_back(cam_angles(roll, tfov, head, tilt));
+    top_cameras.push_back(cam_angles(roll, tfov, head, tilt) );
     right_fovs.push_back(rfov);
-  }
+    }
   return true;
 }

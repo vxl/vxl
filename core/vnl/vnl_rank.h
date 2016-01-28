@@ -1,7 +1,7 @@
 // This is core/vnl/vnl_rank.h
 #ifndef vnl_rank_h_
 #define vnl_rank_h_
-//:
+// :
 //  \file
 //  \author Peter Vanroose, Leuven
 //  \date   27 March 2003
@@ -16,17 +16,17 @@
 #include <vnl/vnl_matrix.h>
 
 typedef enum { vnl_rank_row, vnl_rank_column, vnl_rank_both } vnl_rank_type;
-typedef enum { vnl_rank_pivot_one, vnl_rank_pivot_all } vnl_rank_pivot_type;
+typedef enum { vnl_rank_pivot_one, vnl_rank_pivot_all }       vnl_rank_pivot_type;
 
-//: Returns the rank of a matrix
+// : Returns the rank of a matrix
 //  By default, the row rank of the matrix is determined.
 //  Specify vnl_rank_column to obtain the column rank.
 //
 // \relatesalso vnl_matrix
 template <class T>
-unsigned int vnl_rank(vnl_matrix<T> const& mat, vnl_rank_type = vnl_rank_both);
+unsigned int vnl_rank(vnl_matrix<T> const & mat, vnl_rank_type = vnl_rank_both);
 
-//: Row reduce a matrix.
+// : Row reduce a matrix.
 //  First try to use 1 or -1 as pivot element in each row, to avoid divisions;
 //  then use any nonzero element as candidate pivot.
 //  Repeat this process until the matrix does not change any more.
@@ -42,18 +42,18 @@ unsigned int vnl_rank(vnl_matrix<T> const& mat, vnl_rank_type = vnl_rank_both);
 // \relatesalso vnl_matrix
 //
 template <class T>
-vnl_matrix<T> vnl_rank_row_reduce(vnl_matrix<T> const& mat,
+vnl_matrix<T> vnl_rank_row_reduce(vnl_matrix<T> const & mat,
                                   vnl_rank_pivot_type = vnl_rank_pivot_all);
 
-//: Column reduce a matrix.
+// : Column reduce a matrix.
 //
 // \relatesalso vnl_matrix
 //
 template <class T>
-vnl_matrix<T> vnl_rank_column_reduce(vnl_matrix<T> const& mat,
+vnl_matrix<T> vnl_rank_column_reduce(vnl_matrix<T> const & mat,
                                      vnl_rank_pivot_type = vnl_rank_pivot_all);
 
-//: Row and column reduce a matrix.
+// : Row and column reduce a matrix.
 //  Perform both row reduction and column reduction on a matrix.
 //  The resulting matrix will in general no longer span the same row space
 //  (or column space) as the original matrix, but the rank will not have
@@ -63,7 +63,7 @@ vnl_matrix<T> vnl_rank_column_reduce(vnl_matrix<T> const& mat,
 // \relatesalso vnl_matrix
 //
 template <class T>
-vnl_matrix<T> vnl_rank_row_column_reduce(vnl_matrix<T> const& mat,
+vnl_matrix<T> vnl_rank_row_column_reduce(vnl_matrix<T> const & mat,
                                          vnl_rank_pivot_type = vnl_rank_pivot_all);
 
 #define VNL_RANK_INSTANTIATE(T) extern "please #include vnl/vnl_rank.txx instead"

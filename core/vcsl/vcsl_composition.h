@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_composition.h
 #ifndef vcsl_composition_h_
 #define vcsl_composition_h_
-//:
+// :
 // \file
 // \brief Composition of transformations
 // \author Francois BERTEL
@@ -18,16 +18,16 @@
 #include <vcsl/vcsl_composition_sptr.h>
 #include <vcl_vector.h>
 
-//: Composition of transformations
+// : Composition of transformations
 // This transformation handles a composition of transformations, that is,
 // at a given time, all the transformations are applied on a given point
 class vcsl_composition
-  :public vcsl_spatial_transformation
+  : public vcsl_spatial_transformation
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor
   vcsl_composition() {}
@@ -35,47 +35,46 @@ class vcsl_composition
   // Destructor
   virtual ~vcsl_composition() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Is `this' invertible at time `time'?
+  // : Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
   virtual bool is_invertible(double time) const;
 
-  //: Is `this' correctly set ?
+  // : Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
   virtual bool is_valid() const;
 
-  //: Return the list of transformations
+  // : Return the list of transformations
   vcl_vector<vcsl_spatial_transformation_sptr> composition() const { return transformations_; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status setting
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Set the list of transformations of the composition
+  // : Set the list of transformations of the composition
   //  The transformations are performed in the order of the list
-  void set_composition(vcl_vector<vcsl_spatial_transformation_sptr> const& t) { transformations_=t; }
+  void set_composition(vcl_vector<vcsl_spatial_transformation_sptr> const& t) { transformations_ = t; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Basic operations
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Image of `v' by `this'
+  // : Image of `v' by `this'
   //  REQUIRE: is_valid()
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  virtual vnl_vector<double> execute(const vnl_vector<double> & v, double time) const;
 
-  //: Image of `v' by the inverse of `this'
+  // : Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
- protected:
+  virtual vnl_vector<double> inverse(const vnl_vector<double> & v, double time) const;
+
+protected:
   vcl_vector<vcsl_spatial_transformation_sptr> transformations_;
 };
 

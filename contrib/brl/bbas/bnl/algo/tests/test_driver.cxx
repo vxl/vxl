@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE(test_legendre_polynomial );
 DECLARE( test_fresnel );
 

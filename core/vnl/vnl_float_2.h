@@ -2,9 +2,9 @@
 #ifndef vnl_float_2_h_
 #define vnl_float_2_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Contains class vnl_float_2
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -19,10 +19,10 @@
 
 #include <vnl/vnl_T_n.h>
 
-//: class vnl_float_2 : a vnl_vector of 2 floats.
-vnl_T_n_impl(float,2);
+// : class vnl_float_2 : a vnl_vector of 2 floats.
+vnl_T_n_impl(float, 2);
 
-//: Cross product of two 2-vectors
+// : Cross product of two 2-vectors
 //  \relatesalso vnl_vector_fixed
 inline
 float vnl_cross_2d(vnl_float_2 const& v1, vnl_float_2 const& v2)

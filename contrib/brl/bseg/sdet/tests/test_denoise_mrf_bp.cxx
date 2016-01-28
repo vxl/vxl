@@ -23,20 +23,22 @@ static void test_denoise_mrf_bp()
   dmbp.n_iter_ = 3;
   dmbp.pyramid_levels_ = 5;
   dmbp.discontinuity_cost_ = 5.0;
-  dmbp.truncation_cost_=400;
+  dmbp.truncation_cost_ = 400;
   dmbp.n_labels_ = 64;
 
-  //dmbp.lambda_=0.000001f;
-  dmbp.lambda_=0.001f;
+  // dmbp.lambda_=0.000001f;
+  dmbp.lambda_ = 0.001f;
 
   sdet_denoise_mrf_bp mbp(dmbp);
   mbp.set_image(depth);   mbp.set_variance(var);
   bool success = mbp.denoise();
-  if (success) {
+  if( success )
+    {
     vil_image_resource_sptr outr = mbp.output();
     vil_save_image_resource(outr,
                             "e:/images/MeshStudies/FixedModelBug/belief_.001.tiff", "tiff");
-  }
+    }
 #endif
 }
+
 TESTMAIN(test_denoise_mrf_bp);

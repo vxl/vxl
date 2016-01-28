@@ -2,9 +2,9 @@
 #ifndef vgl_fit_conics_2d_h_
 #define vgl_fit_conics_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Fits a contiguous set of conic segments to a sampled curve
 // \author J.L. Mundy
@@ -31,47 +31,46 @@ template <class T>
 class vgl_fit_conics_2d
 {
   // Data Members--------------------------------------------------------------
- protected:
-  vcl_vector<vgl_point_2d<T> > curve_;
+protected:
+  vcl_vector<vgl_point_2d<T> >         curve_;
   vcl_vector<vgl_conic_segment_2d<T> > segs_;
-  unsigned int min_length_;
-  T tol_;
- public:
+  unsigned int                         min_length_;
+  T                                    tol_;
+public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  vgl_fit_conics_2d(const unsigned min_length = 10,
-                    const T tol = 0.01);
+  vgl_fit_conics_2d(const unsigned min_length = 10, const T tol = 0.01);
 
   ~vgl_fit_conics_2d() {}
 
   // Operations----------------------------------------------------------------
 
-  //: set parameters
-  void set_min_fit_length(const unsigned min_fit_length){min_length_ = min_fit_length;}
-  void set_rms_error_tol(const T rms_error_tol){tol_ = rms_error_tol;}
+  // : set parameters
+  void set_min_fit_length(const unsigned min_fit_length) {min_length_ = min_fit_length; }
+  void set_rms_error_tol(const T rms_error_tol) {tol_ = rms_error_tol; }
 
-  //: add a point to the curve
-  void add_point(vgl_point_2d<T> const &p);
+  // : add a point to the curve
+  void add_point(vgl_point_2d<T> const & p);
+
   void add_point(const T x, const T y);
 
-  //: add an entire curve
-  void add_curve(vcl_vector<vgl_point_2d<T> > const & curve){curve_=curve;}
+  // : add an entire curve
+  void add_curve(vcl_vector<vgl_point_2d<T> > const & curve) {curve_ = curve; }
 
-  //: clear internal data
+  // : clear internal data
   void clear();
 
-  //: the fitting method
+  // : the fitting method
   bool fit();
 
   // Data Access---------------------------------------------------------------
-  vcl_vector<vgl_point_2d<T> >& get_points(){return curve_;}
-  vcl_vector<vgl_conic_segment_2d<T> >& get_conic_segs(){return segs_;}
+  vcl_vector<vgl_point_2d<T> > & get_points() {return curve_; }
+  vcl_vector<vgl_conic_segment_2d<T> > & get_conic_segs() {return segs_; }
+protected:
+  // : output a conic that fits from start to end
+  void output(const unsigned start_index, const unsigned end_index, vgl_conic<T> const& conic);
 
- protected:
-  //: output a conic that fits from start to end
-  void output(const unsigned start_index, const unsigned end_index,
-              vgl_conic<T> const& conic);
 };
 
 #define VGL_FIT_CONICS_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_fit_conics_2d.txx first"

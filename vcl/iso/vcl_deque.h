@@ -6,9 +6,9 @@
 #include <deque>
 
 #ifdef vcl_generic_deque_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_deque_STD std
+#  define vcl_generic_deque_STD std
 #endif
 
 #include "../generic/vcl_deque.h"

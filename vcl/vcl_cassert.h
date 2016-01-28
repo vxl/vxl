@@ -1,10 +1,10 @@
 // This is vcl/vcl_cassert.h
 
-//- The <cassert> header does not
-//- have inclusion guards. The
-//- C and C++ standards say so.
+// - The <cassert> header does not
+// - have inclusion guards. The
+// - C and C++ standards say so.
 
-//:
+// :
 // \file
 // \author fsm
 
@@ -19,7 +19,6 @@
 //   # define assert(x) do { if (!(x)) vcl_cassert_failure(__FILE__, __LINE__, #x); } while (false)
 //   #endif
 // If the system/compiler version works, use that instead.
-
 
 #if !VCL_CXX_HAS_HEADER_CASSERT
 #  include <assert.h>

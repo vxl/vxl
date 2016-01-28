@@ -5,7 +5,7 @@
 #ifndef rgtl_sqt_cell_bounds_hxx
 #define rgtl_sqt_cell_bounds_hxx
 
-//:
+// :
 // \file
 // \brief Represent the bounding box of a cell on one face of a SQT.
 // \author Brad King
@@ -13,26 +13,27 @@
 
 #include "rgtl_octree_cell_bounds.hxx"
 
-template <unsigned int D> class rgtl_sqt_cell_location;
+template <unsigned int D>
+class rgtl_sqt_cell_location;
 
-//: Represent the bounding box of a cell on one face of a SQT.
+// : Represent the bounding box of a cell on one face of a SQT.
 //
 // The spherical quad-tree root cell on each face always has the same
 // bounds since the cells are defined on a parameter space.  This
 // class encapsulates this knowledge and provides bounds computation
 // without requiring the user to provide root cell bounds.
 template <unsigned int D>
-class rgtl_sqt_cell_bounds: public rgtl_octree_cell_bounds<D-1>
+class rgtl_sqt_cell_bounds : public rgtl_octree_cell_bounds<D - 1>
 {
 public:
-  //: The type from which this class derives.
-  typedef rgtl_octree_cell_bounds<D-1> derived;
+  // : The type from which this class derives.
+  typedef rgtl_octree_cell_bounds<D - 1> derived;
 
-  //: Construct the bounds for a logical cell location.
+  // : Construct the bounds for a logical cell location.
   rgtl_sqt_cell_bounds(rgtl_sqt_cell_location<D> const& cell);
-
 private:
   static derived root_bounds();
+
 };
 
 #endif

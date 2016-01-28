@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_normalize_image_process.h
 #ifndef bvxm_normalize_image_process_h_
 #define bvxm_normalize_image_process_h_
-//:
+// :
 // \file
 // \brief A process for contrast normalization of images using a voxel world.
 //  CAUTION: Input image is assumed to have type vxl_byte
@@ -33,40 +33,40 @@
 // global variables/functions for bvxm_normalize_image_process_globals
 namespace bvxm_normalize_image_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 3;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 3;
 
-  // normalized image = a*(original_image) +b;
-  const vcl_string param_a_start_= "a_start";
-  const vcl_string param_a_inc_ = "a_inc";
-  const vcl_string param_a_end_ = "a_end";
-  const vcl_string param_b_start_ = "b_start";
-  const vcl_string param_b_end_ = "b_end";
-  const vcl_string param_b_ratio_ = "b_ration";
-  const vcl_string param_verbose_ = "verbose";
+// normalized image = a*(original_image) +b;
+const vcl_string param_a_start_ = "a_start";
+const vcl_string param_a_inc_ = "a_inc";
+const vcl_string param_a_end_ = "a_end";
+const vcl_string param_b_start_ = "b_start";
+const vcl_string param_b_end_ = "b_end";
+const vcl_string param_b_ratio_ = "b_ration";
+const vcl_string param_verbose_ = "verbose";
 
-  // initialize variables that hold paramerters.
-  float a_start_ = 0.6f;
-  float a_inc_ = 0.05f;
-  float a_end_ = 1.8f;
-  float b_start_ = 100.0f/255.0f;
-  float b_end_ = 5.0f/255.0f;
-  float b_ratio_ = 0.5f;
-  bool verbose_ = false;
+// initialize variables that hold paramerters.
+float a_start_ = 0.6f;
+float a_inc_ = 0.05f;
+float a_end_ = 1.8f;
+float b_start_ = 100.0f / 255.0f;
+float b_end_ = 5.0f / 255.0f;
+float b_ratio_ = 0.5f;
+bool  verbose_ = false;
 
-  // other global variables
-  unsigned ni_= 0;
-  unsigned nj_= 0;
-  unsigned nplanes_=0;
+// other global variables
+unsigned ni_ = 0;
+unsigned nj_ = 0;
+unsigned nplanes_ = 0;
 
-  // this processes functions
-  template <bvxm_voxel_type APM_T>
-  bool norm_parameters(vil_image_view_base_sptr const& input_img,vil_image_view<float>*& input_img_float_stretched,
-                       bvxm_voxel_slab_base_sptr const& mog_image,
-                       float& a, float& b);
+// this processes functions
+template <bvxm_voxel_type APM_T>
+bool norm_parameters(vil_image_view_base_sptr const& input_img, vil_image_view<float> *& input_img_float_stretched,
+                     bvxm_voxel_slab_base_sptr const& mog_image, float& a, float& b);
+
 }
 
-//: sets input and output types for bvxm_create_normalized_nplanes_image_process
+// : sets input and output types for bvxm_create_normalized_nplanes_image_process
 bool bvxm_normalize_image_process_cons(bprb_func_process& pro);
 
 bool bvxm_normalize_image_process(bprb_func_process& pro);

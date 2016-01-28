@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_transform );
 DECLARE( test_roi );
 DECLARE( test_matcher );
@@ -22,5 +21,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-

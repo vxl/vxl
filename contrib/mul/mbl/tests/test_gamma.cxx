@@ -9,10 +9,10 @@ void test_gamma()
            << " Testing mbl_gamma\n"
            << "*******************\n";
 
-  TEST_NEAR("mbl_gamma_p(2,0)",      mbl_gamma_p(2,0),            0,  1e-8);
-  TEST_NEAR("mbl_gamma_p(2,inf)",    mbl_gamma_p(2,1e9),        1.0,  1e-8);
-  TEST_NEAR("mbl_gamma_q(2,0)",      mbl_gamma_q(2,0),          1.0,  1e-8);
-  TEST_NEAR("mbl_gamma_q(2,inf)",    mbl_gamma_q(2,1e9),          0,  1e-8);
+  TEST_NEAR("mbl_gamma_p(2,0)",      mbl_gamma_p(2, 0),            0,  1e-8);
+  TEST_NEAR("mbl_gamma_p(2,inf)",    mbl_gamma_p(2, 1e9),        1.0,  1e-8);
+  TEST_NEAR("mbl_gamma_q(2,0)",      mbl_gamma_q(2, 0),          1.0,  1e-8);
+  TEST_NEAR("mbl_gamma_q(2,inf)",    mbl_gamma_q(2, 1e9),          0,  1e-8);
   TEST_NEAR("mbl_erf(0)",            mbl_erf(0),                  0,  1e-8);
   TEST_NEAR("mbl_erf(inf)",          mbl_erf(1e9),              1.0,  1e-8);
   TEST_NEAR("mbl_erf(-inf)",         mbl_erf(-1e9),            -1.0,  1e-8);

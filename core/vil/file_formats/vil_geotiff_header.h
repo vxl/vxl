@@ -2,9 +2,9 @@
 #ifndef vil_geotiff_header_h_
 #define vil_geotiff_header_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author    Gamze Tunali
 // \date      Jan 31, 2007
@@ -26,9 +26,9 @@
 
 class vil_geotiff_header
 {
- public:
+public:
 
-  typedef enum {UNDEF=-1, NORTH=0, SOUTH=1} GTIF_HEMISPH;
+  typedef enum { UNDEF = -1, NORTH = 0, SOUTH = 1 } GTIF_HEMISPH;
   vil_geotiff_header(TIFF* tif);
 
   // destructor frees up gtif
@@ -36,33 +36,31 @@ class vil_geotiff_header
 
   int gtif_number_of_keys() const { return number_of_geokeys_; }
 
-  bool gtif_tiepoints(vcl_vector<vcl_vector<double> > &tiepoints);
+  bool gtif_tiepoints(vcl_vector<vcl_vector<double> > & tiepoints);
 
-  bool gtif_pixelscale(double &scale_x, double &scale_y, double &scale_z);
+  bool gtif_pixelscale(double & scale_x, double & scale_y, double & scale_z);
 
-  //:returns the matrix in the argument
-  bool gtif_trans_matrix (double* &trans_matrix);
+  // :returns the matrix in the argument
+  bool gtif_trans_matrix(double * & trans_matrix);
 
-  //: returns the Zone and the Hemisphere (0 for N, 1 for S);
-  bool PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
+  // : returns the Zone and the Hemisphere (0 for N, 1 for S);
+  bool PCS_WGS84_UTM_zone(int & zone, GTIF_HEMISPH & hemisph);
 
-  //: returns the Zone and the Hemisphere (0 for N, 1 for S);
-  bool PCS_NAD83_UTM_zone(int &zone, GTIF_HEMISPH &hemisph);
+  // : returns the Zone and the Hemisphere (0 for N, 1 for S);
+  bool PCS_NAD83_UTM_zone(int & zone, GTIF_HEMISPH & hemisph);
 
-  //: returns true if in geographic coords, linear units are in meters and angular units are in degrees
+  // : returns true if in geographic coords, linear units are in meters and angular units are in degrees
   bool GCS_WGS84_MET_DEG();
 
-  //: <key> : key id
+  // : <key> : key id
   // <value>: a single value or an array of values
   // <size>:  the size of individual key values
   // <length> : the number of values in the value array
   // <type>: the type of the key
-  bool get_key_value(geokey_t key, void** value,
-                     int& size, int& length, tagtype_t& type);
+  bool get_key_value(geokey_t key, void* * value, int& size, int& length, tagtype_t& type);
 
-  void print_gtif(){ if (gtif_) GTIFPrint(gtif_, 0, 0); }
-
- private:
+  void print_gtif() { if( gtif_ ) {GTIFPrint(gtif_, 0, 0); }}
+private:
 
   TIFF* tif_;
   GTIF* gtif_;
@@ -77,15 +75,19 @@ class vil_geotiff_header
   // the number of keys defined in the rest of the tag
   int number_of_geokeys_;
 
-  modeltype_t model_type_;
+  modeltype_t  model_type_;
   rastertype_t raster_type_;
   geographic_t geographic_type_;
-  geounits_t geounits_;
+  geounits_t   geounits_;
 
-  bool gtif_modeltype (modeltype_t& type);
-  bool gtif_rastertype (rastertype_t&);
-  bool geounits (geounits_t&);
-  bool geographic_type(geographic_t&);
+  bool gtif_modeltype(modeltype_t& type);
+
+  bool gtif_rastertype(rastertype_t &);
+
+  bool geounits(geounits_t &);
+
+  bool geographic_type(geographic_t &);
+
 };
 
-#endif //vil_geotiff_header_h_
+#endif // vil_geotiff_header_h_

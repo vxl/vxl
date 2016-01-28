@@ -1,7 +1,7 @@
 // This is brl/bbas/brad/io/brad_io_image_metadata.h
 #ifndef brad_io_image_metadata_h_
 #define brad_io_image_metadata_h_
-//:
+// :
 // \file
 // \brief Binary I/O for image metadata
 // \author D. E. Crispell
@@ -16,32 +16,31 @@
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 
-//: Binary save brad_image_metadata to stream.
-void
-vsl_b_write(vsl_b_ostream &os, const brad_image_metadata& m);
+// : Binary save brad_image_metadata to stream.
+void vsl_b_write(vsl_b_ostream & os, const brad_image_metadata& m);
 
-//: Binary load brad_image_metadata from stream.
-void
-vsl_b_read(vsl_b_istream &is, brad_image_metadata& m);
+// : Binary load brad_image_metadata from stream.
+void vsl_b_read(vsl_b_istream & is, brad_image_metadata& m);
 
-//: Print summary
-void
-vsl_print_summary(vcl_ostream &os, const brad_image_metadata& m);
+// : Print summary
+void vsl_print_summary(vcl_ostream & os, const brad_image_metadata& m);
 
-//: Binary write brad_image_metadata to stream
-void vsl_b_write(vsl_b_ostream& os, const brad_image_metadata* &p);
-//: Binary write brad_image_metadata to stream
+// : Binary write brad_image_metadata to stream
+void vsl_b_write(vsl_b_ostream& os, const brad_image_metadata * & p);
+
+// : Binary write brad_image_metadata to stream
 void vsl_b_write(vsl_b_ostream& os, brad_image_metadata_sptr& sptr);
-//: Binary write brad_image_metadata to stream
+
+// : Binary write brad_image_metadata to stream
 void vsl_b_write(vsl_b_ostream& os, brad_image_metadata_sptr const& sptr);
 
-//: Binary load brad_image_metadata scene from stream.
+// : Binary load brad_image_metadata scene from stream.
 void vsl_b_read(vsl_b_istream& is, brad_image_metadata* p);
-//: Binary load brad_image_metadata scene from stream.
+
+// : Binary load brad_image_metadata scene from stream.
 void vsl_b_read(vsl_b_istream& is, brad_image_metadata_sptr& sptr);
-//: Binary load brad_image_metadata scene from stream.
+
+// : Binary load brad_image_metadata scene from stream.
 void vsl_b_read(vsl_b_istream& is, brad_image_metadata_sptr const& sptr);
 
-
 #endif // brad_io_image_metadata_h_
-

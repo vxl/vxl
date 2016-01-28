@@ -1,6 +1,6 @@
 #ifndef boxm2_vecf_mandible_h_
 #define boxm2_vecf_mandible_h_
-//:
+// :
 // \file
 // \brief  The mandible represented as a generalized cylinder
 //
@@ -19,46 +19,57 @@
 #include <bvgl/bvgl_cross_section.h>
 #include <bvgl/bvgl_gen_cylinder.h>
 #include "boxm2_vecf_mandible_params.h"
-class boxm2_vecf_mandible : public bvgl_gen_cylinder{
- public:
+class boxm2_vecf_mandible : public bvgl_gen_cylinder
+{
+public:
 
- boxm2_vecf_mandible(){
-   fill_boundary_map();
+  boxm2_vecf_mandible()
+  {
+    fill_boundary_map();
   }
- boxm2_vecf_mandible(vcl_string const& geometry_file);
 
- boxm2_vecf_mandible(vcl_map<vcl_string, unsigned> const& boundary_knots, vgl_cubic_spline_3d<double> const& axis,
-                     vcl_vector<bvgl_cross_section> const& cross_sects, double cross_section_interval=0.5):
- bvgl_gen_cylinder(axis, cross_sects, cross_section_interval), boundary_knots_(boundary_knots){
-   fill_boundary_map();
- }
+  boxm2_vecf_mandible(vcl_string const& geometry_file);
 
- boxm2_vecf_spline_field translate(vgl_vector_3d<double> const& tr);
+  boxm2_vecf_mandible(vcl_map<vcl_string, unsigned> const& boundary_knots, vgl_cubic_spline_3d<double> const& axis,
+                      vcl_vector<bvgl_cross_section> const& cross_sects, double cross_section_interval = 0.5) :
+    bvgl_gen_cylinder(axis, cross_sects, cross_section_interval), boundary_knots_(boundary_knots)
+  {
+    fill_boundary_map();
+  }
 
- //: offset axis curve in the curve normal direction
- boxm2_vecf_spline_field offset_axis(double offset);
+  boxm2_vecf_spline_field translate(vgl_vector_3d<double> const& tr);
 
- //: adjust slope of ramus relative to nominal
- boxm2_vecf_spline_field tilt_ramus(double delta_z_at_condyle);
+  // : offset axis curve in the curve normal direction
+  boxm2_vecf_spline_field offset_axis(double offset);
 
- //: adjust slope of body relative to nominal
- boxm2_vecf_spline_field  tilt_body(double delta_y_at_chin);
+  // : adjust slope of ramus relative to nominal
+  boxm2_vecf_spline_field tilt_ramus(double delta_z_at_condyle);
 
- //: create a new mandible by applying a vector field
- boxm2_vecf_mandible apply_vector_field(boxm2_vecf_spline_field const& field) const;
+  // : adjust slope of body relative to nominal
+  boxm2_vecf_spline_field  tilt_body(double delta_y_at_chin);
 
- //: the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
- // can be away from the closest point in the cross-section pointset.
- double operator() (vgl_point_3d<double> p) const{ return bvgl_gen_cylinder::surface_distance(p, params_.planar_surface_dist_thresh_);}
+  // : create a new mandible by applying a vector field
+  boxm2_vecf_mandible apply_vector_field(boxm2_vecf_spline_field const& field) const;
 
- //:for debug purposes
- virtual void display_axis_spline(vcl_ofstream& ostr) const;
- private:
- boxm2_vecf_mandible_params params_;
- void fill_boundary_map();
- vcl_map<vcl_string, unsigned> boundary_knots_;
+  // : the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
+  // can be away from the closest point in the cross-section pointset.
+  double operator()(vgl_point_3d<double> p) const
+  {
+    return bvgl_gen_cylinder::surface_distance(p,
+                                               params_.planar_surface_dist_thresh_);
+  }
+
+  // :for debug purposes
+  virtual void display_axis_spline(vcl_ofstream& ostr) const;
+
+private:
+  boxm2_vecf_mandible_params params_;
+  void fill_boundary_map();
+
+  vcl_map<vcl_string, unsigned> boundary_knots_;
 };
-vcl_ostream&  operator << (vcl_ostream& s, boxm2_vecf_mandible const& pr);
-vcl_istream&  operator >> (vcl_istream& s, boxm2_vecf_mandible& pr);
+vcl_ostream & operator <<(vcl_ostream& s, boxm2_vecf_mandible const& pr);
+
+vcl_istream & operator >>(vcl_istream& s, boxm2_vecf_mandible& pr);
 
 #endif// boxm2_vecf_mandible

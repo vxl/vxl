@@ -1,4 +1,4 @@
-//if this file compiles, then the test passes
+// if this file compiles, then the test passes
 #include <bgrl/bgrl_edge_sptr.h>
 #include <bgrl/bgrl_edge.h>
 #include <bgrl/bgrl_vertex_sptr.h>

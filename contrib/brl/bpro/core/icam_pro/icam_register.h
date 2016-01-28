@@ -3,9 +3,11 @@
 
 class icam_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // icam_register_h_

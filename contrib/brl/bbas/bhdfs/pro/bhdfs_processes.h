@@ -4,7 +4,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-//the init functions
+// the init functions
 DECLARE_FUNC_CONS(bhdfs_create_fs_manager_process);
 DECLARE_FUNC_CONS(bhdfs_fs_create_dir_process);
 DECLARE_FUNC_CONS(bhdfs_load_image_view_process);

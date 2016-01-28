@@ -13,5 +13,4 @@ void register_tests()
   REGISTER( test_pc_gaussian );
 }
 
-
 DEFINE_MAIN;

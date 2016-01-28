@@ -1,7 +1,7 @@
 // This is brl/bseg/bvpl/kernels/bvpl_neighborhood_kernel_factory.h
 #ifndef bvpl_neighborhood_kernel_factory_h
 #define bvpl_neighborhood_kernel_factory_h
-//:
+// :
 // \file
 // \author Isabel Restrepo mir@lems.brown.edu
 // \date  October 6, 2009
@@ -15,21 +15,19 @@
 
 class bvpl_neighborhood_kernel_factory : public bvpl_kernel_factory
 {
- public:
+public:
 
-  //:Default Constructor
+  // :Default Constructor
   bvpl_neighborhood_kernel_factory();
 
-  //: Constructs a kernel form three values, length, width and thickness
-  bvpl_neighborhood_kernel_factory(int min_length, int max_length,
-                                   int min_width, int max_width,
-                                   int min_thickness, int max_thickness);
+  // : Constructs a kernel form three values, length, width and thickness
+  bvpl_neighborhood_kernel_factory(int min_length, int max_length, int min_width, int max_width, int min_thickness,
+                                   int max_thickness);
 
   virtual ~bvpl_neighborhood_kernel_factory() {}
+private:
 
- private:
-
-  //:Creates a 2d edge kernel
+  // :Creates a 2d edge kernel
   virtual void create_canonical();
 
   int min_length_;

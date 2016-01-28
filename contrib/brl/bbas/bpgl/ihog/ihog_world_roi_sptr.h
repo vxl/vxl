@@ -1,7 +1,7 @@
 // This is bbas/bpgl/ihog/ihog_world_roi_sptr.h
 #ifndef ihog_world_roi_sptr_h_
 #define ihog_world_roi_sptr_h_
-//:
+// :
 // \file
 // \brief Smart pointer to a ihog_world_roi
 // \author Matthew Leotta, (mleotta@lems.brown.edu)

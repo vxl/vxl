@@ -2,9 +2,9 @@
 #ifndef bxml_find_h_
 #define bxml_find_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief functions to search XML documents
 // \author Matt Leotta (Brown)
@@ -18,23 +18,20 @@
 
 #include "bxml_document.h"
 
-//: Return true if \a elm has the same name and contains the same attributes as query
+// : Return true if \a elm has the same name and contains the same attributes as query
 bool bxml_matches(const bxml_element& elm, const bxml_element& query);
 
-//: Find the first element that matches
-bxml_data_sptr bxml_find(const bxml_data_sptr& head,
-                             const bxml_element& query);
+// : Find the first element that matches
+bxml_data_sptr bxml_find(const bxml_data_sptr& head, const bxml_element& query);
 
 bool bxml_matches_by_name(const bxml_element& elm, const bxml_element& query);
 
-//: Find the first element that matches the query only by name
+// : Find the first element that matches the query only by name
 //  (no check on the attribute matching)
-bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head,
-                                     const bxml_element& query);
+bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head, const bxml_element& query);
 
-//: Find all elements that match the query only by name
+// : Find all elements that match the query only by name
 //  (no check on the attribute matching)
-vcl_vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
-                                                   const bxml_element& query);
+vcl_vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head, const bxml_element& query);
 
 #endif // bxml_find_h_

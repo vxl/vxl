@@ -3,7 +3,7 @@
 #include <vgui/vgui.h>
 #include <vgui/vgui_debug_tableau.h>
 
-int main(int argc,char **argv)
+int main(int argc, char * * argv)
 {
   vgui::init(argc, argv);
 

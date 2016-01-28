@@ -1,12 +1,11 @@
 // This is oxl/mvl/PMatrixDecompCR.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 //  \file
 
 #include "PMatrixDecompCR.h"
-
 
 #include <vcl_iostream.h>
 
@@ -28,73 +27,85 @@ PMatrixDecompCR::PMatrixDecompCR(const vnl_double_3x4& P, bool scale_C)
 
 void UtSolve(const vnl_double_3x3& T, vnl_double_3& x)
 {
-  x[2] /= T(2,2);
-  x[1] = (x[1] - T(1,2)*x[2])/T(1,1);
-  x[0] = (x[0] - T(0,1)*x[1] - T(0,2)*x[2])/T(0,0);
+  x[2] /= T(2, 2);
+  x[1] = (x[1] - T(1, 2) * x[2]) / T(1, 1);
+  x[0] = (x[0] - T(0, 1) * x[1] - T(0, 2) * x[2]) / T(0, 0);
 }
 
-//: Decompose P
+// : Decompose P
 void PMatrixDecompCR::compute(const vnl_double_3x4& p, bool scale_C)
 {
   // P = [H t]
   //
   vnl_double_3x3 PermHtPerm;
 
-  for (int i = 0; i < 3; ++i)
-    for (int j = 0; j < 3; ++j)
-      PermHtPerm(i,j) = p(2-j,2-i);
+  for( int i = 0; i < 3; ++i )
+    {
+    for( int j = 0; j < 3; ++j )
+      {
+      PermHtPerm(i, j) = p(2 - j, 2 - i);
+      }
+    }
 
-  vnl_qr<double> qr(PermHtPerm.as_ref()); // size 3x3
+  vnl_qr<double> qr(PermHtPerm.as_ref() ); // size 3x3
 
   vnl_double_3x3 Q = qr.Q();
   vnl_double_3x3 R = qr.R();
 
   // Ensure all diagonal components of C are positive.
   // Must insert a det(+1) or det(-1) mx between.
-  int r0pos = R(0,0) > 0 ? 1 : 0;
-  int r1pos = R(1,1) > 0 ? 1 : 0;
-  int r2pos = R(2,2) > 0 ? 1 : 0;
+  int r0pos = R(0, 0) > 0 ? 1 : 0;
+  int r1pos = R(1, 1) > 0 ? 1 : 0;
+  int r2pos = R(2, 2) > 0 ? 1 : 0;
   typedef double d3[3];
-  d3 diags[] = {   // 1 2 3
-    { -1,  1, -1}, // - + -
-    {  1, -1, -1}, // - + +
-    { -1, -1, -1}, // - - -
-    {  1,  1, -1}, // - - +
-    { -1, -1,  1}, // + + -
-    {  1,  1,  1}, // + + +
-    { -1,  1,  1}, // + - -
-    {  1, -1,  1}, // + - +
-  };
-  int d = r0pos * 4 + r1pos * 2 + r2pos;
+  d3 diags[] =                                    // 1 2 3
+                                  {{ -1,  1, -1}, // - + -
+          {  1, -1, -1},                          // - + +
+        { -1, -1, -1},                            // - - -
+          {  1,  1, -1},                          // - - +
+        { -1, -1,  1},                            // + + -
+          {  1,  1,  1},                          // + + +
+        { -1,  1,  1},                            // + - -
+          {  1, -1,  1},                          // + - +
+                                  };
+  int     d = r0pos * 4 + r1pos * 2 + r2pos;
   double* diag = &diags[d][0];
-
-  for (int i = 0; i < 3; ++i)
-    for (int j = 0; j < 3; ++j) {
-      C(j,i)  = diag[i] * R(2-i,2-j);
-      Po(j,i) = diag[j] * Q(2-i,2-j);
+  for( int i = 0; i < 3; ++i )
+    {
+    for( int j = 0; j < 3; ++j )
+      {
+      C(j, i)  = diag[i] * R(2 - i, 2 - j);
+      Po(j, i) = diag[j] * Q(2 - i, 2 - j);
+      }
     }
 
   // Compute t' = inv(C) t
   vnl_double_3 t;
-  for (int i = 0; i < 3; ++i)
-    t[i] = p(i,3);
+  for( int i = 0; i < 3; ++i )
+    {
+    t[i] = p(i, 3);
+    }
   UtSolve(C, t);
+  for( int i = 0; i < 3; ++i )
+    {
+    Po(i, 3) = t[i];
+    }
 
-  for (int i = 0; i < 3; ++i)
-    Po(i,3) = t[i];
-
-  if (((C * Po - p).fro_norm() > 1e-4) ||
-      (C(0,0) < 0) ||
-      (C(1,1) < 0) ||
-      (C(2,2) < 0)) {
+  if( ( (C * Po - p).fro_norm() > 1e-4) ||
+      (C(0, 0) < 0) ||
+      (C(1, 1) < 0) ||
+      (C(2, 2) < 0) )
+    {
     vcl_cerr << "PMatrixDecompCR: AIEEE!\n";
     vnl_matlab_print(vcl_cerr, p, "p");
     vnl_matlab_print(vcl_cerr, C, "C");
     vnl_matlab_print(vcl_cerr, Po, "Po");
     vnl_matlab_print(vcl_cerr, C * Po - p, "C * Po - p");
-  }
+    }
 
   // Make C(2,2) = 1
-  if (scale_C)
-    C *= 1.0/C(2,2);
+  if( scale_C )
+    {
+    C *= 1.0 / C(2, 2);
+    }
 }

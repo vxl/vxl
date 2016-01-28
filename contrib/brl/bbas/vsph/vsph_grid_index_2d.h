@@ -1,6 +1,6 @@
 #ifndef vsph_grid_index_2d_h_
 #define vsph_grid_index_2d_h_
-//:
+// :
 // \file
 // \brief  A grid on the surface of a unit sphere for indexing points
 // \author J. L. Mundy
@@ -14,41 +14,41 @@
 //
 #include <vcl_iostream.h>
 #include "vsph_sph_point_2d.h"
-#include "vsph_defs.h"//DIST_TOL
+#include "vsph_defs.h"// DIST_TOL
 #include <vcl_vector.h>
 #include <vcl_map.h>
 
 class vsph_grid_index_2d
 {
- public:
+public:
   vsph_grid_index_2d();
-  vsph_grid_index_2d(unsigned n_bins_theta, unsigned n_bins_phi,
-                     bool in_radians = true);
-  //: grid index corresponding to spherical point sp
+  vsph_grid_index_2d(unsigned n_bins_theta, unsigned n_bins_phi, bool in_radians = true);
+  // : grid index corresponding to spherical point sp
   bool index(vsph_sph_point_2d const& sp, unsigned& th_idx, unsigned& ph_idx) const;
-  //: insert a point in the index
-  //  \returns false if a point already exists or coordinates are outside the range of the index
-  bool insert(vsph_sph_point_2d const& sp, int id=-1);
 
-  //: find if a point is near sp within tolerance
+  // : insert a point in the index
+  //  \returns false if a point already exists or coordinates are outside the range of the index
+  bool insert(vsph_sph_point_2d const& sp, int id = -1);
+
+  // : find if a point is near sp within tolerance
   //  \return the point id
   //  an id of -1 indicates that the point id was not defined or the
   //  point was not found
-  bool find(vsph_sph_point_2d const& sp, unsigned& th_idx, unsigned& ph_idx,
-            int& id, double tol = DIST_TOL )const;
+  bool find(vsph_sph_point_2d const& sp, unsigned& th_idx, unsigned& ph_idx, int& id, double tol = DIST_TOL ) const;
 
-  //: clear all points from the index. Maintain the bin structure
+  // : clear all points from the index. Maintain the bin structure
   void clear();
 
- private:
-  double pye() const;//returns pi in the units of *this
+private:
+  double pye() const;// returns pi in the units of *this
+
   unsigned n_bins_theta_;
   unsigned n_bins_phi_;
-  bool in_radians_;
+  bool     in_radians_;
   //  theta           phi
   vcl_vector<vcl_vector<vcl_vector<vcl_pair<vsph_sph_point_2d, int> > > > index_;
-  double theta_inc_;//elevation angle
-  double phi_inc_;  //azimuth angle
+  double                                                                  theta_inc_; // elevation angle
+  double                                                                  phi_inc_;   // azimuth angle
 };
 
 #endif

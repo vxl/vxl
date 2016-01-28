@@ -21,5 +21,4 @@ void register_tests()
   REGISTER( test_bit_tree );
 }
 
-
 DEFINE_MAIN;

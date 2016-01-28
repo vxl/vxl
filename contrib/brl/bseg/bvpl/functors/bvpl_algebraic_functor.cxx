@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \author Isabel Restrepo
 // \date 11-Oct-2010
@@ -8,7 +8,6 @@
 #include <vcl_cmath.h>
 #include <vcl_iostream.h>
 
-
 // Default constructor
 
 bvpl_algebraic_functor::bvpl_algebraic_functor()
@@ -16,25 +15,23 @@ bvpl_algebraic_functor::bvpl_algebraic_functor()
   this->init();
 }
 
-//:Initializes all local variables
+// :Initializes all local variables
 void bvpl_algebraic_functor::init()
 {
-  result_=0.0f;
+  result_ = 0.0f;
 }
-
 
 void bvpl_algebraic_functor::apply(const float& val, const bvpl_kernel_dispatch& d)
 {
-  result_+=(d.c_)*val;
+  result_ += (d.c_) * val;
 }
 
 float bvpl_algebraic_functor::result()
 {
   float result = result_;
 
-  //reset all variables
+  // reset all variables
   init();
 
   return result;
 }
-

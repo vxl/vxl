@@ -1,6 +1,6 @@
 #ifndef gevd_clean_edgels_h_
 #define gevd_clean_edgels_h_
-//:
+// :
 // \file
 // \brief Remove edgel chains with (1) end vertices closer than 3 pixels, (2) bridges, (3) self-intersection
 //
@@ -37,7 +37,7 @@
 //         Effectively the same as Detection/Clean.h but duplicated here
 //         to allow for CAD required changes
 // \endverbatim
-//-------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vtol/vtol_vertex_2d.h>
 #include <vtol/vtol_vertex_2d_sptr.h>
@@ -46,25 +46,40 @@
 
 class gevd_clean_edgels
 {
- public:
+public:
   gevd_clean_edgels();
   ~gevd_clean_edgels();
-  void DoCleanEdgelChains(vcl_vector<vtol_edge_2d_sptr>& in_edgels, vcl_vector<vtol_edge_2d_sptr>& out_edgels, int steps = 10);
+  void DoCleanEdgelChains(vcl_vector<vtol_edge_2d_sptr>& in_edgels, vcl_vector<vtol_edge_2d_sptr>& out_edgels,
+                          int steps = 10);
+
   void JumpGaps();
+
   void RemoveBridges();
+
   void DeleteShortEdges();
+
   void FixDefficientEdgels();
+
   void RemoveJaggies();
+
   void RemoveLoops();
- protected:
+
+protected:
   void print_protection();
+
   void detect_similar_edges(vcl_vector<vtol_edge_2d_sptr>& common_edges, float tolerance,
                             vcl_vector<vtol_edge_2d_sptr>& deleted_edges);
-  void remove_similar_edges(vtol_vertex_2d*& v1, vcl_vector<vtol_edge_2d_sptr>& deleted_edges);
+
+  void remove_similar_edges(vtol_vertex_2d *& v1, vcl_vector<vtol_edge_2d_sptr>& deleted_edges);
+
   bool edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr v2, vcl_vector<vtol_edge_2d_sptr>& intersection);
+
   void remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vtol_edge_2d_sptr>& edges);
+
   bool closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v);
+
   bool split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr v, vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& e2);
+
   vcl_vector<vtol_edge_2d_sptr>* out_edgels_;
 };
 

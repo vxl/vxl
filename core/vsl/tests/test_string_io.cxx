@@ -26,7 +26,7 @@ void test_string_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_string_io_test.bvl.tmp");
+  vpl_unlink("vsl_string_io_test.bvl.tmp");
 
   TEST("vcl_string<int> out == vcl_string<int> in", outstring, instring);
 }

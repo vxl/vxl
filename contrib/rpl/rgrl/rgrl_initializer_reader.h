@@ -1,6 +1,6 @@
 #ifndef rgrl_initializer_reader_h_
 #define rgrl_initializer_reader_h_
-//:
+// :
 // \file
 // \brief Generate initial estimates based on prior transformations in input stream.
 // \author Gehua Yang
@@ -15,58 +15,56 @@
 #include <rgrl/rgrl_mask_sptr.h>
 #include <rgrl/rgrl_transformation_sptr.h>
 
-//: Generate initial estimates based on a single prior transformation.
+// : Generate initial estimates based on a single prior transformation.
 class rgrl_initializer_reader
   : public rgrl_initializer
 {
- public:
-  //: Initialize with a view
-  rgrl_initializer_reader( vcl_istream& istr,
-                           rgrl_mask_sptr             const& from_image_roi,
+public:
+  // : Initialize with a view
+  rgrl_initializer_reader( vcl_istream& istr, rgrl_mask_sptr             const& from_image_roi,
                            rgrl_mask_sptr             const& to_image_roi,
-                           rgrl_scale_sptr            const& prior_scale=0,
+                           rgrl_scale_sptr            const& prior_scale = 0,
                            rgrl_estimator_sptr        const& estimator = 0,
                            unsigned int                      resolution = 0 );
 
-  //: Add more potential prior transformations
+  // : Add more potential prior transformations
   void add_prior_xform( rgrl_transformation_sptr   xform_estimate );
 
-  //: Get next initial estimate when first called, but return false thereafter.
-  bool next_initial( rgrl_view_sptr           & view,
-                     rgrl_scale_sptr          & prior_scale );
+  // : Get next initial estimate when first called, but return false thereafter.
+  bool next_initial( rgrl_view_sptr           & view, rgrl_scale_sptr          & prior_scale );
 
-  //: Set index pointing to vector of initializations to zero.
-  void reset_xform_index( ) { xform_index_ = 0; }
+  // : Set index pointing to vector of initializations to zero.
+  void reset_xform_index() { xform_index_ = 0; }
 
-  //: Set index pointing to the vector of initializations to a given value.
+  // : Set index pointing to the vector of initializations to a given value.
   void set_xform_index( unsigned int index ) { xform_index_ = index; }
 
-  //: Return number of initializations
+  // : Return number of initializations
   //  -1 stands for unknown
   virtual int size() const;
 
-  //: Defines type-related functions
+  // : Defines type-related functions
   rgrl_type_macro( rgrl_initializer_reader, rgrl_initializer );
+protected:
 
- protected:
+  struct init_record
+    {
+    rgrl_view_sptr view_;
+    rgrl_scale_sptr scale_;
+    rgrl_transformation_sptr xform_;
+    };
 
-  struct init_record {
-    rgrl_view_sptr            view_;
-    rgrl_scale_sptr           scale_;
-    rgrl_transformation_sptr  xform_;
-  };
+  // : Initializations read from a stream
+  vcl_vector<init_record> init_records_;
 
-  //: Initializations read from a stream
-  vcl_vector< init_record >           init_records_;
-
-  //: Index pointing into initialization in init_records_ vector that will be used
+  // : Index pointing into initialization in init_records_ vector that will be used
   unsigned int xform_index_;
 
-  rgrl_mask_sptr       from_image_roi_;
-  rgrl_mask_sptr       to_image_roi_;
-  rgrl_scale_sptr      prior_scale_;
-  rgrl_estimator_sptr  estimator_;
-  unsigned int         res_;
+  rgrl_mask_sptr      from_image_roi_;
+  rgrl_mask_sptr      to_image_roi_;
+  rgrl_scale_sptr     prior_scale_;
+  rgrl_estimator_sptr estimator_;
+  unsigned int        res_;
 };
 
 #endif

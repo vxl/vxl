@@ -51,8 +51,8 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
-typedef vnl_vector_fixed<double,3>       vector_3d;
+typedef vcl_vector<rgrl_feature_sptr> feature_vector;
+typedef vnl_vector_fixed<double, 3>   vector_3d;
 
 // BeginLatex
 //
@@ -69,58 +69,63 @@ read_feature_file( const char* filename,
 {
   vcl_ifstream istr( filename );
 
-  if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+  if( !istr )
+    {
+    vcl_cerr << "ERROR: Cannot open " << filename << '\n';
     return;
-  }
+    }
 
   vector_3d location;
   vector_3d normal;
 
   int total;
   istr >> total;
-  for (int i = 0; i<total; i+=sample_spacing) {
+  for( int i = 0; i < total; i += sample_spacing )
+    {
     istr >> location[0] >> location[1] >> location[2]
-         >>normal[0]>>normal[1]>>normal[2];
+    >> normal[0] >> normal[1] >> normal[2];
     // BeginCodeSnippet
-    rgrl_feature_sptr feature_pt = new rgrl_feature_face_pt(location.as_ref(), normal.as_ref());
+    rgrl_feature_sptr feature_pt = new rgrl_feature_face_pt(location.as_ref(), normal.as_ref() );
     feature_points.push_back( feature_pt );
     // EndCodeSnippet
-  }
+    }
 
   istr.close();
 
-  vcl_cout<<"There are "<<feature_points.size()<<" features"<<vcl_endl;
+  vcl_cout << "There are " << feature_points.size() << " features" << vcl_endl;
 }
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command
+class command_iteration_update : public rgrl_command
 {
- public:
+public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
-    execute( (const rgrl_object*) caller, event );
+    execute( (const rgrl_object *) caller, event );
   }
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
-      dynamic_cast<const rgrl_feature_based_registration*>(caller);
+      dynamic_cast<const rgrl_feature_based_registration *>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
-    rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
+    rgrl_trans_affine*       a_xform = rgrl_cast<rgrl_trans_affine *>(trans);
+
+    vcl_cout << "xform: A = " << a_xform->A() << "t = " << a_xform->t() << vcl_endl;
   }
+
 };
 
 int
 main( int argc, char* argv[] )
 {
-  if ( argc < 2 ) {
+  if( argc < 2 )
+    {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " ImageFeatureFile\n";
     return 1;
-  }
+    }
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
@@ -129,7 +134,7 @@ main( int argc, char* argv[] )
   //
   feature_vector moving_feature_points;
   feature_vector fixed_feature_points;
-  const char* file_name = argv[1];
+  const char*    file_name = argv[1];
   read_feature_file( file_name, moving_feature_points, 50);
   read_feature_file( file_name, fixed_feature_points, 1 );
 
@@ -152,7 +157,7 @@ main( int argc, char* argv[] )
   // EndLatex
 
   // BeginCodeSnippet
-  const unsigned int dimension = 3;
+  const unsigned int    dimension = 3;
   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
   rgrl_feature_set_sptr fixed_feature_set =
@@ -161,7 +166,6 @@ main( int argc, char* argv[] )
   rgrl_mask_box fixed_image_roi = fixed_feature_set->bounding_box();
   // EndCodeSnippet
 
-
   // Set up the initial transformation and the estimator for affine
   // transformation
   //
@@ -169,37 +173,37 @@ main( int argc, char* argv[] )
   // The initial transform is rotation = [x_angle, y_angle, z_angle],
   // t=[10, 0, 15]
   //
-  vnl_matrix<double> A(3,3,vnl_matrix_identity);
+  vnl_matrix<double> A(3, 3, vnl_matrix_identity);
 
-  //y_dir
-  vnl_matrix<double> Ay(3,3,vnl_matrix_identity);
-  double y_angle = 5*vnl_math::pi_over_180;
-  Ay(0,0) = vcl_cos(y_angle); Ay(0,2) = vcl_sin(y_angle);
-  Ay(2,0) = -vcl_sin(y_angle); Ay(2,2) = vcl_cos(y_angle);
+  // y_dir
+  vnl_matrix<double> Ay(3, 3, vnl_matrix_identity);
+  double             y_angle = 5 * vnl_math::pi_over_180;
+  Ay(0, 0) = vcl_cos(y_angle); Ay(0, 2) = vcl_sin(y_angle);
+  Ay(2, 0) = -vcl_sin(y_angle); Ay(2, 2) = vcl_cos(y_angle);
 
-  //x_dir
-  vnl_matrix<double> Ax(3,3,vnl_matrix_identity);
-  double x_angle = 0*vnl_math::pi_over_180;
-  Ax(1,1) = vcl_cos(x_angle); Ax(1,2) = -vcl_sin(x_angle);
-  Ax(2,1) = vcl_sin(x_angle); Ax(2,2) = vcl_cos(x_angle);
+  // x_dir
+  vnl_matrix<double> Ax(3, 3, vnl_matrix_identity);
+  double             x_angle = 0 * vnl_math::pi_over_180;
+  Ax(1, 1) = vcl_cos(x_angle); Ax(1, 2) = -vcl_sin(x_angle);
+  Ax(2, 1) = vcl_sin(x_angle); Ax(2, 2) = vcl_cos(x_angle);
 
-  //z_dir
-  vnl_matrix<double> Az(3,3,vnl_matrix_identity);
-  double z_angle = 10*vnl_math::pi_over_180;
-  Az(0,0) = vcl_cos(z_angle); Az(0,1) = -vcl_sin(z_angle);
-  Az(1,0) = vcl_sin(z_angle); Az(1,1) =  vcl_cos(z_angle);
+  // z_dir
+  vnl_matrix<double> Az(3, 3, vnl_matrix_identity);
+  double             z_angle = 10 * vnl_math::pi_over_180;
+  Az(0, 0) = vcl_cos(z_angle); Az(0, 1) = -vcl_sin(z_angle);
+  Az(1, 0) = vcl_sin(z_angle); Az(1, 1) =  vcl_cos(z_angle);
 
-  A = Ax*Ay*Az;
+  A = Ax * Ay * Az;
 #if 0 // commented out
-  A(0,0) = 0.98106; A(0,1) =  -0.172987; A(0,2)= 0.0871557;
-  A(1,0) = 0.173648;  A(1,1) = 0.984808;  A(1,2)= 0;
-  A(2,0) = -0.0858317; A(2,1) = 0.0151344; A(2,2)= 0.996195;
+  A(0, 0) = 0.98106; A(0, 1) =  -0.172987; A(0, 2) = 0.0871557;
+  A(1, 0) = 0.173648;  A(1, 1) = 0.984808;  A(1, 2) = 0;
+  A(2, 0) = -0.0858317; A(2, 1) = 0.0151344; A(2, 2) = 0.996195;
 #endif // 0
   vector_3d t(10, 0, 15);
-  t *= 1/1000;
+  t *= 1 / 1000;
 
-  rgrl_transformation_sptr init_transform = new rgrl_trans_affine(A, t.as_ref());
-  rgrl_estimator_sptr estimator = new rgrl_est_affine();
+  rgrl_transformation_sptr init_transform = new rgrl_trans_affine(A, t.as_ref() );
+  rgrl_estimator_sptr      estimator = new rgrl_est_affine();
 
   // Store the data in the data manager. Other components in the black
   // box of registration are set to the common default techniques for
@@ -210,23 +214,24 @@ main( int argc, char* argv[] )
                   fixed_feature_set);   // data from fixed image
 
   rgrl_feature_based_registration reg( data );
-  reg.set_expected_min_geometric_scale( 0.01/1000 );
+  reg.set_expected_min_geometric_scale( 0.01 / 1000 );
 
   // To monitor registration
-  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
+  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update() );
 
   // Run ...
   //
   reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );
 
   // Output Results
-  if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+  if( reg.has_final_transformation() )
+    {
+    vcl_cout << "Final xform:" << vcl_endl;
     rgrl_transformation_sptr final_trans = reg.final_transformation();
-    rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(final_trans);
-    vcl_cout<<"Final xform: A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
-  }
+    rgrl_trans_affine*       a_xform = rgrl_cast<rgrl_trans_affine *>(final_trans);
+    vcl_cout << "Final xform: A =\n" << a_xform->A() << "t = " << a_xform->t() << vcl_endl
+             << "Final alignment error = " << reg.final_status()->error() << vcl_endl;
+    }
 
   // BeginLatex
   //
@@ -241,7 +246,7 @@ main( int argc, char* argv[] )
   // locations. The result of the execution is a transformation very
   // close to identity.
   //
-  //EndLatex
+  // EndLatex
 
   // Perform testing
   //

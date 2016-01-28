@@ -4,5 +4,5 @@
 #include <vgl/vgl_point_3d.h>
 #include <vsl/vsl_map_io.txx>
 typedef vcl_vector<vgl_point_3d<double> > vec_point_3d_double;
-typedef vcl_less<unsigned char> comp;
+typedef vcl_less<unsigned char>           comp;
 VSL_MAP_IO_INSTANTIATE(unsigned char, vec_point_3d_double, comp);

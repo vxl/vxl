@@ -5,7 +5,7 @@
 #ifndef rgtl_static_assert_hxx
 #define rgtl_static_assert_hxx
 
-//:
+// :
 // \file
 // \brief Macro to enforce compile-time conditions in a template.
 // \author Brad King
@@ -17,15 +17,18 @@
 // compile time.  This is adapted from boost.
 #define RGTL_STATIC_ASSERT(condition) \
   RGTL_STATIC_CONST(unsigned int, \
-    RGTL_PP_JOIN(rgtl_static_assert_, __LINE__) = \
-      sizeof(::rgtl::STATIC_ASSERTION_FAILURE<(bool)(condition)>))
+                    RGTL_PP_JOIN(rgtl_static_assert_, __LINE__) = \
+                      sizeof(::rgtl::STATIC_ASSERTION_FAILURE<(bool)(condition)> ) )
 #define RGTL_STATIC_ASSERT_USE() \
-  static_cast<void>(RGTL_PP_JOIN(rgtl_static_assert_, __LINE__))
+  static_cast<void>(RGTL_PP_JOIN(rgtl_static_assert_, __LINE__) )
 namespace rgtl
 {
-template <bool Condition> struct STATIC_ASSERTION_FAILURE;
-template <> struct STATIC_ASSERTION_FAILURE<true> {};
-template <> struct STATIC_ASSERTION_FAILURE<false>;
+template <bool Condition>
+struct STATIC_ASSERTION_FAILURE;
+template <>
+struct STATIC_ASSERTION_FAILURE<true> {};
+template <>
+struct STATIC_ASSERTION_FAILURE<false>;
 }
 
 #endif

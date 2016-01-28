@@ -8,17 +8,18 @@
 
 #include <vcl_iostream.h>
 
-int main(int argc, char ** argv)
+int main(int argc, char * * argv)
 {
-  if (argc < 3) {
+  if( argc < 3 )
+    {
     vcl_cerr << "Provide two images as arguments\n";
     return 1;
-  }
+    }
 
   vgui::init(argc, argv);
 
   vgui_blender_tableau_new blend(argv[1], 0, 0.5);
-  vgui_image_tableau_new image(argv[2]);
+  vgui_image_tableau_new   image(argv[2]);
 
   vgui_composite_tableau_new comp(image, blend);
 

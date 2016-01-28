@@ -1,6 +1,6 @@
 #ifndef vcl_atomic_count_pthreads_h_
 #define vcl_atomic_count_pthreads_h_
-//:
+// :
 // \file
 // \brief thread/SMP safe reference counter
 // \author www.boost.org
@@ -30,64 +30,64 @@
 
 class vcl_atomic_count
 {
- private:
+private:
 
-    class scoped_lock
+  class scoped_lock
+  {
+public:
+
+    scoped_lock(pthread_mutex_t & m) : m_(m)
     {
-    public:
-
-        scoped_lock(pthread_mutex_t & m): m_(m)
-        {
-            pthread_mutex_lock(&m_);
-        }
-
-        ~scoped_lock()
-        {
-            pthread_mutex_unlock(&m_);
-        }
-
-    private:
-
-        pthread_mutex_t & m_;
-    };
-
- public:
-
-    explicit vcl_atomic_count(long v): value_(v)
-    {
-        pthread_mutex_init(&mutex_, 0);
+      pthread_mutex_lock(&m_);
     }
 
-    ~vcl_atomic_count()
+    ~scoped_lock()
     {
-        pthread_mutex_destroy(&mutex_);
+      pthread_mutex_unlock(&m_);
     }
 
-    void operator++()
+private:
+
+    pthread_mutex_t & m_;
+  };
+public:
+
+  explicit vcl_atomic_count(long v) : value_(v)
+  {
+    pthread_mutex_init(&mutex_, 0);
+  }
+
+  ~vcl_atomic_count()
+  {
+    pthread_mutex_destroy(&mutex_);
+  }
+
+  void operator++()
+  {
+    scoped_lock lock(mutex_);
+
+    ++value_;
+  }
+
+  long operator--()
+  {
+    scoped_lock lock(mutex_);
+
+    return --value_;
+  }
+
+  operator long() const
     {
-        scoped_lock lock(mutex_);
-        ++value_;
+    scoped_lock lock(mutex_);
+    return value_;
     }
+private:
 
-    long operator--()
-    {
-        scoped_lock lock(mutex_);
-        return --value_;
-    }
+  vcl_atomic_count(vcl_atomic_count const &);
+  vcl_atomic_count & operator=(vcl_atomic_count const &);
 
-    operator long() const
-    {
-        scoped_lock lock(mutex_);
-        return value_;
-    }
-
- private:
-
-    vcl_atomic_count(vcl_atomic_count const &);
-    vcl_atomic_count & operator=(vcl_atomic_count const &);
-
-    mutable pthread_mutex_t mutex_;
-    long value_;
+  mutable pthread_mutex_t mutex_;
+  long                    value_;
 };
 
 #endif // #ifndef vcl_atomic_count_pthreads_h_

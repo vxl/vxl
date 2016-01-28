@@ -1,7 +1,7 @@
 // This is oxl/osl/osl_canny_rothwell_params.h
 #ifndef osl_canny_rothwell_params_h_
 #define osl_canny_rothwell_params_h_
-//:
+// :
 // \file
 // \author fsm
 //
@@ -12,7 +12,7 @@
 
 class osl_canny_rothwell_params
 {
- public:
+public:
   osl_canny_rothwell_params() : sigma(1.0), low(2.0), high(12.0), range(2.0), verbose(true) {}
   ~osl_canny_rothwell_params() {}
 
@@ -20,7 +20,7 @@ class osl_canny_rothwell_params
   float low;
   float high;
   float range;
-  bool verbose;
+  bool  verbose;
 };
 
 #endif // osl_canny_rothwell_params_h_

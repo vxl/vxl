@@ -1,5 +1,5 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_update_dist_image_process.cxx
-//:
+// :
 // \file
 #include <bprb/bprb_func_process.h>
 #include <vcl_iostream.h>
@@ -17,84 +17,87 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
 
-
 bool bbgm_update_dist_image_process_cons(bprb_func_process& pro)
 {
   vcl_vector<vcl_string> in_types(7), out_types(1);
-  in_types[0] = "bbgm_image_sptr";// the distribution image being updated
-  in_types[1]= "vil_image_view_base_sptr";//the update image data
-  in_types[2]= "int"; //max_components
-  in_types[3]= "int"; //window size
-  in_types[4]= "float"; //initial_variance
-  in_types[5]= "float"; //g_thresh
-  in_types[6]= "float"; //min_stdev
+  in_types[0] = "bbgm_image_sptr";          // the distribution image being updated
+  in_types[1] = "vil_image_view_base_sptr"; // the update image data
+  in_types[2] = "int";                      // max_components
+  in_types[3] = "int";                      // window size
+  in_types[4] = "float";                    // initial_variance
+  in_types[5] = "float";                    // g_thresh
+  in_types[6] = "float";                    // min_stdev
   pro.set_input_types(in_types);
-  out_types[0]= "bbgm_image_sptr";// the updated distribution image
+  out_types[0] = "bbgm_image_sptr";// the updated distribution image
   pro.set_output_types(out_types);
-  pro.set_input(0, brdb_value_sptr(new brdb_value_t<bbgm_image_sptr>(0)));
+  pro.set_input(0, brdb_value_sptr(new brdb_value_t<bbgm_image_sptr>(0) ) );
   return true;
 }
 
 bool bbgm_update_dist_image_process_init(bprb_func_process& pro)
 {
-  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(0));
+  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(0) );
   return true;
 }
 
-//: Process execute function
+// : Process execute function
 bool bbgm_update_dist_image_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (!pro.verify_inputs()){
+  if( !pro.verify_inputs() )
+    {
     vcl_cerr << "In bbgm_update_dist_image_process::execute() -"
              << " invalid inputs\n";
     return false;
-  }
+    }
 
   // Retrieve background image
   bbgm_image_sptr bgm = pro.get_input<bbgm_image_sptr>(0);
 
-  //Retrieve image for update
+  // Retrieve image for update
   vil_image_view_base_sptr update_image =
     pro.get_input<vil_image_view_base_sptr>(1);
 
-  //Retrieve max components
+  // Retrieve max components
   int max_components = pro.get_input<int>(2);
 
-  //Retrieve window_size
+  // Retrieve window_size
   int window_size = pro.get_input<int>(3);
 
-  //Retrieve initial_variance
+  // Retrieve initial_variance
   float initial_variance = pro.get_input<float>(4);
 
-  //Retrieve g_thresh
+  // Retrieve g_thresh
   float g_thresh = pro.get_input<float>(5);
 
-  //Retrieve min_stdev
+  // Retrieve min_stdev
   float min_stdev = pro.get_input<float>(6);
 
-
   vil_image_view<float> img = *vil_convert_cast(float(), update_image);
-  if (update_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
-    vil_math_scale_values(img,1.0/255.0);
+  if( update_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE )
+    {
+    vil_math_scale_values(img, 1.0 / 255.0);
+    }
 
   unsigned ni = img.ni();
   unsigned nj = img.nj();
   unsigned np = img.nplanes();
 
-  if (np ==1){
-    typedef bsta_gauss_sf1 bsta_gauss1_t;
-    typedef bsta_num_obs<bsta_gauss1_t> gauss_type1;
-    typedef bsta_mixture<gauss_type1> mix_gauss_type1;
+  if( np == 1 )
+    {
+    typedef bsta_gauss_sf1                bsta_gauss1_t;
+    typedef bsta_num_obs<bsta_gauss1_t>   gauss_type1;
+    typedef bsta_mixture<gauss_type1>     mix_gauss_type1;
     typedef bsta_num_obs<mix_gauss_type1> obs_mix_gauss_type1;
     // get the templated mixture model
     bbgm_image_sptr model_sptr;
-    if (!bgm) {
-      model_sptr = new bbgm_image_of<obs_mix_gauss_type1>(ni,nj, obs_mix_gauss_type1());
-    }
-    else model_sptr = bgm;
-    bbgm_image_of<obs_mix_gauss_type1> *model =
-      static_cast<bbgm_image_of<obs_mix_gauss_type1>*>(model_sptr.ptr());
+    if( !bgm )
+      {
+      model_sptr = new bbgm_image_of<obs_mix_gauss_type1>(ni, nj, obs_mix_gauss_type1() );
+      }
+    else {model_sptr = bgm; }
+    bbgm_image_of<obs_mix_gauss_type1> * model =
+      static_cast<bbgm_image_of<obs_mix_gauss_type1> *>(model_sptr.ptr() );
 
     bsta_gauss1_t init_gauss(0, initial_variance);
 
@@ -104,27 +107,28 @@ bool bbgm_update_dist_image_process(bprb_func_process& pro)
                                                             min_stdev,
                                                             window_size);
 
-    update(*model,img,updater);
+    update(*model, img, updater);
 
     brdb_value_sptr output = new brdb_value_t<bbgm_image_sptr>(model);
     pro.set_output(0, output);
     return true;
-  }
-  if (np ==3)
-  {
-    typedef bsta_gauss_if3 bsta_gauss3_t;
-    typedef bsta_gauss3_t::vector_type vector3_;
-    typedef bsta_num_obs<bsta_gauss3_t> gauss_type3;
-    typedef bsta_mixture<gauss_type3> mix_gauss_type3;
+    }
+  if( np == 3 )
+    {
+    typedef bsta_gauss_if3                bsta_gauss3_t;
+    typedef bsta_gauss3_t::vector_type    vector3_;
+    typedef bsta_num_obs<bsta_gauss3_t>   gauss_type3;
+    typedef bsta_mixture<gauss_type3>     mix_gauss_type3;
     typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;
     // get the templated mixture model
     bbgm_image_sptr model_sptr;
-    if (!bgm) {
-      model_sptr = new bbgm_image_of<obs_mix_gauss_type3>(ni,nj, obs_mix_gauss_type3());
-    }
-    else model_sptr = bgm;
-    bbgm_image_of<obs_mix_gauss_type3> *model =
-      static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(model_sptr.ptr());
+    if( !bgm )
+      {
+      model_sptr = new bbgm_image_of<obs_mix_gauss_type3>(ni, nj, obs_mix_gauss_type3() );
+      }
+    else {model_sptr = bgm; }
+    bbgm_image_of<obs_mix_gauss_type3> * model =
+      static_cast<bbgm_image_of<obs_mix_gauss_type3> *>(model_sptr.ptr() );
 
     vector3_ mean, var;
     mean.fill(0.0f); var.fill(initial_variance);
@@ -136,12 +140,11 @@ bool bbgm_update_dist_image_process(bprb_func_process& pro)
                                                             min_stdev,
                                                             window_size);
 
-    update(*model,img,updater);
+    update(*model, img, updater);
 
     brdb_value_sptr output = new brdb_value_t<bbgm_image_sptr>(model);
     pro.set_output(0, output);
     return true;
-  }
+    }
   return false;
 }
-

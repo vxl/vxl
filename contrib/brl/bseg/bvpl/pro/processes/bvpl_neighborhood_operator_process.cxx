@@ -1,6 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/bvpl_neighborhood_operator_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A class for applying a kernel on a voxel world.
 //
@@ -31,22 +31,21 @@
 
 namespace bvpl_neighborhood_operator_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 5;
+const unsigned n_outputs_ = 1;
 }
-
 
 bool bvpl_neighborhood_operator_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_neighborhood_operator_process_globals;
-  //process takes 5 inputs
-  //input[0]: The grid
-  //input[1]: The kernel
-  //input[2]: The occupancy type:
+  // process takes 5 inputs
+  // input[0]: The grid
+  // input[1]: The kernel
+  // input[2]: The occupancy type:
   //          -float
   //          -opinion
-  //input[3]: The functor type
-  //input[4]: Output grid path
+  // input[3]: The functor type
+  // input[4]: Output grid path
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_grid_base_sptr";
   input_types_[1] = "bvpl_kernel_sptr";
@@ -64,105 +63,121 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
 {
   using namespace bvpl_neighborhood_operator_process_globals;
 
-  if (pro.n_inputs() < n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
-  unsigned i = 0;
+  // get inputs:
+  unsigned                  i = 0;
   bvxm_voxel_grid_base_sptr input_grid = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  bvpl_kernel_sptr kernel = pro.get_input<bvpl_kernel_sptr>(i++);
-  vcl_string ocp_type = pro.get_input<vcl_string>(i++);
-  vcl_string functor_name = pro.get_input<vcl_string>(i++);
-  vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
+  bvpl_kernel_sptr          kernel = pro.get_input<bvpl_kernel_sptr>(i++);
+  vcl_string                ocp_type = pro.get_input<vcl_string>(i++);
+  vcl_string                functor_name = pro.get_input<vcl_string>(i++);
+  vcl_string                out_grid_path = pro.get_input<vcl_string>(i++);
 
-  //check input's validity
-  i=0;
-  if (!input_grid.ptr()) {
+  // check input's validity
+  i = 0;
+  if( !input_grid.ptr() )
+    {
     vcl_cout << pro.name() << " :-- Grid is not valid!\n";
     return false;
-  }
+    }
 
-  if ( !kernel ){
-      vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
-      return false;
-  }
-
-  if (ocp_type == "float") {
-    bvxm_voxel_grid<float> *grid_out= new bvxm_voxel_grid<float>(out_grid_path, input_grid->grid_size());
-    if (bvxm_voxel_grid<float> * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
+  if( !kernel )
     {
-      if (functor_name == "edge2d") {
-        bvpl_edge2d_functor<float> func;
+    vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
+    return false;
+    }
+
+  if( ocp_type == "float" )
+    {
+    bvxm_voxel_grid<float> * grid_out = new bvxm_voxel_grid<float>(out_grid_path, input_grid->grid_size() );
+    if( bvxm_voxel_grid<float> * float_input_grid = dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr() ) )
+      {
+      if( functor_name == "edge2d" )
+        {
+        bvpl_edge2d_functor<float>                               func;
         bvpl_neighb_operator<float, bvpl_edge2d_functor<float> > oper(func);
         oper.operate(float_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
-      }
-      else if (functor_name == "edge_algebraic_mean") {
-        bvpl_edge_algebraic_mean_functor<float> func;
+        }
+      else if( functor_name == "edge_algebraic_mean" )
+        {
+        bvpl_edge_algebraic_mean_functor<float>                               func;
         bvpl_neighb_operator<float, bvpl_edge_algebraic_mean_functor<float> > oper(func);
         oper.operate(float_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
-      }
-      else if (functor_name == "edge_geometric_mean") {
-        bvpl_edge_geometric_mean_functor<float> func;
+        }
+      else if( functor_name == "edge_geometric_mean" )
+        {
+        bvpl_edge_geometric_mean_functor<float>                               func;
         bvpl_neighb_operator<float, bvpl_edge_geometric_mean_functor<float> > oper(func);
         oper.operate(float_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
-      }
-      else {
+        }
+      else
+        {
         vcl_cout << "Unsupported data type or functor type\n";
         return false;
+        }
       }
-    }
     vcl_cout << "Input grid is invalid\n";
     return false;
-  }
-  else if (ocp_type == "opinion") {
-    if (bvxm_voxel_grid<bvxm_opinion> * bvxm_opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
+    }
+  else if( ocp_type == "opinion" )
     {
-      bvxm_voxel_grid<bvxm_opinion> * grid_out= new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, bvxm_opinion_input_grid->grid_size());
-      grid_out->initialize_data(bvxm_opinion(0.005f));
-      bvpl_opinion_functor func;
+    if( bvxm_voxel_grid<bvxm_opinion> * bvxm_opinion_input_grid =
+          dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr() ) )
+      {
+      bvxm_voxel_grid<bvxm_opinion> * grid_out = new bvxm_voxel_grid<bvxm_opinion>(out_grid_path,
+                                                                                   bvxm_opinion_input_grid->grid_size() );
+      grid_out->initialize_data(bvxm_opinion(0.005f) );
+      bvpl_opinion_functor                                     func;
       bvpl_neighb_operator<bvxm_opinion, bvpl_opinion_functor> oper(func);
       oper.operate(bvxm_opinion_input_grid, kernel, grid_out);
       pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
       return true;
-    }
+      }
     vcl_cout << "Input grid is invalid\n";
     return false;
-  }
-  else if (ocp_type == "bsta_gauss_f1") {
+    }
+  else if( ocp_type == "bsta_gauss_f1" )
+    {
     typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
-    bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, input_grid->grid_size());
-    if (bvxm_voxel_grid<gauss_type> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr())){
-      if (functor_name == "gauss_convolution") {
-        bvpl_gauss_convolution_functor func;
+    bvxm_voxel_grid<gauss_type> * grid_out = new bvxm_voxel_grid<gauss_type>(out_grid_path, input_grid->grid_size() );
+    if( bvxm_voxel_grid<gauss_type> * gauss_input_grid =
+          dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr() ) )
+      {
+      if( functor_name == "gauss_convolution" )
+        {
+        bvpl_gauss_convolution_functor                                   func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
         oper.operate(gauss_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
-      }
-      if (functor_name == "positive_gauss_convolution") {
-        bvpl_positive_gauss_conv_functor func;
+        }
+      if( functor_name == "positive_gauss_convolution" )
+        {
+        bvpl_positive_gauss_conv_functor                                   func;
         bvpl_neighb_operator<gauss_type, bvpl_positive_gauss_conv_functor> oper(func);
         oper.operate(gauss_input_grid, kernel, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         return true;
-      }
-      else {
+        }
+      else
+        {
         vcl_cout << "Unsupported functor\n";
         return false;
+        }
       }
-    }
     vcl_cout << "Input grid is invalid\n";
     return false;
-  }
+    }
   vcl_cout << "Unsupported data type or functor type\n";
   return false;
 }

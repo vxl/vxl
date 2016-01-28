@@ -2,9 +2,9 @@
 #ifndef mbl_read_double_h_
 #define mbl_read_double_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Asks question and waits for an answer
 // \author tim
@@ -31,6 +31,7 @@
 // \endcode
 
 double mbl_read_double(const char* q_str, double default_d);
+
 double mbl_read_double(const char* q_str, double default_d, double min_d, double max_d);
 
-#endif //mbl_read_double_h_
+#endif // mbl_read_double_h_

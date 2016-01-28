@@ -1,6 +1,6 @@
 #ifndef bwm_tableau_generic_cam_h_
 #define bwm_tableau_generic_cam_h_
-//:
+// :
 // \file
 #include "bwm_tableau_cam.h"
 #include "bwm_observer_generic_cam.h"
@@ -15,25 +15,27 @@
 
 class bwm_tableau_generic_cam : public bwm_tableau_cam
 {
- public:
+public:
 
   bwm_tableau_generic_cam(bwm_observer_generic_cam* obs)
     : bwm_tableau_cam(obs), my_observer_(obs) {}
 
-  virtual ~bwm_tableau_generic_cam(){}
+  virtual ~bwm_tableau_generic_cam() {}
 
   virtual vcl_string type_name() const { return "bwm_tableau_generic_cam"; }
 
   bool handle(const vgui_event &);
 
-  void get_popup(vgui_popup_params const &params, vgui_menu &menu);
+  void get_popup(vgui_popup_params const & params, vgui_menu & menu);
 
-  //: saves the camera with a new version number (if adjusted) and returns the path
+  // : saves the camera with a new version number (if adjusted) and returns the path
   vcl_string save_camera();
+
   void ray_image();
- protected:
+
+protected:
   bwm_observer_generic_cam* my_observer_;
-  vul_timer timer_;
+  vul_timer                 timer_;
 };
 
 #endif

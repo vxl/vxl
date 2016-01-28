@@ -1,5 +1,5 @@
 #include "segv_vil_menus.h"
-//:
+// :
 // \file
 #include <vgui/vgui.h>
 #include <vgui/vgui_key.h>
@@ -12,7 +12,6 @@ void segv_vil_menus::quit_callback()
 {
   segv_vil_segmentation_manager::instance()->quit();
 }
-
 
 void segv_vil_menus::load_image_callback()
 {
@@ -33,7 +32,6 @@ void segv_vil_menus::remove_image_callback()
 {
   segv_vil_segmentation_manager::instance()->remove_image();
 }
-
 
 void segv_vil_menus::convert_to_grey_callback()
 {
@@ -104,7 +102,6 @@ void segv_vil_menus::mser_conics_callback()
 {
   segv_vil_segmentation_manager::instance()->mser_conics();
 }
-
 
 void segv_vil_menus::regions_callback()
 {
@@ -231,18 +228,22 @@ void segv_vil_menus::line_image_callback()
 {
   segv_vil_segmentation_manager::instance()->draw_line_image();
 }
+
 void segv_vil_menus::display_roi_callback()
 {
   segv_vil_segmentation_manager::instance()->display_roi();
 }
+
 void segv_vil_menus::create_roi_callback()
 {
   segv_vil_segmentation_manager::instance()->create_roi();
 }
+
 void segv_vil_menus::crop_image_callback()
 {
   segv_vil_segmentation_manager::instance()->crop_image();
 }
+
 void segv_vil_menus::gaussian_callback()
 {
   segv_vil_segmentation_manager::instance()->gaussian();
@@ -253,7 +254,7 @@ void segv_vil_menus::abs_value_callback()
   segv_vil_segmentation_manager::instance()->abs_value();
 }
 
-//segv_vil_menus definition
+// segv_vil_menus definition
 vgui_menu segv_vil_menus::get_menu()
 {
   vgui_menu menubar;
@@ -261,13 +262,14 @@ vgui_menu segv_vil_menus::get_menu()
   vgui_menu menuview;
   vgui_menu menuedit;
   vgui_menu menuops;
-  //file menu entries
-  menufile.add( "Quit", quit_callback,(vgui_key)'q', vgui_CTRL);
-  menufile.add( "Load Image", load_image_callback,(vgui_key)'l', vgui_CTRL);
+
+  // file menu entries
+  menufile.add( "Quit", quit_callback, (vgui_key)'q', vgui_CTRL);
+  menufile.add( "Load Image", load_image_callback, (vgui_key)'l', vgui_CTRL);
   menufile.add( "Save Image", save_image_callback);
   menufile.add( "Save NITF Camera", save_camera_callback);
 
-  //view menu entries
+  // view menu entries
   menuview.add("Remove Image", remove_image_callback);
   menuview.add("Clear Spatial Objects", clear_display_callback);
   menuview.add("Display ROI", display_roi_callback);
@@ -285,7 +287,7 @@ vgui_menu segv_vil_menus::get_menu()
   menuview.add("Project Points RPC", project_points_callback);
   menuview.add("Image as VRML Points", image_as_vrml_points_callback);
 
-  //edit menu entries
+  // edit menu entries
 
   menuedit.add("Threshold", threshold_image_callback);
   menuedit.add("Harris", harris_corners_callback);
@@ -302,8 +304,8 @@ vgui_menu segv_vil_menus::get_menu()
   menuedit.add("Non-Maximal Suppression", nonmaximal_suppression_callback);
   menuedit.add("Load Line Image", line_image_callback);
 
-  //operation menu entries
-  menuops.add("Create ROI:" , create_roi_callback);
+  // operation menu entries
+  menuops.add("Create ROI:", create_roi_callback);
   menuops.add("Convert To Greyscale:", convert_to_grey_callback);
   menuops.add("Crop Image:", crop_image_callback);
   menuops.add("Add Images:", add_images_callback);
@@ -319,11 +321,10 @@ vgui_menu segv_vil_menus::get_menu()
   menuops.add("Rotational Extrema", rot_extrema_callback);
   menuops.add("GradMagAngle", gradient_mag_angle_callback);
   menuops.add("FFT", fft_callback);
-  //Top level menu layout
+  // Top level menu layout
   menubar.add( "File", menufile);
   menubar.add( "View", menuview);
   menubar.add( "Edit", menuedit);
   menubar.add( "Image Ops", menuops);
   return menubar;
 }
-

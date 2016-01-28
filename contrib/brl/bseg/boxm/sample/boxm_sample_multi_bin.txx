@@ -12,87 +12,93 @@
 
 template <boxm_apm_type APM_MODEL>
 typename boxm_sample_multi_bin<APM_MODEL>::apm_datatype & boxm_sample_multi_bin<APM_MODEL>::appearance(int bin)
-{
-  if (appearance_.find(bin)==appearance_.end())
   {
-    appearance_[bin]=apm_datatype();
+  if( appearance_.find(bin) == appearance_.end() )
+    {
+    appearance_[bin] = apm_datatype();
     return appearance_[bin];
-  }
+    }
   else
+    {
     return appearance_[bin];
-}
+    }
+  }
 
 template <boxm_apm_type APM_MODEL>
-void boxm_sample_multi_bin<APM_MODEL>::set_appearance(apm_datatype  app,int bin)
+void boxm_sample_multi_bin<APM_MODEL>::set_appearance(apm_datatype  app, int bin)
 {
-  appearance_[bin]=app;
+  appearance_[bin] = app;
 }
 
 template <boxm_apm_type APM_MODEL>
 void boxm_sample_multi_bin<APM_MODEL>::print(vcl_ostream& os) const
 {
-  os << "(alpha=" << alpha << " appearence=" ;
-  for (typename vcl_map<int,apm_datatype>::const_iterator iter=appearance_.begin();
-       iter!=appearance_.end(); ++iter)
+  os << "(alpha=" << alpha << " appearence=";
+  for( typename vcl_map<int, apm_datatype>::const_iterator iter = appearance_.begin();
+       iter != appearance_.end(); ++iter )
+    {
     os << "bin#= " << iter->first << ' ' << iter->second;
+    }
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_write(vsl_b_ostream & os, boxm_sample_multi_bin<APM_MODEL> const &sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_sample_multi_bin<APM_MODEL> const & sample)
 {
-  vsl_b_write(os, sample.version_no());
+  vsl_b_write(os, sample.version_no() );
   vsl_b_write(os, sample.alpha);
   vsl_b_write(os, sample.appearance_);
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_write(vsl_b_ostream & os, boxm_sample_multi_bin<APM_MODEL> const * &sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_sample_multi_bin<APM_MODEL> const * & sample)
 {
-  if (sample) {
+  if( sample )
+    {
     vsl_b_write(os, *sample);
-  }
+    }
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_read(vsl_b_istream & is, boxm_sample_multi_bin<APM_MODEL> &sample)
+void vsl_b_read(vsl_b_istream & is, boxm_sample_multi_bin<APM_MODEL> & sample)
 {
-  if (!is) return;
+  if( !is ) {return; }
 
   short version;
-  vsl_b_read(is,version);
-  switch (version)
-  {
+  vsl_b_read(is, version);
+
+  switch( version )
+    {
     case 1:
       vsl_b_read(is, sample.alpha);
       vsl_b_read(is, sample.appearance_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample_multi_bin<T>&)\n"
-               << "           Unknown version number "<< version << '\n';
+               << "           Unknown version number " << version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       break;
-  }
+    }
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_read(vsl_b_istream & is, boxm_sample_multi_bin<APM_MODEL> *&sample)
+void vsl_b_read(vsl_b_istream & is, boxm_sample_multi_bin<APM_MODEL> *& sample)
 {
   vsl_b_read(is, *sample);
 }
 
 template <boxm_apm_type APM_MODEL>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_sample_multi_bin<APM_MODEL>& sample)
+vcl_ostream & operator <<(vcl_ostream& os, const boxm_sample_multi_bin<APM_MODEL>& sample)
 {
   sample.print(os);
   return os;
 }
 
 #define BOXM_SAMPLE_MULTI_BIN_INSTANTIATE(T) \
-template class boxm_sample_multi_bin<T >; \
-template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T > const &); \
-template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T > const *&); \
-template void vsl_b_read(vsl_b_istream &, boxm_sample_multi_bin<T > &); \
-template void vsl_b_read(vsl_b_istream &, boxm_sample_multi_bin<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_sample_multi_bin<T >&)
+  template class boxm_sample_multi_bin<T>; \
+  template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T> const &); \
+  template void vsl_b_write(vsl_b_ostream &, boxm_sample_multi_bin<T> const * &); \
+  template void vsl_b_read(vsl_b_istream &, boxm_sample_multi_bin<T> &); \
+  template void vsl_b_read(vsl_b_istream &, boxm_sample_multi_bin<T> *&); \
+  template vcl_ostream & operator <<(vcl_ostream &, const boxm_sample_multi_bin<T> &)
 
 #endif

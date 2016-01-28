@@ -1,7 +1,7 @@
 // This is brl/bbas/bgrl/bgrl_search_func_sptr.h
 #ifndef bgrl_search_func_sptr_h_
 #define bgrl_search_func_sptr_h_
-//:
+// :
 // \file
 // \brief A smart pointer to a bgrl_search_func.
 // \author Matt Leotta, (mleotta@lems.brown.edu)

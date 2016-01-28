@@ -1,7 +1,7 @@
-//This is brl/bbas/bpgl/depth_map/depth_map_scene.h
+// This is brl/bbas/bpgl/depth_map/depth_map_scene.h
 #ifndef depth_map_scene_h_
 #define depth_map_scene_h_
-//:
+// :
 // \file
 // \brief A class to represent a symbolic depth map
 //
@@ -46,193 +46,194 @@
 class scene_depth_iterator;
 class depth_map_scene : public vbl_ref_count
 {
- public:
+public:
   depth_map_scene()
-  : ni_(0), nj_(0), image_path_("") {}
+    : ni_(0), nj_(0), image_path_("") {}
 
-  //: ni and nj are the required image dimensions
+  // : ni and nj are the required image dimensions
   depth_map_scene(unsigned ni, unsigned nj)
-  : ni_(ni), nj_(nj),image_path_("") {}
+    : ni_(ni), nj_(nj), image_path_("") {}
 
-  depth_map_scene(unsigned ni, unsigned nj,
-                  vcl_string const& image_path,
-                  vpgl_perspective_camera<double> const& cam,
-                  depth_map_region_sptr const& ground_plane,
-                  depth_map_region_sptr const& sky,
+  depth_map_scene(unsigned ni, unsigned nj, vcl_string const& image_path, vpgl_perspective_camera<double> const& cam,
+                  depth_map_region_sptr const& ground_plane, depth_map_region_sptr const& sky,
                   vcl_vector<depth_map_region_sptr> const& scene_regions);
 
-  //: accessors
-  unsigned ni() const {return ni_;}
-  unsigned nj() const {return nj_;}
-  vcl_string image_path() const {return image_path_;}
-  vcl_vector<depth_map_region_sptr> ground_plane() const {return ground_plane_;}
-  vcl_vector<depth_map_region_sptr> sky() const {return sky_;}
+  // : accessors
+  unsigned ni() const {return ni_; }
+  unsigned nj() const {return nj_; }
+  vcl_string image_path() const {return image_path_; }
+  vcl_vector<depth_map_region_sptr> ground_plane() const {return ground_plane_; }
+  vcl_vector<depth_map_region_sptr> sky() const {return sky_; }
   vcl_vector<depth_map_region_sptr> scene_regions() const;
-  vpgl_perspective_camera<double> cam() const{return cam_;}
-  //: set members
-  void set_image_path(vcl_string const& path){image_path_ = path;}
+
+  vpgl_perspective_camera<double> cam() const {return cam_; }
+  // : set members
+  void set_image_path(vcl_string const& path) {image_path_ = path; }
   void set_image_size(unsigned const& ni, unsigned const& nj) { ni_ = ni;  nj_ = nj; }
-  void set_camera(vpgl_perspective_camera<double> const& cam) {cam_ = cam;}
+  void set_camera(vpgl_perspective_camera<double> const& cam) {cam_ = cam; }
   void set_ground_plane(vsol_polygon_2d_sptr ground_plane);
+
   void set_sky(vsol_polygon_2d_sptr ground_plane);
 
-  //: set the scene depth of a movable plane. returns false if plane is fixed
+  // : set the scene depth of a movable plane. returns false if plane is fixed
   bool set_depth(double depth, vcl_string const& name);
 
-  //: set the maximum depth of the ground plane
+  // : set the maximum depth of the ground plane
   // For example the depth can be limited by the curvature of the Earth
   // proximity scale factor is with respect to the closest ground plane
   // point to the horizon. That is, points less than scale * distance to
   // closest point are moved to max_depth
-  void set_ground_plane_max_depth(double max_depth,
-                                  double proximity_scale_factor = 3.0);
+  void set_ground_plane_max_depth(double max_depth, double proximity_scale_factor = 3.0);
 
-  //:add a region orthogonal to the ground plane and perpendicular to the plane containing the principal ray and the z axis
-  void add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
-                             double min_distance, double max_distance,
+  // :add a region orthogonal to the ground plane and perpendicular to the plane containing the principal ray and the z axis
+  void add_ortho_perp_region(vsol_polygon_2d_sptr const& region, double min_distance, double max_distance,
                              vcl_string name);
 
-  //: add a region with an arbitrary orientation (not currently used)
-  void add_region(vsol_polygon_2d_sptr const& region,
-                  vgl_vector_3d<double> plane_normal,
-                  double min_distance,
-                  double max_distance,
-                  vcl_string name,
-                  depth_map_region::orientation orient,
-                  unsigned order = 0,
-                  unsigned land_id = 40,
-                  double height = -1.0,
-                  bool is_ref = false);
+  // : add a region with an arbitrary orientation (not currently used)
+  void add_region(vsol_polygon_2d_sptr const& region, vgl_vector_3d<double> plane_normal, double min_distance,
+                  double max_distance, vcl_string name, depth_map_region::orientation orient, unsigned order = 0,
+                  unsigned land_id = 40, double height = -1.0, bool is_ref = false);
 
-  //: add a ground region into ground_plane_
-  void add_ground(vsol_polygon_2d_sptr const& ground_plane,
-                  double min_depth = 0,
-                  double max_depth = 0,
-                  unsigned order = 0,
-                  vcl_string name = "ground_plane",
-                  unsigned land_id = 40,
-                  double height=-1.0);
+  // : add a ground region into ground_plane_
+  void add_ground(vsol_polygon_2d_sptr const& ground_plane, double min_depth = 0, double max_depth = 0,
+                  unsigned order = 0, vcl_string name = "ground_plane", unsigned land_id = 40, double height = -1.0);
 
-  //: add a sky region into sky_
-  void add_sky(vsol_polygon_2d_sptr const& sky,
-               unsigned order = 0,
-               vcl_string name = "sky");
+  // : add a sky region into sky_
+  void add_sky(vsol_polygon_2d_sptr const& sky, unsigned order = 0, vcl_string name = "sky");
 
-  //: return a depth map of distance from the camera. Downsample accordingly
+  // : return a depth map of distance from the camera. Downsample accordingly
   vil_image_view<float> depth_map(unsigned log2_downsample_ratio);
 
-  //: return a depth map of the specified region, use the 'ground_plane' and 'sky' strings to specify those two regions. downsample accordingly.
-  vil_image_view<float> depth_map(vcl_string region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff = 20000);
+  // : return a depth map of the specified region, use the 'ground_plane' and 'sky' strings to specify those two regions. downsample accordingly.
+  vil_image_view<float> depth_map(vcl_string region_name, unsigned log2_downsample_ratio,
+                                  double gp_dist_cutoff = 20000);
 
-  //: the iterator at the start of depth search. resets the depth_states_.
+  // : the iterator at the start of depth search. resets the depth_states_.
   scene_depth_iterator begin();
 
-  //: the iterator at the end of depth search.
+  // : the iterator at the end of depth search.
   scene_depth_iterator end();
 
-  //: move vert regions to next depth configuration. returns false if done
+  // : move vert regions to next depth configuration. returns false if done
   bool next_depth();
 
-  //: initialize the movable depth configuration
+  // : initialize the movable depth configuration
   void init_depths();
 
-  //: binary IO write
+  // : binary IO write
   void b_write(vsl_b_ostream& os);
 
-  //: binary IO read
+  // : binary IO read
   void b_read(vsl_b_istream& is);
 
-  //: binary io version no
-  unsigned version(){return 3;}
+  // : binary io version no
+  unsigned version() {return 3; }
 
-  //: debug utilities
+  // : debug utilities
   void print_depth_states();
 
-  //: match to a given continuous depth image
-  bool match(vil_image_view<float> const& depth_img, vil_image_view<float> const& vis_img, unsigned level, float& score);
+  // : match to a given continuous depth image
+  bool match(vil_image_view<float> const& depth_img, vil_image_view<float> const& vis_img, unsigned level,
+             float& score);
 
-  //: match to a given continuous depth image, use the ground_plane constraint as well
-  bool match_with_ground(vil_image_view<float> const& depth_img, vil_image_view<float> const& vis_img, unsigned level, float ground_depth_std_dev, float& score);
+  // : match to a given continuous depth image, use the ground_plane constraint as well
+  bool match_with_ground(vil_image_view<float> const& depth_img, vil_image_view<float> const& vis_img, unsigned level,
+                         float ground_depth_std_dev, float& score);
 
- protected:
-  unsigned ni_, nj_; //: depth map dimensions
-  vcl_string image_path_;
+protected:
+  unsigned                                   ni_, nj_; // : depth map dimensions
+  vcl_string                                 image_path_;
   vcl_map<vcl_string, depth_map_region_sptr> scene_regions_;
-  vcl_vector<depth_map_region_sptr> ground_plane_;
-  vcl_vector<depth_map_region_sptr> sky_;
-  vpgl_perspective_camera<double> cam_;
-  //: a vector of regions with assigned depths
+  vcl_vector<depth_map_region_sptr>          ground_plane_;
+  vcl_vector<depth_map_region_sptr>          sky_;
+  vpgl_perspective_camera<double>            cam_;
+  // : a vector of regions with assigned depths
   vcl_vector<depth_map_region_sptr> depth_states_;
 };
 
-//: An iterator for parameterized depth maps
+// : An iterator for parameterized depth maps
 //  Scans the vertical movable regions in depth, while respecting
 //  depth ordering constraints, e.g. region A is closer than region B.
 class scene_depth_iterator
 {
- public:
+public:
   scene_depth_iterator(depth_map_scene* scene = 0)
-  : end_(false), scene_(scene) {}
+    : end_(false), scene_(scene) {}
 
   ~scene_depth_iterator() {}
 
-  //: returns a reference to the scene to enable access to scene methods
-  depth_map_scene& operator*() {
+  // : returns a reference to the scene to enable access to scene methods
+  depth_map_scene & operator*()
+  {
     return *scene_;
   }
 
-  //: returns a pointer to the scene to enable access to scene methods
-  depth_map_scene* operator->() {
+  // : returns a pointer to the scene to enable access to scene methods
+  depth_map_scene * operator->()
+  {
     return scene_;
   }
 
-  //: increments the depth arrangement of vertical regions
-  scene_depth_iterator& operator++() {
-    if (!scene_) // if scene_ is null, there is no effect
+  // : increments the depth arrangement of vertical regions
+  scene_depth_iterator & operator++()
+  {
+    if( !scene_ ) // if scene_ is null, there is no effect
+      {
       return *this;
-    if (!scene_->next_depth()) end_ = true;
+      }
+    if( !scene_->next_depth() ) {end_ = true; }
     return *this;
   }
 
-  //: increments the depth arrangement of vertical regions n_inc times
-  scene_depth_iterator& operator+=(unsigned n_inc) {
-    if (!scene_)
+  // : increments the depth arrangement of vertical regions n_inc times
+  scene_depth_iterator & operator+=(unsigned n_inc)
+  {
+    if( !scene_ )
+      {
       return *this;
-
-    for (unsigned k =0; k<n_inc; ++k) {
-      if (!scene_->next_depth()) { end_ = true; break; }
-    }
+      }
+    for( unsigned k = 0; k < n_inc; ++k )
+      {
+      if( !scene_->next_depth() ) { end_ = true; break; }
+      }
     return *this;
   }
 
-  //: Only considers the state of end_ in determining equality.
+  // : Only considers the state of end_ in determining equality.
   //  enables the test for the end of depth region arrangements
-  bool operator==(const scene_depth_iterator& it) {
+  bool operator==(const scene_depth_iterator& it)
+  {
     return end_ == it.end();
   }
-  bool operator!=(const scene_depth_iterator& it) {
-    return !(end_ == it.end());
+
+  bool operator!=(const scene_depth_iterator& it)
+  {
+    return !(end_ == it.end() );
   }
 
-  //: defines the state of completing all the depth arrangements
-  void set_end(){end_ = true;}
-  bool end() const{return end_;}
- private:
-  bool end_;
+  // : defines the state of completing all the depth arrangements
+  void set_end() {end_ = true; }
+  bool end() const {return end_; }
+private:
+  bool             end_;
   depth_map_scene* scene_;
 };
 
-//: a functor to compare region depth order
-struct compare_order {
+// : a functor to compare region depth order
+struct compare_order
+  {
   bool operator ()(depth_map_region_sptr ra, depth_map_region_sptr rb)
   { return ra->order() < rb->order(); }
-};
+  };
 
 #include "depth_map_scene_sptr.h"
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* sptr);
-void vsl_b_read(vsl_b_istream &is, depth_map_scene*& sptr);
-void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& sptr);
-void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& sptr);
 
-#endif //depth_map_scene_h_
+void vsl_b_read(vsl_b_istream & is, depth_map_scene *& sptr);
+
+void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& sptr);
+
+void vsl_b_read(vsl_b_istream & is, depth_map_scene_sptr& sptr);
+
+#endif // depth_map_scene_h_

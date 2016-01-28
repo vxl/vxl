@@ -8,7 +8,7 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vnl/vnl_matrix_fixed.h>
 
-//a rational camera from a commercial satellite image
+// a rational camera from a commercial satellite image
 vpgl_rational_camera<double> construct_rational_camera()
 {
   double n_u[20] =  { 3.89528e-006, -7.41303e-008, 1.25847e-005,
@@ -39,22 +39,22 @@ vpgl_rational_camera<double> construct_rational_camera()
                     -1.15965e-007,  -7.89301e-006,  0.000275139, 1};
 
   vnl_matrix_fixed<double, 4, 20> cmatrix;
-  for (unsigned i = 0; i<20; ++i)
-  {
-    cmatrix[0][i]=n_u[i];  cmatrix[1][i]=d_u[i];
-    cmatrix[2][i]=n_v[i];  cmatrix[3][i]=d_v[i];
-  }
-  //The scales and offsets
-  vpgl_scale_offset<double> sox(0.0347, -71.4049);
-  vpgl_scale_offset<double> soy(0.0219, 41.8216);
-  vpgl_scale_offset<double> soz(501, -30);
-  vpgl_scale_offset<double> sou(4764, 4693);
-  vpgl_scale_offset<double> sov(4221, 3921);
+  for( unsigned i = 0; i < 20; ++i )
+    {
+    cmatrix[0][i] = n_u[i];  cmatrix[1][i] = d_u[i];
+    cmatrix[2][i] = n_v[i];  cmatrix[3][i] = d_v[i];
+    }
+  // The scales and offsets
+  vpgl_scale_offset<double>              sox(0.0347, -71.4049);
+  vpgl_scale_offset<double>              soy(0.0219, 41.8216);
+  vpgl_scale_offset<double>              soz(501, -30);
+  vpgl_scale_offset<double>              sou(4764, 4693);
+  vpgl_scale_offset<double>              sov(4221, 3921);
   vcl_vector<vpgl_scale_offset<double> > scale_offsets;
   scale_offsets.push_back(sox);   scale_offsets.push_back(soy);
   scale_offsets.push_back(soz);   scale_offsets.push_back(sou);
   scale_offsets.push_back(sov);
-  //Construct the rational camera
+  // Construct the rational camera
   vpgl_rational_camera<double> rat_cam(cmatrix, scale_offsets);
   return rat_cam;
 }
@@ -62,54 +62,53 @@ vpgl_rational_camera<double> construct_rational_camera()
 static void test_local_rational_camera()
 {
   vpgl_rational_camera<double> rcam = construct_rational_camera();
-  double xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
-  double yoff = rcam.offset(vpgl_rational_camera<double>::Y_INDX);
-  double zoff = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
+  double                       xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
+  double                       yoff = rcam.offset(vpgl_rational_camera<double>::Y_INDX);
+  double                       zoff = rcam.offset(vpgl_rational_camera<double>::Z_INDX);
 
-  vpgl_lvcs lvcs(yoff, xoff, zoff);
+  vpgl_lvcs                          lvcs(yoff, xoff, zoff);
   vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
-  double ug, vg, ul, vl;
+  double                             ug, vg, ul, vl;
   rcam.project(xoff, yoff, zoff, ug, vg);
   lrcam.project(0.0, 0.0, 0.0, ul, vl);
   vcl_cout << "Global (u v) (" << ug << ' ' << vg << ")\n"
            << "Local (u v) (" << ul << ' ' << vl << ")\n";
-  TEST_NEAR("local projection", vcl_fabs(ug-ul)+vcl_fabs(vg-vl), 0.0, 1e-3);
-  //---- test file I/O
+  TEST_NEAR("local projection", vcl_fabs(ug - ul) + vcl_fabs(vg - vl), 0.0, 1e-3);
+  // ---- test file I/O
   vcl_string path = "./test.lrcam";
-  bool good = lrcam.save(path);
+  bool       good = lrcam.save(path);
   TEST("save to file", good, true);
   vpgl_local_rational_camera<double>* lrc_r = read_local_rational_camera<double>(path);
-  double ulr, vlr;
+  double                              ulr, vlr;
   lrc_r->project(0.0, 0.0, 0.0, ulr, vlr);
-  TEST_NEAR("read from file", vcl_fabs(ug-ulr)+vcl_fabs(vg-vlr), 0.0, 1e-3);
-  vpl_unlink(path.c_str());
+  TEST_NEAR("read from file", vcl_fabs(ug - ulr) + vcl_fabs(vg - vlr), 0.0, 1e-3);
+  vpl_unlink(path.c_str() );
   // test binary I/O
-  vcl_string b_path = "./test_binary.vsl";
+  vcl_string     b_path = "./test_binary.vsl";
   vsl_b_ofstream os(b_path);
   vsl_b_write(os, lrcam);
   os.close();
-  vsl_b_ifstream is(b_path);
+  vsl_b_ifstream                     is(b_path);
   vpgl_local_rational_camera<double> lrcam_r;
   vsl_b_read(is, lrcam_r);
   double ulb, vlb;
   lrc_r->project(0.0, 0.0, 0.0, ulb, vlb);
-  TEST_NEAR("read from binary file", vcl_fabs(ug-ulb)+vcl_fabs(vg-vlb),
+  TEST_NEAR("read from binary file", vcl_fabs(ug - ulb) + vcl_fabs(vg - vlb),
             0.0, 1e-3);
-  vpl_unlink(b_path.c_str());
-  //-- test other geographic locations
+  vpl_unlink(b_path.c_str() );
+  // -- test other geographic locations
   double x0 = -71.402457, y0 = 41.821589, z0 = 20;
   double ug0, vg0, ul0, vl0;
   rcam.project(x0, y0, z0, ug0, vg0);
   lrcam.project(202.47, 0, 50, ul0, vl0);
-  TEST_NEAR("test displacement East", vcl_fabs(ug0-ul0)+vcl_fabs(vg0-vl0),
+  TEST_NEAR("test displacement East", vcl_fabs(ug0 - ul0) + vcl_fabs(vg0 - vl0),
             0.0, 3);
   double x1 = -71.404887, y1 = 41.823402, z1 = 16;
   double ug1, vg1, ul1, vl1;
   rcam.project(x1, y1, z1, ug1, vg1);
   lrcam.project(0, 200, 46, ul1, vl1);
-  TEST_NEAR("test displacement North", vcl_fabs(ug1-ul1)+vcl_fabs(vg1-vl1),
+  TEST_NEAR("test displacement North", vcl_fabs(ug1 - ul1) + vcl_fabs(vg1 - vl1),
             0.0, 3);
 }
 
 TESTMAIN(test_local_rational_camera);
-

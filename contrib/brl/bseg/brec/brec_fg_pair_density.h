@@ -1,6 +1,6 @@
 #ifndef brec_fg_pair_density_h_
 #define brec_fg_pair_density_h_
-//:
+// :
 // \file
 // \brief brec recognition utilities
 //
@@ -14,18 +14,20 @@
 
 #include "brec_pair_density.h"
 
-
 class brec_fg_pair_density : public brec_pair_density
 {
- public:
+public:
   brec_fg_pair_density() : brec_pair_density() {}
   virtual ~brec_fg_pair_density() {}
 
   virtual double operator()(const double y0, const double y1);
+
   double negative_log(const double y0, const double y1);
+
   double gradient_of_log(const double y0, const double y1);
+
   double gradient_of_negative_log(const double y0, const double y1);
+
 };
 
 #endif // brec_fg_pair_density_h_
-
