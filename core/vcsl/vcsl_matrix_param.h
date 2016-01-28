@@ -3,7 +3,7 @@
 //:
 // \file
 // \brief Auxiliary class for vcsl_matrix
-// \author François BERTEL
+// \author Francois BERTEL
 
 #include <vcsl/vcsl_matrix_param_sptr.h>
 #include <vbl/vbl_ref_count.h>

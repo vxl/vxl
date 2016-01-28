@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief Abstract unit associated to a dimension
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 //   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead

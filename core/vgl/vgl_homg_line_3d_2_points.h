@@ -6,7 +6,7 @@
 #endif
 //:
 // \file
-// \author Don HAMILTON Peter TU François BERTEL
+// \author Don HAMILTON Peter TU Francois BERTEL
 //
 // \verbatim
 //  Modifications

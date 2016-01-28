@@ -7,7 +7,7 @@
 //  Modifications
 //   Version |Date      | Author                   |Comment
 //   --------+----------+--------------------------+---------------------------
-//   1.0     |2000/05/09| François BERTEL          |Creation
+//   1.0     |2000/05/09| Francois BERTEL          |Creation
 //   1.1     |2003/01/08| Peter Vanroose           |Now using testlib macros
 // \endverbatim
 //*****************************************************************************

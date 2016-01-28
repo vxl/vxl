@@ -9,7 +9,7 @@
 //
 // \verbatim
 // Modifications
-// 2000.05.15 François BERTEL Added some missing <T>
+// 2000.05.15 Francois BERTEL Added some missing <T>
 // 2000.05.16 Peter Vanroose  Operators > < >= <= made const
 // 2000.09.13 fsm      Added rationale for unprotect().
 // PDA (Manchester) 23/03/2001: Tidied up the documentation

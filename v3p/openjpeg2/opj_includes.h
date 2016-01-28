@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *

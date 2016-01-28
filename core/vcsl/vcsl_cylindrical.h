@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief 3D cylindrical coordinate system
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2004/09/10 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 

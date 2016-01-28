@@ -6,11 +6,11 @@
 // \brief  Region of a 3D space
 //
 // \author
-// François BERTEL
+// Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/05/04 François BERTEL Creation
+//   2000/05/04 Francois BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 //   2004/09/06 Peter Vanroose  Added safe cast methods to polygon_3d

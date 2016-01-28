@@ -1,7 +1,7 @@
 // \file
 //
 // \version 1.0
-// \author  Gastón Araguás UTN Cordoba, Argentina
+// \author  Gaston Araguas UTN Cordoba, Argentina
 // \date    3 March, 2008
 
 #include <vgui/vgui.h>
