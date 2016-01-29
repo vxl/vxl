@@ -6,9 +6,9 @@
 #include <cstddef>
 
 #ifdef vcl_generic_cstddef_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cstddef_STD std
+#  define vcl_generic_cstddef_STD std
 #endif
 
 #include "../generic/vcl_cstddef.h"

@@ -2,9 +2,9 @@
 #ifndef mvl_three_view_six_point_structure_h_
 #define mvl_three_view_six_point_structure_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 // Code for computing projective structure from 3 views of 6 points.
@@ -23,7 +23,7 @@
 #include <vnl/vnl_matrix.h>
 
 struct mvl_three_view_six_point_structure
-{
+  {
   mvl_three_view_six_point_structure();
 
   // this flag is currently ignored.
@@ -39,11 +39,11 @@ struct mvl_three_view_six_point_structure
 
   // output data.
   struct solution_t
-  {
+    {
     bool valid;
     vnl_double_3x4 P[3]; // camera matrices.
-    vnl_double_4   Q;    // last world point.
-  } solution[3];
-};
+    vnl_double_4 Q;      // last world point.
+    } solution[3];
+  };
 
 #endif // mvl_three_view_six_point_structure_h_

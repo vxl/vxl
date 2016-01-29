@@ -44,4 +44,3 @@ DECLARE_FUNC_CONS_INIT(brec_detect_hierarchy_process);
 DECLARE_FUNC_CONS(brec_set_hierarchy_model_dir_process);
 
 #endif  // brec_processes_h_
-

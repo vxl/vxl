@@ -5,7 +5,7 @@
 #ifndef rgtl_serialize_stl_vector_hxx
 #define rgtl_serialize_stl_vector_hxx
 
-//:
+// :
 // \file
 // \brief Implement serialization for stl vector.
 // \author Brad King
@@ -22,7 +22,7 @@ void rgtl_serialize_save(Serializer& sr, vcl_vector<T>& self)
 {
   typename vcl_vector<T>::size_type sz = self.size();
   sr << sz;
-  for(typename vcl_vector<T>::iterator i = self.begin(); i != self.end(); ++i)
+  for( typename vcl_vector<T>::iterator i = self.begin(); i != self.end(); ++i )
     {
     sr << *i;
     }
@@ -34,7 +34,7 @@ void rgtl_serialize_load(Serializer& sr, vcl_vector<T>& self)
   typename vcl_vector<T>::size_type sz;
   sr >> sz;
   self.resize(sz);
-  for(typename vcl_vector<T>::iterator i = self.begin(); i != self.end(); ++i)
+  for( typename vcl_vector<T>::iterator i = self.begin(); i != self.end(); ++i )
     {
     sr >> *i;
     }

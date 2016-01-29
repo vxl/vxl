@@ -6,9 +6,9 @@
 #include <streambuf>
 
 #ifdef vcl_generic_streambuf_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_streambuf_STD std
+#  define vcl_generic_streambuf_STD std
 #endif
 
 #include "../generic/vcl_streambuf.h"

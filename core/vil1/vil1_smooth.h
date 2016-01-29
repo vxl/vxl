@@ -2,20 +2,20 @@
 #ifndef vil1_smooth_h_
 #define vil1_smooth_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Functions to convolve a vil1_image with a smoothing kernel
 // \author fsm
 
 #include <vil1/vil1_image.h>
 
-//: Convolve a vil1_image with a separable symmetric kernel.
+// : Convolve a vil1_image with a separable symmetric kernel.
 // The 1-D half-kernel is supplied.
 vil1_image vil1_smooth_byte_separable_symmetric(float const kernel[], unsigned N, vil1_image const &);
 
-//: Gaussian smooth an image.
+// : Gaussian smooth an image.
 vil1_image vil1_smooth_gaussian(vil1_image const &, double sigma);
 
 #endif // vil1_smooth_h_

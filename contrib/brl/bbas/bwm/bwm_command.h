@@ -1,7 +1,7 @@
 // This is brl/bbas/bwm/bwm_command.h
 #ifndef bwm_command_h_
 #define bwm_command_h_
-//:
+// :
 // \file
 // \brief This file defines vgui_command classes for bwm
 // \author Gamze Tunali (gtunali@brown.edu)
@@ -21,10 +21,10 @@
 
 #include <vcl_string.h>
 
-//: \brief The command for selecting the active tool from a menu
+// : \brief The command for selecting the active tool from a menu
 class bwm_command : public vgui_command
 {
- public:
+public:
   bwm_command() {}
   virtual ~bwm_command() {}
   virtual vcl_string name() const { return "bwm_command"; }
@@ -33,28 +33,26 @@ class bwm_command : public vgui_command
 
 class bwm_tab_process_command : public bwm_command
 {
- public:
+public:
   bwm_tab_process_command() {}
   virtual ~bwm_tab_process_command() {}
   virtual vcl_string name() const { return "bwm_tab_process_command"; }
 
   void set_tableau(vgui_tableau_sptr tab) {tableau_ = tab; }
-
- protected:
+protected:
   vgui_tableau_sptr tableau_;
 };
 
 class bwm_menu_process_command : public bwm_command
 {
- public:
+public:
   bwm_menu_process_command() {}
   virtual ~bwm_menu_process_command() {}
   virtual vcl_string name() const { return "bwm_tab_process_command"; }
 
   virtual void set_menu(vgui_menu& menu) {menu_ = menu; }
-
- protected:
+protected:
   vgui_menu menu_;
 };
 
-#endif //bwm_command_h_
+#endif // bwm_command_h_

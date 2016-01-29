@@ -6,7 +6,7 @@
 // VC8 does not declare abs(__int 64) - so need to rewrite all vcl_abs
 
 #ifndef vcl_abs
-# define vcl_abs vcl_abs
+#  define vcl_abs vcl_abs
 #endif
 
 #define vcl_generic_cmath_STD std

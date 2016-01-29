@@ -1,6 +1,6 @@
 #ifndef vnl_hungarian_algorithm_h_
 #define vnl_hungarian_algorithm_h_
-//:
+// :
 // \file
 // \author Amitha Perera
 // \date   Sep 2004
@@ -10,7 +10,7 @@
 #include <vcl_vector.h>
 #include <vnl/vnl_matrix.h>
 
-//: Find the best column to row assignment given a cost matrix.
+// : Find the best column to row assignment given a cost matrix.
 //
 // This is an implementation of the Hungarian algorithm (also known
 // as the Munkres algorithm). It finds the minimum cost assignment of
@@ -29,11 +29,12 @@
 template <class T>
 class vnl_hungarian_algorithm
 {
- public:
+public:
 
   // The steps of the algorithm described below are taken from
   // http://www.cs.duke.edu/brd/Teaching/Bio/asmb/current/Handouts/munkres.html
-  enum STEP_TYPE {
+  enum STEP_TYPE
+    {
     STEP_0 = 0,
     STEP_1,
     STEP_2,
@@ -42,65 +43,66 @@ class vnl_hungarian_algorithm
     STEP_5,
     STEP_6,
     STEP_done
-  };
+    };
 
-  enum STATE_TYPE {
-    NORMAL=0,
+  enum STATE_TYPE
+    {
+    NORMAL = 0,
     STAR,
     PRIME
-  };
+    };
 
-  typedef vnl_matrix< int >    AssignmentMatrixType;
+  typedef vnl_matrix<int>      AssignmentMatrixType;
   typedef vcl_vector<unsigned> AssignmentVectorType;
 
   vnl_hungarian_algorithm() : m_TotalCost(0) {}
 
   ~vnl_hungarian_algorithm() {}
 
-  //: This constructor (and the following cast operator) is provided for backward compatibility with the original function implementation
+  // : This constructor (and the following cast operator) is provided for backward compatibility with the original function implementation
   vnl_hungarian_algorithm(vnl_matrix<T> const& cost) { SetCostMatrix(cost); StartAssignment(); }
   operator vcl_vector<unsigned>() { return GetAssignmentVector(); }
 
-  //: Starts the assignment
-  void SetCostMatrix( vnl_matrix< T > const& );
+  // : Starts the assignment
+  void SetCostMatrix( vnl_matrix<T> const & );
 
-  //: Starts the assignment
+  // : Starts the assignment
   void StartAssignment();
 
-  //: Returns the total cost of the assignment
+  // : Returns the total cost of the assignment
   T GetTotalCost();
 
-  //: Returns the assignment matrix
+  // : Returns the assignment matrix
   AssignmentMatrixType GetAssignmentMatrix();
 
-  //: Returns the assignment vector
+  // : Returns the assignment vector
   AssignmentVectorType  GetAssignmentVector();
 
- protected:
-  //: Step 0 - Make sure there are at least as many rows as columns in the cost matrix
+protected:
+  // : Step 0 - Make sure there are at least as many rows as columns in the cost matrix
   //  The nxm cost matrix is a matrix in which each element represents
   //  the cost of assigning one of n workers to one of m jobs.
   //  \returns the next step to go to (which is Step 1).
   STEP_TYPE   Step_0();
 
-  //: Step 1 - For each row of the matrix, find the smallest element and subtract it from every element in its row.
+  // : Step 1 - For each row of the matrix, find the smallest element and subtract it from every element in its row.
   //  \returns the next step to go to (which is Step 2).
   STEP_TYPE   Step_1();
 
-  //: Step 2 - Find a zero (Z) in the resulting matrix.
+  // : Step 2 - Find a zero (Z) in the resulting matrix.
   //  If there is no starred zero in its row or column, star Z.
   //  Repeat for each element in the matrix.
   //  \returns the next step to go to (which is Step 3)
   STEP_TYPE   Step_2();
 
-  //: Step 3 - Cover each column containing a starred zero.
+  // : Step 3 - Cover each column containing a starred zero.
   //  If K columns are covered, the starred zeros describe a complete
   //  set of unique assignments.
   //  In this case, Go to DONE, otherwise, Go to Step 4.
   //  \returns the next step to go to
   STEP_TYPE   Step_3();
 
-  //: Step 4: Find a noncovered zero and prime it.
+  // : Step 4: Find a noncovered zero and prime it.
   //  If there is no starred zero in the row containing this primed zero, Go to Step 5.
   //  Otherwise, cover this row and uncover the column containing the starred
   //  zero. Continue in this manner until there are no uncovered zeros left.
@@ -108,7 +110,7 @@ class vnl_hungarian_algorithm
   //  \returns the next step to go to
   STEP_TYPE   Step_4();
 
-  //: Step 5 - Construct a series of alternating primed and starred zeros as follows.
+  // : Step 5 - Construct a series of alternating primed and starred zeros as follows.
   //  Let Z0 represent the uncovered primed zero found in Step 4.
   //  Let Z1 denote the starred zero in the column of Z0 (if any).
   //  Let Z2 denote the primed zero in the row of Z1 (there will always be
@@ -119,47 +121,47 @@ class vnl_hungarian_algorithm
   //  \returns the next step to go to
   STEP_TYPE   Step_5();
 
-  //: Step 6 -
+  // : Step 6 -
   //  Add the value found in Step 4 to every element of each covered row,
   //  and subtract it from every element of each uncovered column.
   //  Return to Step 4 without altering any stars, primes, or covered lines.
   //  \returns the next step to go to
   STEP_TYPE   Step_6();
 
-  //: Step done - Returns a vector containing the result of the assignment.
+  // : Step done - Returns a vector containing the result of the assignment.
   //  Assignment pairs are indicated by the positions of the
   //  starred zeros in the cost matrix.  If C(i,j) is a starred zero,
   //  then the element associated with row i is assigned to the element
   //  associated with column j.
   void        Step_done();
 
-  //: Sets all the values in the input bool vector to false.
-  void clear_vector( vcl_vector<bool>& );
+  // : Sets all the values in the input bool vector to false.
+  void clear_vector( vcl_vector<bool> & );
 
   vnl_matrix<T> m_Cost;
   vnl_matrix<T> m_Cost_in;
 
-  //: Size of the input matrix
+  // : Size of the input matrix
   unsigned m_N;
 
-  //: Row and col of the primed zero in step four to pass to step five.
+  // : Row and col of the primed zero in step four to pass to step five.
   unsigned m_Z0_r, m_Z0_c;
 
-  //:
+  // :
   //   m_M(i,j) = 1   =>  m_Cost(i,j) is starred
   //   m_M(i,j) = 2   =>  m_Cost(i,j) is primed
   AssignmentMatrixType m_M;
 
-  //: m_R_cov[i] = true  => row i is covered
+  // : m_R_cov[i] = true  => row i is covered
   vcl_vector<bool> m_R_cov;
 
-  //: m_C_cov[j] = true  => column j is covered
+  // : m_C_cov[j] = true  => column j is covered
   vcl_vector<bool> m_C_cov;
 
-  //: Total cost of the assignment
+  // : Total cost of the assignment
   T m_TotalCost;
 
-  //: m_C_cov[j] = true  => column j is covered
+  // : m_C_cov[j] = true  => column j is covered
   AssignmentVectorType m_AssignmentVector;
 };
 

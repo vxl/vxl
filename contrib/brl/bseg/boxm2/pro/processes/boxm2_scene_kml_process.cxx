@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_scene_kml_process.cxx
-//:
+// :
 // \file
 // \brief  A process for writing scene blocks into a kml file
 //
@@ -15,8 +15,8 @@
 
 namespace boxm2_scene_kml_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 2;
+const unsigned n_outputs_ = 0;
 }
 bool boxm2_scene_kml_process_cons(bprb_func_process& pro)
 {
@@ -25,7 +25,7 @@ bool boxm2_scene_kml_process_cons(bprb_func_process& pro)
   input_types_[0] = "boxm2_scene_sptr";
   input_types_[1] = "vcl_string";
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -33,21 +33,22 @@ bool boxm2_scene_kml_process(bprb_func_process& pro)
 {
   using namespace boxm2_scene_kml_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
-  boxm2_scene_sptr   scene = pro.get_input<boxm2_scene_sptr>(0);
-  vpgl_lvcs lvcs = scene->lvcs();
+  // get the inputs
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
+  vpgl_lvcs        lvcs = scene->lvcs();
 
-  vcl_string kml_name = pro.get_input<vcl_string>(1);
-  vcl_ofstream ofs(kml_name.c_str());
+  vcl_string   kml_name = pro.get_input<vcl_string>(1);
+  vcl_ofstream ofs(kml_name.c_str() );
   bkml_write::open_document(ofs);
   vcl_map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
-
-  for (vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) {
+  for( vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++ )
+    {
 
     vgl_box_3d<double> box = iter->second.bbox();
 
@@ -67,10 +68,11 @@ bool boxm2_scene_kml_process(bprb_func_process& pro)
     vcl_stringstream box_id;
     box_id << iter->first.to_string() << ", max_level: " << iter->second.max_level_
            << ", dim: "
-           << iter->second.sub_block_dim_.x() << "x" <<  iter->second.sub_block_dim_.y() << "x" <<  iter->second.sub_block_dim_.z();
+           << iter->second.sub_block_dim_.x() << "x" <<  iter->second.sub_block_dim_.y() << "x"
+           <<  iter->second.sub_block_dim_.z();
     vcl_string desc = scene->data_path() + " block footprint";
     bkml_write::write_box(ofs, box_id.str(), desc, ul, ur, ll, lr);
-  }
+    }
 
   bkml_write::close_document(ofs);
   ofs.close();

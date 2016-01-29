@@ -1,8 +1,8 @@
 // This is brl/bpro/bprb/bprb_process.h
 #ifndef bprb_process_h_
 #define bprb_process_h_
-//------------------------------------------------------------------------------
-//:
+// ------------------------------------------------------------------------------
+// :
 // \file
 // \brief The bprb process base class
 //
@@ -20,7 +20,7 @@
 //   Edu Almeida   April    21, 2007  Added global methods and variables
 //   J.L. Mundy    January  30, 2008  Migrated back to brl/bpro,adapted to brdb
 // \endverbatim
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vcl_string.h>
@@ -29,7 +29,7 @@
 #include <bprb/bprb_parameters_sptr.h>
 #include <brdb/brdb_value_sptr.h>
 
-//: This abstract class is the base class for process objects
+// : This abstract class is the base class for process objects
 //
 // The process manager uses polymorphism to manage and execute
 // classes derived from this one.  The process manager will call
@@ -64,77 +64,77 @@
 
 class bprb_process : public vbl_ref_count
 {
- public:
+public:
   bprb_process();
-  //: Clone the process
-  virtual bprb_process* clone() const = 0;
+  // : Clone the process
+  virtual bprb_process * clone() const = 0;
 
-  //: Return a smart pointer to the parameters
+  // : Return a smart pointer to the parameters
   bprb_parameters_sptr parameters();
 
-  //: Set the parameters
+  // : Set the parameters
   void set_parameters(const bprb_parameters_sptr& params);
 
   bool parse_params_XML(const vcl_string& xml_path);
 
-  //: The name of the process
+  // : The name of the process
   virtual vcl_string name() const = 0;
 
-  //: The number of inputs
+  // : The number of inputs
   unsigned n_inputs() const;
 
-  //: Get all input types at once
-  vcl_vector<vcl_string> const& input_types() const {return input_types_;}
+  // : Get all input types at once
+  vcl_vector<vcl_string> const & input_types() const {return input_types_; }
 
   // The type of each input
   vcl_string input_type(unsigned i) const;
 
-  //: The number of outputs
+  // : The number of outputs
   unsigned n_outputs() const;
 
-  //: Get all output types at once
-  vcl_vector<vcl_string> const& output_types() const {return output_types_;}
+  // : Get all output types at once
+  vcl_vector<vcl_string> const & output_types() const {return output_types_; }
 
   // The type of each output
   vcl_string output_type(unsigned i) const;
 
-  //: Set all the inputs at once
+  // : Set all the inputs at once
   virtual bool set_input_data(vcl_vector<brdb_value_sptr> const& inputs);
 
-  //: set a particular input
+  // : set a particular input
   virtual bool set_input(unsigned i, brdb_value_sptr const& value);
 
-  //: get all outputs at once
-  vcl_vector<brdb_value_sptr>& output_data(){return output_data_;}
+  // : get all outputs at once
+  vcl_vector<brdb_value_sptr> & output_data() {return output_data_; }
 
-  //: get a particular output
+  // : get a particular output
   brdb_value_sptr output(unsigned i)
-  { if (i<n_outputs()) return output_data_[i]; else return 0; }
+  { if( i < n_outputs() ) {return output_data_[i]; } else {return 0; }}
 
-  //: Insure that inputs are valid
+  // : Insure that inputs are valid
   bool verify_inputs();
 
-  //: Perform any initialization required by the process
+  // : Perform any initialization required by the process
   virtual bool init() = 0;
 
-  //: Execute the process
+  // : Execute the process
   virtual bool execute() = 0;
 
-  //: Perform any clean up or final computation
+  // : Perform any clean up or final computation
   virtual bool finish() = 0;
 
- protected:
+protected:
 
-  //: Copy Constructor
+  // : Copy Constructor
   bprb_process(const bprb_process& other);
   virtual ~bprb_process();
 
-  //: The parameters of this process
+  // : The parameters of this process
   vcl_vector<brdb_value_sptr> input_data_;
   vcl_vector<brdb_value_sptr> output_data_;
-  bprb_parameters_sptr parameters_;
-  vcl_vector<vcl_string> input_types_;
-  vcl_vector<vcl_string> output_types_;
+  bprb_parameters_sptr        parameters_;
+  vcl_vector<vcl_string>      input_types_;
+  vcl_vector<vcl_string>      output_types_;
 };
 #include <bprb/bprb_process_sptr.h>
 #endif // bprb_process_h_

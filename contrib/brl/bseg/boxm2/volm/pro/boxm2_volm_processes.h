@@ -4,7 +4,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-//the init functions
+// the init functions
 DECLARE_FUNC_CONS(boxm2_create_index_process);
 DECLARE_FUNC_CONS(boxm2_visualize_index_process);
 DECLARE_FUNC_CONS(boxm2_create_index_process2);

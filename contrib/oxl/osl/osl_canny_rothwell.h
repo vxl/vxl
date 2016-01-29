@@ -1,6 +1,6 @@
 #ifndef osl_canny_rothwell_h
 #define osl_canny_rothwell_h
-//:
+// :
 // \file
 //
 // A class for performing traditional Canny edge detection. The basic
@@ -40,36 +40,49 @@ class osl_canny_rothwell_params;
 
 class osl_canny_rothwell : public osl_canny_base
 {
- public:
+public:
   osl_canny_rothwell(osl_canny_rothwell_params const &);
   ~osl_canny_rothwell();
 
-  void detect_edges(vil1_image const &image, vcl_list<osl_edge*>*, bool adaptive = false);
+  void detect_edges(vil1_image const & image, vcl_list<osl_edge *> *, bool adaptive = false);
 
- protected:
+protected:
   void Non_maximal_suppression();
+
   void Initial_hysteresis();
-  void Final_hysteresis(vcl_list<osl_edge*>*);
-  void Jump_gap(int,int,int,int,int*,int*);
+
+  void Final_hysteresis(vcl_list<osl_edge *> *);
+
+  void Jump_gap(int, int, int, int, int *, int *);
+
   void Thin_edges();
+
   void Jump_single_breaks();
+
   void Adaptive_Canny(vil1_image const &);
-  void Compute_adaptive_images(int,int,int,float**,float**,float**);
-  void Subtract_thick(int,int,int,float**);
-  void Best_eight_way(int,int,float**,int*,int*);
+
+  void Compute_adaptive_images(int, int, int, float * *, float * *, float * *);
+
+  void Subtract_thick(int, int, int, float * *);
+
+  void Best_eight_way(int, int, float * *, int *, int *);
+
   void Find_dangling_ends();
-  int Dangling_end(int,int);
+
+  int Dangling_end(int, int);
+
   void Find_junctions();
+
   void Find_junction_clusters();
 
-  int **dangling_;     // Binary image true only at dangling ends, and relevant lists
-  vcl_list<int> *xdang_,*ydang_;
-  float range_;       // The maximal region of effect of the smallest smoothing kernel
+  int * *         dangling_; // Binary image true only at dangling ends, and relevant lists
+  vcl_list<int> * xdang_, * ydang_;
+  float           range_; // The maximal region of effect of the smallest smoothing kernel
 
   // Parameters for the adaptive smoothing
   float old_sigma_;   // Smoothing sigma
-  int old_width_;     // The smoothing kernel width
-  int old_k_size_;    // The kernel is 2*width_+1s
+  int   old_width_;   // The smoothing kernel width
+  int   old_k_size_;  // The kernel is 2*width_+1s
 
   float dummy_;       // A dummy intensity step value
 };

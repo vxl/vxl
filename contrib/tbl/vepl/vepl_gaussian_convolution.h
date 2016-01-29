@@ -1,6 +1,6 @@
 #ifndef vepl_gaussian_convolution_h_
 #define vepl_gaussian_convolution_h_
-//:
+// :
 // \file
 // \brief gaussian smoothing
 //
@@ -27,7 +27,7 @@
 
 #include <vil/vil_image_resource.h>
 
-//: gaussian smoothing with given sigma (default 1)
-vil_image_resource_sptr vepl_gaussian_convolution(vil_image_resource_sptr , double sigma=1, double cutoff=0.01);
+// : gaussian smoothing with given sigma (default 1)
+vil_image_resource_sptr vepl_gaussian_convolution(vil_image_resource_sptr, double sigma = 1, double cutoff = 0.01);
 
 #endif // vepl_gaussian_convolution_h_

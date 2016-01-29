@@ -4,8 +4,6 @@ DECLARE(test_champher);
 DECLARE(test_matcher);
 DECLARE(test_processor);
 
-
-
 void
 register_tests()
 {

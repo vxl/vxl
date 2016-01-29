@@ -1,6 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/util/bvpl_find_pairs_process.cxx
 #include <bvpl/util/bvpl_corner_pair_finder.h>
-//:
+// :
 // \file
 // \brief A process to find corner pairs that are rotated 90 degrees
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -19,11 +19,11 @@
 
 namespace bvpl_find_pairs_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 2;
+const unsigned n_inputs_ = 4;
+const unsigned n_outputs_ = 2;
 }
 
-//:
+// :
 // Inputs
 // * input[0]: The pair grid
 // * input[1]: The angle that separates features (90, 180)
@@ -54,32 +54,32 @@ bool bvpl_find_pairs_process_process(bprb_func_process& pro)
 {
   using namespace bvpl_find_pairs_process_globals;
 
-  if (pro.n_inputs() != n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() != n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
+  // get inputs:
   bvxm_voxel_grid_base_sptr pair_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
-  int opposite_angle = pro.get_input<int>(1);
-  bvpl_kernel_vector_sptr search_kernels = pro.get_input<bvpl_kernel_vector_sptr>(2);
-  vcl_string out_path = pro.get_input<vcl_string>(3);
+  int                       opposite_angle = pro.get_input<int>(1);
+  bvpl_kernel_vector_sptr   search_kernels = pro.get_input<bvpl_kernel_vector_sptr>(2);
+  vcl_string                out_path = pro.get_input<vcl_string>(3);
 
-
-  if (!pair_grid_base.ptr() || !search_kernels.ptr()) {
+  if( !pair_grid_base.ptr() || !search_kernels.ptr() )
+    {
     vcl_cout <<  " :-- One of the inputs is invalid\n";
     return false;
-  }
-  //cast grid
-  bvxm_voxel_grid<bvpl_pair> *pair_grid = dynamic_cast<bvxm_voxel_grid<bvpl_pair>* > (pair_grid_base.ptr());
-  bvxm_voxel_grid<bvpl_pair> * out_grid= new bvxm_voxel_grid<bvpl_pair >(out_path, pair_grid->grid_size());
-  out_grid->initialize_data(bvpl_pair());
+    }
+  // cast grid
+  bvxm_voxel_grid<bvpl_pair> * pair_grid = dynamic_cast<bvxm_voxel_grid<bvpl_pair> *>(pair_grid_base.ptr() );
+  bvxm_voxel_grid<bvpl_pair> * out_grid = new bvxm_voxel_grid<bvpl_pair>(out_path, pair_grid->grid_size() );
+  out_grid->initialize_data(bvpl_pair() );
 
   bvpl_corner_pairs_sptr pairs = new bvpl_corner_pairs();
   bvpl_corner_pair_finder::find_pairs_no_lines(pair_grid, search_kernels, out_grid, opposite_angle);
 
   pro.set_output_val<bvpl_corner_pairs_sptr>(0, pairs);
-  pro.set_output_val<bvxm_voxel_grid_base_sptr>(1,out_grid);
+  pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, out_grid);
   return true;
 }

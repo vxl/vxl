@@ -2,9 +2,9 @@
 #ifndef vgui_viewer3D_tableau_h_
 #define vgui_viewer3D_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -27,23 +27,28 @@
 
 struct vgui_viewer3D_tableau_spin;
 
-//:  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
+// :  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).
 class vgui_viewer3D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixin
 {
- public:
-  //: Constructor - don't use this, use vgui_viewer3D_tableau_new.
-  vgui_viewer3D_tableau(vgui_tableau_sptr const&);
+public:
+  // : Constructor - don't use this, use vgui_viewer3D_tableau_new.
+  vgui_viewer3D_tableau(vgui_tableau_sptr const &);
 
   // vgui_tableau methods
   void draw_before_child();
+
   virtual bool handle(const vgui_event& event);
+
   vcl_string type_name() const;
 
   // Drag mixin methods
   bool key_press(int, int, vgui_key, vgui_modifier);
   bool help();
+
   bool mouse_up(int x, int y, vgui_button button, vgui_modifier modifier);
+
   bool mouse_drag(int x, int y, vgui_button button, vgui_modifier modifier);
+
   bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
 
   // Key/mouse codes that initiate various actions
@@ -64,28 +69,29 @@ class vgui_viewer3D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixi
   // Implementation
   void setup_gl_matrices();
 
-  //: Data on the current state of vgui_viewer3D_tableau (eg, the amount we are zoomed).
+  // : Data on the current state of vgui_viewer3D_tableau (eg, the amount we are zoomed).
   struct token_t
-  {
+    {
     float quat[4];     // quaternion
     float scale;
     float trans[3];
     float fov;
-    token_t() {
+    token_t()
+    {
       quat[0] = quat[1] = quat[2] = quat[3] = 0.0f;
       scale = 0.0;
       trans[0] = trans[1] = trans[2] = 0.0;
       fov = 45;
     }
-  };
+
+    };
 
   token_t token;
   token_t home;
 
   static vgui_DLLDATA const void * const SPIN_EVENT;
 
-
-  enum {wireframe, shaded, textured} gl_mode;
+  enum { wireframe, shaded, textured } gl_mode;
 
   bool spinning;
   bool allow_spinning;
@@ -93,32 +99,29 @@ class vgui_viewer3D_tableau : public vgui_wrapper_tableau, public vgui_drag_mixi
   bool smooth_shading;
   bool high_quality;
   bool headlight;
-
- protected:
- ~vgui_viewer3D_tableau();
-
- private:
+protected: ~vgui_viewer3D_tableau();
+private:
   vgui_event event;
   vgui_event last;
 
-  vgui_viewer3D_tableau *viewer;
-  float beginx;
-  float beginy;
-  token_t lastpos;
-  float prevx;
-  float prevy;
+  vgui_viewer3D_tableau * viewer;
+  float                   beginx;
+  float                   beginy;
+  token_t                 lastpos;
+  float                   prevx;
+  float                   prevy;
 
   bool lock_dolly;
   bool lock_zoom;
 
-  vgui_viewer3D_tableau_spin *spin_data;
+  vgui_viewer3D_tableau_spin * spin_data;
 };
 
-//: Create a smart pointer to a vgui_viewer3D_tableau tableau.
+// : Create a smart pointer to a vgui_viewer3D_tableau tableau.
 struct vgui_viewer3D_tableau_new : public vgui_viewer3D_tableau_sptr
-{
+  {
   typedef vgui_viewer3D_tableau_sptr base;
-  vgui_viewer3D_tableau_new(vgui_tableau_sptr const& a) : base(new vgui_viewer3D_tableau(a)) { }
-};
+  vgui_viewer3D_tableau_new(vgui_tableau_sptr const& a) : base(new vgui_viewer3D_tableau(a) ) { }
+  };
 
 #endif // vgui_viewer3D_tableau_h_

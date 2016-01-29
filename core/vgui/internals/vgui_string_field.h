@@ -2,9 +2,9 @@
 #ifndef vgui_string_field_h_
 #define vgui_string_field_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   24 Oct 99
@@ -20,23 +20,22 @@
 #include <vcl_string.h>
 #include "vgui_dialog_field.h"
 
-//: A dialog field implementation that holds a vcl_string.
+// : A dialog field implementation that holds a vcl_string.
 class vgui_string_field : public vgui_dialog_field
 {
-  vcl_string &var_;
-
- public:
-  //: Constructor - creates a string field with the given text as label.
+  vcl_string & var_;
+public:
+  // : Constructor - creates a string field with the given text as label.
   vgui_string_field(const char* txt, vcl_string& var_to_modify)
-  : vgui_dialog_field(txt) , var_(var_to_modify) {}
+    : vgui_dialog_field(txt), var_(var_to_modify) {}
 
-  //: Destructor.
+  // : Destructor.
   ~vgui_string_field() {}
 
-  //: Returns the current value of the string field.
+  // : Returns the current value of the string field.
   vcl_string current_value() const { return var_; }
 
-  //: Set the given string to be the value of the string field.
+  // : Set the given string to be the value of the string field.
   bool update_value(vcl_string const& s) { var_ = s; return true; }
 };
 

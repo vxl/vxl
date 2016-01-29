@@ -1,6 +1,6 @@
 #ifndef vepl_median_h_
 #define vepl_median_h_
-//:
+// :
 // \file
 // \brief median filter with circular element
 //
@@ -28,7 +28,7 @@
 
 #include <vil/vil_image_resource.h>
 
-//: median filter with circular element of supplied radius
-vil_image_resource_sptr vepl_median(vil_image_resource_sptr , float radius=1.0);
+// : median filter with circular element of supplied radius
+vil_image_resource_sptr vepl_median(vil_image_resource_sptr, float radius = 1.0);
 
 #endif // vepl_median_h_

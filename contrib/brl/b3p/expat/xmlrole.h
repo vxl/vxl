@@ -12,7 +12,8 @@ See the file COPYING for copying permission.
 extern "C" {
 #endif
 
-enum {
+enum
+  {
   XML_ROLE_ERROR = -1,
   XML_ROLE_NONE = 0,
   XML_ROLE_XML_DECL,
@@ -70,28 +71,27 @@ enum {
   XML_ROLE_INNER_PARAM_ENTITY_REF,
 #endif /* XML_DTD */
   XML_ROLE_PARAM_ENTITY_REF
-};
+  };
 
-typedef struct prolog_state {
-  int (*handler)(struct prolog_state *state,
-                 int tok,
-                 const char *ptr,
-                 const char *end,
-                 const ENCODING *enc);
+typedef struct prolog_state
+  {
+  int (* handler)(struct prolog_state * state, int tok, const char * ptr, const char * end, const ENCODING * enc);
   unsigned level;
 #ifdef XML_DTD
   unsigned includeLevel;
   int documentEntity;
 #endif /* XML_DTD */
-} PROLOG_STATE;
+  } PROLOG_STATE;
 
 void XmlPrologStateInit(PROLOG_STATE *);
+
 #ifdef XML_DTD
 void XmlPrologStateInitExternalEntity(PROLOG_STATE *);
+
 #endif /* XML_DTD */
 
 #define XmlTokenRole(state, tok, ptr, end, enc) \
- (((state)->handler)(state, tok, ptr, end, enc))
+  ( ( (state)->handler)(state, tok, ptr, end, enc) )
 
 #ifdef __cplusplus
 }

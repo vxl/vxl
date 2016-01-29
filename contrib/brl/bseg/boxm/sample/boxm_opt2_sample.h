@@ -1,6 +1,6 @@
 #ifndef boxm_opt2_sample_h_
 #define boxm_opt2_sample_h_
-//:
+// :
 // \file
 
 #include <vcl_iostream.h>
@@ -8,13 +8,12 @@
 #include <vsl/vsl_binary_io.h>
 #include <boxm/boxm_aux_traits.h>
 
-
 template <class OBS_T>
 class boxm_opt2_sample
 {
- public:
+public:
   boxm_opt2_sample()
-  : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), seg_len_(0.0f), log_pass_prob_sum_(0.0f), weighted_seg_len_sum_(0.0f)
+    : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), seg_len_(0.0f), log_pass_prob_sum_(0.0f), weighted_seg_len_sum_(0.0f)
   {}
 
   ~boxm_opt2_sample() {}
@@ -31,39 +30,39 @@ class boxm_opt2_sample
   float weighted_seg_len_sum_;
 };
 
-//:traits for a grey optimization sample
+// :traits for a grey optimization sample
 template <>
 class boxm_aux_traits<BOXM_AUX_OPT2_GREY>
 {
- public:
+public:
   typedef boxm_opt2_sample<float> sample_datatype;
 
   static vcl_string storage_subdir() { return "opt2_grey_work"; }
 };
 
-//:traits for an rgb optimization sample
+// :traits for an rgb optimization sample
 template <>
 class boxm_aux_traits<BOXM_AUX_OPT2_RGB>
 {
- public:
+public:
   typedef boxm_opt2_sample<vil_rgb<float> > sample_datatype;
 
   static vcl_string storage_subdir() { return "opt2_rgb_work"; }
 };
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, boxm_opt2_sample<T> const &sample);
+void vsl_b_write(vsl_b_ostream & os, boxm_opt2_sample<T> const & sample);
 
 template <class T>
-void vsl_b_write(vsl_b_ostream & os, boxm_opt2_sample<T> const * &sample);
+void vsl_b_write(vsl_b_ostream & os, boxm_opt2_sample<T> const * & sample);
 
 template <class T>
-void vsl_b_read(vsl_b_istream & is, boxm_opt2_sample<T> &sample);
+void vsl_b_read(vsl_b_istream & is, boxm_opt2_sample<T> & sample);
 
 template <class T>
-void vsl_b_read(vsl_b_istream & is, boxm_opt2_sample<T> *&sample);
+void vsl_b_read(vsl_b_istream & is, boxm_opt2_sample<T> *& sample);
 
 template <class T>
-vcl_ostream& operator<< (vcl_ostream& os, const boxm_opt2_sample<T>& sample);
+vcl_ostream & operator<<(vcl_ostream& os, const boxm_opt2_sample<T>& sample);
 
 #endif // boxm_opt2_sample_h_

@@ -1,6 +1,6 @@
 #ifndef vcl_atomic_count_solaris_h_
 #define vcl_atomic_count_solaris_h_
-//:
+// :
 // \file
 // \brief thread/SMP safe reference counter
 // \author www.boost.org
@@ -24,33 +24,32 @@
 
 class vcl_atomic_count
 {
- public:
+public:
 
-    explicit vcl_atomic_count( uint32_t v ): value_( v )
+  explicit vcl_atomic_count( uint32_t v ) : value_( v )
+  {
+  }
+
+  long operator++()
+  {
+    return atomic_inc_32_nv( &value_ );
+  }
+
+  long operator--()
+  {
+    return atomic_dec_32_nv( &value_ );
+  }
+
+  operator uint32_t() const
     {
+    return static_cast<uint32_t const volatile &>( value_ );
     }
+private:
 
-    long operator++()
-    {
-        return atomic_inc_32_nv( &value_ );
-    }
+  vcl_atomic_count( vcl_atomic_count const & );
+  vcl_atomic_count & operator=( vcl_atomic_count const & );
 
-    long operator--()
-    {
-        return atomic_dec_32_nv( &value_ );
-    }
-
-    operator uint32_t() const
-    {
-        return static_cast<uint32_t const volatile &>( value_ );
-    }
-
- private:
-
-    vcl_atomic_count( vcl_atomic_count const & );
-    vcl_atomic_count & operator=( vcl_atomic_count const & );
-
-    uint32_t value_;
+  uint32_t value_;
 };
 
 #endif // #ifndef vcl_atomic_count_solaris_h_

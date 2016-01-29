@@ -19,5 +19,4 @@
 #include <vpdfl/vpdfl_prob_chi2.h>
 #include <vpdfl/vpdfl_sampler_base.h>
 
-
 #endif

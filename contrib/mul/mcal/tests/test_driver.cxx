@@ -11,5 +11,4 @@ void register_tests()
   REGISTER( test_general_ca );
 }
 
-
 DEFINE_MAIN;

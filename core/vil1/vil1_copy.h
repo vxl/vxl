@@ -2,9 +2,9 @@
 #ifndef vil1_copy_h_
 #define vil1_copy_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Image copy function
 // \author awf@robots.ox.ac.uk
@@ -18,11 +18,11 @@
 
 #include <vil1/vil1_fwd.h>
 
-//: Copy SRC to DST.
+// : Copy SRC to DST.
 // Images must be exactly the same dimensions, but datatype isn't matched
 void vil1_copy(vil1_image const& src, vil1_image& DST);
 
-//: Return a memory image copy of SRC.
+// : Return a memory image copy of SRC.
 vil1_memory_image vil1_copy(vil1_image const& src);
 
 #endif // vil1_copy_h_

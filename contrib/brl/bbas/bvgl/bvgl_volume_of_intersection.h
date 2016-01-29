@@ -1,7 +1,7 @@
 // This is brl/bbas/bvgl/bvgl_volume_of_intersection.h
 #ifndef bvgl_volume_of_intersection_h_
 #define bvgl_volume_of_intersection_h_
-//:
+// :
 // \file
 // \brief Set of intersection functions
 // \author Jan 25, 2007 Gamze Tunali

@@ -2,7 +2,7 @@
 #define bwm_site_process_h_
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
 
 #include "bwm_process.h"
@@ -11,19 +11,19 @@
 
 class bwm_site_process : public bwm_process
 {
- public:
-  bwm_site_process() : bwm_process() { site_ = 0; timer_.mark();}
+public:
+  bwm_site_process() : bwm_process() { site_ = 0; timer_.mark(); }
   ~bwm_site_process() {}
 
-  void set_site(bwm_site_sptr site) { site_ = site;}
+  void set_site(bwm_site_sptr site) { site_ = site; }
 
   // overridable
   void RunBackgroundTask();
 
- private:
+private:
   bwm_site_sptr site_;
   static double version_num;
-  vul_timer timer_;
+  vul_timer     timer_;
 };
 
 #endif

@@ -1,7 +1,7 @@
 // This is oxl/xcv/xcv_geometry.h
 #ifndef xcv_geometry_h_
 #define xcv_geometry_h_
-//:
+// :
 // \file
 // \author   K.Y.McGaul
 // \brief  Interface to geometry functions.
@@ -21,72 +21,98 @@ class vgui_menu;
 
 class xcv_geometry
 {
- public:
-  //: Draw a point onto the currently selected tableau.
+public:
+  // : Draw a point onto the currently selected tableau.
   static void create_point();
-  //: Rubberband a line on the currently selected tableau.
+
+  // : Rubberband a line on the currently selected tableau.
   static void create_line();
-  //: Rubberband a circle on the currently selected tableau.
+
+  // : Rubberband a circle on the currently selected tableau.
   static void create_circle();
-  //: Rubberband a polygon on the currently selected tableau.
+
+  // : Rubberband a polygon on the currently selected tableau.
   static void create_polygon();
-  //: Rubberband a linestrip on the currently selected tableau.
+
+  // : Rubberband a linestrip on the currently selected tableau.
   static void create_linestrip();
-  //: Rubberband infinite line on the currently selected tableau.
+
+  // : Rubberband infinite line on the currently selected tableau.
   static void create_infinite_line();
-  //:
+
+  // :
   static void create_box();
-  //: Change the color of all the selected geometric objects.
+
+  // : Change the color of all the selected geometric objects.
   static void change_sel_color();
-  //: Change the radius of all the selected points.
+
+  // : Change the radius of all the selected points.
   static void change_sel_radius();
-  //: Change the line widths of all the selected geometric objects
+
+  // : Change the line widths of all the selected geometric objects
   static void change_sel_width();
-  //: Delete all the selected geometric objects.
+
+  // : Delete all the selected geometric objects.
   static void delete_sel_objs();
-  //: Delete all geometric objects.
+
+  // : Delete all geometric objects.
   static void delete_all();
-  //: Delete all points.
+
+  // : Delete all points.
   static void delete_points();
-  //: Delete all lines.
+
+  // : Delete all lines.
   static void delete_lines();
-  //: Delete all infinite lines.
+
+  // : Delete all infinite lines.
   static void delete_inf_lines();
-  //: Delete all circles.
+
+  // : Delete all circles.
   static void delete_circles();
-  //: Delete all linestrips.
+
+  // : Delete all linestrips.
   static void delete_linestrips();
 
-  //: Change the default color for geometric objects.
+  // : Change the default color for geometric objects.
   static void change_default_color();
-  //: Change the default radius for points.
+
+  // : Change the default radius for points.
   static void change_default_radius();
-  //: Change the default line width for geometric objects.
+
+  // : Change the default line width for geometric objects.
   static void change_default_width();
-  //: Save all points into a file.
+
+  // : Save all points into a file.
   static void save_points();
-  //: Save all lines into a file.
+
+  // : Save all lines into a file.
   static void save_lines();
-  //: Save all linestrips into a file.
+
+  // : Save all linestrips into a file.
   static void save_linestrips();
-  //: Save all circles into a file.
+
+  // : Save all circles into a file.
   static void save_circles();
-  //: Save all geometric objects into a file.
+
+  // : Save all geometric objects into a file.
   static void save_geometry();
-  //: Load geometric objects from a file.
+
+  // : Load geometric objects from a file.
   static void load_geometry();
 
-  //: Intersect two polygons to get a set of non-intersecting polygons.
+  // : Intersect two polygons to get a set of non-intersecting polygons.
   static void polygon_intersect();
 
-  //: Move geometric objects apart.
+  // : Move geometric objects apart.
   static vgui_menu create_geometry_menu();
 
- private:
-  //: Write coordinates into a file.
-  static void save(const char *,const char *);
-  //: Load coordinates from a file
-  static void load(const char *,const char *);
+private:
+  // : Write coordinates into a file.
+  static void save(const char *, const char *);
+
+  // : Load coordinates from a file
+  static void load(const char *, const char *);
+
 };
 
 #endif // xcv_geometry_h_

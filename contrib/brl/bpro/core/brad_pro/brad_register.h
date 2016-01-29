@@ -3,9 +3,11 @@
 
 class brad_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // brad_register_h_

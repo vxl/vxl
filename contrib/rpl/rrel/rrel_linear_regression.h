@@ -1,7 +1,7 @@
 #ifndef rrel_linear_regression_h_
 #define rrel_linear_regression_h_
 
-//:
+// :
 // \file
 // \author Chuck Stewart
 // \date March 2001
@@ -9,7 +9,7 @@
 
 #include <rrel/rrel_estimation_problem.h>
 
-//: Class to maintain data and optimization model for single linear regression problems.
+// : Class to maintain data and optimization model for single linear regression problems.
 //  The linear regression problem is to estimate the parameter vector \f$ a \f$ in
 //  \f[
 //      y = Xa + \epsilon
@@ -47,43 +47,39 @@
 //      z = a_0 + a_1 x + a_2 y + a_3 x^2 + a_4 xy + a_5 y^2
 //  \f]
 
-class rrel_linear_regression : public rrel_estimation_problem {
+class rrel_linear_regression : public rrel_estimation_problem
+{
 public:
-  //: Constructor that includes all information in the sample vectors.
+  // : Constructor that includes all information in the sample vectors.
   //  For each sample, the first m-1 entries are the independent
   //  variables, and the last entry is the dependent variable.
-  rrel_linear_regression( const vcl_vector<vnl_vector<double> >& pts,
-                          bool use_intercept=true);
+  rrel_linear_regression( const vcl_vector<vnl_vector<double> >& pts, bool use_intercept = true);
 
-  //: Constructor with data pre-separated into arrays of independent and dependent variables.
-  rrel_linear_regression( const vcl_vector< vnl_vector<double> >&  ind_vars,
-                          const vcl_vector< double >&  dep_vars );
+  // : Constructor with data pre-separated into arrays of independent and dependent variables.
+  rrel_linear_regression( const vcl_vector<vnl_vector<double> >&  ind_vars, const vcl_vector<double>&  dep_vars );
 
-  //: Destructor.
+  // : Destructor.
   virtual ~rrel_linear_regression();
 
-  //: Total number of data points.
-  unsigned int num_samples( ) const;
+  // : Total number of data points.
+  unsigned int num_samples() const;
 
-  //: Generate a parameter estimate from a minimal sample set.
-  bool fit_from_minimal_set( const vcl_vector<int>& point_indices,
-                             vnl_vector<double>& params ) const;
+  // : Generate a parameter estimate from a minimal sample set.
+  bool fit_from_minimal_set( const vcl_vector<int>& point_indices, vnl_vector<double>& params ) const;
 
-  //: Compute signed fit residuals relative to the parameter estimate.
-  void compute_residuals( const vnl_vector<double>& params,
-                          vcl_vector<double>& residuals ) const;
+  // : Compute signed fit residuals relative to the parameter estimate.
+  void compute_residuals( const vnl_vector<double>& params, vcl_vector<double>& residuals ) const;
 
-  //: \brief Weighted least squares parameter estimate.
-  bool weighted_least_squares_fit( vnl_vector<double>& params,
-                                   vnl_matrix<double>& norm_covar,
-                                   const vcl_vector<double>* weights=0 ) const;
+  // : \brief Weighted least squares parameter estimate.
+  bool weighted_least_squares_fit( vnl_vector<double>& params, vnl_matrix<double>& norm_covar,
+                                   const vcl_vector<double>* weights = 0 ) const;
 
 public:  // testing / debugging utility
-    //: \brief Print information as a test utility.
+  // : \brief Print information as a test utility.
   void print_points() const;
 
 protected:
-  vcl_vector<double> rand_vars_;               // e.g. the z or depth values
+  vcl_vector<double>              rand_vars_;  // e.g. the z or depth values
   vcl_vector<vnl_vector<double> > ind_vars_;   // e.g. the image coordinates (plus 1.0
                                                // for intercept parameters)
 };

@@ -12,11 +12,12 @@
 // the callback, so the implementation of this callback is simple.
 void change_number_cb( vgui_slider_tableau* tab, void* data )
 {
-  float* number = static_cast<float*>(data);
+  float* number = static_cast<float *>(data);
+
   *number = tab->value() * 2.0f - 1.0f;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char * * argv)
 {
   vgui::init(argc, argv);
 
@@ -35,7 +36,6 @@ int main(int argc, char **argv)
   // endpoints of each line.
   vgui_slider_tableau_new slider_h( vgui_slider_tableau::horiz );
   vgui_slider_tableau_new slider_v( vgui_slider_tableau::vert );
-
 
   // Callbacks to move the thick line when the sliders stop moving
   slider_h->add_final_callback( change_number_cb, &(line1->x1) );

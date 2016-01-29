@@ -6,7 +6,7 @@
 
 #include <vil/vil_rgb.h>
 typedef vil_rgb<unsigned char> rgbcell;
-typedef section<rgbcell,2> img_type;
+typedef section<rgbcell, 2>    img_type;
 
-template class vipl_x_gradient<img_type,img_type,rgbcell,rgbcell, vipl_trivial_pixeliter>;
+template class vipl_x_gradient<img_type, img_type, rgbcell, rgbcell, vipl_trivial_pixeliter>;
 #endif

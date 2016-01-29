@@ -1,6 +1,6 @@
 #ifndef breg3d_lm_direct_homography_generator_h_
 #define breg3d_lm_direct_homography_generator_h_
-//:
+// :
 // \file
 // \brief levenberg marquardt direct homography generator
 //
@@ -16,14 +16,13 @@
 
 #include "breg3d_homography_generator.h"
 
-
 class breg3d_lm_direct_homography_generator : public breg3d_homography_generator
 {
- public:
-  breg3d_lm_direct_homography_generator(){}
+public:
+  breg3d_lm_direct_homography_generator() {}
 
   virtual ihog_transform_2d compute_homography();
-};
 
+};
 
 #endif

@@ -5,5 +5,5 @@
 #include <vipl/vipl_sobel.txx>
 typedef vbl_array_2d<unsigned char> img_type;
 
-template class vipl_sobel<img_type,img_type,unsigned char,unsigned char, vipl_trivial_pixeliter>;
+template class vipl_sobel<img_type, img_type, unsigned char, unsigned char, vipl_trivial_pixeliter>;
 #endif

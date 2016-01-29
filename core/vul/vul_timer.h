@@ -11,7 +11,7 @@
 // express or implied warranty.
 #ifndef vul_timer_h
 #define vul_timer_h
-//:
+// :
 // \file
 // \brief A timing facility for C++
 // \author This code was originally written by Joe Rahmeh at UT Austin.
@@ -48,38 +48,42 @@
 //   Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
 
-//: struct containing timer data
+// : struct containing timer data
 struct vul_timer_data;
 
 #include <vcl_iosfwd.h>
 
-//: The Timer class provides timing code for performance evaluation.
+// : The Timer class provides timing code for performance evaluation.
 class vul_timer
 {
-  //: struct containing timer data
-  vul_timer_data *data;
- public:
-  //: construct and reset counter to now.
+  // : struct containing timer data
+  vul_timer_data * data;
+public:
+  // : construct and reset counter to now.
   vul_timer();
   ~vul_timer();
-  //: Reset the counted to now
+  // : Reset the counted to now
   void mark();
-  //: Real        time (ms) since last mark
+
+  // : Real        time (ms) since last mark
   long real();
-  //: User        time (ms) since last mark
+
+  // : User        time (ms) since last mark
   long user();
-  //: System      time (ms) since last mark
+
+  // : System      time (ms) since last mark
   long system();
-  //: User+system time (ms) since last mark
+
+  // : User+system time (ms) since last mark
   long all();
 
-  //: Display user and real time since the last mark.
+  // : Display user and real time since the last mark.
   void print(vcl_ostream& s);
 
- private:
+private:
   // disallow assigning to objects of this class:
   vul_timer(vul_timer const &) { }
-  vul_timer& operator=(vul_timer const &) { return *this; }
+  vul_timer & operator=(vul_timer const &) { return *this; }
 };
 
 #endif // vul_timer_h

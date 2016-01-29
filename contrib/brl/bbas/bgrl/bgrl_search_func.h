@@ -1,7 +1,7 @@
 // This is brl/bbas/bgrl/bgrl_search_func.h
 #ifndef bgrl_search_func_h_
 #define bgrl_search_func_h_
-//:
+// :
 // \file
 // \brief A set of search functions to search through a graph
 // \author Matt Leotta, (mleotta@lems.brown.edu)
@@ -18,11 +18,10 @@
 #include <vcl_deque.h>
 #include <vcl_set.h>
 
-
-//: The abstract base class for search functions
+// : The abstract base class for search functions
 class bgrl_search_func : public vbl_ref_count
 {
- public:
+public:
   // Constructor
   bgrl_search_func(const bgrl_vertex_sptr& init_vertex = NULL)
     : curr_vertex_(init_vertex) {}
@@ -36,56 +35,56 @@ class bgrl_search_func : public vbl_ref_count
 
   bgrl_vertex_sptr curr_vertex() const { return curr_vertex_; }
 
-  //: Returns the edge to the next vertex in the search
+  // : Returns the edge to the next vertex in the search
   virtual bgrl_edge_sptr next_vertex() = 0;
 
- protected:
+protected:
   bgrl_vertex_sptr curr_vertex_;
 };
 
-//================================================================
+// ================================================================
 
-//: A search function for breadth first search
+// : A search function for breadth first search
 class bgrl_breadth_search : public bgrl_search_func
 {
- public:
-  //: Constructor
+public:
+  // : Constructor
   bgrl_breadth_search(const bgrl_vertex_sptr& init_vertex = NULL)
-    : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
+    : bgrl_search_func(init_vertex) {visited_.insert(init_vertex); }
 
-  //: Destructor
-  ~bgrl_breadth_search(){}
+  // : Destructor
+  ~bgrl_breadth_search() {}
 
-  //: Returns the edge to the next vertex in the search
+  // : Returns the edge to the next vertex in the search
   virtual bgrl_edge_sptr next_vertex();
 
- protected:
-  //: The queue of nodes to be evaluated
+protected:
+  // : The queue of nodes to be evaluated
   vcl_deque<bgrl_edge_sptr> eval_queue_;
-  //: The set of visited nodes
+  // : The set of visited nodes
   vcl_set<bgrl_vertex_sptr> visited_;
 };
 
-//================================================================
+// ================================================================
 
-//: A search function for depth first search
+// : A search function for depth first search
 class bgrl_depth_search : public bgrl_search_func
 {
- public:
-  //: Constructor
+public:
+  // : Constructor
   bgrl_depth_search(const bgrl_vertex_sptr& init_vertex = NULL)
-    : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
+    : bgrl_search_func(init_vertex) {visited_.insert(init_vertex); }
 
-  //: Destructor
-  ~bgrl_depth_search(){}
+  // : Destructor
+  ~bgrl_depth_search() {}
 
-  //: Returns the edge to the next vertex in the search
+  // : Returns the edge to the next vertex in the search
   virtual bgrl_edge_sptr next_vertex();
 
- protected:
-  //: The queue of nodes to be evaluated
+protected:
+  // : The queue of nodes to be evaluated
   vcl_deque<bgrl_edge_sptr> eval_queue_;
-  //: The set of visited nodes
+  // : The set of visited nodes
   vcl_set<bgrl_vertex_sptr> visited_;
 };
 

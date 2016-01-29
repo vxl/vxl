@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_vil_image_renderer.h
 #ifndef vgui_vil_image_renderer_h_
 #define vgui_vil_image_renderer_h_
-//:
+// :
 // \file
 // \brief OpenGL utility to render a vil_image_view.
 // \author Amitha
@@ -17,7 +17,7 @@
 
 class vgui_section_buffer;
 
-//: OpenGL utility to render a vil_image_view.
+// : OpenGL utility to render a vil_image_view.
 //
 //  This is not a tableau.
 //
@@ -58,68 +58,66 @@ class vgui_section_buffer;
 //
 class vgui_vil_image_renderer
 {
-  //: Are the range params those used to form the current buffer
+  // : Are the range params those used to form the current buffer
   bool old_range_map_params(vgui_range_map_params_sptr const& rmp);
 
-  //: Render the pixels in hardware using the glPixelMap with range_map data
+  // : Render the pixels in hardware using the glPixelMap with range_map data
   // Note that some OpenGL environments have no graphics hardware
   // but the glPixelMap is still somewhat faster JLM (on a DELL precision)
   bool render_directly(vgui_range_map_params_sptr const& mp);
 
-  //: Create a buffer if necessary
+  // : Create a buffer if necessary
   void create_buffer(vgui_range_map_params_sptr const& rmp);
 
-  //: Create a buffer with viewport dimensions
-  void create_buffer(vgui_range_map_params_sptr const& rmp,
-                     unsigned x0, unsigned y0, unsigned x1, unsigned y1,
+  // : Create a buffer with viewport dimensions
+  void create_buffer(vgui_range_map_params_sptr const& rmp, unsigned x0, unsigned y0, unsigned x1, unsigned y1,
                      float zoomx, float zoomy);
 
-  //: Create a buffer from specified resource corresponding to a pyramid zoom level
-  void create_buffer(vgui_range_map_params_sptr const& rmp,
-                     float zoomx, float zoomy,
+  // : Create a buffer from specified resource corresponding to a pyramid zoom level
+  void create_buffer(vgui_range_map_params_sptr const& rmp, float zoomx, float zoomy,
                      vil_image_resource_sptr const& ir);
 
-  //: draw the pixels to the frame buffer
+  // : draw the pixels to the frame buffer
   void draw_pixels();
 
-  //: Stores the image data (pixels, dimensions, etc).
+  // : Stores the image data (pixels, dimensions, etc).
   vil_image_resource_sptr the_image_;
 
-  //: Stored the GL pixels corresponding to the image data
+  // : Stored the GL pixels corresponding to the image data
   vgui_section_buffer* buffer_;
 
-  //: a cache for the range map params associated with buffer
+  // : a cache for the range map params associated with buffer
   vgui_range_map_params_sptr buffer_params_;
 
-  //: buffer state variable
+  // : buffer state variable
   bool valid_buffer_;
 
-  //: a cache when rendering using the gl hardware map
+  // : a cache when rendering using the gl hardware map
   vil_memory_chunk_sptr vbuf_;
 
   unsigned x0_, y0_, w_, h_; // viewport parameters
-  float zx_, zy_;            // zoomx and zoomy values of the viewport
-  unsigned sni_, snj_;       //size of the pyramid view
-
- public:
-  //: Constructor - create an empty image renderer.
+  float    zx_, zy_;         // zoomx and zoomy values of the viewport
+  unsigned sni_, snj_;       // size of the pyramid view
+public:
+  // : Constructor - create an empty image renderer.
   vgui_vil_image_renderer();
 
-  //: Destructor - delete image buffer.
+  // : Destructor - delete image buffer.
   ~vgui_vil_image_renderer();
 
-  //: Attach the renderer to a new view.
+  // : Attach the renderer to a new view.
   //
-  void set_image_resource( vil_image_resource_sptr const& );
+  void set_image_resource( vil_image_resource_sptr const & );
 
-  //: Return the image resource that this renderer draws.
+  // : Return the image resource that this renderer draws.
   vil_image_resource_sptr get_image_resource() const;
 
-  //: Tell the renderer that the underlying image data has been changed.
+  // : Tell the renderer that the underlying image data has been changed.
   void reread_image();
 
-  //: Renders the image pixels. If mp not null then render over an interval
+  // : Renders the image pixels. If mp not null then render over an interval
   void render(vgui_range_map_params_sptr const& mp);
+
 };
 
 #endif // vgui_vil_image_renderer_h_

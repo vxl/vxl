@@ -16,8 +16,7 @@ DECLARE_FUNC_CONS(bvpl_scene_histogram_process);
 DECLARE_FUNC_CONS(bvpl_block_avg_value_process);
 DECLARE_FUNC_CONS(bvpl_grad_scene_to_bin_process);
 
-
-//PCA related
+// PCA related
 DECLARE_FUNC_CONS(bvpl_discover_pca_features_process);
 DECLARE_FUNC_CONS(bvpl_compute_pca_test_error_process);
 DECLARE_FUNC_CONS(bvpl_compute_pca_error_scene_process);
@@ -35,7 +34,7 @@ DECLARE_FUNC_CONS(bvpl_load_global_pca_125_process);
 DECLARE_FUNC_CONS(bvpl_pca_global_proj_error_process);
 DECLARE_FUNC_CONS(bvpl_pca_global_add_error_process);
 
-//Taylor related
+// Taylor related
 DECLARE_FUNC_CONS(bvpl_load_taylor_scenes_process);
 DECLARE_FUNC_CONS(bvpl_compute_taylor_error_process);
 DECLARE_FUNC_CONS(bvpl_add_taylor_errors_process);
@@ -46,16 +45,15 @@ DECLARE_FUNC_CONS(bvpl_load_global_taylor_process);
 DECLARE_FUNC_CONS(bvpl_taylor_global_proj_error_process);
 DECLARE_FUNC_CONS(bvpl_taylor_global_add_error_process);
 
-//Corner related
+// Corner related
 DECLARE_FUNC_CONS(bvpl_compute_harris_measure_process);
 DECLARE_FUNC_CONS(bvpl_load_global_corners_process);
 DECLARE_FUNC_CONS(bvpl_corner_statistics_process);
 DECLARE_FUNC_CONS(bvpl_threshold_corners_process);
 DECLARE_FUNC_CONS(bvpl_compute_beaudet_measure_process);
 
-//Steerable filters
+// Steerable filters
 DECLARE_FUNC_CONS(bvpl_init_sf_response_scene_process);
 DECLARE_FUNC_CONS(bvpl_compute_sf_raw_response_process);
-
 
 #endif

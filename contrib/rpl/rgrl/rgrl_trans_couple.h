@@ -1,6 +1,6 @@
 #ifndef rgrl_trans_couple_h_
 #define rgrl_trans_couple_h_
-//:
+// :
 // \file
 // \brief class to encapsulate a pair of transformations: forward & backward
 // \author Gehua Yang
@@ -10,47 +10,42 @@
 #include <rgrl/rgrl_transformation.h>
 #include <vcl_iosfwd.h>
 
-//: A base class that represents a pair of transformation: forward & backward
+// : A base class that represents a pair of transformation: forward & backward
 //
 class rgrl_trans_couple
   : public rgrl_transformation
 {
- public:
+public:
   virtual ~rgrl_trans_couple();
 
-  //: default constructor
+  // : default constructor
   rgrl_trans_couple() {  }
 
-  //: initialize with covariance matrix
+  // : initialize with covariance matrix
   rgrl_trans_couple( rgrl_transformation_sptr const& forward, rgrl_transformation_sptr const& backward );
 
-
-  //: Map a tangent direction
+  // : Map a tangent direction
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  virtual void map_tangent( vnl_vector<double> const& from_loc,
-                            vnl_vector<double> const& from_dir,
+  virtual void map_tangent( vnl_vector<double> const& from_loc, vnl_vector<double> const& from_dir,
                             vnl_vector<double>      & to_dir    ) const;
 
-  //: Map a normal direction
+  // : Map a normal direction
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  virtual void map_normal( vnl_vector<double> const & from_loc,
-                           vnl_vector<double> const & from_dir,
+  virtual void map_normal( vnl_vector<double> const & from_loc, vnl_vector<double> const & from_dir,
                            vnl_vector<double>       & to_dir    ) const;
 
-  //: Map a normal direction, given the tangent subspace
+  // : Map a normal direction, given the tangent subspace
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  virtual void map_normal( vnl_vector<double> const  & from_loc,
-                           vnl_vector<double> const  & from_dir,
-                           vnl_matrix< double > const& tangent_subspace,
-                           vnl_vector<double>        & to_dir    ) const;
+  virtual void map_normal( vnl_vector<double> const  & from_loc, vnl_vector<double> const  & from_dir,
+                           vnl_matrix<double> const& tangent_subspace, vnl_vector<double>        & to_dir    ) const;
 
-  //:  Compute covariance of the transfer error based on transformation covariance
+  // :  Compute covariance of the transfer error based on transformation covariance
   //
   // This gives the additional uncertainty of the transferred point
   // location due to the uncertainty of the transform estimate.
@@ -58,62 +53,54 @@ class rgrl_trans_couple
   virtual
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p ) const;
 
+  // :  Inverse map with an initial guess
+  virtual void inv_map( const vnl_vector<double>& to, bool initialize_next, const vnl_vector<double>& to_delta,
+                        vnl_vector<double>& from, vnl_vector<double>& from_next_est) const;
 
-  //:  Inverse map with an initial guess
-  virtual void inv_map( const vnl_vector<double>& to,
-                        bool initialize_next,
-                        const vnl_vector<double>& to_delta,
-                        vnl_vector<double>& from,
-                        vnl_vector<double>& from_next_est) const;
-
-  //:  Inverse map based on the transformation.
+  // :  Inverse map based on the transformation.
   //   This function only exist for certain transformations.
-  virtual void inv_map( const vnl_vector<double>& to,
-                        vnl_vector<double>& from ) const;
+  virtual void inv_map( const vnl_vector<double>& to, vnl_vector<double>& from ) const;
 
-  //: is this an invertible transformation?
+  // : is this an invertible transformation?
   virtual bool is_invertible() const;
 
-  //: Return an inverse transformation
+  // : Return an inverse transformation
   //  This function only exist for certain transformations.
   virtual rgrl_transformation_sptr inverse_transform() const;
 
-  //: Compute jacobian w.r.t. location
+  // : Compute jacobian w.r.t. location
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
 
-  //:  transform the transformation for images of different resolution
+  // :  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;
 
-  //: output transformation
+  // : output transformation
   void write( vcl_ostream& os ) const;
 
-  //: input transformation
+  // : input transformation
   bool read( vcl_istream& is );
 
-  //: make a clone copy
+  // : make a clone copy
   rgrl_transformation_sptr clone() const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_couple, rgrl_transformation );
+protected:
 
- protected:
-
-  //:  Apply the transformation to create a new (mapped) location
+  // :  Apply the transformation to create a new (mapped) location
   //
   virtual
-  void map_loc( vnl_vector<double> const& from,
-                vnl_vector<double>      & to    ) const;
+  void map_loc( vnl_vector<double> const& from, vnl_vector<double>      & to    ) const;
 
-  //:  Apply the transformation to create a new direction at the (mapped) location
+  // :  Apply the transformation to create a new direction at the (mapped) location
   //
   // The resulting direction \a to_dir is a unit vector.
   //
   virtual
-  void map_dir( vnl_vector<double> const& from_loc,
-                vnl_vector<double> const& from_dir,
+  void map_dir( vnl_vector<double> const& from_loc, vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const;
 
- protected:
+protected:
 
   rgrl_transformation_sptr forward_xform_, backward_xform_;
 };

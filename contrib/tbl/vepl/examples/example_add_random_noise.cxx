@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //  This example program shows a typical use of the vepl_add_random_noise function
 //  on a ubyte image.  The input image (argv[1]) must be ubyte, and in that
@@ -17,24 +17,29 @@
 #include <vcl_cstdlib.h> // for atof()
 
 int
-main(int argc, char** argv) {
-  if (argc < 3) { vcl_cerr << "Syntax: example_add_random_noise file_in file_out [width]\n"; return 1; }
+main(int argc, char* * argv)
+{
+  if( argc < 3 ) { vcl_cerr << "Syntax: example_add_random_noise file_in file_out [width]\n"; return 1; }
 
   // The input image:
   vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
-  if (!in) { vcl_cerr << "Cannot read image from "<<argv[1]<<'\n'; return 2; }
+  if( !in ) { vcl_cerr << "Cannot read image from " << argv[1] << '\n'; return 2; }
 
   // The noise `width':
   double sigma = (argc < 4) ? 5 : vcl_atof(argv[3]);
 
   // The filter:
-  vil_image_resource_sptr out = vepl_add_random_noise(in,sigma);
+  vil_image_resource_sptr out = vepl_add_random_noise(in, sigma);
 
   // Output to file:
-  if (vil_save_image_resource(out, argv[2], "pnm"))
+  if( vil_save_image_resource(out, argv[2], "pnm") )
+    {
     vcl_cout << "Written noisy image of type PNM to " << argv[2] << '\n';
+    }
   else
-    vcl_cout << "Could not write noisy image as PNM to "<< argv[2]<<'\n';
+    {
+    vcl_cout << "Could not write noisy image as PNM to " << argv[2] << '\n';
+    }
 
   return 0;
 }

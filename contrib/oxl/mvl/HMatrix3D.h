@@ -2,9 +2,9 @@
 #ifndef HMatrix3D_h_
 #define HMatrix3D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 //
 // A class to hold a 3D projective transformation matrix
@@ -30,37 +30,42 @@ class PMatrix;
 class HMatrix3D : public vnl_double_4x4
 {
   typedef vnl_double_4x4 Base;
- public:
+public:
   HMatrix3D();
   HMatrix3D(const HMatrix3D& M);
   HMatrix3D(vnl_double_4x4 const& M);
   HMatrix3D(vnl_double_3x3 const& M, vnl_double_3 const& m);
   HMatrix3D(const double* t_matrix);
-  HMatrix3D(vcl_istream&);
- ~HMatrix3D();
+  HMatrix3D(vcl_istream &);
+  ~HMatrix3D();
 
   // Operations----------------------------------------------------------------
 
   HomgPoint3D transform(const HomgPoint3D& x1) const;
+
   vgl_homg_point_3d<double> transform(const vgl_homg_point_3d<double>& x1) const
-    { return (*this) * x1; }
+  { return (*this) * x1; }
   HomgLine3D transform(const HomgLine3D& l1) const;
 
-  bool load(vcl_istream&);
+  bool load(vcl_istream &);
 
   // Data Access---------------------------------------------------------------
 
-  double get (unsigned int row_index, unsigned int col_index) const;
-  void get (double *t_matrix) const;
-  void get (vnl_matrix<double>* t_matrix) const;
+  double get(unsigned int row_index, unsigned int col_index) const;
+
+  void get(double * t_matrix) const;
+
+  void get(vnl_matrix<double>* t_matrix) const;
 
   HMatrix3D get_inverse() const;
+
 };
 
-PMatrix operator* (const PMatrix&, const HMatrix3D& H);
+PMatrix operator*(const PMatrix &, const HMatrix3D& H);
 
 // stream I/O
-vcl_ostream& operator<<(vcl_ostream &,HMatrix3D const &);
-vcl_istream& operator>>(vcl_istream &,HMatrix3D       &);
+vcl_ostream & operator<<(vcl_ostream &, HMatrix3D const &);
+
+vcl_istream & operator>>(vcl_istream &, HMatrix3D       &);
 
 #endif // HMatrix3D_h_

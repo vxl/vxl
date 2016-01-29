@@ -1,6 +1,6 @@
 #ifndef vil3d_property_h_
 #define vil3d_property_h_
-//:
+// :
 // \file
 //
 // There is no class or function called vil3d_property.
@@ -41,29 +41,27 @@
 //
 // \author Ian Scott - Copied from fsm's design in vil.
 
-
-//: Indicate whether this is an in-memory image or an on-disk image
+// : Indicate whether this is an in-memory image or an on-disk image
 //  By default an image is not in-memory, and since this is a boolean property
 //  the return value of get_property(), which is "false" by default, will be
 //  correct.  Only in-memory images must implement this property, and return
 //  "true".
 #define vil3d_property_memory "memory"
 
-//: Indicate that you can't call put_view on this image.
+// : Indicate that you can't call put_view on this image.
 //  By default an image is not read-only, and since this is a boolean property
 //  the return value of get_property(), which is "false" by default, will be
 //  correct.  Only images which do not allow put_view must implement this
 //  property, and return "true".
 #define vil3d_property_read_only "read-only"
 
-
-//: voxel size in metres.
+// : voxel size in metres.
 // Type is float[3].
 // If this property exists you may get and set the values
 // through the size_i(), and set_pixel_size() members of vil3d_image_resource.
 #define vil3d_property_voxel_size "voxel_size"
 
-//: Original image origin in pixels.
+// : Original image origin in pixels.
 // Measured from vil3d origin in standard direction.
 // Type is float[3].
 #define vil3d_property_origin_offset "origin_offset"

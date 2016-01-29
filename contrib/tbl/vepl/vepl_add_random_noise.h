@@ -1,6 +1,6 @@
 #ifndef vepl_add_random_noise_h_
 #define vepl_add_random_noise_h_
-//:
+// :
 // \file
 // \brief add random noise to all pixels
 //
@@ -20,7 +20,7 @@
 
 #include <vil/vil_image_resource.h>
 
-//: add random noise to all pixels
+// : add random noise to all pixels
 vil_image_resource_sptr vepl_add_random_noise(vil_image_resource_sptr, double maxdev);
 
 #endif // vepl_add_random_noise_h_

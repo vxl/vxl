@@ -1,7 +1,7 @@
 #ifndef gevd_status_mixin_h
 #define gevd_status_mixin_h
 
-//=========================== Basics ====================================
+// =========================== Basics ====================================
 //
 // .NAME    gevd_status_mixin
 // .HEADER  gel Package
@@ -21,33 +21,30 @@
 //                   single object.
 //
 //
-//======================================================================
+// ======================================================================
 
 /* ------------------------------------ */
 /*       DEFINE A STATUS TYPE           */
 typedef int StatusCode;
 
-
 class gevd_status_mixin
 {
- private:
-   int status;
+private:
+  int status;
+public:
+  inline void ClearStatus()            { status = 0;   }
+  inline void ClearStatus(int x)       { status &= ~ x; }
+  inline void SetStatus(int x = 0)     { status |= x;  }
 
- public:
-   inline void ClearStatus()            { status = 0;   }
-   inline void ClearStatus(int x)       { status &= ~x; }
-   inline void SetStatus(int x = 0)     { status |= x;  }
+  inline void SetStatusGood()          { status = 0; }
+  inline void SetStatusBad(int c = -1)  { status = c; }
 
-   inline void SetStatusGood()          { status = 0; }
-   inline void SetStatusBad(int c =-1)  { status = c; }
-
-   gevd_status_mixin() { ClearStatus(); }
-
- public:
-   inline StatusCode Stat()          const { return status; }     // XXX
-   inline bool       StatusGood()    const { return status == 0; }
-   inline bool       StatusBad()     const { return status != 0; }
-   inline StatusCode GetStatusCode() const { return status; }
+  gevd_status_mixin() { ClearStatus(); }
+public:
+  inline StatusCode Stat()          const { return status; }      // XXX
+  inline bool       StatusGood()    const { return status == 0; }
+  inline bool       StatusBad()     const { return status != 0; }
+  inline StatusCode GetStatusCode() const { return status; }
 };
 
 #endif // gevd_status_mixin_h

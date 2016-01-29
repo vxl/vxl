@@ -2,9 +2,9 @@
 #ifndef vil1_skip_h_
 #define vil1_skip_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief a function
 // \author fsm

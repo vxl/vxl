@@ -1,37 +1,34 @@
 // This is core/vidl/vidl_iidc1394_params.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Matt Leotta
 // \date   10 Jan 2006
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "vidl_iidc1394_params.h"
 #include <vcl_cassert.h>
 
-//-----------------------------------------------------------------------------
-
+// -----------------------------------------------------------------------------
 
 vidl_iidc1394_params::vidl_iidc1394_params()
   : guid_( 0 ),
-    speed_( ISO_SPEED_400 ),
-    b_mode_(false),
-    frame_rate_( FRAMERATE_15 ),
-    video_mode_( MODE_640x480_RGB8 )
+  speed_( ISO_SPEED_400 ),
+  b_mode_(false),
+  frame_rate_( FRAMERATE_15 ),
+  video_mode_( MODE_640x480_RGB8 )
 {
 }
 
-
-//: Return the speed value for a speed setting
+// : Return the speed value for a speed setting
 unsigned int
-vidl_iidc1394_params::
-speed_val(speed_t s)
+vidl_iidc1394_params::speed_val(speed_t s)
 {
-  switch (s)
-  {
+  switch( s )
+    {
     case ISO_SPEED_100:  return 100;
     case ISO_SPEED_200:  return 200;
     case ISO_SPEED_400:  return 400;
@@ -39,17 +36,15 @@ speed_val(speed_t s)
     case ISO_SPEED_1600: return 1600;
     case ISO_SPEED_3200: return 3200;
     default:             return 0;
-  }
+    }
 }
 
-
-//: Return the frame rate as a floating point value
+// : Return the frame rate as a floating point value
 float
-vidl_iidc1394_params::
-frame_rate_val(frame_rate_t r)
+vidl_iidc1394_params::frame_rate_val(frame_rate_t r)
 {
-  switch (r)
-  {
+  switch( r )
+    {
     case FRAMERATE_1_875: return 1.875f;
     case FRAMERATE_3_75:  return 3.75f;
     case FRAMERATE_7_5:   return 7.5f;
@@ -59,17 +54,15 @@ frame_rate_val(frame_rate_t r)
     case FRAMERATE_120:   return 120.0f;
     case FRAMERATE_240:   return 240.0f;
     default:              return 0.0f;
-  }
+    }
 }
 
-
-//: Return string describing the mode
+// : Return string describing the mode
 vcl_string
-vidl_iidc1394_params::
-video_mode_string(video_mode_t m)
+vidl_iidc1394_params::video_mode_string(video_mode_t m)
 {
-  switch (m)
-  {
+  switch( m )
+    {
     case MODE_160x120_YUV444:   return "160x120 YUV(4:4:4)";
     case MODE_320x240_YUV422:   return "320x240 YUV(4:2:2)";
     case MODE_640x480_YUV411:   return "640x480 YUV(4:1:1)";
@@ -103,17 +96,15 @@ video_mode_string(video_mode_t m)
     case MODE_FORMAT7_6: return "Format 7 : Mode 6";
     case MODE_FORMAT7_7: return "Format 7 : Mode 7";
     default:             return "invalid mode";
-  }
+    }
 }
 
-
-//: Return string describing the feature
+// : Return string describing the feature
 vcl_string
-vidl_iidc1394_params::
-feature_string(feature_t f)
+vidl_iidc1394_params::feature_string(feature_t f)
 {
-  switch (f)
-  {
+  switch( f )
+    {
     case FEATURE_BRIGHTNESS:      return "Brightness";
     case FEATURE_EXPOSURE:        return "Exposure";
     case FEATURE_SHARPNESS:       return "Sharpness";
@@ -137,82 +128,86 @@ feature_string(feature_t f)
     case FEATURE_CAPTURE_SIZE:    return "Capture Size";
     case FEATURE_CAPTURE_QUALITY: return "Capture Quality";
     default:                      return "invalid feature";
-  }
+    }
 }
 
-
-//: Return string describing the feature mode
+// : Return string describing the feature mode
 vcl_string
-vidl_iidc1394_params::
-feature_mode_string(feature_mode_t fm)
+vidl_iidc1394_params::feature_mode_string(feature_mode_t fm)
 {
-  switch (fm)
-  {
+  switch( fm )
+    {
     case FEATURE_MODE_MANUAL:         return "Manual";
     case FEATURE_MODE_AUTO:           return "Automatic";
     case FEATURE_MODE_ONE_PUSH_AUTO:  return "One Push";
     default:                          return "invalid feature mode";
-  }
+    }
 }
 
-
-//: Return the format number from the video mode enumeration
+// : Return the format number from the video mode enumeration
 unsigned int
-vidl_iidc1394_params::
-video_format_val(video_mode_t m)
+vidl_iidc1394_params::video_format_val(video_mode_t m)
 {
-  if ((m>=MODE_160x120_YUV444)&&(m<=MODE_640x480_MONO16)) {
+  if( (m >= MODE_160x120_YUV444) && (m <= MODE_640x480_MONO16) )
+    {
     return 0;
-  }
-  else if ((m>=MODE_800x600_YUV422)&&(m<=MODE_1024x768_MONO16)) {
+    }
+  else if( (m >= MODE_800x600_YUV422) && (m <= MODE_1024x768_MONO16) )
+    {
     return 1;
-  }
-  else if ((m>=MODE_1280x960_YUV422)&&(m<=MODE_1600x1200_MONO16)) {
+    }
+  else if( (m >= MODE_1280x960_YUV422) && (m <= MODE_1600x1200_MONO16) )
+    {
     return 2;
-  }
-  else if (m==MODE_EXIF) {
+    }
+  else if( m == MODE_EXIF )
+    {
     return 6;
-  }
-  else if ((m>=MODE_FORMAT7_0)&&(m<=MODE_FORMAT7_7)) {
+    }
+  else if( (m >= MODE_FORMAT7_0) && (m <= MODE_FORMAT7_7) )
+    {
     return 7;
-  }
+    }
   // unknown format
   return unsigned(-1);
 }
 
-
-//: Return the mode number from the video mode enumeration
+// : Return the mode number from the video mode enumeration
 unsigned int
-vidl_iidc1394_params::
-video_mode_val(video_mode_t m)
+vidl_iidc1394_params::video_mode_val(video_mode_t m)
 {
-  if ((m>=MODE_160x120_YUV444)&&(m<=MODE_640x480_MONO16)) {
+  if( (m >= MODE_160x120_YUV444) && (m <= MODE_640x480_MONO16) )
+    {
     return m - MODE_160x120_YUV444;
-  }
-  else if ((m>=MODE_800x600_YUV422)&&(m<=MODE_1024x768_MONO16)) {
+    }
+  else if( (m >= MODE_800x600_YUV422) && (m <= MODE_1024x768_MONO16) )
+    {
     return m - MODE_800x600_YUV422;
-  }
-  else if ((m>=MODE_1280x960_YUV422)&&(m<=MODE_1600x1200_MONO16)) {
+    }
+  else if( (m >= MODE_1280x960_YUV422) && (m <= MODE_1600x1200_MONO16) )
+    {
     return m - MODE_1280x960_YUV422;
-  }
-  else if (m==MODE_EXIF) {
+    }
+  else if( m == MODE_EXIF )
+    {
     return 0;
-  }
-  else if ((m>=MODE_FORMAT7_0)&&(m<=MODE_FORMAT7_7)) {
+    }
+  else if( (m >= MODE_FORMAT7_0) && (m <= MODE_FORMAT7_7) )
+    {
     return m - MODE_FORMAT7_0;
-  }
+    }
   // unknown mode value
   return unsigned(-1);
 }
 
-
-//: Return the video mode enumeration for a format and mode
+// : Return the video mode enumeration for a format and mode
 vidl_iidc1394_params::video_mode_t
-vidl_iidc1394_params::
-video_mode(unsigned int format, unsigned int mode)
+vidl_iidc1394_params::video_mode(unsigned int format, unsigned int mode)
 {
   assert(mode < 8);
-  switch (format) {
+
+  switch( format )
+    {
     case 0:
       return video_mode_t(MODE_160x120_YUV444 + mode);
     case 1:
@@ -225,17 +220,16 @@ video_mode(unsigned int format, unsigned int mode)
       return video_mode_t(MODE_FORMAT7_0 + mode);
     default:
       return MODE_FORMAT7_0;
-  }
+    }
   assert(false); // never reached
 }
 
-
-//: Return the pixel format of the video mode
+// : Return the pixel format of the video mode
 vidl_pixel_format
 vidl_iidc1394_params::pixel_format(video_mode_t m)
 {
-  switch (m)
-  {
+  switch( m )
+    {
     case MODE_160x120_YUV444:
       return VIDL_PIXEL_FORMAT_UYV_444;
 
@@ -273,17 +267,16 @@ vidl_iidc1394_params::pixel_format(video_mode_t m)
 
     default:
       return VIDL_PIXEL_FORMAT_UNKNOWN;
-  }
+    }
   assert(false); // never reached
 }
 
-
-//: Return the image resolution of the video mode
+// : Return the image resolution of the video mode
 bool
 vidl_iidc1394_params::resolution(video_mode_t m, unsigned& ni, unsigned& nj)
 {
-  switch (m)
-  {
+  switch( m )
+    {
     case MODE_160x120_YUV444:
       ni = 160;  nj = 120;  break;
     case MODE_320x240_YUV422:
@@ -316,6 +309,6 @@ vidl_iidc1394_params::resolution(video_mode_t m, unsigned& ni, unsigned& nj)
       ni = 1600;  nj = 1200;  break;
     default:
       return false;
-  }
+    }
   return true;
 }

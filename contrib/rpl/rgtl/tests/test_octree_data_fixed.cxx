@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // Copyright 2006-2009 Brad King, Chuck Stewart
 // Distributed under the Boost Software License, Version 1.0.
@@ -32,14 +32,14 @@ test_octree_data_fixed()
   tree_type tree;
   testlib_test_perform(true);
 
-  tree_type::child_index_type c0(0);
+  tree_type::child_index_type   c0(0);
   tree_type::cell_location_type root;
   tree_type::cell_location_type child0 = root.get_child(c0);
   tree_type::cell_location_type grandchild0 = child0.get_child(c0);
 
   testlib_test_begin("fixed data parent location");
   testlib_test_perform(root == child0.get_parent() &&
-                       child0 == grandchild0.get_parent());
+                       child0 == grandchild0.get_parent() );
 
   testlib_test_begin("fixed data store node");
   float nd = 1.2f;

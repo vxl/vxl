@@ -13,7 +13,6 @@
 //
 // EndLatex
 
-
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -41,32 +40,35 @@ void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 #include <rgrl/rgrl_command.h>
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command
+class command_iteration_update : public rgrl_command
 {
- public:
+public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
-    execute( (const rgrl_object*) caller, event );
+    execute( (const rgrl_object *) caller, event );
   }
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
-      dynamic_cast<const rgrl_feature_based_registration*>(caller);
+      dynamic_cast<const rgrl_feature_based_registration *>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
-    rgrl_trans_translation* xform = rgrl_cast<rgrl_trans_translation*>(trans);
-    vcl_cout<<"Xform T = "<<xform->t()<<vcl_endl;
+    rgrl_trans_translation*  xform = rgrl_cast<rgrl_trans_translation *>(trans);
+
+    vcl_cout << "Xform T = " << xform->t() << vcl_endl;
   }
+
 };
 
 int
 main( int argc, char* argv[] )
 {
-  if ( argc < 2 ) {
+  if( argc < 2 )
+    {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0] << " ImageFeatureFile\n";
     return 1;
-  }
+    }
 
   // BeginLatex
   //
@@ -95,32 +97,36 @@ main( int argc, char* argv[] )
   //
   // EndLatex
 
-  const char* filename = argv[1];
+  const char*  filename = argv[1];
   vcl_ifstream istr( filename );
-  if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+  if( !istr )
+    {
+    vcl_cerr << "ERROR: Cannot open " << filename << '\n';
     return 1;
-  }
+    }
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
 
-  typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
-  typedef vnl_vector_fixed<double,2>              vector_2d;
+  typedef vcl_vector<rgrl_feature_sptr> feature_vector;
+  typedef vnl_vector_fixed<double, 2>   vector_2d;
 
-  feature_vector  moving_feature_points;
-  feature_vector  fixed_feature_points;
-  vector_2d location;
-  vector_2d direction;
+  feature_vector moving_feature_points;
+  feature_vector fixed_feature_points;
+  vector_2d      location;
+  vector_2d      direction;
 
   // BeginCodeSnippet
   const unsigned int dimension = 2;
-  bool done = false;
-  while ( !done && istr ) {
-    if ( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
+  bool               done = false;
+  while( !done && istr )
+    {
+    if( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
+      {
       done = true;
-    else moving_feature_points.push_back( new rgrl_feature_point(location.as_ref()) );
-  }
+      }
+    else {moving_feature_points.push_back( new rgrl_feature_point(location.as_ref() ) ); }
+    }
 
   fixed_feature_points = moving_feature_points;
 
@@ -152,8 +158,8 @@ main( int argc, char* argv[] )
 
   // BeginCodeSnippet
   rgrl_transformation_sptr init_transform;
-  vector_2d init_parameters( 15, 15);
-  init_transform = new rgrl_trans_translation(init_parameters.as_ref());
+  vector_2d                init_parameters( 15, 15);
+  init_transform = new rgrl_trans_translation(init_parameters.as_ref() );
   // EndCodeSnippet
 
   // BeginLatex
@@ -166,10 +172,10 @@ main( int argc, char* argv[] )
   // EndLatex
 
   // BeginCodeSnippet
-  vector_2d x0(0,0);          //upper left corner
-  vector_2d x1(1023,1023);    //bottom right corner
-  rgrl_mask_sptr moving_image_roi = new rgrl_mask_box(x0.as_ref(), x1.as_ref());
-  rgrl_mask_sptr fixed_image_roi = moving_image_roi; // assume two are identical
+  vector_2d             x0(0, 0);       // upper left corner
+  vector_2d             x1(1023, 1023); // bottom right corner
+  rgrl_mask_sptr        moving_image_roi = new rgrl_mask_box(x0.as_ref(), x1.as_ref() );
+  rgrl_mask_sptr        fixed_image_roi = moving_image_roi; // assume two are identical
   rgrl_initializer_sptr initializer =
     new rgrl_initializer_prior(moving_image_roi,
                                fixed_image_roi,
@@ -187,7 +193,7 @@ main( int argc, char* argv[] )
   // EndLatex
 
   // BeginCodeSnippet
-  unsigned int k = 1;
+  unsigned int      k = 1;
   rgrl_matcher_sptr cp_matcher = new rgrl_matcher_k_nearest( k );
   // EndCodeSnippet
 
@@ -224,7 +230,7 @@ main( int argc, char* argv[] )
   // EndLatex
 
   // BeginCodeSnippet
-  double tolerance = 1.5;
+  double                       tolerance = 1.5;
   rgrl_convergence_tester_sptr conv_test =
     new rgrl_convergence_on_median_error( tolerance );
   // EndCodeSnippet
@@ -265,7 +271,7 @@ main( int argc, char* argv[] )
   reg.set_expected_min_geometric_scale(0.001);
   // EndCodeSnippet
 
-  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
+  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update() );
   reg.set_debug_flag(1);
 
   // BeginLatex
@@ -290,13 +296,14 @@ main( int argc, char* argv[] )
   // EndLatex
 
   // BeginCodeSnippet
-  if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+  if( reg.has_final_transformation() )
+    {
+    vcl_cout << "Final xform:" << vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
-    rgrl_trans_translation* a_xform = rgrl_cast<rgrl_trans_translation*>(trans);
-    vcl_cout<<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
-  }
+    rgrl_trans_translation*  a_xform = rgrl_cast<rgrl_trans_translation *>(trans);
+    vcl_cout << "t = " << a_xform->t() << vcl_endl
+             << "Final alignment error = " << reg.final_status()->error() << vcl_endl;
+    }
   // EndCodeSnippet
 
   // BeginLatex

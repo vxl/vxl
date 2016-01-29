@@ -2,9 +2,9 @@
 #ifndef vidl_ostream_h_
 #define vidl_ostream_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief A base class for output video streams
 //
@@ -13,44 +13,42 @@
 
 #include "vidl_frame_sptr.h"
 
-
-//: A base class for output video streams
+// : A base class for output video streams
 class vidl_ostream
 {
- public:
-  //: Constructor
+public:
+  // : Constructor
   vidl_ostream() : ref_count_(0) {}
-  //: Destructor
+  // : Destructor
   virtual ~vidl_ostream() {}
 
-  //: Close the stream
+  // : Close the stream
   virtual void close() = 0;
 
-  //: Return true if the stream is open for writing
+  // : Return true if the stream is open for writing
   virtual bool is_open() const = 0;
 
-  //: Write and image to the stream
+  // : Write and image to the stream
   // \retval false if the image could not be written
   virtual bool write_frame(const vidl_frame_sptr& frame) = 0;
 
- private:
-  //: prevent deep copying a stream
-  vidl_ostream(const vidl_ostream& /*other*/) : ref_count_(0) {}
+private:
+  // : prevent deep copying a stream
+  vidl_ostream(const vidl_ostream & /*other*/) : ref_count_(0) {}
 
- //-------------------------------------------------------
- // reference counting
- public:
+  // -------------------------------------------------------
+  // reference counting
+public:
 
-  //: Increment reference count
+  // : Increment reference count
   void ref() { ref_count_++; }
 
-  //: Decrement reference count
-  void unref() { if (--ref_count_ <= 0) delete this; }
+  // : Decrement reference count
+  void unref() { if( --ref_count_ <= 0 ) {delete this; }}
 
-  //: Number of objects referring to this data
+  // : Number of objects referring to this data
   int ref_count() const { return ref_count_; }
-
- private:
+private:
   int ref_count_;
 };
 

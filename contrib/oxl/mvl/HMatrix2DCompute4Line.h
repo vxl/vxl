@@ -1,7 +1,7 @@
 #ifndef _HMatrix2DCompute4Line_
 #define _HMatrix2DCompute4Line_
-//--------------------------------------------------------------
-//:
+// --------------------------------------------------------------
+// :
 // \file
 //
 // HMatrix2DCompute4Line computes the homography relating
@@ -11,13 +11,13 @@
 
 #include "HMatrix2DCompute.h"
 
-class HMatrix2DCompute4Line : public HMatrix2DCompute {
-//--------------------------------------------------------------------------------
+class HMatrix2DCompute4Line : public HMatrix2DCompute
+{
+// --------------------------------------------------------------------------------
 protected:
-  bool compute_l(const LineArray&,
-                 const LineArray&,
-                 HMatrix2D *);
-//--------------------------------------------------------------------------------
+  bool compute_l(const LineArray &, const LineArray &, HMatrix2D *);
+
+// --------------------------------------------------------------------------------
 public:
   int minimum_number_of_correspondences() const { return 4; }
 };

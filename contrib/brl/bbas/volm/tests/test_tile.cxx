@@ -24,12 +24,16 @@ static void test_tile()
   // pixels from (0,0) to (0,3600) and pixels from (0,0) to (3600,0) are defined as overlaped region
   // pixel (0,0) correspond to (lon-0.5/nj, lat+1+0.5/ni)
   double lat2, lon2;
-  tiles[0].img_to_global(0, tiles[0].nj_-1, lon2, lat2);
-  TEST_NEAR("tile 1 img to global", lat2,   37+tiles[0].scale_j()*0.5/tiles[0].nj(), 0.99*tiles[0].scale_j()*0.5/tiles[0].nj());
-  TEST_NEAR("tile 1 img to global", lon2, -118-tiles[0].scale_i()*0.5/tiles[0].ni(), 0.99*tiles[0].scale_i()*0.5/tiles[0].ni());
-  tiles[0].img_to_global(tiles[0].ni_-1, 0, lon2, lat2);
-  TEST_NEAR("tile 1 img to global", lat2,   38+tiles[0].scale_j()*0.5/tiles[0].nj(), 0.99*tiles[0].scale_j()*0.5/tiles[0].nj());
-  TEST_NEAR("tile 1 img to global", lon2, -117-tiles[0].scale_i()*0.5/tiles[0].ni(), 0.99*tiles[0].scale_i()*0.5/tiles[0].ni());
+  tiles[0].img_to_global(0, tiles[0].nj_ - 1, lon2, lat2);
+  TEST_NEAR("tile 1 img to global", lat2,   37 + tiles[0].scale_j() * 0.5 / tiles[0].nj(),
+            0.99 * tiles[0].scale_j() * 0.5 / tiles[0].nj() );
+  TEST_NEAR("tile 1 img to global", lon2, -118 - tiles[0].scale_i() * 0.5 / tiles[0].ni(),
+            0.99 * tiles[0].scale_i() * 0.5 / tiles[0].ni() );
+  tiles[0].img_to_global(tiles[0].ni_ - 1, 0, lon2, lat2);
+  TEST_NEAR("tile 1 img to global", lat2,   38 + tiles[0].scale_j() * 0.5 / tiles[0].nj(),
+            0.99 * tiles[0].scale_j() * 0.5 / tiles[0].nj() );
+  TEST_NEAR("tile 1 img to global", lon2, -117 - tiles[0].scale_i() * 0.5 / tiles[0].ni(),
+            0.99 * tiles[0].scale_i() * 0.5 / tiles[0].ni() );
   unsigned i_bdry, j_bdry;
   tiles[0].global_to_img(-tiles[0].lon_, tiles[0].lat_, i_bdry, j_bdry);
   TEST("tile1 global to img(boundary)", i_bdry, 0);
@@ -40,21 +44,21 @@ static void test_tile()
   vcl_cout << " i = " << i << ", tiles[0].ni_ = " << tiles[0].ni() << '\n';
   vcl_cout << " j = " << j << ", tiles[0].nj_ = " << tiles[0].nj() << '\n';
   TEST("tile1 global to img", j, 0);
-  TEST("tile1 global to img", i+1, tiles[0].nj_);
+  TEST("tile1 global to img", i + 1, tiles[0].nj_);
   // for location out of current tile, it will return nothing
-  TEST("tile1 global to img", tiles[0].global_to_img(lon2+5, lat2, i, j), false);
+  TEST("tile1 global to img", tiles[0].global_to_img(lon2 + 5, lat2, i, j), false);
 
   volm_tile tt(38, -117, tiles[0].scale_i_, tiles[0].scale_j_, tiles[0].ni_, tiles[0].nj_);
   TEST("tt global to img", tt.global_to_img(lon2, lat2, i, j), true);
   TEST("tt global to img", i, 0);
   vcl_cout << " j = " << j << ", tt.nj_ = " <<  tt.nj_ << '\n';
-  TEST("tt global to img", j+1, tt.nj_);
+  TEST("tt global to img", j + 1, tt.nj_);
 
-  //volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.108007f, 0.930012f, (unsigned)10000, (unsigned)10000);
+  // volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.108007f, 0.930012f, (unsigned)10000, (unsigned)10000);
   volm_tile ttt(37.622991f, 118.209999f, 'N', 'W', 1.0f, 0.9f, (unsigned)10000, (unsigned)10000);
-  vcl_cout << "width is: " << ttt.calculate_width() << " meters = " << ttt.calculate_width()/1000.0 << " Km..\n";
-  vcl_cout << "height is: " << ttt.calculate_height() << " meters = " << ttt.calculate_height()/1000.0 << " Km..\n";
-  vcl_cout << "one pixel is: " << ttt.calculate_width()/ttt.ni_ << " meters..\n";
+  vcl_cout << "width is: " << ttt.calculate_width() << " meters = " << ttt.calculate_width() / 1000.0 << " Km..\n";
+  vcl_cout << "height is: " << ttt.calculate_height() << " meters = " << ttt.calculate_height() / 1000.0 << " Km..\n";
+  vcl_cout << "one pixel is: " << ttt.calculate_width() / ttt.ni_ << " meters..\n";
   ttt.write_kml("./t0.kml", 1000);
 
   // test the transformation as tile is in southern hemisphere
@@ -85,10 +89,10 @@ static void test_tile()
   tile_east.img_to_global(1800, 1800, lon_east, lat_east);
   TEST_NEAR("tile_east global to image", lon_east, 77.5, 0.01);
   TEST_NEAR("tile_east global to image", lat_east, 12.5, 0.01);
-  tile_east.img_to_global(3600,3600, lon_east, lat_east);
+  tile_east.img_to_global(3600, 3600, lon_east, lat_east);
   TEST_NEAR("tile_east image to global", lon_east, 78, 0.01);
   TEST_NEAR("tile_east image to global", lat_east, 12, 0.01);
-  tile_east.img_to_global(0,0, lon_east, lat_east);
+  tile_east.img_to_global(0, 0, lon_east, lat_east);
   TEST_NEAR("tile_east image to global", lon_east, 77, 0.01);
   TEST_NEAR("tile_east image to global", lat_east, 13, 0.01);
 
@@ -97,11 +101,11 @@ static void test_tile()
   ofs.close();
 
   vsl_b_ifstream ifs("test_tile.bin");
-  volm_tile t;
+  volm_tile      t;
   t.b_read(ifs);
   TEST("tile 2", t.lat_, 37);
   double lat3, lon3;
-  t.img_to_global(t.ni()-1, 0, lon3, lat3);
+  t.img_to_global(t.ni() - 1, 0, lon3, lat3);
   TEST_NEAR("tile 2 img to global lat", lat3, lat2, 0.01);
   TEST_NEAR("tile 2 img to global lon", lon3, lon2, 0.01);
 

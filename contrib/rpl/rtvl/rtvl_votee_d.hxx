@@ -8,20 +8,22 @@
 
 #include "rtvl_votee.hxx"
 
-template <class T, unsigned int n> class vnl_vector_fixed;
-template <class T, unsigned int nr, unsigned int nc> class vnl_matrix_fixed;
+template <class T, unsigned int n>
+class vnl_vector_fixed;
+template <class T, unsigned int nr, unsigned int nc>
+class vnl_matrix_fixed;
 
 template <unsigned int N>
-class rtvl_votee_d: public rtvl_votee<N>
+class rtvl_votee_d : public rtvl_votee<N>
 {
 public:
   typedef rtvl_votee<N> derived;
-  rtvl_votee_d(vnl_vector_fixed<double, N> const& votee_location,
-               vnl_matrix_fixed<double, N, N>& votee_tensor,
-               vnl_matrix_fixed<double, N, N> (&votee_dtensor)[N]);
+  rtvl_votee_d(vnl_vector_fixed<double, N> const& votee_location, vnl_matrix_fixed<double, N, N>& votee_tensor,
+               vnl_matrix_fixed<double, N, N>(&votee_dtensor)[N]);
   virtual void go(rtvl_vote_internal<N>& vi, double saliency);
+
 private:
-  vnl_matrix_fixed<double, N, N> (&dtensor_)[N];
+  vnl_matrix_fixed<double, N, N>(&dtensor_)[N];
 };
 
 #endif

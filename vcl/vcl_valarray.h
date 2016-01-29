@@ -7,26 +7,29 @@
 #include "vcl_compiler.h"
 
 #if defined(VCL_VC_9)
-# include "win32-vc9/vcl_valarray.h"
+#  include "win32-vc9/vcl_valarray.h"
 
 #else
-# include "iso/vcl_valarray.h"
+#  include "iso/vcl_valarray.h"
 #endif
 
 #if !VCL_COMPLEX_POW_WORKS
 // deal with corrections to pow(complex...)
-# undef vcl_pow
-# define vcl_pow vcl_pow
-template<class T> inline vcl_valarray<T>
-  vcl_pow(const vcl_valarray<T>& x, const vcl_valarray<T>& y)
+#  undef vcl_pow
+#  define vcl_pow vcl_pow
+template <class T>
+inline vcl_valarray<T>
+vcl_pow(const vcl_valarray<T>& x, const vcl_valarray<T>& y)
 { return std::pow(x, y); }
 
-template<class T> inline vcl_valarray<T>
-  vcl_pow(const vcl_valarray<T>& x, const T& y)
+template <class T>
+inline vcl_valarray<T>
+vcl_pow(const vcl_valarray<T>& x, const T& y)
 { return std::pow(x, y); }
 
-template<class T> inline vcl_valarray<T>
-  vcl_pow(const T& x, const vcl_valarray<T>& y)
+template <class T>
+inline vcl_valarray<T>
+vcl_pow(const T& x, const vcl_valarray<T>& y)
 { return std::pow(x, y); }
 
 #endif

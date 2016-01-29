@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_composite_tableau_sptr.h
 #ifndef vgui_composite_tableau_sptr_h_
 #define vgui_composite_tableau_sptr_h_
-//:
+// :
 // \file
 // \author  fsm
 // \brief   Smart-pointer to a vgui_composite_tableau tableau.

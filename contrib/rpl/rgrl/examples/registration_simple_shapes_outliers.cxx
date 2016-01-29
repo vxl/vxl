@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //
 // \latexonly
@@ -50,28 +50,29 @@ void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 // vnl_vector_fixed is a fixed-length, stack storage
 // vector. vnl_vector_fixed defines most of the operators defined by
 // vnl_vector, and does so efficiently.
-typedef vnl_vector_fixed<double,2>              vector_2d;
-typedef vcl_vector< rgrl_feature_sptr >         feature_vector;
+typedef vnl_vector_fixed<double, 2>   vector_2d;
+typedef vcl_vector<rgrl_feature_sptr> feature_vector;
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command
+class command_iteration_update : public rgrl_command
 {
- public:
+public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
-    execute( (const rgrl_object*) caller, event );
+    execute( (const rgrl_object *) caller, event );
   }
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
-      dynamic_cast<const rgrl_feature_based_registration*>(caller);
+      dynamic_cast<const rgrl_feature_based_registration *>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
-    rgrl_trans_affine* xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"Xform A = "<<xform->A()<<"\n t= "<<xform->t()<<vcl_endl;
-  }
-};
+    rgrl_trans_affine*       xform = rgrl_cast<rgrl_trans_affine *>(trans);
 
+    vcl_cout << "Xform A = " << xform->A() << "\n t= " << xform->t() << vcl_endl;
+  }
+
+};
 
 void
 generate_data( feature_vector& feature_set )
@@ -80,62 +81,64 @@ generate_data( feature_vector& feature_set )
   // Gaussian noise of sigma=0.1 is added to the point set.
   //
   vnl_random random;
-  double sigma  = 0.2;
-  double org_x = 50;
-  double org_y = 50;
+  double     sigma  = 0.2;
+  double     org_x = 50;
+  double     org_y = 50;
 
   // The edge of y = org_y
   //
-  for (unsigned int xi = 0; xi<200; xi+=2 ) {
-    vector_2d pt, tangent_dir(1,0);
-    pt[0] = org_x + xi + random.normal()*sigma;
-    pt[1] = org_y + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
-  }
-
+  for( unsigned int xi = 0; xi < 200; xi += 2 )
+    {
+    vector_2d pt, tangent_dir(1, 0);
+    pt[0] = org_x + xi + random.normal() * sigma;
+    pt[1] = org_y + random.normal() * sigma;
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref() ) );
+    }
   // The edge of y = org_y + 99
   //
-  for (unsigned int xi = 0; xi<200; xi+=2 ) {
+  for( unsigned int xi = 0; xi < 200; xi += 2 )
+    {
     vector_2d pt, tangent_dir(-1, 0);
-    pt[0] = org_x + xi + random.normal()*sigma;
-    pt[1] = org_y + 99 + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
-  }
-
+    pt[0] = org_x + xi + random.normal() * sigma;
+    pt[1] = org_y + 99 + random.normal() * sigma;
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref() ) );
+    }
   // The edge of x = org_x
   //
-  for (unsigned int yi = 0; yi<100; yi+=2 ) {
-    vector_2d pt, tangent_dir(0,1);
-    pt[0] = org_x + random.normal()*sigma;
-    pt[1] = org_y + yi + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
-  }
-
+  for( unsigned int yi = 0; yi < 100; yi += 2 )
+    {
+    vector_2d pt, tangent_dir(0, 1);
+    pt[0] = org_x + random.normal() * sigma;
+    pt[1] = org_y + yi + random.normal() * sigma;
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref() ) );
+    }
   // The edge of x = org_x+199
   //
-  for (unsigned int yi = 0; yi<100; yi+=2 ) {
-    vector_2d pt,tangent_dir(0,-1);
-    pt[0] = org_x + 199 + random.normal()*sigma;
-    pt[1] = org_y + yi + random.normal()*sigma;
-    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
-  }
+  for( unsigned int yi = 0; yi < 100; yi += 2 )
+    {
+    vector_2d pt, tangent_dir(0, -1);
+    pt[0] = org_x + 199 + random.normal() * sigma;
+    pt[1] = org_y + yi + random.normal() * sigma;
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref() ) );
+    }
 
   // Draw the circle, centered at (115, 115), with radius 50
   //
   double radius = 50;
   double center_x = 115;
   double center_y = 115;
-  for ( unsigned int ci = 0; ci<360; ci++ ) {
-    vector_2d pt,tangent_dir;
-    double angle = ci*2*vnl_math::pi_over_180;
-    double next_angle = (ci+1)*2*vnl_math::pi_over_180;
-    pt[0] = center_x + radius*vcl_cos(angle);
-    pt[1] = center_y + radius*vcl_sin(angle);
-    tangent_dir[0] = vcl_cos(next_angle) - vcl_cos(angle) ;
-    tangent_dir[1] = vcl_sin(next_angle) - vcl_sin(angle) ;
-    tangent_dir.normalize(); //make the tangent a unit vector
-    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref()) );
-  }
+  for( unsigned int ci = 0; ci < 360; ci++ )
+    {
+    vector_2d pt, tangent_dir;
+    double    angle = ci * 2 * vnl_math::pi_over_180;
+    double    next_angle = (ci + 1) * 2 * vnl_math::pi_over_180;
+    pt[0] = center_x + radius * vcl_cos(angle);
+    pt[1] = center_y + radius * vcl_sin(angle);
+    tangent_dir[0] = vcl_cos(next_angle) - vcl_cos(angle);
+    tangent_dir[1] = vcl_sin(next_angle) - vcl_sin(angle);
+    tangent_dir.normalize(); // make the tangent a unit vector
+    feature_set.push_back( new rgrl_feature_trace_pt(pt.as_ref(), tangent_dir.as_ref() ) );
+    }
 }
 
 void
@@ -144,12 +147,14 @@ add_outliers( feature_vector& feature_set )
   vnl_random random;
 
   unsigned int num_outliers = 200;
-  for (unsigned int i = 0; i<num_outliers; i++) {
+
+  for( unsigned int i = 0; i < num_outliers; i++ )
+    {
     vnl_vector<double> v(2), n(2);
     n[0] = v[0] = random.drand32(0, 300);
     n[1] = v[1] = random.drand32(0, 300);
-    feature_set.push_back( new rgrl_feature_trace_pt(v, n.normalize()) );
-  }
+    feature_set.push_back( new rgrl_feature_trace_pt(v, n.normalize() ) );
+    }
 }
 
 int
@@ -160,8 +165,8 @@ main()
 
   // Generate the feature points
   //
-  feature_vector  moving_feature_points;
-  feature_vector  fixed_feature_points;
+  feature_vector moving_feature_points;
+  feature_vector fixed_feature_points;
 
   generate_data( moving_feature_points);
   generate_data( fixed_feature_points );
@@ -172,10 +177,10 @@ main()
 
   // Set up the feature sets
   //
-  const unsigned int  dimension = 2;
-   rgrl_feature_set_sptr moving_feature_set =
+  const unsigned int    dimension = 2;
+  rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
-  rgrl_mask_box moving_image_roi = moving_feature_set->bounding_box();
+  rgrl_mask_box         moving_image_roi = moving_feature_set->bounding_box();
   rgrl_feature_set_sptr fixed_feature_set =
     new rgrl_feature_set_location<dimension>(fixed_feature_points);
   rgrl_mask_box fixed_image_roi = fixed_feature_set->bounding_box();
@@ -184,11 +189,11 @@ main()
   // transformation
   //
   rgrl_transformation_sptr init_transform;
-  vnl_matrix<double> A(2,2);
-  A(0,0) = 0.996;   A(0,1) = -0.087;
-  A(1,0) = -0.087;  A(1,1) = 0.996;
+  vnl_matrix<double>       A(2, 2);
+  A(0, 0) = 0.996;   A(0, 1) = -0.087;
+  A(1, 0) = -0.087;  A(1, 1) = 0.996;
   vector_2d t( 10, -13);
-  init_transform = new rgrl_trans_affine(A, t.as_ref());
+  init_transform = new rgrl_trans_affine(A, t.as_ref() );
   rgrl_estimator_sptr estimator = new rgrl_est_affine();
 
   // Set up the ICP matcher
@@ -211,7 +216,7 @@ main()
   // \endlatexonly
 
   // BeginCodeSnippet
-  unsigned int k = 1;
+  unsigned int      k = 1;
   rgrl_matcher_sptr cp_matcher = new rgrl_matcher_k_nearest( k );
   // EndCodeSnippet
 
@@ -247,8 +252,8 @@ main()
   // \endlatexonly
 
   // BeginCodeSnippet
-  vcl_auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
-  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(m_est_obj, false, false);
+  vcl_auto_ptr<rrel_m_est_obj> m_est_obj( new rrel_tukey_obj(4) );
+  rgrl_weighter_sptr           wgter = new rgrl_weighter_m_est(m_est_obj, false, false);
   // EndCodeSnippet
 
   // \latexonly
@@ -329,7 +334,7 @@ main()
   // \endlatexonly
 
   // BeginCodeSnippet
-  double tolerance = 1.5;
+  double                       tolerance = 1.5;
   rgrl_convergence_tester_sptr conv_test =
     new rgrl_convergence_on_weighted_error( tolerance );
   // EndCodeSnippet
@@ -381,24 +386,25 @@ main()
 
   // BeginCodeSnippet
   rgrl_feature_based_registration reg( data, conv_test );
-  reg.set_expected_min_geometric_scale( 0.1 ); //scale cannot go lower than 0.1
+  reg.set_expected_min_geometric_scale( 0.1 ); // scale cannot go lower than 0.1
   reg.set_max_icp_iter( 10 );
   // EndCodeSnippet
 
-  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
+  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update() );
 
   // Run ...
   //
   reg.run( moving_image_roi, fixed_image_roi, estimator, init_transform );
 
-  if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+  if( reg.has_final_transformation() )
+    {
+    vcl_cout << "Final xform:" << vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
-    rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"A = "<<a_xform->A()<<vcl_endl
-            <<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
-  }
+    rgrl_trans_affine*       a_xform = rgrl_cast<rgrl_trans_affine *>(trans);
+    vcl_cout << "A = " << a_xform->A() << vcl_endl
+             << "t = " << a_xform->t() << vcl_endl
+             << "Final alignment error = " << reg.final_status()->error() << vcl_endl;
+    }
 
   // Perform testing
   //

@@ -2,9 +2,9 @@
 #ifndef vgui_dialog_h_
 #define vgui_dialog_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   23 Oct 1999
@@ -29,7 +29,7 @@
 
 class vgui_dialog_impl;
 
-//: Abstract dialog class
+// : Abstract dialog class
 //
 // vgui_dialog allows the user to build a dialog from a collection of fields.
 // A field in this context consists of a vcl_string label and a variable.
@@ -51,82 +51,85 @@ class vgui_dialog_impl;
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
 
-typedef void (*vgui_dialog_callback)(void const* client_data);
-typedef void (*vgui_dialog_callback_no_client_data)();
+typedef void (* vgui_dialog_callback)(void const* client_data);
+typedef void (* vgui_dialog_callback_no_client_data)();
 
 class vgui_dialog
 {
- public:
+public:
 
-  //: Constructor - takes the title of the dialog box.
+  // : Constructor - takes the title of the dialog box.
   vgui_dialog(const char* name);
   virtual ~vgui_dialog();
 
   // A push button is oftern shown with a label and/or a icon/bitmap
   // and a command is executed when the button is clicked.
-  void pushbutton(vgui_command_sptr cmnd, const char *label, const void* icon);
-  void pushbutton(vgui_dialog_callback_no_client_data f, const char *label, const void* icon);
-  void pushbutton(vgui_dialog_callback f, void const *client_data, const char *label, const void* icon);
+  void pushbutton(vgui_command_sptr cmnd, const char * label, const void* icon);
 
-  void checkbox(const char*, bool&);
+  void pushbutton(vgui_dialog_callback_no_client_data f, const char * label, const void* icon);
 
-  void field(const char*, int&);
-  void field(const char* c, unsigned int& v) { field(c,*reinterpret_cast<int*>(&v)); }
-  void field(const char*, long&);
-  void field(const char*, float&);
-  void field(const char*, double&);
-  void field(const char*, vcl_string&);
+  void pushbutton(vgui_dialog_callback f, void const * client_data, const char * label, const void* icon);
 
-  //: Multiple choice - with two options.
-  void choice(const char* label, const char* option1,
-              const char* option2, int& chosen);
+  void checkbox(const char *, bool &);
 
-  //: Multiple choice - with three options.
-  void choice(const char* label, const char* option1,
-              const char* option2, const char* option3, int& chosen);
+  void field(const char *, int &);
 
-  //: Multiple choice - with the list of options given.
-  void choice(const char*, const vcl_vector<vcl_string>&, int &);
+  void field(const char* c, unsigned int& v) { field(c, *reinterpret_cast<int *>(&v) ); }
+  void field(const char *, long &);
 
-  void choice(const char*s, const vcl_vector<vcl_string>&v, unsigned &r)
-  { choice(s,v,*reinterpret_cast<int*>(&r)); }
+  void field(const char *, float &);
 
-  //: File browsers
-  void file (const char* label, vcl_string& regexp, vcl_string& filepath);
+  void field(const char *, double &);
 
-  //: inline file browser
-  void inline_file(const char* label, vcl_string& regexp,vcl_string& filepath);
+  void field(const char *, vcl_string &);
 
-  //: Color chooser
-  void color (const char* label, vcl_string&);
+  // : Multiple choice - with two options.
+  void choice(const char* label, const char* option1, const char* option2, int& chosen);
 
-  //: Inline color chooser
-  void inline_color(const char *label, vcl_string &);
+  // : Multiple choice - with three options.
+  void choice(const char* label, const char* option1, const char* option2, const char* option3, int& chosen);
 
-  //: Text message
-  void message(const char*);
+  // : Multiple choice - with the list of options given.
+  void choice(const char *, const vcl_vector<vcl_string> &, int &);
+
+  void choice(const char* s, const vcl_vector<vcl_string>& v, unsigned & r)
+  { choice(s, v, *reinterpret_cast<int *>(&r) ); }
+
+  // : File browsers
+  void file(const char* label, vcl_string& regexp, vcl_string& filepath);
+
+  // : inline file browser
+  void inline_file(const char* label, vcl_string& regexp, vcl_string& filepath);
+
+  // : Color chooser
+  void color(const char* label, vcl_string &);
+
+  // : Inline color chooser
+  void inline_color(const char * label, vcl_string &);
+
+  // : Text message
+  void message(const char *);
 
   void line_break();
 
-  //: Display a tableau in the dialog
-  void inline_tableau(const vgui_tableau_sptr tab, unsigned width,
-                      unsigned height);
+  // : Display a tableau in the dialog
+  void inline_tableau(const vgui_tableau_sptr tab, unsigned width, unsigned height);
 
-  //: Set the labels on each button, if 0 that button does not appear.
+  // : Set the labels on each button, if 0 that button does not appear.
   void set_cancel_button(const char* label);
 
-  //: Set the labels on each button, if 0 that button does not appear.
+  // : Set the labels on each button, if 0 that button does not appear.
   void set_ok_button(const char* label);
 
-  //: A "modal" dialog captures all events sent to the application.
+  // : A "modal" dialog captures all events sent to the application.
   void set_modal(const bool);
 
-  //: Display the dialog box and wait for the users response.
+  // : Display the dialog box and wait for the users response.
   //  Returns true if the user clicks on the 'OK' button and false if the
   //  user clicks on the 'Cancel' button.
   bool ask();
 
- protected:
+protected:
   vgui_dialog() {}
   vgui_dialog_impl* impl;
 };

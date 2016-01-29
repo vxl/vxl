@@ -4,7 +4,6 @@
 #include <vcl_iomanip.h>
 #include <vidl/vidl_pixel_format.h>
 
-
 static void test_pixel_format()
 {
   vcl_cout << "****************************\n"
@@ -40,15 +39,15 @@ static void test_pixel_format()
        vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_MONO_8>::name() );
 
   TEST("vidl_pixel_format_from_string",
-       vidl_pixel_format_from_string(vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_YUV_420P>::name()),
+       vidl_pixel_format_from_string(vidl_pixel_traits_of<VIDL_PIXEL_FORMAT_YUV_420P>::name() ),
        VIDL_PIXEL_FORMAT_YUV_420P );
 
   vcl_cout << "\nSupported pixel types:\n";
-  for (vidl_pixel_format fmt = VIDL_PIXEL_FORMAT_UNKNOWN;
-       fmt != VIDL_PIXEL_FORMAT_ENUM_END; fmt = vidl_pixel_format(fmt+1))
-  {
-    vcl_cout << "  " <<vcl_setw(15) <<fmt <<' '<<vidl_pixel_format_bpp(fmt)<<" bpp\n";
-  }
+  for( vidl_pixel_format fmt = VIDL_PIXEL_FORMAT_UNKNOWN;
+       fmt != VIDL_PIXEL_FORMAT_ENUM_END; fmt = vidl_pixel_format(fmt + 1) )
+    {
+    vcl_cout << "  " << vcl_setw(15) << fmt << ' ' << vidl_pixel_format_bpp(fmt) << " bpp\n";
+    }
   vcl_cout << vcl_endl;
 }
 

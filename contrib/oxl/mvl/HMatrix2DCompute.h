@@ -1,6 +1,6 @@
 #ifndef HMatrix2DCompute_h_
 #define HMatrix2DCompute_h_
-//:
+// :
 // \file
 //
 // Abstract interface for classes that compute plane-to-plane
@@ -22,7 +22,8 @@ class PairMatchSetCorner;
 #include <mvl/HomgLine2D.h>
 #include <vcl_vector.h>
 
-class HMatrix2DCompute {
+class HMatrix2DCompute
+{
 public:
   HMatrix2DCompute() : verbose_(false) { }
   virtual ~HMatrix2DCompute() { }
@@ -43,22 +44,31 @@ public:
   // correspondences, some use both. They are implemented
   // in terms of the compute_(p|l|pl) methods.
 
-  bool compute(PointArray const&, PointArray const&, HMatrix2D *);
-  bool compute(LineArray const&, LineArray const&, HMatrix2D *);
-  bool compute(PointArray const&, PointArray const&, LineArray const&, LineArray const&, HMatrix2D *);
+  bool compute(PointArray const &, PointArray const &, HMatrix2D *);
+
+  bool compute(LineArray const &, LineArray const &, HMatrix2D *);
+
+  bool compute(PointArray const &, PointArray const &, LineArray const &, LineArray const &, HMatrix2D *);
+
   bool compute(PairMatchSetCorner const &, HMatrix2D *);
 
-  HMatrix2D compute(PointArray const&, PointArray const&);
-  HMatrix2D compute(LineArray const&, LineArray const&);
-  HMatrix2D compute(PointArray const&, PointArray const&, LineArray const&, LineArray const&);
+  HMatrix2D compute(PointArray const &, PointArray const &);
+
+  HMatrix2D compute(LineArray const &, LineArray const &);
+
+  HMatrix2D compute(PointArray const &, PointArray const &, LineArray const &, LineArray const &);
+
   HMatrix2D compute(PairMatchSetCorner const &);
 
 protected:
   bool verbose_;
 
-  virtual bool compute_p (PointArray const&, PointArray const&, HMatrix2D *);
-  virtual bool compute_l (LineArray const&, LineArray const&, HMatrix2D *);
-  virtual bool compute_pl(PointArray const&, PointArray const&, LineArray const&, LineArray const&, HMatrix2D *);
+  virtual bool compute_p(PointArray const &, PointArray const &, HMatrix2D *);
+
+  virtual bool compute_l(LineArray const &, LineArray const &, HMatrix2D *);
+
+  virtual bool compute_pl(PointArray const &, PointArray const &, LineArray const &, LineArray const &, HMatrix2D *);
+
 };
 
 #endif // HMatrix2DCompute_h_

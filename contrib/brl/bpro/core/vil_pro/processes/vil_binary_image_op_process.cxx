@@ -1,6 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_binary_image_op_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \verbatim
 //   Yi Dong --- Oct, 2014  add image difference, image ratio binary operation
@@ -10,11 +10,10 @@
 #include <vil/vil_convert.h>
 #include <vcl_iostream.h>
 
-
-//: Constructor
+// : Constructor
 bool vil_binary_image_op_process_cons(bprb_func_process& pro)
 {
-  //this process takes three inputs and has one output
+  // this process takes three inputs and has one output
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
@@ -24,39 +23,50 @@ bool vil_binary_image_op_process_cons(bprb_func_process& pro)
   output_types.push_back("vil_image_view_base_sptr");  // label image
 
   return pro.set_input_types(input_types)
-      && pro.set_output_types(output_types);
+         && pro.set_output_types(output_types);
 }
 
-//: Execute the process
+// : Execute the process
 bool vil_binary_image_op_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()< 3) {
+  if( pro.n_inputs() < 3 )
+    {
     vcl_cout << "vil_binary_image_op_process: The number of inputs should be 3" << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs
-  unsigned i=0;
+  unsigned                 i = 0;
   vil_image_view_base_sptr img_ptr_a = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr img_ptr_b = pro.get_input<vil_image_view_base_sptr>(i++);
-  vcl_string operation = pro.get_input<vcl_string>(i++);
+  vcl_string               operation = pro.get_input<vcl_string>(i++);
 
-  vil_image_view<float> view_a = *(vil_convert_cast(float(), img_ptr_a));
-  vil_image_view<float> view_b = *(vil_convert_cast(float(), img_ptr_b));
+  vil_image_view<float> view_a = *(vil_convert_cast(float(), img_ptr_a) );
+  vil_image_view<float> view_b = *(vil_convert_cast(float(), img_ptr_b) );
   vil_image_view<float> result;
 
-  //test for operation
-  if (operation=="product")
+  // test for operation
+  if( operation == "product" )
+    {
     vil_math_image_product(view_a, view_b, result);
-  else if (operation=="max")
+    }
+  else if( operation == "max" )
+    {
     vil_math_image_max(view_a, view_b, result);
-  else if (operation=="sum")
+    }
+  else if( operation == "sum" )
+    {
     vil_math_image_sum(view_a, view_b, result);
-  else if (operation=="diff")
+    }
+  else if( operation == "diff" )
+    {
     vil_math_image_difference(view_a, view_b, result);
-  else if (operation=="ratio")
+    }
+  else if( operation == "ratio" )
+    {
     vil_math_image_ratio(view_a, view_b, result);
+    }
   else
     {
     vcl_cerr << "In vil_binary_image_op_process::execute() -"
@@ -64,7 +74,6 @@ bool vil_binary_image_op_process(bprb_func_process& pro)
     return false;
     }
 
-  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(result));
+  pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(result) );
   return true;
 }
-

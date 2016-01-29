@@ -1,7 +1,7 @@
-//This is brl/bseg/boxm2/volm/conf/boxm2_volm_conf_matcher.h
+// This is brl/bseg/boxm2/volm/conf/boxm2_volm_conf_matcher.h
 #ifndef boxm2_volm_conf_matcher_h_
 #define boxm2_volm_conf_matcher_h_
-//:
+// :
 // \file
 // \brief  A class to match a configurational query to pre-created configurational indices.  The output will be
 //         a measurement (from 0 to 1) to quantify the similarity of configuration in the query and the index
@@ -30,24 +30,17 @@ class boxm2_volm_conf_matcher
 public:
   // =============== constructor ======================
 
-  //: default constructor
+  // : default constructor
   boxm2_volm_conf_matcher() {}
-  boxm2_volm_conf_matcher(volm_conf_query_sptr const& query,
-                          unsigned const& tile_id,
-                          vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
-                          vcl_string const& index_folder,
+  boxm2_volm_conf_matcher(volm_conf_query_sptr const& query, unsigned const& tile_id,
+                          vcl_vector<volm_geo_index_node_sptr> const& loc_leaves, vcl_string const& index_folder,
                           vcl_string const& out_folder,
-                          vcl_string const& cand_folder,
-                          float const& buffer_capacity = 2.0);
-  //: constructor to create query online
+                          vcl_string const& cand_folder, float const& buffer_capacity = 2.0);
+  // : constructor to create query online
   boxm2_volm_conf_matcher(volm_camera_space_sptr const& cam_space, depth_map_scene_sptr const& depth_scene,
-                          unsigned const& tile_id,
-                          vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
-                          vcl_string const& index_folder,
-                          vcl_string const& out_folder,
-                          vcl_string const& cand_folder,
-                          float const& buffer_capacity = 2.0,
-                          unsigned tol_in_pixel = 25);
+                          unsigned const& tile_id, vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
+                          vcl_string const& index_folder, vcl_string const& out_folder, vcl_string const& cand_folder,
+                          float const& buffer_capacity = 2.0, unsigned tol_in_pixel = 25);
 
   ~boxm2_volm_conf_matcher() {}
 
@@ -56,53 +49,53 @@ public:
   vcl_string index_folder()       const { return index_folder_; }
   float buffer_capacity()         const { return buffer_capacity_; }
 
-  vcl_vector<volm_geo_index_node_sptr>& loc_leaves() { return loc_leaves_; }
+  vcl_vector<volm_geo_index_node_sptr> & loc_leaves() { return loc_leaves_; }
 
   // =================== method =======================
 
-  //: configurational matcher on location leaf with leaf_id (if leaf_id is -1, matcher will operate on all leaves)
+  // : configurational matcher on location leaf with leaf_id (if leaf_id is -1, matcher will operate on all leaves)
   int conf_match_cpp(vcl_string const& index_name, bool const& use_height = true);
+
   int conf_match_cpp_no_candidate(vcl_string& index_name, bool const& use_height = true);
 
 private:
-  //: configurational query
+  // : configurational query
   volm_conf_query_sptr query_;
 
-  //: tile id where matcher operates on
+  // : tile id where matcher operates on
   unsigned tile_id_;
 
-  //: configurational index folder
+  // : configurational index folder
   vcl_string index_folder_;
 
-  //: location database
+  // : location database
   vcl_vector<volm_geo_index_node_sptr> loc_leaves_;
 
-  //: matcher related parameters
+  // : matcher related parameters
   float buffer_capacity_;  // in GB
 
-  //: candidate polygon
+  // : candidate polygon
   vcl_string cand_folder_;
 
-  //: output folder
+  // : output folder
   vcl_string out_folder_;
 
-  //: matching query with a single location index
+  // : matching query with a single location index
   bool matching(vcl_vector<volm_conf_object> const& values, volm_conf_score& score, bool const& use_height = false);
 
 #if 0
-  //: matching given a reference object point in index
+  // : matching given a reference object point in index
   void match_to_reference(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
-                           vcl_vector<volm_conf_object_sptr> const& obj_q,
-                           vcl_map<unsigned char, vcl_vector<volm_conf_object> >& obj_i,
-                           float& score,
-                           vcl_vector<volm_conf_object>& matched_objs);
+                          vcl_vector<volm_conf_object_sptr> const& obj_q, vcl_map<unsigned char,
+                                                                                  vcl_vector<volm_conf_object> >& obj_i,
+                          float& score,
+                          vcl_vector<volm_conf_object>& matched_objs);
+
 #endif
 
   void match_to_reference_h(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
-                            vcl_vector<volm_conf_object_sptr> const& obj_q,
-                            vcl_map<unsigned char, vcl_vector<volm_conf_object> >& obj_i,
-                            float& score,
-                            vcl_vector<volm_conf_object>& matched_objs,
+                            vcl_vector<volm_conf_object_sptr> const& obj_q, vcl_map<unsigned char,
+                                                                                    vcl_vector<volm_conf_object> >& obj_i, float& score, vcl_vector<volm_conf_object>& matched_objs,
                             bool const& use_height = true);
 
 };

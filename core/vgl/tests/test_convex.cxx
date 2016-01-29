@@ -16,12 +16,13 @@ static void test_convex()
   pts.push_back( vgl_point_2d<double>(3.0, 1.0) );
   pts.push_back( vgl_point_2d<double>(2.0, 1.0) );
   pts.push_back( vgl_point_2d<double>(0.0, 5.0) );
-
-  for (unsigned i=0; i < pts.size(); ++i)
-    vcl_cout << '(' << pts[i].x() <<','<<pts[i].y()<<") ";
+  for( unsigned i = 0; i < pts.size(); ++i )
+    {
+    vcl_cout << '(' << pts[i].x() << ',' << pts[i].y() << ") ";
+    }
   vcl_cout << vcl_endl;
 
-  vgl_polygon<double> poly=vgl_convex_hull(pts);
+  vgl_polygon<double> poly = vgl_convex_hull(pts);
   vcl_cout << "Outputs\n";
   poly.print(vcl_cout);
   vcl_cout << vcl_endl;

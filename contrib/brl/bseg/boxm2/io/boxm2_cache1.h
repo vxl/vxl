@@ -1,6 +1,6 @@
 #ifndef boxm2_cache1_h_
 #define boxm2_cache1_h_
-//:
+// :
 // \file
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -11,7 +11,7 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-//: top level storage (abstract) class
+// : top level storage (abstract) class
 // - handles all block io, from both the cache/marshaller and the disk
 //
 // \todo needs some notion of scene size (number of blocks in each dimension ...)
@@ -25,113 +25,122 @@ typedef vbl_smart_ptr<boxm2_cache1> boxm2_cache1_sptr;
 
 class boxm2_cache1_destroyer;
 
-class boxm2_cache1: public vbl_ref_count
+class boxm2_cache1 : public vbl_ref_count
 {
- public:
+public:
   void set_filesystem(BOXM2_IO_FS_TYPE fs_type) { filesystem_ = fs_type; }
 
-  //: Use this instead of constructor
+  // : Use this instead of constructor
   static boxm2_cache1_sptr instance();
-  static bool         exists() { return boxm2_cache1::instance_!=0; }
 
-  //: the destructor instance to make sure memory is deallocated when the program exits
+  static bool         exists() { return boxm2_cache1::instance_ != 0; }
+
+  // : the destructor instance to make sure memory is deallocated when the program exits
   static boxm2_cache1_destroyer destroyer_;  // it's not a pointer so C++ will make sure that its destructor will be called
   friend class boxm2_cache1_destroyer;
 
-  //: returns block pointer to block specified by ID
-  virtual boxm2_block* get_block(boxm2_block_id id) = 0;
+  // : returns block pointer to block specified by ID
+  virtual boxm2_block * get_block(boxm2_block_id id) = 0;
 
-  //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-  virtual boxm2_data_base* get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes=0, bool read_only = true) = 0;
+  // : returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
+  virtual boxm2_data_base * get_data_base(boxm2_block_id id, vcl_string type, vcl_size_t num_bytes = 0,
+                                          bool read_only = true) = 0;
 
-  //: returns a data_base pointer which is initialized to the default value of the type.
+  // : returns a data_base pointer which is initialized to the default value of the type.
   //  If a block for this type exists on the cache, it is removed and replaced with the new one.
   //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-  virtual boxm2_data_base* get_data_base_new(boxm2_block_id id, vcl_string type=0, vcl_size_t num_bytes=0, bool read_only = true) = 0;
+  virtual boxm2_data_base * get_data_base_new(boxm2_block_id id, vcl_string type = 0, vcl_size_t num_bytes = 0,
+                                              bool read_only = true) = 0;
 
-  //: removes data from this cache (may or may not write to disk first)
+  // : removes data from this cache (may or may not write to disk first)
   //  Note that this function does not delete the memory, just removes it from the cache
   //  and puts it in the garbage vector
-  virtual void remove_data_base(boxm2_block_id id, vcl_string type)=0;
+  virtual void remove_data_base(boxm2_block_id id, vcl_string type) = 0;
 
-  virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement)=0;
+  virtual void replace_data_base(boxm2_block_id id, vcl_string type, boxm2_data_base* replacement) = 0;
 
-  //: returns data pointer to data specified by ID and data_type
+  // : returns data pointer to data specified by ID and data_type
   template <boxm2_data_type T>
-  boxm2_data<T>* get_data(boxm2_block_id id, vcl_size_t num_bytes=0, bool read_only=true);
+  boxm2_data<T> * get_data(boxm2_block_id id, vcl_size_t num_bytes = 0, bool read_only = true);
 
-  //: dumps writeable data onto disk
+  // : dumps writeable data onto disk
   // -- pure virtual method; see specialisations
   virtual void write_to_disk() = 0;
 
-  //: disable the write process
+  // : disable the write process
   // -- generic method: does not do anything; see specialisations
   virtual void disable_write() {}
 
-  //: delete all the memory
+  // : delete all the memory
   // Caution: make sure to call write to disk methods not to loose writable data
   virtual void clear_cache() = 0;
 
-  //: return scene sptr
+  // : return scene sptr
   virtual boxm2_scene_sptr get_scene() { return scene_; }
+protected:
 
- protected:
+  // : hidden constructor
+  boxm2_cache1(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs = LOCAL) : scene_(scene), filesystem_(fs) {}
 
-  //: hidden constructor
-  boxm2_cache1(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs=LOCAL) : scene_(scene), filesystem_(fs) {}
-
-  //: hidden destructor (protected so it cannot be called -- forces the class to be singleton)
+  // : hidden destructor (protected so it cannot be called -- forces the class to be singleton)
   virtual ~boxm2_cache1() {}
 
-  //: singleton instance of boxm2_cache1
+  // : singleton instance of boxm2_cache1
   static boxm2_cache1_sptr instance_;
 
-  //: boxm2_scene needs to be around to initialized uninitialized blocks
+  // : boxm2_scene needs to be around to initialized uninitialized blocks
   boxm2_scene_sptr scene_;
 
-  //: boxm2_asio_manager handles asio requests
+  // : boxm2_asio_manager handles asio requests
   boxm2_asio_mgr io_mgr_;
 
   BOXM2_IO_FS_TYPE filesystem_;
 };
 
-//: returns a boxm2_data<T>* from the cache
+// : returns a boxm2_data<T>* from the cache
 //  This is a work around for the lack of support of virtual templated functions
 template <boxm2_data_type T>
-boxm2_data<T>* boxm2_cache1::get_data(boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
+boxm2_data<T> * boxm2_cache1::get_data(boxm2_block_id id, vcl_size_t num_bytes, bool read_only)
 {
   boxm2_data_base* base = this->get_data_base(id, boxm2_data_traits<T>::prefix(), num_bytes, read_only);
-  return static_cast<boxm2_data<T>* >(base);
+
+  return static_cast<boxm2_data<T> *>(base);
 }
 
-//: Binary write boxm2_cache1  to stream
+// : Binary write boxm2_cache1  to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_cache1 const& scene);
-//: Binary write boxm2_cache1  to stream
-void vsl_b_write(vsl_b_ostream& os, const boxm2_cache1* &p);
-//: Binary write boxm2_cache1 smart pointer to stream
+
+// : Binary write boxm2_cache1  to stream
+void vsl_b_write(vsl_b_ostream& os, const boxm2_cache1 * & p);
+
+// : Binary write boxm2_cache1 smart pointer to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_cache1_sptr& sptr);
-//: Binary write boxm2_cache1 smart pointer to stream
+
+// : Binary write boxm2_cache1 smart pointer to stream
 void vsl_b_write(vsl_b_ostream& os, boxm2_cache1_sptr const& sptr);
 
-//: Binary load boxm2_cache1  from stream.
-void vsl_b_read(vsl_b_istream& is, boxm2_cache1 &scene);
-//: Binary load boxm2_cache1  from stream.
+// : Binary load boxm2_cache1  from stream.
+void vsl_b_read(vsl_b_istream& is, boxm2_cache1 & scene);
+
+// : Binary load boxm2_cache1  from stream.
 void vsl_b_read(vsl_b_istream& is, boxm2_cache1* p);
-//: Binary load boxm2_cache1 smart pointer from stream.
+
+// : Binary load boxm2_cache1 smart pointer from stream.
 void vsl_b_read(vsl_b_istream& is, boxm2_cache1_sptr& sptr);
-//: Binary load boxm2_cache1 smart pointer from stream.
+
+// : Binary load boxm2_cache1 smart pointer from stream.
 void vsl_b_read(vsl_b_istream& is, boxm2_cache1_sptr const& sptr);
 
-
-//: create another class whose sole purpose is to destroy the singleton instance
+// : create another class whose sole purpose is to destroy the singleton instance
 class boxm2_cache1_destroyer
 {
- public:
+public:
   boxm2_cache1_destroyer(boxm2_cache1_sptr s = 0);
   ~boxm2_cache1_destroyer();
 
   void set_singleton(boxm2_cache1_sptr s);
- private:
+
+private:
   boxm2_cache1_sptr s_;
 };
 

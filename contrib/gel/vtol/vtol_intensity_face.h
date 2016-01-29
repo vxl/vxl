@@ -1,7 +1,7 @@
 // This is gel/vtol/vtol_intensity_face.h
 #ifndef vtol_intensity_face_h_
 #define vtol_intensity_face_h_
-//:
+// :
 // \file
 // \brief A face with intensity attributes
 //
@@ -36,7 +36,7 @@
 //   22-Sep-2004 - Peter Vanroose - added cast_to_intensity_face()
 // \endverbatim
 //
-//-------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
 #include <vdgl/vdgl_digital_region.h>
@@ -46,21 +46,21 @@
 
 class vtol_intensity_face : public vtol_face_2d
 {
- protected:
+protected:
   // Data Members--------------------------------------------------------------
   vdgl_digital_region* region_;
- public:
-  //Constructors---------------------------------------------------------------
-  //: A constructor from an existing face
+public:
+  // Constructors---------------------------------------------------------------
+  // : A constructor from an existing face
   vtol_intensity_face(vtol_face_2d_sptr const& face);
 #if 0
-  //: A constructor from a set of 2-d vtol_edge(s) with DigitalCurve geometry
+  // : A constructor from a set of 2-d vtol_edge(s) with DigitalCurve geometry
   //  Here the vtol_edge(s) are constructed from edgel curves formed during
   //  region analysis.
   vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges) : Face(edges) {}
-  //: Uses given 2-d vtol_edges (not deep copy) with intensity information from dr.
+  // : Uses given 2-d vtol_edges (not deep copy) with intensity information from dr.
   vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges, vdgl_digital_region& dr)
-  : vtol_face_2d(edges), vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij()) {}
+    : vtol_face_2d(edges), vdgl_digital_region(dr.Npix(), dr.Xj(), dr.Yj(), dr.Ij() ) {}
 #endif
   vtol_intensity_face(vcl_vector<vtol_edge_sptr>* edges);
   vtol_intensity_face(one_chain_list & one_chains);
@@ -70,83 +70,83 @@ class vtol_intensity_face : public vtol_face_2d
                       unsigned short const* pix);
   ~vtol_intensity_face();
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
+  // ---------------------------------------------------------------------------
+  // : Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  // ---------------------------------------------------------------------------
+  virtual vsol_spatial_object_2d * clone() const;
 
-  //: Return a platform independent string identifying the class
+  // : Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vtol_intensity_face"); }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
+  // : Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const vcl_string& cls) const
-  { return cls==is_a() || vtol_face_2d::is_class(cls); }
-
- private:
-  inline vtol_topology_object::vtol_topology_object_type
-    GetTopologyType() const { return vtol_topology_object::INTENSITYFACE; }
+  { return cls == is_a() || vtol_face_2d::is_class(cls); }
+private:
+  inline vtol_topology_object::vtol_topology_object_type GetTopologyType() const
+  {
+    return vtol_topology_object::
+           INTENSITYFACE;
+  }
 
   // MPP 5/9/2003
   // Added API consistent w/ overloaded vtol method
-  virtual vtol_topology_object::vtol_topology_object_type
-  topology_type() const { return GetTopologyType(); }
-
- public:
-  //***************************************************************************
+  virtual vtol_topology_object::vtol_topology_object_type topology_type() const { return GetTopologyType(); }
+public:
+  // ***************************************************************************
   // Replaces dynamic_cast<T>
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an intensity face, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_intensity_face* cast_to_intensity_face() const { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an intensity face, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual const vtol_intensity_face * cast_to_intensity_face() const { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an intensity face, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_intensity_face* cast_to_intensity_face() { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an intensity face, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual vtol_intensity_face * cast_to_intensity_face() { return this; }
 
-  virtual vdgl_digital_region* cast_to_digital_region() const {return region_;}
-  virtual vdgl_digital_region* cast_to_digital_region() {return region_;}
+  virtual vdgl_digital_region * cast_to_digital_region() const {return region_; }
+  virtual vdgl_digital_region * cast_to_digital_region() {return region_; }
   double area() const { return region_->area(); }
   void ResetPixelData() { region_->ResetPixelData(); }
-  void IncrementMeans(float x, float y, unsigned short pix){region_->IncrementMeans(x,y,pix);}
-  void ComputeIntensityStdev(){region_->ComputeIntensityStdev();}
+  void IncrementMeans(float x, float y, unsigned short pix) {region_->IncrementMeans(x, y, pix); }
+  void ComputeIntensityStdev() {region_->ComputeIntensityStdev(); }
   void InitPixelArrays() { region_->InitPixelArrays(); }
-  void InsertInPixelArrays(float x, float y, unsigned short pix){region_->InsertInPixelArrays(x,y,pix);}
+  void InsertInPixelArrays(float x, float y, unsigned short pix) {region_->InsertInPixelArrays(x, y, pix); }
 
-  float const* Xj() const { return region_->Xj(); }
-  float const* Yj() const { return region_->Yj(); }
+  float const * Xj() const { return region_->Xj(); }
+  float const * Yj() const { return region_->Yj(); }
   // \deprecated since intensity_face is strictly 2d in VXL
-  float const* Zj() const { return 0; }
-  unsigned short const* Ij() const { return region_->Ij(); }
+  float const * Zj() const { return 0; }
+  unsigned short const * Ij() const { return region_->Ij(); }
 
-  int Npix()const {return region_->Npix(); }
+  int Npix() const {return region_->Npix(); }
   float X() const { return region_->X(); }
   float Y() const { return region_->Y(); }
   // \deprecated since intensity_face is strictly 2d in VXL
   float Z() const { return 0.f; }
-  unsigned short I() const {return region_->I();}
+  unsigned short I() const {return region_->I(); }
 
-  void set_X(float x){region_->set_X(x); }
-  void set_Y(float y){region_->set_Y(y); }
-  void set_I(unsigned short I){region_->set_I(I);}
+  void set_X(float x) {region_->set_X(x); }
+  void set_Y(float y) {region_->set_Y(y); }
+  void set_I(unsigned short I) {region_->set_I(I); }
 
-  void reset() const {region_->reset();}
-  bool next() const {return region_->next();}
-  float Xo()const { return region_->Xo(); }
-  float Yo()const { return region_->Yo(); }
+  void reset() const {region_->reset(); }
+  bool next() const {return region_->next(); }
+  float Xo() const { return region_->Xo(); }
+  float Yo() const { return region_->Yo(); }
   // \deprecated since intensity_face is strictly 2d in VXL
-  float Zo()const { return 0.f; }
-  float Io()const { return region_->Io(); }
-  float Io_sd()const { return region_->Io_sd(); }
-  double X2()const { return region_->X2(); }
-  double Y2()const { return region_->Y2(); }
-  double XY()const { return region_->XY(); }
-  double I2()const { return region_->I2(); }
-  double XI()const { return region_->XI(); }
-  double YI()const { return region_->YI(); }
+  float Zo() const { return 0.f; }
+  float Io() const { return region_->Io(); }
+  float Io_sd() const { return region_->Io_sd(); }
+  double X2() const { return region_->X2(); }
+  double Y2() const { return region_->Y2(); }
+  double XY() const { return region_->XY(); }
+  double I2() const { return region_->I2(); }
+  double XI() const { return region_->XI(); }
+  double YI() const { return region_->YI(); }
   double Ix() const { return region_->Ix(); }
   double Iy() const { return region_->Iy(); }
   float Ir() const { return region_->Ir(); }
@@ -162,15 +162,16 @@ class vtol_intensity_face : public vtol_face_2d
   float get_min() const { return region_->get_min(); }
   float get_max() const { return region_->get_max(); }
 
-  //Accessors
+  // Accessors
   // The Face moment matrix
   virtual vnl_matrix<double> MomentMatrix();
 
-  //Utility Methods
+  // Utility Methods
 
   // MPP 5/9/2003
   // Resurrected from #ifdef'd block below for intensity face attributes
   double perimeter();
+
 };
 
 #endif // vtol_intensity_face_h_

@@ -1,6 +1,6 @@
 #ifndef brip_line_generator_h
 #define brip_line_generator_h
-//:
+// :
 // \file
 // \brief A process for generating a digital line
 // \author J.L. Mundy
@@ -31,11 +31,10 @@
 
 class brip_line_generator
 {
- public:
-  static bool generate(bool& init, float xs, float ys,
-                       float xe, float ye,
-                       float& x, float& y);
- private:
+public:
+  static bool generate(bool& init, float xs, float ys, float xe, float ye, float& x, float& y);
+
+private:
   brip_line_generator();
 };
 

@@ -1,8 +1,8 @@
 // This is gel/vsol/vsol_polygon_3d.h
 #ifndef vsol_polygon_3d_h_
 #define vsol_polygon_3d_h_
-//*****************************************************************************
-//:
+// *****************************************************************************
+// :
 // \file
 // \brief Polygon in 3D space
 //
@@ -20,7 +20,7 @@
 //   2004-05-14 Peter Vanroose  Added describe()
 //   2004-09-06 Peter Vanroose  Added Binary I/O
 // \endverbatim
-//*****************************************************************************
+// *****************************************************************************
 
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
@@ -34,185 +34,186 @@ class vsol_rectangle_3d;
 
 class vsol_polygon_3d : public vsol_region_3d
 {
- protected:
-  //***************************************************************************
+protected:
+  // ***************************************************************************
   // Data members
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: List of vertices
-  //---------------------------------------------------------------------------
-  vcl_vector<vsol_point_3d_sptr> *storage_;
+  // ---------------------------------------------------------------------------
+  // : List of vertices
+  // ---------------------------------------------------------------------------
+  vcl_vector<vsol_point_3d_sptr> * storage_;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Initialization
-  //***************************************************************************
-
- public:
-  //---------------------------------------------------------------------------
-  //: Default constructor. Do nothing.
-  //---------------------------------------------------------------------------
+  // ***************************************************************************
+public:
+  // ---------------------------------------------------------------------------
+  // : Default constructor. Do nothing.
+  // ---------------------------------------------------------------------------
   vsol_polygon_3d(void);
 
-  //---------------------------------------------------------------------------
-  //: Constructor from a vcl_vector (not a geometric vector but a list of points)
+  // ---------------------------------------------------------------------------
+  // : Constructor from a vcl_vector (not a geometric vector but a list of points)
   //  REQUIRE: new_vertices.size()>=3 and valid_vertices(new_vertices)
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   explicit vsol_polygon_3d(vcl_vector<vsol_point_3d_sptr> const& new_vertices);
 
-  //---------------------------------------------------------------------------
-  //: Copy constructor
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Copy constructor
+  // ---------------------------------------------------------------------------
   vsol_polygon_3d(vsol_polygon_3d const& other);
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Destructor
+  // ---------------------------------------------------------------------------
   virtual ~vsol_polygon_3d();
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
+  // ---------------------------------------------------------------------------
+  // : Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d* clone(void) const;
+  // ---------------------------------------------------------------------------
+  virtual vsol_spatial_object_3d * clone(void) const;
 
-  //---------------------------------------------------------------------------
-  //: Safe down-casting methods
-  //---------------------------------------------------------------------------
-  virtual vsol_polygon_3d *cast_to_polygon(void) {return this;}
-  virtual vsol_polygon_3d const* cast_to_polygon(void) const {return this;}
+  // ---------------------------------------------------------------------------
+  // : Safe down-casting methods
+  // ---------------------------------------------------------------------------
+  virtual vsol_polygon_3d * cast_to_polygon(void) {return this; }
+  virtual vsol_polygon_3d const * cast_to_polygon(void) const {return this; }
 
-  virtual vsol_triangle_3d* cast_to_triangle(void) {return 0;}
-  virtual const vsol_triangle_3d* cast_to_triangle(void) const {return 0;}
+  virtual vsol_triangle_3d * cast_to_triangle(void) {return 0; }
+  virtual const vsol_triangle_3d * cast_to_triangle(void) const {return 0; }
 
-  virtual vsol_rectangle_3d* cast_to_rectangle(void) {return 0;}
-  virtual const vsol_rectangle_3d* cast_to_rectangle(void) const {return 0;}
+  virtual vsol_rectangle_3d * cast_to_rectangle(void) {return 0; }
+  virtual const vsol_rectangle_3d * cast_to_rectangle(void) const {return 0; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Access
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return vertex `i'
+  // ---------------------------------------------------------------------------
+  // : Return vertex `i'
   //  REQUIRE: valid_index(i)
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   vsol_point_3d_sptr vertex(const int i) const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Comparison
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Has `this' the same points than `other' in the same order ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Has `this' the same points than `other' in the same order ?
+  // ---------------------------------------------------------------------------
   virtual bool operator==(vsol_polygon_3d const& other) const;
+
   virtual bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
 
-  //---------------------------------------------------------------------------
-  //: Has `this' not the same points than `other' in the same order ?
-  //---------------------------------------------------------------------------
-  inline bool operator!=(vsol_polygon_3d const& o)const{return !operator==(o);}
+  // ---------------------------------------------------------------------------
+  // : Has `this' not the same points than `other' in the same order ?
+  // ---------------------------------------------------------------------------
+  inline bool operator!=(vsol_polygon_3d const& o) const {return !operator==(o); }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return the region type of a polygon.  Its spatial type is a REGION
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the region type of a polygon.  Its spatial type is a REGION
+  // ---------------------------------------------------------------------------
   vsol_region_3d_type region_type(void) const { return vsol_region_3d::POLYGON; }
 
-  //---------------------------------------------------------------------------
-  //: Compute the bounding box of `this'
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Compute the bounding box of `this'
+  // ---------------------------------------------------------------------------
   virtual void compute_bounding_box(void) const;
 
-  //---------------------------------------------------------------------------
-  //: Return the number of vertices
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the number of vertices
+  // ---------------------------------------------------------------------------
   unsigned int size(void) const { return storage_->size(); }
 
-  //---------------------------------------------------------------------------
-  //: Return the area of `this'
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the area of `this'
+  // ---------------------------------------------------------------------------
   virtual double area(void) const; // virtual of vsol_region_3d
 
-  //---------------------------------------------------------------------------
-  //: Return the plane where 'this' polygon resides
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the plane where 'this' polygon resides
+  // ---------------------------------------------------------------------------
   vgl_homg_plane_3d<double> plane(void) const { return plane_; }
 
-  //---------------------------------------------------------------------------
-  //: Is `this' convex ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Is `this' convex ?
+  // ---------------------------------------------------------------------------
   virtual bool is_convex(void) const;
 
-  //---------------------------------------------------------------------------
-  //: Is `i' a valid index for the list of vertices ?
-  //---------------------------------------------------------------------------
-  bool valid_index(unsigned int i) const { return i<storage_->size(); }
+  // ---------------------------------------------------------------------------
+  // : Is `i' a valid index for the list of vertices ?
+  // ---------------------------------------------------------------------------
+  bool valid_index(unsigned int i) const { return i < storage_->size(); }
 
-  //---------------------------------------------------------------------------
-  //: Are `new_vertices' valid vertices to build a polygon of the current type?
+  // ---------------------------------------------------------------------------
+  // : Are `new_vertices' valid vertices to build a polygon of the current type?
   //  That is: are all vertices in the same plane ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   virtual bool valid_vertices(const vcl_vector<vsol_point_3d_sptr> new_vertices) const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Basic operations
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Is `p' in `this' ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Is `p' in `this' ?
+  // ---------------------------------------------------------------------------
   virtual bool in(vsol_point_3d_sptr const& p) const;
 
-  //---------------------------------------------------------------------------
-  //: Return the unit normal vector at point `p'. Have to be deleted manually
+  // ---------------------------------------------------------------------------
+  // : Return the unit normal vector at point `p'. Have to be deleted manually
   //  REQUIRE: in(p)
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   virtual vgl_vector_3d<double> normal_at_point(vsol_point_3d_sptr const& p) const;
 
-  //---------------------------------------------------------------------------
-  //: Return the normal vector
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the normal vector
+  // ---------------------------------------------------------------------------
   vgl_vector_3d<double> normal() const;
 
   // ==== Binary IO methods ======
 
-  //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  // : Binary save self to stream.
+  void b_write(vsl_b_ostream & os) const;
 
-  //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  // : Binary load self from stream.
+  void b_read(vsl_b_istream & is);
 
-  //: Return IO version number;
+  // : Return IO version number;
   short version() const;
 
-  //: Print an ascii summary to the stream
-  void print_summary(vcl_ostream &os) const;
+  // : Print an ascii summary to the stream
+  void print_summary(vcl_ostream & os) const;
 
-  //: Return a platform independent string identifying the class
+  // : Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vsol_polygon_3d"); }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
+  // : Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(vcl_string const& cls) const
-  { return cls==is_a() || vsol_region_3d::is_class(cls); }
+  { return cls == is_a() || vsol_region_3d::is_class(cls); }
 
-  //---------------------------------------------------------------------------
-  //: output description to stream
-  //---------------------------------------------------------------------------
-  void describe(vcl_ostream &strm, int blanking=0) const;
+  // ---------------------------------------------------------------------------
+  // : output description to stream
+  // ---------------------------------------------------------------------------
+  void describe(vcl_ostream & strm, int blanking = 0) const;
 
- protected:
+protected:
   void compute_plane();
+
   vgl_homg_plane_3d<double> plane_;
 };
 
-//: Binary save vsol_polygon_3d* to stream.
-void vsl_b_write(vsl_b_ostream &os, const vsol_polygon_3d* p);
+// : Binary save vsol_polygon_3d* to stream.
+void vsl_b_write(vsl_b_ostream & os, const vsol_polygon_3d* p);
 
-//: Binary load vsol_polygon_3d* from stream.
-void vsl_b_read(vsl_b_istream &is, vsol_polygon_3d* &p);
+// : Binary load vsol_polygon_3d* from stream.
+void vsl_b_read(vsl_b_istream & is, vsol_polygon_3d * & p);
 
 #endif // vsol_polygon_3d_h_

@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_blender_tableau_sptr.h
 #ifndef vgui_blender_tableau_sptr_h
 #define vgui_blender_tableau_sptr_h
-//:
+// :
 // \file
 // \brief  Smart-pointer to a vgui_blender_tableau.
 // \author K.Y.McGaul

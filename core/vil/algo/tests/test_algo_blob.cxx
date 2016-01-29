@@ -4,11 +4,9 @@
 #include <vil/vil_crop.h>
 #include <vil/vil_print.h>
 
-
-
 static vil_image_view<bool> generate_test_image()
 {
-  vil_image_view<bool> image(15,25);
+  vil_image_view<bool> image(15, 25);
   image.fill(false);
   image( 3, 10 ) = true;
   image( 3, 11 ) = true;
@@ -77,19 +75,18 @@ static vil_image_view<bool> generate_test_image()
   return image;
 }
 
-
 static void test_algo_blob()
 {
-  vcl_cout<<"=== Testing vil_blob ===\n";
-  vil_image_view<bool> image(10,11);
-  vil_image_view<unsigned> labels;
-  vil_image_view<unsigned> edge_labels;
-  vcl_vector<vil_blob_region > regions;
-  vcl_vector<vil_blob_pixel_list > edge_lists;
+  vcl_cout << "=== Testing vil_blob ===\n";
+  vil_image_view<bool>            image(10, 11);
+  vil_image_view<unsigned>        labels;
+  vil_image_view<unsigned>        edge_labels;
+  vcl_vector<vil_blob_region>     regions;
+  vcl_vector<vil_blob_pixel_list> edge_lists;
 
   // Create 3 x 3 square
   image.fill(false);
-  vil_crop(image, 4,3, 5,3).fill(true);
+  vil_crop(image, 4, 3, 5, 3).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -105,7 +102,7 @@ static void test_algo_blob()
 
   // Create 1 x 5 line
   image.fill(false);
-  vil_crop(image, 5,1, 3,5).fill(true);
+  vil_crop(image, 5, 1, 3, 5).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -119,9 +116,8 @@ static void test_algo_blob()
   TEST("Count edge (1x5)", edge_lists.size(), 1);
   TEST("Area edge (1x5)", edge_lists[0].size(), 5);
 
-
   // Make an L shape
-  image(6,3)=true;
+  image(6, 3) = true;
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
 
@@ -132,8 +128,8 @@ static void test_algo_blob()
 
   // Make a T shape
   image.fill(false);
-  vil_crop(image, 5,1, 3,5).fill(true);
-  image(6,5)=true;
+  vil_crop(image, 5, 1, 3, 5).fill(true);
+  image(6, 5) = true;
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
 
@@ -142,14 +138,13 @@ static void test_algo_blob()
   TEST("Count (T shape)", regions.size(), 1);
   TEST("Area (T shape)", vil_area(regions[0]), 6);
 
-
   // Make a U shape
   image.fill(false);
-  vil_crop(image, 3,5, 3,5).fill(true);
-  vil_crop(image, 4,3, 3,3).fill(false);
-  image(3,7)=false;
-  image(7,7)=false;
-  image(5,6)=false;
+  vil_crop(image, 3, 5, 3, 5).fill(true);
+  vil_crop(image, 4, 3, 3, 3).fill(false);
+  image(3, 7) = false;
+  image(7, 7) = false;
+  image(5, 6) = false;
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -158,14 +153,11 @@ static void test_algo_blob()
   TEST("Count (U shape)", regions.size(), 1);
   TEST("Area (U shape)", vil_area(regions[0]), 13);
 
-
-
-
   // Make a V shape
   image.fill(false);
-  image(6,5)=true;
-  image(5,4)=true;
-  image(7,4)=true;
+  image(6, 5) = true;
+  image(5, 4) = true;
+  image(7, 4) = true;
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -185,8 +177,8 @@ static void test_algo_blob()
 
   // Make a Cross shape
   image.fill(false);
-  vil_crop(image, 5,1, 3,5).fill(true);
-  vil_crop(image, 3,5, 5,1).fill(true);
+  vil_crop(image, 5, 1, 3, 5).fill(true);
+  vil_crop(image, 3, 5, 5, 1).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -214,7 +206,7 @@ static void test_algo_blob()
 
   // Line up to edge
   image.fill(false);
-  vil_crop(image, 5,1, 0,10).fill(true);
+  vil_crop(image, 5, 1, 0, 10).fill(true);
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
   vil_print_all(vcl_cout, labels, 1);
@@ -224,7 +216,7 @@ static void test_algo_blob()
 
   // Line up to edge
   image.fill(false);
-  vil_crop(image, 0,10, 5,1).fill(true);
+  vil_crop(image, 0, 10, 5, 1).fill(true);
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
   vil_print_all(vcl_cout, labels, 1);
@@ -233,11 +225,11 @@ static void test_algo_blob()
   TEST("Area (Horizontal line)", vil_area(regions[0]), 10);
   TEST("N chords (Horizontal line)", regions[0].size(), 1);
 
-  vcl_cout<<"Test nested blobs."<<vcl_endl;
+  vcl_cout << "Test nested blobs." << vcl_endl;
   image.fill(false);
-  vil_crop(image, 3,6, 3,6).fill(true);
-  vil_crop(image, 4,4, 4,4).fill(false);
-  vil_crop(image, 5,2, 5,2).fill(true);
+  vil_crop(image, 3, 6, 3, 6).fill(true);
+  vil_crop(image, 4, 4, 4, 4).fill(false);
+  vil_crop(image, 5, 2, 5, 2).fill(true);
 
   vil_blob_labels(image, vil_blob_4_conn, labels);
   vil_blob_labels_to_regions(labels, regions);
@@ -249,7 +241,7 @@ static void test_algo_blob()
   TEST("Area (inner of nested blocks)", vil_area(regions[1]), 4);
 
   // Generic image
-  {
+    {
     vil_image_view<bool> c_shape_image = generate_test_image();
     vil_print_all(vcl_cout, c_shape_image, 1);
 
@@ -267,7 +259,7 @@ static void test_algo_blob()
     TEST("Number of blob edge lists", edge_lists.size(), 1 );
     TEST("Size of blob 8-conn edge ", edge_lists[0].size(), 40 );
 
-  }
+    }
 }
 
 TESTMAIN(test_algo_blob);

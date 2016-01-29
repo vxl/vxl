@@ -3,10 +3,10 @@
 #define vil3d_from_image_2d_h_
 
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
 
-//:
+// :
 // \file
 // \author Kevin de Souza
 
@@ -14,8 +14,7 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_cassert.h>
 
-
-//: Return a 3D image view containing a single slice obtained from a 2D image.
+// : Return a 3D image view containing a single slice obtained from a 2D image.
 //  result(x,y,0,p)=im(x,y,p)
 // \relatesalso vil3d_image_view
 // \relatesalso vil_image_view
@@ -24,10 +23,10 @@
 template <class T>
 inline vil3d_image_view<T> vil3d_from_image_2d(const vil_image_view<T>& im)
 {
-  if (im.is_contiguous())
-  {
-    vcl_ptrdiff_t kstep = im.ni()*im.nj();
-    unsigned nk = 1;
+  if( im.is_contiguous() )
+    {
+    vcl_ptrdiff_t kstep = im.ni() * im.nj();
+    unsigned      nk = 1;
     vcl_ptrdiff_t pstep = im.planestep();
 
     // Insist on a particular ordering of input image data
@@ -37,12 +36,11 @@ inline vil3d_image_view<T> vil3d_from_image_2d(const vil_image_view<T>& im)
                                im.top_left_ptr(),
                                im.ni(), im.nj(), nk, im.nplanes(),
                                im.istep(), im.jstep(), kstep, pstep);
-  }
+    }
   else
-  {
+    {
     return vil3d_image_view<T>();
-  }
+    }
 }
-
 
 #endif // vil3d_from_image_2d_h_

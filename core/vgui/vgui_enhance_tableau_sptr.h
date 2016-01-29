@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_enhance_tableau_sptr.h
 #ifndef vgui_enhance_tableau_sptr_h_
 #define vgui_enhance_tableau_sptr_h_
-//:
+// :
 // \file
 // \author awf@robots.ox.ac.uk
 // \date   10 Sep 00

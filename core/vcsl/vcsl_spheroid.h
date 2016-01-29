@@ -1,6 +1,6 @@
 #ifndef vcsl_spheroid_h_
 #define vcsl_spheroid_h_
-//:
+// :
 // \file
 // \brief Reference sphere or ellipse for a geographic coordinate system
 // \author Francois BERTEL
@@ -15,7 +15,7 @@
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_spheroid_sptr.h>
 
-//: Reference sphere or ellipse for a geographic coordinate system
+// : Reference sphere or ellipse for a geographic coordinate system
 // The default value for a reference ellipsoid is the Clarke 1866 model, but
 // this class contains a constructor that allows reference spheroids to be
 // constructed with values for several different standard models. See the book
@@ -26,9 +26,9 @@
 class vcsl_spheroid
   : public vbl_ref_count
 {
- public:
+public:
   enum vcsl_std_spheroid
-  {
+    {
     airy_1830,
     australian_national,
     bessel_1841,
@@ -42,86 +42,86 @@ class vcsl_spheroid
     south_american_1969,
     wgs_1972,
     wgs_1984
-  };
+    };
 
-  //***************************************************************************
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Default constructor. Clark_1866 spheroid
+  // : Default constructor. Clark_1866 spheroid
   vcsl_spheroid() { set_from_std(clarke_1866); }
 
-  //: Constructor from a standard spheroid
+  // : Constructor from a standard spheroid
   explicit vcsl_spheroid(const vcsl_std_spheroid s) { set_from_std(s); }
 
   // Copy constructor
-  vcsl_spheroid(const vcsl_spheroid &other)
+  vcsl_spheroid(const vcsl_spheroid & other)
     : vbl_ref_count(), a_(other.a_), b_(other.b_), e_(other.e_), f_(other.f_) {}
 
   // Destructor
   ~vcsl_spheroid() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Return the major axis of spheroid
+  // : Return the major axis of spheroid
   double a() const { return a_; }
 
-  //: Return the minor axis of spheroid
+  // : Return the minor axis of spheroid
   double b() const { return b_; }
 
-  //: Return the eccentricity of spheroid
+  // : Return the eccentricity of spheroid
   double e() const { return e_; }
 
-  //: Return the flattening of spheroid
+  // : Return the flattening of spheroid
   double f() const { return f_; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status setting
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Set from a standard spheroid
+  // : Set from a standard spheroid
   void set_from_std(const vcsl_std_spheroid new_std_spheroid);
 
-  //: Set the major axis of spheroid
-  void set_a(double new_a) { a_=new_a; }
+  // : Set the major axis of spheroid
+  void set_a(double new_a) { a_ = new_a; }
 
-  //: Set the minor axis of spheroid
-  void set_b(double new_b) { b_=new_b; }
+  // : Set the minor axis of spheroid
+  void set_b(double new_b) { b_ = new_b; }
 
-  //: Set the eccentricity of spheroid
-  void set_e(double new_e) { e_=new_e; }
+  // : Set the eccentricity of spheroid
+  void set_e(double new_e) { e_ = new_e; }
 
-  //: Set the flattening of spheroid
-  void set_f(double new_f) { f_=new_f; }
+  // : Set the flattening of spheroid
+  void set_f(double new_f) { f_ = new_f; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Comparison
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Is `this' equal to `other' ?
-  bool operator==(const vcsl_spheroid &other) const;
+  // : Is `this' equal to `other' ?
+  bool operator==(const vcsl_spheroid & other) const;
 
-  //***************************************************************************
+  // ***************************************************************************
   // Duplication
-  //***************************************************************************
+  // ***************************************************************************
 
   // Assignment
-  vcsl_spheroid &operator=(const vcsl_spheroid &other);
+  vcsl_spheroid & operator=(const vcsl_spheroid & other);
 
- protected:
-  //***************************************************************************
+protected:
+  // ***************************************************************************
   // Implementation
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Major axis of spheroid
+  // : Major axis of spheroid
   double a_;
-  //: Minor axis of spheroid
+  // : Minor axis of spheroid
   double b_;
-  //: Eccentricity of spheroid
+  // : Eccentricity of spheroid
   double e_;
-  //: Flattening of spheroid
+  // : Flattening of spheroid
   double f_;
 };
 

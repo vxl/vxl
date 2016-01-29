@@ -1,5 +1,5 @@
 #include "rgrl_transformation.h"
-//:
+// :
 // \file
 // \brief Base class for transformation representation, estimations and application in generalized registration library
 // \author Chuck Stewart
@@ -18,8 +18,7 @@
 #include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 
-rgrl_transformation::
-rgrl_transformation( const vnl_matrix<double>& cov )
+rgrl_transformation::rgrl_transformation( const vnl_matrix<double>& cov )
   : is_covar_set_(false)
 {
   set_covar( cov );
@@ -31,16 +30,14 @@ rgrl_transformation::
 }
 
 void
-rgrl_transformation::
-map_location( vnl_vector<double> const& from,
-              vnl_vector<double>      & to    ) const
+rgrl_transformation::map_location( vnl_vector<double> const& from,
+                                   vnl_vector<double>      & to    ) const
 {
   map_loc( from, to );
 }
 
 vnl_vector<double>
-rgrl_transformation::
-map_location( vnl_vector<double> const& p ) const
+rgrl_transformation::map_location( vnl_vector<double> const& p ) const
 {
   vnl_vector<double> result( p.size() );
   map_loc( p, result );
@@ -48,43 +45,40 @@ map_location( vnl_vector<double> const& p ) const
 }
 
 void
-rgrl_transformation::
-map_direction( vnl_vector<double> const& from_loc,
-               vnl_vector<double> const& from_dir,
-               vnl_vector<double>      & to_dir    ) const
+rgrl_transformation::map_direction( vnl_vector<double> const& from_loc,
+                                    vnl_vector<double> const& from_dir,
+                                    vnl_vector<double>      & to_dir    ) const
 {
   map_dir( from_loc, from_dir, to_dir );
 }
 
 void
-rgrl_transformation::
-map_tangent( vnl_vector<double> const& from_loc,
-             vnl_vector<double> const& from_dir,
-             vnl_vector<double>      & to_dir    ) const
+rgrl_transformation::map_tangent( vnl_vector<double> const& from_loc,
+                                  vnl_vector<double> const& from_dir,
+                                  vnl_vector<double>      & to_dir    ) const
 {
   vnl_matrix<double> J;
   this->jacobian_wrt_loc( J, from_loc );
-  assert ( from_loc.size() == J.cols() );
-  assert ( from_dir.size() == J.cols() );
+  assert( from_loc.size() == J.cols() );
+  assert( from_dir.size() == J.cols() );
 
   to_dir = J * from_dir;
   to_dir.normalize();
 }
 
 void
-rgrl_transformation::
-map_normal( vnl_vector<double> const & from_loc,
-            vnl_vector<double> const & from_dir,
-            vnl_vector<double>       & to_dir    ) const
+rgrl_transformation::map_normal( vnl_vector<double> const & from_loc,
+                                 vnl_vector<double> const & from_dir,
+                                 vnl_vector<double>       & to_dir    ) const
 {
 #if 0
   // generate the tangent subspace
-  vnl_matrix< double > tangent_subspace;
+  vnl_matrix<double> tangent_subspace;
   vnl_matrix<double> one_row( 1, from_dir.size() );
   one_row.set_row( 0, from_dir );
   vnl_svd<double> normal_svd( one_row );
   tangent_subspace = normal_svd.nullspace();
-  assert ( tangent_subspace.columns() == from_dir. size() - 1 );
+  assert( tangent_subspace.columns() == from_dir.size() - 1 );
 
   // compute the transformed normal from by transforming the tangent_subspace
   map_normal( from_loc, from_dir, tangent_subspace, to_dir );
@@ -92,15 +86,15 @@ map_normal( vnl_vector<double> const & from_loc,
 
   // assuming it is face feature, i.e., with dimension n-1
   unsigned int m = from_loc.size();
-  if (m == 2) //rotate the tangent by 90 degrees
-  {
+  if( m == 2 ) // rotate the tangent by 90 degrees
+    {
     // rotate from_dir
-    vnl_vector< double > from_tangent(2);
+    vnl_vector<double> from_tangent(2);
     from_tangent[0] =  from_dir[1];
     from_tangent[1] = -from_dir[0];
 
     // map tangent
-    vnl_vector< double > xformed_tangent;
+    vnl_vector<double> xformed_tangent;
     map_tangent(from_loc, from_tangent, xformed_tangent);
 
     // rotate mapped tangent to get normal
@@ -108,9 +102,9 @@ map_normal( vnl_vector<double> const & from_loc,
     to_dir.set_size( 2 );
     to_dir[0] = -xformed_tangent[1];
     to_dir[1] =  xformed_tangent[0];
-  }
-  else //m == 3, compute the normal as the cross-product of the two xformed tangents
-  {
+    }
+  else // m == 3, compute the normal as the cross-product of the two xformed tangents
+    {
     // avoid using SVD to
     // obtain two tangent bases
     // Description of this somewhat naive method:
@@ -129,113 +123,126 @@ map_normal( vnl_vector<double> const & from_loc,
     vnl_double_3 from_tangent0;
     vnl_double_3 from_tangent1;
     // find the element with smallest magnitude
-    unsigned int min_index=0;
-    double min = vcl_abs(from_dir[0]);
-    for ( unsigned int i=1; i<3; i++)
-      if ( vcl_abs(from_dir[i]) < min ) {
+    unsigned int min_index = 0;
+    double       min = vcl_abs(from_dir[0]);
+    for( unsigned int i = 1; i < 3; i++ )
+      {
+      if( vcl_abs(from_dir[i]) < min )
+        {
         min = vcl_abs( from_dir[i] );
         min_index = i;
+        }
       }
 
     // shrink it to 2D, by removing that smallest element.
     vnl_double_2 t, n;
-    for (unsigned int i=0,j=0; i<3; ++i)
-      if ( i != min_index )
+    for( unsigned int i = 0, j = 0; i < 3; ++i )
+      {
+      if( i != min_index )
+        {
         n[j++] = from_dir[i];
+        }
+      }
     // 2D orthogonality constraint
     t[0] =  n[1];
     t[1] = -n[0];
     // fill it back to 3D, with the corresponding smallest
     // element set as zero
-    for (unsigned int i=0,j=0; i<3; ++i)
-      if ( i != min_index )
+    for( unsigned int i = 0, j = 0; i < 3; ++i )
+      {
+      if( i != min_index )
+        {
         from_tangent0[i] = t[j++];
+        }
       else
+        {
         from_tangent0[i] = 0.0;
+        }
+      }
 
     // it is easier for the second one
     from_tangent1 = vnl_cross_3d( vnl_double_3(from_dir), from_tangent0 );
 
     // transform tangent dir
-    vnl_vector< double > xformed_tangent0;
-    vnl_vector< double > xformed_tangent1;
+    vnl_vector<double> xformed_tangent0;
+    vnl_vector<double> xformed_tangent1;
     map_tangent(from_loc, from_tangent0.as_ref(), xformed_tangent0);
     map_tangent(from_loc, from_tangent1.as_ref(), xformed_tangent1);
     to_dir = vnl_cross_3d( xformed_tangent0, xformed_tangent1 );
     to_dir.normalize();
-  }
+    }
 }
 
 void
-rgrl_transformation::
-map_normal( vnl_vector<double> const  & from_loc,
-            vnl_vector<double> const  & /*from_dir*/,
-            vnl_matrix< double > const& tangent_subspace,
-            vnl_vector<double>        & to_dir    ) const
+rgrl_transformation::map_normal( vnl_vector<double> const  & from_loc,
+                                 vnl_vector<double> const  & /*from_dir*/,
+                                 vnl_matrix<double> const& tangent_subspace,
+                                 vnl_vector<double>        & to_dir    ) const
 {
 #if 0
   // Transform basis tangent vectors
-  vnl_matrix< double > xform_tangent_subspace = tangent_subspace.transpose();
-  vnl_vector< double > xformed_tangent;
-  for ( unsigned int i = 0; i< tangent_subspace.columns(); i++ ) {
+  vnl_matrix<double> xform_tangent_subspace = tangent_subspace.transpose();
+  vnl_vector<double> xformed_tangent;
+  for( unsigned int i = 0; i < tangent_subspace.columns(); i++ )
+    {
     map_tangent(from_loc, tangent_subspace.get_column(i), xformed_tangent);
     xform_tangent_subspace.set_row(i, xformed_tangent);
-  }
+    }
 
   // It is not necessary to orthogonize bases.  The reason is
   // the null space is always orthogonal to a linear combination
   // of any number of bases
-  if ( tangent_subspace.columns() == 2 ) {
+  if( tangent_subspace.columns() == 2 )
+    {
     // If (m == 3), make the 2 tangent vector orthogonal
-    vnl_vector< double > tangent1 = xform_tangent_subspace.get_row(0);
-    vnl_vector< double > tangent2 = xform_tangent_subspace.get_row(1);
-    vnl_vector< double > ortho_tangent = tangent2 - inner_product(tangent2,tangent1)* tangent1;
-    xform_tangent_subspace.set_row(1, ortho_tangent.normalize());
-  }
+    vnl_vector<double> tangent1 = xform_tangent_subspace.get_row(0);
+    vnl_vector<double> tangent2 = xform_tangent_subspace.get_row(1);
+    vnl_vector<double> ortho_tangent = tangent2 - inner_product(tangent2, tangent1) * tangent1;
+    xform_tangent_subspace.set_row(1, ortho_tangent.normalize() );
+    }
 
   // Get the transformed normal from the xformed tangent subspace
   vnl_svd<double> tangent_svd( xform_tangent_subspace );
-  assert ( tangent_svd.nullspace().columns() == 1 );
+  assert( tangent_svd.nullspace().columns() == 1 );
   to_dir = tangent_svd.nullspace().get_column(0);
 #endif
 
   unsigned int m = tangent_subspace.rows();
-  if (m == 2) {//rotate the tangent by 90 degrees
-    vnl_vector< double > xformed_tangent;
+  if( m == 2 ) // rotate the tangent by 90 degrees
+    {
+    vnl_vector<double> xformed_tangent;
     map_tangent(from_loc, tangent_subspace.get_column(0), xformed_tangent);
     xformed_tangent.normalize();
     to_dir.set_size( 2 );
     to_dir[0] = -xformed_tangent[1];
     to_dir[1] =  xformed_tangent[0];
-  }
-  else { //m == 3, compute the normal as the cross-product of the two xformed tangents
-    vnl_vector< double > xformed_tangent0;
-    vnl_vector< double > xformed_tangent1;
+    }
+  else   // m == 3, compute the normal as the cross-product of the two xformed tangents
+    {
+    vnl_vector<double> xformed_tangent0;
+    vnl_vector<double> xformed_tangent1;
     map_tangent(from_loc, tangent_subspace.get_column(0), xformed_tangent0);
     map_tangent(from_loc, tangent_subspace.get_column(1), xformed_tangent1);
     to_dir = vnl_cross_3d( xformed_tangent0, xformed_tangent1 );
     to_dir.normalize();
-  }
+    }
 }
 
 double
-rgrl_transformation::
-map_intensity( vnl_vector<double> const& /*from*/,
-               double intensity ) const
+rgrl_transformation::map_intensity( vnl_vector<double> const & /*from*/,
+                                    double intensity ) const
 {
   return intensity;
 }
 
 double
-rgrl_transformation::
-log_det_covar() const
+rgrl_transformation::log_det_covar() const
 {
   return log_det_sym_matrix( covar_ );
 }
 
 double
-rgrl_transformation::
-log_det_sym_matrix( vnl_matrix<double> const& m ) const
+rgrl_transformation::log_det_sym_matrix( vnl_matrix<double> const& m ) const
 {
   assert( m.rows() && m.cols() );
   assert( m.rows() == m.cols() );
@@ -246,91 +253,109 @@ log_det_sym_matrix( vnl_matrix<double> const& m ) const
   // we go around it and do a sum on the log of *each* of the
   // eigen-values.
 
-  double result = 0;
+  double                            result = 0;
   vnl_symmetric_eigensystem<double> eig(m);
-  for ( unsigned i=0; i<m.rows(); ++i )
+  for( unsigned i = 0; i < m.rows(); ++i )
+    {
     result += vcl_log( eig.get_eigenvalue(i) );
+    }
   return result;
 }
 
 double
-rgrl_transformation::
-log_det_covar_deficient( int rank ) const
+rgrl_transformation::log_det_covar_deficient( int rank ) const
 {
   // first, scan the matrix and eliminate
   // rows and columns containing only zeros
   vcl_vector<unsigned int> zero_indices;
-  for ( unsigned i=0; i<covar_.rows(); ++i )
-    if ( !covar_(i,i) ) {
+  for( unsigned i = 0; i < covar_.rows(); ++i )
+    {
+    if( !covar_(i, i) )
+      {
 
       // scan the whole row
-      bool all_zero=true;
-      for ( unsigned j=0; j<covar_.cols()&&all_zero; ++j )
-        if ( covar_(i,j) )
-          all_zero=false;
+      bool all_zero = true;
+      for( unsigned j = 0; j < covar_.cols() && all_zero; ++j )
+        {
+        if( covar_(i, j) )
+          {
+          all_zero = false;
+          }
+        }
 
-      if ( all_zero )
+      if( all_zero )
+        {
         zero_indices.push_back( i );
+        }
+      }
     }
 
   vnl_matrix<double> m;
 
-  if ( !zero_indices.empty() ) {
+  if( !zero_indices.empty() )
+    {
 
     // put together a new matrix without the rows and
     // columns of zeros
     const unsigned int num = covar_.rows() - zero_indices.size();
     m.set_size( num, num );
-    for ( unsigned i=0,ic=0,iz=0; i<covar_.rows(); ++i ) {
+    for( unsigned i = 0, ic = 0, iz = 0; i < covar_.rows(); ++i )
+      {
 
-      if ( iz<zero_indices.size() && i == zero_indices[iz] ) {
+      if( iz < zero_indices.size() && i == zero_indices[iz] )
+        {
         ++iz;
         continue;
-      }
+        }
+      for( unsigned j = 0, jc = 0, jz = 0; j < covar_.cols(); ++j )
+        {
 
-      for ( unsigned j=0,jc=0,jz=0; j<covar_.cols(); ++j ) {
-
-        if ( jz<zero_indices.size() && j == zero_indices[jz] ) {
+        if( jz < zero_indices.size() && j == zero_indices[jz] )
+          {
           ++jz;
           continue;
-        }
+          }
         m( ic, jc ) = covar_( i, j );
 
         ++jc;
-      }
+        }
 
       ++ic;
+      }
     }
-  }
   else
+    {
     m = covar_;
+    }
 
   // compute the log of determinant with the largest [rank] eigenvalues
   const int num = m.rows();
 
   // by default
-  if ( rank <= 0 )
+  if( rank <= 0 )
+    {
     rank = num;
+    }
 
-  double result = 0;
+  double                            result = 0;
   vnl_symmetric_eigensystem<double> eig(m);
-  for ( int i=0; i<rank; ++i )
-    result += vcl_log( eig.get_eigenvalue(num-1-i) );
+  for( int i = 0; i < rank; ++i )
+    {
+    result += vcl_log( eig.get_eigenvalue(num - 1 - i) );
+    }
   return result;
 }
 
-//:  Parameter covariance matrix
+// :  Parameter covariance matrix
 vnl_matrix<double>
-rgrl_transformation::
-covar() const
+rgrl_transformation::covar() const
 {
   assert( is_covar_set_ );
   return covar_;
 }
 
 vnl_matrix<double>
-rgrl_transformation::
-jacobian( vnl_vector<double> const& from_loc ) const
+rgrl_transformation::jacobian( vnl_vector<double> const& from_loc ) const
 {
   vnl_matrix<double> jac;
   this->jacobian_wrt_loc( jac, from_loc );
@@ -338,157 +363,162 @@ jacobian( vnl_vector<double> const& from_loc ) const
   return jac;
 }
 
-//:  set parameter covariance matrix
+// :  set parameter covariance matrix
 void
-rgrl_transformation::
-set_covar( const vnl_matrix<double>& covar )
+rgrl_transformation::set_covar( const vnl_matrix<double>& covar )
 {
   covar_ = covar;
-  if ( covar.rows() > 0 && covar.cols() > 0 ) {
+  if( covar.rows() > 0 && covar.cols() > 0 )
+    {
     is_covar_set_ = true;
-  }
+    }
 }
 
-//: set scaling factors
+// : set scaling factors
 //  Unless the transformation is not estimated using estimators in rgrl,
 //  it does not need to be set explicitly
 void
-rgrl_transformation::
-set_scaling_factors( vnl_vector<double> const& scaling )
+rgrl_transformation::set_scaling_factors( vnl_vector<double> const& scaling )
 {
   // checking scaling
   // set it to epsilon if scaling is in fact zero
-  for ( unsigned int i=0; i<scaling.size(); ++i )
+  for( unsigned int i = 0; i < scaling.size(); ++i )
+    {
     assert( vnl_math::isfinite( scaling[i] ) );
+    }
 
   scaling_factors_ = scaling;
 }
 
-
-vcl_ostream&
-operator<< (vcl_ostream& os, rgrl_transformation const& xform )
+vcl_ostream &
+operator<<(vcl_ostream& os, rgrl_transformation const& xform )
 {
   xform.write( os );
   return os;
 }
 
-//: output transformation
+// : output transformation
 void
-rgrl_transformation::
-write( vcl_ostream& os ) const
+rgrl_transformation::write( vcl_ostream& os ) const
 {
-  if ( is_covar_set() )
-  {
+  if( is_covar_set() )
+    {
     // write covariance
     os << "COVARIANCE\n"
        << covar_.rows() << ' ' << covar_.cols() << '\n'
        << covar_ << vcl_endl;
-  }
+    }
 
-  if ( scaling_factors_.size() )
-  {
+  if( scaling_factors_.size() )
+    {
     // write scaling factors
     os << "SCALING_FACTORS\n"
        << scaling_factors_.size() << '\n'
        << scaling_factors_ << vcl_endl;
-  }
+    }
 }
 
-//: input transformation
+// : input transformation
 bool
-rgrl_transformation::
-read( vcl_istream& is )
+rgrl_transformation::read( vcl_istream& is )
 {
   vcl_streampos pos;
-  vcl_string tag_str;
+  vcl_string    tag_str;
 
   // skip any empty lines
   rgrl_util_skip_empty_lines( is );
-  if ( !is.good() )
+  if( !is.good() )
+    {
     return true;   // reach the end of stream
 
-  tag_str="";
+    }
+  tag_str = "";
   pos = is.tellg();
   vcl_getline( is, tag_str );
 
-  if ( tag_str.find("COVARIANCE") == 0 )
-  {
+  if( tag_str.find("COVARIANCE") == 0 )
+    {
     // read in covariance matrix
-    int m=-1, n=-1;
+    int                m = -1, n = -1;
     vnl_matrix<double> cov;
 
     // get dimension
     is >> m >> n;
-    if ( !is || m<=0 || n<=0 )
+    if( !is || m <= 0 || n <= 0 )
+      {
       return false;   // cannot get the dimension
 
+      }
     cov.set_size(m, n);
     cov.fill(0.0);
     is >> cov;
 
-    if ( !is.good() )
+    if( !is.good() )
+      {
       return false;  // cannot read the covariance matrix
 
+      }
     this->set_covar( cov );
 
     // read in the next tag
     // skip any empty lines
     rgrl_util_skip_empty_lines( is );
-    if ( is.eof() )
+    if( is.eof() )
+      {
       return true;   // reach the end of stream
 
-    tag_str="";
+      }
+    tag_str = "";
     pos = is.tellg();
     vcl_getline( is, tag_str );
-  }
+    }
 
-  if ( tag_str.find("SCALING_FACTORS") == 0 )
-  {
+  if( tag_str.find("SCALING_FACTORS") == 0 )
+    {
     // read in scaling factors
-    int m=-1;
+    int m = -1;
 
     // get dimension
     is >> m;
 
-    if ( !is || m<=0 )
+    if( !is || m <= 0 )
+      {
       return false;  // cannot get dimension
 
+      }
     scaling_factors_.set_size( m );
     is >> scaling_factors_;
 
     return is.good();
-  }
+    }
 
   // reset the stream pos
   is.seekg( pos );
   return is.good();
 }
 
-
 class inverse_mapping_func
-: public vnl_least_squares_function
+  : public vnl_least_squares_function
 {
- public:
+public:
   inverse_mapping_func( rgrl_transformation const* xform_ptr, vnl_vector<double> const& to_loc )
     : vnl_least_squares_function( to_loc.size(), to_loc.size(), use_gradient ),
-      xform_( xform_ptr ), to_loc_( to_loc )
+    xform_( xform_ptr ), to_loc_( to_loc )
   {}
 
-  //: obj func value
+  // : obj func value
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
 
-  //: Jacobian
+  // : Jacobian
   void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
 
- public:
+public:
   const rgrl_transformation* xform_;
-  vnl_vector<double>   to_loc_;
+  vnl_vector<double>         to_loc_;
 };
 
-
 void
-inverse_mapping_func::
-f(vnl_vector<double> const& x, vnl_vector<double>& fx)
+inverse_mapping_func::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 {
   assert( xform_ );
 
@@ -501,8 +531,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 }
 
 void
-inverse_mapping_func::
-gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
+inverse_mapping_func::gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
 {
   assert( xform_ );
 
@@ -511,18 +540,17 @@ gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian)
   xform_->jacobian_wrt_loc( jacobian, x );
 }
 
-//:  Inverse map with an initial guess
+// :  Inverse map with an initial guess
 void
-rgrl_transformation::
-inv_map( const vnl_vector<double>& to,
-         bool initialize_next,
-         const vnl_vector<double>& /*to_delta*/, // FIXME: unused
-         vnl_vector<double>& from,
-         vnl_vector<double>& from_next_est) const
+rgrl_transformation::inv_map( const vnl_vector<double>& to,
+                              bool initialize_next,
+                              const vnl_vector<double> & /*to_delta*/, // FIXME: unused
+                              vnl_vector<double>& from,
+                              vnl_vector<double>& from_next_est) const
 {
   // use different objects for different dimension
-  if ( to.size() == 2 )
-  {
+  if( to.size() == 2 )
+    {
     static inverse_mapping_func inv_map_func( this, to );
 
     // set transformation and the desired
@@ -542,13 +570,14 @@ inv_map( const vnl_vector<double>& to,
     // run LM
     bool ret = lm.minimize_using_gradient( from );
 
-    if ( !ret ) {
+    if( !ret )
+      {
       WarningMacro( "Levenberg-Marquardt in rgrl_transformation::inv_map has failed!!!" );
       return;
+      }
     }
-  }
-  else if ( to.size() == 3 )
-  {
+  else if( to.size() == 3 )
+    {
     static inverse_mapping_func inv_map_func( this, to );
 
     // set transformation and the desired
@@ -568,16 +597,17 @@ inv_map( const vnl_vector<double>& to,
     // run LM
     bool ret = lm.minimize_using_gradient( from );
 
-    if ( !ret ) {
+    if( !ret )
+      {
       WarningMacro( "Levenberg-Marquardt in rgrl_transformation::inv_map has failed!!!" );
       return;
+      }
     }
-  }
   else
-  {
-    assert( ! "Other dimensioin is not implemented!" );
+    {
+    assert( !"Other dimensioin is not implemented!" );
     return;
-  }
+    }
 
   // initialize the next
   // NOTE:
@@ -586,30 +616,29 @@ inv_map( const vnl_vector<double>& to,
   // and there is extra memory allocation
   // Therefore, just initialize it as current from
   //
-  if ( initialize_next ) {
+  if( initialize_next )
+    {
     from_next_est = from;
-  }
+    }
 }
 
-//:  Inverse map based on the transformation.
+// :  Inverse map based on the transformation.
 //   This function only exist for certain transformations.
 void
-rgrl_transformation::
-inv_map( const vnl_vector<double>& to,
-         vnl_vector<double>& from ) const
+rgrl_transformation::inv_map( const vnl_vector<double>& to,
+                              vnl_vector<double>& from ) const
 {
   const bool initialize_next = false;
+
   vnl_vector<double> unused;
   inv_map( to, initialize_next, unused, from, unused );
 }
 
-//: Return an inverse transformation
+// : Return an inverse transformation
 //  This function only exist for certain transformations.
 rgrl_transformation_sptr
-rgrl_transformation::
-inverse_transform() const
+rgrl_transformation::inverse_transform() const
 {
   assert( !"Should never reach rgrl_transformation::inverse_transform()" );
   return 0;
 }
-

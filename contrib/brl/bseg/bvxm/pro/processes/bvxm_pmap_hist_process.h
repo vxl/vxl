@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_pmap_hist_process.h
 #ifndef bvxm_pmap_hist_process_h_
 #define bvxm_pmap_hist_process_h_
-//:
+// :
 // \file
 // \brief A class for generating a histogram out of occupancy probability grid
 //        -  Inputs:
@@ -20,17 +20,18 @@
 #include <bprb/bprb_func_process.h>
 #include <vcl_string.h>
 
-//: globals
+// : globals
 namespace bvxm_pmap_hist_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 2;
+const unsigned n_outputs_ = 0;
 
-  // functions
-  bool compute(vcl_string pmap, vcl_string path);
+// functions
+bool compute(vcl_string pmap, vcl_string path);
+
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_pmap_hist_process_cons(bprb_func_process& pro);
 
 bool bvxm_pmap_hist_process(bprb_func_process& pro);

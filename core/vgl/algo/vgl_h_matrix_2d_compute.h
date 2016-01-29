@@ -1,7 +1,7 @@
 // This is core/vgl/algo/vgl_h_matrix_2d_compute.h
 #ifndef vgl_h_matrix_2d_compute_h_
 #define vgl_h_matrix_2d_compute_h_
-//:
+// :
 // \file
 // \brief contains class vgl_h_matrix_2d_compute
 //
@@ -29,7 +29,7 @@
 
 class vgl_h_matrix_2d_compute
 {
- public:
+public:
   vgl_h_matrix_2d_compute() : verbose_(false) {}
   virtual ~vgl_h_matrix_2d_compute() {}
 
@@ -45,7 +45,7 @@ class vgl_h_matrix_2d_compute
   // correspondences, some use both. They are implemented
   // in terms of the pure virtual compute_(p|l|pl) methods.
 
-  //: homography from matched points
+  // : homography from matched points
   bool compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                vcl_vector<vgl_homg_point_2d<double> > const& points2,
                vgl_h_matrix_2d<double>& H)
@@ -53,7 +53,7 @@ class vgl_h_matrix_2d_compute
     return compute_p(points1, points2, H);
   }
 
- //: homography from matched lines
+  // : homography from matched lines
   bool compute(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
                vcl_vector<vgl_homg_line_2d<double> > const& lines2,
                vgl_h_matrix_2d<double>& H)
@@ -61,7 +61,7 @@ class vgl_h_matrix_2d_compute
     return compute_l(lines1, lines2, H);
   }
 
- //: homography from matched lines with a weight vector
+  // : homography from matched lines with a weight vector
   bool compute(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
                vcl_vector<vgl_homg_line_2d<double> > const& lines2,
                vcl_vector<double> const& weights,
@@ -70,7 +70,7 @@ class vgl_h_matrix_2d_compute
     return compute_l(lines1, lines2, weights, H);
   }
 
-  //: homography from matched points and lines
+  // : homography from matched points and lines
   bool compute(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                vcl_vector<vgl_homg_point_2d<double> > const& points2,
                vcl_vector<vgl_homg_line_2d<double> > const& lines1,
@@ -80,53 +80,45 @@ class vgl_h_matrix_2d_compute
     return compute_pl(points1, points2, lines1, lines2, H);
   }
 
-  //: homography from matched points - return h_matrix
-  vgl_h_matrix_2d<double>
-  compute(vcl_vector<vgl_homg_point_2d<double> > const& p1,
-          vcl_vector<vgl_homg_point_2d<double> > const& p2)
+  // : homography from matched points - return h_matrix
+  vgl_h_matrix_2d<double> compute(vcl_vector<vgl_homg_point_2d<double> > const& p1,
+                                  vcl_vector<vgl_homg_point_2d<double> > const& p2)
   { vgl_h_matrix_2d<double> H; compute_p(p1, p2, H); return H; }
 
-  //: homography from matched lines - return h_matrix
-  vgl_h_matrix_2d<double>
-  compute(vcl_vector<vgl_homg_line_2d<double> > const& l1,
-          vcl_vector<vgl_homg_line_2d<double> > const& l2)
+  // : homography from matched lines - return h_matrix
+  vgl_h_matrix_2d<double> compute(vcl_vector<vgl_homg_line_2d<double> > const& l1,
+                                  vcl_vector<vgl_homg_line_2d<double> > const& l2)
   { vgl_h_matrix_2d<double> H; compute_l(l1, l2, H); return H; }
 
-  //: homography from matched lines with weight vector - return h_matrix
-  vgl_h_matrix_2d<double>
-  compute(vcl_vector<vgl_homg_line_2d<double> > const& l1,
-          vcl_vector<vgl_homg_line_2d<double> > const& l2,
-          vcl_vector<double> const& weights)
+  // : homography from matched lines with weight vector - return h_matrix
+  vgl_h_matrix_2d<double> compute(vcl_vector<vgl_homg_line_2d<double> > const& l1,
+                                  vcl_vector<vgl_homg_line_2d<double> > const& l2,
+                                  vcl_vector<double> const& weights)
   { vgl_h_matrix_2d<double> H; compute_l(l1, l2, weights, H); return H; }
 
-  //: homography from matched points and lines - return h_matrix
-  vgl_h_matrix_2d<double>
-  compute(vcl_vector<vgl_homg_point_2d<double> > const& p1,
-          vcl_vector<vgl_homg_point_2d<double> > const& p2,
-          vcl_vector<vgl_homg_line_2d<double> > const& l1,
-          vcl_vector<vgl_homg_line_2d<double> > const& l2)
-  { vgl_h_matrix_2d<double>  H; compute_pl(p1, p2, l1, l2, H); return H; }
-
- protected:
+  // : homography from matched points and lines - return h_matrix
+  vgl_h_matrix_2d<double> compute(vcl_vector<vgl_homg_point_2d<double> > const& p1,
+                                  vcl_vector<vgl_homg_point_2d<double> > const& p2,
+                                  vcl_vector<vgl_homg_line_2d<double> > const& l1,
+                                  vcl_vector<vgl_homg_line_2d<double> > const& l2)
+  { vgl_h_matrix_2d<double> H; compute_pl(p1, p2, l1, l2, H); return H; }
+protected:
   bool verbose_;
   virtual bool compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                         vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                         vgl_h_matrix_2d<double>& H) = 0;
+                         vcl_vector<vgl_homg_point_2d<double> > const& points2, vgl_h_matrix_2d<double>& H) = 0;
 
   virtual bool compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                         vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                         vgl_h_matrix_2d<double>& H) = 0;
+                         vcl_vector<vgl_homg_line_2d<double> > const& lines2, vgl_h_matrix_2d<double>& H) = 0;
 
   virtual bool compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                         vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                         vcl_vector<double> const& weights,
+                         vcl_vector<vgl_homg_line_2d<double> > const& lines2, vcl_vector<double> const& weights,
                          vgl_h_matrix_2d<double>& H) = 0;
 
   virtual bool compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
                           vcl_vector<vgl_homg_point_2d<double> > const& points2,
                           vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                          vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                          vgl_h_matrix_2d<double>& H) = 0;
+                          vcl_vector<vgl_homg_line_2d<double> > const& lines2, vgl_h_matrix_2d<double>& H) = 0;
+
 };
 
 #endif // vgl_h_matrix_2d_compute_h_

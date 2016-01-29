@@ -2,10 +2,10 @@
 #ifndef FMatrixSkew_h_
 #define FMatrixSkew_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//--------------------------------------------------------------
-//:
+// --------------------------------------------------------------
+// :
 // \file
 // \brief Skew fundamental matrix
 //
@@ -26,7 +26,7 @@
 
 class FMatrixSkew : public FMatrix
 {
- public:
+public:
 
   // Constructors/Initializers/Destructors----------------------------------
 
@@ -38,25 +38,31 @@ class FMatrixSkew : public FMatrix
   // Computations
 
   inline void set_rank2_using_svd();
+
   inline FMatrixSkew get_rank2_truncated();
-  bool get_epipoles (HomgPoint2D *e1_out, HomgPoint2D *e2_out) const;
-  bool get_epipoles (vgl_homg_point_2d<double>& e1_out,
-                     vgl_homg_point_2d<double>& e2_out) const;
-  void decompose_to_skew_rank3 (vnl_matrix<double> *skew,
-                                vnl_matrix<double> *rank3) const;
-  void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
-                                   HomgPoint2D *out1, HomgPoint2D *out2) const;
-  void find_nearest_perfect_match (vgl_homg_point_2d<double> const& in1,
-                                   vgl_homg_point_2d<double> const& in2,
-                                   vgl_homg_point_2d<double>& out1,
-                                   vgl_homg_point_2d<double>& out2) const;
+
+  bool get_epipoles(HomgPoint2D * e1_out, HomgPoint2D * e2_out) const;
+
+  bool get_epipoles(vgl_homg_point_2d<double>& e1_out, vgl_homg_point_2d<double>& e2_out) const;
+
+  void decompose_to_skew_rank3(vnl_matrix<double> * skew, vnl_matrix<double> * rank3) const;
+
+  void find_nearest_perfect_match(const HomgPoint2D& in1, const HomgPoint2D& in2, HomgPoint2D * out1,
+                                  HomgPoint2D * out2) const;
+
+  void find_nearest_perfect_match(vgl_homg_point_2d<double> const& in1, vgl_homg_point_2d<double> const& in2,
+                                  vgl_homg_point_2d<double>& out1, vgl_homg_point_2d<double>& out2) const;
 
   // Data Access------------------------------------------------------------
 
-  bool set (const double* f_matrix );
-  inline bool set (const vnl_matrix<double>& f_matrix );
-  inline bool get_rank2_flag (void) const;
-  inline void set_rank2_flag (bool rank2_flag);
+  bool set(const double* f_matrix );
+
+  inline bool set(const vnl_matrix<double>& f_matrix );
+
+  inline bool get_rank2_flag(void) const;
+
+  inline void set_rank2_flag(bool rank2_flag);
+
 };
 
 #endif // FMatrixSkew_h_

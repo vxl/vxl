@@ -11,26 +11,31 @@
 static float parabola(float r, float vmin, float vmax, float x0, float y0,
                       float x, float y)
 {
-  float arg_sq = (x-x0)*(x-x0) + (y-y0)*(y-y0);
-  float dv = vmax-vmin;
-  float v = (dv*arg_sq)/(r*r);
-  if (v>dv)
+  float arg_sq = (x - x0) * (x - x0) + (y - y0) * (y - y0);
+  float dv = vmax - vmin;
+  float v = (dv * arg_sq) / (r * r);
+
+  if( v > dv )
+    {
     return vmax;
+    }
   else
-    return v+vmin;
+    {
+    return v + vmin;
+    }
 }
 
 static void test_watershed()
 {
-  //Test region pixel
-  vgl_point_2d<int> location(0, 0), nearest1(1, 1), nearest2(2,2);
+  // Test region pixel
+  vgl_point_2d<int> location(0, 0), nearest1(1, 1), nearest2(2, 2);
 
   brip_region_pixel_sptr pixel1 =
     new brip_region_pixel(location, nearest1, 0, 0, 0);
   brip_region_pixel_sptr pixel2 =
     new brip_region_pixel(location, nearest2, 0, 0, 0);
   brip_region_pixel::compare c;
-  vcl_cout << "compare c() " << c(pixel1, pixel2) << '\n'<< vcl_flush;
+  vcl_cout << "compare c() " << c(pixel1, pixel2) << '\n' << vcl_flush;
 #if 0
   vcl_priority_queue<brip_region_pixel_sptr, vcl_vector<brip_region_pixel_sptr>, brip_region_pixel::compare> pq;
 
@@ -38,27 +43,27 @@ static void test_watershed()
   pq.push(pixel2);
   brip_region_pixel_sptr top = pq.top();
   vcl_cout << "top element " << *top << '\n'
-           << "pq.size() " << pq.size() << '\n'<< vcl_flush;
+           << "pq.size() " << pq.size() << '\n' << vcl_flush;
 #endif
   //  TEST("",x  , y);
-  //Create test image for watershed
-  int w = 12, h = 12;
-  vil1_memory_image_of<float> input(w,h);
+  // Create test image for watershed
+  int                         w = 12, h = 12;
+  vil1_memory_image_of<float> input(w, h);
   input.fill(0);
   // create a parabolic dish
-  for (int r = 0; r<h; r++)
-  {
-    for (int c = 0; c<w; c++)
+  for( int r = 0; r < h; r++ )
     {
-      input(c,r) = parabola(2.f, 0.f, 255.f, 4.f, 4.f, float(c), float(r))
-                 + parabola(2.f, 0.f, 255.f, 7.f, 7.f, float(c), float(r))
-                 + parabola(2.f, 0.f, 255.f, 3.f, 8.f, float(c), float(r));
-      vcl_cout << ' ' << input(c,r);
-    }
+    for( int c = 0; c < w; c++ )
+      {
+      input(c, r) = parabola(2.f, 0.f, 255.f, 4.f, 4.f, float(c), float(r) )
+        + parabola(2.f, 0.f, 255.f, 7.f, 7.f, float(c), float(r) )
+        + parabola(2.f, 0.f, 255.f, 3.f, 8.f, float(c), float(r) );
+      vcl_cout << ' ' << input(c, r);
+      }
     vcl_cout << vcl_endl;
-  }
+    }
   brip_watershed_params wp;
-  brip_watershed ws(wp);
+  brip_watershed        ws(wp);
   ws.set_image(input);
   ws.compute_regions();
   ws.print_region_array();

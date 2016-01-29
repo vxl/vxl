@@ -2,9 +2,9 @@
 #ifndef vil_bmp_core_header_h_
 #define vil_bmp_core_header_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 // \verbatim
@@ -16,18 +16,21 @@ class vil_stream;
 #include <vcl_iosfwd.h>
 
 struct vil_bmp_core_header
-{
-  enum { disk_size = 4+4+4+2+2 }; // this is what is *on disk*.
-  unsigned  header_size;  // 4
-  int       width;        // 4, can be negative
-  int       height;       // 4, can be negative
-  short     planes;       // 2
-  short     bitsperpixel; // 2
+  {
+  enum { disk_size = 4 + 4 + 4 + 2 + 2 }; // this is what is *on disk*.
+  unsigned header_size;                   // 4
+  int width;                              // 4, can be negative
+  int height;                             // 4, can be negative
+  short planes;                           // 2
+  short bitsperpixel;                     // 2
 
   vil_bmp_core_header();
   void read(vil_stream *);
+
   void write(vil_stream *) const;
+
   void print(vcl_ostream &) const;
-};
+
+  };
 
 #endif // vil_bmp_core_header_h_

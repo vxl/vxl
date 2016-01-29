@@ -1,5 +1,5 @@
 #include "frame_grabber_vil.h"
-#include <vcl_cstdio.h> // for perror()
+#include <vcl_cstdio.h>  // for perror()
 #include <vcl_cstdlib.h> // for exit()
 #include <vcl_cerrno.h>
 
@@ -8,15 +8,15 @@
 
 using namespace std;
 
-FrameGrabberVil::FrameGrabberVil(const string &device_name,
+FrameGrabberVil::FrameGrabberVil(const string & device_name,
                                  int width, int height)
 {
   fd = open(device_name.c_str(), O_RDWR);
-  if (fd<0)
-  {
+  if( fd < 0 )
+    {
     vcl_perror("Couldn't open device");
     vcl_exit(-1);
-  }
+    }
 
   ioctl(fd, VIDIOCSCHAN, 1);
 
@@ -25,22 +25,26 @@ FrameGrabberVil::FrameGrabberVil(const string &device_name,
   vcl_cout << "camera name = " << vcap.name << vcl_endl
            << "max image size = " << vcap.maxwidth << ' '
            << vcap.maxheight << vcl_endl;
-  if (vcap.type && VID_TYPE_CAPTURE)
+  if( vcap.type && VID_TYPE_CAPTURE )
+    {
     vcl_cout << "can capture\n";
-  else vcl_cout << "can't capture\n";
+    }
+  else {vcl_cout << "can't capture\n"; }
 
   struct video_picture vp;
   ioctl(fd, VIDIOCGPICT, &vp);
   vcl_cout << "vp.pallette = " << vp.palette << vcl_endl;
 
   vp.palette = VIDEO_PALETTE_YUV420P;
-  if (ioctl(fd, VIDIOCSPICT, &vp)>=0)
+  if( ioctl(fd, VIDIOCSPICT, &vp) >= 0 )
+    {
     vcl_cout << "Successfully set palette to YUV420P\n";
+    }
   else
-  {
+    {
     vcl_perror("Error setting pallette\n");
     vcl_cerr << "Capture may not work\n";
-  }
+    }
   struct video_window vw;
   ioctl(fd, VIDIOCGWIN, &vw);
   vw.x = vw.y = 0;
@@ -59,42 +63,44 @@ FrameGrabberVil::FrameGrabberVil(const string &device_name,
   height = vw.height;
 
   // Query the actual buffers available
-  if (ioctl(fd, VIDIOCGMBUF, &vm) < 0) {
+  if( ioctl(fd, VIDIOCGMBUF, &vm) < 0 )
+    {
     vcl_perror("VIDIOCGMBUF");
     vcl_exit(-1);
-  }
+    }
   vcl_cout << "vm.size = " << vm.size << " vm.frames = "
            << vm.frames << vcl_endl;
   vm.frames = 1;
 
   // MMap all available buffers
-  bigbuf=(unsigned char*)mmap(0,vm.size,PROT_READ|PROT_WRITE,MAP_SHARED,fd,0);
+  bigbuf = (unsigned char *)mmap(0, vm.size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
-  if (bigbuf==(unsigned char *)-1) {
+  if( bigbuf == (unsigned char *)-1 )
+    {
     vcl_perror("mmap");
     vcl_exit(-1);
-  }
+    }
 
-  mm.height = height; /* Your own height */
-  mm.width  = width;  /* Your own width */
+  mm.height = height;                /* Your own height */
+  mm.width  = width;                 /* Your own width */
   mm.format = VIDEO_PALETTE_YUV420P; /* Your own format */
   mm.frame = 0;
 
-  typedef vil_image_view<vxl_byte>* Type;
+  typedef vil_image_view<vxl_byte> * Type;
   frame = new Type[vm.frames];
-
-  for (int i=0; i<vm.frames; i++)
-  {
+  for( int i = 0; i < vm.frames; i++ )
+    {
     vcl_cout << "offset = " << vm.offsets[i] << vcl_endl;
     frame[i] =
-      new vil_image_view<vxl_byte>(bigbuf+vm.offsets[i],width,height,
-                                   1,1,width,1);
-  }
+      new vil_image_view<vxl_byte>(bigbuf + vm.offsets[i], width, height,
+                                   1, 1, width, 1);
+    }
 #if 0
-  if (ioctl(fd, VIDIOCMCAPTURE, &mm)<0) {
+  if( ioctl(fd, VIDIOCMCAPTURE, &mm) < 0 )
+    {
     vcl_perror("VIDIOCMCAPTURE");
     vcl_exit(-1);
-  }
+    }
 #endif
 }
 
@@ -105,29 +111,34 @@ FrameGrabberVil::~FrameGrabberVil()
   munmap(bigbuf, vm.size);
 }
 
-vil_image_view<vxl_byte> *FrameGrabberVil::grab_frame()
+vil_image_view<vxl_byte> * FrameGrabberVil::grab_frame()
 {
   int frame_num = mm.frame;
-  mm.frame = (mm.frame+1)%vm.frames;
-  if (ioctl(fd, VIDIOCMCAPTURE, &mm)<0) {
+
+  mm.frame = (mm.frame + 1) % vm.frames;
+  if( ioctl(fd, VIDIOCMCAPTURE, &mm) < 0 )
+    {
     vcl_perror("VIDIOCMCAPTURE");
     vcl_exit(-1);
-  }
+    }
 
   int i = -1;
-  while (i < 0) {
-    i = ioctl(fd, VIDIOCSYNC, &frame_num);
-    if (i < 0 && errno == EINTR)
+  while( i < 0 )
     {
+    i = ioctl(fd, VIDIOCSYNC, &frame_num);
+    if( i < 0 && errno == EINTR )
+      {
       vcl_perror("VIDIOCSYNC problem");
       continue;
-    }
-    if (i < 0) {
+      }
+    if( i < 0 )
+      {
       vcl_perror("VIDIOCSYNC");
       // You may want to exit here, because something has gone
       // pretty badly wrong...
-    }
+      }
     break;
-  }
+    }
+
   return frame[i];
 }

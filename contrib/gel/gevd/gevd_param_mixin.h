@@ -1,7 +1,7 @@
 #ifndef gevd_param_mixin_h_
 #define gevd_param_mixin_h_
-//=======================================================================
-//:
+// =======================================================================
+// :
 // \file
 // \brief A mixin to package algorithm parameters
 //
@@ -27,7 +27,7 @@
 //      class.  Or it might just print the values to a stream.  See
 //      Segmentation/Detection/DetectorParams for an example of use.
 // \endverbatim
-//======================================================================
+// ======================================================================
 
 #include <vcl_string.h>
 
@@ -37,62 +37,63 @@ class ParamModifier;
 
 class gevd_param_mixin
 {
-  bool valid_;
+  bool       valid_;
   vcl_string error_msg_;
- public:
-  //=====================================================
-  //: Constructor.  By default a constructed parameter block is valid.
+public:
+  // =====================================================
+  // : Constructor.  By default a constructed parameter block is valid.
   gevd_param_mixin() : valid_(true) {}
   // Destructor
   virtual ~gevd_param_mixin() {}
-  //=====================================================
+  // =====================================================
   virtual bool SanityCheck();
+
   bool Valid() const { return valid_; }
-  const char* GetErrorMsg() const { return error_msg_.c_str(); }
+  const char * GetErrorMsg() const { return error_msg_.c_str(); }
   void SetErrorMsg(const char* msg);
+
 #if 0// not implemented in vxl
-  virtual void Describe(ParamModifier&) {}
+  virtual void Describe(ParamModifier &) {}
 #endif
 };
 
 #if 0 // not implemented in vxl
 class ParamModifier
 {
- virtual ~ParamModifier() {}
-
- public:
-  //------------------------------------------------------------
-  //: These are some standard boolean choice styles defined for convenience.
+  virtual ~ParamModifier() {}
+public:
+  // ------------------------------------------------------------
+  // : These are some standard boolean choice styles defined for convenience.
   enum BoolChoiceStyle { TrueFalse, OnOff, YesNo };
 
-  //------------------------------------------------------------
-  //: Name those parameters which follow.
+  // ------------------------------------------------------------
+  // : Name those parameters which follow.
   virtual void Name(const vcl_string& name) = 0;
 
-  //------------------------------------------------------------
-  //: Add a float parameter.
+  // ------------------------------------------------------------
+  // : Add a float parameter.
   virtual void AddParam(const vcl_string& name, float& value) = 0;
 
-  //------------------------------------------------------------
-  //: Add a double parameter.
+  // ------------------------------------------------------------
+  // : Add a double parameter.
   virtual void AddParam(const vcl_string& name, double& value) = 0;
 
-  //------------------------------------------------------------
-  //: Add an integer parameter.
+  // ------------------------------------------------------------
+  // : Add an integer parameter.
   virtual void AddParam(const vcl_string& name, int& value) = 0;
 
-  //------------------------------------------------------------
-  //: Add a boolean parameter.
+  // ------------------------------------------------------------
+  // : Add a boolean parameter.
   virtual void AddParam(const vcl_string& name, bool& value) = 0;
 
-  //------------------------------------------------------------
-  //: Add a choice parameter.
+  // ------------------------------------------------------------
+  // : Add a choice parameter.
   //  virtual void AddParam(const vcl_string& name, int& value, UIChoice* choices) = 0;
 
-  //------------------------------------------------------------
-  //: Add a boolean choice parameter, using one of the convenient standard styles.
-  virtual void AddParam(const vcl_string& name, bool& value,
-                        BoolChoiceStyle style = TrueFalse) = 0;
+  // ------------------------------------------------------------
+  // : Add a boolean choice parameter, using one of the convenient standard styles.
+  virtual void AddParam(const vcl_string& name, bool& value, BoolChoiceStyle style = TrueFalse) = 0;
+
 };
 #endif
 #endif // gevd_param_mixin_h_

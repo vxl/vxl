@@ -1,7 +1,7 @@
 // This is oxl/xcv/xcv_threeview_manager.h
 #ifndef xcv_threeview_manager_h_
 #define xcv_threeview_manager_h_
-//:
+// :
 // \file
 // \author  K.Y.McGaul
 // \brief Handles events which occur in one view but are displayed in three views.
@@ -26,35 +26,36 @@ class vgui_event;
 
 class xcv_threeview_manager : public xcv_mview_manager
 {
-  TriTensor* tri_tensor;
-  vgui_tableau_sptr tabs[3];
+  TriTensor*                   tri_tensor;
+  vgui_tableau_sptr            tabs[3];
   vgui_rubberband_tableau_sptr rubberbands[3];
-  vgui_easy2D_tableau_sptr easys[3];
-  bool tri_tensor_is_displayed;
+  vgui_easy2D_tableau_sptr     easys[3];
+  bool                         tri_tensor_is_displayed;
+public:
 
- public:
-
-  //: Constructor.
+  // : Constructor.
   xcv_threeview_manager();
-  //: Destructor.
+  // : Destructor.
   ~xcv_threeview_manager();
 
-  //: Set the tableau at the given position to the given tableau.
+  // : Set the tableau at the given position to the given tableau.
   void set_tableau(vgui_tableau_sptr const& tab, unsigned tab_position);
-  //: Set TriTensor to given value.
-  void set_tri_tensor(TriTensor* tt){tri_tensor = tt;}
 
-  //: Toggle between displaying and not displaying the TriTensor.
+  // : Set TriTensor to given value.
+  void set_tri_tensor(TriTensor* tt) {tri_tensor = tt; }
+
+  // : Toggle between displaying and not displaying the TriTensor.
   void toggle_tri_tensor_display();
 
-  //: Return the tri-tensor held by this manager.
-  TriTensor* get_tri_tensor(){return tri_tensor;}
+  // : Return the tri-tensor held by this manager.
+  TriTensor * get_tri_tensor() {return tri_tensor; }
 
-  //: Handle all events sent to this manager.
+  // : Handle all events sent to this manager.
   void handle_tjunction_event(vgui_event const& e, vgui_tableau_sptr const& child_tab);
 
- private:
+private:
   void draw_tri_tensor(vgui_event const& e, vgui_tableau_sptr const& child_tab, bool make_permanent);
+
 };
 
 #endif // xcv_threeview_manager_h_

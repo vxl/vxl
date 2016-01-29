@@ -7,6 +7,7 @@
 void test_displaybase()
 {
   vgui_easy2D_tableau_new tab1;
+
   tab1->set_foreground( 1.0f, 1.0f, 1.0f );
   vgui_soview2D* line1 = tab1->add_line( 0.0f, 0.0f, 1.0f, 1.0f );
 

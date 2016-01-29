@@ -7,9 +7,9 @@
 #include "vcl_compiler.h"
 
 #if !VCL_CXX_HAS_HEADER_CLIMITS
-# include <limits.h>
+#  include <limits.h>
 #else
-# include "iso/vcl_climits.h"
+#  include "iso/vcl_climits.h"
 #endif
 
 #endif // vcl_climits_h_

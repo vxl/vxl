@@ -13,6 +13,7 @@ void test_bugl()
 {
   // test constructor
   vnl_double_2x2 s2(0.0); s2[0][0] = 1; s2[1][1] = 3;
+
   bugl_gaussian_point_2d<double> p2d(1, 1, s2);
 
   vnl_double_2x2 c = p2d.get_covariant_matrix();
@@ -22,7 +23,7 @@ void test_bugl()
   TEST("cov[1][0]==0", c[1][0], 0.0);
 
   bugl_gaussian_point_3d<double> p1;
-  vnl_double_3x3 s3(0.0); s3[0][0] = 1; s3[1][1] = 3; s3[2][2] = 5;
+  vnl_double_3x3                 s3(0.0); s3[0][0] = 1; s3[1][1] = 3; s3[2][2] = 5;
   bugl_gaussian_point_3d<double> p3d(100, 100, 100, s3);
 
   vnl_double_3x3 t = p3d.get_covariant_matrix();
@@ -40,12 +41,12 @@ void test_bugl()
   TEST("p3d.z()==1", p3d_ptr->z(), 1.0);
 
   // test set point
-  vgl_point_3d<double> pt(5.0,5.0,5.0);
+  vgl_point_3d<double> pt(5.0, 5.0, 5.0);
   p3d_ptr->set_point(pt);
 
   TEST("p3d.x()==5", p3d_ptr->x(), 5.0);
   TEST("p3d.y()==5", p3d_ptr->y(), 5.0);
   TEST("p3d.z()==5", p3d_ptr->z(), 5.0);
- }
+}
 
 TESTMAIN(test_bugl);

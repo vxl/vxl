@@ -1,7 +1,7 @@
 // This is brl/bbas/bsta/bsta_sampler.h
 #ifndef bsta_sampler_h_
 #define bsta_sampler_h_
-//:
+// :
 // \file
 // \brief Various sampling techniques to aid bsta library
 // \author Ozge C. Ozcanli
@@ -23,30 +23,31 @@
 template <class T>
 class bsta_sampler
 {
- public:
-  //: put cnt samples into output vector wrt given probabilities
+public:
+  // : put cnt samples into output vector wrt given probabilities
   //  The sum of probabilities should sum to 1 otherwise return false
-  static bool sample(vcl_vector<T>& samples, vcl_vector<float>& p,
-                     unsigned cnt, vcl_vector<T>& out);
+  static bool sample(vcl_vector<T>& samples, vcl_vector<float>& p, unsigned cnt, vcl_vector<T>& out);
 
-  //: put cnt samples into output vector wrt given probabilities
+  // : put cnt samples into output vector wrt given probabilities
   //  The sum of probabilities should sum to 1 otherwise return false.
   //  User provides seeded random generator
-  static bool sample(vcl_vector<T>& samples, vcl_vector<float>& p,
-                     unsigned cnt, vcl_vector<T>& out, vnl_random &rng);
+  static bool sample(vcl_vector<T>& samples, vcl_vector<float>& p, unsigned cnt, vcl_vector<T>& out, vnl_random & rng);
 
-  //: sample from a joint histogram treating it as a discrete prob distribution
+  // : sample from a joint histogram treating it as a discrete prob distribution
   static bool sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out);
 
-  //: sample from a joint histogram treating it as a discrete prob distribution
+  // : sample from a joint histogram treating it as a discrete prob distribution
   // User provides seeded random generator
-  static bool sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out, vnl_random &rng);
+  static bool sample(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out,
+                     vnl_random & rng);
 
-  //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
-  static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float, float> >& out);
+  // : sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
+  static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<float,
+                                                                                                                  float> >& out);
 
-  //: sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
-  static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt, vcl_vector<vcl_pair<unsigned, unsigned> >& out_indices);
+  // : sample in the decreasing order of likelihood (i.e. the most likely bin will be returned as the first sample)
+  static bool sample_in_likelihood_order(const bsta_joint_histogram<float>& jh, unsigned cnt,
+                                         vcl_vector<vcl_pair<unsigned, unsigned> >& out_indices);
 
   static vnl_random default_rand;
 };

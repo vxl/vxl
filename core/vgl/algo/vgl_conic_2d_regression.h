@@ -2,9 +2,9 @@
 #ifndef vgl_conic_2d_regression_h_
 #define vgl_conic_2d_regression_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Fits a conic to a set of points using linear regression
 // \author J.L. Mundy
@@ -69,37 +69,36 @@
 template <class T>
 class vgl_conic_2d_regression
 {
- public:
+public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
   vgl_conic_2d_regression();
 
-  ~vgl_conic_2d_regression(){}
+  ~vgl_conic_2d_regression() {}
 
   // Operations----------------------------------------------------------------
 
+  // : Number of regression points
+  unsigned get_n_pts() const {return npts_; }
 
-  //: Number of regression points
-  unsigned get_n_pts() const {return npts_;}
-
-  //: clear the regression data
+  // : clear the regression data
   void clear_points();
 
   void add_point(vgl_point_2d<T> const& p);
 
   void remove_point(vgl_point_2d<T> const& p);
 
-  //: get the estimated Euclidean error with respect to the fitted conic segment in the original frame
+  // : get the estimated Euclidean error with respect to the fitted conic segment in the original frame
   T get_rms_error_est(vgl_point_2d<T> const& p) const;
 
-  //: get the current Euclidean fitting error in the original frame
-  T get_rms_sampson_error() const { return sampson_error_; } //temporarily
+  // : get the current Euclidean fitting error in the original frame
+  T get_rms_sampson_error() const { return sampson_error_; } // temporarily
 
-  //: get the current algebraic fitting error in the normalized frame
+  // : get the current algebraic fitting error in the normalized frame
   T get_rms_algebraic_error() const;
 
-  //: the fitting method
+  // : the fitting method
   bool fit();
 
   // Data Access---------------------------------------------------------------
@@ -108,41 +107,45 @@ class vgl_conic_2d_regression
 
   // Debug support
   void print_pointset(vcl_ostream& str = vcl_cout );
- protected:
+
+protected:
   // Internals
   void init();
+
   void compute_partial_sums();
+
   void fill_scatter_matrix();
+
   void set_sampson_error(T a, T b, T c, T d, T e, T f);
 
   // Data Members--------------------------------------------------------------
 
-  //: The current set of points
+  // : The current set of points
   vcl_vector<vgl_point_2d<T> > points_;
 
-  //: Size of point set
+  // : Size of point set
   unsigned npts_;
 
-  //: The normalizing transformation
+  // : The normalizing transformation
   vgl_norm_trans_2d<T> trans_;
 
-  //: The partial scatter term sums, updated with each ::add_point
+  // : The partial scatter term sums, updated with each ::add_point
   vcl_vector<T> partial_sums_;
 
-  //: The fitting matrices
-  vnl_matrix_fixed<T,3,3> S11_, S12_, S22_;
-  vnl_matrix_fixed<T,3,3> Dinv_;
+  // : The fitting matrices
+  vnl_matrix_fixed<T, 3, 3> S11_, S12_, S22_;
+  vnl_matrix_fixed<T, 3, 3> Dinv_;
 
-  //: The fitted conic in the un-normalized frame
+  // : The fitted conic in the un-normalized frame
   vgl_conic<T> conic_;
 
-  //: The algebraic fitting cost in the normalized frame
+  // : The algebraic fitting cost in the normalized frame
   T cost_;
 
-  //: The Sampson approximation to Euclidean distance in the normalized frame
+  // : The Sampson approximation to Euclidean distance in the normalized frame
   T sampson_error_;
 
-  //: Normalized points
+  // : Normalized points
   vcl_vector<vgl_homg_point_2d<T> > hnorm_points_;
 };
 

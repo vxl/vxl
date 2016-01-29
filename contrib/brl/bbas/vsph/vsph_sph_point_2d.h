@@ -1,17 +1,17 @@
 #ifndef vsph_sph_point_2d_h_
 #define vsph_sph_point_2d_h_
-//:
+// :
 // \file
 #include <vsl/vsl_binary_io.h>
 #include <vcl_iostream.h>
 
-//: a point in the spherical coordinate system on the surface of a unit sphere
+// : a point in the spherical coordinate system on the surface of a unit sphere
 // \p theta is elevation with zero at the North Pole, 180 degress at the South Pole
 // \p phi is azimuth with zero pointing East, positive heading North
 class vsph_sph_point_2d
 {
- public:
-  //: Default constructor
+public:
+  // : Default constructor
   vsph_sph_point_2d() : theta_(0.0), phi_(0.0) {}
 
   vsph_sph_point_2d(double theta, double phi, bool in_radians = true);
@@ -19,10 +19,9 @@ class vsph_sph_point_2d
   ~vsph_sph_point_2d() {}
 
   void set(double theta, double phi, bool in_radians = true)
-  { in_radians_ = in_radians; theta_=theta; phi_=phi; }
+  { in_radians_ = in_radians; theta_ = theta; phi_ = phi; }
 
-  bool operator==(const vsph_sph_point_2d &other) const;
-
+  bool operator==(const vsph_sph_point_2d & other) const;
 
   void print(vcl_ostream& os) const;
 
@@ -30,8 +29,8 @@ class vsph_sph_point_2d
 
   void b_write(vsl_b_ostream& os) const;
 
-  short version() const {return 1;}
-  bool in_radians_;
+  short version() const {return 1; }
+  bool   in_radians_;
   double theta_;
   double phi_;
 };
@@ -42,6 +41,6 @@ void vsl_b_write(vsl_b_ostream& os, vsph_sph_point_2d const& sp);
 
 void vsl_print_summary(vcl_ostream& os, vsph_sph_point_2d const& sp);
 
-vcl_ostream& operator<<(vcl_ostream& os, vsph_sph_point_2d const& sp);
+vcl_ostream & operator<<(vcl_ostream& os, vsph_sph_point_2d const& sp);
 
 #endif

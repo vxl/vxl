@@ -1,7 +1,7 @@
 // This is brl/bseg/brip/brip_mutual_info.txx
 #ifndef brip_mutual_info_txx_
 #define brip_mutual_info_txx_
-//:
+// :
 // \file
 // \brief Calculate the mutual information between the images.
 // \author Matt Leotta
@@ -12,17 +12,16 @@
 #include <vcl_vector.h>
 #include <vcl_cassert.h>
 
-
-//: Calculate the Mutual Information between the images.
-template<class T>
+// : Calculate the Mutual Information between the images.
+template <class T>
 double brip_mutual_info(const vil_image_view<T>& image1,
                         const vil_image_view<T>& image2,
                         double min, double max, unsigned n_bins)
 {
-  assert( (image1.ni() == image2.ni()) &&
-          (image1.nj() == image2.nj()) &&
-          (image1.nplanes() == image2.nplanes()) );
-  vcl_vector<double> histogram1, histogram2;
+  assert( (image1.ni() == image2.ni() ) &&
+          (image1.nj() == image2.nj() ) &&
+          (image1.nplanes() == image2.nplanes() ) );
+  vcl_vector<double>              histogram1, histogram2;
   vcl_vector<vcl_vector<double> > joint_histogram;
 
   double mag1, mag2, mag3;
@@ -39,12 +38,11 @@ double brip_mutual_info(const vil_image_view<T>& image1,
   return H1 + H2 - H3;
 }
 
-
 // Macro to perform manual instantiations
 #define BRIP_MUTUAL_INFO_INSTANTIATE(T) \
   template \
-  double brip_mutual_info(const vil_image_view<T >& image1, \
-                          const vil_image_view<T >& image2, \
+  double brip_mutual_info(const vil_image_view<T> &image1, \
+                          const vil_image_view<T> &image2, \
                           double min, double max, unsigned n_bins)
 
 #endif // brip_mutual_info_txx_

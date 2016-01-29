@@ -2,9 +2,9 @@
 #ifndef vgui_enhance_tableau_h_
 #define vgui_enhance_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Magnify/display another tableau in a region around the mouse pointer.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -25,7 +25,7 @@
 
 class vgui_event;
 
-//: Magnify or display another tableau in a region around the mouse pointer.
+// : Magnify or display another tableau in a region around the mouse pointer.
 //  This happens when the user presses the left mouse button inside the
 //  rendering area.
 //
@@ -34,82 +34,81 @@ class vgui_event;
 //  Use '{' and '}' to change the magnification.
 class vgui_enhance_tableau : public vgui_tableau
 {
- public:
-  //: Constructor - don't use this, use vgui_enhance_tableau_new.
+public:
+  // : Constructor - don't use this, use vgui_enhance_tableau_new.
   //  A tableau constructed this way magnifies an area under the mouse pointer.
   vgui_enhance_tableau();
 
-  //: Constructor - don't use this, use vgui_enhance_tableau_new.
+  // : Constructor - don't use this, use vgui_enhance_tableau_new.
   //  A tableau constructed this way magnifies area of the given tableau
   //  under the mouse pointer.
   vgui_enhance_tableau(vgui_tableau_sptr const& t);
 
-  //: Constructor - don't use this, use vgui_enhance_tableau_new.
+  // : Constructor - don't use this, use vgui_enhance_tableau_new.
   //  A tableau constructed this way displays the tableau t2 on top of t1 in
   //  a region around the mouse pointer.
-  vgui_enhance_tableau(vgui_tableau_sptr const& t1,
-                       vgui_tableau_sptr const& t2);
+  vgui_enhance_tableau(vgui_tableau_sptr const& t1, vgui_tableau_sptr const& t2);
 
-  //: Returns the file_name of the first child tableau.
+  // : Returns the file_name of the first child tableau.
   vcl_string file_name() const;
 
-  //: Returns the type of this tableau ('vgui_enhance_tableau').
+  // : Returns the type of this tableau ('vgui_enhance_tableau').
   vcl_string type_name() const;
 
-  //: True to enable key-presses to change size and magnification.
+  // : True to enable key-presses to change size and magnification.
   void set_enable_key_bindings(bool on) { enable_key_bindings = on; }
 
-  //: Set the child in the first slot.
+  // : Set the child in the first slot.
   void set_child(vgui_tableau_sptr const& t);
 
- protected:
-  //: Destructor - called by vgui_enhance_tableau_sptr.
- ~vgui_enhance_tableau();
+protected:
+  // : Destructor - called by vgui_enhance_tableau_sptr.
+  ~vgui_enhance_tableau();
 
-  //: Handle all events sent to this tableau.
+  // : Handle all events sent to this tableau.
   //  In particular, use left mouse press to enhance/magnify.
-  bool handle(const vgui_event&);
+  bool handle(const vgui_event &);
 
-  //: First child, this is the tableau displayed, except when the mouse is down.
+  // : First child, this is the tableau displayed, except when the mouse is down.
   vgui_parent_child_link slot1;
 
-  //: Second child, displayed when the mouse is pressed in the rendering area.
+  // : Second child, displayed when the mouse is pressed in the rendering area.
   vgui_parent_child_link slot2;
 
-  //: True if enhancing is on.
+  // : True if enhancing is on.
   bool enhancing_;
 
-  //: Mouse x-position.
+  // : Mouse x-position.
   int x;
 
-  //: Mouse y-position.
+  // : Mouse y-position.
   int y;
 
-  //: Size of enhance region around the mouse pointer.
+  // : Size of enhance region around the mouse pointer.
   int size;
 
-  //: Amount to zoom if we are magnifying.
+  // : Amount to zoom if we are magnifying.
   float zoom_factor;
 
-  //: True if key presses can change size and zoom factor.
+  // : True if key presses can change size and zoom factor.
   bool enable_key_bindings;
 };
 
-//: Create a smart-pointer to a vgui_enhance_tableau tableau.
+// : Create a smart-pointer to a vgui_enhance_tableau tableau.
 struct vgui_enhance_tableau_new : public vgui_enhance_tableau_sptr
-{
-  //: Constructor - magnifies an area under the mouse pointer.
+  {
+  // : Constructor - magnifies an area under the mouse pointer.
   vgui_enhance_tableau_new() :
-    vgui_enhance_tableau_sptr(new vgui_enhance_tableau()) { }
+    vgui_enhance_tableau_sptr(new vgui_enhance_tableau() ) { }
 
-  //: Constructor - magnifies area of the given tableau under the mouse pointer.
-  vgui_enhance_tableau_new(vgui_tableau_sptr const&t) :
-    vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t)) { }
+  // : Constructor - magnifies area of the given tableau under the mouse pointer.
+  vgui_enhance_tableau_new(vgui_tableau_sptr const& t) :
+    vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t) ) { }
 
-  //: Constructor - displays t2 on top of t1 in a region around mouse pointer.
-  vgui_enhance_tableau_new(vgui_tableau_sptr const&t1,
-                           vgui_tableau_sptr const&t2) :
-    vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t1,t2)) { }
-};
+  // : Constructor - displays t2 on top of t1 in a region around mouse pointer.
+  vgui_enhance_tableau_new(vgui_tableau_sptr const& t1,
+                           vgui_tableau_sptr const& t2) :
+    vgui_enhance_tableau_sptr(new vgui_enhance_tableau(t1, t2) ) { }
+  };
 
 #endif // vgui_enhance_tableau_h_

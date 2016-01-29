@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_render_virtual_view_process.h
 #ifndef bvxm_render_virtual_view_process_h_
 #define bvxm_render_virtual_view_process_h_
-//:
+// :
 // \file
 // \brief A process that renders a video frame from a new viewpoint (used for 3-D registration)
 //
@@ -15,17 +15,17 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_render_virtual_view_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
+const unsigned n_inputs_ = 7;
+const unsigned n_outputs_ = 2;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_render_virtual_view_process_cons(bprb_func_process& pro);
 
-//: renders a video frame from a new viewpoint (used for 3-D registration)
+// : renders a video frame from a new viewpoint (used for 3-D registration)
 bool bvxm_render_virtual_view_process(bprb_func_process& pro);
 
 #endif // bvxm_render_virtual_view_process_h_

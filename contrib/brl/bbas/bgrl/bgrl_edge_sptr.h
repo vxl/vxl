@@ -1,7 +1,7 @@
 // This is brl/bbas/bgrl/bgrl_edge_sptr.h
 #ifndef bgrl_edge_sptr_h_
 #define bgrl_edge_sptr_h_
-//:
+// :
 // \file
 // \brief A smart pointer to a bgrl_edge.
 // \author Matt Leotta, (mleotta@lems.brown.edu)

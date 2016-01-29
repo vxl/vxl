@@ -15,17 +15,28 @@
 
 class vil_nitf2_index_vector : public vcl_vector<int>
 {
- public:
+public:
   // Convenience constructors: empty vector, 1 element, etc.
   vil_nitf2_index_vector() : vcl_vector<int>() {}
-  vil_nitf2_index_vector(int i): vcl_vector<int>(1) {
-    (*this)[0] = i; }
-  vil_nitf2_index_vector(int i, int j) : vcl_vector<int>(2) {
-    (*this)[0] = i; (*this)[1] = j; }
-  vil_nitf2_index_vector(int i, int j, int k) : vcl_vector<int>(3) {
-    (*this)[0] = i; (*this)[1] = j; (*this)[2] = k; }
-  vil_nitf2_index_vector(int i, int j, int k, int l) : vcl_vector<int>(4) {
-    (*this)[0] = i; (*this)[1] = j; (*this)[2] = k; (*this)[3] = l; }
+  vil_nitf2_index_vector(int i) : vcl_vector<int>(1)
+  {
+    (*this)[0] = i;
+  }
+
+  vil_nitf2_index_vector(int i, int j) : vcl_vector<int>(2)
+  {
+    (*this)[0] = i; (*this)[1] = j;
+  }
+
+  vil_nitf2_index_vector(int i, int j, int k) : vcl_vector<int>(3)
+  {
+    (*this)[0] = i; (*this)[1] = j; (*this)[2] = k;
+  }
+
+  vil_nitf2_index_vector(int i, int j, int k, int l) : vcl_vector<int>(4)
+  {
+    (*this)[0] = i; (*this)[1] = j; (*this)[2] = k; (*this)[3] = l;
+  }
 
   // General-purpose constructor
   vil_nitf2_index_vector(const vcl_vector<int>& v) : vcl_vector<int>(v) {}
@@ -34,13 +45,14 @@ class vil_nitf2_index_vector : public vcl_vector<int>
   virtual ~vil_nitf2_index_vector() {}
 };
 
-inline vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_index_vector& vec)
+inline vcl_ostream & operator <<(vcl_ostream& os, const vil_nitf2_index_vector& vec)
 {
   os << '(';
-  for (vil_nitf2_index_vector::const_iterator it = vec.begin(); it != vec.end(); ++it) {
-    if (it != vec.begin()) os << ", ";
+  for( vil_nitf2_index_vector::const_iterator it = vec.begin(); it != vec.end(); ++it )
+    {
+    if( it != vec.begin() ) {os << ", "; }
     os << *it;
-  }
+    }
   os << ')';
   return os;
 }

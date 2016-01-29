@@ -1,8 +1,8 @@
 // This is brl/bseg/brip/brip_watershed.h
 #ifndef brip_watershed_h_
 #define brip_watershed_h_
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \author J.L. Mundy
 // \brief Computes the seeded watershed algorithm
@@ -28,7 +28,7 @@
 //   Initial version June 18, 2004
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vcl_map.h>
 #include <vcl_queue.h>
@@ -40,42 +40,52 @@
 
 class brip_watershed : public brip_watershed_params
 {
- public:
-  enum label {UNLABELED = 0, BOUNDARY=1};
-  //:Constructors/destructor
+public:
+  enum label { UNLABELED = 0, BOUNDARY = 1 };
+  // :Constructors/destructor
   brip_watershed(brip_watershed_params const& bwp);
   ~brip_watershed();
-  //: Accessors/Mutators
+  // : Accessors/Mutators
   void set_image(vil1_memory_image_of<float> const& image);
-  static unsigned int min_region_label() {return BOUNDARY + 1;}
-  unsigned int max_region_label() const {return max_region_label_;}
+
+  static unsigned int min_region_label() {return BOUNDARY + 1; }
+  unsigned int max_region_label() const {return max_region_label_; }
   vil1_image overlay_image();
-  vbl_array_2d<unsigned int>& region_label_array(){return region_label_array_;}
-  bool adjacent_regions(const unsigned int region,
-                        vcl_vector<unsigned int>& adj_regs);
-  //: Main process method
+
+  vbl_array_2d<unsigned int> & region_label_array() {return region_label_array_; }
+  bool adjacent_regions(const unsigned int region, vcl_vector<unsigned int>& adj_regs);
+
+  // : Main process method
   bool compute_regions();
-  //: Debug methods
+
+  // : Debug methods
   void print_region_array();
+
   void print_adjacency_map();
- protected:
-  //: internal methods
+
+protected:
+  // : internal methods
   void print_neighborhood(int col, int row, unsigned int lab);
+
   bool add_adjacency(const unsigned int reg, const unsigned int adj_reg);
+
   bool compute_seeds();
+
   bool initialize_queue();
+
   bool grow_regions();
-  //: members
-  brip_watershed();//don't use this constructor
-  int width_;
-  int height_;
-  unsigned int max_region_label_;
-  vbl_array_2d<unsigned int> region_label_array_;
+
+  // : members
+  brip_watershed();// don't use this constructor
+  int                         width_;
+  int                         height_;
+  unsigned int                max_region_label_;
+  vbl_array_2d<unsigned int>  region_label_array_;
   vil1_memory_image_of<float> image_;
   vil1_memory_image_of<float> gradient_mag_image_;
   vcl_priority_queue<brip_region_pixel_sptr, vcl_vector<brip_region_pixel_sptr>,
-                     brip_region_pixel::compare> priority_queue_;
-  vcl_map<unsigned int, vcl_vector<unsigned int>* > region_adjacency_;
+                     brip_region_pixel::compare>    priority_queue_;
+  vcl_map<unsigned int, vcl_vector<unsigned int> *> region_adjacency_;
 };
 
 #endif // brip_watershed_h_

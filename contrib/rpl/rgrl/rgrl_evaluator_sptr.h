@@ -5,6 +5,6 @@
 
 class rgrl_evaluator;
 
-typedef vbl_smart_ptr< rgrl_evaluator > rgrl_evaluator_sptr;
+typedef vbl_smart_ptr<rgrl_evaluator> rgrl_evaluator_sptr;
 
 #endif

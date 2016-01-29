@@ -6,27 +6,27 @@
 #include <vcl_sstream.h>
 static void test_display_vrml()
 {
-  vnl_vector_fixed<float, 3> mean(0.0f, 0.0f, 0.0f);
+  vnl_vector_fixed<float, 3>    mean(0.0f, 0.0f, 0.0f);
   vnl_matrix_fixed<float, 3, 3> covar(0.0f), dcovar(0.0f);
-  covar[0][0] = 2.0f;  covar[0][1] = 1.0f; covar[0][2]=1.0f;
-  covar[1][0] = 1.0f;  covar[1][1] = 1.625f; covar[1][2]=1.375f;
-  covar[2][0] = 1.0f;  covar[2][1] = 1.375f; covar[2][2]=1.625f;
+  covar[0][0] = 2.0f;  covar[0][1] = 1.0f; covar[0][2] = 1.0f;
+  covar[1][0] = 1.0f;  covar[1][1] = 1.625f; covar[1][2] = 1.375f;
+  covar[2][0] = 1.0f;  covar[2][1] = 1.375f; covar[2][2] = 1.625f;
   vcl_cout << "Original Covar \n" << covar << '\n';
   bsta_gaussian_full<float, 3> g(mean, covar);
-  vcl_stringstream ss;
-  bool good = bsta_display_vrml(ss, g);
-  vcl_string str = ss.str();
+  vcl_stringstream             ss;
+  bool                         good = bsta_display_vrml(ss, g);
+  vcl_string                   str = ss.str();
 #ifdef VRML_DEBUG
   vcl_cout << str << '\n';
 #endif
   vcl_string test("0.541766 0.0713248 0.837498 4.28395");
-  unsigned pos = str.find(test);
+  unsigned   pos = str.find(test);
   good = good && pos == 84;
   TEST("gaussian full display", good, true);
-  dcovar[0][0] = 5.0f;  dcovar[1][1] = 3.0f; dcovar[2][2]=1.0f;
-  vnl_vector_fixed<float, 3> mean2(5.0f, 0.0f, 0.0f);
-  bsta_gaussian_full<float, 3> g2(mean2, dcovar);
-  bsta_mixture< bsta_gaussian_full<float, 3> > mix;
+  dcovar[0][0] = 5.0f;  dcovar[1][1] = 3.0f; dcovar[2][2] = 1.0f;
+  vnl_vector_fixed<float, 3>                  mean2(5.0f, 0.0f, 0.0f);
+  bsta_gaussian_full<float, 3>                g2(mean2, dcovar);
+  bsta_mixture<bsta_gaussian_full<float, 3> > mix;
   good = mix.insert(g, 0.5f);
   good = good && mix.insert(g2, 0.5f);
   vcl_stringstream ss2;

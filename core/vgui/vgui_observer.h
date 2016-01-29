@@ -2,9 +2,9 @@
 #ifndef vgui_observer_h_
 #define vgui_observer_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Base class for classes that receive messages from observables.
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
@@ -21,28 +21,29 @@
 class vgui_message;
 class vgui_observable;
 
-//: Base class for classes that receive messages from observables.
+// : Base class for classes that receive messages from observables.
 //
 //  Observers attach them selves to a vgui_observable object.  The observable
 //  can broadcast a vgui_message or an update to all the vgui_observer's
 //  attached to themselves.
 class vgui_observer
 {
- public:
-  //: Constructor - create a default observable.
+public:
+  // : Constructor - create a default observable.
   vgui_observer() {}
 
-  //: Destructor.
+  // : Destructor.
   virtual ~vgui_observer() {}
 
-  //: Called by the observable when some event occurs.
+  // : Called by the observable when some event occurs.
   virtual void update();
 
-  //: Called by the observable with a message.
+  // : Called by the observable with a message.
   virtual void update(vgui_message const &);
 
-  //: Called by the observable with a message.
+  // : Called by the observable with a message.
   virtual void update(vgui_observable const *);
+
 };
 
 #endif // vgui_observer_h_

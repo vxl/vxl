@@ -1,6 +1,6 @@
 #ifndef bstm_analyze_coherency_function_h_
 #define bstm_analyze_coherency_function_h_
-//:
+// :
 // \file
 
 #include <bstm/bstm_time_block.h>
@@ -20,20 +20,21 @@
 
 class bstm_analyze_coherency_function
 {
- public:
+public:
 
-   typedef unsigned char uchar;
-   typedef unsigned short ushort;
-   typedef vnl_vector_fixed<uchar, 16> uchar16;
-   typedef vnl_vector_fixed<uchar, 8> uchar8;
-   typedef vnl_vector_fixed<ushort, 4> ushort4;
+  typedef unsigned char               uchar;
+  typedef unsigned short              ushort;
+  typedef vnl_vector_fixed<uchar, 16> uchar16;
+  typedef vnl_vector_fixed<uchar, 8>  uchar8;
+  typedef vnl_vector_fixed<ushort, 4> ushort4;
 
-   //: "default" constructor does all the work
-   bstm_analyze_coherency_function(bstm_block* blk, bstm_block_metadata blk_data, bstm_time_block* blk_t, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *app,
-                                       bstm_data_traits<BSTM_ALPHA>::datatype * alpha, double init_local_time, double end_local_time, vgl_box_3d<double> box,
-                                       float p_threshold, vcl_ofstream & output_file);
+  // : "default" constructor does all the work
+  bstm_analyze_coherency_function(bstm_block* blk, bstm_block_metadata blk_data, bstm_time_block* blk_t,
+                                  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype * app,
+                                  bstm_data_traits<BSTM_ALPHA>::datatype * alpha, double init_local_time,
+                                  double end_local_time, vgl_box_3d<double> box, float p_threshold,
+                                  vcl_ofstream & output_file);
 
 };
-
 
 #endif // bstm_analyze_coherency_function_h_

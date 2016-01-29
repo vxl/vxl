@@ -1,7 +1,8 @@
 #ifndef vtol_dtd_h_
 #define vtol_dtd_h_
 
-char vtol_dtd0[] = "\
+char vtol_dtd0[] =
+  "\
 \n\
 <!DOCTYPE vxl [\n\
 \n\
@@ -39,7 +40,9 @@ char vtol_dtd0[] = "\
   <!ATTLIST vxl_point_2d_sptr id IDREF #REQUIRED>\n\
 <!ELEMENT vxl_point_3d_sptr EMPTY>\n\
   <!ATTLIST vxl_point_3d_sptr id IDREF #REQUIRED>\n\
-\n"; char vtol_dtd1[] = "\
+\n";
+char vtol_dtd1[] =
+  "\
 <!-- ** Topology structures ** -->\n\
 \n\
 <!-- vxl_vertex_[23]d\n\
@@ -81,7 +84,9 @@ char vtol_dtd0[] = "\
               <vxl_vertex_2d ...>\n\
          </vxl_edge_2d>\n\
   -->\n\
-\n"; char vtol_dtd2[] = "\
+\n";
+char vtol_dtd2[] =
+  "\
 <!ELEMENT vxl_edge_2d ( vxl_zero_chain_2d | vxl_zero_chain_2d_sptr)>\n\
   <!ATTLIST vxl_edge_2d id ID #IMPLIED>\n\
 \n\
@@ -125,7 +130,9 @@ char vtol_dtd0[] = "\
 \n\
 <!ELEMENT vxl_triangle_2d_sptr EMPTY>\n\
   <!ATTLIST vxl_triangle_2d_sptr id IDREF #REQUIRED>\n\
-\n"; char vtol_dtd3[] = "\
+\n";
+char vtol_dtd3[] =
+  "\
 <!-- vxl_face_[23d]\n\
            <vxl_face_2d id=\"7\">\n\
                  <vxl_one_chain_2d ...>\n\

@@ -153,66 +153,83 @@ class vil_nitf2_scalar_field;
 //   functions that compute values of tags from a TRE for the purpose
 //   of representing conditions and repeat counts.
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // vil_nitf2_tagged_record is an instance of a single NITF tagged record extension,
 // consisting of a list of vil_nitf2_fields, as read from (or to be written to) a
 // NITF file.
 //
 class vil_nitf2_tagged_record
 {
- public:
+public:
   // Return record identifier
   vcl_string name() const;
+
   vcl_string pretty_name() const;
 
   // Return record length in bytes
   int length() const { return m_length; }
 
-  //bool validate(vil_nitf2_ostream& = vcl_cerr);
+  // bool validate(vil_nitf2_ostream& = vcl_cerr);
 
   // Attempts to read a NITF tagged record from input stream
-  static vil_nitf2_tagged_record* create(vil_nitf2_istream& input);
+  static vil_nitf2_tagged_record * create(vil_nitf2_istream& input);
 
   // Attempts to write a NITF tagged record to the input stream
-  virtual bool write(vil_nitf2_ostream&);
+  virtual bool write(vil_nitf2_ostream &);
 
   // Implements operator <<
-  vcl_ostream& output(vcl_ostream&) const;
+  vcl_ostream & output(vcl_ostream &) const;
 
   // Sets out_value to the value of the integer-value field specified by tag.
   // Returns 0 if such a field is not found.
   bool get_value(vcl_string tag, int& out_value) const;
+
   bool get_value(vcl_string tag, double& out_value) const;
+
   bool get_value(vcl_string tag, char& out_value) const;
-  bool get_value(vcl_string tag, void*& out_value) const;
+
+  bool get_value(vcl_string tag, void *& out_value) const;
+
   bool get_value(vcl_string tag, vcl_string& out_value) const;
-  bool get_value(vcl_string tag, vil_nitf2_location*& out_value) const;
+
+  bool get_value(vcl_string tag, vil_nitf2_location *& out_value) const;
+
   bool get_value(vcl_string tag, vil_nitf2_date_time& out_value) const;
+
 #if VXL_HAS_INT_64
   bool get_value(vcl_string tag, vil_nitf2_long& out_value) const;
-#endif //VXL_HAS_INT_64
 
-  //bool get_value(vcl_string tag, int i, int& out_value) const;
-  //bool get_value(vcl_string tag, int i, double& out_value) const;
-  //bool get_value(vcl_string tag, int i, char& out_value) const;
-  //bool get_value(vcl_string tag, int i, void*& out_value) const;
-  //bool get_value(vcl_string tag, int i, vcl_string& out_value) const;
-  //bool get_value(vcl_string tag, int i, vil_nitf2_location*& out_value) const;
-  //bool get_value(vcl_string tag, int i, vil_nitf2_date_time& out_value) const;
+#endif // VXL_HAS_INT_64
+
+  // bool get_value(vcl_string tag, int i, int& out_value) const;
+  // bool get_value(vcl_string tag, int i, double& out_value) const;
+  // bool get_value(vcl_string tag, int i, char& out_value) const;
+  // bool get_value(vcl_string tag, int i, void*& out_value) const;
+  // bool get_value(vcl_string tag, int i, vcl_string& out_value) const;
+  // bool get_value(vcl_string tag, int i, vil_nitf2_location*& out_value) const;
+  // bool get_value(vcl_string tag, int i, vil_nitf2_date_time& out_value) const;
 #if VXL_HAS_INT_64
-  //bool get_value(vcl_string tag, int i, vil_nitf2_long& out_value) const;
-#endif //VXL_HAS_INT_64
+  // bool get_value(vcl_string tag, int i, vil_nitf2_long& out_value) const;
+#endif // VXL_HAS_INT_64
 
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, int& out_value) const;
+
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, double& out_value) const;
+
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, char& out_value) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, void*& out_value) const;
+
+  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, void *& out_value) const;
+
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_string& out_value) const;
-  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const;
+
+  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location *& out_value) const;
+
   bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const;
+
 #if VXL_HAS_INT_64
-    bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const;
-#endif //VXL_HAS_INT_64
+  bool get_value(vcl_string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const;
+
+#endif // VXL_HAS_INT_64
 
   // Sets out_value to a flattened list of the values of the array field element
   // specified by tag and index. If index is the empty vector, then out_values
@@ -220,53 +237,71 @@ class vil_nitf2_tagged_record
   // the out_values hold all instances of the field selected by the partial index.
   // Appends to, instead of clearing, out_values if clear_out_values is false.
   // Returns 0 if such a field is not found or is of the wrong type.
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<int>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<double>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<char>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<void*>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vcl_string>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vil_nitf2_location*>& out_values, bool clear_out_values = true) const;
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vil_nitf2_date_time>& out_values, bool clear_out_values = true) const;
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<int>& out_values,
+                  bool clear_out_values = true) const;
+
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<double>& out_values,
+                  bool clear_out_values = true) const;
+
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<char>& out_values,
+                  bool clear_out_values = true) const;
+
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<void *>& out_values,
+                  bool clear_out_values = true) const;
+
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<vcl_string>& out_values,
+                  bool clear_out_values = true) const;
+
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<vil_nitf2_location *>& out_values,
+                  bool clear_out_values = true) const;
+
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<vil_nitf2_date_time>& out_values,
+                  bool clear_out_values = true) const;
+
 #if VXL_HAS_INT_64
-  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes,
-                  vcl_vector<vil_nitf2_long>& out_values, bool clear_out_values = true) const;
+  bool get_values(vcl_string tag, const vil_nitf2_index_vector& indexes, vcl_vector<vil_nitf2_long>& out_values,
+                  bool clear_out_values = true) const;
+
 #endif
 
   // Convenience overload of preceding methods, that set out_values to all
   // instances of array field element.
   bool get_values(vcl_string tag, vcl_vector<int>& out_values) const;
+
   bool get_values(vcl_string tag, vcl_vector<double>& out_values) const;
+
   bool get_values(vcl_string tag, vcl_vector<char>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<void*>& out_values) const;
+
+  bool get_values(vcl_string tag, vcl_vector<void *>& out_values) const;
+
   bool get_values(vcl_string tag, vcl_vector<vcl_string>& out_values) const;
-  bool get_values(vcl_string tag, vcl_vector<vil_nitf2_location*>& out_values) const;
+
+  bool get_values(vcl_string tag, vcl_vector<vil_nitf2_location *>& out_values) const;
+
   bool get_values(vcl_string tag, vcl_vector<vil_nitf2_date_time>& out_values) const;
+
 #if VXL_HAS_INT_64
   bool get_values(vcl_string tag, vcl_vector<vil_nitf2_long>& out_values) const;
+
 #endif
 
-  virtual vil_nitf2_field::field_tree* get_tree() const;
+  virtual vil_nitf2_field::field_tree * get_tree() const;
 
   // Sets the value of the integer-valued field specified by tag to value.
   // Not yet implemented.
-  //bool set_value(vcl_string tag, int value) {
+  // bool set_value(vcl_string tag, int value) {
   //  return m_field_sequence->set_value(tag, value); }
 
   // Returns a field with specified tag, or 0 if not found.
-  vil_nitf2_field* get_field(vcl_string tag) const {
-    return m_field_sequence->get_field(tag); }
+  vil_nitf2_field * get_field(vcl_string tag) const
+  {
+    return m_field_sequence->get_field(tag);
+  }
 
   // Removes a field with specified tag, returning whether successful.
   // Use this method to "undefine" an existing field.
   // Not yet implemented.
-  //bool remove_field(vcl_string tag) {
+  // bool remove_field(vcl_string tag) {
   //  return m_field_sequence->remove_field(tag); }
 
   // Test method. Prints results. Returns true if no errors.
@@ -274,8 +309,7 @@ class vil_nitf2_tagged_record
 
   // Destructor
   virtual ~vil_nitf2_tagged_record();
-
- private:
+private:
   // Default constructor
   vil_nitf2_tagged_record();
 
@@ -284,34 +318,37 @@ class vil_nitf2_tagged_record
 
   // Static variables
   static vil_nitf2_field_definition & s_length_definition();
+
   static vil_nitf2_field_definition & s_tag_definition();
+
   static vil_nitf2_integer_formatter & s_length_formatter();
+
   static vil_nitf2_string_formatter & s_tag_formatter();
 
   // Member variables
-  vil_nitf2_scalar_field* m_length_field;
-  vil_nitf2_scalar_field* m_tag_field;
-  int m_length;
+  vil_nitf2_scalar_field*             m_length_field;
+  vil_nitf2_scalar_field*             m_tag_field;
+  int                                 m_length;
   vil_nitf2_tagged_record_definition* m_definition;
-  vil_nitf2_field_sequence* m_field_sequence;
+  vil_nitf2_field_sequence*           m_field_sequence;
 };
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record& record);
+vcl_ostream & operator <<(vcl_ostream& os, const vil_nitf2_tagged_record& record);
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // A sequence of tagged records, as read from a NITF file header or image
 // subheader extended data field.
 
-class vil_nitf2_tagged_record_sequence : public vcl_list<vil_nitf2_tagged_record*>
+class vil_nitf2_tagged_record_sequence : public vcl_list<vil_nitf2_tagged_record *>
 {
- public:
+public:
   // Constructor
-  vil_nitf2_tagged_record_sequence() : vcl_list<vil_nitf2_tagged_record*>() {}
+  vil_nitf2_tagged_record_sequence() : vcl_list<vil_nitf2_tagged_record *>() {}
 
   // Destructor
   virtual ~vil_nitf2_tagged_record_sequence() {}
 };
 
-vcl_ostream& operator << (vcl_ostream& os, const vil_nitf2_tagged_record_sequence& seq);
+vcl_ostream & operator <<(vcl_ostream& os, const vil_nitf2_tagged_record_sequence& seq);
 
 #endif // VIL_NITF2_TAGGED_RECORD_H

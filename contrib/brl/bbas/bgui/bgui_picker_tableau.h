@@ -1,7 +1,7 @@
 // This is brl/bbas/bgui/bgui_picker_tableau.h
 #ifndef bgui_picker_tableau_h_
 #define bgui_picker_tableau_h_
-//:
+// :
 // \file
 // \author K.Y.McGaul
 // \brief  Tableau to pick points and lines.
@@ -34,110 +34,108 @@
 
 class bgui_picker_tableau : public vgui_tableau
 {
- public:
+public:
 
-  //: Constructor, takes a child tableau.
-  bgui_picker_tableau(vgui_tableau_sptr const&);
-  //: Destructor.
+  // : Constructor, takes a child tableau.
+  bgui_picker_tableau(vgui_tableau_sptr const &);
+  // : Destructor.
   ~bgui_picker_tableau();
-  vcl_string type_name() const { return "bgui_picker_tableau";}
+  vcl_string type_name() const { return "bgui_picker_tableau"; }
 
-  //: Gets a user selected point.
+  // : Gets a user selected point.
   bool pick_point(float* x, float* y);
 
-  //: Gets a user selected line.
+  // : Gets a user selected line.
   void pick_line(float* x1, float* y1, float* x2, float* y2);
 
-  //: Gets a user selected box specified by corner points)
-  void pick_box(float* x1, float* y1, float *x2, float* y2);
+  // : Gets a user selected box specified by corner points)
+  void pick_box(float* x1, float* y1, float * x2, float* y2);
 
-  //: Gets a user selected polygon
+  // : Gets a user selected polygon
 
-  //: Pick a point with an anchored line indicator
-  void anchored_pick_point(const float anch_x,
-                           const float anch_y,
-                           float* x, float* y);
+  // : Pick a point with an anchored line indicator
+  void anchored_pick_point(const float anch_x, const float anch_y, float* x, float* y);
 
-  //: Pick a polygon
+  // : Pick a polygon
   void pick_polygon(vsol_polygon_2d_sptr& poly);
 
-  //: pick a polyline (set of connected lines)
+  // : pick a polyline (set of connected lines)
   void pick_polyline(vsol_polyline_2d_sptr& poly);
 
-  bool pick_point_set(vcl_vector< vsol_point_2d_sptr >& ps_list, unsigned max);
+  bool pick_point_set(vcl_vector<vsol_point_2d_sptr>& ps_list, unsigned max);
 
-  //: Set drawing style, [0 1.0] for colors
-  void set_color(const float red=1.0f, const float green=1.0f,
-                 const float blue=1.0f) {r = red; g = green; b = blue;}
-  void set_line_width(const float width=2.0f){w = width;}
+  // : Set drawing style, [0 1.0] for colors
+  void set_color(const float red = 1.0f, const float green = 1.0f,
+                 const float blue = 1.0f) {r = red; g = green; b = blue; }
+  void set_line_width(const float width = 2.0f) {w = width; }
 
-  //: Handles all events for this tableau.
-  bool handle(const vgui_event&);
+  // : Handles all events for this tableau.
+  bool handle(const vgui_event &);
 
- protected:
+protected:
   vgui_parent_child_link child_tab;
-
- private:
-  //: Draw a line to help the user pick it.
+private:
+  // : Draw a line to help the user pick it.
   void draw_line();
+
   void draw_anchor_line();
 
-  //: draw box
+  // : draw box
   void draw_box();
 
-  //: Get next event in the event loop.
+  // : Get next event in the event loop.
   bool next();
-  //: List of possible objects to pick.
-  enum object_type {none_enum, point_enum, line_enum, anchor_enum, box_enum,
-    poly_enum, point_set_enum, polyline_enum};
 
-  //: Type of object we are picking.
+  // : List of possible objects to pick.
+  enum object_type { none_enum, point_enum, line_enum, anchor_enum, box_enum,
+                     poly_enum, point_set_enum, polyline_enum };
+
+  // : Type of object we are picking.
   static object_type obj_type;
 
-  //: Used in next() to indicate when the event has been used.
+  // : Used in next() to indicate when the event has been used.
   bool use_event_;
 
-  //: Start and end points for line and box:
+  // : Start and end points for line and box:
   float pointx1, pointy1, pointx2, pointy2;
 
-  //: Anchor point coordinates
+  // : Anchor point coordinates
   float anchor_x, anchor_y;
 
-  //: For polygon
-  bool active;
+  // : For polygon
+  bool                 active;
   vgui_event_condition gesture0;
   vgui_event_condition gesture1;
   vgui_event_condition gesture2;
 
-  vcl_vector< vsol_point_2d_sptr > point_list;
+  vcl_vector<vsol_point_2d_sptr> point_list;
 
   // for point_set
-  vcl_vector< vsol_point_2d_sptr > point_set_list;
+  vcl_vector<vsol_point_2d_sptr> point_set_list;
 
   float last_x;
   float last_y;
 
-  //: Style values
+  // : Style values
   float r, g, b, w;
-  //: Whether this is the first (start) or second (end) point being selected.
+  // : Whether this is the first (start) or second (end) point being selected.
   bool FIRSTPOINT;
-  //: Coordinates for point:
+  // : Coordinates for point:
   float pointx, pointy;
-  //: True if picked by left mouse button, else false.
+  // : True if picked by left mouse button, else false.
   bool point_ret;
 
-  //: True if we have completed picking the object.
+  // : True if we have completed picking the object.
   bool picking_completed;
 
 };
 
-
 // <vgui_make_sptr>
 struct bgui_picker_tableau_new : public bgui_picker_tableau_sptr
-{
+  {
   typedef bgui_picker_tableau_sptr base;
-  bgui_picker_tableau_new(vgui_tableau_sptr const& arg1000) : base(new bgui_picker_tableau(arg1000)) {}
-};
+  bgui_picker_tableau_new(vgui_tableau_sptr const& arg1000) : base(new bgui_picker_tableau(arg1000) ) {}
+  };
 // </vgui_make_sptr>
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS bgui_picker_tableau.

@@ -15,27 +15,26 @@
 template <class T, unsigned n>
 void test_gauss_indep_update()
 {
-  //A tri-mixture of n-dimensional independent gaussian
-  typedef bsta_num_obs<bsta_gaussian_indep<T,n> > gauss_type;
-  typedef bsta_mixture_fixed<gauss_type, 3> mix_gauss;
-  typedef bsta_num_obs<mix_gauss> mix_gauss_type;
+  // A tri-mixture of n-dimensional independent gaussian
+  typedef bsta_num_obs<bsta_gaussian_indep<T, n> > gauss_type;
+  typedef bsta_mixture_fixed<gauss_type, 3>        mix_gauss;
+  typedef bsta_num_obs<mix_gauss>                  mix_gauss_type;
 
+  // Initialize the updater
+  float                                          init_variance = 0.008f;
+  float                                          min_stddev = 0.02f;
+  float                                          g_thresh = 2.5;
+  typename bsta_gaussian_indep<T, n>::covar_type init_covar(init_variance);
+  bsta_gaussian_indep<T, n>                      init_gauss(typename gauss_type::vector_type(0.0f), init_covar);
 
-  //Initialize the updater
-  float init_variance = 0.008f;
-  float min_stddev = 0.02f;
-  float g_thresh = 2.5;
-  typename bsta_gaussian_indep<T,n>::covar_type init_covar(init_variance);
-  bsta_gaussian_indep<T,n> init_gauss(typename gauss_type::vector_type(0.0f),init_covar);
+  bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss, n, g_thresh, min_stddev);
 
-  bsta_mg_grimson_weighted_updater<mix_gauss> updater(init_gauss,n,g_thresh,min_stddev);
+  // Update
 
-  //Update
-
-  //Create the model, the observation and the weight
-  mix_gauss_type model;
+  // Create the model, the observation and the weight
+  mix_gauss_type                   model;
   typename gauss_type::vector_type obs(0.3f);
-  float weight = 0.01f;
+  float                            weight = 0.01f;
 
   updater(model, obs, weight);
   obs = typename gauss_type::vector_type(0.8f);
@@ -43,46 +42,47 @@ void test_gauss_indep_update()
   obs = typename gauss_type::vector_type(0.81f);
   updater(model, obs, weight);
 
-  //Test most probable value:
- typename gauss_type::vector_type most_probable_val(T(0));
-  if (model.num_components() > 0)
-    if (model.weight(0) > 0.0f)
+  // Test most probable value:
+  typename gauss_type::vector_type most_probable_val(T(0) );
+  if( model.num_components() > 0 )
+    {
+    if( model.weight(0) > 0.0f )
+      {
       most_probable_val = model.distribution(0).mean();
-
-  for (unsigned i = 0 ; i<n; i++)
-  {
+      }
+    }
+  for( unsigned i = 0; i < n; i++ )
+    {
     T mp_v = most_probable_val[i];
-    TEST_NEAR("most_probable", mp_v , T(0.8), T(0.01));
-  }
+    TEST_NEAR("most_probable", mp_v, T(0.8), T(0.01) );
+    }
 
-  //Test expected value:
-  typename gauss_type::vector_type v(T(0));
-  typename gauss_type::vector_type expected_val(T(0));
+  // Test expected value:
+  typename gauss_type::vector_type v(T(0) );
+  typename gauss_type::vector_type expected_val(T(0) );
 
   expected_val = model.expected_value();
-
-  for (unsigned i = 0 ; i<n; i++)
-  {
+  for( unsigned i = 0; i < n; i++ )
+    {
     T e_v = expected_val[i];
-    TEST_NEAR("expected_value", e_v , T(0.63), T(0.01));
-  }
+    TEST_NEAR("expected_value", e_v, T(0.63), T(0.01) );
+    }
 }
-
 
 static void test_gaussian_model()
 {
   vcl_cout << "----------------------------------\n"
            << " float, 2-dimensional, 3-modal\n"
-           << "-----------------------------------" <<vcl_endl;
-  test_gauss_indep_update<float,2>();
+           << "-----------------------------------" << vcl_endl;
+  test_gauss_indep_update<float, 2>();
   vcl_cout << "-----------------------------------\n"
            << " float, 3-dimensional, 3-modal\n"
-           << "-----------------------------------" <<vcl_endl;
-  test_gauss_indep_update<float,3>();
+           << "-----------------------------------" << vcl_endl;
+  test_gauss_indep_update<float, 3>();
   vcl_cout << "-----------------------------------\n"
            << " float, 4-dimensional, 3-modal\n"
-           << "-----------------------------------" <<vcl_endl;
-  test_gauss_indep_update<float,4>();
+           << "-----------------------------------" << vcl_endl;
+  test_gauss_indep_update<float, 4>();
 }
 
 TESTMAIN(test_gaussian_model);

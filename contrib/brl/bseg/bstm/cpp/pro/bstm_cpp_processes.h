@@ -4,7 +4,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-//the init functions
+// the init functions
 DECLARE_FUNC_CONS(bstm_cpp_ingest_boxm2_scene_process);
 DECLARE_FUNC_CONS(bstm_cpp_label_bb_process);
 DECLARE_FUNC_CONS(bstm_cpp_label_tt_depth_process);
@@ -19,7 +19,5 @@ DECLARE_FUNC_CONS(bstm_cpp_majority_filter_process);
 DECLARE_FUNC_CONS(bstm_cpp_copy_data_to_future_process);
 DECLARE_FUNC_CONS(bstm_cpp_change_btw_frames_process);
 DECLARE_FUNC_CONS(bstm_cpp_box_roc_process);
-
-
 
 #endif

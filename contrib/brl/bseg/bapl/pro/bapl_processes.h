@@ -20,4 +20,3 @@ DECLARE_FUNC_CONS(bapl_write_match_process);
 DECLARE_FUNC_CONS(bapl_dsift_sptr_process);
 
 #endif  // bapl_processes_h_
-

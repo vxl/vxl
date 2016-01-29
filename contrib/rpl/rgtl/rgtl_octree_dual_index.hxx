@@ -5,7 +5,7 @@
 #ifndef rgtl_octree_dual_index_hxx
 #define rgtl_octree_dual_index_hxx
 
-//:
+// :
 // \file
 // \brief Index of an octree dual mesh element.
 // \author Brad King
@@ -13,7 +13,7 @@
 
 #include "rgtl_compact_tree_index.hxx"
 
-//: Represent an octree dual mesh element index.
+// : Represent an octree dual mesh element index.
 //
 // The first template argument specifies the dimension of the octree.
 // The second template argument specifies the dimension of the element.
@@ -29,22 +29,23 @@ template <unsigned int D, unsigned int d>
 class rgtl_octree_dual_index
 {
 public:
-  //: The octree cell index type.
+  // : The octree cell index type.
   typedef rgtl_compact_tree_index<D> cell_index_type;
 
-  //: Access the primal grid cell indices.
-  cell_index_type& operator[](unsigned int i)
-    {
+  // : Access the primal grid cell indices.
+  cell_index_type & operator[](unsigned int i)
+  {
     return this->primal_[i];
-    }
+  }
+
   cell_index_type operator[](unsigned int i) const
-    {
+  {
     return this->primal_[i];
-    }
+  }
 
 private:
   // The octree index of each primal cell.
-  cell_index_type primal_[(1<<d)];
+  cell_index_type primal_[(1 << d)];
 };
 
 #endif

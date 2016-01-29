@@ -1,6 +1,6 @@
 // This is brl/bbas/volm/processes/vlm_project_dem_to_sat_img_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief Process to find a set of highly overlapping resource footprints
 //
@@ -20,15 +20,14 @@
 #include <volm/volm_satellite_resources_sptr.h>
 #include <bkml/bkml_write.h>
 
-
-//: global variables and functions
+// : global variables and functions
 namespace volm_find_overlapping_sat_resources_process_globals
 {
-  const unsigned n_inputs_  = 4;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_  = 4;
+const unsigned n_outputs_ = 0;
 }
 
-//: constructor
+// : constructor
 bool volm_find_overlapping_sat_resources_process_cons(bprb_func_process& pro)
 {
   using namespace volm_find_overlapping_sat_resources_process_globals;
@@ -45,37 +44,42 @@ bool volm_find_overlapping_sat_resources_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//: execute the process
+// : execute the process
 bool volm_find_overlapping_sat_resources_process(bprb_func_process& pro)
 {
   using namespace volm_find_overlapping_sat_resources_process_globals;
   // sanity check
-  if (pro.n_inputs() != n_inputs_) {
+  if( pro.n_inputs() != n_inputs_ )
+    {
     vcl_cout << pro.name() << ": there should be " << n_inputs_ << " inputs" << vcl_endl;
     return false;
-  }
+    }
   // get the input
-  unsigned in_i = 0;
+  unsigned                      in_i = 0;
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
-  vcl_string kml_file = pro.get_input<vcl_string>(1);
-  float downsample_factor = pro.get_input<float>(2);
-  vcl_string out_file = pro.get_input<vcl_string>(3);
+  vcl_string                    kml_file = pro.get_input<vcl_string>(1);
+  float                         downsample_factor = pro.get_input<float>(2);
+  vcl_string                    out_file = pro.get_input<vcl_string>(3);
 
   vcl_vector<vcl_string> overlapping_res;
   res->highly_overlapping_resources(overlapping_res, res, kml_file, downsample_factor);
 
-
   // save txt file of nitf filenames
   unsigned cnt = overlapping_res.size();
-  if (out_file.compare("") == 0)
+  if( out_file.compare("") == 0 )
+    {
     return true;
-  vcl_ofstream ofs(out_file.c_str());
-  if (!ofs) {
+    }
+  vcl_ofstream ofs(out_file.c_str() );
+  if( !ofs )
+    {
     vcl_cerr << pro.name() << " ERROR: cannot open file: " << out_file << vcl_endl;
     return false;
-  }
-  for (unsigned i = 0; i < overlapping_res.size(); i++)
+    }
+  for( unsigned i = 0; i < overlapping_res.size(); i++ )
+    {
     ofs << overlapping_res[i] << '\n';
+    }
   ofs.close();
 
   return true;

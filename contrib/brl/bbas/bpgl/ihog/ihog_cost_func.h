@@ -1,7 +1,7 @@
 // This is bbas/bpgl/ihog/ihog_cost_func.h
 #ifndef ihog_cost_func_h_
 #define ihog_cost_func_h_
-//:
+// :
 // \file
 // \brief A cost function for registering video frames by minimizing square difference in intensities
 // \author Matt Leotta
@@ -19,34 +19,28 @@
 #include "ihog_image.h"
 #include "ihog_transform_2d.h"
 
-//: A cost function for registering video frames by minimizing square difference in intensities
+// : A cost function for registering video frames by minimizing square difference in intensities
 class ihog_cost_func : public vnl_cost_function
 {
- public:
-  //: Constructor
-  ihog_cost_func( const vil_image_view<float>& image1,
-                  const vil_image_view<float>& image2,
-                  const ihog_world_roi& roi,
+public:
+  // : Constructor
+  ihog_cost_func( const vil_image_view<float>& image1, const vil_image_view<float>& image2, const ihog_world_roi& roi,
                   const ihog_transform_2d& init_xform );
-  //: Constructor
-  ihog_cost_func( const vil_image_view<float>& image1,
-                  const vil_image_view<float>& image2,
-                  const vil_image_view<float>& mask,
-                  const ihog_world_roi& roi,
-                  const ihog_transform_2d& init_xform );
-  //: The main function.
+  // : Constructor
+  ihog_cost_func( const vil_image_view<float>& image1, const vil_image_view<float>& image2,
+                  const vil_image_view<float>& mask, const ihog_world_roi& roi, const ihog_transform_2d& init_xform );
+  // : The main function.
   virtual double f(vnl_vector<double> const& x);
 
-  //: Returns the transformed second image
+  // : Returns the transformed second image
   vil_image_view<float> last_xformed_image();
 
- protected:
-  ihog_image<float> from_image_;
-  ihog_image<float> to_image_;
-  ihog_world_roi roi_;
+protected:
+  ihog_image<float>       from_image_;
+  ihog_image<float>       to_image_;
+  ihog_world_roi          roi_;
   ihog_transform_2d::Form form_;
-  vil_image_view<bool> mask_image_;
+  vil_image_view<bool>    mask_image_;
 };
 
 #endif // ihog_cost_func_h_
-

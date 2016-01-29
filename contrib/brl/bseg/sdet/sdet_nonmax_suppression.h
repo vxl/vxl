@@ -1,8 +1,8 @@
 // This is brl/bseg/sdet/sdet_nonmax_suppression.h
 #ifndef sdet_nonmax_suppression_h_
 #define sdet_nonmax_suppression_h_
-//---------------------------------------------------------------------
-//:
+// ---------------------------------------------------------------------
+// :
 // \file
 // \brief a processor for non-maximal suppression
 // For every pixel in an image, a parabola fit is applied along the
@@ -39,7 +39,7 @@
 //             changed input style through the constructors, added another output variable
 // \endverbatim
 //
-//-------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_line_2d_sptr.h>
@@ -51,67 +51,67 @@
 
 class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
 {
- public:
-  //: Constructor from a parameter block, and gradients along x and y directions given as arrays
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
-                          vbl_array_2d<double> &grad_x,
-                          vbl_array_2d<double> &grad_y);
-  //: Constructor from a parameter block, gradient magnitudes given as an array and directions given as component arrays
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
-                          vbl_array_2d<double> &dir_x,
-                          vbl_array_2d<double> &dir_y,
-                          vbl_array_2d<double> &grad_mag);
-  //: Constructor from a parameter block, gradient magnitudes given as an array and the search directions
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
-                          vbl_array_2d<double> &grad_mag,
-                          vbl_array_2d<vgl_vector_2d <double> > &directions);
-  //: Constructor from a parameter block, and gradients along x and y directions given as images
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
-                          vil_image_view<double> &grad_x,
-                          vil_image_view<double> &grad_y);
-  //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
-                          vil_image_view<double> &dir_x,
-                          vil_image_view<double> &dir_y,
-                          vil_image_view<double> &grad_mag);
-  //: Constructor from a parameter block, gradient magnitudes given as an image and the search directions
-  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp,
-                          vil_image_view<double> &grad_mag,
-                          vbl_array_2d<vgl_vector_2d <double> > &directions);
-  //: Destructor
+public:
+  // : Constructor from a parameter block, and gradients along x and y directions given as arrays
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vbl_array_2d<double> & grad_x,
+                          vbl_array_2d<double> & grad_y);
+  // : Constructor from a parameter block, gradient magnitudes given as an array and directions given as component arrays
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vbl_array_2d<double> & dir_x,
+                          vbl_array_2d<double> & dir_y, vbl_array_2d<double> & grad_mag);
+  // : Constructor from a parameter block, gradient magnitudes given as an array and the search directions
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vbl_array_2d<double> & grad_mag,
+                          vbl_array_2d<vgl_vector_2d<double> > & directions);
+  // : Constructor from a parameter block, and gradients along x and y directions given as images
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vil_image_view<double> & grad_x,
+                          vil_image_view<double> & grad_y);
+  // : Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vil_image_view<double> & dir_x,
+                          vil_image_view<double> & dir_y, vil_image_view<double> & grad_mag);
+  // : Constructor from a parameter block, gradient magnitudes given as an image and the search directions
+  sdet_nonmax_suppression(sdet_nonmax_suppression_params& nsp, vil_image_view<double> & grad_mag,
+                          vbl_array_2d<vgl_vector_2d<double> > & directions);
+  // : Destructor
   ~sdet_nonmax_suppression();
-  //Accessors
-  vcl_vector<vsol_point_2d_sptr>& get_points(){return points_;}
-  vcl_vector<vsol_line_2d_sptr>& get_lines(){return lines_;}
-  vcl_vector<vgl_vector_2d<double> >& get_directions() {return directions_;}
-  //Utility Methods
+  // Accessors
+  vcl_vector<vsol_point_2d_sptr> & get_points() {return points_; }
+  vcl_vector<vsol_line_2d_sptr> & get_lines() {return lines_; }
+  vcl_vector<vgl_vector_2d<double> > & get_directions() {return directions_; }
+  // Utility Methods
   void apply();
+
   void clear();
 
- protected:
-  //members
-  bool points_valid_;      //process state flag
-  vcl_vector<vsol_point_2d_sptr> points_; //output, resulting edge points
-  vcl_vector<vsol_line_2d_sptr> lines_; //output, lines along the edges
-  vcl_vector<vgl_vector_2d<double> > directions_; //output, direction along which non-maximal suppression was done
-  vbl_array_2d<double> grad_x_; //Gradient in x-direction
-  vbl_array_2d<double> grad_y_; //Gradient in y-direction
-  vbl_array_2d<double> grad_mag_;   //Gradient magnitude
-  int width_, height_; // Width and height of the vbl_array_2d
-  double max_grad_mag_; //maximum gradient magnitude value
-  int parabola_fit_type_; //flag for parabola fit method
-  //functions
+protected:
+  // members
+  bool                               points_valid_;      // process state flag
+  vcl_vector<vsol_point_2d_sptr>     points_;            // output, resulting edge points
+  vcl_vector<vsol_line_2d_sptr>      lines_;             // output, lines along the edges
+  vcl_vector<vgl_vector_2d<double> > directions_;        // output, direction along which non-maximal suppression was done
+  vbl_array_2d<double>               grad_x_;            // Gradient in x-direction
+  vbl_array_2d<double>               grad_y_;            // Gradient in y-direction
+  vbl_array_2d<double>               grad_mag_;          // Gradient magnitude
+  int                                width_, height_;    // Width and height of the vbl_array_2d
+  double                             max_grad_mag_;      // maximum gradient magnitude value
+  int                                parabola_fit_type_; // flag for parabola fit method
+  // functions
   int intersected_face_number(double gx, double gy);
+
   double intersection_parameter(double gx, double gy, int face_num);
-  void f_values(int x, int y, double gx, double gy, double s, int face_num, double *f);
+
+  void f_values(int x, int y, double gx, double gy, double s, int face_num, double * f);
+
   // get the corners related to the given face
-  void get_relative_corner_coordinates(int face_num, int *corners);
+  void get_relative_corner_coordinates(int face_num, int * corners);
+
   // used for 3 points parabola fit
-  double subpixel_s(double *s, double *f);
+  double subpixel_s(double * s, double * f);
+
   // used for 9 points parabola fit
   double subpixel_s(int x, int y, vgl_vector_2d<double> direction);
-  void find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line,
-                                       double &d, double &s, vgl_vector_2d<double> direction);
+
+  void find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line, double & d, double & s,
+                                       vgl_vector_2d<double> direction);
+
 };
 
 #endif // sdet_nonmax_suppression_h_

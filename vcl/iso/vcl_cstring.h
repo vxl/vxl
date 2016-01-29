@@ -6,9 +6,9 @@
 #include <cstring>
 
 #ifdef vcl_generic_cstring_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cstring_STD std
+#  define vcl_generic_cstring_STD std
 #endif
 
 #include "../generic/vcl_cstring.h"

@@ -1,55 +1,55 @@
 // This is gel/pop/pop_point_3d.cxx
 #include "pop_point_3d.h"
-//:
+// :
 // \file
 #include <vcl_iostream.h>
 
-
-//: constructor
-pop_point_3d::pop_point_3d(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params):
-  vgl_point_3d<double>(params[0]->value_,params[1]->value_,params[2]->value_),
-  pop_geometric_object(coordinate_system,params)
+// : constructor
+pop_point_3d::pop_point_3d(pop_vertex * coordinate_system, vcl_vector<pop_parameter *> & params) :
+  vgl_point_3d<double>(params[0]->value_, params[1]->value_, params[2]->value_),
+  pop_geometric_object(coordinate_system, params)
 {
   this->update();
 }
 
-//: constructor
-pop_point_3d::pop_point_3d(pop_vertex *coordinate_system,double x, double y, double z):
-  vgl_point_3d<double>(x,y,z),
+// : constructor
+pop_point_3d::pop_point_3d(pop_vertex * coordinate_system, double x, double y, double z) :
+  vgl_point_3d<double>(x, y, z),
   pop_geometric_object(coordinate_system)
 {
 }
 
-//: destructor
+// : destructor
 pop_point_3d::~pop_point_3d()
 {
 }
 
-//: this is the update method
+// : this is the update method
 
 void pop_point_3d::update()
 {
-  vgl_point_3d<double>::set(params_[0]->value_,params_[1]->value_,params_[2]->value_);
+  vgl_point_3d<double>::set(params_[0]->value_, params_[1]->value_, params_[2]->value_);
 }
 
-//: compute the cost between to geometric objects
-double pop_point_3d::cost(pop_geometric_object *other)
+// : compute the cost between to geometric objects
+double pop_point_3d::cost(pop_geometric_object * other)
 {
-  pop_point_3d *p = other->cast_to_pop_point_3d();
+  pop_point_3d * p = other->cast_to_pop_point_3d();
 
-  if (p->coordinate_system_ != this->coordinate_system_) {
+  if( p->coordinate_system_ != this->coordinate_system_ )
+    {
     vcl_cout << "Warning the systems do not match\n";
-  }
+    }
 
-  if (p)
-  {
+  if( p )
+    {
     // the cost is the square distance between the two points
-    double dx = (this->x() - p->x());
-    double dy = (this->y() - p->y());
-    double dz = (this->z() - p->z());
+    double dx = (this->x() - p->x() );
+    double dy = (this->y() - p->y() );
+    double dz = (this->z() - p->z() );
 
-    double residule = dx*dx + dy*dy + dz*dz;
+    double residule = dx * dx + dy * dy + dz * dz;
     return residule;
-  }
+    }
   return 0;
 }

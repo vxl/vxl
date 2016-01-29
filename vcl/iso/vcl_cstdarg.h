@@ -6,9 +6,9 @@
 #include <cstdarg>
 
 #ifdef vcl_generic_cstdarg_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cstdarg_STD std
+#  define vcl_generic_cstdarg_STD std
 #endif
 
 #include "../generic/vcl_cstdarg.h"

@@ -1,13 +1,13 @@
 // This is core/vpl/vpl.h
 #ifndef vpl_h_
 #define vpl_h_
-//:
+// :
 // \file
 // \brief Access to certain POSIX functions.
 
 #include <vcl_cstddef.h>
 
-//: Get the pathname of the current working directory.
+// : Get the pathname of the current working directory.
 //
 //  If \a buf is not NULL, then \a size must be at least 1 greater
 //  than the length of the pathname to be returned and the pathname
@@ -17,36 +17,35 @@
 //
 //  See also: getcwd(3) manpage.
 
-char           *vpl_getcwd( char *buf, vcl_size_t buf_size );
+char           * vpl_getcwd( char * buf, vcl_size_t buf_size );
 
-//: Create a new directory \a dir with permissions \a mode.
-int             vpl_mkdir( const char *dir, unsigned short mode );
+// : Create a new directory \a dir with permissions \a mode.
+int             vpl_mkdir( const char * dir, unsigned short mode );
 
-//: Remove the directory \a dir.
-int             vpl_rmdir( const char *dir );
+// : Remove the directory \a dir.
+int             vpl_rmdir( const char * dir );
 
-//: Change the working directory to \a dir.
-int             vpl_chdir( const char *dir );
+// : Change the working directory to \a dir.
+int             vpl_chdir( const char * dir );
 
-//: Remove the file \a file.
-int             vpl_unlink( const char *file );
+// : Remove the file \a file.
+int             vpl_unlink( const char * file );
 
-//: Sleep for \a t seconds.
+// : Sleep for \a t seconds.
 unsigned int    vpl_sleep( unsigned int t );
 
-//: Sleep for \a t microseconds.
+// : Sleep for \a t microseconds.
 int             vpl_usleep( unsigned int t );
 
-//: Set environment variable
+// : Set environment variable
 // \param envvar should contain the environment variable name and value
 // separated by an equals sign, e.g. "VARNAME=VALUE"
-int             vpl_putenv ( const char * envvar );
+int             vpl_putenv( const char * envvar );
 
-//: Get the process identifier.
-unsigned        vpl_getpid( );
+// : Get the process identifier.
+unsigned        vpl_getpid();
 
-//: Get the current machine's hostname.
-int             vpl_gethostname(char *name, vcl_size_t len );
-
+// : Get the current machine's hostname.
+int             vpl_gethostname(char * name, vcl_size_t len );
 
 #endif // vpl_h_

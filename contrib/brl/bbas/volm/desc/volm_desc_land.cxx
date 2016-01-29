@@ -4,7 +4,8 @@
 #include <volm/volm_category_io.h>
 
 #if 0
-unsigned obtain_bin_size() {
+unsigned obtain_bin_size()
+{
   return volm_osm_category_io::volm_land_table.size();
 }
 
@@ -17,34 +18,45 @@ volm_desc_land::volm_desc_land(int land_type_id, vcl_string const& id_type)
   name_ = "volm_desc_land";
   nbins_ = volm_osm_category_io::volm_land_table.size();
   h_.resize(nbins_, (unsigned char)0);
-  if (land_type_id > 0) {  // we don't want to consider invalid = 0 as one of the land types and leave the histogram as all zeros
-    if (id_type.compare("geo_cover") == 0) {
+  if( land_type_id > 0 )    // we don't want to consider invalid = 0 as one of the land types and leave the histogram as all zeros
+    {
+    if( id_type.compare("geo_cover") == 0 )
+      {
       // current land_type_id is from geo cover, using volm_osm_category_io  (for phase1b)
       vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::geo_land_table.find(land_type_id);
-      if (mit != volm_osm_category_io::geo_land_table.end())
+      if( mit != volm_osm_category_io::geo_land_table.end() )
+        {
         h_[mit->second.id_] = 1;
-    }
-    else if (id_type.compare("NLCD") == 0) {
+        }
+      }
+    else if( id_type.compare("NLCD") == 0 )
+      {
       // use NLCD as input data
       vcl_map<int, volm_land_layer>::iterator mit = volm_osm_category_io::nlcd_land_table.find(land_type_id);
-      if (mit != volm_osm_category_io::nlcd_land_table.end())
+      if( mit != volm_osm_category_io::nlcd_land_table.end() )
+        {
         h_[mit->second.id_] = 1;
-    }
-    else if (id_type.compare("volm") == 0) {
+        }
+      }
+    else if( id_type.compare("volm") == 0 )
+      {
       // input land_type_id is the id defined in volm_osm_category_io
       vcl_map<unsigned, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table.find(land_type_id);
-      if (mit != volm_osm_category_io::volm_land_table.end())
+      if( mit != volm_osm_category_io::volm_land_table.end() )
+        {
         h_[mit->second.id_] = 1;
+        }
+      }
     }
-  }
 }
 
 vcl_string trim(const vcl_string & s)
 {
   vcl_size_t start = s.find_first_not_of(" ");
-  if (start == vcl_string::npos) return "";
+
+  if( start == vcl_string::npos ) {return ""; }
   unsigned end = s.find_last_not_of(" ");
-  return s.substr(start, 1+end-start);
+  return s.substr(start, 1 + end - start);
 }
 
 // Constructor for the query
@@ -55,36 +67,44 @@ volm_desc_land::volm_desc_land(vcl_string& filename)
   h_.resize(nbins_, (unsigned char)0);
 
   // read the file and determine the land type of the camera location of the query
-  vcl_ifstream ifs(filename.c_str());
-  char buffer[1000];
+  vcl_ifstream ifs(filename.c_str() );
+  char         buffer[1000];
   ifs.getline(buffer, 1000);
   vcl_string cat_name(buffer); // ifs >> cat_name;
 
   // now search in the land_type table in volm_io
   vcl_map<vcl_string,  volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table_name.find(cat_name);
-  if (mit != volm_osm_category_io::volm_land_table_name.end())
+  if( mit != volm_osm_category_io::volm_land_table_name.end() )
+    {
     h_[mit->second.id_] = 1;
+    }
 #if 0
-  for (vcl_map<int, volm_attributes >::iterator it = volm_label_table::land_id.begin(); it != volm_label_table::land_id.end(); it++) {
-    if (it->second.contains(cat_name)) {
+  for( vcl_map<int, volm_attributes>::iterator it = volm_label_table::land_id.begin();
+       it != volm_label_table::land_id.end(); it++ )
+    {
+    if( it->second.contains(cat_name) )
+      {
       NLCD_id = it->first;
       cat_id = it->second.id_;
       break;
+      }
     }
-  }
   vcl_cout << " image category: " << cat_name << " NLCD id: " << NLCD_id << " category id: " << cat_id;
-  h_[cat_id-1] = 1;
+  h_[cat_id - 1] = 1;
 #endif
 }
 
 float volm_desc_land::similarity(volm_desc_sptr other)
 {
-  if (nbins_ != other->nbins())
+  if( nbins_ != other->nbins() )
+    {
     return 0.0f;
+    }
   // calculate the intersection
   float intersec = 0.0f;
-  for (unsigned idx = 0; idx < nbins_; idx++) {
-    intersec += (float)vcl_min(this->count(idx), other->count(idx));
-  }
+  for( unsigned idx = 0; idx < nbins_; idx++ )
+    {
+    intersec += (float)vcl_min(this->count(idx), other->count(idx) );
+    }
   return intersec;  // intersect is 0 or 1
 }

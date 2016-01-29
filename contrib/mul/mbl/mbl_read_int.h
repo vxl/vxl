@@ -2,9 +2,9 @@
 #ifndef mbl_read_int_h_
 #define mbl_read_int_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Asks question and waits for an answer
 // \author tim, updated by me apparently!!!
@@ -31,6 +31,7 @@
 // \endcode
 
 int mbl_read_int(const char* q_str, int default_int);
+
 int mbl_read_int(const char* q_str, int default_int, int min_int, int max_int);
 
-#endif //mbl_read_int_h_
+#endif // mbl_read_int_h_

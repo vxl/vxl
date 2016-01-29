@@ -2,9 +2,9 @@
 #ifndef vnl_double_3_h_
 #define vnl_double_3_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Contains class vnl_double_3 and function vnl_cross_3d()
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -19,15 +19,16 @@
 
 #include <vnl/vnl_T_n.h>
 
-//: class vnl_double_3 : a vnl_vector of 3 doubles.
-vnl_T_n_impl(double,3);
+// : class vnl_double_3 : a vnl_vector of 3 doubles.
+vnl_T_n_impl(double, 3);
 
-//: Cross product of two 3-vectors
+// : Cross product of two 3-vectors
 //  \relatesalso vnl_vector_fixed
 inline
 vnl_double_3 vnl_cross_3d(vnl_double_3 const& v1, vnl_double_3 const& v2)
 {
   vnl_double_3 result;
+
   result[0] = v1[1] * v2[2] - v1[2] * v2[1];
   result[1] = v1[2] * v2[0] - v1[0] * v2[2];
   result[2] = v1[0] * v2[1] - v1[1] * v2[0];

@@ -1,7 +1,7 @@
 // This is brl/bbas/bgui/bgui_bargraph_clipon_tableau.h
 #ifndef bgui_bargraph_clipon_tableau_h_
 #define bgui_bargraph_clipon_tableau_h_
-//:
+// :
 // \file
 // \author  Joe Mundy
 // \brief   A tableau to produce a bar graph
@@ -20,34 +20,34 @@
 
 class bgui_bargraph_clipon_tableau : public vbl_ref_count
 {
- public:
-  //: Constructor
+public:
+  // : Constructor
   bgui_bargraph_clipon_tableau(vgui_easy2D_tableau_sptr const& easy);
-  //: Destructor.
+  // : Destructor.
   ~bgui_bargraph_clipon_tableau();
-  //: Set the color vector, 0-7 color code
+  // : Set the color vector, 0-7 color code
   void set_color_vector(vcl_vector<unsigned char> const& colors);
 
-  //: Update the data vector.  Defaults determine size of plot from window
-  void update(vcl_vector<float> const& bars, const bool fixed = false,
-              const float scale=1.0);
+  // : Update the data vector.  Defaults determine size of plot from window
+  void update(vcl_vector<float> const& bars, const bool fixed = false, const float scale = 1.0);
 
-  //: Return the name of this tableau.
-  vcl_string type_name() const { return "bgui_bargraph_clipon_tableau";}
+  // : Return the name of this tableau.
+  vcl_string type_name() const { return "bgui_bargraph_clipon_tableau"; }
 
-  //: Clear the data
+  // : Clear the data
   void clear();
- private:
-  int left_offset_;
-  int top_offset_;
-  int graph_width_;
-  int graph_height_;
-  int nominal_bar_width_;
-  vcl_vector<vcl_vector<float> > color_values_;
-  vcl_vector<unsigned char> color_index_;
-  vcl_vector<float> bars_;
-  vgui_easy2D_tableau_sptr easy_;
-  vcl_vector<vgui_soview2D_lineseg*> bar_plot_;
+
+private:
+  int                                 left_offset_;
+  int                                 top_offset_;
+  int                                 graph_width_;
+  int                                 graph_height_;
+  int                                 nominal_bar_width_;
+  vcl_vector<vcl_vector<float> >      color_values_;
+  vcl_vector<unsigned char>           color_index_;
+  vcl_vector<float>                   bars_;
+  vgui_easy2D_tableau_sptr            easy_;
+  vcl_vector<vgui_soview2D_lineseg *> bar_plot_;
 };
 
 #include "bgui_bargraph_clipon_tableau_sptr.h"

@@ -1,6 +1,6 @@
 #ifndef vcsl_geographic_h_
 #define vcsl_geographic_h_
-//:
+// :
 // \file
 // \brief Represent a location relative to the earth
 // \author Francois BERTEL
@@ -17,7 +17,7 @@
 #include <vcsl/vcsl_geographic_sptr.h>
 #include <vcsl/vcsl_spheroid_sptr.h>
 
-//: Represent a location relative to the earth
+// : Represent a location relative to the earth
 // 3D coordinate system that is intended to represent a location relative to
 // the earth, although its use is not restricted to earthbound coordinate
 // systems. See the book "Map Projections Used by the U.S. Geological Survey"
@@ -25,40 +25,37 @@
 // Geological Survey Bulletin 1532, U.S. Government Printing Office,
 // Washington, 1982.) for further detail on most of these coordinate systems.
 class vcsl_geographic
-  :public vcsl_spatial
+  : public vcsl_spatial
 {
-  //***************************************************************************
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
-
- protected:
+  // ***************************************************************************
+protected:
   // Default constructor
   vcsl_geographic();
-
- public:
+public:
   // Destructor
   virtual ~vcsl_geographic() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Return the spheroid
+  // : Return the spheroid
   vcsl_spheroid_sptr spheroid() const { return spheroid_; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status setting
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Set the spheroid
-  void set_spheroid(vcsl_spheroid_sptr const& s) { spheroid_=s; }
-
- protected:
-  //***************************************************************************
+  // : Set the spheroid
+  void set_spheroid(vcsl_spheroid_sptr const& s) { spheroid_ = s; }
+protected:
+  // ***************************************************************************
   // Implementation
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Spheroid
+  // : Spheroid
   vcsl_spheroid_sptr spheroid_;
 };
 

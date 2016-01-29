@@ -2,9 +2,9 @@
 #ifndef FMPlanarComputeNonLinear_h_
 #define FMPlanarComputeNonLinear_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Nonlinear least squares planar fundamental matrix fit
 //
@@ -25,7 +25,7 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixCompute.h>
@@ -36,34 +36,34 @@ class FMatrixPlanar;
 
 class FMPlanarComputeNonLinear : public FMatrixCompute
 {
- protected:
+protected:
   // Data Members--------------------------------------------------------------
   double outlier_distance_squared_;
 
   const ImageMetric* image_metric1_;
   const ImageMetric* image_metric2_;
-
- public:
+public:
 
   // Constructors/Destructors--------------------------------------------------
-  FMPlanarComputeNonLinear(const ImageMetric*, const ImageMetric*,
-                           double outlier_threshold = 0);
+  FMPlanarComputeNonLinear(const ImageMetric *, const ImageMetric *, double outlier_threshold = 0);
 
   // Computations--------------------------------------------------------------
 
-  bool compute_planar(vcl_vector<vgl_homg_point_2d<double> >& points1,
-                      vcl_vector<vgl_homg_point_2d<double> >& points2,
+  bool compute_planar(vcl_vector<vgl_homg_point_2d<double> >& points1, vcl_vector<vgl_homg_point_2d<double> >& points2,
                       FMatrixPlanar& F);
+
   bool compute_planar(PairMatchSetCorner& matches, FMatrixPlanar* F);
-  bool compute_planar(vcl_vector<HomgPoint2D>& points1,
-                      vcl_vector<HomgPoint2D>& points2, FMatrixPlanar* F);
+
+  bool compute_planar(vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2, FMatrixPlanar* F);
 
   // FMatrixCompute virtuals
-  bool compute(vcl_vector<vgl_homg_point_2d<double> >& points1,
-               vcl_vector<vgl_homg_point_2d<double> >& points2, FMatrix& F);
+  bool compute(vcl_vector<vgl_homg_point_2d<double> >& points1, vcl_vector<vgl_homg_point_2d<double> >& points2,
+               FMatrix& F);
+
   bool compute(PairMatchSetCorner& matches, FMatrix* F);
-  bool compute(vcl_vector<HomgPoint2D>& points1,
-               vcl_vector<HomgPoint2D>& points2, FMatrix* F);
+
+  bool compute(vcl_vector<HomgPoint2D>& points1, vcl_vector<HomgPoint2D>& points2, FMatrix* F);
+
 };
 
 #endif // FMPlanarComputeNonLinear_h_

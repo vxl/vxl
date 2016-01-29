@@ -3,13 +3,13 @@
 #include <vnl/vnl_double_2.h>
 
 MAIN( test_transform )
-{
-  START ("affine transform");
+  {
+  START("affine transform");
 
   bapl_affine_transform T;
-  vnl_double_2 p(13.3, -101.23);
+  vnl_double_2          p(13.3, -101.23);
 
-  TEST("Identity Transform",p,T*p);
+  TEST("Identity Transform", p, T * p);
 
   SUMMARY();
-}
+  }

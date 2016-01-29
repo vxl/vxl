@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_orthorectify_process.h
 #ifndef bvxm_orthorectify_process_h_
 #define bvxm_orthorectify_process_h_
-//:
+// :
 // \file
 // \brief Given an ortho height map of the scene, its camera, an input image and its camera, generate the ortho version of the input image
 //        the rays are cast into volume using the camera of the input image, when the rays first hit a surface, the value of the image is written onto ortho image
@@ -17,14 +17,14 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_orthorectify_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 5;
+const unsigned n_outputs_ = 1;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_orthorectify_process_cons(bprb_func_process& pro);
 
 bool bvxm_orthorectify_process(bprb_func_process& pro);

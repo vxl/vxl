@@ -6,9 +6,9 @@
 #include <csetjmp>
 
 #ifdef vcl_generic_csetjmp_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_csetjmp_STD std
+#  define vcl_generic_csetjmp_STD std
 #endif
 
 #include "../generic/vcl_csetjmp.h"

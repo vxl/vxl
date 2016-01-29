@@ -14,4 +14,4 @@
 // Object Tags
 #define OBJECTS_TAG "Objects"
 #define OBJECT_TAG "Object"
-#endif //bwm_video_io_defs_h_
+#endif // bwm_video_io_defs_h_

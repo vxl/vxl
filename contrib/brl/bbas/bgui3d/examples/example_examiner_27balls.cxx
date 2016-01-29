@@ -19,13 +19,14 @@
 ///#include <Inventor/draggers/SoTranslate1Dragger.h>
 
 // Construct a simple scene
-void buildScene(SoGroup *root)
+void buildScene(SoGroup * root)
 {
   // Add a camera
-  SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
+  SoPerspectiveCamera * myCamera = new SoPerspectiveCamera;
+
   root->addChild(myCamera);
 
-  int num = 5;
+  int   num = 5;
   float fnum = (float)num;
 
   SoSeparator* sep = new SoSeparator;
@@ -36,29 +37,27 @@ void buildScene(SoGroup *root)
   SoLineSet* face = new SoLineSet;
   sep->addChild( coords );
   sep->addChild( face );
-
-
   // 27 BALLS EXAMPLE
-  for (int x = 0; x<num; ++x)
-  {
-    for (int y =0; y<num; ++y)
+  for( int x = 0; x < num; ++x )
     {
-      for (int z = 0; z<num; ++z)
+    for( int y = 0; y < num; ++y )
       {
+      for( int z = 0; z < num; ++z )
+        {
         SoSeparator* sep = new SoSeparator;
         root->addChild(sep);
         SoSphere* cyl = new SoSphere;
-        cyl->radius = (x+y+z)/(float)num;
-        SoMaterial *myMaterial = new SoMaterial;
-        SoTranslation *trans = new SoTranslation;
-        myMaterial->diffuseColor.setValue(x/fnum, y/fnum, z/fnum);
-        trans->translation.setValue(x*num,y*num,z*num);
+        cyl->radius = (x + y + z) / (float)num;
+        SoMaterial *    myMaterial = new SoMaterial;
+        SoTranslation * trans = new SoTranslation;
+        myMaterial->diffuseColor.setValue(x / fnum, y / fnum, z / fnum);
+        trans->translation.setValue(x * num, y * num, z * num);
         sep->addChild(myMaterial);
         sep->addChild(trans);
         sep->addChild(cyl);
+        }
       }
     }
-  }
 
   SoHandleBoxDragger* dragger = new SoHandleBoxDragger;
   sep->addChild( dragger );
@@ -66,8 +65,7 @@ void buildScene(SoGroup *root)
   myCamera->viewAll(root, SbViewportRegion() );
 }
 
-
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
   // initialize vgui
   vgui::init(argc, argv);
@@ -76,7 +74,7 @@ int main(int argc, char** argv)
   bgui3d_init();
 
   // create the scene graph root
-  SoSeparator *root = new SoSeparator;
+  SoSeparator * root = new SoSeparator;
   root->ref();
   buildScene(root);
 
@@ -94,7 +92,7 @@ int main(int argc, char** argv)
 
   group->addChild(new SoTranslate1Dragger);
 
-  root->addChild (group);
+  root->addChild(group);
 #endif // 0
 
   // wrap the scene graph in a bgui3d tableau

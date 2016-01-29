@@ -1,7 +1,7 @@
 #ifndef msm_aligner_h_
 #define msm_aligner_h_
 
-//:
+// :
 // \file
 // \author Tim Cootes
 // \brief Base for functions which calculate and apply 2D transformations
@@ -15,7 +15,7 @@
 #include <msm/msm_wt_mat_2d.h>
 class mbl_read_props_type;
 
-//: Base for functions which calculate and apply 2D transformations.
+// : Base for functions which calculate and apply 2D transformations.
 //  Derived classes represent transformations, eg translation, similarity, affine.
 //  The parameters of the transformation are stored in a vector, arranged so
 //  that the zero vector corresponds to the identity transformation.
@@ -24,25 +24,24 @@ class mbl_read_props_type;
 //  another.
 class msm_aligner
 {
- public:
+public:
 
   virtual ~msm_aligner() {}
 
-  //: Return number of parameters defining the transformation
-  virtual unsigned size() const=0;
+  // : Return number of parameters defining the transformation
+  virtual unsigned size() const = 0;
 
-  //: Compute parameters for inverse transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double>&) const = 0;
+  // : Compute parameters for inverse transformation
+  virtual vnl_vector<double> inverse(const vnl_vector<double> &) const = 0;
 
-  //: Apply the transformation to the given points
-  virtual void apply_transform(const msm_points& points,
-                     const vnl_vector<double>& trans,
-                     msm_points& new_points) const = 0;
+  // : Apply the transformation to the given points
+  virtual void apply_transform(const msm_points& points, const vnl_vector<double>& trans,
+                               msm_points& new_points) const = 0;
 
-  //: Return scaling applied by the transform with given parameters.
+  // : Return scaling applied by the transform with given parameters.
   virtual double scale(const vnl_vector<double>& trans) const = 0;
 
-  //: Estimate parameter which best map ref_points to points2
+  // : Estimate parameter which best map ref_points to points2
   //  Minimises ||points2-T(ref_points)||^2.
   //  Takes advantage of assumed properties of ref_points (eg CoG=origin,
   //  unit size etc) to perform efficiently.
@@ -54,87 +53,77 @@ class msm_aligner
   //  to compute the optimal shape and pose parameters, rather than an iterative
   //  method which is required where the orthogonality properties do not hold,
   //  or where weights are considered.
-  virtual void calc_transform_from_ref(const msm_points& ref_points,
-                              const msm_points& points2,
-                              vnl_vector<double>& trans) const =0;
+  virtual void calc_transform_from_ref(const msm_points& ref_points, const msm_points& points2,
+                                       vnl_vector<double>& trans) const = 0;
 
-  //: Estimate parameter which best map points1 to points2
+  // : Estimate parameter which best map points1 to points2
   //  Minimises ||points2-T(points1)||^2
-  virtual void calc_transform(const msm_points& points1,
-                              const msm_points& points2,
-                              vnl_vector<double>& trans) const =0;
+  virtual void calc_transform(const msm_points& points1, const msm_points& points2,
+                              vnl_vector<double>& trans) const = 0;
 
-  //: Estimate parameters which map points1 to points2 allowing for weights
+  // : Estimate parameters which map points1 to points2 allowing for weights
   //  Minimises sum of weighted squares error in frame of pts2,
   //  ie sum w_i * ||p2_i - T(p1_i)||
-  virtual void calc_transform_wt(const msm_points& points1,
-                              const msm_points& points2,
-                              const vnl_vector<double>& wts,
-                              vnl_vector<double>& trans) const =0;
+  virtual void calc_transform_wt(const msm_points& points1, const msm_points& points2, const vnl_vector<double>& wts,
+                                 vnl_vector<double>& trans) const = 0;
 
-  //: Estimate parameters which map points allowing for anisotropic wts
+  // : Estimate parameters which map points allowing for anisotropic wts
 //  Errors on point i are weighted by wt_mat[i] in pts2 frame.
 //  ie error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
-  virtual void calc_transform_wt_mat(const msm_points& points1,
-                              const msm_points& points2,
-                              const vcl_vector<msm_wt_mat_2d>& wt_mat,
-                              vnl_vector<double>& trans) const =0;
+  virtual void calc_transform_wt_mat(const msm_points& points1, const msm_points& points2,
+                                     const vcl_vector<msm_wt_mat_2d>& wt_mat, vnl_vector<double>& trans) const = 0;
 
-  //: Apply transform to weight matrices (ie ignore translation component)
-  virtual void transform_wt_mat(const vcl_vector<msm_wt_mat_2d>& wt_mat,
-                                const vnl_vector<double>& trans,
+  // : Apply transform to weight matrices (ie ignore translation component)
+  virtual void transform_wt_mat(const vcl_vector<msm_wt_mat_2d>& wt_mat, const vnl_vector<double>& trans,
                                 vcl_vector<msm_wt_mat_2d>& new_wt_mat) const = 0;
 
-  //: Returns params of pose such that pose(x) = pose1(pose2(x))
-  virtual vnl_vector<double> compose(const vnl_vector<double>& pose1,
-                         const vnl_vector<double>& pose2) const = 0;
+  // : Returns params of pose such that pose(x) = pose1(pose2(x))
+  virtual vnl_vector<double> compose(const vnl_vector<double>& pose1, const vnl_vector<double>& pose2) const = 0;
 
-  //: Apply transform to generate points in some reference frame
+  // : Apply transform to generate points in some reference frame
   //  For instance, depending on transform, may translate so the
   //  centre of gravity is at the origin and scale to a unit size.
   virtual void normalise_shape(msm_points& points) const = 0;
 
-  //: Find poses which align a set of points
+  // : Find poses which align a set of points
   //  On exit ref_mean_shape is the mean shape in the reference
   //  frame, pose_to_ref[i] maps points[i] into the reference
   //  frame (ie pose is the mapping from the reference frame to
   //  the target frames).
   // \param average_pose Some estimate of the average mapping
-  virtual void align_set(const vcl_vector<msm_points>& points,
-                         msm_points& ref_mean_shape,
-                         vcl_vector<vnl_vector<double> >& pose_to_ref,
-                         vnl_vector<double>& average_pose) const =0;
+  virtual void align_set(const vcl_vector<msm_points>& points, msm_points& ref_mean_shape,
+                         vcl_vector<vnl_vector<double> >& pose_to_ref, vnl_vector<double>& average_pose) const = 0;
 
-  //: Compute mean of points[i] after transforming with pose[i]
-  void mean_of_transformed(const vcl_vector<msm_points>& points,
-                         const vcl_vector<vnl_vector<double> >& pose,
-                         msm_points& mean) const;
+  // : Compute mean of points[i] after transforming with pose[i]
+  void mean_of_transformed(const vcl_vector<msm_points>& points, const vcl_vector<vnl_vector<double> >& pose,
+                           msm_points& mean) const;
 
-  //: Name of the class
+  // : Name of the class
   virtual vcl_string is_a() const = 0;
 
-  //: Create a copy on the heap and return base class pointer
-  virtual msm_aligner* clone() const = 0;
+  // : Create a copy on the heap and return base class pointer
+  virtual msm_aligner * clone() const = 0;
 
-  //: Print class to os
+  // : Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-  //: Save class to binary file stream
+  // : Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-  //: Load class from binary file stream
+  // : Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
 
-  //: Create a concrete msm_aligner-derived object, from a text specification.
-  static vcl_auto_ptr<msm_aligner> create_from_stream(vcl_istream &is);
+  // : Create a concrete msm_aligner-derived object, from a text specification.
+  static vcl_auto_ptr<msm_aligner> create_from_stream(vcl_istream & is);
 
-  //: Initialise from a text stream.
+  // : Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,
   // and throws if it finds any data in the stream.
-  virtual void config_from_stream(vcl_istream &is);
+  virtual void config_from_stream(vcl_istream & is);
+
 };
 
-//: Allows derived class to be loaded by base-class pointer
+// : Allows derived class to be loaded by base-class pointer
 //  A loader object exists which is invoked by calls
 //  of the form "vsl_b_read(bfs,base_ptr);".  This loads derived class
 //  objects from the disk, places them on the heap and
@@ -145,24 +134,22 @@ class msm_aligner
 //  the appropriate loader.
 void vsl_add_to_binary_loader(const msm_aligner& b);
 
-//: Binary file stream output operator for class reference
+// : Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const msm_aligner& b);
 
-//: Binary file stream input operator for class reference
+// : Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, msm_aligner& b);
 
-//: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner& b);
+// : Stream output operator for class reference
+vcl_ostream & operator<<(vcl_ostream& os, const msm_aligner& b);
 
-//: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const msm_aligner* b);
+// : Stream output operator for class pointer
+vcl_ostream & operator<<(vcl_ostream& os, const msm_aligner* b);
 
-//: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_aligner& b);
+// : Stream output operator for class reference
+void vsl_print_summary(vcl_ostream& os, const msm_aligner& b);
 
-//: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_aligner* b);
+// : Stream output operator for class reference
+void vsl_print_summary(vcl_ostream& os, const msm_aligner* b);
 
 #endif // msm_aligner_h_
-
-

@@ -12,6 +12,4 @@
 #include <vpgl/vpgl_radial_distortion.txx>
 #include <vpgl/vpgl_rational_camera.txx>
 
-
-
 int main() { return 0; }

@@ -1,7 +1,7 @@
 // This is brl/bbas/bvgl/bvgl_triangle_3d.txx
 #ifndef bvgl_triangle_3d_txx_
 #define bvgl_triangle_3d_txx_
-//:
+// :
 // \file
 
 #include "bvgl_triangle_3d.h"
@@ -16,9 +16,9 @@
 template <class Type>
 bvgl_triangle_3d<Type>::bvgl_triangle_3d()
 {
-  points_[0].set(0,0,0);
-  points_[1].set(0,0,0);
-  points_[2].set(0,0,0);
+  points_[0].set(0, 0, 0);
+  points_[1].set(0, 0, 0);
+  points_[2].set(0, 0, 0);
 }
 
 template <class Type>
@@ -32,43 +32,43 @@ bvgl_triangle_3d<Type>::bvgl_triangle_3d(vgl_point_3d<Type> const& corner1,
 }
 
 template <class Type>
-vcl_ostream& bvgl_triangle_3d<Type>::print(vcl_ostream& s) const
+vcl_ostream & bvgl_triangle_3d<Type>::print(vcl_ostream& s) const
 {
-  return s << "<bvgl_triangle_3d "<< ' ' << points_[0] << ' '
-                                         << points_[1] << ' '
-                                         << points_[2] << '>';
+  return s << "<bvgl_triangle_3d " << ' ' << points_[0] << ' '
+           << points_[1] << ' '
+           << points_[2] << '>';
 }
 
 template <class Type>
-vcl_ostream& bvgl_triangle_3d<Type>::write(vcl_ostream& s) const
+vcl_ostream & bvgl_triangle_3d<Type>::write(vcl_ostream& s) const
 {
   return s << points_[0] << ' ' << points_[1] << ' ' << points_[2] << '>';
 }
 
 template <class Type>
-vcl_istream& bvgl_triangle_3d<Type>::read(vcl_istream& is)
+vcl_istream & bvgl_triangle_3d<Type>::read(vcl_istream& is)
 {
   return is >> points_[0] >> points_[1] >> points_[2];
 }
 
-//: Write box to stream
+// : Write box to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, bvgl_triangle_3d<Type> const& p)
+vcl_ostream &  operator<<(vcl_ostream& s, bvgl_triangle_3d<Type> const& p)
 {
   return p.print(s);
 }
 
-//: Read box from stream
+// : Read box from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  bvgl_triangle_3d<Type>& p)
+vcl_istream &  operator>>(vcl_istream& is,  bvgl_triangle_3d<Type>& p)
 {
   return p.read(is);
 }
 
 #undef BVGL_TRIANGLE_3D_INSTANTIATE
 #define BVGL_TRIANGLE_3D_INSTANTIATE(Type) \
-template class bvgl_triangle_3d<Type >;\
-template vcl_ostream& operator<<(vcl_ostream&, bvgl_triangle_3d<Type > const& p);\
-template vcl_istream& operator>>(vcl_istream&, bvgl_triangle_3d<Type >& p)
+  template class bvgl_triangle_3d<Type>; \
+  template vcl_ostream & operator<<(vcl_ostream &, bvgl_triangle_3d<Type> const& p); \
+  template vcl_istream & operator>>(vcl_istream &, bvgl_triangle_3d<Type>& p)
 
 #endif // bvgl_triangle_3d_txx_

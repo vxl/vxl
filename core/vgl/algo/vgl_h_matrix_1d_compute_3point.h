@@ -1,7 +1,7 @@
 // This is core/vgl/algo/vgl_h_matrix_1d_compute_3point.h
 #ifndef vgl_h_matrix_1d_compute_3point_h_
 #define vgl_h_matrix_1d_compute_3point_h_
-//:
+// :
 // \file
 // \brief Calculate the line projectivity which matches three 1D point correspondences
 //
@@ -19,19 +19,18 @@
 
 #include <vgl/algo/vgl_h_matrix_1d_compute.h>
 
-//: Calculate the line projectivity which matches three 1D point correspondences
+// : Calculate the line projectivity which matches three 1D point correspondences
 //  To obtain the H-matrix from 3 point pairs, call the compute() method from
 //  the parent class vgl_h_matrix_1d_compute.
 class vgl_h_matrix_1d_compute_3point : public vgl_h_matrix_1d_compute
 {
- public:
+public:
   vgl_h_matrix_1d_compute_3point(void) {}
   ~vgl_h_matrix_1d_compute_3point() {}
- protected:
-  virtual bool
-    compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > & points1,
-                      const vcl_vector<vgl_homg_point_1d<double> > & points2,
-                      vgl_h_matrix_1d<double>& H);
+protected:
+  virtual bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > & points1,
+                                 const vcl_vector<vgl_homg_point_1d<double> > & points2, vgl_h_matrix_1d<double>& H);
+
 };
 
 #endif // vgl_h_matrix_1d_compute_3point_h_

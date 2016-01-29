@@ -1,12 +1,12 @@
 #ifndef bvxm_grid_processes_h_
 #define bvxm_grid_processes_h_
-//:
+// :
 // \file
 
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-//:Grid processes
+// :Grid processes
 DECLARE_FUNC_CONS(bvxm_load_grid_process);
 DECLARE_FUNC_CONS(bvxm_create_grid_process);
 DECLARE_FUNC_CONS(bvxm_save_grid_raw_process);

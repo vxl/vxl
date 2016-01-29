@@ -15,17 +15,17 @@ public:
   /** Voter-to-votee vector.  */
   vnl_vector_fixed<double, N> v;
   vnl_vector_fixed<double, N> vhat;
-  double vlen;
-  double vlen_squared;
+  double                      vlen;
+  double                      vlen_squared;
 
   /** Voter-to-votee angle.  */
-  double cos_theta;
-  double sin_theta;
+  double                      cos_theta;
+  double                      sin_theta;
   vnl_vector_fixed<double, N> dtheta;
 
   /** Weight terms.  */
-  double wflat;
-  double wcurve;
+  double                      wflat;
+  double                      wcurve;
   vnl_vector_fixed<double, N> dwflat;
   vnl_vector_fixed<double, N> dwcurve;
 };

@@ -1,16 +1,16 @@
 // This is oul/oufgl/asyncio.h
 #ifndef OTAGO_Asyncio_IO__h_INCLUDED
 #define OTAGO_Asyncio_IO__h_INCLUDED
-//:
+// :
 // \file
 // \brief A simple wrapper around POSIX.1b asynchronous I/O
 //
 // Copyright (c) 2001 Simon Brady
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 //
-//: Asynchronous I/O wrapper
+// : Asynchronous I/O wrapper
 // Simple wrapper around POSIX.1b asynchronous I/O (as documented in GNU Info
 // under Libc -> Low-Level I/O -> Asynchronous I/O). This should be portable
 // across most Unix-like systems. Win32 has its own async I/O facilities which
@@ -43,11 +43,11 @@
 // \endverbatim
 // Status: Complete
 // \author Simon Brady
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 #include <unistd.h>
 #ifndef _POSIX_ASYNCHRONOUS_IO
-#error Your system does not support POSIX asynchronous I/O
+#  error Your system does not support POSIX asynchronous I/O
 #endif
 #include <aio.h>
 #include <vcl_csignal.h>
@@ -55,41 +55,41 @@
 
 class AsyncIO_Shared_State
 {
- protected:
+protected:
   static volatile vcl_sig_atomic_t complete;   // 0 - in progress, 1 - complete
 
   // Set complete flag when completion signal arrives. Currently ignores
   // the signal number (see the warning at the start of this header)
   static void signal_handler(int);
+
 };
 
 class AsyncIO : protected AsyncIO_Shared_State
 {
   struct aiocb cb;                         // Control block
-
- public:
+public:
 
   // Constructor - perform I/O on file descriptor fd, using sig as completion
   // signal. Note that SIGUSR1,2 may be used by the linuxthreads library.
   AsyncIO(int fd, int sig = SIGIO);
 
   // Destructor - disconnect signal handler
- ~AsyncIO();
+  ~AsyncIO();
 
   // NB: All methods returning int return zero on success, or an errno value
   // on failure
 
   // Begin reading n bytes into buf starting at current file position
-  int read(volatile void *buf, vcl_size_t n);
+  int read(volatile void * buf, vcl_size_t n);
 
   // Begin reading n bytes into buf starting at absolute file position pos
-  int read(volatile void *buf, vcl_size_t n, off_t pos);
+  int read(volatile void * buf, vcl_size_t n, off_t pos);
 
   // Begin writing n bytes from buf starting at current file position
-  int write(volatile void *buf, vcl_size_t nbytes);
+  int write(volatile void * buf, vcl_size_t nbytes);
 
   // Begin writing n bytes from buf starting at absolute file position pos
-  int write(volatile void *buf, vcl_size_t nbytes, off_t pos);
+  int write(volatile void * buf, vcl_size_t nbytes, off_t pos);
 
   // Wait for I/O to complete, then return status. If suspend is true, block
   // the calling process while waiting, otherwise continuously poll for
@@ -102,4 +102,3 @@ class AsyncIO : protected AsyncIO_Shared_State
 };
 
 #endif // OTAGO_Asyncio_IO__h_INCLUDED
-

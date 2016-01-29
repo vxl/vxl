@@ -2,9 +2,9 @@
 #ifndef vgui_mfc_statusbar_h_
 #define vgui_mfc_statusbar_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief    The MFC implementation of vgui_statusbar.
 // \author   Marko Bacic, Oxford RRG
@@ -23,29 +23,31 @@
 #include <vgui/vgui_statusbar.h>
 #include "StdAfx.h"
 
-//: The MFC implementation of vgui_statusbar.
+// : The MFC implementation of vgui_statusbar.
 class vgui_mfc_statusbar : public vgui_statusbar
 {
- public:
+public:
 
-  //: Constructor, creates an MFC status bar object and displays it.
+  // : Constructor, creates an MFC status bar object and displays it.
   vgui_mfc_statusbar();
-  //: Destructor.
- ~vgui_mfc_statusbar();
+  // : Destructor.
+  ~vgui_mfc_statusbar();
 
-  //: Append given text (of given length) to the status bar
+  // : Append given text (of given length) to the status bar
   int write(const char* text, int n);
-  //: Append given text to the status bar
+
+  // : Append given text to the status bar
   int write(const char* text);
-  //: Updates the status bar by calling OnUpdateStatusBar of vgui_mfc_mainfrm
+
+  // : Updates the status bar by calling OnUpdateStatusBar of vgui_mfc_mainfrm
   void update();
 
-  //: MFC status bar object
-  CStatusBar *statusbar;
-  //: Text displayed on the statusbar
-  vcl_string linebuffer;
+  // : MFC status bar object
+  CStatusBar * statusbar;
+  // : Text displayed on the statusbar
+  vcl_string      linebuffer;
   vgui_statusbuf* statusbuf;
-  vcl_ostream out;
+  vcl_ostream     out;
 };
 
 #endif // vgui_mfc_statusbar_h_

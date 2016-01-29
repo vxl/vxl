@@ -1,5 +1,5 @@
 // This is brl/bseg/bbgm/pro/processes/bbgm_update_parzen_dist_image_process.cxx
-//:
+// :
 // \file
 
 #include <bprb/bprb_func_process.h>
@@ -16,90 +16,92 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_math.h>
 
-//: Constructor
+// : Constructor
 bool bbgm_update_parzen_dist_image_process_cons(bprb_func_process& pro)
 {
-  //input
+  // input
   vcl_vector<vcl_string> in_types(5), out_types(1);
-  in_types[0]= "bbgm_image_sptr"; // the initial parzen distribution image
-  in_types[1]= "vil_image_view_base_sptr"; // the update image
-  in_types[2]= "float"; //bandwidth
-  in_types[3]= "int"; //max number of samples
-  in_types[4]= "float"; //equality tolerance
+  in_types[0] = "bbgm_image_sptr";          // the initial parzen distribution image
+  in_types[1] = "vil_image_view_base_sptr"; // the update image
+  in_types[2] = "float";                    // bandwidth
+  in_types[3] = "int";                      // max number of samples
+  in_types[4] = "float";                    // equality tolerance
   pro.set_input_types(in_types);
 
-  //output
-  out_types[0]="bbgm_image_sptr";// the updated distribution image
+  // output
+  out_types[0] = "bbgm_image_sptr";// the updated distribution image
   pro.set_output_types(out_types);
   return true;
 }
 
-
 bool bbgm_update_parzen_dist_image_process_init(bprb_func_process& pro)
 {
-  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(0));
+  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(0) );
   return true;
 }
 
-//: the execute process
+// : the execute process
 bool bbgm_update_parzen_dist_image_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.verify_inputs()){
+  if( pro.verify_inputs() )
+    {
     vcl_cerr << "In bbgm_update_parzen_dist_image_process::execute() -"
              << " invalid inputs\n";
     return false;
-  }
+    }
   // Retrieve background image
   bbgm_image_sptr bgm = pro.get_input<bbgm_image_sptr>(0);
 
-  //Retrieve update image
+  // Retrieve update image
   vil_image_view_base_sptr update_image =
     pro.get_input<vil_image_view_base_sptr>(1);
 
   vil_image_view<float> img = *vil_convert_cast(float(), update_image);
-  if (update_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
-    vil_math_scale_values(img,1.0/255.0);
+  if( update_image->pixel_format() == VIL_PIXEL_FORMAT_BYTE )
+    {
+    vil_math_scale_values(img, 1.0 / 255.0);
+    }
 
   unsigned ni = img.ni();
   unsigned nj = img.nj();
   unsigned np = img.nplanes();
 
-  //Retrieve bandwidth
+  // Retrieve bandwidth
   float bandwidth = pro.get_input<float>(2);
 
-  //Retrieve maximum number of samples
+  // Retrieve maximum number of samples
   unsigned max_samples = pro.get_input<unsigned>(3);
 
   float tol = pro.get_input<float>(4);
 
-  if(np!=3)
+  if( np != 3 )
     {
-      vcl_cout << "Parzen update only implemented for color\n";
-      return false;
+    vcl_cout << "Parzen update only implemented for color\n";
+    return false;
     }
 
-  typedef bsta_parzen_sphere<float,3> parzen_f3_t;
+  typedef bsta_parzen_sphere<float, 3> parzen_f3_t;
 
-  //cast the model to an image of parzen distributions
+  // cast the model to an image of parzen distributions
   bbgm_image_sptr model_sptr;
-  if (!bgm) {
+  if( !bgm )
+    {
     parzen_f3_t par;
     par.set_bandwidth(bandwidth);
-    model_sptr = new bbgm_image_of<parzen_f3_t>(ni,nj,par);
-  }
-  else model_sptr = bgm;
-  bbgm_image_of<parzen_f3_t> *model =
-    static_cast<bbgm_image_of<parzen_f3_t>*>(model_sptr.ptr());
+    model_sptr = new bbgm_image_of<parzen_f3_t>(ni, nj, par);
+    }
+  else {model_sptr = bgm; }
+  bbgm_image_of<parzen_f3_t> * model =
+    static_cast<bbgm_image_of<parzen_f3_t> *>(model_sptr.ptr() );
 
-  float frac_back = 0.5f;
-  bsta_parzen_adapt_bw_updater<parzen_f3_t> updater(tol*bandwidth, max_samples,
-                                           frac_back);
+  float                                     frac_back = 0.5f;
+  bsta_parzen_adapt_bw_updater<parzen_f3_t> updater(tol * bandwidth, max_samples,
+                                                    frac_back);
 
-  update(*model,img,updater);
+  update(*model, img, updater);
 
   brdb_value_sptr output = new brdb_value_t<bbgm_image_sptr>(model);
   pro.set_output(0, output);
   return true;
 }
-

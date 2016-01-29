@@ -1,6 +1,6 @@
 #ifndef osl_harris_h
 #define osl_harris_h
-//:
+// :
 // \file
 // \brief The Harris corner detector
 //
@@ -31,14 +31,15 @@
 #include <osl/osl_harris_params.h>
 #include <osl/osl_roi_window.h>
 
-//: An osl_harris object stores the internal buffers used by the Harris corner detector.
+// : An osl_harris object stores the internal buffers used by the Harris corner detector.
 class osl_harris
 {
- public:
+public:
   osl_harris(osl_harris_params const & params) : image_w(0), image_h(0), params_(params) { }
 
-  void compute(vil1_image const &image) {
-    prepare_buffers(image.width(), image.height());
+  void compute(vil1_image const & image)
+  {
+    prepare_buffers(image.width(), image.height() );
     compute_gradients(image);
     compute_2nd_moments();
     compute_cornerness();
@@ -46,9 +47,12 @@ class osl_harris
   }
 
   void get_corners(vcl_vector<vcl_pair<float, float> > &) const;
+
   void get_corners(vcl_vector<float> &, vcl_vector<float> &) const;
-  void save_corners(vcl_ostream &stream) const;
-  void save_corners(char const *file) const;
+
+  void save_corners(vcl_ostream & stream) const;
+
+  void save_corners(char const * file) const;
 
   // these buffers persist between invocations so that
   // unnecessary allocation is not performed (a.stoddart).
@@ -58,40 +62,45 @@ class osl_harris
   vil1_memory_image_of<vxl_byte> image_buf;
 
   // gradient bitmaps.
-  vil1_memory_image_of<int>      image_gradx_buf;
-  vil1_memory_image_of<int>      image_grady_buf;
+  vil1_memory_image_of<int> image_gradx_buf;
+  vil1_memory_image_of<int> image_grady_buf;
 
   // second moment matrix of the gradient vector.
-  vil1_memory_image_of<float>    image_fxx_buf;
-  vil1_memory_image_of<float>    image_fxy_buf;
-  vil1_memory_image_of<float>    image_fyy_buf;
+  vil1_memory_image_of<float> image_fxx_buf;
+  vil1_memory_image_of<float> image_fxy_buf;
+  vil1_memory_image_of<float> image_fyy_buf;
 
   // the cornerness response map and its maximum value.
-  vil1_memory_image_of<float>    image_cornerness_buf;
-  float corner_max;
+  vil1_memory_image_of<float> image_cornerness_buf;
+  float                       corner_max;
 
   // local maximum map.
-  vil1_memory_image_of<bool>     image_cornermax_buf;
+  vil1_memory_image_of<bool> image_cornermax_buf;
 
   // region of interest ?
   osl_roi_window window_str;
 
-
   // These are the stages of algorithm. Clients can call a subset of
   // these manually in order to insert algorithms of their own choice.
   void prepare_buffers(int w, int h);
+
   void compute_gradients(vil1_image const &);
+
   void compute_2nd_moments();
+
   void compute_cornerness();
+
   void compute_corners();
 
- protected:
-  osl_harris_params params_;
+protected:
+  osl_harris_params                   params_;
   vcl_vector<vcl_pair<float, float> > cc; // corners
- private:
+private:
   // these routines called by compute() :
-  void do_non_adaptive(double *corner_min);
+  void do_non_adaptive(double * corner_min);
+
   void do_adaptive();
+
 };
 
 #endif // osl_harris_h

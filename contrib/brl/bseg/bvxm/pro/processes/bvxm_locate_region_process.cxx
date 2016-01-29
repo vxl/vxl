@@ -1,6 +1,6 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_locate_region_process.cxx
+// This is brl/bseg/bvxm/pro/processes/bvxm_locate_region_process.cxx
 #include "bvxm_locate_region_process.h"
-//:
+// :
 // \file
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_parameters.h>
@@ -17,13 +17,13 @@
 bool bvxm_locate_region_process_cons(bprb_func_process& pro)
 {
   using namespace bvxm_locate_region_process_globals;
-  //process takes 4inputs
-  //input[0]: The observation image
-  //input[1]: The mask image
-  //input[2]: The camera of the observation
-  //input[3]: The voxel world
-  //input[4]: The path for output grid
-  //input[5]: The appearance model type, the supported strings are:
+  // process takes 4inputs
+  // input[0]: The observation image
+  // input[1]: The mask image
+  // input[2]: The camera of the observation
+  // input[3]: The voxel world
+  // input[4]: The path for output grid
+  // input[5]: The appearance model type, the supported strings are:
   //          -apm_mog_grey
   //          -apm_mog_rgb
   //          -apm_mog_mc_2_3
@@ -38,10 +38,12 @@ bool bvxm_locate_region_process_cons(bprb_func_process& pro)
   input_types_[4] = "vcl_string";
   input_types_[5] = "vcl_string";
 
-  if (!pro.set_input_types(input_types_))
+  if( !pro.set_input_types(input_types_) )
+    {
     return false;
+    }
 
-  //output has 0 output
+  // output has 0 output
 
   return true;
 }
@@ -50,54 +52,59 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
 {
   using namespace bvxm_locate_region_process_globals;
 
-  if (pro.n_inputs() < n_inputs_)
-  {
-    vcl_cout << pro.name() << " The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
-  unsigned i = 0;
+  // get inputs:
+  unsigned                 i = 0;
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  if ( !img ) {
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
-      return false;
-  }
+  if( !img )
+    {
+    vcl_cout << pro.name() << " :-- Input " << (i - 1) << " is not valid!" << vcl_endl;
+    return false;
+    }
   vil_image_view_base_sptr mask = pro.get_input<vil_image_view_base_sptr>(i++);
 
-  //vil_image_view<float> mask = *(vil_convert_cast(float(),mask_base));
+  // vil_image_view<float> mask = *(vil_convert_cast(float(),mask_base));
 
-  //vil_save(mask,"./binary_mask");
+  // vil_save(mask,"./binary_mask");
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  if ( !camera ) {
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
-      return false;
-  }
+  if( !camera )
+    {
+    vcl_cout << pro.name() << " :-- Input " << (i - 1) << " is not valid!" << vcl_endl;
+    return false;
+    }
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  if ( !world ) {
-      vcl_cout << pro.name() << " :-- Input " << (i-1) << " is not valid!" << vcl_endl;
-      return false;
-  }
+  if( !world )
+    {
+    vcl_cout << pro.name() << " :-- Input " << (i - 1) << " is not valid!" << vcl_endl;
+    return false;
+    }
   vcl_string output_path = pro.get_input<vcl_string>(i++);
   vcl_string voxel_type = pro.get_input<vcl_string>(i++);
-  unsigned bin_index = 0;
-  unsigned scale = 0;
+  unsigned   bin_index = 0;
+  unsigned   scale = 0;
 
-  //create metadata:
-  bvxm_image_metadata observation(img,camera);
+  // create metadata:
+  bvxm_image_metadata observation(img, camera);
 
-  //create output_grid:
+  // create output_grid:
   vgl_vector_3d<unsigned int> grid_size = world->get_params()->num_voxels(scale);
-  bvxm_voxel_grid_base_sptr grid_out = new bvxm_voxel_grid<float>(output_path, grid_size);
-
+  bvxm_voxel_grid_base_sptr   grid_out = new bvxm_voxel_grid<float>(output_path, grid_size);
 
   bool result = true;
 
-  if (voxel_type == "apm_mog_grey")
-    result = world->region_probability_density<APM_MOG_GREY>(observation,mask,grid_out, bin_index,scale);
+  if( voxel_type == "apm_mog_grey" )
+    {
+    result = world->region_probability_density<APM_MOG_GREY>(observation, mask, grid_out, bin_index, scale);
+    }
   else
+    {
     vcl_cerr << "Error in: bvxm_locate_region_processor: Unsuppported appearance model\n";
+    }
 
   return result;
 }
-

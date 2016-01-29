@@ -7,18 +7,18 @@
 #include <vcl_deque.h>
 #include <vcl_algorithm.h>
 
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // sdet_edgel methods
-//------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
-//: constructor
+// : constructor
 sdet_edgel::sdet_edgel(
-    vgl_point_2d<double> new_pt, double tan, double conf, double der, double uncer,
-    sdet_appearance* lapp, sdet_appearance* rapp)
-:
+  vgl_point_2d<double> new_pt, double tan, double conf, double der, double uncer,
+  sdet_appearance* lapp, sdet_appearance* rapp)
+  :
   id(-1),
   pt(new_pt),
-  tangent(sdet_angle0To2Pi(tan)),
+  tangent(sdet_angle0To2Pi(tan) ),
   strength(conf),
   deriv(der),
   uncertainty(uncer),
@@ -27,8 +27,7 @@ sdet_edgel::sdet_edgel(
 {
 }
 
-
-//: copy constructor
+// : copy constructor
 sdet_edgel::sdet_edgel(const sdet_edgel& other)
   :
   id(other.id),
@@ -43,8 +42,7 @@ sdet_edgel::sdet_edgel(const sdet_edgel& other)
 }
 
 sdet_edgel &
-sdet_edgel::
-operator=(const sdet_edgel &rhs)
+sdet_edgel::operator=(const sdet_edgel & rhs)
 {
   id = rhs.id;
 
@@ -55,7 +53,7 @@ operator=(const sdet_edgel &rhs)
 
   gpt = rhs.gpt;
 
-  //: Copy pointers, taking care for when rhs is *this
+  // : Copy pointers, taking care for when rhs is *this
   sdet_appearance* left_app_orig = left_app;
   sdet_appearance* right_app_orig = right_app;
 
@@ -68,7 +66,7 @@ operator=(const sdet_edgel &rhs)
   return *this;
 }
 
-//: destructor
+// : destructor
 sdet_edgel::~sdet_edgel()
 {
   delete left_app;

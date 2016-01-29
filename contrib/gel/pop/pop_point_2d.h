@@ -2,9 +2,9 @@
 #ifndef pop_point_2d_h_
 #define pop_point_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief a 2d point with a coordinate system
 //
@@ -12,39 +12,40 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-//-------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
-#include<vgl/vgl_point_2d.h>
-#include<pop/pop_point_2d.h>
-#include<pop/pop_geometric_object.h>
-#include<pop/pop_vertex.h>
-#include<vcl_list.h>
-#include<pop/pop_parameter.h>
+#include <vgl/vgl_point_2d.h>
+#include <pop/pop_point_2d.h>
+#include <pop/pop_geometric_object.h>
+#include <pop/pop_vertex.h>
+#include <vcl_list.h>
+#include <pop/pop_parameter.h>
 
-//: this is a 2d point with a coordinate system
+// : this is a 2d point with a coordinate system
 
-class pop_point_2d:public vgl_point_2d<double>, public pop_geometric_object
+class pop_point_2d : public vgl_point_2d<double>, public pop_geometric_object
 {
- public:
-  //: constructor
-  pop_point_2d(pop_vertex *coordinate_system,vcl_vector<pop_parameter*> &params);
+public:
+  // : constructor
+  pop_point_2d(pop_vertex * coordinate_system, vcl_vector<pop_parameter *> & params);
 
-  //: constructor
+  // : constructor
   // this is used when we want to represent a non parametric result
-  pop_point_2d(pop_vertex *coordinate_system, double x, double y);
+  pop_point_2d(pop_vertex * coordinate_system, double x, double y);
 
-  //: destructor
+  // : destructor
   virtual ~pop_point_2d();
 
-  //: this is the update method
+  // : this is the update method
 
   virtual void update();
 
-  //: this is the casting which needs to be done
-  virtual pop_point_2d* cast_to_pop_point_2d() {return this;}
+  // : this is the casting which needs to be done
+  virtual pop_point_2d * cast_to_pop_point_2d() {return this; }
 
-  //: compute the cost between two points
-  virtual double cost(pop_geometric_object *other);
+  // : compute the cost between two points
+  virtual double cost(pop_geometric_object * other);
+
 };
 
 #endif // pop_point_2d_h_

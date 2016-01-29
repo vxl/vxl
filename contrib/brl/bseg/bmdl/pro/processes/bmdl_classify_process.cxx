@@ -1,5 +1,5 @@
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 
 #include <vil/vil_image_view.h>
@@ -22,15 +22,14 @@ bool classify(const vil_image_view<T>& lidar_first,
               vil_image_view<T>& height_img,
               T gthresh, T vthresh, T athresh, T hres)
 {
-  bmdl_classify<T> classifier((unsigned)(athresh+0.5), hres, gthresh, vthresh);
-  classifier.set_lidar_data(lidar_first,lidar_last);
+  bmdl_classify<T> classifier( (unsigned)(athresh + 0.5), hres, gthresh, vthresh);
+  classifier.set_lidar_data(lidar_first, lidar_last);
   classifier.set_bare_earth(ground);
   classifier.label_lidar();
   label_img = classifier.labels();
   height_img = classifier.heights();
   return true;
 }
-
 
 bool classify(vil_image_view_base_sptr lidar_first,
               vil_image_view_base_sptr lidar_last,
@@ -42,97 +41,105 @@ bool classify(vil_image_view_base_sptr lidar_first,
   label_img = new vil_image_view<unsigned int>();
 
   // use the float version
-  if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
-  {
-    if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
+  if( lidar_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT )
     {
-      if (ground->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
+    if( lidar_last->pixel_format() == VIL_PIXEL_FORMAT_FLOAT )
+      {
+      if( ground->pixel_format() == VIL_PIXEL_FORMAT_FLOAT )
+        {
         height_img = new vil_image_view<float>();
         return classify<float>(lidar_first, lidar_last, ground,
-                               (vil_image_view<unsigned int>&)(*label_img),
-                               (vil_image_view<float>&)(*height_img), gthresh, vthresh, athresh, hres);
+                               (vil_image_view<unsigned int> &)(*label_img),
+                               (vil_image_view<float> &)(*height_img), gthresh, vthresh, athresh, hres);
+        }
       }
-    }
     else
-    {
+      {
       vcl_cout << "input images have different bit depths" << vcl_endl;
       return false;
+      }
     }
-  }
 
   // use the double version
-  else if (lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
-  {
-    if (lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)
+  else if( lidar_first->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE )
     {
-      if (ground->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) {
+    if( lidar_last->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE )
+      {
+      if( ground->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE )
+        {
         height_img = new vil_image_view<double>();
         return classify<double>(lidar_first, lidar_last, ground,
-                                (vil_image_view<unsigned int>&)(*label_img),
-                                (vil_image_view<double>&)(*height_img),
+                                (vil_image_view<unsigned int> &)(*label_img),
+                                (vil_image_view<double> &)(*height_img),
                                 (double) gthresh, (double) vthresh, (double) athresh, (double) hres);
+        }
       }
-    }
     else
-    {
+      {
       vcl_cout << "input images have different bit depths" << vcl_endl;
       return false;
+      }
     }
-  }
 
   return false;
 }
 
 bool bmdl_classify_process(bprb_func_process& pro)
 {
-  if (pro.n_inputs()< 3) {
+  if( pro.n_inputs() < 3 )
+    {
     vcl_cout << "lidar_roi_process: The input number should be 3" << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs:
-  unsigned int i=0;
+  unsigned int             i = 0;
   vil_image_view_base_sptr first_ret = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr last_ret = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr ground = pro.get_input<vil_image_view_base_sptr>(i++);
 
-  //pro.set_input_types
+  // pro.set_input_types
   // check first return's validity
-  if (!first_ret) {
+  if( !first_ret )
+    {
     vcl_cout << "bmdl_classify_process -- First return image is not valid!\n";
     return false;
-  }
+    }
 
   // check last return's validity
-  if (!last_ret) {
+  if( !last_ret )
+    {
     vcl_cout << "bmdl_classify_process -- Last return image is not valid!\n";
     return false;
-  }
+    }
 
   // check last return's validity
-  if (!ground) {
+  if( !ground )
+    {
     vcl_cout << "bmdl_classify_process -- Ground image is not valid!\n";
     return false;
-  }
+    }
 
   // read the parameters
-  float gthresh=0.0f, vthresh = 0.0f, hres=0.0f; // dummy initialization, to avoid compiler warning
-  float athresh=0.0f;
+  float gthresh = 0.0f, vthresh = 0.0f, hres = 0.0f; // dummy initialization, to avoid compiler warning
+  float athresh = 0.0f;
 
-  if (!pro.parameters()->get_value(PARAM_GROUND_THRESH, gthresh) ||
+  if( !pro.parameters()->get_value(PARAM_GROUND_THRESH, gthresh) ||
       !pro.parameters()->get_value(PARAM_VEG_THRESH, vthresh) ||
       !pro.parameters()->get_value(PARAM_AREA_THRESH, athresh) ||
-      !pro.parameters()->get_value(PARAM_HEIGHT_RES, hres)) {
+      !pro.parameters()->get_value(PARAM_HEIGHT_RES, hres) )
+    {
     vcl_cout << "bmdl_classify_process -- problem getting the parameters!\n";
     return false;
-  }
+    }
 
-  vil_image_view_base_sptr label_img=0, height_img=0;
-  if (!classify(first_ret, last_ret, ground, label_img, height_img, gthresh, vthresh, athresh, hres)) {
+  vil_image_view_base_sptr label_img = 0, height_img = 0;
+  if( !classify(first_ret, last_ret, ground, label_img, height_img, gthresh, vthresh, athresh, hres) )
+    {
     vcl_cout << "bmdl_classify_process -- The process has failed!\n";
     return false;
-  }
-  i=0;
+    }
+  i = 0;
   pro.set_output_val<vil_image_view_base_sptr>(i, label_img);
   pro.set_output_val<vil_image_view_base_sptr>(i++, height_img);
   return true;
@@ -140,19 +147,20 @@ bool bmdl_classify_process(bprb_func_process& pro)
 
 bool bmdl_classify_process_cons(bprb_func_process& pro)
 {
-  bool ok=false;
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");  // label image
   output_types.push_back("vil_image_view_base_sptr");  // height image
   ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   return true;
 }

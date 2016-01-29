@@ -1,7 +1,7 @@
 #ifndef bsol_hough_line_index_h_
 #define bsol_hough_line_index_h_
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief Hough transform for fast queries on line sets
 //
@@ -82,7 +82,7 @@
 //  Modifications
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <vcl_vector.h>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_bounding_box.h>
@@ -92,116 +92,95 @@
 class bsol_hough_line_index :  public vbl_ref_count
 {
   // PUBLIC INTERFACE----------------------------------------------------------
-
- public:
+public:
 
   // Constructors/initializers/Destructors-------------------------------------
 
   bsol_hough_line_index(const int r_dimension, const int theta_dimension);
-  bsol_hough_line_index(const float x0, const float y0,
-                        const float xsize, const float ysize,
-                        const float angle_range=180.0,
-                        const float angle_increment=5.0);
+  bsol_hough_line_index(const float x0, const float y0, const float xsize, const float ysize,
+                        const float angle_range = 180.0, const float angle_increment = 5.0);
 
-  bsol_hough_line_index(vbl_bounding_box<double, 2> const & box,
-                        const float angle_range=180.0,
-                        const float angle_increment=5.0);
+  bsol_hough_line_index(vbl_bounding_box<double, 2> const & box, const float angle_range = 180.0,
+                        const float angle_increment = 5.0);
 
   bsol_hough_line_index(bsol_hough_line_index const& i)
     : vbl_ref_count(), xo_(i.xo_), yo_(i.yo_),
-      xsize_(i.xsize_), ysize_(i.ysize_),
-      angle_range_(i.angle_range_), angle_increment_(i.angle_increment_),
-      r_dim_(i.r_dim_), th_dim_(i.th_dim_), index_(i.index_) {}
+    xsize_(i.xsize_), ysize_(i.ysize_),
+    angle_range_(i.angle_range_), angle_increment_(i.angle_increment_),
+    r_dim_(i.r_dim_), th_dim_(i.th_dim_), index_(i.index_) {}
 
   ~bsol_hough_line_index();
 
   // Data Access---------------------------------------------------------------
 
-  float getxsize_() const {return xsize_;}
-  float getysize_() const {return ysize_;}
+  float getxsize_() const {return xsize_; }
+  float getysize_() const {return ysize_; }
 
-  int get_r_dimension() const {return r_dim_;}
-  int get_theta_dimension() const {return th_dim_;}
+  int get_r_dimension() const {return r_dim_; }
+  int get_theta_dimension() const {return th_dim_; }
 
-  //: Get the bsol_hough_line_index array location of a line segment
+  // : Get the bsol_hough_line_index array location of a line segment
   void array_loc(vsol_line_2d_sptr const& line, float& r, float& theta);
+
   void array_loc(vsol_line_2d_sptr const& line, int& r, int& theta);
 
-  //: r Location for a translated line position
-  int trans_loc(const int transx, const int transy,
-                const int ry, const int theta);
+  // : r Location for a translated line position
+  int trans_loc(const int transx, const int transy, const int ry, const int theta);
 
-  //: Get line count at a particular location in bsol_hough_line_index space
+  // : Get line count at a particular location in bsol_hough_line_index space
   int count(const int r, const int theta);
 
-  //: Insert a new line into the index
+  // : Insert a new line into the index
   bool index(vsol_line_2d_sptr const& line);
 
-  //: Insert a unique new line into the index
+  // : Insert a unique new line into the index
   bool index_new(vsol_line_2d_sptr const& line);
 
-  //: find if a line is in the index
+  // : find if a line is in the index
   bool find(vsol_line_2d_sptr const& line);
 
-  //: remove a line
+  // : remove a line
   bool remove(vsol_line_2d_sptr const& line);
 
-  //: Lines in a line index bin at integer r and theta bin indices.
-  void lines_at_index(const int r, const int theta,
-                      vcl_vector<vsol_line_2d_sptr>& lines);
+  // : Lines in a line index bin at integer r and theta bin indices.
+  void lines_at_index(const int r, const int theta, vcl_vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr > lines_at_index(const int r,
-                                                const int theta);
+  vcl_vector<vsol_line_2d_sptr> lines_at_index(const int r, const int theta);
 
-  //: Lines in a tolerance box around the r and theta of a given line.
+  // : Lines in a tolerance box around the r and theta of a given line.
   // r is in distance units and theta is in degrees.
-  void lines_in_interval(vsol_line_2d_sptr const& l,
-                         const float r_dist, const float theta_dist,
+  void lines_in_interval(vsol_line_2d_sptr const& l, const float r_dist, const float theta_dist,
                          vcl_vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr>
-    lines_in_interval(vsol_line_2d_sptr const & l,
-                      const float r_dist,
-                      const float theta_dist);
+  vcl_vector<vsol_line_2d_sptr> lines_in_interval(vsol_line_2d_sptr const & l, const float r_dist,
+                                                  const float theta_dist);
 
-  //:Lines parallel to a given angle in degrees
-  void parallel_lines(const float angle,
-                      const float angle_dist,
+  // :Lines parallel to a given angle in degrees
+  void parallel_lines(const float angle, const float angle_dist, vcl_vector<vsol_line_2d_sptr>& lines);
+
+  vcl_vector<vsol_line_2d_sptr> parallel_lines(const float angle, const float angle_dist);
+
+  // : Lines at an angle to a given line (angle is in degrees)
+  void lines_at_angle(vsol_line_2d_sptr const & l, const float angle, const float angle_dist,
                       vcl_vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr> parallel_lines(const float angle,
-                                               const float angle_dist);
+  vcl_vector<vsol_line_2d_sptr> lines_at_angle(vsol_line_2d_sptr const & l, const float angle, const float angle_dist);
 
-  //: Lines at an angle to a given line (angle is in degrees)
-  void lines_at_angle(vsol_line_2d_sptr const &l,
-                      const float angle, const float angle_dist,
-                      vcl_vector<vsol_line_2d_sptr >& lines);
+  // : Lines parallel to a given line with angle_dist in degrees
+  void parallel_lines(vsol_line_2d_sptr const & l, const float angle_dist, vcl_vector<vsol_line_2d_sptr>& lines);
 
-  vcl_vector<vsol_line_2d_sptr>
-    lines_at_angle(vsol_line_2d_sptr const &l,
-                   const float angle, const float angle_dist);
+  vcl_vector<vsol_line_2d_sptr> parallel_lines(vsol_line_2d_sptr const & l, const float angle_dist);
 
-  //: Lines parallel to a given line with angle_dist in degrees
-  void parallel_lines(vsol_line_2d_sptr const &l,
-                      const float angle_dist,
-                      vcl_vector<vsol_line_2d_sptr>& lines);
-
-  vcl_vector<vsol_line_2d_sptr>
-    parallel_lines(vsol_line_2d_sptr const &l,
-                   const float angle_dist);
-
-  //: Angle histogram - projection of hough space onto theta axis
+  // : Angle histogram - projection of hough space onto theta axis
   vcl_vector<int> angle_histogram();
 
-  //: Dominant line directions found by non-maximum suppression above thresh
-  int dominant_directions(const int thresh, const float angle_tol,
-                          vcl_vector<int>& dirs);
+  // : Dominant line directions found by non-maximum suppression above thresh
+  int dominant_directions(const int thresh, const float angle_tol, vcl_vector<int>& dirs);
 
-  //: Dominant parallel line groups
-  int dominant_line_groups(const int thresh, const float angle_tol,
-                           vcl_vector<vcl_vector<vsol_line_2d_sptr> >& groups);
+  // : Dominant parallel line groups
+  int dominant_line_groups(const int thresh, const float angle_tol, vcl_vector<vcl_vector<vsol_line_2d_sptr> >& groups);
 
-  //: An image of the hough space
+  // : An image of the hough space
   vbl_array_2d<unsigned char> get_hough_image();
 
   // Data Control--------------------------------------------------------------
@@ -209,31 +188,29 @@ class bsol_hough_line_index :  public vbl_ref_count
   void clear_index();
 
   // INTERNALS-----------------------------------------------------------------
-
- protected:
-  //internal functions
+protected:
+  // internal functions
   void init(const int r_dimension, const int theta_dimension);
-  vcl_vector<int> non_maximum_suppress(const int radius,
-                                       vcl_vector<int> const & bins);
+
+  vcl_vector<int> non_maximum_suppress(const int radius, vcl_vector<int> const & bins);
 
   // Data Members--------------------------------------------------------------
+private:
 
- private:
+  float xo_; // !< X Origin of the Cartesian Space
+  float yo_; // !< Y Origin of the Cartesian Space
 
-  float xo_; //!< X Origin of the Cartesian Space
-  float yo_; //!< Y Origin of the Cartesian Space
-
-  float xsize_; //!< Dimensions of the Cartesian space
+  float xsize_; // !< Dimensions of the Cartesian space
   float ysize_;
 
-  float angle_range_; //!< Granularity of the line index
+  float angle_range_; // !< Granularity of the line index
   float angle_increment_;
 
-  int   r_dim_;  //!< The dimensions of the index space
-  int   th_dim_;
+  int r_dim_;    // !< The dimensions of the index space
+  int th_dim_;
 
-  //: The index space for lines. An array of vectors of line indices
-  vbl_array_2d<vcl_vector<vsol_line_2d_sptr>* > index_;
+  // : The index space for lines. An array of vectors of line indices
+  vbl_array_2d<vcl_vector<vsol_line_2d_sptr> *> index_;
 };
 
 #endif

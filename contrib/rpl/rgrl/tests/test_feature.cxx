@@ -19,9 +19,10 @@ static
 void
 test_feature_caster()
 {
-  vnl_double_2 loc2d(5.0, -4.0);
+  vnl_double_2        loc2d(5.0, -4.0);
   rgrl_feature_point* pf2d = new rgrl_feature_point( loc2d );
-  rgrl_feature_sptr fsptr = pf2d;
+  rgrl_feature_sptr   fsptr = pf2d;
+
   TEST("feature sptr cast to 2D point feature", rgrl_feature_caster<rgrl_feature_point>(fsptr), pf2d);
 }
 
@@ -53,24 +54,26 @@ test_feature_point()
        pf4d->location() == loc4d &&
        pf4d->error_projector().is_identity(), true);
 
-  {
-    double a[] = {2.0,1.0,4.0,-3.0};
-    vnl_double_2x2 A(a);
-    vnl_double_2 t(-3.0, 5.0);
-    vnl_matrix_fixed<double,6,6> covar;
+    {
+    double                         a[] = {2.0, 1.0, 4.0, -3.0};
+    vnl_double_2x2                 A(a);
+    vnl_double_2                   t(-3.0, 5.0);
+    vnl_matrix_fixed<double, 6, 6> covar;
 
     rgrl_trans_affine xform( A, t, covar );
     rgrl_feature_sptr result = pf2d->transform( xform );
     TEST("Transform 2D point feature (point location remains unchanged)", pf2d->location(), loc2d );
-    TEST("Transform 2D point feature (feature is of point type)", result->is_type( rgrl_feature_point::type_id() ), true );
-    TEST("Transform 2D point feature (mapped feature has location same as mapping location only)", result->location(), xform.map_location( loc2d ) );
+    TEST("Transform 2D point feature (feature is of point type)", result->is_type( rgrl_feature_point::type_id() ),
+         true );
+    TEST("Transform 2D point feature (mapped feature has location same as mapping location only)",
+         result->location(), xform.map_location( loc2d ) );
     // vcl_cout << "Error projector: " << result->error_projector() << vcl_endl;
     vnl_double_2x2 true_error_projector(0.0);
-    true_error_projector.fill_diagonal(1.0/result->scale()/result->scale());
-    TEST("Transform 2D point feature (Error projector is identity matrix)", result->error_projector(), true_error_projector );
-  }
+    true_error_projector.fill_diagonal(1.0 / result->scale() / result->scale() );
+    TEST("Transform 2D point feature (Error projector is identity matrix)",
+         result->error_projector(), true_error_projector );
+    }
 }
-
 
 static
 void
@@ -81,19 +84,19 @@ test_feature_trace_pt()
   vnl_double_2 loc2d(5.0, -4.0);
   vnl_double_2 dir2d(3.0, 1.0);
   vnl_double_2 nor2d(-dir2d[1], dir2d[0]); nor2d.normalize();
-  vnl_double_4 loc4d( 2.0, 7.0,-1.0, 3.0);
-  vnl_double_4 dir4d(-2.0, 4.0,-1.5, 1.0);
-  vnl_double_4 err4d( 2.0,-1.0, 3.0,-8.0);
+  vnl_double_4 loc4d( 2.0, 7.0, -1.0, 3.0);
+  vnl_double_4 dir4d(-2.0, 4.0, -1.5, 1.0);
+  vnl_double_4 err4d( 2.0, -1.0, 3.0, -8.0);
 
-  rgrl_feature_sptr pf2d = new rgrl_feature_trace_pt( loc2d, dir2d );
+  rgrl_feature_sptr                          pf2d = new rgrl_feature_trace_pt( loc2d, dir2d );
   rgrl_feature_caster<rgrl_feature_trace_pt> trace_ptr( pf2d );
 
   TEST("2D trace point",
        pf2d->is_type( rgrl_feature_trace_pt::type_id() ) &&
        pf2d->location() == loc2d &&
        !pf2d->error_projector().is_identity() &&
-       ((rgrl_feature_trace_pt*) trace_ptr) -> length() == 0 &&
-       ((rgrl_feature_trace_pt*) trace_ptr) -> radius() == 0, true);
+       ( (rgrl_feature_trace_pt *) trace_ptr)->length() == 0 &&
+       ( (rgrl_feature_trace_pt *) trace_ptr)->radius() == 0, true);
 
   rgrl_feature_sptr pf4d = new rgrl_feature_trace_pt( loc4d, dir4d );
   TEST("4D trace point feature",
@@ -104,11 +107,11 @@ test_feature_trace_pt()
   TEST_NEAR( "4D trace point feature error projector",
              dot_product( pf4d->error_projector() * err4d, dir4d ), 0.0, 1e-6 );
 
-  {
-    double a[] = {2.0,1.0,4.0,-3.0};
-    vnl_double_2x2 A(a);
-    vnl_double_2 t(-3.0, 5.0);
-    vnl_matrix_fixed<double,6,6> covar;
+    {
+    double                         a[] = {2.0, 1.0, 4.0, -3.0};
+    vnl_double_2x2                 A(a);
+    vnl_double_2                   t(-3.0, 5.0);
+    vnl_matrix_fixed<double, 6, 6> covar;
 
     rgrl_trans_affine xform( A, t, covar );
     rgrl_feature_sptr result = pf2d->transform( xform );
@@ -129,9 +132,8 @@ test_feature_trace_pt()
 
     TEST_NEAR( "                        , error projector",
                ( result->error_projector() - outer_product( x_nor, x_nor ) ).absolute_value_max(), 0, 1e-6 );
-  }
+    }
 }
-
 
 static
 void
@@ -139,10 +141,10 @@ test_feature_face()
 {
   vcl_cout << "Test face feature\n";
 
-  vnl_double_2 loc2d(3.0,-2.0);
+  vnl_double_2 loc2d(3.0, -2.0);
   vnl_double_2 nor2d(3.0, 1.0); nor2d.normalize();
 
-  rgrl_feature_sptr pf2d = new rgrl_feature_face_pt( loc2d, nor2d );
+  rgrl_feature_sptr     pf2d = new rgrl_feature_face_pt( loc2d, nor2d );
   rgrl_feature_face_pt* face_ptr = rgrl_feature_caster<rgrl_feature_face_pt>( pf2d );
 
   //  Basic constructor, type and normal first
@@ -159,21 +161,21 @@ test_feature_face()
 
   vnl_double_2 dir2d(-nor2d[1], nor2d[0]);
 
-  double dist = 3.0;
+  double       dist = 3.0;
   vnl_double_2 test_pt2d = loc2d + 10.0 * dir2d + dist * nor2d;
   vnl_double_2 error_vect2d = test_pt2d - loc2d;
 
   TEST_NEAR( "2d face point error projector",
              vnl_math::abs( dot_product( pf2d->error_projector() * error_vect2d, error_vect2d ) ),
-             dist*dist, 1e-6 );
+             dist * dist, 1e-6 );
 
   //  Onto testing the transformation
 
-  {
-    double a[] = {2.0,1.0,4.0,-3.0};
-    vnl_double_2x2 A(a);
-    vnl_double_2 t(-3.0, 5.0);
-    vnl_matrix_fixed<double,6,6> covar; covar.set_identity();
+    {
+    double                         a[] = {2.0, 1.0, 4.0, -3.0};
+    vnl_double_2x2                 A(a);
+    vnl_double_2                   t(-3.0, 5.0);
+    vnl_matrix_fixed<double, 6, 6> covar; covar.set_identity();
 
     rgrl_trans_affine xform( A, t, covar );
     rgrl_feature_sptr result = pf2d->transform( xform );
@@ -184,11 +186,11 @@ test_feature_face()
          !result->error_projector().is_identity(), true);
 
     // This matrix convert normal to tangent
-    double b[] = {0.0, -1.0, 1.0, 0.0};
+    double         b[] = {0.0, -1.0, 1.0, 0.0};
     vnl_double_2x2 B(b);
 
     // mapping tangent is easy:  A*tangent
-    vnl_double_2x2 C = vnl_transpose(B)*A*B;
+    vnl_double_2x2 C = vnl_transpose(B) * A * B;
 
     // affine transforms do not preseve angles, calculate the
     // transformed normal by transforming the tangent and re-computing
@@ -198,7 +200,7 @@ test_feature_face()
     // xform.map_normal( loc2d, nor2d, x_nor );
     x_nor = nor2d;
     x_nor.normalize();
-    x_nor = C*x_nor;
+    x_nor = C * x_nor;
 
     // compute the inverse of outer product,
     // because it is rank insufficient,
@@ -208,12 +210,12 @@ test_feature_face()
     // vnl_double_2x2 outer = outer_product( x_nor, x_nor );
     vnl_double_2x2 real_proj = outer_product( x_nor, x_nor ) / vnl_math::sqr(eig_val);
 
-    //vcl_cout << "error proj: " << result->error_projector() << vcl_endl;
-    //vcl_cout << "transformed normal: " << x_nor << vcl_endl;
-    //vcl_cout << "real proj: " << real_proj << vcl_endl;
+    // vcl_cout << "error proj: " << result->error_projector() << vcl_endl;
+    // vcl_cout << "transformed normal: " << x_nor << vcl_endl;
+    // vcl_cout << "real proj: " << real_proj << vcl_endl;
     TEST_NEAR( "                        , error projector",
                ( result->error_projector() - real_proj ).absolute_value_max(), 0, 0.05 );
-  }
+    }
 }
 
 static void test_feature()

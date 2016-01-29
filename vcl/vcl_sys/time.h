@@ -4,34 +4,35 @@
 #include <vcl_compiler.h>
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-# include <sys/timeb.h>
-extern "C" int gettimeofday(struct timeval*, struct timezone*);
+#  include <sys/timeb.h>
+extern "C" int gettimeofday(struct timeval *, struct timezone *);
 
 #elif defined(__CYGWIN__)
-# include <sys/time.h>
-# include <sys/timeb.h>
-# include <sys/times.h>
+#  include <sys/time.h>
+#  include <sys/timeb.h>
+#  include <sys/times.h>
 
 #elif defined(VCL_GCC) && !defined(__INTEL_COMPILER)
-# define __restrict /* */
-# include <sys/time.h>
-# undef __restrict
+#  define __restrict /* */
+#  include <sys/time.h>
+#  undef __restrict
 
 #elif !defined(VCL_NO_SYS_TIME_H)
-# include <sys/time.h>
+#  include <sys/time.h>
 
 #elif defined(SYSV)
-extern "C" int gettimeofday(struct timeval *tp);
+extern "C" int gettimeofday(struct timeval * tp);
 
 #else
-extern "C" int gettimeofday(struct timeval*, struct timezone*);
+extern "C" int gettimeofday(struct timeval *, struct timezone *);
+
 #endif
 
-//struct timeval:
+// struct timeval:
 // time_t         tv_sec      seconds
 // suseconds_t    tv_usec     microseconds
 
-//struct itimerval:
+// struct itimerval:
 // struct timeval it_interval timer interval
 // struct timeval it_value    current value
 

@@ -13,45 +13,45 @@
 #include <vnl/vnl_matlab_print.h>
 
 #define macro(p, T) \
-inline void vnl_linpack_svdc_economy(vnl_netlib_svd_proto(T)) \
-{ v3p_netlib_##p##svdc_(vnl_netlib_svd_params); }
+  inline void vnl_linpack_svdc_economy(vnl_netlib_svd_proto(T) ) \
+    { v3p_netlib_##p##svdc_(vnl_netlib_svd_params); }
 macro(s, float);
 macro(d, double);
-macro(c, vcl_complex<float>);
-macro(z, vcl_complex<double>);
+macro(c, vcl_complex<float> );
+macro(z, vcl_complex<double> );
 #undef macro
 
 template <class real_t>
 vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
-  m_(M.rows()), n_(M.columns()),
-  V_(n_,n_),
+  m_(M.rows() ), n_(M.columns() ),
+  V_(n_, n_),
   sv_(n_)
 {
   vnl_fortran_copy<real_t> X(M);
 
-  int mm = vcl_min(m_+1L,n_);
+  int mm = vcl_min(m_ + 1L, n_);
 
   // Make workspace vectors.
-  vnl_vector<real_t> work(m_, real_t(0));
-  vnl_vector<real_t> vspace(n_*n_, real_t(0));
-  vnl_vector<real_t> wspace(mm, real_t(0)); // complex fortran routine actually _wants_ complex W!
-  vnl_vector<real_t> espace(n_, real_t(0));
+  vnl_vector<real_t> work(m_, real_t(0) );
+  vnl_vector<real_t> vspace(n_ * n_, real_t(0) );
+  vnl_vector<real_t> wspace(mm, real_t(0) ); // complex fortran routine actually _wants_ complex W!
+  vnl_vector<real_t> espace(n_, real_t(0) );
 
   // Call Linpack SVD
-  long ldu = 0;
-  long info = 0;
+  long       ldu = 0;
+  long       info = 0;
   const long job = 01; // no U, n svs in V (i.e. super-economy size)
-  vnl_linpack_svdc_economy((real_t*)X, &m_, &m_, &n_,
-                           wspace.data_block(),
-                           espace.data_block(),
-                           0, &ldu,
-                           vspace.data_block(), &n_,
-                           work.data_block(),
-                           &job, &info);
+  vnl_linpack_svdc_economy( (real_t *)X, &m_, &m_, &n_,
+                            wspace.data_block(),
+                            espace.data_block(),
+                            0, &ldu,
+                            vspace.data_block(), &n_,
+                            work.data_block(),
+                            &job, &info);
 
   // Error return?
-  if (info != 0)
-  {
+  if( info != 0 )
+    {
     // If info is non-zero, it contains the number of singular values
     // for this the SVD algorithm failed to converge. The condition is
     // not bogus. Even if the returned singular values are sensible,
@@ -84,20 +84,27 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
 
     vnl_matlab_print(vcl_cerr, M, "M", vnl_matlab_print_format_long);
     //    valid_ = false;
-  }
+    }
+  for( int j = 0; j < mm; ++j )
+    {
+    sv_[j] = vcl_abs(wspace(j) ); // we get rid of complexness here.
 
-  for (int j = 0; j < mm; ++j)
-    sv_[j] = vcl_abs(wspace(j)); // we get rid of complexness here.
-
-  for (int j = mm; j < n_; ++j)
+    }
+  for( int j = mm; j < n_; ++j )
+    {
     sv_[j] = 0;
+    }
 
-  {
-    const real_t *d = vspace.data_block();
-    for (int j = 0; j < n_; ++j)
-      for (int i = 0; i < n_; ++i)
+    {
+    const real_t * d = vspace.data_block();
+    for( int j = 0; j < n_; ++j )
+      {
+      for( int i = 0; i < n_; ++i )
+        {
         V_[i][j] = *(d++);
-  }
+        }
+      }
+    }
 }
 
 template <class real_t>
@@ -108,6 +115,6 @@ vnl_svd_economy<real_t>::nullvector()
 }
 
 #undef VNL_SVD_ECONOMY_INSTANTIATE
-#define VNL_SVD_ECONOMY_INSTANTIATE(T) template class vnl_svd_economy<T >
+#define VNL_SVD_ECONOMY_INSTANTIATE(T) template class vnl_svd_economy < T >
 
 #endif // vnl_svd_economy_txx_

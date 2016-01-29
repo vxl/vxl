@@ -1,6 +1,6 @@
 #ifndef msm_shape_model_h_
 #define msm_shape_model_h_
-//:
+// :
 // \file
 // \brief Contains mean/modes etc of a shape model and aligner details
 // \author Tim Cootes
@@ -9,7 +9,7 @@
 #include <msm/msm_aligner.h>
 #include <vcl_iosfwd.h>
 
-//: Contains mean/modes etc of a shape model
+// : Contains mean/modes etc of a shape model
 //  Container to hold the components of a statistical shape model.
 //  Uses a linear model the shape variation.
 //  Global pose form defined by the choice of msm_aligner class.
@@ -18,14 +18,13 @@
 //  synthesize and match to shapes using this model.
 class msm_shape_model : public msm_ref_shape_model
 {
- private:
-  //: Pose to use as a default (for convenience)
+private:
+  // : Pose to use as a default (for convenience)
   vnl_vector<double> default_pose_;
 
-  //: Object used to deal with global transformations
+  // : Object used to deal with global transformations
   mbl_cloneable_ptr<msm_aligner> aligner_;
-
- public:
+public:
 
   // Dflt ctor
   msm_shape_model();
@@ -33,52 +32,47 @@ class msm_shape_model : public msm_ref_shape_model
   // Destructor
   ~msm_shape_model();
 
-  //: Set up model
-  void set(const msm_points& mean,
-           const vnl_matrix<double>& modes,
-           const vnl_vector<double>& mode_var,
-           const vnl_vector<double>& default_pose,
-           const msm_aligner& aligner,
-           const msm_param_limiter& param_limiter);
+  // : Set up model
+  void set(const msm_points& mean, const vnl_matrix<double>& modes, const vnl_vector<double>& mode_var,
+           const vnl_vector<double>& default_pose, const msm_aligner& aligner, const msm_param_limiter& param_limiter);
 
-  //: Pose to use as a default (for convenience)
+  // : Pose to use as a default (for convenience)
   const vnl_vector<double> default_pose() const
   { return default_pose_; }
 
-  //: Object used to deal with global transformations
-  const msm_aligner& aligner() const { return aligner_; }
+  // : Object used to deal with global transformations
+  const msm_aligner & aligner() const { return aligner_; }
 
-  //: Version number for I/O
+  // : Version number for I/O
   short version_no() const;
 
-  //: Name of the class
+  // : Name of the class
   vcl_string is_a() const;
 
-  //: Print class to os
+  // : Print class to os
   void print_summary(vcl_ostream& os) const;
 
-  //: Save class to binary file stream
+  // : Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
 
-  //: Load class from binary file stream
+  // : Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
 
-  //: Equality test
+  // : Equality test
   bool operator==(const msm_shape_model& model) const;
+
 };
 
-
-//: Binary file stream output operator for class reference
+// : Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const msm_shape_model& pts);
 
-
-//: Binary file stream input operator for class reference
+// : Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, msm_shape_model& pts);
 
-//: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const msm_shape_model& pts);
+// : Stream output operator for class reference
+vcl_ostream & operator<<(vcl_ostream& os, const msm_shape_model& pts);
 
-//: Stream output operator for class reference
-void vsl_print_summary(vcl_ostream& os,const msm_shape_model& pts);
+// : Stream output operator for class reference
+void vsl_print_summary(vcl_ostream& os, const msm_shape_model& pts);
 
 #endif // msm_shape_model_h_

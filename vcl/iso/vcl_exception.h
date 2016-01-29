@@ -6,9 +6,9 @@
 #include <exception>
 
 #ifdef vcl_generic_exception_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_exception_STD std
+#  define vcl_generic_exception_STD std
 #endif
 
 #include "../generic/vcl_exception.h"

@@ -1,6 +1,6 @@
 #ifndef vcsl_meter_h_
 #define vcsl_meter_h_
-//:
+// :
 // \file
 // \brief Standard unit associated to the length dimension
 // \author Francois BERTEL
@@ -15,35 +15,35 @@
 #include <vcsl/vcsl_length_unit.h>
 #include <vcsl/vcsl_meter_sptr.h>
 
-//: Standard unit associated to the length dimension
+// : Standard unit associated to the length dimension
 class vcsl_meter
   : public vcsl_length_unit
 {
-  //***************************************************************************
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor
   vcsl_meter() {}
-
- public:
+public:
   // Destructor
   virtual ~vcsl_meter() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Returns the number of units of `this' equal of the standard_unit for the dimension
+  // : Returns the number of units of `this' equal of the standard_unit for the dimension
   // Pure virtual function of vcsl_unit
   virtual double units_per_standard_unit() const { return 1; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Singleton pattern
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Return the reference to the unique vcsl_meter object
+  // : Return the reference to the unique vcsl_meter object
   static vcsl_meter_sptr instance();
+
 };
 
 #endif // vcsl_meter_h_

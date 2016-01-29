@@ -2,9 +2,9 @@
 #ifndef vgui_tag_h_
 #define vgui_tag_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Allow clients to register 'tag functions' which are called later.
 // \author fsm
@@ -40,16 +40,16 @@
 //   07-AUG-2002 K.Y.McGaul - Changed to Doxygen style comments.
 // \endverbatim
 
-//: The type of a tag function.
-typedef int (*vgui_tag_function)(void);
+// : The type of a tag function.
+typedef int (* vgui_tag_function)(void);
 
-//: Registers a tag function - returns 0.
+// : Registers a tag function - returns 0.
 int vgui_tag_add(vgui_tag_function, char const *);
 
-//: Returns null-terminated list of tag functions.
-vgui_tag_function const *vgui_tag_list();
+// : Returns null-terminated list of tag functions.
+vgui_tag_function const * vgui_tag_list();
 
-//: Call all registered tag functions and remove them from the list.
+// : Call all registered tag functions and remove them from the list.
 void                     vgui_tag_call();
 
 // Easy macro. It will provide two external symbols
@@ -60,17 +60,17 @@ void                     vgui_tag_call();
 // it multiple times will not have any further side
 // effects and will given the same return value.
 #define vgui_tag(tk) \
-int vgui_##tk##_tag_function(); \
-int vgui_##tk##_tag = vgui_tag_add(vgui_##tk##_tag_function, #tk); \
-static int vgui_##tk##_tag_function_(); \
-int vgui_##tk##_tag_function() { \
-  static bool once = false; \
-  static int  value = 0; \
-  if (!once) \
-    value = vgui_##tk##_tag_function_(); \
-  once = true; \
-  return value; \
-} \
-int vgui_##tk##_tag_function_()
+  int vgui_##tk##_tag_function(); \
+  int        vgui_##tk##_tag = vgui_tag_add(vgui_##tk##_tag_function, # tk); \
+  static int vgui_##tk##_tag_function_(); \
+  int        vgui_##tk##_tag_function() { \
+    static bool once = false; \
+    static int  value = 0; \
+    if( !once ) { \
+      value = vgui_##tk##_tag_function_(); } \
+    once = true; \
+    return value; \
+    } \
+  int vgui_##tk##_tag_function_()
 
 #endif // vgui_tag_h_

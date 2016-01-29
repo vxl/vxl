@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_occupancy_vff_process.h
 #ifndef bvxm_save_occupancy_vff_process_h_
 #define bvxm_save_occupancy_vff_process_h_
-//:
+// :
 // \file
 // \brief Save the voxel world occupancy grid in binary format
 // A process that saves the voxel world occupancy grid in a binary format
@@ -17,11 +17,11 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_save_occupancy_vff_process_globals
 {
-  const unsigned int n_inputs_ = 3;
-  const unsigned int n_outputs_ = 0;
+const unsigned int n_inputs_ = 3;
+const unsigned int n_outputs_ = 0;
 }
 
 bool bvxm_save_occupancy_vff_process_cons(bprb_func_process& pro);

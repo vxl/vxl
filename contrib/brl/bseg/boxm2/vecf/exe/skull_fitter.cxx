@@ -3,10 +3,11 @@
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include "../boxm2_vecf_fit_skull.h"
-int main(int argc, char ** argv)
+int main(int argc, char * * argv)
 {
 
   vul_arg_info_list arglist;
+
   vul_arg<vcl_string> base_dir_path(arglist, "-bdir", "Base directory", "");
   vul_arg<vcl_string> idstr(arglist, "-bid", " id string", "");
   vul_arg<vcl_string> show_model_arg(arglist, "-smod", "Show model", "true");
@@ -15,49 +16,54 @@ int main(int argc, char ** argv)
 
   arglist.parse(argc, argv, false);
   vcl_string show_model_str = show_model_arg();
-  bool show_model = show_model_str == "true";
+  bool       show_model = show_model_str == "true";
 
   vcl_string non_lin_str = non_lin_arg();
-  bool do_non_lin = non_lin_str == "true";
+  bool       do_non_lin = non_lin_str == "true";
 
   vcl_string dlib_str = dlib_arg();
-  bool from_dlib = dlib_str == "true";
+  bool       from_dlib = dlib_str == "true";
 
   vcl_string base_dir = base_dir_path();
 
-  if(base_dir == ""){
+  if( base_dir == "" )
+    {
     vcl_cout << "Must have a base directory - fatal!\n";
     return -1;
-  }
+    }
   vcl_string id = idstr();
-  if(id == ""){
+  if( id == "" )
+    {
     vcl_cout << "Must have an id string - fatal!\n";
     return -1;
-  }
+    }
   //  sub-directory named by id
   vcl_string p_dir =  base_dir + id + "/";
 
   vcl_string anchor_path = p_dir + id + "_skull_anchors.txt";
 
   boxm2_vecf_fit_skull fs;
-  bool good = true;
+  bool                 good = true;
 
   good = fs.read_anchor_file(anchor_path);
-  if(!good){
+  if( !good )
+    {
     vcl_cout << "failed to read left anchor file\n";
     return -1;
-  }
+    }
   good = fs.compute_auxillary_points();
-  if(!good){
+  if( !good )
+    {
     vcl_cout << "failed to compute auxillary points\n";
     return -1;
-  }
+    }
 
   good = fs.set_trans();
-  if(!good){
-        vcl_cout << "failed to compute skull transform\n";
+  if( !good )
+    {
+    vcl_cout << "failed to compute skull transform\n";
     return -1;
-  }
+    }
   vcl_string source_path = base_dir + "skull/skull-top-2x-r-zeroaxis-samp-1.0-r35-norm.txt";
   vcl_string target_path = base_dir + id + "/" + id + "_trans_skull.txt";
   good = fs.transform_skull(source_path, target_path);
@@ -66,5 +72,3 @@ int main(int argc, char ** argv)
   good = fs.transform_skull(source_path, target_path);
   return 0;
 }
-
-

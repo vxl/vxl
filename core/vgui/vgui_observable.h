@@ -2,9 +2,9 @@
 #ifndef vgui_observable_h_
 #define vgui_observable_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Base class for classes that want to broadcast messages to observers.
 // \author fsm
@@ -21,45 +21,44 @@
 class vgui_observer;
 class vgui_message;
 
-
-//: Base class for classes that want to broadcast messages to observers.
+// : Base class for classes that want to broadcast messages to observers.
 //
 //  Objects from classes derived from vgui_observable can broadcast a
 //  vgui_message or an update using notify() to all the vgui_observer's
 //  attached to themselves.
 class vgui_observable
 {
- public:
-  //: Constructor - create a default observable.
+public:
+  // : Constructor - create a default observable.
   vgui_observable() { }
 
-  //: Destructor.
+  // : Destructor.
   virtual ~vgui_observable();
 
-  //: Attach the given observer to receive notify messages.
-  void attach(vgui_observer*);
+  // : Attach the given observer to receive notify messages.
+  void attach(vgui_observer *);
 
-  //: Detach the given observer.
-  void detach(vgui_observer*);
+  // : Detach the given observer.
+  void detach(vgui_observer *);
 
-  //: Returns a list of all the observers for this observable.
-  void get_observers(vcl_vector<vgui_observer*>&) const;
+  // : Returns a list of all the observers for this observable.
+  void get_observers(vcl_vector<vgui_observer *> &) const;
 
-  //: Broadcast an update to all observers of this class.
+  // : Broadcast an update to all observers of this class.
   virtual void notify() const;
 
-  //: Broadcast a message to all observers of this class.
+  // : Broadcast a message to all observers of this class.
   virtual void notify(const vgui_message &) const;
 
- private:
-  //: List of all observers for this observable.
-  vcl_vector<vgui_observer*> observers;
+private:
+  // : List of all observers for this observable.
+  vcl_vector<vgui_observer *> observers;
 
-  //: Disallow assignment.
-  vgui_observable(vgui_observable const&) { }
+  // : Disallow assignment.
+  vgui_observable(vgui_observable const &) { }
 
-  //: Disallow assignment.
-  vgui_observable& operator=(vgui_observable const&) { return *this; }
+  // : Disallow assignment.
+  vgui_observable & operator=(vgui_observable const &) { return *this; }
 };
 
 #endif // vgui_observable_h_

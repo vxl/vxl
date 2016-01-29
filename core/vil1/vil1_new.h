@@ -2,9 +2,9 @@
 #ifndef vil1_new_h_
 #define vil1_new_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Make a new image.
 //
@@ -16,35 +16,24 @@
 // \author awf@robots.ox.ac.uk
 // \date 26 Feb 00
 //
-//\verbatim
+// \verbatim
 //  Modifications
 //     000216 AWF Initial version.
-//\endverbatim
+// \endverbatim
 
 #include <vil1/vil1_fwd.h>
 #include <vil1/vil1_image.h>
 
-//: Make a new image.
+// : Make a new image.
 vil1_image vil1_new(int width, int height, vil1_image const& prototype);
 
-//: Make a new image.
-vil1_image vil1_new(vil1_stream* os,
-                    int planes,
-                    int width, int height,
-                    int components,
-                    int bits_per_component,
-                    vil1_component_format format,
-                    char const* file_format = 0);
+// : Make a new image.
+vil1_image vil1_new(vil1_stream* os, int planes, int width, int height, int components, int bits_per_component,
+                    vil1_component_format format, char const* file_format = 0);
 
-//: Make a new image.
-vil1_image vil1_new(char const* filename,
-                    int width, int height,
-                    vil1_image const &prototype,
-                    char const* format = 0);
+// : Make a new image.
+vil1_image vil1_new(char const* filename, int width, int height, vil1_image const & prototype, char const* format = 0);
 
-vil1_image vil1_new(vil1_stream* os,
-                    int width, int height,
-                    vil1_image const& prototype,
-                    char const* file_format = 0);
+vil1_image vil1_new(vil1_stream* os, int width, int height, vil1_image const& prototype, char const* file_format = 0);
 
 #endif // vil1_new_h_

@@ -1,7 +1,7 @@
 #ifndef msdi_reflected_marked_images_h_
 #define msdi_reflected_marked_images_h_
 
-//:
+// :
 // \file
 // \author Tim Cootes
 // \brief Adaptor which generates reflected versions of images/points
@@ -11,101 +11,100 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>
 
-//: Adaptor which generates reflected versions of images/points
+// : Adaptor which generates reflected versions of images/points
 //  Given a source msdi_marked_images, generates a reflected version
 //  of each image/points pair.
 //  If only_reflect, then returns reflected version only.
 //  If not only_reflect, then return both reflected and original
 //  examples.
-class msdi_reflected_marked_images : public msdi_marked_images {
+class msdi_reflected_marked_images : public msdi_marked_images
+{
 private:
-  //: Original data
+  // : Original data
   msdi_marked_images& marked_images_;
 
-  //: Indicate correspondences between shape and its reflection
+  // : Indicate correspondences between shape and its reflection
   vcl_vector<unsigned> sym_pts_;
 
-  //: When true, supply only reflection of original data
+  // : When true, supply only reflection of original data
   //  When false, supply original and reflection.
   bool only_reflect_;
 
-  //: Current image pyramid
+  // : Current image pyramid
   vimt_image_pyramid image_pyr_;
 
-  //: Current base image
+  // : Current base image
   vimt_image_2d_of<vxl_byte> image_;
 
-  //: Current points
+  // : Current points
   msm_points points_;
 
-  //: True on first pass
+  // : True on first pass
   bool first_pass_;
 
-  //: True if points are current
+  // : True if points are current
   bool points_ok_;
 
-  //: True if image_ is current
+  // : True if image_ is current
   bool image_ok_;
 
-  //: True if image_pyr_ is current
+  // : True if image_pyr_ is current
   bool image_pyr_ok_;
 
-  //: Generate current image
+  // : Generate current image
   void get_image();
 
-  //: Generate current points
+  // : Generate current points
   void get_points();
 
-  //: Pyramid builder
+  // : Pyramid builder
   vimt_gaussian_pyramid_builder_2d<vxl_byte> pyr_builder_;
 
   // Private copy operator to prevent copying
-  msdi_reflected_marked_images& operator=(const msdi_reflected_marked_images&);
-public:
-    //: Default constructor
-    // /params sym_pts[i] indicates symmetric match to point i
-    // /params only_reflect: When true, only supply reflected shapes.
-  msdi_reflected_marked_images(msdi_marked_images& raw_data,
-                             const vcl_vector<unsigned>& sym_pts,
-                             bool only_reflect=false);
+  msdi_reflected_marked_images & operator=(const msdi_reflected_marked_images &);
 
-    //: Construct with external vectors of images and points
-    //  Pointers retained to both - they must stay in scope.
+public:
+  // : Default constructor
+  // /params sym_pts[i] indicates symmetric match to point i
+  // /params only_reflect: When true, only supply reflected shapes.
+  msdi_reflected_marked_images(msdi_marked_images& raw_data, const vcl_vector<unsigned>& sym_pts,
+                               bool only_reflect = false);
+
+  // : Construct with external vectors of images and points
+  //  Pointers retained to both - they must stay in scope.
   msdi_reflected_marked_images();
 
-    //: Destructor
+  // : Destructor
   virtual ~msdi_reflected_marked_images();
 
-  //: Pyramid builder to be used
-  vimt_gaussian_pyramid_builder_2d<vxl_byte>& pyr_builder()
+  // : Pyramid builder to be used
+  vimt_gaussian_pyramid_builder_2d<vxl_byte> & pyr_builder()
   { return pyr_builder_; }
 
-  //: Move to start of data
+  // : Move to start of data
   virtual void reset();
 
-  //: Move to next item.  Return true until reach end of items
+  // : Move to next item.  Return true until reach end of items
   virtual bool next();
 
-  //: Return number of examples this will provide
+  // : Return number of examples this will provide
   virtual unsigned size() const;
 
-  //: Return current image
-  virtual const vimt_image_2d& image();
+  // : Return current image
+  virtual const vimt_image_2d & image();
 
-  //: Return current image pyramid
-  virtual const vimt_image_pyramid& image_pyr();
+  // : Return current image pyramid
+  virtual const vimt_image_pyramid & image_pyr();
 
-  //: points for the current image
-  virtual const msm_points& points();
+  // : points for the current image
+  virtual const msm_points & points();
 
-    //: Return current image file name
+  // : Return current image file name
   virtual vcl_string image_name() const;
 
-    //: Return current points file name
+  // : Return current points file name
   virtual vcl_string points_name() const;
+
 };
 
 #endif // msdi_reflected_marked_images_h_
-
-
-

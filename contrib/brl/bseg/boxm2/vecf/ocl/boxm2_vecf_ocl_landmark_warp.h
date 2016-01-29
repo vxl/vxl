@@ -12,11 +12,10 @@
 
 class boxm2_vecf_ocl_landmark_warp : public boxm2_vecf_ocl_vector_field_adaptor
 {
-  public:
-    boxm2_vecf_ocl_landmark_warp(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
-                                 vcl_vector<vgl_point_3d<double> > const& control_pts_target,
-                                 double weight_fun_max, double weight_fun_x_at_10_percent);
-
+public:
+  boxm2_vecf_ocl_landmark_warp(vcl_vector<vgl_point_3d<double> > const& control_pts_source,
+                               vcl_vector<vgl_point_3d<double> > const& control_pts_target, double weight_fun_max,
+                               double weight_fun_x_at_10_percent);
 
 };
 

@@ -2,9 +2,9 @@
 #ifndef mvl_modify_handle_h_
 #define mvl_modify_handle_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Temporarily modify a value, restoring on end-of-block
 //
@@ -14,18 +14,18 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 03 Aug 96
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 template <class T>
 class mvl_modify_handle
 {
   T  oldvalue_;
   T* place_;
- public:
+public:
   mvl_modify_handle(T* place) { place_ = place; oldvalue_ = *place; }
   ~mvl_modify_handle() { *place_ = oldvalue_; }
-  operator T* () { return place_; }
-  T& operator*() { return *place_; }
+  operator T *() { return place_; }
+  T & operator*() { return *place_; }
 };
 
 #endif // mvl_modify_handle_h_

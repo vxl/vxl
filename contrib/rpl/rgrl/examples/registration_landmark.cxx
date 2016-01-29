@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //
 // \latexonly
@@ -36,7 +36,6 @@
 // \end{enumerate}
 //
 // \endlatexonly
-
 
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
@@ -80,9 +79,9 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
-typedef vnl_vector_fixed<double,2>       vector_2d;
-typedef vcl_vector< vnl_vector<double> > vec_vec_type;
+typedef vcl_vector<rgrl_feature_sptr>   feature_vector;
+typedef vnl_vector_fixed<double, 2>     vector_2d;
+typedef vcl_vector<vnl_vector<double> > vec_vec_type;
 
 void
 read_feature_file( const char* filename,
@@ -90,70 +89,79 @@ read_feature_file( const char* filename,
 {
   vcl_ifstream istr( filename );
 
-  if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+  if( !istr )
+    {
+    vcl_cerr << "ERROR: Cannot open " << filename << '\n';
     return;
-  }
+    }
 
   vector_2d location;
   vector_2d direction;
-  int num_landmarks;
-  int num_directions;
-  double temp1, temp2; //to store information not needed in this example
+  int       num_landmarks;
+  int       num_directions;
+  double    temp1, temp2; // to store information not needed in this example
 
   istr >> num_landmarks;
-  for ( int li = 0; li < num_landmarks; ++li ) {
+  for( int li = 0; li < num_landmarks; ++li )
+    {
     istr >> location[0] >> location[1] >> temp1 >> temp2 >> num_directions;
     vec_vec_type directions;
-    for ( int di = 0; di < num_directions; ++di ) {
+    for( int di = 0; di < num_directions; ++di )
+      {
       istr >> direction[0] >> direction[1];
       directions.push_back( direction.as_ref() );
-    }
+      }
     landmarks.push_back( new rgrl_feature_landmark(location.as_ref(), directions) );
-  }
+    }
 
   istr.close();
-  vcl_cout<<"There are "<<landmarks.size()<<" landmarks"<<vcl_endl;
+  vcl_cout << "There are " << landmarks.size() << " landmarks" << vcl_endl;
 }
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command
+class command_iteration_update : public rgrl_command
 {
- public:
+public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
-    execute( (const rgrl_object*) caller, event );
+    execute( (const rgrl_object *) caller, event );
   }
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
-      dynamic_cast<const rgrl_feature_based_registration*>(caller);
+      dynamic_cast<const rgrl_feature_based_registration *>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
 
-    if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
-      rgrl_trans_affine* affine_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout<<"Initial xform: A =\n"<<affine_xform->A()<<"t = "<<affine_xform->t()<<vcl_endl;
-    }
-    else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ) {
-      rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<
-        "t = "<<q_xform->t()<<vcl_endl;
-    }
+    if( trans->is_type( rgrl_trans_affine::type_id() ) )
+      {
+      rgrl_trans_affine* affine_xform = rgrl_cast<rgrl_trans_affine *>(trans);
+      vcl_cout << "Initial xform: A =\n" << affine_xform->A() << "t = " << affine_xform->t() << vcl_endl;
+      }
+    else if( trans->is_type( rgrl_trans_quadratic::type_id() ) )
+      {
+      rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic *>(trans);
+      vcl_cout << "xform: Q\n" << q_xform->Q() << "A = " << q_xform->A()
+               << "t = " << q_xform->t() << vcl_endl;
+      }
     else
-      vcl_cout<<"Unknown type"<<vcl_endl;
+      {
+      vcl_cout << "Unknown type" << vcl_endl;
+      }
   }
+
 };
 
 int
 main( int argc, char* argv[] )
 {
-  if ( argc < 4 ) {
+  if( argc < 4 )
+    {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageLandmarkFile MovingImageLandmarkFile MaskImage\n";
     return 1;
-  }
+    }
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
@@ -162,8 +170,8 @@ main( int argc, char* argv[] )
   //
   feature_vector moving_landmark_set;
   feature_vector fixed_landmark_set;
-  const char* fixed_file_name = argv[1];
-  const char* moving_file_name = argv[2];
+  const char*    fixed_file_name = argv[1];
+  const char*    moving_file_name = argv[2];
 
   read_feature_file( moving_file_name, moving_landmark_set );
   read_feature_file( fixed_file_name, fixed_landmark_set );
@@ -171,15 +179,15 @@ main( int argc, char* argv[] )
   // Prepare the feature sets. The mask is defined by an image with
   // non-zero intensity value for valid pixel positions.
   //
-  const char* make_file_name = argv[3];
+  const char*              make_file_name = argv[3];
   vil_image_view<vxl_byte> mask_image = vil_load(make_file_name);
-  rgrl_mask_sptr mask = new rgrl_mask_2d_image( mask_image );
+  rgrl_mask_sptr           mask = new rgrl_mask_2d_image( mask_image );
 
   // A masked feature set, \code{rgrl\_feature\_set\_location\_masked},
   // differs from its super-class, \code{rgrl\_feature\_set\_location}, by
   // checking if the requested features are in the valid region.
   //
-  const unsigned int dimension = 2;
+  const unsigned int    dimension = 2;
   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location_masked( new  rgrl_feature_set_bins<dimension>(moving_landmark_set),
                                           mask);
@@ -202,16 +210,15 @@ main( int argc, char* argv[] )
   //
   // \endlatexonly
 
-
-  double shift_x = -286;
-  double shift_y = -42;
-  vector_2d shift( shift_x, shift_y);
+  double                   shift_x = -286;
+  double                   shift_y = -42;
+  vector_2d                shift( shift_x, shift_y);
   rgrl_transformation_sptr init_translation = new rgrl_trans_translation( shift.as_ref() );
-  rgrl_scale_sptr dummy_scale = new rgrl_scale();
+  rgrl_scale_sptr          dummy_scale = new rgrl_scale();
 
   // BeginCodeSnippet
-  int k = 2;
-  rgrl_matcher_sptr cp_matcher = new rgrl_matcher_k_nearest( k );
+  int                 k = 2;
+  rgrl_matcher_sptr   cp_matcher = new rgrl_matcher_k_nearest( k );
   rgrl_match_set_sptr pruned_match_set =
     cp_matcher->compute_matches(*moving_feature_set,
                                 *fixed_feature_set,
@@ -221,7 +228,7 @@ main( int argc, char* argv[] )
                                 *dummy_scale);
   // EndCodeSnippet
 
-  vcl_cout<<"pruned match set = "<<pruned_match_set->from_size()<<vcl_endl;
+  vcl_cout << "pruned match set = " << pruned_match_set->from_size() << vcl_endl;
 
   // \latexonly
   //
@@ -243,7 +250,7 @@ main( int argc, char* argv[] )
 
   rgrl_estimator_sptr affine_estimator = new rgrl_est_affine(dim);
 
-  vcl_auto_ptr<rrel_objective> obj_fun( new rrel_lms_obj(1) );
+  vcl_auto_ptr<rrel_objective>      obj_fun( new rrel_lms_obj(1) );
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est =
     new rgrl_scale_est_closest( obj_fun );
 
@@ -271,12 +278,12 @@ main( int argc, char* argv[] )
   // \code{rgrl\_weighter\_m\_est}. Make sure
   // \code{signature\_precomputed} is allowed.
   //
-  vcl_auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
-  bool use_signature_error = false;
-  bool signature_precomputed = true;
-  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(m_est_obj,
-                                                     use_signature_error,
-                                                     signature_precomputed);
+  vcl_auto_ptr<rrel_m_est_obj> m_est_obj( new rrel_tukey_obj(4) );
+  bool                         use_signature_error = false;
+  bool                         signature_precomputed = true;
+  rgrl_weighter_sptr           wgter = new rgrl_weighter_m_est(m_est_obj,
+                                                               use_signature_error,
+                                                               signature_precomputed);
 
   // weighted scale estimators
   //
@@ -287,10 +294,9 @@ main( int argc, char* argv[] )
   //
   rgrl_estimator_sptr quad_estimator = new rgrl_est_quadratic();
 
-
   // Convergence test
   //
-  double tolerance = 1.5;
+  double                       tolerance = 1.5;
   rgrl_convergence_tester_sptr conv_test =
     new rgrl_convergence_on_weighted_error( tolerance );
 
@@ -314,7 +320,7 @@ main( int argc, char* argv[] )
 
   // Add observer for debugging
   //
-  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
+  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update() );
 
   // Run ...
   //
@@ -334,13 +340,14 @@ main( int argc, char* argv[] )
 
   // Output Results
   //
-  if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:\n";
+  if( reg.has_final_transformation() )
+    {
+    vcl_cout << "Final xform:\n";
     rgrl_transformation_sptr trans = reg.final_transformation();
-    rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()<<"t = "<<q_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
-  }
+    rgrl_trans_quadratic*    q_xform = rgrl_cast<rgrl_trans_quadratic *>(trans);
+    vcl_cout << "Q =\n" << q_xform->Q() << "A = " << q_xform->A() << "t = " << q_xform->t() << vcl_endl
+             << "Final alignment error = " << reg.final_status()->error() << vcl_endl;
+    }
 
   // \latexonly
   //

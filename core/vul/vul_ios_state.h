@@ -2,9 +2,9 @@
 #ifndef vul_ios_state_h_
 #define vul_ios_state_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief saves and restores stream state
 // \author Ian Scott, Imorphics.
@@ -45,31 +45,31 @@
 
 #include <vcl_ios.h>
 
-//: Use RAII to save and restore precision and other state on an iostream
+// : Use RAII to save and restore precision and other state on an iostream
 class vul_ios_state_saver
 {
-  public:
-    explicit  vul_ios_state_saver( vcl_ios_base &s )
-        : stream_( s ),
-        flags_( s.flags() ),
-        precision_( s.precision() ),
-        width_( s.width() )
-    {}
-    ~vul_ios_state_saver()
-    { this->restore(); }
+public:
+  explicit  vul_ios_state_saver( vcl_ios_base & s )
+    : stream_( s ),
+    flags_( s.flags() ),
+    precision_( s.precision() ),
+    width_( s.width() )
+  {}
+  ~vul_ios_state_saver()
+  { this->restore(); }
 
-    void  restore()
-    {
-      stream_.width(width_);
-      stream_.precision(precision_);
-      stream_.flags(flags_);
-    }
+  void  restore()
+  {
+    stream_.width(width_);
+    stream_.precision(precision_);
+    stream_.flags(flags_);
+  }
 
-  private:
-    vcl_ios_base & stream_;
-    const vcl_ios_fmtflags flags_;
-    const vcl_streamsize precision_;
-    const vcl_streamsize width_;
+private:
+  vcl_ios_base &         stream_;
+  const vcl_ios_fmtflags flags_;
+  const vcl_streamsize   precision_;
+  const vcl_streamsize   width_;
 };
 
 #endif

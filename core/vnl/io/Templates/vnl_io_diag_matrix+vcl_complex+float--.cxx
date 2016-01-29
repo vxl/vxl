@@ -2,5 +2,4 @@
 #include <vcl_complex.h>
 #include <vnl/io/vnl_io_diag_matrix.txx>
 
-VNL_IO_DIAG_MATRIX_INSTANTIATE(vcl_complex<float>);
-
+VNL_IO_DIAG_MATRIX_INSTANTIATE(vcl_complex<float> );

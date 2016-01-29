@@ -1,6 +1,6 @@
 // This is tbl/vipl/examples/example_gaussian_convolution.cxx
 
-//:
+// :
 // \file
 //  This example program shows a typical use of the gaussian convolution filter
 //  on a ubyte image.  The input image (argv[1]) must be ubyte, and in that
@@ -37,16 +37,16 @@ typedef vnl_matrix<vxl_byte> img_type;
 #include <vcl_cstring.h> // for memcpy()
 
 int
-main(int argc, char** argv)
+main(int argc, char* * argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example_gaussian_convolution file_in file_out [sigma]\n"; return 1; }
+  if( argc < 3 ) { vcl_cerr << "Syntax: example_gaussian_convolution file_in file_out [sigma]\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if( !in ) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The output image:
-  vil_image_view<vxl_byte> out(in.ni(),in.nj(),in.nplanes());
+  vil_image_view<vxl_byte> out(in.ni(), in.nj(), in.nplanes() );
 
   // The image sizes:
   int xs = in.ni();
@@ -55,20 +55,20 @@ main(int argc, char** argv)
   // The value of sigma: (default is 5)
   float sigma = (argc < 4) ? 5.0f : (float)vcl_atof(argv[3]);
 
-  img_type src(ys,xs);
-  img_type dst(ys,xs);
+  img_type src(ys, xs);
+  img_type dst(ys, xs);
 
   // set the input image:
-  vcl_memcpy(src.begin(), in.memory_chunk()->const_data(), in.size_bytes());
+  vcl_memcpy(src.begin(), in.memory_chunk()->const_data(), in.size_bytes() );
 
   // The filter:
-  vipl_gaussian_convolution<img_type,img_type,vxl_byte,vxl_byte> op(sigma);
+  vipl_gaussian_convolution<img_type, img_type, vxl_byte, vxl_byte> op(sigma);
   op.put_in_data_ptr(&src);
   op.put_out_data_ptr(&dst);
   op.filter();
 
   // Write output:
-  vcl_memcpy(out.memory_chunk()->data(), dst.begin(), out.size_bytes());
+  vcl_memcpy(out.memory_chunk()->data(), dst.begin(), out.size_bytes() );
   vil_save(out, argv[2], "pnm");
   vcl_cout << "Written image of type PGM to " << argv[2] << vcl_endl;
 

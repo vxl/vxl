@@ -10,14 +10,14 @@
 static void test_query()
 {
   TEST("comparison complements", true,
-       (brdb_query::NONE == ~brdb_query::ALL ) &&
-       (brdb_query::ALL  == ~brdb_query::NONE) &&
-       (brdb_query::EQ   == ~brdb_query::NEQ ) &&
-       (brdb_query::NEQ  == ~brdb_query::EQ  ) &&
-       (brdb_query::GT   == ~brdb_query::LEQ ) &&
-       (brdb_query::LEQ  == ~brdb_query::GT  ) &&
-       (brdb_query::LT   == ~brdb_query::GEQ ) &&
-       (brdb_query::GEQ  == ~brdb_query::LT  ) );
+       (brdb_query::NONE == ~ brdb_query::ALL ) &&
+       (brdb_query::ALL  == ~ brdb_query::NONE) &&
+       (brdb_query::EQ   == ~ brdb_query::NEQ ) &&
+       (brdb_query::NEQ  == ~ brdb_query::EQ  ) &&
+       (brdb_query::GT   == ~ brdb_query::LEQ ) &&
+       (brdb_query::LEQ  == ~ brdb_query::GT  ) &&
+       (brdb_query::LT   == ~ brdb_query::GEQ ) &&
+       (brdb_query::GEQ  == ~ brdb_query::LT  ) );
 
   brdb_query_aptr q1 = brdb_query_comp_new("attr", brdb_query::EQ, 1);
   brdb_query_aptr q2 = brdb_query_comp_new("attr", brdb_query::EQ, 3);

@@ -7,15 +7,15 @@
 static void test_spherical_region()
 {
   vsph_sph_box_2d box(true);
-  box.set(0.25*vnl_math::pi, 0.75*vnl_math::pi,
-          0.5*vnl_math::pi, 1.5*vnl_math::pi,
+
+  box.set(0.25 * vnl_math::pi, 0.75 * vnl_math::pi,
+          0.5 * vnl_math::pi, 1.5 * vnl_math::pi,
           vnl_math::pi, true);
 
   volm_spherical_region sph_region(box);
 
-  sph_region.set_attribute(ORIENTATION,1);
-  sph_region.set_attribute(NLCD,44);
-
+  sph_region.set_attribute(ORIENTATION, 1);
+  sph_region.set_attribute(NLCD, 44);
 
   sph_region.print(vcl_cout);
   bool good = sph_region.is_attribute(ORIENTATION);
@@ -25,6 +25,5 @@ static void test_spherical_region()
   good = sph_region.is_attribute(DEPTH_ORDER);
   TEST("Attribute Depth Order Not Present", good, false);
 }
-
 
 TESTMAIN(test_spherical_region);

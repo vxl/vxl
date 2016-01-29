@@ -1,5 +1,5 @@
 #include "bwm_tableau_mgr.h"
-//:
+// :
 // \file
 #include "bwm_observer_mgr.h"
 #include "bwm_observer_video.h"
@@ -15,20 +15,21 @@
 #include <bgui/bgui_image_utils.h>
 #include <vgui/vgui_dialog.h>
 
-bwm_tableau_mgr* bwm_tableau_mgr::instance_ = 0;
+bwm_tableau_mgr *                     bwm_tableau_mgr::instance_ = 0;
 vcl_map<vcl_string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
 
-bwm_tableau_mgr* bwm_tableau_mgr::instance()
+bwm_tableau_mgr * bwm_tableau_mgr::instance()
 {
-  if (!instance_) {
+  if( !instance_ )
+    {
     instance_ = new bwm_tableau_mgr();
-  }
+    }
   return bwm_tableau_mgr::instance_;
 }
 
 bwm_tableau_mgr::bwm_tableau_mgr()
 {
-  grid_ = vgui_grid_tableau_new ();
+  grid_ = vgui_grid_tableau_new();
   grid_->set_frames_selectable(true);
   grid_->set_unique_selected(true);
   grid_->set_grid_size_changeable(true);
@@ -38,8 +39,10 @@ bwm_tableau_mgr::bwm_tableau_mgr()
 
 void bwm_tableau_mgr::init_env()
 {
-  if (tableaus_.size() == 0)
+  if( tableaus_.size() == 0 )
+    {
     return;
+    }
 
   grid_->set_frames_selectable(true);
   grid_->set_unique_selected(true);
@@ -52,12 +55,16 @@ void bwm_tableau_mgr::init_env()
 
   int rows = grid_->rows();
   int cols = grid_->cols();
-  for (int row=0; row<rows; row++)
+  for( int row = 0; row < rows; row++ )
+    {
     grid_->remove_row();
-  for (int col=0; col<cols; col++)
+    }
+  for( int col = 0; col < cols; col++ )
+    {
     grid_->remove_column();
+    }
 
-  grid_->remove_at(0,0);
+  grid_->remove_at(0, 0);
 }
 
 bwm_tableau_mgr::~bwm_tableau_mgr()
@@ -66,12 +73,13 @@ bwm_tableau_mgr::~bwm_tableau_mgr()
 
 void bwm_tableau_mgr::add_tableau(bwm_tableau_img* tab, vcl_string name)
 {
-  //create only if registered
-  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tab->type_name());
-  if (iter == tab_types_.end()) {
+  // create only if registered
+  vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tab->type_name() );
+  if( iter == tab_types_.end() )
+    {
     vcl_cerr << "Tableau type is not registered, not creating!\n";
     return;
-  }
+    }
 
   vgui_viewer2D_tableau_sptr viewer = vgui_viewer2D_tableau_new(tab);
 
@@ -97,9 +105,12 @@ void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)
 bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(vcl_string tableau_type)
 {
   bwm_command_sptr comm = 0;
+
   vcl_map<vcl_string, bwm_command_sptr>::iterator iter = tab_types_.find(tableau_type);
-  if (iter != tab_types_.end())
+  if( iter != tab_types_.end() )
+    {
     comm = iter->second;
+    }
 
   return comm;
 }
@@ -109,133 +120,158 @@ vcl_string bwm_tableau_mgr::save_camera(vcl_string tab_name)
   vgui_tableau_sptr tab = find_tableau(tab_name);
 
   // tableau is not found
-  if (!tab) {
+  if( !tab )
+    {
     vcl_cerr << "Tableau " << tab_name << "is not found!\n";
     return "";
-  }
+    }
 
-  if (tab->type_name().compare("bwm_tableau_rat_cam") == 0) {
+  if( tab->type_name().compare("bwm_tableau_rat_cam") == 0 )
+    {
     bwm_tableau_rat_cam* tab_cam =
-      static_cast<bwm_tableau_rat_cam*> (tab.as_pointer());
+      static_cast<bwm_tableau_rat_cam *>(tab.as_pointer() );
     vcl_string path = tab_cam->save_camera();
     return path;
-  }else if(tab->type_name().compare("bwm_tableau_proj_cam") == 0){
+    }
+  else if( tab->type_name().compare("bwm_tableau_proj_cam") == 0 )
+    {
     bwm_tableau_proj_cam* tab_cam =
-      static_cast<bwm_tableau_proj_cam*> (tab.as_pointer());
+      static_cast<bwm_tableau_proj_cam *>(tab.as_pointer() );
     vcl_string path = tab_cam->save_camera();
     return path;
-  }else if(tab->type_name().compare("bwm_tableau_generic_cam") == 0){
+    }
+  else if( tab->type_name().compare("bwm_tableau_generic_cam") == 0 )
+    {
     vcl_cout << " generic cams not currently saved \n";
     return "";
-  }else{
+    }
+  else
+    {
     vcl_cerr << "Tableau " << tab_name << "is an unknown camera tableau!\n";
     return "";
-  }
+    }
 }
 
 void bwm_tableau_mgr::save_cameras()
 {
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
-  while (iter != tableaus_.end()) {
+  while( iter != tableaus_.end() )
+    {
     save_camera(iter->first);
     iter++;
-  }
+    }
 }
 
 void bwm_tableau_mgr::add_corresp(vcl_string tab_name, bwm_corr_sptr corr, double X, double Y)
 {
   vgui_tableau_sptr tab = this->find_tableau(tab_name);
-  if (tab) {
-    if ((tab->type_name().compare("bwm_tableau_proj_cam") == 0) ||
-        (tab->type_name().compare("bwm_tableau_rat_cam") == 0)) {
-          bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam*> (tab.as_pointer());
-          // ??????tab_cam->add_corresp_cross(X, Y);
-          bwm_observer_cam* obs = tab_cam->observer();
-          if (obs) {
-            corr->set_match(obs, X, Y);
-            obs->add_cross(X, Y, 3);
-          }
+
+  if( tab )
+    {
+    if( (tab->type_name().compare("bwm_tableau_proj_cam") == 0) ||
+        (tab->type_name().compare("bwm_tableau_rat_cam") == 0) )
+      {
+      bwm_tableau_cam* tab_cam = static_cast<bwm_tableau_cam *>(tab.as_pointer() );
+      // ??????tab_cam->add_corresp_cross(X, Y);
+      bwm_observer_cam* obs = tab_cam->observer();
+      if( obs )
+        {
+        corr->set_match(obs, X, Y);
+        obs->add_cross(X, Y, 3);
+        }
+      }
     }
-  }
 }
 
 void bwm_tableau_mgr::remove_tableau()
 {
   unsigned int col, row;
+
   grid_->get_last_selected_position(&col, &row);
   grid_->set_selected(row, col, false);
   vgui_tableau_sptr tab = grid_->get_tableau_at(col, row);
 
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
-  while (iter != tableaus_.end()) {
-    if ((iter->second == tab) || (tab->get_child(0) == iter->second)) {
+  while( iter != tableaus_.end() )
+    {
+    if( (iter->second == tab) || (tab->get_child(0) == iter->second) )
+      {
       tableaus_.erase(iter);
       grid_->remove_at(col, row);
       return;
-    }
+      }
     iter++;
-  }
+    }
+
   grid_->layout_grid2();
 }
 
 vgui_tableau_sptr bwm_tableau_mgr::active_tableau()
 {
   unsigned col_pos, row_pos;
+
   grid_->get_last_selected_position(&col_pos, &row_pos);
   vgui_tableau_sptr tab = grid_->get_tableau_at(col_pos, row_pos);
   return tab;
 }
 
-//: manages creating new tableaux on the grid.
+// : manages creating new tableaux on the grid.
 // Decides on the layout of the grid based on the number of current tableaux.
 void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab, unsigned& col,
                                   unsigned& row)
 {
-   if (tableaus_.size() == 0)
-  {
+  if( tableaus_.size() == 0 )
+    {
     grid_->add_next(tab, col, row);
     return;
-   }
+    }
 
   // it alternatively adds rows and columns, to equally divide the grid
-  if ((tableaus_.size()%2 == 0) && (grid_->rows()*grid_->cols() == tableaus_.size())) {
-    if (row_added_) {
+  if( (tableaus_.size() % 2 == 0) && (grid_->rows() * grid_->cols() == tableaus_.size() ) )
+    {
+    if( row_added_ )
+      {
       grid_->add_column();
       row_added_ = false;
-    }
-    else {
+      }
+    else
+      {
       grid_->add_row();
       row_added_ = true;
+      }
     }
-  }
   grid_->add_next(tab, col, row);
 }
 
 void bwm_tableau_mgr::add_to_grid(vgui_tableau_sptr tab)
 {
-  unsigned row = 0, col=0;
+  unsigned row = 0, col = 0;
+
   this->add_to_grid(tab, col, row);
 }
 
 vgui_tableau_sptr bwm_tableau_mgr::find_tableau(vcl_string name)
 {
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.find(name);
-  if (iter != tableaus_.end()) {
+  if( iter != tableaus_.end() )
+    {
     return iter->second;
-  }
+    }
   return 0;
 }
 
 void bwm_tableau_mgr::exit()
 {
-  vcl_vector<bwm_observer_cam*> obs =
+  vcl_vector<bwm_observer_cam *> obs =
     bwm_observer_mgr::instance()->observers_cam();
-  for (vcl_vector<bwm_observer_cam*>::iterator oit = obs.begin();
-       oit != obs.end(); ++oit)
-    if ((*oit)->type_name() == "bwm_observer_video")
+  for( vcl_vector<bwm_observer_cam *>::iterator oit = obs.begin();
+       oit != obs.end(); ++oit )
     {
-      bwm_observer_video* obv = static_cast<bwm_observer_video*>(*oit);
+    if( (*oit)->type_name() == "bwm_observer_video" )
+      {
+      bwm_observer_video* obv = static_cast<bwm_observer_video *>(*oit);
       obv->stop();
+      }
     }
   vgui::quit();
 }
@@ -262,27 +298,29 @@ void bwm_tableau_mgr::set_draw_mode_mesh()
 
 void bwm_tableau_mgr::set_observer_draw_mode(int mode)
 {
-  vcl_vector<bwm_observer_cam*> obs =
+  vcl_vector<bwm_observer_cam *> obs =
     bwm_observer_mgr::instance()->observers_cam();
-  for (unsigned i=0; i<obs.size(); i++)
-  {
-    obs[i]->set_draw_mode((bwm_observer::BWM_DRAW_MODE)mode);
-  }
+  for( unsigned i = 0; i < obs.size(); i++ )
+    {
+    obs[i]->set_draw_mode( (bwm_observer::BWM_DRAW_MODE)mode);
+    }
 }
 
 void bwm_tableau_mgr::zoom_to_fit()
 {
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
-  while (iter != tableaus_.end()) {
-    bwm_tableau_img* tab = static_cast<bwm_tableau_img*> (iter->second.as_pointer());
+  while( iter != tableaus_.end() )
+    {
+    bwm_tableau_img* tab = static_cast<bwm_tableau_img *>(iter->second.as_pointer() );
     tab->zoom_to_fit();
     iter++;
-  }
+    }
 }
 
 void bwm_tableau_mgr::scroll_to_point()
 {
-  double lx,ly,lz;
+  double lx, ly, lz;
+
   /*ly = 12.952359;
   lx = 77.589078;
   lz = 850.0;*/
@@ -295,14 +333,19 @@ void bwm_tableau_mgr::scroll_to_point()
   dialog.field("lon:", lx);
   dialog.field("lat:", ly);
   dialog.field("elev:", lz);
-  if (!dialog.ask())
+  if( !dialog.ask() )
+    {
     return;
+    }
 
   vcl_map<vcl_string, vgui_tableau_sptr>::iterator iter = tableaus_.begin();
-  while (iter != tableaus_.end()) {
-    bwm_tableau_cam* tab = dynamic_cast<bwm_tableau_cam*> (iter->second.as_pointer());
-    if (tab)
-      tab->scroll_to_point(lx,ly,lz);
+  while( iter != tableaus_.end() )
+    {
+    bwm_tableau_cam* tab = dynamic_cast<bwm_tableau_cam *>(iter->second.as_pointer() );
+    if( tab )
+      {
+      tab->scroll_to_point(lx, ly, lz);
+      }
     iter++;
-  }
+    }
 }

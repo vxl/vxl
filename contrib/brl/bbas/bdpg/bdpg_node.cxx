@@ -1,7 +1,7 @@
 #include "bdpg_node.h"
-//:
+// :
 // \file
-#include <vcl_cmath.h> //for exp() & log()
+#include <vcl_cmath.h> // for exp() & log()
 #include <vnl/vnl_numeric_traits.h>
 
 bdpg_node::bdpg_node() :
@@ -25,7 +25,7 @@ double bdpg_node::p()
   return vcl_exp(log_prob_);
 }
 
-//: append the path probability to the current probability
+// : append the path probability to the current probability
 void bdpg_node::update_prob(const double p)
 {
   log_prob_ += vcl_log(p);

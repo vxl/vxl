@@ -1,12 +1,11 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_value );
 DECLARE( test_tuple );
 DECLARE( test_relation );
 DECLARE( test_database );
 DECLARE( test_query );
-//DECLARE( test_database_manager );
+// DECLARE( test_database_manager );
 
 void
 register_tests()
@@ -20,5 +19,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-

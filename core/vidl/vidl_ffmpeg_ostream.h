@@ -2,9 +2,9 @@
 #ifndef vidl_ffmpeg_ostream_h_
 #define vidl_ffmpeg_ostream_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief A video output stream to an encoded file using FFMPEG
 //
@@ -20,61 +20,57 @@
 #include <vcl_string.h>
 #include "vidl_ffmpeg_ostream_params.h"
 
-
-//: The parameters used to initialize a ffmpeg writer.
+// : The parameters used to initialize a ffmpeg writer.
 struct vidl_ffmpeg_ostream_params;
 
-
-//: A video output stream to an encoded file using FFMPEG
+// : A video output stream to an encoded file using FFMPEG
 class vidl_ffmpeg_ostream
   : public vidl_ostream
 {
- public:
-  //: Constructor
+public:
+  // : Constructor
   vidl_ffmpeg_ostream();
 
-  //: Constructor - opens a stream
-  vidl_ffmpeg_ostream(const vcl_string& filenam,
-                      const vidl_ffmpeg_ostream_params& parms);
+  // : Constructor - opens a stream
+  vidl_ffmpeg_ostream(const vcl_string& filenam, const vidl_ffmpeg_ostream_params& parms);
 
-  //: Destructor
+  // : Destructor
   virtual ~vidl_ffmpeg_ostream();
 
-  //: Open the stream
+  // : Open the stream
   virtual bool open();
 
-  //: Close the stream
+  // : Close the stream
   virtual void close();
 
-  //: Return true if the stream is open for writing
+  // : Return true if the stream is open for writing
   virtual bool is_open() const;
 
-  //: Write and image to the stream
+  // : Write and image to the stream
   // \retval false if the image could not be written
   virtual bool write_frame(const vidl_frame_sptr& frame);
 
-  //: Set the filename
+  // : Set the filename
   void set_filename(const vcl_string& filenam) { filename_ = filenam; }
 
-  //: Set the parameters
+  // : Set the parameters
   void set_params(const vidl_ffmpeg_ostream_params& parms) { params_ = parms; }
 
-  //: Access the filename
+  // : Access the filename
   vcl_string filename() const { return filename_; }
 
-  //: Access the parameters
-  const vidl_ffmpeg_ostream_params& params() const { return params_; }
-
- private:
-  //: The private implementation (PIMPL) details
+  // : Access the parameters
+  const vidl_ffmpeg_ostream_params & params() const { return params_; }
+private:
+  // : The private implementation (PIMPL) details
   //  This isolates the clients from the ffmpeg details
   struct pimpl;
   pimpl* os_;
 
-  //: The filename to open
+  // : The filename to open
   vcl_string filename_;
 
-  //: The parameters
+  // : The parameters
   vidl_ffmpeg_ostream_params params_;
 };
 

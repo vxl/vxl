@@ -18,8 +18,7 @@
 #include <vgui/vgui_shell_tableau.h>
 #include <vgui/vgui_command.h>
 
-
-void bwm_tableau_img::get_popup(vgui_popup_params const &params, vgui_menu &menu)
+void bwm_tableau_img::get_popup(vgui_popup_params const & params, vgui_menu & menu)
 {
   menu.clear();
 
@@ -36,8 +35,10 @@ void bwm_tableau_img::lock()
 void bwm_tableau_img::unlock()
 {
   my_observer_->lock_vgui_status(false);
-  if (!my_observer_->vgui_status_on())
+  if( !my_observer_->vgui_status_on() )
+    {
     my_observer_->image_tableau()->lock_linenum(false);
+    }
 }
 
 void bwm_tableau_img::create_box()
@@ -59,15 +60,16 @@ void bwm_tableau_img::create_polygon()
 {
   // first lock the bgui_image _tableau
   bwm_observer_mgr::instance()->stop_corr();
+
   this->lock();
   vsol_polygon_2d_sptr poly2d;
   set_color(1, 0, 0);
   pick_polygon(poly2d);
-  if (!poly2d)
-  {
+  if( !poly2d )
+    {
     vcl_cerr << "In bwm_tableau_img::create_polygon() - picking failed\n";
     return;
-  }
+    }
   this->unlock();
 
   // add the polygon to the list
@@ -83,11 +85,11 @@ void bwm_tableau_img::create_polyline()
   vsol_polyline_2d_sptr poly2d;
   set_color(1, 0, 0);
   this->pick_polyline(poly2d);
-  if (!poly2d)
-  {
+  if( !poly2d )
+    {
     vcl_cerr << "In bwm_tableau_img::create_polyline() - picking failed\n";
     return;
-  }
+    }
 
   this->unlock();
   // add the polygon to the list
@@ -100,7 +102,7 @@ void bwm_tableau_img::create_point()
 
   set_color(1, 0, 0);
   this->pick_point(&x, &y);
-  my_observer_->create_point(new vsol_point_2d(x, y));
+  my_observer_->create_point(new vsol_point_2d(x, y) );
 }
 
 void bwm_tableau_img::create_pointset()
@@ -108,65 +110,78 @@ void bwm_tableau_img::create_pointset()
   vcl_vector<vsol_point_2d_sptr> pts;
 
   bool picked = this->pick_point_set(pts, 1000);
-  if (!picked) return; // failed!
+  if( !picked )
+    {
+    return;            // failed!
 
-  for (vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
-       pit != pts.end(); ++pit)
+    }
+  for( vcl_vector<vsol_point_2d_sptr>::iterator pit = pts.begin();
+       pit != pts.end(); ++pit )
+    {
     my_observer_->create_point(*pit);
+    }
   this->post_redraw();
 }
 
 void bwm_tableau_img::create_vsol_spatial_object(vsol_spatial_object_2d_sptr sos)
 {
-  if (sos->cast_to_point()) {
+  if( sos->cast_to_point() )
+    {
     vsol_point_2d_sptr p = sos->cast_to_point();
     my_observer_->create_point(p);
-  }
-  else if (sos->cast_to_curve())
-  {
-    if (sos->cast_to_curve()->cast_to_digital_curve())
+    }
+  else if( sos->cast_to_curve() )
     {
+    if( sos->cast_to_curve()->cast_to_digital_curve() )
+      {
       vcl_cerr << "bwm_observer does not have support to add digital curve!! skipping this object!\n";
-    }
-    else if (sos->cast_to_curve()->cast_to_vdgl_digital_curve())
-    {
+      }
+    else if( sos->cast_to_curve()->cast_to_vdgl_digital_curve() )
+      {
       vcl_cerr << "bwm_observer does not have support to add vdgl digital curve!! skipping this object!\n";
-    }
-    else if (sos->cast_to_curve()->cast_to_line())
-    {
-      //vsol_line_2d_sptr line =
+      }
+    else if( sos->cast_to_curve()->cast_to_line() )
+      {
+      // vsol_line_2d_sptr line =
       //  sos->cast_to_curve()->cast_to_line();
       vcl_cerr << "bwm_observer does not have support to add vsol_line_2d !! skipping this object!\n";
-    }
-    else if (sos->cast_to_curve()->cast_to_polyline())
-    {
+      }
+    else if( sos->cast_to_curve()->cast_to_polyline() )
+      {
       vsol_polyline_2d_sptr pline =
         sos->cast_to_curve()->cast_to_polyline();
       my_observer_->create_polyline(pline);
-    }
-    else if (sos->cast_to_curve()->cast_to_conic())
-    {
-      //vsol_conic_2d_sptr conic = sos->cast_to_curve()->cast_to_conic();
+      }
+    else if( sos->cast_to_curve()->cast_to_conic() )
+      {
+      // vsol_conic_2d_sptr conic = sos->cast_to_curve()->cast_to_conic();
       // make sure the endpoints are already defined
-      //assert(conic->p0() && conic->p1());
-      //this->add_vsol_conic_2d(conic, style);
+      // assert(conic->p0() && conic->p1());
+      // this->add_vsol_conic_2d(conic, style);
       vcl_cerr << "bwm_observer does not have support to add vsol_conic_2d_sptr !! skipping this object!\n";
-    }
+      }
     else
+      {
       assert(!"unknown curve type in bgui_vsol2D_tableau::add_spatial_object()");
-  }
-  else if (sos->cast_to_region()) {
-    if (sos->cast_to_region()->cast_to_polygon())
+      }
+    }
+  else if( sos->cast_to_region() )
     {
+    if( sos->cast_to_region()->cast_to_polygon() )
+      {
       vsol_polygon_2d_sptr pline =
         sos->cast_to_region()->cast_to_polygon();
       my_observer_->create_polygon(pline);
-    }
+      }
     else
+      {
       assert(!"unknown region type in bgui_vsol2D_tableau::add_spatial_object()");
-  }
+      }
+    }
   else
+    {
     assert(!"unknown spatial object type in bgui_vsol2D_tableau::add_spatial_object()");
+    }
   return;
 
 }
@@ -179,6 +194,7 @@ void bwm_tableau_img::copy()
 void bwm_tableau_img::paste()
 {
   float x, y;
+
   this->pick_point(&x, &y);
   my_observer_->paste(x, y);
 }
@@ -203,8 +219,8 @@ void bwm_tableau_img::clear_all()
   my_observer_->delete_all();
 }
 
-//if only an image tableau is loaded this will effectively
-//be the same command. Only to be overridden when a video tableau is loaded.
+// if only an image tableau is loaded this will effectively
+// be the same command. Only to be overridden when a video tableau is loaded.
 void bwm_tableau_img::clear_all_frames()
 {
   my_observer_->delete_all();
@@ -213,6 +229,7 @@ void bwm_tableau_img::clear_all_frames()
 void bwm_tableau_img::intensity_profile()
 {
   float x1, y1, x2, y2;
+
   this->lock();
   pick_line(&x1, &y1, &x2, &y2);
   vcl_cout << x1 << ',' << y1 << "-->" << x2 << ',' << y2 << vcl_endl;
@@ -243,61 +260,86 @@ void bwm_tableau_img::scroll_to_point()
 void bwm_tableau_img::save_mask()
 {
   vil_image_view_base_sptr mask = my_observer_->mask();
-  if (!mask)
+
+  if( !mask )
+    {
     return;
+    }
   vgui_dialog save_dlg("Save Mask");
-  vcl_string ext, file_path;
+  vcl_string  ext, file_path;
   save_dlg.file("Mask Filename", ext, file_path);
-  if (!save_dlg.ask())
+  if( !save_dlg.ask() )
+    {
     return;
-  if (file_path =="")
+    }
+  if( file_path == "" )
+    {
     return;
-  bool result = vil_save(*mask,file_path.c_str());
-  if ( !result ) {
+    }
+  bool result = vil_save(*mask, file_path.c_str() );
+  if( !result )
+    {
     vcl_cerr << "Failed to save image to " << file_path << '\n';
-  }
+    }
 }
 
 void bwm_tableau_img::save_spatial_objects_2d()
 {
   vcl_vector<vsol_spatial_object_2d_sptr> sos =
     my_observer_->get_spatial_objects_2d();
-  if (sos.size() == 0)
+  if( sos.size() == 0 )
+    {
     return;
+    }
   vgui_dialog save_dlg("Save Spatial Objects 2d");
-  vcl_string ext, binary_filename;
+  vcl_string  ext, binary_filename;
   save_dlg.file("Binary Filename", ext, binary_filename);
-  if (!save_dlg.ask())
+  if( !save_dlg.ask() )
+    {
     return;
-  if (binary_filename == "")
+    }
+  if( binary_filename == "" )
+    {
     return;
+    }
   vsl_b_ofstream ostr(binary_filename);
-  if (!ostr) {
+  if( !ostr )
+    {
     vcl_cerr << "Failed to open output stream "
              << binary_filename << vcl_endl;
     return;
-  }
+    }
   vsl_b_write(ostr, sos);
 }
-void bwm_tableau_img::load_spatial_objects_2d(){
+
+void bwm_tableau_img::load_spatial_objects_2d()
+{
   vgui_dialog save_dlg("Load Spatial Objects 2d");
-  vcl_string ext, binary_filename;
+  vcl_string  ext, binary_filename;
+
   save_dlg.file("Binary Filename", ext, binary_filename);
-  if (!save_dlg.ask())
+  if( !save_dlg.ask() )
+    {
     return;
-  if (binary_filename == "")
+    }
+  if( binary_filename == "" )
+    {
     return;
+    }
   vsl_b_ifstream istr(binary_filename);
-  if (!istr) {
+  if( !istr )
+    {
     vcl_cerr << "Failed to open inputt stream "
              << binary_filename << vcl_endl;
     return;
-  }
+    }
   vcl_vector<vsol_spatial_object_2d_sptr> sos;
   vsl_b_read(istr, sos);
-  //my_observer_->add_spatial_objects(sos);
-  for (unsigned i = 0; i < sos.size(); i++)
+  // my_observer_->add_spatial_objects(sos);
+  for( unsigned i = 0; i < sos.size(); i++ )
+    {
     this->create_vsol_spatial_object(sos[i]);
+    }
   my_observer_->post_redraw();
 }
 
@@ -305,56 +347,75 @@ void bwm_tableau_img::save_pointset_2d_ascii()
 {
   vcl_vector<vsol_spatial_object_2d_sptr> sos =
     my_observer_->get_spatial_objects_2d();
-  if (sos.size() == 0)
+  if( sos.size() == 0 )
+    {
     return;
+    }
   vcl_vector<vsol_point_2d_sptr> pts;
-  for (unsigned i=0; i<sos.size(); ++i) {
+  for( unsigned i = 0; i < sos.size(); ++i )
+    {
     vsol_spatial_object_2d_sptr so = sos[i];
-    vsol_point_2d_sptr pt = so->cast_to_point();
-    if (pt)
+    vsol_point_2d_sptr          pt = so->cast_to_point();
+    if( pt )
+      {
       pts.push_back(pt);
-  }
+      }
+    }
   vgui_dialog save_dlg("Save Pointset");
-  vcl_string ext, pt_filename;
+  vcl_string  ext, pt_filename;
   save_dlg.file("Point Filename", ext, pt_filename);
-  if (!save_dlg.ask())
+  if( !save_dlg.ask() )
+    {
     return;
-  vcl_ofstream os(pt_filename.c_str());
-  if (os.is_open()) {
-    os << pts.size()<< '\n';
-    for (unsigned i=0; i<pts.size(); ++i)
+    }
+  vcl_ofstream os(pt_filename.c_str() );
+  if( os.is_open() )
+    {
+    os << pts.size() << '\n';
+    for( unsigned i = 0; i < pts.size(); ++i )
+      {
       os << pts[i]->x() << ' ' << pts[i]->y() << '\n';
+      }
     os.close();
-  }
+    }
 }
+
 void bwm_tableau_img::load_pointset_2d_ascii()
 {
   // the style toggling is just to
   // allow comparison of two or three point sets
   static float r = 0.0;
-  if(r == 1.5f)
+
+  if( r == 1.5f )
+    {
     r = 0.0f;
+    }
   vgui_style_sptr sty = vgui_style::new_style( r, 1.0f, 0.0f, 3.0, 2.0);
 
   vgui_dialog load_dlg("Load Pointset");
-  vcl_string ext, pt_filename;
+  vcl_string  ext, pt_filename;
   load_dlg.file("Point Filename", ext, pt_filename);
-  if (!load_dlg.ask())
+  if( !load_dlg.ask() )
+    {
     return;
-  vcl_ifstream istr(pt_filename.c_str());
-  if (istr.is_open()) {
+    }
+  vcl_ifstream istr(pt_filename.c_str() );
+  if( istr.is_open() )
+    {
     unsigned n;
-    istr >> n; //number of pts
+    istr >> n; // number of pts
     double x, y;
-    for(unsigned i = 0; i<n; ++i){
+    for( unsigned i = 0; i < n; ++i )
+      {
       istr >> x >> y;
       vsol_point_2d_sptr pt = new vsol_point_2d(x, y);
       my_observer_->add_vsol_point_2d(pt, sty);
-    }
+      }
     istr.close();
-  }
-  r = r+0.5f;
+    }
+  r = r + 0.5f;
 }
+
 void bwm_tableau_img::help_pop()
 {
   bwm_tableau_text* text = new bwm_tableau_text(500, 500);
@@ -362,10 +423,12 @@ void bwm_tableau_img::help_pop()
   text->set_text("C:/lems/lemsvxlsrc/contrib/bwm/doc/HELP_cam.txt");
   vgui_tableau_sptr v = vgui_viewer2D_tableau_new(text);
   vgui_tableau_sptr s = vgui_shell_tableau_new(v);
-  vgui_dialog popup("CAMERA TABLEAU HELP");
+  vgui_dialog       popup("CAMERA TABLEAU HELP");
   popup.inline_tableau(s, 550, 550);
-  if (!popup.ask())
+  if( !popup.ask() )
+    {
     return;
+    }
 }
 
 void bwm_tableau_img::step_edges_vd()
@@ -391,15 +454,20 @@ void bwm_tableau_img::recover_lines()
 void  bwm_tableau_img::crop_image()
 {
   vgui_dialog crop_dlg("Crop Image Path");
-  vcl_string ext = "tiff";
-  vcl_string filename;
+  vcl_string  ext = "tiff";
+  vcl_string  filename;
+
   crop_dlg.file("Point Filename", ext, filename);
-  if (!crop_dlg.ask())
+  if( !crop_dlg.ask() )
+    {
     return;
+    }
   vil_image_resource_sptr chip;
-  if (!my_observer_->crop_image(chip))
+  if( !my_observer_->crop_image(chip) )
+    {
     return;
-  vil_save_image_resource(chip, filename.c_str());
+    }
+  vil_save_image_resource(chip, filename.c_str() );
 }
 
 bool bwm_tableau_img::handle(const vgui_event& e)
@@ -422,6 +490,7 @@ void bwm_tableau_img::add_dontcare_poly_to_mask()
 {
   my_observer_->add_dontcare_poly_to_mask();
 }
+
 #endif
 
 void bwm_tableau_img::remove_poly_from_mask()
@@ -434,4 +503,5 @@ void bwm_tableau_img::create_mask()
 {
   my_observer_->create_mask();
 }
+
 #endif

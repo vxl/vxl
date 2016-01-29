@@ -2,11 +2,11 @@
 #ifndef FMatrixPlanar_h_
 #define FMatrixPlanar_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
 
-//--------------------------------------------------------------
-//:
+// --------------------------------------------------------------
+// :
 // \file
 // \brief planar fundamental matrix
 //
@@ -29,7 +29,7 @@
 
 class FMatrixPlanar : public FMatrix
 {
- public:
+public:
   FMatrixPlanar();
   FMatrixPlanar(const double* f_matrix);
   FMatrixPlanar(const vnl_double_3x3& f_matrix);
@@ -38,25 +38,26 @@ class FMatrixPlanar : public FMatrix
   // Computations-----------------------------------------------------------
   void init(const FMatrix& F);
 
-  //: Null function since planar FMatrix has already rank 2.
+  // : Null function since planar FMatrix has already rank 2.
   inline void set_rank2_using_svd() {}
-  //: Returns current matrix which is already Rank 2.
+  // : Returns current matrix which is already Rank 2.
   inline FMatrixPlanar get_rank2_truncated() { return *this; }
-  void find_nearest_perfect_match (const HomgPoint2D& in1, const HomgPoint2D& in2,
-                                   HomgPoint2D *out1, HomgPoint2D *out2) const;
-  void find_nearest_perfect_match (vgl_homg_point_2d<double> const& in1,
-                                   vgl_homg_point_2d<double> const& in2,
-                                   vgl_homg_point_2d<double>& out1,
-                                   vgl_homg_point_2d<double>& out2) const;
+  void find_nearest_perfect_match(const HomgPoint2D& in1, const HomgPoint2D& in2, HomgPoint2D * out1,
+                                  HomgPoint2D * out2) const;
+
+  void find_nearest_perfect_match(vgl_homg_point_2d<double> const& in1, vgl_homg_point_2d<double> const& in2,
+                                  vgl_homg_point_2d<double>& out1, vgl_homg_point_2d<double>& out2) const;
 
   // Data Access------------------------------------------------------------
 
-  bool set (const double* f_matrix );
-  bool set (const vnl_double_3x3& f_matrix );
-  //: Returns the rank2 flag which is always true for FMatrixPlanar.
-  inline bool get_rank2_flag (void) const { return true; }
-  //: Null function since planar FMatrix has already rank 2.
-  inline void set_rank2_flag (bool /*rank2_flag*/) const {}
+  bool set(const double* f_matrix );
+
+  bool set(const vnl_double_3x3& f_matrix );
+
+  // : Returns the rank2 flag which is always true for FMatrixPlanar.
+  inline bool get_rank2_flag(void) const { return true; }
+  // : Null function since planar FMatrix has already rank 2.
+  inline void set_rank2_flag(bool /*rank2_flag*/) const {}
 };
 
 #endif // FMatrixPlanar_h_

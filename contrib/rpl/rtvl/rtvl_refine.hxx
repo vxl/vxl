@@ -6,8 +6,10 @@
 #ifndef rtvl_refine_hxx
 #define rtvl_refine_hxx
 
-template <unsigned int N> class rtvl_refine_internal;
-template <unsigned int N> class rtvl_tokens;
+template <unsigned int N>
+class rtvl_refine_internal;
+template <unsigned int N>
+class rtvl_tokens;
 
 template <unsigned int N>
 class rtvl_refine
@@ -28,6 +30,7 @@ public:
 
   /** Move to the next-larger scale.  */
   bool next_scale();
+
 private:
   friend class rtvl_refine_internal<N>;
   typedef rtvl_refine_internal<N> internal_type;

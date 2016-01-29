@@ -2,9 +2,9 @@
 #ifndef vul_sequence_filename_map_h_
 #define vul_sequence_filename_map_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Contains class for mapping sequence frame indices to filenames
 // \author David Capel, Oxford RRG
@@ -19,8 +19,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
 
-
-//: Maps sequence frame indices to filenames
+// : Maps sequence frame indices to filenames
 // vul_sequence_filename_map maps sequence frame indices to filenames. It
 // also performs some disk probing functions to discover the image extension,
 // directories and sequence template if not specified by the user.
@@ -37,63 +36,63 @@
 // determine the sequence start/end frames.
 class vul_sequence_filename_map
 {
- public:
-  vul_sequence_filename_map ();
-  vul_sequence_filename_map (vcl_string const & seq_template,
-                             vcl_vector<int> const & indices);
-  vul_sequence_filename_map (vcl_string const & seq_template,
-                             int start, int end, int step = 1);
-  vul_sequence_filename_map (vcl_string const & seq_template,
-                             int step = 1);
-  ~vul_sequence_filename_map ();
+public:
+  vul_sequence_filename_map();
+  vul_sequence_filename_map(vcl_string const & seq_template, vcl_vector<int> const & indices);
+  vul_sequence_filename_map(vcl_string const & seq_template, int start, int end, int step = 1);
+  vul_sequence_filename_map(vcl_string const & seq_template, int step = 1);
+  ~vul_sequence_filename_map();
 
-  //: returns frame name with no extension, e.g. "img.003", "img.003.004"
+  // : returns frame name with no extension, e.g. "img.003", "img.003.004"
   vcl_string name(int frame);
+
   vcl_string pair_name(int i, int j);
+
   vcl_string triplet_name(int i, int j, int k);
 
   vcl_string image_name(int frame)
   { return image_dir_ + name(frame) + image_extension_; }
 
-  //: returns the image directory e.g. "pgm/"
+  // : returns the image directory e.g. "pgm/"
   vcl_string get_image_dir() const { return image_dir_; }
 
-  //: returns the image extension e.g. ".pgm"
+  // : returns the image extension e.g. ".pgm"
   vcl_string get_image_extension() const { return image_extension_; }
 
-  //: returns the base name e.h. "img."
+  // : returns the base name e.h. "img."
   vcl_string get_base_name() const { return basename_; }
 
-  //: returns the actually on-disk index corresponding to frame N
+  // : returns the actually on-disk index corresponding to frame N
   int get_real_index(int frame) const { return indices_[frame]; }
-  vcl_vector<int> const& get_real_indices() const { return indices_; }
+  vcl_vector<int> const & get_real_indices() const { return indices_; }
 
-  //: returns the frame number corresp. to on-disk index N, or -1 if out-of-range
+  // : returns the frame number corresp. to on-disk index N, or -1 if out-of-range
   int get_mapped_index(int real) const;
 
-  int get_nviews() const { return int(indices_.size()); }
+  int get_nviews() const { return int(indices_.size() ); }
 
+  // : pretty print
+  vcl_ostream & print(vcl_ostream& s) const;
 
-  //: pretty print
-  vcl_ostream& print(vcl_ostream& s) const;
-
- protected:
+protected:
   bool filter_dirent(char const* name, vcl_string const& extension);
+
   int extract_index(char const* name);
 
-  vcl_string seq_template_;
+  vcl_string      seq_template_;
   vcl_vector<int> indices_;
-  vcl_string basename_;
-  vcl_string index_format_;
-  vcl_string image_dir_;
-  vcl_string image_extension_;
-  int start_;
-  int step_;
-  int end_;
+  vcl_string      basename_;
+  vcl_string      index_format_;
+  vcl_string      image_dir_;
+  vcl_string      image_extension_;
+  int             start_;
+  int             step_;
+  int             end_;
 
   void parse();
+
 };
 
-vcl_ostream& operator<<(vcl_ostream &os, const vul_sequence_filename_map& s);
+vcl_ostream & operator<<(vcl_ostream & os, const vul_sequence_filename_map& s);
 
 #endif // vul_sequence_filename_map_h_

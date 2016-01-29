@@ -1,7 +1,7 @@
 // This is gel/vtol/vtol_vertex.h
 #ifndef vtol_vertex_h_
 #define vtol_vertex_h_
-//:
+// :
 // \file
 // \brief Topological container for a spatial point, without geometry info
 //
@@ -33,125 +33,135 @@ class vtol_block;
 
 class vtol_vertex : public vtol_topology_object
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Initialization
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Default constructor
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Default constructor
+  // ---------------------------------------------------------------------------
   vtol_vertex() {}
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Destructor
+  // ---------------------------------------------------------------------------
   virtual ~vtol_vertex();
 
   // Accessors
-
- private: // has been superseded by is_a()
-  //: Return the topology type
+private:  // has been superseded by is_a()
+  // : Return the topology type
   virtual vtol_topology_object_type topology_type() const { return VERTEX; }
-
- public:
-  //---------------------------------------------------------------------------
-  //: create a list of all connected vertices
-  //---------------------------------------------------------------------------
+public:
+  // ---------------------------------------------------------------------------
+  // : create a list of all connected vertices
+  // ---------------------------------------------------------------------------
   virtual void explore_vertex(vertex_list &);
 
-  //---------------------------------------------------------------------------
-  //: Is `this' has the same coordinates for its point than `other' ?
-  //---------------------------------------------------------------------------
-  virtual bool operator==(const vtol_vertex &other) const;
-  inline bool operator!=(const vtol_vertex &other)const{return !operator==(other);}
+  // ---------------------------------------------------------------------------
+  // : Is `this' has the same coordinates for its point than `other' ?
+  // ---------------------------------------------------------------------------
+  virtual bool operator==(const vtol_vertex & other) const;
+
+  inline bool operator!=(const vtol_vertex & other) const {return !operator==(other); }
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
-  //---------------------------------------------------------------------------
-  //: Assignment of `this' with `other' (copy the point not the links)
-  //---------------------------------------------------------------------------
-  virtual vtol_vertex& operator=(const vtol_vertex &other);
+  // ---------------------------------------------------------------------------
+  // : Assignment of `this' with `other' (copy the point not the links)
+  // ---------------------------------------------------------------------------
+  virtual vtol_vertex & operator=(const vtol_vertex & other);
 
-  //***************************************************************************
+  // ***************************************************************************
   // Replaces dynamic_cast<T>
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_vertex *cast_to_vertex() const { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is a vertex, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual const vtol_vertex * cast_to_vertex() const { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_vertex *cast_to_vertex() { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is a vertex, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual vtol_vertex * cast_to_vertex() { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a 2D vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex_2d() const {return 0;}
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is a 2D vertex, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual const vtol_vertex_2d * cast_to_vertex_2d() const {return 0; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a 2D vertex, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex_2d() {return 0;}
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is a 2D vertex, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual vtol_vertex_2d * cast_to_vertex_2d() {return 0; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Is `inferior' type valid for `this' ?
-  //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* /*inf*/) const
+  // ---------------------------------------------------------------------------
+  // : Is `inferior' type valid for `this' ?
+  // ---------------------------------------------------------------------------
+  virtual bool valid_inferior_type(vtol_topology_object const * /*inf*/) const
   { return false; } // a vertex can never have an inferior
-  bool valid_superior_type(vtol_zero_chain_sptr const& ) const { return true; }
+  bool valid_superior_type(vtol_zero_chain_sptr const & ) const { return true; }
 
-  //---------------------------------------------------------------------------
-  //: Is `this' connected with `v2' ?
+  // ---------------------------------------------------------------------------
+  // : Is `this' connected with `v2' ?
   //  ie has a superior of `this' `v2' as inferior ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   virtual bool is_connected(vtol_vertex_sptr const& v2) const;
 
   // methods that will be defined by inherited classes
 
-  //---------------------------------------------------------------------------
-  //: Create a line edge from `this' and `other' only if this edge does not exist.
+  // ---------------------------------------------------------------------------
+  // : Create a line edge from `this' and `other' only if this edge does not exist.
   //  Otherwise it just returns the existing edge
   //  REQUIRE: other!=*this
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
 
-  virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& other)=0;
- private: // deprecated:
+  virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& other) = 0;
+
+private:  // deprecated:
   vtol_edge_sptr new_edge(vtol_vertex const& other);
- public:
 
-  //: check to see if the vertex is part of the edge
-  bool is_endpoint(vtol_edge_sptr const&) const;
+public:
 
-  void print(vcl_ostream &strm=vcl_cout) const;
-  void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  // : check to see if the vertex is part of the edge
+  bool is_endpoint(vtol_edge_sptr const &) const;
 
-  //: Return a platform independent string identifying the class
+  void print(vcl_ostream & strm = vcl_cout) const;
+
+  void describe(vcl_ostream & strm = vcl_cout, int blanking = 0) const;
+
+  // : Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vtol_vertex"); }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  // : Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls == is_a(); }
 
-  //: have the inherited classes copy the geometry
-  virtual void copy_geometry(const vtol_vertex &other)=0;
-  virtual bool compare_geometry(const vtol_vertex &other) const =0;
+  // : have the inherited classes copy the geometry
+  virtual void copy_geometry(const vtol_vertex & other) = 0;
 
- protected:
+  virtual bool compare_geometry(const vtol_vertex & other) const = 0;
+
+protected:
   // \warning these should not be used by clients
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
-  virtual vcl_vector<vtol_edge*> *compute_edges();
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
-  virtual vcl_vector<vtol_face*> *compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
-  virtual vcl_vector<vtol_block*> *compute_blocks();
+  virtual vcl_vector<vtol_vertex *> * compute_vertices();
+
+  virtual vcl_vector<vtol_edge *> * compute_edges();
+
+  virtual vcl_vector<vtol_zero_chain *> * compute_zero_chains();
+
+  virtual vcl_vector<vtol_one_chain *> * compute_one_chains();
+
+  virtual vcl_vector<vtol_face *> * compute_faces();
+
+  virtual vcl_vector<vtol_two_chain *> * compute_two_chains();
+
+  virtual vcl_vector<vtol_block *> * compute_blocks();
+
 };
 
 #endif // vtol_vertex_h_

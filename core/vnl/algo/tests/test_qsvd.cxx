@@ -8,10 +8,10 @@
 static
 void test_qsvd()
 {
-  float AA[9]={2.f/3, -1.36f/3, .2f/3,   2.8f/3, .4f/3, 1.f/3,   1, .16f, -.2f};
-  float BB[9]={.16f, -.224f, -.768f,  .8f, .36f, -.48f,  1.12f, -.168f, -.576f};
+  float AA[9] = {2.f / 3, -1.36f / 3, .2f / 3,   2.8f / 3, .4f / 3, 1.f / 3,   1, .16f, -.2f};
+  float BB[9] = {.16f, -.224f, -.768f,  .8f, .36f, -.48f,  1.12f, -.168f, -.576f};
   float U[9], V[9], Q[9], Alpha[3], Beta[3], Work[12];
-  long m=3, n=3, p=3, k, l, Iwork[3], info;
+  long  m = 3, n = 3, p = 3, k, l, Iwork[3], info;
 
   vcl_printf("m = 3, n = 3, p = 3\n");
   v3p_netlib_sggsvd_(
@@ -20,7 +20,7 @@ void test_qsvd()
     );
 
   vcl_printf("k = %ld, l = %ld, return = %ld\n", k, l, info);
-  TEST("(k,l) must be (0,3)", k==0 && l==3, true);
+  TEST("(k,l) must be (0,3)", k == 0 && l == 3, true);
   TEST("sggsvd should return 0", info, 0);
 
   vcl_printf("U = %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n    %12.7f %12.7f %12.7f\n",
@@ -35,14 +35,14 @@ void test_qsvd()
              AA[0], AA[3], AA[6], AA[1], AA[4], AA[7], AA[2], AA[5], AA[8]);
 
   TEST("D1 must be (0.6,0.8,0.6)",
-       vnl_math::abs(Alpha[0]-0.6)<1e-6 &&
-       vnl_math::abs(Alpha[1]-0.8)<1e-6 &&
-       vnl_math::abs(Alpha[2]-0.6)<1e-6, true);
+       vnl_math::abs(Alpha[0] - 0.6) < 1e-6 &&
+       vnl_math::abs(Alpha[1] - 0.8) < 1e-6 &&
+       vnl_math::abs(Alpha[2] - 0.6) < 1e-6, true);
 
   TEST("D2 must be (0.8,0.6,0.8)",
-       vnl_math::abs(Beta[0]-0.8)<1e-6 &&
-       vnl_math::abs(Beta[1]-0.6)<1e-6 &&
-       vnl_math::abs(Beta[2]-0.8)<1e-6, true);
+       vnl_math::abs(Beta[0] - 0.8) < 1e-6 &&
+       vnl_math::abs(Beta[1] - 0.6) < 1e-6 &&
+       vnl_math::abs(Beta[2] - 0.8) < 1e-6, true);
 }
 
 TESTMAIN(test_qsvd);

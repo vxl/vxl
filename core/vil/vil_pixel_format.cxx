@@ -1,6 +1,6 @@
 // This is core/vil/vil_pixel_format.cxx
 #include "vil_pixel_format.h"
-//:
+// :
 // \file
 // \author Ian Scott.
 //
@@ -14,7 +14,7 @@
 #include <vcl_string.h>
 
 static unsigned component_size[] =
-{
+  {
   0,                   //  VIL_PIXEL_FORMAT_UNKNOWN
 
 #if VXL_HAS_INT_64
@@ -68,13 +68,12 @@ static unsigned component_size[] =
   sizeof(float),       //  VIL_PIXEL_FORMAT_RGBA_FLOAT
   0,                   //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE
 
-  sizeof(vcl_complex<float>),   // VIL_PIXEL_FORMAT_COMPLEX_FLOAT
-  sizeof(vcl_complex<double>),  // VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
-};
-
+  sizeof(vcl_complex<float> ),   // VIL_PIXEL_FORMAT_COMPLEX_FLOAT
+  sizeof(vcl_complex<double> ),  // VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
+  };
 
 static unsigned num_components[] =
-{
+  {
   0,  //  VIL_PIXEL_FORMAT_UNKNOWN
 
 #if VXL_HAS_INT_64
@@ -131,11 +130,10 @@ static unsigned num_components[] =
 
   1,  //  VIL_PIXEL_FORMAT_COMPLEX_FLOAT
   1,  //  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
-};
-
+  };
 
 static vil_pixel_format component_format[] =
-{
+  {
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_UNKNOWN
 
 #if VXL_HAS_INT_64
@@ -190,39 +188,36 @@ static vil_pixel_format component_format[] =
   VIL_PIXEL_FORMAT_DOUBLE,   //  VIL_PIXEL_FORMAT_RGBA_DOUBLE
   VIL_PIXEL_FORMAT_UNKNOWN,  //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE
 
-  VIL_PIXEL_FORMAT_COMPLEX_FLOAT, //  VIL_PIXEL_FORMAT_COMPLEX_FLOAT
-  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE,//  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
-};
+  VIL_PIXEL_FORMAT_COMPLEX_FLOAT,  //  VIL_PIXEL_FORMAT_COMPLEX_FLOAT
+  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE, //  VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
+  };
 
-
-//: Return the number of bytes used by each component of pixel format f
+// : Return the number of bytes used by each component of pixel format f
 unsigned vil_pixel_format_sizeof_components(enum vil_pixel_format f)
 {
-  assert (f >= VIL_PIXEL_FORMAT_UNKNOWN && f < VIL_PIXEL_FORMAT_ENUM_END);
+  assert(f >= VIL_PIXEL_FORMAT_UNKNOWN && f < VIL_PIXEL_FORMAT_ENUM_END);
   return component_size[f];
 }
 
-//: Return the number of components in pixel format f
+// : Return the number of components in pixel format f
 unsigned vil_pixel_format_num_components(enum vil_pixel_format f)
 {
-  assert (f >= VIL_PIXEL_FORMAT_UNKNOWN && f < VIL_PIXEL_FORMAT_ENUM_END);
+  assert(f >= VIL_PIXEL_FORMAT_UNKNOWN && f < VIL_PIXEL_FORMAT_ENUM_END);
   return num_components[f];
 }
 
-
-//: Return the number of components in pixel format f
+// : Return the number of components in pixel format f
 vil_pixel_format vil_pixel_format_component_format(enum vil_pixel_format f)
 {
-  assert (f >= VIL_PIXEL_FORMAT_UNKNOWN && f < VIL_PIXEL_FORMAT_ENUM_END);
+  assert(f >= VIL_PIXEL_FORMAT_UNKNOWN && f < VIL_PIXEL_FORMAT_ENUM_END);
   return component_format[f];
 }
 
-
-//: output a pretty string representing the pixel format.
-vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
+// : output a pretty string representing the pixel format.
+vcl_ostream & operator <<(vcl_ostream & os, vil_pixel_format f)
 {
-  switch (f)
-  {
+  switch( f )
+    {
     case VIL_PIXEL_FORMAT_UNKNOWN: os << "VIL_PIXEL_FORMAT_UNKNOWN";  break;
 
 #if VXL_HAS_INT_64
@@ -269,59 +264,59 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
     case VIL_PIXEL_FORMAT_COMPLEX_DOUBLE:  os << "complex<double>";  break;
 
     default:  os << "VIL_PIXEL_FORMAT_INVALID";  break;
-  }
+    }
   return os;
 }
 
-
-//: Convert a string into a pixel format.
+// : Convert a string into a pixel format.
 // This uses the same encoding as operator<<.
 vil_pixel_format vil_pixel_format_from_string(const char * s)
 {
   vcl_string str(s);
-  if (str == "VIL_PIXEL_FORMAT_UNKNOWN") return VIL_PIXEL_FORMAT_UNKNOWN;
+
+  if( str == "VIL_PIXEL_FORMAT_UNKNOWN" ) {return VIL_PIXEL_FORMAT_UNKNOWN; }
 #if VXL_HAS_INT_64
-  if (str == "vxl_uint_64") return VIL_PIXEL_FORMAT_UINT_64;
-  if (str == "vxl_int_64") return VIL_PIXEL_FORMAT_INT_64;
+  if( str == "vxl_uint_64" ) {return VIL_PIXEL_FORMAT_UINT_64; }
+  if( str == "vxl_int_64" ) {return VIL_PIXEL_FORMAT_INT_64; }
 #endif
-  if (str == "vxl_uint_32") return VIL_PIXEL_FORMAT_UINT_32;
-  if (str == "vxl_int_32") return VIL_PIXEL_FORMAT_INT_32;
-  if (str == "vxl_uint_16") return VIL_PIXEL_FORMAT_UINT_16;
-  if (str == "vxl_int_16") return VIL_PIXEL_FORMAT_INT_16;
-  if (str == "vxl_byte") return VIL_PIXEL_FORMAT_BYTE;
-  if (str == "vxl_sbyte") return VIL_PIXEL_FORMAT_SBYTE;
-  if (str == "float") return VIL_PIXEL_FORMAT_FLOAT;
-  if (str == "double") return VIL_PIXEL_FORMAT_DOUBLE;
-  if (str == "bool") return VIL_PIXEL_FORMAT_BOOL;
+  if( str == "vxl_uint_32" ) {return VIL_PIXEL_FORMAT_UINT_32; }
+  if( str == "vxl_int_32" ) {return VIL_PIXEL_FORMAT_INT_32; }
+  if( str == "vxl_uint_16" ) {return VIL_PIXEL_FORMAT_UINT_16; }
+  if( str == "vxl_int_16" ) {return VIL_PIXEL_FORMAT_INT_16; }
+  if( str == "vxl_byte" ) {return VIL_PIXEL_FORMAT_BYTE; }
+  if( str == "vxl_sbyte" ) {return VIL_PIXEL_FORMAT_SBYTE; }
+  if( str == "float" ) {return VIL_PIXEL_FORMAT_FLOAT; }
+  if( str == "double" ) {return VIL_PIXEL_FORMAT_DOUBLE; }
+  if( str == "bool" ) {return VIL_PIXEL_FORMAT_BOOL; }
 
 #if VXL_HAS_INT_64
-  if (str == "vil_rgb<vxl_int_64>") return VIL_PIXEL_FORMAT_RGB_INT_64;
-  if (str == "vil_rgb<vxl_uint_64>") return VIL_PIXEL_FORMAT_RGB_UINT_64;
+  if( str == "vil_rgb<vxl_int_64>" ) {return VIL_PIXEL_FORMAT_RGB_INT_64; }
+  if( str == "vil_rgb<vxl_uint_64>" ) {return VIL_PIXEL_FORMAT_RGB_UINT_64; }
 #endif
-  if (str == "vil_rgb<vxl_int_32>") return VIL_PIXEL_FORMAT_RGB_INT_32;
-  if (str == "vil_rgb<vxl_uint_32>") return VIL_PIXEL_FORMAT_RGB_UINT_32;
-  if (str == "vil_rgb<vxl_int_16>") return VIL_PIXEL_FORMAT_RGB_INT_16;
-  if (str == "vil_rgb<vxl_uint_16>") return VIL_PIXEL_FORMAT_RGB_UINT_16;
-  if (str == "vil_rgb<vxl_byte>") return VIL_PIXEL_FORMAT_RGB_BYTE;
-  if (str == "vil_rgb<vxl_sbyte>") return VIL_PIXEL_FORMAT_RGB_SBYTE;
-  if (str == "vil_rgb<float>") return VIL_PIXEL_FORMAT_RGB_FLOAT;
-  if (str == "vil_rgb<double>") return VIL_PIXEL_FORMAT_RGB_DOUBLE;
+  if( str == "vil_rgb<vxl_int_32>" ) {return VIL_PIXEL_FORMAT_RGB_INT_32; }
+  if( str == "vil_rgb<vxl_uint_32>" ) {return VIL_PIXEL_FORMAT_RGB_UINT_32; }
+  if( str == "vil_rgb<vxl_int_16>" ) {return VIL_PIXEL_FORMAT_RGB_INT_16; }
+  if( str == "vil_rgb<vxl_uint_16>" ) {return VIL_PIXEL_FORMAT_RGB_UINT_16; }
+  if( str == "vil_rgb<vxl_byte>" ) {return VIL_PIXEL_FORMAT_RGB_BYTE; }
+  if( str == "vil_rgb<vxl_sbyte>" ) {return VIL_PIXEL_FORMAT_RGB_SBYTE; }
+  if( str == "vil_rgb<float>" ) {return VIL_PIXEL_FORMAT_RGB_FLOAT; }
+  if( str == "vil_rgb<double>" ) {return VIL_PIXEL_FORMAT_RGB_DOUBLE; }
 
 #if VXL_HAS_INT_64
-  if (str == "vil_rgba<vxl_int_64>") return VIL_PIXEL_FORMAT_RGBA_INT_64;
-  if (str == "vil_rgba<vxl_uint_64>") return VIL_PIXEL_FORMAT_RGBA_UINT_64;
+  if( str == "vil_rgba<vxl_int_64>" ) {return VIL_PIXEL_FORMAT_RGBA_INT_64; }
+  if( str == "vil_rgba<vxl_uint_64>" ) {return VIL_PIXEL_FORMAT_RGBA_UINT_64; }
 #endif
-  if (str == "vil_rgba<vxl_int_32>") return VIL_PIXEL_FORMAT_RGBA_INT_32;
-  if (str == "vil_rgba<vxl_uint_32>") return VIL_PIXEL_FORMAT_RGBA_UINT_32;
-  if (str == "vil_rgba<vxl_int_16>") return VIL_PIXEL_FORMAT_RGBA_INT_16;
-  if (str == "vil_rgba<vxl_uint_16>") return VIL_PIXEL_FORMAT_RGBA_UINT_16;
-  if (str == "vil_rgba<vxl_byte>") return VIL_PIXEL_FORMAT_RGBA_BYTE;
-  if (str == "vil_rgba<vxl_sbyte>") return VIL_PIXEL_FORMAT_RGBA_SBYTE;
-  if (str == "vil_rgba<float>") return VIL_PIXEL_FORMAT_RGBA_FLOAT;
-  if (str == "vil_rgba<double>") return VIL_PIXEL_FORMAT_RGBA_DOUBLE;
+  if( str == "vil_rgba<vxl_int_32>" ) {return VIL_PIXEL_FORMAT_RGBA_INT_32; }
+  if( str == "vil_rgba<vxl_uint_32>" ) {return VIL_PIXEL_FORMAT_RGBA_UINT_32; }
+  if( str == "vil_rgba<vxl_int_16>" ) {return VIL_PIXEL_FORMAT_RGBA_INT_16; }
+  if( str == "vil_rgba<vxl_uint_16>" ) {return VIL_PIXEL_FORMAT_RGBA_UINT_16; }
+  if( str == "vil_rgba<vxl_byte>" ) {return VIL_PIXEL_FORMAT_RGBA_BYTE; }
+  if( str == "vil_rgba<vxl_sbyte>" ) {return VIL_PIXEL_FORMAT_RGBA_SBYTE; }
+  if( str == "vil_rgba<float>" ) {return VIL_PIXEL_FORMAT_RGBA_FLOAT; }
+  if( str == "vil_rgba<double>" ) {return VIL_PIXEL_FORMAT_RGBA_DOUBLE; }
 
-  if (str == "complex<float>") return VIL_PIXEL_FORMAT_COMPLEX_FLOAT;
-  if (str == "complex<double>") return VIL_PIXEL_FORMAT_COMPLEX_DOUBLE;
+  if( str == "complex<float>" ) {return VIL_PIXEL_FORMAT_COMPLEX_FLOAT; }
+  if( str == "complex<double>" ) {return VIL_PIXEL_FORMAT_COMPLEX_DOUBLE; }
 
   return VIL_PIXEL_FORMAT_UNKNOWN;
 }

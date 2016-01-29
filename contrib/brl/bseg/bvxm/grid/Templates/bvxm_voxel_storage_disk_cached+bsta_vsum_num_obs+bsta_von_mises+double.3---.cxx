@@ -4,5 +4,5 @@
 #include <bsta/io/bsta_io_attributes.h>
 #include <bsta/io/bsta_io_von_mises.h>
 
-typedef bsta_vsum_num_obs<bsta_von_mises<double,3> > gauss_type;
+typedef bsta_vsum_num_obs<bsta_von_mises<double, 3> > gauss_type;
 BVXM_VOXEL_STORAGE_DISK_CACHED_INSTANTIATE(gauss_type);

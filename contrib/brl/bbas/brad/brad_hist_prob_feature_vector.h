@@ -1,7 +1,7 @@
 // This is brl/bbas/brad/brad_hist_prob_feature_vector.h
 #ifndef brad_hist_prob_feature_vector_h
 #define brad_hist_prob_feature_vector_h
-//:
+// :
 // \file
 // \brief Extract a feature vector from histogram probabilities
 // \author J.L. Mundy
@@ -22,46 +22,46 @@
 
 class brad_hist_prob_feature_vector
 {
- public:
-  brad_hist_prob_feature_vector(){}
+public:
+  brad_hist_prob_feature_vector() {}
 
   brad_hist_prob_feature_vector(float minval, float maxval, unsigned nbins)
     : min_(minval), max_(maxval), nbins_(nbins) {};
 
-  ~brad_hist_prob_feature_vector(){};
+  ~brad_hist_prob_feature_vector() {};
 
-  //: vector of histogram probabilities computed from the input view, plus entropy
-  vnl_vector<double> operator() (vil_image_view<float> const& view) const;
+  // : vector of histogram probabilities computed from the input view, plus entropy
+  vnl_vector<double> operator()(vil_image_view<float> const& view) const;
 
-  //: the number of elements in the vector
-  unsigned size() const { return nbins_+1;}
+  // : the number of elements in the vector
+  unsigned size() const { return nbins_ + 1; }
 
-  //: the type name
-  vcl_string type() const {return "brad_hist_prob_feature_vector";}
+  // : the type name
+  vcl_string type() const {return "brad_hist_prob_feature_vector"; }
 
-  //: accessors, setters
-  unsigned nbins() const { return nbins_;}
-  float min() const {return min_;}
-  float max() const {return max_;}
-  void set_nbins(unsigned nbins) {nbins_ = nbins;}
-  void set_min(float minval) {min_ = minval;}
-  void set_max(float maxval) {max_ = maxval;}
-  //: print
-  void print(vcl_ostream& os = vcl_cout) const {
+  // : accessors, setters
+  unsigned nbins() const { return nbins_; }
+  float min() const {return min_; }
+  float max() const {return max_; }
+  void set_nbins(unsigned nbins) {nbins_ = nbins; }
+  void set_min(float minval) {min_ = minval; }
+  void set_max(float maxval) {max_ = maxval; }
+  // : print
+  void print(vcl_ostream& os = vcl_cout) const
+  {
     os << "nbins = " << nbins_ << " min = "
        << min_ << " max = " << max_ << '\n';
   }
 
- private:
-  float min_, max_;
+private:
+  float    min_, max_;
   unsigned nbins_;
 };
 
-void vsl_b_write(vsl_b_ostream &os, const brad_hist_prob_feature_vector& fv);
+void vsl_b_write(vsl_b_ostream & os, const brad_hist_prob_feature_vector& fv);
 
-void vsl_b_read(vsl_b_istream &is, brad_hist_prob_feature_vector& fv);
+void vsl_b_read(vsl_b_istream & is, brad_hist_prob_feature_vector& fv);
 
-void vsl_print_summary(vcl_ostream &os, brad_hist_prob_feature_vector& fv);
-
+void vsl_print_summary(vcl_ostream & os, brad_hist_prob_feature_vector& fv);
 
 #endif // brad_hist_prob_feature_vector_h

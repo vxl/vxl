@@ -1,7 +1,7 @@
 // This is bbas/bpgl/algo/bpgl_construct_cameras.h
 #ifndef bpgl_construct_cameras_h_
 #define bpgl_construct_cameras_h_
-//:
+// :
 // \file
 // \brief This class creates a pair of cameras from a set of corresponding points from a pair of images.
 // \author Vishal Jain, (vj@lems.brown.edu)
@@ -26,46 +26,41 @@
 
 class bpgl_construct_cameras
 {
- public:
+public:
 
-    //: constructor
-    bpgl_construct_cameras();
+  // : constructor
+  bpgl_construct_cameras();
 
-    //: constructor initializing the set of points
-    bpgl_construct_cameras(
-      vcl_vector<vgl_point_2d<double> > p0,
-      vcl_vector<vgl_point_2d<double> > p1,
-      const vpgl_calibration_matrix<double>* K = NULL );
+  // : constructor initializing the set of points
+  bpgl_construct_cameras(vcl_vector<vgl_point_2d<double> > p0, vcl_vector<vgl_point_2d<double> > p1,
+                         const vpgl_calibration_matrix<double>* K = NULL );
 
-    ~bpgl_construct_cameras();
+  ~bpgl_construct_cameras();
 
-    //: function to construct cameras
-    // \deprecated in favour of vpgl_essential_matrix public function
-    bool construct();
+  // : function to construct cameras
+  // \deprecated in favour of vpgl_essential_matrix public function
+  bool construct();
 
-    //: returns the projection matrix for the cameras
-    const vpgl_perspective_camera<double>& get_camera1(){return P1_;}
-    const vpgl_perspective_camera<double>& get_camera2(){return P2_;}
+  // : returns the projection matrix for the cameras
+  const vpgl_perspective_camera<double> & get_camera1() {return P1_; }
+  const vpgl_perspective_camera<double> & get_camera2() {return P2_; }
 
-    //: gets the world points
-    void get_world_points( vcl_vector< vgl_point_3d<double> >& world_points );
+  // : gets the world points
+  void get_world_points( vcl_vector<vgl_point_3d<double> >& world_points );
 
- private:
+private:
 
-    // Lifted from brct_algos, since don't want to link vsol.
-    vgl_point_3d<double> triangulate_3d_point(
-      const vgl_point_2d<double>& x1,
-      const vnl_double_3x4& P1,
-      const vgl_point_2d<double>& x2,
-      const vnl_double_3x4& P2 );
+  // Lifted from brct_algos, since don't want to link vsol.
+  vgl_point_3d<double> triangulate_3d_point(const vgl_point_2d<double>& x1, const vnl_double_3x4& P1,
+                                            const vgl_point_2d<double>& x2, const vnl_double_3x4& P2 );
 
-    //: set of points
-    vcl_vector<vgl_point_2d<double> > points0_;
-    vcl_vector<vgl_point_2d<double> > points1_;
+  // : set of points
+  vcl_vector<vgl_point_2d<double> > points0_;
+  vcl_vector<vgl_point_2d<double> > points1_;
 
-    vnl_double_3x3 K_;
-    vnl_double_3x3 E_;
-    vpgl_perspective_camera<double> P1_,P2_;
+  vnl_double_3x3                  K_;
+  vnl_double_3x3                  E_;
+  vpgl_perspective_camera<double> P1_, P2_;
 };
 
 #endif // bpgl_construct_cameras_h_

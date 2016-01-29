@@ -12,10 +12,12 @@ void test_map_io()
            << "Testing vcl_map binary io\n"
            << "*************************\n";
 
-  int n = 10;
+  int                               n = 10;
   vcl_map<int, int, vcl_less<int> > m_int_int_out;
-  for (int i=0;i<n;++i)
-    m_int_int_out[i] = i*i+1;
+  for( int i = 0; i < n; ++i )
+    {
+    m_int_int_out[i] = i * i + 1;
+    }
 
   vcl_map<int, vcl_string, vcl_less<int> > m_int_string_out;
   m_int_string_out[1] = vcl_string("one");
@@ -38,9 +40,9 @@ void test_map_io()
   vsl_b_write(bfs_out, m_string_int_out);
   bfs_out.close();
 
-  vcl_map<int,int, vcl_less<int> > m_int_int_in;
-  vcl_map<int,vcl_string, vcl_less<int> > m_int_string_in;
-  vcl_map<vcl_string,int, vcl_less<vcl_string> > m_string_int_in;
+  vcl_map<int, int, vcl_less<int> >               m_int_int_in;
+  vcl_map<int, vcl_string, vcl_less<int> >        m_int_string_in;
+  vcl_map<vcl_string, int, vcl_less<vcl_string> > m_string_int_in;
 
   vsl_b_ifstream bfs_in("vsl_map_io_test.bvl.tmp");
   TEST("Opened vsl_map_io_test.bvl.tmp for reading", (!bfs_in), false);
@@ -50,7 +52,7 @@ void test_map_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_map_io_test.bvl.tmp");
+  vpl_unlink("vsl_map_io_test.bvl.tmp");
 
   TEST("vcl_map<int,int> out == in", m_int_int_out, m_int_int_in);
   TEST("vcl_map<int,vcl_string> out == in", m_int_string_out, m_int_string_in);

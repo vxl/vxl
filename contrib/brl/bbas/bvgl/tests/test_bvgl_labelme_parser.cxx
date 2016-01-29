@@ -1,6 +1,6 @@
-//This is brl/bbas/bvgl/tests/test_bvgl_labelme_parser.cxx
+// This is brl/bbas/bvgl/tests/test_bvgl_labelme_parser.cxx
 #include <testlib/testlib_test.h>
-//:
+// :
 // \file
 
 #include <bvgl/bvgl_labelme_parser.h>
@@ -10,7 +10,8 @@
 
 static vcl_string test_xml_file()
 {
-  return  "\
+  return
+    "\
 <annotation>\
 <filename>andy_eze.jpg</filename>\
 <folder>test</folder>\
@@ -65,55 +66,56 @@ static vcl_string test_xml_file()
 </annotation>";
 }
 
-
-//: Test changes
+// : Test changes
 static void test_bvgl_labelme_parser()
 {
   vcl_string filename = "labelme_test.xml";
-  vcl_cout<<"Testing label me parser on synthetic data"<<vcl_endl;
+
+  vcl_cout << "Testing label me parser on synthetic data" << vcl_endl;
   vcl_ofstream file;
-  file.open (filename.c_str());
+  file.open(filename.c_str() );
   file << test_xml_file() << vcl_endl;
   file.close();
 
-  //Use parser
-  bvgl_labelme_parser parser(filename);
+  // Use parser
+  bvgl_labelme_parser              parser(filename);
   vcl_vector<vgl_polygon<double> > polys = parser.polygons();
-  TEST("Number of polygons returned", 2, polys.size());
+  TEST("Number of polygons returned", 2, polys.size() );
 
-  //ground truth
+  // ground truth
   vcl_vector<vgl_point_2d<double> > poly0;
-  poly0.push_back(vgl_point_2d<double>(335, 183));
-  poly0.push_back(vgl_point_2d<double>(333, 220));
-  poly0.push_back(vgl_point_2d<double>(332, 234));
+  poly0.push_back(vgl_point_2d<double>(335, 183) );
+  poly0.push_back(vgl_point_2d<double>(333, 220) );
+  poly0.push_back(vgl_point_2d<double>(332, 234) );
 
   vcl_vector<vgl_point_2d<double> > poly1;
-  poly1.push_back(vgl_point_2d<double>(544, 200));
-  poly1.push_back(vgl_point_2d<double>(501, 211));
-  poly1.push_back(vgl_point_2d<double>(497, 224));
-
-  for (unsigned int i=0; i<poly0.size(); ++i) {
+  poly1.push_back(vgl_point_2d<double>(544, 200) );
+  poly1.push_back(vgl_point_2d<double>(501, 211) );
+  poly1.push_back(vgl_point_2d<double>(497, 224) );
+  for( unsigned int i = 0; i < poly0.size(); ++i )
+    {
     double tx = poly0[i].x();
     double ty = poly0[i].y();
     TEST_NEAR("Polygon point equal", tx, polys[0][0][i].x(), 1e-5);
     TEST_NEAR("Polygon point equal", ty, polys[0][0][i].y(), 1e-5);
-  }
-  for (unsigned int i=0; i<poly1.size(); ++i) {
+    }
+  for( unsigned int i = 0; i < poly1.size(); ++i )
+    {
     double tx = poly1[i].x();
     double ty = poly1[i].y();
     TEST_NEAR("Polygon point equal", tx, polys[1][0][i].x(), 1e-5);
     TEST_NEAR("Polygon point equal", ty, polys[1][0][i].y(), 1e-5);
-  }
+    }
 
-  //test filename
-  TEST("Testing filename tag", "andy_eze.jpg", parser.image_name());
+  // test filename
+  TEST("Testing filename tag", "andy_eze.jpg", parser.image_name() );
 
-  //test each object name
+  // test each object name
   vcl_vector<vcl_string> names = parser.obj_names();
   TEST("Testing object name", names[0], "mouth");
   TEST("Testing object name", names[1], "Sunglasses");
 
-  //Remove file from directory
+  // Remove file from directory
   vul_file::delete_file_glob("labelme_test.xml");
 }
 

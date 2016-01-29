@@ -3,10 +3,11 @@
 
 class brec_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif  // brec_register_h_
-

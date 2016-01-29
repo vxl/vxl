@@ -1,7 +1,7 @@
 // This is gel/gst/gst_vertex_2d_sptr.h
 #ifndef gst_vertex_2d_sptr_h_
 #define gst_vertex_2d_sptr_h_
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 

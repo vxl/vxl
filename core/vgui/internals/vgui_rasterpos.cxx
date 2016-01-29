@@ -1,8 +1,8 @@
 // This is core/vgui/internals/vgui_rasterpos.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author fsm
 
@@ -20,12 +20,13 @@ void vgui_rasterpos4dv(double const X[4])
   vgui_matrix_state matrix_state;
 
   GLint vp[4]; // x,y, w,h
+
   glGetIntegerv(GL_VIEWPORT, vp);
 
-  vnl_matrix_fixed<double,4,4> T = vgui_matrix_state::total_transformation();
-  vnl_vector_fixed<double,4> tmp = T * vnl_vector_fixed<double,4>(X);
-  double rx = tmp[0]/tmp[3];
-  double ry = tmp[1]/tmp[3];
+  vnl_matrix_fixed<double, 4, 4> T = vgui_matrix_state::total_transformation();
+  vnl_vector_fixed<double, 4>    tmp = T * vnl_vector_fixed<double, 4>(X);
+  double                         rx = tmp[0] / tmp[3];
+  double                         ry = tmp[1] / tmp[3];
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -40,31 +41,31 @@ void vgui_rasterpos4dv(double const X[4])
   //          This technique is useful when panning an image around the
   //          viewport.
   // (from http://www.opengl.org/developers/faqs/technical/clipping.htm#0070)
-  glRasterPos2f(0,0);
-  glBitmap(0,0,
-           0,0,
-           float(rx*vp[2]/2), float(ry*vp[3]/2),
+  glRasterPos2f(0, 0);
+  glBitmap(0, 0,
+           0, 0,
+           float(rx * vp[2] / 2), float(ry * vp[3] / 2),
            0);
 }
 
-
 void vgui_rasterpos2f(float x, float y)
 {
-  double X[4]={x,y,0,1};
+  double X[4] = {x, y, 0, 1};
+
   vgui_rasterpos4dv(X);
 }
-
 
 void vgui_rasterpos2i(int x, int y)
 {
-  double X[4]={double(x),double(y),0.0,1.0};
+  double X[4] = {double(x), double(y), 0.0, 1.0};
+
   vgui_rasterpos4dv(X);
 }
-
 
 bool vgui_rasterpos_valid()
 {
   GLboolean params;
+
   glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID, &params);
   return params != GL_FALSE;
 }

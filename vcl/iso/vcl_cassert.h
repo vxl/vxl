@@ -6,9 +6,9 @@
 #include <cassert>
 
 #ifdef vcl_generic_cassert_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cassert_STD std
+#  define vcl_generic_cassert_STD std
 #endif
 
 #include "../generic/vcl_cassert.h"

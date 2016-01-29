@@ -1,6 +1,6 @@
 #ifndef vepl_threshold_h_
 #define vepl_threshold_h_
-//:
+// :
 // \file
 // \brief set pixel to given value if above/below certain threshold
 //
@@ -30,7 +30,8 @@
 
 #include <vil/vil_image_resource.h>
 
-//: set pixel to given value if above/below certain threshold
-vil_image_resource_sptr vepl_threshold(vil_image_resource_sptr , double threshold=128.0, double below=1.0, double above=0.0);
+// : set pixel to given value if above/below certain threshold
+vil_image_resource_sptr vepl_threshold(vil_image_resource_sptr, double threshold = 128.0, double below = 1.0,
+                                       double above = 0.0);
 
 #endif // vepl_threshold_h_

@@ -1,7 +1,7 @@
 #ifndef rrel_cauchy_obj_h_
 #define rrel_cauchy_obj_h_
 
-//:
+// :
 // \file
 // \author Amitha Perera (perera@cs.rpi.edu)
 // Cauchy loss function.
@@ -9,7 +9,7 @@
 #include <rrel/rrel_m_est_obj.h>
 #include <vnl/vnl_math.h>
 
-//: Cauchy robust loss function.
+// : Cauchy robust loss function.
 //  The objective function for the Cauchy M-estimator is
 //  \f[
 //      \rho(u) = 0.5 \log\bigl( 1 + \frac{u^2}{c^2} \bigr),
@@ -25,29 +25,29 @@
 
 class rrel_cauchy_obj : public rrel_m_est_obj
 {
- public:
-  //: Constructor.
+public:
+  // : Constructor.
   rrel_cauchy_obj( double C );
 
-  //: Destructor.
+  // : Destructor.
   virtual ~rrel_cauchy_obj();
 
-  //: The robust loss function for the M-estimator.
+  // : The robust loss function for the M-estimator.
   virtual double rho( double u ) const;
 
-  //: The robust loss function for the M-estimator.
+  // : The robust loss function for the M-estimator.
   //  Overriding the overloaded version rho(u) hides the superclass'
   //  implementation of this version of rho(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
   virtual double rho( double r, double s ) const
-    { return rrel_m_est_obj::rho(r, s); }
+  { return rrel_m_est_obj::rho(r, s); }
 
-  //: The weight of the residual.
+  // : The weight of the residual.
   virtual double wgt( double u ) const;
 
-  //: Evaluate the objective function on heteroscedastic residuals.
+  // : Evaluate the objective function on heteroscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
@@ -55,9 +55,9 @@ class rrel_cauchy_obj : public rrel_m_est_obj
   virtual void wgt( vect_const_iter res_begin, vect_const_iter res_end,
                     vect_const_iter scale_begin,
                     vect_iter wgt_begin ) const
-    { rrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
+  { rrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
 
-  //: Computes the weights for homoscedastic residuals.
+  // : Computes the weights for homoscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
@@ -65,38 +65,37 @@ class rrel_cauchy_obj : public rrel_m_est_obj
   virtual void wgt( vect_const_iter begin, vect_const_iter end,
                     double scale,
                     vect_iter wgt_begin ) const
-    { rrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
+  { rrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
 
-  //: The weight of the residual.
+  // : The weight of the residual.
   //  Overriding the overloaded version wgt(u) hides the superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \a r is the residual and
   //  \a s is the scale for that residual.
   virtual double wgt( double r, double s ) const
-    { return rrel_m_est_obj::wgt(r, s); }
+  { return rrel_m_est_obj::wgt(r, s); }
 
-  //: Fast version of the wgt(u) computation.
+  // : Fast version of the wgt(u) computation.
   inline double wgt_fast( double u ) const;
 
-  //: Fast version of the rho(u) computation.
+  // : Fast version of the rho(u) computation.
   inline double rho_fast( double u ) const;
 
-
- private:
+private:
   double C_;
 };
 
 inline double
 rrel_cauchy_obj::rho_fast( double u ) const
 {
-  return 0.5 * vcl_log( 1 + vnl_math::sqr( u/C_ ) );
+  return 0.5 * vcl_log( 1 + vnl_math::sqr( u / C_ ) );
 }
 
 inline double
 rrel_cauchy_obj::wgt_fast( double u ) const
 {
-  return 1.0 / ( 1 + vnl_math::sqr(u/C_) );
+  return 1.0 / ( 1 + vnl_math::sqr(u / C_) );
 }
 
 #endif // rrel_cauchy_obj_h_

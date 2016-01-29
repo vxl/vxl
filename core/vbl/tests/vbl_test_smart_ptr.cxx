@@ -3,14 +3,14 @@
 #include <vcl_list.h>
 #include <vcl_iostream.h>
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-void printval (base_sptr const &p)
+void printval(base_sptr const & p)
 {
   vcl_cout << "base_impl val = " << p->n << vcl_endl;
 }
 
-void changeval (base_impl *p, int k)
+void changeval(base_impl * p, int k)
 {
   // To pass a base_sptr to this function, use the .as_pointer() method
   // to get the raw/dumb pointer out of the smart pointer.
@@ -19,11 +19,12 @@ void changeval (base_impl *p, int k)
   p->n = k;
 }
 
-base_sptr newbase_impl (int k)
+base_sptr newbase_impl(int k)
 {
   // This is just to prove that one can pass these things
   // around as function values
   base_sptr q(new base_impl);
+
   q->n = k;
   return q;
 }
@@ -31,15 +32,20 @@ base_sptr newbase_impl (int k)
 static void test_base_sptr()
 {
   base_sptr p;
+
   TEST("initial value of base_sptr should be null", bool(p), false);
-  if (!p) // This is actually unnecessary - just to demonstrate operator bool()
+  if( !p ) // This is actually unnecessary - just to demonstrate operator bool()
+    {
     p = new base_impl;
-  if (p == (base_impl*)0) // identical result - just to demonstrate operator==()
+    }
+  if( p == (base_impl *)0 ) // identical result - just to demonstrate operator==()
+    {
     p = new base_impl;
+    }
 
   vcl_cout << "operator<< gives : " << p << vcl_endl;
 
-  base_sptr a = new base_impl (5);
+  base_sptr a = new base_impl(5);
   TEST("p == a", p == a, false);
   TEST("p != a", p != a, true);
   TEST("!p", !p, false);
@@ -60,59 +66,63 @@ static void test_base_sptr()
   vcl_cout << "value of   p->n : " << p->n << vcl_endl
            << "value of (*p).n : " << (*p).n << vcl_endl;
 
-  {
+    {
     // make a new base
-    base_sptr r = new base_impl ();
+    base_sptr r = new base_impl();
     // assign p to r
     r = p;
     // r is really the same as p in this, so when r is changed, so is p
     changeval(r.as_pointer(), 27);
-    printval (r);
-    printval (p);
-  }
+    printval(r);
+    printval(p);
+    }
 
   // Now test lists of base_impl
-  {
-    vcl_list<base_sptr> videos;
-    for (int i=1; i<=10; i++)
     {
-      base_sptr newvid = new base_impl (i);
-      videos.push_back (newvid);
-    }
+    vcl_list<base_sptr> videos;
+    for( int i = 1; i <= 10; i++ )
+      {
+      base_sptr newvid = new base_impl(i);
+      videos.push_back(newvid);
+      }
 
     // Print out the list
     vcl_cout << "List of video sequences\n";
-    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
+    for( vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++ )
+      {
       vcl_cout << ' ' << *i << vcl_endl;
+      }
 
     // Clear the list
     videos.clear();
 
     vcl_cout << "Video list is clear : filling again\n";
-
-    for (int i=11; i<=15; i++)
-    {
+    for( int i = 11; i <= 15; i++ )
+      {
       base_sptr newvid = new base_impl(i);
-      videos.push_back (newvid);
-    }
+      videos.push_back(newvid);
+      }
 
     // Print out the list
     vcl_cout << "List of video sequences\n";
-    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
+    for( vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++ )
+      {
       vcl_cout << ' ' << *i << vcl_endl;
-  }
+      }
+    }
 }
 
 static void test_ref_unref()
 {
   // Test protect and unref
-  int good_count = base_impl::reftotal + 2;
+  int       good_count = base_impl::reftotal + 2;
   base_sptr p = new base_impl( 1 );
   base_sptr q = p;
   base_sptr r = new base_impl( 1 );
+
   TEST("reference counts", base_impl::checkcount(good_count) &&
-                           p->get_references() == 2 &&
-                           r->get_references() == 1,            true);
+       p->get_references() == 2 &&
+       r->get_references() == 1,            true);
   q.unprotect();
   TEST("unprotect should unref", p->get_references(), 1 );
   q = r;

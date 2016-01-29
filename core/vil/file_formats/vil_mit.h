@@ -1,7 +1,7 @@
 // This is core/vil/file_formats/vil_mit.h
 #ifndef vil_mit_file_format_h_
 #define vil_mit_file_format_h_
-//:
+// :
 // \file
 // \brief Image in MIT format
 // \author Alison Noble, Oxford University, TargetJr version
@@ -23,7 +23,7 @@
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>
 
-//: Loader for MIT files
+// : Loader for MIT files
 //
 // TYPES:
 // -# unsigned (grayscale)
@@ -36,37 +36,38 @@
 
 class vil_mit_file_format : public vil_file_format
 {
- public:
-  virtual char const* tag() const;
+public:
+  virtual char const * tag() const;
+
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
-                                                    unsigned int ni, unsigned int nj, unsigned int nplanes,
-                                                    vil_pixel_format format);
+
+  virtual vil_image_resource_sptr make_output_image(vil_stream* vs, unsigned int ni, unsigned int nj,
+                                                    unsigned int nplanes, vil_pixel_format format);
+
 };
 
-//: Generic image implementation for MIT files
+// : Generic image implementation for MIT files
 class vil_mit_image : public vil_image_resource
 {
-  vil_stream* is_;
-  unsigned int ni_;
-  unsigned int nj_;
-  unsigned int components_;
-  unsigned int type_;
+  vil_stream*           is_;
+  unsigned int          ni_;
+  unsigned int          nj_;
+  unsigned int          components_;
+  unsigned int          type_;
   enum vil_pixel_format format_;
 
   bool read_header();
+
   bool write_header();
 
   friend class vil_mit_file_format;
- public:
+public:
 
   vil_mit_image(vil_stream* is);
-  vil_mit_image(vil_stream* is,
-                unsigned int ni, unsigned int nj, unsigned int nplanes,
-                vil_pixel_format format);
- ~vil_mit_image();
+  vil_mit_image(vil_stream* is, unsigned int ni, unsigned int nj, unsigned int nplanes, vil_pixel_format format);
+  ~vil_mit_image();
 
-  //: Dimensions.  W x H x Components
+  // : Dimensions.  W x H x Components
   virtual unsigned int ni() const { return ni_; }
   virtual unsigned int nj() const { return nj_; }
   virtual unsigned int nplanes() const { return components_; }
@@ -75,13 +76,17 @@ class vil_mit_image : public vil_image_resource
 
   virtual enum vil_pixel_format pixel_format() const { return format_; }
 
-  //: Return part of this as buffer
-  virtual vil_image_view_base_sptr get_copy_view(unsigned int x0, unsigned int ni, unsigned int y0, unsigned int nj) const;
-  //: Write buf into this at position (x0,y0)
+  // : Return part of this as buffer
+  virtual vil_image_view_base_sptr get_copy_view(unsigned int x0, unsigned int ni, unsigned int y0,
+                                                 unsigned int nj) const;
+
+  // : Write buf into this at position (x0,y0)
   virtual bool put_view(vil_image_view_base const& buf, unsigned int x0, unsigned int y0);
 
-  char const* file_format() const;
-  bool get_property(char const *tag, void *prop = 0) const;
+  char const * file_format() const;
+
+  bool get_property(char const * tag, void * prop = 0) const;
+
 };
 
 #endif // vil_mit_file_format_h_

@@ -1,8 +1,8 @@
 // This is gel/vtol/vtol_two_chain.h
 #ifndef vtol_two_chain_h_
 #define vtol_two_chain_h_
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief Represents a connected chain of faces
 //
@@ -27,7 +27,7 @@
 //   PTU May 2000 ported to vxl
 //   Dec. 2002, Peter Vanroose -interface change: vtol objects -> smart pointers
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>
 #include <vcl_vector.h>
@@ -42,179 +42,205 @@ class vtol_block;
 
 class vtol_two_chain : public vtol_chain
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Initialization
-  //***************************************************************************
+  // ***************************************************************************
 
   void link_chain_inferior(vtol_two_chain_sptr chain_inferior);
+
   void unlink_chain_inferior(vtol_two_chain_sptr chain_inferior);
 
-  //---------------------------------------------------------------------------
-  //: Default constructor
-  //---------------------------------------------------------------------------
-  vtol_two_chain() { is_cycle_=false; }
+  // ---------------------------------------------------------------------------
+  // : Default constructor
+  // ---------------------------------------------------------------------------
+  vtol_two_chain() { is_cycle_ = false; }
 
-  //---------------------------------------------------------------------------
-  //: Constructor
-  //---------------------------------------------------------------------------
-  explicit vtol_two_chain(int /*num_faces*/) { is_cycle_=false; }
+  // ---------------------------------------------------------------------------
+  // : Constructor
+  // ---------------------------------------------------------------------------
+  explicit vtol_two_chain(int /*num_faces*/) { is_cycle_ = false; }
 
-  //---------------------------------------------------------------------------
-  //: Constructor
-  //---------------------------------------------------------------------------
-  explicit vtol_two_chain(face_list const&, bool new_is_cycle=false);
+  // ---------------------------------------------------------------------------
+  // : Constructor
+  // ---------------------------------------------------------------------------
+  explicit vtol_two_chain(face_list const &, bool new_is_cycle = false);
 
-  //---------------------------------------------------------------------------
-  //: Constructor
-  //---------------------------------------------------------------------------
-  vtol_two_chain(face_list const&,
-                 vcl_vector<signed char> const&,
-                 bool new_is_cycle=false);
+  // ---------------------------------------------------------------------------
+  // : Constructor
+  // ---------------------------------------------------------------------------
+  vtol_two_chain(face_list const &, vcl_vector<signed char> const &, bool new_is_cycle = false);
 
-  //---------------------------------------------------------------------------
-  //: Pseudo copy constructor.  Deep copy.
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Pseudo copy constructor.  Deep copy.
+  // ---------------------------------------------------------------------------
   vtol_two_chain(vtol_two_chain_sptr const& other);
- private:
-  //---------------------------------------------------------------------------
-  //: Copy constructor.  Deep copy.  Deprecated.
-  //---------------------------------------------------------------------------
+private:
+  // ---------------------------------------------------------------------------
+  // : Copy constructor.  Deep copy.  Deprecated.
+  // ---------------------------------------------------------------------------
   vtol_two_chain(vtol_two_chain const& other);
- public:
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
+public:
+  // ---------------------------------------------------------------------------
+  // : Destructor
+  // ---------------------------------------------------------------------------
   virtual ~vtol_two_chain();
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
+  // ---------------------------------------------------------------------------
+  // : Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  // ---------------------------------------------------------------------------
+  virtual vsol_spatial_object_2d * clone() const;
 
-  //: Return a platform independent string identifying the class
+  // : Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vtol_two_chain"); }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
+  // : Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const vcl_string& cls) const
-  { return cls==is_a() || vtol_chain::is_class(cls); }
+  { return cls == is_a() || vtol_chain::is_class(cls); }
 
-  virtual vtol_two_chain * copy_with_arrays(topology_list &verts,
-                                            topology_list &edges) const;
+  virtual vtol_two_chain * copy_with_arrays(topology_list & verts, topology_list & edges) const;
+
   // Accessors
-
- private: // has been superseded by is_a()
-  //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const {return TWOCHAIN;}
-
- public:
-  //: get the direction of the face
+private:  // has been superseded by is_a()
+  // : Return the topology type
+  virtual vtol_topology_object_type topology_type() const {return TWOCHAIN; }
+public:
+  // : get the direction of the face
   signed char direction(vtol_face const& f) const;
 
   virtual vtol_face_sptr face(int i);
 
-  //---------------------------------------------------------------------------
-  //: Shallow copy with no links
-  //---------------------------------------------------------------------------
-  virtual vtol_topology_object *shallow_copy_with_no_links() const;
+  // ---------------------------------------------------------------------------
+  // : Shallow copy with no links
+  // ---------------------------------------------------------------------------
+  virtual vtol_topology_object * shallow_copy_with_no_links() const;
 
   virtual void add_superiors_from_parent(topology_list &);
+
   virtual void remove_superiors_of_parent(topology_list &);
+
   virtual void remove_superiors();
+
   virtual void update_superior_list_p_from_hierarchy_parent();
 
-  virtual void add_face(vtol_face_sptr const&, signed char);
-  virtual void remove_face(vtol_face_sptr const&);
- private:
+  virtual void add_face(vtol_face_sptr const &, signed char);
+
+  virtual void remove_face(vtol_face_sptr const &);
+
+private:
   // Deprecated:
-  virtual void add_face(vtol_face &,signed char);
+  virtual void add_face(vtol_face &, signed char);
+
   virtual void remove_face(vtol_face &);
- public:
-  //***************************************************************************
+
+public:
+  // ***************************************************************************
   // Replaces dynamic_cast<T>
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a two_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_two_chain *cast_to_two_chain() const { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is a two_chain, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual const vtol_two_chain * cast_to_two_chain() const { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is a two_chain, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_two_chain *cast_to_two_chain() { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is a two_chain, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual vtol_two_chain * cast_to_two_chain() { return this; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
   void link_inferior(vtol_face_sptr inf);
+
   void unlink_inferior(vtol_face_sptr inf);
 
-  //---------------------------------------------------------------------------
-  //: Is `inferior' type valid for `this' ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Is `inferior' type valid for `this' ?
+  // ---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
-  { return inferior->cast_to_face()!=0; }
-  bool valid_inferior_type(vtol_face_sptr const& )    const { return true; }
-  bool valid_inferior_type(vtol_face_2d_sptr const& ) const { return true; }
-  bool valid_superior_type(vtol_block_sptr const& )   const { return true; }
+  { return inferior->cast_to_face() != 0; }
+  bool valid_inferior_type(vtol_face_sptr const & )    const { return true; }
+  bool valid_inferior_type(vtol_face_2d_sptr const & ) const { return true; }
+  bool valid_superior_type(vtol_block_sptr const & )   const { return true; }
 
-  //---------------------------------------------------------------------------
-  //: Is `chain_inf_sup' type valid for `this' ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Is `chain_inf_sup' type valid for `this' ?
+  // ---------------------------------------------------------------------------
   virtual bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const
-  { return chain_inf_sup->cast_to_two_chain()!=0; }
-  bool valid_chain_type(vtol_two_chain_sptr const& ) const { return true; }
+  { return chain_inf_sup->cast_to_two_chain() != 0; }
+  bool valid_chain_type(vtol_two_chain_sptr const & ) const { return true; }
 
   // network access methods
 
-  virtual vertex_list *outside_boundary_vertices();
-  virtual zero_chain_list *outside_boundary_zero_chains();
-  virtual edge_list *outside_boundary_edges();
-  virtual one_chain_list *outside_boundary_one_chains();
-  virtual face_list *outside_boundary_faces();
-  virtual two_chain_list *outside_boundary_two_chains();
+  virtual vertex_list * outside_boundary_vertices();
+
+  virtual zero_chain_list * outside_boundary_zero_chains();
+
+  virtual edge_list * outside_boundary_edges();
+
+  virtual one_chain_list * outside_boundary_one_chains();
+
+  virtual face_list * outside_boundary_faces();
+
+  virtual two_chain_list * outside_boundary_two_chains();
 
   // The returned pointers must be deleted after use.
-  virtual two_chain_list *inferior_two_chains();
-  // The returned pointers must be deleted after use.
-  virtual two_chain_list *superior_two_chains();
+  virtual two_chain_list * inferior_two_chains();
 
- protected:
+  // The returned pointers must be deleted after use.
+  virtual two_chain_list * superior_two_chains();
+
+protected:
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
-  virtual vcl_vector<vtol_edge*> *compute_edges();
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
-  virtual vcl_vector<vtol_face*> *compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
-  virtual vcl_vector<vtol_block*> *compute_blocks();
+  virtual vcl_vector<vtol_vertex *> * compute_vertices();
 
- public:
-  virtual vcl_vector<vtol_vertex*> *outside_boundary_compute_vertices();
-  virtual vcl_vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
-  virtual vcl_vector<vtol_edge*> *outside_boundary_compute_edges();
-  virtual vcl_vector<vtol_one_chain*> *outside_boundary_compute_one_chains();
-  virtual vcl_vector<vtol_face*> *outside_boundary_compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *outside_boundary_compute_two_chains();
+  virtual vcl_vector<vtol_edge *> * compute_edges();
+
+  virtual vcl_vector<vtol_zero_chain *> * compute_zero_chains();
+
+  virtual vcl_vector<vtol_one_chain *> * compute_one_chains();
+
+  virtual vcl_vector<vtol_face *> * compute_faces();
+
+  virtual vcl_vector<vtol_two_chain *> * compute_two_chains();
+
+  virtual vcl_vector<vtol_block *> * compute_blocks();
+
+public:
+  virtual vcl_vector<vtol_vertex *> * outside_boundary_compute_vertices();
+
+  virtual vcl_vector<vtol_zero_chain *> * outside_boundary_compute_zero_chains();
+
+  virtual vcl_vector<vtol_edge *> * outside_boundary_compute_edges();
+
+  virtual vcl_vector<vtol_one_chain *> * outside_boundary_compute_one_chains();
+
+  virtual vcl_vector<vtol_face *> * outside_boundary_compute_faces();
+
+  virtual vcl_vector<vtol_two_chain *> * outside_boundary_compute_two_chains();
 
   int num_faces() const { return numinf(); }
 
   virtual void correct_chain_directions();
 
   virtual bool operator==(vtol_two_chain const& other) const;
-  inline bool operator!=(const vtol_two_chain &other)const{return !operator==(other);}
+
+  inline bool operator!=(const vtol_two_chain & other) const {return !operator==(other); }
   bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe_directions(vcl_ostream &strm=vcl_cout, int blanking=0) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout, int blanking=0) const;
+  virtual void print(vcl_ostream & strm = vcl_cout) const;
 
-  virtual bool break_into_connected_components(topology_list &components);
+  virtual void describe_directions(vcl_ostream & strm = vcl_cout, int blanking = 0) const;
+
+  virtual void describe(vcl_ostream & strm = vcl_cout, int blanking = 0) const;
+
+  virtual bool break_into_connected_components(topology_list & components);
+
 };
 
 #endif // vtol_two_chain_h_

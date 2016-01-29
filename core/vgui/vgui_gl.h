@@ -1,6 +1,6 @@
 #ifndef vgui_gl_h
 #define vgui_gl_h
-//:
+// :
 // \file
 
 #include <vcl_compiler.h>
@@ -8,35 +8,35 @@
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
 // fix windows gl.h :
-# include <windows.h>
-# ifdef VCL_VC // exclude when using MinGW
-#  pragma warning (disable:4244) // disable bogus conversion warnings
-# endif
-# include <GL/gl.h>
-# undef min
-# undef max
+#  include <windows.h>
+#  ifdef VCL_VC                    // exclude when using MinGW
+#    pragma warning (disable:4244) // disable bogus conversion warnings
+#  endif
+#  include <GL/gl.h>
+#  undef min
+#  undef max
 // Fix wxWidgets incompatibility with windows.h. Some macros defined by
 // windows.h have the same name as wxWidgets classes.
-# ifdef __WXMSW__
-#  include <wx/msw/winundef.h>
-# endif
+#  ifdef __WXMSW__
+#    include <wx/msw/winundef.h>
+#  endif
 #elif defined(__APPLE__)
-#include <OpenGL/gl.h>
+#  include <OpenGL/gl.h>
 #else
 // no need to fix :
-# include <GL/gl.h>
+#  include <GL/gl.h>
 #endif
 
 // If the value is defined from outside, don't try to guess
 #ifndef VGUI_MESA
 #  define VGUI_MESA 0
-#  if (defined(MESA) || defined(GL_MESA_window_pos) || defined(GL_MESA_resize_buffers))
-    // xmesa.h is not distributed with Cygwin
+#  if (defined(MESA) || defined(GL_MESA_window_pos) || defined(GL_MESA_resize_buffers) )
+// xmesa.h is not distributed with Cygwin
 #    ifndef __CYGWIN__
-#    ifndef NO_MESA
-#      undef VGUI_MESA
-#      define VGUI_MESA 1
-#    endif
+#      ifndef NO_MESA
+#        undef VGUI_MESA
+#        define VGUI_MESA 1
+#      endif
 #    endif
 #  endif
 #endif

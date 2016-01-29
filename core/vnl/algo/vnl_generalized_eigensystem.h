@@ -2,9 +2,9 @@
 #ifndef vnl_generalized_eigensystem_h_
 #define vnl_generalized_eigensystem_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Solves the generalized eigenproblem Ax=La
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -18,18 +18,18 @@
 
 #include <vnl/vnl_diag_matrix.h>
 
-//: Solves the generalized eigenproblem Ax=Bx
+// : Solves the generalized eigenproblem Ax=Bx
 //  Solves the generalized eigenproblem of $A x = \lambda B x$,
 //  with $A$ symmetric and $B$ positive definite. \n
 //  See Golub and van Loan, Section 8.7.
 
 class vnl_generalized_eigensystem
 {
- public:
+public:
 // Public data members because they're unique.
   long n;
 
-//: Solves the generalized eigenproblem Ax=Bx
+// : Solves the generalized eigenproblem Ax=Bx
 //  Solve real generalized eigensystem $A x = \lambda B x$ for
 //  $\lambda$ and $x$, where $A$ symmetric, $B$ positive definite.
 //  Initializes storage for the matrix $V = [ x_0 x_1 .. x_n ]$ and
@@ -42,14 +42,13 @@ class vnl_generalized_eigensystem
 //  symmetric eigensystem code.   It will print a verbose warning
 //  if $B$ is not positive definite.
 
-  vnl_generalized_eigensystem(const vnl_matrix<double>& A,
-                              const vnl_matrix<double>& B);
+  vnl_generalized_eigensystem(const vnl_matrix<double>& A, const vnl_matrix<double>& B);
 
-//: Public eigenvectors.
+// : Public eigenvectors.
 //  After construction, this contains the matrix of eigenvectors.
   vnl_matrix<double> V;
 
-//: Public eigenvalues.
+// : Public eigenvalues.
 //  After construction, this contains the diagonal matrix of eigenvalues, stored as a vector.
   vnl_diag_matrix<double> D;
 };

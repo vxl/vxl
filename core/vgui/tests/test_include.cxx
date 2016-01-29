@@ -54,10 +54,10 @@
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_glu.h>
 #ifdef HAS_GLUT
-# include <vgui/vgui_glut.h>
+#  include <vgui/vgui_glut.h>
 #endif
 #ifdef HAS_X11
-# include <vgui/vgui_glx.h>
+#  include <vgui/vgui_glx.h>
 #endif
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/vgui_grid_tableau_sptr.h>

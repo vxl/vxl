@@ -9,7 +9,7 @@
 #include <vul/vul_arg.h>
 #include <mbl/mbl_mask.h>
 
-int main(int argc, char **argv)
+int main(int argc, char * * argv)
 {
   vul_arg_base::set_help_description(
     "Apply a logical operation on a pair of mask files.\n"
@@ -37,29 +37,32 @@ int main(int argc, char **argv)
     "   A XNOR B = 1001\n"
     "   A NAND B = 1110\n"
     "\n"
-  );
+    );
 
-  vul_arg<vcl_string> maskA_filename(0,"Filename of mask A");
-  vul_arg<vcl_string> maskB_filename(0,"Filename of mask B");
-  vul_arg<vcl_string> operation(0,"Operation to apply - see help text for explanation");
-  vul_arg<vcl_string> maskout_filename(0,"Filename of the output mask");
+  vul_arg<vcl_string> maskA_filename(0, "Filename of mask A");
+  vul_arg<vcl_string> maskB_filename(0, "Filename of mask B");
+  vul_arg<vcl_string> operation(0, "Operation to apply - see help text for explanation");
+  vul_arg<vcl_string> maskout_filename(0, "Filename of the output mask");
   vul_arg_parse(argc, argv);
 
   mbl_mask maskA, maskB;
-  mbl_load_mask(maskA, maskA_filename().c_str());
-  mbl_load_mask(maskB, maskB_filename().c_str());
+  mbl_load_mask(maskA, maskA_filename().c_str() );
+  mbl_load_mask(maskB, maskB_filename().c_str() );
 
-  try { mbl_mask_logic(maskA, maskB, operation()); }
-  catch (vcl_exception & e)
-  {
+  try
+    {
+    mbl_mask_logic(maskA, maskB, operation() );
+    }
+  catch( vcl_exception & e )
+    {
     vcl_cout << "An error occurred while carrying out the logic operation.\n" << e.what() << vcl_endl;
     return 1;
-  }
-  catch (...)
-  {
+    }
+  catch( ... )
+    {
     vcl_cout << "An unknown error occurred while carrying out the logic operation." << vcl_endl;
     return 1;
-  }
+    }
 
-  mbl_save_mask(maskB, maskout_filename().c_str());
+  mbl_save_mask(maskB, maskout_filename().c_str() );
 }

@@ -1,6 +1,6 @@
 // This is core/vnl/examples/vnl_polynomial_RPN.cxx
 
-//:
+// :
 // \file
 // \brief Performs operations (+, -, *, / or %) on polynomials
 //
@@ -15,7 +15,7 @@
 //
 // \author Peter Vanroose, ABIS Leuven
 // \date   August 2011
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_polynomial.h>
 #include <vcl_iostream.h>
@@ -25,44 +25,79 @@
 
 vcl_vector<vnl_polynomial<double> > stack;
 
-vnl_polynomial<double> operation(char op) {
-  if (op == '.') { return stack.back(); }
+vnl_polynomial<double> operation(char op)
+{
+  if( op == '.' ) { return stack.back(); }
   vnl_polynomial<double> p = stack.size() ? stack.back() : 0.0;
-  if (stack.size()) stack.pop_back();
+  if( stack.size() ) {stack.pop_back(); }
   vnl_polynomial<double> p2 = stack.size() ? stack.back() : 0.0;
-  if (op == '+') p += p2;
-  else if (op == '-') p -= p2;
-  else if (op == '*') p *= p2;
-  else if (op == '/') p /= p2;
-  else if (op == '%') p %= p2;
+  if( op == '+' ) {p += p2; }
+  else if( op == '-' )
+    {
+    p -= p2;
+    }
+  else if( op == '*' )
+    {
+    p *= p2;
+    }
+  else if( op == '/' )
+    {
+    p /= p2;
+    }
+  else if( op == '%' )
+    {
+    p %= p2;
+    }
   else { vcl_cerr << "Unknown operator " << op << vcl_endl; return p; }
-  if (stack.size()) stack.pop_back();
+  if( stack.size() ) {stack.pop_back(); }
   return p;
 }
 
-vnl_polynomial<double> polynomial(char* txt) {
+vnl_polynomial<double> polynomial(char* txt)
+{
   vcl_vector<double> coef;
-  vcl_stringstream ss(txt);
-  double onecoef;
-  while (ss >> onecoef) coef.insert(coef.begin(), 1, onecoef);
-  while (coef.size() && coef.back() == 0.0) coef.pop_back(); // highest order coeff should not be zero!
+  vcl_stringstream   ss(txt);
+  double             onecoef;
+  while( ss >> onecoef )
+    {
+    coef.insert(coef.begin(), 1, onecoef);
+    }
+
+  while( coef.size() && coef.back() == 0.0 )
+    {
+    coef.pop_back();                                         // highest order coeff should not be zero!
+    }
+
   return vnl_polynomial<double>(coef);
 }
 
 int main()
 {
   char l[65000];
+
   vnl_polynomial<double> p;
-  while (vcl_cin.getline(l, 65000)) {
+  while( vcl_cin.getline(l, 65000) )
+    {
     int n = vcl_strlen(l) - 1;
     // strip trailing blanks:
-    while (l[n] == ' ' || l[n] == '\t' || l[n] == '\r' || l[n] == '\n') l[n--] = '\0';
-    if (n<0) continue;
-    else if (l[n] >= '0' && l[n] <= '9') p=polynomial(l);
-    else if (n == 0) p=operation(l[0]);
-    else p=polynomial(l);
+    while( l[n] == ' ' || l[n] == '\t' || l[n] == '\r' || l[n] == '\n' )
+      {
+      l[n--] = '\0';
+      }
+
+    if( n < 0 ) {continue; }
+    else if( l[n] >= '0' && l[n] <= '9' )
+      {
+      p = polynomial(l);
+      }
+    else if( n == 0 )
+      {
+      p = operation(l[0]);
+      }
+    else {p = polynomial(l); }
     stack.push_back(p);
     vcl_cout << p << vcl_endl;
-  }
+    }
+
   return 0;
 }

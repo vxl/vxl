@@ -2,8 +2,8 @@
 #ifndef VIFA_NORM_PARAMS_H
 #define VIFA_NORM_PARAMS_H
 
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief Parameter mixin for intensity normalization.
 //
@@ -27,7 +27,7 @@
 //  Modifications:
 //   MPP Mar 2003, Ported to VXL
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -35,71 +35,61 @@
 #include <vul/vul_timestamp.h>
 #include <gevd/gevd_param_mixin.h>
 
-
 class vifa_norm_params : public gevd_param_mixin,
-             public vul_timestamp,
-             public vbl_ref_count
+  public vul_timestamp,
+  public vbl_ref_count
 {
- public:
-  //: x-coordinate of low point (i == intensity)
-  float  ilow;
+public:
+  // : x-coordinate of low point (i == intensity)
+  float ilow;
 
-  //: y-coordinate of low point (p == percentage)
-  float  plow;
+  // : y-coordinate of low point (p == percentage)
+  float plow;
 
-  //: x-coordinate of high point
-  float  ihigh;
+  // : x-coordinate of high point
+  float ihigh;
 
-  //: y-coordinate of high point
-  float  phigh;
+  // : y-coordinate of high point
+  float phigh;
+private:
+  // : Calculated x-coord of y == 0 [low intensity clip point]
+  float imin_;
 
- private:
-  //: Calculated x-coord of y == 0 [low intensity clip point]
-  float  imin_;
+  // : Calculated x-coord of y == 1 [high intensity clip point]
+  float imax_;
 
-  //: Calculated x-coord of y == 1 [high intensity clip point]
-  float  imax_;
+  // : Computed slope of line connecting high & low points
+  float slope_;
 
-  //: Computed slope of line connecting high & low points
-  float  slope_;
+  // : Computed y-intercept of line connecting high & low points
+  float b_;
+public:
+  // : Default constructor
+  vifa_norm_params(float  IntLow = 0.0, float  ProbLow = 0.0, float  IntHigh = 0.0, float  ProbHigh = 0.0);
 
-  //: Computed y-intercept of line connecting high & low points
-  float  b_;
-
- public:
-  //: Default constructor
-  vifa_norm_params(float  IntLow = 0.0,
-                   float  ProbLow = 0.0,
-                   float  IntHigh = 0.0,
-                   float  ProbHigh = 0.0
-                  );
-
-  //: Copy constructor
+  // : Copy constructor
   vifa_norm_params(const vifa_norm_params&  old_params);
 
-  //: Force update of clip points & interpolation line
+  // : Force update of clip points & interpolation line
   void recompute(void);
 
-  //: Compute normalized equivalent of given intensity
+  // : Compute normalized equivalent of given intensity
   float  normalize(float  raw_intensity);
 
-  //: Find an image's low & high intensities for normalization
-  static bool  get_norm_bounds(vil_image_view_base*  img,
-                               float                 low_bound_pcent,
-                               float                 high_bound_pcent,
-                               float&                normal_low,
-                               float&                normal_high
-                              );
+  // : Find an image's low & high intensities for normalization
+  static bool  get_norm_bounds(vil_image_view_base*  img, float                 low_bound_pcent,
+                               float                 high_bound_pcent, float&                normal_low,
+                               float&                normal_high);
 
-  //: Dump the parameters
+  // : Dump the parameters
   void  print_info(void);
 
- private:
-  //: Internal method to update clip points & interpolation line
+private:
+  // : Internal method to update clip points & interpolation line
   void  calculate_clip_points(void);
+
 };
 
-typedef vbl_smart_ptr<vifa_norm_params>  vifa_norm_params_sptr;
-
+typedef vbl_smart_ptr<vifa_norm_params> vifa_norm_params_sptr;
 
 #endif  // VIFA_NORM_PARAMS_H

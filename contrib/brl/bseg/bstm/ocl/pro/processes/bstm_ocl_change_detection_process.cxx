@@ -1,5 +1,5 @@
 // This is brl/bseg/bstm/ocl/pro/processes/bstm_ocl_change_detection_process.cxx
-//:
+// :
 // \file
 // \brief  A process for change detection
 //
@@ -32,8 +32,8 @@
 
 namespace bstm_ocl_change_detection_process_globals
 {
-  const unsigned n_inputs_     = 9;
-  const unsigned n_outputs_    = 1;
+const unsigned n_inputs_     = 9;
+const unsigned n_outputs_    = 1;
 }
 
 bool bstm_ocl_change_detection_process_cons(bprb_func_process& pro)
@@ -50,14 +50,14 @@ bool bstm_ocl_change_detection_process_cons(bprb_func_process& pro)
   input_types_[5] = "vil_image_view_base_sptr";
   input_types_[6] = "vcl_string"; // "raybelief" string for using raybelief
   input_types_[7] = "bool";       // true to use max mode probability
-  input_types_[8] = "float";       // time
+  input_types_[8] = "float";      // time
 
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default is 1x1, with no ray belief
-  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
+  brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1, 1) );
   brdb_value_sptr pmax = new brdb_value_t<bool>(false);    // use max-mode probability instead of mixture?
   pro.set_input(5, empty_mask);
   pro.set_input(7, pmax);
@@ -67,13 +67,14 @@ bool bstm_ocl_change_detection_process_cons(bprb_func_process& pro)
 bool bstm_ocl_change_detection_process(bprb_func_process& pro)
 {
   using namespace bstm_ocl_change_detection_process_globals;
-  if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs
-  unsigned i = 0;
+  unsigned                 i = 0;
   bocl_device_sptr         device        = pro.get_input<bocl_device_sptr>(i++);
   bstm_scene_sptr          scene         = pro.get_input<bstm_scene_sptr>(i++);
   bstm_opencl_cache_sptr   opencl_cache  = pro.get_input<bstm_opencl_cache_sptr>(i++);
@@ -85,37 +86,39 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
   float                    time         = pro.get_input<float>(i++);
 
   // img dims
-  unsigned ni=img->ni();
-  unsigned nj=img->nj();
+  unsigned ni = img->ni();
+  unsigned nj = img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    change_img     = new vil_image_view<float>(ni, nj);
+  vil_image_view<float>* change_img     = new vil_image_view<float>(ni, nj);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;
-  if ( norm_type != "single" ) {
+  if( norm_type != "single" )
+    {
     bstm_ocl_aux_pass_change::change_detect( *change_img,
-                                               device,
-                                               scene,
-                                               opencl_cache,
-                                               cam,
-                                               img,
-                                               mask_img,
-                                               time);
-  }
-  else {
+                                             device,
+                                             scene,
+                                             opencl_cache,
+                                             cam,
+                                             img,
+                                             mask_img,
+                                             time);
+    }
+  else
+    {
     // store scene smaprt pointer
     bstm_ocl_change_detection::change_detect( *change_img,
-                                               device,
-                                               scene,
-                                               opencl_cache,
-                                               cam,
-                                               img,
-                                               mask_img,
-                                               norm_type,
-                                               time);
-  }
-  vcl_cout<<" change time: "<<t.all()<<" ms"<<vcl_endl;
+                                              device,
+                                              scene,
+                                              opencl_cache,
+                                              cam,
+                                              img,
+                                              mask_img,
+                                              norm_type,
+                                              time);
+    }
+  vcl_cout << " change time: " << t.all() << " ms" << vcl_endl;
 
 //  float thresh = 0.3;
 //  //detect change blobs
@@ -135,10 +138,8 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
 //    }
 //  }
 
-
-
   // set outputs
-  i=0;
+  i = 0;
   pro.set_output_val<vil_image_view_base_sptr>(i++, change_img);
   return true;
 }

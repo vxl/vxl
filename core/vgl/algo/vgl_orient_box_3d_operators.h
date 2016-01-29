@@ -1,7 +1,7 @@
 // This is core/vgl/algo/vgl_orient_box_3d_operators.h
 #ifndef vgl_orient_box_3d_operators_h
 #define vgl_orient_box_3d_operators_h
-//:
+// :
 // \file
 // \brief Compute the minimal oriented bounding box for several 3D shapes
 // \author Peter Vanroose
@@ -29,15 +29,18 @@ template <class T>
 class vgl_orient_box_3d_operators
 {
   vgl_orient_box_3d_operators() {} // The default constructor is private
- public:
+public:
 
-  static vgl_orient_box_3d<T> minimal_box(vgl_point_3d<T> const& p) {
+  static vgl_orient_box_3d<T> minimal_box(vgl_point_3d<T> const& p)
+  {
     vgl_box_3d<T> bb; bb.add(p); return bb;
   }
 
   static vgl_orient_box_3d<T> minimal_box(vcl_vector<vgl_point_3d<T> > const& plist);
+
 };
 
-#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d_operators.txx> instead"
+#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern \
+  "Please #include <vgl/vgl_orient_box_3d_operators.txx> instead"
 
 #endif // vgl_orient_box_3d_operators_h

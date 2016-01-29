@@ -7,26 +7,25 @@
 
 class boxm2_normal_albedo_array
 {
- public:
+public:
   boxm2_normal_albedo_array();
 
   static vcl_vector<vgl_vector_3d<double> > get_normals();
 
-  float get_albedo(unsigned int i) const {return albedos[i];}
-  float get_probability(unsigned int i) const {return probs[i];}
+  float get_albedo(unsigned int i) const {return albedos[i]; }
+  float get_probability(unsigned int i) const {return probs[i]; }
 
-  void set_albedo(unsigned int i, float albedo) {albedos[i] = albedo;}
-  void set_probability(unsigned int i, float prob) {probs[i] = prob;}
-
- protected:
+  void set_albedo(unsigned int i, float albedo) {albedos[i] = albedo; }
+  void set_probability(unsigned int i, float prob) {probs[i] = prob; }
+protected:
   static boxm2_EXPORT_DATA const unsigned NUM_NORMALS = 16; // 8 at elevation 0 + 7 at elevation 45 + 1 at elevation 90
-  float albedos[NUM_NORMALS];
-  float probs[NUM_NORMALS];
+  float                                   albedos[NUM_NORMALS];
+  float                                   probs[NUM_NORMALS];
 };
 
 class boxm2_normal_albedo_array_constants
 {
- public:
+public:
   static boxm2_EXPORT_DATA const double sigma_albedo;
   static boxm2_EXPORT_DATA const double sigma_optical_depth;
   static boxm2_EXPORT_DATA const double sigma_airlight;
@@ -34,4 +33,3 @@ class boxm2_normal_albedo_array_constants
 };
 
 #endif
-

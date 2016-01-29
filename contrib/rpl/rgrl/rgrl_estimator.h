@@ -1,6 +1,6 @@
 #ifndef rgrl_estimator_h_
 #define rgrl_estimator_h_
-//:
+// :
 // \file
 // \author Amitha Perera
 // \date   Feb 2003
@@ -20,35 +20,32 @@
 
 #include "rgrl_estimator_sptr.h"
 
-//: Interface for the transform estimators
+// : Interface for the transform estimators
 //
 // An estimator creates a transform object from a set of matches.
 //
 class rgrl_estimator
   : public rgrl_object
 {
- public:
-  //: Default constructor
+public:
+  // : Default constructor
   //
   //  Does nothing.
   rgrl_estimator();
 
-  //: Constructor.
+  // : Constructor.
   //
   // See the comments for param_dof(). The parameter is required by
   // some algorithms such as random sampling and DBICP.
   rgrl_estimator( unsigned int param_dof );
 
+  virtual ~rgrl_estimator();
+
+  // : whether this method is iterative or non-iterative
   virtual
-  ~rgrl_estimator();
+  bool is_iterative_method() const = 0;
 
-  //: whether this method is iterative or non-iterative
-  virtual
-  bool
-  is_iterative_method() const = 0;
-
-
-  //: Estimate the transform
+  // : Estimate the transform
   //
   // Given a collection of match sets in \a matches and the current
   // transform estimate (from the previous iteration, for example),
@@ -56,12 +53,10 @@ class rgrl_estimator
   // return a transform object that captures the estimated transform.
   //
   virtual
-  rgrl_transformation_sptr
-  estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-            rgrl_transformation const& cur_transform ) const = 0;
+  rgrl_transformation_sptr estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
+                                     rgrl_transformation const& cur_transform ) const = 0;
 
-
-  //: Estimate the transform
+  // : Estimate the transform
   //
   // Given a set of matches in \a matches and the current transform
   // estimate (from the previous iteration, for example), this
@@ -73,17 +68,15 @@ class rgrl_estimator
   // estimate function.
   //
   virtual
-  rgrl_transformation_sptr
-  estimate( rgrl_match_set_sptr matches,
-            rgrl_transformation const& cur_transform ) const;
+  rgrl_transformation_sptr estimate( rgrl_match_set_sptr matches, rgrl_transformation const& cur_transform ) const;
 
-  //: The degrees of freedom in the parameter set.
-  unsigned int param_dof() const { assert (dof_); return dof_; }
+  // : The degrees of freedom in the parameter set.
+  unsigned int param_dof() const { assert(dof_); return dof_; }
 
-  //: Set the degrees of freedom
+  // : Set the degrees of freedom
   void set_param_dof(unsigned int dof) { dof_ = dof; }
 
-  //: The degrees of freedom in the residual.
+  // : The degrees of freedom in the residual.
   //
   //  Most of the time, this would be 1 since the residual comes from
   //  a single random variable. In some problems, however, the error
@@ -93,11 +86,11 @@ class rgrl_estimator
   //  the error will be 2.)
   virtual unsigned int residual_dof() const { return 1; }
 
-  //: Type of transformation estimated by this estimator.
+  // : Type of transformation estimated by this estimator.
   virtual
-  const vcl_type_info& transformation_type() const = 0;
+  const vcl_type_info & transformation_type() const = 0;
 
-  //: Name of transformation estimated by this estimator.
+  // : Name of transformation estimated by this estimator.
   //  It is more useful when a transformation/estimator pair
   //  is capable of storing/estimating several models,
   //  usually differing in dof
@@ -107,122 +100,114 @@ class rgrl_estimator
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_estimator, rgrl_object );
-
- protected:
-  //: Determine the weighted centres of the From and To points
+protected:
+  // : Determine the weighted centres of the From and To points
   //
-
- private:
+private:
   unsigned int dof_;
 };
 
 // ===================================================================
 //
-//: Interface for linear transform estimators
+// : Interface for linear transform estimators
 //
 // An estimator creates a transform object from a set of matches.
 //
 class rgrl_linear_estimator
   : public rgrl_estimator
 {
- public:
-  //: Default constructor
+public:
+  // : Default constructor
   //
   //  Does nothing.
   rgrl_linear_estimator()
-   : rgrl_estimator()
+    : rgrl_estimator()
   { }
 
-  //: Constructor.
+  // : Constructor.
   //
   // See the comments for param_dof(). The parameter is required by
   // some algorithms such as random sampling and DBICP.
   rgrl_linear_estimator( unsigned int param_dof )
-   : rgrl_estimator( param_dof )
+    : rgrl_estimator( param_dof )
   { }
 
   virtual
   ~rgrl_linear_estimator()
   { }
 
-  //: Linear estimator is non-iterative
+  // : Linear estimator is non-iterative
   //
   virtual
-  bool
-  is_iterative_method() const
+  bool is_iterative_method() const
   { return false; }
 };
 
 // ===================================================================
 //
-//: Interface for non-linear transform estimators
+// : Interface for non-linear transform estimators
 //
 // An estimator creates a transform object from a set of matches.
 //
 class rgrl_nonlinear_estimator
   : public rgrl_estimator
 {
- public:
-  //: Default constructor
+public:
+  // : Default constructor
   //
   //  Does nothing.
   rgrl_nonlinear_estimator()
-   : rgrl_estimator(),
-     max_num_iterations_(0),
-     relative_threshold_(1e-8)
+    : rgrl_estimator(),
+    max_num_iterations_(0),
+    relative_threshold_(1e-8)
   { }
 
-  //: Constructor.
+  // : Constructor.
   //
   // See the comments for param_dof(). The parameter is required by
   // some algorithms such as random sampling and DBICP.
   rgrl_nonlinear_estimator( unsigned int /*param_dof*/ )
-   : rgrl_estimator(),
-     max_num_iterations_(0),
-     relative_threshold_(1e-8)
+    : rgrl_estimator(),
+    max_num_iterations_(0),
+    relative_threshold_(1e-8)
   { }
 
   virtual
   ~rgrl_nonlinear_estimator()
   { }
 
-  //: Linear estimator is non-iterative
+  // : Linear estimator is non-iterative
   //
   virtual
-  bool
-  is_iterative_method() const
+  bool is_iterative_method() const
   { return true; }
 
-  //: set max number of iterations
+  // : set max number of iterations
   void set_max_num_iter( int max )
   { max_num_iterations_ = max; }
 
-  //: return max number of iterations
+  // : return max number of iterations
   int max_num_iter() const
   { return max_num_iterations_; }
 
-  //: set relative threshold for parameters change
+  // : set relative threshold for parameters change
   void set_rel_thres( double thres )
   { relative_threshold_ = thres; }
 
-  //: relative threshold
+  // : relative threshold
   double rel_thres() const
   { return relative_threshold_; }
-
- protected:
-  //: specify the maximum number of iterations for this estimator
+protected:
+  // : specify the maximum number of iterations for this estimator
   int max_num_iterations_;
 
-  //: The threshold for relative parameter change before termination
+  // : The threshold for relative parameter change before termination
   double relative_threshold_;
 };
 
-bool
-rgrl_est_compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-                                   vnl_vector<double>& from_centre,
-                                   vnl_vector<double>& to_centre );
-unsigned
-rgrl_est_matches_residual_number(rgrl_set_of<rgrl_match_set_sptr> const& matches);
+bool rgrl_est_compute_weighted_centres( rgrl_set_of<rgrl_match_set_sptr> const& matches,
+                                        vnl_vector<double>& from_centre, vnl_vector<double>& to_centre );
 
+unsigned rgrl_est_matches_residual_number(rgrl_set_of<rgrl_match_set_sptr> const& matches);
 
 #endif // rgrl_estimator_h_

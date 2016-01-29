@@ -1,4 +1,4 @@
-//-*- c++ -*-------------------------------------------------------------------
+// -*- c++ -*-------------------------------------------------------------------
 #ifndef osl_canny_ox_h
 #define osl_canny_ox_h
 //
@@ -41,51 +41,59 @@
 class osl_canny_ox_params;
 
 struct osl_LINK
-{
+  {
   int to;
-  osl_LINK *nextl;
-};
-
+  osl_LINK * nextl;
+  };
 
 class osl_canny_ox : public osl_canny_base
 {
- public:
-  osl_canny_ox(osl_canny_ox_params const &params);
-  void detect_edges(vil1_image const &image, vcl_list<osl_edge*>*);
-  ~osl_canny_ox();
+public:
+  osl_canny_ox(osl_canny_ox_params const & params);
+  void detect_edges(vil1_image const & image, vcl_list<osl_edge *> *);
 
- protected:
-  osl_edgel_chain *Get_NMS_edgelsOX(int n_edgels_NMS, int *x_, int *y_);
+  ~osl_canny_ox();
+protected:
+  osl_edgel_chain * Get_NMS_edgelsOX(int n_edgels_NMS, int * x_, int * y_);
 
   // Functions used in performing the hysteresis part of canny
-  int HysteresisOX(osl_edgel_chain *&, int *&);
-  void Initial_followOX(int,int,osl_edgel_chain *&,osl_LINK *[],int *&,float);
-  void Add_linkOX(int,int,osl_LINK *[]);
-  void Link_edgelsOX(vcl_vector<unsigned> const &, vcl_vector<unsigned> const &,osl_LINK *[]);
-  int Get_n_edgels_hysteresisOX(osl_edgel_chain *&,int *&);
-  void Get_hysteresis_edgelsOX(osl_edgel_chain *&,int *&, osl_edgel_chain *&, int *x_, int *y_);
-  void Delete_linksOX(osl_LINK **, int);
-  osl_edge *NO_FollowerOX(osl_edgel_chain *);
+  int HysteresisOX(osl_edgel_chain * &, int * &);
+
+  void Initial_followOX(int, int, osl_edgel_chain * &, osl_LINK *[], int * &, float);
+  void Add_linkOX(int, int, osl_LINK *[]);
+  void Link_edgelsOX(vcl_vector<unsigned> const &, vcl_vector<unsigned> const &, osl_LINK *[]);
+  int Get_n_edgels_hysteresisOX(osl_edgel_chain * &, int * &);
+
+  void Get_hysteresis_edgelsOX(osl_edgel_chain * &, int * &, osl_edgel_chain * &, int * x_, int * y_);
+
+  void Delete_linksOX(osl_LINK * *, int);
+
+  osl_edge * NO_FollowerOX(osl_edgel_chain *);
 
   // Functions used in the follow part of canny
-  void FollowerOX(vcl_list<osl_edge*> *);
-  void Final_followOX(int,int,vcl_list<int> *,vcl_list<int> *,vcl_list<float> *,int);
-  int Join_dotsOX(int,int,int,int,int&,int&);
-  void Scale_imageOX(float **, float);
-  void Set_image_borderOX(float **, int, float);
+  void FollowerOX(vcl_list<osl_edge *> *);
+
+  void Final_followOX(int, int, vcl_list<int> *, vcl_list<int> *, vcl_list<float> *, int);
+
+  int Join_dotsOX(int, int, int, int, int &, int &);
+
+  void Scale_imageOX(float * *, float);
+
+  void Set_image_borderOX(float * *, int, float);
 
   // Functions used in locating junctions
   void Find_junctionsOX();
+
   void Find_junction_clustersOX();
 
- protected:
-  int max_width_OX_;       // The maximum smoothing kernel width
-  float *sub_area_OX_;     // Used in smoothing the image near the borders
+protected:
+  int     max_width_OX_;   // The maximum smoothing kernel width
+  float * sub_area_OX_;    // Used in smoothing the image near the borders
 
   int edge_min_OX_;        // Minimum edge pixel intensity
 
-  int min_length_OX_;      // Minimum number of pixels in a curve
-  int border_size_OX_;     // Border size around the image to be set
+  int   min_length_OX_;    // Minimum number of pixels in a curve
+  int   border_size_OX_;   // Border size around the image to be set
   float border_value_OX_;  //   to border_value_OX_ (usually 0) to ensure
                            //   follow won't overrun.
   float scale_OX_;         // Value used in the follow part of canny to
@@ -98,8 +106,8 @@ class osl_canny_ox : public osl_canny_base
                            //  Locating Junctions in not performed either.
                            //  See Do_osl_canny_ox(...)
 
-  bool join_flag_OX_;      // True to enable pixel jumping
-  int junction_option_OX_; // True if we want to locate junctions
+  bool join_flag_OX_;       // True to enable pixel jumping
+  int  junction_option_OX_; // True if we want to locate junctions
 };
 
 #endif // osl_canny_ox_h

@@ -2,9 +2,9 @@
 #ifndef vnl_vector_fixed_h_
 #define vnl_vector_fixed_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Fixed length stack-stored vector
 //
@@ -38,10 +38,12 @@
 #include <vnl/vnl_config.h> // for VNL_CONFIG_CHECK_BOUNDS
 #include <vnl/vnl_error.h>
 
-VCL_TEMPLATE_EXPORT template <class T, unsigned int n> class vnl_vector_fixed;
-VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
+VCL_TEMPLATE_EXPORT template <class T, unsigned int n>
+class vnl_vector_fixed;
+VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_cols>
+class vnl_matrix_fixed;
 
-//: Fixed length stack-stored, space-efficient vector.
+// : Fixed length stack-stored, space-efficient vector.
 // vnl_vector_fixed is a fixed-length, stack storage vector. It has
 // the same storage size as a C-style array. It is not related via
 // inheritance to vnl_vector. However, it can be converted cheaply to
@@ -85,12 +87,11 @@ VCL_TEMPLATE_EXPORT template <class T, unsigned int num_rows, unsigned int num_c
 template <class T, unsigned int n>
 class vnl_vector_fixed
 {
- protected:
+protected:
   T data_[n];
-
- public:
-  typedef vnl_vector_fixed<T,n> self;
-  typedef unsigned int size_type;
+public:
+  typedef vnl_vector_fixed<T, n> self;
+  typedef unsigned int           size_type;
   // Compile-time accessible attribute to get the dimensionality of the vector.
   enum { SIZE = n };
 
@@ -98,17 +99,17 @@ class vnl_vector_fixed
   // adds a significant overhead. (memcpy is often implemented with a
   // couple of assembly instructions.)
 
-  //: Construct an uninitialized n-vector
+  // : Construct an uninitialized n-vector
   vnl_vector_fixed() {}
 
-  //: Copy constructor
+  // : Copy constructor
   //  The dimensions must match.
-  vnl_vector_fixed( const vnl_vector_fixed<T,n>& rhs )
+  vnl_vector_fixed( const vnl_vector_fixed<T, n>& rhs )
   {
     vcl_memcpy( data_, rhs.data_, sizeof data_ );
   }
 
-  //: Construct a fixed-n-vector copy of \a rhs.
+  // : Construct a fixed-n-vector copy of \a rhs.
   //  The dimensions must match.
   vnl_vector_fixed( const vnl_vector<T>& rhs )
   {
@@ -116,150 +117,158 @@ class vnl_vector_fixed
     vcl_memcpy( data_, rhs.data_block(), sizeof data_ );
   }
 
-  //: Constructs n-vector with all elements initialised to \a v
+  // : Constructs n-vector with all elements initialised to \a v
   explicit vnl_vector_fixed( const T& v ) { fill( v ); }
 
-  //: Construct a fixed-n-vector initialized from \a datablck
+  // : Construct a fixed-n-vector initialized from \a datablck
   //  The data \e must have enough data. No checks performed.
   explicit vnl_vector_fixed( const T* datablck )
   {
     vcl_memcpy( data_, datablck, sizeof data_ );
   }
 
-  //: Convenience constructor for 2-D vectors
+  // : Convenience constructor for 2-D vectors
   // While this constructor is sometimes useful, consider using
   // vnl_double_2 or vnl_float_2 instead.
   vnl_vector_fixed( const T& x0, const T& x1 )
   {
-    if ( n != 2 )
-    {
-      #ifndef NDEBUG
+    if( n != 2 )
+      {
+#ifndef NDEBUG
       vnl_error_vector_dimension("vnl_vector_fixed()", 2, n);
-      #endif
+#endif
       return;
-    }
+      }
 
     data_[0] = x0; data_[1] = x1;
   }
 
-  //: Convenience constructor for 3-D vectors
+  // : Convenience constructor for 3-D vectors
   // While this constructor is sometimes useful, consider using
   // vnl_double_3 or vnl_float_3 instead.
   vnl_vector_fixed( const T& x0, const T& x1, const T& x2 )
   {
-    if ( n != 3 )
-    {
-      #ifndef NDEBUG
+    if( n != 3 )
+      {
+#ifndef NDEBUG
       vnl_error_vector_dimension("vnl_vector_fixed()", 3, n);
-      #endif
+#endif
       return;
-    }
+      }
     data_[0] = x0; data_[1] = x1; data_[2] = x2;
   }
 
-  //: Convenience constructor for 4-D vectors
+  // : Convenience constructor for 4-D vectors
   vnl_vector_fixed( const T& x0, const T& x1, const T& x2, const T& x3 )
   {
-    if ( n != 4 )
-    {
-      #ifndef NDEBUG
+    if( n != 4 )
+      {
+#ifndef NDEBUG
       vnl_error_vector_dimension("vnl_vector_fixed()", 4, n);
-      #endif
+#endif
       return;
-    }
+      }
     data_[0] = x0; data_[1] = x1; data_[2] = x2; data_[3] = x3;
   }
 
-  //: Copy operator
-  vnl_vector_fixed<T,n>& operator=( const vnl_vector_fixed<T,n>& rhs ) {
+  // : Copy operator
+  vnl_vector_fixed<T, n> & operator=( const vnl_vector_fixed<T, n>& rhs )
+  {
     vcl_memcpy( data_, rhs.data_, sizeof data_ );
     return *this;
   }
 
-  //: Copy data from a dynamic vector
+  // : Copy data from a dynamic vector
   // The dimensions must match.
-  vnl_vector_fixed<T,n>& operator=( const vnl_vector<T>& rhs) {
+  vnl_vector_fixed<T, n> & operator=( const vnl_vector<T>& rhs)
+  {
     assert( n == rhs.size() );
     vcl_memcpy( data_, rhs.data_block(), sizeof data_ );
     return *this;
   }
 
-  //: Length of the vector.
+  // : Length of the vector.
   // This is always \a n.
   unsigned size() const { return n; }
 
-  //: Put value at given position in vector.
-  void put (unsigned int i, T const& v) { data_[i] = v; }
+  // : Put value at given position in vector.
+  void put(unsigned int i, T const& v) { data_[i] = v; }
 
-  //: Get value at element i
-  T get (unsigned int i) const { return data_[i]; }
+  // : Get value at element i
+  T get(unsigned int i) const { return data_[i]; }
 
-  //: Set all values to v
-  vnl_vector_fixed& fill( T const& v )
+  // : Set all values to v
+  vnl_vector_fixed & fill( T const& v )
   {
-    for ( size_type i = 0; i < n; ++i )
+    for( size_type i = 0; i < n; ++i )
+      {
       data_[i] = v;
+      }
     return *this;
   }
 
-  //: Sets elements to ptr[i]
+  // : Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  vnl_vector_fixed& copy_in( T const * ptr )
+  vnl_vector_fixed & copy_in( T const * ptr )
   {
-    for ( size_type i = 0; i < n; ++i )
+    for( size_type i = 0; i < n; ++i )
+      {
       data_[i] = ptr[i];
+      }
     return *this;
   }
 
-  //: Copy elements to ptr[i]
+  // : Copy elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
   void copy_out( T* ptr ) const
   {
-    for ( size_type i = 0; i < n; ++i )
+    for( size_type i = 0; i < n; ++i )
+      {
       ptr[i] = data_[i];
+      }
   }
 
-  //: Sets elements to ptr[i]
+  // : Sets elements to ptr[i]
   //  Note: ptr[i] must be valid for i=0..size()-1
-  vnl_vector_fixed& set( T const *ptr ) { return copy_in(ptr); }
+  vnl_vector_fixed & set( T const * ptr ) { return copy_in(ptr); }
 
-  //: Return reference to the element at specified index.
+  // : Return reference to the element at specified index.
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T       & operator() (unsigned int i)
+  T       & operator()(unsigned int i)
   {
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-    assert(i<n);   // Check the index is valid.
+    assert(i < n);   // Check the index is valid.
 #endif
     return data_[i];
   }
 
-  //: Return reference to the element at specified index.
+  // : Return reference to the element at specified index.
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T const & operator() (unsigned int i) const
+  T const & operator()(unsigned int i) const
   {
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-    assert(i<n);   // Check the index is valid
+    assert(i < n);   // Check the index is valid
 #endif
     return data_[i];
   }
 
-  //: Return the i-th element
-  T& operator[] ( unsigned int i ) { return data_[i]; }
+  // : Return the i-th element
+  T & operator[]( unsigned int i ) { return data_[i]; }
 
-  //: Return the i-th element
-  const T& operator[] ( unsigned int i ) const { return data_[i]; }
+  // : Return the i-th element
+  const T & operator[]( unsigned int i ) const { return data_[i]; }
 
-  //: Access the contiguous block storing the elements in the vector.
+  // : Access the contiguous block storing the elements in the vector.
   //  O(1).
   //  data_block()[0] is the first element of the vector
-  T const* data_block() const { return data_; }
+  T const * data_block() const { return data_; }
 
-  //: Access the contiguous block storing the elements in the vector.
+  // : Access the contiguous block storing the elements in the vector.
   //  O(1).
   //  data_block()[0] is the first element of the vector
   T      * data_block() { return data_; }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
   // Conversion to vnl_vector_ref.
 
   // The const version of as_ref should return a const vnl_vector_ref
@@ -267,157 +276,166 @@ class vnl_vector_fixed
   // it. This prevents a const vnl_vector_fixed from being cast into a
   // non-const vnl_vector reference, giving a slight increase in type safety.
 
-  //: Explicit conversion to a vnl_vector_ref.
+  // : Explicit conversion to a vnl_vector_ref.
   // This is a cheap conversion for those functions that have an interface
   // for vnl_vector but not for vnl_vector_fixed. There is also a
   // conversion operator that should work most of the time.
   // \sa vnl_vector_ref::non_const
   vnl_vector_ref<T> as_ref() { return vnl_vector_ref<T>( n, data_ ); }
 
-  //: Explicit conversion to a vnl_vector_ref.
+  // : Explicit conversion to a vnl_vector_ref.
   // This is a cheap conversion for those functions that have an interface
   // for vnl_vector but not for vnl_vector_fixed. There is also a
   // conversion operator that should work most of the time.
   // \sa vnl_vector_ref::non_const
-  const vnl_vector_ref<T> as_ref() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
+  const vnl_vector_ref<T> as_ref() const { return vnl_vector_ref<T>( n, const_cast<T *>(data_) ); }
 
-  //: Cheap conversion to vnl_vector_ref
+  // : Cheap conversion to vnl_vector_ref
   // Sometimes, such as with templated functions, the compiler cannot
   // use this user-defined conversion. For those cases, use the
   // explicit as_ref() method instead.
-  operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T*>(data_) ); }
+  operator const vnl_vector_ref<T>() const { return vnl_vector_ref<T>( n, const_cast<T *>(data_) ); }
 
-  //----------------------------------------------------------------------
+  // ----------------------------------------------------------------------
 
-  //: Type defs for iterators
+  // : Type defs for iterators
   typedef T element_type;
-  //: Type defs for iterators
-  typedef T       *iterator;
-  //: Iterator pointing to start of data
+  // : Type defs for iterators
+  typedef T * iterator;
+  // : Iterator pointing to start of data
   iterator begin() { return data_; }
 
-  //: Iterator pointing to element beyond end of data
-  iterator end() { return data_+n; }
+  // : Iterator pointing to element beyond end of data
+  iterator end() { return data_ + n; }
 
-  //: Const iterator type
-  typedef T const *const_iterator;
-  //: Iterator pointing to start of data
+  // : Const iterator type
+  typedef T const * const_iterator;
+  // : Iterator pointing to start of data
   const_iterator begin() const { return data_; }
-  //: Iterator pointing to element beyond end of data
-  const_iterator end() const { return data_+n; }
+  // : Iterator pointing to element beyond end of data
+  const_iterator end() const { return data_ + n; }
 
-
-  //: Apply f to each element.
+  // : Apply f to each element.
   // Returns a new vector with the result.
-  vnl_vector_fixed<T,n> apply(T (*f)(T));
+  vnl_vector_fixed<T, n> apply(T (* f)(T) );
 
-  //: Apply f to each element.
+  // : Apply f to each element.
   // Returns a new vector with the result.
-  vnl_vector_fixed<T,n> apply(T (*f)(const T&));
+  vnl_vector_fixed<T, n> apply(T (* f)(const T &) );
 
-  //:
-  vnl_vector_fixed<T,n>& operator+=( T s ) { self::add( data_, s, data_ ); return *this; }
+  // :
+  vnl_vector_fixed<T, n> & operator+=( T s ) { self::add( data_, s, data_ ); return *this; }
 
-  //:
-  vnl_vector_fixed<T,n>& operator-=( T s ) { self::sub( data_, s, data_ ); return *this; }
+  // :
+  vnl_vector_fixed<T, n> & operator-=( T s ) { self::sub( data_, s, data_ ); return *this; }
 
-  //:
-  vnl_vector_fixed<T,n>& operator*=( T s ) { self::mul( data_, s, data_ ); return *this; }
+  // :
+  vnl_vector_fixed<T, n> & operator*=( T s ) { self::mul( data_, s, data_ ); return *this; }
 
-  //:
-  vnl_vector_fixed<T,n>& operator/=( T s ) { self::div( data_, s, data_ ); return *this; }
+  // :
+  vnl_vector_fixed<T, n> & operator/=( T s ) { self::div( data_, s, data_ ); return *this; }
 
-  //:
-  vnl_vector_fixed<T,n>& operator+=( const vnl_vector_fixed<T,n>& v ) { self::add( data_, v.data_block(), data_ ); return *this; }
+  // :
+  vnl_vector_fixed<T, n> & operator+=( const vnl_vector_fixed<T, n>& v )
+  {
+    self::add( data_, v.data_block(), data_ );
 
-  //:
-  vnl_vector_fixed<T,n>& operator-=( const vnl_vector_fixed<T,n>& v ) { self::sub( data_, v.data_block(), data_ ); return *this; }
+    return *this;
+  }
 
-  //:
-  vnl_vector_fixed<T,n>& operator+=( const vnl_vector<T>& v )
+  // :
+  vnl_vector_fixed<T, n> & operator-=( const vnl_vector_fixed<T, n>& v )
+  {
+    self::sub( data_, v.data_block(), data_ );
+
+    return *this;
+  }
+
+  // :
+  vnl_vector_fixed<T, n> & operator+=( const vnl_vector<T>& v )
   {
     assert( v.size() == n );
     self::add( data_, v.data_block(), data_ ); return *this;
   }
 
-  //:
-  vnl_vector_fixed<T,n>& operator-=( const vnl_vector<T>& v )
+  // :
+  vnl_vector_fixed<T, n> & operator-=( const vnl_vector<T>& v )
   {
     assert( v.size() == n );
     self::sub( data_, v.data_block(), data_ ); return *this;
   }
 
-  //:
-  vnl_vector_fixed<T,n> operator-() const
+  // :
+  vnl_vector_fixed<T, n> operator-() const
   {
-    vnl_vector_fixed<T,n> result;
+    vnl_vector_fixed<T, n> result;
     self::sub( (T)0, data_, result.data_ );
     return result;
   }
 
-  //: Returns a subvector specified by the start index and length. O(n).
-  vnl_vector<T> extract (unsigned int len, unsigned int start=0) const;
+  // : Returns a subvector specified by the start index and length. O(n).
+  vnl_vector<T> extract(unsigned int len, unsigned int start = 0) const;
 
-  //: Convert to a vnl_vector.
+  // : Convert to a vnl_vector.
   vnl_vector<T> as_vector() const { return extract(n); }
 
-  //: Replaces elements with index beginning at start, by values of v. O(n).
-  vnl_vector_fixed& update (vnl_vector<T> const&, unsigned int start=0);
+  // : Replaces elements with index beginning at start, by values of v. O(n).
+  vnl_vector_fixed & update(vnl_vector<T> const &, unsigned int start = 0);
 
   // norms etc
   typedef typename vnl_c_vector<T>::abs_t abs_t;
 
-  //: Return sum of squares of elements
-  abs_t squared_magnitude() const { return vnl_c_vector<T>::two_nrm2(begin(), size()); }
+  // : Return sum of squares of elements
+  abs_t squared_magnitude() const { return vnl_c_vector<T>::two_nrm2(begin(), size() ); }
 
-  //: Return magnitude (length) of vector
+  // : Return magnitude (length) of vector
   abs_t magnitude() const { return two_norm(); }
 
-  //: Return sum of absolute values of the elements
-  abs_t one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size()); }
+  // : Return sum of absolute values of the elements
+  abs_t one_norm() const { return vnl_c_vector<T>::one_norm(begin(), size() ); }
 
-  //: Return sqrt of sum of squares of values of elements
-  abs_t two_norm() const { return vnl_c_vector<T>::two_norm(begin(), size()); }
+  // : Return sqrt of sum of squares of values of elements
+  abs_t two_norm() const { return vnl_c_vector<T>::two_norm(begin(), size() ); }
 
-  //: Return largest absolute element value
-  abs_t inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size()); }
+  // : Return largest absolute element value
+  abs_t inf_norm() const { return vnl_c_vector<T>::inf_norm(begin(), size() ); }
 
-  //: Normalise by dividing through by the magnitude
-  vnl_vector_fixed<T,n>& normalize() { vnl_c_vector<T>::normalize(begin(), size()); return *this; }
+  // : Normalise by dividing through by the magnitude
+  vnl_vector_fixed<T, n> & normalize() { vnl_c_vector<T>::normalize(begin(), size() ); return *this; }
 
   // These next 6 functions are should really be helper functions since they aren't
   // really proper functions on a vector in a philosophical sense.
 
-  //: Root Mean Squares of values
-  abs_t rms     () const { return vnl_c_vector<T>::rms_norm(begin(), size()); }
+  // : Root Mean Squares of values
+  abs_t rms() const { return vnl_c_vector<T>::rms_norm(begin(), size() ); }
 
-  //: Smallest value
-  T min_value () const { return vnl_c_vector<T>::min_value(begin(), size()); }
+  // : Smallest value
+  T min_value() const { return vnl_c_vector<T>::min_value(begin(), size() ); }
 
-  //: Largest value
-  T max_value () const { return vnl_c_vector<T>::max_value(begin(), size()); }
+  // : Largest value
+  T max_value() const { return vnl_c_vector<T>::max_value(begin(), size() ); }
 
-  //: Location of smallest value
-  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+  // : Location of smallest value
+  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size() ); }
 
-  //: Location of largest value
-  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
+  // : Location of largest value
+  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size() ); }
 
-  //: Mean of values in vector
-  T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
+  // : Mean of values in vector
+  T mean() const { return vnl_c_vector<T>::mean(begin(), size() ); }
 
-  //: Sum of values in a vector
-  T sum() const { return vnl_c_vector<T>::sum(begin(), size()); }
+  // : Sum of values in a vector
+  T sum() const { return vnl_c_vector<T>::sum(begin(), size() ); }
 
-  //: Reverse the order of the elements
+  // : Reverse the order of the elements
   //  Element i swaps with element size()-1-i
-  vnl_vector_fixed& flip();
+  vnl_vector_fixed & flip();
 
-  //: Check that size()==sz if not, abort();
+  // : Check that size()==sz if not, abort();
   // This function does or tests nothing if NDEBUG is defined
   void assert_size( unsigned sz ) const { assert( sz == n ); (void)sz; }
 
-  //: Check that this is finite if not, abort();
+  // : Check that this is finite if not, abort();
   // This function does or tests nothing if NDEBUG is defined
   void assert_finite() const
   {
@@ -426,181 +444,205 @@ class vnl_vector_fixed
 #endif
   }
 
-  //: Return true if it's finite
+  // : Return true if it's finite
   bool is_finite() const;
 
-  //: Return true iff all the entries are zero.
+  // : Return true iff all the entries are zero.
   bool is_zero() const;
 
-  //: Return true iff the size is zero.
-  bool empty() const { return n==0; }
+  // : Return true iff the size is zero.
+  bool empty() const { return n == 0; }
 
-  //: Return true if *this == v
-  bool operator_eq (vnl_vector_fixed<T,n> const& v) const
+  // : Return true if *this == v
+  bool operator_eq(vnl_vector_fixed<T, n> const& v) const
   {
-    for ( size_type i = 0; i < n; ++i )
-      if ( (*this)[i] != v[i] )
+    for( size_type i = 0; i < n; ++i )
+      {
+      if( (*this)[i] != v[i] )
+        {
         return false;
+        }
+      }
     return true;
   }
 
-  //: Return true if *this == v
-  bool operator_eq (vnl_vector<T> const& v) const
+  // : Return true if *this == v
+  bool operator_eq(vnl_vector<T> const& v) const
   {
     assert( v.size() == n );
-    for ( size_type i = 0; i < n; ++i )
-      if ( (*this)[i] != v[i] )
+    for( size_type i = 0; i < n; ++i )
+      {
+      if( (*this)[i] != v[i] )
+        {
         return false;
+        }
+      }
     return true;
   }
 
-
-  //: Read from text stream
+  // : Read from text stream
   bool read_ascii(vcl_istream& s);
 
-  //: Display the vector
+  // : Display the vector
   // Output each element separated by a single space.
   void print( vcl_ostream& s ) const;
 
- public:
+public:
   // Helper routines for arithmetic. n is the size, and is the
   // template parameter.
 
   inline static void add( const T* a, const T* b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a, ++b )
+      {
       *r = *a + *b;
+      }
   }
 
   inline static void add( const T* a, T b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a )
+      {
       *r = *a + b;
+      }
   }
 
   inline static void sub( const T* a, const T* b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a, ++b )
+      {
       *r = *a - *b;
+      }
   }
 
   inline static void sub( const T* a, T b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a )
+      {
       *r = *a - b;
+      }
   }
 
   inline static void sub( T a, const T* b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++b )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++b )
+      {
       *r = a - *b;
+      }
   }
 
   inline static void mul( const T* a, const T* b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a, ++b )
+      {
       *r = *a * *b;
+      }
   }
 
   inline static void mul( const T* a, T b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a )
+      {
       *r = *a * b;
+      }
   }
 
   inline static void div( const T* a, const T* b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a,++b )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a, ++b )
+      {
       *r = *a / *b;
+      }
   }
 
   inline static void div( const T* a, T b, T* r )
   {
-    for ( unsigned int i=0; i < n; ++i,++r,++a )
+    for( unsigned int i = 0; i < n; ++i, ++r, ++a )
+      {
       *r = *a / b;
+      }
   }
 
- private:
-  //: See assert_finite().
+private:
+  // : See assert_finite().
   void assert_finite_internal() const;
-};
 
+};
 
 // --- Vector-scalar operators ----------------------------------------
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed<T,n>& v, T s )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator+( const vnl_vector_fixed<T, n>& v, T s )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::add( v.data_block(), s, r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::add( v.data_block(), s, r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator+( const T& s,
-                                        const vnl_vector_fixed<T,n>& v )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator+( const T& s,
+                                         const vnl_vector_fixed<T, n>& v )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::add( v.data_block(), s, r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::add( v.data_block(), s, r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed<T,n>& v, T s )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator-( const vnl_vector_fixed<T, n>& v, T s )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::sub( v.data_block(), s, r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::sub( v.data_block(), s, r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator-( const T& s,
-                                        const vnl_vector_fixed<T,n>& v )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator-( const T& s,
+                                         const vnl_vector_fixed<T, n>& v )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::sub( s, v.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::sub( s, v.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator*( const vnl_vector_fixed<T,n>& v, T s )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator*( const vnl_vector_fixed<T, n>& v, T s )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::mul( v.data_block(), s, r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::mul( v.data_block(), s, r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator*( const T& s,
-                                        const vnl_vector_fixed<T,n>& v )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator*( const T& s,
+                                         const vnl_vector_fixed<T, n>& v )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::mul( v.data_block(), s, r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::mul( v.data_block(), s, r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator/( const vnl_vector_fixed<T,n>& v, T s )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator/( const vnl_vector_fixed<T, n>& v, T s )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::div( v.data_block(), s, r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::div( v.data_block(), s, r.data_block() );
   return r;
 }
-
 
 // --- Vector-vector operators ----------------------------------------
 //
@@ -608,299 +650,295 @@ inline vnl_vector_fixed<T,n> operator/( const vnl_vector_fixed<T,n>& v, T s )
 // non-fixed. Because the operators are templated, the fixed will not
 // be automatically converted to a non-fixed-ref. These do it for you.
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator+( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator+( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::add( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::add( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> operator+( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> operator+( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   return a.as_ref() + b;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> operator+( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> operator+( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
   return a + b.as_ref();
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> operator-( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> operator-( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::sub( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::sub( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> operator-( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> operator-( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   return a.as_ref() - b;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> operator-( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> operator-( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
   return a - b.as_ref();
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> element_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> element_product( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::mul( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::mul( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> element_product( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> element_product( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   assert( b.size() == n );
   vnl_vector<T> r(n);
-  vnl_vector_fixed<T,n>::mul( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n>::mul( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> element_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> element_product( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
   assert( a.size() == n );
   vnl_vector<T> r(n);
-  vnl_vector_fixed<T,n>::mul( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n>::mul( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector_fixed<T,n> element_quotient( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector_fixed<T, n> element_quotient( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
-  vnl_vector_fixed<T,n> r;
-  vnl_vector_fixed<T,n>::div( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n> r;
+  vnl_vector_fixed<T, n>::div( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> element_quotient( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> element_quotient( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   assert( b.size() == n );
   vnl_vector<T> r(n);
-  vnl_vector_fixed<T,n>::div( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n>::div( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_vector<T> element_quotient( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_vector<T> element_quotient( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
   assert( a.size() == n );
   vnl_vector<T> r(n);
-  vnl_vector_fixed<T,n>::div( a.data_block(), b.data_block(), r.data_block() );
+  vnl_vector_fixed<T, n>::div( a.data_block(), b.data_block(), r.data_block() );
   return r;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T dot_product( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned n>
+inline T dot_product( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
   return dot_product( a.as_ref(), b.as_ref() );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T dot_product( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned n>
+inline T dot_product( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   return dot_product( a.as_ref(), b );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T dot_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned n>
+inline T dot_product( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
   return dot_product( a, b.as_ref() );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_matrix<T> outer_product( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline vnl_matrix<T> outer_product( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
-  return outer_product( a, b.as_ref());
+  return outer_product( a, b.as_ref() );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned int n>
+inline vnl_matrix<T> outer_product( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   return outer_product( a.as_ref(), b);
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T angle( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned n>
+inline T angle( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
   return angle( a.as_ref(), b.as_ref() );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T angle( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned n>
+inline T angle( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   return angle( a.as_ref(), b );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T angle( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned n>
+inline T angle( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
   return angle( a, b.as_ref() );
 }
 
-
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T vnl_vector_ssd( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned n>
+inline T vnl_vector_ssd( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
   return vnl_vector_ssd( a.as_ref(), b.as_ref() );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T vnl_vector_ssd( const vnl_vector_fixed<T,n>& a, const vnl_vector<T>& b )
+template <class T, unsigned n>
+inline T vnl_vector_ssd( const vnl_vector_fixed<T, n>& a, const vnl_vector<T>& b )
 {
   return vnl_vector_ssd( a.as_ref(), b );
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned n>
-inline T vnl_vector_ssd( const vnl_vector<T>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned n>
+inline T vnl_vector_ssd( const vnl_vector<T>& a, const vnl_vector_fixed<T, n>& b )
 {
   return vnl_vector_ssd( a, b.as_ref() );
 }
 
-
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline bool operator==( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline bool operator==( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
   return a.operator_eq(b);
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline bool operator==( vnl_vector_fixed<T,n> const& a, vnl_vector<T> const& b )
+template <class T, unsigned int n>
+inline bool operator==( vnl_vector_fixed<T, n> const& a, vnl_vector<T> const& b )
 {
   return a.operator_eq(b);
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline bool operator==( vnl_vector<T> const& a, vnl_vector_fixed<T,n> const& b )
+template <class T, unsigned int n>
+inline bool operator==( vnl_vector<T> const& a, vnl_vector_fixed<T, n> const& b )
 {
   return b.operator_eq(a);
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline bool operator!=( const vnl_vector_fixed<T,n>& a, const vnl_vector_fixed<T,n>& b )
+template <class T, unsigned int n>
+inline bool operator!=( const vnl_vector_fixed<T, n>& a, const vnl_vector_fixed<T, n>& b )
 {
-  return ! a.operator_eq(b);
+  return !a.operator_eq(b);
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline bool operator!=( vnl_vector_fixed<T,n> const& a, vnl_vector<T> const& b )
+template <class T, unsigned int n>
+inline bool operator!=( vnl_vector_fixed<T, n> const& a, vnl_vector<T> const& b )
 {
-  return ! a.operator_eq(b);
+  return !a.operator_eq(b);
 }
 
-//:
+// :
 // \relatesalso vnl_vector
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
-inline bool operator!=( vnl_vector<T> const& a, vnl_vector_fixed<T,n> const& b )
+template <class T, unsigned int n>
+inline bool operator!=( vnl_vector<T> const& a, vnl_vector_fixed<T, n> const& b )
 {
-  return ! b.operator_eq(a);
+  return !b.operator_eq(a);
 }
-
 
 // --- I/O operators -------------------------------------------------
 
-
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
+template <class T, unsigned int n>
 inline
-vcl_ostream& operator<< ( vcl_ostream& ostr, const vnl_vector_fixed<T,n>& v )
+vcl_ostream & operator<<( vcl_ostream& ostr, const vnl_vector_fixed<T, n>& v )
 {
   v.print( ostr );
   return ostr;
 }
 
-//:
+// :
 // \relatesalso vnl_vector_fixed
-template<class T, unsigned int n>
+template <class T, unsigned int n>
 inline
-vcl_istream& operator>> ( vcl_istream& ostr, vnl_vector_fixed<T,n>& v )
+vcl_istream & operator>>( vcl_istream& ostr, vnl_vector_fixed<T, n>& v )
 {
   v.read_ascii( ostr );
   return ostr;

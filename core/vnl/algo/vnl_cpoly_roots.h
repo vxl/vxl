@@ -1,7 +1,7 @@
 #ifndef vnl_cpoly_roots_h_
 #define vnl_cpoly_roots_h_
 
-//:
+// :
 //  \file
 //  \brief  finds roots of a univariate polynomial with complex coefficients
 //  \author fsm
@@ -14,7 +14,7 @@
 #include <vcl_complex.h>
 #include <vnl/vnl_vector.h>
 
-//: Find all the roots of a univariate polynomial with complex coefficients.
+// : Find all the roots of a univariate polynomial with complex coefficients.
 //  Class to find all the roots of a univariate polynomial f
 //  with complex coefficients. Currently works by computing the
 //  eigenvalues of the companion matrix of f.
@@ -27,16 +27,15 @@ class vnl_cpoly_roots
 {
 public:
   vnl_cpoly_roots(vnl_vector<vcl_complex<double> > const & a);
-  vnl_cpoly_roots(vnl_vector<double> const & a_real,
-                  vnl_vector<double> const & a_imag);
+  vnl_cpoly_roots(vnl_vector<double> const & a_real, vnl_vector<double> const & a_imag);
 
   // the roots can be found in here :
   vnl_vector<vcl_complex<double> > solns;
-
 private:
-  unsigned N; //degree
-  //: does the actual work
+  unsigned N; // degree
+  // : does the actual work
   void compute(vnl_vector<vcl_complex<double> > const & a);
+
 };
 
 #endif // vnl_cpoly_roots_h_

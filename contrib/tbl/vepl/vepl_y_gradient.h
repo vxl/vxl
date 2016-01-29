@@ -1,6 +1,6 @@
 #ifndef vepl_y_gradient_h_
 #define vepl_y_gradient_h_
-//:
+// :
 // \file
 // \brief Convolve image with vertical [-1 1] filter
 //
@@ -22,7 +22,7 @@
 
 #include <vil/vil_image_resource.h>
 
-//: Convolve image with vertical [-1 1] filter
-vil_image_resource_sptr vepl_y_gradient(vil_image_resource_sptr , double scale=1.0, double shift=0.0);
+// : Convolve image with vertical [-1 1] filter
+vil_image_resource_sptr vepl_y_gradient(vil_image_resource_sptr, double scale = 1.0, double shift = 0.0);
 
 #endif // vepl_y_gradient_h_

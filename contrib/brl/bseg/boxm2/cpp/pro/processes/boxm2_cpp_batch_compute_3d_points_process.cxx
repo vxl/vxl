@@ -1,6 +1,6 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_batch_compute_3d_points_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief  A process to compute a point hypothesis and a covariance for each voxel
 //         First the process boxm2_cpp_cast_3d_point_hypothesis_process is run for each image
@@ -15,7 +15,7 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
 #
-//brdb stuff
+// brdb stuff
 #include <brdb/brdb_value.h>
 #include <boxm2/boxm2_util.h>
 
@@ -24,15 +24,15 @@
 
 namespace boxm2_cpp_batch_compute_3d_points_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_batch_compute_3d_points_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_batch_compute_3d_points_process_globals;
 
-  //process takes 3 inputs
+  // process takes 3 inputs
   // 0) scene
   // 2) cache
   // 3) stream cache
@@ -41,7 +41,7 @@ bool boxm2_cpp_batch_compute_3d_points_process_cons(bprb_func_process& pro)
   input_types_[1] = "boxm2_cache_sptr";
   input_types_[2] = "boxm2_stream_cache_sptr";
   // process has 0 output:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -50,18 +50,19 @@ bool boxm2_cpp_batch_compute_3d_points_process(bprb_func_process& pro)
 {
   using namespace boxm2_cpp_batch_compute_3d_points_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
-  //get the inputs
-  unsigned i = 0;
-  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  boxm2_stream_cache_sptr str_cache= pro.get_input<boxm2_stream_cache_sptr>(i++);
+    }
+  // get the inputs
+  unsigned                i = 0;
+  boxm2_scene_sptr        scene = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_cache_sptr        cache = pro.get_input<boxm2_cache_sptr>(i++);
+  boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
 
   boxm2_block_id bid;
-  int data_index;
+  int            data_index;
 
   // vgl_point_3d<double> point(309.583,251.252,258.228);
   // boxm2_block_id bid; int data_index; float side_len;
@@ -72,35 +73,39 @@ bool boxm2_cpp_batch_compute_3d_points_process(bprb_func_process& pro)
   //   vcl_cout << "point: " << point << " is in block: " << bid << " index: " << data_index << vcl_endl;
 
   // assumes that the intensities of each image have been cast into data models of type ALPHA previously
-  int ptsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
-  int covTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_COVARIANCE>::prefix());
-  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  int ptsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix() );
+  int covTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_COVARIANCE>::prefix() );
+  int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix() );
   // iterate the scene block by block and write to output
-  vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
+  vcl_vector<boxm2_block_id>           blk_ids = scene->get_block_ids();
   vcl_vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
-  for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
+  for( id = blk_ids.begin(); id != blk_ids.end(); ++id )
+    {
     // we're assuming that we have enough RAM to store the whole output blocks
 
-    //: alpha is only retrieved to get buf len, there is a problem in get_data_base_new: TODO: fix this, there should be no need to retrieve alpha
-    boxm2_data_base *  alph = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    vcl_size_t buf_len = alph->buffer_length();
-    vcl_cout << "\nin blk: " << *id << " data buf len: " << buf_len/alphaTypeSize << "\n";
+    // : alpha is only retrieved to get buf len, there is a problem in get_data_base_new: TODO: fix this, there should be no need to retrieve alpha
+    boxm2_data_base * alph = cache->get_data_base(scene, *id, boxm2_data_traits<BOXM2_ALPHA>::prefix(), 0, false);
+    vcl_size_t        buf_len = alph->buffer_length();
+    vcl_cout << "\nin blk: " << *id << " data buf len: " << buf_len / alphaTypeSize << "\n";
 
-    boxm2_data_base * output_pts = cache->get_data_base_new(scene, *id,boxm2_data_traits<BOXM2_POINT>::prefix(),buf_len/alphaTypeSize*ptsTypeSize,false);
-    boxm2_data_base * output_covs = cache->get_data_base_new(scene, *id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(),buf_len/alphaTypeSize*covTypeSize,false);
+    boxm2_data_base * output_pts =
+      cache->get_data_base_new(scene, *id,
+                               boxm2_data_traits<BOXM2_POINT>::prefix(), buf_len / alphaTypeSize * ptsTypeSize, false);
+    boxm2_data_base * output_covs =
+      cache->get_data_base_new(scene, *id,
+                               boxm2_data_traits<BOXM2_COVARIANCE>::prefix(), buf_len / alphaTypeSize * covTypeSize,
+                               false);
     boxm2_3d_point_estimator_batch_functor data_functor;
     data_functor.init_data(output_pts, output_covs, str_cache, bid, data_index);
 
-    int data_buf_len = output_pts->buffer_length()/ptsTypeSize;
+    int data_buf_len = output_pts->buffer_length() / ptsTypeSize;
     vcl_cout << "in blk: " << *id << " data buf len: " << data_buf_len << "\n";
-    boxm2_data_serial_iterator<boxm2_3d_point_estimator_batch_functor>(data_buf_len,data_functor);
-    cache->remove_data_base(scene, *id,boxm2_data_traits<BOXM2_POINT>::prefix());  // cache needs to be read-write cache for output blocks to be written before being discarded
-    cache->remove_data_base(scene, *id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix());
+    boxm2_data_serial_iterator<boxm2_3d_point_estimator_batch_functor>(data_buf_len, data_functor);
+    cache->remove_data_base(scene, *id, boxm2_data_traits<BOXM2_POINT>::prefix() );  // cache needs to be read-write cache for output blocks to be written before being discarded
+    cache->remove_data_base(scene, *id, boxm2_data_traits<BOXM2_COVARIANCE>::prefix() );
     vcl_cout << "\n";
-  }
+    }
 
   return true;
 }
-
-

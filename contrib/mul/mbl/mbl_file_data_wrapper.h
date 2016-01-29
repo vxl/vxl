@@ -2,9 +2,9 @@
 #ifndef mbl_file_data_wrapper_h
 #define mbl_file_data_wrapper_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Tim Cootes
 // \brief A wrapper to provide access to sets of objects
@@ -13,7 +13,7 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_string.h>
 
-//: Base class for objects which can return a set of objects, one at a time
+// : Base class for objects which can return a set of objects, one at a time
 //  This is an iterator-like object.  However, unlike STL, generality is
 //  obtained by deriving from the class rather than providing a similar
 //  interface.
@@ -39,7 +39,7 @@
 //  Note: It should be fairly simple to provide an iterator type object
 //  which steps through the examples in a standard STL way by using this class.
 
-template<class T>
+template <class T>
 class mbl_file_data_wrapper : public mbl_data_wrapper<T>
 {
   // file stream
@@ -55,56 +55,57 @@ class mbl_file_data_wrapper : public mbl_data_wrapper<T>
   unsigned long index_;
 
   // size of data
-    unsigned long size_;
-
- public:
+  unsigned long size_;
+public:
 #if 0
-  //: Default constructor
+  // : Default constructor
   mbl_file_data_wrapper();
 #endif
 
   // constructors
   mbl_file_data_wrapper(const vcl_string path);
 
-  //: Default destructor
+  // : Default destructor
   virtual ~mbl_file_data_wrapper();
 
-  //: count number of data items
+  // : count number of data items
   void calc_data_size();
 
-  //: Number of objects available
+  // : Number of objects available
   virtual unsigned long size() const;
 
-  //: Reset so that current() returns first object
+  // : Reset so that current() returns first object
   virtual void reset();
 
-  //: Return current object
-  virtual const T& current();
+  // : Return current object
+  virtual const T & current();
 
-  //: Move to next object, returning true if is valid
+  // : Move to next object, returning true if is valid
   virtual bool next();
 
-  //: Return current index
+  // : Return current index
   //  First example has index 0
   virtual unsigned long index() const;
 
 #if 0
-  //: Move to element n
+  // : Move to element n
   //  First example has index 0
   virtual void set_index(unsigned long n);
+
 #endif
 
-  //: Create copy on heap and return base pointer
+  // : Create copy on heap and return base pointer
   // This will create an independent iterator on the underlying data.
   // The original data is not copied.
   // Be careful of destruction of underlying data.
-  virtual mbl_data_wrapper< T >* clone() const;
+  virtual mbl_data_wrapper<T> * clone() const;
 
-  //: Name of the class
+  // : Name of the class
   virtual vcl_string is_a() const;
 
-  //: True if this is (or is derived from) class named s
+  // : True if this is (or is derived from) class named s
   virtual bool is_class(vcl_string const& s) const;
+
 };
 
 #endif // mbl_file_data_wrapper_h

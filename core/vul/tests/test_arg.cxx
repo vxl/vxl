@@ -1,10 +1,10 @@
-//-*- c++ -*-------------------------------------------------------------------
+// -*- c++ -*-------------------------------------------------------------------
 //
 // test_vul_arg
 // Author: Andrew W. Fitzgibbon, Oxford RRG
 // Created: 21 Jan 97
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vul/vul_arg.h>
 #include <vcl_cstring.h> // needed for strcmp()
@@ -14,7 +14,7 @@
 #include <testlib/testlib_test.h>
 
 char const * my_argv_1[] =
-{
+  {
   "progname",
   "f",
   "-int", "3",
@@ -31,17 +31,20 @@ char const * my_argv_1[] =
   "j",
   "-req", "100",
   0
-};
+  };
 
-int list1_contents[] = { 1,2,10,21,24,-1,-3,-5,-7 };
+int list1_contents[] = { 1, 2, 10, 21, 24, -1, -3, -5, -7 };
 
-double list2_contents[] = { 1.5,-1.5,8.0 };
+double list2_contents[] = { 1.5, -1.5, 8.0 };
 
 int count_my_args(char const * const * my_argv)
 {
   int c = 0;
-  for (; *my_argv; ++my_argv)
+
+  for( ; *my_argv; ++my_argv )
+    {
     ++c;
+    }
   return c;
 }
 
@@ -49,15 +52,16 @@ void test_arg()
 {
   vul_arg_info_list arglist;
 
-  vul_arg<int> int1(arglist, "-int", "A help string", 1);
-  vul_arg<int> int2(arglist, "-int2", "Another help string", 2);
-  vul_arg<bool> bool1(arglist, "-bool1", "And another", false);
-  vul_arg<bool> bool2(arglist, "-bool2", "And another", true);
-  vul_arg<bool> bool3(arglist, "-bool3", "And a final help test just to finish off...", true);
-  vul_arg<vcl_list<int> > list1(arglist, "-list1", "List...");
-  vul_arg<char*> filename1(arglist);
+  vul_arg<int>                 int1(arglist, "-int", "A help string", 1);
+  vul_arg<int>                 int2(arglist, "-int2", "Another help string", 2);
+  vul_arg<bool>                bool1(arglist, "-bool1", "And another", false);
+  vul_arg<bool>                bool2(arglist, "-bool2", "And another", true);
+  vul_arg<bool>                bool3(arglist, "-bool3", "And a final help test just to finish off...", true);
+  vul_arg<vcl_list<int> >      list1(arglist, "-list1", "List...");
+  vul_arg<char *>              filename1(arglist);
   vul_arg<vcl_vector<double> > list2(arglist, "-list2", "double List...");
-  vul_arg<int> required (arglist, "-req", "Another one to declare a required flag", vul_arg<int>::is_required);
+  vul_arg<int>                 required(arglist, "-req", "Another one to declare a required flag",
+                                        vul_arg<int>::is_required);
 
   int my_argc = count_my_args(my_argv_1);
   vcl_cout << "vul_argc = " << my_argc
@@ -70,7 +74,7 @@ void test_arg()
            << ", list2 size = " << list2().size()
            << ", req = " << required()
            << vcl_endl;
-  char **my_argv = (char**) my_argv_1; // casting away const !!!
+  char * * my_argv = (char * *) my_argv_1; // casting away const !!!
 
   arglist.parse(my_argc, my_argv, true);
 
@@ -79,32 +83,36 @@ void test_arg()
   TEST("req", required(), 100);
   TEST("filename == f", vcl_strcmp(filename1(), "f"), 0);
 
-  {
-    unsigned true_list_length = sizeof list1_contents / sizeof list1_contents[0];
+    {
+    unsigned      true_list_length = sizeof list1_contents / sizeof list1_contents[0];
     vcl_list<int> l = list1();
     TEST("list1 length", l.size(), true_list_length);
     bool ok = true;
-    for (unsigned int i = 0; i < true_list_length; ++i) {
-      if (vcl_find(l.begin(), l.end(), list1_contents[i]) == l.end()) {
+    for( unsigned int i = 0; i < true_list_length; ++i )
+      {
+      if( vcl_find(l.begin(), l.end(), list1_contents[i]) == l.end() )
+        {
         vcl_cout << "Integer [" << list1_contents[i] << "] not found in list\n";
         ok = false;
+        }
       }
-    }
     TEST("list1 contents", ok, true);
-  }
-  {
-    unsigned true_list_length = sizeof list2_contents / sizeof list2_contents[0];
+    }
+    {
+    unsigned           true_list_length = sizeof list2_contents / sizeof list2_contents[0];
     vcl_vector<double> l = list2();
     TEST("list2 length", l.size(), true_list_length);
     bool ok = true;
-    for (unsigned int i = 0; i < true_list_length; ++i) {
-      if (vcl_find(l.begin(), l.end(), list2_contents[i]) == l.end()) {
+    for( unsigned int i = 0; i < true_list_length; ++i )
+      {
+      if( vcl_find(l.begin(), l.end(), list2_contents[i]) == l.end() )
+        {
         vcl_cout << "Value [" << list2_contents[i] << "] not found in list\n";
         ok = false;
+        }
       }
-    }
     TEST("list2 contents", ok, true);
-  }
+    }
 }
 
 TEST_MAIN(test_arg);

@@ -9,29 +9,24 @@
 
 class boxm2_vecf_ocl_vector_field : public vbl_ref_count
 {
-  public:
+public:
 
-    //: compute vector field, writing to gpu cache
-    // Note that both pts_source and pts_target are defined for each cell in source scene using data type float4
-    virtual bool compute_forward_transform(boxm2_scene_sptr source,
-                                           boxm2_block_id const& blk_id,
-                                           bocl_mem* pts_source, // in
-                                           bocl_mem* pts_target, // out
-                                           cl_command_queue &queue) = 0;
+  // : compute vector field, writing to gpu cache
+  // Note that both pts_source and pts_target are defined for each cell in source scene using data type float4
+  virtual bool compute_forward_transform(boxm2_scene_sptr source, boxm2_block_id const& blk_id, bocl_mem* pts_source, // in
+                                         bocl_mem* pts_target,                                                        // out
+                                         cl_command_queue & queue) = 0;
 
-    //: compute inverse vector field, writing result to gpu cache
-    // Note that both pts_target and pts_source are defined for each cell in target scene using data type float4
-    virtual bool compute_inverse_transform(boxm2_scene_sptr target,
-                                           boxm2_block_id const& blk_id,
-                                           bocl_mem* pts_target, // in
-                                           bocl_mem* pts_source, // out
-                                           cl_command_queue &queue) = 0;
+  // : compute inverse vector field, writing result to gpu cache
+  // Note that both pts_target and pts_source are defined for each cell in target scene using data type float4
+  virtual bool compute_inverse_transform(boxm2_scene_sptr target, boxm2_block_id const& blk_id, bocl_mem* pts_target, // in
+                                         bocl_mem* pts_source,                                                        // out
+                                         cl_command_queue & queue) = 0;
 
-    //: virtual destructor to ensure proper cleanup when used polymorphically
-    virtual ~boxm2_vecf_ocl_vector_field(){}
-
-  private:
-    //TODO: might want to just make virtual method that returns kernel so we can reuse other ocl boilerplate stuff
+  // : virtual destructor to ensure proper cleanup when used polymorphically
+  virtual ~boxm2_vecf_ocl_vector_field() {}
+private:
+  // TODO: might want to just make virtual method that returns kernel so we can reuse other ocl boilerplate stuff
 
 };
 

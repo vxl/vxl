@@ -1,6 +1,6 @@
 #ifndef rgtl_octree_objects_hxx
 #define rgtl_octree_objects_hxx
-//:
+// :
 // \file
 // \brief Store a set of objects in an octree for efficient spatial queries.
 // \author Brad King
@@ -15,12 +15,15 @@
 
 class rgtl_serialize_access;
 
-template <unsigned int D> class rgtl_octree_cell_bounds;
-template <unsigned int D> class rgtl_object_array;
+template <unsigned int D>
+class rgtl_octree_cell_bounds;
+template <unsigned int D>
+class rgtl_object_array;
 
-template <unsigned int D> class rgtl_octree_objects_internal;
+template <unsigned int D>
+class rgtl_octree_objects_internal;
 
-//: Store a fixed set of objects in a spatial structure for efficient lookup.
+// : Store a fixed set of objects in a spatial structure for efficient lookup.
 //
 // Given an array of objects with a few basic operations defined by
 // rgtl_object_array, stores the objects in an efficient octree-based
@@ -32,26 +35,24 @@ template <unsigned int D> class rgtl_octree_objects_internal;
 template <unsigned int D>
 class rgtl_octree_objects
 {
- public:
-  typedef rgtl_object_array<D> object_array_type;
+public:
+  typedef rgtl_object_array<D>       object_array_type;
   typedef rgtl_octree_cell_bounds<D> bounds_type;
 
-  //: Construct with a set of objects, the region of interest, and a maximum subdivision level.
-  rgtl_octree_objects(object_array_type const& objs,
-                      bounds_type const& b, int ml);
+  // : Construct with a set of objects, the region of interest, and a maximum subdivision level.
+  rgtl_octree_objects(object_array_type const& objs, bounds_type const& b, int ml);
 
-  //: Default constructor should be used only just before loading a previously serialized instance.
+  // : Default constructor should be used only just before loading a previously serialized instance.
   rgtl_octree_objects(object_array_type const& oa);
 
-  //: Destruct.
+  // : Destruct.
   ~rgtl_octree_objects();
 
-  //: Query the given hyper-sphere for objects its volume intersects.
+  // : Query the given hyper-sphere for objects its volume intersects.
   //  Returns the number of objects found.
-  int query_sphere(double const center[D], double radius,
-                   vcl_vector<int>& ids) const;
+  int query_sphere(double const center[D], double radius, vcl_vector<int>& ids) const;
 
-  //: Query the given object for other objects its volume intersects.
+  // : Query the given object for other objects its volume intersects.
   //  Returns the number of objects found.  Note that the given id is
   //  treated opaquely and passed back to the object_intersects_box
   //  and object_intersects_object callbacks.  It may therefore be out
@@ -59,32 +60,33 @@ class rgtl_octree_objects
   //  object not in the set.
   int query_object(int id, vcl_vector<int>& ids) const;
 
-  //: Query the k closest objects to the given point.
+  // : Query the k closest objects to the given point.
   //  Returns the number of objects found.  Any combination of the object ids,
   //  squared distances, and closest point locations may be obtained.
   //  Pass null pointers to for the results not desired.  If a
   //  non-negative value is given for bound_squared no objects outside
   //  the squared distance bound will be returned.  This optionally
   //  limits the search to a user-specified sphere.
-  int query_closest(double const p[D], int k, int* ids,
-                    double* squared_distances, double* points,
+  int query_closest(double const p[D], int k, int* ids, double* squared_distances, double* points,
                     double bound_squared = -1) const;
 
-  //: Compute the nth-order distance transform on the leaf cell centers.
+  // : Compute the nth-order distance transform on the leaf cell centers.
   //  This speeds up query_closest for query points inside the
   //  bounds and k<=n by providing a smaller initial bound.
   bool compute_distance_transform(int n = 1) const;
 
-  //: Enable/Disable query_closest debug output if support is compiled in.
+  // : Enable/Disable query_closest debug output if support is compiled in.
   void set_query_closest_debug(bool b);
 
- private:
+private:
   // Internal implementation details.
   typedef rgtl_octree_objects_internal<D> internal_type;
   internal_type* internal_;
 
   friend class rgtl_serialize_access;
-  template <class Serializer> void serialize(Serializer& sr);
+  template <class Serializer>
+  void serialize(Serializer& sr);
+
 };
 
 #endif // rgtl_octree_objects_hxx

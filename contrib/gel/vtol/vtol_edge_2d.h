@@ -1,7 +1,7 @@
 // This is gel/vtol/vtol_edge_2d.h
 #ifndef vtol_edge_2d_h_
 #define vtol_edge_2d_h_
-//:
+// :
 // \file
 // \brief Represents the basic 1D topological entity with 2d geometry (curve)
 //
@@ -50,132 +50,130 @@
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vtol/vtol_edge.h>
 
-//: topological edge
+// : topological edge
 
 class vtol_edge_2d : public vtol_edge
 {
-  //***************************************************************************
+  // ***************************************************************************
   // Data members
-  //***************************************************************************
+  // ***************************************************************************
 
   vsol_curve_2d_sptr curve_;
-
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Initialization
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Default constructor. Empty edge. Not a valid edge.
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Default constructor. Empty edge. Not a valid edge.
+  // ---------------------------------------------------------------------------
   vtol_edge_2d() : vtol_edge(), curve_(0) {}
 
-  //---------------------------------------------------------------------------
-  //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
+  // ---------------------------------------------------------------------------
+  // : Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
   //  If `new_curve' is 0, a line is created from `new_v1' and `new_v2'.
-  //---------------------------------------------------------------------------
-  vtol_edge_2d(vtol_vertex_2d_sptr const& new_v1,
-               vtol_vertex_2d_sptr const& new_v2,
-               const vsol_curve_2d_sptr &new_curve=0);
+  // ---------------------------------------------------------------------------
+  vtol_edge_2d(vtol_vertex_2d_sptr const& new_v1, vtol_vertex_2d_sptr const& new_v2,
+               const vsol_curve_2d_sptr & new_curve = 0);
 
-  vtol_edge_2d(vtol_vertex_sptr const& new_v1,
-               vtol_vertex_sptr const& new_v2,
-               const vsol_curve_2d_sptr &new_curve=0);
- private:
+  vtol_edge_2d(vtol_vertex_sptr const& new_v1, vtol_vertex_sptr const& new_v2,
+               const vsol_curve_2d_sptr & new_curve = 0);
+private:
   // deprecated interface:
-  vtol_edge_2d(vtol_vertex_2d &new_v1,
-               vtol_vertex_2d &new_v2,
-               const vsol_curve_2d_sptr &new_curve=0);
+  vtol_edge_2d(vtol_vertex_2d & new_v1, vtol_vertex_2d & new_v2, const vsol_curve_2d_sptr & new_curve = 0);
 
-  //---------------------------------------------------------------------------
-  //: Copy constructor. Deep copy.  Deprecated.
-  //---------------------------------------------------------------------------
-  vtol_edge_2d(const vtol_edge_2d &other);
- public:
-  //---------------------------------------------------------------------------
-  //: Pseudo copy constructor. Deep copy.
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Copy constructor. Deep copy.  Deprecated.
+  // ---------------------------------------------------------------------------
+  vtol_edge_2d(const vtol_edge_2d & other);
+public:
+  // ---------------------------------------------------------------------------
+  // : Pseudo copy constructor. Deep copy.
+  // ---------------------------------------------------------------------------
   vtol_edge_2d(vtol_edge_2d_sptr const& other);
 
-  //---------------------------------------------------------------------------
-  //: Constructor from a zero-chain.
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Constructor from a zero-chain.
+  // ---------------------------------------------------------------------------
   explicit vtol_edge_2d(vtol_zero_chain_sptr const& new_zero_chain);
- private:
+private:
   // Deprecated:
-  explicit vtol_edge_2d(vtol_zero_chain &new_zero_chain);
- public:
-  //---------------------------------------------------------------------------
-  //: Constructor from an array of zero-chains.
-  //---------------------------------------------------------------------------
+  explicit vtol_edge_2d(vtol_zero_chain & new_zero_chain);
+public:
+  // ---------------------------------------------------------------------------
+  // : Constructor from an array of zero-chains.
+  // ---------------------------------------------------------------------------
   explicit vtol_edge_2d(zero_chain_list const& new_zero_chains);
 
   explicit vtol_edge_2d(vsol_curve_2d &);
 
-  //: Constructor from two vertices (alternate interface)
-  vtol_edge_2d(double, double, double, double, vsol_curve_2d_sptr c=0);
+  // : Constructor from two vertices (alternate interface)
+  vtol_edge_2d(double, double, double, double, vsol_curve_2d_sptr c = 0);
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Destructor
+  // ---------------------------------------------------------------------------
   virtual ~vtol_edge_2d() {}
 
-  //---------------------------------------------------------------------------
-  //: Clone `this': creation of a new object and initialization
+  // ---------------------------------------------------------------------------
+  // : Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  // ---------------------------------------------------------------------------
+  virtual vsol_spatial_object_2d * clone() const;
 
-  //: Return a platform independent string identifying the class
+  // : Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vtol_edge_2d"); }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
+  // : Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const vcl_string& cls) const
-  { return cls==is_a() || vtol_edge::is_class(cls); }
+  { return cls == is_a() || vtol_edge::is_class(cls); }
 
-  //---------------------------------------------------------------------------
-  //: Return the curve associated to `this'
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the curve associated to `this'
+  // ---------------------------------------------------------------------------
   vsol_curve_2d_sptr curve() const { return curve_; }
 
-  //---------------------------------------------------------------------------
-  //: Set the curve with `new_curve'
-  //---------------------------------------------------------------------------
-  virtual void set_curve(vsol_curve_2d &new_curve);
+  // ---------------------------------------------------------------------------
+  // : Set the curve with `new_curve'
+  // ---------------------------------------------------------------------------
+  virtual void set_curve(vsol_curve_2d & new_curve);
 
-  //---------------------------------------------------------------------------
-  //: Equality operators
-  //---------------------------------------------------------------------------
-  virtual bool operator==(const vtol_edge_2d &other) const;
-  inline bool operator!=(const vtol_edge_2d &other)const{return !operator==(other);}
-  bool operator==(const vtol_edge &other) const; // virtual of vtol_edge
+  // ---------------------------------------------------------------------------
+  // : Equality operators
+  // ---------------------------------------------------------------------------
+  virtual bool operator==(const vtol_edge_2d & other) const;
+
+  inline bool operator!=(const vtol_edge_2d & other) const {return !operator==(other); }
+  bool operator==(const vtol_edge & other) const; // virtual of vtol_edge
+
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
-  //***************************************************************************
+  // ***************************************************************************
   // Replaces dynamic_cast<T>
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge_2d() const { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an edge, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual const vtol_edge_2d * cast_to_edge_2d() const { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge_2d() { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an edge, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual vtol_edge_2d * cast_to_edge_2d() { return this; }
 
-  virtual void compute_bounding_box() const; //A local implementation
+  virtual void compute_bounding_box() const; // A local implementation
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
-                        int blanking=0) const;
+  virtual void print(vcl_ostream & strm = vcl_cout) const;
 
-  //:  copy the geometry
-  virtual void copy_geometry(const vtol_edge &other);
+  virtual void describe(vcl_ostream & strm = vcl_cout, int blanking = 0) const;
 
-  //: comparison of geometry
-  virtual bool compare_geometry(const vtol_edge &other) const;
+  // :  copy the geometry
+  virtual void copy_geometry(const vtol_edge & other);
+
+  // : comparison of geometry
+  virtual bool compare_geometry(const vtol_edge & other) const;
+
 };
 
 #endif // vtol_edge_2d_h_

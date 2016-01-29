@@ -2,9 +2,9 @@
 #ifndef vgui_text_tableau_h_
 #define vgui_text_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Tableau for rendering text.
 // \author Philip C. Pritchett, RRG, University of Oxford
@@ -21,12 +21,11 @@
 //   06-AUG-2002 K.Y.McGaul - Changed to and added Doxygen comments.
 // \endverbatim
 
-
 #include <vcl_string.h>
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_text_tableau_sptr.h>
 
-//: Tableau for rendering text.
+// : Tableau for rendering text.
 //
 //  Each piece of text is associated with an integer handle through
 //  which it can be retrieved, moved about, changed or removed.
@@ -35,84 +34,83 @@
 //  compiled with GLUT.
 class vgui_text_tableau : public vgui_tableau
 {
- public:
-  //: Constructor - don't use this, use vgui_text_tableau_new.
+public:
+  // : Constructor - don't use this, use vgui_text_tableau_new.
   //  Creates empty text tableau.
   vgui_text_tableau();
 
-  //: Remove all text from the display.
+  // : Remove all text from the display.
   void clear();
 
-  //: Returns the number of pieces of text displayed in this tableau.
+  // : Returns the number of pieces of text displayed in this tableau.
   unsigned size() const;
 
-  //: Returns the tableau name ("vgui_text_tableau").
+  // : Returns the tableau name ("vgui_text_tableau").
   vcl_string type_name() const;
 
-  //: Add the given text to the display at the given x,y position.
-  int add(float x, float y, char const *text);
+  // : Add the given text to the display at the given x,y position.
+  int add(float x, float y, char const * text);
 
-  //: Add the given vcl_string to the display at the given x,y position.
-  int add(float x, float y, vcl_string const &text) { return add(x,y,text.c_str()); }
+  // : Add the given vcl_string to the display at the given x,y position.
+  int add(float x, float y, vcl_string const & text) { return add(x, y, text.c_str() ); }
 
-  //: Set the colour of the text
+  // : Set the colour of the text
   void set_colour(float r, float g, float b);
 
-  //: Set the size of the text.
+  // : Set the size of the text.
   //
   // This is one of the sizes supported by vgui_text_put.
   void set_size( unsigned sz );
 
-  //: Return the x-coordinate of the text associated to given handle.
+  // : Return the x-coordinate of the text associated to given handle.
   float get_posx(int hndl) const;
 
-  //: Return the y-coordinate of the text associated to given handle.
+  // : Return the y-coordinate of the text associated to given handle.
   float get_posy(int hndl) const;
 
-  //: Return the text associated to the given handle.
-  vcl_string const &get_text(int hndl) const;
+  // : Return the text associated to the given handle.
+  vcl_string const & get_text(int hndl) const;
 
-  //: Move text associated to given handle to the given x,y position.
+  // : Move text associated to given handle to the given x,y position.
   void move(int hndl, float nx, float ny);
 
-  //: Change the text associated to given handle to the given new text.
-  void change(int hndl, char const *ntext);
+  // : Change the text associated to given handle to the given new text.
+  void change(int hndl, char const * ntext);
 
-  //: Change the text associated to given handle to the given new vcl_string.
-  void change(int hndl, vcl_string const &ntext) { change(hndl, ntext.c_str()); }
+  // : Change the text associated to given handle to the given new vcl_string.
+  void change(int hndl, vcl_string const & ntext) { change(hndl, ntext.c_str() ); }
 
-  //: Delete text associated to given handle from the display.
+  // : Delete text associated to given handle from the display.
   void remove(int hndl);
 
-  //: Handles all events sent to this tableau.
+  // : Handles all events sent to this tableau.
   //  In particular, uses draw events to render the text.
   bool handle(vgui_event const &);
 
- protected:
-  //: Destructor - called by vgui_text_tableau_sptr.
+protected:
+  // : Destructor - called by vgui_text_tableau_sptr.
   ~vgui_text_tableau() { }
-
- private:
-  vcl_vector<float> xs;
-  vcl_vector<float> ys;
-  vcl_vector<float> r_, g_, b_;
+private:
+  vcl_vector<float>      xs;
+  vcl_vector<float>      ys;
+  vcl_vector<float>      r_, g_, b_;
   vcl_vector<vcl_string> ts;
-  vcl_vector<unsigned> sz_;
+  vcl_vector<unsigned>   sz_;
 
-  float cur_r_, cur_g_, cur_b_;
+  float    cur_r_, cur_g_, cur_b_;
   unsigned cur_sz_;
 
-  //: Position of the first empty space in the vectors
+  // : Position of the first empty space in the vectors
   unsigned first_empty;
 };
 
-//: Create a smart-pointer to a vgui_text_tableau.
+// : Create a smart-pointer to a vgui_text_tableau.
 struct vgui_text_tableau_new : public vgui_text_tableau_sptr
-{
+  {
   typedef vgui_text_tableau_sptr base;
 
-  //: Constructor - creates a default vgui_text_tableau.
-  vgui_text_tableau_new() : base(new vgui_text_tableau()) { }
-};
+  // : Constructor - creates a default vgui_text_tableau.
+  vgui_text_tableau_new() : base(new vgui_text_tableau() ) { }
+  };
 
 #endif // vgui_text_tableau_h_

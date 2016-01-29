@@ -1,7 +1,7 @@
 // This is brl/bbas/volm/volm_candidate_region_parser.h
 #ifndef volm_candidate_region_parser_h_
 #define volm_candidate_region_parser_h_
-//:
+// :
 // \file
 // \brief A class to parse series of candidate region kml file
 //
@@ -15,7 +15,7 @@
 // Tages for KML
 // general
 #ifdef WIN32
-  #define _LIB
+#  define _LIB
 #endif
 #define KML_PLACEMARK_NAME_TAG "name"
 
@@ -56,21 +56,21 @@
 
 class volm_candidate_region_parser : public expatpp
 {
- public:
+public:
   volm_candidate_region_parser(void);
   // parser should not delete the site, it is used afterwards
   ~volm_candidate_region_parser(void) {}
 
-  //: parse all the points that have given name (will return empty vector if kml file does not have points with given name)
+  // : parse all the points that have given name (will return empty vector if kml file does not have points with given name)
   static vcl_vector<vgl_point_3d<double> > parse_points(vcl_string const& kml_file, vcl_string const& name);
 
-  //: parse all lines that have given name
+  // : parse all lines that have given name
   static vcl_vector<vcl_vector<vgl_point_3d<double> > > parse_lines(vcl_string const& kml_file, vcl_string const& name);
 
-  //: parse the exterior boundaries of polygons that have given name
+  // : parse the exterior boundaries of polygons that have given name
   static vgl_polygon<double> parse_polygon(vcl_string const& kml_file, vcl_string const& name);
 
-  //: parse polygons that have given name
+  // : parse polygons that have given name
   static vgl_polygon<double> parse_polygon_with_inner(vcl_string const& kml_file, vcl_string const& name,
                                                       vgl_polygon<double>& outer, vgl_polygon<double>& inner,
                                                       unsigned& n_out, unsigned& n_in);
@@ -90,21 +90,25 @@ class volm_candidate_region_parser : public expatpp
   double roll_dev_;
   double right_fov_dev_;
   double top_fov_dev_;
-  //: map of polygons based on the Placemark name
+  // : map of polygons based on the Placemark name
   vcl_map<vcl_string, vcl_vector<vcl_vector<vgl_point_3d<double> > > > polyouter_;
   vcl_map<vcl_string, vcl_vector<vcl_vector<vgl_point_3d<double> > > > polyinner_;
-  //: map of lines based on the Placemark name
+  // : map of lines based on the Placemark name
   vcl_map<vcl_string, vcl_vector<vcl_vector<vgl_point_3d<double> > > > linecords_;
 
-  //: map of points based on the Placemark name
+  // : map of points based on the Placemark name
   vcl_map<vcl_string, vcl_vector<vgl_point_3d<double> > > points_;
+private:
+  virtual void startElement(const XML_Char* name, const XML_Char* * atts);
 
- private:
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
   virtual void endElement(const XML_Char* name);
+
   virtual void charData(const XML_Char* s, int len);
-  void handleAtts(const XML_Char** atts);
+
+  void handleAtts(const XML_Char* * atts);
+
   void cdataHandler(vcl_string name, vcl_string data);
+
   void init_params();
 
   vcl_string current_name_;

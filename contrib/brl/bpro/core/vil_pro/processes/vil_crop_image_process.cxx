@@ -1,6 +1,6 @@
 // This is brl/bpro/core/vil_pro/processes/vil_crop_image_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 
 #include <bprb/bprb_parameters.h>
@@ -8,10 +8,11 @@
 #include <vil/vil_crop.h>
 #include <vil/vil_new.h>
 
-//: Constructor
+// : Constructor
 bool vil_crop_image_process_cons(bprb_func_process& pro)
 {
-  bool ok=false;
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vil_image_view_base_sptr");
   input_types.push_back("unsigned");
@@ -19,48 +20,49 @@ bool vil_crop_image_process_cons(bprb_func_process& pro)
   input_types.push_back("unsigned");
   input_types.push_back("unsigned");
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   vcl_vector<vcl_string> output_types;
   output_types.push_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
   return true;
 }
 
-//: Execute the process
+// : Execute the process
 bool vil_crop_image_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs()< 5) {
+  if( pro.n_inputs() < 5 )
+    {
     vcl_cout << "vil_crop_image_process: The input number should be 5" << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs
-  unsigned i=0;
-  //Retrieve image from input
+  unsigned i = 0;
+  // Retrieve image from input
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_resource_sptr image_ptr = vil_new_image_resource_of_view(*image);
+  vil_image_resource_sptr  image_ptr = vil_new_image_resource_of_view(*image);
 
-  //Retrieve limits
-  unsigned i0= pro.get_input<unsigned>(i++);
-  unsigned j0= pro.get_input<unsigned>(i++);
-  unsigned ni= pro.get_input<unsigned>(i++);
-  unsigned nj= pro.get_input<unsigned>(i++);
+  // Retrieve limits
+  unsigned i0 = pro.get_input<unsigned>(i++);
+  unsigned j0 = pro.get_input<unsigned>(i++);
+  unsigned ni = pro.get_input<unsigned>(i++);
+  unsigned nj = pro.get_input<unsigned>(i++);
 
-  vil_image_resource_sptr out_img = vil_crop(image_ptr, i0, ni, j0, nj);
-  vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(out_img->get_view()));
+  vil_image_resource_sptr  out_img = vil_crop(image_ptr, i0, ni, j0, nj);
+  vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(out_img->get_view() ) );
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
   return true;
 }
 
-//: A crop process that takes vil_image_resource as input to crop the image
+// : A crop process that takes vil_image_resource as input to crop the image
 namespace vil_crop_image_res_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_  = 5;
+const unsigned n_outputs_ = 1;
 }
 
 bool vil_crop_image_res_process_cons(bprb_func_process& pro)
@@ -78,26 +80,27 @@ bool vil_crop_image_res_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 
-//: Execute the process
+// : Execute the process
 bool vil_crop_image_res_process(bprb_func_process& pro)
 {
   using namespace vil_crop_image_res_process_globals;
   // sanity check
-  if (pro.n_inputs() != n_inputs_) {
+  if( pro.n_inputs() != n_inputs_ )
+    {
     vcl_cout << pro.name() << ": The input number should be 5" << vcl_endl;
     return false;
-  }
+    }
 
   // get the inputs
-  unsigned i = 0;
+  unsigned                i = 0;
   vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(i++);
-  unsigned i0 = pro.get_input<unsigned>(i++);
-  unsigned j0 = pro.get_input<unsigned>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  unsigned                i0 = pro.get_input<unsigned>(i++);
+  unsigned                j0 = pro.get_input<unsigned>(i++);
+  unsigned                ni = pro.get_input<unsigned>(i++);
+  unsigned                nj = pro.get_input<unsigned>(i++);
 
-  vil_image_resource_sptr out_img = vil_crop(img_res_sptr, i0, ni, j0, nj);
-  vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(out_img->get_view()));
+  vil_image_resource_sptr  out_img = vil_crop(img_res_sptr, i0, ni, j0, nj);
+  vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(out_img->get_view() ) );
 
   pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
   return true;

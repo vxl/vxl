@@ -7,5 +7,6 @@
 #include <vipl/accessors/vipl_accessors_vcl_vector.h>
 #include <vipl/vipl_histogram.txx>
 
-template class vipl_histogram<section<unsigned char,2>,vcl_vector<unsigned int>,unsigned char,unsigned int,vipl_trivial_pixeliter>;
+template class vipl_histogram<section<unsigned char, 2>, vcl_vector<unsigned int>, unsigned char, unsigned int,
+                              vipl_trivial_pixeliter>;
 #endif

@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_bins_2d );
 DECLARE( test_borgefors );
 DECLARE( test_bounding_box );

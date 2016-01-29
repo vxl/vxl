@@ -1,7 +1,7 @@
 // This is mul/clsfy/clsfy_binary_threshold_1d_gini_builder.h
 #ifndef clsfy_binary_threshold_1d_gini_builder_h_
 #define clsfy_binary_threshold_1d_gini_builder_h_
-//:
+// :
 // \file
 // \brief Builder  of 1d threshold using gini index
 // \author Martin Roberts
@@ -20,7 +20,7 @@
 
 class clsfy_binary_threshold_1d_gini_builder : public clsfy_binary_threshold_1d_builder
 {
- public:
+public:
 
   // Dflt ctor
   clsfy_binary_threshold_1d_gini_builder();
@@ -28,47 +28,45 @@ class clsfy_binary_threshold_1d_gini_builder : public clsfy_binary_threshold_1d_
   // Destructor
   virtual ~clsfy_binary_threshold_1d_gini_builder();
 
-  //: Create empty model
-  virtual clsfy_classifier_1d* new_classifier() const;
+  // : Create empty model
+  virtual clsfy_classifier_1d * new_classifier() const;
 
-
-  //: Build a binary_threshold classifier
+  // : Build a binary_threshold classifier
   //  Train classifier
   //  Selects parameters of classifier which best separate examples from two classes,
   // Uses the gini impurity index
   // Note it returns the -reduction in Gini impurity produced by the split
   // Not the misclassification rate
   // (i.e. but minimise as per error rate)
-  virtual double build_gini(clsfy_classifier_1d& classifier,
-                            const vnl_vector<double>& inputs,
-                            const vcl_vector<unsigned> &outputs) const;
-
+  virtual double build_gini(clsfy_classifier_1d& classifier, const vnl_vector<double>& inputs,
+                            const vcl_vector<unsigned> & outputs) const;
 
   //  Note that input "data" must be sorted to use this routine
-  virtual double build_gini_from_sorted_data(clsfy_classifier_1d& classifier,
-                                             const vcl_vector<vbl_triple<double,int,int> >& data) const;
+  virtual double build_gini_from_sorted_data(clsfy_classifier_1d& classifier, const vcl_vector<vbl_triple<double, int,
+                                                                                                          int> >& data)
+  const;
 
-  //: Name of the class
+  // : Name of the class
   virtual vcl_string is_a() const;
 
-  //: Name of the class
+  // : Name of the class
   virtual bool is_class(vcl_string const& s) const;
 
-  //: Version number for I/O
+  // : Version number for I/O
   short version_no() const;
 
-  //: Create a copy on the heap and return base class pointer
-  virtual clsfy_builder_1d* clone() const;
+  // : Create a copy on the heap and return base class pointer
+  virtual clsfy_builder_1d * clone() const;
 
-  //: Print class to os
+  // : Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-  //: Save class to binary file stream
+  // : Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-  //: Load class from binary file stream
+  // : Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
-};
 
+};
 
 #endif // clsfy_binary_threshold_1d_gini_builder_h_

@@ -6,4 +6,4 @@
 #include <boct/boct_tree.h>
 
 typedef boct_tree<short, boxm_opt2_sample<float> > tree_type;
-VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type>*);
+VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type> *);

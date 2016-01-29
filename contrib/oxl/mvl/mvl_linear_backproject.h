@@ -19,15 +19,15 @@
 // Least-Squares method is affine invariant whereas eigenvector method is not
 
 vnl_vector<double> mvl_linear_backproject(
-          // camera matrices:
-          vcl_vector<PMatrix> Ps,
-          // image coordinates:
-          HomgPoint2D const *imgcoords,
-          // world point:
-          HomgPoint3D &X,
-          // if true use current value of X to commute weights.
-          bool re_weighted = false,
-          // if 'e' then use eigenvalue method if 'l' use least-squares
-          char method = 'e');
+  // camera matrices:
+  vcl_vector<PMatrix> Ps,
+  // image coordinates:
+  HomgPoint2D const * imgcoords,
+  // world point:
+  HomgPoint3D & X,
+  // if true use current value of X to commute weights.
+  bool re_weighted = false,
+  // if 'e' then use eigenvalue method if 'l' use least-squares
+  char method = 'e');
 
 #endif // mvl_linear_backproject_h_

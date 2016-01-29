@@ -6,9 +6,9 @@
 #include <complex>
 
 #ifdef vcl_generic_complex_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_complex_STD std
+#  define vcl_generic_complex_STD std
 #endif
 
 #include "../generic/vcl_complex.h"

@@ -5,5 +5,5 @@
 #include <vipl/vipl_threshold.txx>
 typedef vnl_matrix<unsigned char> img_type;
 
-template class vipl_threshold<img_type,img_type,unsigned char,unsigned char, vipl_trivial_pixeliter>;
+template class vipl_threshold<img_type, img_type, unsigned char, unsigned char, vipl_trivial_pixeliter>;
 #endif

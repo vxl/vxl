@@ -9,7 +9,7 @@ my_function()
 }
 
 int
-test_macros_main( int, char*[] )
+test_macros_main( int, char *[] )
 {
   START( "macros" );
   TEST( "TEST macro", 5, 5 );

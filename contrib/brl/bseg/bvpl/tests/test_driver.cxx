@@ -21,5 +21,4 @@ void register_tests()
   REGISTER( test_detect_corner);
 }
 
-
 DEFINE_MAIN;

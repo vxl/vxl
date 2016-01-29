@@ -1,6 +1,6 @@
 // This is core/vgui/wx/vgui_wx.cxx
 #include "vgui_wx.h"
-//:
+// :
 // \file
 #include <wx/xrc/xmlres.h>
 
@@ -9,8 +9,7 @@
 #include "wxSliderPanelXmlHandler.h"
 #include "wxVideoControlXmlHandler.h"
 
-
-//: Initialize all vgui_wx XML Resource Handlers
+// : Initialize all vgui_wx XML Resource Handlers
 // Call this right after you call wxXmlResource::Get()->InitAllHandlers();
 void vgui_wx::InitVguiHandlers()
 {

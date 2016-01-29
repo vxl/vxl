@@ -3,101 +3,113 @@
 
 static const int NUM_FS = 10;
 
-static int factorial(int n){
-    int ret = 1;
+static int factorial(int n)
+{
+  int ret = 1;
 
-    for(int i = 2; i <= n; i++){
-        ret *= i;
+  for( int i = 2; i <= n; i++ )
+    {
+    ret *= i;
     }
 
-    return ret;
+  return ret;
 }
 
-static int combination(int n, int k){
-    return factorial(n) / (factorial(k) * factorial(n-k));
+static int combination(int n, int k)
+{
+  return factorial(n) / (factorial(k) * factorial(n - k) );
 }
 
-static bundler_inters_image_sptr create_dummy_fs(int fl){
-    bundler_inters_image_sptr fs(new bundler_inters_image);
+static bundler_inters_image_sptr create_dummy_fs(int fl)
+{
+  bundler_inters_image_sptr fs(new bundler_inters_image);
 
-    fs->focal_length = fl;
+  fs->focal_length = fl;
 
-    return fs;
+  return fs;
 }
 
-static bool paired(int i, int j, bundler_inters_image_pair const& p){
-    return
-        (p.f1->focal_length == i && p.f2->focal_length == j) ||
-        (p.f1->focal_length == j && p.f2->focal_length == i);
+static bool paired(int i, int j, bundler_inters_image_pair const& p)
+{
+  return (p.f1->focal_length == i && p.f2->focal_length == j) ||
+         (p.f1->focal_length == j && p.f2->focal_length == i);
 }
 
 static bool check_for_match(
-    const vcl_vector<bundler_inters_image_pair> &matches,
-    int fl1, int fl2){
+  const vcl_vector<bundler_inters_image_pair> & matches,
+  int fl1, int fl2)
+{
 
-    vcl_vector<bundler_inters_image_pair>::const_iterator i;
-    for(i = matches.begin(); i != matches.end(); i++){
-        if(paired(fl1, fl2, *i)){
-            return true;
-        }
+  vcl_vector<bundler_inters_image_pair>::const_iterator i;
+  for( i = matches.begin(); i != matches.end(); i++ )
+    {
+    if( paired(fl1, fl2, *i) )
+      {
+      return true;
+      }
     }
 
-    return false;
+  return false;
 }
 
 static bool check_no_self_match(
-    const vcl_vector<bundler_inters_image_pair> &matches,
-    int fl){
+  const vcl_vector<bundler_inters_image_pair> & matches,
+  int fl)
+{
 
-    vcl_vector<bundler_inters_image_pair>::const_iterator i;
-    for(i = matches.begin(); i != matches.end(); i++){
-        if(paired(fl, fl, *i)){
-            return false;
-        }
+  vcl_vector<bundler_inters_image_pair>::const_iterator i;
+  for( i = matches.begin(); i != matches.end(); i++ )
+    {
+    if( paired(fl, fl, *i) )
+      {
+      return false;
+      }
     }
 
-    return true;
+  return true;
 }
 
-static void test_propose_matches(){
-    //------------------ Create the "feature set" list. Use the focal
-    // length as an identifier.
-    vcl_vector<bundler_inters_image_sptr> feature_sets;
-
-    for(int i = 1; i <= NUM_FS; i++){
-        feature_sets.push_back(create_dummy_fs(i));
+static void test_propose_matches()
+{
+  // ------------------ Create the "feature set" list. Use the focal
+  // length as an identifier.
+  vcl_vector<bundler_inters_image_sptr> feature_sets;
+  for( int i = 1; i <= NUM_FS; i++ )
+    {
+    feature_sets.push_back(create_dummy_fs(i) );
     }
 
-    //------------------ Do the matching.
-    vcl_vector<bundler_inters_image_pair> matches;
+  // ------------------ Do the matching.
+  vcl_vector<bundler_inters_image_pair> matches;
 
-    bundler_tracks_impl_propose_matches_all propose;
-    propose(feature_sets, matches);
+  bundler_tracks_impl_propose_matches_all propose;
+  propose(feature_sets, matches);
 
+  // ------------------ Perform consistency checks.
+  TEST_EQUAL("Right number of matches",
+             matches.size(),
+             combination(NUM_FS, 2) );
+  // Check that i is matched with every other set but itself.
+  for( int i = 1; i <= NUM_FS; i++ )
+    {
+    for( int j = 1; j <= NUM_FS; j++ )
+      {
 
-    //------------------ Perform consistency checks.
-    TEST_EQUAL("Right number of matches",
-        matches.size(),
-        combination(NUM_FS, 2));
+      if( i != j )
+        {
+        vcl_stringstream str;
+        str << "Check that " << i << " is matched with " << j << ".";
+        Assert(str.str(), check_for_match(matches, i, j) );
 
-
-    // Check that i is matched with every other set but itself.
-    for(int i = 1; i <= NUM_FS; i++){
-        for(int j = 1; j <= NUM_FS; j++){
-
-            if(i != j){
-                vcl_stringstream str;
-                str<< "Check that " << i << " is matched with " << j << ".";
-                Assert(str.str(), check_for_match(matches, i, j));
-
-            } else {
-                vcl_stringstream str;
-                str<< "Check that " << i << " is not matched with itself.";
-                Assert(str.str(), check_no_self_match(matches, i));
-            }
         }
+      else
+        {
+        vcl_stringstream str;
+        str << "Check that " << i << " is not matched with itself.";
+        Assert(str.str(), check_no_self_match(matches, i) );
+        }
+      }
     }
 }
-
 
 TESTMAIN(test_propose_matches);

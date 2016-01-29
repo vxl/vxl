@@ -60,82 +60,77 @@
 //             Joseph L. Mundy - November 1997
 //             GE Corporate Research and Development
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <vcl_iosfwd.h>
 #include <gevd/gevd_param_mixin.h>
 
 class sdet_detector_params : public gevd_param_mixin
 {
- public:
-  sdet_detector_params(float smooth_sigma = 1.0f, float noise_w = -0.5f,
-                       float noise_m = 1.5f, bool automatic_t = false,
-                       int aggressive_jc = 1, int minl = 6,
-                       float maxgp = 4.0f, float minjmp = 0.1f,
-                       float contour_f = 2.0f, float junction_f = 1.0f,
-                       bool recover_j = true, bool equal_spacing=false,
-                       bool follow_b = true,
-                       bool peaks_only=false,
-                       bool valleys_only=false,
-                       float ang = 10.0f, float sep = 1.f, int min_corner_len = 5,
+public:
+  sdet_detector_params(float smooth_sigma = 1.0f, float noise_w = -0.5f, float noise_m = 1.5f, bool automatic_t = false,
+                       int aggressive_jc = 1, int minl = 6, float maxgp = 4.0f, float minjmp = 0.1f,
+                       float contour_f = 2.0f, float junction_f = 1.0f, bool recover_j = true,
+                       bool equal_spacing = false, bool follow_b = true, bool peaks_only = false,
+                       bool valleys_only = false, float ang = 10.0f, float sep = 1.f, int min_corner_len = 5,
                        int cyc = 2, int ndim = 2);
 
   sdet_detector_params(const sdet_detector_params& old_params);
   ~sdet_detector_params() {}
-  friend vcl_ostream& operator<<(vcl_ostream&, const sdet_detector_params& dp);
+  friend vcl_ostream & operator<<(vcl_ostream &, const sdet_detector_params& dp);
+
   bool SanityCheck();
+
 #if 0
   void Describe(ParamModifier& mod);
+
 #endif
   void set_noise_weight(float noise_weight);
+
   void set_noise_multiplier(float noise_multiplier);
+
   void set_automatic_threshold(bool automatic_threshold);
+
   void set_aggressive_junction_closure(int aggressive_junction_closure);
+
   void set_close_borders(bool close_borders);
 
- protected:
-  void InitParams(float smooth_sigma, float noise_w,
-                  float noise_m, bool automatic_t,
-                  int aggressive_jc, int minl,
-                  float maxgp, float minjmp,
-                  float contour_f, float junction_f,
-                  bool recover_j, bool equal_spacing,
-                  bool follow_b,
-                  bool peaks_only,
-                  bool valleys_only,
-                  float ang, float sep, int min_corner_len,
-                  int cyc, int ndim);
+protected:
+  void InitParams(float smooth_sigma, float noise_w, float noise_m, bool automatic_t, int aggressive_jc, int minl,
+                  float maxgp, float minjmp, float contour_f, float junction_f, bool recover_j, bool equal_spacing,
+                  bool follow_b, bool peaks_only, bool valleys_only, float ang, float sep, int min_corner_len, int cyc,
+                  int ndim);
 
- public:
+public:
   //
   // Parameters for detecting edgel chains
   //
-  float smooth; //!< Smoothing kernel sigma
-  float noise_weight; //!<The weight between sensor noise and texture noise
-  float noise_multiplier; //!< The overal noise threshold scale factor
-  bool   automatic_threshold; //!< Determine the threshold values from image
-  int aggressive_junction_closure; //!<Close junctions aggressively
-  int minLength;                //!< minimum chain length
-  float contourFactor;  //!<Threshold along contours
-  float junctionFactor; //!<Threshold at junctions
-  float filterFactor;   //!< ratio of sensor to texture noise
-  bool junctionp; //!< recover missing junctions
-  float minJump;  //!< change in strength at junction
-  float maxGap;   //!< Bridge small gaps up to max_gap across.
-  bool spacingp;  //!< equalize spacing?
-  bool borderp;   //!< insert virtual border for closure?
+  float smooth;                      // !< Smoothing kernel sigma
+  float noise_weight;                // !<The weight between sensor noise and texture noise
+  float noise_multiplier;            // !< The overal noise threshold scale factor
+  bool  automatic_threshold;         // !< Determine the threshold values from image
+  int   aggressive_junction_closure; // !<Close junctions aggressively
+  int   minLength;                   // !< minimum chain length
+  float contourFactor;               // !<Threshold along contours
+  float junctionFactor;              // !<Threshold at junctions
+  float filterFactor;                // !< ratio of sensor to texture noise
+  bool  junctionp;                   // !< recover missing junctions
+  float minJump;                     // !< change in strength at junction
+  float maxGap;                      // !< Bridge small gaps up to max_gap across.
+  bool  spacingp;                    // !< equalize spacing?
+  bool  borderp;                     // !< insert virtual border for closure?
   //
   // Fold detection parameters
   //
-  bool peaks_only; //!<Only return peaks, d^2I/dn^2 < 0, n is normal dir to ridge
-  bool valleys_only; //!<Only return valeys, d^2I/dn^2 > 0
+  bool peaks_only;   // !<Only return peaks, d^2I/dn^2 < 0, n is normal dir to ridge
+  bool valleys_only; // !<Only return valeys, d^2I/dn^2 > 0
   //
   // Parameters for corner detection on edgel chains
   //
-  float corner_angle; //!< smallest angle at corner
-  float separation; //!< |mean1-mean2|/sigma
-  int min_corner_length; //!< min length to find corners
-  int cycle; //!< number of corners in a cycle
-  int ndimension; //!< spatial dimension of edgel chains.
+  float corner_angle;      // !< smallest angle at corner
+  float separation;        // !< |mean1-mean2|/sigma
+  int   min_corner_length; // !< min length to find corners
+  int   cycle;             // !< number of corners in a cycle
+  int   ndimension;        // !< spatial dimension of edgel chains.
 };
 
 #endif

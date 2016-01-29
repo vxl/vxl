@@ -1,6 +1,6 @@
 #ifndef PMatrixCompute6Point_h_
 #define PMatrixCompute6Point_h_
-//:
+// :
 // \file
 //
 //  PMatrixCompute6Point is actually identical to PMatrixComputeLinear,

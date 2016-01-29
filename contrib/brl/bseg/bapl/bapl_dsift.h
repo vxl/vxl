@@ -1,7 +1,7 @@
-//this is /brl/bseg/bapl/bapl_dsift.h
+// this is /brl/bseg/bapl/bapl_dsift.h
 #ifndef BAPL_DSIFT_H_
 #define BAPL_DSIFT_H_
-//:
+// :
 // \file
 // \brief Extract SIFT features at specific image locations.
 // This is different from bapl_dense_sift in that it ignores scale space
@@ -28,18 +28,19 @@
 #include <vcl_cmath.h>
 #include <vcl_vector.h>
 
-//:
+// :
 // Ignores Scale and Orientation computations and produces a sift descriptor at the scale of the image,
 // specified orientation and location.
-class bapl_dsift: public vbl_ref_count
+class bapl_dsift : public vbl_ref_count
 {
- public:
+public:
   bapl_dsift() : grad_valid_(false) {}
   bapl_dsift( vil_image_view<float> const& img );
   bapl_dsift( vil_image_view<vxl_byte> const& img);
-   ~bapl_dsift() {}
+  ~bapl_dsift() {}
 
   bool set_img( vil_image_view<float> const& img );
+
   bool set_img( vil_image_view<vxl_byte> const& img );
 
   vcl_vector<float> dsift( unsigned const& key_x, unsigned const& key_y, float const& key_orient = 0.0f );
@@ -50,12 +51,12 @@ class bapl_dsift: public vbl_ref_count
 
   void b_read(vsl_b_istream& is);
 
- protected:
+protected:
   vil_image_view<float> grad_mag_;
   vil_image_view<float> grad_orient_;
-  bool grad_valid_;
+  bool                  grad_valid_;
 
-  inline static float gaussian( float const& x, float const& y ){return vcl_exp(-(x*x+y*y)/128.0f);}
+  inline static float gaussian( float const& x, float const& y ) {return vcl_exp(-(x * x + y * y) / 128.0f); }
 };
 
-#endif //BAPL_DSIFT_H_
+#endif // BAPL_DSIFT_H_

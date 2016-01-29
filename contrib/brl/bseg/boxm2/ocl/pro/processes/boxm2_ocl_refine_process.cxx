@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_refine_process.cxx
-//:
+// :
 // \file
 // \brief  A process for rendering depth map of a scene.
 //
@@ -16,48 +16,48 @@
 #include <bocl/bocl_device.h>
 namespace boxm2_ocl_refine_process_globals
 {
-    const unsigned n_inputs_ = 4;
-    const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 4;
+const unsigned n_outputs_ = 1;
 }
 
 bool boxm2_ocl_refine_process_cons(bprb_func_process& pro)
 {
-    using namespace boxm2_ocl_refine_process_globals;
+  using namespace boxm2_ocl_refine_process_globals;
 
-    //process takes 1 input
-    vcl_vector<vcl_string> input_types_(n_inputs_);
-    input_types_[0] = "bocl_device_sptr";
-    input_types_[1] = "boxm2_scene_sptr";
-    input_types_[2] = "boxm2_opencl_cache_sptr";
-    input_types_[3] = "float";
+  // process takes 1 input
+  vcl_vector<vcl_string> input_types_(n_inputs_);
+  input_types_[0] = "bocl_device_sptr";
+  input_types_[1] = "boxm2_scene_sptr";
+  input_types_[2] = "boxm2_opencl_cache_sptr";
+  input_types_[3] = "float";
 
-    // process has 1 output:
-    vcl_vector<vcl_string>  output_types_(n_outputs_);
-    output_types_[0] = "int";  //numcells
-    return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
+  // process has 1 output:
+  vcl_vector<vcl_string> output_types_(n_outputs_);
+  output_types_[0] = "int";    // numcells
+  return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
 bool boxm2_ocl_refine_process(bprb_func_process& pro)
 {
-    using namespace boxm2_ocl_refine_process_globals;
-    if ( pro.n_inputs() < n_inputs_ ) {
-        vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
-        return false;
+  using namespace boxm2_ocl_refine_process_globals;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
+    return false;
     }
 
-    //get the inputs
-    unsigned i = 0;
-    bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
-    boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(i++);
-    boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    float                   thresh       = pro.get_input<float>(i++);
+  // get the inputs
+  unsigned                i = 0;
+  bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  float                   thresh       = pro.get_input<float>(i++);
 
-    unsigned num_cells = boxm2_ocl_refine::refine_scene(device, scene, opencl_cache, thresh);
-    vcl_cout<<"boxm2_ocl_refine_process num split: "<<num_cells<<vcl_endl;
+  unsigned num_cells = boxm2_ocl_refine::refine_scene(device, scene, opencl_cache, thresh);
+  vcl_cout << "boxm2_ocl_refine_process num split: " << num_cells << vcl_endl;
 
-    //set output
-    pro.set_output_val<int>(0, num_cells);
+  // set output
+  pro.set_output_val<int>(0, num_cells);
 
-    return true;
+  return true;
 }
-

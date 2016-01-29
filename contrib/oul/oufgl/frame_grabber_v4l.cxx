@@ -1,13 +1,13 @@
-//:
+// :
 // \file
 //
 // Copyright (c) 2002 Brendan McCane
 // University of Otago, Dunedin, New Zealand
 // Reproduction rights limited as described in the COPYRIGHT file.
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-//----------------------------------------------------------------------
-//: constructor
+// ----------------------------------------------------------------------
+// : constructor
 //
 // @param int width: the width of the image (default 384)
 // @param int height: the height of the image (default 288)
@@ -16,7 +16,7 @@
 // @status Under Development
 // @author Brendan McCane
 // @library oul/oufgl
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 #include "frame_grabber_v4l.h"
 #include <vcl_cstring.h> // for memcpy()
@@ -24,28 +24,30 @@
 #include <vcl_cstdio.h>
 
 FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
-                                         bool debug_, char *devname)
+                                         bool debug_, char * devname)
   : current(0), width(width_), height(height_), debug(debug_)
 {
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "V4lGrey constructor, current = " << current << vcl_endl;
+    }
   // now setup the input stream
   fd = open(devname, O_RDWR);
-  if (fd<0)
-  {
+  if( fd < 0 )
+    {
     vcl_cerr << "Error: couldn't open device " << devname << vcl_endl;
     vcl_perror("Couldn't open device");
     vcl_exit(-1);
-  }
+    }
   // check the video capability stuff
   struct video_capability vcap;
   ioctl(fd, VIDIOCGCAP, &vcap);
-  if (debug)
-  {
+  if( debug )
+    {
     vcl_cout << "camera name = " << vcap.name << vcl_endl
              << "max image size = " << vcap.maxwidth << ' '
              << vcap.maxheight << vcl_endl;
-  }
+    }
 
   // now set the default parameters for the camera set the format to
   // YUV420P - easy to extract greyscale that way. What we really
@@ -56,59 +58,69 @@ FrameGrabberV4lGrey::FrameGrabberV4lGrey(int width_, int height_,
   // to convert to RGB.
   struct video_picture vp;
   ioctl(fd, VIDIOCGPICT, &vp);
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "vp.pallette = " << vp.palette << vcl_endl;
+    }
   vp.palette = VIDEO_PALETTE_YUV420P;
-  if (ioctl(fd, VIDIOCSPICT, &vp)>=0)
+  if( ioctl(fd, VIDIOCSPICT, &vp) >= 0 )
+    {
     vcl_cout << "Successfully set palette to YUV420P\n";
+    }
   else
-  {
+    {
     vcl_cerr << "Error setting pallette\n"
              << "Capture may not work\n";
-  }
+    }
 
   struct video_window vw;
   ioctl(fd, VIDIOCGWIN, &vw);
   vw.x = vw.y = 0;
   vw.width = width;
   vw.height = height;
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "trying to set to window = " << vw.x << ' ' << vw.y
              << ' ' << vw.width << ' ' << vw.height << vcl_endl;
+    }
 #if 0
   // set the fps to 30 fps
-  vw.flags &= ~PWC_FPS_FRMASK;
+  vw.flags &= ~ PWC_FPS_FRMASK;
   vw.flags |= (30 << PWC_FPS_SHIFT);
 #endif // 0
   // try setting the image size
   ioctl(fd, VIDIOCSWIN, &vw);
   // now read the actual size back
   ioctl(fd, VIDIOCGWIN, &vw);
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "actually setting window to = " << vw.x << ' ' << vw.y
              << ' ' << vw.width << ' ' << vw.height << vcl_endl;
+    }
   // set the size to the actual size
   width = vw.width;
   height = vw.height;
 
   // allocate the buffers for the image
-  contents[0] = new ImageContents[width*height*3];
-  contents[1] = new ImageContents[width*height*3];
+  contents[0] = new ImageContents[width * height * 3];
+  contents[1] = new ImageContents[width * height * 3];
   im[0] = new ImageGrey(contents[0], width, height);
   im[1] = new ImageGrey(contents[1], width, height);
 
   // aio = new AsyncIO(fd);
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "V4lGrey constructor end, current = " << current << vcl_endl;
+    }
 }
 
-//----------------------------------------------------------------------
-//: destructor
+// ----------------------------------------------------------------------
+// : destructor
 //
 // .status Under Development
 // .author Brendan McCane
 // .library oul/oufgl
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 FrameGrabberV4lGrey::~FrameGrabberV4lGrey()
 {
@@ -116,12 +128,12 @@ FrameGrabberV4lGrey::~FrameGrabberV4lGrey()
   delete im[1];
   delete contents[0];
   delete contents[1];
-//delete aio;
+// delete aio;
   close(fd);
 }
 
-//----------------------------------------------------------------------
-//: acquire_frame_synch
+// ----------------------------------------------------------------------
+// : acquire_frame_synch
 //
 // acquire a new frame synchronously (ie don't return until completed)
 // You probably shouldn't mix asynch and synchronous calls as this
@@ -130,18 +142,24 @@ FrameGrabberV4lGrey::~FrameGrabberV4lGrey()
 // .status Under Development
 // .author Brendan McCane
 // .library oul/oufgl
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 void FrameGrabberV4lGrey::acquire_frame_synch()
 {
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "acquire_frame_synch, current = " << current << vcl_endl;
-  if (!read(fd, (void*)contents[current], width*height*3))
+    }
+  if( !read(fd, (void *)contents[current], width * height * 3) )
+    {
     return;
-  if (debug)
+    }
+  if( debug )
+    {
     vcl_cout << "acquire_frame_synch end, current = " << current << vcl_endl;
+    }
 #if 0
-  current = (current+1)%2;
-  aio->read(contents[current], width*height*sizeof(ImageContents));
+  current = (current + 1) % 2;
+  aio->read(contents[current], width * height * sizeof(ImageContents) );
   aio->wait_for_completion();
 
   // Alessandro reckons the following is needed for compatibility with
@@ -155,8 +173,8 @@ void FrameGrabberV4lGrey::acquire_frame_synch()
 #endif // 0
 }
 
-//----------------------------------------------------------------------
-//: acquire_frame_asynch
+// ----------------------------------------------------------------------
+// : acquire_frame_asynch
 //
 // acquire a new frame asynchronously (ie start acquiring and
 // return immediately )
@@ -167,36 +185,41 @@ void FrameGrabberV4lGrey::acquire_frame_synch()
 // .status Under Development
 // .author Brendan McCane
 // .library oul/oufgl
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 void FrameGrabberV4lGrey::acquire_frame_asynch()
 {
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "acquire_frame_asynch: currently equivalent to synch\n";
-  if (!read(fd, (void*)contents[current], width*height*3))
+    }
+  if( !read(fd, (void *)contents[current], width * height * 3) )
+    {
     return;
-  if (debug)
+    }
+  if( debug )
+    {
     vcl_cout << "acquire_frame_asynch end\n";
+    }
 #if 0
   // first need to wait for any previous acquire to finish
   aio->wait_for_completion();
   // now start reading the next one
-  aio->read(contents[current], width*height*sizeof(ImageContents));
+  aio->read(contents[current], width * height * sizeof(ImageContents) );
 
   struct Px_BufControl bufcontrol;
   ioctl(aio->getFd(), PX_IOCINFOBUF, &bufcontrol);
   ioctl(aio->getFd(), PX_IOCDONEBUF, &bufcontrol);
 
   // move the current frame to the frame previously completed
-  current = (current+1)%2;
+  current = (current + 1) % 2;
   // now need to flip the image so that it is the right way up
   flip_current();
 #endif // 0
 }
 
-
-//----------------------------------------------------------------------
-//: get_current_and_acquire
+// ----------------------------------------------------------------------
+// : get_current_and_acquire
 //
 // start acquiring the next frame asynchronously and return the
 // current frame
@@ -204,38 +227,43 @@ void FrameGrabberV4lGrey::acquire_frame_asynch()
 // .status Under Development
 // .author Brendan McCane
 // .library oul/oufgl
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-vil1_memory_image *FrameGrabberV4lGrey::get_current_and_acquire()
+vil1_memory_image * FrameGrabberV4lGrey::get_current_and_acquire()
 {
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "get_current_and_acquire\n";
+    }
   acquire_frame_asynch();
   return get_current_frame();
-  if (debug)
+  if( debug )
+    {
     vcl_cout << "get_current_and_acquire end\n";
+    }
 }
 
-//----------------------------------------------------------------------
-//: flip the current frame around a horizontal axis
+// ----------------------------------------------------------------------
+// : flip the current frame around a horizontal axis
 //
 // .status Under Development
 // .author Brendan McCane
 // .library oul/oufgl
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 void FrameGrabberV4lGrey::flip_current()
 {
-  int limit = im[current]->height()/2;
-  int length = im[current]->width()*sizeof(ImageContents);
-  int width = im[current]->width();
-  int height = im[current]->height();
-  ImageContents *temp_mem = new ImageContents[im[current]->width()];
-  for (int i=0; i<limit; i++)
-  {
-    vcl_memcpy(temp_mem, contents[current]+i*width, length);
-    vcl_memcpy(contents[current]+i*width, contents[current]+(height-i-1)*width, length);
-    vcl_memcpy(contents[current]+(height-i-1)*width, temp_mem, length);
-  }
+  int             limit = im[current]->height() / 2;
+  int             length = im[current]->width() * sizeof(ImageContents);
+  int             width = im[current]->width();
+  int             height = im[current]->height();
+  ImageContents * temp_mem = new ImageContents[im[current]->width()];
+
+  for( int i = 0; i < limit; i++ )
+    {
+    vcl_memcpy(temp_mem, contents[current] + i * width, length);
+    vcl_memcpy(contents[current] + i * width, contents[current] + (height - i - 1) * width, length);
+    vcl_memcpy(contents[current] + (height - i - 1) * width, temp_mem, length);
+    }
   delete[] temp_mem;
 }

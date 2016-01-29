@@ -9,7 +9,7 @@ class myclass_test1 : public vbl_ref_count
 class myclass_test2 : public vbl_ref_count
 {
   int value;
- public:
+public:
   myclass_test2() : value(4) {}
   myclass_test2(myclass_test2 const& o) : vbl_ref_count(), value(o.value) {}
 };
@@ -19,7 +19,7 @@ static void vbl_test_ref_count()
   // test that ref counts are handled correctly when copying objects.
 
   // Class with compiler generated copy constructor
-  {
+    {
     myclass_test1* obj1 = new myclass_test1();
     // Get three references to the object, like creating three smart pointers would do.
     obj1->ref();
@@ -35,10 +35,10 @@ static void vbl_test_ref_count()
 
     delete obj1;
     delete obj2;
-  }
+    }
 
   // Class with user-defined copy constructor
-  {
+    {
     myclass_test2* obj1 = new myclass_test2();
     // Get three references to the object, like creating three smart pointers would do.
     obj1->ref();
@@ -54,7 +54,7 @@ static void vbl_test_ref_count()
 
     delete obj1;
     delete obj2;
-  }
+    }
 }
 
 TESTMAIN(vbl_test_ref_count);

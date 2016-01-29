@@ -2,9 +2,9 @@
 #ifndef vnl_real_npolynomial_h_
 #define vnl_real_npolynomial_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief contains class for polynomials with N variables
 //
@@ -25,8 +25,7 @@
 //   Marcus Brubaker  2007-10-15  Added deval() and deriv() functions
 // \endverbatim
 
-
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -34,7 +33,7 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
-//: real polynomial in N variables.
+// : real polynomial in N variables.
 //    vnl_real_npolynomial represents a polynomial in multiple variables.
 //    Used by vnl_rnpoly_solve which solves systems of polynomial equations.
 //    Representation:  an N-omial (N terms) is represented by (1) a vector
@@ -53,92 +52,105 @@
 
 class vnl_real_npolynomial
 {
-  //: coefficients
-  vnl_vector<double>       coeffs_;
-  //: degrees of every term for every variable
+  // : coefficients
+  vnl_vector<double> coeffs_;
+  // : degrees of every term for every variable
   vnl_matrix<unsigned int> polyn_;
-  //: number of variables = # columns of polyn_
-  unsigned int             nvar_;
-  //: number of terms of polynomial
-  unsigned int             nterms_;
-  //: max. degree of polynomial
-  unsigned int             ideg_;
+  // : number of variables = # columns of polyn_
+  unsigned int nvar_;
+  // : number of terms of polynomial
+  unsigned int nterms_;
+  // : max. degree of polynomial
+  unsigned int ideg_;
 
   friend class vnl_rnpoly_solve;
-
- public:
+public:
 
   // Constructor-----------------------------------------------------------------
   vnl_real_npolynomial() : coeffs_(), polyn_(), nvar_(0), nterms_(0), ideg_(0) {} // don't use this: only here for the STL vector class.
 
-  //: Construct the polynomial with coefficients vector c and with exponents matrix p
+  // : Construct the polynomial with coefficients vector c and with exponents matrix p
   vnl_real_npolynomial(const vnl_vector<double>& c, const vnl_matrix<unsigned int>& p);
 
   // Computations--------------------------------------------------------------
 
-  //: Evaluate the polynomial at x.
+  // : Evaluate the polynomial at x.
   double eval(const vnl_vector<double>& x);
-  //: Evaluate the derivative of the polynomial at x with respect to the ith variable.
+
+  // : Evaluate the derivative of the polynomial at x with respect to the ith variable.
   double deval(const vnl_vector<double>& x, unsigned int i);
-  //: Evaluate the gradient of the polynomial at x.
+
+  // : Evaluate the gradient of the polynomial at x.
   vnl_vector<double> deval(const vnl_vector<double>& x);
-  //: Differentiate the polynomial with respect to the ith variable.
+
+  // : Differentiate the polynomial with respect to the ith variable.
   vnl_real_npolynomial deriv(unsigned int i);
 
   vnl_real_npolynomial operator-() const; // unary minus
-  vnl_real_npolynomial operator+(vnl_real_npolynomial const& ) const;
-  vnl_real_npolynomial operator-(vnl_real_npolynomial const& ) const;
-  vnl_real_npolynomial operator*(vnl_real_npolynomial const& ) const;
-  vnl_real_npolynomial& operator+=(vnl_real_npolynomial const& rhs);
-  vnl_real_npolynomial& operator-=(vnl_real_npolynomial const& rhs);
-  vnl_real_npolynomial& operator*=(vnl_real_npolynomial const& rhs);
+
+  vnl_real_npolynomial operator+(vnl_real_npolynomial const & ) const;
+
+  vnl_real_npolynomial operator-(vnl_real_npolynomial const & ) const;
+
+  vnl_real_npolynomial operator*(vnl_real_npolynomial const & ) const;
+
+  vnl_real_npolynomial & operator+=(vnl_real_npolynomial const& rhs);
+
+  vnl_real_npolynomial & operator-=(vnl_real_npolynomial const& rhs);
+
+  vnl_real_npolynomial & operator*=(vnl_real_npolynomial const& rhs);
+
   vnl_real_npolynomial operator+(double ) const;
+
   vnl_real_npolynomial operator-(double P) const { return operator+(-P); }
   vnl_real_npolynomial operator*(double ) const;
-  vnl_real_npolynomial& operator*=(double P) { coeffs_ *= P; return *this; }
-  vnl_real_npolynomial operator/(double P) const { return operator*(1.0/P); }
-  vnl_real_npolynomial& operator/=(double P) { return operator*=(1.0/P); }
-  friend vcl_ostream& operator<<(vcl_ostream& , vnl_real_npolynomial const& );
+
+  vnl_real_npolynomial & operator*=(double P) { coeffs_ *= P; return *this; }
+  vnl_real_npolynomial operator/(double P) const { return operator*(1.0 / P); }
+  vnl_real_npolynomial & operator/=(double P) { return operator*=(1.0 / P); }
+  friend vcl_ostream & operator<<(vcl_ostream &, vnl_real_npolynomial const & );
 
   // nb also added functions to access the coeffs_ member variable
 
-  //--- Data Access------------------------------------------------------------
+  // --- Data Access------------------------------------------------------------
 
-  //: Return the degree (highest total power of all terms) of the polynomial.
+  // : Return the degree (highest total power of all terms) of the polynomial.
   unsigned int degree() const;
 
-  //: Return the highest degree of the polynomial in an individual variable.
+  // : Return the highest degree of the polynomial in an individual variable.
   unsigned int maxdegree() const { return ideg_; }
 
-  //: Return the degrees (highest power of all terms) in each of the variables.
+  // : Return the degrees (highest power of all terms) in each of the variables.
   vcl_vector<unsigned int> degrees() const;
 
-  //: Access to the polynomial coefficients
-  double& operator [] (unsigned int i)       { return coeffs_[i]; }
-  //: Access to the polynomial coefficients
-  double  operator [] (unsigned int i) const { return coeffs_[i]; }
+  // : Access to the polynomial coefficients
+  double & operator [](unsigned int i)       { return coeffs_[i]; }
+  // : Access to the polynomial coefficients
+  double  operator [](unsigned int i) const { return coeffs_[i]; }
 
-  //: Return the vector of coefficients
-  const vnl_vector<double>& coefficients() const { return coeffs_; }
-  //: Return the vector of coefficients
-  vnl_vector<double>& coefficients()       { return coeffs_; }
+  // : Return the vector of coefficients
+  const vnl_vector<double> & coefficients() const { return coeffs_; }
+  // : Return the vector of coefficients
+  vnl_vector<double> & coefficients()       { return coeffs_; }
 
-  //: Set vector of coefficients of each product
+  // : Set vector of coefficients of each product
   void set(const vnl_vector<double> & c, const vnl_matrix<unsigned int> & p);
 
-  //: Return the polynomial matrix
+  // : Return the polynomial matrix
   // (ie specifying the variables in each product)
-  const vnl_matrix<unsigned int>& polyn() const { return polyn_; }
+  const vnl_matrix<unsigned int> & polyn() const { return polyn_; }
 
-  //: Return the vector of coefficients
-  vnl_matrix<unsigned int>& polyn() { return polyn_; }
+  // : Return the vector of coefficients
+  vnl_matrix<unsigned int> & polyn() { return polyn_; }
 
-  //: Return the textual representation of this polynomial
+  // : Return the textual representation of this polynomial
   vcl_string asString() const;
 
- private:
+private:
   void simplify();
+
   double eval(const vnl_matrix<double>& xn);
+
 };
 
 #endif // vnl_real_npolynomial_h_

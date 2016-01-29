@@ -6,16 +6,20 @@ boxm2_vecf_ocl_transform_minimizer::boxm2_vecf_ocl_transform_minimizer(boxm2_sce
                                                                        boxm2_scene_sptr& target_scene,
                                                                        boxm2_opencl_cache_sptr ocl_cache,
                                                                        vil_image_view<float> const& ref_img,
-                                                                       vpgl_camera_double_sptr const& cam):
-  boxm2_vecf_ocl_ssd_func(3, ref_img.ni(), ref_img.nj(), (new boxm2_vecf_ocl_transform_scene( source_scene, target_scene, ocl_cache )), target_scene, ocl_cache)
+                                                                       vpgl_camera_double_sptr const& cam) :
+  boxm2_vecf_ocl_ssd_func(3, ref_img.ni(), ref_img.nj(),
+                          (new boxm2_vecf_ocl_transform_scene( source_scene, target_scene,
+                                                               ocl_cache ) ), target_scene, ocl_cache)
 {
 
   boxm2_vecf_ocl_ssd_func::set_reference_image(ref_img);
   boxm2_vecf_ocl_ssd_func::set_reference_camera(cam);
 }
-bool boxm2_vecf_ocl_transform_minimizer::minimize(){
+
+bool boxm2_vecf_ocl_transform_minimizer::minimize()
+{
   vnl_vector<double> x(3, 1.0);
-  x[0] = 0.995; x[2]=1.005;
+  x[0] = 0.995; x[2] = 1.005;
   vnl_levenberg_marquardt lm(*this);
   lm.minimize(x);
   lm.diagnose_outcome(vcl_cout);
@@ -24,13 +28,15 @@ bool boxm2_vecf_ocl_transform_minimizer::minimize(){
   return true;
 }
 
-void boxm2_vecf_ocl_transform_minimizer::error_surface_1d(unsigned vindx, double smin, double smax, double sinc){
-  vnl_vector<double> x(3, 1.0), fx(ni_*nj_);
+void boxm2_vecf_ocl_transform_minimizer::error_surface_1d(unsigned vindx, double smin, double smax, double sinc)
+{
+  vnl_vector<double> x(3, 1.0), fx(ni_ * nj_);
   vcl_cout << '\n';
-  for(double s = smin; s<=smax; s+=sinc){
-    x[vindx]=s;
+  for( double s = smin; s <= smax; s += sinc )
+    {
+    x[vindx] = s;
     f(x, fx);
     double error = fx.magnitude();
     vcl_cout << s << ' ' << error << '\n';
-  }
+    }
 }

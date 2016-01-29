@@ -22,10 +22,9 @@ static void test_brec_hierarchy_edge()
 
   brec_hierarchy_edge_sptr e = new brec_hierarchy_edge(p0->cast_to_base(), p1->cast_to_base(), false);
 
-  vnl_vector_fixed<float,2> c(111.0f,119.0f); // center measured from the image
-  vnl_vector_fixed<float,2> p(107.0f,123.0f);
-  vnl_vector_fixed<float,2> sample = p - c;
-
+  vnl_vector_fixed<float, 2> c(111.0f, 119.0f); // center measured from the image
+  vnl_vector_fixed<float, 2> p(107.0f, 123.0f);
+  vnl_vector_fixed<float, 2> sample = p - c;
 
   float a, d;
   e->calculate_dist_angle(p0->cast_to_instance(), sample, d, a);

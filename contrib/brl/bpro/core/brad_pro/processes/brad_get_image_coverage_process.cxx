@@ -1,5 +1,5 @@
 // This is brl/bpro/core/brad_pro/processes/brad_get_image_coverage_process.cxx
-//:
+// :
 // \file
 //     get the image lower left corner and the upper right corner of the 'extent' of the satellite image
 //
@@ -24,12 +24,13 @@ bool brad_get_image_coverage_process_cons(bprb_func_process& pro)
 
 bool brad_get_image_coverage_process(bprb_func_process& pro)
 {
-  if (!pro.verify_inputs()) {
+  if( !pro.verify_inputs() )
+    {
     vcl_cout << pro.name() << ": WRONG inputs!!!" << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
+  // get the inputs
   brad_image_metadata_sptr meta = pro.get_input<brad_image_metadata_sptr>(0);
 
   double lower_left_lon  = meta->lower_left_.x();

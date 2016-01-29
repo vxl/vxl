@@ -1,7 +1,7 @@
 // This is core/vnl/vnl_bignum.h
 #ifndef vnl_bignum_h_
 #define vnl_bignum_h_
-//:
+// :
 // \file
 // \brief Infinite precision integers
 //
@@ -72,29 +72,41 @@ class vnl_bignum;
 
 // These are all auxiliary functions:
 
-int magnitude_cmp(const vnl_bignum&, const vnl_bignum&);
-void add(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
-void subtract(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
-void multiply_aux(const vnl_bignum&, unsigned short d, vnl_bignum&, unsigned short i);
-unsigned short normalize(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
-void divide_aux(const vnl_bignum&, unsigned short, vnl_bignum&, unsigned short&);
-unsigned short estimate_q_hat(const vnl_bignum&, const vnl_bignum&, unsigned short);
-unsigned short multiply_subtract(vnl_bignum&, const vnl_bignum&, unsigned short, unsigned short);
-void divide(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
+int magnitude_cmp(const vnl_bignum &, const vnl_bignum &);
+
+void add(const vnl_bignum &, const vnl_bignum &, vnl_bignum &);
+
+void subtract(const vnl_bignum &, const vnl_bignum &, vnl_bignum &);
+
+void multiply_aux(const vnl_bignum &, unsigned short d, vnl_bignum &, unsigned short i);
+
+unsigned short normalize(const vnl_bignum &, const vnl_bignum &, vnl_bignum &, vnl_bignum &);
+
+void divide_aux(const vnl_bignum &, unsigned short, vnl_bignum &, unsigned short &);
+
+unsigned short estimate_q_hat(const vnl_bignum &, const vnl_bignum &, unsigned short);
+
+unsigned short multiply_subtract(vnl_bignum &, const vnl_bignum &, unsigned short, unsigned short);
+
+void divide(const vnl_bignum &, const vnl_bignum &, vnl_bignum &, vnl_bignum &);
+
 vnl_bignum left_shift(const vnl_bignum& b1, int l);
+
 vnl_bignum right_shift(const vnl_bignum& b1, int l);
-void decrement (vnl_bignum& bnum);
-void increment (vnl_bignum& bnum);
 
-//: formatted output
+void decrement(vnl_bignum& bnum);
+
+void increment(vnl_bignum& bnum);
+
+// : formatted output
 // \relatesalso vnl_bignum
-vcl_ostream& operator<<(vcl_ostream& s, vnl_bignum const& r);
+vcl_ostream & operator<<(vcl_ostream& s, vnl_bignum const& r);
 
-//: simple input
+// : simple input
 // \relatesalso vnl_bignum
-vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
+vcl_istream & operator>>(vcl_istream& s, vnl_bignum& r);
 
-//: Infinite precision integers
+// : Infinite precision integers
 //
 // The vnl_bignum class implements near-infinite precision integers
 // and arithmetic by using a dynamic bit vector. A
@@ -138,10 +150,10 @@ vcl_istream& operator>>(vcl_istream& s, vnl_bignum& r);
 //
 class vnl_bignum
 {
-  unsigned short count; // Number of data elements (never 0 except for "0")
-  int sign;             // Sign of vnl_bignum (+1 or -1, nothing else!!)
-  unsigned short* data; // Pointer to data value
- public:
+  unsigned short  count; // Number of data elements (never 0 except for "0")
+  int             sign;  // Sign of vnl_bignum (+1 or -1, nothing else!!)
+  unsigned short* data;  // Pointer to data value
+public:
   vnl_bignum();                        // Void constructor
   vnl_bignum(long);                    // Long constructor
   vnl_bignum(unsigned long);           // Unsigned Long constructor
@@ -150,8 +162,8 @@ class vnl_bignum
   vnl_bignum(float);                   // Float constructor
   vnl_bignum(double);                  // Double constructor
   vnl_bignum(long double);             // Long Double constructor
-  vnl_bignum(vnl_bignum const&);       // Copy constructor
-  vnl_bignum(const char*);             // String constructor
+  vnl_bignum(vnl_bignum const &);      // Copy constructor
+  vnl_bignum(const char *);            // String constructor
   ~vnl_bignum();                       // Destructor
 
   operator short() const;              // Implicit type conversion
@@ -160,139 +172,170 @@ class vnl_bignum
   operator float() const;              // Implicit type conversion
   operator double() const;             // Implicit type conversion
   operator long double() const;        // Implicit type conversion
-  inline operator short() { return ((const vnl_bignum*)this)->operator short(); }
-  inline operator int() { return ((const vnl_bignum*)this)->operator int(); }
-  inline operator long() { return ((const vnl_bignum*)this)->operator long(); }
-  inline operator float() { return ((const vnl_bignum*)this)->operator float(); }
-  inline operator double() { return ((const vnl_bignum*)this)->operator double(); }
-  inline operator long double() { return ((const vnl_bignum*)this)->operator long double(); }
+  inline operator short() { return ( (const vnl_bignum *)this)->operator short(); }
+  inline operator int() { return ( (const vnl_bignum *)this)->operator int(); }
+  inline operator long() { return ( (const vnl_bignum *)this)->operator long(); }
+  inline operator float() { return ( (const vnl_bignum *)this)->operator float(); }
+  inline operator double() { return ( (const vnl_bignum *)this)->operator double(); }
+  inline operator long double() { return ( (const vnl_bignum *)this)->operator long double(); }
 
   vnl_bignum operator-() const;        // Unary minus operator
+
   inline vnl_bignum operator+() const { return *this; } // Unary plus operator
 
-  vnl_bignum& operator=(const vnl_bignum&); // Assignment operator
+  vnl_bignum & operator=(const vnl_bignum &); // Assignment operator
 
   vnl_bignum operator<<(int l) const;  // Bit shift
+
   vnl_bignum operator>>(int l) const;  // Bit shift
+
   vnl_bignum operator+(vnl_bignum const& r) const;
-  inline vnl_bignum& operator+=(vnl_bignum const& r) { return *this = operator+(r); }
-  inline vnl_bignum& operator-=(vnl_bignum const& r) { return *this = operator+(-r); }
-  vnl_bignum& operator*=(vnl_bignum const& r);
-  vnl_bignum& operator/=(vnl_bignum const& r);
-  vnl_bignum& operator%=(vnl_bignum const& r);
-  inline vnl_bignum& operator<<=(int l) { return *this = *this << l; }
-  inline vnl_bignum& operator>>=(int l) { return *this = *this >> l; }
 
-  //: prefix increment (++b)
-  vnl_bignum& operator++();
-  //: decrement
-  vnl_bignum& operator--();
-  //: postfix increment (b++)
-  inline vnl_bignum operator++(int) { vnl_bignum b=(*this); operator++(); return b; }
-  //: decrement
-  inline vnl_bignum operator--(int) { vnl_bignum b=(*this); operator--(); return b; }
+  inline vnl_bignum & operator+=(vnl_bignum const& r) { return *this = operator+(r); }
+  inline vnl_bignum & operator-=(vnl_bignum const& r) { return *this = operator+(-r); }
+  vnl_bignum & operator*=(vnl_bignum const& r);
 
-  bool operator==(vnl_bignum const&) const; // equality
-  bool operator< (vnl_bignum const&) const; // less than
+  vnl_bignum & operator/=(vnl_bignum const& r);
+
+  vnl_bignum & operator%=(vnl_bignum const& r);
+
+  inline vnl_bignum & operator<<=(int l) { return *this = *this << l; }
+  inline vnl_bignum & operator>>=(int l) { return *this = *this >> l; }
+
+  // : prefix increment (++b)
+  vnl_bignum & operator++();
+
+  // : decrement
+  vnl_bignum & operator--();
+
+  // : postfix increment (b++)
+  inline vnl_bignum operator++(int) { vnl_bignum b = (*this); operator++(); return b; }
+  // : decrement
+  inline vnl_bignum operator--(int) { vnl_bignum b = (*this); operator--(); return b; }
+
+  bool operator==(vnl_bignum const &) const; // equality
+
+  bool operator<(vnl_bignum const &) const; // less than
+
   inline bool operator!=(vnl_bignum const& r) const { return !operator==(r); }
-  inline bool operator> (vnl_bignum const& r) const { return r<(*this); }
+  inline bool operator>(vnl_bignum const& r) const { return r < (*this); }
   inline bool operator<=(vnl_bignum const& r) const { return !operator>(r); }
   inline bool operator>=(vnl_bignum const& r) const { return !operator<(r); }
-  inline bool operator==(long r) const { return operator==(vnl_bignum(r)); }
-  inline bool operator!=(long r) const { return !operator==(vnl_bignum(r)); }
-  inline bool operator< (long r) const { return operator<(vnl_bignum(r)); }
-  inline bool operator> (long r) const { return vnl_bignum(r) < (*this); }
-  inline bool operator<=(long r) const { return !operator>(vnl_bignum(r)); }
-  inline bool operator>=(long r) const { return !operator<(vnl_bignum(r)); }
-  inline bool operator==(int r) const { return operator==(long(r)); }
-  inline bool operator!=(int r) const { return !operator==(long(r)); }
-  inline bool operator< (int r) const { return operator<(long(r)); }
-  inline bool operator> (int r) const { return vnl_bignum(long(r)) < (*this); }
-  inline bool operator<=(int r) const { return !operator>(long(r)); }
-  inline bool operator>=(int r) const { return !operator<(long(r)); }
+  inline bool operator==(long r) const { return operator==(vnl_bignum(r) ); }
+  inline bool operator!=(long r) const { return !operator==(vnl_bignum(r) ); }
+  inline bool operator<(long r) const { return operator<(vnl_bignum(r) ); }
+  inline bool operator>(long r) const { return vnl_bignum(r) < (*this); }
+  inline bool operator<=(long r) const { return !operator>(vnl_bignum(r) ); }
+  inline bool operator>=(long r) const { return !operator<(vnl_bignum(r) ); }
+  inline bool operator==(int r) const { return operator==(long(r) ); }
+  inline bool operator!=(int r) const { return !operator==(long(r) ); }
+  inline bool operator<(int r) const { return operator<(long(r) ); }
+  inline bool operator>(int r) const { return vnl_bignum(long(r) ) < (*this); }
+  inline bool operator<=(int r) const { return !operator>(long(r) ); }
+  inline bool operator>=(int r) const { return !operator<(long(r) ); }
   inline bool operator==(double r) const { return r == this->operator double(); }
   inline bool operator!=(double r) const { return r != this->operator double(); }
-  inline bool operator< (double r) const { return r > this->operator double(); }
-  inline bool operator> (double r) const { return r < this->operator double(); }
+  inline bool operator<(double r) const { return r > this->operator double(); }
+  inline bool operator>(double r) const { return r < this->operator double(); }
   inline bool operator<=(double r) const { return r >= this->operator double(); }
   inline bool operator>=(double r) const { return r <= this->operator double(); }
   inline bool operator==(long double r) const { return r == this->operator long double(); }
   inline bool operator!=(long double r) const { return r != this->operator long double(); }
-  inline bool operator< (long double r) const { return r > this->operator long double(); }
-  inline bool operator> (long double r) const { return r < this->operator long double(); }
+  inline bool operator<(long double r) const { return r > this->operator long double(); }
+  inline bool operator>(long double r) const { return r < this->operator long double(); }
   inline bool operator<=(long double r) const { return r >= this->operator long double(); }
   inline bool operator>=(long double r) const { return r <= this->operator long double(); }
 
   inline vnl_bignum abs() const { return operator<(0L) ? operator-() : *this; }
 
   // "+/-Inf" is represented as: count=1, data[0]=0, sign=+/-1 :
-  inline bool is_infinity() const { return count==1 && data && data[0]==0; }
-  inline bool is_plus_infinity() const { return is_infinity() && sign==1; }
-  inline bool is_minus_infinity() const { return is_infinity() && sign==-1; }
+  inline bool is_infinity() const { return count == 1 && data && data[0] == 0; }
+  inline bool is_plus_infinity() const { return is_infinity() && sign == 1; }
+  inline bool is_minus_infinity() const { return is_infinity() && sign == -1; }
 
-  void dump(vcl_ostream& = vcl_cout) const;     // Dump contents of vnl_bignum
+  void dump(vcl_ostream & = vcl_cout) const;     // Dump contents of vnl_bignum
 
-  friend int magnitude_cmp(const vnl_bignum&, const vnl_bignum&);
-  friend void add(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
-  friend void subtract(const vnl_bignum&, const vnl_bignum&, vnl_bignum&);
-  friend void increment (vnl_bignum& bnum);
-  friend void decrement (vnl_bignum& bnum);
-  friend void multiply_aux(const vnl_bignum&, unsigned short, vnl_bignum&, unsigned short);
-  friend unsigned short normalize(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
-  friend void divide_aux(const vnl_bignum&, unsigned short, vnl_bignum&, unsigned short&);
-  friend unsigned short estimate_q_hat(const vnl_bignum&, const vnl_bignum&, unsigned short);
-  friend unsigned short multiply_subtract(vnl_bignum&, const vnl_bignum&, unsigned short, unsigned short);
-  friend void divide(const vnl_bignum&, const vnl_bignum&, vnl_bignum&, vnl_bignum&);
+  friend int magnitude_cmp(const vnl_bignum &, const vnl_bignum &);
+
+  friend void add(const vnl_bignum &, const vnl_bignum &, vnl_bignum &);
+
+  friend void subtract(const vnl_bignum &, const vnl_bignum &, vnl_bignum &);
+
+  friend void increment(vnl_bignum& bnum);
+
+  friend void decrement(vnl_bignum& bnum);
+
+  friend void multiply_aux(const vnl_bignum &, unsigned short, vnl_bignum &, unsigned short);
+
+  friend unsigned short normalize(const vnl_bignum &, const vnl_bignum &, vnl_bignum &, vnl_bignum &);
+
+  friend void divide_aux(const vnl_bignum &, unsigned short, vnl_bignum &, unsigned short &);
+
+  friend unsigned short estimate_q_hat(const vnl_bignum &, const vnl_bignum &, unsigned short);
+
+  friend unsigned short multiply_subtract(vnl_bignum &, const vnl_bignum &, unsigned short, unsigned short);
+
+  friend void divide(const vnl_bignum &, const vnl_bignum &, vnl_bignum &, vnl_bignum &);
+
   friend vnl_bignum left_shift(const vnl_bignum& b1, int l);
-  friend vnl_bignum right_shift(const vnl_bignum& b1, int l);
-  friend vcl_ostream& operator<< (vcl_ostream&, const vnl_bignum&);
-  friend vcl_istream& operator>> (vcl_istream&, vnl_bignum&);
-  friend vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b);
-  friend vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s);
 
- private:
-  void xtoBigNum(const char *s);       // convert hex to vnl_bignum
-  int  dtoBigNum(const char *s);       // convert decimal to vnl_bignum
-  void otoBigNum(const char *s);       // convert octal to vnl_bignum
-  void exptoBigNum(const char *s);     // convert exponential to vnl_bignum
+  friend vnl_bignum right_shift(const vnl_bignum& b1, int l);
+
+  friend vcl_ostream & operator<<(vcl_ostream &, const vnl_bignum &);
+
+  friend vcl_istream & operator>>(vcl_istream &, vnl_bignum &);
+
+  friend vcl_string & vnl_bignum_to_string(vcl_string& s, const vnl_bignum& b);
+
+  friend vnl_bignum & vnl_bignum_from_string(vnl_bignum& b, const vcl_string& s);
+
+private:
+  void xtoBigNum(const char * s);       // convert hex to vnl_bignum
+
+  int  dtoBigNum(const char * s);       // convert decimal to vnl_bignum
+
+  void otoBigNum(const char * s);       // convert octal to vnl_bignum
+
+  void exptoBigNum(const char * s);     // convert exponential to vnl_bignum
 
   void resize(short);                  // Resize vnl_bignum data
-  vnl_bignum& trim();                  // Trim vnl_bignum data
+
+  vnl_bignum & trim();                  // Trim vnl_bignum data
+
 };
 
-
-//: Convert the number to a decimal representation in a string.
+// : Convert the number to a decimal representation in a string.
 // \relatesalso vnl_bignum
-vcl_string& vnl_bignum_to_string (vcl_string& s, const vnl_bignum& b);
+vcl_string & vnl_bignum_to_string(vcl_string& s, const vnl_bignum& b);
 
-//: Convert the number from a decimal representation in a string.
+// : Convert the number from a decimal representation in a string.
 // \relatesalso vnl_bignum
-vnl_bignum& vnl_bignum_from_string (vnl_bignum& b, const vcl_string& s);
+vnl_bignum & vnl_bignum_from_string(vnl_bignum& b, const vcl_string& s);
 
-//: Returns the sum of two bignum numbers.
+// : Returns the sum of two bignum numbers.
 // \relatesalso vnl_bignum
-inline vnl_bignum operator+(vnl_bignum const& r1, long r2) { return r1+vnl_bignum(r2); }
-inline vnl_bignum operator+(vnl_bignum const& r1, int r2) { return r1+long(r2); }
-inline vnl_bignum operator+(vnl_bignum const& r1, double r2) { return r1+vnl_bignum(r2); }
-inline vnl_bignum operator+(vnl_bignum const& r1, long double r2) { return r1+vnl_bignum(r2); }
+inline vnl_bignum operator+(vnl_bignum const& r1, long r2) { return r1 + vnl_bignum(r2); }
+inline vnl_bignum operator+(vnl_bignum const& r1, int r2) { return r1 + long(r2); }
+inline vnl_bignum operator+(vnl_bignum const& r1, double r2) { return r1 + vnl_bignum(r2); }
+inline vnl_bignum operator+(vnl_bignum const& r1, long double r2) { return r1 + vnl_bignum(r2); }
 inline vnl_bignum operator+(long r2, vnl_bignum const& r1) { return r1 + r2; }
 inline vnl_bignum operator+(int r2, vnl_bignum const& r1) { return r1 + r2; }
 inline vnl_bignum operator+(double r2, vnl_bignum const& r1) { return r1 + r2; }
 inline vnl_bignum operator+(long double r2, vnl_bignum const& r1) { return r1 + r2; }
 
-//: Returns the difference of two bignum numbers.
+// : Returns the difference of two bignum numbers.
 // \relatesalso vnl_bignum
 inline vnl_bignum operator-(vnl_bignum const& r1, vnl_bignum const& r2) { return r1 + (-r2); }
 inline vnl_bignum operator-(vnl_bignum const& r1, long r2) { return r1 + (-r2); }
 inline vnl_bignum operator-(vnl_bignum const& r1, int r2) { return r1 + (-r2); }
 inline vnl_bignum operator-(vnl_bignum const& r1, double r2) { return r1 + (-r2); }
 inline vnl_bignum operator-(vnl_bignum const& r1, long double r2) { return r1 + (-r2); }
-inline vnl_bignum operator-(long r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
-inline vnl_bignum operator-(int r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
-inline vnl_bignum operator-(double r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
-inline vnl_bignum operator-(long double r2, vnl_bignum const& r1) { return -(r1 + (-r2)); }
+inline vnl_bignum operator-(long r2, vnl_bignum const& r1) { return -(r1 + (-r2) ); }
+inline vnl_bignum operator-(int r2, vnl_bignum const& r1) { return -(r1 + (-r2) ); }
+inline vnl_bignum operator-(double r2, vnl_bignum const& r1) { return -(r1 + (-r2) ); }
+inline vnl_bignum operator-(long double r2, vnl_bignum const& r1) { return -(r1 + (-r2) ); }
 
-//: Returns the product of two bignum numbers.
+// : Returns the product of two bignum numbers.
 // \relatesalso vnl_bignum
 inline vnl_bignum operator*(vnl_bignum const& r1, vnl_bignum const& r2)
 {
@@ -339,7 +382,7 @@ inline vnl_bignum operator*(long double r2, vnl_bignum const& r1)
   vnl_bignum result(r1); return result *= (vnl_bignum)r2;
 }
 
-//: Returns the division of two bignum numbers.
+// : Returns the division of two bignum numbers.
 // \relatesalso vnl_bignum
 inline vnl_bignum operator/(vnl_bignum const& r1, vnl_bignum const& r2)
 {
@@ -373,7 +416,7 @@ inline vnl_bignum operator/(long r1, vnl_bignum const& r2)
 
 inline vnl_bignum operator/(int r1, vnl_bignum const& r2)
 {
-  vnl_bignum result((long)r1); return result /= r2;
+  vnl_bignum result( (long)r1); return result /= r2;
 }
 
 inline vnl_bignum operator/(double r1, vnl_bignum const& r2)
@@ -386,7 +429,7 @@ inline vnl_bignum operator/(long double r1, vnl_bignum const& r2)
   vnl_bignum result(r1); return result /= r2;
 }
 
-//: Returns the remainder of r1 divided by r2.
+// : Returns the remainder of r1 divided by r2.
 // \relatesalso vnl_bignum
 inline vnl_bignum operator%(vnl_bignum const& r1, vnl_bignum const& r2)
 {
@@ -400,7 +443,7 @@ inline vnl_bignum operator%(vnl_bignum const& r1, long r2)
 
 inline vnl_bignum operator%(vnl_bignum const& r1, int r2)
 {
-  vnl_bignum result(r1); return result %= vnl_bignum((long)r2);
+  vnl_bignum result(r1); return result %= vnl_bignum( (long)r2);
 }
 
 inline vnl_bignum operator%(long r1, vnl_bignum const& r2)
@@ -410,25 +453,25 @@ inline vnl_bignum operator%(long r1, vnl_bignum const& r2)
 
 inline vnl_bignum operator%(int r1, vnl_bignum const& r2)
 {
-  vnl_bignum result((long)r1); return result %= r2;
+  vnl_bignum result( (long)r1); return result %= r2;
 }
 
 // Miscellaneous operators and functions
 
-inline bool operator==(long r1, vnl_bignum const& r2) { return r2==r1; }
-inline bool operator!=(long r1, vnl_bignum const& r2) { return r2!=r1; }
-inline bool operator< (long r1, vnl_bignum const& r2) { return r2> r1; }
-inline bool operator> (long r1, vnl_bignum const& r2) { return r2< r1; }
-inline bool operator<=(long r1, vnl_bignum const& r2) { return r2>=r1; }
-inline bool operator>=(long r1, vnl_bignum const& r2) { return r2<=r1; }
+inline bool operator==(long r1, vnl_bignum const& r2) { return r2 == r1; }
+inline bool operator!=(long r1, vnl_bignum const& r2) { return r2 != r1; }
+inline bool operator<(long r1, vnl_bignum const& r2) { return r2 > r1; }
+inline bool operator>(long r1, vnl_bignum const& r2) { return r2 < r1; }
+inline bool operator<=(long r1, vnl_bignum const& r2) { return r2 >= r1; }
+inline bool operator>=(long r1, vnl_bignum const& r2) { return r2 <= r1; }
 
 namespace vnl_math
 {
-  inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }
-  inline vnl_bignum squared_magnitude(vnl_bignum const& x) { return x*x; }
-  inline vnl_bignum sqr(vnl_bignum const& x) { return x*x; }
-  inline bool isnan(vnl_bignum const& ) { return false; }
-  inline bool isfinite(vnl_bignum const& x) { return ! x.is_infinity(); }
+inline vnl_bignum abs(vnl_bignum const& x) { return x.abs(); }
+inline vnl_bignum squared_magnitude(vnl_bignum const& x) { return x * x; }
+inline vnl_bignum sqr(vnl_bignum const& x) { return x * x; }
+inline bool isnan(vnl_bignum const & ) { return false; }
+inline bool isfinite(vnl_bignum const& x) { return !x.is_infinity(); }
 }
 
 #endif // vnl_bignum_h_

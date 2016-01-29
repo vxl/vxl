@@ -11,7 +11,7 @@
 // Provide vcl_destroy() and vcl_construct() :
 template <class T>
 inline
-void vcl_destroy(T *p) { p->~T(); }
+void vcl_destroy(T * p) { p->~T(); }
 
 template <class U, class V>
 inline

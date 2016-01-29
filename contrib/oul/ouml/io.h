@@ -9,17 +9,17 @@
 #include <vil1/vil1_rgb.h>
 
 template <class T>
-vcl_ostream &operator<<(vcl_ostream &os, const vnl_vector<T> &vector);
+vcl_ostream & operator<<(vcl_ostream & os, const vnl_vector<T> & vector);
 
 template <class T>
-vcl_ostream &operator<<(vcl_ostream &os, const vcl_vector<T> &vector);
+vcl_ostream & operator<<(vcl_ostream & os, const vcl_vector<T> & vector);
 
 template <class T, class S>
-vcl_ostream &operator<<(vcl_ostream &os, const vcl_map<T, S> &omap);
+vcl_ostream & operator<<(vcl_ostream & os, const vcl_map<T, S> & omap);
 
 template <class T>
-vcl_ostream &operator<<(vcl_ostream &os, const vcl_set<T> &vector);
+vcl_ostream & operator<<(vcl_ostream & os, const vcl_set<T> & vector);
 
-vcl_ostream &operator<<(vcl_ostream &os, const vil1_rgb<unsigned char> &colour);
+vcl_ostream & operator<<(vcl_ostream & os, const vil1_rgb<unsigned char> & colour);
 
 #endif // MISC_IO__INCLUDED

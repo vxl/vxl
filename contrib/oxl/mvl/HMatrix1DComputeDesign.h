@@ -6,11 +6,11 @@
 
 class HMatrix1DComputeDesign : public HMatrix1DCompute
 {
- protected:
-  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&,
-                         const vcl_vector<vgl_homg_point_1d<double> >&,
+protected:
+  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > &, const vcl_vector<vgl_homg_point_1d<double> > &,
                          HMatrix1D *);
- public:
+
+public:
   HMatrix1DComputeDesign(void);
   ~HMatrix1DComputeDesign();
 };

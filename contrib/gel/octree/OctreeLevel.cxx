@@ -1,8 +1,8 @@
 // This is gel/octree/OctreeLevel.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author
 // Author: Geoffrey Cross, Oxford RRG
@@ -10,7 +10,7 @@
 // Modifications:
 //   990511 Geoff Initial version.
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "OctreeLevel.h"
 #include <vcl_iostream.h>
@@ -18,7 +18,7 @@
 // Default ctor
 OctreeLevel::OctreeLevel( const int d) :
   depth( d),
-  size( d<0 ? 0 : (1<<d)),
+  size( d < 0 ? 0 : (1 << d) ),
   color( size, size, size),
   next( NULL),
   prev( NULL)
@@ -26,10 +26,9 @@ OctreeLevel::OctreeLevel( const int d) :
   vcl_cout << "Size = " << size << vcl_endl;
 }
 
-
-OctreeLevel::OctreeLevel( OctreeLevel *p) :
-  depth( p->GetDepth()+1),
-  size( 1<<depth),
+OctreeLevel::OctreeLevel( OctreeLevel * p) :
+  depth( p->GetDepth() + 1),
+  size( 1 << depth),
   color( size, size, size),
   next( NULL),
   prev( p)
@@ -40,13 +39,12 @@ OctreeLevel::OctreeLevel( OctreeLevel *p) :
 
 void OctreeLevel::InheritFromAbove()
 {
-  if (!prev)
+  if( !prev )
     {
-      // TODO
+    // TODO
     }
   else
     {
-      // TODO
+    // TODO
     }
 }
-

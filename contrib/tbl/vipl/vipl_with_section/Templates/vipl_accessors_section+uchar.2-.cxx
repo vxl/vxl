@@ -3,7 +3,7 @@
 #include "../accessors/vipl_accessors_section.txx"
 VIPL_INSTANTIATE_ACCESSORS(unsigned char);
 
-template class section<unsigned char,2>;
+template class section<unsigned char, 2>;
 template class section_<unsigned char>;
 
 #endif

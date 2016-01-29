@@ -18,34 +18,36 @@ static void dummy()
 vgui_menu create_menus()
 {
   vgui_menu file;
-  file.add("Open",dummy,(vgui_key)'O',vgui_CTRL);
-  file.add("Quit",dummy,(vgui_key)'R',vgui_SHIFT);
+
+  file.add("Open", dummy, (vgui_key)'O', vgui_CTRL);
+  file.add("Quit", dummy, (vgui_key)'R', vgui_SHIFT);
 
   vgui_menu image;
-  image.add("Center image",dummy);
-  image.add("Show histogram",dummy);
+  image.add("Center image", dummy);
+  image.add("Show histogram", dummy);
 
   vgui_menu bar;
-  bar.add("File",file);
-  bar.add("Image",image);
+  bar.add("File", file);
+  bar.add("Image", image);
 
   return bar;
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char * * argv)
 {
-  vgui::init(argc,argv);
-  if (argc <= 1)
-  {
+  vgui::init(argc, argv);
+
+  if( argc <= 1 )
+    {
     vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
-  }
+    }
 
   // Make our tableau hierarchy.
-  vgui_image_tableau_new image(argv[1]);
+  vgui_image_tableau_new    image(argv[1]);
   vgui_viewer2D_tableau_new viewer(image);
-  vgui_shell_tableau_new shell(viewer);
+  vgui_shell_tableau_new    shell(viewer);
 
   // Create a window, but this time we also pass in a vgui_menu.
-  return vgui::run(shell, 512, 512, create_menus());
+  return vgui::run(shell, 512, 512, create_menus() );
 }

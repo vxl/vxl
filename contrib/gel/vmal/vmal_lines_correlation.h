@@ -1,7 +1,7 @@
 // This is gel/vmal/vmal_lines_correlation.h
 #ifndef vmal_lines_corrletation_h_
 #define vmal_lines_corrletation_h_
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 // .NAME        vmal_lines_correlation
 // .INCLUDE     vmal/vmal_lines_correlation
 // .FILE        vmal_lines_correlation.cxx
@@ -23,7 +23,7 @@
 // .SECTION Author
 //   L. Guichard 29-May-2001
 // .SECTION Modifications:
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 #include <vnl/vnl_double_3.h>
 #include <vil1/vil1_memory_image_of.h>
@@ -31,32 +31,26 @@
 
 class vmal_lines_correlation
 {
- public:
+public:
   vmal_lines_correlation();
 
   vmal_lines_correlation(int, double);
 
   ~vmal_lines_correlation();
 
-  double find_min_corr(vnl_double_3 &line0p, vnl_double_3 &line0q,
-                       vnl_double_3 &line1p, vnl_double_3 &line1q,
-                       vil1_memory_image_of<vxl_byte> &image0,
-                       vil1_memory_image_of<vxl_byte> &image1,
-                       vnl_double_3 &trans);
+  double find_min_corr(vnl_double_3 & line0p, vnl_double_3 & line0q, vnl_double_3 & line1p, vnl_double_3 & line1q,
+                       vil1_memory_image_of<vxl_byte> & image0, vil1_memory_image_of<vxl_byte> & image1,
+                       vnl_double_3 & trans);
 
-  double lines_correlation(vnl_double_3 &line0_p, vnl_double_3 &line0_q,
-                           vnl_double_3 &line1_p, vnl_double_3 &line1_q,
-                           vil1_memory_image_of<vxl_byte> &image0,
-                           vil1_memory_image_of<vxl_byte> &image1,
-                           vnl_double_3 &trans, int bias);
+  double lines_correlation(vnl_double_3 & line0_p, vnl_double_3 & line0_q, vnl_double_3 & line1_p,
+                           vnl_double_3 & line1_q, vil1_memory_image_of<vxl_byte> & image0,
+                           vil1_memory_image_of<vxl_byte> & image1, vnl_double_3 & trans, int bias);
 
-  bool interpol_pixel(vnl_double_3 &pixel0, vnl_double_3 &pixel1,
-                      vil1_memory_image_of<vxl_byte> &image0,
-                      vil1_memory_image_of<vxl_byte> &image1,
-                      unsigned char &value0, unsigned char &value1);
+  bool interpol_pixel(vnl_double_3 & pixel0, vnl_double_3 & pixel1, vil1_memory_image_of<vxl_byte> & image0,
+                      vil1_memory_image_of<vxl_byte> & image1, unsigned char & value0, unsigned char & value1);
 
- private:
-  int delta_;
+private:
+  int    delta_;
   double radius_;
 };
 

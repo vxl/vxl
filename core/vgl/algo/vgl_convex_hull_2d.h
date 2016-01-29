@@ -2,9 +2,9 @@
 #ifndef vgl_convex_hull_2d_h_
 #define vgl_convex_hull_2d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Compute the convex hull of a 2-d point set
 //
@@ -21,16 +21,18 @@
 template <class T>
 class vgl_convex_hull_2d
 {
- public:
-  vgl_convex_hull_2d (vcl_vector<vgl_point_2d<T> > const& points);
-  ~vgl_convex_hull_2d () {}
+public:
+  vgl_convex_hull_2d(vcl_vector<vgl_point_2d<T> > const& points);
+  ~vgl_convex_hull_2d() {}
   vgl_polygon<T>  hull();
- private:
+
+private:
   vgl_convex_hull_2d();
   bool hull_valid_;
   void compute_hull();
+
   vcl_vector<vgl_point_2d<T> > points_;
-  vgl_polygon<T> hull_;
+  vgl_polygon<T>               hull_;
 };
 
 #define VGL_CONVEX_HULL_2D_INSTANTIATE(T) extern "please include vgl/algo/vgl_convex_hull_2d.txx first"

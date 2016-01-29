@@ -1,6 +1,6 @@
 // This is core/vgui/impl/mfc/vgui_mfc_tag.cxx
 #include "vgui_mfc.h"
-//:
+// :
 // \file
 // \author  awf@robots.ox.ac.uk
 
@@ -12,5 +12,4 @@ vgui_tag(mfc) {
   vgui_mfc::instance();
   vul_trace;
   return 0;
-}
-
+  }

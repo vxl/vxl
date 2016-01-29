@@ -18,14 +18,15 @@
 #include <Inventor/SbLinear.h>
 
 // Add sphere
-void addSphere(SoGroup *root)
+void addSphere(SoGroup * root)
 {
   SoSeparator* sep = new SoSeparator;
+
   root->addChild(sep);
-  SoSphere *sph = new SoSphere;
+  SoSphere * sph = new SoSphere;
   sph->radius = 10.0;
 
-  SoMaterial *myMaterial = new SoMaterial;
+  SoMaterial * myMaterial = new SoMaterial;
   myMaterial->transparency.setValue(0.5);
 
   sep->addChild(myMaterial);
@@ -33,20 +34,21 @@ void addSphere(SoGroup *root)
 }
 
 // Add a cylinder
-void addCylinder(SoGroup *root, vgl_vector_3d<double> p)
+void addCylinder(SoGroup * root, vgl_vector_3d<double> p)
 {
   SoSeparator* sep = new SoSeparator;
+
   root->addChild(sep);
-  SoCylinder *cyl = new SoCylinder;
+  SoCylinder * cyl = new SoCylinder;
   cyl->radius = 1.0;
   cyl->height = 20.0;
 
-  SoRotation *rot = new SoRotation;
+  SoRotation * rot = new SoRotation;
   p /= p.length();
-  SbVec3f axis(float(p.z()), 0.0f, -float(p.x()));
-  rot->rotation.setValue(axis, float(vcl_acos(p.y())));
+  SbVec3f axis(float(p.z() ), 0.0f, -float(p.x() ) );
+  rot->rotation.setValue(axis, float(vcl_acos(p.y() ) ) );
 
-  SoMaterial *myMaterial = new SoMaterial;
+  SoMaterial * myMaterial = new SoMaterial;
 //  myMaterial->diffuseColor.setValue(p.x(), p.y(), p.z());
   myMaterial->diffuseColor.setValue(1.0, 0.0, 0.0);
 
@@ -56,10 +58,11 @@ void addCylinder(SoGroup *root, vgl_vector_3d<double> p)
 }
 
 // Construct a simple scene
-void buildScene(SoGroup *root)
+void buildScene(SoGroup * root)
 {
   // Add camera
-  SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
+  SoPerspectiveCamera * myCamera = new SoPerspectiveCamera;
+
   myCamera->position = SbVec3f(0, 0, 100);
   myCamera->nearDistance = 0.5f;
   myCamera->farDistance = 400.0f;
@@ -69,31 +72,30 @@ void buildScene(SoGroup *root)
 
   addSphere(root);
   // xy-plane
-  addCylinder(root, vgl_vector_3d<double>( 1.0,0.0,0.0));
-  addCylinder(root, vgl_vector_3d<double>( 1.0,1.0,0.0));
-  addCylinder(root, vgl_vector_3d<double>( 0.0,1.0,0.0));
-  addCylinder(root, vgl_vector_3d<double>(-1.0,1.0,0.0));
+  addCylinder(root, vgl_vector_3d<double>( 1.0, 0.0, 0.0) );
+  addCylinder(root, vgl_vector_3d<double>( 1.0, 1.0, 0.0) );
+  addCylinder(root, vgl_vector_3d<double>( 0.0, 1.0, 0.0) );
+  addCylinder(root, vgl_vector_3d<double>(-1.0, 1.0, 0.0) );
   // xz-plane
 //  addCylinder(root, vgl_vector_3d<double>( 1.0,0.0,0.0));
-  addCylinder(root, vgl_vector_3d<double>( 1.0,0.0,1.0));
-  addCylinder(root, vgl_vector_3d<double>( 0.0,0.0,1.0));
-  addCylinder(root, vgl_vector_3d<double>(-1.0,0.0,1.0));
+  addCylinder(root, vgl_vector_3d<double>( 1.0, 0.0, 1.0) );
+  addCylinder(root, vgl_vector_3d<double>( 0.0, 0.0, 1.0) );
+  addCylinder(root, vgl_vector_3d<double>(-1.0, 0.0, 1.0) );
   // yz-plane
 //  addCylinder(root, vgl_vector_3d<double>(0.0, 1.0,0.0));
-  addCylinder(root, vgl_vector_3d<double>(0.0, 1.0,1.0));
+  addCylinder(root, vgl_vector_3d<double>(0.0, 1.0, 1.0) );
 //  addCylinder(root, vgl_vector_3d<double>(0.0, 0.0,1.0));
-  addCylinder(root, vgl_vector_3d<double>(0.0,-1.0,1.0));
+  addCylinder(root, vgl_vector_3d<double>(0.0, -1.0, 1.0) );
   // intermediate planes
-  addCylinder(root, vgl_vector_3d<double>( 1.0, 1.0, 1.0));
-  addCylinder(root, vgl_vector_3d<double>(-1.0, 1.0, 1.0));
-  addCylinder(root, vgl_vector_3d<double>( 1.0,-1.0, 1.0));
-  addCylinder(root, vgl_vector_3d<double>( 1.0, 1.0,-1.0));
+  addCylinder(root, vgl_vector_3d<double>( 1.0, 1.0, 1.0) );
+  addCylinder(root, vgl_vector_3d<double>(-1.0, 1.0, 1.0) );
+  addCylinder(root, vgl_vector_3d<double>( 1.0, -1.0, 1.0) );
+  addCylinder(root, vgl_vector_3d<double>( 1.0, 1.0, -1.0) );
 
   myCamera->viewAll(root, SbViewportRegion() );
 }
 
-
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
   // initialize vgui
   vgui::init(argc, argv);
@@ -102,7 +104,7 @@ int main(int argc, char** argv)
   bgui3d_init();
 
   // create the scene graph root
-  SoSeparator *root = new SoSeparator;
+  SoSeparator * root = new SoSeparator;
   root->ref();
   buildScene(root);
 

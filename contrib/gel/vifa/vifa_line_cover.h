@@ -1,8 +1,8 @@
 // This is gel/vifa/vifa_line_cover.h
 #ifndef VIFA_LINE_COVER_H
 #define VIFA_LINE_COVER_H
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief An index space for queries on parallel line overlap
 //
@@ -21,7 +21,7 @@
 //  Modifications:
 //   MPP Jun 2003, Ported to VXL from TargetJr
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -35,16 +35,14 @@ class vifa_line_cover : public vbl_ref_count
   double*       max_extent_;
   double*       min_extent_;
   imp_line_sptr line_;
-
- public:
+public:
   // Constructors and Destructors
   vifa_line_cover();
-  vifa_line_cover(imp_line_sptr prototype_line,
-                  int           index_dimension);
+  vifa_line_cover(imp_line_sptr prototype_line, int           index_dimension);
   // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
   inline vifa_line_cover(vifa_line_cover const& c)
     : vbl_ref_count(), dim_(c.dim_), index_(c.index_),
-      max_extent_(c.max_extent_), min_extent_(c.min_extent_), line_(c.line_) {}
+    max_extent_(c.max_extent_), min_extent_(c.min_extent_), line_(c.line_) {}
   ~vifa_line_cover();
 
   // Indexing methods
@@ -52,18 +50,22 @@ class vifa_line_cover : public vbl_ref_count
 
   // Data Access methods
   double GetCoverage();
-  double GetDenseCoverage();
-  double GetCustomCoverage(const double norm);
-  void   GetExtent(imp_line_sptr& lmin,
-                   imp_line_sptr& lmax);
 
- protected:
+  double GetDenseCoverage();
+
+  double GetCustomCoverage(const double norm);
+
+  void   GetExtent(imp_line_sptr& lmin, imp_line_sptr& lmax);
+
+protected:
   int    get_index_min();
+
   int    get_index_max();
+
   double get_signed_distance(vgl_point_2d<double> const& p);
-  imp_line_sptr get_offset_line(int    start,
-                                int    end,
-                                double dist);
+
+  imp_line_sptr get_offset_line(int    start, int    end, double dist);
+
 };
 
 typedef vbl_smart_ptr<vifa_line_cover> vifa_line_cover_sptr;

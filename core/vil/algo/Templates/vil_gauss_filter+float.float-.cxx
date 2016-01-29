@@ -1,2 +1,2 @@
 #include <vil/algo/vil_gauss_filter.txx>
-VIL_GAUSS_FILTER_INSTANTIATE(float,float);
+VIL_GAUSS_FILTER_INSTANTIATE(float, float);

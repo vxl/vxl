@@ -1,9 +1,9 @@
 #ifndef mbl_progress_null_h_
 #define mbl_progress_null_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Progress object that does nothing.
 // \author Graham Vincent and Kevin de Souza
@@ -11,30 +11,29 @@
 
 #include <mbl/mbl_progress.h>
 
-//========================================================================
-//: Progress object that does nothing.
+// ========================================================================
+// : Progress object that does nothing.
 class mbl_progress_null : public mbl_progress
 {
- public:
-  //: Constructor
+public:
+  // : Constructor
   mbl_progress_null();
 
-  //: Destructor
+  // : Destructor
   ~mbl_progress_null();
 
-  //: Name of the class
+  // : Name of the class
   virtual vcl_string is_a() const;
 
- protected:
-  virtual void on_set_estimated_iterations(const vcl_string& identifier,
-                                           const int total_iterations);
+protected:
+  virtual void on_set_estimated_iterations(const vcl_string& identifier, const int total_iterations);
 
-  virtual void on_set_progress(const vcl_string& identifier,
-                               const int progress);
+  virtual void on_set_progress(const vcl_string& identifier, const int progress);
 
   virtual void on_end_progress(const vcl_string& identifier);
+
 };
 
-//========================================================================
+// ========================================================================
 
 #endif // mbl_progress_null_h_

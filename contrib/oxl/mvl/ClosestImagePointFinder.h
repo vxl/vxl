@@ -2,9 +2,9 @@
 #ifndef ClosestImagePointFinder_h_
 #define ClosestImagePointFinder_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief HomgInterestPointSet closest points
 //
@@ -17,7 +17,7 @@
 //  Modifications
 //   22 Jun 2003 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <vnl/vnl_vector.h>
@@ -29,7 +29,7 @@ class HomgPoint2D;
 
 class ClosestImagePointFinder
 {
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   ClosestImagePointFinder(const HomgInterestPointSet& corners);
@@ -42,9 +42,11 @@ class ClosestImagePointFinder
 
   // Operations----------------------------------------------------------------
   void get_all_within_search_region(double cx, double cy, double w, double h, vcl_vector<int>* out_indices);
+
   void get_all_within_search_region(vgl_box_2d<double> const& region, vcl_vector<int>* out_indices);
 
   int get_closest_within_region(double cx, double cy, double w, double h, int* out_index = 0);
+
   int get_closest_within_distance(double cx, double cy, double r, int* out_index = 0);
 
   // Data Access---------------------------------------------------------------
@@ -53,18 +55,17 @@ class ClosestImagePointFinder
   int get_last_match_index() const { return last_index_; }
   double get_last_x() const { return px_[last_index_]; }
   double get_last_y() const { return py_[last_index_]; }
-
- protected:
+protected:
   // Data Members--------------------------------------------------------------
 
   int get_closest_within_region(double cx, double cy, double w, double h, int* out_index, double mindist_sq);
 
-  vnl_vector<double> px_;
-  vnl_vector<double> py_;
+  vnl_vector<double>       px_;
+  vnl_vector<double>       py_;
   vcl_multimap_double_int* y2i_;
-  double last_d2_;
-  int last_inrange_;
-  int last_index_;
+  double                   last_d2_;
+  int                      last_inrange_;
+  int                      last_index_;
 };
 
 #endif // ClosestImagePointFinder_h_

@@ -1,6 +1,6 @@
 #ifndef vcl_atomic_count_gcc_h_
 #define vcl_atomic_count_gcc_h_
-//:
+// :
 // \file
 // \brief thread/SMP safe reference counter
 // \author www.boost.org
@@ -26,7 +26,6 @@
 
 #include <bits/atomicity.h>
 
-
 #if defined(__GLIBCXX__) // g++ 3.4+
 
 using __gnu_cxx::__atomic_add;
@@ -36,31 +35,30 @@ using __gnu_cxx::__exchange_and_add;
 
 class vcl_atomic_count
 {
- public:
+public:
 
-    explicit vcl_atomic_count(long v) : value_(v) {}
+  explicit vcl_atomic_count(long v) : value_(v) {}
 
-    void operator++()
+  void operator++()
+  {
+    __atomic_add(&value_, 1);
+  }
+
+  long operator--()
+  {
+    return __exchange_and_add(&value_, -1) - 1;
+  }
+
+  operator long() const
     {
-        __atomic_add(&value_, 1);
+    return __exchange_and_add(&value_, 0);
     }
+private:
 
-    long operator--()
-    {
-        return __exchange_and_add(&value_, -1) - 1;
-    }
+  vcl_atomic_count(vcl_atomic_count const &);
+  vcl_atomic_count & operator=(vcl_atomic_count const &);
 
-    operator long() const
-    {
-        return __exchange_and_add(&value_, 0);
-    }
-
- private:
-
-    vcl_atomic_count(vcl_atomic_count const &);
-    vcl_atomic_count & operator=(vcl_atomic_count const &);
-
-    mutable _Atomic_word value_;
+  mutable _Atomic_word value_;
 };
 
 #endif // #ifndef vcl_atomic_count_gcc_h_

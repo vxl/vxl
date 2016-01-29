@@ -10,4 +10,4 @@ vgui_tag(glut) {
   vgui_glut_impl::instance();
   vul_trace;
   return 0;
-}
+  }

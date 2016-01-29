@@ -4,10 +4,10 @@
 #include <vpl/vpl.h>
 #include <testlib/testlib_test.h>
 
-
 void test_sleep_timer()
 {
   vul_timer tic;
+
   vpl_sleep(1);
   double t = tic.real() / 1000.0;
 

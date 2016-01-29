@@ -2,9 +2,9 @@
 #ifndef HMatrix2DEuclideanCompute_h_
 #define HMatrix2DEuclideanCompute_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 //
 // HMatrix2DEuclideanCompute contains a linear method to compute
@@ -22,18 +22,22 @@
 
 class HMatrix2DEuclideanCompute : public HMatrix2DCompute
 {
- public:
+public:
   HMatrix2DEuclideanCompute(void);
   ~HMatrix2DEuclideanCompute();
 
   // left in for capes :
   static HMatrix2D compute(PairMatchSetCorner const& matches);
+
   static HMatrix2D compute(PointArray const& p1, PointArray const& p2);
+
   int minimum_number_of_correspondences() const { return 2; }
- protected:
-  bool compute_p(PointArray const&, PointArray const&, HMatrix2D *);
- private:
-  static bool tmp_fun(PointArray const&, PointArray const&, HMatrix2D*);
+protected:
+  bool compute_p(PointArray const &, PointArray const &, HMatrix2D *);
+
+private:
+  static bool tmp_fun(PointArray const &, PointArray const &, HMatrix2D *);
+
 };
 
 #endif // HMatrix2DEuclideanCompute_h_

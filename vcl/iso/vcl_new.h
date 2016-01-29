@@ -6,9 +6,9 @@
 #include <new>
 
 #ifdef vcl_generic_new_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_new_STD std
+#  define vcl_generic_new_STD std
 #endif
 
 #include "../generic/vcl_new.h"

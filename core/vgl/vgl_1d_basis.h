@@ -2,9 +2,9 @@
 #ifndef vgl_1d_basis_h_
 #define vgl_1d_basis_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief storage for 3 collinear points to serve as 1-D projective basis
 //
@@ -56,9 +56,9 @@
 #include <vcl_iosfwd.h>
 #include <vcl_cassert.h>
 
-//----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-//: Storage for 3 collinear points to serve as 1-D projective basis.
+// : Storage for 3 collinear points to serve as 1-D projective basis.
 // This class is templated on the point type that will be stored.
 // Typically, T will be vgl_point_2d<double> or
 // vgl_homg_point_2d<int> or even vgl_line_2d<float> or vgl_point_3d<T>.
@@ -92,21 +92,20 @@ template <class T>
 class vgl_1d_basis
 {
   // Data members are private:
-  T origin_;    //!< The point to be mapped to homogeneous (0,1)
-  T unity_;     //!< The point to be mapped to homogeneous (1,1)
-  T inf_pt_;    //!< The point to be mapped to homogeneous (1,0)
-  bool affine_; //!< normally false; if true, inf_pt_ is not used: affine basis
+  T    origin_; // !< The point to be mapped to homogeneous (0,1)
+  T    unity_;  // !< The point to be mapped to homogeneous (1,1)
+  T    inf_pt_; // !< The point to be mapped to homogeneous (1,0)
+  bool affine_; // !< normally false; if true, inf_pt_ is not used: affine basis
   // No usable default constructor:
   inline vgl_1d_basis() {}
-
- public:
+public:
   inline T origin() const { return origin_; }
   inline T unity() const { return unity_; }
   inline T inf_pt() const { assert(!affine_); return inf_pt_; }
   inline bool affine() const { return affine_; }
   inline bool projective() const { return !affine_; }
 
-  //: Construct from three collinear points (projective basis).
+  // : Construct from three collinear points (projective basis).
   // It will serve as origin (0,1), unity (1,1) and point at infinity (1,0).
   // The points must be collinear, and different from each other.
   //
@@ -119,22 +118,24 @@ class vgl_1d_basis
   //
   vgl_1d_basis(T const& o, T const& u, T const& i);
 
-  //: Construct from two points (affine basis).
+  // : Construct from two points (affine basis).
   // It will serve as origin (0,1) and unity point (1,1).
   // The points must be different from each other, and not at infinity.
   // This creates an affine basis, i.e., the point at infinity of the basis
   // will be the point at infinity of the line o-u in the source space.
   vgl_1d_basis(T const& o, T const& u);
 
-  //: Projection from a point in the source space to a 1-D homogeneous point
+  // : Projection from a point in the source space to a 1-D homogeneous point
   vgl_homg_point_1d<double> project(T const& p);
+
 };
 
 //  +-+-+ 1d_basis simple I/O +-+-+
 
-//: Write "<vgl_1d_basis o u i> " to stream
+// : Write "<vgl_1d_basis o u i> " to stream
 // \relatesalso vgl_1d_basis
-template <class T> vcl_ostream& operator<<(vcl_ostream& s, vgl_1d_basis<T> const&);
+template <class T>
+vcl_ostream & operator<<(vcl_ostream& s, vgl_1d_basis<T> const &);
 
 #define VGL_1D_BASIS_INSTANTIATE(T) extern "please include vgl/vgl_1d_basis.txx first"
 

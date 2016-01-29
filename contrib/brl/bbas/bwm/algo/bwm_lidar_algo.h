@@ -5,10 +5,10 @@
 
 class lidar_labeling_params
 {
- public:
+public:
   lidar_labeling_params(double gnd_thresh = 1.0, double bld_diff_thresh = 0.5,
-    double min_bld_height = 2.5, double min_bld_area = 35,
-    double max_veg_height = 10.0, double veg_diff_thresh = 0.75)
+                        double min_bld_height = 2.5, double min_bld_area = 35,
+                        double max_veg_height = 10.0, double veg_diff_thresh = 0.75)
     : gnd_thresh_(gnd_thresh), bld_diff_thresh_(bld_diff_thresh),
     min_bld_height_(min_bld_height), min_bld_area_(min_bld_area),
     max_veg_height_(max_veg_height), veg_diff_thresh_(veg_diff_thresh) {}
@@ -21,14 +21,12 @@ class lidar_labeling_params
   double veg_diff_thresh_;
 };
 
-
 class bwm_lidar_algo
 {
- public:
-  static void label_lidar(vil_image_view<float> first_ret,
-                          vil_image_view<float> last_ret,
-                          lidar_labeling_params& params,
-                          vil_image_view<vxl_byte> &labeled);
+public:
+  static void label_lidar(vil_image_view<float> first_ret, vil_image_view<float> last_ret,
+                          lidar_labeling_params& params, vil_image_view<vxl_byte> & labeled);
+
 };
 
 #endif

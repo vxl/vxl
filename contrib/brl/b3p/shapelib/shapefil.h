@@ -38,7 +38,7 @@
 #include <stdio.h>
 
 #ifdef USE_DBMALLOC
-#include <dbmalloc.h>
+#  include <dbmalloc.h>
 #endif
 
 #ifdef __cplusplus
@@ -108,27 +108,27 @@ extern "C" {
 /*                             SHP Support.                             */
 /************************************************************************/
 typedef        struct
-{
-    FILE        *fpSHP;
-    FILE        *fpSHX;
+  {
+  FILE * fpSHP;
+  FILE * fpSHX;
 
-    int                nShapeType;                                /* SHPT_* */
+  int nShapeType;                                                 /* SHPT_* */
 
-    int                nFileSize;                                /* SHP file */
+  int nFileSize;                                                 /* SHP file */
 
-    int         nRecords;
-    int                nMaxRecords;
-    int                *panRecOffset;
-    int                *panRecSize;
+  int nRecords;
+  int nMaxRecords;
+  int * panRecOffset;
+  int * panRecSize;
 
-    double        adBoundsMin[4];
-    double        adBoundsMax[4];
+  double adBoundsMin[4];
+  double adBoundsMax[4];
 
-    int                bUpdated;
+  int bUpdated;
 
-    unsigned char *pabyRec;
-    int         nBufSize;
-} SHPInfo;
+  unsigned char * pabyRec;
+  int nBufSize;
+  } SHPInfo;
 
 typedef SHPInfo * SHPHandle;
 
@@ -150,7 +150,6 @@ typedef SHPInfo * SHPHandle;
 #define SHPT_MULTIPOINTM 28
 #define SHPT_MULTIPATCH 31
 
-
 /* -------------------------------------------------------------------- */
 /*      Part types - everything but SHPT_MULTIPATCH just uses           */
 /*      SHPP_RING.                                                      */
@@ -168,71 +167,67 @@ typedef SHPInfo * SHPHandle;
 /*      from the .shp file.                                             */
 /* -------------------------------------------------------------------- */
 typedef struct
-{
-    int                nSHPType;
+  {
+  int nSHPType;
 
-    int                nShapeId; /* -1 is unknown/unassigned */
+  int nShapeId;                  /* -1 is unknown/unassigned */
 
-    int                nParts;
-    int                *panPartStart;
-    int                *panPartType;
+  int nParts;
+  int * panPartStart;
+  int * panPartType;
 
-    int                nVertices;
-    double        *padfX;
-    double        *padfY;
-    double        *padfZ;
-    double        *padfM;
+  int nVertices;
+  double * padfX;
+  double * padfY;
+  double * padfZ;
+  double * padfM;
 
-    double        dfXMin;
-    double        dfYMin;
-    double        dfZMin;
-    double        dfMMin;
+  double dfXMin;
+  double dfYMin;
+  double dfZMin;
+  double dfMMin;
 
-    double        dfXMax;
-    double        dfYMax;
-    double        dfZMax;
-    double        dfMMax;
-} SHPObject;
+  double dfXMax;
+  double dfYMax;
+  double dfZMax;
+  double dfMMax;
+  } SHPObject;
 
 /* -------------------------------------------------------------------- */
 /*      SHP API Prototypes                                              */
 /* -------------------------------------------------------------------- */
-SHPHandle SHPAPI_CALL
-      SHPOpen( const char * pszShapeFile, const char * pszAccess );
-SHPHandle SHPAPI_CALL
-      SHPCreate( const char * pszShapeFile, int nShapeType );
-void SHPAPI_CALL
-      SHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType,
-                  double * padfMinBound, double * padfMaxBound );
+SHPHandle SHPAPI_CALL SHPOpen( const char * pszShapeFile, const char * pszAccess );
+
+SHPHandle SHPAPI_CALL SHPCreate( const char * pszShapeFile, int nShapeType );
+
+void SHPAPI_CALL SHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType, double * padfMinBound,
+                             double * padfMaxBound );
 
 SHPObject SHPAPI_CALL1(*)
-      SHPReadObject( SHPHandle hSHP, int iShape );
-int SHPAPI_CALL
-      SHPWriteObject( SHPHandle hSHP, int iShape, SHPObject * psObject );
+SHPReadObject( SHPHandle hSHP, int iShape );
+int SHPAPI_CALL SHPWriteObject( SHPHandle hSHP, int iShape, SHPObject * psObject );
 
-void SHPAPI_CALL
-      SHPDestroyObject( SHPObject * psObject );
-void SHPAPI_CALL
-      SHPComputeExtents( SHPObject * psObject );
+void SHPAPI_CALL SHPDestroyObject( SHPObject * psObject );
+
+void SHPAPI_CALL SHPComputeExtents( SHPObject * psObject );
+
 SHPObject SHPAPI_CALL1(*)
-      SHPCreateObject( int nSHPType, int nShapeId,
-                       int nParts, int * panPartStart, int * panPartType,
-                       int nVertices, double * padfX, double * padfY,
-                       double * padfZ, double * padfM );
+SHPCreateObject( int nSHPType, int nShapeId,
+                 int nParts, int * panPartStart, int * panPartType,
+                 int nVertices, double * padfX, double * padfY,
+                 double * padfZ, double * padfM );
 SHPObject SHPAPI_CALL1(*)
-      SHPCreateSimpleObject( int nSHPType, int nVertices,
-                             double * padfX, double * padfY, double * padfZ );
+SHPCreateSimpleObject( int nSHPType, int nVertices,
+                       double * padfX, double * padfY, double * padfZ );
 
-int SHPAPI_CALL
-      SHPRewindObject( SHPHandle hSHP, SHPObject * psObject );
+int SHPAPI_CALL SHPRewindObject( SHPHandle hSHP, SHPObject * psObject );
 
-void SHPAPI_CALL
-      SHPClose( SHPHandle hSHP );
+void SHPAPI_CALL SHPClose( SHPHandle hSHP );
 
 const char SHPAPI_CALL1(*)
-      SHPTypeName( int nSHPType );
+SHPTypeName( int nSHPType );
 const char SHPAPI_CALL1(*)
-      SHPPartTypeName( int nPartType );
+SHPPartTypeName( int nPartType );
 
 /* -------------------------------------------------------------------- */
 /*      Shape quadtree indexing API.                                    */
@@ -242,161 +237,143 @@ const char SHPAPI_CALL1(*)
 #define MAX_SUBNODE        4
 
 typedef struct shape_tree_node
-{
-    /* region covered by this node */
-    double        adfBoundsMin[4];
-    double        adfBoundsMax[4];
+  {
+  /* region covered by this node */
+  double adfBoundsMin[4];
+  double adfBoundsMax[4];
 
-    /* list of shapes stored at this node.  The papsShapeObj pointers
-       or the whole list can be NULL */
-    int                nShapeCount;
-    int                *panShapeIds;
-    SHPObject   **papsShapeObj;
+  /* list of shapes stored at this node.  The papsShapeObj pointers
+     or the whole list can be NULL */
+  int nShapeCount;
+  int * panShapeIds;
+  SHPObject * * papsShapeObj;
 
-    int                nSubNodes;
-    struct shape_tree_node *apsSubNode[MAX_SUBNODE];
+  int nSubNodes;
+  struct shape_tree_node * apsSubNode[MAX_SUBNODE];
 
-} SHPTreeNode;
+  } SHPTreeNode;
 
 typedef struct
-{
-    SHPHandle   hSHP;
+  {
+  SHPHandle hSHP;
 
-    int                nMaxDepth;
-    int                nDimension;
+  int nMaxDepth;
+  int nDimension;
 
-    SHPTreeNode        *psRoot;
-} SHPTree;
+  SHPTreeNode * psRoot;
+  } SHPTree;
 
 SHPTree SHPAPI_CALL1(*)
-      SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
-                     double *padfBoundsMin, double *padfBoundsMax );
-void    SHPAPI_CALL
-      SHPDestroyTree( SHPTree * hTree );
+SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
+               double * padfBoundsMin, double * padfBoundsMax );
+void    SHPAPI_CALL SHPDestroyTree( SHPTree * hTree );
 
-int        SHPAPI_CALL
-      SHPWriteTree( SHPTree *hTree, const char * pszFilename );
-SHPTree SHPAPI_CALL
-      SHPReadTree( const char * pszFilename );
+int        SHPAPI_CALL SHPWriteTree( SHPTree * hTree, const char * pszFilename );
 
-int        SHPAPI_CALL
-      SHPTreeAddObject( SHPTree * hTree, SHPObject * psObject );
-int        SHPAPI_CALL
-      SHPTreeAddShapeId( SHPTree * hTree, SHPObject * psObject );
-int        SHPAPI_CALL
-      SHPTreeRemoveShapeId( SHPTree * hTree, int nShapeId );
+SHPTree SHPAPI_CALL SHPReadTree( const char * pszFilename );
 
-void         SHPAPI_CALL
-      SHPTreeTrimExtraNodes( SHPTree * hTree );
+int        SHPAPI_CALL SHPTreeAddObject( SHPTree * hTree, SHPObject * psObject );
 
-int    SHPAPI_CALL1(*)
-      SHPTreeFindLikelyShapes( SHPTree * hTree,
-                               double * padfBoundsMin,
-                               double * padfBoundsMax,
-                               int * );
-int     SHPAPI_CALL
-      SHPCheckBoundsOverlap( double *, double *, double *, double *, int );
+int        SHPAPI_CALL SHPTreeAddShapeId( SHPTree * hTree, SHPObject * psObject );
+
+int        SHPAPI_CALL SHPTreeRemoveShapeId( SHPTree * hTree, int nShapeId );
+
+void         SHPAPI_CALL SHPTreeTrimExtraNodes( SHPTree * hTree );
+
+int SHPAPI_CALL1(*)
+SHPTreeFindLikelyShapes( SHPTree * hTree,
+                         double * padfBoundsMin,
+                         double * padfBoundsMax,
+                         int * );
+int     SHPAPI_CALL SHPCheckBoundsOverlap( double *, double *, double *, double *, int );
 
 /************************************************************************/
 /*                             DBF Support.                             */
 /************************************************************************/
 typedef        struct
-{
-    FILE        *fp;
+  {
+  FILE * fp;
 
-    int         nRecords;
+  int nRecords;
 
-    int                nRecordLength;
-    int                nHeaderLength;
-    int                nFields;
-    int                *panFieldOffset;
-    int                *panFieldSize;
-    int                *panFieldDecimals;
-    char        *pachFieldType;
+  int nRecordLength;
+  int nHeaderLength;
+  int nFields;
+  int * panFieldOffset;
+  int * panFieldSize;
+  int * panFieldDecimals;
+  char * pachFieldType;
 
-    char        *pszHeader;
+  char * pszHeader;
 
-    int                nCurrentRecord;
-    int                bCurrentRecordModified;
-    char        *pszCurrentRecord;
+  int nCurrentRecord;
+  int bCurrentRecordModified;
+  char * pszCurrentRecord;
 
-    int                bNoHeader;
-    int                bUpdated;
-} DBFInfo;
+  int bNoHeader;
+  int bUpdated;
+  } DBFInfo;
 
 typedef DBFInfo * DBFHandle;
 
-typedef enum {
+typedef enum
+  {
   FTString,
   FTInteger,
   FTDouble,
   FTLogical,
   FTInvalid
-} DBFFieldType;
+  } DBFFieldType;
 
 #define XBASE_FLDHDR_SZ       32
 
-DBFHandle SHPAPI_CALL
-      DBFOpen( const char * pszDBFFile, const char * pszAccess );
-DBFHandle SHPAPI_CALL
-      DBFCreate( const char * pszDBFFile );
+DBFHandle SHPAPI_CALL DBFOpen( const char * pszDBFFile, const char * pszAccess );
 
-int        SHPAPI_CALL
-      DBFGetFieldCount( DBFHandle psDBF );
-int        SHPAPI_CALL
-      DBFGetRecordCount( DBFHandle psDBF );
-int        SHPAPI_CALL
-      DBFAddField( DBFHandle hDBF, const char * pszFieldName,
-                   DBFFieldType eType, int nWidth, int nDecimals );
+DBFHandle SHPAPI_CALL DBFCreate( const char * pszDBFFile );
 
-DBFFieldType SHPAPI_CALL
-      DBFGetFieldInfo( DBFHandle psDBF, int iField,
-                       char * pszFieldName, int * pnWidth, int * pnDecimals );
+int        SHPAPI_CALL DBFGetFieldCount( DBFHandle psDBF );
 
-int SHPAPI_CALL
-      DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName);
+int        SHPAPI_CALL DBFGetRecordCount( DBFHandle psDBF );
 
-int         SHPAPI_CALL
-      DBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
-double         SHPAPI_CALL
-      DBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
+int        SHPAPI_CALL DBFAddField( DBFHandle hDBF, const char * pszFieldName, DBFFieldType eType, int nWidth,
+                                    int nDecimals );
+
+DBFFieldType SHPAPI_CALL DBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName, int * pnWidth,
+                                          int * pnDecimals );
+
+int SHPAPI_CALL DBFGetFieldIndex(DBFHandle psDBF, const char * pszFieldName);
+
+int         SHPAPI_CALL DBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
+
+double         SHPAPI_CALL DBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
+
 const char SHPAPI_CALL1(*)
-      DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
+DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
 const char SHPAPI_CALL1(*)
-      DBFReadLogicalAttribute( DBFHandle hDBF, int iShape, int iField );
-int     SHPAPI_CALL
-      DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
+DBFReadLogicalAttribute( DBFHandle hDBF, int iShape, int iField );
+int     SHPAPI_CALL DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
 
-int SHPAPI_CALL
-      DBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField,
-                                int nFieldValue );
-int SHPAPI_CALL
-      DBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField,
-                               double dFieldValue );
-int SHPAPI_CALL
-      DBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField,
-                               const char * pszFieldValue );
-int SHPAPI_CALL
-     DBFWriteNULLAttribute( DBFHandle hDBF, int iShape, int iField );
+int SHPAPI_CALL DBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, int nFieldValue );
 
-int SHPAPI_CALL
-     DBFWriteLogicalAttribute( DBFHandle hDBF, int iShape, int iField,
-                               const char lFieldValue);
-int SHPAPI_CALL
-     DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity, int iField,
-                               void * pValue );
+int SHPAPI_CALL DBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField, double dFieldValue );
+
+int SHPAPI_CALL DBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField, const char * pszFieldValue );
+
+int SHPAPI_CALL DBFWriteNULLAttribute( DBFHandle hDBF, int iShape, int iField );
+
+int SHPAPI_CALL DBFWriteLogicalAttribute( DBFHandle hDBF, int iShape, int iField, const char lFieldValue);
+
+int SHPAPI_CALL DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity, int iField, void * pValue );
+
 const char SHPAPI_CALL1(*)
-      DBFReadTuple(DBFHandle psDBF, int hEntity );
-int SHPAPI_CALL
-      DBFWriteTuple(DBFHandle psDBF, int hEntity, void * pRawTuple );
+DBFReadTuple(DBFHandle psDBF, int hEntity );
+int SHPAPI_CALL DBFWriteTuple(DBFHandle psDBF, int hEntity, void * pRawTuple );
 
-DBFHandle SHPAPI_CALL
-      DBFCloneEmpty(DBFHandle psDBF, const char * pszFilename );
+DBFHandle SHPAPI_CALL DBFCloneEmpty(DBFHandle psDBF, const char * pszFilename );
 
-void        SHPAPI_CALL
-      DBFClose( DBFHandle hDBF );
-char    SHPAPI_CALL
-      DBFGetNativeFieldType( DBFHandle hDBF, int iField );
+void        SHPAPI_CALL DBFClose( DBFHandle hDBF );
+
+char    SHPAPI_CALL DBFGetNativeFieldType( DBFHandle hDBF, int iField );
 
 #ifdef __cplusplus
 }

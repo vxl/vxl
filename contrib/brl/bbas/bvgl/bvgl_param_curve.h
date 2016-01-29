@@ -1,7 +1,7 @@
 // This is bbas/bvgl/bvgl_param_curve.h
 #ifndef bvgl_param_curve_h_
 #define bvgl_param_curve_h_
-//:
+// :
 // \file
 // \brief A parametric curve that can be sampled via a parametric equation.
 // \author Ozge Can Ozcanli (ozge@lems.brown.edu)
@@ -13,14 +13,13 @@
 //
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_typeinfo.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 
-
-//: A 2D parametric curve
+// : A 2D parametric curve
 //
 //  Parametric curves are required to represent continuous curves
 //  and they enable sampling and calculation of basic differential
@@ -52,72 +51,73 @@
 //
 class bvgl_param_curve
 {
- public:
+public:
 
   bvgl_param_curve() {}
 
-  //: copy constructor
-  //bvgl_param_curve(const bvgl_param_curve()& that )
+  // : copy constructor
+  // bvgl_param_curve(const bvgl_param_curve()& that )
   //  : vbl_ref_count()
-  //{    }   //suppress copying of reference count between objects
+  // {    }   //suppress copying of reference count between objects
 
   virtual ~bvgl_param_curve() {}
 
-  static const vcl_type_info& type_id()
+  static const vcl_type_info & type_id()
   { return typeid(bvgl_param_curve); }
 
   virtual bool is_type( const vcl_type_info& type ) const
-  { return (typeid(bvgl_param_curve) == type)!=0; }
+  { return (typeid(bvgl_param_curve) == type) != 0; }
 
-  //: comparison operator.
+  // : comparison operator.
   //  Comparison is on the curve, two parametric curves are identical if their
   //  equations are equivalent
   virtual
   bool operator==(bvgl_param_curve const& c) const {return this == &c; }
 
-  //: Write "<dbvgl_param_curve> to stream"
+  // : Write "<dbvgl_param_curve> to stream"
   // \relates dbvgl_param_curve
-  //virtual
-  //vcl_ostream&  operator<<(vcl_ostream& s);
+  // virtual
+  // vcl_ostream&  operator<<(vcl_ostream& s);
 
   // Elementary geometric functions ----------------------------------
 
-  //: length of parametric curve from start point to end point
+  // : length of parametric curve from start point to end point
   virtual double length() const = 0;
 
-  //: Get sample point at value s of a parameter along the curve, s within [0,1]
+  // : Get sample point at value s of a parameter along the curve, s within [0,1]
   virtual vgl_point_2d<double> point_at(double s) const = 0;
 
-  //: Get sample point at arclength s away from starting point
+  // : Get sample point at arclength s away from starting point
   virtual vgl_point_2d<double> point_at_length(double s) const = 0;
 
-  //: Get tangent of the point at parameter s within [0,1]
+  // : Get tangent of the point at parameter s within [0,1]
   virtual vgl_vector_2d<double> tangent_at(double s) const = 0;
 
-  //: Get tangent of the point at arclength s away from starting point
+  // : Get tangent of the point at arclength s away from starting point
   virtual vgl_vector_2d<double> tangent_at_length(double s) const = 0;
 
-  //: Gets tangent angle (in radian) in [0, 2PI) at parameter s within [0,1]
+  // : Gets tangent angle (in radian) in [0, 2PI) at parameter s within [0,1]
   virtual double tangent_angle_at(double s) const = 0;
 
-  //: Gets tangent angle (in radian) in [0, 2PI)  at arclength s away
+  // : Gets tangent angle (in radian) in [0, 2PI)  at arclength s away
   // from the starting point
   virtual double tangent_angle_at_length(double s) const = 0;
 
-  //: Get curvature of the point at s within [0,1]
+  // : Get curvature of the point at s within [0,1]
   virtual double curvature_at(double s) const = 0;
 
-  //: Get curvature of the point at s arclength away from starting point.
+  // : Get curvature of the point at s arclength away from starting point.
   virtual double curvature_at_length(double s) const = 0;
 
-  virtual bvgl_param_curve& operator=( bvgl_param_curve const& ) { return *this; }
+  virtual bvgl_param_curve & operator=( bvgl_param_curve const & ) { return *this; }
 
   // This will be an abstract function...
-  virtual bvgl_param_curve *clone() const = 0;// { return 0; }
+  virtual bvgl_param_curve * clone() const = 0;// { return 0; }
+
 };
 
-//: Read parameters from stream
+// : Read parameters from stream
 // \relates dbvgl_param_curve
-//vcl_istream&  operator>>(vcl_istream& s, bvgl_param_curve const& c) const = 0;
+// vcl_istream&  operator>>(vcl_istream& s, bvgl_param_curve const& c) const = 0;
 
 #endif // bvgl_param_curve_h_

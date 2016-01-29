@@ -2,16 +2,16 @@
 #ifndef vil1_scale_intensities_h_
 #define vil1_scale_intensities_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Templated functions to scale/shift image pixel values
 // \author    David Capel
 
 #include <vil1/vil1_image.h>
 
-//: Adaptor which returns a vil1_image with pixel components scaled/shifted
+// : Adaptor which returns a vil1_image with pixel components scaled/shifted
 // I.e. performs a contrast/brightness operation.
 //
 //  (I_new = scale * I_old  + shift)

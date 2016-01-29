@@ -1,6 +1,6 @@
-//This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_create_scene_process.cxx
+// This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_create_scene_process.cxx
 #include <boxm/boxm_scene_base.h>
-//:
+// :
 // \file
 // \brief A process loading xml parameters of a boxm_scene of types specific to bvpl_octree
 //
@@ -22,15 +22,15 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/boxm_scene_parser.h>
 #include <bvpl/bvpl_octree/sample/bvpl_octree_sample.h>
-//:global variables
+// :global variables
 namespace bvpl_create_scene_process_globals
 {
-  //this process takes no inputs
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+// this process takes no inputs
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 1;
 }
 
-//:sets input and output types
+// :sets input and output types
 bool bvpl_create_scene_process_cons(bprb_func_process& pro)
 {
   using namespace bvpl_create_scene_process_globals;
@@ -44,7 +44,7 @@ bool bvpl_create_scene_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//:creates a scene from parameters
+// :creates a scene from parameters
 bool bvpl_create_scene_process(bprb_func_process& pro)
 {
   using namespace bvpl_create_scene_process_globals;
@@ -52,32 +52,35 @@ bool bvpl_create_scene_process(bprb_func_process& pro)
 
   boxm_scene_parser parser;
 
-  boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
+  boxm_scene_base_sptr scene_ptr = new boxm_scene_base();
   scene_ptr->load_scene(fname, parser);
-  if (scene_ptr->appearence_model() == BVPL_SAMPLE_FLOAT) {
-    if (!scene_ptr->multi_bin())
+  if( scene_ptr->appearence_model() == BVPL_SAMPLE_FLOAT )
     {
-      typedef boct_tree<short,bvpl_octree_sample<float> > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, bvpl_octree_sample<float> > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
     }
-  }
-  else if (scene_ptr->appearence_model() == BVPL_SAMPLE_BSTA_GAUSS_F1) {
-    if (!scene_ptr->multi_bin())
+  else if( scene_ptr->appearence_model() == BVPL_SAMPLE_BSTA_GAUSS_F1 )
     {
-      typedef boct_tree<short,bvpl_octree_sample<bsta_num_obs<bsta_gauss_sf1> > > tree_type;
+    if( !scene_ptr->multi_bin() )
+      {
+      typedef boct_tree<short, bvpl_octree_sample<bsta_num_obs<bsta_gauss_sf1> > > tree_type;
       boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
+      }
     }
-  }
-  else {
+  else
+    {
     vcl_cerr << "bvpl_create_scene_process: undefined datatype\n";
     return false;
-  }
+    }
 
-  //store output
+  // store output
   pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
 
   return true;

@@ -3,5 +3,5 @@
 #include <boxm/boxm_block.txx>
 #include <boct/boct_tree.txx>
 
-typedef boct_tree<short, bool > tree_type;
-VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type>*);
+typedef boct_tree<short, bool> tree_type;
+VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type> *);

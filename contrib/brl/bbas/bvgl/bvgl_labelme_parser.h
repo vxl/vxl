@@ -1,4 +1,4 @@
-//This is brl/bbas/bvgl/bvgl_labelme_parser.h
+// This is brl/bbas/bvgl/bvgl_labelme_parser.h
 #ifndef bvgl_labelme_parser_h_
 #define bvgl_labelme_parser_h_
 
@@ -17,7 +17,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
 
-//tag macros
+// tag macros
 #define ANNOTATION "annotation"
 #define FILENAME_TAG "filename"
 #define FOLDER_TAG "folder"
@@ -45,115 +45,116 @@
 #define FRAME_TAG "frame"
 #define REFERENCE_TAG "reference"
 
-
 #if 0
-<annotation>
-filename>andy_eze.jpg</filename>
-<folder>test</folder>
-<source>
-<sourceImage>The MIT-CSAIL database of objects and scenes</sourceImage>
-<sourceAnnotation>LabelMe Webtool</sourceAnnotation>
-</source>
-<object>
-<name>mouth</name>
-<deleted>0</deleted>
-<verified>0</verified>
-<date>05-Mar-2012 22:14:49</date>
-<id>0</id>
-<polygon>
-<username>Andy</username>
-<pt>
-<x>335</x>
-<y>183</y>
-</pt>
-</polygon>
-</object>
+<annotation >
+ filename > andy_eze.jpg</ filename>
+ < folder > test</ folder>
+ < source >
+ < sourceImage > The MIT - CSAIL database of objects and scenes</ sourceImage>
+ < sourceAnnotation > LabelMe Webtool</ sourceAnnotation>
+ < / source >
+ < object >
+ < name > mouth</ name>
+ < deleted > 0 < / deleted >
+ < verified > 0 < / verified >
+ < date > 05 - Mar - 2012 22 : 14 : 49 < / date >
+ < id > 0 < / id >
+ < polygon >
+ < username > Andy</ username>
+ < pt >
+ < x > 335 < / x >
+ < y > 183 < / y >
+ < / pt >
+ < / polygon >
+ < / object >
 #endif
 
 class bvgl_labelme_parser : public expatpp
 {
- public:
+public:
   bvgl_labelme_parser() {}
   bvgl_labelme_parser(vcl_string& filename);
   ~bvgl_labelme_parser(void) {}
 
-  //image filename/path, category, and size
+  // image filename/path, category, and size
   vcl_string image_name() const { return image_name_; }
   vcl_string image_category() const { return image_category_; }
   vcl_string region() const { return region_tag_; }
   unsigned image_ni() const { return image_ni_; }
   unsigned image_nj() const { return image_nj_; }
-  //object names (in the same order as polygons)
-  vcl_vector<vcl_string>& obj_names()            { return obj_names_; }
-  vcl_vector<vcl_string>& obj_types()            { return obj_types_; }
-  vcl_vector<float>& obj_mindists()              { return obj_min_dists_; }
-  vcl_vector<float>& obj_maxdists()              { return obj_max_dists_; }
-  vcl_vector<int>& obj_depth_orders()            { return obj_depth_orders_; }
-  vcl_vector<int>& obj_heights()                 { return obj_heights_; }
-  vcl_vector<bool>& obj_references()             { return obj_references_; }
-  vcl_vector<vcl_string>& obj_orientations()     { return obj_orientations_; }
-  vcl_vector<unsigned>& obj_nlcd_ids()           { return obj_nlcd_ids_; }
-  vcl_vector<vcl_string>& obj_land_categories()  { return obj_land_categories_; }
-  vcl_vector<float>& obj_weights()               { return obj_weights_; }
-  vcl_vector<unsigned>& obj_frame_ids()          { return obj_frame_ids_; }
+  // object names (in the same order as polygons)
+  vcl_vector<vcl_string> & obj_names()            { return obj_names_; }
+  vcl_vector<vcl_string> & obj_types()            { return obj_types_; }
+  vcl_vector<float> & obj_mindists()              { return obj_min_dists_; }
+  vcl_vector<float> & obj_maxdists()              { return obj_max_dists_; }
+  vcl_vector<int> & obj_depth_orders()            { return obj_depth_orders_; }
+  vcl_vector<int> & obj_heights()                 { return obj_heights_; }
+  vcl_vector<bool> & obj_references()             { return obj_references_; }
+  vcl_vector<vcl_string> & obj_orientations()     { return obj_orientations_; }
+  vcl_vector<unsigned> & obj_nlcd_ids()           { return obj_nlcd_ids_; }
+  vcl_vector<vcl_string> & obj_land_categories()  { return obj_land_categories_; }
+  vcl_vector<float> & obj_weights()               { return obj_weights_; }
+  vcl_vector<unsigned> & obj_frame_ids()          { return obj_frame_ids_; }
 
   // ACCESSORS for parser info
-  vcl_vector<vgl_polygon<double> >& polygons() { return polygons_; }
-  vcl_vector<vgl_point_2d<double> >& points()  { return pts_; }
-  vcl_vector<vgl_point_2d<double> >& pixels()  { return pixels_; }
+  vcl_vector<vgl_polygon<double> > & polygons() { return polygons_; }
+  vcl_vector<vgl_point_2d<double> > & points()  { return pts_; }
+  vcl_vector<vgl_point_2d<double> > & pixels()  { return pixels_; }
   void trim_string(vcl_string& s);
 
- private:
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
+private:
+  virtual void startElement(const XML_Char* name, const XML_Char* * atts);
+
   virtual void endElement(const XML_Char* name);
+
   virtual void charData(const XML_Char* s, int len);
 
-  //lvcs temp values
-  vcl_vector<vgl_polygon<double> > polygons_;
+  // lvcs temp values
+  vcl_vector<vgl_polygon<double> >  polygons_;
   vcl_vector<vgl_point_2d<double> > pts_;
   vcl_vector<vgl_point_2d<double> > pixels_;
-  double x_, y_;
+  double                            x_, y_;
 
-  vcl_vector<vcl_string>         obj_names_;
-  vcl_vector<vcl_string>         obj_types_;
-  vcl_vector<float>          obj_min_dists_;
-  vcl_vector<float>          obj_max_dists_;
-  vcl_vector<int>         obj_depth_orders_;
-  vcl_vector<unsigned>        obj_nlcd_ids_;
-  vcl_vector<vcl_string>  obj_orientations_;
-  vcl_vector<vcl_string>  obj_land_categories_;
-  vcl_vector<int>         obj_heights_;
-  vcl_vector<bool>        obj_references_;
-  vcl_vector<float>       obj_weights_;
-  vcl_vector<unsigned>    obj_frame_ids_;
+  vcl_vector<vcl_string> obj_names_;
+  vcl_vector<vcl_string> obj_types_;
+  vcl_vector<float>      obj_min_dists_;
+  vcl_vector<float>      obj_max_dists_;
+  vcl_vector<int>        obj_depth_orders_;
+  vcl_vector<unsigned>   obj_nlcd_ids_;
+  vcl_vector<vcl_string> obj_orientations_;
+  vcl_vector<vcl_string> obj_land_categories_;
+  vcl_vector<int>        obj_heights_;
+  vcl_vector<bool>       obj_references_;
+  vcl_vector<float>      obj_weights_;
+  vcl_vector<unsigned>   obj_frame_ids_;
 
-  float min_dist_;
-  float max_dist_;
-  float weight_;
-  int order_;
-  int height_;
-  int reference_;
+  float      min_dist_;
+  float      max_dist_;
+  float      weight_;
+  int        order_;
+  int        height_;
+  int        reference_;
   vcl_string image_category_;
   vcl_string image_name_;
   vcl_string obj_orient_;
   vcl_string region_tag_;
   vcl_string temp_str_;
-  unsigned frame_id_;
-  unsigned nlcd_id_;
-  unsigned image_ni_;
-  unsigned image_nj_;
+  unsigned   frame_id_;
+  unsigned   nlcd_id_;
+  unsigned   image_ni_;
+  unsigned   image_nj_;
 
-
-  //set active tag for parsing char data from different tags
+  // set active tag for parsing char data from different tags
   vcl_string active_tag_;
 };
 
-//string converter
+// string converter
 template <typename T>
 void convert(const char* t, T& d)
 {
-  vcl_string s = t;
+  vcl_string       s = t;
   vcl_stringstream strm(s);
+
   strm >> d;
 }
 

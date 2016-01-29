@@ -12,53 +12,52 @@
 
 class image_point_match
 {
- public:
-  vnl_vector_fixed<double,2> from_loc_;
-  vnl_vector_fixed<double,2> to_loc_;
-  int point_id_;   // competing matches share the same point_id
- public:
+public:
+  vnl_vector_fixed<double, 2> from_loc_;
+  vnl_vector_fixed<double, 2> to_loc_;
+  int                         point_id_; // competing matches share the same point_id
+public:
   image_point_match() {}
-  image_point_match( const vnl_vector_fixed<double,2>& from,
-                     const vnl_vector_fixed<double,2>& to,
+  image_point_match( const vnl_vector_fixed<double, 2>& from,
+                     const vnl_vector_fixed<double, 2>& to,
                      int id )
     : from_loc_(from), to_loc_(to), point_id_(id) {}
   image_point_match( const image_point_match& old ) { *this = old; }
 
-  const image_point_match& operator= ( const image_point_match& old )
+  const image_point_match & operator=( const image_point_match& old )
   {
     from_loc_ = old.from_loc_;
     to_loc_ = old.to_loc_;
     point_id_ = old.point_id_;
     return *this;
   }
+
 };
 
 class similarity_from_matches : public rrel_estimation_problem
 {
   vcl_vector<image_point_match> matches_;
-  int num_points_to_match_;
- public:
-  similarity_from_matches() : rrel_estimation_problem(2,2) {}
+  int                           num_points_to_match_;
+public:
+  similarity_from_matches() : rrel_estimation_problem(2, 2) {}
   similarity_from_matches( const vcl_vector<image_point_match>& matches );
   ~similarity_from_matches() {}
-  virtual unsigned int num_unique_samples( ) const{ return num_points_to_match_; }
-  virtual unsigned int num_samples( ) const;
-  virtual bool fit_from_minimal_set( const vcl_vector<int>& match_indices,
-                                     vnl_vector<double>& params ) const;
-  virtual void compute_residuals( const vnl_vector<double>& params,
-                                  vcl_vector<double>& residuals ) const;
-  virtual void compute_weights( const vcl_vector<double>& residuals,
-                                const rrel_wls_obj* obj,
-                                double scale,
+  virtual unsigned int num_unique_samples() const { return num_points_to_match_; }
+  virtual unsigned int num_samples() const;
+
+  virtual bool fit_from_minimal_set( const vcl_vector<int>& match_indices, vnl_vector<double>& params ) const;
+
+  virtual void compute_residuals( const vnl_vector<double>& params, vcl_vector<double>& residuals ) const;
+
+  virtual void compute_weights( const vcl_vector<double>& residuals, const rrel_wls_obj* obj, double scale,
                                 vcl_vector<double>& weights ) const;
-  virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
-                                           vnl_matrix<double>& cofact,
-                                           const vcl_vector<double>* weights=0 ) const;
+
+  virtual bool weighted_least_squares_fit( vnl_vector<double>& params, vnl_matrix<double>& cofact,
+                                           const vcl_vector<double>* weights = 0 ) const;
+
 };
 
-void
-generate_similarity_matches( const vnl_vector<double>& params,
-                             double sigma,
-                             vcl_vector<image_point_match>& matches );
+void generate_similarity_matches( const vnl_vector<double>& params, double sigma,
+                                  vcl_vector<image_point_match>& matches );
 
 #endif // similarity_from_matches_h_

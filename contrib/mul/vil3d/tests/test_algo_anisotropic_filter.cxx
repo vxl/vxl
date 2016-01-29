@@ -7,7 +7,6 @@
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_math.h>
 
-
 // Test the anisotropic_gaussian_filter
 static void test_anisotropic_gaussian_filter()
 {
@@ -16,7 +15,7 @@ static void test_anisotropic_gaussian_filter()
            << "************************************************\n";
 
   // Image dimensions
-  const unsigned ni=9, nj=9, nk=9;
+  const unsigned ni = 9, nj = 9, nk = 9;
 
   // Create the source image
   vil3d_image_view<int> src_im(ni, nj, nk, 1);
@@ -55,13 +54,11 @@ static void test_anisotropic_gaussian_filter()
   TEST_NEAR("Sum of destination image", dst_sum, 1002, 1e-9);
 }
 
-
 // Test all anisotropic filters
 static void test_algo_anisotropic_filter()
 {
   test_anisotropic_gaussian_filter();
 }
-
 
 // Main testing function
 TESTMAIN(test_algo_anisotropic_filter);

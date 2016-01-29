@@ -1,6 +1,6 @@
 #ifndef rgrl_weighter_m_est_h_
 #define rgrl_weighter_m_est_h_
-//:
+// :
 // \file
 // \brief  Compute weights in the manner described in the IMCF algorithm
 // \author Chuck Stewart
@@ -29,56 +29,44 @@ class rgrl_transformation;
 class rgrl_weighter_m_est
   : public rgrl_weighter
 {
- public:
-  //:  constructor takes a pointer to M estimator objective function
-  rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est,
-                       bool                          use_signature_error,
+public:
+  // :  constructor takes a pointer to M estimator objective function
+  rgrl_weighter_m_est( vcl_auto_ptr<rrel_m_est_obj>  m_est, bool                          use_signature_error,
                        bool                          use_precomputed_signature_wgt = false );
 
   ~rgrl_weighter_m_est();
 
-  //: set true if desires to weight more on distinct match
+  // : set true if desires to weight more on distinct match
   void set_weight_more_on_distinct_match( bool flag )
   {    weight_more_on_distinct_match_ = flag; }
 
   virtual
-  void
-  compute_weights( rgrl_scale const&  scale,
-                   rgrl_match_set&    match_set ) const;
+  void compute_weights( rgrl_scale const&  scale, rgrl_match_set&    match_set ) const;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_weighter_m_est, rgrl_weighter );
 
   // Auxiliary functions related to the m_est
   virtual
-  double
-  aux_sum_weighted_residuals( rgrl_scale const&  scale,
-                              rgrl_match_set&    match_set,
-                              rgrl_transformation const&  xform );
-  virtual
-  double
-  aux_sum_rho_values( rgrl_scale const&  scale,
-                      rgrl_match_set&    match_set,
-                      rgrl_transformation const&  xform);
-  virtual
-  double
-  aux_neg_log_likelihood( rgrl_scale const&  scale,
-                          rgrl_match_set&    match_set,
-                          rgrl_transformation const&  xform );
+  double aux_sum_weighted_residuals( rgrl_scale const&  scale, rgrl_match_set&    match_set,
+                                     rgrl_transformation const&  xform );
 
   virtual
-  double
-  aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
-                              rgrl_match_set&    match_set,
-                              rgrl_transformation const&  xform );
+  double aux_sum_rho_values( rgrl_scale const&  scale, rgrl_match_set&    match_set, rgrl_transformation const&  xform);
 
- protected:
+  virtual
+  double aux_neg_log_likelihood( rgrl_scale const&  scale, rgrl_match_set&    match_set,
+                                 rgrl_transformation const&  xform );
+
+  virtual
+  double aux_avg_neg_log_likelihood( rgrl_scale const&  scale, rgrl_match_set&    match_set,
+                                     rgrl_transformation const&  xform );
+
+protected:
   vcl_auto_ptr<rrel_m_est_obj> m_est_;
-  bool use_signature_error_;
-  bool signature_precomputed_;
-  bool weight_more_on_distinct_match_;
+  bool                         use_signature_error_;
+  bool                         signature_precomputed_;
+  bool                         weight_more_on_distinct_match_;
 };
 
 #endif
-
-

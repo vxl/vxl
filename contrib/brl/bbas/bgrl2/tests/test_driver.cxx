@@ -5,7 +5,7 @@ DECLARE( graph_test );
 void
 register_tests()
 {
-  REGISTER ( graph_test );
+  REGISTER( graph_test );
 }
 
 DEFINE_MAIN;

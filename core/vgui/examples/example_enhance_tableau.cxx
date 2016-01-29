@@ -13,26 +13,26 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_enhance_tableau.h>
 
-int main(int argc, char ** argv)
+int main(int argc, char * * argv)
 {
-  if (argc < 2) return 1;
+  if( argc < 2 ) {return 1; }
 
   vgui::init(argc, argv);
 
-  vgui_image_tableau_new image1(argv[1]);
+  vgui_image_tableau_new    image1(argv[1]);
   vgui_enhance_tableau_sptr enhance;
 
-  if (argc == 2)
-  {
+  if( argc == 2 )
+    {
     enhance = vgui_enhance_tableau_new(image1);
-  }
+    }
   else
-  {
+    {
     vgui_image_tableau_new image2(argv[2]);
     enhance = vgui_enhance_tableau_new(image1, image2);
-  }
+    }
 
   vgui_viewer2D_tableau_new viewer(enhance);
 
-  return vgui::run(viewer, image1->width(), image1->height() , "test_enhance");
+  return vgui::run(viewer, image1->width(), image1->height(), "test_enhance");
 }

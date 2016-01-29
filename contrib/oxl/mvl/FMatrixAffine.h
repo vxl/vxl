@@ -2,11 +2,11 @@
 #ifndef FMatrixAffine_h_
 #define FMatrixAffine_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
 
-//--------------------------------------------------------------
-//:
+// --------------------------------------------------------------
+// :
 // \file
 // \brief Affine fundamental matrix
 //
@@ -19,13 +19,15 @@
 
 class FMatrixAffine : public FMatrix
 {
- public:
+public:
 
   FMatrixAffine();
   ~FMatrixAffine();
 
-  bool set (const double *f_matrix);
-  bool set (vnl_matrix<double> const& f_matrix);
+  bool set(const double * f_matrix);
+
+  bool set(vnl_matrix<double> const& f_matrix);
+
 };
 
 #endif // FMatrixAffine_h_

@@ -1,6 +1,6 @@
 #ifndef FMatrixComputeMLESAC_h_
 #define FMatrixComputeMLESAC_h_
-//:
+// :
 // \file
 // \brief Robust FMatrix computation
 //
@@ -20,7 +20,7 @@
 //   22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixComputeRobust.h>
@@ -29,18 +29,19 @@
 
 class FMatrixComputeMLESAC : public FMatrixComputeRobust
 {
- public:
-  //: Initialize FMatrixComputeRobust object.
+public:
+  // : Initialize FMatrixComputeRobust object.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
   FMatrixComputeMLESAC(bool rank2_truncate, double std);
   virtual ~FMatrixComputeMLESAC();
 
   virtual double calculate_term(vcl_vector<double>& residuals, vcl_vector<bool>& inlier_list, int& count);
+
   virtual double calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F);
-  virtual double calculate_residual(vgl_homg_point_2d<double>& one,
-                                    vgl_homg_point_2d<double>& two,
-                                    FMatrix* F);
+
+  virtual double calculate_residual(vgl_homg_point_2d<double>& one, vgl_homg_point_2d<double>& two, FMatrix* F);
+
 };
 
 #endif // FMatrixComputeMLESAC_h_

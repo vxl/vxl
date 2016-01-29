@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_detect_changes_process.h
 #ifndef bvxm_detect_changes_process_h_
 #define bvxm_detect_changes_process_h_
-//:
+// :
 // \file
 // \brief A class for detecting changes using a voxel world .
 //
@@ -15,17 +15,17 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_detect_changes_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 3;
+const unsigned n_inputs_ = 6;
+const unsigned n_outputs_ = 3;
 }
 
-//: initialize input and output types
+// : initialize input and output types
 bool bvxm_detect_changes_process_cons(bprb_func_process& pro);
 
-//: detec changes
+// : detec changes
 bool bvxm_detect_changes_process(bprb_func_process& pro);
 
 #endif // bvxm_detect_changes_process_h_

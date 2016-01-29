@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_scene_lvcs_process.cxx
-//:
+// :
 // \file
 // \brief  A process for accessing scene LVCS
 //
@@ -13,18 +13,18 @@
 
 namespace boxm2_scene_lvcs_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 1;
 }
 bool boxm2_scene_lvcs_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_scene_lvcs_process_globals;
-  //process takes 1 input, the scene
+  // process takes 1 input, the scene
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
 
   // process has 3 outputs:
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vpgl_lvcs_sptr";
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
@@ -33,17 +33,18 @@ bool boxm2_scene_lvcs_process(bprb_func_process& pro)
 {
   using namespace boxm2_scene_lvcs_process_globals;
 
-  if ( pro.n_inputs() < n_inputs_ ){
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << ": The input number should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
-  boxm2_scene_sptr   scene = pro.get_input<boxm2_scene_sptr>(0);
-  vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
+  // get the inputs
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
+  vpgl_lvcs_sptr   lvcs = new vpgl_lvcs(scene->lvcs() );
 
   // store outputs
-  int i=0;
+  int i = 0;
   pro.set_output_val<vpgl_lvcs_sptr>(i++, lvcs);
   return true;
 }

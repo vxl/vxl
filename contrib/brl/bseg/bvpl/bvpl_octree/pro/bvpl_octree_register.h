@@ -3,9 +3,11 @@
 
 class bvpl_octree_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // bvpl_octree_register_h_

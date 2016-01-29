@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_clear_tableau_sptr.h
 #ifndef vgui_clear_tableau_sptr_h_
 #define vgui_clear_tableau_sptr_h_
-//:
+// :
 // \file
 // \author fsm
 // \brief  Smart-pointer to a vgui_clear_tableau.

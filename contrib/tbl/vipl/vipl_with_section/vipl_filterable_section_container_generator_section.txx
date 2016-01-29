@@ -4,7 +4,7 @@
 #include <section/section.h>
 
 #undef FILTER_IMPTR_DEC_REFCOUNT
-#define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v)=0;}
+#define FILTER_IMPTR_DEC_REFCOUNT(v) {delete (v); (v) = 0; }
 #undef FILTER_IMPTR_INC_REFCOUNT
 #define FILTER_IMPTR_INC_REFCOUNT(v)
 #undef FILTER_KERNPTR_DEC_REFCOUNT
@@ -13,11 +13,12 @@
 #include <vipl/section/vipl_section_container.txx>
 #include <vipl/section/vipl_section_iterator.txx>
 template <class DataType>
-vipl_section_container<DataType>*
-vipl_filterable_section_container_generator(const section<DataType,2>& im, DataType*)
+vipl_section_container<DataType> *
+vipl_filterable_section_container_generator(const section<DataType, 2>& im, DataType *)
 {
-  vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)0);
-  rtn->put_imgptr((const void*) &im);
+  vipl_section_container<DataType> * rtn =
+    new vipl_section_container<DataType>( (vipl_section_container<DataType> *) 0);
+  rtn->put_imgptr( (const void *) &im);
   rtn->ref_imgsz()[0] = im.Size(0);
   rtn->ref_imgsz()[1] = im.Size(1);
 

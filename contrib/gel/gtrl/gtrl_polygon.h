@@ -2,9 +2,9 @@
 #ifndef gtrl_polygon_h_
 #define gtrl_polygon_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 
@@ -13,7 +13,7 @@
 
 class gtrl_polygon
 {
- public:
+public:
   gtrl_polygon( const vcl_vector<gtrl_vertex_sptr> ps);
 
   int size() const { return ps_.size(); }
@@ -22,7 +22,7 @@ class gtrl_polygon
   // computations
   bool inside( const gtrl_vertex_sptr point) const;
 
- protected:
+protected:
   vcl_vector<gtrl_vertex_sptr> ps_;
 };
 

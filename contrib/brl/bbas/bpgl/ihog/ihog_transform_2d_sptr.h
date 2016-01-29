@@ -1,7 +1,7 @@
 // This is bbas/bpgl/ihog/ihog_transform_2d_sptr.h
 #ifndef ihog_transform_2d_sptr_h_
 #define ihog_transform_2d_sptr_h_
-//:
+// :
 // \file
 // \brief Smart pointer to a ihog_transform_2d
 // \author Matthew Leotta, (mleotta@lems.brown.edu)

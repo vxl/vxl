@@ -2,9 +2,9 @@
 #ifndef vgui_dialog_extensions_h_
 #define vgui_dialog_extensions_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Gamze Tunali, LEMS, Brown University
 // \date   16 Nov 2007
@@ -21,7 +21,7 @@
 
 class vgui_dialog_extensions_impl;
 
-//: Abstract dialog class
+// : Abstract dialog class
 //
 // vgui_dialog_extension allows the user to build a dialog from a collection
 // of fields. It differs from vgui_dialog by two elements, directory browser
@@ -51,24 +51,24 @@ class vgui_dialog_extensions_impl;
 //   send_order(the_table, the_dressing, has_mayo);
 // \endcode
 
-class vgui_dialog_extensions: public vgui_dialog
+class vgui_dialog_extensions : public vgui_dialog
 {
- public:
+public:
 
-  //: Constructor - takes the title of the dialog box.
+  // : Constructor - takes the title of the dialog box.
   vgui_dialog_extensions(const char* name);
- virtual ~vgui_dialog_extensions();
+  virtual ~vgui_dialog_extensions();
 
-  //: directory browsers
-  void dir (const char* label, vcl_string& regexp, vcl_string& dirpath);
+  // : directory browsers
+  void dir(const char* label, vcl_string& regexp, vcl_string& dirpath);
 
   bool ask();
 
   void line_break();
 
- protected:
+protected:
 
-  //vgui_dialog_extensions_impl* impl;
+  // vgui_dialog_extensions_impl* impl;
 };
 
 #endif // vgui_dialog_extensions_h_

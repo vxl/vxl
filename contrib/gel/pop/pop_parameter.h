@@ -2,9 +2,9 @@
 #ifndef pop_parameter_h_
 #define pop_parameter_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief a parameter that can be optimized
 //
@@ -12,25 +12,25 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-//-------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
-//: A parameter that can be optimized
+// : A parameter that can be optimized
 class pop_parameter
 {
- public:
-  //: constructor
+public:
+  // : constructor
   pop_parameter();
 
-  //: destructor
+  // : destructor
   ~pop_parameter();
 
-  //: the value of the parameter - made public for ease of access
+  // : the value of the parameter - made public for ease of access
   double value_;
 
-  //: the expected confidence of the value
+  // : the expected confidence of the value
   double std_;
 
-  //: whether or not the value is fixed or changeable
+  // : whether or not the value is fixed or changeable
   bool is_changeable_;
 };
 

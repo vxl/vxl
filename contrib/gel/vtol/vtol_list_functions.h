@@ -1,6 +1,6 @@
 #ifndef vtol_list_functions_h_
 #define vtol_list_functions_h_
-//:
+// :
 //  \file
 // \brief Base class of vtol_topology_object (inferior/superior mechanics)
 //
@@ -18,12 +18,12 @@
 #include <vcl_list.h>
 #include <vcl_vector.h>
 
-//: \brief function used to get rid of duplicate entries
+// : \brief function used to get rid of duplicate entries
 template <class T>
-vcl_vector<T>* tagged_union(vcl_vector<T>*);
+vcl_vector<T> * tagged_union(vcl_vector<T> *);
 
-//: \brief function used to get rid of duplicate entries
+// : \brief function used to get rid of duplicate entries
 template <class T>
-vcl_list<T>* tagged_union(vcl_list<T>*);
+vcl_list<T> * tagged_union(vcl_list<T> *);
 
 #endif // vtol_list_functions_h_

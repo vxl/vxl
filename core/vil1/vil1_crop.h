@@ -2,16 +2,16 @@
 #ifndef vil1_crop_h_
 #define vil1_crop_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author awf@robots.ox.ac.uk
 // \date 16 Feb 00
 
 #include <vil1/vil1_fwd.h>
 
-//: Crop to a region of SRC.
+// : Crop to a region of SRC.
 vil1_image vil1_crop(vil1_image SRC, int x0, int y0, int w, int h);
 
 #endif // vil1_crop_h_

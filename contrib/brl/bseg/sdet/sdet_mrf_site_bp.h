@@ -1,6 +1,6 @@
 #ifndef sdet_mrf_site_bp_h_
 #define sdet_mrf_site_bp_h_
-//:
+// :
 // \file
 // \brief  A class for representing a site node in an MRF
 // \author J.L. Mundy
@@ -33,67 +33,69 @@
 #include <vcl_vector.h>
 class sdet_mrf_site_bp : public vbl_ref_count
 {
- public:
+public:
 
   sdet_mrf_site_bp(unsigned n_labels, float lambda, float truncation_cost);
-  void switch_buffers() { prior_ = 1-prior_; }
+  void switch_buffers() { prior_ = 1 - prior_; }
   int prior() const { return prior_; }
-  int current() const { return 1-prior_; }
-  //: set the observed label
+  int current() const { return 1 - prior_; }
+  // : set the observed label
   void set_label(float obs_label) { obs_label_ = obs_label; }
 
   // === cost functions ===
 
-  //:data cost due to observed continuous label value
+  // :data cost due to observed continuous label value
   float D(unsigned fp);
 
-  //:sum over stored prior messages, except the message from neighbor nq
+  // :sum over stored prior messages, except the message from neighbor nq
   float M(unsigned nq, unsigned fp);
 
-  //:total of D and M
+  // :total of D and M
   float h(unsigned nq, unsigned fp) { return D(fp) + M(nq, fp); }
 
-  //:belief, sum of data cost and sum of all four prior messages
+  // :belief, sum of data cost and sum of all four prior messages
   float b(unsigned fp);
 
-  //:the most probable label, label with minimum belief
+  // :the most probable label, label with minimum belief
   unsigned believed_label();
 
-  //set the current message from neighbor nq
+  // set the current message from neighbor nq
   void set_cur_message(unsigned nq, unsigned fp, float msg);
 
-  //:the current message value
-  float cur_message(unsigned nq, unsigned fp) const { return msg_[1-prior_][nq][fp]; }
+  // :the current message value
+  float cur_message(unsigned nq, unsigned fp) const { return msg_[1 - prior_][nq][fp]; }
 
-  //:the prior message value
+  // :the prior message value
   float prior_message(unsigned nq, unsigned fp) const { return msg_[prior_][nq][fp]; }
 
-  //:entire prior message
+  // :entire prior message
   vcl_vector<float> prior_message(unsigned nq);
 
-  //:set prior message
-  void set_prior_message(unsigned nq, vcl_vector<float>const& msg);
+  // :set prior message
+  void set_prior_message(unsigned nq, vcl_vector<float> const& msg);
 
-  //:clear messages
+  // :clear messages
   void clear();
 
-  //: print the value of the messages held in the prior queue.
+  // : print the value of the messages held in the prior queue.
   void print_prior_messages();
+
   void print_current_messages();
+
   void print_belief_vector();
 
- protected:
+protected:
   // parameters for computing message values
   float lambda_;
   float truncation_cost_;
 
-  //: this index is toggled to swap the buffers
+  // : this index is toggled to swap the buffers
   int prior_;
 
-  //: typically 256
+  // : typically 256
   unsigned n_labels_;
 
-  //: currently 4, but might change in the future
+  // : currently 4, but might change in the future
   unsigned n_ngbh_;
 
   // define the neighbor index
@@ -101,12 +103,12 @@ class sdet_mrf_site_bp : public vbl_ref_count
   //   1 x 2
   //     3
 
-  //: a set of 2 message buffers, prior and current, one for each neighbor
+  // : a set of 2 message buffers, prior and current, one for each neighbor
   // (p, c)     n_ngbh_    n_labels_
-  vcl_vector< vcl_vector<vcl_vector<short> > > msg_;
+  vcl_vector<vcl_vector<vcl_vector<short> > > msg_;
   // cut down storage using short (for byte images should be adequate)
 
-  //: the label represented by the data
+  // : the label represented by the data
   float obs_label_;
 };
 

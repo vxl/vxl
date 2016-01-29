@@ -11,45 +11,44 @@
 #include <vidl/vidl_ffmpeg_istream.h>
 #include <vidl/vidl_ffmpeg_ostream.h>
 
-int main( int argc, char** argv )
+int main( int argc, char* * argv )
 {
   vul_arg<vcl_string> input_filename( "-i", "Input filename" );
   vul_arg<vcl_string> output_filename( "-o", "Output filename" );
   vul_arg_parse( argc, argv );
 
   vidl_ffmpeg_istream istr;
-  if ( ! istr.open( input_filename() ) )
-  {
+  if( !istr.open( input_filename() ) )
+    {
     vcl_cerr << "Couldn't open " << input_filename() << vcl_endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   vidl_ffmpeg_ostream_params params;
-  params.ni_=istr.width();
-  params.nj_=istr.height();
+  params.ni_ = istr.width();
+  params.nj_ = istr.height();
 
   vidl_ffmpeg_ostream ostr;
   ostr.set_params( params );
   ostr.set_filename( output_filename() );
-  if ( ! ostr.open() )
-  {
+  if( !ostr.open() )
+    {
     vcl_cerr << "Couldn't open " << output_filename() << " for writing" << vcl_endl;
     return EXIT_FAILURE;
-  }
+    }
 
   unsigned count = 0;
-  while ( istr.advance() )
-  {
-    if ( ! ostr.write_frame( istr.current_frame() ) )
+  while( istr.advance() )
     {
+    if( !ostr.write_frame( istr.current_frame() ) )
+      {
       vcl_cerr << "failed to write frame" << vcl_endl;
       break;
-    }
+      }
     ++count;
     vcl_cout << "Processed frame " << istr.frame_number()
              << " (count=" << count << ")" << vcl_endl;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

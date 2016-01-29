@@ -1,4 +1,4 @@
-//if this file compiles, then the test passes
+// if this file compiles, then the test passes
 #include <bgrl2/bgrl2_hg_edge.h>
 #include <bgrl2/bgrl2_hg_graph.h>
 #include <bgrl2/bgrl2_hg_hyperedge.h>

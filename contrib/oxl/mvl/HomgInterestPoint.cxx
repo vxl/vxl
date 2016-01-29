@@ -1,8 +1,8 @@
 // This is oxl/mvl/HomgInterestPoint.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 //  \file
 
 #include "HomgInterestPoint.h"
@@ -15,55 +15,58 @@ HomgInterestPoint::HomgInterestPoint()
 {
 }
 
-//: Create from vgl_homg_point_2d<double> in conditioned coordinates.
+// : Create from vgl_homg_point_2d<double> in conditioned coordinates.
 // Using the given metric to convert back to image coordinates.
-HomgInterestPoint::HomgInterestPoint(const vgl_homg_point_2d<double>& h, const HomgMetric& metric, float mean_intensity):
-  homg_(h.x(),h.y(),h.w()),
+HomgInterestPoint::HomgInterestPoint(const vgl_homg_point_2d<double>& h, const HomgMetric& metric,
+                                     float mean_intensity) :
+  homg_(h.x(), h.y(), h.w() ),
   double2_(0, 0),
   int2_(0, 0), // will be set below
   mean_intensity_(mean_intensity)
 {
   double x, y;
+
   metric.homg_to_image(homg_, &x, &y);
   double2_[0] = x;
   double2_[1] = y;
-  int2_[0]= vnl_math::rnd(x);
-  int2_[1]= vnl_math::rnd(y);
+  int2_[0] = vnl_math::rnd(x);
+  int2_[1] = vnl_math::rnd(y);
 }
 
-//: Create from HomgPoint2D in conditioned coordinates.
+// : Create from HomgPoint2D in conditioned coordinates.
 // Using the given metric to convert back to image coordinates.
-HomgInterestPoint::HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& metric, float mean_intensity):
+HomgInterestPoint::HomgInterestPoint(const HomgPoint2D& h, const HomgMetric& metric, float mean_intensity) :
   homg_(h),
   double2_(0, 0),
   int2_(0, 0), // will be set below
   mean_intensity_(mean_intensity)
 {
   double x, y;
+
   metric.homg_to_image(h, &x, &y);
   double2_[0] = x;
   double2_[1] = y;
-  int2_[0]= vnl_math::rnd(x);
-  int2_[1]= vnl_math::rnd(y);
+  int2_[0] = vnl_math::rnd(x);
+  int2_[1] = vnl_math::rnd(y);
 }
 
-HomgInterestPoint::HomgInterestPoint(double x, double y, float mean_intensity):
+HomgInterestPoint::HomgInterestPoint(double x, double y, float mean_intensity) :
   homg_(x, y, 1.0),
   double2_(x, y),
-  int2_(vnl_math::rnd(x), vnl_math::rnd(y)),
+  int2_(vnl_math::rnd(x), vnl_math::rnd(y) ),
   mean_intensity_(mean_intensity)
 {
 }
 
-HomgInterestPoint::HomgInterestPoint(double x, double y, const HomgMetric& c, float mean_intensity):
-  homg_(c.image_to_homg(x, y)),
+HomgInterestPoint::HomgInterestPoint(double x, double y, const HomgMetric& c, float mean_intensity) :
+  homg_(c.image_to_homg(x, y) ),
   double2_(x, y),
-  int2_(vnl_math::rnd(x), vnl_math::rnd(y)),
+  int2_(vnl_math::rnd(x), vnl_math::rnd(y) ),
   mean_intensity_(mean_intensity)
 {
 }
 
-HomgInterestPoint::HomgInterestPoint(const HomgInterestPoint& that):
+HomgInterestPoint::HomgInterestPoint(const HomgInterestPoint& that) :
   homg_(that.homg_),
   double2_(that.double2_),
   int2_(that.int2_),
@@ -71,7 +74,7 @@ HomgInterestPoint::HomgInterestPoint(const HomgInterestPoint& that):
 {
 }
 
-HomgInterestPoint& HomgInterestPoint::operator=(const HomgInterestPoint& that)
+HomgInterestPoint & HomgInterestPoint::operator=(const HomgInterestPoint& that)
 {
   homg_ = that.homg_;
   double2_ = that.double2_;
@@ -84,7 +87,7 @@ HomgInterestPoint::~HomgInterestPoint()
 {
 }
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgInterestPoint&)
+vcl_ostream & operator<<(vcl_ostream& s, const HomgInterestPoint &)
 {
   return s;
 }

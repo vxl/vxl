@@ -1,7 +1,7 @@
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \brief A class for writing videos
 // \author Franck Bettinger
@@ -54,7 +54,7 @@ void mvl2_video_to_avi::set_frame_rate(double /*frame_rate*/)
   vcl_cerr << "mvl2_video_to_avi::set_frame_rate() NYI\n";
 }
 
-void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte>& /*image*/)
+void mvl2_video_to_avi::write_frame(vil_image_view<vxl_byte> & /*image*/)
 {
   vcl_cerr << "mvl2_video_to_avi::write_frame() NYI\n";
 }
@@ -64,7 +64,7 @@ vcl_string mvl2_video_to_avi::is_a() const
   return vcl_string("mvl2_video_to_avi");
 }
 
-mvl2_video_writer* mvl2_video_to_avi::clone() const
+mvl2_video_writer * mvl2_video_to_avi::clone() const
 {
   return new mvl2_video_to_avi(*this);
 }

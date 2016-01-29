@@ -16,37 +16,41 @@
 #include <ihog/ihog_transform_2d_sptr.h>
 #include <vcl_cassert.h>
 
-
 static void filenames_from_directory(vcl_string const& dirname,
                                      vcl_vector<vcl_string>& filenames)
 {
   vcl_string s(dirname);
+
   s += "/*.*";
-  for (vul_file_iterator fit = s;fit; ++fit) {
+  for( vul_file_iterator fit = s; fit; ++fit )
+    {
     // check to see if file is a directory.
-    if (vul_file::is_directory(fit()))
+    if( vul_file::is_directory(fit() ) )
+      {
       continue;
-    filenames.push_back(fit());
-  }
+      }
+    filenames.push_back(fit() );
+    }
 }
 
 static bool write_homographies(vcl_string const& filename,
-                               vcl_vector<vnl_double_3x3 > const& homographies)
+                               vcl_vector<vnl_double_3x3> const& homographies)
 {
-  vcl_ofstream ofile(filename.c_str(),vcl_ios::out);
-  vcl_cout<<"\n Writing Homographies "<<filename;
+  vcl_ofstream ofile(filename.c_str(), vcl_ios::out);
 
-  if (!ofile)
-  {
-    vcl_cerr<<"\n error opening output file\n";
+  vcl_cout << "\n Writing Homographies " << filename;
+
+  if( !ofile )
+    {
+    vcl_cerr << "\n error opening output file\n";
     return false;
-  }
+    }
   unsigned frame = 0;
-  for (vcl_vector<vnl_double_3x3 >::const_iterator hit = homographies.begin();
-       hit != homographies.end(); ++hit, ++frame)
-  {
-    ofile <<"Frame No " << frame << '\n' << *hit;
-  }
+  for( vcl_vector<vnl_double_3x3>::const_iterator hit = homographies.begin();
+       hit != homographies.end(); ++hit, ++frame )
+    {
+    ofile << "Frame No " << frame << '\n' << *hit;
+    }
   ofile.close();
   return true;
 }
@@ -54,73 +58,75 @@ static bool write_homographies(vcl_string const& filename,
 static ihog_transform_2d
 register_image(vil_image_view<float> & curr_view,
                vil_image_view<float> & last_view,
-               vcl_string transform_type ="Affine")
+               vcl_string transform_type = "Affine")
 {
   // do registration
-  vul_timer time;
+  vul_timer         time;
   ihog_transform_2d init_xform;
-  unsigned ni = curr_view.ni(), nj = curr_view.nj();
-  if (transform_type  ==  "Identity")
-  {
+  unsigned          ni = curr_view.ni(), nj = curr_view.nj();
+
+  if( transform_type  ==  "Identity" )
+    {
     vcl_cout << "In ihog/exe/compute_homographies_exe:"
              << " an identity transform doesn't make sense\n";
-    assert (!"Identity transform makes no sense");
-  }
-  else if (transform_type ==  "Translation")
-  {
+    assert(!"Identity transform makes no sense");
+    }
+  else if( transform_type ==  "Translation" )
+    {
     vnl_vector<double> T(2);
-    T[0]=0.0000001;   T[1]=0.0000001;
+    T[0] = 0.0000001;   T[1] = 0.0000001;
     init_xform.set(T, ihog_transform_2d::Translation);
-  }
-  else if (transform_type ==  "ZoomOnly")
-  {
+    }
+  else if( transform_type ==  "ZoomOnly" )
+    {
     init_xform.set_zoom_only(1.0, 1.0, 0.0, 0.0);
-  }
-  else if (transform_type ==  "RigidBody")
-  {
+    }
+  else if( transform_type ==  "RigidBody" )
+    {
     vnl_vector<double> R(3);
-    R[0]=0.0000001;   R[1]=0.0;  R[2]=0.0;
+    R[0] = 0.0000001;   R[1] = 0.0;  R[2] = 0.0;
     init_xform.set(R, ihog_transform_2d::RigidBody);
-  }
+    }
 #if 0
-  else if (transform_type ==  "Similarity")
-  {
+  else if( transform_type ==  "Similarity" )
+    {
     vnl_vector<double> S(4);
-    S[0]=1.0000001;   S[1]=0.0;  S[2]=0.0; S[3]=0.0;
+    S[0] = 1.0000001;   S[1] = 0.0;  S[2] = 0.0; S[3] = 0.0;
     init_xform.set(S, ihog_transform_2d::Similarity);
-  }
+    }
 #endif
-  else if (transform_type ==  "Affine")
-  {
+  else if( transform_type ==  "Affine" )
+    {
     vnl_double_2x3 A; A.set_identity();
     init_xform.set_affine(A);
-  }
-  else if (transform_type ==  "Projective")
-  {
-    vnl_double_3x3 P; P.set_identity().set(2,2, 1.0000001);
+    }
+  else if( transform_type ==  "Projective" )
+    {
+    vnl_double_3x3 P; P.set_identity().set(2, 2, 1.0000001);
     init_xform.set_projective(P);
-  }
+    }
 #if 0
-  else if (transform_type ==  "Reflection")
-  {
-    vgl_point_2d<double> m1(0, 0), m2(1,0);
+  else if( transform_type ==  "Reflection" )
+    {
+    vgl_point_2d<double> m1(0, 0), m2(1, 0);
     init_xform.set_reflection(m1, m2);
-  }
+    }
 #endif
-  else {
+  else
+    {
     vcl_cerr << "Unrecoverable error:\n"
              << " Unknown ihog transform type " << transform_type << '\n';
     assert(!"Unrecoverable error");
-  }
+    }
 
-  int border = 10;
-  ihog_world_roi roi(ni- 2*border, nj- 2*border,
-                     vgl_point_2d<double>(border,border),
-                     vgl_vector_2d<double>(0.99,0.0),
-                     vgl_vector_2d<double>(0.0,0.99));
-  ihog_image<float> last_img(last_view, ihog_transform_2d());
+  int            border = 10;
+  ihog_world_roi roi(ni - 2 * border, nj - 2 * border,
+                     vgl_point_2d<double>(border, border),
+                     vgl_vector_2d<double>(0.99, 0.0),
+                     vgl_vector_2d<double>(0.0, 0.99) );
+  ihog_image<float> last_img(last_view, ihog_transform_2d() );
   ihog_image<float> curr_img(curr_view, init_xform);
-  ihog_minimizer minimizer(last_img, curr_img, roi);
+  ihog_minimizer    minimizer(last_img, curr_img, roi);
   minimizer.minimize(init_xform);
   vcl_cout << "Registration in " << time.real() << " msecs\n";
   return init_xform;
@@ -129,69 +135,78 @@ register_image(vil_image_view<float> & curr_view,
 static bool compute_homogs(vcl_string const& image_indir,
                            vcl_string const& transform_type,
                            vcl_string const& homg_file
-                          )
+                           )
 {
   ihog_transform_2d total_xform;
+
   total_xform.set_identity();
-  vcl_vector<vnl_double_3x3 > homographies;
-  vcl_vector<vcl_string> in_filenames;
+  vcl_vector<vnl_double_3x3> homographies;
+  vcl_vector<vcl_string>     in_filenames;
   filenames_from_directory(image_indir, in_filenames);
   unsigned n_infiles = in_filenames.size();
   unsigned infile_counter = 0;
-  //read the first image
-  bool no_valid_image = true;
+  // read the first image
+  bool                    no_valid_image = true;
   vil_image_resource_sptr imgr;
-  while (no_valid_image)
-  {
+  while( no_valid_image )
+    {
     imgr =
-      vil_load_image_resource(in_filenames[infile_counter++].c_str());
-    no_valid_image = !imgr||imgr->ni()==0||imgr->nj()==0;
-    if (infile_counter>=n_infiles)
+      vil_load_image_resource(in_filenames[infile_counter++].c_str() );
+    no_valid_image = !imgr || imgr->ni() == 0 || imgr->nj() == 0;
+    if( infile_counter >= n_infiles )
+      {
       return false;
-  }
-  vcl_cout << "Initialized\n";
-  vil_image_view<float> float_last_view = *vil_convert_cast(float(), imgr->get_view());
+      }
+    }
 
-  infile_counter = 0;//return to first frame
+  vcl_cout << "Initialized\n";
+  vil_image_view<float> float_last_view = *vil_convert_cast(float(), imgr->get_view() );
+
+  infile_counter = 0;// return to first frame
   total_xform.set_identity();
   unsigned frame = 1;
-  while (infile_counter<n_infiles)
-  {
+  while( infile_counter < n_infiles )
+    {
     imgr =
-      vil_load_image_resource(in_filenames[infile_counter++].c_str());
-    if (!imgr||imgr->ni()==0||imgr->nj()==0)
+      vil_load_image_resource(in_filenames[infile_counter++].c_str() );
+    if( !imgr || imgr->ni() == 0 || imgr->nj() == 0 )
+      {
       continue;
-    vil_image_view<float> float_curr_view = *vil_convert_cast(float(), imgr->get_view());
-    vcl_cout << "Registering frame " << frame++ << '\n'<< vcl_flush;
+      }
+    vil_image_view<float> float_curr_view = *vil_convert_cast(float(), imgr->get_view() );
+    vcl_cout << "Registering frame " << frame++ << '\n' << vcl_flush;
     ihog_transform_2d xform = register_image(float_curr_view,
                                              float_last_view,
                                              transform_type);
     total_xform = total_xform * xform.inverse();
-    vnl_double_3x3 p=total_xform.get_matrix();
+    vnl_double_3x3 p = total_xform.get_matrix();
     homographies.push_back(p);
     float_last_view = float_curr_view;
-  }
-  write_homographies(homg_file,homographies);
+    }
+
+  write_homographies(homg_file, homographies);
   return true;
 }
 
-int main(int argc,char * argv[])
+int main(int argc, char * argv[])
 {
-  if (argc!=4)
-  {
-    vcl_cout<<"Usage : compute_homographies_exe.exe image_in_dir homography_type(Identity|Translation|ZoomOnly|RigidBody|Similarity|Affine|Projective) homography_outfile\n";
+  if( argc != 4 )
+    {
+    vcl_cout
+      <<
+    "Usage : compute_homographies_exe.exe image_in_dir homography_type(Identity|Translation|ZoomOnly|RigidBody|Similarity|Affine|Projective) homography_outfile\n";
     return -1;
-  }
+    }
   else
-  {
+    {
     vcl_string image_indir(argv[1]);
     vcl_string transform_type(argv[2]);
     vcl_string homg_file(argv[3]);
-    if (!compute_homogs(image_indir, transform_type, homg_file))
-    {
+    if( !compute_homogs(image_indir, transform_type, homg_file) )
+      {
       vcl_cout << "Registration failed\n";
       return -1;
-    }
+      }
     return 0;
-  }
+    }
 }

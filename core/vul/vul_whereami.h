@@ -2,7 +2,7 @@
 #ifndef vul_whereami_h_
 #define vul_whereami_h_
 
-//:
+// :
 // \file
 // \author fsm
 

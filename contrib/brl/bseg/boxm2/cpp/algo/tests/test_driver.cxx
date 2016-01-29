@@ -13,5 +13,4 @@ void register_tests()
   REGISTER( test_merge_function );
 }
 
-
 DEFINE_MAIN;

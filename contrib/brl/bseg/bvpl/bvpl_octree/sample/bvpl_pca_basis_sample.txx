@@ -1,6 +1,6 @@
 #ifndef bvpl_pca_basis_sample_txx
 #define bvpl_pca_basis_sample_txx
-//:
+// :
 // \file
 // \author Isabel Restrepo
 // \date 28-Feb-2011
@@ -10,63 +10,63 @@
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vsl/vsl_binary_io.h>
 
-
 template <unsigned dim>
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_pca_basis_sample<dim>& sample)
+vcl_ostream & operator <<(vcl_ostream& os, const bvpl_pca_basis_sample<dim>& sample)
 {
   os << "PCA projection = " << sample.pca_projections_ << vcl_endl;
   return os;
 }
 
-//I/O
+// I/O
 template <unsigned dim>
-void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const &sample)
+void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const & sample)
 {
-  vsl_b_write(os, sample.version_no());
+  vsl_b_write(os, sample.version_no() );
   vsl_b_write(os, sample.pca_projections_);
 }
 
 template <unsigned dim>
-void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const * &sample)
+void vsl_b_write(vsl_b_ostream & os, bvpl_pca_basis_sample<dim> const * & sample)
 {
-  if (sample) {
+  if( sample )
+    {
     vsl_b_write(os, *sample);
-  }
+    }
 }
 
 template <unsigned dim>
-void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> &sample)
+void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> & sample)
 {
-  if (!is) return;
+  if( !is ) {return; }
 
   short version;
-  vsl_b_read(is,version);
-  switch (version)
-  {
+  vsl_b_read(is, version);
+
+  switch( version )
+    {
     case 1:
       vsl_b_read(is, sample.pca_projections_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
-               << "           Unknown version number "<< version << '\n';
+               << "           Unknown version number " << version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       break;
-  }
+    }
 }
 
 template <unsigned dim>
-void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> *&sample)
+void vsl_b_read(vsl_b_istream & is, bvpl_pca_basis_sample<dim> *& sample)
 {
   vsl_b_read(is, *sample);
 }
 
-
 #define BVPL_PCA_BASIS_SAMPLE_INSTANTIATE(T) \
-template class bvpl_pca_basis_sample<T >; \
-template vcl_ostream& operator << (vcl_ostream&, const bvpl_pca_basis_sample<T >&); \
-template void vsl_b_write(vsl_b_ostream &, bvpl_pca_basis_sample<T > const &); \
-template void vsl_b_write(vsl_b_ostream &, bvpl_pca_basis_sample<T > const *&); \
-template void vsl_b_read(vsl_b_istream &, bvpl_pca_basis_sample<T > &); \
-template void vsl_b_read(vsl_b_istream &, bvpl_pca_basis_sample<T > *&)
+  template class bvpl_pca_basis_sample<T>; \
+  template vcl_ostream & operator <<(vcl_ostream &, const bvpl_pca_basis_sample<T> &); \
+  template void vsl_b_write(vsl_b_ostream &, bvpl_pca_basis_sample<T> const &); \
+  template void vsl_b_write(vsl_b_ostream &, bvpl_pca_basis_sample<T> const * &); \
+  template void vsl_b_read(vsl_b_istream &, bvpl_pca_basis_sample<T> &); \
+  template void vsl_b_read(vsl_b_istream &, bvpl_pca_basis_sample<T> *&)
 
 #endif

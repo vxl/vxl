@@ -6,9 +6,9 @@
 #include <clocale>
 
 #ifdef vcl_generic_clocale_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_clocale_STD std
+#  define vcl_generic_clocale_STD std
 #endif
 
 #include "../generic/vcl_clocale.h"

@@ -5,8 +5,9 @@
 void test_sprintf(void)
 {
   vul_sprintf buf0("[%d]", 123);
+
   vcl_cout << "buf0=" << buf0 << vcl_endl;
-  TEST("buf0 == 123", buf0, vcl_string("[123]"));
+  TEST("buf0 == 123", buf0, vcl_string("[123]") );
 
   vcl_string string_fmt = "[%s]";
 

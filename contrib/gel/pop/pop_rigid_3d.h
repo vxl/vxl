@@ -2,9 +2,9 @@
 #ifndef pop_rigid_3d_h_
 #define pop_rigid_3d_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief this is a vertex/coordinate system in a coordinate system graph
 //
@@ -12,32 +12,31 @@
 //            Peter Tu April 2003
 //            General Electric
 //
-//-------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
-#include<pop/pop_object.h>
-#include<vgl/algo/vgl_h_matrix_3d.h>
-#include<pop/pop_transform.h>
+#include <pop/pop_object.h>
+#include <vgl/algo/vgl_h_matrix_3d.h>
+#include <pop/pop_transform.h>
 
-//: A parameter that can be optimized
+// : A parameter that can be optimized
 class pop_rigid_3d : public pop_transform
 {
- public:
-  //: constructor
+public:
+  // : constructor
   // the parameters for this transform are
   // the Euler angle r1 r2 r2 and the translation t1 t2 t3
-  pop_rigid_3d(vcl_vector<pop_parameter*> params,
-               pop_vertex *cs1, pop_vertex *cs2);
+  pop_rigid_3d(vcl_vector<pop_parameter *> params, pop_vertex * cs1, pop_vertex * cs2);
 
-  //: destructor
+  // : destructor
   virtual ~pop_rigid_3d();
 
-  //: transform a geometric object
-  virtual pop_geometric_object* transform(pop_geometric_object *obj);
+  // : transform a geometric object
+  virtual pop_geometric_object * transform(pop_geometric_object * obj);
 
-  //: update the transform based on the parameters
+  // : update the transform based on the parameters
   virtual void update();
 
- private:
+private:
   vgl_h_matrix_3d<double> trans_;
 };
 

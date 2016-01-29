@@ -1,7 +1,7 @@
 #ifndef mfpf_max_finder_h_
 #define mfpf_max_finder_h_
 
-//:
+// :
 // \file
 // \brief Locates largest value along a profile
 // \author Tim Cootes
@@ -10,69 +10,65 @@
 #include <vgl/vgl_fwd.h>
 #include <vcl_iosfwd.h>
 
-//: Locates largest value along a profile.
+// : Locates largest value along a profile.
 class mfpf_max_finder : public mfpf_point_finder
 {
- public:
+public:
 
-  //: Dflt ctor
+  // : Dflt ctor
   mfpf_max_finder();
 
-  //: Destructor
+  // : Destructor
   virtual ~mfpf_max_finder();
 
-  //: Radius of circle containing modelled region
+  // : Radius of circle containing modelled region
   virtual double radius() const;
 
-  //: Evaluate match at p, using u to define scale and orientation
+  // : Evaluate match at p, using u to define scale and orientation
   // Returns -1*value at p
-  virtual double evaluate(const vimt_image_2d_of<float>& image,
-                          const vgl_point_2d<double>& p,
+  virtual double evaluate(const vimt_image_2d_of<float>& image, const vgl_point_2d<double>& p,
                           const vgl_vector_2d<double>& u);
 
-  //: Evaluate match at in a region around p
+  // : Evaluate match at in a region around p
   // Returns a quality of fit at a set of positions.
   // response image (whose size and transform is set inside the
   // function), indicates the points at which the function was
   // evaluated.  response(i,j) is the fit at the point
   // response.world2im().inverse()(i,j).  The world2im() transformation
   // may be affine.
-  virtual void evaluate_region(const vimt_image_2d_of<float>& image,
-                               const vgl_point_2d<double>& p,
-                               const vgl_vector_2d<double>& u,
-                               vimt_image_2d_of<double>& response);
+  virtual void evaluate_region(const vimt_image_2d_of<float>& image, const vgl_point_2d<double>& p,
+                               const vgl_vector_2d<double>& u, vimt_image_2d_of<double>& response);
 
-  //: Search given image around p, using u to define scale and orientation
+  // : Search given image around p, using u to define scale and orientation
   //  On exit, new_p and new_u define position, scale and orientation of
   //  the best nearby match.  Returns a quality of fit measure at that
   //  point (the smaller the better).
-  virtual double search_one_pose(const vimt_image_2d_of<float>& image,
-                                 const vgl_point_2d<double>& p,
-                                 const vgl_vector_2d<double>& u,
-                                 vgl_point_2d<double>& new_p);
+  virtual double search_one_pose(const vimt_image_2d_of<float>& image, const vgl_point_2d<double>& p,
+                                 const vgl_vector_2d<double>& u, vgl_point_2d<double>& new_p);
 
-  //: Generate points in ref frame that represent boundary
+  // : Generate points in ref frame that represent boundary
   //  Points of a closed contour around the shape.
   //  Used for display purposes.
   virtual void get_outline(vcl_vector<vgl_point_2d<double> >& pts) const;
 
-  //: Name of the class
+  // : Name of the class
   virtual vcl_string is_a() const;
 
-  //: Create a copy on the heap and return base class pointer
-  virtual mfpf_point_finder* clone() const;
+  // : Create a copy on the heap and return base class pointer
+  virtual mfpf_point_finder * clone() const;
 
-  //: Print class to os
+  // : Print class to os
   virtual void print_summary(vcl_ostream& os) const;
 
-  //: Version number for I/O
+  // : Version number for I/O
   short version_no() const;
 
-  //: Save class to binary file stream
+  // : Save class to binary file stream
   virtual void b_write(vsl_b_ostream& bfs) const;
 
-  //: Load class from binary file stream
+  // : Load class from binary file stream
   virtual void b_read(vsl_b_istream& bfs);
+
 };
 
 #endif

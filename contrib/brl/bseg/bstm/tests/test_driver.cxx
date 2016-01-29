@@ -9,5 +9,4 @@ void register_tests()
   REGISTER( test_time_tree );
 }
 
-
 DEFINE_MAIN;

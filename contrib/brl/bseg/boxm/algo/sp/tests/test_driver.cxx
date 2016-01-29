@@ -13,5 +13,4 @@ void register_tests()
   REGISTER( test_update_multi_bin );
 }
 
-
 DEFINE_MAIN;

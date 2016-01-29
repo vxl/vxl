@@ -3,8 +3,8 @@
 #ifndef bwm_observable_point_h_
 #define bwm_observable_point_h_
 
-//*****************************************************************************
-//:
+// *****************************************************************************
+// :
 // \file
 // \brief An observable point object in 3D
 //
@@ -14,7 +14,7 @@
 // \verbatim
 //  Modifications
 // \endverbatim
-//*****************************************************************************
+// *****************************************************************************
 
 #include "bwm_observable.h"
 
@@ -26,7 +26,7 @@
 
 class bwm_observable_point : public bwm_observable
 {
- public:
+public:
   bwm_observable_point() : object_(0) {}
   ~bwm_observable_point() {}
 
@@ -37,9 +37,8 @@ class bwm_observable_point : public bwm_observable
   bwm_observable_point(const vgl_point_3d<double>& p) { object_ = new vsol_point_3d(p); }
 
   bwm_observable_point(bwm_observable_point& p)
-  : bwm_observable(), object_(new vsol_point_3d(p.object_->get_p())) {}
-
- private:
+    : bwm_observable(), object_(new vsol_point_3d(p.object_->get_p() ) ) {}
+private:
   vsol_point_3d_sptr object_;
 };
 

@@ -10,11 +10,11 @@
 
 // VisualC++'s <csetjmp> does not use namespace std.
 #if !VCL_CXX_HAS_HEADER_CSETJMP
-# include <setjmp.h>
-# define vcl_generic_csetjmp_STD /* */
-# include "generic/vcl_csetjmp.h"
+#  include <setjmp.h>
+#  define vcl_generic_csetjmp_STD /* */
+#  include "generic/vcl_csetjmp.h"
 #else
-# include "iso/vcl_csetjmp.h"
+#  include "iso/vcl_csetjmp.h"
 #endif
 
 // In ISO C, setjmp() is a macro. So in vcl it should be

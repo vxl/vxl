@@ -1,7 +1,7 @@
-//This is brl/bseg/bvxm/pro/processes/bvxm_gen_synthetic_world_process.h
+// This is brl/bseg/bvxm/pro/processes/bvxm_gen_synthetic_world_process.h
 #ifndef bvxm_gen_synthetic_world_process_h_
 #define bvxm_gen_synthetic_world_process_h_
-//:
+// :
 // \file
 // \brief A class for generating a synthetic bvxm_voxel_world.
 //
@@ -19,10 +19,10 @@
 
 #include <bprb/bprb_func_process.h>
 
-//:set input and output types
+// :set input and output types
 bool bvxm_gen_synthetic_world_process_cons(bprb_func_process& pro);
 
-//:generates a synthetic world
+// :generates a synthetic world
 bool bvxm_gen_synthetic_world_process(bprb_func_process& pro);
 
 #endif // bvxm_gen_synthetic_world_process_h_

@@ -1,7 +1,7 @@
 // This is brl/bbas/bgrl/bgrl_vertex_sptr.h
 #ifndef bgrl_vertex_sptr_h_
 #define bgrl_vertex_sptr_h_
-//:
+// :
 // \file
 // \brief A smart pointer to a bgrl_vertex.
 // \author Matt Leotta, (mleotta@lems.brown.edu)

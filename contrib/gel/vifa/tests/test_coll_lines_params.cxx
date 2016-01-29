@@ -2,13 +2,11 @@
 #include <testlib/testlib_test.h>
 #include <vifa/vifa_coll_lines_params.h>
 
-
 static void test_coll_lines_params()
 {
-  vifa_coll_lines_params  vclp;
+  vifa_coll_lines_params vclp;
 
   vclp.print_info();
 }
-
 
 TESTMAIN(test_coll_lines_params);

@@ -8,7 +8,6 @@ DECLARE(test_denoise_mrf_bp);
 DECLARE(test_segmentation);
 DECLARE(test_sel);
 
-
 void
 register_tests()
 {

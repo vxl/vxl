@@ -1,6 +1,6 @@
 #ifndef rrel_ran_sam_search_h_
 #define rrel_ran_sam_search_h_
-//:
+// :
 // \file
 // \brief Random sampling search for minimization of a robust objective function
 // \author Chuck Stewart (stewart@cs.rpi.edu)
@@ -13,7 +13,7 @@
 class rrel_objective;
 class rrel_estimation_problem;
 
-//: Random sampling search for minimization of a robust objective function.
+// : Random sampling search for minimization of a robust objective function.
 //  The code organization follows the design of the rrel
 //  library where there is a separation between objective function
 //  (M-estimator, LMS, etc), search technique, and estimation problem.
@@ -39,11 +39,11 @@ class rrel_estimation_problem;
 
 class rrel_ran_sam_search
 {
- public:
-  //: Constructor using a non-deterministic random-sampling seed.
-  rrel_ran_sam_search( );
+public:
+  // : Constructor using a non-deterministic random-sampling seed.
+  rrel_ran_sam_search();
 
-  //: Constructor using a given random-sampling seed.
+  // : Constructor using a given random-sampling seed.
   rrel_ran_sam_search( int seed );
 
   virtual ~rrel_ran_sam_search();
@@ -52,93 +52,87 @@ class rrel_ran_sam_search
   //  when the constructor is called is to sample as in generate
   //  samples as specified in least-median of squares.
 
-  //: Indicate that all possible minimal subset samples should be tried.
+  // : Indicate that all possible minimal subset samples should be tried.
   void set_gen_all_samples();
 
-  //: Set the parameters for random sampling.
-  void set_sampling_params( double max_outlier_frac = 0.5,
-                            double desired_prob_good = 0.99,
-                            unsigned int max_populations_expected = 1,
-                            unsigned int min_samples = 0 );
+  // : Set the parameters for random sampling.
+  void set_sampling_params( double max_outlier_frac = 0.5, double desired_prob_good = 0.99,
+                            unsigned int max_populations_expected = 1, unsigned int min_samples = 0 );
 
   // ----------------------------------------
   //  Main estimation functions
   // ----------------------------------------
 
-  //: \brief Estimation for an "ordinary" estimation problem.
-  virtual bool
-  estimate( const rrel_estimation_problem* problem,
-            const rrel_objective* obj_fcn );
+  // : \brief Estimation for an "ordinary" estimation problem.
+  virtual bool estimate( const rrel_estimation_problem* problem, const rrel_objective* obj_fcn );
 
   // -----------------------------------------
   // Access to results and computed parameters
   // -----------------------------------------
 
-  //:  Get the scale estimate.
+  // :  Get the scale estimate.
   double scale() const { return scale_; }
 
-  //:  Get the parameter estimate.
-  const vnl_vector<double>& params() const { return params_; }
+  // :  Get the parameter estimate.
+  const vnl_vector<double> & params() const { return params_; }
 
-  //:  Get the indices of best data sample
-  const vcl_vector<int>& index() const { return indices_; }
+  // :  Get the indices of best data sample
+  const vcl_vector<int> & index() const { return indices_; }
 
-  //:  Get the residuals for best sample
-  const vcl_vector<double>& residuals() const { return residuals_; }
+  // :  Get the residuals for best sample
+  const vcl_vector<double> & residuals() const { return residuals_; }
 
-  //:  Get the cost for best sample returned by rrel_objective function
+  // :  Get the cost for best sample returned by rrel_objective function
   double cost() const { return min_obj_; }
 
-  //:  Get the number of samples tested in during estimation.
+  // :  Get the number of samples tested in during estimation.
   int samples_tested() const { return samples_to_take_; }
 
-  //:  Print the sampling parameters.  Used for debugging.
+  // :  Print the sampling parameters.  Used for debugging.
   void print_params() const;
 
   void set_trace_level( int level ) { trace_level_ = level; }
-
- protected:
+protected:
   // ------------------------------------------------------------
   //  Random sampling functions.  Don't call directly.  These are
   //  public for test purposes.
   // ------------------------------------------------------------
 
-  //: Calculate number of samples --- non-unique matching estimation problems
-  virtual void
-  calc_num_samples( const rrel_estimation_problem* problem );
+  // : Calculate number of samples --- non-unique matching estimation problems
+  virtual void calc_num_samples( const rrel_estimation_problem* problem );
 
-  //: Determine the next random sample, filling in the "sample" vector.
-  virtual void
-  next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
-               unsigned int points_per_sample );
+  // : Determine the next random sample, filling in the "sample" vector.
+  virtual void next_sample( unsigned int taken, unsigned int num_points, vcl_vector<int>& sample,
+                            unsigned int points_per_sample );
 
- private:
+private:
 
   void trace_sample( const vcl_vector<int>& point_indices ) const;
+
   void trace_residuals( const vcl_vector<double>& residuals ) const;
 
- protected:
+protected:
   //
   //  Parameters
   //
-  double max_outlier_frac_;
-  double desired_prob_good_;
+  double       max_outlier_frac_;
+  double       desired_prob_good_;
   unsigned int max_populations_expected_;
   unsigned int min_samples_;
-  bool generate_all_;
+  bool         generate_all_;
 
-  //: Random number generator.
+  // : Random number generator.
   // Normally, this will point to the "global" generator, but a could
   // point to a local one if the user wants to specify a seed.
   vnl_random* generator_;
-  bool own_generator_;
+  bool        own_generator_;
 
   //
   //  The estimate
   //
   vnl_vector<double> params_;
-  double scale_;
-  vcl_vector<int> indices_;
+  double             scale_;
+  vcl_vector<int>    indices_;
   vcl_vector<double> residuals_;
 
   double min_obj_;

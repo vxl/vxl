@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_spherical_container );
 DECLARE( test_tile );
 DECLARE( test_spherical_shell_container );
@@ -48,4 +47,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-

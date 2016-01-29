@@ -2,9 +2,9 @@
 #ifndef HMatrix2DAffineCompute_h_
 #define HMatrix2DAffineCompute_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 //
 // HMatrix2DAffineCompute contains a linear method to compute
@@ -29,20 +29,22 @@ class HomgPoint2D;
 
 class HMatrix2DAffineCompute : public HMatrix2DCompute
 {
- protected:
-  bool compute_p(vcl_vector<HomgPoint2D> const&,
-                 vcl_vector<HomgPoint2D> const&,
-                 HMatrix2D *);
- public:
-  static HMatrix2D compute(const vcl_vector<HomgPoint2D>&p1, const vcl_vector<HomgPoint2D>&p2);
+protected:
+  bool compute_p(vcl_vector<HomgPoint2D> const &, vcl_vector<HomgPoint2D> const &, HMatrix2D *);
+
+public:
+  static HMatrix2D compute(const vcl_vector<HomgPoint2D>& p1, const vcl_vector<HomgPoint2D>& p2);
+
   static HMatrix2D compute(vcl_vector<vgl_homg_point_2d<double> > const& p1,
                            vcl_vector<vgl_homg_point_2d<double> > const& p2);
+
   int minimum_number_of_correspondences() const { return 3; }
   // left in for capes :
-  static HMatrix2D compute(const PairMatchSetCorner &matches);
+  static HMatrix2D compute(const PairMatchSetCorner & matches);
+
 };
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
 //
@@ -51,24 +53,23 @@ class HMatrix2DAffineCompute : public HMatrix2DCompute
 // coordinates of the ith homogeneous point.
 //
 struct NonHomg : public vnl_matrix<double>
-{
-  NonHomg(const vcl_vector<HomgPoint2D> &A);
+  {
+  NonHomg(const vcl_vector<HomgPoint2D> & A);
   NonHomg(vcl_vector<vgl_homg_point_2d<double> > const& A);
-};
+  };
 
 //
 // This function computes the mean of the columns of
 // an n-by-2 matrix A.
 //
-vnl_double_2 mean2(const vnl_matrix<double> &A);
-
+vnl_double_2 mean2(const vnl_matrix<double> & A);
 
 //
 // This function subtracts the 2-vector a from each row of
 // the n-by-2 matrix A.
 //
-vnl_matrix<double>& sub_rows(vnl_matrix<double> &A, const vnl_double_2 a);
+vnl_matrix<double> & sub_rows(vnl_matrix<double> & A, const vnl_double_2 a);
 
-//--------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 #endif // HMatrix2DAffineCompute_h_

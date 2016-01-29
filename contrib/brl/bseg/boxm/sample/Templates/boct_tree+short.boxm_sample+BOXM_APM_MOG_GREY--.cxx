@@ -5,7 +5,7 @@
 #include <boxm/sample/boxm_sample.h>
 
 // tree with alpha and appearance combined
-BOCT_TREE_INSTANTIATE(short, boxm_sample<BOXM_APM_MOG_GREY>);
+BOCT_TREE_INSTANTIATE(short, boxm_sample<BOXM_APM_MOG_GREY> );
 
 // tree with appearance
 typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype apm_datatype;

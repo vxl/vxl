@@ -5,7 +5,7 @@
 
 // va_list
 #ifndef vcl_va_list
-#define vcl_va_list vcl_generic_cstdarg_STD :: va_list
+#  define vcl_va_list vcl_generic_cstdarg_STD::va_list
 #endif
 
 #endif // vcl_generic_cstdarg_h_

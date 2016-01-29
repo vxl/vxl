@@ -14,118 +14,123 @@
 // template code cannot see file statics.
 static double power(double x, int y)
 {
-  if (y == 0)
+  if( y == 0 )
+    {
     return 1.0;
+    }
   double r = 1.0;
-  if (y < 0)
-  {
+  if( y < 0 )
+    {
     y = -y;
-    x = 1/x;
-  }
-  while (true)
-  {
-    if (y & 1)
+    x = 1 / x;
+    }
+  while( true )
+    {
+    if( y & 1 )
+      {
       r *= x;
-    if (y >>= 1)
+      }
+    if( y >>= 1 )
+      {
       x *= x;
+      }
     else
+      {
       break;
-  }
+      }
+    }
+
   return r;
 }
 
-
-template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
-bool vipl_moment <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: section_applyop()
+template <class ImgIn, class ImgOut, class DataIn, class DataOut, class PixelItr>
+bool vipl_moment<ImgIn, ImgOut, DataIn, DataOut, PixelItr>::section_applyop()
 {
-  const ImgIn &in = this->in_data(0);
-  ImgOut &out = *this->out_data_ptr();
+  const ImgIn & in = this->in_data(0);
+  ImgOut &      out = *this->out_data_ptr();
 
   // We create a (double) float buffer to hold the computed values.
 
-  int startx = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->X_Axis());
-  int starty = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::start(this->Y_Axis());
-  int stopx  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->X_Axis());
-  int stopy  = vipl_filter<ImgIn,ImgOut,DataIn,DataOut,2,PixelItr>::stop(this->Y_Axis());
+  int startx = vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2, PixelItr>::start(this->X_Axis() );
+  int starty = vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2, PixelItr>::start(this->Y_Axis() );
+  int stopx  = vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2, PixelItr>::stop(this->X_Axis() );
+  int stopy  = vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2, PixelItr>::stop(this->Y_Axis() );
 
-  int sizex = stopx-startx+1;
-  int sizey = stopy-starty+1;
+  int sizex = stopx - startx + 1;
+  int sizey = stopy - starty + 1;
 
-  double* tempbuf = new double[sizex*sizey];
+  double* tempbuf = new double[sizex * sizey];
 
-  int size = width_*height_; // size of the mask
+  int size = width_ * height_; // size of the mask
 
-  int x1 = width_%2 ? width_/2 : width_/2-1;
-  int x2 = width_/2;
-  int y1 = height_%2 ? height_/2 : height_/2-1;
-  int y2 = height_/2;
+  int x1 = width_ % 2 ? width_ / 2 : width_ / 2 - 1;
+  int x2 = width_ / 2;
+  int y1 = height_ % 2 ? height_ / 2 : height_ / 2 - 1;
+  int y2 = height_ / 2;
 
   double d = 0.0;
 
   // First we create the outvalue for the first element
-
-  for (int i=startx-x1;i<=(startx+x2);++i)
-    for (int j=starty-y1;j<=(starty+y2);++j)
+  for( int i = startx - x1; i <= (startx + x2); ++i )
     {
-      DataIn w = getpixel(in,i,j,DataIn(0));
-      d += power(double(w),order_);
+    for( int j = starty - y1; j <= (starty + y2); ++j )
+      {
+      DataIn w = getpixel(in, i, j, DataIn(0) );
+      d += power(double(w), order_);
+      }
     }
   tempbuf[0] = d;
-  d/=size;
-  fsetpixel(out,startx,starty,DataOut(d));
-
+  d /= size;
+  fsetpixel(out, startx, starty, DataOut(d) );
   // Now we create the outvalue for the first row
-
-  for (int i = startx+1; i < stopx; ++i)
-  {
-    d = tempbuf[i-startx-1];
-    for (int j = starty-y1;j<=starty+y2;++j)
+  for( int i = startx + 1; i < stopx; ++i )
     {
+    d = tempbuf[i - startx - 1];
+    for( int j = starty - y1; j <= starty + y2; ++j )
+      {
       DataIn
-      w  = getpixel(in,i-1-x1,j,DataIn(0));
-      d -= power(double(w),order_);
-      w  = getpixel(in,i+x2,j,DataIn(0));
-      d += power(double(w),order_);
-    }
-    tempbuf[i-startx] = d;
+        w  = getpixel(in, i - 1 - x1, j, DataIn(0) );
+      d -= power(double(w), order_);
+      w  = getpixel(in, i + x2, j, DataIn(0) );
+      d += power(double(w), order_);
+      }
+    tempbuf[i - startx] = d;
     d /= size;
-    fsetpixel(out,i,starty,DataOut(d));
-  }
-
+    fsetpixel(out, i, starty, DataOut(d) );
+    }
   // Now we create the outvalue for the first column
-
-  for (int j = starty+1; j < stopy; ++j)
-  {
-    d = tempbuf[(j-starty-1)*sizex];
-    for (int i = startx-x1;i<=startx+x2;++i)
+  for( int j = starty + 1; j < stopy; ++j )
     {
+    d = tempbuf[(j - starty - 1) * sizex];
+    for( int i = startx - x1; i <= startx + x2; ++i )
+      {
       DataIn
-      w  = getpixel(in,i,j-1-y1,DataIn(0));
-      d -= power(double(w),order_);
-      w  = getpixel(in,i,j+y2,DataIn(0));
-      d += power(double(w),order_);
-    }
-    tempbuf[(j-starty)*sizex] = d;
+        w  = getpixel(in, i, j - 1 - y1, DataIn(0) );
+      d -= power(double(w), order_);
+      w  = getpixel(in, i, j + y2, DataIn(0) );
+      d += power(double(w), order_);
+      }
+    tempbuf[(j - starty) * sizex] = d;
     d /= size;
-    fsetpixel(out,startx,j,DataOut(d));
-  }
-
+    fsetpixel(out, startx, j, DataOut(d) );
+    }
   // Now we can go for the rest of the section:
-
-  for (int i = startx+1; i < stopx; ++i)
-    for (int j = starty+1; j < stopy; ++j)
+  for( int i = startx + 1; i < stopx; ++i )
     {
-      int i1 = i-startx;
-      int j1 = j-starty;
-      d = tempbuf[i1-1 + j1*sizex] + tempbuf[i1+(j1-1)*sizex] - tempbuf[(i1-1) + (j1-1)*sizex];
+    for( int j = starty + 1; j < stopy; ++j )
+      {
+      int i1 = i - startx;
+      int j1 = j - starty;
+      d = tempbuf[i1 - 1 + j1 * sizex] + tempbuf[i1 + (j1 - 1) * sizex] - tempbuf[(i1 - 1) + (j1 - 1) * sizex];
       DataIn
-      w = getpixel(in,i-x1-1,j-y1-1,DataIn(0));  d += power(double(w),order_);
-      w = getpixel(in,i-x1-1,j+y2,DataIn(0));    d -= power(double(w),order_);
-      w = getpixel(in,i+x2,j-y1-1,DataIn(0));    d -= power(double(w),order_);
-      w = getpixel(in,i+x2,j+y2,DataIn(0));      d += power(double(w),order_);
-      tempbuf[i1+j1*sizex] = d;
+        w = getpixel(in, i - x1 - 1, j - y1 - 1, DataIn(0) );  d += power(double(w), order_);
+      w = getpixel(in, i - x1 - 1, j + y2, DataIn(0) );    d -= power(double(w), order_);
+      w = getpixel(in, i + x2, j - y1 - 1, DataIn(0) );    d -= power(double(w), order_);
+      w = getpixel(in, i + x2, j + y2, DataIn(0) );      d += power(double(w), order_);
+      tempbuf[i1 + j1 * sizex] = d;
       d /= size;
-      fsetpixel(out,i,j,DataOut(d));
+      fsetpixel(out, i, j, DataOut(d) );
+      }
     }
 
   delete[] tempbuf;

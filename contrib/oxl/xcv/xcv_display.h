@@ -1,7 +1,7 @@
 // This is oxl/xcv/xcv_display.h
 #ifndef xcv_display_h_
 #define xcv_display_h_
-//:
+// :
 // \file
 // \author   K.Y.McGaul
 // \brief Interface for display functions.
@@ -21,27 +21,34 @@ class vgui_roi_tableau_make_roi;
 
 class xcv_display
 {
- public:
-  //: Center the current image inside the frame.
+public:
+  // : Center the current image inside the frame.
   static void centre_image();
-  //: Turn the magnify glass on/off.
+
+  // : Turn the magnify glass on/off.
   static void toggle_magnify();
-  //: Turn the enhance lens on/off.
+
+  // : Turn the enhance lens on/off.
   static void toggle_enhance();
-  //: Define a region of interest.
+
+  // : Define a region of interest.
   static void make_roi();
-  //: Remove the region of interest.
+
+  // : Remove the region of interest.
   static void remove_roi();
-  //: Show a profile of the image intensity on a user-selected line.
+
+  // : Show a profile of the image intensity on a user-selected line.
   static void show_line_slice();
-  //: Creates a menu containing all the functions in this file.
+
+  // : Creates a menu containing all the functions in this file.
   static vgui_menu create_display_menu();
 
- private:
-  //: Generates intensity values along a line.
-  static void line_profile(const vil1_image&, float x0, float y0, float x1, float y1,
-                           int num_points, float* xvals, float* yvals, float* ivals);
-  static vgui_roi_tableau_make_roi *roi_tableau_client_;
+private:
+  // : Generates intensity values along a line.
+  static void line_profile(const vil1_image &, float x0, float y0, float x1, float y1, int num_points, float* xvals,
+                           float* yvals, float* ivals);
+
+  static vgui_roi_tableau_make_roi * roi_tableau_client_;
 };
 
 #endif // xcv_display_h_

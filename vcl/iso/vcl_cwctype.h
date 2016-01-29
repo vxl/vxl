@@ -6,9 +6,9 @@
 #include <cwctype>
 
 #ifdef vcl_generic_cwctype_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cwctype_STD std
+#  define vcl_generic_cwctype_STD std
 #endif
 
 #include "../generic/vcl_cwctype.h"

@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_shell_tableau_sptr.h
 #ifndef vgui_shell_tableau_sptr_h_
 #define vgui_shell_tableau_sptr_h_
-//:
+// :
 // \file
 // \author  fsm
 // \brief   Smart-pointer to a vgui_shell_tableau.

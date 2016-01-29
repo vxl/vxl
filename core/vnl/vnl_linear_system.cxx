@@ -1,8 +1,8 @@
 // This is core/vnl/vnl_linear_system.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author David Capel, capes@robots
 // \date   July 2000
@@ -16,7 +16,7 @@ vnl_linear_system::~vnl_linear_system()
 
 void vnl_linear_system::apply_preconditioner(vnl_vector<double> const& x, vnl_vector<double> & px) const
 {
-  assert(px.size() == x.size());
+  assert(px.size() == x.size() );
 
   px = x;
 }

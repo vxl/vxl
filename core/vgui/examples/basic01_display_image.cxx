@@ -7,14 +7,15 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-int main(int argc, char **argv)
+int main(int argc, char * * argv)
 {
   vgui::init(argc, argv);
-  if (argc <= 1)
-  {
+
+  if( argc <= 1 )
+    {
     vcl_cerr << "Please give an image filename on the command line\n";
     return 0;
-  }
+    }
 
   // Load image (given in the first command line param) into an image tableau.
   vgui_image_tableau_new image(argv[1]);
@@ -26,5 +27,5 @@ int main(int argc, char **argv)
   vgui_shell_tableau_new shell(viewer);
 
   // Create a window, add the tableau and show it on screen.
-  return vgui::run(shell, image->width(), image->height());
+  return vgui::run(shell, image->width(), image->height() );
 }

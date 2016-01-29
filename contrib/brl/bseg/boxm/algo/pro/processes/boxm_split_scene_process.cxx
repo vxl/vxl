@@ -1,5 +1,5 @@
 // This is brl/bseg/boxm/algo/pro/processes/boxm_split_scene_process.cxx
-//:
+// :
 // \file
 // \brief process that splits a boxm_scene of boxm samples into an appearance and occupancy scene
 //
@@ -16,14 +16,13 @@
 #include <bprb/bprb_parameters.h>
 #include <brdb/brdb_value.h>
 
-
 namespace boxm_split_scene_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 2;
+const unsigned n_inputs_ = 1;
+const unsigned n_outputs_ = 2;
 }
 
-//: process takes 1 input and two outputs.
+// : process takes 1 input and two outputs.
 // input[0]: The sample scene
 // output[0]: The appearance scene
 // output[1]: The alpha scene
@@ -46,41 +45,48 @@ bool boxm_split_scene_process(bprb_func_process& pro)
 {
   using namespace boxm_split_scene_process_globals;
 
-  if (pro.n_inputs() != n_inputs_)
-  {
+  if( pro.n_inputs() != n_inputs_ )
+    {
     vcl_cout << pro.name() << ": the input number should be " << n_inputs_
              << " but instead it is " << pro.n_inputs() << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
+  // get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
 
-  //check input's validity
-  if (!scene_base.ptr()) {
+  // check input's validity
+  if( !scene_base.ptr() )
+    {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
-  }
+    }
 
-  //: Note initial implementation is for fixed types, but this can be changed if more cases are needed
+  // : Note initial implementation is for fixed types, but this can be changed if more cases are needed
 
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > sample_tree_type;
 
   typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype apm_datatype;
-  typedef boct_tree<short, apm_datatype> apm_tree_type;
+  typedef boct_tree<short, apm_datatype>                   apm_tree_type;
 
   typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_mathtype alpha_type;
-  typedef boct_tree<short, alpha_type> alpha_tree_type;
+  typedef boct_tree<short, alpha_type>                     alpha_tree_type;
 
-  boxm_scene<sample_tree_type> *scene_in = static_cast<boxm_scene<sample_tree_type>* > (scene_base.as_pointer());
+  boxm_scene<sample_tree_type> * scene_in = static_cast<boxm_scene<sample_tree_type> *>(scene_base.as_pointer() );
 
   // parameters of the output scene are the same as those of the input scene
-  boxm_scene<apm_tree_type> *apm_scene = new boxm_scene<apm_tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(),
-                                                                       scene_in->max_level(), scene_in->init_level());
+  boxm_scene<apm_tree_type> * apm_scene = new boxm_scene<apm_tree_type>(scene_in->lvcs(),
+                                                                        scene_in->origin(),
+                                                                        scene_in->block_dim(), scene_in->world_dim(),
+                                                                        scene_in->max_level(), scene_in->init_level() );
   apm_scene->set_paths(scene_in->path(), "apm_mog_grey");
   apm_scene->set_appearance_model(BSTA_MOG_F1);
-  boxm_scene<alpha_tree_type > *alpha_scene = new boxm_scene<alpha_tree_type >(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(),
-                                                                               scene_in->max_level(), scene_in->init_level());
+  boxm_scene<alpha_tree_type> * alpha_scene = new boxm_scene<alpha_tree_type>(scene_in->lvcs(),
+                                                                              scene_in->origin(),
+                                                                              scene_in->block_dim(),
+                                                                              scene_in->world_dim(),
+                                                                              scene_in->max_level(),
+                                                                              scene_in->init_level() );
   alpha_scene->set_paths(scene_in->path(), "alpha");
   alpha_scene->set_appearance_model(BOXM_FLOAT);
   boxm_split_sample<BOXM_APM_MOG_GREY> splitter;
@@ -95,4 +101,3 @@ bool boxm_split_scene_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -7,23 +7,28 @@
 bool test_iterator( bgrl_graph::iterator& itr,
                     bgrl_vertex_sptr truth[] )
 {
-  bool check = true;
-  int i=0;
+  bool            check = true;
+  int             i = 0;
   bgrl_graph_sptr the_graph = itr.graph();
-  int size = the_graph->size();
-  for (; itr != the_graph->end(); ++itr, ++i)
-  {
-    if (i >= size) {
+  int             size = the_graph->size();
+
+  for( ; itr != the_graph->end(); ++itr, ++i )
+    {
+    if( i >= size )
+      {
       check = false; ++i;
       break;
-    }
-    if ((*itr) != truth[i]) {
+      }
+    if( (*itr) != truth[i] )
+      {
       vcl_cout << "\nIncorrect value for i=" << i;
       check = false;
+      }
     }
-  }
-  if (i != size)
+  if( i != size )
+    {
     check = false;
+    }
 
   vcl_cout << "\nsize = " << size << ", imax = " << i;
   return check;
@@ -64,16 +69,16 @@ static void test_search()
   // These tests could use some improvement.  There are multiple acceptable
   // results, thoses used below will be correct if the vertices and edges defined
   // above have monotonically increasing memory addresses.
-  bgrl_vertex_sptr default_order[] = {vertex_1, vertex_2, vertex_3, vertex_4, vertex_5};
+  bgrl_vertex_sptr     default_order[] = {vertex_1, vertex_2, vertex_3, vertex_4, vertex_5};
   bgrl_graph::iterator default_itr = the_graph->begin();
   TEST("Testing default iterator", test_iterator(default_itr, default_order ), true);
 
-  bgrl_vertex_sptr depth_order[] = {vertex_4, vertex_5, vertex_3, vertex_1, vertex_2};
-  bgrl_graph::iterator depth_itr = the_graph->begin(new bgrl_depth_search(vertex_4));
+  bgrl_vertex_sptr     depth_order[] = {vertex_4, vertex_5, vertex_3, vertex_1, vertex_2};
+  bgrl_graph::iterator depth_itr = the_graph->begin(new bgrl_depth_search(vertex_4) );
   TEST("Testing depth_iterator",  test_iterator(depth_itr, depth_order ), true);
 
-  bgrl_vertex_sptr breadth_order[] = {vertex_4, vertex_2, vertex_3, vertex_5, vertex_1};
-  bgrl_graph::iterator breadth_itr = the_graph->begin(new bgrl_breadth_search(vertex_4));
+  bgrl_vertex_sptr     breadth_order[] = {vertex_4, vertex_2, vertex_3, vertex_5, vertex_1};
+  bgrl_graph::iterator breadth_itr = the_graph->begin(new bgrl_breadth_search(vertex_4) );
   TEST("Testing breadth_iterator", test_iterator(breadth_itr, breadth_order ), true);
 }
 

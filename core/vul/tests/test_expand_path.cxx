@@ -4,7 +4,6 @@
 #include <vcl_fstream.h>
 #include <testlib/testlib_test.h>
 
-
 void test_expand_path()
 {
   // vul_expand_path

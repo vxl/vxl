@@ -32,14 +32,14 @@
 // be left out of the count of objects remaining because no amount of
 // subdivision will reduce the count.
 
-//#define RGTL_OCTREE_OBJECTS_DEBUG_BUILD
-//#define RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-//#define RGTL_OCTREE_OBJECTS_DEBUG_FRONT
+// #define RGTL_OCTREE_OBJECTS_DEBUG_BUILD
+// #define RGTL_OCTREE_OBJECTS_DEBUG_QUERY
+// #define RGTL_OCTREE_OBJECTS_DEBUG_FRONT
 
 #if defined(RGTL_OCTREE_OBJECTS_DEBUG_BUILD) || \
-    defined(RGTL_OCTREE_OBJECTS_DEBUG_QUERY) || \
-    defined(RGTL_OCTREE_OBJECTS_DEBUG_FRONT) || 0
-# include <vcl_iostream.h>
+  defined(RGTL_OCTREE_OBJECTS_DEBUG_QUERY) || \
+  defined(RGTL_OCTREE_OBJECTS_DEBUG_FRONT) || 0
+#  include <vcl_iostream.h>
 #endif
 
 // Compile-time option to store distances at node centers and using
@@ -48,11 +48,11 @@
 // but is slower for query points inside the root cell because the
 // overhead of computing the bound for every node on the way down the
 // tree is too great compared to just looking up the initial leaf bound.
-//#define RGTL_OCTREE_OBJECTS_NODE_DT
+// #define RGTL_OCTREE_OBJECTS_NODE_DT
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 struct rgtl_octree_objects_cell_data
-{
+  {
   // Distance from the cell center to the nearest object.  NOTE:
   // During tree construction and distance transform this could be set
   // to a tentative bound.  We could use the sign bit to indicate this
@@ -68,21 +68,22 @@ struct rgtl_octree_objects_cell_data
   // used for initial bounds with k > 1 for query_closest.
 
   rgtl_octree_objects_cell_data() {}
-  rgtl_octree_objects_cell_data(double d): distance(d) {}
- private:
+  rgtl_octree_objects_cell_data(double d) : distance(d) {}
+private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
   {
     sr & distance;
   }
-};
 
-//----------------------------------------------------------------------------
-struct rgtl_octree_objects_leaf_data: public rgtl_octree_objects_cell_data
-{
+  };
+
+// ----------------------------------------------------------------------------
+struct rgtl_octree_objects_leaf_data : public rgtl_octree_objects_cell_data
+  {
   typedef rgtl_octree_objects_cell_data derived;
-  typedef int index_type;
+  typedef int                           index_type;
 
   // Objects in this leaf are stored contiguously in an array.  This
   // is the index of the beginning and (one past) the end of the block
@@ -92,9 +93,9 @@ struct rgtl_octree_objects_leaf_data: public rgtl_octree_objects_cell_data
   index_type index_end;
 
   rgtl_octree_objects_leaf_data() {}
-  rgtl_octree_objects_leaf_data(double d, index_type begin, index_type end):
+  rgtl_octree_objects_leaf_data(double d, index_type begin, index_type end) :
     rgtl_octree_objects_cell_data(d), index_begin(begin), index_end(end) {}
- private:
+private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
@@ -103,46 +104,48 @@ struct rgtl_octree_objects_leaf_data: public rgtl_octree_objects_cell_data
     sr & index_begin;
     sr & index_end;
   }
-};
 
-//----------------------------------------------------------------------------
+  };
+
+// ----------------------------------------------------------------------------
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
-struct rgtl_octree_objects_node_data: public rgtl_octree_objects_cell_data
-{
+struct rgtl_octree_objects_node_data : public rgtl_octree_objects_cell_data
+  {
   typedef rgtl_octree_objects_cell_data derived;
 
   // Currently we have no extra data for nodes.
   rgtl_octree_objects_node_data() {}
-  rgtl_octree_objects_node_data(double d): rgtl_octree_objects_cell_data(d) {}
- private:
+  rgtl_octree_objects_node_data(double d) : rgtl_octree_objects_cell_data(d) {}
+private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
   {
     sr & rgtl_serialize_base<derived>(*this);
   }
-};
+
+  };
 #else
 typedef void rgtl_octree_objects_node_data;
 #endif
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 class rgtl_octree_objects_distance_transform
 {
- public:
-  typedef rgtl_octree_objects_leaf_data leaf_data_type;
-  typedef rgtl_octree_objects_node_data node_data_type;
+public:
+  typedef rgtl_octree_objects_leaf_data                             leaf_data_type;
+  typedef rgtl_octree_objects_node_data                             node_data_type;
   typedef rgtl_octree_data_fixed<D, leaf_data_type, node_data_type> tree_type;
-  typedef typename tree_type::cell_index_type cell_index_type;
-  typedef typename tree_type::cell_location_type cell_location_type;
-  typedef typename tree_type::child_index_type child_index_type;
+  typedef typename tree_type::cell_index_type                       cell_index_type;
+  typedef typename tree_type::cell_location_type                    cell_location_type;
+  typedef typename tree_type::child_index_type                      child_index_type;
 
   // An entry on the front of propagating distance bounds.
   struct entry_type
-  {
+    {
     entry_type(cell_location_type const& idx,
-               cell_index_type cidx, double bound):
+               cell_index_type cidx, double bound) :
       location(idx), cell_index(cidx), Bound(bound) {}
 
     // Logical index of the cell.
@@ -153,21 +156,23 @@ class rgtl_octree_objects_distance_transform
 
     // Current bound.
     double Bound;
-  };
+    };
   struct entry_compare_type
-  {
+    {
     bool operator()(const entry_type& l, const entry_type& r) const
     {
       return l.Bound < r.Bound;
     }
-  };
+
+    };
   struct index_compare_type
-  {
+    {
     bool operator()(cell_index_type l, cell_index_type r) const
     {
       return l < r;
     }
-  };
+
+    };
 
   // The front of propagating distance bounds.
   typedef vcl_multiset<entry_type, entry_compare_type> front_type;
@@ -178,64 +183,67 @@ class rgtl_octree_objects_distance_transform
   front_index_map_type front_index_map_;
 
   typedef rgtl_octree_objects_internal<D> objects_type;
-  objects_type& objects_;
-  tree_type& tree_;
-  int k_;
+  objects_type&      objects_;
+  tree_type&         tree_;
+  int                k_;
   vcl_vector<double> squared_distances_;
 
-  rgtl_octree_objects_distance_transform(objects_type* intern, int k):
+  rgtl_octree_objects_distance_transform(objects_type* intern, int k) :
     objects_(*intern), tree_(intern->tree_), k_(k),
     squared_distances_(k) {}
   void initialize_front(cell_location_type const& cell, cell_index_type cidx);
+
   bool execute_transform();
-  void propagate_front(cell_location_type const& cell, double const center[D],
-                       double distance);
-  void propagate_front(double const from_center[D], double distance,
-                       unsigned int face, cell_location_type const& cell,
+
+  void propagate_front(cell_location_type const& cell, double const center[D], double distance);
+
+  void propagate_front(double const from_center[D], double distance, unsigned int face, cell_location_type const& cell,
                        cell_index_type cidx);
+
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
   bool transform_nodes();
-  bool transform_nodes(cell_location_type const& cell, cell_index_type cidx,
-                       double half_diagonal, double& parent_bound);
+
+  bool transform_nodes(cell_location_type const& cell, cell_index_type cidx, double half_diagonal,
+                       double& parent_bound);
+
 #endif
 };
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 class rgtl_octree_objects_query_closest
 {
- public:
+public:
   // Construct with a reference to the main representation.
   typedef rgtl_octree_objects_internal<D> internal_type;
   rgtl_octree_objects_query_closest(internal_type const& intern, int k);
 
   // Get useful types from the main representation.
   typedef typename internal_type::cell_location_type cell_location_type;
-  typedef typename internal_type::cell_index_type cell_index_type;
-  typedef typename internal_type::child_index_type child_index_type;
-  typedef typename internal_type::leaf_data_type leaf_data_type;
-  typedef typename internal_type::node_data_type node_data_type;
+  typedef typename internal_type::cell_index_type    cell_index_type;
+  typedef typename internal_type::child_index_type   child_index_type;
+  typedef typename internal_type::leaf_data_type     leaf_data_type;
+  typedef typename internal_type::node_data_type     node_data_type;
 
   // The query entry point.
-  int query(double const p[D], int k, double bound,
-            int* ids, double* squared_distances, double* points);
+  int query(double const p[D], int k, double bound, int* ids, double* squared_distances, double* points);
 
   // The recursive query implementation.
-  void query_impl(cell_location_type const& cell, cell_index_type cell_index,
-                  double const p[D], int k);
+  void query_impl(cell_location_type const& cell, cell_index_type cell_index, double const p[D], int k);
 
   // Entry in the list of closest objects.
   struct closest_object_entry
-  {
-    closest_object_entry(): id(-1), distance_squared(-1) {}
-    closest_object_entry(int idx, double d2, double q[D])
-    : id(idx), distance_squared(d2)
     {
-      for (unsigned int a=0; a < D; ++a)
-      {
+    closest_object_entry() : id(-1), distance_squared(-1) {}
+    closest_object_entry(int idx, double d2, double q[D])
+      : id(idx), distance_squared(d2)
+    {
+      for( unsigned int a = 0; a < D; ++a )
+        {
         this->point[a] = q[a];
-      }
+        }
     }
+
     int id;
     double distance_squared;
     double point[D];
@@ -246,7 +254,8 @@ class rgtl_octree_objects_query_closest
              that.distance_squared  >= 0 &&
              this->distance_squared < that.distance_squared;
     }
-  };
+
+    };
 
   // The internal objects representation.
   internal_type const& internal_;
@@ -264,45 +273,47 @@ class rgtl_octree_objects_query_closest
 #endif
 };
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 class rgtl_octree_objects_internal
 {
- public:
-  typedef rgtl_octree_objects_leaf_data leaf_data_type;
-  typedef rgtl_octree_objects_node_data node_data_type;
+public:
+  typedef rgtl_octree_objects_leaf_data                             leaf_data_type;
+  typedef rgtl_octree_objects_node_data                             node_data_type;
   typedef rgtl_octree_data_fixed<D, leaf_data_type, node_data_type> tree_type;
-  typedef rgtl_object_array<D> object_array_type;
-  typedef rgtl_octree_cell_bounds<D> bounds_type;
-  typedef typename tree_type::cell_index_type cell_index_type;
-  typedef typename tree_type::cell_location_type cell_location_type;
-  typedef typename tree_type::child_index_type child_index_type;
-  typedef rgtl_octree_cell_geometry<D> cell_geometry_type;
+  typedef rgtl_object_array<D>                                      object_array_type;
+  typedef rgtl_octree_cell_bounds<D>                                bounds_type;
+  typedef typename tree_type::cell_index_type                       cell_index_type;
+  typedef typename tree_type::cell_location_type                    cell_location_type;
+  typedef typename tree_type::child_index_type                      child_index_type;
+  typedef rgtl_octree_cell_geometry<D>                              cell_geometry_type;
   rgtl_octree_objects_internal(object_array_type const& objs);
 
-  rgtl_octree_objects_internal(object_array_type const& objs,
-                               bounds_type const& b, int ml);
+  rgtl_octree_objects_internal(object_array_type const& objs, bounds_type const& b, int ml);
 
   // Wrap around public object array API.
   int number_of_objects() const
   {
     return this->object_array_.number_of_objects();
   }
+
   bool object_intersects_object(int idA, int idB) const
   {
     return this->object_array_.object_intersects_object(idA, idB);
   }
+
   bool object_intersects_box(int id,
                              cell_geometry_type const& cell_geometry) const
   {
     return this->object_array_.object_intersects_box
-      (id,
-       cell_geometry.get_sphere_center(),
-       cell_geometry.get_sphere_radius(),
-       cell_geometry.get_lower(),
-       cell_geometry.get_upper(),
-       cell_geometry.get_corners());
+             (id,
+             cell_geometry.get_sphere_center(),
+             cell_geometry.get_sphere_radius(),
+             cell_geometry.get_lower(),
+             cell_geometry.get_upper(),
+             cell_geometry.get_corners() );
   }
+
   bool object_closest_point(int id,
                             double const x[D],
                             double y[D],
@@ -316,11 +327,12 @@ class rgtl_octree_objects_internal
                                          double const q[D])
   {
     double d = 0.0;
-    for (unsigned int a=0; a < D; ++a)
-    {
-      double da = p[a]-q[a];
-      d += da*da;
-    }
+
+    for( unsigned int a = 0; a < D; ++a )
+      {
+      double da = p[a] - q[a];
+      d += da * da;
+      }
     return d;
   }
 
@@ -328,71 +340,63 @@ class rgtl_octree_objects_internal
   void compute_center(cell_location_type const& cell, double center[D]) const
   {
     rgtl_octree_cell_bounds<D> upper;
-    child_index_type last = child_index_type((1<<D)-1);
-    upper.compute_bounds(this->bounds_, cell.get_child(last));
+    child_index_type           last = child_index_type( (1 << D) - 1);
+    upper.compute_bounds(this->bounds_, cell.get_child(last) );
     upper.origin().copy_out(center);
   }
 
   // Compute the squared distances to the nearest and farthest point
   // of a cell volume to the given point.
-  void cell_distances(cell_location_type const& cell, double const x[D],
-                      double& nearest_squared, double& farthest_squared) const;
-  void cell_distances(bounds_type const& cell_bounds, double const x[D],
-                      double& nearest_squared, double& farthest_squared) const;
-  void cell_nearest(cell_location_type const& cell, double const x[D],
-                    double& nearest_squared) const;
-  void cell_nearest(bounds_type const& cell_bounds, double const x[D],
-                    double& nearest_squared) const;
+  void cell_distances(cell_location_type const& cell, double const x[D], double& nearest_squared,
+                      double& farthest_squared) const;
+
+  void cell_distances(bounds_type const& cell_bounds, double const x[D], double& nearest_squared,
+                      double& farthest_squared) const;
+
+  void cell_nearest(cell_location_type const& cell, double const x[D], double& nearest_squared) const;
+
+  void cell_nearest(bounds_type const& cell_bounds, double const x[D], double& nearest_squared) const;
 
   // Build the spatial structure within the given cell.
   void build(cell_geometry_type const& cell_geometry, vcl_vector<int>& ids);
 
   // Query the closest k objects.
-  int query_closest(double const p[D], int k, double bound_squared, int* ids,
-                    double* squared_distances, double* points) const;
-  int query_closest_impl(double const p[D], int k, double current_bound,
-                         int* ids, double* squared_distances,
+  int query_closest(double const p[D], int k, double bound_squared, int* ids, double* squared_distances,
+                    double* points) const;
+
+  int query_closest_impl(double const p[D], int k, double current_bound, int* ids, double* squared_distances,
                          double* points) const;
 
   // Lookup an initial closest object distance bound.
-  void lookup_leaf(cell_location_type const& cell,
-                   cell_index_type cidx,
-                   double const p[D],
-                   cell_location_type& leaf, cell_index_type& lidx) const;
+  void lookup_leaf(cell_location_type const& cell, cell_index_type cidx, double const p[D], cell_location_type& leaf,
+                   cell_index_type& lidx) const;
 
   // Compute a kth-order distance transform on the cell centers so
   // that each has a known distance to the kth-closest object.
   bool compute_distance_transform(int k);
 
   // Query the objects intersecting a sphere.
-  int query_sphere(double const center[D], double radius,
-                   vcl_vector<int>& ids) const;
-  void query_sphere(cell_location_type const& cell,
-                    cell_index_type cidx,
-                    double const p[D],
-                    double radius_squared,
+  int query_sphere(double const center[D], double radius, vcl_vector<int>& ids) const;
+
+  void query_sphere(cell_location_type const& cell, cell_index_type cidx, double const p[D], double radius_squared,
                     vcl_vector<int>& ids) const;
 
   // Extract objects from a cell.
-  void extract_objects(cell_index_type cidx,
-                       double const* center, double radius_squared,
-                       vcl_vector<int>& ids) const;
+  void extract_objects(cell_index_type cidx, double const* center, double radius_squared, vcl_vector<int>& ids) const;
 
   // Query the objects intersecting an object.
   int query_object(int id, vcl_vector<int>& ids) const;
-  void query_object(cell_location_type const& cell,
-                    cell_index_type cidx,
-                    int idA, vcl_vector<int>& ids) const;
+
+  void query_object(cell_location_type const& cell, cell_index_type cidx, int idA, vcl_vector<int>& ids) const;
 
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
   void set_query_closest_debug(bool b) { this->query_closest_debug_ = b; }
 #else
   void set_query_closest_debug(bool) {}
 #endif
-
- private:
+private:
   object_array_type const& object_array_;
-  bounds_type bounds_;
+  bounds_type              bounds_;
 
   // The maximum subdivision level.
   int max_level_;
@@ -434,12 +438,13 @@ class rgtl_octree_objects_internal
     sr & tree_;
     sr & object_ids_;
   }
+
 };
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_octree_objects_internal<D>
-::rgtl_octree_objects_internal(object_array_type const& objs):
+::rgtl_octree_objects_internal(object_array_type const& objs) :
   object_array_(objs), bounds_(), max_level_(0), max_per_leaf_(0),
   distance_transform_order_(0), object_once_()
 {
@@ -448,28 +453,28 @@ rgtl_octree_objects_internal<D>
 #endif
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_octree_objects_internal<D>
 ::rgtl_octree_objects_internal(object_array_type const& objs,
-                               bounds_type const& b, int ml):
+                               bounds_type const& b, int ml) :
   object_array_(objs), bounds_(b), max_level_(ml), max_per_leaf_(10),
-  distance_transform_order_(0), object_once_(objs.number_of_objects())
+  distance_transform_order_(0), object_once_(objs.number_of_objects() )
 {
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
   this->query_closest_debug_ = false;
 #endif
-  int n = this->number_of_objects();
+  int             n = this->number_of_objects();
   vcl_vector<int> ids(n);
-  for (int i=0; i < n; ++i)
-  {
+  for( int i = 0; i < n; ++i )
+    {
     ids[i] = i;
-  }
+    }
   cell_geometry_type root_geometry(cell_location_type(), this->bounds_);
   this->build(root_geometry, ids);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
@@ -478,13 +483,14 @@ rgtl_octree_objects_internal<D>
 {
   // Get the bounds of the cell.
   bounds_type cell_bounds;
+
   cell_bounds.compute_bounds(this->bounds_, cell);
 
   // Compute the distances for these bounds.
   this->cell_distances(cell_bounds, x, nearest_squared, farthest_squared);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
@@ -495,20 +501,23 @@ rgtl_octree_objects_internal<D>
   // point the nearest and farthest points in the volume of the cell.
   nearest_squared = 0;
   farthest_squared = 0;
-  for (unsigned int a=0; a < D; ++a)
-  {
-    double l = cell_bounds.origin(a)-x[a];
-    double u = cell_bounds.origin(a)+cell_bounds.size()-x[a];
-    double l2 = l*l;
-    double u2 = u*u;
-    if (l > 0) { nearest_squared += l2; }
-    else if (u < 0) { nearest_squared += u2; }
-    if (l2 > u2) { farthest_squared += l2; }
+  for( unsigned int a = 0; a < D; ++a )
+    {
+    double l = cell_bounds.origin(a) - x[a];
+    double u = cell_bounds.origin(a) + cell_bounds.size() - x[a];
+    double l2 = l * l;
+    double u2 = u * u;
+    if( l > 0 ) { nearest_squared += l2; }
+    else if( u < 0 )
+      {
+      nearest_squared += u2;
+      }
+    if( l2 > u2 ) { farthest_squared += l2; }
     else { farthest_squared += u2; }
-  }
+    }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
@@ -517,13 +526,14 @@ rgtl_octree_objects_internal<D>
 {
   // Get the bounds of the cell.
   bounds_type cell_bounds;
+
   cell_bounds.compute_bounds(this->bounds_, cell);
 
   // Compute the distances for these bounds.
   this->cell_nearest(cell_bounds, x, nearest_squared);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
@@ -533,90 +543,93 @@ rgtl_octree_objects_internal<D>
   // Compute the squared magnitude of vectors pointing from the given
   // point the nearest point in the volume of the cell.
   nearest_squared = 0;
-  for (unsigned int a=0; a < D; ++a)
-  {
-    double l = cell_bounds.origin(a)-x[a];
-    double u = cell_bounds.origin(a)+cell_bounds.size()-x[a];
-    double l2 = l*l;
-    double u2 = u*u;
-    if (l > 0) { nearest_squared += l2; }
-    else if (u < 0) { nearest_squared += u2; }
-  }
+  for( unsigned int a = 0; a < D; ++a )
+    {
+    double l = cell_bounds.origin(a) - x[a];
+    double u = cell_bounds.origin(a) + cell_bounds.size() - x[a];
+    double l2 = l * l;
+    double u2 = u * u;
+    if( l > 0 ) { nearest_squared += l2; }
+    else if( u < 0 )
+      {
+      nearest_squared += u2;
+      }
+    }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
 ::build(cell_geometry_type const& cell_geometry, vcl_vector<int>& ids)
 {
   cell_location_type const& cell = cell_geometry.location();
+
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_BUILD
   vcl_cout << "Considering " << ids.size()
            << " objects in cell " << cell << vcl_endl;
 #endif
   bool tooDeep = cell.level() >= this->max_level_;
-  bool tooMany = (static_cast<int>(ids.size()) > this->max_per_leaf_);
-  if (tooMany && !tooDeep)
-  {
+  bool tooMany = (static_cast<int>(ids.size() ) > this->max_per_leaf_);
+  if( tooMany && !tooDeep )
+    {
     // We need to divide this cell.
     // Compute the child cell geometries.
-    cell_geometry_type child_geometry[1<<D];
+    cell_geometry_type child_geometry[1 << D];
     cell_geometry.get_children(child_geometry);
 
     // Distribute objects into children.
-    vcl_vector<int> child_ids[1<<D];
-    for (unsigned int i=0; i < (1<<D); ++i)
-    {
-      // Build a list of objects intersecting this child.
-      for (vcl_vector<int>::const_iterator pi = ids.begin();
-           pi != ids.end(); ++pi)
+    vcl_vector<int> child_ids[1 << D];
+    for( unsigned int i = 0; i < (1 << D); ++i )
       {
-        int id = *pi;
-        if (this->object_intersects_box(id, child_geometry[i]))
+      // Build a list of objects intersecting this child.
+      for( vcl_vector<int>::const_iterator pi = ids.begin();
+           pi != ids.end(); ++pi )
         {
+        int id = *pi;
+        if( this->object_intersects_box(id, child_geometry[i]) )
+          {
           child_ids[i].push_back(id);
+          }
         }
       }
-    }
 
     // Erase memory used by id list for this cell.
     ids.clear();
-
     // Build the children recursively.
-    for (unsigned int i=0; i < (1<<D); ++i)
-    {
+    for( unsigned int i = 0; i < (1 << D); ++i )
+      {
       this->build(child_geometry[i], child_ids[i]);
+      }
     }
-  }
   else
-  {
+    {
     // We will not divide this cell further.
     // Store the objects for this cell.
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_BUILD
-    if (!ids.empty())
-    {
+    if( !ids.empty() )
+      {
       vcl_cout << "Storing " << ids.size() << " objects in cell "
                << cell << vcl_endl;
-    }
+      }
 #endif
     typedef typename leaf_data_type::index_type index_type;
-    index_type index_begin = index_type(this->object_ids_.size());
-    for (vcl_vector<int>::const_iterator pi = ids.begin();
-         pi != ids.end(); ++pi)
-    {
+    index_type index_begin = index_type(this->object_ids_.size() );
+    for( vcl_vector<int>::const_iterator pi = ids.begin();
+         pi != ids.end(); ++pi )
+      {
       this->object_ids_.push_back(*pi);
-    }
-    index_type index_end = index_type(this->object_ids_.size());
+      }
+    index_type     index_end = index_type(this->object_ids_.size() );
     leaf_data_type leaf_data(-vcl_numeric_limits<double>::infinity(),
                              index_begin, index_end);
 
     // Store the data in the leaf.
     this->tree_.set_leaf_data(cell, &leaf_data);
-  }
+    }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects_internal<D>
@@ -626,36 +639,37 @@ rgtl_octree_objects_internal<D>
   // Establish an initial upper-bound on the distance to an object.
   double nearest_squared;
   double farthest_squared;
+
   this->cell_distances(this->bounds_, p, nearest_squared, farthest_squared);
 
   // Check for a smaller bound given by the caller.
-  if (bound_squared >= 0 && bound_squared < farthest_squared)
-  {
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-    if (this->query_closest_debug_)
+  if( bound_squared >= 0 && bound_squared < farthest_squared )
     {
+#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
+    if( this->query_closest_debug_ )
+      {
       vcl_cout << "User initial bound "
                << bound_squared << " < " << farthest_squared << vcl_endl;
-    }
+      }
 #endif
     farthest_squared = bound_squared;
-  }
+    }
 
 #ifndef RGTL_OCTREE_OBJECTS_NODE_DT
   // Check for a smaller bound given by the distance transform.
-  if (nearest_squared <= 0 && k <= this->distance_transform_order_)
-  {
+  if( nearest_squared <= 0 && k <= this->distance_transform_order_ )
+    {
     // The query point is inside the root cell and the number of
     // objects desired is not larger than the order of the distance
     // transform.  An initial bound may be available in the leaf
     // containing the query point.
     cell_location_type leaf;
-    cell_index_type lidx;
+    cell_index_type    lidx;
     this->lookup_leaf(cell_location_type(), cell_index_type(), p, leaf, lidx);
-    if (leaf_data_type const* leaf_data = this->tree_.get_leaf_data(lidx))
-    {
-      if (vnl_math::isfinite(leaf_data->distance))
+    if( leaf_data_type const* leaf_data = this->tree_.get_leaf_data(lidx) )
       {
+      if( vnl_math::isfinite(leaf_data->distance) )
+        {
         // Compute a bound on the distance by adding the distance from
         // the query point to the cell center and the distance from
         // the cell center to the nearest object.
@@ -669,22 +683,22 @@ rgtl_octree_objects_internal<D>
         // Increase the computed potential bound by a small fraction
         // in order to avoid missing an object altogether due to
         // rounding problems.
-        double squared_bound = bound*bound*1.00001;
-        if (squared_bound < farthest_squared)
-        {
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-          if (this->query_closest_debug_)
+        double squared_bound = bound * bound * 1.00001;
+        if( squared_bound < farthest_squared )
           {
+#  ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
+          if( this->query_closest_debug_ )
+            {
             vcl_cout << "Reduced initial bound "
                      << squared_bound << " < " << farthest_squared
                      << " using leaf " << leaf << vcl_endl;
-          }
-#endif
+            }
+#  endif
           farthest_squared = squared_bound;
+          }
         }
       }
     }
-  }
 #endif
 
   // Perform the real query.
@@ -692,7 +706,7 @@ rgtl_octree_objects_internal<D>
                                   ids, squared_distances, points);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects_internal<D>
@@ -703,7 +717,7 @@ rgtl_octree_objects_internal<D>
   return qc.query(p, k, current_bound, ids, squared_distances, points);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void rgtl_octree_objects_internal<D>
 ::lookup_leaf(cell_location_type const& cell,
@@ -711,45 +725,45 @@ void rgtl_octree_objects_internal<D>
               double const p[D],
               cell_location_type& leaf, cell_index_type& lidx) const
 {
-  if (this->tree_.has_children(cidx))
-  {
+  if( this->tree_.has_children(cidx) )
+    {
     // Compute the index of the child containing the point.
     double center[D];
     this->compute_center(cell, center);
     child_index_type child_index(0);
-    for (unsigned int a=0; a < D; ++a)
-    {
-      child_index |= (p[a] < center[a])? 0 : (1<<a);
-    }
+    for( unsigned int a = 0; a < D; ++a )
+      {
+      child_index |= (p[a] < center[a]) ? 0 : (1 << a);
+      }
 
     // Recursively explore the child.
     this->lookup_leaf(cell.get_child(child_index),
                       this->tree_.get_child(cidx, child_index),
                       p, leaf, lidx);
-  }
+    }
   else
-  {
+    {
     // Return this leaf.
     leaf = cell;
     lidx = cidx;
-  }
+    }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 bool rgtl_octree_objects_internal<D>::compute_distance_transform(int k)
 {
   // Make sure we do not compute more than one distance transform.
-  if (this->distance_transform_order_ > 0)
-  {
+  if( this->distance_transform_order_ > 0 )
+    {
     return this->distance_transform_order_ == k;
-  }
+    }
 
   // Setup the kth-order transform.
   rgtl_octree_objects_distance_transform<D> dt(this, k);
 
   // Initialize the transform front.
-  dt.initialize_front(cell_location_type(), cell_index_type());
+  dt.initialize_front(cell_location_type(), cell_index_type() );
 
   // Execute the entire transform.  Disable debugging output for
   // closest object computation during the transform.
@@ -767,54 +781,54 @@ bool rgtl_octree_objects_internal<D>::compute_distance_transform(int k)
 
   // If the transform succeeded store its order to enable use during
   // closest object queries.
-  if (success)
-  {
+  if( success )
+    {
     this->distance_transform_order_ = k;
     return true;
-  }
+    }
   else
-  {
+    {
     return false;
-  }
+    }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_distance_transform<D>
 ::initialize_front(cell_location_type const& cell, cell_index_type cidx)
 {
-  if (this->tree_.has_children(cidx))
-  {
+  if( this->tree_.has_children(cidx) )
+    {
     // Recursively bound the children.
-    for (child_index_type i(0); i < (1<<D); ++i)
-    {
-      this->initialize_front(cell.get_child(i),
-                             this->tree_.get_child(cidx, i));
-    }
-  }
-  else if (leaf_data_type const* leaf_data =
-           this->tree_.get_leaf_data(cidx))
-  {
-    // The front is initialized with non-empty leaves.
-    if (leaf_data->index_begin != leaf_data->index_end)
-    {
-      double bound;
-      if (leaf_data->index_end - leaf_data->index_begin >= k_)
+    for( child_index_type i(0); i < (1 << D); ++i )
       {
+      this->initialize_front(cell.get_child(i),
+                             this->tree_.get_child(cidx, i) );
+      }
+    }
+  else if( leaf_data_type const* leaf_data =
+             this->tree_.get_leaf_data(cidx) )
+    {
+    // The front is initialized with non-empty leaves.
+    if( leaf_data->index_begin != leaf_data->index_end )
+      {
+      double bound;
+      if( leaf_data->index_end - leaf_data->index_begin >= k_ )
+        {
         // The initial bound is the half-diagonal length because the
         // leaf is known to contain at least k objects in its volume.
         rgtl_octree_cell_bounds<D> cell_bounds;
         cell_bounds.compute_bounds(this->objects_.bounds_, cell);
         double half = cell_bounds.size() / 2;
-        bound = vcl_sqrt(half*half*D);
-      }
+        bound = vcl_sqrt(half * half * D);
+        }
       else
-      {
+        {
         // The initial bound is infinity because the leaf does not
         // contain at least k objects.
         bound = vcl_numeric_limits<double>::infinity();
-      }
+        }
 
       // Update the leaf data with this bound.
       leaf_data_type new_leaf(-bound,
@@ -825,24 +839,24 @@ rgtl_octree_objects_distance_transform<D>
       entry_type entry(cell, cidx, bound);
       typename front_type::iterator ei = this->front_.insert(entry);
       this->front_index_map_[cidx] = ei;
+      }
     }
-  }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 bool
 rgtl_octree_objects_distance_transform<D>
 ::execute_transform()
 {
   // Loop until the front is empty.
-  while (!this->front_.empty())
-  {
+  while( !this->front_.empty() )
+    {
     // Get the next entry in the front.
     entry_type entry = *this->front_.begin();
 
     // Erase the entry from the front.
-    this->front_.erase(this->front_.begin());
+    this->front_.erase(this->front_.begin() );
     this->front_index_map_.erase(entry.cell_index);
 
     // Compute the true distance for this entry's cell center.
@@ -850,21 +864,21 @@ rgtl_octree_objects_distance_transform<D>
     vcl_cout << "Checking front entry cell " << entry.location
              << " with bound " << entry.Bound << vcl_endl;
 #endif
-    double squared_bound = entry.Bound*entry.Bound;
+    double  squared_bound = entry.Bound * entry.Bound;
     double* squared_distances = &this->squared_distances_[0];
-    double center[D];
+    double  center[D];
     this->objects_.compute_center(entry.location, center);
     int n = this->objects_.query_closest_impl(center, this->k_, squared_bound,
                                               0, squared_distances, 0);
-    if (n != this->k_)
-    {
+    if( n != this->k_ )
+      {
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
       vcl_cout << "Could not find " << this->k_
                << " closest object(s)." << vcl_endl;
 #endif
       return false;
-    }
-    double distance = vcl_sqrt(squared_distances[n-1]);
+      }
+    double distance = vcl_sqrt(squared_distances[n - 1]);
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
     vcl_cout << "Found distance " << distance << vcl_endl;
 #endif
@@ -878,12 +892,12 @@ rgtl_octree_objects_distance_transform<D>
 
     // Propagate bounds to adjacent cells based on this distance.
     this->propagate_front(entry.location, center, distance);
-  }
+    }
 
   return true;
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_distance_transform<D>
@@ -892,19 +906,19 @@ rgtl_octree_objects_distance_transform<D>
                   double distance)
 {
   // Propagate a distance bound through each face of the cell.
-  for (unsigned int face = 0; face < 2*D; ++face)
-  {
+  for( unsigned int face = 0; face < 2 * D; ++face )
+    {
     // Get the neighbor through this face.
     cell_location_type neighbor;
-    cell_index_type nidx;
-    if (this->tree_.get_neighbor(cell, face, neighbor, nidx))
-    {
+    cell_index_type    nidx;
+    if( this->tree_.get_neighbor(cell, face, neighbor, nidx) )
+      {
       this->propagate_front(center, distance, face, neighbor, nidx);
+      }
     }
-  }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_distance_transform<D>
@@ -914,8 +928,8 @@ rgtl_octree_objects_distance_transform<D>
                   cell_location_type const& cell,
                   cell_index_type cidx)
 {
-  if (this->tree_.has_children(cidx))
-  {
+  if( this->tree_.has_children(cidx) )
+    {
     // Recurse to the children that are the real face neighbors of the
     // original cell.
     unsigned int axis = face >> 1;
@@ -923,29 +937,29 @@ rgtl_octree_objects_distance_transform<D>
 
     // The bit corresponding to the face axis is fixed to one side.
     // The other bits come from i.
-    unsigned int lower_mask = ((1<<axis)-1);
+    unsigned int lower_mask = ( (1 << axis) - 1);
     unsigned int middle_bit = (side << axis);
-    unsigned int upper_mask = ((1<<(D-1))-1) ^ lower_mask;
-    for (unsigned int i=0; i < (1<<(D-1)); ++i)
-    {
+    unsigned int upper_mask = ( (1 << (D - 1) ) - 1) ^ lower_mask;
+    for( unsigned int i = 0; i < (1 << (D - 1) ); ++i )
+      {
       child_index_type child_index =
-        child_index_type(((upper_mask & i) << 1) |
-                         middle_bit |
-                         (lower_mask & i));
+        child_index_type( ( (upper_mask & i) << 1)
+                          | middle_bit
+                          | (lower_mask & i) );
       this->propagate_front(from_center, distance, face,
                             cell.get_child(child_index),
-                            this->tree_.get_child(cidx, child_index));
+                            this->tree_.get_child(cidx, child_index) );
+      }
     }
-  }
-  else if (leaf_data_type const* old_leaf = this->tree_.get_leaf_data(cidx))
-  {
+  else if( leaf_data_type const* old_leaf = this->tree_.get_leaf_data(cidx) )
+    {
     // This is a leaf to which we may propagate a bound and update the
     // front.
-    if (old_leaf->distance >= 0)
-    {
+    if( old_leaf->distance >= 0 )
+      {
       // This leaf already has the true distance.
       return;
-    }
+      }
 
     // Compute the propagated bound.
     double to_center[D];
@@ -956,8 +970,8 @@ rgtl_octree_objects_distance_transform<D>
 
     // Propagate the bound if it is smaller.  Note that tentative
     // bounds are stored in the leaves as negative distances.
-    if (bound < -old_leaf->distance)
-    {
+    if( bound < -old_leaf->distance )
+      {
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
       vcl_cout << "Updating bound of leaf " << cell
                << " with " << bound << " < " << (-old_leaf->distance)
@@ -975,17 +989,17 @@ rgtl_octree_objects_distance_transform<D>
       typename front_type::iterator ei = this->front_.insert(entry);
       typename front_index_map_type::iterator mi =
         this->front_index_map_.find(cidx);
-      if (mi == this->front_index_map_.end())
-      {
+      if( mi == this->front_index_map_.end() )
+        {
         // The leaf was not already in the front.  Create a front
         // index for the new entry.
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
         vcl_cout << "Creating new front entry." << vcl_endl;
 #endif
         this->front_index_map_[cidx] = ei;
-      }
+        }
       else
-      {
+        {
         // The leaf was already in the front.  Remove the old entry
         // and update the front index for the new entry.
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
@@ -993,26 +1007,27 @@ rgtl_octree_objects_distance_transform<D>
 #endif
         this->front_.erase(mi->second);
         mi->second = ei;
+        }
       }
     }
-  }
 }
 
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 bool
 rgtl_octree_objects_distance_transform<D>
 ::transform_nodes()
 {
-  double half = this->objects_.bounds_.size()/2;
-  double half_diagonal = vcl_sqrt(D*half*half);
+  double half = this->objects_.bounds_.size() / 2;
+  double half_diagonal = vcl_sqrt(D * half * half);
   double bound = 0;
+
   return this->transform_nodes(cell_location_type(), cell_index_type(),
                                half_diagonal, bound);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 bool
 rgtl_octree_objects_distance_transform<D>
@@ -1020,91 +1035,93 @@ rgtl_octree_objects_distance_transform<D>
                   double half_diagonal, double& parent_bound)
 {
   double distance;
-  if (this->tree_.has_children(cidx))
-  {
+
+  if( this->tree_.has_children(cidx) )
+    {
     // Recursively transform the children.
     double bound = vcl_numeric_limits<double>::infinity();
-    for (child_index_type i(0); i < (1<<D); ++i)
-    {
-      if (!this->transform_nodes(cell.get_child(i),
-                                 this->tree_.get_child(cidx, i),
-                                 half_diagonal/2, bound))
+    for( child_index_type i(0); i < (1 << D); ++i )
       {
+      if( !this->transform_nodes(cell.get_child(i),
+                                 this->tree_.get_child(cidx, i),
+                                 half_diagonal / 2, bound) )
+        {
         return false;
+        }
       }
-    }
 
     // We now have a bound provided by our children.  Use it to
     // compute this node center distance.
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
+#  ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
     vcl_cout << "Checking node " << cell
              << " with bound " << bound << vcl_endl;
-#endif
-    double squared_bound = bound*bound;
-    double squared_distance = -1;
+#  endif
+    double  squared_bound = bound * bound;
+    double  squared_distance = -1;
     double* squared_distances = &this->squared_distances_[0];
-    double center[D];
+    double  center[D];
     this->objects_.compute_center(cell, center);
     int n = this->objects_.query_closest_impl(center, this->k_, squared_bound,
                                               0, squared_distances, 0);
-    if (n != this->k_)
-    {
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
+    if( n != this->k_ )
+      {
+#  ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
       vcl_cout << "Could not find " << this->k_
                << " closest object(s)." << vcl_endl;
-#endif
+#  endif
       return false;
-    }
-    distance = vcl_sqrt(squared_distances[n-1]);
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
+      }
+    distance = vcl_sqrt(squared_distances[n - 1]);
+#  ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
     vcl_cout << "Found distance " << distance << vcl_endl;
-#endif
+#  endif
 
     // Store this distance in the node.
     node_data_type new_node(distance);
     this->tree_.set_node_data(cidx, &new_node);
-  }
-  else if (leaf_data_type const* leaf_data =
-           this->tree_.get_leaf_data(cidx))
-  {
-    // Check this leaf.
-    if (leaf_data->distance < 0)
-    {
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
-      vcl_cout << "No distance for leaf " << cell << vcl_endl;
-#endif
-      return false;
     }
-    else
+  else if( leaf_data_type const* leaf_data =
+             this->tree_.get_leaf_data(cidx) )
     {
+    // Check this leaf.
+    if( leaf_data->distance < 0 )
+      {
+#  ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
+      vcl_cout << "No distance for leaf " << cell << vcl_endl;
+#  endif
+      return false;
+      }
+    else
+      {
       // Use the distance provided by this leaf.
       distance = leaf_data->distance;
+      }
     }
-  }
   else
-  {
+    {
     // There is no leaf!
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
+#  ifdef RGTL_OCTREE_OBJECTS_DEBUG_FRONT
     vcl_cout << "No data for leaf " << cell << vcl_endl;
-#endif
+#  endif
     return false;
-  }
+    }
 
   // Bound the distance for our parent cell center using our distance.
   double bound = distance + half_diagonal;
-  if (bound < parent_bound)
-  {
+  if( bound < parent_bound )
+    {
     parent_bound = bound;
-  }
+    }
 
   return true;
 }
+
 #endif
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_octree_objects_query_closest<D>
-::rgtl_octree_objects_query_closest(internal_type const& intern, int k):
+::rgtl_octree_objects_query_closest(internal_type const& intern, int k) :
   internal_(intern), best_(k), bound_(0)
 {
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
@@ -1112,7 +1129,7 @@ rgtl_octree_objects_query_closest<D>
 #endif
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects_query_closest<D>
@@ -1123,17 +1140,17 @@ rgtl_octree_objects_query_closest<D>
   this->bound_ = bound;
 
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-  if (this->internal_.query_closest_debug_)
-  {
+  if( this->internal_.query_closest_debug_ )
+    {
     vcl_cout << "Querying point (";
     const char* sep = "";
-    for (unsigned int a=0; a < D; ++a)
-    {
+    for( unsigned int a = 0; a < D; ++a )
+      {
       vcl_cout << sep << p[a];
       sep = ", ";
-    }
+      }
     vcl_cout << ") with initial bound " << this->bound_ << vcl_endl;
-  }
+    }
 #endif
 
   // Keep track objects already tested to avoid duplicating tests.
@@ -1143,53 +1160,53 @@ rgtl_octree_objects_query_closest<D>
   this->query_impl(cell_location_type(), cell_index_type(), p, k);
 
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-  if (this->internal_.query_closest_debug_)
-  {
+  if( this->internal_.query_closest_debug_ )
+    {
     vcl_cout << " Checked " << this->checked_count_
              << " of " << this->internal_.number_of_objects()
              << " objects." << vcl_endl;
-  }
+    }
 #endif
 
   // Copy the final object id list to the output.
   vcl_vector<closest_object_entry>& best = this->best_;
-  for (int i=0; i < k; ++i)
-  {
-    if (best[i].distance_squared >= 0)
+  for( int i = 0; i < k; ++i )
     {
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-      if (this->internal_.query_closest_debug_)
+    if( best[i].distance_squared >= 0 )
       {
+#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
+      if( this->internal_.query_closest_debug_ )
+        {
         vcl_cout << i
                  << ": id " << best[i].id
                  << ", d  " << vcl_sqrt(best[i].distance_squared) << vcl_endl;
-      }
+        }
 #endif
-      if (ids)
-      {
-        ids[i] = best[i].id;
-      }
-      if (squared_distances)
-      {
-        squared_distances[i] = best[i].distance_squared;
-      }
-      if (points)
-      {
-        for (unsigned int a=0; a < D; ++a)
+      if( ids )
         {
-          points[i*D+a] = best[i].point[a];
+        ids[i] = best[i].id;
+        }
+      if( squared_distances )
+        {
+        squared_distances[i] = best[i].distance_squared;
+        }
+      if( points )
+        {
+        for( unsigned int a = 0; a < D; ++a )
+          {
+          points[i * D + a] = best[i].point[a];
+          }
         }
       }
-    }
     else
-    {
+      {
       return i;
+      }
     }
-  }
   return k;
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_query_closest<D>
@@ -1197,26 +1214,26 @@ rgtl_octree_objects_query_closest<D>
              double const p[D], int k)
 {
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-  if (this->internal_.query_closest_debug_)
-  {
+  if( this->internal_.query_closest_debug_ )
+    {
     vcl_cout << "Considering cell " << cell << vcl_endl;
-  }
+    }
 #endif
 
   // Make sure the cell intersects the current bounding sphere.
   double nearest_squared;
   this->internal_.cell_nearest(cell, p, nearest_squared);
-  if (nearest_squared > this->bound_)
-  {
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-    if (this->internal_.query_closest_debug_)
+  if( nearest_squared > this->bound_ )
     {
+#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
+    if( this->internal_.query_closest_debug_ )
+      {
       vcl_cout << " cell is out of range: " << nearest_squared
                << " > " << this->bound_ << vcl_endl;
-    }
+      }
 #endif
     return;
-  }
+    }
 
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
   // Compute the cell center.
@@ -1226,43 +1243,43 @@ rgtl_octree_objects_query_closest<D>
 #endif
 
   // Check whether this is a node or leaf.
-  bool is_node = this->internal_.tree_.has_children(cell_index);
+  bool                  is_node = this->internal_.tree_.has_children(cell_index);
   leaf_data_type const* ld = 0;
-  if (is_node)
-  {
+  if( is_node )
+    {
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
     // Check if this node center provides a distance.
-    if (node_data_type const* nd =
-        this->internal_.tree_.get_node_data(cell_index))
-    {
+    if( node_data_type const* nd =
+          this->internal_.tree_.get_node_data(cell_index) )
+      {
       center_distance = nd->distance;
-    }
+      }
 #endif
-  }
+    }
   else
-  {
+    {
     // This is a leaf.  Lookup the data.
     ld = this->internal_.tree_.get_leaf_data(cell_index);
 
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
     // Check if this leaf center provides a distance.
-    if (ld)
-    {
+    if( ld )
+      {
       center_distance = ld->distance;
-    }
+      }
 #endif
-  }
+    }
 
 #ifdef RGTL_OCTREE_OBJECTS_NODE_DT
   // Try to reduce the current bound using the distance transform
   // result for this cell.
-  if (k <= this->internal_.distance_transform_order_ &&
-      (center_distance*center_distance) < this->bound_)
-  {
+  if( k <= this->internal_.distance_transform_order_ &&
+      (center_distance * center_distance) < this->bound_ )
+    {
     double distance_squared =
       this->internal_.compute_distance_squared(center, p);
-    if (distance_squared < this->bound_)
-    {
+    if( distance_squared < this->bound_ )
+      {
       // Compute a bound on the distance by adding the distance from
       // the query point to the cell center and the distance from
       // the cell center to its nearest object.
@@ -1272,75 +1289,74 @@ rgtl_octree_objects_query_closest<D>
       // Increase the computed potential bound by a small fraction
       // in order to avoid missing an object altogether due to
       // rounding problems.
-      double squared_bound = bound*bound*1.00001;
-      if (squared_bound < this->bound_)
-      {
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-        if (this->internal_.query_closest_debug_)
+      double squared_bound = bound * bound * 1.00001;
+      if( squared_bound < this->bound_ )
         {
+#  ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
+        if( this->internal_.query_closest_debug_ )
+          {
           vcl_cout << "Reduced current bound "
                    << squared_bound << " < " << this->bound_
                    << " using cell " << cell << vcl_endl;
-        }
-#endif
+          }
+#  endif
         this->bound_ = squared_bound;
+        }
       }
     }
-  }
 #endif
 
-  if (is_node)
-  {
+  if( is_node )
+    {
     // Visit the children closer to the query point first.
 #ifndef RGTL_OCTREE_OBJECTS_NODE_DT
     double center[D];
     this->internal_.compute_center(cell, center);
 #endif
     unsigned int child_xor = 0;
-    for (unsigned int a=0; a < D; ++a)
-    {
-      if (p[a] >= center[a])
+    for( unsigned int a = 0; a < D; ++a )
       {
-        child_xor |= (1<<a);
+      if( p[a] >= center[a] )
+        {
+        child_xor |= (1 << a);
+        }
       }
-    }
-
     // The cell is divided, so visit the children.
-    for (unsigned int l = 0; l < (1<<D); ++l)
-    {
-      child_index_type i(l^child_xor);
+    for( unsigned int l = 0; l < (1 << D); ++l )
+      {
+      child_index_type i(l ^ child_xor);
       this->query_impl(cell.get_child(i),
                        this->internal_.tree_.get_child(cell_index, i), p, k);
+      }
     }
-  }
-  else if (ld)
-  {
+  else if( ld )
+    {
     // This is a leaf.  Look for objects.
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-    if (this->internal_.query_closest_debug_)
-    {
-      if (ld->index_begin < ld->index_end)
+    if( this->internal_.query_closest_debug_ )
       {
+      if( ld->index_begin < ld->index_end )
+        {
         vcl_cout << " checking objects" << vcl_endl;
-      }
+        }
       else
-      {
+        {
         vcl_cout << " no objects" << vcl_endl;
+        }
       }
-    }
 #endif
     // Loop over the objects in this cell.  When the objects are not
     // points it is possible that an object will provide a point
     // that is closer to the query than any point in the cell.  If
     // this occurs we can stop testing objects in the cell.
     typedef typename leaf_data_type::index_type index_type;
-    for (index_type i=ld->index_begin;
-         i < ld->index_end && nearest_squared <= this->bound_; ++i)
-    {
+    for( index_type i = ld->index_begin;
+         i < ld->index_end && nearest_squared <= this->bound_; ++i )
+      {
       // Test each object at most once.
       int id = this->internal_.object_ids_[i];
-      if (this->internal_.object_once_.visit(id))
-      {
+      if( this->internal_.object_once_.visit(id) )
+        {
 #ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
         ++checked_count_;
 #endif
@@ -1349,44 +1365,44 @@ rgtl_octree_objects_query_closest<D>
         // if it is smaller than the current distance bound.
         double q[D];
         double distance_squared;
-        if (this->internal_.object_closest_point(id, p, q, this->bound_) &&
+        if( this->internal_.object_closest_point(id, p, q, this->bound_) &&
             (distance_squared = this->internal_.compute_distance_squared(p, q),
-             distance_squared <= this->bound_))
-        {
+             distance_squared <= this->bound_) )
+          {
           // Insert this object into our sorted list of k objects.
           vcl_vector<closest_object_entry>& best = this->best_;
-          closest_object_entry obj(id, distance_squared, q);
-          for (int j=0; j < k && obj.distance_squared >= 0; ++j)
-          {
-            if (best[j].distance_squared < 0 || obj < best[j])
+          closest_object_entry              obj(id, distance_squared, q);
+          for( int j = 0; j < k && obj.distance_squared >= 0; ++j )
             {
-              vcl_swap(obj, best[j]);
-            }
-          }
-
-          // Update the current bounding sphere radius.
-          if (best[k-1].distance_squared >= 0 &&
-              best[k-1].distance_squared < this->bound_)
-          {
-            this->bound_ = best[k-1].distance_squared;
-#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
-            if (this->internal_.query_closest_debug_)
-            {
-              vcl_cout << " Reduced bound to " << this->bound_ << vcl_endl;
-              if (nearest_squared > this->bound_ && i < ld->index_end-1)
+            if( best[j].distance_squared < 0 || obj < best[j] )
               {
-                vcl_cout << " Terminating cell early!" << vcl_endl;
+              vcl_swap(obj, best[j]);
               }
             }
+
+          // Update the current bounding sphere radius.
+          if( best[k - 1].distance_squared >= 0 &&
+              best[k - 1].distance_squared < this->bound_ )
+            {
+            this->bound_ = best[k - 1].distance_squared;
+#ifdef RGTL_OCTREE_OBJECTS_DEBUG_QUERY
+            if( this->internal_.query_closest_debug_ )
+              {
+              vcl_cout << " Reduced bound to " << this->bound_ << vcl_endl;
+              if( nearest_squared > this->bound_ && i < ld->index_end - 1 )
+                {
+                vcl_cout << " Terminating cell early!" << vcl_endl;
+                }
+              }
 #endif
+            }
           }
         }
       }
     }
-  }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects_internal<D>
@@ -1398,13 +1414,13 @@ rgtl_octree_objects_internal<D>
 
   // Query the tree recursively.
   this->query_sphere(cell_location_type(), cell_index_type(),
-                     center, radius*radius, ids);
+                     center, radius * radius, ids);
 
   // Return the number of objects found.
-  return static_cast<int>(ids.size());
+  return static_cast<int>(ids.size() );
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
@@ -1419,50 +1435,51 @@ rgtl_octree_objects_internal<D>
   // cell.
   double nearest_squared;
   double farthest_squared;
+
   this->cell_distances(cell, p, nearest_squared, farthest_squared);
 
   // If the radius of the sphere is less than the nearest point on the
   // cell then the entire cell is outside the sphere.
-  if (radius_squared < nearest_squared)
-  {
+  if( radius_squared < nearest_squared )
+    {
     // The sphere contains no part of the cell.  Do nothing.
-  }
+    }
   // If the radius of the sphere is greater than the farthest point on
   // the cell then the entire cell is contained within the sphere.
-  else if (radius_squared > farthest_squared)
-  {
+  else if( radius_squared > farthest_squared )
+    {
     // The sphere completely contains the cell.  Extract objects in
     // the cell and its children.  By not passing the center or radius
     // to this method it will not bother testing the objects since
     // they are known to intersect the cell, which is inside the
     // sphere.
     this->extract_objects(cidx, 0, 0, ids);
-  }
+    }
   // If the radius of the sphere is between the length of the nearest
   // and farthest vectors then the surface of the sphere must pass
   // through the cell.
   else
-  {
-    if (this->tree_.has_children(cidx))
     {
+    if( this->tree_.has_children(cidx) )
+      {
       // The cell is divided, so evaluate the children recursively.
       // Some of them may be completely inside or outside the sphere.
-      for (child_index_type i(0); i < (1<<D); ++i)
-      {
+      for( child_index_type i(0); i < (1 << D); ++i )
+        {
         this->query_sphere(cell.get_child(i),
                            this->tree_.get_child(cidx, i),
                            p, radius_squared, ids);
+        }
       }
-    }
     else
-    {
+      {
       // The cell is not divided.  Extract the objects within the sphere.
       this->extract_objects(cidx, p, radius_squared, ids);
+      }
     }
-  }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
@@ -1470,48 +1487,48 @@ rgtl_octree_objects_internal<D>
                   double const* center, double radius_squared,
                   vcl_vector<int>& ids) const
 {
-  if (this->tree_.has_children(cidx))
-  {
-    // Extract objects from all children.
-    for (child_index_type i(0); i < (1<<D); ++i)
+  if( this->tree_.has_children(cidx) )
     {
+    // Extract objects from all children.
+    for( child_index_type i(0); i < (1 << D); ++i )
+      {
       this->extract_objects(this->tree_.get_child(cidx, i), center,
                             radius_squared, ids);
+      }
     }
-  }
-  else if (leaf_data_type const* ld = this->tree_.get_leaf_data(cidx))
-  {
+  else if( leaf_data_type const* ld = this->tree_.get_leaf_data(cidx) )
+    {
     // Extract objects from this leaf.
     typedef typename leaf_data_type::index_type index_type;
-    for (index_type i=ld->index_begin; i < ld->index_end; ++i)
-    {
-      int id = this->object_ids_[i];
-      if (this->object_once_.visit(id))
+    for( index_type i = ld->index_begin; i < ld->index_end; ++i )
       {
-        // If a sphere is given test the object against it.
-        if (center)
+      int id = this->object_ids_[i];
+      if( this->object_once_.visit(id) )
         {
-          double q[D];
-          if (this->object_closest_point(id, center, q, radius_squared))
+        // If a sphere is given test the object against it.
+        if( center )
           {
+          double q[D];
+          if( this->object_closest_point(id, center, q, radius_squared) )
+            {
             double distance_squared =
               this->compute_distance_squared(center, q);
-            if (distance_squared <= radius_squared)
-            {
+            if( distance_squared <= radius_squared )
+              {
               ids.push_back(id);
+              }
             }
           }
-        }
         else
-        {
+          {
           ids.push_back(id);
+          }
         }
       }
     }
-  }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects_internal<D>
@@ -1524,10 +1541,10 @@ rgtl_octree_objects_internal<D>
   this->query_object(cell_location_type(), cell_index_type(), id, ids);
 
   // Return the number of objects found.
-  return static_cast<int>(ids.size());
+  return static_cast<int>(ids.size() );
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects_internal<D>
@@ -1536,50 +1553,51 @@ rgtl_octree_objects_internal<D>
 {
   // Get the bounding box of this cell.
   cell_geometry_type cell_geometry(cell, this->bounds_);
-  if (!this->object_intersects_box(idA, cell_geometry))
-  {
+
+  if( !this->object_intersects_box(idA, cell_geometry) )
+    {
     return;
-  }
+    }
 
   // Search this cell for objects.
-  if (this->tree_.has_children(cidx))
-  {
-    // Recursively search the children.
-    for (child_index_type i(0); i < (1<<D); ++i)
+  if( this->tree_.has_children(cidx) )
     {
+    // Recursively search the children.
+    for( child_index_type i(0); i < (1 << D); ++i )
+      {
       this->query_object(cell.get_child(i),
                          this->tree_.get_child(cidx, i), idA, ids);
+      }
     }
-  }
-  else if (leaf_data_type const* ld = this->tree_.get_leaf_data(cidx))
-  {
+  else if( leaf_data_type const* ld = this->tree_.get_leaf_data(cidx) )
+    {
     // Objects in this leaf are candidates.
     typedef typename leaf_data_type::index_type index_type;
-    for (index_type i=ld->index_begin; i < ld->index_end; ++i)
-    {
-      int idB = this->object_ids_[i];
-      if (this->object_once_.visit(idB))
+    for( index_type i = ld->index_begin; i < ld->index_end; ++i )
       {
+      int idB = this->object_ids_[i];
+      if( this->object_once_.visit(idB) )
+        {
         // Check this object for intersection with the query object.
         // Skip the query object itself.
-        if (idA != idB &&
-            this->object_intersects_object(idA, idB))
-        {
+        if( idA != idB &&
+            this->object_intersects_object(idA, idB) )
+          {
           ids.push_back(idB);
+          }
         }
       }
     }
-  }
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
-rgtl_octree_objects<D>::rgtl_octree_objects(object_array_type const& oa):
-  internal_(new internal_type(oa))
+rgtl_octree_objects<D>::rgtl_octree_objects(object_array_type const& oa) :
+  internal_(new internal_type(oa) )
 {
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_octree_objects<D>::rgtl_octree_objects(object_array_type const& objs,
                                             bounds_type const& b, int ml)
@@ -1587,14 +1605,14 @@ rgtl_octree_objects<D>::rgtl_octree_objects(object_array_type const& objs,
   this->internal_ = new internal_type(objs, b, ml);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 rgtl_octree_objects<D>::~rgtl_octree_objects()
 {
   delete this->internal_;
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects<D>
@@ -1604,7 +1622,7 @@ rgtl_octree_objects<D>
   return this->internal_->query_sphere(center, radius, ids);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects<D>
@@ -1613,7 +1631,7 @@ rgtl_octree_objects<D>
   return this->internal_->query_object(id, ids);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 int
 rgtl_octree_objects<D>
@@ -1624,7 +1642,7 @@ rgtl_octree_objects<D>
                                         ids, squared_distances, points);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 bool
 rgtl_octree_objects<D>
@@ -1633,7 +1651,7 @@ rgtl_octree_objects<D>
   return this->internal_->compute_distance_transform(n);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 void
 rgtl_octree_objects<D>
@@ -1642,7 +1660,7 @@ rgtl_octree_objects<D>
   this->internal_->set_query_closest_debug(b);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 template <unsigned int D>
 template <class Serializer>
 void rgtl_octree_objects<D>::serialize(Serializer& sr)
@@ -1650,16 +1668,16 @@ void rgtl_octree_objects<D>::serialize(Serializer& sr)
   sr & *(this->internal_);
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 #undef RGTL_OCTREE_OBJECTS_INSTANTIATE
 #define RGTL_OCTREE_OBJECTS_INSTANTIATE( D ) \
-  template class rgtl_octree_data_fixed< D , rgtl_octree_objects_leaf_data>; \
-  template class rgtl_octree_objects_distance_transform< D >; \
-  template class rgtl_octree_objects_internal< D >; \
-  template class rgtl_octree_objects< D >; \
-  template void rgtl_octree_objects< D > \
-    ::serialize<rgtl_serialize_ostream>(rgtl_serialize_ostream&); \
-  template void rgtl_octree_objects< D > \
-    ::serialize<rgtl_serialize_istream>(rgtl_serialize_istream&)
+  template class rgtl_octree_data_fixed<D, rgtl_octree_objects_leaf_data>; \
+  template class rgtl_octree_objects_distance_transform<D>; \
+  template class rgtl_octree_objects_internal<D>; \
+  template class rgtl_octree_objects<D>; \
+  template void rgtl_octree_objects<D> \
+  ::serialize<rgtl_serialize_ostream>(rgtl_serialize_ostream &); \
+  template void rgtl_octree_objects<D> \
+  ::serialize<rgtl_serialize_istream>(rgtl_serialize_istream &)
 
 #endif

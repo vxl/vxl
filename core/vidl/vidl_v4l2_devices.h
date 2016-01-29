@@ -1,7 +1,7 @@
 // This is core/vidl/vidl_v4l2_devices.h
 #ifndef vidl_v4l2_devices_h_
 #define vidl_v4l2_devices_h_
-//:
+// :
 // \file
 // \brief A class for a singleton with video devices
 //
@@ -9,14 +9,13 @@
 // \verbatim
 //  Modifications
 //     15 Apr 2009 Created (A. Garrido)
-//\endverbatim
+// \endverbatim
 
 #include <vcl_vector.h>
 #include "vidl_v4l2_device.h"
 #include "vidl_v4l2_device_sptr.h"
 
-
-//: A class which stores all devices in an object
+// : A class which stores all devices in an object
 // This object is a singleton initialized automatically by detecting all devices in the system,
 // The devices are detected iterating over all files in the device directory.
 //
@@ -29,17 +28,18 @@ class vidl_v4l2_devices
 {
   vcl_vector<vidl_v4l2_device_sptr> vecdev;
   vidl_v4l2_devices();
-  void load_devices(const char *name);
- public:
-  //: Instance
-  static vidl_v4l2_devices& all();
+  void load_devices(const char * name);
 
-  //: Return number of detected devices in the system
+public:
+  // : Instance
+  static vidl_v4l2_devices & all();
+
+  // : Return number of detected devices in the system
   unsigned int size() const { return vecdev.size(); }
   // Return device i (0..size()-1)
-  //vidl_v4l2_device& device(unsigned int i) {return *vecdev[i];}
-  //: Return device i (0..size()-1)
-  vidl_v4l2_device& operator()(unsigned int i) {return *vecdev[i];}
+  // vidl_v4l2_device& device(unsigned int i) {return *vecdev[i];}
+  // : Return device i (0..size()-1)
+  vidl_v4l2_device & operator()(unsigned int i) {return *vecdev[i]; }
 };
 
 #endif // vidl_v4l2_devices_h_

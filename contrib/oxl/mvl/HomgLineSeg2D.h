@@ -2,9 +2,9 @@
 #ifndef HomgLineSeg2D_h_
 #define HomgLineSeg2D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Homogeneous 2D line segment
 //
@@ -24,49 +24,52 @@ class HomgLineSeg2D : public HomgLine2D
 {
   HomgPoint2D point1_;
   HomgPoint2D point2_;
- public:
+public:
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  HomgLineSeg2D () {}
-  HomgLineSeg2D (const HomgPoint2D& point1, const HomgPoint2D& point2);
-  HomgLineSeg2D (double x0, double y0, double x1, double y1);
-  ~HomgLineSeg2D () {}
+  HomgLineSeg2D() {}
+  HomgLineSeg2D(const HomgPoint2D& point1, const HomgPoint2D& point2);
+  HomgLineSeg2D(double x0, double y0, double x1, double y1);
+  ~HomgLineSeg2D() {}
 
   // Data Access---------------------------------------------------------------
 
   // get the line through the two points.
-  const HomgLine2D& get_line () const;
-  const HomgPoint2D& get_point1 () const;
-  const HomgPoint2D& get_point2 () const;
+  const HomgLine2D & get_line() const;
 
-  void set (const HomgPoint2D& point1, const HomgPoint2D& point2);
+  const HomgPoint2D & get_point1() const;
+
+  const HomgPoint2D & get_point2() const;
+
+  void set(const HomgPoint2D& point1, const HomgPoint2D& point2);
 
   double picking_distance(const HomgPoint2D& point1) const;
+
 };
 
-vcl_ostream& operator<<(vcl_ostream& s, const HomgLineSeg2D& );
+vcl_ostream & operator<<(vcl_ostream& s, const HomgLineSeg2D & );
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Return the line through the two points.
-inline const HomgLine2D& HomgLineSeg2D::get_line () const
+// : Return the line through the two points.
+inline const HomgLine2D & HomgLineSeg2D::get_line() const
 {
   return *this;
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Return the first point of the line segment
-inline const HomgPoint2D& HomgLineSeg2D::get_point1 () const
+// : Return the first point of the line segment
+inline const HomgPoint2D & HomgLineSeg2D::get_point1() const
 {
   return point1_;
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Return the second point of the line segment
-inline const HomgPoint2D& HomgLineSeg2D::get_point2 () const
+// : Return the second point of the line segment
+inline const HomgPoint2D & HomgLineSeg2D::get_point2() const
 {
   return point2_;
 }

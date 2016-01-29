@@ -2,9 +2,9 @@
 #ifndef vgui_soview_h_
 #define vgui_soview_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author  Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date    24 Mar 99
@@ -25,23 +25,23 @@
 class vgui_observer;
 class vgui_message;
 
-//: Spatial object view (base class for 2 & 3D geometric objects).
+// : Spatial object view (base class for 2 & 3D geometric objects).
 //
 //  This class is the base class for vgui_soview2D and vgui_soview3D
 //  and contains the functionality they have in common.
 class vgui_soview
 {
- public:
-  //: Constructor - create a default soview.
+public:
+  // : Constructor - create a default soview.
   vgui_soview() : selectable(true), style(0) { add_id(); }
 
-  //: Destructor - delete this soview.
+  // : Destructor - delete this soview.
   virtual ~vgui_soview();
 
-  //: Render this soview on the display.
+  // : Render this soview on the display.
   virtual void draw() const = 0;
 
-  //: Render this soview for selection purposes.
+  // : Render this soview for selection purposes.
   //
   // By default, this will call draw(). However, some objects take
   // time to draw, especially in GL_SELECT mode. The routine allows
@@ -53,43 +53,43 @@ class vgui_soview
   //
   virtual void draw_select() const;
 
-  //: Calls OpenGL function glLoadName with this soview's id.
+  // : Calls OpenGL function glLoadName with this soview's id.
   virtual void load_name() const;
 
-  //: Prints the ID of this soview.
-  virtual vcl_ostream& print(vcl_ostream& s) const;
+  // : Prints the ID of this soview.
+  virtual vcl_ostream & print(vcl_ostream& s) const;
 
-  //: This should never be called, derived classes should implement this.
+  // : This should never be called, derived classes should implement this.
   virtual vcl_string type_name() const { return "vgui_soview"; }
 
-  //: Set the style (colour, line width) of the soview.
+  // : Set the style (colour, line width) of the soview.
   virtual void set_style(const vgui_style_sptr& newstyle) { style = newstyle; }
 
-  //: Return the style (colour, line width) of the soview.
+  // : Return the style (colour, line width) of the soview.
   virtual vgui_style_sptr get_style() const { return style; }
 
-  //: Set the colour of the soview.
+  // : Set the colour of the soview.
   void set_colour(float r, float g, float b);
 
-  //: Set the point radius of the soview.
+  // : Set the point radius of the soview.
   void set_point_size(float s);
 
-  //: Set the line width of the soview.
+  // : Set the line width of the soview.
   void set_line_width(float w);
 
-  //: Attach given observer to this soview.
-  void attach(vgui_observer*);
+  // : Attach given observer to this soview.
+  void attach(vgui_observer *);
 
-  //: Detach the given observer from this soview.
-  void detach(vgui_observer*);
+  // : Detach the given observer from this soview.
+  void detach(vgui_observer *);
 
-  //: Get a list of all observers attached to this soview.
-  void get_observers(vcl_vector<vgui_observer*>&) const;
+  // : Get a list of all observers attached to this soview.
+  void get_observers(vcl_vector<vgui_observer *> &) const;
 
-  //: Update all observers.
+  // : Update all observers.
   virtual void notify() const;
 
-  //: Send message to all observers.
+  // : Send message to all observers.
   virtual void notify(vgui_message const &) const;
 
   // fsm. new old message model
@@ -98,37 +98,36 @@ class vgui_soview
   static vgui_DLLDATA const void * const msg_highlight;
   static vgui_DLLDATA const void * const msg_unhighlight;
 
-  //: Returns the ID of this soview.
-  virtual unsigned get_id() const {return id;}
+  // : Returns the ID of this soview.
+  virtual unsigned get_id() const {return id; }
 
-  //: Returns a pointer to the vgui_soview, given the ID.
-  static vgui_soview* id_to_object(unsigned id);
+  // : Returns a pointer to the vgui_soview, given the ID.
+  static vgui_soview * id_to_object(unsigned id);
 
-  //: Create a new ID.
+  // : Create a new ID.
   static unsigned create_id();
 
-  //: Return true if it is possible to select this soview.
+  // : Return true if it is possible to select this soview.
   bool get_selectable() const { return selectable; }
 
-  //: Make this soview selectable/non-selectable.
-  void set_selectable( bool s) { selectable= s; }
-
- protected:
-  //: ID of this soview.
+  // : Make this soview selectable/non-selectable.
+  void set_selectable( bool s) { selectable = s; }
+protected:
+  // : ID of this soview.
   unsigned id;
 
-  //: Whether this soview is selectable.
+  // : Whether this soview is selectable.
   bool selectable;
 
-  //: Style (colour, line width, etc) of this soview.
+  // : Style (colour, line width, etc) of this soview.
   vgui_style_sptr style;
-
- private:
+private:
   void add_id();
+
   static vgui_DLLDATA unsigned current_id;
 };
 
-inline vcl_ostream& operator<<(vcl_ostream& s, const vgui_soview& so)
+inline vcl_ostream & operator<<(vcl_ostream& s, const vgui_soview& so)
 {
   return so.print(s);
 }

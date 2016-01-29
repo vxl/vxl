@@ -3,9 +3,11 @@
 
 class vpgl_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // vpgl_register_h_

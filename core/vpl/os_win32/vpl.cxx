@@ -7,32 +7,32 @@
 #include <windows.h>
 
 char *
-vpl_getcwd( char *buf, vcl_size_t buf_size )
+vpl_getcwd( char * buf, vcl_size_t buf_size )
 {
   return _getcwd( buf, (int)buf_size );
 }
 
 int
-vpl_mkdir( const char *dir, unsigned short /*mode*/ )
+vpl_mkdir( const char * dir, unsigned short /*mode*/ )
 {
   _mkdir( dir );
   return 0;
 }
 
 int
-vpl_rmdir( const char *dir )
+vpl_rmdir( const char * dir )
 {
   return _rmdir( dir );
 }
 
 int
-vpl_chdir( const char *dir )
+vpl_chdir( const char * dir )
 {
   return _chdir( dir );
 }
 
 int
-vpl_unlink( const char *file )
+vpl_unlink( const char * file )
 {
   return _unlink( file );
 }
@@ -52,27 +52,26 @@ vpl_usleep( unsigned int t )
 }
 
 unsigned
-vpl_getpid( )
+vpl_getpid()
 {
   return _getpid();
 }
 
-int vpl_putenv ( const char * envvar )
+int vpl_putenv( const char * envvar )
 {
   return _putenv(envvar);
 }
 
-
-int vpl_gethostname(char *name, vcl_size_t len)
+int vpl_gethostname(char * name, vcl_size_t len)
 {
 #if defined(VCL_VC)
   static bool wsa_initialised = false;
 
-  if (!wsa_initialised)
-  {
+  if( !wsa_initialised )
+    {
     WSADATA wsaData;
-    WSAStartup(MAKEWORD(2,2), &wsaData);
-  }
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
+    }
 #endif
   return gethostname(name, len);
 }

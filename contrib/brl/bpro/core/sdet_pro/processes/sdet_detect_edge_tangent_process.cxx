@@ -1,6 +1,6 @@
-//This is brl/bpro/core/sdet_pro/processes/sdet_detect_edge_tangent_process.cxx
+// This is brl/bpro/core/sdet_pro/processes/sdet_detect_edge_tangent_process.cxx
 #include "sdet_detect_edge_tangent_process.h"
-//:
+// :
 // \file
 
 #include <sdet/sdet_img_edge.h>
@@ -16,19 +16,19 @@
 #include <vdgl/vdgl_interpolator.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
-//#include <vpgl/vpgl_rational_camera.h>
+// #include <vpgl/vpgl_rational_camera.h>
 #include <vsol/vsol_curve_2d_sptr.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 
-//: initialize input and output types
+// : initialize input and output types
 bool sdet_detect_edge_tangent_process_cons(bprb_func_process& pro)
 {
   using namespace sdet_detect_edge_tangent_process_globals;
   // process takes 2 inputs
-  //input[0]: input grayscale image
-  //input[1]: string indicating the output format
+  // input[0]: input grayscale image
+  // input[1]: string indicating the output format
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";
   input_types_[1] = "vcl_string";
@@ -52,37 +52,38 @@ bool sdet_detect_edge_tangent_process_cons(bprb_func_process& pro)
   vcl_vector<vcl_string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
   return pro.set_input_types(input_types_)
-      && pro.set_output_types(output_types_);
+         && pro.set_output_types(output_types_);
 }
 
-//: generates the edge map
+// : generates the edge map
 bool sdet_detect_edge_tangent_process(bprb_func_process& pro)
 {
- using namespace sdet_detect_edge_tangent_process_globals;
+  using namespace sdet_detect_edge_tangent_process_globals;
 
-  if (!pro.verify_inputs())
-  {
+  if( !pro.verify_inputs() )
+    {
     vcl_cout << pro.name() << " Invalid inputs" << vcl_endl;
     return false;
-  }
+    }
 
   // get inputs
   // image
   vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(0);
 
-  //check input validity
-  if (!input_image_sptr) {
-    vcl_cout << pro.name() <<" :-- null input image\n";
+  // check input validity
+  if( !input_image_sptr )
+    {
+    vcl_cout << pro.name() << " :-- null input image\n";
     return false;
-  }
+    }
 
   vil_image_view<vxl_byte> input_image =
     *vil_convert_cast(vxl_byte(), input_image_sptr);
 
   vcl_string out_type = pro.get_input<vcl_string>(1);
   // get parameters
-  double noise_multiplier=1.5, smooth=1.5;
-  bool automatic_threshold=false, junctionp=false, aggressive_junction_closure=false;
+  double noise_multiplier = 1.5, smooth = 1.5;
+  bool   automatic_threshold = false, junctionp = false, aggressive_junction_closure = false;
 
   pro.parameters()->get_value(param_noise_multiplier_, noise_multiplier);
   pro.parameters()->get_value(param_smooth_, smooth);
@@ -102,16 +103,18 @@ bool sdet_detect_edge_tangent_process(bprb_func_process& pro)
                                        aggressive_junction_closure);
 
   // return the output edge image in pos_dir format
-  if (out_type=="pos_dir") {
-    pro.set_output_val<vil_image_view_base_sptr>(0,new vil_image_view<float>(edge_image));
+  if( out_type == "pos_dir" )
+    {
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(edge_image) );
     return true;
-  }
-  //else convert to line format
-  if (out_type == "line_2d") {
+    }
+  // else convert to line format
+  if( out_type == "line_2d" )
+    {
     vil_image_view<float> line_image(edge_image.ni(), edge_image.nj(), 3);
     sdet_img_edge::convert_edge_image_to_line_image(edge_image, line_image);
-    pro.set_output_val<vil_image_view_base_sptr>(0,new vil_image_view<float>(line_image));
+    pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(line_image) );
     return true;
-  }
+    }
   return false;
 }

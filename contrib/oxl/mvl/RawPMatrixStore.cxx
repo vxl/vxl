@@ -1,8 +1,8 @@
 // This is oxl/mvl/RawPMatrixStore.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author
 // Author: Andrew W. Fitzgibbon, Oxford RRG
@@ -10,7 +10,7 @@
 // Modifications:
 //   970822 AWF Initial version.
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "RawPMatrixStore.h"
 #include <vcl_fstream.h>
@@ -23,20 +23,22 @@
 
 bool RawPMatrixStore::Load(int image_index)
 {
-  if (!check_index(image_index))
+  if( !check_index(image_index) )
+    {
     return false;
+    }
 
   vcl_string filename = fng_.frame_name(image_index);
 
-  vcl_ifstream fin(filename.c_str());
+  vcl_ifstream fin(filename.c_str() );
 
-  if (!fin.good())
+  if( !fin.good() )
     {
-      vcl_cerr << "Read PMatrix [" << filename << "] failed\n";
-      return false;
+    vcl_cerr << "Read PMatrix [" << filename << "] failed\n";
+    return false;
     }
 
-  pmatrix_[image_index]= new PMatrix;
+  pmatrix_[image_index] = new PMatrix;
   pmatrix_[image_index]->read_ascii(fin);
 
   vcl_cerr << "Read PMatrix [" << filename << "]\n";
@@ -51,29 +53,38 @@ bool RawPMatrixStore::Save(int)
   return false;
 }
 
-//: Return Image for frame $i$, loading if necessary.
+// : Return Image for frame $i$, loading if necessary.
 PMatrix_sptr RawPMatrixStore::Get(int i)
 {
-  if (i< 0)
+  if( i < 0 )
+    {
     return 0;
+    }
 
-  if (!check_index(i))
+  if( !check_index(i) )
+    {
     return 0;
+    }
 
-  if (!pmatrix_[i])
+  if( !pmatrix_[i] )
+    {
     Load(i);
+    }
 
   return pmatrix_[i];
 }
 
-
 bool RawPMatrixStore::check_index(int i)
 {
-  if (i < 0)
+  if( i < 0 )
+    {
     return false;
+    }
 
-  if ((unsigned int)i >= pmatrix_.size())
+  if( (unsigned int)i >= pmatrix_.size() )
+    {
     pmatrix_.resize(i + 10);
+    }
 
   return true;
 }

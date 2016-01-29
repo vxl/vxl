@@ -13,5 +13,4 @@ void register_tests()
   REGISTER( test_volm_matcher_p0 );
 }
 
-
 DEFINE_MAIN;

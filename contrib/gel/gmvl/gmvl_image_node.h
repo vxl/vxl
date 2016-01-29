@@ -1,7 +1,7 @@
 // This is gel/gmvl/gmvl_image_node.h
 #ifndef gmvl_image_node_h_
 #define gmvl_image_node_h_
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 //
@@ -15,13 +15,12 @@
 
 class gmvl_image_node : public gmvl_node
 {
- public:
-  gmvl_image_node(vil1_image image) : image_(image) { type_="gmvl_image_node"; }
+public:
+  gmvl_image_node(vil1_image image) : image_(image) { type_ = "gmvl_image_node"; }
   ~gmvl_image_node() {}
 
   vil1_image image() const { return image_; }
-
- protected:
+protected:
   vil1_image image_;
 };
 

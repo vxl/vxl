@@ -41,7 +41,7 @@
 //                        crop a small number of edgels from the ends of a segment
 //                        before fitting the line. Avoids fitting to the garbage edgels
 //                        which are curving away from the line.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <vcl_list.h>
 #include <osl/osl_fit_lines_params.h>
 #include <osl/osl_topology.h>
@@ -50,8 +50,8 @@
 
 class osl_fit_lines : public osl_fit_lines_params
 {
- public:
-  osl_fit_lines(osl_fit_lines_params const & params, double scale=1.0, double x0=0.0, double y0=0.0);
+public:
+  osl_fit_lines(osl_fit_lines_params const & params, double scale = 1.0, double x0 = 0.0, double y0 = 0.0);
   ~osl_fit_lines();
 
   inline void SetSqrOrMean(bool sm)    { use_square_fit_ = sm; }
@@ -62,20 +62,24 @@ class osl_fit_lines : public osl_fit_lines_params
 
   // NB. these have the undesirable behaviour of deleting the given edges.
   // beware of future changes. use at own risk. complain to fsm
-  void incremental_fit_to_list(vcl_list<osl_edge *> *in,
-                               vcl_list<osl_edge *> *out);
-  void simple_fit_to_list(vcl_list<osl_edge *> *in,
-                          vcl_list<osl_edge *> *out);
+  void incremental_fit_to_list(vcl_list<osl_edge *> * in, vcl_list<osl_edge *> * out);
 
- //private:
-  void SquareIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge*);
-  void MeanIncrementalFit(vcl_list<osl_edgel_chain*> *curves_, osl_edge*);
-  void OutputLine(vcl_list<osl_edgel_chain*> *curves_, int,int, osl_edgel_chain*,float);
-  void MergeLines(vcl_list<osl_edgel_chain*> *curves_);
+  void simple_fit_to_list(vcl_list<osl_edge *> * in, vcl_list<osl_edge *> * out);
+
+  // private:
+  void SquareIncrementalFit(vcl_list<osl_edgel_chain *> * curves_, osl_edge *);
+
+  void MeanIncrementalFit(vcl_list<osl_edgel_chain *> * curves_, osl_edge *);
+
+  void OutputLine(vcl_list<osl_edgel_chain *> * curves_, int, int, osl_edgel_chain *, float);
+
+  void MergeLines(vcl_list<osl_edgel_chain *> * curves_);
+
   static float MyGetCost(osl_OrthogRegress const *, int, int, osl_edgel_chain *);
- private:
-  osl_OrthogRegress *data_;
-  int old_finish_;
+
+private:
+  osl_OrthogRegress * data_;
+  int                 old_finish_;
 };
 
 #endif // osl_fit_lines_h

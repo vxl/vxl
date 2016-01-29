@@ -18,7 +18,7 @@ void test_process_params()
   // set the inputs
   brdb_value_sptr v0 = new brdb_value_t<float>(1.0f);
   brdb_value_sptr v1 = new brdb_value_t<float>(2.0f);
-  bool good = bprb_batch_process_manager::instance()->init_process("Process");
+  bool            good = bprb_batch_process_manager::instance()->init_process("Process");
   good = bprb_batch_process_manager::instance()->set_params("params.xml");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
@@ -26,24 +26,26 @@ void test_process_params()
 
   unsigned id;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id);
-  TEST("run process", good ,true);
-  //Check if result is in the database
-    // query to get the data
+  TEST("run process", good, true);
+  // Check if result is in the database
+  // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
   brdb_selection_sptr selec = DATABASE->select("float_data", Q);
-  if (selec->size()!=1) {
+  if( selec->size() != 1 )
+    {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
-  }
+    }
 
   brdb_value_sptr value;
-  if (!selec->get_value(vcl_string("value"), value)) {
+  if( !selec->get_value(vcl_string("value"), value) )
+    {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
-  }
+    }
   brdb_value_t<float>* result =
-    static_cast<brdb_value_t<float>* >(value.ptr());
+    static_cast<brdb_value_t<float> *>(value.ptr() );
   float rv = result->value();
   TEST_NEAR("test result in DB", rv, 13.0f, 0.01);
 }

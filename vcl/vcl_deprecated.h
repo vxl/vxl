@@ -1,7 +1,7 @@
 #ifndef vcl_deprecated_h_
 #define vcl_deprecated_h_
 
-//:
+// :
 // \file
 // \brief  Defines macros used for marking deprecated functions
 // \author Amitha Perera
@@ -30,26 +30,28 @@
 // a debugger!
 
 #ifdef VXL_WARN_DEPRECATED
-  void vcl_deprecated_warn( const char* func_name );
-  void vcl_deprecated_abort( const char* func_name );
-  #ifdef VXL_WARN_DEPRECATED_ABORT
-    #define VXL_DEPRECATED(f) vcl_deprecated_abort( f )
-  #else
-    #ifdef VXL_WARN_DEPRECATED_ONCE
-      #define VXL_DEPRECATED(f) \
-        do { \
-            static bool vcl_deprecated_flag = true; \
-            if( vcl_deprecated_flag ) { \
-                vcl_deprecated_warn( f ); \
-                vcl_deprecated_flag=false; \
-            } \
-        } while (0)
-    #else
-      #define VXL_DEPRECATED(f) vcl_deprecated_warn( f )
-    #endif
-  #endif
+void vcl_deprecated_warn( const char* func_name );
+
+void vcl_deprecated_abort( const char* func_name );
+
+#  ifdef VXL_WARN_DEPRECATED_ABORT
+#    define VXL_DEPRECATED(f) vcl_deprecated_abort( f )
+#  else
+#    ifdef VXL_WARN_DEPRECATED_ONCE
+#      define VXL_DEPRECATED(f) \
+  do { \
+    static bool vcl_deprecated_flag = true; \
+    if( vcl_deprecated_flag ) { \
+      vcl_deprecated_warn( f ); \
+      vcl_deprecated_flag = false; \
+      } \
+    } while( 0 )
+#    else
+#      define VXL_DEPRECATED(f) vcl_deprecated_warn( f )
+#    endif
+#  endif
 #else
-  #define VXL_DEPRECATED(f) /* suppress deprecation warning */
+#  define VXL_DEPRECATED(f) /* suppress deprecation warning */
 #endif
 
 #endif

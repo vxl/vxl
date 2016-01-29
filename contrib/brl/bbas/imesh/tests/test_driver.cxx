@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_intersect );
 DECLARE( test_detect );
 DECLARE( test_kd_tree );
@@ -16,6 +15,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-
-

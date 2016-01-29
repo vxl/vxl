@@ -26,129 +26,162 @@ typedef double TruePixelType;
 
 class CheckPixel
 {
- public:
+public:
   virtual ~CheckPixel() { }
-  virtual bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const = 0;
+  virtual bool operator()( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const = 0;
+
 };
 
-template<class T>
+template <class T>
 class CheckRGB : public CheckPixel
 {
- public:
+public:
   CheckRGB( const char* file )
   {
     vil1_image i = vil1_load( (image_base + file).c_str() );
-    if ( !i )
+
+    if( !i )
+      {
       vcl_cout << "[ couldn't load " << file << "]\n";
+      }
     else
+      {
       img_ = i;
+      }
   };
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator()( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    if (!img_ || pixel.size() != 3) return false;
-    vil1_rgb<T> imp = img_(x,y);
-    if (pixel[0] != imp.r || pixel[1] != imp.g || pixel[2] != imp.b)
+    if( !img_ || pixel.size() != 3 ) {return false; }
+    vil1_rgb<T> imp = img_(x, y);
+    if( pixel[0] != imp.r || pixel[1] != imp.g || pixel[2] != imp.b )
+      {
       vcl_cout << "(x,y)=(" << x << ',' << y << "): true="
                << pixel[0] << ',' << pixel[1] << ',' << pixel[2]
                << ", img=" << imp << '\n' << vcl_flush;
+      }
     return pixel[0] == imp.r && pixel[1] == imp.g && pixel[2] == imp.b;
   }
- private:
-  vil1_memory_image_of< vil1_rgb<T> > img_;
+
+private:
+  vil1_memory_image_of<vil1_rgb<T> > img_;
 };
 
-template<class T>
+template <class T>
 class CheckColourPlanes : public CheckPixel
 {
- public:
+public:
   CheckColourPlanes( const char* file )
   {
     vil1_image i = vil1_load( (image_base + file).c_str() );
-    if ( !i )
+
+    if( !i )
+      {
       vcl_cout << "[ couldn't load " << file << "]\n";
+      }
     else
+      {
       img_ = i;
+      }
   };
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator()( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
-    assert( p==0 || p==1 || p==2 );
-    if (!img_ || pixel.size() != 1) return false;
-    TruePixelType imp = img_.get_buffer()[img_.width()*(img_.height()*p+y)+x];
-    if (pixel[0] != imp)
+    assert( p == 0 || p == 1 || p == 2 );
+    if( !img_ || pixel.size() != 1 ) {return false; }
+    TruePixelType imp = img_.get_buffer()[img_.width() * (img_.height() * p + y) + x];
+    if( pixel[0] != imp )
+      {
       vcl_cout << "(x,y,p)=(" << x << ',' << y << ',' << p << "): true="
                << pixel[0] << ", img=" << imp << '\n' << vcl_flush;
+      }
     return pixel[0] == imp;
   }
- private:
-  vil1_memory_image_of< T > img_;
+
+private:
+  vil1_memory_image_of<T> img_;
 };
 
-template<class T>
+template <class T>
 class CheckGrey : public CheckPixel
 {
- public:
+public:
   CheckGrey( const char* file )
   {
     vil1_image i = vil1_load( (image_base + file).c_str() );
-    if ( !i )
+
+    if( !i )
+      {
       vcl_cout << "[ couldn't load " << file << "]\n";
+      }
     else
+      {
       img_ = i;
+      }
   };
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator()( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    if (!img_ || pixel.size() != 1) return false;
-    TruePixelType imp = img_(x,y);
-    if (pixel[0] != imp)
+    if( !img_ || pixel.size() != 1 ) {return false; }
+    TruePixelType imp = img_(x, y);
+    if( pixel[0] != imp )
+      {
       vcl_cout << "(x,y)=(" << x << ',' << y << "): true=" << pixel[0] << ", img=" << imp << '\n' << vcl_flush;
+      }
     // no exact check, to allow for small rounding errors in float pixel types:
-    return vcl_fabs(pixel[0] - imp) <= 1e-7*vcl_fabs(imp);
+    return vcl_fabs(pixel[0] - imp) <= 1e-7 * vcl_fabs(imp);
   }
- private:
-  vil1_memory_image_of< T > img_;
+
+private:
+  vil1_memory_image_of<T> img_;
 };
 
-template<class T>
+template <class T>
 class CheckBit : public CheckPixel
 {
- public:
+public:
   CheckBit( const char* file )
   {
     vil1_image i = vil1_load( (image_base + file).c_str() );
-    if ( !i )
+
+    if( !i )
+      {
       vcl_cout << "[ couldn't load " << file << "]\n";
+      }
     else
+      {
       img_ = i;
+      }
   };
 
-  bool operator() ( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
+  bool operator()( int p, int x, int y, const vcl_vector<TruePixelType>& pixel ) const
   {
     assert( p == 0 );
-    if (!img_ || pixel.size() != 1) return false;
-    TruePixelType imp = (img_(x/8,y)>>(7-(x&7)))&1;
-    if (pixel[0] != imp)
+    if( !img_ || pixel.size() != 1 ) {return false; }
+    TruePixelType imp = (img_(x / 8, y) >> (7 - (x & 7) ) ) & 1;
+    if( pixel[0] != imp )
+      {
       vcl_cout << "(x,y)=(" << x << ',' << y << "): true=" << pixel[0] << ", img=" << imp << '\n' << vcl_flush;
+      }
     return pixel[0] == imp;
   }
- private:
-  vil1_memory_image_of< T > img_;
+
+private:
+  vil1_memory_image_of<T> img_;
 };
 
-template class CheckBit< vxl_uint_8 >;
-template class CheckGrey< vxl_uint_8 >;
-template class CheckGrey< vxl_uint_16 >;
-template class CheckGrey< vxl_uint_32 >;
-template class CheckGrey< float >;
-template class CheckGrey< double >;
-template class CheckRGB< vxl_uint_8 >;
-template class CheckRGB< vxl_uint_16 >;
-template class CheckColourPlanes< vxl_uint_8 >;
-template class CheckColourPlanes< vxl_uint_16 >;
+template class CheckBit<vxl_uint_8>;
+template class CheckGrey<vxl_uint_8>;
+template class CheckGrey<vxl_uint_16>;
+template class CheckGrey<vxl_uint_32>;
+template class CheckGrey<float>;
+template class CheckGrey<double>;
+template class CheckRGB<vxl_uint_8>;
+template class CheckRGB<vxl_uint_16>;
+template class CheckColourPlanes<vxl_uint_8>;
+template class CheckColourPlanes<vxl_uint_16>;
 
 bool
 test( const char* true_data_file, const CheckPixel& check )
@@ -167,29 +200,37 @@ test( const char* true_data_file, const CheckPixel& check )
   int width;
   int height;
 
-  vcl_ifstream fin( (image_base+true_data_file).c_str() );
-  if ( !( fin >> num_planes >> num_comp >> width >> height ) ) {
+  vcl_ifstream fin( (image_base + true_data_file).c_str() );
+
+  if( !( fin >> num_planes >> num_comp >> width >> height ) )
+    {
     vcl_cout << "[couldn't read header from " << true_data_file << ']';
     return false;
-  }
+    }
 
   vcl_vector<TruePixelType> pixel( num_comp );
-
-  for ( int p=0; p < num_planes; ++p ) {
-    for ( int y=0; y < height; ++y ) {
-      for ( int x=0; x < width; ++x ) {
-        for ( int c=0; c < num_comp; ++c ) {
-          if ( !( fin >> pixel[c] ) ) {
+  for( int p = 0; p < num_planes; ++p )
+    {
+    for( int y = 0; y < height; ++y )
+      {
+      for( int x = 0; x < width; ++x )
+        {
+        for( int c = 0; c < num_comp; ++c )
+          {
+          if( !( fin >> pixel[c] ) )
+            {
             vcl_cout << "[couldn't read value at " << p << ',' << x << ',' << y << ',' << c
                      << " from " << true_data_file << ']';
             return false;
+            }
+          }
+        if( !check( p, x, y, pixel ) )
+          {
+          return false;
           }
         }
-        if ( !check( p, x, y, pixel ) )
-          return false;
       }
     }
-  }
 
   return true;
 }
@@ -197,10 +238,11 @@ test( const char* true_data_file, const CheckPixel& check )
 static void
 test_file_format_read( int argc, char* argv[] )
 {
-  if ( argc >= 2 ) {
+  if( argc >= 2 )
+    {
     image_base = argv[1];
     image_base += "/";
-  }
+    }
 
   vcl_cout << "Portable aNy Map [pnm]: pbm, pgm, ppm)\n";
   TEST("1-bit pbm ascii", test( "ff_grey1bit_true.txt", CheckBit<vxl_uint_8>( "ff_grey1bit_ascii.pbm" ) ), true);
@@ -215,7 +257,8 @@ test_file_format_read( int argc, char* argv[] )
   TEST("16-bit ppm raw", test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_raw.ppm" ) ), true);
 
   vcl_cout << "Sun raster [ras]\n";
-  TEST("8-bit grey, no colourmap", test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_nocol.ras" ) ), true);
+  TEST("8-bit grey, no colourmap", test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>(
+                                           "ff_grey8bit_nocol.ras" ) ), true);
   TEST("8-bit RGB, no colourmap", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_raw.ras" ) ), true);
   TEST("8-bit indexed RGB", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_indexed.ras" ) ), true);
 
@@ -223,31 +266,50 @@ test_file_format_read( int argc, char* argv[] )
   TEST("8-bit RGB (xv created)", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_xv.bmp" ) ), true);
 
   vcl_cout << "TIFF [tiff]\n";
-  TEST("1-bit grey uncompressed", test( "ff_grey1bit_true.txt", CheckBit<vxl_uint_8>( "ff_grey1bit_uncompressed.tif" ) ), true);
-  TEST("8-bit RGB uncompressed", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.tif" ) ), true);
+  TEST("1-bit grey uncompressed", test( "ff_grey1bit_true.txt", CheckBit<vxl_uint_8>(
+                                          "ff_grey1bit_uncompressed.tif" ) ), true);
+  TEST("8-bit RGB uncompressed", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>(
+                                         "ff_rgb8bit_uncompressed.tif" ) ), true);
   TEST("8-bit RGB packbits", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_packbits.tif" ) ), true);
-  TEST("16-bit RGB uncompressed", test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>( "ff_rgb16bit_uncompressed.tif" ) ), true);
+  TEST("16-bit RGB uncompressed", test( "ff_rgb16bit_true.txt", CheckRGB<vxl_uint_16>(
+                                          "ff_rgb16bit_uncompressed.tif" ) ), true);
 
   vcl_cout << "Khoros VIFF [viff]\n";
-  TEST("8-bit grey big endian", test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_bigendian.viff" ) ), true);
-  TEST("8-bit RGB big endian", test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_bigendian.viff" ) ), true);
-  TEST("16-bit grey big endian", test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_bigendian.viff" ) ), true);
-  TEST("16-bit RGB big endian", test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_bigendian.viff" ) ), true);
-  TEST("32-bit grey big endian", test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit_bigendian.viff" ) ), true);
-  TEST("32-bit float grey big endian", test( "ff_grey_float_true.txt", CheckGrey<float>( "ff_grey_float_bigendian.viff" ) ), true);
-  TEST("64-bit float grey big endian", test( "ff_grey_float_true.txt", CheckGrey<double>( "ff_grey_double_bigendian.viff" ) ), true);
+  TEST("8-bit grey big endian", test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>(
+                                        "ff_grey8bit_bigendian.viff" ) ), true);
+  TEST("8-bit RGB big endian",
+       test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_bigendian.viff" ) ), true);
+  TEST("16-bit grey big endian", test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>(
+                                         "ff_grey16bit_bigendian.viff" ) ), true);
+  TEST("16-bit RGB big endian",
+       test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_bigendian.viff" ) ), true);
+  TEST("32-bit grey big endian", test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>(
+                                         "ff_grey32bit_bigendian.viff" ) ), true);
+  TEST("32-bit float grey big endian",
+       test( "ff_grey_float_true.txt", CheckGrey<float>( "ff_grey_float_bigendian.viff" ) ), true);
+  TEST("64-bit float grey big endian",
+       test( "ff_grey_float_true.txt", CheckGrey<double>( "ff_grey_double_bigendian.viff" ) ), true);
 
-  TEST("8-bit grey little endian", test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_littleendian.viff" ) ), true);
-  TEST("8-bit RGB little endian", test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_littleendian.viff" ) ), true);
-  TEST("16-bit grey little endian", test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_littleendian.viff" ) ), true);
-  TEST("16-bit RGB little endian", test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_littleendian.viff" ) ), true);
-  TEST("32-bit grey little endian", test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit_littleendian.viff" ) ), true);
-  TEST("32-bit float grey little endian", test( "ff_grey_float_true.txt", CheckGrey<float>( "ff_grey_float_littleendian.viff" ) ), true);
-  TEST("64-bit float grey little endian", test( "ff_grey_float_true.txt", CheckGrey<double>( "ff_grey_double_littleendian.viff" ) ), true);
+  TEST("8-bit grey little endian",
+       test( "ff_grey8bit_true.txt", CheckGrey<vxl_uint_8>( "ff_grey8bit_littleendian.viff" ) ), true);
+  TEST("8-bit RGB little endian",
+       test( "ff_planar8bit_true.txt", CheckColourPlanes<vxl_uint_8>( "ff_rgb8bit_littleendian.viff" ) ), true);
+  TEST("16-bit grey little endian",
+       test( "ff_grey16bit_true.txt", CheckGrey<vxl_uint_16>( "ff_grey16bit_littleendian.viff" ) ), true);
+  TEST("16-bit RGB little endian",
+       test( "ff_planar16bit_true.txt", CheckColourPlanes<vxl_uint_16>( "ff_rgb16bit_littleendian.viff" ) ), true);
+  TEST("32-bit grey little endian",
+       test( "ff_grey32bit_true.txt", CheckGrey<vxl_uint_32>( "ff_grey32bit_littleendian.viff" ) ), true);
+  TEST("32-bit float grey little endian",
+       test( "ff_grey_float_true.txt", CheckGrey<float>( "ff_grey_float_littleendian.viff" ) ), true);
+  TEST("64-bit float grey little endian",
+       test( "ff_grey_float_true.txt", CheckGrey<double>( "ff_grey_double_littleendian.viff" ) ), true);
 
   vcl_cout << "Portable Network Graphics [png]\n";
-  TEST("8-bit RGB uncompressed", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_uncompressed.png" ) ), true);
-  TEST("8-bit RGB compressed", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_compressed.png" ) ), true);
+  TEST("8-bit RGB uncompressed", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>(
+                                         "ff_rgb8bit_uncompressed.png" ) ), true);
+  TEST("8-bit RGB compressed", test( "ff_rgb8bit_true.txt", CheckRGB<vxl_uint_8>( "ff_rgb8bit_compressed.png" ) ),
+       true);
 }
 
 TESTMAIN_ARGS(test_file_format_read);

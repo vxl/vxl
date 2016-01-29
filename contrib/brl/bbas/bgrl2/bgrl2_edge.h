@@ -2,7 +2,7 @@
 #ifndef bgrl2_edge_h_
 #define bgrl2_edge_h_
 
-//:
+// :
 // \file
 // \brief A templated directed edge class for a generic graph class
 // \author Amir Tamrakar
@@ -20,14 +20,13 @@
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
-//: A Directed edge in a graph
-template<class V>
+// : A Directed edge in a graph
+template <class V>
 class bgrl2_edge : public vbl_ref_count
 {
- protected:
+protected:
   typedef vbl_smart_ptr<V> V_sptr;
-
- public:
+public:
   // Constructor
   bgrl2_edge() : vbl_ref_count(), source_(0), target_(0) {}
 
@@ -35,36 +34,36 @@ class bgrl2_edge : public vbl_ref_count
   bgrl2_edge(V_sptr v1, V_sptr v2) : vbl_ref_count(), source_(v1), target_(v2) {}
 
   // Destructor
-  virtual ~bgrl2_edge(){}
+  virtual ~bgrl2_edge() {}
 
-  //: Smart pointer to the vertex where this edge originates
+  // : Smart pointer to the vertex where this edge originates
   V_sptr source() const { return source_; }
 
-  //: Smart pointer to the vertex where this edge points to
+  // : Smart pointer to the vertex where this edge points to
   V_sptr target() const { return target_; }
 
-  //: Returns target(edge) if v = source(edge) and source(edge) otherwise.
+  // : Returns target(edge) if v = source(edge) and source(edge) otherwise.
   V_sptr opposite(V_sptr v);
 
-  //: set the source vertex
+  // : set the source vertex
   void set_source(V_sptr v) { source_ = v; }
 
-  //: set the target vertex
+  // : set the target vertex
   void set_target(V_sptr v) { target_ = v; }
 
-  //: Determine if ``this'' edge shares a vertex with other edge
+  // : Determine if ``this'' edge shares a vertex with other edge
   // Return the shared node if so, otherwise return 0
-  V_sptr shared_vertex(const bgrl2_edge<V >& other) const;
+  V_sptr shared_vertex(const bgrl2_edge<V>& other) const;
 
-  //: Print an ascii summary to the stream
-  virtual void print_summary(vcl_ostream &os) const;
+  // : Print an ascii summary to the stream
+  virtual void print_summary(vcl_ostream & os) const;
 
- protected:
+protected:
 
-  //: The source vertex
+  // : The source vertex
   V_sptr source_;
 
-  //: The target vertex
+  // : The target vertex
   V_sptr target_;
 };
 

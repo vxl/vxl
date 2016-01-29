@@ -14,10 +14,10 @@ vcl_complex<T> vcl_complex_instances_ticker(T *)
 template vcl_complex<vnl_rational> vcl_complex_instances_ticker(vnl_rational *);
 
 // macro to implement an operator>>, for compilers that need it.
-# define implement_rsh(T) \
-vcl_istream &operator>>(vcl_istream &is, vcl_complex<T > &z) { \
-  T r, i; \
-  is >> r >> i; \
-  z = vcl_complex<T >(r, i); \
-  return is; \
-}
+#define implement_rsh(T) \
+  vcl_istream & operator>>(vcl_istream & is, vcl_complex<T> &z) { \
+    T r, i; \
+    is >> r >> i; \
+    z = vcl_complex<T>(r, i); \
+    return is; \
+    }

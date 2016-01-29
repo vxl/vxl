@@ -6,9 +6,9 @@
 #include <bitset>
 
 #ifdef vcl_generic_bitset_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_bitset_STD std
+#  define vcl_generic_bitset_STD std
 #endif
 
 #include "../generic/vcl_bitset.h"

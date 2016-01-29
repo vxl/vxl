@@ -15,11 +15,11 @@ static void test_algo_cartesian_differential_invariants()
 
   const unsigned n = 11;
 
-  vil_image_view<float> src(n,n);
+  vil_image_view<float> src(n, n);
   vil_image_view<float> dest, dest2;
 
   src.fill(0);
-  src(n/2,n/2) = 255;
+  src(n / 2, n / 2) = 255;
 
   vil_cartesian_differential_invariants_3(src, dest, 1.0);
   vcl_cout << "Source\n";
@@ -27,7 +27,6 @@ static void test_algo_cartesian_differential_invariants()
   vcl_cout << "Destination\n";
   vil_print_all(vcl_cout,  dest);
   TEST("dest is correct size", dest.ni() == n && dest.nj() == n && dest.nplanes() == 8, true);
-
 
   // I have visually compared impulse response function images from
   // Kevin's original code, and my new code. They look the same.
@@ -43,7 +42,8 @@ static void test_algo_cartesian_differential_invariants()
   // The following is a regression test. The golden values are
   // merely verified as above.
 
-  const float golden_data[] = {
+  const float golden_data[] =
+    {
     0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
     0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
     0.f, 0.f, 0.00261491f, 0.193499f, 2.37197f, 5.36639f, 2.37197f, 0.193499f, 0.00261491f, 0.f, 0.f,
@@ -139,38 +139,39 @@ static void test_algo_cartesian_differential_invariants()
     0.f, 0.f, 0.000187632f, 0.894689f, 60.6675f, 52.6394f, 86.8583f, 2.0444f, 0.000731781f, 0.f, 0.f,
     0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f,
     0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f
-  };
+    };
 
-  assert(dest.is_contiguous());
+  assert(dest.is_contiguous() );
   assert(dest.istep() == 1);
-  const float *p_dest = dest.begin(), *p_golden=golden_data;
-  unsigned i;
-  for (i=0; i<dest.size(); ++i)
-  {
-    if ( vcl_fabs(*p_dest - *p_golden) > vcl_fabs(*p_golden) * 1e-6)
+  const float * p_dest = dest.begin(), * p_golden = golden_data;
+  unsigned      i;
+  for( i = 0; i < dest.size(); ++i )
     {
+    if( vcl_fabs(*p_dest - *p_golden) > vcl_fabs(*p_golden) * 1e-6 )
+      {
       vcl_cout << "Found excess value at pixel " << i << vcl_endl;
       break;
+      }
     }
-  }
-  TEST("impulse response matches golden data", i, dest.size());
-
+  TEST("impulse response matches golden data", i, dest.size() );
 
   // Test invariant properties
 
   src.fill(0.f);
-  src(n/2,n/2) =   256.f;
-  src(n/2-1,n/2) = 128.f;
-  src(n/2+1,n/2) = 512.f;
+  src(n / 2, n / 2) =   256.f;
+  src(n / 2 - 1, n / 2) = 128.f;
+  src(n / 2 + 1, n / 2) = 512.f;
   vil_cartesian_differential_invariants_3(src, dest, 1.0);
   src.fill(0.f);
-  src(n/2,n/2) =   256.f;
-  src(n/2,n/2-1) = 128.f;
-  src(n/2,n/2+1) = 512.f;
+  src(n / 2, n / 2) =   256.f;
+  src(n / 2, n / 2 - 1) = 128.f;
+  src(n / 2, n / 2 + 1) = 512.f;
   vil_cartesian_differential_invariants_3(src, dest2, 1.0);
-  for (unsigned i=0; i<8; ++i)
-    TEST_NEAR("cartesian invariance", dest2(n/2,n/2,i), dest2(n/2,n/2,i),
-              vcl_fabs(dest2(n/2,n/2,i)*1.e-4f));
+  for( unsigned i = 0; i < 8; ++i )
+    {
+    TEST_NEAR("cartesian invariance", dest2(n / 2, n / 2, i), dest2(n / 2, n / 2, i),
+              vcl_fabs(dest2(n / 2, n / 2, i) * 1.e-4f) );
+    }
 }
 
 TESTMAIN(test_algo_cartesian_differential_invariants);

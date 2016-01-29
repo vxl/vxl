@@ -1,6 +1,6 @@
 #ifndef boxm2_multi_update_cell_h_
 #define boxm2_multi_update_cell_h_
-//:
+// :
 // \file
 // \brief This class does the cumulative seg len and cumulative observation on the GPU.
 
@@ -13,53 +13,42 @@
 #include <bocl/bocl_kernel.h>
 #include <vil/vil_image_view.h>
 
-//: boxm2_multi_cache - example realization of abstract cache class
+// : boxm2_multi_cache - example realization of abstract cache class
 class boxm2_multi_update_cell
 {
-  public:
-    //three separate sub procedures (three separate map reduce tasks)
-    //static float update_cells(boxm2_multi_cache& cache,
-    //                          const vil_image_view<float>& img,
-    //                          vpgl_camera_double_sptr cam,
-    //                          vcl_map<bocl_device*, float*>& vis_map,
-    //                          vcl_map<bocl_device*, float*>& pre_map,
-    //                          float*                         norm_image,
-    //                          boxm2_multi_update_helper& helper);
-    static float update_cells(boxm2_multi_cache& cache,
-                              const vil_image_view<float>& img,
-                              vpgl_camera_double_sptr cam,
-                              float* norm_image,
-                              boxm2_multi_update_helper& helper);
+public:
+  // three separate sub procedures (three separate map reduce tasks)
+  // static float update_cells(boxm2_multi_cache& cache,
+  //                          const vil_image_view<float>& img,
+  //                          vpgl_camera_double_sptr cam,
+  //                          vcl_map<bocl_device*, float*>& vis_map,
+  //                          vcl_map<bocl_device*, float*>& pre_map,
+  //                          float*                         norm_image,
+  //                          boxm2_multi_update_helper& helper);
+  static float update_cells(boxm2_multi_cache& cache, const vil_image_view<float>& img, vpgl_camera_double_sptr cam,
+                            float* norm_image, boxm2_multi_update_helper& helper);
 
-  private:
-    //runs pre/vis on single block
-    static float calc_beta_per_block(const boxm2_block_id&     id,
-                                    boxm2_scene_sptr    scene,
-                                    boxm2_opencl_cache1* opencl_cache,
-                                    cl_command_queue&   queue,
-                                    vcl_string          data_type,
-                                    bocl_kernel*        kern,
-                                    bocl_mem_sptr&      vis_image,
-                                    bocl_mem_sptr&      pre_image,
-                                    bocl_mem_sptr&      norm_image,
-                                    bocl_mem_sptr&      img_dim,
-                                    bocl_mem_sptr&      ray_o_buff,
-                                    bocl_mem_sptr&      ray_d_buff,
-                    bocl_mem_sptr&      tnearfarptr,
-                                    bocl_mem_sptr&      cl_output,
-                                    bocl_mem_sptr&      lookup,
-                                    vcl_size_t*         lthreads,
-                                    vcl_size_t*         gThreads);
+private:
+  // runs pre/vis on single block
+  static float calc_beta_per_block(const boxm2_block_id&     id, boxm2_scene_sptr    scene,
+                                   boxm2_opencl_cache1* opencl_cache, cl_command_queue&   queue,
+                                   vcl_string          data_type, bocl_kernel*        kern,
+                                   bocl_mem_sptr&      vis_image, bocl_mem_sptr&      pre_image,
+                                   bocl_mem_sptr&      norm_image, bocl_mem_sptr&      img_dim,
+                                   bocl_mem_sptr&      ray_o_buff, bocl_mem_sptr&      ray_d_buff,
+                                   bocl_mem_sptr&      tnearfarptr, bocl_mem_sptr&      cl_output,
+                                   bocl_mem_sptr&      lookup, vcl_size_t*         lthreads,
+                                   vcl_size_t*         gThreads);
 
-    static float calc_beta_reduce( boxm2_multi_cache& mcache,
-                                   vpgl_camera_double_sptr cam,
-                                   boxm2_multi_update_helper& helper);
+  static float calc_beta_reduce( boxm2_multi_cache& mcache, vpgl_camera_double_sptr cam,
+                                 boxm2_multi_update_helper& helper);
 
-    //map keeps track of all kernels compiled and cached
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
+  // map keeps track of all kernels compiled and cached
+  static vcl_map<vcl_string, vcl_vector<bocl_kernel *> > kernels_;
 
-    //compile kernels and cache
-    static vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts);
+  // compile kernels and cache
+  static vcl_vector<bocl_kernel *> & get_kernels(bocl_device_sptr device, vcl_string opts);
+
 };
 
 #endif

@@ -1,6 +1,6 @@
 #ifndef rrel_mlesac_obj_h_
 #define rrel_mlesac_obj_h_
-//:
+// :
 //  \file
 //  \author Bess Lee (leey@cs.rpi.edu)
 //  \date   Oct 2001
@@ -14,7 +14,7 @@
 
 #include <rrel/rrel_objective.h>
 
-//: MLESAC objective function.
+// : MLESAC objective function.
 //  Implements the MLESAC objective as presented in Torr and
 //  Zisserman, CVIU 2000. The "cost" is the negative log likelihood of
 //  the residuals, assuming that each residual is i.i.d. with a
@@ -32,9 +32,10 @@
 //  each point in the correspondence pair. In general, this should be
 //  set to rrel_estimation_problem::residual_dof().
 
-class rrel_mlesac_obj : public rrel_objective {
+class rrel_mlesac_obj : public rrel_objective
+{
 public:
-  //: Constructor.
+  // : Constructor.
   //  \a residual_dof is the number of "error random variables" are
   //  combined in computing the residual. In general, this should be
   //  set to rrel_estimation_problem::residual_dof(). \a outlier_sigma
@@ -46,29 +47,26 @@ public:
   //  default.
   rrel_mlesac_obj(unsigned int residual_dof, double outlier_sigma = 20.0, double outlier_frac = 0.5 );
 
-  //: Destructor.
+  // : Destructor.
   ~rrel_mlesac_obj() {}
 
-  //: Evaluate the objective function on heteroscedastic residuals.
+  // : Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn(vect_const_iter res_begin, vect_const_iter res_end,
-                     vect_const_iter scale_begin,
-                     vnl_vector<double>* param_vector=0 ) const;
+  virtual double fcn(vect_const_iter res_begin, vect_const_iter res_end, vect_const_iter scale_begin,
+                     vnl_vector<double>* param_vector = 0 ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.
+  // : Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn(vect_const_iter begin, vect_const_iter end,
-                     double scale,
-                     vnl_vector<double>* param_vector=0 ) const;
+  virtual double fcn(vect_const_iter begin, vect_const_iter end, double scale,
+                     vnl_vector<double>* param_vector = 0 ) const;
 
-  //: True.
+  // : True.
   //  The MLESAC algorithm is sensitive to the scale, and requires a prior scale.
   virtual bool requires_prior_scale() const
-    { return true; }
-
+  { return true; }
 protected:
-  double outlier_sigma_;
-  double outlier_frac_;
+  double       outlier_sigma_;
+  double       outlier_frac_;
   unsigned int residual_dof_;
 };
 

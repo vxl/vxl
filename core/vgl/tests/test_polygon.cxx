@@ -50,8 +50,8 @@ static void test_disjoint_polygon()
   p.push_back( 15.0f, 11.0f );
   p.print(vcl_cout);
 
-  TEST("inside poly1",p.contains(  2.5f,  0.3f ), true );
-  TEST("inside poly2",p.contains( 12.5f, 10.3f ), true );
+  TEST("inside poly1", p.contains(  2.5f,  0.3f ), true );
+  TEST("inside poly2", p.contains( 12.5f, 10.3f ), true );
   TEST("outside (1)", p.contains(  2.5f,  0.6f ), false );
   TEST("outside (2)", p.contains(  5.0f,  1.1f ), false );
   TEST("outside (3)", p.contains(  5.1f,  0.0f ), false );
@@ -89,9 +89,9 @@ static void test_holey_polygon()
   p.print(os);
   // read the poly
   os.close();
-  vcl_ifstream is("./temp");
+  vcl_ifstream        is("./temp");
   vgl_polygon<double> pr;
-  is >>pr;
+  is >> pr;
   pr.print(vcl_cout);
   TEST("inside after read",      pr.contains( 2.5,  0.3 ), true );
 }
@@ -99,10 +99,10 @@ static void test_holey_polygon()
 static void test_self_intersection()
 {
   vcl_cout << "compute polygon self intersections\n";
-  vcl_vector<vcl_pair<unsigned,unsigned> > e1, e2;
-  vcl_vector<vgl_point_2d<double> > ip;
+  vcl_vector<vcl_pair<unsigned, unsigned> > e1, e2;
+  vcl_vector<vgl_point_2d<double> >         ip;
 
-  {
+    {
     vgl_polygon<double> p;
     // non-self-intersecting quad
     p.new_sheet();
@@ -114,9 +114,9 @@ static void test_self_intersection()
     vgl_selfintersections(p, e1, e2, ip);
     TEST("non-self-intersecting quad", e1.empty() &&
          e2.empty() && ip.empty(), true);
-  }
+    }
 
-  {
+    {
     vgl_polygon<double> p;
     // simple self intersecting quad
     p.new_sheet();
@@ -126,12 +126,12 @@ static void test_self_intersection()
     p.push_back( 1.0, 0.0 );
 
     vgl_selfintersections(p, e1, e2, ip);
-    TEST("simple self-intersecting quad", e1.size()==1 &&
+    TEST("simple self-intersecting quad", e1.size() == 1 &&
          e1[0].first == 0 && e1[0].second == 0 &&
          e2[0].first == 0 && e2[0].second == 2 &&
-         ip[0] == vgl_point_2d<double>(0.5,0.5), true);
-  }
-  {
+         ip[0] == vgl_point_2d<double>(0.5, 0.5), true);
+    }
+    {
     vgl_polygon<double> p;
     // non-self-intersecting polygon with collinear segments
     p.new_sheet();
@@ -149,8 +149,8 @@ static void test_self_intersection()
     vgl_selfintersections(p, e1, e2, ip);
     TEST("collinear non-self-intersecting polygon ", e1.empty() &&
          e2.empty() && ip.empty(), true);
-  }
-  {
+    }
+    {
     vgl_polygon<double> p;
     // multisheet self-intersecting polygon
     p.new_sheet();
@@ -170,34 +170,39 @@ static void test_self_intersection()
     p.push_back( 0.5, 2.5 );
 
     // the correct solutions, but order may be incorrect
-    typedef vcl_pair<unsigned,unsigned> upair;
-    vcl_vector<upair> e1s(5), e2s(5);
+    typedef vcl_pair<unsigned, unsigned> upair;
+    vcl_vector<upair>                 e1s(5), e2s(5);
     vcl_vector<vgl_point_2d<double> > ips(5);
-    e1s[0]=upair(0,0);  e2s[0]=upair(0,2);  ips[0]=vgl_point_2d<double>(.5,.5);
-    e1s[1]=upair(0,0);  e2s[1]=upair(2,0);  ips[1]=vgl_point_2d<double>(.75,.75);
-    e1s[2]=upair(0,1);  e2s[2]=upair(2,3);  ips[2]=vgl_point_2d<double>(.5,1);
-    e1s[3]=upair(1,1);  e2s[3]=upair(2,3);  ips[3]=vgl_point_2d<double>(.5,2);
-    e1s[4]=upair(1,2);  e2s[4]=upair(2,0);  ips[4]=vgl_point_2d<double>(2,.75);
+    e1s[0] = upair(0, 0);  e2s[0] = upair(0, 2);  ips[0] = vgl_point_2d<double>(.5, .5);
+    e1s[1] = upair(0, 0);  e2s[1] = upair(2, 0);  ips[1] = vgl_point_2d<double>(.75, .75);
+    e1s[2] = upair(0, 1);  e2s[2] = upair(2, 3);  ips[2] = vgl_point_2d<double>(.5, 1);
+    e1s[3] = upair(1, 1);  e2s[3] = upair(2, 3);  ips[3] = vgl_point_2d<double>(.5, 2);
+    e1s[4] = upair(1, 2);  e2s[4] = upair(2, 0);  ips[4] = vgl_point_2d<double>(2, .75);
 
     vgl_selfintersections(p, e1, e2, ip);
-    bool valid = e1.size()==5;
-    for (unsigned int i=0; valid && i<5; ++i){
+    bool valid = e1.size() == 5;
+    for( unsigned int i = 0; valid && i < 5; ++i )
+      {
       bool match = false;
-      for (unsigned int j=0; valid && j<e1s.size(); ++j){
-        if (e1[i]==e1s[j] && e2[i]==e2s[j] && ip[i]==ips[j]){
-          e1s.erase(e1s.begin()+j);
-          e2s.erase(e2s.begin()+j);
-          ips.erase(ips.begin()+j);
+      for( unsigned int j = 0; valid && j < e1s.size(); ++j )
+        {
+        if( e1[i] == e1s[j] && e2[i] == e2s[j] && ip[i] == ips[j] )
+          {
+          e1s.erase(e1s.begin() + j);
+          e2s.erase(e2s.begin() + j);
+          ips.erase(ips.begin() + j);
           match = true;
           break;
+          }
+        }
+      if( !match )
+        {
+        valid = false;
         }
       }
-      if (!match)
-        valid = false;
-    }
     TEST("multisheet self-intersecting polygon", valid, true);
-  }
-  {
+    }
+    {
     vgl_polygon<double> p;
     // self-intersections at points
     p.new_sheet();
@@ -214,40 +219,45 @@ static void test_self_intersection()
     p.push_back( 0.0, 3.0 );
 
     // the correct solutions, but order may be incorrect
-    typedef vcl_pair<unsigned,unsigned> upair;
-    vcl_vector<upair> e1s(12), e2s(12);
+    typedef vcl_pair<unsigned, unsigned> upair;
+    vcl_vector<upair>                 e1s(12), e2s(12);
     vcl_vector<vgl_point_2d<double> > ips(12);
-    e1s[0]=upair(0,0);  e2s[0]=upair(0,3);  ips[0]=vgl_point_2d<double>(0,1);
-    e1s[1]=upair(0,1);  e2s[1]=upair(0,3);  ips[1]=vgl_point_2d<double>(0,1);
-    e1s[2]=upair(0,0);  e2s[2]=upair(0,4);  ips[2]=vgl_point_2d<double>(0,1);
-    e1s[3]=upair(0,1);  e2s[3]=upair(0,4);  ips[3]=vgl_point_2d<double>(0,1);
-    e1s[4]=upair(0,0);  e2s[4]=upair(1,2);  ips[4]=vgl_point_2d<double>(0,1);
-    e1s[5]=upair(0,1);  e2s[5]=upair(1,2);  ips[5]=vgl_point_2d<double>(0,1);
-    e1s[6]=upair(0,3);  e2s[6]=upair(1,2);  ips[6]=vgl_point_2d<double>(0,1);
-    e1s[7]=upair(0,4);  e2s[7]=upair(1,2);  ips[7]=vgl_point_2d<double>(0,1);
-    e1s[8]=upair(0,0);  e2s[8]=upair(1,1);  ips[8]=vgl_point_2d<double>(-1,0);
-    e1s[9]=upair(0,5);  e2s[9]=upair(1,1);  ips[9]=vgl_point_2d<double>(-1,0);
-    e1s[10]=upair(0,4); e2s[10]=upair(1,3); ips[10]=vgl_point_2d<double>(-1,3);
-    e1s[11]=upair(0,5); e2s[11]=upair(1,3); ips[11]=vgl_point_2d<double>(-1,3);
+    e1s[0] = upair(0, 0);  e2s[0] = upair(0, 3);  ips[0] = vgl_point_2d<double>(0, 1);
+    e1s[1] = upair(0, 1);  e2s[1] = upair(0, 3);  ips[1] = vgl_point_2d<double>(0, 1);
+    e1s[2] = upair(0, 0);  e2s[2] = upair(0, 4);  ips[2] = vgl_point_2d<double>(0, 1);
+    e1s[3] = upair(0, 1);  e2s[3] = upair(0, 4);  ips[3] = vgl_point_2d<double>(0, 1);
+    e1s[4] = upair(0, 0);  e2s[4] = upair(1, 2);  ips[4] = vgl_point_2d<double>(0, 1);
+    e1s[5] = upair(0, 1);  e2s[5] = upair(1, 2);  ips[5] = vgl_point_2d<double>(0, 1);
+    e1s[6] = upair(0, 3);  e2s[6] = upair(1, 2);  ips[6] = vgl_point_2d<double>(0, 1);
+    e1s[7] = upair(0, 4);  e2s[7] = upair(1, 2);  ips[7] = vgl_point_2d<double>(0, 1);
+    e1s[8] = upair(0, 0);  e2s[8] = upair(1, 1);  ips[8] = vgl_point_2d<double>(-1, 0);
+    e1s[9] = upair(0, 5);  e2s[9] = upair(1, 1);  ips[9] = vgl_point_2d<double>(-1, 0);
+    e1s[10] = upair(0, 4); e2s[10] = upair(1, 3); ips[10] = vgl_point_2d<double>(-1, 3);
+    e1s[11] = upair(0, 5); e2s[11] = upair(1, 3); ips[11] = vgl_point_2d<double>(-1, 3);
 
     vgl_selfintersections(p, e1, e2, ip);
-    bool valid = e1.size()==12;
-    for (unsigned int i=0; valid && i<12; ++i){
+    bool valid = e1.size() == 12;
+    for( unsigned int i = 0; valid && i < 12; ++i )
+      {
       bool match = false;
-      for (unsigned int j=0; valid && j<e1s.size(); ++j){
-        if (e1[i]==e1s[j] && e2[i]==e2s[j] && ip[i]==ips[j]){
-          e1s.erase(e1s.begin()+j);
-          e2s.erase(e2s.begin()+j);
-          ips.erase(ips.begin()+j);
+      for( unsigned int j = 0; valid && j < e1s.size(); ++j )
+        {
+        if( e1[i] == e1s[j] && e2[i] == e2s[j] && ip[i] == ips[j] )
+          {
+          e1s.erase(e1s.begin() + j);
+          e2s.erase(e2s.begin() + j);
+          ips.erase(ips.begin() + j);
           match = true;
           break;
+          }
+        }
+      if( !match )
+        {
+        valid = false;
         }
       }
-      if (!match)
-        valid = false;
-    }
     TEST("self-intersections at points", valid, true);
-  }
+    }
 }
 
 static void test_polygon()

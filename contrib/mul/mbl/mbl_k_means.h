@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_k_means.h
 #ifndef mbl_k_means_h
 #define mbl_k_means_h
-//:
+// :
 // \file
 // \author Ian Scott
 // \date 18-May-2001
@@ -11,8 +11,7 @@
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 
-
-//: Find k cluster centres
+// : Find k cluster centres
 // Uses batch k-means clustering.
 // If you provide parameter partition, it will return the
 // cluster index for each data sample. The number of iterations
@@ -31,12 +30,10 @@
 // if some of the centres start off outside the convex hull of the data set.
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
-unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
-                     vcl_vector<vnl_vector<double> >* cluster_centres,
-                     vcl_vector<unsigned> * partition =0 );
+unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > & data, unsigned k,
+                     vcl_vector<vnl_vector<double> >* cluster_centres, vcl_vector<unsigned> * partition = 0 );
 
-
-//: Find k cluster centres with weighted data
+// : Find k cluster centres with weighted data
 // Uses batch k-means clustering.
 // If you provide parameter partition, it will return the
 // cluster index for each data sample. The number of iterations
@@ -55,9 +52,7 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
 // if some of the centres start off outside the convex hull of the data set.
 // In particular if you let the function initialise the centres, it will
 // occur if any of the first k data samples are identical.
-unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
-                              const vcl_vector<double>& wts,
-                              vcl_vector<vnl_vector<double> >* cluster_centres,
-                              vcl_vector<unsigned> * partition =0);
+unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > & data, unsigned k, const vcl_vector<double>& wts,
+                              vcl_vector<vnl_vector<double> >* cluster_centres, vcl_vector<unsigned> * partition = 0);
 
 #endif // mbl_k_means_h

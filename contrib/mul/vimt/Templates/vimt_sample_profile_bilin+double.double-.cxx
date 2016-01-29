@@ -1,2 +1,2 @@
 #include <vimt/vimt_sample_profile_bilin.txx>
-VIMT_SAMPLE_PROFILE_BILIN_INSTANTIATE(double , double);
+VIMT_SAMPLE_PROFILE_BILIN_INSTANTIATE(double, double);

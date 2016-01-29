@@ -11,61 +11,63 @@ void boxm_sample<APM_MODEL>::print(vcl_ostream& os) const
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_write(vsl_b_ostream & os, boxm_sample<APM_MODEL> const &sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_sample<APM_MODEL> const & sample)
 {
-  vsl_b_write(os, sample.version_no());
+  vsl_b_write(os, sample.version_no() );
   vsl_b_write(os, sample.alpha);
   vsl_b_write(os, sample.appearance_);
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_write(vsl_b_ostream & os, boxm_sample<APM_MODEL> const * &sample)
+void vsl_b_write(vsl_b_ostream & os, boxm_sample<APM_MODEL> const * & sample)
 {
-  if (sample) {
+  if( sample )
+    {
     vsl_b_write(os, *sample);
-  }
+    }
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> &sample)
+void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> & sample)
 {
-  if (!is) return;
+  if( !is ) {return; }
 
   short version;
-  vsl_b_read(is,version);
-  switch (version)
-  {
+  vsl_b_read(is, version);
+
+  switch( version )
+    {
     case 1:
       vsl_b_read(is, sample.alpha);
       vsl_b_read(is, sample.appearance_);
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
-               << "           Unknown version number "<< version << '\n';
+               << "           Unknown version number " << version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       break;
-  }
+    }
 }
 
 template <boxm_apm_type APM_MODEL>
-void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> *&sample)
+void vsl_b_read(vsl_b_istream & is, boxm_sample<APM_MODEL> *& sample)
 {
   vsl_b_read(is, *sample);
 }
 
 template <boxm_apm_type APM_MODEL>
-vcl_ostream& operator << (vcl_ostream& os, const boxm_sample<APM_MODEL>& sample)
+vcl_ostream & operator <<(vcl_ostream& os, const boxm_sample<APM_MODEL>& sample)
 {
   sample.print(os);
   return os;
 }
 
 #define BOXM_SAMPLE_INSTANTIATE(T) \
-template class boxm_sample<T >; \
-template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const &); \
-template void vsl_b_write(vsl_b_ostream &, boxm_sample<T > const *&); \
-template void vsl_b_read(vsl_b_istream &, boxm_sample<T > &); \
-template void vsl_b_read(vsl_b_istream &, boxm_sample<T > *&); \
-template vcl_ostream& operator << (vcl_ostream&, const boxm_sample<T >&)
+  template class boxm_sample<T>; \
+  template void vsl_b_write(vsl_b_ostream &, boxm_sample<T> const &); \
+  template void vsl_b_write(vsl_b_ostream &, boxm_sample<T> const * &); \
+  template void vsl_b_read(vsl_b_istream &, boxm_sample<T> &); \
+  template void vsl_b_read(vsl_b_istream &, boxm_sample<T> *&); \
+  template vcl_ostream & operator <<(vcl_ostream &, const boxm_sample<T> &)
 
 #endif

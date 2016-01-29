@@ -9,5 +9,4 @@ void register_tests()
   REGISTER( test_vector_normalisers );
 }
 
-
 DEFINE_MAIN;

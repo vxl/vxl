@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_view_sphere );
 DECLARE( test_spherical_coord );
 DECLARE( test_camera_bounds );
@@ -26,5 +25,3 @@ register_tests()
 }
 
 DEFINE_MAIN;
-
-

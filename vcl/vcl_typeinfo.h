@@ -4,9 +4,9 @@
 #include "vcl_compiler.h"
 
 #if VCL_CXX_HAS_HEADER_TYPEINFO
-# include "iso/vcl_typeinfo.h"
+#  include "iso/vcl_typeinfo.h"
 #else
-  *** too bad ***
+***too bad * **
 #endif
 
 #endif // vcl_typeinfo_h_

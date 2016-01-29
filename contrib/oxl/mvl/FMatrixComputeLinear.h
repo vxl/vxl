@@ -2,9 +2,9 @@
 #ifndef FMatrixComputeLinear_h_
 #define FMatrixComputeLinear_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Hartley 8-point fundamental matrix fit
 //
@@ -30,7 +30,7 @@
 //    22 Oct 2002 - Peter Vanroose - added vgl_homg_point_2d interface
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vgl/vgl_fwd.h>
 #include <mvl/FMatrixCompute.h>
@@ -40,8 +40,8 @@ class FMatrixComputeLinear : public FMatrixCompute
 {
   bool precondition_;
   bool rank2_truncate_;
- public:
-  //: Initialize FMatrixComputeLinear object.
+public:
+  // : Initialize FMatrixComputeLinear object.
   //  If precondition = false, points are not conditioned prior to computation.
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
@@ -49,37 +49,34 @@ class FMatrixComputeLinear : public FMatrixCompute
 
   // Computations--------------------------------------------------------------
 
-  //: Compute a fundamental matrix for a set of point matches.
+  // : Compute a fundamental matrix for a set of point matches.
   //
   // Return false if the calculation fails or there are fewer than eight point
   // matches in the list.
   //
-  bool compute(PairMatchSetCorner&, FMatrix* F);
+  bool compute(PairMatchSetCorner &, FMatrix* F);
 
-  //: Interface to above using arrays of HomgPoint2D.
+  // : Interface to above using arrays of HomgPoint2D.
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
-  bool compute(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
+  bool compute(vcl_vector<HomgPoint2D> &, vcl_vector<HomgPoint2D> &, FMatrix* F);
 
-  //: Interface to above using arrays of vgl_homg_point_2d.
+  // : Interface to above using arrays of vgl_homg_point_2d.
   //  Makes a PairMatchSetCorner, and then calls the compute method above.
-  bool compute(vcl_vector<vgl_homg_point_2d<double> >&,
-               vcl_vector<vgl_homg_point_2d<double> >&,
-               FMatrix& F);
+  bool compute(vcl_vector<vgl_homg_point_2d<double> > &, vcl_vector<vgl_homg_point_2d<double> > &, FMatrix& F);
 
-  //: Interface to above using preconditioned points
-  bool compute_preconditioned(vcl_vector<HomgPoint2D>&, vcl_vector<HomgPoint2D>&, FMatrix* F);
+  // : Interface to above using preconditioned points
+  bool compute_preconditioned(vcl_vector<HomgPoint2D> &, vcl_vector<HomgPoint2D> &, FMatrix* F);
 
-  //: Interface to above using preconditioned points
-  bool compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> >&,
-                              vcl_vector<vgl_homg_point_2d<double> >&,
+  // : Interface to above using preconditioned points
+  bool compute_preconditioned(vcl_vector<vgl_homg_point_2d<double> > &, vcl_vector<vgl_homg_point_2d<double> > &,
                               FMatrix& F);
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }
   inline FMatrix compute(vcl_vector<HomgPoint2D>& p1, vcl_vector<HomgPoint2D>& p2)
-  { return FMatrixCompute::compute(p1,p2); }
+  { return FMatrixCompute::compute(p1, p2); }
   inline FMatrix compute(vcl_vector<vgl_homg_point_2d<double> >& p1,
                          vcl_vector<vgl_homg_point_2d<double> >& p2)
-  { return FMatrixCompute::compute(p1,p2); }
+  { return FMatrixCompute::compute(p1, p2); }
 };
 
 #endif // FMatrixComputeLinear_h_

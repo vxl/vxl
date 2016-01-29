@@ -6,11 +6,11 @@
 
 class HMatrix1DComputeOptimize1 : public HMatrix1DCompute
 {
- protected:
-  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> >&,
-                         const vcl_vector<vgl_homg_point_1d<double> >&,
+protected:
+  bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > &, const vcl_vector<vgl_homg_point_1d<double> > &,
                          HMatrix1D *);
- public:
+
+public:
   HMatrix1DComputeOptimize1(void);
   ~HMatrix1DComputeOptimize1();
 };

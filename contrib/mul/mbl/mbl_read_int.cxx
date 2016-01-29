@@ -1,8 +1,8 @@
 // This is mul/mbl/mbl_read_int.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \brief Asks question and waits for an answer
 // \author tim, updated by me apparently!!!
@@ -40,39 +40,51 @@ int RD_ReadInt1(const char* q_str, int default_int,
 {
   char reply[MAX_LEN];
 
-  while (true)
-  {
-    if (min_int==0 && max_int==0)
-      vcl_cout<<q_str<<" ("<<default_int<<") :";
+  while( true )
+    {
+    if( min_int == 0 && max_int == 0 )
+      {
+      vcl_cout << q_str << " (" << default_int << ") :";
+      }
     else
-      vcl_cout<<q_str<<" ["<<min_int<<".."<<max_int<<"] ("<<default_int<<") :";
+      {
+      vcl_cout << q_str << " [" << min_int << ".." << max_int << "] (" << default_int << ") :";
+      }
     vcl_cout.flush();
 
-    if (vcl_fgets(reply,MAX_LEN,stdin)!=NULL)
-    {
+    if( vcl_fgets(reply, MAX_LEN, stdin) != NULL )
+      {
       int r = default_int;
-      if (reply[0]=='\n' || vcl_sscanf(reply,"%d",&r)>0)
+      if( reply[0] == '\n' || vcl_sscanf(reply, "%d", &r) > 0 )
+        {
         return r;
+        }
+      }
     }
-  }
 }
 
 int mbl_read_int(const char* q_str, int default_int)
 {
-  return RD_ReadInt1(q_str,default_int,0,0);
+  return RD_ReadInt1(q_str, default_int, 0, 0);
 }
 
 int mbl_read_int(const char* q_str, int default_int,
                  int min_int, int max_int)
 {
-  while (true)
-  {
-    int R = RD_ReadInt1(q_str,default_int,min_int,max_int);
-    if (R<min_int)
-      vcl_cout<<R<<": must be at least "<<min_int<<"\n";
-    else if (R>max_int)
-      vcl_cout<<R<<": must be no more than "<<max_int<<"\n";
+  while( true )
+    {
+    int R = RD_ReadInt1(q_str, default_int, min_int, max_int);
+    if( R < min_int )
+      {
+      vcl_cout << R << ": must be at least " << min_int << "\n";
+      }
+    else if( R > max_int )
+      {
+      vcl_cout << R << ": must be no more than " << max_int << "\n";
+      }
     else
+      {
       return R; // acceptable
-  }
+      }
+    }
 }

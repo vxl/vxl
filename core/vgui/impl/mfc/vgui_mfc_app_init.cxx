@@ -1,6 +1,6 @@
 // This is core/vgui/impl/mfc/vgui_mfc_app_init.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
 // See vgui_mfc_app_init.h for a description of this file.
 //
@@ -8,7 +8,6 @@
 
 #include <vgui/impl/mfc/StdAfx.h>
 #include <vgui/impl/mfc/vgui_mfc_app.h>
-
 
 vgui_mfc_app_init::vgui_mfc_app_init()
 {

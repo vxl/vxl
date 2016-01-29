@@ -2,4 +2,4 @@
 #include <vbl/vbl_array_2d.txx>
 #include <vnl/vnl_vector.h>
 
-VBL_ARRAY_2D_INSTANTIATE(vnl_vector<double>);
+VBL_ARRAY_2D_INSTANTIATE(vnl_vector<double> );

@@ -1,7 +1,7 @@
 // This is core/vgl/vgl_polygon_scan_iterator.h
 #ifndef vgl_polygon_scan_iterator_h
 #define vgl_polygon_scan_iterator_h
-//:
+// :
 // \file
 // \author Adapted from FillPolygon by J.L. Mundy
 //
@@ -17,7 +17,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
 
-//: Fill a polygonal face with interior scan lines
+// : Fill a polygonal face with interior scan lines
 //  This class provides an iterator-style interface to polygon scan
 //  conversion.  There are convenient constructors from vgl_polygon, and_
 //  lists of floats.  An auxiliary clipping window can be specified by the
@@ -56,90 +56,90 @@
 template <class T>
 class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 {
-  int boundp;       //!< boolean indicating if boundary should be included or not
-  int xl;           //!< left bound of current span
-  T fxl;            //!< left bound of current span (floating point value)
-  int xr;           //!< right bound of current span
-  T fxr;            //!< right bound of current span (floating point value)
-  int k;            //!< current index of vertices ordered by increasing y
-  int y0;           //!< bottommost scan line
-  int y1;           //!< topmost scan line
-  int y;            //!< current scan line
-  T fy;             //!< floating point value of current scan line (i.e. T(y))
-  int curcrossedge; //!< crossedge marking start of next scan segment
-  vgl_box_2d<T> win;//!< clipping window
-  bool have_window;
+  int           boundp;       // !< boolean indicating if boundary should be included or not
+  int           xl;           // !< left bound of current span
+  T             fxl;          // !< left bound of current span (floating point value)
+  int           xr;           // !< right bound of current span
+  T             fxr;          // !< right bound of current span (floating point value)
+  int           k;            // !< current index of vertices ordered by increasing y
+  int           y0;           // !< bottommost scan line
+  int           y1;           // !< topmost scan line
+  int           y;            // !< current scan line
+  T             fy;           // !< floating point value of current scan line (i.e. T(y))
+  int           curcrossedge; // !< crossedge marking start of next scan segment
+  vgl_box_2d<T> win;          // !< clipping window
+  bool          have_window;
 
-  vgl_polygon<T> poly_; //!< the polygon
-
- public:
+  vgl_polygon<T> poly_; // !< the polygon
+public:
   // Stores coordinates of a 2d point
   typedef typename vgl_polygon<T>::point_t Point2;
 
   // Constructors/Destructor---------------------------------------------------
 
-  //: Construct with a polygon and bool indicating whether boundary included
+  // : Construct with a polygon and bool indicating whether boundary included
   vgl_polygon_scan_iterator(vgl_polygon<T> const& face, bool boundaryp = true);
 
-  //: Construct with a polygon, bool indicating whether boundary included and window (area visible)
-  vgl_polygon_scan_iterator(vgl_polygon<T> const& face, bool boundaryp,
-                            vgl_box_2d<T> const& window);
+  // : Construct with a polygon, bool indicating whether boundary included and window (area visible)
+  vgl_polygon_scan_iterator(vgl_polygon<T> const& face, bool boundaryp, vgl_box_2d<T> const& window);
 
-  //: Destructor
+  // : Destructor
   ~vgl_polygon_scan_iterator();
 
-  //Functions----------------------------------------------------------
+  // Functions----------------------------------------------------------
 
-  //: Resets iterator to first segment of first scan line
+  // : Resets iterator to first segment of first scan line
   void reset();
 
-  //: Moves iterator to next segment
+  // : Moves iterator to next segment
   bool next();
 
-  //: Returns current scan line
-  inline int scany() const { return y-1; }
+  // : Returns current scan line
+  inline int scany() const { return y - 1; }
 
-  //: Returns start of current span
+  // : Returns start of current span
   inline int startx() const { return xl; }
 
-  //: Returns end of current span
+  // : Returns end of current span
   inline int endx() const { return xr; }
 
-  //: Returns start of current span (floating point value)
+  // : Returns start of current span (floating point value)
   inline T fstartx() const { return fxl; }
 
-  //: Returns end of current span (floating point value)
+  // : Returns end of current span (floating point value)
   inline T fendx() const { return fxr; }
 
-  //: Returns current scan line (floating point value)
+  // : Returns current scan line (floating point value)
   inline T fscany() const { return fy; }
 
   // returns the vertices related to
-  void get_crossedge_vertices(int * &chainnum, int * &vertnum, int & numcrossedges);
-  //: Vertex index - uniquely identifies a vertex in the array chains
-  struct vertind {
-    int chainnum; //!< which chain the vertex is part of
-    int vertnum;  //!< which vertex in the chain
-  };
+  void get_crossedge_vertices(int * & chainnum, int * & vertnum, int & numcrossedges);
 
-  //: Describes an edge crossing the current scan line
-  struct crossedge {
-    T x;       //!< x coord of edge's intersection with current scanline
-    T dx;      //!< change in x with respect to y
-    vertind v; //!< edge goes from vertex v.vertnum to v.vertnum + 1
-  };
+  // : Vertex index - uniquely identifies a vertex in the array chains
+  struct vertind
+    {
+    int chainnum; // !< which chain the vertex is part of
+    int vertnum;  // !< which vertex in the chain
+    };
+
+  // : Describes an edge crossing the current scan line
+  struct crossedge
+    {
+    T x;       // !< x coord of edge's intersection with current scanline
+    T dx;      // !< change in x with respect to y
+    vertind v; // !< edge goes from vertex v.vertnum to v.vertnum + 1
+    };
 
 // Internals ---------------------------------------------------------------
-
- private:
+private:
   // avoid copy constructor a operator=
-  vgl_polygon_scan_iterator(const vgl_polygon_scan_iterator& );
-  vgl_polygon_scan_iterator& operator= (const vgl_polygon_scan_iterator& );
+  vgl_polygon_scan_iterator(const vgl_polygon_scan_iterator & );
+  vgl_polygon_scan_iterator & operator=(const vgl_polygon_scan_iterator & );
 
-  vertind * yverts;       //!< array of all vertices ordered by y coordinate
-  crossedge * crossedges; //!< array of edges crossing current scan line
-  int numcrossedges;      //!< number of edges currently crossing scan line
-  int numverts;           //!< total number of vertices comprising face
+  vertind *   yverts;        // !< array of all vertices ordered by y coordinate
+  crossedge * crossedges;    // !< array of edges crossing current scan line
+  int         numcrossedges; // !< number of edges currently crossing scan line
+  int         numverts;      // !< total number of vertices comprising face
 
   // Returns x coord of vertex v
   inline T get_x(vertind v) const { return poly_[v.chainnum][v.vertnum].x(); }
@@ -167,7 +167,9 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 
   // For debugging purposes
   void display_chains();
+
   void display_crossedges();
+
 };
 
 #define VGL_POLYGON_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_polygon_scan_iterator.txx> instead"

@@ -2,4 +2,4 @@
 #include <vbl/vbl_array_2d.txx>
 #include <mvl/PairMatchSetLineSeg.h>
 
-VBL_ARRAY_2D_INSTANTIATE(PairMatchSetLineSeg*);
+VBL_ARRAY_2D_INSTANTIATE(PairMatchSetLineSeg *);

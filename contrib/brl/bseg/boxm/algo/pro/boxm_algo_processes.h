@@ -4,7 +4,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-//the init functions
+// the init functions
 DECLARE_FUNC_CONS(boxm_describe_scene_process);
 DECLARE_FUNC_CONS(boxm_init_scene_process);
 DECLARE_FUNC_CONS(boxm_line_backproject_process);

@@ -24,12 +24,14 @@ static void save_jpg()
 {
   // Saving the OpenGL area as a jpeg image:
   vgui_utils::dump_colour_buffer("kymfile.jpg");
+
   vcl_cout << "Attempting to print to kymfile.jpg" << vcl_endl;
 }
 
 vgui_menu create_menu()
 {
   vgui_menu file;
+
   file.add("Print PostScript", print_ps);
   file.add("Save jpeg", save_jpg);
 
@@ -38,27 +40,28 @@ vgui_menu create_menu()
   return bar;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char * * argv)
 {
   vgui::init(argc, argv);
-  if (argc <= 1)
-  {
+
+  if( argc <= 1 )
+    {
     vcl_cerr << "Please give an image filename on the command line" << vcl_endl;
-     return 1;
-  }
+    return 1;
+    }
 
   // Make something interesting to print (an image with some 2d objects on).
   vgui_image_tableau_new image(argv[1]);
   easy2D = vgui_easy2D_tableau_new(image);
-  easy2D->set_foreground(0,1,0);
+  easy2D->set_foreground(0, 1, 0);
   easy2D->set_point_radius(5);
   easy2D->add_point(10, 20);
-  easy2D->set_foreground(0,0,1);
+  easy2D->set_foreground(0, 0, 1);
   easy2D->set_line_width(2);
-  easy2D->add_line(100,100,200,400);
+  easy2D->add_line(100, 100, 200, 400);
   easy2D->add_circle(100, 100, 50);
   vgui_viewer2D_tableau_new viewer(easy2D);
-  vgui_shell_tableau_new shell(viewer);
+  vgui_shell_tableau_new    shell(viewer);
 
-  return vgui::run(shell, image->width(), image->height(), create_menu());
+  return vgui::run(shell, image->width(), image->height(), create_menu() );
 }

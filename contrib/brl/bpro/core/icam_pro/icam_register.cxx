@@ -14,7 +14,10 @@ void icam_register::register_datatype()
 
 void icam_register::register_process()
 {
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, icam_create_view_sphere_process, "icamCreateViewSphereProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, icam_register_image_process, "icamRegisterImageProcess");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, icam_correct_cam_rotation_process, "icamCorrectCamRotationProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, icam_create_view_sphere_process,
+                        "icamCreateViewSphereProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, icam_register_image_process,
+                        "icamRegisterImageProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, icam_correct_cam_rotation_process,
+                        "icamCorrectCamRotationProcess");
 }

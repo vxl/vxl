@@ -1,6 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/bvpl_suppress_and_combine_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A class for successively running a kernel(of a vector), applying non-max suppression and combining with previous result
 // \author Isabel Restrepo
@@ -33,11 +33,11 @@
 
 namespace bvpl_suppress_and_combine_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 2;
+const unsigned n_inputs_ = 6;
+const unsigned n_outputs_ = 2;
 }
 
-//: process takes 6 inputs and has 2 outputs.
+// : process takes 6 inputs and has 2 outputs.
 // * input[0]: The grid
 // * input[1]: The kernel vector
 // * input[2]: The grid type:
@@ -73,32 +73,34 @@ bool bvpl_suppress_and_combine_process(bprb_func_process& pro)
 {
   using namespace bvpl_suppress_and_combine_process_globals;
 
-  if (pro.n_inputs() < n_inputs_)
-  {
+  if( pro.n_inputs() < n_inputs_ )
+    {
     vcl_cout << pro.name() << ": the input number should be " << n_inputs_
              << " but instead it is " << pro.n_inputs() << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
-  unsigned i = 0;
+  // get inputs:
+  unsigned                  i = 0;
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(i++);
-  vcl_string datatype = pro.get_input<vcl_string>(i++);
-  vcl_string functor_name = pro.get_input<vcl_string>(i++);
-  vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
-  vcl_string id_grid_path = pro.get_input<vcl_string>(i++);
+  bvpl_kernel_vector_sptr   kernel = pro.get_input<bvpl_kernel_vector_sptr>(i++);
+  vcl_string                datatype = pro.get_input<vcl_string>(i++);
+  vcl_string                functor_name = pro.get_input<vcl_string>(i++);
+  vcl_string                out_grid_path = pro.get_input<vcl_string>(i++);
+  vcl_string                id_grid_path = pro.get_input<vcl_string>(i++);
 
-  //check input's validity
-  if (!grid_base.ptr()) {
+  // check input's validity
+  if( !grid_base.ptr() )
+    {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
-  }
+    }
 
-  if ( !kernel ) {
+  if( !kernel )
+    {
     vcl_cout << pro.name() << " :-- Kernel is not valid!\n";
     return false;
-  }
+    }
 
 //  if (datatype == "float")
 //  {
@@ -133,41 +135,48 @@ bool bvpl_suppress_and_combine_process(bprb_func_process& pro)
 //      return true;
 //    }
 //  }
-   if (datatype == "bsta_gauss_f1") {
+  if( datatype == "bsta_gauss_f1" )
+    {
     typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
-    if (bvxm_voxel_grid<gauss_type>* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
-      bvxm_voxel_grid<vnl_vector_fixed<float,3> > *grid_out=new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(out_grid_path, grid->grid_size());
-      bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid=new bvxm_voxel_grid<vnl_vector_fixed<int,3> >(id_grid_path, grid->grid_size());
-      if (functor_name == "gauss_convolution") {
-        bvpl_gauss_convolution_functor func;
+    if( bvxm_voxel_grid<gauss_type>* grid = dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr() ) )
+      {
+      bvxm_voxel_grid<vnl_vector_fixed<float, 3> > * grid_out = new bvxm_voxel_grid<vnl_vector_fixed<float, 3> >(
+          out_grid_path, grid->grid_size() );
+      bvxm_voxel_grid<vnl_vector_fixed<int, 3> > * id_grid = new bvxm_voxel_grid<vnl_vector_fixed<int, 3> >(
+          id_grid_path, grid->grid_size() );
+      if( functor_name == "gauss_convolution" )
+        {
+        bvpl_gauss_convolution_functor                                   func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);
-        bvpl_discriminative_non_max_suppression vector_oper;
-        vector_oper.suppress_and_combine(grid,kernel,&oper,grid_out, id_grid);
+        bvpl_discriminative_non_max_suppression                          vector_oper;
+        vector_oper.suppress_and_combine(grid, kernel, &oper, grid_out, id_grid);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
-      }
-      if (functor_name == "positive_gauss_convolution") {
-        bvpl_positive_gauss_conv_functor func;
+        }
+      if( functor_name == "positive_gauss_convolution" )
+        {
+        bvpl_positive_gauss_conv_functor                                   func;
         bvpl_neighb_operator<gauss_type, bvpl_positive_gauss_conv_functor> oper(func);
-        bvpl_discriminative_non_max_suppression vector_oper;
-        vector_oper.suppress_and_combine(grid,kernel,&oper,grid_out, id_grid);
+        bvpl_discriminative_non_max_suppression                            vector_oper;
+        vector_oper.suppress_and_combine(grid, kernel, &oper, grid_out, id_grid);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
-      }
-      if (functor_name == "negative_gauss_convolution") {
-        bvpl_negative_gauss_conv_functor func;
+        }
+      if( functor_name == "negative_gauss_convolution" )
+        {
+        bvpl_negative_gauss_conv_functor                                   func;
         bvpl_neighb_operator<gauss_type, bvpl_negative_gauss_conv_functor> oper(func);
-        bvpl_discriminative_non_max_suppression vector_oper;
-        vector_oper.suppress_and_combine(grid,kernel,&oper,grid_out, id_grid);
+        bvpl_discriminative_non_max_suppression                            vector_oper;
+        vector_oper.suppress_and_combine(grid, kernel, &oper, grid_out, id_grid);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
         pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, id_grid);
-      }
+        }
       return true;
-    }
+      }
     else
+      {
       return false;
-  }
+      }
+    }
   return false;
 }
-
-

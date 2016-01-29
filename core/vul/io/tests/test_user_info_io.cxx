@@ -12,10 +12,9 @@ void test_user_info_io()
            << "Testing vul_user_info io\n"
            << "************************\n";
   //
-  vcl_string name="cjb";
+  vcl_string    name = "cjb";
   vul_user_info p_out(name), p_in("");
   p_out.init("cjb");
-
 
   vsl_b_ofstream bfs_out("vul_user_info_test_io.bvl.tmp");
   TEST("Created vul_user_info_test_io.bvl.tmp for writing", (!bfs_out), false);
@@ -28,13 +27,13 @@ void test_user_info_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vul_user_info_test_io.bvl.tmp");
+  vpl_unlink("vul_user_info_test_io.bvl.tmp");
 
   TEST("p_out == p_in",
-       p_out.uid==p_in.uid && p_out.gid==p_in.gid &&
-       p_out.name==p_in.name && p_out.home_directory==p_in.home_directory &&
-       p_out.full_name==p_in.full_name && p_out.shell==p_in.shell &&
-       p_out.passwd==p_in.passwd, true);
+       p_out.uid == p_in.uid && p_out.gid == p_in.gid &&
+       p_out.name == p_in.name && p_out.home_directory == p_in.home_directory &&
+       p_out.full_name == p_in.full_name && p_out.shell == p_in.shell &&
+       p_out.passwd == p_in.passwd, true);
 
   vsl_print_summary(vcl_cout, p_out);
   vcl_cout << vcl_endl;

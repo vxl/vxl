@@ -1,7 +1,6 @@
 #ifndef bstm_ocl_minfo_function_h_
 #define bstm_ocl_minfo_function_h_
 
-
 #include <bstm/ocl/bstm_opencl_cache.h>
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_block.h>
@@ -13,16 +12,15 @@
 
 class bstm_ocl_minfo_function
 {
- public:
+public:
   bstm_ocl_minfo_function(bocl_device_sptr device, bstm_scene_sptr scene, bstm_opencl_cache_sptr opencl_cache,
-                              vgl_box_3d<double> bb, vgl_rotation_3d<double> rot, vgl_vector_3d<double> T,
-                              float time1, float time2, vcl_string kernel_opt, int nbins );
+                          vgl_box_3d<double> bb, vgl_rotation_3d<double> rot, vgl_vector_3d<double> T, float time1,
+                          float time2, vcl_string kernel_opt, int nbins );
 
   float evaluate();
 
   ~bstm_ocl_minfo_function() { delete[] app_joint_histogram_buff; delete[] surf_joint_histogram_buff; };
-
- private:
+private:
 
   void init_ocl_minfo();
 
@@ -30,14 +28,14 @@ class bstm_ocl_minfo_function
 
   bool compile_kernel();
 
-  //members
-  bocl_device_sptr device_;
-  bstm_scene_sptr scene_;
+  // members
+  bocl_device_sptr       device_;
+  bstm_scene_sptr        scene_;
   bstm_opencl_cache_sptr opencl_cache_;
-  float time1_;
-  float time2_;
+  float                  time1_;
+  float                  time2_;
 
-  vcl_vector<bstm_block_id> relevant_blocks_;
+  vcl_vector<bstm_block_id>                          relevant_blocks_;
   vcl_map<bstm_block_id, vcl_vector<bstm_block_id> > relevant_block_mapping_;
 
   bocl_mem_sptr centerX_;
@@ -56,30 +54,28 @@ class bstm_ocl_minfo_function
   bocl_mem_sptr surf_joint_hist_mem_;
   bocl_mem_sptr num_bins_mem_;
 
-  cl_float translation_buff[4];
-  cl_float rotation_buff[16];
-  cl_float target_blk_origin_buff[4];
-  cl_int target_subblk_num_buff[4];
-  cl_float output_buff[1000];
-  cl_float block_len_buff;
-  cl_uchar lookup_arr[256];
-  cl_float times[4];
-  cl_float bb_buf_[8];
-  cl_uint app_nbins_;
-  cl_uint surf_nbins_;
-  cl_float *app_joint_histogram_buff;
-  cl_float *surf_joint_histogram_buff;
-  cl_uint num_bins_buff_[4];
-  cl_uint app_view_dir_num_;
+  cl_float   translation_buff[4];
+  cl_float   rotation_buff[16];
+  cl_float   target_blk_origin_buff[4];
+  cl_int     target_subblk_num_buff[4];
+  cl_float   output_buff[1000];
+  cl_float   block_len_buff;
+  cl_uchar   lookup_arr[256];
+  cl_float   times[4];
+  cl_float   bb_buf_[8];
+  cl_uint    app_nbins_;
+  cl_uint    surf_nbins_;
+  cl_float * app_joint_histogram_buff;
+  cl_float * surf_joint_histogram_buff;
+  cl_uint    num_bins_buff_[4];
+  cl_uint    app_view_dir_num_;
 
-  vgl_box_3d<double> bb_;
+  vgl_box_3d<double>      bb_;
   vgl_rotation_3d<double> R_;
-  vgl_vector_3d<double> T_;
+  vgl_vector_3d<double>   T_;
 
-
-  vcl_string kernel_opt_;
+  vcl_string    kernel_opt_;
   bocl_kernel * kern_;
 };
 
-
-#endif //bstm_ocl_minfo_function_h_
+#endif // bstm_ocl_minfo_function_h_

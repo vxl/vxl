@@ -1,6 +1,6 @@
 #ifndef rgrl_matcher_h_
 #define rgrl_matcher_h_
-//:
+// :
 // \file
 // \brief  Abstract base class to compute matches for a particular feature type. Multiple matches are allowed for each feature.
 // \author Chuck Stewart
@@ -18,74 +18,63 @@ class rgrl_view;
 class rgrl_transformation;
 class rgrl_scale;
 
-//: Interface for the routines that compute matches.
+// : Interface for the routines that compute matches.
 //
 class rgrl_matcher
   : public rgrl_object
 {
- public:
+public:
   virtual ~rgrl_matcher();
 
-  //: Build the matches with a view (old interface)
+  // : Build the matches with a view (old interface)
   //
   virtual
-  rgrl_match_set_sptr
-  compute_matches( rgrl_feature_set const&    from_features,
-                   rgrl_feature_set const&    to_features,
-                   rgrl_view const&           current_view,
-                   rgrl_transformation const& current_xform,
-                   rgrl_scale const&          current_scale,
-                   rgrl_match_set_sptr const& old_matches = 0 ) = 0;
+  rgrl_match_set_sptr compute_matches( rgrl_feature_set const&    from_features, rgrl_feature_set const&    to_features,
+                                       rgrl_view const&           current_view,
+                                       rgrl_transformation const& current_xform,
+                                       rgrl_scale const&          current_scale,
+                                       rgrl_match_set_sptr const& old_matches = 0 ) = 0;
 
-  //: Build the matches with a view (new interface)
+  // : Build the matches with a view (new interface)
   //
   //  Current xform is embedded in the view
-  rgrl_match_set_sptr
-  compute_matches( rgrl_feature_set const&    from_features,
-                   rgrl_feature_set const&    to_features,
-                   rgrl_view const&           current_view,
-                   rgrl_scale const&          current_scale,
-                   rgrl_match_set_sptr const& old_matches = 0 );
+  rgrl_match_set_sptr compute_matches( rgrl_feature_set const&    from_features, rgrl_feature_set const&    to_features,
+                                       rgrl_view const&           current_view,
+                                       rgrl_scale const&          current_scale,
+                                       rgrl_match_set_sptr const& old_matches = 0 );
 
-  //: Build the matches without a view
+  // : Build the matches without a view
   //
-  rgrl_match_set_sptr
-  compute_matches( rgrl_feature_set const&    from_features,
-                   rgrl_feature_set const&    to_features,
-                   rgrl_transformation const& current_xform,
-                   rgrl_mask_box const&       from_region,
-                   rgrl_mask_box const&       to_region,
-                   rgrl_scale const&          current_scale,
-                   rgrl_match_set_sptr const& old_matches = 0 );
+  rgrl_match_set_sptr compute_matches( rgrl_feature_set const&    from_features, rgrl_feature_set const&    to_features,
+                                       rgrl_transformation const& current_xform, rgrl_mask_box const&       from_region,
+                                       rgrl_mask_box const&       to_region, rgrl_scale const&          current_scale,
+                                       rgrl_match_set_sptr const& old_matches = 0 );
 
-  //: invert the matches according to inverse transformation
+  // : invert the matches according to inverse transformation
   virtual
-  rgrl_match_set_sptr
-  invert_matches( rgrl_match_set const&    current_set,
-                  rgrl_view const&         current_view );
+  rgrl_match_set_sptr invert_matches( rgrl_match_set const&    current_set, rgrl_view const&         current_view );
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher, rgrl_object );
+protected:
 
- protected:
-
-  //: this struct is used in invert_matches
-  struct flip_node{
+  // : this struct is used in invert_matches
+  struct flip_node
+    {
     rgrl_feature_sptr from_, to_;
-    double            sig_wgt_;
+    double sig_wgt_;
 
     // less than operator
     bool operator<( flip_node const& other ) const;
-  };
+
+    };
 
   typedef vcl_vector<flip_node>::const_iterator nodes_vec_iterator;
 
   virtual
-  void
-  add_one_flipped_match( rgrl_match_set_sptr& inv_set,
-                         rgrl_view const& current_view,
-                         nodes_vec_iterator const& begin_iter,
-                         nodes_vec_iterator const& end_iter );
+  void add_one_flipped_match( rgrl_match_set_sptr& inv_set, rgrl_view const& current_view,
+                              nodes_vec_iterator const& begin_iter, nodes_vec_iterator const& end_iter );
+
 };
 
 #endif

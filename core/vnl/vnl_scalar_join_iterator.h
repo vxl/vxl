@@ -2,9 +2,9 @@
 #ifndef vnl_scalar_join_iterator_h_
 #define vnl_scalar_join_iterator_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief  Database join on matrix columns
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -36,7 +36,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_list.h>
 #include <vnl/vnl_matrix.h>
@@ -44,7 +44,7 @@
 template <class T>
 class vnl_scalar_join_iterator_indexed_pair;
 
-//: Database join on matrix columns.
+// : Database join on matrix columns.
 //  vnl_scalar_join_iterator implements a fast database join on columns
 //  of matrices of scalars.  "Scalar" here really means that the
 //  objects have comparison operators.  The cost is O(n log n) where
@@ -69,66 +69,69 @@ template <class T>
 class vnl_scalar_join_iterator
 {
   VCL_SAFE_BOOL_DEFINE;
- protected:
-  unsigned n1;
-  unsigned n2;
+protected:
+  unsigned                                             n1;
+  unsigned                                             n2;
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI1;
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >* pI2;
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I1;
   vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >& I2;
   typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index1;
   typename vcl_list<vnl_scalar_join_iterator_indexed_pair<T> >::iterator index2;
+public:
 
- public:
-
-  //: Initialize this iterator to the join of relation1(:,column1) and relation2(:,column2).
+  // : Initialize this iterator to the join of relation1(:,column1) and relation2(:,column2).
   // The algorithm sorts an array of pointers to each row and
   // traversal of the iterator runs through these to produce the join.
   // After construction the row1() and row2() methods indicate the first pair.
-  vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1,
-                           const vnl_matrix<T>& relation2, unsigned column2);
+  vnl_scalar_join_iterator(const vnl_matrix<T>& relation1, unsigned column1, const vnl_matrix<T>& relation2,
+                           unsigned column2);
 
   ~vnl_scalar_join_iterator();
 
+  // : Return true if all pairs have been seen.
+  operator safe_bool() const
+            { return (!done() ) ? VCL_SAFE_BOOL_TRUE : 0; }
 
-  //: Return true if all pairs have been seen.
-  operator safe_bool () const
-    { return (!done())? VCL_SAFE_BOOL_TRUE : 0; }
-
-  //: Return false if all pairs have been seen.
+  // : Return false if all pairs have been seen.
   bool operator!() const
-    { return (!done())? false : true; }
+  { return (!done() ) ? false : true; }
 
-  //: Advance to the next pair.  This is prefix ++.
-  inline vnl_scalar_join_iterator<T>& operator ++ () { next(); return *this; }
+  // : Advance to the next pair.  This is prefix ++.
+  inline vnl_scalar_join_iterator<T> & operator ++() { next(); return *this; }
 
   bool done() const;
+
   void next();
 
-  //: Return the index of the current row in the first relation.
+  // : Return the index of the current row in the first relation.
   unsigned row1() const;
-  //: Return the index of the current row in the second relation.
+
+  // : Return the index of the current row in the second relation.
   unsigned row2() const;
 
- private:
+private:
   // Postfix ++ is private as it would be costly to implement.
-  vnl_scalar_join_iterator<T> operator++ (int);
+  vnl_scalar_join_iterator<T> operator++(int);
 
 };
 
-//: Helper class to hold the sorted arrays of indices.
+// : Helper class to hold the sorted arrays of indices.
 template <class T>
 class vnl_scalar_join_iterator_indexed_pair
 {
- public:
+public:
   const T* object;
-  int original_index;
+  int      original_index;
 
   vnl_scalar_join_iterator_indexed_pair() {}
-  vnl_scalar_join_iterator_indexed_pair(const T* object_, int original_index_):object(object_), original_index(original_index_) {}
+  vnl_scalar_join_iterator_indexed_pair(const T* object_, int original_index_) : object(object_), original_index(
+      original_index_) {}
 
-  bool operator == (const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
-  bool operator <  (const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
+  bool operator ==(const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
+
+  bool operator <(const vnl_scalar_join_iterator_indexed_pair<T>& that) const;
+
 };
 
 #endif // vnl_scalar_join_iterator_h_

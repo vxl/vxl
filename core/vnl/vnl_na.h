@@ -2,13 +2,12 @@
 #ifndef vnl_na_h_
 #define vnl_na_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-
 
 #include <vcl_iosfwd.h>
 
-//:
+// :
 // \file
 // \brief NA (Not Available) is a particular double (or single-precision) NaN to represent missing data.
 // For example, where a vnl_vector<double> represents a series of samples from an image,
@@ -37,102 +36,102 @@
 // os << vnl_na_stream(x) << ' ' << vnl_na_stream(x);
 // \endverbatim
 
-
-//: qNaN to indicate value Not Available.
+// : qNaN to indicate value Not Available.
 // Don't assume that any VXL functions will do something sensible in the face of NA, unless
 // explicitly documented.
 double vnl_na(double dummy);
 
-//: qNaN to indicate value Not Available.
+// : qNaN to indicate value Not Available.
 // Don't assume that any VXL functions will do something sensible in the face of NA, unless
 // explicitly documented.
 float vnl_na(float dummy);
 
-//: True if parameter is specific NA qNaN.
+// : True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7ff00000000007a2, as used by Octave and R
 bool vnl_na_isna(double);
 
-//: True if parameter is specific NA qNaN.
+// : True if parameter is specific NA qNaN.
 // Tests for bit pattern 0x7f8007a2
 bool vnl_na_isna(float);
 
-
-//: Replace NaNs with NA, leave other values alone.
+// : Replace NaNs with NA, leave other values alone.
 double vnl_na_nan_to_na(double v);
 
-//: Replace NaNs with NA, leave other values alone.
+// : Replace NaNs with NA, leave other values alone.
 float vnl_na_nan_to_na(float v);
 
-
-//: Read a floating point number or "NA" from a stream.
+// : Read a floating point number or "NA" from a stream.
 // Should behave exactly like a>>x, if the extraction operator was aware of the
 // character sequence \code NA.
-void vnl_na_extract(vcl_istream &is, double& x);
+void vnl_na_extract(vcl_istream & is, double& x);
 
-
-//: Write a floating point number or "NA" to a stream.
+// : Write a floating point number or "NA" to a stream.
 // Should behave exactly like a<<x, if the insertion operator was aware of the
 // character sequence \code NA.
-void vnl_na_insert(vcl_ostream &is, double x);
+void vnl_na_insert(vcl_ostream & is, double x);
 
-//: Read a floating point number or "NA" from a stream.
+// : Read a floating point number or "NA" from a stream.
 // Should behave exactly like a>>x, if the extraction operator was aware of the
 // character sequence \code NA.
-void vnl_na_extract(vcl_istream &is, float& x);
+void vnl_na_extract(vcl_istream & is, float& x);
 
-
-//: Write a floating point number or "NA" to a stream.
+// : Write a floating point number or "NA" to a stream.
 // Should behave exactly like a<<x, if the insertion operator was aware of the
 // character sequence \code NA.
-void vnl_na_insert(vcl_ostream &is, float x);
+void vnl_na_insert(vcl_ostream & is, float x);
 
-
-//: Wrapper around a double or float that handles streaming NA.
-template <class T> struct vnl_na_stream_t
-{
+// : Wrapper around a double or float that handles streaming NA.
+template <class T>
+struct vnl_na_stream_t
+  {
   T& x_;
-  vnl_na_stream_t(T& x): x_(x) {}
-};
+  vnl_na_stream_t(T& x) : x_(x) {}
+  };
 
-//: Wrapper around a double or float that handles streaming NA.
-template <class T> struct vnl_na_stream_const_t
-{
+// : Wrapper around a double or float that handles streaming NA.
+template <class T>
+struct vnl_na_stream_const_t
+  {
   const T& x_;
-  vnl_na_stream_const_t(const T& x): x_(x) {}
-};
+  vnl_na_stream_const_t(const T& x) : x_(x) {}
+  };
 
-//: Wrap a double or float to handle streaming NA.
-template <class T> inline vnl_na_stream_t<T> vnl_na_stream(T& x)
+// : Wrap a double or float to handle streaming NA.
+template <class T>
+inline vnl_na_stream_t<T> vnl_na_stream(T& x)
 {
   return vnl_na_stream_t<T>(x);
 }
 
-//: Wrap a double or float to handle streaming NA.
-template <class T> inline vnl_na_stream_const_t<T> vnl_na_stream(const T& x)
+// : Wrap a double or float to handle streaming NA.
+template <class T>
+inline vnl_na_stream_const_t<T> vnl_na_stream(const T& x)
 {
   return vnl_na_stream_const_t<T>(x);
 }
 
-//: Insert wrapped double or float into stream, whilst handling NA.
-template <class T> inline vcl_ostream& operator <<(vcl_ostream &os, const vnl_na_stream_t<T>& ns)
+// : Insert wrapped double or float into stream, whilst handling NA.
+template <class T>
+inline vcl_ostream & operator <<(vcl_ostream & os, const vnl_na_stream_t<T>& ns)
 {
   vnl_na_insert(os, ns.x_);
   return os;
 }
 
-//: Insert wrapped double or float into stream, whilst handling NA.
-template <class T> inline vcl_ostream& operator <<(vcl_ostream &os, const vnl_na_stream_const_t<T>& ns)
+// : Insert wrapped double or float into stream, whilst handling NA.
+template <class T>
+inline vcl_ostream & operator <<(vcl_ostream & os, const vnl_na_stream_const_t<T>& ns)
 {
   vnl_na_insert(os, ns.x_);
   return os;
 }
 
-//: Extract wrapped double or float from stream, whilst handling NA.
-template <class T> inline vcl_istream& operator >>(vcl_istream &is, const vnl_na_stream_t<T>& ns)
+// : Extract wrapped double or float from stream, whilst handling NA.
+template <class T>
+inline vcl_istream & operator >>(vcl_istream & is, const vnl_na_stream_t<T>& ns)
 {
   vnl_na_extract(is, ns.x_);
   return is;
 }
-
 
 #endif // vnl_na_h_

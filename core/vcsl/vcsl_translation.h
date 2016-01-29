@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_translation.h
 #ifndef vcsl_translation_h_
 #define vcsl_translation_h_
-//:
+// :
 // \file
 // \brief Translation transformation
 // \author Francois BERTEL
@@ -19,14 +19,14 @@
 #include <vcsl/vcsl_translation_sptr.h>
 #include <vnl/vnl_vector.h>
 
-//: Translation transformation
+// : Translation transformation
 class vcsl_translation
-  :public vcsl_spatial_transformation
+  : public vcsl_spatial_transformation
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor
   vcsl_translation() {}
@@ -34,57 +34,57 @@ class vcsl_translation
   // Destructor
   virtual ~vcsl_translation() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Is `this' invertible at time `time'?
+  // : Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
   virtual bool is_invertible(double time) const;
 
-  //: Is `this' correctly set ?
+  // : Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
   virtual bool is_valid() const
-  { return vcsl_spatial_transformation::is_valid() &&
-           ((this->duration()==0&&vector_.size()==1) ||
-            this->duration()==vector_.size()); }
+  {
+    return vcsl_spatial_transformation::is_valid() &&
+           ( (this->duration() == 0 && vector_.size() == 1) ||
+             this->duration() == vector_.size() );
+  }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Transformation parameters
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Set the parameters of a static translation
+  // : Set the parameters of a static translation
   void set_static(vnl_vector<double> const& new_vector);
 
-  //: Set the direction vector variation along the time
-  void set_vector(list_of_vectors const&new_vector){vector_=new_vector;}
+  // : Set the direction vector variation along the time
+  void set_vector(list_of_vectors const& new_vector) {vector_ = new_vector; }
 
-  //: Return the angle variation along the time
+  // : Return the angle variation along the time
   list_of_vectors vector() const { return vector_; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Basic operations
-  //***************************************************************************
+  // ***************************************************************************
 
-  //: Image of `v' by `this'
+  // : Image of `v' by `this'
   //  REQUIRE: is_valid()
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  virtual vnl_vector<double> execute(const vnl_vector<double> & v, double time) const;
 
-  //: Image of `v' by the inverse of `this'
+  // : Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  virtual vnl_vector<double> inverse(const vnl_vector<double> & v, double time) const;
 
- protected:
-  //: Compute the value of the parameter at time `time'
+protected:
+  // : Compute the value of the parameter at time `time'
   vnl_vector<double> vector_value(double time) const;
 
-  //: Direction vector variation along the time
+  // : Direction vector variation along the time
   list_of_vectors vector_;
 };
 

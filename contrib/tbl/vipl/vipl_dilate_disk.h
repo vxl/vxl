@@ -1,6 +1,6 @@
 #ifndef vipl_dilate_disk_h_
 #define vipl_dilate_disk_h_
-//:
+// :
 // \file
 // \brief morphological dilation with circular element
 //
@@ -36,43 +36,46 @@
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-//: morphological dilation with circular element
-template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+// : morphological dilation with circular element
+template <class ImgIn, class ImgOut, class DataIn, class DataOut,
+          VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter)>
+class vipl_dilate_disk : public vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>
 {
   // -+-+- data members: -+-+-
- private:
+private:
   float radius_;
- public:
-  float   radius() const     { return radius_;}
-  float & ref_radius()       { return radius_;}
-  void    put_radius(float v){ radius_ =   v;}
-
- private:
-  bool** mask_;
- public:
-  bool**  mask() const       { return mask_;}
- protected:
-  bool**& ref_mask()         { return mask_;}
-  void    put_mask(bool** v) { mask_ =   v;}
+public:
+  float   radius() const     { return radius_; }
+  float & ref_radius()       { return radius_; }
+  void    put_radius(float v) { radius_ =   v; }
+private:
+  bool* * mask_;
+public:
+  bool * *  mask() const       { return mask_; }
+protected:
+  bool * * & ref_mask()         { return mask_; }
+  void    put_mask(bool* * v) { mask_ =   v; }
 
   // -+-+- constructors/destructors: -+-+-
- public:
-  inline vipl_dilate_disk(float r=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(0) {}
+public:
+  inline vipl_dilate_disk(float r = 1)
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(), radius_(r), mask_(0) {}
   inline vipl_dilate_disk(vipl_dilate_disk const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(0) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A), radius_(A.radius() ), mask_(0) {}
   inline ~vipl_dilate_disk() {}
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();
+
 // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
   bool preop();
+
   bool postop();
+
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_dilate_disk.txx"
+#  include "vipl_dilate_disk.txx"
 #endif
 
 #endif // vipl_dilate_disk_h_

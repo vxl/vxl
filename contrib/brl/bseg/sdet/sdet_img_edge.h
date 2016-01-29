@@ -1,7 +1,7 @@
 // This is brl/bseg/sdet/sdet_img_edge.h
 #ifndef sdet_img_edge_h_
 #define sdet_img_edge_h_
-//:
+// :
 // \file
 // \brief Various utility methods and classes related to edge probability updates
 // \author Ibrahim Eden (ieden@lems.brown.edu)
@@ -24,9 +24,11 @@
 
 class sdet_img_edge
 {
- public:
-  //returns a binary map of edges with pixel resolution
-  static vil_image_view<vxl_byte> detect_edges(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth, bool automatic_threshold, bool junctionp, bool aggressive_junction_closure);
+public:
+  // returns a binary map of edges with pixel resolution
+  static vil_image_view<vxl_byte> detect_edges(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth,
+                                               bool automatic_threshold, bool junctionp,
+                                               bool aggressive_junction_closure);
 
   // return image has three planes:
   // plane 0 - sub-pixel column position of the edge.
@@ -35,29 +37,21 @@ class sdet_img_edge
   //           Negative value indicates no edge is present
   // plane 2 - Orientation of local edge tangent direction in radians
   // range is [0, 2pi).
-  static vil_image_view<float> detect_edge_tangent(vil_image_view<vxl_byte> img,
-                                                   double noise_multiplier,
-                                                   double smooth,
-                                                   bool automatic_threshold,
-                                                   bool junctionp,
+  static vil_image_view<float> detect_edge_tangent(vil_image_view<vxl_byte> img, double noise_multiplier, double smooth,
+                                                   bool automatic_threshold, bool junctionp,
                                                    bool aggressive_junction_closure);
 
   // return image has three planes as in detect_edge_tangent
   // Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator
-  static vil_image_view<float> detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
-                                                                double noise_multiplier,
-                                                                double smooth,
-                                                                bool automatic_threshold,
-                                                                bool junctionp,
+  static vil_image_view<float> detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img, double noise_multiplier,
+                                                                double smooth, bool automatic_threshold, bool junctionp,
                                                                 bool aggressive_junction_closure);
+
   // return image has three planes as in detect_edge_tangent
-  static vil_image_view<float> detect_edge_line_fitted(vil_image_view<vxl_byte> img,
-                                                   double noise_multiplier,
-                                                   double smooth,
-                                                   bool automatic_threshold,
-                                                   bool junctionp,
-                                                   bool aggressive_junction_closure,
-                                                   int min_fit_length, double rms_distance);
+  static vil_image_view<float> detect_edge_line_fitted(vil_image_view<vxl_byte> img, double noise_multiplier,
+                                                       double smooth, bool automatic_threshold, bool junctionp,
+                                                       bool aggressive_junction_closure, int min_fit_length,
+                                                       double rms_distance);
 
   // input is an edge image as the output of detect_edge_tangent(); output is line image:
   // plane 0 - line coefficient a --
@@ -67,16 +61,20 @@ class sdet_img_edge
   // plane 2 - line coefficient c
   static void convert_edge_image_to_line_image(vil_image_view<float>& edge_img, vil_image_view<float>& output_line_img);
 
-
   static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
 
   static vil_image_view<float> multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma);
-  static void estimate_edge_prob_image(const vil_image_view<vxl_byte>& img_edge, vil_image_view<float>& img_edgeness, const int mask_size, const float mask_sigma);
+
+  static void estimate_edge_prob_image(const vil_image_view<vxl_byte>& img_edge, vil_image_view<float>& img_edgeness,
+                                       const int mask_size, const float mask_sigma);
+
   static vbl_array_2d<float> get_spherical_gaussian_kernel(const int size, const float sigma);
 
   static float convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof);
 
-  static void convert_true_edge_prob_to_edge_statistics(const vil_image_view<float>& img_tep,vil_image_view<float>& img_es);
+  static void convert_true_edge_prob_to_edge_statistics(const vil_image_view<float>& img_tep,
+                                                        vil_image_view<float>& img_es);
+
 };
 
 #endif // sdet_img_edge_h_

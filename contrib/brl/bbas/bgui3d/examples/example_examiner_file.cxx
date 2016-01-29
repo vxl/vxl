@@ -10,17 +10,19 @@
 // This is a very simple example of how to use read
 // a scene from a file and display it in an examiner_tableau
 
-
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
-  if (argc <2) {
+  if( argc < 2 )
+    {
     vcl_cerr << "Please specify the path to scene file (IV or VRML)\n";
     return -1;
-  }
+    }
 
   vcl_vector<vcl_string> files;
-  for(int i=1; i<argc; ++i)
+  for( int i = 1; i < argc; ++i )
+    {
     files.push_back(argv[i]);
+    }
 
   // initialize vgui
   vgui::init(argc, argv);
@@ -30,18 +32,22 @@ int main(int argc, char** argv)
 
   // read each file into a scene graph
   SoNode* root;
-  if(files.size() == 1){
-    root = bgui3d_import_file(files.front());
+  if( files.size() == 1 )
+    {
+    root = bgui3d_import_file(files.front() );
     root->ref();
-  }
-  else{
+    }
+  else
+    {
     // add each file as a child of a Separator
     SoSeparator* group = new SoSeparator;
     group->ref();
-    for(unsigned i=0; i<files.size(); ++i)
-      group->addChild(bgui3d_import_file(files[i]));
+    for( unsigned i = 0; i < files.size(); ++i )
+      {
+      group->addChild(bgui3d_import_file(files[i]) );
+      }
     root = group;
-  }
+    }
 
   // wrap the scenegraph in an examiner tableau
   bgui3d_examiner_tableau_new tab3d(root);

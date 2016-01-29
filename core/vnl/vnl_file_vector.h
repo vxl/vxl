@@ -2,9 +2,9 @@
 #ifndef vnl_file_vector_h_
 #define vnl_file_vector_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Load vnl_vector<T> from file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -16,24 +16,23 @@
 //   LSB (Manchester) 23/3/01 Tidied documentation
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
 
-//: Templated class to load a vector from a file.
+// : Templated class to load a vector from a file.
 template <class T>
 class vnl_file_vector : public vnl_vector<T>
 {
   VCL_SAFE_BOOL_DEFINE;
- public:
+public:
   vnl_file_vector(char const* filename);
 
-  operator safe_bool () const
-    { return (ok_)? VCL_SAFE_BOOL_TRUE : 0; }
+  operator safe_bool() const
+        { return (ok_) ? VCL_SAFE_BOOL_TRUE : 0; }
   bool operator!() const
-    { return !ok_; }
-
- private:
+  { return !ok_; }
+private:
   bool ok_;
 };
 

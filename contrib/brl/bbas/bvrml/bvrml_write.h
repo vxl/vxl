@@ -2,7 +2,7 @@
 #ifndef bvrml_write_h
 #define bvrml_write_h
 
-//:
+// :
 // \file
 // \brief A class with vrml utilities
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -22,62 +22,48 @@
 
 class bvrml_color
 {
- public:
-  //: store the color scheme 'classic' to generate a heatmap
-  static bvrml_EXPORT_DATA unsigned heatmap_classic_size;
+public:
+  // : store the color scheme 'classic' to generate a heatmap
+  static bvrml_EXPORT_DATA unsigned      heatmap_classic_size;
   static bvrml_EXPORT_DATA unsigned char heatmap_classic[256][3];
 };
 
 class bvrml_write
 {
- public:
+public:
 
-  //: Write VRML 2.0 header
+  // : Write VRML 2.0 header
   static void write_vrml_header(vcl_ofstream& str);
 
-  //: Write a vgl_line_segment_3d, specifying color and transparency
+  // : Write a vgl_line_segment_3d, specifying color and transparency
   template <class T>
-  static void write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<T>& line,
-                                      const float r = 0.0f, const float g=0.0f, const float b=1.0f,
-                                      const float transparency=0.0f);
+  static void write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<T>& line, const float r = 0.0f,
+                                      const float g = 0.0f, const float b = 1.0f, const float transparency = 0.0f);
 
-  //: Write a line by specifying starting point, direction magnitude and line color
-  static void write_vrml_line(vcl_ofstream& str,vgl_point_3d<double> pt,vgl_vector_3d<double> dir,
-                              const float length =1.0f,
-                              const float r1=1.0f, const float g=1.0f, const float b=0.0f);
+  // : Write a line by specifying starting point, direction magnitude and line color
+  static void write_vrml_line(vcl_ofstream& str, vgl_point_3d<double> pt, vgl_vector_3d<double> dir,
+                              const float length = 1.0f, const float r1 = 1.0f, const float g = 1.0f,
+                              const float b = 0.0f);
 
-  //: Write a vgl_box_3d
+  // : Write a vgl_box_3d
   template <class T>
-  static void write_vrml_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
-                             const float r = 1.0, const float g = 1.0,
-                             const float b = 1.0,
-                             const float transparency = 0.0);
+  static void write_vrml_box(vcl_ofstream& str, vgl_box_3d<T> const& box, const float r = 1.0, const float g = 1.0,
+                             const float b = 1.0, const float transparency = 0.0);
 
-  //: Write a vgl_box_3d as a  wireframe
+  // : Write a vgl_box_3d as a  wireframe
   template <class T>
-  static void write_vrml_wireframe_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
-                                       const float r = 1.0, const float g = 1.0,
-                                       const float b = 1.0,
-                                       const float transparency = 0.0);
+  static void write_vrml_wireframe_box(vcl_ofstream& str, vgl_box_3d<T> const& box, const float r = 1.0,
+                                       const float g = 1.0, const float b = 1.0, const float transparency = 0.0);
 
-  //: Write a vgl_sphere_3d
-  static void write_vrml_sphere(vcl_ofstream& str,
-                                vgl_sphere_3d<float> const& sphere,
-                                const float r = 1.0, const float g =1.0,
-                                const float b=1.0,
-                                const float transparency = 0);
+  // : Write a vgl_sphere_3d
+  static void write_vrml_sphere(vcl_ofstream& str, vgl_sphere_3d<float> const& sphere, const float r = 1.0,
+                                const float g = 1.0, const float b = 1.0, const float transparency = 0);
 
-  static void write_vrml_disk(vcl_ofstream& str,
-                              vgl_point_3d<double> const& pt,
-                              vgl_vector_3d<double> const &dir,
-                              float radius,
-                              const float r, const float g, const float b);
+  static void write_vrml_disk(vcl_ofstream& str, vgl_point_3d<double> const& pt, vgl_vector_3d<double> const & dir,
+                              float radius, const float r, const float g, const float b);
 
-  static void write_vrml_cylinder(vcl_ofstream& str,
-                                  vgl_point_3d<double> const& pt,
-                                  vgl_vector_3d<double> const &dir,
-                                  float radius, float height,
-                                  const float r, const float g, const float b,
+  static void write_vrml_cylinder(vcl_ofstream& str, vgl_point_3d<double> const& pt, vgl_vector_3d<double> const & dir,
+                                  float radius, float height, const float r, const float g, const float b,
                                   const unsigned side = 0);
 
   // From http://www.lighthouse3d.com/vrml/tutorial/index.shtml?view:
@@ -88,21 +74,17 @@ class bvrml_write
   //
   // The default view will be set to the first viewpoint element encountered
   template <class T>
-  static void write_viewpoint(vcl_ofstream& ofs,
-                              const T cx, const T cy, const T cz,//position
-                              const T ox, const T oy, const T oz, const T rad, //orientation
+  static void write_viewpoint(vcl_ofstream& ofs, const T cx, const T cy, const T cz, // position
+                              const T ox, const T oy, const T oz, const T rad,       // orientation
                               const vcl_string& description);
-
 
 };
 
-
 template <class T>
-void bvrml_write::
-write_viewpoint(vcl_ofstream& ofs,
-                const T cx, const T cy, const T cz,
-                const T ox, const T oy, const T oz, const T rad,
-                const vcl_string& description)
+void bvrml_write::write_viewpoint(vcl_ofstream& ofs,
+                                  const T cx, const T cy, const T cz,
+                                  const T ox, const T oy, const T oz, const T rad,
+                                  const vcl_string& description)
 {
   ofs << "Viewpoint {\n"
       << "  position     " << cx << ' ' << cy << ' ' << cz << '\n'
@@ -111,10 +93,9 @@ write_viewpoint(vcl_ofstream& ofs,
       << "}\n";
 }
 
-
 template <class T>
 void bvrml_write::write_vrml_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
-                                 const float r , const float g , const float b ,
+                                 const float r, const float g, const float b,
                                  const float transparency )
 {
   T x0 = box.centroid().x(), y0 = box.centroid().y(), z0 = box.centroid().z();
@@ -144,7 +125,7 @@ void bvrml_write::write_vrml_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
 
 template <class T>
 void bvrml_write::write_vrml_wireframe_box(vcl_ofstream& str, vgl_box_3d<T> const& box,
-                                           const float r , const float g , const float b ,
+                                           const float r, const float g, const float b,
                                            const float transparency )
 {
   vcl_vector<vgl_point_3d<T> > vertices = box.vertices();
@@ -161,11 +142,11 @@ void bvrml_write::write_vrml_wireframe_box(vcl_ofstream& str, vgl_box_3d<T> cons
       << " {\n"
       << "      coord Coordinate{\n"
       << "       point[\n";
-  for (unsigned i = 0; i < vertices.size(); i++)
-  {
+  for( unsigned i = 0; i < vertices.size(); i++ )
+    {
     vgl_point_3d<T> pt = vertices[i];
     str << pt.x() << ' ' << pt.y() << ' ' << pt.z() << ", ";
-  }
+    }
   str << "   ]\n      }"
       << "   coordIndex [\n"
       << "0, 1, 2, 3, 0, -1, 4, 5, 6, 7, 4, -1, 0, 4, -1, 1, 5, -1, 2, 6, -1, 3, 7,   ]\n }\n"
@@ -173,7 +154,8 @@ void bvrml_write::write_vrml_wireframe_box(vcl_ofstream& str, vgl_box_3d<T> cons
 }
 
 template <class T>
-void bvrml_write::write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<T> &line, const float r, const float g, const float b,
+void bvrml_write::write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segment_3d<T> & line, const float r,
+                                          const float g, const float b,
                                           const float transparency)
 {
   str << "Shape {\n"
@@ -189,10 +171,11 @@ void bvrml_write::write_vrml_line_segment(vcl_ofstream& str, const vgl_line_segm
       <<   "{\n"
       << "      coord Coordinate{\n"
       << "       point[\n"
-      << line.point1().x() << ' ' << line.point1().y() << ' ' <<line.point1().z() << '\n'
-      << line.point2().x() << ' ' << line.point2().y() << ' ' <<line.point2().z() << '\n'
+      << line.point1().x() << ' ' << line.point1().y() << ' ' << line.point1().z() << '\n'
+      << line.point2().x() << ' ' << line.point2().y() << ' ' << line.point2().z() << '\n'
       << "   ]\n\n }"
       << "   coordIndex [\n"
       << "0,1   ]\n  }\n}";
 }
+
 #endif

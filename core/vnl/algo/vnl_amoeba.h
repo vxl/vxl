@@ -2,9 +2,9 @@
 #ifndef vnl_amoeba_h_
 #define vnl_amoeba_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Nelder-Meade downhill simplex.
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -18,7 +18,7 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_algo_export.h>
@@ -26,7 +26,7 @@
 class vnl_cost_function;
 class vnl_least_squares_function;
 
-//: Nelder-Meade downhill simplex.
+// : Nelder-Meade downhill simplex.
 //  vnl_amoeba is an implementation of the Nelder-Meade downhill simplex
 //  algorithm.  For most problems, it's a few times slower than
 //  vnl_levenberg_marquardt, but it can perform much better on noisy error
@@ -45,80 +45,77 @@ class vnl_least_squares_function;
 
 class vnl_amoeba
 {
- public:
-  int verbose;
-  int maxiter;
+public:
+  int    verbose;
+  int    maxiter;
   double X_tolerance;
   double F_tolerance;
 
-  //: Define maximum number of iterations to use
+  // : Define maximum number of iterations to use
   void set_max_iterations(int n) { maxiter = n; }
 
-  //: Define tolerance on elements of x
+  // : Define tolerance on elements of x
   void set_x_tolerance(double tol) { X_tolerance = tol; }
 
-  //: Define tolerance on function evaluation
+  // : Define tolerance on function evaluation
   void set_f_tolerance(double tol) { F_tolerance = tol; }
 
-  //: Define scaling used to select starting vertices relative to initial x0.
+  // : Define scaling used to select starting vertices relative to initial x0.
   //  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   void set_relative_diameter(double r) { relative_diameter = r; }
 
   void set_zero_term_delta(double d) { zero_term_delta = d; }
-  //: Scaling used to select starting vertices relative to initial x0.
+  // : Scaling used to select starting vertices relative to initial x0.
   //  I.e. the i'th vertex has x[i] = x0[i]*(1+relative_diameter)
   double relative_diameter;
   double zero_term_delta;
-  //: Construct and supply function to be minimized
+  // : Construct and supply function to be minimized
   vnl_amoeba(vnl_cost_function& f);
 
-  //: Modify x to minimise function supplied in constructor
+  // : Modify x to minimise function supplied in constructor
   //  Start simplex defined by scaling elements of x
   void minimize(vnl_vector<double>& x);
 
-  //: Perform optimisation.
+  // : Perform optimisation.
   //  Start simplex defined by adding dx[i] to each x[i]
   void minimize(vnl_vector<double>& x, const vnl_vector<double>& dx);
 
-  //: Number of evaluations used in last call to minimize
+  // : Number of evaluations used in last call to minimize
   int get_num_evaluations() const { return num_evaluations_; }
-
- public:
-  //: Modify x so as to minimise f(x)
+public:
+  // : Modify x so as to minimise f(x)
   static void minimize(vnl_cost_function& f, vnl_vector<double>& x);
 
-  //: Modify x so as to minimise f(x)
+  // : Modify x so as to minimise f(x)
   //  Start simplex defined by adding dx[i] to each x[i]
-  static void minimize(vnl_cost_function& f, vnl_vector<double>& x,
-                       const vnl_vector<double>& dx);
+  static void minimize(vnl_cost_function& f, vnl_vector<double>& x, const vnl_vector<double>& dx);
 
-  //: Modify x so as to minimise f(x)
+  // : Modify x so as to minimise f(x)
   //  delta defines relative size of initial simplex
   //  ie the i'th vertex has xi[i] = x[i]*(1+delta)
-  static void minimize(vnl_cost_function& f, vnl_vector<double>& x,
-                       double delta);
+  static void minimize(vnl_cost_function& f, vnl_vector<double>& x, double delta);
 
-  //: Modify x so as to minimise f(x)
+  // : Modify x so as to minimise f(x)
   static void minimize(vnl_least_squares_function& f, vnl_vector<double>& x);
 
   static VNL_ALGO_EXPORT bool default_verbose;
-
- protected:
+protected:
   vnl_cost_function* fptr;
-  int num_evaluations_;
+  int                num_evaluations_;
 };
 
 // Private struct needs to be declared in the header file
 // in order to instantiate STL container of it elsewhere.
 struct vnl_amoeba_SimplexCorner
-{
+  {
   vnl_vector<double> v;
   double fv;
 
   vnl_amoeba_SimplexCorner(int = 0);
-  vnl_amoeba_SimplexCorner& operator= (const vnl_amoeba_SimplexCorner& that);
-  static int compare(vnl_amoeba_SimplexCorner const& s1,
-                     vnl_amoeba_SimplexCorner const& s2);
-};
+  vnl_amoeba_SimplexCorner & operator=(const vnl_amoeba_SimplexCorner& that);
+
+  static int compare(vnl_amoeba_SimplexCorner const& s1, vnl_amoeba_SimplexCorner const& s2);
+
+  };
 
 #endif // vnl_amoeba_h_

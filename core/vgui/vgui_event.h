@@ -2,9 +2,9 @@
 #ifndef vgui_event_h_
 #define vgui_event_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
@@ -33,7 +33,7 @@
 class vgui_adaptor;
 
 enum vgui_event_type
-{
+  {
   vgui_EVENT_NULL = 0,
   vgui_ENTER,
   vgui_LEAVE,
@@ -57,11 +57,11 @@ enum vgui_event_type
   vgui_WHEEL_UP,
   vgui_WHEEL_DOWN,
   vgui_EVENT_MAX    // This must be the last entry in the list
-};
+  };
 
-vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
+vcl_ostream & operator<<(vcl_ostream& s, vgui_event_type e);
 
-//: The vgui_event class encapsulates the events handled by the vgui system.
+// : The vgui_event class encapsulates the events handled by the vgui system.
 //
 // For key presses with modifiers the following standards apply:
 // \verbatim
@@ -79,46 +79,46 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type e);
 // key stroke pressed by the user.
 class vgui_event
 {
- public:
-  //: Constructor - create a default event.
+public:
+  // : Constructor - create a default event.
   vgui_event() { init(); }
 
-  //: Constructor - create an event of the given type.
+  // : Constructor - create an event of the given type.
   vgui_event(vgui_event_type);
 
-  //: The type of event (key press, mouse motion, etc).
+  // : The type of event (key press, mouse motion, etc).
   vgui_event_type type;
 
-  //: Mouse button used (if it is a mouse event).
+  // : Mouse button used (if it is a mouse event).
   vgui_button button;
 
-  //: The key pressed in lower case (if it is a key event).
+  // : The key pressed in lower case (if it is a key event).
   vgui_key key;
 
-  //: Convert given key to lower case and use that to set key.
+  // : Convert given key to lower case and use that to set key.
   void set_key(vgui_key c);
 
-  //: Which modifiers are pressed during the event (NULL, CTRL, SHIFT).
+  // : Which modifiers are pressed during the event (NULL, CTRL, SHIFT).
   vgui_modifier modifier;
 
-  //: The actual key stroke pressed by the user.
+  // : The actual key stroke pressed by the user.
   vgui_key ascii_char;
 
-  //: Position of the mouse pointer in viewport coordinates when event occurred.
-  int wx,wy;
+  // : Position of the mouse pointer in viewport coordinates when event occurred.
+  int wx, wy;
 
-  //: Timestamp in milliseconds since app started.
+  // : Timestamp in milliseconds since app started.
   int timestamp;
 
-  //: The adaptor from which the event came.
-  vgui_adaptor *origin;
+  // : The adaptor from which the event came.
+  vgui_adaptor * origin;
 
-  //: If the event is a timer event, this holds the ID.
+  // : If the event is a timer event, this holds the ID.
   // For an event of type vgui_TIMER, this field holds the name
   // that was given when the timer request was posted.
   int timer_id;
 
-  //: A vcl_string message, for an event of type vgui_STRING.
+  // : A vcl_string message, for an event of type vgui_STRING.
   //  An event of type vgui_STRING implies that
   //  this field contains some sort of textual message. The exact
   //  encoding of these messages is unspecified; the sender and the
@@ -127,24 +127,28 @@ class vgui_event
   //  clash with another.
   vcl_string str;
 
-  //: Type and data for events of type vgui_OTHER.
+  // : Type and data for events of type vgui_OTHER.
   //  The fields user and data are used only when the event type is vgui_OTHER.
   //  The 'user' field must uniquely identify the type of event, in the
   //  sense that once the user field is known, the 'data' field can be
   //  safely cast to point to the client data (type).
-  void const *user;
-  void const *data;
+  void const * user;
+  void const * data;
 
   // methods
   bool modifier_is_down(int) const;
+
   double secs_since(vgui_event const &) const;
+
   long usecs_since(vgui_event const &) const;
 
- private:
+private:
   void init();
+
 };
 
 bool operator==(vgui_event const& a, vgui_event const& b);
-vcl_ostream& operator<<(vcl_ostream&, vgui_event const&);
+
+vcl_ostream & operator<<(vcl_ostream &, vgui_event const &);
 
 #endif // vgui_event_h_

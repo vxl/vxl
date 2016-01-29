@@ -1,7 +1,7 @@
-//This is brl/bbas/volm/volm_spherical_shell_container.h
+// This is brl/bbas/volm/volm_spherical_shell_container.h
 #ifndef volm_spherical_shell_container_h_
 #define volm_spherical_shell_container_h_
-//:
+// :
 // \file
 // \brief  A class to represent a container of points uniformly distributed on a spherical surface.
 // The radius of that sphere is pre-defined. Each point represents the ray from sphere center (0,0,0) to the surface point.
@@ -37,17 +37,17 @@
 
 class volm_spherical_shell_container : public vbl_ref_count
 {
- public:
-  //: Default constructor
+public:
+  // : Default constructor
   volm_spherical_shell_container() {}
-  //: Legacy Constructor
-  volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle);
-  //: Minimal constructor (to internally construct vsph_unit_sphere)
-  volm_spherical_shell_container(double point_angle, double min_theta,
-                                 double max_theta);
-  //: Construct using an existing unit sphere smart ptr
- volm_spherical_shell_container(vsph_unit_sphere_sptr usph_ptr) :
-  usph_(usph_ptr){}
+  // : Legacy Constructor
+  volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle,
+                                 float bottom_angle);
+  // : Minimal constructor (to internally construct vsph_unit_sphere)
+  volm_spherical_shell_container(double point_angle, double min_theta, double max_theta);
+  // : Construct using an existing unit sphere smart ptr
+  volm_spherical_shell_container(vsph_unit_sphere_sptr usph_ptr) :
+    usph_(usph_ptr) {}
 
   // === accessors ===
 
@@ -61,34 +61,39 @@ class volm_spherical_shell_container : public vbl_ref_count
 
   vcl_vector<vsph_sph_point_3d> sph_points() const;
 
-  vsph_unit_sphere_sptr unit_sphere() const {return usph_;}
+  vsph_unit_sphere_sptr unit_sphere() const {return usph_; }
 
   vcl_size_t get_container_size() const { return usph_->size(); }
 
   void draw_template(vcl_string vrml_file_name);
-  //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
+
+  // : draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
   void draw_template(vcl_string vrml_file_name, vcl_vector<unsigned char>& values, unsigned char special);
 
-  //: generate panaroma image
+  // : generate panaroma image
   void panaroma_img(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
+
   void panaroma_img_class_labels(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
+
   void panaroma_img_orientations(vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
-  void panaroma_images_from_combined(vil_image_view<vil_rgb<vxl_byte> >& img_orientation, vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
+
+  void panaroma_images_from_combined(vil_image_view<vil_rgb<vxl_byte> >& img_orientation,
+                                     vil_image_view<vil_rgb<vxl_byte> >& img, vcl_vector<unsigned char>& values);
 
   // ===========  binary I/O ================
 
-  //: version
-  unsigned version() const {return 1;}
+  // : version
+  unsigned version() const {return 1; }
 
-  //: binary IO write
+  // : binary IO write
   void b_write(vsl_b_ostream& os);
 
-  //: binary IO read
+  // : binary IO read
   void b_read(vsl_b_istream& is);
 
-  bool operator== (const volm_spherical_shell_container &other) const;
+  bool operator==(const volm_spherical_shell_container & other) const;
 
- protected:
+protected:
   vsph_unit_sphere_sptr usph_;
 };
 

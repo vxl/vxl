@@ -6,9 +6,9 @@
 #include <functional>
 
 #ifdef vcl_generic_functional_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_functional_STD std
+#  define vcl_generic_functional_STD std
 #endif
 
 #include "../generic/vcl_functional.h"

@@ -7,5 +7,4 @@ void register_tests()
   REGISTER( test_reflected_marked_images );
 }
 
-
 DEFINE_MAIN;

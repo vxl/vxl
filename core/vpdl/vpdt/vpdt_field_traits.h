@@ -1,7 +1,7 @@
 // This is core/vpdl/vpdt/vpdt_field_traits.h
 #ifndef vpdt_field_traits_h_
 #define vpdt_field_traits_h_
-//:
+// :
 // \file
 // \author Matthew Leotta
 // \brief specialized template trait classes for properties of a field type
@@ -22,70 +22,65 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_cassert.h>
 
-
-//: The field traits class (scalar)
+// : The field traits class (scalar)
 //  The default is to treat it as a 1-d (scalar) field
 template <class T>
 struct vpdt_field_traits
-{
-  //: The compile time dimension of the field
+  {
+  // : The compile time dimension of the field
   static const unsigned int dimension = 1;
-  //: The type used for scalar operations
+  // : The type used for scalar operations
   typedef T scalar_type;
-  //: the data type to represent a point in the field
+  // : the data type to represent a point in the field
   typedef T field_type;
-  //: the data type used for vectors (difference between points)
+  // : the data type used for vectors (difference between points)
   typedef T vector_type;
-  //: the data type used for square matrices
+  // : the data type used for square matrices
   typedef T matrix_type;
 
-  //: use this to disambiguate templates
+  // : use this to disambiguate templates
   typedef void type_is_scalar;
-};
+  };
 
-
-//: The field traits class (vnl_vector_fixed)
+// : The field traits class (vnl_vector_fixed)
 //  This specialization is for fixed length vnl vectors
 template <class T, unsigned int n>
-struct vpdt_field_traits<vnl_vector_fixed<T,n> >
-{
-  //: The compile time dimension of the field
+struct vpdt_field_traits<vnl_vector_fixed<T, n> >
+  {
+  // : The compile time dimension of the field
   static const unsigned int dimension = n;
-  //: The type used for scalar operations
+  // : The type used for scalar operations
   typedef T scalar_type;
-  //: the data type to represent a point in the field
-  typedef vnl_vector_fixed<T,n> field_type;
-  //: the data type used for vectors (difference between points)
-  typedef vnl_vector_fixed<T,n> vector_type;
-  //: the data type used for square matrices
-  typedef vnl_matrix_fixed<T,n,n> matrix_type;
+  // : the data type to represent a point in the field
+  typedef vnl_vector_fixed<T, n> field_type;
+  // : the data type used for vectors (difference between points)
+  typedef vnl_vector_fixed<T, n> vector_type;
+  // : the data type used for square matrices
+  typedef vnl_matrix_fixed<T, n, n> matrix_type;
 
-  //: use this to disambiguate templates
+  // : use this to disambiguate templates
   typedef void type_is_vector;
-};
+  };
 
-
-//: The field traits class (vnl_vector)
+// : The field traits class (vnl_vector)
 //  This specialization is for variable length vnl vectors
 //  \note dimension of 0 indicates variable dimension at run time
 template <class T>
 struct vpdt_field_traits<vnl_vector<T> >
-{
-  //: The compile time dimension of the field
+  {
+  // : The compile time dimension of the field
   static const unsigned int dimension = 0;
-  //: The type used for scalar operations
+  // : The type used for scalar operations
   typedef T scalar_type;
-  //: the data type to represent a point in the field
+  // : the data type to represent a point in the field
   typedef vnl_vector<T> field_type;
-  //: the data type used for vectors (difference between points)
+  // : the data type used for vectors (difference between points)
   typedef vnl_vector<T> vector_type;
-  //: the data type used for square matrices
+  // : the data type used for square matrices
   typedef vnl_matrix<T> matrix_type;
 
-  //: use this to disambiguate templates
+  // : use this to disambiguate templates
   typedef void type_is_vector;
-};
-
-
+  };
 
 #endif // vpdt_field_traits_h_

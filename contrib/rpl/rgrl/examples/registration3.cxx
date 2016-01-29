@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //
 // \latexonly
@@ -44,7 +44,6 @@
 //
 // \endlatexonly
 
-
 #include <vcl_fstream.h>
 #include <vcl_iostream.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -69,8 +68,8 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
-typedef vnl_vector_fixed<double,2>       vector_2d;
+typedef vcl_vector<rgrl_feature_sptr> feature_vector;
+typedef vnl_vector_fixed<double, 2>   vector_2d;
 
 void
 read_feature_file( const char*     filename,
@@ -78,65 +77,74 @@ read_feature_file( const char*     filename,
 {
   vcl_ifstream istr( filename );
 
-  if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+  if( !istr )
+    {
+    vcl_cerr << "ERROR: Cannot open " << filename << '\n';
     return;
-  }
+    }
 
   vector_2d location;
   vector_2d direction;
-  bool done = false;
-  while ( !done && istr ) {
-    if ( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
+  bool      done = false;
+  while( !done && istr )
+    {
+    if( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )
+      {
       done = true;
-    else trace_points.push_back( new rgrl_feature_trace_pt(location.as_ref(), direction.as_ref()) );
-  }
+      }
+    else {trace_points.push_back( new rgrl_feature_trace_pt(location.as_ref(), direction.as_ref() ) ); }
+    }
+
   istr.close();
-  vcl_cout<<"There are "<<trace_points.size()<<" features"<<vcl_endl;
+  vcl_cout << "There are " << trace_points.size() << " features" << vcl_endl;
 }
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command
+class command_iteration_update : public rgrl_command
 {
- public:
+public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
-    execute( (const rgrl_object*) caller, event );
+    execute( (const rgrl_object *) caller, event );
   }
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
-      dynamic_cast<const rgrl_feature_based_registration*>(caller);
+      dynamic_cast<const rgrl_feature_based_registration *>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
 
-    if ( trans->is_type( rgrl_trans_affine::type_id() ) ) {
-      rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-      vcl_cout<<"xform: A =\n"<<a_xform->A()<< "t = "<<a_xform->t()<<vcl_endl;
-    }
-    else if ( trans->is_type( rgrl_trans_quadratic::type_id() ) ){
-      rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-      vcl_cout<<"xform: Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
-              <<"t = "<<q_xform->t()<<vcl_endl;
-    }
+    if( trans->is_type( rgrl_trans_affine::type_id() ) )
+      {
+      rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine *>(trans);
+      vcl_cout << "xform: A =\n" << a_xform->A() << "t = " << a_xform->t() << vcl_endl;
+      }
+    else if( trans->is_type( rgrl_trans_quadratic::type_id() ) )
+      {
+      rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic *>(trans);
+      vcl_cout << "xform: Q =\n" << q_xform->Q() << "A = " << q_xform->A()
+               << "t = " << q_xform->t() << vcl_endl;
+      }
   }
+
 };
 
 int
 main( int argc, char* argv[] )
 {
-  if ( argc < 5 ) {
+  if( argc < 5 )
+    {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageFeatureFileHighRes FixedImageFeatureFileLowRes"
              << " MovingImageFeatureFileHighRes MovingImageFeatureFileLowRes\n";
     return 1;
-  }
+    }
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
 
-  //read in the feature files
+  // read in the feature files
   //
   feature_vector moving_fps_high_res;
   feature_vector moving_fps_low_res;
@@ -159,12 +167,12 @@ main( int argc, char* argv[] )
   rgrl_feature_set_sptr moving_feature_set_low_res = new rgrl_feature_set_location<2>(moving_fps_low_res);
   rgrl_feature_set_sptr fixed_feature_set_high_res = new rgrl_feature_set_location<2>(fixed_fps_high_res);
   rgrl_feature_set_sptr fixed_feature_set_low_res = new rgrl_feature_set_location<2>(fixed_fps_low_res);
-  const rgrl_mask_box moving_image_roi = moving_feature_set_low_res->bounding_box();
-  const rgrl_mask_box fixed_image_roi = fixed_feature_set_low_res->bounding_box();
+  const rgrl_mask_box   moving_image_roi = moving_feature_set_low_res->bounding_box();
+  const rgrl_mask_box   fixed_image_roi = fixed_feature_set_low_res->bounding_box();
 
   // Set the initial transformation to be identity
   //
-  int dim = 2;
+  int                      dim = 2;
   rgrl_transformation_sptr initial_transformation = new rgrl_trans_affine(dim);
 
   // \latexonly
@@ -190,11 +198,11 @@ main( int argc, char* argv[] )
   // \endlatexonly
 
   // BeginCodeSnippet
-  bool multi_resol = true;
+  bool                   multi_resol = true;
   rgrl_data_manager_sptr data = new rgrl_data_manager( multi_resol );
 
-  unsigned resolution = 1;                   //lower resolution
-  double dimension_increase = 2;
+  unsigned resolution = 1;                   // lower resolution
+  double   dimension_increase = 2;
   data->add_data( resolution,
                   moving_feature_set_low_res,
                   fixed_feature_set_low_res );
@@ -202,7 +210,7 @@ main( int argc, char* argv[] )
   data->add_estimator( resolution, affine_model);
   data->set_dimension_increase_for_next_stage( resolution, dimension_increase);
 
-  resolution = 0;              //original resolution
+  resolution = 0;              // original resolution
   data->add_data( resolution,
                   moving_feature_set_high_res,
                   fixed_feature_set_high_res );
@@ -211,9 +219,9 @@ main( int argc, char* argv[] )
 
   rgrl_feature_based_registration reg( data );
 
-  //EndCodeSnippet
+  // EndCodeSnippet
 
-  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
+  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update() );
 
   // \latexonly
   //
@@ -226,7 +234,7 @@ main( int argc, char* argv[] )
   // it is the opposite. The highest index represents the finest
   // resolution.}.
   //
-  //\endlatexonly
+  // \endlatexonly
 
   int starting_resolution = 1;
   reg.run( moving_image_roi, fixed_image_roi, affine_model, initial_transformation, 0,
@@ -234,14 +242,15 @@ main( int argc, char* argv[] )
 
   // Output Results
   //
-  if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+  if( reg.has_final_transformation() )
+    {
+    vcl_cout << "Final xform:" << vcl_endl;
     rgrl_transformation_sptr trans = reg.final_transformation();
-    rgrl_trans_quadratic* q_xform = rgrl_cast<rgrl_trans_quadratic*>(trans);
-    vcl_cout<<"Q =\n"<<q_xform->Q()<<"A = "<<q_xform->A()
-            <<"t = "<<q_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
-  }
+    rgrl_trans_quadratic*    q_xform = rgrl_cast<rgrl_trans_quadratic *>(trans);
+    vcl_cout << "Q =\n" << q_xform->Q() << "A = " << q_xform->A()
+             << "t = " << q_xform->t() << vcl_endl
+             << "Final alignment error = " << reg.final_status()->error() << vcl_endl;
+    }
 
   // \latexonly
   //

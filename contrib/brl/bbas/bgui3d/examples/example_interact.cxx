@@ -23,7 +23,6 @@
 #include <Inventor/draggers/SoTranslate1Dragger.h>
 #include <Inventor/draggers/SoDragPointDragger.h>
 
-
 // Print instructions on std::cout.
 void show_instructions(void)
 {
@@ -36,11 +35,12 @@ void show_instructions(void)
 // Construct a transparent sphere with position controlled by the
 // translation field of a SoDragPointDragger.
 
-SoSeparator* make_transparent_sphere(SbColor color, SoSFVec3f * draggerfield)
+SoSeparator * make_transparent_sphere(SbColor color, SoSFVec3f * draggerfield)
 {
   SoSeparator * sub = new SoSeparator;
 
   SoMaterial * mat = new SoMaterial;
+
   sub->addChild(mat);
   mat->transparency = 0.1f;
   mat->diffuseColor.setValue(color);
@@ -65,7 +65,7 @@ SoSeparator* make_transparent_sphere(SbColor color, SoSFVec3f * draggerfield)
   return sub;
 }
 
-int main(int argc, char** argv)
+int main(int argc, char* * argv)
 {
   // initialize bgui_3d
   bgui3d_init();
@@ -73,34 +73,38 @@ int main(int argc, char** argv)
   show_instructions();
 
   // create the scene graph root
-  SoSeparator *root = new SoSeparator;
+  SoSeparator * root = new SoSeparator;
   root->ref();
 
-  //###################################################################
+  // ###################################################################
 
-  const SbVec3f startpos[] = {
+  const SbVec3f startpos[] =
+    {
     SbVec3f(0, 0, 0), SbVec3f(5, 0, -1), SbVec3f(2, 5, -2)
-  };
-  const SbColor colors[] = {
+    };
+  const SbColor colors[] =
+    {
     SbColor(1, 0, 0), SbColor(0, 1, 0), SbColor(0, 0, 1)
-  };
-
-  for (int i = 0; i < 3; i++) {
+    };
+  for( int i = 0; i < 3; i++ )
+    {
     SoDragPointDragger* dragger = new SoDragPointDragger;
     root->addChild(dragger);
     dragger->translation.setValue(startpos[i]);
-    root->addChild(make_transparent_sphere(colors[i], &dragger->translation));
-  }
+    root->addChild(make_transparent_sphere(colors[i], &dragger->translation) );
+    }
 
-  //###################################################################
+  // ###################################################################
 
   // Run the specified cmd-line process with visualization in GUI Window.
   // force option "--mfc-use-gl" to use gl in initializing vgui.
   vcl_cout << "Starting bgui3d window...\n";
-  int my_argc = argc+1;
-  char** my_argv = new char*[argc+1];
-  for (int i=0; i<argc; i++)
+  int     my_argc = argc + 1;
+  char* * my_argv = new char *[argc + 1];
+  for( int i = 0; i < argc; i++ )
+    {
     my_argv[i] = argv[i];
+    }
   my_argv[argc] = new char[13];
   vcl_strcpy(my_argv[argc], "--mfc-use-gl");
   vgui::init(my_argc, my_argv);

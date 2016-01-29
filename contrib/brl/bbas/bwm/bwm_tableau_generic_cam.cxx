@@ -6,12 +6,12 @@
 #include <vgui/vgui_dialog.h>
 #include <vil/vil_save.h>
 
-bool bwm_tableau_generic_cam::handle(const vgui_event &e)
+bool bwm_tableau_generic_cam::handle(const vgui_event & e)
 {
   return bwm_tableau_cam::handle(e);
 }
 
-void bwm_tableau_generic_cam::get_popup(vgui_popup_params const &params, vgui_menu &menu)
+void bwm_tableau_generic_cam::get_popup(vgui_popup_params const & params, vgui_menu & menu)
 {
   vgui_menu parent_menu;
   bwm_tableau_cam::get_popup(params, menu);
@@ -21,25 +21,32 @@ void bwm_tableau_generic_cam::get_popup(vgui_popup_params const &params, vgui_me
 vcl_string bwm_tableau_generic_cam::save_camera()
 {
   vcl_string cam_path = my_observer_->camera_path();
+
   return cam_path;
 }
 
 void bwm_tableau_generic_cam::ray_image()
 {
-  static int component = 0;
-  static int level=0;
-  vgui_dialog ray_dlg("Save ray image");
+  static int        component = 0;
+  static int        level = 0;
+  vgui_dialog       ray_dlg("Save ray image");
   static vcl_string ext, file_path;
+
   ray_dlg.file("Ray Filename", ext, file_path);
   ray_dlg.field("Ray Level ",  level);
   ray_dlg.choice("Ray component", "origin", "direction", component);
-  if (!ray_dlg.ask())
+  if( !ray_dlg.ask() )
+    {
     return;
-  vil_image_resource_sptr res = my_observer_->ray_image(component,level);
-  if (!res) {
+    }
+  vil_image_resource_sptr res = my_observer_->ray_image(component, level);
+  if( !res )
+    {
     vcl_cout << "In bwm_observer_generic_cam:: null ray image returned\n";
     return;
-  }
-  if (!vil_save_image_resource(res, file_path.c_str()))
+    }
+  if( !vil_save_image_resource(res, file_path.c_str() ) )
+    {
     vcl_cout << "In bwm_tableau_generic_cam:: ray image could not be saved\n";
+    }
 }

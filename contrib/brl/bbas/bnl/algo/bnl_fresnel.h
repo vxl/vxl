@@ -2,7 +2,7 @@
 #ifndef bnl_fresnel_h_
 #define bnl_fresnel_h_
 
-//:
+// :
 // \file
 // \brief Fresnel integrals - sine and cosine
 //
@@ -15,8 +15,7 @@
 
 // Reference: book "Numerical Recipes in C" by William Press et.al. Section 6.9, page 255
 
-
-//: Fresnel cosine integral
+// : Fresnel cosine integral
 // FresnelC = int(cos(pi/2 * t^2), t = 0..x);
 // FresnelS = int(sin(pi/2 * t^2), t = 0..x);
 // Return: fs is Fresnel cosin integral, fc is Frenel sine integral

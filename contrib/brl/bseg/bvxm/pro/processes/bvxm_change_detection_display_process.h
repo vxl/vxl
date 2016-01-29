@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_change_detection_display_process.h
 #ifndef bvxm_change_detection_display_process_h_
 #define bvxm_change_detection_display_process_h_
-//:
+// :
 // \file
 // \brief process to threshold the changes for foreground detection.
 //     -  Inputs:
@@ -21,20 +21,20 @@
 #include <bprb/bprb_func_process.h>
 #include <vcl_string.h>
 
-//: global variables
+// : global variables
 namespace bvxm_change_detection_display_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 2;
-  // The parameters strings
-  const vcl_string param_prob_thresh_ = "prob_thresh";
-  const vcl_string param_prob_image_scale_ = "prob_image_scale";
+const unsigned n_inputs_ = 3;
+const unsigned n_outputs_ = 2;
+// The parameters strings
+const vcl_string param_prob_thresh_ = "prob_thresh";
+const vcl_string param_prob_image_scale_ = "prob_image_scale";
 }
 
-//: sets input and output types for  bvxm_change_detection_display_process
+// : sets input and output types for  bvxm_change_detection_display_process
 bool bvxm_change_detection_display_process_cons(bprb_func_process& pro);
 
-//: process to threshold the changes for foreground detection
+// : process to threshold the changes for foreground detection
 bool bvxm_change_detection_display_process(bprb_func_process& pro);
 
 #endif // bvxm_change_detection_display_process_h_

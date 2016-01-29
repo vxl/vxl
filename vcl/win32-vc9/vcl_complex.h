@@ -10,13 +10,13 @@
 // same here.
 
 #ifndef vcl_abs
-# define vcl_abs vcl_abs
+#  define vcl_abs vcl_abs
 #endif
-
 
 #define vcl_generic_complex_STD std
 #include "../generic/vcl_complex.h"
 
-template <class T> inline T vcl_abs(const vcl_complex<T>& x) { return std::abs(x); }
+template <class T>
+inline T vcl_abs(const vcl_complex<T>& x) { return std::abs(x); }
 
 #endif // vcl_win32_vc_9_complex_h_

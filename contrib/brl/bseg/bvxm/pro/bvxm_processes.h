@@ -34,12 +34,12 @@ DECLARE_FUNC_CONS(bvxm_get_grid_process);
 DECLARE_FUNC_CONS(bvxm_expected_edge_image_process);
 DECLARE_FUNC_CONS(bvxm_heightmap_ortho_process);
 
-//io
+// io
 DECLARE_FUNC_CONS(bvxm_save_occupancy_raw_process);
 DECLARE_FUNC_CONS(bvxm_save_occupancy_vff_process);
 DECLARE_FUNC_CONS(bvxm_test_process);
 
-//Edges and lidar
+// Edges and lidar
 DECLARE_FUNC_CONS(bvxm_update_edges_lidar_process);
 DECLARE_FUNC_CONS(bvxm_update_edges_process);
 DECLARE_FUNC_CONS_INIT(bvxm_update_edge_tangent_process);
@@ -63,7 +63,7 @@ DECLARE_FUNC_CONS(bvxm_create_ortho_camera_process);
 DECLARE_FUNC_CONS(bvxm_dem_to_xyz_process);
 DECLARE_FUNC_CONS(bvxm_dem_to_xyz_process2);
 
-//Basic operation
+// Basic operation
 DECLARE_FUNC_CONS(bvxm_create_scene_xml_process);
 DECLARE_FUNC_CONS(bvxm_create_scene_xml_large_scale_process);
 DECLARE_FUNC_CONS(bvxm_scene_model_dir_process);

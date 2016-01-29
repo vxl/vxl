@@ -8,14 +8,11 @@
 
 */
 #ifdef WIN32
-    #define XML_STATIC  // we are using a static lib build, not expat.dll
-    #define COMPILED_FROM_DSP
-    #define _LIB
+#  define XML_STATIC    // we are using a static lib build, not expat.dll
+#  define COMPILED_FROM_DSP
+#  define _LIB
 #endif
 
-
 #include "expatpp.h"
-
-
 
 #endif  //  H_EXPATPPLIB

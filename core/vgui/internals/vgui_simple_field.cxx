@@ -1,8 +1,8 @@
 // This is core/vgui/internals/vgui_simple_field.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   23 Oct 99
@@ -12,11 +12,10 @@
 
 #include <vcl_sstream.h>
 
-
 template <class T>
-vgui_simple_field<T>::vgui_simple_field(const char *text,T &variable_to_modify)
-  : vgui_dialog_field(text)
-  , var(variable_to_modify)
+vgui_simple_field<T>::vgui_simple_field(const char * text, T & variable_to_modify)
+  : vgui_dialog_field(text),
+  var(variable_to_modify)
 {
 }
 
@@ -29,18 +28,19 @@ template <class T>
 vcl_string vgui_simple_field<T>::current_value() const
 {
   vcl_stringstream ss;
+
   ss << T(var) << '\0';
   return ss.str();
 }
 
 template <class T>
-bool vgui_simple_field<T>::update_value(const vcl_string &s)
+bool vgui_simple_field<T>::update_value(const vcl_string & s)
 {
   vcl_stringstream ss(s);
+
   ss >> var;
   return ss.eof();
 }
-
 
 template class vgui_simple_field<bool>;
 template class vgui_simple_field<int>;

@@ -2,9 +2,9 @@
 #ifndef ProjectiveBasis2D_h_
 #define ProjectiveBasis2D_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 //  \file
 // \brief Canonical basis of 4 points
 //
@@ -24,7 +24,7 @@
 //     Peter Vanroose - 3 dec 1998 - "collinear_" implemented
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <mvl/HMatrix2D.h>
 #include <vcl_vector.h>
@@ -32,39 +32,37 @@ class HomgPoint2D;
 
 class ProjectiveBasis2D
 {
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   // tm_get_canonical_proj
-  ProjectiveBasis2D(const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&);
-  ProjectiveBasis2D(const vcl_vector<HomgPoint2D>&);
+  ProjectiveBasis2D(const HomgPoint2D &, const HomgPoint2D &, const HomgPoint2D &, const HomgPoint2D &);
+  ProjectiveBasis2D(const vcl_vector<HomgPoint2D> &);
   ProjectiveBasis2D(const ProjectiveBasis2D& that);
- ~ProjectiveBasis2D();
+  ~ProjectiveBasis2D();
 
-  ProjectiveBasis2D& operator=(const ProjectiveBasis2D& that);
+  ProjectiveBasis2D & operator=(const ProjectiveBasis2D& that);
 
   // Operations----------------------------------------------------------------
 
   // Data Access---------------------------------------------------------------
 
-//: Return the planar homography that maps the points to the canonical frame.
-  HMatrix2D& get_T() { return T_; }
-  const vnl_double_3x3& get_T_matrix() const { return T_.get_matrix(); }
+// : Return the planar homography that maps the points to the canonical frame.
+  HMatrix2D &            get_T() { return T_; }
+  const vnl_double_3x3 & get_T_matrix() const { return T_.get_matrix(); }
 
-//: Were three of the four given basis points collinear ?
+// : Were three of the four given basis points collinear ?
   bool collinear() const { return collinear_; }
 
   // Data Control--------------------------------------------------------------
-
- protected:
+protected:
   // Computations--------------------------------------------------------------
-  void compute(const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&, const HomgPoint2D&);
+  void compute(const HomgPoint2D &, const HomgPoint2D &, const HomgPoint2D &, const HomgPoint2D &);
 
   // Data Members--------------------------------------------------------------
   HMatrix2D T_;
-  bool collinear_;
-
- private:
+  bool      collinear_;
+private:
   // Helpers-------------------------------------------------------------------
 };
 

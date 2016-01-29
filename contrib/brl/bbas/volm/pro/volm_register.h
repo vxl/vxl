@@ -3,9 +3,11 @@
 
 class volm_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // volm_register_h_

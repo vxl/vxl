@@ -19,5 +19,4 @@ void register_tests()
   REGISTER( test_remove_level0 );
 }
 
-
 DEFINE_MAIN;

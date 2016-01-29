@@ -2,9 +2,9 @@
 #ifndef vil3d_analyze_format_h_
 #define vil3d_analyze_format_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Reader/Writer for analyze format images.
 // \author Tim Cootes - Manchester
@@ -13,32 +13,33 @@
 #include <vcl_iosfwd.h>
 #include <vil3d/vil3d_file_format.h>
 
-//: Structure containing analyse header file information.
+// : Structure containing analyse header file information.
 class vil3d_analyze_header
 {
- public :
+public:
   // obligatory
   class Key
   {
-   public :
-    int sizeof_hdr;
-    char data_type[10];
-    char db_name[18];
-    int extents;
+public:
+    int       sizeof_hdr;
+    char      data_type[10];
+    char      db_name[18];
+    int       extents;
     short int session_error;
-    char regular;
-    char hkey_un0;
+    char      regular;
+    char      hkey_un0;
 
     Key() { reset(); }
     ~Key() {}
 
     void reset();
+
   };
 
   // obligatory
   class Dimensions
   {
-   public :
+public:
     short int dim[8];
     short int unused8;
     short int unused9;
@@ -50,28 +51,29 @@ class vil3d_analyze_header
     short int datatype;
     short int bitpix;
     short int dim_un0;
-    float pixdim[8];
-    float funused8;
-    float funused9;
-    float funused10;
-    float funused11;
-    float funused12;
-    float funused13;
-    float compressed;
-    float verified;
-    int glmax;
-    int glmin;
+    float     pixdim[8];
+    float     funused8;
+    float     funused9;
+    float     funused10;
+    float     funused11;
+    float     funused12;
+    float     funused13;
+    float     compressed;
+    float     verified;
+    int       glmax;
+    int       glmin;
 
     Dimensions() { reset(); }
     ~Dimensions() {}
 
     void reset();
+
   };
 
   // optional
   class History
   {
-   public :
+public:
     char descrip[80];
     char aux_file[24];
     char orient;
@@ -82,175 +84,170 @@ class vil3d_analyze_header
     char exp_date[10];
     char exp_time[10];
     char hist_un0[3];
-    int views;
-    int vols_added;
-    int start_field;
-    int field_skip;
-    int omax;
-    int omin;
-    int smax;
-    int smin;
+    int  views;
+    int  vols_added;
+    int  start_field;
+    int  field_skip;
+    int  omax;
+    int  omin;
+    int  smax;
+    int  smin;
 
     History() { reset(); }
     ~History() {}
 
     void reset();
+
   };
 
   Key        key;
   Dimensions dim;
   History    history;
-
- private:
+private:
   bool swap_bytes_; // True if bytes need to be swapped
-
- public:
+public:
   vil3d_analyze_header() : swap_bytes_(false) {}
   ~vil3d_analyze_header() {}
 
   void reset();
 
-  //: Define format of pixels
+  // : Define format of pixels
   enum vil_pixel_format pixel_format() const;
 
-  //: Define format of pixels
+  // : Define format of pixels
   void set_pixel_format(enum vil_pixel_format format);
 
-  //: Define number of pixels in each dimension
-  void set_image_size(unsigned ni, unsigned nj, unsigned nk, unsigned np=1);
+  // : Define number of pixels in each dimension
+  void set_image_size(unsigned ni, unsigned nj, unsigned nk, unsigned np = 1);
 
   short int ni() const { return dim.dim[1]; }
   short int nj() const { return dim.dim[2]; }
   short int nk() const { return dim.dim[3]; }
 
-  //: Number of planes (or time points in image sequence)
+  // : Number of planes (or time points in image sequence)
   short int nplanes() const { return dim.dim[4]; }
 
   float voxel_width_i() const { return dim.pixdim[1]; }
   float voxel_width_j() const { return dim.pixdim[2]; }
   float voxel_width_k() const { return dim.pixdim[3]; }
 
-  //: Define width of voxels in each dimension
+  // : Define width of voxels in each dimension
   void set_voxel_size(float si, float sj, float sk);
 
-  //: Read in header from given file
+  // : Read in header from given file
   bool read_file(const vcl_string& path);
 
-  //: Write header to given file
+  // : Write header to given file
   bool write_file(const vcl_string& path) const;
 
-  void swapBytes(char *data, int size);
+  void swapBytes(char * data, int size);
+
   bool needSwap() const { return swap_bytes_; }
 
-  //: Print out some parts of header
+  // : Print out some parts of header
   void print_summary(vcl_ostream& os) const;
+
 };
 
-//: Print out some parts of header
-vcl_ostream& operator<<(vcl_ostream& os, const vil3d_analyze_header&);
+// : Print out some parts of header
+vcl_ostream & operator<<(vcl_ostream& os, const vil3d_analyze_header &);
 
-//: Reader/Writer for analyze format images.
+// : Reader/Writer for analyze format images.
 class vil3d_analyze_format : public vil3d_file_format
 {
- public:
+public:
   vil3d_analyze_format();
-  //: The destructor must be virtual so that the memory chunk is destroyed.
+  // : The destructor must be virtual so that the memory chunk is destroyed.
   virtual ~vil3d_analyze_format();
 
   virtual vil3d_image_resource_sptr make_input_image(const char *) const;
 
-  //: Make a "generic_image" on which put_section may be applied.
+  // : Make a "generic_image" on which put_section may be applied.
   // The file may be opened immediately for writing so that a header can be written.
-  virtual vil3d_image_resource_sptr make_output_image(const char* filename,
-                                                      unsigned ni,
-                                                      unsigned nj,
-                                                      unsigned nk,
-                                                      unsigned nplanes,
-                                                      enum vil_pixel_format) const;
+  virtual vil3d_image_resource_sptr make_output_image(const char* filename, unsigned ni, unsigned nj, unsigned nk,
+                                                      unsigned nplanes, enum vil_pixel_format) const;
 
-
-  //: default filename tag for this image.
-  virtual const char * tag() const {return "hdr";}
+  // : default filename tag for this image.
+  virtual const char * tag() const {return "hdr"; }
 };
 
-//: Object which acts as an interface to an analyze format file
+// : Object which acts as an interface to an analyze format file
 // You can't create one of these yourself.
 // Use vil3d_analyze_format instead.
-class vil3d_analyze_image: public vil3d_image_resource
+class vil3d_analyze_image : public vil3d_image_resource
 {
-  //: Basename of file (not including .hdr/.img)
+  // : Basename of file (not including .hdr/.img)
   vcl_string base_path_;
 
-  //: Header information
+  // : Header information
   vil3d_analyze_header header_;
 
-  //: number of planes
+  // : number of planes
   unsigned nplanes_;
 
-  //: Physical Voxel dimensions ( in mm )
+  // : Physical Voxel dimensions ( in mm )
   float vox_width1_, vox_width2_, vox_width3_;
-
- public:
-  //: Create object with given header and base_path, ready for reading/writing
+public:
+  // : Create object with given header and base_path, ready for reading/writing
   //  Doesn't actually load/save anything until get_copy_view() or put_view() called.
   //  Header is assumed to have been loaded/saved by the calling function.
-  vil3d_analyze_image(const vil3d_analyze_header& header,
-                      const vcl_string& base_path);
+  vil3d_analyze_image(const vil3d_analyze_header& header, const vcl_string& base_path);
 
   virtual ~vil3d_analyze_image();
 
-  //: Dimensions:  nplanes x ni x nj x nk.
+  // : Dimensions:  nplanes x ni x nj x nk.
   // This concept is treated as a synonym to components.
   virtual unsigned nplanes() const;
-  //: Dimensions:  nplanes x ni x nj x nk.
+
+  // : Dimensions:  nplanes x ni x nj x nk.
   // The number of pixels in each row.
   virtual unsigned ni() const;
-  //: Dimensions:  nplanes x ni x nj x nk.
+
+  // : Dimensions:  nplanes x ni x nj x nk.
   // The number of pixels in each column.
   virtual unsigned nj() const;
-  //: Dimensions:  nplanes x ni x nj x nk.
+
+  // : Dimensions:  nplanes x ni x nj x nk.
   // The number of slices per image.
   virtual unsigned nk() const;
 
-  //: Basename of file (not including .hdr/.img)
-  const vcl_string& base_path() const { return base_path_; }
+  // : Basename of file (not including .hdr/.img)
+  const vcl_string & base_path() const { return base_path_; }
 
-  //: Header information
-  const vil3d_analyze_header& header() { return header_; }
+  // : Header information
+  const vil3d_analyze_header & header() { return header_; }
 
-  //: Pixel Format.
+  // : Pixel Format.
   virtual enum vil_pixel_format pixel_format() const;
 
-
-  //: Create a read/write view of a copy of this data.
+  // : Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                   unsigned j0, unsigned nj,
-                                                   unsigned k0, unsigned nk) const;
+  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj, unsigned k0,
+                                                   unsigned nk) const;
 
-  //: Put the data in this view back into the image source.
+  // : Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your
   // view to a scalar-component view if this is not the case.
   // \return false if failed, because e.g. resource is read-only,
   // format of view is not correct (if it is a compound pixel type, try
   // assigning it to a multi-plane scalar pixel view.)
-  virtual bool put_view(const vil3d_image_view_base& im,
-                        unsigned i0, unsigned j0, unsigned k0);
+  virtual bool put_view(const vil3d_image_view_base& im, unsigned i0, unsigned j0, unsigned k0);
 
-  //: Set the size of the each voxel in the i,j,k directions (mm).
+  // : Set the size of the each voxel in the i,j,k directions (mm).
   // You can get the voxel sizes via get_properties().
   // \return false if underlying image doesn't store pixel sizes.
-  virtual bool set_voxel_size_mm(float/*i*/,float/*j*/,float/*k*/);
+  virtual bool set_voxel_size_mm(float /*i*/, float /*j*/, float /*k*/);
 
-  //: Return a string describing the file format.
+  // : Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return "analyze"; }
+  virtual char const * file_format() const { return "analyze"; }
 
-  //: Extra property information
+  // : Extra property information
   // This will just return the property of the first slice in the list.
   virtual bool get_property(char const* label, void* property_value = 0) const;
+
 };
 
 #endif

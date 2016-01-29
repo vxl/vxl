@@ -12,8 +12,9 @@
 //             Joseph L. Mundy - December 1997
 //             GE Corporate Research and Development
 
-class osl_edge_detector_params /*: public ParamMixin*/ {
-public :
+class osl_edge_detector_params /*: public ParamMixin*/
+{
+public:
   osl_edge_detector_params();
   ~osl_edge_detector_params();
 

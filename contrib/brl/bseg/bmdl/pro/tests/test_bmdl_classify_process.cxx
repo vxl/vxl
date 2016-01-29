@@ -21,24 +21,27 @@ bool get_image(unsigned int id, vil_image_view_base_sptr& image)
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id);
 
   brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
-  if (S_img->size()!=1){
+
+  if( S_img->size() != 1 )
+    {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
     return false;
-  }
+    }
 
   brdb_value_sptr value_img;
-  if (!S_img->get_value(vcl_string("value"), value_img)) {
+  if( !S_img->get_value(vcl_string("value"), value_img) )
+    {
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
     return false;
-  }
+    }
 
   bool non_null = (value_img != 0);
-  TEST("display output non-null", non_null ,true);
+  TEST("display output non-null", non_null, true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =
-    static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
+    static_cast<brdb_value_t<vil_image_view_base_sptr> *>(value_img.ptr() );
   image = result->value();
 
   return true;
@@ -59,24 +62,24 @@ static void test_bmdl_classify_process()
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(ground);
 
   bool good1 = bprb_batch_process_manager::instance()->init_process("bmdlClassifyProcess")
-            && bprb_batch_process_manager::instance()->set_input(0, v0)
-            && bprb_batch_process_manager::instance()->set_input(1, v1)
-            && bprb_batch_process_manager::instance()->set_input(2, v2)
-            && bprb_batch_process_manager::instance()->set_params("classify_params.xml")
-            && bprb_batch_process_manager::instance()->run_process();
+    && bprb_batch_process_manager::instance()->set_input(0, v0)
+    && bprb_batch_process_manager::instance()->set_input(1, v1)
+    && bprb_batch_process_manager::instance()->set_input(2, v2)
+    && bprb_batch_process_manager::instance()->set_params("classify_params.xml")
+    && bprb_batch_process_manager::instance()->run_process();
 
   unsigned int label_img_id, height_img_id;
-  vcl_string type;
-  bool good2 = bprb_batch_process_manager::instance()->commit_output(0, label_img_id, type);
-  bool good3 = bprb_batch_process_manager::instance()->commit_output(1, height_img_id, type);
+  vcl_string   type;
+  bool         good2 = bprb_batch_process_manager::instance()->commit_output(0, label_img_id, type);
+  bool         good3 = bprb_batch_process_manager::instance()->commit_output(1, height_img_id, type);
   TEST("run classify process", good1 && good2 && good3, true);
 
   vil_image_view_base_sptr label_img, height_img;
-  bool good4 = get_image(label_img_id, label_img);
-  TEST("get label image", good4 ,true);
+  bool                     good4 = get_image(label_img_id, label_img);
+  TEST("get label image", good4, true);
 
   bool good5 = get_image(height_img_id, height_img);
-  TEST("get height image", good5 ,true);
+  TEST("get height image", good5, true);
 
   bool saved = vil_save(*label_img, "label.tif");
   TEST("LABELS saved", saved, true);

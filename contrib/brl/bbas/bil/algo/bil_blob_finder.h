@@ -1,6 +1,6 @@
 #ifndef bil_blob_finder_h_
 #define bil_blob_finder_h_
-//:
+// :
 // \file
 // \brief Finds connected regions in a boolean image.
 // \author Tim Cootes
@@ -9,7 +9,7 @@
 #include <vil/vil_chord.h>
 #include <vcl_vector.h>
 
-//: Finds connected regions in a boolean image
+// : Finds connected regions in a boolean image
 //  Class to iterate through image, finding boundaries of all regions
 //  (connected true pixels).
 //
@@ -51,39 +51,38 @@
 
 class bil_blob_finder
 {
- private:
-  //: Workspace (may be view of external image)
+private:
+  // : Workspace (may be view of external image)
   vil_image_view<bool> image_;
 
-  //: Current point of interest
-  unsigned int i_,j_;
-
- public:
-  //: Default constructor
+  // : Current point of interest
+  unsigned int i_, j_;
+public:
+  // : Default constructor
   bil_blob_finder();
 
-  //: Construct to work on image (takes deep copy)
+  // : Construct to work on image (takes deep copy)
   bil_blob_finder(const vil_image_view<bool>& image);
 
-  //: Define image to work on (deep copy taken)
+  // : Define image to work on (deep copy taken)
   void set_image(const vil_image_view<bool>& image);
 
-  //: Define image to work on and use as workspace
+  // : Define image to work on and use as workspace
   //  Image will be erased during process.
   //  Avoids the deep copy in set_image()
   void set_work_image(vil_image_view<bool>& image);
 
-  //: Get boundary pixels of next blob in current image.
+  // : Get boundary pixels of next blob in current image.
   //  Uses four connected boundary representation.
   //  Return false if no more regions
   bool next_4con_region(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
-  //: Get pixels of next blob in current image.
+  // : Get pixels of next blob in current image.
   //  Uses 4 connected representation.
   //  Return false if no more regions
   bool next_4con_region(vcl_vector<vil_chord>& region);
 
-  //: Get longest blob boundary in current image
+  // : Get longest blob boundary in current image
   //  Assumes image has been initialised, and that next_4con_region not
   //  yet called.  Erases internal image during this call, so any
   //  subsequent calls will not work.
@@ -91,7 +90,7 @@ class bil_blob_finder
   //  bi,bj empty if no blobs found.
   void longest_4con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
-  //: Get largest blob region in current image
+  // : Get largest blob region in current image
   //  Assumes image has been initialised, and that next_8con_region not
   //  yet called.  Erases internal image during this call, so any
   //  subsequent calls will not work.
@@ -100,21 +99,21 @@ class bil_blob_finder
   // Returns area of largest region
   unsigned largest_4con_region(vcl_vector<vil_chord>& region);
 
-  //: Get number of blobs in given image
+  // : Get number of blobs in given image
   //  Overrides any internal state
   unsigned n_4con_regions(const vil_image_view<bool>& image);
 
-  //: Get boundary pixels of next blob in current image.
+  // : Get boundary pixels of next blob in current image.
   //  Uses 8 connected boundary representation.
   //  Return false if no more regions
   bool next_8con_region(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
-  //: Get pixels of next blob in current image.
+  // : Get pixels of next blob in current image.
   //  Uses 8 connected representation.
   //  Return false if no more regions
   bool next_8con_region(vcl_vector<vil_chord>& region);
 
-  //: Get longest blob boundary in current image
+  // : Get longest blob boundary in current image
   //  Assumes image has been initialised, and that next_8con_region not
   //  yet called.  Erases internal image during this call, so any
   //  subsequent calls will not work.
@@ -122,7 +121,7 @@ class bil_blob_finder
   //  bi,bj empty if no blobs found.
   void longest_8con_boundary(vcl_vector<int>& bi, vcl_vector<int>& bj);
 
-  //: Get largest blob region in current image
+  // : Get largest blob region in current image
   //  Assumes image has been initialised, and that next_8con_region not
   //  yet called.  Erases internal image during this call, so any
   //  subsequent calls will not work.
@@ -131,9 +130,10 @@ class bil_blob_finder
   // Returns area of largest region
   unsigned largest_8con_region(vcl_vector<vil_chord>& region);
 
-  //: Get number of blobs in given image
+  // : Get number of blobs in given image
   //  Overrides any internal state
   unsigned n_8con_regions(const vil_image_view<bool>& image);
+
 };
 
 #endif

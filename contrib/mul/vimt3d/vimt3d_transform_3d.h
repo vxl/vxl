@@ -1,6 +1,6 @@
 #ifndef vimt3d_transform_3d_h_
 #define vimt3d_transform_3d_h_
-//:
+// :
 // \file
 // \brief A class to define and apply a 3D transformation up to affine.
 // \author Graham Vincent, Tim Cootes
@@ -12,9 +12,9 @@
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_quaternion.h>
 
-//=======================================================================
+// =======================================================================
 
-//: A class to define and apply a 3D transform.
+// : A class to define and apply a 3D transform.
 // The transform which can be up to an affine transformation.
 // In order of complexity the transform can be
 // - Identity     x->x, y->y, z->z
@@ -47,17 +47,17 @@
 // attendant memory allocation.
 class vimt3d_transform_3d
 {
- public:
+public:
 
-  //: Defines form of transformation
-  enum Form {Identity,
-             Translation,
-             ZoomOnly,   //!< Anisotropic scaling, followed by translation
-             RigidBody,  //!< Rotation, followed by translation
-             Similarity, //!< Isotropic scaling, followed by rotation, then translation
-             Affine};
+  // : Defines form of transformation
+  enum Form { Identity,
+              Translation,
+              ZoomOnly,   // !< Anisotropic scaling, followed by translation
+              RigidBody,  // !< Rotation, followed by translation
+              Similarity, // !< Isotropic scaling, followed by rotation, then translation
+              Affine };
 
-  //: Construct as identity transform
+  // : Construct as identity transform
   vimt3d_transform_3d() :
     xx_(1), xy_(0), xz_(0), xt_(0),
     yx_(0), yy_(1), yz_(0), yt_(0),
@@ -68,44 +68,44 @@ class vimt3d_transform_3d
   // An explicit destructor is required to avoid an internal compiler
   // error in icc 8.0 (internal error: 0_1270)
 
-  //: Destructor
+  // : Destructor
   ~vimt3d_transform_3d() {}
 
-  //: True if identity.
-  bool is_identity() const { return form_==Identity; }
+  // : True if identity.
+  bool is_identity() const { return form_ == Identity; }
 
-  //: Form of transformation.
+  // : Form of transformation.
   Form form() const { return form_; }
 
-  //: Gets 4x4 Matrix representing transformation
+  // : Gets 4x4 Matrix representing transformation
   vnl_matrix<double> matrix() const;
 
-  //: Gets 4x4 Matrix representing transformation
+  // : Gets 4x4 Matrix representing transformation
   // \retval M  a 4x4 Matrix representing transformation
   void matrix(vnl_matrix<double>& M) const;
 
-  //: Fills v with parameters
+  // : Fills v with parameters
   void params(vnl_vector<double>& v) const;
 
-  //: Define the transform in terms of a 4x4 homogeneous matrix.
+  // : Define the transform in terms of a 4x4 homogeneous matrix.
   // \param M 4x4 homogeneous matrix defining the transform.
   // \note Client must ensure that \a M is a valid representation of an affine (or simpler) transform.
   // \note The form will be set to Affine - call simplify() if you need the simplest form.
   void set_matrix(const vnl_matrix<double>& M);
 
-  //: Sets transform using v
-  void set(const vnl_vector<double>& v, Form);
+  // : Sets transform using v
+  void set(const vnl_vector<double> &v, Form);
 
-  //: Sets transform to identity.
+  // : Sets transform to identity.
   void set_identity();
 
-  //: Sets the transformation to be a translation.
+  // : Sets the transformation to be a translation.
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
   void set_translation(double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to be anisotropic scaling, followed by translation.
+  // : Sets the transformation to be anisotropic scaling, followed by translation.
   // The transformation is separable affine.
   // x' = s_x.x + t_x,  y' = s_y.y + t_y,  z' = s_z.z + t_z
   // \param s_x  Scaling in x
@@ -114,10 +114,9 @@ class vimt3d_transform_3d
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
-  void set_zoom_only( double s_x, double s_y, double s_z,
-                      double t_x, double t_y, double t_z);
+  void set_zoom_only( double s_x, double s_y, double s_z, double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to be isotropic scaling, followed by translation.
+  // : Sets the transformation to be isotropic scaling, followed by translation.
   // The transformation is separable affine.
   // x' = s.x + t_x,  y' = s.y + t_y,  z' = s.z + t_z
   // \param s  Scaling in x, y and z
@@ -125,9 +124,9 @@ class vimt3d_transform_3d
   // \param t_y  Translation in y
   // \param t_z  Translation in z
   void set_zoom_only(double s, double t_x, double t_y, double t_z)
-    { set_zoom_only(s, s, s, t_x, t_y, t_z); }
+  { set_zoom_only(s, s, s, t_x, t_y, t_z); }
 
-  //: Sets the transformation to be rotation, followed by translation.
+  // : Sets the transformation to be rotation, followed by translation.
   // The transformation is separable affine.
   // \param r_x  Angle of rotation in x
   // \param r_y  Angle of rotation in y
@@ -135,16 +134,14 @@ class vimt3d_transform_3d
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
-  void set_rigid_body(double r_x, double r_y, double r_z,
-                      double t_x, double t_y, double t_z);
+  void set_rigid_body(double r_x, double r_y, double r_z, double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to be rotation, followed by translation.
+  // : Sets the transformation to be rotation, followed by translation.
   // The transformation is separable affine.
   // \param unit_q  Unit quaternion defining rotation
-  void set_rigid_body(const vnl_quaternion<double>& unit_q,
-                      double t_x, double t_y, double t_z);
+  void set_rigid_body(const vnl_quaternion<double>& unit_q, double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to be isotropic scaling, followed by rotation, then translation.
+  // : Sets the transformation to be isotropic scaling, followed by rotation, then translation.
   // The transformation is separable affine.
   // \param s  Scaling factor
   // \param r_x  Angle of rotation in x
@@ -153,18 +150,14 @@ class vimt3d_transform_3d
   // \param t_x  Translation in x
   // \param t_y  Translation in y
   // \param t_z  Translation in z
-  void set_similarity(double s,
-                      double r_x, double r_y, double r_z,
-                      double t_x, double t_y, double t_z);
+  void set_similarity(double s, double r_x, double r_y, double r_z, double t_x, double t_y, double t_z);
 
-
-  //: Sets the transformation to be similarity: scale, rotation, followed by translation.
+  // : Sets the transformation to be similarity: scale, rotation, followed by translation.
   // The transformation is separable affine.
   // \param unit_q  Unit quaternion defining rotation
-  void set_similarity(double scale, const vnl_quaternion<double>& unit_q,
-                      double t_x, double t_y, double t_z);
+  void set_similarity(double scale, const vnl_quaternion<double>& unit_q, double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to be a special case of Affine: anisotropic scaling, followed by rotation, then translation.
+  // : Sets the transformation to be a special case of Affine: anisotropic scaling, followed by rotation, then translation.
   // \param s_x  Scaling factor in x
   // \param s_y  Scaling factor in y
   // \param s_z  Scaling factor in z
@@ -176,11 +169,10 @@ class vimt3d_transform_3d
   // \param t_z  Translation in z
   // \note This creates a special case of Affine. Although this special case
   // is separable, in general Affine transformations are not separable.
-  void set_affine(double s_x, double s_y, double s_z,
-                  double r_x, double r_y, double r_z,
-                  double t_x, double t_y, double t_z);
+  void set_affine(double s_x, double s_y, double s_z, double r_x, double r_y, double r_z, double t_x, double t_y,
+                  double t_z);
 
-  //: Sets the transformation to be a special case of Affine: anisotropic scaling, followed by rotation, then translation.
+  // : Sets the transformation to be a special case of Affine: anisotropic scaling, followed by rotation, then translation.
   // \param s_x  Scaling factor in x
   // \param s_y  Scaling factor in y
   // \param s_z  Scaling factor in z
@@ -193,13 +185,10 @@ class vimt3d_transform_3d
   // \note This creates a special case of Affine. Although this special case
   // is separable, in general Affine transformations are not
   // separable. The rotation matrix is assumed to be valid.
-  void set_affine(double s_x, double s_y, double s_z,
-                  vgl_vector_3d<double> c_x,
-                  vgl_vector_3d<double> c_y,
-                  vgl_vector_3d<double> c_z,
-                  double t_x, double t_y, double t_z);
+  void set_affine(double s_x, double s_y, double s_z, vgl_vector_3d<double> c_x, vgl_vector_3d<double> c_y,
+                  vgl_vector_3d<double> c_z, double t_x, double t_y, double t_z);
 
-  //: Sets the transformation to be a special case of Affine.
+  // : Sets the transformation to be a special case of Affine.
   // T(x,y,z) = p +x.u +y.v + z.w
   // \param p Origin point
   // \param u Vector to which the x-axis is mapped. The length of \a u indicates scaling in x.
@@ -209,16 +198,14 @@ class vimt3d_transform_3d
   // and form a right-handed system. There are asserts for this condition.
   // \note This creates a special case of Affine. Although this special case
   // is separable, in general Affine transformations are not separable.
-  void set_affine(const vgl_point_3d<double>& p,
-                  const vgl_vector_3d<double>& u,
-                  const vgl_vector_3d<double>& v,
+  void set_affine(const vgl_point_3d<double>& p, const vgl_vector_3d<double>& u, const vgl_vector_3d<double>& v,
                   const vgl_vector_3d<double>& w);
 
-  //: Returns the coordinates of the origin
+  // : Returns the coordinates of the origin
   vgl_point_3d<double>  origin() const
-    { return vgl_point_3d<double> (tt_==1?xt_:xt_/tt_,tt_==1?yt_:yt_/tt_,tt_==1?zt_:zt_/tt_); }
+  { return vgl_point_3d<double>(tt_ == 1 ? xt_ : xt_ / tt_, tt_ == 1 ? yt_ : yt_ / tt_, tt_ == 1 ? zt_ : zt_ / tt_); }
 
-  //: Modifies the transformation so that origin == p.
+  // : Modifies the transformation so that origin == p.
   // Modifies the transformation so that
   // operator()(vgl_point_3d<double> (0,0)) == p.
   // The rest of the transformation is unaffected.
@@ -226,84 +213,83 @@ class vimt3d_transform_3d
   // it becomes a translation.
   void set_origin( const vgl_point_3d<double> & );
 
-  //: Applies transformation to (x,y,z)
+  // : Applies transformation to (x,y,z)
   // \param x  x coordinate
   // \param y  y co-ord
   // \param z  z co-ord
-  //ret: Point = T(x,y,z)
+  // ret: Point = T(x,y,z)
   vgl_point_3d<double>  operator()(double x, double y, double z) const
   {
-    switch (form_)
-    {
-     case Identity :
-      return vgl_point_3d<double> (x,y,z);
-     case Translation :
-      return vgl_point_3d<double> (x+xt_,y+yt_,z+zt_);
-     case ZoomOnly :
-      return vgl_point_3d<double> (
-        x*xx_+xt_,
-        y*yy_+yt_,
-        z*zz_+zt_);
+    switch( form_ )
+      {
+      case Identity:
+        return vgl_point_3d<double>(x, y, z);
+      case Translation:
+        return vgl_point_3d<double>(x + xt_, y + yt_, z + zt_);
+      case ZoomOnly:
+        return vgl_point_3d<double>(
+          x * xx_ + xt_,
+          y * yy_ + yt_,
+          z * zz_ + zt_);
 //   case RigidBody, Similarity, Affine :
-     default :
-      return vgl_point_3d<double> (
-        x*xx_+y*xy_+z*xz_+xt_,
-        x*yx_+y*yy_+z*yz_+yt_,
-        x*zx_+y*zy_+z*zz_+zt_);
-    }
+      default:
+        return vgl_point_3d<double>(
+          x * xx_ + y * xy_ + z * xz_ + xt_,
+          x * yx_ + y * yy_ + z * yz_ + yt_,
+          x * zx_ + y * zy_ + z * zz_ + zt_);
+      }
   }
 
-  //: Applies transformation to point p
+  // : Applies transformation to point p
   // \param p  Point
   // \return Point = T(p)
   vgl_point_3d<double>  operator()(vgl_point_3d<double>  p) const
-    { return operator()(p.x(),p.y(),p.z()); }
+  { return operator()(p.x(), p.y(), p.z() ); }
 
-  //: Returns the inverse of the current transform
+  // : Returns the inverse of the current transform
   // \return inverse of current transform.
   vimt3d_transform_3d inverse() const;
 
-  //: Returns change in transformed point when original point moved by dp
+  // : Returns change in transformed point when original point moved by dp
   // \param p  point
   // \param dp  movement from point
   // \return T(p+dp)-T(p)
   vgl_vector_3d<double>  delta(vgl_point_3d<double>  /*p*/, vgl_vector_3d<double>  dp) const
   {
-    switch (form_)
-    {
-     case Identity :
-     case Translation:
-      return dp;
-     case ZoomOnly :
-      return vgl_vector_3d<double> (dp.x()*xx_,
-                                    dp.y()*yy_,
-                                    dp.z()*zz_);
+    switch( form_ )
+      {
+      case Identity:
+      case Translation:
+        return dp;
+      case ZoomOnly:
+        return vgl_vector_3d<double>(dp.x() * xx_,
+                                     dp.y() * yy_,
+                                     dp.z() * zz_);
 //   case RigidBody, Similarity, Affine :
-     default : // Don't worry that the returned value is independent of p --- this is correct.
-      return vgl_vector_3d<double> (dp.x()*xx_+dp.y()*xy_+dp.z()*xz_,
-                                    dp.x()*yx_+dp.y()*yy_+dp.z()*yz_,
-                                    dp.x()*zx_+dp.y()*zy_+dp.z()*zz_);
-    }
+      default: // Don't worry that the returned value is independent of p --- this is correct.
+        return vgl_vector_3d<double>(dp.x() * xx_ + dp.y() * xy_ + dp.z() * xz_,
+                                     dp.x() * yx_ + dp.y() * yy_ + dp.z() * yz_,
+                                     dp.x() * zx_ + dp.y() * zy_ + dp.z() * zz_);
+      }
   }
 
-  //: Calculates the product LR
+  // : Calculates the product LR
   // \param L  Transform
   // \param R  Transform
   // \return Transform LR = R followed by L
-  friend vimt3d_transform_3d operator*(const vimt3d_transform_3d& L,
-                                       const vimt3d_transform_3d& R);
+  friend vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transform_3d& R);
 
-  //: Print class to os
+  // : Print class to os
   // This function prints the extracted params.
   // \sa params()
   // \sa set()
   void print_summary(vcl_ostream& os) const;
 
-  //: Print class to os
+  // : Print class to os
   // This function prints the actual parameters xx_,xy_,xz_,xt_, yx_,yy_,yz_,yt_, zx_,zy_,zz_,zt_, tx_,ty_,tz_,tt_
   void print_all(vcl_ostream& os) const;
 
-  //: Set transformation from stream;
+  // : Set transformation from stream;
   // You can specify the vector as used in the set() operation.
   // \verbatim
   // form: rigidbody
@@ -321,68 +307,68 @@ class vimt3d_transform_3d
   // \endverbatim
   void config(vcl_istream& is);
 
-  //: Save class to binary file stream
+  // : Save class to binary file stream
   void b_write(vsl_b_ostream& bfs) const;
 
-  //: Load class from binary file stream
+  // : Load class from binary file stream
   void b_read(vsl_b_istream& bfs);
 
-  //: True if t is the same as this.
+  // : True if t is the same as this.
   // \note All underlying parameters xx_, xy_, etc are required to be equal,
   // but the declared Form (etc RigidBody) need not be equal.
-  bool operator==(const vimt3d_transform_3d&) const;
+  bool operator==(const vimt3d_transform_3d &) const;
 
-  //: Reduce to the simplest form possible.
-  void simplify(double tol =1e-10);
+  // : Reduce to the simplest form possible.
+  void simplify(double tol = 1e-10);
 
- protected:
+protected:
 
-  double xx_,xy_,xz_,xt_,yx_,yy_,yz_,yt_,zx_, zy_, zz_, zt_, tx_,ty_,tz_,tt_;
-  Form form_;
+  double xx_, xy_, xz_, xt_, yx_, yy_, yz_, yt_, zx_, zy_, zz_, zt_, tx_, ty_, tz_, tt_;
+  Form   form_;
 
   // This is all the inverse data
   // Notice the mutable here - take care if using threads!
-  mutable double xx2_,xy2_,xz2_,xt2_,yx2_,yy2_,yz2_,yt2_,zx2_, zy2_, zz2_, zt2_, tx2_,ty2_,tz2_,tt2_;
-  mutable bool inv_uptodate_;
-
+  mutable double xx2_, xy2_, xz2_, xt2_, yx2_, yy2_, yz2_, yt2_, zx2_, zy2_, zz2_, zt2_, tx2_, ty2_, tz2_, tt2_;
+  mutable bool   inv_uptodate_;
 
   void calcInverse() const;
-  void setCheck(int n1,int n2,const char* str) const;
+
+  void setCheck(int n1, int n2, const char* str) const;
+
   void angles(double& phi_x, double& phi_y, double& phi_z) const;
+
   void setRotMat(double r_x, double r_y, double r_z);
+
 };
 
-
-//: Calculates the product LR
+// : Calculates the product LR
 // \param L  Transform
 // \param R  Transform
 // \return Transform LR = R followed by L
-vimt3d_transform_3d operator*(const vimt3d_transform_3d& L,
-                              const vimt3d_transform_3d& R);
+vimt3d_transform_3d operator*(const vimt3d_transform_3d& L, const vimt3d_transform_3d& R);
 
-//: Binary file stream output operator for class reference
+// : Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const vimt3d_transform_3d& b);
 
-//: Binary file stream input operator for class reference
+// : Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, vimt3d_transform_3d& b);
 
-//: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const vimt3d_transform_3d& b);
+// : Stream output operator for class reference
+vcl_ostream & operator<<(vcl_ostream& os, const vimt3d_transform_3d& b);
 
-//: Stream output operator for class reference
+// : Stream output operator for class reference
 inline void vsl_print_summary(vcl_ostream& afs, const vimt3d_transform_3d& b)
 {
   b.print_summary(afs);
 }
 
-//: Test whether a 3D transform is zoom-only or lesser.
+// : Test whether a 3D transform is zoom-only or lesser.
 // i.e. there may be translation and (anisotropic) scaling but no rotation.
 // \note This tests only for a commonly-occurring special case; there may
 // be other zoom-only transforms that are not detected.
 // \param zero_tol Used for testing whether elements are zero or not.
-bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
-                                   const double zero_tol=1e-9);
+bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf, const double zero_tol = 1e-9);
 
-//=======================================================================
+// =======================================================================
 
 #endif // vimt3d_transform_3d_h_

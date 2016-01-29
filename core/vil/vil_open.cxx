@@ -1,8 +1,8 @@
 // This is core/vil/vil_open.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author fsm
 
@@ -16,18 +16,20 @@
 #include <vil/vil_stream_url.h>
 // not used? #include <vcl_fstream.h>
 
-vil_stream *vil_open(char const* what, char const* how)
+vil_stream * vil_open(char const* what, char const* how)
 {
   // check for null pointer or empty strings.
-  if (!what || !*what)
+  if( !what || !*what )
+    {
     return 0;
+    }
 
   // try to open as file first.
 #ifdef VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream64(what, how);
-#else //VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream(what, how);
-#endif //VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream64(what, how);
+#else // VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream(what, how);
+#endif // VIL_USE_FSTREAM64
 
 #if 0
   // unfortunately, the following doesn't work because (note typo)
@@ -39,58 +41,70 @@ vil_stream *vil_open(char const* what, char const* how)
   // vil_load() just does a vil_open<() for reading. i do not think people
   // expect "loading an image" to open the disk file for writing by
   // default. -- fsm
-#ifdef VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream64(what, "r+");
-#else //VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream(what, "r+");
-#endif //VIL_USE_FSTREAM64
+#  ifdef VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream64(what, "r+");
+#  else // VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream(what, "r+");
+#  endif // VIL_USE_FSTREAM64
 #endif
-  if (!is->ok()) {
+  if( !is->ok() )
+    {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = 0;
-  }
+    }
 
-  if (!is) {
+  if( !is )
+    {
     // hacked check for filenames beginning "gen:".
     int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "gen:", 4) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    if( l > 4 && vcl_strncmp(what, "gen:", 4) == 0 )
+      {
+      if( vcl_strcmp(how, "r") == 0 )
+        {
         // Make an in-core stream...
-        vil_stream_core *cis = new vil_stream_core();
-        cis->write(what, l+1);
+        vil_stream_core * cis = new vil_stream_core();
+        cis->write(what, l + 1);
         is = cis;
-      }
-      else {
+        }
+      else
+        {
         vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
+        }
       }
     }
-  }
-  if (is && !is->ok()) {
+  if( is && !is->ok() )
+    {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = 0;
-  }
+    }
 
-  if (!is) {
+  if( !is )
+    {
     // maybe it's a URL?
     int l = (int)vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    if( l > 4 && vcl_strncmp(what, "http://", 7) == 0 )
+      {
+      if( vcl_strcmp(how, "r") == 0 )
+        {
         is = new vil_stream_url(what);
-      }
+        }
       else
+        {
         vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+        }
+      }
     }
-  }
-  if (is && !is->ok()) {
+  if( is && !is->ok() )
+    {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = 0;
-  }
+    }
 
   return is;
 }
@@ -100,71 +114,85 @@ vil_stream *vil_open(char const* what, char const* how)
 //  Windows' wchar_t overloading version
 //
 //
-vil_stream *vil_open(wchar_t const* what, char const* how)
+vil_stream * vil_open(wchar_t const* what, char const* how)
 {
   // check for null pointer or empty strings.
-  if (!what || !*what)
+  if( !what || !*what )
+    {
     return 0;
+    }
 
   // try to open as file first.
-#ifdef VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream64(what, how);
-#else //VIL_USE_FSTREAM64
-  vil_stream *is = new vil_stream_fstream(what, how);
-#endif //VIL_USE_FSTREAM64
+#  ifdef VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream64(what, how);
+#  else // VIL_USE_FSTREAM64
+  vil_stream * is = new vil_stream_fstream(what, how);
+#  endif // VIL_USE_FSTREAM64
 
-  if (!is->ok()) {
+  if( !is->ok() )
+    {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = 0;
-  }
+    }
 
-#if 0  // TODO: add wchar_t support in vil_stream_core
-  if (!is) {
+#  if 0 // TODO: add wchar_t support in vil_stream_core
+  if( !is )
+    {
     // hacked check for filenames beginning "gen:".
     int l = wcslen(what);
-    if (l > 4 && wcsncmp(what, L"gen:", 4) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    if( l > 4 && wcsncmp(what, L"gen:", 4) == 0 )
+      {
+      if( vcl_strcmp(how, "r") == 0 )
+        {
         // Make an in-core stream...
-        vil_stream_core *cis = new vil_stream_core();
-        cis->write(what, l+1);
+        vil_stream_core * cis = new vil_stream_core();
+        cis->write(what, l + 1);
         is = cis;
-      }
-      else {
+        }
+      else
+        {
         vcl_cerr << __FILE__ ": cannot open gen:* for writing\n";
+        }
       }
     }
-  }
-  if (is && !is->ok()) {
+  if( is && !is->ok() )
+    {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = 0;
-  }
-#endif
+    }
+#  endif
 
-#if 0  // TODO: add wchar_t support in vil_stream_url
-  if (!is) {
+#  if 0 // TODO: add wchar_t support in vil_stream_url
+  if( !is )
+    {
     // maybe it's a URL?
     int l = vcl_strlen(what);
-    if (l > 4 && vcl_strncmp(what, "http://", 7) == 0) {
-      if (vcl_strcmp(how, "r") == 0) {
+    if( l > 4 && vcl_strncmp(what, "http://", 7) == 0 )
+      {
+      if( vcl_strcmp(how, "r") == 0 )
+        {
         is = new vil_stream_url(what);
-      }
+        }
       else
+        {
         vcl_cerr << __FILE__ ": cannot open URL for writing (yet)\n";
+        }
+      }
     }
-  }
-  if (is && !is->ok()) {
+  if( is && !is->ok() )
+    {
     // this will delete the stream object.
     is->ref();
     is->unref();
     is = 0;
-  }
-#endif
+    }
+#  endif
 
   return is;
 }
 
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif // defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T

@@ -6,9 +6,9 @@
 #include <cstdio>
 
 #ifdef vcl_generic_cstdio_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cstdio_STD std
+#  define vcl_generic_cstdio_STD std
 #endif
 
 #include "../generic/vcl_cstdio.h"

@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_statusbar.h
 #ifndef vgui_statusbar_h_
 #define vgui_statusbar_h_
-//:
+// :
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   21 Nov 99
@@ -14,12 +14,14 @@
 
 class vgui_statusbar
 {
- public:
+public:
   vgui_statusbar() {}
   virtual ~vgui_statusbar() {}
 
   virtual int write(const char* text, int n) = 0;
+
   virtual int write(const char* text) = 0;
+
 };
 
 #endif // vgui_statusbar_h_

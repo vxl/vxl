@@ -1,8 +1,8 @@
 // This is core/vgui/vgui_observer.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford
 // \date   11 Sep 99

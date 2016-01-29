@@ -1,6 +1,6 @@
 // This is brl/bbas/bmsh3d/examples/bmsh3d_mesh2ply.cxx
 
-//:
+// :
 // \file
 // \brief
 // \date September 11, 2006
@@ -11,14 +11,14 @@
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
-int main( int argc, char **argv )
+int main( int argc, char * * argv )
 {
-  if (argc < 3)
-  {
+  if( argc < 3 )
+    {
     vcl_cerr << "Invalid parameters. Program syntax:\n"
              << argv[0] << "input_meshfile output_mesh.ply\n";
     return 1;
-  }
+    }
 
   // parse the arguments
 
@@ -35,7 +35,7 @@ int main( int argc, char **argv )
 
   // load the meshes
   vcl_cout << "Loading mesh ...";
-  bmsh3d_load(&mesh, input_mesh_file.c_str());
+  bmsh3d_load(&mesh, input_mesh_file.c_str() );
 
   vcl_cout << "done.\n";
 
@@ -45,7 +45,7 @@ int main( int argc, char **argv )
   vcl_cout << "Triangulating the mesh before saving...";
   bmsh3d_mesh* tri_mesh = generate_tri_mesh(&mesh);
 
-  //Save the mesh to ply format
+  // Save the mesh to ply format
   vcl_cout << "Saving the mesh in PLY format ...\n";
   bmsh3d_save_ply(tri_mesh, output_mesh_file.c_str(), false);
 

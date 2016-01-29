@@ -9,5 +9,4 @@ void register_tests()
   REGISTER( test_brec_create_mog_image_process );
 }
 
-
 DEFINE_MAIN;

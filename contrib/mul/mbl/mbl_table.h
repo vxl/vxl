@@ -1,6 +1,6 @@
 #ifndef mbl_table_h
 #define mbl_table_h
-//:
+// :
 // \file
 // \author Kevin de Souza
 // \date 05-Aug-2004
@@ -11,7 +11,7 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 
-//: Container for tabulated data suitable for reading/writing to delimited text files.
+// : Container for tabulated data suitable for reading/writing to delimited text files.
 //
 // Table comprises a number of columns of double-precision data.
 // Each column is headed by a text string (which may contain whitespace but not end-of-line).
@@ -25,95 +25,75 @@ class mbl_table
 {
 public:
 
-  //: Constructor
+  // : Constructor
   // \param delim The delimiter character.
-  mbl_table(const char delim='\t');
+  mbl_table(const char delim = '\t');
 
-
-  //: Constructor
+  // : Constructor
   // \param delim The delimiter character.
   // \param headers The column headers (in order).
-  mbl_table(const char delim,
-            const vcl_vector<vcl_string>& headers);
+  mbl_table(const char delim, const vcl_vector<vcl_string>& headers);
 
-
-  //: Return the number of columns
+  // : Return the number of columns
   unsigned num_cols() const;
 
-
-  //: Return the number of rows
+  // : Return the number of rows
   unsigned num_rows() const;
 
-
-  //: Get the column of data corresponding to a particular heading.
+  // : Get the column of data corresponding to a particular heading.
   // \param header String identifying the desired column.
   // \return true if there is a column with the specified heading.
   // \retval column A vector containing the values of the requested column.
-  bool get_column(const vcl_string& header,
-                  vcl_vector<double>& column) const;
+  bool get_column(const vcl_string& header, vcl_vector<double>& column) const;
 
-
-  //: Returns true if column exists
+  // : Returns true if column exists
   bool column_exists(const vcl_string& header) const;
 
-
-  //: Get a specified row of data.
+  // : Get a specified row of data.
   // \param r Index of the desired row.
   // \return true if there is a row with the specified index.
   // \retval row A vector containing the values of the requested row.
-  bool get_row(const unsigned& r,
-               vcl_vector<double>& row) const;
+  bool get_row(const unsigned& r, vcl_vector<double>& row) const;
 
-
-  //: Get the list of column headers (in column order).
+  // : Get the list of column headers (in column order).
   // \retval headers The list of column headers.
   void get_column_headers(vcl_vector<vcl_string>& headers) const;
 
-
-  //: Append a column of data with its own heading.
+  // : Append a column of data with its own heading.
   // \param header String identifying the column.
   // \param column A vector containing the values of the column.
   // \return true If the column was added.
   // \note The new column must be the same length as existing columns.
-  bool append_column(const vcl_string& header,
-                     const vcl_vector<double>& column);
+  bool append_column(const vcl_string& header, const vcl_vector<double>& column);
 
-
-  //: Append an empty column with its own heading.
+  // : Append an empty column with its own heading.
   // \param header String identifying the column.
   // \param val Default value to initialize all elements of the new column.
   // \return true If the column was added.
   // \note The new column will be the same length as existing columns.
-  bool append_column(const vcl_string& header,
-                     const double val=0);
+  bool append_column(const vcl_string& header, const double val = 0);
 
-
-  //: Append a row of data.
+  // : Append a row of data.
   // \return true if the row was added.
   // \param row A vector containing the values of the new row.
   // \note The new row must be the same length as existing rows.
   bool append_row(const vcl_vector<double>& row);
 
-
-  //: Append an empty row.
+  // : Append an empty row.
   // \return true If the row was added.
   // \param val Default value to initialize all elements of the new row.
   // \note The new row will be the same length as existing rows.
-  bool append_row(const double val=0);
+  bool append_row(const double val = 0);
 
-
-  //: Set the value of an existing element.
+  // : Set the value of an existing element.
   // \param header The string identifying the column to be modified.
   // \param r The row index of the element to be modified.
   // \param value The new value to use for the modified element.
   // \return False if the column does not exist or the row index is not valid.
   // \note This function is intended only for existing elements.
-  bool set_element(const vcl_string& header,
-                   const unsigned r,
-                   const double value);
+  bool set_element(const vcl_string& header, const unsigned r, const double value);
 
-
-  //: Get the value of an existing element.
+  // : Get the value of an existing element.
   // \param header The string identifying the column of interest.
   // \param r The row index of the element of interest.
   // \return The value of the requested element (undefined if the element
@@ -122,48 +102,38 @@ public:
   //                 specified element existed.
   // \note This function is intended only for existing elements.
   // \note It is recommended that you provide and check the parameter success.
-  double get_element(const vcl_string& header,
-                     const unsigned r,
-                     bool* success=0) const;
+  double get_element(const vcl_string& header, const unsigned r, bool* success = 0) const;
 
-
-  //: Load this table's data from specified text stream.
+  // : Load this table's data from specified text stream.
   // Any existing data is lost.
   // \return true if table was read successfully from the stream.
   bool read(vcl_istream& is);
 
-
-  //: Save this table's data to specified text stream.
+  // : Save this table's data to specified text stream.
   void write(vcl_ostream& os) const;
 
-
-  //: Create a new table of subset of columns defined by headers
+  // : Create a new table of subset of columns defined by headers
   // \retval new_table a subtable
   // \param headers subset of column headers
   // \return true if all columns in headers existed in "this" and were copied
-  bool subtable(mbl_table &new_table,  const vcl_vector<vcl_string> &headers) const;
+  bool subtable(mbl_table & new_table,  const vcl_vector<vcl_string> & headers) const;
 
-
-  //: Is another table identical to this one?
+  // : Is another table identical to this one?
   // \note The normal behaviour of this function is to return false as soon
   // as a discrepancy is found. However, if verbosity>=2 this function will
   // compare all corresponding elements (providing that the table dimensions match).
   bool operator==(const mbl_table& rhs) const;
 
-
-  //: Is another table different from this one?
+  // : Is another table different from this one?
   // \sa operator==()
   bool operator!=(const mbl_table& rhs) const;
 
-
-  //: Set the tolerance used to determine whether table entries are equal.
+  // : Set the tolerance used to determine whether table entries are equal.
   // \param tol The tolerance should be a small positive number, eg 1e-19.
   // \param frac Whether the tolerance is applied as a fractional difference.
-  static void set_tolerance(const double& tol,
-                            const bool& fract=false);
+  static void set_tolerance(const double& tol, const bool& fract = false);
 
-
-  //: Set the level of verbosity used for error output.
+  // : Set the level of verbosity used for error output.
   // \param v The verbosity should be a small integer, eg -3 to 3.
   // Larger values cause more detailed output.
   // Default level is 0.
@@ -172,30 +142,26 @@ public:
   // to check all corresponding elements of a table.
   static void set_verbosity(const int& v);
 
-
 protected:
 
-  //: Read a series of characters from the stream until a delimiter character or eol.
+  // : Read a series of characters from the stream until a delimiter character or eol.
   // \param is The input stream.
   // \return true if a non-empty string was successfully read.
   // \retval str The string which was read.
   // \retval eol Whether the stream is at end-of-line after reading the string.
   // \retval eof Whether the stream is at end-of-file after reading the string.
-  bool read_delimited_string(vcl_istream& is,
-                             vcl_string& str,
-                             bool& eol,
-                             bool& eof);
+  bool read_delimited_string(vcl_istream& is, vcl_string& str, bool& eol, bool& eof);
 
-  //: The character delimiting each column.
+  // : The character delimiting each column.
   char delimiter_;
 
-  //: The column headers (in order)
+  // : The column headers (in order)
   vcl_vector<vcl_string> column_headers_;
 
-  //: Map a column header string to column index
+  // : Map a column header string to column index
   vcl_map<vcl_string, unsigned> header_to_column_index_;
 
-  //: The table data, arranged as column vectors of double data.
+  // : The table data, arranged as column vectors of double data.
   vcl_vector<vcl_vector<double> > columns_;
 
 };

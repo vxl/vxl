@@ -1,8 +1,8 @@
 // This is oxl/mvl/HomgPlane3D.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 //  \file
 
 #include "HomgPlane3D.h"
@@ -12,43 +12,42 @@
 #include <mvl/Homg3D.h>
 #include <mvl/HomgPoint3D.h>
 
-
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Constructor
-HomgPlane3D::HomgPlane3D ()
+// : Constructor
+HomgPlane3D::HomgPlane3D()
 {
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Constructor
-HomgPlane3D::HomgPlane3D (double x, double y, double z, double w)
-    : Homg3D (x, y, z, w)
+// : Constructor
+HomgPlane3D::HomgPlane3D(double x, double y, double z, double w)
+  : Homg3D(x, y, z, w)
 {
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Constructor
-HomgPlane3D::HomgPlane3D (const vnl_double_3& n, double d)
-  : Homg3D (n[0], n[1], n[2], -d)
+// : Constructor
+HomgPlane3D::HomgPlane3D(const vnl_double_3& n, double d)
+  : Homg3D(n[0], n[1], n[2], -d)
 {
 }
 
-//--------------------------------------------------------------
+// --------------------------------------------------------------
 //
-//: Destructor
-HomgPlane3D::~HomgPlane3D ()
+// : Destructor
+HomgPlane3D::~HomgPlane3D()
 {
 }
 
-//: closest point
+// : closest point
 HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& p) const
 {
-  vnl_double_3 n(x(), y(), z());
+  vnl_double_3 n(x(), y(), z() );
 
-  double s = 1.0/n.magnitude();
+  double s = 1.0 / n.magnitude();
   double d = -w();
 
   n *= s;
@@ -63,21 +62,21 @@ HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& p) const
   return HomgPoint3D(px[0], px[1], px[2], 1.0);
 }
 
-//: Distance point to plane
+// : Distance point to plane
 double HomgPlane3D::distance(const HomgPoint3D& p) const
 {
-  vnl_double_3 n(x(), y(), z());
+  vnl_double_3 n(x(), y(), z() );
 
-  double s = 1.0/n.magnitude();
+  double s = 1.0 / n.magnitude();
   double d = -w();
 
   vnl_double_3 x3 = p.get_double3();
 
-  return (dot_product(x3, n) - d)*s;
+  return (dot_product(x3, n) - d) * s;
 }
 
-//: print
-vcl_ostream& operator<<(vcl_ostream& s, const HomgPlane3D& P)
+// : print
+vcl_ostream & operator<<(vcl_ostream& s, const HomgPlane3D& P)
 {
   return s << P.get_vector();
 }

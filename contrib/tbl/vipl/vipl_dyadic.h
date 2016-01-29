@@ -1,6 +1,6 @@
 #ifndef vipl_dyadic_h_
 #define vipl_dyadic_h_
-//:
+// :
 // \file
 // \brief apply any (fixed) function to all (out,in) pixel pairs
 //
@@ -30,30 +30,32 @@
 
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
-//: apply any (fixed) function to all (out,in) pixel pairs
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
-class vipl_dyadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
+// : apply any (fixed) function to all (out,in) pixel pairs
+template <class ImgIn, class ImgOut, class DataIn, class DataOut,
+          VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter)>
+class vipl_dyadic : public vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>
 {
- public:
-  typedef void (*DyadicFunction)(DataOut&, DataIn const&);
+public:
+  typedef void (* DyadicFunction)(DataOut &, DataIn const &);
   // -+-+- data members: -+-+-
- private: DyadicFunction func_;
- public: DyadicFunction func() const { return func_; }
+private: DyadicFunction func_;
+public: DyadicFunction func() const { return func_; }
 
   // -+-+- constructors/destructors: -+-+-
- public:
+public:
   inline vipl_dyadic(DyadicFunction f)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(), func_(f) {}
   inline vipl_dyadic(vipl_dyadic const& A)
-    : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), func_(A.func()) {}
+    : vipl_filter_2d<ImgIn, ImgOut, DataIn, DataOut, PixelItr>(A), func_(A.func() ) {}
   inline ~vipl_dyadic() {}
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();
+
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_dyadic.txx"
+#  include "vipl_dyadic.txx"
 #endif
 
 #endif // vipl_dyadic_h_

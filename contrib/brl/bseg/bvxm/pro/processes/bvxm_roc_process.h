@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_roc_process.h
 #ifndef bvxm_roc_process_h_
 #define bvxm_roc_process_h_
-//:
+// :
 // \file
 // \brief A class for obtaining roc curve from change detection results.
 //
@@ -15,11 +15,11 @@
 
 #include <bprb/bprb_func_process.h>
 
-//: global variables
+// : global variables
 namespace bvxm_roc_process_globals
 {
-  const unsigned int n_inputs_ = 3;
-  const unsigned int n_outputs_ = 0;
+const unsigned int n_inputs_ = 3;
+const unsigned int n_outputs_ = 0;
 }
 
 bool bvxm_roc_process_cons(bprb_func_process& pro);

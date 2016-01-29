@@ -1,8 +1,8 @@
 // This is oxl/vrml/vrml_out.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 
 #include "vrml_out.h"
@@ -20,37 +20,39 @@ vrml_out::vrml_out()
   own_ostream_ = false;
 }
 
-//: Point vrml output to this stream
+// : Point vrml output to this stream
 vrml_out::vrml_out(vcl_ostream& s)
 {
   s_ = &s;
   own_ostream_ = false;
 }
 
-//: Open filename for writing, write prologue, and on closure write epilogue
+// : Open filename for writing, write prologue, and on closure write epilogue
 vrml_out::vrml_out(char const* filename)
 {
   s_ = new vcl_ofstream(filename);
   own_ostream_ = true;
-  if (!s_ || !(*s_)) {
+  if( !s_ || !(*s_) )
+    {
     vcl_cerr << "Cannot open " << filename << " for writing\n";
     delete s_; s_ = 0; own_ostream_ = false;
-  }
-  else prologue();
+    }
+  else {prologue(); }
 }
 
-//: Destructor.  If we own the vcl_ostream, write the epilogue
+// : Destructor.  If we own the vcl_ostream, write the epilogue
 vrml_out::~vrml_out()
 {
-  if (own_ostream_) {
+  if( own_ostream_ )
+    {
     epilogue();
     delete s_;
-  }
+    }
 }
 
-#define SETUP if (s_ == 0) { vcl_cerr << "vrml_out -- vcl_ostream not set!\n"; return; } vcl_ostream& f = *s_
+#define SETUP if( s_ == 0 ) { vcl_cerr << "vrml_out -- vcl_ostream not set!\n"; return; } vcl_ostream& f = *s_
 
-//: Write vrml_out header and an opening "Separator {"
+// : Write vrml_out header and an opening "Separator {"
 void vrml_out::prologue()
 {
   SETUP;
@@ -60,7 +62,7 @@ void vrml_out::prologue()
     << "ShapeHints {\n"
     << "\t vertexOrdering  CLOCKWISE\n"
     << "\t shapeType       UNKNOWN_SHAPE_TYPE\n"
-#if 0 // vrweb barfs on the following line if faces are triangles...
+#if 0                                            // vrweb barfs on the following line if faces are triangles...
     << "\t faceType        UNKNOWN_FACE_TYPE\n"; // Not necessarily convex
 #endif
     << "}\n";
@@ -78,7 +80,7 @@ void vrml_out::verbatim(char const* msg)
   f << msg << vcl_endl;
 }
 
-//: Write closing "}"
+// : Write closing "}"
 void vrml_out::epilogue()
 {
   SETUP;
@@ -90,15 +92,18 @@ void vrml_out::epilogue()
 void vrml_out::write_vertices(vcl_vector<vgl_point_3d<double> > const& points)
 {
   begin_pointset();
-  for (vcl_vector<vgl_point_3d<double> >::const_iterator it = points.begin();
-       it != points.end(); ++it)
+  for( vcl_vector<vgl_point_3d<double> >::const_iterator it = points.begin();
+       it != points.end(); ++it )
+    {
     point3d(*it);
+    }
   end_pointset();
   display_pointset();
 }
+
 #endif
 
-void vrml_out::display_pointset ()
+void vrml_out::display_pointset()
 {
   SETUP;
   f << "PointSet {}\n";
@@ -108,29 +113,33 @@ void vrml_out::display_pointset ()
 
 #if 0 // commented out
 struct VRML_IO_VertexRememberer
-{
+  {
   vrml_out* vrml_;
-  typedef vcl_map<void*, int, vcl_less<void*> > Map;
+  typedef vcl_map<void *, int, vcl_less<void *> > Map;
   Map vertex_ids;
   int current_vertex_id;
 
   VRML_IO_VertexRememberer(vrml_out* vrml, int /*approx_numverts*/)
     : vrml_(vrml), current_vertex_id(0) {}
-  bool send_vertex(void*);
-  int vertex_id(void*);
-};
+  bool send_vertex(void *);
 
-//: Return true if it was a new vertex.
+  int vertex_id(void *);
+
+  };
+
+// : Return true if it was a new vertex.
 bool VRML_IO_VertexRememberer::send_vertex(void* v)
 {
   Map::iterator p = vertex_ids.find(v);
-  if (p != vertex_ids.end()) {
+
+  if( p != vertex_ids.end() )
+    {
     // Has already been sent, ignore.
     return false;
-  }
+    }
 
   // Not there already, write the vertex and give it an index
-  vertex_ids.insert(Map::value_type(v, current_vertex_id++));
+  vertex_ids.insert(Map::value_type(v, current_vertex_id++) );
   vrml_->point3d(v);
 
   return true;
@@ -139,8 +148,11 @@ bool VRML_IO_VertexRememberer::send_vertex(void* v)
 int VRML_IO_VertexRememberer::vertex_id(vgl_point_3d<double> v)
 {
   Map::iterator p = vertex_ids.find(v);
-  if (p != vertex_ids.end())
+
+  if( p != vertex_ids.end() )
+    {
     return (*p).second;
+    }
 
   vcl_cerr << "VRML_IO_VertexRememberer::vertex_ids() WARNING! "
            << "This can't happen -- vertex " << v << " has no id.  Fnarrr.\n";
@@ -155,78 +167,89 @@ void vrml_out::write_edges(vcl_list<vgl_line_segment_3d<double> >& edges)
   // Start sending vertices
   begin_pointset();
   VRML_IO_VertexRememberer vertexer(this, edges.length() * 2);
-  for (edges.reset(); edges.next(); ) {
-    vertexer.send_vertex(edges.value()->GetV1());
-    vertexer.send_vertex(edges.value()->GetV2());
-  }
+  for( edges.reset(); edges.next(); )
+    {
+    vertexer.send_vertex(edges.value()->GetV1() );
+    vertexer.send_vertex(edges.value()->GetV2() );
+    }
   end_pointset();
 
   begin_lineset();
-  for (edges.reset(); edges.next(); ) {
-    int i0 = vertexer.vertex_id(edges.value()->GetV1());
-    int i1 = vertexer.vertex_id(edges.value()->GetV2());
+  for( edges.reset(); edges.next(); )
+    {
+    int i0 = vertexer.vertex_id(edges.value()->GetV1() );
+    int i1 = vertexer.vertex_id(edges.value()->GetV2() );
     line(i0, i1);
-  }
+    }
   end_lineset();
 }
 
 void vrml_out::write_faces(vcl_list<vgl_polygon<float> >& triangles)
 {
-  VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
+  VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3 / 2);
 
   // Send vertices
   begin_pointset();
-  for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon<float> face = triangles.value();
+  for( triangles.reset(); triangles.next(); )
+    {
+    vgl_polygon<float>              face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
-    for (vertices->reset(); vertices->next();)
-      vertexer.send_vertex(vertices->value());
-  }
+    for( vertices->reset(); vertices->next(); )
+      {
+      vertexer.send_vertex(vertices->value() );
+      }
+    }
   end_pointset();
 
   // Now send triangles
   begin_faceset();
-  for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon<float> face = triangles.value();
+  for( triangles.reset(); triangles.next(); )
+    {
+    vgl_polygon<float>              face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
-    for (vertices->reset(); vertices->next();)
-      face_index(vertexer.vertex_id(vertices->value()));
+    for( vertices->reset(); vertices->next(); )
+      {
+      face_index(vertexer.vertex_id(vertices->value() ) );
+      }
     face_close();
-  }
+    }
   end_faceset();
 }
 
 void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
                                     char const* texfile,
                                     vrml_out_vertex_to_texture const& v2t
-                                   )
+                                    )
 {
-  VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3/2);
+  VRML_IO_VertexRememberer vertexer(this, triangles.length() * 3 / 2);
 
   vcl_ofstream phil3d("/tmp/pcptex.3d");
   vcl_ofstream phil2d("/tmp/pcptex.2d");
 
   begin_pointset();
-  for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon<float> face = triangles.value();
+  for( triangles.reset(); triangles.next(); )
+    {
+    vgl_polygon<float>              face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
-    for (vertices->reset(); vertices->next();) {
-      Vertex *v = vertices->value();
-      if (vertexer.send_vertex(v)) {
+    for( vertices->reset(); vertices->next(); )
+      {
+      Vertex * v = vertices->value();
+      if( vertexer.send_vertex(v) )
+        {
         // Save pcp3d
         phil3d << v->GetX() << ' ' << v->GetY() << ' ' << v->GetZ() << vcl_endl;
         // Save pcp texture coord
-        int xsize = v2t.image_xsize;
-        int ysize = v2t.image_ysize;
+        int    xsize = v2t.image_xsize;
+        int    ysize = v2t.image_ysize;
         double ix, iy;
         v2t.get_texture_coords(v, &ix, &iy);
         ix = ix / xsize;
         iy = 1.0 - iy / ysize;
         phil2d << ix << ' ' << iy << vcl_endl;
+        }
       }
     }
-  }
   end_pointset();
 
   // Send texture coordinates
@@ -235,43 +258,49 @@ void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
 
   begin_texture(texfile);
   int last_id = -1;
-  for (triangles.reset(); triangles.next(); )
-  {
-    vgl_polygon<float> face = triangles.value();
-    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
-    for (vertices->reset(); vertices->next();)
+  for( triangles.reset(); triangles.next(); )
     {
-      Vertex *v = vertices->value();
-      int id = vertexer.vertex_id(v);
-      if (id > last_id) {
-        if (last_id + 1 != id)
+    vgl_polygon<float>              face = triangles.value();
+    vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
+    for( vertices->reset(); vertices->next(); )
+      {
+      Vertex * v = vertices->value();
+      int      id = vertexer.vertex_id(v);
+      if( id > last_id )
+        {
+        if( last_id + 1 != id )
+          {
           vcl_cerr << "vrml_out::write_faces_textured() -- texture buggered\n";
+          }
         ++last_id;
 
         double ix, iy;
         v2t.get_texture_coords(v, &ix, &iy);
 
         texture2_image_coords(ix, iy, xsize, ysize);
+        }
       }
     }
-  }
   end_texture();
 
   // Now send triangles
   begin_faceset();
-  for (triangles.reset(); triangles.next(); ) {
-    vgl_polygon<float> face = triangles.value();
+  for( triangles.reset(); triangles.next(); )
+    {
+    vgl_polygon<float>              face = triangles.value();
     vcl_list<vgl_point_3d<double> > vertices = face->Vertices();
     face_open();
-    for (vertices->reset(); vertices->next();)
-      face_index(vertexer.vertex_id(vertices->value()));
+    for( vertices->reset(); vertices->next(); )
+      {
+      face_index(vertexer.vertex_id(vertices->value() ) );
+      }
     face_close();
-  }
+    }
   end_faceset();
 }
 
 struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
-{
+  {
   Hack_VertexToTexture(int xsize, int ysize)
     : vrml_out_vertex_to_texture(xsize, ysize) {}
 
@@ -284,15 +313,17 @@ struct Hack_VertexToTexture : public vrml_out_vertex_to_texture
 
     // Ugh ugh - assume C = [f 0 u; 0 f v; 0 0 1];
     double fhak = (image_xsize + image_ysize) * 0.5; // FIXME
+
     *u = tu * fhak + 0.5 * image_xsize; // 0..xsize
     *v = tv * fhak + 0.5 * image_ysize; // 0..ysize
   }
-};
+
+  };
 
 void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
                                     char const* imagefilename,
                                     int xsize, int ysize
-                                   )
+                                    )
 {
   vcl_cerr << "vrml_out::write_faces_textured() -- hacking image-world transform\n";
   Hack_VertexToTexture hack(xsize, ysize);
@@ -301,20 +332,20 @@ void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
 
 class VTT : public vrml_out_vertex_to_texture
 {
- public:
+public:
   VTT(int xsize, int ysize, vnl_matrix<double> const& m)
-        : vrml_out_vertex_to_texture(xsize, ysize), Pmatrix(m) {}
+    : vrml_out_vertex_to_texture(xsize, ysize), Pmatrix(m) {}
 
   void get_texture_coords(
-        const vgl_point_3d<double> vertex,
-        double* u,
-        double* v) const
-      {
-        vnl_vector<double> p3d(4, vertex->GetX(), vertex->GetY(), vertex->GetZ(), 1.0);
-        vnl_vector<double> p2d = Pmatrix*p3d;
-        *u = p2d.x() / p2d.z(); // ==> texture coordinate *u / image_xsize;
-        *v = p2d.y() / p2d.z(); // ==> texture coordinate 1 - *v / image_ysize;
-      }
+    const vgl_point_3d<double> vertex,
+    double* u,
+    double* v) const
+  {
+    vnl_vector<double> p3d(4, vertex->GetX(), vertex->GetY(), vertex->GetZ(), 1.0);
+    vnl_vector<double> p2d = Pmatrix * p3d;
+    *u = p2d.x() / p2d.z();     // ==> texture coordinate *u / image_xsize;
+    *v = p2d.y() / p2d.z();     // ==> texture coordinate 1 - *v / image_ysize;
+  }
 
   vnl_matrix<double> Pmatrix;
 };
@@ -323,64 +354,71 @@ void vrml_out::write_faces_textured(vcl_list<vgl_polygon<float> >& triangles,
                                     char const* imagefilename,
                                     int xsize, int ysize,
                                     vnl_matrix<double> const& Pmatrix
-                                   )
+                                    )
 {
   VTT vtt(xsize, ysize, Pmatrix);
+
   write_faces_textured(triangles, imagefilename, vtt);
 }
 
 void vrml_out::write_block(Block* block)
 {
-  write_faces(*block->Faces());
+  write_faces(*block->Faces() );
 }
 
 void vrml_out::write_topology(TopologyObject* topobj)
 {
   SETUP;
   Block* block = topobj->CastToBlock();
-  if (block) {
+  if( block )
+    {
     begin_separator();
-    write_faces(*block->Faces());
+    write_faces(*block->Faces() );
     end_separator();
     return;
-  }
+    }
 
   vgl_polygon<float> face = topobj->CastToFace();
-  if (face) {
+  if( face )
+    {
     begin_separator();
     vcl_list<vgl_polygon<float> > faces; faces.push(face);
     write_faces(faces);
     end_separator();
     return;
-  }
+    }
 
   vgl_line_segment_3d<double> edge = topobj->CastToEdge();
-  if (edge) {
+  if( edge )
+    {
     begin_separator();
     vcl_list<vgl_line_segment_3d<double> > edges(edge);
     write_edges(edges);
     end_separator();
     return;
-  }
+    }
 
   vgl_point_3d<double> vertex = topobj->CastToVertex();
-  if (vertex) {
+  if( vertex )
+    {
     begin_separator();
     vcl_list<vgl_point_3d<double> > vertices(vertex);
     write_vertices(vertices);
     end_separator();
     return;
-  }
+    }
 
   vcl_cerr << "VRML: not handling " << topobj << vcl_endl;
   f << "# vrml_out: Couldn't handle "
     << TopologyObject::TopoNames[topobj->GetTopologyType()] << vcl_endl;
 }
 
-void vrml_out::write_topology(vcl_list<TopologyObject*>& topobjs)
+void vrml_out::write_topology(vcl_list<TopologyObject *>& topobjs)
 {
-  for (topobjs.reset(); topobjs.next(); )
-    write_topology(topobjs.value());
+  for( topobjs.reset(); topobjs.next(); )
+    {
+    write_topology(topobjs.value() );
+    }
 }
 
 #endif // 0
@@ -410,7 +448,7 @@ void vrml_out::point3d(double x, double y, double z)
   vul_printf(f, "\t %10.4f %10.4f %10.4f,\n", x, y, z);
 }
 
-void vrml_out::point3d(double x, double y, double z, const char *format)
+void vrml_out::point3d(double x, double y, double z, const char * format)
 {
   SETUP;
   vul_printf(f, "\t ");
@@ -510,8 +548,10 @@ void vrml_out::face(const int* base, int n)
 {
   SETUP;
   f << '\t';
-  for (int i = 0; i < n; ++i)
+  for( int i = 0; i < n; ++i )
+    {
     f << base[i] << ", ";
+    }
   f << "-1,\n";
 }
 

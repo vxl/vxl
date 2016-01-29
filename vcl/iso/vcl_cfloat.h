@@ -6,9 +6,9 @@
 #include <cfloat>
 
 #ifdef vcl_generic_cfloat_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cfloat_STD std
+#  define vcl_generic_cfloat_STD std
 #endif
 
 #include "../generic/vcl_cfloat.h"

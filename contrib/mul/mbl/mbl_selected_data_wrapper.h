@@ -2,9 +2,9 @@
 #ifndef mbl_selected_data_wrapper_h
 #define mbl_selected_data_wrapper_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Ian Scott
 // \brief A subset of an existing mbl_data_wrapper.
@@ -13,74 +13,73 @@
 #include <vcl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 
-//: A subset of an existing mbl_data_wrapper.
+// : A subset of an existing mbl_data_wrapper.
 // This wraps another mbl_data_wrapper, and acts like a rearrangement
 // of the original data. The rearrangement does not have to refer
 // to all of the original data, and can refer to the same data more than
 // once.
 
 template <class T>
-class mbl_selected_data_wrapper: public mbl_data_wrapper<T>
+class mbl_selected_data_wrapper : public mbl_data_wrapper<T>
 {
-  mbl_data_wrapper<T> *data_;
-  vcl_vector<unsigned> selection_;
-  unsigned index_;
- public:
-  //: Copy constructor.
+  mbl_data_wrapper<T> * data_;
+  vcl_vector<unsigned>  selection_;
+  unsigned              index_;
+public:
+  // : Copy constructor.
   mbl_selected_data_wrapper(const mbl_selected_data_wrapper<T>& p);
 
-  //: Constructor.
+  // : Constructor.
   // This will take its own copy of selection and the data wrapper,
   // but not the underlying data.
-  mbl_selected_data_wrapper(const mbl_data_wrapper<T>& data,
-                            const vcl_vector<unsigned> &subset);
+  mbl_selected_data_wrapper(const mbl_data_wrapper<T>& data, const vcl_vector<unsigned> & subset);
 
-  //: Default constructor.
+  // : Default constructor.
   mbl_selected_data_wrapper();
 
-  //: Default destructor.
+  // : Default destructor.
   virtual ~mbl_selected_data_wrapper();
 
-  //: Copy operator.
-  mbl_selected_data_wrapper<T>& operator=(const mbl_selected_data_wrapper<T>& b);
+  // : Copy operator.
+  mbl_selected_data_wrapper<T> & operator=(const mbl_selected_data_wrapper<T>& b);
 
-  //: Set the wrappers data.
+  // : Set the wrappers data.
   // This will take its own copy of selection and the data wrapper,
   // but not the underlying data.
-  void set(const mbl_data_wrapper<T>& data,
-    const vcl_vector<unsigned> &selection);
+  void set(const mbl_data_wrapper<T>& data, const vcl_vector<unsigned> & selection);
 
-  //: Number of objects available.
+  // : Number of objects available.
   virtual unsigned long size() const;
 
-  //: Reset so that current() returns first object.
+  // : Reset so that current() returns first object.
   virtual void reset();
 
-  //: Return current object.
-  virtual const T& current();
+  // : Return current object.
+  virtual const T & current();
 
-  //: Move to next object, returning true if is valid.
+  // : Move to next object, returning true if is valid.
   virtual bool next();
 
-  //: Return current index.
+  // : Return current index.
   //  First example has index 0
   virtual unsigned long index() const;
 
-  //: Move to element n.
+  // : Move to element n.
   //  First example has index 0
   virtual void set_index(unsigned long n);
 
-  //: Create copy on heap and return base pointer.
+  // : Create copy on heap and return base pointer.
   // This will create an independent iterator on the underlying data.
   // The original data is not copied.
   // Be careful of destruction of underlying data.
-  virtual mbl_data_wrapper< T >* clone() const ;
+  virtual mbl_data_wrapper<T> * clone() const;
 
-  //: Name of the class.
+  // : Name of the class.
   virtual vcl_string is_a() const;
 
-  //: True if this is (or is derived from) class named s
+  // : True if this is (or is derived from) class named s
   virtual bool is_class(vcl_string const& s) const;
+
 };
 
 #endif // mbl_selected_data_wrapper_h

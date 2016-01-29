@@ -24,6 +24,4 @@ void run_test_pdf1d()
   test_compare_to_pdf_ks();
 }
 
-
 TESTLIB_DEFINE_MAIN(run_test_pdf1d);
-

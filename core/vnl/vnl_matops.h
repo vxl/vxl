@@ -2,9 +2,9 @@
 #ifndef vnl_matops_h_
 #define vnl_matops_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief A collection of Matrix operations
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -16,30 +16,36 @@
 //   LSB (Manchester) 23/3/01 Documentation tidied
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
-//:   A collection of vnl_matrix operations, provided as static methods.
+// :   A collection of vnl_matrix operations, provided as static methods.
 //    Highlights include matrix glueing, and type conversions.
 //    matlab_print has been moved to vnl_matlab_print.h.
 class vnl_matops
 {
- public:
+public:
   static double homg_diff(vnl_matrix<double> const& A, vnl_matrix<double> const& B);
 
-  //: Laminating
+  // : Laminating
   static vnl_matrix<double> cat(vnl_matrix<double> const& A, vnl_matrix<double> const& B);
+
   static vnl_matrix<double> cat(vnl_matrix<double> const& A, vnl_vector<double> const& B);
+
   static vnl_matrix<double> cat(vnl_vector<double> const& A, vnl_matrix<double> const& B);
 
   static vnl_matrix<double> vcat(vnl_matrix<double> const& A, vnl_matrix<double> const& B);
 
-  //: Conversions
-  static vnl_matrix<double> f2d(vnl_matrix<float> const&);
-  static vnl_vector<double> f2d(vnl_vector<float> const&);
-  static vnl_matrix<float>  d2f(vnl_matrix<double> const&);
-  static vnl_vector<float>  d2f(vnl_vector<double> const&);
+  // : Conversions
+  static vnl_matrix<double> f2d(vnl_matrix<float> const &);
+
+  static vnl_vector<double> f2d(vnl_vector<float> const &);
+
+  static vnl_matrix<float>  d2f(vnl_matrix<double> const &);
+
+  static vnl_vector<float>  d2f(vnl_vector<double> const &);
+
 };
 
 #endif // vnl_matops_h_

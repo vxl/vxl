@@ -4,7 +4,7 @@
 #include <bprb/bprb_func_process.h>
 #include <bprb/bprb_macros.h>
 
-//the init functions
+// the init functions
 DECLARE_FUNC_CONS(boxm_opt_bayesian_update_process);
 DECLARE_FUNC_CONS(boxm_update_rt_process);
 DECLARE_FUNC_CONS(boxm_render_expected_rt_process);
@@ -24,6 +24,5 @@ DECLARE_FUNC_CONS(boxm_ray_statistics_process);
 DECLARE_FUNC_CONS(boxm_change_probability_process);
 DECLARE_FUNC_CONS(boxm_estimate_camera_process);
 DECLARE_FUNC_CONS(boxm_edge_refine_updates_process);
-
 
 #endif

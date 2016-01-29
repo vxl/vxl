@@ -5,15 +5,15 @@
 
 // type_info
 #ifndef vcl_type_info
-#define vcl_type_info vcl_generic_typeinfo_STD :: type_info
+#  define vcl_type_info vcl_generic_typeinfo_STD::type_info
 #endif
 // bad_cast
 #ifndef vcl_bad_cast
-#define vcl_bad_cast vcl_generic_typeinfo_STD :: bad_cast
+#  define vcl_bad_cast vcl_generic_typeinfo_STD::bad_cast
 #endif
 // bad_typeid
 #ifndef vcl_bad_typeid
-#define vcl_bad_typeid vcl_generic_typeinfo_STD :: bad_typeid
+#  define vcl_bad_typeid vcl_generic_typeinfo_STD::bad_typeid
 #endif
 
 #endif // vcl_generic_typeinfo_h_

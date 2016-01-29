@@ -1,9 +1,9 @@
 #include "osl_harris_params.h"
 
-//:
+// :
 //  \file
 
-//: Make default osl_harris_params object
+// : Make default osl_harris_params object
 osl_harris_params::osl_harris_params()
 {
   set_defaults();
@@ -35,7 +35,7 @@ void osl_harris_params::set_defaults()
   col_start_index = 0;
   row_start_index = 0;
   pab_emulate = false;
-  //----------
+  // ----------
   corner_count_max = 300;
   gauss_sigma = 0.7f;
   relative_minimum = 0.00001f;

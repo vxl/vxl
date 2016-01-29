@@ -2,4 +2,4 @@
 #include <boxm/sample/boxm_opt2_sample.h>
 
 typedef boxm_opt2_sample<float> sample;
-BOCT_TREE_CELL_READER_INSTANTIATE(short,sample);
+BOCT_TREE_CELL_READER_INSTANTIATE(short, sample);

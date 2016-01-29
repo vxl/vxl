@@ -9,14 +9,15 @@
 // .SECTION Modifications
 //    fsm. various ports and modifications.
 
-class osl_harris_params {
+class osl_harris_params
+{
 public:
   osl_harris_params();
   osl_harris_params(int max_corners_max, float gauss_sigma);
   osl_harris_params(int max_corners_max, float gauss_sigma, float relative_minimum, float scale_factor);
   void set_adaptive(int corner_count_low, int adaptive_window_size, float density_thresh);
 
-  //------------------------------------------------------------
+  // ------------------------------------------------------------
 
   //
   bool verbose;
@@ -28,7 +29,7 @@ public:
   //
   bool pab_emulate;
 
-  //------------------------------------------------------------
+  // ------------------------------------------------------------
 
   //  max no of corners wanted.
   int corner_count_max;
@@ -43,14 +44,14 @@ public:
   float scale_factor;
 
   // Adaptive parameters
-  bool adaptive;
-  int adaptive_window_size;
-  int corner_count_low; // Accept all corners with the top "corner_count_low" strengths
-  float density_thresh; // Accept corners between low and max if the local density is less than this.
+  bool  adaptive;
+  int   adaptive_window_size;
+  int   corner_count_low; // Accept all corners with the top "corner_count_low" strengths
+  float density_thresh;   // Accept corners between low and max if the local density is less than this.
   // "density" means number of corners in a 10x10 window.
-
 private:
   void set_defaults();
+
 };
 
 #endif // osl_harris_params_h_

@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_edgemap_ortho_process.h
 #ifndef bvxm_edgemap_ortho_process_h_
 #define bvxm_edgemap_ortho_process_h_
-//:
+// :
 // \file
 // \brief A class for generating an orthographic edge map
 //        creates an orthographic vpgl_geo_camera first, then renders the edge map using this camera
@@ -22,14 +22,14 @@
 #include <bprb/bprb_func_process.h>
 
 // generate an edge map with an ortho camera - generate a vpgl_geo_camera for the scene
-//: global variables
+// : global variables
 namespace bvxm_edgemap_ortho_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 4;
+const unsigned n_inputs_ = 2;
+const unsigned n_outputs_ = 4;
 }
 
-//: set input and output types
+// : set input and output types
 bool bvxm_edgemap_ortho_process_cons(bprb_func_process& pro);
 
 // generates an edge map using an ortho camera constructed from the scene bounding box, GSD of the image is 1 meter

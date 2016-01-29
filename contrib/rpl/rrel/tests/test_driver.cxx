@@ -1,6 +1,5 @@
 #include <testlib/testlib_register.h>
 
-
 DECLARE( test_similarity_from_matches );
 DECLARE( test_homography2d_est );
 DECLARE( test_shift2d_est );
@@ -39,10 +38,11 @@ DEFINE_MAIN;
 double noise( double sigma )
 {
   static vnl_random rand;
+
   return rand.normal() * sigma;
 }
 
 bool close( double a, double b )
 {
-  return vcl_fabs(a-b) < 1e-5;
+  return vcl_fabs(a - b) < 1e-5;
 }

@@ -2,9 +2,9 @@
 #ifndef vsl_binary_loader_h_
 #define vsl_binary_loader_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Loader to do Polymorphic IO.
 // \author Ian Scott, Tim Cootes (Manchester) March 2001
@@ -16,7 +16,7 @@
 #include <vsl/vsl_binary_loader_base.h>
 #include <vcl_vector.h>
 
-//: Class to load objects by baseclass pointer.
+// : Class to load objects by baseclass pointer.
 // An example of a singleton design pattern for loading
 // a DerivedClass from a stream into a BaseClass*.
 // All we are given is a BaseClass* into which
@@ -45,61 +45,60 @@
 // and saving by base class pointer
 //
 // All loader singletons can be deleted using vsl_delete_all_loaders()
-template<class BaseClass>
+template <class BaseClass>
 class vsl_binary_loader : public vsl_binary_loader_base
 {
-  //: the singleton object
+  // : the singleton object
   static vsl_binary_loader<BaseClass>* instance_;
 
-  //: List of concrete classes that this loader can deal with
-  vcl_vector<BaseClass*> object_;
-
- public :
-  //: Constructor
+  // : List of concrete classes that this loader can deal with
+  vcl_vector<BaseClass *> object_;
+public:
+  // : Constructor
   vsl_binary_loader() {}
 
-  //: Destructor
+  // : Destructor
   ~vsl_binary_loader();
 
-  //: Returns the instance variable for the singleton.
-  static vsl_binary_loader<BaseClass>& instance();
+  // : Returns the instance variable for the singleton.
+  static vsl_binary_loader<BaseClass> & instance();
 
-  //: Remove all example objects
+  // : Remove all example objects
   void make_empty();
 
-  //: Add example object to list of those that can be loaded
-  void add( const BaseClass& b) { object_.push_back(b.clone());}
+  // : Add example object to list of those that can be loaded
+  void add( const BaseClass& b) { object_.push_back(b.clone() ); }
 
-  //: Return current list of class objects which can be loaded
-  const vcl_vector<BaseClass*>& object() { return object_; }
+  // : Return current list of class objects which can be loaded
+  const vcl_vector<BaseClass *> & object() { return object_; }
 
-  //: Loads object and sets base class pointer
+  // : Loads object and sets base class pointer
   //  Determines which derived class object on is belongs
   //  to, loads it and sets b to be a pointer to it.
   //  (Class must be one given to Loader by the add method).
   //  If is indicates a NULL pointer, b will be set to NULL.
   //  If b not initially NULL, *b will be deleted.
-  void load_object( vsl_b_istream& is, BaseClass*& b);
+  void load_object( vsl_b_istream& is, BaseClass *& b);
 
   vcl_string is_a() const;
+
 };
 
-
-//: Loads object and sets base class pointer
+// : Loads object and sets base class pointer
 //  Determines which derived class object on bfs belongs
 //  to, loads it and sets b to be a pointer to it.
 //  (Class must be one given to Loader by the append method).
 //  If bfs indicates a NULL pointer, b will be set to NULL.
 //  If b not initially NULL, *b will be deleted.
-template<class BaseClass>
-inline void vsl_b_read( vsl_b_istream& bfs, BaseClass*& b)
+template <class BaseClass>
+inline void vsl_b_read( vsl_b_istream& bfs, BaseClass *& b)
 {
-  vsl_binary_loader<BaseClass>::instance().load_object(bfs,b);
+  vsl_binary_loader<BaseClass>::instance().load_object(bfs, b);
 }
 
-//: Binary file stream output operator for pointer to class
+// : Binary file stream output operator for pointer to class
 //  This works correctly even if b is a NULL pointer
-template<class BaseClass>
+template <class BaseClass>
 void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b);
 
 #endif // vsl_binary_loader_h_

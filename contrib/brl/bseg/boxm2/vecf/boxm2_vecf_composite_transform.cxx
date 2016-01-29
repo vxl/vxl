@@ -7,44 +7,45 @@
 #include <vgl/vgl_point_3d.h>
 #include <vcl_stdexcept.h>
 
-boxm2_vecf_composite_transform::
-boxm2_vecf_composite_transform(vcl_vector<boxm2_vecf_vector_field_base_sptr> xforms)
+boxm2_vecf_composite_transform::boxm2_vecf_composite_transform(vcl_vector<boxm2_vecf_vector_field_base_sptr> xforms)
   : xforms_(xforms)
 {
-  if (xforms_.size() == 0) {
+  if( xforms_.size() == 0 )
+    {
     throw vcl_runtime_error("boxm2_vecf_composite_transform passed an empty vector of transforms");
-  }
+    }
 }
 
-
-bool boxm2_vecf_composite_transform::
-compute_forward_transform(boxm2_scene_sptr source,
-                          boxm2_block_id const& blk_id,
-                          const boxm2_data_traits<BOXM2_POINT>::datatype *source_pts,
-                          boxm2_data_traits<BOXM2_POINT>::datatype *target_pts)
+bool boxm2_vecf_composite_transform::compute_forward_transform(boxm2_scene_sptr source,
+                                                               boxm2_block_id const& blk_id,
+                                                               const boxm2_data_traits<BOXM2_POINT>::datatype * source_pts,
+                                                               boxm2_data_traits<BOXM2_POINT>::datatype * target_pts)
 {
   // first transform maps source pts to target pts
   bool result = xforms_[0]->compute_forward_transform(source, blk_id, source_pts, target_pts);
+
   // the remaining transforms take target pts as input
-  for (unsigned i=1; i<xforms_.size(); ++i) {
+  for( unsigned i = 1; i < xforms_.size(); ++i )
+    {
     result &= xforms_[i]->compute_forward_transform(source, blk_id, target_pts, target_pts);
-  }
+    }
   return result;
 }
 
-//: write the locations of the cooresponding source points to target's BOXM2_POINT data
-bool boxm2_vecf_composite_transform::
-compute_inverse_transform(boxm2_scene_sptr target,
-                          boxm2_block_id const& blk_id,
-                          const boxm2_data_traits<BOXM2_POINT>::datatype *target_pts,
-                          boxm2_data_traits<BOXM2_POINT>::datatype *source_pts)
+// : write the locations of the cooresponding source points to target's BOXM2_POINT data
+bool boxm2_vecf_composite_transform::compute_inverse_transform(boxm2_scene_sptr target,
+                                                               boxm2_block_id const& blk_id,
+                                                               const boxm2_data_traits<BOXM2_POINT>::datatype * target_pts,
+                                                               boxm2_data_traits<BOXM2_POINT>::datatype * source_pts)
 {
   // inverse transform applies list of inverse transforms in reverse order
   // last transform maps target pts to source pts
   bool result = xforms_.back()->compute_inverse_transform(target, blk_id, target_pts, source_pts);
+
   // the remaining transforms take source pts as input
-  for (int i=xforms_.size()-2; i>=0; --i) {
+  for( int i = xforms_.size() - 2; i >= 0; --i )
+    {
     result &= xforms_[i]->compute_inverse_transform(target, blk_id, source_pts, source_pts);
-  }
+    }
   return result;
 }

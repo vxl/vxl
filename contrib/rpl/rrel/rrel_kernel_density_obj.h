@@ -1,6 +1,6 @@
 #ifndef rrel_kernel_density_obj_h_
 #define rrel_kernel_density_obj_h_
-//:
+// :
 //  \file
 //  \brief Kernel Density objective function
 //  \author Ying-Lin Bess Lee (leey@cs.rpi.edu)
@@ -10,8 +10,7 @@
 
 enum rrel_kernel_scale_type { RREL_KERNEL_MAD, RREL_KERNEL_PRIOR, RREL_KERNEL_MUSE };
 
-
-//: Kernel Density objective function.
+// : Kernel Density objective function.
 //  Implements the Kernel Density Estimation as presented in the
 //  paper "Robust Computer Vision through Kernel Density" by Chen
 //  and Meer, 2002.
@@ -26,57 +25,53 @@ enum rrel_kernel_scale_type { RREL_KERNEL_MAD, RREL_KERNEL_PRIOR, RREL_KERNEL_MU
 
 class rrel_kernel_density_obj : public rrel_objective
 {
- public:
-  //: Constructor.
-  rrel_kernel_density_obj(rrel_kernel_scale_type scale_type=RREL_KERNEL_MAD);
+public:
+  // : Constructor.
+  rrel_kernel_density_obj(rrel_kernel_scale_type scale_type = RREL_KERNEL_MAD);
 
-  //: Destructor.
+  // : Destructor.
   virtual ~rrel_kernel_density_obj() {}
 
-  //: Evaluate the objective function on heteroscedastic residuals.
+  // : Evaluate the objective function on heteroscedastic residuals.
   //  Not implemented.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
-                      vect_const_iter scale_begin,
-                      vnl_vector<double>* param_vector=0 ) const;
+  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end, vect_const_iter scale_begin,
+                      vnl_vector<double>* param_vector = 0 ) const;
 
-  //: Evaluate the objective function on homoscedastic residuals.
+  // : Evaluate the objective function on homoscedastic residuals.
   //  prior_scale is needed if the type RREL_KERNEL_PRIOR is used.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
-                      double prior_scale = 0,
-                      vnl_vector<double>* = 0) const;
+  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end, double prior_scale = 0,
+                      vnl_vector<double> * = 0) const;
 
-  //: Set the type of the scale.
+  // : Set the type of the scale.
   //  RREL_KERNEL_MAD uses median absolute deviations to estimate the scale.
   //  RREL_KERNEL_PRIOR uses the prior scale provided.
   //  RREL_KERNEL_MUSE uses MUSE to estimate the scale.
   virtual void set_scale_type( rrel_kernel_scale_type t = RREL_KERNEL_MAD )
   { scale_type_ = t; }
 
-  //: Depends on the scale type used.
+  // : Depends on the scale type used.
   //  \sa rrel_objective::requires_prior_scale.
   virtual bool requires_prior_scale() const
   { return scale_type_ == RREL_KERNEL_PRIOR; }
 
-  //: x is set to 0;
+  // : x is set to 0;
   void fix_x() { fix_x_ = true; }
 
-  //: The mode of the density estimate which maximizes the estimated kernel density.
+  // : The mode of the density estimate which maximizes the estimated kernel density.
   //  The value can be used to shift the estimated parameters.
-  double best_x( vect_const_iter res_begin, vect_const_iter res_end,
-                 double scale = 0 ) const;
- private:
+  double best_x( vect_const_iter res_begin, vect_const_iter res_end, double scale = 0 ) const;
 
-  //: Calculate the bandwidth.
-  double bandwidth(vect_const_iter res_begin, vect_const_iter res_end,
-                   double prior_scale) const;
+private:
 
-  //: Given a kernel and the bandwidth, the estimated density of residuals.
-  double kernel_density(vect_const_iter res_begin, vect_const_iter res_end,
-                        double x, double h) const;
+  // : Calculate the bandwidth.
+  double bandwidth(vect_const_iter res_begin, vect_const_iter res_end, double prior_scale) const;
 
-  //: Kernel function K(u).
+  // : Given a kernel and the bandwidth, the estimated density of residuals.
+  double kernel_density(vect_const_iter res_begin, vect_const_iter res_end, double x, double h) const;
+
+  // : Kernel function K(u).
   double kernel_function(double u) const;
 
   rrel_kernel_scale_type scale_type_;

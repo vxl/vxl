@@ -23,19 +23,22 @@
 static void test_brec_hierarchy_builder()
 {
   vcl_string file = "normalized0_cropped.png";
-  //vcl_string file = "digits_small.png";
-  vil_image_resource_sptr img = vil_load_image_resource(file.c_str());
+  // vcl_string file = "digits_small.png";
+  vil_image_resource_sptr img = vil_load_image_resource(file.c_str() );
+
   TEST("test load img", !img, false);
 
-  if (!img)
+  if( !img )
+    {
     return;
+    }
 
   unsigned ni = img->ni(); unsigned nj = img->nj();
 
   vcl_cout << "image ni: " << ni << " nj: " << nj << vcl_endl;
 
   brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_detector_roi1_0();
-  //brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_eight_detector();
+  // brec_part_hierarchy_sptr h = brec_part_hierarchy_builder::construct_eight_detector();
 
   TEST("test hierarchy", !h, false);
   vcl_cout << "constructed: " << h->number_of_vertices() << " vertices in the vehicle detector for roi1\n"
@@ -44,32 +47,40 @@ static void test_brec_hierarchy_builder()
   vcl_vector<brec_part_instance_sptr> dumm_ins = h->get_dummy_primitive_instances();
 
   vcl_vector<brec_part_instance_sptr> parts_prims;
-  for (unsigned i = 0; i < dumm_ins.size(); i++) {
-    if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
+  for( unsigned i = 0; i < dumm_ins.size(); i++ )
+    {
+    if( dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN )
+      {
       brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
-      if (!extract_gaussian_primitives(img, p->lambda0_, p->lambda1_, p->theta_, p->bright_, p->cutoff_percentage_, 0.1f, p->type_, parts_prims))
+      if( !extract_gaussian_primitives(img, p->lambda0_, p->lambda1_, p->theta_, p->bright_, p->cutoff_percentage_,
+                                       0.1f, p->type_, parts_prims) )
+        {
         vcl_cout << "problems in extracting gaussian primitives!!\n";
+        }
+      }
     }
-  }
 
   vcl_cout << "\textracted " << parts_prims.size() << " primitives\n";
   unsigned ii = 0;
-  for (unsigned i = 0; i < parts_prims.size(); i++) {
-    if (parts_prims[i]->x_ == 391 && parts_prims[i]->y_ == 196) {
+  for( unsigned i = 0; i < parts_prims.size(); i++ )
+    {
+    if( parts_prims[i]->x_ == 391 && parts_prims[i]->y_ == 196 )
+      {
       ii = i;
       break;
+      }
     }
-  }
 
-  unsigned highest = h->highest_layer_id();
+  unsigned                            highest = h->highest_layer_id();
   vcl_vector<brec_part_instance_sptr> parts_upper_most(parts_prims);
-  for (unsigned l = 1; l <= highest; l++) {
+  for( unsigned l = 1; l <= highest; l++ )
+    {
     vcl_vector<brec_part_instance_sptr> parts_current;
     h->extract_upper_layer(parts_upper_most, ni, nj, parts_current);
     vcl_cout << "extracted " << parts_current.size() << " parts of layer " << l << vcl_endl;
     parts_upper_most.clear();
     parts_upper_most = parts_current;
-  }
+    }
 
   vcl_cout << "\textracted " << parts_upper_most.size() << " of highest layer: " << highest << " parts\n";
 
@@ -85,7 +96,8 @@ static void test_brec_hierarchy_builder()
 
   vil_image_view<vxl_byte> output_img(ni, nj, 3);
   vil_image_view<vxl_byte> input_img = img->get_view(0, ni, 0, nj);
-  brec_part_hierarchy::generate_output_img(parts_upper_most, input_img, output_img, brec_posterior_types::CLASS_FOREGROUND);
+  brec_part_hierarchy::generate_output_img(parts_upper_most, input_img, output_img,
+                                           brec_posterior_types::CLASS_FOREGROUND);
   vil_save(output_img, "./img_output_receptive_field_highest.png");
 }
 

@@ -15,7 +15,7 @@
 
 struct pick_client
   : public vgui_rubberband_client
-{
+  {
   void add_point( float x, float y )
   {
     vgui_dialog dlg( "Test dialog" );
@@ -24,43 +24,43 @@ struct pick_client
 
     vcl_cout << "Add point (" << x << ',' << y << ") with count=" << count << vcl_endl;
 
-    if ( count == 0 )
-    {
+    if( count == 0 )
+      {
       dlg.message( "Move the dialog over the main window, and\n"
                    "click on the dialog so that the\n"
                    "mouse is over the main window too\n" );
       int i;
       dlg.field( "Integer", i );
-    }
-    else if ( count == 1 )
-    {
+      }
+    else if( count == 1 )
+      {
       dlg.message( "This is a second dialog caused by the mouse\n"
                    "click.  It shouldn't have happened, if you\n"
                    "clicked only in the dialog window" );
-    }
+      }
     else
-    {
+      {
       dlg.message( "This is a third or subsequent dialog caused by the mouse\n"
                    "click.  It shouldn't have happened, if you\n"
                    "clicked only in the dialog window" );
-    }
+      }
 
     vcl_cout << "About to pop up dialog " << count << vcl_endl;
     ++count;
     dlg.ask();
     vcl_cout << "Done with dialog" << vcl_endl;
   }
-};
 
+  };
 
-int main( int argc, char** argv )
+int main( int argc, char* * argv )
 {
   vgui::init( argc, argv );
 
   pick_client client;
 
   vgui_rubberband_tableau_new rubbertab( &client );
-  vgui_shell_tableau_new shell_tab( rubbertab );
+  vgui_shell_tableau_new      shell_tab( rubbertab );
 
   vgui::adapt( shell_tab, 320, 240, "Test rubberband w/ popup dialog" );
 

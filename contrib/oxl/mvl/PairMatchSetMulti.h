@@ -2,9 +2,9 @@
 #ifndef PairMatchSetMulti_h_
 #define PairMatchSetMulti_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Multimap of ints
 //
@@ -14,21 +14,22 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 16 Sep 96
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 class PairMatchSetMulti
 {
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
   PairMatchSetMulti();
   PairMatchSetMulti(const PairMatchSetMulti& that);
- ~PairMatchSetMulti();
+  ~PairMatchSetMulti();
 
-  PairMatchSetMulti& operator=(const PairMatchSetMulti& that);
+  PairMatchSetMulti & operator=(const PairMatchSetMulti& that);
 
   // Operations----------------------------------------------------------------
   void add_match(int i1, int i2);
+
 };
 
 #endif // PairMatchSetMulti_h_

@@ -4,7 +4,6 @@ DECLARE( test_transform );
 DECLARE( test_store_nbrs );
 DECLARE( test_filter );
 
-
 void register_tests()
 {
   REGISTER( test_transform );

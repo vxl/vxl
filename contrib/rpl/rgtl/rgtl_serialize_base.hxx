@@ -5,7 +5,7 @@
 #ifndef rgtl_serialize_base_hxx
 #define rgtl_serialize_base_hxx
 
-//:
+// :
 // \file
 // \brief Helper class to serialize the base part of a derived object.
 // \author Brad King
@@ -13,7 +13,7 @@
 
 class rgtl_serialize_access;
 
-//: Helper class to serialize the base part of a derived object.
+// : Helper class to serialize the base part of a derived object.
 //  Example usage:
 //    template <typename Serializer>
 //    void serialize(Serializer& sr)
@@ -25,16 +25,16 @@ template <typename Base>
 class rgtl_serialize_base
 {
 public:
-  //: Construct by storing a reference to the base part of the object
-  rgtl_serialize_base(Base& b): base_(b) {}
-  Base& base() const { return base_; }
+  // : Construct by storing a reference to the base part of the object
+  rgtl_serialize_base(Base& b) : base_(b) {}
+  Base & base() const { return base_; }
 private:
   Base& base_;
 };
 
-//: Provide "serializer & rgtl_serialize_base<derived>(*this)" syntax
+// : Provide "serializer & rgtl_serialize_base<derived>(*this)" syntax
 template <class Serializer, typename Base>
-Serializer& operator&(Serializer& sr, rgtl_serialize_base<Base> const& b)
+Serializer & operator&(Serializer& sr, rgtl_serialize_base<Base> const& b)
 {
   return sr & b.base();
 }

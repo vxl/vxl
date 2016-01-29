@@ -15,8 +15,9 @@ close( vnl_matrix<double> const& a,
 {
   double m1 = a.absolute_value_max();
   double m2 = b.absolute_value_max();
-  double m = m1>m2 ? m1 : m2;
-  vnl_matrix<double> d = a-b;
+  double m = m1 > m2 ? m1 : m2;
+
+  vnl_matrix<double> d = a - b;
   return d.absolute_value_max() / m < tol;
 }
 
@@ -25,10 +26,9 @@ close( vnl_vector<double> const& a,
        vnl_vector<double> const& b,
        double tol )
 {
-  vnl_vector<double> d = a-b;
+  vnl_vector<double> d = a - b;
   return d.inf_norm() < tol;
 }
-
 
 bool
 close_det( vnl_matrix<double> const& a,
@@ -37,7 +37,6 @@ close_det( vnl_matrix<double> const& a,
 {
   return vcl_abs( vnl_determinant(a) - vnl_determinant(b) ) < tol;
 }
-
 
 vnl_vector<double>
 vec1d( double x )

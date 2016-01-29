@@ -7,5 +7,4 @@ void register_tests()
   REGISTER( test_sigma_normalizer );
 }
 
-
 DEFINE_MAIN;

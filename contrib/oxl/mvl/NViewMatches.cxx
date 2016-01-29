@@ -1,8 +1,8 @@
 // This is oxl/mvl/NViewMatches.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 //  \file
 
 #include "NViewMatches.h"
@@ -15,15 +15,17 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-vcl_ostream& operator<<(vcl_ostream& s, const NViewMatch& c)
+vcl_ostream & operator<<(vcl_ostream& s, const NViewMatch& c)
 {
-  for (unsigned i = 0; i < c.size(); ++i)
+  for( unsigned i = 0; i < c.size(); ++i )
+    {
     vul_printf(s, "%-4d ", c[i]);
+    }
 
   return s;
 }
 
-//: Return true if B is consistent with this match.
+// : Return true if B is consistent with this match.
 //  Matches are consistent if they are identical in all non-wildcard positions.
 //  However, it additionally requires that they share at least min_overlap
 //  non-wildcard positions.
@@ -31,56 +33,79 @@ bool NViewMatch::matches(const NViewMatch& b, int min_overlap) const
 {
   unsigned l = size();
 
-  if (l != b.size()) {
+  if( l != b.size() )
+    {
     vcl_cerr << "NViewMatch::matches(B): matching vectors of different lengths\n";
     return false;
-  }
+    }
 
   int overlap = 0;
-  for (unsigned i = 0; i < l; ++i)
-    if ((*this)[i] != NViewMatch::nomatch && b[i] != NViewMatch::nomatch) {
-      if ((*this)[i] != b[i])
+  for( unsigned i = 0; i < l; ++i )
+    {
+    if( (*this)[i] != NViewMatch::nomatch && b[i] != NViewMatch::nomatch )
+      {
+      if( (*this)[i] != b[i] )
+        {
         return false;
+        }
       ++overlap;
+      }
     }
   return overlap >= min_overlap;
 }
 
-//: Fill any wildcard positions with the corresponding position in B.
+// : Fill any wildcard positions with the corresponding position in B.
 void NViewMatch::incorporate(const NViewMatch& b)
 {
   unsigned l = size();
-  for (unsigned i = 0; i < l; ++i)
-    if ((*this)[i] == NViewMatch::nomatch)
+
+  for( unsigned i = 0; i < l; ++i )
+    {
+    if( (*this)[i] == NViewMatch::nomatch )
+      {
       (*this)[i] = b[i];
+      }
+    }
 }
 
-//: Check for any inconsistencies between matches
+// : Check for any inconsistencies between matches
 bool NViewMatch::is_consistent(const NViewMatch& b) const
 {
   unsigned l = size();
-  for (unsigned i = 0; i < l; ++i)
-    if ((*this)[i] != NViewMatch::nomatch && b[i] != NViewMatch::nomatch)
-      if ((*this)[i] != b[i])
+
+  for( unsigned i = 0; i < l; ++i )
+    {
+    if( (*this)[i] != NViewMatch::nomatch && b[i] != NViewMatch::nomatch )
+      {
+      if( (*this)[i] != b[i] )
+        {
         return false;
+        }
+      }
+    }
   return true;
 }
 
-//: Count how many non-wildcard entries are in this NViewMatch
+// : Count how many non-wildcard entries are in this NViewMatch
 int NViewMatch::count_observations() const
 {
   unsigned l = size();
-  int c = 0;
-  for (unsigned i = 0; i < l; ++i)
-    if ((*this)[i] != NViewMatch::nomatch)
+  int      c = 0;
+
+  for( unsigned i = 0; i < l; ++i )
+    {
+    if( (*this)[i] != NViewMatch::nomatch )
+      {
       ++c;
+      }
+    }
   return c;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
 // Default ctor
-NViewMatches::NViewMatches():
+NViewMatches::NViewMatches() :
   min_overlap_(2)
 {
 }
@@ -95,7 +120,7 @@ NViewMatches::NViewMatches(const char* filename)
   load(filename);
 }
 
-NViewMatches::NViewMatches(int nviews, int min_overlap):
+NViewMatches::NViewMatches(int nviews, int min_overlap) :
   nviews_(nviews), min_overlap_(min_overlap)
 {
 }
@@ -113,76 +138,99 @@ void NViewMatches::clear()
 bool NViewMatches::load(const char* filename)
 {
   vcl_ifstream s(filename);
-  if (!s.good()) {
+
+  if( !s.good() )
+    {
     vcl_cerr << "NViewMatches::load(" << filename << ") - bad filename\n";
     return false;
-  }
+    }
   return load(s);
 }
 
 bool NViewMatches::load(vcl_istream& s)
 {
   clear();
-  for (vul_awk awk(s); awk; ++awk) {
+  for( vul_awk awk(s); awk; ++awk )
+    {
     // On first line, set nviews_ to field count
     // On subsequent lines, check the field count matches the first line.
-    if (awk.NR() == 1)
+    if( awk.NR() == 1 )
+      {
       nviews_ = awk.NF();
+      }
     else
-      if (awk.NF() != nviews_) {
-        vcl_cerr << "NViewMatches::load() ERROR: only " << awk.NF() << " fields on line " << awk.NR() << '\n';
-        return false;
+    if( awk.NF() != nviews_ )
+      {
+      vcl_cerr << "NViewMatches::load() ERROR: only " << awk.NF() << " fields on line " << awk.NR() << '\n';
+      return false;
       }
 
     // Build NViewMatch from this line and add it.
     NViewMatch v(nviews_);
-    for (int j = 0; j < nviews_; ++j) {
+    for( int j = 0; j < nviews_; ++j )
+      {
       char const* cp = awk[j];
-      if (cp[0] == '*')
+      if( cp[0] == '*' )
+        {
         v[j] = NViewMatch::nomatch;
+        }
       else
+        {
         v[j] = atoi(cp);
-    }
+        }
+      }
     push_back(v);
-  }
+    }
 
   return true;
 }
 
 bool NViewMatches::save(vcl_ostream& s)
 {
-  for (unsigned i = 0; i < size(); ++i)
+  for( unsigned i = 0; i < size(); ++i )
+    {
     s << (*this)[i] << '\n';
+    }
   return s.good() != 0;
 }
 
 bool NViewMatches::save(const char* filename)
 {
   vcl_ofstream o(filename);
+
   return save(o);
 }
 
-//: Count how many matches are consistent with \p match
+// : Count how many matches are consistent with \p match
 int NViewMatches::count_matches(const NViewMatch& match)
 {
   int nmatches = 0;
-  for (unsigned i = 0; i < size(); ++i)
-    if ((*this)[i].matches(match,min_overlap_))
+
+  for( unsigned i = 0; i < size(); ++i )
+    {
+    if( (*this)[i].matches(match, min_overlap_) )
+      {
       ++nmatches;
+      }
+    }
   return nmatches;
 }
 
-//: Return an array of the indices that match the given \p match
+// : Return an array of the indices that match the given \p match
 vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
 {
   vcl_vector<int> ret;
-  for (unsigned i = 0; i < size(); ++i)
-    if (operator[](i).matches(match,min_overlap_))
+  for( unsigned i = 0; i < size(); ++i )
+    {
+    if( operator[](i).matches(match, min_overlap_) )
+      {
       ret.push_back(i);
+      }
+    }
   return ret;
 }
 
-//: Add a new nview match to the set.
+// : Add a new nview match to the set.
 // If it is just an update of an existing match (filling in a wildcard),
 // merge it.  Otherwise add it at the end.
 //
@@ -198,67 +246,75 @@ vcl_vector<int> NViewMatches::get_matches(const NViewMatch& match)
 
 int NViewMatches::incorporate(const NViewMatch& newtrack)
 {
-  int nmatches = 0;
+  int      nmatches = 0;
   iterator merged = end();
+
   vcl_abort(); // This routine is untested.....
-  for (iterator i = begin(); i != end(); ++i) {
-    if ((*i).matches(newtrack,min_overlap_)) {
-      if (nmatches == 0) {
+  for( iterator i = begin(); i != end(); ++i )
+    {
+    if( (*i).matches(newtrack, min_overlap_) )
+      {
+      if( nmatches == 0 )
+        {
         // This is the first consistent match found for newtrack
         (*i).incorporate(newtrack);
         ++nmatches;
         merged = i;
-      }
-      else if ((*i).is_consistent(*merged)) {
+        }
+      else if( (*i).is_consistent(*merged) )
+        {
         vcl_cerr << "Merge : " << (*i) << '\n'
                  << "        " << (*merged) << '\n';
         // A further consistent match, so merge the two match tracks
-        (*merged).incorporate((*i));
+        (*merged).incorporate( (*i) );
         erase(i);
         --i; // step back so we don't skip any matches
         ++nmatches;
-      }
-      else {
+        }
+      else
+        {
         // Two matches are inconsistent so remove them both and return -1
         //  vcl_cerr << "NViewMatches::incorporate(): Doh! Found inconsistent matches - removing them\n";
         erase(i);
         erase(merged);
         return -1;
+        }
       }
     }
-  }
-  if (nmatches == 0) {
+  if( nmatches == 0 )
+    {
     push_back(newtrack);
     return size() - 1;
-  }
+    }
 
 #ifdef DEBUG
-  if (nmatches > 1) {
+  if( nmatches > 1 )
+    {
     vcl_cerr << "NViewMatches::incorporate(): " << nmatches << " consistent matches merged\n";
-  }
+    }
 #endif
   return merged - begin();
 }
 
-//: Build an NViewMatch from the triplet \p (base_view..base_view+2)
+// : Build an NViewMatch from the triplet \p (base_view..base_view+2)
 NViewMatch NViewMatches::make_triplet_match(int base_view, int c1, int c2, int c3)
 {
-  assert(base_view+2 < nviews_);
+  assert(base_view + 2 < nviews_);
   NViewMatch newtrack(nviews_);
   newtrack[base_view] = c1;
-  newtrack[base_view+1] = c2;
-  newtrack[base_view+2] = c3;
+  newtrack[base_view + 1] = c2;
+  newtrack[base_view + 2] = c3;
   return newtrack;
 }
 
-//: Build an NViewMatch from the triplet \p (base_view..base_view+2), and incorporate.
+// : Build an NViewMatch from the triplet \p (base_view..base_view+2), and incorporate.
 int NViewMatches::incorporate_triplet(int base_view, int c1, int c2, int c3)
 {
-  assert(base_view+2 < nviews_);
+  assert(base_view + 2 < nviews_);
   NViewMatch newtrack(nviews_);
   newtrack[base_view] = c1;
-  newtrack[base_view+1] = c2;
-  newtrack[base_view+2] = c3;
+  newtrack[base_view + 1] = c2;
+  newtrack[base_view + 2] = c3;
   return incorporate(newtrack);
 }
 

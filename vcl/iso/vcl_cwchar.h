@@ -6,9 +6,9 @@
 #include <cwchar>
 
 #ifdef vcl_generic_cwchar_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_cwchar_STD std
+#  define vcl_generic_cwchar_STD std
 #endif
 
 #include "../generic/vcl_cwchar.h"

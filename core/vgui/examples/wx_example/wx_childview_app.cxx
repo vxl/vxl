@@ -1,18 +1,18 @@
 // This is core/vgui/examples/wx_example/wx_childview_app.cxx
-//=========================================================================
-//:
+// =========================================================================
+// :
 // \file
 // \brief  wxWidgets main application class.
 //
 // See wx_childview_app.h for details.
-//=========================================================================
+// =========================================================================
 
 #include "wx_childview_app.h"
 #include "wx_childview_frame.h"
 
 #include <vgui/vgui.h>
 
-//: Give wxWidgets the means to create a wx_childview_app object.
+// : Give wxWidgets the means to create a wx_childview_app object.
 IMPLEMENT_APP(wx_childview_app)
 
 wx_childview_app::wx_childview_app(void)
@@ -20,7 +20,7 @@ wx_childview_app::wx_childview_app(void)
 {
 }
 
-//: Initialize the application.
+// : Initialize the application.
 bool wx_childview_app::OnInit(void)
 {
   // select the vgui_wx toolkit

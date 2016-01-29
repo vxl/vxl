@@ -1,11 +1,10 @@
 // This is core/vgui/vgui_loader_tableau_sptr.h
 #ifndef vgui_loader_tableau_sptr_h_
 #define vgui_loader_tableau_sptr_h_
-//:
+// :
 // \file
 // \author  fsm
 // \brief   Smart-pointer to a vgui_loader_tableau tableau.
-
 
 #include <vgui/vgui_tableau_sptr.h>
 

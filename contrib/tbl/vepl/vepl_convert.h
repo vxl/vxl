@@ -1,6 +1,6 @@
 #ifndef vepl_convert_h_
 #define vepl_convert_h_
-//:
+// :
 // \file
 // \brief convert between arbitrary image types
 //
@@ -16,12 +16,12 @@
 
 #include <vil/vil_image_resource.h>
 
-//: convert between arbitrary image types
+// : convert between arbitrary image types
 template <class D>
 vil_image_resource_sptr vepl_convert(vil_image_resource_sptr, D dummy);
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vepl_convert.txx"
+#  include "vepl_convert.txx"
 #endif
 
 #endif // vepl_convert_h_

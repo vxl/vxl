@@ -1,6 +1,6 @@
 // This is tbl/vepl/examples/example2_threshold.cxx
 
-//:
+// :
 // \file
 //  This example program shows a typical use of the vepl_threshold function on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
@@ -20,29 +20,33 @@
 #include <vcl_cstdlib.h> // for atoi()
 
 int
-main(int argc, char** argv)
+main(int argc, char* * argv)
 {
-  if (argc < 3)
-  {
+  if( argc < 3 )
+    {
     vcl_cerr << "Syntax: example2_threshold file_in file_out [threshold]\n";
     return 1;
-  }
+    }
 
   // The input image:
   vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if( !in ) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 128 : vxl_byte(vcl_atoi(argv[3]) );
 
   // perform thresholding:
-  vil_image_resource_sptr out = vepl_threshold(in,threshold,0,255);
+  vil_image_resource_sptr out = vepl_threshold(in, threshold, 0, 255);
 
   // Write output:
-  if (vil_save_image_resource(out, argv[2], "pnm"))
+  if( vil_save_image_resource(out, argv[2], "pnm") )
+    {
     vcl_cout << "Written thresholded image of type PNM to " << argv[2] << '\n';
+    }
   else
-    vcl_cout << "Could not write thresholded image as PNM to "<< argv[2]<<'\n';
+    {
+    vcl_cout << "Could not write thresholded image as PNM to " << argv[2] << '\n';
+    }
 
   return 0;
 }

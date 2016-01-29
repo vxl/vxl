@@ -1,7 +1,7 @@
 // This is core/vgui/impl/qt4/vgui_qt_statusbar.h
 #ifndef vgui_qt_statusbar_h_
 #define vgui_qt_statusbar_h_
-//:
+// :
 // \file
 // \brief Contains class vgui_qt_statusbar
 // \author Joris Schouteden, ESAT, K.U.Leuven
@@ -22,23 +22,23 @@
 
 #include <QMainWindow>
 
-//: QT implementation of vgui_statusbar.
+// : QT implementation of vgui_statusbar.
 class vgui_qt_statusbar :
-   public vgui_statusbar
+  public vgui_statusbar
 {
- public:
-   vgui_qt_statusbar(QMainWindow *parent);
+public:
+  vgui_qt_statusbar(QMainWindow * parent);
   ~vgui_qt_statusbar();
 
-   int write(const char* text, int n);
-   int write(const char* text);
+  int write(const char* text, int n);
 
-   vcl_string linebuffer;
-   vgui_statusbuf* statusbuf;
-   vcl_ostream out;
+  int write(const char* text);
 
- private:
-   QMainWindow *parent_;
+  vcl_string      linebuffer;
+  vgui_statusbuf* statusbuf;
+  vcl_ostream     out;
+private:
+  QMainWindow * parent_;
 };
 
 #endif // vgui_qt_statusbar_h_

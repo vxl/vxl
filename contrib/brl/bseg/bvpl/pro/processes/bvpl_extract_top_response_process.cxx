@@ -1,6 +1,6 @@
 // This is brl/bseg/bvpl/pro/processes/bvpl_extract_top_response_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A class visualizing a response from a vector of top responses
 //
@@ -10,7 +10,6 @@
 //  Modifications
 //   <none yet>
 // \endverbatim
-
 
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
@@ -23,11 +22,11 @@
 
 namespace bvpl_extract_top_response_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 2;
+const unsigned n_inputs_ = 5;
+const unsigned n_outputs_ = 2;
 }
 
-//: process takes 5 inputs and has 2 outputs.
+// : process takes 5 inputs and has 2 outputs.
 // * input[0]: The response grid (3-D)
 // * input[1]: The id grid (3-D)
 // * input[2]: The array index (0 corresponds to strongest)
@@ -49,7 +48,7 @@ bool bvpl_extract_top_response_process_cons(bprb_func_process& pro)
   input_types_[4] = "vcl_string";
 
   vcl_vector<vcl_string> output_types_(n_outputs_);
-  output_types_[0]= "bvxm_voxel_grid_base_sptr";
+  output_types_[0] = "bvxm_voxel_grid_base_sptr";
   output_types_[1] = "bvxm_voxel_grid_base_sptr";
 
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -59,34 +58,42 @@ bool bvpl_extract_top_response_process(bprb_func_process& pro)
 {
   using namespace bvpl_extract_top_response_process_globals;
 
-  if (pro.n_inputs() < n_inputs_)
-  {
+  if( pro.n_inputs() < n_inputs_ )
+    {
     vcl_cout << pro.name() << ": the input number should be " << n_inputs_
              << " but instead it is " << pro.n_inputs() << vcl_endl;
     return false;
-  }
+    }
 
-  //get inputs:
-  unsigned i = 0;
+  // get inputs:
+  unsigned                  i = 0;
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   bvxm_voxel_grid_base_sptr id_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  unsigned target_index = pro.get_input<unsigned>(i++);
-  vcl_string out_resp_path = pro.get_input<vcl_string>(i++);
-  vcl_string out_id_path = pro.get_input<vcl_string>(i++);
+  unsigned                  target_index = pro.get_input<unsigned>(i++);
+  vcl_string                out_resp_path = pro.get_input<vcl_string>(i++);
+  vcl_string                out_id_path = pro.get_input<vcl_string>(i++);
 
   typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 
-  //check input's validity
-  if (!grid_base.ptr()) {
+  // check input's validity
+  if( !grid_base.ptr() )
+    {
     vcl_cout <<  " :-- Grid is not valid!\n";
     return false;
-  }
+    }
 
-  if (bvxm_voxel_grid<vnl_vector_fixed<float,3> > *grid = dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float,3> >* > (grid_base.ptr())){
-    bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid=dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<int,3>  >* >(id_grid_base.ptr());
-    bvxm_voxel_grid<float> *out_grid = new bvxm_voxel_grid<float>(out_resp_path, id_grid->grid_size());
-    bvxm_voxel_grid<int> *out_id_grid = new bvxm_voxel_grid<int>(out_id_path, id_grid->grid_size());
-    out_grid-> initialize_data(0.0f);
+  if( bvxm_voxel_grid<vnl_vector_fixed<float,
+                                       3> > * grid =
+        dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float, 3> > *>(grid_base.ptr() ) )
+    {
+    bvxm_voxel_grid<vnl_vector_fixed<int,
+                                     3> > * id_grid =
+      dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<int, 3>  > *>(id_grid_base.ptr() );
+    bvxm_voxel_grid<float> * out_grid = new bvxm_voxel_grid<float>(out_resp_path,
+                                                                   id_grid->grid_size() );
+    bvxm_voxel_grid<int> * out_id_grid = new bvxm_voxel_grid<int>(out_id_path,
+                                                                  id_grid->grid_size() );
+    out_grid->initialize_data(0.0f);
     out_id_grid->initialize_data(-1);
 
     bvpl_vector_operator vector_oper;
@@ -94,7 +101,9 @@ bool bvpl_extract_top_response_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, out_grid);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(1, out_id_grid);
     return true;
-  }
+    }
   else
+    {
     return false;
+    }
 }

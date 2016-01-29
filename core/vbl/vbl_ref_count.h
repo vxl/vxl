@@ -1,7 +1,7 @@
 // This is core/vbl/vbl_ref_count.h
 #ifndef vbl_ref_count_h
 #define vbl_ref_count_h
-//:
+// :
 // \file
 //
 // \verbatim
@@ -15,19 +15,18 @@
 class vbl_ref_count
 {
   vcl_atomic_count ref_count_;
- public:
+public:
   vbl_ref_count() : ref_count_(0) { }
   // Copying an object should not copy the ref count.
-  vbl_ref_count(vbl_ref_count const&) : ref_count_(0) { }
+  vbl_ref_count(vbl_ref_count const &) : ref_count_(0) { }
 
-  vbl_ref_count&
-  operator=(vbl_ref_count const& /*rhs*/)
+  vbl_ref_count & operator=(vbl_ref_count const & /*rhs*/)
   { /* should not copy the ref count */ return *this; }
 
   virtual ~vbl_ref_count() {}
 
   void ref() { ++ref_count_; }
-  void unref() { /*assert(ref_count_>0);*/ if (--ref_count_ == 0) delete this; }
+  void unref() { /*assert(ref_count_>0);*/ if( --ref_count_ == 0 ) {delete this; }}
   long get_references() const { return ref_count_; }
   bool is_referenced() const { return ref_count_ > 0; }
 };

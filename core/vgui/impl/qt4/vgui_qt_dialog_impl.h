@@ -1,7 +1,7 @@
 // This is core/vgui/impl/qt4/vgui_qt_dialog_impl.h
 #ifndef vgui_qt_dialog_impl_h_
 #define vgui_qt_dialog_impl_h_
-//:
+// :
 // \file
 // \brief QT Dialog wrapper
 // \author Joris Schouteden, ESAT, K.U.Leuven
@@ -24,91 +24,99 @@
 #include <QLineEdit>
 #include <QSpinBox>
 
-
-
-//: QT implementation of vgui_dialog_impl.
+// : QT implementation of vgui_dialog_impl.
 class vgui_qt_dialog_impl :
-   public QDialog,
-   public vgui_dialog_impl
+  public QDialog,
+  public vgui_dialog_impl
 {
-   Q_OBJECT
- public:
-    vgui_qt_dialog_impl(const char* name);
-   ~vgui_qt_dialog_impl() {}
+  Q_OBJECT
+public:
+  vgui_qt_dialog_impl(const char* name);
+  ~vgui_qt_dialog_impl() {}
 
-   void* bool_field_widget(const char*, bool&);
-   void* int_field_widget(const char*, int&);
-   void* long_field_widget(const char*, long&);
-   void* float_field_widget(const char*, float&);
-   void* double_field_widget(const char*, double&);
-   void* string_field_widget(const char*, vcl_string&);
-   void* choice_field_widget(const char*, const vcl_vector<vcl_string>&, int&);
+  void * bool_field_widget(const char *, bool &);
 
-   void* text_message_widget(const char*);
-   void* file_browser_widget(const char*, vcl_string&, vcl_string&);
-   void* inline_file_browser_widget(const char *,vcl_string&, vcl_string&);
-   void* color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
-   void* inline_color_chooser_widget(const char *,vcl_string&);//, vcl_string&);
-   void* inline_tableau_widget(const vgui_tableau_sptr tab,
-                               unsigned int width, unsigned int height);
-   void  modal(bool m);
+  void * int_field_widget(const char *, int &);
 
-   bool  ask();
+  void * long_field_widget(const char *, long &);
+
+  void * float_field_widget(const char *, float &);
+
+  void * double_field_widget(const char *, double &);
+
+  void * string_field_widget(const char *, vcl_string &);
+
+  void * choice_field_widget(const char *, const vcl_vector<vcl_string> &, int &);
+
+  void * text_message_widget(const char *);
+
+  void * file_browser_widget(const char *, vcl_string &, vcl_string &);
+
+  void * inline_file_browser_widget(const char *, vcl_string &, vcl_string &);
+
+  void * color_chooser_widget(const char *, vcl_string &);// , vcl_string&);
+
+  void * inline_color_chooser_widget(const char *, vcl_string &);// , vcl_string&);
+
+  void * inline_tableau_widget(const vgui_tableau_sptr tab, unsigned int width, unsigned int height);
+
+  void  modal(bool m);
+
+  bool  ask();
+
 };
-
-
 
 class vgui_qt_filebrowser_impl : public QGroupBox
 {
-   Q_OBJECT
- public:
-   vgui_qt_filebrowser_impl(QWidget* parent, const vcl_string& t, const vcl_string& f, const vcl_string& s);
+  Q_OBJECT
+public:
+  vgui_qt_filebrowser_impl(QWidget* parent, const vcl_string& t, const vcl_string& f, const vcl_string& s);
   ~vgui_qt_filebrowser_impl() {}
 
-  vcl_string  file() const { return vcl_string(edit_->text().toLatin1()); }
+  vcl_string  file() const { return vcl_string(edit_->text().toLatin1() ); }
+public slots:
+  void get_a_file();
 
- public slots:
-   void get_a_file();
-
- private:
-   vcl_string title_;
-   vcl_string filter_;
-   QLineEdit*  edit_;
+private:
+  vcl_string title_;
+  vcl_string filter_;
+  QLineEdit* edit_;
 };
 
 class vgui_qt_colorchooser_impl : public QGroupBox
 {
-   Q_OBJECT
- public:
-   vgui_qt_colorchooser_impl(QWidget* parent, const char*, vcl_string&);
+  Q_OBJECT
+public:
+  vgui_qt_colorchooser_impl(QWidget* parent, const char *, vcl_string &);
   ~vgui_qt_colorchooser_impl() {}
 
   vcl_string  color() const { return value_; }
-
- private:
+private:
   void update_color_string();
 
- public slots:
+public slots:
   void get_a_color();
+
   void change_red(int);
+
   void change_green(int);
+
   void change_blue(int);
+
   void change_alpha(int);
 
- private:
-   vcl_string& value_;
-   QColor      color_;
-   QFrame*     frame_;
-   QSpinBox   *rbox_, *gbox_, *bbox_, *abox_;
+private:
+  vcl_string& value_;
+  QColor      color_;
+  QFrame*     frame_;
+  QSpinBox *  rbox_, * gbox_, * bbox_, * abox_;
 };
-
 
 class vgui_qt_tableau_impl : public QWidget
 {
-   Q_OBJECT
- public:
-   vgui_qt_tableau_impl(QWidget* parent, const vgui_tableau_sptr tab,
-                        unsigned int width, unsigned int height);
+  Q_OBJECT
+public:
+  vgui_qt_tableau_impl(QWidget* parent, const vgui_tableau_sptr tab, unsigned int width, unsigned int height);
   ~vgui_qt_tableau_impl() {}
 };
 

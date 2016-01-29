@@ -1,8 +1,8 @@
 // This is oxl/mvl/FMatrixCompute8Point.h
 #ifndef FMatrixCompute8Point_h_
 #define FMatrixCompute8Point_h_
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \brief FMatrix by linear least squares
 //

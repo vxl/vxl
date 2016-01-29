@@ -2,9 +2,9 @@
 #ifndef Homg_h_
 #define Homg_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Private base class for homogeneous vectors
 //
@@ -20,21 +20,22 @@
 //  Modifications:
 //    210297 AWF Switched to fixed-length vectors for speed.
 // \endverbatim
-//-------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------
 
 class Homg
 {
- public:
+public:
 
-  //: Standard placeholder for methods that wish to return infinity.
+  // : Standard placeholder for methods that wish to return infinity.
   static double infinity;
 
-  //: The tolerance used in "near zero" tests in the Homg subclasses.
+  // : The tolerance used in "near zero" tests in the Homg subclasses.
   static double infinitesimal_tol;
 
-  //: Static method to set the default tolerance used for infinitesimal checks.
+  // : Static method to set the default tolerance used for infinitesimal checks.
   // The default is 1e-12.
   static void set_infinitesimal_tol(double tol);
+
 };
 
 #endif // Homg_h_

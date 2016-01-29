@@ -1,14 +1,14 @@
 #ifndef mbl_screen_counter_h_
 #define mbl_screen_counter_h_
 
-//:
+// :
 // \file
 // \brief Printing dots to the screen to indicate events
 // \author Ian Scott
 
 #include <vcl_iosfwd.h>
 
-//: Prints items to the screen to represent events.
+// : Prints items to the screen to represent events.
 // \code
 // // A rather trivial example
 // mbl_screen_counter counter;
@@ -23,15 +23,16 @@
 class mbl_screen_counter
 {
   unsigned long count_;
-  char symbol_;
+  char          symbol_;
   unsigned long skip_;
   vcl_ostream & os_;
 public:
-  mbl_screen_counter(vcl_ostream &) ;
+  mbl_screen_counter(vcl_ostream &);
 
-//: Mark event
+// : Mark event
 // This is a postfix increment operator
-  mbl_screen_counter operator++ (int);
+  mbl_screen_counter operator++(int);
+
 };
 
 #endif // mbl_screen_counter_h_

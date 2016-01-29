@@ -2,9 +2,9 @@
 #ifndef gmvl_connection_h_
 #define gmvl_connection_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 //
@@ -19,7 +19,7 @@
 
 class gmvl_connection : public vbl_ref_count
 {
- public:
+public:
   // constructors / destructors
 
   gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
@@ -32,12 +32,12 @@ class gmvl_connection : public vbl_ref_count
   gmvl_node_sptr get_node1() const { return n1_; }
   gmvl_node_sptr get_node2() const { return n2_; }
 
-  friend vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection &c);
+  friend vcl_ostream & operator<<( vcl_ostream & os, const gmvl_connection & c);
 
- protected:
+protected:
   gmvl_node_sptr n1_, n2_;
 };
 
-vcl_ostream &operator<<( vcl_ostream &os, const gmvl_connection &c);
+vcl_ostream & operator<<( vcl_ostream & os, const gmvl_connection & c);
 
 #endif // gmvl_connection_h_

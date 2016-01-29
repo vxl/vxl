@@ -2,9 +2,9 @@
 #ifndef RawPMatrixStore_h_
 #define RawPMatrixStore_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Demand-load image sequence from disk
 //
@@ -16,7 +16,7 @@
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 97
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vcl_vector.h>
 #include <mvl/FileNameGenerator.h>
@@ -24,21 +24,23 @@
 
 class RawPMatrixStore
 {
- public:
+public:
   // Constructors/Destructors--------------------------------------------------
 
-  //: Construct a PMatrix store given a FileNameGenerator
+  // : Construct a PMatrix store given a FileNameGenerator
   RawPMatrixStore(FileNameGenerator const& fng) : fng_(fng) {}
 
   // Operations----------------------------------------------------------------
 
   bool Load(int image_index);
+
   bool Save(int i);
+
   PMatrix_sptr Get(int i);
 
-  void AddExtension(char const*);
+  void AddExtension(char const *);
 
- protected:
+protected:
 
   // Data Members--------------------------------------------------------------
   vcl_vector<PMatrix_sptr> pmatrix_;

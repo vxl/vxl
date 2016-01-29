@@ -2,9 +2,9 @@
 #ifndef vnl_bracket_minimum_h_
 #define vnl_bracket_minimum_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Function to bracket a minimum
 // \author Tim Cootes
@@ -16,7 +16,7 @@
 
 #include <vnl/vnl_cost_function.h>
 
-//: Given initial values a and b, find bracket a<b<c s.t. f(a)>f(b)<f(c)
+// : Given initial values a and b, find bracket a<b<c s.t. f(a)>f(b)<f(c)
 //  Final function values at a,b,c stored in fa,fb,fc.
 //
 //  The algorithm takes increasingly large steps in a downhill direction
@@ -28,8 +28,6 @@
 //  Note that there's currently nothing
 //  to stop it if it is supplied with a monotonic function - it will just continue
 //  forever.
-void vnl_bracket_minimum(vnl_cost_function& f,
-                         double& a, double& b, double& c,
-                         double& fa, double& fb, double& fc);
+void vnl_bracket_minimum(vnl_cost_function& f, double& a, double& b, double& c, double& fa, double& fb, double& fc);
 
 #endif // vnl_bracket_minimum_h_

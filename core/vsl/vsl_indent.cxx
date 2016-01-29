@@ -1,8 +1,8 @@
 // This is core/vsl/vsl_indent.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 
 #include "vsl_indent.h"
@@ -12,68 +12,72 @@
 
 const int default_tab = 2;
 
-typedef vcl_pair<int,int> indent_data_type;
+typedef vcl_pair<int, int> indent_data_type;
 
 // Get pointer to tab and indent data for os
-indent_data_type* indent_data(vcl_ostream& os)
+indent_data_type * indent_data(vcl_ostream& os)
 {
-  typedef vcl_map<void*, indent_data_type, vcl_less<void*> > maps2i_type;
+  typedef vcl_map<void *, indent_data_type, vcl_less<void *> > maps2i_type;
   // Global record of tab information for streams.
   // Allows data to persist beyond the lifetime of the indent object itself,
   // which may be mercifully brief
   static maps2i_type indent_data_map;
 
   maps2i_type::iterator entry = indent_data_map.find(&os);
-  if (entry==indent_data_map.end())
-  {
+  if( entry == indent_data_map.end() )
+    {
     // Create a new entry
-    indent_data_map[&os]=indent_data_type(0,default_tab);
-  entry = indent_data_map.find(&os);
-  }
+    indent_data_map[&os] = indent_data_type(0, default_tab);
+    entry = indent_data_map.find(&os);
+    }
 
-  return &((*entry).second);
+  return &( (*entry).second);
 }
 
-//: Increments current indent for given stream
+// : Increments current indent for given stream
 void vsl_indent_inc(vcl_ostream& os)
 {
   indent_data(os)->first++;
 }
 
-//: Decrements current indent for given stream
+// : Decrements current indent for given stream
 void vsl_indent_dec(vcl_ostream& os)
 {
   indent_data(os)->first--;
 }
 
-//: Set number of spaces per increment step
+// : Set number of spaces per increment step
 void vsl_indent_set_tab(vcl_ostream& os, int t)
 {
   indent_data(os)->second = t;
 }
 
-//: Number of spaces per increment step
+// : Number of spaces per increment step
 int vsl_indent_tab(vcl_ostream& os)
 {
   return indent_data(os)->second;
 }
 
-//: Set indentation to zero
+// : Set indentation to zero
 void vsl_indent_clear(vcl_ostream& os)
 {
-  indent_data(os)->first =0;
+  indent_data(os)->first = 0;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& /*indent*/)
+vcl_ostream & operator<<(vcl_ostream& os, const vsl_indent & /*indent*/)
 {
   indent_data_type* data = indent_data(os);
 
   int n = data->first * data->second;
-  for (int i=0;i<n;i++) os<<' ';
+
+  for( int i = 0; i < n; i++ )
+    {
+    os << ' ';
+    }
   return os;
 }
 
-//: Tidy up the internal indent map to remove potential memory leaks
+// : Tidy up the internal indent map to remove potential memory leaks
 //  The details of indents for each stream are stored in a static
 //  map.  When testing for memory leaks, this is flagged, creating
 //  lots of noise in the output of memory leak checkers.

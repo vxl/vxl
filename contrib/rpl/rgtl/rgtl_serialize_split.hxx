@@ -1,6 +1,6 @@
 #ifndef rgtl_serialize_split_hxx
 #define rgtl_serialize_split_hxx
-//:
+// :
 // \file
 // \brief Serialization helper class to split save and load calls.
 // \author Brad King
@@ -13,40 +13,45 @@
 
 #include "rgtl_serialize_direction.hxx"
 
-//: Implement serialization by calling rgtl_serialize_save.
+// : Implement serialization by calling rgtl_serialize_save.
 struct rgtl_serialize_split_save
-{
+  {
   template <class Serializer, typename T>
   static void serialize(Serializer& sr, T& x)
   {
     rgtl_serialize_save(sr, x);
   }
-};
 
-//: Implement serialization by calling rgtl_serialize_load.
+  };
+
+// : Implement serialization by calling rgtl_serialize_load.
 struct rgtl_serialize_split_load
-{
+  {
   template <class Serializer, typename T>
   static void serialize(Serializer& sr, T& x)
   {
     rgtl_serialize_load(sr, x);
   }
-};
 
-//: Lookup table for our implementation of each direction.
-template <typename SerializeDirection> struct rgtl_serialize_split_lookup;
+  };
 
-template <> struct rgtl_serialize_split_lookup<rgtl_serialize_direction_save>
-{
+// : Lookup table for our implementation of each direction.
+template <typename SerializeDirection>
+struct rgtl_serialize_split_lookup;
+
+template <>
+struct rgtl_serialize_split_lookup<rgtl_serialize_direction_save>
+  {
   typedef rgtl_serialize_split_save type;
-};
+  };
 
-template <> struct rgtl_serialize_split_lookup<rgtl_serialize_direction_load>
-{
+template <>
+struct rgtl_serialize_split_lookup<rgtl_serialize_direction_load>
+  {
   typedef rgtl_serialize_split_load type;
-};
+  };
 
-//: Dispatch a call to rgtl_serialize_save or rgtl_serialize_load based on the direction of the given serializer.
+// : Dispatch a call to rgtl_serialize_save or rgtl_serialize_load based on the direction of the given serializer.
 template <class Serializer, typename T>
 void rgtl_serialize_split(Serializer& sr, T& x)
 {

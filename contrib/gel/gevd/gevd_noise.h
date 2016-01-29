@@ -32,34 +32,30 @@ class gevd_bufferxy;
 
 class gevd_noise
 {
- public:
+public:
   friend class DetectionUI;
-  gevd_noise(const float* data, const int n, // data in a typical region
-             const int number_of_bins=200);  // granularity of histogram
+  gevd_noise(const float* data, const int n,  // data in a typical region
+             const int number_of_bins = 200); // granularity of histogram
   ~gevd_noise();
 
-  static float* EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
-                                    const gevd_bufferxy& dirx,
-                                    const gevd_bufferxy& diry,
-                                    int& nedgel,
-                                    const int roiArea=250*250); // ROI
-  bool EstimateSensorTexture(float& sensor, // sensor noise is would-be zc
+  static float * EdgelsInCenteredROI(const gevd_bufferxy& magnitude, const gevd_bufferxy& dirx,
+                                     const gevd_bufferxy& diry, int& nedgel, const int roiArea = 250 *250); // ROI
+
+  bool EstimateSensorTexture(float& sensor,         // sensor noise is would-be zc
                              float& texture) const; // texture is real zc
 
-  const float* Histogram(int& n) const { n = nbin; return hist; }
+  const float * Histogram(int& n) const { n = nbin; return hist; }
   float BinSize() const { return binsize; } // size of bin in data unit
+protected:
+  float* hist;    // histogram curve of low responses only
+  int    nbin;    // number of bins
+  float  binsize; // size of bin in data unit
+protected:
+  static bool WouldBeZeroCrossing(const float* dhist, const int nbin, float& index);
 
- protected:
-  float* hist;   // histogram curve of low responses only
-  int nbin;      // number of bins
-  float binsize; // size of bin in data unit
+  static bool RealZeroCrossing(const float* dhist, const int nbin, float& index);
 
- protected:
-  static bool WouldBeZeroCrossing(const float* dhist, const int nbin,
-                                  float& index);
-  static bool RealZeroCrossing(const float* dhist, const int nbin,
-                               float& index);
- private:
+private:
   gevd_noise() {} // no default constructor!
 };
 

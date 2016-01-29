@@ -2,9 +2,9 @@
 #ifndef vil1_colour_space_h_
 #define vil1_colour_space_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Functions to convert between different colour spaces.
 //
@@ -13,12 +13,11 @@
 //
 // \author fsm
 
-//: Linear transformation from RGB to YIQ colour spaces
+// : Linear transformation from RGB to YIQ colour spaces
 template <class T>
 void vil1_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 
-
-//: Transform from RGB to HSV colour spaces
+// : Transform from RGB to HSV colour spaces
 // The input RGB values must lie in [0, L], for some positive L. Usually
 // L=1 or 255.
 //
@@ -29,9 +28,9 @@ void vil1_colour_space_RGB_to_YIQ(T const in[3], T out[3]);
 //
 // [HSV is also known as HSB]
 template <class T>
-void vil1_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
+void vil1_colour_space_RGB_to_HSV(T r, T g, T b, T * h, T * s, T * v);
 
-//: Transform from HSV to RGB colour space
+// : Transform from HSV to RGB colour space
 //
 // The input HSV values will lie in the ranges:
 //    H : [0, 360)   (an angle, in bloody degrees)
@@ -42,6 +41,6 @@ void vil1_colour_space_RGB_to_HSV(T r, T g, T b, T *h, T *s, T *v);
 //
 // [HSV is also known as HSB]
 template <class T>
-void vil1_colour_space_HSV_to_RGB(T h, T s, T v, T *r, T *g, T *b);
+void vil1_colour_space_HSV_to_RGB(T h, T s, T v, T * r, T * g, T * b);
 
 #endif // vil1_colour_space_h_

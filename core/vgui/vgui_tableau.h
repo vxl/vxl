@@ -2,9 +2,9 @@
 #ifndef vgui_tableau_h_
 #define vgui_tableau_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford
 // \date   11 Sep 99
@@ -39,7 +39,7 @@ class vgui_menu;
 class vgui_popup_params;
 struct vgui_tableau_sptr;
 
-//: Base class for all tableaux in vgui.
+// : Base class for all tableaux in vgui.
 //
 //  WHAT'S A TABLEAU?
 //  A tableau is a rectangular area of the screen on which OpenGL may be
@@ -82,71 +82,70 @@ struct vgui_tableau_sptr;
 //  webpage to see this done.
 class vgui_tableau : public vgui_parent_child_link_data
 {
- public:
-  //: Constructor - in general you should not use this, use vgui_tableau_new.
+public:
+  // : Constructor - in general you should not use this, use vgui_tableau_new.
   vgui_tableau();
 
-  //: Return the name of the tableau.
+  // : Return the name of the tableau.
   virtual vcl_string name() const { return file_name(); }
 
-  //: Return the name of a file associated with some tableau below (if meaningful).
+  // : Return the name of a file associated with some tableau below (if meaningful).
   virtual vcl_string file_name() const { return "(none)"; }
 
-  //: Used to provide an informative name for printouts, debugging etc.
+  // : Used to provide an informative name for printouts, debugging etc.
   //  Often it's type_name() + some representation of the essential state.
   virtual vcl_string pretty_name() const { return type_name(); }
 
-  //: Return name of most derived class (for RTTI purposes).
+  // : Return name of most derived class (for RTTI purposes).
   virtual vcl_string type_name() const;
 
-  //: Get the parent tableaux for this tableau.
-  void get_parents (vcl_vector<vgui_tableau_sptr> *out) const;
+  // : Get the parent tableaux for this tableau.
+  void get_parents(vcl_vector<vgui_tableau_sptr> * out) const;
 
-  //: Get the child tableaux for this tableau.
-  void get_children(vcl_vector<vgui_tableau_sptr> *out) const;
+  // : Get the child tableaux for this tableau.
+  void get_children(vcl_vector<vgui_tableau_sptr> * out) const;
 
-  //: Get the ith child or return 0.
+  // : Get the ith child or return 0.
   vgui_tableau_sptr get_child(unsigned i) const;
 
-  //: Add the given tableau to the list of child tableaux.
+  // : Add the given tableau to the list of child tableaux.
   //  Virtual overridden by consenting parents.
   virtual bool add_child(vgui_tableau_sptr const &);
 
-  //: Remove the given child from the list of child tableaux.
+  // : Remove the given child from the list of child tableaux.
   virtual bool remove_child(vgui_tableau_sptr const &);
 
-  //: Push all tableaux onto the given vector.
-  static void get_all(vcl_vector<vgui_tableau_sptr> *out);
+  // : Push all tableaux onto the given vector.
+  static void get_all(vcl_vector<vgui_tableau_sptr> * out);
 
-  //: Returns true if the given address points to a valid tableau.
+  // : Returns true if the given address points to a valid tableau.
   static bool exists(vgui_tableau_sptr const &);
 
-  //: Called whenever a child of this tableau is about to be forcibly replaced
-  virtual bool notify_replaced_child(vgui_tableau_sptr const & old_child,
-                                     vgui_tableau_sptr const & new_child);
+  // : Called whenever a child of this tableau is about to be forcibly replaced
+  virtual bool notify_replaced_child(vgui_tableau_sptr const & old_child, vgui_tableau_sptr const & new_child);
 
-  //: Add the given menu to the popup menu for the tableau.
+  // : Add the given menu to the popup menu for the tableau.
   virtual void add_popup(vgui_menu &);
 
-  //: Get the default popup menu for the tableau.
+  // : Get the default popup menu for the tableau.
   virtual void get_popup(vgui_popup_params const &, vgui_menu &);
 
-  //: Post a message event.
+  // : Post a message event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
   virtual void post_message(char const *, void const *);
 
-  //: Post a draw event.
+  // : Post a draw event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
   virtual void post_redraw();
 
-  //: Post an overlay-redraw event.
+  // : Post an overlay-redraw event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
   virtual void post_overlay_redraw();
 
-  //: Post an idle request event.
+  // : Post an idle request event.
   //  The fact that this is virtual does not imply that you should
   //  go and override it.
   //
@@ -162,65 +161,64 @@ class vgui_tableau : public vgui_parent_child_link_data
   //
   virtual void post_idle_request();
 
-  //: Handle all events sent to this tableau.
+  // : Handle all events sent to this tableau.
   //  Override in subclass to give the tableau some appearance and behaviour.
   virtual bool handle(vgui_event const &);
 
-  //: Get the bounding box of this tableau.
+  // : Get the bounding box of this tableau.
   //  If infinite in extent, or nothing is drawn, or you can't be bothered to
   //  implement it, return false.
   //  const. if you need to cache, cast away const.
   virtual bool get_bounding_box(float low[3], float high[3]) const;
 
-  //: Called by default handle when it receives a draw event.
+  // : Called by default handle when it receives a draw event.
   virtual bool draw();
 
-  //: Called by default handle when it receives a mouse down event.
+  // : Called by default handle when it receives a mouse down event.
   virtual bool mouse_down(int x, int y, vgui_button, vgui_modifier);
 
-  //: Called by default handle when it receives a mouse up event.
+  // : Called by default handle when it receives a mouse up event.
   virtual bool mouse_up(int x, int y, vgui_button, vgui_modifier);
 
-  //: Called by handle when it receives a mouse motion event.
+  // : Called by handle when it receives a mouse motion event.
   virtual bool motion(int x, int y);
 
-  //: Called by default handle when it receives a key-press event.
+  // : Called by default handle when it receives a key-press event.
   virtual bool key_press(int x, int y, vgui_key, vgui_modifier);
 
-  //: Called by default handle when it receives a '?' pressed event.
+  // : Called by default handle when it receives a '?' pressed event.
   virtual bool help(); // this is called if '?' is pressed
 
-  //: Called when the application is otherwise idle.
+  // : Called when the application is otherwise idle.
   // Override if you want to do idle processing.
   // Return false once your idle processing is complete,
   // or if you have no need for more idle processing.
   // Return true if you need more idle processing time.
   virtual bool idle();
 
-  //: Increase the reference count by one (for smart pointers).
+  // : Increase the reference count by one (for smart pointers).
   //  "const" is for convenience, it is cast away internally.
   void ref() const;
 
-  //: Decrease the reference count by one (for smart pointers).
+  // : Decrease the reference count by one (for smart pointers).
   //  "const" is for convenience, it is cast away internally.
   //  If the reference count reaches zero then delete the object.
   void unref() const;
 
- protected:
-  //: Destructor - called by vgui_tableau_sptr.
+protected:
+  // : Destructor - called by vgui_tableau_sptr.
   virtual ~vgui_tableau();
-
- private:
+private:
   friend struct vgui_parent_child_link;
   friend struct vgui_parent_child_link_impl;
   friend class vgui_adaptor;
 
-  //: Reference count - starts at 0.
+  // : Reference count - starts at 0.
   int references;
 };
 
-//: Print some indication of what the tableau is.
-vcl_ostream &operator<<(vcl_ostream &os, vgui_tableau_sptr const &t);
+// : Print some indication of what the tableau is.
+vcl_ostream & operator<<(vcl_ostream & os, vgui_tableau_sptr const & t);
 
 #include "vgui_tableau_sptr.h"
 

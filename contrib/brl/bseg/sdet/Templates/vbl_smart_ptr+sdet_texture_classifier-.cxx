@@ -4,4 +4,3 @@
 
 VBL_SMART_PTR_INSTANTIATE(sdet_texture_classifier);
 VBL_IO_SMART_PTR_INSTANTIATE(sdet_texture_classifier);
-

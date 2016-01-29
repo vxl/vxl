@@ -1,6 +1,6 @@
 // This is brl/bseg/bvpl/bvpl_octree/pro/processes/bvpl_scene_kernel_operator_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief A class for running a kernel to a boxm_scene
 // \author Isabel Restrepo
@@ -29,11 +29,11 @@
 
 namespace bvpl_scene_kernel_operator_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+const unsigned n_inputs_ = 5;
+const unsigned n_outputs_ = 1;
 }
 
-//: process takes 5 inputs and has 1 output.
+// : process takes 5 inputs and has 1 output.
 // * input[0]: The boxm_scene
 // * input[1]: The kernel
 // * input[2]: The grid type:
@@ -66,114 +66,126 @@ bool bvpl_scene_kernel_operator_process(bprb_func_process& pro)
 {
   using namespace bvpl_scene_kernel_operator_process_globals;
 
-  if (pro.n_inputs() < n_inputs_)
-  {
+  if( pro.n_inputs() < n_inputs_ )
+    {
     vcl_cerr << pro.name() << ": the input number should be " << n_inputs_
              << " but instead it is " << pro.n_inputs() << '\n';
     return false;
-  }
+    }
 
-  //get inputs:
-  unsigned i = 0;
+  // get inputs:
+  unsigned             i = 0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  bvpl_kernel_sptr kernel = pro.get_input<bvpl_kernel_sptr>(i++);
-  vcl_string datatype = pro.get_input<vcl_string>(i++);
-  vcl_string functor_name = pro.get_input<vcl_string>(i++);
-  vcl_string output_path = pro.get_input<vcl_string>(i++);
-  //short level = 0;
+  bvpl_kernel_sptr     kernel = pro.get_input<bvpl_kernel_sptr>(i++);
+  vcl_string           datatype = pro.get_input<vcl_string>(i++);
+  vcl_string           functor_name = pro.get_input<vcl_string>(i++);
+  vcl_string           output_path = pro.get_input<vcl_string>(i++);
+  // short level = 0;
 
-  //print inputs
+  // print inputs
   vcl_cout << "In bvpl_scene_kernel_operator:\n"
            << "Datatype:     " << datatype << vcl_endl
            << "Functor Name: " << functor_name << vcl_endl;
 
-  //check input's validity
-  if (!scene_base.ptr()) {
+  // check input's validity
+  if( !scene_base.ptr() )
+    {
     vcl_cerr <<  " :-- Grid is not valid!\n";
     return false;
-  }
+    }
 
-  if ( !kernel ) {
+  if( !kernel )
+    {
     vcl_cerr << pro.name() << " :-- Kernel is not valid!\n";
     return false;
-  }
+    }
 
-  boxm_scene_base_sptr scene_ptr=new boxm_scene_base();
+  boxm_scene_base_sptr scene_ptr = new boxm_scene_base();
 
-  if (datatype == "bsta_gauss_f1")
-  {
+  if( datatype == "bsta_gauss_f1" )
+    {
     typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
-    typedef boct_tree<short, gauss_type > tree_type;
-    boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
-    double finest_cell_length = scene_in->finest_cell_length();
+    typedef boct_tree<short, gauss_type> tree_type;
+    boxm_scene<tree_type> * scene_in = static_cast<boxm_scene<tree_type> *>(scene_base.as_pointer() );
+    double                  finest_cell_length = scene_in->finest_cell_length();
     kernel->set_voxel_length(finest_cell_length);
 
-    //parameters of the output scene are the same as those of the input scene
-    boxm_scene<tree_type> *scene_out =
-      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
+    // parameters of the output scene are the same as those of the input scene
+    boxm_scene<tree_type> * scene_out =
+      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(),
+                                scene_in->world_dim(), scene_in->max_level(), scene_in->init_level() );
     scene_out->set_paths(output_path, "gauss_response_scene");
     scene_out->set_appearance_model(BSTA_GAUSS_F1);
     scene_out->write_scene("/gauss_response_scene.xml");
 
-    if (functor_name == "gauss_convolution") {
+    if( functor_name == "gauss_convolution" )
+      {
       bvpl_gauss_convolution_functor functor;
-      bvpl_scene_kernel_operator scene_oper;
-      //operate on scene
+      bvpl_scene_kernel_operator     scene_oper;
+      // operate on scene
       scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
-    }
-    else if (functor_name == "positive_gauss_convolution") {
+      }
+    else if( functor_name == "positive_gauss_convolution" )
+      {
       bvpl_positive_gauss_conv_functor functor;
-      bvpl_scene_kernel_operator scene_oper;
-      //operate on scene
+      bvpl_scene_kernel_operator       scene_oper;
+      // operate on scene
       scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
 
-      //clean memory
+      // clean memory
       scene_in->unload_active_blocks();
       scene_out->unload_active_blocks();
 
       return true;
+      }
+    return false;
     }
-      return false;
-  }
-  else if (datatype == "float")
-  {
-    typedef boct_tree<short, float > tree_type;
-    boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
-    double finest_cell_length = scene_in->finest_cell_length();
+  else if( datatype == "float" )
+    {
+    typedef boct_tree<short, float> tree_type;
+    boxm_scene<tree_type> * scene_in = static_cast<boxm_scene<tree_type> *>(scene_base.as_pointer() );
+    double                  finest_cell_length = scene_in->finest_cell_length();
     kernel->set_voxel_length(finest_cell_length);
-    //parameters of the output scene are the same as those of the input scene
-    boxm_scene<tree_type> *scene_out =
-      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());
+    // parameters of the output scene are the same as those of the input scene
+    boxm_scene<tree_type> * scene_out =
+      new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(),
+                                scene_in->world_dim(), scene_in->max_level(), scene_in->init_level() );
     scene_out->set_paths(output_path, "response_scene");
     scene_out->set_appearance_model(BOXM_FLOAT);
     scene_out->write_scene("/float_response_scene.xml");
 
-    if (functor_name == "edge_algebraic_mean") {
+    if( functor_name == "edge_algebraic_mean" )
+      {
       bvpl_edge_algebraic_mean_functor<float> functor;
-      bvpl_scene_kernel_operator scene_oper;
-      //operate on scene
+      bvpl_scene_kernel_operator              scene_oper;
+      // operate on scene
       scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
-    }
-    else if (functor_name == "algebraic") {
-      bvpl_algebraic_functor functor;
+      }
+    else if( functor_name == "algebraic" )
+      {
+      bvpl_algebraic_functor     functor;
       bvpl_scene_kernel_operator scene_oper;
-      //operate on scene
+      // operate on scene
       scene_oper.operate(*scene_in, functor, kernel, *scene_out);
       scene_ptr = scene_out;
       pro.set_output_val<boxm_scene_base_sptr>(0, scene_ptr);
       return true;
-    }
+      }
     else
+      {
       return false;
-  }
+      }
+    }
   else
+    {
     return false;
+    }
 }

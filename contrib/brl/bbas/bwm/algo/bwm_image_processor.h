@@ -17,35 +17,29 @@
 
 class bwm_image_processor
 {
- public:
-  static void hist_plot(bgui_image_tableau_sptr img,
-                        vsol_polygon_2d_sptr p = 0);
+public:
+  static void hist_plot(bgui_image_tableau_sptr img, vsol_polygon_2d_sptr p = 0);
 
-  static void intensity_profile(bgui_image_tableau_sptr img,
-                                float start_col, float start_row,
-                                float end_col, float end_row);
+  static void intensity_profile(bgui_image_tableau_sptr img, float start_col, float start_row, float end_col,
+                                float end_row);
 
   static void range_map(bgui_image_tableau_sptr img);
 
 #if 0
-  static bool step_edges_vd(bgui_image_tableau_sptr const& img,
-                            vsol_box_2d_sptr const& roi,
+  static bool step_edges_vd(bgui_image_tableau_sptr const& img, vsol_box_2d_sptr const& roi,
                             vcl_vector<vdgl_digital_curve_sptr>& edges);
+
 #endif
 
-  static bool step_edges_vd(bgui_image_tableau_sptr const& img,
-                            vsol_box_2d_sptr const& roi,
+  static bool step_edges_vd(bgui_image_tableau_sptr const& img, vsol_box_2d_sptr const& roi,
                             vcl_vector<vsol_digital_curve_2d_sptr>& edges);
 
-  static bool lines_vd(bgui_image_tableau_sptr const& img,
-                       vsol_box_2d_sptr const& roi,
+  static bool lines_vd(bgui_image_tableau_sptr const& img, vsol_box_2d_sptr const& roi,
                        vcl_vector<vsol_line_2d_sptr>& edges);
 
-  static void scan_regions(bgui_image_tableau_sptr const& img,
-                           vcl_vector<vgl_polygon<double> > const& regions);
+  static void scan_regions(bgui_image_tableau_sptr const& img, vcl_vector<vgl_polygon<double> > const& regions);
 
-  static bool crop_to_box(bgui_image_tableau_sptr const& img,
-                          vsol_box_2d_sptr const& roi,
+  static bool crop_to_box(bgui_image_tableau_sptr const& img, vsol_box_2d_sptr const& roi,
                           vil_image_resource_sptr& chip);
 
 };

@@ -1,7 +1,7 @@
 // This is brl/bseg/bvpl/kernels/bvpl_gauss3d_x_kernel_factory.h
 #ifndef bvpl_gauss3d_x_kernel_factory_h
 #define bvpl_gauss3d_x_kernel_factory_h
-//:
+// :
 // \file
 // \brief A factory of the kernel of type first (x) derivative of 3d gaussian
 // \author Isabel Restrepo mir@lems.brown.edu
@@ -14,7 +14,7 @@
 
 #include "bvpl_kernel_factory.h"
 
-//: A class to generate kernels of the  first derivative of gaussian.
+// : A class to generate kernels of the  first derivative of gaussian.
 // This kernel can be constructed from 2 sigma values or 3 sigma values. In the first case the gaussian is a spheroid,
 // i.e. 2 of the radii are equal. In such case the kernel is completely described by an axis of rotation (which is aligned with the non-equal radii)
 // and two variance parameters, sigma1 and sigma2
@@ -23,28 +23,27 @@
 // The case of an isotropic has not been implemented because is it not needed at the moment, but the code is reusable for such case
 class bvpl_gauss3d_x_kernel_factory : public bvpl_kernel_factory
 {
- public:
+public:
 
-  //:Default Constructor
+  // :Default Constructor
   bvpl_gauss3d_x_kernel_factory();
 
 #if 0
-  //: Constructs a kernel form gaussian spheroid with sigma parameters s1 and s2. i.e. Cov is diagonal with entries s1, s2, s2
+  // : Constructs a kernel form gaussian spheroid with sigma parameters s1 and s2. i.e. Cov is diagonal with entries s1, s2, s2
   //  Can also specify the support of the kernel
   bvpl_gauss3d_x_kernel_factory(float s1, float s2, float supp_1 = 2.0, float supp2 = 1.0);
 #endif
 
-  //: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2,s3
+  // : Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2,s3
   //  Can also specify the support of the kernel
   bvpl_gauss3d_x_kernel_factory(float s1, float s2, float s3, float supp_1 = 2.0, float supp2 = 1.0, float supp3 = 1.0);
 
   virtual ~bvpl_gauss3d_x_kernel_factory() {}
 
   static vcl_string name() {return "gauss_x"; }
+private:
 
- private:
-
-  //:Creates a 2d edge kernel
+  // :Creates a 2d edge kernel
   virtual void create_canonical();
 
   float sigma1_;
@@ -56,6 +55,5 @@ class bvpl_gauss3d_x_kernel_factory : public bvpl_kernel_factory
 
   static const unsigned max_size_ = 71;
 };
-
 
 #endif

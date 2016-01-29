@@ -1,7 +1,7 @@
 // This is core/vgui/impl/win32/vgui_win32_adaptor.h
 #ifndef vgui_win32_adaptor_h_
 #define vgui_win32_adaptor_h_
-//:
+// :
 // \file
 // \brief The Win32 Application Programming Interfaces (API) implementation of vgui_adaptor.
 // \author Lianqing Yu
@@ -24,12 +24,12 @@ class vgui_win32_window;
 class vgui_win32_internal_timer;
 
 class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
-                           public vgui_win32_cmdtarget
+  public vgui_win32_cmdtarget
 {
- public:
+public:
   typedef vgui_adaptor_mixin mixin;
 
-  vgui_win32_adaptor(HWND hwnd, vgui_window *win = 0);
+  vgui_win32_adaptor(HWND hwnd, vgui_window * win = 0);
   ~vgui_win32_adaptor();
 
   // Set the size of rendering area. This is convinient for tableaus that
@@ -48,12 +48,16 @@ class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
 
   // Create a timer (id) to dispatch WM_TIMER event every tm milliseconds.
   virtual void post_timer(float tm, int id);
+
   // Redraw the rendering area.
   virtual void post_redraw();
+
   // Redraw the overlay buffer
   virtual void post_overlay_redraw();
+
   virtual void post_idle_request();
-  //virtual void post_message(char const *, void const *);
+
+  // virtual void post_message(char const *, void const *);
   virtual void post_destroy();
 
   // kill an existing timer
@@ -64,12 +68,11 @@ class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
   { mixin::popup_modifier = m; mixin::popup_button = b; }
 
   // Return the modifier/button which pops up the popup menu.
-  virtual void get_popup_bindings(vgui_modifier &m, vgui_button &b) const
+  virtual void get_popup_bindings(vgui_modifier & m, vgui_button & b) const
   { m = mixin::popup_modifier; b = mixin::popup_button; }
 
-
   // getting the window.
-  virtual vgui_window *get_window() const { return win_; }
+  virtual vgui_window * get_window() const { return win_; }
 
   // various buffer behaviour.
   virtual void swap_buffers() { SwapBuffers(hdc_); }
@@ -77,52 +80,68 @@ class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
 
   // Message handling function
   virtual BOOL OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam);
+
   // Called within message processing loop.
   void menu_dispatcher(int menuId);
 
   // Message callback functions
   void OnCreate();
-  //void OnDestroy();
+
+  // void OnDestroy();
   void OnSize(WPARAM wParam, LPARAM lParam);
+
   void OnPaint();
+
   void OnTimer(WPARAM wParam, LPARAM lParam);
+
   void OnHScroll(UINT message, WPARAM wParam, LPARAM lParam);
+
   void OnVScroll(UINT message, WPARAM wParam, LPARAM lParam);
+
   void OnKeyDown(WPARAM wParam, LPARAM lParam);
+
   void OnKeyUp(WPARAM wParam, LPARAM lParam);
-  //void OnChar();
+
+  // void OnChar();
   void OnLButtonDown(WPARAM wParam, LPARAM lParam);
+
   void OnLButtonUp(WPARAM wParam, LPARAM lParam);
+
   void OnMButtonDown(WPARAM wParam, LPARAM lParam);
+
   void OnMButtonUp(WPARAM wParam, LPARAM lParam);
+
   void OnRButtonDown(WPARAM wParam, LPARAM lParam);
+
   void OnRButtonUp(WPARAM wParam, LPARAM lParam);
+
   void OnMouseMove(WPARAM wParam, LPARAM lParam);
+
   void OnMouseWheel(WPARAM wParam, LPARAM lParam);
 
- protected:
+protected:
   // Translate a win32 message into the corresponding VGUI event.
-  vgui_event translate_message(WPARAM wParam, LPARAM lParam,
-                               vgui_event_type evtype = vgui_EVENT_NULL);
+  vgui_event translate_message(WPARAM wParam, LPARAM lParam, vgui_event_type evtype = vgui_EVENT_NULL);
+
   // Translate a win32 key into the corresponding VGUI key
-  void translate_key(UINT nChar, UINT nFlags, int *key, int *ascii_char);
+  void translate_key(UINT nChar, UINT nFlags, int * key, int * ascii_char);
+
   // Handle mouse event
   void domouse(vgui_event_type t, vgui_button b, UINT nFlags, int x, int y);
 
-  HWND   hwnd_;  // main window handle
-  HGLRC  hglrc_; // OpenGL rendering context
-  HDC    hdc_;   // device context
-  int    tid_;   // timer identifier
+  HWND  hwnd_;   // main window handle
+  HGLRC hglrc_;  // OpenGL rendering context
+  HDC   hdc_;    // device context
+  int   tid_;    // timer identifier
 
-  vgui_window *win_; // the window that contains this adaptor
+  vgui_window * win_; // the window that contains this adaptor
 
   // map of timers currently in use.
   vcl_map<unsigned int, vgui_win32_internal_timer> timers_;
 
-  static vgui_menu last_popup;
+  static vgui_menu              last_popup;
   vcl_vector<vgui_command_sptr> popup_callbacks; // commands called by popup menu items
-
- private:
+private:
   HGLRC setup_for_gl(HDC);
 
   // True while a redraw event has been requested but not implemented.
@@ -139,13 +158,13 @@ class vgui_win32_adaptor : public vgui_adaptor, public vgui_adaptor_mixin,
 
 class vgui_win32_internal_timer
 {
- public:
+public:
   vgui_win32_internal_timer() : timer_id(0), callback_ptr(0) {}
-  vgui_win32_internal_timer(unsigned int id, void *p)
-  : timer_id(id), callback_ptr(p) {}
+  vgui_win32_internal_timer(unsigned int id, void * p)
+    : timer_id(id), callback_ptr(p) {}
 
   unsigned int timer_id;
-  void* callback_ptr;
+  void*        callback_ptr;
 };
 
 #endif // vgui_win32_adaptor_h_

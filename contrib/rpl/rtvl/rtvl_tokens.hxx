@@ -27,17 +27,17 @@ public:
   rgtl_object_array_points<N> points;
 
   /** Refined tokens ready for dense analysis at this scale.  */
-  vcl_vector< rtvl_tensor<N> > tokens;
-
+  vcl_vector<rtvl_tensor<N> > tokens;
 private:
   friend class rgtl_serialize_access;
   template <class Serializer>
   void serialize(Serializer& sr)
-    {
+  {
     sr & scale;
     sr & points;
     sr & tokens;
-    }
+  }
+
 };
 
 #endif

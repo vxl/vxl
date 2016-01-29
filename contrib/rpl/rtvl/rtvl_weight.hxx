@@ -6,24 +6,28 @@
 #ifndef rtvl_weight_hxx
 #define rtvl_weight_hxx
 
-template <class T, unsigned int n> class vnl_vector_fixed;
+template <class T, unsigned int n>
+class vnl_vector_fixed;
 
-template <unsigned int N> class rtvl_terms;
+template <unsigned int N>
+class rtvl_terms;
 
 template <unsigned int N>
 class rtvl_weight
 {
 public:
-  rtvl_weight(double gs): geodesic_scale(gs) {}
+  rtvl_weight(double gs) : geodesic_scale(gs) {}
   virtual ~rtvl_weight() {}
   virtual void set_scale(double gs) { this->geodesic_scale = gs; }
   virtual double get_scale() const { return geodesic_scale; }
   virtual double compute_flat(rtvl_terms<N> const& terms) = 0;
-  virtual void compute_flat_d(rtvl_terms<N> const& terms,
-                              vnl_vector_fixed<double, N>& dwflat) = 0;
+
+  virtual void compute_flat_d(rtvl_terms<N> const& terms, vnl_vector_fixed<double, N>& dwflat) = 0;
+
   virtual double compute_curved(rtvl_terms<N> const& terms) = 0;
-  virtual void compute_curved_d(rtvl_terms<N> const& terms,
-                                vnl_vector_fixed<double, N>& dwcurve) = 0;
+
+  virtual void compute_curved_d(rtvl_terms<N> const& terms, vnl_vector_fixed<double, N>& dwcurve) = 0;
+
 protected:
   double geodesic_scale;
 };

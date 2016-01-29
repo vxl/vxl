@@ -2,7 +2,7 @@
 #ifndef vgui_multiply_4x4_h_
 #define vgui_multiply_4x4_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
 // .NAME vgui_multiply_4x4
 // .INCLUDE vgui/internals/vgui_multiply_4x4.h

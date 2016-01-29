@@ -1,7 +1,7 @@
 // This is mul/mbl/mbl_test.h
 #ifndef mbl_test_h_
 #define mbl_test_h_
-//:
+// :
 // \file
 // \brief A place for useful things associated with testing.
 // \author iscott
@@ -13,7 +13,7 @@
 #include <vcl_vector.h>
 #include <vul/vul_reg_exp.h>
 
-//: Test if the summaries of two objects are the same.
+// : Test if the summaries of two objects are the same.
 // Both objects \a a and \a b must be the same class, and have
 // vsl_print_summary defined for them.
 // \param exceptions is an optional, 0 terminated, list of c-strings.
@@ -33,52 +33,55 @@
 // \endcode
 
 template <class S>
-bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exceptions=0 )
+bool mbl_test_summaries_are_equal(const S & a, const S & b, const char * * exceptions = 0 )
 {
   vcl_stringstream ssa, ssb;
-  vcl_string sa, sb;
+  vcl_string       sa, sb;
+
   vsl_print_summary(ssa, a);
   vsl_print_summary(ssb, b);
   vcl_vector<vul_reg_exp> exceptions_re;
-  while (exceptions && *exceptions)
-  {
-    exceptions_re.push_back(vul_reg_exp(*exceptions));
+  while( exceptions && *exceptions )
+    {
+    exceptions_re.push_back(vul_reg_exp(*exceptions) );
     exceptions++;
-  }
+    }
 
-  while (!ssa.eof() || !ssb.eof())
-  {
+  while( !ssa.eof() || !ssb.eof() )
+    {
     vcl_getline(ssa, sa);
     vcl_getline(ssb, sb);
-    if (sa != sb && exceptions_re.empty())
-    {
-      vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;
+    if( sa != sb && exceptions_re.empty() )
+      {
+      vcl_cerr << "Found differences:\n>" << sa << "\n<" << sb << vcl_endl;
       return false;
-    }
-    else if (sa != sb)
-    {
+      }
+    else if( sa != sb )
+      {
       bool exception_found = false;
 //      for (const char **it = exceptions; *it!=0; ++it)
 //        if (sa.find(*it)!=vcl_string::npos && sb.find(*it)!=vcl_string::npos)
-      for (vcl_vector<vul_reg_exp>::iterator it=exceptions_re.begin(), end=exceptions_re.end();
-        it != end; ++it)
-        if (it->find(sa) && it->find(sb))
+      for( vcl_vector<vul_reg_exp>::iterator it = exceptions_re.begin(), end = exceptions_re.end();
+           it != end; ++it )
         {
+        if( it->find(sa) && it->find(sb) )
+          {
           exception_found = true;
           break;
+          }
         }
-      if (!exception_found)
-      {
-        vcl_cerr << "Found differences:\n>"<<sa<<"\n<"<<sb<<vcl_endl;
+      if( !exception_found )
+        {
+        vcl_cerr << "Found differences:\n>" << sa << "\n<" << sb << vcl_endl;
         return false;
+        }
       }
     }
-  }
+
   return true;
 }
 
-
-//: A historical measurement recording framework.
+// : A historical measurement recording framework.
 // The function will append the measurement to the file specified
 // by $CMAKE_VAR{VXL_MBL_TEST_SAVE_MEASUREMENT_PATH}/measurement_path. The
 // value is also copied to stdout where it can be automatically
@@ -89,7 +92,6 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
 // \verbatim
 // mbl_test_save_measurement("algo/krr/tests/test_krr_optimise_model_parameters/Point_To_Point_RMS_Error",value);
 // \endverbatim
-void mbl_test_save_measurement( const vcl_string &measurement_path, double value);
-
+void mbl_test_save_measurement( const vcl_string & measurement_path, double value);
 
 #endif // mbl_test_h_

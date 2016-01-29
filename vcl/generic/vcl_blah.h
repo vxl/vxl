@@ -5,7 +5,7 @@
 
 // blah
 #ifndef vcl_blah
-#define vcl_blah vcl_generic_blah_STD :: blah
+#  define vcl_blah vcl_generic_blah_STD::blah
 #endif
 
 #endif // vcl_generic_blah_h_

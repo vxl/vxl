@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //  This example program shows a typical use of the vepl_histogram function on
 //  an int image.  The input image (argv[1]) can be any scalar type (i.e.,
@@ -15,23 +15,28 @@
 #include <vcl_iostream.h>
 
 int
-main(int argc, char** argv) {
-  if (argc < 2)
-  {
+main(int argc, char* * argv)
+{
+  if( argc < 2 )
+    {
     vcl_cerr << "Syntax: example_histogram file_in\n";
     return 1;
-  }
+    }
 
   // The input image:
   vil_image_resource_sptr in = vil_load_image_resource(argv[1]);
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  if( !in ) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
 
   // The filter:
   vcl_vector<unsigned int> out = vepl_histogram(in);
-
   // Write output:
-  for (unsigned int i=0; i<out.size(); ++i) if (out[i] != 0)
-    vcl_cout << i << ": " << out[i] << vcl_endl;
+  for( unsigned int i = 0; i < out.size(); ++i )
+    {
+    if( out[i] != 0 )
+      {
+      vcl_cout << i << ": " << out[i] << vcl_endl;
+      }
+    }
 
   return 0;
 }

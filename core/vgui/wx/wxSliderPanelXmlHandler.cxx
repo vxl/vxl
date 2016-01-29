@@ -5,32 +5,30 @@
 IMPLEMENT_DYNAMIC_CLASS(wxSliderPanelXmlHandler, wxXmlResourceHandler)
 
 wxSliderPanelXmlHandler::wxSliderPanelXmlHandler()
-: wxXmlResourceHandler()
+  : wxXmlResourceHandler()
 {
 }
 
-wxObject *wxSliderPanelXmlHandler::DoCreateResource()
+wxObject * wxSliderPanelXmlHandler::DoCreateResource()
 {
-  long base_id = GetLong(wxT("base_id"),10100);
+  long base_id = GetLong(wxT("base_id"), 10100);
 
   wxSliderPanel* panel =
-      new wxSliderPanel(m_parentAsWindow,
-                        GetID(),
-                        base_id,
-                        GetPosition(), GetSize(),
-                        GetStyle(),
-                        GetName());
+    new wxSliderPanel(m_parentAsWindow,
+                      GetID(),
+                      base_id,
+                      GetPosition(), GetSize(),
+                      GetStyle(),
+                      GetName() );
 
   // TODO: Load initial sliders from the XML File
-  //vcl_vector<double> min_vals, max_vals, init_vals;
-  //panel->CreateSliders(init_vals,min_vals,max_vals);
+  // vcl_vector<double> min_vals, max_vals, init_vals;
+  // panel->CreateSliders(init_vals,min_vals,max_vals);
 
   return panel;
 }
 
-
-bool wxSliderPanelXmlHandler::CanHandle(wxXmlNode *node)
+bool wxSliderPanelXmlHandler::CanHandle(wxXmlNode * node)
 {
-  return IsOfClass(node, wxT("wxSliderPanel"));
+  return IsOfClass(node, wxT("wxSliderPanel") );
 }
-

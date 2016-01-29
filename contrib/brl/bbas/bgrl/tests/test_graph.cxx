@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 #include <testlib/testlib_test.h>
 #include <vsl/vsl_binary_io.h>
@@ -9,7 +9,7 @@
 #include <bgrl/bgrl_edge.h>
 #include <bgrl/bgrl_graph.h>
 
-//: Test the graph class
+// : Test the graph class
 void test_graph(const bgrl_vertex_sptr& vertex_1)
 {
   bgrl_vertex_sptr vertex_2 = new bgrl_vertex();
@@ -46,7 +46,7 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
        the_graph->add_edge(vertex_3, vertex_5) &&
        the_graph->add_edge(vertex_5, vertex_3) &&
        !the_graph->add_edge(vertex_5, vertex_3) && // can't add the same edge twice
-       !the_graph->add_edge(vertex_1, vertex_1), // can't edge to self
+       !the_graph->add_edge(vertex_1, vertex_1),   // can't edge to self
        true);
 
   TEST("Testing vertex degree",
@@ -59,14 +59,14 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
   TEST("Testing remove_edge()",
        the_graph->remove_edge(vertex_3, vertex_5) &&
        !the_graph->remove_edge(vertex_3, vertex_5) && // can't remove an edge not in the graph
-       !the_graph->remove_edge(vertex_2, NULL), // can't remove an invalid edge
+       !the_graph->remove_edge(vertex_2, NULL),       // can't remove an invalid edge
        true);
 
   TEST("Testing size()",
        the_graph->size() == 5,
        true);
 
-  TEST("Testing purge()",the_graph->purge(),false);
+  TEST("Testing purge()", the_graph->purge(), false);
 
 // This test is needs to be updated
 //
@@ -84,16 +84,16 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
 //    breadth_check = ((*b_itr) == breadth_order[i]) && breadth_check;
 //  TEST("Testing breadth_iterator", breadth_check, true);
 
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 // I/O Tests
-//----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
 
-  vsl_add_to_binary_loader(bgrl_vertex());
-  vsl_add_to_binary_loader(bgrl_edge());
+  vsl_add_to_binary_loader(bgrl_vertex() );
+  vsl_add_to_binary_loader(bgrl_edge() );
 
   // binary test output file stream
   vsl_b_ofstream bfs_out("test_graph_io.tmp");
-  TEST("Created test_graph_io.tmp for writing",(!bfs_out), false);
+  TEST("Created test_graph_io.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, the_graph);
   bfs_out.close();
 
@@ -101,18 +101,17 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
 
   // binary test input file stream
   vsl_b_ifstream bfs_in("test_graph_io.tmp");
-  TEST("Opened test_graph_io.tmp for reading",(!bfs_in), false);
+  TEST("Opened test_graph_io.tmp for reading", (!bfs_in), false);
   vsl_b_read(bfs_in, graph_in);
   bfs_in.close();
 
   // remove the temporary file
-  vpl_unlink ("test_graph_io.tmp");
+  vpl_unlink("test_graph_io.tmp");
 
   TEST("Testing size() on loaded graph",
        graph_in->size() == the_graph->size(),
        true);
 }
-
 
 void test_memory_leak(const bgrl_vertex_sptr& v1)
 {
@@ -120,10 +119,10 @@ void test_memory_leak(const bgrl_vertex_sptr& v1)
   TEST("Testing for memory leaks", v1->get_references(), 1);
 }
 
-
 static void test_graph()
 {
   bgrl_vertex_sptr v1 = new bgrl_vertex();
+
   test_graph(v1);
   test_memory_leak(v1);
 }

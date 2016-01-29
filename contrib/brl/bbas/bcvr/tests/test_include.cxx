@@ -5,6 +5,4 @@
 #include <bcvr/bcvr_cv_cor.h>
 #include <bcvr/bcvr_cv_cor_sptr.h>
 
-
-
 int main() { return 0; }

@@ -3,5 +3,4 @@
 
 // THIS IS A GENERATED FILE. DO NOT EDIT! -- Instead, edit vcl_cassert.hhh and run make
 
-
 #endif // vcl_generic_cassert_h_

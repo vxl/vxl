@@ -13,8 +13,8 @@ class boxm2_mog6_view_processor;
 class boxm2_mog6_view_compact_processor;
 
 enum bstm_data_type
-{
-  BSTM_ALPHA=0,
+  {
+  BSTM_ALPHA = 0,
   BSTM_CHANGE,
   BSTM_MOG3_GREY,
   BSTM_MOG3_GREY_16,
@@ -34,276 +34,338 @@ enum bstm_data_type
   BSTM_AUX2,
   BSTM_AUX3,
   BSTM_UNKNOWN
-};
+  };
 
 // Pixel properties for templates.
 template <bstm_data_type type>
 class bstm_data_traits;
 
-template<>
+template <>
 class bstm_data_traits<BSTM_ALPHA>
 {
- public:
+public:
   typedef float datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "alpha"; else return "alpha_"+identifier; }
+  { if( !identifier.size() ) {return "alpha"; } else {return "alpha_" + identifier; }}
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_CHANGE>
 {
- public:
+public:
   typedef float datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_change"; else return "bstm_change_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_change"; } else {return "bstm_change_" + identifier; }}
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_NUM_OBS>
 {
- public:
+public:
   typedef vnl_vector_fixed<unsigned short, 4> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_num_obs"; else return "bstm_num_obs_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_num_obs"; } else {return "bstm_num_obs_" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_NUM_OBS_SINGLE>
 {
- public:
+public:
   typedef unsigned short datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_num_obs_single"; else return "bstm_num_obs_single_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_num_obs_single"; } else {return "bstm_num_obs_single_" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_GAUSS_RGB>
 {
- public:
+public:
   typedef vnl_vector_fixed<unsigned char, 8> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_gauss_rgb"; else return "bstm_gauss_rgb_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_gauss_rgb"; } else {return "bstm_gauss_rgb_" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>
 {
- public:
+public:
   typedef vnl_vector_fixed<int, 8> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_gauss_rgb_view_compact"; else return "bstm_gauss_rgb_view_compact_"+identifier; }
+  {
+    if( !identifier.size() )
+      {
+      return "bstm_gauss_rgb_view_compact";
+      }
+    else
+      {
+      return "bstm_gauss_rgb_view_compact_" + identifier;
+      }
+  }
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_MOG3_GREY>
 {
- public:
-  typedef boxm2_mog3_grey_processor processor;
+public:
+  typedef boxm2_mog3_grey_processor          processor;
   typedef vnl_vector_fixed<unsigned char, 8> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_mog3_grey"; else return "bstm_mog3_grey_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_mog3_grey"; } else {return "bstm_mog3_grey_" + identifier; }}
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_MOG6_VIEW>
 {
- public:
-  typedef boxm2_mog6_view_processor processor;
+public:
+  typedef boxm2_mog6_view_processor   processor;
   typedef vnl_vector_fixed<float, 16> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_mog6_view"; else return "bstm_mog6_view_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_mog6_view"; } else {return "bstm_mog6_view_" + identifier; }}
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>
 {
- public:
-  typedef boxm2_mog6_view_compact_processor processor;
+public:
+  typedef boxm2_mog6_view_compact_processor   processor;
   typedef vnl_vector_fixed<unsigned char, 16> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_mog6_view_compact"; else return "bstm_mog6_view_compact_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_mog6_view_compact"; } else {return "bstm_mog6_view_compact_" + identifier; }}
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_NUM_OBS_VIEW>
 {
- public:
+public:
   typedef vnl_vector_fixed<float, 8> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_num_obs_view"; else return "bstm_num_obs_view"+identifier; }
+  { if( !identifier.size() ) {return "bstm_num_obs_view"; } else {return "bstm_num_obs_view" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>
 {
- public:
+public:
   typedef vnl_vector_fixed<unsigned short, 8> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_num_obs_view_compact"; else return "bstm_num_obs_view_compact"+identifier; }
+  {
+    if( !identifier.size() )
+      {
+      return "bstm_num_obs_view_compact";
+      }
+    else
+      {
+      return "bstm_num_obs_view_compact" + identifier;
+      }
+  }
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_LABEL>
 {
- public:
+public:
   typedef unsigned char datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_label"; else return "bstm_label_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_label"; } else {return "bstm_label_" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_AUX0>
 {
- public:
+public:
   typedef float datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux0"; else return "aux0_"+identifier; }
+  { if( !identifier.size() ) {return "aux0"; } else {return "aux0_" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_AUX1>
 {
- public:
+public:
   typedef float datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux1"; else return "aux1_"+identifier; }
+  { if( !identifier.size() ) {return "aux1"; } else {return "aux1_" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_AUX2>
 {
- public:
+public:
   typedef float datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux2"; else return "aux2_"+identifier; }
+  { if( !identifier.size() ) {return "aux2"; } else {return "aux2_" + identifier; }}
 };
 
-template<>
+template <>
 class bstm_data_traits<BSTM_AUX3>
 {
- public:
+public:
   typedef float datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "aux3"; else return "aux3_"+identifier; }
+  { if( !identifier.size() ) {return "aux3"; } else {return "aux3_" + identifier; }}
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_RAY_DIR>
 {
- public:
+public:
   typedef vnl_vector_fixed<float, 4> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_ray_dir"; else return "bstm_ray_dir_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_ray_dir"; } else {return "bstm_ray_dir_" + identifier; }}
 };
 
-
-template<>
+template <>
 class bstm_data_traits<BSTM_POINT>
 {
- public:
+public:
   typedef vnl_vector_fixed<float, 4> datatype;
   static vcl_size_t datasize() { return sizeof(datatype); }
   static vcl_string prefix(const vcl_string& identifier = "")
-  { if (!identifier.size()) return "bstm_point"; else return "bstm_point_"+identifier; }
+  { if( !identifier.size() ) {return "bstm_point"; } else {return "bstm_point_" + identifier; }}
 };
-
 
 // HACKY WAY TO GENERICALLY GET DATASIZES -
 class bstm_data_info
 {
- public:
+public:
 
   static vcl_size_t datasize(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
 
-    if (prefix.find(bstm_data_traits<BSTM_ALPHA>::prefix()) != vcl_string::npos)
+    if( prefix.find(bstm_data_traits<BSTM_ALPHA>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_ALPHA>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_MOG3_GREY>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_MOG3_GREY>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_MOG3_GREY>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_NUM_OBS_VIEW>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_NUM_OBS_VIEW>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_NUM_OBS_VIEW>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_NUM_OBS_SINGLE>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_NUM_OBS_SINGLE>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_NUM_OBS_SINGLE>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_NUM_OBS>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_NUM_OBS>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_NUM_OBS>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_GAUSS_RGB>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_MOG6_VIEW>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_MOG6_VIEW>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_AUX0>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_AUX0>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_AUX0>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_AUX1>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_AUX1>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_AUX1>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_AUX2>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_AUX2>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_AUX2>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_AUX3>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_AUX3>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_AUX3>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_RAY_DIR>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_RAY_DIR>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_RAY_DIR>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_LABEL>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_LABEL>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_LABEL>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_POINT>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_POINT>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_POINT>::datasize();
-    if (prefix.find(bstm_data_traits<BSTM_CHANGE>::prefix()) != vcl_string::npos)
+      }
+    if( prefix.find(bstm_data_traits<BSTM_CHANGE>::prefix() ) != vcl_string::npos )
+      {
       return bstm_data_traits<BSTM_CHANGE>::datasize();
+      }
     return 0;
   }
 
   static bstm_data_type data_type(vcl_string prefix)
   {
     // some of them changed to using find method to account for identifiers
-    if (prefix.find(bstm_data_traits<BSTM_ALPHA>::prefix()) != vcl_string::npos)
-      return BSTM_ALPHA ;
-    else if (prefix.find(bstm_data_traits<BSTM_MOG3_GREY>::prefix()) != vcl_string::npos)
-      return BSTM_MOG3_GREY ;
-    else if (prefix.find(bstm_data_traits<BSTM_NUM_OBS>::prefix()) != vcl_string::npos)
-      return  BSTM_NUM_OBS ;
-    else if (prefix.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != vcl_string::npos)
-      return  BSTM_GAUSS_RGB ;
-    else if (prefix.find(bstm_data_traits<BSTM_LABEL>::prefix()) != vcl_string::npos)
-      return  BSTM_LABEL ;
-    else if (prefix.find(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix()) != vcl_string::npos)
-      return  BSTM_GAUSS_RGB_VIEW_COMPACT ;
-    else if (prefix.find(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix()) != vcl_string::npos)
-      return  BSTM_MOG6_VIEW_COMPACT ;
-    else if (prefix.find(bstm_data_traits<BSTM_MOG6_VIEW>::prefix()) != vcl_string::npos)
-      return  BSTM_MOG6_VIEW ;
+    if( prefix.find(bstm_data_traits<BSTM_ALPHA>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_ALPHA;
+      }
+    else if( prefix.find(bstm_data_traits<BSTM_MOG3_GREY>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_MOG3_GREY;
+      }
+    else if( prefix.find(bstm_data_traits<BSTM_NUM_OBS>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_NUM_OBS;
+      }
+    else if( prefix.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_GAUSS_RGB;
+      }
+    else if( prefix.find(bstm_data_traits<BSTM_LABEL>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_LABEL;
+      }
+    else if( prefix.find(bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_GAUSS_RGB_VIEW_COMPACT;
+      }
+    else if( prefix.find(bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_MOG6_VIEW_COMPACT;
+      }
+    else if( prefix.find(bstm_data_traits<BSTM_MOG6_VIEW>::prefix() ) != vcl_string::npos )
+      {
+      return BSTM_MOG6_VIEW;
+      }
     else
+      {
       return BSTM_UNKNOWN;
+      }
   }
-};
 
+};
 
 #endif

@@ -1,7 +1,7 @@
 // This is core/vil/vil_smart_ptr.h
 #ifndef vil_smart_ptr_h_
 #define vil_smart_ptr_h_
-//:
+// :
 // \file
 // \brief Contains a templated smart pointer class
 // \author Richard Hartley (original Macro version),
@@ -20,7 +20,7 @@
 
 #include <vcl_iosfwd.h>
 
-//: A templated smart pointer class
+// : A templated smart pointer class
 // This class requires that the class being templated over has
 // the following signatures (methods) :
 // \code
@@ -34,123 +34,129 @@ template <class T>
 class vil_smart_ptr
 {
   VCL_SAFE_BOOL_DEFINE;
- public:
-  vil_smart_ptr ()
+public:
+  vil_smart_ptr()
     :  ptr_(0) { }
 
-  vil_smart_ptr (vil_smart_ptr<T> const &p)
-    :  ptr_(p.as_pointer()) { if (ptr_) ref(ptr_); }
+  vil_smart_ptr(vil_smart_ptr<T> const & p)
+    :  ptr_(p.as_pointer() ) { if( ptr_ ) {ref(ptr_); }}
 
-  vil_smart_ptr (T *p)
-    :  ptr_(p) { if (ptr_) ref(ptr_); }
+  vil_smart_ptr(T * p)
+    :  ptr_(p) { if( ptr_ ) {ref(ptr_); }}
 
-  ~vil_smart_ptr ()
+  ~vil_smart_ptr()
   {
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
-    T *old_ptr = ptr_;
+    T * old_ptr = ptr_;
+
     ptr_ = 0;
-    if (old_ptr)
+    if( old_ptr )
+      {
       unref(old_ptr);
+      }
   }
 
-  //: Assignment
-  vil_smart_ptr<T> &operator = (vil_smart_ptr<T> const &r)
+  // : Assignment
+  vil_smart_ptr<T> & operator =(vil_smart_ptr<T> const & r)
   {
-    return operator=(r.as_pointer());
+    return operator=(r.as_pointer() );
   }
 
-  vil_smart_ptr<T> &operator = (T *r)
+  vil_smart_ptr<T> & operator =(T * r)
   {
-    if (ptr_ != r)
-    {
+    if( ptr_ != r )
+      {
       // If there are circular references, calling unref() may
       // cause *this to be destroyed and so assigning to 'ptr_'
       // would be ill-formed and could cause heap corruption.
       // Hence perform the unref() only at the very end.
-      T *old_ptr = ptr_;
+      T * old_ptr = ptr_;
       ptr_ = r;
 
-      if (ptr_)
+      if( ptr_ )
+        {
         ref(ptr_);
+        }
 
       // *this might get deleted now, but that's ok.
-      if (old_ptr)
+      if( old_ptr )
+        {
         unref(old_ptr);
-    }
+        }
+      }
     return *this;
   }
 
-  //: Cast to bool
-  operator safe_bool () const
-    { return (ptr_ != (T*)0)? VCL_SAFE_BOOL_TRUE : 0; }
+  // : Cast to bool
+  operator safe_bool() const
+        { return (ptr_ != (T *)0) ? VCL_SAFE_BOOL_TRUE : 0; }
 
-  //: Inverse bool
+  // : Inverse bool
   bool operator!() const
-    { return (ptr_ != (T*)0)? false : true; }
+  { return (ptr_ != (T *)0) ? false : true; }
 
-  //: Dereferencing the pointer
-  T &operator * () const { return *ptr_; }
+  // : Dereferencing the pointer
+  T & operator *() const { return *ptr_; }
 
-  //: These methods all return the raw/dumb pointer.
-  T *operator -> () const { return ptr_; }
+  // : These methods all return the raw/dumb pointer.
+  T * operator ->() const { return ptr_; }
 
-  //: These methods all return the raw/dumb pointer.
-  T *ptr () const { return ptr_; }
+  // : These methods all return the raw/dumb pointer.
+  T * ptr() const { return ptr_; }
 
-  //: These methods all return the raw/dumb pointer.
+  // : These methods all return the raw/dumb pointer.
   //
   // WARNING : Do not add an automatic cast to T*.
   //           This is intrinsically incorrect as you loose the smartness!
   //           In cases where you really need the pointer, it is better
   //           to be explicit about it and use one of the methods.
-  T *as_pointer () const { return ptr_; }
+  T * as_pointer() const { return ptr_; }
 
   // Relational operators.
-  //There's no need for casts to void* or any other pointer type than T* here.
+  // There's no need for casts to void* or any other pointer type than T* here.
 
-  //: Do a shallow equality
+  // : Do a shallow equality
   // Do they point to the same object.
-  bool operator==(T const *p) const { return ptr_ == p; }
+  bool operator==(T const * p) const { return ptr_ == p; }
 
-  //: Do a shallow inequality
+  // : Do a shallow inequality
   // Do the smart pointers not point to the same object.
-  bool operator!=(T const *p) const { return ptr_ != p; }
+  bool operator!=(T const * p) const { return ptr_ != p; }
 
-  //: Do a shallow equality
+  // : Do a shallow equality
   // Do they point to the same object.
-  bool operator==(vil_smart_ptr<T>const&p)const{return ptr_ == p.as_pointer();}
+  bool operator==(vil_smart_ptr<T> const& p) const {return ptr_ == p.as_pointer(); }
 
-  //: Do a shallow inequality
+  // : Do a shallow inequality
   // Do the smart pointers not point to the same object.
-  bool operator!=(vil_smart_ptr<T>const&p)const{return ptr_ != p.as_pointer();}
-  bool operator< (vil_smart_ptr<T>const&p)const{return ptr_ <  p.as_pointer();}
-  bool operator> (vil_smart_ptr<T>const&p)const{return ptr_ >  p.as_pointer();}
-  bool operator<=(vil_smart_ptr<T>const&p)const{return ptr_ <= p.as_pointer();}
-  bool operator>=(vil_smart_ptr<T>const&p)const{return ptr_ >= p.as_pointer();}
-
- private:
+  bool operator!=(vil_smart_ptr<T> const& p) const {return ptr_ != p.as_pointer(); }
+  bool operator<(vil_smart_ptr<T> const& p) const {return ptr_ <  p.as_pointer(); }
+  bool operator>(vil_smart_ptr<T> const& p) const {return ptr_ >  p.as_pointer(); }
+  bool operator<=(vil_smart_ptr<T> const& p) const {return ptr_ <= p.as_pointer(); }
+  bool operator>=(vil_smart_ptr<T> const& p) const {return ptr_ >= p.as_pointer(); }
+private:
   // These two methods should not be inlined as they call T's ref()
   // and unref() or are specializations. The big gain from that is
   // that vil_smart_ptr<T> can be forward declared even if T is still
   // an incomplete type.
-  static void ref  (T *p);
-  static void unref(T *p);
+  static void ref(T * p);
 
-  //: Pointer to object, or 0.
-  T *ptr_;
+  static void unref(T * p);
+
+  // : Pointer to object, or 0.
+  T * ptr_;
 };
 
-
-//: Comparison of pointer with smart-pointer (cannot be a member function)
+// : Comparison of pointer with smart-pointer (cannot be a member function)
 template <class T>
-inline bool operator== (T const* p, vil_smart_ptr<T> const& a)
+inline bool operator==(T const* p, vil_smart_ptr<T> const& a)
 {
   return a.as_pointer() == p;
 }
 
 template <class T>
-inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
+inline bool operator!=(T const* p, vil_smart_ptr<T> const& a)
 {
   return a.as_pointer() != p;
 }
@@ -159,9 +165,9 @@ inline bool operator!= (T const* p, vil_smart_ptr<T> const& a)
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>
-vcl_ostream& operator<< (vcl_ostream&, vil_smart_ptr<T> const&);
+vcl_ostream & operator<<(vcl_ostream &, vil_smart_ptr<T> const &);
 
 #define VIL_SMART_PTR_INSTANTIATE(T) \
-extern "please include vil/vil_smart_ptr.txx instead"
+  extern "please include vil/vil_smart_ptr.txx instead"
 
 #endif // vil_smart_ptr_h_

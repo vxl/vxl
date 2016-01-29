@@ -1,6 +1,6 @@
 // This is brl/bseg/bvxm/pro/processes/bvxm_save_edges_raw_process.cxx
 #include "bvxm_save_edges_raw_process.h"
-//:
+// :
 // \file
 
 #include <bprb/bprb_parameters.h>
@@ -13,8 +13,8 @@
 
 namespace bvxm_save_edges_raw_process_globals
 {
-  unsigned int n_inputs_ = 3;
-  unsigned int n_outputs_ = 0;
+unsigned int n_inputs_ = 3;
+unsigned int n_outputs_ = 0;
 }
 
 bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
@@ -22,9 +22,9 @@ bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
   using namespace bvxm_save_edges_raw_process_globals;
 
   // process takes 3 inputs and has no outputs:
-  //input[0]: The voxel world
-  //input[1]: The filename to write to
-  //input[2]: Scale
+  // input[0]: The voxel world
+  // input[1]: The filename to write to
+  // input[2]: Scale
 
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[0] = "bvxm_voxel_world_sptr";
@@ -32,32 +32,33 @@ bool bvxm_save_edges_raw_process_cons(bprb_func_process& pro)
   input_types_[2] = "unsigned";
   vcl_vector<vcl_string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_)
-      && pro.set_output_types(output_types_);
+         && pro.set_output_types(output_types_);
 }
 
 bool bvxm_save_edges_raw_process(bprb_func_process& pro)
 {
   using namespace bvxm_save_edges_raw_process_globals;
 
-  if (pro.n_inputs()<n_inputs_)
-  {
-    vcl_cout << pro.name() << " The number of inputs should be " << n_inputs_<< vcl_endl;
+  if( pro.n_inputs() < n_inputs_ )
+    {
+    vcl_cout << pro.name() << " The number of inputs should be " << n_inputs_ << vcl_endl;
     return false;
-  }
+    }
 
-  //get the inputs
-  unsigned i = 0;
-  bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
+  // get the inputs
+  unsigned                i = 0;
+  bvxm_voxel_world_sptr   world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_edge_ray_processor edge_proc(world);
-  vcl_string filename = pro.get_input<vcl_string>(i++);
-  unsigned scale = pro.get_input<unsigned>(i++);
+  vcl_string              filename = pro.get_input<vcl_string>(i++);
+  unsigned                scale = pro.get_input<unsigned>(i++);
 
   float n_normal = world->get_params()->edges_n_normal();
 
-  if ( !world ){
-    vcl_cout << pro.name() <<" :--  Input 0  is not valid!\n";
+  if( !world )
+    {
+    vcl_cout << pro.name() << " :--  Input 0  is not valid!\n";
     return false;
-  }
+    }
 
-  return edge_proc.save_edges_raw(filename,n_normal,scale);
+  return edge_proc.save_edges_raw(filename, n_normal, scale);
 }

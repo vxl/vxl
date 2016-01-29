@@ -1,7 +1,7 @@
 // This is gel/vtol/vtol_edge.h
 #ifndef vtol_edge_h_
 #define vtol_edge_h_
-//:
+// :
 // \file
 // \brief Represents the basic 1D topological entity
 //
@@ -48,170 +48,183 @@
 #include <vtol/vtol_vertex.h>
 class vtol_edge_2d;
 
-//: topological edge
+// : topological edge
 
 class vtol_edge : public vtol_topology_object
 {
- protected:
-  //***************************************************************************
+protected:
+  // ***************************************************************************
   // Data members
-  //***************************************************************************
+  // ***************************************************************************
 
   // Keeping vertex pointers inside of edge
   // for convenience...for now.
 
   vtol_vertex_sptr v1_;
   vtol_vertex_sptr v2_;
-
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Initialization
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Default constructor. Empty edge. Not a valid edge.
-  //---------------------------------------------------------------------------
-  vtol_edge() : v1_(0), v2_(0){ link_inferior(new vtol_zero_chain); }
+  // ---------------------------------------------------------------------------
+  // : Default constructor. Empty edge. Not a valid edge.
+  // ---------------------------------------------------------------------------
+  vtol_edge() : v1_(0), v2_(0) { link_inferior(new vtol_zero_chain); }
 
-  //---------------------------------------------------------------------------
-  //: Destructor
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Destructor
+  // ---------------------------------------------------------------------------
   virtual ~vtol_edge();
-
- private: // has been superseded by is_a()
-  //: Return the topology type
+private:  // has been superseded by is_a()
+  // : Return the topology type
   virtual vtol_topology_object_type topology_type() const { return EDGE; }
-
- public:
-  //---------------------------------------------------------------------------
-  //: Return the first endpoint
-  //---------------------------------------------------------------------------
+public:
+  // ---------------------------------------------------------------------------
+  // : Return the first endpoint
+  // ---------------------------------------------------------------------------
   vtol_vertex_sptr v1() const { return v1_; }
 
-  //---------------------------------------------------------------------------
-  //: Return the second endpoint
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the second endpoint
+  // ---------------------------------------------------------------------------
   vtol_vertex_sptr v2() const { return v2_; }
 
-  //---------------------------------------------------------------------------
-  //: Return the first non-empty zero-chain of `this'
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Return the first non-empty zero-chain of `this'
+  // ---------------------------------------------------------------------------
   virtual vtol_zero_chain_sptr zero_chain() const;
 
-  //---------------------------------------------------------------------------
-  //: Set the first endpoint.
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Set the first endpoint.
+  // ---------------------------------------------------------------------------
   virtual void set_v1(vtol_vertex_sptr new_v1);
 
-  //---------------------------------------------------------------------------
-  //: Set the last endpoint
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Set the last endpoint
+  // ---------------------------------------------------------------------------
   virtual void set_v2(vtol_vertex_sptr new_v2);
 
-  //---------------------------------------------------------------------------
-  //: Determine the endpoints of an edge from its inferiors
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Determine the endpoints of an edge from its inferiors
+  // ---------------------------------------------------------------------------
   virtual void set_vertices_from_zero_chains();
 
-  //---------------------------------------------------------------------------
-  //: replace the current end point
-  //---------------------------------------------------------------------------
-  virtual void replace_end_point(vtol_vertex &current_end_point,
-                                 vtol_vertex &new_end_point);
+  // ---------------------------------------------------------------------------
+  // : replace the current end point
+  // ---------------------------------------------------------------------------
+  virtual void replace_end_point(vtol_vertex & current_end_point, vtol_vertex & new_end_point);
 
-  virtual bool operator==(const vtol_edge &other) const;
-  inline bool operator!=(const vtol_edge &other)const{return !operator==(other);}
+  virtual bool operator==(const vtol_edge & other) const;
+
+  inline bool operator!=(const vtol_edge & other) const {return !operator==(other); }
   bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
 
-  virtual void add_edge_loop(vtol_one_chain_sptr const&);
-  virtual void remove_edge_loop(vtol_one_chain_sptr const&);
- private:
+  virtual void add_edge_loop(vtol_one_chain_sptr const &);
+
+  virtual void remove_edge_loop(vtol_one_chain_sptr const &);
+
+private:
   // Deprecated:
   virtual void add_edge_loop(vtol_one_chain &);
+
   virtual void remove_edge_loop(vtol_one_chain &);
- public:
-  //***************************************************************************
+
+public:
+  // ***************************************************************************
   // Replaces dynamic_cast<T>
-  //***************************************************************************
+  // ***************************************************************************
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_edge *cast_to_edge() const { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an edge, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual const vtol_edge * cast_to_edge() const { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_edge *cast_to_edge() { return this; }
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an edge, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual vtol_edge * cast_to_edge() { return this; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge_2d() const {return 0;}
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an edge, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual const vtol_edge_2d * cast_to_edge_2d() const {return 0; }
 
-  //---------------------------------------------------------------------------
-  //: Return `this' if `this' is an edge, 0 otherwise
-  //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge_2d() {return 0;}
+  // ---------------------------------------------------------------------------
+  // : Return `this' if `this' is an edge, 0 otherwise
+  // ---------------------------------------------------------------------------
+  virtual vtol_edge_2d * cast_to_edge_2d() {return 0; }
 
-  //***************************************************************************
+  // ***************************************************************************
   // Status report
-  //***************************************************************************
+  // ***************************************************************************
 
   void link_inferior(vtol_zero_chain_sptr inf);
+
   void unlink_inferior(vtol_zero_chain_sptr inf);
 
-  //---------------------------------------------------------------------------
-  //: Is `inferior' type valid for `this' ?
-  //---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  // : Is `inferior' type valid for `this' ?
+  // ---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
   { return inferior->cast_to_zero_chain() != 0; }
-  bool valid_inferior_type(vtol_zero_chain_sptr const& ) const { return true; }
-  bool valid_superior_type(vtol_one_chain_sptr const& ) const { return true; }
+  bool valid_inferior_type(vtol_zero_chain_sptr const & ) const { return true; }
+  bool valid_superior_type(vtol_one_chain_sptr const & ) const { return true; }
 
-  //:
+  // :
   // Inferior/Superior Accessor Methods
- protected:
+protected:
   // \warning should not be used by clients
-  virtual vcl_vector<vtol_vertex*> *compute_vertices();
-  virtual vcl_vector<vtol_edge*> *compute_edges();
-  virtual vcl_vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual vcl_vector<vtol_one_chain*> *compute_one_chains();
-  virtual vcl_vector<vtol_face*> *compute_faces();
-  virtual vcl_vector<vtol_two_chain*> *compute_two_chains();
-  virtual vcl_vector<vtol_block*> *compute_blocks();
- public:
+  virtual vcl_vector<vtol_vertex *> * compute_vertices();
 
-  //: get a list of endpoints
-  virtual vertex_list *endpoints();
+  virtual vcl_vector<vtol_edge *> * compute_edges();
+
+  virtual vcl_vector<vtol_zero_chain *> * compute_zero_chains();
+
+  virtual vcl_vector<vtol_one_chain *> * compute_one_chains();
+
+  virtual vcl_vector<vtol_face *> * compute_faces();
+
+  virtual vcl_vector<vtol_two_chain *> * compute_two_chains();
+
+  virtual vcl_vector<vtol_block *> * compute_blocks();
+
+public:
+
+  // : get a list of endpoints
+  virtual vertex_list * endpoints();
 
   // Utility Functions
 
   virtual bool share_vertex_with(vtol_edge_sptr const& other);
-  virtual bool add_vertex(vtol_vertex_sptr const&);
-  virtual bool remove_vertex(vtol_vertex_sptr const&);
 
-  virtual bool is_endpoint(vtol_vertex_sptr const&) const;
-  virtual bool is_endpoint1(vtol_vertex_sptr const&) const;
-  virtual bool is_endpoint2(vtol_vertex_sptr const&) const;
+  virtual bool add_vertex(vtol_vertex_sptr const &);
+
+  virtual bool remove_vertex(vtol_vertex_sptr const &);
+
+  virtual bool is_endpoint(vtol_vertex_sptr const &) const;
+
+  virtual bool is_endpoint1(vtol_vertex_sptr const &) const;
+
+  virtual bool is_endpoint2(vtol_vertex_sptr const &) const;
 
   virtual vtol_vertex_sptr other_endpoint(const vtol_vertex &) const;
 
-  virtual void print(vcl_ostream &strm=vcl_cout) const;
-  virtual void describe(vcl_ostream &strm=vcl_cout,
-                        int blanking=0) const;
+  virtual void print(vcl_ostream & strm = vcl_cout) const;
 
-  //: have the inherited classes copy the geometry
-  virtual void copy_geometry(const vtol_edge &other)=0;
+  virtual void describe(vcl_ostream & strm = vcl_cout, int blanking = 0) const;
 
-  //: compare the geometry
-  virtual bool compare_geometry(const vtol_edge &other) const =0;
+  // : have the inherited classes copy the geometry
+  virtual void copy_geometry(const vtol_edge & other) = 0;
 
-  //: Return a platform independent string identifying the class
+  // : compare the geometry
+  virtual bool compare_geometry(const vtol_edge & other) const = 0;
+
+  // : Return a platform independent string identifying the class
   virtual vcl_string is_a() const { return vcl_string("vtol_edge"); }
 
-  //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const vcl_string& cls) const { return cls==is_a(); }
+  // : Return true if the argument matches the string identifying the class or any parent class
+  virtual bool is_class(const vcl_string& cls) const { return cls == is_a(); }
 };
 
 #endif // vtol_edge_h_

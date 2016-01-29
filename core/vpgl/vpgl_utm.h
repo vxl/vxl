@@ -1,6 +1,6 @@
 #ifndef vpgl_utm_h
 #define vpgl_utm_h
-//:
+// :
 // \file
 //  A rip-off of the IUE utm_geodedic and geodetic_utm transform classes
 //   which allows the GeoPt to support a constructor in UTM coordinates.
@@ -19,31 +19,27 @@
 // Adapted by:     J. L. Mundy
 // \date            May 8, 1999
 //
-//======================================================================
+// ======================================================================
 
 class vpgl_utm
 {
- public:
+public:
   vpgl_utm();
-  vpgl_utm (const vpgl_utm &t);
+  vpgl_utm(const vpgl_utm & t);
   ~vpgl_utm();
   void SetSpheroidA(double a) { a_ = a; }
   void SetSpheroidB(double b) { b_ = b; }
-  //UTM to LatLon
-  void transform(int utm_zone, double x, double y, double z,
-                 double& lat, double& lon , double& elev,
-                 bool south_flag = false,
+  // UTM to LatLon
+  void transform(int utm_zone, double x, double y, double z, double& lat, double& lon, double& elev,
+                 bool south_flag = false, double utm_central_meridian = 0);
+
+  void transform(int utm_zone, double x, double y, double& lat, double& lon, bool south_flag = false,
                  double utm_central_meridian = 0);
 
-  void transform(int utm_zone, double x, double y,
-                 double& lat, double& lon,
-                 bool south_flag = false,
-                 double utm_central_meridian = 0);
-  //: LatLon to UTM
-  void transform(double lat, double lon,
-                 double& x, double& y, int& utm_zone);
+  // : LatLon to UTM
+  void transform(double lat, double lon, double& x, double& y, int& utm_zone);
 
- private:
+private:
   double a_, b_;
 };
 

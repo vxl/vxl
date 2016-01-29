@@ -1,6 +1,6 @@
 // This is core/vil/vil_blocked_image_resource.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
 #include "vil_blocked_image_resource.h"
 
@@ -9,7 +9,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_copy.h>
-
 
 vil_blocked_image_resource::vil_blocked_image_resource()
 {}
@@ -20,38 +19,44 @@ vil_blocked_image_resource::~vil_blocked_image_resource()
 unsigned int vil_blocked_image_resource::n_block_i() const
 {
   unsigned int sbi = size_block_i();
-  if (sbi==0)
+
+  if( sbi == 0 )
+    {
     return 0;
-  return (ni()+sbi -1)/sbi;
+    }
+  return (ni() + sbi - 1) / sbi;
 }
 
 unsigned int vil_blocked_image_resource::n_block_j() const
 {
   unsigned int sbj = size_block_j();
-  if (sbj==0)
+
+  if( sbj == 0 )
+    {
     return 0;
-  return (nj()+sbj -1)/sbj;
+    }
+  return (nj() + sbj - 1) / sbj;
 }
 
-bool vil_blocked_image_resource::
-get_blocks(unsigned int start_block_i, unsigned int end_block_i,
-           unsigned int start_block_j, unsigned int end_block_j,
-           vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks ) const
+bool vil_blocked_image_resource::get_blocks(unsigned int start_block_i, unsigned int end_block_i,
+                                            unsigned int start_block_j, unsigned int end_block_j,
+                                            vcl_vector<vcl_vector<vil_image_view_base_sptr> >& blocks ) const
 {
-  for (unsigned int bi = start_block_i; bi<=end_block_i; ++bi)
-  {
-    vcl_vector< vil_image_view_base_sptr > jblocks;
-
-    for (unsigned int bj = start_block_j; bj<=end_block_j; ++bj)
+  for( unsigned int bi = start_block_i; bi <= end_block_i; ++bi )
     {
+    vcl_vector<vil_image_view_base_sptr> jblocks;
+    for( unsigned int bj = start_block_j; bj <= end_block_j; ++bj )
+      {
       vil_image_view_base_sptr view =
         this->get_block(bi, bj);
-      if (view) jblocks.push_back(view);
+      if( view ) {jblocks.push_back(view); }
       else
+        {
         return false;
-    }
+        }
+      }
     blocks.push_back(jblocks);
-  }
+    }
   return true;
 }
 
@@ -59,57 +64,69 @@ bool vil_blocked_image_resource::put_blocks( unsigned int start_block_i,
                                              unsigned int end_block_i,
                                              unsigned int start_block_j,
                                              unsigned int end_block_j,
-                                             vcl_vector< vcl_vector< vil_image_view_base_sptr > > const& blocks )
+                                             vcl_vector<vcl_vector<vil_image_view_base_sptr> > const& blocks )
 {
-  for (unsigned int bi = start_block_i; bi<=end_block_i; ++bi)
-    for (unsigned int bj = start_block_j; bj<=end_block_j; ++bj)
-      if (!this->put_block(bi, bj, *blocks[bi][bj]))
+  for( unsigned int bi = start_block_i; bi <= end_block_i; ++bi )
+    {
+    for( unsigned int bj = start_block_j; bj <= end_block_j; ++bj )
+      {
+      if( !this->put_block(bi, bj, *blocks[bi][bj]) )
+        {
         return false;
+        }
+      }
+    }
   return true;
 }
 
-vil_image_view_base_sptr vil_blocked_image_resource::
-glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const
+vil_image_view_base_sptr vil_blocked_image_resource::glue_blocks_together(
+  const vcl_vector<vcl_vector<vil_image_view_base_sptr> >& blocks) const
 {
   vil_image_view_base_sptr result;
-  if (blocks.size()==0)
-    return result;
 
-  //first calculate the overall size of the output image (all blocks glued together)
+  if( blocks.size() == 0 )
+    {
+    return result;
+    }
+
+  // first calculate the overall size of the output image (all blocks glued together)
 
   unsigned int output_width  = 0;
   unsigned int output_height = 0;
   unsigned int i;
-  for (i = 0 ; i < blocks.size() ; i++) {
+  for( i = 0; i < blocks.size(); i++ )
+    {
     output_width += blocks[i][0]->ni();
-  }
-  for (i = 0 ; i < blocks[0].size() ; i++) {
+    }
+  for( i = 0; i < blocks[0].size(); i++ )
+    {
     output_height += blocks[0][i]->nj();
-  }
+    }
 
-  //now paste all the image blocks into their proper location in outImage
-  unsigned int curr_i = 0;
-  unsigned int curr_j = 0;
-  vil_pixel_format fmt = vil_pixel_format_component_format(this->pixel_format());
-  switch (fmt)
-  {
+  // now paste all the image blocks into their proper location in outImage
+  unsigned int     curr_i = 0;
+  unsigned int     curr_j = 0;
+  vil_pixel_format fmt = vil_pixel_format_component_format(this->pixel_format() );
+
+  switch( fmt )
+    {
 #define GLUE_BLOCK_CASE(FORMAT, T) \
-   case FORMAT: { \
+  case FORMAT: { \
     vil_image_view<T>* output_image = \
-      new vil_image_view<T>(output_width, output_height, 1, nplanes()); \
-    for (unsigned int bi = 0 ; bi < blocks.size() ; bi++) \
-    { \
-      for (unsigned int bj = 0 ; bj < blocks[bi].size() ; bj++)\
+      new vil_image_view<T>(output_width, output_height, 1, nplanes() ); \
+    for( unsigned int bi = 0; bi < blocks.size(); bi++ ) \
       { \
-        vil_copy_to_window(static_cast<vil_image_view<T>&>(*blocks[bi][bj]), *output_image, curr_i, curr_j); \
+      for( unsigned int bj = 0; bj < blocks[bi].size(); bj++ ) \
+        { \
+        vil_copy_to_window(static_cast<vil_image_view<T> &>(*blocks[bi][bj]), *output_image, curr_i, curr_j); \
         curr_j += blocks[bi][bj]->nj(); \
-      } \
+        } \
       curr_j = 0; \
-      curr_i += blocks[bi][0]->ni();\
-    } \
+      curr_i += blocks[bi][0]->ni(); \
+      } \
     result = output_image; \
     return result; \
-   }
+    }
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 #if VXL_HAS_INT_64
@@ -125,10 +142,10 @@ glue_blocks_together(const vcl_vector< vcl_vector< vil_image_view_base_sptr > >&
     GLUE_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef GLUE_BLOCK_CASE
 
-   default:
-    assert(!"Unknown vil data type in tiff file format");
-    break;
-  }
+    default:
+      assert(!"Unknown vil data type in tiff file format");
+      break;
+    }
   return result;
 }
 
@@ -138,12 +155,16 @@ bool vil_blocked_image_resource::block_i_offset(unsigned int block_i, unsigned i
 {
   i_offset = 0;
   unsigned int tw = size_block_i();
-  if (tw==0)
+  if( tw == 0 )
+    {
     return false;
-  unsigned int bstrt = tw*block_i;
-  if (i<bstrt)
+    }
+  unsigned int bstrt = tw * block_i;
+  if( i < bstrt )
+    {
     return false;
-  i_offset = i-bstrt;
+    }
+  i_offset = i - bstrt;
   return true;
 }
 
@@ -153,64 +174,87 @@ bool vil_blocked_image_resource::block_j_offset(unsigned int block_j, unsigned i
 {
   j_offset = 0;
   unsigned int tl = size_block_j();
-  if (tl==0)
+  if( tl == 0 )
+    {
     return false;
-  unsigned int bstrt = tl*block_j;
-  if (j<bstrt)
+    }
+  unsigned int bstrt = tl * block_j;
+  if( j < bstrt )
+    {
     return false;
-  j_offset = j-bstrt;
+    }
+  j_offset = j - bstrt;
   return true;
 }
 
-//The blocks may overlap the edges of the requested view
-//Therefore we need to trim them in order to have the
-//correct pieces to glue together to form the view.
+// The blocks may overlap the edges of the requested view
+// Therefore we need to trim them in order to have the
+// correct pieces to glue together to form the view.
 bool vil_blocked_image_resource::trim_border_blocks(unsigned int i0, unsigned int ni,
                                                     unsigned int j0, unsigned int nj,
                                                     unsigned int start_block_i,
                                                     unsigned int start_block_j,
-                                                    vcl_vector< vcl_vector< vil_image_view_base_sptr > >& blocks) const
+                                                    vcl_vector<vcl_vector<vil_image_view_base_sptr> >& blocks) const
 {
   // loop through all the boxes and trim the boxes around the border if necessary.
-  for (unsigned int bi = 0 ; bi < blocks.size() ; bi++) {
-    for (unsigned int bj = 0 ; bj < blocks[bi].size() ; bj++) {
-      if (!blocks[bi][bj]) continue;
-      unsigned int last_col_index = (unsigned int)(blocks.size()-1);
-      unsigned int last_row_index = (unsigned int)(blocks[bi].size()-1);
-      //booleans that tell me whether this box is some sort of border box
+  for( unsigned int bi = 0; bi < blocks.size(); bi++ )
+    {
+    for( unsigned int bj = 0; bj < blocks[bi].size(); bj++ )
+      {
+      if( !blocks[bi][bj] ) {continue; }
+      unsigned int last_col_index = (unsigned int)(blocks.size() - 1);
+      unsigned int last_row_index = (unsigned int)(blocks[bi].size() - 1);
+      // booleans that tell me whether this box is some sort of border box
       bool first_block_in_row = bi == 0;
       bool first_block_in_col = bj == 0;
       bool last_block_in_row = bi  == last_col_index;
       bool last_block_in_col = bj == last_row_index;
 
-      //nothing to do if this isn't a border box
-      if (!first_block_in_row && !first_block_in_col &&
-          !last_block_in_row && !last_block_in_col) continue;
+      // nothing to do if this isn't a border box
+      if( !first_block_in_row && !first_block_in_col &&
+          !last_block_in_row && !last_block_in_col ) {continue; }
 
-      unsigned int bi0=0, bin=size_block_i()-1;
-      unsigned int bj0=0, bjn=size_block_j()-1;
-      if (first_block_in_row)
-        if (!block_i_offset(start_block_i+bi, i0, bi0))
+      unsigned int bi0 = 0, bin = size_block_i() - 1;
+      unsigned int bj0 = 0, bjn = size_block_j() - 1;
+      if( first_block_in_row )
+        {
+        if( !block_i_offset(start_block_i + bi, i0, bi0) )
+          {
           return false;
-      if (last_block_in_row)
-        if (!block_i_offset(start_block_i+bi, i0+ni-1, bin))
+          }
+        }
+      if( last_block_in_row )
+        {
+        if( !block_i_offset(start_block_i + bi, i0 + ni - 1, bin) )
+          {
           return false;
-      if (first_block_in_col)
-        if (!block_j_offset(start_block_j+bj, j0, bj0))
+          }
+        }
+      if( first_block_in_col )
+        {
+        if( !block_j_offset(start_block_j + bj, j0, bj0) )
+          {
           return false;
-      if (last_block_in_col)
-        if (!block_j_offset(start_block_j+bj, j0+nj-1, bjn))
+          }
+        }
+      if( last_block_in_col )
+        {
+        if( !block_j_offset(start_block_j + bj, j0 + nj - 1, bjn) )
+          {
           return false;
+          }
+        }
 
-      switch (vil_pixel_format_component_format(pixel_format()))
-      {
+      switch( vil_pixel_format_component_format(pixel_format() ) )
+        {
 #define TRIM_BORDER_BLOCK_CASE(FORMAT, T) \
-       case FORMAT: { \
-        vil_image_view< T > currBlock = static_cast<vil_image_view< T >&>(*blocks[bi][bj]);\
-        vil_image_view< T >* croppedBlock = new vil_image_view< T >();\
-        *croppedBlock = vil_crop(currBlock, bi0, bin-bi0+1, bj0, bjn-bj0+1);\
-        blocks[bi][bj] = croppedBlock;\
-       } break
+  case FORMAT: { \
+    vil_image_view<T>  currBlock = static_cast<vil_image_view<T> &>(*blocks[bi][bj]); \
+    vil_image_view<T>* croppedBlock = new vil_image_view<T>(); \
+    *croppedBlock = vil_crop(currBlock, bi0, bin - bi0 + 1, bj0, bjn - bj0 + 1); \
+    blocks[bi][bj] = croppedBlock; \
+    } \
+    break
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_BYTE, vxl_byte);
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte);
 #if VXL_HAS_INT_64
@@ -226,62 +270,79 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned int i0, unsigned in
         TRIM_BORDER_BLOCK_CASE(VIL_PIXEL_FORMAT_DOUBLE, double);
 #undef TRIM_BORDER_BLOCK_CASE
 
-       default:
-        assert(!"Unknown vil data type.");
-        return false;
+        default:
+          assert(!"Unknown vil data type.");
+          return false;
+        }
       }
     }
-  }
   return true;
 }
 
-//Get blocks including those that might be in the cache
-vil_image_view_base_sptr vil_blocked_image_resource::
-get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n_j) const
+// Get blocks including those that might be in the cache
+vil_image_view_base_sptr vil_blocked_image_resource::get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0,
+                                                                   unsigned int n_j) const
 {
   vil_image_view_base_sptr view = 0;
 
   unsigned int tw = size_block_i(), tl = size_block_j();
-  if (tw==0||tl==0)
+
+  if( tw == 0 || tl == 0 )
+    {
     return view;
+    }
 
-  //block index ranges
-  unsigned int bi_start = i0/tw, bi_end = (i0+n_i-1)/tw;
-  unsigned int bj_start = j0/tl, bj_end = (j0+n_j-1)/tl;
-  //last block index
-  unsigned int lbi = n_block_i()-1, lbj = n_block_j()-1;
+  // block index ranges
+  unsigned int bi_start = i0 / tw, bi_end = (i0 + n_i - 1) / tw;
+  unsigned int bj_start = j0 / tl, bj_end = (j0 + n_j - 1) / tl;
+  // last block index
+  unsigned int lbi = n_block_i() - 1, lbj = n_block_j() - 1;
 
-  if (bi_start>lbi||bi_end>lbi||bj_start>lbj||bj_end>lbj)
+  if( bi_start > lbi || bi_end > lbi || bj_start > lbj || bj_end > lbj )
+    {
     return view;
+    }
 
-  //Get set of blocks covering the view
-  vcl_vector<vcl_vector< vil_image_view_base_sptr > > blocks;
+  // Get set of blocks covering the view
+  vcl_vector<vcl_vector<vil_image_view_base_sptr> > blocks;
 
   this->get_blocks(bi_start, bi_end, bj_start, bj_end, blocks);
-  if (!blocks.size())
+  if( !blocks.size() )
+    {
     return view;
-  //Trim them if necessary to fit the view
-  if (!trim_border_blocks(i0, n_i, j0, n_j, bi_start, bj_start, blocks))
+    }
+  // Trim them if necessary to fit the view
+  if( !trim_border_blocks(i0, n_i, j0, n_j, bi_start, bj_start, blocks) )
+    {
     return view;
-  //Assemble them to fill the requested view
+    }
+  // Assemble them to fill the requested view
   view = this->glue_blocks_together(blocks);
 #ifdef DEBUG
-  unsigned int nblocks = (bi_end-bi_start+1)*(bj_end-bj_start+1);
-  if (nblocks>1)
+  unsigned int nblocks = (bi_end - bi_start + 1) * (bj_end - bj_start + 1);
+  if( nblocks > 1 )
+    {
     vcl_cout << "Get copy view of " << nblocks << " blocks in "
              << t.real() << "msecs\n";
+    }
 #endif
   return view;
 }
 
 vil_blocked_image_resource_sptr blocked_image_resource(const vil_image_resource_sptr& ir)
 {
-  if (!ir)
+  if( !ir )
+    {
     return 0;
-  unsigned int sbi=0, sbj=0;
-  if (ir->get_property(vil_property_size_block_i, &sbi)&&
-      ir->get_property(vil_property_size_block_j, &sbj))
-    return (vil_blocked_image_resource*)ir.ptr();
+    }
+  unsigned int sbi = 0, sbj = 0;
+  if( ir->get_property(vil_property_size_block_i, &sbi) &&
+      ir->get_property(vil_property_size_block_j, &sbj) )
+    {
+    return (vil_blocked_image_resource *)ir.ptr();
+    }
   else
+    {
     return 0;
+    }
 }

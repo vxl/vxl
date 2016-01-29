@@ -1,14 +1,14 @@
 // This is core/vil/file_formats/vil_jpeg_compressor.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author fsm
 // \verbatim
 //  Modifications
 //     11 Oct 2002 Ian Scott - converted to vil
-//\endverbatim
+// \endverbatim
 
 #include "vil_jpeg_compressor.h"
 #include "vil_jpeg_destination_mgr.h"
@@ -16,9 +16,9 @@
 #include <vcl_iostream.h>
 #include <vxl_config.h>
 
-vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
-  : stream(s)
-  , ready(false), quality(75)
+vil_jpeg_compressor::vil_jpeg_compressor(vil_stream * s)
+  : stream(s),
+  ready(false), quality(75)
 {
   stream->ref();
 
@@ -45,9 +45,10 @@ vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)
   vil_jpeg_stream_dst_set(&jobj, stream);
 }
 
-bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
+bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const * scanline)
 {
-  if (!ready) {
+  if( !ready )
+    {
     // rewind the stream
     vil_jpeg_stream_dst_rewind(&jobj, stream);
 
@@ -55,44 +56,47 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
     jobj.next_scanline = 0;
 
     // set colorspace of input image. FIXME.
-    switch (jobj.input_components) {
-     case 1:
-      jobj.in_color_space = JCS_GRAYSCALE;
-      break;
-     case 3:
-      jobj.in_color_space = JCS_RGB;
-      break;
-     default:
-      vcl_cerr << __FILE__ " : urgh!\n";
-      return false;
-    }
+    switch( jobj.input_components )
+      {
+      case 1:
+        jobj.in_color_space = JCS_GRAYSCALE;
+        break;
+      case 3:
+        jobj.in_color_space = JCS_RGB;
+        break;
+      default:
+        vcl_cerr << __FILE__ " : urgh!\n";
+        return false;
+      }
 
     jpeg_set_defaults(&jobj);
     jpeg_set_quality(&jobj, quality, TRUE);
 
     // start compression
     bool write_all_tables = true;
-    jpeg_start_compress (&jobj, write_all_tables);
+    jpeg_start_compress(&jobj, write_all_tables);
 
     //
     ready = true;
-  }
+    }
 
   //
-  if (line != jobj.next_scanline) {
+  if( line != jobj.next_scanline )
+    {
     vcl_cerr << "scanlines must be written in order\n";
     return false;
-  }
+    }
 
   // write the scanline
-  { JSAMPLE *tmp = const_cast<JSAMPLE*>(scanline);
-  jpeg_write_scanlines(&jobj, &tmp, 1); }
+      { JSAMPLE * tmp = const_cast<JSAMPLE *>(scanline);
+      jpeg_write_scanlines(&jobj, &tmp, 1); }
 
   // finish if the last scanline is written
-  if (line == jobj.image_height - 1) {
+  if( line == jobj.image_height - 1 )
+    {
     jpeg_finish_compress(&jobj);
     ready = false;
-  }
+    }
 
   return true;
 }
@@ -100,8 +104,10 @@ bool vil_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline)
 vil_jpeg_compressor::~vil_jpeg_compressor()
 {
   // finish compression if necessary
-  if (ready)
+  if( ready )
+    {
     jpeg_finish_compress(&jobj);
+    }
 
   // destroy the compression object
   jpeg_destroy_compress(&jobj);

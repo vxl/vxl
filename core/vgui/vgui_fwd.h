@@ -1,7 +1,7 @@
 // This is core/vgui/vgui_fwd.h
 #ifndef vgui_fwd_h_
 #define vgui_fwd_h_
-//:
+// :
 // \file
 // \author  fsm
 // \brief   Forward declaration of classes in vgui.

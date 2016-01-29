@@ -5,7 +5,7 @@
 
 // stack
 #ifndef vcl_stack
-#define vcl_stack vcl_generic_stack_STD :: stack
+#  define vcl_stack vcl_generic_stack_STD::stack
 #endif
 
 #endif // vcl_generic_stack_h_

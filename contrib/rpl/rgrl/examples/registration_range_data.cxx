@@ -52,8 +52,8 @@
 #include <testlib/testlib_test.h>
 void testlib_enter_stealth_mode(); // defined in core/testlib/testlib_main.cxx
 
-typedef vcl_vector< rgrl_feature_sptr >  feature_vector;
-typedef vnl_vector_fixed<double,3>       vector_3d;
+typedef vcl_vector<rgrl_feature_sptr> feature_vector;
+typedef vnl_vector_fixed<double, 3>   vector_3d;
 
 void
 read_feature_file( const char* filename,
@@ -61,102 +61,109 @@ read_feature_file( const char* filename,
 {
   vcl_ifstream istr( filename );
 
-  if ( !istr ) {
-    vcl_cerr<<"ERROR: Cannot open "<<filename<<'\n';
+  if( !istr )
+    {
+    vcl_cerr << "ERROR: Cannot open " << filename << '\n';
     return;
-  }
+    }
 
   vector_3d location;
   vector_3d normal;
 
   int total;
   istr >> total;
-  for (int i = 0; i<total; i+=sample_spacing) {
+  for( int i = 0; i < total; i += sample_spacing )
+    {
     istr >> location[0] >> location[1] >> location[2]
-         >>normal[0]>>normal[1]>>normal[2];
-    features.push_back( new rgrl_feature_face_pt(location.as_ref(), normal.as_ref()) );
-  }
+    >> normal[0] >> normal[1] >> normal[2];
+    features.push_back( new rgrl_feature_face_pt(location.as_ref(), normal.as_ref() ) );
+    }
 
   istr.close();
 
-  vcl_cout<<"There are "<<features.size()<<" features"<<vcl_endl;
+  vcl_cout << "There are " << features.size() << " features" << vcl_endl;
 }
 
 // using command/observer pattern
-class command_iteration_update: public rgrl_command
+class command_iteration_update : public rgrl_command
 {
- public:
+public:
   void execute(rgrl_object* caller, const rgrl_event & event )
   {
-    execute( (const rgrl_object*) caller, event );
+    execute( (const rgrl_object *) caller, event );
   }
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
   {
     const rgrl_feature_based_registration* reg_engine =
-      dynamic_cast<const rgrl_feature_based_registration*>(caller);
+      dynamic_cast<const rgrl_feature_based_registration *>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
-    rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(trans);
-    vcl_cout<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
+    rgrl_trans_affine*       a_xform = rgrl_cast<rgrl_trans_affine *>(trans);
+
+    vcl_cout << "xform: A = " << a_xform->A() << "t = " << a_xform->t() << vcl_endl;
 
 #if 0 // commented out
     static unsigned count = 0;
     ++count;
 
     vcl_ostringstream s;
-    s << "xform-dump-"<<count;
+    s << "xform-dump-" << count;
     vcl_ofstream xform_out( s.str().c_str() );
 
-    xform_out<<"xform: A = "<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl;
+    xform_out << "xform: A = " << a_xform->A() << "t = " << a_xform->t() << vcl_endl;
     xform_out.close();
 
     // Output the matches
     //
-    typedef rgrl_match_set::from_iterator  from_iter;
-    typedef from_iter::to_iterator         to_iter;
+    typedef rgrl_match_set::from_iterator from_iter;
+    typedef from_iter::to_iterator        to_iter;
 
-    vcl_ostringstream ss,ss2;
-    ss << "matches-dump-"<<count;
+    vcl_ostringstream ss, ss2;
+    ss << "matches-dump-" << count;
     vcl_ofstream fout( ss.str().c_str() );
-    ss2 << "sub-matches-dump-"<<count;
+    ss2 << "sub-matches-dump-" << count;
     vcl_ofstream fout2( ss2.str().c_str() );
-
-    for ( unsigned ms=0; ms < match_sets.size(); ++ms ) {
+    for( unsigned ms = 0; ms < match_sets.size(); ++ms )
+      {
       rgrl_match_set_sptr match_set = match_sets[ms];
       //  for each from image feature being matched
-      for ( from_iter fitr = match_set->from_begin();
-            fitr != match_set->from_end(); ++fitr ) {
-        if ( fitr.size() == 0 )  continue;
+      for( from_iter fitr = match_set->from_begin();
+           fitr != match_set->from_end(); ++fitr )
+        {
+        if( fitr.size() == 0 ) {continue; }
 
         rgrl_feature_sptr from_feature = fitr.from_feature();
-        fout<<from_feature->location()<<' ';
+        fout << from_feature->location() << ' ';
         rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
-        fout<<' '<<mapped_from->location();
-        for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
+        fout << ' ' << mapped_from->location();
+        for( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
+          {
           //  for each match with a "to" image feature
           rgrl_feature_sptr to_feature = titr.to_feature();
-          fout<<' '<<to_feature->location();
+          fout << ' ' << to_feature->location();
           double error = titr.to_feature()->geometric_error( *mapped_from );
-          fout<<' '<<error<<vcl_endl;
-          if (error > 1) fout2<<mapped_from->location()<<vcl_endl;
+          fout << ' ' << error << vcl_endl;
+          if( error > 1 ) {fout2 << mapped_from->location() << vcl_endl; }
+          }
         }
       }
-    }
     fout.close();
     fout2.close();
 #endif // 0
   }
+
 };
 
 int
 main( int argc, char* argv[] )
 {
-  if ( argc < 3 ) {
+  if( argc < 3 )
+    {
     vcl_cerr << "Missing Parameters\n"
              << "Usage: " << argv[0]
              << " FixedImageFeatureFile MovingImageFeatureFile\n";
     return 1;
-  }
+    }
 
   // Don't allow Visual Studio to open critical error dialog boxes
   testlib_enter_stealth_mode();
@@ -170,13 +177,13 @@ main( int argc, char* argv[] )
 
   feature_vector moving_feature_points;
   feature_vector fixed_feature_points;
-  const char* fixed_file_name = argv[1];
-  const char* moving_file_name = argv[2];
+  const char*    fixed_file_name = argv[1];
+  const char*    moving_file_name = argv[2];
 
   read_feature_file( moving_file_name, moving_feature_points, 50 );
   read_feature_file( fixed_file_name, fixed_feature_points, 1 );
 
-  const unsigned int dimension = 3;
+  const unsigned int    dimension = 3;
   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points );
   rgrl_feature_set_sptr fixed_feature_set =
@@ -186,7 +193,7 @@ main( int argc, char* argv[] )
   //
   rgrl_estimator_sptr estimator = new rgrl_est_affine();
 
-  //set the initial transformation to identity
+  // set the initial transformation to identity
   //
   // The correct xform from the Stanford range data repository
   // (http://graphics.stanford.edu/data/3Dscanrep/) is about 27 degree
@@ -194,52 +201,52 @@ main( int argc, char* argv[] )
   // translation=[-0.0520211 -0.000383981 -0.0109223]
   //
   rgrl_transformation_sptr init_trans;
-  vnl_matrix<double> A(3,3,vnl_matrix_identity);
-  double angle = 35*vnl_math::pi_over_180; //35 degree rotation around y-axis
-//double angle = 27*vnl_math::pi_over_180; //27 degree rotation around y-axis
-  A(0,0) = vcl_cos(angle); A(0,2) = vcl_sin(angle);
-  A(2,0) = -vcl_sin(angle); A(2,2) = vcl_cos(angle);
-//vector_3d t(-0.06, -0.01, -0.02);
-//vector_3d t(-0.0520211, -0.000383981, -0.0109223);
+  vnl_matrix<double>       A(3, 3, vnl_matrix_identity);
+  double                   angle = 35 * vnl_math::pi_over_180; // 35 degree rotation around y-axis
+// double angle = 27*vnl_math::pi_over_180; //27 degree rotation around y-axis
+  A(0, 0) = vcl_cos(angle); A(0, 2) = vcl_sin(angle);
+  A(2, 0) = -vcl_sin(angle); A(2, 2) = vcl_cos(angle);
+// vector_3d t(-0.06, -0.01, -0.02);
+// vector_3d t(-0.0520211, -0.000383981, -0.0109223);
   vector_3d t(-0.065, -0.015, -0.02);
 
-  init_trans = new rgrl_trans_affine(A, t.as_ref());
+  init_trans = new rgrl_trans_affine(A, t.as_ref() );
 
-  //Initializer
-  vector_3d x0(-1,-1,-1);           //upper left corner
-  vector_3d x1(1,1,1);              //bottom right corner
-  rgrl_mask_sptr moving_image_region = new rgrl_mask_box(x0.as_ref(), x1.as_ref());
-  rgrl_mask_sptr fixed_image_region = moving_image_region;  // assume two are identical
+  // Initializer
+  vector_3d             x0(-1, -1, -1); // upper left corner
+  vector_3d             x1(1, 1, 1);    // bottom right corner
+  rgrl_mask_sptr        moving_image_region = new rgrl_mask_box(x0.as_ref(), x1.as_ref() );
+  rgrl_mask_sptr        fixed_image_region = moving_image_region; // assume two are identical
   rgrl_initializer_sptr initializer =
     new rgrl_initializer_prior( moving_image_region,
                                 fixed_image_region,
                                 estimator,
                                 init_trans);
 
-  //Matcher
+  // Matcher
   //
-  unsigned int k = 1;
+  unsigned int      k = 1;
   rgrl_matcher_sptr cp_matcher = new rgrl_matcher_k_nearest( k );
 
-  //Weighter
+  // Weighter
   //
-  vcl_auto_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
-  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(m_est_obj, false, false);
+  vcl_auto_ptr<rrel_m_est_obj> m_est_obj( new rrel_tukey_obj(4) );
+  rgrl_weighter_sptr           wgter = new rgrl_weighter_m_est(m_est_obj, false, false);
 
-  //Scale estimator
+  // Scale estimator
   //
-  int max_set_size = 1000;  //maximum expected number of features
-  vcl_auto_ptr<rrel_objective> muset_obj( new rrel_muset_obj( max_set_size , false) );
+  int                          max_set_size = 1000; // maximum expected number of features
+  vcl_auto_ptr<rrel_objective> muset_obj( new rrel_muset_obj( max_set_size, false) );
 
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est;
-  rgrl_scale_estimator_wgted_sptr wgted_scale_est;
+  rgrl_scale_estimator_wgted_sptr   wgted_scale_est;
 
   unwgted_scale_est = new rgrl_scale_est_closest( muset_obj );
   wgted_scale_est = new rgrl_scale_est_all_weights();
 
-  //convergence tester
+  // convergence tester
   //
-  double tolerance = 0.1;
+  double                       tolerance = 0.1;
   rgrl_convergence_tester_sptr conv_test =
     new rgrl_convergence_on_weighted_error( tolerance );
 
@@ -253,21 +260,22 @@ main( int argc, char* argv[] )
                   wgted_scale_est );    // weighted scale estimator
 
   rgrl_feature_based_registration reg( data, conv_test );
-  reg.set_expected_min_geometric_scale( 0.01/1000 );
-  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update());
+  reg.set_expected_min_geometric_scale( 0.01 / 1000 );
+  reg.add_observer( new rgrl_event_iteration(), new command_iteration_update() );
 
   reg.run( initializer );
   // EndCodeSnippet
 
   // Output Results
-  if ( reg.has_final_transformation() ) {
-    vcl_cout<<"Final xform:"<<vcl_endl;
+  if( reg.has_final_transformation() )
+    {
+    vcl_cout << "Final xform:" << vcl_endl;
     rgrl_transformation_sptr final_trans = reg.final_transformation();
-    rgrl_trans_affine* a_xform = rgrl_cast<rgrl_trans_affine*>(final_trans);
+    rgrl_trans_affine*       a_xform = rgrl_cast<rgrl_trans_affine *>(final_trans);
 
-    vcl_cout<<"A =\n"<<a_xform->A()<<"t = "<<a_xform->t()<<vcl_endl
-            <<"Final alignment error = "<<reg.final_status()->error()<<vcl_endl;
-  }
+    vcl_cout << "A =\n" << a_xform->A() << "t = " << a_xform->t() << vcl_endl
+             << "Final alignment error = " << reg.final_status()->error() << vcl_endl;
+    }
 
   // BeginLatex
   //

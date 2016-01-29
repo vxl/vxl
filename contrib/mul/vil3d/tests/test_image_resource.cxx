@@ -8,7 +8,6 @@
 #include <vil3d/vil3d_print.h>
 #include <vil3d/vil3d_crop.h>
 
-
 template <class T>
 inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*dummy*/)
 {
@@ -16,39 +15,39 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
            << " Testing vil3d_image_resource objects with pixel type = " << type << '\n'
            << "******************************************************************\n";
 
-  vil3d_image_resource_sptr mem = vil3d_new_image_resource(10,5,3,1,format);
+  vil3d_image_resource_sptr mem = vil3d_new_image_resource(10, 5, 3, 1, format);
 
-  TEST("vil3d_new_image_resource", mem?true:false, true);
+  TEST("vil3d_new_image_resource", mem ? true : false, true);
 
-  vil3d_image_view<T> view1 = mem->get_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
+  vil3d_image_view<T> view1 = mem->get_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk() );
   TEST("vil3d_memory_image::get_view()",
-       view1 && view1.ni()==10 && view1.nj()==5 &&
-       view1.nk()==3 && view1.nplanes()==1, true );
+       view1 && view1.ni() == 10 && view1.nj() == 5 &&
+       view1.nk() == 3 && view1.nplanes() == 1, true );
 
 #if 0
   // vil3d_new_image_resource_of_view() // NYI
   vil3d_image_resource_sptr mem2 = vil3d_new_image_resource_of_view(view1);
-  TEST("vil3d_new_image_resource_of_view", mem2 && view1==(*mem2->get_view()), true);
+  TEST("vil3d_new_image_resource_of_view", mem2 && view1 == (*mem2->get_view() ), true);
 #endif // 0
 
   view1.fill(0);
 
-  TEST("vil3d_memory_image::put_view()", mem->put_view(view1,0,0,0), true);
+  TEST("vil3d_memory_image::put_view()", mem->put_view(view1, 0, 0, 0), true);
 
   vil3d_image_resource_sptr crop = vil3d_crop(mem, 2, 6, 2, 2, 1, 2);
-  TEST("vil3d_crop(image_resource)", crop?true:false, true);
+  TEST("vil3d_crop(image_resource)", crop ? true : false, true);
 
-  vil3d_image_view<T> view2 = mem->get_copy_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
+  vil3d_image_view<T> view2 = mem->get_copy_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk() );
   TEST("vil3d_memory_image::get_copy_view()",
-       view2 && view2.ni()==10 && view2.nj()==5 &&
-       view2.nk()==3 && view2.nplanes()==1, true );
+       view2 && view2.ni() == 10 && view2.nj() == 5 &&
+       view2.nk() == 3 && view2.nplanes() == 1, true );
 
-  view2.set_size(5,2,2);
+  view2.set_size(5, 2, 2);
   view2.fill(10);
 
-  TEST("vil3d_memory_image::put_view(copy)", mem->put_view(view2,5,3,1), true);
+  TEST("vil3d_memory_image::put_view(copy)", mem->put_view(view2, 5, 3, 1), true);
 
-  view1 = mem->get_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk());
+  view1 = mem->get_view(0, mem->ni(), 0, mem->nj(), 0, mem->nk() );
   vil3d_print_all(vcl_cout, view1);
 
   T v1, v2;
@@ -59,14 +58,14 @@ inline void test_image_resource(vcl_string type, vil_pixel_format format, T /*du
 
 static void test_image_resource()
 {
-  test_image_resource("float", VIL_PIXEL_FORMAT_FLOAT, float());
-  test_image_resource("double", VIL_PIXEL_FORMAT_DOUBLE, double());
-  test_image_resource("vxl_byte", VIL_PIXEL_FORMAT_BYTE, vxl_byte());
-  test_image_resource("vxl_sbyte", VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte());
-  test_image_resource("vxl_int_16", VIL_PIXEL_FORMAT_INT_16, vxl_int_16());
-  test_image_resource("vxl_uint_16", VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16());
-  test_image_resource("vxl_int_32", VIL_PIXEL_FORMAT_INT_32, vxl_int_32());
-  test_image_resource("vxl_uint_32", VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32());
+  test_image_resource("float", VIL_PIXEL_FORMAT_FLOAT, float() );
+  test_image_resource("double", VIL_PIXEL_FORMAT_DOUBLE, double() );
+  test_image_resource("vxl_byte", VIL_PIXEL_FORMAT_BYTE, vxl_byte() );
+  test_image_resource("vxl_sbyte", VIL_PIXEL_FORMAT_SBYTE, vxl_sbyte() );
+  test_image_resource("vxl_int_16", VIL_PIXEL_FORMAT_INT_16, vxl_int_16() );
+  test_image_resource("vxl_uint_16", VIL_PIXEL_FORMAT_UINT_16, vxl_uint_16() );
+  test_image_resource("vxl_int_32", VIL_PIXEL_FORMAT_INT_32, vxl_int_32() );
+  test_image_resource("vxl_uint_32", VIL_PIXEL_FORMAT_UINT_32, vxl_uint_32() );
 }
 
 TESTMAIN(test_image_resource);

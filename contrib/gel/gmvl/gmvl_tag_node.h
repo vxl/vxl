@@ -1,7 +1,7 @@
 // This is gel/gmvl/gmvl_tag_node.h
 #ifndef gmvl_tag_node_h_
 #define gmvl_tag_node_h_
-//:
+// :
 // \file
 // \author crossge@crd.ge.com
 //
@@ -15,14 +15,13 @@
 
 class gmvl_tag_node : public gmvl_node
 {
- public:
-  gmvl_tag_node(vcl_string const& name) : name_(name) { type_="gmvl_tag_node"; }
+public:
+  gmvl_tag_node(vcl_string const& name) : name_(name) { type_ = "gmvl_tag_node"; }
   ~gmvl_tag_node() {}
 
   // accessor
-  vcl_string &get() { return name_; }
-
- protected:
+  vcl_string & get() { return name_; }
+protected:
   vcl_string name_;
 };
 

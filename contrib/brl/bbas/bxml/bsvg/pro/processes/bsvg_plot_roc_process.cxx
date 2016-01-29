@@ -1,6 +1,6 @@
 // This is brl/bbas/bxml/bsvg/pro/processes/bsvg_plot_roc_process.cxx
 #include <bprb/bprb_func_process.h>
-//:
+// :
 // \file
 // \brief Processes for plotting
 //
@@ -22,7 +22,7 @@
 
 #include <bbas_pro/bbas_1d_array_float.h>
 
-//: Plot ROC process:
+// : Plot ROC process:
 //    input 0: the path to a text file which has the following format:
 //  # any number of commented lines which start with character: '#'
 //  #line 1: threshold values
@@ -34,34 +34,35 @@
 //    input 1: the path to the output SVG plot ( x.svg )
 //
 
-//: Constructor
+// : Constructor
 bool bsvg_plot_roc_process_cons(bprb_func_process& pro)
 {
-  //inputs
-  bool ok=false;
+  // inputs
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
   input_types.push_back("vcl_string");  // file with 3 lines: threshold values, TPRs and FPRs
   input_types.push_back("vcl_string");  // name of the output svg file
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
-  //output
+  // output
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
 
-
 bool bsvg_plot_roc_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 2) {
+  if( pro.n_inputs() < 2 )
+    {
     vcl_cerr << "bsvg_plot_roc_process - invalid inputs\n";
     return false;
-  }
+    }
 
   // get input
-  unsigned i = 0;
+  unsigned   i = 0;
   vcl_string roc_path = pro.get_input<vcl_string>(i++);
   vcl_string out_name = pro.get_input<vcl_string>(i++);
 
@@ -70,124 +71,137 @@ bool bsvg_plot_roc_process(bprb_func_process& pro)
   p.set_font_size(30);
   p.add_axes(0, 1, 0, 1);
   p.add_title("ROC Plot");
-  //p.add_x_increments(0.1f);
+  // p.add_x_increments(0.1f);
   p.add_y_increments(0.1f);
 
   vcl_vector<float> xs, ys;
 
-  vcl_ifstream ifs(roc_path.c_str());
-  int line_cnt = 0;
-  for (vul_awk awk(ifs); awk; ++awk) {
-    if (!awk.NF())
+  vcl_ifstream ifs(roc_path.c_str() );
+  int          line_cnt = 0;
+  for( vul_awk awk(ifs); awk; ++awk )
+    {
+    if( !awk.NF() )
+      {
       continue;
+      }
     vcl_string field0 = awk[0];
-    if (!field0.size())
+    if( !field0.size() )
+      {
       continue;
-    else if (field0[0] == '#')
+      }
+    else if( field0[0] == '#' )
+      {
       continue;
+      }
     line_cnt++;
-    if (line_cnt == 2) {  // second line is FPR values, read them from the fields
-      for (int j = 0; j < awk.NF(); j++) {
+    if( line_cnt == 2 )    // second line is FPR values, read them from the fields
+      {
+      for( int j = 0; j < awk.NF(); j++ )
+        {
         float fpr = (float)vul_string_atof(awk[j]);
         xs.push_back(fpr);
+        }
       }
-    }
-    else if (line_cnt == 3) {
-      for (int j = 0; j < awk.NF(); j++) {
+    else if( line_cnt == 3 )
+      {
+      for( int j = 0; j < awk.NF(); j++ )
+        {
         float tpr = (float)vul_string_atof(awk[j]);
         ys.push_back(tpr);
-      }
+        }
       break;
+      }
     }
-  }
 
-  xs.erase(xs.end()-1); // erase the last element, which is (1,1) pair as a convention
-  ys.erase(ys.end()-1);
+  xs.erase(xs.end() - 1); // erase the last element, which is (1,1) pair as a convention
+  ys.erase(ys.end() - 1);
   p.add_line(xs, ys, "red");
   bxml_write(out_name, p);
 
   return true;
 }
 
-
-//: Constructor
+// : Constructor
 bool bsvg_plot_roc_process2_cons(bprb_func_process& pro)
 {
-  //inputs
-  bool ok=false;
-  vcl_vector<vcl_string> input_types;
-  input_types.push_back("bbas_1d_array_float_sptr");  // vector of TPR values
-  input_types.push_back("bbas_1d_array_float_sptr");  // vector of FPR values
-  input_types.push_back("vcl_string");  // name of the output svg file
-  ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  // inputs
+  bool ok = false;
 
-  //output
+  vcl_vector<vcl_string> input_types;
+  input_types.push_back("bbas_1d_array_float_sptr"); // vector of TPR values
+  input_types.push_back("bbas_1d_array_float_sptr"); // vector of FPR values
+  input_types.push_back("vcl_string");               // name of the output svg file
+  ok = pro.set_input_types(input_types);
+  if( !ok ) {return ok; }
+
+  // output
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
 }
 
-
 bool bsvg_plot_roc_process2(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 3) {
+  if( pro.n_inputs() < 3 )
+    {
     vcl_cerr << "bsvg_plot_roc_process2 - invalid inputs\n";
     return false;
-  }
+    }
 
   // get input
-  unsigned i = 0;
+  unsigned                 i = 0;
   bbas_1d_array_float_sptr tpr_vals = pro.get_input<bbas_1d_array_float_sptr>(i++);
   bbas_1d_array_float_sptr fpr_vals = pro.get_input<bbas_1d_array_float_sptr>(i++);
-  vcl_string out_name = pro.get_input<vcl_string>(i++);
+  vcl_string               out_name = pro.get_input<vcl_string>(i++);
 
   bsvg_plot p(1200, 600);
   p.set_margin(40);
   p.set_font_size(30);
   p.add_axes(0, 1, 0, 1);
   p.add_title("ROC Plot");
-  //p.add_x_increments(0.1f);
+  // p.add_x_increments(0.1f);
   p.add_y_increments(0.1f);
 
-  if (tpr_vals->data_array.size() != fpr_vals->data_array.size()) {
+  if( tpr_vals->data_array.size() != fpr_vals->data_array.size() )
+    {
     vcl_cout << "In bsvg_plot_roc_process2_cons : inconsistent tpr and fpr array sizes!\n";
     return false;
-  }
+    }
 
   vcl_vector<float> xs, ys;
-  for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin();
-       iter != tpr_vals->data_array.end(); iter++, iter2++) {
+  for( vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin();
+       iter != tpr_vals->data_array.end(); iter++, iter2++ )
+    {
     ys.push_back(*iter);
     xs.push_back(*iter2);
     vcl_cout << "tp: " << *iter << " fp: " << *iter2 << vcl_endl;
-  }
+    }
   vcl_cout << vcl_endl;
 
-  //xs.erase(xs.end()-1); // erase the last element, which is (1,1) pair as a convention
-  //ys.erase(ys.end()-1);
+  // xs.erase(xs.end()-1); // erase the last element, which is (1,1) pair as a convention
+  // ys.erase(ys.end()-1);
   p.add_line(xs, ys, "red");
   bxml_write(out_name, p);
 
   return true;
 }
 
-
-//: Constructor
+// : Constructor
 //  initialize a bar plot with no bars, new bars will be added by the add_bar process
 bool bsvg_plot_initialize_process_cons(bprb_func_process& pro)
 {
-  //inputs
-  bool ok=false;
+  // inputs
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("vcl_string");  // title of the plot
-  input_types.push_back("int");  // width
-  input_types.push_back("int");  // height
-  input_types.push_back("int");  // margin
-  input_types.push_back("int");  // fs
+  input_types.push_back("vcl_string"); // title of the plot
+  input_types.push_back("int");        // width
+  input_types.push_back("int");        // height
+  input_types.push_back("int");        // margin
+  input_types.push_back("int");        // fs
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
   brdb_value_sptr idw = new brdb_value_t<int>(1200);
   pro.set_input(1, idw);
@@ -198,7 +212,7 @@ bool bsvg_plot_initialize_process_cons(bprb_func_process& pro)
   brdb_value_sptr idfs = new brdb_value_t<int>(30);
   pro.set_input(4, idfs);
 
-  //output
+  // output
   vcl_vector<vcl_string> output_types;
   output_types.push_back("bxml_document_sptr");
   ok = pro.set_output_types(output_types);
@@ -208,21 +222,22 @@ bool bsvg_plot_initialize_process_cons(bprb_func_process& pro)
 bool bsvg_plot_initialize_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 1) {
+  if( pro.n_inputs() < 1 )
+    {
     vcl_cerr << "bsvg_roc_plot_initialize_process - invalid inputs\n";
     return false;
-  }
+    }
 
   // get input
-  unsigned i = 0;
+  unsigned   i = 0;
   vcl_string title = pro.get_input<vcl_string>(i++);
-  int w = pro.get_input<int>(i++);
-  int h = pro.get_input<int>(i++);
-  int m = pro.get_input<int>(i++);
-  int fs = pro.get_input<int>(i++);
+  int        w = pro.get_input<int>(i++);
+  int        h = pro.get_input<int>(i++);
+  int        m = pro.get_input<int>(i++);
+  int        fs = pro.get_input<int>(i++);
 
-  bsvg_plot* p = new bsvg_plot((float)w, (float)h);
-  p->set_margin((float)m);
+  bsvg_plot* p = new bsvg_plot( (float)w, (float)h);
+  p->set_margin( (float)m);
   p->set_font_size(fs);
   p->add_axes(0, 1, 0, 1);
   p->add_y_increments(0.1f);
@@ -232,20 +247,21 @@ bool bsvg_plot_initialize_process(bprb_func_process& pro)
   return true;
 }
 
-//: Constructor
+// : Constructor
 bool bsvg_roc_plot_add_process_cons(bprb_func_process& pro)
 {
-  //inputs
-  bool ok=false;
+  // inputs
+  bool ok = false;
+
   vcl_vector<vcl_string> input_types;
   input_types.push_back("bxml_document_sptr");
-  input_types.push_back("bbas_1d_array_float_sptr");  // vector of TPR values
-  input_types.push_back("bbas_1d_array_float_sptr");  // vector of FPR values
-  input_types.push_back("vcl_string");  // color of the line
+  input_types.push_back("bbas_1d_array_float_sptr"); // vector of TPR values
+  input_types.push_back("bbas_1d_array_float_sptr"); // vector of FPR values
+  input_types.push_back("vcl_string");               // color of the line
   ok = pro.set_input_types(input_types);
-  if (!ok) return ok;
+  if( !ok ) {return ok; }
 
-  //output
+  // output
   vcl_vector<vcl_string> output_types;
   ok = pro.set_output_types(output_types);
   return ok;
@@ -254,30 +270,32 @@ bool bsvg_roc_plot_add_process_cons(bprb_func_process& pro)
 bool bsvg_roc_plot_add_process(bprb_func_process& pro)
 {
   // Sanity check
-  if (pro.n_inputs() < 4) {
+  if( pro.n_inputs() < 4 )
+    {
     vcl_cerr << "bsvg_plot_roc_process2 - invalid inputs\n";
     return false;
-  }
+    }
 
   // get input
-  unsigned i = 0;
-  bxml_document_sptr doc = pro.get_input<bxml_document_sptr>(i++);
+  unsigned                 i = 0;
+  bxml_document_sptr       doc = pro.get_input<bxml_document_sptr>(i++);
   bbas_1d_array_float_sptr tpr_vals = pro.get_input<bbas_1d_array_float_sptr>(i++);
   bbas_1d_array_float_sptr fpr_vals = pro.get_input<bbas_1d_array_float_sptr>(i++);
-  vcl_string color = pro.get_input<vcl_string>(i++);
+  vcl_string               color = pro.get_input<vcl_string>(i++);
 
-  if (tpr_vals->data_array.size() != fpr_vals->data_array.size()) {
+  if( tpr_vals->data_array.size() != fpr_vals->data_array.size() )
+    {
     vcl_cout << "In bsvg_plot_roc_process2_cons : inconsistent tpr and fpr array sizes!\n";
     return false;
-  }
+    }
   vcl_vector<float> xs, ys;
-  for (vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin();
-       iter != tpr_vals->data_array.end(); iter++, iter2++) {
+  for( vbl_array_1d<float>::iterator iter = tpr_vals->data_array.begin(), iter2 = fpr_vals->data_array.begin();
+       iter != tpr_vals->data_array.end(); iter++, iter2++ )
+    {
     xs.push_back(*iter2);
     ys.push_back(*iter);
-  }
-  bsvg_plot* p = dynamic_cast<bsvg_plot*>(doc.ptr());
+    }
+  bsvg_plot* p = dynamic_cast<bsvg_plot *>(doc.ptr() );
   p->add_line(xs, ys, color);
   return true;
 }
-

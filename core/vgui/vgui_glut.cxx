@@ -1,6 +1,6 @@
 // This is core/vgui/vgui_glut.cxx
 #include "vgui_glut.h"
-//:
+// :
 // \file
 // \author fsm
 

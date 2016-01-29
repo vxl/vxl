@@ -1,8 +1,8 @@
 // This is mul/vpdfl/vpdfl_sampler_base.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Ian Scott
 // \date 19-Apr-2001
@@ -13,102 +13,106 @@
 #include <vsl/vsl_indent.h>
 #include <vcl_cassert.h>
 
-//=======================================================================
+// =======================================================================
 // Dflt ctor
-//=======================================================================
+// =======================================================================
 
 vpdfl_sampler_base::vpdfl_sampler_base()
 {
 }
 
-//=======================================================================
+// =======================================================================
 // Destructor
-//=======================================================================
+// =======================================================================
 
 vpdfl_sampler_base::~vpdfl_sampler_base()
 {
 }
 
-
-//: Set model for which this is an instance
+// : Set model for which this is an instance
 void vpdfl_sampler_base::set_model(const vpdfl_pdf_base& model)
 {
   pdf_model_ = &model;
 }
 
-//: PDF of which this is an instance
-const vpdfl_pdf_base& vpdfl_sampler_base::model() const
+// : PDF of which this is an instance
+const vpdfl_pdf_base & vpdfl_sampler_base::model() const
 {
-  assert (pdf_model_ != 0);
+  assert(pdf_model_ != 0);
   return *pdf_model_;
 }
 
-
-//: Fill x with samples drawn from distribution
+// : Fill x with samples drawn from distribution
 void vpdfl_sampler_base::get_samples(vcl_vector<vnl_vector<double> >& x)
 {
   int n = x.size();
+
   vnl_vector<double>* x_data = &x[0];
-  for (int i=0;i<n;++i)
+  for( int i = 0; i < n; ++i )
+    {
     sample(x_data[i]);
+    }
 }
 
-//: Fill x with samples possibly chosen so as to represent the distribution
+// : Fill x with samples possibly chosen so as to represent the distribution
 void vpdfl_sampler_base::regular_samples(vcl_vector<vnl_vector<double> >& x)
 {
   int n = x.size();
+
   vnl_vector<double>* x_data = &x[0];
-  for (int i=0;i<n;++i)
+  for( int i = 0; i < n; ++i )
+    {
     sample(x_data[i]);
+    }
 }
 
-//: Fill x with samples possibly chosen so as to represent the distribution
+// : Fill x with samples possibly chosen so as to represent the distribution
 //  As regular_samples(x), but p[i] is set to p(x[i])
 void vpdfl_sampler_base::regular_samples_and_prob(
-                              vcl_vector<vnl_vector<double> >& x,
-                              vnl_vector<double>& p)
+  vcl_vector<vnl_vector<double> >& x,
+  vnl_vector<double>& p)
 {
   regular_samples(x);
   int n = x.size();
   p.set_size(n);
-  double* p_data = p.data_block();
+  double*             p_data = p.data_block();
   vnl_vector<double>* x_data = &x[0];
-
-  for (int i=0;i<n;++i)
+  for( int i = 0; i < n; ++i )
+    {
     p_data[i] = pdf_model_->operator()(x_data[i]);
+    }
 }
 
-//=======================================================================
+// =======================================================================
 // Method: is_a
-//=======================================================================
+// =======================================================================
 
 vcl_string vpdfl_sampler_base::is_a() const
 {
   return vcl_string("vpdfl_sampler_base");
 }
 
-//=======================================================================
+// =======================================================================
 // Method: is_class
-//=======================================================================
+// =======================================================================
 
 bool vpdfl_sampler_base::is_class(vcl_string const& s) const
 {
-  return s==vpdfl_sampler_base::is_a();
+  return s == vpdfl_sampler_base::is_a();
 }
 
-//=======================================================================
+// =======================================================================
 // Method: print
-//=======================================================================
+// =======================================================================
 
-  // required if data is present in this base class
+// required if data is present in this base class
 void vpdfl_sampler_base::print_summary(vcl_ostream& os) const
 {
   os << vsl_indent() << "PDF: ";
-  vsl_print_summary(os, model());
+  vsl_print_summary(os, model() );
 }
 
-
-void vsl_print_summary(vcl_ostream& os,const vpdfl_sampler_base& b)
+void vsl_print_summary(vcl_ostream& os, const vpdfl_sampler_base& b)
 {
   os << b.is_a() << ": ";
   vsl_indent_inc(os);
@@ -116,13 +120,16 @@ void vsl_print_summary(vcl_ostream& os,const vpdfl_sampler_base& b)
   vsl_indent_dec(os);
 }
 
-//=======================================================================
+// =======================================================================
 
-void vsl_print_summary(vcl_ostream& os,const vpdfl_sampler_base* b)
+void vsl_print_summary(vcl_ostream& os, const vpdfl_sampler_base* b)
 {
-  if (b)
+  if( b )
+    {
     vsl_print_summary(os, *b);
+    }
   else
+    {
     os << "No vpdfl_sampler_base defined.";
+    }
 }
-

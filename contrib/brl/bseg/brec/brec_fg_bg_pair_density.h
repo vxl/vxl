@@ -1,6 +1,6 @@
 #ifndef brec_fg_bg_pair_density_h_
 #define brec_fg_bg_pair_density_h_
-//:
+// :
 // \file
 // \brief brec recognition utilities
 //
@@ -16,12 +16,12 @@
 
 class brec_fg_bg_pair_density : public brec_pair_density
 {
- public:
+public:
   brec_fg_bg_pair_density() : brec_pair_density() {}
   virtual ~brec_fg_bg_pair_density() {}
 
   virtual double operator()(const double y0, const double y1);
+
 };
 
 #endif // brec_fg_bg_pair_density_h_
-

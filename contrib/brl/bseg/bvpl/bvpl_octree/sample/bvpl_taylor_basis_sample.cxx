@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \author Isabel Restrepo
 // \date 10-Feb-2011
@@ -7,37 +7,39 @@
 #include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 
-vcl_ostream& operator << (vcl_ostream& os, const bvpl_taylor_basis2_sample& sample)
+vcl_ostream & operator <<(vcl_ostream& os, const bvpl_taylor_basis2_sample& sample)
 {
-  os << "I0 = " << sample.I0 << ", G= " <<sample.G<< ", H=" << sample.H << vcl_endl;
+  os << "I0 = " << sample.I0 << ", G= " << sample.G << ", H=" << sample.H << vcl_endl;
   return os;
 }
 
-//I/O
-void vsl_b_write(vsl_b_ostream & os, bvpl_taylor_basis2_sample const &sample)
+// I/O
+void vsl_b_write(vsl_b_ostream & os, bvpl_taylor_basis2_sample const & sample)
 {
-  vsl_b_write(os, sample.version_no());
+  vsl_b_write(os, sample.version_no() );
   vsl_b_write(os, sample.I0);
   vsl_b_write(os, sample.G);
   vsl_b_write(os, sample.H);
 
 }
 
-void vsl_b_write(vsl_b_ostream & os, bvpl_taylor_basis2_sample const * &sample)
+void vsl_b_write(vsl_b_ostream & os, bvpl_taylor_basis2_sample const * & sample)
 {
-  if (sample) {
+  if( sample )
+    {
     vsl_b_write(os, *sample);
-  }
+    }
 }
 
-void vsl_b_read(vsl_b_istream & is, bvpl_taylor_basis2_sample &sample)
+void vsl_b_read(vsl_b_istream & is, bvpl_taylor_basis2_sample & sample)
 {
-  if (!is) return;
+  if( !is ) {return; }
 
   short version;
-  vsl_b_read(is,version);
-  switch (version)
-  {
+  vsl_b_read(is, version);
+
+  switch( version )
+    {
     case 1:
       vsl_b_read(is, sample.I0);
       vsl_b_read(is, sample.G);
@@ -45,14 +47,14 @@ void vsl_b_read(vsl_b_istream & is, bvpl_taylor_basis2_sample &sample)
       break;
     default:
       vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, boxm_sample<T>&)\n"
-      << "           Unknown version number "<< version << '\n';
+               << "           Unknown version number " << version << '\n';
       is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
       break;
-  }
+    }
 
 }
 
-void vsl_b_read(vsl_b_istream & is, bvpl_taylor_basis2_sample *&sample)
+void vsl_b_read(vsl_b_istream & is, bvpl_taylor_basis2_sample *& sample)
 {
   vsl_b_read(is, *sample);
 }

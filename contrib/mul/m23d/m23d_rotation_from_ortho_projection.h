@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 // \author Tim Cootes
 // \brief Generate pure 3 x 3 rotation matrix from 2 x 3 projection matrix
@@ -8,7 +8,7 @@
 
 #include <vnl/vnl_matrix.h>
 
-//: Generate pure 3 x 3 rotation matrix from 2 x 3 projection matrix
+// : Generate pure 3 x 3 rotation matrix from 2 x 3 projection matrix
 //  Result may also include a reflection.
 //  The result, R, should be such that PR.transpose() approx= (sI|0)
 //

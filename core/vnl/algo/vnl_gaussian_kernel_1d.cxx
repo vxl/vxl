@@ -1,13 +1,13 @@
 // This is core/vnl/algo/vnl_gaussian_kernel_1d.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   07 Aug 1997
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "vnl_gaussian_kernel_1d.h"
 #include <vcl_cmath.h>
@@ -20,26 +20,28 @@
 static inline
 double compute_width(double sigma, double cutoff)
 {
-  return sigma * vcl_sqrt(-2 * vcl_log(cutoff * sigma * vnl_math::sqrt2pi));
+  return sigma * vcl_sqrt(-2 * vcl_log(cutoff * sigma * vnl_math::sqrt2pi) );
 }
 
-//: Construct a sampled 1D gaussian of standard deviation sigma.
+// : Construct a sampled 1D gaussian of standard deviation sigma.
 // The vector is normalized so that its sum is 0.5.
-vnl_gaussian_kernel_1d::vnl_gaussian_kernel_1d(double sigma, double cutoff):
-  vec_((int)vcl_ceil(compute_width(sigma, cutoff)))
+vnl_gaussian_kernel_1d::vnl_gaussian_kernel_1d(double sigma, double cutoff) :
+  vec_( (int)vcl_ceil(compute_width(sigma, cutoff) ) )
 {
   int wid = vec_.size();
-  inscale_ = 0.5/(sigma * sigma);
+
+  inscale_ = 0.5 / (sigma * sigma);
   double area = 0;
-  for (int i = 0; i < wid; ++i) {
+  for( int i = 0; i < wid; ++i )
+    {
     double v = G(i);
     area += v;
     vec_[i] = v;
-  }
-  vec_ *= (0.5/area);
+    }
+  vec_ *= (0.5 / area);
 }
 
 double vnl_gaussian_kernel_1d::G(double x) const
 {
-  return vcl_exp(-x*x * inscale_);
+  return vcl_exp(-x * x * inscale_);
 }

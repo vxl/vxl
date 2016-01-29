@@ -1,6 +1,6 @@
 #ifndef vcsl_polar_h_
 #define vcsl_polar_h_
-//:
+// :
 // \file
 // \brief Planar polar coordinate system
 // \author Francois BERTEL
@@ -15,14 +15,14 @@
 #include <vcsl/vcsl_spatial.h>
 #include <vcsl/vcsl_polar_sptr.h>
 
-//: Planar coordinate system specified by the parameters rho and theta
+// : Planar coordinate system specified by the parameters rho and theta
 class vcsl_polar
   : public vcsl_spatial
 {
- public:
-  //***************************************************************************
+public:
+  // ***************************************************************************
   // Constructors/Destructor
-  //***************************************************************************
+  // ***************************************************************************
 
   // Default constructor.
   vcsl_polar();
@@ -30,11 +30,11 @@ class vcsl_polar
   // Destructor
   virtual ~vcsl_polar() {}
 
-  //***************************************************************************
+  // ***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
-  //***************************************************************************
+  // ***************************************************************************
 
-  virtual const vcsl_polar *cast_to_polar() const { return this; }
+  virtual const vcsl_polar * cast_to_polar() const { return this; }
 };
 
 #endif // vcsl_polar_h_

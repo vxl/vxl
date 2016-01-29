@@ -2,9 +2,9 @@
 #ifndef vidl_ffmpeg_ostream_params_h_
 #define vidl_ffmpeg_ostream_params_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief A parameters struct for vidl_ffmpeg_ostream
 //
@@ -18,7 +18,7 @@
 
 #include <vcl_string.h>
 
-//: A parameters struct for vidl_ffmpeg_ostream
+// : A parameters struct for vidl_ffmpeg_ostream
 //
 // The setter functions are provided for convenience, so that the
 // parameters can be set through an anonymous object.
@@ -29,8 +29,8 @@
 //                 .frame_rate( 29.95 ) );
 // \endcode
 struct vidl_ffmpeg_ostream_params
-{
-  //: Available video encoders
+  {
+  // : Available video encoders
   enum encoder_type { DEFAULT,
                       MPEG4,
                       MSMPEG4V2,
@@ -41,29 +41,29 @@ struct vidl_ffmpeg_ostream_params
                       HUFFYUV,
                       ENCODER_END_MARKER };
 
-  //: Supported video types
+  // : Supported video types
   enum file_format_type { GUESS // < Guess based on file extension
-    };
+                          };
 
-  //: The type of encoder to use (default DEFAULT)
+  // : The type of encoder to use (default DEFAULT)
   encoder_type encoder_;
 
-  //: The file format to use (default GUESS)
+  // : The file format to use (default GUESS)
   file_format_type file_format_;
 
-  //: Frame rate in frames/second. (default 25)
+  // : Frame rate in frames/second. (default 25)
   float frame_rate_;
 
-  //: Bit rate in bits/second. (Default 5000)
+  // : Bit rate in bits/second. (Default 5000)
   unsigned bit_rate_;
 
-  //: Width of a frame (default 640)
+  // : Width of a frame (default 640)
   unsigned ni_;
 
-  //: Height of a frame (default 480)
+  // : Height of a frame (default 480)
   unsigned nj_;
 
-  //: static parameters from ffmpeg.c
+  // : static parameters from ffmpeg.c
   // There are many other FFMPEG parameters available
   // I don't know what most of these do, but using the
   // default values should work most of the time
@@ -150,30 +150,30 @@ struct vidl_ffmpeg_ostream_params
   int me_method_;
   int do_pass_;
 
-  //-------------------------------------------------------
+  // -------------------------------------------------------
 
-  //: Construct to default values
+  // : Construct to default values
   vidl_ffmpeg_ostream_params();
 
-  //: Set the file format
-  vidl_ffmpeg_ostream_params& file_format( file_format_type t )
+  // : Set the file format
+  vidl_ffmpeg_ostream_params & file_format( file_format_type t )
   { file_format_ = t; return *this; }
 
-  //: Set the video encoder
-  vidl_ffmpeg_ostream_params& encoder( encoder_type t )
+  // : Set the video encoder
+  vidl_ffmpeg_ostream_params & encoder( encoder_type t )
   { encoder_ = t; return *this; }
 
-  //: Set the frame rate
-  vidl_ffmpeg_ostream_params& frame_rate( float r )
+  // : Set the frame rate
+  vidl_ffmpeg_ostream_params & frame_rate( float r )
   { frame_rate_ = r; return *this; }
 
-  //: Set the bit rate
-  vidl_ffmpeg_ostream_params& bit_rate( unsigned r )
+  // : Set the bit rate
+  vidl_ffmpeg_ostream_params & bit_rate( unsigned r )
   { bit_rate_ = r; return *this; }
 
-  //: Set the size of the frames
-  vidl_ffmpeg_ostream_params& size( unsigned ni, unsigned nj )
+  // : Set the size of the frames
+  vidl_ffmpeg_ostream_params & size( unsigned ni, unsigned nj )
   { ni_ = ni; nj_ = nj; return *this; }
-};
+  };
 
 #endif // vidl_ffmpeg_ostream_params_h_

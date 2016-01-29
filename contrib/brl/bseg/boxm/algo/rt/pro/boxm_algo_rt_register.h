@@ -3,9 +3,11 @@
 
 class boxm_algo_rt_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // boxm_algo_rt_register_h_

@@ -1,13 +1,13 @@
 // This is sdet_curve_fragment_graph.h
 #ifndef sdet_curve_fragment_graph_h
 #define sdet_curve_fragment_graph_h
-//:
-//\file
-//\brief Curve Fragment graph structure
-//\author Amir Tamrakar
-//\date 04/20/07
+// :
+// \file
+// \brief Curve Fragment graph structure
+// \author Amir Tamrakar
+// \date 04/20/07
 //
-//\verbatim
+// \verbatim
 //  Modifications
 //
 //    Amir Tamrakar  The graph structure used to be represented as a node adjacency list
@@ -15,7 +15,7 @@
 //                   mimicking the edge link graph setup. However, this is a waste for representing
 //                   a curve fragment graph where the nodes are only the endpoint and junction edgels.
 //                   So I've switched to maps instead.
-//\endverbatim
+// \endverbatim
 
 #include <vcl_vector.h>
 #include <vcl_list.h>
@@ -24,7 +24,7 @@
 #include "sdet_edgemap.h"
 #include "sdet_CFTG.h"
 
-//: This class represents the curve fragment graph formed from the edgels
+// : This class represents the curve fragment graph formed from the edgels
 //  The links are curve fragments represented by edgel chains.
 class sdet_curve_fragment_graph
 {
@@ -34,29 +34,30 @@ public:
 
   sdet_edgel_chain_list frags; ///< redundant single list of all fragments
 
-  //this is a hack (need to move this out of here into the storage class)
+  // this is a hack (need to move this out of here into the storage class)
   sdet_CFTG CFTG; ///< The Curve Fragment Topology Graph (CFTG)
 
-  //: constructor
-  sdet_curve_fragment_graph(int size=0): cFrags(size), pFrags(size){}
+  // : constructor
+  sdet_curve_fragment_graph(int size = 0) : cFrags(size), pFrags(size) {}
 
-  //: destructor
+  // : destructor
   ~sdet_curve_fragment_graph()
   {
-    clear(); //delete everything upon exit
+    clear(); // delete everything upon exit
     CFTG.clear();
   }
 
-  //Access functions
-  unsigned size() { return cFrags.size(); }//should be the same as edgels.size()
+  // Access functions
+  unsigned size() { return cFrags.size(); }// should be the same as edgels.size()
 
-  //: resize the graph
+  // : resize the graph
   void resize(unsigned size)
   {
-    if (size!=cFrags.size()){
+    if( size != cFrags.size() )
+      {
       clear();
       CFTG.clear();
-    }
+      }
 
     cFrags.resize(size);
     pFrags.resize(size);
@@ -64,13 +65,16 @@ public:
     CFTG.resize(size);
   }
 
-  //: clear the graph
+  // : clear the graph
   void clear()
   {
-    //delete all the curve fragments
+    // delete all the curve fragments
     sdet_edgel_chain_list_iter f_it = frags.begin();
-    for (; f_it != frags.end(); f_it++)
+
+    for( ; f_it != frags.end(); f_it++ )
+      {
       delete (*f_it);
+      }
 
     frags.clear();
     cFrags.clear();
@@ -79,7 +83,7 @@ public:
     CFTG.clear();
   }
 
-  //: add a curve fragment to the graph
+  // : add a curve fragment to the graph
   void insert_fragment(sdet_edgel_chain* chain)
   {
     sdet_edgel* e1 = chain->edgels.front();
@@ -91,7 +95,7 @@ public:
     frags.push_back(chain);
   }
 
-  //: remove a curve fragment
+  // : remove a curve fragment
   void remove_fragment(sdet_edgel_chain* chain)
   {
     sdet_edgel* e1 = chain->edgels.front();
@@ -105,7 +109,7 @@ public:
     delete chain;
   }
 
-  //: just extract a curve fragment from the graph do not delete
+  // : just extract a curve fragment from the graph do not delete
   void extract_fragment(sdet_edgel_chain* chain)
   {
     sdet_edgel* e1 = chain->edgels.front();

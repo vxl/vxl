@@ -2,9 +2,9 @@
 #ifndef vdgl_edgel_h
 #define vdgl_edgel_h
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Represents a 2D image edgel
 //
@@ -16,19 +16,20 @@
 
 class vdgl_edgel
 {
- public:
+public:
 
   // Constructors/Destructor---------------------------------------------------
   vdgl_edgel() {}
-  vdgl_edgel( const double x, const double y, const double grad= -1, const double theta= 0 );
+  vdgl_edgel( const double x, const double y, const double grad = -1, const double theta = 0 );
   ~vdgl_edgel() {}
 
   // Operators-----------------------------------------------------------------
 
-  vdgl_edgel& operator=(const vdgl_edgel& that);
+  vdgl_edgel & operator=(const vdgl_edgel& that);
 
-  friend bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
-  friend vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
+  friend bool operator==( const vdgl_edgel & e1, const vdgl_edgel & e2);
+
+  friend vcl_ostream & operator<<(vcl_ostream& s, const vdgl_edgel& p);
 
   // Data Access---------------------------------------------------------------
 
@@ -42,21 +43,22 @@ class vdgl_edgel
   inline double y() const { return p_.y(); }
 
   // setters
-  inline void set_x( const double x) { p_.set(x,p_.y()); }
-  inline void set_y( const double y) { p_.set(p_.x(),y); }
-  inline void set_grad( const double grad) { grad_= grad; }
-  inline void set_theta( const double theta) { theta_= theta; }
+  inline void set_x( const double x) { p_.set(x, p_.y() ); }
+  inline void set_y( const double y) { p_.set(p_.x(), y); }
+  inline void set_grad( const double grad) { grad_ = grad; }
+  inline void set_theta( const double theta) { theta_ = theta; }
 
   // INTERNALS-----------------------------------------------------------------
- protected:
+protected:
   // Data Members--------------------------------------------------------------
 
   vgl_point_2d<double> p_;
-  double grad_;
-  double theta_;
+  double               grad_;
+  double               theta_;
 };
 
-bool operator==( const vdgl_edgel &e1, const vdgl_edgel &e2);
-vcl_ostream& operator<<(vcl_ostream& s, const vdgl_edgel& p);
+bool operator==( const vdgl_edgel & e1, const vdgl_edgel & e2);
+
+vcl_ostream & operator<<(vcl_ostream& s, const vdgl_edgel& p);
 
 #endif // vdgl_edgel_h

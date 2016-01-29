@@ -1,6 +1,6 @@
 #ifndef mbl_priority_bounded_queue_h_
 #define mbl_priority_bounded_queue_h_
-//:
+// :
 // \file
 // \brief Describes a bounded priority queue
 // \author Ian Scott
@@ -10,7 +10,7 @@
 #include <vcl_functional.h>
 #include <vcl_algorithm.h>
 
-//: A bounded priority queue
+// : A bounded priority queue
 // This is identical to a vcl_priority_queue, but
 // as more elements are added past the queue's bound size
 // the largest values are thrown out.
@@ -21,71 +21,78 @@
 //
 // top() returns the value that is closest to being thrown out,
 // which is the largest value in the case of the default predicate.
-template <class T, class C= vcl_vector<T>, class O= vcl_less<
+template <class T, class C = vcl_vector<T>, class O = vcl_less<
 #ifndef VCL_VC
-typename
+              typename
 #endif
-  C::value_type> >
+              C::value_type> >
 class mbl_priority_bounded_queue
 {
 public:
-  typedef typename C::value_type value_type;
-  typedef typename C::size_type size_type;
+  typedef typename C::value_type     value_type;
+  typedef typename C::size_type      size_type;
   typedef typename C::allocator_type allocator_type;
 
   explicit
-  mbl_priority_bounded_queue(unsigned bound_size = 10, const O& comp = O()):
+  mbl_priority_bounded_queue(unsigned bound_size = 10, const O& comp = O() ) :
     b_size_(bound_size), comp_(comp) { }
 
 #if 0 // #if VCL_HAS_MEMBER_TEMPLATES
- template <class ITER>
+  template <class ITER>
 #else
-  typedef const value_type *ITER;
+  typedef const value_type * ITER;
 #endif
-  //: Construct a bounded priority queue from a controlled sequence.
+  // : Construct a bounded priority queue from a controlled sequence.
   // The bounded size will be the length of the sequence.
   mbl_priority_bounded_queue(
     size_type bound_size, ITER first, ITER last, const O& comp = O(),
-    const allocator_type& alloc = allocator_type()):
-      b_size_(0), c_(alloc), comp_(comp)
-    {for (; first != last; ++first) {++b_size_; push(*first);} }
+    const allocator_type& alloc = allocator_type() ) :
+    b_size_(0), c_(alloc), comp_(comp)
+  {for( ; first != last; ++first ) {++b_size_; push(*first); } }
 
-  //: The largest size the queue can be before it starts throwing out data.
-  size_type bound_size() const {return b_size_;}
+  // : The largest size the queue can be before it starts throwing out data.
+  size_type bound_size() const {return b_size_; }
 
-  //: Set the largest size the queue can be before it starts throwing out data.
+  // : Set the largest size the queue can be before it starts throwing out data.
   // If the bound_size is smaller that the current size, then data will be thrown out.
-  void set_bound_size(size_type bound_size) {
-    while (bound_size > size()) pop();
-    b_size_ = bound_size; }
+  void set_bound_size(size_type bound_size)
+  {
+    while( bound_size > size() ) {pop(); }
+
+    b_size_ = bound_size;
+  }
 
   bool empty() const {return c_.empty(); }
 
   size_type size() const {return c_.size(); }
 
-  value_type& top() {return c_.front(); }
+  value_type & top() {return c_.front(); }
 
-  const value_type& top() const {return c_.front(); }
+  const value_type & top() const {return c_.front(); }
 
-  void push(const value_type & x) {
-    if (size() >= b_size_)
-    {
-      if ( comp_(x, top()) )
+  void push(const value_type & x)
+  {
+    if( size() >= b_size_ )
+      {
+      if( comp_(x, top() ) )
+        {
         pop();
-      else return;
-    }
+        }
+      else {return; }
+      }
     c_.push_back(x);
-    vcl_push_heap(c_.begin(), c_.end(), comp_); } // ignore purify:UMR error here
+    vcl_push_heap(c_.begin(), c_.end(), comp_);
+  }                                               // ignore purify:UMR error here
+
   // It can be resolved by replacing a comparator object with a function pointer.
   // It seems that when using an object, some compilers put a small data marker in
   // to represent the object. But it contains no useful data.
   // Ignore purify:UMR error on next line as well - same cause.
   void pop() {vcl_pop_heap(c_.begin(), c_.end(), comp_); c_.pop_back(); }
-
 protected:
   size_type b_size_;
-  C c_;
-  O comp_;
+  C         c_;
+  O         comp_;
 };
 
 #endif // mbl_priority_bounded_queue_h_

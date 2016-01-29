@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //  This example program shows a typical use of the vipl_histogram IP class on
 //  an int image.  The input image (argv[1]) can be any scalar type (i.e.,
@@ -35,30 +35,35 @@
 #include <vxl_config.h> // for vxl_byte
 
 int
-main(int argc, char** argv)
+main(int argc, char* * argv)
 {
-  if (argc < 2) { vcl_cerr << "Syntax: example_histogram file_in\n"; return 1; }
+  if( argc < 2 ) { vcl_cerr << "Syntax: example_histogram file_in\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
 
-  section<vxl_byte,2> src(in.ni(),in.nj()); // in-memory 2D image
-  section<int,2> dst(1,256);
+  section<vxl_byte, 2> src(in.ni(), in.nj() ); // in-memory 2D image
+  section<int, 2>      dst(1, 256);
 
   // set the input image:
-  if (!in) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
-  vcl_memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes());
+  if( !in ) { vcl_cerr << "Please use a ubyte image as input\n"; return 2; }
+  vcl_memcpy(src.buffer, in.memory_chunk()->const_data(), in.size_bytes() );
 
   // The filter:
-  vipl_histogram<section<vxl_byte,2>,section<int,2>,vxl_byte,int> op;
+  vipl_histogram<section<vxl_byte, 2>, section<int, 2>, vxl_byte, int> op;
   op.put_in_data_ptr(&src);
   op.put_out_data_ptr(&dst);
   op.filter();
 
   // Write output:
-  {for (int i=0; i<256; ++i) if (src.buffer[i] != 0)
-     vcl_cout << i << ": " << int(src.buffer[i]) << vcl_endl;
-  }
+    {for( int i = 0; i < 256; ++i )
+      {
+      if( src.buffer[i] != 0 )
+        {
+        vcl_cout << i << ": " << int(src.buffer[i]) << vcl_endl;
+        }
+      }
+    }
 
   return 0;
 }

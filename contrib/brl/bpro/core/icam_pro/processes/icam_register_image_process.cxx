@@ -1,6 +1,6 @@
 // This is brl/bpro/core/icam_pro/processes/icam_register_image_process.cxx
 
-//:
+// :
 // \file
 // \brief A process for generating cameras that view a scene
 //
@@ -31,27 +31,31 @@
 // global variables
 namespace icam_register_image_process_globals
 {
-  // this process takes 4 inputs and 1 output
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+// this process takes 4 inputs and 1 output
+const unsigned n_inputs_ = 4;
+const unsigned n_outputs_ = 1;
 }
 
 template <class T>
-bool load_image(vcl_string const& path, vil_image_view<T>*& image)
+bool load_image(vcl_string const& path, vil_image_view<T> *& image)
 {
   vcl_cout << path.c_str() << vcl_endl;
-  vil_image_view_base_sptr base_img = vil_load(path.c_str(),true);
-  if (!base_img)
+  vil_image_view_base_sptr base_img = vil_load(path.c_str(), true);
+  if( !base_img )
+    {
     return false;
+    }
   else
+    {
     return load_image(base_img, image);
+    }
 }
 
-//: sets input and output types
+// : sets input and output types
 bool icam_register_image_process_cons(bprb_func_process& pro)
 {
   using namespace icam_register_image_process_globals;
-  unsigned i=0;
+  unsigned               i = 0;
   vcl_vector<vcl_string> input_types_(n_inputs_);
   input_types_[i++] = "vcl_string";   // the file path of the expected images list
   input_types_[i++] = "vcl_string";   // the file path of the depth images list
@@ -64,79 +68,89 @@ bool icam_register_image_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-//: creates a scene from parameters
+// : creates a scene from parameters
 bool icam_register_image_process(bprb_func_process& pro)
 {
-  if (!pro.verify_inputs()) {
+  if( !pro.verify_inputs() )
+    {
     vcl_cout << pro.name() << "icam_register_image_process: invalid inputs" << vcl_endl;
     return false;
-  }
+    }
   using namespace icam_register_image_process_globals;
 
-  int i=0;
-  vcl_string exp_path = pro.get_input<vcl_string>(i++);
-  vcl_string depth_path = pro.get_input<vcl_string>(i++);
-  icam_view_sphere_sptr view_sphere= pro.get_input<icam_view_sphere_sptr>(i++);
+  int                      i = 0;
+  vcl_string               exp_path = pro.get_input<vcl_string>(i++);
+  vcl_string               depth_path = pro.get_input<vcl_string>(i++);
+  icam_view_sphere_sptr    view_sphere = pro.get_input<icam_view_sphere_sptr>(i++);
   vil_image_view_base_sptr dest_image = pro.get_input<vil_image_view_base_sptr>(i++);
 
   // get the parameters
-  unsigned nbins=0, min_pyramid_image_size=0, box_reduction_k=0;
-  double local_min_thresh=0.0, smooth_sigma=0.0, axis_search_cone_multiplier=0.0, polar_range_multiplier=0.0;
-  vcl_string base_path="";
+  unsigned nbins = 0, min_pyramid_image_size = 0, box_reduction_k = 0;
+  double   local_min_thresh = 0.0, smooth_sigma = 0.0, axis_search_cone_multiplier = 0.0,
+    polar_range_multiplier = 0.0;
+  vcl_string base_path = "";
   // with dummy initialisations to avoid compiler warnings
-  if (!pro.parameters()->get_value("nbins", nbins)) return false;
-  if (!pro.parameters()->get_value("min_pyramid_image_size", min_pyramid_image_size)) return false;
-  if (!pro.parameters()->get_value("box_reduction_k", box_reduction_k)) return false;
-  if (!pro.parameters()->get_value("local_min_thresh", local_min_thresh)) return false;
-  if (!pro.parameters()->get_value("smooth_sigma", smooth_sigma)) return false;
-  if (!pro.parameters()->get_value("axis_search_cone_multiplier", axis_search_cone_multiplier)) return false;
-  if (!pro.parameters()->get_value("polar_range_multiplier", polar_range_multiplier)) return false;
-  if (!pro.parameters()->get_value("base_path", base_path)) return false;
+  if( !pro.parameters()->get_value("nbins", nbins) ) {return false; }
+  if( !pro.parameters()->get_value("min_pyramid_image_size", min_pyramid_image_size) ) {return false; }
+  if( !pro.parameters()->get_value("box_reduction_k", box_reduction_k) ) {return false; }
+  if( !pro.parameters()->get_value("local_min_thresh", local_min_thresh) ) {return false; }
+  if( !pro.parameters()->get_value("smooth_sigma", smooth_sigma) ) {return false; }
+  if( !pro.parameters()->get_value("axis_search_cone_multiplier", axis_search_cone_multiplier) ) {return false; }
+  if( !pro.parameters()->get_value("polar_range_multiplier", polar_range_multiplier) ) {return false; }
+  if( !pro.parameters()->get_value("base_path", base_path) ) {return false; }
 
   // create the parameters object
-  icam_minimizer_params params(nbins,min_pyramid_image_size,box_reduction_k,axis_search_cone_multiplier,
-                               polar_range_multiplier,local_min_thresh,smooth_sigma,base_path);
+  icam_minimizer_params params(nbins, min_pyramid_image_size, box_reduction_k, axis_search_cone_multiplier,
+                               polar_range_multiplier, local_min_thresh, smooth_sigma, base_path);
 
   // set the images to view points
   vcl_map<unsigned, vcl_string> images;
   vcl_map<unsigned, vcl_string> depth_images;
 
   // read the image list from text files
-  vcl_ifstream ifs1(exp_path.c_str());
-  if (!ifs1.good()) {
+  vcl_ifstream ifs1(exp_path.c_str() );
+  if( !ifs1.good() )
+    {
     vcl_cout << "Error opening " << exp_path << vcl_endl;
     return false;
-  }
+    }
 
   // load the view point image paths
-  while (ifs1) {
-    unsigned id;
+  while( ifs1 )
+    {
+    unsigned   id;
     vcl_string path;
     ifs1 >> id >> path;
-    images[id]=path;
-  }
+    images[id] = path;
+    }
+
   ifs1.close();
 
   // load the depth image path
-  vcl_ifstream ifs2(depth_path.c_str());
-  while (ifs2) {
-    unsigned id;
+  vcl_ifstream ifs2(depth_path.c_str() );
+  while( ifs2 )
+    {
+    unsigned   id;
     vcl_string path;
     ifs2 >> id >> path;
-    depth_images[id]=path;
-  }
+    depth_images[id] = path;
+    }
+
   ifs2.close();
 
   view_sphere->set_images(images, depth_images);
 
-  vil_image_view<float> *dest_img;
-  if (load_image<float>(dest_image, dest_img)) {
-    view_sphere->register_image(*dest_img,params);
+  vil_image_view<float> * dest_img;
+  if( load_image<float>(dest_image, dest_img) )
+    {
+    view_sphere->register_image(*dest_img, params);
 
     vpgl_camera_double_sptr cam = new vpgl_perspective_camera<double>();
     pro.set_output_val<vpgl_camera_double_sptr>(0, cam);
     return true;
-  }
+    }
   else
+    {
     return false;
+    }
 }

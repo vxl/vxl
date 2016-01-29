@@ -1,8 +1,8 @@
 // This is core/vul/vul_awk.cxx
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
+#  pragma implementation
 #endif
-//:
+// :
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   17 May 1997
@@ -12,7 +12,7 @@
 //   Eric Moyer       15 Jul 2009: Added strip comment functionality
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include "vul_awk.h"
 
@@ -21,8 +21,8 @@
 #include <vcl_iostream.h>
 #include <vcl_cstdio.h> // for EOF
 
-//: Construct from input stream
-vul_awk::vul_awk(vcl_istream& s, ModeFlags mode):
+// : Construct from input stream
+vul_awk::vul_awk(vcl_istream& s, ModeFlags mode) :
   fd_(s),
   mode_(mode)
 {
@@ -40,29 +40,34 @@ vul_awk::~vul_awk()
 
 void vul_awk::next()
 {
-  bool do_strip_comments = ( ((int)mode_) & ((int)strip_comments) ) != 0;
+  bool do_strip_comments = ( ( (int)mode_) & ( (int)strip_comments) ) != 0;
+
 #if 0
-  bool do_backslash_continuations = (int(mode_) & int(backslash_continuations)) != 0;
+  bool do_backslash_continuations = (int(mode_) & int(backslash_continuations) ) != 0;
 #endif
   bool discard_current_line = true;
-  while (discard_current_line)
-  {
+  while( discard_current_line )
+    {
     bool extract_fields = true;
     discard_current_line = false;
 
     // Read line -- should be quite fast after the first one.
     line_.erase();
 
-    while (true) {
+    while( true )
+      {
       int c = fd_.get();
-      if (c == EOF  ||  fd_.eof()) {
+      if( c == EOF  ||  fd_.eof() )
+        {
         done_ = true;
         break;
-      }
-      if (c == '\n')
+        }
+      if( c == '\n' )
+        {
         break;
+        }
       line_ += char(c);
-    }
+      }
 
     char const* linep = line_.c_str();
 
@@ -71,65 +76,84 @@ void vul_awk::next()
     split_line_ = new char[line_.size() + 1];
     vcl_strcpy(split_line_, linep);
 
-    //strip comments
-    if (do_strip_comments) {
-      //find the first # character
+    // strip comments
+    if( do_strip_comments )
+      {
+      // find the first # character
       char* comment_char = split_line_;
-      while (*comment_char != '#' && *comment_char != '\0') ++comment_char;
-      //replace the # with a single space and terminate the string.  I
-      //use a single space since that will help the backslash
-      //continuation if it is ever implemented
-      if (*comment_char == '#') {
-        //Replace with a space
+      while( *comment_char != '#' && *comment_char != '\0' )
+        {
+        ++comment_char;
+        }
+
+      // replace the # with a single space and terminate the string.  I
+      // use a single space since that will help the backslash
+      // continuation if it is ever implemented
+      if( *comment_char == '#' )
+        {
+        // Replace with a space
         *comment_char = ' '; ++comment_char;
-        //Terminate the string
-        if (*comment_char != '\0') { *comment_char = '\0'; }
-        if (comment_char - split_line_ == 1) {
-          //The line was only a comment -- don't try to extract
-          //records, just discard the current line and go to the next
+        // Terminate the string
+        if( *comment_char != '\0' ) { *comment_char = '\0'; }
+        if( comment_char - split_line_ == 1 )
+          {
+          // The line was only a comment -- don't try to extract
+          // records, just discard the current line and go to the next
           extract_fields = false;
           discard_current_line = true;
+          }
         }
       }
-    }
 
-    if (extract_fields) {
+    if( extract_fields )
+      {
       // Chop line up into fields
       fields_.clear();
       char* cp = split_line_;
 
-      while (true) {
+      while( true )
+        {
         // Eat white
-        while (*cp && vcl_isspace(*cp))
+        while( *cp && vcl_isspace(*cp) )
+          {
           ++cp;
-        if (!*cp) break;
+          }
+
+        if( !*cp ) {break; }
 
         // Push
         fields_.push_back(cp);
 
         // Find nonwhite
-        while (*cp && !vcl_isspace(*cp))
+        while( *cp && !vcl_isspace(*cp) )
+          {
           ++cp;
-        if (!*cp) break;
+          }
+
+        if( !*cp ) {break; }
 
         // Zap space
         *cp++ = '\0';
+        }
       }
-    }
     // Increment line number
     ++line_number_;
-  }
+    }
 }
 
-char const* vul_awk::line_from(int field_number) const
+char const * vul_awk::line_from(int field_number) const
 {
-  char const *p = line_.c_str();
-  if (field_number >= NF())
+  char const * p = line_.c_str();
+
+  if( field_number >= NF() )
+    {
     field_number = NF() - 1;
-  if (field_number < 0) {
-    vcl_cerr << "vul_awk::line_from("<< field_number <<") -- ZOIKS\n";
+    }
+  if( field_number < 0 )
+    {
+    vcl_cerr << "vul_awk::line_from(" << field_number << ") -- ZOIKS\n";
     return line();
-  }
+    }
 
   return p + (fields_[field_number] - split_line_);
 }
@@ -137,7 +161,8 @@ char const* vul_awk::line_from(int field_number) const
 void testvul_awk()
 {
   vcl_cout << "Start\n";
-  for (vul_awk awk(vcl_cin); awk; ++awk) {
+  for( vul_awk awk(vcl_cin); awk; ++awk )
+    {
     vcl_cout << awk.NF() << ':' << awk[2] << vcl_endl;
-  }
+    }
 }

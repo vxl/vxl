@@ -1,7 +1,7 @@
 // This is core/vil/vil_color_table.h
 #ifndef vil_color_table_h_
 #define vil_color_table_h_
-//:
+// :
 // \file
 // \brief Color tables for applying false color to greyscale images.
 // \author brooksby@research.ge.com
@@ -69,11 +69,11 @@
 #include <vil/vil_rgb.h>
 #include <vxl_config.h> // for vxl_byte
 
-enum color_theme {BWLIN1=0, BWLIN2, GRBW, REDTEMP, BGRY, GAMMA_II, PRISM, RED_PURPLE,
-                  GWLIN, GWEXP, GREENPINK, BLUERED, SIXTEENLEVEL, RAINBOW1, STEPS, STERN,
-                  HAZE, BLUE_PASTEL, RED_PASTEL, HSL1, HSL2, HSV1, HSV2, PURPLE_RED_STRIPES,
-                  BEACH, MAC, EOS_A, EOS_B, HARD_CANDY, NATURE, OCEAN, PEPPERMINT, PLASMA,
-                  BLUERED2, RAINBOW2, BLUE_WAVES, VOLCANO1, WAVES1};
+enum color_theme { BWLIN1 = 0, BWLIN2, GRBW, REDTEMP, BGRY, GAMMA_II, PRISM, RED_PURPLE,
+                   GWLIN, GWEXP, GREENPINK, BLUERED, SIXTEENLEVEL, RAINBOW1, STEPS, STERN,
+                   HAZE, BLUE_PASTEL, RED_PASTEL, HSL1, HSL2, HSV1, HSV2, PURPLE_RED_STRIPES,
+                   BEACH, MAC, EOS_A, EOS_B, HARD_CANDY, NATURE, OCEAN, PEPPERMINT, PLASMA,
+                   BLUERED2, RAINBOW2, BLUE_WAVES, VOLCANO1, WAVES1 };
 
 vil_rgb<vxl_byte> color_value(int theme, int color_index);
 

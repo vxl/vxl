@@ -1,8 +1,8 @@
 #pragma once
 // This is brl/bbas/volm/desc/volm_desc.h
 #ifndef volm_desc_h_
-#define volm_desc_h_
-//:
+#  define volm_desc_h_
+// :
 // \file
 // \brief  A base class to represent of volumetric descriptor which constructs a histogram
 //  to represent the scene observed from a hypothesized location
@@ -15,10 +15,10 @@
 //   <none yet>
 // \endverbatim
 
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
-#include <vsl/vsl_binary_io.h>
-#include <vcl_vector.h>
+#  include <vbl/vbl_ref_count.h>
+#  include <vbl/vbl_smart_ptr.h>
+#  include <vsl/vsl_binary_io.h>
+#  include <vcl_vector.h>
 
 class volm_desc;
 typedef vbl_smart_ptr<volm_desc> volm_desc_sptr;
@@ -29,7 +29,7 @@ public:
   // Default constructor
   volm_desc() {}
 
-  //: construct the histogram from a vector
+  // : construct the histogram from a vector
   volm_desc(vcl_vector<unsigned char> values)
     : h_(values)
   { name_ = "descriptor";  nbins_ = (unsigned)values.size(); }
@@ -37,51 +37,51 @@ public:
   // Destructor
   virtual ~volm_desc() {};
 
-  //: return the name of the descriptor
+  // : return the name of the descriptor
   virtual vcl_string name() { return "volm_desc base"; }
 
-  //: return the number of bins of the histogram
+  // : return the number of bins of the histogram
   unsigned int nbins() { return nbins_; }
 
-  //: Get total area under the histogram = total counts in histogram
+  // : Get total area under the histogram = total counts in histogram
   unsigned int get_area();
 
-  //: pretty print (prevent creation of base class by setting = 0)
+  // : pretty print (prevent creation of base class by setting = 0)
   virtual void print() const;
 
-  //: general similarity metric for histogram
+  // : general similarity metric for histogram
   virtual float similarity(volm_desc_sptr other);
 
-  //: visualization using bsvg
+  // : visualization using bsvg
   void visualize(vcl_string outfile, unsigned char const& y_max = 10) const;
 
-  //: return the value of bin
+  // : return the value of bin
   unsigned char count(unsigned const& i) const { return h_[i]; }
 
-  //: Accessor to the value at bin i in the histogram
-  unsigned char operator[] (unsigned int i) const { return h_[i];}
+  // : Accessor to the value at bin i in the histogram
+  unsigned char operator[](unsigned int i) const { return h_[i]; }
 
   void get_char_array(vcl_vector<unsigned char>& values) const;
 
   // ===========  binary I/O ================
 
-  //: version
+  // : version
   virtual unsigned version() const { return 1; }
 
-  //: binary IO write
+  // : binary IO write
   virtual void b_write(vsl_b_ostream& os);
 
-  //: binary IO read
+  // : binary IO read
   virtual void b_read(vsl_b_istream& is);
 
 protected:
-  //: name of the descriptor
+  // : name of the descriptor
   vcl_string name_;
 
-  //: number of bins of the histogram
+  // : number of bins of the histogram
   unsigned int nbins_;
 
-  //: a simple 1D histogram
+  // : a simple 1D histogram
   vcl_vector<unsigned char> h_;
 };
 

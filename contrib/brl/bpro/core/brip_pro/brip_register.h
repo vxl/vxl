@@ -3,9 +3,11 @@
 
 class brip_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif

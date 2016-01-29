@@ -1,6 +1,6 @@
 #ifndef rgrl_trans_rigid_h_
 #define rgrl_trans_rigid_h_
-//:
+// :
 // \file
 // \author Tomasz Malisiewicz
 // \date   March 2004
@@ -8,7 +8,7 @@
 #include "rgrl_transformation.h"
 #include <vcl_iosfwd.h>
 
-//: Represents a rigid transformation.
+// : Represents a rigid transformation.
 //
 //  A rigid transform is q = R p + t where R
 //  is an n-dimensional rotation matrix, and t is an n-dimensional
@@ -21,79 +21,71 @@
 class rgrl_trans_rigid
   : public rgrl_transformation
 {
- public:
-  //: Initialize to the identity transformation.
+public:
+  // : Initialize to the identity transformation.
   //
   rgrl_trans_rigid( unsigned int dimension = 0);
 
-  //: Constructor based on an initial transformation and covar estimate
+  // : Constructor based on an initial transformation and covar estimate
   //
-  rgrl_trans_rigid( vnl_matrix<double> const& rot,
-                    vnl_vector<double> const& trans,
-                    vnl_matrix<double> const& covar );
+  rgrl_trans_rigid( vnl_matrix<double> const& rot, vnl_vector<double> const& trans, vnl_matrix<double> const& covar );
 
-  //: Constructor based on an initial transformation and unknown covar
+  // : Constructor based on an initial transformation and unknown covar
   //
   //  The  covariance matrix is a zero matrix.
-  rgrl_trans_rigid( vnl_matrix<double> const& rot,
-                    vnl_vector<double> const& trans );
+  rgrl_trans_rigid( vnl_matrix<double> const& rot, vnl_vector<double> const& trans );
 
-  //: Sets the translation component of this transformation
+  // : Sets the translation component of this transformation
   //  \note This method is valid for only the 3d version
   void set_translation(double tx, double ty, double tz);
 
-  //: Sets the translation component of this transformation
+  // : Sets the translation component of this transformation
   //  \note This method is valid for only the 2d version
   void set_translation(double tx, double ty);
 
-  //: Sets the rotation part of this transformation
+  // : Sets the rotation part of this transformation
   //  \note This method is valid for only the 3d version
   void set_rotation(double theta, double alpha, double phi);
 
-  //: Sets the rotation part of this transformation
+  // : Sets the rotation part of this transformation
   //  \note This method is valid for only the 2d version
   void set_rotation(double theta);
 
-  //: Given a rotation matrix which is the product of three independent rotations, extract the angles
+  // : Given a rotation matrix which is the product of three independent rotations, extract the angles
   //  \note This method is valid for only the 3d version
   void determine_angles( double& phi, double& alpha, double& theta) const;
 
-  //: Extract the angles
+  // : Extract the angles
   //  \note This method is valid for only the 2d version
   void determine_angles( double& theta ) const;
 
-
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
 
-  //: The rotation component of this transform
-  vnl_matrix<double> const& R() const;
+  // : The rotation component of this transform
+  vnl_matrix<double> const & R() const;
 
-  //: The translation component of the transform
+  // : The translation component of the transform
   vnl_vector<double> t() const;
 
-  //:  Inverse map with an initial guess
-  void inv_map( const vnl_vector<double>& to,
-                bool initialize_next,
-                const vnl_vector<double>& to_delta,
-                vnl_vector<double>& from,
-                vnl_vector<double>& from_next_est) const;
+  // :  Inverse map with an initial guess
+  void inv_map( const vnl_vector<double>& to, bool initialize_next, const vnl_vector<double>& to_delta,
+                vnl_vector<double>& from, vnl_vector<double>& from_next_est) const;
 
-  //:  Inverse map based on the transformation.
+  // :  Inverse map based on the transformation.
   //   The inverse mapping for R(p)+ t = q is p = A^-1(q-t)
-  void inv_map( const vnl_vector<double>& to,
-                vnl_vector<double>& from ) const;
+  void inv_map( const vnl_vector<double>& to, vnl_vector<double>& from ) const;
 
-  //: is this an invertible transformation?
+  // : is this an invertible transformation?
   virtual bool is_invertible() const { return true; }
 
-  //: Return an inverse transformation
+  // : Return an inverse transformation
   //  This function only exist for certain transformations.
   virtual rgrl_transformation_sptr inverse_transform() const;
 
-  //: Compute jacobian w.r.t. location
+  // : Compute jacobian w.r.t. location
   virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
 
-  //:  transform the transformation for images of different resolution
+  // :  transform the transformation for images of different resolution
   rgrl_transformation_sptr scale_by( double scale ) const;
 
   // Defines type-related functions
@@ -105,21 +97,18 @@ class rgrl_trans_rigid
   // for input
   bool read(vcl_istream& is );
 
-  //: make a clone copy
+  // : make a clone copy
   rgrl_transformation_sptr clone() const;
 
- protected:
-  void map_loc( vnl_vector<double> const& from,
-                vnl_vector<double>      & to ) const;
+protected:
+  void map_loc( vnl_vector<double> const& from, vnl_vector<double>      & to ) const;
 
-  void map_dir( vnl_vector<double> const& from_loc,
-                vnl_vector<double> const& from_dir,
+  void map_dir( vnl_vector<double> const& from_loc, vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const;
 
- private:
+private:
   vnl_matrix<double> R_;
   vnl_vector<double> trans_;
 };
-
 
 #endif

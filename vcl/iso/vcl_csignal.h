@@ -6,9 +6,9 @@
 #include <csignal>
 
 #ifdef vcl_generic_csignal_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_csignal_STD std
+#  define vcl_generic_csignal_STD std
 #endif
 
 #include "../generic/vcl_csignal.h"

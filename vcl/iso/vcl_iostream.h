@@ -6,9 +6,9 @@
 #include <iostream>
 
 #ifdef vcl_generic_iostream_STD
-  ** error **
+**error * *
 #else
-# define vcl_generic_iostream_STD std
+#  define vcl_generic_iostream_STD std
 #endif
 
 #include "../generic/vcl_iostream.h"

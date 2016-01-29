@@ -3,9 +3,11 @@
 
 class ihog_register
 {
- public:
+public:
   static void register_datatype();
+
   static void register_process();
+
 };
 
 #endif // ihog_register_h_

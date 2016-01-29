@@ -5,7 +5,7 @@
 #ifndef rgtl_octree_dual_location_hxx
 #define rgtl_octree_dual_location_hxx
 
-//:
+// :
 // \file
 // \brief Logical location of an octree dual mesh element.
 // \author Brad King
@@ -13,7 +13,7 @@
 
 #include "rgtl_octree_cell_location.hxx"
 
-//: Represent an octree dual mesh element logical location.
+// : Represent an octree dual mesh element logical location.
 //
 // The first template argument specifies the dimension of the octree.
 // The second template argument specifies the dimension of the element.
@@ -29,22 +29,23 @@ template <unsigned int D, unsigned int d>
 class rgtl_octree_dual_location
 {
 public:
-  //: The logical octree cell location type.
+  // : The logical octree cell location type.
   typedef rgtl_octree_cell_location<D> cell_location_type;
 
-  //: Access the primal grid cell locations.
-  cell_location_type& operator[](unsigned int i)
-    {
+  // : Access the primal grid cell locations.
+  cell_location_type & operator[](unsigned int i)
+  {
     return this->primal_[i];
-    }
-  cell_location_type const& operator[](unsigned int i) const
-    {
+  }
+
+  cell_location_type const & operator[](unsigned int i) const
+  {
     return this->primal_[i];
-    }
+  }
 
 private:
   // The logical octree location of each primal cell.
-  cell_location_type primal_[(1<<d)];
+  cell_location_type primal_[(1 << d)];
 };
 
 #endif

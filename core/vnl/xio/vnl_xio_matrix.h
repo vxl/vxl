@@ -1,7 +1,7 @@
 // This is core/vnl/xio/vnl_xio_matrix.h
 #ifndef vnl_xio_matrix_h
 #define vnl_xio_matrix_h
-//:
+// :
 // \file
 // \brief XML write a vnl_matrix
 //  Two functions which write a valid XML fragment to an ostream.
@@ -25,17 +25,15 @@
 #include <vcl_string.h>
 #include <vcl_iosfwd.h>
 
-//: XML save vnl_matrix to stream.
+// : XML save vnl_matrix to stream.
 // \relatesalso vnl_matrix
 template <class T>
-void x_write(vcl_ostream & os, vnl_matrix<T> const& v,
-             vcl_string name="vnl_matrix");
+void x_write(vcl_ostream & os, vnl_matrix<T> const& v, vcl_string name = "vnl_matrix");
 
-//: XML save vnl_matrix as a 3-level tree to stream.
+// : XML save vnl_matrix as a 3-level tree to stream.
 // \relatesalso vnl_matrix
 template <class T>
-void x_write_tree(vcl_ostream & os, vnl_matrix<T> const& v,
-                  vcl_string name="vnl_matrix");
+void x_write_tree(vcl_ostream & os, vnl_matrix<T> const& v, vcl_string name = "vnl_matrix");
 
 #define VNL_XIO_MATRIX_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_matrix.txx> first"
 

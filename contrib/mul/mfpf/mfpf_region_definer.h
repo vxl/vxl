@@ -1,6 +1,6 @@
 #ifndef mfpf_region_definer_h_
 #define mfpf_region_definer_h_
-//:
+// :
 // \file
 // \brief Base for objects which generate regions from sets of points
 // \author Tim Cootes
@@ -12,9 +12,9 @@
 #include <vcl_memory.h>
 #include <vcl_iosfwd.h>
 
-const unsigned mfpf_invalid_index=99999;
+const unsigned mfpf_invalid_index = 99999;
 
-//: Base for objects which generate regions from sets of points
+// : Base for objects which generate regions from sets of points
 //  Given a set of points, derived classes can generate a region.
 //  Typically this is centred on one point or set of points, and
 //  is aligned with reference to some other points.
@@ -28,101 +28,98 @@ const unsigned mfpf_invalid_index=99999;
 //  require a fixed aspect.
 class mfpf_region_definer
 {
- public:
+public:
 
-  //: Dflt ctor
+  // : Dflt ctor
   mfpf_region_definer();
 
-  //: Destructor
+  // : Destructor
   virtual ~mfpf_region_definer();
 
-  //: Returns true if the region is centred on an input point
+  // : Returns true if the region is centred on an input point
   virtual bool is_centred_on_pt() const = 0;
 
-  //: Returns index of reference point on which the region is centred
+  // : Returns index of reference point on which the region is centred
   virtual unsigned ref_point_index() const = 0;
 
-  //: Returns original index of reference point on which the region is centred
+  // : Returns original index of reference point on which the region is centred
   virtual unsigned orig_ref_point_index() const = 0;
 
-  //: Returns reference point for region
+  // : Returns reference point for region
   //  Returns the point that would be returned by
   //  set_up(pts).pose().p(), but without changing internal
   //  state.
-  virtual vgl_point_2d<double> get_ref_point(
-             const vcl_vector<vgl_point_2d<double> >& pts) const = 0;
+  virtual vgl_point_2d<double> get_ref_point(const vcl_vector<vgl_point_2d<double> >& pts) const = 0;
 
-  //: Uses some subset of pts to define a region
+  // : Uses some subset of pts to define a region
   //  The pose for the region will be a translation + rotation,
   //  ie region.pose().u() is a unit length
-  virtual mfpf_region_form set_up(
-             const vcl_vector<vgl_point_2d<double> >& pts) = 0;
+  virtual mfpf_region_form set_up(const vcl_vector<vgl_point_2d<double> >& pts) = 0;
 
-  //: Uses some subset of pts to define a new region
+  // : Uses some subset of pts to define a new region
   //  The aspect ratio of the region will be the same as that
   //  from the last call to set_up. Only region.pose() will be
   //  different.  Thus the returned region.pose() can be used
   //  to define the pose for training an mfpf_point_finder,
   //  for instance.
-  virtual mfpf_region_form get_region(
-              const vcl_vector<vgl_point_2d<double> >& pts) const = 0;
+  virtual mfpf_region_form get_region(const vcl_vector<vgl_point_2d<double> >& pts) const = 0;
 
-  //: Replace each point index i with new_index[i]
+  // : Replace each point index i with new_index[i]
   //  Allows for re-numbering of the points used.
   //  new_index[i]==mfpf_invalid_index indicates an invalid index
   //  Returns true if successful.
-  virtual bool replace_index(const vcl_vector<unsigned>& new_index)=0;
+  virtual bool replace_index(const vcl_vector<unsigned>& new_index) = 0;
 
-  //: Initialise from a stream
-  virtual bool set_from_stream(vcl_istream &is);
+  // : Initialise from a stream
+  virtual bool set_from_stream(vcl_istream & is);
 
-  //: Version number for I/O
+  // : Version number for I/O
   short version_no() const;
 
-  //: Name of the class
+  // : Name of the class
   virtual vcl_string is_a() const;
 
-  //: Create a copy on the heap and return base class pointer
-  virtual mfpf_region_definer* clone() const = 0;
+  // : Create a copy on the heap and return base class pointer
+  virtual mfpf_region_definer * clone() const = 0;
 
-  //: Print class to os
-  virtual void print_summary(vcl_ostream& os) const =0;
+  // : Print class to os
+  virtual void print_summary(vcl_ostream& os) const = 0;
 
-  //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const =0;
+  // : Save class to binary file stream
+  virtual void b_write(vsl_b_ostream& bfs) const = 0;
 
-  //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs) =0;
+  // : Load class from binary file stream
+  virtual void b_read(vsl_b_istream& bfs) = 0;
 
-  //: Create a concrete object, from a text specification.
-  static vcl_auto_ptr<mfpf_region_definer> create_from_stream(vcl_istream &is);
+  // : Create a concrete object, from a text specification.
+  static vcl_auto_ptr<mfpf_region_definer> create_from_stream(vcl_istream & is);
+
 };
 
-//: Allows derived class to be loaded by base-class pointer
+// : Allows derived class to be loaded by base-class pointer
 void vsl_add_to_binary_loader(const mfpf_region_definer& b);
 
-//: Binary file stream output operator for class reference
+// : Binary file stream output operator for class reference
 void vsl_b_write(vsl_b_ostream& bfs, const mfpf_region_definer& b);
 
-//: Binary file stream input operator for class reference
+// : Binary file stream input operator for class reference
 void vsl_b_read(vsl_b_istream& bfs, mfpf_region_definer& b);
 
-//: Stream output operator for class reference
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer& b);
+// : Stream output operator for class reference
+vcl_ostream & operator<<(vcl_ostream& os, const mfpf_region_definer& b);
 
-//: Stream output operator for class pointer
-vcl_ostream& operator<<(vcl_ostream& os,const mfpf_region_definer* b);
+// : Stream output operator for class pointer
+vcl_ostream & operator<<(vcl_ostream& os, const mfpf_region_definer* b);
 
-//: Generate a new set of points from \p pts0 using set of definers
+// : Generate a new set of points from \p pts0 using set of definers
 // \code
 //  new_pts[i] = definer[i]->get_ref_point(pts0)
 // \endcode
-void mfpf_points_from_definers(
-              const vcl_vector<mfpf_region_definer*>& definer,
-              const vcl_vector<vgl_point_2d<double> >& pts0,
-              vcl_vector<vgl_point_2d<double> >& new_pts);
+void mfpf_points_from_definers(const vcl_vector<mfpf_region_definer *>& definer,
+                               const vcl_vector<vgl_point_2d<double> >& pts0,
+                               vcl_vector<vgl_point_2d<double> >& new_pts);
 
-//: Change indices in definers to refer to points generated
+// : Change indices in definers to refer to points generated
 //  Suppose definer is used to generate a set of n=definer.size()
 //  regions/pts (say pts1), by referring to some other set of m points.
 //  This sets up self_definer to generate an identical set of
@@ -145,7 +142,6 @@ void mfpf_points_from_definers(
 //  Note that objects pointed to by definer are changed.
 //  They may be left in an invalid state if this returns false,
 //  so caller should ensure a backup retained.
-bool mfpf_renumber_to_self(vcl_vector<mfpf_region_definer*>& definer,
-                           unsigned n_pts0);
+bool mfpf_renumber_to_self(vcl_vector<mfpf_region_definer *>& definer, unsigned n_pts0);
 
 #endif // mfpf_region_definer_h_

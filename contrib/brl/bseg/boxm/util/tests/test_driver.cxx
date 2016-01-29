@@ -11,5 +11,4 @@ void register_tests()
   REGISTER( test_quad_interpolate );
 }
 
-
 DEFINE_MAIN;

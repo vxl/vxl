@@ -1,4 +1,4 @@
-//:
+// :
 // \file
 //  This example program shows a typical use of the vipl_threshold IP class on
 //  a ubyte image.  The input image (argv[1]) must be ubyte, and in that
@@ -23,27 +23,27 @@
 #include <vipl/vipl_threshold.h>
 #include <vcl_iostream.h>
 #include <vcl_cstdlib.h> // for atoi()
-#include <vxl_config.h> // for vxl_byte
+#include <vxl_config.h>  // for vxl_byte
 
 int
-main(int argc, char** argv)
+main(int argc, char* * argv)
 {
-  if (argc < 3) { vcl_cerr << "Syntax: example1_threshold file_in file_out [threshold]\n"; return 1; }
+  if( argc < 3 ) { vcl_cerr << "Syntax: example1_threshold file_in file_out [threshold]\n"; return 1; }
 
   // The input image:
   vil_image_view<vxl_byte> in = vil_load(argv[1]);
-  if (!in) return 2;
+  if( !in ) {return 2; }
   vil_image_view<vxl_byte>* src = &in;
 
   // The output image:
-  vil_image_view<vxl_byte> out(in.ni(),in.nj(),in.nplanes());
+  vil_image_view<vxl_byte>  out(in.ni(), in.nj(), in.nplanes() );
   vil_image_view<vxl_byte>* dst = &out;
 
   // The threshold value:
-  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(vcl_atoi(argv[3]));
+  vxl_byte threshold = (argc < 4) ? 127 : vxl_byte(vcl_atoi(argv[3]) );
 
   // The filter:
-  vipl_threshold<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op(threshold,0);
+  vipl_threshold<vil_image_view<vxl_byte>, vil_image_view<vxl_byte>, vxl_byte, vxl_byte> op(threshold, 0);
   // without third argument, only set below threshold to 0
   op.put_in_data_ptr(src);
   op.put_out_data_ptr(dst);

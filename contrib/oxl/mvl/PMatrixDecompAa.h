@@ -2,9 +2,9 @@
 #ifndef PMatrixDecompAa_h_
 #define PMatrixDecompAa_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 //  \file
 // \brief Decompose PMatrix into [A a]
 //
@@ -19,29 +19,29 @@
 
 class PMatrixDecompAa
 {
- public:
+public:
 
-//: Public data members for A and a.
+// : Public data members for A and a.
   vnl_double_3x3 A;
   vnl_double_3   a;
-  //{genman, do not do anything to this line -- awf}
+  // {genman, do not do anything to this line -- awf}
 
-//: Default constructor
+// : Default constructor
   PMatrixDecompAa() {}
 
-//: Construct from PMatrix.
+// : Construct from PMatrix.
   PMatrixDecompAa(const PMatrix& P) { set(P); }
 
-//: Construct from PMatrix.
+// : Construct from PMatrix.
   PMatrixDecompAa(const vnl_matrix<double>& P) { set(P); }
 
-//:  Set [A a] from PMatrix.
-  void set(const PMatrix& P) { P.get(&A.as_ref().non_const(), &a.as_ref().non_const()); }
+// :  Set [A a] from PMatrix.
+  void set(const PMatrix& P) { P.get(&A.as_ref().non_const(), &a.as_ref().non_const() ); }
 
-//:  Set [A a] from PMatrix.
+// :  Set [A a] from PMatrix.
   void set(const vnl_matrix<double>& P);
 
-//:  Set PMatrix from [A a].
+// :  Set PMatrix from [A a].
   void get(PMatrix* P) const { P->set(A, a); }
 };
 

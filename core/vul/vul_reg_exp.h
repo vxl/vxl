@@ -1,7 +1,7 @@
 // This is core/vul/vul_reg_exp.h
 #ifndef vul_reg_exph
 #define vul_reg_exph
-//:
+// :
 // \file
 // \brief contains class for pattern matching with regular expressions
 // \author Texas Instruments Incorporated.
@@ -31,7 +31,7 @@
 
 const int vul_reg_exp_nsubexp = 10;
 
-//: Pattern matching with regular expressions.
+// : Pattern matching with regular expressions.
 //  A regular expression allows a programmer to specify complex
 //  patterns that can be searched for and matched against the
 //  character string of a string object. In its simplest form, a
@@ -78,70 +78,77 @@ const int vul_reg_exp_nsubexp = 10;
 //
 class vul_reg_exp
 {
-  //: anchor point of start position for n-th matching regular expression
+  // : anchor point of start position for n-th matching regular expression
   const char* startp[vul_reg_exp_nsubexp];
-  //: anchor point of end position for n-th matching regular expression
+  // : anchor point of end position for n-th matching regular expression
   const char* endp[vul_reg_exp_nsubexp];
-  //: Internal use only
-  char  regstart;
-  //: Internal use only
-  char  reganch;
-  //: Internal use only
+  // : Internal use only
+  char regstart;
+  // : Internal use only
+  char reganch;
+  // : Internal use only
   const char* regmust;
-  //: Internal use only
-  int   regmlen;
-  char* program;
-  int   progsize;
+  // : Internal use only
+  int         regmlen;
+  char*       program;
+  int         progsize;
   const char* searchstring;
- public:
-  //: Creates an empty regular expression.
+public:
+  // : Creates an empty regular expression.
   inline vul_reg_exp() : program(0) { clear_bufs(); }
-  //: Creates a regular expression from string s, and compiles s.
+  // : Creates a regular expression from string s, and compiles s.
   inline vul_reg_exp(char const* s) : program(0) { clear_bufs(); compile(s); }
-  //: Copy constructor
-  vul_reg_exp(vul_reg_exp const&);
-  //: Frees space allocated for regular expression.
+  // : Copy constructor
+  vul_reg_exp(vul_reg_exp const &);
+  // : Frees space allocated for regular expression.
   inline ~vul_reg_exp() { delete[] this->program; }
-  //: Compiles char* --> regexp
-  void compile(char const*);
-  //: true if regexp in char* arg
-  bool find(char const*);
-  //: true if regexp in char* arg
-  bool find(vcl_string const&);
-  //: Returns the start index of the last item found.
+  // : Compiles char* --> regexp
+  void compile(char const *);
+
+  // : true if regexp in char* arg
+  bool find(char const *);
+
+  // : true if regexp in char* arg
+  bool find(vcl_string const &);
+
+  // : Returns the start index of the last item found.
   inline vcl_ptrdiff_t start() const { return this->startp[0] - searchstring; }
-  //: Returns the end index of the last item found.
+  // : Returns the end index of the last item found.
   inline vcl_ptrdiff_t end()   const { return this->endp[0] - searchstring; }
-  //: Equality operator
-  bool operator==(vul_reg_exp const&) const;
-  //: Inequality operator
+  // : Equality operator
+  bool operator==(vul_reg_exp const &) const;
+
+  // : Inequality operator
   inline bool operator!=(vul_reg_exp const& r) const { return !operator==(r); }
-  //: Same regexp and state?
-  bool deep_equal(vul_reg_exp const&) const;
-  //: Returns true if a valid RE is compiled and ready for pattern matching.
+  // : Same regexp and state?
+  bool deep_equal(vul_reg_exp const &) const;
+
+  // : Returns true if a valid RE is compiled and ready for pattern matching.
   inline bool is_valid() const { return this->program != 0; }
-  //: Invalidates regular expression.
+  // : Invalidates regular expression.
   inline void set_invalid() { delete[] this->program; this->program = 0; clear_bufs(); }
 
-  //: Return start index of nth submatch.
+  // : Return start index of nth submatch.
   // start(0) is the start of the full match.
   inline vcl_ptrdiff_t start(long n) const { return this->startp[n] - searchstring; }
-  //: Return end index of nth submatch.
+  // : Return end index of nth submatch.
   // end(0) is the end of the full match.
   inline vcl_ptrdiff_t end(long n)   const { return this->endp[n] - searchstring; }
-  //: Return nth submatch as a string.
-  vcl_string match(int n) const {
+  // : Return nth submatch as a string.
+  vcl_string match(int n) const
+  {
     return this->endp[n] == this->startp[n] ? vcl_string("") :
            vcl_string(this->startp[n], this->endp[n] - this->startp[n]);
   }
-  //: Return an expression that will match precisely c
+
+  // : Return an expression that will match precisely c
   // The returned string is owned by the function, and
   // will be overwritten in subsequent calls.
   static const char * protect(char c);
 
- private:
-  //: private function to clear startp[] and endp[]
-  void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=0; }
+private:
+  // : private function to clear startp[] and endp[]
+  void clear_bufs() { for( int n = 0; n < vul_reg_exp_nsubexp; ++n ) {startp[n] = endp[n] = 0; }}
 };
 
 #endif // vul_reg_exph

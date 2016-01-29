@@ -1,6 +1,6 @@
 #ifndef boxm2_refine_block_function_h
 #define boxm2_refine_block_function_h
-//:
+// :
 // \file
 
 #include <boxm2/boxm2_data_traits.h>
@@ -13,70 +13,63 @@
 
 class boxm2_refine_block_function
 {
- public:
-  typedef unsigned char uchar;
-  typedef unsigned short ushort;
+public:
+  typedef unsigned char               uchar;
+  typedef unsigned short              ushort;
   typedef vnl_vector_fixed<uchar, 16> uchar16;
-  typedef vnl_vector_fixed<uchar, 8> uchar8;
+  typedef vnl_vector_fixed<uchar, 8>  uchar8;
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
-  //: "default" constructor
+  // : "default" constructor
   boxm2_refine_block_function() {}
 
-  //: initialize generic data base pointers as their data type
-  bool init_data(boxm2_scene_sptr scene, boxm2_block* blk, vcl_vector<boxm2_data_base*> & datas, float prob_thresh);
+  // : initialize generic data base pointers as their data type
+  bool init_data(boxm2_scene_sptr scene, boxm2_block* blk, vcl_vector<boxm2_data_base *> & datas, float prob_thresh);
 
-  //: refine function;
+  // : refine function;
   bool refine();
-  bool refine_deterministic(vcl_vector<boxm2_data_base*>& datas);
 
-  //: refine bit tree
-  boct_bit_tree refine_bit_tree(boct_bit_tree& curr_tree,
-                                 int buff_offset,
-                                 bool is_random=true);
+  bool refine_deterministic(vcl_vector<boxm2_data_base *>& datas);
 
-  //: move data into new location
-  int move_data(boct_bit_tree& unrefined_tree,
-                boct_bit_tree& refined_tree,
-                float*  alpha_cpy,
-                uchar8*  mog_cpy,
+  // : refine bit tree
+  boct_bit_tree refine_bit_tree(boct_bit_tree& curr_tree, int buff_offset, bool is_random = true);
+
+  // : move data into new location
+  int move_data(boct_bit_tree& unrefined_tree, boct_bit_tree& refined_tree, float*  alpha_cpy, uchar8*  mog_cpy,
                 ushort4* num_obs_cpy );
 
-  //: helper method
+  // : helper method
   int free_space(int startPtr, int endPtr);
 
- private:
+private:
   boxm2_scene_sptr scene_;
-  boxm2_block* blk_;
+  boxm2_block*     blk_;
 
-  float*       alpha_;
-  uchar8*      mog_;
-  ushort4*     num_obs_;
+  float*   alpha_;
+  uchar8*  mog_;
+  ushort4* num_obs_;
 
-  //block max level
+  // block max level
   int max_level_;
   int MAX_INNER_CELLS_;
   int MAX_CELLS_;
 
-  //max alpha integrated
+  // max alpha integrated
   float max_alpha_int_;
 
-  //length of data buffer
+  // length of data buffer
   int data_len_;
 
-  //length of one side of a sub block
+  // length of one side of a sub block
   double block_len_;
 
   int num_split_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-//MAIN REFINE FUNCTION
+// MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_refine_block( boxm2_scene_sptr scene,
-                         boxm2_block* blk,
-                         vcl_vector<boxm2_data_base*> & datas,
-                         float prob_thresh,
-                         bool is_random = true);
+void boxm2_refine_block( boxm2_scene_sptr scene, boxm2_block* blk, vcl_vector<boxm2_data_base *> & datas,
+                         float prob_thresh, bool is_random = true);
 
 #endif

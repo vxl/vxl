@@ -12,10 +12,12 @@ void test_set_io()
            << "Testing vcl_set binary io\n"
            << "*************************\n";
 
-  int n = 10;
+  int          n = 10;
   vcl_set<int> s_int_out;
-  for (int i=0;i<n;++i)
+  for( int i = 0; i < n; ++i )
+    {
     s_int_out.insert(i);
+    }
 
   vcl_set<vcl_string> s_string_out;
   s_string_out.insert("one");
@@ -29,7 +31,7 @@ void test_set_io()
   vsl_b_write(bfs_out, s_string_out);
   bfs_out.close();
 
-  vcl_set<int> s_int_in;
+  vcl_set<int>        s_int_in;
   vcl_set<vcl_string> s_string_in;
 
   vsl_b_ifstream bfs_in("vsl_set_io_test.bvl.tmp");
@@ -39,7 +41,7 @@ void test_set_io()
   TEST("Finished reading file successfully", (!bfs_in), false);
   bfs_in.close();
 
-  vpl_unlink ("vsl_set_io_test.bvl.tmp");
+  vpl_unlink("vsl_set_io_test.bvl.tmp");
 
   TEST("vcl_set<int> out == in", s_int_out, s_int_in);
   TEST("vcl_set<vcl_string> out == in", s_string_out, s_string_in);

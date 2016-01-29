@@ -1,8 +1,8 @@
 // This is brl/bseg/brip/brip_roi.h
 #ifndef brip_roi_h_
 #define brip_roi_h_
-//-----------------------------------------------------------------------------
-//:
+// -----------------------------------------------------------------------------
+// :
 // \file
 // \author J.L. Mundy
 // \brief A composite region of interest class for image processing operations
@@ -18,7 +18,7 @@
 //                                                              now --> if (dymax >= n_image_rows_) dymax = n_image_rows_-1;
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_vector.h>
@@ -26,59 +26,70 @@
 
 class brip_roi : public vbl_ref_count
 {
- public:
-  //: should initialize with image bounds on construction
+public:
+  // : should initialize with image bounds on construction
   brip_roi(const unsigned n_image_cols = 0, const unsigned n_image_rows = 0);
   brip_roi(brip_roi const& r)
     : vbl_ref_count(), n_image_cols_(r.n_image_cols_),
-      n_image_rows_(r.n_image_rows_), regions_(r.regions_) {}
+    n_image_rows_(r.n_image_rows_), regions_(r.regions_) {}
 
-  //: expand (or contract) each region of the roi by delta, creating a new roi
+  // : expand (or contract) each region of the roi by delta, creating a new roi
   brip_roi(brip_roi const& roi, const float delta);
 
   ~brip_roi() {}
-  //: replace existing image bounds
-  void set_image_bounds(const int n_image_cols,
-                        const int n_image_rows);
+  // : replace existing image bounds
+  void set_image_bounds(const int n_image_cols, const int n_image_rows);
 
-  //: roi from origin and size
+  // : roi from origin and size
   void add_region(const int x0, const int y0, const int xs, const int ys);
-  //: roi from center and radius
+
+  // : roi from center and radius
   void add_region(const int xc, const int yc, const int radius);
-  //: roi from box
+
+  // : roi from box
   void add_region(vsol_box_2d_sptr const & box);
 
-  //: useful for inserting a new region, doesn't affect existing image bounds
+  // : useful for inserting a new region, doesn't affect existing image bounds
   vsol_box_2d_sptr clip_to_image_bounds(vsol_box_2d_sptr box);
-  //: clips all existing regions, doesn't affect existing image bounds
-  void clip_to_image_bounds();
-  bool empty() const;
-  unsigned int n_regions() const { return regions_.size(); }
-  int cmin(const unsigned i) const; //!< column minimum for region_i
-  int cmax(const unsigned i) const; //!< column maximum for region_i
-  int rmin(const unsigned i) const; //!< row minimum for region_i
-  int rmax(const unsigned i) const; //!< row maximum for region_i
-  unsigned csize(const unsigned i) const; //!< number of cols for region_i
-  unsigned rsize(const unsigned i) const; //!< number of rows for region_i
 
-  //: image column and row coordinates from local roi coordinates for region i
+  // : clips all existing regions, doesn't affect existing image bounds
+  void clip_to_image_bounds();
+
+  bool empty() const;
+
+  unsigned int n_regions() const { return regions_.size(); }
+  int cmin(const unsigned i) const; // !< column minimum for region_i
+
+  int cmax(const unsigned i) const; // !< column maximum for region_i
+
+  int rmin(const unsigned i) const; // !< row minimum for region_i
+
+  int rmax(const unsigned i) const; // !< row maximum for region_i
+
+  unsigned csize(const unsigned i) const; // !< number of cols for region_i
+
+  unsigned rsize(const unsigned i) const; // !< number of rows for region_i
+
+  // : image column and row coordinates from local roi coordinates for region i
   unsigned ic(int local_col, unsigned i = 0) const;
+
   unsigned ir(int local_row, unsigned i = 0) const;
 
-  //: local roi column and row coordinates from global image coordinates for region i
+  // : local roi column and row coordinates from global image coordinates for region i
   unsigned lc(unsigned global_col, unsigned i = 0) const;
+
   unsigned lr(unsigned global_row, unsigned i = 0) const;
 
   vsol_box_2d_sptr region(unsigned i) const { return regions_[i]; }
   bool remove_region(unsigned i);
 
- protected:
-  unsigned n_image_cols_;
-  unsigned n_image_rows_;
+protected:
+  unsigned                     n_image_cols_;
+  unsigned                     n_image_rows_;
   vcl_vector<vsol_box_2d_sptr> regions_;
 };
 
-vcl_ostream&  operator<<(vcl_ostream& s, brip_roi const& r);
+vcl_ostream & operator<<(vcl_ostream& s, brip_roi const& r);
 
 #include "brip_roi_sptr.h"
 

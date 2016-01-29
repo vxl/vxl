@@ -2,9 +2,9 @@
 #ifndef vgui_section_buffer_h_
 #define vgui_section_buffer_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \author fsm
 // \brief  Holds a section of a GL image with given OpenGL buffer format and types.
@@ -22,7 +22,7 @@ class vil1_image;
 #include <vil/vil_fwd.h>
 #include <vgui/vgui_range_map_params_sptr.h>
 
-//: Holds a section of a GL image with given OpenGL buffer format and types.
+// : Holds a section of a GL image with given OpenGL buffer format and types.
 //
 // A section_buffer is an object which holds a section of a GL image
 // with given OpenGL buffer format and types. The constructor is
@@ -50,26 +50,24 @@ class vil1_image;
 //
 class vgui_section_buffer
 {
- public:
-  //: Create a \a w by \a h buffer
+public:
+  // : Create a \a w by \a h buffer
   //
   // The buffer will be used to hold the GL pixels from (x,y) to
   // (x+w-1, y+w-1) from the input image. (The input image is given
   // via the apply() function).
   //
-  vgui_section_buffer( unsigned x, unsigned y,
-                       unsigned w, unsigned h,
-                       GLenum format_ = GL_NONE,
+  vgui_section_buffer( unsigned x, unsigned y, unsigned w, unsigned h, GLenum format_ = GL_NONE,
                        GLenum type_ = GL_NONE );
 
   ~vgui_section_buffer();
 
   void set_zoom(float zoomx, float zoomy)
-    {zoomx_ = zoomx; zoomy_ = zoomy;}
-  //: These methods take arguments in original image coordinates and return false on failure.
+  {zoomx_ = zoomx; zoomy_ = zoomy; }
+  // : These methods take arguments in original image coordinates and return false on failure.
   // See .cxx file for more details.
 
-  //: Draw a section of the image
+  // : Draw a section of the image
   //
   // The parameters are in the original image coordinates.
   //
@@ -77,7 +75,7 @@ class vgui_section_buffer
   //
   bool draw_as_image( float xlo, float ylo, float xhi, float yhi ) const;
 
-  //: Draw a the border of a section of the image.
+  // : Draw a the border of a section of the image.
   //
   // The parameters are in the original image coordinates.
   //
@@ -85,28 +83,25 @@ class vgui_section_buffer
   //
   bool draw_as_rectangle( float xlo, float ylo, float xhi, float yhi ) const;
 
-  //: Convenience method to draw the whole image.
+  // : Convenience method to draw the whole image.
   bool draw_as_image() const;
 
-  //: Draw a precomputed viewport image section using view rendering.
+  // : Draw a precomputed viewport image section using view rendering.
   // Supports redrawing only visible section during overlay redraw
   bool draw_viewport_as_image() const;
 
-  //: Convenience method to draw the whole image.
+  // : Convenience method to draw the whole image.
   bool draw_as_rectangle() const;
 
-  //: Grab a section from the given image.
-  void apply( vil1_image const & ,
-              vgui_range_map_params_sptr const& );
+  // : Grab a section from the given image.
+  void apply( vil1_image const &, vgui_range_map_params_sptr const & );
 
-  //: Grab a section from the given resource.
-  void apply( vil_image_resource_sptr const&,
-              vgui_range_map_params_sptr const& );
+  // : Grab a section from the given resource.
+  void apply( vil_image_resource_sptr const &, vgui_range_map_params_sptr const & );
 
-  unsigned width () const { return w_; }
+  unsigned width() const { return w_; }
   unsigned height() const { return h_; }
-
- private:
+private:
   // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
   // cast ints to enums. Please don't make them ints.
   GLenum format_;
@@ -116,17 +111,17 @@ class vgui_section_buffer
   // how big it is and its resolution.
   unsigned x_, y_;          // starting position in original image.
   unsigned w_, h_;          // no of columns and rows (in the section).
-  float zoomx_, zoomy_;     // zoom factor when rendering
+  float    zoomx_, zoomy_;  // zoom factor when rendering
   // actual width and height allocated.
   // The actual buffer was bigger than the requested one in the old
   // code when images could be rendered as a texture. It's here in
   // case someone wants to bring that code back. -- Amitha Perera
   unsigned allocw_, alloch_;
 
-  //: Pointer to pixel buffer, as given to glDrawPixels() or glTexImage2D().
+  // : Pointer to pixel buffer, as given to glDrawPixels() or glTexImage2D().
   void* buffer_;
 
-  //: Did the last apply() work?
+  // : Did the last apply() work?
   bool buffer_ok_;
 };
 

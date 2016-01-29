@@ -10,15 +10,18 @@
 // vector<bool>. But, on systems with newer GCCs, the Intel compiler
 // can use the GNU library, which doesn't have this problem.
 #if defined(VCL_ICC_8) && defined(__INTEL_CXXLIB_ICC)
-# include "vcl_utility.h"
-namespace std {
-  inline void swap(std::vector<bool, std::allocator<bool> >::iterator::reference a,
-                   std::vector<bool, std::allocator<bool> >::iterator::reference b)
-  {
-    bool tmp = a;
-    a = b;
-    b = tmp;
-  }
+#  include "vcl_utility.h"
+namespace std
+{
+inline void swap(std::vector<bool, std::allocator<bool> >::iterator::reference a,
+                 std::vector<bool, std::allocator<bool> >::iterator::reference b)
+{
+  bool tmp = a;
+
+  a = b;
+  b = tmp;
+}
+
 } // end namespace std
 #endif
 

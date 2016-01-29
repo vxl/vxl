@@ -2,9 +2,9 @@
 #ifndef vnl_file_matrix_h_
 #define vnl_file_matrix_h_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
+#  pragma interface
 #endif
-//:
+// :
 // \file
 // \brief Load vnl_matrix<double> from file
 // \author Andrew W. Fitzgibbon, Oxford RRG
@@ -15,24 +15,23 @@
 //   LSB (Manchester) 23/3/01 Documentation tidied
 // \endverbatim
 //
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 #include <vnl/vnl_matrix.h>
 
-//: Class to load a matrix from a file.
+// : Class to load a matrix from a file.
 VCL_TEMPLATE_EXPORT template <class T>
 class vnl_file_matrix : public vnl_matrix<T>
 {
   VCL_SAFE_BOOL_DEFINE;
- public:
+public:
   vnl_file_matrix(char const* filename);
 
-  operator safe_bool () const
-    { return (ok_)? VCL_SAFE_BOOL_TRUE : 0; }
+  operator safe_bool() const
+        { return (ok_) ? VCL_SAFE_BOOL_TRUE : 0; }
   bool operator!() const
-    { return !ok_; }
-
- private:
+  { return !ok_; }
+private:
   bool ok_;
 };
 

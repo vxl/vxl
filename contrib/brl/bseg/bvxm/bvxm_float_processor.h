@@ -1,7 +1,7 @@
 // This is brl/bseg/bvxm/bvxm_float_processor.h
 #ifndef bvxm_float_processor_h_
 #define bvxm_float_processor_h_
-//:
+// :
 // \file
 // \brief A class for a float processor.
 //
@@ -24,13 +24,12 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
 
-
 // The mix_gauss_type contains the same data as mix_gauss plus an
 // extra attribute that indicate the number of observations
 
-class  bvxm_float_processor
+class bvxm_float_processor
 {
- public:
+public:
 
   typedef float apm_datatype;
   typedef float obs_datatype;
@@ -40,8 +39,7 @@ class  bvxm_float_processor
   virtual ~bvxm_float_processor() {}
 
   bvxm_voxel_slab<obs_datatype> expected_color( bvxm_voxel_slab<obs_mathtype> const& appear)
-  {return appear;}
+  {return appear; }
 };
-
 
 #endif // bvxm_float_processor_h_
