@@ -51,7 +51,7 @@ static void test_ba_shared_k_lsqr()
   vcl_vector<vpgl_perspective_camera<double> > cameras;
   vcl_vector<vgl_point_2d<double> > image_points;
   // our known internal calibration
-  vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384),1,0.7,2);
+  vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384),0.7,2);
   setup_scene(K, world, cameras, image_points);
   vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
 
