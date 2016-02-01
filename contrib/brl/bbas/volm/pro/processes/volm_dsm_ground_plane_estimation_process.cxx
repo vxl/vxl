@@ -18,6 +18,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_math.h>
 #include <vgl/algo/vgl_line_2d_regression.h>
+#include <vil/vil_save.h>
 
 namespace volm_dsm_ground_plane_estimation_process_globals
 {
@@ -342,7 +343,8 @@ namespace volm_dsm_ground_filter_mgf_process_globals
   bool ground_linear_regression(vil_image_view<float> const& img,
                                 vil_image_view<vxl_byte>& grd_mask,
                                 bool const& is_horizontal,
-                                float const& neighbor_size = 100);
+                                float const& neighbor_size = 100,
+                                float const& rsm_thres = 0.2);
 
 }
 
@@ -547,7 +549,10 @@ bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
 
   // perform linear regression along horizontal scan line
   vcl_cout << "  perform linear regression along image row..." << vcl_flush << vcl_endl;
-  ground_linear_regression(*in_img, *grd_mask, true, 100);
+  unsigned n_size_horizontal = 100;
+  if (n_size_horizontal >= ni)
+    n_size_horizontal = ni;
+  ground_linear_regression(*in_img, *grd_mask, true, n_size_horizontal);
 
   // start top to bottom scan
   vcl_cout << "  scan from top to bottom..." << vcl_flush << vcl_endl;
@@ -623,10 +628,61 @@ bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
 
   // perform linear regression along vertical scan line
   vcl_cout << "  perform linear regression along image column..." << vcl_flush << vcl_endl;
-  ground_linear_regression(*in_img, *grd_mask, false, 100);
+  unsigned n_size_vertical = 100;
+  if (n_size_vertical >= ni)
+    n_size_vertical = ni;
+  ground_linear_regression(*in_img, *grd_mask, false, n_size_vertical);
 
   vcl_cout << "Start to generate ground DEM tile from filtering..." << vcl_flush << vcl_endl;
   // generate ground image from ground mask -- tale minimum elevation points as sample points every 10 pixels
+  vil_image_view<float> sample_img(ni, nj);
+  vil_image_view<vxl_byte> sample_grd(ni, nj);
+  sample_img.fill(0.0f);
+  sample_grd.fill(0);
+  int sample_size = (int)vcl_floor(10.0/pixel_res+0.5);
+  for (int r = sample_size; r < ni-sample_size; r += sample_size) {
+    for (int c = sample_size; c < nj-sample_size; c += sample_size) {
+      // find the minimum elevation among ground pixels
+      float min = 1E7f;
+      int pt_i, pt_j;
+      bool found = false;
+      for (int k = -sample_size; k < sample_size; k++) {
+        for (int m = -sample_size; m < sample_size; m++) {
+          int i = r + k;
+          int j = c + m;
+          if (i < 0 || j < 0 || i >= ni || j >= nj)
+            continue;
+          if ( (*grd_mask)(i,j) != 127)
+            continue;
+          if ( (*in_img)(i,j) < min) {
+            pt_i = i;  pt_j = j;
+            min = (*in_img)(i,j);
+            found = true;
+          }
+        }
+      }
+      if (found) {
+        sample_grd(r, c) = 127;
+        sample_img(r, c) = min;
+      }
+    }
+  }
+
+  // perform linear regression again to remove any specious ground pixels
+  ground_linear_regression(sample_img, sample_grd, true,  ni, 0.5);
+  ground_linear_regression(sample_img, sample_grd, false, nj, 0.5);
+
+  vcl_vector<vgl_point_3d<double> > src_pts, dst_pts;
+  for (unsigned i = 0; i < ni; i++)
+    for (unsigned j = 0; j < nj; j++)
+      if (sample_grd(i,j) == 127) {
+        vgl_point_3d<double> src_pt(i, j, (*in_img)(i,j));
+        vgl_point_3d<double> dst_pt(i, j, sample_img(i,j));
+        src_pts.push_back(src_pt);
+        dst_pts.push_back(dst_pt);
+      }
+
+#if 0
   vcl_vector<vgl_point_3d<double> > src_pts, dst_pts;
   int sample_size = (int)vcl_floor(10.0/pixel_res+0.5);
   for (int r = sample_size; r < ni-sample_size; r += sample_size) {
@@ -659,12 +715,13 @@ bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
     }
   }
 
+  
+#endif
   unsigned grd_pt_cnt = 0;
   for (unsigned i = 0; i < ni; i++)
     for (unsigned j = 0; j < nj; j++)
       if ( (*grd_mask)(i,j) == 127 )
         grd_pt_cnt += 1;
-
   vcl_cout << "  Total image pixels: " << ni*nj << ", number of ground pixels: " << grd_pt_cnt
            << ", number of sampled ground pixels: " << src_pts.size() << vcl_endl;
 
@@ -726,7 +783,8 @@ bool volm_dsm_ground_filter_mgf_process_globals::nearest_ground_elev(vil_image_v
 bool volm_dsm_ground_filter_mgf_process_globals::ground_linear_regression(vil_image_view<float> const& img,
                                                                           vil_image_view<vxl_byte>& grd_mask,
                                                                           bool const& is_horizontal,
-                                                                          float const& neighbor_size)
+                                                                          float const& neighbor_size,
+                                                                          float const& rsm_thres)
 {
   unsigned ni = img.ni();
   unsigned nj = img.nj();
@@ -747,6 +805,8 @@ bool volm_dsm_ground_filter_mgf_process_globals::ground_linear_regression(vil_im
   }
   for (unsigned j = 0; j < num_lines; j++)
   {
+    if (j == 250)
+      unsigned stop_cnt = 1;
     for (unsigned widx = 0; widx < nw; widx++) {
       unsigned s_pt, e_pt;
       s_pt = widx*neighbor_size; e_pt = (widx+1)*neighbor_size;
@@ -783,7 +843,7 @@ bool volm_dsm_ground_filter_mgf_process_globals::ground_linear_regression(vil_im
         else               elev = img(j,i);
         float elev_est = (-line.a()*i-line.c()) / line.b();
         float elev_diff = elev-elev_est;
-        if ((elev-elev_est) >= 0.2*rms) {
+        if ((elev-elev_est) >= rsm_thres*rms) {
           if (is_horizontal) grd_mask(i,j) = 255;
           else               grd_mask(j,i) = 255;
         }
