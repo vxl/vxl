@@ -91,6 +91,37 @@ if(NOT DEFINED CTEST_BUILD_CONFIGURATION)
   set(CTEST_BUILD_CONFIGURATION Debug)
 endif()
 
+# Setup coverage
+if(dashboard_do_coverage)
+
+  # Look for coverage command
+  if(NOT DEFINED CTEST_COVERAGE_COMMAND)
+    find_program(CTEST_COVERAGE_COMMAND NAMES gcov)
+    set(COVERAGE_COMMAND ${CTEST_COVERAGE_COMMAND})
+  endif()
+  if(NOT DEFINED CTEST_COVERAGE_COMMAND)
+    message(FATAL_ERROR "Unable to find coverage command, please set manually or reconfigure to not do coverage")
+  endif()
+
+  # Coverage uses debug compiler flags, so set build to Debug type
+  set(CTEST_BUILD_CONFIGURATION "Debug")
+  set(COVERAGE_FLAGS "-fprofile-arcs -ftest-coverage")
+  set(COMPILER_FLAGS "-g0 -O0")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_FLAGS} ${COVERAGE_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_FLAGS} ${COVERAGE_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${COVERAGE_FLAGS}")
+  set(COVERAGE_VARS CMAKE_C_FLAGS CMAKE_CXX_FLAGS CMAKE_EXE_LINKER_FLAGS COVERAGE_COMMAND)
+
+  # Add coverage configuration to dashboard cache
+  if(DEFINED dashboard_cache)
+    set(dashboard_cache "${dashboard_cache}\n")
+  endif()
+  foreach(covVar ${COVERAGE_VARS})
+    #message("covVar:${covVar}")
+    set(dashboard_cache "${dashboard_cache}${covVar}=${${covVar}}\n")
+  endforeach()
+endif()
+
 # Choose CTest reporting mode.
 if(NOT "${CTEST_CMAKE_GENERATOR}" MATCHES "Make")
   # Launchers work only with Makefile generators.
@@ -232,6 +263,11 @@ foreach(v
     )
   set(vars "${vars}  ${v}=[${${v}}]\n")
 endforeach(v)
+
+# Print dashboard_cache variables
+if(DEFINED dashboard_cache)
+  message("dashboard_cache initilazation:\n${dashboard_cache}\n")
+endif()
 message("Dashboard script configuration:\n${vars}\n")
 
 # Avoid non-ascii characters in tool output.
