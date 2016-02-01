@@ -91,37 +91,6 @@ if(NOT DEFINED CTEST_BUILD_CONFIGURATION)
   set(CTEST_BUILD_CONFIGURATION Debug)
 endif()
 
-# Setup coverage
-if(dashboard_do_coverage)
-
-  # Look for coverage command
-  if(NOT DEFINED CTEST_COVERAGE_COMMAND)
-    find_program(CTEST_COVERAGE_COMMAND NAMES gcov)
-    set(COVERAGE_COMMAND ${CTEST_COVERAGE_COMMAND})
-  endif()
-  if(NOT DEFINED CTEST_COVERAGE_COMMAND)
-    message(FATAL_ERROR "Unable to find coverage command, please set manually or reconfigure to not do coverage")
-  endif()
-
-  # Coverage uses debug compiler flags, so set build to Debug type
-  set(CTEST_BUILD_CONFIGURATION "Debug")
-  set(COVERAGE_FLAGS "-fprofile-arcs -ftest-coverage")
-  set(COMPILER_FLAGS "-g0 -O0")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_FLAGS} ${COVERAGE_FLAGS}")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_FLAGS} ${COVERAGE_FLAGS}")
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${COVERAGE_FLAGS}")
-  set(COVERAGE_VARS CMAKE_C_FLAGS CMAKE_CXX_FLAGS CMAKE_EXE_LINKER_FLAGS COVERAGE_COMMAND)
-
-  # Add coverage configuration to dashboard cache
-  if(DEFINED dashboard_cache)
-    set(dashboard_cache "${dashboard_cache}\n")
-  endif()
-  foreach(covVar ${COVERAGE_VARS})
-    #message("covVar:${covVar}")
-    set(dashboard_cache "${dashboard_cache}${covVar}=${${covVar}}\n")
-  endforeach()
-endif()
-
 # Choose CTest reporting mode.
 if(NOT "${CTEST_CMAKE_GENERATOR}" MATCHES "Make")
   # Launchers work only with Makefile generators.
@@ -178,6 +147,65 @@ if(NOT DEFINED CTEST_BINARY_DIRECTORY)
     set(CTEST_BINARY_DIRECTORY ${CTEST_SOURCE_DIRECTORY}-build)
   endif()
 endif()
+
+# Setup coverage
+if(dashboard_do_coverage)
+  # Look for coverage command
+  if(NOT DEFINED CTEST_COVERAGE_COMMAND)
+    find_program(CTEST_COVERAGE_COMMAND NAMES gcov)
+    set(COVERAGE_COMMAND ${CTEST_COVERAGE_COMMAND})
+  endif()
+  if(NOT DEFINED CTEST_COVERAGE_COMMAND)
+    message(FATAL_ERROR "Unable to find coverage command, please set manually or reconfigure to not do coverage")
+  endif()
+
+  # Coverage uses debug compiler flags, so set build to Debug type
+  set(CTEST_BUILD_CONFIGURATION "Debug")
+  set(COVERAGE_FLAGS "-fprofile-arcs -ftest-coverage")
+  set(COMPILER_FLAGS "-g0 -O0")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMPILER_FLAGS} ${COVERAGE_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_FLAGS} ${COVERAGE_FLAGS}")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${COVERAGE_FLAGS}")
+  set(COVERAGE_VARS CMAKE_C_FLAGS CMAKE_CXX_FLAGS CMAKE_EXE_LINKER_FLAGS COVERAGE_COMMAND)
+
+  # Add coverage configuration to dashboard cache
+  if(DEFINED dashboard_cache)
+    set(dashboard_cache "${dashboard_cache}\n")
+  endif()
+  foreach(covVar ${COVERAGE_VARS})
+    #message("covVar:${covVar}")
+    set(dashboard_cache "${dashboard_cache}${covVar}=${${covVar}}\n")
+  endforeach()
+endif()
+
+# Configure memory checking
+if(dashboard_do_memcheck)
+  # Look for memory check command
+  if(NOT DEFINED CTEST_MEMORYCHECK_COMMAND)
+    find_program(CTEST_MEMORYCHECK_COMMAND NAMES valgrind)
+    set(MEMORYCHECK_COMMAND ${CTEST_MEMORYCHECK_COMMAND})
+  endif()
+  if(NOT DEFINED CTEST_MEMORYCHECK_COMMAND)
+    message(FATAL_ERROR "Unable to find memory check command, please set manually or reconfigure to not do memory checking")
+  endif()
+
+  # Memory checking programs uses debug compiler flags, so set build to Debug type
+  set(CTEST_BUILD_CONFIGURATION "Debug")
+
+  # Add memory check suppressions file
+  if(NOT DEFINED CTEST_MEMORYCHECK_SUPPRESSIONS_FILE)
+    set(CTEST_MEMORYCHECK_SUPPRESSIONS_FILE "${CTEST_SOURCE_DIRECTORY}/config/valgrind.supp")
+  endif()
+  set(MEMORYCHECK_SUPPRESSIONS_FILE ${CTEST_MEMORYCHECK_SUPPRESSIONS_FILE})
+
+  # Add memory check configuration to dashboard cache
+  if(DEFINED dashboard_cache)
+    set(dashboard_cache "${dashboard_cache}\n")
+  set(dashboard_cache "${dashboard_cache}MEMORYCHECK_COMMAND=${MEMORYCHECK_COMMAND}\n")
+  set(dashboard_cache "${dashboard_cache}MEMORYCHECK_SUPPRESSIONS_FILE=${MEMORYCHECK_SUPPRESSIONS_FILE}\n")
+  endif()
+endif()
+
 
 # Delete source tree if it is incompatible with current VCS.
 if(EXISTS ${CTEST_SOURCE_DIRECTORY})
@@ -261,6 +289,8 @@ foreach(v
     CTEST_SCRIPT_DIRECTORY
     CTEST_USE_LAUNCHERS
     CTEST_COVERAGE_COMMAND
+    CTEST_MEMORYCHECK_COMMAND
+    CTEST_MEMORYCHECK_SUPPRESSIONS_FILE
     )
   set(vars "${vars}  ${v}=[${${v}}]\n")
 endforeach(v)
