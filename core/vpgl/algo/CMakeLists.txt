@@ -4,6 +4,7 @@
 
 set( vpgl_algo_sources
   vpgl_optimize_camera.h           vpgl_optimize_camera.cxx
+  vpgl_calibration_matrix_compute.h vpgl_calibration_matrix_compute.cxx
   vpgl_camera_compute.h            vpgl_camera_compute.cxx
   vpgl_camera_convert.h             vpgl_camera_convert.cxx
   vpgl_camera_homographies.h        vpgl_camera_homographies.cxx
@@ -15,7 +16,7 @@ set( vpgl_algo_sources
   vpgl_invmap_cost_function.h      vpgl_invmap_cost_function.cxx
   vpgl_backproject.h               vpgl_backproject.cxx
   vpgl_ray.h                       vpgl_ray.cxx
-  vpgl_ray_intersect.h              vpgl_ray_intersect.cxx
+  vpgl_ray_intersect.h              vpgl_ray_intersect.txx
   vpgl_ortho_procrustes.h          vpgl_ortho_procrustes.cxx
   vpgl_rational_adjust_onept.h     vpgl_rational_adjust_onept.cxx
   vpgl_rational_adjust.h           vpgl_rational_adjust.cxx

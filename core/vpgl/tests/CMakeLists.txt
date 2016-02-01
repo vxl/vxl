@@ -3,6 +3,7 @@ add_executable( vpgl_test_all
 
   test_proj_camera.cxx
   test_perspective_camera.cxx
+  test_perspective_camera_decomposition.cxx
   test_affine_camera.cxx
   test_fundamental_matrix.cxx
   test_essential_matrix.cxx
@@ -18,6 +19,7 @@ target_link_libraries( vpgl_test_all vpgl vpgl_io vgl_algo vgl vnl vbl vpl testl
 
 add_test( NAME vpgl_test_proj_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_proj_camera)
 add_test( NAME vpgl_test_perspective_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_perspective_camera)
+add_test( NAME test_perspective_camera_decomposition COMMAND $<TARGET_FILE:vpgl_test_all> test_perspective_camera_decomposition)
 add_test( NAME vpgl_test_affine_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_affine_camera)
 add_test( NAME vpgl_test_calibration_matrix COMMAND $<TARGET_FILE:vpgl_test_all> test_calibration_matrix)
 add_test( NAME vpgl_test_poly_radial_distortion COMMAND $<TARGET_FILE:vpgl_test_all> test_poly_radial_distortion)
