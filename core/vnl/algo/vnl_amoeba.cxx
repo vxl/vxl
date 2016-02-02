@@ -344,6 +344,7 @@ void vnl_amoebaFit::amoeba(vnl_vector<double>& x,
   }
   num_evaluations_ = cnt;
   x = simplex[0].v;
+  end_error_ = simplex[0].fv;
 }
 
 //: Modify x to minimise function supplied in constructor
@@ -353,6 +354,7 @@ void vnl_amoeba::minimize(vnl_vector<double>& x)
   vnl_amoebaFit af(*this);
   af.amoeba(x);
   num_evaluations_ = af.num_evaluations_;
+  end_error_ = af.end_error_;
 }
 
 //: Perform optimisation.  Start simplex defined by adding dx[i] to each x[i]
@@ -361,6 +363,7 @@ void vnl_amoeba::minimize(vnl_vector<double>& x, const vnl_vector<double>& dx)
   vnl_amoebaFit af(*this);
   af.amoeba(x,dx);
   num_evaluations_ = af.num_evaluations_;
+  end_error_ = af.end_error_;
 }
 
 
