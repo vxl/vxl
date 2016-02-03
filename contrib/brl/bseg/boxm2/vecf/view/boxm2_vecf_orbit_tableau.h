@@ -21,7 +21,7 @@ class boxm2_vecf_orbit_tableau : public vgui_wrapper_tableau
   void set_params(vcl_string const& param_path, bool is_right);
   bool set_image(vcl_string const& image_path);
   bool set_dlib_parts(vcl_string const& dlib_path);
-  void draw_orbit(bool is_right);
+  void draw_orbit(bool is_right, unsigned int num_pts=0);
   void draw_dlib_parts(bool is_right);
   void set_points_filename(vcl_string fname){
     export_fname_base_ = fname;

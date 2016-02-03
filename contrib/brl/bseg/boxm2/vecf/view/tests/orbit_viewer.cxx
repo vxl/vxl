@@ -26,12 +26,14 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> bid_arg(arglist, "-bid", "orbit_params", "");
   vul_arg<vcl_string> image_path_arg(arglist, "-img", "image path", "");
   vul_arg<vcl_string> points_path_arg(arglist, "-pts", "points output path", "");
+  vul_arg<unsigned>  num_points_arg(arglist,  "-n_pts", "Number of points for each curve", 0);
 
   arglist.parse(argc, argv, false);
   vcl_string base_dir_path = base_dir_path_arg();
   vcl_string bid_str = bid_arg();
   vcl_string image_str = image_path_arg();
   vcl_string points_path = points_path_arg();
+  unsigned int  num_pts = num_points_arg();
 
   // check if base directory exists
   bool good = vul_file::exists(base_dir_path);
@@ -77,8 +79,8 @@ int main(int argc, char ** argv)
   otab->set_params(right_param_path, true);
   otab->set_dlib_parts(left_parts_path);
   otab->set_dlib_parts(right_parts_path);
-  otab->draw_orbit(false);
-  otab->draw_orbit(true);
+  otab->draw_orbit(false,num_pts);
+  otab->draw_orbit(true,num_pts);
   otab->draw_dlib_parts(false);
   otab->draw_dlib_parts(true);
   if (!export_points){
