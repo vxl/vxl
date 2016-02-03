@@ -12,6 +12,8 @@
 #  CMAKE_REQUIRED_DEFINITIONS = list of macros to define (-DFOO=bar)
 #  CMAKE_REQUIRED_INCLUDES = list of include directories
 #  CMAKE_REQUIRED_LIBRARIES = list of libraries to link
+#
+# ${variable} is set to 1 on success 0 on failure
 
 #=============================================================================
 # Copyright 2003-2011 Kitware, Inc.
@@ -28,7 +30,7 @@
 
 include(CheckCXXSourceCompiles)
 
-macro(CHECK_CXX_EXPRESSION_COMPILES EXPRESSION FILES VARIABLE)
+macro(check_cxx_expression_compiles EXPRESSION FILES VARIABLE)
   set(SOURCE "/* CHECK_CXX_EXPRESSION_COMPILES */\n")
   foreach(FILE ${FILES})
     set(SOURCE "${SOURCE}#include <${FILE}>\n")
@@ -36,5 +38,8 @@ macro(CHECK_CXX_EXPRESSION_COMPILES EXPRESSION FILES VARIABLE)
   set(SOURCE "${SOURCE}\nint main()\n{\n")
   set(SOURCE "${SOURCE}  static_cast<void>(${EXPRESSION});\n\n")
   set(SOURCE "${SOURCE}  return 0;\n}\n")
-  CHECK_CXX_SOURCE_COMPILES("${SOURCE}" "${VARIABLE}")
+  CHECK_CXX_SOURCE_COMPILES("${SOURCE}" "${VARIABLE}") # Returns 1 - Success "" Failure
+  if( NOT ${VARIABLE} ) # Variable is set to zero
+    set(${VARIABLE} 0 CACHE INTERNAL "Test ${VARIABLE}") #Assume failure, only set to non-zero if CHECK_CXX_SOURCE_COMPILES
+  endif()
 endmacro()
