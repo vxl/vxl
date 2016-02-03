@@ -93,7 +93,6 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
     imin = 0;
     imax = static_cast<int>(inf_pts_var.size());
   }
-  auto it = inf_pts_var.begin();
   for(int i = imin; i<imax; ++ i){
     double x = crease_pts_var[i].x();
     double y = crease_pts_var[i].y();

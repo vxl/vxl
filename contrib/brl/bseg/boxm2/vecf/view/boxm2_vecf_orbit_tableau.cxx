@@ -46,17 +46,20 @@ void boxm2_vecf_orbit_tableau::draw_orbit(bool is_right, unsigned num_pts){
   vcl_vector<vgl_point_3d<double> > crease_pts;
 
   orbit_exporter.export_orbit(is_right, crease_pts, sup_pts, inf_pts,this->export_fname_base_);
-  for (unsigned i=0; i<crease_pts.size(); vsol_pts.push_back(new vsol_point_2d(crease_pts[i].x(),crease_pts[i].y())),i++);
+  for (unsigned i=0; i<crease_pts.size(); i++)
+    vsol_pts.push_back(new vsol_point_2d(crease_pts[i].x(),crease_pts[i].y()));
   vsol_polyline_2d_sptr cre_pline = new vsol_polyline_2d(vsol_pts);
   vsol_tab_->add_vsol_polyline_2d(cre_pline);
 
   vsol_pts.clear();
-  for (unsigned i=0; i<sup_pts.size(); vsol_pts.push_back(new vsol_point_2d(sup_pts[i].x(),sup_pts[i].y())),i++);
+  for (unsigned i=0; i<sup_pts.size(); i++)
+    vsol_pts.push_back(new vsol_point_2d(sup_pts[i].x(),sup_pts[i].y()));
   vsol_polyline_2d_sptr sup_pline = new vsol_polyline_2d(vsol_pts);
   vsol_tab_->add_vsol_polyline_2d(sup_pline);
 
   vsol_pts.clear();
-  for (unsigned i=0; i<inf_pts.size(); vsol_pts.push_back(new vsol_point_2d(inf_pts[i].x(),inf_pts[i].y())),i++);
+  for (unsigned i=0; i<inf_pts.size(); i++)
+    vsol_pts.push_back(new vsol_point_2d(inf_pts[i].x(),inf_pts[i].y()));
   vsol_polyline_2d_sptr inf_pline = new vsol_polyline_2d(vsol_pts);
   vsol_tab_->add_vsol_polyline_2d(inf_pline);
 
