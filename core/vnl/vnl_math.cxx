@@ -175,11 +175,11 @@ bool isinf(double x) { return std::isinf(x); }
 bool isinf(long double x) { return std::isinf(x); }
 #elif !defined(VNL_HAS_NO_FINITE)
 //: Return true if x is inf
-bool isinf(float x) { return ! ::isfinite(x) && ! ::isnan(x); }
+bool isinf(float x) { return ! vnl_math::isfinite(x) && ! vnl_math::isnan(x); }
 //: Return true if x is inf
-bool isinf(double x) { return ! ::isfinite(x) && ! ::isnan(x); }
+bool isinf(double x) { return ! vnl_math::isfinite(x) && ! vnl_math::isnan(x); }
 //: Return true if x is inf
-bool isinf(long double x) { return ! ::isfinite(x) && ! ::isnan(x); }
+bool isinf(long double x) { return ! vnl_math::isfinite(x) && ! vnl_math::isnan(x); }
 #else
 // Assume IEEE floating point number representation
 bool isinf(float x) {return(bMe(&x,0x7f800000L,sz_f)&&!bMp(&x,0x007fffffL,sz_f))||bMp(&x,0x7fffffffL,sz_f)==0x7f7fffffL;}
