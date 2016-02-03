@@ -440,6 +440,45 @@ bool vpgl_geo_cam_global_to_img_process(bprb_func_process& pro)
   return true;
 }
 
+bool vpgl_geo_cam_img_to_global_process_cons(bprb_func_process& pro)
+{
+  // this process takes 3 inputs and two outputs
+  vcl_vector<vcl_string> input_types(3);
+  input_types[0] = "vpgl_camera_double_sptr";  // input geo camera
+  input_types[1] = "unsigned";                 // input pixel row
+  input_types[2] = "unsigned";                 // input pixel column
+  // this process takes 2 outputs
+  vcl_vector<vcl_string> output_types(2);
+  output_types[0] = "double";                  // lon
+  output_types[1] = "double";                  // lat
+  return pro.set_input_types(input_types) && pro.set_output_types(output_types);
+}
+
+bool vpgl_geo_cam_img_to_global_process(bprb_func_process& pro)
+{
+  if (!pro.verify_inputs()) {
+    vcl_cerr << pro.name() << ": Wrong Inputs!\n";
+    return false;
+  }
+  // get inputs
+  unsigned in_i = 0;
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  unsigned i = pro.get_input<unsigned>(in_i++);
+  unsigned j = pro.get_input<unsigned>(in_i++);
+  // convert
+  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  if (!geocam) {
+    vcl_cerr << pro.name() << ": Can not convert input camera into a geo camera!\n";
+    return false;
+  }
+  double lon, lat;
+  geocam->img_to_global(i, j, lon, lat);
+  // output
+  pro.set_output_val<double>(0, lon);
+  pro.set_output_val<double>(1, lat);
+  return true;
+}
+
 //: construct the camera from the name of the image with a known specific format
 //  this geocam has no lvcs, so it's only useful for img_to_global or global_to_img operations
 bool vpgl_load_geo_camera_process2_cons(bprb_func_process& pro)

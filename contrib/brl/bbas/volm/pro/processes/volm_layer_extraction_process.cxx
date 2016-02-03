@@ -190,7 +190,7 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
   vcl_cout << " DONE!" << vcl_endl;
   // start to generate ID images
   double min_thres_prob = pre_param * vcl_exp( -1 * vcl_pow(vcl_abs((min_h-mu)/alpha), beta));
-  double max_thres_prob = pre_param * vcl_exp( -1 * vcl_pow(vcl_abs((min_h-mu)/alpha), beta));
+  double max_thres_prob = pre_param * vcl_exp( -1 * vcl_pow(vcl_abs((max_h-mu)/alpha), beta));
   double thres = (min_thres_prob + max_thres_prob)*0.5;
   vcl_cout << "min_thres: " << min_thres_prob << ", max_thres: " << max_thres_prob << vcl_endl;
   vcl_cout << "Start to generate a binary image given threshold: " << thres << "..." << vcl_flush << vcl_endl;

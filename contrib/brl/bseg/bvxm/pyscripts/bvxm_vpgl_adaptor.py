@@ -782,6 +782,21 @@ def geo_cam_global_to_img(geocam, lon, lat):
     v = bvxm_batch.get_output_int(id)
     return u, v
 
+def geo_cam_img_to_global(geocam, i, j):
+    bvxm_batch.init_process("vpglGeoImgToGlobalProcess")
+    bvxm_batch.set_input_from_db(0, geocam)
+    bvxm_batch.set_input_unsigned(1, i)
+    bvxm_batch.set_input_unsigned(2, j)
+    status = bvxm_batch.run_process()
+    if status:
+      (id, type) = bvxm_batch.commit_output(0)
+      lon = bvxm_batch.get_output_double(id)
+      (id, type) = bvxm_batch.commit_output(1)
+      lat = bvxm_batch.get_output_double(id)
+      return lon, lat
+    else:
+      return 0.0, 0.0
+
 
 def convert_perspective_to_nvm(cams_dir, imgs_dir, output_nvm):
     bvxm_batch.init_process("vpglExportCamerasToNvmProcess")
