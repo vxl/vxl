@@ -98,6 +98,7 @@ depth_map_region
   max_depth_(vcl_numeric_limits<double>::max()),
   depth_inc_(1.0),
   height_(-1.0),
+  region_plane_(),
   region_2d_(0),
   region_3d_(0)
 {}
@@ -151,6 +152,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vcl_string name) :
   active_(true),
+  is_ref_(false),
   order_(0),
   land_id_(0),
   orient_type_(INFINT),
@@ -160,6 +162,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   max_depth_(vcl_numeric_limits<double>::max()),
   depth_inc_(1.0),
   height_(-1.0),
+  region_plane_(),
   region_2d_(region),
   region_3d_(0)
 {}
