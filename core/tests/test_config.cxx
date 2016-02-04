@@ -1462,14 +1462,6 @@ void test_config()
 #endif
   vcl_cout << vcl_endl;
 
-  vcl_cout << "__alpha__ ";
-#ifdef __alpha__
-  vcl_cout << "is set to " << quote(__alpha__);
-#else
-  vcl_cout << "is not set";
-#endif
-  vcl_cout << vcl_endl;
-
   vcl_cout << "__APPLE__ ";
 #ifdef __APPLE__
   vcl_cout << "is set to " << quote(__APPLE__);
