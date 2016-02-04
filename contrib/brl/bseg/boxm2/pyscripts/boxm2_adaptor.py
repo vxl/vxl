@@ -123,7 +123,11 @@ def describe_scene(scene):
     (id, type) = boxm2_batch.commit_output(1)
     appType = boxm2_batch.get_output_string(id)
     boxm2_batch.remove_data(id)
+  (id, type) = boxm2_batch.commit_output(2);
+  voxel_size = boxm2_batch.get_output_double(id);
+  boxm2_batch.remove_data(id)
     description = {
+                  'voxelLength': voxel_size,
         'dataPath': dataPath,
         'appType': appType,
     }

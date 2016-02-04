@@ -64,6 +64,7 @@ void vpgl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_perturb_uniform_persp_cam_orient_process, "vpglPerturbUniformPerspCamOrientProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bpgl_transform_perspective_cameras_process, "bpglTransformPerspectiveCamerasProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_transform_space_process, "vpglTransformSpaceProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_transform_box_process, "vpglTransformBoxProcess");
 
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vpgl_load_affine_camera_process, "vpglLoadAffineCameraProcess");
 
