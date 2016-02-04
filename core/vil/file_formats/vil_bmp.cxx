@@ -353,7 +353,7 @@ bool vil_bmp_image::write_header()
         ptr[3] = 0; // unused byte
       }
       is_->write(map, n*4);
-      delete map;
+      delete [] map;
     }
   return true;
 }
