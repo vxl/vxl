@@ -2003,7 +2003,9 @@ def compute_los_visibility(scene, cache, x0, y0, z0, x1, y1, z1, t=5):
     return vis
 
 
-def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir):
+def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir,
+                            lvcs_origin_lat=0.0, lvcs_origin_lon=0.0,
+                            lvcs_origin_elev=0.0):
 
     boxm2_batch.init_process("boxm2SceneFromBoxCamsProcess")
     boxm2_batch.set_input_string(0, camsdir)
@@ -2014,6 +2016,9 @@ def get_scene_from_box_cams(camsdir, x0, y0, z0, x1, y1, z1, modeldir):
     boxm2_batch.set_input_float(5, y1)
     boxm2_batch.set_input_float(6, z1)
     boxm2_batch.set_input_string(7, modeldir)
+    boxm2_batch.set_input_double(8, lvcs_origin_lat)
+    boxm2_batch.set_input_double(9, lvcs_origin_lon)
+    boxm2_batch.set_input_double(10, lvcs_origin_elev)
 
     result = boxm2_batch.run_process()
 
