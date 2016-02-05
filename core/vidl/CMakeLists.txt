@@ -8,7 +8,11 @@ doxygen_add_library(core/vidl
   DESCRIPTION "Video Sequence Library"
 )
 
+option(WITH_FFMPEG "Include FFMPEG support if available" ON)
+if(WITH_FFMPEG)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindFFMPEG.cmake )
+endif(WITH_FFMPEG)
+
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDC1394.cmake )
 include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 find_file(VIDEODEV_FOUND videodev.h /usr/include/linux/)

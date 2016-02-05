@@ -3,7 +3,6 @@
 //:
 // \file
 #include <vsph/vsph_camera_bounds.h>
-#include <vidl/vidl_image_list_istream.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
