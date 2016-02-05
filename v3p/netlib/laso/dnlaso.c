@@ -696,7 +696,7 @@ L140:
         rnorm = max(d__1,d__2);
     }
 /*<       PNORM = RNORM >*/
-    pnorm = rnorm;
+//    pnorm = rnorm;
 /*<       DELTA = 10.D30 >*/
     *delta = 1e31;
 /*<       EPSRT = DSQRT(EPS) >*/

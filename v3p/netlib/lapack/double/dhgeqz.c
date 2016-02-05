@@ -1804,7 +1804,7 @@ L200:
 /*<                W22 = W22 - TEMP*W12 >*/
                 w22 -= temp * w12;
 /*<                W21 = ZERO >*/
-                w21 = 0.;
+//                w21 = 0.;
 
 /*              Compute SCALE */
 
