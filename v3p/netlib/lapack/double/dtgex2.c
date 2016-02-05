@@ -302,9 +302,9 @@ static doublereal c_b44 = -1.;
     }
 
 /*<       WEAK = .FALSE. >*/
-    weak = FALSE_;
+//    weak = FALSE_;
 /*<       DTRONG = .FALSE. >*/
-    dtrong = FALSE_;
+//    dtrong = FALSE_;
 
 /*     Make a local copy of selected block */
 
