@@ -10,7 +10,7 @@ set(boxm2_class_sources
    )
 
 add_library(boxm2_class  ${boxm2_class_sources})
-target_link_libraries(boxm2_class boxm2 bvgl vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
+target_link_libraries(boxm2_class boxm2 bvgl vpgl vnl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
 
 #install the .h .txx and libs
 install_targets(/lib boxm2_class)

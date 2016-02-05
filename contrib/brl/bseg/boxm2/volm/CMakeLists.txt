@@ -34,7 +34,7 @@ if(EXPAT_FOUND)
     aux_source_directory(Templates boxm2_volm_sources)
 
     add_library(boxm2_volm ${boxm2_volm_sources})
-    target_link_libraries(boxm2_volm boxm2 boxm2_io brip baio vpgl volm vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
+    target_link_libraries(boxm2_volm boxm2 boxm2_io brip baio vpgl volm vnl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
     if(OPENCL_FOUND)
     target_link_libraries(boxm2_volm bocl)
     endif()

@@ -52,7 +52,7 @@ set(boxm2_vecf_sources
 aux_source_directory(Templates boxm2_vecf_sources)
 
 add_library(boxm2_vecf  ${boxm2_vecf_sources})
-target_link_libraries(boxm2_vecf boxm2_io boxm2_cpp_algo brip baio bvrml vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map rsdl)
+target_link_libraries(boxm2_vecf boxm2_io boxm2_cpp_algo brip baio bvrml vpgl vnl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map rsdl)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 if(OPENCL_FOUND)
   target_link_libraries(boxm2_vecf boxm2_ocl boxm2_ocl_algo  bocl )

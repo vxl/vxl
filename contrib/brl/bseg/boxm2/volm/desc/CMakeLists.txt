@@ -13,7 +13,7 @@ set(boxm2_volm_desc_sources
 
 add_library(boxm2_volm_desc ${boxm2_volm_desc_sources})
 
-target_link_libraries(boxm2_volm_desc boxm2_volm boxm2 boxm2_io brip baio vpgl volm volm_desc vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
+target_link_libraries(boxm2_volm_desc boxm2_volm boxm2 boxm2_io brip baio vpgl volm volm_desc vnl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
