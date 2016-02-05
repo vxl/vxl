@@ -8,7 +8,7 @@ doxygen_add_library(core/vidl
   DESCRIPTION "Video Sequence Library"
 )
 
-set(WITH_FFMPEG TRUE CACHE BOOL "Include FFMPEG support if available")
+option(WITH_FFMPEG "Include FFMPEG support if available" ON)
 if(WITH_FFMPEG)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindFFMPEG.cmake )
 endif(WITH_FFMPEG)
