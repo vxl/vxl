@@ -8,12 +8,13 @@ if(ZLIB_FOUND)
   include_directories( ${ZLIB_INCLUDE_DIR} )
 
 
+## Copy files from https://github.com/nmoinvaz/minizip.git
 set( minizip_sources
   crypt.h
   ioapi.c      ioapi.h
   zip.h        zip.c
   unzip.c      unzip.h
-  mztools.c    mztools.h
+  ioapi_buf.c  ioapi_buf.h  ioapi_mem.c  ioapi_mem.h  miniunz.c    minizip.c
 )
 
 if(WIN32)

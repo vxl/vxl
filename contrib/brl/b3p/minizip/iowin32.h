@@ -1,11 +1,19 @@
 /* iowin32.h -- IO base function header for compress/uncompress .zip
-   files using zlib + zip or unzip API
-   This IO API version uses the Win32 API (for Microsoft Windows)
+   Version 1.1, February 14h, 2010
+   part of the MiniZip project
 
-   Version 1.01e, February 12th, 2005
+   Copyright (C) 1998-2010 Gilles Vollant
+     http://www.winimage.com/zLibDll/minizip.html
+   Modifications for Zip64 support
+     Copyright (C) 2009-2010 Mathias Svensson
+     http://result42.com
 
-   Copyright (C) 1998-2005 Gilles Vollant
+   This program is distributed under the terms of the same license as zlib.
+   See the accompanying LICENSE file for the full text of the license.
 */
+
+#ifndef _IOWIN32_H
+#define _IOWIN32_H
 
 #include <windows.h>
 
@@ -14,7 +22,12 @@ extern "C" {
 #endif
 
 void fill_win32_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
+void fill_win32_filefunc64 OF((zlib_filefunc64_def* pzlib_filefunc_def));
+void fill_win32_filefunc64A OF((zlib_filefunc64_def* pzlib_filefunc_def));
+void fill_win32_filefunc64W OF((zlib_filefunc64_def* pzlib_filefunc_def));
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
