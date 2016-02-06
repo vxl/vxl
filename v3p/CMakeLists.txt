@@ -16,12 +16,14 @@ if (VXL_FORCE_V3P_CLIPPER)
   add_subdirectory(clipper)
 endif ()
 
+include(${VXL_CMAKE_DIR}/FindZLIB.cmake)
 CMAKE_DEPENDENT_OPTION( VXL_FORCE_V3P_ZLIB "Use V3P instead of any native ZLIB library?" OFF
                         "BUILD_CORE_IMAGING" OFF)
 mark_as_advanced( VXL_FORCE_V3P_ZLIB )
-if (VXL_FORCE_V3P_ZLIB)
+if (VXL_FORCE_V3P_ZLIB OR ( NOT VXL_USING_NATIVE_ZLIB ) )
   add_subdirectory(zlib)
 endif()
+
 
 if(BUILD_CORE_IMAGING)
   option( VXL_FORCE_V3P_BZLIB2 "Use V3P instead of any native BZip2 library?" OFF)
