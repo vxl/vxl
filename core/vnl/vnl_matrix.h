@@ -571,7 +571,7 @@ class vnl_matrix
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned r, unsigned c) const
+  void assert_size(unsigned VXL_USED_IN_DEBUG(r), unsigned VXL_USED_IN_DEBUG(c)) const
   {
 #ifndef NDEBUG
     assert_size_internal(r, c);

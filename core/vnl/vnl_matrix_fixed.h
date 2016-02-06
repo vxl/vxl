@@ -116,7 +116,7 @@ class vnl_matrix_fixed
   // vnl_matrix, so that algorithms can template over the matrix type
   // itself.  It is illegal to call this constructor without
   // <tt>n==num_rows</tt> and <tt>m==num_cols</tt>.
-  vnl_matrix_fixed( unsigned n, unsigned m )
+  vnl_matrix_fixed( unsigned VXL_USED_IN_DEBUG(n), unsigned VXL_USED_IN_DEBUG(m) )
   {
     assert( n == num_rows && m == num_cols );
   }
@@ -606,7 +606,7 @@ class vnl_matrix_fixed
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned nr_rows, unsigned nr_cols) const
+  void assert_size(unsigned VXL_USED_IN_DEBUG(nr_rows), unsigned VXL_USED_IN_DEBUG(nr_cols) ) const
   {
 #ifndef NDEBUG
     assert_size_internal(nr_rows, nr_cols);
