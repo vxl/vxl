@@ -223,6 +223,7 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 #else
 //----------------------------------------------------------------------------
 //  C++11 not supported
+#include <cstddef>
 # define VXL_CXX11 0
 # define VXL_OVERRIDE
 # define VXL_DELETE_FUNCTION

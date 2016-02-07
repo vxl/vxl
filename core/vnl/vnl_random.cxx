@@ -68,7 +68,7 @@ vnl_random::~vnl_random()
 
 void vnl_random::reseed()
 {
-  reseed((unsigned long)vcl_time(NULL));
+  reseed((unsigned long)vcl_time(VXL_NULLPTR));
 }
 
 void vnl_random::reseed(unsigned long seed)
