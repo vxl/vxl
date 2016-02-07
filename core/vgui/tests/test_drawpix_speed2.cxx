@@ -249,13 +249,13 @@ test_pattern( unsigned option )
       glDrawPixels(ni,nj,pack_type,pix_type,buffer);
       break;
      case 1:
-      convert_and_draw(buffer,GL_RGB,GL_UNSIGNED_BYTE, (vgui_pixel_rgb888*)0 );
+      convert_and_draw(buffer,GL_RGB,GL_UNSIGNED_BYTE, (vgui_pixel_rgb888*)VXL_NULLPTR );
       break;
      case 2:
-      convert_and_draw(buffer,GL_RGBA, GL_UNSIGNED_BYTE, (vgui_pixel_rgba8888*)0 );
+      convert_and_draw(buffer,GL_RGBA, GL_UNSIGNED_BYTE, (vgui_pixel_rgba8888*)VXL_NULLPTR );
       break;
      case 3:
-      convert_and_draw(buffer, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (vgui_pixel_rgb565*)0 );
+      convert_and_draw(buffer, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (vgui_pixel_rgb565*)VXL_NULLPTR );
       break;
      default: // do nothing (silently ignore invalid option)
       break;

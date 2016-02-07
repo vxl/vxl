@@ -76,9 +76,9 @@ void test_vlarge_block_io()
   vcl_cout << "Start by trying to allocate " << (s/(1024*1024))+1 << "MiB" << vcl_endl;
   while (true)
   {
-    char *block = 0;
+    char *block = VXL_NULLPTR;
     block = (char *)vcl_malloc(s);
-    if (block != 0)
+    if (block != VXL_NULLPTR)
     {
       vcl_free(block);
       break;
@@ -115,10 +115,10 @@ void test_vlarge_block_io()
       free_blocks(blocks);
       vcl_exit(3);
     }
-    void * block = 0;
+    void * block = VXL_NULLPTR;
     block = vcl_malloc(s);
     // if we have run out of memory, go on to next section.
-    if (block == 0)
+    if (block == VXL_NULLPTR)
       break;
     //otherwise store memory pointer, and try and use up some more.
     blocks.push_back(block);

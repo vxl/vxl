@@ -40,7 +40,7 @@ vil1_image vil1_load_raw(vil1_stream *is)
     vcl_cerr << " \'" << (*p)->tag() << "\'" << vcl_flush;
   vcl_cerr << ": none succeeded\n";
 
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vil1_image vil1_load_raw(char const* filename)

@@ -31,7 +31,7 @@ static const unsigned buf_limit = 25000000;
 
 vgui_vil_image_renderer::
 vgui_vil_image_renderer()
-  : buffer_( 0 ),  buffer_params_(0), valid_buffer_(false),
+  : buffer_( VXL_NULLPTR ),  buffer_params_(VXL_NULLPTR), valid_buffer_(false),
     x0_(0), y0_(0), w_(1), h_(1), zx_(1.0f), zy_(1.0f), sni_(0), snj_(0)
 {
 }
@@ -49,7 +49,7 @@ set_image_resource( vil_image_resource_sptr const& image )
 {
   // delete old buffer. we could try to reuse it.
   delete buffer_;
-  buffer_ = 0;
+  buffer_ = VXL_NULLPTR;
   valid_buffer_ = false;
   the_image_ = image;
   if ( the_image_ ) {
@@ -71,7 +71,7 @@ vgui_vil_image_renderer::
 reread_image()
 {
   delete buffer_;
-  buffer_ = 0;
+  buffer_ = VXL_NULLPTR;
   valid_buffer_ = false;
 }
 
@@ -124,7 +124,7 @@ create_buffer(vgui_range_map_params_sptr const& rmp,
               vil_image_resource_sptr const& ir)
 {
   delete buffer_;
-  buffer_ = 0;
+  buffer_ = VXL_NULLPTR;
   if (!rmp||!ir)
     return;
 
@@ -294,7 +294,7 @@ render_directly(vgui_range_map_params_sptr const& rmp)
                                         sni_, snj_,
                                         zx_, zy_,
                                         GL_RGB, GL_UNSIGNED_BYTE, hmap,
-                                        0, &fRmap, &fGmap, &fBmap))
+                                        VXL_NULLPTR, &fRmap, &fGmap, &fBmap))
             {
 #ifdef RENDER_TIMER
               vcl_cout << "Directly Byte RGB Rendered in "

@@ -62,7 +62,7 @@ class node
   fptr3 func3;
   void  *param1;
   void  *param2;
-  node(): func1(NULL),func2(NULL),func3(NULL),param1(NULL),param2(NULL) {}
+  node(): func1(VXL_NULLPTR),func2(VXL_NULLPTR),func3(VXL_NULLPTR),param1(VXL_NULLPTR),param2(VXL_NULLPTR) {}
 };
 
 void ErrorExit(vcl_string const& expr, char const* t, unsigned long s)
@@ -274,31 +274,31 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   if (expr[s] == ')') ErrorExit(expr, "empty ()",s);
   j = blocklength(expr,s,l);
   if (j==l && expr[s]>='0' && expr[s]<='9') { // number
-    n.func1 = 0; n.func2 = 0; n.func3 = 0; n.param2 = 0;
+    n.func1 = VXL_NULLPTR; n.func2 = VXL_NULLPTR; n.func3 = VXL_NULLPTR; n.param2 = VXL_NULLPTR;
     n.param1 = (void*)(new vnl_decnum(expr.substr(s,l)));
     return n;
   }
   if (j==l && expr[s]>='a' && expr[s]<='z') { // function
     for (j=0; j<l; ++j) if (expr[s+j] == '(') break; ++j;
     if (j >= l) ErrorExit(expr, "missing parameter list for function",s);
-    else if (expr.substr(s,j)=="abs(")  n.func1 = &vnl_math::abs, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="floor(")  n.func1 = &floor, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="ceil(")  n.func1 = &ceil, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="round(")  n.func1 = &round, n.func2=0, n.func3=0;
-    else if (expr.substr(s,j)=="min(")  n.func1=0, n.func2 = &min, n.func3=0;
-    else if (expr.substr(s,j)=="max(")  n.func1=0, n.func2 = &max, n.func3=0;
-    else if (expr.substr(s,j)=="binom(")  n.func1=0, n.func2 = &binom, n.func3=0;
-    else if (expr.substr(s,j)=="pow(")  n.func1=0, n.func2=0, n.func3 = &pow;
+    else if (expr.substr(s,j)=="abs(")  n.func1 = &vnl_math::abs, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="floor(")  n.func1 = &floor, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="ceil(")  n.func1 = &ceil, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="round(")  n.func1 = &round, n.func2=VXL_NULLPTR, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="min(")  n.func1=VXL_NULLPTR, n.func2 = &min, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="max(")  n.func1=VXL_NULLPTR, n.func2 = &max, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="binom(")  n.func1=VXL_NULLPTR, n.func2 = &binom, n.func3=VXL_NULLPTR;
+    else if (expr.substr(s,j)=="pow(")  n.func1=VXL_NULLPTR, n.func2=VXL_NULLPTR, n.func3 = &pow;
     else ErrorExit(expr, "unknown function call",s);
     n.param1 = new node();
-    n.param2 = 0;
+    n.param2 = VXL_NULLPTR;
     for (i=j; i<l-1; ++i) if (expr[s+i] == ',') break;
     if ( n.func2 ) {
       n.param2 = new node();
       if (i>l-2) ErrorExit(expr, "function needs two arguments",s);
     }
     *(node*)(n.param1)=build_tree(expr,s+j,i-j); j = i+1;
-    if (n.param2 == 0) {
+    if (n.param2 == VXL_NULLPTR) {
       if (j < l) ErrorExit(expr, "function needs only one argument",s);
       return n;
     }
@@ -310,7 +310,7 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   if (expr[s]=='-') { // unary minus
     n.func1 = &unaryminus;
     n.param1 = new node(build_tree(expr,s+1,l-1));
-    n.param2 = 0;
+    n.param2 = VXL_NULLPTR;
     return n;
   }
 
@@ -318,11 +318,11 @@ node build_tree(vcl_string const& expr, unsigned long s, int l)
   n.param1 = new node(build_tree(expr,s,j));
   if (expr[s+j] == '!') { n.func1 = &fac; return n; }
   n.param2 = new node(build_tree(expr,s+j+1,l-j-1));
-       if (expr[s+j] == '*') n.func1=0, n.func2 = &prod, n.func3=0;
-  else if (expr[s+j] == '/') n.func1=0, n.func2 = &quot, n.func3=0;
-  else if (expr[s+j] == '%') n.func1=0, n.func2 = &modulo, n.func3=0;
-  else if (expr[s+j] == '+') n.func1=0, n.func2 = &sum, n.func3=0;
-  else if (expr[s+j] == '-') n.func1=0, n.func2 = &diff, n.func3=0;
+       if (expr[s+j] == '*') n.func1=VXL_NULLPTR, n.func2 = &prod, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '/') n.func1=VXL_NULLPTR, n.func2 = &quot, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '%') n.func1=VXL_NULLPTR, n.func2 = &modulo, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '+') n.func1=VXL_NULLPTR, n.func2 = &sum, n.func3=VXL_NULLPTR;
+  else if (expr[s+j] == '-') n.func1=VXL_NULLPTR, n.func2 = &diff, n.func3=VXL_NULLPTR;
   else ErrorExit(expr, "unknown operator",s+j);
   return n;
 }

@@ -491,7 +491,7 @@ void test_matrix_fixed()
   test_float();
   test_double();
 
-  test_extract( (double*)0 );
+  test_extract( (double*)VXL_NULLPTR );
 }
 
 #ifdef TEST_MALLOC

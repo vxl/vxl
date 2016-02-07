@@ -16,14 +16,14 @@
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
 
-vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = 0;
-vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_20 = 0;
+vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = VXL_NULLPTR;
+vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_20 = VXL_NULLPTR;
 
 vil_nitf2_image_subheader::vil_nitf2_image_subheader(vil_nitf2_classification::file_version version)
   : m_field_sequence(version == vil_nitf2_classification::V_NITF_20 ?
                      *get_field_definitions_20() :
                      *get_field_definitions_21()),
-    m_data_mask_table(0),
+    m_data_mask_table(VXL_NULLPTR),
     m_version(version)
 {
   add_rpc_definitions();
@@ -93,12 +93,12 @@ void vil_nitf2_image_subheader::
 add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
 {
   (*defs)
-    .field("NICOM", "Number of Image Comments", NITF_INT(1), false, 0, 0)
+    .field("NICOM", "Number of Image Comments", NITF_INT(1), false, VXL_NULLPTR, VXL_NULLPTR)
 
     //TODO: does it make any sense for a vcl_vector to have blank entries????  For now, I'm saying no (false parameter)
     .repeat("NICOM", vil_nitf2_field_definitions()
 
-            .field("ICOMn", "Image Comment n", NITF_STR_ECSA(80), false, 0, 0))
+            .field("ICOMn", "Image Comment n", NITF_STR_ECSA(80), false, VXL_NULLPTR, VXL_NULLPTR))
 
     .field("IC", "Image Compression",
            NITF_ENUM(2, vil_nitf2_enum_values()
@@ -119,7 +119,7 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
                      .value("M6", "Reserved - future correlated multicomponent compression")
                      .value("M7", "Reserved - future SAR compression")
                      .value("M8", "JPEG2000 - contains block mask and/or pad pixel mask")),
-           false, 0, 0);
+           false, VXL_NULLPTR, VXL_NULLPTR);
 
   vcl_vector<vcl_string> comp_ic_values;
   comp_ic_values.push_back("C1");
@@ -136,76 +136,76 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
 
   // Using string because the valid enum values are different based on the content of IC
   (*defs)
-    .field("COMRAT", "Compression Rate Code",         NITF_STR_BCSA(4),true, 0,
+    .field("COMRAT", "Compression Rate Code",         NITF_STR_BCSA(4),true, VXL_NULLPTR,
            new vil_nitf2_field_value_one_of<vcl_string>("IC", comp_ic_values))
 
     // The value of IREP determines which values are acceptable here
     // (e.g., if IREP=MONO, then this must equal 1)
-    .field("NBANDS", "Number of Bands",               NITF_INT(1), false, 0, 0)
+    .field("NBANDS", "Number of Bands",               NITF_INT(1), false, VXL_NULLPTR, VXL_NULLPTR)
 
     // Acceptable range [00010-99999]... only used if NBANDS=0
-    .field("XBANDS", "Number of multispectral bands", NITF_INT(5), true, 0,
+    .field("XBANDS", "Number of multispectral bands", NITF_INT(5), true, VXL_NULLPTR,
            new vil_nitf2_field_value_one_of<int>("NBANDS",0))
 
     .repeat(new vil_nitf2_choose_field_value<int>(
                                                   "NBANDS", "XBANDS", new vil_nitf2_field_value_greater_than<int>("NBANDS", 0)),
             vil_nitf2_field_definitions()
 
-            .field("IREPBAND", "nth Band Representation",             NITF_STR_BCSA(2), true, 0, 0)
-            .field("ISUBCAT",  "nth Band Subcategory",                NITF_STR_BCSA(6), true, 0, 0)
-            .field("IFC",      "nth Image Filter Condition",          NITF_STR_BCSA(1), false, 0, 0)
-            .field("IMFLT",    "nth Band Standard Image Filter Code", NITF_STR_BCSA(3), true, 0, 0)
-            .field("NLUTS",    "Number of LUTS for the nth Image Band",        NITF_INT(1, false),  false, 0, 0)
-            .field("NELUT",    "Number of LUT Entries for the nth Image Band", NITF_INT(5, false),  false, 0,
+            .field("IREPBAND", "nth Band Representation",             NITF_STR_BCSA(2), true, VXL_NULLPTR, VXL_NULLPTR)
+            .field("ISUBCAT",  "nth Band Subcategory",                NITF_STR_BCSA(6), true, VXL_NULLPTR, VXL_NULLPTR)
+            .field("IFC",      "nth Image Filter Condition",          NITF_STR_BCSA(1), false, VXL_NULLPTR, VXL_NULLPTR)
+            .field("IMFLT",    "nth Band Standard Image Filter Code", NITF_STR_BCSA(3), true, VXL_NULLPTR, VXL_NULLPTR)
+            .field("NLUTS",    "Number of LUTS for the nth Image Band",        NITF_INT(1, false),  false, VXL_NULLPTR, VXL_NULLPTR)
+            .field("NELUT",    "Number of LUT Entries for the nth Image Band", NITF_INT(5, false),  false, VXL_NULLPTR,
                    new vil_nitf2_field_value_greater_than<int>("NLUTS", 0) /*condition*/ )
 
             .repeat(new vil_nitf2_field_value<int>("NLUTS"), vil_nitf2_field_definitions()
 
                     .field("LUTDnm", "nth Image Band, mth LUT",             NITF_BIN(1), false,
-                           new vil_nitf2_field_value<int>("NELUT"), 0))
+                           new vil_nitf2_field_value<int>("NELUT"), VXL_NULLPTR))
             )
 
-    .field("ISYNC", "Image Sync Code", NITF_INT(1),  false, 0, 0)
+    .field("ISYNC", "Image Sync Code", NITF_INT(1),  false, VXL_NULLPTR, VXL_NULLPTR)
     .field("IMODE", "Image Mode",
            NITF_ENUM(1, vil_nitf2_enum_values()
                      .value("B", "Band interleaved by block")
                      .value("P", "Band interleaved by pixel")
                      .value("R", "Band interleaved by row")
                      .value("S", "Band sequential")),
-           false, 0, 0)
+           false, VXL_NULLPTR, VXL_NULLPTR)
 
-    .field("NBPR",  "Number of Blocks per Row",              NITF_INT(4), false, 0, 0)
-    .field("NBPC",  "Number of Blocks per Column",           NITF_INT(4), false, 0, 0)
-    .field("NPPBH", "Number of Pixels per Block Horizontal", NITF_INT(4), false, 0, 0) //[0000-8192]
-    .field("NPPBV", "Number of Pixels per Block Vertical",   NITF_INT(4), false, 0, 0) //[0000-8192]
-    .field("NBPP",  "Number of Bits per Pixel per Band",     NITF_INT(2), false, 0, 0) //[01-96]
-    .field("IDLVL", "Image Display Level",                   NITF_INT(3), false, 0, 0)
-    .field("IALVL", "Attachment Level",                      NITF_INT(3), false, 0, 0) //[000-998]
+    .field("NBPR",  "Number of Blocks per Row",              NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NBPC",  "Number of Blocks per Column",           NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NPPBH", "Number of Pixels per Block Horizontal", NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR) //[0000-8192]
+    .field("NPPBV", "Number of Pixels per Block Vertical",   NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR) //[0000-8192]
+    .field("NBPP",  "Number of Bits per Pixel per Band",     NITF_INT(2), false, VXL_NULLPTR, VXL_NULLPTR) //[01-96]
+    .field("IDLVL", "Image Display Level",                   NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("IALVL", "Attachment Level",                      NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR) //[000-998]
 
     // TODO: Enter these two values as ints with optional sign (once supported)
     // Actually, since they are both in one field, maybe we'd want to make it one
     // compound field (in the new tree format)
-    .field("ILOC_ROW", "Image Location Row",            NITF_STR_BCSA(5), false, 0, 0)
-    .field("ILOC_COL", "Image Location Column",         NITF_STR_BCSA(5), false, 0, 0)
+    .field("ILOC_ROW", "Image Location Row",            NITF_STR_BCSA(5), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("ILOC_COL", "Image Location Column",         NITF_STR_BCSA(5), false, VXL_NULLPTR, VXL_NULLPTR)
 
     // TODO: THis should be a decimal field that supports non-negative power of two
     // fractions (eg '/2  ' means 1/2, '/16 'means 1/16
-    .field("IMAG",  "Image Magnification",              NITF_STR_BCSA(4), false, 0, 0)
-    .field("UDIDL", "User Defined Image Data Length",        NITF_INT(5), false, 0, 0) //[00000,00003-99999]
+    .field("IMAG",  "Image Magnification",              NITF_STR_BCSA(4), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("UDIDL", "User Defined Image Data Length",        NITF_INT(5), false, VXL_NULLPTR, VXL_NULLPTR) //[00000,00003-99999]
 
-    .field("UDOFL", "User Defined Overflow",                 NITF_INT(3), false, 0,
+    .field("UDOFL", "User Defined Overflow",                 NITF_INT(3), false, VXL_NULLPTR,
            new vil_nitf2_field_value_greater_than<int>("UDIDL", 0))
 
     .field("UDID", "User Defined Image Data",                NITF_TRES(), false,
-           new vil_nitf2_max_field_value_plus_offset_and_threshold("UDIDL", -3), 0)
+           new vil_nitf2_max_field_value_plus_offset_and_threshold("UDIDL", -3), VXL_NULLPTR)
 
-    .field("IXSHDL", "Image Extended Subheader Data Length", NITF_INT(5), false, 0, 0)
+    .field("IXSHDL", "Image Extended Subheader Data Length", NITF_INT(5), false, VXL_NULLPTR, VXL_NULLPTR)
 
-    .field("IXSOFL", "Image Extended Subheader Overflow",    NITF_INT(3), false, 0,
+    .field("IXSOFL", "Image Extended Subheader Overflow",    NITF_INT(3), false, VXL_NULLPTR,
            new vil_nitf2_field_value_greater_than<int>("IXSHDL", 0))
 
     .field("IXSHD", "Image Extended Subheader Data",         NITF_TRES(), false,
-           new vil_nitf2_max_field_value_plus_offset_and_threshold("IXSHDL", -3), 0);
+           new vil_nitf2_max_field_value_plus_offset_and_threshold("IXSHDL", -3), VXL_NULLPTR);
 }
 
 void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* defs,
@@ -222,7 +222,7 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
                          .value("G", "Geodetic/Geographic")
                          .value("N", "None")
                          .value("C", "Geocentric")),
-               false, 0, 0);
+               false, VXL_NULLPTR, VXL_NULLPTR);
 
       vcl_vector<vcl_string> igeolo_icords;
       igeolo_icords.push_back("U");
@@ -230,7 +230,7 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
       igeolo_icords.push_back("C");
 
       (*defs)
-        .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, 0,
+        .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, VXL_NULLPTR,
                new vil_nitf2_field_value_one_of<vcl_string>("ICORDS", igeolo_icords));
       break;
     }
@@ -244,9 +244,9 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
                          .value("N", "UTM/UPS (Northern hemisphere)") // actually means None for Nitf 2.0
                          .value("S", "UTM/UPS (Southern hemisphere)") // NITF 2.1 only
                          .value("D", "Decimal degrees")),             // NITF 2.1 only
-               true, 0, 0)
+               true, VXL_NULLPTR, VXL_NULLPTR)
 
-        .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, 0,
+        .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, VXL_NULLPTR,
                new vil_nitf2_field_specified("ICORDS"));
       break;
     }
@@ -262,12 +262,12 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
            NITF_ENUM(1, vil_nitf2_enum_values()
                      // Only one valid value, until the spec gets updated
                      .value("0", "Not Encrypted")),
-           false, 0, 0)
-    .field("ISORCE", "Image Source", NITF_STR_ECSA(42),  true, 0, 0)
+           false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("ISORCE", "Image Source", NITF_STR_ECSA(42),  true, VXL_NULLPTR, VXL_NULLPTR)
     //TODO: only allow range [00000001-99999999]
-    .field("NROWS", "Number of Significant Rows in Image", NITF_INT(8, false), false, 0, 0)
+    .field("NROWS", "Number of Significant Rows in Image", NITF_INT(8, false), false, VXL_NULLPTR, VXL_NULLPTR)
     //TODO: only allow range [00000001-99999999]
-    .field("NCOLS", "Number of Significant Columns in Image", NITF_INT(8, false), false, 0, 0)
+    .field("NCOLS", "Number of Significant Columns in Image", NITF_INT(8, false), false, VXL_NULLPTR, VXL_NULLPTR)
     .field("PVTYPE", "Pixel Value Type",
            NITF_ENUM(3, vil_nitf2_enum_values()
                      .value("INT", "Integer")
@@ -275,7 +275,7 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
                      .value("SI",  "2's complement signed integer")
                      .value("R",   "Real")
                      .value("C",   "Complex")),
-           false, 0, 0)
+           false, VXL_NULLPTR, VXL_NULLPTR)
     .field("IREP", "Image Representation",
            NITF_ENUM(8, vil_nitf2_enum_values()
                      .value("MONO",     "Monochrome")
@@ -287,7 +287,7 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
                      .value("POLAR",    "Polar coordinates")
                      .value("VPH",      "SAR video phase history")
                      .value("YCbCr601", "BT.601-5 color space")),
-           false, 0, 0)
+           false, VXL_NULLPTR, VXL_NULLPTR)
 #ifdef UNCLASS_ONLY
     .field("ICAT", "Image Category",
            NITF_ENUM(8, vil_nitf2_enum_values()
@@ -322,15 +322,15 @@ void vil_nitf2_image_subheader::add_shared_field_defs_2(vil_nitf2_field_definiti
                      .value("LOCG",   "Location Grids")),
            false, 0, 0)
 #else
-    .field("ICAT", "Image Category", NITF_STR_ECSA(8), false, 0, 0)
+    .field("ICAT", "Image Category", NITF_STR_ECSA(8), false, VXL_NULLPTR, VXL_NULLPTR)
 #endif //UNCLASS_ONLY
 
-    .field("ABPP", "Actual Bits Per Pixel per Band", NITF_INT(2), false, 0, 0) //[1-96]
+    .field("ABPP", "Actual Bits Per Pixel per Band", NITF_INT(2), false, VXL_NULLPTR, VXL_NULLPTR) //[1-96]
     .field("PJUST", "Pixel Justification",
            NITF_ENUM(1, vil_nitf2_enum_values()
                      .value("L", "Left-justified")
                      .value("R", "Right-justified")),
-           false, 0, 0);
+           false, VXL_NULLPTR, VXL_NULLPTR);
 }
 
 void vil_nitf2_image_subheader::add_shared_field_defs_1(vil_nitf2_field_definitions* defs)

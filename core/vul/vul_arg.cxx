@@ -352,7 +352,7 @@ void vul_arg_info_list::parse(int& argc, char **& argv, bool warn_about_unrecogn
     ++argc;
   for (int i = 1; i < argc; ++i)
     argv[i] = my_argv[i-1];
-  argv[argc] = 0;
+  argv[argc] = VXL_NULLPTR;
 
   // 4. Error checking.
   //
@@ -562,7 +562,7 @@ VDS int parse(vul_arg<int>* argmt, char ** argv)
     return -1;
   }
 
-  char* endptr = 0;
+  char* endptr = VXL_NULLPTR;
   double v = vcl_strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
@@ -633,7 +633,7 @@ VDS int parse(vul_arg<unsigned>* argmt, char ** argv)
     return -1;
   }
 
-  char* endptr = 0;
+  char* endptr = VXL_NULLPTR;
   double v = vcl_strtod(argv[0], &endptr);
   if (*endptr != '\0') {
     // There is junk after the number, or no number was found
@@ -664,7 +664,7 @@ VDS int parse(vul_arg<float>* argmt, char ** argv)
     return -1;
   }
 
-  char* endptr = 0;
+  char* endptr = VXL_NULLPTR;
   argmt->value_ = (float)vcl_strtod(argv[0], &endptr);
   if (*endptr == '\0')
     return 1;
@@ -689,7 +689,7 @@ VDS int parse(vul_arg<double>* argmt, char ** argv)
     return -1;
   }
 
-  char* endptr = 0;
+  char* endptr = VXL_NULLPTR;
   argmt->value_ = vcl_strtod(argv[0], &endptr);
   if (*endptr == '\0')
     return 1;
@@ -852,7 +852,7 @@ VDS int parse(vul_arg<vcl_vector<double> >* argmt, char ** argv)
   argmt->value_.clear();
   char *current = argv[0];
   while (current) {
-    char* endptr = 0;
+    char* endptr = VXL_NULLPTR;
     double tmp = vcl_strtod(current, &endptr);
     //argmt->value_
     if (*endptr == '\0') {

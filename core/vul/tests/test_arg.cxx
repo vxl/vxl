@@ -30,7 +30,7 @@ char const * my_argv_1[] =
   "i",
   "j",
   "-req", "100",
-  0
+  VXL_NULLPTR
 };
 
 int list1_contents[] = { 1,2,10,21,24,-1,-3,-5,-7 };

@@ -239,7 +239,7 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned int i0, unsigned in
 vil_image_view_base_sptr vil_blocked_image_resource::
 get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n_j) const
 {
-  vil_image_view_base_sptr view = 0;
+  vil_image_view_base_sptr view = VXL_NULLPTR;
 
   unsigned int tw = size_block_i(), tl = size_block_j();
   if (tw==0||tl==0)
@@ -277,11 +277,11 @@ get_copy_view(unsigned int i0, unsigned int n_i, unsigned int j0, unsigned int n
 vil_blocked_image_resource_sptr blocked_image_resource(const vil_image_resource_sptr& ir)
 {
   if (!ir)
-    return 0;
+    return VXL_NULLPTR;
   unsigned int sbi=0, sbj=0;
   if (ir->get_property(vil_property_size_block_i, &sbi)&&
       ir->get_property(vil_property_size_block_j, &sbj))
     return (vil_blocked_image_resource*)ir.ptr();
   else
-    return 0;
+    return VXL_NULLPTR;
 }

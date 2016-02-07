@@ -92,7 +92,7 @@ vcl_ostream &operator<<(vcl_ostream& os, vbl_bit_array_3d const& bitarray)
 void vbl_bit_array_3d::construct(unsigned int m, unsigned int n, unsigned int p)
 {
   // quick return if possible
-  if (m==0 || n==0 || p==0) { row1_count_=row2_count_=row3_count_=0; data_ = 0; return; }
+  if (m==0 || n==0 || p==0) { row1_count_=row2_count_=row3_count_=0; data_ = VXL_NULLPTR; return; }
   row1_count_ = m; row2_count_ = n; row3_count_ = p;
   data_ = new unsigned char [this->size()];
   data_[this->size()-1]=0; // avoids uninitialized data problems in operator==()
@@ -100,7 +100,7 @@ void vbl_bit_array_3d::construct(unsigned int m, unsigned int n, unsigned int p)
 
 //: Copy constructor
 vbl_bit_array_3d::vbl_bit_array_3d(vbl_bit_array_3d const& that)
-  : row1_count_(0), row2_count_(0), row3_count_(0), data_(0)
+  : row1_count_(0), row2_count_(0), row3_count_(0), data_(VXL_NULLPTR)
 {
   if ( that.data_)
   {

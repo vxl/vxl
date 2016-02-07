@@ -93,7 +93,7 @@ bool vil1_tiff_file_format_probe(vil1_stream* is)
 vil1_image_impl* vil1_tiff_file_format::make_input_image(vil1_stream* is)
 {
   if (!vil1_tiff_file_format_probe(is))
-    return 0;
+    return VXL_NULLPTR;
 
   return new vil1_tiff_generic_image(is);
 }
@@ -119,7 +119,7 @@ struct vil1_tiff_structures {
   vil1_tiff_structures(vil1_stream *vs_):
     vs(vs_),
     filesize(0),
-    buf(0)
+    buf(VXL_NULLPTR)
     { if (vs) vs->ref(); }
   ~vil1_tiff_structures() {
     delete [] buf;
@@ -206,7 +206,7 @@ static int vil1_tiff_closeproc(thandle_t h)
   //delete p->vs;
   if (p->vs) {
     p->vs->unref();
-    p->vs = 0;
+    p->vs = VXL_NULLPTR;
   }
   return 0;
 }

@@ -18,7 +18,7 @@
 vil1_image vil1_image_impl::get_plane(unsigned int p) const
 {
   assert((int)p < planes());
-  return 0; // since this function has to be overloaded
+  return VXL_NULLPTR; // since this function has to be overloaded
 }
 
 bool vil1_image_impl::get_property(char const *, void *) const

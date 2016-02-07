@@ -21,7 +21,7 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_camera_float_sptr const& cam_sptr)
 //: Binary load camera from stream.
 void vsl_b_read(vsl_b_istream & is, vpgl_camera_double_sptr &camera)
 {
-  vpgl_camera<double>* cam = 0;
+  vpgl_camera<double>* cam = VXL_NULLPTR;
    vsl_b_read(is, cam);
   camera = cam;
 }
@@ -29,7 +29,7 @@ void vsl_b_read(vsl_b_istream & is, vpgl_camera_double_sptr &camera)
 //: Binary load camera from stream.
 void vsl_b_read(vsl_b_istream & is, vpgl_camera_float_sptr &camera)
 {
-  vpgl_camera<float>* cam = 0;
+  vpgl_camera<float>* cam = VXL_NULLPTR;
   vsl_b_read(is, cam);
   camera = cam;
 }

@@ -14,7 +14,7 @@ vgui_qt_adaptor::vgui_qt_adaptor(QWidget* parent)
    : QGLWidget(QGLFormat(DoubleBuffer|DepthBuffer|Rgba|AlphaChannel|
                          AccumBuffer|StencilBuffer|NoStereoBuffers|
                          DirectRendering), parent),
-     ovl_helper(0),
+     ovl_helper(VXL_NULLPTR),
      use_overlay_helper(true),
      idle_request_posted_(false)
 {
@@ -48,7 +48,7 @@ vgui_qt_adaptor::~vgui_qt_adaptor()
 {
    if (ovl_helper)
      delete ovl_helper;
-   ovl_helper = 0;
+   ovl_helper = VXL_NULLPTR;
    dispatch_to_tableau(vgui_DESTROY);
 
    for(vcl_map<int, vgui_qt_internal_timer*>::iterator it = timers_.begin();

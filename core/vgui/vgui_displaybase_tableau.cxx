@@ -46,7 +46,7 @@ vgui_displaybase_tableau::vgui_displaybase_tableau()
   highlighted = 0;
   gl_display_list = GL_INVALID_VALUE;
 
-  cb_ = 0;
+  cb_ = VXL_NULLPTR;
 
   current_grouping = "default";
   groupings.clear();
@@ -73,7 +73,7 @@ void vgui_displaybase_tableau::add(vgui_soview* object)
     if ( it == groupings.end() )
     {
       vgui_displaybase_tableau_grouping temp;
-      temp.style = NULL;
+      temp.style = VXL_NULLPTR;
       temp.hide = false;
       temp.color_override = false;
       temp.line_width_override = false;
@@ -379,7 +379,7 @@ vgui_soview* vgui_displaybase_tableau::contains_hit(vcl_vector<unsigned> names)
       return *i;
   }
 
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( vcl_string t_name )
@@ -388,7 +388,7 @@ vgui_displaybase_tableau_grouping* vgui_displaybase_tableau::get_grouping_ptr( v
   if ( it != groupings.end() )
     return & it->second;
   else
-    return NULL;
+    return VXL_NULLPTR;
 }
 
 vcl_vector< vcl_string > vgui_displaybase_tableau::get_grouping_names()

@@ -191,7 +191,7 @@ void test_clipon_polymorphic_io()
 
   test2_derived_class d1_out(1234);
   test2_base_class *b1_out = &d1_out;
-  test2_base_class *b2_out = 0;
+  test2_base_class *b2_out = VXL_NULLPTR;
 
   vsl_b_ofstream bfs_out("vsl_clipon_polymorphic_io_test.bvl.tmp");
   TEST("Opened vsl_polymorphic_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -201,7 +201,7 @@ void test_clipon_polymorphic_io()
   bfs_out.close();
 
   test2_derived_class d1_in(0);
-  test2_base_class *b1_in = 0;
+  test2_base_class *b1_in = VXL_NULLPTR;
   test2_base_class *b2_in = new test2_derived_class(7);
 
   vsl_b_ifstream bfs_in("vsl_clipon_polymorphic_io_test.bvl.tmp");

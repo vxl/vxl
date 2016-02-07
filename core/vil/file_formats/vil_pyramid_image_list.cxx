@@ -21,7 +21,7 @@ vil_pyramid_image_list_format::make_input_pyramid_image(char const* directory)
   vil_image_list il(directory);
   vcl_vector<vil_image_resource_sptr> rescs = il.resources();
   if (rescs.size() < 2L)
-    return 0;
+    return VXL_NULLPTR;
   vil_pyramid_image_list* pil = new vil_pyramid_image_list(rescs);
   pil->set_directory(directory);
   return pil;
@@ -31,7 +31,7 @@ vil_pyramid_image_resource_sptr
 vil_pyramid_image_list_format::make_pyramid_output_image(char const* file)
 {
   if (!vil_image_list::vil_is_directory(file))
-    return 0;
+    return VXL_NULLPTR;
   return new vil_pyramid_image_list(file);
 }
 
@@ -101,7 +101,7 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
                                 )
 {
   if (!vil_image_list::vil_is_directory(directory))
-    return 0;
+    return VXL_NULLPTR;
   vcl_string d = directory;
   vcl_string fn = filename;
   vcl_string full_filename = level_filename(d,fn, 0.0f) + '.'+ level_file_format;
@@ -110,14 +110,14 @@ vil_pyramid_image_resource_sptr vil_pyramid_image_list_format::
   {
     if (!copy_base_resc(base_image, full_filename,
                         level_file_format, blk_base))
-      return 0;
+      return VXL_NULLPTR;
   }
   else
   {
     blk_base =
       blocked_image_resource(base_image);
     if (!blk_base)
-      return 0;
+      return VXL_NULLPTR;
   }
   //Create the other pyramid levels
   { //program scope to close resource files
@@ -276,7 +276,7 @@ pyramid_level* vil_pyramid_image_list::closest(const float scale) const
 {
   unsigned int nlevels = (unsigned int)(levels_.size());
   if (nlevels == 0)
-    return 0;
+    return VXL_NULLPTR;
 
   if (nlevels == 1)
     return levels_[0];
@@ -307,7 +307,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
     vcl_cerr << "pyramid_image_list::get_copy_view(.) level = "
              << level << " max level = "
              << this->nlevels() -1 << '\n';
-    return 0;
+    return VXL_NULLPTR;
   }
   pyramid_level* pl = levels_[level];
   float actual_scale = pl->scale_;
@@ -328,7 +328,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
              << i0 << ' ' << j0 << ") (ni, nj):("
              << n_i << ' ' << n_j << ")\n"
              << "Get copy view from level image failed\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   return v;
 }
@@ -345,7 +345,7 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
   if (!pl)
   {
     actual_scale = 0;
-    return 0;
+    return VXL_NULLPTR;
   }
   actual_scale = pl->scale_;
   unsigned int level = pl->cur_level_;

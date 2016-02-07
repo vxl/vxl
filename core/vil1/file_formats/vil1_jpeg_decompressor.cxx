@@ -31,7 +31,7 @@ vil1_jpeg_decompressor::vil1_jpeg_decompressor(vil1_stream *s)
   : stream(s)
   , ready(false)
   , valid(false)
-  , biffer(0)
+  , biffer(VXL_NULLPTR)
 {
   stream->ref();
 
@@ -117,7 +117,7 @@ JSAMPLE const *vil1_jpeg_decompressor::read_scanline(unsigned line)
       jpeg_abort_decompress(&jobj);
       ready = false;
       valid = false;
-      return 0;
+      return VXL_NULLPTR;
     }
   }
 
@@ -144,10 +144,10 @@ vil1_jpeg_decompressor::~vil1_jpeg_decompressor()
 
   //
   stream->unref();
-  stream = 0;
+  stream = VXL_NULLPTR;
 
   //
   if (biffer)
     delete [] biffer;
-  biffer = 0;
+  biffer = VXL_NULLPTR;
 }

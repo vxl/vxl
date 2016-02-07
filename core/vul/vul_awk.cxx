@@ -28,7 +28,7 @@ vul_awk::vul_awk(vcl_istream& s, ModeFlags mode):
 {
   done_ = false;
   line_number_ = 0;
-  split_line_ = 0;
+  split_line_ = VXL_NULLPTR;
 
   next();
 }

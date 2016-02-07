@@ -10,7 +10,7 @@
 
 basic_manager *basic_manager::instance()
 {
-  static basic_manager *instance_ = 0;
+  static basic_manager *instance_ = VXL_NULLPTR;
   if (!instance_)
   {
     instance_ = new basic_manager();
