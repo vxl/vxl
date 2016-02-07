@@ -203,4 +203,13 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 # define VXL_CXX11 0
 #endif
 
+
+//----------------------------------------------------------------------------
+// Check if the compiler (claims to) support C++11.
+#if defined(NDEBUG)
+# define VXL_USED_IN_DEBUG(x)
+#else
+# define VXL_USED_IN_DEBUG(x) x
+#endif
+
 #endif // vcl_compiler_h_
