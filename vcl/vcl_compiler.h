@@ -197,10 +197,37 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 
 //----------------------------------------------------------------------------
 // Check if the compiler (claims to) support C++11.
-#if __cplusplus > 199711L
+#if __cplusplus >= 201103L
 # define VXL_CXX11 1
+  // In c++11 the override keyword allows you to explicity define that a function
+  // is intended to override the base-class version.  This makes the code more
+  // managable and fixes a set of common hard-to-find bugs.
+# define VXL_OVERRIDE override
+  // In functions that should not be implemented, use the C++11 mechanism
+  // to ensure that thye are purposely not implemented
+# define VXL_DELETE_FUNCTION =delete
+  // In c++11 there is an explicit nullptr type that introduces a new keyword to
+  // serve as a distinguished null pointer constant: nullptr. It is of type
+  // nullptr_t, which is implicitly convertible and comparable to any pointer type
+  // or pointer-to-member type. It is not implicitly convertible or comparable to
+  // integral types, except for bool.
+# define VXL_NULLPTR  nullptr
+  // In C++11 the throw-list specification has been deprecated,
+  // replaces with the noexcept specifier. Using this function
+  // specification adds the run-time check that the method does not
+  // throw, if it does throw then std::terminate will be called.
+  // Use cautiously.
+# define VXL_NOEXCEPT noexcept
+# define VXL_HAS_CXX11_STATIC_ASSERT
+# define VXL_HAS_CXX11_RVREF
 #else
+//----------------------------------------------------------------------------
+//  C++11 not supported
 # define VXL_CXX11 0
+# define VXL_OVERRIDE
+# define VXL_DELETE_FUNCTION
+# define VXL_NULLPTR  NULL
+# define VXL_NOEXCEPT throw()
 #endif
 
 
