@@ -795,7 +795,6 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
           //vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
           img_poly.push_back(vgl_point_2d<double>(iuu,ivv));
           vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
-          hit = true;
         }
       }
     }
@@ -839,7 +838,6 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         if (iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
           //vcl_cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << vcl_endl;
           img_line.push_back(vcl_pair<int, int>(iuu,ivv));
-          hit = true;
         }
       }
     }
@@ -908,7 +906,6 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         unsigned iuu = (unsigned)vcl_floor(iu + 0.5f);
         unsigned ivv = (unsigned)vcl_floor(iv + 0.5f);
         if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
-          hit = true;
           // make it a 2x2 region with this point at the center
           vcl_vector<vsol_point_2d_sptr> vsol_pts;
           vsol_pts.push_back(new vsol_point_2d(iu-1, iv-1));

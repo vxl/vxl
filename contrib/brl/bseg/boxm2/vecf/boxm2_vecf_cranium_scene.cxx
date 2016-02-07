@@ -427,7 +427,6 @@ void boxm2_vecf_cranium_scene::apply_vector_field_to_target(vcl_vector<vgl_vecto
       target_alpha_data_[tindx] = alpha;
       continue;
     }
-    sindx = data_index_to_cell_index_[dindx];
     app = app_data_[dindx];
     alpha = alpha_data_[dindx];
     target_app_data_[tindx] = app;

@@ -267,7 +267,7 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, v
   bool found_it = false;
   for (unsigned i = 0; i < other_responses_names_.size(); i++) {
     if (other_responses_names_[i].compare(response_name) == 0) {
-      found_it = true; break;
+      break;
     }
   }
   vil_image_view<float> out_gauss(img_f.ni(), img_f.nj());

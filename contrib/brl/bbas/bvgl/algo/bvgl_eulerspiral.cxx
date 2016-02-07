@@ -461,7 +461,6 @@ compute_es_params_use_simple_gradient_descent( bool use_lookup_table ){
     // dstep = 0.1;
     dstep_k0 = 0.1;
     dstep_len = 0.1;
-    k0_len_initialized = true;
   }
 
   // perform a simple gradient descent to find the real solution
@@ -601,7 +600,6 @@ compute_es_params_use_levenberg_marquardt(bool use_lookup_table ){
     //From here on, normlize the parameters and use these to perform the optimization
     k0_len_estimate.put(0, biarc_estimate.k1()*d);
     k0_len_estimate.put(1, biarc_estimate.len()/d);
-    k0_len_initialized = true;
   }
 
 

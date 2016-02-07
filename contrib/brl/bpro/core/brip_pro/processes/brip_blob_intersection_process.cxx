@@ -134,7 +134,6 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
       // determine true positive, false positive
       if (intersects && !gt_blob_found) {
         numTP++;
-        gt_blob_found = true;
         break;
       }
     }

@@ -65,7 +65,6 @@ float  boxm2_mog3_grey_processor::prob_density(const vnl_vector_fixed<unsigned c
       if (w2>0.0f && sigma2 >0.0f)
       {
         sum += w2*gauss_prob_density(x, mu2, sigma2);
-        sum_weights+=w2;
       }
     }
   }

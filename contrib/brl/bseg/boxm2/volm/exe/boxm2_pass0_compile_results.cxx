@@ -170,7 +170,6 @@ int main(int argc,  char** argv)
         // look for location and camera giving maximum score
         if (scores[ii]->max_score_ > max_score) {
           max_score = scores[ii]->max_score_;
-          max_score_cam_id = scores[ii]->max_cam_id_;
           max_score_loc = h_pt;
         }
         unsigned u, v;

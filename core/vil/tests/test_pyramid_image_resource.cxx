@@ -394,7 +394,6 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
   //------- Test OpenJPEG image pyramid resource ------------------//
   //
 #if HAS_OPENJPEG2
-  good = true;
   vcl_string filepath_open_jpg2 = image_base+"jpeg2000/file1.jp2";
   vil_image_resource_sptr resc_open_jpeg2 = vil_load_image_resource(filepath_open_jpg2.c_str());
   if (resc_open_jpeg2)

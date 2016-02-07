@@ -494,8 +494,6 @@ void boxm2_vecf_eye_scene::apply_vector_field_to_target(vcl_vector<vgl_vector_3d
       //not a sphere cell
       continue;
     }
-    //source cell index after rotation
-    cell_indx = mit->second;
 
     //appearance and alpha data at source cell
     app = app_data_->data()[dindx];
