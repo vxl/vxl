@@ -65,9 +65,6 @@ vil_viff_xvimage::vil_viff_xvimage(
     case VFF_TYP_DCOMPLEX:  image_data_n_bytes = ncols*16; break;
     default:                image_data_n_bytes = ncols*255; break;
   }
-  image_data_n_bytes *= nrows*num_data_bands;
-
-
   imagedata = 0;
 }
 

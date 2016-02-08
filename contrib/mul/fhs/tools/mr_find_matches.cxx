@@ -273,7 +273,6 @@ int main( int argc, char* argv[] )
 
     vcl_cout<<"Found "<<L_pts.size()<<" points at level "<<L<<vcl_endl;
 
-    i0=i1+1;
     i1=pts.size()-1;
   }
 

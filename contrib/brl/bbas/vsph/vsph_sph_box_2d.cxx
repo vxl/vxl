@@ -576,7 +576,7 @@ vsph_sph_box_2d vsph_sph_box_2d::transform(double t_theta,
   }
   else {
     //extend the start and end positions
-    difs *=s; dife*=s;
+    difs *=s;
     ph_start = c_ph -difs + d_ph;
     ph_end = c_ph + difs + d_ph;
     c_ph += d_ph;

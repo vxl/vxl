@@ -386,7 +386,8 @@ int main(int argc, char** argv)
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
     unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
+    start_ni = w_idx_i*dx();
+    end_ni = (w_idx_i+1)*dx();
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       vcl_cout << '.';

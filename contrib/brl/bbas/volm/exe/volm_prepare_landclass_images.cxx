@@ -126,7 +126,6 @@ int main(int argc,  char** argv)
         unsigned vv = (unsigned)vcl_floor(v + 0.5);
         if (uu > 0 && vv > 0 && uu < nlcd_imgs[k].first.ni() && vv < nlcd_imgs[k].first.nj()) {
           label = (nlcd_imgs[k].first)(uu, vv);
-          nlcd_found = true;
           break;
         }
       }

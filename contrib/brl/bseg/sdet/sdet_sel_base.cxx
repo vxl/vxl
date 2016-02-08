@@ -1652,7 +1652,6 @@ sdet_sel_base
     {
       //now add it to the fragment list
       new_frags.push_back(sub_chain);
-      forming_sub_chain = false;
     }
 
     //delete the curve fragments that were broken
@@ -2266,7 +2265,6 @@ sdet_sel_base
     dt = (dt>vnl_math::pi)? 2*vnl_math::pi-dt : dt;
     cost += vcl_pow((s+dt + a*ds)/size, 2.0);
     thp = thc;//save the current vector for the next iteration
-    dsp = ds;
   }
   return cost;
 }
@@ -2899,7 +2897,8 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                   m9=c11->edgels.size();
                 }
               // Finding the closest unused edge
-              costc=0.0;cost=10000.0;cost1=gap_;
+              cost=10000.0;
+              cost1=gap_;
               for (unsigned int j=0; j<new_chain4->edgels.size(); ++j)
                 {
                 d1= vgl_distance(ed->pt,new_chain4->edgels[j]->pt);
@@ -2983,7 +2982,6 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                 {
                 m2=1;
                 m1=0;
-                cost1=gap_;
                 ce=ed;
                 ed=imp;
                 xx->edgels.push_back(imp);
@@ -2996,7 +2994,6 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                   }
                 if (m3!=0)
                   {
-                  m3=0;
                   break;
                   }
                 }
@@ -3183,7 +3180,9 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                     new_chain6a->temp = true;
                     curve_frag_graph_.CFTG.insert_fragment(new_chain6a);
                     }
-                  p3=0;p2=0;p16=0,p3=0;
+                  p2=0;
+                  p16=0;
+                  p3=0;
                   }
               }
             }

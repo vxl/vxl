@@ -217,8 +217,6 @@ void volm_candidate_region_parser::charData(const XML_Char* s, int len)
         cord_end--;
       while (str_s[cord_end-1] == ' ')
         cord_end--;
-      if ((int)cord_end > len)
-        len = (int)cord_end;
     }
     for (unsigned int i=0; i<cord_end; ++i)
       str << s[i];
