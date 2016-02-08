@@ -38,7 +38,7 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
       *my_free_list = (obj *)start_free;
     }
     start_free = (char*)vcl_malloc(bytes_to_get);
-    if (0 == start_free)
+    if (VXL_NULLPTR == start_free)
     {
       obj *  * my_free_list, *p;
       // Try to make do with what we have.  That can't
@@ -48,7 +48,7 @@ vnl_alloc::chunk_alloc(vcl_size_t size, int& nobjs)
       {
         my_free_list = free_list + FREELIST_INDEX(i);
         p = *my_free_list;
-        if (0 != p) {
+        if (VXL_NULLPTR != p) {
           *my_free_list = p -> free_list_link;
           start_free = (char *)p;
           end_free = start_free + i;
@@ -91,7 +91,7 @@ void* vnl_alloc::refill(vcl_size_t n)
     current_obj = next_obj;
     next_obj = (obj *)((char *)next_obj + n);
     if (nobjs - 1 == i) {
-      current_obj -> free_list_link = 0;
+      current_obj -> free_list_link = VXL_NULLPTR;
       break;
     }
     else {
@@ -120,12 +120,12 @@ vnl_alloc::reallocate(void *p,
   return result;
 }
 
-char *vnl_alloc::start_free = 0;
-char *vnl_alloc::end_free = 0;
+char *vnl_alloc::start_free = VXL_NULLPTR;
+char *vnl_alloc::end_free = VXL_NULLPTR;
 vcl_size_t vnl_alloc::heap_size = 0;
 
 vnl_alloc::obj *
-vnl_alloc::free_list[VNL_ALLOC_NFREELISTS] = { 0 };
+vnl_alloc::free_list[VNL_ALLOC_NFREELISTS] = { VXL_NULLPTR };
 
 #ifdef TEST
 #include <vcl_iostream.h>

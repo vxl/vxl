@@ -115,7 +115,7 @@ static vcl_string encode_base64(const vcl_string& in)
 
 
 vil_stream_url::vil_stream_url(char const *url)
-  : u_(0)
+  : u_(VXL_NULLPTR)
 {
   if (vcl_strncmp(url, "http://", 7) != 0)
     return; // doesn't look like a URL to me....
@@ -323,6 +323,6 @@ vil_stream_url::~vil_stream_url()
 {
   if (u_) {
     u_->unref();
-    u_ = 0;
+    u_ = VXL_NULLPTR;
   }
 }

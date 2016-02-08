@@ -65,14 +65,14 @@ vil1_kernel_info kernels[] = {
   {"bar_y_5",     1, 5, &mask_bar_5[0][0]},
   {"gauss_x_17", 17, 1, &mask_gauss_17[0][0]},
   {"gauss_y_17", 1, 17, &mask_gauss_17[0][0]},
-  {0, 0, 0, 0}
+  {VXL_NULLPTR, 0, 0, VXL_NULLPTR}
 };
 
 int main(int argc, char ** argv)
 {
-  vul_arg<vcl_string> a_input_filename(0, "input");
-  vul_arg<vcl_string> a_output_filename(0, "output");
-  vul_arg<vcl_string> a_kernel(0, "kernel (choose from: sobel_x)", "sobel_x");
+  vul_arg<vcl_string> a_input_filename(VXL_NULLPTR, "input");
+  vul_arg<vcl_string> a_output_filename(VXL_NULLPTR, "output");
+  vul_arg<vcl_string> a_kernel(VXL_NULLPTR, "kernel (choose from: sobel_x)", "sobel_x");
   vul_arg_parse(argc, argv);
 
   // Load from disk into memory "inimg"
@@ -109,7 +109,7 @@ int main(int argc, char ** argv)
                                              in.height() + kernelimg.height());
   outimg.fill(0);
 
-  vil1_convolve_simple(inimg, kernelimg, (float*)0, outimg);
+  vil1_convolve_simple(inimg, kernelimg, (float*)VXL_NULLPTR, outimg);
 
   vil1_save(outimg, a_output_filename().c_str(), in.file_format());
   return 0;

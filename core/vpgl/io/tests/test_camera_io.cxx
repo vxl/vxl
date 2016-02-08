@@ -46,7 +46,7 @@ static void test_camera_io()
   }
   //  delete cam_r; cam_r = 0;
   //================= test smart pointer io ============
-  vpgl_camera_double_sptr cam_sptr = cam, cam_r_sptr=0;
+  vpgl_camera_double_sptr cam_sptr = cam, cam_r_sptr=VXL_NULLPTR;
   vsl_b_ofstream bp_outps("test_camera_sptr_io.tmp");
   vsl_b_write(bp_outps, cam_sptr);
   bp_outps.close();

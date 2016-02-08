@@ -16,7 +16,7 @@
 
 #include <vnl/algo/vnl_netlib.h> // dnlaso_() dseupd_() dsaupd_()
 
-static vnl_sparse_symmetric_eigensystem * current_system = 0;
+static vnl_sparse_symmetric_eigensystem * current_system = VXL_NULLPTR;
 
 //------------------------------------------------------------
 //: Callback for multiplying our matrix by a number of vectors.
@@ -54,14 +54,14 @@ void sse_iovect_callback(const long* n,
 }
 
 vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()
-  : nvalues(0), vectors(0), values(0)
+  : nvalues(0), vectors(VXL_NULLPTR), values(VXL_NULLPTR)
 {
 }
 
 vnl_sparse_symmetric_eigensystem::~vnl_sparse_symmetric_eigensystem()
 {
-  delete[] vectors; vectors = 0;
-  delete[] values; values = 0;
+  delete[] vectors; vectors = VXL_NULLPTR;
+  delete[] values; values = VXL_NULLPTR;
   for (unsigned i=0; i<temp_store.size(); ++i)
     delete temp_store[i];
   temp_store.clear();
@@ -83,8 +83,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
 
   // Clear current vectors.
   if (vectors) {
-    delete[] vectors; vectors = 0;
-    delete[] values; values = 0;
+    delete[] vectors; vectors = VXL_NULLPTR;
+    delete[] values; values = VXL_NULLPTR;
   }
   nvalues = 0;
 
@@ -216,8 +216,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
 
   // Clear current vectors.
   if (vectors) {
-    delete[] vectors; vectors = NULL;
-    delete[] values; values = NULL;
+    delete[] vectors; vectors = VXL_NULLPTR;
+    delete[] values; values = VXL_NULLPTR;
   }
   nvalues = 0;
 

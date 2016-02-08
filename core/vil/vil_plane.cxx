@@ -34,7 +34,7 @@ vil_image_view_base_sptr vil_plane_image_resource::get_copy_view(unsigned i0, un
                                                                  unsigned j0, unsigned nj) const
 {
   vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, j0, nj);
-  if (!vs) return 0;
+  if (!vs) return VXL_NULLPTR;
 
   switch (vs->pixel_format())
   {
@@ -58,7 +58,7 @@ vil_image_view_base_sptr vil_plane_image_resource::get_copy_view(unsigned i0, un
     macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -67,7 +67,7 @@ vil_image_view_base_sptr vil_plane_image_resource::get_view(unsigned i0, unsigne
                                                             unsigned j0, unsigned nj) const
 {
   vil_image_view_base_sptr vs = src_->get_view(i0, ni, j0, nj);
-  if (!vs) return 0;
+  if (!vs) return VXL_NULLPTR;
 
   switch (vs->pixel_format())
   {
@@ -91,7 +91,7 @@ vil_image_view_base_sptr vil_plane_image_resource::get_view(unsigned i0, unsigne
     macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

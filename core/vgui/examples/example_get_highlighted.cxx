@@ -21,7 +21,7 @@ struct my_tab : public vgui_easy2D_tableau
   // Look for mouse motion events and see if the highlighted object has changed.
   bool handle(vgui_event const &e)
   {
-    static vgui_soview* old_so = 0;
+    static vgui_soview* old_so = VXL_NULLPTR;
     if (e.type == vgui_MOTION)
     {
       vgui_soview* my_so = get_highlighted_soview();

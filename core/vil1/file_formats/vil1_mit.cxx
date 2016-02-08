@@ -70,12 +70,12 @@ vil1_image_impl* vil1_mit_file_format::make_input_image(vil1_stream* is)
         type == MIT_SIGNED   ||
         type == MIT_FLOAT    ||
         type == MIT_EDGE      ))
-    return 0;
+    return VXL_NULLPTR;
 
   int bits_per_pixel = vil1_16bit_read_little_endian(is);
   if (bits_per_pixel > 32) {
     vcl_cerr << "vil1_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   /*int width =*/ vil1_16bit_read_little_endian(is);

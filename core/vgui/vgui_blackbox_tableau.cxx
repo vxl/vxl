@@ -79,7 +79,7 @@ bool vgui_blackbox_tableau::handle(const vgui_event& event)
       } else {
         vgui::out << "blackbox: starting playback\n";
         if (child) {
-          vgui_event *old_e = 0;
+          vgui_event *old_e = VXL_NULLPTR;
           int frame_number = 0;
           int t = 0;
           vcl_ofstream story("/tmp/vgui_blackbox_tableau.story");

@@ -47,7 +47,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
   {
     vil_image_view_base_sptr vs = src_->get_copy_view(i0*i_factor_, ni*i_factor_,
                                                       j0*j_factor_, nj*j_factor_);
-    if (!vs) return 0;
+    if (!vs) return VXL_NULLPTR;
 
     return vil_decimate( vs, i_factor_, j_factor_ );
   }
@@ -57,7 +57,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
     {
       vil_exception_warning(vil_exception_out_of_bounds(
         "vil_decimate_image_resource::get_copy_view") );
-      return 0;
+      return VXL_NULLPTR;
     }
 
     switch (src_->pixel_format())
@@ -91,7 +91,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_copy_view(unsigned i0,
     default:
       vil_exception_warning(vil_exception_unsupported_pixel_format(
         src_->pixel_format(), "vil_decimate_image_resource::get_copy_view") );
-      return 0;
+      return VXL_NULLPTR;
     }
   }
 }
@@ -104,7 +104,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
   {
     vil_image_view_base_sptr vs = src_->get_view(i0*i_factor_, ni*i_factor_,
                                                  j0*j_factor_, nj*j_factor_);
-    if (!vs) return 0;
+    if (!vs) return VXL_NULLPTR;
 
     return vil_decimate( vs, i_factor_, j_factor_ );
   }
@@ -142,7 +142,7 @@ vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigne
   default:
     vil_exception_warning(vil_exception_unsupported_pixel_format(
       im->pixel_format(), "vil_decimate") );
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

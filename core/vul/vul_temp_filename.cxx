@@ -41,7 +41,7 @@
     // randomness is that crucial.
     int init_randomizer()
     {
-      vcl_srand( vcl_time( 0 ) );
+      vcl_srand( vcl_time( VXL_NULLPTR ) );
       return 0;
     }
     static int random_seed_trigger = init_randomizer();

@@ -57,8 +57,8 @@ struct move_sprite_tableau_new
 int
 main( int argc, char ** argv )
 {
-  vul_arg<char*> background( "-bg", "Background image", 0 );
-  vul_arg<char*> sprite( "-fg", "Foreground sprite image", 0 );
+  vul_arg<char*> background( "-bg", "Background image", VXL_NULLPTR );
+  vul_arg<char*> sprite( "-fg", "Foreground sprite image", VXL_NULLPTR );
 
   vgui::init( argc, argv );
   vul_arg_parse( argc, argv );
@@ -118,7 +118,7 @@ main( int argc, char ** argv )
   // After a soview2D has been created for the sprite image (which
   // happens in add_image), we don't need the sprite data any more.
   //
-  sprite_img = 0;
+  sprite_img = VXL_NULLPTR;
 
   move_sprite_tableau_new move_tab( viewer_tab, sprite_soview );
   vgui_shell_tableau_new    shell_tab( move_tab );

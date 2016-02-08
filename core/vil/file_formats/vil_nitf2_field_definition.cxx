@@ -13,13 +13,13 @@
 vil_nitf2_field_definition*
 vil_nitf2_field_definition_node::field_definition()
 {
-  return is_field_definition() ? (vil_nitf2_field_definition*)this : 0;
+  return is_field_definition() ? (vil_nitf2_field_definition*)this : VXL_NULLPTR;
 }
 
 vil_nitf2_field_definition_repeat_node*
 vil_nitf2_field_definition_node::repeat_node()
 {
-  return is_repeat_node() ? (vil_nitf2_field_definition_repeat_node*)this : 0;
+  return is_repeat_node() ? (vil_nitf2_field_definition_repeat_node*)this : VXL_NULLPTR;
 }
 
 //==============================================================================
@@ -55,20 +55,20 @@ vil_nitf2_field_definition_node* vil_nitf2_field_definition::copy() const
     pretty_name,
     formatter->copy(),
     blanks_ok,
-    width_functor ? width_functor->copy() : 0,
-    condition_functor ? condition_functor->copy() : 0,
+    width_functor ? width_functor->copy() : VXL_NULLPTR,
+    condition_functor ? condition_functor->copy() : VXL_NULLPTR,
     units,
     description);
 }
 
 bool vil_nitf2_field_definition::is_required() const
 {
-  return condition_functor == 0;
+  return condition_functor == VXL_NULLPTR;
 }
 
 bool vil_nitf2_field_definition::is_variable_width() const
 {
-  return width_functor != 0;
+  return width_functor != VXL_NULLPTR;
 }
 
 vil_nitf2_field_definition::~vil_nitf2_field_definition()

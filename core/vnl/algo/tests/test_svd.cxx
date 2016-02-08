@@ -181,15 +181,15 @@ void test_svd()
   test_ls();
   test_pmatrix();
   test_I();
-  test_svd_recomposition("float",              1e-5 , (float*)0, rng);
-  test_svd_recomposition("double",             1e-10, (double*)0, rng);
-  test_svd_recomposition("vcl_complex<float>",  1e-5 , (vcl_complex<float>*)0, rng);
-  test_svd_recomposition("vcl_complex<double>", 1e-10, (vcl_complex<double>*)0, rng);
+  test_svd_recomposition("float",              1e-5 , (float*)VXL_NULLPTR, rng);
+  test_svd_recomposition("double",             1e-10, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition("vcl_complex<float>",  1e-5 , (vcl_complex<float>*)VXL_NULLPTR, rng);
+  test_svd_recomposition("vcl_complex<double>", 1e-10, (vcl_complex<double>*)VXL_NULLPTR, rng);
 
-  test_nullvector("float",               5e-7,  (float*)0, rng);
-  test_nullvector("double",              5e-15, (double*)0, rng);
-  test_nullvector("vcl_complex<float>",  5e-7,  (vcl_complex<float>*)0, rng);
-  test_nullvector("vcl_complex<double>", 5e-15, (vcl_complex<double>*)0, rng);
+  test_nullvector("float",               5e-7,  (float*)VXL_NULLPTR, rng);
+  test_nullvector("double",              5e-15, (double*)VXL_NULLPTR, rng);
+  test_nullvector("vcl_complex<float>",  5e-7,  (vcl_complex<float>*)VXL_NULLPTR, rng);
+  test_nullvector("vcl_complex<double>", 5e-15, (vcl_complex<double>*)VXL_NULLPTR, rng);
 }
 
 TESTMAIN(test_svd);

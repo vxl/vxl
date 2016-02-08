@@ -17,7 +17,7 @@
 int main(int argc, char *argv[])
 {
 
-  vul_arg<vcl_string> re_string(0, "Regular expression");
+  vul_arg<vcl_string> re_string(VXL_NULLPTR, "Regular expression");
   vul_arg_parse(argc,argv);
 
   vcl_string s;

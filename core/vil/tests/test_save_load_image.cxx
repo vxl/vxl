@@ -333,7 +333,7 @@ void vil_test_image_type(char const* type_name, // type for image to read and wr
   // and the temporary image file (fname) is closed and can be
   // unlinked below.  If the underlying image file is not closed, the
   // unlink will fail.
-  image3 = 0;
+  image3 = VXL_NULLPTR;
 
   // NOTE: Test below may not be correct for NITF images.  One common format
   //     for NITF images is 11 bits per pixel stored in 2 bytes.  For these

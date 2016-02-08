@@ -103,7 +103,7 @@ make_input_image( vil_stream* vs )
   vs->read( buf, 4 );
   if ( ! ( buf[0] == RAS_MAGIC[0] && buf[1] == RAS_MAGIC[1] &&
            buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) )
-    return 0;
+    return VXL_NULLPTR;
 
   return new vil_ras_image( vs );
 }
@@ -194,7 +194,7 @@ vil_ras_image(vil_stream* vs,
   map_type_ = RMT_NONE;
   map_length_ = 0;
   length_ = compute_length( width_, height_, depth_ );
-  col_map_ = 0;
+  col_map_ = VXL_NULLPTR;
 
   write_header();
 }
@@ -280,7 +280,7 @@ read_header()
     col_map_ = new vxl_uint_8[ map_length_ ];
     vs_->read( col_map_, (vil_streampos)map_length_ );
   } else {
-    col_map_ = 0;
+    col_map_ = VXL_NULLPTR;
   }
 
   start_of_data_ = vs_->tell();
@@ -357,7 +357,7 @@ get_copy_view( unsigned i0, unsigned ni,
                unsigned j0, unsigned nj ) const
 {
   if ( type_ == RT_BYTE_ENCODED )
-    return 0; // not yet implemented
+    return VXL_NULLPTR; // not yet implemented
 
   unsigned file_bytes_per_pixel = (depth_+7)/8;
   unsigned buff_bytes_per_pixel = components_ * ( (bits_per_component_+7)/8 );
@@ -432,7 +432,7 @@ get_copy_view( unsigned i0, unsigned ni,
                                             ni, nj, components_,
                                             components_, components_*ni, 1 );
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 

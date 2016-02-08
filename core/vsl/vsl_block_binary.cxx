@@ -19,7 +19,7 @@ struct vsl_block_t
 
 vsl_block_t allocate_up_to(vcl_size_t nbytes)
 {
-  vsl_block_t block = {0, nbytes};
+  vsl_block_t block = {VXL_NULLPTR, nbytes};
   while (true)
   {
 #if VCL_HAS_EXCEPTIONS

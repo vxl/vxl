@@ -36,7 +36,7 @@ void keyboard(unsigned char k, int, int)
 void idle()
 {
   static vcl_time_t last = 0;
-  vcl_time_t now = time(0);
+  vcl_time_t now = time(VXL_NULLPTR);
   if (now > last) {
     // Advance the deck
     deck->next();

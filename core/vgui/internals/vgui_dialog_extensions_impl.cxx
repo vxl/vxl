@@ -40,5 +40,5 @@ void vgui_dialog_extensions_impl::line_break()
   elements.push_back(l);
 }
 
-void* vgui_dialog_extensions_impl::dir_browser_widget(const char*, vcl_string&, vcl_string&) { return 0; }
+void* vgui_dialog_extensions_impl::dir_browser_widget(const char*, vcl_string&, vcl_string&) { return VXL_NULLPTR; }
 

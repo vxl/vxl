@@ -90,6 +90,6 @@ vil1_jpeg_compressor::~vil1_jpeg_compressor() {
 
   //
   stream->unref();
-  stream = 0;
+  stream = VXL_NULLPTR;
 }
 
