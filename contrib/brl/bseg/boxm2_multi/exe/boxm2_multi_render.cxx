@@ -63,24 +63,25 @@ void test_render_expected_images(boxm2_scene_sptr scene,
     brdb_value_sptr brdb_nj = new brdb_value_t<unsigned>(nj);
 
     //if scene has RGB data type, use color render process
-    bool good = true;
-    if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
-      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-    else
-      good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+    if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
+      bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
+    }
+    else {
+      bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+    }
 
     //set process args
-    good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
-                && bprb_batch_process_manager::instance()->set_input(1, brdb_scene)  //  scene
-                && bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache)
-                && bprb_batch_process_manager::instance()->set_input(3, brdb_cam)    // camera
-                && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
-                && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
-                && bprb_batch_process_manager::instance()->run_process();
+    bprb_batch_process_manager::instance()->set_input(0, brdb_device); // device
+    bprb_batch_process_manager::instance()->set_input(1, brdb_scene);  //  scene
+    bprb_batch_process_manager::instance()->set_input(2, brdb_opencl_cache);
+    bprb_batch_process_manager::instance()->set_input(3, brdb_cam);    // camera
+    bprb_batch_process_manager::instance()->set_input(4, brdb_ni);     // ni for rendered image
+    bprb_batch_process_manager::instance()->set_input(5, brdb_nj);     // nj for rendered image
+    bprb_batch_process_manager::instance()->run_process();
 
     //grab vil_image_view_base_sptr from process
     unsigned int out_img = 0;
-    good = good && bprb_batch_process_manager::instance()->commit_output(0, out_img);
+    bprb_batch_process_manager::instance()->commit_output(0, out_img);
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
     if (S->size()!=1) {

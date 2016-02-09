@@ -3181,7 +3181,6 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                     curve_frag_graph_.CFTG.insert_fragment(new_chain6a);
                     }
                   p2=0;
-                  p16=0;
                   p3=0;
                   }
               }

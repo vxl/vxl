@@ -185,7 +185,7 @@ int main(int argc, char ** argv)
     fo.set_right_params(rprm);
     vcl_string right_marg_path = base_dir + patient_id +"_right_margin_fit.txt";
     vcl_ofstream rmstr(right_marg_path.c_str());
-    good = right_fmargs.plot_orbit(rmstr);
+    right_fmargs.plot_orbit(rmstr);
     rmstr.close();
   }
   // if image data set z values for margin and crease curve points
@@ -197,7 +197,7 @@ int main(int argc, char ** argv)
 
 
   vcl_ofstream rostr(right_vrml_path.c_str());
-  good = fo.display_orbit_vrml(rostr, true, show_model);
+  fo.display_orbit_vrml(rostr, true, show_model);
   rostr.close();
 
   fo.fitting_error("right_eye_inferior_margin");
@@ -251,7 +251,7 @@ int main(int argc, char ** argv)
     fo.set_left_params(lprm);
     vcl_string left_marg_path = base_dir + patient_id +"_left_margin_fit.txt";
     vcl_ofstream lmstr(left_marg_path.c_str());
-    good = left_fmargs.plot_orbit(lmstr);
+    left_fmargs.plot_orbit(lmstr);
     lmstr.close();
   }
   // if image data set z values for margin and crease curve points
@@ -261,7 +261,7 @@ int main(int argc, char ** argv)
       return -1;
   }
   vcl_ofstream lostr(left_vrml_path.c_str());
-  good = fo.display_orbit_vrml(lostr, false, show_model);
+  fo.display_orbit_vrml(lostr, false, show_model);
   lostr.close();
 
   // find canthus angles
@@ -284,7 +284,7 @@ int main(int argc, char ** argv)
 
 
   vcl_ofstream lrmstr(left_right_merge_path.c_str());
-  good = fo.display_left_right_orbit_model_vrml(lrmstr);
+  fo.display_left_right_orbit_model_vrml(lrmstr);
   lrmstr.close();
 
 

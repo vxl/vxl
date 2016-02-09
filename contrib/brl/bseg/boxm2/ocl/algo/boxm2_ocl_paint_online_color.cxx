@@ -364,14 +364,13 @@ bool boxm2_ocl_paint_online_color::paint_scene_with_weights(boxm2_scene_sptr    
       status = clFinish(queue);
       check_val(status, MEM_FAILURE, "BEFORE UPDATE_KERN: clFinish FAILED: " + error_to_string(status));
 
-      bool arg_status = true;
-      arg_status &= update_kern->set_arg( blk_info );
-      arg_status &= update_kern->set_arg( mog );
-      arg_status &= update_kern->set_arg( num_obs );
-      arg_status &= update_kern->set_arg( aux0 );
-      arg_status &= update_kern->set_arg( aux1 );
-      arg_status &= update_kern->set_arg( aux2 );
-      arg_status &= update_kern->set_arg( cl_output.ptr() );
+      update_kern->set_arg( blk_info );
+      update_kern->set_arg( mog );
+      update_kern->set_arg( num_obs );
+      update_kern->set_arg( aux0 );
+      update_kern->set_arg( aux1 );
+      update_kern->set_arg( aux2 );
+      update_kern->set_arg( cl_output.ptr() );
 
       vcl_cout << "local_threads = " << local_threads[0] << ", " << local_threads[1] << vcl_endl;
       vcl_cout << "global_threads = " << global_threads[0] << ", " << global_threads[1] << vcl_endl;

@@ -435,7 +435,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 aux1->read_to_buffer(queue);
                 aux2->read_to_buffer(queue);
                 aux3->read_to_buffer(queue);
-                status = clFinish(queue);
+                clFinish(queue);
             }
         } // UPDATE POST DEPTH kernel
         else if (i==CONVERT_AUX_INT_FLOAT)

@@ -100,10 +100,10 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
 
         //intersect each ray with z plane
         vgl_point_3d<double> ulp, urp, blp, brp;
-        bool good =    vgl_intersection(ul, zp, ulp);
-        good = good && vgl_intersection(ur, zp, urp);
-        good = good && vgl_intersection(bl, zp, blp);
-        good = good && vgl_intersection(br, zp, brp);
+        vgl_intersection(ul, zp, ulp);
+        vgl_intersection(ur, zp, urp);
+        vgl_intersection(bl, zp, blp);
+        vgl_intersection(br, zp, brp);
 
         //convert the four corners into image coordinates
         typedef vgl_polygon<double>::point_t        Point_type;
