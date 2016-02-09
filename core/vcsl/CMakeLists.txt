@@ -62,11 +62,8 @@ doxygen_add_library(core/vcsl
 
   aux_source_directory( Templates vcsl_sources )
 
-  add_library( vcsl ${vcsl_sources} )
+  vxl_add_library( LIBNAME vcsl LIBSRCS ${vcsl_sources} )
   target_link_libraries( vcsl vnl vbl )
-
-  install_targets(/lib vcsl)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vcsl ${vcsl_sources})
 
   if( BUILD_EXAMPLES )
     add_subdirectory(examples)

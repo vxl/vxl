@@ -12,12 +12,9 @@ set(vpgl_io_sources
 
 aux_source_directory(Templates vpgl_io_sources)
 
-add_library(vpgl_io ${vpgl_io_sources})
+vxl_add_library(LIBNAME vpgl_io LIBSRCS ${vpgl_io_sources})
 
 target_link_libraries(vpgl_io vsl vpgl vnl vgl vgl_algo vgl_io vnl_io vbl_io)
-
-install_targets(/lib vpgl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/io ${vpgl_io_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

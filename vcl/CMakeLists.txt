@@ -206,13 +206,13 @@ set( vcl_sources
   internal/vcl_interlocked.h
 )
 
+
 # We use implicit instantiation of the standard library now,
 # so we shouldn't be explicitly instantiating anything.
 # This also avoid trouble where the instantiation hack conflict
 # with modern, more compliant compilers.
 #aux_source_directory(Templates vcl_sources)
-
-add_library(vcl ${vcl_sources})
+vxl_add_library(LIBNAME vcl LIBSRCS ${vcl_sources} )
 
 # CMake can automatically figure out the compiler characteristics on
 # Windows too.  No need to do manual config.
@@ -220,10 +220,6 @@ add_library(vcl ${vcl_sources})
 if(UNIX)
   target_link_libraries( vcl m )
 endif()
-
-# Installation
-install_targets(/lib vcl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/vcl ${vcl_sources})
 
 if( BUILD_TESTING)
   add_subdirectory(tests)

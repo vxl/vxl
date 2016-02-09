@@ -303,12 +303,10 @@ set( vil_network_sources
 )
 
 if(NOT SOLARIS)
-  add_library(vil ${vil_sources} ${vil_network_sources})
-  install_targets(/lib vil)
+  vxl_add_library(LIBNAME vil LIBSRCS ${vil_sources} ${vil_network_sources})
 else()
-  add_library(vil ${vil_sources})
-  add_library(vil_network ${vil_network_sources})
-  install_targets(/lib vil vil_network)
+  vxl_add_library(LIBNAME vil LIBSRCS ${vil_sources})
+  vxl_add_library(LIBNAME vil_network LIBSRCS ${vil_network_sources})
 endif()
 
 if(JPEG_FOUND)
@@ -339,11 +337,6 @@ endif()
 if(SOLARIS)
   target_link_libraries( vil nsl vil_network socket )
 endif()
-
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil
-  ${vil_sources}
-  ${vil_network_sources}
-)
 
 if(ECW_FOUND)
   target_link_libraries( vil ${ECW_LIBRARIES} )

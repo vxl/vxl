@@ -82,7 +82,7 @@ endif()
 
 aux_source_directory(Templates vgl_sources)
 
-add_library(vgl ${vgl_sources})
+vxl_add_library(LIBNAME vgl LIBSRCS ${vgl_sources})
 target_link_libraries( vgl vcl )
 
 doxygen_add_library(core/vgl
@@ -95,9 +95,6 @@ if( NOT BUILD_NONCOMMERCIAL )
     target_link_libraries( vgl ${CLIPPER_LIBRARIES} )
   endif()
 endif()
-
-install_targets(/lib vgl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})
 
 add_subdirectory(algo)
 

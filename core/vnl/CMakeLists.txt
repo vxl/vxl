@@ -264,11 +264,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif()
 endif()
 
-add_library(vnl ${vnl_sources})
+vxl_add_library(LIBNAME vnl LIBSRCS ${vnl_sources})
 target_link_libraries( vnl vcl )
-
-install_targets(/lib vnl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl ${vnl_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

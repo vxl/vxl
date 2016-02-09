@@ -26,11 +26,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     COMPILE_FLAGS -ftemplate-depth-50)
 endif()
 
-add_library(vnl_io ${vnl_io_sources} )
+vxl_add_library(LIBNAME vnl_io LIBSRCS ${vnl_io_sources} )
 target_link_libraries( vnl_io vnl vsl )
-
-install(TARGETS vnl_io DESTINATION lib)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/io ${vnl_io_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

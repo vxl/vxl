@@ -56,17 +56,14 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(APPLE)
-  add_library(vul ${vul_sources})
-  install_targets(/lib vul)
+  vxl_add_library(LIBNAME vul LIBSRCS ${vul_sources})
 else()
 
 if(NOT SOLARIS)
-  add_library(vul ${vul_sources} ${vul_network_sources})
-  install_targets(/lib vul)
+  vxl_add_library(LIBNAME vul ${vul_sources} LIBSRCS ${vul_network_sources})
 else()
-  add_library(vul ${vul_sources})
-  add_library(vul_network ${vul_network_sources})
-  install_targets(/lib vul vul_network)
+  vxl_add_library(LIBNAME vul LIBSRCS ${vul_sources})
+  vxl_add_library(LIBNAME vul_network LIBSRCS ${vul_network_sources})
 endif()
 
 if(NOT UNIX)
@@ -80,11 +77,6 @@ endif()
 endif()
 
 target_link_libraries( vul vcl )
-
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vul
-  ${vul_sources}
-  ${vul_network_sources}
-)
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)

@@ -76,6 +76,16 @@ if(NOT VXL_LIB_PREFIX)
   set( VXL_LIB_PREFIX "") # This is typically empty
 endif()
 
+if(NOT VXL_INSTALL_RUNTIME_DIR)
+  set(VXL_INSTALL_RUNTIME_DIR bin)
+endif()
+if(NOT VXL_INSTALL_LIBRARY_DIR)
+  set(VXL_INSTALL_LIBRARY_DIR lib)
+endif()
+if(NOT VXL_INSTALL_ARCHIVE_DIR)
+  set(VXL_INSTALL_ARCHIVE_DIR lib)
+endif()
+
 
 # CMake support directory.
 set(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)

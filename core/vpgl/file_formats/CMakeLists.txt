@@ -20,13 +20,10 @@ if(TIFF_FOUND)
   endif()
 endif()
 
-add_library(vpgl_file_formats ${vpgl_file_formats_sources})
+vxl_add_library(LIBNAME vpgl_file_formats LIBSRCS ${vpgl_file_formats_sources})
 
 target_link_libraries(vpgl_file_formats vpgl vil vnl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
-
-install_targets(/lib vpgl_file_formats)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/file_formats ${vpgl_file_formats_sources})

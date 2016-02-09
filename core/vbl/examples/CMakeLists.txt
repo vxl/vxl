@@ -5,7 +5,7 @@ set( vbl_example_templates_sources
 )
 aux_source_directory( Templates vbl_example_templates_sources )
 
-add_library( vbl_example_templates ${vbl_example_templates_sources} )
+vxl_add_library( LIBNAME vbl_example_templates LIBSRCS ${vbl_example_templates_sources} )
 target_link_libraries( vbl_example_templates vbl )
 
 add_executable( vbl_smart_ptr_example

@@ -12,20 +12,15 @@ set( vpl_sources
   vpl_mutex.h
 )
 
-add_library(vpl ${vpl_sources})
+vxl_add_library(LIBNAME vpl LIBSRCS ${vpl_sources})
 if(NOT WIN32)
   set_target_properties(vpl PROPERTIES COMPILE_FLAGS "-fPIC")
 endif()
 
 target_link_libraries( vpl vcl )
-
-
 if(NOT UNIX)
   target_link_libraries( vpl ws2_32 vcl )
 endif()
-
-install_targets(/lib vpl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpl ${vpl_sources})
 
 if( BUILD_TESTING)
   add_subdirectory(tests)

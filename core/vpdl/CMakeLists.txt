@@ -47,11 +47,8 @@ set( vpdl_sources
 
 aux_source_directory(Templates vpdl_sources)
 
-add_library(vpdl ${vpdl_sources})
+vxl_add_library(LIBNAME vpdl LIBSRCS ${vpdl_sources})
 target_link_libraries( vpdl vnl_algo vnl )
-
-install_targets(/lib vpdl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpdl ${vpdl_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

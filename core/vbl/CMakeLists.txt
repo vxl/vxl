@@ -44,11 +44,8 @@ set( vbl_sources
 
 aux_source_directory(Templates vbl_sources)
 
-add_library(vbl ${vbl_sources})
+vxl_add_library(LIBNAME vbl LIBSRCS ${vbl_sources})
 target_link_libraries( vbl vcl )
-
-install_targets(/lib vbl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl ${vbl_sources})
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)

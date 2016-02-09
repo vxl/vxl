@@ -140,9 +140,7 @@ endif()
 
 aux_source_directory(Templates vidl_sources)
 
-add_library(vidl ${vidl_sources})
-install_targets(/lib vidl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vidl ${vidl_sources})
+vxl_add_library(LIBNAME vidl LIBSRCS ${vidl_sources})
 
 target_link_libraries( vidl vil vul vbl )
 if( FFMPEG_FOUND )

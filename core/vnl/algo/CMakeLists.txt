@@ -100,17 +100,12 @@ if(NETLIB_FOUND)
 
   aux_source_directory(Templates vnl_algo_sources)
 
-  add_library( vnl_algo ${vnl_algo_sources})
+  vxl_add_library( LIBNAME vnl_algo LIBSRCS ${vnl_algo_sources})
   target_link_libraries( vnl_algo ${NETLIB_LIBRARIES} vnl )
   include(GenerateExportHeader)
   generate_export_header(vnl_algo)
 
-  install_targets(/lib vnl_algo)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/algo ${vnl_algo_sources})
-
   if( BUILD_TESTING )
     add_subdirectory(tests)
   endif()
-
-
 endif()

@@ -56,12 +56,9 @@ set( vil_algo_sources
 
 aux_source_directory(Templates vil_algo_sources)
 
-add_library(vil_algo ${vil_algo_sources})
+vxl_add_library(LIBNAME vil_algo LIBSRCS ${vil_algo_sources})
 
 target_link_libraries( vil_algo vil vnl_algo vnl vcl )
-
-install_targets(/lib vil_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil/algo ${vil_algo_sources})
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)

@@ -32,10 +32,9 @@ set( vpgl_algo_sources
 
 aux_source_directory(Templates vpgl_algo_sources)
 
-add_library(vpgl_algo ${vpgl_algo_sources})
+vxl_add_library(LIBNAME vpgl_algo LIBSRCS ${vpgl_algo_sources})
 
 target_link_libraries(vpgl_algo vpgl vpgl_file_formats vgl_algo vnl_algo vnl vgl vil vul vbl)
-
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
@@ -44,6 +43,3 @@ endif()
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)
 endif()
-
-install_targets(/lib vpgl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/algo ${vpgl_algo_sources})

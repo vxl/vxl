@@ -14,11 +14,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
                               COMPILE_FLAGS -ftemplate-depth-50)
 endif()
 
-add_library(vil_io ${vil_io_sources})
+vxl_add_library(LIBNAME vil_io LIBSRCS ${vil_io_sources})
 target_link_libraries( vil_io vil vsl )
-
-install_targets(/lib vil_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil/io ${vil_io_sources})
 
 if( BUILD_TESTING)
   add_subdirectory(tests)
