@@ -125,6 +125,7 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
   h_ni = h_img->ni();  h_nj = h_img->nj();
 
   vil_image_view<float>* out_prob_img = new vil_image_view<float>(l_ni, l_nj);
+  out_prob_img->fill(0);
   vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
   out_img->fill(0);
   vil_image_view<vxl_byte>* mask_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
@@ -160,6 +161,8 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
         continue;
       // retrieve height value from height image
       float height = (*h_img)(uu, vv);
+      if (height == 255)
+        continue;
       // compute the GGD probability
       double prob = pre_param * vcl_exp( -1 * vcl_pow(vcl_abs((height-mu)/alpha), beta));
       (*out_prob_img)(i,j) = prob;
