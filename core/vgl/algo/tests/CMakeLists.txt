@@ -21,7 +21,7 @@ add_executable( vgl_algo_test_all
   test_rotation_3d.cxx
   test_rtree.cxx
 )
-target_link_libraries( vgl_algo_test_all vgl_algo testlib )
+target_link_libraries( vgl_algo_test_all ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vgl_test_compute_similarity_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_compute_similarity_3d )
 add_test( NAME vgl_test_conic COMMAND $<TARGET_FILE:vgl_algo_test_all> test_conic )
@@ -42,7 +42,7 @@ add_test( NAME vgl_test_rotation_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> tes
 add_test( NAME vgl_test_rtree COMMAND $<TARGET_FILE:vgl_algo_test_all> test_rtree)
 
 add_executable( vgl_algo_test_include test_include.cxx )
-target_link_libraries( vgl_algo_test_include vgl_algo)
+target_link_libraries( vgl_algo_test_include ${VXL_LIB_PREFIX}vgl_algo)
 
 add_executable( vgl_algo_test_template_include test_template_include.cxx )
-target_link_libraries( vgl_algo_test_template_include vgl_algo)
+target_link_libraries( vgl_algo_test_template_include ${VXL_LIB_PREFIX}vgl_algo)

@@ -47,7 +47,7 @@ add_library(rrel ${rrel_sources})
 
 install_targets(/lib rrel)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rrel ${rrel_sources})
-target_link_libraries(rrel vnl_algo vnl vgl)
+target_link_libraries(rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 
 include_directories(${VXLCORE_INCLUDE_DIR})
 include_directories(${MUL_INCLUDE_DIR})

@@ -212,13 +212,9 @@ set( vcl_sources
 # This also avoid trouble where the instantiation hack conflict
 # with modern, more compliant compilers.
 #aux_source_directory(Templates vcl_sources)
-vxl_add_library(LIBNAME vcl LIBSRCS ${vcl_sources} )
-
-# CMake can automatically figure out the compiler characteristics on
-# Windows too.  No need to do manual config.
-
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vcl LIBSRCS ${vcl_sources} )
 if(UNIX)
-  target_link_libraries( vcl m )
+  target_link_libraries( ${VXL_LIB_PREFIX}vcl m )
 endif()
 
 if( BUILD_TESTING)

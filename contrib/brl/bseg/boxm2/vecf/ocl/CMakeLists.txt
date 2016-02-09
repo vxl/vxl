@@ -30,7 +30,7 @@ set(boxm2_vecf_ocl_sources
 aux_source_directory(Templates boxm2_vecf_ocl_sources)
 
 add_library(boxm2_vecf_ocl  ${boxm2_vecf_ocl_sources})
-target_link_libraries(boxm2_vecf_ocl boxm2_vecf boxm2_io  boxm2_ocl boxm2_ocl_algo bocl brip baio vpgl vnl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map)
+target_link_libraries(boxm2_vecf_ocl boxm2_vecf boxm2_io  boxm2_ocl boxm2_ocl_algo bocl brip baio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl depth_map)
 
 #install the .h .txx and libs
 install_targets(/lib boxm2_vecf_ocl)

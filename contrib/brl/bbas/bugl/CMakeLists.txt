@@ -28,7 +28,7 @@ aux_source_directory(Templates bugl_sources)
 add_library(bugl ${bugl_sources})
 install_targets(/lib bugl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bugl ${bugl_sources})
-target_link_libraries(bugl vnl vgl_algo vgl vbl)
+target_link_libraries(bugl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

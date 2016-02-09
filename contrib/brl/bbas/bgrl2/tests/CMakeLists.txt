@@ -15,7 +15,7 @@ set( bgrl2_test_sources
 aux_source_directory(Templates bgrl2_test_sources)
 
 add_executable( bgrl2_test_all ${bgrl2_test_sources})
-target_link_libraries( bgrl2_test_all bgrl2 testlib vbl )
+target_link_libraries( bgrl2_test_all bgrl2 ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vbl )
 
 add_test( NAME bgrl2_test_graph COMMAND $<TARGET_FILE:bgrl2_test_all> graph_test )
 

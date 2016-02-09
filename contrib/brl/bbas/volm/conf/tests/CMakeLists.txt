@@ -8,7 +8,7 @@ add_executable( volm_conf_test_all
   test_volm_conf_buffer.cxx
 )
 
-target_link_libraries( volm_conf_test_all volm_conf testlib )
+target_link_libraries( volm_conf_test_all volm_conf ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME volm_conf_test_object COMMAND $<TARGET_FILE:volm_conf_test_all> test_volm_conf_object )
 add_test( NAME volm_conf_test_score COMMAND $<TARGET_FILE:volm_conf_test_all> test_volm_conf_score )

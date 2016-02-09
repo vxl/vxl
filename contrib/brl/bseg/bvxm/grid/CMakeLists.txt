@@ -29,7 +29,7 @@ aux_source_directory(Templates bvxm_grid_sources)
 
 add_library( bvxm_grid ${bvxm_grid_sources})
 
-target_link_libraries( bvxm_grid vpgl vnl vil vil_algo vul vbl vsl vgl vgl_algo vil3d vil3d_algo vcl)
+target_link_libraries( bvxm_grid ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo vil3d vil3d_algo ${VXL_LIB_PREFIX}vcl)
 
 add_subdirectory(io)
 add_subdirectory(pro)

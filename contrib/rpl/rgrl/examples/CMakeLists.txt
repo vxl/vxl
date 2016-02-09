@@ -4,69 +4,69 @@ include_directories( ${VXL_MUL_INCLUDE_DIR} )
 add_executable( registration1
   registration1.cxx
 )
-target_link_libraries( registration1 rgrl testlib)
+target_link_libraries( registration1 rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration2
   registration2.cxx
 )
-target_link_libraries( registration2 rgrl testlib)
+target_link_libraries( registration2 rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration3
   registration3.cxx
 )
-target_link_libraries( registration3 rgrl testlib)
+target_link_libraries( registration3 rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration_landmark
   registration_landmark.cxx
 )
-target_link_libraries( registration_landmark rgrl testlib)
+target_link_libraries( registration_landmark rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration_retina_no_view
   registration_retina_no_view.cxx
 )
-target_link_libraries( registration_retina_no_view rgrl  testlib)
+target_link_libraries( registration_retina_no_view rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration_simple_shapes
   registration_simple_shapes.cxx
 )
-target_link_libraries( registration_simple_shapes rgrl testlib)
+target_link_libraries( registration_simple_shapes rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration_simple_shapes_outliers
   registration_simple_shapes_outliers.cxx
 )
-target_link_libraries( registration_simple_shapes_outliers rgrl testlib)
+target_link_libraries( registration_simple_shapes_outliers rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration_blackbox
   registration_blackbox.cxx
 )
-target_link_libraries( registration_blackbox rgrl testlib)
+target_link_libraries( registration_blackbox rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration_range_data
   registration_range_data.cxx
 )
-target_link_libraries( registration_range_data rgrl testlib)
+target_link_libraries( registration_range_data rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( registration_range_data_blackbox
   registration_range_data_blackbox.cxx
 )
-target_link_libraries( registration_range_data_blackbox rgrl testlib)
+target_link_libraries( registration_range_data_blackbox rgrl ${VXL_LIB_PREFIX}testlib)
 
 add_executable( estimate_normals_3d
   estimate_normals_3d.cxx
 )
-target_link_libraries( estimate_normals_3d rrel rsdl vnl_algo)
+target_link_libraries( estimate_normals_3d rrel rsdl ${VXL_LIB_PREFIX}vnl_algo)
 
 # pesudo matching executables
 add_executable( match_2d
   match_2d.cxx
 )
-target_link_libraries( match_2d rgrl testlib vnl vil vbl vul)
+target_link_libraries( match_2d rgrl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 
 # multi-resolution version
 add_executable( match_2d_multi
   match_2d_multi.cxx
 )
-target_link_libraries( match_2d_multi testlib rgrl vil_algo vil vnl vbl vul)
+target_link_libraries( match_2d_multi ${VXL_LIB_PREFIX}testlib rgrl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 
 
 

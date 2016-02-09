@@ -29,7 +29,7 @@ set(vdtop_sources
 add_library(vdtop ${vdtop_sources})
 install_targets(/lib vdtop)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vdtop ${vdtop_sources})
-target_link_libraries(vdtop vmap vil)
+target_link_libraries(vdtop vmap ${VXL_LIB_PREFIX}vil)
 
 #if(BUILD_TESTING)
   add_subdirectory(tests)

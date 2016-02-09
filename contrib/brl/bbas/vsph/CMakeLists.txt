@@ -20,7 +20,7 @@ set(vsph_sources
 aux_source_directory(Templates vsph_sources)
 
 add_library(vsph ${vsph_sources})
-target_link_libraries(vsph vpgl vpgl_algo vpgl_io vgl_algo vgl_io vgl vbl vnl vcl bpgl_algo bvrml)
+target_link_libraries(vsph ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl bpgl_algo bvrml)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

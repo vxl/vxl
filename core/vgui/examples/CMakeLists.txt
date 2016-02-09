@@ -2,12 +2,12 @@ include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 if( HAS_VGUI )
 
-link_libraries( vgui )
+link_libraries( ${VXL_LIB_PREFIX}vgui )
 
 add_executable( basic01_display_image basic01_display_image.cxx)
 add_executable( basic01a_multiple_panes basic01a_multiple_panes.cxx)
 add_executable( basic01b_deck basic01b_deck.cxx)
-target_link_libraries( basic01b_deck vgui vnl )
+target_link_libraries( basic01b_deck ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vnl )
 add_executable( basic01c_display_vil_image basic01c_display_vil_image.cxx)
 add_executable( basic01d_display_vil1_image basic01d_display_vil1_image.cxx)
 add_executable( basic02_display_line basic02_display_line.cxx)
@@ -23,7 +23,7 @@ add_executable( basic10a_rubberband basic10a_rubberband.cxx)
 add_executable( basic11_display_3d basic11_display_3d.cxx)
 add_executable( example_display_pyramid example_display_pyramid.cxx)
 add_executable( example_draw_polygon example_draw_polygon.cxx)
-target_link_libraries( example_draw_polygon vgui vnl vgl )
+target_link_libraries( example_draw_polygon ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl )
 add_executable( example_get_highlighted example_get_highlighted.cxx)
 add_executable( example_multiple_windows example_multiple_windows.cxx)
 add_executable( example_vgui_observer example_vgui_observer.cxx)
@@ -33,7 +33,7 @@ add_executable( example_enhance_tableau example_enhance_tableau.cxx)
 add_executable( example_poly_tableau example_poly_tableau.cxx)
 add_executable( example_text_windows example_text_windows.cxx)
 add_executable( example_sprite example_sprite.cxx )
-target_link_libraries( example_sprite vgui vil vul )
+target_link_libraries( example_sprite ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul )
 add_executable( example_idle_processing example_idle_processing.cxx )
 add_executable( example_slider example_slider.cxx)
 add_executable( click_points click_points.cxx)
@@ -45,7 +45,7 @@ set(basic_sources
     basic_manager.cxx  basic_manager.h
     basic_menus.cxx    basic_menus.h)
 add_executable(basic_app ${basic_sources})
-target_link_libraries(basic_app vgui vul vbl)
+target_link_libraries(basic_app ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
 
 # GTK examples

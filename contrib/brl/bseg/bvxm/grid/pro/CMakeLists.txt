@@ -26,7 +26,7 @@ if(EXPAT_FOUND)
 
   add_library(bvxm_grid_pro ${bvxm_grid_pro_sources})
 
-  target_link_libraries(bvxm_grid_pro bvxm_grid bvxm_grid_io bprb brdb vul vgl imesh vnl vbl_io)
+  target_link_libraries(bvxm_grid_pro bvxm_grid bvxm_grid_io bprb brdb ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl imesh ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl_io)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

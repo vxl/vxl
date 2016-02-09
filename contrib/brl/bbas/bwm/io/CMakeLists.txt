@@ -23,7 +23,7 @@ endif()
 
 add_library(bwm_io ${bwm_io_sources})
 
-target_link_libraries(bwm_io vsol vsl vbl)
+target_link_libraries(bwm_io vsol ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl)
 
 if(EXPAT_FOUND)
   target_link_libraries(bwm_io ${EXPAT_LIBRARIES})

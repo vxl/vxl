@@ -54,7 +54,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
  set_source_files_properties(test_finite.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-target_link_libraries(vnl_test_all vnl testlib ${CMAKE_THREAD_LIBS})
+target_link_libraries(vnl_test_all ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib ${CMAKE_THREAD_LIBS})
 
 if(BUILD_CORE_UTILITIES)
   add_executable( vnl_test_with_core_utils
@@ -62,13 +62,13 @@ if(BUILD_CORE_UTILITIES)
     test_matlab.cxx
     test_sample.cxx
   )
-  target_link_libraries(vnl_test_with_core_utils vnl vpl vul testlib ${CMAKE_THREAD_LIBS})
+  target_link_libraries(vnl_test_with_core_utils ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib ${CMAKE_THREAD_LIBS})
   add_test( NAME vnl_test_matlab COMMAND $<TARGET_FILE:vnl_test_with_core_utils> test_matlab                 )
   add_test( NAME vnl_test_sample COMMAND $<TARGET_FILE:vnl_test_with_core_utils> test_sample                 )
 endif()
 
 add_executable(vnl_basic_operation_timings basic_operation_timings.cxx)
-target_link_libraries(vnl_basic_operation_timings vnl)
+target_link_libraries(vnl_basic_operation_timings ${VXL_LIB_PREFIX}vnl)
 add_test( NAME vnl_basic_operation_timings COMMAND $<TARGET_FILE:vnl_basic_operation_timings>   )
 
 add_test( NAME vnl_test_bignum COMMAND $<TARGET_FILE:vnl_test_all> test_bignum                 )
@@ -114,6 +114,6 @@ add_test( NAME test_pow_log COMMAND $<TARGET_FILE:vnl_test_all> test_pow_log    
 add_test( NAME test_vnl_index_sort COMMAND $<TARGET_FILE:vnl_test_all> test_vnl_index_sort         )
 
 add_executable(vnl_test_include test_include.cxx)
-target_link_libraries(vnl_test_include vnl)
+target_link_libraries(vnl_test_include ${VXL_LIB_PREFIX}vnl)
 add_executable(vnl_test_template_include test_template_include.cxx)
-target_link_libraries(vnl_test_template_include vnl)
+target_link_libraries(vnl_test_template_include ${VXL_LIB_PREFIX}vnl)

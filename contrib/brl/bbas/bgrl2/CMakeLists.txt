@@ -18,7 +18,7 @@ bgrl2_hg_hypergraph.cxx    bgrl2_hg_hypergraph.h
 
 add_library(bgrl2 ${bgrl2_sources})
 
-target_link_libraries( bgrl2 vbl )
+target_link_libraries( bgrl2 ${VXL_LIB_PREFIX}vbl )
 
 #Algorithms on graphs
 add_subdirectory(algo)

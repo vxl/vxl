@@ -100,10 +100,10 @@ if(NETLIB_FOUND)
 
   aux_source_directory(Templates vnl_algo_sources)
 
-  vxl_add_library( LIBNAME vnl_algo LIBSRCS ${vnl_algo_sources})
-  target_link_libraries( vnl_algo ${NETLIB_LIBRARIES} vnl )
+  vxl_add_library( LIBNAME ${VXL_LIB_PREFIX}vnl_algo LIBSRCS ${vnl_algo_sources})
+  target_link_libraries( ${VXL_LIB_PREFIX}vnl_algo ${NETLIB_LIBRARIES} ${VXL_LIB_PREFIX}vnl )
   include(GenerateExportHeader)
-  generate_export_header(vnl_algo)
+  generate_export_header(${VXL_LIB_PREFIX}vnl_algo BASE_NAME vnl_algo)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

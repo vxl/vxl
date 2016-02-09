@@ -12,9 +12,9 @@ set(vpgl_io_sources
 
 aux_source_directory(Templates vpgl_io_sources)
 
-vxl_add_library(LIBNAME vpgl_io LIBSRCS ${vpgl_io_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpgl_io LIBSRCS ${vpgl_io_sources})
 
-target_link_libraries(vpgl_io vsl vpgl vnl vgl vgl_algo vgl_io vnl_io vbl_io)
+target_link_libraries(${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

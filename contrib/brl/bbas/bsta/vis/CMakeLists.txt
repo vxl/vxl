@@ -9,7 +9,7 @@ set( bsta_vis_sources
 
 add_library( bsta_vis  ${bsta_vis_sources} )
 
-target_link_libraries( bsta_vis bsta bsvg vnl )
+target_link_libraries( bsta_vis bsta bsvg ${VXL_LIB_PREFIX}vnl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

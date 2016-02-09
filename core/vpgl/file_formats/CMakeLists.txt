@@ -20,9 +20,9 @@ if(TIFF_FOUND)
   endif()
 endif()
 
-vxl_add_library(LIBNAME vpgl_file_formats LIBSRCS ${vpgl_file_formats_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpgl_file_formats LIBSRCS ${vpgl_file_formats_sources})
 
-target_link_libraries(vpgl_file_formats vpgl vil vnl)
+target_link_libraries(${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

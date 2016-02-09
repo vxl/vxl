@@ -49,7 +49,7 @@ if(NETLIB_FOUND)
     test_sparse_lm.cxx
   )
 
-  target_link_libraries( vnl_algo_test_all vnl_algo testlib ${CMAKE_THREAD_LIBS} )
+  target_link_libraries( vnl_algo_test_all ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}testlib ${CMAKE_THREAD_LIBS} )
 
   add_test( NAME vnl_algo_test_algo COMMAND $<TARGET_FILE:vnl_algo_test_all> test_algo                    )
   add_test( NAME vnl_algo_test_amoeba COMMAND $<TARGET_FILE:vnl_algo_test_all> test_amoeba                  )
@@ -110,6 +110,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_executable( vnl_algo_test_include test_include.cxx )
-target_link_libraries( vnl_algo_test_include vnl_algo )
+target_link_libraries( vnl_algo_test_include ${VXL_LIB_PREFIX}vnl_algo )
 add_executable( vnl_algo_test_template_include test_template_include.cxx )
-target_link_libraries( vnl_algo_test_template_include vnl_algo )
+target_link_libraries( vnl_algo_test_template_include ${VXL_LIB_PREFIX}vnl_algo )

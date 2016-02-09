@@ -11,7 +11,7 @@ add_executable( bapl_test_all
   test_dense_sift.cxx
 )
 
-target_link_libraries(bapl_test_all bapl testlib vil vnl brip vpgl_algo vgl_algo vul)
+target_link_libraries(bapl_test_all bapl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl brip ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vul)
 
 add_test( NAME bapl_test_transform        COMMAND $<TARGET_FILE:bapl_test_all> test_transform )
 add_test( NAME bapl_test_roi              COMMAND $<TARGET_FILE:bapl_test_all> test_roi )

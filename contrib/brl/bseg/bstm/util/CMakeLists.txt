@@ -8,4 +8,4 @@ set(bstm_util_sources
    )
 
 add_library(bstm_util  ${bstm_util_sources})
-target_link_libraries(bstm_util bstm expatpp vpgl baio vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
+target_link_libraries(bstm_util bstm expatpp ${VXL_LIB_PREFIX}vpgl baio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)

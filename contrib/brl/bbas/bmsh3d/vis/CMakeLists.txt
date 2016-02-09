@@ -17,7 +17,7 @@ set(bmsh3d_vis_sources
    )
 
 add_library(bmsh3d_vis ${bmsh3d_vis_sources})
-target_link_libraries( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro vnl vgl vul )
+target_link_libraries( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul )
 
 add_subdirectory(tests)
 

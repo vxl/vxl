@@ -36,7 +36,7 @@ set(boxm2_ocl_algo_sources
    )
 
 add_library(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
+target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vnl_algo brad bvpl_kernels)
 
 #tests
 if( BUILD_TESTING )

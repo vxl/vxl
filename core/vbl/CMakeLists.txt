@@ -44,8 +44,8 @@ set( vbl_sources
 
 aux_source_directory(Templates vbl_sources)
 
-vxl_add_library(LIBNAME vbl LIBSRCS ${vbl_sources})
-target_link_libraries( vbl vcl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vbl LIBSRCS ${vbl_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)

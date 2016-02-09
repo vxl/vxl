@@ -15,7 +15,7 @@ aux_source_directory(processes brad_pro_sources)
 
 add_library(brad_pro ${brad_pro_sources} )
 
-target_link_libraries(brad_pro brad_io brad bprb brdb brip vbl_io vbl vil_pro)
+target_link_libraries(brad_pro brad_io brad bprb brdb brip ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl vil_pro)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

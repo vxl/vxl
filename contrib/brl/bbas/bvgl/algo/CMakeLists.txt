@@ -34,7 +34,7 @@ set( bvgl_algo_sources
 aux_source_directory(Templates bvgl_algo_sources)
 
 add_library(bvgl_algo ${bvgl_algo_sources})
-target_link_libraries(bvgl_algo bvgl bkml vpgl vgl vbl vbl_io vsl vcl vnl bnl bnl_algo vnl_algo)
+target_link_libraries(bvgl_algo bvgl bkml ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl bnl bnl_algo ${VXL_LIB_PREFIX}vnl_algo)
 
 install_targets(/lib bvgl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvgl/algo ${bvgl_algo_sources})

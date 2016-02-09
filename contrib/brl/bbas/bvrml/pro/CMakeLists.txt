@@ -16,7 +16,7 @@ aux_source_directory(Templates bvrml_pro_sources)
 
 add_library(bvrml_pro ${bvrml_pro_sources} )
 
-target_link_libraries(bvrml_pro boxm2_cpp bvrml vpgl_algo vpgl_io bprb rply )
+target_link_libraries(bvrml_pro boxm2_cpp bvrml ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io bprb rply )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

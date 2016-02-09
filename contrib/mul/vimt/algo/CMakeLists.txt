@@ -13,7 +13,7 @@ set( vimt_algo_sources
 add_library(vimt_algo ${vimt_algo_sources})
 install_targets(/lib vimt_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt/algo ${vimt_algo_sources})
-target_link_libraries( vimt_algo vimt vil_algo vgl vcl )
+target_link_libraries( vimt_algo vimt ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

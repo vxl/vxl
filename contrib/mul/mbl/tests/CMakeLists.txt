@@ -56,7 +56,7 @@ add_executable( mbl_test_all
   test_mask.cxx
 )
 
-target_link_libraries(mbl_test_all mbl vgl vnl_io vnl vbl vsl vul vpl testlib )
+target_link_libraries(mbl_test_all mbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME mbl_test_jarque_bera COMMAND $<TARGET_FILE:mbl_test_all> test_jarque_bera )
 add_test( NAME mbl_test_parse_block COMMAND $<TARGET_FILE:mbl_test_all> test_parse_block )

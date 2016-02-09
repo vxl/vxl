@@ -56,27 +56,27 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 if(APPLE)
-  vxl_add_library(LIBNAME vul LIBSRCS ${vul_sources})
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources})
 else()
 
 if(NOT SOLARIS)
-  vxl_add_library(LIBNAME vul ${vul_sources} LIBSRCS ${vul_network_sources})
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources} ${vul_network_sources})
 else()
-  vxl_add_library(LIBNAME vul LIBSRCS ${vul_sources})
-  vxl_add_library(LIBNAME vul_network LIBSRCS ${vul_network_sources})
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources})
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul_network LIBSRCS ${vul_network_sources})
 endif()
 
 if(NOT UNIX)
-  target_link_libraries( vul ws2_32 )
+  target_link_libraries( ${VXL_LIB_PREFIX}vul ws2_32 )
 endif()
 
 if(SOLARIS)
-  target_link_libraries( vul nsl vul_network socket )
+  target_link_libraries( ${VXL_LIB_PREFIX}vul nsl ${VXL_LIB_PREFIX}vul_network socket )
 endif()
 
 endif()
 
-target_link_libraries( vul vcl )
+target_link_libraries( ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)

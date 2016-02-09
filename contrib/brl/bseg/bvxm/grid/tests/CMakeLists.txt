@@ -10,7 +10,7 @@ add_executable( bvxm_grid_test_all
   test_bvxm_vrml.cxx
 )
 
-target_link_libraries( bvxm_grid_test_all bvxm_grid bvxm_grid_io testlib vpgl bsta bsta_algo vnl vil vgl vul vpl vbl vcl )
+target_link_libraries( bvxm_grid_test_all bvxm_grid bvxm_grid_io ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpgl bsta bsta_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl )
 
 add_test( NAME bvxm_grid_test_voxel_storage_mem COMMAND $<TARGET_FILE:bvxm_grid_test_all>   test_voxel_storage_mem )
 add_test( NAME bvxm_grid_test_voxel_storage_slab_mem COMMAND $<TARGET_FILE:bvxm_grid_test_all>   test_voxel_storage_slab_mem )

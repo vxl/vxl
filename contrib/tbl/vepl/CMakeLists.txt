@@ -54,7 +54,7 @@ endif()
 add_library(vepl ${vepl_sources})
 install_targets(/lib vepl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl ${vepl_sources})
-target_link_libraries(vepl vipl vil ${CMAKE_THREAD_LIBS})
+target_link_libraries(vepl vipl ${VXL_LIB_PREFIX}vil ${CMAKE_THREAD_LIBS})
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)

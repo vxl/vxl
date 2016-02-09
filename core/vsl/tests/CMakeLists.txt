@@ -1,6 +1,6 @@
 # This is core/vsl/tests/CMakeLists.txt
 
-link_libraries( vsl testlib vpl )
+link_libraries( ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl )
 
 add_executable( vsl_test_all
   test_driver.cxx
@@ -58,6 +58,6 @@ add_test( NAME vsl_test_block_rle_io COMMAND $<TARGET_FILE:vsl_test_all> test_bl
 
 
 add_executable( vsl_test_include test_include.cxx )
-target_link_libraries( vsl_test_include vsl )
+target_link_libraries( vsl_test_include ${VXL_LIB_PREFIX}vsl )
 add_executable( vsl_test_template_include test_template_include.cxx )
-target_link_libraries( vsl_test_template_include vsl )
+target_link_libraries( vsl_test_template_include ${VXL_LIB_PREFIX}vsl )

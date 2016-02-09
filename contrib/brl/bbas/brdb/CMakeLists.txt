@@ -17,7 +17,7 @@ aux_source_directory(Templates brdb_sources)
 add_library(brdb  ${brdb_sources})
 
 # brdb should not depend on any library that uses it
-target_link_libraries(brdb vbl_io vbl vsl)
+target_link_libraries(brdb ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
 #install the .h .txx and libs
 install_targets(/lib brdb)

@@ -27,7 +27,7 @@ add_executable( vgl_test_all
   test_spline.cxx
   test_pointset.cxx
 )
-target_link_libraries( vgl_test_all vgl vpl testlib )
+target_link_libraries( vgl_test_all ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vgl_test_cartesian COMMAND $<TARGET_FILE:vgl_test_all> test_cartesian )
 add_test( NAME vgl_test_distance COMMAND $<TARGET_FILE:vgl_test_all> test_distance )
@@ -53,6 +53,6 @@ add_test( NAME vgl_test_intersection COMMAND $<TARGET_FILE:vgl_test_all> test_in
 add_test( NAME vgl_test_spline COMMAND $<TARGET_FILE:vgl_test_all> test_spline)
 add_test( NAME vgl_test_pointset COMMAND $<TARGET_FILE:vgl_test_all> test_pointset)
 add_executable( vgl_test_include test_include.cxx )
-target_link_libraries( vgl_test_include vgl )
+target_link_libraries( vgl_test_include ${VXL_LIB_PREFIX}vgl )
 add_executable( vgl_test_template_include test_template_include.cxx )
-target_link_libraries( vgl_test_template_include vgl )
+target_link_libraries( vgl_test_template_include ${VXL_LIB_PREFIX}vgl )

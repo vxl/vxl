@@ -35,7 +35,7 @@ add_executable( vcl_test_all
      test_atomic_count.cxx
      test_typename.cxx
 )
-target_link_libraries( vcl_test_all vcl )
+target_link_libraries( vcl_test_all ${VXL_LIB_PREFIX}vcl )
 
 add_test( NAME vcl_test_algorithm COMMAND $<TARGET_FILE:vcl_test_all> test_algorithm )
 add_test( NAME vcl_test_cctype COMMAND $<TARGET_FILE:vcl_test_all> test_cctype )
@@ -65,4 +65,4 @@ add_test( NAME vcl_test_atomic_count COMMAND $<TARGET_FILE:vcl_test_all> test_at
 #add_test( NAME vcl_test_typename COMMAND $<TARGET_FILE:vcl_test_all> test_typename )
 
 add_executable( vcl_test_include test_include.cxx )
-target_link_libraries( vcl_test_include vcl )
+target_link_libraries( vcl_test_include ${VXL_LIB_PREFIX}vcl )

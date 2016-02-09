@@ -23,7 +23,7 @@ endif()
 add_library(rsdl ${rsdl_sources})
 install_targets(/lib rsdl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rsdl ${rsdl_sources})
-target_link_libraries( rsdl vnl vbl )
+target_link_libraries( rsdl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl )
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

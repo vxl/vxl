@@ -85,6 +85,9 @@ endif()
 if(NOT VXL_INSTALL_ARCHIVE_DIR)
   set(VXL_INSTALL_ARCHIVE_DIR lib)
 endif()
+if(NOT VXL_LIB_PREFIX)
+  set( VXL_LIB_PREFIX "") # This is typically empty
+endif()
 
 
 # CMake support directory.

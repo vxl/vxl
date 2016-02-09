@@ -56,9 +56,9 @@ set( vil_algo_sources
 
 aux_source_directory(Templates vil_algo_sources)
 
-vxl_add_library(LIBNAME vil_algo LIBSRCS ${vil_algo_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil_algo LIBSRCS ${vil_algo_sources})
 
-target_link_libraries( vil_algo vil vnl_algo vnl vcl )
+target_link_libraries( ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_EXAMPLES )
   add_subdirectory(examples)

@@ -19,7 +19,7 @@ if(EXPAT_FOUND)
 
   add_library(bhdfs_pro ${bhdfs_pro_sources})
 
-  target_link_libraries(bhdfs_pro bhdfs bprb vil_algo vil_io vil vpgl boxm2)
+  target_link_libraries(bhdfs_pro bhdfs bprb ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl boxm2)
 
   if(BUILD_TESTING)
     add_subdirectory(tests)

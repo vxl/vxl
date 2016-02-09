@@ -8,7 +8,7 @@ add_executable( icam_test_all
   test_spherical_map.cxx
 )
 
-target_link_libraries( icam_test_all icam depth_map vgl_algo vgl vnl vil vul testlib)
+target_link_libraries( icam_test_all icam depth_map ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME icam_test_minimizer     COMMAND $<TARGET_FILE:icam_test_all> test_minimizer )
 add_test( NAME icam_test_transform     COMMAND $<TARGET_FILE:icam_test_all> test_icam_transform )

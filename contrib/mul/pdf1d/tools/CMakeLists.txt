@@ -4,7 +4,7 @@
 #   Tim Cootes
 #
 
-link_libraries( pdf1d mbl vnl )
+link_libraries( pdf1d mbl ${VXL_LIB_PREFIX}vnl )
 
 add_executable(
 pdf1d_test_overlap_pdf test_overlap_pdf.cxx

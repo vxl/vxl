@@ -22,7 +22,7 @@ add_library(btol ${btol_sources})
 install_targets(/lib btol)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/btol ${btol_sources})
 
-target_link_libraries(btol bsol vtol vdgl vsol vgl vnl)
+target_link_libraries(btol bsol vtol vdgl vsol ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

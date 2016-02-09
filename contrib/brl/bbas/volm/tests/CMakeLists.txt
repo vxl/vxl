@@ -22,7 +22,7 @@ add_executable( volm_test_all
   test_find_overlapping.cxx
 )
 
-target_link_libraries( volm_test_all volm brad testlib vpl )
+target_link_libraries( volm_test_all volm brad ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl )
 
 add_test( NAME volm_test_spherical_container COMMAND $<TARGET_FILE:volm_test_all> test_spherical_container)
 add_test( NAME volm_test_tile COMMAND $<TARGET_FILE:volm_test_all> test_tile)

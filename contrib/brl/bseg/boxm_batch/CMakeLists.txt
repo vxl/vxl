@@ -35,7 +35,7 @@ if( PYTHON_FOUND )
       endif()
       set_target_properties(boxm_batch PROPERTIES PREFIX "")
 
-      target_link_libraries(boxm_batch bpro_batch boxm_pro boxm_sample_algo boxm_algo_rt_pro boxm_algo_sp_pro boxm_algo_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro bsta_pro icam_pro bapl_pro )
+      target_link_libraries(boxm_batch bpro_batch boxm_pro boxm_sample_algo boxm_algo_rt_pro boxm_algo_sp_pro boxm_algo_pro ${VXL_LIB_PREFIX}vpgl_io vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro sdet_pro bsta_pro icam_pro bapl_pro )
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( boxm_batch debug ${PYTHON_DEBUG_LIBRARY})

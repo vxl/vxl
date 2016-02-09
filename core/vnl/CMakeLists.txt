@@ -264,8 +264,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif()
 endif()
 
-vxl_add_library(LIBNAME vnl LIBSRCS ${vnl_sources})
-target_link_libraries( vnl vcl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vnl LIBSRCS ${vnl_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

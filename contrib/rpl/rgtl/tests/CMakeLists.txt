@@ -20,7 +20,7 @@ endforeach()
 
 # Create the test executable.
 add_executable(rgtl_test_all ${test_srcs})
-target_link_libraries(rgtl_test_all rgtl vnl vul testlib)
+target_link_libraries(rgtl_test_all rgtl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib)
 
 # Add the tests.
 foreach(name ${test_names})

@@ -18,7 +18,7 @@ aux_source_directory(Templates bsl_sources)
 add_library(bsl ${bsl_sources})
 install_targets(/lib bsl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsl ${bsl_sources})
-target_link_libraries(bsl vnl vbl)
+target_link_libraries(bsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

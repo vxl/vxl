@@ -1,6 +1,6 @@
 # oxl/osl/examples/CMakeLists.txt
 
-link_libraries( osl vul vil1 )
+link_libraries( osl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil1 )
 
 # Harris corner detector
 add_executable(run_osl_harris run_osl_harris.cxx)

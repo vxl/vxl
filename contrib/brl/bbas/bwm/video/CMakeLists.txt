@@ -28,10 +28,10 @@ endif()
 aux_source_directory(Templates bwm_video_sources)
 add_library(bwm_video ${bwm_video_sources})
 
-target_link_libraries( bwm_video vidl bpgl bpgl_algo brip vil vbl vgl vul vpl vsl vgl_algo vnl_algo vnl bsta bsol vsol vpgl vpgl_algo)
+target_link_libraries( bwm_video ${VXL_LIB_PREFIX}vidl bpgl bpgl_algo brip ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl bsta bsol vsol ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo)
 
 if(EXPAT_FOUND)
-  target_link_libraries( bwm_video vidl)
+  target_link_libraries( bwm_video ${VXL_LIB_PREFIX}vidl)
   if(EXPATPP_FOUND)
     target_link_libraries(bwm_video ${EXPATPP_LIBRARIES})
   endif()

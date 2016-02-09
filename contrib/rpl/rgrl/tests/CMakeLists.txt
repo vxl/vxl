@@ -20,7 +20,7 @@ add_executable( rgrl_test_all
   test_initializer_ran_sam.cxx
   test_matcher.cxx
 )
-target_link_libraries( rgrl_test_all rgrl rrel testlib vnl_algo vnl vil vul )
+target_link_libraries( rgrl_test_all rgrl rrel ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul )
 
 add_test( NAME rgrl_rgrl_util COMMAND $<TARGET_FILE:rgrl_test_all> test_rgrl_util )
 add_test( NAME rgrl_transformation COMMAND $<TARGET_FILE:rgrl_test_all> test_transformation )

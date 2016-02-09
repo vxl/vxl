@@ -45,8 +45,8 @@ set( vgl_algo_sources
 )
 aux_source_directory(Templates vgl_algo_sources)
 
-vxl_add_library(LIBNAME vgl_algo LIBSRCS ${vgl_algo_sources})
-target_link_libraries( vgl_algo vgl vnl_algo vnl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgl_algo LIBSRCS ${vgl_algo_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

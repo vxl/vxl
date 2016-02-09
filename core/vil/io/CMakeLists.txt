@@ -14,8 +14,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
                               COMPILE_FLAGS -ftemplate-depth-50)
 endif()
 
-vxl_add_library(LIBNAME vil_io LIBSRCS ${vil_io_sources})
-target_link_libraries( vil_io vil vsl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil_io LIBSRCS ${vil_io_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vsl )
 
 if( BUILD_TESTING)
   add_subdirectory(tests)

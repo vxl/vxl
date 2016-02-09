@@ -4,8 +4,8 @@ set(vpgl_xio_sources
   vpgl_xio_lvcs.cxx   vpgl_xio_lvcs.h
 )
 
-vxl_add_library(LIBNAME vpgl_xio LIBSRCS ${vpgl_xio_sources} )
-target_link_libraries( vpgl_xio vpgl vsl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpgl_xio LIBSRCS ${vpgl_xio_sources} )
+target_link_libraries( ${VXL_LIB_PREFIX}vpgl_xio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vsl )
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

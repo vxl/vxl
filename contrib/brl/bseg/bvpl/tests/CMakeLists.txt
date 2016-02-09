@@ -12,7 +12,7 @@ add_executable( bvpl_test_all
   test_detect_corner.cxx
  )
 
-target_link_libraries( bvpl_test_all bvpl bvxm vnl vgl vul vbl testlib)
+target_link_libraries( bvpl_test_all bvpl bvxm ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME bvpl_test_subgrid COMMAND $<TARGET_FILE:bvpl_test_all> test_subgrid  )
 add_test( NAME bvpl_test_neighb_oper COMMAND $<TARGET_FILE:bvpl_test_all> test_neighb_oper  )

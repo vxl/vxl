@@ -9,7 +9,7 @@ if( EXPAT_FOUND )
   test_bmdl_generate_mesh_process.cxx
  )
 
-target_link_libraries( bmdl_pro_test_all testlib bmdl_pro bmdl vil_pro bprb brdb sdet vbl vil vil_io vcl expat expatpp)
+target_link_libraries( bmdl_pro_test_all ${VXL_LIB_PREFIX}testlib bmdl_pro bmdl vil_pro bprb brdb sdet ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vcl expat expatpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/first_ret.tif       ${CMAKE_CURRENT_BINARY_DIR}/first_ret.tif       COPYONLY )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/last_ret.tif        ${CMAKE_CURRENT_BINARY_DIR}/last_ret.tif        COPYONLY )
@@ -27,4 +27,4 @@ add_test( NAME bmdl_pro_generate_mesh_process COMMAND $<TARGET_FILE:bmdl_pro_tes
 endif()
 
 add_executable( bmdl_pro_test_include test_include.cxx )
-target_link_libraries( bmdl_pro_test_include bmdl_pro bprb brdb vil vil_io vgl vgl_io vpgl)
+target_link_libraries( bmdl_pro_test_include bmdl_pro bprb brdb ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vpgl)
