@@ -261,7 +261,6 @@ int main(int argc,  char** argv)
     vil_rgb<vxl_byte> pixel_color = building_pixel_color;
 
     if (heights[ii] > 20) {  // specify the category
-      label = volm_label_table::BUILDING_TALL;
       pixel_id = building_tall_id;
       pixel_color = building_tall_pixel_color;
     }

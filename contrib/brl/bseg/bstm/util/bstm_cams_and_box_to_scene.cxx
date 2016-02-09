@@ -104,6 +104,9 @@ void bstm_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
         good = good && vgl_intersection(ur, zp, urp);
         good = good && vgl_intersection(bl, zp, blp);
         good = good && vgl_intersection(br, zp, brp);
+        if (!good) {
+            vcl_cout << "ERROR: lines do not intersect" << __FILE__ << __LINE__ << vcl_endl;
+        }
 
         //convert the four corners into image coordinates
         typedef vgl_polygon<double>::point_t        Point_type;
