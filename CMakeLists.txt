@@ -42,11 +42,38 @@ if(MEMORYCHECK_COMMAND)
   set( MEMORYCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/config/valgrind.supp" )
 endif()
 
-set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${vxl_BINARY_DIR}/lib CACHE PATH
-     "Output directory for the vxl libraries" )
+#-----------------------------------------------------------------------------
+if(NOT COMMAND SETIFEMPTY)
+  macro(SETIFEMPTY)
+    set(KEY ${ARGV0})
+    set(VALUE ${ARGV1})
+    if(NOT ${KEY})
+      set(${ARGV})
+    endif()
+  endmacro()
+endif()
 
-if( NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY )
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "." )
+#-----------------------------------------------------------------------------
+SETIFEMPTY(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+SETIFEMPTY(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+SETIFEMPTY(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+
+#-----------------------------------------------------------------------------
+SETIFEMPTY(CMAKE_INSTALL_LIBRARY_DESTINATION lib)
+SETIFEMPTY(CMAKE_INSTALL_ARCHIVE_DESTINATION lib)
+SETIFEMPTY(CMAKE_INSTALL_RUNTIME_DESTINATION bin)
+
+if(NOT VXL_INSTALL_RUNTIME_DIR)
+  set(VXL_INSTALL_RUNTIME_DIR bin)
+endif()
+if(NOT VXL_INSTALL_LIBRARY_DIR)
+  set(VXL_INSTALL_LIBRARY_DIR lib)
+endif()
+if(NOT VXL_INSTALL_ARCHIVE_DIR)
+  set(VXL_INSTALL_ARCHIVE_DIR lib)
+endif()
+if(NOT VXL_LIB_PREFIX)
+  set( VXL_LIB_PREFIX "") # This is typically empty
 endif()
 
 
