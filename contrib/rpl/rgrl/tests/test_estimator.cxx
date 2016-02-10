@@ -2001,10 +2001,11 @@ static  vnl_random random;
       {
         vnl_double_3x3 perturbed_H( H ), est_H;
         vnl_matrix<double> iid_cov(2,2,vnl_matrix_identity);
-        const double err_std = 2e-3;
+        const double err_std = 5e-4;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( i, j ) += random.drand32()*err_std;
+        perturbed_H( 2, 2 ) = H(2,2);  // no change to the bottom-left element.
         rgrl_transformation_sptr init_trans = new rgrl_trans_homography2d( perturbed_H.as_ref() );
 
         // estimate
