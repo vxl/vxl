@@ -53,10 +53,14 @@ if(NOT COMMAND SETIFEMPTY)
   endmacro()
 endif()
 
+
 #-----------------------------------------------------------------------------
-SETIFEMPTY(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-SETIFEMPTY(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
-SETIFEMPTY(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib CACHE PATH
+     "Output directory for the vxl module libraries" )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib CACHE PATH
+     "Output directory for the vxl static libraries" )
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin CACHE PATH
+     "Output directory for the vxl executables" )
 
 #-----------------------------------------------------------------------------
 SETIFEMPTY(CMAKE_INSTALL_LIBRARY_DESTINATION lib)
@@ -75,20 +79,6 @@ endif()
 if(NOT VXL_LIB_PREFIX)
   set( VXL_LIB_PREFIX "") # This is typically empty
 endif()
-
-if(NOT VXL_INSTALL_RUNTIME_DIR)
-  set(VXL_INSTALL_RUNTIME_DIR bin)
-endif()
-if(NOT VXL_INSTALL_LIBRARY_DIR)
-  set(VXL_INSTALL_LIBRARY_DIR lib)
-endif()
-if(NOT VXL_INSTALL_ARCHIVE_DIR)
-  set(VXL_INSTALL_ARCHIVE_DIR lib)
-endif()
-if(NOT VXL_LIB_PREFIX)
-  set( VXL_LIB_PREFIX "") # This is typically empty
-endif()
-
 
 # CMake support directory.
 set(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
