@@ -471,11 +471,11 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
     }
 
     // block everything to ensure the reading score
-    status = clFinish(queue_);
+    clFinish(queue_);
     // read score
     score_cl_mem_->read_to_buffer(queue_);
     //mu_cl_mem_->read_to_buffer(queue_);
-    status = clFinish(queue_);
+    clFinish(queue_);
     // count time
     if (is_grd_reg_ && is_sky_reg_)
       gpu_matcher_time += kernels_[identifier][0]->exec_time();

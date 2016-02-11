@@ -60,13 +60,11 @@ void boxm2_vecf_ocl_composite_head_model::map_to_target(boxm2_scene_sptr target)
 {
   //  vcl_cout << "@@@@@@@@@@@@@@@  clearing and re-mapping head model " << vcl_endl;
   // clear target
-  bool need_to_clear_cache  = false;
 
   if (boxm2_vecf_ocl_head_model::intrinsic_change_){
     this->clear_target(target);
   // head model
     boxm2_vecf_ocl_head_model::map_to_target(target);
-    need_to_clear_cache = true;
   }
   //orbit model
   right_orbit_.map_to_target(target);

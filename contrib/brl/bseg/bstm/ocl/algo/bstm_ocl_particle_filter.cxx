@@ -632,7 +632,6 @@ vcl_vector<double> bstm_ocl_particle_filter::eval_mi(unsigned prev_time, unsigne
     bocl_mem* alpha = opencl_cache_->get_data(relevant_blk_id, bstm_data_traits<BSTM_ALPHA>::prefix());
     bocl_mem* app = opencl_cache_->get_data(relevant_blk_id, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix());
     blk_info = opencl_cache_->loaded_block_info();
-    info_buffer = (bstm_scene_info*) blk_info->cpu_buffer();
 
     //opencl mem operations are done. begin kernel launches...
 
