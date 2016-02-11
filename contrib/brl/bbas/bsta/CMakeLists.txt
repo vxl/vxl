@@ -63,7 +63,7 @@ add_library(bsta  ${bsta_sources})
 install_targets(/lib bsta)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta ${bsta_sources})
 
-target_link_libraries(bsta vnl_algo vbl vnl_io vnl vgl)
+target_link_libraries(bsta ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

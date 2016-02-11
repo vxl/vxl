@@ -15,7 +15,7 @@ add_executable( mfpf_test_all
   test_pose_predictor.cxx
   )
 
-target_link_libraries( mfpf_test_all mfpf  vil_algo testlib )
+target_link_libraries( mfpf_test_all mfpf ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME mfpf_test_edge_finder COMMAND $<TARGET_FILE:mfpf_test_all> test_edge_finder)
 add_test( NAME mfpf_test_norm_corr1d COMMAND $<TARGET_FILE:mfpf_test_all> test_norm_corr1d)

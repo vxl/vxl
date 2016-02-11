@@ -84,7 +84,7 @@ set(rgtl_sources
   )
 
 add_library(rgtl ${rgtl_sources})
-target_link_libraries(rgtl vnl_algo vnl vcl)
+target_link_libraries(rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl)
 
 install_targets(/lib rgtl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgtl ${rgtl_sources})

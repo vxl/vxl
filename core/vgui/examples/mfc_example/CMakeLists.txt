@@ -9,4 +9,4 @@ set(mfc_example_sources
 
 add_executable(mfc_example WIN32 ${mfc_example_sources})
 
-target_link_libraries(mfc_example vgui vcl)
+target_link_libraries(mfc_example ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vcl)

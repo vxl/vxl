@@ -14,7 +14,7 @@ set(octree_sources
 
 add_executable(octree ${octree_sources})
 install_targets(/bin octree)
-target_link_libraries(octree mvl vil1 vgl vnl vbl vul)
+target_link_libraries(octree mvl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

@@ -16,7 +16,7 @@ if(wxWidgets_FOUND)
   configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/crosscut.xrc ${CMAKE_CURRENT_BINARY_DIR}/crosscut.xrc COPYONLY )
   WXWIDGETS_ADD_RESOURCES(bwm_wx_example_sources crosscut.xrc)
   add_executable(bwm_wx_example WIN32 ${bwm_wx_example_sources} )
-  target_link_libraries(bwm_wx_example bwm vgui vgui_wx ${wxWidgets_LIBRARIES})
+  target_link_libraries(bwm_wx_example bwm ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vgui_wx ${wxWidgets_LIBRARIES})
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

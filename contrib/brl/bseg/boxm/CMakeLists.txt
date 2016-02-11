@@ -23,7 +23,7 @@ aux_source_directory(Templates boxm_sources)
 
 add_library(boxm  ${boxm_sources})
 
-target_link_libraries(boxm boct bsta brdb vgl_io vgl_xio vpgl vpgl_xio vpgl_algo vsol expatpp vgl_algo vnl_algo vnl vgl vul vil vbl_io vbl vsl vpl vcl)
+target_link_libraries(boxm boct bsta brdb ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_xio ${VXL_LIB_PREFIX}vpgl_algo vsol expatpp ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vcl)
 
 #processes
 add_subdirectory(pro)

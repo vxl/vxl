@@ -19,7 +19,7 @@ add_executable( vepl_test_all
  vepl_test_x_gradient.cxx
  vepl_test_y_gradient.cxx
 )
-target_link_libraries( vepl_test_all vepl vil testlib )
+target_link_libraries( vepl_test_all vepl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vepl_test_dilate_disk COMMAND $<TARGET_FILE:vepl_test_all> vepl_test_dilate_disk)
 add_test( NAME vepl_test_dyadic COMMAND $<TARGET_FILE:vepl_test_all> vepl_test_dyadic)

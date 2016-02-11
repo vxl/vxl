@@ -6,10 +6,10 @@ if(GLEW_FOUND)
   link_directories(${OPENGL_LIBRARY_DIR})
 
   add_executable( bstm_ocl_render_view bstm_ocl_render_view.cxx )
-  target_link_libraries( bstm_ocl_render_view boxm2 bstm_ocl_algo bstm_ocl_pro bstm_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
+  target_link_libraries( bstm_ocl_render_view boxm2 bstm_ocl_algo bstm_ocl_pro bstm_view ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
   add_executable( bstm_ocl_multi_render_view bstm_ocl_multi_render_view.cxx )
-  target_link_libraries( bstm_ocl_multi_render_view boxm2 bstm_ocl_algo bstm_ocl_pro bstm_view vul vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
+  target_link_libraries( bstm_ocl_multi_render_view boxm2 bstm_ocl_algo bstm_ocl_pro bstm_view ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgui vil_pro vpgl_pro ${GLEW_LIBRARY} )
 
  endif()
 endif()

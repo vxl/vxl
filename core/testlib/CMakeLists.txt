@@ -28,10 +28,8 @@ set( testlib_sources
   testlib_root_dir.h            testlib_root_dir.cxx
 )
 
-add_library( testlib ${testlib_sources} )
-target_link_libraries( testlib vcl )
-install_targets( /lib testlib)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/testlib ${testlib_sources})
+vxl_add_library( LIBNAME ${VXL_LIB_PREFIX}testlib LIBSRCS ${testlib_sources} )
+target_link_libraries( ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

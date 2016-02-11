@@ -14,7 +14,7 @@ aux_source_directory(processes bsta_pro_sources)
 
 add_library(bsta_pro ${bsta_pro_sources} )
 
-target_link_libraries(bsta_pro bsta_algo bsta_io bsta bprb brdb brip vbl_io)
+target_link_libraries(bsta_pro bsta_algo bsta_io bsta bprb brdb brip ${VXL_LIB_PREFIX}vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

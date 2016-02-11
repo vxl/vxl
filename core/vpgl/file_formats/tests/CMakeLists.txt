@@ -1,2 +1,2 @@
 add_executable( vpgl_file_formats_test_include test_include.cxx )
-target_link_libraries( vpgl_file_formats_test_include vpgl_file_formats)
+target_link_libraries( vpgl_file_formats_test_include ${VXL_LIB_PREFIX}vpgl_file_formats)

@@ -11,7 +11,7 @@ add_executable( rsdl_test_all
   test_point.cxx
   test_bins.cxx
 )
-target_link_libraries( rsdl_test_all rsdl testlib vnl )
+target_link_libraries( rsdl_test_all rsdl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl )
 
 add_test( NAME rsdl_test_bins_2d COMMAND $<TARGET_FILE:rsdl_test_all> test_bins_2d )
 add_test( NAME rsdl_test_borgefors COMMAND $<TARGET_FILE:rsdl_test_all> test_borgefors )

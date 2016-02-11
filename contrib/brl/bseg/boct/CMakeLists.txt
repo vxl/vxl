@@ -15,7 +15,7 @@ aux_source_directory(Templates boct_sources)
 
 add_library(boct  ${boct_sources})
 
-target_link_libraries(boct vcl vgl vgl_io vnl_io vbl vnl)
+target_link_libraries(boct ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl)
 
 #tests
 if( BUILD_TESTING )

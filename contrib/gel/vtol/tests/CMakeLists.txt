@@ -19,7 +19,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
  set_source_files_properties(test_cycle_processor.cxx PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-target_link_libraries( vtol_test_all vtol_algo vtol vsol vdgl vnl vil vul testlib )
+target_link_libraries( vtol_test_all vtol_algo vtol vsol vdgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vtol_test_vertex_2d COMMAND $<TARGET_FILE:vtol_test_all> test_vertex_2d)
 add_test( NAME vtol_test_zero_chain COMMAND $<TARGET_FILE:vtol_test_all> test_zero_chain)

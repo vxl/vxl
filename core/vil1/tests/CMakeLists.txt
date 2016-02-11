@@ -18,7 +18,7 @@ add_executable( vil1_test_all
   test_file_format_read.cxx
   test_resample.cxx
 )
-target_link_libraries( vil1_test_all vil1 vil vpl vul testlib vcl )
+target_link_libraries( vil1_test_all ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 
 add_test( NAME vil1_test_flipud COMMAND $<TARGET_FILE:vil1_test_all> test_flipud )
 add_test( NAME vil1_test_assign COMMAND $<TARGET_FILE:vil1_test_all> test_assign )
@@ -36,14 +36,14 @@ add_test( NAME vil1_test_resample COMMAND $<TARGET_FILE:vil1_test_all> test_resa
 add_test( NAME vil1_test_vil COMMAND $<TARGET_FILE:vil1_test_all> test_vil ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data)
 
 #add_executable( vil_vil1_compare_access_timings vil_vil1_compare_access_timings.cxx)
-#target_link_libraries( vil_vil1_compare_access_timings vil_algo vil mbl vcl )
+#target_link_libraries( vil_vil1_compare_access_timings ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil mbl ${VXL_LIB_PREFIX}vcl )
 #add_test( NAME vil_vil1_compare_access_timings COMMAND $<TARGET_FILE:vil_vil1_compare_access_timings> )
 
 #add_executable( vil_vil1_compare_function_timings vil_vil1_compare_function_timings.cxx)
-#target_link_libraries( vil_vil1_compare_function_timings vil1 mbl vcl )
+#target_link_libraries( vil_vil1_compare_function_timings ${VXL_LIB_PREFIX}vil1 mbl ${VXL_LIB_PREFIX}vcl )
 #add_test( NAME vil_vil1_compare_function_timings COMMAND $<TARGET_FILE:vil_vil1_compare_function_timings> )
 
 add_executable( vil1_test_include test_include.cxx )
-target_link_libraries( vil1_test_include vil1 vil )
+target_link_libraries( vil1_test_include ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil )
 add_executable( vil1_test_template_include test_template_include.cxx )
-target_link_libraries( vil1_test_template_include vil1 vil )
+target_link_libraries( vil1_test_template_include ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil )

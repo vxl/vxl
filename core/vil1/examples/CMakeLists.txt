@@ -1,6 +1,6 @@
 # vxl/vil1/examples/CMakeLists.txt
 
-link_libraries( vil1 vul )
+link_libraries( ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vul )
 
 add_executable(vil1_convolve_1d   vil1_convolve_1d.cxx)
 add_executable(vil1_convolve      vil1_convolve.cxx)

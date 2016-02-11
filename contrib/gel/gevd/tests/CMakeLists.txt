@@ -8,7 +8,7 @@ add_executable(gevd_test_all
                test_gevd_noise.cxx
                test_gevd_float_operators.cxx
               )
-target_link_libraries( gevd_test_all gevd testlib vil vnl vpl )
+target_link_libraries( gevd_test_all gevd ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpl )
 
 add_test( NAME gevd_test_param_mixin COMMAND $<TARGET_FILE:gevd_test_all> test_gevd_param_mixin)
 add_test( NAME gevd_test_memory_mixin COMMAND $<TARGET_FILE:gevd_test_all> test_gevd_memory_mixin)

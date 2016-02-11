@@ -58,7 +58,7 @@ if(EXPAT_FOUND)
 
     add_library(volm  ${volm_sources})
 
-    target_link_libraries(volm vsph bpgl vgl vgl_algo vgl_io vil vil_io vil_algo vbl_io vsol bkml bvgl vbl vsl vul bvrml depth_map brad)
+    target_link_libraries(volm vsph bpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vbl_io vsol bkml bvgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul bvrml depth_map brad)
     target_link_libraries(volm ${EXPAT_LIBRARIES})
     if(APPLE)
       target_link_libraries(volm expat)

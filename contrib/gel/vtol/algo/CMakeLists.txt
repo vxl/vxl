@@ -10,7 +10,7 @@ aux_source_directory( Templates vtol_algo_sources )
 add_library( vtol_algo ${vtol_algo_sources} )
 install_targets(/lib vtol_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vtol/algo ${vtol_algo_sources})
-target_link_libraries( vtol_algo vtol vsol vdgl vil_algo vgl_algo vgl vil vbl )
+target_link_libraries( vtol_algo vtol vsol vdgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

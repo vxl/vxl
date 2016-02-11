@@ -11,7 +11,7 @@ add_library(bnl ${bnl_sources})
 install_targets(/lib bnl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl ${bnl_sources})
 
-target_link_libraries(bnl vnl vnl_algo)
+target_link_libraries(bnl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo)
 
 add_subdirectory(algo)
 

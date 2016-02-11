@@ -50,7 +50,7 @@ add_executable( vil_test_all
   test_na.cxx
 )
 
-target_link_libraries( vil_test_all vil vpl vul testlib vcl )
+target_link_libraries( vil_test_all ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 
 # basic things
 add_test( NAME vil_test_image_resource COMMAND $<TARGET_FILE:vil_test_all> test_image_resource)
@@ -100,22 +100,22 @@ add_test( NAME vil_test_pyramid_image_resource COMMAND $<TARGET_FILE:vil_test_al
 
 # To run timing tests
 #add_executable( vil_test_access_timings vil_test_access_timings.cxx)
-#target_link_libraries( vil_test_access_timings vil mbl vcl )
+#target_link_libraries( vil_test_access_timings ${VXL_LIB_PREFIX}vil mbl ${VXL_LIB_PREFIX}vcl )
 #add_test( NAME vil_test_access_timings COMMAND $<TARGET_FILE:vil_test_access_timings> )
 
 #add_executable( vil_test_access_timings_noplanes vil_test_access_timings_noplanes.cxx)
-#target_link_libraries( vil_test_access_timings_noplanes vil mbl vcl )
+#target_link_libraries( vil_test_access_timings_noplanes ${VXL_LIB_PREFIX}vil mbl ${VXL_LIB_PREFIX}vcl )
 #add_test( NAME vil_test_access_timings_noplanes COMMAND $<TARGET_FILE:vil_test_access_timings_noplanes> )
 
 #add_executable( vil_test_pair_access_timings vil_test_pair_access_timings.cxx)
-#target_link_libraries( vil_test_pair_access_timings vil mbl vcl )
+#target_link_libraries( vil_test_pair_access_timings ${VXL_LIB_PREFIX}vil mbl ${VXL_LIB_PREFIX}vcl )
 #add_test( NAME vil_test_pair_access_timings COMMAND $<TARGET_FILE:vil_test_pair_access_timings> )
 
 #add_executable( vil_test_random_access_timings vil_test_random_access_timings.cxx)
-#target_link_libraries( vil_test_random_access_timings vil mbl vcl )
+#target_link_libraries( vil_test_random_access_timings ${VXL_LIB_PREFIX}vil mbl ${VXL_LIB_PREFIX}vcl )
 #add_test( NAME vil_test_random_access_timings COMMAND $<TARGET_FILE:vil_test_random_access_timings> )
 
 add_executable( vil_test_include test_include.cxx )
-target_link_libraries( vil_test_include vil )
+target_link_libraries( vil_test_include ${VXL_LIB_PREFIX}vil )
 add_executable( vil_test_template_include test_template_include.cxx )
-target_link_libraries( vil_test_template_include vil )
+target_link_libraries( vil_test_template_include ${VXL_LIB_PREFIX}vil )

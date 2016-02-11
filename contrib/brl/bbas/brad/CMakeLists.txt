@@ -23,7 +23,7 @@
   aux_source_directory(Templates brad_sources)
   add_library(brad ${brad_sources} )
 
-  target_link_libraries(brad  bsta vnl_io vnl vgl_algo vgl_io vnl_algo vgl vil vpgl vpgl_algo vbl_io vbl vpl vul )
+  target_link_libraries(brad  bsta ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul )
 
   add_subdirectory(io)
 

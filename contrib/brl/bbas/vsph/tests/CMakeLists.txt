@@ -14,7 +14,7 @@ add_executable( vsph_test_all
   test_sph_cover.cxx
 )
 
-target_link_libraries( vsph_test_all vsph testlib vgl bpgl vpgl vcl vnl vpl)
+target_link_libraries( vsph_test_all vsph ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vgl bpgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpl)
 
 add_test( NAME vsph_test_view_sphere COMMAND $<TARGET_FILE:vsph_test_all> test_view_sphere )
 add_test( NAME vsph_test_spherical_coord COMMAND $<TARGET_FILE:vsph_test_all> test_spherical_coord )

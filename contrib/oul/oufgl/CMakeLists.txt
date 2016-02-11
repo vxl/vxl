@@ -17,7 +17,7 @@ set(oufgl_sources
 add_library(oufgl ${oufgl_sources})
 install_targets(/lib oufgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/oufgl ${oufgl_sources})
-target_link_libraries( oufgl vil vil1 rt)
+target_link_libraries( oufgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 rt)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

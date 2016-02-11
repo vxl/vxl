@@ -14,7 +14,7 @@ add_executable( bundler_test_all test_driver.cxx
   utils.cxx     utils.h)
 
 
-target_link_libraries(bundler_test_all bundler vpgl_algo vpgl vpgl_file_formats vsol vgl_algo vnl_algo vnl vgl vil vul vbl rrel bapl rsdl testlib)
+target_link_libraries(bundler_test_all bundler ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl rrel bapl rsdl ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME bundler_test_utils
           COMMAND $<TARGET_FILE:bundler_test_all> test_bundler_utils )

@@ -11,7 +11,7 @@ add_executable( boxm2_test_all
   test_utils.h  test_utils.cxx
  )
 
-target_link_libraries( boxm2_test_all testlib boxm2_cpp_pro brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vul vpl )
+target_link_libraries( boxm2_test_all ${VXL_LIB_PREFIX}testlib boxm2_cpp_pro brdb ${VXL_LIB_PREFIX}vpgl_algo vpgl_pro vil_pro sdet ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl )
 
 add_test( NAME boxm2_test_scene COMMAND $<TARGET_FILE:boxm2_test_all>  test_scene  )
 add_test( NAME boxm2_test_cache COMMAND $<TARGET_FILE:boxm2_test_all>  test_cache  )

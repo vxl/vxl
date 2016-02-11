@@ -115,7 +115,7 @@ endif()
 add_library(mvl ${mvl_sources})
 install_targets(/lib mvl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oxl/mvl ${mvl_sources})
-target_link_libraries(mvl vil1 vnl_algo vnl vbl vgl vgl_algo vul)
+target_link_libraries(mvl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vul)
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)

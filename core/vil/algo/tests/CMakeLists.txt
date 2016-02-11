@@ -44,7 +44,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(test_algo_convolve_1d.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-target_link_libraries( vil_algo_test_all vil_algo testlib vcl )
+target_link_libraries( vil_algo_test_all ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 
 
 # vil/algo
@@ -87,6 +87,6 @@ add_test( NAME vil_algo_test_quad_distance_function COMMAND $<TARGET_FILE:vil_al
 add_test( NAME vil_algo_test_flood_fill COMMAND $<TARGET_FILE:vil_algo_test_all> test_algo_flood_fill)
 
 add_executable( vil_algo_test_include test_include.cxx )
-target_link_libraries( vil_algo_test_include vil_algo )
+target_link_libraries( vil_algo_test_include ${VXL_LIB_PREFIX}vil_algo )
 add_executable( vil_algo_test_template_include test_template_include.cxx )
-target_link_libraries( vil_algo_test_template_include vil_algo )
+target_link_libraries( vil_algo_test_template_include ${VXL_LIB_PREFIX}vil_algo )

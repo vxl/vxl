@@ -17,7 +17,7 @@ if(EXPAT_FOUND)
   aux_source_directory(processes boxm_algo_sp_pro_sources)
 
   add_library(boxm_algo_sp_pro ${boxm_algo_sp_pro_sources} )
-  target_link_libraries(boxm_algo_sp_pro boxm boxm_algo_sp boxm_util bprb brdb brip sdet vsol vil_pro vil_io vil)
+  target_link_libraries(boxm_algo_sp_pro boxm boxm_algo_sp boxm_util bprb brdb brip sdet vsol vil_pro ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

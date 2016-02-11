@@ -10,7 +10,7 @@ set(boxm2_volm_conf_sources
 
 add_library(boxm2_volm_conf ${boxm2_volm_conf_sources})
 
-target_link_libraries(boxm2_volm_conf boxm2_volm boxm2 boxm2_io volm volm_conf vul vgl vcl)
+target_link_libraries(boxm2_volm_conf boxm2_volm boxm2 boxm2_io volm volm_conf ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

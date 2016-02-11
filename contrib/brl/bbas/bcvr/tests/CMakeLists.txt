@@ -7,7 +7,7 @@ add_executable( bcvr_test_all
   test_cvmatch.cxx
   test_clsd_cvmatch.cxx
 )
-target_link_libraries( bcvr_test_all bcvr bsol testlib)
+target_link_libraries( bcvr_test_all bcvr bsol ${VXL_LIB_PREFIX}testlib)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/line1.con  ${CMAKE_CURRENT_BINARY_DIR}/line1.con COPYONLY )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/line2.con  ${CMAKE_CURRENT_BINARY_DIR}/line2.con COPYONLY )

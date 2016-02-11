@@ -28,11 +28,8 @@ set(vgl_io_sources
 
 aux_source_directory(Templates vgl_io_sources)
 
-add_library(vgl_io ${vgl_io_sources})
-target_link_libraries( vgl_io vgl vsl )
-
-install_targets(/lib vgl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/io ${vgl_io_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgl_io LIBSRCS ${vgl_io_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl )
 
 if( BUILD_TESTING)
   add_subdirectory(tests)

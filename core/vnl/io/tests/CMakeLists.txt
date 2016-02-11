@@ -20,7 +20,7 @@ add_executable( vnl_io_test_all
   test_vector_io.cxx
 )
 
-target_link_libraries( vnl_io_test_all vnl_io vsl testlib vpl )
+target_link_libraries( vnl_io_test_all ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl )
 
 add_test( NAME vnl_io_test_bignum_io COMMAND $<TARGET_FILE:vnl_io_test_all> test_bignum_io               )
 add_test( NAME vnl_io_test_diag_matrix_io COMMAND $<TARGET_FILE:vnl_io_test_all> test_diag_matrix_io          )
@@ -37,6 +37,6 @@ add_test( NAME vnl_io_test_vector_io COMMAND $<TARGET_FILE:vnl_io_test_all> test
 add_test( NAME vnl_io_golden_test_vnl_io COMMAND $<TARGET_FILE:vnl_io_test_all> golden_test_vnl_io           )
 
 add_executable( vnl_io_test_include test_include.cxx )
-target_link_libraries( vnl_io_test_include vnl_io )
+target_link_libraries( vnl_io_test_include ${VXL_LIB_PREFIX}vnl_io )
 add_executable( vnl_io_test_template_include test_template_include.cxx )
-target_link_libraries( vnl_io_test_template_include vnl_io )
+target_link_libraries( vnl_io_test_template_include ${VXL_LIB_PREFIX}vnl_io )

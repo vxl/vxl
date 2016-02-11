@@ -11,7 +11,7 @@ add_executable( brdb_test_all
   test_query.cxx
 )
 
-target_link_libraries( brdb_test_all brdb testlib )
+target_link_libraries( brdb_test_all brdb ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME brdb_test_value COMMAND $<TARGET_FILE:brdb_test_all> test_value )
 add_test( NAME brdb_test_tuple COMMAND $<TARGET_FILE:brdb_test_all> test_tuple )

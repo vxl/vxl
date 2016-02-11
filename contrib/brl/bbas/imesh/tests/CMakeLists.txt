@@ -13,7 +13,7 @@ add_executable( imesh_test_all
   test_imls_surface.cxx
 )
 
-target_link_libraries( imesh_test_all imesh imesh_algo vnl vgl testlib )
+target_link_libraries( imesh_test_all imesh imesh_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME imesh_test_intersect COMMAND $<TARGET_FILE:imesh_test_all> test_intersect )
 add_test( NAME imesh_test_detect COMMAND $<TARGET_FILE:imesh_test_all> test_detect )

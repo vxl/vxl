@@ -13,7 +13,7 @@ set( bmsh3d_algo_sources
 )
 
 add_library( bmsh3d_algo  ${bmsh3d_algo_sources})
-target_link_libraries( bmsh3d_algo bmsh3d rply vgl vnl vul)
+target_link_libraries( bmsh3d_algo bmsh3d rply ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

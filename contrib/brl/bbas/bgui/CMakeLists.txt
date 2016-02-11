@@ -36,7 +36,7 @@ if(HAS_VGUI)
  install_targets(/lib bgui)
  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgui ${bgui_sources})
 
- target_link_libraries(bgui bsta vdgl vtol vsol vgui vgl_algo vgl vil_algo vil vil1 vnl vul vbl vcl)
+ target_link_libraries(bgui bsta vdgl vtol vsol ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
  if(BUILD_EXAMPLES)
    add_subdirectory(examples)

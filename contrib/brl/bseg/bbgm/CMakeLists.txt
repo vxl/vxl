@@ -27,7 +27,7 @@ aux_source_directory(Templates bbgm_sources)
 add_library(bbgm  ${bbgm_sources})
 
 # add the required libraries into this list
-target_link_libraries(bbgm bsta bsta_algo brip vnl_io vbl_io vsl vnl vil_algo vil vgl_algo vgl vbl)
+target_link_libraries(bbgm bsta bsta_algo brip ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl)
 
 add_subdirectory(pro)
 

@@ -1,6 +1,5 @@
 # This is core/vbl/tests/CMakeLists.txt
 
-link_libraries( vbl testlib )
 
 add_executable( vbl_test_all
   test_driver.cxx
@@ -24,6 +23,7 @@ add_executable( vbl_test_all
   vbl_test_attributes.cxx
   vbl_test_disjoint_sets.cxx
 )
+target_link_libraries( vbl_test_all ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vbl_test_bounding_box COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_bounding_box )
 add_test( NAME vbl_test_triple COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_triple )
@@ -44,6 +44,6 @@ add_test( NAME vbl_test_attributes COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_
 add_test( NAME vbl_test_disjoint_sets COMMAND $<TARGET_FILE:vbl_test_all> vbl_test_disjoint_sets )
 
 add_executable( vbl_test_include test_include.cxx )
-target_link_libraries( vbl_test_include vbl )
+target_link_libraries( vbl_test_include ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib)
 add_executable( vbl_test_template_include test_template_include.cxx )
-target_link_libraries( vbl_test_template_include vbl )
+target_link_libraries( vbl_test_template_include ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib)

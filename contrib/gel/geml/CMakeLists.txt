@@ -14,7 +14,7 @@ set(geml_sources
 add_library(geml ${geml_sources})
 install_targets(/lib geml)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/geml ${geml_sources})
-target_link_libraries(geml vil1 vnl)
+target_link_libraries(geml ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

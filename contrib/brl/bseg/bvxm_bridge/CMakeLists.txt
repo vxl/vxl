@@ -14,7 +14,7 @@ if(OPENCL_FOUND)
 
     # executable to convert a bvxm scene to a boxm2_scene
     add_executable( bvxm_to_boxm2_exe bvxm_to_boxm2.cxx  bvxm_to_boxm2.h)
-    target_link_libraries( bvxm_to_boxm2_exe boxm2 bvxm bvxm_io bvxm_grid_io bvxm_algo boxm2_io boct vnl vgl vul vbl vcl)
+    target_link_libraries( bvxm_to_boxm2_exe boxm2 bvxm bvxm_io bvxm_grid_io bvxm_algo boxm2_io boct ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
   endif()
 

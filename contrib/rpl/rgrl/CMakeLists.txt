@@ -166,7 +166,7 @@ add_library( rgrl ${rgrl_sources} )
 
 install_targets(/lib rgrl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgrl ${rgrl_sources})
-target_link_libraries( rgrl rrel rsdl vil3d vil vnl_algo vnl vbl vul)
+target_link_libraries( rgrl rrel rsdl vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 #find_package( ITK )
 #if( ITK_FOUND )
 #    target_link_libraries( rgrl ITKCommon )

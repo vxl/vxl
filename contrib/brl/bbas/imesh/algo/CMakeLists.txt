@@ -26,9 +26,9 @@ add_library( imesh_algo ${imesh_algo_sources} )
 
 if(NETLIB_FOUND)
 
-target_link_libraries( imesh_algo imesh vpgl bpgl bpgl_algo vgl_algo vgl vnl_algo vnl vil netlib)
+target_link_libraries( imesh_algo imesh ${VXL_LIB_PREFIX}vpgl bpgl bpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil netlib)
 else()
-target_link_libraries( imesh_algo imesh vpgl vgl_algo vgl vnl_algo vnl vil )
+target_link_libraries( imesh_algo imesh ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil )
 endif()
 
 

@@ -18,7 +18,7 @@ add_executable( vifa_test_all
   test_int_faces_attr.cxx
   test_int_faces_adj_attr.cxx
 )
-target_link_libraries( vifa_test_all vifa sdet vtol vdgl vil vil1 vgl testlib )
+target_link_libraries( vifa_test_all vifa sdet vtol vdgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vifa_test_coll_lines_params COMMAND $<TARGET_FILE:vifa_test_all> test_coll_lines_params)
 add_test( NAME vifa_test_group_pgram_params COMMAND $<TARGET_FILE:vifa_test_all> test_group_pgram_params)

@@ -13,7 +13,7 @@ add_executable( bsta_algo_test_all
   test_display_vrml.cxx
 )
 
-target_link_libraries( bsta_algo_test_all bsta_algo vnl vgl testlib )
+target_link_libraries( bsta_algo_test_all bsta_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}testlib )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_100_100.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_100_100.txt COPYONLY )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_10_100.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_10_100.txt COPYONLY )

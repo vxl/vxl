@@ -10,7 +10,7 @@ add_executable( m23d_test_all
   test_rotation_matrix.cxx
   test_correction_matrix_error.cxx
 )
-target_link_libraries( m23d_test_all m23d testlib )
+target_link_libraries( m23d_test_all m23d ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME m23d_test_make_ortho_projection COMMAND $<TARGET_FILE:m23d_test_all> test_make_ortho_projection )
 add_test( NAME m23d_test_rotation_from_ortho_projection COMMAND $<TARGET_FILE:m23d_test_all> test_rotation_from_ortho_projection )
