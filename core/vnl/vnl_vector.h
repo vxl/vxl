@@ -391,7 +391,7 @@ class vnl_vector
 
   //: Check that size()==sz if not, abort();
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned sz) const {
+  void assert_size(unsigned VXL_USED_IN_DEBUG(sz) ) const {
 #ifndef NDEBUG
     assert_size_internal(sz);
 #endif

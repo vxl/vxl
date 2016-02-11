@@ -1,4 +1,4 @@
-link_libraries( rrel vnl )
+link_libraries( rrel ${VXL_LIB_PREFIX}vnl )
 
 add_executable( homography2d_fit   homography2d_fit.cxx )
 add_executable( homography2d_gen   homography2d_gen.cxx )

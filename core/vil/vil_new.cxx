@@ -83,7 +83,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  vil_image_resource_sptr outimage = 0;
+  vil_image_resource_sptr outimage = VXL_NULLPTR;
   for (vil_file_format** p = vil_file_format::all(); *p; ++p)
   {
     vil_file_format* fmt = *p;
@@ -96,7 +96,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
   }
 
   vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: Make a new vil_image_resource, writing to file "filename", size ni x nj, copying pixel format etc from "prototype".
@@ -161,7 +161,7 @@ vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "pnm";
 
-  vil_blocked_image_resource_sptr outimage = 0;
+  vil_blocked_image_resource_sptr outimage = VXL_NULLPTR;
   for (vil_file_format** p = vil_file_format::all(); *p; ++p)
   {
     vil_file_format* fmt = *p;
@@ -175,7 +175,7 @@ vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
   }
 
   vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vil_blocked_image_resource_sptr
@@ -215,7 +215,7 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
-  vil_pyramid_image_resource_sptr outimage = 0;
+  vil_pyramid_image_resource_sptr outimage = VXL_NULLPTR;
   for (vil_file_format** p = vil_file_format::all(); *p; ++p)
   {
     vil_file_format* fmt = *p;
@@ -227,7 +227,7 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
     }
   }
   vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vil_pyramid_image_resource_sptr
@@ -239,7 +239,7 @@ vil_pyramid_image_resource_sptr
 {
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
-  vil_pyramid_image_resource_sptr outimage = 0;
+  vil_pyramid_image_resource_sptr outimage = VXL_NULLPTR;
   for (vil_file_format** p = vil_file_format::all(); *p; ++p)
   {
     vil_file_format* fmt = *p;
@@ -254,7 +254,7 @@ vil_pyramid_image_resource_sptr
     }
   }
   vcl_cerr << "vil_new: Unknown file type [" << file_format << "]\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //for now there is only one directory based pyramid format

@@ -35,7 +35,7 @@ add_executable( core_test_all
   test_config.cxx
   test_build_info.cxx test_build_info.h.in
 )
-target_link_libraries( core_test_all testlib vcl )
+target_link_libraries( core_test_all ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 
 add_executable( vxl_test_include test_include.cxx )
 
@@ -70,7 +70,7 @@ if( COMMAND WRITE_FILE )
 endif()
 
 add_executable( vxl_echo vxl_echo.cxx )
-target_link_libraries( vxl_echo vcl )
+target_link_libraries( vxl_echo ${VXL_LIB_PREFIX}vcl )
 
 
 # Deal with unavailablility of file(TO_CMAKE_PATH ...)

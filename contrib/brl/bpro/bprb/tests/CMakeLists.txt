@@ -10,7 +10,7 @@ if(EXPAT_FOUND)
    test_process_params.cxx
    bprb_test_process.h bprb_test_process.cxx
   )
-  target_link_libraries( bprb_test_all bprb testlib expat expatpp)
+  target_link_libraries( bprb_test_all bprb ${VXL_LIB_PREFIX}testlib expat expatpp)
 
   add_test( NAME bprb_test_process COMMAND $<TARGET_FILE:bprb_test_all> test_process )
   add_test( NAME bprb_test_process_params COMMAND $<TARGET_FILE:bprb_test_all> test_process_params )

@@ -81,7 +81,7 @@ vil1_image_impl* vil1_ras_file_format::make_input_image(vil1_stream* vs)
   vs->read(buf, 4);
   if ( ! ( buf[0] == RAS_MAGIC[0] && buf[1] == RAS_MAGIC[1] &&
            buf[2] == RAS_MAGIC[2] && buf[3] == RAS_MAGIC[3]  ) )
-    return 0;
+    return VXL_NULLPTR;
 
   return new vil1_ras_generic_image(vs);
 }
@@ -171,7 +171,7 @@ vil1_ras_generic_image::vil1_ras_generic_image(vil1_stream* vs, int planes,
   map_type_ = RMT_NONE;
   map_length_ = 0;
   length_ = compute_length( width_, height_, depth_ );
-  col_map_ = 0;
+  col_map_ = VXL_NULLPTR;
 
   write_header();
 }
@@ -245,7 +245,7 @@ bool vil1_ras_generic_image::read_header()
     col_map_ = new vxl_uint_8[ map_length_ ];
     vs_->read( col_map_, (vil1_streampos)map_length_ );
   } else {
-    col_map_ = 0;
+    col_map_ = VXL_NULLPTR;
   }
 
   start_of_data_ = vs_->tell();

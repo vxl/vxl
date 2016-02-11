@@ -12,7 +12,7 @@ set(boxm2_view_pro_sources
 aux_source_directory(processes boxm2_view_pro_sources)
 add_library(boxm2_view_pro ${boxm2_view_pro_sources} )
 
-target_link_libraries(boxm2_view_pro boxm2_view vgui)
+target_link_libraries(boxm2_view_pro boxm2_view ${VXL_LIB_PREFIX}vgui)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

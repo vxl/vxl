@@ -5,7 +5,7 @@ add_executable( boxm_util_test_all
   test_quad_interpolate.cxx
  )
 
-target_link_libraries( boxm_util_test_all boxm_util boxm boxm_sample testlib boct bsta vcl vnl vnl_algo vnl_io vgl vgl_algo vbl vpgl vpgl_algo vil bvrml)
+target_link_libraries( boxm_util_test_all boxm_util boxm boxm_sample ${VXL_LIB_PREFIX}testlib boct bsta ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vil bvrml)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/camera0.txt ${CMAKE_CURRENT_BINARY_DIR}/camera0.txt COPYONLY )
 
 add_test( NAME boxm_util_test_plane_ransac COMMAND $<TARGET_FILE:boxm_util_test_all> test_boxm_plane_ransac  )

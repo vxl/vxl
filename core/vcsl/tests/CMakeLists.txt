@@ -1,6 +1,6 @@
 # This is core/vcsl/tests/CMakeLists.txt
 
-link_libraries( vcsl vnl testlib )
+link_libraries( ${VXL_LIB_PREFIX}vcsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib )
 
 add_executable( vcsl_test_all
   test_driver.cxx
@@ -35,4 +35,4 @@ add_test( NAME vcsl_test_rotation COMMAND $<TARGET_FILE:vcsl_test_all> test_rota
 add_test( NAME vcsl_test_displacement COMMAND $<TARGET_FILE:vcsl_test_all> test_displacement)
 
 add_executable( vcsl_test_include test_include.cxx )
-target_link_libraries( vcsl_test_include vcsl )
+target_link_libraries( vcsl_test_include ${VXL_LIB_PREFIX}vcsl )

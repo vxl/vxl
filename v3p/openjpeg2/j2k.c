@@ -2075,7 +2075,6 @@ bool j2k_read_siz (
                 opj_event_msg(p_manager, EVT_ERROR, "Error with SIZ marker size\n");
                 return false;
         }
-        l_size = p_header_size + 2;                        /* Lsiz */
 
         opj_read_bytes(p_header_data,&l_tmp ,2);                        /* Rsiz (capabilities) */
         p_header_data+=2;
@@ -3490,7 +3489,6 @@ bool j2k_write_qcd(
         assert(p_stream != 00);
 
         l_cp = &(p_j2k->m_cp);
-        l_tcp = &l_cp->tcps[p_j2k->m_current_tile_number];
         l_qcd_size = 4 + j2k_get_SQcd_SQcc_size(p_j2k,p_j2k->m_current_tile_number,0);
         l_remaining_size = l_qcd_size;
 
@@ -3994,7 +3992,6 @@ bool j2k_write_mcc_record(
                 l_tmcc |= ((p_mcc_record->m_offset_array->m_index)<<8);
         }
         opj_write_bytes(l_current_data,l_tmcc,3);        /* Tmcci : use MCT defined as number 1 and irreversible array based. */
-        l_current_data+=3;
         if
                 (opj_stream_write_data(p_stream,p_j2k->m_specific_param.m_encoder.m_header_tile_data,l_mcc_size,p_manager) != l_mcc_size)
         {
@@ -4683,7 +4680,6 @@ bool j2k_read_mco (
         }
 
         l_tccp = l_tcp->tccps;
-        l_img_comp = l_image->comps;
         for
                 (i=0;i<l_image->numcomps;++i)
         {
@@ -4886,7 +4882,6 @@ bool j2k_write_poc(
         assert(p_stream != 00);
 
         l_tcp = &p_j2k->m_cp.tcps[p_j2k->m_current_tile_number];
-        l_tccp = &l_tcp->tccps[0];
         l_nb_comp = p_j2k->m_image->numcomps;
         l_nb_poc = 1 + l_tcp->numpocs;
         if
@@ -5410,7 +5405,6 @@ bool j2k_read_tlm (
         l_Ptlm_size = (l_SP + 1) * 2;
         l_quotient = l_Ptlm_size + l_ST;
 
-        l_tot_num_tp = p_header_size / l_quotient;
         l_tot_num_tp_remaining = p_header_size % l_quotient;
         if
                 (l_tot_num_tp_remaining != 0)
@@ -5714,8 +5708,6 @@ bool j2k_read_ppm (
                 {
                         memcpy(l_cp->ppm_buffer + l_cp->ppm_data_size , p_header_data , p_header_size);
                         l_cp->ppm_data_size += p_header_size;
-                        p_header_data += p_header_size;
-                        p_header_size = 0;
                         break;
                 }
         }
@@ -6051,13 +6043,11 @@ bool j2k_write_sod(
         l_remaining_data =  p_total_data_size - 4;
 
         l_cp = &(p_j2k->m_cp);
-        l_tcp = &l_cp->tcps[p_j2k->m_current_tile_number];
         l_cstr_info = p_j2k->cstr_info;
 
         /* update tile coder */
         p_tile_coder->tp_num = p_j2k->m_specific_param.m_encoder.m_current_poc_tile_part_number ;
         p_tile_coder->cur_tp_num = p_j2k->m_specific_param.m_encoder.m_current_tile_part_number;
-        l_size_tile = l_cp->th * l_cp->tw;
 
         /* INDEX >> */
         if
@@ -8084,7 +8074,6 @@ bool j2k_write_first_tile_part (
 
         l_tcd = p_j2k->m_tcd;
         l_cp = &(p_j2k->m_cp);
-        l_tcp = l_cp->tcps + p_j2k->m_current_tile_number;
 
         l_tcd->cur_pino = 0;
         /*Get number of tile parts*/
@@ -8344,7 +8333,6 @@ bool j2k_post_write_tile (
 
         l_tcd = p_j2k->m_tcd;
         l_cp = &(p_j2k->m_cp);
-        l_tcp = l_cp->tcps + p_j2k->m_current_tile_number;
 
         l_tile_size = p_j2k->m_specific_param.m_encoder.m_encoded_tile_size;
         l_available_data = l_tile_size;

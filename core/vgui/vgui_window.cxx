@@ -30,13 +30,13 @@ void vgui_window::set_adaptor(vgui_adaptor*)
 vgui_adaptor* vgui_window::get_adaptor()
 {
   vgui_macro_warning << "get_adaptor() not implemented for this window\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_statusbar* vgui_window::get_statusbar()
 {
   vgui_macro_warning << "get_statusbar() not implemented for this window\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //------------------------------------------------------------------------------

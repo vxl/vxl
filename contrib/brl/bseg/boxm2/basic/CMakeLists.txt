@@ -15,7 +15,7 @@ set(boxm2_basic_sources
 aux_source_directory(Templates boxm2_basic_sources)
 
 add_library(boxm2_basic  ${boxm2_basic_sources})
-target_link_libraries(boxm2_basic brdb baio expatpp vpgl vgl_xio vgl vnl vbl vsl vcl)
+target_link_libraries(boxm2_basic brdb baio expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
 #install the .h .txx and libs
 install_targets(/lib boxm2_basic)

@@ -364,8 +364,8 @@ vgui_soview2D_linestrip::vgui_soview2D_linestrip(unsigned n_, float const *x_, f
 vgui_soview2D_linestrip::~vgui_soview2D_linestrip()
 {
   n=0;
-  delete [] x; x=0;
-  delete [] y; y=0;
+  delete [] x; x=VXL_NULLPTR;
+  delete [] y; y=VXL_NULLPTR;
 }
 
 void vgui_soview2D_linestrip::draw() const
@@ -440,8 +440,8 @@ vgui_soview2D_polygon::vgui_soview2D_polygon(unsigned n_, float const *x_, float
 vgui_soview2D_polygon::~vgui_soview2D_polygon()
 {
   n=0;
-  delete [] x; x=0;
-  delete [] y; y=0;
+  delete [] x; x=VXL_NULLPTR;
+  delete [] y; y=VXL_NULLPTR;
 }
 
 void vgui_soview2D_polygon::draw() const
@@ -523,7 +523,7 @@ vgui_soview2D_image::vgui_soview2D_image( float in_x, float in_y,
     blend_( in_blend ),
     buffer_( new vgui_section_buffer( 0, 0, w_, h_, format, type ) )
 {
-  buffer_->apply( img , (vgui_range_map_params*) 0);
+  buffer_->apply( img , (vgui_range_map_params*) VXL_NULLPTR);
 }
 
 vgui_soview2D_image::vgui_soview2D_image( float in_x, float in_y,
@@ -538,7 +538,7 @@ vgui_soview2D_image::vgui_soview2D_image( float in_x, float in_y,
     blend_( in_blend ),
     buffer_( new vgui_section_buffer( 0, 0, w_, h_, format, type ) )
 {
-  buffer_->apply( vil_new_image_resource_of_view( img ), (vgui_range_map_params*) 0);
+  buffer_->apply( vil_new_image_resource_of_view( img ), (vgui_range_map_params*) VXL_NULLPTR);
 }
 
 vgui_soview2D_image::~vgui_soview2D_image()

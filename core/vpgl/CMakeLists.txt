@@ -35,8 +35,8 @@ set( vpgl_sources
 
 aux_source_directory(Templates vpgl_sources)
 
-add_library(vpgl ${vpgl_sources})
-target_link_libraries(vpgl vnl_algo vnl vgl_algo vgl vul vsl vbl)
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpgl LIBSRCS ${vpgl_sources})
+target_link_libraries(${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
@@ -46,5 +46,3 @@ add_subdirectory(algo)
 add_subdirectory(file_formats)
 add_subdirectory(io)
 add_subdirectory(xio)
-install_targets(/lib vpgl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/ ${vpgl_sources})

@@ -10,7 +10,7 @@ add_executable( boct_test_all
   test_bit_tree.cxx
   )
 
-target_link_libraries( boct_test_all boct testlib vnl vgl_io vgl vpl)
+target_link_libraries( boct_test_all boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl)
 
 add_test( NAME boct_test_locate_point COMMAND $<TARGET_FILE:boct_test_all> test_locate_point  )
 add_test( NAME boct_test_create_tree COMMAND $<TARGET_FILE:boct_test_all> test_create_tree   )
@@ -23,6 +23,6 @@ add_test( NAME boct_test_bit_tree COMMAND $<TARGET_FILE:boct_test_all> test_bit_
 
 
 add_executable( boct_test_include test_include.cxx )
-target_link_libraries( boct_test_include boct vnl)
+target_link_libraries( boct_test_include boct ${VXL_LIB_PREFIX}vnl)
 add_executable( boct_test_template_include test_template_include.cxx )
-target_link_libraries( boct_test_template_include boct vnl)
+target_link_libraries( boct_test_template_include boct ${VXL_LIB_PREFIX}vnl)

@@ -9,7 +9,7 @@ if( HAS_VGUI )
   # No need to do FindGLUT since the parent CMakeLists.txt did it for
   # us...
 
-  link_libraries( vgui )
+  link_libraries( ${VXL_LIB_PREFIX}vgui )
 
   add_executable( vgui_test_popup test_popup.cxx )
   #add_test( NAME vgui_test_popup COMMAND $<TARGET_FILE:vgui_test_popup> )
@@ -35,7 +35,7 @@ if( HAS_VGUI )
     test_image_tableau.cxx
     test_range_map.cxx
   )
-  target_link_libraries( vgui_test_all vgui vul vbl testlib )
+  target_link_libraries( vgui_test_all ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib )
 
   add_test( NAME vgui_test_displaybase COMMAND $<TARGET_FILE:vgui_test_all> test_displaybase )
   add_test( NAME vgui_test_pixels COMMAND $<TARGET_FILE:vgui_test_all> test_pixels )
@@ -43,9 +43,9 @@ if( HAS_VGUI )
   add_test( NAME vgui_test_range_map COMMAND $<TARGET_FILE:vgui_test_all> test_range_map)
 
   add_executable( vgui_test_include test_include.cxx )
-  target_link_libraries( vgui_test_include vgui )
+  target_link_libraries( vgui_test_include ${VXL_LIB_PREFIX}vgui )
   add_executable( vgui_test_template_include test_template_include.cxx )
-  target_link_libraries( vgui_test_template_include vgui )
+  target_link_libraries( vgui_test_template_include ${VXL_LIB_PREFIX}vgui )
 
   add_executable( vgui_test_drawpix_speed2 test_drawpix_speed2.cxx )
   add_executable( vgui_test_rubberband_dialog test_rubberband_dialog.cxx )

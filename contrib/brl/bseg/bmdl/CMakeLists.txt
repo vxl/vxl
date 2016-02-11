@@ -17,7 +17,7 @@ aux_source_directory(Templates bmdl_sources)
 
 add_library(bmdl  ${bmdl_sources})
 
-target_link_libraries(bmdl vil_algo imesh vgl_algo vgl vnl vil)
+target_link_libraries(bmdl ${VXL_LIB_PREFIX}vil_algo imesh ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil)
 
 #process lib
 add_subdirectory(pro)

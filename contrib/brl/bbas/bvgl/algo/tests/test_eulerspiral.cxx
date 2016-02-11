@@ -104,7 +104,6 @@ MAIN( test_eulerspiral )
   bvgl_eulerspiral es;
 
   // test case 1 - create a "straight line" eulerspiral
-  test_passed = true;
   es.set_params(vgl_point_2d< double >(case1[0], case1[1]), case1[2],
     vgl_point_2d<double >(case1[3], case1[4]), case1[5]);
   es.compute_es_params();
@@ -117,7 +116,6 @@ MAIN( test_eulerspiral )
   TEST("Straight-line Euler spiral", test_passed, true);
 
     // test case 2 - create a "circular" eulerspiral
-  test_passed = true;
   es.compute_es_params(vgl_point_2d< double >(case2[0], case2[1]), case2[2],
     vgl_point_2d<double >(case2[3], case2[4]), case2[5]);
   double r2[] = {es.k0(), es.gamma(), es.length()};
@@ -129,7 +127,6 @@ MAIN( test_eulerspiral )
   TEST("Circular Euler spiral", test_passed, true);
 
   // test case 3 - create an eulerspiral with no inflection point
-  test_passed = true;
   es.compute_es_params(vgl_point_2d< double >(case3[0], case3[1]), case3[2],
     vgl_point_2d<double >(case3[3], case3[4]), case3[5]);
   double r3[] = {es.k0(), es.gamma(), es.length()};
@@ -141,7 +138,6 @@ MAIN( test_eulerspiral )
   TEST("Euler spiral with no inflection point", test_passed, true);
 
   // test case 4 - create an eulerspiral with no inflection point and with negative curvature
-  test_passed = true;
   es.compute_es_params(vgl_point_2d< double >(case4[0], case4[1]), case4[2],
     vgl_point_2d<double >(case4[3], case4[4]), case4[5]);
   double r4[] = {es.k0(), es.gamma(), es.length()};
@@ -154,7 +150,6 @@ MAIN( test_eulerspiral )
 
 
   // test case 5 - create an eulerspiral with inflection point
-  test_passed = true;
   es.compute_es_params(vgl_point_2d< double >(case5[0], case5[1]), case5[2],
     vgl_point_2d<double >(case5[3], case5[4]), case5[5]);
   double r5[] = {es.k0(), es.gamma(), es.length()};
@@ -220,7 +215,6 @@ MAIN( test_eulerspiral )
 
   vcl_cout << "Comparing between levenberg_marquardt minimization and simple gradient descent" << vcl_endl;
 
-  test_passed = true;
   // use vnl_levenberg_marquardt
   es.compute_es_params(vgl_point_2d< double >(case3[0], case3[1]), case3[2],
     vgl_point_2d<double >(case3[3], case3[4]), case3[5]);

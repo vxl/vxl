@@ -16,11 +16,8 @@ set(vbl_io_sources
 
 aux_source_directory(Templates vbl_io_sources)
 
-add_library(vbl_io ${vbl_io_sources})
-target_link_libraries( vbl_io vbl vsl )
-
-install_targets(/lib vbl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl/io ${vbl_io_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vbl_io LIBSRCS ${vbl_io_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl )
 
 if( BUILD_TESTING)
   add_subdirectory(tests)

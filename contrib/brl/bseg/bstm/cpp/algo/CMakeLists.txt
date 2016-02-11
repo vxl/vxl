@@ -15,7 +15,7 @@ set(bstm_cpp_algo_sources
 aux_source_directory(Templates bstm_cpp_algo_sources)
 
 add_library(bstm_cpp_algo  ${bstm_cpp_algo_sources})
-target_link_libraries(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm bstm_io vcl)
+target_link_libraries(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm bstm_io ${VXL_LIB_PREFIX}vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

@@ -25,7 +25,7 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-target_link_libraries(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh vpgl vgl_algo vgl vnl vul vbl vcl)
+target_link_libraries(boxm_algo boxm boxm_util boxm_sample boxm_sample_algo boxm_basic bsta imesh ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
 #raytracing algorithms
 add_subdirectory(rt)

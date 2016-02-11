@@ -37,7 +37,7 @@ endif()
 add_library(vtol ${vtol_sources})
 install_targets(/lib vtol)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vtol ${vtol_sources})
-target_link_libraries(vtol vdgl vsol vnl vbl vul ${CMAKE_THREAD_LIBS})
+target_link_libraries(vtol vdgl vsol ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${CMAKE_THREAD_LIBS})
 
 add_subdirectory(algo)
 

@@ -9,7 +9,7 @@
 static void test_algo_fft()
 {
   vil_image_view<vcl_complex<double> > img0(4, 8, 2);
-  unsigned int seed = (unsigned int)vcl_time(0);
+  unsigned int seed = (unsigned int)vcl_time(VXL_NULLPTR);
 
   // fill in image
   for (unsigned i=0; i<img0.ni(); i++)

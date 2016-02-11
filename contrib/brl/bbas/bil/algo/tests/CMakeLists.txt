@@ -14,7 +14,7 @@ add_executable( bil_algo_test_all
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/c.20.tif ${CMAKE_CURRENT_BINARY_DIR}/c.20.tif)
 
-target_link_libraries( bil_algo_test_all bil_algo vil_algo vil vnl testlib )
+target_link_libraries( bil_algo_test_all bil_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib )
 add_test( NAME bil_algo_test_bil_wshed2d COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_wshed2d )
 add_test( NAME bil_algo_test_bil_scale_image COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_scale_image )
 add_test( NAME bil_algo_test_bil_edt COMMAND $<TARGET_FILE:bil_algo_test_all> test_bil_edt )

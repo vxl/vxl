@@ -14,7 +14,7 @@ set(bstm_ocl_algo_sources
    )
 
 add_library(bstm_ocl_algo  ${bstm_ocl_algo_sources})
-target_link_libraries(bstm_ocl_algo bstm_ocl bstm_cpp_algo boxm2_ocl_algo vgl vil vul bsta)
+target_link_libraries(bstm_ocl_algo bstm_ocl bstm_cpp_algo boxm2_ocl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul bsta)
 
 install_targets(/lib bstm_ocl_algo)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm/ocl/algo ${bstm_ocl_algo_sources})

@@ -5,7 +5,7 @@ add_executable( boxm_algo_rt_test_all
   test_shadow_appearance.cxx
  )
 
-target_link_libraries( boxm_algo_rt_test_all boxm_algo_rt boxm boxm_util boxm_sample boct testlib vpl vul)
+target_link_libraries( boxm_algo_rt_test_all boxm_algo_rt boxm boxm_util boxm_sample boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul)
 
 add_test( NAME boxm_algo_rt_test_bayesian_optimizer COMMAND $<TARGET_FILE:boxm_algo_rt_test_all> test_bayesian_optimizer  )
 add_test( NAME boxm_algo_rt_test_edges COMMAND $<TARGET_FILE:boxm_algo_rt_test_all> test_edges  )

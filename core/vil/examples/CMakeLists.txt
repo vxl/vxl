@@ -1,6 +1,6 @@
 # core/vil/examples/CMakeLists.txt
 
-link_libraries( vil vcl )
+link_libraries( ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vcl )
 
 add_executable( vil_example1 example1.cxx )
 add_executable( vil_example2 example2.cxx )

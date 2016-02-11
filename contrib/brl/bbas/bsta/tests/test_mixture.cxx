@@ -60,7 +60,6 @@ void test_sampling()
     vcl_cout << s0 << ' ';
     mean += s0;
   }
-  mean /= 1000;
   vcl_cout << vcl_endl;
 
   mean = 0.0f;
@@ -69,7 +68,6 @@ void test_sampling()
     vcl_cout << s1 << ' ';
     mean += s1;
   }
-  mean /= 1000;
   vcl_cout << vcl_endl;
 
 #if 0

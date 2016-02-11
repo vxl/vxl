@@ -24,7 +24,7 @@ endif()
 aux_source_directory(Templates bwm_pro_sources)
 
 add_library(bwm_pro ${bwm_pro_sources})
-target_link_libraries( bwm_pro bprb brip bwm_io vul bwm_algo)
+target_link_libraries( bwm_pro bprb brip bwm_io ${VXL_LIB_PREFIX}vul bwm_algo)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

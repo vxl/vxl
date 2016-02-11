@@ -158,7 +158,7 @@ vgui_tableau_sptr vgui_deck_tableau::current()
   if (index_ok(index_))
     return children[index_];
 
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //----------------------------------------------------------------------------
@@ -167,7 +167,7 @@ vgui_tableau_sptr vgui_deck_tableau::get_tableau_at(int tab_pos)
 {
   if (index_ok(tab_pos))
     return children[tab_pos];
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //----------------------------------------------------------------------------

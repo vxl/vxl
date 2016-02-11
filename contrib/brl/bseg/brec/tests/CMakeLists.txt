@@ -16,7 +16,7 @@ if( EXPAT_FOUND )
   test_brec_hierarchy_detector2.cxx
 )
 
-target_link_libraries( brec_test_all brec testlib vpgl vil_pro vil_io vnl vil vul vbl expat expatpp)
+target_link_libraries( brec_test_all brec ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpgl vil_pro ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl expat expatpp)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/digits_small.png    ${CMAKE_CURRENT_BINARY_DIR}/digits_small.png COPYONLY )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/normalized0_cropped.png    ${CMAKE_CURRENT_BINARY_DIR}/normalized0_cropped.png COPYONLY )

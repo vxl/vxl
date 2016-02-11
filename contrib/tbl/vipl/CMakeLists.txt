@@ -77,13 +77,13 @@ INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vipl ${vipl_sources})
 
 # No unconditional library dependencies:
 if(BUILD_CORE_IMAGING)
-  target_link_libraries(vipl vil)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vil)
 endif()
 if(BUILD_CORE_UTILITIES)
-  target_link_libraries(vipl vbl)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vbl)
 endif()
 if(BUILD_CORE_NUMERICS)
-  target_link_libraries(vipl vnl)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vnl)
 endif()
 
 if(BUILD_EXAMPLES)

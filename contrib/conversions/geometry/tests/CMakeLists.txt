@@ -1,4 +1,4 @@
-link_libraries( vgl_algo vnl_algo vbl testlib )
+link_libraries( ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib )
 
 if(BUILD_GEL)
   include_directories(${GEL_INCLUDE_DIR})

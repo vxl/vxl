@@ -19,7 +19,7 @@ if(EXPAT_FOUND)
 
   add_library(boxm_algo_rt_pro ${boxm_algo_rt_pro_sources} )
 
-  target_link_libraries(boxm_algo_rt_pro boxm_algo_rt boxm_algo_pro boxm boxm_sample boxm_sample_algo boct bprb brdb brip sdet vgl vnl_algo vil vul vcl)
+  target_link_libraries(boxm_algo_rt_pro boxm_algo_rt boxm_algo_pro boxm boxm_sample boxm_sample_algo boct bprb brdb brip sdet ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

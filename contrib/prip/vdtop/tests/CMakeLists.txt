@@ -1,6 +1,6 @@
 # This is contrib/prip/vdtop/tests/CMakeLists.txt
 
-link_libraries(vdtop vmap vil)
+link_libraries(vdtop vmap ${VXL_LIB_PREFIX}vil)
 
 #add_executable(vdtop_precompute vdtop_precompute.cxx)
 add_executable(vdtop_kernel_test               vdtop_kernel_test.cxx)

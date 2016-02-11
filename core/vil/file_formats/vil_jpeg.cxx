@@ -57,7 +57,7 @@ char const* vil_jpeg_file_format::tag() const
 //:
 vil_image_resource_sptr  vil_jpeg_file_format::make_input_image(vil_stream *vs)
 {
-  return vil_jpeg_file_probe(vs) ? new vil_jpeg_image(vs) : 0;
+  return vil_jpeg_file_probe(vs) ? new vil_jpeg_image(vs) : VXL_NULLPTR;
 }
 
 vil_image_resource_sptr
@@ -71,7 +71,7 @@ vil_image_resource_sptr
   {
     vcl_cout<<"ERROR! vil_jpeg_file_format::make_output_image()\n"
             <<"Pixel format should be byte, but is "<<format<<" instead.\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   return new vil_jpeg_image(vs, nx, ny, nplanes, format);
 }
@@ -81,7 +81,7 @@ vil_image_resource_sptr
 // class vil_jpeg_image
 
 vil_jpeg_image::vil_jpeg_image(vil_stream *s)
-  : jc(0)
+  : jc(VXL_NULLPTR)
   , jd(new vil_jpeg_decompressor(s))
   , stream(s)
 {
@@ -106,7 +106,7 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s,
                                unsigned nplanes,
                                enum vil_pixel_format format)
   : jc(new vil_jpeg_compressor(s))
-  , jd(0)
+  , jd(VXL_NULLPTR)
   , stream(s)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
@@ -132,12 +132,12 @@ vil_jpeg_image::~vil_jpeg_image()
   // free the vil_jpeg_stream_source_mgr allocated in vil_jpeg_stream_xxx_set()
   if (jd)
     delete jd;
-  jd = 0;
+  jd = VXL_NULLPTR;
   if (jc)
     delete jc;
-  jc = 0;
+  jc = VXL_NULLPTR;
   stream->unref();
-  stream = 0;
+  stream = VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
 {
   if (!jd) {
     vcl_cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 #ifdef DEBUG
   vcl_cerr << "get_copy_view " << ' ' << x0 << ' ' << nx << ' ' << y0 << ' ' << ny << '\n';
@@ -164,7 +164,7 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
   for (unsigned int i=0; i<ny; ++i) {
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
-      return 0; // failed
+      return VXL_NULLPTR; // failed
 
     vcl_memcpy(reinterpret_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
   }

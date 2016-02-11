@@ -1,4 +1,4 @@
-link_libraries( vil1 vpl vul vbl testlib )
+link_libraries( ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib )
 
 set(HAS_IMAGE "NO")
 if(EXISTS ${vxl_SOURCE_DIR}/Image/CMakeLists.txt )

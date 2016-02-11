@@ -33,7 +33,7 @@ set(bmsh3d_sources
 
 add_library( bmsh3d  ${bmsh3d_sources})
 
-target_link_libraries( bmsh3d vgl vgl_algo vnl vul)
+target_link_libraries( bmsh3d ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
 add_subdirectory(algo)
 add_subdirectory(pro)

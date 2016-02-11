@@ -15,7 +15,7 @@ add_executable( vpgl_test_all
   test_lvcs.cxx
 )
 
-target_link_libraries( vpgl_test_all vpgl vpgl_io vgl_algo vgl vnl vbl vpl testlib )
+target_link_libraries( vpgl_test_all ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vpgl_test_proj_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_proj_camera)
 add_test( NAME vpgl_test_perspective_camera COMMAND $<TARGET_FILE:vpgl_test_all> test_perspective_camera)
@@ -37,6 +37,6 @@ if(GEOTIFF_FOUND)
 endif()
 
 add_executable( vpgl_test_include test_include.cxx )
-target_link_libraries( vpgl_test_include vpgl )
+target_link_libraries( vpgl_test_include ${VXL_LIB_PREFIX}vpgl )
 add_executable( vpgl_test_template_include test_template_include.cxx )
-target_link_libraries( vpgl_test_template_include vpgl )
+target_link_libraries( vpgl_test_template_include ${VXL_LIB_PREFIX}vpgl )

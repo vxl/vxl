@@ -5,10 +5,10 @@ set( vbl_example_templates_sources
 )
 aux_source_directory( Templates vbl_example_templates_sources )
 
-add_library( vbl_example_templates ${vbl_example_templates_sources} )
-target_link_libraries( vbl_example_templates vbl )
+vxl_add_library( LIBNAME ${VXL_LIB_PREFIX}vbl_example_templates LIBSRCS ${vbl_example_templates_sources} )
+target_link_libraries( ${VXL_LIB_PREFIX}vbl_example_templates ${VXL_LIB_PREFIX}vbl )
 
 add_executable( vbl_smart_ptr_example
   vbl_smart_ptr_example.cxx    vbl_smart_ptr_example.h
 )
-target_link_libraries( vbl_smart_ptr_example vbl_example_templates vbl vcl )
+target_link_libraries( vbl_smart_ptr_example ${VXL_LIB_PREFIX}vbl_example_templates ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl )

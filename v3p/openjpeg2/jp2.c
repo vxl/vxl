@@ -2139,7 +2139,6 @@ void jp2_setup_encoder(opj_jp2_t *jp2, opj_cparameters_t *parameters, opj_image_
         jp2->bpc = depth_0 + (sign << 7);
         for (i = 1; i < image->numcomps; i++) {
                 int depth = image->comps[i].prec - 1;
-                sign = image->comps[i].sgnd;
                 if (depth_0 != depth)
                         jp2->bpc = 255;
         }

@@ -34,7 +34,7 @@ static void test_base_sptr()
   TEST("initial value of base_sptr should be null", bool(p), false);
   if (!p) // This is actually unnecessary - just to demonstrate operator bool()
     p = new base_impl;
-  if (p == (base_impl*)0) // identical result - just to demonstrate operator==()
+  if (p == (base_impl*)VXL_NULLPTR) // identical result - just to demonstrate operator==()
     p = new base_impl;
 
   vcl_cout << "operator<< gives : " << p << vcl_endl;

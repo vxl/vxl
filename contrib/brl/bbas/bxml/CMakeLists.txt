@@ -28,7 +28,7 @@ aux_source_directory(Templates bxml_sources)
 
 add_library(bxml ${bxml_sources})
 
-target_link_libraries( bxml vbl_io vul vbl )
+target_link_libraries( bxml ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
 if(EXPAT_FOUND)
  if(EXPATPP_FOUND)
   target_link_libraries( bxml ${EXPATPP_LIBRARIES})

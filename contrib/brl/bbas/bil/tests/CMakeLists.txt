@@ -4,7 +4,7 @@ add_executable( bil_test_all
   test_raw_image_istream.cxx
 )
 
-target_link_libraries( bil_test_all bil vil vul testlib )
+target_link_libraries( bil_test_all bil ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 set( testdata_path ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
 
 add_test( NAME bil_test_bounded_image_view COMMAND $<TARGET_FILE:bil_test_all> test_bounded_image_view )

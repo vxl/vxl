@@ -121,7 +121,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 add_library(mbl ${mbl_sources})
-target_link_libraries(mbl vnl_io vnl_algo vgl_io vgl vbl_io vil_io vsl vnl vil vul vbl)
+target_link_libraries(mbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
 install_targets(/lib mbl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})

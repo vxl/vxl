@@ -9,7 +9,7 @@ set(bstm_basic_sources
 aux_source_directory(Templates bstm_basic_sources)
 
 add_library(bstm_basic  ${bstm_basic_sources})
-target_link_libraries(bstm_basic vcl)
+target_link_libraries(bstm_basic ${VXL_LIB_PREFIX}vcl)
 
 #install the .h .txx and libs
 install_targets(/lib bstm_basic)

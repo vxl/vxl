@@ -51,7 +51,7 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   long n = ls_->get_number_of_unknowns();
   double damp = 0;
   long leniw = 1;
-  long* iw = 0;
+  long* iw = VXL_NULLPTR;
   long lenrw = m;
 #if defined __GNUC__ && !defined __STRICT_ANSI__
   double rw[m];

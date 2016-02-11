@@ -25,7 +25,7 @@ if(OPENCL_FOUND)
   aux_source_directory(Templates bocl_sources)
   add_library(bocl ${bocl_sources} )
 
-  target_link_libraries(bocl brdb vnl vnl_algo vbl_io vpgl vgl vil vbl vul ${OPENCL_LIBRARIES})
+  target_link_libraries(bocl brdb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${OPENCL_LIBRARIES})
 
   #install the .h .txx and libs
   install_targets(/lib bocl)

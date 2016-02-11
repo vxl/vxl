@@ -32,7 +32,7 @@ endif()
 
 add_executable(xcv ${xcv_sources})
 install_targets(/bin xcv)
-target_link_libraries(xcv osl mvl vgui vgl vil1 vnl vul vcl)
+target_link_libraries(xcv osl mvl ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

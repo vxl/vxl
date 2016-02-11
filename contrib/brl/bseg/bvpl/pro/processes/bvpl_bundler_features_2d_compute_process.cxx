@@ -212,7 +212,6 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
       k.locs.push_back(loc);
       w[idx++] = weight;
     }//end kernel weight iteration
-    idx = 0;
     k.w.set_size(w.size());
     k.w = w;
     kernel_map[*k_itr] = k;

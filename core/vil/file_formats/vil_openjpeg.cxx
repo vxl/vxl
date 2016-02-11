@@ -52,7 +52,7 @@ vil_openjpeg_file_format
   if ( !im->is_valid() )
   {
     delete im;
-    return 0;
+    return VXL_NULLPTR;
   }
   else
     return im;
@@ -66,7 +66,7 @@ vil_openjpeg_file_format
                     vil_pixel_format /*format*/, vil_openjpeg_format /*opjfmt*/)
 {
   assert(!"openjpeg write support is currently not implemented");
-  return 0;
+  return VXL_NULLPTR;
 }
 
 
@@ -158,7 +158,7 @@ struct vil_openjpeg_image_impl
   bool error_;
 
   vil_openjpeg_image_impl(void)
-  : encode_codec_(0), image_(0), vstream_(0), vstream_start_(0),
+  : encode_codec_(VXL_NULLPTR), image_(VXL_NULLPTR), vstream_(VXL_NULLPTR), vstream_start_(0),
     is_valid_(false), error_(false)
   {
     vcl_memset(&this->encode_params_, 0, sizeof(opj_cparameters_t));
@@ -174,7 +174,7 @@ struct vil_openjpeg_image_impl
 
 vil_openjpeg_decoder
 ::vil_openjpeg_decoder(OPJ_CODEC_FORMAT opj_codec_format)
-: codec_(0), image_(0), stream_(0), opj_codec_format_(opj_codec_format),
+: codec_(VXL_NULLPTR), image_(VXL_NULLPTR), stream_(VXL_NULLPTR), opj_codec_format_(opj_codec_format),
   error_(false), silent_(false)
 {
   vcl_memset(&this->params_, 0, sizeof(opj_dparameters_t));
@@ -189,17 +189,17 @@ vil_openjpeg_decoder
   if ( this->stream_ )
   {
     opj_stream_destroy(this->stream_);
-    this->stream_ = 0;
+    this->stream_ = VXL_NULLPTR;
   }
   if ( this->codec_ )
   {
     opj_destroy_codec(this->codec_);
-    this->codec_ = 0;
+    this->codec_ = VXL_NULLPTR;
   }
   if ( this->image_ )
   {
     opj_image_destroy(this->image_);
-    this->image_ = 0;
+    this->image_ = VXL_NULLPTR;
   }
 }
 
@@ -244,7 +244,7 @@ vil_openjpeg_decoder
   if ( this->stream_ )
   {
     opj_stream_destroy(this->stream_);
-    this->stream_ = 0;
+    this->stream_ = VXL_NULLPTR;
   }
 
   // Setup the input stream
@@ -274,7 +274,7 @@ vil_openjpeg_decoder
   if ( this->codec_ )
   {
     opj_destroy_codec(this->codec_);
-    this->codec_ = 0;
+    this->codec_ = VXL_NULLPTR;
   }
 
   // Set decoder parameters
@@ -313,7 +313,7 @@ vil_openjpeg_decoder
   if ( this->image_ )
   {
     opj_image_destroy(this->image_);
-    this->image_ = 0;
+    this->image_ = VXL_NULLPTR;
   }
 
   return opj_read_header( this->codec_,
@@ -343,7 +343,7 @@ vil_openjpeg_decoder
 ::take_image(void)
 {
   opj_image_t *image = this->image_;
-  this->image_ = 0;
+  this->image_ = VXL_NULLPTR;
   return image;
 }
 
@@ -554,7 +554,7 @@ vil_openjpeg_image
   if ( this->impl_->image_ )
   {
     opj_image_destroy(this->impl_->image_);
-    this->impl_->image_ = 0;
+    this->impl_->image_ = VXL_NULLPTR;
   }
   delete this->impl_;
 }
@@ -738,32 +738,32 @@ vil_openjpeg_image
                         unsigned int reduction) const
 {
   if ( !this->impl_->is_valid_ )
-    return 0;
+    return VXL_NULLPTR;
 
   if ( reduction > this->impl_->header_.num_reductions_ )
-    return 0;
+    return VXL_NULLPTR;
 
   vil_pixel_format pixel_format = this->pixel_format();
   if ( pixel_format == VIL_PIXEL_FORMAT_UNKNOWN )
-    return 0;
+    return VXL_NULLPTR;
 
   // Set up decoder
   this->impl_->vstream_->seek(this->impl_->vstream_start_);
   vil_openjpeg_decoder decoder(this->impl_->opj_codec_format_);
   if ( !decoder.init_from_stream(reduction, this->impl_->vstream_.as_pointer()) )
-    return 0;
+    return VXL_NULLPTR;
 
   // Configure the ROI
   int adj_mask = ~( (1 << reduction) - 1);
   i0 &= adj_mask; j0 &= adj_mask;
   ni &= adj_mask; nj &= adj_mask;
   if ( !decoder.set_decode_area( i0, j0, i0 + ni, j0 + nj ) )
-    return 0;
+    return VXL_NULLPTR;
 
   // Decode the JPEG2000 data
   opj_image_t *opj_view = decoder.decode();
   if ( !opj_view || decoder.error() )
-    return 0;
+    return VXL_NULLPTR;
 
   // Adjust ROI for reduction
   i0 >>= reduction;
@@ -780,7 +780,7 @@ vil_openjpeg_image
     return this->opj2vil<vxl_uint_16>(opj_view, i0, ni, j0, nj);
   case VIL_PIXEL_FORMAT_UINT_32 :
     return this->opj2vil<vxl_uint_32>(opj_view, i0, ni, j0, nj);
-  default: return 0;
+  default: return VXL_NULLPTR;
   }
 }
 

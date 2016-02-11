@@ -14,7 +14,7 @@
 
 //: Copy constructor
 vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
-  : data_(0), num_rows_(0), num_cols_(0)
+  : data_(VXL_NULLPTR), num_rows_(0), num_cols_(0)
 {
   if ( that.data_)
   {
@@ -88,7 +88,7 @@ unsigned long vbl_bit_array_2d::size() const
 void vbl_bit_array_2d::construct(unsigned int num_rows, unsigned int num_cols)
 {
   // quick return if possible
-  if (num_rows==0 || num_cols==0) { num_rows_=num_cols_=0; data_ = 0; return; }
+  if (num_rows==0 || num_cols==0) { num_rows_=num_cols_=0; data_ = VXL_NULLPTR; return; }
   num_rows_ = num_rows;
   num_cols_ = num_cols;
   data_ = new unsigned char [this->size()];

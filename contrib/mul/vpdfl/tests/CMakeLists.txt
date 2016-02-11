@@ -7,7 +7,7 @@ add_executable( vpdfl_test_all
   test_mixture.cxx
   test_pc_gaussian.cxx
   )
-target_link_libraries( vpdfl_test_all vpdfl mbl vnl_io vsl vpl testlib )
+target_link_libraries( vpdfl_test_all vpdfl mbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vpdfl_test_axis_gaussian COMMAND $<TARGET_FILE:vpdfl_test_all> test_axis_gaussian )
 add_test( NAME vpdfl_test_gaussian COMMAND $<TARGET_FILE:vpdfl_test_all> test_gaussian )

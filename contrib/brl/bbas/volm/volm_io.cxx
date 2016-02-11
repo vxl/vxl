@@ -984,7 +984,6 @@ int volm_io::read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<d
     char *tok = vcl_strtok(name_buf, "-");
     char *tok2 = vcl_strtok(tok, "_");
     tok2 = vcl_strtok(NULL, "_"); // tokenize the remaining string
-    tok2 = vcl_strtok(NULL, "_"); // tokenize the remaining string
     int img_id;
     vcl_stringstream tv(tok2); tv >> img_id;
 

@@ -9,7 +9,7 @@ set( register_images_exe_sources
    )
 
 add_executable( register_images_exe  ${register_images_exe_sources})
-target_link_libraries(register_images_exe ihog vnl vbl vul vil)
+target_link_libraries(register_images_exe ihog ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil)
 
 add_executable(compute_homographies_exe compute_homographies_exe.cxx)
-target_link_libraries(compute_homographies_exe ihog vnl vbl vul)
+target_link_libraries(compute_homographies_exe ihog ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)

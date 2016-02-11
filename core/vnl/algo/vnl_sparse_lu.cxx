@@ -19,7 +19,7 @@ vnl_sparse_lu::~vnl_sparse_lu()
 
 //: constructor - controls if condition information is computed
 vnl_sparse_lu::vnl_sparse_lu(vnl_sparse_matrix<double> const & M, operation mode):
-  A_(M), factored_(false),condition_computed_(false), mode_(mode),norm_(0), rcond_(0), largest_(0), pivot_thresh_(0),absolute_thresh_(0),diag_pivoting_(1),pmatrix_(0)
+  A_(M), factored_(false),condition_computed_(false), mode_(mode),norm_(0), rcond_(0), largest_(0), pivot_thresh_(0),absolute_thresh_(0),diag_pivoting_(1),pmatrix_(VXL_NULLPTR)
 {
   int n = (int)M.columns();
   assert(n == (int)(M.rows()));
@@ -31,14 +31,14 @@ vnl_sparse_lu::vnl_sparse_lu(vnl_sparse_matrix<double> const & M, operation mode
     return;
   }
   // fill the internal sparse matrix from A_
-  spElement* pelement = 0;
+  spElement* pelement = VXL_NULLPTR;
   for (A_.reset(); A_.next();)
   {
     int r = A_.getrow();
     int c = A_.getcolumn();
     double v = A_.value();
     pelement = spGetElement(pmatrix_, r+1, c+1);
-    if (pelement == 0)
+    if (pelement == VXL_NULLPTR)
     {
       vcl_cout<< "In vnl_sparse_lu::vnl_sparse_lu - error in getting element\n";
       return;

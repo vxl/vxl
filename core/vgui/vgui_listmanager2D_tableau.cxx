@@ -30,7 +30,7 @@ vgui_listmanager2D_tableau::vgui_listmanager2D_tableau():
 #if 0
   highlight_list(0),
 #endif // 0
-  highlight_so(0)
+  highlight_so(VXL_NULLPTR)
 {
 }
 
@@ -156,8 +156,8 @@ void vgui_listmanager2D_tableau::find_closest(float x, float y, vcl_vector<vcl_v
   float closest_dist = -1; // vnl_numeric_traits<float>::maxval;
   vcl_vector<unsigned> closest_hit;
   vgui_displaylist2D_tableau_sptr display;
-  closest_display = 0;
-  closest_so = 0;
+  closest_display = VXL_NULLPTR;
+  closest_so = VXL_NULLPTR;
 
 #ifdef DEBUG
   vcl_cerr << "vgui_listmanager2D_tableau::find_closest: hits->size() = " << hits->size() << '\n';
@@ -342,7 +342,7 @@ bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, v
       if (highlight_list == list)
       {
         highlight_list = vgui_displaylist2D_tableau_sptr();
-        highlight_so = 0;
+        highlight_so = VXL_NULLPTR;
       }
     }
     else if (isvisible)
@@ -360,7 +360,7 @@ bool vgui_listmanager2D_tableau::key_press(int /*x*/, int /*y*/, vgui_key key, v
       if (highlight_list == list)
       {
         highlight_list = vgui_displaylist2D_tableau_sptr();
-        highlight_so = 0;
+        highlight_so = VXL_NULLPTR;
       }
     }
 

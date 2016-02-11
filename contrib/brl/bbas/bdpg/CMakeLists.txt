@@ -13,7 +13,7 @@ add_library(bdpg ${bdpg_sources})
 install_targets(/lib bdpg)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bdpg ${bdpg_sources})
 
-target_link_libraries(bdpg vnl vbl)
+target_link_libraries(bdpg ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

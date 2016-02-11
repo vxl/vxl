@@ -19,7 +19,7 @@ add_executable( vimt_test_all
   test_v2i.cxx
   test_reflect.cxx
 )
-target_link_libraries( vimt_test_all vimt_algo vgl vnl vil vpl vsl vul testlib )
+target_link_libraries( vimt_test_all vimt_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vimt_test_image_2d_of COMMAND $<TARGET_FILE:vimt_test_all> test_image_2d_of )
 add_test( NAME vimt_test_sample_profile_bilin COMMAND $<TARGET_FILE:vimt_test_all> test_sample_profile_bilin )

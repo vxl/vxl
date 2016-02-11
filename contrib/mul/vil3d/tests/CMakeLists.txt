@@ -42,7 +42,7 @@ add_executable( vil3d_test_all
   test_algo_find_blobs.cxx
 )
 
-target_link_libraries( vil3d_test_all vil3d_algo vil3d vil vpl vul testlib vcl )
+target_link_libraries( vil3d_test_all vil3d_algo vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 
 add_test( NAME vil3d_test_file_format_read COMMAND $<TARGET_FILE:vil3d_test_all> test_file_format_read ${CMAKE_CURRENT_SOURCE_DIR}/file_read_data )
 add_test( NAME vil3d_test_save_load_image COMMAND $<TARGET_FILE:vil3d_test_all> test_save_load_image )
@@ -83,6 +83,6 @@ add_test( NAME vil3d_test_algo_exp_distance_transform COMMAND $<TARGET_FILE:vil3
 add_test( NAME vil3d_test_algo_find_blobs COMMAND $<TARGET_FILE:vil3d_test_all>  test_algo_find_blobs )
 
 add_executable( vil3d_test_include test_include.cxx )
-target_link_libraries( vil3d_test_include vil3d_algo vil3d vgl )
+target_link_libraries( vil3d_test_include vil3d_algo vil3d ${VXL_LIB_PREFIX}vgl )
 add_executable( vil3d_test_template_include test_template_include.cxx )
-target_link_libraries( vil3d_test_template_include vil3d_algo vil3d vgl )
+target_link_libraries( vil3d_test_template_include vil3d_algo vil3d ${VXL_LIB_PREFIX}vgl )

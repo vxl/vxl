@@ -154,7 +154,7 @@ bool vpgl_geo_camera::init_geo_camera(vcl_string img_name, unsigned ni, unsigned
     vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon-scale_lon << vcl_endl;
   else
     vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale_lon << vcl_endl;
-  vnl_matrix<double> trans_matrix(4,4,0,0);
+  vnl_matrix<double> trans_matrix(4,4,0,VXL_NULLPTR);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   if (direction == "E") {
     trans_matrix[0][3] = lon - 0.5/(ni-1.0);
@@ -246,7 +246,7 @@ bool vpgl_geo_camera::init_geo_camera_from_filename(vcl_string img_name, unsigne
   vcl_cout << " upper left corner in the image is: " << hemisphere << lat+scale << direction << lon << vcl_endl;
   vcl_cout << " lower right corner in the image is: " << hemisphere << lat << direction << lon+scale << vcl_endl;
 
-  vnl_matrix<double> trans_matrix(4,4,0,0);
+  vnl_matrix<double> trans_matrix(4,4,0,VXL_NULLPTR);
   //divide by ni-1 to account for 1 pixel overlap with the next tile
   trans_matrix[0][3] = lon - 0.5/(ni-1.0);
   trans_matrix[0][0] = scale/(ni-1.0);

@@ -23,7 +23,7 @@
 #include <vgui/internals/vgui_adaptor_tableau.h>
 
 
-vgui_adaptor *vgui_adaptor::current = 0;
+vgui_adaptor *vgui_adaptor::current = VXL_NULLPTR;
 static int adaptor_count = 0;
 
 //-----------------------------------------------------------------------------
@@ -32,7 +32,7 @@ vgui_adaptor::vgui_adaptor()
   : nested_popups(false)
   , default_items(true)
   , use_double_buffering(true)
-  , the_tableau(0)
+  , the_tableau(VXL_NULLPTR)
 {
   ++adaptor_count;
 
@@ -48,7 +48,7 @@ vgui_adaptor::vgui_adaptor()
 //: Destructor - quits application if all adaptors have been deleted.
 vgui_adaptor::~vgui_adaptor()
 {
-  set_tableau(0);
+  set_tableau(VXL_NULLPTR);
   the_tableau->unref();
 
   --adaptor_count;
@@ -198,7 +198,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
   vgui_macro_report_errors;
 
   // sanity check the 'origin' field :
-  if (e.origin == 0)
+  if (e.origin == VXL_NULLPTR)
     const_cast<vgui_event&>(e).origin = this;
   else
     assert(e.origin == this);
@@ -216,7 +216,7 @@ bool vgui_adaptor::dispatch_to_tableau(vgui_event const &e)
 vgui_window *vgui_adaptor::get_window() const
 {
   vgui_macro_warning << "get_window() not implemented\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //-----------------------------------------------------------------------------

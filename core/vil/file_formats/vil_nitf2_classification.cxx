@@ -33,7 +33,7 @@ const vil_nitf2_field_definitions* vil_nitf2_classification::
 get_field_definitions(const file_version& version,
                       vcl_string tag_prefix, vcl_string pretty_name_prefix)
 {
-  vil_nitf2_field_definitions* field_defs = 0;
+  vil_nitf2_field_definitions* field_defs = VXL_NULLPTR;
   if (version == V_NITF_20 || version == V_NITF_21) {
     type_field_defs_key key =
       vcl_make_pair(version, vcl_make_pair(tag_prefix, pretty_name_prefix));
@@ -68,14 +68,14 @@ add_field_defs(vil_nitf2_field_definitions* defs, const file_version& version,
              .value("C", "Confidential")
              .value("R", "Restricted")
              .value("U", "Unclassified")),
-            false, 0, 0)
-    .field(tp+"SCODE", np+"Codewords",                NITF_STR_ECSA(40), true, 0, 0)
-    .field(tp+"SCTLH", np+"Control and Handling",     NITF_STR_ECSA(40), true, 0, 0)
-    .field(tp+"SREL",  np+"Releasing Instructions",   NITF_STR_ECSA(40), true, 0, 0)
-    .field(tp+"SCAUT", np+"Classification Authority", NITF_STR_ECSA(20), true, 0, 0)
-    .field(tp+"SCTLN", np+"Security Control Number",  NITF_STR_ECSA(20), true, 0, 0)
-    .field(tp+"SDWNG", np+"Security Downgrade",       NITF_STR_ECSA(6),  true, 0, 0)
-    .field(tp+"SDEVT", np+"Downgrading Event",        NITF_STR_ECSA(40), true, 0,
+            false, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCODE", np+"Codewords",                NITF_STR_ECSA(40), true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCTLH", np+"Control and Handling",     NITF_STR_ECSA(40), true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SREL",  np+"Releasing Instructions",   NITF_STR_ECSA(40), true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCAUT", np+"Classification Authority", NITF_STR_ECSA(20), true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCTLN", np+"Security Control Number",  NITF_STR_ECSA(20), true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SDWNG", np+"Security Downgrade",       NITF_STR_ECSA(6),  true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SDEVT", np+"Downgrading Event",        NITF_STR_ECSA(40), true, VXL_NULLPTR,
            new vil_nitf2_field_value_one_of<vcl_string>(tp+"SDWNG", "999998"));
     break;
    case V_NITF_21:
@@ -87,33 +87,33 @@ add_field_defs(vil_nitf2_field_definitions* defs, const file_version& version,
                .value("C", "Confidential")
                .value("R", "Restricted")
                .value("U", "Unclassified")),
-              false, 0, 0)
-    .field(tp+"SCLSY", np+"Security Classification System", NITF_STR_ECSA(2),  true, 0, 0)
-    .field(tp+"SCODE", np+"Codewords",                      NITF_STR_ECSA(11), true, 0, 0)
-    .field(tp+"SCTLH", np+"Control and Handling",           NITF_STR_ECSA(2),  true, 0, 0)
-    .field(tp+"SREL",  np+"Releasing Instructions",         NITF_STR_ECSA(20), true, 0, 0)
+              false, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCLSY", np+"Security Classification System", NITF_STR_ECSA(2),  true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCODE", np+"Codewords",                      NITF_STR_ECSA(11), true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCTLH", np+"Control and Handling",           NITF_STR_ECSA(2),  true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SREL",  np+"Releasing Instructions",         NITF_STR_ECSA(20), true, VXL_NULLPTR, VXL_NULLPTR)
     //TODO: should this be an enum that accepts only DD, DE, GD, GE, 0, X and <blank>?
-    .field(tp+"SDCTP", np+"Declassification Type",          NITF_STR_ECSA(2),  true, 0, 0)
+    .field(tp+"SDCTP", np+"Declassification Type",          NITF_STR_ECSA(2),  true, VXL_NULLPTR, VXL_NULLPTR)
     //this field def is only used for NITF2.1, so we can use NitfDT
-    .field(tp+"SDCDT", np+"Declassification Date",          NITF_DAT(8),       true, 0, 0)
+    .field(tp+"SDCDT", np+"Declassification Date",          NITF_DAT(8),       true, VXL_NULLPTR, VXL_NULLPTR)
     //TODO: Should this instead be a NitfEnum that accepts only [X1-X8] and [x251-X259]??
-    .field(tp+"SDCXM", np+"Declassification Exemption",     NITF_STR_ECSA(4),  true, 0, 0)
+    .field(tp+"SDCXM", np+"Declassification Exemption",     NITF_STR_ECSA(4),  true, VXL_NULLPTR, VXL_NULLPTR)
     .field(tp+"SDG",   np+"Downgrade",
            NITF_ENUM(1, vil_nitf2_enum_values()
              .value("S", "Secret")
              .value("C", "Confidential")
              .value("R", "Restricted")),
-            true, 0, 0)
+            true, VXL_NULLPTR, VXL_NULLPTR)
     //this field def is only used for NITF2.1, so we can use NitfDT
-    .field(tp+"SDGDT", np+"Downgrade Date",                 NITF_DAT(8),       true, 0, 0)
-    .field(tp+"SCLTX", np+"Classification Text",            NITF_STR_ECSA(43), true, 0, 0)
+    .field(tp+"SDGDT", np+"Downgrade Date",                 NITF_DAT(8),       true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCLTX", np+"Classification Text",            NITF_STR_ECSA(43), true, VXL_NULLPTR, VXL_NULLPTR)
     .field(tp+"SCATP", np+"Classification Authority Type",
            NITF_ENUM(1, vil_nitf2_enum_values()
              .value("O", "Original classification authority")
              .value("D", "Derivative from a single source")
              .value("M", "Derivative from multiple sources")),
-            true, 0, 0)
-    .field(tp+"SCAUT", np+"Classification Authority",       NITF_STR_ECSA(40), true, 0, 0)
+            true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCAUT", np+"Classification Authority",       NITF_STR_ECSA(40), true, VXL_NULLPTR, VXL_NULLPTR)
     .field(tp+"SCRSN", np+"Classification Reason",
            NITF_ENUM(1, vil_nitf2_enum_values()
              .value("A", "Military plans, weapons systems, or operations")
@@ -123,10 +123,10 @@ add_field_defs(vil_nitf2_field_definitions* defs, const file_version& version,
              .value("E", "Scientific, technological, or economic matters relating to national security")
              .value("F", "United States Government programs for safeguarding nuclear materials or facilities")
              .value("G", "Vulnerabilities or capabilities of systems, installations, projects or plans relating to the national security")),
-            true, 0, 0)
+            true, VXL_NULLPTR, VXL_NULLPTR)
     //order of data/time depends on NITF2.1 or NITF2.0, so just read in as string for now
-    .field(tp+"SSRDT", np+"Security Source Date",           NITF_DAT(8),       true, 0, 0)
-    .field(tp+"SCTLN", np+"Security Control Number",        NITF_STR_ECSA(15), true, 0, 0);
+    .field(tp+"SSRDT", np+"Security Source Date",           NITF_DAT(8),       true, VXL_NULLPTR, VXL_NULLPTR)
+    .field(tp+"SCTLN", np+"Security Control Number",        NITF_STR_ECSA(15), true, VXL_NULLPTR, VXL_NULLPTR);
     break;
    default:
     assert(!"vil_nitf2_classification::add_field_defs() called with unsupported version!");

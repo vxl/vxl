@@ -15,7 +15,7 @@
 //=======================================================================
 
 static vcl_vector<vil_image_resource_plugin*>
-    *vil_image_resource_plugins_list_ = 0;
+    *vil_image_resource_plugins_list_ = VXL_NULLPTR;
 
 //=======================================================================
 
@@ -24,7 +24,7 @@ bool vil_image_resource_plugin::load_the_image (
     const vcl_string & path, const vcl_string & filetype,
     const vcl_string & colour)
 {
-  if (vil_image_resource_plugins_list_==0 ||
+  if (vil_image_resource_plugins_list_==VXL_NULLPTR ||
       is_a()!=vcl_string("vil_image_resource_plugin"))
   {
     return false;
@@ -47,12 +47,12 @@ bool vil_image_resource_plugin::load_the_image (
 void vil_image_resource_plugin::register_plugin(
     vil_image_resource_plugin* plugin)
 {
-  if (plugin==0 || plugin->is_a()==vcl_string("vil_image_resource_plugin"))
+  if (plugin==VXL_NULLPTR || plugin->is_a()==vcl_string("vil_image_resource_plugin"))
   {
     return;
   }
 
-  if (vil_image_resource_plugins_list_==0)
+  if (vil_image_resource_plugins_list_==VXL_NULLPTR)
   {
     vil_image_resource_plugins_list_ =
       new vcl_vector<vil_image_resource_plugin*>();
@@ -65,7 +65,7 @@ void vil_image_resource_plugin::register_plugin(
 
 void vil_image_resource_plugin::delete_all_plugins()
 {
-  if (vil_image_resource_plugins_list_==0) return;
+  if (vil_image_resource_plugins_list_==VXL_NULLPTR) return;
   unsigned int n = (unsigned int)(vil_image_resource_plugins_list_->size());
   for (unsigned int i=0;i<n;++i)
     delete vil_image_resource_plugins_list_->operator[](i);
@@ -73,14 +73,14 @@ void vil_image_resource_plugin::delete_all_plugins()
 
   // Clean up the list itself
   delete vil_image_resource_plugins_list_;
-  vil_image_resource_plugins_list_=0;
+  vil_image_resource_plugins_list_=VXL_NULLPTR;
 }
 
 //=======================================================================
 
 bool vil_image_resource_plugin::can_be_loaded(const vcl_string& filename)
 {
-  if (vil_image_resource_plugins_list_==0 ||
+  if (vil_image_resource_plugins_list_==VXL_NULLPTR ||
       is_a()!=vcl_string("vil_image_resource_plugin"))
   {
     return false;

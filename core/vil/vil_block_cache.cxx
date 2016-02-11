@@ -11,7 +11,7 @@ vil_block_cache::~vil_block_cache()
   for(vcl_vector<bcell*>::iterator bit = blocks_.begin();
       bit != blocks_.end(); ++bit){
     delete *bit;
-    *bit = 0;
+    *bit = VXL_NULLPTR;
   }
   blocks_.clear();//empty the index
 }

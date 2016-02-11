@@ -10,7 +10,7 @@ set(vrml_sources
 )
 
 add_library(oxl_vrml ${vrml_sources})
-target_link_libraries(oxl_vrml vul)
+target_link_libraries(oxl_vrml ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

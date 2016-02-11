@@ -7,7 +7,7 @@ set(bvrml_sources
 
 add_library(bvrml  ${bvrml_sources})
 
-target_link_libraries(bvrml vgl)
+target_link_libraries(bvrml ${VXL_LIB_PREFIX}vgl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

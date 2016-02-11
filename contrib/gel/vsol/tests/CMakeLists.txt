@@ -20,7 +20,7 @@ add_executable( vsol_test_all
   test_vsol_tetrahedron.cxx
   test_vsol_io.cxx
 )
-target_link_libraries( vsol_test_all vsol vnl vgl vbl_io vsl vpl testlib )
+target_link_libraries( vsol_test_all vsol ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vsol_test_point_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_point_2d)
 add_test( NAME vsol_test_group_2d COMMAND $<TARGET_FILE:vsol_test_all> test_vsol_group_2d)

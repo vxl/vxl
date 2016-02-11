@@ -2,10 +2,6 @@
 
 project( zlib C )
 
-include(${VXL_CMAKE_DIR}/FindZLIB.cmake)
-
-if(NOT VXL_USING_NATIVE_ZLIB)
-
 set( zlib_sources
   zlib.h
   zconf.h
@@ -35,5 +31,4 @@ endif()
 add_library( z ${zlib_sources} )
 install_targets( /lib z )
 
-endif()
 

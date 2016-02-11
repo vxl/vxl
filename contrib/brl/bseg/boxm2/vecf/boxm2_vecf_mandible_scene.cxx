@@ -610,7 +610,6 @@ void boxm2_vecf_mandible_scene::apply_vector_field_to_target(vcl_vector<vgl_vect
     }
 
     // the nearest source data is defined, so use it
-    sindx = data_index_to_cell_index_[dindx];
     app = app_data_[dindx];
     alpha = alpha_data_[dindx];
     target_app_data_[tindx] = app;

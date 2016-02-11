@@ -12,7 +12,7 @@ set( bocl_test_sources
 aux_source_directory(Templates bocl_test_sources)
 add_executable(bocl_test_all ${bocl_test_sources})
 
-target_link_libraries( bocl_test_all bocl testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
+target_link_libraries( bocl_test_all bocl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul)
 
 add_test( NAME bocl_test_global_io_bandwidth COMMAND $<TARGET_FILE:bocl_test_all> test_global_io_bandwidth  )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## This test is always segmentation faulting

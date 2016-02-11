@@ -1,6 +1,7 @@
 //:
 // \file
 #include "vil_viffheader.h"
+#include "vcl_compiler.h"
 #include <string.h>
 
 
@@ -34,14 +35,14 @@ vil_viff_xvimage::vil_viff_xvimage(
   pixsizy = 1.0;
   location_type = VFF_LOC_IMPLICIT;
   location_dim = 0;
-  location = NULL;
+  location = VXL_NULLPTR;
   num_of_images = 1;
   num_data_bands = num_bands;
   data_storage_type = storage_type;
   data_encode_scheme = VFF_DES_RAW;
   map_scheme = VFF_MS_NONE;
   map_storage_type = VFF_MAPTYP_NONE;
-  maps = NULL;
+  maps = VXL_NULLPTR;
   map_row_size = 0;
   map_col_size = 0;
   map_subrow_size = 0;
@@ -65,10 +66,7 @@ vil_viff_xvimage::vil_viff_xvimage(
     case VFF_TYP_DCOMPLEX:  image_data_n_bytes = ncols*16; break;
     default:                image_data_n_bytes = ncols*255; break;
   }
-  image_data_n_bytes *= nrows*num_data_bands;
-
-
-  imagedata = 0;
+  imagedata = VXL_NULLPTR;
 }
 
 vil_viff_xvimage::vil_viff_xvimage()

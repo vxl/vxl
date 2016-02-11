@@ -19,7 +19,7 @@ add_executable( bhdfs_test_all
   test_vil_save_load_image.cxx
 )
 
-target_link_libraries( bhdfs_test_all bhdfs vil testlib )
+target_link_libraries( bhdfs_test_all bhdfs ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_manager )
 add_test( NAME bhdfs_test_manager COMMAND $<TARGET_FILE:bhdfs_test_all> test_fstream )

@@ -18,4 +18,4 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-target_link_libraries(boxm_basic boxm boxm_util boxm_sample boxm_sample_algo boct vpgl vpgl_algo vgl_io vgl vil vul vbl_io vbl vcl)
+target_link_libraries(boxm_basic boxm boxm_util boxm_sample boxm_sample_algo boct ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)

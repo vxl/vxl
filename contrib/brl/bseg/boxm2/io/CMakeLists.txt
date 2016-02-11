@@ -28,7 +28,7 @@ set(boxm2_io_sources
 aux_source_directory(Templates boxm2_io_sources)
 
 add_library(boxm2_io  ${boxm2_io_sources})
-target_link_libraries(boxm2_io boxm2 expatpp vpgl baio vpgl vgl_xio vgl vbl vul vsl vcl)
+target_link_libraries(boxm2_io boxm2 expatpp ${VXL_LIB_PREFIX}vpgl baio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
 if(HDFS_FOUND)
  target_link_libraries(boxm2_io bhdfs)

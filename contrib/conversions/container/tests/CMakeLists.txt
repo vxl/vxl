@@ -1,4 +1,4 @@
-link_libraries( vnl testlib )
+link_libraries( ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib )
 
 set(HAS_COOL "NO")
 if(EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )

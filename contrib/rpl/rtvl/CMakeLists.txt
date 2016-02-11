@@ -41,7 +41,7 @@ set(rtvl_sources
   )
 
 add_library(rtvl ${rtvl_sources})
-target_link_libraries(rtvl rgtl vnl_algo vnl)
+target_link_libraries(rtvl rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
 install_targets(/lib rtvl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rtvl ${rtvl_sources})

@@ -54,7 +54,7 @@ endif()
 add_library(mvl2 ${mvl2_sources})
 install_targets(/lib mvl2)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mvl2 ${mvl2_sources})
-target_link_libraries( mvl2 vil vul ${AVIFILE_LIBRARIES} )
+target_link_libraries( mvl2 ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${AVIFILE_LIBRARIES} )
 
 if(AVIFILE_FOUND)
   if( BUILD_TESTING )
