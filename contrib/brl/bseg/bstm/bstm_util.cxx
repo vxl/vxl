@@ -60,7 +60,6 @@ bool bstm_util::query_point_color(bstm_scene_sptr& scene,
       {
           data_type = apps[i];
           foundDataType = true;
-          appTypeSize = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
       }
   }
 

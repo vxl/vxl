@@ -240,9 +240,7 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
   if (fin)
     vcl_fclose(fin);
 
-  if (err<0)
-    err=ZIP_ERRNO;
-  else {
+  if (err >= 0 ){
     err = zipCloseFileInZip(zf);
     if (err!=ZIP_OK)
       vcl_printf("error in closing %s in the zipfile\n", filenameinzip);

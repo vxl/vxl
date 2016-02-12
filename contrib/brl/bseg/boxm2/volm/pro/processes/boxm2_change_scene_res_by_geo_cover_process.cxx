@@ -161,7 +161,7 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
           }
           else if ( (*img)(i,j) == volm_osm_category_io::GEO_AGRICULTURE_GENERAL || (*img)(i,j) == volm_osm_category_io::GEO_AGRICULTURE_GENERAL) {
             if (land_cover != volm_osm_category_io::GEO_URBAN) {
-              land_cover = volm_osm_category_io::GEO_AGRICULTURE_GENERAL;  ii = i;  jj = j;
+              land_cover = volm_osm_category_io::GEO_AGRICULTURE_GENERAL;
             }
           }
         }

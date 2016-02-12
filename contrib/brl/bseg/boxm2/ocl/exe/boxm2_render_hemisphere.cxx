@@ -101,11 +101,16 @@ int main(int argc,  char** argv)
 
       //if scene has RGB data type, use color render process
       bool good;
-      if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+      if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-      else
+      }
+      else {
         good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
-
+      }
+      if ( !good ) {
+        vcl_cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << vcl_endl;
+        return -1;
+      }
       //set process args and run process
       good = good
           && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
@@ -115,9 +120,17 @@ int main(int argc,  char** argv)
           && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
           && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
           && bprb_batch_process_manager::instance()->run_process();
+      if ( !good ) {
+        vcl_cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << vcl_endl;
+        return -1;
+      }
 
       unsigned int img_id=0;
       good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+      if ( !good ) {
+        vcl_cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << vcl_endl;
+        return -1;
+      }
       brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
       brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
       if (S->size()!=1) {
@@ -205,10 +218,16 @@ int main(int argc,  char** argv)
 
         //if scene has RGB data type, use color render process
         bool good;
-        if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+        if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
           good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-        else
+        }
+        else {
           good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+        }
+        if ( !good ) {
+          vcl_cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << vcl_endl;
+          return -1;
+        }
 
         //set process args and run process
         good = good
@@ -219,9 +238,17 @@ int main(int argc,  char** argv)
             && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
             && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
             && bprb_batch_process_manager::instance()->run_process();
+        if ( !good ) {
+          vcl_cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << vcl_endl;
+          return -1;
+        }
 
         unsigned int img_id=0;
         good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+        if ( !good ) {
+          vcl_cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << vcl_endl;
+          return -1;
+        }
         brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
         brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
         if (S->size()!=1) {
