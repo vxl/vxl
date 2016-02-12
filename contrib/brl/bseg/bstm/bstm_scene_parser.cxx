@@ -29,19 +29,23 @@ bool bstm_scene_parser::lvcs(vpgl_lvcs& lvcs)
   vpgl_lvcs::cs_names cs_name = vpgl_lvcs::str_to_enum(lvcs_cs_name_.data());
   vpgl_lvcs::LenUnits len_unit;
   vpgl_lvcs::AngUnits geo_unit;
-   if (vcl_strcmp(lvcs_XYZ_unit_.data(), "feet")==0)
+   if (vcl_strcmp(lvcs_XYZ_unit_.data(), "feet")==0) {
      len_unit = vpgl_lvcs::FEET;
-   if (vcl_strcmp(lvcs_XYZ_unit_.data(), "meters")==0)
+   }
+   else if (vcl_strcmp(lvcs_XYZ_unit_.data(), "meters")==0) {
      len_unit = vpgl_lvcs::METERS;
+   }
    else {
      vcl_cout << "LVCS Length Unit " << lvcs_XYZ_unit_ << " is not valid\n";
      return false;
    }
 
-   if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "radians")==0)
+   if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "radians")==0) {
      geo_unit = vpgl_lvcs::RADIANS;
-   if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "degrees")==0)
+   }
+   else if (vcl_strcmp(lvcs_geo_angle_unit_.data(), "degrees")==0) {
      geo_unit = vpgl_lvcs::DEG;
+   }
    else {
      vcl_cout << "LVCS Geo Angle Unit " << lvcs_geo_angle_unit_ << " is not valid\n";
      return false;

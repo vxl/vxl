@@ -811,7 +811,6 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
 
         // find the best score
         if(compactness_score > best_score) {
-          best_nimages = nimages;
           best_score = compactness_score;
           best_region_hull = region_hull;
           //vcl_cout << best_region_hull << vcl_endl;
