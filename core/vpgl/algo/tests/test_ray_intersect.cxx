@@ -91,12 +91,12 @@ static void test_ray_intersect()
   p2 = rcam2.project(p3d);
   vcl_cout << "Projected point from rcam 1 " << p1 << '\n'
            << "Projected point from rcam 2 " << p2 << '\n';
-  vcl_vector<vpgl_camera<double>* > cams(2);
+  vcl_vector<vpgl_camera<double> const * > cams(2);
   cams[0]= (vpgl_camera<double>*)(&rcam1);
   cams[1]= (vpgl_camera<double>*)(&rcam2);
   vcl_vector<vgl_point_2d<double> > image_pts;
   image_pts.push_back(p1);   image_pts.push_back(p2);
-  vpgl_ray_intersect ri(2);
+  vpgl_ray_intersect<double> ri(2);
   vgl_point_3d<double> intersection;
   vgl_point_3d<double> initial_point(44.3542,33.1855 ,32);
   /*bool success =*/ ri.intersect(cams, image_pts, initial_point, intersection);

@@ -1,15 +1,15 @@
 # bbas/bpgl/ihog/exe/CMakeLists.txt
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${VXLCORE_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${VXLCORE_INCLUDE_DIR} )
 
-SET( register_images_exe_sources
+set( register_images_exe_sources
      register_images_exe.cxx
    )
 
-ADD_EXECUTABLE( register_images_exe  ${register_images_exe_sources})
-TARGET_LINK_LIBRARIES(register_images_exe ihog vnl vbl vul vil)
+add_executable( register_images_exe  ${register_images_exe_sources})
+target_link_libraries(register_images_exe ihog ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil)
 
-ADD_EXECUTABLE (compute_homographies_exe compute_homographies_exe.cxx)
-TARGET_LINK_LIBRARIES(compute_homographies_exe ihog vnl vbl vul)
+add_executable(compute_homographies_exe compute_homographies_exe.cxx)
+target_link_libraries(compute_homographies_exe ihog ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)

@@ -62,7 +62,7 @@ foreach my $dir (@DIRS)
   my @file_list = grep {! m/^(\..*|CVS|\.svn)$/} readdir(BASEDIR);
   closedir(BASEDIR);
   my @sd = ();
-  if    ($dir =~ m!\bvcl$!)   { @sd = qw(vcl_sys iso generic gcc gcc-295 gcc-libstdcxx-v3 sgi sunpro win32-vc60 win32-vc70 win32-vc8 emulation stlport internal); }
+  if    ($dir =~ m!\bvcl$!)   { @sd = qw(vcl_sys iso generic gcc gcc-libstdcxx-v3 sunpro win32-vc9 internal); }
   elsif ($dir =~ m!\bvil(|1|3d)$!) { @sd = qw(file_formats); }
   elsif ($dir =~ m!\bvgl$!)   { @sd = qw(internals); }
   elsif ($dir =~ m!\bvpl$!)   { @sd = qw(os_unix os_win32); }
@@ -325,7 +325,7 @@ foreach my $dir (@DIRS)
 
   # General manipulations of the CMakeLists.txt content:
   $cmakefile =~ s/\s*\#[^\n]*//g;
-  $cmakefile =~ s!\$\{EXECUTABLE_OUTPUT_PATH\}/!!g;
+  $cmakefile =~ s!\$\{CMAKE_RUNTIME_OUTPUT_DIRECTORY\}/!!g;
   my $moc_files = '';
   if ($cmakefile =~ s/\bQT_WRAP_CPP\s*\(\s*(\S+)\s+(\S+)\s+(.+?)\)//s) {
     $moc_files = $2;

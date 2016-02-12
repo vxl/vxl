@@ -1,6 +1,9 @@
 #include "boxm2_vecf_orbit_params.h"
 #include <vcl_iostream.h>
-double boxm2_vecf_orbit_params::height_to_width_ratio(){
+double
+boxm2_vecf_orbit_params
+::height_to_width_ratio()
+{
   double width = eye_radius_*(x_max_-x_min_)*scale_x();
   vnl_vector_fixed<double, 5> mm = this->m(0.0);
   vnl_vector_fixed<double, 5> c0 = eyelid_coefs_t0();

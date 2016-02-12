@@ -63,18 +63,6 @@ O vil1_ncc(vil1_memory_image_of<I1> const &a,
 
 //--------------------------------------------------------------------------------
 
-#if defined(VCL_GCC_295)
-// for 2.7 we'd have to instantiate the inline function, which can't be done
-// in the macro as it would conflict with the specialization.
-template <class T, class A>
-inline A vil1_ncc_cond(T const &x, A *) { return A(x); }
-
-VCL_DEFINE_SPECIALIZATION
-inline double vil1_ncc_cond(unsigned char const &x, double *) { return (double(x)-127.5)/127.5; }
-#else
-# define vil1_ncc_cond(x, ptr_to_A) (x) //(typeof *ptr_to_A)(x)
-#endif
-
 template <class T1, class T2, class A>
 A vil1_ncc(T1 const * const *I1, int x1, int y1,
            T2 const * const *I2, int x2, int y2,
@@ -88,8 +76,8 @@ A vil1_ncc(T1 const * const *I1, int x1, int y1,
     T1 const *row1 = I1[y1+j];
     T2 const *row2 = I2[y2+j];
     for (int i=-size; i<=size; ++i) {
-      A im1 = vil1_ncc_cond(row1[x1+i], (A*)0);
-      A im2 = vil1_ncc_cond(row2[x2+i], (A*)0);
+      A im1 = row1[x1+i];
+      A im2 = row2[x2+i];
       N += 1;
       S1 += im1; S2 += im2;
       S11 += im1*im1; S12 += im1*im2; S22 += im2*im2;

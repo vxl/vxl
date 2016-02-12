@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief Reference sphere or ellipse for a geographic coordinate system
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2004/09/17 Peter Vanroose  made a(), b(), e() and f() non-virtual - they just return a member and should not be overloaded
 // \endverbatim

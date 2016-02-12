@@ -5,7 +5,7 @@ doxygen_add_library(contrib/tbl/vipl
   DESCRIPTION "Templated Image Processing Library"
   )
 
-SET(vipl_sources
+set(vipl_sources
  # A. Point operators:
  vipl_convert.txx              vipl_convert.h
  vipl_threshold.txx            vipl_threshold.h
@@ -48,48 +48,48 @@ SET(vipl_sources
  vipl_with_section/vipl_filterable_section_container_generator_section.txx
  vipl_with_section/accessors/vipl_accessors_section.txx  vipl_with_section/accessors/vipl_accessors_section.h
 )
-IF (BUILD_CORE_IMAGING)
-  SET(vipl_sources ${vipl_sources}
+if(BUILD_CORE_IMAGING)
+  set(vipl_sources ${vipl_sources}
       section/vipl_filterable_section_container_generator_vil_image_view.txx
       accessors/vipl_accessors_vil_image_view.txx accessors/vipl_accessors_vil_image_view.h
      )
-ENDIF (BUILD_CORE_IMAGING)
-IF (BUILD_CORE_UTILITIES)
-  SET(vipl_sources ${vipl_sources}
+endif()
+if(BUILD_CORE_UTILITIES)
+  set(vipl_sources ${vipl_sources}
       vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_array_2d.txx
       vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.txx vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h
      )
-ENDIF (BUILD_CORE_UTILITIES)
-IF (BUILD_CORE_NUMERICS)
-  SET(vipl_sources ${vipl_sources}
+endif()
+if(BUILD_CORE_NUMERICS)
+  set(vipl_sources ${vipl_sources}
       vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.txx
       vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.txx     vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h
       vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_vector.txx
       vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.txx     vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h
      )
-ENDIF (BUILD_CORE_NUMERICS)
+endif()
 
-ADD_DEFINITIONS(-DINSTANTIATE_TEMPLATES)
+add_definitions(-DINSTANTIATE_TEMPLATES)
 
-ADD_LIBRARY(vipl ${vipl_sources})
-INSTALL_TARGETS(/lib vipl)
+add_library(vipl ${vipl_sources})
+install_targets(/lib vipl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vipl ${vipl_sources})
 
 # No unconditional library dependencies:
-IF (BUILD_CORE_IMAGING)
-  TARGET_LINK_LIBRARIES(vipl vil)
-ENDIF (BUILD_CORE_IMAGING)
-IF (BUILD_CORE_UTILITIES)
-  TARGET_LINK_LIBRARIES(vipl vbl)
-ENDIF (BUILD_CORE_UTILITIES)
-IF (BUILD_CORE_NUMERICS)
-  TARGET_LINK_LIBRARIES(vipl vnl)
-ENDIF (BUILD_CORE_NUMERICS)
+if(BUILD_CORE_IMAGING)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vil)
+endif()
+if(BUILD_CORE_UTILITIES)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vbl)
+endif()
+if(BUILD_CORE_NUMERICS)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vnl)
+endif()
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

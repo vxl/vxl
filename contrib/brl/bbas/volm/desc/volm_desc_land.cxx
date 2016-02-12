@@ -61,7 +61,6 @@ volm_desc_land::volm_desc_land(vcl_string& filename)
   vcl_string cat_name(buffer); // ifs >> cat_name;
 
   // now search in the land_type table in volm_io
-  int cat_id;
   vcl_map<vcl_string,  volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table_name.find(cat_name);
   if (mit != volm_osm_category_io::volm_land_table_name.end())
     h_[mit->second.id_] = 1;

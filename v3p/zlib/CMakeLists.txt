@@ -1,12 +1,8 @@
 # v3p/zlib/CMakeLists.txt
 
-PROJECT( zlib C )
+project( zlib C )
 
-INCLUDE(${VXL_CMAKE_DIR}/FindZLIB.cmake)
-
-IF(NOT VXL_USING_NATIVE_ZLIB)
-
-SET( zlib_sources
+set( zlib_sources
   zlib.h
   zconf.h
 
@@ -28,12 +24,11 @@ SET( zlib_sources
 )
 
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(deflate.c PROPERTIES COMPILE_FLAGS -O1)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(deflate.c PROPERTIES COMPILE_FLAGS -O1)
+endif()
 
-ADD_LIBRARY( z ${zlib_sources} )
-INSTALL_TARGETS( /lib z )
+add_library( z ${zlib_sources} )
+install_targets( /lib z )
 
-ENDIF(NOT VXL_USING_NATIVE_ZLIB)
 

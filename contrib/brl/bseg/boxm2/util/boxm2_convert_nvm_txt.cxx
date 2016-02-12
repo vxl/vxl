@@ -3,7 +3,6 @@
 //:
 // \file
 #include <vsph/vsph_camera_bounds.h>
-#include <vidl/vidl_image_list_istream.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_double_3.h>
@@ -65,13 +64,13 @@ boxm2_convert_nvm_txt::boxm2_convert_nvm_txt(vcl_string nvm_file, vcl_string img
 bool boxm2_convert_nvm_txt::read_cameras(vcl_ifstream& in)
 {
 
-  int rotation_parameter_num = 4;
   vcl_string token;
   //read the header
-  for(int i = 0; i < 19; i++) {
-      vcl_getline(in, token); // was: in >> token; //file header
-      vcl_cout << token << vcl_endl;
-  }
+  for (unsigned int i = 0; i < 19; ++i)
+    {
+    vcl_getline(in, token); // was: in >> token; //file header
+    vcl_cout << token << vcl_endl;
+    }
 
 
   // read # of cameras

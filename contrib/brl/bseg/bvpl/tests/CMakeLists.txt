@@ -1,6 +1,6 @@
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
+include_directories( ${MUL_INCLUDE_DIR} )
 
-ADD_EXECUTABLE( bvpl_test_all
+add_executable( bvpl_test_all
   test_driver.cxx
   test_subgrid.cxx
   test_neighb_oper.cxx
@@ -12,20 +12,20 @@ ADD_EXECUTABLE( bvpl_test_all
   test_detect_corner.cxx
  )
 
-TARGET_LINK_LIBRARIES( bvpl_test_all bvpl bvxm vnl vgl vul vbl testlib)
+target_link_libraries( bvpl_test_all bvpl bvxm ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib)
 
-ADD_TEST( bvpl_test_subgrid                ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_subgrid  )
-ADD_TEST( bvpl_test_neighb_oper            ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_neighb_oper  )
-ADD_TEST( bvpl_test_kernels                ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_bvpl_kernels  )
-ADD_TEST( bvpl_test_bvpl_kernel_functors   ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_bvpl_kernel_functors  )
-ADD_TEST( bvpl_test_direction_to_color_map ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_direction_to_color_map  )
-ADD_TEST( bvpl_test_vector_operator        ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_bvpl_vector_operator  )
-ADD_TEST( bvpl_test_vector_directions      ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_vector_directions  )
+add_test( NAME bvpl_test_subgrid COMMAND $<TARGET_FILE:bvpl_test_all> test_subgrid  )
+add_test( NAME bvpl_test_neighb_oper COMMAND $<TARGET_FILE:bvpl_test_all> test_neighb_oper  )
+add_test( NAME bvpl_test_kernels COMMAND $<TARGET_FILE:bvpl_test_all> test_bvpl_kernels  )
+add_test( NAME bvpl_test_bvpl_kernel_functors COMMAND $<TARGET_FILE:bvpl_test_all> test_bvpl_kernel_functors  )
+add_test( NAME bvpl_test_direction_to_color_map COMMAND $<TARGET_FILE:bvpl_test_all> test_direction_to_color_map  )
+add_test( NAME bvpl_test_vector_operator COMMAND $<TARGET_FILE:bvpl_test_all> test_bvpl_vector_operator  )
+add_test( NAME bvpl_test_vector_directions COMMAND $<TARGET_FILE:bvpl_test_all> test_vector_directions  )
 if( HACK_FORCE_BRL_FAILING_TESTS )
-ADD_TEST( bvpl_test_detect_corner          ${EXECUTABLE_OUTPUT_PATH}/bvpl_test_all test_detect_corner  )
+add_test( NAME bvpl_test_detect_corner COMMAND $<TARGET_FILE:bvpl_test_all> test_detect_corner  )
 endif()
 
-ADD_EXECUTABLE( bvpl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bvpl_test_include bvpl)
-ADD_EXECUTABLE( bvpl_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( bvpl_test_template_include bvpl)
+add_executable( bvpl_test_include test_include.cxx )
+target_link_libraries( bvpl_test_include bvpl)
+add_executable( bvpl_test_template_include test_template_include.cxx )
+target_link_libraries( bvpl_test_template_include bvpl)

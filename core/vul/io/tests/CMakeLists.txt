@@ -1,13 +1,13 @@
 # This is core/vul/io/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( vul_io_test_all
+add_executable( vul_io_test_all
   test_driver.cxx
 
   test_user_info_io.cxx
 )
-TARGET_LINK_LIBRARIES( vul_io_test_all  vul_io vul vsl testlib vpl )
+target_link_libraries( vul_io_test_all ${VXL_LIB_PREFIX}vul_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl )
 
-ADD_TEST( vul_io_test_user_info_io  ${EXECUTABLE_OUTPUT_PATH}/vul_io_test_all test_user_info_io )
+add_test( NAME vul_io_test_user_info_io COMMAND $<TARGET_FILE:vul_io_test_all> test_user_info_io )
 
-ADD_EXECUTABLE( vul_io_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( vul_io_test_include vul_io )
+add_executable( vul_io_test_include test_include.cxx )
+target_link_libraries( vul_io_test_include ${VXL_LIB_PREFIX}vul_io )

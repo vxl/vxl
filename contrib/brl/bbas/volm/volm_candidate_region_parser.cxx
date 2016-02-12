@@ -217,8 +217,6 @@ void volm_candidate_region_parser::charData(const XML_Char* s, int len)
         cord_end--;
       while (str_s[cord_end-1] == ' ')
         cord_end--;
-      if ((int)cord_end > len)
-        len = (int)cord_end;
     }
     for (unsigned int i=0; i<cord_end; ++i)
       str << s[i];
@@ -384,11 +382,11 @@ vgl_polygon<double> volm_candidate_region_parser::parse_polygon_with_inner(vcl_s
   // create the outer boundary polygon
   if (parser->polyouter_.find(name) != parser->polyouter_.end()) {
     vcl_vector<vcl_vector<vgl_point_3d<double> > > out_sheets = parser->polyouter_[name];
-    unsigned n_sheet = out_sheets.size();
-    for (unsigned i = 0; i < n_sheet; i++) {
-      unsigned n_pts = out_sheets[i].size();
+    unsigned int n_sheet = out_sheets.size();
+    for (unsigned int i = 0; i < n_sheet; ++i) {
+      unsigned int n_pts = out_sheets[i].size();
       outer.new_sheet();
-      for (unsigned k = 0; k < out_sheets[i].size(); k++)
+      for (unsigned int k = 0; k < n_pts; ++k)
         outer.push_back(out_sheets[i][k].x(), out_sheets[i][k].y());
     }
   }

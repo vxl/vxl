@@ -1,6 +1,6 @@
 # vxl/vbl/io/CMakeLists.txt
 
-SET(vbl_io_sources
+set(vbl_io_sources
   vbl_io_smart_ptr.txx vbl_io_smart_ptr.h
   vbl_io_array_1d.txx vbl_io_array_1d.h
   vbl_io_array_2d.txx vbl_io_array_2d.h
@@ -14,14 +14,11 @@ SET(vbl_io_sources
   vbl_io_quadruple.txx vbl_io_quadruple.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vbl_io_sources)
+aux_source_directory(Templates vbl_io_sources)
 
-ADD_LIBRARY(vbl_io ${vbl_io_sources})
-TARGET_LINK_LIBRARIES( vbl_io vbl vsl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vbl_io LIBSRCS ${vbl_io_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl )
 
-INSTALL_TARGETS(/lib vbl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vbl/io ${vbl_io_sources})
-
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

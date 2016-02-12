@@ -1,6 +1,6 @@
 # brl/bseg/brip/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( brip_test_all
+add_executable( brip_test_all
   test_driver.cxx
   test_histogram.cxx
   test_mutual_info.cxx
@@ -19,28 +19,28 @@ ADD_EXECUTABLE( brip_test_all
   test_nitf_ops.cxx
   test_phase_correlation.cxx
 )
-TARGET_LINK_LIBRARIES( brip_test_all brip vgl_algo vgl vnl_algo vnl vil vil1 vbl testlib)
+target_link_libraries( brip_test_all brip ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib)
 
-ADD_TEST( brip_test_histogram          ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_histogram )
-ADD_TEST( brip_test_mutual_info        ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_mutual_info )
-ADD_TEST( brip_test_watershed          ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_watershed )
-ADD_TEST( brip_test_fourier            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_fourier )
-ADD_TEST( brip_test_homography         ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_homography )
-ADD_TEST( brip_test_lucas_kanade       ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_lucas_kanade )
-ADD_TEST( brip_test_Horn_Schunck       ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_Horn_Schunck )
-ADD_TEST( brip_test_quadtree           ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_quadtree )
-ADD_TEST( brip_test_max_scale_response ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_max_scale_response )
-ADD_TEST( brip_test_mask               ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_mask )
-ADD_TEST( brip_test_label_equivalence  ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_label_equivalence )
-ADD_TEST( brip_nitf_ops                ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_nitf_ops )
-ADD_TEST( brip_phase_correlation   ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_phase_correlation )
-IF(SEGFAULT_FIXED)
-ADD_TEST( brip_test_extrema            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_extrema )
-ADD_TEST( brip_test_filter_bank            ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_filter_bank )
-ADD_TEST( brip_test_gain_offset_solver   ${EXECUTABLE_OUTPUT_PATH}/brip_test_all test_gain_offset_solver )
-ENDIF(SEGFAULT_FIXED)
+add_test( NAME brip_test_histogram COMMAND $<TARGET_FILE:brip_test_all> test_histogram )
+add_test( NAME brip_test_mutual_info COMMAND $<TARGET_FILE:brip_test_all> test_mutual_info )
+add_test( NAME brip_test_watershed COMMAND $<TARGET_FILE:brip_test_all> test_watershed )
+add_test( NAME brip_test_fourier COMMAND $<TARGET_FILE:brip_test_all> test_fourier )
+add_test( NAME brip_test_homography COMMAND $<TARGET_FILE:brip_test_all> test_homography )
+add_test( NAME brip_test_lucas_kanade COMMAND $<TARGET_FILE:brip_test_all> test_lucas_kanade )
+add_test( NAME brip_test_Horn_Schunck COMMAND $<TARGET_FILE:brip_test_all> test_Horn_Schunck )
+add_test( NAME brip_test_quadtree COMMAND $<TARGET_FILE:brip_test_all> test_quadtree )
+add_test( NAME brip_test_max_scale_response COMMAND $<TARGET_FILE:brip_test_all> test_max_scale_response )
+add_test( NAME brip_test_mask COMMAND $<TARGET_FILE:brip_test_all> test_mask )
+add_test( NAME brip_test_label_equivalence COMMAND $<TARGET_FILE:brip_test_all> test_label_equivalence )
+add_test( NAME brip_nitf_ops COMMAND $<TARGET_FILE:brip_test_all> test_nitf_ops )
+add_test( NAME brip_phase_correlation COMMAND $<TARGET_FILE:brip_test_all> test_phase_correlation )
+if(SEGFAULT_FIXED)
+add_test( NAME brip_test_extrema COMMAND $<TARGET_FILE:brip_test_all> test_extrema )
+add_test( NAME brip_test_filter_bank COMMAND $<TARGET_FILE:brip_test_all> test_filter_bank )
+add_test( NAME brip_test_gain_offset_solver COMMAND $<TARGET_FILE:brip_test_all> test_gain_offset_solver )
+endif()
 
-ADD_EXECUTABLE( brip_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( brip_test_include brip )
-ADD_EXECUTABLE( brip_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( brip_test_template_include brip )
+add_executable( brip_test_include test_include.cxx )
+target_link_libraries( brip_test_include brip )
+add_executable( brip_test_template_include test_template_include.cxx )
+target_link_libraries( brip_test_template_include brip )

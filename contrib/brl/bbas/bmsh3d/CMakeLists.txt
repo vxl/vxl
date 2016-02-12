@@ -1,10 +1,10 @@
 # bmsh3d - Brown 3D Mesh Library
 # brl/bbas/bmsh3d/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${GEL_INCLUDE_DIR} )
 
-SET(bmsh3d_sources
+set(bmsh3d_sources
                                     bmsh3d_utils.h
                                     bmsh3d_ptr_list.h
 
@@ -31,9 +31,9 @@ SET(bmsh3d_sources
                                     bmsh3d_graph.h
 )
 
-ADD_LIBRARY( bmsh3d  ${bmsh3d_sources})
+add_library( bmsh3d  ${bmsh3d_sources})
 
-TARGET_LINK_LIBRARIES( bmsh3d vgl vgl_algo vnl vul)
+target_link_libraries( bmsh3d ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
 add_subdirectory(algo)
 add_subdirectory(pro)
@@ -42,5 +42,5 @@ add_subdirectory(tests)
 add_subdirectory(examples)
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib bmsh3d)
+install_targets(/lib bmsh3d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bmsh3d/ ${bmsh3d_sources})

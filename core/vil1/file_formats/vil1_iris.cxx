@@ -54,12 +54,12 @@ vil1_image_impl* vil1_iris_file_format::make_input_image(vil1_stream* is)
 
   colormap_ = get_long(is);
 
-  if (magic_ != 474) return 0;
-  if (storage_ != 0 && storage_ != 1) return 0;
-  if (colormap_ == 3) return 0;
-  if (dimension_ == 3 && colormap_ != 0) return 0;
-  if (dimension_ > 3 || dimension_ < 1) return 0;
-  if (bytes_per_component_ < 1 || bytes_per_component_ > 2) return 0;
+  if (magic_ != 474) return VXL_NULLPTR;
+  if (storage_ != 0 && storage_ != 1) return VXL_NULLPTR;
+  if (colormap_ == 3) return VXL_NULLPTR;
+  if (dimension_ == 3 && colormap_ != 0) return VXL_NULLPTR;
+  if (dimension_ > 3 || dimension_ < 1) return VXL_NULLPTR;
+  if (bytes_per_component_ < 1 || bytes_per_component_ > 2) return VXL_NULLPTR;
 
   return new vil1_iris_generic_image(is,imagename);
 }
@@ -82,7 +82,7 @@ char const* vil1_iris_file_format::tag() const
 /////////////////////////////////////////////////////////////////////////////
 
 vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, char const* imagename):
-  starttab_(0), lengthtab_(0), is_(is)
+  starttab_(VXL_NULLPTR), lengthtab_(VXL_NULLPTR), is_(is)
 {
   is_->ref();
   read_header();
@@ -111,7 +111,7 @@ vil1_iris_generic_image::vil1_iris_generic_image(vil1_stream* is, int planes,
                                                  int components,
                                                  int bits_per_component,
                                                  vil1_component_format /*format*/):
-  starttab_(0), lengthtab_(0), is_(is)
+  starttab_(VXL_NULLPTR), lengthtab_(VXL_NULLPTR), is_(is)
 {
   is_->ref();
 
@@ -251,7 +251,7 @@ vil1_image vil1_iris_generic_image::get_plane(unsigned int plane) const
 {
   assert((int)plane < planes_);
   vcl_cerr << __FILE__ ": do something for vil1_iris_generic_image::get_plane\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 

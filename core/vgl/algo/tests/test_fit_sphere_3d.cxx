@@ -27,7 +27,7 @@ static void test_linear_fit_unit_sphere()
   double error = fit_sph.fit_linear(&vcl_cout);
   TEST_NEAR("linear fit perfect unit sphere", error, 0.0, 1e-6);
   double non_lin_error = fit_sph.fit(&vcl_cout, true);
-  TEST_NEAR("nonlinear fit perfect unit sphere", error, 0.0, 1e-6);
+  TEST_NEAR("nonlinear fit perfect unit sphere", non_lin_error, 0.0, 1e-6);
 }
 static void test_linear_fit_unit_sphere_rand_error()
 {
@@ -56,7 +56,7 @@ static void test_linear_fit_unit_sphere_rand_error()
   double error = fit_sph.fit_linear(&vcl_cout);
   TEST_NEAR("linear fit unit sphere with error", error, 0.0, 0.1);
   double non_lin_error = fit_sph.fit(&vcl_cout, true);
-  TEST_NEAR("nonlinear fit unit sphere with error", error, 0.0, 0.1);
+  TEST_NEAR("nonlinear fit unit sphere with error", non_lin_error, 0.0, 0.1);
 }
 static void test_linear_fit_actual_pts()
 {
@@ -97,7 +97,7 @@ static void test_linear_fit_actual_pts()
   double lin_error = fit_sph.fit_linear(&vcl_cout);
   TEST_NEAR("linear fit actual sphere data", lin_error, 0.0, 0.25);
   double non_lin_error = fit_sph.fit(&vcl_cout, true);
-  TEST_NEAR("nonlinear fit actual sphere data", lin_error, 0.0, 0.25);
+  TEST_NEAR("nonlinear fit actual sphere data", non_lin_error, 0.0, 0.25);
 }
 static void test_fit_sphere_3d()
 {

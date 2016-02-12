@@ -66,14 +66,14 @@ int main(int argc, char **argv)
       vcl_cerr << "convolve x..." << vcl_flush;
       vil1_convolve_1d_x(K,
                          vil1_convolve_signal_2d<vxl_byte const>(bytesc.row_array(), 0, 0, w,  0, 0, h),
-                         (double*)0,
+                         (double*)VXL_NULLPTR,
                          vil1_convolve_signal_2d<double        >(tmp   .row_array(), 0, 0, w,  0, 0, h),
                          option[j], option[j]);
       vcl_cerr << "done\n"
                << "convolve y..." << vcl_flush;
       vil1_convolve_1d_y(K,
                          vil1_convolve_signal_2d<double const>(tmpc  .row_array(), 0, 0, w,  0, 0, h),
-                         (double*)0,
+                         (double*)VXL_NULLPTR,
                          vil1_convolve_signal_2d<float       >(smooth.row_array(), 0, 0, w,  0, 0, h),
                          option[j], option[j]);
       vcl_cerr << "done\n"

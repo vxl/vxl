@@ -706,13 +706,13 @@ L900:
 /*<       ZERO   = 0.0 >*/
     zero = (float)0.;
 /*<       DAMP1  = 0.1 >*/
-    damp1 = (float).1;
+//    damp1 = (float).1;
 /*<       DAMP2  = 0.01 >*/
     damp2 = (float).01;
 /*<       DAMP3  = 0.001 >*/
-    damp3 = (float).001;
+//    damp3 = (float).001;
 /*<       DAMP4  = 0.0001 >*/
-    damp4 = (float)1e-4;
+//    damp4 = (float)1e-4;
 /*<       CALL TEST  (  1,  1, 1, 1, ZERO  ) >*/
     test_(&c__1, &c__1, &c__1, &c__1, &zero);
 /*<       CALL TEST  (  2,  1, 1, 1, ZERO  ) >*/

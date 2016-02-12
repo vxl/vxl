@@ -16,14 +16,16 @@
 //-----------------------------------------------------------------------
 
 template <class T>
-void vnl_complexify(T const *src, vcl_complex<T> *dst, unsigned n)
+void
+vnl_complexify(T const *src, vcl_complex<T> *dst, unsigned n)
 {
   for (unsigned i=0; i<n; ++i)
     dst[i] = src[i];
 }
 
 template <class T>
-void vnl_complexify(T const *re, T const *im, vcl_complex<T> *dst, unsigned n)
+void
+vnl_complexify(T const *re, T const *im, vcl_complex<T> *dst, unsigned n)
 {
   for (unsigned i=0; i<n; ++i)
     dst[i] = vcl_complex<T>(re[i], im[i]);
@@ -127,10 +129,19 @@ vnl_sym_matrix<vcl_complex<T> >
 }
 
 //----------------------------------------------------------------------
+// vnl_real()
+// - vnl_vector
+// - vnl_vector_fixed -- in header
+// - vnl_matrix
+// - vnl_matrix_fixed -- in header
+// - vnl_diag_matrix
+// - vnl_diag_matrix_fixed -- in header
+// - vnl_sym_matrix
 
 //: Return array of real parts of complex array.
 template <class T>
-void vnl_real(vcl_complex<T> const* C, T* R, unsigned int n)
+void
+  vnl_real(vcl_complex<T> const* C, T* R, unsigned int n)
 {
   for (unsigned int i=0; i<n; ++i)
     R[i] = vcl_real(C[i]);
@@ -138,30 +149,70 @@ void vnl_real(vcl_complex<T> const* C, T* R, unsigned int n)
 
 //: Vector of real parts of vnl_vector<vcl_complex<T> >.
 template <class T>
-vnl_vector<T> vnl_real(vnl_vector<vcl_complex<T> > const & C)
+vnl_vector<T>
+  vnl_real(vnl_vector<vcl_complex<T> > const & C)
 {
-  vnl_vector<T> ret(C.size());
-  for (unsigned i = 0; i < C.size(); ++i)
-    ret[i] = vcl_real(C[i]);
-  return ret;
+  vnl_vector<T> R(C.size());
+  typename vnl_vector<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_vector<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_real(*cIt);
+  return R;
 }
 
 //: Matrix of real parts of vnl_matrix<vcl_complex<T> >.
 template <class T>
-vnl_matrix<T> vnl_real(vnl_matrix<vcl_complex<T> > const& C)
+vnl_matrix<T>
+  vnl_real(vnl_matrix<vcl_complex<T> > const& C)
 {
-  vnl_matrix<T> ret(C.rows(), C.columns());
-  for (unsigned i = 0; i < C.rows(); ++i)
-    for (unsigned j = 0; j < C.columns(); ++j)
-      ret(i,j) = vcl_real(C(i,j));
-  return ret;
+  vnl_matrix<T> R(C.rows(), C.columns());
+  typename vnl_matrix<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_matrix<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_real(*cIt);
+  return R;
+}
+
+//: Matrix of real parts of vnl_diag_matrix<vcl_complex<T> >.
+template <class T>
+vnl_diag_matrix<T>
+  vnl_real(vnl_diag_matrix<vcl_complex<T> > const& C)
+{
+  vnl_diag_matrix<T> R(C.rows());
+  typename vnl_diag_matrix<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_diag_matrix<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_real(*cIt);
+  return R;
+}
+
+//: Matrix of real parts of vnl_sym_matrix<vcl_complex<T> >.
+template <class T>
+vnl_sym_matrix<T>
+  vnl_real(vnl_sym_matrix<vcl_complex<T> > const& C)
+{
+  vnl_sym_matrix<T> R(C.rows());
+  typename vnl_sym_matrix<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_sym_matrix<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_real(*cIt);
+  return R;
 }
 
 //----------------------------------------------------------------------
+// vnl_imag()
+// - vnl_vector
+// - vnl_vector_fixed -- in header
+// - vnl_matrix
+// - vnl_matrix_fixed -- in header
+// - vnl_diag_matrix
+// - vnl_diag_matrix_fixed -- in header
+// - vnl_sym_matrix
 
 //: Return array of imaginary parts of complex array.
 template <class T>
-void vnl_imag(vcl_complex<T> const* C, T* I, unsigned int n)
+void
+  vnl_imag(vcl_complex<T> const* C, T* I, unsigned int n)
 {
   for (unsigned int i=0; i<n; ++i)
     I[i] = vcl_imag(C[i]);
@@ -169,23 +220,54 @@ void vnl_imag(vcl_complex<T> const* C, T* I, unsigned int n)
 
 //: Vector of imaginary parts of vnl_vector<vcl_complex<T> >.
 template <class T>
-vnl_vector<T> vnl_imag(vnl_vector<vcl_complex<T> > const & C)
+vnl_vector<T>
+  vnl_imag(vnl_vector<vcl_complex<T> > const & C)
 {
-  vnl_vector<T> ret(C.size());
-  for (unsigned i = 0; i < C.size(); ++i)
-    ret[i] = vcl_imag(C[i]);
-  return ret;
+  vnl_vector<T> R(C.size());
+  typename vnl_vector<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_vector<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_imag(*cIt);
+  return R;
 }
 
 //: Matrix of imaginary parts of vnl_matrix<vcl_complex<T> >.
 template <class T>
-vnl_matrix<T> vnl_imag(vnl_matrix<vcl_complex<T> > const& C)
+vnl_matrix<T>
+  vnl_imag(vnl_matrix<vcl_complex<T> > const& C)
 {
-  vnl_matrix<T> ret(C.rows(), C.columns());
-  for (unsigned i = 0; i < C.rows(); ++i)
-    for (unsigned j = 0; j < C.columns(); ++j)
-      ret(i,j) = vcl_imag(C(i,j));
-  return ret;
+  vnl_matrix<T> R(C.rows(), C.columns());
+  typename vnl_matrix<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_matrix<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_imag(*cIt);
+  return R;
+}
+
+//: Matrix of real parts of vnl_diag_matrix<vcl_complex<T> >.
+template <class T>
+vnl_diag_matrix<T>
+  vnl_imag(vnl_diag_matrix<vcl_complex<T> > const& C)
+{
+  vnl_diag_matrix<T> R(C.rows());
+  typename vnl_diag_matrix<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_diag_matrix<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_imag(*cIt);
+  return R;
+}
+
+//: Matrix of real parts of vnl_sym_matrix<vcl_complex<T> >.
+template <class T>
+vnl_sym_matrix<T>
+  vnl_imag(vnl_sym_matrix<vcl_complex<T> > const& C)
+{
+  vnl_sym_matrix<T> R(C.rows());
+  typename vnl_sym_matrix<vcl_complex<T> >::const_iterator cIt = C.begin();
+  typename vnl_sym_matrix<T>::iterator rIt = R.begin();
+  for (; cIt != C.end(); ++cIt, ++rIt)
+    *rIt = vcl_imag(*cIt);
+  return R;
 }
 
 //-------------------------------------------------------------------------
@@ -210,6 +292,12 @@ template vnl_vector<T > vnl_real(vnl_vector<vcl_complex<T > > const&); \
 template vnl_vector<T > vnl_imag(vnl_vector<vcl_complex<T > > const&); \
 \
 template vnl_matrix<T > vnl_real(vnl_matrix<vcl_complex<T > > const&); \
-template vnl_matrix<T > vnl_imag(vnl_matrix<vcl_complex<T > > const&)
+template vnl_matrix<T > vnl_imag(vnl_matrix<vcl_complex<T > > const&); \
+\
+template vnl_diag_matrix<T > vnl_real(vnl_diag_matrix<vcl_complex<T > > const&); \
+template vnl_diag_matrix<T > vnl_imag(vnl_diag_matrix<vcl_complex<T > > const&); \
+\
+template vnl_sym_matrix<T > vnl_real(vnl_sym_matrix<vcl_complex<T > > const&); \
+template vnl_sym_matrix<T > vnl_imag(vnl_sym_matrix<vcl_complex<T > > const&)
 
 #endif // vnl_complex_ops_txx_

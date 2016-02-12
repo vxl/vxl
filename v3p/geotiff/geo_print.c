@@ -469,7 +469,6 @@ static int ReadKey(GTIF *gt, GTIFReadMethod scan, void *aux)
                 if (vals_now<count)
                 {
                     scan(message,aux);
-                    vptr = message;
                 }
             }
             GTIFKeySet(gt,key,ktype,outcount,sptr);

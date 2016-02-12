@@ -238,9 +238,8 @@ foreach $f (@FILES)
 #   next if ("$f-$j" =~ m!(.*)\.h-\1_sptr\.h!);
     next if ($j eq 'vcl_compiler.h' || $j eq 'vcl_new.h');
     next if ($j eq 'vcl_cstdio.h' && $f =~ m!/StdAfx\.h$!);
-    next if ($j eq 'vcl_cmath.h' && $f =~ m!\bvcl/(vcl_cfloat|win32-vc60/vcl_complex)\.h$!);
+    next if ($j eq 'vcl_cmath.h' && $f =~ m!\bvcl/(vcl_cfloat)\.h$!);
     next if ($j eq 'vcl_cmath.h' && $f =~ m!\bvnl/algo/vnl_generalized_eigensystem\.cxx$!);
-    next if ($j eq 'vcl_algorithm.h' && $f =~ m!\bvcl/gcc-295/vcl_deque\.txx$!);
     next if ($i =~ m!^(vnl|vil|vil1|vsl|vul|vpl|vgl|vgl_algo|vbl)_fwd$! || $i =~ m!^vgui_glu?x?t?$! || $i eq 'StdAfx');
     next if ($i =~ m!^mil_! && $f =~ m!\bmul/mil/mil_all\.h$!);
     next if ($j eq 'mil/mil_all.h' && $f =~ m!\bmul/mil/mil_add_all_loaders\.cxx$!);
@@ -626,7 +625,7 @@ foreach $f (@FILES)
 # if ($file =~ m!//\s*[a-zA-Z_0_9]*\s*--\s+(\S*)! && $1 ne "JLM")
 # {
 #   &msg(1, "contains old style // -- docs")
-#     unless ($f =~ m!vcl/vcl_complex_fwd\.h$! || $f =~ m!win32-vc60/vcl_complex\.h$! || $f =~ m!vgui/vgui_glut\.h$!);
+#     unless ($f =~ m!vcl/vcl_complex_fwd\.h$! $f =~ m!vgui/vgui_glut\.h$!);
 # }
   &msg(1, "contains long /*...*/ comments")
     if ($cpp_file && $file =~ s!\001[^\001\002]{121,}\002!!g &&

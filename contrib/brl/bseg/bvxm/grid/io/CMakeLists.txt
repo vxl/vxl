@@ -1,6 +1,6 @@
 # contrib/brl/bseg/bvxm/grid/io/CMakeLists.txt
 
-SET(bvxm_grid_io_sources
+set(bvxm_grid_io_sources
     bvxm_io_voxel_slab_base.h  bvxm_io_voxel_slab_base.cxx
     bvxm_io_voxel_grid_base.h  bvxm_io_voxel_grid_base.cxx
     bvxm_io_voxel_grid.h       bvxm_io_voxel_grid.cxx
@@ -9,11 +9,11 @@ SET(bvxm_grid_io_sources
     bvxm_vrml_voxel_grid.h     bvxm_vrml_voxel_grid.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates bvxm_grid_io_sources)
+aux_source_directory(Templates bvxm_grid_io_sources)
 
-ADD_LIBRARY(bvxm_grid_io ${bvxm_grid_io_sources})
-TARGET_LINK_LIBRARIES(bvxm_grid_io bvxm_grid bvrml vsl vbl vil vil_io vnl vgl vbl_io vul)
+add_library(bvxm_grid_io ${bvxm_grid_io_sources})
+target_link_libraries(bvxm_grid_io bvxm_grid bvrml ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

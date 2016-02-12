@@ -6,11 +6,11 @@
 // \brief  Region of a 2D space
 //
 // \author
-// François BERTEL
+// Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/05/02 François BERTEL Creation
+//   2000/05/02 Francois BERTEL Creation
 //   2000/06/17 Peter Vanroose  Implemented all operator==()s and type info
 //   2003/01/08 Peter Vanroose  Added pure virtual is_convex()
 //   2003/11/06 Amir Tamrakar   Added safe cast methods to polygon_2d

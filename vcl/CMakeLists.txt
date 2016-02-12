@@ -1,26 +1,26 @@
 # vcl/CMakeLists.txt
 
-IF(WIN32)
+if(WIN32)
   # MSVC.NET produces lots of warnings like
   # "warning LNK4221: no public symbols found; archive member will be inaccessible"
   # that depend on subtle logic at compile time.
   # This is a bit indescriminate, but it may be the only feasible way to suppress them.
-  IF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-    SET ( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
-    SET ( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
-  ENDIF (CMAKE_CXX_COMPILER MATCHES "^cl$")
-ENDIF(WIN32)
+  if(CMAKE_CXX_COMPILER MATCHES "^cl$")
+    set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /WARN:0")
+    set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WARN:0")
+  endif()
+endif()
 
 
-PROJECT( vcl )
+project( vcl )
 
 # Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
-CONFIGURE_FILE(
+configure_file(
   ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
   ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
 )
 
-SET( vcl_sources
+set( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx     vcl_deprecated.h
 
@@ -190,69 +190,10 @@ SET( vcl_sources
   iso/vcl_typeinfo.h
   iso/vcl_valarray.h
 
-  gcc/vcl_cmath.h
-  gcc/vcl_cstdlib.h
-  gcc-295/vcl_algorithm.txx
-  gcc-295/vcl_complex.h               gcc-295/vcl_complex.txx
-  gcc-295/vcl_deque.txx
-  gcc-295/vcl_functional.txx
-  gcc-295/vcl_iterator.txx
-  gcc-295/vcl_list.txx
-  gcc-295/vcl_map.txx
-  gcc-295/vcl_memory.h
-  gcc-295/vcl_queue.txx
-  gcc-295/vcl_set.txx
-  gcc-295/vcl_string.txx
-  gcc-295/vcl_utility.txx
-  gcc-295/vcl_vector.txx
-  gcc-295/vcl_iomanip.h
-  gcc-295/vcl_ios.h
-  gcc-libstdcxx-v3/vcl_algorithm.txx
-  gcc-libstdcxx-v3/vcl_deque.txx
-  gcc-libstdcxx-v3/vcl_functional.txx
-  gcc-libstdcxx-v3/vcl_iterator.txx
-  gcc-libstdcxx-v3/vcl_list.txx
-  gcc-libstdcxx-v3/vcl_map.txx
-  gcc-libstdcxx-v3/vcl_set.txx
-  gcc-libstdcxx-v3/vcl_string.txx
-  gcc-libstdcxx-v3/vcl_utility.txx
-  gcc-libstdcxx-v3/vcl_vector.txx
-
-  sunpro/vcl_algorithm.txx
-  sunpro/vcl_cmath.h
-  sunpro/vcl_complex.txx            sunpro/vcl_complex.h
-  sunpro/vcl_cstdlib.h
-  sunpro/vcl_deque.txx
-  sunpro/vcl_functional.txx
-  sunpro/vcl_iterator.txx           sunpro/vcl_iterator.h
-  sunpro/vcl_list.txx
-  sunpro/vcl_map.txx                sunpro/vcl_map.h
-  sunpro/vcl_set.txx
-  sunpro/vcl_stack.txx
-  sunpro/vcl_utility.txx
-  sunpro/vcl_vector.txx             sunpro/vcl_vector.h
-
-  win32-vc60/vcl_cmath.h
-  win32-vc60/vcl_complex.h
-  win32-vc60/vcl_cstdarg.h
-  win32-vc60/vcl_cstdlib.h
-  win32-vc60/vcl_memory.h
-  win32-vc60/vcl_string.h
-  win32-vc60/vcl_valarray.h
-
-  win32-vc70/vcl_cmath.h
-  win32-vc70/vcl_complex.h
-  win32-vc70/vcl_cstdlib.h
-  win32-vc70/vcl_valarray.h
-
-  win32-vc8/vcl_cmath.h
-  win32-vc8/vcl_complex.h
-  win32-vc8/vcl_cstdlib.h
-  win32-vc8/vcl_valarray.h
-
-  stlport/vcl_cmath.h
-  stlport/vcl_complex.h
-  stlport/vcl_cstdlib.h
+  win32-vc9/vcl_cmath.h
+  win32-vc9/vcl_complex.h
+  win32-vc9/vcl_cstdlib.h
+  win32-vc9/vcl_valarray.h
 
   # The following shall not be used other than as reference count for smart pointers
   vcl_atomic_count.h
@@ -265,34 +206,17 @@ SET( vcl_sources
   internal/vcl_interlocked.h
 )
 
+
 # We use implicit instantiation of the standard library now,
 # so we shouldn't be explicitly instantiating anything.
 # This also avoid trouble where the instantiation hack conflict
 # with modern, more compliant compilers.
-#AUX_SOURCE_DIRECTORY(Templates vcl_sources)
+#aux_source_directory(Templates vcl_sources)
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vcl LIBSRCS ${vcl_sources} )
+if(UNIX)
+  target_link_libraries( ${VXL_LIB_PREFIX}vcl m )
+endif()
 
-ADD_LIBRARY(vcl ${vcl_sources})
-
-# CMake can automatically figure out the compiler characteristics on
-# Windows too.  No need to do manual config.
-
-# IF(WIN32)
-#   IF(NOT CYGWIN)
-#     ADD_DEFINITIONS( -DBUILDING_VCL_DLL )
-#     INCLUDE_DIRECTORIES( config.win32 )
-#   ENDIF(NOT CYGWIN)
-# ENDIF(WIN32)
-
-IF(UNIX)
-  TARGET_LINK_LIBRARIES( vcl m )
-ENDIF(UNIX)
-
-# Installation
-INSTALL_TARGETS(/lib vcl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/vcl ${vcl_sources})
-
-# INCLUDE( ${vxl_SOURCE_DIR}/vcl/LinkSTLPort.cmake )
-
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

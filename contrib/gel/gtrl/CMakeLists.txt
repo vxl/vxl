@@ -6,37 +6,37 @@ doxygen_add_library(contrib/gel/gtrl
   DESCRIPTION "Polygon triangulation"
 )
 
-SET(gtrl_sources
+set(gtrl_sources
   gtrl_triangle.cxx  gtrl_triangle.h
   gtrl_vertex.h
   gtrl_polygon.cxx   gtrl_polygon.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates gtrl_sources)
+aux_source_directory(Templates gtrl_sources)
 
-INCLUDE( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
+include( ${VXL_CMAKE_DIR}/FindNetlib.cmake )
 
-IF(NETLIB_FOUND)
-  INCLUDE_DIRECTORIES(${NETLIB_INCLUDE_DIR})
+if(NETLIB_FOUND)
+  include_directories(${NETLIB_INCLUDE_DIR})
 
-  SET(gtrl_sources ${gtrl_sources}
+  set(gtrl_sources ${gtrl_sources}
     gtrl_triangulation.cxx gtrl_triangulation.h
   )
-ENDIF(NETLIB_FOUND)
+endif()
 
-ADD_LIBRARY(gtrl ${gtrl_sources})
-INSTALL_TARGETS(/lib gtrl)
+add_library(gtrl ${gtrl_sources})
+install_targets(/lib gtrl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/gtrl ${gtrl_sources})
 
-TARGET_LINK_LIBRARIES(gtrl vbl)
-IF(NETLIB_FOUND)
-  TARGET_LINK_LIBRARIES(gtrl ${NETLIB_LIBRARIES})
-ENDIF(NETLIB_FOUND)
+target_link_libraries(gtrl ${VXL_LIB_PREFIX}vbl)
+if(NETLIB_FOUND)
+  target_link_libraries(gtrl ${NETLIB_LIBRARIES})
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()

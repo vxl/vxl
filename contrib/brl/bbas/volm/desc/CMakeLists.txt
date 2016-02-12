@@ -1,12 +1,12 @@
 # volm/desc/CMakeLists.txt
 # Existence matching and base matching library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/volm )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bsta )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas/bpgl )
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/volm )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/bsta )
+include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
 
-SET(volm_desc_sources
+set(volm_desc_sources
   volm_desc.h                             volm_desc.cxx
   volm_desc_ex.h                          volm_desc_ex.cxx
   volm_desc_ex_2d.h                       volm_desc_ex_2d.cxx
@@ -20,14 +20,14 @@ SET(volm_desc_sources
   volm_desc_ex_2d_matcher.h               volm_desc_ex_2d_matcher.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates volm_desc_sources)
+aux_source_directory(Templates volm_desc_sources)
 
-ADD_LIBRARY(volm_desc ${volm_desc_sources})
+add_library(volm_desc ${volm_desc_sources})
 
-TARGET_LINK_LIBRARIES(volm_desc volm bsta bsta_algo bsta_vis bsvg bvgl vsl vbl vbl_io vul depth_map)
+target_link_libraries(volm_desc volm bsta bsta_algo bsta_vis bsvg bvgl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul depth_map)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()
 
 add_subdirectory(exe)

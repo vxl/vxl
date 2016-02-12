@@ -298,7 +298,7 @@ L10:
 /*<                ROWMAX = ZERO >*/
                 rowmax = 0.;
 /*<                JMAX = IMAX >*/
-                jmax = imax;
+//                jmax = imax;
 /*<                KX = IMAX*( IMAX+1 ) / 2 + IMAX >*/
                 kx = imax * (imax + 1) / 2 + imax;
 /*<                DO 20 J = IMAX + 1, K >*/
@@ -309,7 +309,7 @@ L10:
 /*<                      ROWMAX = ABS( AP( KX ) ) >*/
                         rowmax = (d__1 = ap[kx], abs(d__1));
 /*<                      JMAX = J >*/
-                        jmax = j;
+//                        jmax = j;
 /*<                   END IF >*/
                     }
 /*<                   KX = KX + J >*/
@@ -607,7 +607,7 @@ L40:
 /*<                      ROWMAX = ABS( AP( KX ) ) >*/
                         rowmax = (d__1 = ap[kx], abs(d__1));
 /*<                      JMAX = J >*/
-                        jmax = j;
+//                        jmax = j;
 /*<                   END IF >*/
                     }
 /*<                   KX = KX + N - J >*/

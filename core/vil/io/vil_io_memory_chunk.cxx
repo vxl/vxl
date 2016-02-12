@@ -277,7 +277,7 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk& chunk)
 //: Binary save vil_memory_chunk to stream  by pointer
 void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk* chunk_ptr)
 {
-  bool not_null_ptr = (chunk_ptr!=0);
+  bool not_null_ptr = (chunk_ptr!=VXL_NULLPTR);
   vsl_b_write(os,not_null_ptr);
   if (not_null_ptr)
     vsl_b_write(os,*chunk_ptr);
@@ -295,7 +295,7 @@ void vsl_b_read(vsl_b_istream &is, vil_memory_chunk*& p)
     vsl_b_read(is, *p);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 //: Print human readable summary of a vil_memory_chunk object to a stream

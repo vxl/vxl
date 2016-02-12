@@ -51,7 +51,7 @@ bool test_contiguous(vil_image_view<vxl_uint_32> &im)
 // A nice overview of Saito's method may be found at:
 //    Chapter 2 of "Distance transformations: fast algorithms and applications
 //    to medical image processing", Olivier Cuisenaire's Ph.D. Thesis, October
-//    1999, Université Catholique de Louvain, Belgium.
+//    1999, Universite Catholique de Louvain, Belgium.
 bool
 bil_edt_saito(vil_image_view<vxl_uint_32> &im, unsigned plane_idx)
 {

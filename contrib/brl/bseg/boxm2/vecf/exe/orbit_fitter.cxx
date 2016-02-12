@@ -187,6 +187,10 @@ int main(int argc, char ** argv)
     vcl_string right_marg_path = base_dir + patient_id +"_right_margin_fit.txt";
     vcl_ofstream rmstr(right_marg_path.c_str());
     good = right_fmargs.plot_orbit(rmstr);
+    if(!good){
+      vcl_cout << "ERROR: Invalid parameter to plot_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+      return -1;
+    }
     rmstr.close();
   }
   // if image data set z values for margin and crease curve points
@@ -199,6 +203,10 @@ int main(int argc, char ** argv)
 
   vcl_ofstream rostr(right_vrml_path.c_str());
   good = fo.display_orbit_vrml(rostr, true, show_model);
+  if(!good){
+    vcl_cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+    return -1;
+  }
   rostr.close();
 
   fo.fitting_error("right_eye_inferior_margin");
@@ -253,6 +261,10 @@ int main(int argc, char ** argv)
     vcl_string left_marg_path = base_dir + patient_id +"_left_margin_fit.txt";
     vcl_ofstream lmstr(left_marg_path.c_str());
     good = left_fmargs.plot_orbit(lmstr);
+    if(!good){
+      vcl_cout << "ERROR: Invalid parameter to plot_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+      return -1;
+    }
     lmstr.close();
   }
   // if image data set z values for margin and crease curve points
@@ -263,6 +275,10 @@ int main(int argc, char ** argv)
   }
   vcl_ofstream lostr(left_vrml_path.c_str());
   good = fo.display_orbit_vrml(lostr, false, show_model);
+  if(!good){
+    vcl_cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+    return -1;
+  }
   lostr.close();
 
   // find canthus angles
@@ -285,6 +301,10 @@ int main(int argc, char ** argv)
 
   vcl_ofstream lrmstr(left_right_merge_path.c_str());
   good = fo.display_left_right_orbit_model_vrml(lrmstr);
+  if(!good){
+    vcl_cout << "ERROR: Invalid parameter to display_orbit: " << __FILE__ << __LINE__ << vcl_endl;
+    return -1;
+  }
   lrmstr.close();
 
   return 0;

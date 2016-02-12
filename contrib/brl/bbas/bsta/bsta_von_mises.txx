@@ -27,7 +27,7 @@ namespace
   };
 
   //: base case
-  // this is a partial specialization: expect MSVC6 to complain
+  // this is a partial specialization
   template <class T, unsigned n>
   struct bsta_von_mises_compute_dot<T,n,0>
   {
@@ -37,7 +37,7 @@ namespace
   };
 
   //: base case
-  // this is partial specialization: expect MSVC6 to complain
+  // this is partial specialization
   template <class T>
       struct bsta_von_mises_compute_dot<T,1,1>
   {

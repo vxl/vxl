@@ -8,12 +8,12 @@
 //
 // The vertices are to be defined in counterclockwise order.
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-05-09
 //
 // \verbatim
 //  Modifications
-//   2000-05-09 François BERTEL Creation
+//   2000-05-09 Francois BERTEL Creation
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001-07-03 Peter Vanroose  Corrected the implementation of is_convex()
 //   2003-11-05 Amir Tamrakar   Added Safe casting methods

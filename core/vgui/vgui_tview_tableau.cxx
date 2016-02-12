@@ -32,8 +32,8 @@ vgui_tview_tableau::vgui_tview_tableau(vgui_tableau_sptr const& t)
   , spacing(10)
   , icon_height(2)
   , icon_width(2)
-  , active_icon(0)
-  , closest_icon(0)
+  , active_icon(VXL_NULLPTR)
+  , closest_icon(VXL_NULLPTR)
 {
 }
 
@@ -243,7 +243,7 @@ vgui_tableau_sptr vgui_tview_tableau::find_closest_icon(vcl_vector<vgui_tview_ta
   vcl_cerr << "vgui_tview_tableau::find_closest_icon() number of icons = " << icons.size() << '\n';
 #endif
 
-  float closest_dist /*quell SunPro warning*/= -1;
+  float closest_dist = -1;
   vgui_tableau_sptr closest;
 
   for (vcl_vector<icon>::const_iterator i_iter = icons.begin();
@@ -343,7 +343,7 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
     post_redraw();
   }
   else if (e.type==vgui_BUTTON_UP) {
-    active_icon = 0;
+    active_icon = VXL_NULLPTR;
     post_redraw();
   }
   else {

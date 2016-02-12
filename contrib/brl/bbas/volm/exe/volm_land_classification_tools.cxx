@@ -154,19 +154,17 @@ void collect_lidar_pixels(vpgl_lvcs_sptr lvcs, vcl_string const& mask_name, vcl_
 void enlarge_neighborhood(vcl_vector<vcl_pair<int, int> >& img_pixels, int ni, int nj, int n_size) {
   vcl_map<vcl_pair<int, int>, bool> pixel_map;
   vcl_map<vcl_pair<int, int>, bool>::iterator iter;
-  for (unsigned kk = 0; kk < img_pixels.size(); kk++) {
-    int ii = img_pixels[kk].first;
-    int jj = img_pixels[kk].second;
+  for (unsigned int kk = 0; kk < img_pixels.size(); ++kk) {
     // make the previously existing pixels false, so the additional pixels can be added to the end of img_pixels
     pixel_map[img_pixels[kk]] = false;
   }
   // add the neighborhood pixels trying to avoid repeats
-  for (unsigned kk = 0; kk < img_pixels.size(); kk++) {
+  for (unsigned int kk = 0; kk < img_pixels.size(); ++kk) {
     int ii = img_pixels[kk].first;
     int jj = img_pixels[kk].second;
     // now try adding the neighborhood
-    for (int i = ii-n_size; i <= ii + n_size; i++)
-      for (int j = jj - n_size; j <= jj + n_size; j++) {
+    for (int i = ii-n_size; i <= ii + n_size; ++i)
+      for (int j = jj - n_size; j <= jj + n_size; ++j) {
         if (i < 0 || j < 0 || i >= ni || j >= nj)
           continue;
         vcl_pair<int, int> current_p(i, j);

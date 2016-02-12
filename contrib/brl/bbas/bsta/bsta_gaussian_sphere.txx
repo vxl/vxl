@@ -23,7 +23,7 @@ namespace
   };
 
   //: base case
-  // this is partial specialization: expect MSVC6 to complain
+  // this is partial specialization
   template <class T, unsigned n>
   struct bsta_gaussian_sphere_compute_dot<T,n,0>
   {
@@ -32,7 +32,7 @@ namespace
   };
 
   //: base case
-  // this is partial specialization: expect MSVC6 to complain
+  // this is partial specialization
   template <class T>
       struct bsta_gaussian_sphere_compute_dot<T,1,1>
   {
@@ -52,7 +52,7 @@ namespace
   };
 
   //: base case
-  // this is partial specialization: expect MSVC6 to complain
+  // this is partial specialization
   template <class T, unsigned n>
   struct bsta_gaussian_sphere_determinant<T,n,0>
   {
@@ -97,7 +97,7 @@ struct bsta_gaussian_sphere_compute_probability_box
 };
 
 //: base case
-//  This is partial specialization: expect MSVC6 to complain
+//  This is partial specialization
 template <class T, class vector_, unsigned n>
 struct bsta_gaussian_sphere_compute_probability_box<T,vector_,n,0>
 {
@@ -117,7 +117,7 @@ struct bsta_gaussian_sphere_compute_probability_box<T,vector_,n,0>
 
 
 //: base case
-//  This is partial specialization: expect MSVC6 to complain
+//  This is partial specialization
 template <class T, class vector_>
 struct bsta_gaussian_sphere_compute_probability_box<T,vector_,1,0>
 {
@@ -174,7 +174,7 @@ struct var_from_dist
 };
 
 //: base case
-//  This is partial specialization: expect MSVC6 to complain
+//  This is partial specialization
 template <class T, class vector_, unsigned n>
 struct var_from_dist<T,vector_,n,0>
 {
@@ -189,7 +189,7 @@ struct var_from_dist<T,vector_,n,0>
 
 
 //: base case
-//  This is partial specialization: expect MSVC6 to complain
+//  This is partial specialization
 template <class T, class vector_>
 struct var_from_dist<T,vector_,1,0>
 {

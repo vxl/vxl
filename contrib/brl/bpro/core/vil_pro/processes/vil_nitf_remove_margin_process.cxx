@@ -52,14 +52,10 @@ bool vil_nitf_remove_margin_process(bprb_func_process& pro)
     return false;
   }
 
-  unsigned ni = img_res_sptr->ni();
-  unsigned nj = img_res_sptr->nj();
-  unsigned np = img_res_sptr->nplanes();
+  unsigned int ni = img_res_sptr->ni();
+  unsigned int nj = img_res_sptr->nj();
 
-
-  unsigned vi, vj, vni, vnj;
-  vi = 0;    vj = 0;
-  vni = ni;  vnj = nj;
+  unsigned int vi = 0, vj = 0, vni = 0, vnj = 0;
 
   // create blocked image resource for IO speed up
   vil_blocked_image_resource_sptr bir = blocked_image_resource(img_res_sptr);
@@ -104,9 +100,8 @@ bool vil_nitf_remove_margin_process(bprb_func_process& pro)
 
   // trimming from the bottom right
   found = false;
-  unsigned bottom_i = ni, bottom_j = nj;
+  unsigned int bottom_i = ni, bottom_j = nj;
   for (int sub_idx_i = 10; (sub_idx_i >= 0 && !found); sub_idx_i--) {
-    unsigned temp = sub_idx_i;
     for (int sub_idx_j = 10; (sub_idx_j >= 0 && !found); sub_idx_j--)
     {
       sub_i0 = sub_idx_i * sub_size_i;

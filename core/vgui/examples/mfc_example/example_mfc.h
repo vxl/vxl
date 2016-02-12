@@ -4,9 +4,9 @@
 #ifndef AFX_EXAMPLE_MFC_H__D215F64C_C1C9_41E2_B0F8_05ACF6313455__INCLUDED_
 #define AFX_EXAMPLE_MFC_H__D215F64C_C1C9_41E2_B0F8_05ACF6313455__INCLUDED_
 
-#if _MSC_VER > 1000
+#if defined(_MSC_VER)
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 #ifndef __AFXWIN_H__
         #error include 'StdAfx.h' before including this file for PCH

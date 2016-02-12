@@ -258,7 +258,6 @@ bool boxm2_refine_block_multi_data::match_refine(vcl_vector<vcl_string> const& p
   boxm2_array_3d<uchar16> trees = blk_->trees_copy();
   int dataIndex = 0;
   int dataSize = 0;                                 //running sum of data size
-  int currIndex = 0;
   int max_level = blk_->max_level();
   // loop over the trees and refine to the specified level
   int nx = static_cast<int>(trees.get_row1_count()), ny = static_cast<int>(trees.get_row2_count()), nz = static_cast<int>(trees.get_row3_count());

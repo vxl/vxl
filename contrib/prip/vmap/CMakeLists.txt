@@ -1,6 +1,6 @@
 # prip/vmap/CMakeLists.txt
 
-SET(vmap_sources
+set(vmap_sources
 
     # vbl extensions
 
@@ -27,11 +27,11 @@ SET(vmap_sources
    vmap_2_tmap_elts.cxx          vmap_2_tmap_elts.h
 )
 
-ADD_LIBRARY(vmap ${vmap_sources})
-INSTALL_TARGETS(/lib vmap)
+add_library(vmap ${vmap_sources})
+install_targets(/lib vmap)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vmap ${vmap_sources})
-TARGET_LINK_LIBRARIES(vmap vcl)
+target_link_libraries(vmap ${VXL_LIB_PREFIX}vcl)
 
-#IF (BUILD_TESTING)
+#if(BUILD_TESTING)
   add_subdirectory(tests)
-#ENDIF (BUILD_TESTING)
+#endif()

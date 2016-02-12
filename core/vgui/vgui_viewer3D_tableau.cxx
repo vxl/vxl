@@ -52,7 +52,7 @@ vgui_viewer3D_tableau::vgui_viewer3D_tableau(vgui_tableau_sptr const& s) :
   c_restore_home(vgui_key('<'), vgui_MODIFIER_NULL),
   lock_dolly(false),
   lock_zoom(true),
-  spin_data(0)
+  spin_data(VXL_NULLPTR)
 {
   spinning = false;
   allow_spinning = true;

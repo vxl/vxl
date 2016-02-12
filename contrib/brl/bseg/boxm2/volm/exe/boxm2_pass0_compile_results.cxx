@@ -80,7 +80,6 @@ int main(int argc,  char** argv)
   if ( candidate_list().compare("") != 0) {
     vcl_cout << " candidate list = " <<  candidate_list() << vcl_endl;
     if ( vul_file::extension(candidate_list()).compare(".txt") == 0) {
-      is_candidate = true;
       volm_io::read_polygons(candidate_list(), cand_poly);
     }
     else {
@@ -170,7 +169,6 @@ int main(int argc,  char** argv)
         // look for location and camera giving maximum score
         if (scores[ii]->max_score_ > max_score) {
           max_score = scores[ii]->max_score_;
-          max_score_cam_id = scores[ii]->max_cam_id_;
           max_score_loc = h_pt;
         }
         unsigned u, v;

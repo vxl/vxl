@@ -987,7 +987,6 @@ static bool t2_skip_packet(
         {
                 return false;
         }
-        p_src += l_nb_bytes_read;
         l_nb_total_bytes_read += l_nb_bytes_read;
         p_max_length -= l_nb_bytes_read;
         /* we should read data for the packet */
@@ -1045,7 +1044,6 @@ bool t2_encode_packets(
         if
                 (p_t2_mode == THRESH_CALC )
         { /* Calculating threshold */
-                l_current_pi = l_pi;
                 for
                         (compno = 0; compno < l_max_comp; ++compno)
                 {

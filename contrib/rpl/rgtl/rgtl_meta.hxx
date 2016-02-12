@@ -71,11 +71,7 @@ namespace rgtl
       typedef typename F::arg1_type arg1_type;
       static void invoke(arg1_type arg1)
         {
-#if defined(_MSC_VER) && _MSC_VER <= 1300
-        T::invoke(arg1, static_cast<F*>(0));
-#else
         T::template invoke<F>(arg1);
-#endif
         }
     };
 
@@ -88,11 +84,7 @@ namespace rgtl
       typedef typename F::arg2_type arg2_type;
       static void invoke(arg1_type arg1, arg2_type arg2)
         {
-#if defined(_MSC_VER) && _MSC_VER <= 1300
-        T::invoke(arg1, arg2, static_cast<F*>(0));
-#else
         T::template invoke<F>(arg1, arg2);
-#endif
         }
     };
   } // namespace rgtl::meta

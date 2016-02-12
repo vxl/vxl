@@ -45,35 +45,6 @@ class vnl_levenberg_marquardt : public vnl_nonlinear_minimizer
   //: Initialize with the function object that is to be minimized.
   vnl_levenberg_marquardt(vnl_least_squares_function& f) { init(&f); }
 
-#if 0
-  //: Initialize as above, and then run minimization.
-  //
-  // obsolete, as virtuals in base class vnl_nonlinear_minimizer not valid...
-  // i.e. if minimize() calls base::get_covariance(), it will call the
-  // base version rather than any overridden here or in classes derived
-  // from this.  This is an argument against computation in constructors.
-  // You should replace code like
-  // \code
-  //    vnl_levenberg_marquardt lm(f, x);
-  // \endcode
-  // with
-  // \code
-  //    vnl_levenberg_marquardt lm(f);
-  //    lm.minimize(x);
-  // \endcode
-  // Or
-  // \code
-  //    x = vnl_levenberg_marquardt_minimize(f, x);
-  // \endcode
-
-  vnl_levenberg_marquardt(vnl_least_squares_function& f,
-                          vnl_vector<double>& x)
-  {
-    init(&f);
-    minimize(x);
-  }
-#endif
-
   ~vnl_levenberg_marquardt();
 
   //: Minimize the function supplied in the constructor until convergence or failure.

@@ -1,15 +1,15 @@
 #brl/bbas/bapl/io/CMakeLists.txt
 
-SET( bapl_io_sources
+set( bapl_io_sources
      bapl_io_dsift.h      bapl_io_dsift.cxx
    )
-AUX_SOURCE_DIRECTORY( Templates bapl_io_sources )
+aux_source_directory( Templates bapl_io_sources )
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg)
+include_directories( ${BRL_INCLUDE_DIR}/bseg)
 
-ADD_LIBRARY( bapl_io ${bapl_io_sources} )
-TARGET_LINK_LIBRARIES( bapl_io bapl vbl vbl_io)
+add_library( bapl_io ${bapl_io_sources} )
+target_link_libraries( bapl_io bapl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

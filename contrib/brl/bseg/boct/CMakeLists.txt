@@ -1,6 +1,6 @@
 # contrib/brl/bseg/boct/CMakeLists.txt
 
-SET(boct_sources
+set(boct_sources
     boct_loc_code.txx         boct_loc_code.h
     boct_tree_cell.txx        boct_tree_cell.h      boct_tree_cell.cxx
     boct_tree.txx             boct_tree.h
@@ -11,16 +11,16 @@ SET(boct_sources
     util/boct_construct_tree.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates boct_sources)
+aux_source_directory(Templates boct_sources)
 
-ADD_LIBRARY(boct  ${boct_sources})
+add_library(boct  ${boct_sources})
 
-TARGET_LINK_LIBRARIES(boct vcl vgl vgl_io vnl_io vbl vnl)
+target_link_libraries(boct ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl)
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-INSTALL_TARGETS(/lib boct)
+install_targets(/lib boct)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boct ${boct_sources})

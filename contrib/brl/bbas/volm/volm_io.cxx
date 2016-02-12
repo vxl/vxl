@@ -523,7 +523,6 @@ bool volm_io::read_query_tags(vcl_string xml_file,
   vcl_vector<float>& object_mindist = parser.obj_mindists();
   vcl_vector<float>& object_maxdist = parser.obj_maxdists();
   vcl_vector<float>& object_weight =  parser.obj_weights();
-  vcl_vector<unsigned>& object_frame_ids = parser.obj_frame_ids();
 
   unsigned num_objs = object_names.size();
   if (num_objs != object_land_types.size() || num_objs != object_mindist.size() ||
@@ -984,7 +983,6 @@ int volm_io::read_gt_file(vcl_string gt_file, vcl_vector<vcl_pair<vgl_point_3d<d
 
     char *tok = vcl_strtok(name_buf, "-");
     char *tok2 = vcl_strtok(tok, "_");
-    tok2 = vcl_strtok(NULL, "_"); // tokenize the remaining string
     tok2 = vcl_strtok(NULL, "_"); // tokenize the remaining string
     int img_id;
     vcl_stringstream tv(tok2); tv >> img_id;

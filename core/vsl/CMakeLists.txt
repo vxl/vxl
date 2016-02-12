@@ -5,7 +5,7 @@ doxygen_add_library(core/vsl
   DESCRIPTION "Streaming Library for Binary I/O"
   )
 
-SET(vsl_sources
+set(vsl_sources
   vsl_fwd.h
   vsl_export.h
   vsl_binary_io.cxx vsl_binary_io.h
@@ -33,14 +33,11 @@ SET(vsl_sources
   vsl_basic_xml_element.cxx vsl_basic_xml_element.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vsl_sources)
+aux_source_directory(Templates vsl_sources)
 
-ADD_LIBRARY(vsl ${vsl_sources})
-TARGET_LINK_LIBRARIES( vsl vcl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vsl LIBSRCS ${vsl_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl )
 
-INSTALL_TARGETS(/lib vsl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vsl ${vsl_sources})
-
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

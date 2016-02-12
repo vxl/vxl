@@ -43,7 +43,7 @@ vil_stream_section::~vil_stream_section()
   // unreffing the underlying stream might cause deletion of *this, so
   // zero out the pointer first.
   vil_stream *u = underlying_;
-  underlying_ = 0;
+  underlying_ = VXL_NULLPTR;
   u->unref();
 }
 

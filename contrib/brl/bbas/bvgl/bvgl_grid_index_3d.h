@@ -20,7 +20,17 @@
 #include <vbl/vbl_array_3d.h>
 class bvgl_grid_index_3d{
  public:
- bvgl_grid_index_3d(): has_normals_(false), nx_(0), ny_(0), nz_(0), delta_x_(1.0), delta_y_(1.0), delta_z_(1.0), npts_(0), thresh_(1.0){}
+ bvgl_grid_index_3d():
+   has_normals_(false),
+   delta_x_(1.0),
+   delta_y_(1.0),
+   delta_z_(1.0),
+   nx_(0),
+   ny_(0),
+   nz_(0),
+   npts_(0),
+   thresh_(1.0)
+{}
   bvgl_grid_index_3d(unsigned nx, unsigned ny, unsigned nz, vgl_pointset_3d<double> ptset, double thresh = 1.0);
 
   void index(vgl_point_3d<double> const& p, unsigned& ix, unsigned& iy, unsigned& iz) const;

@@ -37,6 +37,7 @@ bool bsta_display_vrml(vcl_ostream& os, bsta_gaussian_full<T, 3> const& dist,
   vnl_vector<T> D; //eigenvalues
   bool good = vnl_symmetric_eigensystem_compute<T>(covar, V, D);
 #ifdef VRML_DEBUG
+  assert(good);
   vcl_cout << "V \n" << V << '\n';
   vcl_cout << "V^t \n" << V.transpose() << '\n';
   vcl_cout << "D \n" << D << '\n';

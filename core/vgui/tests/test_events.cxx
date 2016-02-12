@@ -7,7 +7,7 @@ int main(int argc,char **argv)
 {
   vgui::init(argc, argv);
 
-  vgui_debug_tableau_new echo(0);
+  vgui_debug_tableau_new echo(VXL_NULLPTR);
 
 #if 0
   vgui_shell_tableau shell(&echo);

@@ -63,7 +63,6 @@ int main(int argc,  char** argv)
         return -1;
       }
       vil_image_view<vxl_byte> img(nlcd_img_infos[i].img_r);
-      unsigned nii = img.ni(); unsigned nji = img.nj();
 
       vcl_pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> pair(img, nlcd_img_infos[i].cam);
       nlcd_imgs.push_back(pair);
@@ -127,7 +126,6 @@ int main(int argc,  char** argv)
         unsigned vv = (unsigned)vcl_floor(v + 0.5);
         if (uu > 0 && vv > 0 && uu < nlcd_imgs[k].first.ni() && vv < nlcd_imgs[k].first.nj()) {
           label = (nlcd_imgs[k].first)(uu, vv);
-          nlcd_found = true;
           break;
         }
       }
@@ -263,7 +261,6 @@ int main(int argc,  char** argv)
     vil_rgb<vxl_byte> pixel_color = building_pixel_color;
 
     if (heights[ii] > 20) {  // specify the category
-      label = volm_label_table::BUILDING_TALL;
       pixel_id = building_tall_id;
       pixel_color = building_tall_pixel_color;
     }

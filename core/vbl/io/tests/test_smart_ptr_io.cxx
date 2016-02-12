@@ -19,7 +19,7 @@ void test_smart_ptr_io()
   vbl_smart_ptr<impl> null1_in(new impl(n)), null2_in;
 
   TEST("sp1_out->get_references() == 2", sp1_out->get_references() ,2);
-  TEST("null1_in!=0", null1_in.ptr()!=0, true);
+  TEST("null1_in!=0", null1_in.ptr()!=VXL_NULLPTR, true);
   TEST("null2_in==0", null2_in.ptr(), 0);
 
   vsl_b_ofstream bfs_out("vbl_smart_ptr_test_io.bvl.tmp");

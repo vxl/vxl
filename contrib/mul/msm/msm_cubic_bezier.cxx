@@ -389,17 +389,17 @@ void msm_cubic_bezier::smooth_open()
 
   vnl_vector<double> c(n-1),dx(n-1),dy(n-1);
   c[0]=0.5; dx[0]=0.5*rx[0]; dy[0]=0.5*ry[0];
-  for (int i=1;i<n-2;++i)
-  {
+  for (unsigned int i=1; i<n-2; ++i)
+    {
     c[i]=1.0/(4-c[i-1]);
-  }
+    }
   c[n-2]=1.0/(3.5-c[n-3]);
 
-  for (unsigned i=1;i<n-1;++i)
-  {
+  for (unsigned int i=1; i<n-1; ++i)
+    {
     dx[i]=c[i]*(rx[i]-dx[i-1]);
     dy[i]=c[i]*(ry[i]-dy[i-1]);
-  }
+    }
 
   // Set c1 for each node
   // Solution given by  x[n-1]=dx[n-2]; x[i]=dx[i]-c[i]*x[i+1]

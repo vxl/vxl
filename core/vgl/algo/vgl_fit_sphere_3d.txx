@@ -38,14 +38,15 @@ class sphere_residual_function : public vnl_least_squares_function{
 // J[i] = [-(xi-x0)/ri, -(yi-y0)/ri, -(zi-z0)/ri, -1]
 //
   virtual void gradf(vnl_vector<double> const& x, vnl_matrix<double>& J){
-  double x0 = x[0], y0 = x[1], z0 = x[2], r = x[3];
+  double x0 = x[0], y0 = x[1], z0 = x[2];
   unsigned n = get_number_of_residuals();
-  for(unsigned i = 0; i<n; ++i){
+  for (unsigned i = 0; i<n; ++i)
+    {
     vgl_point_3d<double> p(pts_[i]);
     double xi = (p.x()-x0), yi = (p.y()-y0), zi = (p.z()-z0);
     double ri = vcl_sqrt(xi*xi + yi*yi + zi*zi);
     J[i][0]= -(xi-x0)/ri; J[i][1]= -(yi-y0)/ri; J[i][2]= -(zi-z0)/ri; J[i][3]= -1.0;
-  }
+    }
   //vcl_cout << "J\n" << J << '\n';
   }
  private:

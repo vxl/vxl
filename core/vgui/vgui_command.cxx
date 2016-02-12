@@ -28,16 +28,16 @@ vgui_command::~vgui_command()
 //-----------------------------------------------------------------------------
 vgui_command_cfunc::vgui_command_cfunc(function_pv f, void const *d)
   : fn_pv(f)
-  , fn(0)
+  , fn(VXL_NULLPTR)
   , data(d)
 {
 }
 
 //-----------------------------------------------------------------------------
 vgui_command_cfunc::vgui_command_cfunc(function f)
-  : fn_pv(0)
+  : fn_pv(VXL_NULLPTR)
   , fn(f)
-  , data(0)
+  , data(VXL_NULLPTR)
 {
 }
 

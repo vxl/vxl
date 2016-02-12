@@ -5,9 +5,9 @@
 #ifndef AFX_EXAMPLE_MFCVIEW_H__18E6E4B2_3489_47C5_ABEA_A07DF852DBEC__INCLUDED_
 #define AFX_EXAMPLE_MFCVIEW_H__18E6E4B2_3489_47C5_ABEA_A07DF852DBEC__INCLUDED_
 
-#if _MSC_VER > 1000
+#if defined(_MSC_VER)
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 #include <vgui/impl/mfc/vgui_mfc_adaptor.h>
 

@@ -6,22 +6,22 @@ doxygen_add_library(contrib/brl/bseg/bmdl
   DESCRIPTION "Brown Lidar Mesh Modeling Library"
   )
 
-ADD_DEFINITIONS(-DDEBUG_MEMORY=1)
+add_definitions(-DDEBUG_MEMORY=1)
 
-SET( bmdl_sources
+set( bmdl_sources
   bmdl_classify.txx    bmdl_classify.h
   bmdl_mesh.cxx        bmdl_mesh.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates bmdl_sources)
+aux_source_directory(Templates bmdl_sources)
 
-ADD_LIBRARY(bmdl  ${bmdl_sources})
+add_library(bmdl  ${bmdl_sources})
 
-TARGET_LINK_LIBRARIES(bmdl vil_algo imesh vgl_algo vgl vnl vil)
+target_link_libraries(bmdl ${VXL_LIB_PREFIX}vil_algo imesh ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil)
 
 #process lib
 add_subdirectory(pro)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

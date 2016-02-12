@@ -26,7 +26,7 @@ class test_base_class
   virtual void b_read(vsl_b_istream & /*is*/) { assert(false); } //= 0;
 
   //: Clone this
-  virtual test_base_class* clone() const { assert(false); return 0; } //= 0;
+  virtual test_base_class* clone() const { assert(false); return VXL_NULLPTR; } //= 0;
 
   //: Return a platform independent string identifying the class
   virtual vcl_string is_a() const
@@ -62,7 +62,7 @@ inline void vsl_b_write(vsl_b_ostream &os, const test_base_class & v)
 //: Binary save to stream.
 inline void vsl_b_write(vsl_b_ostream &os, const test_base_class* v)
 {
-  if (v!=0)
+  if (v!=VXL_NULLPTR)
   {
     vsl_b_write(os,v->is_a());
     v->b_write(os);
@@ -155,7 +155,7 @@ void test_polymorphic_io()
 
   test_derived_class d1_out(1234);
   test_base_class *b1_out = &d1_out;
-  test_base_class *b2_out = 0;
+  test_base_class *b2_out = VXL_NULLPTR;
 
   vsl_b_ofstream bfs_out("vsl_polymorphic_io_test.bvl.tmp");
   TEST("Opened vsl_polymorphic_io_test.bvl.tmp for writing", (!bfs_out), false);
@@ -165,7 +165,7 @@ void test_polymorphic_io()
   bfs_out.close();
 
   test_derived_class d1_in(0);
-  test_base_class *b1_in = 0;
+  test_base_class *b1_in = VXL_NULLPTR;
   test_base_class *b2_in = new test_derived_class(7);
 
   vsl_b_ifstream bfs_in("vsl_polymorphic_io_test.bvl.tmp");

@@ -3,7 +3,7 @@
 # (See accompanying file rgtl_license_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-SET(rgtl_sources
+set(rgtl_sources
   rgtl_compact_tree.hxx                 rgtl_compact_tree.txx
   rgtl_compact_tree_data_fixed.hxx
   rgtl_compact_tree_index.hxx
@@ -83,12 +83,12 @@ SET(rgtl_sources
   Templates/rgtl_sqt_space+3._-.cxx
   )
 
-ADD_LIBRARY(rgtl ${rgtl_sources})
-TARGET_LINK_LIBRARIES(rgtl vnl_algo vnl vcl)
+add_library(rgtl ${rgtl_sources})
+target_link_libraries(rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl)
 
-INSTALL_TARGETS(/lib rgtl)
+install_targets(/lib rgtl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgtl ${rgtl_sources})
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

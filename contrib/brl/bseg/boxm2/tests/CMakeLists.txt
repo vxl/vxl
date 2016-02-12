@@ -1,4 +1,4 @@
-ADD_EXECUTABLE( boxm2_test_all
+add_executable( boxm2_test_all
   test_driver.cxx
   test_scene.cxx
   test_cache.cxx
@@ -11,21 +11,21 @@ ADD_EXECUTABLE( boxm2_test_all
   test_utils.h  test_utils.cxx
  )
 
-TARGET_LINK_LIBRARIES( boxm2_test_all testlib boxm2_cpp_pro brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vul vpl )
+target_link_libraries( boxm2_test_all ${VXL_LIB_PREFIX}testlib boxm2_cpp_pro brdb ${VXL_LIB_PREFIX}vpgl_algo vpgl_pro vil_pro sdet ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl )
 
-ADD_TEST( boxm2_test_scene               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_scene  )
-ADD_TEST( boxm2_test_cache               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cache  )
-ADD_TEST( boxm2_test_cache2               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_cache2  )
+add_test( NAME boxm2_test_scene COMMAND $<TARGET_FILE:boxm2_test_all>  test_scene  )
+add_test( NAME boxm2_test_cache COMMAND $<TARGET_FILE:boxm2_test_all>  test_cache  )
+add_test( NAME boxm2_test_cache2 COMMAND $<TARGET_FILE:boxm2_test_all>  test_cache2  )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## These tests are always failing on Mac.  An infinite loop occurs in while statement
                                    ## due to failure in aio_read function on Mac.
-ADD_TEST( boxm2_test_io                  ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_io  )
+add_test( NAME boxm2_test_io COMMAND $<TARGET_FILE:boxm2_test_all>  test_io  )
 endif()
-ADD_TEST( boxm2_test_wrappers            ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_wrappers  )
-ADD_TEST( boxm2_test_data                ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_data  )
-ADD_TEST( boxm2_test_block               ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_block  )
-ADD_TEST( boxm2_test_block_vis_graph         ${EXECUTABLE_OUTPUT_PATH}/boxm2_test_all  test_block_vis_graph  )
+add_test( NAME boxm2_test_wrappers COMMAND $<TARGET_FILE:boxm2_test_all>  test_wrappers  )
+add_test( NAME boxm2_test_data COMMAND $<TARGET_FILE:boxm2_test_all>  test_data  )
+add_test( NAME boxm2_test_block COMMAND $<TARGET_FILE:boxm2_test_all>  test_block  )
+add_test( NAME boxm2_test_block_vis_graph COMMAND $<TARGET_FILE:boxm2_test_all>  test_block_vis_graph  )
 
-ADD_EXECUTABLE( boxm2_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( boxm2_test_include boxm2 boxm2_io boxm2_cpp )
-ADD_EXECUTABLE( boxm2_test_template_include test_template_include.cxx )
-TARGET_LINK_LIBRARIES( boxm2_test_template_include boxm2 boxm2_io boxm2_cpp )
+add_executable( boxm2_test_include test_include.cxx )
+target_link_libraries( boxm2_test_include boxm2 boxm2_io boxm2_cpp )
+add_executable( boxm2_test_template_include test_template_include.cxx )
+target_link_libraries( boxm2_test_template_include boxm2 boxm2_io boxm2_cpp )

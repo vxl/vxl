@@ -6,7 +6,7 @@ doxygen_add_library(contrib/mul/pdf1d
   DESCRIPTION "Univariate Probability Density Function Library"
   )
 
-SET(pdf1d_sources
+set(pdf1d_sources
   pdf1d_all.h                                      pdf1d_add_all_loaders.cxx
   pdf1d_pdf.cxx                                    pdf1d_pdf.h
   pdf1d_sampler.cxx                                pdf1d_sampler.h
@@ -46,18 +46,18 @@ SET(pdf1d_sources
   pdf1d_select_pdf.cxx                             pdf1d_select_pdf.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates pdf1d_sources)
+aux_source_directory(Templates pdf1d_sources)
 
-ADD_LIBRARY(pdf1d ${pdf1d_sources})
-INSTALL_TARGETS(/lib pdf1d)
+add_library(pdf1d ${pdf1d_sources})
+install_targets(/lib pdf1d)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/pdf1d ${pdf1d_sources})
-TARGET_LINK_LIBRARIES( pdf1d mbl vbl vnl_io vnl vsl )
+target_link_libraries( pdf1d mbl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vsl )
 
-IF(BUILD_MUL_TOOLS)
+if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
-ENDIF(BUILD_MUL_TOOLS)
+endif()
 
 
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

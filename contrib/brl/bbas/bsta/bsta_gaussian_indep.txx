@@ -23,7 +23,7 @@ namespace
   };
 
   //: base case
-  //  This is partial specialization: expect MSVC6 to complain
+  //  This is partial specialization
   template <class T, unsigned n>
   struct bsta_gaussian_indep_compute_sqr_mahalanobis<T,n,0>
   {
@@ -44,7 +44,7 @@ namespace
   };
 
   //: base case
-  //  This is partial specialization: expect MSVC6 to complain
+  //  This is partial specialization
   template <class T, unsigned n>
   struct bsta_gaussian_indep_determinant<T,n,0>
   {
@@ -99,7 +99,7 @@ struct bsta_gaussian_indep_compute_probability_box
 };
 
 //: base case
-//  This is partial specialization: expect MSVC6 to complain
+//  This is partial specialization
 template <class T, unsigned n>
 struct bsta_gaussian_indep_compute_probability_box<T,n,0>
 {

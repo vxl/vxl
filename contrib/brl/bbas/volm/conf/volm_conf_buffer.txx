@@ -210,7 +210,6 @@ bool volm_conf_buffer<T>::read_to_buffer()
     }
     length_vec_.push_back(prev_length_);
     // check whether the end of file has been reached
-    int check = ifs_ptr_->is().peek();
     if (ifs_ptr_->is().peek() == EOF)
       return true;
     // read next length

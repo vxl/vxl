@@ -96,7 +96,6 @@ static void test_category_io()
     vcl_cout << " id = " << mit->first << " --> ";  mit->second.print(); vcl_cout << '\n';
   }
 
-  unsigned cnt = 0;
   for (vcl_vector<vcl_string>::iterator vit = volm_osm_category_io::volm_category_name_table.begin();
        vit != volm_osm_category_io::volm_category_name_table.end(); ++vit) {
     unsigned id = volm_osm_category_io::volm_land_table_name[*vit].id_;

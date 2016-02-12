@@ -24,12 +24,12 @@
 //               p0                         p1
 // \endverbatim
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-05-08
 //
 // \verbatim
 //  Modifications
-//   2000-05-08 François BERTEL Creation
+//   2000-05-08 Francois BERTEL Creation
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2001-07-03 Peter Vanroose  Replaced vnl_double_2 by vgl_vector_2d
 //   2004-05-11 Joseph Mundy    Changed internal representation to 4 verts,

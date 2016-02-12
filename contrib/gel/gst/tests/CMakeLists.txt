@@ -1,2 +1,2 @@
-ADD_EXECUTABLE(gst_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( gst_test_include gst )
+add_executable(gst_test_include test_include.cxx )
+target_link_libraries( gst_test_include gst )

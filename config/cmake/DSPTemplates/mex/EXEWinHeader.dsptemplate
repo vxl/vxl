@@ -9,32 +9,32 @@
 # already been used, so do not edit here...
 
 # variables to REPLACE
-# 
+#
 # BUILD_INCLUDES == include path
-# EXECUTABLE_OUTPUT_PATH == override in output directory
+# CMAKE_RUNTIME_OUTPUT_DIRECTORY == override in output directory
 # EXTRA_DEFINES == compiler defines
 # OUTPUT_LIBNAME  == name of output library
-# CM_LIBRARIES == libraries linked in 
+# CM_LIBRARIES == libraries linked in
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=OUTPUT_LIBNAME - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "OUTPUT_LIBNAME.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "OUTPUT_LIBNAME.mak" CFG="OUTPUT_LIBNAME - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "OUTPUT_LIBNAME - Win32 MinSizeRel" (based on "Win32 (x86) Application")
 !MESSAGE "OUTPUT_LIBNAME - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "OUTPUT_LIBNAME - Win32 RelWithDebInfo" (based on "Win32 (x86) Application")
 !MESSAGE "OUTPUT_LIBNAME - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -53,7 +53,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC CMAKE_MFC_FLAG
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "EXECUTABLE_OUTPUT_PATHRelease"
+# PROP Output_Dir "CMAKE_RUNTIME_OUTPUT_DIRECTORYRelease"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS"  /FD /c
@@ -85,7 +85,7 @@ CMAKE_CUSTOM_RULE_CODE
 # PROP BASE Target_Dir ""
 # PROP Use_MFC CMAKE_MFC_FLAG
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "EXECUTABLE_OUTPUT_PATHDebug"
+# PROP Output_Dir "CMAKE_RUNTIME_OUTPUT_DIRECTORYDebug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP  /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS"  /FD /c
@@ -117,7 +117,7 @@ CMAKE_CUSTOM_RULE_CODE
 # PROP BASE Target_Dir ""
 # PROP Use_MFC CMAKE_MFC_FLAG
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "EXECUTABLE_OUTPUT_PATHMinSizeRel"
+# PROP Output_Dir "CMAKE_RUNTIME_OUTPUT_DIRECTORYMinSizeRel"
 # PROP Intermediate_Dir "MinSizeRel"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS"  /FD /c
@@ -147,7 +147,7 @@ CMAKE_CUSTOM_RULE_CODE
 # PROP BASE Target_Dir ""
 # PROP Use_MFC CMAKE_MFC_FLAG
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "EXECUTABLE_OUTPUT_PATHRelWithDebInfo"
+# PROP Output_Dir "CMAKE_RUNTIME_OUTPUT_DIRECTORYRelWithDebInfo"
 # PROP Intermediate_Dir "RelWithDebInfo"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS"  /FD /c
@@ -170,7 +170,7 @@ CM_MULTILINE_LIBRARIES
 
 CMAKE_CUSTOM_RULE_CODE
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 

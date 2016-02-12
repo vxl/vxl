@@ -1,6 +1,6 @@
 # vxl/vgl/io/CMakeLists.txt
 
-SET(vgl_io_sources
+set(vgl_io_sources
   vgl_io_polygon.cxx vgl_io_polygon.h
 
   vgl_io_box_2d.txx vgl_io_box_2d.h
@@ -26,14 +26,11 @@ SET(vgl_io_sources
   vgl_io_h_matrix_2d.txx vgl_io_h_matrix_2d.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates vgl_io_sources)
+aux_source_directory(Templates vgl_io_sources)
 
-ADD_LIBRARY(vgl_io ${vgl_io_sources})
-TARGET_LINK_LIBRARIES( vgl_io vgl vsl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgl_io LIBSRCS ${vgl_io_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl )
 
-INSTALL_TARGETS(/lib vgl_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl/io ${vgl_io_sources})
-
-IF( BUILD_TESTING)
+if( BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING)
+endif()

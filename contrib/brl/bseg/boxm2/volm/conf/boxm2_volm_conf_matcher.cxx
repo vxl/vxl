@@ -8,34 +8,46 @@
 #include <volm/volm_utils.h>
 #include <volm/volm_candidate_list.h>
 
-
-boxm2_volm_conf_matcher::boxm2_volm_conf_matcher(volm_conf_query_sptr const& query,
-                                                 unsigned const& tile_id,
-                                                 vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
-                                                 vcl_string const& index_folder,
-                                                 vcl_string const& out_folder,
-                                                 vcl_string const& cand_folder,
-                                                 float const& buffer_capacity)
- : query_(query), tile_id_(tile_id), loc_leaves_(loc_leaves), index_folder_(index_folder),
-   buffer_capacity_(buffer_capacity), cand_folder_(cand_folder),
-   out_folder_(out_folder)
+boxm2_volm_conf_matcher
+::boxm2_volm_conf_matcher(volm_conf_query_sptr const& query,
+                          unsigned const& tile_id,
+                          vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
+                          vcl_string const& index_folder,
+                          vcl_string const& out_folder,
+                          vcl_string const& cand_folder,
+                          float const& buffer_capacity) :
+  query_(query),
+  tile_id_(tile_id),
+  index_folder_(index_folder),
+  loc_leaves_(loc_leaves),
+  buffer_capacity_(buffer_capacity),
+  cand_folder_(cand_folder),
+  out_folder_(out_folder)
 {}
 
-boxm2_volm_conf_matcher::boxm2_volm_conf_matcher(volm_camera_space_sptr const& cam_space, depth_map_scene_sptr const& depth_scene,
-                                                 unsigned const& tile_id,
-                                                 vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
-                                                 vcl_string const& index_folder,
-                                                 vcl_string const& out_folder,
-                                                 vcl_string const& cand_folder,
-                                                 float const& buffer_capacity,
-                                                 unsigned tol_in_pixel)
- : tile_id_(tile_id), loc_leaves_(loc_leaves), index_folder_(index_folder),
-   buffer_capacity_(buffer_capacity), cand_folder_(cand_folder), out_folder_(out_folder)
+boxm2_volm_conf_matcher
+::boxm2_volm_conf_matcher(volm_camera_space_sptr const& cam_space,
+                          depth_map_scene_sptr const& depth_scene,
+                          unsigned const& tile_id,
+                          vcl_vector<volm_geo_index_node_sptr> const& loc_leaves,
+                          vcl_string const& index_folder,
+                          vcl_string const& out_folder,
+                          vcl_string const& cand_folder,
+                          float const& buffer_capacity,
+                          unsigned tol_in_pixel) :
+  tile_id_(tile_id),
+  index_folder_(index_folder),
+  loc_leaves_(loc_leaves),
+  buffer_capacity_(buffer_capacity),
+  cand_folder_(cand_folder),
+  out_folder_(out_folder)
 {
   query_ = new volm_conf_query(cam_space, depth_scene, tol_in_pixel);
 }
 
-int boxm2_volm_conf_matcher::conf_match_cpp(vcl_string const& index_name, bool const& use_height)
+int
+boxm2_volm_conf_matcher
+::conf_match_cpp(vcl_string const& index_name, bool const& use_height)
 {
   // loop over each leaf to match
   unsigned matched_locs = 0;
@@ -190,7 +202,9 @@ int boxm2_volm_conf_matcher::conf_match_cpp(vcl_string const& index_name, bool c
 #endif
 }
 
-int boxm2_volm_conf_matcher::conf_match_cpp_no_candidate(vcl_string& index_name, bool const& use_height)
+int
+boxm2_volm_conf_matcher
+::conf_match_cpp_no_candidate(vcl_string& index_name, bool const& use_height)
 {
   // loop over each leaf to match
   unsigned matched_locs = 0;
@@ -244,7 +258,9 @@ int boxm2_volm_conf_matcher::conf_match_cpp_no_candidate(vcl_string& index_name,
   return matched_locs;
 }
 
-bool boxm2_volm_conf_matcher::matching(vcl_vector<volm_conf_object> const& values, volm_conf_score& score, bool const& use_height)
+bool
+boxm2_volm_conf_matcher
+::matching(vcl_vector<volm_conf_object> const& values, volm_conf_score& score, bool const& use_height)
 {
   // transfer index to a map indexed by land id
   vcl_map<unsigned char, vcl_vector<volm_conf_object> > index_map;
@@ -429,12 +445,14 @@ void boxm2_volm_conf_matcher::match_to_reference(volm_conf_object const& ref_i, 
 }
 #endif
 
-void boxm2_volm_conf_matcher::match_to_reference_h(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
-                                                   vcl_vector<volm_conf_object_sptr> const& obj_q,
-                                                   vcl_map<unsigned char, vcl_vector<volm_conf_object> >& obj_map_i,
-                                                   float& score,
-                                                   vcl_vector<volm_conf_object>& matched_objs,
-                                                   bool const& use_height)
+void
+boxm2_volm_conf_matcher
+::match_to_reference_h(volm_conf_object const& ref_i, volm_conf_object_sptr const& ref_q,
+                       vcl_vector<volm_conf_object_sptr> const& obj_q,
+                       vcl_map<unsigned char, vcl_vector<volm_conf_object> >& obj_map_i,
+                       float& score,
+                       vcl_vector<volm_conf_object>& matched_objs,
+                       bool const& use_height)
 {
   matched_objs.clear();
   score = 0.0f;

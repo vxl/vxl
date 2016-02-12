@@ -805,7 +805,6 @@ void tcd_makelayer_fixed(opj_tcd_t *tcd, OPJ_UINT32 layno, OPJ_UINT32 final) {
                                                         cblk->numpassesinlayers = 0;
                                                 }
 
-                                                n = cblk->numpassesinlayers;
                                                 if (cblk->numpassesinlayers == 0) {
                                                         if (value != 0) {
                                                                 n = 3 * value - 2 + cblk->numpassesinlayers;
@@ -1421,7 +1420,6 @@ bool tcd_dc_level_shift_encode (
 
         l_tile = p_tcd->tcd_image->tiles;
         l_tile_comp = l_tile->comps;
-        l_tcp = p_tcd->tcp;
         l_tccp = p_tcd->tcp->tccps;
         l_img_comp = p_tcd->image->comps;
         for
@@ -1881,7 +1879,6 @@ bool tcd_dc_level_shift_decode (
 
         l_tile = p_tcd->tcd_image->tiles;
         l_tile_comp = l_tile->comps;
-        l_tcp = p_tcd->tcp;
         l_tccp = p_tcd->tcp->tccps;
         l_img_comp = p_tcd->image->comps;
 

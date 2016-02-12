@@ -1,16 +1,16 @@
 # core/vgui/wx/CMakeLists.txt
-PROJECT(vgui_wx)
+project(vgui_wx)
 
 # Build an additional library of widgets for use with vgui.
 # These widgets are intended for use with wxWidgets applications
 # that use a vgui_wx_adaptor, NOT for vgui applications that are
 # rendered using wxWidgets as a Toolkit.
 
-FIND_PACKAGE(wxWidgets COMPONENTS base core gl adv html xml xrc)
-IF(wxWidgets_FOUND)
-  INCLUDE( ${wxWidgets_USE_FILE} )
+find_package(wxWidgets COMPONENTS base core gl adv html xml xrc)
+if(wxWidgets_FOUND)
+  include( ${wxWidgets_USE_FILE} )
 
-  SET(vgui_wx_sources
+  set(vgui_wx_sources
     vgui_wx.cxx                     vgui_wx.h
 
     # wxWidgets
@@ -23,11 +23,11 @@ IF(wxWidgets_FOUND)
     wxVideoControlXmlHandler.cxx    wxVideoControlXmlHandler.h
   )
 
-  ADD_LIBRARY(vgui_wx ${vgui_wx_sources})
-  TARGET_LINK_LIBRARIES(vgui_wx vgui ${wxWidgets_LIBRARIES})
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgui_wx LIBSRCS ${vgui_wx_sources})
+  target_link_libraries(${VXL_LIB_PREFIX}vgui_wx ${VXL_LIB_PREFIX}vgui ${wxWidgets_LIBRARIES})
 
-  IF (BUILD_TESTING)
+  if(BUILD_TESTING)
     add_subdirectory(tests)
-  ENDIF (BUILD_TESTING)
+  endif()
 
-ENDIF(wxWidgets_FOUND)
+endif()

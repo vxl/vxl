@@ -6,8 +6,4 @@
 
 #include "iso/vcl_complex.txx"
 
-#if defined(VCL_GCC_31) && defined(sun)
-# include "gcc/vcl_cmath.h" // for sqrtf(), sinf(), cosf(), sinl(), cosl()
-#endif // sun
-
 #endif

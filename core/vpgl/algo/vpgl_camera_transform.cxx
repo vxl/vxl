@@ -612,7 +612,7 @@ bool vpgl_camera_transform::compute_initial_transformation_t(const vcl_vector<vp
       double r4 = R[1][0], r5 = R[1][1], r6 = R[1][2];
       double r7 = R[2][0], r8 = R[2][1], r9 = R[2][2];
       vgl_vector_3d<double> t = input_cams_norm[cam_ids_norm_cam_pts[j][i].second].get_translation();
-      double t1 = t.x(), t2 = t.y(), t3 = t.z();
+      double t1 = t.x(), t2 = t.y();
 
       A(cnt, 0) = r7*a-r1;
       A(cnt, 1) = r8*a-r2;

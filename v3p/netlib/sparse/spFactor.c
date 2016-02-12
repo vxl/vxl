@@ -41,12 +41,6 @@
  *  by Kenneth S. Kundert
  */
 
-#if 0
-static char copyright[] =
-    "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
-#endif
-
-
 
 /*
  *  IMPORTS
@@ -613,7 +607,7 @@ BOOLEAN *DoRealDirect, *DoCmplxDirect;
     if (Matrix->Partitioned) return;
     Size = Matrix->Size;
     DoRealDirect = Matrix->DoRealDirect;
-    DoCmplxDirect = Matrix->DoCmplxDirect;
+//    DoCmplxDirect = Matrix->DoCmplxDirect;
     Matrix->Partitioned = YES;
 
 /* If partition is specified by the user, this is easy. */
@@ -2518,7 +2512,7 @@ register  ElementPtr  pElement;
                 pElement = *ElementAboveRow2;
             }   while (pElement->Row < Row2);
 
-        ElementBelowRow2 = Element2->NextInCol;
+//        ElementBelowRow2 = Element2->NextInCol;
 
 /* Move Element2 to Row1. */
             *ElementAboveRow2 = Element2->NextInCol;
@@ -2663,7 +2657,7 @@ register   ElementPtr  pElement;
                 pElement = *ElementLeftOfCol2;
             }   while (pElement->Col < Col2);
 
-            ElementRightOfCol2 = Element2->NextInRow;
+//            ElementRightOfCol3 = Element2->NextInRow;
 
 /* Move Element2 to Col1. */
             *ElementLeftOfCol2 = Element2->NextInRow;

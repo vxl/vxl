@@ -1,10 +1,10 @@
 # library to support vector field operations
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${RPL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${RPL_INCLUDE_DIR} )
 message("RPL_INCLUDE_DIR = " ${RPL_INCLUDE_DIR})
-SET(boxm2_vecf_sources
+set(boxm2_vecf_sources
     boxm2_vecf_eye_params.h
     boxm2_vecf_eye_scene.h                  boxm2_vecf_eye_scene.cxx
     boxm2_vecf_head_model.h                 boxm2_vecf_head_model.cxx
@@ -49,14 +49,14 @@ SET(boxm2_vecf_sources
     boxm2_vecf_skull_articulation.h         boxm2_vecf_skull_articulation.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates boxm2_vecf_sources)
+aux_source_directory(Templates boxm2_vecf_sources)
 
-ADD_LIBRARY(boxm2_vecf  ${boxm2_vecf_sources})
-TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_io boxm2_cpp_algo brip baio bvrml vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl depth_map rsdl)
-INCLUDE( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
-IF(OPENCL_FOUND)
-  TARGET_LINK_LIBRARIES(boxm2_vecf boxm2_ocl boxm2_ocl_algo  bocl )
-ENDIF()
+add_library(boxm2_vecf  ${boxm2_vecf_sources})
+target_link_libraries(boxm2_vecf boxm2_io boxm2_cpp_algo brip baio bvrml ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl depth_map rsdl)
+include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
+if(OPENCL_FOUND)
+  target_link_libraries(boxm2_vecf boxm2_ocl boxm2_ocl_algo  bocl )
+endif()
 # OpenCL support code
 add_subdirectory(ocl)
 
@@ -71,6 +71,6 @@ subdirs(view)
 subdirs(exe)
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

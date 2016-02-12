@@ -6,7 +6,7 @@ doxygen_add_library(contrib/brl/bseg/bbgm
   PACKAGE contrib/brl
   )
 
-SET(bbgm_sources
+set(bbgm_sources
 
   bbgm_planes_to_sample.h
   bbgm_update.h
@@ -22,15 +22,15 @@ SET(bbgm_sources
   bbgm_features.h         bbgm_features.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates bbgm_sources)
+aux_source_directory(Templates bbgm_sources)
 
-ADD_LIBRARY(bbgm  ${bbgm_sources})
+add_library(bbgm  ${bbgm_sources})
 
 # add the required libraries into this list
-TARGET_LINK_LIBRARIES(bbgm bsta bsta_algo brip vnl_io vbl_io vsl vnl vil_algo vil vgl_algo vgl vbl)
+target_link_libraries(bbgm bsta bsta_algo brip ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl)
 
 add_subdirectory(pro)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

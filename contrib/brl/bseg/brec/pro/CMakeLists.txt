@@ -1,26 +1,26 @@
 # This is contrib/brl/bseg/brec/pro/CMakeLists.txt
 # Brown Recognition Process Library
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/bvxm )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/brec )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+include_directories( ${GEL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR}/bseg/bvxm )
+include_directories( ${BRL_INCLUDE_DIR}/bseg/brec )
 
-SET(brec_pro_sources
+set(brec_pro_sources
     brec_register.h      brec_register.cxx
     brec_processes.h
    )
 
-AUX_SOURCE_DIRECTORY(Templates brec_pro_sources)
+aux_source_directory(Templates brec_pro_sources)
 
-AUX_SOURCE_DIRECTORY(processes brec_pro_sources)
+aux_source_directory(processes brec_pro_sources)
 
-ADD_LIBRARY(brec_pro ${brec_pro_sources})
+add_library(brec_pro ${brec_pro_sources})
 
-TARGET_LINK_LIBRARIES(brec_pro brec bvxm_grid_io bbgm_pro bprb brip brdb sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_pro vil_algo vil vil_io vnl_io vnl vgl_algo vgl vbl_io vul)
+target_link_libraries(brec_pro brec bvxm_grid_io bbgm_pro bprb brip brdb sdet ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats vpgl_pro vsol vil_pro ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

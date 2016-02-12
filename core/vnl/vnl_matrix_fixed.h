@@ -89,16 +89,6 @@ vnl_vector_fixed<T, M> vnl_matrix_fixed_mat_vec_mult(const vnl_matrix_fixed<T, M
 template <class T, unsigned M, unsigned N, unsigned O>
 inline
 vnl_matrix_fixed<T, M, O> vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a, const vnl_matrix_fixed<T, N, O>& b);
-#ifdef VCL_VC_6
-template <unsigned num_cols, unsigned num_rows, class T>
-class vnl_matrix_fixed_fake_base
-{
-};
-
-#define VNL_MATRIX_FIXED_VCL60_WORKAROUND : public vnl_matrix_fixed_fake_base<num_cols,num_rows,T>
-#else
-#define VNL_MATRIX_FIXED_VCL60_WORKAROUND /* no workaround. Phew. */
-#endif
 
 //: Fixed size, stack-stored, space-efficient matrix.
 // vnl_matrix_fixed is a fixed-length, stack storage vector. It has
@@ -109,7 +99,7 @@ class vnl_matrix_fixed_fake_base
 // Read the overview documentation of vnl_vector_fixed.
 // The text there applies here.
 template <class T, unsigned int num_rows, unsigned int num_cols>
-class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
+class vnl_matrix_fixed
 {
   T data_[num_rows][num_cols]; // Local storage
 
@@ -126,7 +116,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
   // vnl_matrix, so that algorithms can template over the matrix type
   // itself.  It is illegal to call this constructor without
   // <tt>n==num_rows</tt> and <tt>m==num_cols</tt>.
-  vnl_matrix_fixed( unsigned n, unsigned m )
+  vnl_matrix_fixed( unsigned VXL_USED_IN_DEBUG(n), unsigned VXL_USED_IN_DEBUG(m) )
   {
     assert( n == num_rows && m == num_cols );
   }
@@ -389,19 +379,6 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
     return *this = out;
   }
 
-#ifdef VCL_VC_6
-  template <unsigned o>
-  vnl_matrix_fixed<T,num_rows,o> operator*( vnl_matrix_fixed_fake_base<o,num_cols,T> const& mat ) const
-  {
-    vnl_matrix_fixed<T,num_cols,o> const& b = static_cast<vnl_matrix_fixed<T,num_cols,o> const&>(mat);
-    return vnl_matrix_fixed_mat_mat_mult<T,num_rows,num_cols,o>( *this, b );
-  }
-  vnl_vector_fixed<T, num_rows> operator*( vnl_vector_fixed<T, num_cols> const& b) const
-  {
-    return vnl_matrix_fixed_mat_vec_mult<T,num_rows,num_cols>(*this,b);
-  }
-#endif
-
   ////--------------------------- Additions ----------------------------
 
   //: Make a new matrix by applying function to each element.
@@ -629,7 +606,7 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned nr_rows, unsigned nr_cols) const
+  void assert_size(unsigned VXL_USED_IN_DEBUG(nr_rows), unsigned VXL_USED_IN_DEBUG(nr_cols) ) const
   {
 #ifndef NDEBUG
     assert_size_internal(nr_rows, nr_cols);
@@ -757,9 +734,6 @@ class vnl_matrix_fixed  VNL_MATRIX_FIXED_VCL60_WORKAROUND
 
   void assert_size_internal(unsigned, unsigned) const;
 };
-
-#undef VNL_MATRIX_FIXED_VCL60_WORKAROUND
-
 
 // Make the operators below inline because (1) they are small and
 // (2) we then have less explicit instantiation trouble.
@@ -930,7 +904,6 @@ vnl_matrix_fixed_mat_mat_mult(const vnl_matrix_fixed<T, M, N>& a,
   return out;
 }
 
-#ifndef VCL_VC_6
 // The version for correct compilers
 
 //: Multiply  conformant vnl_matrix_fixed (M x N) and vector_fixed (N)
@@ -961,7 +934,6 @@ vnl_matrix_fixed<T, M, O> operator*(const vnl_matrix_fixed<T, M, N>& a, const vn
 {
   return vnl_matrix_fixed_mat_mat_mult(a, b);
 }
-#endif // VCL_VC_6
 
 
 // These overloads for the common case of mixing a fixed with a
@@ -1035,44 +1007,10 @@ vcl_istream& operator>> (vcl_istream& is, vnl_matrix_fixed<T,m,n>& mat)
   return is;
 }
 
-// More workarounds for Visual C++ 6.0. The problem is that VC6 cannot
-// automatically determine the m of the second parameter, for some
-// reason. Also, VC6 can't figure out that vector_fixed::SIZE is a
-// compile time constant when used in the return parameter. So, we
-// have to introduce a helper class to do it.
-//
-#if defined(VCL_VC_6) && !defined(ITK_WRAPPING_PARSER)
-
-template<class T, unsigned m, class FixedVector>
-struct outer_product_fixed_type_helper
-{
-  typedef vnl_matrix_fixed<T,m,FixedVector::SIZE> result_matrix;
-};
-
-template<class V1, class V2, class RM>
-struct outer_product_fixed_calc_helper
-{
-  static RM calc( V1 const& a, V2 const& b );
-};
-
-template <class T, unsigned m, class SecondFixedVector>
-outer_product_fixed_type_helper<T,m,SecondFixedVector>::result_matrix
-outer_product(vnl_vector_fixed<T,m> const& a, SecondFixedVector const& b)
-{
-  typedef vnl_vector_fixed<T,m> VecA;
-  typedef vnl_vector_fixed<T,SecondFixedVector::SIZE> VecB;
-  typedef outer_product_fixed_type_helper<T,m,SecondFixedVector>::result_matrix ResultMat;
-  return outer_product_fixed_calc_helper<VecA,VecB,ResultMat>::calc(a,b);
-}
-
-#else // no need for VC6 workaround for outer_product
-
 //:
 // \relatesalso vnl_vector_fixed
 template <class T, unsigned m, unsigned n>
 vnl_matrix_fixed<T,m,n> outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b);
-
-#endif // VC6 workaround for outer_product
 
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
 extern "please include vnl/vnl_matrix_fixed.txx instead"

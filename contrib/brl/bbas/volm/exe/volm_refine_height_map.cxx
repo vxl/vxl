@@ -50,7 +50,6 @@ static bool find_nearest_building(unsigned const& i, unsigned const& j,
                                   vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > > const& buildings,
                                   unsigned & building_id)
 {
-  bool found = false;
   unsigned num_nbrs = 8;
 
   vcl_map<unsigned, vcl_pair<vcl_vector<unsigned>, vcl_vector<unsigned> > >::const_iterator mit = buildings.begin();
@@ -387,14 +386,10 @@ int main(int argc, char** argv)
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
     unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       vcl_cout << '.';
       vcl_cout.flush();
-      // obtain window pixels
-      unsigned start_nj, end_nj;
-      start_nj = w_idx_j*dy(); end_nj = (w_idx_j+1)*dy();
 
       // obtain the window height
       float grd_height = 0.0f;
@@ -440,7 +435,6 @@ int main(int argc, char** argv)
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
     unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       vcl_cout << '.';
@@ -478,7 +472,6 @@ int main(int argc, char** argv)
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
     unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       vcl_cout << '.';
@@ -550,7 +543,6 @@ static bool obtain_buildings(vil_image_view<vxl_byte> const& c_img,
     {
       if ( i >= ni || j >= nj)
         continue;
-      unsigned img_cat = c_img(i,j);
       if (c_img(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_)
       {
         vcl_vector<unsigned> ri;  vcl_vector<unsigned> rj;
@@ -614,7 +606,6 @@ static bool refine_building_by_median(vil_image_view<float> const& h_img,
   {
     if (mit->second.first.size() < 10)
       continue;
-    unsigned building_key = mit->first;
     unsigned num_pts = (unsigned)mit->second.first.size();
     // find the median
     vcl_vector<float> height_values;
@@ -625,9 +616,9 @@ static bool refine_building_by_median(vil_image_view<float> const& h_img,
 
     // refine the height using median
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++) {
-      unsigned img_i = mit->second.first[p_idx];
-      unsigned img_j = mit->second.second[p_idx];
-      refined_img(mit->second.first[p_idx], mit->second.second[p_idx]) = median;
+      unsigned int img_i = mit->second.first[p_idx];
+      unsigned int img_j = mit->second.second[p_idx];
+      refined_img(img_i, img_j) = median;
     }
 
     // compute the mean height and the std
@@ -692,15 +683,15 @@ static bool refine_building_by_median_divided(vil_image_view<float> const& h_img
     unsigned num_w_i = ni/w_size + 1;
     unsigned num_w_j = nj/w_size + 1;
     // obtain the building height for each window
-    for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++) {
-      for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++) {
-        unsigned key = (w_idx_i + w_idx_j)*(w_idx_i+w_idx_j+1)/2 + w_idx_j;
-        unsigned s_ni, e_ni, s_nj, e_nj;
-        s_ni = bbox.min_x() + w_idx_i*w_size;  e_ni = bbox.min_x() + (w_idx_i+1)*w_size;
-        s_nj = bbox.min_y() + w_idx_j*w_size;  e_nj = bbox.min_y() + (w_idx_j+1)*w_size;
+    for (unsigned int w_idx_i = 0; w_idx_i < num_w_i; ++w_idx_i) {
+      for (unsigned int w_idx_j = 0; w_idx_j < num_w_j; ++w_idx_j) {
+        unsigned int s_ni = bbox.min_x() + w_idx_i*w_size;
+        unsigned int e_ni = bbox.min_x() + (w_idx_i+1)*w_size;
+        unsigned int s_nj = bbox.min_y() + w_idx_j*w_size;
+        unsigned int e_nj = bbox.min_y() + (w_idx_j+1)*w_size;
         vcl_vector<float> h_values;
-        for (unsigned i = s_ni; i < e_ni; i++) {
-          for (unsigned j = s_nj; j < e_nj; j++) {
+        for (unsigned int i = s_ni; i < e_ni; ++i) {
+          for (unsigned int j = s_nj; j < e_nj; ++j) {
             if ( i > bbox.max_x() && j > bbox.max_y() )  // outside the bounding box
               continue;
             if ( c_img(i,j) == volm_osm_category_io::volm_land_table_name["building"].id_)

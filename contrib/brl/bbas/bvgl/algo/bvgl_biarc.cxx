@@ -261,9 +261,6 @@ compute_biarc_params(){
 
   this->flag_ = 0;
 
-  d1 = -10.0;
-  d2 = -10.0;
-
   // due to the 0-2*pi discontinuity even for perfect arcs,
   // (psi-(t2+t0)/2)~{-pi,0, pi} for cocircular solutions
   // if (abs(mod(psi -(t2+t0)/2, pi))<bvgl_biarc_e_angle) % this condition is not correct
@@ -287,7 +284,6 @@ compute_biarc_params(){
       k1 = -4*vcl_sin((3*t0+t2)/4 - psi)* vcl_cos((t2-t0)/4)/d;
       // special case when start_angle == end_angle = psi-pi : no solution
       if (vcl_fabs(k1) < bvgl_biarc_e_k){
-        k1 = 0;
         this->set_len1(vnl_huge_val((double) 1));
         return false;
       }

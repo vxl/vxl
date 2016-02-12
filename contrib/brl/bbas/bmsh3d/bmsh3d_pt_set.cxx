@@ -216,7 +216,6 @@ void rotate_points (bmsh3d_pt_set* pt_set,
     x =  x0*vcl_cos(ry) - z0*vcl_sin(ry);
     z =  x0*vcl_sin(ry) + z0*vcl_cos(ry);
     x0=x;
-    z0=z;
 
     //3)Rotation about Z
     x =  x0*vcl_cos(rz) + y0*vcl_sin(rz);

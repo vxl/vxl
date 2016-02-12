@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( bvxm_io_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( bvxm_io_test_include bvxm_io)
+add_executable( bvxm_io_test_include test_include.cxx )
+target_link_libraries( bvxm_io_test_include bvxm_io)

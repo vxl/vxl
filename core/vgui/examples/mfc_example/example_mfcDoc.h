@@ -5,9 +5,9 @@
 #ifndef AFX_EXAMPLE_MFCDOC_H__957CF9E8_8EF9_4244_A5B7_DAB9A3EF96A9__INCLUDED_
 #define AFX_EXAMPLE_MFCDOC_H__957CF9E8_8EF9_4244_A5B7_DAB9A3EF96A9__INCLUDED_
 
-#if _MSC_VER > 1000
+#if defined(_MSC_VER)
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 #include <vgui/vgui_tableau_sptr.h>
 

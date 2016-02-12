@@ -168,13 +168,6 @@ class vnl_sse
   {
     // IMS: Unable to optimise this any further for MSVC compiler
     T sum(0);
-  #ifdef VCL_VC_6
-    for (unsigned i=0; i<n; ++i)
-    {
-      const T diff = x[i] - y[i];
-      sum += diff*diff;
-    }
-  #else
     --x;
     --y;
     while (n!=0)
@@ -183,7 +176,6 @@ class vnl_sse
       sum += diff*diff;
       --n;
     }
-  #endif
     return sum;
   }
 

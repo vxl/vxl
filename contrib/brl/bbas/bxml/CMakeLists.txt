@@ -6,41 +6,41 @@ doxygen_add_library(contrib/brl/bbas/bxml
   PACKAGE contrib/brl
   )
 
-SET( bxml_sources
+set( bxml_sources
     bxml_document.cxx            bxml_document.h
     bxml_write.cxx               bxml_write.h
     bxml_find.cxx                bxml_find.h
 )
 
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  INCLUDE_DIRECTORIES (${EXPAT_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES (${EXPATPP_INCLUDE_DIRS} )
-  SET( bxml_sources ${bxml_sources}
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  include_directories(${EXPAT_INCLUDE_DIRS} )
+  include_directories(${EXPATPP_INCLUDE_DIRS} )
+  set( bxml_sources ${bxml_sources}
       bxml_read.cxx                bxml_read.h
   )
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+ endif()
+endif()
 
-AUX_SOURCE_DIRECTORY(Templates bxml_sources)
+aux_source_directory(Templates bxml_sources)
 
-ADD_LIBRARY(bxml ${bxml_sources})
+add_library(bxml ${bxml_sources})
 
-TARGET_LINK_LIBRARIES( bxml vbl_io vul vbl )
-IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  TARGET_LINK_LIBRARIES( bxml ${EXPATPP_LIBRARIES})
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+target_link_libraries( bxml ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
+if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  target_link_libraries( bxml ${EXPATPP_LIBRARIES})
+ endif()
+endif()
 
 add_subdirectory(bsvg)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib bxml)
+install_targets(/lib bxml)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bxml/ ${bxml_sources})

@@ -218,7 +218,7 @@ void vgui_selector_tableau::clear()
 vgui_tableau_sptr vgui_selector_tableau::active_tableau() const
 {
   vcl_map<vcl_string, vgui_parent_child_link>::const_iterator itr = child_map_.find(active_child_);
-  if (itr == child_map_.end()) return NULL;
+  if (itr == child_map_.end()) return VXL_NULLPTR;
   return itr->second;
 }
 
@@ -227,7 +227,7 @@ vgui_tableau_sptr vgui_selector_tableau::active_tableau() const
 vgui_tableau_sptr vgui_selector_tableau::get_tableau(const vcl_string& name) const
 {
   vcl_map<vcl_string, vgui_parent_child_link>::const_iterator itr = child_map_.find(name);
-  if (itr == child_map_.end()) return NULL;
+  if (itr == child_map_.end()) return VXL_NULLPTR;
   return itr->second;
 }
 

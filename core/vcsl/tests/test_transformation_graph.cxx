@@ -7,7 +7,7 @@
 //
 // Version |Date      | Author                   |Comment
 // --------+----------+--------------------------+-----------------------------
-// 1.0     |2000/07/31| François BERTEL          |Creation
+// 1.0     |2000/07/31| Francois BERTEL          |Creation
 // 1.1     |2002/01/22| Peter Vanroose           |Avoid new/delete if possible
 // 1.2     |2002/11/13| Peter Vanroose           |converted to use TESTMAIN
 //*****************************************************************************

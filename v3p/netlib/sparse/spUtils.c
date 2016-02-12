@@ -43,11 +43,6 @@
  *
  *  Copyright (c) 1985-2003 by Kenneth S. Kundert
  */
-#if 0
-static char copyright[] =
-    "Sparse1.4: Copyright (c) 1985-2003 by Kenneth S. Kundert";
-#endif
-
 
 /*
  *  IMPORTS
@@ -233,7 +228,8 @@ BOOLEAN  Swapped, AnotherPassNeeded;
         if (AnotherPassNeeded)
         {   for (J = StartAt; NOT Swapped AND (J <= Size); J++)
             {   if (Matrix->Diag[J] == NULL)
-                {   Twins = CountTwins( Matrix, J, &pTwin1, &pTwin2 );
+                {  // Twins = CountTwins( Matrix, J, &pTwin1, &pTwin2 );
+                    CountTwins( Matrix, J, &pTwin1, &pTwin2 );
                     SwapCols( Matrix, pTwin1, pTwin2 );
                     Swapped = YES;
                 }
@@ -2150,60 +2146,4 @@ RealNumber Reid, Gear;
  *        Name of originator of error message.  If NULL, `sparse' is used.
  *        If zero-length string, no originator is printed.
  */
-#if 0 //Remove Borland Error
-void
-spErrorMessage(
-    spMatrix eMatrix,
-    FILE *Stream,
-    char *Originator
-)
-{
-int Row, Col, Error;
-
-/* Begin `spErrorMessage'. */
-    if (eMatrix == NULL)
-        Error = spNO_MEMORY;
-    else
-    {   ASSERT_IS_SPARSE( (MatrixPtr)eMatrix );
-        Error = ((MatrixPtr)eMatrix)->Error;
-    }
-
-    if (Error == spOKAY) return;
-    if (Originator == NULL) Originator = "sparse";
-    if (Stream == NULL) Stream = stderr;
-    if (Originator[0] != '\0') fprintf( Stream, "%s: ", Originator );
-    if (Error >= spFATAL)
-        fprintf( Stream, "fatal error: ");
-    else
-        fprintf( Stream, "warning: ");
-/*
- * Print particular error message.
- * Do not use switch statement because error codes may not be unique.
- */
-    if (Error == spPANIC)
-        fprintf( Stream, "Sparse called improperly.\n");
-    else if (Error == spNO_MEMORY)
-        fprintf( Stream, "insufficient memory available.\n");
-    else if (Error == spMANGLED)
-        fprintf( Stream, "matrix is mangled.\n");
-    else if (Error == spSINGULAR)
-    {   spWhereSingular( eMatrix, &Row, &Col );
-        fprintf( Stream, "singular matrix detected at row %d and column %d.\n",
-                 Row, Col);
-    }
-    else if (Error == spZERO_DIAG)
-    {   spWhereSingular( eMatrix, &Row, &Col );
-        fprintf( Stream, "zero diagonal detected at row %d and column %d.\n",
-                 Row, Col);
-    }
-    else if (Error == spSMALL_PIVOT)
-    {   fprintf( Stream,
-            "unable to find a pivot that is larger than absolute threshold.\n");
-    }
-    else ABORT();
-
-    ((MatrixPtr)eMatrix)->Error = spOKAY;
-    return;
-}
-#endif //Remove Borland Error
 #endif /* DOCUMENTATION */

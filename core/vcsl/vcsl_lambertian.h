@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief Lambert Conformal Conic Projection
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/30 François BERTEL Creation. Adapted from IUE
+//   2000/06/30 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 

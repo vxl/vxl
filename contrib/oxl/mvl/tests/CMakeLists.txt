@@ -1,2 +1,2 @@
-ADD_EXECUTABLE( mvl_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( mvl_test_include mvl )
+add_executable( mvl_test_include test_include.cxx )
+target_link_libraries( mvl_test_include mvl )

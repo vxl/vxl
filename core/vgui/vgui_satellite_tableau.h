@@ -158,18 +158,13 @@ struct vgui_satellite_tableau : public vgui_tableau
 };
 
 //----------------------------------------------------------------------------
-#ifdef VCL_SUNPRO_CC_50
-# define quirk(x) , x
-#else
-# define quirk(x) /* */
-#endif
 
 template <class object, class data>
-struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_tableau_t<object, data> quirk(vgui_tableau_sptr)>
+struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_tableau_t<object, data> >
 {
   // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_tableau_t<object, data> impl;
-  typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
+  typedef vgui_tableau_sptr_t<impl > base;
   typedef typename impl::method method;
   vgui_satellite_tableau_t_new(object *p, method m, data const &d,
                                vcl_string const&n=""):base(new impl(p,m,d,n)) {}
@@ -177,16 +172,15 @@ struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_
 
 //----------------------------------------------------------------------------
 template <class object>
-struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_tableau<object> quirk(vgui_tableau_sptr)>
+struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_tableau<object> >
 {
   // no vgui_make_sptr: this file must be maintained manually.
   typedef vgui_satellite_tableau<object> impl;
-  typedef vgui_tableau_sptr_t<impl quirk(vgui_tableau_sptr)> base;
+  typedef vgui_tableau_sptr_t<impl > base;
   typedef typename impl::method method;
   vgui_satellite_tableau_new(object *p, method m, vcl_string const &n = "")
     : base(new impl(p, m, n)) { }
 };
-#undef quirk
 
 //----------------------------------------------------------------------------
 // these could be in the .txx file but there would be no point to that.

@@ -5,14 +5,34 @@
 //:
 // \file
 // \author Matt Leotta
-// \date   19 Jan 2006
+// \author Gehua Yang
+// \date 19 Jan 2016
 //
 //-----------------------------------------------------------------------------
 
 #include "vidl_ffmpeg_convert.h"
+#include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
+#include <vcl_cassert.h>
 #include <vcl_cstring.h>
+#include <vcl_iostream.h>
 
+#include <vidl/vidl_config.h>
+extern "C" {
+#if FFMPEG_IN_SEVERAL_DIRECTORIES
+# include <libavcodec/version.h>
+# if LIBAVCODEC_VERSION_MAJOR >= 56
+#   include <libavutil/pixfmt.h>
+# else 
+#   ifndef __STDC_CONSTANT_MACROS
+#     define __STDC_CONSTANT_MACROS
+#   endif
+#   include <libavcodec/avcodec.h>
+# endif
+#else
+# include <ffmpeg/avcodec.h>
+#endif
+}
 
 #ifdef LIBAVFORMAT_BUILD
 #if LIBAVFORMAT_BUILD <= 4623
@@ -27,123 +47,162 @@ extern "C" {
 }
 #endif
 
-
 //--------------------------------------------------------------------------------
+
+#if LIBAVCODEC_VERSION_MAJOR < 56
+
+// The enum values in the old versions have the form PIX_FMT_*,
+// whereas the new ones are AV_PIX_FMT_*.
+// Use macro definitions so that the code works on both.
+#define AV_PIX_FMT_NONE          PIX_FMT_NONE
+#define AV_PIX_FMT_YUV420P       PIX_FMT_YUV420P
+#define AV_PIX_FMT_YUYV422       PIX_FMT_YUYV422
+#define AV_PIX_FMT_RGB24         PIX_FMT_RGB24
+#define AV_PIX_FMT_BGR24         PIX_FMT_BGR24
+#define AV_PIX_FMT_YUV422P       PIX_FMT_YUV422P
+#define AV_PIX_FMT_YUV444P       PIX_FMT_YUV444P
+#define AV_PIX_FMT_YUV410P       PIX_FMT_YUV410P
+#define AV_PIX_FMT_YUV411P       PIX_FMT_YUV411P
+#define AV_PIX_FMT_GRAY8         PIX_FMT_GRAY8
+#define AV_PIX_FMT_MONOWHITE     PIX_FMT_MONOWHITE
+#define AV_PIX_FMT_MONOBLACK     PIX_FMT_MONOBLACK
+#define AV_PIX_FMT_PAL8          PIX_FMT_PAL8
+#define AV_PIX_FMT_YUVJ420P      PIX_FMT_YUVJ420P
+#define AV_PIX_FMT_YUVJ422P      PIX_FMT_YUVJ422P
+#define AV_PIX_FMT_YUVJ444P      PIX_FMT_YUVJ444P
+
+#define AV_PIX_FMT_UYVY422       PIX_FMT_UYVY422
+#define AV_PIX_FMT_UYYVYY411     PIX_FMT_UYYVYY411
+#define AV_PIX_FMT_BGR8          PIX_FMT_BGR8
+#define AV_PIX_FMT_BGR4          PIX_FMT_BGR4
+#define AV_PIX_FMT_BGR4_BYTE     PIX_FMT_BGR4_BYTE
+#define AV_PIX_FMT_RGB8          PIX_FMT_RGB8
+#define AV_PIX_FMT_RGB4          PIX_FMT_RGB4
+#define AV_PIX_FMT_RGB4_BYTE     PIX_FMT_RGB4_BYTE
+#define AV_PIX_FMT_NV12          PIX_FMT_NV12
+#define AV_PIX_FMT_NV21          PIX_FMT_NV21
+
+#define AV_PIX_FMT_ARGB          PIX_FMT_ARGB
+#define AV_PIX_FMT_RGBA          PIX_FMT_RGBA
+#define AV_PIX_FMT_ABGR          PIX_FMT_ABGR
+#define AV_PIX_FMT_BGRA          PIX_FMT_BGRA
+
+#define AV_PIX_FMT_GRAY16BE      PIX_FMT_GRAY16BE
+#define AV_PIX_FMT_GRAY16LE      PIX_FMT_GRAY16LE
+#define AV_PIX_FMT_YUV440P       PIX_FMT_YUV440P
+#define AV_PIX_FMT_YUVJ440P      PIX_FMT_YUVJ440P
+#define AV_PIX_FMT_YUVA420P      PIX_FMT_YUVA420P
+
+#endif
 
 //: Convert the pixel format of a frame using FFMPEG
 //
-// The \p in_frame->data() is converted from \p in_frame->pixel_format()
+// The \p in_frame.data() is converted from \p in_frame.pixel_format()
 // to \p out_frame->pixel_format() and stored in \p out_frame->data()
 // If the output frame data is not the correct size new memory
 // will be allocated
-bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
-                               vidl_frame_sptr& out_frame)
+bool vidl_ffmpeg_convert(vidl_frame const& in_frame,
+                         vidl_frame      & out_frame)
 {
-  if (!in_frame || !out_frame)
+  AVPixelFormat in_fmt =
+    vidl_pixel_format_to_ffmpeg(in_frame.pixel_format());
+
+  AVPixelFormat out_fmt =
+    vidl_pixel_format_to_ffmpeg(out_frame.pixel_format());
+
+  if (in_fmt == AV_PIX_FMT_NONE || out_fmt == AV_PIX_FMT_NONE)
     return false;
 
-  PixelFormat in_fmt =
-      vidl_pixel_format_to_ffmpeg(in_frame->pixel_format());
+  unsigned ni = in_frame.ni();
+  unsigned nj = in_frame.nj();
+  unsigned out_size = (unsigned)avpicture_get_size(out_fmt, ni, nj);
 
-  PixelFormat out_fmt =
-      vidl_pixel_format_to_ffmpeg(out_frame->pixel_format());
-
-  if (in_fmt == PIX_FMT_NONE || out_fmt == PIX_FMT_NONE)
+  if (out_frame.size() != out_size ||
+      out_frame.ni() != ni ||
+      out_frame.nj() != nj ||
+      !out_frame.data())
+  {
+    //assert(typeid(out_frame) == typeid(vidl_memory_chunk_frame));  // must be the same type
+    //static_cast<vidl_memory_chunk_frame&>(out_frame)
+    //  = vidl_memory_chunk_frame(ni, nj, out_frame.pixel_format(),
+    //                            new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
     return false;
-
-  unsigned ni = in_frame->ni();
-  unsigned nj = in_frame->nj();
-  unsigned out_size = (unsigned) avpicture_get_size( out_fmt, ni, nj );
-
-  if (out_frame->size() != out_size ||
-      out_frame->ni() != ni ||
-      out_frame->nj() != nj ||
-      !out_frame->data() )
-    out_frame = new vidl_memory_chunk_frame(ni, nj, out_frame->pixel_format(),
-                                            new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
+  }
 
   AVPicture in_pic;
-  vcl_memset( &in_pic, 0, sizeof(in_pic) );
-  avpicture_fill(&in_pic, (uint8_t*) in_frame->data(), in_fmt, ni, nj);
+  vcl_memset(&in_pic, 0, sizeof(in_pic));
+  avpicture_fill(&in_pic, (uint8_t*)in_frame.data(), in_fmt, ni, nj);
 
   AVPicture out_pic;
-  vcl_memset( &out_pic, 0, sizeof(out_pic) );
-  avpicture_fill(&out_pic, (uint8_t*) out_frame->data(), out_fmt, ni, nj);
+  vcl_memset(&out_pic, 0, sizeof(out_pic));
+  avpicture_fill(&out_pic, (uint8_t*)out_frame.data(), out_fmt, ni, nj);
 
 #if LIBAVCODEC_BUILD < ((52<<16)+(10<<8)+0)  // before ver 52.10.0
-  if ( img_convert( &out_pic, out_fmt, &in_pic, in_fmt, ni, nj ) < 0 )
+  if (img_convert(&out_pic, out_fmt, &in_pic, in_fmt, ni, nj) < 0)
     return false;
 #else
-  SwsContext* ctx = sws_getContext( ni, nj, in_fmt,
-                                    ni, nj, out_fmt,
-                                    SWS_BILINEAR,
-                                    NULL, NULL, NULL );
-  sws_scale( ctx,
-             in_pic.data, in_pic.linesize,
-             0, nj,
-             out_pic.data, out_pic.linesize );
-  sws_freeContext( ctx );
+  SwsContext* ctx = sws_getContext(ni, nj, in_fmt,
+                                   ni, nj, out_fmt,
+                                   SWS_BILINEAR,
+                                   NULL, NULL, NULL);
+  sws_scale(ctx,
+            in_pic.data, in_pic.linesize,
+            0, nj,
+            out_pic.data, out_pic.linesize);
+  sws_freeContext(ctx);
 #endif
 
   return true;
 }
 
-
-//: Find the vidl pixel format that matches a FFMPEG one
-vidl_pixel_format
-vidl_pixel_format_from_ffmpeg(PixelFormat ffmpeg_pix_fmt)
+bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
+                         vidl_frame_sptr& out_frame)
 {
-  switch (ffmpeg_pix_fmt)
-  {
-    case PIX_FMT_YUV420P:   return VIDL_PIXEL_FORMAT_YUV_420P;
-    case PIX_FMT_YUYV422:   return VIDL_PIXEL_FORMAT_YUYV_422;
-    case PIX_FMT_RGB24:     return VIDL_PIXEL_FORMAT_RGB_24;
-    case PIX_FMT_BGR24:     return VIDL_PIXEL_FORMAT_BGR_24;
-    case PIX_FMT_YUV422P:   return VIDL_PIXEL_FORMAT_YUV_422P;
-    case PIX_FMT_YUV444P:   return VIDL_PIXEL_FORMAT_YUV_444P;
-#ifdef PIX_FMT_RGBA
-    case PIX_FMT_RGBA:      return VIDL_PIXEL_FORMAT_RGBA_32;
-#endif
-    case PIX_FMT_YUV410P:   return VIDL_PIXEL_FORMAT_YUV_410P;
-    case PIX_FMT_YUV411P:   return VIDL_PIXEL_FORMAT_YUV_411P;
-    case PIX_FMT_RGB565:    return VIDL_PIXEL_FORMAT_RGB_565;
-    case PIX_FMT_RGB555:    return VIDL_PIXEL_FORMAT_RGB_555;
-    case PIX_FMT_GRAY8:     return VIDL_PIXEL_FORMAT_MONO_8;
-    case PIX_FMT_PAL8:      return VIDL_PIXEL_FORMAT_MONO_8;   //HACK: Treating 8-bit palette as greyscale image
-    case PIX_FMT_MONOWHITE: return VIDL_PIXEL_FORMAT_MONO_1;
-    case PIX_FMT_MONOBLACK: return VIDL_PIXEL_FORMAT_MONO_1;
-    case PIX_FMT_UYVY422:   return VIDL_PIXEL_FORMAT_UYVY_422;
-    case PIX_FMT_UYYVYY411: return VIDL_PIXEL_FORMAT_UYVY_411;
-    default: break;
-  }
-  return VIDL_PIXEL_FORMAT_UNKNOWN;
-}
+  if (!in_frame || !out_frame)
+    return false;
 
+  AVPixelFormat in_fmt =
+    vidl_pixel_format_to_ffmpeg(in_frame->pixel_format());
 
-//: Find the FFMPEG pixel format that matches a vidl one
-PixelFormat
-vidl_pixel_format_to_ffmpeg(vidl_pixel_format vidl_pix_fmt)
-{
-  switch (vidl_pix_fmt)
-  {
-    case VIDL_PIXEL_FORMAT_RGB_24:   return PIX_FMT_RGB24;
-    case VIDL_PIXEL_FORMAT_BGR_24:   return PIX_FMT_BGR24;
-#ifdef PIX_FMT_RGBA
-    case VIDL_PIXEL_FORMAT_RGBA_32:  return PIX_FMT_RGBA;
+  AVPixelFormat out_fmt =
+    vidl_pixel_format_to_ffmpeg(out_frame->pixel_format());
+
+  if (in_fmt == AV_PIX_FMT_NONE || out_fmt == AV_PIX_FMT_NONE)
+    return false;
+
+  unsigned ni = in_frame->ni();
+  unsigned nj = in_frame->nj();
+  unsigned out_size = (unsigned)avpicture_get_size(out_fmt, ni, nj);
+
+  if (out_frame->size() != out_size ||
+      out_frame->ni() != ni ||
+      out_frame->nj() != nj ||
+      !out_frame->data())
+    out_frame = new vidl_memory_chunk_frame(ni, nj, out_frame->pixel_format(),
+                                            new vil_memory_chunk(out_size, VIL_PIXEL_FORMAT_BYTE));
+
+  AVPicture in_pic;
+  vcl_memset(&in_pic, 0, sizeof(in_pic));
+  avpicture_fill(&in_pic, (uint8_t*)in_frame->data(), in_fmt, ni, nj);
+
+  AVPicture out_pic;
+  vcl_memset(&out_pic, 0, sizeof(out_pic));
+  avpicture_fill(&out_pic, (uint8_t*)out_frame->data(), out_fmt, ni, nj);
+
+#if LIBAVCODEC_BUILD < ((52<<16)+(10<<8)+0)  // before ver 52.10.0
+  if (img_convert(&out_pic, out_fmt, &in_pic, in_fmt, ni, nj) < 0)
+    return false;
+#else
+  SwsContext* ctx = sws_getContext(ni, nj, in_fmt,
+                                   ni, nj, out_fmt,
+                                   SWS_BILINEAR,
+                                   NULL, NULL, NULL);
+  sws_scale(ctx,
+            in_pic.data, in_pic.linesize,
+            0, nj,
+            out_pic.data, out_pic.linesize);
+  sws_freeContext(ctx);
 #endif
-    case VIDL_PIXEL_FORMAT_RGB_565:  return PIX_FMT_RGB565;
-    case VIDL_PIXEL_FORMAT_RGB_555:  return PIX_FMT_RGB555;
-    case VIDL_PIXEL_FORMAT_YUV_444P: return PIX_FMT_YUV444P;
-    case VIDL_PIXEL_FORMAT_YUYV_422: return PIX_FMT_YUYV422;
-    case VIDL_PIXEL_FORMAT_YUV_422P: return PIX_FMT_YUV422P;
-    case VIDL_PIXEL_FORMAT_YUV_420P: return PIX_FMT_YUV420P;
-    case VIDL_PIXEL_FORMAT_YUV_411P: return PIX_FMT_YUV411P;
-    case VIDL_PIXEL_FORMAT_YUV_410P: return PIX_FMT_YUV410P;
-    case VIDL_PIXEL_FORMAT_UYVY_422: return PIX_FMT_UYVY422;
-    case VIDL_PIXEL_FORMAT_UYVY_411: return PIX_FMT_UYYVYY411;
-    case VIDL_PIXEL_FORMAT_MONO_1:   return PIX_FMT_MONOBLACK;
-    case VIDL_PIXEL_FORMAT_MONO_8:   return PIX_FMT_GRAY8;
-    default: break;
-  }
-  return PIX_FMT_NONE;
+
+  return true;
 }

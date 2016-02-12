@@ -1,15 +1,15 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-SET(bstm_cpp_pro_sources
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+include_directories( ${MUL_INCLUDE_DIR} )
+set(bstm_cpp_pro_sources
     bstm_cpp_register.h                              bstm_cpp_register.cxx
     bstm_cpp_processes.h
    )
-AUX_SOURCE_DIRECTORY(processes bstm_cpp_pro_sources)
-ADD_LIBRARY(bstm_cpp_pro  ${bstm_cpp_pro_sources})
+aux_source_directory(processes bstm_cpp_pro_sources)
+add_library(bstm_cpp_pro  ${bstm_cpp_pro_sources})
 
-TARGET_LINK_LIBRARIES(bstm_cpp_pro bbas_pro boct bprb bstm_cpp_algo bstm bstm_io boxm2 brdb vpgl vil vgl vul vbl vcl)
+target_link_libraries(bstm_cpp_pro bbas_pro boct bprb bstm_cpp_algo bstm bstm_io boxm2 brdb ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

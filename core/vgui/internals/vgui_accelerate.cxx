@@ -22,7 +22,7 @@ bool vgui_accelerate::vgui_mfc_acceleration = false;
 bool vgui_accelerate::vgui_doublebuffer = true;
 
 static int accelerator_level = 0;
-static vgui_accelerate* vgui_accelerator = 0;
+static vgui_accelerate* vgui_accelerator = VXL_NULLPTR;
 vgui_accelerate* vgui_accelerate::instance()
 {
   if (!vgui_accelerator) vgui_accelerator = new vgui_accelerate;

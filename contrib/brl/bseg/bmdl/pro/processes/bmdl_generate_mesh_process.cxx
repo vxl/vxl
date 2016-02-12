@@ -208,7 +208,6 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
   else {
     fin = vcl_fopen(filenameinzip,"rb");
     if (fin==NULL) {
-        err=ZIP_ERRNO;
         vcl_printf("error in opening %s for reading\n",filenameinzip);
         return 0;
     }
@@ -241,9 +240,7 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
   if (fin)
     vcl_fclose(fin);
 
-  if (err<0)
-    err=ZIP_ERRNO;
-  else {
+  if (err >= 0 ){
     err = zipCloseFileInZip(zf);
     if (err!=ZIP_OK)
       vcl_printf("error in closing %s in the zipfile\n", filenameinzip);

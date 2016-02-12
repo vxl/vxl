@@ -172,6 +172,12 @@
 /* true if <stdlib.h> declares srand48() */
 #define VXL_STDLIB_HAS_SRAND48    @VXL_STDLIB_HAS_SRAND48@
 
+/* Check for C99 versions of is[finite|inf|nan|normal] in <math.h> */
+#define VXL_HAS_STD_ISFINITE @VXL_HAS_STD_ISFINITE@
+#define VXL_HAS_STD_ISINF    @VXL_HAS_STD_ISINF@
+#define VXL_HAS_STD_ISNAN    @VXL_HAS_STD_ISNAN@
+#define VXL_HAS_STD_ISNORMAL @VXL_HAS_STD_ISNORMAL@
+
 /* true if <ieeefp.h> declares finite() */
 #define VXL_IEEEFP_HAS_FINITE     @VXL_IEEEFP_HAS_FINITE@
 
@@ -193,16 +199,8 @@
 /* true if usleep() returns void */
 #define VXL_UNISTD_USLEEP_IS_VOID @VXL_UNISTD_USLEEP_IS_VOID@
 
-/* true if gettime() takes two arguments */
-#define VXL_TWO_ARG_GETTIME       @VXL_TWO_ARG_GETTIME@
-
 /* true if <ieeefp.h> is available */
 #define VXL_HAS_IEEEFP_H          @VXL_HAS_IEEEFP_H@
-
-#ifdef __APPLE__
-/* true if in OsX <math.h> declares __isnand() */
-#define VXL_APPLE_HAS_ISNAND @VXL_APPLE_HAS_ISNAND@
-#endif
 
 /* true if <emmintrin.h> is available */
 #define VXL_HAS_EMMINTRIN_H   @VXL_HAS_EMMINTRIN_H@
@@ -223,6 +221,6 @@
 #define VXL_USE_WIN_WCHAR_T @VXL_USE_WIN_WCHAR_T@
 
 /* true if VXL is built shared */
-#cmakedefine VXL_BUILD_SHARED
+#cmakedefine VXL_BUILD_SHARED_LIBS
 
 #endif /* vxl_config_h_ */

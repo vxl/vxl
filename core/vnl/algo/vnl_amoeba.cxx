@@ -87,11 +87,7 @@ int vnl_amoeba_SimplexCorner::compare(vnl_amoeba_SimplexCorner const& s1,
   return vnl_math::sgn(s1.fv - s2.fv);
 }
 
-#ifdef VCL_SUNPRO_CC
-extern "C"
-#else
 static
-#endif
 int compare_aux(const void * s1, const void * s2)
 {
   return vnl_amoeba_SimplexCorner::compare(*(const vnl_amoeba_SimplexCorner*)s1,
@@ -121,21 +117,6 @@ double sorted_simplex_fdiameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simp
 {
   return simplex[simplex.size()-1].fv - simplex[0].fv;
 }
-
-#if 0
-static
-double simplex_fdiameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)
-{
-  // simplex assumed sorted, so fdiam is n - 0
-  double max = 0;
-  for (unsigned i = 1; i < simplex.size(); i++) {
-    double thismax = vnl_math::abs(simplex[0].fv - simplex[i].fv);
-    if (thismax > max)
-      max = thismax;
-  }
-  return max;
-}
-#endif
 
 static
 double simplex_diameter(const vcl_vector<vnl_amoeba_SimplexCorner>& simplex)

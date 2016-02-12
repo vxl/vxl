@@ -267,7 +267,7 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, v
   bool found_it = false;
   for (unsigned i = 0; i < other_responses_names_.size(); i++) {
     if (other_responses_names_[i].compare(response_name) == 0) {
-      found_it = true; break;
+      break;
     }
   }
   vil_image_view<float> out_gauss(img_f.ni(), img_f.nj());
@@ -1233,7 +1233,6 @@ void sdet_texture_classifier::create_samples_and_labels_from_training_data(vcl_v
     //histogram for the given category
     const vcl_string& cat = (*dit).first;
     const vcl_vector<vnl_vector<double> >& tdata = (*dit).second;
-    unsigned ndata  = tdata.size();
     //insert texton counts into the histogram
     for (vcl_vector<vnl_vector<double> >::const_iterator vit = tdata.begin(); vit != tdata.end(); ++vit) {
       samples.push_back(*vit);
@@ -1289,16 +1288,10 @@ float sdet_texture_classifier::prob_hist_intersection(vcl_vector<float> const& h
 {
   unsigned nt = texton_index_.size();
   float prob_sum = 0.0f;
-  float np = 0.0f;
   for (unsigned i = 0; i<nt; ++i) {
-    /*float w = texton_weights_[i];
-    np += w;
-    float vc = hc[i]*w, vh = hist[i]*w;
-    prob_sum += (vc<=vh)?vc:vh;*/
     float vc = hc[i], vh = hist[i];
     prob_sum += (vc<=vh)?vc:vh;
   }
-  //prob_sum /= np;
   return prob_sum;
 }
 
@@ -1444,28 +1437,31 @@ unsigned sdet_texture_classifier::max_filter_radius()
 //: compute the texton of each pixel using the filter bank and/or other responses
 void sdet_texture_classifier::compute_textons_of_pixels(vil_image_view<int>& texton_img)
 {
-  unsigned ni = this->filter_responses().ni();
-  unsigned nj = this->filter_responses().nj();
+  unsigned int ni = this->filter_responses().ni();
+  unsigned int nj = this->filter_responses().nj();
   assert(ni != 0 && nj != 0);
 
-  unsigned border = maxr_;
+  unsigned int border = maxr_;
   vcl_cout << " sdet_texture_classifier::compute_textons_of_pixels() -- using border: " << border << " for an " << ni << " by " << nj << " image to compute a texton per pixel!\n";
 
-  unsigned dim = filter_responses_.n_levels();
+  unsigned int dim = filter_responses_.n_levels();
   assert(dim != 0);
-  unsigned dim_total = dim + 2 + other_responses_.size();
+  unsigned int dim_total = dim + 2 + other_responses_.size();
 
-  for (int i = border; i < ni-border; i++)
-    for (int j = border; j < nj-border; j++) {
+  for (unsigned int i = border; i < ni-border; ++i)
+    {
+    for (unsigned int j = border; j < nj-border; ++j)
+      {
       vnl_vector<double> tx(dim_total);
-      for (unsigned f = 0; f<dim; ++f)
+      for (unsigned int f = 0; f<dim; ++f)
         tx[f]=filter_responses_.response(f)(i,j);
       double g = gauss_(i,j);
       tx[dim]=laplace_(i,j); tx[dim+1]=g;
-      for (unsigned f = 0; f<other_responses_.size(); ++f)
+      for (unsigned int f = 0; f<other_responses_.size(); ++f)
         tx[dim+2+f]=(other_responses_[f])(i,j);
-      unsigned indx = this->nearest_texton_index(tx);
+      unsigned int indx = this->nearest_texton_index(tx);
       texton_img(i,j) = indx;
+      }
     }
 }
 

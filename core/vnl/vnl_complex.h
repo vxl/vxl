@@ -26,14 +26,6 @@
 
 namespace vnl_math
 {
-#if 0
- // isinf
- template <class T> inline
- bool isinf(const vcl_complex<T>& z)
- {
-   return isinf(vcl_real(z)) || isinf(vcl_imag(z));
- }
-#else
  // should consider making these function templated,
 #define type_macro(T) \
  inline bool isnan(vcl_complex<T >const& z) { return isnan(vcl_real(z)) || isnan(vcl_imag(z)); } \
@@ -45,7 +37,6 @@ namespace vnl_math
  type_macro(double)
  type_macro(long double)
 #undef type_macro
-#endif
 
 #ifdef NEED_COMPLEX_BIGNUM // should never be defined ;-)
 

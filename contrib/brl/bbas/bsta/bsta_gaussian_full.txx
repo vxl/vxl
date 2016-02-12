@@ -30,7 +30,7 @@ struct compute_sqr_mahalanobis_helper
 };
 
 //: base case
-// this is partial specialization: expect MSVC6 to complain
+// this is partial specialization
 template <class T, unsigned n, unsigned i>
 struct compute_sqr_mahalanobis_helper<T,n,i,0>
 {
@@ -53,7 +53,7 @@ static inline T value(const vnl_vector_fixed<T,n>& d,
 };
 
 //: base case
-// this is partial specialization: expect MSVC6 to complain
+// this is partial specialization
 template <class T, unsigned n>
 struct bsta_gaussian_full_compute_sqr_mahalanobis<T,n,0>
 {

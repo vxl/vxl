@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief A specific geographic coordinate system
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/29 François BERTEL Creation. Adapted from IUE
+//   2000/06/29 Francois BERTEL Creation. Adapted from IUE
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 

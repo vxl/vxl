@@ -39,7 +39,7 @@ enum baio_status
 {
   BAIO_IN_PROGRESS = 0, // baio object is either reading or writing
   BAIO_FINISHED    = 1, // baio object is done and idle
-  BAIO_ERROR       = 2, // baio object has hit an error
+  BAIO_ERROR       = 2  // baio object has hit an error
 };
 
 class baio

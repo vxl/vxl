@@ -18,7 +18,7 @@ vil_nitf2_scalar_field::read(vil_nitf2_istream& input,
   if (error) (*error) = false;
   if (!definition || !definition->formatter) {
     vcl_cerr << "vil_nitf2_field::read(): Incomplete field definition!\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   vil_nitf2_field_formatter* formatter = definition->formatter;
   // variable_width, if positive, overrides formatter field_width
@@ -32,7 +32,7 @@ vil_nitf2_scalar_field::read(vil_nitf2_istream& input,
   //   value if computed
   //   warning if required field missing (scalar field or vcl_vector element)
   //   failed message if neither of the above apply
-  if (result!=0) {
+  if (result!=VXL_NULLPTR) {
     result->m_definition = definition;
     VIL_NITF2_LOG(log_debug) << *result;
   } else if (is_blank && !definition->blanks_ok) {

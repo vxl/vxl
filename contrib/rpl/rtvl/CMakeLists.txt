@@ -4,7 +4,7 @@
 # (See accompanying file rtvl_license_1_0.txt or copy at
 #  http://www.boost.org/LICENSE_1_0.txt)
 
-SET(rtvl_sources
+set(rtvl_sources
   rtvl_intpow.hxx
   rtvl_terms.hxx
   rtvl_tokens.hxx
@@ -40,16 +40,16 @@ SET(rtvl_sources
   Templates/rtvl_weight_smooth+3-.cxx
   )
 
-ADD_LIBRARY(rtvl ${rtvl_sources})
-TARGET_LINK_LIBRARIES(rtvl rgtl vnl_algo vnl)
+add_library(rtvl ${rtvl_sources})
+target_link_libraries(rtvl rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
-INSTALL_TARGETS(/lib rtvl)
+install_targets(/lib rtvl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rtvl ${rtvl_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()

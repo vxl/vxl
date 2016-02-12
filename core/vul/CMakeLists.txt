@@ -7,7 +7,7 @@ doxygen_add_library(core/vul
   )
 
 
-SET(vul_sources
+set(vul_sources
   vul_export.h
   vul_fwd.h
   vul_whereami.h
@@ -46,50 +46,42 @@ SET(vul_sources
 #
 # This workaround also occurs in vil
 #
-SET( vul_network_sources
+set( vul_network_sources
   vul_url.h                   vul_url.cxx
 )
 
 
-IF(CMAKE_COMPILER_IS_GNUCXX)
-  SET_SOURCE_FILES_PROPERTIES(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
-ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set_source_files_properties(vul_sequence_filename_map.cxx PROPERTIES COMPILE_FLAGS -O0)
+endif()
 
-IF(APPLE)
-  ADD_LIBRARY(vul ${vul_sources})
-  INSTALL_TARGETS(/lib vul)
-ELSE(APPLE)
+if(APPLE)
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources})
+else()
 
-IF(NOT SOLARIS)
-  ADD_LIBRARY(vul ${vul_sources} ${vul_network_sources})
-  INSTALL_TARGETS(/lib vul)
-ELSE(NOT SOLARIS)
-  ADD_LIBRARY(vul ${vul_sources})
-  ADD_LIBRARY(vul_network ${vul_network_sources})
-  INSTALL_TARGETS(/lib vul vul_network)
-ENDIF(NOT SOLARIS)
+if(NOT SOLARIS)
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources} ${vul_network_sources})
+else()
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul LIBSRCS ${vul_sources})
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vul_network LIBSRCS ${vul_network_sources})
+endif()
 
-IF (NOT UNIX)
-  TARGET_LINK_LIBRARIES( vul ws2_32 )
-ENDIF (NOT UNIX)
+if(NOT UNIX)
+  target_link_libraries( ${VXL_LIB_PREFIX}vul ws2_32 )
+endif()
 
-IF (SOLARIS)
-  TARGET_LINK_LIBRARIES( vul nsl vul_network socket )
-ENDIF (SOLARIS)
+if(SOLARIS)
+  target_link_libraries( ${VXL_LIB_PREFIX}vul nsl ${VXL_LIB_PREFIX}vul_network socket )
+endif()
 
-ENDIF(APPLE)
+endif()
 
-TARGET_LINK_LIBRARIES( vul vcl )
+target_link_libraries( ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl )
 
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vul
-  ${vul_sources}
-  ${vul_network_sources}
-)
-
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+endif()
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

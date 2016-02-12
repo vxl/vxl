@@ -1,13 +1,13 @@
 # Brown affine patch library
 # contrib/brl/bseg/bapl/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${RPL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${RPL_INCLUDE_DIR} )
+include_directories( ${MUL_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${GEL_INCLUDE_DIR})
 
-SET(bapl_sources
+set(bapl_sources
    bapl_keypoint.cxx            bapl_keypoint.h                 bapl_keypoint_sptr.h
    bapl_keypoint_set.cxx        bapl_keypoint_set.h             bapl_keypoint_set_sptr.h
    bapl_lowe_keypoint.cxx       bapl_lowe_keypoint.h            bapl_lowe_keypoint_sptr.h
@@ -25,19 +25,19 @@ SET(bapl_sources
    bapl_dense_sift.h            bapl_dense_sift.cxx             bapl_dense_sift_sptr.h
    bapl_dsift.h                 bapl_dsift.cxx                  bapl_dsift_sptr.h
    )
-AUX_SOURCE_DIRECTORY(Templates bapl_sources)
+aux_source_directory(Templates bapl_sources)
 
-ADD_LIBRARY(bapl  ${bapl_sources})
-TARGET_LINK_LIBRARIES(bapl bpgl_algo vpgl_algo ipts vimt brip rrel vnl_algo vnl vil_algo vil_io vil vgl_algo vgl vbl_io vbl)
+add_library(bapl  ${bapl_sources})
+target_link_libraries(bapl bpgl_algo ${VXL_LIB_PREFIX}vpgl_algo ipts vimt brip rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
-#IF( BUILD_EXAMPLES )
+#if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-#ENDIF( BUILD_EXAMPLES )
+#endif()
 
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()
 
 add_subdirectory(pro)
 

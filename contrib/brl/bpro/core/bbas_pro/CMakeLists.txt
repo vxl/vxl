@@ -1,12 +1,12 @@
 # brl/bpro/core/bbas_pro/CMakeLists.txt
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc)
+include_directories( ${BRL_INCLUDE_DIR} )
+include_directories( ${BRL_INCLUDE_DIR}/bpro )
+include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+include_directories( ${GEL_INCLUDE_DIR})
+include_directories( ${GEL_INCLUDE_DIR}/mrc)
 
-SET(bbas_pro_sources
+set(bbas_pro_sources
     bbas_processes.h
     bbas_register.h             bbas_register.cxx
     bbas_1d_array_float.h       bbas_1d_array_float.cxx
@@ -16,15 +16,15 @@ SET(bbas_pro_sources
     bbas_1d_array_string.h      bbas_1d_array_string.cxx
    )
 
-AUX_SOURCE_DIRECTORY(Templates bbas_pro_sources)
-AUX_SOURCE_DIRECTORY(processes bbas_pro_sources)
+aux_source_directory(Templates bbas_pro_sources)
+aux_source_directory(processes bbas_pro_sources)
 
-ADD_LIBRARY(bbas_pro ${bbas_pro_sources})
-TARGET_LINK_LIBRARIES(bbas_pro bprb brdb brad brad_io bsta_io bsta vpgl vpgl_algo vil_io vil vnl_io vnl_algo vnl vgl vbl_io vbl vsl imesh depth_map)
+add_library(bbas_pro ${bbas_pro_sources})
+target_link_libraries(bbas_pro bprb brdb brad brad_io bsta_io bsta ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl imesh depth_map)
 
-INSTALL_TARGETS(/lib bbas_pro)
+install_targets(/lib bbas_pro)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/bbas_pro ${bbas_pro_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

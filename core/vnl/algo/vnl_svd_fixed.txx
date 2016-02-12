@@ -152,9 +152,6 @@ template <class T, unsigned int R, unsigned int C>
 vcl_ostream& operator<<(vcl_ostream& s, const vnl_svd_fixed<T,R,C>& svd)
 {
   s << "vnl_svd_fixed<T,R,C>:\n"
-#if 0
-    << "M = [\n" << M << "]\n"
-#endif // 0
     << "U = [\n" << svd.U() << "]\n"
     << "W = " << svd.W() << '\n'
     << "V = [\n" << svd.V() << "]\n"

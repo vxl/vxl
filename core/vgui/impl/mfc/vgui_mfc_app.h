@@ -14,9 +14,9 @@
 //   23-AUG-2000 Marko Bacic, Oxford RRG -- Added support for scroll bars
 // \endverbatim
 
-#if _MSC_VER > 1000
+#if defined(_MSC_VER)
 #pragma once
-#endif // _MSC_VER > 1000
+#endif
 
 #ifndef __AFXWIN_H__
         #error include 'StdAfx.h' before including this file for PCH

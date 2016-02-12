@@ -3,11 +3,11 @@
 //:
 // \file
 // \brief Angle dimension
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2004/09/17 Peter Vanroose  do not pass vcsl_unit objects; use vcsl_unit_sptr instead
 // \endverbatim
 

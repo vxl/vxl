@@ -71,9 +71,8 @@ static void test_candidate_region_parser()
   TEST("parse polygon with name \"Region\"", poly_outer_region.num_sheets(), 2);
   TEST("parse polygon with name \"Overhead Overlay\"", poly_outer_overhead.num_sheets(), 3);
 
-  success = (n_in == 1) && (n_out == 2);
   success = (outer.num_sheets() == n_out) && (inner.num_sheets() == n_in);
-  success = (poly_all_region.num_sheets() == (n_in + n_out));
+  success &= (poly_all_region.num_sheets() == (n_in + n_out));
   TEST("parse polygon with inner boundary", success, true);
   return;
 }

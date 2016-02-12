@@ -1,15 +1,15 @@
 # This is mul/fhs/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( fhs_test_all
+add_executable( fhs_test_all
   test_driver.cxx
 
   test_arc.cxx
   test_searcher.cxx
 )
-TARGET_LINK_LIBRARIES( fhs_test_all fhs testlib )
+target_link_libraries( fhs_test_all fhs ${VXL_LIB_PREFIX}testlib )
 
-ADD_TEST( fhs_test_arc                  ${EXECUTABLE_OUTPUT_PATH}/fhs_test_all test_arc )
-ADD_TEST( fhs_test_searcher             ${EXECUTABLE_OUTPUT_PATH}/fhs_test_all test_searcher )
+add_test( NAME fhs_test_arc COMMAND $<TARGET_FILE:fhs_test_all> test_arc )
+add_test( NAME fhs_test_searcher COMMAND $<TARGET_FILE:fhs_test_all> test_searcher )
 
-ADD_EXECUTABLE( fhs_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( fhs_test_include fhs )
+add_executable( fhs_test_include test_include.cxx )
+target_link_libraries( fhs_test_include fhs )

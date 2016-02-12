@@ -23,7 +23,7 @@ vcl_vector<vcl_string> vil_image_list::files()
   if (!this->vil_is_directory(directory_.c_str()))
     return temp;
   // This mess should go away soon.
-# if defined VCL_VC_6 || defined VCL_VC_5 || defined __MINGW32__
+# if defined __MINGW32__
   typedef long handle_type;      // works with msvc6
 # else
   typedef intptr_t handle_type;  // not found by msvc6
@@ -64,7 +64,7 @@ vcl_vector<vcl_string> vil_image_list::files()
   DIR* dir_handle = opendir(directory_.c_str());
   dirent* de;
   de = readdir(dir_handle);
-  if (de==0)
+  if (de==VXL_NULLPTR)
     return temp;
   vcl_string s = de->d_name;
   vcl_string filename = directory_+ "/" + s;
@@ -78,7 +78,7 @@ vcl_vector<vcl_string> vil_image_list::files()
   while ( true )
   {
     de = readdir(dir_handle);
-    if (de == 0) {
+    if (de == VXL_NULLPTR) {
       closedir(dir_handle);
       return temp;
     }

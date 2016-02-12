@@ -51,7 +51,7 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   long n = ls_->get_number_of_unknowns();
   double damp = 0;
   long leniw = 1;
-  long* iw = 0;
+  long* iw = VXL_NULLPTR;
   long lenrw = m;
 #if defined __GNUC__ && !defined __STRICT_ANSI__
   double rw[m];
@@ -83,14 +83,6 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   resid_norm_estimate_ = rnorm;
   result_norm_estimate_ = xnorm;
   A_condition_estimate_ = acond;
-
-#if 0
-  vcl_cerr << "A Fro norm estimate      = " << anorm << vcl_endl
-           << "A condition estimate     = " << acond << vcl_endl
-           << "Residual norm estimate   = " << rnorm << vcl_endl
-           << "A'(Ax - b) norm estimate = " << arnorm << vcl_endl
-           << "x norm estimate          = " << xnorm << vcl_endl;
-#endif
 
   // We should return the return code, as translate_return_code is public and
   // it is very misleading that the return code from this function can't be fed

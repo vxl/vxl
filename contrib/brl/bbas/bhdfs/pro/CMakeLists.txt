@@ -1,28 +1,28 @@
 # bhdfs's Process Library
 
 # bprb depends on expat and bhdfs_pro depends on bprb primarily
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIR} )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/b3p/expatpp )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  include_directories( ${BRL_INCLUDE_DIR}/bpro )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+  include_directories( ${BRL_INCLUDE_DIR}/bbas )
+  include_directories( ${EXPAT_INCLUDE_DIR} )
+  include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 
-  SET(bhdfs_pro_sources
+  set(bhdfs_pro_sources
       bhdfs_processes.h
       bhdfs_register.h   bhdfs_register.cxx
      )
 
-  AUX_SOURCE_DIRECTORY(Templates bhdfs_pro_sources)
-  AUX_SOURCE_DIRECTORY(processes bhdfs_pro_sources)
+  aux_source_directory(Templates bhdfs_pro_sources)
+  aux_source_directory(processes bhdfs_pro_sources)
 
-  ADD_LIBRARY(bhdfs_pro ${bhdfs_pro_sources})
+  add_library(bhdfs_pro ${bhdfs_pro_sources})
 
-  TARGET_LINK_LIBRARIES(bhdfs_pro bhdfs bprb vil_algo vil_io vil vpgl boxm2)
+  target_link_libraries(bhdfs_pro bhdfs bprb ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl boxm2)
 
-  IF(BUILD_TESTING)
+  if(BUILD_TESTING)
     add_subdirectory(tests)
-  ENDIF(BUILD_TESTING)
+  endif()
 
-ENDIF(EXPAT_FOUND)
+endif()

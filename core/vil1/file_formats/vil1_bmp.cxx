@@ -28,7 +28,7 @@ vil1_image_impl* vil1_bmp_file_format::make_input_image(vil1_stream* is)
   if ( hdr.signature_valid() )
     return new vil1_bmp_generic_image(is);
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 vil1_image_impl* vil1_bmp_file_format::make_output_image(vil1_stream* is, int planes,

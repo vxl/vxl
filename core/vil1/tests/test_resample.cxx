@@ -14,7 +14,7 @@ static char default_filename[] = "square.pgm";
 template <class T> inline
 T get_pixel(vil1_image const& i, int x, int y, T* /*dummy*/) { T t; i.get_section(&t,x,y,1,1); return t; }
 
-static unsigned char* t = (unsigned char*)0;
+static unsigned char* t = (unsigned char*)VXL_NULLPTR;
 
 static void test_resample(int argc, char* argv[])
 {

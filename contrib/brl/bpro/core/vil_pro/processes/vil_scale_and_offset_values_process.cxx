@@ -44,7 +44,6 @@ bool vil_scale_and_offset_values_process(bprb_func_process& pro)
   float offset = pro.get_input<float>(2);
 
   // cast to float
-  vil_image_view<float> *image_float = dynamic_cast<vil_image_view<float>*>(image.ptr());
   if (vil_image_view<float> *image_float = dynamic_cast<vil_image_view<float>*>(image.ptr()))
     vil_math_scale_and_offset_values(*image_float, scale, offset);
   else if (vil_image_view<vxl_int_16>* image_int = dynamic_cast<vil_image_view<vxl_int_16>*>(image.ptr()))

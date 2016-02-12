@@ -1,23 +1,23 @@
 # contrib/brl/bseg/boxm2/util/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${GEL_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
-SET(boxm2_class_sources
+set(boxm2_class_sources
     boxm2_class_generate_samples.h    boxm2_class_generate_samples.cxx
    )
 
-ADD_LIBRARY(boxm2_class  ${boxm2_class_sources})
-TARGET_LINK_LIBRARIES(boxm2_class boxm2 bvgl vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
+add_library(boxm2_class  ${boxm2_class_sources})
+target_link_libraries(boxm2_class boxm2 bvgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib boxm2_class)
+install_targets(/lib boxm2_class)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_class/ ${boxm2_class_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
 add_subdirectory(exe)

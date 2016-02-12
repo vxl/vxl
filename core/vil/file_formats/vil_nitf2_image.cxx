@@ -39,7 +39,7 @@ vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs)
   vil_nitf2_image* im = new vil_nitf2_image( vs );
   if ( !im->parse_headers() ) {
     delete im;
-    im = 0;
+    im = VXL_NULLPTR;
   }
   return im;
 }
@@ -52,7 +52,7 @@ vil_image_resource_sptr
                                            enum vil_pixel_format /*format*/)
 {
   //write not supported
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ vil_streampos vil_nitf2_image::size_to(vil_nitf2_header::section_type sec,
 }
 
 vil_image_view_base_sptr ( *vil_nitf2_image::s_decode_jpeg_2000 )
-( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0, unsigned nj, double i_factor, double j_factor ) = 0;
+( vil_stream* vs, unsigned i0, unsigned ni, unsigned j0, unsigned nj, double i_factor, double j_factor ) = VXL_NULLPTR;
 
 vil_nitf2_image::vil_nitf2_image(vil_stream* is)
   : m_stream(is),
@@ -490,7 +490,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
 {
   // ACCORDING TO DOCUMENTATION, IF PARAMETERS ARE BAD, WE SHOULD RETURN NULL POINTER.
   if ((start_i + num_i > ni()) || (start_j + num_j > nj())) {
-    return 0;
+    return VXL_NULLPTR;
   }
   assert( is_jpeg_2000_compressed() );
   if ( ! s_decode_jpeg_2000 ) {
@@ -498,7 +498,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view_decimated_j2k(
     s_decode_jpeg_2000 = vil_j2k_image::s_decode_jpeg_2000;
 #else //HAS_J2K
     vcl_cerr << "Cannot decode JPEG 2000 image. The J2K library was not built." << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
 #endif //HAS_J2K
   }
 
@@ -514,12 +514,12 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
 {
   // ACCORDING TO DOCUMENTATION, IF PARAMETERS ARE BAD, WE SHOULD RETURN NULL POINTER.
   if ((start_i + num_i > ni()) || (start_j + num_j > nj())) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vcl_string compression_type;
   if (!current_image_header()->get_property("IC", compression_type)) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   //right now we only plan to support uncompressed and JPEG2000
@@ -530,7 +530,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_copy_view(unsigned start_i, unsign
     return get_copy_view_decimated_j2k( start_i, num_i, start_j, num_j, 1.0, 1.0 );
   }
   else {
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -637,9 +637,9 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
 
 vil_image_view_base_sptr vil_nitf2_image::get_block_j2k( unsigned int blockIndexX, unsigned int blockIndexY ) const
 {
-  if ( ! is_jpeg_2000_compressed() ) return 0;
-  if ( blockIndexX >= n_block_i() ) return 0;
-  if ( blockIndexY >= n_block_j() ) return 0;
+  if ( ! is_jpeg_2000_compressed() ) return VXL_NULLPTR;
+  if ( blockIndexX >= n_block_i() ) return VXL_NULLPTR;
+  if ( blockIndexY >= n_block_j() ) return VXL_NULLPTR;
 
   //sometimes blocks don't align nicely with the image edge.  I'm not sure
   //if this is a bug in the file or if we need to handle it.  Anyway,
@@ -654,14 +654,14 @@ vil_image_view_base_sptr vil_nitf2_image::get_block_j2k( unsigned int blockIndex
 
 vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, unsigned int block_index_y) const
 {
-  if (pixel_format() == VIL_PIXEL_FORMAT_UNKNOWN) return 0;
+  if (pixel_format() == VIL_PIXEL_FORMAT_UNKNOWN) return VXL_NULLPTR;
 
   if ( is_jpeg_2000_compressed() ) {
     return get_block_j2k( block_index_x, block_index_y );
   }
 
   vcl_string image_mode_type;
-  if (!current_image_header()->get_property("IMODE", image_mode_type)) return 0;
+  if (!current_image_header()->get_property("IMODE", image_mode_type)) return VXL_NULLPTR;
 
   //calculate the start position of the block that we need
   int bits_per_pixel_per_band, actualBitsPerPixelPerBand;
@@ -669,7 +669,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   if (!current_image_header()->get_property("NBPP", bits_per_pixel_per_band) ||
       !current_image_header()->get_property("ABPP", actualBitsPerPixelPerBand) ||
       !current_image_header()->get_property("PJUST", bitJustification)) {
-    return 0;
+    return VXL_NULLPTR;
   }
   int extra_bits = bits_per_pixel_per_band - actualBitsPerPixelPerBand;
   bool need_to_right_justify = bitJustification == "L" && (extra_bits > 0);
@@ -706,7 +706,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
         char* position_to_read_to = static_cast<char*>(image_memory->data());
         position_to_read_to += i*bytes_per_block_per_band;
         if (m_stream->read((void*)position_to_read_to, bytes_per_block_per_band) != static_cast<int>(bytes_per_block_per_band)) {
-          return 0;
+          return VXL_NULLPTR;
         }
       }
     }
@@ -726,7 +726,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
       m_stream->seek(current_offset);
       //read in the data
       if (m_stream->read(image_memory->data(), block_size_bytes) != static_cast<int>(block_size_bytes)) {
-        return 0;
+        return VXL_NULLPTR;
       }
     }
 
@@ -752,7 +752,7 @@ vil_image_view_base_sptr vil_nitf2_image::get_block(unsigned int block_index_x, 
   }
 
   //create image view of the data
-  vil_image_view_base_sptr view = 0;
+  vil_image_view_base_sptr view = VXL_NULLPTR;
   switch (vil_pixel_format_component_format(image_memory->pixel_format()))
   {
 #define GET_BLOCK_CASE(FORMAT, T)\

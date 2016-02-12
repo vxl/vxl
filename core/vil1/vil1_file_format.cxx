@@ -62,10 +62,10 @@ vil1_file_format::~vil1_file_format()
 #endif
 
 
-static vil1_file_format** storage = 0;
+static vil1_file_format** storage = VXL_NULLPTR;
 vil1_file_format** vil1_file_format::all()
 {
-  if (storage == 0)
+  if (storage == VXL_NULLPTR)
   {
     storage = new vil1_file_format*[256];
     int c = 0;
@@ -101,7 +101,7 @@ vil1_file_format** vil1_file_format::all()
     storage[c++] = new vil1_gen_file_format;
 #endif
 
-    storage[c] = 0;
+    storage[c] = VXL_NULLPTR;
   }
   return storage;
 }
@@ -111,7 +111,7 @@ class vil1_file_format_list_destroyer
  public:
   ~vil1_file_format_list_destroyer()
   {
-    if (storage==0) return;
+    if (storage==VXL_NULLPTR) return;
     unsigned i=0;
     while (storage[i])
       delete storage[i++];

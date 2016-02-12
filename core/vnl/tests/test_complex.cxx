@@ -25,15 +25,25 @@ static void fill_rand(vcl_complex<double> *b, vcl_complex<double> *e, vnl_random
 
 static void test_operators()
 {
-  vcl_complex<double> a(-5), b(7,-1), c;
-  c = a + b; TEST("sum", c, vcl_complex<double>(2,-1));
-  c = a - b; TEST("difference", c, vcl_complex<double>(-12,1));
-  c = a * b; TEST("product", c, vcl_complex<double>(-35,5));
+  vcl_complex<double> a(-5.);
+  vcl_complex<double> b(7.,-1.);
+  vcl_complex<double> c;
+  //Numerically deterministic double precision
+  c = a + b; TEST("sum", c, vcl_complex<double>(2.,-1.));
+  c = a - b; TEST("difference", c, vcl_complex<double>(-12.,1.));
+  c = a * b; TEST("product", c, vcl_complex<double>(-35.,5.));
+  //Numerically could have small floating point truncation errors
   c = a / b; TEST_NEAR("quotient", c, vcl_complex<double>(-0.7,-0.1), 1e-12);
-  a += b; TEST("+=", a, vcl_complex<double>(2,-1));
-  a -= b; TEST("-=", a, vcl_complex<double>(-5));
-  a *= b; TEST("*=", a, vcl_complex<double>(-35,5));
-  a /= b; TEST("/=", a, vcl_complex<double>(-5));
+  //Numerically deterministic double precision
+  a += b; TEST("+=", a, vcl_complex<double>(2.,-1.));
+  a -= b; TEST("-=", a, vcl_complex<double>(-5.));
+  a *= b; TEST("*=", a, vcl_complex<double>(-35.,5.));
+  //Numerically could have small floating point truncation errors
+  vcl_complex<double> a_pre = a;
+  a /= b; TEST_NEAR("/=", a, vcl_complex<double>(-5.),1e-12);
+  vcl_cout << "a /= b " << a_pre << " /= " << b
+           << "\n         --> " << a << " diff: "<< (a-vcl_complex<double>(-5))
+           <<'\n';
 }
 
 static void test_vector()

@@ -109,12 +109,12 @@ vnl_real_polynomial operator+(const vnl_real_polynomial& f1, const vnl_real_poly
   vnl_real_polynomial sum(d);
 
   // Coefficients are stored such that f(i) is coef. on x^(d-i)
-  for (int i=0;i<=d;++i)
-  {
+  for (unsigned int i=0; i<=d; ++i)
+    {
     sum[d-i]=0.0;
     if (i<=d1) sum[d-i]+=f1[d1-i];
     if (i<=d2) sum[d-i]+=f2[d2-i];
-  }
+    }
 
   return sum;
 }
@@ -131,12 +131,12 @@ vnl_real_polynomial operator-(const vnl_real_polynomial& f1, const vnl_real_poly
   vnl_real_polynomial diff(d);
 
   // Coefficients are stored such that f(i) is coef. on x^(d-i)
-  for (int i=0;i<=d;++i)
-  {
+  for (unsigned int i=0; i<=d; ++i)
+    {
     diff[d-i]=0.0;
     if (i<=d1) diff[d-i]+=f1[d1-i];
     if (i<=d2) diff[d-i]-=f2[d2-i];
-  }
+    }
 
   return diff;
 }
@@ -151,8 +151,8 @@ vnl_real_polynomial operator*(const vnl_real_polynomial& f1, const vnl_real_poly
   vnl_real_polynomial prod(d);
   prod.coefficients().fill(0.0);
 
-  for (int i=0;i<=d1;++i)
-    for (int j=0;j<=d2;++j)
+  for (unsigned int i=0; i<=d1; ++i)
+    for (unsigned int j=0; j<=d2; ++j)
       prod[d-(i+j)] += f1[d1-i]*f2[d2-j];
 
   return prod;

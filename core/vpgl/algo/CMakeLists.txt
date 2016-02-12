@@ -2,8 +2,9 @@
 # Photogrammetry Algorithms Library.
 
 
-SET( vpgl_algo_sources
+set( vpgl_algo_sources
   vpgl_optimize_camera.h           vpgl_optimize_camera.cxx
+  vpgl_calibration_matrix_compute.h vpgl_calibration_matrix_compute.cxx
   vpgl_camera_compute.h            vpgl_camera_compute.cxx
   vpgl_camera_convert.h             vpgl_camera_convert.cxx
   vpgl_camera_homographies.h        vpgl_camera_homographies.cxx
@@ -15,7 +16,7 @@ SET( vpgl_algo_sources
   vpgl_invmap_cost_function.h      vpgl_invmap_cost_function.cxx
   vpgl_backproject.h               vpgl_backproject.cxx
   vpgl_ray.h                       vpgl_ray.cxx
-  vpgl_ray_intersect.h              vpgl_ray_intersect.cxx
+  vpgl_ray_intersect.h              vpgl_ray_intersect.txx
   vpgl_ortho_procrustes.h          vpgl_ortho_procrustes.cxx
   vpgl_rational_adjust_onept.h     vpgl_rational_adjust_onept.cxx
   vpgl_rational_adjust.h           vpgl_rational_adjust.cxx
@@ -29,20 +30,16 @@ SET( vpgl_algo_sources
   vpgl_camera_transform.h          vpgl_camera_transform.cxx
 )
 
-AUX_SOURCE_DIRECTORY(Templates vpgl_algo_sources)
+aux_source_directory(Templates vpgl_algo_sources)
 
-ADD_LIBRARY(vpgl_algo ${vpgl_algo_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpgl_algo LIBSRCS ${vpgl_algo_sources})
 
-TARGET_LINK_LIBRARIES(vpgl_algo vpgl vpgl_file_formats vgl_algo vnl_algo vnl vgl vil vul vbl)
+target_link_libraries(${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
-
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()
 
-IF( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
-
-INSTALL_TARGETS(/lib vpgl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vpgl/algo ${vpgl_algo_sources})
+endif()

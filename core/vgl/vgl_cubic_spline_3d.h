@@ -44,8 +44,10 @@ class vgl_cubic_spline_3d
   vgl_cubic_spline_3d(): closed_curve_(false), s_(Type(0.5)) {}
 
   //: Construct from set of knots
-  vgl_cubic_spline_3d(vcl_vector<vgl_point_3d<Type> > const& knots, Type s = Type(0.5),
-                             bool closed = false): knots_(knots), s_(s), closed_curve_(closed){}
+  vgl_cubic_spline_3d(vcl_vector<vgl_point_3d<Type> > const& knots,
+                      Type s = Type(0.5),
+                      bool closed = false)
+    : closed_curve_(closed), s_(s), knots_(knots){}
 
   //: accessors
   bool closed() const {return closed_curve_;}

@@ -1,14 +1,14 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-INCLUDE_DIRECTORIES( ${MUL_INCLUDE_DIR} )
-SET(bstm_pro_sources
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${MUL_INCLUDE_DIR} )
+set(bstm_pro_sources
     bstm_register.h                              bstm_register.cxx
     bstm_processes.h
    )
-AUX_SOURCE_DIRECTORY(processes bstm_pro_sources)
-ADD_LIBRARY(bstm_pro  ${bstm_pro_sources})
+aux_source_directory(processes bstm_pro_sources)
+add_library(bstm_pro  ${bstm_pro_sources})
 
-TARGET_LINK_LIBRARIES(bstm_pro bprb boxm2_util bstm bstm_io bstm_util boxm2_basic boct brdb vpgl vil vgl vul vbl vcl)
+target_link_libraries(bstm_pro bprb boxm2_util bstm bstm_io bstm_util boxm2_basic boct brdb ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

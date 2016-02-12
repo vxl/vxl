@@ -9,9 +9,9 @@
 //
 // Be careful when modifying this file. In general, you need to make
 // sure that exactly one of the preprocessor flags is defined. For
-// example, if the compiler is GCC 3.4.2, then VCL_GCC should be
-// defined, VCL_GCC_3 should be defined, and VCL_GCC_34 should be
-// defined. Others, like VCL_GCC_33 *should not* be defined.
+// example, if the compiler is GCC 5.3.0, then VCL_GCC should be
+// defined, VCL_GCC_5 should be defined, and VCL_GCC_53 should be
+// defined. Others, like VCL_GCC_51 *should not* be defined.
 //
 // Note that this is most commonly implemented using a cascade of if
 // statements. Be careful to add your statements to the correct place
@@ -42,25 +42,6 @@
 # endif
 #endif
 
-#if defined(__SUNPRO_CC)
-# define VCL_SUNPRO_CC
-# if (__SUNPRO_CC>=0x500)
-#  if (__SUNPRO_CC>=0x560)
-#   define VCL_SUNPRO_CC_56
-#   undef VCL_SUNPRO_CC_50
-#  else
-#   define VCL_SUNPRO_CC_50
-#   undef VCL_SUNPRO_CC_56
-#  endif
-#  define VCL_SUNPRO_CC_5
-# else
-#  undef VCL_SUNPRO_CC_5
-# endif
-# ifdef INSTANTIATE_TEMPLATES
-#  define _RWSTD_COMPILE_INSTANTIATE
-# endif
-#endif
-
 #if defined(__GNUC__) && !defined(__ICC) // icc 8.0 defines __GNUC__
 # define VCL_GCC
 # if (__GNUC__ < 4)
@@ -83,6 +64,17 @@
 #  else
 #   define VCL_GCC_50
 #  endif
+# elif (__GNUC__==6)
+#  define VCL_GCC_6
+#  if (__GNUC_MINOR__ > 2 )
+#   define VCL_GCC_63
+#  elif (__GNUC_MINOR__ > 1 )
+#   define VCL_GCC_62
+#  elif (__GNUC_MINOR__ > 0 )
+#   define VCL_GCC_61
+#  else
+#   define VCL_GCC_60
+#  endif
 # else
 #  error "Dunno about this gcc"
 # endif
@@ -92,9 +84,7 @@
 # define VCL_WIN32
 # if defined(_MSC_VER)
 #  define VCL_VC
-#  if _MSC_VER >= 1300
-#   define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
-#  endif
+#  define VCL_VC_DOTNET 1 // VC is at least version >= 7.0
 
 // In future use VCL_VC_13_1 for 13.1, etc.
 #  if _MSC_VER >= 1700     // Visual Studio 2011 = Version 11.x
@@ -103,26 +93,8 @@
 #   define VCL_VC_10
 #  elif _MSC_VER >= 1500     // Visual Studio 2008 = Version 9.x
 #   define VCL_VC_9
-#  elif _MSC_VER >= 1400   // .NET 2005 = Version 8.x
-#   define VCL_VC_8
-#   define VCL_VC80 1      // (deprecated)
-#  elif _MSC_VER >= 1300   // .NET 2003 = Version 7.x
-#   define VCL_VC_7
-#   if _MSC_VER >= 1310
-#    define VCL_VC_71      // Version 7.1
-#    define VCL_VC71 1     // (deprecated)
-#   else
-#    define VCL_VC_70      // Version 7.0
-#    define VCL_VC70 1     // (deprecated)
-#   endif
-#  elif _MSC_VER >= 1200   // pre- .NET, Version 6.x
-#   define VCL_VC_6
-#   define VCL_VC_60       // Version 6.0
-#   define VCL_VC60 1      // (deprecated)
 #  else
-#   define VCL_VC_5
-#   define VCL_VC_50       // Version 5.0
-#   define VCL_VC50 1      // (deprecated)
+#   error "Invalid VCL_VC version"
 #  endif
 # endif
 #endif
@@ -130,24 +102,10 @@
 // win32 or vc++ ?
 // awf hack alert:
 #ifdef VCL_VC
-#  ifdef VCL_VC_60
-#    pragma warning(disable:4786 4660 4661)
-#    pragma warning(disable:4786 4660 4355 4390)
-#  elif VCL_VC_DOTNET
-// 4786: 'identifier' : identifier was truncated to 'number' characters in the debug information
-// 4018: signed/unsigned mismatch
-// 4146: unary minus operator applied to unsigned type, result still unsigned
-// 4267: conversion related to size_t
-// 4355: 'this' : used in base member initializer list
-#    pragma warning(disable:4786 4355)
-#  endif
-
 // Disable warnings about C standard library functions.
-#  if _MSC_VER >= 1400   // .NET 2005 = Version 8.x
-#   ifndef _CRT_SECURE_NO_DEPRECATE
-#    define _CRT_SECURE_NO_DEPRECATE 1
-#   endif
-#  endif
+# ifndef _CRT_SECURE_NO_DEPRECATE
+#  define _CRT_SECURE_NO_DEPRECATE 1
+# endif
 #endif
 
 #if defined(__CYGWIN__) // Cygwin GCC Compiler
@@ -173,17 +131,6 @@
 #include <vcl_config_compiler.h>
 #include <vcl_config_headers.h>
 
-// This *needs* to come after vcl_config_headers.h
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-# if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_GCC_5)
-#  define GNU_LIBSTDCXX_V3 1
-# elif !defined(GNU_LIBSTDCXX_V3) && defined(VCL_GCC_295) && VCL_CXX_HAS_HEADER_ISTREAM
-// One difference between v2 and v3 is that the former has
-// no <istream> header file whereas v3 has the lot.
-#  define GNU_LIBSTDCXX_V3 1
-# endif
-#endif
-
 // -------------------- default template parameters
 #if VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
 # define VCL_DFL_TYPE_PARAM_STLDECL(A, a) class A = a
@@ -199,13 +146,11 @@
 
 #define VCL_DFL_TMPL_ARG(classname) , classname
 
-#define VCL_SUNPRO_ALLOCATOR_HACK(T) T VCL_SUNPRO_CLASS_SCOPE_HACK(std::allocator<T >)
-
    //-------------------- template instantiation ------------------------------
 
 // if the compiler doesn't understand "export", we just leave it out.
-// gcc and SunPro 5.0 understand it, but they ignore it noisily.
-#if !VCL_HAS_EXPORT||defined(VCL_GCC_4)||defined(VCL_GCC_5)
+// gcc understands it, but ignore it noisily.
+#if !VCL_HAS_EXPORT || defined(VCL_GCC)
 # define VCL_TEMPLATE_EXPORT /* ignore */
 #else
 # define VCL_TEMPLATE_EXPORT export
@@ -252,10 +197,47 @@ typedef int saw_VCL_FOR_SCOPE_HACK;
 
 //----------------------------------------------------------------------------
 // Check if the compiler (claims to) support C++11.
-#if __cplusplus > 199711L
+#if __cplusplus >= 201103L
 # define VXL_CXX11 1
+  // In c++11 the override keyword allows you to explicity define that a function
+  // is intended to override the base-class version.  This makes the code more
+  // managable and fixes a set of common hard-to-find bugs.
+# define VXL_OVERRIDE override
+  // In functions that should not be implemented, use the C++11 mechanism
+  // to ensure that thye are purposely not implemented
+# define VXL_DELETE_FUNCTION =delete
+  // In c++11 there is an explicit nullptr type that introduces a new keyword to
+  // serve as a distinguished null pointer constant: nullptr. It is of type
+  // nullptr_t, which is implicitly convertible and comparable to any pointer type
+  // or pointer-to-member type. It is not implicitly convertible or comparable to
+  // integral types, except for bool.
+# define VXL_NULLPTR  nullptr
+  // In C++11 the throw-list specification has been deprecated,
+  // replaces with the noexcept specifier. Using this function
+  // specification adds the run-time check that the method does not
+  // throw, if it does throw then std::terminate will be called.
+  // Use cautiously.
+# define VXL_NOEXCEPT noexcept
+# define VXL_HAS_CXX11_STATIC_ASSERT
+# define VXL_HAS_CXX11_RVREF
 #else
+//----------------------------------------------------------------------------
+//  C++11 not supported
+#include <cstddef>
 # define VXL_CXX11 0
+# define VXL_OVERRIDE
+# define VXL_DELETE_FUNCTION
+# define VXL_NULLPTR  NULL
+# define VXL_NOEXCEPT throw()
+#endif
+
+
+//----------------------------------------------------------------------------
+// Check if the compiler (claims to) support C++11.
+#if defined(NDEBUG)
+# define VXL_USED_IN_DEBUG(x)
+#else
+# define VXL_USED_IN_DEBUG(x) x
 #endif
 
 #endif // vcl_compiler_h_

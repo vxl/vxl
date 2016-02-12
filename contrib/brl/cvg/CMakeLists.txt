@@ -1,23 +1,23 @@
 # cvg vgui demos
-INCLUDE( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg/boxm2 )
+include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${BRL_INCLUDE_DIR}/bseg/boxm2 )
 
-IF( HAS_VGUI )
+if( HAS_VGUI )
 
-  SET(cvg_view_sources
+  set(cvg_view_sources
       cvg_hemisphere_tableau.h    cvg_hemisphere_tableau.cxx )
-  AUX_SOURCE_DIRECTORY(Templates cvg_view_sources)
+  aux_source_directory(Templates cvg_view_sources)
 
-  ADD_LIBRARY(cvg_view ${cvg_view_sources})
-  TARGET_LINK_LIBRARIES(cvg_view vnl vnl_algo vbl_io vgui vpgl vgl vil vbl vul vsph)
+  add_library(cvg_view ${cvg_view_sources})
+  target_link_libraries(cvg_view ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul vsph)
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif()
 
   #Create Executables
-  ADD_EXECUTABLE( cvg_hemisphere_view cvg_hemisphere_view.cxx )
-  TARGET_LINK_LIBRARIES( cvg_hemisphere_view cvg_view vul vgui vil_pro vpgl_pro vsph)
+  add_executable( cvg_hemisphere_view cvg_hemisphere_view.cxx )
+  target_link_libraries( cvg_hemisphere_view cvg_view ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgui vil_pro vpgl_pro vsph)
 
-ENDIF( HAS_VGUI )
+endif()

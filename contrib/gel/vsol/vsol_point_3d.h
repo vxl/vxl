@@ -6,13 +6,13 @@
 // \file
 // \brief Point in 3D space
 //
-// \author François BERTEL
+// \author Francois BERTEL
 // \date   2000-05-03
 //
 // \verbatim
 //  Modifications
-//   2000-05-03 François BERTEL Creation
-//   2000-05-12 François BERTEL Replacement of vnl_vector_fixed<double,3> by vnl_double_3
+//   2000-05-03 Francois BERTEL Creation
+//   2000-05-12 Francois BERTEL Replacement of vnl_vector_fixed<double,3> by vnl_double_3
 //   2000-06-17 Peter Vanroose  Implemented all operator==()s and type info
 //   2000-09-18 Peter Tu        connected to vgl
 //   2001-06-30 Peter Vanroose  Added constructor from vgl_point_3d

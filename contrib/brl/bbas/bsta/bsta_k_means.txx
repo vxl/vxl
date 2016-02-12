@@ -527,7 +527,6 @@ unsigned bsta_k_means_weighted(vcl_vector<vnl_vector_fixed<T,n> > &data,
 
   vcl_vector<unsigned> * p_partition;
   unsigned didx = 0;
-  unsigned  dims = data[didx].size();
   vcl_vector<vnl_vector_fixed<T,n> > sums(k, vnl_vector_fixed<T,n>(T(0)));
   vcl_vector<T> nNearest(k, T(0));
   unsigned i;

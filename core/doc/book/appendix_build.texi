@@ -433,11 +433,11 @@ one of these commands.  Here ``foobar'' is the name of the project
 (see Example 3).
 
 @example
-SET( LIBRARY_OUTPUT_PATH $@{foobar_BINARY_DIR@}/lib )
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY $@{foobar_BINARY_DIR@}/lib )
 @end example
 or
 @example
-SET( LIBRARY_OUTPUT_PATH /usr/local/lib )
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY /usr/local/lib )
 @end example
 
 @subsection CMake Variables and Preprocessor Macros
@@ -460,8 +460,7 @@ are in @file{$VXLSRC/config/cmake/Modules/}.
 @itemx @bullet{} Preprocessor: @code{VCL_WIN32} (@file{vcl_compiler.h}, included by each @file{vcl_*.h} file)
 The Windows API is available.  Keep in mind that @code{WIN32} is
 defined under Cygwin, so it does not imply use of MSVC++.  Make sure
-you don't really want @code{HAS_MFC} or @code{VCL_VC} (or
-@code{VCL_VC_6} or @code{VCL_VC_DOTNET}) instead.
+you don't really want @code{HAS_MFC} or @code{VCL_VC} (@code{VCL_VC_DOTNET}) instead.
 
 @item  @bullet{} CMake: @code{UNIX} (defined by CMake, not in a file)
 @itemx @bullet{} Preprocessor: system dependent

@@ -4,17 +4,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_GCC) && !defined(GNU_LIBSTDCXX_V3)
-# include "iso/vcl_string.h"
-# undef  vcl_char_traits
-# define vcl_char_traits   string_char_traits
-
-#elif defined(VCL_VC60)
-# include "win32-vc60/vcl_string.h"
-
-#else
-# include "iso/vcl_string.h"
-#endif
+#include "iso/vcl_string.h"
 
 #define VCL_BASIC_STRING_INSTANTIATE \
 extern "include vcl_string.txx instead"

@@ -206,13 +206,13 @@ extern "C" {
 /*<          NROWA = M >*/
         nrowa = *m;
 /*<          NCOLA = K >*/
-        ncola = *k;
+//        ncola = *k;
 /*<       ELSE >*/
     } else {
 /*<          NROWA = K >*/
         nrowa = *k;
 /*<          NCOLA = M >*/
-        ncola = *m;
+//        ncola = *m;
 /*<       END IF >*/
     }
 /*<       IF( NOTB )THEN >*/

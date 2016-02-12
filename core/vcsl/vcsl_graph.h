@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Spatial coordinate system transformation graph
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/08/01 François BERTEL Creation.
+//   2000/08/01 Francois BERTEL Creation.
 //   2001/04/10 Ian Scott (Manchester) Converted perceps header to doxygen
 //   2002/01/28 Peter Vanroose - vcl_vector member vertices_ changed to non-ptr
 //   2004/09/10 Peter Vanroose - Added explicit copy constructor (ref_count !)

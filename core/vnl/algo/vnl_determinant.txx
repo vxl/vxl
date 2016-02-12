@@ -95,36 +95,6 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance)
             tmp.scale_column(i, abs_t(1)/rn);
           }
         }
-#if 0
-        // pivot
-        for (int k=0; k<n-1; ++k)
-        {
-          // find largest element after (k, k):
-          int i0 = k, j0 = k;
-          abs_t v0(0);
-          for (int i=k; i<n; ++i) {
-            for (int j=k; j<n; ++j) {
-              abs_t v = vcl_abs(tmp[i][j]);
-              if (v > v0) {
-                i0 = i;
-                j0 = j;
-                v0 = v;
-              }
-            }
-          }
-          // largest element is in position (i0, j0).
-          if (i0 != k) {
-            for (int j=0; j<n; ++j)
-              vcl_swap(tmp[k][j], tmp[i0][j]);
-            scalings = -scalings;
-          }
-          if (j0 != k) {
-            for (int i=0; i<n; ++i)
-              vcl_swap(tmp[i][k], tmp[i][j0]);
-            scalings = -scalings;
-          }
-        }
-#endif
       }
       T balanced_det = vnl_qr<T>(tmp).determinant();
       //vcl_clog << __FILE__ ": scalings, balanced_det = " << scalings << ", " << balanced_det << vcl_endl;

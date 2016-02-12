@@ -1,6 +1,6 @@
 # This is mul/m23d/tests/CMakeLists.txt
 
-ADD_EXECUTABLE( m23d_test_all
+add_executable( m23d_test_all
   test_driver.cxx
 
   test_make_ortho_projection.cxx
@@ -10,14 +10,14 @@ ADD_EXECUTABLE( m23d_test_all
   test_rotation_matrix.cxx
   test_correction_matrix_error.cxx
 )
-TARGET_LINK_LIBRARIES( m23d_test_all m23d testlib )
+target_link_libraries( m23d_test_all m23d ${VXL_LIB_PREFIX}testlib )
 
-ADD_TEST( m23d_test_make_ortho_projection  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_make_ortho_projection )
-ADD_TEST( m23d_test_rotation_from_ortho_projection  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_rotation_from_ortho_projection )
-ADD_TEST( m23d_test_ortho_rigid_builder  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_ortho_rigid_builder )
-ADD_TEST( m23d_test_ortho_flexible_builder  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_ortho_flexible_builder )
-ADD_TEST( m23d_test_rotation_matrix  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_rotation_matrix )
-ADD_TEST( m23d_test_correction_matrix_error  ${EXECUTABLE_OUTPUT_PATH}/m23d_test_all test_correction_matrix_error )
+add_test( NAME m23d_test_make_ortho_projection COMMAND $<TARGET_FILE:m23d_test_all> test_make_ortho_projection )
+add_test( NAME m23d_test_rotation_from_ortho_projection COMMAND $<TARGET_FILE:m23d_test_all> test_rotation_from_ortho_projection )
+add_test( NAME m23d_test_ortho_rigid_builder COMMAND $<TARGET_FILE:m23d_test_all> test_ortho_rigid_builder )
+add_test( NAME m23d_test_ortho_flexible_builder COMMAND $<TARGET_FILE:m23d_test_all> test_ortho_flexible_builder )
+add_test( NAME m23d_test_rotation_matrix COMMAND $<TARGET_FILE:m23d_test_all> test_rotation_matrix )
+add_test( NAME m23d_test_correction_matrix_error COMMAND $<TARGET_FILE:m23d_test_all> test_correction_matrix_error )
 
-ADD_EXECUTABLE( m23d_test_include test_include.cxx )
-TARGET_LINK_LIBRARIES( m23d_test_include m23d )
+add_executable( m23d_test_include test_include.cxx )
+target_link_libraries( m23d_test_include m23d )

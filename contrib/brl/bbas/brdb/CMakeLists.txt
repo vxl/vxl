@@ -1,7 +1,7 @@
 # brl/bbas/brdb/CMakeLists.txt
 # The Brown Relational Database Library
 
-SET(brdb_sources
+set(brdb_sources
    brdb_value.cxx                    brdb_value.h                    brdb_value_sptr.h
    brdb_value.txx
    brdb_tuple.cxx                    brdb_tuple.h                    brdb_tuple_sptr.h
@@ -12,17 +12,17 @@ SET(brdb_sources
    brdb_selection.cxx                brdb_selection.h                brdb_selection_sptr.h
 )
 
-AUX_SOURCE_DIRECTORY(Templates brdb_sources)
+aux_source_directory(Templates brdb_sources)
 
-ADD_LIBRARY(brdb  ${brdb_sources})
+add_library(brdb  ${brdb_sources})
 
 # brdb should not depend on any library that uses it
-TARGET_LINK_LIBRARIES(brdb vbl_io vbl vsl)
+target_link_libraries(brdb ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib brdb)
+install_targets(/lib brdb)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brdb/ ${brdb_sources})
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

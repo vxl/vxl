@@ -15,12 +15,12 @@
 //: Constructor - don't use this, use vgui_function_tableau_new.
 //  Creates a default vgui_function_tableau.
 vgui_function_tableau::vgui_function_tableau()
-  : draw_(0)
-  , mouse_up_(0)
-  , mouse_down_(0)
-  , motion_(0)
-  , key_press_(0)
-  , help_(0)
+  : draw_(VXL_NULLPTR)
+  , mouse_up_(VXL_NULLPTR)
+  , mouse_down_(VXL_NULLPTR)
+  , motion_(VXL_NULLPTR)
+  , key_press_(VXL_NULLPTR)
+  , help_(VXL_NULLPTR)
 {
 }
 

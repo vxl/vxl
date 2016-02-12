@@ -32,10 +32,12 @@ class bstm_opencl_cache: public vbl_ref_count
 
   public:
     bstm_opencl_cache(bstm_scene_sptr scene,
-                       bocl_device_sptr device);
-    ~bstm_opencl_cache() { if (cpu_cache_) cpu_cache_ = 0;
-                            this->clear_cache();
-                           }
+                      bocl_device_sptr device);
+    ~bstm_opencl_cache()
+      {
+      if (cpu_cache_) cpu_cache_ = 0;
+      this->clear_cache();
+      }
 
     void set_context(cl_context& context);
     bstm_cache_sptr get_cpu_cache() { return cpu_cache_; }

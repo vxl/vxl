@@ -276,8 +276,6 @@ void bkml_parser::charData(const XML_Char* s, int len)
         cord_end--;
       while (str_s[cord_end-1] == ' ')
         cord_end--;
-      if ((int)cord_end > len)
-        len = (int)cord_end;
     }
 
     for (unsigned int i=0; i<cord_end; ++i)
@@ -292,7 +290,6 @@ void bkml_parser::charData(const XML_Char* s, int len)
       str.ignore(128, ' ');
       vgl_point_3d<double> vpt(x,y,z);
       // check whether same point exists inside the poly_verts already
-      bool found = false;
       if (vcl_find(poly_verts.begin(), poly_verts.end(), vpt) == poly_verts.end())
         poly_verts.push_back(vpt);
       //else

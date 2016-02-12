@@ -18,29 +18,9 @@
 // complex over other number types.
 
 
-#if defined(VCL_STLPORT)
-# include "stlport/vcl_complex.h"
-
-// ---------- Visual Studio 6
-#elif defined(VCL_VC_6)
-# include "win32-vc60/vcl_complex.h"
-
-// ---------- Visual Studio 7.0
-#elif defined(VCL_VC_70)
-# include "win32-vc70/vcl_complex.h"
-
-// ---------- Visual Studio 8 and 9
-#elif defined(VCL_VC_8) || defined(VCL_VC_9)
-# include "win32-vc8/vcl_complex.h"
-
-// ---------- SunPro compiler
-#elif defined(VCL_SUNPRO_CC)
-# include "sunpro/vcl_complex.h"
-
-// ---------- GCC 2.95
-#elif defined(VCL_GCC_295)
-#include  "gcc-295/vcl_complex.h"
-
+// ---------- Visual Studio 9
+#if defined(VCL_VC_9)
+# include "win32-vc9/vcl_complex.h"
 // ---------- ISO
 #else
 # include "iso/vcl_complex.h"
@@ -86,18 +66,6 @@ template <class T> inline vcl_complex<T>
 }
 
 # endif // !VCL_COMPLEX_POW_WORKS
-
-
-#if 0
-// this breaks the sunpro build. it should be moved so that
-// it is only seen by compilers that need it. - fsm.
-inline vcl_complex<double> operator*(float c, vcl_complex<double> const &z) { return z * (double)c; }
-inline vcl_complex<double> operator*(vcl_complex<double> const &z, float c) { return z * (double)c; }
-inline vcl_complex<float > operator*(double c, vcl_complex<float> const &z) { return z * (float)c; }
-inline vcl_complex<float > operator*(vcl_complex<float> const &z, double c) { return z * (float)c; }
-inline vcl_complex<double> operator/(vcl_complex<double> const &z, float c) { return z / (double)c; }
-inline vcl_complex<float > operator/(vcl_complex<float> const &z, double c) { return z / (float)c; }
-#endif
 
 //--------------------------------------------------------------------------------
 

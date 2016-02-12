@@ -76,18 +76,6 @@ class vnl_vector_ref : public vnl_vector<T>
   //: Copy constructor from vnl_vector<T> is disallowed:
   vnl_vector_ref(vnl_vector<T> const&) {}
 
-#if 0 // NOW COMMENTED OUT - PVR, may 97
-  // Private operator new because deleting a pointer to
-  // one of these through a baseclass pointer will attempt
-  // to free the referenced memory.
-  // Therefore disallow newing of these -- if you're paying for
-  // one malloc, you can afford two.
-  void* operator new(vcl_size_t) { return 0; }
-
- public:
-  // Privatizing other new means we must offer placement new for STL
-  void* operator new(vcl_size_t, void* space) { return space; }
-#endif
 };
 
 //: Create a reference vector with part of an existing vector.

@@ -1,17 +1,17 @@
 # contrib/brl/bseg/boxm/CMakeLists.txt
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
+include_directories( ${GEL_INCLUDE_DIR} )
+include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bbas )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
-INCLUDE( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
-IF(HDFS_FOUND)
-  ADD_DEFINITIONS(-DHAS_HDFS=1)
-  INCLUDE_DIRECTORIES( ${HDFS_INCLUDE_DIRS} )
-ENDIF(HDFS_FOUND)
+include( ${BRL_CMAKE_DIR}/FindHadoop.cmake )
+if(HDFS_FOUND)
+  add_definitions(-DHAS_HDFS=1)
+  include_directories( ${HDFS_INCLUDE_DIRS} )
+endif()
 
-SET(boxm2_io_sources
+set(boxm2_io_sources
     boxm2_asio_mgr.h       boxm2_asio_mgr.cxx
     boxm2_sio_mgr.h        boxm2_sio_mgr.cxx
     boxm2_cache.h          boxm2_cache.cxx
@@ -25,19 +25,19 @@ SET(boxm2_io_sources
     boxm2_cache1.h          boxm2_cache1.cxx
     boxm2_lru_cache1.h      boxm2_lru_cache1.cxx
    )
-AUX_SOURCE_DIRECTORY(Templates boxm2_io_sources)
+aux_source_directory(Templates boxm2_io_sources)
 
-ADD_LIBRARY(boxm2_io  ${boxm2_io_sources})
-TARGET_LINK_LIBRARIES(boxm2_io boxm2 expatpp vpgl baio vpgl vgl_xio vgl vbl vul vsl vcl)
+add_library(boxm2_io  ${boxm2_io_sources})
+target_link_libraries(boxm2_io boxm2 expatpp ${VXL_LIB_PREFIX}vpgl baio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
-IF(HDFS_FOUND)
- TARGET_LINK_LIBRARIES(boxm2_io bhdfs)
-ENDIF(HDFS_FOUND)
+if(HDFS_FOUND)
+ target_link_libraries(boxm2_io bhdfs)
+endif()
 
 #install the .h .txx and libs
-INSTALL_TARGETS(/lib boxm2_io)
+install_targets(/lib boxm2_io)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/io ${boxm2_io_sources})
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

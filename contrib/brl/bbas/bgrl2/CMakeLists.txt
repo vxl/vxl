@@ -1,7 +1,7 @@
 # This is bbas/bgrl2/CMakeLists.txt
 # Brown Templated Graph/Hypergraph Library
 
-SET(bgrl2_sources
+set(bgrl2_sources
 
 bgrl2_vertex.h             bgrl2_vertex.txx
 bgrl2_edge.h               bgrl2_edge.txx
@@ -16,13 +16,13 @@ bgrl2_hg_hypergraph.cxx    bgrl2_hg_hypergraph.h
 
 )
 
-ADD_LIBRARY(bgrl2 ${bgrl2_sources})
+add_library(bgrl2 ${bgrl2_sources})
 
-TARGET_LINK_LIBRARIES( bgrl2 vbl )
+target_link_libraries( bgrl2 ${VXL_LIB_PREFIX}vbl )
 
 #Algorithms on graphs
 add_subdirectory(algo)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

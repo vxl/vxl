@@ -1,7 +1,7 @@
 #include <vcl_vector.h>
 #include <rrel/rrel_util.txx>
 
-#if defined(VCL_GCC_3) || defined(VCL_GCC_4) || defined(VCL_GCC_5) || defined(VCL_ICC) || defined(VCL_VC_8)
+#if defined(VCL_GCC) || defined(VCL_ICC)
 
 // Apply explicit instantiation
 // ICC 8.1 has problems with the following
@@ -22,7 +22,7 @@ RREL_UTIL_INSTANTIATE_RAN_ITER(float, Iter);
 // favour of the symbols in the pointer instantiation.
 //
 // This function must have external linkage (i.e. should not be static);
-// otherwise, an aggressive optimizer (VC7) will throw it away and never
+// otherwise, an aggressive optimizer will throw it away and never
 // emit the instantiations.
 
 void

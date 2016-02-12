@@ -92,6 +92,9 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
     good = good && vgl_intersection(ur, zp, urp);
     good = good && vgl_intersection(bl, zp, blp);
     good = good && vgl_intersection(br, zp, brp);
+    if (!good) {
+        vcl_cout << "ERROR: lines do not intersect" << __FILE__ << __LINE__ << vcl_endl;
+    }
 
     //convert the four corners into image coordinates
     typedef vgl_polygon<double>::point_t        Point_type;

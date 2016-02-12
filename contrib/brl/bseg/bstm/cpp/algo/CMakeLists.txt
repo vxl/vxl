@@ -1,6 +1,6 @@
-INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
+include_directories( ${BRL_INCLUDE_DIR}/bseg )
 
-SET(bstm_cpp_algo_sources
+set(bstm_cpp_algo_sources
     bstm_data_similarity_traits.h
     bstm_ingest_boxm2_scene_function.h bstm_ingest_boxm2_scene_function.txx
     bstm_analyze_coherency_function.h bstm_analyze_coherency_function.cxx
@@ -12,11 +12,11 @@ SET(bstm_cpp_algo_sources
     bstm_copy_data_to_future_function.h bstm_copy_data_to_future_function.txx
     bstm_label_bb_function.h)
 
-AUX_SOURCE_DIRECTORY(Templates bstm_cpp_algo_sources)
+aux_source_directory(Templates bstm_cpp_algo_sources)
 
-ADD_LIBRARY(bstm_cpp_algo  ${bstm_cpp_algo_sources})
-TARGET_LINK_LIBRARIES(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm bstm_io vcl)
+add_library(bstm_cpp_algo  ${bstm_cpp_algo_sources})
+target_link_libraries(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm bstm_io ${VXL_LIB_PREFIX}vcl)
 
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

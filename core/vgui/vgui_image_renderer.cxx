@@ -22,7 +22,7 @@
 //-----------------------------------------------------------------------------
 //: Constructor - create an empty image renderer.
 vgui_image_renderer::vgui_image_renderer()
-  : buffer(0), buffer_params(0), valid_buffer(false), use_texture_mapping(false)
+  : buffer(VXL_NULLPTR), buffer_params(VXL_NULLPTR), valid_buffer(false), use_texture_mapping(false)
 {
 }
 
@@ -57,7 +57,7 @@ void vgui_image_renderer::set_image(vil1_image const &image_)
   // delete old buffer. we could try to reuse it.
   if (buffer)
     delete buffer;
-  buffer = 0;
+  buffer = VXL_NULLPTR;
 
   the_image = image_;
   valid_buffer = false;
@@ -68,7 +68,7 @@ void vgui_image_renderer::set_image(vil1_image const &image_)
 void vgui_image_renderer::reread_image()
 {
   delete buffer;
-  buffer = 0;
+  buffer = VXL_NULLPTR;
   valid_buffer = false;
 }
 

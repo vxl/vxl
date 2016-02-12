@@ -1,27 +1,27 @@
 # bvxm_algo Process Library
 
 # bprb depends on expat and this process library depends on bprb
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
- IF(EXPAT_FOUND)
- IF(EXPATPP_FOUND)
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-  INCLUDE_DIRECTORIES( ${EXPAT_INCLUDE_DIRS} )
-  INCLUDE_DIRECTORIES( ${EXPATPP_INCLUDE_DIRS} )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+ if(EXPAT_FOUND)
+ if(EXPATPP_FOUND)
+  include_directories( ${BRL_INCLUDE_DIR}/bpro )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+  include_directories( ${BRL_INCLUDE_DIR}/bseg )
+  include_directories( ${EXPAT_INCLUDE_DIRS} )
+  include_directories( ${EXPATPP_INCLUDE_DIRS} )
 
-  SET(bvxm_algo_pro_sources
+  set(bvxm_algo_pro_sources
       bvxm_algo_processes.h
       bvxm_algo_register.h   bvxm_algo_register.cxx
      )
-  AUX_SOURCE_DIRECTORY(processes bvxm_algo_pro_sources)
+  aux_source_directory(processes bvxm_algo_pro_sources)
 
-  ADD_LIBRARY(bvxm_algo_pro ${bvxm_algo_pro_sources} )
-  TARGET_LINK_LIBRARIES(bvxm_algo_pro bvxm_algo bvxm_grid_pro boxm boct bprb brdb vul vbl)
+  add_library(bvxm_algo_pro ${bvxm_algo_pro_sources} )
+  target_link_libraries(bvxm_algo_pro bvxm_algo bvxm_grid_pro boxm boct bprb brdb ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
-  IF( BUILD_TESTING )
+  if( BUILD_TESTING )
     add_subdirectory(tests)
-  ENDIF( BUILD_TESTING )
+  endif()
 
- ENDIF(EXPATPP_FOUND)
-ENDIF(EXPAT_FOUND)
+ endif()
+endif()

@@ -4,11 +4,11 @@
 //:
 // \file
 // \brief Composition of transformations
-// \author François BERTEL
+// \author Francois BERTEL
 //
 // \verbatim
 //  Modifications
-//   2000/06/28 François BERTEL Creation. Adapted from IUE
+//   2000/06/28 Francois BERTEL Creation. Adapted from IUE
 //   2002/01/22 Peter Vanroose - return type of execute() and inverse() changed to non-ptr
 //   2002/01/28 Peter Vanroose - vcl_vector member transformations_ changed to non-ptr
 //   2004/09/17 Peter Vanroose - made composition() non-virtual - it just returns a member and should not be overloaded

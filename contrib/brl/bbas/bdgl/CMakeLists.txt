@@ -6,11 +6,11 @@ doxygen_add_library(contrib/brl/bbas/bdgl
   PACKAGE contrib/brl
 )
 
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES(${BRL_INCLUDE_DIR}/bbas )
-INCLUDE_DIRECTORIES(${GEL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR} )
+include_directories(${BRL_INCLUDE_DIR}/bbas )
+include_directories(${GEL_INCLUDE_DIR} )
 
-SET(bdgl_sources
+set(bdgl_sources
     bdgl_export.h
 
     bdgl_curve_algs.cxx   bdgl_curve_algs.h
@@ -19,12 +19,12 @@ SET(bdgl_sources
     bdgl_peano_curve.cxx  bdgl_peano_curve.h
 )
 
-ADD_LIBRARY(bdgl ${bdgl_sources})
-INSTALL_TARGETS(/lib bdgl)
+add_library(bdgl ${bdgl_sources})
+install_targets(/lib bdgl)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bdgl ${bdgl_sources})
 
-TARGET_LINK_LIBRARIES(bdgl vdgl vsol vgl_algo vgl vnl_algo vnl)
+target_link_libraries(bdgl vdgl vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
-IF(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF(BUILD_TESTING)
+endif()

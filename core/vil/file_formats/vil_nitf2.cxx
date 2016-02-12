@@ -17,27 +17,27 @@ void vil_nitf2::cleanup_static_members()
   // memory leaks. We'll see what valgrid says.
   if( vil_nitf2_header::s_field_definitions_1 ) {
     delete vil_nitf2_header::s_field_definitions_1;
-    vil_nitf2_header::s_field_definitions_1 = 0;
+    vil_nitf2_header::s_field_definitions_1 = VXL_NULLPTR;
   }
 
   if( vil_nitf2_header::s_field_definitions_20 ) {
     delete vil_nitf2_header::s_field_definitions_20;
-    vil_nitf2_header::s_field_definitions_20 = 0;
+    vil_nitf2_header::s_field_definitions_20 = VXL_NULLPTR;
   }
 
   if( vil_nitf2_header::s_field_definitions_21 ) {
     delete vil_nitf2_header::s_field_definitions_21;
-    vil_nitf2_header::s_field_definitions_21 = 0;
+    vil_nitf2_header::s_field_definitions_21 = VXL_NULLPTR;
   }
 
   if( vil_nitf2_image_subheader::s_field_definitions_20 ) {
     delete vil_nitf2_image_subheader::s_field_definitions_20;
-    vil_nitf2_image_subheader::s_field_definitions_20 = 0;
+    vil_nitf2_image_subheader::s_field_definitions_20 = VXL_NULLPTR;
   }
 
   if( vil_nitf2_image_subheader::s_field_definitions_21 ) {
     delete vil_nitf2_image_subheader::s_field_definitions_21;
-    vil_nitf2_image_subheader::s_field_definitions_21 = 0;
+    vil_nitf2_image_subheader::s_field_definitions_21 = VXL_NULLPTR;
   }
 
 }

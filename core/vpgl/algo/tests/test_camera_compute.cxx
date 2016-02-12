@@ -9,10 +9,13 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_distance.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
+#include <vpgl/algo/vpgl_calibration_matrix_compute.h>
 #include <vpgl/algo/vpgl_ray.h>
+#include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>
@@ -164,11 +167,90 @@ static void test_perspective_compute_direct_linear_transform()
   }
 }
 
+static void test_perspective_compute_ground()
+{
+  vpgl_calibration_matrix<double> trueK( 1680, vgl_point_2d<double>( 959.5, 539.5 ) );
+  vgl_rotation_3d<double> trueR( vnl_vector_fixed<double,3>(1.87379,0.0215981,-0.0331475));
+  vgl_point_3d<double> trueC(14.5467,-6.71791,4.79478);
+  vpgl_perspective_camera<double> trueP(trueK,trueC,trueR);
+
+  // generate some points on the ground
+  vcl_vector<vgl_point_2d<double> > ground_pts;
+  ground_pts.push_back( vgl_point_2d<double>( 14.3256, 5.7912 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 14.3256, 9.4488 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 14.3256, 15.24 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 5.7404, 9.398 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 22.8092, 9.398 ) );
+
+  // project them to the image
+  vcl_vector< vgl_point_2d<double> > image_pts;
+  for ( int k = 0; k < ground_pts.size(); ++k )
+  {
+    vgl_homg_point_3d<double> world_pt(ground_pts[k].x(), ground_pts[k].y(), 0, 1);
+
+    vgl_point_2d<double> img_pt = trueP.project(world_pt);
+    assert( img_pt.x() >= 0 );
+    assert( img_pt.x() <= 1920 );
+    assert( img_pt.y() >= 0 );
+    assert( img_pt.y() <= 1080 );
+
+    image_pts.push_back( img_pt );
+  }
+
+  vpgl_perspective_camera<double> P;
+  P.set_calibration(trueK);
+
+  bool did_compute = vpgl_perspective_camera_compute::compute(image_pts, ground_pts, P);
+
+  TEST("Calibrate from ground<->image correspondences", did_compute, true);
+  TEST_NEAR("   C", vgl_distance( trueC, P.get_camera_center() ), 0, 1e-6);
+  TEST_NEAR("   R", ( trueR.as_matrix() - P.get_rotation().as_matrix() ).frobenius_norm(), 0, 1e-6);
+}
+
+static void test_calibration_compute_natural()
+{
+  vpgl_calibration_matrix<double> trueK( 1680, vgl_point_2d<double>( 959.5, 539.5 ) );
+  vgl_rotation_3d<double> trueR( vnl_vector_fixed<double,3>(1.87379,0.0215981,-0.0331475));
+  vgl_point_3d<double> trueC(14.5467,-6.71791,4.79478);
+  vpgl_perspective_camera<double> trueP(trueK,trueC,trueR);
+
+  // generate some points on the ground
+  vcl_vector<vgl_point_2d<double> > ground_pts;
+  ground_pts.push_back( vgl_point_2d<double>( 14.3256, 5.7912 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 14.3256, 9.4488 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 14.3256, 15.24 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 5.7404, 9.398 ) );
+  ground_pts.push_back( vgl_point_2d<double>( 22.8092, 9.398 ) );
+
+  // project them to the image
+  vcl_vector< vgl_point_2d<double> > image_pts;
+  for ( int k = 0; k < ground_pts.size(); ++k )
+  {
+    vgl_homg_point_3d<double> world_pt( ground_pts[k].x(), ground_pts[k].y(), 0, 1 );
+
+    vgl_point_2d<double> img_pt = trueP.project( world_pt );
+    assert( img_pt.x() >= 0 );
+    assert( img_pt.x() <= 1920 );
+    assert( img_pt.y() >= 0 );
+    assert( img_pt.y() <= 1080 );
+
+    image_pts.push_back( img_pt );
+  }
+
+  vpgl_calibration_matrix<double> K;
+  bool did_compute = vpgl_calibration_matrix_compute::natural( image_pts, ground_pts, trueK.principal_point(), K );
+
+  TEST( "Calibrate natural intrinsics from correspondences", did_compute, true );
+  TEST_NEAR( "   K Discrepancy", ( trueK.get_matrix() - K.get_matrix() ).frobenius_norm(), 0, 1e-6 );
+}
+
 static void test_camera_compute()
 {
   test_camera_compute_setup();
   test_perspective_compute();
   test_perspective_compute_direct_linear_transform();
+  test_perspective_compute_ground();
+  test_calibration_compute_natural();
 }
 
 TESTMAIN(test_camera_compute);

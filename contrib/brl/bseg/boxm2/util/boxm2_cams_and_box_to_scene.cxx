@@ -83,7 +83,6 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
 
     vcl_cout<<"Selecting Blocks for Rendering"<<vcl_endl;
     //create blocks in each direction
-    double thresh = .10;
     for (unsigned int i=0; i<numBlocks.x(); ++i) {
         for (unsigned int j=0; j<numBlocks.y(); ++j) {
             for (unsigned int k=0; k<numBlocks.z(); ++k){
@@ -115,8 +114,6 @@ void boxm2_util_cams_and_box_to_scene (vcl_vector<CamType>& cams,
                     blks[id]=mdata;
                     uscene.set_blocks(blks);
                 }
-
-
             }
         }
     }

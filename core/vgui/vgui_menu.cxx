@@ -12,7 +12,7 @@
 
 vgui_menu_item::vgui_menu_item()
   : name("[]")
-  , menu(0)
+  , menu(VXL_NULLPTR)
 {
   short_cut.mod = vgui_MODIFIER_NULL;
   short_cut.key = vgui_KEY_NULL;
@@ -32,7 +32,7 @@ vgui_menu_item::~vgui_menu_item()
 {
   if (menu)
     delete menu;
-  menu = 0;
+  menu = VXL_NULLPTR;
 }
 
 bool vgui_menu_item::is_toggle_button() const
@@ -45,7 +45,7 @@ bool vgui_menu_item::is_toggle_button() const
   // all kinds of things. Let's just use the compiler generated
   // version until we run into a real problem.
   //
-  return name!="" &&  (bool)cmnd && (menu == 0) &&  dynamic_cast<vgui_command_toggle*>(cmnd.ptr()) != 0;
+  return name!="" &&  (bool)cmnd && (menu == VXL_NULLPTR) &&  dynamic_cast<vgui_command_toggle*>(cmnd.ptr()) != VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void vgui_menu::add(vcl_string const &n,
                     vgui_modifier modifiers)
 {
   im_here;
-  vgui_command* cfunc = new vgui_command_cfunc(f, client_data); //KYM fix for SunPro
+  vgui_command* cfunc = new vgui_command_cfunc(f, client_data);
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 
@@ -99,7 +99,7 @@ void vgui_menu::add(vcl_string const &n,
                     vgui_modifier modifiers)
 {
   im_here;
-  vgui_command* cfunc = new vgui_command_cfunc(f);  //KYM fix for SunPro
+  vgui_command* cfunc = new vgui_command_cfunc(f);
   add(n, /* (vgui_command*) */cfunc, key, modifiers);
 }
 

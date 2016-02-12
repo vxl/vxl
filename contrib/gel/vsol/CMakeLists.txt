@@ -6,7 +6,7 @@ doxygen_add_library(contrib/gel/vsol
   DESCRIPTION "Connected Spatial Objects"
   )
 
-SET(vsol_sources
+set(vsol_sources
  # adding generic vsol_spatial_object class
  vsol_spatial_object.cxx vsol_spatial_object.h vsol_spatial_object_sptr.h
  vsol_flags_id.cxx vsol_flags_id.h vsol_flags_id_sptr.h
@@ -58,19 +58,19 @@ SET(vsol_sources
  vsol_tetrahedron.cxx       vsol_tetrahedron.h       vsol_tetrahedron_sptr.h
 )
 
-INCLUDE_DIRECTORIES(${VXLCORE_INCLUDE_DIR})
+include_directories(${VXLCORE_INCLUDE_DIR})
 
-AUX_SOURCE_DIRECTORY(Templates vsol_sources)
+aux_source_directory(Templates vsol_sources)
 
-ADD_LIBRARY(vsol ${vsol_sources})
-INSTALL_TARGETS(/lib vsol)
+add_library(vsol ${vsol_sources})
+install_targets(/lib vsol)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vsol ${vsol_sources})
-TARGET_LINK_LIBRARIES(vsol vgl_algo vgl_io vgl vnl vbl_io vbl vsl vul vcl)
+target_link_libraries(vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
-IF (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
   add_subdirectory(examples)
-ENDIF (BUILD_EXAMPLES)
+endif()
 
-IF (BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-ENDIF (BUILD_TESTING)
+endif()

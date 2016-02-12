@@ -1,4 +1,4 @@
-SET(vcl_generic
+set(vcl_generic
   vcl_algorithm.hhh
   vcl_bitset.hhh
   vcl_blah.hhh

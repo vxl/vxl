@@ -369,12 +369,12 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
     vcl_cerr << "vgui_easy2D_tableau: Printing geometric objects\n";
 
   vcl_vector<vgui_soview*> all_objs = get_all();
-  vgui_style_sptr style = 0;
+  vgui_style_sptr style = VXL_NULLPTR;
   float style_point_size = 0;
   for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); ++i)
   {
     vgui_soview* sv = *i;
-    if (sv == NULL) {
+    if (sv == VXL_NULLPTR) {
        vgui_macro_warning << "An object in soview list is null\n";
        continue;
     }

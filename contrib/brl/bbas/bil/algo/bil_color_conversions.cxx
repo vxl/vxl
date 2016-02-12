@@ -30,7 +30,7 @@ void rgb2lab(double R, double G, double B, double &L , double &a, double &b)
   double Z = var_R * 0.0193 + var_G * 0.1192 + var_B * 0.9505;
 
   //2) now convert 1931 CIE-XYZ to 1976 CIE-Lab
-  // Assuming Observer = 2°, Illuminant = D65
+  // Assuming Observer = 2 degrees, Illuminant = D65
 
   double var_X = X * 100.0/95.047;
   double var_Y = Y * 100.0/100.000;
@@ -117,7 +117,7 @@ void rgb2luv(double R, double G, double B, double &L , double &u, double &v)
   double Z = var_R * 0.0193 + var_G * 0.1192 + var_B * 0.9505;
 
   //2) now convert 1931 CIE-XYZ to 1976 CIE-Luv
-  // Assuming Observer = 2°, Illuminant = D65
+  // Assuming Observer = 2 degrees, Illuminant = D65
 
   double var_X = X * 100.0/95.047;
   double var_Y = Y * 100.0/100.000;

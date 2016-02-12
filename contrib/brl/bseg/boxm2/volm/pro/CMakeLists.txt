@@ -1,45 +1,43 @@
 # boxm2's Process Library
 
 # bprb depends on expat and boxm2_pro depends on bprb primarily
-INCLUDE( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
-IF(EXPAT_FOUND)
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/core )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bpro/bprb )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bseg )
-  INCLUDE_DIRECTORIES( ${BRL_INCLUDE_DIR}/bbas )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc/vpgl )
-  INCLUDE_DIRECTORIES( ${GEL_INCLUDE_DIR}/mrc )
-  INCLUDE_DIRECTORIES( ${VTHREEP_INCLUDE_DIR}/rply )
-IF(OPENCL_FOUND)
-  INCLUDE_DIRECTORIES( ${OPENCL_INCLUDE_PATH} )
+include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
+if(EXPAT_FOUND)
+  include_directories( ${BRL_INCLUDE_DIR}/bpro/core )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro )
+  include_directories( ${BRL_INCLUDE_DIR}/bpro/bprb )
+  include_directories( ${BRL_INCLUDE_DIR}/bseg )
+  include_directories( ${BRL_INCLUDE_DIR}/bbas )
+  include_directories( ${GEL_INCLUDE_DIR}/mrc/vpgl )
+  include_directories( ${GEL_INCLUDE_DIR}/mrc )
+  include_directories( ${VTHREEP_INCLUDE_DIR}/rply )
+if(OPENCL_FOUND)
+  include_directories( ${OPENCL_INCLUDE_PATH} )
   set( BOXM2_VOLM_PRO_LIBS boxm2_ocl)
-ENDIF(OPENCL_FOUND)
+endif()
 
-  SET(boxm2_volm_pro_sources
+  set(boxm2_volm_pro_sources
       boxm2_volm_processes.h
       boxm2_volm_register.h   boxm2_volm_register.cxx
      )
 
-  AUX_SOURCE_DIRECTORY(Templates boxm2_volm_pro_sources)
-  IF(OPENCL_FOUND)
-    AUX_SOURCE_DIRECTORY(processes boxm2_volm_pro_sources)
+  aux_source_directory(Templates boxm2_volm_pro_sources)
+  if(OPENCL_FOUND)
+    aux_source_directory(processes boxm2_volm_pro_sources)
     add_definitions(-DHAVE_OPENCL)
-  ENDIF(OPENCL_FOUND)
+  endif()
 
-  ADD_LIBRARY(boxm2_volm_pro ${boxm2_volm_pro_sources})
+  add_library(boxm2_volm_pro ${boxm2_volm_pro_sources})
 
   #install the .h .txx and libs
-  INSTALL_TARGETS(/lib boxm2_volm_pro)
+  install_targets(/lib boxm2_volm_pro)
   INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/volm/pro ${boxm2_volm_pro_sources})
 
-  TARGET_LINK_LIBRARIES(boxm2_volm_pro
-    boxm2_volm boxm2_volm_io boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip
-    vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml ${BOXM2_VOLM_PRO_LIBS})
+  target_link_libraries(boxm2_volm_pro boxm2_volm boxm2_volm_io boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip vsol bsta bsta_pro vpgl_pro ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul bvrml ${BOXM2_VOLM_PRO_LIBS})
 
-ENDIF(EXPAT_FOUND)
+endif()
 
 #tests
-IF( BUILD_TESTING )
+if( BUILD_TESTING )
   add_subdirectory(tests)
-ENDIF( BUILD_TESTING )
+endif()

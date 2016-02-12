@@ -329,24 +329,20 @@ static void test_math()
            << "qnan_q = " << qnan_q << " =  "<< print_hex(qnan_q) << "    sizeof " << sizeof(qnan_q) << '\n'
            << vcl_endl;
 
-#ifndef __alpha__ // on alpha, infinity() == max()
   TEST("!isfinite(pinf_f)", vnl_math::isfinite(pinf_f), false);
   TEST("!isfinite(ninf_f)", vnl_math::isfinite(ninf_f), false);
   TEST(" isinf(pinf_f)   ",  vnl_math::isinf(pinf_f), true);
   TEST(" isinf(ninf_f)   ",  vnl_math::isinf(ninf_f), true);
-#endif
   TEST("!isnan(pinf_f)   ", vnl_math::isnan(pinf_f), false);
   TEST("!isnan(ninf_f)   ", vnl_math::isnan(ninf_f), false);
   TEST("!isfinite(qnan_f)", vnl_math::isfinite(qnan_f), false);
   TEST("!isinf(qnan_f)   ", vnl_math::isinf(qnan_f), false);
   TEST(" isnan(qnan_f)   ",  vnl_math::isnan(qnan_f), true);
 
-#ifndef __alpha__ // on alpha, infinity() == max()
   TEST("!isfinite(pinf_d)", vnl_math::isfinite(pinf_d), false);
   TEST("!isfinite(ninf_d)", vnl_math::isfinite(ninf_d), false);
   TEST(" isinf(pinf_d)   ",  vnl_math::isinf(pinf_d), true);
   TEST(" isinf(ninf_d)   ",  vnl_math::isinf(ninf_d), true);
-#endif
   TEST("!isnan(pinf_d)   ", vnl_math::isnan(pinf_d), false);
   TEST("!isnan(ninf_d)   ", vnl_math::isnan(ninf_d), false);
   TEST("!isfinite(qnan_d)", vnl_math::isfinite(qnan_d), false);
@@ -354,19 +350,14 @@ static void test_math()
   TEST(" isnan(qnan_d)   ",  vnl_math::isnan(qnan_d), true);
 
 #ifndef __ICC // "long double" has no standard internal representation on different platforms/compilers
-#ifndef __alpha__ // on alpha, infinity() == max()
   TEST("!isfinite(pinf_q)", vnl_math::isfinite(pinf_q), false);
   TEST("!isfinite(ninf_q)", vnl_math::isfinite(ninf_q), false);
   TEST(" isinf(pinf_q)   ",  vnl_math::isinf(pinf_q), true);
   TEST(" isinf(ninf_q)   ",  vnl_math::isinf(ninf_q), true);
-#endif
   TEST("!isnan(pinf_q)   ", vnl_math::isnan(pinf_q), false);
   TEST("!isnan(ninf_q)   ", vnl_math::isnan(ninf_q), false);
   TEST("!isfinite(qnan_q)", vnl_math::isfinite(qnan_q), false);
   TEST("!isinf(qnan_q)   ", vnl_math::isinf(qnan_q), false);
-#if 0 // even more nonstandard ...
-  TEST(" isnan(qnan_q)   ",  vnl_math::isnan(qnan_q));
-#endif // 0
 #endif // __ICC
 
   TEST("!isfinite(huge_val(double))", vnl_math::isfinite(vnl_huge_val(double())), false);

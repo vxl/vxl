@@ -11,19 +11,8 @@
 // \author Brad King
 // \date March 2007
 
-// We need typename in a few places that old MSVC does not like.
-#if defined(_MSC_VER) && _MSC_VER <= 1300
-# define RGTL_TYPENAME
-#else
-# define RGTL_TYPENAME typename
-#endif
-
 // Macro to define a compile-time constant.
-#if defined(_MSC_VER) && _MSC_VER <= 1300
-# define RGTL_STATIC_CONST(type, assignment) enum { assignment }
-#else
 # define RGTL_STATIC_CONST(type, assignment) static type const assignment
-#endif
 
 // Join two preprocessor symbols into a single symbol.
 #define RGTL_PP_JOIN(x,y)  RGTL_PP_JOIN0(x,y)
