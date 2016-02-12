@@ -294,7 +294,7 @@ void MultiFilterParser::endElement(const XML_Char *name)
 class expatppNesting : public expatpp
 {
  public:
-  expatppNesting(expatppNesting* parent=0);  ///< NOT a copy ctor!! this is a recursive situation
+  expatppNesting(expatppNesting* parent=VXL_NULLPTR);  ///< NOT a copy ctor!! this is a recursive situation
   virtual ~expatppNesting();
 
   void switchToNewSubParser( expatppNesting* pAdoptedChild );
@@ -351,7 +351,7 @@ inline void
 expatppNesting::OwnedChildOrphansItself(expatppNesting* callingChild)
 {
   assert(callingChild==mOwnedChild);
-  mOwnedChild = 0;
+  mOwnedChild = VXL_NULLPTR;
 }
 
 

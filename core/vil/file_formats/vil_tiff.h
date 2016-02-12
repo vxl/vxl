@@ -116,7 +116,7 @@ struct tif_ref_cnt
 //The smart pointer to the tiff handle
 struct tif_smart_ptr
 {
-  tif_smart_ptr(): tptr_(0){}
+  tif_smart_ptr(): tptr_(VXL_NULLPTR){}
 
   tif_smart_ptr(tif_ref_cnt* tptr):tptr_(tptr)
   { if (tptr_) tptr_->ref(); }
@@ -129,18 +129,18 @@ struct tif_smart_ptr
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
     tif_ref_cnt* old_ptr = tptr_;
-    tptr_ = 0;
+    tptr_ = VXL_NULLPTR;
     if (old_ptr)
       old_ptr->unref();
   }
   //: Inverse bool
   bool operator!() const
   {
-    return (tptr_ != (tif_ref_cnt*)0)? false : true;
+    return (tptr_ != VXL_NULLPTR)? false : true;
   }
 
   //: Convenient get TIFF* for header construction; assumes temporary use
-  TIFF* tif() const {if (tptr_) return tptr_->tif(); return (TIFF*)0;}
+  TIFF* tif() const {if (tptr_) return tptr_->tif(); return VXL_NULLPTR;}
  private:
   tif_ref_cnt* tptr_;
 };
@@ -199,7 +199,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   //  "quantisation_depth" - number of relevant bits per pixel
   //  "size_block_i" and "size_block_j" - block dimensions
 
-  virtual bool get_property(char const *tag, void *prop = 0) const;
+  virtual bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
 
 #if HAS_GEOTIFF
   //* returns null if the tiff file does not include any geotiff tags

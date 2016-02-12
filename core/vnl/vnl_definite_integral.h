@@ -8,6 +8,7 @@
 
 #include "vnl_integrant_fnct.h"
 #include "vnl/vnl_export.h"
+#include <vcl_compiler.h>
 
 class vnl_definite_integral
 {
@@ -15,12 +16,12 @@ class vnl_definite_integral
   static VNL_EXPORT vnl_integrant_fnct *pfnct_;
 
  public:
-  vnl_definite_integral() { pfnct_ = 0; }
+  vnl_definite_integral() { pfnct_ = VXL_NULLPTR; }
 
   void set_fnct(vnl_integrant_fnct* f) { pfnct_ = f; }
 
   // destructor
-  virtual ~vnl_definite_integral() { pfnct_ = 0; }
+  virtual ~vnl_definite_integral() { pfnct_ = VXL_NULLPTR; }
 };
 
 #endif

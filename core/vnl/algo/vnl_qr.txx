@@ -35,8 +35,8 @@ vnl_qr<T>::vnl_qr(vnl_matrix<T> const& M):
   qrdc_out_(M.columns(), M.rows()),
   qraux_(M.columns()),
   jpvt_(M.rows()),
-  Q_(0),
-  R_(0)
+  Q_(VXL_NULLPTR),
+  R_(VXL_NULLPTR)
 {
   assert(! M.empty());
 

@@ -78,7 +78,7 @@ class vnl_vector
   friend class vnl_matrix<T>;
 
   //: Creates an empty vector. O(1).
-  vnl_vector() : num_elmts(0) , data(0) {}
+  vnl_vector() : num_elmts(0) , data(VXL_NULLPTR) {}
 
   //: Creates vector containing n elements.
   // Elements are not initialized.
