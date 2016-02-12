@@ -13,6 +13,7 @@ int main(int argc, char ** argv)
   vul_arg<vcl_string> show_model_arg(arglist, "-smod", "Show model", "true");
   vul_arg<vcl_string> verbose_arg(arglist, "-verbose", "print out fitting results", "true");
   vul_arg<vcl_string> estimate_t_arg(arglist,"-estimate_t", "Estimate lid opening amount rather than s_y" , "false");
+  vul_arg<float> mm_scale_arg(arglist,"-mm_scale", "mm per pixel coversion scale" , 0.0f);
   vul_arg<vcl_string> non_lin_arg(arglist, "-nlin", "non-linear refine orbit parameters", "true");
   vul_arg<vcl_string> dlib_arg(arglist, "-dlib", "2-d data from dlib", "false");
   arglist.parse(argc, argv, false);
@@ -22,7 +23,7 @@ int main(int argc, char ** argv)
   vcl_string non_lin_str = non_lin_arg();
   bool do_non_lin = non_lin_str == "true";
 
-
+  float mm_per_pix = mm_scale_arg();
   vcl_string dlib_str = dlib_arg();
   bool from_dlib = dlib_str == "true";
 
@@ -133,7 +134,7 @@ int main(int argc, char ** argv)
     return false;
 
   if(fo.from_image_data())
-    fo.normalize_eye_data();
+    fo.normalize_eye_data(mm_per_pix);
 
 
   good = fo.fit_left();
@@ -282,11 +283,9 @@ int main(int argc, char ** argv)
     vcl_cout<<fo.left_params()<<vcl_endl;
     }
 
-
   vcl_ofstream lrmstr(left_right_merge_path.c_str());
   good = fo.display_left_right_orbit_model_vrml(lrmstr);
   lrmstr.close();
-
 
   return 0;
 }
