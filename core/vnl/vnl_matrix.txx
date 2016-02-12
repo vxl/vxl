@@ -222,7 +222,7 @@ vnl_matrix<T>::vnl_matrix (vnl_matrix<T> const& from)
   else {
     num_rows = 0;
     num_cols = 0;
-    data = 0;
+    data = VXL_NULLPTR;
   }
 }
 
@@ -385,7 +385,7 @@ void vnl_matrix<T>::clear()
     destroy();
     num_rows = 0;
     num_cols = 0;
-    data = 0;
+    data = VXL_NULLPTR;
   }
 }
 
@@ -1297,7 +1297,7 @@ bool vnl_matrix<T>::read_ascii(vcl_istream& s)
   while (true)
   {
     T* row = vnl_c_vector<T>::allocate_T(colz);
-    if (row == 0) {
+    if (row == VXL_NULLPTR) {
       vcl_cerr << "vnl_matrix<T>::read_ascii: Error, Out of memory on row "
                << row_vals.size() << vcl_endl;
       return false;

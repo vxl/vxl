@@ -128,13 +128,13 @@ class vil_nitf2_field_sequence
   // current repeat iteration(s) and field_defs must equal the repeat node's
   // field definitions only.
   bool read(vil_nitf2_istream& input,
-            const vil_nitf2_field_definitions* field_defs = 0,
+            const vil_nitf2_field_definitions* field_defs = VXL_NULLPTR,
             vil_nitf2_index_vector indexes = vil_nitf2_index_vector());
 
   // Attempts to write field sequence to the output stream. Arg
   // 'indexes' is used only during recursive calls to write nested sequences.
   virtual bool write(vil_nitf2_ostream&,
-                     const vil_nitf2_field_definitions* field_defs = 0,
+                     const vil_nitf2_field_definitions* field_defs = VXL_NULLPTR,
                      vil_nitf2_index_vector indexes = vil_nitf2_index_vector());
 
   // Create vector fields for the specified field definitions with specified
@@ -152,7 +152,7 @@ class vil_nitf2_field_sequence
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.  If you pass in 'tr', then I'll add my stuff to that.
   // otherwise I'll add a new one and return it.  Either way, you own it.
-  virtual vil_nitf2_field::field_tree* get_tree( vil_nitf2_field::field_tree* tr = 0 ) const;
+  virtual vil_nitf2_field::field_tree* get_tree( vil_nitf2_field::field_tree* tr = VXL_NULLPTR ) const;
 
  private:
   void insert_field( const vcl_string& str, vil_nitf2_field* field);

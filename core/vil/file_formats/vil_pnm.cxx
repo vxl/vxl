@@ -524,7 +524,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
 
     if ( bytes_per_sample==1 )
     {
-      assert(ob!=0);
+      assert(ob!=VXL_NULLPTR);
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -534,7 +534,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
     }
     else if ( bytes_per_sample==2 && VXL_BIG_ENDIAN )
     {
-      assert(pb!=0);
+      assert(pb!=VXL_NULLPTR);
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -548,7 +548,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       vcl_vector<vxl_byte> tempbuf(byte_out_width);
-      assert(pb!=0);
+      assert(pb!=VXL_NULLPTR);
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -574,7 +574,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
 
     if ( bytes_per_sample==1 )
     {
-      assert(ob!=0);
+      assert(ob!=VXL_NULLPTR);
 
       // capes_at_robots - Modified to write a scan-line at once. Writing single bytes
       // to disk was extremely slow.
@@ -592,7 +592,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
     }
     else if ( bytes_per_sample==2 )
     {
-      assert(pb!=0);
+      assert(pb!=VXL_NULLPTR);
       for (unsigned y = y0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -618,7 +618,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
   {
     int byte_width = (ni_+7)/8;
 
-    assert(bb!=0);
+    assert(bb!=VXL_NULLPTR);
     for (unsigned y = 0; y < view.nj(); ++y)
     {
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;

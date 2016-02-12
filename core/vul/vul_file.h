@@ -93,8 +93,8 @@ struct vul_file
 
   //: Return basename
   // Only strip specified suffix.
-  static vcl_string basename(char const* filename, char const* suffix = 0);
-  static vcl_string basename(vcl_string const& filename, char const* suffix = 0) {
+  static vcl_string basename(char const* filename, char const* suffix = VXL_NULLPTR);
+  static vcl_string basename(vcl_string const& filename, char const* suffix = VXL_NULLPTR) {
     return basename(filename.c_str(), suffix );
   }
 

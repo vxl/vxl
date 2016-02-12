@@ -95,9 +95,9 @@ class vul_reg_exp
   const char* searchstring;
  public:
   //: Creates an empty regular expression.
-  inline vul_reg_exp() : program(0) { clear_bufs(); }
+  inline vul_reg_exp() : program(VXL_NULLPTR) { clear_bufs(); }
   //: Creates a regular expression from string s, and compiles s.
-  inline vul_reg_exp(char const* s) : program(0) { clear_bufs(); compile(s); }
+  inline vul_reg_exp(char const* s) : program(VXL_NULLPTR) { clear_bufs(); compile(s); }
   //: Copy constructor
   vul_reg_exp(vul_reg_exp const&);
   //: Frees space allocated for regular expression.
@@ -119,9 +119,9 @@ class vul_reg_exp
   //: Same regexp and state?
   bool deep_equal(vul_reg_exp const&) const;
   //: Returns true if a valid RE is compiled and ready for pattern matching.
-  inline bool is_valid() const { return this->program != 0; }
+  inline bool is_valid() const { return this->program != VXL_NULLPTR; }
   //: Invalidates regular expression.
-  inline void set_invalid() { delete[] this->program; this->program = 0; clear_bufs(); }
+  inline void set_invalid() { delete[] this->program; this->program = VXL_NULLPTR; clear_bufs(); }
 
   //: Return start index of nth submatch.
   // start(0) is the start of the full match.

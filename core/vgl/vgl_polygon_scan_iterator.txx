@@ -131,8 +131,8 @@ void vgl_polygon_scan_iterator<T>::init()
     // Make a call to next() return false.
     y0 = 0;
     y1 = -1;
-    crossedges = 0;
-    yverts = 0;
+    crossedges = VXL_NULLPTR;
+    yverts = VXL_NULLPTR;
     return;
   }
 

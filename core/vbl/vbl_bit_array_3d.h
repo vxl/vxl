@@ -91,7 +91,7 @@ class vbl_bit_array_3d
 
   // Helpers-------------------------------------------------------------------
 
-  void destruct() { delete[] data_; data_=0; }
+  void destruct() { delete[] data_; data_=VXL_NULLPTR; }
   void construct(unsigned int m, unsigned int n, unsigned int p);
 
   void index(unsigned int x, unsigned int y, unsigned int z,
