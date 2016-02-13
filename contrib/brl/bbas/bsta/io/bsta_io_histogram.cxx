@@ -4,7 +4,7 @@
 //
 void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base* hptr)
 {
-  if (hptr == 0)
+  if (hptr == VXL_NULLPTR)
     vsl_b_write(os, false);
   else {
     vsl_b_write(os, true);
@@ -23,7 +23,7 @@ void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base* hptr)
 
 void vsl_b_read(vsl_b_istream &is, bsta_histogram_base*& hptr)
 {
-  delete hptr; hptr = 0;
+  delete hptr; hptr = VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -59,7 +59,7 @@ void vsl_b_write(vsl_b_ostream& os, const bsta_histogram_base_sptr& hptr)
 
 void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr)
 {
-  bsta_histogram_base* ptr = 0;
+  bsta_histogram_base* ptr = VXL_NULLPTR;
   vsl_b_read(is, ptr);
   hptr = ptr;
 }
@@ -70,7 +70,7 @@ void vsl_b_read(vsl_b_istream &is, bsta_histogram_base_sptr& hptr)
 
 void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_base* hptr)
 {
-  if (hptr == 0)
+  if (hptr == VXL_NULLPTR)
     vsl_b_write(os, false);
   else {
     vsl_b_write(os, true);
@@ -89,7 +89,7 @@ void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_base* hptr)
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base*& hptr)
 {
-  delete hptr; hptr = 0;
+  delete hptr; hptr = VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -125,7 +125,7 @@ void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_base_sptr& hptr)
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr)
 {
-  bsta_joint_histogram_base* ptr = 0;
+  bsta_joint_histogram_base* ptr = VXL_NULLPTR;
   vsl_b_read(is, ptr);
   hptr = ptr;
 }
@@ -135,7 +135,7 @@ void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_base_sptr& hptr)
 
 void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_base* hptr)
 {
-  if (hptr==0)
+  if (hptr==VXL_NULLPTR)
     vsl_b_write(os, false);
   else {
     vsl_b_write(os, true);
@@ -154,7 +154,7 @@ void vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d_base* hptr)
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base*& hptr)
 {
-  delete hptr; hptr = 0;
+  delete hptr; hptr = VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -190,7 +190,7 @@ void vsl_b_write(vsl_b_ostream& os, const bsta_joint_histogram_3d_base_sptr& hpt
 
 void vsl_b_read(vsl_b_istream &is, bsta_joint_histogram_3d_base_sptr& hptr)
 {
-  bsta_joint_histogram_3d_base* ptr=0;
+  bsta_joint_histogram_3d_base* ptr=VXL_NULLPTR;
   vsl_b_read(is, ptr);
   hptr = ptr;
 }

@@ -120,15 +120,15 @@ boxm2_ocl_num_obs_renderer
   delete[] max_omega_buff_;
 
   opencl_cache_->unref_mem(exp_nobs_image_.ptr());
-  exp_nobs_image_ = bocl_mem_sptr(0);
+  exp_nobs_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(vis_image_.ptr());
-  vis_image_ = bocl_mem_sptr(0);
+  vis_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(max_omega_image_.ptr());
-  max_omega_image_ = bocl_mem_sptr(0);
+  max_omega_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(img_dim_.ptr());
-  img_dim_ = bocl_mem_sptr(0);
+  img_dim_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(tnearfar_.ptr());
-  tnearfar_ = bocl_mem_sptr(0);
+  tnearfar_ = bocl_mem_sptr(VXL_NULLPTR);
 
   buffers_allocated_ = false;
   return true;

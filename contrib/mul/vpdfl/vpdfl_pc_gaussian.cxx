@@ -29,7 +29,7 @@
 
 //: Dflt ctor
 vpdfl_pc_gaussian::vpdfl_pc_gaussian()
-  : partition_(0), log_k_principal_(0.0), partition_chooser_(0)
+  : partition_(0), log_k_principal_(0.0), partition_chooser_(VXL_NULLPTR)
 {
 }
 //=======================================================================
@@ -295,14 +295,14 @@ void vpdfl_pc_gaussian::b_read(vsl_b_istream& bfs)
       vpdfl_gaussian::b_read(bfs);
       vsl_b_read(bfs,partition_);
       vsl_b_read(bfs,log_k_principal_);
-      partition_chooser_ = 0;
+      partition_chooser_ = VXL_NULLPTR;
       break;
     case (2):
       vpdfl_gaussian::b_read(bfs);
       vsl_b_read(bfs,partition_);
       vsl_b_read(bfs,log_k_principal_);
       {
-        vpdfl_builder_base * c = 0;
+        vpdfl_builder_base * c = VXL_NULLPTR;
         vsl_b_read(bfs,c);
         assert(!c || c->is_class("vpdfl_pc_gaussian_builder"));
         partition_chooser_ = static_cast<vpdfl_pc_gaussian_builder *>(c);
@@ -332,5 +332,5 @@ void vpdfl_pc_gaussian::set_partition_chooser(
   if (partition_chooser)
     partition_chooser_ = static_cast<vpdfl_pc_gaussian_builder *>(partition_chooser->clone());
   else
-    partition_chooser_ = 0;
+    partition_chooser_ = VXL_NULLPTR;
 }

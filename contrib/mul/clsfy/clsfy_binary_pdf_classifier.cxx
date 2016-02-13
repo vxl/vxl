@@ -17,7 +17,7 @@
 void clsfy_binary_pdf_classifier::deleteStuff()
 {
   delete pdf_;
-  pdf_ = 0;
+  pdf_ = VXL_NULLPTR;
 }
 
 //=======================================================================

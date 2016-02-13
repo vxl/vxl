@@ -31,7 +31,7 @@ static void test_cloneable_ptr()
   TEST( "Back again, count = 2", some_class::count, 2 );
 
   { // Test release and empty destruction of cloneable_ptr
-    some_class* true_ptr_3b=0;
+    some_class* true_ptr_3b=VXL_NULLPTR;
     {
       mbl_cloneable_ptr<some_class> ptr3b = true_ptr_3b = new some_class();
       TEST( "Nested count = 3", some_class::count, 3 );
@@ -43,7 +43,7 @@ static void test_cloneable_ptr()
     delete true_ptr_3b;
     TEST( "Manual deletion of released ptr, count = 2)", some_class::count, 2 );
     // Check assumption that destructor isn't called on null pointer.
-    true_ptr_3b=0;
+    true_ptr_3b=VXL_NULLPTR;
     delete true_ptr_3b;
     TEST( "Manual deletion of null ptr, count = 2)", some_class::count, 2 );
   }
@@ -55,7 +55,7 @@ static void test_cloneable_ptr()
   TEST( "Back again, count = 2", some_class::count, 2 );
 
   { // Test release and empty destruction of cloneable_nzptr
-    some_class* true_ptr_3d=0;
+    some_class* true_ptr_3d=VXL_NULLPTR;
     {
       mbl_cloneable_nzptr<some_class> ptr3d(true_ptr_3d=new some_class());
       TEST( "Nested count = 3", some_class::count, 3 );
@@ -88,7 +88,7 @@ static void test_cloneable_ptr()
   }
   TEST( "Back again, count = 2", some_class::count, 2 );
 
-  ptr1 = 0;
+  ptr1 = VXL_NULLPTR;
   TEST( "Down to count = 1", some_class::count, 1 );
 }
 

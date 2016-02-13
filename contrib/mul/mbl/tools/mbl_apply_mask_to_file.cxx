@@ -84,8 +84,8 @@ int main(int argc, char **argv)
 {
   try
   {
-    vul_arg<vcl_string> mask_filename(0, "Input mask file");
-    vul_arg<vcl_string> values_filename(0, "Input values file");
+    vul_arg<vcl_string> mask_filename(VXL_NULLPTR, "Input mask file");
+    vul_arg<vcl_string> values_filename(VXL_NULLPTR, "Input values file");
     vul_arg<vcl_string> output_filename("-out", "Output values file - write to standard out if not set");
     vul_arg<vcl_string> delim("-delim", "Delimiter character for values file - one entry per line if not set");
     vul_arg_parse(argc, argv);

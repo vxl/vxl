@@ -59,7 +59,7 @@ void gtrl_triangulation::run()
   in.pointmarkerlist= markers;
   in.numberofpointattributes= 0;
   in.numberofholes= 0;
-  in.trianglelist= 0;
+  in.trianglelist= VXL_NULLPTR;
 
   // output
   triangulateio out;

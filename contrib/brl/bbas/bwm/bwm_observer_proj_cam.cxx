@@ -24,7 +24,7 @@ read_camera(vcl_string cam_path, vcl_string subtype,
 {
   vcl_string ext = vul_file_extension(cam_path);
   if (ext == ".rpc")
-    return 0;
+    return VXL_NULLPTR;
   if (subtype=="perspective") {
     if (ext == ".vsl") // binary form
     {
@@ -33,7 +33,7 @@ read_camera(vcl_string cam_path, vcl_string subtype,
       if (!bp_in) {
         vcl_cerr << "In bwm_observer_proj_cam::read_camera(.) -\n"
                  << " invalid binary camera file " << cam_path.data() << '\n';
-        return 0;
+        return VXL_NULLPTR;
       }
       vsl_b_read(bp_in, pcam);
       bp_in.close();
@@ -50,7 +50,7 @@ read_camera(vcl_string cam_path, vcl_string subtype,
       if (!success) {
         vcl_cerr << "In bwm_observer_proj_cam::read_kml_camera(.) -\n"
                  << " invalid binary camera file " << cam_path.data() << '\n';
-        return 0;
+        return VXL_NULLPTR;
       }
       vpgl_perspective_camera<double> cam =
         bpgl_camera_utils::camera_from_kml(ni, nj, right_fov, top_fov,
@@ -65,7 +65,7 @@ read_camera(vcl_string cam_path, vcl_string subtype,
     {
       vcl_cerr << "In bwm_observer_proj_cam::read_projective_camera(.) -\n"
                << " invalid camera file " << cam_path.data() << '\n';
-      return 0;
+      return VXL_NULLPTR;
     }
 
     cam_stream >> pcam;

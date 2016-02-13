@@ -477,7 +477,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
         {
           vcl_cerr << "join: trying to join relations which having same name "
                    << "attributes with different types!\n";
-          return NULL;
+          return VXL_NULLPTR;
         }
 
         common_attribute_count++;
@@ -516,7 +516,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     {
       vcl_cerr << "join: trying to join relations which don't have any "
                << "common attributes.\n";
-      return NULL;
+      return VXL_NULLPTR;
     }
 
     // compose a new relation
@@ -552,25 +552,25 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
           for (unsigned int m=0; m<arity1; m++)
           {
             if (!new_tup->add_value((*(*itr_1))[m]))
-              return NULL;
+              return VXL_NULLPTR;
           }
 
           // add all non-common values of tuple in r2
           for (unsigned int m=0; m<r2_non_common_attribute_index.size(); m++)
           {
             if (!new_tup->add_value((*(*itr_2))[r2_non_common_attribute_index[m]]))
-              return NULL;
+              return VXL_NULLPTR;
           }
 
           // check the size of the new tuple
           if (new_tup->arity() != (arity1+arity2-common_attribute_count))
-            return NULL;
+            return VXL_NULLPTR;
 
           // add the new tuple into the resulting relation
           if (!new_relation->add_tuple(new_tup))
           {
             vcl_cerr << "join: failed to add tuple.\n";
-            return NULL;
+            return VXL_NULLPTR;
           }
         }
       }

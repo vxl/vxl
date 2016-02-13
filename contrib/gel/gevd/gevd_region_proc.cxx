@@ -21,7 +21,7 @@ gevd_region_proc::gevd_region_proc()
   debug_=false;
   //debug_data_ = 0;
   //roi_proc_ = 0;
-  buf_ = 0;
+  buf_ = VXL_NULLPTR;
 }
 
 //:Default Destructor
@@ -36,9 +36,9 @@ gevd_region_proc::~gevd_region_proc()
 gevd_bufferxy* gevd_region_proc::get_image_buffer(vil1_image& image)
 {
   if (!image)
-    return NULL;
+    return VXL_NULLPTR;
   if (image.planes() != 1)
-    return NULL;
+    return VXL_NULLPTR;
 
   int wd = image.width();
   int ht = image.height();
@@ -54,7 +54,7 @@ gevd_bufferxy* gevd_region_proc::get_image_buffer(vil1_image& image)
 gevd_bufferxy*  gevd_region_proc::get_float_buffer(gevd_bufferxy* buf)
 {
   if (!buf)
-    return NULL;
+    return VXL_NULLPTR;
   gevd_bufferxy* fbuf =  new gevd_bufferxy(buf->GetSizeX(),
                                            buf->GetSizeY(),
                                            8*sizeof(float));
@@ -69,7 +69,7 @@ gevd_bufferxy*  gevd_region_proc::get_float_buffer(gevd_bufferxy* buf)
 gevd_bufferxy* gevd_region_proc::put_float_buffer(gevd_bufferxy* fbuf)
 {
   if (!fbuf)
-    return NULL;
+    return VXL_NULLPTR;
 
   gevd_bufferxy* pbuf = new gevd_bufferxy(fbuf->GetSizeX(), fbuf->GetSizeY(), 16);
   gevd_float_operators::FloatToBuffer(*fbuf, *pbuf);
@@ -90,7 +90,7 @@ void gevd_region_proc::set_image(vil1_image& image)
   if (buf_)
     {
       delete buf_;
-      buf_ = NULL;
+      buf_ = VXL_NULLPTR;
     }
   //Expand by expand_scale_
   if (expand_scale_==1.0f)
@@ -108,7 +108,7 @@ void gevd_region_proc::set_image(vil1_image& image)
           return;
         }
       gevd_bufferxy* fbuf = this->get_float_buffer(temp);
-      gevd_bufferxy* expand = NULL;
+      gevd_bufferxy* expand = VXL_NULLPTR;
       gevd_float_operators::ExpandBy2(*fbuf, expand, burt_adelson_factor_);
       gevd_float_operators::TruncateToPositive(*expand);
       buf_ = this->put_float_buffer(expand);
@@ -127,7 +127,7 @@ void gevd_region_proc::set_image(vil1_image& image)
           return;
         }
       gevd_bufferxy* fbuf = this->get_float_buffer(temp);
-      gevd_bufferxy* shrink = NULL;
+      gevd_bufferxy* shrink = VXL_NULLPTR;
       gevd_float_operators::ShrinkBy2(*fbuf, shrink, burt_adelson_factor_);
       gevd_float_operators::TruncateToPositive(*shrink);
       buf_ = this->put_float_buffer(shrink);

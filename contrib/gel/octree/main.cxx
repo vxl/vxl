@@ -225,15 +225,15 @@ cubetest_t DoScan( VoxmapImagePoints const& voxmap, Voxel &voxel, int imageindex
 ////////////////////////////////
 int main(int argc, char ** argv)
 {
-  vul_arg<const char*> colorimagefilename( "-c", "Color image filenames (only for pipe)", 0);
+  vul_arg<const char*> colorimagefilename( "-c", "Color image filenames (only for pipe)", VXL_NULLPTR);
   vul_arg<const char*> imagefilename( "-i", "Thresholded images", "/home/crossge/images/dino/full/thresh.%03d.pgm");
   vul_arg<const char*> pmatrixfilename( "-p", "PMatrix basename", "/home/crossge/images/dino/full/viff.%03d.sa.P");
-  vul_arg<const char*> outputfilename( "-o", "Piped output filename", 0);
+  vul_arg<const char*> outputfilename( "-o", "Piped output filename", VXL_NULLPTR);
   vul_arg<const char*> outputvrml( "-v", "Output VRML filename", "/tmp/out.wrl");
   vul_arg<int>         iterations( "-s", "Number of iterations", 5);
   vul_arg<int>         startiteration( "-start", "Starting iteration", 0);
   vul_arg<double>      fiddlefactor( "-fiddle", "Fiddle factor for cube radii", 1.5);
-  vul_arg<const char*> voxmapfilename( "-vf", "Voxmap filename", 0);
+  vul_arg<const char*> voxmapfilename( "-vf", "Voxmap filename", VXL_NULLPTR);
 
   vul_arg<double>      sx( "-sx", "Starting x position" , -0.0044); // was: -0.0011
   vul_arg<double>      sy( "-sy", "Starting y position" , -0.0136); // was: -0.0226
@@ -250,7 +250,7 @@ int main(int argc, char ** argv)
 
   ///////////////////////////////////////////////////////////////////
 
-  vcl_ofstream *fout= NULL;
+  vcl_ofstream *fout= VXL_NULLPTR;
 
   if ((const char *)outputfilename())
   {

@@ -16,7 +16,7 @@ float volm_desc_land_matcher::score(volm_desc_sptr const& query, volm_desc_sptr 
 volm_desc_sptr volm_desc_land_matcher::create_query_desc()
 {
   //volm_desc_sptr query_land = new volm_desc_land(query_category_file_);
-  volm_desc_sptr query_land = 0;
+  volm_desc_sptr query_land = VXL_NULLPTR;
   unsigned char label;
   if (volm_io_tools::get_location_nlcd(NLCD_imgs_, query_gt_loc_.y(), query_gt_loc_.x(), query_gt_loc_.z(), label))
     query_land = new volm_desc_land((int)label);

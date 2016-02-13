@@ -19,7 +19,7 @@ ihog_transform_2d breg3d_lm_direct_homography_generator::compute_homography()
   else
     init_xform.set_affine(vnl_double_2x3().set_identity());
 
-  ihog_minimizer *minimizer = 0;
+  ihog_minimizer *minimizer = VXL_NULLPTR;
   // no masks
   if (!use_mask0_ && !use_mask1_) {
     ihog_image<float> from_img(*img0_, init_xform);

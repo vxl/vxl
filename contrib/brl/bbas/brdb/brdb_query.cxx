@@ -23,7 +23,7 @@ brdb_query::comp_type operator ~(brdb_query::comp_type type)
 brdb_query_aptr operator ~(const brdb_query_aptr& q)
 {
   if (!q.get())
-    return brdb_query_aptr(NULL);
+    return brdb_query_aptr(VXL_NULLPTR);
 
   return q->complement();
 }
@@ -34,7 +34,7 @@ brdb_query_aptr operator &(brdb_query_aptr q1, brdb_query_aptr q2)
 {
   if (!q1.get()){
     if (!q2.get())
-      return brdb_query_aptr(NULL);
+      return brdb_query_aptr(VXL_NULLPTR);
     else
       return q2;
   }
@@ -50,7 +50,7 @@ brdb_query_aptr operator |(brdb_query_aptr q1, brdb_query_aptr q2)
 {
   if (!q1.get()){
     if (!q2.get())
-      return brdb_query_aptr(NULL);
+      return brdb_query_aptr(VXL_NULLPTR);
     else
       return q2;
   }

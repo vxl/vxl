@@ -95,7 +95,7 @@ int main2(int argc, char *argv[])
   vul_arg_parse(argc, argv);
 
   // Try to open the input file if specified or use stdin
-  vcl_istream* is=0;
+  vcl_istream* is=VXL_NULLPTR;
   if (!in_file().empty())
   {
     is = new vcl_ifstream(in_file().c_str());
@@ -129,7 +129,7 @@ int main2(int argc, char *argv[])
       ifs->close();
       delete ifs;
     }
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   // Calculate the requested statistics
@@ -167,7 +167,7 @@ int main2(int argc, char *argv[])
   }
 
   // Open output file if requested, otherwise use stdout
-  vcl_ostream* os=0;
+  vcl_ostream* os=VXL_NULLPTR;
   if (!out_file().empty())
   {
     os = new vcl_ofstream(out_file().c_str(), vcl_ios::app);
@@ -234,7 +234,7 @@ int main2(int argc, char *argv[])
       ofs->close();
       delete ofs;
     }
-    os = 0;
+    os = VXL_NULLPTR;
   }
 
   return 0;

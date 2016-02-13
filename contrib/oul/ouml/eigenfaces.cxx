@@ -102,7 +102,7 @@ vnl_vector<double> *EigenFace::get_eigenvector(int i)
   {
     vcl_cerr << "Requesting eigenvector, " << i << " which doesn't exist\n"
              << "Number of eigenvectors is: " << eigenvectors.size() << vcl_endl;
-    return NULL;
+    return VXL_NULLPTR;
   }
   return eigenvectors[i];
 }
@@ -224,7 +224,7 @@ bool EigenFace::calculate_eigenfaces()
 void EigenFace::check_training()
 {
   vcl_cout << "Check training image\n";
-  if (average_training_image!=NULL)
+  if (average_training_image!=VXL_NULLPTR)
     vcl_cout << "ati size = " << average_training_image->size() << vcl_endl;
   else
     vcl_cout << "ati not set\n";
@@ -365,7 +365,7 @@ vnl_vector<double>* EigenFace::encode(Image *im)
 {
   if (eigenvectors.size()<=0)
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
   vnl_vector<double> *im_vec = convert_image_to_vector(im);
   *im_vec -= *average_training_image;
@@ -380,7 +380,7 @@ vnl_vector<double>* EigenFace::encode(vnl_vector<double> *t_vec)
 {
   if (eigenvectors.size()<=0)
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
   vnl_vector<double> *im_vec = new vnl_vector<double>(*t_vec);
   *im_vec -= *average_training_image;
@@ -432,15 +432,15 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
 {
   vcl_priority_queue<LabelDist> pq;
 
-  if (num_vectors()==0) return NULL;
-  if (eigenvectors.size()==0) return NULL;
+  if (num_vectors()==0) return VXL_NULLPTR;
+  if (eigenvectors.size()==0) return VXL_NULLPTR;
 
   vnl_vector<double> *all_rep = encode(im);
   vnl_vector<double> rep(all_rep->extract(dim, all_rep->size()-dim));
   vnl_vector<double> diff(rep.size());
   double min_dist = DBL_MAX;
   int best=-1;
-  char *ret=NULL;
+  char *ret=VXL_NULLPTR;
 #if 0
   vcl_cout << "rep = " << *rep << vcl_endl;
 #endif
@@ -483,7 +483,7 @@ char *EigenFace::classify(Image *im, double threshold, int k, int dim)
     }
   }
   vcl_cout << "label = " << ret << " num = " << max << vcl_endl;
-  if (max<k/2+1) ret=NULL;
+  if (max<k/2+1) ret=VXL_NULLPTR;
 #if 0
   char ch;
   vcl_cin >> ch;

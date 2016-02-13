@@ -32,7 +32,7 @@
 bmsh3d_edge::~bmsh3d_edge()
 {
   //when destruct this edge, also destruct all associated halfedges
-  if (halfedge_ && halfedge_->pair() == NULL) {
+  if (halfedge_ && halfedge_->pair() == VXL_NULLPTR) {
     //if it has only one halfedge
     delete halfedge_;
   }
@@ -78,11 +78,11 @@ bmsh3d_edge* bmsh3d_edge::clone()
 unsigned int bmsh3d_edge::n_incident_Fs() const
 {
   // if there's no associated halfedge
-  if (halfedge_ == NULL)
+  if (halfedge_ == VXL_NULLPTR)
     return 0;
 
   // if there's only one associated halfedge (no loop)
-  if (halfedge_->pair() == NULL)
+  if (halfedge_->pair() == VXL_NULLPTR)
     return 1;
 
   // the last case, the associated halfedges form a circular list
@@ -99,10 +99,10 @@ unsigned int bmsh3d_edge::n_incident_Fs() const
 
 bool bmsh3d_edge::is_F_incident(const bmsh3d_face* F) const
 {
-  if (halfedge_ == NULL) {
+  if (halfedge_ == VXL_NULLPTR) {
     return false;
   }
-  else if (halfedge_->pair() == NULL) {
+  else if (halfedge_->pair() == VXL_NULLPTR) {
     if (halfedge_->face() == F)
       return true;
   }
@@ -120,10 +120,10 @@ bool bmsh3d_edge::is_F_incident(const bmsh3d_face* F) const
 
 bool bmsh3d_edge::is_F_incident(bmsh3d_face* F) const
 {
-  if (halfedge_ == NULL) {
+  if (halfedge_ == VXL_NULLPTR) {
     return false;
   }
-  else if (halfedge_->pair() == NULL) {
+  else if (halfedge_->pair() == VXL_NULLPTR) {
     if (halfedge_->face() == F)
       return true;
   }
@@ -142,14 +142,14 @@ bool bmsh3d_edge::is_F_incident(bmsh3d_face* F) const
 //: loop through all halfedges and find the one incident to F.
 bmsh3d_halfedge* bmsh3d_edge::get_HE_of_F(bmsh3d_face* F) const
 {
-  if (halfedge_ == NULL) {
-    return NULL;
+  if (halfedge_ == VXL_NULLPTR) {
+    return VXL_NULLPTR;
   }
-  else if (halfedge_->pair() == NULL) {
+  else if (halfedge_->pair() == VXL_NULLPTR) {
     if (halfedge_->face() == F)
       return halfedge_;
     else
-      return NULL;
+      return VXL_NULLPTR;
   }
   else { //Loop through the circular list of halfedges.
     bmsh3d_halfedge* HE = halfedge_;
@@ -159,18 +159,18 @@ bmsh3d_halfedge* bmsh3d_edge::get_HE_of_F(bmsh3d_face* F) const
       HE = HE->pair();
     }
     while (HE != halfedge_);
-    return NULL;
+    return VXL_NULLPTR;
   }
 }
 
 void bmsh3d_edge::get_incident_Fs(vcl_vector<bmsh3d_face*>& incident_faces) const
 {
   //If there's no associated halfedge
-  if (halfedge_ == NULL) {
+  if (halfedge_ == VXL_NULLPTR) {
     return;
   }
   //If there's only one associated halfedge (no loop)
-  else if (halfedge_->pair() == NULL) {
+  else if (halfedge_->pair() == VXL_NULLPTR) {
     incident_faces.push_back(halfedge_->face());
     return;
   }
@@ -188,14 +188,14 @@ void bmsh3d_edge::get_incident_Fs(vcl_vector<bmsh3d_face*>& incident_faces) cons
 
 bmsh3d_face* bmsh3d_edge::incident_F_given_E(bmsh3d_edge* other_incident_E) const
 {
-  if (halfedge_ == NULL)
-    return NULL;
+  if (halfedge_ == VXL_NULLPTR)
+    return VXL_NULLPTR;
   //if there's only one associated halfedge (no loop)
-  if (halfedge_->pair() == NULL) {
+  if (halfedge_->pair() == VXL_NULLPTR) {
     if (halfedge_->face()->is_E_incident(other_incident_E))
       return halfedge_->face();
     else
-      return NULL;
+      return VXL_NULLPTR;
   }
   //the last case, the associated halfedges form a circular list
   bmsh3d_halfedge* HE = halfedge_;
@@ -205,18 +205,18 @@ bmsh3d_face* bmsh3d_edge::incident_F_given_E(bmsh3d_edge* other_incident_E) cons
     HE = HE->pair();
   }
   while (HE != halfedge_);
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 bmsh3d_face* bmsh3d_edge::incident_F_given_V(bmsh3d_vertex* incident_V) const
 {
-  if (halfedge_ == NULL)
-    return NULL;
-  if (halfedge_->pair() == NULL) {
+  if (halfedge_ == VXL_NULLPTR)
+    return VXL_NULLPTR;
+  if (halfedge_->pair() == VXL_NULLPTR) {
     if (halfedge_->face()->is_V_incident_via_HE(incident_V))
       return halfedge_->face();
     else
-      return NULL;
+      return VXL_NULLPTR;
   }
   //the last case, the associated halfedges form a circular list
   bmsh3d_halfedge* HE = halfedge_;
@@ -226,7 +226,7 @@ bmsh3d_face* bmsh3d_edge::incident_F_given_V(bmsh3d_vertex* incident_V) const
     HE = HE->pair();
   }
   while (HE != halfedge_);
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //:
@@ -242,10 +242,10 @@ bmsh3d_face* bmsh3d_edge::is_2_incident_to_one_S() const
     if (incident_faces[0] == incident_faces[1])
       return incident_faces[0];
     else
-      return NULL;
+      return VXL_NULLPTR;
   }
   else
-    return NULL;
+    return VXL_NULLPTR;
 }
 
 //: Check if E is 3-incident to one sheet.
@@ -259,16 +259,16 @@ bmsh3d_face* bmsh3d_edge::is_3_incident_to_one_S() const
         incident_faces[1] == incident_faces[2])
       return incident_faces[0];
     else
-      return NULL;
+      return VXL_NULLPTR;
   }
   else
-    return NULL;
+    return VXL_NULLPTR;
 }
 
 bmsh3d_face* bmsh3d_edge::other_2_manifold_F(bmsh3d_face* inputF) const
 {
   if (n_incident_Fs() > 2)
-    return NULL;
+    return VXL_NULLPTR;
 
   bmsh3d_halfedge* HE = halfedge_;
   do {
@@ -277,8 +277,8 @@ bmsh3d_face* bmsh3d_edge::other_2_manifold_F(bmsh3d_face* inputF) const
       return F;
     HE = HE->pair();
   }
-  while (HE != halfedge_ && HE != NULL);
-  return NULL;
+  while (HE != halfedge_ && HE != VXL_NULLPTR);
+  return VXL_NULLPTR;
 }
 
 //:
@@ -317,11 +317,11 @@ double bmsh3d_edge::length() const
 void bmsh3d_edge::_connect_HE_to_end(bmsh3d_halfedge* inputHE)
 {
   //Note that the link list is circular, but not necessarily geometrically ordered!
-  if (halfedge_ == NULL) { //1)
+  if (halfedge_ == VXL_NULLPTR) { //1)
     halfedge_ = inputHE;
     return;
   }
-  else if (halfedge_->pair() == NULL) { //2)
+  else if (halfedge_->pair() == VXL_NULLPTR) { //2)
     halfedge_->set_pair(inputHE);
     inputHE->set_pair(halfedge_);
     return;
@@ -340,12 +340,12 @@ void bmsh3d_edge::_connect_HE_to_end(bmsh3d_halfedge* inputHE)
 void bmsh3d_edge::_disconnect_HE(bmsh3d_halfedge* inputHE)
 {
   //first set its edge pointer to NULL (disconnect)
-  inputHE->set_edge(NULL);
+  inputHE->set_edge(VXL_NULLPTR);
 
   //1) be careful on the only-one-inputHE case
-  if (inputHE->pair() == NULL) {
+  if (inputHE->pair() == VXL_NULLPTR) {
     assert (halfedge_ == inputHE);
-    halfedge_ = NULL;
+    halfedge_ = VXL_NULLPTR;
     return;
   }
   bmsh3d_halfedge* prev_pair = (bmsh3d_halfedge*)inputHE->get_prev(); // casting away const!
@@ -358,8 +358,8 @@ void bmsh3d_edge::_disconnect_HE(bmsh3d_halfedge* inputHE)
 
   //2) be careful on the case that inputHE becomes the only-one halfedge.
   if (prev_pair == next_pair) {
-    halfedge_->set_pair(NULL);
-    inputHE->set_pair(NULL);
+    halfedge_->set_pair(VXL_NULLPTR);
+    inputHE->set_pair(VXL_NULLPTR);
     return;
   }
 
@@ -367,14 +367,14 @@ void bmsh3d_edge::_disconnect_HE(bmsh3d_halfedge* inputHE)
   prev_pair->set_pair(next_pair);
 
   // disconnect this inputHE from its pair
-  inputHE->set_pair(NULL);
+  inputHE->set_pair(VXL_NULLPTR);
 }
 
 void bmsh3d_edge::disconnect_all_Fs(vcl_vector<bmsh3d_face*>& disconn_faces)
 {
   // Repeatedly disconnect all incident faces until finish.
   bmsh3d_halfedge* HE = halfedge_;
-  while (HE != NULL) {
+  while (HE != VXL_NULLPTR) {
     bmsh3d_halfedge* pair = HE->pair();
     disconn_faces.push_back(HE->face());
     HE->face()->disconnect_E(HE);
@@ -388,10 +388,10 @@ void bmsh3d_edge::disconnect_all_Fs(vcl_vector<bmsh3d_face*>& disconn_faces)
 
 bmsh3d_halfedge* bmsh3d_edge::m2_other_HE(bmsh3d_halfedge* inputHE)
 {
-  if (halfedge_ == NULL)
-    return NULL;
-  if (halfedge_->pair() == NULL)
-    return NULL;
+  if (halfedge_ == VXL_NULLPTR)
+    return VXL_NULLPTR;
+  if (halfedge_->pair() == VXL_NULLPTR)
+    return VXL_NULLPTR;
   bmsh3d_halfedge* HE = halfedge_;
   do {
     if (HE != inputHE)
@@ -399,16 +399,16 @@ bmsh3d_halfedge* bmsh3d_edge::m2_other_HE(bmsh3d_halfedge* inputHE)
     HE = HE->pair();
   }
   while (HE != halfedge_);
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //: for 2-manifold mesh only
 bmsh3d_face* bmsh3d_edge::m2_other_face(bmsh3d_face* inputF)
 {
-  if (halfedge_ == NULL)
-    return NULL;
-  if (halfedge_->pair() == NULL)
-    return NULL;
+  if (halfedge_ == VXL_NULLPTR)
+    return VXL_NULLPTR;
+  if (halfedge_->pair() == VXL_NULLPTR)
+    return VXL_NULLPTR;
   bmsh3d_halfedge* HE = halfedge_;
   do {
     if (HE->face() != inputF)
@@ -416,7 +416,7 @@ bmsh3d_face* bmsh3d_edge::m2_other_face(bmsh3d_face* inputF)
     HE = HE->pair();
   }
   while (HE != halfedge_);
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //###############################################################
@@ -434,10 +434,10 @@ void bmsh3d_edge::getInfo(vcl_ostringstream& ostrm)
   int n_halfedges = n_incident_Fs ();
   ostrm << ' ' << n_halfedges << " HEs: ";
 
-  if (halfedge_ == NULL) {
+  if (halfedge_ == VXL_NULLPTR) {
     ostrm << "NONE ";
   }
-  else if (halfedge_->pair() == NULL) {
+  else if (halfedge_->pair() == VXL_NULLPTR) {
     ostrm << halfedge_->face()->id() << ' ';
   }
   else {

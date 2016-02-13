@@ -132,9 +132,9 @@ void boxm2_vecf_cranium_scene::cache_cell_centers_from_anatomy_labels(){
   }
 }
 // constructors
-boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file): boxm2_vecf_articulated_scene(scene_file), source_model_exists_(true), alpha_data_(0), app_data_(0), nobs_data_(0), cranium_data_(0), intrinsic_change_(false){
+boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file): boxm2_vecf_articulated_scene(scene_file), source_model_exists_(true), alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR), cranium_data_(VXL_NULLPTR), intrinsic_change_(false){
   this->extrinsic_only_ = true;
-  target_blk_ = 0;
+  target_blk_ = VXL_NULLPTR;
   target_data_extracted_ = false;
   this->has_background_ = false;
   boxm2_lru_cache::create(base_model_);
@@ -144,11 +144,11 @@ boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file)
 }
 
 boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file, vcl_string const& geometry_file):
-  boxm2_vecf_articulated_scene(scene_file), source_model_exists_(false), alpha_data_(0), app_data_(0), nobs_data_(0), cranium_data_(0), intrinsic_change_(false)
+  boxm2_vecf_articulated_scene(scene_file), source_model_exists_(false), alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR), cranium_data_(VXL_NULLPTR), intrinsic_change_(false)
 {
   cranium_geo_ = boxm2_vecf_cranium(geometry_file);
   this->extrinsic_only_ = false;
-  target_blk_ = 0;
+  target_blk_ = VXL_NULLPTR;
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
@@ -167,7 +167,7 @@ boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file,
   }
 
 boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(vcl_string const& scene_file, vcl_string const& geometry_file, vcl_string const& params_file_name):
-  boxm2_vecf_articulated_scene(scene_file),source_model_exists_(false),alpha_data_(0), app_data_(0), nobs_data_(0),cranium_data_(0)
+  boxm2_vecf_articulated_scene(scene_file),source_model_exists_(false),alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR),cranium_data_(VXL_NULLPTR)
   {
     vcl_ifstream params_file(params_file_name.c_str());
     if (!params_file){

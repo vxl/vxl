@@ -98,16 +98,16 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
              << "\n\n";
 
   // Allocate internal bitmaps ..
-  smooth_ = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
-  dx_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
-  dy_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
-  grad_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
-  thick_  = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
-  thin_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
-  theta_  = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)0);
-  junction_ = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)0);
-  jx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)0);
-  jy_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)0);
+  smooth_ = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
+  dx_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
+  dy_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
+  grad_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
+  thick_  = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
+  thin_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
+  theta_  = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
+  junction_ = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)VXL_NULLPTR);
+  jx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)VXL_NULLPTR);
+  jy_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)VXL_NULLPTR);
   //image_ = 0;
 
   // .. and initialize them.
@@ -167,7 +167,7 @@ void osl_canny_ox::detect_edges(vil1_image const &image_in, vcl_list<osl_edge*> 
 
   // delete the edgels that are output of Non_maximal_suppression
   fsm_delete_array status;
-  fsm_delete edgels_NMS; edgels_NMS = 0;
+  fsm_delete edgels_NMS; edgels_NMS = VXL_NULLPTR;
 
   // delete *x_ and *y_; they are not needed anymore
   fsm_delete_array x_;
@@ -260,7 +260,7 @@ int osl_canny_ox::HysteresisOX(osl_edgel_chain *&edgels_NMS,
   vcl_vector<osl_LINK *> links(n_edgels_NMS);  //
   // .. initialize arrays.
   for (unsigned int i=0; i<n_edgels_NMS; ++i) {
-    links[i]  = 0; // null pointer
+    links[i]  = VXL_NULLPTR; // null pointer
     row[i]    = (int) edgels_NMS->GetY(i);
     col[i]    = (int) edgels_NMS->GetX(i);
     status[i] = 0;
@@ -561,7 +561,7 @@ osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, osl_Vertex const &v)
   for (vcl_list<osl_Vertex*>::const_iterator i=l->begin(); i!=l->end(); ++i)
     if (v == *(*i))
       return *i;
-  return 0;
+  return VXL_NULLPTR;
 }
 
 osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y)
@@ -569,7 +569,7 @@ osl_Vertex *osl_find(vcl_list<osl_Vertex*> const *l, float x, float y)
   for (vcl_list<osl_Vertex*>::const_iterator i=l->begin(); i!=l->end(); ++i)
     if ((*i)->x == x && (*i)->y == y)
       return *i;
-  return 0;
+  return VXL_NULLPTR;
 }
 
 

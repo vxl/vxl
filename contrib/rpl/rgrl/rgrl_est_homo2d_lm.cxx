@@ -101,7 +101,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
   vnl_matrix_fixed<double,2,2> error_proj_sqrt;
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
-    if ( (*matches_ptr_)[ms] != 0 ) { // if pointer is valid
+    if ( (*matches_ptr_)[ms] != VXL_NULLPTR ) { // if pointer is valid
       rgrl_match_set const& one_set = *((*matches_ptr_)[ms]);
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {
         // map from point
@@ -207,7 +207,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     rgrl_est_homography2d est_homo;
     rgrl_transformation_sptr tmp_trans= est_homo.estimate( matches, cur_transform );
     if ( !tmp_trans )
-      return 0;
+      return VXL_NULLPTR;
     rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( *tmp_trans );
     init_H = trans.H();
   }
@@ -218,7 +218,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> from_centre;
   vnl_vector<double> to_centre;
   if ( !rgrl_est_compute_weighted_centres( matches, from_centre, to_centre ) )
-    return 0;
+    return VXL_NULLPTR;
    DebugMacro( 3, "From center: " << from_centre
                <<"  To center: " << to_centre << vcl_endl );
 
@@ -263,7 +263,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
     WarningMacro( "Levenberg-Marquardt failed" );
-    return 0;
+    return VXL_NULLPTR;
   }
   // lm.diagnose_outcome(vcl_cout);
 
@@ -276,7 +276,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // check rank of H
   vnl_double_3x3 tmpH(init_H);
   if ( vcl_abs(vnl_det(tmpH)) < 1e-8 )
-    return 0;
+    return VXL_NULLPTR;
 
   // compute covariance
   // JtJ is INVERSE of jacobian
@@ -302,7 +302,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
   if ( svd.rank() < 8 ) {
     WarningMacro( "The covariance of homography ranks less than 8! ");
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();

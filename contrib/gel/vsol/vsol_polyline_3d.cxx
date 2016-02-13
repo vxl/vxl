@@ -20,8 +20,8 @@ vsol_polyline_3d::vsol_polyline_3d()
   : vsol_curve_3d()
 {
   storage_=new vcl_vector<vsol_point_3d_sptr>();
-  p0_ = 0;
-  p1_ = 0;
+  p0_ = VXL_NULLPTR;
+  p1_ = VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
@@ -35,8 +35,8 @@ vsol_polyline_3d::vsol_polyline_3d(vcl_vector<vsol_point_3d_sptr> const& new_ver
   int n = storage_->size();
   if (n<2)
   {
-    p0_ = 0;
-    p1_ = 0;
+    p0_ = VXL_NULLPTR;
+    p1_ = VXL_NULLPTR;
     return;
   }
   p0_ = (*storage_)[0];
@@ -206,8 +206,8 @@ void vsol_polyline_3d::b_read(vsl_b_istream &is)
     return;
   delete storage_;
   storage_ = new vcl_vector<vsol_point_3d_sptr>();
-  p0_=0;
-  p1_=0;
+  p0_=VXL_NULLPTR;
+  p1_=VXL_NULLPTR;
   bool null_ptr;
   vsl_b_read(is, null_ptr);
   if (!null_ptr)
@@ -245,7 +245,7 @@ void vsol_polyline_3d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_polyline_3d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else {
@@ -267,7 +267,7 @@ vsl_b_read(vsl_b_istream &is, vsol_polyline_3d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 void vsol_polyline_3d::describe(vcl_ostream &strm, int blanking) const

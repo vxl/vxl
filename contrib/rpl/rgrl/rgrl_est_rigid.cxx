@@ -64,7 +64,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ++ms;
   if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
-    return 0; // no data!
+    return VXL_NULLPTR; // no data!
   }
   const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
   assert ( m==3 ); // currently only 3D estimation is implemented
@@ -143,7 +143,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     if ( (unsigned)svd.rank() < m ) {
       DebugMacro(1, "rank ("<<svd.rank()<<") < "<<m<<"; no solution." );
       DebugMacro_abv(1, "(used " << count << " correspondences)\n" );
-      return 0; // no solution
+      return VXL_NULLPTR; // no solution
     }
 
     // Compute the solution into XtWy

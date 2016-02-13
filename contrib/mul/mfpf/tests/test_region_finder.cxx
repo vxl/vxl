@@ -207,7 +207,7 @@ void test_region_finder()
     bfs_out.close();
 
     mfpf_region_finder region_finder_in;
-    mfpf_point_finder *base_ptr_in = 0;
+    mfpf_point_finder *base_ptr_in = VXL_NULLPTR;
 
     vsl_b_ifstream bfs_in("test_region_finder.bvl.tmp");
     TEST ("Opened test_region_finder.bvl.tmp for reading", (!bfs_in), false);

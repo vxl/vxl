@@ -21,7 +21,7 @@ int main2(int argc, char*argv[])
   const vcl_string sep="\n";
 
   // Parse the program arguments
-  vul_arg<vcl_string> in_fname(0, "input filename (or \"-\" for stdin)");
+  vul_arg<vcl_string> in_fname(VXL_NULLPTR, "input filename (or \"-\" for stdin)");
   vul_arg<vcl_string> out_fname("-o", "output filename (defaults to stdout)", "-");
   vul_arg<vcl_vector<unsigned> > lines_arg("-l", "List of line ");
   vul_arg<vcl_string > lines_fname("-f", "Filename containing list of lines ");
@@ -55,7 +55,7 @@ int main2(int argc, char*argv[])
 
   // Load the input data
   vcl_ifstream in_file;
-  vcl_istream *in_stream=0;
+  vcl_istream *in_stream=VXL_NULLPTR;
   if (in_fname() == "-")
     in_stream = &vcl_cin;
   else
@@ -104,7 +104,7 @@ int main2(int argc, char*argv[])
 
 
   // write data to output
-  vcl_ostream *out_stream=0;
+  vcl_ostream *out_stream=VXL_NULLPTR;
   vcl_ofstream out_file;
   if (out_fname() == "-")
     out_stream = &vcl_cout;

@@ -36,13 +36,13 @@
 #include <bmsh3d/algo/bmsh3d_mesh_triangulate.h>
 
 bwm_observable_mesh::bwm_observable_mesh()
-  : object_(0)
+  : object_(VXL_NULLPTR)
 {
   //bwm_world::instance()->add(this);
 }
 
 bwm_observable_mesh::bwm_observable_mesh(BWM_MESH_TYPES type)
-  : object_(0), mesh_type_(type)
+  : object_(VXL_NULLPTR), mesh_type_(type)
 {
   //bwm_world::instance()->add(this);
 }
@@ -305,7 +305,7 @@ void bwm_observable_mesh::extrude(int face_id)
 
 void bwm_observable_mesh::extrude(int face_id, double dist)
 {
-  if (object_ != 0) {
+  if (object_ != VXL_NULLPTR) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*)object_->facemap(face_id);
     if (face) {
       if (object_->facemap().size() == 1) {
@@ -325,7 +325,7 @@ void bwm_observable_mesh::extrude(int face_id, double dist)
       notify_observers("update");
     }
     else
-      current_extr_face = 0;
+      current_extr_face = VXL_NULLPTR;
   }
 #if 0
   vcl_cout << "FACES====>" << vcl_endl;
@@ -336,7 +336,7 @@ void bwm_observable_mesh::extrude(int face_id, double dist)
 void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
 {
   vcl_string msg = "";
-  if (object_ == 0)
+  if (object_ == VXL_NULLPTR)
     msg = "new";
   else {
     msg = "update";
@@ -351,7 +351,7 @@ void bwm_observable_mesh::set_object(bmsh3d_mesh_mc* obj)
 void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly, double z)
 {
   vcl_string msg = "";
-  if (object_ == 0)
+  if (object_ == VXL_NULLPTR)
     msg = "new";
   else {
     msg = "update";
@@ -371,7 +371,7 @@ void bwm_observable_mesh::set_object(vsol_polygon_3d_sptr poly)
     return;
 
   vcl_string msg = "";
-  if (object_ == 0)
+  if (object_ == VXL_NULLPTR)
     msg = "new";
   else {
     msg = "update";
@@ -636,7 +636,7 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*) object_->facemap(face_id);
   vcl_vector<bmsh3d_halfedge *> halfedges;
-  if (face == 0) {
+  if (face == VXL_NULLPTR) {
     print_faces();
     vcl_cerr << "Face " << face_id << " is not found in the facemap\n";
   }
@@ -653,8 +653,8 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
   object_->_add_vertex(v2);
 
   // find the halfedges corresponding to edge segments
-  bmsh3d_edge* edge1=0;
-  bmsh3d_edge* edge2=0;
+  bmsh3d_edge* edge1=VXL_NULLPTR;
+  bmsh3d_edge* edge2=VXL_NULLPTR;
 
 #ifdef DEBUG
   vcl_cout << "p1=" << p1 << " p2=" << p2 << '\n'
@@ -708,7 +708,7 @@ void bwm_observable_mesh::divide_face(unsigned face_id,
   bmsh3d_halfedge* he2 = (bmsh3d_halfedge*) halfedges[min_index2];
   edge2 = he2->edge();
 
-  if (edge1 == 0 || edge2 == 0) {
+  if (edge1 == VXL_NULLPTR || edge2 == VXL_NULLPTR) {
     vcl_cerr << "bwm_observable_mesh::divide_face -- edges are not found in polygon\n";
     return;
   }
@@ -727,7 +727,7 @@ bmsh3d_face* bwm_observable_mesh::create_inner_face(vsol_polygon_3d_sptr polygon
   unsigned n = polygon->size();
   bmsh3d_face* inner_face = new bmsh3d_face();
   // create vertices
-  bmsh3d_vertex* prev_v = 0;
+  bmsh3d_vertex* prev_v = VXL_NULLPTR;
   bmsh3d_vertex* v_first;
   for (unsigned i=0; i<n; i++) {
     double x = polygon->vertex(i)->x();
@@ -736,7 +736,7 @@ bmsh3d_face* bwm_observable_mesh::create_inner_face(vsol_polygon_3d_sptr polygon
     bmsh3d_vertex* v = (bmsh3d_vertex*) object_->_new_vertex ();
     v->get_pt().set(x, y, z);
     object_->_add_vertex(v); //??? do we add this vertex to the mesh
-    if (prev_v != 0) {
+    if (prev_v != VXL_NULLPTR) {
 #if 0
       object_->add_new_edge(v, prev_v);
 #endif
@@ -764,7 +764,7 @@ bmsh3d_face_mc* bwm_observable_mesh::create_face(vsol_polygon_3d_sptr polygon)
   unsigned n = polygon->size();
 
   // create vertices
-  bmsh3d_vertex* prev_v = 0;
+  bmsh3d_vertex* prev_v = VXL_NULLPTR;
   for (unsigned i=0; i<n; i++) {
     double x = polygon->vertex(i)->x();
     double y = polygon->vertex(i)->y();
@@ -772,7 +772,7 @@ bmsh3d_face_mc* bwm_observable_mesh::create_face(vsol_polygon_3d_sptr polygon)
     bmsh3d_vertex* v = (bmsh3d_vertex*) object_->_new_vertex ();
     v->get_pt().set(x, y, z);
     object_->_add_vertex(v);
-    if (prev_v != 0)
+    if (prev_v != VXL_NULLPTR)
       object_->add_new_edge (v, prev_v);
     prev_v = v;
   }
@@ -967,7 +967,7 @@ void bwm_observable_mesh::attach_inner_face(unsigned face_id, vsol_polygon_3d_sp
 {
   bmsh3d_face* inner_face = create_inner_face(poly);
   bmsh3d_face_mc* outer_face = (bmsh3d_face_mc*) object_->facemap(face_id);
-  if (outer_face != 0) {
+  if (outer_face != VXL_NULLPTR) {
     bmsh3d_halfedge* he = (bmsh3d_halfedge*) inner_face->halfedge();
     outer_face->add_mc_halfedge(he);
     notify_observers("update");
@@ -1298,7 +1298,7 @@ bwm_observable_sptr bwm_observable_mesh::global_to_local(vpgl_lvcs* lvcs, double
     }
     return new bwm_observable_mesh(mesh);
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 #if 0

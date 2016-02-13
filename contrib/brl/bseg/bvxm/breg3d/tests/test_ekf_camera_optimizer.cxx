@@ -121,9 +121,9 @@ static void test_ekf_camera_optimizer()
   vpgl_camera_double_sptr cam1 = new vpgl_perspective_camera<double>(K,center1,rot1);
   vpgl_camera_double_sptr cam2 = new vpgl_perspective_camera<double>(K,center2,rot2);
 
-  bvxm_image_metadata meta0(vil_image_view_base_sptr(0),cam0);
-  bvxm_image_metadata meta1(vil_image_view_base_sptr(0),cam1);
-  bvxm_image_metadata meta2(vil_image_view_base_sptr(0),cam2);
+  bvxm_image_metadata meta0(vil_image_view_base_sptr(VXL_NULLPTR),cam0);
+  bvxm_image_metadata meta1(vil_image_view_base_sptr(VXL_NULLPTR),cam1);
+  bvxm_image_metadata meta2(vil_image_view_base_sptr(VXL_NULLPTR),cam2);
 
   vil_image_view<float> mask(640,480,1);
   vil_image_view_base_sptr img0 = new vil_image_view<unsigned char>(640,480);

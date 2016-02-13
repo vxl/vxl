@@ -186,7 +186,7 @@ bool bvrml_load_points_ply(const vcl_string &ply_file, float dist_thres,
   parsed_ply.data = data;
   parsed_ply.dist_thres = dist_thres;
 
-  p_ply ply = ply_open(ply_file.c_str(), NULL, 0, NULL);
+  p_ply ply = ply_open(ply_file.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
   if (!ply){
     vcl_cerr << "Couldn't open ply file: " << ply_file << '\n';
     return false;

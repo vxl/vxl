@@ -37,7 +37,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     rgrl_est_homography2d est_homo;
     rgrl_transformation_sptr tmp_trans= est_homo.estimate( matches, cur_transform );
     if ( !tmp_trans )
-      return 0;
+      return VXL_NULLPTR;
     rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( *tmp_trans );
     init_H = trans.H();
   }
@@ -53,7 +53,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_matrix<double> covar;
   if ( !homo_func.projective_estimate( init_H, covar, from_centre, to_centre ) ) {
     WarningMacro( "L-M estimation failed." << vcl_endl );
-    return 0;
+    return VXL_NULLPTR;
   }
 
   return new rgrl_trans_homography2d( init_H.as_ref(), covar, from_centre.as_ref(), to_centre.as_ref() );

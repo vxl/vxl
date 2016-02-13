@@ -203,7 +203,7 @@ rrel_irls::estimate( const rrel_estimation_problem* problem,
       if ( use_weighted_scale_ ) {
         assert( residuals.size() == weights.size() );
         scale_ = rrel_util_weighted_scale( residuals.begin(), residuals.end(),
-                                           weights.begin(), num_for_fit, (double*)0 );
+                                           weights.begin(), num_for_fit, (double*)VXL_NULLPTR );
       }
       else {
         scale_ = rrel_util_median_abs_dev_scale( residuals.begin(), residuals.end(), num_for_fit );

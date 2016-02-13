@@ -68,7 +68,7 @@ vsol_spatial_object_2d* vsol_digital_curve_2d::clone(void) const
 vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 {
   if ( samples_.empty() )
-    return NULL;
+    return VXL_NULLPTR;
 
   return samples_.front();
 }
@@ -79,7 +79,7 @@ vsol_point_2d_sptr vsol_digital_curve_2d::p0(void) const
 vsol_point_2d_sptr vsol_digital_curve_2d::p1(void) const
 {
   if ( samples_.empty() )
-    return NULL;
+    return VXL_NULLPTR;
 
   return samples_.back();
 }
@@ -268,7 +268,7 @@ void vsol_digital_curve_2d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_digital_curve_2d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else {
@@ -290,7 +290,7 @@ vsl_b_read(vsl_b_istream &is, vsol_digital_curve_2d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 void vsol_digital_curve_2d::describe(vcl_ostream &strm, int blanking) const

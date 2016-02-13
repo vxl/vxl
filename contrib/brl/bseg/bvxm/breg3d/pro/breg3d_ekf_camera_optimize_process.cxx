@@ -23,7 +23,7 @@ breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
   //input[4]: The voxel world
   //input[5]: The appearance model type to use for expected images
   //input[6]: The bin index to use for expected images
-  input_data_.resize(7,brdb_value_sptr(0));
+  input_data_.resize(7,brdb_value_sptr(VXL_NULLPTR));
   input_types_.resize(7);
   input_types_[0] = "breg3d_ekf_camera_optimizer_state";
   input_types_[1] = "vil_image_view_base_sptr";
@@ -36,7 +36,7 @@ breg3d_ekf_camera_optimize_process::breg3d_ekf_camera_optimize_process()
   // process has 2 outputs:
   // output[0]: The estimate for the current state
   // output[1]: The optimized camera
-  output_data_.resize(2,brdb_value_sptr(0));
+  output_data_.resize(2,brdb_value_sptr(VXL_NULLPTR));
   output_types_.resize(2);
   output_types_[0]= "breg3d_ekf_camera_optimizer_state";
   output_types_[1] = "vpgl_camera_double_sptr";

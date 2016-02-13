@@ -97,7 +97,7 @@ bool bvpl_create_generic_kernel_vector_process(bprb_func_process& pro)
 
   //if got to here is because we didn't meet available conditions
   vcl_cerr << "Error: No vector could be created for specified factory and directions " <<vcl_endl;
-  pro.set_output_val<bvpl_kernel_vector_sptr>(0, NULL);
+  pro.set_output_val<bvpl_kernel_vector_sptr>(0, VXL_NULLPTR);
   return false;
 }
 

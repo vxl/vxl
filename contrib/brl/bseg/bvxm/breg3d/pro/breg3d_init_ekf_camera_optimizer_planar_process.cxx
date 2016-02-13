@@ -23,7 +23,7 @@ breg3d_init_ekf_camera_optimizer_planar_process::breg3d_init_ekf_camera_optimize
   //input[1]: The first frame
   //input[2]: The second frame
   //input[3]: The voxel world
-  input_data_.resize(4,brdb_value_sptr(0));
+  input_data_.resize(4,brdb_value_sptr(VXL_NULLPTR));
   input_types_.resize(4);
   input_types_[0] = "vpgl_camera_double_sptr";
   input_types_[1] = "vil_image_view_base_sptr";
@@ -34,7 +34,7 @@ breg3d_init_ekf_camera_optimizer_planar_process::breg3d_init_ekf_camera_optimize
   // output[0]: The initial state estimate for the kalman filter
   // output[1]: The second camera's estimated position
   // outputs[2-5]: The plane parameters a,b,c,d  (ax + by + cz + d = 0)
-  output_data_.resize(6,brdb_value_sptr(0));
+  output_data_.resize(6,brdb_value_sptr(VXL_NULLPTR));
   output_types_.resize(6);
   output_types_[0] = "breg3d_ekf_camera_optimizer_state";
   output_types_[1] = "vpgl_camera_double_sptr";

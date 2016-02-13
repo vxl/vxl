@@ -69,7 +69,7 @@ static void test_vector_normalisers()
 
     mipa_vector_normaliser* pNorm = norm->clone();
     mipa_block_normaliser* pBlockNormaliser=dynamic_cast<mipa_block_normaliser* >(pNorm);
-    TEST("Clone is dynamic castable to Block normaliser",pBlockNormaliser != 0,true);
+    TEST("Clone is dynamic castable to Block normaliser",pBlockNormaliser != VXL_NULLPTR,true);
     if (pBlockNormaliser)
     {
         TEST("Contains an L2 normaliser",pBlockNormaliser->normaliser().is_a()=="mipa_l2norm_vector_normaliser",true);
@@ -246,7 +246,7 @@ static void test_vector_normalisers()
 
              << "===============Testing MS Block Normaliser stream config============" <<vcl_endl;
 
-    mipa_ms_block_normaliser* pMSBlockNormaliser=0;
+    mipa_ms_block_normaliser* pMSBlockNormaliser=VXL_NULLPTR;
     {
         vcl_string strConfig;
         strConfig += "mipa_ms_block_normaliser {\n";
@@ -266,7 +266,7 @@ static void test_vector_normalisers()
 
         mipa_vector_normaliser* pNorm = msnorm->clone();
         pMSBlockNormaliser=dynamic_cast<mipa_ms_block_normaliser* >(pNorm);
-        TEST("Clone is dynamic castable to Block normaliser",pMSBlockNormaliser != 0,true);
+        TEST("Clone is dynamic castable to Block normaliser",pMSBlockNormaliser != VXL_NULLPTR,true);
     }
     if (pMSBlockNormaliser)
     {
@@ -292,10 +292,10 @@ static void test_vector_normalisers()
         bfs_out.close();
         delete pNorm;
         delete pNorm2;
-        pNorm2=pNorm=0;
+        pNorm2=pNorm=VXL_NULLPTR;
 
-        mipa_vector_normaliser *p1=0;
-        mipa_vector_normaliser *p2=0;
+        mipa_vector_normaliser *p1=VXL_NULLPTR;
+        mipa_vector_normaliser *p2=VXL_NULLPTR;
         vsl_b_ifstream bfs_in(path);
         vsl_b_read(bfs_in, p1);
         vsl_b_read(bfs_in, p2);
@@ -306,7 +306,7 @@ static void test_vector_normalisers()
         TEST("Loaded normaliser (binary)",p2->is_a() == "mipa_ms_block_normaliser",true);
 
         pBlockNormaliser=dynamic_cast<mipa_block_normaliser* >(p1);
-        TEST("Reloaded normaliser is dynamic castable to Block normaliser",pBlockNormaliser != 0,true);
+        TEST("Reloaded normaliser is dynamic castable to Block normaliser",pBlockNormaliser != VXL_NULLPTR,true);
         if (pBlockNormaliser)
         {
             TEST("Reloaded ni",pBlockNormaliser->ni_region()==16,true);
@@ -316,7 +316,7 @@ static void test_vector_normalisers()
         }
 
         pMSBlockNormaliser=dynamic_cast<mipa_ms_block_normaliser* >(p2);
-        TEST("Reloaded normaliser is dynamic castable to MS Block normaliser",pMSBlockNormaliser != 0,true);
+        TEST("Reloaded normaliser is dynamic castable to MS Block normaliser",pMSBlockNormaliser != VXL_NULLPTR,true);
         if (pMSBlockNormaliser)
         {
             TEST("Reloaded ni",pMSBlockNormaliser->ni_region()==16,true);

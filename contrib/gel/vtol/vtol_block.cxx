@@ -360,7 +360,7 @@ vtol_two_chain_sptr vtol_block::get_boundary_cycle()
   return
     (inferiors_.size() > 0)
     ? inferiors_[0]->cast_to_two_chain()
-    : 0;
+    : VXL_NULLPTR;
 }
 
 //: add a hole cycle

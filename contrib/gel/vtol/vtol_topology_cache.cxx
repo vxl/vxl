@@ -6,27 +6,27 @@
 //: Set up the cache
 vtol_topology_cache::vtol_topology_cache()
 {
-  source_ = 0;
-  vertices_ = 0;
-  zerochains_ = 0;
-  edges_  = 0;
-  onechains_ = 0;
-  faces_ =0;
-  twochains_ =0;
-  blocks_ =0;
+  source_ = VXL_NULLPTR;
+  vertices_ = VXL_NULLPTR;
+  zerochains_ = VXL_NULLPTR;
+  edges_  = VXL_NULLPTR;
+  onechains_ = VXL_NULLPTR;
+  faces_ =VXL_NULLPTR;
+  twochains_ =VXL_NULLPTR;
+  blocks_ =VXL_NULLPTR;
 }
 
 //: Set up the cache
 vtol_topology_cache::vtol_topology_cache(vtol_topology_object * to_be_cached)
 {
   source_ = to_be_cached;
-  vertices_ = 0;
-  zerochains_ = 0;
-  edges_  = 0;
-  onechains_ = 0;
-  faces_ =0;
-  twochains_ =0;
-  blocks_ =0;
+  vertices_ = VXL_NULLPTR;
+  zerochains_ = VXL_NULLPTR;
+  edges_  = VXL_NULLPTR;
+  onechains_ = VXL_NULLPTR;
+  faces_ =VXL_NULLPTR;
+  twochains_ =VXL_NULLPTR;
+  blocks_ =VXL_NULLPTR;
 }
 
 // destructor
@@ -44,13 +44,13 @@ void vtol_topology_cache::set_source(vtol_topology_object *to_be_cached)
 //: reset the list pointers
 void vtol_topology_cache::clear_cache()
 {
-  delete vertices_; vertices_ = 0;
-  delete zerochains_; zerochains_ = 0;
-  delete edges_; edges_ = 0;
-  delete onechains_; onechains_ = 0;
-  delete faces_; faces_ = 0;
-  delete twochains_; twochains_ = 0;
-  delete blocks_; blocks_ = 0;
+  delete vertices_; vertices_ = VXL_NULLPTR;
+  delete zerochains_; zerochains_ = VXL_NULLPTR;
+  delete edges_; edges_ = VXL_NULLPTR;
+  delete onechains_; onechains_ = VXL_NULLPTR;
+  delete faces_; faces_ = VXL_NULLPTR;
+  delete twochains_; twochains_ = VXL_NULLPTR;
+  delete blocks_; blocks_ = VXL_NULLPTR;
 }
 
 //: If cache is out of date as compared to its source object, then clear the cache.

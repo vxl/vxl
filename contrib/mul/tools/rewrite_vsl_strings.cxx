@@ -23,10 +23,10 @@ int main2(int argc, char*argv[])
   const vcl_string sep="\n";
 
   // Parse the program arguments
-  vul_arg<vcl_string> find_str(0, "find string");
-  vul_arg<vcl_string> replace_str(0, "replace string");
-  vul_arg<vcl_string> in_fname(0, "input filename");
-  vul_arg<vcl_string> out_fname(0, "output filename");
+  vul_arg<vcl_string> find_str(VXL_NULLPTR, "find string");
+  vul_arg<vcl_string> replace_str(VXL_NULLPTR, "replace string");
+  vul_arg<vcl_string> in_fname(VXL_NULLPTR, "input filename");
+  vul_arg<vcl_string> out_fname(VXL_NULLPTR, "output filename");
   vul_arg<vcl_vector<unsigned> > selection_list("-s", "Only replace the specified matches");
   vul_arg_parse(argc, argv);
 

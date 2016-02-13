@@ -63,7 +63,7 @@ void readPointsFromPLY(const vcl_string& filename, vcl_vector<vnl_vector_fixed<d
   ply_points_reader parsed_ply;
   parsed_ply.all_points = all_points;
 
-  p_ply ply = ply_open(filename.c_str(), NULL, 0, NULL);
+  p_ply ply = ply_open(filename.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
   if (!ply) {
     vcl_cout << "File " << filename << " doesn't exist.";
   }
@@ -92,7 +92,7 @@ void readPointsFromPLY(const vcl_string& filename, vcl_vector<vnl_vector_fixed<d
 void writePointsToPLY(const vcl_string& ply_file_out, vcl_vector<vnl_vector_fixed<double,3> > &all_points)
 {
     // OPEN output file
-  p_ply oply = ply_create(ply_file_out.c_str(), PLY_ASCII, NULL, 0, NULL);
+  p_ply oply = ply_create(ply_file_out.c_str(), PLY_ASCII, VXL_NULLPTR, 0, VXL_NULLPTR);
 
   vcl_cerr << "  saving " << ply_file_out << " :\n";
 

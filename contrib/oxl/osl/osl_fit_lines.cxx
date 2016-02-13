@@ -31,7 +31,7 @@ osl_fit_lines::osl_fit_lines(osl_fit_lines_params const & params,
 
 osl_fit_lines::~osl_fit_lines()
 {
-  delete data_; data_ = 0;
+  delete data_; data_ = VXL_NULLPTR;
 }
 
 //-----------------------------------------------------------------------------

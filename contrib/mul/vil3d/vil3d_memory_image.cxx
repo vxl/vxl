@@ -55,7 +55,7 @@ vil3d_image_view_base_sptr vil3d_memory_image::get_copy_view(unsigned i0, unsign
                                                              unsigned k0, unsigned nk) const
 {
   if (i0 + ni > view_->ni() || j0 + nj > view_->nj() ||
-      k0 + nk > view_->nk()) return 0;
+      k0 + nk > view_->nk()) return VXL_NULLPTR;
 
   switch(view_->pixel_format())
   {
@@ -78,7 +78,7 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -89,7 +89,7 @@ vil3d_image_view_base_sptr vil3d_memory_image::get_view(unsigned i0, unsigned ni
                                                         unsigned k0, unsigned nk) const
 {
   if (i0 + ni > view_->ni() || j0 + nj > view_->nj() ||
-      k0 + nk > view_->nk()) return 0;
+      k0 + nk > view_->nk()) return VXL_NULLPTR;
 
   switch(view_->pixel_format())
   {
@@ -112,7 +112,7 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
   default:
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

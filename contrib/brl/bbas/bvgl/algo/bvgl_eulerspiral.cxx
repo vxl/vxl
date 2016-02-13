@@ -649,7 +649,7 @@ const vcl_string bvgl_eulerspiral_lookup_table::
 file_name = vcl_string("bvgl_eulerspiral_lookup_table.bvl");
 
 //: static bvgl_eulerspiral_lookup_table instance
-bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = 0;
+bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = VXL_NULLPTR;
 
 //: Return the pointer to the only instance of the class
 bvgl_eulerspiral_lookup_table *bvgl_eulerspiral_lookup_table::instance(){
@@ -821,7 +821,7 @@ bvgl_eulerspiral_optimization_function(unsigned int number_of_unknowns,
                                        UseGradient g):
 vnl_least_squares_function(number_of_unknowns, number_of_residuals, g)
 {
-  this->es_ = 0;
+  this->es_ = VXL_NULLPTR;
 }
 
 //: Main function for optimization

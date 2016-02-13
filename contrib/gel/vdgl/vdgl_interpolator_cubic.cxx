@@ -326,7 +326,7 @@ closest_point_on_curve ( vsol_point_2d_sptr p )
 {
   unsigned int n = chain_->size();
   if (n==0)
-    return 0;
+    return VXL_NULLPTR;
   double px = p->x(), py = p->y(), dmin = vnl_numeric_traits<double>::maxval;
   int imin = 0;
   for (unsigned int i = 0; i<n; i++)

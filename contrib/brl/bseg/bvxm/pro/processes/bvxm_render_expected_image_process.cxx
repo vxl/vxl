@@ -80,7 +80,7 @@ bool bvxm_render_expected_image_process(bprb_func_process& pro)
   }
 
   //create image metadata object (no image with camera, so just use dummy):
-  vil_image_view_base_sptr dummy_img = 0;
+  vil_image_view_base_sptr dummy_img = VXL_NULLPTR;
   bvxm_image_metadata camera_metadata(dummy_img,camera);
   //render image
   bool result=true;

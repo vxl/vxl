@@ -55,7 +55,7 @@ bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<dou
     if (!root->children_[i])
       continue;
     if (!prune_tree(root->children_[i], poly))  // the child does not intersect with the polygon
-      root->children_[i] = 0; // sptr de-allocates this child
+      root->children_[i] = VXL_NULLPTR; // sptr de-allocates this child
   }
   return true;
 }
@@ -81,7 +81,7 @@ bool volm_geo_index2::prune_by_zone(volm_geo_index2_node_sptr root, unsigned utm
     if (!root->children_[i])
       continue;
     if (!prune_by_zone(root->children_[i], utm_zone))  // the child i is not in the utm_zone
-      root->children_[i] = 0;  // sptr deallocates this child
+      root->children_[i] = VXL_NULLPTR;  // sptr deallocates this child
   }
   return true;
 }

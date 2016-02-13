@@ -87,7 +87,7 @@ static void test_shift2d_est()
     TEST_NEAR("(Translation) minimal-set estimation", (param-true_param).two_norm(), 0.0, 1e-8);
 
     vnl_matrix<double> cofact;
-    TEST("weighted_least_squares_fit()", shift_est.weighted_least_squares_fit(param, cofact, NULL), true);
+    TEST("weighted_least_squares_fit()", shift_est.weighted_least_squares_fit(param, cofact, VXL_NULLPTR), true);
     param /= param.two_norm();
     TEST_NEAR("(Translation) Weighted Least Squares", (param-true_param).two_norm(), 0.0, 1e-8);
   }

@@ -10,13 +10,13 @@ vifa_int_face_attr(vdgl_fit_lines_params*  fitter_params,
                    vifa_group_pgram_params*  gpp,
                    vifa_group_pgram_params*  gpp_w,
                    vifa_norm_params*    np) :
-  vifa_int_face_attr_common(fitter_params, gpp, gpp_w, 0, np),
-  face_(NULL),
+  vifa_int_face_attr_common(fitter_params, gpp, gpp_w, VXL_NULLPTR, np),
+  face_(VXL_NULLPTR),
   cached_min_(0.0f),
   cached_max_(0.0f),
   cached_mean_(0.0f),
   cached_var_(0.0f),
-  npobj_(0)
+  npobj_(VXL_NULLPTR)
 {
 }
 
@@ -26,7 +26,7 @@ vifa_int_face_attr(vtol_intensity_face_sptr f,
                    vifa_group_pgram_params*  gpp,
                    vifa_group_pgram_params*  gpp_w,
                    vifa_norm_params*    np) :
-  vifa_int_face_attr_common(fitter_params, gpp, gpp_w, 0, np),
+  vifa_int_face_attr_common(fitter_params, gpp, gpp_w, VXL_NULLPTR, np),
   face_(f),
   cached_min_(0.0f),
   cached_max_(0.0f),
@@ -35,7 +35,7 @@ vifa_int_face_attr(vtol_intensity_face_sptr f,
   cached_2_parallel_(-1),
   cached_4_parallel_(-1),
   cached_80_parallel_(-1),
-  npobj_(0)
+  npobj_(VXL_NULLPTR)
 {
   attributes_valid_ = this->ComputeAttributes();
 }
@@ -56,7 +56,7 @@ SetFace(vtol_intensity_face_sptr  f)
 {
   face_ = f;
   delete npobj_;
-  npobj_ = 0;
+  npobj_ = VXL_NULLPTR;
   attributes_valid_ = this->ComputeAttributes();
 }
 

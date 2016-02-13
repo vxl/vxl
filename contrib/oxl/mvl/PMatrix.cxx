@@ -38,7 +38,7 @@
 //
 
 PMatrix::PMatrix ()
-  : svd_(0)
+  : svd_(VXL_NULLPTR)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
@@ -55,7 +55,7 @@ PMatrix::PMatrix ()
 //   PMatrix P(cin);
 // \endcode
 PMatrix::PMatrix (vcl_istream& i)
-  : svd_(0)
+  : svd_(VXL_NULLPTR)
 {
   read_ascii(i);
 }
@@ -66,7 +66,7 @@ PMatrix::PMatrix (vcl_istream& i)
 
 PMatrix::PMatrix (vnl_double_3x4 const& pmatrix)
   : p_matrix_ (pmatrix),
-  svd_(0)
+  svd_(VXL_NULLPTR)
 {
 }
 
@@ -75,7 +75,7 @@ PMatrix::PMatrix (vnl_double_3x4 const& pmatrix)
 //: Construct from 3x3 matrix A and vector a. P = [A a].
 
 PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a)
-  : svd_(0)
+  : svd_(VXL_NULLPTR)
 {
   set(A,a);
 }
@@ -86,7 +86,7 @@ PMatrix::PMatrix (const vnl_matrix<double>& A, const vnl_vector<double>& a)
 
 PMatrix::PMatrix (const double *c_matrix)
   : p_matrix_ (c_matrix),
-  svd_(0)
+  svd_(VXL_NULLPTR)
 {
 }
 
@@ -95,7 +95,7 @@ PMatrix::PMatrix (const double *c_matrix)
 // - Copy ctor
 
 PMatrix::PMatrix (const PMatrix& that)
-  : vbl_ref_count(), p_matrix_(that.get_matrix()), svd_(0)
+  : vbl_ref_count(), p_matrix_(that.get_matrix()), svd_(VXL_NULLPTR)
 {
 }
 
@@ -103,7 +103,7 @@ PMatrix::PMatrix (const PMatrix& that)
 PMatrix& PMatrix::operator=(const PMatrix& that)
 {
   p_matrix_ = that.get_matrix();
-  svd_ = 0;
+  svd_ = VXL_NULLPTR;
   return *this;
 }
 
@@ -112,7 +112,7 @@ PMatrix& PMatrix::operator=(const PMatrix& that)
 // - Destructor
 PMatrix::~PMatrix()
 {
-  delete svd_; svd_ = 0;
+  delete svd_; svd_ = VXL_NULLPTR;
 }
 
 // OPERATIONS
@@ -277,7 +277,7 @@ PMatrix PMatrix::read(vcl_istream& s)
 //: Compute the svd of this P and cache it, so that future operations that require it need not recompute it.
 vnl_svd<double>* PMatrix::svd() const
 {
-  if (svd_ == 0) {
+  if (svd_ == VXL_NULLPTR) {
     svd_ = new vnl_svd<double>(p_matrix_.as_ref());
   }
   return svd_;
@@ -287,7 +287,7 @@ vnl_svd<double>* PMatrix::svd() const
 //  This is necessary only in order to recover the space used by it if the PMatrix is not being deleted.
 void PMatrix::clear_svd() const
 {
-  delete svd_; svd_ = 0;
+  delete svd_; svd_ = VXL_NULLPTR;
 }
 
 //-----------------------------------------------------------------------------

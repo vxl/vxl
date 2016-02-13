@@ -43,7 +43,7 @@ compute_matches( rgrl_feature_set const&    from_features,
 {
   rgrl_mask_sptr from_roi = new rgrl_mask_box( from_region.x0(), from_region.x1() );
   rgrl_mask_sptr to_roi = new rgrl_mask_box( to_region.x0(), to_region.x1() );
-  rgrl_view view( from_roi, to_roi, from_region, from_region, 0, 0, 0);
+  rgrl_view view( from_roi, to_roi, from_region, from_region, VXL_NULLPTR, VXL_NULLPTR, 0);
 
   return this->compute_matches(from_features,
                                to_features,

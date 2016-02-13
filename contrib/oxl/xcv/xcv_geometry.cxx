@@ -460,7 +460,7 @@ void xcv_geometry::save(const char *object_type,const char *dialog_name)
         vgui_macro_warning << "Object in soview list is null\n";
         return;
       }
-      bool matched = (object_type == 0) || (sv->type_name() == object_type);
+      bool matched = (object_type == VXL_NULLPTR) || (sv->type_name() == object_type);
       vcl_string svtype = sv->type_name();
       vgui_style_sptr style = sv->get_style();
       if (style)
@@ -536,7 +536,7 @@ void xcv_geometry::save_linestrips()
 //: Save all geometric objects into a file.
 void xcv_geometry::save_geometry()
 {
-  save(0,"Save geometry");
+  save(VXL_NULLPTR,"Save geometry");
 }
 
 //-----------------------------------------------------------------------------
@@ -563,53 +563,53 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
     {
       vcl_string tag;
       fs >> tag >> vcl_ws;
-      if (tag == "c" && (object_type == 0 || tag==vcl_string(object_type)))
+      if (tag == "c" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         // colour
         float r,g,b;
         fs>>r>>g>>b;
         easy_tab->set_foreground(r,g,b);
       }
-      else if (tag == "w" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "w" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         // line width
         float w;
         fs>>w;
         easy_tab->set_line_width(w);
       }
-      else if (tag == "r" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "r" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         // point radius
         float w;
         fs>>w;
         easy_tab->set_point_radius(w);
       }
-      else if (tag == "p" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "p" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         float x,y;
         fs>>x;
         fs>>y;
         easy_tab->add_point(x,y);
       }
-      else if (tag == "circle" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "circle" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         float x,y,r;
         fs>>x>>y>>r;
         easy_tab->add_circle(x,y,r);
       }
-      else if (tag == "l" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "l" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         float x0,y0,x1,y1;
         fs>>x0>>y0>>x1>>y1;
         easy_tab->add_line(x0,y0,x1,y1);
       }
-      else if (tag == "il" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "il" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         float a,b,c;
         fs>>a>>b>>c;
         easy_tab->add_infinite_line(a,b,c);
       }
-      else if (tag == "L" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "L" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         int n;
         fs>>n;
@@ -624,7 +624,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
           y0 = y1;
         }
       }
-      else if (tag == "y" && (object_type == 0 || tag==vcl_string(object_type)))
+      else if (tag == "y" && (object_type == VXL_NULLPTR || tag==vcl_string(object_type)))
       {
         int n;
         fs>>n;
@@ -644,7 +644,7 @@ void xcv_geometry::load(const char *object_type,const char *dialog_name)
 //: Load all geometric objects from a file.
 void xcv_geometry::load_geometry()
 {
-  load(0,"Load geometry");
+  load(VXL_NULLPTR,"Load geometry");
 }
 
 //: Add sheets to gui

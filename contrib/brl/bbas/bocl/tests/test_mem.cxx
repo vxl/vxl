@@ -23,7 +23,7 @@ bool test_fill_kernel()
   }
 
   //create command queue
-  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, NULL);
+  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, VXL_NULLPTR);
 
   //cr  //make sure a is set to zero
   bocl_mem a_mem(mgr.context(), a, length * sizeof(int), "test int buffer");

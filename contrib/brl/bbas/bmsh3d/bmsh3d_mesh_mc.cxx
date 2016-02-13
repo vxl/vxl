@@ -403,7 +403,7 @@ bmsh3d_face* copy_inner_face(vcl_vector<bmsh3d_edge*> incident_edges,
 {
   bmsh3d_face* inner_face = new bmsh3d_face();
 
-  bmsh3d_vertex *prev_v = 0, *v_first = 0, *v;
+  bmsh3d_vertex *prev_v = VXL_NULLPTR, *v_first = VXL_NULLPTR, *v;
   for (unsigned i=0; i<incident_edges.size()-1; i++) {
     bmsh3d_edge* edge = incident_edges[i];
     bmsh3d_vertex* s = edge->sV();
@@ -507,9 +507,9 @@ void bmsh3d_mesh_mc::orient_face_normals()
       face_stack.pop_front();
     }
     else {
-      face = 0;
+      face = VXL_NULLPTR;
     }
-  } while (face != 0);
+  } while (face != VXL_NULLPTR);
 
   // print out the normals;
   face_it = fmap.begin();

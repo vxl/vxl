@@ -19,7 +19,7 @@
 LineSegSet::LineSegSet():
   hlines_(0)
 {
-  conditioner_ = 0;
+  conditioner_ = VXL_NULLPTR;
 }
 
 // Copy ctor
@@ -163,5 +163,5 @@ HomgLineSeg2D* LineSegSet::pick_line(double x, double y)
   if (i >= 0)
     return &hlines_[i];
   else
-    return 0;
+    return VXL_NULLPTR;
 }

@@ -191,7 +191,7 @@ sdet_edgel_regions::sdet_edgel_regions(int array_scale,bool verbose,
 #endif
   image_source_ = false;
   buf_source_ = false;
-  buf_ = NULL;
+  buf_ = VXL_NULLPTR;
   xo_=0;
   yo_=0;
   xend_ = 0;
@@ -201,11 +201,11 @@ sdet_edgel_regions::sdet_edgel_regions(int array_scale,bool verbose,
   min_region_label_ = LABEL;
   max_region_label_ = LABEL;
   faces_ = new vcl_vector<vtol_intensity_face_sptr>;
-  face_edge_index_ = NULL;
-  intensity_face_index_ = NULL;
+  face_edge_index_ = VXL_NULLPTR;
+  intensity_face_index_ = VXL_NULLPTR;
   failed_insertions_ = new vcl_vector<vtol_edge_2d_sptr>;
-  ubuf_ = NULL;
-  sbuf_ = NULL;
+  ubuf_ = VXL_NULLPTR;
+  sbuf_ = VXL_NULLPTR;
 }
 
 //----------------------------------------------------------
@@ -280,7 +280,7 @@ compute_edgel_regions(vil1_image const& image,
 #endif
   // change to uniform use of bufferxy for ease of interfacing to different
   // image types
-  image_ = 0;
+  image_ = VXL_NULLPTR;
   image_source_=false;
   buf_source_ = false;
   buf_ = new gevd_bufferxy(image);
@@ -304,7 +304,7 @@ compute_edgel_regions(vil_image_resource_sptr const& image,
 #endif
   // change to uniform use of bufferxy for ease of interfacing to different
   // image types
-  image_ = 0;
+  image_ = VXL_NULLPTR;
   image_source_=false;
   buf_source_ = false;
   buf_ = new gevd_bufferxy(image);
@@ -432,7 +432,7 @@ unsigned int sdet_edgel_regions::BaseLabel(unsigned int label)
 //  edge, 0 otherwise
 vil1_image sdet_edgel_regions::GetEdgeImage(vcl_vector<vtol_edge_2d_sptr>& sg)
 {
-  if (!this->InitRegionArray(sg)) return NULL;
+  if (!this->InitRegionArray(sg)) return VXL_NULLPTR;
   unsigned char no_edge = 0, edge = 255;
 
   vil1_memory_image_of<vxl_byte> image(xs_,ys_);
@@ -584,7 +584,7 @@ void sdet_edgel_regions::GrowEquivalenceClasses()
   while (true)
   {
     bool merging = true;
-    vcl_vector<unsigned int>* cur_set = NULL;
+    vcl_vector<unsigned int>* cur_set = VXL_NULLPTR;
     unsigned int i = cur_label;
     int len = 0;
     int old_len;
@@ -759,7 +759,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
 
   // initialize
   region_label_array_.fill(UNLABELED);
-  edge_boundary_array_.fill(NULL);
+  edge_boundary_array_.fill(VXL_NULLPTR);
 
   switch (this->bytes_per_pix())
   {
@@ -811,7 +811,7 @@ bool sdet_edgel_regions::InitRegionArray(vcl_vector< vtol_edge_2d_sptr>& sg)
     // edge insertions to prevent any gaps in the region boundary
     // There shouldn't be DigitalCurve(s) with this defect but it
     // does seem to occur.
-    sdet_region_edge_sptr const& vre = new sdet_region_edge(NULL);
+    sdet_region_edge_sptr const& vre = new sdet_region_edge(VXL_NULLPTR);
     float pex1, pey1, pex2, pey2;
     if (n_edgels>0)
     {
@@ -1550,7 +1550,7 @@ void sdet_edgel_regions::CollectFaceEdges()
 
   face_edge_index_ = new vcl_vector<vtol_edge_2d_sptr>*[max_region_label_];
   for (i=0; i<max_region_label_; i++)
-    face_edge_index_[i] = NULL;
+    face_edge_index_[i] = VXL_NULLPTR;
 
   for (i =min_region_label_; i<max_region_label_; i++)
   {
@@ -1630,7 +1630,7 @@ void sdet_edgel_regions::ConstructFaces()
   // Initialize the intensity_face_index_
   intensity_face_index_ = new vtol_intensity_face_sptr[max_region_label_];
   for (i=0; i<max_region_label_; i++)
-    intensity_face_index_[i] = NULL;
+    intensity_face_index_[i] = VXL_NULLPTR;
 
   for (i =min_region_label_; i<max_region_label_; i++)
   {
@@ -1774,7 +1774,7 @@ void sdet_edgel_regions::AccumulateMeans()
   // Get rid of regions with no pixels
   for (i=min_region_label_; i<max_region_label_; i++)
     if (intensity_face_index_[i]&&!intensity_face_index_[i]->Npix())
-      intensity_face_index_[i]=NULL;
+      intensity_face_index_[i]=VXL_NULLPTR;
 
   int Nregions = max_region_label_ - min_region_label_;
   if (verbose_)

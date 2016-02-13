@@ -29,7 +29,7 @@ struct osl_stash_link {
   osl_stash_link *next;
 };
 
-osl_topology_base::osl_topology_base() : id(0), stash_head(0) { }
+osl_topology_base::osl_topology_base() : id(0), stash_head(VXL_NULLPTR) { }
 void  osl_topology_base::stash_add(char const *name,
                                    void const *data,
                                    void (*dtor)(void *))
@@ -59,11 +59,11 @@ void *osl_topology_base::stash_retrieve(char const *name) const {
     if (vcl_strcmp(l->name, name) == 0)
       return l->data;
   // not found
-  return 0;
+  return VXL_NULLPTR;
 }
 
 void *osl_topology_base::stash_remove(char const *name) {
-  for (osl_stash_link *p = 0, *l = stash_head; l; p=l, l=p->next) {
+  for (osl_stash_link *p = VXL_NULLPTR, *l = stash_head; l; p=l, l=p->next) {
     if (vcl_strcmp(l->name, name) == 0) {
       if (p)
         p->next = l->next;
@@ -73,7 +73,7 @@ void *osl_topology_base::stash_remove(char const *name) {
     }
   }
   // not found
-  return 0;
+  return VXL_NULLPTR;
 }
 
 osl_topology_base::~osl_topology_base() {

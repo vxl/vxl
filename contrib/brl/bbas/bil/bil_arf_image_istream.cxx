@@ -45,7 +45,7 @@ bil_arf_image_istream()
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIL_PIXEL_FORMAT_UNKNOWN ),
-    current_frame_(NULL),
+    current_frame_(VXL_NULLPTR),
     time_stamp_(-1) {}
 
 
@@ -55,7 +55,7 @@ bil_arf_image_istream(const vcl_string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(NULL),
+    current_frame_(VXL_NULLPTR),
     time_stamp_(-1)
 {
   open(glob);
@@ -116,7 +116,7 @@ open(const vcl_string& rawFile)
 
   //index is invalid until advance is called
   index_ = INIT_INDEX;
-  current_frame_ = NULL;
+  current_frame_ = VXL_NULLPTR;
   return true;
 }
 
@@ -127,7 +127,7 @@ close()
 {
   //image_paths_.clear();
   index_ = INIT_INDEX;
-  current_frame_ = NULL;
+  current_frame_ = VXL_NULLPTR;
   ni_ = 0;
   nj_ = 0;
   format_ = VIL_PIXEL_FORMAT_UNKNOWN;
@@ -141,7 +141,7 @@ bool
 bil_arf_image_istream::
 advance()
 {
-  current_frame_ = NULL;
+  current_frame_ = VXL_NULLPTR;
   if (index_ < num_frames_ || index_ == INIT_INDEX )
     return ++index_ < num_frames_;
   else
@@ -205,7 +205,7 @@ bil_arf_image_istream::current_frame()
 
     return current_frame_;
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 
@@ -225,7 +225,7 @@ seek_frame(unsigned int frame_nr)
 {
   if (is_open() && frame_nr < num_frames_) {
     if (index_ != frame_nr)
-      current_frame_ = NULL;
+      current_frame_ = VXL_NULLPTR;
     index_ = frame_nr;
     return true;
   }

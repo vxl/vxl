@@ -45,17 +45,17 @@ void test_cloneables_factory()
   // Check we can get all objects.
   {
     vcl_auto_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_A");
-    TEST("get A == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=0,true);
+    TEST("get A == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=VXL_NULLPTR,true);
   }
   {
     vcl_auto_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_B");
-    TEST("get B == B",dynamic_cast<mbl_test_cf_B*>(p.get())!=0,true);
+    TEST("get B == B",dynamic_cast<mbl_test_cf_B*>(p.get())!=VXL_NULLPTR,true);
     // Check the tests would fail if there was a problem.
-    TEST("get B != A",dynamic_cast<mbl_test_cf_A*>(p.get())==0,true);
+    TEST("get B != A",dynamic_cast<mbl_test_cf_A*>(p.get())==VXL_NULLPTR,true);
   }
   {
     vcl_auto_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("wibble");
-    TEST("get wibble == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=0,true);
+    TEST("get wibble == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=VXL_NULLPTR,true);
   }
 
 // Test the error reporting mechanism

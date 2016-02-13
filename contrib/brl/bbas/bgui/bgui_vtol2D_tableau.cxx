@@ -235,7 +235,7 @@ vtol_edge_2d_sptr bgui_vtol2D_tableau::get_mapped_edge(const int id)
   if (!to)
   {
     vcl_cout << "In bgui_vtol2D_tableau::get_mapped_edge(..) - null map entry\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   return to->cast_to_edge()->cast_to_edge_2d();
 }
@@ -246,7 +246,7 @@ vtol_face_2d_sptr bgui_vtol2D_tableau::get_mapped_face(const int id)
   if (!to)
   {
     vcl_cout << "In bgui_vtol2D_tableau::get_mapped_face(..) - null map entry\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   return to->cast_to_face()->cast_to_face_2d();
 }

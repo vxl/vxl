@@ -54,7 +54,7 @@ static void test_cam_iostream()
     open = cam_istr.is_open();
     TEST("open input camera stream", open, true);
     bool read = false;
-    vpgl_perspective_camera<double>* c = 0;
+    vpgl_perspective_camera<double>* c = VXL_NULLPTR;
     c = cam_istr.read_camera();
     if(c){
       vcl_cout << "Camera from stream \n" << *c << '\n';

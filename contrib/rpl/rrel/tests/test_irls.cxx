@@ -139,7 +139,7 @@ static void test_irls()
   int max_iterations = 50;
   testlib_test_begin( "ctor" );
   rrel_irls * irls = new rrel_irls( max_iterations );
-  testlib_test_perform( irls != 0 );
+  testlib_test_perform( irls != VXL_NULLPTR );
 
   //  Setting max iteration parameters.
   max_iterations = 50;

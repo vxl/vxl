@@ -32,7 +32,7 @@ vsol_spatial_object_3d* vsol_digital_curve_3d::clone(void) const
 vsol_point_3d_sptr vsol_digital_curve_3d::p0(void) const
 {
   if (samples_.empty())
-    return NULL;
+    return VXL_NULLPTR;
   else
     return samples_.front();
 }
@@ -41,7 +41,7 @@ vsol_point_3d_sptr vsol_digital_curve_3d::p0(void) const
 vsol_point_3d_sptr vsol_digital_curve_3d::p1(void) const
 {
   if (samples_.empty())
-    return NULL;
+    return VXL_NULLPTR;
   else
     return samples_.back();
 }
@@ -194,7 +194,7 @@ void vsol_digital_curve_3d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, vsol_digital_curve_3d const* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else {
@@ -216,7 +216,7 @@ vsl_b_read(vsl_b_istream &is, vsol_digital_curve_3d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 void vsol_digital_curve_3d::describe(vcl_ostream &strm, int blanking) const

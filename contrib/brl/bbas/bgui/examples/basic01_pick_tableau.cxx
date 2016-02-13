@@ -14,8 +14,8 @@
 #include <bgui/bgui_picker_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 //global pointer to the rubberband tableau
-static bgui_picker_tableau_sptr picker = 0;
-static vgui_easy2D_tableau_sptr easy = 0;
+static bgui_picker_tableau_sptr picker = VXL_NULLPTR;
+static vgui_easy2D_tableau_sptr easy = VXL_NULLPTR;
 
 //the meunu callback functions
 static void create_box()

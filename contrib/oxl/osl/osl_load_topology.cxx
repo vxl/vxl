@@ -51,7 +51,7 @@ void osl_load_topology(vcl_istream &f, vcl_list<osl_edge*> &es, vcl_list<osl_ver
   streamok;
   // read vertices :
   vcl_cerr << "reading " << numverts << " vertices...\n";
-  vcl_vector<osl_vertex*> vert(numverts+1, (osl_vertex*)0);
+  vcl_vector<osl_vertex*> vert(numverts+1, (osl_vertex*)VXL_NULLPTR);
   for (int i=0; i<numverts; ++i) {
     unsigned int stashid;
     int id;

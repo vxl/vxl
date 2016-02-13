@@ -8,7 +8,7 @@ inline double rho( rrel_objective* obj, double r )
 {
   vcl_vector<double> res;
   res.push_back( r );
-  return obj->fcn( res.begin(), res.end(), 1.0, 0 );
+  return obj->fcn( res.begin(), res.end(), 1.0, VXL_NULLPTR );
 }
 
 static void test_ransac_obj()

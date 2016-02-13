@@ -44,7 +44,7 @@ const vimt_image_pyramid&
 
   base_pixel_width_ = that.base_pixel_width_;
   scale_step_ = that.scale_step_;
-  image_.resize(that.image_.size(),0);
+  image_.resize(that.image_.size(),VXL_NULLPTR);
   for (unsigned int i=0;i<image_.size();++i)
   {
     delete image_[i];
@@ -61,7 +61,7 @@ void vimt_image_pyramid::deep_copy(const vimt_image_pyramid& im_pyr)
 
   base_pixel_width_ = im_pyr.base_pixel_width_;
   scale_step_ = im_pyr.scale_step_;
-  image_.resize(im_pyr.image_.size(),0);
+  image_.resize(im_pyr.image_.size(),VXL_NULLPTR);
   for (unsigned int i=0;i<image_.size();++i)
   {
     delete image_[i];
@@ -83,7 +83,7 @@ void vimt_image_pyramid::resize(int n_levels, const vimt_image& im_type)
     if (int(image_.size())==n_levels && n_levels>0 && image_[0]->is_a()==im_type.is_a())
         return;
     deleteImages();
-    image_.resize(n_levels,0);
+    image_.resize(n_levels,VXL_NULLPTR);
     for (int i=0;i<n_levels;++i)
         image_[i]=im_type.clone();
 }

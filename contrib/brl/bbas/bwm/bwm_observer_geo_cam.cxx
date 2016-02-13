@@ -25,7 +25,7 @@ read_camera(vcl_string cam_path)
     if (!cam_stream) {
       vcl_cerr << "In bwm_observer_geo_cam::read_camera(.) -\n"
                << " invalid binary camera file " << cam_path.data() << '\n';
-      return 0;
+      return VXL_NULLPTR;
     }
     vnl_matrix<double> trans(2,2);
     cam_stream >> trans;
@@ -40,7 +40,7 @@ read_camera(vcl_string cam_path)
     return affine_cam;
   }
   else
-    return static_cast<vpgl_camera<double>*>(0);
+    return static_cast<vpgl_camera<double>*>(VXL_NULLPTR);
 }
 
 bwm_observer_geo_cam::bwm_observer_geo_cam(bgui_image_tableau_sptr img,

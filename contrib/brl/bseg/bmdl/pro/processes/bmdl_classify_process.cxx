@@ -127,7 +127,7 @@ bool bmdl_classify_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view_base_sptr label_img=0, height_img=0;
+  vil_image_view_base_sptr label_img=VXL_NULLPTR, height_img=VXL_NULLPTR;
   if (!classify(first_ret, last_ret, ground, label_img, height_img, gthresh, vthresh, athresh, hres)) {
     vcl_cout << "bmdl_classify_process -- The process has failed!\n";
     return false;

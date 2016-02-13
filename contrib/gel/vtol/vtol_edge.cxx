@@ -34,7 +34,7 @@ vtol_zero_chain_sptr vtol_edge::zero_chain(void) const
   for (unsigned int i=0; i<inf.size(); ++i)
     if (inf[i]->cast_to_zero_chain()) // return empty chain if nothing else present
       return inf[i]->cast_to_zero_chain();
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------------
@@ -107,8 +107,8 @@ void vtol_edge::set_vertices_from_zero_chains(void)
     switch (zc0->numinf())
     {
      case 0:
-      v1_=0;
-      v2_=0;
+      v1_=VXL_NULLPTR;
+      v2_=VXL_NULLPTR;
       break;
      case 1:
       v1_=v2_=zc0->inferiors()->front()->cast_to_vertex();
@@ -130,8 +130,8 @@ void vtol_edge::set_vertices_from_zero_chains(void)
     switch (verts.size())
     {
      case 0:
-      v1_=0;
-      v2_=0;
+      v1_=VXL_NULLPTR;
+      v2_=VXL_NULLPTR;
       break;
      default:
       v1_=verts.front();
@@ -314,9 +314,9 @@ bool vtol_edge::add_vertex(vtol_vertex_sptr const& newvert)
 bool vtol_edge::remove_vertex(vtol_vertex_sptr const& uglyvert)
 {
   if (uglyvert==v1_)
-    set_v1(0);
+    set_v1(VXL_NULLPTR);
   else if (uglyvert==v2_)
-    set_v2(0);
+    set_v2(VXL_NULLPTR);
   else
     return false;
   touch();
@@ -350,7 +350,7 @@ vtol_vertex_sptr vtol_edge::other_endpoint(const vtol_vertex &overt) const
   else if (overt==*v2_)
     return v1_;
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 // ******************************************************
