@@ -70,7 +70,7 @@ bool boxm_update_rt_process(bprb_func_process& pro)
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
-  if ((input_image == 0) || (camera == 0) || (scene == 0)) {
+  if ((input_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
      vcl_cout << "boxm_update_rt_process: null input value, cannot run" << vcl_endl;
      return false;
   }

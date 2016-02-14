@@ -198,7 +198,7 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
     // 3D Objects menu
     bwm_tableau_cam* cam_tab = static_cast<bwm_tableau_cam* > (tab_.as_pointer());
     //might be a generic camera tableau
-    bwm_tableau_generic_cam* gen_tab = 0;
+    bwm_tableau_generic_cam* gen_tab = VXL_NULLPTR;
     if (cam_tab->type_name()=="bwm_tableau_generic_cam")
       gen_tab = static_cast<bwm_tableau_generic_cam* > (tab_.as_pointer());
 

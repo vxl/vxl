@@ -1,6 +1,6 @@
 #include "bwm_process_mgr.h"
 
-bwm_process_mgr* bwm_process_mgr::instance_ = 0;
+bwm_process_mgr* bwm_process_mgr::instance_ = VXL_NULLPTR;
 
 vcl_map<vcl_string, bwm_command_sptr> bwm_process_mgr::process_map;
 
@@ -31,7 +31,7 @@ bwm_command_sptr bwm_process_mgr::load_process(vcl_string name)
   if (iter != process_map.end()) {
     return iter->second;
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
@@ -46,7 +46,7 @@ bwm_command_sptr bwm_process_mgr::load_tab_process(vcl_string name,
       return comm;
     }
   }
-  return 0;
+  return VXL_NULLPTR;
 }
 
 bwm_command_sptr bwm_process_mgr::load_menu_process(vcl_string name,
@@ -61,5 +61,5 @@ bwm_command_sptr bwm_process_mgr::load_menu_process(vcl_string name,
       return comm;
     }
   }
-  return 0;
+  return VXL_NULLPTR;
 }

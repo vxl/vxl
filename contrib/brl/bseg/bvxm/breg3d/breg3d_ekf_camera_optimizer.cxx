@@ -120,7 +120,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
       vpgl_camera_double_sptr step_cam =
         new vpgl_perspective_camera<double>(cam_est->get_calibration(),substep_state.get_point(),substep_state.get_rotation());
       // fill in metadata
-      bvxm_image_metadata step_meta(vil_image_view_base_sptr(0),step_cam);
+      bvxm_image_metadata step_meta(vil_image_view_base_sptr(VXL_NULLPTR),step_cam);
       // allocate expected images
       vil_image_view_base_sptr step_expected =
         new vil_image_view<unsigned char>(curr_img.img->ni(),curr_img.img->nj(),curr_img.img->nplanes());

@@ -13,7 +13,7 @@
 brec_part_base_sptr
 brec_part_base::central_part()
 {
-  if (out_edges().size() == 0) return 0;
+  if (out_edges().size() == 0) return VXL_NULLPTR;
   else return (*out_edges_begin())->target();
 }
 
@@ -21,14 +21,14 @@ brec_part_base::central_part()
 brec_hierarchy_edge_sptr
 brec_part_base::edge_to_central_part()
 {
-  if (out_edges().size() == 0) return 0;
+  if (out_edges().size() == 0) return VXL_NULLPTR;
   else return *out_edges_begin();
 }
 
 brec_hierarchy_edge_sptr
 brec_part_base::edge_to_second_part()
 {
-  if (out_edges().size() < 2) return 0;
+  if (out_edges().size() < 2) return VXL_NULLPTR;
   edge_iterator eit = out_edges_begin();
   eit++;
   return *eit;
@@ -83,18 +83,18 @@ brec_part_base* brec_part_base::cast_to_base(void)
 
 brec_part_gaussian* brec_part_base::cast_to_gaussian(void)
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 brec_part_instance* brec_part_base::cast_to_instance(void)
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 
 brec_part_gaussian* brec_part_instance::cast_to_gaussian(void)
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 brec_part_instance* brec_part_instance::cast_to_instance(void)

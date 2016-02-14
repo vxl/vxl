@@ -33,7 +33,7 @@ vpgl_rational_camera<double>* load_cam_from_nitf(vcl_string& nitf_image_path) {
   if (!image)
   {
     vcl_cout << "NITF image load failed from the file: " << nitf_image_path << '\n';
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vcl_string format = image->file_format();
@@ -42,7 +42,7 @@ vpgl_rational_camera<double>* load_cam_from_nitf(vcl_string& nitf_image_path) {
   if (prefix != "nitf")
   {
     vcl_cout << "source image is not NITF in load_cam_from_nitf\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
   //cast to an nitf2_image

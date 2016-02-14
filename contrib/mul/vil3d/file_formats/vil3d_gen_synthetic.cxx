@@ -22,7 +22,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
   assert(re.is_valid());
 
   if (! re.find(filename))
-    return 0;
+    return VXL_NULLPTR;
 
   unsigned ni = vul_string_atoi(re.match(1));
   unsigned nj = vul_string_atoi(re.match(2));
@@ -32,7 +32,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
   if (pf == VIL_PIXEL_FORMAT_UNKNOWN)
   {
     vcl_cerr << "ERROR: vil3d_gen_synthetic_format unknown pixel format " << re.match(4) << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vil3d_gen_synthetic_pixel_value pv;
@@ -67,7 +67,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_input_image(const cha
     break;
    default:
     vcl_cerr << "ERROR: vil3d_gen_synthetic_format Cannot handle pixel format " << re.match(4) << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   return new vil3d_gen_synthetic_image(ni, nj, nk, pf, pv);
@@ -84,7 +84,7 @@ vil3d_image_resource_sptr vil3d_gen_synthetic_format::make_output_image(const ch
                                                                         enum vil_pixel_format /*format*/) const
 {
   vcl_cerr << "ERROR: Cannot write to generated synthetic images.\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 
@@ -137,7 +137,7 @@ vil3d_image_view_base_sptr vil3d_gen_synthetic_image::get_copy_view(
                                unsigned i0, unsigned ni, unsigned j0, unsigned nj,
                                unsigned k0, unsigned nk) const
 {
-  if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return 0;
+  if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return VXL_NULLPTR;
 
   switch (format_)
   {
@@ -207,7 +207,7 @@ vil3d_image_view_base_sptr vil3d_gen_synthetic_image::get_copy_view(
     default:
     vcl_cout<<"ERROR: vil3d_gen_synthetic_format::get_image_data()\n"
             <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

@@ -58,7 +58,7 @@ void bmsh3d_mesh::IFS_to_MHE_build_edges(const bool skip_v0)
       vcl_cerr << per << "% ";
     prev_per = per;
 
-    for (bmsh3d_ptr_node* cur = V->F_list(); cur != NULL; cur = cur->next()) {
+    for (bmsh3d_ptr_node* cur = V->F_list(); cur != VXL_NULLPTR; cur = cur->next()) {
       const bmsh3d_face* F = (const bmsh3d_face*) cur->ptr();
 
       // 1) The prev node
@@ -68,7 +68,7 @@ void bmsh3d_mesh::IFS_to_MHE_build_edges(const bool skip_v0)
 
       // If link between prevV <-> v not exist, create one.
       bmsh3d_edge* E = E_sharing_2V(prevV, V);
-      if (E == NULL)
+      if (E == VXL_NULLPTR)
         E = add_new_edge(prevV, V);
 
       // Connect the face to the edge through the half-edge
@@ -82,7 +82,7 @@ void bmsh3d_mesh::IFS_to_MHE_build_edges(const bool skip_v0)
 
       // If link between v <-> nextV not exist, create one.
       E = E_sharing_2V(V, nextV);
-      if (E == NULL)
+      if (E == VXL_NULLPTR)
         E = add_new_edge(V, nextV);
 
       // Connect the face to the edge through the half-edge
@@ -138,7 +138,7 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
 
       // If link between prevV <-> v not exist, create one.
       bmsh3d_edge* E = E_sharing_2V(prevV, V);
-      if (E == NULL)
+      if (E == VXL_NULLPTR)
         E = add_new_edge(prevV, V);
 
       // Connect the face to the edge through the half-edge
@@ -152,7 +152,7 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
 
       // If link between v <-> nextV not exist, create one.
       E = E_sharing_2V(V, nextV);
-      if (E == NULL)
+      if (E == VXL_NULLPTR)
         E = add_new_edge(V, nextV);
 
       // Connect the face to the edge through the half-edge
@@ -275,7 +275,7 @@ void bmsh3d_mesh::sort_V_incident_Es()
     vcl_vector<const bmsh3d_edge*> edges;
     unsigned int count = 0;
     bmsh3d_ptr_node* cur = (bmsh3d_ptr_node*) V->E_list();
-    for (; cur != NULL; cur = cur->next()) {
+    for (; cur != VXL_NULLPTR; cur = cur->next()) {
       const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
       edges.push_back(E);
       count++;

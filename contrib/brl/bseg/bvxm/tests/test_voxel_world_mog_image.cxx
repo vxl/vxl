@@ -109,7 +109,7 @@ static void test_voxel_world_mog_image()
   vgl_rotation_3d<double> rot1(5*vnl_math::pi/6,0.0,0.0);
 
   vpgl_camera_double_sptr cam1 = new vpgl_perspective_camera<double>(K,center1,rot1);
-  bvxm_image_metadata meta1(vil_image_view_base_sptr(0),cam1);
+  bvxm_image_metadata meta1(vil_image_view_base_sptr(VXL_NULLPTR),cam1);
   vil_image_view<float> mask(640,480,1);
   vil_image_view_base_sptr img1 = new vil_image_view<unsigned char>(640,480);
 

@@ -67,11 +67,11 @@ static void test_scale_est()
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from.size(); ++i ) {
-      ms.add_feature_and_match( pf( from[i] ), 0, pf( from[i]+err[i] ) );
+      ms.add_feature_and_match( pf( from[i] ), VXL_NULLPTR, pf( from[i]+err[i] ) );
     }
     ms.remap_from_features( *trans );
 
-    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
+    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, VXL_NULLPTR );
     TEST( "Estimate scale from one-to-one",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
@@ -91,11 +91,11 @@ static void test_scale_est()
       for ( unsigned j=0; j < num; ++j ) {
         to.push_back( pf( from[i] + err[i] * ((j+pos)%num + 1) ) );
       }
-      ms.add_feature_and_matches( pf( from[i] ), 0, to );
+      ms.add_feature_and_matches( pf( from[i] ), VXL_NULLPTR, to );
     }
     ms.remap_from_features( *trans );
 
-    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, 0 );
+    rgrl_scale_sptr scale = closest_est.estimate_unweighted( ms, VXL_NULLPTR );
     TEST( "Estimate scale from closest in one-to-many",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 
@@ -109,11 +109,11 @@ static void test_scale_est()
   {
     rgrl_match_set ms( rgrl_feature_point::type_id() );
     for ( unsigned i=0; i < from.size(); ++i ) {
-      ms.add_feature_and_match( pf( from[i] ), 0, pf( from[i]+err[i] ) );
+      ms.add_feature_and_match( pf( from[i] ), VXL_NULLPTR, pf( from[i]+err[i] ) );
     }
     ms.remap_from_features( *trans );
 
-    rgrl_scale_sptr scale = allwgt_est.estimate_weighted( ms, 0, false );
+    rgrl_scale_sptr scale = allwgt_est.estimate_weighted( ms, VXL_NULLPTR, false );
     TEST( "Estimate weighted scale from one-to-one, unit weight",
           scale->has_geometric_scale() && ! scale->has_signature_inv_covar(), true);
 

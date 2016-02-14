@@ -99,7 +99,7 @@ static void test_homography2d_est()
     param /= param.two_norm();
     TEST("(Translation) minimal-set estimation", (param-true_param).two_norm() < tol, true);
 
-    homo_est.weighted_least_squares_fit(param, cofact, NULL);
+    homo_est.weighted_least_squares_fit(param, cofact, VXL_NULLPTR);
     if (param[0]<0)  param = -param;
     param /= param.two_norm();
     TEST("(Translation) Weighted Least Squares", (param-true_param).two_norm() < tol, true);
@@ -124,7 +124,7 @@ static void test_homography2d_est()
     param /= param.two_norm();
     TEST("(Similarity) minimal-set estimation", (param-true_param).two_norm() < tol, true);
 
-    homo_est.weighted_least_squares_fit(param, cofact, NULL);
+    homo_est.weighted_least_squares_fit(param, cofact, VXL_NULLPTR);
     if (param[0]<0)  param = -param;
     param /= param.two_norm();
     TEST("(Similarity) Weighted Least Squares", (param-true_param).two_norm() < tol, true);
@@ -147,7 +147,7 @@ static void test_homography2d_est()
     param /= param.two_norm();
     TEST("(Affine) minimal-set estimation", (param-true_param).two_norm() < tol, true);
 
-    homo_est.weighted_least_squares_fit(param, cofact, NULL);
+    homo_est.weighted_least_squares_fit(param, cofact, VXL_NULLPTR);
     if (param[0]<0)  param = -param;
     param /= param.two_norm();
     TEST("(Affine) Weighted Least Squares", (param-true_param).two_norm() < tol, true);

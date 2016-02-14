@@ -95,10 +95,10 @@ imesh_imls_surface::imesh_imls_surface(const imesh_imls_surface& other)
   : verts_(other.verts_),
     triangles_(other.triangles_.get() ?
                new imesh_regular_face_array<3>(*other.triangles_) :
-               0),
+               VXL_NULLPTR),
     kd_tree_(other.kd_tree_.get() ?
              new imesh_kd_tree_node(*other.kd_tree_) :
-             0),
+             VXL_NULLPTR),
     phi_(other.phi_),
     area_(other.area_),
     unweighted_(other.unweighted_),

@@ -1279,7 +1279,7 @@ bool brip_vil1_float_ops::fft_2d(vnl_matrix<vcl_complex<double> >& c,int nx,int 
   /* Transform the rows */
   real = new double[nx];
   imag = new double[nx];
-  if (real == 0 || imag == 0)
+  if (real == VXL_NULLPTR || imag == VXL_NULLPTR)
     return false;
   for (j=0;j<ny;j++) {
     for (i=0;i<nx;i++) {
@@ -1297,7 +1297,7 @@ bool brip_vil1_float_ops::fft_2d(vnl_matrix<vcl_complex<double> >& c,int nx,int 
   /* Transform the columns */
   real = new double[ny];
   imag = new double[ny];
-  if (real == 0 || imag == 0)
+  if (real == VXL_NULLPTR || imag == VXL_NULLPTR)
     return false;
   for (i=0;i<nx;i++) {
     for (j=0;j<ny;j++) {

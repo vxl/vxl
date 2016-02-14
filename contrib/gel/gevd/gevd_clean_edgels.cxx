@@ -70,7 +70,7 @@ void gevd_clean_edgels::print_protection()
 //:Default Constructor
 gevd_clean_edgels::gevd_clean_edgels()
 {
-  out_edgels_ = NULL;
+  out_edgels_ = VXL_NULLPTR;
 }
 
 
@@ -219,7 +219,7 @@ void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, vcl_vector<vto
 bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v)
 {
   vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
-  if (!dc) { v = NULL; return false; }
+  if (!dc) { v = VXL_NULLPTR; return false; }
   vsol_point_2d_sptr sp = new vsol_point_2d(*p);
   vsol_point_2d_sptr pc = dc->get_interpolator()->closest_point_on_curve( sp );
   double span_sq = p->distance(pc);
@@ -381,7 +381,7 @@ void gevd_clean_edgels::JumpGaps()
     {
       ///      nnn=0;
       vtol_edge_2d_sptr  e = (*eit);
-      vtol_vertex_2d_sptr new_v = NULL;
+      vtol_vertex_2d_sptr new_v = VXL_NULLPTR;
       //If end_vertex is true, then one of the vertices of e is
       //within the given radius
       bool end_vertex = this->closest_vertex(e, p, radius, new_v);
@@ -390,7 +390,7 @@ void gevd_clean_edgels::JumpGaps()
       {
         //The new vertex is interior to e,
         //so we have to split the edge
-        vtol_edge_2d_sptr e1=NULL, e2=NULL;
+        vtol_edge_2d_sptr e1=VXL_NULLPTR, e2=VXL_NULLPTR;
         if (verbose) vcl_cout << "Splitting " << e->v1()->cast_to_vertex() << e->v2()->cast_to_vertex() << vcl_endl;
         if (!this->split_edge(e, new_v, e1, e2))
           continue;

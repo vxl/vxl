@@ -20,8 +20,8 @@ void bgui_graph_tableau::init()
   easy_->set_foreground(0.0, 1.0f, 0.0);
   easy_->set_line_width(2.0f);
   n_ = 0;
-  pos_ = 0;
-  vals_ = 0;
+  pos_ = VXL_NULLPTR;
+  vals_ = VXL_NULLPTR;
   tic_length_ = 10.0f;
   left_offset_ = 75;
   top_offset_ = 20;
@@ -33,7 +33,7 @@ void bgui_graph_tableau::init()
 
 bgui_graph_tableau::bgui_graph_tableau(const unsigned gwidth,
                                        const unsigned gheight) :
-  graph_width_(gwidth), graph_height_(gheight), plot_(0)
+  graph_width_(gwidth), graph_height_(gheight), plot_(VXL_NULLPTR)
 {   this->init(); }
 
 // Destructor.
@@ -276,7 +276,7 @@ void bgui_graph_tableau::draw_graph()
     easy_->remove(plot_);
     tt_->clear();
     delete plot_;
-    plot_ = 0;
+    plot_ = VXL_NULLPTR;
   }
   for (unsigned i = 0; i<n_; ++i)
   {
@@ -330,7 +330,7 @@ void bgui_graph_tableau::rem()
   {
     easy_->remove(plot_);
     //delete plot_;
-    plot_ = 0;
+    plot_ = VXL_NULLPTR;
   }
   for (vcl_vector<vgui_soview2D_lineseg*>::iterator cit = xtics_.begin();
        cit!=xtics_.end(); ++cit)
@@ -357,12 +357,12 @@ void bgui_graph_tableau::del()
   if (pos_)
   {
     delete [] pos_;
-    pos_ =0;
+    pos_ =VXL_NULLPTR;
   }
   if (vals_)
   {
     delete [] vals_;
-    vals_ = 0;
+    vals_ = VXL_NULLPTR;
   }
 }
 

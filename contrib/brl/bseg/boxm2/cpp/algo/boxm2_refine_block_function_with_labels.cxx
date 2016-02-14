@@ -28,22 +28,22 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, vcl
     if(datas.size()>=4)
         flow_res_   =  (vnl_vector_fixed<float,4>*)   datas[i++]->data_buffer();
     else
-        flow_res_ = 0;
+        flow_res_ = VXL_NULLPTR;
 
     if(datas.size()>=5)
         alpha_sav_   =  (float*)   datas[i++]->data_buffer();
     else
-        alpha_sav_ = 0;
+        alpha_sav_ = VXL_NULLPTR;
 
      if(datas.size()>=6)
         mog_sav_   =  (T*)   datas[i++]->data_buffer();
     else
-        mog_sav_ = 0;
+        mog_sav_ = VXL_NULLPTR;
 
      if(datas.size()>=7)
         flow_   =  (vnl_vector_fixed<float,4>*)   datas[i++]->data_buffer();
     else
-        flow_ = 0;
+        flow_ = VXL_NULLPTR;
 
 
 
@@ -141,10 +141,10 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
   vcl_cout << "data size is "<<app_type_size_<<" , "<<sizeof(T)<<" and id is "<<app_type_<<vcl_endl;
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
   boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * app_type_size_], dataSize * app_type_size_, id);
-  boxm2_data_base* newF = 0;
-  boxm2_data_base* newF_res = 0;
-  boxm2_data_base* newA_sav = 0;
-  boxm2_data_base* newM_sav = 0;
+  boxm2_data_base* newF = VXL_NULLPTR;
+  boxm2_data_base* newF_res = VXL_NULLPTR;
+  boxm2_data_base* newA_sav = VXL_NULLPTR;
+  boxm2_data_base* newM_sav = VXL_NULLPTR;
   T fills;
   fills.fill(0);
 
@@ -170,10 +170,10 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(vcl_vector
 
   float*   alpha_cpy = (float*) newA->data_buffer();
   T* mog_cpy   = (T*) newM->data_buffer();
-  float4*   flow_cpy = 0;
-  float4*  flow_res_cpy =0;
-  float*   alpha_sav_cpy = 0;
-  T*  mog_sav_cpy = 0;
+  float4*   flow_cpy = VXL_NULLPTR;
+  float4*  flow_res_cpy =VXL_NULLPTR;
+  float*   alpha_sav_cpy = VXL_NULLPTR;
+  T*  mog_sav_cpy = VXL_NULLPTR;
   if(flow_)
           flow_cpy =(float4*)newF->data_buffer();
   if(flow_res_)

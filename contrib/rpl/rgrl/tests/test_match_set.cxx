@@ -121,16 +121,16 @@ test_one_to_one_correspondence()
 
   testlib_test_begin( "Adding the features" );
   for ( unsigned i=0; i < from_pts.size(); ++i ) {
-    ms->add_feature_and_match( from_pts[i], 0, to_pts[i], wgts[i] );
+    ms->add_feature_and_match( from_pts[i], VXL_NULLPTR, to_pts[i], wgts[i] );
   }
   testlib_test_perform( true );
 
   TEST( "Iterating over all the data",
-        test_one_to_one_contents( ms.as_pointer(), (rgrl_match_set::from_iterator*)0,
+        test_one_to_one_contents( ms.as_pointer(), (rgrl_match_set::from_iterator*)VXL_NULLPTR,
                                   from_pts, to_pts, wgts ), true);
 
   TEST( "Iterating over all the data (const iterator)",
-        test_one_to_one_contents( (rgrl_match_set const*)ms.as_pointer(), (rgrl_match_set::const_from_iterator*)0,
+        test_one_to_one_contents( (rgrl_match_set const*)ms.as_pointer(), (rgrl_match_set::const_from_iterator*)VXL_NULLPTR,
                                   from_pts, to_pts, wgts ), true);
 }
 

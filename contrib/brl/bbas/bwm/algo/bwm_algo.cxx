@@ -99,7 +99,7 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
   }
   else {
     vcl_cout << "NO FITTING" << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
 
@@ -135,7 +135,7 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vcl_vector<vsol_point_3d_spt
   }
   else {
     vcl_cout << "NO FITTING" << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
 
@@ -230,10 +230,10 @@ bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
   if (!img)
   {
     vcl_cerr << "Null image in bwm_tableau_mgr::extract_nitf_camera\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
-  vil_nitf2_image* nitf = 0;
+  vil_nitf2_image* nitf = VXL_NULLPTR;
   vcl_string format = img->file_format();
   vcl_string prefix = format.substr(0,4);
   if (prefix == "nitf") {
@@ -243,7 +243,7 @@ bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
   }
   else {
     vcl_cout << "The image is not an NITF" << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

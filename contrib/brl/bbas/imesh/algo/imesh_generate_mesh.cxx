@@ -114,7 +114,7 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     in.segmentlist[m]=pi1;     in.segmentlist[m+1]=pi2;
   }
   //attributes and markers are not used in this algorithm
-  in.pointattributelist = NULL;
+  in.pointattributelist = VXL_NULLPTR;
   in.pointmarkerlist = (int*)malloc(in.numberofpoints * sizeof(int));
   for (int i = 0; i<in.numberofpoints; ++i)
     in.pointmarkerlist[i]=0;
@@ -122,18 +122,18 @@ imesh_generate_mesh_2d(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   for (int i = 0; i<in.numberofsegments; ++i)
     in.segmentmarkerlist[i]=0;
 
-  out.pointlist = (REAL *) NULL;            // Not needed if -N switch used.
+  out.pointlist = (REAL *) VXL_NULLPTR;            // Not needed if -N switch used.
   // Not needed if -N switch used or number of point attributes is zero:
-  out.pointattributelist = (REAL *) NULL;
-  out.pointmarkerlist = (int *) NULL; // Not needed if -N or -B switch used.
-  out.trianglelist = (int *) NULL;          // Not needed if -E switch used.
-  out.neighborlist = (int *) NULL;         // Needed only if -n switch used.
+  out.pointattributelist = (REAL *) VXL_NULLPTR;
+  out.pointmarkerlist = (int *) VXL_NULLPTR; // Not needed if -N or -B switch used.
+  out.trianglelist = (int *) VXL_NULLPTR;          // Not needed if -E switch used.
+  out.neighborlist = (int *) VXL_NULLPTR;         // Needed only if -n switch used.
   // Needed only if segments are output (-p or -c) and -P not used:
   out.segmentlist = (int *) (REAL *) malloc(in.numberofsegments * 2 * sizeof(REAL)); // Suspicious. Why the double cast? and why sizeof(REAL) if it's really int*?
   // Needed only if segments are output (-p or -c) and -P and -B not used:
-  out.segmentmarkerlist = (int *) NULL;
-  out.edgelist = (int *) NULL;             // Needed only if -e switch used.
-  out.edgemarkerlist = (int *) NULL;   // Needed if -e used and -B not used.
+  out.segmentmarkerlist = (int *) VXL_NULLPTR;
+  out.edgelist = (int *) VXL_NULLPTR;             // Needed only if -e switch used.
+  out.edgemarkerlist = (int *) VXL_NULLPTR;   // Needed if -e used and -B not used.
 
   //A string of switch characters must be provided
   // Triangulate the points.  Switches are chosen to read and write a
@@ -227,7 +227,7 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
     in.segmentlist[m]=pi1;     in.segmentlist[m+1]=pi2;
   }
   //attributes and markers are not used in this algorithm
-  in.pointattributelist = NULL;
+  in.pointattributelist = VXL_NULLPTR;
   in.pointmarkerlist = (int*)malloc(in.numberofpoints * sizeof(int));
   for (int i = 0; i<in.numberofpoints; ++i)
     in.pointmarkerlist[i]=0;
@@ -235,18 +235,18 @@ imesh_generate_mesh_2d_2(vcl_vector<vgl_point_2d<double> > const& convex_hull,
   for (int i = 0; i<in.numberofsegments; ++i)
     in.segmentmarkerlist[i]=0;
 
-  out.pointlist = (REAL *) NULL;            // Not needed if -N switch used.
+  out.pointlist = (REAL *) VXL_NULLPTR;            // Not needed if -N switch used.
   // Not needed if -N switch used or number of point attributes is zero:
-  out.pointattributelist = (REAL *) NULL;
-  out.pointmarkerlist = (int *) NULL; // Not needed if -N or -B switch used.
-  out.trianglelist = (int *) NULL;          // Not needed if -E switch used.
-  out.neighborlist = (int *) NULL;         // Needed only if -n switch used.
+  out.pointattributelist = (REAL *) VXL_NULLPTR;
+  out.pointmarkerlist = (int *) VXL_NULLPTR; // Not needed if -N or -B switch used.
+  out.trianglelist = (int *) VXL_NULLPTR;          // Not needed if -E switch used.
+  out.neighborlist = (int *) VXL_NULLPTR;         // Needed only if -n switch used.
   // Needed only if segments are output (-p or -c) and -P not used:
   out.segmentlist = (int *) (REAL *) malloc(in.numberofsegments * 2 * sizeof(REAL)); // Suspicious. Why the double cast? and why sizeof(REAL) if it's really int*?
   // Needed only if segments are output (-p or -c) and -P and -B not used:
-  out.segmentmarkerlist = (int *) NULL;
-  out.edgelist = (int *) NULL;             // Needed only if -e switch used.
-  out.edgemarkerlist = (int *) NULL;   // Needed if -e used and -B not used.
+  out.segmentmarkerlist = (int *) VXL_NULLPTR;
+  out.edgelist = (int *) VXL_NULLPTR;             // Needed only if -e switch used.
+  out.edgemarkerlist = (int *) VXL_NULLPTR;   // Needed if -e used and -B not used.
 
   //A string of switch characters must be provided
   // Triangulate the points.  Switches are chosen to read and write a

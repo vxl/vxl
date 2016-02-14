@@ -125,7 +125,7 @@ convert_to_frame(vcl_vector<vil_image_view<float> >const&  views,
 {
   unsigned np = views.size();
   if (!np)
-    return 0;
+    return VXL_NULLPTR;
   unsigned ni = views[0].ni(), nj = views[0].nj();
   if (!preserve_float){
     vcl_vector<vil_image_view<unsigned char> > cviews;

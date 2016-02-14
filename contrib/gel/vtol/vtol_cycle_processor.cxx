@@ -307,7 +307,7 @@ static vtol_vertex_sptr common_vertex(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& 
     return v02;
   if ((vtol_vertex_sptr)v02==(vtol_vertex_sptr)v12)
     return v02;
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //----------------------------------------------------------------
@@ -338,7 +338,7 @@ static vtol_edge_2d_sptr ccw_edge(vtol_edge_2d_sptr in_edg, vtol_vertex_sptr fro
                                   vcl_vector<vtol_edge_2d_sptr>& edges)
 {
   double most_ccw = -360;
-  vtol_edge_2d_sptr ccw = NULL;
+  vtol_edge_2d_sptr ccw = VXL_NULLPTR;
   for (vcl_vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
        eit != edges.end(); ++eit)
   {
@@ -579,7 +579,7 @@ vtol_edge_2d_sptr vtol_cycle_processor::search_for_next_edge(vcl_vector<vtol_edg
       return temp;
     edge_2d_erase(edges_at_last, temp);
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //---------------------------------------------------------------------
@@ -831,7 +831,7 @@ void vtol_cycle_processor::sort_one_cycles()
   //defined as a ccw cycle with the largest bounding box.
   //search for the largest ccw bounding box
   double area = 0;
-  vtol_one_chain_sptr outer_chain = 0;
+  vtol_one_chain_sptr outer_chain = VXL_NULLPTR;
   for (one_chain_list::iterator cit=chains_.begin(); cit!=chains_.end(); ++cit)
   {
     untouch(*cit);

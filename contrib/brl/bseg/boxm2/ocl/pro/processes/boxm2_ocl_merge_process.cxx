@@ -207,12 +207,12 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
 
         //set up tree copy
         vcl_cout<<"  creating tree copy"<<vcl_endl;
-        bocl_mem_sptr blk_copy = new bocl_mem(device->context(), NULL, numTrees*sizeof(cl_uchar16), "merge trees block copy buffer");
+        bocl_mem_sptr blk_copy = new bocl_mem(device->context(), VXL_NULLPTR, numTrees*sizeof(cl_uchar16), "merge trees block copy buffer");
         blk_copy->create_buffer(CL_MEM_READ_WRITE| CL_MEM_ALLOC_HOST_PTR, (queue));
 
         //set up tree size (first find num trees)
         vcl_cout<<"  creating tree sizes buff"<<vcl_endl;
-        bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), NULL, sizeof(cl_int)*numTrees, "merge tree sizes buffer");
+        bocl_mem_sptr tree_sizes = new bocl_mem(device->context(), VXL_NULLPTR, sizeof(cl_int)*numTrees, "merge tree sizes buffer");
         tree_sizes->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, (queue));
         clFinish((queue));
 
@@ -307,7 +307,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
             //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
             vcl_cout<<"  new data size of "<<data_types[i]<<" is "<<newDataSize<<vcl_endl;
             int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
-            bocl_mem* new_dat = new bocl_mem(device->context(), NULL, dataBytes, "new data buffer " + data_types[i]);
+            bocl_mem* new_dat = new bocl_mem(device->context(), VXL_NULLPTR, dataBytes, "new data buffer " + data_types[i]);
             new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
             //grab the block out of the cache as well

@@ -151,8 +151,8 @@ void test_gaussian()
 
   vpdfl_gaussian          pdf_in;
   vpdfl_gaussian_builder  builder_in;
-  vpdfl_pdf_base*         p_base_pdf_in = NULL;
-  vpdfl_builder_base*     p_base_builder_in = NULL;
+  vpdfl_pdf_base*         p_base_pdf_in = VXL_NULLPTR;
+  vpdfl_builder_base*     p_base_builder_in = VXL_NULLPTR;
 
   vsl_b_ifstream bfs_in("test_gaussian.bvl.tmp");
   TEST("Opened test_gaussian.bvl.tmp for reading", (!bfs_in), false);

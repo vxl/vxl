@@ -125,7 +125,7 @@ void clsfy_smo_base::set_eps(double eps)
 // ----------------------------------------------------------------
 
 clsfy_smo_base::clsfy_smo_base():
-  error_(0.0), data_(0), tolerance_(0.001), eps_(0.001), b_(0.0), rng_(9667566)
+  error_(0.0), data_(VXL_NULLPTR), tolerance_(0.001), eps_(0.001), b_(0.0), rng_(9667566)
 {
 }
 

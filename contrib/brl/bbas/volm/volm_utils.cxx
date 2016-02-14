@@ -8,7 +8,7 @@ vcl_string volm_utils::volm_src_root()
 {
     vcl_string volm_src_dir;
     char* volm_dir_env = getenv("VOLM_DIR");
-    if (volm_dir_env != NULL) {
+    if (volm_dir_env != VXL_NULLPTR) {
       volm_src_dir = vcl_string(volm_dir_env) + "/";
     }
 //    vcl_cout<<"VOLM dir "<<volm_src_dir<<vcl_endl;

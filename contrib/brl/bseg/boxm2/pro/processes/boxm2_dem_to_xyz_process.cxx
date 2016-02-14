@@ -108,7 +108,7 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   if (cam && (geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr())) ) {
     vcl_cout << "Using the loaded camera!\n";
   }
@@ -287,7 +287,7 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
   }
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   vgl_box_3d<double> scene_bbox = scene->bounding_box();
@@ -403,7 +403,7 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   if ( cam && (geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr())) ) {
     vcl_cout << "Using the loaded camera!\n";
   }

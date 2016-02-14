@@ -312,7 +312,7 @@ static mbl_logger& local_logger()
 #endif
 
 mbl_logger::mbl_logger(const char *id):
-  output_(0),
+  output_(VXL_NULLPTR),
   streambuf_(this),
   logstream_(&streambuf_),
   mt_logstream_(&logstream_)

@@ -23,7 +23,7 @@ msdi_array_of_marked_images::msdi_array_of_marked_images(
                  const vcl_vector<vil_image_view<vxl_byte> >& images,
                  const vcl_vector<msm_points>& points,
                  bool grey_only)
-  : images_(0),points_(0),index_(0)
+  : images_(VXL_NULLPTR),points_(VXL_NULLPTR),index_(0)
 {
   set(images,points,grey_only);
 }

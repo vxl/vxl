@@ -14,7 +14,7 @@
 #include "bwm_observable.h"
 #include "bwm_observable_textured_mesh.h"
 
-bwm_world* bwm_world::instance_ = 0;
+bwm_world* bwm_world::instance_ = VXL_NULLPTR;
 
 bwm_world* bwm_world::instance()
 {

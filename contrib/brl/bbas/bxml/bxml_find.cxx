@@ -34,7 +34,7 @@ bxml_data_sptr bxml_find(const bxml_data_sptr& head,
                              const bxml_element& query)
 {
   if (head->type() != bxml_data::ELEMENT)
-    return NULL;
+    return VXL_NULLPTR;
   bxml_element* h_elm = static_cast<bxml_element*>(head.ptr());
   if ( bxml_matches(*h_elm, query) )
     return head;
@@ -48,7 +48,7 @@ bxml_data_sptr bxml_find(const bxml_data_sptr& head,
         return result;
     }
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //: Return true if elm has the same name and contains the same attributes as query
@@ -66,7 +66,7 @@ bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head,
                              const bxml_element& query)
 {
   if (head->type() != bxml_data::ELEMENT)
-    return NULL;
+    return VXL_NULLPTR;
   bxml_element* h_elm = static_cast<bxml_element*>(head.ptr());
   if ( bxml_matches_by_name(*h_elm, query) )
     return head;
@@ -80,7 +80,7 @@ bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head,
         return result;
     }
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 //: Find all elements that match

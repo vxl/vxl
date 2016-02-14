@@ -186,7 +186,7 @@ void mfpf_profile_pdf::print_summary(vcl_ostream& os) const
 {
   os<< "{  size: [" << ilo_ << ',' << ihi_<< ']'
     << " PDF: ";
-  if (pdf_.ptr()==0) os << "--";
+  if (pdf_.ptr()==VXL_NULLPTR) os << "--";
   else               os << pdf_;
   mfpf_point_finder::print_summary(os);
   os << " }";

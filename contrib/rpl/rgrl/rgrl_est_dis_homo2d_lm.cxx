@@ -194,7 +194,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 
   unsigned int ind = 0;
   for ( unsigned ms = 0; ms<matches_ptr_->size(); ++ms )
-    if ( (*matches_ptr_)[ms] != 0 ) { // if pointer is valid
+    if ( (*matches_ptr_)[ms] != VXL_NULLPTR ) { // if pointer is valid
 
       rgrl_match_set const& one_set = *((*matches_ptr_)[ms]);
 
@@ -362,7 +362,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       rgrl_est_homography2d est_homo;
       rgrl_transformation_sptr tmp_trans= est_homo.estimate( matches, cur_transform );
       if ( !tmp_trans )
-        return 0;
+        return VXL_NULLPTR;
       rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( *tmp_trans );
       init_H = trans.H();
     }
@@ -426,7 +426,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ret = lm.minimize_without_gradient(p);
   if ( !ret ) {
     WarningMacro( "Levenberg-Marquardt failed" );
-    return 0;
+    return VXL_NULLPTR;
   }
   // lm.diagnose_outcome(vcl_cout);
 
@@ -469,7 +469,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_svd<double> svd( vnl_transpose(compliment) * jtj *compliment, 1e-6 );
   if ( svd.rank() < 10 ) {
     WarningMacro( "The covariance of homography ranks less than 8! ");
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vnl_matrix<double>covar = compliment * svd.inverse() * compliment.transpose();

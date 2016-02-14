@@ -9,7 +9,7 @@
 xcv_tjunction::xcv_tjunction(xcv_mview_manager* xmm)
   : vgui_tableau()
   , xcv_mgr(xmm)
-  , child_tab(this, 0)
+  , child_tab(this, VXL_NULLPTR)
 {
 }
 

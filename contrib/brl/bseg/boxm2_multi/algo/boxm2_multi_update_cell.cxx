@@ -70,8 +70,8 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
 
     //grab vis and pre images that correspond
 
-    bocl_mem_sptr vis_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, NULL /*vis_img*/, "vis image buff");
-    bocl_mem_sptr pre_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, NULL /*pre_img*/, "pre image buff");
+    bocl_mem_sptr vis_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, VXL_NULLPTR /*vis_img*/, "vis image buff");
+    bocl_mem_sptr pre_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, VXL_NULLPTR /*pre_img*/, "pre image buff");
     bocl_mem_sptr norm_mem = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, norm_image, "norm image buff");
     vis_mem->create_buffer(CL_MEM_READ_WRITE); // | CL_MEM_COPY_HOST_PTR);
     pre_mem->create_buffer(CL_MEM_READ_WRITE); // | CL_MEM_COPY_HOST_PTR);

@@ -72,10 +72,10 @@ bool bocl_command_queue_mgr::init_kernel()
   //map standard pointers to pinned memory
   float* pinned_in = (float*) clEnqueueMapBuffer(queue_a_, pinned_in_->buffer(), CL_TRUE,
                                             CL_MAP_WRITE, 0, memLength_*sizeof(float), 0,
-                                            NULL, NULL, NULL);
+                                            VXL_NULLPTR, NULL, NULL);
   float* pinned_out = (float*) clEnqueueMapBuffer(queue_a_, pinned_out_->buffer(), CL_TRUE,
                                             CL_MAP_READ, 0, memLength_*sizeof(float), 0,
-                                            NULL, NULL, NULL);
+                                            VXL_NULLPTR, NULL, NULL);
   pinned_in_->set_cpu_buffer(pinned_in);
   pinned_out_->set_cpu_buffer(pinned_out);
 
@@ -176,7 +176,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
       float* buff = (float*) pinned_in_->cpu_buffer();
       clEnqueueWriteBuffer( queues_[next], pinned_in_->buffer(),
                             CL_FALSE, off, incr*sizeof(float),
-                            (void*) &buff[memHalf_], 0, NULL, NULL);
+                            (void*) &buff[memHalf_], 0, VXL_NULLPTR, VXL_NULLPTR);
       kernels_[k].clear_args();
     }
   }

@@ -90,7 +90,7 @@ static void test_io(int argc, char* argv[])
 
     //vcl_ifstream file("text_out.xml");
     unsigned int depth = 0;
-    bxml_data_sptr data = NULL;
+    bxml_data_sptr data = VXL_NULLPTR;
     bool fail = false;
     int count = 0;
     while ((data = str_reader.next_element(s, depth))) { // assignment, no comparison

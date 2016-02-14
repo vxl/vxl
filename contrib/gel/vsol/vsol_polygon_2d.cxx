@@ -44,7 +44,7 @@ vsol_polygon_2d::vsol_polygon_2d(const vsol_polygon_2d &other)
 vsol_polygon_2d::~vsol_polygon_2d()
 {
   for (unsigned i = 0; i < storage_->size(); i++)
-   (*storage_)[i] = 0;
+   (*storage_)[i] = VXL_NULLPTR;
   delete storage_;
 }
 
@@ -66,7 +66,7 @@ vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void)
   if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void) const
@@ -74,19 +74,19 @@ const vsol_polygon_2d* vsol_polygon_2d::cast_to_polygon(void) const
   if (!cast_to_triangle()||!cast_to_rectangle())
     return this;
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
-vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void){return 0;}
+vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void){return VXL_NULLPTR;}
 const vsol_triangle_2d* vsol_polygon_2d::cast_to_triangle(void) const
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
-vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void){return 0;}
+vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void){return VXL_NULLPTR;}
 const vsol_rectangle_2d* vsol_polygon_2d::cast_to_rectangle(void) const
 {
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //***************************************************************************
@@ -365,7 +365,7 @@ bool vsol_polygon_2d::valid_vertices(const vcl_vector<vsol_point_2d_sptr> ) cons
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_polygon_2d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -387,7 +387,7 @@ vsl_b_read(vsl_b_istream &is, vsol_polygon_2d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 

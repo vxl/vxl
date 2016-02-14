@@ -231,12 +231,12 @@ read_affine_trans_2d( const char* trans_file, vnl_matrix< double > & A, vnl_vect
 int
 main( int argc, char* argv[] )
 {
-  vul_arg< unsigned > spacing( 0, "spacing for fewer features" );
-  vul_arg< const char* > feature_file( 0, "the feature file" );
-  vul_arg< const char* > from_files( 0, "from image file" );
-  vul_arg< const char* > to_files( 0, "to image file" );
-  vul_arg< const char* > output_xform( "-o", "output xformation file", 0 );
-  vul_arg< const char* > mask_file( "-mask", "mask file", 0 );
+  vul_arg< unsigned > spacing( VXL_NULLPTR, "spacing for fewer features" );
+  vul_arg< const char* > feature_file( VXL_NULLPTR, "the feature file" );
+  vul_arg< const char* > from_files( VXL_NULLPTR, "from image file" );
+  vul_arg< const char* > to_files( VXL_NULLPTR, "to image file" );
+  vul_arg< const char* > output_xform( "-o", "output xformation file", VXL_NULLPTR );
+  vul_arg< const char* > mask_file( "-mask", "mask file", VXL_NULLPTR );
   vul_arg< const char* > trans_file( "-init", "the initialization" );
   vul_arg< const char* > model( "-model", "Final model (affine, quadratic)", "quadratic" );
 

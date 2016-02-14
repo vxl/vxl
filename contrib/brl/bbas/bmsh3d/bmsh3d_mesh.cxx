@@ -166,7 +166,7 @@ void bmsh3d_ifs_mesh::assign_IFS_vertex_vid_by_vertex_order()
 {
   this->reset_vertex_traversal();
   int vid_count = 0;
-  for (bmsh3d_vertex* vb = 0; this->next_vertex(vb); vid_count ++) {
+  for (bmsh3d_vertex* vb = VXL_NULLPTR; this->next_vertex(vb); vid_count ++) {
     bmsh3d_vertex* vertex = (vb);
     vertex->set_vid(vid_count);
   }
@@ -294,7 +294,7 @@ void bmsh3d_mesh::remove_F_del_isolated_Es (bmsh3d_face* F)
   bmsh3d_halfedge* HE = F->halfedge();
   do {
     bmsh3d_edge* E = HE->edge();
-    if (E->halfedge()->pair() == NULL)
+    if (E->halfedge()->pair() == VXL_NULLPTR)
       edges_to_del.push_back (E);
     HE = HE->next();
   }
@@ -420,18 +420,18 @@ bmsh3d_face* add_F_to_M (vcl_vector<int>& vids, bmsh3d_mesh* M)
   vids.push_back (vids[0]);
   for (unsigned int i=0; i<vids.size()-1; i++) {
     bmsh3d_vertex* V0 = M->vertexmap (vids[i]);
-    if (V0 == NULL) { //if vertex not found, create a new vertex.
+    if (V0 == VXL_NULLPTR) { //if vertex not found, create a new vertex.
       V0 = M->_new_vertex (vids[i]);
       M->_add_vertex (V0);
     }
     bmsh3d_vertex* V1 = M->vertexmap (vids[i+1]);
-    if (V1 == NULL) { //if vertex not found, create a new vertex.
+    if (V1 == VXL_NULLPTR) { //if vertex not found, create a new vertex.
       V1 = M->_new_vertex (vids[i+1]);
       M->_add_vertex (V1);
     }
 
     bmsh3d_edge* E = E_sharing_2V (V0, V1);
-    if (E == NULL) //if edge not found, create a new edge.
+    if (E == VXL_NULLPTR) //if edge not found, create a new edge.
       E = M->add_new_edge (V0, V1);
 
     ordered_edges.push_back (E);
@@ -456,34 +456,34 @@ bmsh3d_face* add_F_to_M_check_topo (vcl_vector<int>& vids, bmsh3d_mesh* M)
 
   for (unsigned int i=0; i<vids.size()-1; i++) {
     bmsh3d_vertex* V0 = M->vertexmap (vids[i]);
-    if (V0 == NULL) { //if vertex not found, create a new vertex.
+    if (V0 == VXL_NULLPTR) { //if vertex not found, create a new vertex.
       V0 = M->_new_vertex (vids[i]);
       M->_add_vertex (V0);
     }
     else { //Check V0 for non-2-manifold 1-ring
       vt = V0->detect_vtopo_type();
       if (vt==VTOPO_2_MANIFOLD_1RING || vt==VTOPO_NON_MANIFOLD_1RING)
-        return NULL;
+        return VXL_NULLPTR;
     }
 
     bmsh3d_vertex* V1 = M->vertexmap (vids[i+1]);
-    if (V1 == NULL) { //if vertex not found, create a new vertex.
+    if (V1 == VXL_NULLPTR) { //if vertex not found, create a new vertex.
       V1 = M->_new_vertex (vids[i+1]);
       M->_add_vertex (V1);
     }
     else { //Check V1 for non-2-manifold 1-ring
       vt = V1->detect_vtopo_type();
       if (vt==VTOPO_2_MANIFOLD_1RING || vt==VTOPO_NON_MANIFOLD_1RING)
-        return NULL;
+        return VXL_NULLPTR;
     }
 
     bmsh3d_edge* E = E_sharing_2V (V0, V1);
-    if (E == NULL) { //if edge not found, create a new edge.
+    if (E == VXL_NULLPTR) { //if edge not found, create a new edge.
       E = M->add_new_edge (V0, V1);
     }
     else { //Check E for non-2-manifold topology.
       if (E->n_incident_Fs() > 1)
-        return NULL;
+        return VXL_NULLPTR;
     }
 
     ordered_edges.push_back (E);
@@ -651,7 +651,7 @@ void bmsh3d_mesh::m2_mesh_merge_face (bmsh3d_face* F1, bmsh3d_face* F2 ,bmsh3d_e
 
   //Delete F2. Note that most of F2's halfedges now belongs to F1.
   F2->set_halfedge (HE2);
-  HE2->set_next (NULL);
+  HE2->set_next (VXL_NULLPTR);
   remove_face (F2);
 
   //Remove HE1: the other incidence of edge E.

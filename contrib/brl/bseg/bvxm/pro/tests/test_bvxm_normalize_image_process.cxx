@@ -232,13 +232,13 @@ static void test_bvxm_normalize_image_process()
   // convert image to a voxel_slab
   bvxm_voxel_slab<obs_datatype> image_slab(ni, nj, 1);
   bvxm_util::img_to_slab(input_img_float_stretched_sptr,image_slab);
-  input_img_float_stretched_sptr = 0;  // clears up the space taken by new
+  input_img_float_stretched_sptr = VXL_NULLPTR;  // clears up the space taken by new
   TEST_NEAR("check slab conversion", (float)*(image_slab.begin()), 200.0f/255.0f, 0.01f);
 
 
   bvxm_voxel_slab<obs_datatype_rgb> image_slab_rgb(ni, nj, 1);
   bvxm_util::img_to_slab(input_img_rgb_float_stretched_sptr,image_slab_rgb);
-  input_img_rgb_float_stretched_sptr = 0;
+  input_img_rgb_float_stretched_sptr = VXL_NULLPTR;
 
   // create a GREY mog image from a known world
   vcl_string model_dir("test_world_dir");
@@ -315,7 +315,7 @@ static void test_bvxm_normalize_image_process()
 
   brdb_value_sptr value_slab;
   TEST("output slab is in db", S_slab->get_value(vcl_string("value"), value_slab), true);
-  TEST("output slab is non-null", (value_slab != 0) ,true);
+  TEST("output slab is non-null", (value_slab != VXL_NULLPTR) ,true);
 
   good = bprb_batch_process_manager::instance()->init_process("bvxmNormalizeImageProcess")
       && bprb_batch_process_manager::instance()->set_input(0, v0)
@@ -338,7 +338,7 @@ static void test_bvxm_normalize_image_process()
 
   brdb_value_sptr value_img;
   TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
-  TEST("output image is non-null", (value_img != 0) ,true);
+  TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
@@ -354,7 +354,7 @@ static void test_bvxm_normalize_image_process()
 
   brdb_value_sptr value_a;
   TEST("output a is in db", S_a->get_value(vcl_string("value"), value_a), true);
-  TEST("output a is non-null", (value_a != 0) ,true);
+  TEST("output a is non-null", (value_a != VXL_NULLPTR) ,true);
 
   brdb_value_t<float>* resulta = static_cast<brdb_value_t<float>* >(value_a.ptr());
   float result_a = resulta->value();
@@ -366,7 +366,7 @@ static void test_bvxm_normalize_image_process()
 
   brdb_value_sptr value_b;
   TEST("output b is in db", S_b->get_value(vcl_string("value"), value_b), true);
-  TEST("output b is non-null", (value_b != 0) ,true);
+  TEST("output b is non-null", (value_b != VXL_NULLPTR) ,true);
 
   brdb_value_t<float>* resultb = static_cast<brdb_value_t<float>* >(value_b.ptr());
   float result_b = resultb->value();

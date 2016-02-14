@@ -113,7 +113,7 @@ test_inv_indexing()
                                                      loc2_cart_inv.as_ref(),
                                                      zero_vec.as_ref()) );
   rgrl_mask_sptr roi = new rgrl_mask_box(2);
-  rgrl_initializer_inv_indexing* initializer = new rgrl_initializer_inv_indexing( roi, roi, 0, 0, false);
+  rgrl_initializer_inv_indexing* initializer = new rgrl_initializer_inv_indexing( roi, roi, VXL_NULLPTR, 0, false);
 
   initializer->add_data(fixed_set1, moving_set1, 0, 1);
   initializer->add_data(fixed_set2, moving_set2, 0, 1);

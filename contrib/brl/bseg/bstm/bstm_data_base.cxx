@@ -104,7 +104,7 @@ char * bstm_data_base::cell_buffer(int i, vcl_size_t cell_size)
     }
     return out;
   }
-  else return 0;
+  else return VXL_NULLPTR;
 }
 
 

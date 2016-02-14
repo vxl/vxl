@@ -79,7 +79,7 @@ vcl_string boxm2_ocl_util::ocl_src_root()
 {
     vcl_string boxm2_ocl_src_dir;
     char* ocl_dir_env = getenv("BOXM2_OPENCL_DIR");
-    if (ocl_dir_env != NULL) {
+    if (ocl_dir_env != VXL_NULLPTR) {
       boxm2_ocl_src_dir = vcl_string(ocl_dir_env) + "/";
     }
     vcl_cout<<"CL dir "<<boxm2_ocl_src_dir<<vcl_endl;

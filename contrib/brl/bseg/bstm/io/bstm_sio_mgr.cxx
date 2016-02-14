@@ -17,7 +17,7 @@ bstm_block* bstm_sio_mgr::load_block(vcl_string dir, bstm_block_id block_id, bst
   myFile.read(bytes, numBytes);
   if (!myFile) {
     //vcl_cerr<<"bstm_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   //instantiate new block
@@ -37,7 +37,7 @@ bstm_time_block* bstm_sio_mgr::load_time_block(vcl_string dir, bstm_block_id blo
   myFile.read(bytes, numBytes);
   if (!myFile) {
     //vcl_cerr<<"bstm_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   //instantiate new block
@@ -59,7 +59,7 @@ bstm_data_base* bstm_sio_mgr::load_block_data_generic(vcl_string dir, bstm_block
   myFile.read(bytes, numBytes);
   if (!myFile) {
       //vcl_cerr<<"bstm_sio_mgr::load_data cannot read file "<<filename<<vcl_endl;
-      return NULL;
+      return VXL_NULLPTR;
   }
 
   //instantiate new block

@@ -121,7 +121,7 @@ void bwm_tableau_cam::move_obj_by_vertex()
 {
   // first check if master tableau is set
   bwm_observer_cam* mt = bwm_observer_mgr::BWM_MASTER_OBSERVER;
-  if (mt == 0) {
+  if (mt == VXL_NULLPTR) {
     vcl_cerr << "Master Tableau is not selected, please select one different than the current one!\n";
     return;
   }

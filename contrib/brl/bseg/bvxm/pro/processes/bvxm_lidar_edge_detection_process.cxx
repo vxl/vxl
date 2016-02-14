@@ -50,12 +50,12 @@ bool bvxm_lidar_edge_detection_process(bprb_func_process& pro)
   vil_image_view_base_sptr image_second_return_base = pro.get_input<vil_image_view_base_sptr>(i++);
 
   //check input's validity
-  if (image_first_return_base == 0) {
+  if (image_first_return_base == VXL_NULLPTR) {
     vcl_cout << "first return image is NULL\n";
     return false;
   }
 
-  if (image_second_return_base == 0) {
+  if (image_second_return_base == VXL_NULLPTR) {
     vcl_cout << "last return image is NULL\n";
     return false;
   }

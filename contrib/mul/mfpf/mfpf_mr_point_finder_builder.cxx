@@ -350,7 +350,7 @@ void mfpf_mr_point_finder_builder::b_read(vsl_b_istream& bfs)
       builders_.resize(n);
       for (unsigned i=0;i<n;++i)
       {
-        builders_[i]=0;
+        builders_[i]=VXL_NULLPTR;
         vsl_b_read(bfs,builders_[i]);
       }
       break;

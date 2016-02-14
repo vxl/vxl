@@ -42,8 +42,8 @@ vul_arg<char const*>  bmsh3d_cmd_iv_file2 ("-iv_2", "Second OpenInventor IV file
 vul_arg<char const*>  bmsh3d_cmd_iv_file3 ("-iv_3", "Third OpenInventor IV file (.iv)");
 
         //   --- IV/VRML parsing ---
-vul_arg<char const*>  bmsh3d_cmd_iv_pfile ("-piv", "Parse reading OpenInventor file (*.iv)", 0);
-vul_arg<char const*>  bmsh3d_cmd_wrl_pfile ("-pwrl", "Parse reading VRML ASCII mesh file (*.wrl)", 0);
+vul_arg<char const*>  bmsh3d_cmd_iv_pfile ("-piv", "Parse reading OpenInventor file (*.iv)", VXL_NULLPTR);
+vul_arg<char const*>  bmsh3d_cmd_wrl_pfile ("-pwrl", "Parse reading VRML ASCII mesh file (*.wrl)", VXL_NULLPTR);
 
 vul_arg<char const*>  bmsh3d_cmd_fileprefix ("-f", "Input file prefix");
 vul_arg<char const*>  bmsh3d_cmd_fileprefix1 ("-f1", "Input file prefix1");

@@ -65,7 +65,7 @@
 #include <sdet/sdet_region_proc_params.h>
 #include <sdet/sdet_region_proc.h>
 
-segv_misc_manager *segv_misc_manager::instance_ = 0;
+segv_misc_manager *segv_misc_manager::instance_ = VXL_NULLPTR;
 
 segv_misc_manager *segv_misc_manager::instance()
 {
@@ -119,7 +119,7 @@ range_params(vil_image_resource_sptr const& image)
   { gl_map = true; cache = false; }
 
   //Check if the image is a pyramid
-  bool pyr = image->get_property(vil_property_pyramid, 0);
+  bool pyr = image->get_property(vil_property_pyramid, VXL_NULLPTR);
   if (pyr)
   { gl_map = true; cache = false; }
   //Get max min parameters
@@ -281,7 +281,7 @@ vil_image_resource_sptr segv_misc_manager::selected_image()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
   if (!itab)
-    return 0;
+    return VXL_NULLPTR;
   return itab->get_image_resource();
 }
 
@@ -290,7 +290,7 @@ vil_image_resource_sptr segv_misc_manager::image_at(const unsigned col,
 {
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (!top_tab)
-    return 0;
+    return VXL_NULLPTR;
 
   bgui_image_tableau_sptr itab;
   itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
@@ -299,7 +299,7 @@ vil_image_resource_sptr segv_misc_manager::image_at(const unsigned col,
   {
     vcl_cout << "Unable to get bgui_image_tableau at (" << col
              << ", " << row << ")\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   return itab->get_image_resource();
 }
@@ -673,7 +673,7 @@ trans_poly(const double alpha,
            vsol_polyline_2d_sptr const & base_poly)
 {
   if (!base_poly)
-    return 0;
+    return VXL_NULLPTR;
   double e = vnl_math::e;
   double scale = vcl_pow(e, alpha);
   vcl_vector<vsol_point_2d_sptr> verts, trans_verts;

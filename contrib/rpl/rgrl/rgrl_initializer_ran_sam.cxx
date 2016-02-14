@@ -33,7 +33,7 @@ rgrl_initializer_ran_sam( )
   : generate_all_(false),
     generator_( &global_generator_ ),
     own_generator_( false ),
-    xform_(0), scale_(0),
+    xform_(VXL_NULLPTR), scale_(VXL_NULLPTR),
     samples_to_take_(0)
 {
   set_sampling_params();
@@ -44,7 +44,7 @@ rgrl_initializer_ran_sam( int seed )
   : generate_all_(false),
     generator_( new vnl_random( seed ) ),
     own_generator_( true ),
-    xform_(0), scale_(0),
+    xform_(VXL_NULLPTR), scale_(VXL_NULLPTR),
     samples_to_take_(0)
 {
   set_sampling_params();
@@ -110,7 +110,7 @@ set_data(rgrl_match_set_sptr                init_match_set,
   rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi,
                                                initial_from_image_roi,
                                                global_region, xform_estimator,
-                                               0, initial_resolution );
+                                               VXL_NULLPTR, initial_resolution );
   set_data( init_match_set, scale_est, prior_view, should_estimate_global_region );
 }
 
@@ -126,7 +126,7 @@ set_data(rgrl_match_set_sptr                init_match_set,
   rgrl_mask_box global_region( from_image_roi->bounding_box() );
   rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, to_image_roi,
                                                global_region, global_region,
-                                               xform_estimator, 0,
+                                               xform_estimator, VXL_NULLPTR,
                                                initial_resolution );
   set_data( init_match_set, scale_est, prior_view, false );
 }
@@ -142,7 +142,7 @@ set_data(rgrl_match_set_sptr                init_match_set,
   rgrl_mask_box global_region( from_image_roi->bounding_box() );
   rgrl_view_sptr  prior_view  = new rgrl_view( from_image_roi, from_image_roi,
                                                global_region, global_region,
-                                               xform_estimator, 0,
+                                               xform_estimator, VXL_NULLPTR,
                                                initial_resolution );
   set_data( init_match_set, scale_est, prior_view, false );
 }

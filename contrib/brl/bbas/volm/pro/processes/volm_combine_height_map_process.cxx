@@ -126,7 +126,7 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
     filename << "HeightMap_" << hemisphere << vcl_setprecision(12) << lat_min << direction << vcl_setprecision(12) << lon_min
              << "_S" << scale_x << 'x' << scale_y;
     // create geo camera for output image
-    vnl_matrix<double> trans_matrix(4,4,0,0);
+    vnl_matrix<double> trans_matrix(4,4,0,VXL_NULLPTR);
     trans_matrix[0][0] = scale_x/ni;    trans_matrix[1][1] = -scale_y/nj;
     trans_matrix[0][3] = lon_min;       trans_matrix[1][3] = lat_max;
     vpgl_geo_camera* cam = new vpgl_geo_camera(trans_matrix, lvcs);

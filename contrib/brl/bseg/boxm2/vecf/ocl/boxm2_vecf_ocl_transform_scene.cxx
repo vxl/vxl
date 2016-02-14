@@ -98,7 +98,7 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
                                                                bool do_interp)
 
   :  source_scene_(source_scene),
-     target_scene_(0),
+     target_scene_(VXL_NULLPTR),
      opencl_cache_(ocl_cache),
      grey_app_id_(gray_app_id), color_app_id_(color_app_id),
      do_alpha_(do_alpha),do_interp_(do_interp)
@@ -289,20 +289,20 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
     int status = 0;
     queue_ = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
 
-    octree_depth_ = 0;
-    blk_info_target_ = 0;
-    blk_info_source = 0;
-    info_buffer_ = 0;
-    blk_target_ = 0;
-    alpha_target_ = 0;
-    mog_target_ = 0;
-    info_buffer_source = 0;
-    blk_source = 0;
-    alpha_source = 0;
-    mog_source = 0;
-    nobs_target_ = 0;
-    rgb_target_ = 0;
-    long_output=0;
+    octree_depth_ = VXL_NULLPTR;
+    blk_info_target_ = VXL_NULLPTR;
+    blk_info_source = VXL_NULLPTR;
+    info_buffer_ = VXL_NULLPTR;
+    blk_target_ = VXL_NULLPTR;
+    alpha_target_ = VXL_NULLPTR;
+    mog_target_ = VXL_NULLPTR;
+    info_buffer_source = VXL_NULLPTR;
+    blk_source = VXL_NULLPTR;
+    alpha_source = VXL_NULLPTR;
+    mog_source = VXL_NULLPTR;
+    nobs_target_ = VXL_NULLPTR;
+    rgb_target_ = VXL_NULLPTR;
+    long_output=VXL_NULLPTR;
     return true;
 }
 // the transform is the inverse, i.e. a map from the target to the source
@@ -729,7 +729,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
      vcl_cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
      return false;
    }
-   bocl_mem* rgb_source = 0;
+   bocl_mem* rgb_source = VXL_NULLPTR;
    if(color_app_type_id_ !=""){
      rgb_source = opencl_cache_->get_data(source_scene_, *iter_blk_source,color_app_type_id_,0,true);
    }

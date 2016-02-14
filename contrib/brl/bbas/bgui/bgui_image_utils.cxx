@@ -19,7 +19,7 @@
 bgui_image_utils::bgui_image_utils():
   hist_valid_(false), percent_limit_(0.0002), bin_limit_(1000),
   n_skip_upper_bins_(0), n_skip_lower_bins_(1), min_blocks_(50),
-  scan_fraction_(0.005), image_(0), poly_(0)
+  scan_fraction_(0.005), image_(VXL_NULLPTR), poly_(VXL_NULLPTR)
 {
 }
 
@@ -41,7 +41,7 @@ void bgui_image_utils::set_image(vil_image_resource_sptr const& image)
 {
   if (!image)
   {
-    image_ = 0;
+    image_ = VXL_NULLPTR;
     return;
   }
   image_ = image;
@@ -76,7 +76,7 @@ bool bgui_image_utils::init_histogram_from_data()
     return false;
 
   vil_image_resource_sptr image;
-  bool pyr = image_->get_property(vil_property_pyramid, 0);
+  bool pyr = image_->get_property(vil_property_pyramid, VXL_NULLPTR);
   if (pyr)
   {
     // cast to pyramid resource
@@ -338,18 +338,18 @@ bgui_graph_tableau_sptr bgui_image_utils::hist_graph()
   unsigned n_planes = image_->nplanes();
 
   if (!image_ || n_planes>4)
-    return 0;
+    return VXL_NULLPTR;
 
   if (!hist_valid_)
     if (!this->construct_histogram())
-      return 0;
+      return VXL_NULLPTR;
 
   bgui_graph_tableau_sptr g = bgui_graph_tableau_new(512, 512);
 
   if (n_planes ==1)
   {
     unsigned lowbin =hist_[0].low_bin(), highbin = hist_[0].high_bin();
-    if (lowbin>highbin) return 0; // shouldn't happen
+    if (lowbin>highbin) return VXL_NULLPTR; // shouldn't happen
     vcl_vector<double> pos = hist_[0].value_array();
     vcl_vector<double> counts = hist_[0].count_array();
     vcl_vector<double> trim_pos, trim_counts;
@@ -457,7 +457,7 @@ bool bgui_image_utils::range_map_from_hist(float gamma, bool invert,
                                            bool gl_map, bool cache,
                                            vgui_range_map_params_sptr& rmp)
 {
-  rmp = 0;
+  rmp = VXL_NULLPTR;
   if (!image_)
     return false;
 

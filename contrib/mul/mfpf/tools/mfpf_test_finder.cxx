@@ -150,7 +150,7 @@ int main(int argc, char** argv)
 
   vgl_vector_2d<double> u(1,0);  // Default to unit scale and fixed angle
 
-  mfpf_point_finder *finder = 0;
+  mfpf_point_finder *finder = VXL_NULLPTR;
   vsl_quick_file_load(finder,params.model_path);
   vcl_cout<<"Finder: "<<*finder<<vcl_endl;
 

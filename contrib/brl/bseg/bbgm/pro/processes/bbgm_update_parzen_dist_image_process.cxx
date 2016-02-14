@@ -37,7 +37,7 @@ bool bbgm_update_parzen_dist_image_process_cons(bprb_func_process& pro)
 
 bool bbgm_update_parzen_dist_image_process_init(bprb_func_process& pro)
 {
-  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(0));
+  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(VXL_NULLPTR));
   return true;
 }
 

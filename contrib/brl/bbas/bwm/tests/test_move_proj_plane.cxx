@@ -36,7 +36,7 @@ void test_move_proj_plane(int argc, char* argv[])
   vcl_string camera_path = argc < 2 ? "." : argv[1];
   vpgl_proj_camera<double> master_cam = read_projective_camera(camera_path + "/jcp1_042799_0930.txt");
   vsol_point_2d_sptr master_img_pt = new vsol_point_2d(100, 100);
-  bwm_observer_proj_cam master_obs(0);
+  bwm_observer_proj_cam master_obs(VXL_NULLPTR);
   master_obs.set_camera(&master_cam, "");
 #if 0
   vpgl_proj_camera<double> second_cam = read_projective_camera(camera_path + "/jcp4_042799_1030.txt");

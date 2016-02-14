@@ -130,7 +130,7 @@ boxm2_ocl_update_vis_score
       vul_timer transfer;
       bocl_mem* blk       = ocl_cache_->get_block(scene_,*id);
       bocl_mem* alpha     = ocl_cache_->get_data<BOXM2_ALPHA>(scene_,*id);
-      bocl_mem* normals = 0;
+      bocl_mem* normals = VXL_NULLPTR;
       if (use_surface_normals_) {
         normals   = ocl_cache_->get_data<BOXM2_NORMAL>(scene_,*id);
       }

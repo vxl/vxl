@@ -88,7 +88,7 @@ static void test_bvxm_create_normalized_image_process()
 
   brdb_value_sptr value_img;
   TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
-  TEST("output image is non-null", (value_img != 0) ,true);
+  TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());

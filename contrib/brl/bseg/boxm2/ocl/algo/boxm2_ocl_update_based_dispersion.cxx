@@ -64,7 +64,7 @@ bool boxm2_ocl_update_based_dispersion::update(boxm2_scene_sptr              sce
     vcl_cout<<"Update using mask."<<vcl_endl;
     use_mask = true;
   }
-  vil_image_view<unsigned char >* mask_map = 0;
+  vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
   if (use_mask) {
     mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
     if (!mask_map) {

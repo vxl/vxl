@@ -304,7 +304,7 @@ vsl_b_read(vsl_b_istream &is, vsol_rectangle_2d* &r)
     r->b_read(is);
   }
   else
-    r = 0;
+    r = VXL_NULLPTR;
 }
 
 inline void vsol_rectangle_2d::describe(vcl_ostream &strm, int blanking) const

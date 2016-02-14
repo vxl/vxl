@@ -82,8 +82,8 @@ bool vdgl_ortho_regress::fit(double &a, double &b, double &c) const {
   double ybar = Sy/S1;
 
   if (!symmetric_2x2_eigen_system(Sxx-Sx*Sx/S1, Sxy-Sx*Sy/S1, Syy-Sy*Sy/S1,
-                                  &a, &b, 0,
-                                  0, 0, 0))
+                                  &a, &b, VXL_NULLPTR,
+                                  VXL_NULLPTR, VXL_NULLPTR, VXL_NULLPTR))
     return false;
 
   c = -(a*xbar+b*ybar);
@@ -109,8 +109,8 @@ bool vdgl_ortho_regress::fit_constrained(double x, double y,
   assert(S1 >= 1);
 
   if (!symmetric_2x2_eigen_system(Sxx-2*Sx*x+S1*x*x, Sxy-Sx*y-x*Sy+S1*x*y, Syy-2*Sy*y+S1*y*y,
-                                  &a, &b, 0,
-                                  0, 0, 0))
+                                  &a, &b, VXL_NULLPTR,
+                                  VXL_NULLPTR, VXL_NULLPTR, VXL_NULLPTR))
     return false;
 
   c = -(a*x + b*y);

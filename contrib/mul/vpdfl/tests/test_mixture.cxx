@@ -161,14 +161,14 @@ void test_mixture()
   vsl_b_write(bfs_out,builder);
   vsl_b_write(bfs_out,static_cast<vpdfl_builder_base*>(&builder));
   vsl_b_write(bfs_out,p_pdf);
-  vsl_b_write(bfs_out,(vpdfl_pdf_base*) 0);
+  vsl_b_write(bfs_out,(vpdfl_pdf_base*) VXL_NULLPTR);
   bfs_out.close();
 
   vcl_cout<<"Loading data...\n";
   vpdfl_mixture_builder builder2;
-  vpdfl_builder_base*  p_builder2 = 0;
-  vpdfl_pdf_base*         p_pdf2 = 0;
-  vpdfl_pdf_base*         p_pdf3 = 0;
+  vpdfl_builder_base*  p_builder2 = VXL_NULLPTR;
+  vpdfl_pdf_base*         p_pdf2 = VXL_NULLPTR;
+  vpdfl_pdf_base*         p_pdf3 = VXL_NULLPTR;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened "+test_path+" for reading").c_str(), (!bfs_in), false);

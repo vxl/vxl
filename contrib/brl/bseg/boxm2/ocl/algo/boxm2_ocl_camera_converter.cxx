@@ -5,7 +5,7 @@
 #include <vpgl/algo/vpgl_camera_convert.h>
 
 //Default private variables to null/0
-bocl_kernel* boxm2_ocl_camera_converter::persp_to_generic_kernel = 0;
+bocl_kernel* boxm2_ocl_camera_converter::persp_to_generic_kernel = VXL_NULLPTR;
 vcl_map<vcl_string, bocl_kernel*> boxm2_ocl_camera_converter::kernels_;
 
 //takes in an unknown camera (must be vpgl_generic or perspective)

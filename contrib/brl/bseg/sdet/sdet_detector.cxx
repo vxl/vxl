@@ -25,10 +25,10 @@
 //
 sdet_detector::sdet_detector(sdet_detector_params& params)
   : sdet_detector_params(params),
-    edgel(NULL), direction(NULL),
-    locationx(NULL), locationy(NULL), grad_mag(NULL),
-    angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
-    vertices(NULL), edges(NULL),
+    edgel(VXL_NULLPTR), direction(VXL_NULLPTR),
+    locationx(VXL_NULLPTR), locationy(VXL_NULLPTR), grad_mag(VXL_NULLPTR),
+    angle(VXL_NULLPTR), junctionx(VXL_NULLPTR), junctiony(VXL_NULLPTR), njunction(0),
+    vertices(VXL_NULLPTR), edges(VXL_NULLPTR),
     filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
 {
   if (params.automatic_threshold)
@@ -37,18 +37,18 @@ sdet_detector::sdet_detector(sdet_detector_params& params)
     noise = params.noise_multiplier;
 //don't really know but have to pick one
   use_vil_image = true;
-  image=0;
-  vimage=0;
+  image=VXL_NULLPTR;
+  vimage=VXL_NULLPTR;
   use_roi_ = false;
 }
 
 sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
-  : image(img), vimage(0), noise(noiseSigma), edgel(NULL), direction(NULL),
-    locationx(NULL), locationy(NULL), grad_mag(NULL),
-    angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
-    vertices(NULL), edges(NULL),
+  : image(img), vimage(VXL_NULLPTR), noise(noiseSigma), edgel(VXL_NULLPTR), direction(VXL_NULLPTR),
+    locationx(VXL_NULLPTR), locationy(VXL_NULLPTR), grad_mag(VXL_NULLPTR),
+    angle(VXL_NULLPTR), junctionx(VXL_NULLPTR), junctiony(VXL_NULLPTR), njunction(0),
+    vertices(VXL_NULLPTR), edges(VXL_NULLPTR),
     filterFactor(2), hysteresisFactor(2.0f), noiseThreshold(0.0f)
 {
   use_vil_image = false;
@@ -64,10 +64,10 @@ sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma
 sdet_detector::sdet_detector(vil_image_resource_sptr & img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
-  : image(0),vimage(img), noise(noiseSigma), edgel(NULL), direction(NULL),
-    locationx(NULL), locationy(NULL), grad_mag(NULL),
-    angle(NULL), junctionx(NULL), junctiony(NULL), njunction(0),
-    vertices(NULL), edges(NULL),
+  : image(VXL_NULLPTR),vimage(img), noise(noiseSigma), edgel(VXL_NULLPTR), direction(VXL_NULLPTR),
+    locationx(VXL_NULLPTR), locationy(VXL_NULLPTR), grad_mag(VXL_NULLPTR),
+    angle(VXL_NULLPTR), junctionx(VXL_NULLPTR), junctiony(VXL_NULLPTR), njunction(0),
+    vertices(VXL_NULLPTR), edges(VXL_NULLPTR),
     filterFactor(2), hysteresisFactor(2.0f), noiseThreshold(0.0f)
 {
   use_vil_image = true;
@@ -101,9 +101,9 @@ void sdet_detector::ClearData()
   if (edges)
     edges->clear();
   delete vertices;
-  vertices = 0;
+  vertices = VXL_NULLPTR;
   delete edges;
-  edges = 0;
+  edges = VXL_NULLPTR;
 }
 
 
@@ -239,13 +239,13 @@ bool sdet_detector::DoStep()
   }
   else {
     njunction = 0;
-    delete [] junctionx; junctionx = NULL;
-    delete [] junctiony; junctiony = NULL;
+    delete [] junctionx; junctionx = VXL_NULLPTR;
+    delete [] junctiony; junctiony = VXL_NULLPTR;
   }
 
   this->noiseThreshold = step.NoiseThreshold();
   delete source;//this fixes a leak
-  return edgel!=NULL;
+  return edgel!=VXL_NULLPTR;
 }
 
 #if 0 // commented out
@@ -295,20 +295,20 @@ bool sdet_detector::DoFold()
 // vil1_image version
 gevd_bufferxy* sdet_detector::GetBufferFromImage()
 {
-  gevd_bufferxy* image_float_buf = 0;
+  gevd_bufferxy* image_float_buf = VXL_NULLPTR;
 
   if (image_float_buf) return image_float_buf;
   //Tests for validity
   if (!image)
   {
     vcl_cout << "In sdet_detector::GetBufferFromImage() - no image\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   if (image.components()!=1)
   {
     vcl_cout << "In sdet_detector::GetBufferFromImage() -"
              << " not exactly one component\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
 #if 0 // TargetJr
@@ -343,7 +343,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
   if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))
   {
     delete image_float_buf;
-    image_float_buf = 0;
+    image_float_buf = VXL_NULLPTR;
   }
 
   return image_float_buf;
@@ -351,7 +351,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromImage()
 // vil_image version
 gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
 {
-  gevd_bufferxy* image_float_buf = 0;
+  gevd_bufferxy* image_float_buf = VXL_NULLPTR;
 
   if (image_float_buf) return image_float_buf;
   //Tests for validity
@@ -359,7 +359,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
   if (!use_vil_image||!vimage->ni()||!vimage->nj())
   {
     vcl_cout << "In sdet_detector::GetBufferFromVilImage() - no image\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vil_image_resource_sptr process_region = vimage;
@@ -368,11 +368,11 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
   if (use_roi_)
   {
     if (roi_.n_regions()!=1)//no roi to process
-      return 0;
+      return VXL_NULLPTR;
     vil_image_view_base_sptr vb =
       vimage->get_view(roi_.cmin(0), roi_.csize(0), roi_.rmin(0), roi_.rsize(0));
     if (!vb)
-      return 0;
+      return VXL_NULLPTR;
     process_region = vil_new_image_resource_of_view(*vb);
   }
 
@@ -393,7 +393,7 @@ gevd_bufferxy* sdet_detector::GetBufferFromVilImage()
   if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf))
   {
     delete image_float_buf;
-    image_float_buf = 0;
+    image_float_buf = VXL_NULLPTR;
   }
 
   return image_float_buf;

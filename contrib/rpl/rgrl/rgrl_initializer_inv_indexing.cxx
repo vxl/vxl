@@ -45,7 +45,7 @@ rgrl_initializer_inv_indexing( rgrl_mask_sptr const&     from_image_roi,
   rgrl_mask_box global_region( from_image_roi->bounding_box() );
   view_ = new rgrl_view( from_image_roi, to_image_roi,
                          global_region, global_region,
-                         xform_estimator, 0,
+                         xform_estimator, VXL_NULLPTR,
                          initial_resolution );
 }
 
