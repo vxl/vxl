@@ -699,8 +699,8 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
 
   // garbage collection
   delete mask;
-  delete masksum;
-  delete wHist;
+  delete [] masksum;
+  delete [] wHist;
   delete dist;
   vil_image_view<float> magimg=NMS.mag();
 

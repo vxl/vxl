@@ -361,7 +361,7 @@ brip_vil_float_ops::gaussian(vil_image_view<float> const& input, float sigma,
       for (unsigned i = 0; i<ni; ++i)
         dest(i,j,p) = plane(i,j);
   }
-  delete ker;
+  delete [] ker;
   return dest;
 }
 
