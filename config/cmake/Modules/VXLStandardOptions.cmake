@@ -25,6 +25,10 @@ include(CTest)
 
 if( WIN32 )
   option( VXL_BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
+  if (VXL_BUILD_SHARED_LIBS)
+    # On windows, we need to export symbols for shared builds
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "TRUE")
+  endif()
 else()
   option( VXL_BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
 endif()
