@@ -583,6 +583,13 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
 
         //figure out sizes
         int alphaTypeSize = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            return false;
+        }
+
         int data_buffer_length = alpha->num_bytes() / alphaTypeSize;
         int num_time_trees = info_buffer_t->tree_buffer_length;
 
@@ -647,6 +654,13 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
 
         //figure out sizes
         int alphaTypeSize = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            return false;
+        }
+
         int data_buffer_length = alpha->num_bytes() / alphaTypeSize;
         int num_time_trees = info_buffer_t->tree_buffer_length;
 

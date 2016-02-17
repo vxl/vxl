@@ -25,6 +25,11 @@ inline vil_image_view<T> vil_decimate(const vil_image_view<T> &im, unsigned i_fa
 {
   if (j_factor==0) j_factor=i_factor;
   // use (n+d-1)/n instead of ceil((double)n/d) to calcualte sizes
+  if ( i_factor == 0 ) //Silence compiler "Division by zero" warning
+  {
+    vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    throw 0;
+  }
   return vil_image_view<T>(im.memory_chunk(), im.top_left_ptr(),
                            (im.ni()+i_factor-1u)/i_factor, (im.nj()+j_factor-1u)/j_factor, im.nplanes(),
                            im.istep()*i_factor, im.jstep()*j_factor, im.planestep());
