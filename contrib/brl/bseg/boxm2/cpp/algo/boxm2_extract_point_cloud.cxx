@@ -25,6 +25,12 @@ bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm
     vcl_size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vcl_size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
 
+    if( alphaTypeSize == 0 ) //this should never happen, it results in division by 0 in later calculations
+    {
+      vcl_cout << "ERROR alphaTypeSize == 0 " << __FILE__ << __LINE__ << vcl_endl;
+      return false;
+    }
+
     boxm2_data_base * points= cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_POINT>::prefix(), (alpha->buffer_length() /alphaTypeSize) * pointTypeSize, false);
 
     //3d array of trees

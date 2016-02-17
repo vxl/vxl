@@ -150,6 +150,13 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(vgl_ro
         bocl_mem* blk_B       = opencl_cache_->get_block(sceneB_, *iter_blks_B);
         bocl_mem* alpha_B     = opencl_cache_->get_data<BOXM2_ALPHA>(sceneB_, *iter_blks_B,0,false);
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            return false;
+        }
+
         info_buffer_B->data_buffer_length = (int) (alpha_B->num_bytes()/alphaTypeSize);
 
         bocl_mem* blk_info_B  = new bocl_mem(device_->context(), info_buffer_B, sizeof(boxm2_scene_info), " Scene Info" );

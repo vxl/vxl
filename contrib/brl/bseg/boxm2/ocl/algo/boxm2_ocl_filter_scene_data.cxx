@@ -103,6 +103,12 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
         bocl_mem* alpha     = opencl_cache_->get_data<BOXM2_ALPHA>(scene_,id,0,false);
 
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            return false;
+        }
 
                 vcl_size_t data_size = alpha->num_bytes()/alphaTypeSize;
                 bocl_mem * blk_info  = opencl_cache_->loaded_block_info();

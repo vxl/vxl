@@ -373,13 +373,18 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
   for (unsigned int i=0; i<peaks.size(); ++i) {
     if (histogram[ peaks[i] ] > max) {
       //parabolic interpolation
-      float ypos = histogram[ (peaks[i]+1)%num_bins_ ];
-      float yneg = histogram[ (peaks[i]-1)%num_bins_ ];
-      float dy   = (ypos - yneg)/2.0f;
-      float d2y  = 2.0f*histogram[ peaks[i] ] - ypos - yneg;
-      float dx = 6.28319f/num_bins_;
-      float angle = (float(peaks[i])+dy/d2y)*dx;
-      orientations.push_back(angle);
+      if(num_bins_ != 0) {
+        float ypos = histogram[ (peaks[i]+1)%num_bins_ ];
+        float yneg = histogram[ (peaks[i]-1)%num_bins_ ];
+        float dy   = (ypos - yneg)/2.0f;
+        float d2y  = 2.0f*histogram[ peaks[i] ] - ypos - yneg;
+        float dx = 6.28319f/num_bins_;
+        float angle = (float(peaks[i])+dy/d2y)*dx;
+        orientations.push_back(angle);
+      }
+      else {
+        vcl_cout << "ERROR: Division by 0" << vcl_endl;
+      }
     }
   }
 }

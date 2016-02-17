@@ -320,6 +320,13 @@ bool boxm2_cpp_batch_update_nonray_process(bprb_func_process& pro)
 
     // assumes that the data of each image has been created in the data models previously
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    // check for invalid parameters
+    //This should never happen, it will result in division by zero later
+    if( alphaTypeSize == 0 ) {
+        vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        return false;
+    }
+
     // iterate the scene block by block and write to output
     vcl_vector<boxm2_block_id> blk_ids = scene->get_block_ids();
     vcl_vector<boxm2_block_id>::iterator id;

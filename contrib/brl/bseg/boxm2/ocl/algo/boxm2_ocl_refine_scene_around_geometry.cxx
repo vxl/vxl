@@ -194,6 +194,13 @@ boxm2_ocl_refine_scene_around_geometry
 
 
                         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+                        // check for invalid parameters
+                        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+                        {
+                                vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+                                return false;
+                        }
+
                         vcl_size_t data_size = data_in->num_bytes()/alphaTypeSize;
                         data_in->write_to_buffer(queue);
                         vcl_size_t labelTypeSize =  boxm2_data_info::datasize(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());;

@@ -61,6 +61,13 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
             boxm2_data_base *  nobs = cache->get_data_base(scene,*id,num_obs_type,0,false);
             int alphaTypeSize       = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
             int auxTypeSize         = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
+            // check for invalid parameters
+            if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+            {
+                vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+                return false;
+            }
+
             boxm2_data_base *  aux  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX>::prefix(),alph->buffer_length()/alphaTypeSize*auxTypeSize);
 
             vcl_vector<boxm2_data_base*> datas;
