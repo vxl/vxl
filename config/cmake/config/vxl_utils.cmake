@@ -10,7 +10,9 @@ foreach(file ${ARGN})
   if(${file} MATCHES "\\.(h|hxx|txx)(\\.in)?$")
     string(REGEX REPLACE "\\.in$" "" install_file ${file})
     get_filename_component(dir ${install_file} PATH)
-    install_files(${prefix}/${dir} FILES ${install_file})
+    install(FILES ${install_file}
+            DESTINATION ${prefix}/${dir}
+            COMPONENT Development )
   endif()
 endforeach()
 endmacro()
