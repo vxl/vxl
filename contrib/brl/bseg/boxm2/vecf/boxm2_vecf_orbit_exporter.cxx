@@ -55,6 +55,7 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
       } else
         vcl_cout<<"Exporting crease points into "<<cre_fname<<vcl_endl;
     }
+
   double xm_min = params.x_min()-10.0;
   double xm_max = params.x_max()+10.0;
   double xtr = params.x_trans();
@@ -91,9 +92,10 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
     crease_pts_var.clear();
     boxm2_vecf_plot_orbit::plot_crease(params, is_right, min_x_new, max_x_new, crease_pts_var,num_pts_);
     imin = 0;
-    imax = static_cast<int>(inf_pts_var.size());
+    imax = static_cast<int>(inf_pts_var.size()) -1 ;
+    vcl_cout<<"number of points exported " << inf_pts_var.size()<< " versus  "<<num_pts_<<vcl_endl;
   }
-  for(int i = imin; i<imax; ++ i){
+  for(int i = imin; i<=imax; ++ i){
     double x = crease_pts_var[i].x();
     double y = crease_pts_var[i].y();
     double z = crease_pts_var[i].z();
@@ -106,7 +108,7 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
       *cre_points<< x << " " << y <<vcl_endl;
   }
 
-  for(int i = imin; i<imax; ++ i){
+  for(int i = imin; i<=imax; ++ i){
     // convert to image coordinates
     double x = inf_pts_var[i].x();
     double y = inf_pts_var[i].y();
@@ -118,7 +120,7 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
     if(export_points)
       *inf_points<< x << " " << y <<vcl_endl;
   }
-  for(int i = imin; i<imax; ++ i){
+  for(int i = imin; i<=imax; ++ i){
     double x = sup_pts_var[i].x();
     double y = sup_pts_var[i].y();
     double z = sup_pts_var[i].z();
