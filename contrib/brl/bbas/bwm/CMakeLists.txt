@@ -113,7 +113,7 @@ endif()
 
 aux_source_directory(Templates bwm_sources)
 
-add_library(bwm ${bwm_sources})
+vxl_add_library( LIBNAME bwm LIBSRCS ${bwm_sources})
 
 target_link_libraries( bwm bwm_video bwm_reg bwm_algo bwm_io vsph depth_map bsta_io bmsh3d bmsh3d_algo bsol vsol vdgl bgui ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_file_formats bvgl ${VXL_LIB_PREFIX}vul)
 
@@ -130,8 +130,6 @@ add_subdirectory(reg)
 
 
 #install the .h .txx and libs
-install_targets(/lib bwm)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/ ${bwm_sources})
 
 if(EXPAT_FOUND)
  if(EXPATPP_FOUND)

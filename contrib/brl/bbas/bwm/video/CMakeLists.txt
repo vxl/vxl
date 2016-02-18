@@ -26,7 +26,7 @@ if(EXPAT_FOUND)
 endif()
 
 aux_source_directory(Templates bwm_video_sources)
-add_library(bwm_video ${bwm_video_sources})
+vxl_add_library( LIBNAME bwm_video LIBSRCS ${bwm_video_sources})
 
 target_link_libraries( bwm_video ${VXL_LIB_PREFIX}vidl bpgl bpgl_algo brip ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl bsta bsol vsol ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo)
 
@@ -44,5 +44,3 @@ endif()
 add_subdirectory(exe)
 
 #install the .h .txx and libs
-install_targets(/lib bwm_video)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/video/ ${bwm_video_sources})

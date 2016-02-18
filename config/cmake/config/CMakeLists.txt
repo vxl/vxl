@@ -398,12 +398,12 @@ unset(VCL_CXX_HAS_HEADER_CFLOAT)
 #
 # configure files
 #
+vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h include/vxl/vcl)
+vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in  ${vxl_BINARY_DIR}/vcl/vcl_config_headers.h  include/vxl/vcl)
+vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in   ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h   include/vxl/vcl)
+vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in  ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h  include/vxl/vcl)
 
-configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h)
-configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_headers.h)
-configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h)
-configure_file(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h)
-configure_file(${vxl_SOURCE_DIR}/core/vxl_config.h.in ${vxl_BINARY_DIR}/core/vxl_config.h)
+vxl_configure_file(${vxl_SOURCE_DIR}/core/vxl_config.h.in         ${vxl_BINARY_DIR}/core/vxl_config.h         include/vxl/core)
 
 # Reset the update configuration flag
 set( VXL_UPDATE_CONFIGURATION "OFF" CACHE BOOL "Re-run the configuration tests?" FORCE )

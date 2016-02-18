@@ -26,12 +26,10 @@ set(boxm2_ocl_sources
    )
 aux_source_directory(Templates boxm2_ocl_sources)
 
-add_library(boxm2_ocl ${boxm2_ocl_sources})
+vxl_add_library( LIBNAME boxm2_ocl LIBSRCS ${boxm2_ocl_sources})
 target_link_libraries(boxm2_ocl boxm2 boxm2_basic boxm2_io bocl boct bsta brdb expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
 #install the .h .txx and libs
-install_targets(/lib boxm2_ocl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl ${boxm2_ocl_sources})
 
 #pro
 add_subdirectory(pro)

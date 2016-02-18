@@ -24,7 +24,7 @@ else()
      )
 endif()
 
-add_library(baio ${baio_sources})
+vxl_add_library( LIBNAME baio LIBSRCS ${baio_sources})
 
 if(APPLE)
     target_link_libraries(baio c)
@@ -33,8 +33,6 @@ elseif(UNIX)
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib baio)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/baio/ ${baio_sources})
 
 #tests
 if( BUILD_TESTING )

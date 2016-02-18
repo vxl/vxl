@@ -333,15 +333,13 @@ set( dcmtk_sources
   dcmimgle/libsrc/diutils.cxx
 )
 
-add_library( dcmtk ${dcmtk_sources} )
+vxl_add_library( LIBNAME dcmtk LIBSRCS ${dcmtk_sources} )
 if(WIN32)
   target_link_libraries( dcmtk Netapi32 )
 endif()
 if( DCMTK_HAVE_ZLIB )
   target_link_libraries( dcmtk ${ZLIB_LIBRARIES} )
 endif()
-
-install_targets( /lib dcmtk )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

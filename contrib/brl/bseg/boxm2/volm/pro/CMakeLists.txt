@@ -27,11 +27,9 @@ endif()
     add_definitions(-DHAVE_OPENCL)
   endif()
 
-  add_library(boxm2_volm_pro ${boxm2_volm_pro_sources})
+  vxl_add_library( LIBNAME boxm2_volm_pro LIBSRCS ${boxm2_volm_pro_sources})
 
   #install the .h .txx and libs
-  install_targets(/lib boxm2_volm_pro)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/volm/pro ${boxm2_volm_pro_sources})
 
   target_link_libraries(boxm2_volm_pro boxm2_volm boxm2_volm_io boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip vsol bsta bsta_pro vpgl_pro ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul bvrml ${BOXM2_VOLM_PRO_LIBS})
 

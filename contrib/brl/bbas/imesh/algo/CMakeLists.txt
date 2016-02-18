@@ -22,7 +22,7 @@ if(NETLIB_FOUND)
       imesh_generate_mesh.cxx     imesh_generate_mesh.h)
 endif()
 
-add_library( imesh_algo ${imesh_algo_sources} )
+vxl_add_library( LIBNAME imesh_algo LIBSRCS ${imesh_algo_sources} )
 
 if(NETLIB_FOUND)
 
@@ -36,5 +36,3 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib imesh_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/imesh/algo/ ${imesh_algo_sources})

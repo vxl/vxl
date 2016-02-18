@@ -10,7 +10,7 @@ set(boxm_algo_sp_sources
     dummy.cxx
    )
 
-add_library(boxm_algo_sp ${boxm_algo_sp_sources})
+vxl_add_library( LIBNAME boxm_algo_sp LIBSRCS ${boxm_algo_sp_sources})
 
 #processes
 add_subdirectory(pro)

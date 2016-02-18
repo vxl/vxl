@@ -6,8 +6,6 @@ doxygen_add_library(core/vil
   DESCRIPTION "Core image library"
 )
 
-# avoid undefined macro in subsequent SETs:
-set( vil_sources vil_config.h.in )
 
 include(${VXL_CMAKE_DIR}/FindPNG.cmake)
 if(PNG_FOUND)
@@ -132,8 +130,8 @@ endif()
 
 
 # Store the external library configurations in to the config file
-configure_file( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
-                ${vxl_BINARY_DIR}/core/vil/vil_config.h @ONLY IMMEDIATE )
+vxl_configure_file( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
+                ${vxl_BINARY_DIR}/core/vil/vil_config.h include/vxl/core/vil)
 
 set( vil_sources ${vil_sources}
 

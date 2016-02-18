@@ -37,8 +37,7 @@ configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expat
 configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
 configure_file(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
 
-add_library(expat ${expat_sources})
-install_targets(/lib expat)
+vxl_add_library( LIBNAME expat LIBSRCS ${expat_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

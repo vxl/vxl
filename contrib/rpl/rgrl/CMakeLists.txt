@@ -162,10 +162,7 @@ set( rgrl_sources
 
 aux_source_directory( Templates rgrl_sources )
 
-add_library( rgrl ${rgrl_sources} )
-
-install_targets(/lib rgrl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgrl ${rgrl_sources})
+vxl_add_library( LIBNAME rgrl LIBSRCS ${rgrl_sources} )
 target_link_libraries( rgrl rrel rsdl vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 #find_package( ITK )
 #if( ITK_FOUND )

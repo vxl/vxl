@@ -22,9 +22,7 @@ set(vdgl_sources
 
 aux_source_directory(Templates vdgl_sources)
 
-add_library(vdgl ${vdgl_sources})
-install_targets(/lib vdgl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vdgl ${vdgl_sources})
+vxl_add_library( LIBNAME vdgl LIBSRCS ${vdgl_sources})
 target_link_libraries(vdgl vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
 if(BUILD_TESTING)

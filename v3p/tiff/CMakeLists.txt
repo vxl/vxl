@@ -168,11 +168,7 @@ if(NOT VXL_USING_NATIVE_TIFF)
       )
     endif()
   endif()
-
-
-  add_library( tiff ${tiff_sources} )
-  install_targets( /lib tiff )
-  target_link_libraries( tiff ${ZLIB_LIBRARIES} ${JPEG_LIBRARIES})
+  vxl_add_library( LIBNAME tiff LIBSRCS ${tiff_sources} )
 
   if( BUILD_TESTING)
     add_subdirectory(test)

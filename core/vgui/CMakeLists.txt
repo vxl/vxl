@@ -63,7 +63,6 @@ if(OPENGL_FOUND)
 
 set(vgui_sources
   vgui_fwd.h
-  vgui_config.h.in
 
   # basic classes
   vgui.cxx                      vgui.h
@@ -501,8 +500,8 @@ endif()
 # that depend on these configuration parameters to be automatically
 # recompiled when the config changes.
 
-configure_file( ${vxl_SOURCE_DIR}/core/vgui/vgui_config.h.in
-                ${vxl_BINARY_DIR}/core/vgui/vgui_config.h @ONLY IMMEDIATE )
+vxl_configure_file( ${vxl_SOURCE_DIR}/core/vgui/vgui_config.h.in
+                ${vxl_BINARY_DIR}/core/vgui/vgui_config.h include/vxl/core/vgui)
 
 # Register each toolkit that was compiled in.
 set( vgui_sources ${vgui_sources}
