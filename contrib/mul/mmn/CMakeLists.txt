@@ -27,7 +27,7 @@ set(mmn_sources
 )
 aux_source_directory(Templates mmn_sources)
 
-add_library(mmn ${mmn_sources})
+vxl_add_library( LIBNAME mmn LIBSRCS ${mmn_sources})
 target_link_libraries(mmn mbl)
 
 if(BUILD_TESTING)

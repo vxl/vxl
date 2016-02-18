@@ -21,7 +21,7 @@ set(mcal_sources
 )
 aux_source_directory(Templates mcal_sources)
 
-add_library(mcal ${mcal_sources})
+vxl_add_library( LIBNAME mcal LIBSRCS ${mcal_sources})
 target_link_libraries(mcal mbl)
 
 if(BUILD_TESTING)

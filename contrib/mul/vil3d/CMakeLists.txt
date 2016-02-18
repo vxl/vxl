@@ -48,11 +48,8 @@ set(vil3d_sources
 )
 aux_source_directory(Templates vil3d_sources)
 
-add_library(vil3d ${vil3d_sources})
+vxl_add_library( LIBNAME vil3d LIBSRCS ${vil3d_sources})
 target_link_libraries( vil3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl )
-
-install_targets(/lib vil3d)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vil3d ${vil3d_sources})
 
 add_subdirectory(algo)
 add_subdirectory(io)

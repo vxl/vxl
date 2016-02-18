@@ -20,7 +20,7 @@ set(m23d_sources
 )
 aux_source_directory(Templates m23d_sources)
 
-add_library(m23d ${m23d_sources})
+vxl_add_library( LIBNAME m23d LIBSRCS ${m23d_sources})
 target_link_libraries(m23d mbl)
 
 if(BUILD_TESTING)
