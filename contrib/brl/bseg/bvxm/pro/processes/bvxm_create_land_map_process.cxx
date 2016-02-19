@@ -99,10 +99,16 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
         vit->cam->global_to_img(lon, lat, gz, u, v);
         unsigned uu = (unsigned)vcl_floor(u+0.5), vv = (unsigned)vcl_floor(v+0.5);
         if (uu < vit->ni && vv < vit->nj)
+        {
           if (is_convert)
+          {
             (*out_img)(i, j) = volm_osm_category_io::geo_land_table[(*geo_img)(uu,vv)].id_;
+          }
           else
+          {
             (*out_img)(i, j) = (*geo_img)(uu,vv);
+          }
+        }
       }
     }
   }
