@@ -46,7 +46,7 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
   vcl_vector<vcl_string>::const_iterator pit;
   pit = vcl_find(prefixes.begin(), prefixes.end(),"alpha");
   if(pit == prefixes.end()){
-    "FATAL! In refine - the data base for alpha must be present\n";
+    vcl_cerr << "FATAL! In refine - the data base for alpha must be present\n" << vcl_endl;
     return false;
   }
   // the index in the prefix list corresponding to alpha
