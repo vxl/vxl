@@ -427,8 +427,8 @@ sdet_sel_base
         cvlet2_found = true;
 
         //do the c1 test
-        if ( before && cvlet2->edgel_chain.front()==eA ||
-            !before && cvlet2->edgel_chain.back()==eA)
+        if ( (before && cvlet2->edgel_chain.front()==eA) ||
+            (!before && cvlet2->edgel_chain.back()==eA) )
           c1_pair_found = c1_pair_found || cvlet1->curve_model->is_C1_with(cvlet2->curve_model);
       }
 
