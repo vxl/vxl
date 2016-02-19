@@ -424,6 +424,13 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,true);
    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+   // check for invalid parameters
+   if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+   {
+     vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+     return false;
+   }
+
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
 
    blk_info_source  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info" );
@@ -552,6 +559,13 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
   alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,true);
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  // check for invalid parameters
+  if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+  {
+    vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    return false;
+  }
+
   info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
   data_size = info_buffer_source->data_buffer_length;
 
@@ -712,6 +726,13 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>  (source_scene_, *iter_blk_source,0,true);
 
    int alphaTypeSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+   // check for invalid parameters
+   if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+   {
+    vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    return false;
+   }
+
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
    vcl_size_t data_size_target = static_cast<vcl_size_t>(info_buffer_->data_buffer_length);
 

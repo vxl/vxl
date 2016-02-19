@@ -51,6 +51,12 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   boxm2_cache_sptr cache  = opencl_cache->get_cpu_cache();
   boxm2_data_base* alph   = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
   int alphaTypeSize       = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+  // check for invalid parameters
+  if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+  {
+    vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    throw 0;
+  }
   int data_buff_length    = (int) (alph->buffer_length()/alphaTypeSize);
 
   //debuggers--------

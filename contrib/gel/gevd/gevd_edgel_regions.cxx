@@ -711,8 +711,14 @@ int gevd_edgel_regions::bytes_per_pix()
 {
   int bypp = 1;
   if (image_source_)
+  {
+    if ( image_ ->bits_per_component() == 0 )
+    {
+      vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+      throw 0;
+    }
     bypp = (image_->components() / image_->bits_per_component());
-
+  }
   if (buf_source_)
     bypp = buf_->GetBytesPixel();
   return bypp;

@@ -72,6 +72,13 @@ bool boxm2_cpp_batch_compute_synoptic_function_1d_process(bprb_func_process& pro
     boxm2_synoptic_fucntion_1d_functor data_functor;
     data_functor.init_data(str_cache,alpha,cubic_model_data);
     int phongs_model_TypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
+    // check for invalid parameters
+    if( phongs_model_TypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      vcl_cout << "ERROR: phongs_model_TypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+      return false;
+    }
+
     int data_buff_length = (int) (cubic_model_data->buffer_length()/phongs_model_TypeSize);
 
     boxm2_data_leaves_serial_iterator<boxm2_synoptic_fucntion_1d_functor>(blk,data_buff_length,data_functor);
