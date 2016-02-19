@@ -87,23 +87,9 @@ include( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
 include( ${CMAKE_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
 include(${CMAKE_SOURCE_DIR}/config/cmake/doxygen/doxygen.cmake)
 
-# Copy the UseVXL.cmake file to the binary directory so that client
-# projects don't need to find the source directory first. They can run
-# the UseVXL.cmake from the vxl binary directory, and determine the
-# vxl source directory by loading the cache.
-configure_file( ${VXL_CMAKE_DIR}/UseVXL.cmake
-                ${CMAKE_BINARY_DIR}/UseVXL.cmake COPYONLY )
-
-# Copy CTestCustom.cmake to top of build tree
-configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
-  ${CMAKE_BINARY_DIR}/CTestCustom.cmake COPYONLY )
-
 # Location of VXL's FindXXX.cmake CMake modules.
 # This is identical to VXL_CMAKE_DIR.  Perhaps we should eliminate MODULE_PATH?
 set( MODULE_PATH ${CMAKE_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
-
-# For use in client projects that call UseVXL.cmake
-set(VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
 # Options to add extra compiler and linker flags
 #
@@ -227,5 +213,21 @@ if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/CMakeLists.txt )
   add_subdirectory(contrib)
 endif()
 
+# Generate Project files dependacy generation for now for downstream packages
+
+# Copy the UseVXL.cmake file to the binary directory so that client
+# projects don't need to find the source directory first. They can run
+# the UseVXL.cmake from the vxl binary directory, and determine the
+# vxl source directory by loading the cache.
+configure_file( ${VXL_CMAKE_DIR}/UseVXL.cmake
+                ${vxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
+# For use in client projects that call UseVXL.cmake
+set(VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
+
+# Copy CTestCustom.cmake to top of build tree
+configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
+  ${vxl_BINARY_DIR}/CTestCustom.cmake COPYONLY )
+
+
 # This add_subdirectory command must be the last add_subdirectory command in this file
-add_subdirectory(config/cmake/export)
+include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/export/VXLCreateProject.cmake)
