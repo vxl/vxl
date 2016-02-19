@@ -72,6 +72,13 @@ bool boxm2_cpp_batch_update_nonsurface_model_process(bprb_func_process& pro)
     boxm2_compute_empty_model_gradient_functor data_functor;
     data_functor.init_data(entropy_histo_air, str_cache);
     int histo_entropy_airTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
+    // check for invalid parameters
+    if( histo_entropy_airTypeSize == 0 ) {
+    //This should never happen, it will result in division by zero later
+        vcl_cout << "ERROR: histo_entropy_airTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        return false;
+    }
+
     int data_buff_length  = (int)(entropy_histo_air->buffer_length()/histo_entropy_airTypeSize);
     boxm2_data_serial_iterator<boxm2_compute_empty_model_gradient_functor>(data_buff_length,data_functor);
 

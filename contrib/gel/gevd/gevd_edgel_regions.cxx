@@ -711,8 +711,16 @@ int gevd_edgel_regions::bytes_per_pix()
 {
   int bypp = 1;
   if (image_source_)
-    bypp = (image_->components() / image_->bits_per_component());
-
+  {
+    if ( image_ ->bits_per_component() != 0 )
+    {
+      bypp = (image_->components() / image_->bits_per_component());
+    }
+    else
+    {
+      vcl_cout << "ERROR: 0 bits per component" << vcl_endl;
+    }
+  }
   if (buf_source_)
     bypp = buf_->GetBytesPixel();
   return bypp;

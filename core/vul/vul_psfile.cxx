@@ -287,7 +287,10 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
               index += int(*(buffer + (pixel_number+m+n*width)));
               ++number_of_pixels_sampled;
             }
-        index/=number_of_pixels_sampled; // Average the pixel intensity value.
+        if(number_of_pixels_sampled != 0)
+        {
+          index/=number_of_pixels_sampled; // Average the pixel intensity value.
+        }
       }
 
       // write hex pixel value
@@ -443,7 +446,10 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
                 index += int(*(data+(pixel_number+(m+n*sizex)*bytes_per_pixel)));
                 ++number_of_pixels_sampled;
               }
-          index/=number_of_pixels_sampled;  // average the pixel intensity
+          if(number_of_pixels_sampled != 0)
+          {
+            index/=number_of_pixels_sampled;  // average the pixel intensity
+          }
         }
 
         // write RGC hex.
