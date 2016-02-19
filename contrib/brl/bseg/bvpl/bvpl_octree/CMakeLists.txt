@@ -10,8 +10,8 @@ if(EXPAT_FOUND)
 
 find_package( Threads )
 
-#configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/bvpl_octree_config.h.in
-#                ${CMAKE_CURRENT_BINARY_DIR}/bvpl_octree_config.h )
+#vxl_configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/bvpl_octree_config.h.in
+#                ${CMAKE_CURRENT_BINARY_DIR}/bvpl_octree_config.h include/vxl/contrib/brl/bseg/bvpl/bvpl_octree)
 
 include_directories( ${EXPAT_INCLUDE_DIR} )
 include_directories( ${VXLCORE_INCLUDE_DIR} )

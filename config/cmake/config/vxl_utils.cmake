@@ -12,9 +12,19 @@ foreach(file ${ARGN})
     get_filename_component(dir ${install_file} PATH)
     install(FILES ${install_file}
             DESTINATION ${prefix}/${dir}
+            PERMISSIONS WORLD_READ
             COMPONENT Development )
   endif()
 endforeach()
+endmacro()
+
+##
+#
+# A macro to setup configuration and installation of header files
+#
+macro(vxl_configure_file infile outfile installprefix)
+  configure_file(${infile}  ${outfile}  ESCAPE_QUOTES @ONLY IMMEDIATE)
+  INSTALL_NOBASE_HEADER_FILES(${installprefix} ${outfile})
 endmacro()
 
 #
@@ -61,7 +71,7 @@ macro( vxl_add_library )
   endif()
   if(NOT VXL_INSTALL_NO_DEVELOPMENT)
     ## Identify the relative path for installing the header files and txx files
-    string(REPLACE ${CMAKE_SOURCE_DIR} "/include/vxl" cmake_relative_path ${CMAKE_CURRENT_SOURCE_DIR})
+    string(REPLACE ${CMAKE_SOURCE_DIR} "include/vxl" cmake_relative_path ${CMAKE_CURRENT_SOURCE_DIR})
     #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}\n${CMAKE_SOURCE_DIR}\n${cmake_relative_path}")
     INSTALL_NOBASE_HEADER_FILES(${cmake_relative_path} ${lib_srcs})
   endif()

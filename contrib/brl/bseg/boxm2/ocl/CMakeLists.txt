@@ -4,9 +4,9 @@ if(BUILD_BRL)
 endif()
 
 # Set up boxm2_ocl_where_root_dir.h to have a macro set to $BOXM2_OPENCL_SRC_DIR
-configure_file(
+vxl_configure_file(
   boxm2_ocl_where_root_dir.h.in
-  ${vxl_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/boxm2_ocl_where_root_dir.h ESCAPE_QUOTES
+  ${vxl_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/boxm2_ocl_where_root_dir.h include/vxl/contrib/brl/bseg/boxm2/ocl
 )
 include_directories( ${vxl_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/ )
 

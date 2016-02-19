@@ -18,8 +18,8 @@ include( ${VXL_CMAKE_DIR}/NewCMake/FindDirectShow.cmake )
 find_file(VIDEODEV_FOUND videodev.h /usr/include/linux/)
 find_file(VIDEODEV2_FOUND videodev2.h /usr/include/linux/)
 
-configure_file( ${vxl_SOURCE_DIR}/core/vidl/vidl_config.h.in
-                ${vxl_BINARY_DIR}/core/vidl/vidl_config.h )
+vxl_configure_file( ${vxl_SOURCE_DIR}/core/vidl/vidl_config.h.in
+                ${vxl_BINARY_DIR}/core/vidl/vidl_config.h include/vxl/core/vidl )
 
 if( FFMPEG_FOUND )
   include_directories(${FFMPEG_INCLUDE_DIR})
@@ -50,7 +50,6 @@ if(DIRECTSHOW_FOUND)
 endif()
 
 set(vidl_sources
-    vidl_config.h.in
     vidl_pixel_format.h           vidl_pixel_format.cxx
 	vidl_export.h
     vidl_color.h                  vidl_color.cxx

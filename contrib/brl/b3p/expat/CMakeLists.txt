@@ -17,8 +17,6 @@ set(expat_sources
     utf8tab.h
     expat.h
     cm_expat_mangle.h
-    expatConfig.h.in
-    expatDllConfig.h.in
    )
 
 include(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
@@ -32,10 +30,11 @@ if(WIN32)
   endif()
 endif()
 
-configure_file(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h)
-configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h)
+vxl_configure_file(${expat_SOURCE_DIR}/expatConfig.h.in ${expat_BINARY_DIR}/expatConfig.h include/vxl/contrib/brl/b3p/expat)
+vxl_configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in ${expat_BINARY_DIR}/expatDllConfig.h include/vxl/contrib/brl/b3p/expat)
+vxl_configure_file(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h include/vxl/contrib/brl/b3p/expat)
+
 configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)
-configure_file(${expat_SOURCE_DIR}/expat.h ${expat_BINARY_DIR}/expat.h)
 
 vxl_add_library( LIBNAME expat LIBSRCS ${expat_sources})
 
