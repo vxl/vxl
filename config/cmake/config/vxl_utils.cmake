@@ -6,16 +6,28 @@
 #
 
 macro(INSTALL_NOBASE_HEADER_FILES prefix)
-foreach(file ${ARGN})
-  if(${file} MATCHES "\\.(h|hxx|txx)(\\.in)?$")
-    string(REGEX REPLACE "\\.in$" "" install_file ${file})
-    get_filename_component(dir ${install_file} PATH)
-    install(FILES ${install_file}
-            DESTINATION ${prefix}/${dir}
-            PERMISSIONS WORLD_READ
-            COMPONENT Development )
-  endif()
-endforeach()
+  foreach(file ${ARGN})
+    if(${file} MATCHES "\\.(h|hxx|txx)?$")
+      string(REGEX REPLACE "\\.in$" "" install_file ${file})
+      get_filename_component(dir ${install_file} PATH)
+      # message("install_file=${prefix}/${dir}/${install_file}")
+      install(FILES ${install_file}
+              DESTINATION ${prefix}/${dir}
+              PERMISSIONS WORLD_READ
+              COMPONENT Development )
+    endif()
+    if(${file} MATCHES "\\.in?$")
+      string(REGEX REPLACE "\\.in$" "" install_file ${file})
+      if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${install_file})
+        # message("install_file=${CMAKE_CURRENT_BINARY_DIR}/${install_file}")
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${install_file}
+                DESTINATION ${prefix}
+                COMPONENT Development )
+      else()
+        message(WARNING "File not found: ${CMAKE_CURRENT_BINARY_DIR}/${install_file}")
+      endif()
+    endif()
+  endforeach()
 endmacro()
 
 ##
@@ -56,6 +68,8 @@ macro( vxl_add_library )
   list(LENGTH lib_srcs num_src_files)
   if( ${num_src_files} GREATER 0 )
     add_library(${lib_name} ${lib_srcs} )
+
+    set_property(GLOBAL APPEND PROPERTY VXLTargets_MODULES ${lib_name})
     if(VXL_LIBRARY_PROPERTIES)
        set_target_properties(${lib_name} PROPERTIES ${VXL_LIBRARY_PROPERTIES})
     endif()
@@ -63,7 +77,7 @@ macro( vxl_add_library )
     # Installation
     if(NOT VXL_INSTALL_NO_LIBRARIES)
       install(TARGETS ${lib_name}
-        EXPORT ${VXL_INSTALL_EXPORT_NAME}
+        EXPORT VXLTargets
         RUNTIME DESTINATION ${VXL_INSTALL_RUNTIME_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${VXL_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
         ARCHIVE DESTINATION ${VXL_INSTALL_ARCHIVE_DIR} COMPONENT Development)
@@ -72,7 +86,12 @@ macro( vxl_add_library )
   if(NOT VXL_INSTALL_NO_DEVELOPMENT)
     ## Identify the relative path for installing the header files and txx files
     string(REPLACE ${CMAKE_SOURCE_DIR} "include/vxl" cmake_relative_path ${CMAKE_CURRENT_SOURCE_DIR})
-    #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}\n${CMAKE_SOURCE_DIR}\n${cmake_relative_path}")
+    # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}\n${CMAKE_SOURCE_DIR}\n${cmake_relative_path}")
+    target_include_directories(${lib_name}
+      PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:${cmake_relative_path}>
+    )
     INSTALL_NOBASE_HEADER_FILES(${cmake_relative_path} ${lib_srcs})
   endif()
   unset(lib_srcs)

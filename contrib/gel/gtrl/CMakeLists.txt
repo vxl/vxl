@@ -24,7 +24,7 @@ if(NETLIB_FOUND)
   )
 endif()
 
-vxl_add_library( LIBNAME gtrl LIBSRCS ${gtrl_sources})
+vxl_add_library(LIBNAME gtrl LIBSRCS ${gtrl_sources})
 target_link_libraries(gtrl ${VXL_LIB_PREFIX}vbl)
 if(NETLIB_FOUND)
   target_link_libraries(gtrl ${NETLIB_LIBRARIES})

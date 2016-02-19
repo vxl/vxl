@@ -112,7 +112,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(FMatrixComputeRobust.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-vxl_add_library( LIBNAME mvl LIBSRCS ${mvl_sources})
+vxl_add_library(LIBNAME mvl LIBSRCS ${mvl_sources})
 target_link_libraries(mvl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vul)
 
 if(BUILD_EXAMPLES)

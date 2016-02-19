@@ -32,7 +32,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(gevd_contour.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-vxl_add_library( LIBNAME gevd LIBSRCS ${gevd_sources})
+vxl_add_library(LIBNAME gevd LIBSRCS ${gevd_sources})
 target_link_libraries(gevd vtol vsol vdgl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 
 if(BUILD_TESTING)

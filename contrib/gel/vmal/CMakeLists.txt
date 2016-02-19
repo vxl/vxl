@@ -27,7 +27,7 @@ aux_source_directory(Templates vmal_sources)
 )
 
 
-vxl_add_library( LIBNAME vmal LIBSRCS ${vmal_sources})
+vxl_add_library(LIBNAME vmal LIBSRCS ${vmal_sources})
 
 if(BUILD_OXL)
  target_link_libraries(vmal mvl osl ${VXL_LIB_PREFIX}vil)

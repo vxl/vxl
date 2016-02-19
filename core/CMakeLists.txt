@@ -14,6 +14,8 @@ set(global_sources
  vxl_version.h
 )
 
+INSTALL_NOBASE_HEADER_FILES(include/vxl/core ${global_sources})
+
 if(BUILD_CORE_UTILITIES)
   # POSIX layer
   add_subdirectory(vpl)

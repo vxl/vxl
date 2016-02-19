@@ -3,7 +3,7 @@
 include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 include_directories( ${RPL_INCLUDE_DIR} )
-message("RPL_INCLUDE_DIR = " ${RPL_INCLUDE_DIR})
+
 set(boxm2_vecf_sources
     boxm2_vecf_eye_params.h
     boxm2_vecf_eye_scene.h                  boxm2_vecf_eye_scene.cxx

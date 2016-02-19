@@ -33,7 +33,8 @@ endif()
 add_executable( core_test_all
   test_driver.cxx
   test_config.cxx
-  test_build_info.cxx test_build_info.h.in
+  test_build_info.cxx
+  test_build_info.h.in
 )
 target_link_libraries( core_test_all ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 

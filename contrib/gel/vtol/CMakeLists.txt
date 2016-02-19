@@ -34,7 +34,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vtol_two_chain.cxx PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-vxl_add_library( LIBNAME vtol LIBSRCS ${vtol_sources})
+vxl_add_library(LIBNAME vtol LIBSRCS ${vtol_sources})
 target_link_libraries(vtol vdgl vsol ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${CMAKE_THREAD_LIBS})
 
 add_subdirectory(algo)

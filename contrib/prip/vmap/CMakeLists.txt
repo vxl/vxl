@@ -27,7 +27,7 @@ set(vmap_sources
    vmap_2_tmap_elts.cxx          vmap_2_tmap_elts.h
 )
 
-vxl_add_library( LIBNAME vmap LIBSRCS ${vmap_sources})
+vxl_add_library(LIBNAME vmap LIBSRCS ${vmap_sources})
 target_link_libraries(vmap ${VXL_LIB_PREFIX}vcl)
 
 #if(BUILD_TESTING)

@@ -17,7 +17,7 @@ if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
 endif()
 
 add_definitions(-DBVGL_WHERE_BRL_LIB_DIR_H_EXISTS)
-include_directories( ${brl_BINARY_DIR}/bbas/bvgl/algo/ )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 
 set( bvgl_algo_sources
