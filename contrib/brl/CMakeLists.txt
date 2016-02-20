@@ -10,8 +10,8 @@ doxygen_add_package(contrib/brl "Brown University Libraries")
 # Setting BRL_INCLUDE_DIR in this way allows #include <foo/foo.h> without
 # having to know the internal directory structure.
 # The root directory should be listed last in case anyone tries to append to this path
-set( BRL_INCLUDE_DIR "${brl_SOURCE_DIR}/bbas;${brl_BINARY_DIR}/bbas;${brl_SOURCE_DIR}/bseg;${brl_SOURCE_DIR}/bpro;${brl_SOURCE_DIR}" CACHE STATIC "Brown University package include files" FORCE )
-set( BRL_BINARY_DIR "${brl_BINARY_DIR}")
+set( BRL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bbas;${CMAKE_CURRENT_BINARY_DIR}/bbas;${CMAKE_CURRENT_SOURCE_DIR}/bseg;${CMAKE_CURRENT_SOURCE_DIR}/bpro;${CMAKE_CURRENT_SOURCE_DIR}" CACHE STATIC "Brown University package include files" FORCE )
+set( BRL_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 set( BRL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/bbas

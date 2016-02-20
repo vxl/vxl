@@ -8,7 +8,7 @@ vxl_configure_file(${expat_SOURCE_DIR}/expatConfig.h.in
                   ${expat_BINARY_DIR}/expatConfig.h include/vxl/contrib/brl/b3p/expat)
 vxl_configure_file(${expat_SOURCE_DIR}/expatDllConfig.h.in
                   ${expat_BINARY_DIR}/expatDllConfig.h include/vxl/contrib/brl/b3p/expat)
-vxl_configure_file(${expat_SOURCE_DIR}/expat.h
+vxl_configure_file_copyonly(${expat_SOURCE_DIR}/expat.h
                   ${expat_BINARY_DIR}/expat.h include/vxl/contrib/brl/b3p/expat)
 
 configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCoverage)

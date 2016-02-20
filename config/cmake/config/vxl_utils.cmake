@@ -39,6 +39,15 @@ macro(vxl_configure_file infile outfile installprefix)
   INSTALL_NOBASE_HEADER_FILES(${installprefix} ${outfile})
 endmacro()
 
+##
+#
+# A macro to setup configuration and installation of header files
+#
+macro(vxl_configure_file_copyonly infile outfile installprefix)
+  configure_file(${infile}  ${outfile} COPYONLY IMMEDIATE)
+  INSTALL_NOBASE_HEADER_FILES(${installprefix} ${outfile})
+endmacro()
+
 #
 # A macro to configure where libraries are to be installed for
 # vxl for adding a library, setting it's properties, and

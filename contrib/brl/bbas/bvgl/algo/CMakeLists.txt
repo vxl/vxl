@@ -3,15 +3,13 @@
 project(bvgl_algo)
 
 # Set up bvgl_where_brl_lib_dir.h to have a macro set to $CMAKE_LIBRARY_OUTPUT_DIRECTORY
-vxl_configure_file(
-  ${brl_SOURCE_DIR}/bbas/bvgl/algo/bvgl_where_brl_lib_dir.h.in
-  ${brl_BINARY_DIR}/bbas/bvgl/algo/bvgl_where_brl_lib_dir.h include/vxl/bbas/bvgl/algo
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/bvgl_where_brl_lib_dir.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/bvgl_where_brl_lib_dir.h include/vxl/bbas/bvgl/algo
 )
 
 # Copy the Eulerspiral lookup-table file to the BRL library folder
 if(CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  vxl_configure_file(
-    ${brl_SOURCE_DIR}/bbas/bvgl/algo/bvgl_eulerspiral_lookup_table.bvl
+  vxl_configure_file_copyonly( ${CMAKE_CURRENT_SOURCE_DIR}/bvgl_eulerspiral_lookup_table.bvl
     ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/bvgl_eulerspiral_lookup_table.bvl include/vxl/bbas/bvgl/algo
   )
 endif()

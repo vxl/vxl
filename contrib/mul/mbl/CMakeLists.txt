@@ -10,8 +10,7 @@ set( VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT  CACHE PATH "Where to store historical m
 mark_as_advanced(VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT)
 
 # Set up mbl_config.h for VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT, etc.
-vxl_configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/mbl_config.h.in
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/mbl_config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/mbl_config.h
   include/vxl/contrib/mul/mbl
 )
