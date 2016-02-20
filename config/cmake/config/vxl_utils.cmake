@@ -35,7 +35,7 @@ endmacro()
 # A macro to setup configuration and installation of header files
 #
 macro(vxl_configure_file infile outfile installprefix)
-  configure_file(${infile}  ${outfile}  ESCAPE_QUOTES @ONLY IMMEDIATE)
+  configure_file(${infile}  ${outfile}  ESCAPE_QUOTES @ONLY)
   INSTALL_NOBASE_HEADER_FILES(${installprefix} ${outfile})
 endmacro()
 
@@ -44,7 +44,7 @@ endmacro()
 # A macro to setup configuration and installation of header files
 #
 macro(vxl_configure_file_copyonly infile outfile installprefix)
-  configure_file(${infile}  ${outfile} COPYONLY IMMEDIATE)
+  configure_file(${infile}  ${outfile} COPYONLY)
   INSTALL_NOBASE_HEADER_FILES(${installprefix} ${outfile})
 endmacro()
 
@@ -172,7 +172,7 @@ macro(GENERATE_TEST_INCLUDE LIB SOURCES PREFIX)
 
   configure_file("${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in"
                  "${CMAKE_CURRENT_BINARY_DIR}/test_include.cxx"
-                 @ONLY IMMEDIATE)
+                 @ONLY)
 
   add_executable(${LIB}_test_include ${CMAKE_CURRENT_BINARY_DIR}/test_include.cxx)
   target_link_libraries(${LIB}_test_include ${LIB})
