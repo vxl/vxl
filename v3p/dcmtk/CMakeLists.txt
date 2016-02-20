@@ -153,7 +153,7 @@ else()
   set( DCMTK_HAVE_ZLIB )
 endif()
 
-set( DCMTK_DCM_DICT_DEFAULT_PATH "${PROJECT_SOURCE_DIR}/dcmdata/libsrc/dicom.dic" )
+set( DCMTK_DCM_DICT_DEFAULT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dcmdata/libsrc/dicom.dic" )
 if( WIN32 )
   set( DCMTK_PATH_SEPARATOR "\\\\" )
   set( DCMTK_ENVIRONMENT_PATH_SEPARATOR ";" )
@@ -226,11 +226,10 @@ endif()
 
 # ---------------------------------------------------------------------------
 # Source files
-
-include_directories( ${PROJECT_BINARY_DIR} )
-include_directories( ${PROJECT_SOURCE_DIR}/ofstd/include )
-include_directories( ${PROJECT_SOURCE_DIR}/dcmdata/include )
-include_directories( ${PROJECT_SOURCE_DIR}/dcmimgle/include )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/ofstd/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/dcmdata/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/dcmimgle/include )
 
 
 set( dcmtk_sources
