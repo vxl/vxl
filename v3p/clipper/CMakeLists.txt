@@ -16,5 +16,4 @@ set( clipper_sources
 
 add_definitions( -D_FILE_OFFSET_BITS )
 
-add_library( clipper ${clipper_sources} )
-install_targets( /lib clipper )
+vxl_add_library( LIBNAME clipper LIBSRCS ${clipper_sources} )

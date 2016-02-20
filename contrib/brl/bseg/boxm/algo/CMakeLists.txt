@@ -19,7 +19,7 @@ set(boxm_algo_sources
     boxm_scene_levels_utils.h
    )
 
-add_library(boxm_algo ${boxm_algo_sources})
+vxl_add_library( LIBNAME boxm_algo LIBSRCS ${boxm_algo_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

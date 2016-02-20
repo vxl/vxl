@@ -17,7 +17,7 @@ if( PYTHON_FOUND )
         reg_brec.cxx          reg_brec.h
        )
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      add_library(brec_batch SHARED ${brec_batch_sources})
+      vxl_add_library( LIBNAME brec_batch LIBSRCS SHARED ${brec_batch_sources})
 
       if(WIN32)
         #library has to have different name depending on debug or release version.

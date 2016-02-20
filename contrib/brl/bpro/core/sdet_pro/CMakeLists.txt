@@ -19,7 +19,7 @@ set(sdet_pro_sources
 aux_source_directory(Templates sdet_pro_sources)
 aux_source_directory(processes sdet_pro_sources)
 
-add_library(sdet_pro ${sdet_pro_sources})
+vxl_add_library( LIBNAME sdet_pro LIBSRCS ${sdet_pro_sources})
 target_link_libraries(sdet_pro bprb brdb sdet vil_pro ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl)
 
 if( BUILD_TESTING )

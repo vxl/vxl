@@ -45,9 +45,10 @@ void test_image()
 
   //compile pyramid test
   vcl_vector<vcl_string> src_paths;
-  vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+  const vcl_string source_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
   src_paths.push_back(source_dir + "basic/image_pyramid.cl");
   bocl_kernel pyramid_test;
+  vcl_cout << "Reading file: " << source_dir + "basic/image_pyramid.cl" << vcl_endl;
   pyramid_test.create_kernel(&device->context(),device->device_id(), src_paths, "test_image_pyramid", " -D IMG_TYPE=float ", "test image pyramid kernel");
 
   // create a command queue.

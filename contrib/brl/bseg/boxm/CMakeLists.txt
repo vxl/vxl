@@ -21,7 +21,7 @@ set(boxm_sources
 
 aux_source_directory(Templates boxm_sources)
 
-add_library(boxm  ${boxm_sources})
+vxl_add_library( LIBNAME boxm LIBSRCS  ${boxm_sources})
 
 target_link_libraries(boxm boct bsta brdb ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_xio ${VXL_LIB_PREFIX}vpgl_algo vsol expatpp ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vcl)
 
@@ -49,5 +49,3 @@ endif()
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib boxm)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm/ ${boxm_sources})

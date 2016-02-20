@@ -29,7 +29,7 @@ if( PYTHON_FOUND )
         )
 
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      add_library(bstm_batch SHARED ${bstm_batch_sources})
+      vxl_add_library( LIBNAME bstm_batch LIBSRCS SHARED ${bstm_batch_sources})
 
       #library has to have different name depending on debug or release version.
       if(WIN32)
@@ -58,8 +58,6 @@ if( PYTHON_FOUND )
 
 
       #install the .h .txx and libs
-      install_targets(/lib bstm_batch)
-      INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bstm_batch/ ${bstm_batch_sources})
 
       if( BUILD_TESTING )
         add_subdirectory(tests)

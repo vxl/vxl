@@ -11,7 +11,7 @@ set( bsvg_sources
 
 aux_source_directory(Templates bsvg_sources)
 
-add_library(bsvg ${bsvg_sources})
+vxl_add_library( LIBNAME bsvg LIBSRCS ${bsvg_sources})
 
 target_link_libraries( bsvg bxml )
 
@@ -22,5 +22,3 @@ endif()
 add_subdirectory(pro)
 
 
-install_targets(/lib bsvg)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bxml/bsvg ${bsvg_sources})

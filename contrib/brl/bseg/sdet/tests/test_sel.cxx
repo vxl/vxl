@@ -34,8 +34,8 @@ MAIN( test_sel )
   sdet_ES_curve_model es3(eA, eC, eA, 0.1, 0.1, 1.0, 0.5, 0.5, false);
 
   //ground truth curve bundle eA-eB at eA
-  double k_range_gt[] = {-0.0008, -0.7983, 0.0008, 0.7983 };
-  double gamma_range_gt[] = {-0.5942, 1.7910, 0.5942, -1.7910};
+  const double k_range_gt[] = {-0.0008, -0.7983, 0.0008, 0.7983 };
+  const double gamma_range_gt[] = {-0.5942, 1.7910, 0.5942, -1.7910};
 
   for (unsigned i=0; i<es1.cv_bundle[0].size(); i++){
     test_passed = test_passed && vcl_fabs(es1.cv_bundle[0][i].x() - k_range_gt[i])<tolerance
@@ -43,8 +43,8 @@ MAIN( test_sel )
   }
   TEST("Compute curve bundle from(eA-eB) at eA", test_passed, true);
 
-  double k_range_gt2[] = {-0.0008, 0.7984, 0.0008, -0.7984 };
-  double gamma_range_gt2[] = {0.5941, 1.7910, -0.5941, -1.7910};
+  const double k_range_gt2[] = {-0.0008, 0.7984, 0.0008, -0.7984 };
+  const double gamma_range_gt2[] = {0.5941, 1.7910, -0.5941, -1.7910};
 
   for (unsigned i=0; i<es2.cv_bundle[0].size(); i++){
     test_passed = test_passed && vcl_fabs(es2.cv_bundle[0][i].x() - k_range_gt2[i])<tolerance
@@ -53,8 +53,8 @@ MAIN( test_sel )
   TEST("Compute curve bundle from(eA-eB) at eB", test_passed, true);
 
   //ground truth eA-eC
-  double k_range_gt3[] = { 0.0498, -0.2496, -0.0498, 0.2496 };
-  double gamma_range_gt3[] = {-0.1492, 0.2990, 0.1492, -0.2990};
+  const double k_range_gt3[] = { 0.0498, -0.2496, -0.0498, 0.2496 };
+  const double gamma_range_gt3[] = {-0.1492, 0.2990, 0.1492, -0.2990};
 
   for (unsigned i=0; i<es3.cv_bundle[0].size(); i++){
     test_passed = test_passed && vcl_fabs(es3.cv_bundle[0][i].x() - k_range_gt3[i])<tolerance

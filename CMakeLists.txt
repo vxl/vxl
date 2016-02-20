@@ -39,7 +39,7 @@ include(CMakeDependentOption)
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
   set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --malloc-fill=0xFF" )
-  set( MEMORYCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/config/valgrind.supp" )
+  set( MEMORYCHECK_SUPPRESSIONS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/config/valgrind.supp" )
 endif()
 
 #-----------------------------------------------------------------------------
@@ -81,26 +81,26 @@ if(NOT VXL_LIB_PREFIX)
 endif()
 
 # CMake support directory.
-set(VXL_CMAKE_DIR ${vxl_SOURCE_DIR}/config/cmake/Modules)
+set(VXL_CMAKE_DIR ${CMAKE_SOURCE_DIR}/config/cmake/Modules)
 
 include( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
-include( ${vxl_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
-include(${vxl_SOURCE_DIR}/config/cmake/doxygen/doxygen.cmake)
+include( ${CMAKE_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
+include(${CMAKE_SOURCE_DIR}/config/cmake/doxygen/doxygen.cmake)
 
 # Copy the UseVXL.cmake file to the binary directory so that client
 # projects don't need to find the source directory first. They can run
 # the UseVXL.cmake from the vxl binary directory, and determine the
 # vxl source directory by loading the cache.
 configure_file( ${VXL_CMAKE_DIR}/UseVXL.cmake
-                ${vxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
+                ${CMAKE_BINARY_DIR}/UseVXL.cmake COPYONLY )
 
 # Copy CTestCustom.cmake to top of build tree
 configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
-  ${vxl_BINARY_DIR}/CTestCustom.cmake COPYONLY )
+  ${CMAKE_BINARY_DIR}/CTestCustom.cmake COPYONLY )
 
 # Location of VXL's FindXXX.cmake CMake modules.
 # This is identical to VXL_CMAKE_DIR.  Perhaps we should eliminate MODULE_PATH?
-set( MODULE_PATH ${vxl_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
+set( MODULE_PATH ${CMAKE_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
 
 # For use in client projects that call UseVXL.cmake
 set(VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
@@ -168,26 +168,26 @@ endif()
 
 # Some types of path names can cause havoc with regular expressions,
 # so avoid those.
-if( ${vxl_BINARY_DIR} MATCHES  \\+ )
+if( ${CMAKE_BINARY_DIR} MATCHES  \\+ )
   message(SEND_ERROR "You cannot have a + in your binary path")
 endif()
-if( ${vxl_SOURCE_DIR} MATCHES  \\+ )
+if( ${CMAKE_SOURCE_DIR} MATCHES  \\+ )
   message(SEND_ERROR "You cannot have a + in your source path")
 endif()
 
 # include CMakeListsLocal.txt from source directory if it exists
 # also include it from the binary dir if different from source dir
-if( ${vxl_BINARY_DIR} MATCHES ${vxl_SOURCE_DIR} )
-  include( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+if( ${CMAKE_BINARY_DIR} MATCHES ${CMAKE_SOURCE_DIR} )
+  include( ${CMAKE_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
 else()
-  include( ${vxl_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
-  include( ${vxl_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
+  include( ${CMAKE_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+  include( ${CMAKE_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
 endif()
 
 # Standard include directories.
-set(VXLCORE_INCLUDE_DIR ${vxl_BINARY_DIR}/core ${vxl_SOURCE_DIR}/core)
+set(VXLCORE_INCLUDE_DIR ${CMAKE_BINARY_DIR}/core ${CMAKE_SOURCE_DIR}/core)
 set(VXLCORE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/core)
-set(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
+set(VCL_INCLUDE_DIR ${CMAKE_BINARY_DIR}/vcl ${CMAKE_SOURCE_DIR}/vcl)
 set(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/vcl)
 
 include_directories(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
@@ -222,7 +222,7 @@ add_subdirectory(v3p)
 add_subdirectory(core)
 
 # Optionally build the contributed libraries
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_CONTRIB "Build the contributed libraries?" ON "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF)
   add_subdirectory(contrib)
 endif()

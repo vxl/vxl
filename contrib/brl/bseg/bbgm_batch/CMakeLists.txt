@@ -31,7 +31,7 @@ if( PYTHON_FOUND )
            )
 
         if(NOT BUILD_POSITION_DEPENDENT_CODE)
-          add_library(bbgm_batch SHARED ${bbgm_batch_sources})
+          vxl_add_library( LIBNAME bbgm_batch LIBSRCS SHARED ${bbgm_batch_sources})
 
           if(WIN32)
             #library has to have different name depending on debug or release version.

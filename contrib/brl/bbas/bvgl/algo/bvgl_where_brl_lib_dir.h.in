@@ -12,5 +12,5 @@
 // may get checked back into the repository by accident.
 
 #ifndef BRL_LIB_DIR // file guard
-#define BRL_LIB_DIR "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}"
+#define BRL_LIB_DIR "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@"
 #endif

@@ -15,7 +15,7 @@ if( PYTHON_FOUND )
        reg_bvpl_octree.h   reg_bvpl_octree.cxx
      )
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      add_library(bvpl_octree_batch SHARED ${bvpl_octree_batch_sources})
+      vxl_add_library( LIBNAME bvpl_octree_batch LIBSRCS SHARED ${bvpl_octree_batch_sources})
 
       #In windows, library has to have different name depending on debug or release version.
       if(WIN32)

@@ -13,7 +13,7 @@ set( MUL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/mul CAC
 
 include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${VXL_MUL_INCLUDE_DIR} )
-include_directories( ${vxl_BINARY_DIR}/contrib/mul )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/mul )
 
 
 add_subdirectory(mbl)

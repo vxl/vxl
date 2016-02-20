@@ -14,20 +14,10 @@ endif()
 
 project( vcl )
 
-# Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
-configure_file(
-  ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
-  ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
-)
 
 set( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx     vcl_deprecated.h
-
-  vcl_where_root_dir.h.in
-  vcl_config_compiler.h.in
-  vcl_config_headers.h.in
-  vcl_config_manual.h.in
 
   vcl_cmath.cxx          vcl_cmath.h
   vcl_cassert.cxx        vcl_cassert.h

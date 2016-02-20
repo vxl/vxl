@@ -13,7 +13,7 @@ set(boct_sources
 
 aux_source_directory(Templates boct_sources)
 
-add_library(boct  ${boct_sources})
+vxl_add_library( LIBNAME boct LIBSRCS  ${boct_sources})
 
 target_link_libraries(boct ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl)
 
@@ -22,5 +22,3 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib boct)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boct ${boct_sources})

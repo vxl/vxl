@@ -12,10 +12,9 @@ doxygen_add_package(core-test "Test Framework")
 set(global_sources
  vxl_copyright.h
  vxl_version.h
- vxl_config.h.in
 )
 
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core ${global_sources})
+INSTALL_NOBASE_HEADER_FILES(include/vxl/core ${global_sources})
 
 if(BUILD_CORE_UTILITIES)
   # POSIX layer

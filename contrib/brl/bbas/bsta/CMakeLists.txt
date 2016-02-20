@@ -59,9 +59,7 @@ set(bsta_sources
 )
 
 aux_source_directory(Templates bsta_sources)
-add_library(bsta  ${bsta_sources})
-install_targets(/lib bsta)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta ${bsta_sources})
+vxl_add_library( LIBNAME bsta LIBSRCS  ${bsta_sources})
 
 target_link_libraries(bsta ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 

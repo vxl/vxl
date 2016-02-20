@@ -29,7 +29,7 @@ if( PYTHON_FOUND )
          reg_boxm2.h   reg_boxm2.cxx
         )
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      add_library(boxm2_batch SHARED ${boxm2_batch_sources})
+      vxl_add_library( LIBNAME boxm2_batch LIBSRCS SHARED ${boxm2_batch_sources})
 
       #library has to have different name depending on debug or release version.
       if(WIN32)
@@ -79,8 +79,6 @@ if( PYTHON_FOUND )
       endif()
 
       #install the .h .txx and libs
-      install_targets(/lib boxm2_batch)
-      INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2_batch/ ${boxm2_batch_sources})
 
     endif()
   endif()

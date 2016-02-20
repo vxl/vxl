@@ -21,7 +21,6 @@ set( bzlib2_sources
 
 add_definitions( -D_FILE_OFFSET_BITS -DBZ_DEBUG=0 )
 
-add_library( bzip2 ${bzlib2_sources} )
-install_targets( /lib bzip2 )
+vxl_add_library( LIBNAME bzip2 LIBSRCS ${bzlib2_sources} )
 
 endif()

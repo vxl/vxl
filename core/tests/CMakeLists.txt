@@ -33,7 +33,8 @@ endif()
 add_executable( core_test_all
   test_driver.cxx
   test_config.cxx
-  test_build_info.cxx test_build_info.h.in
+  test_build_info.cxx
+  test_build_info.h.in
 )
 target_link_libraries( core_test_all ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 
@@ -45,7 +46,7 @@ add_test( NAME core_test_build_info COMMAND $<TARGET_FILE:core_test_all> test_bu
 # a simple Dart notes file, in case test_build_info fails
 if( COMMAND WRITE_FILE )
   write_file(
-    "${vxl_BINARY_DIR}/Testing/HTML/TestingResults/Sites/${SITE}/${BUILDNAME}/BuildNameNotes.xml"
+    "${CMAKE_BINARY_DIR}/Testing/HTML/TestingResults/Sites/${SITE}/${BUILDNAME}/BuildNameNotes.xml"
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     "<Site BuildName=\"${BUILDNAME}\" Name=\"${SITE}\">\n"
     "<BuildNameNotes>\n"
@@ -54,8 +55,8 @@ if( COMMAND WRITE_FILE )
     "<Text>\n"
     "The full test_build_info did not run.\n"
     "Here is some basic information:\n"
-    "vxl_SOURCE_DIR = ${vxl_SOURCE_DIR}\n"
-    "vxl_BINARY_DIR = ${vxl_BINARY_DIR}\n"
+    "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}\n"
+    "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}\n"
     "CMAKE_C_COMPILER = ${CMAKE_C_COMPILER}\n"
     "CMAKE_C_FLAGS = ${CMAKE_C_FLAGS}\n"
     "CMAKE_CXX_COMPILER = ${CMAKE_CXX_COMPILER}\n"
