@@ -1,10 +1,10 @@
 #boxm2/ocl source dir
 if(BUILD_BRL)
-  set(BOXM2_OPENCL_SRC_DIR CACHE STRING "Location of OpenCL source files for brl/bseg/boxm2/ (defaults to source tree)" )
+  set(BOXM2_OPENCL_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cl CACHE STRING "Location of OpenCL source files for brl/bseg/boxm2/ (defaults to source tree)")
 endif()
 
 # Set up boxm2_ocl_where_root_dir.h to have a macro set to $BOXM2_OPENCL_SRC_DIR
-vxl_configure_file(boxm2_ocl_where_root_dir.h.in
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/boxm2_ocl_where_root_dir.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/boxm2_ocl_where_root_dir.h ESCAPE_QUOTES
 )
 include_directories( ${CMAKE_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/ )
