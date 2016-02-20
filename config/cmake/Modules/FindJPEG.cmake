@@ -30,11 +30,11 @@ else()
   # will not have the v3p jpeg library
   #
 
-  if(EXISTS ${vxl_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
+  if(EXISTS ${CMAKE_SOURCE_DIR}/v3p/jpeg/jpeglib.h)
 
     set( JPEG_FOUND "YES" )
     set( JPEG_LIBRARIES jpeg )
-    set( JPEG_INCLUDE_DIR ${vxl_SOURCE_DIR}/v3p/jpeg)
+    set( JPEG_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/v3p/jpeg)
     set( JPEG_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/v3p/jpeg)
 
   endif()

@@ -4,12 +4,12 @@ doxygen_add_library(contrib/rpl/rgrl
   DESCRIPTION "Rensselaer (Generalized) Registration Library"
   )
 
-if(vxl_SOURCE_DIR)
+if(CMAKE_SOURCE_DIR)
   set(VXL_MUL_INCLUDE_DIR ${MUL_INCLUDE_DIR})
 endif()
 
 include_directories( ${VXL_MUL_INCLUDE_DIR} )
-include_directories( ${vxl_BINARY_DIR}/contrib/rpl )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/rpl )
 set( rgrl_sources
   rgrl_export.h
   rgrl_fwd.h

@@ -21,9 +21,9 @@ set( BRL_INSTALL_INCLUDE_DIR
 )
 
 # Location of brl's private FindXXX.cmake CMake modules.
-set( BRL_CMAKE_DIR ${vxl_SOURCE_DIR}/contrib/brl/bmods )
+set( BRL_CMAKE_DIR ${CMAKE_SOURCE_DIR}/contrib/brl/bmods )
 # This is identical to BRL_CMAKE_DIR.  Perhaps we should eliminate BRL_MODULE_PATH?
-set( BRL_MODULE_PATH ${vxl_SOURCE_DIR}/contrib/brl/bmods )
+set( BRL_MODULE_PATH ${CMAKE_SOURCE_DIR}/contrib/brl/bmods )
 
 include_directories( ${VXLCORE_INCLUDE_DIR} )
 include_directories( ${BRL_INCLUDE_DIR} )

@@ -44,7 +44,7 @@ include(CheckSymbolExists)
 include(TestBigEndian)
 include(CheckTypeSize)
 
-include(${vxl_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
+include(${CMAKE_SOURCE_DIR}/config/cmake/config/vxl_config_macros.cmake)
 #
 # Perform all the specific tests
 #
@@ -286,7 +286,7 @@ if(UNIX)
 endif()
 
 # Check C++ <cmath> first, where the C++11 standard says these must be.
-include(${vxl_SOURCE_DIR}/config/cmake/config/CheckCXXExpressionCompiles.cmake) ## From VTK
+include(${CMAKE_SOURCE_DIR}/config/cmake/config/CheckCXXExpressionCompiles.cmake) ## From VTK
 check_cxx_expression_compiles("std::isnan(0.0)" "cmath" VXL_HAS_STD_ISNAN)
 check_cxx_expression_compiles("std::isinf(0.0)" "cmath" VXL_HAS_STD_ISINF)
 check_cxx_expression_compiles("std::isfinite(0.0)" "cmath" VXL_HAS_STD_ISFINITE)
@@ -398,12 +398,12 @@ unset(VCL_CXX_HAS_HEADER_CFLOAT)
 #
 # configure files
 #
-vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${vxl_BINARY_DIR}/vcl/vcl_config_compiler.h include/vxl/vcl)
-vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_headers.h.in  ${vxl_BINARY_DIR}/vcl/vcl_config_headers.h  include/vxl/vcl)
-vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_config_manual.h.in   ${vxl_BINARY_DIR}/vcl/vcl_config_manual.h   include/vxl/vcl)
-vxl_configure_file(${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in  ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h  include/vxl/vcl)
+vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${CMAKE_BINARY_DIR}/vcl/vcl_config_compiler.h include/vxl/vcl)
+vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_config_headers.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_config_headers.h  include/vxl/vcl)
+vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_config_manual.h.in   ${CMAKE_BINARY_DIR}/vcl/vcl_config_manual.h   include/vxl/vcl)
+vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_where_root_dir.h  include/vxl/vcl)
 
-vxl_configure_file(${vxl_SOURCE_DIR}/core/vxl_config.h.in         ${vxl_BINARY_DIR}/core/vxl_config.h         include/vxl/core)
+vxl_configure_file(${CMAKE_SOURCE_DIR}/core/vxl_config.h.in         ${CMAKE_BINARY_DIR}/core/vxl_config.h         include/vxl/core)
 
 # Reset the update configuration flag
 set( VXL_UPDATE_CONFIGURATION "OFF" CACHE BOOL "Re-run the configuration tests?" FORCE )

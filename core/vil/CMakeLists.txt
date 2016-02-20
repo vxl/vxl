@@ -134,8 +134,8 @@ endif()
 
 
 # Store the external library configurations in to the config file
-vxl_configure_file( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
-                ${vxl_BINARY_DIR}/core/vil/vil_config.h include/vxl/core/vil)
+vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vil/vil_config.h.in
+                ${CMAKE_BINARY_DIR}/core/vil/vil_config.h include/vxl/core/vil)
 
 set( vil_sources ${vil_sources}
 

@@ -8,7 +8,7 @@ vxl_configure_file(
   boxm2_ocl_where_root_dir.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/boxm2_ocl_where_root_dir.h ESCAPE_QUOTES
 )
-include_directories( ${vxl_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/ )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/brl/bseg/boxm2/ocl/ )
 
 
 #depends on OPENCL being found...

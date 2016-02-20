@@ -15,7 +15,7 @@ vxl_configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/mbl_config.h
   include/vxl/contrib/mul/mbl
 )
-include_directories( ${vxl_BINARY_DIR}/contrib/mul )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/mul )
 
 set(mbl_sources
   mbl_add_all_loaders.cxx               mbl_add_all_loaders.h

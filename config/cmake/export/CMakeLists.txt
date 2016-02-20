@@ -13,11 +13,11 @@ include( ${MODULE_PATH}/FindJPEG.cmake )
 include( ${MODULE_PATH}/FindTIFF.cmake )
 include( ${MODULE_PATH}/FindGEOTIFF.cmake )
 set( EXPAT_FIND_QUIETLY "YES" )
-include( ${vxl_SOURCE_DIR}/contrib/brl/bmods/FindEXPAT.cmake )
+include( ${CMAKE_SOURCE_DIR}/contrib/brl/bmods/FindEXPAT.cmake )
 set( EXPAT_FIND_QUIETLY )
 
 # Save library dependencies.
-set(VXL_CMAKE_DOXYGEN_DIR  ${vxl_SOURCE_DIR}/config/cmake/doxygen)
+set(VXL_CMAKE_DOXYGEN_DIR  ${CMAKE_SOURCE_DIR}/config/cmake/doxygen)
 
 get_property(VXLTargets_MODULES GLOBAL PROPERTY VXLTargets_MODULES)
 
@@ -35,15 +35,15 @@ endif()
 # Create the VXLConfig.cmake file for the build tree.
 set(VXL_CONFIG_TARGETS_FILE "${CMAKE_CURRENT_BINARY_DIR}/VXLTargets.cmake")
 configure_file(${VXL_CMAKE_DIR}/VXLConfig.cmake.in
-               ${vxl_BINARY_DIR}/VXLConfig.cmake @ONLY)
+               ${CMAKE_BINARY_DIR}/VXLConfig.cmake @ONLY)
 
 set(VXL_CONFIG_TARGETS_FILE "${VXL_CONFIG_CMAKE_DIR}/VXLTargets.cmake")
 configure_file(${VXL_CMAKE_DIR}/VXLConfig_export.cmake.in
-               ${vxl_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
+               ${CMAKE_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
                @ONLY)
 
 install(FILES
-  ${vxl_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
+  ${CMAKE_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
   ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake
   ${VXL_CMAKE_DIR}/UseVXL.cmake
   ${VXL_CMAKE_DIR}/UseVGUI.cmake

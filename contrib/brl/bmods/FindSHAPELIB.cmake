@@ -21,11 +21,11 @@ if( VXL_FORCE_B3P_SHAPELIB )
   # will not have the b3p SHAPELIB library
   #
 
-  if(EXISTS ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib/shapefil.h)
+  if(EXISTS ${CMAKE_SOURCE_DIR}/contrib/brl/b3p/shapelib/shapefil.h)
 
     set( SHAPELIB_FOUND "YES" )
     set( SHAPELIB_LIBRARIES shapelib )
-    set( SHAPELIB_INCLUDE_DIR ${vxl_SOURCE_DIR}/contrib/brl/b3p/shapelib)
+    set( SHAPELIB_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/contrib/brl/b3p/shapelib)
     set( SHAPELIB_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/shapelib)
 
   endif()
