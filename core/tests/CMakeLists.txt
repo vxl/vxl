@@ -7,7 +7,7 @@
 # and SITE from CMake
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
                 ${CMAKE_CURRENT_BINARY_DIR}/test_build_info.h
-                @ONLY IMMEDIATE)
+                @ONLY)
 
 # needed for generated test_build_info.h
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
