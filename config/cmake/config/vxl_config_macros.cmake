@@ -10,7 +10,7 @@ include(CheckCXXSymbolExists)
 # and linked
 #
 
-macro(PERFORM_CMAKE_TEST FILE TEST)
+macro(PERFORM_CMAKE_TEST PLFM_TEST_FILE TEST)
   if( VXL_UPDATE_CONFIGURATION )
     unset( ${TEST} )
   endif()
@@ -27,7 +27,7 @@ macro(PERFORM_CMAKE_TEST FILE TEST)
     endif()
     try_compile(${TEST}
                 ${CMAKE_BINARY_DIR}
-                ${vxl_config_SOURCE_DIR}/${FILE}
+                ${PLFM_TEST_FILE}
                 CMAKE_FLAGS
                   -DCOMPILE_DEFINITIONS:STRING=${CMAKE_REQUIRED_FLAGS} "${TEST_ADD_LIBRARIES}"
                   ${TRY_COMP_CXX_STANDARD}
@@ -104,7 +104,7 @@ endmacro()
 # and returns 0 (indicating success).
 #
 
-macro(PERFORM_CMAKE_TEST_RUN FILE TEST)
+macro(PERFORM_CMAKE_TEST_RUN PLFM_TEST_FILE TEST)
   if( VXL_UPDATE_CONFIGURATION )
     unset( ${TEST} )
   endif()
@@ -120,7 +120,7 @@ macro(PERFORM_CMAKE_TEST_RUN FILE TEST)
 
     try_run(${TEST} ${TEST}_COMPILED
             ${CMAKE_BINARY_DIR}
-            ${vxl_config_SOURCE_DIR}/${FILE}
+            ${PLFM_TEST_FILE}
             CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_CHECK_FUNCTION_DEFINITIONS}
             "${TEST_ADD_LIBRARIES}"
             OUTPUT_VARIABLE OUTPUT)
@@ -157,22 +157,22 @@ endmacro()
 # Check for include file and if not found, set variable to 0
 #
 
-macro(PERFORM_CHECK_HEADER FILE VARIABLE)
+macro(PERFORM_CHECK_HEADER PLFM_TEST_FILE VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
   endif()
-  CHECK_INCLUDE_FILE_CXX(${FILE} ${VARIABLE})
+  CHECK_INCLUDE_FILE_CXX(${PLFM_TEST_FILE} ${VARIABLE})
   if("x${${VARIABLE}}" STREQUAL "x")
     set(${VARIABLE} 0)
   endif()
 endmacro()
 
 
-macro(PERFORM_CHECK_C_HEADER FILE VARIABLE)
+macro(PERFORM_CHECK_C_HEADER PLFM_TEST_FILE VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
   endif()
-  CHECK_INCLUDE_FILES(${FILE} ${VARIABLE})
+  CHECK_INCLUDE_FILES(${PLFM_TEST_FILE} ${VARIABLE})
   if("x${${VARIABLE}}" STREQUAL "x")
     set(${VARIABLE} 0)
   endif()
@@ -220,9 +220,9 @@ macro(CHECK_TYPE_EXISTS TYPE FILES VARIABLE)
       set(CHECK_TYPE_EXISTS_LIBS
           "-DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}")
     endif()
-    foreach(FILE ${FILES})
+    foreach(PLFM_TEST_FILE ${FILES})
       set(CHECK_TYPE_EXISTS_CONTENT
-          "${CHECK_TYPE_EXISTS_CONTENT}#include <${FILE}>\n")
+          "${CHECK_TYPE_EXISTS_CONTENT}#include <${PLFM_TEST_FILE}>\n")
     endforeach()
     set(CHECK_TYPE_EXISTS_CONTENT
         "${CHECK_TYPE_EXISTS_CONTENT}\nvoid cmakeRequireSymbol(${TYPE} dummy){(void)dummy;}\nint main()\n{return 0;\n}\n")
@@ -315,7 +315,7 @@ macro( DETERMINE_TYPE VAR INTEGRAL_TYPE SIZE TYPE_LIST )
       message( STATUS "${MSG} [Checking ${TYPE}...]" )
       try_compile(COMPILE_RESULT
             ${CMAKE_BINARY_DIR}
-            ${vxl_config_SOURCE_DIR}/vxl_platform_tests.cxx
+            ${VXL_PLFM_TEST_FILE}
             CMAKE_FLAGS -DCOMPILE_DEFINITIONS:STRING=${MACRO_DETERMINE_TYPE_FLAGS}
                         -DINCLUDE_DIRECTORIES:STRING=${CMAKE_BINARY_DIR}/CMakeTmp
                         -DLINK_LIBRARIES:STRING=${CMAKE_REQUIRED_LIBRARIES}
@@ -344,11 +344,11 @@ endmacro()
 # Determine if a particular function is declared in the given header.
 #
 
-macro(PERFORM_C_CHECK_FUNCTION SYMBOL FILE VARIABLE)
+macro(PERFORM_C_CHECK_FUNCTION SYMBOL PLFM_TEST_FILE VARIABLE)
   if( VXL_UPDATE_CONFIGURATION )
     unset(${VARIABLE})
   endif()
-  CHECK_CXX_SYMBOL_EXISTS(${SYMBOL} ${FILE} ${VARIABLE})
+  CHECK_CXX_SYMBOL_EXISTS(${SYMBOL} ${PLFM_TEST_FILE} ${VARIABLE})
   if(${VARIABLE})
     set(${VARIABLE} "1")
   else()
