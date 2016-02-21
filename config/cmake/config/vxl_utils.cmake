@@ -36,7 +36,10 @@ endmacro()
 #
 macro(vxl_configure_file infile outfile installprefix)
   configure_file(${infile}  ${outfile}  ESCAPE_QUOTES @ONLY)
-  INSTALL_NOBASE_HEADER_FILES(${installprefix} ${outfile})
+  install(FILES ${outfile}
+      DESTINATION ${installprefix}
+      PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+      COMPONENT Development )
 endmacro()
 
 ##
@@ -45,7 +48,10 @@ endmacro()
 #
 macro(vxl_configure_file_copyonly infile outfile installprefix)
   configure_file(${infile}  ${outfile} COPYONLY)
-  INSTALL_NOBASE_HEADER_FILES(${installprefix} ${outfile})
+  install(FILES ${outfile}
+      DESTINATION ${installprefix}
+      PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
+      COMPONENT Development )
 endmacro()
 
 #
@@ -94,14 +100,14 @@ macro( vxl_add_library )
   endif()
   if(NOT VXL_INSTALL_NO_DEVELOPMENT)
     ## Identify the relative path for installing the header files and txx files
-    string(REPLACE ${CMAKE_SOURCE_DIR} "include/vxl" cmake_relative_path ${CMAKE_CURRENT_SOURCE_DIR})
-    # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}\n${CMAKE_SOURCE_DIR}\n${cmake_relative_path}")
+    string(REPLACE ${CMAKE_SOURCE_DIR} "include/vxl" relative_install_path ${CMAKE_CURRENT_SOURCE_DIR})
+    # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}\n${CMAKE_SOURCE_DIR}\n${relative_install_path}")
     target_include_directories(${lib_name}
       PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:${cmake_relative_path}>
+        $<INSTALL_INTERFACE:${relative_install_path}>
     )
-    INSTALL_NOBASE_HEADER_FILES(${cmake_relative_path} ${lib_srcs})
+    INSTALL_NOBASE_HEADER_FILES(${relative_install_path} ${lib_srcs})
   endif()
   unset(lib_srcs)
   unset(_doing)

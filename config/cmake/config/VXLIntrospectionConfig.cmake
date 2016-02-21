@@ -1,9 +1,3 @@
-# vxl/config/cmake/config/CMakeLists.txt
-#
-
-project(vxl_config)
-cmake_minimum_required(VERSION 2.8.9)
-
 # When adding new configuration tests that cache results, please make
 # sure they honour VXL_UPDATE_CONFIGURATION: if this variable is ON,
 # redo the test and update the cached value.
@@ -395,15 +389,7 @@ if(NOT VCL_CXX_HAS_HEADER_CFLOAT)
 endif()
 unset(VCL_CXX_HAS_HEADER_CFLOAT)
 
-#
-# configure files
-#
-vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_config_compiler.h.in ${CMAKE_BINARY_DIR}/vcl/vcl_config_compiler.h include/vxl/vcl)
-vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_config_headers.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_config_headers.h  include/vxl/vcl)
-vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_config_manual.h.in   ${CMAKE_BINARY_DIR}/vcl/vcl_config_manual.h   include/vxl/vcl)
-vxl_configure_file(${CMAKE_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_where_root_dir.h  include/vxl/vcl)
 
-vxl_configure_file(${CMAKE_SOURCE_DIR}/core/vxl_config.h.in         ${CMAKE_BINARY_DIR}/core/vxl_config.h         include/vxl/core)
 
 # Reset the update configuration flag
 set( VXL_UPDATE_CONFIGURATION "OFF" CACHE BOOL "Re-run the configuration tests?" FORCE )

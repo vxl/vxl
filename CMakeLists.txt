@@ -179,7 +179,7 @@ set(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/vcl)
 include_directories(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
 # Do platform-specific configuration.
-add_subdirectory(config/cmake/config)
+include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/config/VXLIntrospectionConfig.cmake)
 
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS

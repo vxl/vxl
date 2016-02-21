@@ -9,11 +9,16 @@ doxygen_add_package(core-L2 "Level-2 Vision Libraries")
 doxygen_add_package(core-L2E "Level-2 Vision Libraries (Experimental)")
 doxygen_add_package(core-test "Test Framework")
 
+#
+# Do platform-specific configuration.
+# configure files
+#
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vxl_config.h.in ${CMAKE_BINARY_DIR}/core/vxl_config.h include/vxl/core)
+
 set(global_sources
  vxl_copyright.h
  vxl_version.h
 )
-
 INSTALL_NOBASE_HEADER_FILES(include/vxl/core ${global_sources})
 
 if(BUILD_CORE_UTILITIES)
