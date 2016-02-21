@@ -13,7 +13,7 @@ macro(INSTALL_NOBASE_HEADER_FILES prefix)
       # message("install_file=${prefix}/${dir}/${install_file}")
       install(FILES ${install_file}
               DESTINATION ${prefix}/${dir}
-              PERMISSIONS WORLD_READ
+              PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
               COMPONENT Development )
     endif()
     if(${file} MATCHES "\\.in?$")
