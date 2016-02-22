@@ -21,7 +21,7 @@ set(VXL_CMAKE_DOXYGEN_DIR  ${CMAKE_SOURCE_DIR}/config/cmake/doxygen)
 
 get_property(VXLTargets_MODULES GLOBAL PROPERTY VXLTargets_MODULES)
 
-set(VXL_CONFIG_CMAKE_DIR "${CMAKE_INSTALL_PREFIX}/share/vxl/cmake")
+set(VXL_CONFIG_CMAKE_DIR "share/vxl/cmake")
 if(VXLTargets_MODULES)
   export(TARGETS
     ${VXLTargets_MODULES}
