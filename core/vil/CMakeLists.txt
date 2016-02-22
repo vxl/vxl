@@ -7,9 +7,7 @@ doxygen_add_library(core/vil
 )
 
 # avoid undefined macro in subsequent SETs:
-set( vil_sources
-  vil_config.h.in
-)
+set( vil_sources)
 
 include(${VXL_CMAKE_DIR}/FindPNG.cmake)
 if(PNG_FOUND)

@@ -28,9 +28,6 @@ if(NOT VXL_USING_NATIVE_TIFF)
   # Header files
     tiff.h
     tiffcomp.h
-    tiffconf.h
-    tiffconf.h.in
-    tif_config.h
     tiffio.h
     tiffvers.h
     t4.h
@@ -134,10 +131,10 @@ if(NOT VXL_USING_NATIVE_TIFF)
   set(TIFF_SSIZE_FORMAT "%${_FORMAT_SSIZE_PREFIX}u")
   set(TIFF_PTRDIFF_FORMAT "%${_FORMAT_SSIZE_PREFIX}d")
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tif_config.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h )
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h )
+  vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tif_config.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h v3p/tiff )
+  vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h v3p/tiff )
 
   include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -171,7 +168,7 @@ if(NOT VXL_USING_NATIVE_TIFF)
       )
     endif()
   endif()
-  vxl_add_library( LIBNAME tiff LIBSRCS ${tiff_sources} ${CMAKE_CURRENT_SOURCE_DIR}/tiffconf.h.in )
+  vxl_add_library( LIBNAME tiff LIBSRCS ${tiff_sources} )
 
   if( BUILD_TESTING)
     add_subdirectory(test)
