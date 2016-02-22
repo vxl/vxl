@@ -1,4 +1,4 @@
-# This CMakeLists.txt file handles the creation of files needed by
+# This VXLCreateProject.cmake file handles the creation of files needed by
 # other client projects that use VXL.  Nothing is built by this
 # CMakeLists.txt file.  This CMakeLists.txt file must be processed by
 # CMake after all the other CMakeLists.txt files in the VXL tree,
