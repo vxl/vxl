@@ -33,11 +33,9 @@ if(VXLTargets_MODULES)
 endif()
 
 # Create the VXLConfig.cmake file for the build tree.
-set(VXL_CONFIG_TARGETS_FILE "${CMAKE_CURRENT_BINARY_DIR}/VXLTargets.cmake")
 configure_file(${VXL_CMAKE_DIR}/VXLConfig.cmake.in
                ${CMAKE_BINARY_DIR}/VXLConfig.cmake @ONLY)
 
-set(VXL_CONFIG_TARGETS_FILE "${VXL_CONFIG_CMAKE_DIR}/VXLTargets.cmake")
 configure_file(${VXL_CMAKE_DIR}/VXLConfig_export.cmake.in
                ${CMAKE_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
                @ONLY)
