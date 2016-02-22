@@ -21,7 +21,6 @@ if(OPENCL_FOUND)
       boxm2_opencl_cache.h     boxm2_opencl_cache.cxx
       boxm2_opencl_cache1.h     boxm2_opencl_cache1.cxx
       boxm2_ocl_util.h         boxm2_ocl_util.cxx
-      boxm2_ocl_where_root_dir.h.in
     )
   aux_source_directory(Templates boxm2_ocl_sources)
 

@@ -21,7 +21,7 @@ set(VXL_CMAKE_DOXYGEN_DIR  ${CMAKE_SOURCE_DIR}/config/cmake/doxygen)
 
 get_property(VXLTargets_MODULES GLOBAL PROPERTY VXLTargets_MODULES)
 
-set(VXL_CONFIG_CMAKE_DIR "${CMAKE_INSTALL_PREFIX}/share/vxl/cmake")
+set(VXL_CONFIG_CMAKE_DIR "share/vxl/cmake")
 if(VXLTargets_MODULES)
   export(TARGETS
     ${VXLTargets_MODULES}
@@ -33,11 +33,9 @@ if(VXLTargets_MODULES)
 endif()
 
 # Create the VXLConfig.cmake file for the build tree.
-set(VXL_CONFIG_TARGETS_FILE "${CMAKE_CURRENT_BINARY_DIR}/VXLTargets.cmake")
 configure_file(${VXL_CMAKE_DIR}/VXLConfig.cmake.in
                ${CMAKE_BINARY_DIR}/VXLConfig.cmake @ONLY)
 
-set(VXL_CONFIG_TARGETS_FILE "${VXL_CONFIG_CMAKE_DIR}/VXLTargets.cmake")
 configure_file(${VXL_CMAKE_DIR}/VXLConfig_export.cmake.in
                ${CMAKE_BINARY_DIR}/config/cmake/export/VXLConfig.cmake
                @ONLY)

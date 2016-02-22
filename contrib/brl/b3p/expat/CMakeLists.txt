@@ -26,8 +26,6 @@ configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCo
       utf8tab.h
       expat.h
       cm_expat_mangle.h
-      expatConfig.h.in
-      expatDllConfig.h.in
     )
 
   include(${CMAKE_ROOT}/Modules/TestBigEndian.cmake)

@@ -5,9 +5,9 @@
 
 # header to tell test_build_info values of vxl_BUILD_DIR, BUILD_NAME,
 # and SITE from CMake
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
-                ${CMAKE_CURRENT_BINARY_DIR}/test_build_info.h
-                @ONLY)
+vxl_configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/test_build_info.h.in
+                    ${CMAKE_CURRENT_BINARY_DIR}/test_build_info.h
+                    core/tests )
 
 # needed for generated test_build_info.h
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
@@ -34,7 +34,6 @@ add_executable( core_test_all
   test_driver.cxx
   test_config.cxx
   test_build_info.cxx
-  test_build_info.h.in
 )
 target_link_libraries( core_test_all ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl )
 

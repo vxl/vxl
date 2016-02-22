@@ -186,7 +186,7 @@ if( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
   endif()
 endif()
 
-configure_file(
+vxl_configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/config/include/osconfig_cmake.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/osconfig.h
 )
@@ -332,7 +332,7 @@ set( dcmtk_sources
   dcmimgle/libsrc/diutils.cxx
 )
 
-vxl_add_library( LIBNAME dcmtk LIBSRCS ${dcmtk_sources} ${CMAKE_CURRENT_SOURCE_DIR}/osconfig.h.in)
+vxl_add_library( LIBNAME dcmtk LIBSRCS ${dcmtk_sources})
 if(WIN32)
   target_link_libraries( dcmtk Netapi32 )
 endif()
