@@ -13,7 +13,8 @@
 MAIN( test_fit_gaussian)
 {
   START ("test_fit_gaussian");
-  vnl_random rand_gen;
+  // seed the random number generator for better test repeatability
+  vnl_random rand_gen(468002);
 
   {
     vcl_cout << "Testing 1D Gaussian (spherical)" << vcl_endl;
@@ -83,7 +84,7 @@ MAIN( test_fit_gaussian)
 
     vnl_vector_fixed<float,3> sigmas(vcl_sqrt(covar_diag[0]),vcl_sqrt(covar_diag[1]),vcl_sqrt(covar_diag[2]));
 
-    const unsigned int n_samples = 500;
+    const unsigned int n_samples = 1000;
 
     bsta_gaussian_indep<float,3> gauss_est;
     // generate samples
