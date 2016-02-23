@@ -49,7 +49,7 @@
 #include "test_util.h"
 
 namespace {
-static  vnl_random random;
+    static  vnl_random random(468002);
 
   vnl_vector<double>
   random_3d_vector( )
