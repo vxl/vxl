@@ -188,7 +188,7 @@ endif()
 
 vxl_configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/config/include/osconfig_cmake.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/osconfig.h
+  ${CMAKE_CURRENT_BINARY_DIR}/osconfig.h v3p/dcmtk
 )
 
 
