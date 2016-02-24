@@ -457,6 +457,12 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
         alpha->read_to_buffer(queue);
         mog->read_to_buffer(queue);
         num_obs->read_to_buffer(queue);
+
+        if (ident != "")
+        {
+            opencl_cache->deep_remove_data(scene, *id, data_type, true);
+            opencl_cache->deep_remove_data(scene, *id, num_obs_type, true);
+        }
       }
 
       //read image out to buffer (from gpu)
