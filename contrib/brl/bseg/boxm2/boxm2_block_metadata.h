@@ -45,7 +45,7 @@ class boxm2_block_metadata: public vbl_ref_count
                         const int max_level,
                         const double max_mb,
                         const double p_init,
-                        const int version = 1) : id_(id),
+                        const int version = 2) : id_(id),
                                           local_origin_(local_origin),
                                           sub_block_dim_(sub_block_dim),
                                           sub_block_num_(sub_block_num),
