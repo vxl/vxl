@@ -13,7 +13,8 @@
 
 //=======================================================================
 
-  //: Compute parameters for inverse transformation
+
+//: Compute parameters for inverse transformation
 vnl_vector<double> msm_similarity_aligner::inverse(const vnl_vector<double>& t) const
 {
   vnl_vector<double> q(4);
@@ -201,90 +202,6 @@ void msm_similarity_aligner::calc_transform_wt(const msm_points& pts1,
   trans[3] = cog2.y() - (b*cog1.x() + a*cog1.y());
 }
 
-#if 0 // function commented out
-//: Estimate parameters which map points allowing for anisotropic wts
-//  Errors on point i are weighted by wt_mat[i] in pts2 frame.
-//  ie error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
-*** Incorrect implementation - assumption about CoG incorrect ***
-void msm_similarity_aligner::calc_transform_wt_mat(
-                              const msm_points& pts1,
-                              const msm_points& pts2,
-                              const vcl_vector<msm_wt_mat_2d>& wt_mat,
-                              vnl_vector<double>& trans) const
-{
-  assert(pts2.size()==pts1.size());
-  assert(wt_mat.size()==pts1.size());
-  // Compute weighted CoGs
-  msm_wt_mat_2d w_sum(0,0,0);
-  double x1=0.0,y1=0.0;
-  double x2=0.0,y2=0.0;
-  const double* p1 = pts1.vector().begin();
-  const double* p2 = pts2.vector().begin();
-  const double* p1_end = pts1.vector().end();
-  vcl_vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
-  for (;p1!=p1_end;p1+=2,p2+=2,++w)
-  {
-    double wa=w->m11(), wb=w->m12(), wc=w->m22();
-    w_sum += (*w);
-    x1 += wa*p1[0]+wb*p1[1];
-    y1 += wb*p1[0]+wc*p1[1];
-    x2 += wa*p2[0]+wb*p2[1];
-    y2 += wb*p2[0]+wc*p2[1];
-  }
-  msm_wt_mat_2d w_inv = w_sum.inverse();
-  double v11=w_inv.m11(), v12=w_inv.m12(), v22=w_inv.m22();
-  vgl_point_2d<double> cog1(v11*x1+v12*y1,v12*x1+v22*y1);
-  vgl_point_2d<double> cog2(v11*x2+v12*y2,v12*x2+v22*y2);
-  vcl_cout<<"CoG1: "<<cog1<<'\n'
-          <<"CoG2: "<<cog2<<vcl_endl;
-
-  // Need to compute the a,b terms relative to these centres.
-
-  msm_wt_mat_2d S(0,0,0); // Sum
-  double txx_sum = 0;
-  double txy_sum = 0;
-
-  p1 = pts1.vector().begin();
-  p2 = pts2.vector().begin();
-  w=wt_mat.begin();
-  for (;p1!=p1_end;p1+=2,p2+=2,++w)
-  {
-    double dpx = p1[0]-cog1.x();
-    double dpy = p1[1]-cog1.y();
-    double dtx = p2[0]-cog2.x();
-    double dty = p2[1]-cog2.y();
-
-    double wa=w->m11(), wb=w->m12(), wc=w->m22();
-
-    double wx = wa*dpx + wb*dpy;
-    double wy = wb*dpx + wc*dpy;
-    double vx = wb*dpx - wa*dpy;
-    double vy = wc*dpx - wb*dpy;
-
-    S += msm_wt_mat_2d(dpx*wx + dpy*wy,
-                       dpx*wy - dpy*wx,
-                       dpx*vy - dpy*vx);
-
-    txx_sum += dtx*wx + dty*wy;
-    txy_sum += dtx*vx + dty*vy;
-  }
-
-  // Solve equation
-  // ( S11 S12 )(a) = (txx_sum)
-  // ( S12 S22 )(b)   (txy_sum)
-
-  trans.set_size(4);
-  msm_wt_mat_2d S_inv = S.inverse();
-  double a = S_inv.m11()*txx_sum + S_inv.m12()*txy_sum;
-  double b = S_inv.m21()*txx_sum + S_inv.m22()*txy_sum;
-
-  trans[0] = a - 1.0;
-  trans[1] = b;
-  trans[2] = cog2.x() - (a*cog1.x() - b*cog1.y());
-  trans[3] = cog2.y() - (b*cog1.x() + a*cog1.y());
-}
-#endif // 0
-
 //: Estimate parameters which map points allowing for anisotropic wts
 //  Errors on point i are weighted by wt_mat[i] in pts2 frame.
 //  ie error is sum (p2_i-T(p1_i)'*wt_mat[i]*(p2_i-T(p1_i)
@@ -421,11 +338,13 @@ void msm_similarity_aligner::normalise_shape(msm_points& points) const
 //  frame, pose_to_ref[i] maps points[i] into the reference
 //  frame (ie pose is the mapping from the reference frame to
 //  the target frames).
+// \param pose_source defines how alignment of ref_mean_shape is calculated
 // \param average_pose Average mapping from ref to target frame
 void msm_similarity_aligner::align_set(const vcl_vector<msm_points>& points,
                                        msm_points& ref_mean_shape,
                                        vcl_vector<vnl_vector<double> >& pose_to_ref,
-                                       vnl_vector<double>& average_pose) const
+                                       vnl_vector<double>& average_pose,
+                                       ref_pose_source pose_source) const
 {
   vcl_size_t n_shapes = points.size();
   assert(n_shapes>0);
@@ -466,6 +385,14 @@ void msm_similarity_aligner::align_set(const vcl_vector<msm_points>& points,
     // the mean and to rotation defined by the mean.
 
     change = (new_mean.vector()-ref_mean_shape.vector()).rms();
+
+    if (pose_source==mean_pose && n_its==0)
+    {
+      // Use the average pose to define the orientation of the mean in the ref frame
+      apply_transform(new_mean,average_pose/n_shapes,new_mean);
+      change=1.0;  // Force at least one more iteration
+    }
+
     n_its++;
   }
 

@@ -172,7 +172,7 @@ void test_zoom_aligner()
   msm_points ref_mean_shape;
   vcl_vector<vnl_vector<double> > poses;
   vnl_vector<double> average_pose;
-  aligner.align_set(shapes,ref_mean_shape,poses,average_pose);
+  aligner.align_set(shapes,ref_mean_shape,poses,average_pose,msm_aligner::first_shape);
 
   vcl_cout<<"Aligned mean: "<<ref_mean_shape<<vcl_endl;
 
@@ -223,7 +223,7 @@ void test_rigid_aligner()
   msm_points ref_mean_shape;
   vcl_vector<vnl_vector<double> > poses;
   vnl_vector<double> average_pose;
-  aligner.align_set(shapes,ref_mean_shape,poses,average_pose);
+  aligner.align_set(shapes,ref_mean_shape,poses,average_pose,msm_aligner::first_shape);
 
   vcl_cout<<"Aligned mean: "<<ref_mean_shape<<vcl_endl;
 }
@@ -299,7 +299,7 @@ void test_similarity_aligner()
   msm_points ref_mean_shape;
   vcl_vector<vnl_vector<double> > poses;
   vnl_vector<double> average_pose;
-  aligner.align_set(shapes,ref_mean_shape,poses,average_pose);
+  aligner.align_set(shapes,ref_mean_shape,poses,average_pose,msm_aligner::first_shape);
 
   vcl_cout<<"Aligned mean: "<<ref_mean_shape<<vcl_endl;
 

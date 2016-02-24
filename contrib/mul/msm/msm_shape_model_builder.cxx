@@ -23,7 +23,7 @@
 //=======================================================================
 
 msm_shape_model_builder::msm_shape_model_builder()
-  : var_prop_(0.98),min_modes_(0),max_modes_(9999)
+  : var_prop_(0.98),min_modes_(0),max_modes_(9999),ref_pose_source_(msm_aligner::first_shape)
 {
 }
 
@@ -56,6 +56,11 @@ void msm_shape_model_builder::set_mode_choice(unsigned min, unsigned max,
   var_prop_ = var_proportion;
 }
 
+//: Define how to compute alignment of reference shape
+void msm_shape_model_builder::set_ref_pose_source(msm_aligner::ref_pose_source rps)
+{
+  ref_pose_source_=rps;
+}
 
 //: Builds the model from the supplied examples
 void msm_shape_model_builder::build_model(
@@ -66,7 +71,7 @@ void msm_shape_model_builder::build_model(
   msm_points ref_mean_shape;
   vcl_vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
   // Generate vectors corresponding to aligned shapes
   unsigned n = shapes.size();
@@ -133,7 +138,7 @@ void msm_shape_model_builder::build_model(
   msm_points ref_mean_shape;
   vcl_vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
   // Generate vectors corresponding to aligned shapes
   unsigned n = shapes.size();
@@ -210,7 +215,7 @@ void msm_shape_model_builder::build_within_class_model(
   msm_points ref_mean_shape;
   vcl_vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
   vcl_vector<unsigned> n_per_class;
   msm_count_classes(id,n_per_class);
@@ -289,7 +294,7 @@ void msm_shape_model_builder::build_within_class_model(
   msm_points ref_mean_shape;
   vcl_vector<vnl_vector<double> > pose_to_ref;
   vnl_vector<double> average_pose;
-  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose);
+  aligner().align_set(shapes,ref_mean_shape,pose_to_ref,average_pose,ref_pose_source_);
 
   vcl_vector<unsigned> n_per_class;
   msm_count_classes(id,n_per_class);
@@ -396,6 +401,16 @@ void msm_shape_model_builder::config_from_stream(vcl_istream &is)
   max_modes_=vul_string_atoi(props.get_optional_property("max_modes","999"));
   var_prop_=vul_string_atof(props.get_optional_property("var_prop","0.98"));
 
+  vcl_string rps_str = props.get_optional_property("ref_pose_source","first_shape");
+  if (rps_str=="first_shape") ref_pose_source_=msm_aligner::first_shape;
+  else
+  if (rps_str=="mean_pose") ref_pose_source_=msm_aligner::mean_pose;
+  else
+  {
+    mbl_exception_parse_error x("Unknown ref_pose_source: "+rps_str);
+    mbl_exception_error(x);
+  }
+
   mbl_read_props_look_for_unused_props(
       "msm_shape_model_builder::config_from_stream", props, mbl_read_props_type());
 }
@@ -407,7 +422,7 @@ void msm_shape_model_builder::config_from_stream(vcl_istream &is)
 
 short msm_shape_model_builder::version_no() const
 {
-  return 1;
+  return 2;
 }
 
 //=======================================================================
@@ -433,7 +448,14 @@ void msm_shape_model_builder::print_summary(vcl_ostream& os) const
     os<<param_limiter_; else os<<"-";
   os<<vsl_indent()<<"min_modes: "<<min_modes_<<'\n'
     <<vsl_indent()<<"max_modes: "<<max_modes_<<'\n'
-    <<vsl_indent()<<"var_prop: "<<var_prop_;
+    <<vsl_indent()<<"var_prop: "<<var_prop_<<'\n';
+  os<<vsl_indent()<<"ref_pose_source: ";
+  switch (ref_pose_source_)
+  {
+    case (msm_aligner::first_shape): os<<"first_shape"; break;
+    case (msm_aligner::mean_pose): os<<"mean_pose"; break;
+    default: os<<"unknown";
+  }
 }
 
 //=======================================================================
@@ -449,6 +471,7 @@ void msm_shape_model_builder::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,min_modes_);
   vsl_b_write(bfs,max_modes_);
   vsl_b_write(bfs,var_prop_);
+  vsl_b_write(bfs,short(ref_pose_source_));
 }
 
 //=======================================================================
@@ -460,14 +483,21 @@ void msm_shape_model_builder::b_read(vsl_b_istream& bfs)
 {
   short version;
   vsl_b_read(bfs,version);
+  short rps;
   switch (version)
   {
     case (1):
+    case (2):
       vsl_b_read(bfs,aligner_);
       vsl_b_read(bfs,param_limiter_);
       vsl_b_read(bfs,min_modes_);
       vsl_b_read(bfs,max_modes_);
       vsl_b_read(bfs,var_prop_);
+      if (version==1) ref_pose_source_=msm_aligner::first_shape;
+      else
+      {
+        vsl_b_read(bfs,rps); ref_pose_source_=msm_aligner::ref_pose_source(rps);
+      }
       break;
     default:
       vcl_cerr << "msm_shape_model_builder::b_read() :\n"

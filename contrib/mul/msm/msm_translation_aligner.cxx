@@ -173,7 +173,8 @@ void msm_translation_aligner::normalise_shape(msm_points& points) const
 void msm_translation_aligner::align_set(const vcl_vector<msm_points>& points,
                                         msm_points& ref_mean_shape,
                                         vcl_vector<vnl_vector<double> >& pose_to_ref,
-                                        vnl_vector<double>& average_pose) const
+                                        vnl_vector<double>& average_pose,
+                                        ref_pose_source) const
 {
   vcl_size_t n_shapes = points.size();
   assert(n_shapes>0);

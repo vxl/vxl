@@ -25,7 +25,6 @@ class mbl_read_props_type;
 class msm_aligner
 {
  public:
-
   virtual ~msm_aligner() {}
 
   //: Return number of parameters defining the transformation
@@ -94,16 +93,21 @@ class msm_aligner
   //  centre of gravity is at the origin and scale to a unit size.
   virtual void normalise_shape(msm_points& points) const = 0;
 
+  //: Options for defining pose in reference frame
+  enum ref_pose_source { first_shape, mean_pose };
+
   //: Find poses which align a set of points
   //  On exit ref_mean_shape is the mean shape in the reference
   //  frame, pose_to_ref[i] maps points[i] into the reference
   //  frame (ie pose is the mapping from the reference frame to
   //  the target frames).
+  // \param pose_source defines how alignment of ref_mean_shape is calculated
   // \param average_pose Some estimate of the average mapping
   virtual void align_set(const vcl_vector<msm_points>& points,
                          msm_points& ref_mean_shape,
                          vcl_vector<vnl_vector<double> >& pose_to_ref,
-                         vnl_vector<double>& average_pose) const =0;
+                         vnl_vector<double>& average_pose,
+                         ref_pose_source pose_source=first_shape) const =0;
 
   //: Compute mean of points[i] after transforming with pose[i]
   void mean_of_transformed(const vcl_vector<msm_points>& points,
