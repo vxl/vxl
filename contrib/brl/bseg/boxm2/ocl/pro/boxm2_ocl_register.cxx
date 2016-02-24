@@ -124,6 +124,12 @@ void boxm2_ocl_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_compute_expectation_view_direction_process, "boxm2OclComputeExpectationViewDirectionProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_render_gl_expected_depth_process, "boxm2OclRenderGlExpectedDepthProcess");
 
-
-
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_image_factor_process, "boxm2OclUpdateImageFactorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_fuse_factors_process, "boxm2OclFuseFactorsProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_compute_pre_post_process, "boxm2OclComputePrePostProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_compute_height_factor_process, "boxm2OclComputeHeightFactorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_update_heightmap_factor_process, "boxm2OclUpdateHeightMapFactorProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_init_prob_uniform_process, "boxm2OclInitProbUniformProcess");
+  
+  
 }

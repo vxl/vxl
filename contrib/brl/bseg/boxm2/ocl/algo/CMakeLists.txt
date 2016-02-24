@@ -33,6 +33,9 @@ set(boxm2_ocl_algo_sources
     boxm2_ocl_filter_scene_data.h               boxm2_ocl_filter_scene_data.cxx
     boxm2_ocl_aggregate_normal_from_filter_vector.h  boxm2_ocl_aggregate_normal_from_filter_vector.cxx
     boxm2_ocl_kernel_vector_filter.h            boxm2_ocl_kernel_vector_filter.cxx
+    boxm2_ocl_update_image_factor.h				boxm2_ocl_update_image_factor.cxx
+    boxm2_ocl_fuse_factors.h					boxm2_ocl_fuse_factors.cxx
+    boxm2_ocl_update_heightmap_factor.h		boxm2_ocl_update_heightmap_factor.cxx
    )
 
 vxl_add_library(LIBRARY_NAME boxm2_ocl_algo LIBRARY_SOURCES  ${boxm2_ocl_algo_sources})
