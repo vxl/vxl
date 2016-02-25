@@ -38,9 +38,9 @@ int main2(int argc, char*argv[])
 
   // Parse the program arguments
   vul_arg_base::set_help_precis("Divide a volume image in smaller pieces.");
-  vul_arg<vcl_string> img_src(0, "input image filename");
-  vul_arg<vcl_string> img_dst(0, "output image file-stem");
-  vul_arg<vcl_string> max_voxels_arg(0, "Max number of voxels in an output image. (Suffix k=1000, kb=1024, M=1e6, G=1e9 etc.)");
+  vul_arg<vcl_string> img_src(VXL_NULLPTR, "input image filename");
+  vul_arg<vcl_string> img_dst(VXL_NULLPTR, "output image file-stem");
+  vul_arg<vcl_string> max_voxels_arg(VXL_NULLPTR, "Max number of voxels in an output image. (Suffix k=1000, kb=1024, M=1e6, G=1e9 etc.)");
   vul_arg<vcl_string> replace_str("-I", "Replace this string in the filestem with the split numbering. Default puts it at end.");
   vul_arg<vcl_string> output_format_arg("-f", "Format of output images (e.g. v3i, dcm, gipl.) Guesses from filestem by default.");
   vul_arg<bool> split_z("-z", "Split along z-plane boundaries, default is rough cubes.");

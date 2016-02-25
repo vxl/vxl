@@ -5,7 +5,7 @@
 #
 #   DEPENDENCIES:  vepl vipl vil
 
-link_libraries( vepl vil )
+link_libraries( vepl ${VXL_LIB_PREFIX}vil )
 
 add_definitions(-DINSTANTIATE_TEMPLATES)
 

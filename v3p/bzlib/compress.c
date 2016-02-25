@@ -222,7 +222,6 @@ void generateMTFValues ( EState* s )
          if (zPend < 2) break;
          zPend = (zPend - 2) / 2;
       };
-      zPend = 0;
    }
 
    mtfv[wr] = EOB; wr++; s->mtfFreq[EOB]++;

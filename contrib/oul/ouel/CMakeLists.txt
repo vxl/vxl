@@ -10,10 +10,8 @@ set(ouel_sources
   kalman_filter.h    kalman_filter.cxx
 )
 
-add_library(ouel ${ouel_sources})
-install_targets(/lib ouel)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/ouel ${ouel_sources})
-target_link_libraries( ouel vnl_algo vnl )
+vxl_add_library(LIBNAME ouel LIBSRCS ${ouel_sources})
+target_link_libraries( ouel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

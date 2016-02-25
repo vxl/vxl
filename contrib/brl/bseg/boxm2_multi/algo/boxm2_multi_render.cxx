@@ -477,6 +477,13 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
     bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id);
     int alphaTypeSize   = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     // data type string may contain an identifier so determine the buffer size
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+        vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        return false;
+    }
+
     bocl_mem* mog       = opencl_cache->get_data(id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
     float transfer_time = (float) transfer.all();
 

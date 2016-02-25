@@ -74,7 +74,7 @@ class vil_viff_image : public vil_image_resource
   virtual bool put_view(vil_image_view_base const& buf, unsigned int x0, unsigned int y0);
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = 0) const;
+  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
 
   //: User defined spare values in header
   vxl_uint_32 ispare1() const { return header_.ispare1;}

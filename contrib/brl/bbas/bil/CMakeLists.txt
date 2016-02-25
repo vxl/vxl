@@ -11,9 +11,9 @@ set(bil_sources
 
 aux_source_directory(Templates bil_sources)
 
-add_library(bil  ${bil_sources})
+vxl_add_library( LIBNAME bil LIBSRCS  ${bil_sources})
 
-target_link_libraries(bil vil vil_io vsl)
+target_link_libraries(bil ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vsl)
 
 add_subdirectory(algo)
 
@@ -23,5 +23,3 @@ endif()
 
 add_subdirectory(exe)
 
-install_targets(/lib bil)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bil ${bil_sources})

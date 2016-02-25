@@ -7,8 +7,8 @@ aux_source_directory( Templates bapl_io_sources )
 
 include_directories( ${BRL_INCLUDE_DIR}/bseg)
 
-add_library( bapl_io ${bapl_io_sources} )
-target_link_libraries( bapl_io bapl vbl vbl_io)
+vxl_add_library( LIBNAME bapl_io LIBSRCS ${bapl_io_sources} )
+target_link_libraries( bapl_io bapl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

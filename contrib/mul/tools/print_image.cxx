@@ -156,7 +156,7 @@ int main2(int argc, char*argv[])
   vimt3d_add_all_loaders();
 
   // Parse the program arguments
-  vul_arg<vcl_string> img_src(0, "input image filename");
+  vul_arg<vcl_string> img_src(VXL_NULLPTR, "input image filename");
   vul_arg<float> unit_scaling("-s", "Unit scaling (1000 for mm)", 1000);
   vul_arg<bool> range("-r", "Determine intensity range", false);
   vul_arg<bool> only_3d("-3", "Only try to load 3d image", false);

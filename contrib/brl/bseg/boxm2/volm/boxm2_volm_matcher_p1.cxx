@@ -24,16 +24,16 @@ boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_s
                                              vcl_vector<volm_weight> weights)
 : cam_space_(cam_space), query_(query), leaves_(leaves), ind_buffer_(buffer_capacity),
   weights_(weights),
-  fallback_size_buff_(0), layer_size_buff_(0), is_candidate_(is_candidate), cand_poly_(cand_poly),
+  fallback_size_buff_(VXL_NULLPTR), layer_size_buff_(VXL_NULLPTR), is_candidate_(is_candidate), cand_poly_(cand_poly),
   is_last_pass_(is_last_pass), out_folder_(out_folder), depth_interval_(depth_interval),
-  gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(0), n_obj_(0),
-  grd_id_buff_(0), grd_dist_buff_(0), grd_land_buff_(0), grd_land_wgt_buff_(0),
-  grd_id_offset_buff_(0), grd_weight_buff_(0), grd_wgt_attri_buff_(0),
-  sky_id_buff_(0), sky_id_offset_buff_(0), sky_weight_buff_(0),
-  obj_id_buff_(0), obj_id_offset_buff_(0), obj_min_dist_buff_(0), obj_order_buff_(0),
-  obj_weight_buff_(0), obj_wgt_attri_buff_(0),
-  obj_orient_buff_(0), obj_land_buff_(0), obj_land_wgt_buff_(0), depth_interval_buff_(0),
-  depth_length_buff_(0), threshold_(threshold), max_cam_per_loc_(max_cam_per_loc)
+  gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(VXL_NULLPTR), n_obj_(VXL_NULLPTR),
+  grd_id_buff_(VXL_NULLPTR), grd_dist_buff_(VXL_NULLPTR), grd_land_buff_(VXL_NULLPTR), grd_land_wgt_buff_(VXL_NULLPTR),
+  grd_id_offset_buff_(VXL_NULLPTR), grd_weight_buff_(VXL_NULLPTR), grd_wgt_attri_buff_(VXL_NULLPTR),
+  sky_id_buff_(VXL_NULLPTR), sky_id_offset_buff_(VXL_NULLPTR), sky_weight_buff_(VXL_NULLPTR),
+  obj_id_buff_(VXL_NULLPTR), obj_id_offset_buff_(VXL_NULLPTR), obj_min_dist_buff_(VXL_NULLPTR), obj_order_buff_(VXL_NULLPTR),
+  obj_weight_buff_(VXL_NULLPTR), obj_wgt_attri_buff_(VXL_NULLPTR),
+  obj_orient_buff_(VXL_NULLPTR), obj_land_buff_(VXL_NULLPTR), obj_land_wgt_buff_(VXL_NULLPTR), depth_interval_buff_(VXL_NULLPTR),
+  depth_length_buff_(VXL_NULLPTR), threshold_(threshold), max_cam_per_loc_(max_cam_per_loc)
 {
   valid_cam_indices_ = cam_space_->valid_indices();
   layer_size_ = query_->get_query_size();
@@ -472,10 +472,12 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
 
     // block everything to ensure the reading score
     status = clFinish(queue_);
+    check_val(status, MEM_FAILURE, " release N_INDEX failed on device " + gpu_->device_identifier() + error_to_string(status));
     // read score
     score_cl_mem_->read_to_buffer(queue_);
     //mu_cl_mem_->read_to_buffer(queue_);
     status = clFinish(queue_);
+    check_val(status, MEM_FAILURE, " release N_INDEX failed on device " + gpu_->device_identifier() + error_to_string(status));
     // count time
     if (is_grd_reg_ && is_sky_reg_)
       gpu_matcher_time += kernels_[identifier][0]->exec_time();

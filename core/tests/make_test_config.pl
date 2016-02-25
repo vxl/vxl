@@ -247,7 +247,6 @@ for $var_exp (
   '__CYGWIN__',         # cygwin
   '__MINGW32__',        # MinGW
   '_WIN32',             # windows
-  '__alpha__',          # Alpha
   '__APPLE__',          # MacOS X
   'macintosh',          #
   'unix',               #

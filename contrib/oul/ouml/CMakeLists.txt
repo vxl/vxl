@@ -19,10 +19,8 @@ set(ouml_sources
   inlines.h
 )
 
-add_library(ouml ${ouml_sources})
-install_targets(/lib ouml)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/oul/ouml ${ouml_sources})
-target_link_libraries( ouml vgl vnl_algo vnl_io vnl vil1 vsl vpl )
+vxl_add_library(LIBNAME ouml LIBSRCS ${ouml_sources})
+target_link_libraries( ouml ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

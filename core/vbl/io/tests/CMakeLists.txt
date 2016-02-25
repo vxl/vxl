@@ -1,6 +1,6 @@
 # This is core/vbl/io/tests/CMakeLists.txt
 
-link_libraries( vbl_io testlib vpl )
+link_libraries( ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl )
 
 add_executable( vbl_io_test_all
   test_driver.cxx
@@ -25,6 +25,6 @@ add_test( NAME vbl_io_test_triple_io COMMAND $<TARGET_FILE:vbl_io_test_all> test
 add_test( NAME vbl_io_golden_test_vbl_io COMMAND $<TARGET_FILE:vbl_io_test_all> golden_test_vbl_io)
 
 add_executable( vbl_io_test_include test_include.cxx )
-target_link_libraries( vbl_io_test_include vbl_io )
+target_link_libraries( vbl_io_test_include ${VXL_LIB_PREFIX}vbl_io )
 add_executable( vbl_io_test_template_include test_template_include.cxx )
-target_link_libraries( vbl_io_test_template_include vbl_io )
+target_link_libraries( vbl_io_test_template_include ${VXL_LIB_PREFIX}vbl_io )

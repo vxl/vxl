@@ -20,8 +20,8 @@ set(icam_sources
    )
 aux_source_directory(Templates icam_sources)
 
-add_library(icam  ${icam_sources})
-target_link_libraries(icam vsph vpgl_io vpgl_algo vpgl vgl_algo vil_algo vnl_algo vgl_io vgl vnl vil vul vsl vbl_io vbl vcl)
+vxl_add_library( LIBNAME icam LIBSRCS  ${icam_sources})
+target_link_libraries(icam vsph ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

@@ -151,7 +151,7 @@ static void test_face_2d()
   vtol_face_2d_sptr f1_copy = new vtol_face_2d(f1);
 
   TEST("vtol_face_2d deep copy (pseudo copy constructor)", *f1, *f1_copy);
-  TEST("vtol_face_2d::cast_to_face_2d()", f1->cast_to_face_2d()==0, false);
+  TEST("vtol_face_2d::cast_to_face_2d()", f1->cast_to_face_2d()==VXL_NULLPTR, false);
   TEST("vtol_face_2d::cast_to_face()", *f1->cast_to_face(), *f1_copy->cast_to_face());
 
   vsol_spatial_object_2d_sptr f1_clone = f1->clone();
@@ -159,7 +159,7 @@ static void test_face_2d()
   f1_clone->describe(vcl_cout,8);
 
   vsol_region_2d_sptr surf = f1->surface();
-  TEST("vtol_face_2d::surface()", surf.ptr()==0, false);
+  TEST("vtol_face_2d::surface()", surf.ptr()==VXL_NULLPTR, false);
 
   vtol_vertex_2d_sptr v5 = new vtol_vertex_2d(4.0,4.0);
   v_list.push_back(v5->cast_to_vertex());
@@ -167,7 +167,7 @@ static void test_face_2d()
   vtol_face_sptr new_f = new vtol_face_2d(v_list);
 
   TEST("vtol_face_2d inequality", *f1==*new_f, false);
-  TEST("vtol_face_2d::cast_to_face()", f1->cast_to_face()==0, false);
+  TEST("vtol_face_2d::cast_to_face()", f1->cast_to_face()==VXL_NULLPTR, false);
   TEST("vtol_face_2d::valid_inferior_type()", f1->valid_inferior_type(oc1), true);
   TEST("vtol_face_2d::valid_inferior_type()", f1->valid_inferior_type(e12->cast_to_topology_object()), false);
   TEST("vtol_one_chain::valid_superior_type()", oc1->valid_superior_type(f1), true);

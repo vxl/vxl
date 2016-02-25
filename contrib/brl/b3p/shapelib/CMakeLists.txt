@@ -20,8 +20,7 @@ if(NOT VXL_USING_NATIVE_SHAPELIB)
      dbfopen.c
   )
 
-  add_library(shapelib ${shapelib_sources})
-  install_targets(/lib shapelib)
+  vxl_add_library( LIBNAME shapelib LIBSRCS ${shapelib_sources})
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

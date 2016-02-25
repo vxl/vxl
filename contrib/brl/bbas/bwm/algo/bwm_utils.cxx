@@ -293,7 +293,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
     }
     else {
       vcl_cerr << "error loading image pyramid "<< filename << '\n';
-      return 0;
+      return VXL_NULLPTR;
     }
   }
   else {
@@ -320,12 +320,12 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
       }
 #endif //HAS_J2K
   }
-  if (!res) return 0;
+  if (!res) return VXL_NULLPTR;
   float gamma = 1.0f;
   bool invert = false;
   bool gl_map = false;
   bool cache = true;
-  bool is_pyr = res->get_property(vil_property_pyramid, 0);
+  bool is_pyr = res->get_property(vil_property_pyramid, VXL_NULLPTR);
   if (is_pyr)
   { gl_map = true; cache = true;}
 
@@ -339,7 +339,7 @@ bwm_utils::load_image(vcl_string& filename, vgui_range_map_params_sptr& rmps)
     return res;
   if (biu.default_range_map(rmps, gamma, invert, gl_map, cache))
     return res;
-  return 0;
+  return VXL_NULLPTR;
 }
 
 void bwm_utils::show_error(vcl_string msg)

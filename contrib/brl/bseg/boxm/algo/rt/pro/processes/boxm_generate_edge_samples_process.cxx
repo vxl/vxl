@@ -83,7 +83,7 @@ bool boxm_generate_edge_samples_process(bprb_func_process& pro)
   pro.parameters()->get_value("edge_prob_mask_sigma",edge_prob_mask_sigma);
 
   // check the input validity
-  if ((edge_image == 0) || (camera == 0) || (scene == 0)) {
+  if ((edge_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
      vcl_cout << "boxm_generate_edge_samples_process: null input value, cannot run" << vcl_endl;
      return false;
   }

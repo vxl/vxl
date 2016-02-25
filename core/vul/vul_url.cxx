@@ -127,7 +127,7 @@ vcl_istream * vul_http_open(char const *url)
   if (tcp_socket < 0) {
 #endif
     vcl_cerr << __FILE__ ": failed to create socket.\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
 #ifdef DEBUG
@@ -145,7 +145,7 @@ vcl_istream * vul_http_open(char const *url)
     close(tcp_socket);
 #endif
 
-    return 0;
+    return VXL_NULLPTR;
   }
 
   // make socket address.
@@ -166,7 +166,7 @@ vcl_istream * vul_http_open(char const *url)
     close(tcp_socket);
 #endif
 
-    return 0;
+    return VXL_NULLPTR;
   }
 
   // buffer for data transfers over socket.
@@ -200,7 +200,7 @@ vcl_istream * vul_http_open(char const *url)
 #else
     close(tcp_socket);
 #endif
-    return 0;
+    return VXL_NULLPTR;
   }
 
 
@@ -233,12 +233,12 @@ vcl_istream * vul_http_open(char const *url)
 
   if (contents.find("HTTP/1.1 200") == contents.npos)
   {
-    return 0;
+    return VXL_NULLPTR;
   }
   vcl_string::size_type n = contents.find("\r\n\r\n");
   if (n == contents.npos)
   {
-    return 0;
+    return VXL_NULLPTR;
   }
 
   contents.erase(0,n+4);
@@ -443,7 +443,7 @@ vcl_istream * vul_url::open(const char * url, vcl_ios_openmode mode)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
-    return 0;
+    return VXL_NULLPTR;
   unsigned int l = (unsigned int)vcl_strlen(url);
 
   // check for filenames beginning "file:".
@@ -459,7 +459,7 @@ vcl_istream * vul_url::open(const char * url, vcl_ios_openmode mode)
   {
     vcl_cerr << __LINE__ << "ERROR:\n vul_read_url(const char * url)\n"
       "Doesn't support FTP yet, url=" << url << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   // try an ordinary filename

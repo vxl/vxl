@@ -20,8 +20,8 @@ aux_source_directory(processes/corners bvpl_octree_pro_sources)
 aux_source_directory(processes/steerable_filters bvpl_octree_pro_sources)
 
 
-add_library(bvpl_octree_pro ${bvpl_octree_pro_sources})
-target_link_libraries(bvpl_octree_pro bvpl_octree_io bvpl_octree bvpl_kernels_io boxm boct boxm_algo_pro boxm_sample boxm_util bprb brdb vnl vul vbl_io)
+vxl_add_library( LIBNAME bvpl_octree_pro LIBSRCS ${bvpl_octree_pro_sources})
+target_link_libraries(bvpl_octree_pro bvpl_octree_io bvpl_octree bvpl_kernels_io boxm boct boxm_algo_pro boxm_sample boxm_util bprb brdb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

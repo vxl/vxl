@@ -184,7 +184,7 @@ intersecting_edges(vtol_face_2d_sptr const & face,
 vsol_point_2d_sptr btol_face_algs::centroid(vtol_face_2d_sptr const & face)
 {
   if (!face)
-    return (vsol_point_2d*)0;
+    return (vsol_point_2d*)VXL_NULLPTR;
   vcl_vector<vtol_vertex_sptr> verts;
   face->vertices(verts);
   int n = 0;
@@ -197,7 +197,7 @@ vsol_point_2d_sptr btol_face_algs::centroid(vtol_face_2d_sptr const & face)
     y0 += v->y();
   }
   if (!n)
-    return (vsol_point_2d*)0;
+    return (vsol_point_2d*)VXL_NULLPTR;
   x0 /=n;
   y0 /=n;
   return new vsol_point_2d(x0, y0);

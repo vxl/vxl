@@ -21,9 +21,9 @@ if(EXPAT_FOUND)
  endif()
 endif()
 
-add_library(bwm_io ${bwm_io_sources})
+vxl_add_library( LIBNAME bwm_io LIBSRCS ${bwm_io_sources})
 
-target_link_libraries(bwm_io vsol vsl vbl)
+target_link_libraries(bwm_io vsol ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl)
 
 if(EXPAT_FOUND)
   target_link_libraries(bwm_io ${EXPAT_LIBRARIES})
@@ -40,5 +40,3 @@ if( BUILD_TESTING )
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib bwm_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/io ${bwm_io_sources})

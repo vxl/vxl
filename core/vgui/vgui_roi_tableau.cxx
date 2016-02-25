@@ -24,7 +24,7 @@
 vgui_roi_tableau::vgui_roi_tableau()
   : vgui_tableau()
 {
-  cropped_image_ = 0;
+  cropped_image_ = VXL_NULLPTR;
 }
 
 vgui_roi_tableau::vgui_roi_tableau(vil1_image const &I,char const *t_name,

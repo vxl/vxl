@@ -167,7 +167,7 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
     use_mask = true;
   }
 
-  vil_image_view<unsigned char >* mask_map = 0;
+  vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
   if (use_mask) {
     mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
     if (!mask_map) {
@@ -373,7 +373,6 @@ bool boxm2_ocl_compute_expectation_per_view_process(bprb_func_process& pro)
       //grab an appropriately sized AUX data buffer
       int auxTypeSize  = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
       bocl_mem *aux0   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(suffix),info_buffer->data_buffer_length*auxTypeSize,false);
-      auxTypeSize      = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
 
       //also grab mog
       bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);

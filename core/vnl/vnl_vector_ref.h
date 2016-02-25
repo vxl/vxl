@@ -52,7 +52,7 @@ class vnl_vector_ref : public vnl_vector<T>
   //: Destructor
   // Prevents base destructor from releasing memory we don't own
   ~vnl_vector_ref() {
-    Base::data = 0;
+    Base::data = VXL_NULLPTR;
   }
 
   //: Reference to self to make non-const temporaries.

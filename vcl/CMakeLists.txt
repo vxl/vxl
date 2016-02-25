@@ -14,20 +14,18 @@ endif()
 
 project( vcl )
 
-# Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
-configure_file(
-  ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
-  ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
-)
+#
+# Do platform-specific configuration.
+# configure files
+#
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_compiler.h.in ${CMAKE_BINARY_DIR}/vcl/vcl_config_compiler.h include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_headers.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_config_headers.h  include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_manual.h.in   ${CMAKE_BINARY_DIR}/vcl/vcl_config_manual.h   include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_where_root_dir.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_where_root_dir.h  include/vxl/vcl)
 
 set( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx     vcl_deprecated.h
-
-  vcl_where_root_dir.h.in
-  vcl_config_compiler.h.in
-  vcl_config_headers.h.in
-  vcl_config_manual.h.in
 
   vcl_cmath.cxx          vcl_cmath.h
   vcl_cassert.cxx        vcl_cassert.h
@@ -206,24 +204,16 @@ set( vcl_sources
   internal/vcl_interlocked.h
 )
 
+
 # We use implicit instantiation of the standard library now,
 # so we shouldn't be explicitly instantiating anything.
 # This also avoid trouble where the instantiation hack conflict
 # with modern, more compliant compilers.
 #aux_source_directory(Templates vcl_sources)
-
-add_library(vcl ${vcl_sources})
-
-# CMake can automatically figure out the compiler characteristics on
-# Windows too.  No need to do manual config.
-
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vcl LIBSRCS ${vcl_sources} )
 if(UNIX)
-  target_link_libraries( vcl m )
+  target_link_libraries( ${VXL_LIB_PREFIX}vcl m )
 endif()
-
-# Installation
-install_targets(/lib vcl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/vcl ${vcl_sources})
 
 if( BUILD_TESTING)
   add_subdirectory(tests)

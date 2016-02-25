@@ -19,11 +19,9 @@ set( vpgl_pro_sources
 aux_source_directory(Templates vpgl_pro_sources)
 aux_source_directory(processes vpgl_pro_sources)
 
-add_library(vpgl_pro ${vpgl_pro_sources})
-target_link_libraries(vpgl_pro bprb vsph bpgl bpgl_algo vpgl_io vpgl vpgl_algo vnl vil vgl vbl_io vul bkml brad bbas_pro vsol)
+vxl_add_library( LIBNAME vpgl_pro LIBSRCS ${vpgl_pro_sources})
+target_link_libraries(vpgl_pro bprb vsph bpgl bpgl_algo ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul bkml brad bbas_pro vsol)
 
-install_targets(/lib vpgl_pro)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/vpgl_pro ${vpgl_pro_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

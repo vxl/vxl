@@ -19,7 +19,7 @@ bwm_reg_edge_champher::bwm_reg_edge_champher()
   col_off_ = 0;
   row_off_ = 0;
   distance_ = vbl_array_2d<unsigned char>(0,0,0);
-  edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(0, 0, 0);
+  edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(0, 0, VXL_NULLPTR);
   sample_index_ = vbl_array_2d<unsigned>(0, 0, 0);
 }
 
@@ -40,7 +40,7 @@ bwm_reg_edge_champher(unsigned col_off, unsigned row_off,
   distance_ = vbl_array_2d<unsigned char>(nrows_, ncols_, (unsigned char)-1 );
 
   //pointers to the digital curves, initially null
-  edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(nrows_, ncols_, 0);
+  edges_ = vbl_array_2d<vsol_digital_curve_2d_sptr>(nrows_, ncols_, VXL_NULLPTR);
 
   //The index of the curve vertex inserted at a given cell
   sample_index_ = vbl_array_2d<unsigned>(nrows_, ncols_, 0);

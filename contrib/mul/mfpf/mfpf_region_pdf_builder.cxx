@@ -435,7 +435,7 @@ void mfpf_region_pdf_builder::print_summary(vcl_ostream& os) const
   if (norm_method_==0) os<<vsl_indent()<<"norm: none"<<'\n';
   else                 os<<vsl_indent()<<"norm: linear"<<'\n';
   os <<vsl_indent()<< "pdf_builder: ";
-  if (pdf_builder_.ptr()==0) os << '-'<<'\n';
+  if (pdf_builder_.ptr()==VXL_NULLPTR) os << '-'<<'\n';
   else                       os << pdf_builder_<<'\n';
   os <<vsl_indent()<< "nA: " << nA_ << " dA: " << dA_ << ' '<<'\n'
      <<vsl_indent();

@@ -83,7 +83,7 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
     }
     else {
       vcl_cerr << "Unknown camera type " << cam_tab->cam_type << "coming from parser!\n";
-      return 0;
+      return VXL_NULLPTR;
     }
   }
 
@@ -94,7 +94,7 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
     vcl_string camera_glob = tab->camera_glob;
 
     if (video_path == "")
-      return 0;
+      return VXL_NULLPTR;
 
     bgui_image_tableau_sptr img = bgui_image_tableau_new();
     img->set_file_name(video_path);
@@ -121,5 +121,5 @@ bwm_tableau_factory::create_tableau(bwm_io_tab_config* t)
   }
 
   else
-    return 0;
+    return VXL_NULLPTR;
 }

@@ -13,17 +13,15 @@ set(bwm_reg_sources
 
 aux_source_directory(Templates bwm_reg_sources)
 
-add_library(bwm_reg ${bwm_reg_sources})
+vxl_add_library( LIBNAME bwm_reg LIBSRCS ${bwm_reg_sources})
 
-target_link_libraries( bwm_reg brip sdet vil vbl vgl vnl bsta bsol vsol vpgl vpgl_algo )
+target_link_libraries( bwm_reg brip sdet ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl bsta bsol vsol ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo )
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib bwm_reg)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/reg/ ${bwm_reg_sources})
 
 
 

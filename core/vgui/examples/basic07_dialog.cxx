@@ -88,7 +88,7 @@ static void test_dialog2()
 
   vcl_string button_txt("close");
   mydialog.set_ok_button(button_txt.c_str());
-  mydialog.set_cancel_button(0);
+  mydialog.set_cancel_button(VXL_NULLPTR);
   mydialog.ask();
 }
 

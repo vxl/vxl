@@ -48,10 +48,8 @@ set(pdf1d_sources
 
 aux_source_directory(Templates pdf1d_sources)
 
-add_library(pdf1d ${pdf1d_sources})
-install_targets(/lib pdf1d)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/pdf1d ${pdf1d_sources})
-target_link_libraries( pdf1d mbl vbl vnl_io vnl vsl )
+vxl_add_library( LIBNAME pdf1d LIBSRCS ${pdf1d_sources})
+target_link_libraries( pdf1d mbl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vsl )
 
 if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)

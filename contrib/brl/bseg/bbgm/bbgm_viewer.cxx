@@ -17,7 +17,7 @@ bool bbgm_viewer::probe(const bbgm_image_sptr& dimg) const
   if (!view_maker_ || view_maker_->dist_typeid() != dimg->dist_typeid())
     view_maker_ = this->find_vm(dimg->dist_typeid());
 
-  return view_maker_ != 0;
+  return view_maker_ != VXL_NULLPTR;
 }
 
 
@@ -87,7 +87,7 @@ bbgm_mean_viewer::find_view_maker(const vcl_type_info& dist_type)
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == dist_type)
       return *i;
-  return bbgm_view_maker_sptr(NULL);
+  return bbgm_view_maker_sptr(VXL_NULLPTR);
 }
 
 //=============================================================================
@@ -126,7 +126,7 @@ bbgm_variance_viewer::find_view_maker(const vcl_type_info& dist_type)
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == dist_type)
       return *i;
-  return bbgm_view_maker_sptr(NULL);
+  return bbgm_view_maker_sptr(VXL_NULLPTR);
 }
 
 
@@ -166,6 +166,6 @@ bbgm_weight_viewer::find_view_maker(const vcl_type_info& dist_type)
   for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
     if ((*i)->dist_typeid() == dist_type)
       return *i;
-  return bbgm_view_maker_sptr(NULL);
+  return bbgm_view_maker_sptr(VXL_NULLPTR);
 }
 

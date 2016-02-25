@@ -8,9 +8,9 @@ set(boxm2_volm_conf_sources
   boxm2_volm_conf_matcher.h       boxm2_volm_conf_matcher.cxx
 )
 
-add_library(boxm2_volm_conf ${boxm2_volm_conf_sources})
+vxl_add_library( LIBNAME boxm2_volm_conf LIBSRCS ${boxm2_volm_conf_sources})
 
-target_link_libraries(boxm2_volm_conf boxm2_volm boxm2 boxm2_io volm volm_conf vul vgl vcl)
+target_link_libraries(boxm2_volm_conf boxm2_volm boxm2 boxm2_io volm volm_conf ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

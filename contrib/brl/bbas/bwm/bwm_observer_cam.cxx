@@ -202,7 +202,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       moving_face_->set_object(poly3d);
     }
     this->deselect();
-    moving_face_ = 0;
+    moving_face_ = VXL_NULLPTR;
     moving_vertex_ = false;
     moving_polygon_ = false;
     return true;
@@ -226,7 +226,7 @@ bool bwm_observer_cam::handle(const vgui_event &e)
       moving_face_->set_object(poly3d);
     }
     this->deselect();
-    moving_face_ = 0;
+    moving_face_ = VXL_NULLPTR;
     moving_vertex_ = false;
     moving_polygon_ = false;
     return true;
@@ -543,7 +543,7 @@ void bwm_observer_cam::translate_along_optical_cone(double da)
       return;
     }
     // cone method only available on observable_mesh, not in general
-    bwm_observable_mesh* omsh = 0;
+    bwm_observable_mesh* omsh = VXL_NULLPTR;
     if (obs->type_name()=="bwm_observable_mesh")
       omsh = static_cast<bwm_observable_mesh*>(obs.ptr());
     else return;
@@ -804,7 +804,7 @@ bool bwm_observer_cam::intersect(bwm_observable_sptr obj, unsigned face_id,
 
   if (obj) {
     vsol_polygon_3d_sptr face = obj->extract_face(face_id);
-    if (face != 0) {
+    if (face != VXL_NULLPTR) {
       vgl_point_3d<double> l1, l2, l3, l4;
       vgl_point_3d<double> point1, point2;
       if (find_intersection_points(image_point1, image_point2, face, point1, l1, l2, point2, l3, l4)) {
@@ -1213,7 +1213,7 @@ void bwm_observer_cam::backproj_point(vsol_point_2d_sptr p2d,
     p3d = new vsol_point_3d (x, y, z);
   }
   else
-    p3d = 0;
+    p3d = VXL_NULLPTR;
 }
 
 void bwm_observer_cam::backproj_poly(vsol_polygon_2d_sptr poly2d,
@@ -1323,7 +1323,7 @@ void bwm_observer_cam::save(vcl_string path)
       unsigned face_id;
       bwm_observable_sptr obs = this->find_object(poly->get_id(), face_id);
       if (obs)
-        obs->save(path.c_str(), 0); // LVCS?? gamze
+        obs->save(path.c_str(), VXL_NULLPTR); // LVCS?? gamze
     }
   }
 }
@@ -1981,7 +1981,7 @@ void bwm_observer_cam::toggle_cam_horizon()
   if (horizon_soview_) {
     // in vgui_easy2D
     remove(horizon_soview_);
-    horizon_soview_ = 0;
+    horizon_soview_ = VXL_NULLPTR;
     post_redraw();
     return;
   }

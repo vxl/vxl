@@ -27,8 +27,8 @@ set(bvpl_kernels_sources
 
 aux_source_directory(Templates bvpl_kernels_sources)
 
-add_library(bvpl_kernels ${bvpl_kernels_sources})
-target_link_libraries(bvpl_kernels bxml bsvg bsta vgl_algo vgl vnl vbl)
+vxl_add_library( LIBNAME bvpl_kernels LIBSRCS ${bvpl_kernels_sources})
+target_link_libraries(bvpl_kernels bxml bsvg bsta ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 #Directory with python/c++ processes
 add_subdirectory(io)
@@ -41,5 +41,3 @@ endif()
 endif()
 
 
-install_targets(/lib bvpl_kernels)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/bvpl/kernels/ ${bvpl_kernels_sources})

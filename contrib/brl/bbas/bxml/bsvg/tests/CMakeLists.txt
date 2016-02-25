@@ -5,7 +5,7 @@ add_executable( bsvg_test_all
   test_svg.cxx
 )
 
-target_link_libraries( bsvg_test_all bsvg testlib )
+target_link_libraries( bsvg_test_all bsvg ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME bsvg_test_svg COMMAND $<TARGET_FILE:bsvg_test_all> test_svg )
 

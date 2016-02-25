@@ -16,7 +16,7 @@ static bool dragging = false;
 
 //-----------------------------------------------------------------------------
 xcv_threeview_manager::xcv_threeview_manager()
-  : tri_tensor(0)
+  : tri_tensor(VXL_NULLPTR)
   , tri_tensor_is_displayed(true)
 { }
 
@@ -96,7 +96,7 @@ void xcv_threeview_manager::handle_tjunction_event(vgui_event const& e, vgui_tab
   }
   if (e.type == vgui_MOTION && dragging)
   {
-    if (tri_tensor != 0 && tri_tensor_is_displayed)
+    if (tri_tensor != VXL_NULLPTR && tri_tensor_is_displayed)
     {
       draw_tri_tensor(e, child_tab, false);
     }
@@ -104,7 +104,7 @@ void xcv_threeview_manager::handle_tjunction_event(vgui_event const& e, vgui_tab
 
   if (e.type == vgui_BUTTON_DOWN && e.modifier == vgui_MODIFIER_NULL && e.button == vgui_MIDDLE)
   {
-    if (tri_tensor != 0 && tri_tensor_is_displayed)
+    if (tri_tensor != VXL_NULLPTR && tri_tensor_is_displayed)
     {
       draw_tri_tensor(e, child_tab, true);
     }

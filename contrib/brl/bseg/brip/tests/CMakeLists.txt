@@ -19,7 +19,7 @@ add_executable( brip_test_all
   test_nitf_ops.cxx
   test_phase_correlation.cxx
 )
-target_link_libraries( brip_test_all brip vgl_algo vgl vnl_algo vnl vil vil1 vbl testlib)
+target_link_libraries( brip_test_all brip ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME brip_test_histogram COMMAND $<TARGET_FILE:brip_test_all> test_histogram )
 add_test( NAME brip_test_mutual_info COMMAND $<TARGET_FILE:brip_test_all> test_mutual_info )

@@ -17,7 +17,7 @@ if(EXPAT_FOUND)
 endif()
 
 add_executable(bvgl_test_all ${bvgl_test_sources})
-target_link_libraries(bvgl_test_all bvgl vgl vnl testlib)
+target_link_libraries(bvgl_test_all bvgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME bvgl_test_changes COMMAND $<TARGET_FILE:bvgl_test_all> test_bvgl_changes)
 add_test( NAME bvgl_test_volume_of_intersection COMMAND $<TARGET_FILE:bvgl_test_all> test_bvgl_volume_of_intersection)

@@ -31,13 +31,11 @@ if(EXPAT_FOUND)
     set(HAS_GEOTIFF 1 )
   endif()
 
-  add_library(boxm2_pro ${boxm2_pro_sources})
+  vxl_add_library( LIBNAME boxm2_pro LIBSRCS ${boxm2_pro_sources})
 
   #install the .h .txx and libs
-  install_targets(/lib boxm2_pro)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/pro ${boxm2_pro_sources})
 
-  target_link_libraries(boxm2_pro boxm2 boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro vnl vil_algo vil_io vil vgl vbl_io vul bvrml bmsh3d_algo rply)
+  target_link_libraries(boxm2_pro boxm2 boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul bvrml bmsh3d_algo rply)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

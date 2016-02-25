@@ -274,15 +274,20 @@ bool boxm2_vecf_fit_orbit::read_dlib_part_file(vcl_string const& path, bool imag
 // approximate mapping to mm coordinates, which eases
 // interpretation of the model parameters.
 //
-void boxm2_vecf_fit_orbit::normalize_eye_data(){
-  double ril = left_params_.iris_radius_;
-  double rir = right_params_.iris_radius_;
-  double ria = (ril + rir)/2.0;
-  double ari = left_params_.avg_iris_radius_;
-  left_params_.iris_radius_ = ari;
-  right_params_.iris_radius_ = ari;
-  //conversion factor in millimeters per pixel
-  double mm_per_pix = ari/ria;
+void boxm2_vecf_fit_orbit::normalize_eye_data(float fixed_amount){
+  double mm_per_pix;
+  if(fixed_amount == 0.0f){
+    double ril = left_params_.iris_radius_;
+    double rir = right_params_.iris_radius_;
+    double ria = (ril + rir)/2.0;
+    double ari = left_params_.avg_iris_radius_;
+    left_params_.iris_radius_ = ari;
+    right_params_.iris_radius_ = ari;
+    //conversion factor in millimeters per pixel
+    mm_per_pix = ari/ria;
+  }else
+    mm_per_pix = fixed_amount;
+
   left_params_.mm_per_pix_ = mm_per_pix;
   right_params_.mm_per_pix_ = mm_per_pix;
   // for transforming to image coordinates

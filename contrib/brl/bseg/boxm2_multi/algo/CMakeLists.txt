@@ -13,8 +13,8 @@ set(boxm2_multi_algo_sources
     boxm2_multi_refine.h       boxm2_multi_refine.cxx
    )
 
-add_library(boxm2_multi_algo  ${boxm2_multi_algo_sources})
-target_link_libraries(boxm2_multi_algo boxm2_multi boxm2_ocl_algo)# boxm2_ocl boxm2_ocl_pro boct brdb bsta vbl_io vpgl_algo vpgl vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl)
+vxl_add_library( LIBNAME boxm2_multi_algo LIBSRCS  ${boxm2_multi_algo_sources})
+target_link_libraries(boxm2_multi_algo boxm2_multi boxm2_ocl_algo)# boxm2_ocl boxm2_ocl_pro boct brdb bsta ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

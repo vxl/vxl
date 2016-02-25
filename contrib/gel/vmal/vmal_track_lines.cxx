@@ -450,7 +450,7 @@ vtol_edge_2d_sptr vmal_track_lines::find_transfo(vtol_edge_2d_sptr line,
       return transformed_lines[i];
     i++;
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 void vmal_track_lines::sort_lines(vmal_multi_view_data_edge_sptr matches,

@@ -14,23 +14,23 @@ osl_canny_base::osl_canny_base(float sigma, float low, float high, bool v)
   : xstart_(0), ystart_(0)
   , xsize_(0), ysize_(0)
 
-  , smooth_(0)
-  , dx_(0)
-  , dy_(0)
-  , grad_(0)
+  , smooth_(VXL_NULLPTR)
+  , dx_(VXL_NULLPTR)
+  , dy_(VXL_NULLPTR)
+  , grad_(VXL_NULLPTR)
 
-  , thick_(0)
-  , thin_(0)
-  , theta_(0)
+  , thick_(VXL_NULLPTR)
+  , thin_(VXL_NULLPTR)
+  , theta_(VXL_NULLPTR)
 
-  , junction_(0)
-  , jx_(0)
-  , jy_(0)
-  , xjunc_(0)
-  , yjunc_(0)
-  , vlist_(0)
+  , junction_(VXL_NULLPTR)
+  , jx_(VXL_NULLPTR)
+  , jy_(VXL_NULLPTR)
+  , xjunc_(VXL_NULLPTR)
+  , yjunc_(VXL_NULLPTR)
+  , vlist_(VXL_NULLPTR)
 
-  , kernel_(0)
+  , kernel_(VXL_NULLPTR)
 {
   verbose =v;
   sigma_ = sigma;

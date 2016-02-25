@@ -13,8 +13,8 @@ set( ihog_pro_sources
 aux_source_directory(Templates ihog_pro_sources)
 aux_source_directory(processes ihog_pro_sources)
 
-add_library(ihog_pro ${ihog_pro_sources})
-target_link_libraries(ihog_pro bprb ihog vnl vil vil_pro vbl_io)
+vxl_add_library( LIBNAME ihog_pro LIBSRCS ${ihog_pro_sources})
+target_link_libraries(ihog_pro bprb ihog ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil vil_pro ${VXL_LIB_PREFIX}vbl_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

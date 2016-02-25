@@ -336,6 +336,11 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
   {
     for (int j=0; j<w; j++)
     {
+      if(max_disparity == 0 )
+      {
+        vcl_cerr << "Error: Divide by zero in " << __FILE__ << __LINE__ << vcl_endl;
+        throw 0;
+      }
       int value=vmal_round_int((map(j,i)-min_disparity)*255/max_disparity);
       buf[i*w+j]=(unsigned char)value;
     }

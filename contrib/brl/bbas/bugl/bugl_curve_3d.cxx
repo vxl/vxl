@@ -33,7 +33,7 @@ void bugl_curve_3d::add_curve(vcl_vector<bugl_normal_point_3d_sptr > & pts)
     for (unsigned int j=1; j<=num_neighbors_; j++){
       // assign the left neighbors
       if (j > i)
-        seg[num_neighbors_-j] = 0;
+        seg[num_neighbors_-j] = VXL_NULLPTR;
       else
         seg[num_neighbors_-j] = pts[i-j];
 
@@ -41,7 +41,7 @@ void bugl_curve_3d::add_curve(vcl_vector<bugl_normal_point_3d_sptr > & pts)
       if (i+j < size)
         seg[num_neighbors_ + j] = pts[i+j];
       else
-        seg[num_neighbors_ + j] = 0;
+        seg[num_neighbors_ + j] = VXL_NULLPTR;
     }//end neighbors
 
     data_.push_back(seg);

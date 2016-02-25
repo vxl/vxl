@@ -16,7 +16,7 @@
 void
 test_gevd_float_operators()
 {
-  gevd_bufferxy buf_in(8,8,32), *buf_out=0, *buf_mag=0, *buf_dirx=0, *buf_diry=0;
+  gevd_bufferxy buf_in(8,8,32), *buf_out=VXL_NULLPTR, *buf_mag=VXL_NULLPTR, *buf_dirx=VXL_NULLPTR, *buf_diry=VXL_NULLPTR;
   gevd_float_operators::Fill(buf_in, 5.0f); *(float*)buf_in.GetElementAddr(1,2) = 3.0f;
   int r = gevd_float_operators::Threshold(buf_in, 4.0f);
   TEST("gevd_float_operators::Threshold()", r, 1);
@@ -34,7 +34,7 @@ test_gevd_float_operators()
   delete buf_mag;
   delete buf_dirx;
   delete buf_diry;
-  float* kernel = 0; int radius;
+  float* kernel = VXL_NULLPTR; int radius;
   gevd_float_operators::Find1dGaussianKernel(7.0f, kernel, radius);
   TEST("gevd_float_operators::Find1dGaussianKernel(7) radius", radius, 20);
   TEST_NEAR("gevd_float_operators::Find1dGaussianKernel(7) kernel values", kernel[20], 0.0571849, 1e-7);

@@ -15,8 +15,8 @@ set(msm_utils_sources
 )
 
 # aux_source_directory(Templates msm_utils_sources)
-add_library(msm_utils ${msm_utils_sources} )
-target_link_libraries(msm_utils msm vgl)
+vxl_add_library( LIBNAME msm_utils LIBSRCS ${msm_utils_sources} )
+target_link_libraries(msm_utils msm ${VXL_LIB_PREFIX}vgl)
 
 if( BUILD_TESTING)
   add_subdirectory(tests)

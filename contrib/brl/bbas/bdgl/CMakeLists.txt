@@ -19,11 +19,9 @@ set(bdgl_sources
     bdgl_peano_curve.cxx  bdgl_peano_curve.h
 )
 
-add_library(bdgl ${bdgl_sources})
-install_targets(/lib bdgl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bdgl ${bdgl_sources})
+vxl_add_library( LIBNAME bdgl LIBSRCS ${bdgl_sources})
 
-target_link_libraries(bdgl vdgl vsol vgl_algo vgl vnl_algo vnl)
+target_link_libraries(bdgl vdgl vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

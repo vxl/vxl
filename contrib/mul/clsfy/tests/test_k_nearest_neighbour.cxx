@@ -280,7 +280,7 @@ void test_k_nearest_neighbour()
 
   clsfy_k_nearest_neighbour knn_in;
   clsfy_rbf_parzen win_in;
-  clsfy_classifier_base *p_base_class_knn_in=0, *p_base_class_win_in=0;
+  clsfy_classifier_base *p_base_class_knn_in=VXL_NULLPTR, *p_base_class_win_in=VXL_NULLPTR;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);

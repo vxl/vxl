@@ -28,6 +28,13 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
 
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+  //check for invalid parameters
+  if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
+  {
+    vcl_cerr << "ERROR: Division by zero in " << __FILE__ << __LINE__ << vcl_endl;
+    throw 0;
+  }
+
   for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
     //check normal magnitude and vis score and that point data is valid
     if (normals_data[currIdx][3] >= nmag_t && vis_data[currIdx] >= vis_t && points_data[currIdx][3] != -1)
@@ -70,6 +77,13 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
 
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+  //check for invalid parameters
+  if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
+  {
+    vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    throw 0;
+  }
+
   for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
     //check normal magnitude and vis score and that point data is valid
     if (normals_data[currIdx][3] >= nmag_t && vis_data[currIdx] >= vis_t && points_data[currIdx][3] != -1)
@@ -108,6 +122,13 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
 
   file << vcl_fixed;
   int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+  //check for invalid parameters
+  if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
+  {
+    vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+    throw 0;
+  }
+
   for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
     //check if the point data is valid
     //if (covs_data[currIdx][0] >= 0.0)
@@ -148,6 +169,12 @@ void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const 
     boxm2_data_traits<BOXM2_ALPHA>::datatype     *   alpha_data   = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
     file << vcl_fixed;
     int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
+    //check for invalid parameters
+    if( pointTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+        vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        throw 0;
+    }
     for (unsigned currIdx=0; currIdx < (points->buffer_length()/pointTypeSize) ; currIdx++) {
         float prob = 0.0f;
         if (!calculateProbOfPoint(scene, blk, points_data[currIdx], alpha_data[currIdx], prob))
@@ -362,7 +389,7 @@ void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const vcl_string&
   ply_bb_reader parsed_ply;
   parsed_ply.bbox = box;
 
-  p_ply ply = ply_open(filename.c_str(), NULL, 0, NULL);
+  p_ply ply = ply_open(filename.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
   if (!ply) {
     vcl_cout << "File " << filename << " doesn't exist.";
   }

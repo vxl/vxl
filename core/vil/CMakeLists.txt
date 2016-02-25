@@ -7,7 +7,7 @@ doxygen_add_library(core/vil
 )
 
 # avoid undefined macro in subsequent SETs:
-set( vil_sources vil_config.h.in )
+set( vil_sources)
 
 include(${VXL_CMAKE_DIR}/FindPNG.cmake)
 if(PNG_FOUND)
@@ -132,8 +132,8 @@ endif()
 
 
 # Store the external library configurations in to the config file
-configure_file( ${vxl_SOURCE_DIR}/core/vil/vil_config.h.in
-                ${vxl_BINARY_DIR}/core/vil/vil_config.h @ONLY IMMEDIATE )
+vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vil/vil_config.h.in
+                ${CMAKE_BINARY_DIR}/core/vil/vil_config.h include/vxl/core/vil)
 
 set( vil_sources ${vil_sources}
 
@@ -303,53 +303,46 @@ set( vil_network_sources
 )
 
 if(NOT SOLARIS)
-  add_library(vil ${vil_sources} ${vil_network_sources})
-  install_targets(/lib vil)
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil LIBSRCS ${vil_sources} ${vil_network_sources})
 else()
-  add_library(vil ${vil_sources})
-  add_library(vil_network ${vil_network_sources})
-  install_targets(/lib vil vil_network)
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil LIBSRCS ${vil_sources})
+  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil_network LIBSRCS ${vil_network_sources})
 endif()
 
 if(JPEG_FOUND)
-  target_link_libraries( vil ${JPEG_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${JPEG_LIBRARIES} )
 endif()
 if(TIFF_FOUND)
-  target_link_libraries( vil ${TIFF_LIBRARIES})
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${TIFF_LIBRARIES})
 endif()
 if(HAS_GEOTIFF)
-  target_link_libraries( vil ${GEOTIFF_LIBRARIES})
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${GEOTIFF_LIBRARIES})
 endif()
 if(PNG_FOUND)
-  target_link_libraries( vil ${PNG_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${PNG_LIBRARIES} )
 endif()
 if(DCMTK_FOUND)
-  target_link_libraries( vil ${DCMTK_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${DCMTK_LIBRARIES} )
 endif()
 if(OPENJPEG2_FOUND)
-  target_link_libraries( vil ${OPENJPEG2_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${OPENJPEG2_LIBRARIES} )
 endif()
 
-target_link_libraries( vil vcl )
+target_link_libraries( ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vcl )
 
 if(NOT UNIX)
-  target_link_libraries( vil ws2_32 )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ws2_32 )
 endif()
 
 if(SOLARIS)
-  target_link_libraries( vil nsl vil_network socket )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil nsl ${VXL_LIB_PREFIX}vil_network socket )
 endif()
-
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil
-  ${vil_sources}
-  ${vil_network_sources}
-)
 
 if(ECW_FOUND)
-  target_link_libraries( vil ${ECW_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${ECW_LIBRARIES} )
 endif()
 if(OPENJPEG2_FOUND)
-  target_link_libraries( vil ${OPENJPEG2_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil ${OPENJPEG2_LIBRARIES} )
 endif()
 
 if( BUILD_EXAMPLES )

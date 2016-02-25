@@ -5,8 +5,8 @@ vifa_int_faces_adj_attr::
 vifa_int_faces_adj_attr(void)
   : vifa_int_faces_attr(),
     closure_valid_(false),
-    seed_(NULL),
-    seed_attr_(NULL),
+    seed_(VXL_NULLPTR),
+    seed_attr_(VXL_NULLPTR),
     depth_(BAD_DEPTH)
 {
   init();
@@ -27,7 +27,7 @@ vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
   : vifa_int_faces_attr(fitter_params, gpp_s, gpp_w, cpp, np, factory),
     closure_valid_(false),
     seed_(seed),
-    seed_attr_(NULL),
+    seed_attr_(VXL_NULLPTR),
     depth_(depth),
     size_filter_(size_filter),
     junk_area_percentage_(junk_area_percentage),
@@ -52,7 +52,7 @@ vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
   : vifa_int_faces_attr(neighborhood, fitter_params, gpp_s, gpp_w, cpp, np, factory),
     closure_valid_(false), // still need to filter on size!
     seed_(seed),
-    seed_attr_(NULL),
+    seed_attr_(VXL_NULLPTR),
     depth_(depth),
     size_filter_(size_filter),
     junk_area_percentage_(junk_area_percentage),
@@ -404,7 +404,7 @@ vtol_intensity_face_sptr vifa_int_faces_adj_attr::
 get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
                           vtol_edge_2d*              e)
 {
-  vtol_intensity_face_sptr  adj_face = 0;
+  vtol_intensity_face_sptr  adj_face = VXL_NULLPTR;
   face_list faces; e->faces(faces);
 
   // Expect only one or two intensity faces for 2-D case
@@ -430,7 +430,7 @@ get_adjacent_face_at_edge(vtol_intensity_face_sptr&  known_face,
 iface_list* vifa_int_faces_adj_attr::
 get_adjacent_faces(vtol_intensity_face_sptr&  known_face)
 {
-  iface_list*    faces = NULL;
+  iface_list*    faces = VXL_NULLPTR;
 
   if (known_face.ptr())
   {

@@ -48,9 +48,9 @@ if(EXPAT_FOUND)
      )
 endif()
 
-add_library( bvxm ${bvxm_sources})
+vxl_add_library( LIBNAME bvxm LIBSRCS ${bvxm_sources})
 
-target_link_libraries( bvxm bvxm_grid bsta bsta_algo vpgl vpgl_io vpgl_file_formats brip sdet bil_algo vgl_io vgl_algo vil_algo vnl_algo vnl vgl vil vul vbl vsl vcl)
+target_link_libraries( bvxm bvxm_grid bsta bsta_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_file_formats brip sdet bil_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
 if(EXPAT_FOUND)
 target_link_libraries(bvxm expatpp)

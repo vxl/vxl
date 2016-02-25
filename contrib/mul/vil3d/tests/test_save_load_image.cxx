@@ -111,7 +111,7 @@ bool test_image_equal(char const* type_name,
     return false;
   }
 
-  if (voxel_size != 0)
+  if (voxel_size != VXL_NULLPTR)
   {
     float vs2[3];
     TEST("Voxel size provided", pimage2->get_property(vil3d_property_voxel_size, vs2), true);

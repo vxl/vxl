@@ -89,11 +89,13 @@ class msm_zoom_aligner : public msm_aligner
   //  frame, pose_to_ref[i] maps points[i] into the reference
   //  frame (ie pose is the mapping from the reference frame to
   //  the target frames).
+  // \param pose_source - unused
   // \param average_pose Some estimate of the average mapping
   virtual void align_set(const vcl_vector<msm_points>& points,
                          msm_points& ref_mean_shape,
                          vcl_vector<vnl_vector<double> >& pose_to_ref,
-                         vnl_vector<double>& average_pose) const;
+                         vnl_vector<double>& average_pose,
+                         ref_pose_source pose_source) const;
 
   //: Name of the class
   virtual vcl_string is_a() const;

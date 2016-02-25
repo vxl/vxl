@@ -33,7 +33,7 @@ namespace boxm_construct_scene_from_image_process_globals
                        unsigned& base_ni, unsigned& base_nj,
                        boct_tree<short, T >*& tree)
   {
-    tree = 0;
+    tree = VXL_NULLPTR;
     unsigned ni = image.ni(), nj = image.nj();
     // find a square arrangement consistent with area unit
     double gsize = static_cast<double>(area_unit);
@@ -177,7 +177,7 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
   vcl_string app_type =  pro.get_input<vcl_string>(i++);
   vcl_string scene_dir =  pro.get_input<vcl_string>(i++);
   vcl_string xml_path =  pro.get_input<vcl_string>(i++);
-  if (image == 0) {
+  if (image == VXL_NULLPTR) {
     vcl_cerr << "boxm_construct_scene_from_image_process: null image value, cannot run\n";
     return false;
   }
@@ -188,13 +188,13 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
 
   unsigned base_ni =0, base_nj=0;
   vcl_string block_prefix = "ideal";
-  boxm_scene_base_sptr scene_base = 0;
+  boxm_scene_base_sptr scene_base = VXL_NULLPTR;
   if (app_type == "simple_grey")
   {
     typedef boxm_sample<BOXM_APM_SIMPLE_GREY> data_type;
-    boct_tree<short, data_type>* tree = 0;
+    boct_tree<short, data_type>* tree = VXL_NULLPTR;
     tree_from_image<data_type>(img, 16, base_ni, base_nj,tree);
-    if (tree == 0) return false;
+    if (tree == VXL_NULLPTR) return false;
     boxm_block<boct_tree<short, data_type> >* blk =
       new boxm_block<boct_tree<short, data_type> >(tree->bounding_box(), tree);
     vgl_box_3d<double> bb = blk->bounding_box();

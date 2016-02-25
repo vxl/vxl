@@ -82,8 +82,8 @@ endif()
 
 aux_source_directory(Templates vgl_sources)
 
-add_library(vgl ${vgl_sources})
-target_link_libraries( vgl vcl )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgl LIBSRCS ${vgl_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl )
 
 doxygen_add_library(core/vgl
   #DEPENDS core/vsl core/vnl
@@ -92,12 +92,9 @@ doxygen_add_library(core/vgl
   )
 if( NOT BUILD_NONCOMMERCIAL )
   if(CLIPPER_FOUND)
-    target_link_libraries( vgl ${CLIPPER_LIBRARIES} )
+    target_link_libraries( ${VXL_LIB_PREFIX}vgl ${CLIPPER_LIBRARIES} )
   endif()
 endif()
-
-install_targets(/lib vgl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgl ${vgl_sources})
 
 add_subdirectory(algo)
 

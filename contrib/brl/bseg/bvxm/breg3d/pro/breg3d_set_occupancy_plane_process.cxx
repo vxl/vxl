@@ -15,7 +15,7 @@ breg3d_set_occupancy_plane_process::breg3d_set_occupancy_plane_process()
   //inputs[0-3]: The plane parameters (a,b,c,d) such that ax + by + cz + d = 0
   //input[4]: The standard deviation of the plane estimate
   //input[5]: The voxel world
-  input_data_.resize(6,brdb_value_sptr(0));
+  input_data_.resize(6,brdb_value_sptr(VXL_NULLPTR));
   input_types_.resize(6);
   input_types_[0] = "double";
   input_types_[1] = "double";
@@ -25,7 +25,7 @@ breg3d_set_occupancy_plane_process::breg3d_set_occupancy_plane_process()
   input_types_[5] = "bvxm_voxel_world_sptr";
 
   // process has 0 outputs.
-  output_data_.resize(0,brdb_value_sptr(0));
+  output_data_.resize(0,brdb_value_sptr(VXL_NULLPTR));
   output_types_.resize(0);
 }
 

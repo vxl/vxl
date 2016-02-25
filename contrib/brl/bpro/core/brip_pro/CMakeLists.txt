@@ -13,8 +13,8 @@ set(brip_pro_sources
 aux_source_directory(Templates brip_pro_sources)
 aux_source_directory(processes brip_pro_sources)
 
-add_library(brip_pro ${brip_pro_sources})
-target_link_libraries(brip_pro bprb brdb brip vil_pro vil vsl bil_algo)
+vxl_add_library( LIBNAME brip_pro LIBSRCS ${brip_pro_sources})
+target_link_libraries(brip_pro bprb brdb brip vil_pro ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vsl bil_algo)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

@@ -89,8 +89,8 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view_base_sptr roi_first=0, roi_second=0;
-  vpgl_geo_camera *cam_first=0, *cam_second=0;
+  vil_image_view_base_sptr roi_first=VXL_NULLPTR, roi_second=VXL_NULLPTR;
+  vpgl_geo_camera *cam_first=VXL_NULLPTR, *cam_second=VXL_NULLPTR;
 
   if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
     vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
@@ -104,7 +104,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
     }
   }
 
-  vil_image_view_base_sptr mask=0;
+  vil_image_view_base_sptr mask=VXL_NULLPTR;
   if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
     vcl_cout << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;

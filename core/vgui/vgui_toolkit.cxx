@@ -32,7 +32,7 @@ vgui_toolkit *vgui_toolkit::lookup(char const *name)
     if ((*vv)[i]->name() == name)
       return (*vv)[i];
   vgui_macro_warning << "WARNING : no toolkit with name \'" << name << "\' found.\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ vgui_window *vgui_toolkit::produce_window(int /*width*/,
                                           char const* /*title*/)
 {
   vgui_macro_warning << "no implementation of produce_window supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_window *vgui_toolkit::produce_window(int /*width*/,
@@ -78,19 +78,19 @@ vgui_window *vgui_toolkit::produce_window(int /*width*/,
                                           char const* /*title*/)
 {
   vgui_macro_warning << "no implementation of produce_window supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_dialog_impl *vgui_toolkit::produce_dialog(char const*)
 {
   vgui_macro_warning << "no implementation of produce_dialog supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vgui_dialog_extensions_impl *vgui_toolkit::produce_dialog_extension(char const*)
 {
   vgui_macro_warning << "no implementation of produce_dialog supplied\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 void vgui_toolkit::quit()

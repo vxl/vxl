@@ -184,7 +184,7 @@ bool bdgl_curve_algs::closest_point_near(vdgl_edgel_chain_sptr const& ec,
 vdgl_digital_curve_sptr bdgl_curve_algs::reverse(vdgl_digital_curve_sptr const& dc)
 {
   if (!dc)
-    return 0;
+    return VXL_NULLPTR;
   vdgl_interpolator_sptr intrp = dc->get_interpolator();
   vdgl_edgel_chain_sptr ec = intrp->get_edgel_chain();
   int N = ec->size();

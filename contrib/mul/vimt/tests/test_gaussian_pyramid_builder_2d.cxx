@@ -81,7 +81,7 @@ static void test_gaussian_pyramid_builder_2d()
   bfs_out.close();
 
   vimt_gaussian_pyramid_builder_2d<vxl_byte> builder_in;
-  vimt_image_pyramid_builder* ptr_in=0;
+  vimt_image_pyramid_builder* ptr_in=VXL_NULLPTR;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in), false);

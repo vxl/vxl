@@ -175,7 +175,7 @@ vsl_b_read(vsl_b_istream &is, vsol_box_3d_sptr &b)
       break;
      }
      default:
-      b = 0;
+      b = VXL_NULLPTR;
     }
   }
 }

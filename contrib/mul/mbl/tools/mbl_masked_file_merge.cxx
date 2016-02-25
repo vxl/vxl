@@ -30,9 +30,9 @@ int main(int argc, char **argv)
     "\n"
   );
 
-  vul_arg<vcl_string> valueA_filename(0,"Filename of values file A");
-  vul_arg<vcl_string> valueB_filename(0,"Filename of values file B");
-  vul_arg<vcl_string> mask_filename(0,"Filename of mask");
+  vul_arg<vcl_string> valueA_filename(VXL_NULLPTR,"Filename of values file A");
+  vul_arg<vcl_string> valueB_filename(VXL_NULLPTR,"Filename of values file B");
+  vul_arg<vcl_string> mask_filename(VXL_NULLPTR,"Filename of mask");
   vul_arg<vcl_string> output_filename("-out","Filename for output - sent to standard out if not set");
   vul_arg<bool> use_blanks("-b", "Keep blank lines in values files (they are stripped by default)");
   vul_arg_parse(argc, argv);

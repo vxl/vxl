@@ -372,6 +372,7 @@ bool boxm2_ocl_paint_online_color::paint_scene_with_weights(boxm2_scene_sptr    
       arg_status &= update_kern->set_arg( aux1 );
       arg_status &= update_kern->set_arg( aux2 );
       arg_status &= update_kern->set_arg( cl_output.ptr() );
+      check_val(arg_status, true, "AFTER UPDATE_KERN: set kernel args FAILED: " __FILE__ );
 
       vcl_cout << "local_threads = " << local_threads[0] << ", " << local_threads[1] << vcl_endl;
       vcl_cout << "global_threads = " << global_threads[0] << ", " << global_threads[1] << vcl_endl;

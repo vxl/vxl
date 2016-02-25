@@ -7,11 +7,9 @@ set(bnl_sources
     bnl_quadratic_interpolator.cxx    bnl_quadratic_interpolator.h
    )
 
-add_library(bnl ${bnl_sources})
-install_targets(/lib bnl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl ${bnl_sources})
+vxl_add_library( LIBNAME bnl LIBSRCS ${bnl_sources})
 
-target_link_libraries(bnl vnl vnl_algo)
+target_link_libraries(bnl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo)
 
 add_subdirectory(algo)
 

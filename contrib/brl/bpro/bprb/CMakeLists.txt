@@ -17,14 +17,12 @@ set(bprb_sources
 
 aux_source_directory(Templates bprb_sources)
 
-add_library(bprb ${bprb_sources})
+vxl_add_library( LIBNAME bprb LIBSRCS ${bprb_sources})
 
-target_link_libraries(bprb brdb bxml vbl vsl)
+target_link_libraries(bprb brdb bxml ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib bprb)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bprb/ ${bprb_sources})

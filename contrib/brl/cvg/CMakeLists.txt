@@ -9,8 +9,8 @@ if( HAS_VGUI )
       cvg_hemisphere_tableau.h    cvg_hemisphere_tableau.cxx )
   aux_source_directory(Templates cvg_view_sources)
 
-  add_library(cvg_view ${cvg_view_sources})
-  target_link_libraries(cvg_view vnl vnl_algo vbl_io vgui vpgl vgl vil vbl vul vsph)
+  vxl_add_library( LIBNAME cvg_view LIBSRCS ${cvg_view_sources})
+  target_link_libraries(cvg_view ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul vsph)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
@@ -18,6 +18,6 @@ if( HAS_VGUI )
 
   #Create Executables
   add_executable( cvg_hemisphere_view cvg_hemisphere_view.cxx )
-  target_link_libraries( cvg_hemisphere_view cvg_view vul vgui vil_pro vpgl_pro vsph)
+  target_link_libraries( cvg_hemisphere_view cvg_view ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgui vil_pro vpgl_pro vsph)
 
 endif()

@@ -10,7 +10,7 @@ add_executable( imesh_algo_test_all
   test_driver.cxx
   test_generate_mesh.cxx
 )
-target_link_libraries( imesh_algo_test_all imesh imesh_algo vnl vgl testlib )
+target_link_libraries( imesh_algo_test_all imesh imesh_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}testlib )
 if( HACK_FORCE_BRL_FAILING_TESTS ) ## This test always fails in travis builds, segfault during memory free operation
 add_test( NAME imesh_test_generate_mesh COMMAND $<TARGET_FILE:imesh_algo_test_all> test_generate_mesh)
 endif()

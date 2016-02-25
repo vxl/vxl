@@ -2,10 +2,6 @@
 
 project( zlib C )
 
-include(${VXL_CMAKE_DIR}/FindZLIB.cmake)
-
-if(NOT VXL_USING_NATIVE_ZLIB)
-
 set( zlib_sources
   zlib.h
   zconf.h
@@ -32,8 +28,5 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(deflate.c PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-add_library( z ${zlib_sources} )
-install_targets( /lib z )
-
-endif()
+vxl_add_library( LIBNAME z LIBSRCS ${zlib_sources} )
 

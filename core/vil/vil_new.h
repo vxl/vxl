@@ -68,7 +68,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
                                                unsigned ni, unsigned nj,
                                                unsigned nplanes,
                                                vil_pixel_format format,
-                                               char const* file_format = 0);
+                                               char const* file_format = VXL_NULLPTR);
 
 //: Make a new image.
 // \relatesalso vil_image_resource

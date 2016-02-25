@@ -222,7 +222,6 @@ static bool pi_next_lrcp(opj_pi_iterator_t * pi) {
 
         if (!pi->first) {
                 comp = &pi->comps[pi->compno];
-                res = &comp->resolutions[pi->resno];
                 goto LABEL_SKIP;
         } else {
                 pi->first = 0;
@@ -262,7 +261,6 @@ static bool pi_next_rlcp(opj_pi_iterator_t * pi) {
 
         if (!pi->first) {
                 comp = &pi->comps[pi->compno];
-                res = &comp->resolutions[pi->resno];
                 goto LABEL_SKIP;
         } else {
                 pi->first = 0;
@@ -1845,7 +1843,6 @@ void pi_create_encode( opj_pi_iterator_t *pi, opj_cp_t *cp,OPJ_UINT32 tileno, OP
                                                         break;
                                 }
                         }
-                        incr_top=1;
                 }else{
                         for(i=tppos;i>=0;i--){
                                 switch(prog[i]){

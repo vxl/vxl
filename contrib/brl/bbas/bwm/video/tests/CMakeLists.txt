@@ -10,7 +10,7 @@ add_executable( bwm_video_test_all
                 test_video_site_io.cxx
                 test_video_corr_processor.cxx
               )
-target_link_libraries(bwm_video_test_all bwm_video vpgl_algo vpgl vnl vgl_algo vgl vpl vul testlib expat expatpp)
+target_link_libraries(bwm_video_test_all bwm_video ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib expat expatpp)
 
 add_test( NAME bwm_video_test_cam_iostream COMMAND $<TARGET_FILE:bwm_video_test_all> test_cam_iostream)
 add_test( NAME bwm_video_test_site_io COMMAND $<TARGET_FILE:bwm_video_test_all> test_video_site_io)

@@ -250,9 +250,18 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                         && bprb_batch_process_manager::instance()->run_process();
+                    if( !good ) {
+                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      return -1;
+                    }
 
                     unsigned int img_id=0;
                     good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                    if( !good ) {
+                      vcl_cout << "ERROR!!:  commit output failed: " << __FILE__ << __LINE__ << vcl_endl;
+                      return -1;
+                    }
+
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
@@ -291,8 +300,18 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                         && bprb_batch_process_manager::instance()->run_process();
+                    if( !good ) {
+                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      return -1;
+                    }
+
                     unsigned int img_id=0;
                     good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                    if( !good ) {
+                      vcl_cout << "ERROR!!: commit output failed: " << __FILE__ << __LINE__ << vcl_endl;
+                      return -1;
+                    }
+
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
@@ -326,9 +345,18 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                         && bprb_batch_process_manager::instance()->run_process();
+                    if( !good ) {
+                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      return -1;
+                    }
 
                     unsigned int img_id=0;
                     good = good && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                    if( !good ) {
+                      vcl_cout << "ERROR!!: commit output failed: " << __FILE__ << __LINE__ << vcl_endl;
+                      return -1;
+                    }
+
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {
@@ -360,6 +388,11 @@ int main(int argc,  char** argv)
                         && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                         && bprb_batch_process_manager::instance()->run_process()
                         && bprb_batch_process_manager::instance()->commit_output(0, img_id);
+                    if( !good ) {
+                      vcl_cout << "ERROR!!: process args input not set: " << __FILE__ << __LINE__ << vcl_endl;
+                      return -1;
+                    }
+
                     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
                     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
                     if (S->size()!=1) {

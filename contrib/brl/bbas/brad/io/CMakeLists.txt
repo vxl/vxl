@@ -7,12 +7,10 @@ set(brad_io_sources
 )
 aux_source_directory(Templates brad_io_sources)
 
-add_library(brad_io  ${brad_io_sources})
-target_link_libraries(brad_io brad vnl_io vbl_io vbl)
+vxl_add_library( LIBNAME brad_io LIBSRCS  ${brad_io_sources})
+target_link_libraries(brad_io brad ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib brad_io)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brad/io ${brad_io_sources})

@@ -71,19 +71,17 @@ endif()
 
 add_definitions(-DINSTANTIATE_TEMPLATES)
 
-add_library(vipl ${vipl_sources})
-install_targets(/lib vipl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vipl ${vipl_sources})
+vxl_add_library(LIBNAME vipl LIBSRCS ${vipl_sources})
 
 # No unconditional library dependencies:
 if(BUILD_CORE_IMAGING)
-  target_link_libraries(vipl vil)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vil)
 endif()
 if(BUILD_CORE_UTILITIES)
-  target_link_libraries(vipl vbl)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vbl)
 endif()
 if(BUILD_CORE_NUMERICS)
-  target_link_libraries(vipl vnl)
+  target_link_libraries(vipl ${VXL_LIB_PREFIX}vnl)
 endif()
 
 if(BUILD_EXAMPLES)

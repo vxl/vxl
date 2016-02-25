@@ -11,8 +11,8 @@ set(bvxm_grid_io_sources
 
 aux_source_directory(Templates bvxm_grid_io_sources)
 
-add_library(bvxm_grid_io ${bvxm_grid_io_sources})
-target_link_libraries(bvxm_grid_io bvxm_grid bvrml vsl vbl vil vil_io vnl vgl vbl_io vul)
+vxl_add_library( LIBNAME bvxm_grid_io LIBSRCS ${bvxm_grid_io_sources})
+target_link_libraries(bvxm_grid_io bvxm_grid bvrml ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

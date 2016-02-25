@@ -230,7 +230,7 @@ void vsl_b_write(vsl_b_ostream& os, volm_conf_object const& obj)
 
 void vsl_b_write(vsl_b_ostream& os, volm_conf_object const* obj_ptr)
 {
-  if (obj_ptr == 0)
+  if (obj_ptr == VXL_NULLPTR)
     vsl_b_write(os, false);
   else {
     vsl_b_write(os, true);
@@ -250,7 +250,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_object& obj)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_object*& obj_ptr)
 {
-  delete obj_ptr;  obj_ptr = 0;
+  delete obj_ptr;  obj_ptr = VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -262,7 +262,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_object*& obj_ptr)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_object_sptr& obj_sptr)
 {
-  volm_conf_object* obj_ptr = 0;
+  volm_conf_object* obj_ptr = VXL_NULLPTR;
   vsl_b_read(is, obj_ptr);
   obj_sptr = obj_ptr;
 }

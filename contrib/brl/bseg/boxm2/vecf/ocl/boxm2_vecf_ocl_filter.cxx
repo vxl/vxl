@@ -97,17 +97,17 @@ bool boxm2_vecf_ocl_filter::init_ocl_filter()
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     int status = 0;
     queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
-    ocl_depth = 0;
-    blk_info_temp = 0;
-    blk_info_source = 0;
-    info_buffer = 0;
-    blk_temp = 0;
-    alpha_temp = 0;
-    mog_temp = 0;
-    info_buffer_source = 0;
-    blk_source = 0;
-    alpha_source = 0;
-    mog_source = 0;
+    ocl_depth = VXL_NULLPTR;
+    blk_info_temp = VXL_NULLPTR;
+    blk_info_source = VXL_NULLPTR;
+    info_buffer = VXL_NULLPTR;
+    blk_temp = VXL_NULLPTR;
+    alpha_temp = VXL_NULLPTR;
+    mog_temp = VXL_NULLPTR;
+    info_buffer_source = VXL_NULLPTR;
+    blk_source = VXL_NULLPTR;
+    alpha_source = VXL_NULLPTR;
+    mog_source = VXL_NULLPTR;
     return true;
 }
 bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned num_iterations)

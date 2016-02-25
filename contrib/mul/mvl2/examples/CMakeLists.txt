@@ -3,7 +3,7 @@
 #   Franck Bettinger
 #
 
-link_libraries( mvl2 mbl vil )
+link_libraries( mvl2 mbl ${VXL_LIB_PREFIX}vil )
 
 if(NOT WIN32)
   find_package(AVIFile)

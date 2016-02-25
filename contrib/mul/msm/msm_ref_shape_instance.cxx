@@ -24,7 +24,7 @@
 //=======================================================================
 
 msm_ref_shape_instance::msm_ref_shape_instance()
-  : model_(0),use_prior_(false)
+  : model_(VXL_NULLPTR),use_prior_(false)
 {
   param_limiter_ = msm_no_limiter();
 }

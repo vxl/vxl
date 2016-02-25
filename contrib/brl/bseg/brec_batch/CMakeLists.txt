@@ -17,7 +17,7 @@ if( PYTHON_FOUND )
         reg_brec.cxx          reg_brec.h
        )
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      add_library(brec_batch SHARED ${brec_batch_sources})
+      vxl_add_library( LIBNAME brec_batch LIBSRCS SHARED ${brec_batch_sources})
 
       if(WIN32)
         #library has to have different name depending on debug or release version.
@@ -25,7 +25,7 @@ if( PYTHON_FOUND )
       endif()
       set_target_properties(brec_batch PROPERTIES PREFIX "")
 
-      target_link_libraries(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro vbl vpgl_io vidl_pro vpgl_pro vil_io vil_pro)
+      target_link_libraries(brec_batch bprb brdb bpro_batch bmdl_pro bvxm_pro bvxm_io bvxm_grid_io brec_pro bbgm_pro bvgl_pro brip_pro bsvg_pro ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpgl_io vidl_pro vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro)
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( brec_batch debug ${PYTHON_DEBUG_LIBRARY})

@@ -35,15 +35,15 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_input_image(const char *
 {
   vcl_auto_ptr<vcl_fstream> file(new vcl_fstream(filename, vcl_ios_in | vcl_ios_binary ));
   if (!file.get() || !file->is_open())
-    return 0;
+    return VXL_NULLPTR;
 
   // Check file is a v3m file
   {
     vsl_b_istream is(file.get());
-    if (!is) return 0;
+    if (!is) return VXL_NULLPTR;
     unsigned magic;
     vsl_b_read(is, magic);
-    if (magic != vimt3d_vil3d_v3m_format::magic_number()) return 0;
+    if (magic != vimt3d_vil3d_v3m_format::magic_number()) return VXL_NULLPTR;
   }
   return new vimt3d_vil3d_v3m_image(file);
 }
@@ -65,7 +65,7 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_output_image
   {
     vcl_cerr << "vimt3d_vil3d_v3m_format::make_output_image() WARNING\n"
              << "  Unable to deal with file format : " << format << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vcl_auto_ptr<vcl_fstream> of(
@@ -74,7 +74,7 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_output_image
   {
     vcl_cerr << "vimt3d_vil3d_v3m_format::make_output_image() WARNING\n"
              << "  Unable to open file: " << filename << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   return new vimt3d_vil3d_v3m_image(of, ni, nj, nk, nplanes, format);
@@ -100,7 +100,7 @@ void vimt3d_vil3d_v3m_image::load_full_image() const
   vsl_b_read(is, magic);
   if (magic != vimt3d_vil3d_v3m_format::magic_number())
   {
-    im_ =0;
+    im_ =VXL_NULLPTR;
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     vil_exception_warning(vil_exception_corrupt_image_file(
       "vimt3d_vil3d_v3m_image::load_full_image", "vimt3d_vil3d_v3m_image", "", "Incorrect v3m magic number detected"));
@@ -190,7 +190,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
     break;
 
    default:
-    im_ =0;
+    im_ =VXL_NULLPTR;
     is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
     vcl_ostringstream oss;
     oss << "I/O ERROR: vimt3d_vil3d_v3m_image::load_full_image()\n"
@@ -203,7 +203,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
   {
     vil_exception_warning(vil_exception_corrupt_image_file(
       "vimt3d_vil3d_v3m_image::load_full_image", "vimt3d_vil3d_v3m_image", "", "Failed to read all expected values."));
-    im_=0;
+    im_=VXL_NULLPTR;
   }
 }
 
@@ -211,7 +211,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 //: Private constructor, use vil3d_load instead.
 // This object takes ownership of the file, for reading.
 vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file):
-  file_(file.release()), im_(0), dirty_(false)
+  file_(file.release()), im_(VXL_NULLPTR), dirty_(false)
 {
   file_->seekg(0);
   vsl_b_istream is(file_);
@@ -265,7 +265,7 @@ vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_auto_ptr<vcl_fstream> file, u
                                                unsigned nj, unsigned nk,
                                                unsigned nplanes,
                                                vil_pixel_format format):
-  file_(file.release()), im_(0), dirty_(true)
+  file_(file.release()), im_(VXL_NULLPTR), dirty_(true)
 {
   header_.ni = ni;
   header_.nj = nj;
@@ -487,12 +487,12 @@ vil3d_image_view_base_sptr vimt3d_vil3d_v3m_image::get_copy_view(unsigned i0, un
 {
   if (!im_)
     load_full_image();
-  if (!im_) return 0; // If load full image failed then im_ will remain null
+  if (!im_) return VXL_NULLPTR; // If load full image failed then im_ will remain null
 
   const vil3d_image_view_base &view = im_->image_base();
 
   if (i0 + ni > view.ni() || j0 + nj > view.nj() ||
-      k0 + nk > view.nk()) return 0;
+      k0 + nk > view.nk()) return VXL_NULLPTR;
 
   switch (view.pixel_format())
   {
@@ -517,7 +517,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
    default:
      vil_exception_warning(vil_exception_unsupported_pixel_format(
        view.pixel_format(), "vimt3d_vil3d_v3m_image::get_copy_view"));
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -529,12 +529,12 @@ vil3d_image_view_base_sptr vimt3d_vil3d_v3m_image::get_view(unsigned i0, unsigne
 {
   if (!im_)
     load_full_image();
-  if (!im_) return 0; // If load full image failed then im_ will remain null
+  if (!im_) return VXL_NULLPTR; // If load full image failed then im_ will remain null
 
   const vil3d_image_view_base &view = im_->image_base();
 
   if (i0 + ni > view.ni() || j0 + nj > view.nj() ||
-      k0 + nk > view.nk()) return 0;
+      k0 + nk > view.nk()) return VXL_NULLPTR;
 
   switch (view.pixel_format())
   {
@@ -559,14 +559,14 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
    case VIL_PIXEL_FORMAT_INT_32 : {
     const vil3d_image_view< vxl_int_32 > &v =
       static_cast<const vil3d_image_view< vxl_int_32 > &>(view);
-    return new vil3d_image_view< vxl_int_32 >(v.memory_chunk(), v.size()?&v(i0,j0,k0):0,
+    return new vil3d_image_view< vxl_int_32 >(v.memory_chunk(), v.size()?&v(i0,j0,k0):VXL_NULLPTR,
                                               ni, nj, nk, v.nplanes(),
                                               v.istep(), v.jstep(), v.kstep(),
                                               v.planestep()); }
    default:
      vil_exception_warning(vil_exception_unsupported_pixel_format(
        view.pixel_format(), "vimt3d_vil3d_v3m_image::get_view"));
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

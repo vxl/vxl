@@ -1,9 +1,9 @@
-link_libraries( vnl testlib )
+link_libraries( ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib )
 
 set(HAS_COOL "NO")
-if(EXISTS ${vxl_SOURCE_DIR}/COOL/CMakeLists.txt )
-  include_directories(${vxl_SOURCE_DIR}/COOL)
-  include_directories(${vxl_SOURCE_DIR}/Numerics)
+if(EXISTS ${CMAKE_SOURCE_DIR}/COOL/CMakeLists.txt )
+  include_directories(${CMAKE_SOURCE_DIR}/COOL)
+  include_directories(${CMAKE_SOURCE_DIR}/Numerics)
   link_libraries( TJCOOL )
   set(HAS_COOL "YES")
 endif()

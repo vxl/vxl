@@ -324,7 +324,7 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
     //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
     //vcl_cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<vcl_endl;
     int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
-    bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
+    bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, VXL_NULLPTR, "new data buffer " + data_types[i]);
     new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
     //grab the block out of the cache as well

@@ -1007,15 +1007,15 @@ void bwm_video_corr_processor::close()
 {
   if (video_istr_)
     video_istr_->close();
-  video_istr_ = 0;
+  video_istr_ = VXL_NULLPTR;
 
   if (cam_istr_)
     cam_istr_->close();
-  cam_istr_ = 0;
+  cam_istr_ = VXL_NULLPTR;
 
   if (cam_ostr_)
     cam_ostr_->close();
-  cam_ostr_ = 0;
+  cam_ostr_ = VXL_NULLPTR;
 
   site_name_ = "";
   site_path_ = "";

@@ -42,7 +42,7 @@ static void test_robust_util()
   }
   int num = 10;
   int dof = 1;
-  double est_wgted_scale = rrel_util_weighted_scale( rs.begin(), rs.end(), wgt.begin(), dof, (double*)0 );
+  double est_wgted_scale = rrel_util_weighted_scale( rs.begin(), rs.end(), wgt.begin(), dof, (double*)VXL_NULLPTR );
   double corr_wgted_scale = vcl_sqrt( sum_wr / ( sum_w * (num-dof) / num ) );
   TEST_NEAR("rrel_util_weighted_scale", est_wgted_scale, corr_wgted_scale, 1e-6);
 

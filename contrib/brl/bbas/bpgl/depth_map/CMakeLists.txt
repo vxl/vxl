@@ -13,9 +13,9 @@ set(depth_map_sources
 
 aux_source_directory(Templates depth_map_sources)
 
-add_library(depth_map  ${depth_map_sources})
+vxl_add_library( LIBNAME depth_map LIBSRCS  ${depth_map_sources})
 
-target_link_libraries(depth_map bpgl vpgl vpgl_io vpgl_algo vsol vnl_algo vnl vil vgl_io vgl_algo vgl vil_algo vbl_io vsol vbl vsl vul)
+target_link_libraries(depth_map bpgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_algo vsol ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vbl_io vsol ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul)
 
 
 

@@ -138,7 +138,7 @@ void test_edge_finder()
     bfs_out.close();
 
     mfpf_edge_finder edge_finder_in;
-    mfpf_point_finder *base_ptr_in = 0;
+    mfpf_point_finder *base_ptr_in = VXL_NULLPTR;
 
     vsl_b_ifstream bfs_in("test_edge_finder.bvl.tmp");
     TEST ("Opened test_edge_finder.bvl.tmp for reading",

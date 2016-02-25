@@ -1,6 +1,6 @@
 # This is mul/mbl/tools/CMakeLists.txt
 
-link_libraries( mbl vul )
+link_libraries( mbl ${VXL_LIB_PREFIX}vul )
 
 add_executable( mbl_print_log_properties     print_log_properties.cxx )
 add_executable( mbl_sample_stats             sample_stats.cxx)

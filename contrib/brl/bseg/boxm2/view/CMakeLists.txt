@@ -31,13 +31,11 @@ if(VGUI_FOUND)
      )
   aux_source_directory(Templates boxm2_view_sources)
 
-  add_library(boxm2_view ${boxm2_view_sources} )
+  vxl_add_library( LIBNAME boxm2_view LIBSRCS ${boxm2_view_sources} )
 
   #install the .h .txx and libs
-  install_targets(/lib boxm2_view)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/view ${boxm2_view_sources})
 
-  target_link_libraries(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro vgui bprb vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  target_link_libraries(boxm2_view bocl boxm2_pro boxm2_ocl_pro boxm2_cpp boxm2_cpp_pro ${VXL_LIB_PREFIX}vgui bprb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl vsph ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
   #pro
   add_subdirectory(pro)

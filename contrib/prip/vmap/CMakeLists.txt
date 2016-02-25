@@ -27,10 +27,8 @@ set(vmap_sources
    vmap_2_tmap_elts.cxx          vmap_2_tmap_elts.h
 )
 
-add_library(vmap ${vmap_sources})
-install_targets(/lib vmap)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vmap ${vmap_sources})
-target_link_libraries(vmap vcl)
+vxl_add_library(LIBNAME vmap LIBSRCS ${vmap_sources})
+target_link_libraries(vmap ${VXL_LIB_PREFIX}vcl)
 
 #if(BUILD_TESTING)
   add_subdirectory(tests)

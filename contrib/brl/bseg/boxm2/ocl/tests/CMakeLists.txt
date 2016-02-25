@@ -2,8 +2,8 @@ set(boxm2_ocl_test_all_sources
     boxm2_ocl_test_utils.h    boxm2_ocl_test_utils.cxx
     )
 
-add_library(boxm2_ocl_utils ${boxm2_ocl_test_all_sources})
-target_link_libraries(boxm2_ocl_utils boct boxm2 boxm2_io testlib vpl)
+vxl_add_library( LIBNAME boxm2_ocl_utils LIBSRCS ${boxm2_ocl_test_all_sources})
+target_link_libraries(boxm2_ocl_utils boct boxm2 boxm2_io ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl)
 
 add_executable( boxm2_ocl_test_all
   test_driver.cxx
@@ -21,7 +21,7 @@ add_executable( boxm2_ocl_test_all
  )
 
 
-target_link_libraries( boxm2_ocl_test_all testlib boxm2_ocl boxm2_ocl_pro boxm2_ocl_utils boxm2_cpp boxm2_cpp_algo boxm2_cpp_pro boxm2_pro brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )
+target_link_libraries( boxm2_ocl_test_all ${VXL_LIB_PREFIX}testlib boxm2_ocl boxm2_ocl_pro boxm2_ocl_utils boxm2_cpp boxm2_cpp_algo boxm2_cpp_pro boxm2_pro brdb ${VXL_LIB_PREFIX}vpgl_algo vpgl_pro vil_pro sdet ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl )
 
 add_test( NAME boxm2_ocl_test_refine COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_refine  )
 add_test( NAME boxm2_ocl_test_image_pyramid COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_image_pyramid  )

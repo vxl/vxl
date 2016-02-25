@@ -48,7 +48,7 @@ static void test_one_chain()
 
   TEST("vtol_one_chain::direction()", oc2->direction(*e12), 1);
 
-  TEST("vtol_one_chain::cast_to_one_chain()", oc2->cast_to_one_chain()==0, false);
+  TEST("vtol_one_chain::cast_to_one_chain()", oc2->cast_to_one_chain()==VXL_NULLPTR, false);
   TEST("vtol_one_chain::valid_inferior_type()", oc2->valid_inferior_type(e12), true);
   TEST("vtol_edge::valid_superior_type()", e12->valid_superior_type(oc2), true);
   TEST("vtol_one_chain::valid_inferior_type()", oc2->valid_inferior_type(v1->cast_to_topology_object()), false);

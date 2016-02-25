@@ -10,7 +10,7 @@ add_executable( msm_test_all
   test_param_limiters.cxx
   test_cubic_bezier.cxx
 )
-target_link_libraries( msm_test_all msm testlib )
+target_link_libraries( msm_test_all msm ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME msm_test_points COMMAND $<TARGET_FILE:msm_test_all> test_points)
 add_test( NAME msm_test_wt_mat_2d COMMAND $<TARGET_FILE:msm_test_all> test_wt_mat_2d)

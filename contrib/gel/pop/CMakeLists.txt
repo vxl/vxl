@@ -27,10 +27,8 @@ set(pop_sources
     pop_vertex.cxx                  pop_vertex.h
 )
 
-add_library(pop ${pop_sources})
-install_targets(/lib pop)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/pop ${pop_sources})
-target_link_libraries( pop vcl vnl vgl vnl_algo vgl_algo)
+vxl_add_library(LIBNAME pop LIBSRCS ${pop_sources})
+target_link_libraries( pop ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_algo)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

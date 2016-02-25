@@ -5,10 +5,8 @@ set( bnl_algo_sources
    bnl_fresnel.cxx                  bnl_fresnel.h
 )
 
-add_library( bnl_algo ${bnl_algo_sources} )
-install_targets(/lib bnl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bnl/algo ${bnl_algo_sources})
-target_link_libraries( bnl_algo vnl )
+vxl_add_library( LIBNAME bnl_algo LIBSRCS ${bnl_algo_sources} )
+target_link_libraries( bnl_algo ${VXL_LIB_PREFIX}vnl )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

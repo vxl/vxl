@@ -51,10 +51,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/vepl_convert+float-.cxx PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-add_library(vepl ${vepl_sources})
-install_targets(/lib vepl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/tbl/vepl ${vepl_sources})
-target_link_libraries(vepl vipl vil ${CMAKE_THREAD_LIBS})
+vxl_add_library(LIBNAME vepl LIBSRCS ${vepl_sources})
+target_link_libraries(vepl vipl ${VXL_LIB_PREFIX}vil ${CMAKE_THREAD_LIBS})
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)

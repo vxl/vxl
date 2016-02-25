@@ -167,15 +167,15 @@ struct vul_file_iterator_data
   void next() {
     // if dir_handle_ is NULL, then the directory probably doesn't
     // exist.
-    if(dir_handle_ == 0) {
+    if(dir_handle_ == VXL_NULLPTR) {
       return;
     }
     do
     {
       de_ = readdir(dir_handle_);
-      if (de_==0) {
+      if (de_==VXL_NULLPTR) {
         closedir(dir_handle_);
-        dir_handle_ = 0;
+        dir_handle_ = VXL_NULLPTR;
         return;
       }
     } while ( ! reg_exp_.find(de_->d_name) );
@@ -184,13 +184,13 @@ struct vul_file_iterator_data
 
   // should be constish, and ret 0 when nuffink
   char const* value() {
-    if (!dir_handle_) return 0;
+    if (!dir_handle_) return VXL_NULLPTR;
     return name_;
   }
 
   // Return non-dir part of fn
   char const* value_filename() {
-    if (!dir_handle_) return 0;
+    if (!dir_handle_) return VXL_NULLPTR;
     return de_->d_name;
   }
 
@@ -254,13 +254,13 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
 
 vul_file_iterator::vul_file_iterator(char const* glob)
 {
-  p = 0;
+  p = VXL_NULLPTR;
   reset(glob);
 }
 
 vul_file_iterator::vul_file_iterator(vcl_string const& glob)
 {
-  p = 0;
+  p = VXL_NULLPTR;
   reset(glob.c_str());
 }
 
@@ -287,12 +287,12 @@ char const* vul_file_iterator::filename()
 
 vul_file_iterator::operator vul_file_iterator::safe_bool() const
 {
-  return (p->value() != 0)? VCL_SAFE_BOOL_TRUE : 0;
+  return (p->value() != VXL_NULLPTR)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR;
 }
 
 bool vul_file_iterator::operator!() const
 {
-  return (p->value() != 0)? false : true;
+  return (p->value() != VXL_NULLPTR)? false : true;
 }
 
 vul_file_iterator& vul_file_iterator::operator++()

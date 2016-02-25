@@ -83,7 +83,6 @@ bool bstm_block::init_empty_block(bstm_block_metadata data)
                                         sub_block_num_.y(),
                                         sub_block_num_.z(),
                                         treesBuff);
-  bytes_read += sizeof(uchar16)*sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
 
   //--- Now initialize blocks and their pointers --------- ---------------------
   //6. initialize blocks in order

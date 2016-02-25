@@ -693,7 +693,7 @@ sdet_curve_model* sdet_CC_curve_model_new::transport(vgl_point_2d<double> pt, do
 sdet_curve_model* sdet_CC_curve_model_new::transition(sdet_curve_model* cm, int& trans_k, int& trans_type, double & bundle_size)
 {
   if (cm->type!=CC2)
-    return 0; //type mismatch
+    return VXL_NULLPTR; //type mismatch
 
   sdet_CC_curve_model_new* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
 
@@ -784,14 +784,14 @@ sdet_curve_model* sdet_CC_curve_model_new::transition(sdet_curve_model* cm, int&
     return new_cm;
   }
 
-  return 0; // no transition possible
+  return VXL_NULLPTR; // no transition possible
 }
 
 //: construct and return a curve bundle of the same type by looking for legal transitions with another curve bundle
 sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_model* cm, int& trans_k, int& trans_type, double &gc_cost)
 {
   if (cm->type!=CC2)
-    return 0; //type mismatch
+    return VXL_NULLPTR; //type mismatch
 
   sdet_CC_curve_model_new* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
 
@@ -892,7 +892,7 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
     return new_cm;
   }
 
-  return 0; // no transition possible
+  return VXL_NULLPTR; // no transition possible
 }
 
 //: construct and return a curve bundle of the same type by looking for legal C1 transitions with another curve bundle
@@ -902,7 +902,7 @@ sdet_curve_model* sdet_CC_curve_model_new::C1_transition(sdet_curve_model* cm)
   // methodology: take the union of all cbs of cvlet1 and intersect it with the cbs of cvlet2
 
   if (cm->type!=CC2)
-    return 0; //type mismatch
+    return VXL_NULLPTR; //type mismatch
 
   sdet_CC_curve_model_new* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
 
@@ -917,7 +917,7 @@ sdet_curve_model* sdet_CC_curve_model_new::C1_transition(sdet_curve_model* cm)
   }
 
   if (cum_cb.num_sheets()!=1)  //sanity check
-    return 0;
+    return VXL_NULLPTR;
 
   //intersect the cumulative cb with all the curve bundles of cvlet2
   sdet_CC_curve_model_new* new_cm = new sdet_CC_curve_model_new(next_cm->ref_pt, next_cm->ref_theta);
@@ -988,7 +988,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
   omega.push_back(-dpos,  0);
   omega.push_back(-dpos, -dtheta/2.0);
 
-  sdet_edgel* neigh_e=0; //relic of older design req.
+  sdet_edgel* neigh_e=VXL_NULLPTR; //relic of older design req.
   if (ref_e == e1)
     neigh_e = e2;
   else
@@ -1749,7 +1749,7 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
   Kmax.resize(2*vcl_floor(ref_dx/_dx_+0.5)+1, 2*vcl_floor(ref_dt/_dt_+0.5)+1);
   Kmax.fill((float)max_k);
 
-  sdet_edgel* ne=0; //relic of older design req.
+  sdet_edgel* ne=VXL_NULLPTR; //relic of older design req.
   ne = (ref_e == e1) ? e2 : e1;
 
   //now compute the four constraint surfaces due to the neighboring edgel

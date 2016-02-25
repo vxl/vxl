@@ -22,7 +22,7 @@ add_executable( vpgl_algo_test_all
   test_affine_rectification.cxx
 )
 
-target_link_libraries( vpgl_algo_test_all vpgl_algo vgl_algo vgl vnl_algo vnl vil vul testlib )
+target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vpgl_algo_test_camera_compute COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_camera_compute )
 add_test( NAME vpgl_algo_test_camera_convert COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_camera_convert )
@@ -43,6 +43,6 @@ add_test( NAME vpgl_algo_test_ba_shared_k_lsqr COMMAND $<TARGET_FILE:vpgl_algo_t
 add_test( NAME vpgl_algo_test_affine_rect COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_affine_rect )
 
 add_executable( vpgl_algo_test_include test_include.cxx )
-target_link_libraries( vpgl_algo_test_include vpgl_algo )
+target_link_libraries( vpgl_algo_test_include ${VXL_LIB_PREFIX}vpgl_algo )
 add_executable( vpgl_algo_test_template_include test_template_include.cxx )
-target_link_libraries( vpgl_algo_test_template_include vpgl_algo )
+target_link_libraries( vpgl_algo_test_template_include ${VXL_LIB_PREFIX}vpgl_algo )

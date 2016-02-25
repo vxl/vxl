@@ -377,7 +377,6 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
      //vcl_cout << resources_[possible_seeds["other"][i]].name_ << '\n';
      cnt++;
      if (cnt == n_seeds) {
-       done = true;
        break;
      }
     }
@@ -812,7 +811,6 @@ volm_satellite_resources::highly_overlapping_resources(vcl_vector<unsigned>& ove
 
         // find the best score
         if(compactness_score > best_score) {
-          best_nimages = nimages;
           best_score = compactness_score;
           best_region_hull = region_hull;
           //vcl_cout << best_region_hull << vcl_endl;

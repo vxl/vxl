@@ -17,9 +17,9 @@ if(EXPAT_FOUND)
   aux_source_directory(processes bvpl_pro_sources)
   aux_source_directory(processes/util bvpl_pro_sources)
 
-  add_library(bvpl_pro ${bvpl_pro_sources})
+  vxl_add_library( LIBNAME bvpl_pro LIBSRCS ${bvpl_pro_sources})
 
-  target_link_libraries(bvpl_pro bprb brdb bvpl bvpl_util bvpl_util_io bvpl_kernels_pro bvrml bwm_video vil_algo vil vgl vnl vul vbl_io)
+  target_link_libraries(bvpl_pro bprb brdb bvpl bvpl_util bvpl_util_io bvpl_kernels_pro bvrml bwm_video ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

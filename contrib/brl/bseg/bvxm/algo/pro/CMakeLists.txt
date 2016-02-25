@@ -16,8 +16,8 @@ include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
      )
   aux_source_directory(processes bvxm_algo_pro_sources)
 
-  add_library(bvxm_algo_pro ${bvxm_algo_pro_sources} )
-  target_link_libraries(bvxm_algo_pro bvxm_algo bvxm_grid_pro boxm boct bprb brdb vul vbl)
+  vxl_add_library( LIBNAME bvxm_algo_pro LIBSRCS ${bvxm_algo_pro_sources} )
+  target_link_libraries(bvxm_algo_pro bvxm_algo bvxm_grid_pro boxm boct bprb brdb ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

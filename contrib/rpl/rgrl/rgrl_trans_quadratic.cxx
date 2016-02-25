@@ -381,7 +381,7 @@ rgrl_trans_quadratic::
 inverse_transform( ) const
 {
   assert ( ! "rgrl_trans_quadratic::inverse_transform() is not defined" );
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: make a clone copy

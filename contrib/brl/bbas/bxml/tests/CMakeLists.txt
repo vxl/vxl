@@ -8,7 +8,7 @@ if( EXPAT_FOUND )
    test_find.cxx
   )
 
-  target_link_libraries( bxml_test_all bxml testlib expat expatpp)
+  target_link_libraries( bxml_test_all bxml ${VXL_LIB_PREFIX}testlib expat expatpp)
 
   add_test( NAME bxml_test_io COMMAND $<TARGET_FILE:bxml_test_all>
                                  test_io ${CMAKE_CURRENT_SOURCE_DIR}/ )

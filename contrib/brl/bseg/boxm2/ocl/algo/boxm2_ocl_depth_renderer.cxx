@@ -119,30 +119,30 @@ boxm2_ocl_depth_renderer
   delete[] ray_directions_buff_;
 
   opencl_cache_->unref_mem(depth_image_.ptr());
-  depth_image_ = bocl_mem_sptr(0);
+  depth_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(vis_image_.ptr());
-  vis_image_ = bocl_mem_sptr(0);
+  vis_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(prob_image_.ptr());
-  prob_image_ = bocl_mem_sptr(0);
+  prob_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(var_image_.ptr());
-  var_image_ = bocl_mem_sptr(0);
+  var_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(t_infinity_image_.ptr());
-  t_infinity_image_ = bocl_mem_sptr(0);
+  t_infinity_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(ray_origins_image_.ptr());
-  ray_origins_image_ = bocl_mem_sptr(0);
+  ray_origins_image_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(ray_directions_image_.ptr());
-  ray_directions_image_ = bocl_mem_sptr(0);
+  ray_directions_image_ = bocl_mem_sptr(VXL_NULLPTR);
 
   opencl_cache_->unref_mem(tnearfar_.ptr());
-  tnearfar_ = bocl_mem_sptr(0);
+  tnearfar_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(img_dim_.ptr());
-  img_dim_ = bocl_mem_sptr(0);
+  img_dim_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(cl_output_.ptr());
-  cl_output_ = bocl_mem_sptr(0);
+  cl_output_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(cl_subblk_dim_.ptr());
-  cl_subblk_dim_ = bocl_mem_sptr(0);
+  cl_subblk_dim_ = bocl_mem_sptr(VXL_NULLPTR);
   opencl_cache_->unref_mem(lookup_.ptr());
-  lookup_ = bocl_mem_sptr(0);
+  lookup_ = bocl_mem_sptr(VXL_NULLPTR);
 
   buffers_allocated_ = false;
   return true;

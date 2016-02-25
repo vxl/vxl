@@ -718,7 +718,7 @@ bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(const vcl_vector<vgl_p
 
 
 bpgl_bundle_rolling_shutter_adjust::bpgl_bundle_rolling_shutter_adjust()
-  : ba_func_(NULL),
+  : ba_func_(VXL_NULLPTR),
     use_weights_(false),
     use_gradient_(true),
     start_error_(0.0),

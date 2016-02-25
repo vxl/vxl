@@ -50,7 +50,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_vertex_sptr const& new_v1,
 //: Pseudo copy constructor. Deep copy.
 //---------------------------------------------------------------------------
 vtol_edge_2d::vtol_edge_2d(vtol_edge_2d_sptr const& other)
-  : curve_(0)
+  : curve_(VXL_NULLPTR)
 {
   topology_list::const_iterator i;
   for (i=other->inferiors()->begin();i!=other->inferiors()->end();++i)
@@ -105,7 +105,7 @@ vtol_edge_2d::vtol_edge_2d(vtol_zero_chain_sptr const& new_zero_chain)
     // User must set the type of curve needed.
     // Since guessing could get confusing.
     // So NULL indicates an edge of unknown type.
-    curve_=0;
+    curve_=VXL_NULLPTR;
   touch();
 }
 
@@ -126,7 +126,7 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list const& newchains)
   // 2) Set v1_ and v2_;
 
   set_vertices_from_zero_chains();
-  curve_=0;
+  curve_=VXL_NULLPTR;
 }
 
 //: Constructor for a linear vtol_edge_2d.

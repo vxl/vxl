@@ -60,7 +60,6 @@ bool bstm_util::query_point_color(bstm_scene_sptr& scene,
       {
           data_type = apps[i];
           foundDataType = true;
-          appTypeSize = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
       }
   }
 
@@ -230,7 +229,7 @@ vil_image_view_base_sptr bstm_util::prepare_input_image(vil_image_view_base_sptr
     }
     else {
       vcl_cerr << "Failed to load image\n";
-      return 0;
+      return VXL_NULLPTR;
     }
     vil_image_view_base_sptr toReturn(floatimg);
     return toReturn;
@@ -238,7 +237,7 @@ vil_image_view_base_sptr bstm_util::prepare_input_image(vil_image_view_base_sptr
 
   //otherwise it's messed up, return a null pointer
   vcl_cerr<<"Failed to recognize input image type\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 

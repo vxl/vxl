@@ -23,10 +23,8 @@ set(bsol_sources
 )
 aux_source_directory(Templates bsol_sources)
 
-add_library(bsol ${bsol_sources})
-install_targets(/lib bsol)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsol ${bsol_sources})
-target_link_libraries(bsol vsol vgl_algo vgl vnl vbl)
+vxl_add_library( LIBNAME bsol LIBSRCS ${bsol_sources})
+target_link_libraries(bsol vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

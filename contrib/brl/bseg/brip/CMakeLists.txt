@@ -41,11 +41,9 @@ set(brip_sources
 )
 aux_source_directory(Templates brip_sources)
 
-add_library(brip ${brip_sources})
-install_targets(/lib brip)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/brip ${brip_sources})
+vxl_add_library( LIBNAME brip LIBSRCS ${brip_sources})
 
-target_link_libraries(brip gevd bsta bsol vsol vil1 vil_algo vil vgl_algo vgl vnl_algo vnl vbl vul vpgl bil_algo)
+target_link_libraries(brip gevd bsta bsol vsol ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpgl bil_algo)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

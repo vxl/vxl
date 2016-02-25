@@ -114,9 +114,7 @@ set( vil1_network_sources
 if(NOT APPLE)
 # vil1_stream_url in separate library on Solaris
   if(SOLARIS)
-    add_library(vil1_network ${vil1_network_sources})
-    install_targets(lib/ vil1_network)
-    INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_network_sources})
+    vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil1_network LIBSRCS ${vil1_network_sources})
   else()
     set(vil1_sources ${vil1_sources} ${vil1_network_sources})
   endif()
@@ -168,28 +166,26 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vil1_image_as.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-add_library(vil1 ${vil1_sources})
-install_targets(/lib vil1)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vil1 ${vil1_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil1 LIBSRCS ${vil1_sources})
 
 if(JPEG_FOUND)
-  target_link_libraries( vil1 ${JPEG_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${JPEG_LIBRARIES} )
 endif()
 if(TIFF_FOUND)
-  target_link_libraries( vil1 ${TIFF_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${TIFF_LIBRARIES} )
 endif()
 if(PNG_FOUND)
-  target_link_libraries( vil1 ${PNG_LIBRARIES} )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${PNG_LIBRARIES} )
 endif()
 
-target_link_libraries( vil1 vcl )
+target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vcl )
 
 if(NOT UNIX)
-  target_link_libraries( vil1 ws2_32 )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 ws2_32 )
 endif()
 
 if(SOLARIS)
-  target_link_libraries( vil1 nsl vil1_network socket )
+  target_link_libraries( ${VXL_LIB_PREFIX}vil1 nsl ${VXL_LIB_PREFIX}vil1_network socket )
 endif()
 
 

@@ -20,10 +20,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/rsdl_bins_2d+double.int-.cxx PROPERTIES COMPILE_FLAGS -O1)
 endif()
 
-add_library(rsdl ${rsdl_sources})
-install_targets(/lib rsdl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rsdl ${rsdl_sources})
-target_link_libraries( rsdl vnl vbl )
+vxl_add_library(LIBNAME rsdl LIBSRCS ${rsdl_sources})
+target_link_libraries( rsdl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl )
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

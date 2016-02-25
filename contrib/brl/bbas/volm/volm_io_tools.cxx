@@ -99,7 +99,7 @@ bool volm_io_tools::load_naip_img(vcl_string const& img_folder, vcl_string const
 
   }
 
-  vpgl_geo_camera *cam = 0;
+  vpgl_geo_camera *cam = VXL_NULLPTR;
   if (!vpgl_geo_camera::init_geo_camera(tfw_name, lvcs, utm_zone, northing, cam))
     return false;
   info.cam = cam;
@@ -146,7 +146,7 @@ int volm_io_tools::load_lidar_img(vcl_string img_file, volm_img_info& info, bool
   info.name = vul_file::strip_directory(vul_file::strip_extension(img_file));
   info.img_name = img_file;
 
-  vpgl_geo_camera *cam = 0;
+  vpgl_geo_camera *cam = VXL_NULLPTR;
   // try to load camera from image header first
   vil_image_resource_sptr img_res = vil_load_image_resource(info.img_name.c_str());
   vpgl_lvcs_sptr lvcs_dummy = new vpgl_lvcs;
@@ -331,13 +331,13 @@ volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(vcl_string geoin
   // load the osm bin file to get real location date with unit of lon and lat, associated with ids stored in geo_index2
   if (!vul_file::exists(osm_bin_filename)) {
     vcl_cout << "ERROR: can not find osm binary: " << osm_bin_filename << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   vsl_b_ifstream is(osm_bin_filename.c_str());
   if (!is) {
     vcl_cerr << "In volm_osm_object::volm_osm_object() -- cannot open: " << osm_bin_filename << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
   osm_objs.b_read(is);
   is.close();

@@ -32,7 +32,7 @@ bpgl_construct_cameras::bpgl_construct_cameras(
     if ( p0.size() < 8 )
       vcl_cerr << "ERROR: bpgl_construct_cameras: need at least 7 correspondences.\n";
 
-    if ( K == NULL ) {
+    if ( K == VXL_NULLPTR ) {
       K_[0][0]=2000;K_[0][1]=0;K_[0][2]=512;
       K_[1][0]=0;K_[1][1]=2000;K_[1][2]=384;
       K_[2][0]=0;K_[2][1]=0;K_[2][2]=1;

@@ -62,7 +62,7 @@ bool boxm_refine_scene_process(bprb_func_process& pro)
   bool reset = pro.get_input<bool>(i++);
 
   // check the input validity
-  if (scene == 0) {
+  if (scene == VXL_NULLPTR) {
     vcl_cout << "boxm_refine_scene_process: scene is null, cannot run" << vcl_endl;
     return false;
   }

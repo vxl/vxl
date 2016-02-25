@@ -18,11 +18,9 @@ set(bgrl_sources
 )
 aux_source_directory(Templates bgrl_sources)
 
-add_library(bgrl ${bgrl_sources})
-install_targets(/lib bgrl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bgrl ${bgrl_sources})
+vxl_add_library( LIBNAME bgrl LIBSRCS ${bgrl_sources})
 
-target_link_libraries(bgrl vbl_io vbl vsl)
+target_link_libraries(bgrl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

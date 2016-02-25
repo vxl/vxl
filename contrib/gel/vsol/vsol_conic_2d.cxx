@@ -570,7 +570,7 @@ vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
     candidates = conic.intersection(*this);
   }
   // And find the intersection point closest to the given location:
-  vsol_point_2d_sptr p = 0;
+  vsol_point_2d_sptr p = VXL_NULLPTR;
   double dist = 1e31; // infinity
   vcl_list<vsol_point_2d_sptr>::iterator it = candidates.begin();
   for (; it != candidates.end(); ++it) {
@@ -610,7 +610,7 @@ vsol_line_2d_sptr vsol_conic_2d::axis() const
     vgl_vector_2d<double> v(wd,ht);
     return new vsol_line_2d(v,new vsol_point_2d(cx,cy));
   }
-  else return 0;
+  else return VXL_NULLPTR;
 }
 
 //----------------------------------------------------------------
@@ -685,6 +685,6 @@ vsl_b_read(vsl_b_istream &is, vsol_conic_2d* &c)
     c->b_read(is);
   }
   else
-    c = 0;
+    c = VXL_NULLPTR;
 }
 

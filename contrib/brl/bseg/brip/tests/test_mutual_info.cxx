@@ -32,7 +32,6 @@ static bsta_histogram<float> compute_hist(vcl_vector<float> const& I)
   float Im=0.0f;
   for (unsigned i = 0; i<npts; ++i)
     Im += I[i];
-  Im/= npts;
   bsta_histogram<float> h(1.0f, 25);
   for (unsigned i = 0; i<npts; ++i)
     //    h.upcount(vcl_fabs(I[i]-Im), 1.0f);

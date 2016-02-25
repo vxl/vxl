@@ -195,7 +195,7 @@ template <bvxm_voxel_type APM_T>
         // convert image to a voxel_slab
         bvxm_voxel_slab<obs_datatype> image_slab(ni_, nj_, 1);
         bvxm_util::img_to_slab(nimg_sptr,image_slab);
-        nimg_sptr = 0;  // to clear up space
+        nimg_sptr = VXL_NULLPTR;  // to clear up space
 
         bvxm_voxel_slab<float> prob = apm_processor.prob_density(*mog_image_ptr,image_slab); //prob( nimg );
 

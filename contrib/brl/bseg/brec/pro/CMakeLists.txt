@@ -17,9 +17,9 @@ aux_source_directory(Templates brec_pro_sources)
 
 aux_source_directory(processes brec_pro_sources)
 
-add_library(brec_pro ${brec_pro_sources})
+vxl_add_library( LIBNAME brec_pro LIBSRCS ${brec_pro_sources})
 
-target_link_libraries(brec_pro brec bvxm_grid_io bbgm_pro bprb brip brdb sdet vpgl vpgl_io vpgl_algo vpgl_file_formats vpgl_pro vsol vil_pro vil_algo vil vil_io vnl_io vnl vgl_algo vgl vbl_io vul)
+target_link_libraries(brec_pro brec bvxm_grid_io bbgm_pro bprb brip brdb sdet ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats vpgl_pro vsol vil_pro ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

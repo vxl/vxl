@@ -7,9 +7,9 @@ set(boxm2_cpp_pro_sources
     boxm2_cpp_processes.h
    )
 aux_source_directory(processes boxm2_cpp_pro_sources)
-add_library(boxm2_cpp_pro  ${boxm2_cpp_pro_sources})
+vxl_add_library( LIBNAME boxm2_cpp_pro LIBSRCS  ${boxm2_cpp_pro_sources})
 
-target_link_libraries(boxm2_cpp_pro boxm2_cpp_algo brad bbas_pro bbgm_pro bprb brdb vbl_io expatpp vpgl vil vgl_xio vgl vul vbl vsl vcl)
+target_link_libraries(boxm2_cpp_pro boxm2_cpp_algo brad bbas_pro bbgm_pro bprb brdb ${VXL_LIB_PREFIX}vbl_io expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

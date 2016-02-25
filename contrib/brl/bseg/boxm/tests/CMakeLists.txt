@@ -12,10 +12,10 @@ set(boxm_test_all_sources
     test_utils.h    test_utils.cxx
     )
 
-add_library(boxm_tests  ${boxm_test_all_sources})
-target_link_libraries(boxm_tests boxm boct testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
+vxl_add_library( LIBNAME boxm_tests LIBSRCS  ${boxm_test_all_sources})
+target_link_libraries(boxm_tests boxm boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul)
 
-target_link_libraries( boxm_test_all boxm_tests boxm boct testlib vnl vpgl vgl_xio vgl_algo vil vgl vpl vul)
+target_link_libraries( boxm_test_all boxm_tests boxm boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/camera0.txt ${CMAKE_CURRENT_BINARY_DIR}/camera0.txt COPYONLY )
 
 add_test( NAME boxm_test_binary_io COMMAND $<TARGET_FILE:boxm_test_all>    test_binary_io  )

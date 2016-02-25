@@ -8,7 +8,7 @@
 boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
                                                    vcl_vector<vcl_string> data_types,
                                                    vcl_vector<vcl_string> identifiers)
-: blk_buffer_(0), scene_(scene), data_types_(data_types), identifiers_(identifiers)
+: blk_buffer_(VXL_NULLPTR), scene_(scene), data_types_(data_types), identifiers_(identifiers)
 {
   vcl_map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
@@ -31,7 +31,7 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
   }
 
   blk_buffer_ = new(std::nothrow)  uchar16[total_bytes_per_block_];
-  if (blk_buffer_ == 0)
+  if (blk_buffer_ == VXL_NULLPTR)
   {
     vcl_cout<<"Failed to Allocate Memory"<<vcl_endl;
     return ;
@@ -81,7 +81,7 @@ boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
 
     total_bytes_per_data_[data_type]=total_bytes_per_data_type;
     char * data_buffer = new(std::nothrow)  char[total_bytes_per_data_type];
-    if (data_buffer == 0)
+    if (data_buffer == VXL_NULLPTR)
     {
       vcl_cout<<"Failed to Allocate Memory"<<vcl_endl;
       return ;

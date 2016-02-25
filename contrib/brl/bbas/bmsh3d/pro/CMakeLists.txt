@@ -6,8 +6,8 @@ set( bmsh3d_pro_sources
     bmsh3d_cmdpara.cxx         bmsh3d_cmdpara.h
 )
 
-add_library( bmsh3d_pro ${bmsh3d_pro_sources} )
-target_link_libraries( bmsh3d_pro bmsh3d vul )
+vxl_add_library( LIBNAME bmsh3d_pro LIBSRCS ${bmsh3d_pro_sources} )
+target_link_libraries( bmsh3d_pro bmsh3d ${VXL_LIB_PREFIX}vul )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

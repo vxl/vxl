@@ -42,7 +42,7 @@ class boxm2_vecf_fit_orbit{
   // revert coordinates to approximate millimeters using the
   // iris radius
   bool from_image_data(){return from_image_data_;}
-  void normalize_eye_data();
+  void normalize_eye_data(float fixed_amount = 0.0f);
   // set the z values of the margin curve points and the crease curve points
   bool set_left_z_values();
   bool set_right_z_values();

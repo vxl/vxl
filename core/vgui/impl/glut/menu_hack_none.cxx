@@ -2,6 +2,7 @@
   fsm
 */
 #include "menu_hack.h"
+#include "vcl_compiler.h"
 
 // without X11, I don't know how to do this.
 // fsm
@@ -12,4 +13,4 @@ bool vgui_glut_menu_hack::mouse(int button, int state, int x,int y) { return fal
 
 void vgui_glut_menu_hack::menustatus(int status,int x,int y) { }
 
-void (*vgui_glut_menu_hack::last_minute_change_callback)(int menu_id) = 0;
+void (*vgui_glut_menu_hack::last_minute_change_callback)(int menu_id) = VXL_NULLPTR;

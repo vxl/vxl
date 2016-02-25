@@ -33,7 +33,7 @@ set(boxm_algo_rt_sources
 
 aux_source_directory(Templates boxm_algo_rt_sources)
 
-add_library(boxm_algo_rt ${boxm_algo_rt_sources})
+vxl_add_library( LIBNAME boxm_algo_rt LIBSRCS ${boxm_algo_rt_sources})
 
 #processes
 add_subdirectory(pro)
@@ -42,5 +42,5 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-target_link_libraries(boxm_algo_rt boxm boxm_sample boxm_sample_algo boxm_basic boxm_util vil vcl vgl vbl vgl_algo bsta vnl sdet brip vpgl vpgl_algo )
+target_link_libraries(boxm_algo_rt boxm boxm_sample boxm_sample_algo boxm_basic boxm_util ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl_algo bsta ${VXL_LIB_PREFIX}vnl sdet brip ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo )
 

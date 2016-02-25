@@ -54,7 +54,7 @@ vil_nitf2_scalar_field* vil_nitf2_field::scalar_field()
   if (num_dimensions()==0) {
     return (vil_nitf2_scalar_field*) this;
   } else {
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -63,7 +63,7 @@ vil_nitf2_array_field* vil_nitf2_field::array_field()
   if (num_dimensions()>0) {
     return (vil_nitf2_array_field*) this;
   } else {
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

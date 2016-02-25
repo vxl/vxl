@@ -33,10 +33,8 @@ set(vimt3d_sources
 
 aux_source_directory(Templates vimt3d_sources)
 
-add_library(vimt3d ${vimt3d_sources})
-install_targets(/lib vimt3d)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt3d ${vimt3d_sources})
-target_link_libraries(vimt3d vil3d_algo vil3d_io vil3d vimt mbl vnl_algo vgl vnl_io vnl vil vsl vul)
+vxl_add_library( LIBNAME vimt3d LIBSRCS ${vimt3d_sources})
+target_link_libraries(vimt3d vil3d_algo vil3d_io vil3d vimt mbl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

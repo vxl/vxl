@@ -48,7 +48,7 @@ double RD_ReadDouble1(const char *q_str, double default_d,
     vcl_cout<<q_str<<" ["<<min_d<<".."<<max_d<<"] ("<<default_d<<") :";
     vcl_cout.flush();
 
-    if (vcl_fgets(reply,MAX_LEN,stdin)!=NULL)
+    if (vcl_fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
     {
       double r = default_d;
       if (reply[0]=='\n' || vcl_sscanf(reply,"%lf",&r)>0)

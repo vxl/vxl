@@ -88,7 +88,7 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
 
   vil_math_scale_and_offset_values(toa_radiance_img, (1.0/mdata->gain_), -(mdata->offset_/mdata->gain_) );
 
-  vil_image_view_base_sptr output_img = 0;
+  vil_image_view_base_sptr output_img = VXL_NULLPTR;
   if (do_normalization) {
     vil_image_view<float> *output_img_float = new vil_image_view<float>(ni,nj);
     vil_convert_stretch_range_limited(toa_radiance_img,*output_img_float,0.0f,(float)max_digital_count,0.0f,1.0f);

@@ -62,10 +62,8 @@ include_directories(${VXLCORE_INCLUDE_DIR})
 
 aux_source_directory(Templates vsol_sources)
 
-add_library(vsol ${vsol_sources})
-install_targets(/lib vsol)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vsol ${vsol_sources})
-target_link_libraries(vsol vgl_algo vgl_io vgl vnl vbl_io vbl vsl vul vcl)
+vxl_add_library(LIBNAME vsol LIBSRCS ${vsol_sources})
+target_link_libraries(vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)

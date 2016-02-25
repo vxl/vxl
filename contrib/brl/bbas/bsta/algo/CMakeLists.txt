@@ -22,12 +22,10 @@ set( bsta_algo_sources
 
 aux_source_directory(Templates bsta_algo_sources)
 
-add_library( bsta_algo ${bsta_algo_sources} )
-target_link_libraries(bsta_algo bsta vnl_algo vnl vbl)
+vxl_add_library( LIBNAME bsta_algo LIBSRCS ${bsta_algo_sources} )
+target_link_libraries(bsta_algo bsta ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib bsta_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bsta/algo ${bsta_algo_sources})

@@ -220,7 +220,6 @@ double boxm2_vecf_lid_base::curve_distance(double t, double x, double y, double 
     double dx = xp-x, dy = y-gi(xp,t), dz = z-Z(xp, t);
     double d = vcl_sqrt(dx*dx + dy*dy + dz*dz);
     if(d<dmin){
-      xmin = xp; ymin = gi(xp,t); zmin = Z(xp,t);
       dmin = d;
     }
   }

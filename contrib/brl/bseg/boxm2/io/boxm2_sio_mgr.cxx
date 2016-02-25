@@ -11,7 +11,7 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id, 
 {
   vcl_string filepath = dir + block_id.to_string() + ".bin";
   unsigned long numBytes = 0;
-  char* bytes=0;
+  char* bytes=VXL_NULLPTR;
 
   if (fs_type == LOCAL) {
     //get file size
@@ -22,7 +22,7 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id, 
     vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
     if (!myFile) {
     //vcl_cerr<<"boxm2_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
-    return NULL;
+    return VXL_NULLPTR;
     }
 
     myFile.read(bytes, numBytes);
@@ -37,12 +37,12 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id, 
     }
 #else
     vcl_cerr << "boxm2_sio_mgr:: bhdfs is needed for HDFS file system!\n";
-    return NULL;
+    return VXL_NULLPTR;
 #endif
   }
   else {
     vcl_cerr << "boxm2_sio_mgr:: FileSystem -" << fs_type << " is not implemented, yet!\n";
-    return NULL;
+    return VXL_NULLPTR;
   }
   //instantiate new block
   return new boxm2_block(block_id, bytes);
@@ -52,7 +52,7 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,b
 {
   vcl_string filepath = dir + block_id.to_string() + ".bin";
   unsigned long numBytes = 0;
-  char* bytes=0;
+  char* bytes=VXL_NULLPTR;
 
   if (fs_type == LOCAL) {
     //get file size
@@ -63,7 +63,7 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,b
     vcl_ifstream myFile (filepath.c_str(), vcl_ios::in | vcl_ios::binary);
     if (!myFile) {
       //vcl_cerr<<"boxm2_sio_mgr::load_block cannot read file "<<filepath<<vcl_endl;
-      return NULL;
+      return VXL_NULLPTR;
     }
     myFile.read(bytes, numBytes);
   }
@@ -77,12 +77,12 @@ boxm2_block* boxm2_sio_mgr::load_block(vcl_string dir, boxm2_block_id block_id,b
     }
 #else
     vcl_cerr << "boxm2_sio_mgr:: bhdfs is needed for HDFS file system!\n";
-    return NULL;
+    return VXL_NULLPTR;
 #endif
   }
   else {
     vcl_cerr << "boxm2_sio_mgr:: FileSystem -" << fs_type << " is not implemented, yet!\n";
-    return NULL;
+    return VXL_NULLPTR;
   }
   //instantiate new block
   boxm2_block * returnboxm2_block = new boxm2_block(block_id,data, bytes);
@@ -108,7 +108,7 @@ boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_bl
   // file name
   vcl_string filename = dir + data_type + "_" + id.to_string() + ".bin";
   unsigned long numBytes = 0;
-  char* bytes=0;
+  char* bytes=VXL_NULLPTR;
   if (fs_type == LOCAL) {
     //get file size
     numBytes=vul_file::size(filename);
@@ -119,7 +119,7 @@ boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_bl
     myFile.read(bytes, numBytes);
     if (!myFile) {
         //vcl_cerr<<"boxm2_sio_mgr::load_data cannot read file "<<filename<<vcl_endl;
-        return NULL;
+        return VXL_NULLPTR;
     }
   }
   else if (fs_type == HDFS) {
@@ -132,12 +132,12 @@ boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(vcl_string dir, boxm2_bl
     }
 #else
     vcl_cerr << "boxm2_sio_mgr:: bhdfs is needed for HDFS file system!\n";
-    return NULL;
+    return VXL_NULLPTR;
 #endif
   }
   else {
     vcl_cerr << "boxm2_sio_mgr:: FileSystem -" << fs_type << " is not implemented, yet!\n";
-    return NULL;
+    return VXL_NULLPTR;
   }
   //instantiate new block
   return new boxm2_data_base(bytes,numBytes,id);
@@ -171,6 +171,6 @@ char* boxm2_sio_mgr::load_from_hdfs(vcl_string filepath, unsigned long &numBytes
   fs->read(bytes, numBytes);
   return bytes;
 #else
-  return NULL;
+  return VXL_NULLPTR;
 #endif
 }

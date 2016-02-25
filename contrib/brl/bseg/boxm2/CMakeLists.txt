@@ -36,8 +36,8 @@ endif()
 
 aux_source_directory(Templates boxm2_sources)
 
-add_library(boxm2  ${boxm2_sources})
-target_link_libraries(boxm2 boxm2_basic boct brdb bsta vsph vbl_io vpgl vpgl_io vpgl_xio vpgl_algo vgl_xio vgl vnl_algo vnl vbl vil vul vsl vcl mcal bkml bvgl_algo)
+vxl_add_library( LIBNAME boxm2 LIBSRCS  ${boxm2_sources})
+target_link_libraries(boxm2 boxm2_basic boct brdb bsta vsph ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_xio ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl mcal bkml bvgl_algo)
 if(EXPAT_FOUND)
 target_link_libraries(boxm2 expatpp)
 endif()
@@ -81,5 +81,3 @@ if( BUILD_TESTING )
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib boxm2)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ ${boxm2_sources})

@@ -17,7 +17,7 @@ add_executable( vimt3d_test_all
   test_crop.cxx
 )
 
-target_link_libraries( vimt3d_test_all vimt3d vil3d mbl vgl vnl vil vpl vul vsl testlib )
+target_link_libraries( vimt3d_test_all vimt3d vil3d mbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME vimt3d_test_transform_3d COMMAND $<TARGET_FILE:vimt3d_test_all> test_transform_3d )
 add_test( NAME vimt3d_test_image_3d_of COMMAND $<TARGET_FILE:vimt3d_test_all> test_image_3d_of )

@@ -24,10 +24,16 @@
 include(CTest)
 
 if( WIN32 )
-  option( VXL_BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
+  option( BUILD_SHARED_LIBS "Build shared libraries." OFF)
+  if (BUILD_SHARED_LIBS)
+    # On windows, we need to export symbols for shared builds
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "TRUE")
+  endif()
 else()
-  option( VXL_BUILD_SHARED_LIBS "Should shared libraries be the default?" OFF )
+  option( BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif()
+set( VXL_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS} )
+mark_as_advanced(BUILD_SHARED_LIBS)
 
 set( SOLARIS 0 )
 if( CMAKE_SYSTEM MATCHES "SunOS.*" )

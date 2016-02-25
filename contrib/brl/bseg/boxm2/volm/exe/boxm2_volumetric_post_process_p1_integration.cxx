@@ -86,10 +86,10 @@ int main(int argc, char** argv)
     unsigned zone_id;
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
-      zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
+      geo_hypo_folder = geo_hypo_folder_a();
     }
     else {
-      zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
+      geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
     vcl_stringstream file_name_pre;
@@ -136,8 +136,6 @@ int main(int argc, char** argv)
   // search for the top 30 scores
   for (unsigned i = 0; i < tiles.size(); i++) {
     unsigned zone_id;
-    if (i < 8 && i != 5) zone_id = 17;
-    else                 zone_id = 18;
     vcl_stringstream score_file;
     score_file << out() << "/ps_1_scores_tile_" << i << ".bin";
     if (!vul_file::exists(score_file.str()))
@@ -167,10 +165,10 @@ int main(int argc, char** argv)
     unsigned zone_id;
     vcl_string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
-      zone_id = 17;  geo_hypo_folder = geo_hypo_folder_a();
+      geo_hypo_folder = geo_hypo_folder_a();
     }
     else {
-      zone_id = 18;  geo_hypo_folder = geo_hypo_folder_b();
+      geo_hypo_folder = geo_hypo_folder_b();
     }
     // load associate geo_hypo
     vcl_stringstream file_name_pre;

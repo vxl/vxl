@@ -168,7 +168,7 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
   zip_fileinfo zi;
   unsigned long crcFile=0;
   int size_buf=0;
-  void* buf=NULL;
+  void* buf=VXL_NULLPTR;
 
   zi.tmz_date.tm_sec = zi.tmz_date.tm_min = zi.tmz_date.tm_hour =
   zi.tmz_date.tm_mday = zi.tmz_date.tm_mon = zi.tmz_date.tm_year = 0;
@@ -192,10 +192,10 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
 
   int err = 0;
   int opt_compress_level=Z_DEFAULT_COMPRESSION;
-  const char* password=0;
+  const char* password=VXL_NULLPTR;
 
   err = zipOpenNewFileInZip3(zf,filenameinzip,&zi,
-                             NULL,0,NULL,0,NULL ,
+                             VXL_NULLPTR,0,VXL_NULLPTR,0,VXL_NULLPTR ,
                              (opt_compress_level != 0) ? Z_DEFLATED : 0,
                              opt_compress_level,0,
                              -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY,
@@ -207,8 +207,7 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
   }
   else {
     fin = vcl_fopen(filenameinzip,"rb");
-    if (fin==NULL) {
-        err=ZIP_ERRNO;
+    if (fin==VXL_NULLPTR) {
         vcl_printf("error in opening %s for reading\n",filenameinzip);
         return 0;
     }
@@ -216,7 +215,7 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
 
   size_buf = WRITEBUFFERSIZE;
   buf = (void*)malloc(size_buf);
-  if (buf==NULL) {
+  if (buf==VXL_NULLPTR) {
     vcl_printf("Error allocating memory\n");
     return ZIP_INTERNALERROR;
   }
@@ -241,15 +240,13 @@ int zip_kmz(zipFile& zf, const char* filenameinzip)
   if (fin)
     vcl_fclose(fin);
 
-  if (err<0)
-    err=ZIP_ERRNO;
-  else {
+  if (err >= 0 ){
     err = zipCloseFileInZip(zf);
     if (err!=ZIP_OK)
       vcl_printf("error in closing %s in the zipfile\n", filenameinzip);
   }
 
-  int errclose = zipClose(zf,NULL);
+  int errclose = zipClose(zf,VXL_NULLPTR);
 
   if (errclose != ZIP_OK) {
     vcl_printf("error in closing zipfile\n");

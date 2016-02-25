@@ -190,7 +190,7 @@ void vsol_point_2d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_point_2d* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -212,5 +212,5 @@ vsl_b_read(vsl_b_istream &is, vsol_point_2d* &p)
     p->b_read(is);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }

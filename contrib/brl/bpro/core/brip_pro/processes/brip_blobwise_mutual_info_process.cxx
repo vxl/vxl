@@ -62,13 +62,13 @@ namespace brip_blobwise_mutual_info_process_globals
       }
       else {
         vcl_cerr << "Failed to load image\n";
-        return 0;
+        return VXL_NULLPTR;
       }
       return floatimg;
     }
     //otherwise it's messed up, return a null pointer
     vcl_cerr<<"Failed to recognize input image type\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 };
 

@@ -12,7 +12,7 @@ set( brad_test_sources
    )
 
 add_executable(brad_test_all ${brad_test_sources})
-target_link_libraries( brad_test_all brad bsta_io vnl_algo vnl vil testlib)
+target_link_libraries( brad_test_all brad bsta_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME test_illum_brad_test_all                  COMMAND $<TARGET_FILE:brad_test_all> test_illum)
 add_test( NAME test_sun_pos_brad_test_all                COMMAND $<TARGET_FILE:brad_test_all> test_sun_pos)

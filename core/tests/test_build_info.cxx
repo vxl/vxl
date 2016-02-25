@@ -105,7 +105,7 @@ static void test_build_info()
     vxl_BUILD_DIR "/core/vnl/vnl_config.h",
     vxl_BUILD_DIR "/v3p/dcmtk/osconfig.h",
     vxl_BUILD_DIR "/v3p/mpeg2/include/config.h",
-    0
+    VXL_NULLPTR
   };
 
   for (const char** f = files; *f; f++)

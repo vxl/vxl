@@ -30,7 +30,7 @@ if( PYTHON_FOUND )
             reg_bmdl.cxx          reg_bmdl.h
            )
         if(NOT BUILD_POSITION_DEPENDENT_CODE)
-          add_library(bmdl_batch SHARED ${bmdl_batch_sources})
+          vxl_add_library( LIBNAME bmdl_batch LIBSRCS SHARED ${bmdl_batch_sources})
 
           if(WIN32)
             #library has to have different name depending on debug or release version.
@@ -38,7 +38,7 @@ if( PYTHON_FOUND )
           endif()
           set_target_properties(bmdl_batch PROPERTIES PREFIX "")
 
-          target_link_libraries(bmdl_batch bprb brdb bpro_batch bmdl_pro vbl vpgl_io vpgl_pro vil_io vil_pro expat expatpp)
+          target_link_libraries(bmdl_batch bprb brdb bpro_batch bmdl_pro ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vpgl_io vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro expat expatpp)
 
           if(PYTHON_DEBUG_LIBRARIES)
             target_link_libraries( bmdl_batch debug ${PYTHON_DEBUG_LIBRARY})

@@ -31,7 +31,7 @@ macro(CHECK_PROTOTYPE_EXISTS_CXX FUNC INCLUDE VARIABLE)
 
         file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log "Trying struct with ${FILE}\n" )
         configure_file( ${CHECK_PROTOTYPE_EXISTS_CXX_FILE_IN}
-                        ${CHECK_PROTOTYPE_EXISTS_CXX_FILE} IMMEDIATE )
+                        ${CHECK_PROTOTYPE_EXISTS_CXX_FILE} @ONLY)
 
         try_compile( CHECK_PROTOTYPE_EXISTS_CXX_RESULT
           ${CMAKE_BINARY_DIR}

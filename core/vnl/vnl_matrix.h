@@ -115,7 +115,7 @@ class vnl_matrix
   vnl_matrix() :
     num_rows(0),
     num_cols(0),
-    data(0)
+    data(VXL_NULLPTR)
   {
   }
 
@@ -160,7 +160,7 @@ class vnl_matrix
   vnl_matrix(vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // M * M
   vnl_matrix(vnl_matrix<T> &that, vnl_tag_grab)
     : num_rows(that.num_rows), num_cols(that.num_cols), data(that.data)
-  { that.num_cols=that.num_rows=0; that.data=0; } // "*this" now uses "that"'s data.
+  { that.num_cols=that.num_rows=0; that.data=VXL_NULLPTR; } // "*this" now uses "that"'s data.
 // </internal>
 #endif
 
@@ -571,7 +571,7 @@ class vnl_matrix
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned r, unsigned c) const
+  void assert_size(unsigned VXL_USED_IN_DEBUG(r), unsigned VXL_USED_IN_DEBUG(c)) const
   {
 #ifndef NDEBUG
     assert_size_internal(r, c);
@@ -617,16 +617,16 @@ class vnl_matrix
   //: Iterators
   typedef T       *iterator;
   //: Iterator pointing to start of data
-  iterator       begin() { return data?data[0]:0; }
+  iterator       begin() { return data?data[0]:VXL_NULLPTR; }
   //: Iterator pointing to element beyond end of data
-  iterator       end() { return data?data[0]+num_rows*num_cols:0; }
+  iterator       end() { return data?data[0]+num_rows*num_cols:VXL_NULLPTR; }
 
   //: Const iterators
   typedef T const *const_iterator;
   //: Iterator pointing to start of data
-  const_iterator begin() const { return data?data[0]:0; }
+  const_iterator begin() const { return data?data[0]:VXL_NULLPTR; }
   //: Iterator pointing to element beyond end of data
-  const_iterator end() const { return data?data[0]+num_rows*num_cols:0; }
+  const_iterator end() const { return data?data[0]+num_rows*num_cols:VXL_NULLPTR; }
 
   //: Return a reference to this.
   // Useful in code which would prefer not to know if its argument

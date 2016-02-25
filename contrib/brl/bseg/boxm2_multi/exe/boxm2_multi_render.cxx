@@ -64,10 +64,15 @@ void test_render_expected_images(boxm2_scene_sptr scene,
 
     //if scene has RGB data type, use color render process
     bool good = true;
-    if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) )
+    if (scene->has_data_type(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) ) {
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedColorProcess");
-    else
+    }
+    else {
       good = bprb_batch_process_manager::instance()->init_process("boxm2OclRenderExpectedImageProcess");
+    }
+    if ( !good ) {
+      vcl_cout << "ERROR: couldn't start color render process: " << __FILE__ << __LINE__ << vcl_endl;
+    }
 
     //set process args
     good = good && bprb_batch_process_manager::instance()->set_input(0, brdb_device) // device
@@ -77,10 +82,17 @@ void test_render_expected_images(boxm2_scene_sptr scene,
                 && bprb_batch_process_manager::instance()->set_input(4, brdb_ni)     // ni for rendered image
                 && bprb_batch_process_manager::instance()->set_input(5, brdb_nj)     // nj for rendered image
                 && bprb_batch_process_manager::instance()->run_process();
+    if ( !good ) {
+      vcl_cout << "ERROR: couldn't set process args: " << __FILE__ << __LINE__ << vcl_endl;
+    }
 
     //grab vil_image_view_base_sptr from process
     unsigned int out_img = 0;
     good = good && bprb_batch_process_manager::instance()->commit_output(0, out_img);
+    if ( !good ) {
+      vcl_cout << "ERROR: couldn't commit output: " << __FILE__ << __LINE__ << vcl_endl;
+    }
+
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, out_img);
     brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
     if (S->size()!=1) {
@@ -122,7 +134,6 @@ int main(int argc,  char** argv)
 
   if (numGPU() > mgr.gpus_.size()) {
     vcl_cout<<"-numGPU ("<<numGPU()<<") is too big, only "<<mgr.gpus_.size()<<" available"<<vcl_endl;
-    return -1;
   }
   //make a multicache
   vcl_vector<bocl_device_sptr> gpus;

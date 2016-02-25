@@ -25,7 +25,7 @@ bool brip_solve_gain_offset_process_cons(bprb_func_process& pro)
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 
-  brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(0);
+  brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(VXL_NULLPTR);
   // initialize mask inputs to null
   pro.set_input(2, null);
   pro.set_input(3, null);
@@ -96,7 +96,7 @@ bool brip_solve_gain_offset_constraints_process_cons(bprb_func_process& pro)
     ok = pro.set_output_types(output_types);
     if (!ok) return ok;
 
-    brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(0);
+    brdb_value_sptr null = new brdb_value_t<vil_image_view_base_sptr>(VXL_NULLPTR);
     // initialize mask inputs to null
     pro.set_input(3, null);
     pro.set_input(4, null);

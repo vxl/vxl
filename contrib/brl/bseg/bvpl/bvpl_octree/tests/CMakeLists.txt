@@ -16,10 +16,10 @@ set(bvpl_octree_test_all_sources
     test_utils.h    test_utils.cxx
    )
 
-add_library(bvpl_octree_tests_util  ${bvpl_octree_test_all_sources})
+vxl_add_library( LIBNAME bvpl_octree_tests_util LIBSRCS  ${bvpl_octree_test_all_sources})
 
-target_link_libraries( bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
-target_link_libraries( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm testlib vnl vul)
+target_link_libraries( bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
+target_link_libraries( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
 add_test( NAME bvpl_octree_test_kernel_operator COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_octree_kernel_operator  )
 add_test( NAME bvpl_octree_test_neighbors COMMAND $<TARGET_FILE:bvpl_octree_test_all> test_octree_neighbors  )

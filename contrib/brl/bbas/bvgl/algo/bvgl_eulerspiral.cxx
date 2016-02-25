@@ -461,7 +461,6 @@ compute_es_params_use_simple_gradient_descent( bool use_lookup_table ){
     // dstep = 0.1;
     dstep_k0 = 0.1;
     dstep_len = 0.1;
-    k0_len_initialized = true;
   }
 
   // perform a simple gradient descent to find the real solution
@@ -601,7 +600,6 @@ compute_es_params_use_levenberg_marquardt(bool use_lookup_table ){
     //From here on, normlize the parameters and use these to perform the optimization
     k0_len_estimate.put(0, biarc_estimate.k1()*d);
     k0_len_estimate.put(1, biarc_estimate.len()/d);
-    k0_len_initialized = true;
   }
 
 
@@ -651,7 +649,7 @@ const vcl_string bvgl_eulerspiral_lookup_table::
 file_name = vcl_string("bvgl_eulerspiral_lookup_table.bvl");
 
 //: static bvgl_eulerspiral_lookup_table instance
-bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = 0;
+bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = VXL_NULLPTR;
 
 //: Return the pointer to the only instance of the class
 bvgl_eulerspiral_lookup_table *bvgl_eulerspiral_lookup_table::instance(){
@@ -823,7 +821,7 @@ bvgl_eulerspiral_optimization_function(unsigned int number_of_unknowns,
                                        UseGradient g):
 vnl_least_squares_function(number_of_unknowns, number_of_residuals, g)
 {
-  this->es_ = 0;
+  this->es_ = VXL_NULLPTR;
 }
 
 //: Main function for optimization

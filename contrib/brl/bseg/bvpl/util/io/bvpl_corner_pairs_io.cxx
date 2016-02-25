@@ -37,12 +37,12 @@ void vsl_b_read(vsl_b_istream& is,bvpl_corner_pairs* p)
     vsl_b_read(is, *p);
   }
   else
-    p = 0;
+    p = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const bvpl_corner_pairs* &p)
 {
-  if (p==0)
+  if (p==VXL_NULLPTR)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
@@ -55,7 +55,7 @@ void vsl_b_write(vsl_b_ostream& os, const bvpl_corner_pairs* &p)
 
 void vsl_print_summary(vcl_ostream& os, const bvpl_corner_pairs* &p)
 {
-  if (p==0)
+  if (p==VXL_NULLPTR)
     os << "NULL PTR";
   else {
     os << "T: ";

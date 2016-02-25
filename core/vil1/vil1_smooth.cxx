@@ -39,12 +39,12 @@ vil1_image vil1_smooth_gaussian(vil1_image const & in, double sigma)
   // Call convolver
   switch (vil1_pixel_format(in))
   {
-    case VIL1_BYTE:  return vil1_convolve_separable(in, &mask[0], size-1, (vxl_byte*)0, (double*)0, (float*)0);
-    case VIL1_UINT16:return vil1_convolve_separable(in, &mask[0], size-1, (vxl_uint_16*)0, (double*)0, (float*)0);
-    case VIL1_UINT32:return vil1_convolve_separable(in, &mask[0], size-1, (vxl_uint_32*)0, (double*)0, (float*)0);
-    case VIL1_FLOAT: return vil1_convolve_separable(in, &mask[0], size-1, (float*)0, (double*)0, (float*)0);
-    case VIL1_DOUBLE:return vil1_convolve_separable(in, &mask[0], size-1, (double*)0, (double*)0, (double*)0);
-    default: return 0;
+    case VIL1_BYTE:  return vil1_convolve_separable(in, &mask[0], size-1, (vxl_byte*)VXL_NULLPTR, (double*)VXL_NULLPTR, (float*)VXL_NULLPTR);
+    case VIL1_UINT16:return vil1_convolve_separable(in, &mask[0], size-1, (vxl_uint_16*)VXL_NULLPTR, (double*)VXL_NULLPTR, (float*)VXL_NULLPTR);
+    case VIL1_UINT32:return vil1_convolve_separable(in, &mask[0], size-1, (vxl_uint_32*)VXL_NULLPTR, (double*)VXL_NULLPTR, (float*)VXL_NULLPTR);
+    case VIL1_FLOAT: return vil1_convolve_separable(in, &mask[0], size-1, (float*)VXL_NULLPTR, (double*)VXL_NULLPTR, (float*)VXL_NULLPTR);
+    case VIL1_DOUBLE:return vil1_convolve_separable(in, &mask[0], size-1, (double*)VXL_NULLPTR, (double*)VXL_NULLPTR, (double*)VXL_NULLPTR);
+    default: return VXL_NULLPTR;
   }
 }
 

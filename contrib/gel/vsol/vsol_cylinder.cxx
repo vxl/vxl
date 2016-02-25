@@ -88,7 +88,7 @@ void vsol_cylinder::describe(vcl_ostream &strm, int blanking) const
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_cylinder* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -101,7 +101,7 @@ vsl_b_write(vsl_b_ostream &os, const vsol_cylinder* p)
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_cylinder_sptr &p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -114,7 +114,7 @@ vsl_b_write(vsl_b_ostream &os, const vsol_cylinder_sptr &p)
 void
 vsl_b_read(vsl_b_istream &is, vsol_cylinder* &cyl)
 {
-  delete cyl; cyl=0;
+  delete cyl; cyl=VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr) {

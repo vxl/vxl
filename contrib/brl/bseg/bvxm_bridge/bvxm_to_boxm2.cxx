@@ -80,6 +80,12 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
     const boxm2_array_3d<uchar16> trees = cache->get_block(new_scene, id)->trees();
 
     boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+      throw 0;
+    }
 
     vcl_cout << " alpha array size: " << alpha->buffer_length() /alphaTypeSize << vcl_endl; vcl_cout.flush();
 

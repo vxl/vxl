@@ -24,7 +24,7 @@ add_executable( vgl_io_test_all
   test_polygon_io.cxx
   golden_test_vgl_io.cxx
 )
-target_link_libraries( vgl_io_test_all vgl_io testlib vpl )
+target_link_libraries( vgl_io_test_all ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl )
 
 add_test( NAME vgl_io_test_point_2d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_point_2d_io )
 add_test( NAME vgl_io_test_point_3d_io COMMAND $<TARGET_FILE:vgl_io_test_all> test_point_3d_io )
@@ -48,6 +48,6 @@ add_test( NAME vgl_io_test_polygon_io COMMAND $<TARGET_FILE:vgl_io_test_all> tes
 add_test( NAME vgl_io_golden_test COMMAND $<TARGET_FILE:vgl_io_test_all> golden_test_vgl_io )
 
 add_executable( vgl_io_test_include test_include.cxx )
-target_link_libraries( vgl_io_test_include vgl_io )
+target_link_libraries( vgl_io_test_include ${VXL_LIB_PREFIX}vgl_io )
 add_executable( vgl_io_test_template_include test_template_include.cxx )
-target_link_libraries( vgl_io_test_template_include vgl_io )
+target_link_libraries( vgl_io_test_template_include ${VXL_LIB_PREFIX}vgl_io )

@@ -7,5 +7,5 @@ set(bstm_util_sources
     bstm_cams_and_box_to_scene.h   bstm_cams_and_box_to_scene.cxx
    )
 
-add_library(bstm_util  ${bstm_util_sources})
-target_link_libraries(bstm_util bstm expatpp vpgl baio vpgl vnl vidl vil_algo vil vgl_algo vgl_xio vgl vbl vul vsl vcl)
+vxl_add_library( LIBNAME bstm_util LIBSRCS  ${bstm_util_sources})
+target_link_libraries(bstm_util bstm expatpp ${VXL_LIB_PREFIX}vpgl baio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)

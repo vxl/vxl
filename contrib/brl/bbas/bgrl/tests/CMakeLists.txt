@@ -7,7 +7,7 @@ add_executable( bgrl_test_all
   test_graph.cxx
   test_search.cxx
 )
-target_link_libraries( bgrl_test_all bgrl vpl vbl_io vsl testlib )
+target_link_libraries( bgrl_test_all bgrl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME bgrl_test_graph COMMAND $<TARGET_FILE:bgrl_test_all> test_graph )
 add_test( NAME bgrl_test_search COMMAND $<TARGET_FILE:bgrl_test_all> test_search )

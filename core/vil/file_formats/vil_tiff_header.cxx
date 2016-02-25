@@ -11,7 +11,7 @@ static vcl_string date_and_time()
 {
   vcl_time_t clock;
   struct vcl_tm *t_m;
-  clock = vcl_time(NULL);
+  clock = vcl_time(VXL_NULLPTR);
   t_m = vcl_localtime(&clock);
   char tmp[20];
   char datetime[20];
@@ -23,7 +23,7 @@ static vcl_string date_and_time()
 
 static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string const& deflt = "not_defined")
 {
-  char* adr = 0;
+  char* adr = VXL_NULLPTR;
   TIFFGetField(tif, tag, &adr);
   if (adr)
     stag = vcl_string(adr);
@@ -147,7 +147,7 @@ bool vil_tiff_header::read_header()
 
   // EXTRASAMPLES tag requires two input arguments, which is different
   // from other 16bit values.
-  vxl_uint_16* sample_info=0;
+  vxl_uint_16* sample_info=VXL_NULLPTR;
   extra_samples.val=0;
   extra_samples.valid = false;
   int const ret_extrasamples = TIFFGetField(tif_, TIFFTAG_EXTRASAMPLES, &extra_samples.val, &sample_info);
@@ -155,7 +155,7 @@ bool vil_tiff_header::read_header()
     extra_samples.valid = true;
 
   read_short_tag(tif_,TIFFTAG_FILLORDER, fill_order);
-  vxl_uint_16* gc=0;
+  vxl_uint_16* gc=VXL_NULLPTR;
   TIFFGetField(tif_,TIFFTAG_GRAYRESPONSECURVE, &gc);
   read_short_tag(tif_,TIFFTAG_GRAYRESPONSEUNIT, gray_response_unit);
   read_string(tif_,TIFFTAG_HOSTCOMPUTER, host_computer);

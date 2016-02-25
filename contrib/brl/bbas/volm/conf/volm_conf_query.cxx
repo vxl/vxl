@@ -16,7 +16,7 @@
 volm_conf_query::volm_conf_query()
 {
   ni_ = 0;  nj_ = 0;  ncam_ = 0;  nobj_ = 0;  nref_ = 0;
-  dm_ = 0;
+  dm_ = VXL_NULLPTR;
   cameras_.clear();  camera_strings_.clear();
   ref_obj_name_.clear();  conf_objects_.clear();
   tol_in_pixel_ = 0;
@@ -50,7 +50,7 @@ volm_conf_query::volm_conf_query(volm_camera_space_sptr cam_space, depth_map_sce
 bool volm_conf_query::parse_ref_object(depth_map_scene_sptr dm)
 {
   ref_obj_name_.clear();
-  if (dm == 0)
+  if (dm == VXL_NULLPTR)
     return false;
   // note that sky object should never be reference object
   if (dm->ground_plane().size())

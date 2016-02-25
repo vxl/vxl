@@ -58,7 +58,7 @@ bool bvxm_dem_to_xyz_process(bprb_func_process& pro)
   // load the image/camera
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 
-  vpgl_geo_camera* geocam = 0;
+  vpgl_geo_camera* geocam = VXL_NULLPTR;
   if (cam) {
     vcl_cout << pro.name() << " -- Using the loaded camera!\n";
     geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
@@ -210,7 +210,7 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
   vcl_string geotiff_folder = pro.get_input<vcl_string>(i++);
   double geoid_height = pro.get_input<double>(i++);
   float fill_in_value = pro.get_input<float>(i++);
-  vpgl_camera_double_sptr cam = 0;
+  vpgl_camera_double_sptr cam = VXL_NULLPTR;
 
   vcl_string file_glob = geotiff_folder + "//*.tif";
   vcl_vector<vcl_string> geotiff_img_names;
@@ -266,7 +266,7 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
     vcl_string dem_img_name = geotiff_img_names[img_idx];
     // load the camera from image header
     vil_image_resource_sptr dem_res = vil_load_image_resource(dem_img_name.c_str());
-    vpgl_geo_camera* geocam = 0;
+    vpgl_geo_camera* geocam = VXL_NULLPTR;
     vcl_cout << '\t' << pro.name() << " -- Generate xyz images from " << dem_img_name << "..." << vcl_flush << vcl_endl;
     vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
     if (!geocam) {

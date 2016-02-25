@@ -35,13 +35,11 @@ set(boxm2_ocl_algo_sources
     boxm2_ocl_kernel_vector_filter.h            boxm2_ocl_kernel_vector_filter.cxx
    )
 
-add_library(boxm2_ocl_algo  ${boxm2_ocl_algo_sources})
-target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl vgl vil vul vnl_algo brad bvpl_kernels)
+vxl_add_library( LIBNAME boxm2_ocl_algo LIBSRCS  ${boxm2_ocl_algo_sources})
+target_link_libraries(boxm2_ocl_algo boxm2_cpp_algo boxm2_ocl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vnl_algo brad bvpl_kernels)
 
 #tests
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib boxm2_ocl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/boxm2/ocl/algo ${boxm2_ocl_algo_sources})

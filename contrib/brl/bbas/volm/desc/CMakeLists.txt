@@ -22,9 +22,9 @@ set(volm_desc_sources
 
 aux_source_directory(Templates volm_desc_sources)
 
-add_library(volm_desc ${volm_desc_sources})
+vxl_add_library( LIBNAME volm_desc LIBSRCS ${volm_desc_sources})
 
-target_link_libraries(volm_desc volm bsta bsta_algo bsta_vis bsvg bvgl vsl vbl vbl_io vul depth_map)
+target_link_libraries(volm_desc volm bsta bsta_algo bsta_vis bsvg bvgl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul depth_map)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

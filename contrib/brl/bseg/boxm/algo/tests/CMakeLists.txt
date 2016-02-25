@@ -14,10 +14,10 @@ set(boxm_algo_test_all_sources
     test_utils.h    test_utils.cxx
     )
 
-add_library(boxm_algo_tests  ${boxm_algo_test_all_sources})
+vxl_add_library( LIBNAME boxm_algo_tests LIBSRCS  ${boxm_algo_test_all_sources})
 
-target_link_libraries( boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct testlib vnl_io vpgl vgl_algo vgl vpl vul vpgl imesh vcl)
-target_link_libraries( boxm_algo_test_all boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct testlib vnl_io vpgl vgl_algo vgl vpl vul vpgl imesh vcl)
+target_link_libraries( boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpgl imesh ${VXL_LIB_PREFIX}vcl)
+target_link_libraries( boxm_algo_test_all boxm_algo_tests boxm_algo boxm boxm_sample boxm_util boxm_basic boct ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpgl imesh ${VXL_LIB_PREFIX}vcl)
 
 add_test( NAME boxm_algo_test_fill_in_mesh COMMAND $<TARGET_FILE:boxm_algo_test_all> test_fill_in_mesh  )
 add_test( NAME boxm_algo_test_save_scene_raw COMMAND $<TARGET_FILE:boxm_algo_test_all> test_save_scene_raw  )

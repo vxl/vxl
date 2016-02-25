@@ -20,7 +20,7 @@ add_executable( bsta_test_all
   test_spherical_histogram.cxx
 )
 
-target_link_libraries( bsta_test_all bsta bsta_io vnl vpl vbl_io vsl vbl vgl testlib )
+target_link_libraries( bsta_test_all bsta bsta_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}testlib )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_2_2.txt ${CMAKE_CURRENT_BINARY_DIR}/beta_distr_2_2.txt COPYONLY )
 
@@ -41,6 +41,6 @@ add_test( NAME bsta_test_kent COMMAND $<TARGET_FILE:bsta_test_all> test_kent )
 add_test( NAME bsta_test_spherical_histogram COMMAND $<TARGET_FILE:bsta_test_all> test_spherical_histogram )
 
 add_executable( bsta_test_include test_include.cxx )
-target_link_libraries( bsta_test_include bsta vsl)
+target_link_libraries( bsta_test_include bsta ${VXL_LIB_PREFIX}vsl)
 add_executable( bsta_test_template_include test_template_include.cxx )
-target_link_libraries( bsta_test_template_include bsta vsl)
+target_link_libraries( bsta_test_template_include bsta ${VXL_LIB_PREFIX}vsl)

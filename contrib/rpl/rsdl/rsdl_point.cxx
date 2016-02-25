@@ -8,7 +8,7 @@
 #include <vnl/vnl_vector.h>
 
 rsdl_point::rsdl_point( )
-  : Nc_(0), Na_(0), data_(0)
+  : Nc_(0), Na_(0), data_(VXL_NULLPTR)
 {
 }
 

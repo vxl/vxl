@@ -19,7 +19,7 @@ if( PYTHON_FOUND )
          reg_bvxm.h   reg_bvxm.cxx
         )
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      add_library(bvxm_batch SHARED ${bvxm_batch_sources})
+      vxl_add_library( LIBNAME bvxm_batch LIBSRCS SHARED ${bvxm_batch_sources})
 
       #library has to have different name depending on debug or release version.
       if(WIN32)
@@ -29,7 +29,7 @@ if( PYTHON_FOUND )
       endif()
       set_target_properties(bvxm_batch PROPERTIES PREFIX "")
 
-      target_link_libraries(bvxm_batch bprb brdb bpro_batch vbl bvxm bvxm_pro bvxm_io bvxm_grid_io bvxm_grid_pro vpgl_io vpgl_pro vil_io vil_pro sdet_pro brad_pro brad_io bvrml_pro volm_pro brip_pro bapl_pro bvgl_pro)
+      target_link_libraries(bvxm_batch bprb brdb bpro_batch ${VXL_LIB_PREFIX}vbl bvxm bvxm_pro bvxm_io bvxm_grid_io bvxm_grid_pro ${VXL_LIB_PREFIX}vpgl_io vpgl_pro ${VXL_LIB_PREFIX}vil_io vil_pro sdet_pro brad_pro brad_io bvrml_pro volm_pro brip_pro bapl_pro bvgl_pro)
 
       if(PYTHON_DEBUG_LIBRARIES)
         target_link_libraries( bvxm_batch debug ${PYTHON_DEBUG_LIBRARY})

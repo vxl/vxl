@@ -3,7 +3,7 @@
 // \file
 
 //: global initialization for singleton instance_
-bstm_cache_sptr bstm_cache::instance_ = 0;
+bstm_cache_sptr bstm_cache::instance_ = VXL_NULLPTR;
 
 //: global initialization for singleton destroyer instance
 bstm_cache_destroyer bstm_cache::destroyer_;
@@ -37,7 +37,7 @@ bstm_cache_destroyer::bstm_cache_destroyer(bstm_cache_sptr s)
 //: the destructor deletes the instance
 bstm_cache_destroyer::~bstm_cache_destroyer()
 {
-  if (s_ != 0)
+  if (s_ != VXL_NULLPTR)
     s_->unref();  // smart pointer is deleted when ref cnt is zero
 }
 

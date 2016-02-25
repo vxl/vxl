@@ -1,6 +1,6 @@
 # mul/clsfy/tests/CMakeLists.txt
 
-link_libraries(vgl vul vpl vnl mbl clsfy testlib vpdfl pdf1d vimt vsl)
+link_libraries(${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vnl mbl clsfy ${VXL_LIB_PREFIX}testlib vpdfl pdf1d vimt ${VXL_LIB_PREFIX}vsl)
 add_executable(clsfy_test_all
   test_driver.cxx
 

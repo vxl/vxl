@@ -10,7 +10,7 @@ add_executable( bnl_algo_test_all
    test_fresnel.cxx
 )
 
-target_link_libraries( bnl_algo_test_all bnl_algo vnl testlib )
+target_link_libraries( bnl_algo_test_all bnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME bnl_algo_test_legendre_polynomial COMMAND $<TARGET_FILE:bnl_algo_test_all> test_legendre_polynomial)
 add_test( NAME bnl_test_fresnel COMMAND $<TARGET_FILE:bnl_algo_test_all> test_fresnel )

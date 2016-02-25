@@ -14,7 +14,7 @@ add_executable(bgui3d_example_basic_trackball MACOSX_BUNDLE example_basic_trackb
 target_link_libraries(bgui3d_example_basic_trackball bgui3d)
 
 add_executable(bgui3d_example_project2d MACOSX_BUNDLE example_project2d.cxx)
-target_link_libraries(bgui3d_example_project2d bgui3d vil vnl)
+target_link_libraries(bgui3d_example_project2d bgui3d ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl)
 
 add_executable(bgui3d_example_examiner_animate MACOSX_BUNDLE example_examiner_animate.cxx)
 target_link_libraries(bgui3d_example_examiner_animate bgui3d)
@@ -32,15 +32,15 @@ add_executable(bgui3d_example_grid_examiner MACOSX_BUNDLE example_grid_examiner.
 target_link_libraries(bgui3d_example_grid_examiner bgui3d)
 
 add_executable(bgui3d_example_point_set MACOSX_BUNDLE example_point_set.cxx)
-target_link_libraries(bgui3d_example_point_set bgui3d vnl)
+target_link_libraries(bgui3d_example_point_set bgui3d ${VXL_LIB_PREFIX}vnl)
 
 add_executable(bgui3d_example_grid_multiscene MACOSX_BUNDLE example_grid_multiscene.cxx)
 target_link_libraries(bgui3d_example_grid_multiscene bgui3d)
 
 add_executable(bgui3d_example_examiner_cylinders MACOSX_BUNDLE example_examiner_cylinders.cxx)
-target_link_libraries(bgui3d_example_examiner_cylinders bgui3d vnl)
+target_link_libraries(bgui3d_example_examiner_cylinders bgui3d ${VXL_LIB_PREFIX}vnl)
 
 add_executable(bgui3d_example_interact MACOSX_BUNDLE example_interact.cxx)
-target_link_libraries(bgui3d_example_interact bgui3d vgl)
+target_link_libraries(bgui3d_example_interact bgui3d ${VXL_LIB_PREFIX}vgl)
 
 endif()

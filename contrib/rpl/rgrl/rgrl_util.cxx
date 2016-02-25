@@ -862,7 +862,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
     rgrl_transformation_sptr
       new_estimate = estimator->estimate(match_sets, *estimate);
     if ( !new_estimate ) {
-      estimate = 0;
+      estimate = VXL_NULLPTR;
       DebugFuncMacro( debug_flag, 1, "*** irls failed!\n" );
       return failed;
     }

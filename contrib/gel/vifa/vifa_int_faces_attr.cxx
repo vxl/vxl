@@ -90,13 +90,13 @@ init()
   cached_4_parallel_ = -1;
   cached_80_parallel_ = -1;
 
-  npobj_ = 0;
+  npobj_ = VXL_NULLPTR;
 
   attr_vec_.reserve(NumHistAttributes());
   for (int i=0; i < NumHistAttributes(); i++)
   {
     // can't do it below; garbage values trap in unref
-    attr_vec_.push_back(NULL);
+    attr_vec_.push_back(VXL_NULLPTR);
   }
 
   perimeter_ = -1.f;

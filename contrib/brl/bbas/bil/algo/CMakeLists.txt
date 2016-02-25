@@ -31,13 +31,11 @@ set( bil_algo_sources
 
 aux_source_directory(Templates bil_algo_sources)
 
-add_library( bil_algo ${bil_algo_sources} )
+vxl_add_library( LIBNAME bil_algo LIBSRCS ${bil_algo_sources} )
 
-target_link_libraries( bil_algo vil_algo vil vnl_algo vnl vgl_algo vgl vbl vsol)
+target_link_libraries( bil_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl vsol)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib bil_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bil/algo ${bil_algo_sources})

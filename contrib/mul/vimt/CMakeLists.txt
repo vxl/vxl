@@ -34,10 +34,8 @@ set(vimt_sources
 )
 aux_source_directory(Templates vimt_sources)
 
-add_library(vimt ${vimt_sources})
-install_targets(/lib vimt)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/vimt ${vimt_sources})
-target_link_libraries(vimt mbl vil_algo vgl vnl vil_io vil )
+vxl_add_library( LIBNAME vimt LIBSRCS ${vimt_sources})
+target_link_libraries(vimt mbl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil )
 
 add_subdirectory(algo)
 

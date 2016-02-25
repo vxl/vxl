@@ -8,7 +8,7 @@ add_executable( boxm2_vecf_test_all
   test_mandible.cxx
   test_cranium.cxx
  )
-target_link_libraries(boxm2_vecf_test_all testlib  boxm2_vecf brdb vpgl_algo vpgl_pro vil_pro sdet vnl vgl vil vul vpl )
+target_link_libraries(boxm2_vecf_test_all ${VXL_LIB_PREFIX}testlib  boxm2_vecf brdb ${VXL_LIB_PREFIX}vpgl_algo vpgl_pro vil_pro sdet ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl )
 
 ##- #depends on OPENCL being found...
 ##- include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )

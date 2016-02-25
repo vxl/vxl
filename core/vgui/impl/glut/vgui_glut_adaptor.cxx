@@ -31,11 +31,11 @@ vgui_glut_adaptor::vgui_glut_adaptor( vgui_window *win_, int id_ )
   //, popup_button(vgui_RIGHT)
   //
   , ovl_established( false )
-  , ovl_helper( 0 )
+  , ovl_helper( VXL_NULLPTR )
   //
-  , super(0)
+  , super(VXL_NULLPTR)
   //
-  , popup(0)
+  , popup(VXL_NULLPTR)
 {
   all().push_back(this); // register
   register_static_callbacks();
@@ -46,17 +46,17 @@ vgui_glut_adaptor::~vgui_glut_adaptor()
   // destroy the overlay helper, if necessary.
   if (ovl_helper)
     delete ovl_helper;
-  ovl_helper = 0;
+  ovl_helper = VXL_NULLPTR;
 
   // destroy the GLUT window through its handle.
   glutDestroyWindow( id );
   id = 0;
-  win = 0;
+  win = VXL_NULLPTR;
 
   // deallocate popup.
   if (popup)
     delete popup;
-  popup = 0;
+  popup = VXL_NULLPTR;
 
   // destroy GLUT sub-contexts.
   for (unsigned i=0; i<sub_contexts.size(); ++i)
@@ -148,7 +148,7 @@ void vgui_glut_adaptor::establish_overlays()
   // determine whether to use hardware or emulation overlays.
   make_current();
   bool use_hardware;
-  if (vgui_emulate_overlays || getenv("vgui_emulate_overlays") != 0)
+  if (vgui_emulate_overlays || getenv("vgui_emulate_overlays") != VXL_NULLPTR)
     use_hardware = false;
   else {
     glutInitDisplayMode( GLUT_RGBA | GLUT_SINGLE );
@@ -308,7 +308,7 @@ void vgui_glut_adaptor::register_static_callbacks()
 // a segfault at module initialization time (linux-egcs).
 vcl_vector<vgui_glut_adaptor*> &vgui_glut_adaptor::all()
 {
-  static vcl_vector<vgui_glut_adaptor*> *the_vector = 0;
+  static vcl_vector<vgui_glut_adaptor*> *the_vector = VXL_NULLPTR;
   if (!the_vector)
     the_vector = new vcl_vector<vgui_glut_adaptor*>;
   return *the_vector;
@@ -321,7 +321,7 @@ vgui_glut_adaptor *vgui_glut_adaptor::get_adaptor(int window_id)
     if (all[i]->id == window_id)
       return all[i];
   vgui_macro_warning << "window id " << window_id << " is not a glut context\n";
-  return 0; // not one of our glut contexts.
+  return VXL_NULLPTR; // not one of our glut contexts.
 }
 
 //--------------------------------------------------------------------------------
@@ -651,7 +651,7 @@ struct vgui_glut_adaptor_callback_data
 #include <vcl_list.h>
 typedef vcl_pair<void*, int> pair_Pv_i;
 typedef vcl_list<pair_Pv_i> list_Pv_i;
-static list_Pv_i *timer_posts = 0;
+static list_Pv_i *timer_posts = VXL_NULLPTR;
 
 //: timeout is in milliseconds
 void vgui_glut_adaptor::post_timer(float timeout, int name)
@@ -676,7 +676,7 @@ void vgui_glut_adaptor::post_timer(float timeout, int name)
 void vgui_glut_adaptor::timer_callback(int value)
 {
   // convert 'value' back to a pointer 'ff'.
-  vgui_glut_adaptor_callback_data *ff = 0;
+  vgui_glut_adaptor_callback_data *ff = VXL_NULLPTR;
   assert(timer_posts);
   for (list_Pv_i::iterator i=timer_posts->begin(); i!=timer_posts->end(); ++i)
     if (value == (*i).second) {

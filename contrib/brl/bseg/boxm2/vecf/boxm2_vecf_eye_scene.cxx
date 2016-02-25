@@ -158,7 +158,7 @@ void boxm2_vecf_eye_scene::reset_indices(){
 }
 
 boxm2_vecf_eye_scene::boxm2_vecf_eye_scene(vcl_string const& scene_file, bool initialize):
-  base_model_(new boxm2_scene(scene_file)), alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0)
+  base_model_(new boxm2_scene(scene_file)), alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR), sphere_(VXL_NULLPTR), sphere_dist_(VXL_NULLPTR), iris_(VXL_NULLPTR), pupil_(VXL_NULLPTR)
 {
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
@@ -494,8 +494,6 @@ void boxm2_vecf_eye_scene::apply_vector_field_to_target(vcl_vector<vgl_vector_3d
       //not a sphere cell
       continue;
     }
-    //source cell index after rotation
-    cell_indx = mit->second;
 
     //appearance and alpha data at source cell
     app = app_data_->data()[dindx];

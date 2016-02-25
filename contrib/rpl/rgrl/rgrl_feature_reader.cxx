@@ -79,7 +79,7 @@ read( vcl_istream& is )
       << "       " << "Tag " << tag_str
       << " cannot match with any existing features.\n"
       << "         Try to open istream in BINARY mode!" << vcl_endl;
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: Read a feature from input stream

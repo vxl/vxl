@@ -48,7 +48,7 @@ compute_matches( rgrl_feature_set const&       /*from_features*/,
       for ( TIter ti = fi.begin(); ti != fi.end(); ++ti ) {
         matching_to.push_back( ti.to_feature());
       }
-      sub_match_set->add_feature_and_matches( from_feature, 0, matching_to);
+      sub_match_set->add_feature_and_matches( from_feature, VXL_NULLPTR, matching_to);
     }
   }
   sub_match_set->remap_from_features( current_xform );

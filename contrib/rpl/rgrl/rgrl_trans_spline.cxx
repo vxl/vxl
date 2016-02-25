@@ -235,7 +235,7 @@ rgrl_trans_spline::
 inverse_transform( ) const
 {
   assert ( ! "rgrl_trans_spline::inverse_transform() is not defined" );
-  return 0;
+  return VXL_NULLPTR;
 }
 
 rgrl_transformation_sptr
@@ -243,7 +243,7 @@ rgrl_trans_spline::
 scale_by( double /*scale*/ ) const
 {
   assert ( ! "rgrl_trans_spline::scale_by() is not defined" );
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: make a clone copy

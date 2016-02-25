@@ -19,9 +19,9 @@ set(bvgl_pro_sources
 
 aux_source_directory(processes bvgl_pro_sources)
 
-add_library(bvgl_pro ${bvgl_pro_sources})
+vxl_add_library( LIBNAME bvgl_pro LIBSRCS ${bvgl_pro_sources})
 
-target_link_libraries(bvgl_pro bprb vil_pro bvgl bvgl_algo vil vil_io)
+target_link_libraries(bvgl_pro bprb vil_pro bvgl bvgl_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

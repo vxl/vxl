@@ -22,9 +22,9 @@ if(VGUI_FOUND)
       bstm_ocl_render_tableau.h  bstm_ocl_render_tableau.cxx
       bstm_ocl_multi_render_tableau.h  bstm_ocl_multi_render_tableau.cxx
      )
-  add_library(bstm_view ${bstm_view_sources} )
+  vxl_add_library( LIBNAME bstm_view LIBSRCS ${bstm_view_sources} )
 
-  target_link_libraries(bstm_view bocl boxm2_view bstm_ocl_pro vgui bprb vnl vnl_algo vbl_io vpgl vsph vgl vil vbl vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
+  target_link_libraries(bstm_view bocl boxm2_view bstm_ocl_pro ${VXL_LIB_PREFIX}vgui bprb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl vsph ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${GLEW_LIBRARY} ${OPENCL_LIBRARIES} )
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

@@ -97,11 +97,11 @@ vil3d_gipl_format::~vil3d_gipl_format()
 vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filename) const
 {
   vil_smart_ptr<vil_stream> is = new vil_stream_fstream(filename,"r");
-  if (!is->ok()) return 0;
+  if (!is->ok()) return VXL_NULLPTR;
 
   is->seek(252);
   unsigned magic_number = vil_stream_read_big_endian_uint_32(is.as_pointer());
-  if (magic_number!=GIPL_MAGIC1 && magic_number!=GIPL_MAGIC2) return 0;
+  if (magic_number!=GIPL_MAGIC1 && magic_number!=GIPL_MAGIC2) return VXL_NULLPTR;
   else return new vil3d_gipl_image(is.as_pointer());
 }
 
@@ -123,7 +123,7 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image(const char* filen
   {
     vcl_cerr << "vil3d_gipl_format::make_output_image() WARNING\n"
              << "  Unable to deal with file format : " << format << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 
   // vil_smart_ptr<vil_stream> os = new vil_stream_fstream(filename,"w");
@@ -131,10 +131,10 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image(const char* filen
   vil_stream* os = vil_open(filename, "w");
   if (!os || !os->ok()) {
     vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
-  if (!os->ok()) return 0;
+  if (!os->ok()) return VXL_NULLPTR;
 
   return new vil3d_gipl_image(os, ni, nj, nk, nplanes, format);
 }
@@ -143,7 +143,7 @@ vil3d_image_resource_sptr vil3d_gipl_format::make_output_image(const char* filen
 vil3d_gipl_image::vil3d_gipl_image(vil_stream *is): is_(is)
 {
   read_header(is);
-  os_ = 0;
+  os_ = VXL_NULLPTR;
 }
 
 vil3d_gipl_image::~vil3d_gipl_image()
@@ -233,7 +233,7 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
                                unsigned i0, unsigned ni, unsigned j0, unsigned nj,
                                unsigned k0, unsigned nk) const
 {
-  if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return 0;
+  if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return VXL_NULLPTR;
 
 #define macro(type) \
   vil3d_image_view< type > im = \
@@ -317,11 +317,11 @@ vil3d_image_view_base_sptr vil3d_gipl_image::get_copy_view(
     case VIL_PIXEL_FORMAT_BOOL:
     vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()"
             <<pixel_format() << " pixel type not yet implemented\n";
-    return 0;
+    return VXL_NULLPTR;
     default:
     vcl_cout<<"ERROR: vil3d_gipl_format::get_image_data()\n"
             <<"Can't deal with pixel type " << pixel_format() << vcl_endl;
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -641,14 +641,14 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
   }
 
 //const vil3d_image_view<bool>* bool_im=0;
-  const vil3d_image_view<vxl_sbyte>* sbyte_im=0;
-  const vil3d_image_view<vxl_byte>* byte_im=0;
-  const vil3d_image_view<vxl_uint_16>* uint_16_im=0;
-  const vil3d_image_view<vxl_int_16>* int_16_im=0;
-  const vil3d_image_view<vxl_uint_32>* uint_32_im=0;
-  const vil3d_image_view<vxl_int_32>* int_32_im=0;
-  const vil3d_image_view<float>* float_im=0;
-  const vil3d_image_view<double>* double_im=0;
+  const vil3d_image_view<vxl_sbyte>* sbyte_im=VXL_NULLPTR;
+  const vil3d_image_view<vxl_byte>* byte_im=VXL_NULLPTR;
+  const vil3d_image_view<vxl_uint_16>* uint_16_im=VXL_NULLPTR;
+  const vil3d_image_view<vxl_int_16>* int_16_im=VXL_NULLPTR;
+  const vil3d_image_view<vxl_uint_32>* uint_32_im=VXL_NULLPTR;
+  const vil3d_image_view<vxl_int_32>* int_32_im=VXL_NULLPTR;
+  const vil3d_image_view<float>* float_im=VXL_NULLPTR;
+  const vil3d_image_view<double>* double_im=VXL_NULLPTR;
 
   unsigned bytes_per_pixel=0;
 

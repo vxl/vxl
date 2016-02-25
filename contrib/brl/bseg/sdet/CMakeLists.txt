@@ -69,11 +69,9 @@ set(sdet_sources
 )
 aux_source_directory(Templates sdet_sources)
 
-add_library(sdet ${sdet_sources})
-install_targets(/lib sdet)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/sdet ${sdet_sources})
+vxl_add_library( LIBNAME sdet LIBSRCS ${sdet_sources})
 
-target_link_libraries(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh vil vil_algo vil1 vgl_algo vgl bvgl vnl_algo vnl vul vbl vbl_io bil_algo vsl vnl_io pdf1d)
+target_link_libraries(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl bvgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io bil_algo ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl_io pdf1d)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

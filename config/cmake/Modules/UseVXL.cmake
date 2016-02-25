@@ -19,8 +19,6 @@
 # The old names can be made available by placing this line before
 # including UseVXL.cmake:
 #
-#  set(VXL_PROVIDE_OLD_CACHE_NAMES 1)
-#
 # This UseVXL.cmake no longer adds options and testing features automatically
 # to projects including it unless this line appears before including it:
 #
@@ -31,7 +29,6 @@
 #
 #  find_package(VXL)
 #  if(VXL_FOUND)
-#    set(VXL_PROVIDE_OLD_CACHE_NAMES 1)
 #    set(VXL_PROVIDE_STANDARD_OPTIONS 1)
 #    include(${VXL_CMAKE_DIR}/UseVXL.cmake)
 #  else()
@@ -59,7 +56,6 @@ if(NOT VXL_CONFIG_CMAKE)
     find_package(VXL)
 
     # Enable compatibility mode.
-    set(VXL_PROVIDE_OLD_CACHE_NAMES 1)
     set(VXL_PROVIDE_STANDARD_OPTIONS 1)
 
   endif()
@@ -82,54 +78,6 @@ if(VXL_CONFIG_CMAKE)
 
   # Add link directories needed to use VXL.
   link_directories(${VXL_LIBRARY_DIR})
-
-  # Provide backwards compatibility if it is requested.
-  if(VXL_PROVIDE_OLD_CACHE_NAMES)
-    # Translate include directory variables back to old names.
-    set(VTHREEP_INCLUDE_DIR ${VXL_V3P_INCLUDE_DIR_deprecated})
-    set(VCL_INCLUDE_DIR ${VXL_VCL_INCLUDE_DIR})
-    set(VXLCORE_INCLUDE_DIR ${VXL_CORE_INCLUDE_DIR})
-    set(BRL_INCLUDE_DIR ${VXL_BRL_INCLUDE_DIR})
-    set(GEL_INCLUDE_DIR ${VXL_GEL_INCLUDE_DIR})
-    set(MUL_INCLUDE_DIR ${VXL_MUL_INCLUDE_DIR})
-    set(OUL_INCLUDE_DIR ${VXL_OUL_INCLUDE_DIR})
-    set(OXL_INCLUDE_DIR ${VXL_OXL_INCLUDE_DIR})
-    set(RPL_INCLUDE_DIR ${VXL_RPL_INCLUDE_DIR})
-    set(TBL_INCLUDE_DIR ${VXL_TBL_INCLUDE_DIR})
-    set(PYTHON_INCLUDE_PATH ${VXL_PYTHON_INCLUDE_PATH})
-    set(CONVERSIONS_INCLUDE_DIR ${VXL_CONVERSIONS_INCLUDE_DIR})
-
-    set(BUILD_VGUI ${VXL_VGUI_FOUND})
-    set(BUILD_BRL ${VXL_BRL_FOUND})
-    set(BUILD_BGUI3D ${VXL_BGUI3D_FOUND})
-    set(COIN3D_FOUND ${VXL_COIN3D_FOUND})
-    set(PYTHON_FOUND ${VXL_PYTHON_FOUND})
-    set(BUILD_OUL ${VXL_OUL_FOUND})
-    set(BUILD_CONTRIB ${VXL_CONTRIB_FOUND})
-    set(BUILD_TARGETJR ${VXL_TARGETJR_FOUND})
-    # These were excluded by LOAD_CACHE in old UseVXL.cmake.
-    # set(BUILD_CONVERSIONS ${VXL_CONVERSIONS_FOUND})
-    # set(BUILD_GEL ${VXL_GEL_FOUND})
-    # set(BUILD_MUL ${VXL_MUL_FOUND})
-    # set(BUILD_OXL ${VXL_OXL_FOUND})
-    # set(BUILD_RPL ${VXL_RPL_FOUND})
-    # set(BUILD_TBL ${VXL_TBL_FOUND})
-
-    set(VGUI_USE_GLUT ${VXL_VGUI_USE_GLUT_deprecated})
-    set(VGUI_USE_QT ${VXL_VGUI_USE_QT_deprecated})
-    set(VGUI_USE_MFC ${VXL_VGUI_USE_MFC_deprecated})
-    set(VGUI_USE_GTK ${VXL_VGUI_USE_GTK_deprecated})
-    set(VGUI_USE_GTK2 ${VXL_VGUI_USE_GTK2_deprecated})
-
-    set(VXL_FORCE_V3P_ZLIB ${VXL_FORCE_V3P_ZLIB_deprecated})
-    set(VXL_FORCE_V3P_JPEG ${VXL_FORCE_V3P_JPEG_deprecated})
-    set(VXL_FORCE_V3P_TIFF ${VXL_FORCE_V3P_TIFF_deprecated})
-    set(VXL_FORCE_V3P_PNG ${VXL_FORCE_V3P_PNG_deprecated})
-    set(VXL_FORCE_V3P_MPEG2 ${VXL_FORCE_V3P_MPEG2_deprecated})
-
-    set(MODULE_PATH ${VXL_CMAKE_DIR})
-    set(VXL_LIBRARY_PATH ${VXL_LIBRARY_DIR})
-  endif()
 
   if(VXL_CMAKE_DOXYGEN_DIR)
     # Allow use of VXL's cmake/doxygen framework

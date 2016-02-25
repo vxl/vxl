@@ -30,7 +30,7 @@
 void vul_get_timestamp(int &secs, int &msecs)
 {
   struct timeval  timestamp;
-  struct timezone* dummy = 0;
+  struct timezone* dummy = VXL_NULLPTR;
   gettimeofday(&timestamp, dummy);
 
   secs = timestamp.tv_sec;

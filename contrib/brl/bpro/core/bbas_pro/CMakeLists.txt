@@ -19,11 +19,9 @@ set(bbas_pro_sources
 aux_source_directory(Templates bbas_pro_sources)
 aux_source_directory(processes bbas_pro_sources)
 
-add_library(bbas_pro ${bbas_pro_sources})
-target_link_libraries(bbas_pro bprb brdb brad brad_io bsta_io bsta vpgl vpgl_algo vil_io vil vnl_io vnl_algo vnl vgl vbl_io vbl vsl imesh depth_map)
+vxl_add_library( LIBNAME bbas_pro LIBSRCS ${bbas_pro_sources})
+target_link_libraries(bbas_pro bprb brdb brad brad_io bsta_io bsta ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl imesh depth_map)
 
-install_targets(/lib bbas_pro)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bpro/core/bbas_pro ${bbas_pro_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

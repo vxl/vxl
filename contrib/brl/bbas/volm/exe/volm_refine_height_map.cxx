@@ -386,14 +386,10 @@ int main(int argc, char** argv)
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
     unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       vcl_cout << '.';
       vcl_cout.flush();
-      // obtain window pixels
-      unsigned start_nj, end_nj;
-      start_nj = w_idx_j*dy(); end_nj = (w_idx_j+1)*dy();
 
       // obtain the window height
       float grd_height = 0.0f;
@@ -439,7 +435,6 @@ int main(int argc, char** argv)
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
     unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       vcl_cout << '.';
@@ -477,7 +472,6 @@ int main(int argc, char** argv)
   for (unsigned w_idx_i = 0; w_idx_i < num_w_i; w_idx_i++)
   {
     unsigned start_ni, end_ni;
-    start_ni = w_idx_i*dx(); end_ni = (w_idx_i+1)*dx();
     for (unsigned w_idx_j = 0; w_idx_j < num_w_j; w_idx_j++)
     {
       vcl_cout << '.';

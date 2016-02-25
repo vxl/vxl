@@ -14,13 +14,11 @@ set(bvrml_pro_sources
 aux_source_directory(processes bvrml_pro_sources)
 aux_source_directory(Templates bvrml_pro_sources)
 
-add_library(bvrml_pro ${bvrml_pro_sources} )
+vxl_add_library( LIBNAME bvrml_pro LIBSRCS ${bvrml_pro_sources} )
 
-target_link_libraries(bvrml_pro boxm2_cpp bvrml vpgl_algo vpgl_io bprb rply )
+target_link_libraries(bvrml_pro boxm2_cpp bvrml ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io bprb rply )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-install_targets(/lib bvrml_pro)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bvrml/pro ${bvrml_pro_sources})

@@ -53,9 +53,9 @@ set(bgui3d_sources
     bgui3d_examiner_slider_tableau.cxx    bgui3d_examiner_slider_tableau.h    bgui3d_examiner_slider_tableau_sptr.h
    )
 
-add_library(bgui3d  ${bgui3d_sources})
+vxl_add_library( LIBNAME bgui3d LIBSRCS  ${bgui3d_sources})
 set(BGUI3D_FOUND "YES" CACHE INTERNAL "Was bgui3d successfully built?" )
-target_link_libraries(bgui3d ${COIN3D_LIBRARY} vgui vpgl vnl_algo vnl vgl_algo vgl vul)
+target_link_libraries(bgui3d ${COIN3D_LIBRARY} ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul)
 
 if(SIMVOLEON_FOUND)
   target_link_libraries(bgui3d ${SIMVOLEON_LIBRARY})

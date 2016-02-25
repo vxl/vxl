@@ -63,7 +63,7 @@ bool boxm_force_write_blocks_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
 
   // check the input validity
-  if (scene == 0) {
+  if (scene == VXL_NULLPTR) {
     vcl_cout << "boxm_force_write_blocks_process: scene is null, cannot run" << vcl_endl;
     return false;
   }

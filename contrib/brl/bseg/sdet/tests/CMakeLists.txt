@@ -14,7 +14,7 @@ add_executable(sdet_test_all
   test_segmentation.cxx
   test_sel.cxx
 )
-target_link_libraries(sdet_test_all sdet imesh_algo vtol vil1 vnl_algo vnl vgl vil testlib)
+target_link_libraries(sdet_test_all sdet imesh_algo vtol ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}testlib)
 
 add_test( NAME sdet_test_detector COMMAND $<TARGET_FILE:sdet_test_all> test_detector    ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)
 add_test( NAME sdet_test_region_proc COMMAND $<TARGET_FILE:sdet_test_all> test_region_proc ${CMAKE_CURRENT_SOURCE_DIR}/jar-closeup.tif)

@@ -27,8 +27,8 @@ set(bapl_sources
    )
 aux_source_directory(Templates bapl_sources)
 
-add_library(bapl  ${bapl_sources})
-target_link_libraries(bapl bpgl_algo vpgl_algo ipts vimt brip rrel vnl_algo vnl vil_algo vil_io vil vgl_algo vgl vbl_io vbl)
+vxl_add_library( LIBNAME bapl LIBSRCS  ${bapl_sources})
+target_link_libraries(bapl bpgl_algo ${VXL_LIB_PREFIX}vpgl_algo ipts vimt brip rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
 #if( BUILD_EXAMPLES )
   add_subdirectory(examples)

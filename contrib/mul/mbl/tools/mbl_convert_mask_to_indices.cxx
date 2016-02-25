@@ -52,8 +52,8 @@ int main2(int argc, char *argv[])
   );
 
   // Parse command line arguments
-  vul_arg<vcl_string> mask_file(0, "INPUT mask file");
-  vul_arg<vcl_string> inds_file(0, "OUTPUT indices file");
+  vul_arg<vcl_string> mask_file(VXL_NULLPTR, "INPUT mask file");
+  vul_arg<vcl_string> inds_file(VXL_NULLPTR, "OUTPUT indices file");
   vul_arg_parse(argc, argv);
 
   mbl_mask mask;

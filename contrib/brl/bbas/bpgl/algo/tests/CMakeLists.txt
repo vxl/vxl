@@ -12,7 +12,7 @@ add_executable( bpgl_algo_test_all
   test_project.cxx
 )
 
-target_link_libraries( bpgl_algo_test_all bpgl_algo vpgl_algo vgl_algo vgl vnl_algo vnl vil vul testlib )
+target_link_libraries( bpgl_algo_test_all bpgl_algo ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/07JAN27.RPB ${CMAKE_CURRENT_BINARY_DIR}/07JAN27.RPB )
 

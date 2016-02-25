@@ -23,6 +23,13 @@ bool boxm2_merge_block_function::init_data(boxm2_block* blk, vcl_vector<boxm2_da
 
     //Data length now is constant
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+      return false;
+    }
+
     data_len_ = (int) (alph->buffer_length()/alphaTypeSize);
     alpha_   = (float*)   alph->data_buffer();
     mog_     = (uchar8*)  mog->data_buffer();

@@ -32,14 +32,12 @@ if(ECW_FOUND)
   include_directories(${ECW_INCLUDE_DIR})
 endif()
 
-add_library(bwm_algo ${bwm_algo_sources})
+vxl_add_library( LIBNAME bwm_algo LIBSRCS ${bwm_algo_sources})
 
-target_link_libraries( bwm_algo sdet vtol vil vil_algo vgl vgl_algo vnl vnl_algo vsol vpgl vpgl_algo vpgl_file_formats bgui brip vdgl bsta vgui vul vcl shapelib brad)
+target_link_libraries( bwm_algo sdet vtol ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo vsol ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats bgui brip vdgl bsta ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl shapelib brad)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib bwm_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bwm/algo/ ${bwm_algo_sources})

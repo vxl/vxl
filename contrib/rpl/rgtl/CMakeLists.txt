@@ -83,11 +83,8 @@ set(rgtl_sources
   Templates/rgtl_sqt_space+3._-.cxx
   )
 
-add_library(rgtl ${rgtl_sources})
-target_link_libraries(rgtl vnl_algo vnl vcl)
-
-install_targets(/lib rgtl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/rpl/rgtl ${rgtl_sources})
+vxl_add_library(LIBNAME rgtl LIBSRCS ${rgtl_sources})
+target_link_libraries(rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl)
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

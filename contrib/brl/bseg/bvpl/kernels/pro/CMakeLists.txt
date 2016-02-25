@@ -16,9 +16,9 @@ if(EXPAT_FOUND)
   aux_source_directory(Templates bvpl_kernels_pro_sources)
   aux_source_directory(processes bvpl_kernels_pro_sources)
 
-  add_library(bvpl_kernels_pro ${bvpl_kernels_pro_sources})
+  vxl_add_library( LIBNAME bvpl_kernels_pro LIBSRCS ${bvpl_kernels_pro_sources})
 
-  target_link_libraries(bvpl_kernels_pro bvpl_kernels bvpl_kernels_io bvpl_octree bvpl_octree_io bsta bprb brdb bvpl vnl vul vbl_io)
+  target_link_libraries(bvpl_kernels_pro bvpl_kernels bvpl_kernels_io bvpl_octree bvpl_octree_io bsta bprb brdb bvpl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

@@ -53,7 +53,7 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
   float meanval = pro.get_input<float>(i++);
 
   // check the input validity
-  if (scene == 0) {
+  if (scene == VXL_NULLPTR) {
     vcl_cout << "boxm_replace_const_app_process: scene is null, cannot run" << vcl_endl;
     return false;
   }

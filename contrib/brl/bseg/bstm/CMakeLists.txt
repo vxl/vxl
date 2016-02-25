@@ -22,8 +22,8 @@ endif()
 
 aux_source_directory(Templates bstm_sources)
 
-add_library(bstm  ${bstm_sources})
-target_link_libraries(bstm boxm2 bstm_basic vgl vnl_algo vnl)
+vxl_add_library( LIBNAME bstm LIBSRCS  ${bstm_sources})
+target_link_libraries(bstm boxm2 bstm_basic ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
 if(EXPAT_FOUND)
   target_link_libraries(bstm expatpp)

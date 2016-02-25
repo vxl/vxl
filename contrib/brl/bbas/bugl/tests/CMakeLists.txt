@@ -7,7 +7,7 @@ add_executable( bugl_test_all
   test_bugl.cxx
   test_random_transform_set_2d.cxx
 )
-target_link_libraries( bugl_test_all bugl vgl_algo vgl vnl testlib )
+target_link_libraries( bugl_test_all bugl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME bugl_test_bugl COMMAND $<TARGET_FILE:bugl_test_all> test_bugl)
 add_test( NAME bugl_test_random_transform_2d COMMAND $<TARGET_FILE:bugl_test_all> test_random_transform_set_2d)

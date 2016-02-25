@@ -91,7 +91,7 @@ void vimt_load_to_byte(const vcl_string& im_path, vimt_image_2d_of<vxl_byte>& im
 {
   vil_image_resource_sptr ir = vil_load_image_resource(im_path.c_str());
 
-  if (ir.ptr()==0)
+  if (ir.ptr()==VXL_NULLPTR)
   {
     image.image().set_size(0,0);
     return;

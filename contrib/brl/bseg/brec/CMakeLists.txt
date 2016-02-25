@@ -40,9 +40,9 @@ set(brec_sources
 
 aux_source_directory(Templates brec_sources)
 
-add_library(brec ${brec_sources})
+vxl_add_library( LIBNAME brec LIBSRCS ${brec_sources})
 
-target_link_libraries(brec bvxm bbgm bsta_algo bgrl2 bsta bvgl bxml brip vil_algo vgl_algo vnl_algo vnl vgl vil vul vbl_io vbl)
+target_link_libraries(brec bvxm bbgm bsta_algo bgrl2 bsta bvgl bxml brip ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
 add_subdirectory(pro)
 

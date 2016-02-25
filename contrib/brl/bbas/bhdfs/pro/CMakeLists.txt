@@ -17,9 +17,9 @@ if(EXPAT_FOUND)
   aux_source_directory(Templates bhdfs_pro_sources)
   aux_source_directory(processes bhdfs_pro_sources)
 
-  add_library(bhdfs_pro ${bhdfs_pro_sources})
+  vxl_add_library( LIBNAME bhdfs_pro LIBSRCS ${bhdfs_pro_sources})
 
-  target_link_libraries(bhdfs_pro bhdfs bprb vil_algo vil_io vil vpgl boxm2)
+  target_link_libraries(bhdfs_pro bhdfs bprb ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpgl boxm2)
 
   if(BUILD_TESTING)
     add_subdirectory(tests)

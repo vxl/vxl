@@ -7,7 +7,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 
-static vgui_text_tableau_sptr text = 0;
+static vgui_text_tableau_sptr text = VXL_NULLPTR;
 
 //Create a popup text display
 static void draw_text()

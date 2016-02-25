@@ -31,7 +31,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   vnl_vector<double> from_center(2), to_center(2);
   if ( !normalize( matches, norm_from_pts, norm_to_pts, wgts, from_scale, to_scale,
                    from_center, to_center ) )
-    return 0;
+    return VXL_NULLPTR;
 
   vnl_matrix< double > A( 2*norm_from_pts.size(), 9, 0.0 );
   for ( unsigned int i=0; i<norm_from_pts.size(); ++i ) {
@@ -49,7 +49,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   if ( svd.rank() < 8 ) {
     DebugMacro(1, "rank ("<<svd.rank()<<")  no solution." );
-    return 0; // no solution
+    return VXL_NULLPTR; // no solution
   }
   else {
     vnl_vector< double > nparams = svd.nullvector();
@@ -61,7 +61,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     // check rank of H
     vnl_double_3x3 tmpH(normH);
     if ( vcl_abs(vnl_det(tmpH)) < 1e-8 )
-      return 0;
+      return VXL_NULLPTR;
 
     vnl_matrix<double> to_scale_matrix_inv(3,3,vnl_matrix_identity);
     vnl_matrix<double> from_scale_matrix(3,3,vnl_matrix_identity);

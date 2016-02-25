@@ -13,8 +13,8 @@ set(bsvg_pro_sources
 aux_source_directory(Templates bsvg_pro_sources)
 aux_source_directory(processes bsvg_pro_sources)
 
-add_library(bsvg_pro ${bsvg_pro_sources})
-target_link_libraries(bsvg_pro bbas_pro bsvg bprb brdb vbl_io vul)
+vxl_add_library( LIBNAME bsvg_pro LIBSRCS ${bsvg_pro_sources})
+target_link_libraries(bsvg_pro bbas_pro bsvg bprb brdb ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

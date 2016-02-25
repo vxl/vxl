@@ -134,13 +134,13 @@ gevd_step::DetectEdgels(const gevd_bufferxy& image,
   // -tpk @@ missing check if the requested buffer size is too small to contain the convolution operations
 
   // 1. Smooth image to regularize data, before taking derivatives
-  gevd_bufferxy* smooth = NULL;      // Gaussian smoothed image
+  gevd_bufferxy* smooth = VXL_NULLPTR;      // Gaussian smoothed image
   // use float to avoid overflow/truncation
   filterFactor = gevd_float_operators::Gaussian((gevd_bufferxy&)image, // well-condition before
                                                 smooth, smoothSigma); // 1st-difference
 
   // 2. Use 1st-difference to estimate local slope, filter is dG.
-  gevd_bufferxy *slope = NULL, *dirx=NULL, *diry=NULL;
+  gevd_bufferxy *slope = VXL_NULLPTR, *dirx=VXL_NULLPTR, *diry=VXL_NULLPTR;
   filterFactor *= gevd_float_operators::Gradient(*smooth, // directional 1st-difference
                                                  slope, dirx, diry); // mult factor returned
   delete smooth;
@@ -395,7 +395,7 @@ gevd_step::RecoverJunctions(const gevd_bufferxy& image,
   if (!length) return 0;        // no end points exist
 
   // 2. Extend from end points until they touch other contours
-  gevd_bufferxy* smooth = NULL;
+  gevd_bufferxy* smooth = VXL_NULLPTR;
   gevd_float_operators::Gaussian((gevd_bufferxy&)image, smooth, smoothSigma/2); // avoid oversmoothing
   const bool shortp = true;     // short contours
   const float threshold = NoiseThreshold(shortp);

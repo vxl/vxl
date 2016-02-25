@@ -3,7 +3,7 @@
 // \file
 
 //: global initialization for singleton instance_
-boxm2_cache_sptr boxm2_cache::instance_ = 0;
+boxm2_cache_sptr boxm2_cache::instance_ = VXL_NULLPTR;
 
 //: Only one instance should be created (by a derived class)
 boxm2_cache_sptr boxm2_cache::instance()

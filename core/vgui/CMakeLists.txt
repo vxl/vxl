@@ -63,7 +63,6 @@ if(OPENGL_FOUND)
 
 set(vgui_sources
   vgui_fwd.h
-  vgui_config.h.in
 
   # basic classes
   vgui.cxx                      vgui.h
@@ -501,41 +500,39 @@ endif()
 # that depend on these configuration parameters to be automatically
 # recompiled when the config changes.
 
-configure_file( ${vxl_SOURCE_DIR}/core/vgui/vgui_config.h.in
-                ${vxl_BINARY_DIR}/core/vgui/vgui_config.h @ONLY IMMEDIATE )
+vxl_configure_file( ${CMAKE_SOURCE_DIR}/core/vgui/vgui_config.h.in
+                ${CMAKE_BINARY_DIR}/core/vgui/vgui_config.h include/vxl/core/vgui)
 
 # Register each toolkit that was compiled in.
 set( vgui_sources ${vgui_sources}
   vgui_register_all.cxx
 )
 
-add_library(vgui ${vgui_sources})
-install_targets(/lib vgui)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vgui ${vgui_sources})
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgui LIBSRCS ${vgui_sources})
 set( VGUI_FOUND "YES" CACHE INTERNAL "Was vgui successfully built?" )
 
 # Dependencies on other vxl libraries
-target_link_libraries(vgui vnl vil1 vil vgl vpl vbl vul)
+target_link_libraries(${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul)
 
 #imagehlp.dll is needed for directory browsing (vgui_dir_dialog)
 if(MFC_FOUND)
-  target_link_libraries(vgui imagehlp)
+  target_link_libraries(${VXL_LIB_PREFIX}vgui imagehlp)
 endif()
 
 # Dependencies created by the toolkit implementations
 
 if(VGUI_USE_QT)
   if(QT4_INSTALLED AND VGUI_USE_QT4)
-    target_link_libraries(vgui ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY})
+    target_link_libraries(${VXL_LIB_PREFIX}vgui ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY})
   else()
-    target_link_libraries(vgui ${QT_LIBRARIES})
+    target_link_libraries(${VXL_LIB_PREFIX}vgui ${QT_LIBRARIES})
   endif()
 endif()
 if(VGUI_USE_GTK)
-  target_link_libraries(vgui ${GTK_LIBRARIES})
+  target_link_libraries(${VXL_LIB_PREFIX}vgui ${GTK_LIBRARIES})
 endif()
 if(VGUI_USE_GTK2)
-  target_link_libraries(vgui ${GTK2_LIBRARIES})
+  target_link_libraries(${VXL_LIB_PREFIX}vgui ${GTK2_LIBRARIES})
 endif()
 if(VGUI_USE_WX)
   if(wxWidgets_LINK_DIRECTORIES)
@@ -543,7 +540,7 @@ if(VGUI_USE_WX)
   endif()
 
   if(wxWidgets_LIBRARIES)
-    target_link_libraries(vgui ${wxWidgets_LIBRARIES})
+    target_link_libraries(${VXL_LIB_PREFIX}vgui ${wxWidgets_LIBRARIES})
   endif()
 endif()
 
@@ -552,13 +549,13 @@ endif()
 # the toolkits depend on OpenGL.
 
 if(VGUI_USE_GLUT)
-  target_link_libraries(vgui ${GLUT_LIBRARIES})
+  target_link_libraries(${VXL_LIB_PREFIX}vgui ${GLUT_LIBRARIES})
 endif()
 
-target_link_libraries(vgui ${OPENGL_LIBRARIES})
+target_link_libraries(${VXL_LIB_PREFIX}vgui ${OPENGL_LIBRARIES})
 
 if(X11_FOUND)
-  target_link_libraries(vgui ${X11_LIBRARIES})
+  target_link_libraries(${VXL_LIB_PREFIX}vgui ${X11_LIBRARIES})
 endif()
 
 if(BUILD_EXAMPLES)

@@ -16,7 +16,7 @@
 
 //--------------------------------------------------------------------------------
 
-osl_edgel_chain::osl_edgel_chain() : n(0), x(0), y(0), grad(0), theta(0) { }
+osl_edgel_chain::osl_edgel_chain() : n(0), x(VXL_NULLPTR), y(VXL_NULLPTR), grad(VXL_NULLPTR), theta(VXL_NULLPTR) { }
 
 osl_edgel_chain::osl_edgel_chain(unsigned int n_)
   : n(n_)
@@ -55,10 +55,10 @@ osl_edgel_chain& osl_edgel_chain::operator=(osl_edgel_chain const &that)
 osl_edgel_chain::~osl_edgel_chain()
 {
   n = 0;
-  fsm_delete_array x; x = 0;
-  fsm_delete_array y; y = 0;
-  fsm_delete_array grad; grad = 0;
-  fsm_delete_array theta; theta = 0;
+  fsm_delete_array x; x = VXL_NULLPTR;
+  fsm_delete_array y; y = VXL_NULLPTR;
+  fsm_delete_array grad; grad = VXL_NULLPTR;
+  fsm_delete_array theta; theta = VXL_NULLPTR;
 }
 
 float  osl_edgel_chain::GetGrad(unsigned int i) const { return grad[i]; }

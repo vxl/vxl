@@ -15,7 +15,7 @@
 vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_string const &tn, bool direction_down)
 {
   if (!start)
-    return 0;
+    return VXL_NULLPTR;
 
   if (start->type_name() == tn)
     return start;
@@ -31,7 +31,7 @@ vgui_tableau_sptr vgui_find_by_type_name(vgui_tableau_sptr const& start, vcl_str
     if (t)
       return t; // found one.
   }
-  return 0; // not found.
+  return VXL_NULLPTR; // not found.
 }
 
 
@@ -39,7 +39,7 @@ vgui_tableau_sptr
 vgui_find_by_name(vgui_tableau_sptr const& start, vcl_string const &name, bool direction_down)
 {
   if (!start)
-    return 0;
+    return VXL_NULLPTR;
 
   if (start->name() == name)
     return start;
@@ -55,5 +55,5 @@ vgui_find_by_name(vgui_tableau_sptr const& start, vcl_string const &name, bool d
     if (t)
       return t; // found one.
   }
-  return 0; // not found.
+  return VXL_NULLPTR; // not found.
 }

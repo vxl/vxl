@@ -82,11 +82,9 @@ boxm2_vecf_orbit_scene
   vcl_vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
   blk_ = boxm2_cache::instance()->get_block(base_model_, *iter_blk);
   sigma_ = static_cast<float>(blk_->sub_block_dim().x());
-
   boxm2_data_base *  alpha_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   alpha_base->enable_write();
   alpha_data_=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
-
   boxm2_data_base *  app_base  = boxm2_cache::instance()->get_data_base(base_model_,*iter_blk,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   app_base->enable_write();
   app_data_=new boxm2_data<BOXM2_MOG3_GREY>(app_base->data_buffer(),app_base->buffer_length(),app_base->block_id());
@@ -236,18 +234,18 @@ boxm2_vecf_orbit_scene
                          bool is_right) :
   boxm2_vecf_articulated_scene(scene_file),
   is_right_(is_right),
-  alpha_data_(0),
-  app_data_(0),
-  nobs_data_(0),
-  sphere_(0),
-  iris_(0),
-  pupil_(0)
+  alpha_data_(VXL_NULLPTR),
+  app_data_(VXL_NULLPTR),
+  nobs_data_(VXL_NULLPTR),
+  sphere_(VXL_NULLPTR),
+  iris_(VXL_NULLPTR),
+  pupil_(VXL_NULLPTR)
 {
 
   this->extrinsic_only_ = false;
   this->init_eyelids();
   is_single_instance_ = is_single_instance;
-  target_blk_ = 0;
+  target_blk_ = VXL_NULLPTR;
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
@@ -265,13 +263,13 @@ boxm2_vecf_orbit_scene
                          bool is_right ) :
   boxm2_vecf_articulated_scene(scene_file),
   is_right_(is_right),
-  alpha_data_(0),
-  app_data_(0),
-  nobs_data_(0),
-  sphere_(0),
-  iris_(0),
-  pupil_(0),
-  target_blk_(0)
+  alpha_data_(VXL_NULLPTR),
+  app_data_(VXL_NULLPTR),
+  nobs_data_(VXL_NULLPTR),
+  sphere_(VXL_NULLPTR),
+  iris_(VXL_NULLPTR),
+  pupil_(VXL_NULLPTR),
+  target_blk_(VXL_NULLPTR)
 {
   vcl_ifstream params_file(params_file_name.c_str());
 

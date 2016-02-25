@@ -436,6 +436,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 aux2->read_to_buffer(queue);
                 aux3->read_to_buffer(queue);
                 status = clFinish(queue);
+                check_val(status, MEM_FAILURE, "UPDATE EXECUTE FAILED: " + error_to_string(status));
             }
         } // UPDATE POST DEPTH kernel
         else if (i==CONVERT_AUX_INT_FLOAT)

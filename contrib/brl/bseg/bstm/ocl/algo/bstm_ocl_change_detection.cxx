@@ -86,7 +86,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
       vcl_cout<<"Change detection using mask."<<vcl_endl;
       use_mask = true;
     }
-    vil_image_view<unsigned char >* mask_map = 0;
+    vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
@@ -466,7 +466,7 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
       vcl_cout<<"Change detection using mask."<<vcl_endl;
       use_mask = true;
     }
-    vil_image_view<unsigned char >* mask_map = 0;
+    vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
@@ -583,6 +583,13 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
 
         //figure out sizes
         int alphaTypeSize = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            return false;
+        }
+
         int data_buffer_length = alpha->num_bytes() / alphaTypeSize;
         int num_time_trees = info_buffer_t->tree_buffer_length;
 
@@ -647,6 +654,13 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
 
         //figure out sizes
         int alphaTypeSize = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
+        // check for invalid parameters
+        if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+        {
+            vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+            return false;
+        }
+
         int data_buffer_length = alpha->num_bytes() / alphaTypeSize;
         int num_time_trees = info_buffer_t->tree_buffer_length;
 
@@ -858,7 +872,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
       vcl_cout<<"Change detection using mask."<<vcl_endl;
       use_mask = true;
     }
-    vil_image_view<unsigned char >* mask_map = 0;
+    vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {

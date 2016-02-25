@@ -18,7 +18,7 @@ vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
                                                vil1_memory_image_format
                                                const& format)
 {
-  init((void*)0, planes, w, h, format.components, format.bits_per_component,
+  init((void*)VXL_NULLPTR, planes, w, h, format.components, format.bits_per_component,
        format.component_format);
 }
 
@@ -27,32 +27,32 @@ vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
                                                int bits_per_component,
                                                vil1_component_format component_format)
 {
-  init((void*)0, planes, w, h, components, bits_per_component, component_format);
+  init((void*)VXL_NULLPTR, planes, w, h, components, bits_per_component, component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int planes, int w, int h,
                                                vil1_pixel_format_t pixel_format)
 {
-  init((void*)0, planes, w, h, pixel_format);
+  init((void*)VXL_NULLPTR, planes, w, h, pixel_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int w, int h, int components,
                                                int bits_per_component,
                                                vil1_component_format component_format)
 {
-  init((void*)0, 1, w, h, components, bits_per_component, component_format);
+  init((void*)VXL_NULLPTR, 1, w, h, components, bits_per_component, component_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(int w, int h,
                                                vil1_pixel_format_t pixel_format)
 {
-  init((void*)0, 1, w, h, pixel_format);
+  init((void*)VXL_NULLPTR, 1, w, h, pixel_format);
 }
 
 vil1_memory_image_impl::vil1_memory_image_impl(vil1_memory_image_impl const& i)
   : vil1_image_impl()
 {
-  init((void*)0, i.planes_, i.width_, i.height_, i.components_,
+  init((void*)VXL_NULLPTR, i.planes_, i.width_, i.height_, i.components_,
        i.bits_per_component_, i.component_format_);
 }
 
@@ -61,7 +61,7 @@ void vil1_memory_image_impl::init(void *buf,
                                   int components, int bits_per_component,
                                   vil1_component_format component_format)
 {
-  is_foreign_buf_ = (buf != 0); // true if buf is non-nil
+  is_foreign_buf_ = (buf != VXL_NULLPTR); // true if buf is non-nil
   planes_ = planes;
   width_ = w;
   height_ = h;
@@ -92,8 +92,8 @@ void vil1_memory_image_impl::init(void *buf,
   }
   else {
     // empty image
-    buf_ = 0;
-    rows_ = 0;
+    buf_ = VXL_NULLPTR;
+    rows_ = VXL_NULLPTR;
   }
 }
 
@@ -147,7 +147,7 @@ void vil1_memory_image_impl::resize(int planes, int width, int height)
   }
   if (!is_foreign_buf_)
     delete [] buf_;
-  init((void*)0, planes, width, height, components_,
+  init((void*)VXL_NULLPTR, planes, width, height, components_,
        bits_per_component_, component_format_);
 }
 

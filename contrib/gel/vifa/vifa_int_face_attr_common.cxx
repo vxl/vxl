@@ -95,7 +95,7 @@ get_contrast_across_edge(vtol_edge_sptr  e, double dflt_cont)
 vifa_coll_lines_sptr vifa_int_face_attr_common::
 get_line_along_edge(vtol_edge* edge)
 {
-  vifa_coll_lines_sptr  ret(0);
+  vifa_coll_lines_sptr  ret(VXL_NULLPTR);
   vtol_vertex_sptr    ev1 = edge->v1();
   vtol_vertex_sptr    ev2 = edge->v2();
 

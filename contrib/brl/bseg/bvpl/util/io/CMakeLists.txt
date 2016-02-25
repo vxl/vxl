@@ -6,8 +6,8 @@ set(bvpl_util_io_sources
    )
 aux_source_directory(Templates bvpl_util_io_sources)
 
-add_library(bvpl_util_io ${bvpl_util_io_sources})
-target_link_libraries(bvpl_util_io bvpl_util vbl_io vbl vsl)
+vxl_add_library( LIBNAME bvpl_util_io LIBSRCS ${bvpl_util_io_sources})
+target_link_libraries(bvpl_util_io bvpl_util ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

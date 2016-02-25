@@ -11,10 +11,8 @@ set(vidl_gui_sources
     vidl_capture_tableau.cxx    vidl_capture_tableau.h     vidl_capture_tableau_sptr.h
    )
 
-add_library(vidl_gui ${vidl_gui_sources})
-install_targets(/lib vidl_gui)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vidl/gui ${vidl_gui_sources})
-target_link_libraries( vidl_gui vidl vgui vil )
+vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vidl_gui LIBSRCS ${vidl_gui_sources})
+target_link_libraries( ${VXL_LIB_PREFIX}vidl_gui ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vil )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

@@ -10,8 +10,8 @@ set(bvpl_util_sources
    )
 aux_source_directory(Templates bvpl_util_sources)
 
-add_library(bvpl_util ${bvpl_util_sources})
-target_link_libraries(bvpl_util bvpl brdb vil_algo vgl_io vgl vnl_io vnl vbl)
+vxl_add_library( LIBNAME bvpl_util LIBSRCS ${bvpl_util_sources})
+target_link_libraries(bvpl_util bvpl brdb ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 add_subdirectory(io)
 

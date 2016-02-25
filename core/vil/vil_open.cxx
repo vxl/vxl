@@ -20,7 +20,7 @@ vil_stream *vil_open(char const* what, char const* how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)
-    return 0;
+    return VXL_NULLPTR;
 
   // try to open as file first.
 #ifdef VIL_USE_FSTREAM64
@@ -49,7 +49,7 @@ vil_stream *vil_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   if (!is) {
@@ -71,7 +71,7 @@ vil_stream *vil_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   if (!is) {
@@ -89,7 +89,7 @@ vil_stream *vil_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = 0;
+    is = VXL_NULLPTR;
   }
 
   return is;

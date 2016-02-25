@@ -14,6 +14,7 @@
 #include <vil/vil_load.h>
 #include <vnl/vnl_math.h>
 #include <vil/vil_crop.h>
+#include <vimt/vimt_load.h>
 
 // Note: Currently doesn't quite deal with images correctly - need a
 // half pixel offset so (0,0) is the centre of the pixel.
@@ -81,18 +82,21 @@ int main( int argc, char* argv[] )
   points.get_points(pts);
 
   //================ Attempt to load image ========
-  vil_image_view<vxl_byte> image;
+  vimt_image_2d_of<vxl_byte> image;
+
   if (image_path()!="")
   {
-    image = vil_load(image_path().c_str());
-    if (image.size()==0)
+
+    vimt_load_to_byte(image_path().c_str(), image, 1000.0f);
+    if (image.image().size()==0)
     {
       vcl_cout<<"Failed to load image from "<<image_path()<<vcl_endl;
       return 1;
     }
-    vcl_cout<<"Image is "<<image<<vcl_endl;
 
-    if (border_prop()>-0.5) crop_image_to_points(points,image,border_prop());
+    vcl_cout<<"Image is "<<image.image()<<vcl_endl;
+
+    if (border_prop()>-0.5) crop_image_to_points(points,image.image(),border_prop());
   }
 
 
@@ -100,12 +104,12 @@ int main( int argc, char* argv[] )
   {
     // Scale image and points
     vil_image_view<vxl_byte> image2;
-    image2.deep_copy(image);
+    image2.deep_copy(image.image());
     if (scale()<0.51)
-      vil_gauss_filter_2d(image,image2,1.0,3);
-    vil_resample_bilin(image2,image,
-                       int(0.5+scale()*image.ni()),
-                       int(0.5+scale()*image.nj()));
+      vil_gauss_filter_2d(image.image(),image2,1.0,3);
+    vil_resample_bilin(image2,image.image(),
+                       int(0.5+scale()*image.image().ni()),
+                       int(0.5+scale()*image.image().nj()));
 
     points.scale_by(scale());
   }
@@ -116,9 +120,9 @@ int main( int argc, char* argv[] )
   bbox.scale_about_centroid(1.05);  // Add a border
 
   // If an image is supplied, use that to define bounding box
-  if (image.size()>0)
+  if (image.image().size()>0)
   {
-    bbox = vgl_box_2d<double>(0,image.ni(), 0,image.nj());
+    bbox = vgl_box_2d<double>(0,image.image().ni(), 0,image.image().nj());
   }
 
   vgl_point_2d<double> blo=bbox.min_point();
@@ -128,8 +132,8 @@ int main( int argc, char* argv[] )
 
   mbl_eps_writer writer(out_path().c_str(),bbox.width(),bbox.height());
 
-  if (image.size()>0)
-    writer.draw_image(image,0,0, 1,1);
+  if (image.image().size()>0)
+    writer.draw_image(image.image(),0,0, 1,1);
 
   if (pt_colour()!="none")
   {

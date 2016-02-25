@@ -32,11 +32,9 @@ if(HAS_VGUI)
      segv_misc_manager.cxx segv_misc_manager.h
     )
 
- add_library(segv ${segv_sources})
- install_targets(/lib segv)
- INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bseg/segv ${segv_sources})
+ vxl_add_library( LIBNAME segv LIBSRCS ${segv_sources})
 
- target_link_libraries(segv bgui vgui sdet bsol bvgl brip vpgl_file_formats vpgl vtol vdgl vsol vil vil_algo vil1 vnl vgl vul vbl)
+ target_link_libraries(segv bgui ${VXL_LIB_PREFIX}vgui sdet bsol bvgl brip ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vpgl vtol vdgl vsol ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
  if(BUILD_TESTING)
   add_subdirectory(tests)

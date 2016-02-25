@@ -79,7 +79,6 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
   vcl_string out_grid_path = pro.get_input<vcl_string>(i++);
 
   //check input's validity
-  i=0;
   if (!input_grid.ptr()) {
     vcl_cout << pro.name() << " :-- Grid is not valid!\n";
     return false;

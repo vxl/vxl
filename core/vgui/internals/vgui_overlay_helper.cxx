@@ -41,7 +41,7 @@ vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor *a)
 }
 
 vgui_overlay_helper::~vgui_overlay_helper() {
-  adaptor = 0;
+  adaptor = VXL_NULLPTR;
 }
 
 //--------------------------------------------------------------------------------

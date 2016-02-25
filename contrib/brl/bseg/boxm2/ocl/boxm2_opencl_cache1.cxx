@@ -6,7 +6,7 @@
 boxm2_opencl_cache1::boxm2_opencl_cache1(boxm2_scene_sptr scene,
                                        bocl_device_sptr device,
                                        unsigned int maxBlocks)
-: scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(0), device_(device)
+: scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(VXL_NULLPTR), device_(device)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
   maxBytesInCache_ = (unsigned long) (device->info().total_global_memory_ * 0.7);
@@ -54,7 +54,7 @@ bool boxm2_opencl_cache1::clear_cache()
     boxm2_scene_info* buff = (boxm2_scene_info*) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
-    block_info_=0;
+    block_info_=VXL_NULLPTR;
   }
 
   // delete blocks in cache
@@ -202,7 +202,7 @@ bocl_mem* boxm2_opencl_cache1::get_block(boxm2_block_id id)
       boxm2_block_id lru_id;
       if (!this->lru_remove_last(lru_id)) {
          vcl_cerr << "ERROR: boxm2_opencl_cache1::get_block(): lru is empty" << vcl_endl;
-         return (bocl_mem*)0;
+         return (bocl_mem*)VXL_NULLPTR;
       }
 #ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
@@ -298,7 +298,7 @@ bocl_mem* boxm2_opencl_cache1::get_data(boxm2_block_id id, vcl_string type, vcl_
       boxm2_block_id lru_id;
       if(!this->lru_remove_last(lru_id)) {
          vcl_cerr << "ERROR: boxm2_opencl_cache1::get_data() : lru is empty" << vcl_endl;
-         return (bocl_mem*)0;
+         return (bocl_mem*)VXL_NULLPTR;
       }
 #ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
@@ -315,7 +315,7 @@ bocl_mem* boxm2_opencl_cache1::get_data(boxm2_block_id id, vcl_string type, vcl_
   // if num bytes is specified and the data doesn't match, create empty buffer
   if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
   {
-    bocl_mem* data = new bocl_mem(*context_, NULL, num_bytes, type);
+    bocl_mem* data = new bocl_mem(*context_, VXL_NULLPTR, num_bytes, type);
     data->create_buffer(CL_MEM_READ_WRITE);
     this->deep_replace_data(id,type,data,read_only);
     //data->zero_gpu_buffer(*queue_);
@@ -366,7 +366,7 @@ bocl_mem* boxm2_opencl_cache1::get_data_new(boxm2_block_id id, vcl_string type, 
       boxm2_block_id lru_id;
       if (!this->lru_remove_last(lru_id)) {
          vcl_cerr << "ERROR: boxm2_opencl_cache1::get_data_new() : lru is empty " << vcl_endl;
-         return (bocl_mem*)0;
+         return (bocl_mem*)VXL_NULLPTR;
       }
 #ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
@@ -405,7 +405,7 @@ bocl_mem* boxm2_opencl_cache1::alloc_mem(vcl_size_t num_bytes, void* cpu_buff, v
       boxm2_block_id lru_id;
       if (!this->lru_remove_last(lru_id)) {
          vcl_cerr << "ERROR: lru empty. unable to alloc buffer of requested size. " << vcl_endl;
-         return (bocl_mem*)0;
+         return (bocl_mem*)VXL_NULLPTR;
       }
 #ifdef DEBUG
       vcl_cout<<lru_id<<" ... ";
