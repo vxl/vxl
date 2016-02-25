@@ -23,6 +23,10 @@ Parameter file format:
 //: Aligner for shape model
 aligner: msm_similarity_aligner
 
+//: Define how to align mean shape in reference frame
+// Options: { first_shape, mean_pose }
+ref_pose_source: first_shape
+
 //: Object to apply limits to parameters
 param_limiter: msm_ellipsoid_limiter { accept_prop: 0.98 }
 
@@ -59,6 +63,8 @@ struct tool_params
 {
   //: Aligner for shape model
   vcl_auto_ptr<msm_aligner> aligner;
+
+  msm_aligner::ref_pose_source ref_pose_source;
 
   //: Object to apply limits to parameters
   vcl_auto_ptr<msm_param_limiter> limiter;
@@ -116,6 +122,17 @@ void tool_params::read_from_file(const vcl_string& path)
     aligner = msm_aligner::create_from_stream(ss);
   }
 
+  vcl_string rps_str = props.get_optional_property("ref_pose_source","first_shape");
+  if (rps_str=="first_shape") ref_pose_source=msm_aligner::first_shape;
+  else
+  if (rps_str=="mean_pose") ref_pose_source=msm_aligner::mean_pose;
+  else
+  {
+    mbl_exception_parse_error x("Unknown ref_pose_source: "+rps_str);
+    mbl_exception_error(x);
+  }
+
+
   {
     vcl_string limiter_str
        = props.get_optional_property("param_limiter",
@@ -159,6 +176,7 @@ int main(int argc, char** argv)
   msm_shape_model shape_model;
 
   builder.set_aligner(*params.aligner);
+  builder.set_ref_pose_source(params.ref_pose_source);
   builder.set_param_limiter(*params.limiter);
   builder.set_mode_choice(0,params.max_modes,params.var_prop);
   builder.build_from_files(params.points_dir,
