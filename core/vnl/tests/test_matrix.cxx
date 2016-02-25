@@ -6,6 +6,10 @@
 #include <testlib/testlib_test.h>
 #include <vcl_cmath.h> // sqrt()
 
+// This function is used in testing later.
+template< typename T >
+T sum_vector(const vnl_vector<T> &v) { return v.sum(); }
+
 static
 void test_int()
 {
@@ -223,6 +227,17 @@ void test_int()
     TEST("zero-size after clear()", m2.rows(), 0);
     TEST("zero-size after clear()", m2.columns(), 0);
   }
+
+  {
+  vnl_matrix<int> m(5,10,1);
+  vnl_vector<int> vr = m.apply_rowwise(sum_vector);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
+  vnl_vector<int> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
+  }
+
 }
 
 
@@ -344,6 +359,17 @@ void test_float()
   v.clear();
   TEST("zero-size after clear()", v.rows(), 0);
   TEST("zero-size after clear()", v.columns(), 0);
+
+  {
+  vnl_matrix<float> m(5,10,1);
+  vnl_vector<float> vr = m.apply_rowwise(sum_vector);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
+  vnl_vector<float> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
+  }
+
 }
 
 void test_double()
@@ -444,6 +470,17 @@ void test_double()
   d9.fill(-15.0);
   vnl_copy(d10, d9);
   TEST("vnl_copy(T, S)", d9==d2, true);
+
+  {
+  vnl_matrix<double> m(5,10,1);
+  vnl_vector<double> vr = m.apply_rowwise(sum_vector);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
+  vnl_vector<double> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
+  }
+
 }
 
 #ifdef LEAK

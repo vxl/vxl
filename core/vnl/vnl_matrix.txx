@@ -638,6 +638,31 @@ vnl_matrix<T> vnl_matrix<T>::apply(T (*f)(T)) const
   return ret;
 }
 
+//: Make a vector by applying a function across rows.
+template <class T>
+vnl_vector<T>
+vnl_matrix<T>
+::apply_rowwise(T (*f)(vnl_vector<T> const&)) const
+{
+  vnl_vector<T> v(this->num_rows);
+  for (unsigned int i = 0; i < this->num_rows; ++i)
+    v.put(i,f(this->get_row(i)));
+  return v;
+}
+
+//: Make a vector by applying a function across columns.
+template <class T>
+vnl_vector<T>
+vnl_matrix<T>
+::apply_columnwise(T (*f)(vnl_vector<T> const&)) const
+{
+  vnl_vector<T> v(this->num_cols);
+  for (unsigned int i = 0; i < this->num_cols; ++i)
+    v.put(i,f(this->get_column(i)));
+  return v;
+}
+
+
 ////--------------------------- Additions------------------------------------
 
 //: Returns new matrix with rows and columns transposed.
