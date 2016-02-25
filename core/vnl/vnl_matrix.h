@@ -343,6 +343,12 @@ class vnl_matrix
   //: Make a new matrix by applying function to each element.
   vnl_matrix<T> apply(T (*f)(T const&)) const;
 
+  //: Make a vector by applying a function across rows.
+  vnl_vector<T> apply_rowwise(T (*f)(vnl_vector<T> const&)) const;
+
+  //: Make a vector by applying a function across columns.
+  vnl_vector<T> apply_columnwise(T (*f)(vnl_vector<T> const&)) const;
+
   //: Return transpose
   vnl_matrix<T> transpose() const;
 
