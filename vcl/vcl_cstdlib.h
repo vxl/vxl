@@ -12,11 +12,6 @@
 // NB: size_t is declared in <cstddef>, not <cstdlib>
 
 #include "vcl_compiler.h"
-
-#if defined(VCL_VC_9) // need to handle abs(__int64) correctly
-# include "win32-vc9/vcl_cstdlib.h"
-#else
-# include "iso/vcl_cstdlib.h"
-#endif
+#include "iso/vcl_cstdlib.h"
 
 #endif // vcl_cstdlib_h_

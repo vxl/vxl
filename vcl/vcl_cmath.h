@@ -38,12 +38,7 @@
 // \endcode
 
 #include "vcl_compiler.h"
-
-#if defined(VCL_VC_9)     // C++ .NET earlier than 2003 is not iso compliant
-# include "win32-vc9/vcl_cmath.h"
-#else
-# include "iso/vcl_cmath.h"
-#endif
+#include "iso/vcl_cmath.h"
 
 
 #if !VCL_COMPLEX_POW_WORKS && !defined VCL_CMATH_POW_DECLARED

@@ -6,12 +6,7 @@
 
 #include "vcl_compiler.h"
 
-#if defined(VCL_VC_9)
-# include "win32-vc9/vcl_valarray.h"
-
-#else
-# include "iso/vcl_valarray.h"
-#endif
+#include "iso/vcl_valarray.h"
 
 #if !VCL_COMPLEX_POW_WORKS
 // deal with corrections to pow(complex...)
