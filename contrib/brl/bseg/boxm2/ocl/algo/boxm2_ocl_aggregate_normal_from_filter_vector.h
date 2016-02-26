@@ -18,7 +18,7 @@ class boxm2_ocl_aggregate_normal_from_filter_vector
     typedef boxm2_data_traits<BOXM2_FLOAT> RESPONSE_DATATYPE;
 
     boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache,
-                                                  bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector);
+                                                  bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector,bool optimize_transfers = false);
 
     bool run(bool clear_cache=true);
     bool reset();
@@ -32,7 +32,7 @@ class boxm2_ocl_aggregate_normal_from_filter_vector
     boxm2_scene_sptr scene_;
     boxm2_opencl_cache_sptr ocl_cache_;
     bocl_device_sptr device_;
-
+    bool optimize_transfers_;
     bvpl_kernel_vector_sptr filter_vector_;
 
 };

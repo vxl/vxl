@@ -45,11 +45,13 @@ boxm2_ocl_update_vis_score
 ::boxm2_ocl_update_vis_score(boxm2_scene_sptr scene,
                              bocl_device_sptr device,
                              boxm2_opencl_cache_sptr ocl_cache,
-                             bool use_surface_normals) :
+                             bool use_surface_normals,
+                             bool optimize_transfers) :
   use_surface_normals_(use_surface_normals),
   scene_(scene),
   device_(device),
-  ocl_cache_(ocl_cache)
+  ocl_cache_(ocl_cache),
+  optimize_transfers_(optimize_transfers)
 {
   if (!compile_kernels()) {
     throw std::runtime_error("boxm2_ocl_update_vis_score: Failed to compile opencl kernels");
@@ -185,12 +187,14 @@ boxm2_ocl_update_vis_score
       //clear render kernel args so it can reset em on next execution
       seg_len_kernel_.clear_args();
       //read info back to host memory
-      blk->read_to_buffer(queue);
-      aux0->read_to_buffer(queue);
-      aux1->read_to_buffer(queue);
-      vis_image->read_to_buffer(queue);
-      cl_output->read_to_buffer(queue);
-      clFinish(queue);
+      if(!optimize_transfers_){
+        blk->read_to_buffer(queue);
+        aux0->read_to_buffer(queue);
+        aux1->read_to_buffer(queue);
+        vis_image->read_to_buffer(queue);
+        cl_output->read_to_buffer(queue);
+        clFinish(queue);
+      }
   }
 
   ocl_cache_->unref_mem(ray_o_buff.ptr());
@@ -260,13 +264,15 @@ boxm2_ocl_update_vis_score
       update_kernel_.clear_args();
       //vcl_cout << "1" << vcl_endl;
       //read info back to host memory
-      blk->read_to_buffer(queue);
-      //vcl_cout << "2" << vcl_endl;
-      //vcl_cout << "vis_score cpu_buffer= " << vis_score->cpu_buffer() << vcl_endl;
-      //vcl_cout << "vis_score nbytes = " << vis_score->num_bytes() << vcl_endl;
-      vis_score->read_to_buffer(queue);
-      //vcl_cout << "3" << vcl_endl;
-      clFinish(queue);
+      if( ! optimize_transfers_){
+        blk->read_to_buffer(queue);
+        //vcl_cout << "2" << vcl_endl;
+        //vcl_cout << "vis_score cpu_buffer= " << vis_score->cpu_buffer() << vcl_endl;
+        //vcl_cout << "vis_score nbytes = " << vis_score->num_bytes() << vcl_endl;
+        vis_score->read_to_buffer(queue);
+        //vcl_cout << "3" << vcl_endl;
+        clFinish(queue);
+      }
       //vcl_cout << "4" << vcl_endl;
       //cache->remove_data_base(scene_,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
       //vcl_cout << "5" << vcl_endl;
@@ -291,8 +297,8 @@ boxm2_ocl_update_vis_score
 
   for(id = block_ids.begin(); id!=block_ids.end(); id++){
     bocl_mem *vis_score  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(prefix_name));
-    bocl_mem * alpha  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    //    bocl_mem * alpha  = ocl_cache_->get_data(scene_,*id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
     vis_score->zero_gpu_buffer(queue);
-    alpha->write_to_buffer(queue);
+    //alpha->write_to_buffer(queue);
   }
 }

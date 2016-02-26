@@ -6,8 +6,8 @@
 #include <vcl_fstream.h>
 
 boxm2_ocl_kernel_vector_filter::
-boxm2_ocl_kernel_vector_filter( bocl_device_sptr device) :
-  device_(device)
+boxm2_ocl_kernel_vector_filter( bocl_device_sptr device,bool optimize_transfers) :
+  device_(device),optimize_transfers_(optimize_transfers)
 {
   compile_filter_kernel();
 }
@@ -163,16 +163,17 @@ bool boxm2_ocl_kernel_vector_filter::run(boxm2_scene_sptr scene, boxm2_opencl_ca
 
       //clear render kernel args so it can reset em on next execution
       kernel_.clear_args();
+      if (!optimize_transfers_ ){
+        //read filter response from gpu to cpu
+        filter_response->read_to_buffer(queue);
+        status = clFinish(queue);
+        if (!check_val(status, CL_SUCCESS, "READ FILTER RESPONSE FAILED: " + error_to_string(status)))
+          return false;
 
-      //read filter response from gpu to cpu
-      filter_response->read_to_buffer(queue);
-      status = clFinish(queue);
-      if (!check_val(status, CL_SUCCESS, "READ FILTER RESPONSE FAILED: " + error_to_string(status)))
-        return false;
-
-      //shallow remove from ocl cache unnecessary items from ocl cache.
+        //shallow remove from ocl cache unnecessary items from ocl cache.
+        opencl_cache->shallow_remove_data(scene,id,boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
+      }
       vcl_cout<<"Filtering: After execute MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
-      opencl_cache->shallow_remove_data(scene,id,boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
     }  //end block iter for
 
     delete [] filter_coeff;

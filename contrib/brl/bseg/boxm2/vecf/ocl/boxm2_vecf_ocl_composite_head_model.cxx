@@ -1,14 +1,13 @@
 #include "boxm2_vecf_ocl_composite_head_model.h"
 // #include "boxm2_vecf_eye_params.h"
 
-boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( vcl_string const& head_model_path, vcl_string const& eye_model_path,bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache)
-  : boxm2_vecf_ocl_head_model(head_model_path,device,opencl_cache),
+boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( vcl_string const& head_model_path, vcl_string const& eye_model_path,bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache,bool optimize)
+  : boxm2_vecf_ocl_head_model(head_model_path,device,opencl_cache,optimize),
   params_()
 {
 #ifdef USE_ORBIT_CL
   right_orbit_= boxm2_vecf_ocl_orbit_scene(eye_model_path,device,opencl_cache,false,true);
   left_orbit_= boxm2_vecf_ocl_orbit_scene(eye_model_path,device,opencl_cache,false);
-  optimize_= true;
 #else
     right_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false,true);
     left_orbit_= boxm2_vecf_orbit_scene(eye_model_path,false);

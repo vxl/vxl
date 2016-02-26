@@ -10,11 +10,10 @@
 #include <vcl_algorithm.h>
 #include <vcl_limits.h>
 
-boxm2_vecf_ocl_head_model::boxm2_vecf_ocl_head_model(vcl_string const& scene_file,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,vcl_string color_apm_ident):
+boxm2_vecf_ocl_head_model::boxm2_vecf_ocl_head_model(vcl_string const& scene_file,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,bool optimize ,vcl_string color_apm_ident):
   boxm2_vecf_articulated_scene(scene_file,color_apm_ident),
-  scale_(1.0, 1.0, 1.0),opencl_cache_(opencl_cache),device_(device), scene_transformer_(base_model_,opencl_cache_,"",color_apm_id_)
+  scale_(1.0, 1.0, 1.0),opencl_cache_(opencl_cache),device_(device), scene_transformer_(base_model_,opencl_cache_,"",color_apm_id_),optimize_(optimize)
 {
-
 }
 
 void boxm2_vecf_ocl_head_model::set_scale(vgl_vector_3d<double> scale) {
@@ -49,7 +48,8 @@ void boxm2_vecf_ocl_head_model::map_to_target(boxm2_scene_sptr target_scene)
   vgl_vector_3d<double> inv_scale = vgl_vector_3d<double>(1.0/this->scale_.x(),1.0/this->scale_.y(),1.0/this->scale_.z());
   //   boxm2_vecf_ocl_transform_scene  tmp(base_model_,target_scene,this->opencl_cache_,"",color_apm_id_);
    //   tmp.transform_1_blk_interp_trilin(target_scene,id, null, inv_scale,true);
-  scene_transformer_.transform_1_blk_interp_trilin(target_scene,id, null, inv_scale,true);
+  bool transfer_data = !optimize_;
+  scene_transformer_.transform_1_blk_interp_trilin(target_scene,id, null, inv_scale,transfer_data);
 }
 
 void boxm2_vecf_ocl_head_model::clear_target(boxm2_scene_sptr target_scene)
@@ -75,12 +75,12 @@ void boxm2_vecf_ocl_head_model::clear_target(boxm2_scene_sptr target_scene)
     alpha_db->zero_gpu_buffer(queue);
     gray_app_db->zero_gpu_buffer(queue);
 
-
-    color_app_db->read_to_buffer(queue);
-    gray_app_db ->read_to_buffer(queue);
-    nobs_db     ->read_to_buffer(queue);
-    alpha_db    ->read_to_buffer(queue);
-    status = clFinish(queue);
-
+    if (!this->optimize_ ){ //update cpu buffers also
+      color_app_db->read_to_buffer(queue);
+      gray_app_db ->read_to_buffer(queue);
+      nobs_db     ->read_to_buffer(queue);
+      alpha_db    ->read_to_buffer(queue);
+      status = clFinish(queue);
+    }
   } // for each target block
 }
