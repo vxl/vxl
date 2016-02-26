@@ -1,10 +1,11 @@
 #include "bsta_k_medoid.h"
 //:
 // \file
-#include <vcl_cmath.h> //for HUGE_VAL
+#include <vcl_cmath.h>
 #include <vcl_algorithm.h> //for find
 #include <vcl_iostream.h>
 #include <vcl_cassert.h>
+#include <vcl_limits.h>
 
 bsta_k_medoid::bsta_k_medoid(const unsigned n_elements, bool verbose)
 {
@@ -121,7 +122,7 @@ void bsta_k_medoid::form_clusters()
     else
     {
       //find closest medoid
-      double dmin = HUGE_VAL;
+      double dmin = vcl_numeric_limits<double>::max();
       unsigned jmin=0;
       for (unsigned j=0; j<this->k(); ++j)
         if (distance(i,this->medoid(j))<dmin)
@@ -157,7 +158,7 @@ bool bsta_k_medoid::test_medoid_swap(unsigned& mj, unsigned& mk)
   mj = n_elements_, mk = n_elements_;
 
   // for each j not a medoid
-  double Sdc_min = HUGE_VAL;
+  double Sdc_min = vcl_numeric_limits<double>::max();
   unsigned jmin=0, kmin=0;
   for ( unsigned j = 0; j<n_elements_; ++j)
     if (is_medoid(j))

@@ -7,6 +7,7 @@
 
 #include "vnl_math.h"
 #include <vxl_config.h>
+#include <vcl_limits.h>
 
 #if defined(VCL_VC) || defined(__MINGW32__)
 // I don't think we need this, because <ieeefp.h> is available -- fsm
@@ -214,10 +215,7 @@ bool isnormal(long double x) { return vnl_math::isfinite(x) && (x != 0.0 ); }
 
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
-#ifndef VCL_ICC_81
-double vnl_huge_val(double) { return HUGE_VAL; }
-float  vnl_huge_val(float)  { return (float)HUGE_VAL; }
-#else
+#ifdef VCL_ICC_81
 // workaround ICC warning that 0x1.0p2047 cannot be represented exactly.
 double vnl_huge_val(double) { return // 2^2047
 16158503035655503650357438344334975980222051334857742016065172713762\
@@ -233,7 +231,12 @@ double vnl_huge_val(double) { return // 2^2047
 float  vnl_huge_val(float)  { return // 2^255
 57896044618658097711785492504343953926634992332820282019728792003956\
 564819968.0f; }
+#else
+float  vnl_huge_val(float)  { return vcl_numeric_limits<float>::infinity(); }
+double  vnl_huge_val(double)  { return vcl_numeric_limits<double>::infinity(); }
+long double vnl_huge_val(long double) { return vcl_numeric_limits<long double>::infinity(); }
 #endif
+
 #ifdef _INT_64BIT_
 long int vnl_huge_val(long int) { return 0x7fffffffffffffffL; }
 int    vnl_huge_val(int)    { return 0x7fffffffffffffffL; }
