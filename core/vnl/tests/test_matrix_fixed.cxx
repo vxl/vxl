@@ -16,6 +16,7 @@
 #include <vnl/vnl_int_2x2.h>
 
 #include <testlib/testlib_test.h>
+#include <vcl_exception.h>
 
 #undef printf // to work around a bug in libintl.h
 #include <vcl_cstdio.h> // do not use iostream within operator new - it causes infinite recursion
@@ -78,6 +79,11 @@ void test_int()
   vcl_cout << "*********************************\n"
            << "Testing vnl_matrix_fixed<int,x,x>\n"
            << "*********************************" << vcl_endl;
+
+  //////////////////
+  // CONSTRUCTORS //
+  //////////////////
+
   vnl_matrix_fixed<int,2,2> m0;
   TEST("vnl_matrix_fixed<int,2,2> m0", (m0.rows()==2 && m0.columns()==2), true);
   vnl_matrix_fixed<int,3,4> m1;
@@ -104,6 +110,50 @@ void test_int()
         (m0.get(0,0)==2 && m0.get(0,1)==2 && m0.get(1,0)==2 && m0.get(1,1)==2)), true);
   TEST("m0 == m2", (m0 == m2), true);
   TEST("(m0 == m2)", (m0 == m2), true);
+
+  ///////////////
+  // ACCESSORS //
+  ///////////////
+
+#ifdef VNL_CONFIG_CHECK_BOUNDS
+
+  {
+  // Get
+  bool exceptionThrownAndCaught = false;
+  vcl_try { m0.get(0,25); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds get(0,25)", exceptionThrownAndCaught, true);
+  
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.get(25,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds get(25,0)", exceptionThrownAndCaught, true);
+
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.get(25,25); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds get(25,25)", exceptionThrownAndCaught, true);
+
+  // Put
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.put(0,25,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds put(0,25,0)", exceptionThrownAndCaught, true);
+
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.put(25,0,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds put(25,0,0)", exceptionThrownAndCaught, true);
+
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.put(25,25,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds put(25,25,0)", exceptionThrownAndCaught, true);
+
+  }
+
+#endif
+
   TEST("m2.put(1,1,3)", (m2.put(1,1,3),m2.get(1,1)), 3);
   TEST("m2.get(1,1)", m2.get(1,1), 3);
   int v2_data[] = {2,3};

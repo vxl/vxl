@@ -186,19 +186,33 @@ class vnl_vector_fixed
 
   //: Length of the vector.
   // This is always \a n.
-  unsigned size() const { return n; }
+  unsigned int size() const { return n; }
 
   //: Put value at given position in vector.
-  void put (unsigned int i, T const& v) { data_[i] = v; }
+  inline void put (unsigned int i, T const& v)
+  {
+#ifdef VNL_CONFIG_CHECK_BOUNDS
+    if (i >= this->size())           // If invalid index specified
+      vnl_error_vector_index("put", i); // Raise exception
+#endif
+    this->data_[i] = v;
+  }
 
   //: Get value at element i
-  T get (unsigned int i) const { return data_[i]; }
+  inline T get (unsigned int i) const
+  {
+#ifdef VNL_CONFIG_CHECK_BOUNDS
+    if (i >= this->size())            // If invalid index specified
+      vnl_error_vector_index("get", i);  // Raise exception
+#endif
+    return this->data_[i];
+  }
 
   //: Set all values to v
   vnl_vector_fixed& fill( T const& v )
   {
     for ( size_type i = 0; i < n; ++i )
-      data_[i] = v;
+      this->data_[i] = v;
     return *this;
   }
 
