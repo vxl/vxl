@@ -75,14 +75,6 @@ namespace vnl_math
  bool isnan(double x) { return std::isnan(x); }
  //: Return true iff x is "Not a Number"
  bool isnan(long double x) { return std::isnan(x); }
-#elif defined(VCL_ICC)
-#include <mathimf.h> // defines isnanf, isnan, and isnanl
-//: Return true iff x is "Not a Number"
-bool isnan(float x) { return isnanf(x) != 0; }
-//: Return true iff x is "Not a Number"
-bool isnan(double x) { return isnan(x) != 0; }
-//: Return true iff x is "Not a Number"
-bool isnan(long double x) { return isnanl(x) != 0; }
 #elif !defined(VNL_HAS_NO_FINITE) && !defined(VCL_WIN32)
 //: Return true iff x is "Not a Number"
 bool isnan(float x) { return x != x; } // causes "floating exception" on alpha

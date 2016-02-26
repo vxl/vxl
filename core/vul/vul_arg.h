@@ -248,30 +248,4 @@ class vul_arg_info_list
   vul_arg_info_list& operator=(vul_arg_info_list const &) { return *this; }
 };
 
-#if defined(VCL_ICC)
-#define declare_specialization(T) \
-template<> void settype(vul_arg<T > &); \
-template<> void print_value(vcl_ostream &, vul_arg<T > const &); \
-template<> int  parse(vul_arg<T > *, char **)
-
-declare_specialization(bool);
-declare_specialization(int);
-declare_specialization(unsigned);
-declare_specialization(char*);
-declare_specialization(char const*);
-declare_specialization(float);
-declare_specialization(double);
-declare_specialization(vcl_list<int>);
-declare_specialization(vcl_vector<int>);
-declare_specialization(vcl_vector<unsigned>);
-declare_specialization(vcl_vector<double>);
-declare_specialization(vcl_string);
-
-#ifdef VXL_HAS_INT_64
-declare_specialization(vxl_int_64);
-#endif
-
-#undef declare_specialization
-#endif // VCL_KAI
-
 #endif // vul_arg_h_
