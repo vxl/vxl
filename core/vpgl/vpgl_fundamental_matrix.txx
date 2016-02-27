@@ -1,4 +1,5 @@
 // This is core/vpgl/vpgl_fundamental_matrix.txx
+// -*- c++ -*-
 #ifndef vpgl_fundamental_matrix_txx_
 #define vpgl_fundamental_matrix_txx_
 //:

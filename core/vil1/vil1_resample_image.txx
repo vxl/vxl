@@ -1,4 +1,5 @@
 // This is core/vil1/vil1_resample_image.txx
+// -*- c++ -*-
 #ifndef vil1_resample_image_txx_
 #define vil1_resample_image_txx_
 

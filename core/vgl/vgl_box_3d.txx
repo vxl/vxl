@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_box_3d.txx
+// -*- c++ -*-
 #ifndef vgl_box_3d_txx_
 #define vgl_box_3d_txx_
 //:

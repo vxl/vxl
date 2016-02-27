@@ -1,4 +1,5 @@
 // This is core/vil1/vil1_ncc.txx
+// -*- c++ -*-
 #ifndef vil1_ncc_txx_
 #define vil1_ncc_txx_
 

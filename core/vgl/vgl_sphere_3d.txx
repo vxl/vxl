@@ -1,3 +1,5 @@
+// This is core/vgl/vgl_sphere_3d.txx
+// -*- c++ -*-
 #ifndef vgl_sphere_3d_txx_
 #define vgl_sphere_3d_txx_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

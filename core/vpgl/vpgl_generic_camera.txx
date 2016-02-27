@@ -1,4 +1,5 @@
 // This is core/vpgl/vpgl_generic_camera.txx
+// -*- c++ -*-
 #ifndef vpgl_generic_camera_txx_
 #define vpgl_generic_camera_txx_
 //:

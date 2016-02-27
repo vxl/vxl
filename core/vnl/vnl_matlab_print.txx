@@ -1,5 +1,6 @@
 // This is core/vnl/vnl_matlab_print.txx
 // It is different from vnl_matlab_print.cxx
+// -*- c++ -*-
 #ifndef vnl_matlab_print_txx_
 #define vnl_matlab_print_txx_
 // \author fsm

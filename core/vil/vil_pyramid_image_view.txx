@@ -1,3 +1,5 @@
+// This is core/vil/vil_pyramid_image_view.txx
+// -*- c++ -*-
 #ifndef vil_pyramid_image_view_txx_
 #define vil_pyramid_image_view_txx_
 

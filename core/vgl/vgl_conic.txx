@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_conic.txx
+// -*- c++ -*-
 #ifndef vgl_conic_txx_
 #define vgl_conic_txx_
 //:

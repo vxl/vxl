@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_scalar_join_iterator.txx
+// -*- c++ -*-
 #ifndef vnl_scalar_join_iterator_txx_
 #define vnl_scalar_join_iterator_txx_
 //:

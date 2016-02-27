@@ -1,4 +1,5 @@
 // This is core/vil/vil_rotate.txx
+// -*- c++ -*-
 #ifndef vil_rotate_txx_
 #define vil_rotate_txx_
 //:

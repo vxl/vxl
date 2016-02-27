@@ -1,3 +1,5 @@
+// This is core/vnl/vnl_hungarian_algorithm.txx
+// -*- c++ -*-
 #ifndef vnl_hungarian_algorithm_txx_
 #define vnl_hungarian_algorithm_txx_
 

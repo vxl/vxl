@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_quaternion.txx
+// -*- c++ -*-
 #ifndef vnl_quaternion_txx_
 #define vnl_quaternion_txx_
 //:

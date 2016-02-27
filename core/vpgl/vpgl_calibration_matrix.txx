@@ -1,4 +1,5 @@
 // This is core/vpgl/vpgl_calibration_matrix.txx
+// -*- c++ -*-
 #ifndef vpgl_calibration_matrix_txx_
 #define vpgl_calibration_matrix_txx_
 //:

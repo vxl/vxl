@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_conic_segment_2d.txx
+// -*- c++ -*-
 #ifndef vgl_conic_segment_2d_txx_
 #define vgl_conic_segment_2d_txx_
 

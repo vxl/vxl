@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_point_2d.txx
+// -*- c++ -*-
 #ifndef vgl_point_2d_txx_
 #define vgl_point_2d_txx_
 //:

@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_plane_3d.txx
+// -*- c++ -*-
 #ifndef vgl_plane_3d_txx_
 #define vgl_plane_3d_txx_
 //:

@@ -1,4 +1,5 @@
 // This is core/vbl/vbl_array_2d.txx
+// -*- c++ -*-
 #ifndef vbl_array_2d_txx_
 #define vbl_array_2d_txx_
 

@@ -1,4 +1,5 @@
 // This is core/vil1/vil1_convolve.txx
+// -*- c++ -*-
 #ifndef vil1_convolve_txx_
 #define vil1_convolve_txx_
 // \author fsm

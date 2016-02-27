@@ -1,3 +1,5 @@
+// This is core/vgl/vgl_cylinder.txx
+// -*- c++ -*-
 #ifndef vgl_cylinder_txx_
 #define vgl_cylinder_txx_
 //:

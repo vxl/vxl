@@ -1,4 +1,5 @@
 // This is core/vpgl/vpgl_affine_camera.txx
+// -*- c++ -*-
 #ifndef vpgl_affine_camera_txx_
 #define vpgl_affine_camera_txx_
 //:

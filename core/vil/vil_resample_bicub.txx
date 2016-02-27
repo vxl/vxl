@@ -1,4 +1,5 @@
 // This is core/vil/vil_resample_bicub.txx
+// -*- c++ -*-
 #ifndef vil_resample_bicub_txx_
 #define vil_resample_bicub_txx_
 //:

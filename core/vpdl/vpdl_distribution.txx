@@ -1,4 +1,5 @@
 // This is core/vpdl/vpdl_distribution.txx
+// -*- c++ -*-
 #ifndef vpdl_distribution_txx_
 #define vpdl_distribution_txx_
 //:

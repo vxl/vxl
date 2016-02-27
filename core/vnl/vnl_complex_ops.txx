@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_complex_ops.txx
+// -*- c++ -*-
 #ifndef vnl_complex_ops_txx_
 #define vnl_complex_ops_txx_
 //:

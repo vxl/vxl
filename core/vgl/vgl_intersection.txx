@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_intersection.txx
+// -*- c++ -*-
 #ifndef vgl_intersection_txx_
 #define vgl_intersection_txx_
 //:

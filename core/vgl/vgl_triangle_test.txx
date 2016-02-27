@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_triangle_test.txx
+// -*- c++ -*-
 #ifndef vgl_triangle_test_txx_
 #define vgl_triangle_test_txx_
 //:

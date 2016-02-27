@@ -1,4 +1,5 @@
 // This is core/vil/vil_rgba.txx
+// -*- c++ -*-
 #ifndef vil_rgba_txx_
 #define vil_rgba_txx_
 

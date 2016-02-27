@@ -1,4 +1,5 @@
 // This is core/vidl/vidl_ffmpeg_istream_v0.9.txx
+// -*- c++ -*-
 #ifndef vidl_ffmpeg_istream_v0_9_txx_
 #define vidl_ffmpeg_istream_v0_9_txx_
 #include "vidl_ffmpeg_istream.h"

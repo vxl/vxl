@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_convex.txx
+// -*- c++ -*-
 #ifndef vgl_convex_txx_
 #define vgl_convex_txx_
 //:

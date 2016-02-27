@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_diag_matrix.txx
+// -*- c++ -*-
 #ifndef vnl_diag_matrix_txx_
 #define vnl_diag_matrix_txx_
 //:

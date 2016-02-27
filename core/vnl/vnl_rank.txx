@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_rank.txx
+// -*- c++ -*-
 #ifndef vnl_rank_txx_
 #define vnl_rank_txx_
 

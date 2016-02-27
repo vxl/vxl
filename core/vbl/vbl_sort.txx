@@ -1,4 +1,5 @@
 // This is core/vbl/vbl_sort.txx
+// -*- c++ -*-
 #ifndef vbl_sort_txx_
 #define vbl_sort_txx_
 

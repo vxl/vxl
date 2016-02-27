@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_matrix_fixed_ref.txx
+// -*- c++ -*-
 #ifndef vnl_matrix_fixed_ref_txx_
 #define vnl_matrix_fixed_ref_txx_
 

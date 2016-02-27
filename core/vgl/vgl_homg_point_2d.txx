@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_homg_point_2d.txx
+// -*- c++ -*-
 #ifndef vgl_homg_point_2d_txx_
 #define vgl_homg_point_2d_txx_
 

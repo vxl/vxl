@@ -1,4 +1,5 @@
 // This is core/vsl/vsl_pair_io.txx
+// -*- c++ -*-
 #ifndef vsl_pair_io_txx_
 #define vsl_pair_io_txx_
 //:

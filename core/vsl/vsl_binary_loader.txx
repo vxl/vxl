@@ -1,4 +1,5 @@
 // This is core/vsl/vsl_binary_loader.txx
+// -*- c++ -*-
 #ifndef vsl_binary_loader_txx_
 #define vsl_binary_loader_txx_
 //:

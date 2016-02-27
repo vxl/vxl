@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_fortran_copy_fixed.txx
+// -*- c++ -*-
 #ifndef vnl_fortran_copy_fixed_txx_
 #define vnl_fortran_copy_fixed_txx_
 //:

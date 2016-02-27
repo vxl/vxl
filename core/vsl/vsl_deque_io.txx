@@ -1,4 +1,5 @@
 // This is core/vsl/vsl_deque_io.txx
+// -*- c++ -*-
 #ifndef vsl_deque_io_txx_
 #define vsl_deque_io_txx_
 //:

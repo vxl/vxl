@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_ray_3d.txx
+// -*- c++ -*-
 #ifndef vgl_ray_3d_txx_
 #define vgl_ray_3d_txx_
 

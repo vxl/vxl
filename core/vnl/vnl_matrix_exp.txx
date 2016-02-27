@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_matrix_exp.txx
+// -*- c++ -*-
 #ifndef vnl_matrix_exp_txx_
 #define vnl_matrix_exp_txx_
 //:

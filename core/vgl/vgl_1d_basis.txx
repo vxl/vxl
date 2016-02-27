@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_1d_basis.txx
+// -*- c++ -*-
 #ifndef vgl_1d_basis_txx_
 #define vgl_1d_basis_txx_
 

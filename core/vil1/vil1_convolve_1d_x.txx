@@ -1,4 +1,5 @@
 // This is core/vil1/vil1_convolve_1d_x.txx
+// -*- c++ -*-
 #ifndef vil1_convolve_1d_x_txx_
 #define vil1_convolve_1d_x_txx_
 

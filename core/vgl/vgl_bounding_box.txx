@@ -1,3 +1,5 @@
+// This is core/vgl/vgl_bounding_box.txx
+// -*- c++ -*-
 #include "vgl_bounding_box.h"
 #include "vgl_sphere_3d.h"
 #include "vgl_pointset_3d.h"

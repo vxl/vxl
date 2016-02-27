@@ -1,3 +1,5 @@
+// This is core/vbl/vbl_quadruple.txx
+// -*- c++ -*-
 #ifndef vbl_quadruple_txx_
 #define vbl_quadruple_txx_
 /*

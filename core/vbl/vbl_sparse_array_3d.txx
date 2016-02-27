@@ -1,4 +1,5 @@
 // This is core/vbl/vbl_sparse_array_3d.txx
+// -*- c++ -*-
 #ifndef vbl_sparse_array_3d_txx_
 #define vbl_sparse_array_3d_txx_
 //:

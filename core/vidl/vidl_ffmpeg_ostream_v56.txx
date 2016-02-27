@@ -1,4 +1,5 @@
 // This is core/vidl/vidl_ffmpeg_ostream_v56.txx
+// -*- c++ -*-
 #ifndef vidl_ffmpeg_ostream_v56_txx_
 #define vidl_ffmpeg_ostream_v56_txx_
 #pragma once
