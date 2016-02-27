@@ -169,26 +169,26 @@ class vnl_matrix
 
 // Basic 2D-Array functionality-------------------------------------------
 
-  //: Return number of rows
-  unsigned rows()    const { return num_rows; }
-
-  //: Return number of columns
-  // A synonym for cols()
-  unsigned columns()  const { return num_cols; }
-
-  //: Return number of columns
-  // A synonym for columns()
-  unsigned cols()    const { return num_cols; }
-
-  //: Return number of elements
+  //: Return the total number of elements stored by the matrix.
   // This equals rows() * cols()
-  unsigned size()    const { return rows()*cols(); }
+  inline unsigned int size() const { return this->num_rows*this->num_cols; }
+
+  //: Return the number of rows.
+  inline unsigned int rows() const { return this->num_rows; }
+
+  //: Return the number of columns.
+  // A synonym for columns().
+  inline unsigned int cols() const { return this->num_cols; }
+
+  //: Return the number of columns.
+  // A synonym for cols().
+  inline unsigned int columns() const { return this->num_cols; }
 
   //: set element with boundary checks if error checking is on.
-  void put(unsigned r, unsigned c, T const&);
+  inline void put(unsigned r, unsigned c, T const&);
 
   //: get element with boundary checks if error checking is on.
-  T    get(unsigned r, unsigned c) const;
+  inline T get(unsigned r, unsigned c) const;
 
   //: return pointer to given row
   // No boundary checking here.
@@ -712,30 +712,32 @@ class vnl_matrix
 // Checks for valid range of indices.
 
 template<class T>
-inline T vnl_matrix<T>::get(unsigned row, unsigned column) const
+inline T vnl_matrix<T>
+::get(unsigned r, unsigned c) const
 {
-#ifdef ERROR_CHECKING
-  if (row >= this->num_rows)                   // If invalid size specified
-    vnl_error_matrix_row_index("get", row);    // Raise exception
-  if (column >= this->num_cols)                // If invalid size specified
-    vnl_error_matrix_col_index("get", column); // Raise exception
+#ifdef VNL_CONFIG_CHECK_BOUNDS
+  if (r >= this->num_rows)                // If invalid size specified
+    vnl_error_matrix_row_index("get", r); // Raise exception
+  if (c >= this->num_cols)                // If invalid size specified
+    vnl_error_matrix_col_index("get", c); // Raise exception
 #endif
-  return this->data[row][column];
+  return this->data[r][c];
 }
 
 //: Puts value into element at specified row and column. O(1).
 // Checks for valid range of indices.
 
 template<class T>
-inline void vnl_matrix<T>::put(unsigned row, unsigned column, T const& value)
+inline void vnl_matrix<T>
+::put(unsigned r, unsigned c, T const& v)
 {
-#ifdef ERROR_CHECKING
-  if (row >= this->num_rows)                   // If invalid size specified
-    vnl_error_matrix_row_index("put", row);    // Raise exception
-  if (column >= this->num_cols)                // If invalid size specified
-    vnl_error_matrix_col_index("put", column); // Raise exception
+#ifdef VNL_CONFIG_CHECK_BOUNDS
+  if (r >= this->num_rows)                // If invalid size specified
+    vnl_error_matrix_row_index("put", r); // Raise exception
+  if (c >= this->num_cols)                // If invalid size specified
+    vnl_error_matrix_col_index("put", c); // Raise exception
 #endif
-  this->data[row][column] = value;             // Assign data value
+  this->data[r][c] = v;             // Assign data value
 }
 
 

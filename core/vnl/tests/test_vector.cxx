@@ -9,23 +9,66 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_cross.h>
 #include <testlib/testlib_test.h>
+#include <vcl_exception.h>
 
 void vnl_vector_test_int()
 {
+
   vcl_cout << "***********************\n"
            << "Testing vnl_vector<int>\n"
            << "***********************\n";
-  //// test constructors, accessors
+
+  //////////////////
+  // CONSTRUCTORS //
+  //////////////////
+
+  //  vnl_vector();
   vnl_vector<int> v0;
   TEST("vnl_vector<int> v0()", v0.size(), 0);
+
+  //  vnl_vector(unsigned int len);
   vnl_vector<int> v1(2);
   TEST("vnl_vector<int> v1(2)", v1.size(), 2);
+
+  //  vnl_vector(unsigned int len, T const& v0);
   vnl_vector<int> v2(2,2);
   TEST("vnl_vector<int> v2(2,2)", (v2.get(0)==2 && v2.get(1)==2), true);
-//   TEST("v0.set_compare", (v0.set_compare(int_equal), true), true);
+
+  //  vnl_vector(unsigned int len, int n, T const values[]);
   int vcvalues[] = {1,0};
   vnl_vector<int> vc(2,2,vcvalues);
   TEST("vnl_vector<int> vc(2,2,int[])", (vc(0)==1 && vc(1)==0), true);
+
+  //  vnl_vector(T const* data_block,unsigned int n);
+  vnl_vector<int> vb(vcvalues,2);
+  TEST("vnl_vector<int> vb(int[],2)", (vb(0)==1 && vb(1)==0), true);
+
+  //  vnl_vector(vnl_vector<T> const&);
+  vnl_vector<int> v_copy(vb);
+  TEST("vnl_vector<int> v_copy(vb)", (v_copy(0)==1 && v_copy(1)==0), true);
+
+  ///////////////
+  // ACCESSORS //
+  ///////////////
+
+#ifdef VNL_CONFIG_CHECK_BOUNDS
+
+  {
+  bool exceptionThrownAndCaught = false;
+  vcl_try { v0.get(25); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds get()", exceptionThrownAndCaught, true);
+  
+  exceptionThrownAndCaught = false;
+  vcl_try { v0.put(25,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds put()", exceptionThrownAndCaught, true);
+  }
+
+#endif
+
+  //// test constructors, accessors
+//   TEST("v0.set_compare", (v0.set_compare(int_equal), true), true);
   TEST("v1=2", (v1=2, (v1.get(0)==2 && v1.get(1)==2)), true);
   TEST("v1 == v2", (v1 == v2), true);
   TEST("v0 = v2", ((v0 = v2), (v0 == v2)), true);
@@ -251,7 +294,6 @@ void vnl_vector_test_int()
        (1 == v[0] && 2 == v[1] && 3 == v[2] && 0 == v[3]), true);
   }
 }
-
 
 bool float_equal(const float& f1, const float& f2)
 {
