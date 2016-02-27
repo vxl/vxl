@@ -77,12 +77,13 @@
 
 //: Type-accessible infinities for use in templates.
 template <class T> T vnl_huge_val(T);
-double   vnl_huge_val(double);
-float    vnl_huge_val(float);
-long int vnl_huge_val(long int);
-int      vnl_huge_val(int);
-short    vnl_huge_val(short);
-char     vnl_huge_val(char);
+extern long double   vnl_huge_val(long double);
+extern double   vnl_huge_val(double);
+extern float    vnl_huge_val(float);
+extern long int vnl_huge_val(long int);
+extern int      vnl_huge_val(int);
+extern short    vnl_huge_val(short);
+extern char     vnl_huge_val(char);
 
 //: real numerical constants
 // Strictly speaking, the static declaration of the constant variables is
