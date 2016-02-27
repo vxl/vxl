@@ -105,7 +105,7 @@ macro( vxl_add_library )
     target_include_directories(${lib_name}
       PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:${relative_install_path}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${relative_install_path}>
     )
     INSTALL_NOBASE_HEADER_FILES(${relative_install_path} ${lib_srcs})
   endif()
