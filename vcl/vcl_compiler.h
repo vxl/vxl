@@ -150,7 +150,8 @@
 
 // if the compiler doesn't understand "export", we just leave it out.
 // gcc understands it, but ignore it noisily.
-#if !VCL_HAS_EXPORT || defined(VCL_GCC)
+// icc understands it, but ignore it noisily.
+#if !VCL_HAS_EXPORT || defined(VCL_GCC) || defined(VCL_ICC)
 # define VCL_TEMPLATE_EXPORT /* ignore */
 #else
 # define VCL_TEMPLATE_EXPORT export
