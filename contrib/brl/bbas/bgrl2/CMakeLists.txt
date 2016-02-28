@@ -3,9 +3,9 @@
 
 set(bgrl2_sources
 
-bgrl2_vertex.h             bgrl2_vertex.txx
-bgrl2_edge.h               bgrl2_edge.txx
-bgrl2_graph.h              bgrl2_graph.txx
+bgrl2_vertex.h             bgrl2_vertex.hxx
+bgrl2_edge.h               bgrl2_edge.hxx
+bgrl2_graph.h              bgrl2_graph.hxx
 
 bgrl2_hg_vertex.h
 bgrl2_hg_edge.h

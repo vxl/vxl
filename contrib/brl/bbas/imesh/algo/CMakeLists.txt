@@ -10,9 +10,9 @@ set(imesh_algo_sources
     imesh_pca.cxx                imesh_pca.h
     imesh_project.cxx            imesh_project.h
     imesh_detect.cxx             imesh_detect.h
-    imesh_kd_tree.cxx            imesh_kd_tree.h      imesh_kd_tree.txx
+    imesh_kd_tree.cxx            imesh_kd_tree.h      imesh_kd_tree.hxx
     imesh_render.cxx             imesh_render.h
-    imesh_imls_surface.cxx       imesh_imls_surface.h imesh_imls_surface.txx
+    imesh_imls_surface.cxx       imesh_imls_surface.h imesh_imls_surface.hxx
    )
 aux_source_directory(Templates imesh_algo_sources)
 

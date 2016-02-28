@@ -41,4 +41,4 @@ add_subdirectory(vis)
 add_subdirectory(tests)
 add_subdirectory(examples)
 
-#install the .h .txx and libs
+#install the .h .hxx and libs

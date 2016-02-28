@@ -33,7 +33,7 @@ if(EXPAT_FOUND)
 
   vxl_add_library( LIBNAME boxm2_pro LIBSRCS ${boxm2_pro_sources})
 
-  #install the .h .txx and libs
+  #install the .h .hxx and libs
 
   target_link_libraries(boxm2_pro boxm2 boxm2_io boxm2_util boxm2_cpp_algo bbas_pro bvgl sdet bprb brdb brip imesh vsol bsta bsta_pro vpgl_pro ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul bvrml bmsh3d_algo rply)
 

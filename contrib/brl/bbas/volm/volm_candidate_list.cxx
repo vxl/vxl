@@ -3,7 +3,7 @@
 // \file
 #include <vcl_cassert.h>
 #include <vgl/vgl_area.h>
-#include <vgl/vgl_area.txx>
+#include <vgl/vgl_area.hxx>
 
 volm_candidate_list::volm_candidate_list(vil_image_view<vxl_byte> const& image,
                                          unsigned threshold)

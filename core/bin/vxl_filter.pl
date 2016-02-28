@@ -330,8 +330,8 @@ sub process_headers {
       s/<Basics\/IUE_sprintf\.h>/<vbl\/vbl_sprintf.h>/;
       s/<Basics\/Array2D\.h>/<vbl\/vbl_array_2d.h>/;
       s/<Basics\/Array3D\.h>/<vbl\/vbl_array_3d.h>/;
-      s/<Basics\/Array2D\.C>/<vbl\/vbl_array_2d.txx>/;
-      s/<Basics\/Array3D\.C>/<vbl\/vbl_array_3d.txx>/;
+      s/<Basics\/Array2D\.C>/<vbl\/vbl_array_2d.hxx>/;
+      s/<Basics\/Array3D\.C>/<vbl\/vbl_array_3d.hxx>/;
       s/<Basics\/BaseArray3D\.h>/<vbl\/vbl_base_array_3d.h>/;
       s/<Basics\/file\.h>/<vbl\/vbl_file.h>/;
       s/<Basics\/stat\.h>/<vbl\/vbl_file.h> \/\/ use vbl_file instead of IUE_stat/;
@@ -348,9 +348,9 @@ sub process_headers {
 
       # sparse array things.
       s!<Basics/SparseArray([123])D.h>!<vbl/vbl_sparse_array_$1d.h>!;
-      s!<Basics/SparseArray([123])D.C>!<vbl/vbl_sparse_array_$1d.txx>!;
+      s!<Basics/SparseArray([123])D.C>!<vbl/vbl_sparse_array_$1d.hxx>!;
       s!<Basics/SparseArray.h>!<vbl/vbl_sparse_array.h>!;
-      s!<Basics/SparseArray.C>!<vbl/vbl_sparse_array.txx>!;
+      s!<Basics/SparseArray.C>!<vbl/vbl_sparse_array.hxx>!;
 
       s/<cool\/Timer\.h>/<vbl\/vbl_timer.h>/;
       s/<cool\/RegExp\.h>/<vbl\/vbl_reg_exp.h>/;
@@ -456,9 +456,9 @@ sub process_headers {
 
       s!<cool/Array.h>!<vcl_vector.h>!;
       s!<cool/ArrayP.h>!<vcl_vector.h>!;
-      s!<cool/Array.C>!<vcl_vector.txx>!;
+      s!<cool/Array.C>!<vcl_vector.hxx>!;
       s!<cool/List(|P).h>!<vcl_list.h>!;
-      s!<cool/List.C>!<vcl_list.txx>!;
+      s!<cool/List.C>!<vcl_list.hxx>!;
       s!^(\#include +\<(Geometry|Topology)/)!//$1!;
     }
 
@@ -953,7 +953,7 @@ sub output_lines {
 
       # emit any .txx files needed :
       foreach my $class (@txx_needed) {
-        print "#include <vcl_$class.txx>\n";
+        print "#include <vcl_$class.hxx>\n";
       }
 
       #

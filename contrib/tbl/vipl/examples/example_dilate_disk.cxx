@@ -78,7 +78,7 @@ main(int argc, char** argv) {
 
 // instantiation of the filter;
 // this should normally go into a separate file in the Templates subdirectory
-#include <vipl/vipl_with_section/accessors/vipl_accessors_section.txx>
-#include <vipl/vipl_dilate_disk.txx>
+#include <vipl/vipl_with_section/accessors/vipl_accessors_section.hxx>
+#include <vipl/vipl_dilate_disk.hxx>
 
 template class vipl_dilate_disk<img_type,img_type,vxl_byte,vxl_byte>;

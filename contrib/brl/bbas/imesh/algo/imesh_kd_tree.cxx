@@ -1,6 +1,6 @@
 // This is brl/bbas/imesh/algo/imesh_kd_tree.cxx
 #include "imesh_kd_tree.h"
-#include "imesh_kd_tree.txx"
+#include "imesh_kd_tree.hxx"
 //:
 // \file
 

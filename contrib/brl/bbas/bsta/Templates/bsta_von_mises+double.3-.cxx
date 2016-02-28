@@ -1,4 +1,4 @@
-#include <bsta/bsta_von_mises.txx>
+#include <bsta/bsta_von_mises.hxx>
 // do not remove the following text
 // Approved for public release, distribution unlimited (DISTAR Case 14389)
 //

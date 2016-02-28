@@ -8,6 +8,6 @@
 #define VCL_PAIR_INSTANTIATE extern "you must include vcl_utility.txx first"
 #define VCL_PAIR_const_INSTANTIATE extern "you must include vcl_utility.txx first"
 
-#include "vcl_utility.txx"
+#include "vcl_utility.hxx"
 
 #endif // vcl_utility_h_

@@ -21,7 +21,7 @@ T getpixel(vbl_array_2d<T> const& i, int x, int y, T); \
 void setpixel(vbl_array_2d<T>& i, int x, int y, T e)
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_accessors_vbl_array_2d.txx"
+#include "vipl_accessors_vbl_array_2d.hxx"
 #endif
 
 #endif // vipl_accessors_vbl_array_2d_h_

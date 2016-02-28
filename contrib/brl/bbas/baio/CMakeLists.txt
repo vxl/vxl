@@ -32,7 +32,7 @@ elseif(UNIX)
     target_link_libraries(baio rt)
 endif()
 
-#install the .h .txx and libs
+#install the .h .hxx and libs
 
 #tests
 if( BUILD_TESTING )

@@ -1,10 +1,10 @@
 # vxl/vgl/xio/CMakeLists.txt
 
 set(vgl_xio_sources
-  vgl_xio_point_2d.txx vgl_xio_point_2d.h
-  vgl_xio_point_3d.txx vgl_xio_point_3d.h
-  vgl_xio_box_3d.txx vgl_xio_box_3d.h
-  vgl_xio_vector_3d.txx vgl_xio_vector_3d.h
+  vgl_xio_point_2d.hxx vgl_xio_point_2d.h
+  vgl_xio_point_3d.hxx vgl_xio_point_3d.h
+  vgl_xio_box_3d.hxx vgl_xio_box_3d.h
+  vgl_xio_vector_3d.hxx vgl_xio_vector_3d.h
 )
 
 aux_source_directory(Templates vgl_xio_sources)

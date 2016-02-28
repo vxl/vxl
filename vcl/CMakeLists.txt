@@ -31,7 +31,7 @@ set( vcl_sources
   vcl_cassert.cxx        vcl_cassert.h
   vcl_cstdlib.cxx        vcl_cstdlib.h
 
-  vcl_algorithm.txx      vcl_algorithm.h
+  vcl_algorithm.hxx      vcl_algorithm.h
   vcl_bitset.h
   vcl_cctype.h
   vcl_cerrno.h
@@ -39,7 +39,7 @@ set( vcl_sources
   vcl_ciso646.h
   vcl_climits.h
   vcl_clocale.h
-  vcl_complex.txx        vcl_complex.h
+  vcl_complex.hxx        vcl_complex.h
   vcl_complex_fwd.h
   vcl_csetjmp.h
   vcl_csignal.h
@@ -51,36 +51,36 @@ set( vcl_sources
   vcl_cwchar.h
   vcl_cwctype.h
   vcl_deprecated_header.h
-  vcl_deque.txx          vcl_deque.h
+  vcl_deque.hxx          vcl_deque.h
   vcl_exception.h
   vcl_fstream.h
-  vcl_functional.txx     vcl_functional.h
+  vcl_functional.hxx     vcl_functional.h
   vcl_iomanip.h
   vcl_ios.h
   vcl_iosfwd.h
   vcl_iostream.h
   vcl_istream.h
-  vcl_iterator.txx       vcl_iterator.h
+  vcl_iterator.hxx       vcl_iterator.h
   vcl_limits.h
-  vcl_list.txx           vcl_list.h
+  vcl_list.hxx           vcl_list.h
   vcl_locale.h
-  vcl_map.txx            vcl_map.h
+  vcl_map.hxx            vcl_map.h
   vcl_memory.h
   vcl_new.h
   vcl_numeric.h
   vcl_ostream.h
-  vcl_queue.txx          vcl_queue.h
-  vcl_set.txx            vcl_set.h
+  vcl_queue.hxx          vcl_queue.h
+  vcl_set.hxx            vcl_set.h
   vcl_sstream.h
-  vcl_stack.txx          vcl_stack.h
+  vcl_stack.hxx          vcl_stack.h
   vcl_stdexcept.h
   vcl_stlfwd.h
   vcl_streambuf.h
-  vcl_string.txx         vcl_string.h
+  vcl_string.hxx         vcl_string.h
   vcl_typeinfo.h
-  vcl_utility.txx        vcl_utility.h
+  vcl_utility.hxx        vcl_utility.h
   vcl_valarray.h
-  vcl_vector.txx         vcl_vector.h
+  vcl_vector.hxx         vcl_vector.h
   vcl_sys/time.h
   vcl_sys/types.h
 
@@ -136,19 +136,19 @@ set( vcl_sources
   generic/vcl_valarray.h
   generic/vcl_vector.h
 
-  iso/vcl_algorithm.txx  iso/vcl_algorithm.h
-  iso/vcl_complex.txx    iso/vcl_complex.h
-  iso/vcl_deque.txx      iso/vcl_deque.h
-  iso/vcl_functional.txx iso/vcl_functional.h
-  iso/vcl_iterator.txx   iso/vcl_iterator.h
-  iso/vcl_list.txx       iso/vcl_list.h
-  iso/vcl_map.txx        iso/vcl_map.h
-  iso/vcl_queue.txx      iso/vcl_queue.h
-  iso/vcl_set.txx        iso/vcl_set.h
-  iso/vcl_stack.txx      iso/vcl_stack.h
-  iso/vcl_string.txx     iso/vcl_string.h
-  iso/vcl_utility.txx    iso/vcl_utility.h
-  iso/vcl_vector.txx     iso/vcl_vector.h
+  iso/vcl_algorithm.hxx  iso/vcl_algorithm.h
+  iso/vcl_complex.hxx    iso/vcl_complex.h
+  iso/vcl_deque.hxx      iso/vcl_deque.h
+  iso/vcl_functional.hxx iso/vcl_functional.h
+  iso/vcl_iterator.hxx   iso/vcl_iterator.h
+  iso/vcl_list.hxx       iso/vcl_list.h
+  iso/vcl_map.hxx        iso/vcl_map.h
+  iso/vcl_queue.hxx      iso/vcl_queue.h
+  iso/vcl_set.hxx        iso/vcl_set.h
+  iso/vcl_stack.hxx      iso/vcl_stack.h
+  iso/vcl_string.hxx     iso/vcl_string.h
+  iso/vcl_utility.hxx    iso/vcl_utility.h
+  iso/vcl_vector.hxx     iso/vcl_vector.h
   iso/vcl_bitset.h
   iso/vcl_cassert.h
   iso/vcl_cctype.h

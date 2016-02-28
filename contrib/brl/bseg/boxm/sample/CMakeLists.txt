@@ -1,16 +1,16 @@
 # brl/bseg/boxm/sample/CMakeLists.txt
 include_directories( ${MUL_INCLUDE_DIR} )
 set(boxm_sample_sources
-    boxm_edge_sample.h                        boxm_edge_sample.txx
-    boxm_edge_tangent_sample.h                boxm_edge_tangent_sample.txx
-    boxm_inf_line_sample.h                    boxm_inf_line_sample.txx
-    boxm_opt2_sample.h                        boxm_opt2_sample.txx
-    boxm_opt3_sample.h                        boxm_opt3_sample.txx
-    boxm_plane_obs.h                          boxm_plane_obs.txx
-    boxm_rt_sample.h                          boxm_rt_sample.txx
-    boxm_sample.h                             boxm_sample.txx
-    boxm_sample_multi_bin.h                   boxm_sample_multi_bin.txx
-    boxm_scalar_sample.h                      boxm_scalar_sample.txx
+    boxm_edge_sample.h                        boxm_edge_sample.hxx
+    boxm_edge_tangent_sample.h                boxm_edge_tangent_sample.hxx
+    boxm_inf_line_sample.h                    boxm_inf_line_sample.hxx
+    boxm_opt2_sample.h                        boxm_opt2_sample.hxx
+    boxm_opt3_sample.h                        boxm_opt3_sample.hxx
+    boxm_plane_obs.h                          boxm_plane_obs.hxx
+    boxm_rt_sample.h                          boxm_rt_sample.hxx
+    boxm_sample.h                             boxm_sample.hxx
+    boxm_sample_multi_bin.h                   boxm_sample_multi_bin.hxx
+    boxm_scalar_sample.h                      boxm_scalar_sample.hxx
     boxm_vis_implicit_sample.h
     boxm_update_sample.h
     dummy.cxx

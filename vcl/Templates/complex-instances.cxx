@@ -25,7 +25,7 @@
 // it needs. With gcc, using #pragma weak may be an option.
 
 #include <vcl_iostream.h>
-#include <vcl_complex.txx>
+#include <vcl_complex.hxx>
 
 // this function will tickle implicit templates for
 // some compilers and detect missing instances for others.

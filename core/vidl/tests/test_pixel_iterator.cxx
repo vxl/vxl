@@ -5,7 +5,7 @@
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_pixel_iterator.h>
-#include <vidl/vidl_pixel_iterator.txx>
+#include <vidl/vidl_pixel_iterator.hxx>
 
 
 static void test_pixel_iterator()

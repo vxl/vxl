@@ -1,9 +1,9 @@
 # brl/bseg/boxm/basic/CMakeLists.txt
 include_directories( ${MUL_INCLUDE_DIR} )
 set(boxm_basic_sources
-    boxm_block_vis_graph_iterator.h     boxm_block_vis_graph_iterator.txx
+    boxm_block_vis_graph_iterator.h     boxm_block_vis_graph_iterator.hxx
     boxm_block_vis_graph_node.h
-    boxm_cell_vis_graph_iterator.h      boxm_cell_vis_graph_iterator.txx
+    boxm_cell_vis_graph_iterator.h      boxm_cell_vis_graph_iterator.hxx
     boxm_raytrace_function.h
     boxm_seg_length_functor.h
     boxm_num_rays_functor.h

@@ -31,7 +31,7 @@
 // templates with incomplete types. -- Amitha Perera
 //
 // Uncommenting the following line will trigger the bug(?) with Borland.
-//#include <vbl/vbl_smart_ptr.txx>
+//#include <vbl/vbl_smart_ptr.hxx>
 
 vtol_extract_topology_vertex_node::
 vtol_extract_topology_vertex_node( unsigned in_i, unsigned in_j )

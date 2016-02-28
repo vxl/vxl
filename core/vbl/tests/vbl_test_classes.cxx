@@ -43,16 +43,16 @@ bool base_impl::checkcount ( int count )
   }
 }
 
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 
 VBL_SMART_PTR_INSTANTIATE(base_impl);
 VBL_SMART_PTR_INSTANTIATE(derived_impl);
 
-#include <vcl_list.txx>
+#include <vcl_list.hxx>
 
 VCL_LIST_INSTANTIATE(base_sptr);
 
-#include <vcl_algorithm.txx>
+#include <vcl_algorithm.hxx>
 
 VCL_OPERATOR_NE_INSTANTIATE(base_sptr);
 VCL_CONTAINABLE_INSTANTIATE(base_sptr);

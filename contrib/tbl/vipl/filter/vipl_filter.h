@@ -407,7 +407,7 @@ class vipl_filter          : public vipl_filter_abs
 }; // end of class definition
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_filter.txx"
+#include "vipl_filter.hxx"
 #endif
 
 #endif // file guard

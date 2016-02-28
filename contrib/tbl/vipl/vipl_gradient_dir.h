@@ -49,7 +49,7 @@ class vipl_gradient_dir : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixe
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_gradient_dir.txx"
+#include "vipl_gradient_dir.hxx"
 #endif
 
 #endif // vipl_gradient_dir_h_

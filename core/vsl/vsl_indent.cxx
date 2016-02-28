@@ -7,7 +7,7 @@
 
 #include "vsl_indent.h"
 #include <vcl_iostream.h>
-#include <vcl_map.txx>
+#include <vcl_map.hxx>
 #include <vcl_utility.h>
 
 const int default_tab = 2;

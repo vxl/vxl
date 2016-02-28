@@ -1,4 +1,4 @@
-#include <bgrl2/bgrl2_graph.txx>
+#include <bgrl2/bgrl2_graph.hxx>
 
 #include "../test_node.h"
 #include "../test_edge.h"

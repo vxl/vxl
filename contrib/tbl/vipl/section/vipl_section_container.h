@@ -158,7 +158,7 @@ class vipl_section_container
 }; // end of class definition
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_section_container.txx"
+#include "vipl_section_container.hxx"
 #endif
 
 #endif // vipl_section_container_h_

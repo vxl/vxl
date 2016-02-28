@@ -88,5 +88,5 @@ int VoxmapPoints::GetCornerIndex( int x, int y, int z, int dx, int dy, int dz, i
   return cornerpoints.size()-1;
 }
 
-#include <vbl/vbl_sparse_array_3d.txx>
+#include <vbl/vbl_sparse_array_3d.hxx>
 VBL_SPARSE_ARRAY_3D_INSTANTIATE(vnl_double_3);

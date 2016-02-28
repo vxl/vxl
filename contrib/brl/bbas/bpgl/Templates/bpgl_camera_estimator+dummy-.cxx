@@ -1,4 +1,4 @@
-#include <bpgl/bpgl_camera_estimator.txx>
+#include <bpgl/bpgl_camera_estimator.hxx>
 
 class dummy {
  public:

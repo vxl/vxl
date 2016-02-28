@@ -1,3 +1,3 @@
-#include <boxm/util/boxm_triangle_interpolation_iterator.txx>
+#include <boxm/util/boxm_triangle_interpolation_iterator.hxx>
 
 int main() { return 0; }

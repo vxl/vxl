@@ -25,11 +25,11 @@ set(vepl_sources
  vepl_moment.cxx               vepl_moment.h
  vepl_histogram.cxx            vepl_histogram.h
 
- vepl_convert.txx              vepl_convert.h
+ vepl_convert.hxx              vepl_convert.h
 
  accessors/vipl_accessors_vil_image_view_base.h
- accessors/vipl_accessors_vil_image_view_base.txx
- section/vipl_filterable_section_container_generator_vil_image_view_base.txx
+ accessors/vipl_accessors_vil_image_view_base.hxx
+ section/vipl_filterable_section_container_generator_vil_image_view_base.hxx
 )
 
 add_definitions(-DINSTANTIATE_TEMPLATES)

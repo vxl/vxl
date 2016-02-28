@@ -18,7 +18,7 @@
 #include <vil/vil_save.h>
 #include <vcl_iostream.h>
 #include <vxl_config.h> // for vxl_byte
-#include <vil/vil_image_view.txx>
+#include <vil/vil_image_view.hxx>
 
 class rgbcell: public vil_rgb<vxl_byte>
 {

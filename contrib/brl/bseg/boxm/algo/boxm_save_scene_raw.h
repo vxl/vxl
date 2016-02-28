@@ -22,7 +22,7 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 
 #include <bsta/bsta_histogram.h>
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 #include <vsl/vsl_binary_io.h>
 #include <vpl/vpl.h>
 

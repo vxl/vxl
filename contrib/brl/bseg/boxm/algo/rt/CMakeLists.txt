@@ -2,17 +2,17 @@
 include_directories( ${MUL_INCLUDE_DIR} )
 set(boxm_algo_rt_sources
     boxm_change_probability_functor.h
-    boxm_edge_tangent_updater.h             boxm_edge_tangent_updater.txx
-    boxm_edge_updater.h                     boxm_edge_updater.txx
+    boxm_edge_tangent_updater.h             boxm_edge_tangent_updater.hxx
+    boxm_edge_updater.h                     boxm_edge_updater.hxx
     boxm_generate_edge_sample_functor.h
     boxm_generate_edge_tangent_sample_functor.h
     boxm_generate_opt2_sample_functor.h
     boxm_generate_opt3_sample_functor.h
     boxm_generate_opt_sample_functor.h
-    boxm_opt2_optimizer.h                   boxm_opt2_optimizer.txx
-    boxm_opt3_optimizer.h                   boxm_opt3_optimizer.txx
+    boxm_opt2_optimizer.h                   boxm_opt2_optimizer.hxx
+    boxm_opt3_optimizer.h                   boxm_opt3_optimizer.hxx
     boxm_opt_appearance_estimator.h
-    boxm_opt_rt_bayesian_optimizer.h        boxm_opt_rt_bayesian_optimizer.txx
+    boxm_opt_rt_bayesian_optimizer.h        boxm_opt_rt_bayesian_optimizer.hxx
     boxm_pre_infinity_functor.h
     boxm_render_expected_depth_functor.h
     boxm_render_expected_edge_image_functor.h
@@ -26,8 +26,8 @@ set(boxm_algo_rt_sources
     boxm_expected_edge_functor.h
     boxm_shadow_appearance_estimator.h
     boxm_generate_shadow_sample_functor.h
-    boxm_shadow_app_initializer.h            boxm_shadow_app_initializer.txx
-    boxm_shadow_bayes_optimizer.h            boxm_shadow_bayes_optimizer.txx
+    boxm_shadow_app_initializer.h            boxm_shadow_app_initializer.hxx
+    boxm_shadow_bayes_optimizer.h            boxm_shadow_bayes_optimizer.hxx
     dummy.cxx
    )
 

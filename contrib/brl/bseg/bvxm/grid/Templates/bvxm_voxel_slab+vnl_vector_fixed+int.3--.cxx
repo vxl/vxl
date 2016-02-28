@@ -1,4 +1,4 @@
-#include <bvxm/grid/bvxm_voxel_slab.txx>
+#include <bvxm/grid/bvxm_voxel_slab.hxx>
 #include <vnl/vnl_vector_fixed.h>
 
 typedef vnl_vector_fixed<int,3> vector;

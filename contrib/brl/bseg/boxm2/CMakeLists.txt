@@ -12,7 +12,7 @@ set(boxm2_sources
     boxm2_block.h                 boxm2_block.cxx
     boxm2_block_metadata.h        boxm2_block_metadata.cxx
     boxm2_data_base.h             boxm2_data_base.cxx
-    boxm2_data.h                  boxm2_data.txx
+    boxm2_data.h                  boxm2_data.hxx
     boxm2_data_traits.h
     boxm2_util.h                  boxm2_util.cxx
     boxm2_normal_albedo_array.h   boxm2_normal_albedo_array.cxx
@@ -80,4 +80,4 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-#install the .h .txx and libs
+#install the .h .hxx and libs

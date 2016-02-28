@@ -1,5 +1,5 @@
 #include <vcl_string.h>
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 #include <boxm/boxm_block.h>
 #include <boct/boct_tree.h>
 #include <vnl/vnl_vector_fixed.h>

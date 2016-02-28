@@ -39,18 +39,18 @@ if(NETLIB_FOUND)
     vnl_netlib.h
 
     # matrix decompositions
-    vnl_svd.txx vnl_svd.h
-    vnl_svd_economy.txx vnl_svd_economy.h
-    vnl_svd_fixed.txx vnl_svd_fixed.h
-    vnl_matrix_inverse.txx vnl_matrix_inverse.h
-    vnl_qr.txx vnl_qr.h
-    vnl_scatter_3x3.txx vnl_scatter_3x3.h
+    vnl_svd.hxx vnl_svd.h
+    vnl_svd_economy.hxx vnl_svd_economy.h
+    vnl_svd_fixed.hxx vnl_svd_fixed.h
+    vnl_matrix_inverse.hxx vnl_matrix_inverse.h
+    vnl_qr.hxx vnl_qr.h
+    vnl_scatter_3x3.hxx vnl_scatter_3x3.h
     vnl_cholesky.cxx vnl_cholesky.h
     vnl_ldl_cholesky.cxx vnl_ldl_cholesky.h
     vnl_sparse_lu.cxx vnl_sparse_lu.h
     vnl_real_eigensystem.cxx vnl_real_eigensystem.h
     vnl_complex_eigensystem.cxx vnl_complex_eigensystem.h
-    vnl_symmetric_eigensystem.txx vnl_symmetric_eigensystem.h
+    vnl_symmetric_eigensystem.hxx vnl_symmetric_eigensystem.h
     vnl_generalized_eigensystem.cxx vnl_generalized_eigensystem.h
     vnl_sparse_symmetric_eigensystem.cxx vnl_sparse_symmetric_eigensystem.h
     vnl_generalized_schur.cxx vnl_generalized_schur.h
@@ -79,18 +79,18 @@ if(NETLIB_FOUND)
 
     # fft
     vnl_fft.cxx vnl_fft.h
-    vnl_fft_base.txx vnl_fft_base.h
-    vnl_fft_1d.txx vnl_fft_1d.h
-    vnl_fft_2d.txx vnl_fft_2d.h
-    vnl_fft_prime_factors.txx vnl_fft_prime_factors.h
+    vnl_fft_base.hxx vnl_fft_base.h
+    vnl_fft_1d.hxx vnl_fft_1d.h
+    vnl_fft_2d.hxx vnl_fft_2d.h
+    vnl_fft_prime_factors.hxx vnl_fft_prime_factors.h
 
     # stuff
-    vnl_convolve.txx vnl_convolve.h
-    vnl_determinant.cxx vnl_determinant.txx vnl_determinant.h
-    vnl_chi_squared.txx vnl_chi_squared.h
+    vnl_convolve.hxx vnl_convolve.h
+    vnl_determinant.cxx vnl_determinant.hxx vnl_determinant.h
+    vnl_chi_squared.hxx vnl_chi_squared.h
     vnl_gaussian_kernel_1d.cxx vnl_gaussian_kernel_1d.h
-    vnl_adjugate.txx vnl_adjugate.h
-    vnl_orthogonal_complement.txx vnl_orthogonal_complement.h
+    vnl_adjugate.hxx vnl_adjugate.h
+    vnl_orthogonal_complement.hxx vnl_orthogonal_complement.h
     vnl_matrix_update.h
 
     # integral

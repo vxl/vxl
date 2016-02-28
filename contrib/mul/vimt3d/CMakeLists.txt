@@ -8,17 +8,17 @@ doxygen_add_library(contrib/mul/vimt3d
 
 set(vimt3d_sources
     vimt3d_transform_3d.h                 vimt3d_transform_3d.cxx
-    vimt3d_image_3d_of.h                  vimt3d_image_3d_of.txx
+    vimt3d_image_3d_of.h                  vimt3d_image_3d_of.hxx
     vimt3d_image_3d.h                     vimt3d_image_3d.cxx
-    vimt3d_sample_grid_trilin.h           vimt3d_sample_grid_trilin.txx
-    vimt3d_reconstruct_from_grid.h        vimt3d_reconstruct_from_grid.txx
+    vimt3d_sample_grid_trilin.h           vimt3d_sample_grid_trilin.hxx
+    vimt3d_reconstruct_from_grid.h        vimt3d_reconstruct_from_grid.hxx
     vimt3d_sample_profile_trilin.h
     vimt3d_trilin_interp.h
     vimt3d_slice.h
     vimt3d_load.h                         vimt3d_load.cxx
     vimt3d_save.h                         vimt3d_save.cxx
     vimt3d_reflect.h
-    vimt3d_gaussian_pyramid_builder_3d.h  vimt3d_gaussian_pyramid_builder_3d.txx
+    vimt3d_gaussian_pyramid_builder_3d.h  vimt3d_gaussian_pyramid_builder_3d.hxx
     vimt3d_crop.h
     vimt3d_vil3d_v3i.h                    vimt3d_vil3d_v3i.cxx
     vimt3d_vil3d_v3m.cxx                  vimt3d_vil3d_v3m.h

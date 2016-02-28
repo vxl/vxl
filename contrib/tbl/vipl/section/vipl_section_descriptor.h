@@ -153,7 +153,7 @@ class vipl_section_descriptor
 }; // end of class definition
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_section_descriptor.txx"
+#include "vipl_section_descriptor.hxx"
 #endif
 
 #endif // vipl_section_descriptor_h_

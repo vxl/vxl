@@ -1,5 +1,5 @@
-#include <boxm/boxm_scene.txx>
-#include <boct/boct_tree.txx>
+#include <boxm/boxm_scene.hxx>
+#include <boct/boct_tree.hxx>
 
 typedef boct_tree<short,int > tree;
 BOXM_SCENE_INSTANTIATE(tree);

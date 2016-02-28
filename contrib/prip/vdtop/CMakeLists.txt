@@ -15,13 +15,13 @@ set(vdtop_sources
     vdtop_draw_digital_graph.h
     vdtop_freeman_code.cxx vdtop_freeman_code.h
     vdtop_kernel.h
-    vdtop_misc.txx
+    vdtop_misc.hxx
     vdtop_neighborhood.h
-    vdtop_pixel.h vdtop_pixel.txx
+    vdtop_pixel.h vdtop_pixel.hxx
     vdtop_replace_quasi_8_minima.h
-    vdtop_set_4_veinerization_structure.h vdtop_set_4_veinerization_structure.txx
-    vdtop_set_8_veinerization_structure.h vdtop_set_8_veinerization_structure.txx
-    vdtop_set_structure_from_digital_graph.h vdtop_set_structure_from_digital_graph.txx
+    vdtop_set_4_veinerization_structure.h vdtop_set_4_veinerization_structure.hxx
+    vdtop_set_8_veinerization_structure.h vdtop_set_8_veinerization_structure.hxx
+    vdtop_set_structure_from_digital_graph.h vdtop_set_structure_from_digital_graph.hxx
     vdtop_well_composed_lower_leveling_kernel.h
     vil_canny_deriche_grad_filter.h
 )

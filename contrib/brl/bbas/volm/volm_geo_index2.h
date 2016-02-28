@@ -118,6 +118,6 @@ public:
 };
 
 #include <volm/volm_geo_index2_sptr.h>
-#define VOLM_GEO_INDEX2_INSTANTIATE(T) extern "Please #include <volm/volm_geo_index2.txx>"
+#define VOLM_GEO_INDEX2_INSTANTIATE(T) extern "Please #include <volm/volm_geo_index2.hxx>"
 
 #endif // volm_geo_index2_h_

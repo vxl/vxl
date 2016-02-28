@@ -3,7 +3,7 @@
 #include "my_pyramid.h"
 #include "my_top_level.h"
 #include <vmap/tests/my_map.h>
-#include "my_pyramid_functions.txx"
+#include "my_pyramid_functions.hxx"
 
 #include <vmap/vmap_non_oriented_kernel.h>
 #include <vmap/vmap_oriented_kernel.h>

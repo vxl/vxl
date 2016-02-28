@@ -1,5 +1,5 @@
-#include <bgrl2/bgrl2_edge.txx>
-#include <bgrl2/bgrl2_graph.txx>
-#include <bgrl2/bgrl2_vertex.txx>
+#include <bgrl2/bgrl2_edge.hxx>
+#include <bgrl2/bgrl2_graph.hxx>
+#include <bgrl2/bgrl2_vertex.hxx>
 
 int main() { return 0; }

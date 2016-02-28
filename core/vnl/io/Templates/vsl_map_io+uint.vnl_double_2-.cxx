@@ -1,4 +1,4 @@
-#include <vsl/vsl_map_io.txx>
+#include <vsl/vsl_map_io.hxx>
 #include <vnl/vnl_double_2.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 

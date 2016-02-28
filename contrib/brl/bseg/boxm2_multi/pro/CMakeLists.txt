@@ -14,7 +14,7 @@ if(EXPAT_FOUND)
 
 
   vxl_add_library( LIBNAME boxm2_multi_pro LIBSRCS ${boxm2_multi_pro_sources})
-  #install the .h .txx and libs
+  #install the .h .hxx and libs
 
   target_link_libraries(boxm2_multi_pro boxm2_multi_algo bprb)
 

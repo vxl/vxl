@@ -8,6 +8,6 @@
 #define VCL_DEQUE_INSTANTIATE \
 extern "include vcl_deque.txx instead"
 
-#include "vcl_deque.txx"
+#include "vcl_deque.hxx"
 
 #endif // vcl_deque_h_

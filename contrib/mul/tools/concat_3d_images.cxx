@@ -8,7 +8,7 @@
 #include <vcl_functional.h>
 #include <vcl_cstring.h>
 #include <vul/vul_file.h>
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_image_view.h>

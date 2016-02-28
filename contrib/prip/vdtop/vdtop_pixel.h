@@ -182,6 +182,6 @@ class vdtop_pixel
   vil_image_view<T> * img_ ;
 };
 
-#include "vdtop_pixel.txx"
+#include "vdtop_pixel.hxx"
 
 #endif

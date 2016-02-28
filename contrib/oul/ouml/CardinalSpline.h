@@ -7,8 +7,8 @@
 #include <vcl_vector.h>
 #include <vcl_string.h>
 #include <vcl_cassert.h>
-#include <vnl/io/vnl_io_vector_fixed.txx>
-#include <vnl/io/vnl_io_matrix.txx>
+#include <vnl/io/vnl_io_vector_fixed.hxx>
+#include <vnl/io/vnl_io_matrix.hxx>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_iostream.h>

@@ -10,7 +10,7 @@
 #include <vcl_iostream.h>
 #include <vcl_fstream.h>
 #include <vcl_vector.h>
-#include <vcl_vector.txx>
+#include <vcl_vector.hxx>
 
 #include <mvl/ImageMetric.h>
 #include <mvl/HomgPoint2D.h>

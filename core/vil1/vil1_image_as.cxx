@@ -14,7 +14,7 @@
 #include <vcl_string.h>
 
 #include <vil1/vil1_pixel.h>
-#include <vil1/vil1_memory_image_of_format.txx>
+#include <vil1/vil1_memory_image_of_format.hxx>
 
 #include <vxl_config.h>
 

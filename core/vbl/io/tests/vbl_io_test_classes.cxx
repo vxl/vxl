@@ -9,10 +9,10 @@
 // \file
 // \brief Contains some stuff for testing smart ptr IO
 
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 VBL_SMART_PTR_INSTANTIATE(impl);
 
-#include <vbl/io/vbl_io_smart_ptr.txx>
+#include <vbl/io/vbl_io_smart_ptr.hxx>
 VBL_IO_SMART_PTR_INSTANTIATE(impl);
 
 

@@ -9,7 +9,7 @@ doxygen_add_library(contrib/brl/bseg/bmdl
 add_definitions(-DDEBUG_MEMORY=1)
 
 set( bmdl_sources
-  bmdl_classify.txx    bmdl_classify.h
+  bmdl_classify.hxx    bmdl_classify.h
   bmdl_mesh.cxx        bmdl_mesh.h
 )
 

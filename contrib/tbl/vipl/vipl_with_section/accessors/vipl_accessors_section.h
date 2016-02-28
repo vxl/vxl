@@ -21,7 +21,7 @@ T getpixel(section<T,2> const& i, int x, int y, T); \
 void setpixel(section<T,2>& i, int x, int y, T e)
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_accessors_section.txx"
+#include "vipl_accessors_section.hxx"
 #endif
 
 #endif // vipl_accessors_section_h_

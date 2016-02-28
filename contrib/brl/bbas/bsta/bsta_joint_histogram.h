@@ -134,6 +134,6 @@ template <class T> class bsta_joint_histogram : public bsta_joint_histogram_base
   vbl_array_2d<T> counts_;
 };
 #include <bsta/bsta_joint_histogram_sptr.h>
-#define BSTA_JOINT_HISTOGRAM_INSTANTIATE(T) extern "Please #include <bsta/bsta_joint_histogram.txx>"
+#define BSTA_JOINT_HISTOGRAM_INSTANTIATE(T) extern "Please #include <bsta/bsta_joint_histogram.hxx>"
 
 #endif // bsta_joint_histogram_h_

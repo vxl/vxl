@@ -1,4 +1,4 @@
-#include <vsph/vsph_view_sphere.txx>
+#include <vsph/vsph_view_sphere.hxx>
 #include <vsph/vsph_view_point.h>
 
 typedef vsph_view_point<vcl_string> type;

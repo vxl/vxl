@@ -7,7 +7,7 @@
 
 #include <vcl_cstddef.h>
 #include <vcl_cassert.h>
-#include <vcl_map.txx>
+#include <vcl_map.hxx>
 #include <vcl_cstdlib.h> // abort()
 #include <vsl/vsl_binary_explicit_io.h>
 

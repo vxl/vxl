@@ -707,6 +707,6 @@ class vmap_2_tmap: public vmap_2_map<D>,
   }
 };
 
-#include "vmap_2_tmap.txx"
+#include "vmap_2_tmap.hxx"
 
 #endif

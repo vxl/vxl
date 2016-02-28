@@ -11,7 +11,7 @@ set(bapl_sources
    bapl_keypoint.cxx            bapl_keypoint.h                 bapl_keypoint_sptr.h
    bapl_keypoint_set.cxx        bapl_keypoint_set.h             bapl_keypoint_set_sptr.h
    bapl_lowe_keypoint.cxx       bapl_lowe_keypoint.h            bapl_lowe_keypoint_sptr.h
-   bapl_lowe_pyramid.txx        bapl_lowe_pyramid.h
+   bapl_lowe_pyramid.hxx        bapl_lowe_pyramid.h
    bapl_lowe_pyramid_set.cxx    bapl_lowe_pyramid_set.h         bapl_lowe_pyramid_set_sptr.h
    bapl_keypoint_extractor.cxx  bapl_keypoint_extractor.h
    bapl_bbf_tree.cxx            bapl_bbf_tree.h

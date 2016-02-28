@@ -7,7 +7,7 @@
 #include <vcl_iostream.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vsl/vsl_binary_loader.txx>
+#include <vsl/vsl_binary_loader.hxx>
 #include <vpl/vpl.h>
 
 //: Base class to test polymorphic loading

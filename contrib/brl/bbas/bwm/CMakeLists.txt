@@ -129,7 +129,7 @@ add_subdirectory(io)
 add_subdirectory(reg)
 
 
-#install the .h .txx and libs
+#install the .h .hxx and libs
 
 if(EXPAT_FOUND)
  if(EXPATPP_FOUND)

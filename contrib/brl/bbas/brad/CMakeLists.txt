@@ -10,7 +10,7 @@
       brad_hist_prob_feature_vector.h brad_hist_prob_feature_vector.cxx
       brad_grad_hist_feature_vector.h brad_grad_hist_feature_vector.cxx
       brad_grad_int_feature_vector.h  brad_grad_int_feature_vector.cxx
-      brad_eigenspace.h               brad_eigenspace.txx
+      brad_eigenspace.h               brad_eigenspace.hxx
       brad_eigenspace_base.h          brad_eigenspace_base.cxx
       brad_eigenspace_sptr.h
       brad_phongs_model_est.h         brad_phongs_model_est.cxx

@@ -255,7 +255,7 @@ is obtained by capitalizing the name (of that class or function) and appending
 @smallexample
 // Templates/vcl_map+int.X-.cxx
 #include "X.h"         // declaration of class X.
-#include <vcl_map.txx> // the instantiation macro lives here.
+#include <vcl_map.hxx> // the instantiation macro lives here.
 VCL_MAP_INSTANTIATE(int, X, vcl_less<int>);
 @end smallexample
 
@@ -264,7 +264,7 @@ and here is how to instantiate @code{vcl_vector<X *>}:
 @smallexample
 // Templates/vcl_vector+X~-.cxx
 struct X; // forward declare the class.
-#include <vcl_vector.txx>
+#include <vcl_vector.hxx>
 VCL_VECTOR_INSTANTIATE(X *);
 @end smallexample
 

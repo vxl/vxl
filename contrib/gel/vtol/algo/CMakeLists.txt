@@ -1,7 +1,7 @@
 # vtol/algo/CMakeLists.txt
 
 set( vtol_algo_sources
-  vtol_extract_topology.h  vtol_extract_topology.cxx  vtol_extract_topology.txx
+  vtol_extract_topology.h  vtol_extract_topology.cxx  vtol_extract_topology.hxx
 # vtol_extract_topology_internals.h     vtol_extract_topology_internals.cxx
 )
 

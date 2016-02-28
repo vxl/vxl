@@ -9,7 +9,7 @@ doxygen_add_library(contrib/gel/vtol
 set(vtol_sources
  vtol_topology_object.cxx vtol_topology_object.h vtol_topology_object_sptr.h
  vtol_topology_cache.cxx  vtol_topology_cache.h  vtol_topology_cache_sptr.h
- vtol_list_functions.txx  vtol_list_functions.h
+ vtol_list_functions.hxx  vtol_list_functions.h
  vtol_chain.cxx           vtol_chain.h           vtol_chain_sptr.h
  vtol_two_chain.cxx       vtol_two_chain.h       vtol_two_chain_sptr.h
  vtol_one_chain.cxx       vtol_one_chain.h       vtol_one_chain_sptr.h

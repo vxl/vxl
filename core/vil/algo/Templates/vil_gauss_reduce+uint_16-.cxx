@@ -1,5 +1,5 @@
 #include <vxl_config.h>
-#include <vil/algo/vil_gauss_reduce.txx>
+#include <vil/algo/vil_gauss_reduce.hxx>
 
 //Explicit instantiation of the called single plane template functions also seems to be needed
 //by some compilers/where not covered by one of the specialisations

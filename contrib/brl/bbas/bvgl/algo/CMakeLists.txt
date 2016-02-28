@@ -22,7 +22,7 @@ set( bvgl_algo_sources
   bvgl_2d_geo_index_node_base.h     bvgl_2d_geo_index_node_base.cxx
   bvgl_2d_geo_index.h               bvgl_2d_geo_index.cxx
   bvgl_2d_geo_index_sptr.h
-  bvgl_2d_geo_index.txx
+  bvgl_2d_geo_index.hxx
 
   bvgl_biarc.cxx               bvgl_biarc.h
   bvgl_eulerspiral.cxx         bvgl_eulerspiral.h

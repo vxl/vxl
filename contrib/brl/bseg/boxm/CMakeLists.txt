@@ -9,10 +9,10 @@ include_directories( ${BRL_INCLUDE_DIR}/b3p/expatpp )
 
 set(boxm_sources
     boxm_export.h
-    boxm_block.txx                         boxm_block.h
+    boxm_block.hxx                         boxm_block.h
     boxm_scene_base.cxx                    boxm_scene_base.h
-    boxm_scene.txx                         boxm_scene.h
-    boxm_aux_scene.txx                     boxm_aux_scene.h
+    boxm_scene.hxx                         boxm_scene.h
+    boxm_aux_scene.hxx                     boxm_aux_scene.h
     boxm_scene_parser.cxx                  boxm_scene_parser.h
     boxm_apm_traits.cxx                    boxm_apm_traits.h
     boxm_aux_traits.h
@@ -48,4 +48,4 @@ endif()
 
 endif()
 
-#install the .h .txx and libs
+#install the .h .hxx and libs

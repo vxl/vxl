@@ -12,9 +12,9 @@ set(ouml_sources
   polygon_mesh.h     polygon_mesh.cxx
   CardinalSpline.h   CardinalSpline.cxx
 
-  image_convert.h    image_convert.txx
-  image_ops.h        image_ops.txx
-  io.h               io.txx
+  image_convert.h    image_convert.hxx
+  image_ops.h        image_ops.hxx
+  io.h               io.hxx
 
   inlines.h
 )

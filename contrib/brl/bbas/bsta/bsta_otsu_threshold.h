@@ -38,6 +38,6 @@ template <class T> class bsta_otsu_threshold
   bsta_histogram<T> distribution_1d_;
 };
 
-#define BSTA_OTSU_THRESHOLD_INSTANTIATE(T) extern "Please #include <bsta/bsta_otsu_threshold.txx>"
+#define BSTA_OTSU_THRESHOLD_INSTANTIATE(T) extern "Please #include <bsta/bsta_otsu_threshold.hxx>"
 
 #endif // bsta_otsu_threshold_h_

@@ -175,6 +175,6 @@ vgl_homg_plane_3d<Type> operator*(vnl_matrix_fixed<Type,4,3> const& m,
                                   vgl_homg_line_2d<Type> const& l);
 
 #define VGL_HOMG_OPERATORS_3D_INSTANTIATE(T) \
-        "Please #include <vgl/algo/vgl_homg_operators_3d.txx>"
+        "Please #include <vgl/algo/vgl_homg_operators_3d.hxx>"
 
 #endif // vgl_homg_operators_3d_h_
