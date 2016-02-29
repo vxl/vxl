@@ -191,7 +191,7 @@ class vnl_vector_fixed
   //: Put value at given position in vector.
   inline void put (unsigned int i, T const& v)
   {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
     if (i >= this->size())           // If invalid index specified
       vnl_error_vector_index("put", i); // Raise exception
 #endif
@@ -201,7 +201,7 @@ class vnl_vector_fixed
   //: Get value at element i
   inline T get (unsigned int i) const
   {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
     if (i >= this->size())            // If invalid index specified
       vnl_error_vector_index("get", i);  // Raise exception
 #endif

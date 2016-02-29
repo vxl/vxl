@@ -715,7 +715,7 @@ template<class T>
 inline T vnl_matrix<T>
 ::get(unsigned r, unsigned c) const
 {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
   if (r >= this->num_rows)                // If invalid size specified
     vnl_error_matrix_row_index("get", r); // Raise exception
   if (c >= this->num_cols)                // If invalid size specified
@@ -731,7 +731,7 @@ template<class T>
 inline void vnl_matrix<T>
 ::put(unsigned r, unsigned c, T const& v)
 {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
   if (r >= this->num_rows)                // If invalid size specified
     vnl_error_matrix_row_index("put", r); // Raise exception
   if (c >= this->num_cols)                // If invalid size specified

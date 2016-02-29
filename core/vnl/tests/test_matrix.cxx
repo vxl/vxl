@@ -53,7 +53,7 @@ void test_int()
   // ACCESSORS //
   ///////////////
 
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
 
   {
   // Get

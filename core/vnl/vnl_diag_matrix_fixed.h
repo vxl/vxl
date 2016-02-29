@@ -130,7 +130,7 @@ class vnl_diag_matrix_fixed
   {
     assert(r == c);
     (void)c;
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
     if (r >= this->size())                  // If invalid size specified
       vnl_error_matrix_row_index("put", r); // Raise exception
 #endif
@@ -142,7 +142,7 @@ class vnl_diag_matrix_fixed
   {
     assert(r == c);
     (void)c;
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
     if (r >= this->size())                  // If invalid size specified
       vnl_error_matrix_row_index("get", r); // Raise exception
 #endif

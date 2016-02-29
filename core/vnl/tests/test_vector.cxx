@@ -51,7 +51,7 @@ void vnl_vector_test_int()
   // ACCESSORS //
   ///////////////
 
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
 
   {
   bool exceptionThrownAndCaught = false;

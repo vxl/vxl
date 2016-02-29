@@ -16,6 +16,7 @@
 //   Mar.2009 - Peter Vanroose - added arg_min() and arg_max()
 //   Oct.2010 - Peter Vanroose - mutators and setters now return *this
 // \endverbatim
+# include <vnl/vnl_error.h>
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_tag.h>
@@ -492,7 +493,7 @@ template <class T>
 inline T vnl_vector<T>
 ::get(unsigned int i) const
 {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
   if (i >= this->size())     // If invalid index specified
     vnl_error_vector_index("get", i);  // Raise exception
 #endif
@@ -506,7 +507,7 @@ template <class T>
 inline void vnl_vector<T>
 ::put(unsigned int i, T const& v)
 {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
   if (i >= this->size())     // If invalid index specified
     vnl_error_vector_index("put", i); // Raise exception
 #endif
