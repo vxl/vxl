@@ -1,6 +1,6 @@
 # vxl/config/cmake/VXLConfig_export.cmake.in
 #   also configured by CMake to
-# @CMAKE_BINARY_DIR@/config/cmake/export/VXLConfig.cmake
+# @PROJECT_BINARY_DIR@/config/cmake/export/VXLConfig.cmake
 #
 # This CMake module is configured by VXL's build process to export the
 # project settings for use by client projects.  A client project may

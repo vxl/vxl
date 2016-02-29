@@ -28,7 +28,7 @@ else()
   set( VXL_CONFIG_SERIAL_LAST ${VXL_CONFIG_SERIAL_CURRENT} CACHE INTERNAL "Serial number of last configuration" )
 endif()
 
-set(vxl_config_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/config)
+set(vxl_config_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(VXL_PLFM_TEST_FILE ${vxl_config_SOURCE_DIR}/vxl_platform_tests.cxx)
 ########################################################################
 # START MACRO DEFINITIONS
@@ -623,7 +623,7 @@ if(UNIX)
 endif()
 
 # Check C++ <cmath> first, where the C++11 standard says these must be.
-include(${CMAKE_SOURCE_DIR}/config/cmake/config/CheckCXXExpressionCompiles.cmake) ## From VTK
+include(${CMAKE_CURRENT_LIST_DIR}/CheckCXXExpressionCompiles.cmake) ## From VTK
 check_cxx_expression_compiles("std::isnan(0.0)" "cmath" VXL_HAS_STD_ISNAN)
 check_cxx_expression_compiles("std::isinf(0.0)" "cmath" VXL_HAS_STD_ISINF)
 check_cxx_expression_compiles("std::isfinite(0.0)" "cmath" VXL_HAS_STD_ISFINITE)

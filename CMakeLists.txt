@@ -39,7 +39,7 @@ include(CMakeDependentOption)
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
   set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --malloc-fill=0xFF" )
-  set( MEMORYCHECK_SUPPRESSIONS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/config/valgrind.supp" )
+  set( MEMORYCHECK_SUPPRESSIONS_FILE "${CMAKE_CURRENT_LIST_DIR}/config/valgrind.supp" )
 endif()
 
 #-----------------------------------------------------------------------------
@@ -67,6 +67,11 @@ SETIFEMPTY(CMAKE_INSTALL_LIBRARY_DESTINATION lib)
 SETIFEMPTY(CMAKE_INSTALL_ARCHIVE_DESTINATION lib)
 SETIFEMPTY(CMAKE_INSTALL_RUNTIME_DESTINATION bin)
 
+# Allow external project to override the export target
+if(NOT VXL_NO_EXPORT)
+  SETIFEMPTY(VXL_INSTALL_EXPORT_NAME VXLTargets)
+endif()
+
 if(NOT VXL_INSTALL_RUNTIME_DIR)
   set(VXL_INSTALL_RUNTIME_DIR bin)
 endif()
@@ -81,15 +86,16 @@ if(NOT VXL_LIB_PREFIX)
 endif()
 
 # CMake support directory.
-set(VXL_CMAKE_DIR ${CMAKE_SOURCE_DIR}/config/cmake/Modules)
+set(VXL_ROOT_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR})
+set(VXL_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR}/config/cmake/Modules)
 
 include( ${VXL_CMAKE_DIR}/VXLStandardOptions.cmake )
-include( ${CMAKE_SOURCE_DIR}/config/cmake/config/vxl_utils.cmake )
-include(${CMAKE_SOURCE_DIR}/config/cmake/doxygen/doxygen.cmake)
+include( ${CMAKE_CURRENT_LIST_DIR}/config/cmake/config/vxl_utils.cmake )
+include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/doxygen/doxygen.cmake)
 
 # Location of VXL's FindXXX.cmake CMake modules.
 # This is identical to VXL_CMAKE_DIR.  Perhaps we should eliminate MODULE_PATH?
-set( MODULE_PATH ${CMAKE_SOURCE_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
+set( MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/config/cmake/Modules CACHE STATIC "VXL module path" )
 
 # Options to add extra compiler and linker flags
 #
@@ -154,32 +160,32 @@ endif()
 
 # Some types of path names can cause havoc with regular expressions,
 # so avoid those.
-if( ${CMAKE_BINARY_DIR} MATCHES  \\+ )
+if( ${PROJECT_BINARY_DIR} MATCHES  \\+ )
   message(SEND_ERROR "You cannot have a + in your binary path")
 endif()
-if( ${CMAKE_SOURCE_DIR} MATCHES  \\+ )
+if( ${CMAKE_CURRENT_LIST_DIR} MATCHES  \\+ )
   message(SEND_ERROR "You cannot have a + in your source path")
 endif()
 
 # include CMakeListsLocal.txt from source directory if it exists
 # also include it from the binary dir if different from source dir
-if( ${CMAKE_BINARY_DIR} MATCHES ${CMAKE_SOURCE_DIR} )
-  include( ${CMAKE_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
+if( ${PROJECT_BINARY_DIR} MATCHES ${CMAKE_CURRENT_LIST_DIR} )
+  include( ${CMAKE_CURRENT_LIST_DIR}/CMakeListsLocal.txt OPTIONAL )
 else()
-  include( ${CMAKE_SOURCE_DIR}/CMakeListsLocal.txt OPTIONAL )
-  include( ${CMAKE_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
+  include( ${CMAKE_CURRENT_LIST_DIR}/CMakeListsLocal.txt OPTIONAL )
+  include( ${PROJECT_BINARY_DIR}/CMakeListsLocal.txt OPTIONAL )
 endif()
 
 # Standard include directories.
-set(VXLCORE_INCLUDE_DIR ${CMAKE_BINARY_DIR}/core ${CMAKE_SOURCE_DIR}/core)
+set(VXLCORE_INCLUDE_DIR ${PROJECT_BINARY_DIR}/core ${CMAKE_CURRENT_LIST_DIR}/core)
 set(VXLCORE_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/core)
-set(VCL_INCLUDE_DIR ${CMAKE_BINARY_DIR}/vcl ${CMAKE_SOURCE_DIR}/vcl)
+set(VCL_INCLUDE_DIR ${PROJECT_BINARY_DIR}/vcl ${CMAKE_CURRENT_LIST_DIR}/vcl)
 set(VCL_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/vcl)
 
 include_directories(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
 # Do platform-specific configuration.
-include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/config/VXLIntrospectionConfig.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/config/VXLIntrospectionConfig.cmake)
 
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS
@@ -208,7 +214,7 @@ add_subdirectory(v3p)
 add_subdirectory(core)
 
 # Optionally build the contributed libraries
-if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/CMakeLists.txt )
+if( EXISTS ${CMAKE_CURRENT_LIST_DIR}/contrib/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_CONTRIB "Build the contributed libraries?" ON "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF)
   add_subdirectory(contrib)
 endif()
@@ -228,6 +234,7 @@ set(VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all t
 configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
   ${vxl_BINARY_DIR}/CTestCustom.cmake COPYONLY )
 
-
-# This add_subdirectory command must be the last add_subdirectory command in this file
-include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/export/VXLCreateProject.cmake)
+# This command must be the last command in this file
+if(NOT VXL_NO_EXPORT)
+  include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/export/VXLCreateProject.cmake)
+endif()

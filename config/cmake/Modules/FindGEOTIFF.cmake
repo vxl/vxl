@@ -30,11 +30,11 @@ if( NOT GEOTIFF_FOUND )
   #
 
   if( NOT GEOTIFF_FOUND )
-    if(EXISTS ${CMAKE_SOURCE_DIR}/v3p/geotiff/geotiff.h)
+    if(EXISTS ${VXL_ROOT_SOURCE_DIR}/v3p/geotiff/geotiff.h)
       # Use FIND_PATH here to allow the user to set the path to IGNORE
       # to disable geotiff support.
       find_path(GEOTIFF_INCLUDE_DIR geotiff.h
-        ${CMAKE_SOURCE_DIR}/v3p/geotiff
+        ${VXL_ROOT_SOURCE_DIR}/v3p/geotiff
       )
       if( GEOTIFF_INCLUDE_DIR )
         set( GEOTIFF_FOUND "YES" )
