@@ -45,7 +45,7 @@
 // platforms with vcl_vector<vnl_rational>.
 # define VNL_SSE_FORCE_INLINE /* __attribute__((always_inline)) */ inline
 # define VNL_SSE_STACK_ALIGNED(x)  __attribute__((aligned(x)))
-#elif defined VCL_VC || defined VCL_ICC
+#elif defined VCL_VC
 # define VNL_SSE_FORCE_INLINE __forceinline
 # define VNL_SSE_STACK_ALIGNED(x)  __declspec(align(x))
 #else
