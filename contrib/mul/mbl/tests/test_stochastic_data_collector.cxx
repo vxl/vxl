@@ -76,7 +76,7 @@ void test_stochastic_data_collector()
   vcl_cout << "=========Testing IO\n";
 
   mbl_stochastic_data_collector<vnl_vector<double> > collector2;
-  mbl_data_collector_base *collector3=0;
+  mbl_data_collector_base *collector3=VXL_NULLPTR;
 
   vcl_string path = "test_stochastic_data_collector.bvl.tmp";
   vcl_cout<<"Saving : "<<collector<<'\n';

@@ -13,10 +13,10 @@
 vifa_line_cover::
 vifa_line_cover()
 {
-  line_ = NULL;
-  index_ = NULL;
-  max_extent_ = NULL;
-  min_extent_ = NULL;
+  line_ = VXL_NULLPTR;
+  index_ = VXL_NULLPTR;
+  max_extent_ = VXL_NULLPTR;
+  min_extent_ = VXL_NULLPTR;
   dim_ =0;
 }
 
@@ -155,8 +155,8 @@ GetExtent(imp_line_sptr&  lmin,
 {
   if (!line_)
   {
-    lmin = NULL;
-    lmax = NULL;
+    lmin = VXL_NULLPTR;
+    lmax = VXL_NULLPTR;
     return;
   }
 

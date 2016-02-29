@@ -23,10 +23,10 @@
 sdet_region_proc::sdet_region_proc(sdet_region_proc_params& rpp)
   : sdet_region_proc_params(rpp)
 {
-  image_ = 0;
-  vimage_ = 0;
-  clip_ = 0;
-  vclip_ = 0;
+  image_ = VXL_NULLPTR;
+  vimage_ = VXL_NULLPTR;
+  clip_ = VXL_NULLPTR;
+  vclip_ = VXL_NULLPTR;
   use_vil_image_ = true; //who knows, but need to chose one
 }
 
@@ -75,7 +75,7 @@ vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0
                                  unsigned n_i, unsigned j0, unsigned n_j);
   if (box)
   {
-    vclip_ = 0;
+    vclip_ = VXL_NULLPTR;
 
     unsigned i0 = (unsigned)box->get_min_x(), j0 = (unsigned)box->get_min_y();
     unsigned n_i = ((unsigned)box->get_max_x())-i0;
@@ -191,7 +191,7 @@ vil1_image sdet_region_proc::get_residual_image()
   if (!image_||!regions_valid_)
   {
     vcl_cout << "In sdet_region_proc::get_residual_image() - no regions\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   int xsize = image_.width(), ysize = image_.height();
   vil1_memory_image_of<unsigned char> res_image(xsize, ysize);

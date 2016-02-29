@@ -435,7 +435,7 @@ vil1_image sdet_watershed_region_proc::get_residual_image()
   if (!image_ || !regions_valid_)
   {
     vcl_cout << "In sdet_watershed_region_proc::get_residual_image() - no regions\n";
-    return 0;
+    return VXL_NULLPTR;
   }
   int xsize = image_.width(), ysize = image_.height();
   vil1_memory_image_of<unsigned char> res_image(xsize, ysize);

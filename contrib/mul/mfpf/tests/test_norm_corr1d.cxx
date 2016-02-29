@@ -138,7 +138,7 @@ void test_norm_corr1d()
     bfs_out.close();
 
     mfpf_norm_corr1d norm_corr1d_in;
-    mfpf_point_finder *base_ptr_in = 0;
+    mfpf_point_finder *base_ptr_in = VXL_NULLPTR;
 
     vsl_b_ifstream bfs_in("test_norm_corr1d.bvl.tmp");
     TEST ("Opened test_norm_corr1d.bvl.tmp for reading", (!bfs_in), false);

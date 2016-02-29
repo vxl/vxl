@@ -372,6 +372,11 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
   max *= 0.8f;
   for (unsigned int i=0; i<peaks.size(); ++i) {
     if (histogram[ peaks[i] ] > max) {
+      //check for zivide by zero condition
+      if (num_bins_ == 0) {
+        vcl_cerr << "ERROR: Division by 0" << vcl_endl;
+        throw 0;
+      }
       //parabolic interpolation
       float ypos = histogram[ (peaks[i]+1)%num_bins_ ];
       float yneg = histogram[ (peaks[i]-1)%num_bins_ ];
@@ -380,6 +385,7 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
       float dx = 6.28319f/num_bins_;
       float angle = (float(peaks[i])+dy/d2y)*dx;
       orientations.push_back(angle);
+      
     }
   }
 }

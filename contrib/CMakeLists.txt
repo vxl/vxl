@@ -1,15 +1,15 @@
 # This is contrib/CMakeLists.txt
 # Dependencies: mul --> (rpl,tbl);  oxl --> gel --> brl;  (gel,oxl) --> conversions
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/conversions/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/conversions/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_CONVERSIONS "Build the Conversions Examples?" ON "BUILD_CONTRIB" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/gel/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/gel/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_GEL "Build the GE library package?" ON "BUILD_CONTRIB" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/brl/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_BRL "Build the Brown University library package?" ON "BUILD_CONTRIB" OFF)
   # Optionally Build this library only if VGUI is available
   CMAKE_DEPENDENT_OPTION(BUILD_BGUI3D "Build VGUI wrapper for Coin3d" OFF "BUILD_CONTRIB;BUILD_BRL;BUILD_GEL;HAS_VGUI" OFF)
@@ -17,24 +17,24 @@ if( EXISTS ${vxl_SOURCE_DIR}/contrib/brl/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_BRL_PYTHON "Build the python interfaces for BRL" OFF "BUILD_CONTRIB;BUILD_BRL" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/mul/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/mul/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_MUL "Build the Manchester University library package?" ON "BUILD_CONTRIB" OFF)
   CMAKE_DEPENDENT_OPTION(BUILD_MUL_TOOLS "Build the MUL tools?" ON "BUILD_CONTRIB;BUILD_MUL" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/oul/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/oul/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_OUL "Build the Otago University library package?" ON "BUILD_CONTRIB" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/prip/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/prip/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_PRIP "Build the T.U.Wien library package?" ON "BUILD_CONTRIB" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/oxl/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/oxl/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_OXL "Build the Oxford University library package?" ON "BUILD_CONTRIB" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/rpl/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/rpl/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_RPL "Build the RPI library package?" ON "BUILD_CONTRIB" OFF)
   CMAKE_DEPENDENT_OPTION(BUILD_RPL_RGTL "Build Rensselaer Generic Tree Library (rgtl)" OFF "BUILD_CONTRIB;BUILD_RPL" OFF)
   mark_as_advanced(BUILD_RPL_RTVL)
@@ -42,11 +42,11 @@ if( EXISTS ${vxl_SOURCE_DIR}/contrib/rpl/CMakeLists.txt )
   mark_as_advanced(BUILD_RPL_RGTL)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/tbl/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/tbl/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(BUILD_TBL "Build the TB library package?" ON "BUILD_CONTRIB" OFF)
 endif()
 
-if( EXISTS ${vxl_SOURCE_DIR}/contrib/cul/CMakeLists.txt )
+if( EXISTS ${CMAKE_SOURCE_DIR}/contrib/cul/CMakeLists.txt )
     CMAKE_DEPENDENT_OPTION(BUILD_CUL OFF "Build the Cornell University library package?" "BUILD_CONTRIB" OFF)
 endif()
 

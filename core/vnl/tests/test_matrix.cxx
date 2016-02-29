@@ -5,6 +5,11 @@
 #include <vnl/vnl_copy.h>
 #include <testlib/testlib_test.h>
 #include <vcl_cmath.h> // sqrt()
+#include <vcl_exception.h>
+
+// This function is used in testing later.
+template< typename T >
+T sum_vector(const vnl_vector<T> &v) { return v.sum(); }
 
 static
 void test_int()
@@ -12,6 +17,11 @@ void test_int()
   vcl_cout << "***********************\n"
            << "Testing vnl_matrix<int>\n"
            << "***********************" << vcl_endl;
+
+  //////////////////
+  // CONSTRUCTORS //
+  //////////////////
+
   vnl_matrix<int> m0(2,2);
   TEST("vnl_matrix<int> m0(2,2)", (m0.rows()==2 && m0.columns()==2), true);
   vnl_matrix<int> m1(3,4);
@@ -38,6 +48,50 @@ void test_int()
         (m0.get(0,0)==2 && m0.get(0,1)==2 && m0.get(1,0)==2 && m0.get(1,1)==2)), true);
   TEST("m0 == m2", (m0 == m2), true);
   TEST("(m0 == m2)", (m0 == m2), true);
+
+  ///////////////
+  // ACCESSORS //
+  ///////////////
+
+#ifdef VNL_CONFIG_CHECK_BOUNDS
+
+  {
+  // Get
+  bool exceptionThrownAndCaught = false;
+  vcl_try { m0.get(0,25); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds get(0,25)", exceptionThrownAndCaught, true);
+  
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.get(25,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds get(25,0)", exceptionThrownAndCaught, true);
+
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.get(25,25); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds get(25,25)", exceptionThrownAndCaught, true);
+
+  // Put
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.put(0,25,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds put(0,25,0)", exceptionThrownAndCaught, true);
+
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.put(25,0,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds put(25,0,0)", exceptionThrownAndCaught, true);
+
+  exceptionThrownAndCaught = false;
+  vcl_try { m0.put(25,25,0); }  // Raise out of bounds exception.
+  vcl_catch_all { exceptionThrownAndCaught = true; }
+  TEST("Out of bounds put(25,25,0)", exceptionThrownAndCaught, true);
+
+  }
+
+#endif
+
   TEST("m2.put(1,1,3)", (m2.put(1,1,3),m2.get(1,1)), 3);
   TEST("m2.get(1,1)", m2.get(1,1), 3);
   int v2_data[] = {2,3};
@@ -223,6 +277,17 @@ void test_int()
     TEST("zero-size after clear()", m2.rows(), 0);
     TEST("zero-size after clear()", m2.columns(), 0);
   }
+
+  {
+  vnl_matrix<int> m(5,10,1);
+  vnl_vector<int> vr = m.apply_rowwise(sum_vector);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
+  vnl_vector<int> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
+  }
+
 }
 
 
@@ -344,6 +409,17 @@ void test_float()
   v.clear();
   TEST("zero-size after clear()", v.rows(), 0);
   TEST("zero-size after clear()", v.columns(), 0);
+
+  {
+  vnl_matrix<float> m(5,10,1);
+  vnl_vector<float> vr = m.apply_rowwise(sum_vector);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
+  vnl_vector<float> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
+  }
+
 }
 
 void test_double()
@@ -444,6 +520,17 @@ void test_double()
   d9.fill(-15.0);
   vnl_copy(d10, d9);
   TEST("vnl_copy(T, S)", d9==d2, true);
+
+  {
+  vnl_matrix<double> m(5,10,1);
+  vnl_vector<double> vr = m.apply_rowwise(sum_vector);
+  for (unsigned int i = 0; i < vr.size(); ++i)
+    TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
+  vnl_vector<double> vc = m.apply_columnwise(sum_vector);
+  for (unsigned int i = 0; i < vc.size(); ++i)
+    TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
+  }
+
 }
 
 #ifdef LEAK

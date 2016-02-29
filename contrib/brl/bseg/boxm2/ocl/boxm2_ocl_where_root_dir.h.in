@@ -11,5 +11,5 @@
 // may get checked back into the repository by accident.
 
 #ifndef BOXM2_OPENCL_SOURCE_DIR // file guard
-#define BOXM2_OPENCL_SOURCE_DIR "${BOXM2_OPENCL_SRC_DIR}"
+#define BOXM2_OPENCL_SOURCE_DIR "@BOXM2_OPENCL_SRC_DIR@"
 #endif

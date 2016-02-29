@@ -55,7 +55,7 @@ vpgl_camera<double>* bwm_observer_rat_cam::read_camera(vcl_string cam_path,
 
   if (!cam) {
     bwm_utils::show_error("[" + cam_path + "] is not a valid rational camera path");
-    return 0;
+    return VXL_NULLPTR;
   }
   return cam;
 }
@@ -173,7 +173,7 @@ void bwm_observer_rat_cam::center_pos()
   vgui_dialog params ("Geographic Coordinates");
   double lat=41.830939, lon=-71.394178, elev=0;
 
-  if (viewer_ == 0) {
+  if (viewer_ == VXL_NULLPTR) {
     vcl_cerr << "viewer2D tableau is not found in the parents\n";
     return;
   }
@@ -1131,7 +1131,7 @@ void bwm_observer_rat_cam::project_edges_from_master()
     return;
   }
   // First determine if the master has a selected box
-  bgui_vsol_soview2D_polygon* box = 0;
+  bgui_vsol_soview2D_polygon* box = VXL_NULLPTR;
   bool selected =
     mobs->get_selected_box(box);
   if (!selected)

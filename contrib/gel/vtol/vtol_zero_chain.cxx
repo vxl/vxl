@@ -105,7 +105,7 @@ vtol_vertex_sptr vtol_zero_chain::v0() const
   if (numinf()>0)
     return inferiors()->front()->cast_to_vertex();
   else
-    return 0;
+    return VXL_NULLPTR;
 }
 
 //: get list of vertices

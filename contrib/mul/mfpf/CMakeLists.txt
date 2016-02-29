@@ -69,7 +69,7 @@ set(mfpf_sources
 )
 
 aux_source_directory(Templates mfpf_sources)
-add_library(mfpf ${mfpf_sources} )
+vxl_add_library( LIBNAME mfpf LIBSRCS ${mfpf_sources} )
 target_link_libraries(mfpf clsfy mipa)
 
 if(BUILD_MUL_TOOLS)

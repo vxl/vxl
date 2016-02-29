@@ -27,9 +27,7 @@ aux_source_directory(Templates vmal_sources)
 )
 
 
-add_library(vmal ${vmal_sources})
-install_targets(/lib vmal)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/gel/vmal ${vmal_sources})
+vxl_add_library(LIBNAME vmal LIBSRCS ${vmal_sources})
 
 if(BUILD_OXL)
  target_link_libraries(vmal mvl osl ${VXL_LIB_PREFIX}vil)

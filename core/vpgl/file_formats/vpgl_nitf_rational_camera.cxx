@@ -145,7 +145,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     vcl_strncpy(temp,in_string-length,length);
     if ( (fsec = (float)vcl_atof(temp)) >= 60.0f || fsec<0.0f)
       return 0;
-    delete temp;
+    delete [] temp;
 
     //go past '"' and any spaces to the direction
     ++in_string;
@@ -189,7 +189,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
     vcl_strncpy(temp,in_string-length,length);
     *val = vcl_atof(temp);
     if (vcl_fabs(*val)>float(maxval)) return 0;
-    delete temp;
+    delete [] temp;
 
     ++in_string;
 

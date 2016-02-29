@@ -24,7 +24,7 @@ vsol_spatial_object_2d* vdgl_digital_region::clone() const
 //
 vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
   : vsol_region_2d(r),
-    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), pix_(0),
+    npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -41,7 +41,7 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const unsigned short *pix)
   : vsol_region_2d(),
-    npts_(0), pixel_size_(1.f), xp_(0), yp_(0), pix_(0),
+    npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -131,9 +131,9 @@ void vdgl_digital_region::set_I(unsigned short I)
 void vdgl_digital_region::ResetPixelData()
 {
   npts_ = 0;
-  delete [] xp_; xp_ = NULL;
-  delete [] yp_; yp_ = NULL;
-  delete [] pix_; pix_ = NULL;
+  delete [] xp_; xp_ = VXL_NULLPTR;
+  delete [] yp_; yp_ = VXL_NULLPTR;
+  delete [] pix_; pix_ = VXL_NULLPTR;
   xo_ = yo_ = io_ = io_stdev_=0.0f;
 }
 

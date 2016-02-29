@@ -89,8 +89,8 @@ int main2(int argc, char*argv[])
   vimt_add_all_binary_loaders();
 
   // Parse the program arguments
-  vul_arg<vcl_string> image_list_file(0, "file containing a list of input image filenames");
-  vul_arg<vcl_string> output_image_filename(0, "output image filename");
+  vul_arg<vcl_string> image_list_file(VXL_NULLPTR, "file containing a list of input image filenames");
+  vul_arg<vcl_string> output_image_filename(VXL_NULLPTR, "output image filename");
   vul_arg_parse(argc, argv);
 
   // Load the list of image filenames

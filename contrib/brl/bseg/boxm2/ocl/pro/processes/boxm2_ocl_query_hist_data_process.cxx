@@ -64,7 +64,7 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
   float x =pro.get_input<float>(i++);
   float y =pro.get_input<float>(i++);
   float z =pro.get_input<float>(i++);
-  vnl_vector_fixed<int,8> * element_int = 0;
+  vnl_vector_fixed<int,8> * element_int = VXL_NULLPTR;
   // set arguments
   vcl_vector<boxm2_block_id> block_ids = scene->get_block_ids();
   for (vcl_vector<boxm2_block_id>::iterator id = block_ids.begin(); id != block_ids.end(); ++id)

@@ -72,7 +72,7 @@ void bxml_expat_parser::startElement(const XML_Char* name, const XML_Char** atts
       stack_.push_back(data);
     }
     else
-      stack_.push_back(NULL);
+      stack_.push_back(VXL_NULLPTR);
   }
   else{
     if (stack_.back().ptr()) {
@@ -193,7 +193,7 @@ bxml_stream_read::next_element(vcl_istream& is, unsigned int& depth)
   char buf[4096];
   int done = 0;
 
-  bxml_data_sptr data = NULL;
+  bxml_data_sptr data = VXL_NULLPTR;
   depth = 0;
   while ( p_->parser.pop_complete_data(data, depth) )
     if (depth <= p_->depth)
@@ -211,6 +211,6 @@ bxml_stream_read::next_element(vcl_istream& is, unsigned int& depth)
       if (depth <= p_->depth)
         return data;
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 

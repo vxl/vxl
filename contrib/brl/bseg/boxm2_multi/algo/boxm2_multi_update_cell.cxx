@@ -70,8 +70,8 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
 
     //grab vis and pre images that correspond
 
-    bocl_mem_sptr vis_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, NULL /*vis_img*/, "vis image buff");
-    bocl_mem_sptr pre_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, NULL /*pre_img*/, "pre image buff");
+    bocl_mem_sptr vis_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, VXL_NULLPTR /*vis_img*/, "vis image buff");
+    bocl_mem_sptr pre_mem  = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, VXL_NULLPTR /*pre_img*/, "pre image buff");
     bocl_mem_sptr norm_mem = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, norm_image, "norm image buff");
     vis_mem->create_buffer(CL_MEM_READ_WRITE); // | CL_MEM_COPY_HOST_PTR);
     pre_mem->create_buffer(CL_MEM_READ_WRITE); // | CL_MEM_COPY_HOST_PTR);
@@ -295,6 +295,13 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
 
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      // check for invalid parameters
+      if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+      {
+        vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        throw 0;
+      }
+
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer(queues[i]);
       //grab mog
@@ -374,6 +381,13 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       //write alpha, mog and num obs to disk
       bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id,0,false);
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+      // check for invalid parameters
+      if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+      {
+        vcl_cerr << "ERROR: Division by 0 in " << __FILE__ << __LINE__ << vcl_endl;
+        throw 0;
+      }
+
       vcl_size_t dataLen = (vcl_size_t) (alpha->num_bytes()/alphaTypeSize);
       bocl_mem* mog       = ocl_cache->get_data(id,data_type,dataLen*apptypesize,false);
       //numobs

@@ -55,11 +55,9 @@ if(NOT VXL_USING_NATIVE_PNG)
       pngwutil.c
     )
 
-    add_library( png ${png_sources} )
-    install_targets( /lib png )
+    vxl_add_library( LIBNAME png LIBSRCS ${png_sources} )
 
     # SOME NEEDED DEFINITIONS
-
     add_definitions(-DPNG_CONFIGURE_LIBPNG)
 
     if(MSVC)

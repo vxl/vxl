@@ -93,7 +93,7 @@ static void test_find_neighbors()
 
   n.clear();
   cell_xlow->find_neighbors(X_LOW,n,9);
-  boct_tree_cell<short,vgl_point_3d<double> >* ncell=NULL;
+  boct_tree_cell<short,vgl_point_3d<double> >* ncell=VXL_NULLPTR;
   cell_xlow->find_neighbor(X_LOW,ncell,10);
 
   // ground truth for the code of the neighbor

@@ -76,7 +76,7 @@ static void test_bvxm_update_lidar_process()
       vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
-    bool non_null = (value_img != 0);
+    bool non_null = (value_img != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<vil_image_view_base_sptr>* result =
@@ -106,7 +106,7 @@ static void test_bvxm_update_lidar_process()
                << " didn't get value\n";
     }
 
-    non_null = (value_cam != 0);
+    non_null = (value_cam != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<vpgl_camera_double_sptr>* result2 =
@@ -198,7 +198,7 @@ static void test_bvxm_update_lidar_process()
       vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
-    bool non_null = (value_world != 0);
+    bool non_null = (value_world != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<bvxm_voxel_world_sptr>* result =
@@ -282,7 +282,7 @@ static void test_bvxm_update_lidar_process()
       vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " didn't get value\n";
     }
-    bool non_null = (value_img != 0);
+    bool non_null = (value_img != VXL_NULLPTR);
     TEST("display output non-null", non_null ,true);
 
     brdb_value_t<vil_image_view_base_sptr>* result =

@@ -68,7 +68,7 @@ bool boxm_generate_opt3_samples_process(bprb_func_process& pro)
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
-  if ((input_image == 0) || (camera == 0) || (scene == 0)) {
+  if ((input_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
     vcl_cout << "boxm_generate_opt3_samples_process: null input value, cannot run" << vcl_endl;
     return false;
   }

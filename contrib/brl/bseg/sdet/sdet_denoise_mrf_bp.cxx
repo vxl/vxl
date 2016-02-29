@@ -76,9 +76,9 @@ sdet_mrf_bp_sptr sdet_denoise_mrf_bp::
 pyramid_upsample(sdet_mrf_bp_sptr const& in_mrf, unsigned level)
 {
   if (level==0)
-    return 0;
+    return VXL_NULLPTR;
   unsigned nj = in_mrf->nj(), ni = in_mrf->ni();
-  if (!ni || !nj) return 0;
+  if (!ni || !nj) return VXL_NULLPTR;
   //initialize a mrf at the next resolution level
   vil_image_view<float> in_view = pyr_in_(level-1);
   unsigned njd = in_view.nj(), nid = in_view.ni();

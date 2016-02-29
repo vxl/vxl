@@ -16,7 +16,7 @@
 //: Constructor
 bgui_histogram_tableau::bgui_histogram_tableau()
   : left_offset_(10), top_offset_(10),
-    graph_width_(256), graph_height_(200), plot_(0)
+    graph_width_(256), graph_height_(200), plot_(VXL_NULLPTR)
 {
   easy_ = vgui_easy2D_tableau_new();
 
@@ -120,7 +120,7 @@ void bgui_histogram_tableau::clear()
 {
   easy_->remove(plot_);
   delete plot_;
-  plot_ = 0;
+  plot_ = VXL_NULLPTR;
 
   post_redraw();
 }

@@ -30,7 +30,7 @@ endif()
 
 aux_source_directory(Templates bpgl_algo_sources)
 
-add_library(bpgl_algo ${bpgl_algo_sources})
+vxl_add_library( LIBNAME bpgl_algo LIBSRCS ${bpgl_algo_sources})
 
 target_link_libraries(bpgl_algo bpgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
@@ -46,5 +46,3 @@ if( BUILD_EXAMPLES )
 #  add_subdirectory(examples)
 endif()
 
-install_targets(/lib bpgl_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bpgl/algo ${bpgl_algo_sources})

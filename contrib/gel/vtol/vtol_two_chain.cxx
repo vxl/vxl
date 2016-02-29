@@ -237,14 +237,14 @@ void vtol_two_chain::remove_superiors()
 void vtol_two_chain::update_superior_list_p_from_hierarchy_parent()
 {
   // Check to see if there is a parent node in the tree.
-  const vtol_two_chain *hierarchy_parent=0;
+  const vtol_two_chain *hierarchy_parent=VXL_NULLPTR;
   if (chain_superiors_.size()>0)
     hierarchy_parent = chain_superiors_.front()->cast_to_two_chain();
 
   // If vtol_two_chain is a child of another vtol_two_chain...the superiors
   // lists are updated.
 
-  if (hierarchy_parent!=0)
+  if (hierarchy_parent!=VXL_NULLPTR)
   {
     const vcl_list<vtol_topology_object*> *parent_superiors = hierarchy_parent->superiors_list();
 

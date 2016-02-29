@@ -60,11 +60,11 @@ class vsol_region_2d : public vsol_spatial_object_2d
   virtual vsol_region_2d* cast_to_region(void) { return this; }
   virtual vsol_region_2d const* cast_to_region(void) const { return this; }
 
-  virtual vsol_polygon_2d* cast_to_polygon(void) { return 0; }
-  virtual vsol_polygon_2d const* cast_to_polygon(void) const { return 0; }
+  virtual vsol_polygon_2d* cast_to_polygon(void) { return VXL_NULLPTR; }
+  virtual vsol_polygon_2d const* cast_to_polygon(void) const { return VXL_NULLPTR; }
 
-  virtual vsol_poly_set_2d* cast_to_poly_set(void) { return 0; }
-  virtual vsol_poly_set_2d const* cast_to_poly_set(void) const { return 0; }
+  virtual vsol_poly_set_2d* cast_to_poly_set(void) { return VXL_NULLPTR; }
+  virtual vsol_poly_set_2d const* cast_to_poly_set(void) const { return VXL_NULLPTR; }
   //***************************************************************************
   // Status report
   //***************************************************************************

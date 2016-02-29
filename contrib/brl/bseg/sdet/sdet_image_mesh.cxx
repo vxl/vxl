@@ -64,7 +64,7 @@ bool sdet_image_mesh:: step_boundary(vgl_line_segment_2d<double> const& parent,
 
 // constructor from a parameter block (the only way)
 sdet_image_mesh::sdet_image_mesh(sdet_image_mesh_params& imp)
-  : sdet_image_mesh_params(imp), mesh_valid_(false), resc_(0)
+  : sdet_image_mesh_params(imp), mesh_valid_(false), resc_(VXL_NULLPTR)
 {
 }
 

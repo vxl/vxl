@@ -44,7 +44,7 @@ vifa_group_pgram::
     imp_line_list*  illp = (*ilti);
     for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
     {
-      (*ili) = 0;
+      (*ili) = VXL_NULLPTR;
     }
 
     delete illp;
@@ -81,7 +81,7 @@ Clear()
   {
     imp_line_list*  illp = (*ilti);
     for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
-      (*ili) = 0;
+      (*ili) = VXL_NULLPTR;
 
     delete illp;
     (*ilti) = new imp_line_list;
@@ -118,7 +118,7 @@ GetLineCover(int  angle_bin)
 
   if (!lg.size())
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   // Construct a bounding box from the ROI and clip
@@ -134,7 +134,7 @@ GetLineCover(int  angle_bin)
                             bx, by, ex, ey))
   {
     vcl_cerr << "In vifa_group_pgram::GetLineCover(): No intersection found\n";
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   // Here we set the clipping bounds.
@@ -146,7 +146,7 @@ GetLineCover(int  angle_bin)
   int len = int(il->length());
   if (!len)
   {
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   vifa_line_cover_sptr  cov = new vifa_line_cover(il, len);

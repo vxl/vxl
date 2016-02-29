@@ -261,7 +261,7 @@ foreach $f (@FILES)
     elsif ($j eq 'vcl_cerrno.h') { $i='errno|EBUSY|EEXIST'; }
     elsif ($j eq 'vcl_cfloat.h') { $i='FLT_MAX|DBL_MAX|MAXFLOAT|MAXDOUBLE'; }
     elsif ($j eq 'vcl_climits.h') { $i='CHAR_BIT|CLK_TCK|[US]?(INT|CHAR)_(MIN|MAX)'; }
-    elsif ($j eq 'vcl_cmath.h') { $i='vcl_(abs|acos|asin|atan|atan2|ceil|cos|cosh|exp|fabs|floor|fmod|frexp|ldexp|log|log10|modf|pow|sin|sinh|sqrt|tan|tanh)|hypot|HUGE_VAL'; }
+    elsif ($j eq 'vcl_cmath.h') { $i='vcl_(abs|acos|asin|atan|atan2|ceil|cos|cosh|exp|fabs|floor|fmod|frexp|ldexp|log|log10|modf|pow|sin|sinh|sqrt|tan|tanh)|hypot'; }
     elsif ($j eq 'vcl_complex.h') { $i='vcl_(complex|real|imag|abs|arg|norm|conj|polar|cos|cosh|exp|log|log10|pow|sin|sinh|sqrt|tan|tanh)'; }
     elsif ($j eq 'vcl_complex.h' && $f =~ m!/tests/test_cmath\.cxx$!) { $i=''; }
     elsif ($j eq 'vcl_csetjmp.h') { $i='setjmp|vcl_(jmp_buf|longjmp)'; }

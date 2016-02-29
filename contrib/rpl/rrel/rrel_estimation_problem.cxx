@@ -12,14 +12,14 @@ rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,
     num_samples_for_fit_( num_samples_for_fit ),
     scale_type_( NONE ),
     single_scale_( 0 ),
-    multiple_scales_( 0 )
+    multiple_scales_( VXL_NULLPTR )
 {
 }
 
 rrel_estimation_problem::rrel_estimation_problem( )
   : scale_type_( NONE ),
     single_scale_( 0 ),
-    multiple_scales_( 0 )
+    multiple_scales_( VXL_NULLPTR )
 {
 }
 

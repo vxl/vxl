@@ -28,7 +28,7 @@ sdet_curvelet::sdet_curvelet(const sdet_curvelet& other)
     case sdet_curve_model::ES:
       curve_model = new sdet_ES_curve_model(*(sdet_ES_curve_model*)other.curve_model);
     default:
-      curve_model=0; //TO DO
+      curve_model=VXL_NULLPTR; //TO DO
   }
 
   forward = other.forward;

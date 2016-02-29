@@ -115,7 +115,7 @@ static void test_brec_create_mog_image_process()
   TEST("output image is in db", S_img->size(), 1);
   brdb_value_sptr value_img;
   TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
-  TEST("output image is non-null", (value_img != 0) ,true);
+  TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
   brdb_value_t<bbgm_image_sptr>* result = static_cast<brdb_value_t<bbgm_image_sptr>* >(value_img.ptr());
   bbgm_image_sptr out_exp_img = result->value();
   TEST("output image is a valid bbgm image", !out_exp_img, false);

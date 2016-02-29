@@ -416,7 +416,7 @@ vtol_intensity_face_sptr vifa_parallel::
 get_adjacent_iface(vtol_intensity_face_sptr  known_face,
                    vtol_edge_2d*         e)
 {
-  vtol_intensity_face_sptr  adj_face = 0;
+  vtol_intensity_face_sptr  adj_face = VXL_NULLPTR;
   face_list faces; e->faces(faces);
 
   // Expect only two intensity faces for 2-D case

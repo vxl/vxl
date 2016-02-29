@@ -183,7 +183,7 @@ static void test_brec_update_changes_process()
 
   brdb_value_sptr value_w;
   TEST("output world is in db", S_w->get_value(vcl_string("value"), value_w), true);
-  TEST("output world is non-null", (value_w != 0) ,true);
+  TEST("output world is non-null", (value_w != VXL_NULLPTR) ,true);
 
   brdb_value_t<bvxm_voxel_world_sptr>* result_w = static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(value_w.ptr());
   bvxm_voxel_world_sptr vox_world = result_w->value();
@@ -232,7 +232,7 @@ static void test_brec_update_changes_process()
   TEST("output image is in db", S_img->size(), 1);
   brdb_value_sptr value_img;
   TEST("output image is in db", S_img->get_value(vcl_string("value"), value_img), true);
-  TEST("output image is non-null", (value_img != 0) ,true);
+  TEST("output image is non-null", (value_img != VXL_NULLPTR) ,true);
   brdb_value_t<vil_image_view_base_sptr>* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr out_change_map = result->value();

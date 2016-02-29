@@ -71,14 +71,14 @@ if(VNL_CONFIG_ENABLE_SSE2_ROUNDING)
 else()
   set(VNL_CONFIG_ENABLE_SSE2_ROUNDING 0)
 endif()
-configure_file(${vxl_SOURCE_DIR}/core/vnl/vnl_config.h.in
-               ${vxl_BINARY_DIR}/core/vnl/vnl_config.h @ONLY IMMEDIATE)
+
+vxl_configure_file(${CMAKE_SOURCE_DIR}/core/vnl/vnl_config.h.in
+               ${CMAKE_BINARY_DIR}/core/vnl/vnl_config.h include/vxl/core/vnl)
 
 set( vnl_sources
   dll.h
   vnl_export.h
 
-  vnl_config.h.in
   vnl_fwd.h
   vnl_tag.h
 

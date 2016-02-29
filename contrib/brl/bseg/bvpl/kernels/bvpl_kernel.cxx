@@ -138,7 +138,7 @@ bxml_data_sptr bvpl_kernel::xml_element()
   bxml_element *kernel = new bxml_element("bvpl_kernel");
   kernel->append_text("\n");
   if(!factory_data_)
-    return NULL;
+    return VXL_NULLPTR;
   //bxml_data_sptr factory_data = factory_->xml_element();
   kernel->append_data(factory_data_);
   kernel->append_text("\n");
@@ -153,7 +153,7 @@ bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
 
   bxml_data_sptr root = bxml_find_by_name(d, query);
   if (!root || root->type() != bxml_data::ELEMENT) {
-    return NULL;
+    return VXL_NULLPTR;
   }
   bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());
 
@@ -162,7 +162,7 @@ bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
 
   gp_root->get_attribute("voxel_length", voxel_length );
   //try each factory
-  bvpl_kernel_sptr kernel = NULL;
+  bvpl_kernel_sptr kernel = VXL_NULLPTR;
 
   kernel = bvpl_edge3d_kernel_factory::parse_xml_element(d);
 
@@ -171,7 +171,7 @@ bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
     return kernel;
   }
   else
-    return NULL;
+    return VXL_NULLPTR;
 
 
 }

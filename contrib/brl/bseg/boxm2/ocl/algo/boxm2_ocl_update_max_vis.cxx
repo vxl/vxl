@@ -62,7 +62,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
   bool use_mask = false;
-  vil_image_view<unsigned char >* mask_map = 0;
+  vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
 
   if ( mask_sptr->ni() == ni && mask_sptr->nj() == nj ) {
       vcl_cout<<"Update using mask."<<vcl_endl;
@@ -418,7 +418,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
                                                  CL_QUEUE_PROFILING_ENABLE,
                                                  &status);
   bool use_mask = false;
-  vil_image_view<unsigned char >* mask_map = 0;
+  vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
 
   if ( mask_sptr->ni() == ni && mask_sptr->nj() == nj ) {
       vcl_cout<<"Update using mask."<<vcl_endl;

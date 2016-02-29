@@ -287,6 +287,11 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
               index += int(*(buffer + (pixel_number+m+n*width)));
               ++number_of_pixels_sampled;
             }
+        if(number_of_pixels_sampled == 0)
+        {
+          vcl_cerr << "ERROR: Division by 0! " << __FILE__ << __LINE__ << vcl_endl;
+          throw 0;
+        }
         index/=number_of_pixels_sampled; // Average the pixel intensity value.
       }
 
@@ -443,6 +448,11 @@ void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
                 index += int(*(data+(pixel_number+(m+n*sizex)*bytes_per_pixel)));
                 ++number_of_pixels_sampled;
               }
+          if(number_of_pixels_sampled == 0)
+          {
+              vcl_cerr << "ERROR: Division by 0! " << __FILE__ << __LINE__ << vcl_endl;
+              throw 0;
+          }
           index/=number_of_pixels_sampled;  // average the pixel intensity
         }
 

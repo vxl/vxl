@@ -14,20 +14,18 @@ endif()
 
 project( vcl )
 
-# Set up vcl_where_root_dir.h to have a macro set to $VCL_SOURCE_ROOT_DIR
-configure_file(
-  ${vxl_SOURCE_DIR}/vcl/vcl_where_root_dir.h.in
-  ${vxl_BINARY_DIR}/vcl/vcl_where_root_dir.h ESCAPE_QUOTES
-)
+#
+# Do platform-specific configuration.
+# configure files
+#
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_compiler.h.in ${CMAKE_BINARY_DIR}/vcl/vcl_config_compiler.h include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_headers.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_config_headers.h  include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_manual.h.in   ${CMAKE_BINARY_DIR}/vcl/vcl_config_manual.h   include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_where_root_dir.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_where_root_dir.h  include/vxl/vcl)
 
 set( vcl_sources
   vcl_compiler.h
   vcl_deprecated.cxx     vcl_deprecated.h
-
-  vcl_where_root_dir.h.in
-  vcl_config_compiler.h.in
-  vcl_config_headers.h.in
-  vcl_config_manual.h.in
 
   vcl_cmath.cxx          vcl_cmath.h
   vcl_cassert.cxx        vcl_cassert.h
@@ -189,11 +187,6 @@ set( vcl_sources
   iso/vcl_streambuf.h
   iso/vcl_typeinfo.h
   iso/vcl_valarray.h
-
-  win32-vc9/vcl_cmath.h
-  win32-vc9/vcl_complex.h
-  win32-vc9/vcl_cstdlib.h
-  win32-vc9/vcl_valarray.h
 
   # The following shall not be used other than as reference count for smart pointers
   vcl_atomic_count.h

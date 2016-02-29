@@ -31,13 +31,13 @@ bool bbgm_update_dist_image_process_cons(bprb_func_process& pro)
   pro.set_input_types(in_types);
   out_types[0]= "bbgm_image_sptr";// the updated distribution image
   pro.set_output_types(out_types);
-  pro.set_input(0, brdb_value_sptr(new brdb_value_t<bbgm_image_sptr>(0)));
+  pro.set_input(0, brdb_value_sptr(new brdb_value_t<bbgm_image_sptr>(VXL_NULLPTR)));
   return true;
 }
 
 bool bbgm_update_dist_image_process_init(bprb_func_process& pro)
 {
-  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(0));
+  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(VXL_NULLPTR));
   return true;
 }
 

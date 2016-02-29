@@ -151,12 +151,12 @@ int main(int argc,  char** argv)
         buf[kk] = radii_string()[kk];
 
       char *tok = vcl_strtok(buf, "_");;
-      while (tok != 0) {
+      while (tok != VXL_NULLPTR) {
         vcl_stringstream tokstr(tok);
         double radius;
         tokstr >> radius;
         radii.push_back(radius);
-        tok = vcl_strtok(NULL, "_"); // tokenize the remaining string
+        tok = vcl_strtok(VXL_NULLPTR, "_"); // tokenize the remaining string
       }
       vcl_cout << " will index 2d maps using radii: ";
       for (unsigned i = 0; i < radii.size(); i++) {

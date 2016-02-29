@@ -18,13 +18,7 @@
 // complex over other number types.
 
 
-// ---------- Visual Studio 9
-#if defined(VCL_VC_9)
-# include "win32-vc9/vcl_complex.h"
-// ---------- ISO
-#else
-# include "iso/vcl_complex.h"
-#endif
+#include "iso/vcl_complex.h"
 
 
 # if !VCL_COMPLEX_POW_WORKS

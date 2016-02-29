@@ -168,7 +168,7 @@ vtol_edge_sptr vtol_vertex_2d::new_edge(vtol_vertex_2d_sptr const& other)
 #endif // 0
 
   // awf: load vrml speed up by factor of 2 using this loop.
-  vtol_edge_sptr result = 0;
+  vtol_edge_sptr result = VXL_NULLPTR;
 
   // Scan Zero Chains
   bool found = false;

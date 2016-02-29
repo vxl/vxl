@@ -47,8 +47,8 @@ class vul_arg_base
   static void set_help_option( char const*str);
   static void set_help_description( char const*str);
   static void set_help_precis( char const*str);
-  static void display_usage(char const* msg = 0);
-  static void display_usage_and_exit(char const* msg = 0);
+  static void display_usage(char const* msg = VXL_NULLPTR);
+  static void display_usage_and_exit(char const* msg = VXL_NULLPTR);
 
   friend class vul_arg_info_list;
 
@@ -123,7 +123,7 @@ void vul_arg_parse(int& argc, char **& argv,
 void vul_arg_include(vul_arg_info_list& l);
 
 //: Print all args, and usage messages.
-void vul_arg_display_usage_and_exit(char const* msg = 0);
+void vul_arg_display_usage_and_exit(char const* msg = VXL_NULLPTR);
 
 //: parse command-line arguments
 template <class T>
@@ -144,8 +144,8 @@ class vul_arg : public vul_arg_base
   // first plain word in the command line (warning: this causes problems for
   // T=char *, but that just means that you have to have a help string if you
   // want a default... good)
-  vul_arg(char const* option_string = 0,
-          char const* helpstring = 0,
+  vul_arg(char const* option_string = VXL_NULLPTR,
+          char const* helpstring = VXL_NULLPTR,
           T default_value = T()
          )
     : vul_arg_base(option_string,helpstring, false),
@@ -153,8 +153,8 @@ class vul_arg : public vul_arg_base
 
   //: As above, but add the arg to the list \a l, on which \c parse() can be called later.
   vul_arg(vul_arg_info_list & l,
-          char const * option_string = 0,
-          char const * helpstring = 0,
+          char const * option_string = VXL_NULLPTR,
+          char const * helpstring = VXL_NULLPTR,
           T default_value = T() )
     : vul_arg_base(l, option_string, helpstring, false),
       value_(default_value) { settype(); }
@@ -240,38 +240,12 @@ class vul_arg_info_list
   bool verbose_;
   autonomy autonomy_;
 
-  void display_help( char const* progname= 0);
+  void display_help( char const* progname= VXL_NULLPTR);
 
  private:
   // Disallow assigning to objects of this class:
   vul_arg_info_list(vul_arg_info_list const &) {}
   vul_arg_info_list& operator=(vul_arg_info_list const &) { return *this; }
 };
-
-#if defined(VCL_ICC)
-#define declare_specialization(T) \
-template<> void settype(vul_arg<T > &); \
-template<> void print_value(vcl_ostream &, vul_arg<T > const &); \
-template<> int  parse(vul_arg<T > *, char **)
-
-declare_specialization(bool);
-declare_specialization(int);
-declare_specialization(unsigned);
-declare_specialization(char*);
-declare_specialization(char const*);
-declare_specialization(float);
-declare_specialization(double);
-declare_specialization(vcl_list<int>);
-declare_specialization(vcl_vector<int>);
-declare_specialization(vcl_vector<unsigned>);
-declare_specialization(vcl_vector<double>);
-declare_specialization(vcl_string);
-
-#ifdef VXL_HAS_INT_64
-declare_specialization(vxl_int_64);
-#endif
-
-#undef declare_specialization
-#endif // VCL_KAI
 
 #endif // vul_arg_h_

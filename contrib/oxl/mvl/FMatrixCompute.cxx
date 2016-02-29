@@ -56,8 +56,8 @@ bool FMatrixCompute::compute (vcl_vector<vgl_homg_point_2d<double> >& points1,
   if (points1.size() != points2.size())
     vcl_cerr << "FMatrixCompute::compute(): Point vectors are not of equal length\n";
   assert(points1.size() <= points2.size());
-  HomgInterestPointSet p1(points1,0);
-  HomgInterestPointSet p2(points2,0);
+  HomgInterestPointSet p1(points1,VXL_NULLPTR);
+  HomgInterestPointSet p2(points2,VXL_NULLPTR);
 
   PairMatchSetCorner matches(&p1, &p2);
   int count = matches.size();
@@ -75,8 +75,8 @@ bool FMatrixCompute::compute (vcl_vector<HomgPoint2D>& points1,
   if (points1.size() != points2.size())
     vcl_cerr << "FMatrixCompute::compute(): Point vectors are not of equal length\n";
   assert(points1.size() <= points2.size());
-  HomgInterestPointSet p1(points1,0);
-  HomgInterestPointSet p2(points2,0);
+  HomgInterestPointSet p1(points1,VXL_NULLPTR);
+  HomgInterestPointSet p2(points2,VXL_NULLPTR);
 
   PairMatchSetCorner matches(&p1, &p2);
   int count = matches.size();

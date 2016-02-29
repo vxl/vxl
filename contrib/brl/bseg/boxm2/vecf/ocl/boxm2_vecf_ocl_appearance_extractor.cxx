@@ -80,7 +80,7 @@ void boxm2_vecf_ocl_appearance_extractor::extract_orbit_appearance(){
   vcl_vector<boxm2_block_id> target_blocks = target_scene_->get_block_ids();
   if (target_blocks.size()>1){
     vcl_cout<< "visibility info cannot be used in current implementation if scene contains more than one block"<<vcl_endl;
-    current_vis_score_ = 0;
+    current_vis_score_ = VXL_NULLPTR;
   }else{
     boxm2_data_base* vis_score_db = boxm2_cache::instance()->get_data_base(target_scene_,target_blocks[0],boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(head_model_.color_apm_id_));
     current_vis_score_ = reinterpret_cast<vis_score_t*>(vis_score_db->data_buffer());

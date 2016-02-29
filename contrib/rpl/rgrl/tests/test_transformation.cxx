@@ -196,7 +196,7 @@ test_trans_homography()
 
   testlib_test_begin( "Construct 2D homography transform object" );
   rgrl_transformation_sptr xform = new rgrl_trans_homography2d( H );
-  testlib_test_perform( xform != 0 );
+  testlib_test_perform( xform != VXL_NULLPTR );
 
   testlib_test_begin( "Transform 2D location" );
 

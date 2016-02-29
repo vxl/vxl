@@ -48,7 +48,7 @@ int RD_ReadInt1(const char* q_str, int default_int,
       vcl_cout<<q_str<<" ["<<min_int<<".."<<max_int<<"] ("<<default_int<<") :";
     vcl_cout.flush();
 
-    if (vcl_fgets(reply,MAX_LEN,stdin)!=NULL)
+    if (vcl_fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
     {
       int r = default_int;
       if (reply[0]=='\n' || vcl_sscanf(reply,"%d",&r)>0)

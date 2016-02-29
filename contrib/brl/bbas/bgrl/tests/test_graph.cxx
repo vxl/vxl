@@ -59,7 +59,7 @@ void test_graph(const bgrl_vertex_sptr& vertex_1)
   TEST("Testing remove_edge()",
        the_graph->remove_edge(vertex_3, vertex_5) &&
        !the_graph->remove_edge(vertex_3, vertex_5) && // can't remove an edge not in the graph
-       !the_graph->remove_edge(vertex_2, NULL), // can't remove an invalid edge
+       !the_graph->remove_edge(vertex_2, VXL_NULLPTR), // can't remove an invalid edge
        true);
 
   TEST("Testing size()",

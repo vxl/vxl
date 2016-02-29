@@ -214,7 +214,7 @@ bool bvgl_2d_geo_index::prune_tree(bvgl_2d_geo_index_node_sptr root, vgl_polygon
     if (!root->children_[i])
       continue;
     if (!prune_tree(root->children_[i], poly))  // the child does not intersect with the polygon
-      root->children_[i] = 0; // sptr de-allocates this child
+      root->children_[i] = VXL_NULLPTR; // sptr de-allocates this child
   }
   return true;
 }

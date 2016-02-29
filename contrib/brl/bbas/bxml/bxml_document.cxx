@@ -23,7 +23,7 @@ bxml_element::attribute(const vcl_string& attr_name) const
 
 //: Constructor - default
 bxml_document::bxml_document()
-  : root_element_(NULL),
+  : root_element_(VXL_NULLPTR),
     version_("1.0"),
     encoding_("UTF-8"),
     standalone_(true)
@@ -34,7 +34,7 @@ bxml_document::bxml_document()
 //: Append text in this element
 void bxml_element::append_text(const vcl_string& text)
 {
-  bxml_text * last_text = NULL;
+  bxml_text * last_text = VXL_NULLPTR;
   if (!data_.empty()){
     bxml_data_sptr last_data = data_.back();
     if (last_data->type() == bxml_data::TEXT)
@@ -136,12 +136,12 @@ void vsl_b_read(vsl_b_istream& is, bxml_document* ph)
     vsl_b_read(is, *ph);
   }
   else
-    ph = 0;
+    ph = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const bxml_document* &ph)
 {
-  if (ph==0)
+  if (ph==VXL_NULLPTR)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }

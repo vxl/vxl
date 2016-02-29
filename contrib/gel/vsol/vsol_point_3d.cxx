@@ -200,7 +200,7 @@ void vsol_point_3d::print_summary(vcl_ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, vsol_point_3d const* p)
 {
-  if (p==0) {
+  if (p==VXL_NULLPTR) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -213,7 +213,7 @@ vsl_b_write(vsl_b_ostream &os, vsol_point_3d const* p)
 void
 vsl_b_read(vsl_b_istream &is, vsol_point_3d* &p)
 {
-  delete p; p=0;
+  delete p; p=VXL_NULLPTR;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr) {

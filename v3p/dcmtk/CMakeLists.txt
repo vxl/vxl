@@ -153,7 +153,7 @@ else()
   set( DCMTK_HAVE_ZLIB )
 endif()
 
-set( DCMTK_DCM_DICT_DEFAULT_PATH "${PROJECT_SOURCE_DIR}/dcmdata/libsrc/dicom.dic" )
+set( DCMTK_DCM_DICT_DEFAULT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dcmdata/libsrc/dicom.dic" )
 if( WIN32 )
   set( DCMTK_PATH_SEPARATOR "\\\\" )
   set( DCMTK_ENVIRONMENT_PATH_SEPARATOR ";" )
@@ -186,9 +186,9 @@ if( "DCMTK_INCLUDE_MATH_H_AS_CXX" MATCHES "^${DCMTK_INCLUDE_MATH_H_AS_CXX}$" )
   endif()
 endif()
 
-configure_file(
-  ${PROJECT_SOURCE_DIR}/config/include/osconfig_cmake.h.in
-  ${PROJECT_BINARY_DIR}/osconfig.h
+vxl_configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/config/include/osconfig_cmake.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/osconfig.h v3p/dcmtk
 )
 
 
@@ -226,11 +226,10 @@ endif()
 
 # ---------------------------------------------------------------------------
 # Source files
-
-include_directories( ${PROJECT_BINARY_DIR} )
-include_directories( ${PROJECT_SOURCE_DIR}/ofstd/include )
-include_directories( ${PROJECT_SOURCE_DIR}/dcmdata/include )
-include_directories( ${PROJECT_SOURCE_DIR}/dcmimgle/include )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/ofstd/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/dcmdata/include )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/dcmimgle/include )
 
 
 set( dcmtk_sources
@@ -333,15 +332,13 @@ set( dcmtk_sources
   dcmimgle/libsrc/diutils.cxx
 )
 
-add_library( dcmtk ${dcmtk_sources} )
+vxl_add_library( LIBNAME dcmtk LIBSRCS ${dcmtk_sources})
 if(WIN32)
   target_link_libraries( dcmtk Netapi32 )
 endif()
 if( DCMTK_HAVE_ZLIB )
   target_link_libraries( dcmtk ${ZLIB_LIBRARIES} )
 endif()
-
-install_targets( /lib dcmtk )
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

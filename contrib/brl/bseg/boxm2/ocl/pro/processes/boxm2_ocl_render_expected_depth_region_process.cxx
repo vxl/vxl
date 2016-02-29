@@ -272,7 +272,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   double lx, ly, lz;
   lvcs.global_to_local(lon, lat, elev, vpgl_lvcs::wgs84, lx, ly, lz);
   vgl_point_3d<double> local_h_pt_d(lx, ly, lz);
-  bvgl_2d_geo_index_node_sptr curr_leaf = 0;
+  bvgl_2d_geo_index_node_sptr curr_leaf = VXL_NULLPTR;
   boxm2_block_id curr_block;
   bvgl_2d_geo_index::get_leaf(blk_id_tree_2d, curr_leaf, vgl_point_2d<double>(local_h_pt_d.x(), local_h_pt_d.y()));
   if (curr_leaf) {

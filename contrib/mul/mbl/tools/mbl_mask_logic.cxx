@@ -39,10 +39,10 @@ int main(int argc, char **argv)
     "\n"
   );
 
-  vul_arg<vcl_string> maskA_filename(0,"Filename of mask A");
-  vul_arg<vcl_string> maskB_filename(0,"Filename of mask B");
-  vul_arg<vcl_string> operation(0,"Operation to apply - see help text for explanation");
-  vul_arg<vcl_string> maskout_filename(0,"Filename of the output mask");
+  vul_arg<vcl_string> maskA_filename(VXL_NULLPTR,"Filename of mask A");
+  vul_arg<vcl_string> maskB_filename(VXL_NULLPTR,"Filename of mask B");
+  vul_arg<vcl_string> operation(VXL_NULLPTR,"Operation to apply - see help text for explanation");
+  vul_arg<vcl_string> maskout_filename(VXL_NULLPTR,"Filename of the output mask");
   vul_arg_parse(argc, argv);
 
   mbl_mask maskA, maskB;

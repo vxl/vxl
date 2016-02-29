@@ -79,9 +79,9 @@ void test_test()
   TEST("Simple case +ve", mbl_test_summaries_are_equal(A + "D 1", B + "D 2"), false);
 
   TEST("Simple case +ve", mbl_test_summaries_are_equal(A, B), true);
-  const char * ignore1[]={"D", 0 };
+  const char * ignore1[]={"D", VXL_NULLPTR };
   TEST("Exclusions case +ve", mbl_test_summaries_are_equal(A + "D 1", B + "D 2", ignore1), true);
-  const char * ignore2[]={"^ *D", 0 };
+  const char * ignore2[]={"^ *D", VXL_NULLPTR };
   TEST("RE Exclusions case +ve", mbl_test_summaries_are_equal(A + "D 1", B + "D 2", ignore2), true);
   TEST("RE Exclusions case -ne", mbl_test_summaries_are_equal(A + "AD 1", B + "AD 2", ignore2), false);
 

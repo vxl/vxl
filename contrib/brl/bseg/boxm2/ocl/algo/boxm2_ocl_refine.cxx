@@ -166,7 +166,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
       int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
       vcl_cout<<"# of bytes "<<data_types[i]<<' '<<dataBytes<<vcl_endl;
-      bocl_mem* new_dat = opencl_cache->alloc_mem(dataBytes, NULL, "new data buffer " + data_types[i]);
+      bocl_mem* new_dat = opencl_cache->alloc_mem(dataBytes, VXL_NULLPTR, "new data buffer " + data_types[i]);
       new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
       //grab the block out of the cache as well

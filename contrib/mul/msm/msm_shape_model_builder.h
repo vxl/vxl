@@ -31,6 +31,9 @@ class msm_shape_model_builder
   //: Max. number of modes to use
   unsigned max_modes_;
 
+  //: Define how to compute alignment of reference shape
+  msm_aligner::ref_pose_source ref_pose_source_;
+
  public:
 
   // Dflt ctor
@@ -49,6 +52,10 @@ class msm_shape_model_builder
   // \param var_proportion  Proportion of variance in data to explain
   void set_mode_choice(unsigned min, unsigned max,
                        double var_proportion);
+
+  //: Define how to compute alignment of reference shape
+  void set_ref_pose_source(msm_aligner::ref_pose_source);
+
 
   //: Object used to deal with global transformations
   const msm_aligner& aligner() const { return aligner_; }

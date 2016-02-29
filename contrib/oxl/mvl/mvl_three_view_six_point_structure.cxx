@@ -74,7 +74,7 @@ bool mvl_three_view_six_point_structure::compute()
       if (! mvl_five_point_camera_pencil_parameters(A[i], B[i],
                                                     solution[k].Q,
                                                     u[i][5], v[i][5],
-                                                    st, 0))
+                                                    st, VXL_NULLPTR))
         solution[k].valid = false;
       else
         solution[k].P[i] = st[0] * A[i] + st[1] * B[i];

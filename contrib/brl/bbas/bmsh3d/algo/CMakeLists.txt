@@ -12,7 +12,7 @@ set( bmsh3d_algo_sources
   bmsh3d_mesh_bnd.cxx         bmsh3d_mesh_bnd.h
 )
 
-add_library( bmsh3d_algo  ${bmsh3d_algo_sources})
+vxl_add_library( LIBNAME bmsh3d_algo LIBSRCS  ${bmsh3d_algo_sources})
 target_link_libraries( bmsh3d_algo bmsh3d rply ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )
@@ -20,5 +20,3 @@ if( BUILD_TESTING )
 endif()
 
 #install the .h .txx and libs
-install_targets(/lib bmsh3d_algo)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bmsh3d/algo/ ${bmsh3d_algo_sources})

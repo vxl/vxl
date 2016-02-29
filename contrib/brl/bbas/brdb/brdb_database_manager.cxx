@@ -16,7 +16,7 @@
 #include <brdb/brdb_tuple_sptr.h>
 #include <brdb/brdb_value.h>
 
-brdb_database_sptr brdb_database_manager::instance_ = NULL;
+brdb_database_sptr brdb_database_manager::instance_ = VXL_NULLPTR;
 
 unsigned brdb_database_manager::id_ = 0;
 //: Insure only one instance is created

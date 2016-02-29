@@ -39,9 +39,9 @@ bgrl_vertex::strip()
   {
     if ((*out_itr)->to_) {
       (*out_itr)->to_->in_edges_.erase(*out_itr);
-      (*out_itr)->to_ = NULL;
+      (*out_itr)->to_ = VXL_NULLPTR;
     }
-    (*out_itr)->from_ = NULL;
+    (*out_itr)->from_ = VXL_NULLPTR;
   }
 
   // Clear outgoing edges
@@ -53,9 +53,9 @@ bgrl_vertex::strip()
   {
     if ((*in_itr)->from_){
       (*in_itr)->from_->out_edges_.erase(*in_itr);
-      (*in_itr)->from_ = NULL;
+      (*in_itr)->from_ = VXL_NULLPTR;
     }
-    (*in_itr)->to_ = NULL;
+    (*in_itr)->to_ = VXL_NULLPTR;
   }
 
   // Clear incoming edges
@@ -103,13 +103,13 @@ bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex,
                           const bgrl_edge_sptr& model_edge )
 {
   if (!vertex || vertex.ptr() == this)
-    return bgrl_edge_sptr(NULL);
+    return bgrl_edge_sptr(VXL_NULLPTR);
 
   // verify that this edge is not already present
   for ( edge_iterator itr = out_edges_.begin();
         itr != out_edges_.end(); ++itr )
     if ((*itr)->to_ == vertex)
-      return bgrl_edge_sptr(NULL);
+      return bgrl_edge_sptr(VXL_NULLPTR);
 
   // add the edge
   bgrl_edge_sptr new_edge;
@@ -142,8 +142,8 @@ bgrl_vertex::remove_edge_to( const bgrl_vertex_sptr& vertex )
   {
     if ((*itr)->to_ == vertex) {
       if ( vertex->in_edges_.erase(*itr) > 0 ) {
-        (*itr)->to_ = NULL;
-        (*itr)->from_ = NULL;
+        (*itr)->to_ = VXL_NULLPTR;
+        (*itr)->from_ = VXL_NULLPTR;
         out_edges_.erase(itr);
         return true;
       }

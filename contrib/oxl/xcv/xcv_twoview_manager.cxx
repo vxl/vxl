@@ -21,9 +21,9 @@
 //: Constructor.
 //-----------------------------------------------------------------------------
 xcv_twoview_manager::xcv_twoview_manager()
-  : f_matrix(0)
-  , h_matrix(0)
-  , corner_matches(0)
+  : f_matrix(VXL_NULLPTR)
+  , h_matrix(VXL_NULLPTR)
+  , corner_matches(VXL_NULLPTR)
   , f_matrix_is_displayed(true)
   , h_matrix_is_displayed(true)
   , corner_matches_are_displayed(false)
@@ -357,11 +357,11 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
   }
   if ((e.type == vgui_MOTION || e.type == vgui_BUTTON_DOWN) && dragging)
   {
-    if (f_matrix != 0 && f_matrix_is_displayed)
+    if (f_matrix != VXL_NULLPTR && f_matrix_is_displayed)
       draw_f_matrix(e, child_tab, false);
-    if (h_matrix != 0 && h_matrix_is_displayed)
+    if (h_matrix != VXL_NULLPTR && h_matrix_is_displayed)
       draw_h_matrix(e, child_tab, false);
-    if (corner_matches != 0 && corner_matches_are_displayed)
+    if (corner_matches != VXL_NULLPTR && corner_matches_are_displayed)
       draw_corner_matches(e, child_tab);
   }
 
@@ -369,9 +369,9 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
       e.modifier == vgui_MODIFIER_NULL &&
       e.button == vgui_MIDDLE)
   {
-    if (f_matrix != 0 && f_matrix_is_displayed)
+    if (f_matrix != VXL_NULLPTR && f_matrix_is_displayed)
       draw_f_matrix(e, child_tab, true);
-    if (h_matrix != 0 && h_matrix_is_displayed)
+    if (h_matrix != VXL_NULLPTR && h_matrix_is_displayed)
       draw_h_matrix(e, child_tab, true);
   }
   if (dragging)
@@ -390,11 +390,11 @@ void xcv_twoview_manager::handle_tjunction_event(vgui_event const& e, vgui_table
          easys[transfer_index]->get_child(0)->handle(e);
       }
 
-      if (f_matrix != 0 && f_matrix_is_displayed)
+      if (f_matrix != VXL_NULLPTR && f_matrix_is_displayed)
         draw_overlay_f_matrix(child_tab);
-      if (h_matrix != 0 && h_matrix_is_displayed)
+      if (h_matrix != VXL_NULLPTR && h_matrix_is_displayed)
         draw_overlay_h_matrix(child_tab);
-      if (corner_matches != 0 && corner_matches_are_displayed)
+      if (corner_matches != VXL_NULLPTR && corner_matches_are_displayed)
         draw_overlay_corner_matches(child_tab);
     }
   }

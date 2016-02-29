@@ -100,7 +100,7 @@ bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
   bxml_element query("bvpl_edge3d_kernel_factory");
   bxml_data_sptr root = bxml_find_by_name(d, query);
   if (!root || root->type() != bxml_data::ELEMENT) {
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());

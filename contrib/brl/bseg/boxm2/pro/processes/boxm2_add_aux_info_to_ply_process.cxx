@@ -66,7 +66,7 @@ namespace boxm2_add_aux_info_to_ply_process_globals
     ply_points_reader parsed_ply;
     parsed_ply.points = points;
 
-    p_ply ply = ply_open(filename.c_str(), NULL, 0, NULL);
+    p_ply ply = ply_open(filename.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
     if (!ply) {
       vcl_cout << "File " << filename << " doesn't exist.";
       return false;
@@ -135,7 +135,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
   read_points_from_ply(input_mesh_filename, points);
 
   //write outgoing mesh header
-  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, NULL, 0, NULL);
+  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, VXL_NULLPTR, 0, VXL_NULLPTR);
 
   // HEADER SECTION
   // vertex

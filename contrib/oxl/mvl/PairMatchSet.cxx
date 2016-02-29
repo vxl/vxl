@@ -272,7 +272,7 @@ void PairMatchSet::print_brief() const
 
 //: Construct an empty iterator.
 PairMatchSet::iterator::iterator(bool full_only):
-  c_(0),
+  c_(VXL_NULLPTR),
   match_index_(0),
   full_only_(full_only)
 {

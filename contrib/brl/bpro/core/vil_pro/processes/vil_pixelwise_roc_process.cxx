@@ -201,11 +201,13 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     for (unsigned int i=exampleIdx; i<totPix; ++i) {
       bool truth = (pairs[i].gt == 255);
       bool ignore= (pairs[i].gt > 0 && pairs[i].gt < 255);
-      if(!ignore)
-      if (truth )
-        tp->data_array[pnt]++; // gt = true, class = true => true pos
-      else
-        fp->data_array[pnt]++; // gt = false, class = true => false pos
+      if(!ignore) {
+        if (truth ) {
+          tp->data_array[pnt]++; // gt = true, class = true => true pos
+        }
+        else
+          fp->data_array[pnt]++; // gt = false, class = true => false pos
+        }
     }
   }
 

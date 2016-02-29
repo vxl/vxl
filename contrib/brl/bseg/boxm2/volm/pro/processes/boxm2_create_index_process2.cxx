@@ -362,7 +362,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
       t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
       // find its block for local_h_pt
-      bvgl_2d_geo_index_node_sptr curr_leaf = 0;
+      bvgl_2d_geo_index_node_sptr curr_leaf = VXL_NULLPTR;
       bvgl_2d_geo_index::get_leaf(blk_2d_tree, curr_leaf, vgl_point_2d<double>(local_h_pt_d.x(), local_h_pt_d.y()));
       if (curr_leaf) {
         bvgl_2d_geo_index_node<vcl_vector<boxm2_block_id> >* curr_leaf_ptr =

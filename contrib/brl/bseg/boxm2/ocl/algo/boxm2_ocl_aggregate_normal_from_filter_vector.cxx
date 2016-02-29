@@ -121,11 +121,25 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::run(bool clear_cache)
     bocl_mem* alpha     = ocl_cache_->get_data<BOXM2_ALPHA>(scene_,blk_iter->first,0,true);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+      return false;
+    }
+
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
     blk_info->write_to_buffer((queue));
 
     //store normals locations
     vcl_size_t normalsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
+    // check for invalid parameters
+    if( normalsTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      vcl_cout << "ERROR: normalsTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+      return false;
+    }
+
     bocl_mem * normals    = ocl_cache_->get_data(scene_,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), info_buffer->data_buffer_length*normalsTypeSize,false);
 
     vcl_cout<<"MBs in cache: "<< (ocl_cache_->bytes_in_cache()/(1024.0*1024.0)) << vcl_endl;

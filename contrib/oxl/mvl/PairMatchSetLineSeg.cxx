@@ -12,8 +12,8 @@
 
 PairMatchSetLineSeg::PairMatchSetLineSeg()
 {
-  linesegs1_ = 0;
-  linesegs2_ = 0;
+  linesegs1_ = VXL_NULLPTR;
+  linesegs2_ = VXL_NULLPTR;
 }
 
 PairMatchSetLineSeg::PairMatchSetLineSeg(LineSegSet& linesegs1, LineSegSet& linesegs2):

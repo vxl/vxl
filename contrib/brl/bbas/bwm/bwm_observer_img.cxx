@@ -29,8 +29,8 @@
 #include <vcl_cmath.h>
 
 bwm_observer_img::bwm_observer_img(bgui_image_tableau_sptr const& img, vcl_string name, vcl_string image_path, bool display_image_path)
-: bgui_vsol2D_tableau(img), lock_vgui_status_(false), vgui_status_on_(false), draw_mode_(MODE_2D_POLY), img_tab_(img), viewer_(0),
-  change_type_("change"), show_image_path_(false), start_x_(0), start_y_(0), moving_p_(0), moving_v_(0), moving_vertex_(false),
+: bgui_vsol2D_tableau(img), lock_vgui_status_(false), vgui_status_on_(false), draw_mode_(MODE_2D_POLY), img_tab_(img), viewer_(VXL_NULLPTR),
+  change_type_("change"), show_image_path_(false), start_x_(0), start_y_(0), moving_p_(VXL_NULLPTR), moving_v_(VXL_NULLPTR), moving_vertex_(false),
   moving_polygon_(false), in_jog_mode_(false), row_(0), col_(0)
 {
 // LOAD IMAGE
@@ -56,8 +56,8 @@ bool bwm_observer_img::handle(const vgui_event &e)
       e.button == vgui_MIDDLE &&
       e.modifier == vgui_SHIFT)
   {
-    bgui_vsol_soview2D* p=0;
-    bwm_soview2D_vertex* v = 0;
+    bgui_vsol_soview2D* p=VXL_NULLPTR;
+    bwm_soview2D_vertex* v = VXL_NULLPTR;
 
     // get the selected polyline or polygon
     if ((p = (bgui_vsol_soview2D*) get_selected_object(POLYGON_TYPE)) ||
@@ -355,7 +355,7 @@ vgui_soview2D* bwm_observer_img::get_selected_object(vcl_string type,
   if (warn)
     vcl_cerr << "\nThe number of selected " << type << " is "
              << objs.size() << ". Please select only one!!!\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 vcl_vector<vgui_soview2D*> bwm_observer_img::get_selected_objects(vcl_string type)
@@ -512,7 +512,7 @@ void bwm_observer_img::delete_vertex(vgui_soview* vertex)
 void bwm_observer_img::clear_box()
 {
   // get the selected box
-  bgui_vsol_soview2D_polygon* p = 0;
+  bgui_vsol_soview2D_polygon* p = VXL_NULLPTR;
 
   if (!this->get_selected_box(p))
   {
@@ -536,7 +536,7 @@ void bwm_observer_img::recover_edges()
   //make sure the box is actually empty
   this->clear_box();
   // get the selected box
-  bgui_vsol_soview2D_polygon* p = 0;
+  bgui_vsol_soview2D_polygon* p = VXL_NULLPTR;
   if (!this->get_selected_box(p))
   {
     vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
@@ -561,7 +561,7 @@ void bwm_observer_img::recover_lines()
   this->clear_box();
 
   // get the selected box
-  bgui_vsol_soview2D_polygon* p = 0;
+  bgui_vsol_soview2D_polygon* p = VXL_NULLPTR;
   if (!this->get_selected_box(p))
   {
     vcl_cerr << "In bwm_observer_img::clear_box() - no box selected\n";
@@ -644,7 +644,7 @@ void bwm_observer_img::toggle_show_image_path()
 
 void bwm_observer_img::step_edges_vd()
 {
-  bgui_vsol_soview2D_polygon* p = 0;
+  bgui_vsol_soview2D_polygon* p = VXL_NULLPTR;
   if (!this->get_selected_box(p))
   {
     vcl_cerr << "In bwm_observer_img::step_edges_vd() - no box selected\n";
@@ -677,7 +677,7 @@ void bwm_observer_img::step_edges_vd()
 
 void bwm_observer_img::lines_vd()
 {
-  bgui_vsol_soview2D_polygon* p = 0;
+  bgui_vsol_soview2D_polygon* p = VXL_NULLPTR;
   if (!this->get_selected_box(p))
   {
     vcl_cerr << "In bwm_observer_img::lines_vd() - no box selected\n";
@@ -712,7 +712,7 @@ void bwm_observer_img::lines_vd()
 
 bool bwm_observer_img::crop_image(vil_image_resource_sptr& chip)
 {
-  bgui_vsol_soview2D_polygon* p = 0;
+  bgui_vsol_soview2D_polygon* p = VXL_NULLPTR;
   if (!this->get_selected_box(p))
   {
     vcl_cerr << "In bwm_observer_img::crop_image() - no box selected\n";
@@ -865,7 +865,7 @@ void bwm_observer_img::scroll_to_point()
 
 void bwm_observer_img::init_mask()
 {
-  mask_ = 0;
+  mask_ = VXL_NULLPTR;
   change_polys_.clear();
 }
 
@@ -929,7 +929,7 @@ void bwm_observer_img::set_change_type()
 
 void bwm_observer_img::add_poly_to_mask()
 {
-  bgui_vsol_soview2D_polygon* p=0;
+  bgui_vsol_soview2D_polygon* p=VXL_NULLPTR;
 
   if (!ground_truth_)
     ground_truth_ = new bvgl_changes();
@@ -950,7 +950,7 @@ void bwm_observer_img::add_poly_to_mask()
 
 void bwm_observer_img::remove_poly_from_mask()
 {
-  bgui_vsol_soview2D_polygon* p=0;
+  bgui_vsol_soview2D_polygon* p=VXL_NULLPTR;
   vcl_vector<vgui_soview2D*> polys = get_selected_objects(POLYGON_TYPE);
   for (unsigned i=0; i<polys.size(); i++) {
     p = (bgui_vsol_soview2D_polygon*) polys[i];
@@ -1029,7 +1029,7 @@ bool bwm_observer_img::load_changes_binary()
 {
   vcl_string fname = bwm_utils::select_file();
   vsl_b_ifstream is(fname);
-  if (ground_truth_ == 0)
+  if (ground_truth_ == VXL_NULLPTR)
     ground_truth_= new bvgl_changes();
   ground_truth_->b_read(is);
 

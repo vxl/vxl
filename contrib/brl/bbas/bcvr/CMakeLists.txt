@@ -24,7 +24,7 @@ bcvr_cv_cor_sptr.h
 
 aux_source_directory(Templates bcvr_sources)
 
-add_library(bcvr  ${bcvr_sources})
+vxl_add_library( LIBNAME bcvr LIBSRCS  ${bcvr_sources})
 
 target_link_libraries(bcvr bsol vdgl)
 

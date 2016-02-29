@@ -6,8 +6,4 @@ set(rply_sources
   rply.c
   )
 
-add_library(rply ${rply_sources})
-
-#install the .h .txx and libs
-install_targets(/lib rply)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/rply/brl/ ${rply_sources})
+vxl_add_library( LIBNAME rply LIBSRCS ${rply_sources})

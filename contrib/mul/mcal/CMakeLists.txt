@@ -1,5 +1,5 @@
 # mul/mcal/CMakeLists.txt
-include_directories( ${vxl_BINARY_DIR}/contrib/mul )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/mul )
 
 doxygen_add_library(contrib/mul/mcal
   DEPENDS core/vnl/algo core/vnl contrib/mul/mbl
@@ -21,7 +21,7 @@ set(mcal_sources
 )
 aux_source_directory(Templates mcal_sources)
 
-add_library(mcal ${mcal_sources})
+vxl_add_library( LIBNAME mcal LIBSRCS ${mcal_sources})
 target_link_libraries(mcal mbl)
 
 if(BUILD_TESTING)

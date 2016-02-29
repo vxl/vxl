@@ -34,7 +34,7 @@ vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,vcl_string type)
     osl_vertex* v2=in.GetV2();
     vtol_vertex_2d_sptr new_v1=convert_vertex_2d(*v1);
     vtol_vertex_2d_sptr new_v2=convert_vertex_2d(*v2);
-    out=new vtol_edge_2d(new_v1,new_v2,0);
+    out=new vtol_edge_2d(new_v1,new_v2,VXL_NULLPTR);
   }
 
   return out;

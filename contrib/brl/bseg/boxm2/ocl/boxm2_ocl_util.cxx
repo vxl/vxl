@@ -79,14 +79,15 @@ vcl_string boxm2_ocl_util::ocl_src_root()
 {
     vcl_string boxm2_ocl_src_dir;
     char* ocl_dir_env = getenv("BOXM2_OPENCL_DIR");
-    if (ocl_dir_env != NULL) {
+    if (ocl_dir_env != VXL_NULLPTR) {
       boxm2_ocl_src_dir = vcl_string(ocl_dir_env) + "/";
     }
-    vcl_cout<<"CL dir "<<boxm2_ocl_src_dir<<vcl_endl;
     if ( boxm2_ocl_src_dir == "" )
         boxm2_ocl_src_dir = BOXM2_OPENCL_SOURCE_DIR ;
+        boxm2_ocl_src_dir += "/";
     if ( boxm2_ocl_src_dir == "" )
         boxm2_ocl_src_dir = vcl_string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bseg/boxm2/ocl/cl/";
+    vcl_cout<<"CL dir "<<boxm2_ocl_src_dir<<vcl_endl;
     return boxm2_ocl_src_dir;
 }
 

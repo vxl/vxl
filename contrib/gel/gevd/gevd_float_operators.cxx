@@ -55,7 +55,7 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from,
 #endif
   bool overwrite = to == &from;
   gevd_bufferxy*& t = to;
-  if (overwrite) to=0;
+  if (overwrite) to=VXL_NULLPTR;
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -97,7 +97,7 @@ gevd_float_operators::Correlation(const gevd_bufferxy& from,
 #endif
   bool overwrite = to == &from;
   gevd_bufferxy*& t = to;
-  if (overwrite) to=0;
+  if (overwrite) to=VXL_NULLPTR;
   to = gevd_float_operators::Allocate(to, from);
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
   const int rx = wx/2, ry = wy/2;
@@ -147,7 +147,7 @@ gevd_float_operators::CorrelationAlongAxis(const gevd_bufferxy& from,
 #endif
   bool overwrite = to == &from;
   gevd_bufferxy*& t = to;
-  if (overwrite) to=0;
+  if (overwrite) to=VXL_NULLPTR;
   to = gevd_float_operators::Allocate(to, from);
   to->Clear();
   const int wx = kernel.GetSizeX(), wy = kernel.GetSizeY();
@@ -206,11 +206,11 @@ gevd_float_operators::Read2dKernel(const char* filename)
 {
   vcl_ifstream infile(filename, vcl_ios_in); // open the file
   if (!infile)
-    return NULL;
+    return VXL_NULLPTR;
   int width, height;
   infile >> width;
   infile >> height;
-  if (width < 1 || height < 1) return NULL;
+  if (width < 1 || height < 1) return VXL_NULLPTR;
   gevd_bufferxy* kernel = new gevd_bufferxy(width, height, bits_per_float);
   for (int y = 0; y < height; y++)
     for (int x = 0; x < width; x++)
@@ -239,7 +239,7 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from, gevd_bufferxy*& to,
 #endif
   bool overwrite = to == &from;
   gevd_bufferxy*& t = to;
-  if (overwrite) to=0;
+  if (overwrite) to=VXL_NULLPTR;
   to = gevd_float_operators::Allocate(to, from);
   const int sizeX = to->GetSizeX(), sizeY = to->GetSizeY();
   const int ylo = yradius, yhi = sizeY - yradius;
@@ -645,7 +645,7 @@ gevd_float_operators::Read1dKernel(const char* filename,
       evenp = true;
   if (!evenp)                   // double check that kernel is odd
     return true;
-  delete[] kernel; kernel = NULL;
+  delete[] kernel; kernel = VXL_NULLPTR;
   return false;                 // invalid kernel
 }
 
@@ -661,7 +661,7 @@ float
 gevd_float_operators::Gaussian(gevd_bufferxy& from, gevd_bufferxy*& to, const float sigma,
                                const bool xwrap, const bool ywrap)
 {
-  float* kernel = NULL;
+  float* kernel = VXL_NULLPTR;
   int radius = 0;
   if (!gevd_float_operators::Find1dGaussianKernel(sigma, kernel, radius)) {
     to = gevd_float_operators::Allocate(to, from);
@@ -886,7 +886,7 @@ gevd_float_operators::Slope(float* from, float*& to, const int len,
   bool overwrite = to == from;
   if (!to || overwrite) to = new float[len];
   const int xlo = 1, xhi = len - 1;
-  float *cache = NULL, *pipeline;
+  float *cache = VXL_NULLPTR, *pipeline;
   int p = gevd_float_operators::SetupPipeline(from, len, 1, wrap, // current pipeline and index
                                               cache, pipeline);
   to[0] = pipeline[+1] - pipeline[-1];
@@ -1647,11 +1647,11 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
           }
           else {
             delete nz;
-            fvectorPixel(*normal, i, j) = NULL;
+            fvectorPixel(*normal, i, j) = VXL_NULLPTR;
           }
         }
       else {
-        fvectorPixel(*normal, i, j) = NULL;
+        fvectorPixel(*normal, i, j) = VXL_NULLPTR;
       }
     }
 }
@@ -1690,10 +1690,10 @@ _CurvatureInDir(const gevd_bufferxy& normal,
   float zval1, zval2, dz;
   int dx, dy;
 
-  if ( norm == NULL || ( low_norm == NULL && high_norm == NULL ) )
+  if ( norm == VXL_NULLPTR || ( low_norm == VXL_NULLPTR && high_norm == VXL_NULLPTR ) )
     return false;
 
-  if ( low_norm == NULL ) {
+  if ( low_norm == VXL_NULLPTR ) {
     // -rgc-   sq_dist = 1.0;
     zval1 = floatPixel(surface, high_x, high_y);
     zval2 = floatPixel(surface, x, y);
@@ -1709,7 +1709,7 @@ _CurvatureInDir(const gevd_bufferxy& normal,
              << ",  sq_curve = " << sq_curve << vcl_endl;
 #endif
   }
-  else if ( high_norm == NULL ) {
+  else if ( high_norm == VXL_NULLPTR ) {
     // -rgc-   sq_dist = 1.0;
     zval1 = floatPixel(surface, x, y);
     zval2 = floatPixel(surface, low_x, low_y);
@@ -1768,7 +1768,7 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
 
   for (int j = frame; j < highy; j++)
     for (int i = frame; i < highx; i++) { // for all grid points
-      if ( fvectorPixel( normal, i, j ) == NULL ) {
+      if ( fvectorPixel( normal, i, j ) == VXL_NULLPTR ) {
         floatPixel(*curvature, i, j) = dflt;
         continue;
       }
@@ -1844,7 +1844,7 @@ gevd_float_operators::ShrinkBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   const int sizeY = (from.GetSizeY() + 1) / 2;
   bool overwrite = to == &from;
   gevd_bufferxy*& t = to;
-  if (overwrite) to=0;
+  if (overwrite) to=VXL_NULLPTR;
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
   const float ka = burt_ka;
   const float kb = 0.25f;
@@ -1967,7 +1967,7 @@ gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
   const int sizeY = (from.GetSizeY() + 1) / 2;
   bool overwrite = to == &from;
   gevd_bufferxy*& t = to;
-  if (overwrite) to=0;
+  if (overwrite) to=VXL_NULLPTR;
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
 
   //  Build a kernel of smoothing weights.  kernel[2] is the center.
@@ -2163,7 +2163,7 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   const int sizeY = 2 * from.GetSizeY();
   bool overwrite = to == &from;
   gevd_bufferxy*& t = to;
-  if (overwrite) to=0;
+  if (overwrite) to=VXL_NULLPTR;
   to = gevd_float_operators::Allocate(to, from, 0, sizeX, sizeY);
   const float ka = burt_ka * 2;
   const float kb = 0.5f;
@@ -2493,7 +2493,7 @@ gevd_float_operators::FindWavelet(const int waveletno,
     break;
    default:
     ncof = 0;
-    lo_filter = hi_filter = NULL;
+    lo_filter = hi_filter = VXL_NULLPTR;
     vcl_cerr << "Unknown wavelet: " << waveletno << vcl_endl;
     return false;
   }
@@ -2602,8 +2602,8 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
                                        const int waveletno)
 {
   if (n >= 4) {
-    float* lo_filter = NULL;
-    float* hi_filter = NULL;
+    float* lo_filter = VXL_NULLPTR;
+    float* hi_filter = VXL_NULLPTR;
     int ncof = 0;
     FindWavelet(waveletno, lo_filter, hi_filter, ncof);
 #ifdef DEBUG
@@ -2699,8 +2699,8 @@ gevd_float_operators::WaveletTransformByIndex(float* array,
     ntot *= dim;
     if (dim > maxn) maxn = dim;
   }}
-  float* lo_filter = NULL;
-  float* hi_filter = NULL;
+  float* lo_filter = VXL_NULLPTR;
+  float* hi_filter = VXL_NULLPTR;
   int ncof = 0;
   if (!FindWavelet(waveletno, lo_filter, hi_filter, ncof)) // look up wavelets
     return false;
@@ -2872,8 +2872,8 @@ gevd_float_operators::WaveletTransformByBlock(float* array,
     if (dim > maxn) maxn = dim;
   }}
 
-  float* lo_filter = NULL;
-  float* hi_filter = NULL;
+  float* lo_filter = VXL_NULLPTR;
+  float* hi_filter = VXL_NULLPTR;
   int ncof = 0;
   if (!FindWavelet(waveletno, lo_filter, hi_filter, ncof)) // look up wavelets
     return false;
@@ -3256,7 +3256,7 @@ gevd_float_operators::ProjectOntoX(const gevd_bufferxy& buf, float*& proj,
     sizeX = buf.GetSizeX();
   if (sizeY == 0)
     sizeY = buf.GetSizeY();
-  if (proj == NULL)
+  if (proj == VXL_NULLPTR)
     proj = new float [buf.GetSizeX()];
   int hiX = origX + sizeX, hiY = origY + sizeY;
   for (int x = origX; x < hiX; x++) {   // projection onto the x-axis
@@ -3275,7 +3275,7 @@ gevd_float_operators::ProjectOntoY(const gevd_bufferxy& buf, float*& proj,
     sizeX = buf.GetSizeX();
   if (sizeY == 0)
     sizeY = buf.GetSizeY();
-  if (proj == NULL)
+  if (proj == VXL_NULLPTR)
     proj = new float [buf.GetSizeY()];
   int hiX = origX + sizeX, hiY = origY + sizeY;
   for (int y = origY; y < hiY; y++) {   // projection onto the y-axis
@@ -3527,7 +3527,7 @@ gevd_float_operators::Allocate(gevd_bufferxy* space, const gevd_bufferxy& model,
     sizeX = model.GetSizeX();
   if (!sizeY)
     sizeY = model.GetSizeY();
-  if (space == NULL ||          // check if need reallocation
+  if (space == VXL_NULLPTR ||          // check if need reallocation
       space->GetBitsPixel() != bits_per_pixel ||
       space->GetSizeX() < sizeX || space->GetSizeY() < sizeY) {
     delete space;
@@ -4111,7 +4111,7 @@ gevd_float_operators::AbsoluteDifference(const gevd_bufferxy& buf1,
                                          const gevd_bufferxy& buf2)
 {
   if (!IsSimilarBuffer(buf1, buf2))
-    return NULL;
+    return VXL_NULLPTR;
   else {
     int sizeX = buf1.GetSizeX(), sizeY = buf1.GetSizeY();
     gevd_bufferxy& buf = *gevd_float_operators::SimilarBuffer(buf1);

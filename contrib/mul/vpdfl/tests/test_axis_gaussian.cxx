@@ -120,8 +120,8 @@ void test_axis_gaussian()
 
   vpdfl_axis_gaussian_builder builder0_in;
   vpdfl_axis_gaussian gauss0_in;
-  vpdfl_pdf_base            *base_pdf_ptr_in  = 0;
-  vpdfl_builder_base *base_builder_ptr_in  = 0;
+  vpdfl_pdf_base            *base_pdf_ptr_in  = VXL_NULLPTR;
+  vpdfl_builder_base *base_builder_ptr_in  = VXL_NULLPTR;
 
   vsl_b_ifstream bfs_in("test_axis_gaussian.bvl.tmp");
   TEST("Opened test_axis_gaussian.bvl.tmp for reading", (!bfs_in), false);

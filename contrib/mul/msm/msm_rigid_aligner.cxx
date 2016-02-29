@@ -317,11 +317,13 @@ void msm_rigid_aligner::normalise_shape(msm_points& points) const
 //  frame, pose_to_ref[i] maps points[i] into the reference
 //  frame (ie pose is the mapping from the reference frame to
 //  the target frames).
+// \param pose_source defines how orientation of ref_mean_shape is calculated
 // \param average_pose Average mapping from ref to target frame
 void msm_rigid_aligner::align_set(const vcl_vector<msm_points>& points,
                                        msm_points& ref_mean_shape,
                                        vcl_vector<vnl_vector<double> >& pose_to_ref,
-                                       vnl_vector<double>& average_pose) const
+                                       vnl_vector<double>& average_pose,
+                                       ref_pose_source pose_source) const
 {
   vcl_size_t n_shapes = points.size();
   assert(n_shapes>0);
@@ -362,6 +364,14 @@ void msm_rigid_aligner::align_set(const vcl_vector<msm_points>& points,
     // the mean and to rotation defined by the mean.
 
     change = (new_mean.vector()-ref_mean_shape.vector()).rms();
+
+    if (pose_source==mean_pose && n_its==0)
+    {
+      // Use the average pose to define the orientation of the mean in the ref frame
+      apply_transform(new_mean,average_pose/n_shapes,new_mean);
+      change=1.0;  // Force at least one more iteration
+    }
+
     n_its++;
   }
 

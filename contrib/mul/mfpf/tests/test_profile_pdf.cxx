@@ -148,7 +148,7 @@ void test_profile_pdf()
     bfs_out.close();
 
     mfpf_profile_pdf profile_pdf_in;
-    mfpf_point_finder *base_ptr_in = 0;
+    mfpf_point_finder *base_ptr_in = VXL_NULLPTR;
 
     vsl_b_ifstream bfs_in("test_profile_pdf.bvl.tmp");
     TEST ("Opened test_profile_pdf.bvl.tmp for reading", (!bfs_in), false);

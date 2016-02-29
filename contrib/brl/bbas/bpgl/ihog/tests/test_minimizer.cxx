@@ -28,7 +28,7 @@ static void test_minimizer()
   vcl_string image_file =
     root_dir + "/contrib/brl/bbas/bpgl/ihog/tests/dalmation.tif";
   bool exists = vul_file::exists(image_file);
-  vil_image_view_base_sptr img0_base = 0;
+  vil_image_view_base_sptr img0_base = VXL_NULLPTR;
   if(exists){
     vcl_cout << "File " << image_file << " exists\n";
     img0_base = vil_load(image_file.c_str());

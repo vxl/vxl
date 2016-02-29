@@ -23,13 +23,11 @@ if(OPENCL_FOUND)
       bocl_kernel.h       bocl_kernel.cxx
   )
   aux_source_directory(Templates bocl_sources)
-  add_library(bocl ${bocl_sources} )
+  vxl_add_library( LIBNAME bocl LIBSRCS ${bocl_sources} )
 
   target_link_libraries(bocl brdb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${OPENCL_LIBRARIES})
 
   #install the .h .txx and libs
-  install_targets(/lib bocl)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/bocl/ ${bocl_sources})
 
 #tests
 if( BUILD_TESTING )

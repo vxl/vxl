@@ -15,8 +15,8 @@
 
 // constructor from a parameter block (the only way)
 sdet_denoise_mrf::sdet_denoise_mrf(sdet_denoise_mrf_params& dmp)
-  : sdet_denoise_mrf_params(dmp), output_valid_(false), in_resc_(0),
-    var_resc_(0), out_resc_(0)
+  : sdet_denoise_mrf_params(dmp), output_valid_(false), in_resc_(VXL_NULLPTR),
+    var_resc_(VXL_NULLPTR), out_resc_(VXL_NULLPTR)
 {
   sigma_sq_inv_ = radius_/1.978; //so that exp(radius^2/sigma_^2) = 0.02
   sigma_sq_inv_ *= sigma_sq_inv_;
@@ -131,9 +131,9 @@ void sdet_denoise_mrf::compute_incidence_matrix()
 vil_image_resource_sptr sdet_denoise_mrf::Dimgr()
 {
   unsigned nr = D_mat_.rows();
-  if (!nr||!in_resc_) return 0;
+  if (!nr||!in_resc_) return VXL_NULLPTR;
   unsigned ni = in_resc_->ni(), nj = in_resc_->nj();
-  if (nr!=ni*nj) return 0;
+  if (nr!=ni*nj) return VXL_NULLPTR;
   vil_image_view<float> out(ni, nj);
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i) {

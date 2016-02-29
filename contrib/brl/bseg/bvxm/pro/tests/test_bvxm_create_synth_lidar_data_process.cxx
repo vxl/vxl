@@ -46,7 +46,7 @@ static void test_bvxm_create_synth_lidar_data_process()
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value != 0);
+  bool non_null = (value != VXL_NULLPTR);
   TEST("camera output non-null", non_null, true);
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
@@ -61,7 +61,7 @@ static void test_bvxm_create_synth_lidar_data_process()
     vcl_cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  non_null = (value_img != 0);
+  non_null = (value_img != VXL_NULLPTR);
   TEST("image output non-null", non_null, true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =

@@ -66,7 +66,7 @@ void volm_osm_object_polygon::b_read(vsl_b_istream& is)
 
 void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_polygon* rptr)
 {
-  if (rptr == 0) {
+  if (rptr == VXL_NULLPTR) {
     vsl_b_write(os, false);
     return;
   }
@@ -85,7 +85,7 @@ void vsl_b_read(vsl_b_istream& is, volm_osm_object_polygon*& rptr)
     rptr->b_read(is);
     return;
   }
-  rptr = 0;
+  rptr = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_polygon_sptr& sptr)
@@ -96,7 +96,7 @@ void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_polygon_sptr& sptr)
 
 void vsl_b_read(vsl_b_istream& is, volm_osm_object_polygon_sptr& sptr)
 {
-  volm_osm_object_polygon* rptr = 0;
+  volm_osm_object_polygon* rptr = VXL_NULLPTR;
   vsl_b_read(is, rptr);
   sptr = rptr;
 }

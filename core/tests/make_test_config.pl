@@ -204,9 +204,6 @@ for $var_exp (
   'VCL_GCC_62',
   'VCL_GCC_63',
   'VCL_ICC',
-  'VCL_ICC_8',
-  'VCL_ICC_80',
-  'VCL_ICC_81',
   'VCL_WIN32',
   'VCL_VC',
   'VCL_VC_DOTNET',
@@ -238,7 +235,6 @@ for $var_exp (
   '__VERSION__',        # gcc, icc
   '__OPTIMIZE__',       # gcc, icc
   '__ICC',              # icc
-  '__ECC',              # icc?
   '__INTEL_COMPILER',   # icc
   '__INTEL_CXXLIB_ICC', # icc using its own library?
   '_MSC_VER',           # msvc++

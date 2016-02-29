@@ -116,7 +116,7 @@ init_status( rgrl_view       const& /*init_view*/,
              bool                   /*penalize_scaling*/ ) const
 {
   // nothing to initialize
-  return 0;
+  return VXL_NULLPTR;
 }
 
 rgrl_converge_status_sptr

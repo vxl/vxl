@@ -60,6 +60,13 @@ export_oriented_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
     vcl_size_t nobsTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix());
     vcl_size_t raydirTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_RAY_DIR>::prefix());
 
+    // check for invalid parameters
+    if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
+    {
+      vcl_cout << "ERROR: alphaTypeSize == 0 in " << __FILE__ << __LINE__ << vcl_endl;
+      return false;
+    }
+
     boxm2_data_base * alpha =        cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
 

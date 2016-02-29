@@ -22,9 +22,7 @@ set(vpyr_sources
    vpyr_top_tmap.txx             vpyr_top_tmap.h
 )
 
-add_library(vpyr ${vpyr_sources})
-install_targets(/lib vpyr)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/prip/vpyr ${vpyr_sources})
+vxl_add_library(LIBNAME vpyr LIBSRCS ${vpyr_sources})
 target_link_libraries(vpyr vmap)
 
 #if(BUILD_EXAMPLES)

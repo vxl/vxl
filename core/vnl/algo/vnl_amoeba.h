@@ -80,6 +80,8 @@ class vnl_amoeba
   //  Start simplex defined by adding dx[i] to each x[i]
   void minimize(vnl_vector<double>& x, const vnl_vector<double>& dx);
 
+  double get_end_error() const { return end_error_; }
+
   //: Number of evaluations used in last call to minimize
   int get_num_evaluations() const { return num_evaluations_; }
 
@@ -105,6 +107,7 @@ class vnl_amoeba
 
  protected:
   vnl_cost_function* fptr;
+  double end_error_;
   int num_evaluations_;
 };
 

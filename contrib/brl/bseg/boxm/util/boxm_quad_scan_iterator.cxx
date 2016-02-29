@@ -142,8 +142,8 @@ float boxm_quad_scan_iterator::pix_coverage(int x)
 bool
 boxm_quad_scan_iterator:: x_start_end_val(double * vals,double & start_val,double & end_val)
 {
-  int * chainnum=0;
-  int * vertnum=0;
+  int * chainnum=VXL_NULLPTR;
+  int * vertnum=VXL_NULLPTR;
   int numcrossedges=0;
   super_it_->get_crossedge_vertices(chainnum,vertnum,numcrossedges);
   if (numcrossedges==2)

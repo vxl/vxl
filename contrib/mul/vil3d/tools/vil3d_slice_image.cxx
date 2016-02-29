@@ -74,7 +74,7 @@ int main(int argc, char** argv)
 
   // Attempt to load in the 3D image
   vil3d_image_resource_sptr im_res = vil3d_load_image_resource(image_path().c_str());
-  if (im_res==0)
+  if (im_res==VXL_NULLPTR)
   {
     vcl_cerr<<"Failed to load in image from "<<image_path()<<'\n';
     return 1;

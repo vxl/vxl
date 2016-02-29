@@ -11,14 +11,12 @@ if( EXPAT_FOUND )
 
   set( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
 
-  add_library( expatpp ${expatpp_sources} )
+  vxl_add_library( LIBNAME expatpp LIBSRCS ${expatpp_sources} )
   target_link_libraries( expatpp ${EXPAT_LIBRARIES} )
 
   if( BUILD_TESTING )
     add_subdirectory(tests)
   endif()
 
-  install_targets(/lib expatpp)
-  INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/b3p/expatpp/ ${expatpp_sources})
 
 endif()

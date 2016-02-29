@@ -147,5 +147,5 @@ bvgl_changes::obj(unsigned int i)
 {
   if (i<size())
     return objs_[i];
-  return 0;
+  return VXL_NULLPTR;
 }

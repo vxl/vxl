@@ -30,7 +30,7 @@ if(EXPAT_FOUND)
       aux_source_directory(Templates bmdl_pro_sources)
       aux_source_directory(processes bmdl_pro_sources)
 
-      add_library(bmdl_pro ${bmdl_pro_sources})
+      vxl_add_library( LIBNAME bmdl_pro LIBSRCS ${bmdl_pro_sources})
 
       target_link_libraries(bmdl_pro bmdl bprb ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vgl_io vsol brip vpgl_pro ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl imesh_algo minizip)
 

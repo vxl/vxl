@@ -16,7 +16,7 @@
 // Default ctor
 vrml_out::vrml_out()
 {
-  s_ = 0;
+  s_ = VXL_NULLPTR;
   own_ostream_ = false;
 }
 
@@ -34,7 +34,7 @@ vrml_out::vrml_out(char const* filename)
   own_ostream_ = true;
   if (!s_ || !(*s_)) {
     vcl_cerr << "Cannot open " << filename << " for writing\n";
-    delete s_; s_ = 0; own_ostream_ = false;
+    delete s_; s_ = VXL_NULLPTR; own_ostream_ = false;
   }
   else prologue();
 }

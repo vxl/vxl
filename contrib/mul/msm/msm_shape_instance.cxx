@@ -20,7 +20,7 @@
 //=======================================================================
 
 msm_shape_instance::msm_shape_instance()
-  : model_(0)
+  : model_(VXL_NULLPTR)
 {
 }
 

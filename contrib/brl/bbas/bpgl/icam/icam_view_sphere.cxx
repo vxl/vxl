@@ -5,7 +5,7 @@
 #include <vsph/vsph_camera_bounds.h>
 
 icam_view_sphere::icam_view_sphere(vgl_box_3d<double> bb, double radius)
-: view_sphere_(0), ICAM_LOCAL_MIN_THRESH_(100)
+: view_sphere_(VXL_NULLPTR), ICAM_LOCAL_MIN_THRESH_(100)
 {
   // create the view sphere
   view_sphere_ = new vsph_view_sphere<vsph_view_point<icam_view_metadata> > (bb, radius);

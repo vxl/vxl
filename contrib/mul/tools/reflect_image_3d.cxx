@@ -43,8 +43,8 @@ int main2(int argc, char *argv[])
     "The output image is written in v3i format (vimt3d_image_3d_of<float>).\n"
     "NB. Default units are metres.\n"
   );
-  vul_arg<vcl_string> src_file(0, "Input image file");
-  vul_arg<vcl_string> dst_file(0, "Output image file");
+  vul_arg<vcl_string> src_file(VXL_NULLPTR, "Input image file");
+  vul_arg<vcl_string> dst_file(VXL_NULLPTR, "Output image file");
   vul_arg<vcl_string> axis("-a", "Axis along which to reflect, i.e. X means reflect in X direction (through YZ plane)", "X");
   vul_arg<bool> image_centre("-c", "Reflect about image centre if set, otherwise about world origin", false);
   vul_arg<bool> use_mm("-mm", "World coords in units of mm", false);

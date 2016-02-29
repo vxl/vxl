@@ -70,7 +70,7 @@ static void test_database()
   TEST("exists()", (test_db->exists("department")), true);
 
   brdb_relation_sptr r3 = test_db->get_relation("department");
-  TEST("get_relation()", r3 == NULL, false);
+  TEST("get_relation()", r3 == VXL_NULLPTR, false);
 
   test_db->remove_relation("department");
   TEST("remove_relation()", test_db->exists("department"), false);

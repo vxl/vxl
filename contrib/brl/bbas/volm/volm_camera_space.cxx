@@ -264,7 +264,7 @@ vpgl_perspective_camera<double> volm_camera_space::camera(unsigned cam_index) co
 
 void vsl_b_write(vsl_b_ostream& os, const volm_camera_space* csp_ptr)
 {
-  if (csp_ptr ==0) {
+  if (csp_ptr ==VXL_NULLPTR) {
     vsl_b_write(os, false);
     return;
   }
@@ -283,7 +283,7 @@ void vsl_b_read(vsl_b_istream &is, volm_camera_space*& csp_ptr)
     csp_ptr->b_read(is);
     return;
   }
-  csp_ptr = 0;
+  csp_ptr = VXL_NULLPTR;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const volm_camera_space_sptr& csp_ptr)
@@ -294,7 +294,7 @@ void vsl_b_write(vsl_b_ostream& os, const volm_camera_space_sptr& csp_ptr)
 
 void vsl_b_read(vsl_b_istream &is, volm_camera_space_sptr& csp_ptr)
 {
-  volm_camera_space* dm=0;
+  volm_camera_space* dm=VXL_NULLPTR;
   vsl_b_read(is, dm);
   csp_ptr = dm;
 }

@@ -118,7 +118,7 @@ class vdgl_digital_region : public vsol_region_2d
   vcl_vector<unsigned int> histogram(int nbins);
   //: Compute the residual intensity histogram
   //  The intensity range is returned as the last two arguments.
-  vcl_vector<unsigned int> residual_histogram(int nbins, float* min=0, float* max=0);
+  vcl_vector<unsigned int> residual_histogram(int nbins, float* min=VXL_NULLPTR, float* max=VXL_NULLPTR);
 
   //: Return true if this region is convex
   virtual bool is_convex() const { return false; } // virtual of vsol_region_2d

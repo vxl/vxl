@@ -3,7 +3,7 @@
 include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${BRL_INCLUDE_DIR}/bseg )
 include_directories( ${RPL_INCLUDE_DIR} )
-message("RPL_INCLUDE_DIR = " ${RPL_INCLUDE_DIR})
+
 set(boxm2_vecf_sources
     boxm2_vecf_eye_params.h
     boxm2_vecf_eye_scene.h                  boxm2_vecf_eye_scene.cxx
@@ -52,7 +52,7 @@ set(boxm2_vecf_sources
 
 aux_source_directory(Templates boxm2_vecf_sources)
 
-add_library(boxm2_vecf  ${boxm2_vecf_sources})
+vxl_add_library( LIBNAME boxm2_vecf LIBSRCS  ${boxm2_vecf_sources})
 target_link_libraries(boxm2_vecf boxm2_io boxm2_cpp_algo brip baio bvrml ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl depth_map rsdl)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindOpenCL.cmake )
 if(OPENCL_FOUND)

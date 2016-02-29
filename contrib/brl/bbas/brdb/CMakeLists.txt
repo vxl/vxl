@@ -14,14 +14,12 @@ set(brdb_sources
 
 aux_source_directory(Templates brdb_sources)
 
-add_library(brdb  ${brdb_sources})
+vxl_add_library( LIBNAME brdb LIBSRCS  ${brdb_sources})
 
 # brdb should not depend on any library that uses it
 target_link_libraries(brdb ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
 #install the .h .txx and libs
-install_targets(/lib brdb)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/brl/bbas/brdb/ ${brdb_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

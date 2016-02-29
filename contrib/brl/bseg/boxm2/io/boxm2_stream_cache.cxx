@@ -13,7 +13,7 @@ bool boxm2_stream_cache_helper::open_file(vcl_string filename)
   ifs_.clear();
   ifs_.open(filename.c_str(), vcl_ios::in | vcl_ios::binary);
   if (!ifs_) return false;
-  if (buf_) { delete buf_; buf_ = 0; }
+  if (buf_) { delete buf_; buf_ = VXL_NULLPTR; }
   return true;
 }
 
@@ -30,7 +30,7 @@ void boxm2_stream_cache_helper::read(unsigned long size, boxm2_block_id id)
 void boxm2_stream_cache_helper::close_file()
 {
   ifs_.close();
-  if (buf_) { delete buf_; buf_ = 0; }
+  if (buf_) { delete buf_; buf_ = VXL_NULLPTR; }
   index_ = -1;
 }
 
@@ -39,7 +39,7 @@ char *boxm2_stream_cache_helper::get_cell(int i, vcl_size_t cell_size, boxm2_blo
 {
   if (i < index_) { vcl_cerr << "cannot backtrack in the file!\n"; throw 0; }
   int dif = i-index_;
-  if (dif >= num_cells(cell_size)) return 0; // means new buf needs to be loaded
+  if (dif >= num_cells(cell_size)) return VXL_NULLPTR; // means new buf needs to be loaded
   int byte_ind = (int)(dif*cell_size);
   return buf_->cell_buffer(byte_ind, cell_size);
 }

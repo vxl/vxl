@@ -170,7 +170,7 @@ namespace
                              const vgl_point_2d<double>& p1,
                              const vgl_point_2d<double>& p2)
   {
-    unsigned int *binp = 0;
+    unsigned int *binp = VXL_NULLPTR;
     if (vcl_abs(p2.x() - p1.x()) < 0.5)
     {
       binp = &edge_bins(static_cast<unsigned int>(p1.x()+1.0),

@@ -18,7 +18,7 @@
 # include <vcl_cerrno.h> // for EBUSY, I think
 struct vpl_mutex
 {
-  vpl_mutex() { pthread_mutex_init(&mutex_, 0); }
+  vpl_mutex() { pthread_mutex_init(&mutex_, VXL_NULLPTR); }
 
   void lock() { pthread_mutex_lock(&mutex_); }
 

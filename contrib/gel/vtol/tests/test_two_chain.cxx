@@ -68,7 +68,7 @@ static void test_two_chain()
   tc1->remove_face(f2);
   TEST("vtol_two_chain::remove_face()", tc1->face(1), f3);
 
-  TEST("vtol_two_chain::cast_to_two_chain()", tc1->cast_to_two_chain()==0, false);
+  TEST("vtol_two_chain::cast_to_two_chain()", tc1->cast_to_two_chain()==VXL_NULLPTR, false);
   TEST("vtol_two_chain::valid_inferior_type()", tc1->valid_inferior_type(f1), true);
   TEST("vtol_two_chain::valid_superior_type()", f1->valid_superior_type(tc1), true);
   TEST("vtol_two_chain::valid_chain_type()", tc1->valid_chain_type(tc1), true);

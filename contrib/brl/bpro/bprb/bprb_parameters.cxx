@@ -117,7 +117,7 @@ bool bprb_parameters::parse_XML(const vcl_string& xml_path,
         vcl_string value = param->attribute("value");
         vcl_string type = param->attribute("type");
         vcl_string desc = param->attribute("desc");
-        bprb_param* p=0;
+        bprb_param* p=VXL_NULLPTR;
         if (!type.compare("float")) {
           p =  new bprb_param_type<float>(param->name(), desc, 0);
         } else if ( (!type.compare("unsigned int")) || (!type.compare("unsigned")) ) {

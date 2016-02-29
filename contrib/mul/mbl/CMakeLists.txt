@@ -10,15 +10,13 @@ set( VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT  CACHE PATH "Where to store historical m
 mark_as_advanced(VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT)
 
 # Set up mbl_config.h for VXL_MBL_TEST_SAVE_MEASUREMENT_ROOT, etc.
-configure_file(
-  ${vxl_SOURCE_DIR}/contrib/mul/mbl/mbl_config.h.in
-  ${vxl_BINARY_DIR}/contrib/mul/mbl/mbl_config.h ESCAPE_QUOTES
+vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/mbl_config.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/mbl_config.h
+  include/vxl/contrib/mul/mbl
 )
-include_directories( ${vxl_BINARY_DIR}/contrib/mul )
+include_directories( ${CMAKE_BINARY_DIR}/contrib/mul )
 
 set(mbl_sources
-  mbl_config.h.in
-
   mbl_add_all_loaders.cxx               mbl_add_all_loaders.h
   mbl_gamma.cxx                         mbl_gamma.h
   mbl_matrix_products.cxx               mbl_matrix_products.h
@@ -120,11 +118,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-add_library(mbl ${mbl_sources})
+vxl_add_library( LIBNAME mbl LIBSRCS ${mbl_sources})
 target_link_libraries(mbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
-
-install_targets(/lib mbl)
-INSTALL_NOBASE_HEADER_FILES(/include/vxl/contrib/mul/mbl ${mbl_sources})
 
 if(BUILD_TESTING)
   add_subdirectory(tests)

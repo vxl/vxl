@@ -407,7 +407,7 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(vcl_vector<vpgl_pe
     //find camera with the closest look vector to this normal
     //int closeIdx = boxm2_util::find_nearest_cam(normal, visible_views);
     int closeIdx = get_best_view(visible_views, vis_images, normx, normy, normz, world_tri);
-    vpgl_perspective_camera<double>* closest = NULL;
+    vpgl_perspective_camera<double>* closest = VXL_NULLPTR;
     vcl_string im_name = "empty.png";
     if (closeIdx >= 0) {
       closest = visible_views[closeIdx];

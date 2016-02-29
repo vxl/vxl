@@ -25,9 +25,9 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
   boxm2_vecf_orbit_params params = is_right? right_params_ : left_params_;
 
     bool export_points = export_fname_base == "" ? false : true;
-    vcl_ofstream * sup_points = 0;
-    vcl_ofstream * inf_points = 0;
-    vcl_ofstream * cre_points = 0;
+    vcl_ofstream * sup_points = VXL_NULLPTR;
+    vcl_ofstream * inf_points = VXL_NULLPTR;
+    vcl_ofstream * cre_points = VXL_NULLPTR;
 
     if (export_points){
       vcl_string sup_fname = is_right ? export_fname_base+"/right_sup_points.txt" : export_fname_base+"/left_sup_points.txt";

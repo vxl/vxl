@@ -37,7 +37,7 @@ set(OPENJPEG2_SRCS
 add_definitions( ${OPENJPEG2_DEFINITIONS} )
 
 # Pass proper definition to preprocessor to generate shared lib
-add_library(openjpeg2 ${OPENJPEG2_SRCS})
+vxl_add_library( LIBNAME openjpeg2 LIBSRCS ${OPENJPEG2_SRCS})
 
 find_library(VXL_MATH_LIBRARY_FOUND m)
 if(VXL_MATH_LIBRARY_FOUND)
@@ -51,9 +51,5 @@ endif()
 set_target_properties(openjpeg2 PROPERTIES
   VERSION       2.0.0
   DEFINE_SYMBOL OPJ_EXPORTS)
-
-# Install library
-install_targets(/lib openjpeg2)
-
 endif()
 
