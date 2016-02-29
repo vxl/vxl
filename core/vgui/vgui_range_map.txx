@@ -1,3 +1,5 @@
+// This is core/vgui/vgui_range_map.txx
+// -*- c++ -*-
 #ifndef vgui_range_map_txx_
 #define vgui_range_map_txx_
 

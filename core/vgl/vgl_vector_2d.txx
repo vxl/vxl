@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_vector_2d.txx
+// -*- c++ -*-
 #ifndef vgl_vector_2d_txx_
 #define vgl_vector_2d_txx_
 //:

@@ -1,4 +1,5 @@
 // This is core/vsl/vsl_stack_io.txx
+// -*- c++ -*-
 #ifndef vsl_stack_io_txx_
 #define vsl_stack_io_txx_
 //:

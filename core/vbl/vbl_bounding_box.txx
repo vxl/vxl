@@ -1,4 +1,5 @@
 // This is core/vbl/vbl_bounding_box.txx
+// -*- c++ -*-
 #ifndef vbl_bounding_box_txx_
 #define vbl_bounding_box_txx_
 

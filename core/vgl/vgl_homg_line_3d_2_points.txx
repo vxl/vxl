@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_homg_line_3d_2_points.txx
+// -*- c++ -*-
 #ifndef vgl_homg_line_3d_2_points_txx_
 #define vgl_homg_line_3d_2_points_txx_
 //:

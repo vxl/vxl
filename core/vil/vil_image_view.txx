@@ -1,4 +1,5 @@
 // This is core/vil/vil_image_view.txx
+// -*- c++ -*-
 #ifndef vil_image_view_txx_
 #define vil_image_view_txx_
 //:

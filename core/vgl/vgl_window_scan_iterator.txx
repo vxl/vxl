@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_window_scan_iterator.txx
+// -*- c++ -*-
 #ifndef vgl_window_scan_iterator_txx_
 #define vgl_window_scan_iterator_txx_
 

@@ -1,4 +1,5 @@
 // This is core/vil/vil_sample_grid_bicub.txx
+// -*- c++ -*-
 #ifndef vil_sample_grid_bicub_txx_
 #define vil_sample_grid_bicub_txx_
 //:

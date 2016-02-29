@@ -1,3 +1,5 @@
+// This is core/vbl/vbl_attributes.txx
+// -*- c++ -*-
 #ifndef vbl_attributes_txx_
 #define vbl_attributes_txx_
 #include "vbl_attributes.h"

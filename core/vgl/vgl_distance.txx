@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_distance.txx
+// -*- c++ -*-
 #ifndef vgl_distance_txx_
 #define vgl_distance_txx_
 //:

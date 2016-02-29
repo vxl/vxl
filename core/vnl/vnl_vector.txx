@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_vector.txx
+// -*- c++ -*-
 #ifndef vnl_vector_txx_
 #define vnl_vector_txx_
 //:

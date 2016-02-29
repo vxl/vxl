@@ -1,3 +1,5 @@
+// This is core/vgl/vgl_frustrum_3d.txx
+// -*- c++ -*-
 #include <vgl/vgl_frustum_3d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_plane_3d.h>

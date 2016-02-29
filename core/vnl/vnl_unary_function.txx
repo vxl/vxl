@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_unary_function.txx
+// -*- c++ -*-
 #ifndef vnl_unary_function_txx_
 #define vnl_unary_function_txx_
 //:

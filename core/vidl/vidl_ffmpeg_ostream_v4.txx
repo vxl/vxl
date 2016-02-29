@@ -1,4 +1,5 @@
 // This is core/vidl/vidl_ffmpeg_ostream_v4.txx
+// -*- c++ -*-
 #ifndef vidl_ffmpeg_ostream_v4_txx_
 #define vidl_ffmpeg_ostream_v4_txx_
 #include "vidl_ffmpeg_ostream.h"

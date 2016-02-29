@@ -1,4 +1,5 @@
 // This is core/vil/vil_sample_profile_bilin.txx
+// -*- c++ -*-
 #ifndef vil_sample_profile_bilin_txx_
 #define vil_sample_profile_bilin_txx_
 //:

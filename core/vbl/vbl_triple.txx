@@ -1,3 +1,5 @@
+// core/vbl/vbl_triple.txx
+// -*- c++ -*-
 #ifndef vbl_triple_txx_
 #define vbl_triple_txx_
 /*

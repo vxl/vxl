@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_polynomial.txx
+// -*- c++ -*-
 #ifndef vnl_polynomial_txx_
 #define vnl_polynomial_txx_
 

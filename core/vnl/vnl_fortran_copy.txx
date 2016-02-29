@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_fortran_copy.txx
+// -*- c++ -*-
 #ifndef vnl_fortran_copy_txx_
 #define vnl_fortran_copy_txx_
 //:

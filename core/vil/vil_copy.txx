@@ -1,4 +1,5 @@
 // This is core/vil/vil_copy.txx
+// -*- c++ -*-
 #ifndef vil_copy_txx_
 #define vil_copy_txx_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_clip.txx
+// -*- c++ -*-
 #ifndef vgl_clip_txx_
 #define vgl_clip_txx_
 //:

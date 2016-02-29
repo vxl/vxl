@@ -1,4 +1,5 @@
 // This is core/vpgl/vpgl_perspective_camera.txx
+// -*- c++ -*-
 #ifndef vpgl_perspective_camera_txx_
 #define vpgl_perspective_camera_txx_
 //:

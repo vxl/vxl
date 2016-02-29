@@ -1,4 +1,5 @@
 // This is core/vil/vil_resample_bilin.txx
+// -*- c++ -*-
 #ifndef vil_resample_bilin_txx_
 #define vil_resample_bilin_txx_
 //:

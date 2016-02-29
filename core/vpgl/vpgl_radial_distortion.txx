@@ -1,4 +1,5 @@
 // This is core/vpgl/vpgl_radial_distortion.txx
+// -*- c++ -*-
 #ifndef vpgl_radial_distortion_txx_
 #define vpgl_radial_distortion_txx_
 //:

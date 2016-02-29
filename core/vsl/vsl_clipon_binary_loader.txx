@@ -1,4 +1,5 @@
 // This is core/vsl/vsl_clipon_binary_loader.txx
+// -*- c++ -*-
 #ifndef vsl_clipon_binary_loader_txx_
 #define vsl_clipon_binary_loader_txx_
 //:

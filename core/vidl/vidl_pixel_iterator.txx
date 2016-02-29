@@ -1,4 +1,5 @@
 // This is core/vidl/vidl_pixel_iterator.txx
+// -*- c++ -*-
 #ifndef vidl_pixel_iterator_txx_
 #define vidl_pixel_iterator_txx_
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE

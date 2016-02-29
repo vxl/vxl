@@ -1,4 +1,5 @@
 // core/vil/vil_bicub_interp.txx
+// -*- c++ -*-
 #ifndef vil_bicub_interp_txx_
 #define vil_bicub_interp_txx_
 //:

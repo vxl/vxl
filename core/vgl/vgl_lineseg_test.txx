@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_lineseg_test.txx
+// -*- c++ -*-
 #ifndef vgl_lineseg_test_txx_
 #define vgl_lineseg_test_txx_
 //:

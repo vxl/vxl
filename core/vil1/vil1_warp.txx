@@ -1,4 +1,5 @@
 // This is core/vil1/vil1_warp.txx
+// -*- c++ -*-
 #ifndef vil1_warp_txx_
 #define vil1_warp_txx_
 //:

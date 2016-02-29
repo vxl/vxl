@@ -1,3 +1,5 @@
+// This is core/vbl/vbl_local_minima.txx
+// -*- c++ -*-
 #ifndef VBL_LOCAL_MINIMA_TXX_
 #define VBL_LOCAL_MINIMA_TXX_
 #include "vbl_local_minima.h"

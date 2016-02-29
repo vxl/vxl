@@ -1,4 +1,5 @@
 // This is core/vsl/vsl_complex_io.txx
+// -*- c++ -*-
 #ifndef vsl_complex_io_txx_
 #define vsl_complex_io_txx_
 //:

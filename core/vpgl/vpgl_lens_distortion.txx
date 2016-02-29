@@ -1,4 +1,5 @@
 // This is core/vpgl/vpgl_lens_distortion.txx
+// -*- c++ -*-
 #ifndef vpgl_lens_distortion_txx_
 #define vpgl_lens_distortion_txx_
 //:

@@ -1,4 +1,5 @@
 // This is core/vil/vil_resample_nearest.txx
+// -*- c++ -*-
 #ifndef vil_resample_nearest_txx_
 #define vil_resample_nearest_txx_
 //:

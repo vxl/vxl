@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_line_2d.txx
+// -*- c++ -*-
 #ifndef vgl_line_2d_txx_
 #define vgl_line_2d_txx_
 //:

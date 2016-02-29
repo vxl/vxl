@@ -1,4 +1,5 @@
 // This is core/vil1/vil1_memory_image_of_format.txx
+// -*- c++ -*-
 #ifndef vil1_memory_image_of_format_h_
 #define vil1_memory_image_of_format_h_
 //:

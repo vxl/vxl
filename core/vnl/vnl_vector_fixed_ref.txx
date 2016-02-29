@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_vector_fixed_ref.txx
+// -*- c++ -*-
 #ifndef vnl_vector_fixed_ref_txx_
 #define vnl_vector_fixed_ref_txx_
 // Author: Paul P. Smyth, Vicon Motion Systems Ltd.

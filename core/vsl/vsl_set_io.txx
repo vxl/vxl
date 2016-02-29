@@ -1,4 +1,5 @@
 // This is core/vsl/vsl_set_io.txx
+// -*- c++ -*-
 #ifndef vsl_set_io_txx_
 #define vsl_set_io_txx_
 //:

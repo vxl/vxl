@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_closest_point.txx
+// -*- c++ -*-
 #ifndef vgl_closest_point_txx_
 #define vgl_closest_point_txx_
 #include <vcl_limits.h>

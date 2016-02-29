@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_ellipse_scan_iterator.txx
+// -*- c++ -*-
 #ifndef vgl_ellipse_scan_iterator_txx_
 #define vgl_ellipse_scan_iterator_txx_
 

@@ -1,4 +1,5 @@
 // This is core/vil1/vil1_ssd.txx
+// -*- c++ -*-
 #ifndef vil1_ssd_txx_
 #define vil1_ssd_txx_
 

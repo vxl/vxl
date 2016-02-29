@@ -1,4 +1,5 @@
 // This is core/vil/vil_smart_ptr.txx
+// -*- c++ -*-
 #ifndef vil_smart_ptr_txx_
 #define vil_smart_ptr_txx_
 

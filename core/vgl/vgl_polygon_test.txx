@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_polygon_test.txx
+// -*- c++ -*-
 #ifndef vgl_polygon_test_txx_
 #define vgl_polygon_test_txx_
 //:

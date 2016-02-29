@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_det.txx
+// -*- c++ -*-
 #ifndef vnl_det_txx_
 #define vnl_det_txx_
 

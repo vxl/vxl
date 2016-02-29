@@ -1,3 +1,5 @@
+// This is core/vgl/vgl_tolerance.txx
+// -*- c++ -*-
 #ifndef vgl_tolerance_txx_
 #define vgl_tolerance_txx_
 

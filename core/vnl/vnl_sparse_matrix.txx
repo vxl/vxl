@@ -1,4 +1,5 @@
 // This is core/vnl/vnl_sparse_matrix.txx
+// -*- c++ -*-
 #ifndef vnl_sparse_matrix_txx_
 #define vnl_sparse_matrix_txx_
 //:

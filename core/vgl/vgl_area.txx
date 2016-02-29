@@ -1,4 +1,5 @@
 // This is core/vgl/vgl_area.txx
+// -*- c++ -*-
 #ifndef vgl_area_txx_
 #define vgl_area_txx_
 
