@@ -87,7 +87,7 @@ def get_index_from_3d_point(scene,cache,point):
     index=boxm2_batch.get_output_int(id);
     boxm2_batch.remove_data(id);
 
-  return ((blk_i, blk_j, blk_k), index)
+    return ((blk_i, blk_j, blk_k), index)
 
 def get_3d_point_from_index(scene,cache,block_index, index): 
     #Warning, you probably shouldn't be doing this!
