@@ -140,6 +140,6 @@ class vnl_symmetric_eigensystem
 };
 
 #define VNL_SYMMETRIC_EIGENSYSTEM_INSTANTIATE(T) \
-extern "please include vnl/algo/vnl_symmetric_eigensystem.txx first"
+extern "please include vnl/algo/vnl_symmetric_eigensystem.hxx first"
 
 #endif // vnl_symmetric_eigensystem_h_

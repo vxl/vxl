@@ -166,6 +166,6 @@ class vnl_polynomial
 template <class T>
 vcl_ostream& operator<<(vcl_ostream& os, vnl_polynomial<T> const& p) { p.print(os); return os; }
 
-#define VNL_POLYNOMIAL_INSTANTIATE(T) extern "please #include vnl/vnl_polynomial.txx instead"
+#define VNL_POLYNOMIAL_INSTANTIATE(T) extern "please #include vnl/vnl_polynomial.hxx instead"
 
 #endif // vnl_polynomial_h_

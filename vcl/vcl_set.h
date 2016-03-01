@@ -8,8 +8,8 @@
 #include "vcl_functional.h"
 #include "iso/vcl_set.h"
 
-#define VCL_SET_INSTANTIATE extern "you must include vcl_set.txx first"
-#define VCL_MULTISET_INSTANTIATE extern "you must include vcl_set.txx first"
+#define VCL_SET_INSTANTIATE extern "you must include vcl_set.hxx first"
+#define VCL_MULTISET_INSTANTIATE extern "you must include vcl_set.hxx first"
 #include "vcl_set.hxx"
 
 #endif // vcl_set_h_
