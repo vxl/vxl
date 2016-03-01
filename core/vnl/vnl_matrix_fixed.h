@@ -1031,6 +1031,6 @@ template <class T, unsigned m, unsigned n>
 vnl_matrix_fixed<T,m,n> outer_product(vnl_vector_fixed<T,m> const& a, vnl_vector_fixed<T,n> const& b);
 
 #define VNL_MATRIX_FIXED_INSTANTIATE(T, M, N) \
-extern "please include vnl/vnl_matrix_fixed.txx instead"
+extern "please include vnl/vnl_matrix_fixed.hxx instead"
 
 #endif // vnl_matrix_fixed_h_

@@ -64,7 +64,7 @@ template <class T> inline vcl_complex<T>
 //--------------------------------------------------------------------------------
 
 // bogus instantiation macro.
-#define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.txx instead"
+#define VCL_COMPLEX_INSTANTIATE(T) extern "you must include vcl_complex.hxx instead"
 
 #include "vcl_complex.hxx"
 

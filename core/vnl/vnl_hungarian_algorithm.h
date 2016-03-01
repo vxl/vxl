@@ -163,6 +163,6 @@ class vnl_hungarian_algorithm
   AssignmentVectorType m_AssignmentVector;
 };
 
-#define VNL_HUNGARIAN_ALGORITHM_INSTANTIATE(T) extern "please #include vnl/vnl_hungarian_algorithm.txx instead"
+#define VNL_HUNGARIAN_ALGORITHM_INSTANTIATE(T) extern "please #include vnl/vnl_hungarian_algorithm.hxx instead"
 
 #endif // vnl_hungarian_algorithm_h_

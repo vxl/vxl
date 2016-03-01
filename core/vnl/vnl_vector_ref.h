@@ -13,7 +13,7 @@
 // \verbatim
 //  Modifications
 //   LSB (Manchester) 19/03/2001: Tidied up the documentation
-//   Peter Vanroose   27-Jun-2003 Removed .txx as all methods are inlined
+//   Peter Vanroose   27-Jun-2003 Removed .hxx as all methods are inlined
 // \endverbatim
 //-----------------------------------------------------------------------------
 
