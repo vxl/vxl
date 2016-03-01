@@ -121,7 +121,7 @@ class vnl_sym_matrix
   //: set element
   inline void put (unsigned r, unsigned c, T const& v)
   {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
     if (r >= this->nn_)                // If invalid size specified
       vnl_error_matrix_row_index("put", r); // Raise exception
     if (c >= this->nn_)                // If invalid size specified
@@ -133,7 +133,7 @@ class vnl_sym_matrix
   //: get element
   inline T get (unsigned r, unsigned c) const
   {
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
     if (r >= this->nn_)                // If invalid size specified
       vnl_error_matrix_row_index("get", r); // Raise exception
     if (c >= this->nn_)                // If invalid size specified

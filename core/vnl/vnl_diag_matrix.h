@@ -130,7 +130,7 @@ class vnl_diag_matrix
   inline void put (unsigned r, unsigned c, T const& v) {
     assert(r == c);
     (void)c;
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
     if (r >= this->size())                  // If invalid size specified
       vnl_error_matrix_row_index("get", r); // Raise exception
 #endif
@@ -141,7 +141,7 @@ class vnl_diag_matrix
   inline T get (unsigned r, unsigned c) const {
     assert(r == c);
     (void)c;
-#ifdef VNL_CONFIG_CHECK_BOUNDS
+#if VNL_CONFIG_CHECK_BOUNDS
   if (r >= this->size())                  // If invalid size specified
     vnl_error_matrix_row_index("get", r); // Raise exception
 #endif
