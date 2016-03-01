@@ -1,5 +1,5 @@
-#include <boct/boct_tree.txx>
-#include <boct/boct_tree_cell.txx>
+#include <boct/boct_tree.hxx>
+#include <boct/boct_tree_cell.hxx>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 

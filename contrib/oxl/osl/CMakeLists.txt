@@ -38,8 +38,8 @@ set(osl_sources
     internals/droid.cxx             internals/droid.h
     internals/osl_reorder_chain.cxx internals/osl_reorder_chain.h
 
-    osl_1d_half_kernel.txx          osl_1d_half_kernel.h
-    osl_canny_smooth.txx            osl_canny_smooth.h osl_canny_smooth.cxx
+    osl_1d_half_kernel.hxx          osl_1d_half_kernel.h
+    osl_canny_smooth.hxx            osl_canny_smooth.h osl_canny_smooth.cxx
     osl_hacks.h
 )
 aux_source_directory(Templates osl_sources)

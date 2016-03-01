@@ -1,3 +1,3 @@
 // Instantiation of vgl_area<double>
-#include <vgl/vgl_area.txx>
+#include <vgl/vgl_area.hxx>
 VGL_AREA_INSTANTIATE(double);

@@ -2,7 +2,7 @@
 // Modifications approved for public release, distribution unlimited
 // DISTAR Case 14074
 //
-#include <vil/vil_rgb.txx>
+#include <vil/vil_rgb.hxx>
 #include <vxl_config.h>
 
 VIL_RGB_INSTANTIATE( bool );

@@ -4,7 +4,7 @@
 #include <vcl_iostream.h>
 
 #include <vgui/vgui_satellite_tableau.h>
-#include <vgui/vgui_satellite_tableau.txx>
+#include <vgui/vgui_satellite_tableau.hxx>
 
 struct example_object
 {

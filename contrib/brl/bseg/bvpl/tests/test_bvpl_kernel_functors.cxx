@@ -327,5 +327,5 @@ MAIN(test_bvpl_kernel_functors)
 }
 
 // Template instantiation, only used in this test file:
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 VBL_ARRAY_3D_INSTANTIATE(bvxm_opinion);

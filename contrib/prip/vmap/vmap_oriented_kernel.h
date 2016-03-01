@@ -76,6 +76,6 @@ class vmap_oriented_kernel : public TKernel
   Mark mark_ ;
 };
 
-#include "vmap_oriented_kernel.txx"
+#include "vmap_oriented_kernel.hxx"
 
 #endif

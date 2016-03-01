@@ -36,6 +36,6 @@ template <class T, unsigned n>
 void x_write_tree(vcl_ostream & os, vnl_vector_fixed<T,n> const& v,
                   vcl_string name="vnl_vector_fixed");
 
-#define VNL_XIO_VECTOR_FIXED_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_vector_fixed.txx> first"
+#define VNL_XIO_VECTOR_FIXED_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_vector_fixed.hxx> first"
 
 #endif // vnl_xio_vector_fixed_h

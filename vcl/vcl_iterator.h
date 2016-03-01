@@ -28,6 +28,6 @@
 // ---------- ISO
 # include "iso/vcl_iterator.h"
 // vc has no raw_storage_iterator
-#include "vcl_iterator.txx"
+#include "vcl_iterator.hxx"
 
 #endif // vcl_iterator_h_

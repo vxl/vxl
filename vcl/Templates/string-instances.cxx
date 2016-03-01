@@ -1,4 +1,4 @@
-#include <vcl_string.txx>
+#include <vcl_string.hxx>
 #include <vcl_iostream.h>
 
 VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char> );

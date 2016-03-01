@@ -6,7 +6,7 @@
 
 #include <vcl_cstring.h>
 #include <vcl_cstddef.h> // for std::size_t
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 
 //: Default constructor
 bvxm_memory_chunk::bvxm_memory_chunk() : data_(VXL_NULLPTR), size_(0) {}

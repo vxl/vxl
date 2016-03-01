@@ -98,6 +98,6 @@ inline vcl_ostream& operator<<(vcl_ostream&s,vbl_big_sparse_array_3d<T>const& a)
 }
 
 #define VBL_BIG_SPARSE_ARRAY_3D_INSTANTIATE(T) \
-extern "Please #include <vbl/vbl_big_sparse_array_3d.txx> instead"
+extern "Please #include <vbl/vbl_big_sparse_array_3d.hxx> instead"
 
 #endif // vbl_big_sparse_array_3d_h_

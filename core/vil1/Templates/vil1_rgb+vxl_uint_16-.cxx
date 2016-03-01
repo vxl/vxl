@@ -1,4 +1,4 @@
-#include <vil1/vil1_rgb.txx>
+#include <vil1/vil1_rgb.hxx>
 
 #include <vxl_config.h>
 

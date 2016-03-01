@@ -1,5 +1,5 @@
 #include "my_pyramid.h"
-#include "my_pyramid_functions.txx"
+#include "my_pyramid_functions.hxx"
 #include <vmap/tests/my_map.h>
 #include <vmap/vmap_set_grid_structure.h>
 

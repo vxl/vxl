@@ -39,7 +39,7 @@ if(EXPAT_FOUND)
     target_link_libraries(boxm2_volm bocl)
     endif()
 
-    #install the .h .txx and libs
+    #install the .h .hxx and libs
 
     add_subdirectory(io)
 

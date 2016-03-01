@@ -99,6 +99,6 @@ class vmap_non_oriented_kernel : public TKernel
   Graph graph_ ;
 };
 
-#include "vmap_non_oriented_kernel.txx"
+#include "vmap_non_oriented_kernel.hxx"
 
 #endif

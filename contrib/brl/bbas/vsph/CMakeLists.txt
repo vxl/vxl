@@ -4,7 +4,7 @@
 include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
 set(vsph_sources
-    vsph_view_sphere.h       vsph_view_sphere.txx
+    vsph_view_sphere.h       vsph_view_sphere.hxx
     vsph_view_point.h
     vsph_spherical_coord.h   vsph_spherical_coord.cxx     vsph_spherical_coord_sptr.h
     vsph_sph_point_3d.h      vsph_sph_point_3d.cxx

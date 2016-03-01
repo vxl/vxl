@@ -38,6 +38,6 @@ class vgl_orient_box_3d_operators
   static vgl_orient_box_3d<T> minimal_box(vcl_vector<vgl_point_3d<T> > const& plist);
 };
 
-#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d_operators.txx> instead"
+#define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d_operators.hxx> instead"
 
 #endif // vgl_orient_box_3d_operators_h

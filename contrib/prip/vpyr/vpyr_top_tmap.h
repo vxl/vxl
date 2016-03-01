@@ -77,6 +77,6 @@ class vpyr_top_tmap : public vmap_2_tmap<V,E,F,D>
   pyramid_type & pyramid_ ;
 };
 
-#include "vpyr_top_tmap.txx"
+#include "vpyr_top_tmap.hxx"
 
 #endif

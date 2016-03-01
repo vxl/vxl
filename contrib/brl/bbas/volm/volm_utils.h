@@ -39,6 +39,6 @@ private:  // only static function in this class: disallow instantiation
   volm_utils();
 };
 
-#define VOLM_UTILS_INSTANTIATE(T) extern "Please #include <volm/volm_utils.txx>"
+#define VOLM_UTILS_INSTANTIATE(T) extern "Please #include <volm/volm_utils.hxx>"
 
 #endif // volm_utils_h_

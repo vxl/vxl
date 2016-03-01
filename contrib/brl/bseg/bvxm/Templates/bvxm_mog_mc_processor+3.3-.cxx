@@ -1,3 +1,3 @@
-#include <bvxm/bvxm_mog_mc_processor.txx>
+#include <bvxm/bvxm_mog_mc_processor.hxx>
 
 BVXM_MOG_MC_PROCESSOR_INSTANTIATE(3,3);

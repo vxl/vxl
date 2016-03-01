@@ -5,11 +5,11 @@ include_directories( ${BRL_INCLUDE_DIR}/bbas )
 include_directories( ${GEL_INCLUDE_DIR} )
 
 set(bpgl_sources
-bpgl_comp_rational_camera.h         bpgl_comp_rational_camera.txx
-bpgl_reg_fundamental_matrix.h       bpgl_reg_fundamental_matrix.txx
+bpgl_comp_rational_camera.h         bpgl_comp_rational_camera.hxx
+bpgl_reg_fundamental_matrix.h       bpgl_reg_fundamental_matrix.hxx
 bpgl_rolling_shutter_camera.h
-bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.txx
-bpgl_camera_estimator.h bpgl_camera_estimator.txx bpgl_camera_estimator_amoeba.h
+bpgl_segmented_rolling_shutter_camera.h bpgl_segmented_rolling_shutter_camera.hxx
+bpgl_camera_estimator.h bpgl_camera_estimator.hxx bpgl_camera_estimator_amoeba.h
 bpgl_camera_utils.h bpgl_camera_utils.cxx
    )
 

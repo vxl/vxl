@@ -1,6 +1,6 @@
 // This is core/vidl/vidl_pixel_iterator.cxx
 #include "vidl_pixel_iterator.h"
-#include "vidl_pixel_iterator.txx"
+#include "vidl_pixel_iterator.hxx"
 //:
 // \file
 // \author Matt Leotta

@@ -1,4 +1,4 @@
-#include <bvpl/bvpl_voxel_subgrid.txx>
+#include <bvpl/bvpl_voxel_subgrid.hxx>
 #include <vnl/vnl_float_3.h>
 
 

@@ -1,4 +1,4 @@
-#include <vil1/vil1_rgb.txx>
+#include <vil1/vil1_rgb.hxx>
 
 #if 0
 #if !VCL_HAS_MEMBER_TEMPLATES

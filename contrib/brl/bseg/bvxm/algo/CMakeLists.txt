@@ -5,7 +5,7 @@ include_directories( ${BRL_INCLUDE_DIR}/bseg/bvxm )
 
 set(bvxm_algo_sources
     bvxm_merge_mog.h     bvxm_merge_mog.cxx
-    bvxm_mog_norm.h      bvxm_mog_norm.txx
+    bvxm_mog_norm.h      bvxm_mog_norm.hxx
     bvxm_boxm_convert.h
    )
 

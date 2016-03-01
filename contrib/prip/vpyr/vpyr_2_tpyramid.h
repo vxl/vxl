@@ -133,6 +133,6 @@ class vpyr_2_tpyramid : public vpyr_2_pyramid<TLevel>
   }
 };
 
-#include "vpyr_2_tpyramid.txx"
+#include "vpyr_2_tpyramid.hxx"
 
 #endif

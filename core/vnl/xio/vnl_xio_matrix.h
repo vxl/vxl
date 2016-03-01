@@ -37,6 +37,6 @@ template <class T>
 void x_write_tree(vcl_ostream & os, vnl_matrix<T> const& v,
                   vcl_string name="vnl_matrix");
 
-#define VNL_XIO_MATRIX_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_matrix.txx> first"
+#define VNL_XIO_MATRIX_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_matrix.hxx> first"
 
 #endif // vnl_xio_matrix_h

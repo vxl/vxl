@@ -43,4 +43,4 @@ endif()
 
 add_subdirectory(exe)
 
-#install the .h .txx and libs
+#install the .h .hxx and libs

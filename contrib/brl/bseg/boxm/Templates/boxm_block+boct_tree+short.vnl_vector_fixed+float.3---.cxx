@@ -1,8 +1,8 @@
 #include <boct/boct_tree.h>
-#include <boxm/boxm_block.txx>
-#include <boxm/boxm_scene.txx>
+#include <boxm/boxm_block.hxx>
+#include <boxm/boxm_scene.hxx>
 #include <vnl/vnl_vector_fixed.h>
-#include <vbl/vbl_array_3d.txx>
+#include <vbl/vbl_array_3d.hxx>
 #include <vcl_string.h>
 
 typedef boct_tree<short, vnl_vector_fixed<float,3> > tree_type;

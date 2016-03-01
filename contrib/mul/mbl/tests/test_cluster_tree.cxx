@@ -5,8 +5,8 @@
 #include <vcl_iostream.h>
 #include <mbl/mbl_cluster_tree.h>
 
-#include <mbl/mbl_clusters.txx>
-#include <mbl/mbl_cluster_tree.txx>
+#include <mbl/mbl_clusters.hxx>
+#include <mbl/mbl_cluster_tree.hxx>
 
 //: Distance class
 class mbl_scalar_distance

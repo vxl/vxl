@@ -1,4 +1,4 @@
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 
 #include <vil/vil_image_view_base.h>
 #include <vil/io/vil_io_smart_ptr.h>

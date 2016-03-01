@@ -34,6 +34,6 @@ template <class T>
 void x_write_tree(vcl_ostream & os, vnl_quaternion<T> const& v,
                   vcl_string name="vnl_quaternion");
 
-#define VNL_XIO_QUATERNION_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_quaternion.txx> first"
+#define VNL_XIO_QUATERNION_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_quaternion.hxx> first"
 
 #endif // vnl_xio_quaternion_h

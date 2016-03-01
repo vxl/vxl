@@ -18,7 +18,7 @@ set(boxm2_io_sources
     boxm2_dumb_cache.h     boxm2_dumb_cache.cxx
     boxm2_nn_cache.h       boxm2_nn_cache.cxx
     boxm2_lru_cache.h      boxm2_lru_cache.cxx
-    boxm2_stream_cache.h   boxm2_stream_cache.cxx boxm2_stream_cache.txx
+    boxm2_stream_cache.h   boxm2_stream_cache.cxx boxm2_stream_cache.hxx
     boxm2_stream_block_cache.h   boxm2_stream_block_cache.cxx
     boxm2_stream_scene_cache.h   boxm2_stream_scene_cache.cxx
 
@@ -34,7 +34,7 @@ if(HDFS_FOUND)
  target_link_libraries(boxm2_io bhdfs)
 endif()
 
-#install the .h .txx and libs
+#install the .h .hxx and libs
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

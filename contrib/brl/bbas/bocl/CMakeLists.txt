@@ -13,7 +13,7 @@ if(OPENCL_FOUND)
   endif()
 
   set(bocl_sources
-      bocl_manager.h      bocl_manager.txx  bocl_manager.cxx
+      bocl_manager.h      bocl_manager.hxx  bocl_manager.cxx
       bocl_cl.h
       bocl_cl_gl.h
       bocl_device_info.h  bocl_device_info.cxx
@@ -27,7 +27,7 @@ if(OPENCL_FOUND)
 
   target_link_libraries(bocl brdb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${OPENCL_LIBRARIES})
 
-  #install the .h .txx and libs
+  #install the .h .hxx and libs
 
 #tests
 if( BUILD_TESTING )

@@ -1,7 +1,7 @@
 #include "CardinalSpline.h"
 //:
 // \file
-#include <vsl/vsl_vector_io.txx>
+#include <vsl/vsl_vector_io.hxx>
 #include <vcl_cassert.h>
 
 //: Return a list of points on the boundary of the curve.

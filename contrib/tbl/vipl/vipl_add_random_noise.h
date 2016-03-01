@@ -62,7 +62,7 @@ class vipl_add_random_noise : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_add_random_noise.txx"
+#include "vipl_add_random_noise.hxx"
 #endif
 
 #endif // vipl_add_random_noise_h_

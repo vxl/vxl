@@ -20,7 +20,7 @@
 #include <volm/volm_tile.h>
 #include <volm/volm_camera_space.h>
 #include <vil/vil_image_view.h>
-#include <vgl/vgl_polygon.txx>
+#include <vgl/vgl_polygon.hxx>
 #include <vgl/algo/vgl_convex_hull_2d.h>
 
 typedef vcl_multimap<unsigned, vgl_point_2d<int>, vcl_greater<unsigned> > mymap;

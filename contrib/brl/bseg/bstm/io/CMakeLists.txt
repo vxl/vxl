@@ -13,7 +13,7 @@ aux_source_directory(Templates bstm_io_sources)
 vxl_add_library( LIBNAME bstm_io LIBSRCS  ${bstm_io_sources})
 target_link_libraries(bstm_io bstm bstm_basic)
 
-#install the .h .txx and libs
+#install the .h .hxx and libs
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

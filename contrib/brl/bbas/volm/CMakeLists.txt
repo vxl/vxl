@@ -40,18 +40,18 @@ if(EXPAT_FOUND)
      volm_geo_index2_node_base.h            volm_geo_index2_node_base.cxx
      volm_geo_index2_sptr.h
      volm_geo_index2.h                      volm_geo_index2.cxx
-     volm_geo_index2.txx
+     volm_geo_index2.hxx
      volm_category_io.h                     volm_category_io.cxx
      volm_satellite_resources.h             volm_satellite_resources.cxx
      volm_satellite_resources_sptr.h
-     volm_utils.h                           volm_utils.txx
+     volm_utils.h                           volm_utils.hxx
      volm_osm_parser.h                      volm_osm_parser.cxx
      volm_osm_objects.h                     volm_osm_objects.cxx
      volm_osm_object_point.h                volm_osm_object_point.cxx
      volm_osm_object_line.h                 volm_osm_object_line.cxx
      volm_osm_object_polygon.h              volm_osm_object_polygon.cxx
      volm_candidate_region_parser.h         volm_candidate_region_parser.cxx
-     volm_utils.h                           volm_utils.txx                   volm_utils.cxx
+     volm_utils.h                           volm_utils.hxx                   volm_utils.cxx
     )
 
     aux_source_directory(Templates volm_sources)

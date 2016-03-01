@@ -532,7 +532,7 @@ INPUT_ENCODING         = UTF-8
 
 FILE_PATTERNS          = *.h \
                          *.cxx \
-                         *.txx \
+                         *.hxx \
                          *_doxy.txt
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories

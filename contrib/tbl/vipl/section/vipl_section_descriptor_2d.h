@@ -120,7 +120,7 @@ class vipl_section_descriptor_2d : public vipl_section_descriptor< DataType >
 }; // end of class definition
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_section_descriptor_2d.txx"
+#include "vipl_section_descriptor_2d.hxx"
 #endif
 
 #endif // vipl_section_descriptor_2d_h_

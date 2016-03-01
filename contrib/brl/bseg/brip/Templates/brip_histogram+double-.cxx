@@ -1,2 +1,2 @@
-#include <brip/brip_histogram.txx>
+#include <brip/brip_histogram.hxx>
 BRIP_HISTOGRAM_INSTANTIATE(double);

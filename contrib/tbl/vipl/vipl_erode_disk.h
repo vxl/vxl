@@ -69,7 +69,7 @@ class vipl_erode_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelI
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_erode_disk.txx"
+#include "vipl_erode_disk.hxx"
 #endif
 
 #endif // vipl_erode_disk_h_

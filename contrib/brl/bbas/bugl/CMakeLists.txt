@@ -11,17 +11,17 @@ include_directories(${BRL_INCLUDE_DIR}/bbas )
 
 set(bugl_sources
     bugl_uncertainty_point_2d.h
-    bugl_gaussian_point_2d.h     bugl_gaussian_point_2d.txx
+    bugl_gaussian_point_2d.h     bugl_gaussian_point_2d.hxx
     bugl_normal_point_2d.h
     bugl_normal_point_2d_sptr.h
 
     bugl_uncertainty_point_3d.h
-    bugl_gaussian_point_3d.h     bugl_gaussian_point_3d.txx
+    bugl_gaussian_point_3d.h     bugl_gaussian_point_3d.hxx
     bugl_normal_point_3d.h
     bugl_normal_point_3d_sptr.h
 
     bugl_curve_3d.h             bugl_curve_3d.cxx
-    bugl_random_transform_set_2d.h     bugl_random_transform_set_2d.txx
+    bugl_random_transform_set_2d.h     bugl_random_transform_set_2d.hxx
 )
 aux_source_directory(Templates bugl_sources)
 

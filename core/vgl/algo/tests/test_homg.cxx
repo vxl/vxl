@@ -634,7 +634,7 @@ static void test_homg()
 
 TESTMAIN(test_homg);
 
-#include <vgl/vgl_1d_basis.txx>
+#include <vgl/vgl_1d_basis.hxx>
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_1d<float>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_2d<int>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_line_2d<int>);

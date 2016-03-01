@@ -188,6 +188,6 @@ inline vcl_ostream& operator<< (vcl_ostream& os, vnl_quaternion<T> const& q)
   return os << *((const vnl_vector_fixed<T,4>*) &q);
 }
 
-#define VNL_QUATERNION_INSTANTIATE(T) extern "Please #include <vnl/vnl_quaternion.txx> first"
+#define VNL_QUATERNION_INSTANTIATE(T) extern "Please #include <vnl/vnl_quaternion.hxx> first"
 
 #endif // vnl_quaternion_h_

@@ -564,6 +564,6 @@ class vmap_permutation_kernel : public vmap_kernel<typename TPermutation::map_ty
   vbl_controlled_partition representatives_;
 };
 
-#include "vmap_kernel.txx"
+#include "vmap_kernel.hxx"
 
 #endif

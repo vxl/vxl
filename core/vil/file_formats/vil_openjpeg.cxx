@@ -23,8 +23,8 @@
 
 #include <vil/vil_stream.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vbl/vbl_smart_ptr.txx>
-#include <vil/vil_image_view.txx>
+#include <vbl/vbl_smart_ptr.hxx>
+#include <vil/vil_image_view.hxx>
 
 // TODO: How can we avoid using the "deprecated" functions?
 #define USE_OPJ_DEPRECATED

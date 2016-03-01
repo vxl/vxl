@@ -1,4 +1,4 @@
-#include <brdb/brdb_value.txx>
+#include <brdb/brdb_value.hxx>
 
 #include <volm/volm_satellite_resources_sptr.h>
 

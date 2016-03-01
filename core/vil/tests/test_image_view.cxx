@@ -533,7 +533,7 @@ static void test_image_view()
 TESTMAIN(test_image_view);
 
 
-#include <vil/vil_image_view.txx>
+#include <vil/vil_image_view.hxx>
 
 class my_int
 {

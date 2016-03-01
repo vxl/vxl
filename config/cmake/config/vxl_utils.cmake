@@ -1,7 +1,7 @@
 #
 # INSTALL_NOBASE_HEADER_FILES(prefix file file file ...)
 # Will create install rules for those files of the list
-# which are headers (.h, .hxx or .txx).
+# which are headers (.h, .hxx or .hxx).
 # If .in files are given, the .in extension is removed.
 #
 

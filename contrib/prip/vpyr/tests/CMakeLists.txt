@@ -2,8 +2,8 @@
 
 link_libraries(vpyr)
 
-add_executable(vpyr_test vpyr_test.cxx my_pyramid.cxx my_pyramid.h my_pyramid_functions.txx)
-add_executable(vpyr_test2 vpyr_test2.cxx my_pyramid.cxx my_pyramid.h my_pyramid_functions.txx my_top_level.h my_top_level.cxx)
+add_executable(vpyr_test vpyr_test.cxx my_pyramid.cxx my_pyramid.h my_pyramid_functions.hxx)
+add_executable(vpyr_test2 vpyr_test2.cxx my_pyramid.cxx my_pyramid.h my_pyramid_functions.hxx my_top_level.h my_top_level.cxx)
 
 # temporarily disabling these tests: causing segfaults
 #add_test( NAME vpyr_test COMMAND $<TARGET_FILE:vpyr_test)>

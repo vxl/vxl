@@ -62,7 +62,7 @@ class vipl_moment : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_moment.txx"
+#include "vipl_moment.hxx"
 #endif
 
 #endif // vipl_moment_h_

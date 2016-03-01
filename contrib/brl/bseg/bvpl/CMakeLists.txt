@@ -6,8 +6,8 @@ include_directories( ${BRL_INCLUDE_DIR}/bseg )
 include_directories( ${GEL_INCLUDE_DIR}/mrc )
 
 set(bvpl_sources
-    bvpl_voxel_subgrid.h               bvpl_voxel_subgrid.txx
-    bvpl_subgrid_iterator.h            bvpl_subgrid_iterator.txx
+    bvpl_voxel_subgrid.h               bvpl_voxel_subgrid.hxx
+    bvpl_subgrid_iterator.h            bvpl_subgrid_iterator.hxx
     bvpl_neighb_operator.h
     bvpl_combined_neighb_operator.h
     bvpl_vector_operator.h

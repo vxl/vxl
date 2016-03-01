@@ -16,7 +16,7 @@ set(vifa_sources
  vifa_line_cover.cxx            vifa_line_cover.h
  vifa_group_pgram.cxx           vifa_group_pgram.h
  vifa_group_pgram_params.cxx    vifa_group_pgram_params.h
- vifa_imp_line.h                vifa_imp_line.txx
+ vifa_imp_line.h                vifa_imp_line.hxx
  vifa_norm_params.cxx           vifa_norm_params.h
  vifa_parallel_params.cxx       vifa_parallel_params.h
  vifa_coll_lines.cxx            vifa_coll_lines.h

@@ -28,10 +28,10 @@ set(boxm2_vecf_sources
     boxm2_vecf_plot_orbit.h                 boxm2_vecf_plot_orbit.cxx
     boxm2_vecf_orbit_exporter.h             boxm2_vecf_orbit_exporter.cxx
     boxm2_vecf_vector_field_base.h          boxm2_vecf_vector_field_base.cxx
-    boxm2_vecf_vector_field.h               boxm2_vecf_vector_field.txx
+    boxm2_vecf_vector_field.h               boxm2_vecf_vector_field.hxx
     boxm2_vecf_similarity_transform.h       boxm2_vecf_similarity_transform.cxx
     boxm2_vecf_inverse_square_weighting_function.h        boxm2_vecf_inverse_square_weighting_function.cxx
-    boxm2_vecf_landmark_warp.h              boxm2_vecf_landmark_warp.txx
+    boxm2_vecf_landmark_warp.h              boxm2_vecf_landmark_warp.hxx
     boxm2_vecf_composite_transform.h        boxm2_vecf_composite_transform.cxx
     boxm2_vecf_mandible.h                   boxm2_vecf_mandible.cxx
     boxm2_vecf_spline_field.h               boxm2_vecf_spline_field.cxx

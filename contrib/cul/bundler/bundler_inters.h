@@ -6,11 +6,11 @@
 #include <vcl_vector.h>
 #include <vcl_utility.h>
 
-#include <vbl/vbl_smart_ptr.txx>
+#include <vbl/vbl_smart_ptr.hxx>
 #include <vbl/vbl_ref_count.h>
 
 #include <vnl/vnl_vector.h>
-#include <vnl/vnl_sparse_matrix.txx>
+#include <vnl/vnl_sparse_matrix.hxx>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

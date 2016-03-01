@@ -69,7 +69,7 @@ class vipl_median : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 };
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_median.txx"
+#include "vipl_median.hxx"
 #endif
 
 #endif // vipl_median_h_

@@ -20,7 +20,7 @@ set(boxm2_util_sources
 vxl_add_library( LIBNAME boxm2_util LIBSRCS  ${boxm2_util_sources})
 target_link_libraries(boxm2_util boxm2 bwm_video bil_algo expatpp ${VXL_LIB_PREFIX}vpgl baio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl)
 
-#install the .h .txx and libs
+#install the .h .hxx and libs
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

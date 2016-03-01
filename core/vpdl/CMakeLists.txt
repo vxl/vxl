@@ -8,7 +8,7 @@ doxygen_add_library(core/vpdl
   )
 
 set( vpdl_sources
-  vpdl_distribution.h      vpdl_distribution.txx
+  vpdl_distribution.h      vpdl_distribution.hxx
 
   vpdl_gaussian_base.h
   vpdl_gaussian_sphere.h

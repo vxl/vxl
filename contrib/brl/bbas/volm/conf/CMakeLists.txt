@@ -7,7 +7,7 @@ set(volm_conf_sources
   volm_conf_object.h              volm_conf_object.cxx
   volm_conf_query.h               volm_conf_query.cxx
   volm_conf_land_map_indexer.h    volm_conf_land_map_indexer.cxx
-  volm_conf_buffer.h              volm_conf_buffer.txx
+  volm_conf_buffer.h              volm_conf_buffer.hxx
   volm_conf_indexer.h             volm_conf_indexer.cxx
   volm_conf_2d_indexer.h          volm_conf_2d_indexer.cxx
   volm_conf_score.h               volm_conf_score.cxx

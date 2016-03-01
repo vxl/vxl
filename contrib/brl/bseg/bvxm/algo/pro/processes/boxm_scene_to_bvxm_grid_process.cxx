@@ -106,11 +106,11 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
   }
 }
 
-#include <boxm/boxm_scene.txx>
-#include <boxm/boxm_block.txx>
-#include <boct/boct_tree.txx>
-#include <boct/boct_tree_cell.txx>
-#include <vbl/vbl_array_3d.txx>
+#include <boxm/boxm_scene.hxx>
+#include <boxm/boxm_block.hxx>
+#include <boct/boct_tree.hxx>
+#include <boct/boct_tree_cell.hxx>
+#include <vbl/vbl_array_3d.hxx>
 
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 typedef bsta_num_obs<bsta_mixture_fixed<gauss_type,3> > mixture_type;

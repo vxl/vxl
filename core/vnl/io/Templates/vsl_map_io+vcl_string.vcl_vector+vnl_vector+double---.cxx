@@ -1,5 +1,5 @@
-#include <vsl/vsl_map_io.txx>
-#include <vsl/vsl_vector_io.txx>
+#include <vsl/vsl_map_io.hxx>
+#include <vsl/vsl_vector_io.hxx>
 #include <vcl_string.h>
 #include <vcl_vector.h>
 #include <vnl/io/vnl_io_vector.h>

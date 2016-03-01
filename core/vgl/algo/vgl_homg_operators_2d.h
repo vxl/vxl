@@ -216,6 +216,6 @@ vgl_homg_line_2d<T> operator*(vnl_matrix_fixed<T,3,3> const& m,
                               vgl_homg_line_2d<T> const& p);
 
 #define VGL_HOMG_OPERATORS_2D_INSTANTIATE(T) \
-        "Please #include <vgl/algo/vgl_homg_operators_2d.txx>"
+        "Please #include <vgl/algo/vgl_homg_operators_2d.hxx>"
 
 #endif // vgl_homg_operators_2d_h_

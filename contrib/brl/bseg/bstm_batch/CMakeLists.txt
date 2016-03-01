@@ -57,7 +57,7 @@ if( PYTHON_FOUND )
       endif()
 
 
-      #install the .h .txx and libs
+      #install the .h .hxx and libs
 
       if( BUILD_TESTING )
         add_subdirectory(tests)

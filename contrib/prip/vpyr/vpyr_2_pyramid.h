@@ -219,6 +219,6 @@ class vpyr_2_pyramid
   level_array_type level_ ;
 };
 
-#include "vpyr_2_pyramid.txx"
+#include "vpyr_2_pyramid.hxx"
 
 #endif

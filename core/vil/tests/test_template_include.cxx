@@ -1,17 +1,17 @@
-#include <vil/vil_bicub_interp.txx>
-#include <vil/vil_copy.txx>
-#include <vil/vil_image_view.txx>
-#include <vil/vil_pyramid_image_view.txx>
-#include <vil/vil_resample_bicub.txx>
-#include <vil/vil_resample_bilin.txx>
-#include <vil/vil_resample_nearest.txx>
-#include <vil/vil_rgba.txx>
-#include <vil/vil_rgb.txx>
-#include <vil/vil_rotate.txx>
-#include <vil/vil_sample_grid_bicub.txx>
-#include <vil/vil_sample_grid_bilin.txx>
-#include <vil/vil_sample_profile_bicub.txx>
-#include <vil/vil_sample_profile_bilin.txx>
-#include <vil/vil_smart_ptr.txx>
+#include <vil/vil_bicub_interp.hxx>
+#include <vil/vil_copy.hxx>
+#include <vil/vil_image_view.hxx>
+#include <vil/vil_pyramid_image_view.hxx>
+#include <vil/vil_resample_bicub.hxx>
+#include <vil/vil_resample_bilin.hxx>
+#include <vil/vil_resample_nearest.hxx>
+#include <vil/vil_rgba.hxx>
+#include <vil/vil_rgb.hxx>
+#include <vil/vil_rotate.hxx>
+#include <vil/vil_sample_grid_bicub.hxx>
+#include <vil/vil_sample_grid_bilin.hxx>
+#include <vil/vil_sample_profile_bicub.hxx>
+#include <vil/vil_sample_profile_bilin.hxx>
+#include <vil/vil_smart_ptr.hxx>
 
 int main() { return 0; }

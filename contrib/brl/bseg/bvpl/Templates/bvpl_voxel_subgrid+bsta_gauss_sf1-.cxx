@@ -1,4 +1,4 @@
-#include <bvpl/bvpl_voxel_subgrid.txx>
+#include <bvpl/bvpl_voxel_subgrid.hxx>
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 

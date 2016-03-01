@@ -1,6 +1,6 @@
 #include <bsta/io/bsta_io_mixture_fixed.h>
 #include <bsta/io/bsta_io_gaussian_sphere.h>
-#include <boct/boct_tree_cell.txx>
+#include <boct/boct_tree_cell.hxx>
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/boxm_sample.h>
 

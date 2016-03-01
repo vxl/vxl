@@ -3,7 +3,7 @@
 //:
 // \file
 #include <mbl/mbl_clusters.h>
-#include <mbl/mbl_clusters.txx>
+#include <mbl/mbl_clusters.hxx>
 #include <vcl_iostream.h>
 
 //: Distance class

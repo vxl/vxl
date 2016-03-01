@@ -566,6 +566,6 @@ class vmap_2_map : public vmap_owning_sequence<D>
   }
 };
 
-#include "vmap_2_map.txx"
+#include "vmap_2_map.hxx"
 
 #endif

@@ -17,10 +17,10 @@ set(bvgl_sources
  bvgl_changes.h      bvgl_changes.cxx
  bvgl_changes_sptr.h
  bvgl_point_3d_cmp.h
- bvgl_triangle_interpolation_iterator.h  bvgl_triangle_interpolation_iterator.txx
- bvgl_intersection.h                     bvgl_intersection.txx
- bvgl_triangle_3d.h                      bvgl_triangle_3d.txx
- bvgl_volume_of_intersection.h           bvgl_volume_of_intersection.txx
+ bvgl_triangle_interpolation_iterator.h  bvgl_triangle_interpolation_iterator.hxx
+ bvgl_intersection.h                     bvgl_intersection.hxx
+ bvgl_triangle_3d.h                      bvgl_triangle_3d.hxx
+ bvgl_volume_of_intersection.h           bvgl_volume_of_intersection.hxx
  bvgl_ray_pyramid.h                      bvgl_ray_pyramid.cxx
  bvgl_param_curve.h                      # EMPTY FILE bvgl_param_curve.cxx
  bvgl_cross_section.h                    bvgl_cross_section.cxx

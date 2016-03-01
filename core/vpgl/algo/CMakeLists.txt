@@ -11,12 +11,12 @@ set( vpgl_algo_sources
   vpgl_fm_compute_7_point.h        vpgl_fm_compute_7_point.cxx
   vpgl_fm_compute_8_point.h        vpgl_fm_compute_8_point.cxx
   vpgl_fm_compute_2_point.h        vpgl_fm_compute_2_point.cxx
-  vpgl_em_compute_5_point.h        vpgl_em_compute_5_point.txx
+  vpgl_em_compute_5_point.h        vpgl_em_compute_5_point.hxx
   vpgl_lens_warp_mapper.h
   vpgl_invmap_cost_function.h      vpgl_invmap_cost_function.cxx
   vpgl_backproject.h               vpgl_backproject.cxx
   vpgl_ray.h                       vpgl_ray.cxx
-  vpgl_ray_intersect.h              vpgl_ray_intersect.txx
+  vpgl_ray_intersect.h              vpgl_ray_intersect.hxx
   vpgl_ortho_procrustes.h          vpgl_ortho_procrustes.cxx
   vpgl_rational_adjust_onept.h     vpgl_rational_adjust_onept.cxx
   vpgl_rational_adjust.h           vpgl_rational_adjust.cxx

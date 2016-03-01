@@ -86,6 +86,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_orient_box_3d<Type> const& p);
 template <class Type>
 vcl_istream&  operator>>(vcl_istream& is,  vgl_orient_box_3d<Type>& p);
 
-#define VGL_ORIENT_BOX_3D_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d.txx> instead"
+#define VGL_ORIENT_BOX_3D_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d.hxx> instead"
 
 #endif // vgl_orient_box_3d_h

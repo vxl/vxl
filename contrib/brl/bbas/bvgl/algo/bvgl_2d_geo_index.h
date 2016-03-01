@@ -121,6 +121,6 @@ public:
 };
 
 #include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
-#define BVGL_2D_GEO_INDEX_INSTANTIATE(T) extern "Please #include <bvgl/algo/bvgl_2d_geo_index.txx>"
+#define BVGL_2D_GEO_INDEX_INSTANTIATE(T) extern "Please #include <bvgl/algo/bvgl_2d_geo_index.hxx>"
 
 #endif // bvgl_2d_geo_index_h_

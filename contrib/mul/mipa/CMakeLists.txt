@@ -11,8 +11,8 @@ doxygen_add_library(contrib/mul/mipa
 )
 
 set(mipa_sources
-  mipa_orientation_histogram.h     mipa_orientation_histogram.txx
-  mipa_sample_histo_boxes.h        mipa_sample_histo_boxes.txx
+  mipa_orientation_histogram.h     mipa_orientation_histogram.hxx
+  mipa_sample_histo_boxes.h        mipa_sample_histo_boxes.hxx
   mipa_vector_normaliser.h         mipa_vector_normaliser.cxx
   mipa_l2norm_vector_normaliser.h  mipa_l2norm_vector_normaliser.cxx
   mipa_identity_normaliser.h       mipa_identity_normaliser.cxx

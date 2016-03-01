@@ -22,8 +22,8 @@
 #include <vcl_iomanip.h>
 #include <vcl_cassert.h>
 #include <vcl_cstdlib.h>
-#include <vsl/vsl_deque_io.txx>
-#include <vsl/vsl_map_io.txx>
+#include <vsl/vsl_deque_io.hxx>
+#include <vsl/vsl_map_io.hxx>
 #include <vsl/vsl_stream.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>

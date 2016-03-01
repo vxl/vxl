@@ -35,6 +35,6 @@ template <class T>
 void x_write_tree(vcl_ostream & os, vnl_vector<T> const& v,
                   vcl_string name="vnl_vector");
 
-#define VNL_XIO_VECTOR_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_vector.txx> first"
+#define VNL_XIO_VECTOR_INSTANTIATE(T) extern "Please #include <vnl/xio/vnl_xio_vector.hxx> first"
 
 #endif // vnl_xio_vector_h

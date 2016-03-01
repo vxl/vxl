@@ -7,7 +7,7 @@
 #include <vgl/vgl_point_3d.h>
 
 // instantiate the template code in the .txx file
-#include "boxm2_vecf_vector_field.txx"
+#include "boxm2_vecf_vector_field.hxx"
 BOXM2_VECF_VECTOR_FIELD_INSTANTIATE(boxm2_vecf_similarity_transform_mapper);
 
 boxm2_vecf_similarity_transform_mapper::

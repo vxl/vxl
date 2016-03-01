@@ -64,6 +64,6 @@ class vgl_window_scan_iterator : public vgl_region_scan_iterator
   inline int  endx  () const { return x2; }
 };
 
-#define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_window_scan_iterator.txx> instead"
+#define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_window_scan_iterator.hxx> instead"
 
 #endif // vgl_window_scan_iterator_h_

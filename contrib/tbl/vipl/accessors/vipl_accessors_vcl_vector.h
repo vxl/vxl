@@ -21,7 +21,7 @@ T getpixel(vcl_vector<T> const& i, int x, int y, T); \
 void setpixel(vcl_vector<T>& i, int x, int y, T e)
 
 #ifdef INSTANTIATE_TEMPLATES
-#include "vipl_accessors_vcl_vector.txx"
+#include "vipl_accessors_vcl_vector.hxx"
 #endif
 
 #endif // vipl_accessors_vcl_vector_h_

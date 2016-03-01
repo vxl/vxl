@@ -249,6 +249,6 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
   pyramid_type * pyramid_ ;
 };
 
-#include "vpyr_2_pyramid_level.txx"
+#include "vpyr_2_pyramid_level.hxx"
 
 #endif

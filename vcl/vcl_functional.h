@@ -43,6 +43,6 @@
 # define  vcl_constant_binary_fun vcl_functional_h_STD constant_binary_fun
 #endif
 
-#include "vcl_functional.txx"
+#include "vcl_functional.hxx"
 
 #endif // vcl_functional_h_

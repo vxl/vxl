@@ -3,7 +3,7 @@
 #pragma implementation
 #endif
 
-#include "vgl_1d_basis.txx"
+#include "vgl_1d_basis.hxx"
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_1d.h>

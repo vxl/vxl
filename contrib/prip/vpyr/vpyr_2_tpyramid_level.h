@@ -595,6 +595,6 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
 // From VC6 workaround above.
 #undef SEQUENCE_OF_BASE
 
-#include "vpyr_2_tpyramid_level.txx"
+#include "vpyr_2_tpyramid_level.hxx"
 
 #endif

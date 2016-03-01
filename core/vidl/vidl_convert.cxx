@@ -17,7 +17,7 @@
 #include "vidl_convert.h"
 #include "vidl_frame.h"
 #include "vidl_pixel_format.h"
-#include "vidl_pixel_iterator.txx"
+#include "vidl_pixel_iterator.hxx"
 #include "vidl_color.h"
 #include <vidl/vidl_config.h>
 #if VIDL_HAS_FFMPEG

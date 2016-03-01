@@ -21,6 +21,6 @@ void vsl_b_read(vsl_b_istream &is, vgl_conic<T> & p);
 template <class T>
 void vsl_print_summary(vcl_ostream& os, vgl_conic<T> const& p);
 
-#define VGL_IO_CONIC_INSTANTIATE(T) extern "Please #include <vgl/io/vgl_io_conic.txx>"
+#define VGL_IO_CONIC_INSTANTIATE(T) extern "Please #include <vgl/io/vgl_io_conic.hxx>"
 
 #endif // vgl_io_conic_h

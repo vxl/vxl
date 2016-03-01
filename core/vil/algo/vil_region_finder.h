@@ -98,6 +98,6 @@ class vil_region_finder
 };
 
 // do the implicit template thing.
-#include "vil_region_finder.txx"
+#include "vil_region_finder.hxx"
 
 #endif // vil_region_finder_h_

@@ -8,6 +8,6 @@
 
 #define VCL_VECTOR_INSTANTIATE extern "you must include vcl_vector.txx first"
 
-#include "vcl_vector.txx"
+#include "vcl_vector.hxx"
 
 #endif // vcl_vector_h_
