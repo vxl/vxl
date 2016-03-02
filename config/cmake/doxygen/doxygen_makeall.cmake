@@ -26,7 +26,7 @@ function(doxygen_module_has_changed _module _modname _changed)
 
     # Save the last revision built (or attempted to build).
     if(${_modname}_WC_REVISION)
-      file(APPEND "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
+      file(APPEND "${PROJECT_BINARY_DIR}/doxygen_last_build_rev.cmake"
         "set(DOXYGEN_${_modname}_LAST_BUILD_REV ${${_modname}_WC_REVISION})\n"
         )
     endif()
@@ -143,15 +143,15 @@ endfunction()
 # Initial configuration.
 #---------------------------------------------------------------------
 # All the variables used in this script must be loaded from here.
-include("${CMAKE_BINARY_DIR}/doxygen_configuration.cmake" OPTIONAL)
+include("${PROJECT_BINARY_DIR}/doxygen_configuration.cmake" OPTIONAL)
 
 # Read in last revision built.
-include("${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake" OPTIONAL)
+include("${PROJECT_BINARY_DIR}/doxygen_last_build_rev.cmake" OPTIONAL)
 
 find_package(Subversion QUIET)
 
 # Reset the file for new values.
-file(WRITE "${CMAKE_BINARY_DIR}/doxygen_last_build_rev.cmake"
+file(WRITE "${PROJECT_BINARY_DIR}/doxygen_last_build_rev.cmake"
   "# *** This is a auto-generated file. DO NOT edit! ***\n\n"
   )
 
@@ -221,9 +221,9 @@ foreach(book ${DOXYGEN_BOOK_LIST})
         -split=chapter -l2h -number -output=. -I=. book.texi
       WORKING_DIRECTORY "${book_output_dir}"
       OUTPUT_FILE
-        "${CMAKE_BINARY_DIR}/doxy/output/texi2html_${bname}.out"
+        "${PROJECT_BINARY_DIR}/doxy/output/texi2html_${bname}.out"
       ERROR_FILE
-        "${CMAKE_BINARY_DIR}/doxy/output/texi2html_${bname}.out"
+        "${PROJECT_BINARY_DIR}/doxy/output/texi2html_${bname}.out"
       )
   else()
     message(STATUS "Texi2html: ${book} previously processed.")
@@ -273,20 +273,20 @@ foreach(library ${DOXYGEN_LIBRARY_LIST})
 
     # configure @tagfiles@ entry
     configure_file(
-      "${CMAKE_BINARY_DIR}/doxy/output/doxyfile.${libname}"
-      "${CMAKE_BINARY_DIR}/doxy/output/doxyfile.${libname}"
+      "${PROJECT_BINARY_DIR}/doxy/output/doxyfile.${libname}"
+      "${PROJECT_BINARY_DIR}/doxy/output/doxyfile.${libname}"
       )
 
     file(MAKE_DIRECTORY "${DOXYGEN_OUTPUT_DIR}/html/${library}/html")
     execute_process(
       COMMAND
         ${DOXYGEN_EXECUTABLE}
-        "${CMAKE_BINARY_DIR}/doxy/output/doxyfile.${libname}"
+        "${PROJECT_BINARY_DIR}/doxy/output/doxyfile.${libname}"
       WORKING_DIRECTORY "${DOXYGEN_SOURCE_DIR}"
       OUTPUT_FILE
-        "${CMAKE_BINARY_DIR}/doxy/output/${libname}.doxy_out"
+        "${PROJECT_BINARY_DIR}/doxy/output/${libname}.doxy_out"
       ERROR_FILE
-        "${CMAKE_BINARY_DIR}/doxy/output/${libname}.doxy_out"
+        "${PROJECT_BINARY_DIR}/doxy/output/${libname}.doxy_out"
       )
   else()
     message(STATUS "Doxygen: ${library} previously processed.")

@@ -1,5 +1,7 @@
 # vxl/core/vnl/CMakeLists.txt
 
+project(vnl)
+
 doxygen_add_library(core/vnl
   DEPENDS core/vsl
   PACKAGE core
@@ -72,8 +74,8 @@ else()
   set(VNL_CONFIG_ENABLE_SSE2_ROUNDING 0)
 endif()
 
-vxl_configure_file(${CMAKE_SOURCE_DIR}/core/vnl/vnl_config.h.in
-               ${CMAKE_BINARY_DIR}/core/vnl/vnl_config.h include/vxl/core/vnl)
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vnl_config.h.in
+               ${PROJECT_BINARY_DIR}/vnl_config.h include/vxl/core/vnl)
 
 set( vnl_sources
   dll.h

@@ -92,7 +92,7 @@ macro( vxl_add_library )
     # Installation
     if(NOT VXL_INSTALL_NO_LIBRARIES)
       install(TARGETS ${lib_name}
-        EXPORT VXLTargets
+        EXPORT ${VXL_INSTALL_EXPORT_NAME}
         RUNTIME DESTINATION ${VXL_INSTALL_RUNTIME_DIR} COMPONENT RuntimeLibraries
         LIBRARY DESTINATION ${VXL_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
         ARCHIVE DESTINATION ${VXL_INSTALL_ARCHIVE_DIR} COMPONENT Development)
@@ -100,13 +100,16 @@ macro( vxl_add_library )
   endif()
   if(NOT VXL_INSTALL_NO_DEVELOPMENT)
     ## Identify the relative path for installing the header files and txx files
-    string(REPLACE ${CMAKE_SOURCE_DIR} "include/vxl" relative_install_path ${CMAKE_CURRENT_SOURCE_DIR})
-    # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}\n${CMAKE_SOURCE_DIR}\n${relative_install_path}")
-    target_include_directories(${lib_name}
-      PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${relative_install_path}>
-    )
+    string(REPLACE ${VXL_ROOT_SOURCE_DIR} "include/vxl" relative_install_path ${CMAKE_CURRENT_SOURCE_DIR})
+    # message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}\n${VXL_ROOT_SOURCE_DIR}\n${relative_install_path}")
+    ## Added in 2.8.11 http://stackoverflow.com/questions/19460707/how-to-set-include-directories-from-a-cmakelists-txt-file
+    if(${CMAKE_VERSION} VERSION_GREATER 2.8.10)
+      target_include_directories(${lib_name}
+        PUBLIC
+          $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+          $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${relative_install_path}>
+      )
+    endif()
     INSTALL_NOBASE_HEADER_FILES(${relative_install_path} ${lib_srcs})
   endif()
   unset(lib_srcs)

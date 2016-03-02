@@ -18,10 +18,11 @@ project( vcl )
 # Do platform-specific configuration.
 # configure files
 #
-vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_compiler.h.in ${CMAKE_BINARY_DIR}/vcl/vcl_config_compiler.h include/vxl/vcl)
-vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_headers.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_config_headers.h  include/vxl/vcl)
-vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_config_manual.h.in   ${CMAKE_BINARY_DIR}/vcl/vcl_config_manual.h   include/vxl/vcl)
-vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vcl_where_root_dir.h.in  ${CMAKE_BINARY_DIR}/vcl/vcl_where_root_dir.h  include/vxl/vcl)
+include_directories(${PROJECT_BINARY_DIR})
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_config_compiler.h.in ${PROJECT_BINARY_DIR}/vcl_config_compiler.h include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_config_headers.h.in  ${PROJECT_BINARY_DIR}/vcl_config_headers.h  include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_config_manual.h.in   ${PROJECT_BINARY_DIR}/vcl_config_manual.h   include/vxl/vcl)
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_where_root_dir.h.in  ${PROJECT_BINARY_DIR}/vcl_where_root_dir.h  include/vxl/vcl)
 
 set( vcl_sources
   vcl_compiler.h

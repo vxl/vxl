@@ -13,7 +13,8 @@ doxygen_add_package(core-test "Test Framework")
 # Do platform-specific configuration.
 # configure files
 #
-vxl_configure_file(${CMAKE_CURRENT_SOURCE_DIR}/vxl_config.h.in ${CMAKE_BINARY_DIR}/core/vxl_config.h include/vxl/core)
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vxl_config.h.in ${PROJECT_BINARY_DIR}/vxl_config.h include/vxl/core)
+include_directories(${PROJECT_BINARY_DIR})
 
 set(global_sources
  vxl_copyright.h
@@ -128,7 +129,8 @@ endif ()
 add_subdirectory(testlib)
 
 # Tests that check and output the vxl configuration
-if( BUILD_TESTING )
+# NOTE: some external projects remove the tests directory (aka ITK)
+if( BUILD_TESTING AND EXISTS "tests")
   add_subdirectory(tests)
 endif()
 if( BUILD_EXAMPLES )
