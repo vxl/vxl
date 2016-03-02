@@ -50,6 +50,7 @@ set(bwm_sources
 
 if(EXPAT_FOUND)
  if(EXPATPP_FOUND)
+
   include_directories(${EXPAT_INCLUDE_DIRS} )
   include_directories(${EXPATPP_INCLUDE_DIRS} )
   if(SHAPELIB_FOUND)
