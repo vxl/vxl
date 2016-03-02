@@ -48,7 +48,7 @@ class boxm_render_expected_edge_image_functor
 
     // keep the max value in expected image
     // if (expected_(i,j) < exp)
-    expected_(i,j) =  vnl_math::max(expected_(i,j), exp);
+    expected_(i,j) =  std::max(expected_(i,j), exp);
 
     return true;
   }

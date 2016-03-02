@@ -206,11 +206,11 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   double factor0, factor1, factor2;
   vnl_vector<double> s(p_size*m, 1);
   if (m == 2) {
-    factor0 = vnl_math::max(XtWX(5,5), XtWX(11,11));
-    factor1 = vnl_math::max(vnl_math::max(XtWX(3,3), XtWX(4,4)),
-                           vnl_math::max(XtWX(10,10), XtWX(9,9)));
-    factor2 = vnl_math::max(vnl_math::max(XtWX(0,0), XtWX(1,1)),
-                           vnl_math::max(XtWX(6,6), XtWX(7,7)));
+    factor0 = std::max(XtWX(5,5), XtWX(11,11));
+    factor1 = std::max(std::max(XtWX(3,3), XtWX(4,4)),
+                           std::max(XtWX(10,10), XtWX(9,9)));
+    factor2 = std::max(std::max(XtWX(0,0), XtWX(1,1)),
+                           std::max(XtWX(6,6), XtWX(7,7)));
 
     double scale0 = vcl_sqrt( (factor0 > 0 && factor2 > 0) ? factor2 / factor0 : 1 ); // neither should be 0
     double scale1 = vcl_sqrt( (factor1 > 0 && factor2 > 0) ? factor2 / factor1 : 1 );
@@ -219,7 +219,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     s(5) = s(11) = scale0;
   }
   else { // m == 3
-    factor0 = vnl_math::max( vnl_math::max(XtWX(9,9), XtWX(19,19)),
+    factor0 = std::max( std::max(XtWX(9,9), XtWX(19,19)),
                             XtWX(29,29));
     factor1 = max_of_9_elements( XtWX(6,6), XtWX(7,7), XtWX(8,8),
                                  XtWX(16,16), XtWX(17,17), XtWX(18,18),
@@ -329,8 +329,8 @@ max_of_9_elements(double elt1, double elt2, double elt3,
                   double elt4, double elt5, double elt6,
                   double elt7, double elt8, double elt9 ) const
 {
-  double max = vnl_math::max( elt1, vnl_math::max( elt2, elt3 ) );
-  max  = vnl_math::max ( max, vnl_math::max( elt4, elt5 ) );
-  max  = vnl_math::max ( max, vnl_math::max( elt6, elt7 ) );
-  return vnl_math::max ( max, vnl_math::max( elt8, elt9 ) );
+  double max = std::max( elt1, std::max( elt2, elt3 ) );
+  max  = std::max ( max, std::max( elt4, elt5 ) );
+  max  = std::max ( max, std::max( elt6, elt7 ) );
+  return std::max ( max, std::max( elt8, elt9 ) );
 }

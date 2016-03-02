@@ -369,12 +369,12 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
 
   // Estimate the change in the spread of the feature set
   //
-  double change_in_fst = vnl_math::max( factors[0],
+  double change_in_fst = std::max( factors[0],
                                        1/factors[0] );
-  double change_in_snd = vnl_math::max( factors[1],
+  double change_in_snd = std::max( factors[1],
                                        1/factors[1] );
 
-  double scaling = vnl_math::max( change_in_fst, change_in_snd );
+  double scaling = std::max( change_in_fst, change_in_snd );
   //double scaling = vcl_sqrt(scaling_sqr);
 
   return scaling;
@@ -384,7 +384,7 @@ rgrl_util_geometric_error_scaling( rgrl_match_set const& match_set )
   // moments
   double ratio_from = ev_fst_from/ev_snd_from;
   double ratio_mapped = ev_fst_mapped/ev_snd_mapped;
-  double distortion = vnl_math::max( ratio_from/ratio_mapped,
+  double distortion = std::max( ratio_from/ratio_mapped,
                                     ratio_mapped/ratio_from );
 
   return distortion;
@@ -401,12 +401,12 @@ rgrl_util_geometric_error_scaling( rgrl_set_of<rgrl_match_set_sptr> const& curre
 
   // Estimate the change in the spread of the feature set
   //
-  double change_in_fst = vnl_math::max( factors[0],
+  double change_in_fst = std::max( factors[0],
                                        1/factors[0] );
-  double change_in_snd = vnl_math::max( factors[1],
+  double change_in_snd = std::max( factors[1],
                                        1/factors[1] );
 
-  double scaling = vnl_math::max( change_in_fst, change_in_snd );
+  double scaling = std::max( change_in_fst, change_in_snd );
 
   return scaling;
 }
@@ -461,8 +461,8 @@ rgrl_util_geometric_scaling_factors( rgrl_match_set const& match_set,
   double sv_from, sv_mapped;
   factors.set_size( m );
   for ( unsigned i=0; i<m; ++i ) {
-    sv_from = vcl_sqrt( vnl_math::max( svd_from.W(i), 1e-16 ) );
-    sv_mapped = vcl_sqrt( vnl_math::max( svd_mapped.W(i), 1e-16 ) );
+    sv_from = vcl_sqrt( std::max( svd_from.W(i), 1e-16 ) );
+    sv_mapped = vcl_sqrt( std::max( svd_mapped.W(i), 1e-16 ) );
     factors[i] = sv_mapped / sv_from;
   }
 
@@ -544,8 +544,8 @@ rgrl_util_geometric_scaling_factors( rgrl_set_of<rgrl_match_set_sptr> const& cur
   double sv_from, sv_mapped;
   factors.set_size( m );
   for ( unsigned i=0; i<m; ++i ) {
-    sv_from = vnl_math::max( svd_from.W(i), 1e-16 );
-    sv_mapped = vnl_math::max( svd_mapped.W(i), 1e-16 );
+    sv_from = std::max( svd_from.W(i), 1e-16 );
+    sv_mapped = std::max( svd_mapped.W(i), 1e-16 );
     // As the scatter matrix essentially squared the
     // underlying scaling factors,
     // take square-root to get the real factor

@@ -182,9 +182,9 @@ read_landmark_file( const char* filename,
       istr >> direction2[0] >> direction2[1]>>width2;
       istr >> direction3[0] >> direction3[1]>>width3;
       // Make sure all widths are at least 1
-      width1 = vnl_math::max( 1.0, width1);
-      width2 = vnl_math::max( 1.0, width2);
-      width3 = vnl_math::max( 1.0, width3);
+      width1 = std::max( 1.0, width1);
+      width2 = std::max( 1.0, width2);
+      width3 = std::max( 1.0, width3);
 
       // BeginCodeSnippet
       rgrl_invariant_single_landmark* single =

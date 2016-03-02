@@ -92,8 +92,8 @@ bool line_chamfer_1d::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lines,
     l.normalize();
     double d = -l.c(); // perpendicular distance
     distances_.push_back(d);
-    dmin_ = vnl_math::min(d,dmin_);
-    dmax_ = vnl_math::max(d,dmax_);
+    dmin_ = std::min(d,dmin_);
+    dmax_ = std::max(d,dmax_);
   }
   if (!(dmax_>=dmin_))
     return false;
@@ -209,8 +209,8 @@ bool grid_profile_matcher::insert_lines(vcl_vector<vsol_line_2d_sptr> const& lin
       d = mid->x();
 #endif
     distances_.push_back(d);
-    dmin_ = vnl_math::min(d,dmin_);
-    dmax_ = vnl_math::max(d,dmax_);
+    dmin_ = std::min(d,dmin_);
+    dmax_ = std::max(d,dmax_);
   }
   if (!(dmax_>=dmin_))
     return false;
@@ -1587,9 +1587,9 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
 #endif
   // add/subtract 1 from min_y and max_y to account for possible rounding error
   int min_y =
-    vnl_math::rnd(vnl_math::min(vnl_math::min(vnl_math::min(ul.y(),ur.y()),ll.y()),lr.y())) -1;
+    vnl_math::rnd(std::min(std::min(std::min(ul.y(),ur.y()),ll.y()),lr.y())) -1;
   int max_y =
-    vnl_math::rnd(vnl_math::max(vnl_math::max(vnl_math::max(ul.y(),ur.y()),ll.y()),lr.y())) +1;
+    vnl_math::rnd(std::max(std::max(std::max(ul.y(),ur.y()),ll.y()),lr.y())) +1;
 
   int n_scan_rows = max_y - min_y + 1;
 
@@ -1624,8 +1624,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   {
     rounded_pix = vnl_math::rnd(real_pix);
     row_idx = rounded_pix - min_y;
-    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],t);
-    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],t);
+    scan_rows[row_idx][0] = std::min(scan_rows[row_idx][0],t);
+    scan_rows[row_idx][1] = std::max(scan_rows[row_idx][1],t);
     real_pix += slope;
   }
 
@@ -1641,8 +1641,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   {
     rounded_pix = vnl_math::rnd(real_pix);
     row_idx = rounded_pix - min_y;
-    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],t);
-    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],t);
+    scan_rows[row_idx][0] = std::min(scan_rows[row_idx][0],t);
+    scan_rows[row_idx][1] = std::max(scan_rows[row_idx][1],t);
     real_pix += slope;
   }
 
@@ -1658,8 +1658,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   {
     rounded_pix = vnl_math::rnd(real_pix);
     row_idx = t - min_y;
-    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],rounded_pix);
-    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],rounded_pix);
+    scan_rows[row_idx][0] = std::min(scan_rows[row_idx][0],rounded_pix);
+    scan_rows[row_idx][1] = std::max(scan_rows[row_idx][1],rounded_pix);
     real_pix += slope;
   }
 
@@ -1675,8 +1675,8 @@ bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
   {
     rounded_pix = vnl_math::rnd(real_pix);
     row_idx = t - min_y;
-    scan_rows[row_idx][0] = vnl_math::min(scan_rows[row_idx][0],rounded_pix);
-    scan_rows[row_idx][1] = vnl_math::max(scan_rows[row_idx][1],rounded_pix);
+    scan_rows[row_idx][0] = std::min(scan_rows[row_idx][0],rounded_pix);
+    scan_rows[row_idx][1] = std::max(scan_rows[row_idx][1],rounded_pix);
     real_pix += slope;
   }
   // now we can scan the pixels and grab their intensities

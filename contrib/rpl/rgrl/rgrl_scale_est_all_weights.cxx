@@ -88,7 +88,7 @@ compute_geometric_scale( double& return_scale,
   if ( !vnl_math::isfinite( scale ) )
     return false;
 
-  return_scale = scaling * vnl_math::max( scale, epsilon );
+  return_scale = scaling * std::max( scale, epsilon );
 
   DebugMacro(1, "  Final geometric scale" << return_scale << vcl_endl );
   return true;
@@ -96,7 +96,7 @@ compute_geometric_scale( double& return_scale,
 #if 0
   double est_scale = vcl_sqrt( sum_weighted_error / sum_weights );
   vcl_cout << " rgrl_scale_est_all_weights : scale = " << est_scale << " (lower bound=1.0)\n";
-  return vnl_math::max( est_scale, 1.0 );
+  return std::max( est_scale, 1.0 );
 #endif
 }
 

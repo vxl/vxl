@@ -37,7 +37,7 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
 
   // Compute the radius of the region that the landmark occupies
   //
-  radius_ = vnl_math::max(width1, vnl_math::max(width2, width3));
+  radius_ = std::max(width1, std::max(width2, width3));
 
   // reorder the vessels directions, so that they're ordered in
   // increasing counter-clock-wise angles from the x-axis.
@@ -224,8 +224,8 @@ estimate(rgrl_invariant_sptr         from_inv,
 
   // Find the scales and scale the matrices appropriate to normalize
   // them and increase the numerical stability.
-  double factor0 = vnl_math::max(sum_prod(0,0),sum_prod(1,1));
-  double factor1 = vnl_math::max(sum_prod(2,2),sum_prod(3,3));
+  double factor0 = std::max(sum_prod(0,0),sum_prod(1,1));
+  double factor1 = std::max(sum_prod(2,2),sum_prod(3,3));
   double norm_scale = vcl_sqrt(factor1 / factor0);   // neither should be 0
 
   vnl_double_4 s;

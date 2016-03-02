@@ -39,7 +39,7 @@ void gmvl_connection_cache::add(const gmvl_node_sptr node1, const gmvl_node_sptr
     if (node1->ref_>= int(cache_.size())) cache_.resize(node1->ref_+1);
     if (node2->ref_>= int(cache_.size())) cache_.resize(node2->ref_+1);
 
-    unsigned int biggest = vnl_math::max(node1->ref_, node2->ref_);
+    unsigned int biggest = std::max(node1->ref_, node2->ref_);
 
     if (biggest>= cachebool_.rows())
     {
@@ -125,7 +125,7 @@ void gmvl_connection_cache::rebuild()
     if (node1->ref_>= int(cache_.size())) cache_.resize(node1->ref_+1);
     if (node2->ref_>= int(cache_.size())) cache_.resize(node2->ref_+1);
 
-    unsigned int biggest= vnl_math::max(node1->ref_, node2->ref_);
+    unsigned int biggest= std::max(node1->ref_, node2->ref_);
 
     if (biggest>= cachebool_.rows())
     {

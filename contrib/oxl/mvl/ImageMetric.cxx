@@ -229,14 +229,14 @@ double ImageMetric::distance_squared(vgl_line_segment_2d<double> const& segment,
                                      vgl_homg_line_2d<double> const& line) const
 {
   // ca_distance_squared_lineseg_to_line
-  return vnl_math::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
+  return std::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
                       this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point2()), line));
 }
 
 double ImageMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
   // ca_distance_squared_lineseg_to_line
-  return vnl_math::max(this->perp_dist_squared(segment.get_point1(), line),
+  return std::max(this->perp_dist_squared(segment.get_point1(), line),
                       this->perp_dist_squared(segment.get_point2(), line));
 }
 

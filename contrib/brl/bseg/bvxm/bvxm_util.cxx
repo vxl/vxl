@@ -264,5 +264,5 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl
     roi_uncertainty->add(p2d_uncertainty);
   }
 
-  return vnl_math::ceil(0.5*vnl_math::max(roi_uncertainty->width(),roi_uncertainty->height()));
+  return vnl_math::ceil(0.5*std::max(roi_uncertainty->width(),roi_uncertainty->height()));
 }

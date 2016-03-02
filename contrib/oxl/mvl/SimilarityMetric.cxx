@@ -222,7 +222,7 @@ double SimilarityMetric::distance_squared(HomgPoint2D const& p1, HomgPoint2D con
 double SimilarityMetric::distance_squared(vgl_line_segment_2d<double> const& segment,
                                           vgl_homg_line_2d<double> const& line) const
 {
-  return vnl_math::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
+  return std::max(this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point1()), line),
                       this->perp_dist_squared(vgl_homg_point_2d<double>(segment.point2()), line));
 }
 
@@ -230,7 +230,7 @@ double SimilarityMetric::distance_squared(vgl_line_segment_2d<double> const& seg
 //  The metric used is the maximum of the two endpoint perp distances.
 double SimilarityMetric::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line) const
 {
-  return vnl_math::max(this->perp_dist_squared(segment.get_point1(), line),
+  return std::max(this->perp_dist_squared(segment.get_point1(), line),
                       this->perp_dist_squared(segment.get_point2(), line));
 }
 

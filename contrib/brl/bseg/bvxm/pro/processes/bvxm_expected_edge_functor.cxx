@@ -65,7 +65,7 @@ bool bvxm_expected_edge_functor::apply(const vpgl_camera_double_sptr& camera,
 
             // this line takes 2200 milliseconds
             // with float ***data it takes 1100 ms
-            (*img_eei)(i,j) = vnl_math::max((*img_eei)(i,j),(*slab_)(vx,vy,vz));
+            (*img_eei)(i,j) = std::max((*img_eei)(i,j),(*slab_)(vx,vy,vz));
           }
         }
       }

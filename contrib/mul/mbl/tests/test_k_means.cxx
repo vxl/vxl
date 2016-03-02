@@ -92,10 +92,10 @@ void test_k_means()
   {
     double bestDist = nDims ;
     for (j=0; j<i; ++j)
-      bestDist = vnl_math::min(bestDist,
+      bestDist = std::min(bestDist,
                               vnl_vector_ssd(centres[i], centres[j]));
     for (j=i+1; j<nCentres; ++j)
-      bestDist = vnl_math::min(bestDist,
+      bestDist = std::min(bestDist,
                               vnl_vector_ssd(centres[i], centres[j]));
     bestDistSum += vcl_sqrt(bestDist);
     bestDistSumSq += bestDist;

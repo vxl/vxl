@@ -120,8 +120,8 @@ bool bvxm_rpc_registration_process(bprb_func_process& pro)
   //// setting the output edge image for viewing purposes
   //for (int i=0; i<ni; i++) {
   //  for (int j=0; j<nj; j++) {
-  //    eei_min = vnl_math::min(eei_min,expected_edge_image(i,j));
-  //    eei_max = vnl_math::max(eei_max,expected_edge_image(i,j));
+  //    eei_min = std::min(eei_min,expected_edge_image(i,j));
+  //    eei_max = std::max(eei_max,expected_edge_image(i,j));
   //  }
   //}
   for (int i=0; i<ni; i++) {

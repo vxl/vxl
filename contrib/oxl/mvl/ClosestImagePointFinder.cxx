@@ -132,7 +132,7 @@ int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, dou
 
 int ClosestImagePointFinder::get_closest_within_region(double cx, double cy, double w, double h, int* out)
 {
-  double d = vnl_math::max(w,h);
+  double d = std::max(w,h);
   return get_closest_within_region(cx, cy, w, h, out, d*d);
 }
 
