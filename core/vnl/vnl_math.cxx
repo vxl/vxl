@@ -9,6 +9,11 @@
 #include <vxl_config.h>
 #include <vcl_limits.h>
 
+#if  __cplusplus >= 201103L
+// Nothing to do for isnan,isfinite,isinf,isnormal
+// or hypot here
+#else
+
 #if defined(VCL_VC) || defined(__MINGW32__)
 // I don't think we need this, because <ieeefp.h> is available -- fsm
 # include <float.h> // for 'isnan' and 'finite'
@@ -204,24 +209,6 @@ bool isnormal(long double x) { return vnl_math::isfinite(x) && (x != 0.0 ); }
 } // end namespace vnl_math
 
 //----------------------------------------------------------------------
-
-//: Type-accessible infinities for use in templates.
-template <class T> T vnl_huge_val(T);
-float  vnl_huge_val(float)  { return vcl_numeric_limits<float>::infinity(); }
-double  vnl_huge_val(double)  { return vcl_numeric_limits<double>::infinity(); }
-long double vnl_huge_val(long double) { return vcl_numeric_limits<long double>::infinity(); }
-
-#ifdef _INT_64BIT_
-long int vnl_huge_val(long int) { return 0x7fffffffffffffffL; }
-int    vnl_huge_val(int)    { return 0x7fffffffffffffffL; }
-#else
-int    vnl_huge_val(int)    { return 0x7fffffff; }
-#endif
-short  vnl_huge_val(short)  { return 0x7fff; }
-char   vnl_huge_val(char)   { return 0x7f; }
-
-
-//----------------------------------------------------------------------
 namespace vnl_math
 {
 
@@ -281,6 +268,24 @@ long double hypot(long double x, long double y)
 }
 } // end namespace vnl_math
 
+#endif
+
+//----------------------------------------------------------------------
+
+//: Type-accessible infinities for use in templates.
+template <class T> T vnl_huge_val(T);
+float  vnl_huge_val(float)  { return vcl_numeric_limits<float>::infinity(); }
+double  vnl_huge_val(double)  { return vcl_numeric_limits<double>::infinity(); }
+long double vnl_huge_val(long double) { return vcl_numeric_limits<long double>::infinity(); }
+
+#ifdef _INT_64BIT_
+long int vnl_huge_val(long int) { return 0x7fffffffffffffffL; }
+int    vnl_huge_val(int)    { return 0x7fffffffffffffffL; }
+#else
+int    vnl_huge_val(int)    { return 0x7fffffff; }
+#endif
+short  vnl_huge_val(short)  { return 0x7fff; }
+char   vnl_huge_val(char)   { return 0x7f; }
 
 
 //----------------------------------------------------------------------
