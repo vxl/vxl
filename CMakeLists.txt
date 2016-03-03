@@ -12,7 +12,7 @@
 # Root vxl
 #
 #   vxl-maintainers@lists.sf.net
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 2.8.7)
 
 # Set policies for cmake
 if( POLICY CMP0003 )
