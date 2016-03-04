@@ -410,7 +410,7 @@ void boxm2_vecf_cranium_scene::apply_vector_field_to_target(vcl_vector<vgl_vecto
     // the source cell is found by appplying the inverse vector
     vgl_point_3d<double> trg_cent_in_source = box_cell_centers_[j].cell_center_-params_.offset_;
     double side_len = box_cell_centers_[j].side_length_;
-    int depth = box_cell_centers_[j].depth_;//for debug purposes
+    //int depth = box_cell_centers_[j].depth_;//for debug purposes
     unsigned tindx = box_cell_centers_[j].data_index_;
 
     vgl_point_3d<double> p = box_cell_centers_[j].cell_center_-params_.offset_;

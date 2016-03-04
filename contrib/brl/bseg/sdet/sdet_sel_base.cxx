@@ -2821,7 +2821,7 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
             }
         }
         //Constucting the tree from end of an unambiguous chain and extending it till the end of edge chain
-      double cost1=gap_,cost2=10.0,cost3=gap_,d1=0.0,dx=0.0,dy=0.0,cost=1000.0,costc=0.0;
+      double cost2=10.0, d1=0.0,dx=0.0,dy=0.0,cost=1000.0,costc=0.0;
       int m1=0,m2=0,m3=0,m4=0,m5=0,m7=0,m8=0,m9=0;
       sdet_edgel* ce=VXL_NULLPTR;sdet_edgel* pe=VXL_NULLPTR;sdet_edgel* ed=VXL_NULLPTR;sdet_edgel* imp=VXL_NULLPTR;sdet_edgel* im=VXL_NULLPTR;
       sdet_edgel_chain *c11=new sdet_edgel_chain();
@@ -2898,7 +2898,7 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                 }
               // Finding the closest unused edge
               cost=10000.0;
-              cost1=gap_;
+              double cost1=gap_;
               for (unsigned int j=0; j<new_chain4->edgels.size(); ++j)
                 {
                 d1= vgl_distance(ed->pt,new_chain4->edgels[j]->pt);
@@ -2945,7 +2945,8 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                 ++eit1;
                 }
 
-              m3=0;m5=0;cost3=gap_;
+              m3=0;m5=0;
+              double cost3=gap_;
               // Finding the closest edge which is part of a fragment
               for (unsigned int t=0; t<new_chain3.size(); ++t)
                 {
@@ -3029,7 +3030,6 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
           gap_=1;
           for (unsigned int i=0; i<new_chain5->edgels.size(); ++i)
             {
-            sdet_edgel_chain *new_chain6a=new sdet_edgel_chain();
             p1=gap_;
             sdet_edgel_list_iter eit5=new_chain4->edgels.begin();
             sdet_edgel_list_iter eit6=new_chain4->edgels.begin();
@@ -3064,7 +3064,8 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                   }
                 else continue;
                 }
-                new_chain6a=new sdet_edgel_chain();new_chain6a->edgels.push_back(edge2);new_chain6a->edgels.push_back(edge1);
+                sdet_edgel_chain *new_chain6a = new sdet_edgel_chain();
+                new_chain6a->edgels.push_back(edge2); new_chain6a->edgels.push_back(edge1);
                 int p7=0,p8=0,p9=0;
                 if (curve_frag_graph_.cFrags[edge3->id].size()>=1)
                   {

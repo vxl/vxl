@@ -234,7 +234,7 @@ int main(int argc, char** argv)
     double gt_lon, gt_lat;
     gt_lon = 0.0;  gt_lat = 0.0;
     vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
-    unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
+    volm_io::read_gt_file(gt_file(), samples);
     if (img_id() != 1E6 && img_id() < samples.size()) {
       gt_lon = samples[img_id()].first.x();
       gt_lat = samples[img_id()].first.y();

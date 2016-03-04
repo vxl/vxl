@@ -453,7 +453,6 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
    nbr_exint = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exint");
    nbr_exists = opencl_cache_->get_data<BOXM2_CHAR8>(source_scene_, *iter_blk_source,0,true, "nbr_exist");
    nbr_prob   = opencl_cache_->get_data<BOXM2_FLOAT8>(source_scene_, *iter_blk_source, 32 * info_buffer_source->data_buffer_length,true, "nbr_prob");
-   int sz =nbr_prob->num_bytes()/info_buffer_source->data_buffer_length;
    trans_interp_kern->set_arg(blk_info_target_.ptr());
    trans_interp_kern->set_arg(blk_info_source);
    trans_interp_kern->set_arg(blk_target_);

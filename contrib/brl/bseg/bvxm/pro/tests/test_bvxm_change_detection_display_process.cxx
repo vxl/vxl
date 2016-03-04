@@ -41,7 +41,7 @@ static void test_bvxm_change_detection_display_process()
   brdb_value_sptr v2 = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<bool>(mask));
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmChangeDetectionDisplayProcess");
-  good = bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
+  good &= bprb_batch_process_manager::instance()->set_params("change_display_params.xml");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);

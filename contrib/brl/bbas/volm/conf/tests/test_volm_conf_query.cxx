@@ -25,6 +25,10 @@ static void test_volm_conf_query_from_tag_file()
   vcl_string world_region, query_name;
   unsigned img_ni, img_nj;
   bool success = volm_io::read_conf_query_tags(xml_file, floor_height, dms, world_region, img_ni, img_nj, query_name);
+  if (! success)
+    {
+    vcl_cerr << "ERROR reading query tag in " << __FILE__ << __LINE__ << vcl_endl;
+    }
   vcl_cout << "Tag content output: " << vcl_endl;
   vcl_cout << "  region: " << world_region;
   vcl_cout << "  query name: " << query_name << vcl_endl;

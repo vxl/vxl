@@ -188,9 +188,7 @@ int main(int argc,  char** argv)
       vil_rgb<vxl_byte> class_color = lidar_class_img(i,j);
       float class_prob = lidar_prob_img(i,j);
 
-      if (pixel_id == water_id && class_color == pier_color && elev > 1.0f)
-        pixel_id = pier_id;
-      else if (pixel_id == sand_id && class_color == pier_color && elev > 1.0f && class_prob > pier_prob_thres) {
+      if (pixel_id == sand_id && class_color == pier_color && elev > 1.0f && class_prob > pier_prob_thres) {
 
         // enforce water neighborhood
         unsigned cnt = 0;

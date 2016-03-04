@@ -156,8 +156,8 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   vcl_cout << " will ingest and write data blocks with type: " << out_data_type << " as output!\n";
 
 
-  size_t apptypesize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
-  size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
+  //size_t apptypesize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
+  //size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
 
 
   //get x and y size from scene

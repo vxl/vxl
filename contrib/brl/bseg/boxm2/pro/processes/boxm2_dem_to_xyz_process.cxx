@@ -397,9 +397,9 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
   vcl_string geotiff_fname = pro.get_input<vcl_string>(1);
-  double geoid_height = pro.get_input<double>(2); // TODO: unused!
+  //double geoid_height = pro.get_input<double>(2); // TODO: unused!
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(3);
-  float fill_in_value = pro.get_input<float>(4); // TODO: unused!
+  //float fill_in_value = pro.get_input<float>(4); // TODO: unused!
 
   vil_image_resource_sptr dem_res = vil_load_image_resource(geotiff_fname.c_str());
 

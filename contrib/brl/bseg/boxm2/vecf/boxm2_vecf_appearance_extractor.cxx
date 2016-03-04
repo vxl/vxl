@@ -105,7 +105,7 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
                 target_blk->data_index( fwd_scaled_cell_center, target_data_idx);
                 float alpha = target_alpha_data[target_data_idx];
                 float src_prob = static_cast<float>(1.0 - vcl_exp( - source_alpha_data[data_idx] * source_side_len));
-                double prob = static_cast<float>(1.0 - vcl_exp(-alpha*side_len));
+                //double prob = static_cast<float>(1.0 - vcl_exp(-alpha*side_len));
                 const double prob_thresh = 0.0;
 
                 if (src_prob >= prob_thresh) {

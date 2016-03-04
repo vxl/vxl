@@ -348,7 +348,6 @@ void clsfy_binary_tree_builder::build_a_node(
     }
     else
     {
-        ndimsUsed=ndims;
         param_indices.resize(ndims);
         mbl_stl_increments(param_indices.begin(),param_indices.end(),0);
     }

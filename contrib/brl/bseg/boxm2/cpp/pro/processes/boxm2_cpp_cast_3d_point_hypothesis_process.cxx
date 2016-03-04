@@ -228,7 +228,6 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process2(bprb_func_process& pro)
     return true;
   }
 
-  int pointTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
   int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT16>::prefix());
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 

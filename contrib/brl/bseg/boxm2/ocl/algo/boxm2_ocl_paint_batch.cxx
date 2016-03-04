@@ -62,7 +62,7 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
   //debuggers--------
   int mogSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   boxm2_data_base* mog_base = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), mogSize*data_buff_length, false);
-  boxm2_data<BOXM2_MOG3_GREY>* mog_data_ = new boxm2_data<BOXM2_MOG3_GREY>(mog_base->data_buffer(), mog_base->buffer_length(), mog_base->block_id());
+  //boxm2_data<BOXM2_MOG3_GREY>* mog_data_ = new boxm2_data<BOXM2_MOG3_GREY>(mog_base->data_buffer(), mog_base->buffer_length(), mog_base->block_id());
   //----------------
 
   //int buffer indicating starting location for each sample

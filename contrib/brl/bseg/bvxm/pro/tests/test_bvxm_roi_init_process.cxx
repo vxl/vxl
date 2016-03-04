@@ -53,7 +53,7 @@ static void test_bvxm_roi_init_process()
   brdb_value_sptr v3 = new brdb_value_t<unsigned>(0);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmRoiInitProcess");
-  good = bprb_batch_process_manager::instance()->set_params("roi_params.xml");
+  good = good && bprb_batch_process_manager::instance()->set_params("roi_params.xml");
   good = good && bprb_batch_process_manager::instance()->set_input(0, v0);
   good = good && bprb_batch_process_manager::instance()->set_input(1, v1);
   good = good && bprb_batch_process_manager::instance()->set_input(2, v2);

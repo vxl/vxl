@@ -18,7 +18,6 @@ static void test_volm_conf_buffer()
   for (unsigned k = 0; k < data_size;  k++)
   {
     vcl_vector<volm_conf_object> value;
-    unsigned char land_id = k;
     for (unsigned i = 0; i < (k+1)*100; i++)
       value.push_back(volm_conf_object(rnd.drand32(0.0, 360.0), rnd.drand32(0, 1000), rnd.drand32(0, 100.0), k));
     values.push_back(value);

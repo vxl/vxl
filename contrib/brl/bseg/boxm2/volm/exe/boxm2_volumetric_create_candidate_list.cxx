@@ -130,8 +130,8 @@ bool create_camera_kml(unsigned const& top_id, double const& lon, double const& 
     for (vit = scores.begin(); vit != scores.end(); ++vit) {
       unsigned li = (*vit)->leaf_id_, hi = (*vit)->hypo_id_;
       vgl_point_3d<double> loc_closest = leaves[li]->hyps_->locs_[hi];
-      double x_dist = abs(loc.x() - loc_closest.x());
-      double y_dist = abs(loc.y() - loc_closest.y());
+      double x_dist = vcl_abs(loc.x() - loc_closest.x());
+      double y_dist = vcl_abs(loc.y() - loc_closest.y());
       vgl_vector_2d<double> gt_dist_vect(x_dist, y_dist);
       double dist = sqrt(gt_dist_vect.sqr_length());
       if (dist < min_dist) {
@@ -334,8 +334,8 @@ int main(int argc,  char** argv)
       if (leaf) {
         loc_closest = leaf->hyps_->locs_[hypo_id];
         double sec_to_meter = 21.0/0.000202;
-        double x_dist = abs(lon - loc_closest.x())*sec_to_meter;
-        double y_dist = abs(lat - loc_closest.y())*sec_to_meter;
+        double x_dist = vcl_abs(lon - loc_closest.x())*sec_to_meter;
+        double y_dist = vcl_abs(lat - loc_closest.y())*sec_to_meter;
         vgl_vector_2d<double> gt_dist_vect(x_dist, y_dist);
         double gt_dist = sqrt(gt_dist_vect.sqr_length());
         vcl_cout << " loc_closest = " << loc_closest << " with leaf id = " << leaf->get_string() << " and hypo_id = " << hypo_id << vcl_endl;

@@ -201,8 +201,6 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
     return false;
   }
 
-  int alphaTypeSize = (int)boxm2_data_traits<BOXM2_ALPHA>::datasize();
-  int apptypesize = (int)boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();
   vcl_string data_type = boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix();
   if (ident.size() > 0) data_type += "_" + ident;
   vcl_cout << " indexing data blocks with type: " << data_type << vcl_endl;

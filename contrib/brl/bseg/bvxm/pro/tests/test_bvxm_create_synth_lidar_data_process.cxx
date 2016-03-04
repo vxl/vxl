@@ -24,7 +24,7 @@ static void test_bvxm_create_synth_lidar_data_process()
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
 
   bool good = bprb_batch_process_manager::instance()->init_process("bvxmCreateSynthLidarDataProcess");
-  good = bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
+  good = good && bprb_batch_process_manager::instance()->set_params("synth_test_params.xml");
   good = good && bprb_batch_process_manager::instance()->run_process();
   TEST("run generate synthetic lidar data process should be successful", good, true);
 

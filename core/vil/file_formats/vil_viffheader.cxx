@@ -55,17 +55,7 @@ vil_viff_xvimage::vil_viff_xvimage(
   fspare2 = 0;
 
   unsigned long image_data_n_bytes=0L; // dummy initialisation to avoid compiler warning
-  switch (storage_type)
-  {
-    case VFF_TYP_BIT:       image_data_n_bytes = (ncols+7)/8; break;
-    case VFF_TYP_2_BYTE:    image_data_n_bytes = ncols*2; break;
-    case VFF_TYP_4_BYTE:
-    case VFF_TYP_FLOAT:     image_data_n_bytes = ncols*4; break;
-    case VFF_TYP_DOUBLE:
-    case VFF_TYP_COMPLEX:   image_data_n_bytes = ncols*8; break;
-    case VFF_TYP_DCOMPLEX:  image_data_n_bytes = ncols*16; break;
-    default:                image_data_n_bytes = ncols*255; break;
-  }
+  
   imagedata = VXL_NULLPTR;
 }
 

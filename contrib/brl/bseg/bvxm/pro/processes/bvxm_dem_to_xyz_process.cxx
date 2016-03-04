@@ -248,7 +248,7 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
   int nj = (int)num_voxels.y();
   double lon, lat, gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84, lon, lat, gz);
-  gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
+  //gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
   if (fill_in_value < 0)
     fill_in_value = vcl_numeric_limits<float>::max();
   vcl_cout << pro.name() << " -- there are " << geotiff_img_names.size() << " dem images available for current bvxm_scene" << vcl_endl;
