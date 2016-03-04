@@ -149,8 +149,6 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
       if (min_nj > max_nj) {  bd_min_nj = max_nj;  bd_max_nj = min_nj;  }
       // look for the land cover of current block (consider urban or agriculture here)
       bool loop = true;
-      unsigned ii = img->ni();
-      unsigned jj = img->nj();
       // if any pixel is urban, the land cover for this blk is urban
       // else if any pixel is agriculture, the land cover for this blk is agriculture
       // if no urban and no agriculture, the land cover for this blk is barren land, i.e., the lowest max_level, largest dims

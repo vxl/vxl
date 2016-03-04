@@ -115,9 +115,6 @@ bool copy_fine_to_coarse(boxm2_block & blk,
                         if (scene->contains(pt, id, local) && id == mdata.id_)
                         {
                             boxm2_block_metadata mdata = scene->get_block_metadata_const(id);
-                            unsigned int blk_index = (id.i()-bbox.min_x())*(bbox.depth()+1)*(bbox.height()+1)+
-                                                     (id.j()-bbox.min_y())*(bbox.depth()+1)+
-                                                     (id.k()-bbox.min_z());
                             int index_x=(int)vcl_floor(local.x());
                             int index_y=(int)vcl_floor(local.y());
                             int index_z=(int)vcl_floor(local.z());

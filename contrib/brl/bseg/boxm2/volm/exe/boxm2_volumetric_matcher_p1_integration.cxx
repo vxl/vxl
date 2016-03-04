@@ -108,7 +108,6 @@ int main(int argc, char** argv)
   vsl_b_ifstream is_sph(sph_bin());
   sph_shell->b_read(is_sph);
   is_sph.close();
-  unsigned layer_size = (unsigned)sph_shell->get_container_size();
 
   // create depth interval
   if (!vul_file::exists(param_file())) {

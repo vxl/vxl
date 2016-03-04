@@ -6,8 +6,6 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
 {
 
   boxm2_array_3d<uchar16>& trees = blk->trees();
-  int num_time_trees = blk_t->tree_buff_length();
-
 
   vcl_size_t data_size = changes->buffer_length();
   bstm_data_base* new_change = new bstm_data_base(new char[data_size], data_size, data.id_);

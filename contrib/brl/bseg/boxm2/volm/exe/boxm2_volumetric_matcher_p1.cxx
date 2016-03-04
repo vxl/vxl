@@ -205,7 +205,6 @@ int main(int argc, char** argv)
     vcl_cerr << log.str();
     return volm_io::EXE_ARGUMENT_ERROR;
   }
-  unsigned layer_size = (unsigned)sph_shell->get_container_size();
 
   // load camera space
   if (!vul_file::exists(cam_bin())) {
@@ -369,7 +368,7 @@ int main(int argc, char** argv)
   if (gt_id() != 0 && gt_id() < 100) {
     //vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_string, vcl_string> > > samples;
     vcl_vector<vcl_pair<vgl_point_3d<double>, vcl_pair<vcl_pair<vcl_string, int>, vcl_string> > > samples;
-    unsigned int cnt = volm_io::read_gt_file(gt_file(), samples);
+    volm_io::read_gt_file(gt_file(), samples);
     // obtain the zone_id and tile_id from gt_locs
     int gt_utm_id;
     double x, y;

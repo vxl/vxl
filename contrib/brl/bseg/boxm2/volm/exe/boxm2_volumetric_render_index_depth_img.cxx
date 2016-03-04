@@ -226,8 +226,8 @@ int main(int argc, char** argv)
   vgl_point_3d<double> gt_closest = leaf_gt->hyps_->locs_[hyp_gt];
 
   double sec_to_meter = 21.0/0.000202;;  // 1 arcsec ~ 30 meter ~ 1/3600 degree
-  double x_dist = abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
-  double y_dist = abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
+  double x_dist = vcl_abs(gt_loc.x()-gt_closest.x())*sec_to_meter;
+  double y_dist = vcl_abs(gt_loc.y()-gt_closest.y())*sec_to_meter;
   vgl_vector_2d<double> gt_dist_vec(x_dist, y_dist);
   double gt_dist = sqrt(gt_dist_vec.sqr_length());
   vcl_cerr << vcl_setprecision(10) << " GT_location = " << gt_loc

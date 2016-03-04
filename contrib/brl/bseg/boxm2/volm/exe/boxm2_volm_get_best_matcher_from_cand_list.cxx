@@ -159,7 +159,6 @@ int main(int argc, char** argv)
   // check the score binary files in advance
   for (unsigned t_idx = 0; t_idx < tiles.size(); t_idx++) {
     if (t_idx == 10) continue;
-    unsigned zone_idx = zone_id(t_idx);
     vcl_stringstream score_file;
     score_file << score_folder() << "/ps_1_scores_tile_" << t_idx << ".bin";
     if (!vul_file::exists(score_file.str())) {

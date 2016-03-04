@@ -160,7 +160,7 @@ void boxm2_ocl_test_utils::print_alpha_scene(boxm2_scene_sptr scene)
             int currBitIndex = (*iter);
             int currIdx = bit_tree.get_data_index(currBitIndex);
             double side_len = 1.0 / (double) (1 << 3);
-            float prob = 1.0f - vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
+            //float prob = 1.0f - vcl_exp(-alpha_data[currIdx] * side_len * data.sub_block_dim_.x());
             //vcl_cout << "Leaf with index: " << currIdx << " has prob: " << prob << vcl_endl;
           }
         }

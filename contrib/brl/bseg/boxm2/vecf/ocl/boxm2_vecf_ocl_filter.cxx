@@ -144,7 +144,6 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    info_buffer = temp_scene_->get_blk_metadata(*iter_blk_temp);
    int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
    info_buffer->data_buffer_length = (int) (alpha_temp->num_bytes()/alphaTypeSize);
-   int data_size = info_buffer->data_buffer_length;
    blk_info_temp  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );
    blk_info_temp->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
@@ -163,7 +162,7 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    blk_source       = opencl_cache_->get_block(source_scene_, *iter_blk_source);
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,false);
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
-   data_size = info_buffer_source->data_buffer_length;
+   int data_size = info_buffer_source->data_buffer_length;
    float* output_buff= new float[data_size];
    output = new bocl_mem(device_->context(), output_buff, sizeof(float)*info_buffer_source->data_buffer_length, "output" );
    output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
@@ -246,4 +245,5 @@ bool boxm2_vecf_ocl_filter::filter(vcl_vector<float> const& weights, unsigned nu
    blk_info_temp->release_memory();
    delete info_buffer;
    delete output_buff;
+   return true;
 }

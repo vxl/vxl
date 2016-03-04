@@ -15,13 +15,10 @@ int main(int argc, char ** argv)
 
   arglist.parse(argc, argv, false);
   vcl_string show_model_str = show_model_arg();
-  bool show_model = show_model_str == "true";
 
   vcl_string non_lin_str = non_lin_arg();
-  bool do_non_lin = non_lin_str == "true";
 
   vcl_string dlib_str = dlib_arg();
-  bool from_dlib = dlib_str == "true";
 
   vcl_string base_dir = base_dir_path();
 

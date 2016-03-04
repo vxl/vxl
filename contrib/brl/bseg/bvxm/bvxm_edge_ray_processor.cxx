@@ -895,9 +895,10 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
 #endif
             vgl_homg_line_2d<double> img_l(img_a, img_b, img_c);
             vgl_plane_3d<double> pl = cam->backproject(img_l);
-            double pa = pl.a(), pb = pl.b(), pc = pl.c(), pd = pl.d();
-            double nm = vcl_sqrt(pa*pa + pb*pb + pc*pc);
+            double pa = pl.a(), pb = pl.b(), pc = pl.c();
 #if 0
+            double pd = pl.d();
+            double nm = vcl_sqrt(pa*pa + pb*pb + pc*pc);
             pa/=nm;
             pb/=nm;
             pc/=nm;

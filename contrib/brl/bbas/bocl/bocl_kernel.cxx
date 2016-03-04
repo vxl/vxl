@@ -190,7 +190,7 @@ float bocl_kernel::exec_time()
 {
   cl_ulong tend=0, tstart=0;
   int status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,VXL_NULLPTR);
-  status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,VXL_NULLPTR);
+  status &= clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,VXL_NULLPTR);
   if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
     return false;
 

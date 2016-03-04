@@ -75,11 +75,11 @@ export_oriented_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
     boxm2_data_base * normals = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
     boxm2_data_base * vis = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
     boxm2_data_base * vis_sum = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix("sum"), data_buff_length * visTypeSize);
-    boxm2_data_base * mog = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
+    // boxm2_data_base * mog = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
     boxm2_data_base * exp = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_EXPECTATION>::prefix(), data_buff_length * expTypeSize);
     boxm2_data_base * nobs = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix(), data_buff_length * nobsTypeSize);
     boxm2_data_base * ray_dir_sum = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
-    boxm2_data_base * ray_dir_weighted_sum = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
+    //boxm2_data_base * ray_dir_weighted_sum = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_RAY_DIR>::prefix(), data_buff_length * raydirTypeSize);
 
 
     boxm2_block_metadata data = blk_iter->second;

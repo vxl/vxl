@@ -25,11 +25,9 @@ class boxm2_entropy_air
         float sum = 1.0;
         for (unsigned i=0;i<Iobs.size();i++)
         {
-            unsigned index = i;
+            unsigned index = i + 1;
             if (i == Iobs.size()-1)
                 index =0;
-            else
-                index = i+1;
             float gradI=vcl_fabs(Iobs[i]-Iobs[index]);
 
             int bin_index  = (int) vcl_floor(gradI*8);
@@ -101,11 +99,9 @@ class boxm2_compute_empty_model_gradient_functor
         float sum = 1.0;
         for (unsigned i=0;i<Iobs.size();i++)
         {
-            unsigned index = i;
+            unsigned index = i + 1;
             if (i == Iobs.size()-1)
                 index =0;
-            else
-                index = i+1;
             float gradI=vcl_fabs(Iobs[i]-Iobs[index]);
 
             int bin_index  = (int) vcl_floor(gradI*8);
