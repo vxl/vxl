@@ -151,7 +151,6 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
             //choose correct render kernel
             boxm2_block_metadata mdata = scene->get_block_metadata(*id);
             bocl_kernel* kern = kernels[i];
-            vcl_cout << "Pre -Processing " << *id << vcl_endl;
             //write the image values to the buffer
             vul_timer transfer;
             bocl_mem* blk = opencl_cache->get_block(scene, *id);
@@ -165,7 +164,6 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
             bocl_mem *aux1_ph_smooth = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX1>::prefix("pheight_smooth"), 0, true);
             bocl_mem *aux2 = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX1>::prefix("pre_h"), 0, false);
             bocl_mem *aux3 = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX2>::prefix("vis_h"), 0, false);
-            vcl_cout << "PRe -Processing " << *id << vcl_endl;
             transfer_time += (float)transfer.all();
             if (i == UPDATE_PRE)
             {
@@ -825,7 +823,6 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
     {
         //choose correct render kernel
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
-        vcl_cout << "Pheight - Processing " << *id << vcl_endl;
         //write the image values to the buffer
         vul_timer transfer;
         bocl_mem* blk = opencl_cache->get_block(scene, *id);
@@ -861,8 +858,6 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
         kern->clear_args();
         aux0->read_to_buffer(queue);
         aux1->read_to_buffer(queue);
-
-        vcl_cout << "GPU done" << vcl_endl;
        // boxm2_block_metadata data = scene->get_block_metadata(*id);
         boxm2_block * cblk = opencl_cache->get_cpu_cache()->get_block(scene, *id);
         //get data from cache
