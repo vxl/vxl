@@ -34,7 +34,7 @@ struct second_eq_one { bool operator()(const pairDV &x) {return x.second == 1;}}
 unsigned clsfy_k_nearest_neighbour::classify(const vnl_vector<double> &input) const
 {
   const unsigned nTrainingVecs = trainInputs_.size();
-  const unsigned k = vnl_math::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
+  const unsigned k = std::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
   mbl_priority_bounded_queue<pairDV, vcl_vector<pairDV>, first_lt >  pq(k);
   unsigned i;
 
@@ -58,7 +58,7 @@ void clsfy_k_nearest_neighbour::class_probabilities(vcl_vector<double> &outputs,
                                                     const vnl_vector<double> &input) const
 {
   const unsigned nTrainingVecs = trainInputs_.size();
-  const unsigned k = vnl_math::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
+  const unsigned k = std::min(k_, nTrainingVecs-1 + (nTrainingVecs%2));
   mbl_priority_bounded_queue<pairDV, vcl_vector<pairDV>, first_lt >  pq(k);
   unsigned i;
 

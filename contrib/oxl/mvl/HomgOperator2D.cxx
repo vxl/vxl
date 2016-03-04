@@ -120,7 +120,7 @@ double HomgOperator2D::perp_dist_squared (const HomgPoint2D& point, const HomgLi
 //  This is defined as the maximum of the distances of the two endpoints to the line.
 double HomgOperator2D::distance_squared(const HomgLineSeg2D& segment, const HomgLine2D& line)
 {
-  return vnl_math::max(perp_dist_squared(segment.get_point1(), line),
+  return std::max(perp_dist_squared(segment.get_point1(), line),
                    perp_dist_squared(segment.get_point2(), line));
 }
 

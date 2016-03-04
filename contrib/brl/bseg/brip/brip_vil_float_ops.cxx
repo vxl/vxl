@@ -1463,8 +1463,8 @@ brip_vil_float_ops::convert_to_byte(vil_image_view<float> const& image)
   for (unsigned y = 0; y<h; y++)
     for (unsigned x = 0; x<w; x++)
     {
-      min_val = vnl_math::min(min_val, image(x,y));
-      max_val = vnl_math::max(max_val, image(x,y));
+      min_val = std::min(min_val, image(x,y));
+      max_val = std::max(max_val, image(x,y));
     }
   float range = max_val-min_val;
   if (range == 0.f)
@@ -1725,8 +1725,8 @@ void brip_vil_float_ops::rgb_to_ihs(vil_rgb<vxl_byte> const& rgb,
   float g=rgb.G();
   float b=rgb.B();
 
-  float maxval = vnl_math::max(r,vnl_math::max(g,b));
-  float minval = vnl_math::min(r,vnl_math::min(g,b));
+  float maxval = std::max(r,std::max(g,b));
+  float minval = std::min(r,std::min(g,b));
 
   float delta = maxval - minval;
   i = maxval;

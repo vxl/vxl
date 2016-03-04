@@ -74,7 +74,7 @@ vnl_qr<T>::~vnl_qr()
 template <class T>
 T vnl_qr<T>::determinant() const
 {
-  int m = vnl_math::min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
+  int m = std::min((int)qrdc_out_.columns(), (int)qrdc_out_.rows());
   T det = qrdc_out_(0,0);
 
   for (int i = 1; i < m; ++i)

@@ -102,11 +102,11 @@ inline bool sdet_intersect_range(double a1, double b1, double a2, double b2,
 {
   if (a1<=a2 && a2<=b1){
     ai = a2;
-    bi = vnl_math::min(b1,b2);
+    bi = std::min(b1,b2);
     return true;
   }
   else if (a1<=b2 && b2<=b1){
-    ai = vnl_math::max(a1, a2);
+    ai = std::max(a1, a2);
     bi = b2;
     return true;
   }
@@ -144,7 +144,7 @@ inline double sdet_angle_min_max(double a1, double b1, double a2, double b2)
       return b1;
   }
   else
-    return vnl_math::min(b1, b2);
+    return std::min(b1, b2);
 }
 
 //compute the maximum of the minimums of the two ranges
@@ -162,7 +162,7 @@ inline double sdet_angle_max_min(double a1, double b1, double a2, double b2)
       return a1;
   }
   else
-    return vnl_math::max(a1, a2);
+    return std::max(a1, a2);
 }
 
 inline bool sdet_intersect_angle_range(double a1, double b1, double a2, double b2,

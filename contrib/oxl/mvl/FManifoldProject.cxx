@@ -200,7 +200,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   double b3 = 1./d_[2]; double a3 = vnl_math::sqr(pprime[2])*b3;
   double b4 = 1./d_[3]; double a4 = vnl_math::sqr(pprime[3])*b4;
 
-  if (vnl_math::max(vnl_math::abs(b1 + b2), vnl_math::abs(b3 + b4)) > 1e-7) {
+  if (std::max(vnl_math::abs(b1 + b2), vnl_math::abs(b3 + b4)) > 1e-7) {
     vcl_cerr << "FManifoldProject: B = [" <<b1<< ' ' <<b2<< ' ' <<b3<< ' ' <<b4<< "];\n"
              << "FManifoldProject: b1 != -b2 or b3 != -b4\n";
   }

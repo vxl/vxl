@@ -320,8 +320,8 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
       bin_xs.clear(); bin_ys.clear();
 
       // make list of bins to try
-      int lower_x_for_y = vnl_math::max( c_bin_x - infinity_norm_dist, 0 );
-      int upper_x_for_y = vnl_math::min( c_bin_x + infinity_norm_dist, num_bins_x_-1 );
+      int lower_x_for_y = std::max( c_bin_x - infinity_norm_dist, 0 );
+      int upper_x_for_y = std::min( c_bin_x + infinity_norm_dist, num_bins_x_-1 );
 
       // across top (when origin is at upper left)
       if ( c_bin_y - infinity_norm_dist >= 0 ) {
@@ -339,8 +339,8 @@ n_nearest( const vnl_vector_fixed< COORD_T, 2 > & query_pt,
         }
       }
 
-      int lower_y_for_x = vnl_math::max( c_bin_y - infinity_norm_dist+1, 0 );
-      int upper_y_for_x = vnl_math::min( c_bin_y + infinity_norm_dist-1, num_bins_y_-1 );
+      int lower_y_for_x = std::max( c_bin_y - infinity_norm_dist+1, 0 );
+      int upper_y_for_x = std::min( c_bin_y + infinity_norm_dist-1, num_bins_y_-1 );
 
       // across left
       if ( c_bin_x - infinity_norm_dist >= 0 ) {   // haven't fallen off left edge

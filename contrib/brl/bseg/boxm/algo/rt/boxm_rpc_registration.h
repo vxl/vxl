@@ -69,7 +69,7 @@ int convert_uncertainty_from_meters_to_pixels(float uncertainty,
     roi_uncertainty.add(p2d_uncertainty);
   }
 
-  return vnl_math::ceil(0.5*vnl_math::max(roi_uncertainty.width(),roi_uncertainty.height()));
+  return vnl_math::ceil(0.5*std::max(roi_uncertainty.width(),roi_uncertainty.height()));
 }
 
 template<class T_loc, class T_data>

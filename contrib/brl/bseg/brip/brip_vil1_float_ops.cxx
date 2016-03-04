@@ -709,8 +709,8 @@ brip_vil1_float_ops::convert_to_byte(vil1_memory_image_of<float> const & image)
   for (int y = 0; y<h; y++)
     for (int x = 0; x<w; x++)
     {
-      min_val = vnl_math::min(min_val, image(x,y));
-      max_val = vnl_math::max(max_val, image(x,y));
+      min_val = std::min(min_val, image(x,y));
+      max_val = std::max(max_val, image(x,y));
     }
   float range = max_val-min_val;
   if (range == 0.f)
@@ -844,8 +844,8 @@ static void rgb_to_ihs(vil1_rgb<unsigned char> const & rgb,
   float r = rgb.R(), g = rgb.G(), b = rgb.B();
   i = rgb.grey();
 
-  float maxval = vnl_math::max(r, vnl_math::max(g, b));
-  float minval = vnl_math::min(r, vnl_math::min(g, b));
+  float maxval = std::max(r, std::max(g, b));
+  float minval = std::min(r, std::min(g, b));
 
   //lightness
   float la = (maxval + minval) / 2.f;

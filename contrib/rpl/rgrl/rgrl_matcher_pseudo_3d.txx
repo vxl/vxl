@@ -628,7 +628,7 @@ match_mapped_region( rgrl_feature_sptr         mapped_feature,
     double second_d2 = vnl_math::abs( responses[ idx1 ][ idx2-1 ] + responses[ idx1 ][ idx2+1 ]
                                       - 2 * responses[ idx1 ][ idx2 ] );
 
-    second_derivative = vnl_math::min( second_d1, second_d2 );
+    second_derivative = std::min( second_d1, second_d2 );
     match_location = mapped_location + basis1 * sub_offset1 + basis2 * sub_offset2;
     DBG( vcl_cout << "best match :\n" << match_location << vcl_endl );
   }

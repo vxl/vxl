@@ -143,8 +143,8 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // Find the scales and scale the matrices appropriate to normalize
   // them and increase the numerical stability.
-  double factor0 = vnl_math::max(XtWX(2,2),XtWX(3,3));
-  double factor1 = vnl_math::max(XtWX(1,1),XtWX(0,0));
+  double factor0 = std::max(XtWX(2,2),XtWX(3,3));
+  double factor1 = std::max(XtWX(1,1),XtWX(0,0));
   double scale = vcl_sqrt( (factor1 > 0 && factor0 > 0) ? factor1 / factor0 : 1 );   // neither should be 0
 
   vnl_vector_fixed<double, 4> s;

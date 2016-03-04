@@ -60,15 +60,15 @@ rsdl_dist_sq( const rsdl_point & p, const rsdl_bounding_box &  b )
     double a = p.angular(j);
     if ( a0 > a1 ) {             // interval wraps around 0
       if ( a < a0 && a > a1 ) {  // outside interval, calculate distance
-        sum_sq += vnl_math::sqr( vnl_math::min( a0-a, a-a1 ) );
+        sum_sq += vnl_math::sqr( std::min( a0-a, a-a1 ) );
       }
     }
     else {                       // interval does not wrap around
       if ( a > a1 ) {            // a is above a1
-        sum_sq += vnl_math::sqr( vnl_math::min( a - a1, vnl_math::twopi + a0 - a ) );
+        sum_sq += vnl_math::sqr( std::min( a - a1, vnl_math::twopi + a0 - a ) );
       }
       else if ( a0 > a ) {       // a is below a0
-        sum_sq += vnl_math::sqr( vnl_math::min( a0 - a, vnl_math::twopi + a - a1 ) );
+        sum_sq += vnl_math::sqr( std::min( a0 - a, vnl_math::twopi + a - a1 ) );
       }
     }
   }

@@ -775,12 +775,12 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
   x12 = this->k0_table_.at(start_index_low).at(end_index_high);
   x22 = this->k0_table_.at(start_index_high).at(end_index_high);
   *k0 = (1-a)*(1-b)*x11 + a*(1-b)*x21 + (1-a)*b*x12 + a*b*x22;
-  *k0_max_error = vnl_math::max(
-    vnl_math::max((double)x11, (double)x21),
-    vnl_math::max((double)x12, (double)x22)
-    ) - vnl_math::min(
-    vnl_math::min((double)x11, (double)x21),
-    vnl_math::min((double)x12,(double)x22)
+  *k0_max_error = std::max(
+    std::max((double)x11, (double)x21),
+    std::max((double)x12, (double)x22)
+    ) - std::min(
+    std::min((double)x11, (double)x21),
+    std::min((double)x12,(double)x22)
     );
 
   x11 = this->gamma_table_.at(start_index_low).at(end_index_low);
@@ -788,12 +788,12 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
   x12 = this->gamma_table_.at(start_index_low).at(end_index_high);
   x22 = this->gamma_table_.at(start_index_high).at(end_index_high);
   *gamma = (1-a)*(1-b)*x11 + a*(1-b)*x21 + (1-a)*b*x12 + a*b*x22;
-  *gamma_max_error = vnl_math::max(
-    vnl_math::max((double)x11, (double)x21),
-    vnl_math::max((double)x12, (double)x22)
-    ) - vnl_math::min(
-    vnl_math::min((double)x11, (double)x21),
-    vnl_math::min((double)x12,(double)x22)
+  *gamma_max_error = std::max(
+    std::max((double)x11, (double)x21),
+    std::max((double)x12, (double)x22)
+    ) - std::min(
+    std::min((double)x11, (double)x21),
+    std::min((double)x12,(double)x22)
     );
 
   x11 = this->len_table_.at(start_index_low).at(end_index_low);
@@ -801,12 +801,12 @@ look_up(double start_angle, double end_angle, double* k0, double* gamma, double*
   x12 = this->len_table_.at(start_index_low).at(end_index_high);
   x22 = this->len_table_.at(start_index_high).at(end_index_high);
   *len = (1-a)*(1-b)*x11 + a*(1-b)*x21 + (1-a)*b*x12 + a*b*x22;
-  *len_max_error = vnl_math::max(
-    vnl_math::max((double)x11, (double)x21),
-    vnl_math::max((double)x12, (double)x22)
-    ) - vnl_math::min(
-    vnl_math::min((double)x11, (double)x21),
-    vnl_math::min((double)x12,(double)x22)
+  *len_max_error = std::max(
+    std::max((double)x11, (double)x21),
+    std::max((double)x12, (double)x22)
+    ) - std::min(
+    std::min((double)x11, (double)x21),
+    std::min((double)x12,(double)x22)
     );
 
   return;

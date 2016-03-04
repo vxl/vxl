@@ -128,7 +128,7 @@ bool mbl_stochastic_data_collector<T>::store_next()
 template <class T>
 mbl_data_wrapper<T>& mbl_stochastic_data_collector<T>::data_wrapper()
 {
-  v_data_.set(&samples_[0], vnl_math::min((unsigned long) samples_.size(), nPresented_));
+  v_data_.set(&samples_[0], std::min((unsigned long) samples_.size(), nPresented_));
   return v_data_;
 }
 

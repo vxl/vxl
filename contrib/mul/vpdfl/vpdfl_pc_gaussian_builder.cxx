@@ -332,7 +332,7 @@ unsigned vpdfl_pc_gaussian_builder::decide_partition(const vnl_vector<double>& e
   assert (eVals.size() > 0);
   if (partitionMethod_ == vpdfl_pc_gaussian_builder::fixed)
   {
-    return vnl_math::min(eVals.size(), (unsigned)fixed_partition()+1);;
+    return std::min(eVals.size(), (unsigned)fixed_partition()+1);;
   }
   else if (partitionMethod_ == proportionate)
   {

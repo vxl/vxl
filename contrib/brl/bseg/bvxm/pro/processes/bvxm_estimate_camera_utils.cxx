@@ -207,7 +207,7 @@ void bvxm_camera_estimator::get_expected_edge_image(const bvxm_voxel_slab<float>
 
           // this line takes 2200 milliseconds
           // with float ***data it takes 1100 ms
-          (*img_eei)(i,j) = vnl_math::max((*img_eei)(i,j),data(vx,vy,vz));
+          (*img_eei)(i,j) = std::max((*img_eei)(i,j),data(vx,vy,vz));
         }
       }
     }

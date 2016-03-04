@@ -126,7 +126,7 @@ bool brip_watershed::compute_seeds()
         for (int j = -1;j<=1; j++)
         {
           float g = gradient_mag_image_(c+j, r+i);
-          max_grad = vnl_math::max(max_grad, g);
+          max_grad = std::max(max_grad, g);
           if (g<min_grad)
           {
             min_grad = g;
