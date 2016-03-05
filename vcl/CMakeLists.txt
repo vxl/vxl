@@ -30,7 +30,7 @@ set( vcl_sources
 
   vcl_cmath.cxx          vcl_cmath.h
   vcl_cassert.cxx        vcl_cassert.h
-  vcl_cstdlib.cxx        vcl_cstdlib.h
+  vcl_cstdlib.h
 
   vcl_algorithm.hxx      vcl_algorithm.h
   vcl_bitset.h
@@ -40,7 +40,7 @@ set( vcl_sources
   vcl_ciso646.h
   vcl_climits.h
   vcl_clocale.h
-  vcl_complex.hxx        vcl_complex.h
+  vcl_complex.h
   vcl_complex_fwd.h
   vcl_csetjmp.h
   vcl_csignal.h
@@ -95,14 +95,11 @@ set( vcl_sources
   generic/vcl_ciso646.h
   generic/vcl_climits.h
   generic/vcl_clocale.h
-  generic/vcl_cmath.h
-  generic/vcl_complex.h
   generic/vcl_csetjmp.h
   generic/vcl_csignal.h
   generic/vcl_cstdarg.h
   generic/vcl_cstddef.h
   generic/vcl_cstdio.h
-  generic/vcl_cstdlib.h
   generic/vcl_cstring.h
   generic/vcl_ctime.h
   generic/vcl_cwchar.h
@@ -134,11 +131,9 @@ set( vcl_sources
   generic/vcl_string.h
   generic/vcl_typeinfo.h
   generic/vcl_utility.h
-  generic/vcl_valarray.h
   generic/vcl_vector.h
 
   iso/vcl_algorithm.hxx  iso/vcl_algorithm.h
-  iso/vcl_complex.hxx    iso/vcl_complex.h
   iso/vcl_deque.hxx      iso/vcl_deque.h
   iso/vcl_functional.hxx iso/vcl_functional.h
   iso/vcl_iterator.hxx   iso/vcl_iterator.h
@@ -158,13 +153,11 @@ set( vcl_sources
   iso/vcl_ciso646.h
   iso/vcl_climits.h
   iso/vcl_clocale.h
-  iso/vcl_cmath.h
   iso/vcl_csetjmp.h
   iso/vcl_csignal.h
   iso/vcl_cstdarg.h
   iso/vcl_cstddef.h
   iso/vcl_cstdio.h
-  iso/vcl_cstdlib.h
   iso/vcl_cstring.h
   iso/vcl_ctime.h
   iso/vcl_cwchar.h
@@ -187,7 +180,6 @@ set( vcl_sources
   iso/vcl_stdexcept.h
   iso/vcl_streambuf.h
   iso/vcl_typeinfo.h
-  iso/vcl_valarray.h
 
   # The following shall not be used other than as reference count for smart pointers
   vcl_atomic_count.h
