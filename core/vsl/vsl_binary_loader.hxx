@@ -5,7 +5,7 @@
 // \file
 
 #include "vsl_binary_loader.h"
-#include <vcl_vector.hxx>
+#include <vcl_vector.h>
 
 template<class BaseClass>
 vsl_binary_loader<BaseClass>& vsl_binary_loader<BaseClass>::instance()

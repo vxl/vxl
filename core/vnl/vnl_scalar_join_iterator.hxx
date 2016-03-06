@@ -10,13 +10,12 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_scalar_join_iterator.h"
-#include <vcl_list.hxx>
+#include <vcl_list.h>
 
 #define VNL_SCALAR_JOIN_ITERATOR_INSTANTIATE(T) \
 template class vnl_scalar_join_iterator_indexed_pair<T >;\
 template class vnl_scalar_join_iterator<T >; \
 template vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_pair<T >& p);\
-VCL_LIST_INSTANTIATE(vnl_scalar_join_iterator_indexed_pair<T >)
 
 #include <vcl_cassert.h>
 #include <vcl_iostream.h>

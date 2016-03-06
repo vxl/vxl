@@ -3,7 +3,4 @@
 
 #include <vcl_set.h>
 
-#undef VCL_SET_INSTANTIATE
-#define VCL_SET_INSTANTIATE(T, C) /* */
-
 #endif

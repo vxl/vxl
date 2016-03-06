@@ -193,4 +193,3 @@ TESTMAIN(test_polymorphic_io);
 
 // Explicitly instantiate loader
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(test_base_class);
-VCL_VECTOR_INSTANTIATE(test_base_class*);

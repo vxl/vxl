@@ -6,7 +6,7 @@
 
 #include "vsl_clipon_binary_loader.h"
 #include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_vector.hxx>
+#include <vcl_vector.h>
 
 template<class BaseClass, class BaseClassIO>
 vsl_clipon_binary_loader<BaseClass,BaseClassIO>& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance()
@@ -147,7 +147,6 @@ template <class B, class IO>
 vsl_clipon_binary_loader<B, IO>* vsl_clipon_binary_loader<B, IO>::instance_ = 0;
 
 #define VSL_CLIPON_BINARY_LOADER_INSTANTIATE(B,IO) \
-template class vsl_clipon_binary_loader<B, IO >; \
-VCL_VECTOR_INSTANTIATE(IO*)
+template class vsl_clipon_binary_loader<B, IO >;
 
 #endif // vsl_clipon_binary_loader_hxx_

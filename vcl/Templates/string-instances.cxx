@@ -1,7 +1,5 @@
-#include <vcl_string.hxx>
+#include <vcl_string.h>
 #include <vcl_iostream.h>
-
-VCL_BASIC_STRING_INSTANTIATE(char, vcl_char_traits<char> );
 
 // this should work for all compilers. by putting it in the
 // library we (a) get the implicit template instances it

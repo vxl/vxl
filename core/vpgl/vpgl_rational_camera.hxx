@@ -5,7 +5,7 @@
 // \file
 
 #include "vpgl_rational_camera.h"
-#include <vcl_vector.hxx>
+#include <vcl_vector.h>
 #include <vcl_fstream.h>
 #include <vsl/vsl_binary_io.h>
 //#include <vnl/io/vnl_io_matrix_fixed.h>
@@ -820,9 +820,7 @@ template vcl_ostream& operator<<(vcl_ostream&, const vpgl_rational_camera<T >&);
 template vcl_istream& operator>>(vcl_istream&, vpgl_rational_camera<T >&); \
 template vpgl_rational_camera<T > * read_rational_camera(vcl_string); \
 template vpgl_rational_camera<T > * read_rational_camera(vcl_istream&); \
-template vpgl_rational_camera<T > * read_rational_camera_from_txt(vcl_string); \
-typedef vpgl_scale_offset<T > soff; \
-VCL_VECTOR_INSTANTIATE(soff)
+template vpgl_rational_camera<T > * read_rational_camera_from_txt(vcl_string);
 
 
 #endif // vpgl_rational_camera_hxx_

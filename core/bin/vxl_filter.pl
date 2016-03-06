@@ -456,9 +456,7 @@ sub process_headers {
 
       s!<cool/Array.h>!<vcl_vector.h>!;
       s!<cool/ArrayP.h>!<vcl_vector.h>!;
-      s!<cool/Array.C>!<vcl_vector.hxx>!;
       s!<cool/List(|P).h>!<vcl_list.h>!;
-      s!<cool/List.C>!<vcl_list.hxx>!;
       s!^(\#include +\<(Geometry|Topology)/)!//$1!;
     }
 
@@ -680,7 +678,6 @@ sub process_lines {
 
       # Instantiation macros.
       #deprecated:
-      #  s/\bINSTANTIATE_UNARY\b/VCL_SWAP_INSTANTIATE /g;
       #  HASHKEY, HASHMAP, HASHTABLE
       s/\bINSTANTIATE_COMPARISONS/\/\/INSTANTIATE_COMPARISONS/;
       s/\bINSTANTIATE_UNARY/\/\/INSTANTIATE_UNARY/;

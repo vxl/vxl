@@ -7,7 +7,7 @@
 
 #include "vsl_binary_loader_base.h"
 #include <vcl_vector.h>
-#include <vcl_vector.hxx>
+#include <vcl_vector.h>
 #include <vsl/vsl_indent.h>
 
 // List of all loaders register_this()'ed

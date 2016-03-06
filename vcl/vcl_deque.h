@@ -5,9 +5,4 @@
 
 #include "iso/vcl_deque.h"
 
-#define VCL_DEQUE_INSTANTIATE \
-extern "include vcl_deque.hxx instead"
-
-#include "vcl_deque.hxx"
-
 #endif // vcl_deque_h_

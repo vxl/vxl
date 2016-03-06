@@ -4,7 +4,7 @@
 //:
 // \file
 #include "bpgl_segmented_rolling_shutter_camera.h"
-#include <vcl_vector.hxx>
+#include <vcl_vector.h>
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

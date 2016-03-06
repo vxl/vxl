@@ -3,7 +3,4 @@
 
 #include <vcl_stack.h>
 
-#undef VCL_STACK_INSTANTIATE
-#define VCL_STACK_INSTANTIATE(T) /* */
-
 #endif

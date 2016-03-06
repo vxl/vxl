@@ -5,7 +5,7 @@
 // \file
 #include "bpgl_comp_rational_camera.h"
 #include <vcl_cmath.h>
-#include <vcl_vector.hxx>
+#include <vcl_vector.h>
 #include <vcl_fstream.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>

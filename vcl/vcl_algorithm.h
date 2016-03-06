@@ -24,6 +24,4 @@ inline T vcl_min(T const& a, T const& b)
 }
 #endif
 
-#include "vcl_algorithm.hxx"
-
 #endif // vcl_algorithm_h_
