@@ -1,51 +1,47 @@
-// This is vcl/vcl_iostream.h
 #ifndef vcl_iostream_h_
 #define vcl_iostream_h_
-//:
-// \file
-// \brief Include compiler's <iostream.h> in a uniform way.
-// \author awf@robots.ox.ac.uk
-//
-//  In particular, define the following
-// \code
-//   vcl_ostream
-//   vcl_ios_X (as in ios::X)
-//   operator>>(vcl_ostream &, T &) for T in {signed char, bool}
-//   vcl_hex
-//   vcl_dec
-//   vcl_ws
-//   vcl_setprecision
-//   vcl_streampos
-//   vcl_streambuf
-//   vcl_streamsize
-//   vcl_cin
-//   vcl_cout
-//   vcl_cerr
-// \endcode
-//
 
-#include "vcl_iosfwd.h" // Include this to ensure the two are consistent.
-
-// Notes to maintainers.
-//   The purpose of this file is to repair broken iostream
-// headers. Thus in conditional logic, the compilers that
-// behave in a non-standard way should be treated first, as
-// special cases, and the #else arm should contain the
-// appropriate action for an ISO compiler.
-//
-// On win32, <iostream.h> contains old crufty iostreams and
-// <iostream> contains new standard ones. There is no iosfwd
-// for the old ones and <string> includes the new iostreams.
-// So we must avoid the old ones at any price.
-//
-// ------------------------------------------------------------
-#include "iso/vcl_iostream.h"
-
-   // -------------------- miscellaneous fixes which can go at the end: -------
-
-// It seems that VC++ can show strange behaviour without this include:
-#if defined(VCL_VC)
-# include <vcl_fstream.h>
-#endif
+#include "vcl_compiler.h"
+#include <iostream>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+#include "vcl_iosfwd.h"
+#include "vcl_cstddef.h"
+#include "vcl_ios.h"
+#include "vcl_iomanip.h"
+#include "vcl_istream.h"
+#include "vcl_ostream.h"
+//vcl alias names to std names
+#define vcl_cin std::cin
+#define vcl_cout std::cout
+#define vcl_cerr std::cerr
+#define vcl_clog std::clog
+#define vcl_wcout std::wcout
+// the following are not actually in the
+// <iostream> synopsis. for example, endl
+// and ends actually come from <ostream>.
+// hex, oct, dec, ws, setprecision, setw,
+// setfill, fixed, scientific come from
+// <iomanip>.
+#define vcl_ios_in std::ios::in
+#define vcl_ios_out std::ios::out
+#define vcl_ios_ate std::ios::ate
+#define vcl_ios_app std::ios::app
+#define vcl_ios_trunc std::ios::trunc
+#define vcl_ios_binary std::ios::binary
+#define vcl_ios_openmode std::ios::openmode
+#define vcl_ostream std::ostream
+#define vcl_endl std::endl
+#define vcl_ends std::ends
+#define vcl_flush std::flush
+#define vcl_streampos std::streampos
+#define vcl_streambuf std::streambuf
+#define vcl_hex std::hex
+#define vcl_oct std::oct
+#define vcl_dec std::dec
+#define vcl_ws std::ws
 
 #endif // vcl_iostream_h_

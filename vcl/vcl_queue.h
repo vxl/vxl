@@ -2,7 +2,15 @@
 #define vcl_queue_h_
 
 #include "vcl_compiler.h"
-
-#include "iso/vcl_queue.h"
+#include <queue>
+/* The following includes are needed to preserve backwards
+   compatilibility for external applications.  Previously
+   definitions were defined in multiple headers with conditional
+   ifndef guards, but we now include a reference header
+   instead */
+//no dependancies remove comment above
+//vcl alias names to std names
+#define vcl_queue std::queue
+#define vcl_priority_queue std::priority_queue
 
 #endif // vcl_queue_h_

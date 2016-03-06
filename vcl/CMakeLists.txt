@@ -40,7 +40,7 @@ set( vcl_sources
   vcl_ciso646.h
   vcl_climits.h
   vcl_clocale.h
-  vcl_complex.hxx        vcl_complex.h
+  vcl_complex.h
   vcl_complex_fwd.h
   vcl_csetjmp.h
   vcl_csignal.h
@@ -61,7 +61,7 @@ set( vcl_sources
   vcl_iosfwd.h
   vcl_iostream.h
   vcl_istream.h
-  vcl_iterator.hxx       vcl_iterator.h
+  vcl_iterator.h
   vcl_limits.h
   vcl_list.h
   vcl_locale.h
@@ -84,110 +84,6 @@ set( vcl_sources
   vcl_vector.h
   vcl_sys/time.h
   vcl_sys/types.h
-
-  generic/vcl_algorithm.h
-  generic/vcl_bitset.h
-  generic/vcl_blah.h
-  generic/vcl_cassert.h
-  generic/vcl_cctype.h
-  generic/vcl_cerrno.h
-  generic/vcl_cfloat.h
-  generic/vcl_ciso646.h
-  generic/vcl_climits.h
-  generic/vcl_clocale.h
-  generic/vcl_cmath.h
-  generic/vcl_complex.h
-  generic/vcl_csetjmp.h
-  generic/vcl_csignal.h
-  generic/vcl_cstdarg.h
-  generic/vcl_cstddef.h
-  generic/vcl_cstdio.h
-  generic/vcl_cstdlib.h
-  generic/vcl_cstring.h
-  generic/vcl_ctime.h
-  generic/vcl_cwchar.h
-  generic/vcl_cwctype.h
-  generic/vcl_deque.h
-  generic/vcl_exception.h
-  generic/vcl_fstream.h
-  generic/vcl_functional.h
-  generic/vcl_iomanip.h
-  generic/vcl_ios.h
-  generic/vcl_iosfwd.h
-  generic/vcl_iostream.h
-  generic/vcl_istream.h
-  generic/vcl_iterator.h
-  generic/vcl_limits.h
-  generic/vcl_list.h
-  generic/vcl_locale.h
-  generic/vcl_map.h
-  generic/vcl_memory.h
-  generic/vcl_memory_tr1.h
-  generic/vcl_numeric.h
-  generic/vcl_ostream.h
-  generic/vcl_queue.h
-  generic/vcl_set.h
-  generic/vcl_sstream.h
-  generic/vcl_stack.h
-  generic/vcl_stdexcept.h
-  generic/vcl_streambuf.h
-  generic/vcl_string.h
-  generic/vcl_typeinfo.h
-  generic/vcl_utility.h
-  generic/vcl_valarray.h
-  generic/vcl_vector.h
-
-  iso/vcl_algorithm.h
-  iso/vcl_complex.hxx    iso/vcl_complex.h
-  iso/vcl_deque.h
-  iso/vcl_functional.h
-  iso/vcl_iterator.hxx   iso/vcl_iterator.h
-  iso/vcl_list.h
-  iso/vcl_map.h
-  iso/vcl_queue.h
-  iso/vcl_set.h
-  iso/vcl_stack.h
-  iso/vcl_string.h
-  iso/vcl_utility.h
-  iso/vcl_vector.h
-  iso/vcl_bitset.h
-  iso/vcl_cassert.h
-  iso/vcl_cctype.h
-  iso/vcl_cerrno.h
-  iso/vcl_cfloat.h
-  iso/vcl_ciso646.h
-  iso/vcl_climits.h
-  iso/vcl_clocale.h
-  iso/vcl_cmath.h
-  iso/vcl_csetjmp.h
-  iso/vcl_csignal.h
-  iso/vcl_cstdarg.h
-  iso/vcl_cstddef.h
-  iso/vcl_cstdio.h
-  iso/vcl_cstdlib.h
-  iso/vcl_cstring.h
-  iso/vcl_ctime.h
-  iso/vcl_cwchar.h
-  iso/vcl_cwctype.h
-  iso/vcl_exception.h
-  iso/vcl_fstream.h
-  iso/vcl_iomanip.h
-  iso/vcl_ios.h
-  iso/vcl_iosfwd.h
-  iso/vcl_iostream.h
-  iso/vcl_istream.h
-  iso/vcl_limits.h
-  iso/vcl_locale.h
-  iso/vcl_memory.h
-  iso/vcl_memory_tr1.h
-  iso/vcl_new.h
-  iso/vcl_numeric.h
-  iso/vcl_ostream.h
-  iso/vcl_sstream.h
-  iso/vcl_stdexcept.h
-  iso/vcl_streambuf.h
-  iso/vcl_typeinfo.h
-  iso/vcl_valarray.h
 
   # The following shall not be used other than as reference count for smart pointers
   vcl_atomic_count.h
