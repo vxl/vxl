@@ -6,7 +6,7 @@ VXL_BUILD_DIR=/usr/src/vxl-build
 DOCKER_RUN_COMMAND=(
   docker run
     --rm
-    vxl/travisMarch
+    vxl:travisMarch
     /bin/bash -c "
       echo '$HOME';
       git clone http://github.com/vxl/vxl.git;
