@@ -6,7 +6,11 @@ RUN apt-get update && apt-get install -y \
   cmake \
   git
 
-RUN mkdir -p /usr/src/vxl-build
-WORKDIR /usr/src/
+
+RUN useradd -m travis
+ENV HOME /home/travis
+USER travis
+
+
 
 CMD /bin/bash  
