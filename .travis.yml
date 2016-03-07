@@ -26,7 +26,7 @@ git:
 #script:
 #  - export PATH=$HOME/deps/bin:$PATH
 before install:
-  - docker build -t vxl/travisMarch7_2016 .
+  - docker build -t vxl/travisMarch .
 
 script:
   - /bin/bash dockerRunScript.sh
