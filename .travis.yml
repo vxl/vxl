@@ -29,5 +29,6 @@ before_install:
   - docker build -t myvxl:m7 .
 
 script:
-  - docker images
+#  - pwd
+#  - docker images
   - /bin/bash dockerRunScript.sh
