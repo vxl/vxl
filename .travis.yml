@@ -29,4 +29,4 @@ before install:
   - docker build -t vxl/travisMarch7_2016 .
 
 script:
-  - bash dockerRunScript.sh
+  - /bin/bash dockerRunScript.sh
