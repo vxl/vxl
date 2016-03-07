@@ -1,7 +1,11 @@
 #Travis CI configuration for VXL
 # See http://travis-ci.org/vxl/vxl
 
-sudo: false
+# sudo is required for using docker containers
+sudo: required
+
+services:
+  - docker
 
 language: cpp
 compiler:
@@ -21,18 +25,8 @@ git:
 
 #script:
 #  - export PATH=$HOME/deps/bin:$PATH
+before install:
+  - docker build -t vxl/travisMarch7_2016 .
+
 script:
-  - cmake --version
-  - mkdir build
-  - mkdir $HOME/install
-  - cd build
-  - cmake
-          -DCMAKE_INSTALL_PREFIX=$HOME/install
-          -DCMAKE_CXX_STANDARD=98
-          ../
-  - ctest -D ExperimentalStart
-  - ctest -D ExperimentalConfigure
-  - ctest -D ExperimentalBuild -j2
-  - ctest -D ExperimentalTest --schedule-random -j2
-  - ctest -D ExperimentalSubmit
-  - make install
+  - dockerRunScript.sh
