@@ -30,4 +30,4 @@ before_install:
 
 script:
   - docker images
-#- /bin/bash dockerRunScript.sh
+  - /bin/bash dockerRunScript.sh
