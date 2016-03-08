@@ -15,10 +15,10 @@ DOCKER_RUN_COMMAND=(
       ls;
       whoami;
       uname -a;
-      cd;
+      cd ${VXL_BASE_DIR};
       pwd;
       ls;
-      ls -R;
+#      ls -R;
       echo 'hello';
       cmake --version
 #     git clone http://github.com/vxl/vxl.git;
