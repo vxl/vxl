@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y \
 
 #RUN sudo sudo setenforce 0
 
-RUN useradd -m travis
-ENV HOME /home/travis
-USER travis
+#RUN useradd -m travis
 
+RUN mkdir -p /home/travis/build/vxl
 
+WORKDIR /home/travie/build/vxl
 
 CMD /bin/bash  
