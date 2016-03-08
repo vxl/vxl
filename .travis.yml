@@ -1,8 +1,9 @@
 #Travis CI configuration for VXL
 # See http://travis-ci.org/vxl/vxl
 
-# sudo is required for using docker containers
+# sudo is required for using docker containers?
 sudo: required
+#sudo: false
 
 services:
   - docker

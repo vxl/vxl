@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
   cmake \
   git
 
+RUN sudo sudo setenforce 0
 
 RUN useradd -m travis
 ENV HOME /home/travis

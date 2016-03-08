@@ -8,7 +8,7 @@ VXL_BUILD_DIR=/home/travis/build/vxl/vxl-build
 DOCKER_RUN_COMMAND=(
   docker run
 #    --rm
-    -v ${VXL_BASE_DIR}:${VXL_BASE_DIR}
+    -v ${VXL_BASE_DIR}:${VXL_BASE_DIR}:Z
     myvxl:m7
     /bin/bash -c "
       pwd;
