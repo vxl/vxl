@@ -17,6 +17,8 @@ DOCKER_RUN_COMMAND=(
       uname -a;
       cd;
       pwd;
+      ls;
+      ls -R;
       echo 'hello';
       cmake --version
 #     git clone http://github.com/vxl/vxl.git;
