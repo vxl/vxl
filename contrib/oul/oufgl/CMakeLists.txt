@@ -14,7 +14,7 @@ set(oufgl_sources
     frame_grabber.h
 )
 
-vxl_add_library(LIBNAME oufgl LIBSRCS ${oufgl_sources})
+vxl_add_library(LIBRARY_NAME oufgl LIBRARY_SOURCES ${oufgl_sources})
 target_link_libraries( oufgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 rt)
 
 if( BUILD_TESTING )

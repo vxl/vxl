@@ -8,7 +8,7 @@ set(bvpl_octree_sample_sources
 
 aux_source_directory(Templates bvpl_octree_sample_sources)
 
-vxl_add_library( LIBNAME bvpl_octree_sample LIBSRCS ${bvpl_octree_sample_sources})
+vxl_add_library(LIBRARY_NAME bvpl_octree_sample LIBRARY_SOURCES ${bvpl_octree_sample_sources})
 target_link_libraries(bvpl_octree_sample ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl)
 
 if( BUILD_TESTING )

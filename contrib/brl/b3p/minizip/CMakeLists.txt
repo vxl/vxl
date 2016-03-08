@@ -21,7 +21,7 @@ if(WIN32)
        iowin32.c    iowin32.h)
 endif()
 
-vxl_add_library( LIBNAME minizip LIBSRCS ${minizip_sources} )
+vxl_add_library(LIBRARY_NAME minizip LIBRARY_SOURCES ${minizip_sources} )
 target_link_libraries(minizip z)
 
 endif()

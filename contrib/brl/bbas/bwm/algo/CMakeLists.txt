@@ -32,7 +32,7 @@ if(ECW_FOUND)
   include_directories(${ECW_INCLUDE_DIR})
 endif()
 
-vxl_add_library( LIBNAME bwm_algo LIBSRCS ${bwm_algo_sources})
+vxl_add_library(LIBRARY_NAME bwm_algo LIBRARY_SOURCES ${bwm_algo_sources})
 
 target_link_libraries( bwm_algo sdet vtol ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo vsol ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats bgui brip vdgl bsta ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl shapelib brad)
 

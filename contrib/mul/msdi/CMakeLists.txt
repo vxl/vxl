@@ -16,7 +16,7 @@ set(msdi_sources
 
 #aux_source_directory(Templates msdi_sources)
 
-vxl_add_library( LIBNAME msdi LIBSRCS ${msdi_sources})
+vxl_add_library(LIBRARY_NAME msdi LIBRARY_SOURCES ${msdi_sources})
 target_link_libraries(msdi msm)
 
 if(BUILD_TESTING)

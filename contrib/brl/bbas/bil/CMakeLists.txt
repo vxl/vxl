@@ -11,7 +11,7 @@ set(bil_sources
 
 aux_source_directory(Templates bil_sources)
 
-vxl_add_library( LIBNAME bil LIBSRCS  ${bil_sources})
+vxl_add_library(LIBRARY_NAME bil LIBRARY_SOURCES  ${bil_sources})
 
 target_link_libraries(bil ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vsl)
 

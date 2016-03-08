@@ -69,7 +69,7 @@ set(sdet_sources
 )
 aux_source_directory(Templates sdet_sources)
 
-vxl_add_library( LIBNAME sdet LIBSRCS ${sdet_sources})
+vxl_add_library(LIBRARY_NAME sdet LIBRARY_SOURCES ${sdet_sources})
 
 target_link_libraries(sdet brip bsol btol bdgl bvgl_algo bnl gevd vdgl vtol vsol imesh_algo imesh ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl bvgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io bil_algo ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl_io pdf1d)
 

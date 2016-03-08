@@ -17,7 +17,7 @@ if(EXPAT_FOUND)
  endif()
 endif()
 
-vxl_add_library( LIBNAME bkml LIBSRCS  ${bkml_sources})
+vxl_add_library(LIBRARY_NAME bkml LIBRARY_SOURCES  ${bkml_sources})
 
 target_link_libraries(bkml ${VXL_LIB_PREFIX}vgl)
 

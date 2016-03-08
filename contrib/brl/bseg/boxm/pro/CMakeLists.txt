@@ -17,7 +17,7 @@ if(EXPAT_FOUND)
   aux_source_directory(Templates boxm_pro_sources)
   aux_source_directory(processes boxm_pro_sources)
 
-  vxl_add_library( LIBNAME boxm_pro LIBSRCS ${boxm_pro_sources})
+  vxl_add_library(LIBRARY_NAME boxm_pro LIBRARY_SOURCES ${boxm_pro_sources})
 
   target_link_libraries(boxm_pro boxm boxm_util boxm_sample_algo boxm_sample vpgl_pro imesh bprb brdb brip vsol bsta bsta_pro ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 

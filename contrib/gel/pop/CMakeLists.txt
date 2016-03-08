@@ -27,7 +27,7 @@ set(pop_sources
     pop_vertex.cxx                  pop_vertex.h
 )
 
-vxl_add_library(LIBNAME pop LIBSRCS ${pop_sources})
+vxl_add_library(LIBRARY_NAME pop LIBRARY_SOURCES ${pop_sources})
 target_link_libraries( pop ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_algo)
 
 if( BUILD_TESTING )

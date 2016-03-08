@@ -28,7 +28,7 @@ set(vgl_io_sources
 
 aux_source_directory(Templates vgl_io_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgl_io LIBSRCS ${vgl_io_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgl_io LIBRARY_SOURCES ${vgl_io_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl )
 
 if( BUILD_TESTING)

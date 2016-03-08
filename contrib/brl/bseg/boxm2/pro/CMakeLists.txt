@@ -31,7 +31,7 @@ if(EXPAT_FOUND)
     set(HAS_GEOTIFF 1 )
   endif()
 
-  vxl_add_library( LIBNAME boxm2_pro LIBSRCS ${boxm2_pro_sources})
+  vxl_add_library(LIBRARY_NAME boxm2_pro LIBRARY_SOURCES ${boxm2_pro_sources})
 
   #install the .h .hxx and libs
 

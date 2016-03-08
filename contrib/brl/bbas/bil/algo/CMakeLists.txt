@@ -31,7 +31,7 @@ set( bil_algo_sources
 
 aux_source_directory(Templates bil_algo_sources)
 
-vxl_add_library( LIBNAME bil_algo LIBSRCS ${bil_algo_sources} )
+vxl_add_library(LIBRARY_NAME bil_algo LIBRARY_SOURCES ${bil_algo_sources} )
 
 target_link_libraries( bil_algo ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl vsol)
 

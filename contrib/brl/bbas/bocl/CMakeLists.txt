@@ -23,7 +23,7 @@ if(OPENCL_FOUND)
       bocl_kernel.h       bocl_kernel.cxx
   )
   aux_source_directory(Templates bocl_sources)
-  vxl_add_library( LIBNAME bocl LIBSRCS ${bocl_sources} )
+  vxl_add_library(LIBRARY_NAME bocl LIBRARY_SOURCES ${bocl_sources} )
 
   target_link_libraries(bocl brdb ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${OPENCL_LIBRARIES})
 

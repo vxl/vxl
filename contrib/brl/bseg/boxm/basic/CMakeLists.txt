@@ -12,7 +12,7 @@ set(boxm_basic_sources
 
 aux_source_directory(Templates boxm_basic_sources)
 
-vxl_add_library( LIBNAME boxm_basic LIBSRCS ${boxm_basic_sources})
+vxl_add_library(LIBRARY_NAME boxm_basic LIBRARY_SOURCES ${boxm_basic_sources})
 
 if( BUILD_TESTING )
   add_subdirectory(tests)

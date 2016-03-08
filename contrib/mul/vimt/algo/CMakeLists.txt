@@ -10,7 +10,7 @@ set( vimt_algo_sources
   vimt_dummy.cxx
 )
 
-vxl_add_library( LIBNAME vimt_algo LIBSRCS ${vimt_algo_sources})
+vxl_add_library(LIBRARY_NAME vimt_algo LIBRARY_SOURCES ${vimt_algo_sources})
 target_link_libraries( vimt_algo vimt ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl )
 
 if( BUILD_TESTING )

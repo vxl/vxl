@@ -16,4 +16,4 @@ set( clipper_sources
 
 add_definitions( -D_FILE_OFFSET_BITS )
 
-vxl_add_library( LIBNAME clipper LIBSRCS ${clipper_sources} )
+vxl_add_library(LIBRARY_NAME clipper LIBRARY_SOURCES ${clipper_sources} )

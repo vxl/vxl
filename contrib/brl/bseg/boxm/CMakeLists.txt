@@ -21,7 +21,7 @@ set(boxm_sources
 
 aux_source_directory(Templates boxm_sources)
 
-vxl_add_library( LIBNAME boxm LIBSRCS  ${boxm_sources})
+vxl_add_library(LIBRARY_NAME boxm LIBRARY_SOURCES  ${boxm_sources})
 
 target_link_libraries(boxm boct bsta brdb ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_xio ${VXL_LIB_PREFIX}vpgl_algo vsol expatpp ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}vcl)
 

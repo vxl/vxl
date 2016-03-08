@@ -22,7 +22,7 @@ set(mipa_sources
 )
 
 aux_source_directory(Templates mipa_sources)
-vxl_add_library( LIBNAME mipa LIBSRCS ${mipa_sources} )
+vxl_add_library(LIBRARY_NAME mipa LIBRARY_SOURCES ${mipa_sources} )
 target_link_libraries(mipa vimt vpdfl)
 
 if(BUILD_MUL_TOOLS)

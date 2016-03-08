@@ -16,7 +16,7 @@ bgrl2_hg_hypergraph.cxx    bgrl2_hg_hypergraph.h
 
 )
 
-vxl_add_library( LIBNAME bgrl2 LIBSRCS ${bgrl2_sources})
+vxl_add_library(LIBRARY_NAME bgrl2 LIBRARY_SOURCES ${bgrl2_sources})
 
 target_link_libraries( bgrl2 ${VXL_LIB_PREFIX}vbl )
 

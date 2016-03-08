@@ -24,7 +24,7 @@ else()
      )
 endif()
 
-vxl_add_library( LIBNAME baio LIBSRCS ${baio_sources})
+vxl_add_library(LIBRARY_NAME baio LIBRARY_SOURCES ${baio_sources})
 
 if(APPLE)
     target_link_libraries(baio c)

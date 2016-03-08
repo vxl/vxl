@@ -31,7 +31,7 @@ if(VGUI_FOUND)
      )
   aux_source_directory(Templates boxm2_view_sources)
 
-  vxl_add_library( LIBNAME boxm2_view LIBSRCS ${boxm2_view_sources} )
+  vxl_add_library(LIBRARY_NAME boxm2_view LIBRARY_SOURCES ${boxm2_view_sources} )
 
   #install the .h .hxx and libs
 

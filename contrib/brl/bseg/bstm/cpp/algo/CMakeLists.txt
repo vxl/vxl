@@ -14,7 +14,7 @@ set(bstm_cpp_algo_sources
 
 aux_source_directory(Templates bstm_cpp_algo_sources)
 
-vxl_add_library( LIBNAME bstm_cpp_algo LIBSRCS  ${bstm_cpp_algo_sources})
+vxl_add_library(LIBRARY_NAME bstm_cpp_algo LIBRARY_SOURCES  ${bstm_cpp_algo_sources})
 target_link_libraries(bstm_cpp_algo bstm_basic boxm2 boxm2_cpp_algo bstm bstm_io ${VXL_LIB_PREFIX}vcl)
 
 if( BUILD_TESTING )

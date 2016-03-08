@@ -44,7 +44,7 @@ include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
  )
 
 
- vxl_add_library( LIBNAME geotiff LIBSRCS ${geotiff_sources} )
+ vxl_add_library(LIBRARY_NAME geotiff LIBRARY_SOURCES ${geotiff_sources} )
  target_link_libraries(geotiff ${TIFF_LIBRARIES})
 
 #endif()

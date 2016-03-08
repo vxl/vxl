@@ -22,7 +22,7 @@ if(NETLIB_FOUND)
       imesh_generate_mesh.cxx     imesh_generate_mesh.h)
 endif()
 
-vxl_add_library( LIBNAME imesh_algo LIBSRCS ${imesh_algo_sources} )
+vxl_add_library(LIBRARY_NAME imesh_algo LIBRARY_SOURCES ${imesh_algo_sources} )
 
 if(NETLIB_FOUND)
 

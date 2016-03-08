@@ -9,7 +9,7 @@ set(vgl_xio_sources
 
 aux_source_directory(Templates vgl_xio_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgl_xio LIBSRCS ${vgl_xio_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgl_xio LIBRARY_SOURCES ${vgl_xio_sources})
 if(NOT WIN32)
   set_target_properties( ${VXL_LIB_PREFIX}vgl_xio PROPERTIES COMPILE_FLAGS "-fPIC")
 endif()

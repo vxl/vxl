@@ -15,7 +15,7 @@ set(bsta_io_sources
 )
 #aux_source_directory(Templates bsta_io_sources)
 
-vxl_add_library( LIBNAME bsta_io LIBSRCS  ${bsta_io_sources})
+vxl_add_library(LIBRARY_NAME bsta_io LIBRARY_SOURCES  ${bsta_io_sources})
 target_link_libraries(bsta_io bsta ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )

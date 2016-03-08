@@ -15,7 +15,7 @@ set( bmdl_sources
 
 aux_source_directory(Templates bmdl_sources)
 
-vxl_add_library( LIBNAME bmdl LIBSRCS  ${bmdl_sources})
+vxl_add_library(LIBRARY_NAME bmdl LIBRARY_SOURCES  ${bmdl_sources})
 
 target_link_libraries(bmdl ${VXL_LIB_PREFIX}vil_algo imesh ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil)
 

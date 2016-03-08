@@ -40,7 +40,7 @@ set(msm_sources
 )
 
 aux_source_directory(Templates msm_sources)
-vxl_add_library( LIBNAME msm LIBSRCS ${msm_sources} )
+vxl_add_library(LIBRARY_NAME msm LIBRARY_SOURCES ${msm_sources} )
 target_link_libraries(msm mcal vimt)
 
 add_subdirectory(utils)

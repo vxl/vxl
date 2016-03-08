@@ -36,7 +36,7 @@ set(vil3d_algo_sources
 
 aux_source_directory(Templates vil3d_algo_sources)
 
-vxl_add_library( LIBNAME vil3d_algo LIBSRCS ${vil3d_algo_sources})
+vxl_add_library(LIBRARY_NAME vil3d_algo LIBRARY_SOURCES ${vil3d_algo_sources})
 target_link_libraries( vil3d_algo vil3d ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl )
 
 if( BUILD_TESTING )

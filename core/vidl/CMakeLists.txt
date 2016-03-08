@@ -139,7 +139,7 @@ endif()
 
 aux_source_directory(Templates vidl_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vidl LIBSRCS ${vidl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vidl LIBRARY_SOURCES ${vidl_sources})
 
 target_link_libraries( ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
 if( FFMPEG_FOUND )

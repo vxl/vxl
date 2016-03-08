@@ -7,7 +7,7 @@ set(brad_io_sources
 )
 aux_source_directory(Templates brad_io_sources)
 
-vxl_add_library( LIBNAME brad_io LIBSRCS  ${brad_io_sources})
+vxl_add_library(LIBRARY_NAME brad_io LIBRARY_SOURCES  ${brad_io_sources})
 target_link_libraries(brad_io brad ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )

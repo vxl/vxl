@@ -15,7 +15,7 @@ set(bsl_sources
 )
 aux_source_directory(Templates bsl_sources)
 
-vxl_add_library( LIBNAME bsl LIBSRCS ${bsl_sources})
+vxl_add_library(LIBRARY_NAME bsl LIBRARY_SOURCES ${bsl_sources})
 target_link_libraries(bsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )

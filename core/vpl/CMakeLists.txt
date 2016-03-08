@@ -12,7 +12,7 @@ set( vpl_sources
   vpl_mutex.h
 )
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpl LIBSRCS ${vpl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpl LIBRARY_SOURCES ${vpl_sources})
 if(NOT WIN32)
   set_target_properties(${VXL_LIB_PREFIX}vpl PROPERTIES COMPILE_FLAGS "-fPIC")
 endif()

@@ -11,7 +11,7 @@ if( PYTHON_FOUND )
     bpro_batch.h              bpro_batch.cxx
   )
 
-  vxl_add_library( LIBNAME bpro_batch LIBSRCS  ${bpro_batch_sources})
+  vxl_add_library(LIBRARY_NAME bpro_batch LIBRARY_SOURCES  ${bpro_batch_sources})
   target_link_libraries(bpro_batch bprb brdb bbas_pro ${PYTHON_LIBRARY})
 
   if( BUILD_TESTING )

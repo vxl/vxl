@@ -24,7 +24,7 @@ set(bbgm_sources
 
 aux_source_directory(Templates bbgm_sources)
 
-vxl_add_library( LIBNAME bbgm LIBSRCS  ${bbgm_sources})
+vxl_add_library(LIBRARY_NAME bbgm LIBRARY_SOURCES  ${bbgm_sources})
 
 # add the required libraries into this list
 target_link_libraries(bbgm bsta bsta_algo brip ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl)

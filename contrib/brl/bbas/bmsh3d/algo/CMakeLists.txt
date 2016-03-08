@@ -12,7 +12,7 @@ set( bmsh3d_algo_sources
   bmsh3d_mesh_bnd.cxx         bmsh3d_mesh_bnd.h
 )
 
-vxl_add_library( LIBNAME bmsh3d_algo LIBSRCS  ${bmsh3d_algo_sources})
+vxl_add_library(LIBRARY_NAME bmsh3d_algo LIBRARY_SOURCES  ${bmsh3d_algo_sources})
 target_link_libraries( bmsh3d_algo bmsh3d rply ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 
 if( BUILD_TESTING )

@@ -332,7 +332,7 @@ set( dcmtk_sources
   dcmimgle/libsrc/diutils.cxx
 )
 
-vxl_add_library( LIBNAME dcmtk LIBSRCS ${dcmtk_sources})
+vxl_add_library(LIBRARY_NAME dcmtk LIBRARY_SOURCES ${dcmtk_sources})
 if(WIN32)
   target_link_libraries( dcmtk Netapi32 )
 endif()

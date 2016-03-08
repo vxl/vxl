@@ -14,7 +14,7 @@ set( icam_pro_sources
 aux_source_directory(Templates icam_pro_sources)
 aux_source_directory(processes icam_pro_sources)
 
-vxl_add_library( LIBNAME icam_pro LIBSRCS ${icam_pro_sources})
+vxl_add_library(LIBRARY_NAME icam_pro LIBRARY_SOURCES ${icam_pro_sources})
 target_link_libraries(icam_pro bprb icam ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 
 if( BUILD_TESTING )

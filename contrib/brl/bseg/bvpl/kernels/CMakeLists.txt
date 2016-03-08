@@ -27,7 +27,7 @@ set(bvpl_kernels_sources
 
 aux_source_directory(Templates bvpl_kernels_sources)
 
-vxl_add_library( LIBNAME bvpl_kernels LIBSRCS ${bvpl_kernels_sources})
+vxl_add_library(LIBRARY_NAME bvpl_kernels LIBRARY_SOURCES ${bvpl_kernels_sources})
 target_link_libraries(bvpl_kernels bxml bsvg bsta ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 #Directory with python/c++ processes

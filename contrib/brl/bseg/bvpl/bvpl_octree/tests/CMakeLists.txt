@@ -16,7 +16,7 @@ set(bvpl_octree_test_all_sources
     test_utils.h    test_utils.cxx
    )
 
-vxl_add_library( LIBNAME bvpl_octree_tests_util LIBSRCS  ${bvpl_octree_test_all_sources})
+vxl_add_library(LIBRARY_NAME bvpl_octree_tests_util LIBRARY_SOURCES  ${bvpl_octree_test_all_sources})
 
 target_link_libraries( bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)
 target_link_libraries( bvpl_octree_test_all bvpl_octree_tests_util bvpl_octree_io bvpl_octree bvpl boct boxm ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul)

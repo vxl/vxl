@@ -15,7 +15,7 @@ bpgl_camera_utils.h bpgl_camera_utils.cxx
 
 aux_source_directory(Templates bpgl_sources)
 
-vxl_add_library( LIBNAME bpgl LIBSRCS ${bpgl_sources})
+vxl_add_library(LIBRARY_NAME bpgl LIBRARY_SOURCES ${bpgl_sources})
 target_link_libraries(bpgl brip ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl)
 
 # algorithms involving cameras

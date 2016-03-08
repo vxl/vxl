@@ -39,7 +39,7 @@ configure_file(${expat_SOURCE_DIR}/.NoDartCoverage ${expat_BINARY_DIR}/.NoDartCo
     endif()
   endif()
 
-  vxl_add_library( LIBNAME expat LIBSRCS ${expat_sources})
+  vxl_add_library(LIBRARY_NAME expat LIBRARY_SOURCES ${expat_sources})
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

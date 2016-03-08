@@ -13,7 +13,7 @@ set(bwm_reg_sources
 
 aux_source_directory(Templates bwm_reg_sources)
 
-vxl_add_library( LIBNAME bwm_reg LIBSRCS ${bwm_reg_sources})
+vxl_add_library(LIBRARY_NAME bwm_reg LIBRARY_SOURCES ${bwm_reg_sources})
 
 target_link_libraries( bwm_reg brip sdet ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl bsta bsol vsol ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo )
 

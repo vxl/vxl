@@ -508,7 +508,7 @@ set( vgui_sources ${vgui_sources}
   vgui_register_all.cxx
 )
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgui LIBSRCS ${vgui_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgui LIBRARY_SOURCES ${vgui_sources})
 set( VGUI_FOUND "YES" CACHE INTERNAL "Was vgui successfully built?" )
 
 # Dependencies on other vxl libraries

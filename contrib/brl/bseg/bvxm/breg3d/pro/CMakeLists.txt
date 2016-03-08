@@ -19,7 +19,7 @@ set(breg3d_pro_sources
 
 aux_source_directory(Templates breg3d_pro_sources)
 
-vxl_add_library( LIBNAME breg3d_pro LIBSRCS ${breg3d_pro_sources})
+vxl_add_library(LIBRARY_NAME breg3d_pro LIBRARY_SOURCES ${breg3d_pro_sources})
 
 target_link_libraries(breg3d_pro breg3d bprb vpgl_pro ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo vsol brip brdb)
 

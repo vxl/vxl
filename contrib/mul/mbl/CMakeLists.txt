@@ -118,7 +118,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(Templates/mbl_data_wrapper_mixer+vnl_vector+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-vxl_add_library( LIBNAME mbl LIBSRCS ${mbl_sources})
+vxl_add_library(LIBRARY_NAME mbl LIBRARY_SOURCES ${mbl_sources})
 target_link_libraries(mbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 
 if(BUILD_TESTING)
