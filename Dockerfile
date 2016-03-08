@@ -3,15 +3,39 @@ MAINTAINER Alexander Leinoff <alexander-leinoff@uiowa.edu>
 
 RUN apt-get update && apt-get install -y \
   build-essential \
-#  clang \
-  cmake \
-  git
+  clang \
+  curl \
+  git \
+  libncurses-dev \
+  vim \
+  zlib1g-dev
 
 
-RUN useradd -m travis
+# Install CMake 2.8.9
+WORKDIR /tmp/
+RUN curl -O https://cmake.org/files/v2.8/cmake-2.8.9.tar.gz && \
+    tar xvzf cmake-2.8.9.tar.gz && \
+    mkdir /tmp/cmake-build && \
+    cd /tmp/cmake-build && \
+    ../cmake-2.8.9/bootstrap && \
+    make -j$(nproc) && \
+    ./bin/cmake -DCMAKE_BUILD_TYPE:STRING=Release . && \
+    make -j$(nproc) && \
+    make install && \
+    cd /tmp && \
+    rm -rf cmake*
 
-RUN mkdir -p /home/travis/build/vxl
 
-WORKDIR /home/travis/build/vxl
+# Normal user
+RUN useradd -m vxl
 
-CMD /bin/bash  
+
+
+USER vxl
+
+RUN mkdir -p /home/vxl/vxl
+RUN mkdir -p /home/vxl/build
+
+WORKDIR /home/vxl/vxl
+
+CMD /bin/bash

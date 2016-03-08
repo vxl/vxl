@@ -1,7 +1,7 @@
 #Travis CI configuration for VXL
 # See http://travis-ci.org/vxl/vxl
 
-# sudo is required for using docker containers?
+# sudo is required for using docker containers
 sudo: required
 #sudo: false
 
@@ -32,4 +32,5 @@ before_install:
 script:
 #  - pwd
 #  - docker images
-  - /bin/bash dockerRunScript.sh
+  - docker run -v /home/travis/build/vxl/vxl:/home/vxl/vxl myvxl:m7 /bin/bash -c "export C_COMPILER='gcc'; export CXX_COMPILER='g++'; bash dockerRunCommand.sh"
+  - docker run -v /home/travis/build/vxl/vxl:/home/vxl/vxl myvxl:m7 /bin/bash -c "export C_COMPILER='clang'; export CXX_COMPILER='clang++'; bash dockerRunCommand.sh"
