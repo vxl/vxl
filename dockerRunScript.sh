@@ -22,6 +22,7 @@ DOCKER_RUN_COMMAND=(
       echo 'hello';
       cmake --version
 #     git clone http://github.com/vxl/vxl.git;
+      mkdir -p vxl-build
       cd vxl-build;
       cmake ../vxl -DCMAKE_CXX_STANDARD=98;
       ctest -D ExperimentalStart
