@@ -8,7 +8,7 @@ VXL_BUILD_DIR=/home/travis/build/vxl/vxl-build
 DOCKER_RUN_COMMAND=(
   docker run
 #    --rm
-    -v ${VXL_BASE_DIR}:${VXL_BASE_DIR}:Z
+    -v ${VXL_SRC_DIR}:${VXL_SRC_DIR}:Z
     myvxl:m7
     /bin/bash -c "
       pwd;
@@ -23,6 +23,7 @@ DOCKER_RUN_COMMAND=(
       cmake --version
 #     git clone http://github.com/vxl/vxl.git;
       mkdir -p vxl-build
+      ls;
       cd vxl-build;
       cmake ../vxl -DCMAKE_CXX_STANDARD=98;
       ctest -D ExperimentalStart
