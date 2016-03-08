@@ -12,11 +12,11 @@ DOCKER_RUN_COMMAND=(
     myvxl:m7
     /bin/bash -c "
       pwd;
+      ls;
       whoami;
       uname -a;
       cd;
       pwd;
-      ls;
       echo 'hello';
       cmake --version
 #     git clone http://github.com/vxl/vxl.git;

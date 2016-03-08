@@ -26,7 +26,7 @@ git:
 #script:
 #  - export PATH=$HOME/deps/bin:$PATH
 before_install:
-#  - docker build -t myvxl:m7 .
+  - docker build -t myvxl:m7 .
 
 script:
 #  - pwd
