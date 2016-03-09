@@ -74,9 +74,9 @@ class sdet_nms
   bool use_adaptive_thresh_;                       ///< use reliable threshold or not
 
   //references to the data passed to this algo
-  const vil_image_view<double>& dir_x_;
-  const vil_image_view<double>& dir_y_;
-  const vil_image_view<double>& grad_mag_;
+  const vil_image_view<double> dir_x_;
+  const vil_image_view<double> dir_y_;
+  const vil_image_view<double> grad_mag_;
 
   // various 2d arrays holding the NMS pixel information to allow for post processing before
   // edgel tokens are returned
@@ -88,10 +88,11 @@ class sdet_nms
   vbl_array_2d<double> deriv_; ///< to store the second derivative of the maxima points
 
  protected:
-  //: default constructor is not to be used
-  sdet_nms();
 
  public:
+  //: default constructor is not to be used
+  sdet_nms() VXL_DELETE_FUNCTION;
+
   //: Constructor from a parameter block, gradient magnitudes given as an image and gradients given as component images
   sdet_nms(const sdet_nms_params& nsp,
            const vil_image_view<double>& dir_x,
