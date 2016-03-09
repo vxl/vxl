@@ -5,25 +5,15 @@
 */
 
 #include "vcl_compiler.h"
+#include "vcl_cmath.h"
+#include <valarray>
 
-#include "iso/vcl_valarray.h"
-
-#if !VCL_COMPLEX_POW_WORKS
-// deal with corrections to pow(complex...)
-# undef vcl_pow
-# define vcl_pow vcl_pow
-template<class T> inline vcl_valarray<T>
-  vcl_pow(const vcl_valarray<T>& x, const vcl_valarray<T>& y)
-{ return std::pow(x, y); }
-
-template<class T> inline vcl_valarray<T>
-  vcl_pow(const vcl_valarray<T>& x, const T& y)
-{ return std::pow(x, y); }
-
-template<class T> inline vcl_valarray<T>
-  vcl_pow(const T& x, const vcl_valarray<T>& y)
-{ return std::pow(x, y); }
-
-#endif
+#define vcl_valarray std::valarray
+#define vcl_slice std::slice
+#define vcl_slice_array std::slice_array
+#define vcl_gslice std::gslice
+#define vcl_gslice_array std::gslice_array
+#define vcl_mask_array std::mask_array
+#define vcl_indirect_array std::indirect_array
 
 #endif // vcl_valarray_h_
