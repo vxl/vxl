@@ -177,12 +177,12 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
           sum += 0.25*cyl_map_(kth-1, iz,p);
           w+=0.25;
           }
-        if((iz+1)<nz_)
+        if(iz < (nz_-1))
           {
           sum += 0.25*cyl_map_(kth, iz+1,p);
           w+=0.25;
           }
-        if((iz-1)>=0)
+        if(iz != 0)
           {
           sum += 0.25*cyl_map_(kth, iz-1,p);
           w+=0.25;
