@@ -56,11 +56,44 @@
 // printf() family
 #define vcl_printf std::printf
 #define vcl_sprintf std::sprintf
-#define vcl_snprintf std::snprintf
 #define vcl_fprintf std::fprintf
 #define vcl_vprintf std::vprintf
 #define vcl_vsprintf std::vsprintf
 #define vcl_vfprintf std::vfprintf
+
+// Adapted from
+// http://stackoverflow.com/questions/2915672/snprintf-and-visual-studio-2010
+//
+// Microsoft has finally implemented snprintf in Visual Studio 2015. On earlier
+// versions you can simulate it as below.
+#if defined(_MSC_VER) && _MSC_VER < 1900
+#include <cstdarg>
+__inline int c99_vsnprintf(char *outBuf, size_t size, const char *format, va_list ap)
+{
+    int count = -1;
+
+    if (size != 0)
+        count = _vsnprintf_s(outBuf, size, _TRUNCATE, format, ap);
+    if (count == -1)
+        count = _vscprintf(format, ap);
+
+    return count;
+}
+
+__inline int vcl_snprintf(char *outBuf, size_t size, const char *format, ...)
+{
+    int count;
+    va_list ap;
+
+    va_start(ap, format);
+    count = c99_vsnprintf(outBuf, size, format, ap);
+    va_end(ap);
+
+    return count;
+}
+#else
+#define vcl_snprintf std::snprintf
+#endif
 
 // scanf() family
 #define vcl_scanf std::scanf

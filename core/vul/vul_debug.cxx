@@ -9,6 +9,7 @@
 #include <vcl_compiler.h>
 #include <new>
 #include <cstdlib>
+#include <vcl_cstdio.h> // for vcl_snprintf()
 
 #ifdef _WIN32
 
@@ -41,7 +42,7 @@ static bool vul_debug_core_dump_in_windows_seh(const char * filename,
 {
   static char buffer[2048];
   static int count = 0;
-  std::snprintf(buffer, sizeof(buffer), filename, count++);
+  vcl_snprintf(buffer, sizeof(buffer), filename, count++);
   buffer[sizeof(buffer)-1]=0; // Just in case it is too long
 
   HANDLE hFile = CreateFile( buffer, GENERIC_READ | GENERIC_WRITE,

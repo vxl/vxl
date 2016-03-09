@@ -188,7 +188,7 @@ vcl_cstdio.h,vcl_rewind,std::rewind
 vcl_cstdio.h,vcl_scanf,std::scanf
 vcl_cstdio.h,vcl_setbuf,std::setbuf
 vcl_cstdio.h,vcl_setvbuf,std::setvbuf
-vcl_cstdio.h,vcl_snprintf,std::snprintf
+vcl_cstdio.h,vcl_snprintf,vcl_snprintf
 vcl_cstdio.h,vcl_sprintf,std::sprintf
 vcl_cstdio.h,vcl_sscanf,std::sscanf
 vcl_cstdio.h,vcl_tmpfile,std::tmpfile

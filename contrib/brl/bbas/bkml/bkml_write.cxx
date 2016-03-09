@@ -4,22 +4,23 @@
 #include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
+#include <vcl_cstdio.h>
 #include <iomanip>
 
 std::string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
 {
   std::string result;
   char a[255];
-  std::snprintf(a, 255, "%.2x", alpha);
+  vcl_snprintf(a, 255, "%.2x", alpha);
   result.append(a );
   char b[255];
-  std::snprintf(b, 255, "%.2x", bNum);
+  vcl_snprintf(b, 255, "%.2x", bNum);
   result.append(b );
   char g[255];
-  std::snprintf(g, 255, "%.2x", gNum);
+  vcl_snprintf(g, 255, "%.2x", gNum);
   result.append(g );
   char r[255];
-  std::snprintf(r, 255, "%.2x", rNum);
+  vcl_snprintf(r, 255, "%.2x", rNum);
   result.append(r );
   return result;
 }
