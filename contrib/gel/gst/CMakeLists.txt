@@ -16,7 +16,7 @@ set(gst_sources
 
 aux_source_directory(Templates gst_sources)
 
-vxl_add_library(LIBNAME gst LIBSRCS ${gst_sources})
+vxl_add_library(LIBRARY_NAME gst LIBRARY_SOURCES ${gst_sources})
 target_link_libraries(gst ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )

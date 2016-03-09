@@ -9,7 +9,7 @@ if( HAS_VGUI )
       cvg_hemisphere_tableau.h    cvg_hemisphere_tableau.cxx )
   aux_source_directory(Templates cvg_view_sources)
 
-  vxl_add_library( LIBNAME cvg_view LIBSRCS ${cvg_view_sources})
+  vxl_add_library(LIBRARY_NAME cvg_view LIBRARY_SOURCES ${cvg_view_sources})
   target_link_libraries(cvg_view ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul vsph)
 
   if( BUILD_TESTING )

@@ -35,7 +35,7 @@ set(vsl_sources
 
 aux_source_directory(Templates vsl_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vsl LIBSRCS ${vsl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vsl LIBRARY_SOURCES ${vsl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl )
 
 if(BUILD_TESTING)

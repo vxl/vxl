@@ -15,7 +15,7 @@ set(boxm_util_sources
 
 aux_source_directory(Templates boxm_util_sources)
 
-vxl_add_library( LIBNAME boxm_util LIBSRCS ${boxm_util_sources})
+vxl_add_library(LIBRARY_NAME boxm_util LIBRARY_SOURCES ${boxm_util_sources})
 target_link_libraries(boxm_util boxm boxm_sample bvrml boct bsta ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
 if( BUILD_TESTING )

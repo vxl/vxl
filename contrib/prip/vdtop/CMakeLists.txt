@@ -26,7 +26,7 @@ set(vdtop_sources
     vil_canny_deriche_grad_filter.h
 )
 
-vxl_add_library(LIBNAME vdtop LIBSRCS ${vdtop_sources})
+vxl_add_library(LIBRARY_NAME vdtop LIBRARY_SOURCES ${vdtop_sources})
 target_link_libraries(vdtop vmap ${VXL_LIB_PREFIX}vil)
 
 #if(BUILD_TESTING)

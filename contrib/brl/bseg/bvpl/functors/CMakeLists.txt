@@ -24,7 +24,7 @@ set(bvpl_functors_sources
 
 aux_source_directory(Templates bvpl_functors_sources)
 
-vxl_add_library( LIBNAME bvpl_functors LIBSRCS ${bvpl_functors_sources})
+vxl_add_library(LIBRARY_NAME bvpl_functors LIBRARY_SOURCES ${bvpl_functors_sources})
 
 target_link_libraries(bvpl_functors bvpl_kernels)
 

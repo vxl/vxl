@@ -2,7 +2,7 @@ set(boxm2_ocl_test_all_sources
     boxm2_ocl_test_utils.h    boxm2_ocl_test_utils.cxx
     )
 
-vxl_add_library( LIBNAME boxm2_ocl_utils LIBSRCS ${boxm2_ocl_test_all_sources})
+vxl_add_library(LIBRARY_NAME boxm2_ocl_utils LIBRARY_SOURCES ${boxm2_ocl_test_all_sources})
 target_link_libraries(boxm2_ocl_utils boct boxm2 boxm2_io ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vpl)
 
 add_executable( boxm2_ocl_test_all

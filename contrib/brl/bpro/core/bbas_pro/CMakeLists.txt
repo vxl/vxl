@@ -19,7 +19,7 @@ set(bbas_pro_sources
 aux_source_directory(Templates bbas_pro_sources)
 aux_source_directory(processes bbas_pro_sources)
 
-vxl_add_library( LIBNAME bbas_pro LIBSRCS ${bbas_pro_sources})
+vxl_add_library(LIBRARY_NAME bbas_pro LIBRARY_SOURCES ${bbas_pro_sources})
 target_link_libraries(bbas_pro bprb brdb brad brad_io bsta_io bsta ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl imesh depth_map)
 
 

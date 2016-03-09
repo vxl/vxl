@@ -92,7 +92,7 @@ if(EXPAT_FOUND)
     processes/bvxm_create_scene_xml_process.h         processes/bvxm_create_scene_xml_process.cxx
   )
 
-  vxl_add_library( LIBNAME bvxm_pro LIBSRCS ${bvxm_pro_sources})
+  vxl_add_library(LIBRARY_NAME bvxm_pro LIBRARY_SOURCES ${bvxm_pro_sources})
 
   target_link_libraries(bvxm_pro bprb bvxm bvxm_io bvxm_grid bvxm_grid_io expatpp sdet ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats vpgl_pro vsol ${VXL_LIB_PREFIX}vil_io vil_pro ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul brdb ${VXL_LIB_PREFIX}vbl_io bkml volm bvgl_algo)
 

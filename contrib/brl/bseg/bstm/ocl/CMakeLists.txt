@@ -18,7 +18,7 @@ set(bstm_ocl_sources
 
 aux_source_directory(Templates bstm_ocl_sources)
 
-vxl_add_library( LIBNAME bstm_ocl LIBSRCS ${bstm_ocl_sources})
+vxl_add_library(LIBRARY_NAME bstm_ocl LIBRARY_SOURCES ${bstm_ocl_sources})
 target_link_libraries(bstm_ocl bstm bstm_io bocl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vcl)
 
 if( BUILD_TESTING )

@@ -8,7 +8,7 @@ set(bstm_basic_sources
 
 aux_source_directory(Templates bstm_basic_sources)
 
-vxl_add_library( LIBNAME bstm_basic LIBSRCS  ${bstm_basic_sources})
+vxl_add_library(LIBRARY_NAME bstm_basic LIBRARY_SOURCES  ${bstm_basic_sources})
 target_link_libraries(bstm_basic ${VXL_LIB_PREFIX}vcl)
 
 #install the .h .hxx and libs

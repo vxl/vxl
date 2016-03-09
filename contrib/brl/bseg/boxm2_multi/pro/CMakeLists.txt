@@ -13,7 +13,7 @@ if(EXPAT_FOUND)
   aux_source_directory(processes boxm2_multi_pro_sources)
 
 
-  vxl_add_library( LIBNAME boxm2_multi_pro LIBSRCS ${boxm2_multi_pro_sources})
+  vxl_add_library(LIBRARY_NAME boxm2_multi_pro LIBRARY_SOURCES ${boxm2_multi_pro_sources})
   #install the .h .hxx and libs
 
   target_link_libraries(boxm2_multi_pro boxm2_multi_algo bprb)

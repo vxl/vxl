@@ -55,7 +55,7 @@ if(NOT VXL_USING_NATIVE_PNG)
       pngwutil.c
     )
 
-    vxl_add_library( LIBNAME png LIBSRCS ${png_sources} )
+    vxl_add_library(LIBRARY_NAME png LIBRARY_SOURCES ${png_sources} )
 
     # SOME NEEDED DEFINITIONS
     add_definitions(-DPNG_CONFIGURE_LIBPNG)

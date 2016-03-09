@@ -71,7 +71,7 @@ endif()
 
 add_definitions(-DINSTANTIATE_TEMPLATES)
 
-vxl_add_library(LIBNAME vipl LIBSRCS ${vipl_sources})
+vxl_add_library(LIBRARY_NAME vipl LIBRARY_SOURCES ${vipl_sources})
 
 # No unconditional library dependencies:
 if(BUILD_CORE_IMAGING)

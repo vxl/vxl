@@ -51,7 +51,7 @@ else()
   set(AVIFILE_LIBRARIES "")
 endif()
 
-vxl_add_library( LIBNAME mvl2 LIBSRCS ${mvl2_sources})
+vxl_add_library(LIBRARY_NAME mvl2 LIBRARY_SOURCES ${mvl2_sources})
 target_link_libraries( mvl2 ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${AVIFILE_LIBRARIES} )
 
 if(AVIFILE_FOUND)

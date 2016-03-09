@@ -21,7 +21,7 @@ if(EXPAT_FOUND)
  endif()
 endif()
 
-vxl_add_library( LIBNAME bwm_io LIBSRCS ${bwm_io_sources})
+vxl_add_library(LIBRARY_NAME bwm_io LIBRARY_SOURCES ${bwm_io_sources})
 
 target_link_libraries(bwm_io vsol ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vbl)
 

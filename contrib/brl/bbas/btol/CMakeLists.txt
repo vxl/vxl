@@ -18,7 +18,7 @@ set(btol_sources
     btol_face_algs.cxx     btol_face_algs.h
 )
 
-vxl_add_library( LIBNAME btol LIBSRCS ${btol_sources})
+vxl_add_library(LIBRARY_NAME btol LIBRARY_SOURCES ${btol_sources})
 
 target_link_libraries(btol bsol vtol vdgl vsol ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl)
 

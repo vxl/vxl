@@ -23,7 +23,7 @@ set(bsol_sources
 )
 aux_source_directory(Templates bsol_sources)
 
-vxl_add_library( LIBNAME bsol LIBSRCS ${bsol_sources})
+vxl_add_library(LIBRARY_NAME bsol LIBRARY_SOURCES ${bsol_sources})
 target_link_libraries(bsol vsol ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 if(BUILD_TESTING)

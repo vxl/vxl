@@ -19,7 +19,7 @@ if( PYTHON_FOUND )
          reg_bvpl.h   reg_bvpl.cxx
         )
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      vxl_add_library( LIBNAME bvpl_batch LIBSRCS SHARED ${bvpl_batch_sources})
+      vxl_add_library(LIBRARY_NAME bvpl_batch LIBRARY_SOURCES SHARED ${bvpl_batch_sources})
 
       #library has to have different name depending on debug or release version.
       if(WIN32)

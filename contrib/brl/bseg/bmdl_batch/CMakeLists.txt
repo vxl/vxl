@@ -30,7 +30,7 @@ if( PYTHON_FOUND )
             reg_bmdl.cxx          reg_bmdl.h
            )
         if(NOT BUILD_POSITION_DEPENDENT_CODE)
-          vxl_add_library( LIBNAME bmdl_batch LIBSRCS SHARED ${bmdl_batch_sources})
+          vxl_add_library(LIBRARY_NAME bmdl_batch LIBRARY_SOURCES SHARED ${bmdl_batch_sources})
 
           if(WIN32)
             #library has to have different name depending on debug or release version.

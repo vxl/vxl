@@ -11,7 +11,7 @@ set( bsvg_sources
 
 aux_source_directory(Templates bsvg_sources)
 
-vxl_add_library( LIBNAME bsvg LIBSRCS ${bsvg_sources})
+vxl_add_library(LIBRARY_NAME bsvg LIBRARY_SOURCES ${bsvg_sources})
 
 target_link_libraries( bsvg bxml )
 

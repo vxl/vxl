@@ -13,7 +13,7 @@ set(boct_sources
 
 aux_source_directory(Templates boct_sources)
 
-vxl_add_library( LIBNAME boct LIBSRCS  ${boct_sources})
+vxl_add_library(LIBRARY_NAME boct LIBRARY_SOURCES  ${boct_sources})
 
 target_link_libraries(boct ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl)
 

@@ -15,7 +15,7 @@ set(bbgm_pro_sources
 aux_source_directory(Templates bbgm_pro_sources)
 aux_source_directory(processes bbgm_pro_sources)
 
-vxl_add_library( LIBNAME bbgm_pro LIBSRCS ${bbgm_pro_sources})
+vxl_add_library(LIBRARY_NAME bbgm_pro LIBRARY_SOURCES ${bbgm_pro_sources})
 target_link_libraries(bbgm_pro bbgm bprb brdb bsta_algo bsta brip ${VXL_LIB_PREFIX}vidl ${VXL_LIB_PREFIX}vil vil_pro ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl)
 
 if( BUILD_TESTING )

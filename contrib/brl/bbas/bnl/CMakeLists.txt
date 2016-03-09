@@ -7,7 +7,7 @@ set(bnl_sources
     bnl_quadratic_interpolator.cxx    bnl_quadratic_interpolator.h
    )
 
-vxl_add_library( LIBNAME bnl LIBSRCS ${bnl_sources})
+vxl_add_library(LIBRARY_NAME bnl LIBRARY_SOURCES ${bnl_sources})
 
 target_link_libraries(bnl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vnl_algo)
 

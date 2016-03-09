@@ -64,6 +64,6 @@ set( jpeg_sources
   jmemansi.c
 )
 
-vxl_add_library( LIBNAME jpeg LIBSRCS ${jpeg_sources} )
+vxl_add_library(LIBRARY_NAME jpeg LIBRARY_SOURCES ${jpeg_sources} )
 
 endif()

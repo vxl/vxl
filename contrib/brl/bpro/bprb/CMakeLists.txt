@@ -17,7 +17,7 @@ set(bprb_sources
 
 aux_source_directory(Templates bprb_sources)
 
-vxl_add_library( LIBNAME bprb LIBSRCS ${bprb_sources})
+vxl_add_library(LIBRARY_NAME bprb LIBRARY_SOURCES ${bprb_sources})
 
 target_link_libraries(bprb brdb bxml ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl)
 

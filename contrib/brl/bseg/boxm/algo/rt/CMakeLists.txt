@@ -33,7 +33,7 @@ set(boxm_algo_rt_sources
 
 aux_source_directory(Templates boxm_algo_rt_sources)
 
-vxl_add_library( LIBNAME boxm_algo_rt LIBSRCS ${boxm_algo_rt_sources})
+vxl_add_library(LIBRARY_NAME boxm_algo_rt LIBRARY_SOURCES ${boxm_algo_rt_sources})
 
 #processes
 add_subdirectory(pro)

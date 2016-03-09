@@ -16,7 +16,7 @@ set(bmsh3d_vis_sources
     bmsh3d_vis_mesh.cxx         bmsh3d_vis_mesh.h
    )
 
-vxl_add_library( LIBNAME bmsh3d_vis LIBSRCS ${bmsh3d_vis_sources})
+vxl_add_library(LIBRARY_NAME bmsh3d_vis LIBRARY_SOURCES ${bmsh3d_vis_sources})
 target_link_libraries( bmsh3d_vis bmsh3d bmsh3d_algo bmsh3d_pro ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul )
 
 add_subdirectory(tests)

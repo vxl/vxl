@@ -13,7 +13,7 @@ set(bstm_ocl_algo_sources
     bstm_ocl_change_detection.h bstm_ocl_change_detection.cxx
    )
 
-vxl_add_library( LIBNAME bstm_ocl_algo LIBSRCS  ${bstm_ocl_algo_sources})
+vxl_add_library(LIBRARY_NAME bstm_ocl_algo LIBRARY_SOURCES  ${bstm_ocl_algo_sources})
 target_link_libraries(bstm_ocl_algo bstm_ocl bstm_cpp_algo boxm2_ocl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul bsta)
 
 

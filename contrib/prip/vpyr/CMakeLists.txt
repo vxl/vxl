@@ -22,7 +22,7 @@ set(vpyr_sources
    vpyr_top_tmap.hxx             vpyr_top_tmap.h
 )
 
-vxl_add_library(LIBNAME vpyr LIBSRCS ${vpyr_sources})
+vxl_add_library(LIBRARY_NAME vpyr LIBRARY_SOURCES ${vpyr_sources})
 target_link_libraries(vpyr vmap)
 
 #if(BUILD_EXAMPLES)

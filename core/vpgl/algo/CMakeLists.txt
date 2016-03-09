@@ -32,7 +32,7 @@ set( vpgl_algo_sources
 
 aux_source_directory(Templates vpgl_algo_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vpgl_algo LIBSRCS ${vpgl_algo_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpgl_algo LIBRARY_SOURCES ${vpgl_algo_sources})
 
 target_link_libraries(${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl)
 

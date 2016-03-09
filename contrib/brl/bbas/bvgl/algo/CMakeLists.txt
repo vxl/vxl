@@ -30,7 +30,7 @@ set( bvgl_algo_sources
 )
 aux_source_directory(Templates bvgl_algo_sources)
 
-vxl_add_library( LIBNAME bvgl_algo LIBSRCS ${bvgl_algo_sources})
+vxl_add_library(LIBRARY_NAME bvgl_algo LIBRARY_SOURCES ${bvgl_algo_sources})
 target_link_libraries(bvgl_algo bvgl bkml ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl ${VXL_LIB_PREFIX}vnl bnl bnl_algo ${VXL_LIB_PREFIX}vnl_algo)
 
 

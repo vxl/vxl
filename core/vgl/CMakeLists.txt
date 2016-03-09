@@ -82,7 +82,7 @@ endif()
 
 aux_source_directory(Templates vgl_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgl LIBSRCS ${vgl_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgl LIBRARY_SOURCES ${vgl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vcl )
 
 doxygen_add_library(core/vgl

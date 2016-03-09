@@ -83,7 +83,7 @@ set(rgtl_sources
   Templates/rgtl_sqt_space+3._-.cxx
   )
 
-vxl_add_library(LIBNAME rgtl LIBSRCS ${rgtl_sources})
+vxl_add_library(LIBRARY_NAME rgtl LIBRARY_SOURCES ${rgtl_sources})
 target_link_libraries(rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl)
 
 if(BUILD_TESTING)

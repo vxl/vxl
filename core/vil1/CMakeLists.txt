@@ -114,7 +114,7 @@ set( vil1_network_sources
 if(NOT APPLE)
 # vil1_stream_url in separate library on Solaris
   if(SOLARIS)
-    vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil1_network LIBSRCS ${vil1_network_sources})
+    vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil1_network LIBRARY_SOURCES ${vil1_network_sources})
   else()
     set(vil1_sources ${vil1_sources} ${vil1_network_sources})
   endif()
@@ -166,7 +166,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set_source_files_properties(vil1_image_as.cxx PROPERTIES COMPILE_FLAGS -O0)
 endif()
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil1 LIBSRCS ${vil1_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil1 LIBRARY_SOURCES ${vil1_sources})
 
 if(JPEG_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${JPEG_LIBRARIES} )

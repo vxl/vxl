@@ -303,10 +303,10 @@ set( vil_network_sources
 )
 
 if(NOT SOLARIS)
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil LIBSRCS ${vil_sources} ${vil_network_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources} ${vil_network_sources})
 else()
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil LIBSRCS ${vil_sources})
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vil_network LIBSRCS ${vil_network_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil_network LIBRARY_SOURCES ${vil_network_sources})
 endif()
 
 if(JPEG_FOUND)

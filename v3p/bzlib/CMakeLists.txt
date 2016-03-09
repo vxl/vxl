@@ -21,6 +21,6 @@ set( bzlib2_sources
 
 add_definitions( -D_FILE_OFFSET_BITS -DBZ_DEBUG=0 )
 
-vxl_add_library( LIBNAME bzip2 LIBSRCS ${bzlib2_sources} )
+vxl_add_library(LIBRARY_NAME bzip2 LIBRARY_SOURCES ${bzlib2_sources} )
 
 endif()

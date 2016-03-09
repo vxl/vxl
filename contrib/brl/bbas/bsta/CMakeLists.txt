@@ -59,7 +59,7 @@ set(bsta_sources
 )
 
 aux_source_directory(Templates bsta_sources)
-vxl_add_library( LIBNAME bsta LIBSRCS  ${bsta_sources})
+vxl_add_library(LIBRARY_NAME bsta LIBRARY_SOURCES  ${bsta_sources})
 
 target_link_libraries(bsta ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 

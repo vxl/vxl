@@ -26,7 +26,7 @@ endif()
 
 aux_source_directory(Templates bxml_sources)
 
-vxl_add_library( LIBNAME bxml LIBSRCS ${bxml_sources})
+vxl_add_library(LIBRARY_NAME bxml LIBRARY_SOURCES ${bxml_sources})
 
 target_link_libraries( bxml ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl )
 if(EXPAT_FOUND)

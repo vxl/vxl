@@ -15,7 +15,7 @@ set(volm_conf_sources
 
 aux_source_directory(Templates volm_conf_sources)
 
-vxl_add_library( LIBNAME volm_conf LIBSRCS ${volm_conf_sources})
+vxl_add_library(LIBRARY_NAME volm_conf LIBRARY_SOURCES ${volm_conf_sources})
 
 target_link_libraries(volm_conf volm ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vbl_io bkml bvgl bpgl ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vpgl_io vsol ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vnl bvrml depth_map vdgl sdet vtol bsol bvgl_algo)
 

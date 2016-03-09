@@ -11,7 +11,7 @@ set(bvxm_algo_sources
 
 aux_source_directory(Templates bvxm_algo_sources)
 
-vxl_add_library( LIBNAME bvxm_algo LIBSRCS ${bvxm_algo_sources})
+vxl_add_library(LIBRARY_NAME bvxm_algo LIBRARY_SOURCES ${bvxm_algo_sources})
 
 target_link_libraries( bvxm_algo bsta bvxm_grid_io boxm_util ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 

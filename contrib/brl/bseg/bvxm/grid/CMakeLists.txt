@@ -27,7 +27,7 @@ set(bvxm_grid_sources
 
 aux_source_directory(Templates bvxm_grid_sources)
 
-vxl_add_library( LIBNAME bvxm_grid LIBSRCS ${bvxm_grid_sources})
+vxl_add_library(LIBRARY_NAME bvxm_grid LIBRARY_SOURCES ${bvxm_grid_sources})
 
 target_link_libraries( bvxm_grid ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo vil3d vil3d_algo ${VXL_LIB_PREFIX}vcl)
 

@@ -29,7 +29,7 @@ if( PYTHON_FOUND )
         )
 
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      vxl_add_library( LIBNAME bstm_batch LIBSRCS SHARED ${bstm_batch_sources})
+      vxl_add_library(LIBRARY_NAME bstm_batch LIBRARY_SOURCES SHARED ${bstm_batch_sources})
 
       #library has to have different name depending on debug or release version.
       if(WIN32)

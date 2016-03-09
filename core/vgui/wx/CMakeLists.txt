@@ -23,7 +23,7 @@ if(wxWidgets_FOUND)
     wxVideoControlXmlHandler.cxx    wxVideoControlXmlHandler.h
   )
 
-  vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vgui_wx LIBSRCS ${vgui_wx_sources})
+  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vgui_wx LIBRARY_SOURCES ${vgui_wx_sources})
   target_link_libraries(${VXL_LIB_PREFIX}vgui_wx ${VXL_LIB_PREFIX}vgui ${wxWidgets_LIBRARIES})
 
   if(BUILD_TESTING)

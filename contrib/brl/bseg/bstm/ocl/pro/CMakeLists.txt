@@ -11,7 +11,7 @@ set(bstm_ocl_pro_sources
 
 aux_source_directory(processes bstm_ocl_pro_sources)
 
-vxl_add_library( LIBNAME bstm_ocl_pro LIBSRCS  ${bstm_ocl_pro_sources})
+vxl_add_library(LIBRARY_NAME bstm_ocl_pro LIBRARY_SOURCES  ${bstm_ocl_pro_sources})
 target_link_libraries(bstm_ocl_pro bstm_ocl bstm_ocl_algo boct brdb bprb ${VXL_LIB_PREFIX}vbl_io expatpp ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vcl)
 
 

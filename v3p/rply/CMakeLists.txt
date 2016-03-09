@@ -6,4 +6,4 @@ set(rply_sources
   rply.c
   )
 
-vxl_add_library( LIBNAME rply LIBSRCS ${rply_sources})
+vxl_add_library(LIBRARY_NAME rply LIBRARY_SOURCES ${rply_sources})

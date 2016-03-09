@@ -18,7 +18,7 @@ set(boxm2_multi_sources
     boxm2_multi_util.h          boxm2_multi_util.cxx
    )
 
-vxl_add_library( LIBNAME boxm2_multi LIBSRCS  ${boxm2_multi_sources})
+vxl_add_library(LIBRARY_NAME boxm2_multi LIBRARY_SOURCES  ${boxm2_multi_sources})
 target_link_libraries(boxm2_multi boxm2 boxm2_ocl)
 
 #multi gpu implementations

@@ -16,7 +16,7 @@ set(vbl_io_sources
 
 aux_source_directory(Templates vbl_io_sources)
 
-vxl_add_library(LIBNAME ${VXL_LIB_PREFIX}vbl_io LIBSRCS ${vbl_io_sources})
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vbl_io LIBRARY_SOURCES ${vbl_io_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl )
 
 if( BUILD_TESTING)

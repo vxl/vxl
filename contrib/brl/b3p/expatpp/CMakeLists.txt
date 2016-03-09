@@ -11,7 +11,7 @@ if( EXPAT_FOUND )
 
   set( expatpp_sources expatpp.h expatpp.cpp expatpplib.h )
 
-  vxl_add_library( LIBNAME expatpp LIBSRCS ${expatpp_sources} )
+  vxl_add_library(LIBRARY_NAME expatpp LIBRARY_SOURCES ${expatpp_sources} )
   target_link_libraries( expatpp ${EXPAT_LIBRARIES} )
 
   if( BUILD_TESTING )

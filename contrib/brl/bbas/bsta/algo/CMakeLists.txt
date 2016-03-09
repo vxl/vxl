@@ -22,7 +22,7 @@ set( bsta_algo_sources
 
 aux_source_directory(Templates bsta_algo_sources)
 
-vxl_add_library( LIBNAME bsta_algo LIBSRCS ${bsta_algo_sources} )
+vxl_add_library(LIBRARY_NAME bsta_algo LIBRARY_SOURCES ${bsta_algo_sources} )
 target_link_libraries(bsta_algo bsta ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl)
 
 if( BUILD_TESTING )

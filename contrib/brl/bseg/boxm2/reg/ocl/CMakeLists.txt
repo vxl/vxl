@@ -14,7 +14,7 @@ set(boxm2_ocl_reg_sources
     boxm2_ocl_hierarchical_points_to_volume_reg.h boxm2_ocl_hierarchical_points_to_volume_reg.cxx
    )
 
-vxl_add_library( LIBNAME boxm2_ocl_reg LIBSRCS  ${boxm2_ocl_reg_sources})
+vxl_add_library(LIBRARY_NAME boxm2_ocl_reg LIBRARY_SOURCES  ${boxm2_ocl_reg_sources})
 target_link_libraries(boxm2_ocl_reg boxm2_io  boxm2_ocl bocl brip baio ${VXL_LIB_PREFIX}vpgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vcl depth_map)
 
 #install the .h .hxx and libs

@@ -40,7 +40,7 @@ set(rtvl_sources
   Templates/rtvl_weight_smooth+3-.cxx
   )
 
-vxl_add_library(LIBNAME rtvl LIBSRCS ${rtvl_sources})
+vxl_add_library(LIBRARY_NAME rtvl LIBRARY_SOURCES ${rtvl_sources})
 target_link_libraries(rtvl rgtl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl)
 
 if( BUILD_TESTING )

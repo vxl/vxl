@@ -10,7 +10,7 @@ set(ouel_sources
   kalman_filter.h    kalman_filter.cxx
 )
 
-vxl_add_library(LIBNAME ouel LIBSRCS ${ouel_sources})
+vxl_add_library(LIBRARY_NAME ouel LIBRARY_SOURCES ${ouel_sources})
 target_link_libraries( ouel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl )
 
 if( BUILD_TESTING )

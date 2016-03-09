@@ -34,7 +34,7 @@ set(vimt_sources
 )
 aux_source_directory(Templates vimt_sources)
 
-vxl_add_library( LIBNAME vimt LIBSRCS ${vimt_sources})
+vxl_add_library(LIBRARY_NAME vimt LIBRARY_SOURCES ${vimt_sources})
 target_link_libraries(vimt mbl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil )
 
 add_subdirectory(algo)

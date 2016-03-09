@@ -24,7 +24,7 @@ if(EXPAT_FOUND)
 
   set(bvxm_grid_pro_sources ${bvxm_grid_pro_sources})
 
-  vxl_add_library( LIBNAME bvxm_grid_pro LIBSRCS ${bvxm_grid_pro_sources})
+  vxl_add_library(LIBRARY_NAME bvxm_grid_pro LIBRARY_SOURCES ${bvxm_grid_pro_sources})
 
   target_link_libraries(bvxm_grid_pro bvxm_grid bvxm_grid_io bprb brdb ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vgl imesh ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl_io)
 

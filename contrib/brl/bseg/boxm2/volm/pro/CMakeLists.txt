@@ -27,7 +27,7 @@ endif()
     add_definitions(-DHAVE_OPENCL)
   endif()
 
-  vxl_add_library( LIBNAME boxm2_volm_pro LIBSRCS ${boxm2_volm_pro_sources})
+  vxl_add_library(LIBRARY_NAME boxm2_volm_pro LIBRARY_SOURCES ${boxm2_volm_pro_sources})
 
   #install the .h .hxx and libs
 

@@ -10,7 +10,7 @@ set(bstm_io_sources
    )
 aux_source_directory(Templates bstm_io_sources)
 
-vxl_add_library( LIBNAME bstm_io LIBSRCS  ${bstm_io_sources})
+vxl_add_library(LIBRARY_NAME bstm_io LIBRARY_SOURCES  ${bstm_io_sources})
 target_link_libraries(bstm_io bstm bstm_basic)
 
 #install the .h .hxx and libs

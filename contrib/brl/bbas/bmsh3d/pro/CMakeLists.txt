@@ -6,7 +6,7 @@ set( bmsh3d_pro_sources
     bmsh3d_cmdpara.cxx         bmsh3d_cmdpara.h
 )
 
-vxl_add_library( LIBNAME bmsh3d_pro LIBSRCS ${bmsh3d_pro_sources} )
+vxl_add_library(LIBRARY_NAME bmsh3d_pro LIBRARY_SOURCES ${bmsh3d_pro_sources} )
 target_link_libraries( bmsh3d_pro bmsh3d ${VXL_LIB_PREFIX}vul )
 
 if( BUILD_TESTING )

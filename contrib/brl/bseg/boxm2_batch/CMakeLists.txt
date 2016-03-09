@@ -29,7 +29,7 @@ if( PYTHON_FOUND )
          reg_boxm2.h   reg_boxm2.cxx
         )
     if(NOT BUILD_POSITION_DEPENDENT_CODE)
-      vxl_add_library( LIBNAME boxm2_batch LIBSRCS SHARED ${boxm2_batch_sources})
+      vxl_add_library(LIBRARY_NAME boxm2_batch LIBRARY_SOURCES SHARED ${boxm2_batch_sources})
 
       #library has to have different name depending on debug or release version.
       if(WIN32)
