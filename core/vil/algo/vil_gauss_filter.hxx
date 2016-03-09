@@ -9,7 +9,8 @@
 #include "vil_gauss_filter.h"
 #include <vil/vil_transpose.h>
 #include <vil/algo/vil_convolve_1d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_cassert.h>
 
 //=======================================================================
@@ -33,10 +34,10 @@ inline    float       vl_round(double x,    float       ) { return (float)x; }
 //  Assumes dest_im has sufficient data allocated
 
 template <class srcT, class destT>
-void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrdiff_t src_jstep,
-                           destT* dest_im, vcl_ptrdiff_t dest_istep, vcl_ptrdiff_t dest_jstep,
+void vil_gauss_filter_5tap(const srcT* src_im, std::ptrdiff_t src_istep, std::ptrdiff_t src_jstep,
+                           destT* dest_im, std::ptrdiff_t dest_istep, std::ptrdiff_t dest_jstep,
                            unsigned nx, unsigned ny, const vil_gauss_filter_5tap_params& params,
-                           destT* work, vcl_ptrdiff_t work_jstep)
+                           destT* work, std::ptrdiff_t work_jstep)
 {
   assert (nx > 3 && ny > 3);
   // Convolve src with a 5 x 1 Gaussian filter,
@@ -80,7 +81,7 @@ void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrd
                              + params.filt_edge0() * src_col3[(nx-1)*src_istep], (destT)0);
   }
 
-//  work_.print_all(vcl_cout);
+//  work_.print_all(std::cout);
   // Now perform vertical smoothing
   for (unsigned int y=2;y<ny-2;y++)
   {
@@ -137,7 +138,7 @@ void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_istep, vcl_ptrd
                                             + params.filt_edge1() * work_row_bottom_2[x]
                                             + params.filt_edge0() * work_row_bottom_1[x], (destT)0);
   }
-//  dest_im.print_all(vcl_cout);
+//  dest_im.print_all(std::cout);
 }
 
 template <class srcT, class destT>
@@ -151,7 +152,7 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
   unsigned n_planes = src_im.nplanes();
   dest_im.set_size(ni, nj, n_planes);
   work.set_size(ni,nj,1);
-  assert (work.jstep() == (vcl_ptrdiff_t)ni);
+  assert (work.jstep() == (std::ptrdiff_t)ni);
 
   if (ni > 3 && nj > 3)
   // Reduce plane-by-plane
@@ -278,10 +279,10 @@ void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
   }
 
 #if 0
-  vsl_indent_inc(vcl_cout);
-  vcl_cout << vsl_indent() << "Work image B\n";
-  workb_.print_all(vcl_cout);
-  vsl_indent_dec(vcl_cout);
+  vsl_indent_inc(std::cout);
+  std::cout << vsl_indent() << "Work image B\n";
+  workb_.print_all(std::cout);
+  vsl_indent_dec(std::cout);
 #endif
 }
 

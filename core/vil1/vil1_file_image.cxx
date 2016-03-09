@@ -4,11 +4,12 @@
 #endif
 
 #include "vil1_file_image.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vil1/vil1_load.h>
 
-bool vil1_file_image::load(vcl_string const& filename, verbosity)
+bool vil1_file_image::load(std::string const& filename, verbosity)
 {
   return this->load(filename.c_str());
 }
@@ -17,10 +18,10 @@ bool vil1_file_image::load(char const* filename, verbosity v)
 {
   vil1_image i = vil1_load(filename);
   if (v == verbose) {
-    vcl_cerr << "vil1_file_image: Loaded [" << filename << "]\n";
+    std::cerr << "vil1_file_image: Loaded [" << filename << "]\n";
   }
   if (!i && v != silent) {
-    vcl_cerr << "vil1_file_image: Could not load [" << filename << "]\n";
+    std::cerr << "vil1_file_image: Could not load [" << filename << "]\n";
   }
 
   vil1_image::operator= (i);

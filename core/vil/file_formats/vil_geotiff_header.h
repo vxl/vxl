@@ -20,7 +20,8 @@
 //   <none>
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <tiffio.h>
 #include <geotiffio.h>
 
@@ -36,7 +37,7 @@ class vil_geotiff_header
 
   int gtif_number_of_keys() const { return number_of_geokeys_; }
 
-  bool gtif_tiepoints(vcl_vector<vcl_vector<double> > &tiepoints);
+  bool gtif_tiepoints(std::vector<std::vector<double> > &tiepoints);
 
   bool gtif_pixelscale(double &scale_x, double &scale_y, double &scale_z);
 

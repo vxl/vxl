@@ -11,19 +11,20 @@
 // \date   Feb 16 2000
 // \verbatim
 //  Modifications
-//   31-Oct-00 Peter Vanroose - signatures fixed, and vcl_list iterator used
+//   31-Oct-00 Peter Vanroose - signatures fixed, and std::list iterator used
 //   16-Mar-01 Tim Cootes     - added documentation
 //   29-Aug-01 Peter Vanroose - added vgl_conic functions (ported from TargetJr)
 //    5-Oct-01 Peter Vanroose - added compute_bounding_box functions
 //   15-May-03 Peter Vanroose - added implementation for closest_point()
-//   22-Jun-03 Peter Vanroose - vcl_list replaced by vcl_vector in lines_to_point
+//   22-Jun-03 Peter Vanroose - std::list replaced by std::vector in lines_to_point
 //    3-Feb-07 Peter Vanroose - changed vnl_vector to vnl_vector_fixed
 //   20-Dec-10 Peter Vanroose - bug fix in conic intersection
 //                              (when 2 intersection pts have same y coordinate)
 // \endverbatim
 
-#include <vcl_list.h>
-#include <vcl_vector.h>
+#include <list>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 
@@ -115,7 +116,7 @@ class vgl_homg_operators_2d
                                        const vgl_homg_point_2d<T>& p2);
 
   //: Intersect a set of 2D lines to find the least-square point of intersection.
-  static vgl_homg_point_2d<T> lines_to_point(const vcl_vector<vgl_homg_line_2d<T> >& lines);
+  static vgl_homg_point_2d<T> lines_to_point(const std::vector<vgl_homg_line_2d<T> >& lines);
 
   //: cross ratio of four collinear points
   // This number is projectively invariant, and it is the coordinate of p4
@@ -151,10 +152,10 @@ class vgl_homg_operators_2d
                                         double cr = -1.0);
 
   //: compute most orthogonal vector with vnl_symmetric_eigensystem
-  static vnl_vector_fixed<T,3> most_orthogonal_vector(const vcl_vector<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector_fixed<T,3> most_orthogonal_vector(const std::vector<vgl_homg_line_2d<T> >& lines);
 
   //: compute most orthogonal vector with SVD
-  static vnl_vector_fixed<T,3> most_orthogonal_vector_svd(const vcl_vector<vgl_homg_line_2d<T> >& lines);
+  static vnl_vector_fixed<T,3> most_orthogonal_vector_svd(const std::vector<vgl_homg_line_2d<T> >& lines);
 
   // coefficient <-> conic matrix conversion -------------------------
   static vgl_conic<T> vgl_conic_from_matrix(vnl_matrix_fixed<T,3,3> const& mat);
@@ -162,19 +163,19 @@ class vgl_homg_operators_2d
   static vnl_matrix_fixed<T,3,3> matrix_from_dual_conic(vgl_conic<T> const&);
 
   //: Find all real intersection points of a conic and a line (between 0 and 2, including points at infinity)
-  static vcl_list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c,
+  static std::list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c,
                                                       vgl_homg_line_2d<T> const& l);
 
   //: Find all real intersection points of two conics (between 0 and 4, including points at infinity)
-  static vcl_list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c1,
+  static std::list<vgl_homg_point_2d<T> > intersection(vgl_conic<T> const& c1,
                                                       vgl_conic<T> const& c2);
 
   //: Return the (at most) two tangent lines that pass through p and are tangent to the conic.
-  static vcl_list<vgl_homg_line_2d<T> > tangent_from(vgl_conic<T> const& c,
+  static std::list<vgl_homg_line_2d<T> > tangent_from(vgl_conic<T> const& c,
                                                      vgl_homg_point_2d<T> const& p);
 
   //: Return the list of common tangent lines of two conics.
-  static vcl_list<vgl_homg_line_2d<T> > common_tangents(vgl_conic<T> const& c1,
+  static std::list<vgl_homg_line_2d<T> > common_tangents(vgl_conic<T> const& c1,
                                                         vgl_conic<T> const& c2);
 
   //: Return the point on the line closest to the given point
@@ -199,8 +200,8 @@ class vgl_homg_operators_2d
 
  private:
   // Helper functions for conic intersection
-  static vcl_list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& q, vgl_homg_line_2d<T> const& l);
-  static vcl_list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& c1, vgl_conic<T> const& c2);
+  static std::list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& q, vgl_homg_line_2d<T> const& l);
+  static std::list<vgl_homg_point_2d<T> > do_intersect(vgl_conic<T> const& c1, vgl_conic<T> const& c2);
 };
 
 //: Transform a point through a 3x3 projective transformation matrix

@@ -1,13 +1,14 @@
 #include <testlib/testlib_test.h>
 #include "vbl_test_classes.h"
-#include <vcl_list.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <list>
+#include <iostream>
 
 //----------------------------------------------------------------------
 
 void printval (base_sptr const &p)
 {
-  vcl_cout << "base_impl val = " << p->n << vcl_endl;
+  std::cout << "base_impl val = " << p->n << std::endl;
 }
 
 void changeval (base_impl *p, int k)
@@ -37,7 +38,7 @@ static void test_base_sptr()
   if (p == (base_impl*)VXL_NULLPTR) // identical result - just to demonstrate operator==()
     p = new base_impl;
 
-  vcl_cout << "operator<< gives : " << p << vcl_endl;
+  std::cout << "operator<< gives : " << p << std::endl;
 
   base_sptr a = new base_impl (5);
   TEST("p == a", p == a, false);
@@ -57,8 +58,8 @@ static void test_base_sptr()
   // They should be the same
   TEST("p == q", p, q);
 
-  vcl_cout << "value of   p->n : " << p->n << vcl_endl
-           << "value of (*p).n : " << (*p).n << vcl_endl;
+  std::cout << "value of   p->n : " << p->n << std::endl
+           << "value of (*p).n : " << (*p).n << std::endl;
 
   {
     // make a new base
@@ -73,7 +74,7 @@ static void test_base_sptr()
 
   // Now test lists of base_impl
   {
-    vcl_list<base_sptr> videos;
+    std::list<base_sptr> videos;
     for (int i=1; i<=10; i++)
     {
       base_sptr newvid = new base_impl (i);
@@ -81,14 +82,14 @@ static void test_base_sptr()
     }
 
     // Print out the list
-    vcl_cout << "List of video sequences\n";
-    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
-      vcl_cout << ' ' << *i << vcl_endl;
+    std::cout << "List of video sequences\n";
+    for (std::list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
+      std::cout << ' ' << *i << std::endl;
 
     // Clear the list
     videos.clear();
 
-    vcl_cout << "Video list is clear : filling again\n";
+    std::cout << "Video list is clear : filling again\n";
 
     for (int i=11; i<=15; i++)
     {
@@ -97,9 +98,9 @@ static void test_base_sptr()
     }
 
     // Print out the list
-    vcl_cout << "List of video sequences\n";
-    for (vcl_list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
-      vcl_cout << ' ' << *i << vcl_endl;
+    std::cout << "List of video sequences\n";
+    for (std::list<base_sptr>::const_iterator i = videos.begin(); i != videos.end(); i++)
+      std::cout << ' ' << *i << std::endl;
   }
 }
 

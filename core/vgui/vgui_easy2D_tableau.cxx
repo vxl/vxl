@@ -15,9 +15,10 @@
 
 #include "vgui_easy2D_tableau.h"
 
-#include <vcl_vector.h>
+#include <vector>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // for abort
+#include <vcl_compiler.h>
+#include <cstdlib> // for abort
 
 #include <vxl_config.h> // for vxl_byte
 
@@ -82,7 +83,7 @@ bool vgui_easy2D_tableau::handle(vgui_event const& e)
 {
 #if 0 //event tracker
   if(e.type != vgui_MOTION)
-    vcl_cout << "easy2D" << e << '\n' << vcl_flush;
+    std::cout << "easy2D" << e << '\n' << std::flush;
 #endif
   if (image_slot && (e.type != vgui_DRAW || gl_mode != GL_SELECT))
     image_slot.handle(e);
@@ -90,7 +91,7 @@ bool vgui_easy2D_tableau::handle(vgui_event const& e)
   return vgui_displaylist2D_tableau::handle(e);
 }
 
-vcl_string vgui_easy2D_tableau::file_name() const
+std::string vgui_easy2D_tableau::file_name() const
 {
   if (image_slot)
     return type_name() + "[" + name_ + ",i=" + image_slot->file_name() + "]";
@@ -99,7 +100,7 @@ vcl_string vgui_easy2D_tableau::file_name() const
 }
 
 
-vcl_string vgui_easy2D_tableau::pretty_name() const
+std::string vgui_easy2D_tableau::pretty_name() const
 {
   if (image_slot)
     return type_name() + "[" + name_ + ",i=" + image_slot->file_name() + "]";
@@ -107,13 +108,13 @@ vcl_string vgui_easy2D_tableau::pretty_name() const
     return type_name() + "[" + name_ + ",i=null]";
 }
 
-vcl_string vgui_easy2D_tableau::type_name() const
+std::string vgui_easy2D_tableau::type_name() const
 {
   return "vgui_easy2D_tableau";
 }
 
 //: Set the child tableau to be the given image_tableau.
-void vgui_easy2D_tableau::set_image(vcl_string const& fn)
+void vgui_easy2D_tableau::set_image(std::string const& fn)
 {
   image_image->set_image(fn.c_str());
 }
@@ -123,7 +124,7 @@ void vgui_easy2D_tableau::set_child(vgui_tableau_sptr const& i)
 {
   if (i && i->type_name() != "vgui_image_tableau" &&
       i->type_name() != "xcv_image_tableau")
-    vgui_macro_warning << "assigning what seems like a non-image to my child : i = " << i << vcl_endl;
+    vgui_macro_warning << "assigning what seems like a non-image to my child : i = " << i << std::endl;
   image_slot.assign(i);
 }
 
@@ -276,7 +277,7 @@ vgui_soview2D_polygon* vgui_easy2D_tableau::add_polygon(unsigned n, float const 
 //  Specify the optional arguments in case this tableau does not contain
 //  an image tableau, or if you want a smaller part of the image printed.
 //  If wd or ht are 0, no image is printed at all.
-void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor, bool print_geom_objs, int wd, int ht)
+void vgui_easy2D_tableau::print_psfile(std::string filename, int reduction_factor, bool print_geom_objs, int wd, int ht)
 {
   // Set wd and ht from the image tableau, if not specified as parameters
   if (wd < 0 || ht < 0)
@@ -315,16 +316,16 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       {
         // invalid pixel type
         vgui_macro_warning<< "failed to print image of unsupported pixel format: "
-                          << img << vcl_endl;
+                          << img << std::endl;
       }
       if (img.nplanes()==1) // greyscale image
       {
         if (img.istep() != 1)
           vgui_macro_warning<< "The istep of this image view is not 1: "
-                            << img << vcl_endl;
+                            << img << std::endl;
         else {
           if (debug)
-            vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
+            std::cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
                      << filename.c_str() << '\n';
           psfile.print_greyscale_image(img.top_left_ptr(), img.ni(), img.nj());
         }
@@ -334,7 +335,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       else
         // urgh
         vgui_macro_warning<< "Don't know how to handle image with "
-                          << img.nplanes() << " planes" << vcl_endl;
+                          << img.nplanes() << " planes" << std::endl;
     }
     else
     {
@@ -344,21 +345,21 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       if (vil1_pixel_format(img) == VIL1_BYTE)
       {
         if (debug)
-          vcl_cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
+          std::cerr << "vgui_easy2D_tableau::print_psfile printing greyscale image to"
                    << filename.c_str() << '\n';
         psfile.print_greyscale_image(data, wd, ht);
       }
       else if (vil1_pixel_format(img) == VIL1_RGB_BYTE)
       {
         if (debug)
-          vcl_cerr << "vgui_easy2D_tableau::print_psfile printing color image to "
+          std::cerr << "vgui_easy2D_tableau::print_psfile printing color image to "
                    << filename.c_str() << '\n';
         psfile.print_color_image(data, wd, ht);
       }
       else
         // urgh
         vgui_macro_warning<< "failed to print image of unsupported pixel format: "
-                          << img << vcl_endl;
+                          << img << std::endl;
       delete[] data;
     }
   }
@@ -366,12 +367,12 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
   // Skip the rest of this function if no geometry is wanted
   if (!print_geom_objs) return;
   if (debug)
-    vcl_cerr << "vgui_easy2D_tableau: Printing geometric objects\n";
+    std::cerr << "vgui_easy2D_tableau: Printing geometric objects\n";
 
-  vcl_vector<vgui_soview*> all_objs = get_all();
+  std::vector<vgui_soview*> all_objs = get_all();
   vgui_style_sptr style = VXL_NULLPTR;
   float style_point_size = 0;
-  for (vcl_vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); ++i)
+  for (std::vector<vgui_soview*>::iterator i = all_objs.begin(); i != all_objs.end(); ++i)
   {
     vgui_soview* sv = *i;
     if (sv == VXL_NULLPTR) {
@@ -393,7 +394,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       vgui_soview2D_point* pt = (vgui_soview2D_point*)sv;
       psfile.point(pt->x, pt->y, style_point_size);
       if (debug)
-        vcl_cerr << "  vgui_easy2D_tableau: Adding a point at "
+        std::cerr << "  vgui_easy2D_tableau: Adding a point at "
                  << pt->x << ", " << pt->y << '\n';
     }
     else if (sv->type_name() == "vgui_soview2D_circle")
@@ -401,7 +402,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       vgui_soview2D_circle* circ = (vgui_soview2D_circle*)sv;
       psfile.circle(circ->x, circ->y, circ->r);
       if (debug)
-        vcl_cerr << "  vgui_easy2D_tableau: Adding circle, center " << circ->x << ", "
+        std::cerr << "  vgui_easy2D_tableau: Adding circle, center " << circ->x << ", "
                  << circ->y << " radius " << circ->r << '\n';
     }
     else if (sv->type_name() == "vgui_soview2D_lineseg")
@@ -409,7 +410,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
       vgui_soview2D_lineseg* line = (vgui_soview2D_lineseg*)sv;
       psfile.line(line->x0, line->y0, line->x1, line->y1);
       if (debug)
-        vcl_cerr << " vgui_easy2D_tableau: Adding line between " << line->x0 << ", "
+        std::cerr << " vgui_easy2D_tableau: Adding line between " << line->x0 << ", "
                  << line->y0 << " and " << line->x1 << ", " << line->y1 << '\n';
     }
     else if (sv->type_name() == "vgui_soview2D_linestrip")
@@ -419,7 +420,7 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
         psfile.line(linestrip->x[ii-1],linestrip->y[ii-1],
                     linestrip->x[ii  ],linestrip->y[ii  ]);
       if (debug)
-        vcl_cerr<< " vgui_easy2D_tableau: Adding linestrip\n";
+        std::cerr<< " vgui_easy2D_tableau: Adding linestrip\n";
     }
     else if (sv->type_name() == "vgui_soview2D_polygon")
     {
@@ -431,19 +432,19 @@ void vgui_easy2D_tableau::print_psfile(vcl_string filename, int reduction_factor
                   polygon->y[polygon->n - 1],
                   polygon->x[0], polygon->y[0]);
       if (debug)
-        vcl_cerr<< " vgui_easy2D_tableau: Adding polygon\n";
+        std::cerr<< " vgui_easy2D_tableau: Adding polygon\n";
     }
     else if (sv->type_name() == "vgui_soview2D_ellipse")
     {
       vgui_soview2D_ellipse* ellip = (vgui_soview2D_ellipse*)sv;
       psfile.ellipse(ellip->x, ellip->y, ellip->w, ellip->h, int(vnl_math::deg_per_rad * ellip->phi + 0.5)); // convert radians to degrees
       if (debug)
-        vcl_cerr << "  vgui_easy2D_tableau: Adding ellipse, center " << ellip->x << ", "
+        std::cerr << "  vgui_easy2D_tableau: Adding ellipse, center " << ellip->x << ", "
                  << ellip->y << " width " << ellip->w << " height " << ellip->h
                  << " angle " << ellip->phi << " (" << int(vnl_math::deg_per_rad * ellip->phi + 0.5) << " deg)\n";
     }
     else
-      vgui_macro_warning << "unknown soview typename = " << sv->type_name() << vcl_endl;
+      vgui_macro_warning << "unknown soview typename = " << sv->type_name() << std::endl;
   }
 }
 
@@ -486,8 +487,8 @@ vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
                                                      unsigned int format, unsigned int type )
 {
   if ( type != GL_UNSIGNED_BYTE ) {
-    vcl_cerr << "Don't know how to add non-byte sprites using old interface\n";
-    vcl_abort();
+    std::cerr << "Don't know how to add non-byte sprites using old interface\n";
+    std::abort();
   }
   unsigned w = unsigned(width);
   unsigned h = unsigned(height);
@@ -505,8 +506,8 @@ vgui_soview2D_image* vgui_easy2D_tableau::add_image( float x, float y,
 #endif
   }
   else {
-    vcl_cerr << "Don't know how to handle format " << format << " with old interface\n";
-    vcl_abort();
+    std::cerr << "Don't know how to handle format " << format << " with old interface\n";
+    std::abort();
   }
   return this->add_image( x, y, img );
 }

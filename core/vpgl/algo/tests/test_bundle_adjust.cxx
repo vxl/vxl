@@ -10,15 +10,16 @@
 #include <vnl/vnl_crs_index.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <algorithm>
 
 
 // create a test scene with world points, cameras, and ideal projections
 // of the points into the images
 void setup_scene(const vpgl_calibration_matrix<double>& K,
-                 vcl_vector<vgl_point_3d<double> >& world,
-                 vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                 vcl_vector<vgl_point_2d<double> >& image_points)
+                 std::vector<vgl_point_3d<double> >& world,
+                 std::vector<vpgl_perspective_camera<double> >& cameras,
+                 std::vector<vgl_point_2d<double> >& image_points)
 {
   world.clear();
   // The world points are the 8 corners of a unit cube
@@ -55,13 +56,13 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
 
 
 // add uniform noise to the measurements with a maximum range size of max_p_err
-vcl_vector<vgl_point_2d<double> >
-make_noisy_measurements(const vcl_vector<vgl_point_2d<double> >& image_points,
+std::vector<vgl_point_2d<double> >
+make_noisy_measurements(const std::vector<vgl_point_2d<double> >& image_points,
                         double max_p_err)
 {
   vnl_random rnd;
   // project each point adding uniform noise in a [-max_p_err/2, max_p_err/2] pixel window
-  vcl_vector<vgl_point_2d<double> > noisy_image_points(image_points);
+  std::vector<vgl_point_2d<double> > noisy_image_points(image_points);
   for (unsigned int i=0; i<noisy_image_points.size(); ++i) {
     vgl_vector_2d<double> noise(rnd.drand32()-0.5, rnd.drand32()-0.5);
     noisy_image_points[i] += max_p_err * noise;
@@ -72,7 +73,7 @@ make_noisy_measurements(const vcl_vector<vgl_point_2d<double> >& image_points,
 
 // add uniform noise to 3-d point locations
 void
-perturb_points(vcl_vector<vgl_point_3d<double> >& points,
+perturb_points(std::vector<vgl_point_3d<double> >& points,
                double max_p_err)
 {
   vnl_random rnd;
@@ -87,7 +88,7 @@ perturb_points(vcl_vector<vgl_point_3d<double> >& points,
 
 // add uniform noise to camera locations and orientation
 void
-perturb_cameras(vcl_vector<vpgl_perspective_camera<double> >& cameras,
+perturb_cameras(std::vector<vpgl_perspective_camera<double> >& cameras,
                 double max_t_err, double max_r_error)
 {
   vnl_random rnd;
@@ -109,9 +110,9 @@ perturb_cameras(vcl_vector<vpgl_perspective_camera<double> >& cameras,
 
 
 // remove some observations and mark them in the mask
-vcl_vector<vgl_point_2d<double> >
-make_occlusions(const vcl_vector<vgl_point_2d<double> >& image_points,
-                vcl_vector<vcl_vector<bool> >& mask)
+std::vector<vgl_point_2d<double> >
+make_occlusions(const std::vector<vgl_point_2d<double> >& image_points,
+                std::vector<std::vector<bool> >& mask)
 {
   // remove several correspondences
   mask[0][1] = false;
@@ -130,7 +131,7 @@ make_occlusions(const vcl_vector<vgl_point_2d<double> >& image_points,
 
   // create a subset of projections based on the mask
   vnl_crs_index crs(mask);
-  vcl_vector<vgl_point_2d<double> > subset_image_points(crs.num_non_zero());
+  std::vector<vgl_point_2d<double> > subset_image_points(crs.num_non_zero());
   for (int i=0; i<crs.num_rows(); ++i) {
     for (int j=0; j<crs.num_cols(); ++j) {
       int k = crs(i,j);
@@ -144,9 +145,9 @@ make_occlusions(const vcl_vector<vgl_point_2d<double> >& image_points,
 
 // apply a similarity transformation to map the points as close as possible to
 // the the ground truth
-void similarity_to_truth(const vcl_vector<vgl_point_3d<double> >& truth_pts,
-                         vcl_vector<vgl_point_3d<double> >& est_pts,
-                         vcl_vector<vpgl_perspective_camera<double> >& est_cameras)
+void similarity_to_truth(const std::vector<vgl_point_3d<double> >& truth_pts,
+                         std::vector<vgl_point_3d<double> >& est_pts,
+                         std::vector<vpgl_perspective_camera<double> >& est_cameras)
 {
   vgl_compute_similarity_3d<double> reg(est_pts,truth_pts);
   reg.estimate();
@@ -175,9 +176,9 @@ static void test_bundle_adjust()
 {
   const double max_p_err = 0.25;//1; // maximum image error to introduce (pixels)
 
-  vcl_vector<vgl_point_3d<double> > world;
-  vcl_vector<vpgl_perspective_camera<double> > cameras;
-  vcl_vector<vgl_point_2d<double> > image_points;
+  std::vector<vgl_point_3d<double> > world;
+  std::vector<vpgl_perspective_camera<double> > cameras;
+  std::vector<vgl_point_2d<double> > image_points;
   // our known internal calibration
   //vpgl_calibration_matrix<double> K(2.0,vgl_homg_point_2d<double>(0,0));
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384));
@@ -188,12 +189,12 @@ static void test_bundle_adjust()
   vpgl_bundle_adjust::write_vrml("test_bundle_truth.wrl",cameras,world);
 
   // create noisy measurements
-  vcl_vector<vgl_point_2d<double> > noisy_image_points =
+  std::vector<vgl_point_2d<double> > noisy_image_points =
       make_noisy_measurements(image_points, max_p_err);
 
   // remove some measurements (occlusion)
-  vcl_vector<vcl_vector<bool> > mask(cameras.size(), vcl_vector<bool>(world.size(),true) );
-  vcl_vector<vgl_point_2d<double> > subset_image_points =
+  std::vector<std::vector<bool> > mask(cameras.size(), std::vector<bool>(world.size(),true) );
+  std::vector<vgl_point_2d<double> > subset_image_points =
       make_occlusions(noisy_image_points, mask);
 
   // test optimization with fixed calibration
@@ -202,11 +203,11 @@ static void test_bundle_adjust()
     vgl_rotation_3d<double> I; // no rotation
     vpgl_perspective_camera<double> init_cam(K,vgl_homg_point_3d<double>(0.0, 0.0, -10.0),I);
     init_cam.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0),vgl_vector_3d<double>(0,-1,0));
-    vcl_vector<vpgl_perspective_camera<double> >
+    std::vector<vpgl_perspective_camera<double> >
       unknown_cameras(cameras.size(),init_cam);
 
     // make the unknown world points
-    vcl_vector<vgl_point_3d<double> > unknown_world(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
+    std::vector<vgl_point_3d<double> > unknown_world(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
 
     vpgl_bundle_adjust ba;
     bool converge = ba.optimize(unknown_cameras, unknown_world, subset_image_points, mask);
@@ -215,13 +216,13 @@ static void test_bundle_adjust()
     double rms_3d_pts = 0.0;
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
-    rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
+    rms_3d_pts = std::sqrt(rms_3d_pts/world.size());
     TEST_NEAR("Solution Correct (fixed K)", rms_3d_pts, 0.0, 2.0e-3);
 
     // make default cameras
-    unknown_cameras = vcl_vector<vpgl_perspective_camera<double> >(cameras.size(),init_cam);
+    unknown_cameras = std::vector<vpgl_perspective_camera<double> >(cameras.size(),init_cam);
     // make the unknown world points
-    unknown_world = vcl_vector<vgl_point_3d<double> >(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
+    unknown_world = std::vector<vgl_point_3d<double> >(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
     ba.set_use_gradient(false);
     converge = ba.optimize(unknown_cameras, unknown_world, subset_image_points, mask);
     TEST("Converged (without gradient, fixed K)",converge,true);
@@ -229,7 +230,7 @@ static void test_bundle_adjust()
     rms_3d_pts = 0.0;
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
-    rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
+    rms_3d_pts = std::sqrt(rms_3d_pts/world.size());
     TEST_NEAR("Solution Correct (without gradient, fixed K)", rms_3d_pts, 0.0, 2.0e-3);
 
     vpgl_bundle_adjust::write_vrml("test_bundle_fixed_k.wrl",unknown_cameras,unknown_world);
@@ -243,11 +244,11 @@ static void test_bundle_adjust()
     K2.set_focal_length(1500);
     vpgl_perspective_camera<double> init_cam(K2,vgl_homg_point_3d<double>(0.0, 0.0, -10.0),I);
     init_cam.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0),vgl_vector_3d<double>(0,-1,0));
-    vcl_vector<vpgl_perspective_camera<double> >
+    std::vector<vpgl_perspective_camera<double> >
       unknown_cameras(cameras.size(),init_cam);
 
     // make the unknown world points
-    vcl_vector<vgl_point_3d<double> > unknown_world(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
+    std::vector<vgl_point_3d<double> > unknown_world(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
 
     vpgl_bundle_adjust ba;
     ba.set_self_calibrate(true);
@@ -258,13 +259,13 @@ static void test_bundle_adjust()
     double rms_3d_pts = 0.0;
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
-    rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
+    rms_3d_pts = std::sqrt(rms_3d_pts/world.size());
     TEST_NEAR("Solution Correct (est focal len)", rms_3d_pts, 0.0, 2.0e-3);
 
     // make default cameras
-    unknown_cameras = vcl_vector<vpgl_perspective_camera<double> >(cameras.size(),init_cam);
+    unknown_cameras = std::vector<vpgl_perspective_camera<double> >(cameras.size(),init_cam);
     // make the unknown world points
-    unknown_world = vcl_vector<vgl_point_3d<double> >(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
+    unknown_world = std::vector<vgl_point_3d<double> >(world.size(),vgl_point_3d<double>(0.0, 0.0, 0.0));
     ba.set_use_gradient(false);
     converge = ba.optimize(unknown_cameras, unknown_world, subset_image_points, mask);
     TEST("Converged (without gradient, est focal len)",converge,true);
@@ -272,7 +273,7 @@ static void test_bundle_adjust()
     rms_3d_pts = 0.0;
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
-    rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
+    rms_3d_pts = std::sqrt(rms_3d_pts/world.size());
     TEST_NEAR("Solution Correct (without gradient, est focal len)", rms_3d_pts, 0.0, 2.0e-3);
 
     vpgl_bundle_adjust::write_vrml("test_bundle_est_f.wrl",unknown_cameras,unknown_world);
@@ -280,18 +281,18 @@ static void test_bundle_adjust()
 
   // test optimization with outliers
   {
-    mask = vcl_vector<vcl_vector<bool> >(cameras.size(), vcl_vector<bool>(world.size(),true) );
+    mask = std::vector<std::vector<bool> >(cameras.size(), std::vector<bool>(world.size(),true) );
     // make outliers
     noisy_image_points[6].x() += 20;
     noisy_image_points[6].y() -= 18;
     noisy_image_points[10] = noisy_image_points[0];
 
-    vcl_vector<vgl_point_3d<double> > unknown_world(world);
+    std::vector<vgl_point_3d<double> > unknown_world(world);
     perturb_points(unknown_world, 0.1);
-    vcl_vector<vgl_point_3d<double> > init_world(unknown_world);
-    vcl_vector<vpgl_perspective_camera<double> > unknown_cameras(cameras);
+    std::vector<vgl_point_3d<double> > init_world(unknown_world);
+    std::vector<vpgl_perspective_camera<double> > unknown_cameras(cameras);
     perturb_cameras(unknown_cameras,0.1, 0.0001);
-    vcl_vector<vpgl_perspective_camera<double> > init_cameras(unknown_cameras);
+    std::vector<vpgl_perspective_camera<double> > init_cameras(unknown_cameras);
 
     vpgl_bundle_adjust ba;
     ba.set_self_calibrate(true);
@@ -308,8 +309,8 @@ static void test_bundle_adjust()
     converge = converge && ba.optimize(unknown_cameras, unknown_world, noisy_image_points, mask);
     TEST("Converged (outliers)",converge,true);
     double rms_error = ba.end_error();
-    vcl_cout << "Final RMS reprojection error: "<<rms_error<<vcl_endl;
-    vcl_vector<double> weights = ba.final_weights();
+    std::cout << "Final RMS reprojection error: "<<rms_error<<std::endl;
+    std::vector<double> weights = ba.final_weights();
     bool outliers_downweighted = true;
     for (unsigned i=0; i<weights.size(); ++i)
     {
@@ -318,13 +319,13 @@ static void test_bundle_adjust()
         if (weights[i] > 0.5) // should have low weight
         {
           outliers_downweighted = false;
-          vcl_cout << "outlier measurement "<<i<<" has high weight "<<weights[i]<<vcl_endl;
+          std::cout << "outlier measurement "<<i<<" has high weight "<<weights[i]<<std::endl;
         }
       }
       else if (weights[i] < 0.9) // inliers should have high weight
       {
         outliers_downweighted = false;
-        vcl_cout << "inlier measurement "<<i<<" has low weight "<<weights[i]<<vcl_endl;
+        std::cout << "inlier measurement "<<i<<" has low weight "<<weights[i]<<std::endl;
       }
     }
     TEST("only outliers down-weighted",outliers_downweighted, true);
@@ -333,7 +334,7 @@ static void test_bundle_adjust()
     double rms_3d_pts = 0.0;
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
-    rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
+    rms_3d_pts = std::sqrt(rms_3d_pts/world.size());
     TEST_NEAR("Solution Correct (outliers)", rms_3d_pts, 0.0, 1.0e-3);
 
     unknown_cameras = init_cameras;
@@ -350,7 +351,7 @@ static void test_bundle_adjust()
     converge = converge && ba.optimize(unknown_cameras, unknown_world, noisy_image_points, mask);
     TEST("Converged (without gradient, outliers)",converge,true);
     rms_error = ba.end_error();
-    vcl_cout << "Final RMS reprojection error: "<<rms_error<<vcl_endl;
+    std::cout << "Final RMS reprojection error: "<<rms_error<<std::endl;
 
     weights = ba.final_weights();
     outliers_downweighted = true;
@@ -361,13 +362,13 @@ static void test_bundle_adjust()
         if (weights[i] > 0.5) // should have low weight
         {
           outliers_downweighted = false;
-          vcl_cout << "outlier measurement "<<i<<" has high weight "<<weights[i]<<vcl_endl;
+          std::cout << "outlier measurement "<<i<<" has high weight "<<weights[i]<<std::endl;
         }
       }
       else if (weights[i] < 0.9) // inliers should have high weight
       {
         outliers_downweighted = false;
-        vcl_cout << "inlier measurement "<<i<<" has low weight "<<weights[i]<<vcl_endl;
+        std::cout << "inlier measurement "<<i<<" has low weight "<<weights[i]<<std::endl;
       }
     }
     TEST("only outliers down-weighted",outliers_downweighted, true);
@@ -376,7 +377,7 @@ static void test_bundle_adjust()
     rms_3d_pts = 0.0;
     for ( unsigned i=0; i< unknown_world.size(); ++i)
       rms_3d_pts += (unknown_world[i] - world[i]).sqr_length();
-    rms_3d_pts = vcl_sqrt(rms_3d_pts/world.size());
+    rms_3d_pts = std::sqrt(rms_3d_pts/world.size());
     TEST_NEAR("Solution Correct (without gradient, outliers)", rms_3d_pts, 0.0, 1.0e-3);
 
     vpgl_bundle_adjust::write_vrml("test_bundle_est_f.wrl",unknown_cameras,unknown_world);

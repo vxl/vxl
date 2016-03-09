@@ -10,9 +10,10 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_tolerance.h>
 
-#include <vcl_iostream.h>
-#include <vcl_iomanip.h>
-#include <vcl_cmath.h> // for std::sqrt
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iomanip>
+#include <cmath> // for std::sqrt
 
 //: Construct from homogeneous point
 template <class Type>
@@ -80,7 +81,7 @@ double cross_ratio(vgl_point_3d<T>const& p1, vgl_point_3d<T>const& p2,
 
 //: Write "<vgl_point_3d x,y,z> " to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p)
+std::ostream&  operator<<(std::ostream& s, vgl_point_3d<Type> const& p)
 {
   return s << "<vgl_point_3d "<< p.x() << ',' << p.y() << ',' << p.z() << "> ";
 }
@@ -91,21 +92,21 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_point_3d<Type> const& p)
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_point_3d
 template <class Type>
-vcl_istream& vgl_point_3d<Type>::read(vcl_istream& is)
+std::istream& vgl_point_3d<Type>::read(std::istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
   Type tx, ty, tz;
-  is >> vcl_ws; // jump over any leading whitespace
+  is >> std::ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> tx >> vcl_ws;
+  is >> std::ws >> tx >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> ty >> vcl_ws;
+  is >> std::ws >> ty >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> tz >> vcl_ws;
+  is >> std::ws >> tz >> std::ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
@@ -121,7 +122,7 @@ vcl_istream& vgl_point_3d<Type>::read(vcl_istream& is)
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_point_3d
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is, vgl_point_3d<Type>& p)
+std::istream&  operator>>(std::istream& is, vgl_point_3d<Type>& p)
 {
   return p.read(is);
 }
@@ -131,7 +132,7 @@ vcl_istream&  operator>>(vcl_istream& is, vgl_point_3d<Type>& p)
 //  of sum of squares) of the distances from that centre of gravity.
 // \relatesalso vgl_point_3d
 template <class Type>
-double stddev(vcl_vector<vgl_point_3d<Type> > const& v)
+double stddev(std::vector<vgl_point_3d<Type> > const& v)
 {
   int n = (int)(v.size());
   double d = 0.0;
@@ -142,7 +143,7 @@ double stddev(vcl_vector<vgl_point_3d<Type> > const& v)
   for (int i=0; i<n; ++i)
     d += vgl_sqr(v[i].x()-cx) + vgl_sqr(v[i].y()-cy) + vgl_sqr(v[i].z()-cz);
 #undef vgl_sqr
-  return vcl_sqrt(d);
+  return std::sqrt(d);
 }
 
 
@@ -153,8 +154,8 @@ template double cross_ratio(vgl_point_3d<T >const&, vgl_point_3d<T >const&, \
                             vgl_point_3d<T >const&, vgl_point_3d<T >const&); \
 template bool coplanar(vgl_point_3d<T > const&, vgl_point_3d<T > const&, \
                        vgl_point_3d<T > const&, vgl_point_3d<T > const&); \
-template vcl_ostream& operator<<(vcl_ostream&, const vgl_point_3d<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_point_3d<T >&); \
-template double stddev(vcl_vector<vgl_point_3d<T > > const&)
+template std::ostream& operator<<(std::ostream&, const vgl_point_3d<T >&); \
+template std::istream& operator>>(std::istream&, vgl_point_3d<T >&); \
+template double stddev(std::vector<vgl_point_3d<T > > const&)
 
 #endif // vgl_point_3d_hxx_

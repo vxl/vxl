@@ -12,44 +12,45 @@
 //
 // \verbatim
 //  Modifications
-//   10 June 1999 fsm removed constructor from 'const vcl_string &' and
+//   10 June 1999 fsm removed constructor from 'const std::string &' and
 //                    changed remaining constructors to use do_vul_sprintf().
 //   Peter Vanroose   27/05/2001: Corrected the documentation
 // \endverbatim
 //-----------------------------------------------------------------------------
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: C++ conforming replacement to the ANSI C functions sprintf and printf.
 // vul_sprintf works in the same way as sprintf but is itself an ANSI C++ string
 // which can either be kept or output directly using streams  e.g.
 // \code
-// vcl_cerr << vul_sprintf("int %d, float %f ", 1, 3.14)
-//          << bigobject << vcl_endl;
+// std::cerr << vul_sprintf("int %d, float %f ", 1, 3.14)
+//          << bigobject << std::endl;
 // \endcode
 
-struct vul_sprintf : public vcl_string
+struct vul_sprintf : public std::string
 {
   // ISO C++ does not allow reference types or structure types for the
   // argument preceding ... in a function taking a variable number of
   // parameters.
   // So we can't have any of these constructors:
-  //   vul_sprintf(vcl_string const& fmt, ...);
-  //   vul_sprintf(vcl_string fmt, ...);
+  //   vul_sprintf(std::string const& fmt, ...);
+  //   vul_sprintf(std::string fmt, ...);
   vul_sprintf(char const *fmt, ...);
 
 #ifndef VCL_WIN32
   // assignment
-  vul_sprintf& operator=(vcl_string const& s)
-  { vcl_string::operator=(s); return *this; }
+  vul_sprintf& operator=(std::string const& s)
+  { std::string::operator=(s); return *this; }
   vul_sprintf& operator=(char const* s)
-  { vcl_string::operator=(s); return *this; }
+  { std::string::operator=(s); return *this; }
 #endif
 
   operator char const* () const { return c_str(); }
 };
 
-vcl_ostream& operator<<(vcl_ostream &os, const vul_sprintf& s);
+std::ostream& operator<<(std::ostream &os, const vul_sprintf& s);
 
 #endif // vul_sprintf_h_

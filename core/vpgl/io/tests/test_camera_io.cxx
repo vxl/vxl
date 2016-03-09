@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
@@ -21,7 +22,7 @@ static double camera_diff_norm(vpgl_perspective_camera<double> const& C0,
 
 static void test_camera_io()
 {
-  vcl_cout << "Testing base camera io" << vcl_endl;
+  std::cout << "Testing base camera io" << std::endl;
   vpgl_camera<double>* cam, *cam_r;
   //===========   proj_camera ==================
   // Some matrices for testing.
@@ -133,7 +134,7 @@ static void test_camera_io()
 
   //===========   rational_camera ==================
 
-  vcl_vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
+  std::vector<double> neu_u(20,0.0), den_u(20,0.0), neu_v(20,0.0), den_v(20,0.0);
   neu_u[0]=0.1; neu_u[10]=0.071; neu_u[7]=0.01;  neu_u[9]=0.3;
   neu_u[15]=1.0; neu_u[18]=1.0, neu_u[19]=0.75;
 

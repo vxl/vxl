@@ -9,7 +9,8 @@
 // \brief  See vgui_debug_tableau.cxx for a description of this file.
 
 #include "vgui_debug_tableau.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui_event.h>
 
 //-----------------------------------------------------------------------------
@@ -28,12 +29,12 @@ vgui_debug_tableau::~vgui_debug_tableau()
 }
 
 //-----------------------------------------------------------------------------
-static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_sptr t)
+static void print_tableau(std::ostream& s, std::string indent, vgui_tableau_sptr t)
 {
-  s << indent << t->pretty_name() << vcl_endl;
+  s << indent << t->pretty_name() << std::endl;
 
   // Print any children
-  vcl_vector<vgui_tableau_sptr> children;
+  std::vector<vgui_tableau_sptr> children;
   t->get_children(&children);
 
   if (children.size() > 1)
@@ -48,7 +49,7 @@ static void print_tableau(vcl_ostream& s, vcl_string indent, vgui_tableau_sptr t
 //-----------------------------------------------------------------------------
 static void print_tableau(vgui_tableau_sptr t)
 {
-  print_tableau(vcl_cerr, __FILE__ ": ", t);
+  print_tableau(std::cerr, __FILE__ ": ", t);
 }
 
 //-----------------------------------------------------------------------------
@@ -65,10 +66,10 @@ bool vgui_debug_tableau::handle(const vgui_event& e)
   if (e.type == vgui_MOTION)
     print = (verbosity > 1);
   if (print)
-    vcl_cerr << __FILE__ ": " << (handled ? "TOOK" : "left") << ": " << e << vcl_endl;
+    std::cerr << __FILE__ ": " << (handled ? "TOOK" : "left") << ": " << e << std::endl;
 
   if (!(e == e_in))
-    vcl_cerr << __FILE__ ": The event changed !!!\n";
+    std::cerr << __FILE__ ": The event changed !!!\n";
 
   // Handle our events
   // In general, we'd like a debug tableau to have no effect on its child,
@@ -77,7 +78,7 @@ bool vgui_debug_tableau::handle(const vgui_event& e)
     switch (e.key) {
     case 'v':
       if (++verbosity > 2) verbosity = 0;
-      vcl_cerr << __FILE__ ": verbosity = " << verbosity << vcl_endl;
+      std::cerr << __FILE__ ": verbosity = " << verbosity << std::endl;
       break;
     case 'p':
       print_tableau(this);

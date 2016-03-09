@@ -21,7 +21,8 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vcl_cassert.h>
 
 
@@ -182,8 +183,8 @@ vpgl_proj_camera<T> vpgl_fundamental_matrix<T>::extract_left_camera(
 //--------------------------------
 template <class T>
 vpgl_proj_camera<T> vpgl_fundamental_matrix<T>::extract_left_camera(
-    const vcl_vector< vgl_point_3d<T> >& world_points,
-    const vcl_vector< vgl_point_2d<T> >& image_points ) const
+    const std::vector< vgl_point_3d<T> >& world_points,
+    const std::vector< vgl_point_2d<T> >& image_points ) const
 {
   assert( world_points.size() == image_points.size() );
   assert( world_points.size() >= 2 );
@@ -253,7 +254,7 @@ void vpgl_fundamental_matrix<T>::set_matrix( const vnl_matrix_fixed<T,3,3>& F )
 
 //: write vpgl_fundamental_matrix to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p)
+std::ostream&  operator<<(std::ostream& s, vpgl_fundamental_matrix<T> const& p)
 {
   s << p.get_matrix();
   return s;
@@ -261,7 +262,7 @@ vcl_ostream&  operator<<(vcl_ostream& s, vpgl_fundamental_matrix<T> const& p)
 
 //: Read vpgl_perspective_camera from stream
 template <class T>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p)
+std::istream&  operator>>(std::istream& s, vpgl_fundamental_matrix<T>& p)
 {
   vnl_matrix_fixed<T, 3, 3> m;
   s >> m;
@@ -273,7 +274,7 @@ vcl_istream&  operator>>(vcl_istream& s, vpgl_fundamental_matrix<T>& p)
 #undef vpgl_FUNDAMENTAL_MATRIX_INSTANTIATE
 #define vpgl_FUNDAMENTAL_MATRIX_INSTANTIATE(T) \
 template class vpgl_fundamental_matrix<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_fundamental_matrix<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vpgl_fundamental_matrix<T >&)
+template std::ostream& operator<<(std::ostream&, const vpgl_fundamental_matrix<T >&); \
+template std::istream& operator>>(std::istream&, vpgl_fundamental_matrix<T >&)
 
 #endif // vpgl_fundamental_matrix_hxx_

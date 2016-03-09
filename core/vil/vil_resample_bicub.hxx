@@ -45,15 +45,15 @@ void vil_resample_bicub(const vil_image_view<sType>& src_image,
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
   const unsigned np = src_image.nplanes();
-  const vcl_ptrdiff_t istep = src_image.istep();
-  const vcl_ptrdiff_t jstep = src_image.jstep();
-  const vcl_ptrdiff_t pstep = src_image.planestep();
+  const std::ptrdiff_t istep = src_image.istep();
+  const std::ptrdiff_t jstep = src_image.jstep();
+  const std::ptrdiff_t pstep = src_image.planestep();
   const sType* plane0 = src_image.top_left_ptr();
 
   dest_image.set_size(n1,n2,np);
-  const vcl_ptrdiff_t d_istep = dest_image.istep();
-  const vcl_ptrdiff_t d_jstep = dest_image.jstep();
-  const vcl_ptrdiff_t d_pstep = dest_image.planestep();
+  const std::ptrdiff_t d_istep = dest_image.istep();
+  const std::ptrdiff_t d_jstep = dest_image.jstep();
+  const std::ptrdiff_t d_pstep = dest_image.planestep();
   dType* d_plane0 = dest_image.top_left_ptr();
 
   double x1=x0;
@@ -142,15 +142,15 @@ void vil_resample_bicub_edge_extend(const vil_image_view<sType>& src_image,
   const unsigned ni = src_image.ni();
   const unsigned nj = src_image.nj();
   const unsigned np = src_image.nplanes();
-  const vcl_ptrdiff_t istep = src_image.istep();
-  const vcl_ptrdiff_t jstep = src_image.jstep();
-  const vcl_ptrdiff_t pstep = src_image.planestep();
+  const std::ptrdiff_t istep = src_image.istep();
+  const std::ptrdiff_t jstep = src_image.jstep();
+  const std::ptrdiff_t pstep = src_image.planestep();
   const sType* plane0 = src_image.top_left_ptr();
 
   dest_image.set_size(n1,n2,np);
-  const vcl_ptrdiff_t d_istep = dest_image.istep();
-  const vcl_ptrdiff_t d_jstep = dest_image.jstep();
-  const vcl_ptrdiff_t d_pstep = dest_image.planestep();
+  const std::ptrdiff_t d_istep = dest_image.istep();
+  const std::ptrdiff_t d_jstep = dest_image.jstep();
+  const std::ptrdiff_t d_pstep = dest_image.planestep();
   dType* d_plane0 = dest_image.top_left_ptr();
 
   double x1=x0;

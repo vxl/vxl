@@ -1,8 +1,9 @@
 // This is core/vil/io/tests/test_image_view_io.cxx
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
-#include <vcl_complex.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <complex>
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vil/vil_image_view.h>
@@ -28,8 +29,8 @@ void test_image_view_io_with_view_transform()
 
     vil_image_view<vxl_byte> img3(vil_plane(img, 0));
 
-    vcl_cout << "img: " << vsl_stream_summary(img) << vcl_endl;
-    vcl_cout << "vil_plane(img): " << vsl_stream_summary(img3) << vcl_endl;
+    std::cout << "img: " << vsl_stream_summary(img) << std::endl;
+    std::cout << "vil_plane(img): " << vsl_stream_summary(img3) << std::endl;
 
     {
       vsl_b_ofstream f("vil_image_view_test_io_vt2.bvl.tmp");
@@ -42,7 +43,7 @@ void test_image_view_io_with_view_transform()
     TEST("Finished reading file successfully", (!f2), false);
 
 
-    vcl_cout << "loaded vil_plane(img): " << vsl_stream_summary(img4) << vcl_endl;
+    std::cout << "loaded vil_plane(img): " << vsl_stream_summary(img4) << std::endl;
 
     TEST("image as expected", vil_image_view_deep_equality(img3, img4), true);
   }
@@ -51,12 +52,12 @@ void test_image_view_io_with_view_transform()
   // It isn't, and the consistency checks during IO pick up on that.
 
   {
-    vil_image_view<vcl_complex<double> > img(10, 10);
+    vil_image_view<std::complex<double> > img(10, 10);
 
     vil_image_view<double> img2(vil_view_real_part(img));
 
-    vcl_cout << "img: " << vsl_stream_summary(img) << vcl_endl;
-    vcl_cout << "vil_view_real_part(img): " << vsl_stream_summary(img2) << vcl_endl;
+    std::cout << "img: " << vsl_stream_summary(img) << std::endl;
+    std::cout << "vil_view_real_part(img): " << vsl_stream_summary(img2) << std::endl;
 
     {
       vsl_b_ofstream f("vil_image_view_test_io_vt1.bvl.tmp");
@@ -68,7 +69,7 @@ void test_image_view_io_with_view_transform()
     TEST("Finished reading file successfully", (!f2), false);
 
 
-    vcl_cout << "vil_view_real_part(img): " << vsl_stream_summary(img3) << vcl_endl;
+    std::cout << "vil_view_real_part(img): " << vsl_stream_summary(img3) << std::endl;
 
     TEST("read image as expected", vil_image_view_deep_equality(img2, img3), true);
   }
@@ -80,7 +81,7 @@ void test_image_view_io_with_view_transform()
 // Check for multiple null pointer loading bug
 void test_image_view_io_as_null()
 {
-  vcl_cout<<"Testing empty image IO "<<vcl_endl;
+  std::cout<<"Testing empty image IO "<<std::endl;
   vil_image_view<vxl_byte> im1, im2;
 
   vsl_b_ofstream bfs_out("vil_image_view_test_io.bvl.tmp");
@@ -105,7 +106,7 @@ void test_image_view_io_as_null()
 template<class T>
 inline void test_image_view_io_as(T value1, T value2)
 {
-  vcl_cout<<"Testing IO of images of type "<<vil_pixel_format_of(T())<<vcl_endl;
+  std::cout<<"Testing IO of images of type "<<vil_pixel_format_of(T())<<std::endl;
   vil_image_view<T> image1(15,17,3);
   image1.fill(value1);
   image1(3,2,1) = value2;
@@ -144,7 +145,7 @@ inline void test_image_view_io_as(T value1, T value2)
 
 static void test_image_view_io()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing IO for vil_image_view\n"
            << "*******************************\n";
 

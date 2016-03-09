@@ -3,8 +3,9 @@
 //:
 // \file
 
-#include <vcl_cmath.h>
-#include <vcl_cstdlib.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vcl_cassert.h>
 
 #include <vgl/vgl_vector_3d.h>
@@ -18,8 +19,8 @@
 
 
 double vpgl_triangulate_points::triangulate(
-        const vcl_vector<vgl_point_2d<double> > &points,
-        const vcl_vector<vpgl_perspective_camera<double> > &cameras,
+        const std::vector<vgl_point_2d<double> > &points,
+        const std::vector<vpgl_perspective_camera<double> > &cameras,
         vgl_point_3d<double> &point_3d)
 {
     const int num_vars = 3;// One var for x, y, z of output 3d point
@@ -75,5 +76,5 @@ double vpgl_triangulate_points::triangulate(
         error += dx * dx + dy * dy;
     }
 
-    return vcl_sqrt(error / points.size());
+    return std::sqrt(error / points.size());
 }

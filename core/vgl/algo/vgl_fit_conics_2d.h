@@ -23,7 +23,8 @@
 //  Modifications
 //   none
 // \endverbatim
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_conic_segment_2d.h>
 
@@ -32,8 +33,8 @@ class vgl_fit_conics_2d
 {
   // Data Members--------------------------------------------------------------
  protected:
-  vcl_vector<vgl_point_2d<T> > curve_;
-  vcl_vector<vgl_conic_segment_2d<T> > segs_;
+  std::vector<vgl_point_2d<T> > curve_;
+  std::vector<vgl_conic_segment_2d<T> > segs_;
   unsigned int min_length_;
   T tol_;
  public:
@@ -56,7 +57,7 @@ class vgl_fit_conics_2d
   void add_point(const T x, const T y);
 
   //: add an entire curve
-  void add_curve(vcl_vector<vgl_point_2d<T> > const & curve){curve_=curve;}
+  void add_curve(std::vector<vgl_point_2d<T> > const & curve){curve_=curve;}
 
   //: clear internal data
   void clear();
@@ -65,8 +66,8 @@ class vgl_fit_conics_2d
   bool fit();
 
   // Data Access---------------------------------------------------------------
-  vcl_vector<vgl_point_2d<T> >& get_points(){return curve_;}
-  vcl_vector<vgl_conic_segment_2d<T> >& get_conic_segs(){return segs_;}
+  std::vector<vgl_point_2d<T> >& get_points(){return curve_;}
+  std::vector<vgl_conic_segment_2d<T> >& get_conic_segs(){return segs_;}
 
  protected:
   //: output a conic that fits from start to end

@@ -14,8 +14,8 @@
 // The algorithm determines the transformation $H_i$ from each pointset to the
 // canonical projective basis (see h_matrix_2d::projective_basis), and
 // returns the combined transform $H = H_2^{-1} H_1$.
-bool vgl_h_matrix_2d_compute_4point::compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                                               vcl_vector<vgl_homg_point_2d<double> > const& points2,
+bool vgl_h_matrix_2d_compute_4point::compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
+                                               std::vector<vgl_homg_point_2d<double> > const& points2,
                                                vgl_h_matrix_2d<double>& H)
 {
   vgl_h_matrix_2d<double> H1, H2;
@@ -34,8 +34,8 @@ bool vgl_h_matrix_2d_compute_4point::compute_p(vcl_vector<vgl_homg_point_2d<doub
 // matches in the list.
 //
 // Implementation is the dual of the implementation of compute_p()
-bool vgl_h_matrix_2d_compute_4point::compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                                               vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+bool vgl_h_matrix_2d_compute_4point::compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+                                               std::vector<vgl_homg_line_2d<double> > const& lines2,
                                                vgl_h_matrix_2d<double>& H)
 {
   vgl_h_matrix_2d<double> H1, H2;
@@ -47,9 +47,9 @@ bool vgl_h_matrix_2d_compute_4point::compute_l(vcl_vector<vgl_homg_line_2d<doubl
   return true;
 }
 
-bool vgl_h_matrix_2d_compute_4point::compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                                               vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                                               vcl_vector<double> const&,
+bool vgl_h_matrix_2d_compute_4point::compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+                                               std::vector<vgl_homg_line_2d<double> > const& lines2,
+                                               std::vector<double> const&,
                                                vgl_h_matrix_2d<double>& H)
 {
   vgl_h_matrix_2d<double> H1, H2;
@@ -61,10 +61,10 @@ bool vgl_h_matrix_2d_compute_4point::compute_l(vcl_vector<vgl_homg_line_2d<doubl
   return true;
 }
 
-bool vgl_h_matrix_2d_compute_4point::compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& /*points1*/,
-                                                vcl_vector<vgl_homg_point_2d<double> > const& /*points2*/,
-                                                vcl_vector<vgl_homg_line_2d<double> > const& /*lines1*/,
-                                                vcl_vector<vgl_homg_line_2d<double> > const& /*lines2*/,
+bool vgl_h_matrix_2d_compute_4point::compute_pl(std::vector<vgl_homg_point_2d<double> > const& /*points1*/,
+                                                std::vector<vgl_homg_point_2d<double> > const& /*points2*/,
+                                                std::vector<vgl_homg_line_2d<double> > const& /*lines1*/,
+                                                std::vector<vgl_homg_line_2d<double> > const& /*lines2*/,
                                                 vgl_h_matrix_2d<double>& )
 {
   assert(!"vgl_h_matrix_2d_compute_4point::compute_pl() NYI");

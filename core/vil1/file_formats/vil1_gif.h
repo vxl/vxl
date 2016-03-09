@@ -17,7 +17,8 @@
 //\endverbatim
 
 class vil1_stream;
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vil1/vil1_file_format.h>
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
@@ -89,7 +90,7 @@ struct vil1_gif_loader_saver : public vil1_image_impl
   vil1_gif_color_map *global_color_map;
   int background_index;
 
-  vcl_vector<void*> images;
+  std::vector<void*> images;
 };
 
 struct vil1_gif_loader_saver_proxy : public vil1_image_impl

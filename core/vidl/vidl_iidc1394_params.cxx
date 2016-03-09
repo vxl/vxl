@@ -64,7 +64,7 @@ frame_rate_val(frame_rate_t r)
 
 
 //: Return string describing the mode
-vcl_string
+std::string
 vidl_iidc1394_params::
 video_mode_string(video_mode_t m)
 {
@@ -108,7 +108,7 @@ video_mode_string(video_mode_t m)
 
 
 //: Return string describing the feature
-vcl_string
+std::string
 vidl_iidc1394_params::
 feature_string(feature_t f)
 {
@@ -142,7 +142,7 @@ feature_string(feature_t f)
 
 
 //: Return string describing the feature mode
-vcl_string
+std::string
 vidl_iidc1394_params::
 feature_mode_string(feature_mode_t fm)
 {

@@ -8,7 +8,8 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_tolerance.h>
 #include <vnl/vnl_det.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 //: constructor from four corner points.
 //  The three directions from the first of these to the three other points must be mutually orthogonal.
@@ -53,9 +54,9 @@ vgl_orient_box_3d<Type>::vgl_orient_box_3d(vgl_point_3d<Type> const& p0,
 
 //: returns the 8 corner points of the box
 template <class Type>
-vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners() const
+std::vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners() const
 {
-  vcl_vector<vgl_point_3d<Type> > corner_points(8);
+  std::vector<vgl_point_3d<Type> > corner_points(8);
 
   //get the min and max of the aab and find the other corners
   corner_points[0] = box_.min_point();
@@ -95,9 +96,9 @@ vcl_vector<vgl_point_3d<Type> > vgl_orient_box_3d<Type>::corners() const
 
 template <class Type>
 vgl_box_3d<Type> vgl_orient_box_3d<Type>::enclosing_box() const{
-  vcl_vector<vgl_point_3d<Type> > crns = this->corners();
+  std::vector<vgl_point_3d<Type> > crns = this->corners();
   vgl_box_3d<Type> ret;
-  for(typename vcl_vector<vgl_point_3d<Type> >::iterator cit = crns.begin();
+  for(typename std::vector<vgl_point_3d<Type> >::iterator cit = crns.begin();
       cit != crns.end(); ++cit)
     ret.add(*cit);
   return ret;
@@ -124,27 +125,27 @@ bool vgl_orient_box_3d<Type>::contains(Type const& x,
 }
 
 template <class Type>
-vcl_ostream& vgl_orient_box_3d<Type>::print(vcl_ostream& s) const
+std::ostream& vgl_orient_box_3d<Type>::print(std::ostream& s) const
 {
-  return s <<  "<vgl_orient_box_3d " << box_ << " dir=" << orient_  << '>' << vcl_endl;
+  return s <<  "<vgl_orient_box_3d " << box_ << " dir=" << orient_  << '>' << std::endl;
 }
 
 template <class Type>
-vcl_istream& vgl_orient_box_3d<Type>::read(vcl_istream& s)
+std::istream& vgl_orient_box_3d<Type>::read(std::istream& s)
 {
   return s >> box_ >> orient_ ;
 }
 
 //: Write box to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_orient_box_3d<Type> const& p)
+std::ostream&  operator<<(std::ostream& s, vgl_orient_box_3d<Type> const& p)
 {
   return p.print(s);
 }
 
 //: Read box from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is,  vgl_orient_box_3d<Type>& p)
+std::istream&  operator>>(std::istream& is,  vgl_orient_box_3d<Type>& p)
 {
   return p.read(is);
 }
@@ -152,7 +153,7 @@ vcl_istream&  operator>>(vcl_istream& is,  vgl_orient_box_3d<Type>& p)
 #undef VGL_ORIENT_BOX_3D_INSTANTIATE
 #define VGL_ORIENT_BOX_3D_INSTANTIATE(T) \
 template class vgl_orient_box_3d<T >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_orient_box_3d<T > const& p);\
-template vcl_istream& operator>>(vcl_istream&, vgl_orient_box_3d<T >& p)
+template std::ostream& operator<<(std::ostream&, vgl_orient_box_3d<T > const& p);\
+template std::istream& operator>>(std::istream&, vgl_orient_box_3d<T >& p)
 
 #endif // vgl_orient_box_3d_hxx_

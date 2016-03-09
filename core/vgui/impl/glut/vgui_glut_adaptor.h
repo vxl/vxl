@@ -11,7 +11,8 @@
 //   17-Sep-2002 K.Y.McGaul - Converted to doxygen style documentation.
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vgui/vgui_adaptor.h>
 struct vgui_command;
 struct vgui_overlay_helper;
@@ -65,7 +66,7 @@ struct vgui_glut_adaptor : vgui_adaptor
 
   // super and sub
   vgui_glut_adaptor *super; // 0 if none.
-  vcl_vector<vgui_glut_adaptor*> sub_contexts;
+  std::vector<vgui_glut_adaptor*> sub_contexts;
 
   // popup things
   friend struct vgui_glut_popup_impl;
@@ -91,7 +92,7 @@ struct vgui_glut_adaptor : vgui_adaptor
   virtual void      special_up(int,int,int);
 
   //
-  static vcl_vector<vgui_glut_adaptor*> &all();
+  static std::vector<vgui_glut_adaptor*> &all();
   static vgui_glut_adaptor *get_adaptor(int window_id);
 
   // static callbacks :

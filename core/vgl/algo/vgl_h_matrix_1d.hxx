@@ -7,29 +7,31 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_cstdlib.h> // for exit()
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <cstdlib> // for exit()
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
 # include <vcl_deprecated.h>
 
 //--------------------------------------------------------------------------------
 template <class T>
-vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vcl_istream &is)
+vgl_h_matrix_1d<T>::vgl_h_matrix_1d(std::istream &is)
 {
   t12_matrix_.read_ascii(is);
 }
 
 template <class T>
-vgl_h_matrix_1d<T>::vgl_h_matrix_1d(vcl_vector<vgl_homg_point_1d<T> > const& points1,
-                                    vcl_vector<vgl_homg_point_1d<T> > const& points2)
+vgl_h_matrix_1d<T>::vgl_h_matrix_1d(std::vector<vgl_homg_point_1d<T> > const& points1,
+                                    std::vector<vgl_homg_point_1d<T> > const& points2)
 {
   vnl_matrix<T> W;
   assert(points1.size() == points2.size());
   unsigned int numpoints = points1.size();
   if (numpoints < 3)
   {
-    vcl_cerr << "\nvhl_h_matrix_1d - minimum of 3 points required\n";
-    vcl_exit(0);
+    std::cerr << "\nvhl_h_matrix_1d - minimum of 3 points required\n";
+    std::exit(0);
   }
 
   W.set_size(numpoints, 4);
@@ -74,13 +76,13 @@ vgl_h_matrix_1d<T>::get_inverse() const
 
 //-----------------------------------------------------------------------------
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_1d<T> const& H)
+std::ostream& operator<<(std::ostream& s, vgl_h_matrix_1d<T> const& H)
 {
   return s << H.get_matrix();
 }
 
 template <class T>
-bool vgl_h_matrix_1d<T>::read(vcl_istream& s)
+bool vgl_h_matrix_1d<T>::read(std::istream& s)
 {
   t12_matrix_.read_ascii(s);
   return s.good() || s.eof();
@@ -90,9 +92,9 @@ bool vgl_h_matrix_1d<T>::read(vcl_istream& s)
 template <class T>
 vgl_h_matrix_1d<T>::vgl_h_matrix_1d(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good())
-    vcl_cerr << "vgl_h_matrix_1d::read: Error opening " << filename << vcl_endl;
+    std::cerr << "vgl_h_matrix_1d::read: Error opening " << filename << std::endl;
   else
     t12_matrix_.read_ascii(f);
 }
@@ -100,9 +102,9 @@ vgl_h_matrix_1d<T>::vgl_h_matrix_1d(char const* filename)
 template <class T>
 bool vgl_h_matrix_1d<T>::read(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good())
-    vcl_cerr << "vgl_h_matrix_1d::read: Error opening " << filename << vcl_endl;
+    std::cerr << "vgl_h_matrix_1d::read: Error opening " << filename << std::endl;
   return read(f);
 }
 
@@ -190,7 +192,7 @@ vgl_h_matrix_1d<T>::set_affine(vnl_matrix_fixed<T,1,2> const& M12)
 
 //-------------------------------------------------------------------
 template <class T>
-bool vgl_h_matrix_1d<T>::projective_basis(vcl_vector<vgl_homg_point_1d<T> > const& points)
+bool vgl_h_matrix_1d<T>::projective_basis(std::vector<vgl_homg_point_1d<T> > const& points)
 {
   if (points.size()!=3)
     return false;
@@ -204,7 +206,7 @@ bool vgl_h_matrix_1d<T>::projective_basis(vcl_vector<vgl_homg_point_1d<T> > cons
 
   if (! point_matrix.is_finite() || point_matrix.has_nans())
   {
-    vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
              << " given points have infinite or NaN values\n";
     this->set_identity();
     return false;
@@ -212,7 +214,7 @@ bool vgl_h_matrix_1d<T>::projective_basis(vcl_vector<vgl_homg_point_1d<T> > cons
   vnl_svd<T> svd1(point_matrix.as_ref(), 1e-8); // size 2x3
   if (svd1.rank() < 2)
   {
-    vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
              << " At least two out of the three points are nearly identical\n";
     this->set_identity();
     return false;
@@ -229,7 +231,7 @@ bool vgl_h_matrix_1d<T>::projective_basis(vcl_vector<vgl_homg_point_1d<T> > cons
 
   if (! back_matrix.is_finite() || back_matrix.has_nans())
   {
-    vcl_cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_1d<T>::projective_basis():\n"
              << " back matrix has infinite or NaN values\n";
     this->set_identity();
     return false;
@@ -266,7 +268,7 @@ bool vgl_h_matrix_1d<T>::is_euclidean() const
 #undef VGL_H_MATRIX_1D_INSTANTIATE
 #define VGL_H_MATRIX_1D_INSTANTIATE(T) \
 template class vgl_h_matrix_1d<T >; \
-template vcl_ostream& operator << (vcl_ostream& s, vgl_h_matrix_1d<T > const& h); \
-template vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_1d<T >& h)
+template std::ostream& operator << (std::ostream& s, vgl_h_matrix_1d<T > const& h); \
+template std::istream& operator >> (std::istream& s, vgl_h_matrix_1d<T >& h)
 
 #endif // vgl_h_matrix_1d_hxx_

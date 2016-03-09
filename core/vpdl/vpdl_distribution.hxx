@@ -6,7 +6,8 @@
 
 #include "vpdl_distribution.h"
 #include <vpdl/vpdt/vpdt_access.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vcl_cassert.h>
 
 //: Default implementation of numerical CDF inverse computation.
@@ -33,7 +34,7 @@ class inverse_cdf_helper
   //: Do the actual inversion
   static inline vector invert(const vpdl_distribution<T,n>& /*dist*/, const T& /*p*/)
   {
-    return vector(vcl_numeric_limits<T>::quiet_NaN());
+    return vector(std::numeric_limits<T>::quiet_NaN());
   }
 };
 
@@ -59,7 +60,7 @@ class inverse_cdf_helper<T,0>
   //: Do the actual inversion
   static inline vector invert(const vpdl_distribution<T,0>& dist, const T& /*p*/)
   {
-    return vector(dist.dimension(), vcl_numeric_limits<T>::quiet_NaN());
+    return vector(dist.dimension(), std::numeric_limits<T>::quiet_NaN());
   }
 };
 

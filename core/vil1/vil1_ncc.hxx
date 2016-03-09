@@ -7,7 +7,8 @@
 */
 #include "vil1_ncc.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // vcl_sqrt()
+#include <vcl_compiler.h>
+#include <cmath> // std::sqrt()
 
 template <class I1, class I2, class O>
 O vil1_ncc(vil1_memory_image_of<I1> const &a,
@@ -58,7 +59,7 @@ O vil1_ncc(vil1_memory_image_of<I1> const &a,
   var2 /= O(w*h);
 
   // Looks a bit dumb I know, but makes it clear what's going on...
-  return acc / (vcl_sqrt(w*h*var1) * vcl_sqrt(w*h*var2));
+  return acc / (std::sqrt(w*h*var1) * std::sqrt(w*h*var2));
 }
 
 //--------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ A vil1_ncc(T1 const * const *I1, int x1, int y1,
     }
   }
 
-  return (N*S12 - S1*S2) / vcl_sqrt((N*S11 - S1*S1) * (N*S22 - S2*S2));
+  return (N*S12 - S1*S2) / std::sqrt((N*S11 - S1*S1) * (N*S22 - S2*S2));
 }
 
 //--------------------------------------------------------------------------------

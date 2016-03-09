@@ -4,12 +4,13 @@
 // \file
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
-#include <vcl_cstring.h>
-#include <vcl_cctype.h>
-#include <vcl_algorithm.h>
-#include <vcl_sstream.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+#include <algorithm>
+#include <sstream>
+#include <cmath>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_sprintf.h>
 
@@ -22,8 +23,8 @@ char* vul_string_c_upcase(char* s)  // Convert entire string to upper case
 {
   char* p = s;                   // Point to beginning of string
   while (*p) {                   // While there are still valid characters
-    if (vcl_islower(*p))         // if this is lower case
-      *p = (char)vcl_toupper(*p);// convert to uppercase
+    if (std::islower(*p))         // if this is lower case
+      *p = (char)std::toupper(*p);// convert to uppercase
     p++;                         // Advance pointer
   }
   return s;                      // Return reference to modified string
@@ -34,8 +35,8 @@ char* vul_string_c_downcase(char* s)  // Convert entire string to lower case
 {
   char* p = s;                   // Point to beginning of string
   while (*p) {                   // While there are still valid characters
-    if (vcl_isupper(*p))         // if this is upper case
-      *p = (char)vcl_tolower(*p);// convert to lowercase
+    if (std::isupper(*p))         // if this is upper case
+      *p = (char)std::tolower(*p);// convert to lowercase
     p++;                         // Advance pointer
   }
   return s;                      // Return reference to modified string
@@ -47,11 +48,11 @@ char* vul_string_c_capitalize(char* s)  // Capitalize each word in string
 {
   char* p = s;                           // Point to beginning of string
   while (true) {                         // Infinite loop
-    for (; *p && !vcl_isalnum(*p); p++) ;// Skip to first alphanumeric
+    for (; *p && !std::isalnum(*p); p++) ;// Skip to first alphanumeric
     if (*p == END_OF_STRING)             // If end of string
       return s;                          // Return string
-    *p = (char)vcl_toupper(*p);          // Convert character
-    while (*++p && vcl_isalnum(*p)) ;    // Search for next word
+    *p = (char)std::toupper(*p);          // Convert character
+    while (*++p && std::isalnum(*p)) ;    // Search for next word
   }
 }
 
@@ -96,7 +97,7 @@ char* vul_string_c_left_trim(char* str, const char* rem) // Trim prefix from str
 // from the first string str, and returns the modified string str.
 char* vul_string_c_right_trim(char* str, const char* rem) // Trim suffix from string
 {
-  char* s = str + vcl_strlen(str) - 1;            // last character of str
+  char* s = str + std::strlen(str) - 1;            // last character of str
   for (; s >= str; s--) {
      const char* r = rem;
      char t;
@@ -112,7 +113,7 @@ char* vul_string_c_right_trim(char* str, const char* rem) // Trim suffix from st
 // Reverses the order of the characters in char*.
 char* vul_string_c_reverse(char* c)     // Reverse the order of characters
 {
-  int length = (int)vcl_strlen(c);      // Number of characters in string
+  int length = (int)std::strlen(c);      // Number of characters in string
   char temp;
 
   for (int i = 0, j = length-1;         // Counting from front and rear
@@ -126,9 +127,9 @@ char* vul_string_c_reverse(char* c)     // Reverse the order of characters
 }
 
 // Reverses the order of the characters in string
-vcl_string& vul_string_reverse(vcl_string& s)
+std::string& vul_string_reverse(std::string& s)
 {
-  for (int i=0, j=(int)vcl_strlen(s.c_str())-1; i<j; ++i,--j)
+  for (int i=0, j=(int)std::strlen(s.c_str())-1; i<j; ++i,--j)
   {
     char c = s[i]; s[i] = s[j]; s[j] = c;
   }
@@ -141,35 +142,35 @@ vcl_string& vul_string_reverse(vcl_string& s)
 // instead of using it explicitly. - PVr.
 
 // Converts all alphabetical characters in string s to uppercase.
-vcl_string& vul_string_upcase(vcl_string& s)
+std::string& vul_string_upcase(std::string& s)
 {
-  for (vcl_string::iterator i=s.begin(); i != s.end(); ++i)
-    *i = (char)vcl_toupper(*i);
+  for (std::string::iterator i=s.begin(); i != s.end(); ++i)
+    *i = (char)std::toupper(*i);
   return s;
 }
 
 // Converts all alphabetical characters in string s to lowercase.
-vcl_string& vul_string_downcase(vcl_string& s)
+std::string& vul_string_downcase(std::string& s)
 {
-  for (vcl_string::iterator i=s.begin(); i != s.end(); ++i)
-    *i = (char)vcl_tolower(*i);
+  for (std::string::iterator i=s.begin(); i != s.end(); ++i)
+    *i = (char)std::tolower(*i);
   return s;
 }
 
 // Capitalizes all words in string s.
-vcl_string& vul_string_capitalize(vcl_string& s)
+std::string& vul_string_capitalize(std::string& s)
 {
   // Word beginnings are defined as the transition from
   // non-alphanumeric to alphanumeric, and word endings as the reverse
   // transition.
-  vcl_string::iterator si;
+  std::string::iterator si;
   bool in_word = false;
   for ( si = s.begin(); si != s.end(); ++si ) {
-    if ( !in_word && vcl_isalnum( *si ) ) {
-      *si = (char)vcl_toupper( *si );
+    if ( !in_word && std::isalnum( *si ) ) {
+      *si = (char)std::toupper( *si );
       in_word = true;
     }
-    else if ( in_word && !vcl_isalnum( *si ) ) {
+    else if ( in_word && !std::isalnum( *si ) ) {
       in_word = false;
     }
   }
@@ -178,12 +179,12 @@ vcl_string& vul_string_capitalize(vcl_string& s)
 
 // Removes any occurrence of the character string rem
 // from the string sr, and returns the modified string sr.
-vcl_string& vul_string_trim(vcl_string& sr, const char* rem)
+std::string& vul_string_trim(std::string& sr, const char* rem)
 {
-  int l = (int)vcl_strlen(rem);
+  int l = (int)std::strlen(rem);
   for (;;) {
-    vcl_string::size_type loc = sr.find(rem);
-    if (loc == vcl_string::npos)
+    std::string::size_type loc = sr.find(rem);
+    if (loc == std::string::npos)
       break;
     sr.erase(loc, l);
   }
@@ -192,33 +193,33 @@ vcl_string& vul_string_trim(vcl_string& sr, const char* rem)
 
 // Removes any prefix occurrence of the character string rem
 // from the string sr, and returns the modified string sr.
-vcl_string& vul_string_left_trim(vcl_string& sr, const char* rem)
+std::string& vul_string_left_trim(std::string& sr, const char* rem)
 {
-  int l = (int)vcl_strlen(rem);
-  if (vcl_strncmp(sr.c_str(), rem, l) == 0)
+  int l = (int)std::strlen(rem);
+  if (std::strncmp(sr.c_str(), rem, l) == 0)
     sr.erase(0, l);
   return sr;
 }
 
 // Removes any suffix occurrence of the character string rem
 // from the string sr, and returns the modified string sr.
-vcl_string& vul_string_right_trim(vcl_string& sr, const char* rem)
+std::string& vul_string_right_trim(std::string& sr, const char* rem)
 {
-  int l = (int)vcl_strlen(rem);
+  int l = (int)std::strlen(rem);
   int lsr = int(sr.length());
-  if (vcl_strncmp(sr.c_str() + lsr - l, rem, l) == 0)
+  if (std::strncmp(sr.c_str() + lsr - l, rem, l) == 0)
     sr.erase(lsr - l, l);
   return sr;
 }
 
-int vul_string_atoi(vcl_string const& s)
+int vul_string_atoi(std::string const& s)
 {
-  return vcl_atoi(s.c_str());
+  return std::atoi(s.c_str());
 }
 
-double vul_string_atof(vcl_string const& s)
+double vul_string_atof(std::string const& s)
 {
-  return vcl_atof(s.c_str());
+  return std::atof(s.c_str());
 }
 
 
@@ -226,9 +227,9 @@ double vul_string_atof(vcl_string const& s)
 // No space is allowed between the number and the suffix.
 // k=10^3, kb=2^10, M=10^6, Mb=2^20, G=10^9, Gb=2^30, T=10^12, Tb=2^40
 // If parse fails, return 0.0;
-double vul_string_atof_withsuffix(vcl_string const& s)
+double vul_string_atof_withsuffix(std::string const& s)
 {
-  vcl_istringstream ss(s);
+  std::istringstream ss(s);
   double d;
   ss >> d;
   if (!ss) return 0.0;
@@ -247,22 +248,22 @@ double vul_string_atof_withsuffix(vcl_string const& s)
     case 'T': e=4; break;
     default: return 0.0;
   }
-  if (ss.eof()) return d*vcl_pow(10.0,3.0*e);
+  if (ss.eof()) return d*std::pow(10.0,3.0*e);
 
   c='A';
   ss >> c;
-  if (ss.eof()) return d*vcl_pow(10.0,3.0*e);
+  if (ss.eof()) return d*std::pow(10.0,3.0*e);
   if (!ss || c!='i') return 0.0;
 
   ss >> c;
   if (!ss.eof()) return 0.0;
 
-  return d*vcl_pow(2.0,10.0*e);
+  return d*std::pow(2.0,10.0*e);
 }
 
 static bool NotSpace(char a)
 {
-  return !vcl_isspace(a);
+  return !std::isspace(a);
 }
 
 template <class IT>
@@ -270,16 +271,16 @@ static bool myequals(IT b1, IT e1,
                      const char * b2, const char * e2)
 {
   for (;b1 != e1 && b2 != e2; ++b1, ++b2)
-    if (vcl_toupper(*b1) != *b2) return false;
+    if (std::toupper(*b1) != *b2) return false;
   return b1 == e1
       && b2 == e2;
 }
 
-bool vul_string_to_bool(const vcl_string &str)
+bool vul_string_to_bool(const std::string &str)
 {
-  vcl_string::const_iterator begin = vcl_find_if(str.begin(), str.end(), NotSpace);
-  const vcl_string::const_reverse_iterator rend(begin);
-  vcl_string::const_iterator end = vcl_find_if(str.rbegin(), rend, NotSpace).base();
+  std::string::const_iterator begin = std::find_if(str.begin(), str.end(), NotSpace);
+  const std::string::const_reverse_iterator rend(begin);
+  std::string::const_iterator end = std::find_if(str.rbegin(), rend, NotSpace).base();
   const char *syes = "YES";
   const char *strue = "TRUE";
   const char *s1 = "1";
@@ -295,9 +296,9 @@ bool vul_string_to_bool(const vcl_string &str)
 // e.g. "0,1,10:14,20:-2:10" results in 0,1,10,11,12,13,14,20,18,16,14,12,10
 // No spaces are allowed.
 // \return empty on error.
-vcl_vector<int> vul_string_to_int_list(vcl_string str)
+std::vector<int> vul_string_to_int_list(std::string str)
 {
-  vcl_vector<int> rv;
+  std::vector<int> rv;
 
 
 #define REGEXP_INTEGER "\\-?[0123456789]+"
@@ -311,8 +312,8 @@ vcl_vector<int> vul_string_to_int_list(vcl_string str)
   while (str.length() > 0 && range_regexp.find(str)) {
     // the start/end positions (ref from 0) of the
     //    current ',' separated token.
-    vcl_ptrdiff_t start= range_regexp.start(0);
-    vcl_ptrdiff_t endp = range_regexp.end(0);
+    std::ptrdiff_t start= range_regexp.start(0);
+    std::ptrdiff_t endp = range_regexp.end(0);
     if (start != 0)
     {
       rv.clear();
@@ -320,9 +321,9 @@ vcl_vector<int> vul_string_to_int_list(vcl_string str)
     }
 
 
-    vcl_string match1 = range_regexp.match(1);
-    vcl_string match2 = range_regexp.match(2);
-    vcl_string match3 = range_regexp.match(3);
+    std::string match1 = range_regexp.match(1);
+    std::string match2 = range_regexp.match(2);
+    std::string match3 = range_regexp.match(3);
 
 
     // Remove this match from the front of string.
@@ -381,20 +382,20 @@ vcl_vector<int> vul_string_to_int_list(vcl_string str)
 // cannot contain whitespace or "$"s.
 // "$$" can be used to insert a literal "$" into the output.
 // \returns false if a matching variable could not be found.
-bool vul_string_expand_var(vcl_string &str)
+bool vul_string_expand_var(std::string &str)
 {
-  vcl_string::size_type i = 0; // index to current char.
-  const vcl_string::size_type npos = vcl_string::npos;
+  std::string::size_type i = 0; // index to current char.
+  const std::string::size_type npos = std::string::npos;
 
   // If there is a problem, carry on trying to convert rest
   bool success=true; //  of string, but remember failure.
 
   enum {not_in_var, start_var, in_var, in_bracket_var} state = not_in_var;
-  vcl_string::size_type var_begin = 0;
+  std::string::size_type var_begin = 0;
 
-  vcl_string::size_type bracket_type = npos; //index into open_brackets.
-  const vcl_string  open_brackets("{([");
-  const vcl_string close_brackets("})]");
+  std::string::size_type bracket_type = npos; //index into open_brackets.
+  const std::string  open_brackets("{([");
+  const std::string close_brackets("})]");
 
   while (i<str.size())
   {
@@ -433,11 +434,11 @@ bool vul_string_expand_var(vcl_string &str)
       }
       else
       {
-        const char * value= vcl_getenv(str.substr(var_begin+1, i-var_begin).c_str());
+        const char * value= std::getenv(str.substr(var_begin+1, i-var_begin).c_str());
         if (value)
         {
           str.replace(var_begin, i+1-var_begin, value);
-          i = var_begin + vcl_strlen(value);
+          i = var_begin + std::strlen(value);
           state=not_in_var;
           continue;
         }
@@ -456,11 +457,11 @@ bool vul_string_expand_var(vcl_string &str)
         }
         else
         {
-          const char * value= vcl_getenv(str.substr(var_begin+2, i-var_begin-2).c_str());
+          const char * value= std::getenv(str.substr(var_begin+2, i-var_begin-2).c_str());
           if (value)
           {
             str.replace(var_begin, i+1-var_begin, value);
-            i = var_begin + vcl_strlen(value);
+            i = var_begin + std::strlen(value);
             continue;
           }
           else
@@ -478,9 +479,9 @@ bool vul_string_expand_var(vcl_string &str)
 
 //: replaces instances "find_str" in "full_str" with "replace_str" a given "num_times".
 //  \returns true iff at least one replacement took place.
-bool vul_string_replace(vcl_string& full_str,
-                        const vcl_string& find_str,
-                        const vcl_string& replace_str,
+bool vul_string_replace(std::string& full_str,
+                        const std::string& find_str,
+                        const std::string& replace_str,
                         int num_times)
 {
   bool rep=false;
@@ -505,21 +506,21 @@ bool vul_string_replace(vcl_string& full_str,
 // Space and "\n" are preserved, but tabs, CR, etc are escaped.
 // This is not aimed and is not suitable for any particular input-validation
 // security problem, such as sql-injection.
-vcl_string vul_string_escape_ctrl_chars(const vcl_string &in)
+std::string vul_string_escape_ctrl_chars(const std::string &in)
 {
-  vcl_string out;
+  std::string out;
 
-  const static vcl_string special("\t\v\b\r\f\a\\");
-  const static vcl_string special_tr("tvbrfa\\");
+  const static std::string special("\t\v\b\r\f\a\\");
+  const static std::string special_tr("tvbrfa\\");
 
-  for (vcl_string::const_iterator it=in.begin(), end=in.end(); it!=end; ++it)
+  for (std::string::const_iterator it=in.begin(), end=in.end(); it!=end; ++it)
   {
-    if (!vcl_iscntrl(*it) || *it=='\n')
+    if (!std::iscntrl(*it) || *it=='\n')
       out+=*it;
     else
     {
-      vcl_string::size_type i=special.find(*it);
-      if (i==vcl_string::npos)
+      std::string::size_type i=special.find(*it);
+      if (i==std::string::npos)
         out+=vul_sprintf("\\x%02x",static_cast<int>(*it));
       else
       {

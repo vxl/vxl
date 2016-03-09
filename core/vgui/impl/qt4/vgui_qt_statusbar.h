@@ -14,8 +14,9 @@
 //   23.05.2007 Matt Leotta  converted to QT3 compatibility functions to native QT4
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
@@ -33,9 +34,9 @@ class vgui_qt_statusbar :
    int write(const char* text, int n);
    int write(const char* text);
 
-   vcl_string linebuffer;
+   std::string linebuffer;
    vgui_statusbuf* statusbuf;
-   vcl_ostream out;
+   std::ostream out;
 
  private:
    QMainWindow *parent_;

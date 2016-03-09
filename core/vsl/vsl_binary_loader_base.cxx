@@ -6,19 +6,21 @@
 // \file
 
 #include "vsl_binary_loader_base.h"
-#include <vcl_vector.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vsl/vsl_indent.h>
 
 // List of all loaders register_this()'ed
 // Create on heap so that it can be cleaned up itself
-static vcl_vector<vsl_binary_loader_base*> *loader_list_ = VXL_NULLPTR;
+static std::vector<vsl_binary_loader_base*> *loader_list_ = VXL_NULLPTR;
 
 
 typedef void (*clear_func_ptr) ();
 // List of all extra loaders clear funcs registered()'ed
 // Create on heap so that it can be cleaned up itself
-static vcl_vector<clear_func_ptr> *extra_loader_clear_list_ = VXL_NULLPTR;
+static std::vector<clear_func_ptr> *extra_loader_clear_list_ = VXL_NULLPTR;
 
 
 struct vsl_binary_loader_base_auto_clearup
@@ -37,7 +39,7 @@ static vsl_binary_loader_base_auto_clearup clearup_object;
 //: Register this, so it can be deleted by vsl_delete_all_loaders();
 void vsl_binary_loader_base::register_this()
 {
-  if (loader_list_==VXL_NULLPTR) loader_list_ = new vcl_vector<vsl_binary_loader_base*>;
+  if (loader_list_==VXL_NULLPTR) loader_list_ = new std::vector<vsl_binary_loader_base*>;
   loader_list_->push_back(this);
 }
 
@@ -47,7 +49,7 @@ void vsl_binary_loader_base::register_this()
 void vsl_register_new_loader_clear_func(clear_func_ptr func)
 {
   if (extra_loader_clear_list_ ==VXL_NULLPTR)
-    extra_loader_clear_list_ = new vcl_vector<clear_func_ptr>;
+    extra_loader_clear_list_ = new std::vector<clear_func_ptr>;
 
   extra_loader_clear_list_->push_back(func);
 }

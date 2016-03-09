@@ -18,7 +18,8 @@
 
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vcl_cassert.h>
 
 //: Represents a homogeneous 3D point
@@ -107,7 +108,7 @@ class vgl_homg_point_3d
     if (w() == 0)
     {
 #ifdef DEBUG
-      vcl_cerr << "vgl_homg_point_3d::get_nonhomogeneous - point at infinity\n";
+      std::cerr << "vgl_homg_point_3d::get_nonhomogeneous - point at infinity\n";
 #endif
       return false;
     }
@@ -140,12 +141,12 @@ class vgl_homg_point_3d
 //: Write "<vgl_homg_point_3d (x,y,z,w) >" to stream
 // \relatesalso vgl_homg_point_3d
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_homg_point_3d<Type> const& p);
+std::ostream& operator<<(std::ostream& s, vgl_homg_point_3d<Type> const& p);
 
 //: Read x y z w from stream
 // \relatesalso vgl_homg_point_3d
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_point_3d<Type>& p);
+std::istream& operator>>(std::istream& s, vgl_homg_point_3d<Type>& p);
 
 //  +-+-+ homg_point_3d arithmetic +-+-+
 
@@ -304,7 +305,7 @@ vgl_homg_point_3d<Type> centre(vgl_homg_point_3d<Type> const& p1,
 // There are no rounding errors when Type is e.g. int, if all w() are 1.
 // \relatesalso vgl_homg_point_3d
 template <class Type> inline
-vgl_homg_point_3d<Type> centre(vcl_vector<vgl_homg_point_3d<Type> > const& v)
+vgl_homg_point_3d<Type> centre(std::vector<vgl_homg_point_3d<Type> > const& v)
 {
   int n=v.size();
   assert(n>0); // it is *not* correct to return the point (0,0) when n==0.

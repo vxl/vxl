@@ -12,11 +12,12 @@
 
 #include <NCSFile.h>
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for ceil()
-#include <vcl_limits.h>
-#include <vcl_cstdlib.h>
+#include <cmath> // for ceil()
+#include <limits>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
@@ -35,49 +36,49 @@ NCSFileBandInfo bandInfo( const vil_pixel_format& vilType )
   {
     case VIL_PIXEL_FORMAT_UINT_32:{
       info.nBits = sizeof(vxl_uint_32)*8;
-      info.bSigned = vcl_numeric_limits<vxl_uint_32>::is_signed;
+      info.bSigned = std::numeric_limits<vxl_uint_32>::is_signed;
       info.szDesc = 0;
       return info;
     }
     case VIL_PIXEL_FORMAT_INT_32:{
       info.nBits = sizeof(vxl_int_32)*8;
-      info.bSigned = vcl_numeric_limits<vxl_int_32>::is_signed;
+      info.bSigned = std::numeric_limits<vxl_int_32>::is_signed;
       info.szDesc = 0;
       return info;
     }
     case VIL_PIXEL_FORMAT_UINT_16:{
       info.nBits =  sizeof(vxl_uint_16)*8;
-      info.bSigned =  vcl_numeric_limits<vxl_uint_16>::is_signed;
+      info.bSigned =  std::numeric_limits<vxl_uint_16>::is_signed;
       info.szDesc = 0;
       return info;
     }
     case VIL_PIXEL_FORMAT_INT_16:{
       info.nBits = sizeof(vxl_int_16)*8;
-      info.bSigned = vcl_numeric_limits<vxl_int_16>::is_signed;
+      info.bSigned = std::numeric_limits<vxl_int_16>::is_signed;
       info.szDesc = 0;
       return info;
     }
     case VIL_PIXEL_FORMAT_BYTE:{
       info.nBits = sizeof(vxl_byte)*8;
-      info.bSigned = vcl_numeric_limits<vxl_byte>::is_signed;
+      info.bSigned = std::numeric_limits<vxl_byte>::is_signed;
       info.szDesc = 0;
       return info;
     }
     case VIL_PIXEL_FORMAT_SBYTE:{
       info.nBits = sizeof(vxl_sbyte)*8;
-      info.bSigned = vcl_numeric_limits<vxl_sbyte>::is_signed;
+      info.bSigned = std::numeric_limits<vxl_sbyte>::is_signed;
       info.szDesc = 0;
       return info;
     }
     case VIL_PIXEL_FORMAT_FLOAT:{
       info.nBits = sizeof(float)*8;
-      info.bSigned = vcl_numeric_limits<float>::is_signed;
+      info.bSigned = std::numeric_limits<float>::is_signed;
       info.szDesc = 0;
       return info;
     }
     case VIL_PIXEL_FORMAT_DOUBLE:{
       info.nBits = sizeof(double)*8;
-      info.bSigned = vcl_numeric_limits<double>::is_signed;
+      info.bSigned = std::numeric_limits<double>::is_signed;
       info.szDesc = 0;
       return info;
     }
@@ -176,7 +177,7 @@ vil_pixel_format convertType( const NCSEcwCellType& ecwType )
 //                vil_j2k_image
 ////////////////////////////////////////////////////
 
-vil_j2k_image::vil_j2k_image( const vcl_string& fileOrUrl )
+vil_j2k_image::vil_j2k_image( const std::string& fileOrUrl )
   : vil_image_resource(),
     mFileResource( new CNCSFile() ),
     mStr(0),
@@ -363,7 +364,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   //we want all bands mapped in the same order as they come in the input file
   //eg. bandMap = {0,1,2,3...nBands}
   INT32 nBands = nplanes();
-  INT32* bandMap = (INT32*) vcl_malloc(sizeof(UINT32) * nBands );
+  INT32* bandMap = (INT32*) std::malloc(sizeof(UINT32) * nBands );
   for ( int i = 0 ; i < nBands ; i++ ) { bandMap[i] = i; }
 
   //this guards us from returning an image that is too big for the computer's memory
@@ -371,7 +372,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
   //We don't want infinite hangs or application crashes.
   unsigned int maxDim = mRemoteFile ? mMaxRemoteDimension : mMaxLocalDimension;
   if ( output_width > maxDim || output_height > maxDim ) {
-    unsigned int biggestDim = vcl_max( output_width, output_height );
+    unsigned int biggestDim = std::max( output_width, output_height );
     double zoomFactor = ((double)maxDim) / ((double)biggestDim);
     output_width  = (unsigned int) ( ((double)output_width)  * zoomFactor );
     output_height = (unsigned int) ( ((double)output_height) * zoomFactor );
@@ -390,13 +391,13 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
 
   //number of samples times the bytes per sample in each band
   double bitsPerSample                 = mFileResource->GetFileInfo()->pBands[0].nBits;
-  unsigned int bytesPerSample          = (unsigned int) vcl_ceil( bitsPerSample / 8.0 );
+  unsigned int bytesPerSample          = (unsigned int) std::ceil( bitsPerSample / 8.0 );
   unsigned int singleBandLineSizeBytes = output_width * bytesPerSample;
   unsigned int allBandLineSizeBytes    = singleBandLineSizeBytes * nBands;
   unsigned int dataPtrSizeBytes        = allBandLineSizeBytes * output_height;
-  //void* data_ptr = vcl_malloc( dataPtrSizeBytes );
+  //void* data_ptr = std::malloc( dataPtrSizeBytes );
   vil_memory_chunk_sptr data_ptr = new vil_memory_chunk( dataPtrSizeBytes, convertType( mFileResource->GetFileInfo()->eCellType ) );
-  void** linePtrPtr = (void**)vcl_malloc( nBands * sizeof( int* /*all pointers have same size, so eg char* would work too*/ ) );
+  void** linePtrPtr = (void**)std::malloc( nBands * sizeof( int* /*all pointers have same size, so eg char* would work too*/ ) );
   //now read all the lines that we want
   for ( unsigned int currLine = 0 ; currLine < output_height ; currLine++ ) {
     for (int currBand = 0 ; currBand < nBands ; currBand++ ) {
@@ -436,7 +437,7 @@ vil_j2k_image::get_copy_view_decimated_by_size(unsigned sample0,
       macro(VIL_PIXEL_FORMAT_BOOL , bool );
 #undef macro
     default:
-      vcl_cerr << "Pixel format not supported by ERMapper SDK\n";
+      std::cerr << "Pixel format not supported by ERMapper SDK\n";
       assert( 0 );
       break;
     }
@@ -455,7 +456,7 @@ vil_image_view_base_sptr vil_j2k_image::get_copy_view(unsigned sample0,
 void vil_j2k_image::unsetMaxImageDimension( bool remote )
 {
 #undef max
-  setMaxImageDimension( vcl_numeric_limits< unsigned int >::max(), remote );
+  setMaxImageDimension( std::numeric_limits< unsigned int >::max(), remote );
 }
 
 void vil_j2k_image::setMaxImageDimension( unsigned int widthOrHeight, bool remote )
@@ -568,7 +569,7 @@ vil_j2k_image::put_line(const vil_image_view_base& im)
       macro(VIL_PIXEL_FORMAT_BOOL , bool );
 #undef macro
     default:
-      vcl_cerr << "Pixel format not supported by ERMapper SDK\n";
+      std::cerr << "Pixel format not supported by ERMapper SDK\n";
       assert( 0 );
       break;
     }
@@ -655,7 +656,7 @@ bool vil_j2k_image::s_encode_jpeg2000(vil_stream* vs,
       if (!j2k_img->put_line(*line_view)) return false;
       if (verbose)
         if (j%100 == 0) //output a dot every 100 lines
-          vcl_cout << '.';
+          std::cout << '.';
     }
   }
   //output the remaining lines left over after loading block-sized chunks
@@ -671,10 +672,10 @@ bool vil_j2k_image::s_encode_jpeg2000(vil_stream* vs,
       if (!j2k_img->put_line(*view)) return false;
       if (verbose)
         if (j%100 == 0) //output a dot every 100 lines
-          vcl_cout << '.';
+          std::cout << '.';
     }
   }
-  if (verbose) vcl_cout << '\n';
+  if (verbose) std::cout << '\n';
   return true;
 }
 

@@ -7,7 +7,8 @@
 #include "vgl_norm_trans_3d.h"
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 //--------------------------------------------------------------
 //
@@ -26,9 +27,9 @@ vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const vgl_norm_trans_3d<T>& M)
 }
 
 
-//: Constructor from vcl_istream
+//: Constructor from std::istream
 template <class T>
-vgl_norm_trans_3d<T>::vgl_norm_trans_3d(vcl_istream& s)
+vgl_norm_trans_3d<T>::vgl_norm_trans_3d(std::istream& s)
 : vgl_h_matrix_3d<T>(s)
 {
 }
@@ -72,13 +73,13 @@ vgl_norm_trans_3d<T>::~vgl_norm_trans_3d()
 // 4) Complete the normalizing transform
 template <class T>
 bool vgl_norm_trans_3d<T>::
-compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points)
+compute_from_points(std::vector<vgl_homg_point_3d<T> > const& points)
 {
   T cx, cy, cz, radius;
   this->center_of_mass(points, cx, cy, cz);
   vgl_h_matrix_3d<T>::set_identity().set_translation(-cx,-cy,-cz);
-  vcl_vector<vgl_homg_point_3d<T> > temp;
-  for (typename vcl_vector<vgl_homg_point_3d<T> >::const_iterator
+  std::vector<vgl_homg_point_3d<T> > temp;
+  for (typename std::vector<vgl_homg_point_3d<T> >::const_iterator
        pit = points.begin(); pit != points.end(); pit++)
   {
     vgl_homg_point_3d<T> p((*this)(*pit));
@@ -96,7 +97,7 @@ compute_from_points(vcl_vector<vgl_homg_point_3d<T> > const& points)
 //
 template <class T>
 void vgl_norm_trans_3d<T>::
-center_of_mass(vcl_vector<vgl_homg_point_3d<T> > const& in,
+center_of_mass(std::vector<vgl_homg_point_3d<T> > const& in,
                T& cx, T& cy, T& cz)
 {
   T cog_x = 0;
@@ -135,7 +136,7 @@ center_of_mass(vcl_vector<vgl_homg_point_3d<T> > const& in,
 //
 template <class T>
 bool vgl_norm_trans_3d<T>::
-scale_xyzroot2(vcl_vector<vgl_homg_point_3d<T> > const& in, T& radius)
+scale_xyzroot2(std::vector<vgl_homg_point_3d<T> > const& in, T& radius)
 {
   T magnitude = T(0);
   int numfinite = 0;

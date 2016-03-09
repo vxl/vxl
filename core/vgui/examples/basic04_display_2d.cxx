@@ -1,6 +1,7 @@
 // Display 2d geometric objects on top of an image.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_easy2D_tableau.h>
@@ -12,7 +13,7 @@ int main(int argc, char **argv)
   vgui::init(argc, argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line" << vcl_endl;
+    std::cerr << "Please give an image filename on the command line" << std::endl;
     return 0;
   }
 

@@ -8,7 +8,8 @@
 
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Binary save vnl_vector to stream.
 //  \relatesalso vnl_vector
@@ -23,6 +24,6 @@ void vsl_b_read(vsl_b_istream & is, vnl_vector<T> & v);
 //: Print human readable summary of object to a stream
 //  \relatesalso vnl_vector
 template <class T>
-void vsl_print_summary(vcl_ostream & os,const vnl_vector<T> & b);
+void vsl_print_summary(std::ostream & os,const vnl_vector<T> & b);
 
 #endif // vnl_io_vector_h

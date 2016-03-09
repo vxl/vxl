@@ -1,7 +1,8 @@
 // This example displays two images in a grid tableau.
 // The images are loaded from the filenames given on
 // the command line
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -13,7 +14,7 @@ int main(int argc, char **argv)
   vgui::init(argc, argv);
   if (argc <= 2)
   {
-    vcl_cerr << "Please give two image filenames on the command line\n";
+    std::cerr << "Please give two image filenames on the command line\n";
     return 0;
   }
   // Load two images(given in the first command line param)

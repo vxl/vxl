@@ -17,9 +17,10 @@ extern "C" { // revisar los .h
 #include <dirent.h>
 };
 
-#include <vcl_cstdio.h> // for std::perror()
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cstdio> // for std::perror()
+#include <cstring>
+#include <iostream>
 #include "vidl_pixel_format.h"
 
 
@@ -40,15 +41,15 @@ namespace
                ((int)((unsigned short)(s.st_rdev) & 0xC0) ==0)   // minor in [0,63]
            );
 #if 0
-    vcl_cout << file << ": ";
-    if (lstat(file, &s) == 0) vcl_cout << "lstat ok, ";
-    if (S_ISCHR(s.st_mode)) vcl_cout << "ISCHR ok, ";
-    vcl_cout <<  "rdev:" << (s.st_rdev)<< "Major: "<< ((unsigned short)(s.st_rdev)>> 8);
-    if ((int)((unsigned short)(s.st_rdev)>> 8) == 81) vcl_cout <<" major number 81, ";
-    if ((int)((unsigned short)(s.st_rdev) & 0xFF) >=0) vcl_cout << " minor >0, ";
-    if ((int)((unsigned short)(s.st_rdev) & 0xFF) <=63) vcl_cout << " minor <64.";
-    if (isvd) vcl_cout << " Is video device"; else vcl_cout << " discarded";
-    vcl_cout << vcl_endl;
+    std::cout << file << ": ";
+    if (lstat(file, &s) == 0) std::cout << "lstat ok, ";
+    if (S_ISCHR(s.st_mode)) std::cout << "ISCHR ok, ";
+    std::cout <<  "rdev:" << (s.st_rdev)<< "Major: "<< ((unsigned short)(s.st_rdev)>> 8);
+    if ((int)((unsigned short)(s.st_rdev)>> 8) == 81) std::cout <<" major number 81, ";
+    if ((int)((unsigned short)(s.st_rdev) & 0xFF) >=0) std::cout << " minor >0, ";
+    if ((int)((unsigned short)(s.st_rdev) & 0xFF) <=63) std::cout << " minor <64.";
+    if (isvd) std::cout << " Is video device"; else std::cout << " discarded";
+    std::cout << std::endl;
 #endif // 0
     return isvd;
   }
@@ -65,7 +66,7 @@ vidl_v4l2_devices& vidl_v4l2_devices::all()
 
 void vidl_v4l2_devices::load_devices(const char *dirname)
 {
-  //vcl_cerr << "Directory: " << dirname << vcl_endl;
+  //std::cerr << "Directory: " << dirname << std::endl;
   DIR *dp;
   struct dirent *ep;
   dp = opendir(dirname);
@@ -73,24 +74,24 @@ void vidl_v4l2_devices::load_devices(const char *dirname)
   if (dp != NULL)
   {
     while ((ep = readdir(dp))) {
-      vcl_strcpy(filename,dirname);
-      vcl_strcat(filename,"/");
-      vcl_strcat(filename,ep->d_name);
+      std::strcpy(filename,dirname);
+      std::strcat(filename,"/");
+      std::strcat(filename,ep->d_name);
       if (is_directory(filename) && ep->d_name[0]!='.')
         load_devices(filename);
       else  if (is_video_device(filename)) {
-        //vcl_cerr<< filename << "  is video device\n";
+        //std::cerr<< filename << "  is video device\n";
         vidl_v4l2_device_sptr aux= new vidl_v4l2_device(filename);
         //vecdev.push_back(aux);
         if (aux->n_inputs()>0) vecdev.push_back(aux);
-        else vcl_cerr << "No inputs in device " << filename << vcl_endl;
+        else std::cerr << "No inputs in device " << filename << std::endl;
       }
       //else puts("  is not video device");
     }
     closedir(dp);
   }
   else
-    vcl_perror("Couldn't open the directory");
+    std::perror("Couldn't open the directory");
 }
 
 

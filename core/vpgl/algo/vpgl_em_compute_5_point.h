@@ -12,7 +12,8 @@
 //      August 31, 2011  Andrew Hoelscher   Added a ransac routine
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -41,38 +42,38 @@ class vpgl_em_compute_5_point
     //
     // The points must be normalized!! Use the function below to avoid
     // normalizing the points yourself.
-    bool compute( const vcl_vector<vgl_point_2d<T> > &normed_right_points,
-                  const vcl_vector<vgl_point_2d<T> > &normed_left_points,
-                  vcl_vector<vpgl_essential_matrix<T> > &ems) const;
+    bool compute( const std::vector<vgl_point_2d<T> > &normed_right_points,
+                  const std::vector<vgl_point_2d<T> > &normed_left_points,
+                  std::vector<vpgl_essential_matrix<T> > &ems) const;
 
     //Same as above, but performs the normalization using the two
     // calibration matrices.
-    bool compute( const vcl_vector<vgl_point_2d<T> > &right_points,
+    bool compute( const std::vector<vgl_point_2d<T> > &right_points,
                   const vpgl_calibration_matrix<T> &k_right,
-                  const vcl_vector<vgl_point_2d<T> > &left_points,
+                  const std::vector<vgl_point_2d<T> > &left_points,
                   const vpgl_calibration_matrix<T> &k_left,
-                  vcl_vector<vpgl_essential_matrix<T> > &ems) const;
+                  std::vector<vpgl_essential_matrix<T> > &ems) const;
 
   protected:
     const bool verbose;
     const double tolerance;
 
     void normalize(
-        const vcl_vector<vgl_point_2d<T> > &points,
+        const std::vector<vgl_point_2d<T> > &points,
         const vpgl_calibration_matrix<T> &k,
-        vcl_vector<vgl_point_2d<T> > &normed_points) const;
+        std::vector<vgl_point_2d<T> > &normed_points) const;
 
     void compute_nullspace_basis(
-        const vcl_vector<vgl_point_2d<T> > &right_points,
-        const vcl_vector<vgl_point_2d<T> > &left_points,
-        vcl_vector<vnl_vector_fixed<T, 9> > &basis) const;
+        const std::vector<vgl_point_2d<T> > &right_points,
+        const std::vector<vgl_point_2d<T> > &left_points,
+        std::vector<vnl_vector_fixed<T, 9> > &basis) const;
 
     void compute_constraint_polynomials(
-        const vcl_vector<vnl_vector_fixed<T,9> > &basis,
-        vcl_vector<vnl_real_npolynomial> &constraints) const;
+        const std::vector<vnl_vector_fixed<T,9> > &basis,
+        std::vector<vnl_real_npolynomial> &constraints) const;
 
     void compute_groebner_basis(
-        const vcl_vector<vnl_real_npolynomial> &constraints,
+        const std::vector<vnl_real_npolynomial> &constraints,
         vnl_matrix<double> &groebner_basis) const;
 
     void compute_action_matrix(
@@ -80,9 +81,9 @@ class vpgl_em_compute_5_point
         vnl_matrix<double> &action_matrix) const;
 
     void compute_e_matrices(
-        const vcl_vector<vnl_vector_fixed<T, 9> > &basis,
+        const std::vector<vnl_vector_fixed<T, 9> > &basis,
         const vnl_matrix<double> &action_matrix,
-        vcl_vector<vpgl_essential_matrix<T> > &ems) const;
+        std::vector<vpgl_essential_matrix<T> > &ems) const;
 
     double get_coeff(
         const vnl_real_npolynomial &p,
@@ -101,9 +102,9 @@ class vpgl_em_compute_5_point_ransac
             num_rounds(nr), inlier_threshold(trsh), verbose(v) { }
 
     bool compute(
-        vcl_vector<vgl_point_2d<T> > const& right_points,
+        std::vector<vgl_point_2d<T> > const& right_points,
         vpgl_calibration_matrix<T> const& right_k,
-        vcl_vector<vgl_point_2d<T> > const& left_points,
+        std::vector<vgl_point_2d<T> > const& left_points,
         vpgl_calibration_matrix<T> const& left_k,
 
         vpgl_essential_matrix<T> &best_em) const;

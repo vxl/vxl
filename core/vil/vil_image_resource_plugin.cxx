@@ -10,22 +10,23 @@
 // \date        Sun Mar 17 22:57:00 2002
 
 #include "vil_image_resource_plugin.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //=======================================================================
 
-static vcl_vector<vil_image_resource_plugin*>
+static std::vector<vil_image_resource_plugin*>
     *vil_image_resource_plugins_list_ = VXL_NULLPTR;
 
 //=======================================================================
 
 bool vil_image_resource_plugin::load_the_image (
     vil_image_view_base_sptr& image,
-    const vcl_string & path, const vcl_string & filetype,
-    const vcl_string & colour)
+    const std::string & path, const std::string & filetype,
+    const std::string & colour)
 {
   if (vil_image_resource_plugins_list_==VXL_NULLPTR ||
-      is_a()!=vcl_string("vil_image_resource_plugin"))
+      is_a()!=std::string("vil_image_resource_plugin"))
   {
     return false;
   }
@@ -47,7 +48,7 @@ bool vil_image_resource_plugin::load_the_image (
 void vil_image_resource_plugin::register_plugin(
     vil_image_resource_plugin* plugin)
 {
-  if (plugin==VXL_NULLPTR || plugin->is_a()==vcl_string("vil_image_resource_plugin"))
+  if (plugin==VXL_NULLPTR || plugin->is_a()==std::string("vil_image_resource_plugin"))
   {
     return;
   }
@@ -55,7 +56,7 @@ void vil_image_resource_plugin::register_plugin(
   if (vil_image_resource_plugins_list_==VXL_NULLPTR)
   {
     vil_image_resource_plugins_list_ =
-      new vcl_vector<vil_image_resource_plugin*>();
+      new std::vector<vil_image_resource_plugin*>();
   }
 
   vil_image_resource_plugins_list_->push_back(plugin);
@@ -78,10 +79,10 @@ void vil_image_resource_plugin::delete_all_plugins()
 
 //=======================================================================
 
-bool vil_image_resource_plugin::can_be_loaded(const vcl_string& filename)
+bool vil_image_resource_plugin::can_be_loaded(const std::string& filename)
 {
   if (vil_image_resource_plugins_list_==VXL_NULLPTR ||
-      is_a()!=vcl_string("vil_image_resource_plugin"))
+      is_a()!=std::string("vil_image_resource_plugin"))
   {
     return false;
   }

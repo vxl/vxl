@@ -8,8 +8,9 @@
 
 // A @class{IUE_UTM_geodetic_transform} is one that relates UTM coordinates to a geodetic lat_long coordinate_system (phi, lambda, h) using a reference spheroid to define the shape of the earth (or other celestial object). where in the geodetic lat_long coordinate system, coordinates phi and lambda are the values of latitude and longitude, respectively.
 #include "vpgl_utm.h"
-#include <vcl_iostream.h>
-#include <vcl_limits.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vnl/vnl_math.h>
 #define DBLLONG 4.61168601e18
 #define EPSLN   1.0e-10
@@ -69,11 +70,11 @@ static double adjust_lon2(double x) // Angle in radians
       break;
     else if (long(vnl_math::abs(x / vnl_math::pi)) < 2)
       x -= (sign(x) * vnl_math::twopi);
-    else if (long(vnl_math::abs(x / (vnl_math::twopi))) < vcl_numeric_limits<long>::max())
+    else if (long(vnl_math::abs(x / (vnl_math::twopi))) < std::numeric_limits<long>::max())
       x -= long((x/vnl_math::twopi)*vnl_math::twopi);
-    else if (((long) vnl_math::abs(x / (vcl_numeric_limits<long>::max() * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
-      x -= (((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::twopi))) * (vnl_math::twopi * vcl_numeric_limits<long>::max()));
-    else if (((long) vnl_math::abs(x / (DBLLONG * vnl_math::twopi))) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / (std::numeric_limits<long>::max() * vnl_math::twopi))) < std::numeric_limits<long>::max())
+      x -= (((long)(x / (std::numeric_limits<long>::max() * vnl_math::twopi))) * (vnl_math::twopi * std::numeric_limits<long>::max()));
+    else if (((long) vnl_math::abs(x / (DBLLONG * vnl_math::twopi))) < std::numeric_limits<long>::max())
       x -= (((long)(x / (DBLLONG * vnl_math::twopi))) * (vnl_math::twopi * DBLLONG));
     else
       x -= (sign(x) * vnl_math::twopi);
@@ -90,11 +91,11 @@ static double adjust_lat2(double x) // Angle in radians
       break;
     else if (((long) vnl_math::abs(x / vnl_math::pi_over_2)) < 2)
       x -= (sign(x) * vnl_math::pi);
-    else if (((long) vnl_math::abs(x / vnl_math::pi)) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / vnl_math::pi)) < std::numeric_limits<long>::max())
       x -= ((long)(x / vnl_math::pi))*vnl_math::pi;
-    else if (((long) vnl_math::abs(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) < vcl_numeric_limits<long>::max())
-      x -= (((long)(x / (vcl_numeric_limits<long>::max() * vnl_math::pi))) * (vnl_math::pi * vcl_numeric_limits<long>::max()));
-    else if (((long) vnl_math::abs(x / (DBLLONG * vnl_math::pi))) < vcl_numeric_limits<long>::max())
+    else if (((long) vnl_math::abs(x / (std::numeric_limits<long>::max() * vnl_math::pi))) < std::numeric_limits<long>::max())
+      x -= (((long)(x / (std::numeric_limits<long>::max() * vnl_math::pi))) * (vnl_math::pi * std::numeric_limits<long>::max()));
+    else if (((long) vnl_math::abs(x / (DBLLONG * vnl_math::pi))) < std::numeric_limits<long>::max())
       x -= (((long)(x / (DBLLONG * vnl_math::pi))) * (vnl_math::pi * DBLLONG));
     else
       x -= (sign(x) *vnl_math::pi);
@@ -108,7 +109,7 @@ static double adjust_lat2(double x) // Angle in radians
 // ---------------------------------------------
 static inline double mlfn2(double e0, double e1, double e2, double e3, double phi)
 {
-  return e0*phi-e1*vcl_sin(2.0*phi)+e2*vcl_sin(4.0*phi)-e3*vcl_sin(6.0*phi);
+  return e0*phi-e1*std::sin(2.0*phi)+e2*std::sin(4.0*phi)-e3*std::sin(6.0*phi);
 }
 
 // Initialization function of UTM transform
@@ -158,7 +159,7 @@ void vpgl_utm::transform(int utm_zone, double x, double y, double z,
                          double utm_central_meridian)
 {
   //double D2R = vnl_math::pi_over_180;
-  double e = vcl_sqrt((sqr(a_) - sqr(b_))/sqr(a_));
+  double e = std::sqrt((sqr(a_) - sqr(b_))/sqr(a_));
 
   if (utm_zone != 0)
     utm_central_meridian = (6 * utm_zone) - 183;
@@ -180,20 +181,20 @@ void vpgl_utm::transform(int utm_zone, double x, double y, double z,
 
   if (ind2 != 0)
   {
-    f = vcl_exp(x/(a_ * scale_factor2));
+    f = std::exp(x/(a_ * scale_factor2));
     g = .5 * (f - 1/f);
     temp = lat_center2 + y/(a_ * scale_factor2);
-    h = vcl_cos(temp);
-    con = vcl_sqrt((1.0 - h * h)/(1.0 + g * g));
+    h = std::cos(temp);
+    con = std::sqrt((1.0 - h * h)/(1.0 + g * g));
     if (vnl_math::abs(con) > 1.0)
     {
       if (con > 1.0)
-        phi = vcl_asin(1.0);
+        phi = std::asin(1.0);
       else
-        phi = vcl_asin(-1.0);
+        phi = std::asin(-1.0);
     }
     else
-      phi = vcl_asin(con);
+      phi = std::asin(con);
 
     if (temp < 0)
       phi = -phi;
@@ -203,7 +204,7 @@ void vpgl_utm::transform(int utm_zone, double x, double y, double z,
     }
     else
     {
-      lambda = adjust_lon2(vcl_atan2(g,h) + lon_center2);
+      lambda = adjust_lon2(std::atan2(g,h) + lon_center2);
     }
   }
   else
@@ -216,30 +217,30 @@ void vpgl_utm::transform(int utm_zone, double x, double y, double z,
     for (i=0;;i++)
     {
       delta_phi =
-        ((con + e12 * vcl_sin(2.0*temp_phi) - e22 * vcl_sin(4.0*temp_phi) + e32 *
-          vcl_sin(6.0*temp_phi)) / e02) - temp_phi;
+        ((con + e12 * std::sin(2.0*temp_phi) - e22 * std::sin(4.0*temp_phi) + e32 *
+          std::sin(6.0*temp_phi)) / e02) - temp_phi;
 #if 0
-      delta_phi = ((con + e12 * vcl_sin(2.0*phi) - e22 * vcl_sin(4.0*phi)) / e02) - phi;
+      delta_phi = ((con + e12 * std::sin(2.0*phi) - e22 * std::sin(4.0*phi)) / e02) - phi;
 #endif
       temp_phi += delta_phi;
 
       if (vnl_math::abs(delta_phi)<1E-6) break;
 
       if (i >= max_iter)
-        vcl_cout << "Transform failed to converge" << vcl_endl;
+        std::cout << "Transform failed to converge" << std::endl;
     }
 
     if (vnl_math::abs(temp_phi) < vnl_math::pi_over_2)
     {
-      sin_phi = vcl_sin(temp_phi);
-      cos_phi = vcl_cos(temp_phi);
-      tan_phi = vcl_tan(temp_phi);
+      sin_phi = std::sin(temp_phi);
+      cos_phi = std::cos(temp_phi);
+      tan_phi = std::tan(temp_phi);
       c = esp2 * sqr(cos_phi);
       cs = sqr(c);
       t = sqr(tan_phi);
       ts = sqr(t);
       con = 1.0 - es2 * sqr(sin_phi);
-      n = a_ / vcl_sqrt(con);
+      n = a_ / std::sqrt(con);
       r = n * (1.0 - es2) / con;
       d = x / (n * scale_factor2);
       ds = sqr(d);
@@ -283,7 +284,7 @@ void vpgl_utm::transform(double lat, double lon,
 {
   // double D2R = vnl_math::pi_over_180;
   utm_zone = int((lon+180)/6.0) + 1;
-  double e = vcl_sqrt(1.0 - b_*b_/(a_*a_));
+  double e = std::sqrt(1.0 - b_*b_/(a_*a_));
   // This value must eventually set by user. lon_zone stands for
   // longitudinal zone, and it must be between 1 and 60.
   int south_flag;
@@ -305,16 +306,16 @@ void vpgl_utm::transform(double lat, double lon,
 
   double delta_lon = adjust_lon2(lambda - lon_center);
 
-  double sin_phi = vcl_sin(phi);
-  double cos_phi = vcl_cos(phi);
+  double sin_phi = std::sin(phi);
+  double cos_phi = std::cos(phi);
 
   double al = cos_phi * delta_lon;
   double als = sqr(al);
   double c = esp2 * sqr(cos_phi);
-  double tq = vcl_tan(phi);
+  double tq = std::tan(phi);
   double t = sqr(tq);
   double con = 1.0 - es2 * sqr(sin_phi);
-  double n = a_ / vcl_sqrt(con);
+  double n = a_ / std::sqrt(con);
   double ml = a_ * mlfn2(e02, e12, e22, e32, phi);
 
   x = scale_factor2 * n * al * (1.0 + (als / 6.0) *

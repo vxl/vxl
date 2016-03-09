@@ -22,13 +22,13 @@ void vil_greyscale_dilate(const vil_image_view<T>& src_image,
   unsigned nj = src_image.nj();
   dest_image.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t s_istep = src_image.istep(),  s_jstep = src_image.jstep(),
+  std::ptrdiff_t s_istep = src_image.istep(),  s_jstep = src_image.jstep(),
                 d_istep = dest_image.istep(), d_jstep = dest_image.jstep();
 
   const T* src_row0 = src_image.top_left_ptr();
   T* dest_row0 = dest_image.top_left_ptr();
 
-  vcl_vector<vcl_ptrdiff_t> offset;
+  std::vector<std::ptrdiff_t> offset;
   vil_compute_offsets(offset,element,s_istep,s_jstep);
 
   // Define box in which all element will be valid

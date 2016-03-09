@@ -8,7 +8,8 @@
 #include <vgui/vgui_menu.h>
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_tview_launcher_tableau.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 vgui_event_condition vgui_shell_tableau_bindings::default_quit  = vgui_event_condition( vgui_key('q'), vgui_ALT );
 vgui_event_condition vgui_shell_tableau_bindings::default_close = vgui_event_condition( vgui_key('w'), vgui_ALT );
@@ -85,7 +86,7 @@ bool vgui_shell_tableau::handle(vgui_event const &e)
   }
 
   if ( bindings.graph(e) ) {
-    vgui_text_graph(vcl_cerr);
+    vgui_text_graph(std::cerr);
   }
 
   // "draw" event : return true unless some child returns false.
@@ -95,7 +96,7 @@ bool vgui_shell_tableau::handle(vgui_event const &e)
     for ( unsigned i=0; i<children.size(); ++i ) {
       //PM.restore();
 #ifdef DEBUG
-      vcl_cerr << "DRAW";
+      std::cerr << "DRAW";
 #endif
       if ( active[i] && children[i] )
         if ( !children[i]->handle(e) )

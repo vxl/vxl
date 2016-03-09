@@ -7,7 +7,8 @@
 
 #include <vcsl/vcsl_matrix_param_sptr.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //: Auxiliary class for vcsl_matrix
 class vcsl_matrix_param : public vbl_ref_count
@@ -21,6 +22,6 @@ class vcsl_matrix_param : public vbl_ref_count
   double omega,phi,kappa;
 };
 
-typedef vcl_vector<vcsl_matrix_param_sptr> list_of_vcsl_matrix_param_sptr;
+typedef std::vector<vcsl_matrix_param_sptr> list_of_vcsl_matrix_param_sptr;
 
 #endif // vcsl_matrix_param_h_

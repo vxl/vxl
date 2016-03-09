@@ -3,7 +3,8 @@
 #define vil1_convolve_hxx_
 // \author fsm
 #include "vil1_convolve.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_separable(I1 const kernel[], unsigned N,
@@ -18,20 +19,20 @@ void vil1_convolve_separable(I1 const kernel[], unsigned N,
   unsigned w = buf.width();
   unsigned h = buf.height();
 
-  vcl_cerr << "convolve x..." << vcl_flush;
+  std::cerr << "convolve x..." << std::flush;
   vil1_convolve_1d_x(K,
                      vil1_convolve_signal_2d<I2 const>(bufc.row_array(), 0, 0, w,  0, 0, h),
                      (AC*)0,
                      vil1_convolve_signal_2d<AC     >(tmp.row_array(), 0, 0, w,  0, 0, h),
                      vil1_convolve_trim, vil1_convolve_trim);
-  vcl_cerr << "done\n"
+  std::cerr << "done\n"
            << "convolve y...";
   vil1_convolve_1d_y(K,
                      vil1_convolve_signal_2d<AC const>(tmpc.row_array(), 0, 0, w,  0, 0, h),
                      (AC*)0,
                      vil1_convolve_signal_2d<O       >(out.row_array(), 0, 0, w,  0, 0, h),
                      vil1_convolve_trim, vil1_convolve_trim);
-  vcl_cerr << "done\n";
+  std::cerr << "done\n";
 }
 
 template <class I1, class I2, class AC, class O>

@@ -3,7 +3,8 @@
 // \brief Example of loading an image and correlating with a normalised mask
 // \author Tim Cootes
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vul/vul_arg.h>
 #include <vil/vil_load.h>
@@ -16,16 +17,16 @@
 
 void print_usage()
 {
-  vcl_cout<<"vil_correlate_grad_tool  -i src_image -k kernel_image -o dest_image [-s]\n"
+  std::cout<<"vil_correlate_grad_tool  -i src_image -k kernel_image -o dest_image [-s]\n"
           <<"Correlates gradient of kernel_image with gradient of\n"
           <<"src_image, saves to dest_image\n";
 }
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> in_path("-i","Input image");
-  vul_arg<vcl_string> kernel_path("-k","Kernel image");
-  vul_arg<vcl_string> out_path("-o","Output image","output.jpg");
+  vul_arg<std::string> in_path("-i","Input image");
+  vul_arg<std::string> kernel_path("-k","Kernel image");
+  vul_arg<std::string> out_path("-o","Output image","output.jpg");
   vul_arg<bool> suppress_non_max("-s","Suppress non-peaks",false);
   vul_arg_parse(argc, argv);
 
@@ -38,7 +39,7 @@ int main(int argc, char** argv)
   vil_image_view<vxl_byte> src_im = vil_load(in_path().c_str());
   if (src_im.size()==0)
   {
-    vcl_cout<<"Unable to load source image from "<<in_path()<<'\n';
+    std::cout<<"Unable to load source image from "<<in_path()<<'\n';
     return 1;
   }
 
@@ -50,11 +51,11 @@ int main(int argc, char** argv)
   vil_image_view<vxl_byte> kernel_im_byte = vil_load(kernel_path().c_str());
   if (kernel_im_byte.size()==0)
   {
-    vcl_cout<<"Unable to load kernel image from "<<kernel_path()<<'\n';
+    std::cout<<"Unable to load kernel image from "<<kernel_path()<<'\n';
     return 1;
   }
 
-  vcl_cout<<"Kernel image is "<<kernel_im_byte.ni()<<" x "<<kernel_im_byte.nj()<<'\n';
+  std::cout<<"Kernel image is "<<kernel_im_byte.ni()<<" x "<<kernel_im_byte.nj()<<'\n';
 
   // Create a normalised kernel gradient image
   vil_image_view<float> kernel_image,k_grad_x,k_grad_y;
@@ -83,20 +84,20 @@ int main(int argc, char** argv)
   vil_math_value_range(dest_image,min_v,max_v);
   double s = 255/(max_v-min_v);
   vil_math_scale_and_offset_values(dest_image,s,-s*min_v);
-  vcl_cout<<"Range of result: "<<min_v<<","<<max_v<<'\n';
+  std::cout<<"Range of result: "<<min_v<<","<<max_v<<'\n';
 
   vil_image_view<vxl_byte> result_image;
   vil_convert_cast(dest_image,result_image);
 
-  vcl_cout<<"Resulting image is "<<result_image.ni()<<" x "<<result_image.nj()<<'\n';
+  std::cout<<"Resulting image is "<<result_image.ni()<<" x "<<result_image.nj()<<'\n';
 
   if (!vil_save(result_image, out_path().c_str()))
   {
-    vcl_cerr<<"Unable to save result image to "<<out_path()<<'\n';
+    std::cerr<<"Unable to save result image to "<<out_path()<<'\n';
     return 1;
   }
 
-  vcl_cout<<"Saved result of convolution to "<<out_path()<<'\n';
+  std::cout<<"Saved result of convolution to "<<out_path()<<'\n';
 
   return 0;
 }

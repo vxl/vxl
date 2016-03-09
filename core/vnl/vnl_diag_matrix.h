@@ -21,7 +21,8 @@
 // \endverbatim
 
 #include <vcl_cassert.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 
@@ -177,7 +178,7 @@ class vnl_diag_matrix
 //:
 // \relatesalso vnl_diag_matrix
 template <class T>
-vcl_ostream& operator<< (vcl_ostream&, vnl_diag_matrix<T> const&);
+std::ostream& operator<< (std::ostream&, vnl_diag_matrix<T> const&);
 
 //: Convert a vnl_diag_matrix to a Matrix.
 template <class T>

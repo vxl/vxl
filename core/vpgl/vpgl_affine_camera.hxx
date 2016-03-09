@@ -56,7 +56,7 @@ vpgl_affine_camera(vgl_vector_3d<T> ray, vgl_vector_3d<T> up,
 
   vgl_vector_3d<T> uvec = normalized(up), rvec = normalized(ray);
   vnl_matrix_fixed<T,3,3> R;
-  if (vcl_fabs(dot_product<T>(uvec,rvec)-T(1))<1e-5)
+  if (std::fabs(dot_product<T>(uvec,rvec)-T(1))<1e-5)
   {
     T r[] = { 1, 0, 0,
               0, 1, 0,
@@ -64,7 +64,7 @@ vpgl_affine_camera(vgl_vector_3d<T> ray, vgl_vector_3d<T> up,
 
     R = vnl_matrix_fixed<T,3,3>(r);
   }
-  else if (vcl_fabs(dot_product<T>(uvec,rvec)-T(-1))<1e-5)
+  else if (std::fabs(dot_product<T>(uvec,rvec)-T(-1))<1e-5)
   {
       T r[] = { 1, 0, 0,
               0, 1, 0,
@@ -178,7 +178,7 @@ backproject( const vgl_homg_point_2d<T>& image_point ) const
   ret = vgl_homg_line_3d_2_points<T>(pt_fin, pinf);
   }
   else
-    vcl_cout << "Warning vpgl_affine_camera::backproject produced line at infinity\n";
+    std::cout << "Warning vpgl_affine_camera::backproject produced line at infinity\n";
   return ret;
 }
 
@@ -205,7 +205,7 @@ void vpgl_affine_camera<T>::orient_ray_direction(vgl_vector_3d<T> const& look_di
 
 //: Write vpgl_affine_camera to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s,
+std::ostream&  operator<<(std::ostream& s,
                          vpgl_affine_camera<Type> const& c)
 {
   s << c.get_matrix() << '\n';
@@ -214,7 +214,7 @@ vcl_ostream&  operator<<(vcl_ostream& s,
 
 //: Read camera from stream
 template <class Type>
-vcl_istream&  operator >>(vcl_istream& s,
+std::istream&  operator >>(std::istream& s,
                           vpgl_affine_camera<Type>& c)
 {
   vnl_matrix_fixed<Type, 3, 4> P;
@@ -228,8 +228,8 @@ vcl_istream&  operator >>(vcl_istream& s,
 #undef vpgl_AFFINE_CAMERA_INSTANTIATE
 #define vpgl_AFFINE_CAMERA_INSTANTIATE(T) \
 template class vpgl_affine_camera<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_affine_camera<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vpgl_affine_camera<T >&)
+template std::ostream& operator<<(std::ostream&, const vpgl_affine_camera<T >&); \
+template std::istream& operator>>(std::istream&, vpgl_affine_camera<T >&)
 
 
 #endif // vpgl_affine_camera_hxx_

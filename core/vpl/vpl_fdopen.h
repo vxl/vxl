@@ -4,9 +4,10 @@
 //:
 // \file
 
-#include <vcl_cstdio.h>
+#include <vcl_compiler.h>
+#include <cstdio>
 
 //: Turn an open file descriptor (int) into a file stream (FILE *).
-vcl_FILE *vpl_fdopen(int fd, char const *mode);
+std::FILE *vpl_fdopen(int fd, char const *mode);
 
 #endif

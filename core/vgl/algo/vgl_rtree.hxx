@@ -5,10 +5,11 @@
 */
 #include "vgl_rtree.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #ifdef DEBUG
-#define trace(str) { vcl_cerr << str << vcl_endl; }
+#define trace(str) { std::cerr << str << std::endl; }
 #else
 #define trace(str)
 #endif
@@ -104,14 +105,14 @@ bool vgl_rtree_node<V, B, C>::find(B const &b, V const &v, node **n_out, int *i_
 template <class V, class B, class C>
 void vgl_rtree_node<V, B, C>::print() const
 {
-  vcl_cout << "node bounds: ";
-  bounds.print(vcl_cout);
-  vcl_cout << "\n--------";
+  std::cout << "node bounds: ";
+  bounds.print(std::cout);
+  std::cout << "\n--------";
   for (unsigned int i=0; i<local_chs; ++i) {
-    vcl_cout << "\n\t";
+    std::cout << "\n\t";
     chs[i]->print();
   }
-  vcl_cout << "------------" << vcl_endl;
+  std::cout << "------------" << std::endl;
 }
 
 //--------------------------------------------------------------------------------
@@ -278,16 +279,16 @@ void vgl_rtree_node<V, B, C>::compute_bounds()
 // this is a special case of the probe version.
 // calls only itself.
 template <class V, class B, class C>
-void vgl_rtree_node<V, B, C>::get(B const &region, vcl_vector<V> &vs) const
+void vgl_rtree_node<V, B, C>::get(B const &region, std::vector<V> &vs) const
 {
 #ifdef DEBUG
-  vcl_cout << " In get: " << region << vcl_endl;
+  std::cout << " In get: " << region << std::endl;
 #endif // DEBUG
   // get vertices from this node :
   for (unsigned int i=0; i<local_vts; ++i)
     if (C::meet(region, vts[i] )) {
 #ifdef DEBUG
-      vcl_cout << " pushed " << vts[i] << vcl_endl;
+      std::cout << " pushed " << vts[i] << std::endl;
 #endif // DEBUG
       vs.push_back(vts[i]);
     }
@@ -296,7 +297,7 @@ void vgl_rtree_node<V, B, C>::get(B const &region, vcl_vector<V> &vs) const
   for (unsigned int i=0; i<local_chs; ++i)
     if (C::meet(region, chs[i]->bounds )) {
 #ifdef DEBUG
-      vcl_cout << "--- region of child: " << i << " :" << chs[i]->bounds << " met search region----\n";
+      std::cout << "--- region of child: " << i << " :" << chs[i]->bounds << " met search region----\n";
 #endif // DEBUG
       chs[i]->get(region, vs);
     }
@@ -304,7 +305,7 @@ void vgl_rtree_node<V, B, C>::get(B const &region, vcl_vector<V> &vs) const
 
 // calls only itself.
 template <class V, class B, class C>
-void vgl_rtree_node<V, B, C>::get(vgl_rtree_probe<V, B, C> const &region, vcl_vector<V> &vs) const
+void vgl_rtree_node<V, B, C>::get(vgl_rtree_probe<V, B, C> const &region, std::vector<V> &vs) const
 {
   // get vertices from this node :
   for (unsigned int i=0; i<local_vts; ++i)
@@ -318,7 +319,7 @@ void vgl_rtree_node<V, B, C>::get(vgl_rtree_probe<V, B, C> const &region, vcl_ve
 }
 
 template <class V, class B, class C>
-void vgl_rtree_node<V, B, C>::get_all(vcl_vector<V> &vs) const
+void vgl_rtree_node<V, B, C>::get_all(std::vector<V> &vs) const
 {
   vs.reserve(vs.size() + total_vts);
 

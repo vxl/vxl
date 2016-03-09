@@ -5,8 +5,10 @@
 // \file
 
 #include "vsl_clipon_binary_loader.h"
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdlib> // std::abort()
+#include <vector>
 
 template<class BaseClass, class BaseClassIO>
 vsl_clipon_binary_loader<BaseClass,BaseClassIO>& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance()
@@ -30,7 +32,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::add( const BaseClassIO& b)
 
 //: Return index associated with given object name
 template<class BaseClass, class BaseClassIO>
-int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_string& name) const
+int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const std::string& name) const
 {
   unsigned int i=0;
   while ((i<object_io_.size()) && !(object_io_[i]->target_classname()==name))
@@ -38,12 +40,12 @@ int vsl_clipon_binary_loader<BaseClass,BaseClassIO>::index_for_name(const vcl_st
 
   if (i>=object_io_.size())
   {
-    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::index_for_name: "
+    std::cerr << "vsl_clipon_binary_loader<BaseClass>::index_for_name: "
              << "class name <" << name << "> not in list of loaders\n"
              << object_io_.size()<<" valid loaders available for\n";
     for (unsigned int j=0; j<object_io_.size(); ++j)
-      vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
-    vcl_abort();
+      std::cerr << object_io_[j]->target_classname() << std::endl;
+    std::abort();
   }
 
   return i;
@@ -59,12 +61,12 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class
 
   if (i>=object_io_.size())
   {
-    vcl_cerr << "vsl_clipon_binary_loader<BaseClass>::io_for_class: "
+    std::cerr << "vsl_clipon_binary_loader<BaseClass>::io_for_class: "
              << "Unable to determine suitable loader.\n"
              << object_io_.size()<<" valid loaders available for\n";
     for (unsigned int j=0; j<object_io_.size(); ++j)
-      vcl_cerr << object_io_[j]->target_classname() << vcl_endl;
-    vcl_abort();
+      std::cerr << object_io_[j]->target_classname() << std::endl;
+    std::abort();
   }
 
   return *object_io_[i];
@@ -72,7 +74,7 @@ const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::io_for_class
 
 //: Return IO object for given named class
 template<class BaseClass, class BaseClassIO>
-const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::object_io(const vcl_string& name) const
+const BaseClassIO& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::object_io(const std::string& name) const
 {
   return *object_io_[index_for_name(name)];
 }
@@ -99,7 +101,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::read_object( vsl_b_istream
   // Delete old object pointed to by b
   delete b;
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(is,name);
 
   if (name=="VSL_NULL_PTR")
@@ -120,7 +122,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::write_object( vsl_b_ostrea
 {
   if (b==0)
   {
-    vsl_b_write(os,vcl_string("VSL_NULL_PTR"));
+    vsl_b_write(os,std::string("VSL_NULL_PTR"));
     return;
   }
 
@@ -131,7 +133,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::write_object( vsl_b_ostrea
 
 // IO for  pointers to BaseClass:
 template<class BaseClass, class BaseClassIO>
-void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::print_object_summary( vcl_ostream& os, const BaseClass* b)
+void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::print_object_summary( std::ostream& os, const BaseClass* b)
 {
   if (b==0)
   {

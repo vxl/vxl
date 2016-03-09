@@ -20,7 +20,8 @@
 // \endverbatim
 
 #include <vcl_cassert.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 class vil1_image;
 
@@ -139,10 +140,10 @@ class vil1_image_impl
   virtual bool set_property(char const* tag, void const* property_value = 0) const;
 
   //: Return the name of the class;
-  virtual vcl_string is_a() const { return "vil1_image_impl"; }
+  virtual std::string is_a() const { return "vil1_image_impl"; }
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(vcl_string const& s) const { return s==this->is_a(); }
+  virtual bool is_class(std::string const& s) const { return s==this->is_a(); }
 
  private:
   friend class vil1_image;

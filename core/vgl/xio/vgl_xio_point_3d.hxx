@@ -11,7 +11,7 @@
 //============================================================================
 //: XML write self to stream.
 template<class T>
-void x_write(vcl_ostream &os, const vgl_point_3d<T> & p, vcl_string element_name)
+void x_write(std::ostream &os, const vgl_point_3d<T> & p, std::string element_name)
 {
   vsl_basic_xml_element xml_element(element_name);
   xml_element.add_attribute("x", p.x());
@@ -21,6 +21,6 @@ void x_write(vcl_ostream &os, const vgl_point_3d<T> & p, vcl_string element_name
 }
 
 #define VGL_XIO_POINT_3D_INSTANTIATE(T) \
-template void x_write(vcl_ostream &, const vgl_point_3d<T > &, vcl_string)
+template void x_write(std::ostream &, const vgl_point_3d<T > &, std::string)
 
 #endif // vgl_xio_point_3d_hxx_

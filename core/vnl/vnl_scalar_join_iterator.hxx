@@ -10,15 +10,16 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_scalar_join_iterator.h"
-#include <vcl_list.h>
+#include <vcl_compiler.h>
+#include <list>
 
 #define VNL_SCALAR_JOIN_ITERATOR_INSTANTIATE(T) \
 template class vnl_scalar_join_iterator_indexed_pair<T >;\
 template class vnl_scalar_join_iterator<T >; \
-template vcl_ostream& operator<<(vcl_ostream& s, const vnl_scalar_join_iterator_indexed_pair<T >& p);\
+template std::ostream& operator<<(std::ostream& s, const vnl_scalar_join_iterator_indexed_pair<T >& p);\
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vnl/vnl_matrix.h>
 
 // Helper class to hold the sorted arrays of indices.
@@ -38,7 +39,7 @@ bool vnl_scalar_join_iterator_indexed_pair<T>::operator <
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s,
+std::ostream& operator<<(std::ostream& s,
                         const vnl_scalar_join_iterator_indexed_pair<T>& p)
 {
   return s << p.original_index << ' ' << *(p.object) << '\n';
@@ -50,8 +51,8 @@ vnl_scalar_join_iterator<T>::vnl_scalar_join_iterator
      const vnl_matrix<T>& relation2, unsigned column2):
   n1(relation1.rows()),
   n2(relation2.rows()),
-  pI1(new vcl_list<vnl_scalar_join_iterator_indexed_pair<T > >(n1)),
-  pI2(new vcl_list<vnl_scalar_join_iterator_indexed_pair<T > >(n2)),
+  pI1(new std::list<vnl_scalar_join_iterator_indexed_pair<T > >(n1)),
+  pI2(new std::list<vnl_scalar_join_iterator_indexed_pair<T > >(n2)),
   I1(*pI1),
   I2(*pI2)
 {
@@ -153,7 +154,7 @@ unsigned vnl_scalar_join_iterator<T>::row2() const
 template <class T>
 vnl_scalar_join_iterator<T> vnl_scalar_join_iterator<T>::operator++(int)
 {
-  vcl_cerr << "This should not happen! postfix ++ called\n";
+  std::cerr << "This should not happen! postfix ++ called\n";
   return *this;
 }
 

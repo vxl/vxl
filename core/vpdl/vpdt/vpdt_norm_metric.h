@@ -16,8 +16,9 @@
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
-#include <vcl_limits.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <limits>
+#include <cmath>
 #include <vcl_cassert.h>
 
 
@@ -45,7 +46,7 @@ struct vpdt_norm_metric<F, typename vpdt_eigen_sym_matrix_gen<F>::type,
   //: Compute the Mahalanobis distance between two points
   static inline T distance(const F& pt1, const F& pt2, const covar_type& c)
   {
-    return vcl_sqrt(sqr_distance(pt1,pt2,c));
+    return std::sqrt(sqr_distance(pt1,pt2,c));
   }
 
   //: Compute the square Mahalanobis distance between two points
@@ -102,7 +103,7 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::vector_type,
   //: Compute the Mahalanobis distance between two points
   static inline T distance(const F& pt1, const F& pt2, const covar_type& c)
   {
-    return vcl_sqrt(sqr_distance(pt1,pt2,c));
+    return std::sqrt(sqr_distance(pt1,pt2,c));
   }
 
   //: Compute the square Mahalanobis distance between two points
@@ -185,7 +186,7 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::scalar_type,
   //: Compute the Mahalanobis distance between two points
   static inline T distance(const F& pt1, const F& pt2, const covar_type& c)
   {
-    return vcl_sqrt(sqr_distance(pt1,pt2,c));
+    return std::sqrt(sqr_distance(pt1,pt2,c));
   }
 
   //: Compute the square Mahalanobis distance between two points
@@ -266,7 +267,7 @@ struct vpdt_norm_metric<F, typename vpdt_field_traits<F>::scalar_type,
   //: Compute the Mahalanobis distance between two points
   static inline T distance(const F& pt1, const F& pt2, const covar_type& c)
   {
-    return vcl_sqrt(sqr_distance(pt1,pt2,c));
+    return std::sqrt(sqr_distance(pt1,pt2,c));
   }
 
   //: Compute the square Mahalanobis distance between two points

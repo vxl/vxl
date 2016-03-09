@@ -20,7 +20,8 @@
 
 #include <vgl/vgl_homg_point_1d.h>
 #include <vgl/algo/vgl_h_matrix_1d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 class vgl_h_matrix_1d_compute
 {
@@ -37,8 +38,8 @@ class vgl_h_matrix_1d_compute
   //
 
   //: principal interface: given point correspondences in p1,p2, returns H
-  bool compute(const vcl_vector<vgl_homg_point_1d<double> >& p1,
-               const vcl_vector<vgl_homg_point_1d<double> >& p2,
+  bool compute(const std::vector<vgl_homg_point_1d<double> >& p1,
+               const std::vector<vgl_homg_point_1d<double> >& p2,
                vgl_h_matrix_1d<double>& H)
   { return compute_cool_homg(p1,p2,H); } // calls pure virtual function
 
@@ -51,22 +52,22 @@ class vgl_h_matrix_1d_compute
 
   //: homography from matched points - return h_matrix
   vgl_h_matrix_1d<double>
-  compute(vcl_vector<vgl_homg_point_1d<double> > const& p1,
-          vcl_vector<vgl_homg_point_1d<double> > const& p2)
+  compute(std::vector<vgl_homg_point_1d<double> > const& p1,
+          std::vector<vgl_homg_point_1d<double> > const& p2)
   { vgl_h_matrix_1d<double> H; compute(p1, p2, H); return H; }
 
  protected:
   bool verbose_;
 
-  virtual bool compute_cool_homg(const vcl_vector<vgl_homg_point_1d<double> > &,
-                                 const vcl_vector<vgl_homg_point_1d<double> > &,
+  virtual bool compute_cool_homg(const std::vector<vgl_homg_point_1d<double> > &,
+                                 const std::vector<vgl_homg_point_1d<double> > &,
                                  vgl_h_matrix_1d<double>& H) = 0;
 
   bool compute_array_dbl(const double p1[], const double p2[], unsigned int length,
                          vgl_h_matrix_1d<double>& H)
   {
-    vcl_vector<vgl_homg_point_1d<double> > pt1; pt1.reserve(length);
-    vcl_vector<vgl_homg_point_1d<double> > pt2; pt2.reserve(length);
+    std::vector<vgl_homg_point_1d<double> > pt1; pt1.reserve(length);
+    std::vector<vgl_homg_point_1d<double> > pt2; pt2.reserve(length);
     for (unsigned int i=0;i<length; ++i) {
       pt1.push_back(vgl_homg_point_1d<double>(p1[i],1.0));
       pt2.push_back(vgl_homg_point_1d<double>(p2[i],1.0));

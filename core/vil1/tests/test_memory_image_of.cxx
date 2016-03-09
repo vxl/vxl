@@ -1,4 +1,5 @@
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vpl/vpl.h>
 
@@ -14,10 +15,10 @@ const int H = 256;
 
 static void test_memory_image_of()
 {
-  vcl_string tmp_nam = vul_temp_filename() + ".pgm";
+  std::string tmp_nam = vul_temp_filename() + ".pgm";
   char const *file_name_2 = tmp_nam!="" ? tmp_nam.c_str() : "vil1_test_memory_image_of.pgm";
   {
-    vcl_cout << "unsigned char\n";
+    std::cout << "unsigned char\n";
     vil1_memory_image_of<unsigned char> image(W,H);
 
     for (int y = 0; y < image.height(); ++y)
@@ -25,7 +26,7 @@ static void test_memory_image_of()
         image(x,y) = ((x - W/2) * (y - H/2) / 16) % 256;
       }
     vil1_save(image, file_name_2);
-    vcl_cout << "Saved image to " << file_name_2 << vcl_endl;
+    std::cout << "Saved image to " << file_name_2 << std::endl;
 #ifdef LEAVE_IMAGES_BEHIND
     vpl_chmod(file_name_2, 0666); // -rw-rw-rw-
 #endif
@@ -41,7 +42,7 @@ static void test_memory_image_of()
   char const* file_name_1 = tmp_nam!="" ? tmp_nam.c_str() : "vil1_test_memory_image_of.ppm";
 
   {
-    vcl_cout << "vil1_rgb_byte\n";
+    std::cout << "vil1_rgb_byte\n";
     vil1_memory_image_of<vil1_rgb<unsigned char> > image(W,H);
 
     for (int y = 0; y < image.height(); ++y)
@@ -52,7 +53,7 @@ static void test_memory_image_of()
         p.b = y/3;
       }
     vil1_save(image, file_name_1);
-    vcl_cout << "Saved image to " << file_name_1 << vcl_endl;
+    std::cout << "Saved image to " << file_name_1 << std::endl;
 #ifdef LEAVE_IMAGES_BEHIND
     vpl_chmod(file_name_1, 0666); // -rw-rw-rw-
 #endif
@@ -64,7 +65,7 @@ static void test_memory_image_of()
 #endif
 
   {
-    vcl_cout << "bool\n";
+    std::cout << "bool\n";
     vil1_memory_image_of<bool> map(451, 349);
     for (int x=0; x<map.width(); ++x)
       for (int y=0; y<map.height(); ++y)
@@ -72,7 +73,7 @@ static void test_memory_image_of()
   }
 
   {
-    vcl_cout << "external_buffer\n";
+    std::cout << "external_buffer\n";
     unsigned char buf[] = { 1, 2, 3, 4, 5, 6 };
     vil1_memory_image_of<unsigned char> image(buf,3,2);
 

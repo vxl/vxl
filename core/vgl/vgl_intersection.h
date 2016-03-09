@@ -25,7 +25,8 @@
 #include <vgl/vgl_line_segment_3d.h>
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_pointset_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //: Return true if the two points intersect, i.e., coincide
 // \relatesalso vgl_point_2d
@@ -270,34 +271,34 @@ bool vgl_intersection(vgl_box_2d<T> const& b, vgl_polygon<T> const& poly);
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_box_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, vcl_vector<vgl_point_2d<T> > const& p);
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, std::vector<vgl_point_2d<T> > const& p);
 
 //: Return the points from the list that lie inside the box
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_box_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vcl_vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b);
+std::vector<vgl_point_2d<T> > vgl_intersection(std::vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b);
 
 //: Return the points from the list that lie inside the box
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
-vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& p);
+std::vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, std::vector<vgl_point_3d<T> > const& p);
 
 //: Return the points from the list that lie inside the box
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
-vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b);
+std::vector<vgl_point_3d<T> > vgl_intersection(std::vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b);
 
 //: Find the intersections of a line with a polygon( can have multiple sheets)
 // \relatesalso vgl_line_2d
 // \relatesalso vgl_point_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
                                               vgl_line_2d<T> const& line);
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_line_2d<T> const& line,
                                               vgl_polygon<T> const& poly){
   return vgl_intersection(poly, line);
 }

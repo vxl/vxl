@@ -5,8 +5,9 @@
 // \file
 
 #include "vpgl_proj_camera.h"
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <fstream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -105,7 +106,7 @@ vpgl_proj_camera<T>::project(const T x, const T y, const T z, T& u, T& v) const
   if (image_point.ideal(static_cast<T>(1.0e-10)))
   {
     u = 0; v = 0;
-    vcl_cerr << "Warning: projection to ideal image point in vpgl_proj_camera -"
+    std::cerr << "Warning: projection to ideal image point in vpgl_proj_camera -"
              << " result not valid\n";
     return;
   }
@@ -206,7 +207,7 @@ vnl_svd<T>* vpgl_proj_camera<T>::svd() const
 
     // Check that the projection matrix isn't degenerate.
     if ( cached_svd_->rank() != 3 )
-      vcl_cerr << "vpgl_proj_camera::svd()\n"
+      std::cerr << "vpgl_proj_camera::svd()\n"
                << "  Warning: Projection matrix is not rank 3, errors may occur.\n";
   }
   return cached_svd_;
@@ -239,18 +240,18 @@ bool vpgl_proj_camera<T>::set_matrix( const T* new_camera_matrix )
 
 //: Write vpgl_perspective_camera to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s,
+std::ostream&  operator<<(std::ostream& s,
                          vpgl_proj_camera<Type> const& p)
 {
   s << "projective:"
-    << "\nP\n" << p.get_matrix() << vcl_endl;
+    << "\nP\n" << p.get_matrix() << std::endl;
 
   return s ;
 }
 
 //: Read vpgl_perspective_camera from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& s,
+std::istream&  operator>>(std::istream& s,
                          vpgl_proj_camera<Type>& p)
 {
   vnl_matrix_fixed<Type,3,4> new_matrix;
@@ -261,11 +262,11 @@ vcl_istream&  operator>>(vcl_istream& s,
 }
 
 template <class T>
-void vpgl_proj_camera<T>::save(vcl_string cam_path)
+void vpgl_proj_camera<T>::save(std::string cam_path)
 {
-  vcl_ofstream os(cam_path.c_str());
+  std::ofstream os(cam_path.c_str());
   if (!os.is_open()) {
-    vcl_cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
+    std::cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
     return;
   }
   os << this->get_matrix() << '\n';
@@ -294,7 +295,7 @@ vgl_h_matrix_3d<T> get_canonical_h( vpgl_proj_camera<T>& camera )
 template <class T>
 void fix_cheirality( vpgl_proj_camera<T>& /*camera*/ )
 {
-  vcl_cerr << "fix_cheirality( vpgl_proj_camera<T>& ) not implemented\n";
+  std::cerr << "fix_cheirality( vpgl_proj_camera<T>& ) not implemented\n";
 }
 
 //--------------------------------
@@ -349,9 +350,9 @@ vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,
 //  The returned matrices map a differential change in 3D
 //  to a differential change in the 2D image at each specified 3D point
 template <class T>
-vcl_vector<vnl_matrix_fixed<T,2,3> >
+std::vector<vnl_matrix_fixed<T,2,3> >
 image_jacobians(const vpgl_proj_camera<T>& camera,
-                const vcl_vector<vgl_point_3d<T> >& pts)
+                const std::vector<vgl_point_3d<T> >& pts)
 {
   const vnl_matrix_fixed<T,3,4>& P = camera.get_matrix();
   vnl_vector_fixed<T,4> denom = P.get_row(2);
@@ -382,7 +383,7 @@ image_jacobians(const vpgl_proj_camera<T>& camera,
 
 
   const unsigned int num_pts = pts.size();
-  vcl_vector<vnl_matrix_fixed<T,2,3> > img_jac(num_pts);
+  std::vector<vnl_matrix_fixed<T,2,3> > img_jac(num_pts);
 
   for (unsigned int i=0; i<num_pts; ++i)
   {
@@ -416,10 +417,10 @@ template vgl_point_3d<T > triangulate_3d_point(const vpgl_proj_camera<T >& c1, \
                                                const vgl_point_2d<T >& x1, \
                                                const vpgl_proj_camera<T >& c2, \
                                                const vgl_point_2d<T >& x2); \
-template vcl_vector<vnl_matrix_fixed<T,2,3> > \
+template std::vector<vnl_matrix_fixed<T,2,3> > \
          image_jacobians(const vpgl_proj_camera<T >& camera, \
-                         const vcl_vector<vgl_point_3d<T > >& pts); \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_proj_camera<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vpgl_proj_camera<T >&)
+                         const std::vector<vgl_point_3d<T > >& pts); \
+template std::ostream& operator<<(std::ostream&, const vpgl_proj_camera<T >&); \
+template std::istream& operator>>(std::istream&, vpgl_proj_camera<T >&)
 
 #endif // vpgl_proj_camera_hxx_

@@ -1,7 +1,8 @@
 // This is core/vul/tests/test_vul_file.cxx
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <fstream>
 #include <testlib/testlib_test.h>
 
 
@@ -24,7 +25,7 @@ void test_vul_file()
   TEST("dirname 2", vul_file::dirname("/awf/fred.txt"), "/awf");
 
   // vul_file::make_directory_path
-  vcl_string rootdir = vul_file::get_cwd();
+  std::string rootdir = vul_file::get_cwd();
 
   vpl_rmdir((rootdir+"/test_make_dir_path/a/b").c_str());
   vpl_rmdir((rootdir+"/test_make_dir_path/a").c_str());
@@ -36,7 +37,7 @@ void test_vul_file()
 
   vpl_rmdir((rootdir+"/test_make_dir_path/a/b").c_str());
   {
-    vcl_ofstream x((rootdir+"/test_make_dir_path/a/b").c_str()); x << ' ';
+    std::ofstream x((rootdir+"/test_make_dir_path/a/b").c_str()); x << ' ';
   }
   TEST("File exists ...", vul_file::exists(rootdir+"/test_make_dir_path/a/b"), true);
   TEST("... but isn't a directory", vul_file::is_directory(rootdir+"/test_make_dir_path/a/b"), false);
@@ -64,7 +65,7 @@ void test_vul_file()
   TEST("wide char dirname 2", vul_file::dirname(L"/ивwf/fred.txt"), L"/ивwf");
 
   // vul_file::make_directory_path
-  vcl_wstring rootdir = vul_file::get_cwd((wchar_t*)0);
+  std::wstring rootdir = vul_file::get_cwd((wchar_t*)0);
 
   _wrmdir((rootdir+L"/test_make_dir_path/ив/b").c_str());
   _wrmdir((rootdir+L"/test_make_dir_path/ив").c_str());
@@ -76,7 +77,7 @@ void test_vul_file()
 
   _wrmdir((rootdir+L"/test_make_dir_path/ив/b").c_str());
   {
-    vcl_ofstream x((rootdir+L"/test_make_dir_path/ив/b").c_str()); x << ' ';
+    std::ofstream x((rootdir+L"/test_make_dir_path/ив/b").c_str()); x << ' ';
   }
   TEST("File exists ...", vul_file::exists(rootdir+L"/test_make_dir_path/ив/b"), true);
   TEST("... but isn't a directory", vul_file::is_directory(rootdir+L"/test_make_dir_path/ив/b"), false);

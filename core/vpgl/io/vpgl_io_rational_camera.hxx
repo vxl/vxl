@@ -16,7 +16,7 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_rational_camera<T> const& camera)
   // write rational coefficients
   vsl_b_write(os, camera.coefficient_matrix());
   // write scale offsets
-  vcl_vector<vpgl_scale_offset<T> > scale_off = camera.scale_offsets();
+  std::vector<vpgl_scale_offset<T> > scale_off = camera.scale_offsets();
   vsl_b_write(os,scale_off.size());
   for (unsigned i=0; i<scale_off.size(); ++i) {
     vsl_b_write(os,scale_off[i].scale());
@@ -41,7 +41,7 @@ void vsl_b_read(vsl_b_istream & is, vpgl_rational_camera<T> &camera)
       // read scale+offsets
       unsigned n_scale_offsets;
       vsl_b_read(is,n_scale_offsets);
-      vcl_vector<vpgl_scale_offset<T> > scale_off(n_scale_offsets);
+      std::vector<vpgl_scale_offset<T> > scale_off(n_scale_offsets);
       for (unsigned i=0; i<n_scale_offsets; ++i) {
         T scale, off;
         vsl_b_read(is,scale);
@@ -53,16 +53,16 @@ void vsl_b_read(vsl_b_istream & is, vpgl_rational_camera<T> &camera)
       break;
     }
     default:
-      vcl_cerr << "I/O ERROR: vpgl_rational_camera::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vpgl_rational_camera::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< ver << '\n';
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os,const vpgl_rational_camera<T> & c)
+void vsl_print_summary(std::ostream& os,const vpgl_rational_camera<T> & c)
 {
   os << c << '\n';
 }
@@ -71,6 +71,6 @@ void vsl_print_summary(vcl_ostream& os,const vpgl_rational_camera<T> & c)
 #define VPGL_IO_RATIONAL_CAMERA_INSTANTIATE(T) \
 template void vsl_b_write(vsl_b_ostream & os, vpgl_rational_camera<T > const& camera); \
 template void vsl_b_read(vsl_b_istream & is, vpgl_rational_camera<T > &camera); \
-template void vsl_print_summary(vcl_ostream& os,const vpgl_rational_camera<T > & b)
+template void vsl_print_summary(std::ostream& os,const vpgl_rational_camera<T > & b)
 
 #endif // vpgl_io_rational_camera_hxx_

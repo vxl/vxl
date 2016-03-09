@@ -9,25 +9,26 @@
 
 #include "vgui_toolkit.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_exit()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cstdlib> // for std::exit()
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 #include <vul/vul_trace.h>
 
 #include <vgui/vgui_macro.h>
 #include <vgui/vgui_window.h>
 
-vcl_vector<vgui_toolkit*> *vgui_toolkit::registry()
+std::vector<vgui_toolkit*> *vgui_toolkit::registry()
 {
-  static vcl_vector<vgui_toolkit*> the_vector;
+  static std::vector<vgui_toolkit*> the_vector;
   return &the_vector;
 }
 
 vgui_toolkit *vgui_toolkit::lookup(char const *name)
 {
-  vcl_vector<vgui_toolkit*> *vv = registry();
+  std::vector<vgui_toolkit*> *vv = registry();
   for (unsigned int i=0; i<vv->size(); ++i)
     if ((*vv)[i]->name() == name)
       return (*vv)[i];
@@ -49,7 +50,7 @@ vgui_toolkit::~vgui_toolkit()
   vul_trace;
 
   // deregister
-  vcl_vector<vgui_toolkit*>::iterator i = vcl_find(registry()->begin(),
+  std::vector<vgui_toolkit*>::iterator i = std::find(registry()->begin(),
                                                    registry()->end(),
                                                    this);
 
@@ -97,7 +98,7 @@ void vgui_toolkit::quit()
 {
   vgui_macro_warning << "vgui_toolkit::quit() called.\n"
                      << "calling exit()\n";
-  vcl_exit(0);
+  std::exit(0);
 }
 
 void vgui_toolkit::run()

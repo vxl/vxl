@@ -1,8 +1,9 @@
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <vector>
+#include <cmath>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
@@ -50,7 +51,7 @@ vpgl_rational_camera<double> construct_rational_camera()
   vpgl_scale_offset<double> soz(501, -30);
   vpgl_scale_offset<double> sou(4764, 4693);
   vpgl_scale_offset<double> sov(4221, 3921);
-  vcl_vector<vpgl_scale_offset<double> > scale_offsets;
+  std::vector<vpgl_scale_offset<double> > scale_offsets;
   scale_offsets.push_back(sox);   scale_offsets.push_back(soy);
   scale_offsets.push_back(soz);   scale_offsets.push_back(sou);
   scale_offsets.push_back(sov);
@@ -71,20 +72,20 @@ static void test_local_rational_camera()
   double ug, vg, ul, vl;
   rcam.project(xoff, yoff, zoff, ug, vg);
   lrcam.project(0.0, 0.0, 0.0, ul, vl);
-  vcl_cout << "Global (u v) (" << ug << ' ' << vg << ")\n"
+  std::cout << "Global (u v) (" << ug << ' ' << vg << ")\n"
            << "Local (u v) (" << ul << ' ' << vl << ")\n";
-  TEST_NEAR("local projection", vcl_fabs(ug-ul)+vcl_fabs(vg-vl), 0.0, 1e-3);
+  TEST_NEAR("local projection", std::fabs(ug-ul)+std::fabs(vg-vl), 0.0, 1e-3);
   //---- test file I/O
-  vcl_string path = "./test.lrcam";
+  std::string path = "./test.lrcam";
   bool good = lrcam.save(path);
   TEST("save to file", good, true);
   vpgl_local_rational_camera<double>* lrc_r = read_local_rational_camera<double>(path);
   double ulr, vlr;
   lrc_r->project(0.0, 0.0, 0.0, ulr, vlr);
-  TEST_NEAR("read from file", vcl_fabs(ug-ulr)+vcl_fabs(vg-vlr), 0.0, 1e-3);
+  TEST_NEAR("read from file", std::fabs(ug-ulr)+std::fabs(vg-vlr), 0.0, 1e-3);
   vpl_unlink(path.c_str());
   // test binary I/O
-  vcl_string b_path = "./test_binary.vsl";
+  std::string b_path = "./test_binary.vsl";
   vsl_b_ofstream os(b_path);
   vsl_b_write(os, lrcam);
   os.close();
@@ -93,7 +94,7 @@ static void test_local_rational_camera()
   vsl_b_read(is, lrcam_r);
   double ulb, vlb;
   lrc_r->project(0.0, 0.0, 0.0, ulb, vlb);
-  TEST_NEAR("read from binary file", vcl_fabs(ug-ulb)+vcl_fabs(vg-vlb),
+  TEST_NEAR("read from binary file", std::fabs(ug-ulb)+std::fabs(vg-vlb),
             0.0, 1e-3);
   vpl_unlink(b_path.c_str());
   //-- test other geographic locations
@@ -101,13 +102,13 @@ static void test_local_rational_camera()
   double ug0, vg0, ul0, vl0;
   rcam.project(x0, y0, z0, ug0, vg0);
   lrcam.project(202.47, 0, 50, ul0, vl0);
-  TEST_NEAR("test displacement East", vcl_fabs(ug0-ul0)+vcl_fabs(vg0-vl0),
+  TEST_NEAR("test displacement East", std::fabs(ug0-ul0)+std::fabs(vg0-vl0),
             0.0, 3);
   double x1 = -71.404887, y1 = 41.823402, z1 = 16;
   double ug1, vg1, ul1, vl1;
   rcam.project(x1, y1, z1, ug1, vg1);
   lrcam.project(0, 200, 46, ul1, vl1);
-  TEST_NEAR("test displacement North", vcl_fabs(ug1-ul1)+vcl_fabs(vg1-vl1),
+  TEST_NEAR("test displacement North", std::fabs(ug1-ul1)+std::fabs(vg1-vl1),
             0.0, 3);
 }
 

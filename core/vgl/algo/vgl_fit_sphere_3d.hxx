@@ -8,13 +8,14 @@
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/vgl_distance.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_least_squares_function.h>
 class sphere_residual_function : public vnl_least_squares_function{
  public:
- sphere_residual_function(vcl_vector<vgl_homg_point_3d<double> >  const& pts ):
+ sphere_residual_function(std::vector<vgl_homg_point_3d<double> >  const& pts ):
   vnl_least_squares_function(4, static_cast<unsigned>(pts.size()), vnl_least_squares_function::use_gradient), pts_(pts){}
   //
   // x = [x0, y0, z0, r]^t
@@ -27,10 +28,10 @@ class sphere_residual_function : public vnl_least_squares_function{
   for(unsigned i = 0; i<n; ++i){
     vgl_point_3d<double> p(pts_[i]);
     double xi = (p.x()-x0), yi = (p.y()-y0), zi = (p.z()-z0);
-    double ri = vcl_sqrt(xi*xi + yi*yi + zi*zi);
+    double ri = std::sqrt(xi*xi + yi*yi + zi*zi);
     fx[i] = (ri-r);
   }
-  //vcl_cout << "f\n" << fx << '\n';
+  //std::cout << "f\n" << fx << '\n';
   }
 //
 // x = [x0, y0, z0, r]^t
@@ -44,20 +45,20 @@ class sphere_residual_function : public vnl_least_squares_function{
     {
     vgl_point_3d<double> p(pts_[i]);
     double xi = (p.x()-x0), yi = (p.y()-y0), zi = (p.z()-z0);
-    double ri = vcl_sqrt(xi*xi + yi*yi + zi*zi);
+    double ri = std::sqrt(xi*xi + yi*yi + zi*zi);
     J[i][0]= -(xi-x0)/ri; J[i][1]= -(yi-y0)/ri; J[i][2]= -(zi-z0)/ri; J[i][3]= -1.0;
     }
-  //vcl_cout << "J\n" << J << '\n';
+  //std::cout << "J\n" << J << '\n';
   }
  private:
-  vcl_vector<vgl_homg_point_3d<double> > pts_;
+  std::vector<vgl_homg_point_3d<double> > pts_;
 };
 
 template <class T>
-vgl_fit_sphere_3d<T>::vgl_fit_sphere_3d(vcl_vector<vgl_point_3d<T> > points)
+vgl_fit_sphere_3d<T>::vgl_fit_sphere_3d(std::vector<vgl_point_3d<T> > points)
 
 {
-  for(typename vcl_vector<vgl_point_3d<T> >::iterator pit = points.begin();
+  for(typename std::vector<vgl_point_3d<T> >::iterator pit = points.begin();
       pit != points.end(); ++pit)
     points_.push_back(vgl_homg_point_3d<T>(*pit));
 }
@@ -81,7 +82,7 @@ void vgl_fit_sphere_3d<T>::add_point(const T x, const T y, const T z)
 }
 
 template <class T>
-T vgl_fit_sphere_3d<T>::fit_linear(vcl_ostream* errstream)
+T vgl_fit_sphere_3d<T>::fit_linear(std::ostream* errstream)
 {
   const unsigned n = static_cast<unsigned>(points_.size());
   if(!n){
@@ -114,7 +115,7 @@ T vgl_fit_sphere_3d<T>::fit_linear(vcl_ostream* errstream)
       *errstream << "Negative squared radius - impossible result \n";
     return T(-1);
   }
-  T r = vcl_sqrt(r2);
+  T r = std::sqrt(r2);
 
   vnl_matrix_fixed<T,4,4> H = norm.get_matrix();
   T scale = H[0][0];
@@ -136,7 +137,7 @@ T vgl_fit_sphere_3d<T>::fit_linear(vcl_ostream* errstream)
   return static_cast<T>(dsum/n);
 }
 template <class T>
-T vgl_fit_sphere_3d<T>::fit(vcl_ostream* outstream, bool verbose){
+T vgl_fit_sphere_3d<T>::fit(std::ostream* outstream, bool verbose){
 
   T error = this->fit_linear(outstream);
   T lin_radius = sphere_lin_.radius();
@@ -162,7 +163,7 @@ T vgl_fit_sphere_3d<T>::fit(vcl_ostream* outstream, bool verbose){
   vgl_point_3d<T> c = sphere_lin_.centre();
   T lin_x0 = scale*c.x()+tx,  lin_y0 = scale*c.y()+ty,  lin_z0 = scale*c.z()+tz;
 
-  vcl_vector<vgl_homg_point_3d<double> > pts;
+  std::vector<vgl_homg_point_3d<double> > pts;
   for(unsigned i = 0; i<n; ++i){
     vgl_homg_point_3d<T> hp = norm(points_[i]);//normalize
     vgl_homg_point_3d<double> hpd(static_cast<double>(hp.x()),
@@ -208,8 +209,8 @@ T vgl_fit_sphere_3d<T>::fit(vcl_ostream* outstream, bool verbose){
   return static_cast<T>(dsum/n);
 }
 template <class T>
-vcl_vector<vgl_point_3d<T> > vgl_fit_sphere_3d<T>::get_points() const{
-  vcl_vector<vgl_point_3d<T> > ret;
+std::vector<vgl_point_3d<T> > vgl_fit_sphere_3d<T>::get_points() const{
+  std::vector<vgl_point_3d<T> > ret;
   const unsigned n = static_cast<unsigned>(points_.size());
   for (unsigned i=0; i<n; i++){
     vgl_point_3d<T> p(points_[i]);
@@ -218,13 +219,13 @@ vcl_vector<vgl_point_3d<T> > vgl_fit_sphere_3d<T>::get_points() const{
   return ret;
 }
 template <class T>
-bool vgl_fit_sphere_3d<T>::fit_linear(const T error_marg, vcl_ostream* outstream){
+bool vgl_fit_sphere_3d<T>::fit_linear(const T error_marg, std::ostream* outstream){
   T error = fit_linear(outstream);
   return (error<error_marg);
 }
 
 template <class T>
-bool vgl_fit_sphere_3d<T>::fit_(const T error_marg, vcl_ostream* outstream, bool verbose){
+bool vgl_fit_sphere_3d<T>::fit_(const T error_marg, std::ostream* outstream, bool verbose){
   T error = fit(outstream, verbose);
   return (error<error_marg);
 }

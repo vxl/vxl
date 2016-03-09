@@ -40,7 +40,7 @@ gint stopimage(GtkWidget*, gpointer deckptr)
 
 int main(int argc, char ** argv)
 {
-  if (argc < 2) { vcl_cerr << "Usage: " << argv[0] << " img1 [img2 ... ]\n"; return 1; }
+  if (argc < 2) { std::cerr << "Usage: " << argv[0] << " img1 [img2 ... ]\n"; return 1; }
   vgui::select("gtk");
   vgui::init(argc, argv);
 

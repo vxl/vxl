@@ -6,7 +6,8 @@
 
 #include "vgl_norm_trans_2d.h"
 #include <vgl/vgl_point_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vnl/vnl_math.h>
 
 //--------------------------------------------------------------
@@ -26,9 +27,9 @@ vgl_norm_trans_2d<T>::vgl_norm_trans_2d(const vgl_norm_trans_2d<T>& M)
 }
 
 
-// Constructor from vcl_istream
+// Constructor from std::istream
 template <class T>
-vgl_norm_trans_2d<T>::vgl_norm_trans_2d(vcl_istream& s)
+vgl_norm_trans_2d<T>::vgl_norm_trans_2d(std::istream& s)
 : vgl_h_matrix_2d<T>(s)
 {
 }
@@ -71,14 +72,14 @@ vgl_norm_trans_2d<T>::~vgl_norm_trans_2d()
 // - Complete the normalizing transform
 template <class T>
 bool vgl_norm_trans_2d<T>::
-compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
+compute_from_points(std::vector<vgl_homg_point_2d<T> > const& points,
                     bool isotropic)
 {
   T cx, cy;
   this->center_of_mass(points, cx, cy);
   vgl_h_matrix_2d<T>::set_identity().set_translation(-cx,-cy);
-  vcl_vector<vgl_homg_point_2d<T> > temp;
-  for (typename vcl_vector<vgl_homg_point_2d<T> >::const_iterator
+  std::vector<vgl_homg_point_2d<T> > temp;
+  for (typename std::vector<vgl_homg_point_2d<T> >::const_iterator
        pit = points.begin(); pit != points.end(); pit++)
   {
     vgl_homg_point_2d<T> p((*this)(*pit));
@@ -114,11 +115,11 @@ compute_from_points(vcl_vector<vgl_homg_point_2d<T> > const& points,
 //
 template <class T>
 bool vgl_norm_trans_2d<T>::
-compute_from_lines(vcl_vector<vgl_homg_line_2d<T> > const& lines,
+compute_from_lines(std::vector<vgl_homg_line_2d<T> > const& lines,
                    bool isotropic)
 {
-  vcl_vector<vgl_homg_point_2d<T> > points;
-  for (typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator lit=lines.begin();
+  std::vector<vgl_homg_point_2d<T> > points;
+  for (typename std::vector<vgl_homg_line_2d<T> >::const_iterator lit=lines.begin();
        lit != lines.end(); lit++)
   {
     vgl_homg_line_2d<T> l = (*lit);
@@ -135,12 +136,12 @@ compute_from_lines(vcl_vector<vgl_homg_line_2d<T> > const& lines,
 //
 template <class T>
 bool vgl_norm_trans_2d<T>::
-compute_from_points_and_lines(vcl_vector<vgl_homg_point_2d<T> > const& pts,
-                              vcl_vector<vgl_homg_line_2d< T> > const& lines,
+compute_from_points_and_lines(std::vector<vgl_homg_point_2d<T> > const& pts,
+                              std::vector<vgl_homg_line_2d< T> > const& lines,
                               bool isotropic)
 {
-  vcl_vector<vgl_homg_point_2d<T> > points = pts;
-  for (typename vcl_vector<vgl_homg_line_2d<T> >::const_iterator lit=lines.begin();
+  std::vector<vgl_homg_point_2d<T> > points = pts;
+  for (typename std::vector<vgl_homg_line_2d<T> >::const_iterator lit=lines.begin();
        lit != lines.end(); lit++)
   {
     vgl_homg_line_2d<T> l = (*lit);
@@ -155,7 +156,7 @@ compute_from_points_and_lines(vcl_vector<vgl_homg_point_2d<T> > const& pts,
 //
 template <class T>
 void vgl_norm_trans_2d<T>::
-center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
+center_of_mass(std::vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
 {
   T cog_x = 0;
   T cog_y = 0;
@@ -188,7 +189,7 @@ center_of_mass(vcl_vector<vgl_homg_point_2d<T> > const& in, T& cx, T& cy)
 //
 template <class T>
 bool vgl_norm_trans_2d<T>::
-scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
+scale_xyroot2(std::vector<vgl_homg_point_2d<T> > const& in, T& radius)
 {
   T magnitude = T(0);
   int numfinite = 0;
@@ -218,7 +219,7 @@ scale_xyroot2(vcl_vector<vgl_homg_point_2d<T> > const& in, T& radius)
 // be removed before calling this function.
 template <class T>
 bool vgl_norm_trans_2d<T>::
-scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
+scale_aniostropic(std::vector<vgl_homg_point_2d<T> > const& in,
                   T& sdx, T& sdy, T& c, T& s)
 {
   T tol = T(1e-06);
@@ -244,13 +245,13 @@ scale_aniostropic(vcl_vector<vgl_homg_point_2d<T> > const& in,
   double t =0.0;
   // Compute the rotation that makes Sxy zero
   if ( Sx2 != Sy2 )
-    t = 0.5*vcl_atan( -2.0*Sxy/(Sx2-Sy2) );
+    t = 0.5*std::atan( -2.0*Sxy/(Sx2-Sy2) );
 
-  double dc = vcl_cos(t),  ds = vcl_sin(t);
+  double dc = std::cos(t),  ds = std::sin(t);
 
   /* determine the standard deviations in the rotated frame */
-  double sddx = vcl_sqrt( (dc*dc*Sx2-2.0*dc*ds*Sxy+ds*ds*Sy2)/count );
-  double sddy = vcl_sqrt( (ds*ds*Sx2+2.0*dc*ds*Sxy+dc*dc*Sy2)/count );
+  double sddx = std::sqrt( (dc*dc*Sx2-2.0*dc*ds*Sxy+ds*ds*Sy2)/count );
+  double sddy = std::sqrt( (ds*ds*Sx2+2.0*dc*ds*Sxy+dc*dc*Sy2)/count );
 
   //cast back to T
   sdx = static_cast<T>(sddx);

@@ -4,7 +4,8 @@
 // \author Ian Scott
 
 #include "vil_blob.h"
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <algorithm>
 #include <vcl_cassert.h>
 
 namespace
@@ -21,7 +22,7 @@ namespace
       LABEL parent;
       LEN rank;
     };
-    vcl_vector<node> store_;
+    std::vector<node> store_;
   public:
     disjoint_sets(): store_(1u)
     { // renumber 0->0
@@ -88,7 +89,7 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
   dest_label.fill(0);
 
   disjoint_sets merge_list;
-  vcl_vector<unsigned> neighbouring_labels;
+  std::vector<unsigned> neighbouring_labels;
 
   unsigned n_prev_neighbours;
   switch (conn)
@@ -108,7 +109,7 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
   int neighbourhood_ii[] = { -1,  0, -1, +1};
   int neighbourhood_jj[] = {  0, -1, -1, -1};
 
-  typedef vcl_vector<unsigned>::iterator ITER;
+  typedef std::vector<unsigned>::iterator ITER;
 
   for (unsigned j=0; j<nj; ++j)
     for (unsigned i=0; i<ni; ++i)
@@ -132,8 +133,8 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
       else
       {
         // See how many unique labels neighbouring labels we have
-        vcl_sort(neighbouring_labels.begin(), neighbouring_labels.end());
-        ITER end = vcl_unique(neighbouring_labels.begin(), neighbouring_labels.end());
+        std::sort(neighbouring_labels.begin(), neighbouring_labels.end());
+        ITER end = std::unique(neighbouring_labels.begin(), neighbouring_labels.end());
         // don't bother erasing unique's suffix, just keeping the end iterator
         // will be enough.
         ITER it=neighbouring_labels.begin();
@@ -149,7 +150,7 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
       }
     }
   unsigned n_merge=merge_list.size();
-  vcl_vector<unsigned> renumbering(n_merge, 0u);
+  std::vector<unsigned> renumbering(n_merge, 0u);
   // Convert the merge lsit into a simple renumbering array,
   // and change to root of each disjoint set to its lowest member.
   // The reinstates label order to the original raster order.
@@ -169,11 +170,11 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
 
   // Now due to the renumbering, the set of labels may not compactly occupy
   // the number line. So renumber the renumbering array.
-  vcl_vector<unsigned> labels(renumbering.begin(), renumbering.end());
-  vcl_sort(labels.begin(), labels.end());
-  labels.erase(vcl_unique(labels.begin(), labels.end()), labels.end());
+  std::vector<unsigned> labels(renumbering.begin(), renumbering.end());
+  std::sort(labels.begin(), labels.end());
+  labels.erase(std::unique(labels.begin(), labels.end()), labels.end());
   const unsigned dodgy = static_cast<unsigned>(-1);
-  vcl_vector<unsigned> renum_renum(renumbering.size(), dodgy);
+  std::vector<unsigned> renum_renum(renumbering.size(), dodgy);
   renum_renum[0]=0;
   for (unsigned l=0, n=labels.size(); l<n; ++l)
     renum_renum[labels[l]] = l;
@@ -182,7 +183,7 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
     *it=renum_renum[*it];
 
   // Check than no DODGY values got into the renumbering.
-  assert(vcl_find(renumbering.begin(), renumbering.end(), dodgy)
+  assert(std::find(renumbering.begin(), renumbering.end(), dodgy)
          == renumbering.end() );
 
   // Renumber the labels, to merge connected blobs, with a compact set of labels.
@@ -245,7 +246,7 @@ void vil_blob_labels_to_edge_labels(const vil_image_view<unsigned>& src_label,
 //: Convert a label image into a list of chorded regions.
 // A blob label value of n will be returned in dest_regions[n-1].
 void vil_blob_labels_to_regions(const vil_image_view<unsigned>& src_label,
-                                vcl_vector<vil_blob_region>& dest_regions)
+                                std::vector<vil_blob_region>& dest_regions)
 {
   dest_regions.clear();
   unsigned ni=src_label.ni();
@@ -273,7 +274,7 @@ void vil_blob_labels_to_regions(const vil_image_view<unsigned>& src_label,
 // A blob label value of n will be returned in dest_pixels_lists[n-1].
 // Note that pixel lists are not ordered.
 void vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned>& src_label,
-                                    vcl_vector<vil_blob_pixel_list>& dest_pixel_lists)
+                                    std::vector<vil_blob_pixel_list>& dest_pixel_lists)
 {
   dest_pixel_lists.clear();
   unsigned ni=src_label.ni();
@@ -286,6 +287,6 @@ void vil_blob_labels_to_pixel_lists(const vil_image_view<unsigned>& src_label,
       if (!label) continue;
       // Make sure there is a pixel list for this label.
       if (label > dest_pixel_lists.size()) dest_pixel_lists.resize(label);
-      dest_pixel_lists[label-1].push_back(vcl_make_pair(i,j));
+      dest_pixel_lists[label-1].push_back(std::make_pair(i,j));
     }
 }

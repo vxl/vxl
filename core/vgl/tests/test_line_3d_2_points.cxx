@@ -1,7 +1,8 @@
 // Some tests for vgl_sphere
 // Ian Scott, Aug 2005.
-#include <vcl_iostream.h>
-// not used? #include <vcl_limits.h>
+#include <iostream>
+// not used? #include <vcl_compiler.h>
+#include <limits>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -50,7 +51,7 @@ static void test_parametric_point()
 
 void test_line_3d_2_points()
 {
-  vcl_cout << "********************************\n"
+  std::cout << "********************************\n"
            << "  Testing vgl_line_3d_2_points\n"
            << "********************************\n\n";
   test_plane_intersection();

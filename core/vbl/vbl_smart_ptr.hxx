@@ -3,7 +3,8 @@
 #define vbl_smart_ptr_hxx_
 
 #include "vbl_smart_ptr.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 // Template definitions for ref() and unref().
 // The client can specialize them between including this file and
@@ -26,7 +27,7 @@ template <class T>
 struct vbl_smart_ptr_T_as_string { static char const *str() { return "T"; } };
 
 template <class T>
-vcl_ostream& operator<< (vcl_ostream& os, vbl_smart_ptr<T> const& r)
+std::ostream& operator<< (std::ostream& os, vbl_smart_ptr<T> const& r)
 {
   return os << "vbl_smart_ptr<"
             << vbl_smart_ptr_T_as_string<T>::str()
@@ -40,6 +41,6 @@ vcl_ostream& operator<< (vcl_ostream& os, vbl_smart_ptr<T> const& r)
 template class vbl_smart_ptr<T >; \
 VCL_DEFINE_SPECIALIZATION struct vbl_smart_ptr_T_as_string<T > \
 { static char const *str() { return #T; } }; \
-template vcl_ostream& operator<< (vcl_ostream&, vbl_smart_ptr<T > const&)
+template std::ostream& operator<< (std::ostream&, vbl_smart_ptr<T > const&)
 
 #endif // vbl_smart_ptr_hxx_

@@ -17,7 +17,8 @@
 //   31-Jul-2010 Peter Vanroose - minor bug fix (operator= instead of operator==)
 // \endverbatim
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 class vgui_observer;
 class vgui_message;
 
@@ -43,7 +44,7 @@ class vgui_observable
   void detach(vgui_observer*);
 
   //: Returns a list of all the observers for this observable.
-  void get_observers(vcl_vector<vgui_observer*>&) const;
+  void get_observers(std::vector<vgui_observer*>&) const;
 
   //: Broadcast an update to all observers of this class.
   virtual void notify() const;
@@ -53,7 +54,7 @@ class vgui_observable
 
  private:
   //: List of all observers for this observable.
-  vcl_vector<vgui_observer*> observers;
+  std::vector<vgui_observer*> observers;
 
   //: Disallow assignment.
   vgui_observable(vgui_observable const&) { }

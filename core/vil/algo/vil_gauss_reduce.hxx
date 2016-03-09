@@ -194,7 +194,7 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
                                   + params.filt_edge0() * src(src.ni()-1,y), (T)0);
   }
 
-//  worka_.print_all(vcl_cout);
+//  worka_.print_all(std::cout);
   // Now perform vertical smoothing
   for (unsigned int y=2;y+2<src.nj();++y)
   {
@@ -228,7 +228,7 @@ void vil_gauss_reduce_general_plane(const vil_image_view<T>& src,
                          + params.filt_edge0() * worka(x,0), (T)0);
   }
 
-//  workb_.print_all(vcl_cout);
+//  workb_.print_all(std::cout);
 
 
 //  assert (dest_ni*scale_step() <= src.ni() && dest_nj*scale_step() <= src.nj());
@@ -269,10 +269,10 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src,
     vil_gauss_reduce_general_plane(src_plane, dest_plane, worka, workb, params);
   }
 #if 0
-  vsl_indent_inc(vcl_cout);
-  vcl_cout << vsl_indent() << "Work image B\n";
-  workb_.print_all(vcl_cout);
-  vsl_indent_dec(vcl_cout);
+  vsl_indent_inc(std::cout);
+  std::cout << vsl_indent() << "Work image B\n";
+  workb_.print_all(std::cout);
+  vsl_indent_dec(std::cout);
 #endif
 }
 
@@ -280,13 +280,13 @@ void vil_gauss_reduce_general(const vil_image_view<T>& src,
 template <class T>
 void vil_gauss_reduce_1plane(const T* src_im,
                              unsigned src_ni, unsigned src_nj,
-                             vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                             std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
                              T* dest_im,
-                             vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                             std::ptrdiff_t d_x_step, std::ptrdiff_t d_y_step)
 {
   T* d_row = dest_im;
   const T* s_row = src_im;
-  vcl_ptrdiff_t sxs2 = s_x_step*2;
+  std::ptrdiff_t sxs2 = s_x_step*2;
   unsigned ni2 = (src_ni-3)/2;
   vil_convert_round_pixel<double,T> rounder;
 
@@ -327,12 +327,12 @@ void vil_gauss_reduce_1plane(const T* src_im,
 template <class T>
 void vil_gauss_reduce_121_1plane(const T* src_im,
                                  unsigned src_ni, unsigned src_nj,
-                                 vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
+                                 std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
                                  T* dest_im,
-                                 vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                                 std::ptrdiff_t d_x_step, std::ptrdiff_t d_y_step)
 {
-  vcl_ptrdiff_t sxs2 = s_x_step*2;
-  vcl_ptrdiff_t sys2 = s_y_step*2;
+  std::ptrdiff_t sxs2 = s_x_step*2;
+  std::ptrdiff_t sys2 = s_y_step*2;
   T* d_row = dest_im+d_y_step;
   const T* s_row1 = src_im + s_y_step;
   const T* s_row2 = s_row1 + s_y_step;
@@ -406,12 +406,12 @@ void vil_gauss_reduce_121_1plane(const T* src_im,
 template <class T>
 void vil_gauss_reduce_2_3_1plane(const T* src_im,
                                  unsigned src_ni, unsigned src_nj,
-                                 vcl_ptrdiff_t s_x_step, vcl_ptrdiff_t s_y_step,
-                                 T* dest_im, vcl_ptrdiff_t d_x_step, vcl_ptrdiff_t d_y_step)
+                                 std::ptrdiff_t s_x_step, std::ptrdiff_t s_y_step,
+                                 T* dest_im, std::ptrdiff_t d_x_step, std::ptrdiff_t d_y_step)
 {
   T* d_row = dest_im;
   const T* s_row = src_im;
-  vcl_ptrdiff_t sxs2 = s_x_step*2,sxs3 = s_x_step*3;
+  std::ptrdiff_t sxs2 = s_x_step*2,sxs3 = s_x_step*3;
   unsigned d_ni = (2*src_ni+1)/3;
   unsigned d_ni2 = d_ni/2;
   vil_convert_round_pixel<double,T> rounder;

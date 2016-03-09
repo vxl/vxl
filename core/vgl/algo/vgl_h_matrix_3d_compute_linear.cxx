@@ -3,8 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
@@ -20,8 +21,8 @@ const double DEGENERACY_THRESHOLD = 0.00001;
 
 //:Assumes all corresponding points have equal weight
 bool vgl_h_matrix_3d_compute_linear::
-solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
-                     vcl_vector<vgl_homg_point_3d<double> > const& p2,
+solve_linear_problem(std::vector<vgl_homg_point_3d<double> > const& p1,
+                     std::vector<vgl_homg_point_3d<double> > const& p2,
                      vgl_h_matrix_3d<double>& H)
 {
   int n = p1.size();
@@ -74,7 +75,7 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
   // FSM added :
   //
   if (svd.W(15)<DEGENERACY_THRESHOLD*svd.W(16)) {
-    vcl_cerr << "vgl_h_matrix_3d_compute_linear : design matrix has rank < 16\n"
+    std::cerr << "vgl_h_matrix_3d_compute_linear : design matrix has rank < 16\n"
              << "vgl_h_matrix_3d_compute_linear : probably due to degenerate point configuration\n";
     return false;
   }
@@ -84,8 +85,8 @@ solve_linear_problem(vcl_vector<vgl_homg_point_3d<double> > const& p1,
 }
 
 bool vgl_h_matrix_3d_compute_linear::
-compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
-          vcl_vector<vgl_homg_point_3d<double> > const& points2,
+compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
+          std::vector<vgl_homg_point_3d<double> > const& points2,
           vgl_h_matrix_3d<double>& H)
 {
   //number of points must be the same
@@ -93,8 +94,8 @@ compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
   int n = points1.size();
 
   if (n * 3 < TM_UNKNOWNS_COUNT - 1) {
-    vcl_cerr << "vgl_h_matrix_3d_compute_linear: Need at least 5 matches.\n";
-    if (n == 0) vcl_cerr << "Could be vcl_vector setlength idiosyncrasies!\n";
+    std::cerr << "vgl_h_matrix_3d_compute_linear: Need at least 5 matches.\n";
+    if (n == 0) std::cerr << "Could be std::vector setlength idiosyncrasies!\n";
     return false;
   }
 
@@ -104,7 +105,7 @@ compute_p(vcl_vector<vgl_homg_point_3d<double> > const& points1,
     return false;
   if (!tr2.compute_from_points(points2))
     return false;
-  vcl_vector<vgl_homg_point_3d<double> > tpoints1, tpoints2;
+  std::vector<vgl_homg_point_3d<double> > tpoints1, tpoints2;
   for (int i = 0; i<n; i++)
   {
     tpoints1.push_back(tr1(points1[i]));

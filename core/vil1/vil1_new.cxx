@@ -11,7 +11,9 @@
 
 #include "vil1_new.h"
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <cstring>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vil1/vil1_file_format.h>
@@ -45,15 +47,15 @@ vil1_image vil1_new(vil1_stream* os,
 
   for (vil1_file_format** p = vil1_file_format::all(); *p; ++p) {
     vil1_file_format* fmt = *p;
-    if (vcl_strcmp(fmt->tag(), file_format) == 0) {
+    if (std::strcmp(fmt->tag(), file_format) == 0) {
       vil1_image_impl* outimage = fmt->make_output_image(os, planes, width, height, components, bits_per_component, format);
       if (outimage == VXL_NULLPTR)
-        vcl_cerr << "vil1_new: Unknown cannot new to type [" << file_format << "]\n";
+        std::cerr << "vil1_new: Unknown cannot new to type [" << file_format << "]\n";
       return outimage;
     }
   }
 
-  vcl_cerr << "vil1_new: Unknown file type [" << file_format << "]\n";
+  std::cerr << "vil1_new: Unknown file type [" << file_format << "]\n";
   return VXL_NULLPTR;
 }
 

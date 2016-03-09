@@ -4,8 +4,9 @@
 //:
 // \file
 #include "vpgl_local_rational_camera.h"
-#include <vcl_vector.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <fstream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 //--------------------------------------
@@ -81,7 +82,7 @@ vgl_point_2d<T> vpgl_local_rational_camera<T>::project(vgl_point_3d<T> world_poi
 
 //: print the camera parameters
 template <class T>
-void vpgl_local_rational_camera<T>::print(vcl_ostream& s) const
+void vpgl_local_rational_camera<T>::print(std::ostream& s) const
 {
   vpgl_rational_camera<T>::print(s);
   s << lvcs_ <<'\n'
@@ -89,12 +90,12 @@ void vpgl_local_rational_camera<T>::print(vcl_ostream& s) const
 }
 
 template <class T>
-bool vpgl_local_rational_camera<T>::save(vcl_string cam_path)
+bool vpgl_local_rational_camera<T>::save(std::string cam_path)
 {
-  vcl_ofstream file_out;
+  std::ofstream file_out;
   file_out.open(cam_path.c_str());
   if (!file_out.good()) {
-    vcl_cerr << "error: bad filename: " << cam_path << vcl_endl;
+    std::cerr << "error: bad filename: " << cam_path << std::endl;
     return false;
   }
   file_out.precision(12);
@@ -176,24 +177,24 @@ bool vpgl_local_rational_camera<T>::save(vcl_string cam_path)
 
 // read from a file
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_string cam_path)
+vpgl_local_rational_camera<T>* read_local_rational_camera(std::string cam_path)
 {
-  vcl_ifstream file_inp;
+  std::ifstream file_inp;
   file_inp.open(cam_path.c_str());
   if (!file_inp.good()) {
-    vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
+    std::cout << "error: bad filename: " << cam_path << std::endl;
     return 0;
   }
   return read_local_rational_camera<T>(file_inp);
 }
 //: read from an open istream
 template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_istream& istr)
+vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr)
 {
   vpgl_rational_camera<T>* rcam = read_rational_camera<T>(istr);
   if (!rcam)
     return 0;
-  vcl_string input;
+  std::string input;
   bool good = false;
   vpgl_lvcs lvcs;
   while (!istr.eof()&&!good) {
@@ -209,7 +210,7 @@ vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_istream& istr)
   }
   if  (!good)
   {
-    //vcl_cout << "error: not a composite rational camera file\n";
+    //std::cout << "error: not a composite rational camera file\n";
     return 0;
   }
   return new vpgl_local_rational_camera<T>(lvcs, *rcam);
@@ -218,7 +219,7 @@ vpgl_local_rational_camera<T>* read_local_rational_camera(vcl_istream& istr)
 
 //: Write to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_local_rational_camera<T>& c )
+std::ostream&  operator<<(std::ostream& s, const vpgl_local_rational_camera<T>& c )
 {
   c.print(s);
   return s;
@@ -229,8 +230,8 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_local_rational_camera<T>& c 
 #undef vpgl_LOCAL_RATIONAL_CAMERA_INSTANTIATE
 #define vpgl_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) \
 template class vpgl_local_rational_camera<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_local_rational_camera<T >&); \
-template vpgl_local_rational_camera<T >* read_local_rational_camera(vcl_string); \
-template vpgl_local_rational_camera<T >* read_local_rational_camera(vcl_istream&)
+template std::ostream& operator<<(std::ostream&, const vpgl_local_rational_camera<T >&); \
+template vpgl_local_rational_camera<T >* read_local_rational_camera(std::string); \
+template vpgl_local_rational_camera<T >* read_local_rational_camera(std::istream&)
 
 #endif // vpgl_local_rational_camera_hxx_

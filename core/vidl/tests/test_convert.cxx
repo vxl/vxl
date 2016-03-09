@@ -1,12 +1,13 @@
 // This is core/vidl/tests/test_convert.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>
 #include <vidl/vidl_config.h>
 #include <vidl/vidl_convert.h>
 #include <vul/vul_timer.h>
-#include <vcl_cstring.h> // for vcl_memcpy
+#include <cstring> // for std::memcpy
 
 #if VIDL_HAS_FFMPEG
 #include <vidl/vidl_ffmpeg_convert.h>
@@ -15,7 +16,7 @@
 
 static void test_convert()
 {
-  vcl_cout << "***********************\n"
+  std::cout << "***********************\n"
            << " Testing vidl_convert\n"
            << "***********************\n";
 
@@ -25,15 +26,15 @@ static void test_convert()
     vidl_frame_sptr frame = new vidl_shared_frame(buffer, 4, 2, VIDL_PIXEL_FORMAT_UYVY_422);
     vidl_convert_to_view(*frame, image);
 
-    vcl_cout << image.ni() << ' '<< image.nj() << ' ' << image.nplanes() << vcl_endl;
+    std::cout << image.ni() << ' '<< image.nj() << ' ' << image.nplanes() << std::endl;
     for (unsigned j = 0; j < image.nj(); ++j){
       for (unsigned i = 0; i < image.ni(); ++i){
-        vcl_cout << '(';
+        std::cout << '(';
         for (unsigned p = 0; p < image.nplanes(); ++p)
-          vcl_cout << (int)image(i,j,p)<< ' ';
-        vcl_cout << ") ";
+          std::cout << (int)image(i,j,p)<< ' ';
+        std::cout << ") ";
       }
-      vcl_cout << vcl_endl;
+      std::cout << std::endl;
     }
 
     bool success = true;
@@ -156,7 +157,7 @@ static void test_convert()
     }
     TEST("vidl_convert_frame - support for all formats", num_unsupported, 0);
     if (num_unsupported > 0)
-      vcl_cerr << "Warning:  conversion failed for "<< num_unsupported << " out of "
+      std::cerr << "Warning:  conversion failed for "<< num_unsupported << " out of "
                << VIDL_PIXEL_FORMAT_ENUM_END*VIDL_PIXEL_FORMAT_ENUM_END
                << " format pairs\n";
   }
@@ -174,41 +175,41 @@ static void test_convert()
     for (unsigned int i=0; i<10; ++i)
       vidl_convert_to_view(*frame, image);
     float time = timer.all()/10000.0f;
-    vcl_cout << "copy time = " << time << vcl_endl;
+    std::cout << "copy time = " << time << std::endl;
 
     timer.mark();
     for (unsigned int i=0; i<10; ++i)
       vidl_convert_to_view(*frame, image);
     time = timer.all()/10000.0f;
-    vcl_cout << "copy convert time = " << time << vcl_endl;
+    std::cout << "copy convert time = " << time << std::endl;
 
     timer.mark();
     for (unsigned int i=0; i<10; ++i)
       vidl_convert_frame(*frame, *frame_image);
     time = timer.all()/10000.0f;
-    vcl_cout << "frame convert time = " << time << vcl_endl;
+    std::cout << "frame convert time = " << time << std::endl;
 
     timer.mark();
     for (unsigned int i=0; i<10; ++i)
       vidl_convert_to_view(*frame, imagef);
     time = timer.all()/10000.0f;
-    vcl_cout << "copy float convert time = " << time << vcl_endl;
+    std::cout << "copy float convert time = " << time << std::endl;
 
     timer.mark();
     for (unsigned int i=0; i<10; ++i)
-      vcl_memcpy(image.top_left_ptr(), buffer, ni*nj*3);
+      std::memcpy(image.top_left_ptr(), buffer, ni*nj*3);
     time = timer.all()/10000.0f;
-    vcl_cout << "memcpy time = " << time << vcl_endl;
+    std::cout << "memcpy time = " << time << std::endl;
 
 #if VIDL_HAS_FFMPEG
     vidl_frame_sptr frame2 = new vidl_memory_chunk_frame(image);
     if (!vidl_ffmpeg_convert(frame, frame2))
-      vcl_cerr << "FFMPEG unable to make conversion\n";
+      std::cerr << "FFMPEG unable to make conversion\n";
     timer.mark();
     for (unsigned int i=0; i<10; ++i)
       vidl_ffmpeg_convert(frame, frame2);
     time = timer.all()/10000.0f;
-    vcl_cout << "ffmpeg time = " << time << vcl_endl;
+    std::cout << "ffmpeg time = " << time << std::endl;
 #endif
   }
 }

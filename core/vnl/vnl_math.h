@@ -38,7 +38,8 @@
 //   Peter Vanroose -15 Nov 2012 - the deprecated vnl_math_* #defines are now only available when VNL_CONFIG_LEGACY_METHODS==1
 // \endverbatim
 
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include "dll.h"
 #include <vxl_config.h>
 #include <vnl/vnl_config.h> // for VNL_CONFIG_ENABLE_SSE2_ROUNDING
@@ -271,8 +272,8 @@ template<class T>
 const T& min( const T& x, const T& y) { return std::min(x,y); }
 
 // cuberoot
-inline float  cuberoot(const float  &a) { return float((a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3)); }
-inline double cuberoot(const double &a) { return       (a<0) ? -vcl_exp(vcl_log(-a)/3) : vcl_exp(vcl_log(a)/3); }
+inline float  cuberoot(const float  &a) { return float((a<0) ? -std::exp(std::log(-a)/3) : std::exp(std::log(a)/3)); }
+inline double cuberoot(const double &a) { return       (a<0) ? -std::exp(std::log(-a)/3) : std::exp(std::log(a)/3); }
 
 // hypotenuse
 extern int         hypot(int         x, int         y);

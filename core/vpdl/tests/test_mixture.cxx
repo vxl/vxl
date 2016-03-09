@@ -4,20 +4,21 @@
 #include <vpdl/vpdl_gaussian_sphere.h>
 #include <vpdl/vpdl_gaussian_indep.h>
 #include <vnl/vnl_random.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
+#include <iostream>
 
 
 template <class T>
 vpdl_gaussian<T,3>
-fit_gaussian(typename vcl_vector<vnl_vector_fixed<T,3> >::const_iterator begin,
-             typename vcl_vector<vnl_vector_fixed<T,3> >::const_iterator end)
+fit_gaussian(typename std::vector<vnl_vector_fixed<T,3> >::const_iterator begin,
+             typename std::vector<vnl_vector_fixed<T,3> >::const_iterator end)
 {
   vnl_vector_fixed<T,3> mean(T(0));
   vnl_matrix_fixed<T,3,3> covar(T(0));
   unsigned int count = 0;
-  typedef typename vcl_vector<vnl_vector_fixed<T,3> >::const_iterator vitr;
+  typedef typename std::vector<vnl_vector_fixed<T,3> >::const_iterator vitr;
   for (vitr i=begin; i!=end; ++i){
     mean += *i;
     covar += outer_product(*i,*i);
@@ -41,10 +42,10 @@ bool weight_less(const vpdl_distribution<T,n>& /*d1*/, const T& w1,
 // test the computation of covariance and mean of a mixture
 // by using mixtures of gaussians obtained from data points
 template <class T>
-void test_covar_mean(T epsilon, const vcl_string& type_name)
+void test_covar_mean(T epsilon, const std::string& type_name)
 {
   // an arbitrary collection of data points
-  vcl_vector<vnl_vector_fixed<T,3> > data;
+  std::vector<vnl_vector_fixed<T,3> > data;
   vnl_random rnd;
   for (unsigned int i=0; i<10; ++i)
     data.push_back(vnl_vector_fixed<T,3>(T(rnd.normal64()+1),
@@ -84,7 +85,7 @@ void test_covar_mean(T epsilon, const vcl_string& type_name)
 
 
 template <class T>
-void test_mixture_type(T epsilon, const vcl_string& type_name)
+void test_mixture_type(T epsilon, const std::string& type_name)
 {
   // create a few sample distributions
   vnl_vector_fixed<T,3> mean1(T(1), T(1), T(1));
@@ -96,7 +97,7 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
   vnl_vector_fixed<T,3> mean3(T(1), T(0), T(0));
   vnl_vector_fixed<T,3> var3(T(0.5), T(1.5), T(0.25));
 
-  vcl_cout << "=================== fixed<3> ======================="<<vcl_endl;
+  std::cout << "=================== fixed<3> ======================="<<std::endl;
   {
     vpdl_gaussian_sphere<T,3> gauss1(mean1,var1);
     vpdl_gaussian_indep<T,3> gauss2(mean2,var2);
@@ -156,7 +157,7 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T,3> g3;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = mixture2.density(pt);
     T den_x = mixture2.density(pt+vnl_vector_fixed<T,3>(dp,0,0));
     T den_y = mixture2.density(pt+vnl_vector_fixed<T,3>(0,dp,0));
@@ -196,7 +197,7 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
   // test the covariance and mean computations
   test_covar_mean(epsilon, type_name);
 
-  vcl_cout << "=================== scalar ======================="<<vcl_endl;
+  std::cout << "=================== scalar ======================="<<std::endl;
   {
     vpdl_gaussian<T,1> gauss1(mean1[0],var1);
     vpdl_gaussian<T,1> gauss2(mean2[0],var2[0]);
@@ -256,7 +257,7 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     T g;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = mixture2.density(pt);
     T den_x = mixture2.density(pt+dp);
     T grad = (den_x-den)/dp;
@@ -306,7 +307,7 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
               cmp_var, var, epsilon);
   }
 
-  vcl_cout << "=================== variable ======================="<<vcl_endl;
+  std::cout << "=================== variable ======================="<<std::endl;
   {
     vpdl_gaussian_sphere<T> gauss1(mean1.as_ref(),var1);
     vpdl_gaussian_indep<T>  gauss2(mean2.as_ref(),var2.as_ref());
@@ -370,7 +371,7 @@ void test_mixture_type(T epsilon, const vcl_string& type_name)
 
     // test gradient virtual functions against numerical difference
     vnl_vector<T> g;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = mixture2.density(pt.as_ref());
     T den_x = mixture2.density((pt+vnl_vector_fixed<T,3>(dp,0,0)).as_ref());
     T den_y = mixture2.density((pt+vnl_vector_fixed<T,3>(0,dp,0)).as_ref());

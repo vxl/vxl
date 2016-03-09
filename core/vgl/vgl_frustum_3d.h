@@ -15,9 +15,10 @@
 // None
 // \endverbatim
 
-#include <vcl_iosfwd.h>
-#include <vcl_vector.h>
-#include <vcl_map.h>
+#include <iosfwd>
+#include <vector>
+#include <vcl_compiler.h>
+#include <map>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h> // forward declare vgl datatypes
 
@@ -41,7 +42,7 @@ class vgl_frustum_3d
   // the norm vector dirction from the apex to the closest parallel face.
   // d1 the distance in the norm direction from the apex to the far face.
   //
-  vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
+  vgl_frustum_3d(std::vector<vgl_ray_3d<Type> >  const& corner_rays,
                  vgl_vector_3d<Type> const& norm, Type d0, Type d1);
 
 
@@ -52,7 +53,7 @@ class vgl_frustum_3d
   const vgl_point_3d<Type>& apex() const{
     return apex_;}
 
-  const vcl_vector<vgl_plane_3d<Type> >& surface_planes() const
+  const std::vector<vgl_plane_3d<Type> >& surface_planes() const
   {return surface_planes_;}
 
   const vgl_plane_3d<Type>& near_plane() const
@@ -61,10 +62,10 @@ class vgl_frustum_3d
   const vgl_plane_3d<Type>& far_plane() const
   {return surface_planes_[far_plane_];}
 
-  const vcl_vector<vgl_point_3d<Type> >& verts() const
+  const std::vector<vgl_point_3d<Type> >& verts() const
   {return verts_;}
 
-  const vcl_map<int, vcl_vector<int> >& faces() const
+  const std::map<int, std::vector<int> >& faces() const
   {return faces_;}
 
   vgl_box_3d<Type> bounding_box() const;
@@ -94,21 +95,21 @@ class vgl_frustum_3d
   vgl_point_3d<Type> apex_;
   vgl_vector_3d<Type> norm_;
   //: planes bounding the frustum volume including near and far plane
-  vcl_vector<vgl_plane_3d<Type> > surface_planes_;
+  std::vector<vgl_plane_3d<Type> > surface_planes_;
   int near_plane_;
   int far_plane_;
-  vcl_vector<vgl_point_3d<Type> > verts_;
+  std::vector<vgl_point_3d<Type> > verts_;
   //: the number of verts in the top or bottom face
   int n_top_bot_face_verts_;
   // key corresponds to plane index, value is clockwise verts on face boundary
   // clockwise with respect the the face normal
-  vcl_map<int, vcl_vector<int> > faces_;
+  std::map<int, std::vector<int> > faces_;
 };
 
 //: Write frustum to stream
 // \relatesalso vgl_frustum_3d
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_frustum_3d<Type> const& p);
+std::ostream&  operator<<(std::ostream& s, vgl_frustum_3d<Type> const& p);
 
 
 

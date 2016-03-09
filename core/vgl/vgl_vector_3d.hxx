@@ -7,15 +7,16 @@
 #include "vgl_vector_3d.h"
 #include "vgl_tolerance.h"
 
-#include <vcl_cmath.h> // sqrt() , acos()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath> // sqrt() , acos()
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vcl_deprecated.h>
 
 template <class T>
 double vgl_vector_3d<T>::length() const
 {
-  return vcl_sqrt( 0.0+sqr_length() );
+  return std::sqrt( 0.0+sqr_length() );
 }
 
 //: The one-parameter family of unit vectors that are orthogonal to *this, v(s).
@@ -35,12 +36,12 @@ double angle(vgl_vector_3d<T> const& a, vgl_vector_3d<T> const& b)
   if (ca>=-1.0)
   {
     if (ca<=1.0)
-      return vcl_acos(ca);
+      return std::acos(ca);
     else
       return 0;
   }
   else
-    return vcl_acos(-1.0); // pi
+    return std::acos(-1.0); // pi
 }
 
 template <class T>
@@ -74,17 +75,17 @@ vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const& a, double s)
   double nx = static_cast<double>(a.x_);
   double ny = static_cast<double>(a.y_);
   double nz = static_cast<double>(a.z_);
-  double two_pi = 2*vcl_acos(-1.0);
-  double co = vcl_cos(two_pi*s);
-  double si = vcl_sin(two_pi*s);
+  double two_pi = 2*std::acos(-1.0);
+  double co = std::cos(two_pi*s);
+  double si = std::sin(two_pi*s);
 
-  double mnz = vcl_fabs(nz);
+  double mnz = std::fabs(nz);
   if (mnz>tol)  // General case
   {
     double rx = nx/nz;
     double ry = ny/nz;
     double q = co*rx +si*ry;
-    double a = 1.0/vcl_sqrt(1+q*q);
+    double a = 1.0/std::sqrt(1+q*q);
     T vx = static_cast<T>(a*co);
     T vy = static_cast<T>(a*si);
     T vz = -static_cast<T>(rx*vx + ry*vy);
@@ -92,11 +93,11 @@ vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const& a, double s)
   }
   else  // Special cases, nz ~ 0
   {
-    double mny = vcl_fabs(ny);
+    double mny = std::fabs(ny);
     if (mny>tol)
     {
       double r = nx/ny;
-      double a = 1/vcl_sqrt(1+co*co*r*r);
+      double a = 1/std::sqrt(1+co*co*r*r);
       T vx = static_cast<T>(a*co);
       T vz = static_cast<T>(a*si);
       T vy = -static_cast<T>(a*co*r);
@@ -106,7 +107,7 @@ vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const& a, double s)
     {
       // assume mnx>tol provided that input vector was not null
       double r = ny/nx;
-      double a = 1/vcl_sqrt(1+co*co*r*r);
+      double a = 1/std::sqrt(1+co*co*r*r);
       T vy = static_cast<T>(a*co);
       T vz = static_cast<T>(a*si);
       T vx = -static_cast<T>(a*co*r);
@@ -117,7 +118,7 @@ vgl_vector_3d<T> orthogonal_vectors(vgl_vector_3d<T> const& a, double s)
 
 //: Write "<vgl_vector_3d x,y,z> " to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_3d<T> const& p)
+std::ostream&  operator<<(std::ostream& s, vgl_vector_3d<T> const& p)
 {
   return s << "<vgl_vector_3d "<< p.x() << ',' << p.y() << ',' << p.z() << "> ";
 }
@@ -128,21 +129,21 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_vector_3d<T> const& p)
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_vector_3d
 template <class T>
-vcl_istream& vgl_vector_3d<T>::read(vcl_istream& is)
+std::istream& vgl_vector_3d<T>::read(std::istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
   T tx, ty, tz;
-  is >> vcl_ws; // jump over any leading whitespace
+  is >> std::ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> tx >> vcl_ws;
+  is >> std::ws >> tx >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> ty >> vcl_ws;
+  is >> std::ws >> ty >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> tz >> vcl_ws;
+  is >> std::ws >> tz >> std::ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
@@ -158,7 +159,7 @@ vcl_istream& vgl_vector_3d<T>::read(vcl_istream& is)
 //  or reads three numbers in parenthesized form "(123, 321, 567)"
 // \relatesalso vgl_vector_3d
 template <class T>
-vcl_istream&  operator>>(vcl_istream& is, vgl_vector_3d<T>& p)
+std::istream&  operator>>(std::istream& is, vgl_vector_3d<T>& p)
 {
   return p.read(is);
 }
@@ -188,7 +189,7 @@ template               vgl_vector_3d<T >  orthogonal_vectors(vgl_vector_3d<T > c
 VCL_INSTANTIATE_INLINE(double             operator/         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
 VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& normalize         (vgl_vector_3d<T >&));\
 VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  normalized        (vgl_vector_3d<T > const&));\
-template               vcl_ostream&       operator<<        (vcl_ostream&, vgl_vector_3d<T >const&);\
-template               vcl_istream&       operator>>        (vcl_istream&, vgl_vector_3d<T >&)
+template               std::ostream&       operator<<        (std::ostream&, vgl_vector_3d<T >const&);\
+template               std::istream&       operator>>        (std::istream&, vgl_vector_3d<T >&)
 
 #endif // vgl_vector_3d_hxx_

@@ -1,5 +1,6 @@
 // This is core/vbl/io/tests/test_bounding_box_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 #include <vsl/vsl_binary_io.h>
@@ -9,7 +10,7 @@
 
 void test_bounding_box_double_io()
 {
-  vcl_cout << "***********************************\n"
+  std::cout << "***********************************\n"
            << "Testing vbl_bounding_box<double> io\n"
            << "***********************************\n";
   //// test constructors, accessors
@@ -42,8 +43,8 @@ void test_bounding_box_double_io()
   TEST("p_out.max()[0] == p_in.max()[0]", p_out.max()[0], p_in.max()[0]);
   TEST("p_out.max()[1] == p_in.max()[1]", p_out.max()[1], p_in.max()[1]);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, p_out);
+  std::cout << std::endl;
   vsl_indent_clear_all_data ();
 }
 

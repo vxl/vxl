@@ -3,32 +3,33 @@
 #define vsl_list_io_hxx_
 //:
 // \file
-// \brief  binary IO functions for vcl_list<T>
+// \brief  binary IO functions for std::list<T>
 // \author K.Y.McGaul
 //
 // Implementation
 
 #include "vsl_list_io.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
 
 //====================================================================================
 //: Write list to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const vcl_list<T>& v)
+void vsl_b_write(vsl_b_ostream& s, const std::list<T>& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
-  for (typename vcl_list<T>::const_iterator iter = v.begin(); iter != v.end(); iter++)
+  for (typename std::list<T>::const_iterator iter = v.begin(); iter != v.end(); iter++)
     vsl_b_write(s,*iter);
 }
 
 //====================================================================================
 //: Read list from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& is, vcl_list<T>& v)
+void vsl_b_read(vsl_b_istream& is, std::list<T>& v)
 {
   if (!is) return;
 
@@ -48,9 +49,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_list<T>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_list<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::list<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -58,11 +59,11 @@ void vsl_b_read(vsl_b_istream& is, vcl_list<T>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
+void vsl_print_summary(std::ostream& os, const std::list<T> &v)
 {
   unsigned i=0;
   os << "List length: " << v.size() << '\n';
-  for (typename vcl_list<T>::const_iterator iter = v.begin();
+  for (typename std::list<T>::const_iterator iter = v.begin();
        iter != v.end() && i<5; ++iter,++i)
   {
     os << vsl_indent() << ' ' << i << ": ";
@@ -76,8 +77,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_list<T> &v)
 }
 
 #define VSL_LIST_IO_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream&, const vcl_list<T >&); \
-template void vsl_b_write(vsl_b_ostream& s, const vcl_list<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_list<T >& v)
+template void vsl_print_summary(std::ostream&, const std::list<T >&); \
+template void vsl_b_write(vsl_b_ostream& s, const std::list<T >& v); \
+template void vsl_b_read(vsl_b_istream& s, std::list<T >& v)
 
 #endif // vsl_list_io_hxx_

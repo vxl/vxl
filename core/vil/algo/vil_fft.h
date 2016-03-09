@@ -6,7 +6,8 @@
 //  \brief Functions to apply the FFT to an image.
 // \author Fred Wheeler
 
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
+#include <complex>
 #include <vil/vil_image_view.h>
 
 //: Perform in place forward FFT.
@@ -14,7 +15,7 @@
 // \relatesalso vil_fft_2d_bwd
 template<class T>
 void
-vil_fft_2d_fwd (vil_image_view<vcl_complex<T> > & img);
+vil_fft_2d_fwd (vil_image_view<std::complex<T> > & img);
 
 //: Perform in place backward FFT.
 // Unlike vnl_fft_2d, scaling is done properly, so using
@@ -24,6 +25,6 @@ vil_fft_2d_fwd (vil_image_view<vcl_complex<T> > & img);
 // \relatesalso vil_fft_2d_fwd
 template<class T>
 void
-vil_fft_2d_bwd (vil_image_view<vcl_complex<T> > & img);
+vil_fft_2d_bwd (vil_image_view<std::complex<T> > & img);
 
 #endif // vil_fft_h_

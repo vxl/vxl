@@ -12,12 +12,13 @@
 // \endverbatim
 
 #include "vul_url.h"
-#include <vcl_cstdio.h>  // sprintf()
-#include <vcl_cstring.h>
-#include <vcl_cstdlib.h>
-#include <vcl_sstream.h>
+#include <cstdio>  // sprintf()
+#include <cstring>
+#include <vcl_compiler.h>
+#include <cstdlib>
+#include <sstream>
 #include <vcl_cassert.h>
-#include <vcl_fstream.h>
+#include <fstream>
 #include <vul/vul_file.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)
@@ -43,21 +44,21 @@ static int called_WSAStartup = 0;
 #endif
 
 //: only call this method with a correctly formatted http URL
-vcl_istream * vul_http_open(char const *url)
+std::istream * vul_http_open(char const *url)
 {
   // split URL into auth, host, path and port number.
-  vcl_string host;
-  vcl_string path;
-  vcl_string auth;
+  std::string host;
+  std::string path;
+  std::string auth;
   int port = 80; // default
 
   // check it is an http URL.
-  assert (vcl_strncmp(url, "http://", 7) == 0);
+  assert (std::strncmp(url, "http://", 7) == 0);
 
   char const *p = url + 7;
   while (*p && *p!='/')
     ++ p;
-  host = vcl_string(url+7, p);
+  host = std::string(url+7, p);
 
 
   if (*p)
@@ -68,8 +69,8 @@ vcl_istream * vul_http_open(char const *url)
   //authentication
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
-      auth = vcl_string(host.c_str(), host.c_str()+i);
-      host = vcl_string(host.c_str()+i+1, host.c_str() + host.size());
+      auth = std::string(host.c_str(), host.c_str()+i);
+      host = std::string(host.c_str()+i+1, host.c_str() + host.size());
       break;
     }
 
@@ -77,8 +78,8 @@ vcl_istream * vul_http_open(char const *url)
   if (host.size() > 0L)
   for (unsigned int i=(unsigned int)(host.size()-1); i>0; --i)
     if (host[i] == ':') {
-      port = vcl_atoi(host.c_str() + i + 1);
-      host = vcl_string(host.c_str(), host.c_str() + i);
+      port = std::atoi(host.c_str() + i + 1);
+      host = std::string(host.c_str(), host.c_str() + i);
       break;
     }
 
@@ -95,10 +96,10 @@ vcl_istream * vul_http_open(char const *url)
 
   // so far so good.
 #ifdef DEBUG
-  vcl_cerr << "auth = \'" << auth << "\'\n"
+  std::cerr << "auth = \'" << auth << "\'\n"
            << "host = \'" << host << "\'\n"
            << "path = \'" << path << "\'\n"
-           << "port = " << port << vcl_endl;
+           << "port = " << port << std::endl;
 #endif
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -121,23 +122,23 @@ vcl_istream * vul_http_open(char const *url)
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
 # ifndef NDEBUG
-    vcl_cerr << __FILE__ "error code : " << WSAGetLastError() << '\n';
+    std::cerr << __FILE__ "error code : " << WSAGetLastError() << '\n';
 # endif
 #else
   if (tcp_socket < 0) {
 #endif
-    vcl_cerr << __FILE__ ": failed to create socket.\n";
+    std::cerr << __FILE__ ": failed to create socket.\n";
     return VXL_NULLPTR;
   }
 
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": tcp_socket = " << tcp_socket << '\n';
+  std::cerr << __FILE__ ": tcp_socket = " << tcp_socket << '\n';
 #endif
 
   // get network address of server.
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
-    vcl_cerr << __FILE__ ": failed to lookup host\n";
+    std::cerr << __FILE__ ": failed to lookup host\n";
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -153,11 +154,11 @@ vcl_istream * vul_http_open(char const *url)
   my_addr.sin_family = AF_INET;
   // convert port number to network byte order..
   my_addr.sin_port = htons(port);
-  vcl_memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
+  std::memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
-    vcl_cerr << __FILE__ ": failed to connect to host\n";
+    std::cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -173,27 +174,27 @@ vcl_istream * vul_http_open(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_snprintf(buffer, 4090-vcl_strlen(buffer),
+  std::snprintf(buffer, 4090-std::strlen(buffer),
                "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
                url, host.c_str());
 
   if (auth != "")
-    vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
+    std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
                  "Authorization: Basic %s\r\n",
                  vul_url::encode_base64(auth).c_str());
 
-  if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
+  if (std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
   {
-    vcl_cerr << "ERROR: vul_http_open buffer overflow.";
-    vcl_abort();
+    std::cerr << "ERROR: vul_http_open buffer overflow.";
+    std::abort();
   }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, (int)vcl_strlen(buffer), 0) < 0) {
+  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0) {
 #else
-  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
+  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0) {
 #endif
-    vcl_cerr << __FILE__ ": error sending HTTP request\n";
+    std::cerr << __FILE__ ": error sending HTTP request\n";
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -205,7 +206,7 @@ vcl_istream * vul_http_open(char const *url)
 
 
   // read from socket into memory.
-  vcl_string contents;
+  std::string contents;
   {
     int n;
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -215,7 +216,7 @@ vcl_istream * vul_http_open(char const *url)
 #endif
       contents.append(buffer, n);
 #ifdef DEBUG
-      vcl_cerr << n << " bytes\n";
+      std::cerr << n << " bytes\n";
 #endif
     }
   }
@@ -228,14 +229,14 @@ vcl_istream * vul_http_open(char const *url)
 #endif
 
 #ifdef DEBUG
-  vcl_cerr << "HTTP server returned:\n" << contents << '\n';
+  std::cerr << "HTTP server returned:\n" << contents << '\n';
 #endif
 
   if (contents.find("HTTP/1.1 200") == contents.npos)
   {
     return VXL_NULLPTR;
   }
-  vcl_string::size_type n = contents.find("\r\n\r\n");
+  std::string::size_type n = contents.find("\r\n\r\n");
   if (n == contents.npos)
   {
     return VXL_NULLPTR;
@@ -243,9 +244,9 @@ vcl_istream * vul_http_open(char const *url)
 
   contents.erase(0,n+4);
 #ifdef DEBUG
-  vcl_cerr << "vul_url::vul_http_open() returns:\n" << contents << '\n';
+  std::cerr << "vul_url::vul_http_open() returns:\n" << contents << '\n';
 #endif
-  return new vcl_istringstream(contents);
+  return new std::istringstream(contents);
 }
 
 
@@ -253,16 +254,16 @@ vcl_istream * vul_http_open(char const *url)
 bool vul_http_exists(char const *url)
 {
   // split URL into auth, host, path and port number.
-  vcl_string host;
-  vcl_string path;
-  vcl_string auth;
+  std::string host;
+  std::string path;
+  std::string auth;
   int port = 80; // default
-  assert (vcl_strncmp(url, "http://", 7) == 0);
+  assert (std::strncmp(url, "http://", 7) == 0);
 
   char const *p = url + 7;
   while (*p && *p!='/')
     ++ p;
-  host = vcl_string(url+7, p);
+  host = std::string(url+7, p);
 
 
   if (*p)
@@ -273,16 +274,16 @@ bool vul_http_exists(char const *url)
   //authentication
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == '@') {
-      auth = vcl_string(host.c_str(), host.c_str()+i);
-      host = vcl_string(host.c_str()+i+1, host.c_str() + host.size());
+      auth = std::string(host.c_str(), host.c_str()+i);
+      host = std::string(host.c_str()+i+1, host.c_str() + host.size());
       break;
     }
 
   // port?
   for (unsigned int i=0; i<host.size(); ++i)
     if (host[i] == ':') {
-      port = vcl_atoi(host.c_str() + i + 1);
-      host = vcl_string(host.c_str(), host.c_str() + i);
+      port = std::atoi(host.c_str() + i + 1);
+      host = std::string(host.c_str(), host.c_str() + i);
       break;
     }
 
@@ -299,10 +300,10 @@ bool vul_http_exists(char const *url)
 
   // so far so good.
 #ifdef DEBUG
-  vcl_cerr << "auth = \'" << auth << "\'\n"
+  std::cerr << "auth = \'" << auth << "\'\n"
            << "host = \'" << host << "\'\n"
            << "path = \'" << path << "\'\n"
-           << "port = " << port << vcl_endl;
+           << "port = " << port << std::endl;
 #endif
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -326,23 +327,23 @@ bool vul_http_exists(char const *url)
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
 # ifndef NDEBUG
-    vcl_cerr << "error code : " << WSAGetLastError() << vcl_endl;
+    std::cerr << "error code : " << WSAGetLastError() << std::endl;
 # endif
 #else
   if (tcp_socket < 0) {
 #endif
-    vcl_cerr << __FILE__ ": failed to create socket.\n";
+    std::cerr << __FILE__ ": failed to create socket.\n";
     return false;
   }
 
 #ifdef DEBUG
-  vcl_cerr << __FILE__ ": tcp_socket = " << tcp_socket << vcl_endl;
+  std::cerr << __FILE__ ": tcp_socket = " << tcp_socket << std::endl;
 #endif
 
   // get network address of server.
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
-    vcl_cerr << __FILE__ ": failed to lookup host\n";
+    std::cerr << __FILE__ ": failed to lookup host\n";
     return false;
   }
 
@@ -351,12 +352,12 @@ bool vul_http_exists(char const *url)
   my_addr.sin_family = AF_INET;
     // convert port number to network byte order..
   my_addr.sin_port = htons(port);
-  vcl_memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
+  std::memcpy(&my_addr.sin_addr, hp->h_addr_list[0], hp->h_length);
 
   // connect to server.
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0)
   {
-    vcl_cerr << __FILE__ ": failed to connect to host\n";
+    std::cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -371,26 +372,26 @@ bool vul_http_exists(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_snprintf(buffer, 4090,
+  std::snprintf(buffer, 4090,
                "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
                url, host.c_str());
   if (auth != "")
-    vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer),
+    std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
                  "Authorization: Basic %s\r\n",
                  vul_url::encode_base64(auth).c_str() );
 
-  if (vcl_snprintf(buffer+vcl_strlen(buffer), 4090-vcl_strlen(buffer), "\r\n") < 0)
+  if (std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
   {
-    vcl_cerr << "ERROR: vul_http_exists buffer overflow.";
-    vcl_abort();
+    std::cerr << "ERROR: vul_http_exists buffer overflow.";
+    std::abort();
   }
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
-  if (send(tcp_socket, buffer, (int)vcl_strlen(buffer), 0) < 0) {
+  if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0) {
 #else
-  if (::write(tcp_socket, buffer, vcl_strlen(buffer)) < 0) {
+  if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0) {
 #endif
-    vcl_cerr << __FILE__ ": error sending HTTP request\n";
+    std::cerr << __FILE__ ": error sending HTTP request\n";
 
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
@@ -402,7 +403,7 @@ bool vul_http_exists(char const *url)
 
 
   // read from socket into memory.
-  vcl_string contents;
+  std::string contents;
   {
     int n;
 #if defined(VCL_WIN32) && !defined(__CYGWIN__)
@@ -411,7 +412,7 @@ bool vul_http_exists(char const *url)
     if ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
 #endif
       contents.append(buffer, n);
-      //vcl_cerr << n << " bytes\n";
+      //std::cerr << n << " bytes\n";
     }
     else
     {
@@ -432,38 +433,38 @@ bool vul_http_exists(char const *url)
 #endif
 
 #ifdef DEBUG
-  vcl_cerr << "HTTP server returned:\n" << contents << '\n';
+  std::cerr << "HTTP server returned:\n" << contents << '\n';
 #endif
 
   return contents.find("HTTP/1.1 200") != contents.npos;
 }
 
 
-vcl_istream * vul_url::open(const char * url, vcl_ios_openmode mode)
+std::istream * vul_url::open(const char * url, std::ios::openmode mode)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
     return VXL_NULLPTR;
-  unsigned int l = (unsigned int)vcl_strlen(url);
+  unsigned int l = (unsigned int)std::strlen(url);
 
   // check for filenames beginning "file:".
-  if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
-    return new vcl_ifstream(url+7,mode);
+  if (l > 7 && std::strncmp(url, "file://", 7) == 0)
+    return new std::ifstream(url+7,mode);
 
   // maybe it's an http URL?
-  if (l > 7 && vcl_strncmp(url, "http://", 7) == 0)
+  if (l > 7 && std::strncmp(url, "http://", 7) == 0)
     return vul_http_open(url);
 
   // maybe it's an ftp URL?
-  if (l > 6 && vcl_strncmp(url, "ftp://", 6) == 0)
+  if (l > 6 && std::strncmp(url, "ftp://", 6) == 0)
   {
-    vcl_cerr << __LINE__ << "ERROR:\n vul_read_url(const char * url)\n"
-      "Doesn't support FTP yet, url=" << url << vcl_endl;
+    std::cerr << __LINE__ << "ERROR:\n vul_read_url(const char * url)\n"
+      "Doesn't support FTP yet, url=" << url << std::endl;
     return VXL_NULLPTR;
   }
 
   // try an ordinary filename
-  return new vcl_ifstream(url, mode);
+  return new std::ifstream(url, mode);
 }
 
 
@@ -473,21 +474,21 @@ bool vul_url::exists(const char * url)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return false;
-  unsigned int l = (unsigned int)vcl_strlen(url);
+  unsigned int l = (unsigned int)std::strlen(url);
 
   // check for filenames beginning "file:".
-  if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
+  if (l > 7 && std::strncmp(url, "file://", 7) == 0)
     return vul_file::exists(url+7);
 
   // maybe it's an http URL?
-  if (l > 7 && vcl_strncmp(url, "http://", 7) == 0)
+  if (l > 7 && std::strncmp(url, "http://", 7) == 0)
     return vul_http_exists(url);
 
   // maybe it's an ftp URL?
-  if (l > 6 && vcl_strncmp(url, "ftp://", 6) == 0)
+  if (l > 6 && std::strncmp(url, "ftp://", 6) == 0)
   {
-    vcl_cerr << "ERROR: vul_read_url(const char * url)\n"
-      "Doesn't support FTP yet, url=" << url << vcl_endl;
+    std::cerr << "ERROR: vul_read_url(const char * url)\n"
+      "Doesn't support FTP yet, url=" << url << std::endl;
     return false;
   }
 
@@ -501,18 +502,18 @@ bool vul_url::is_url(const char * url)
   // check for null pointer or empty strings.
   if (!url || !*url)
     return false;
-  unsigned int l = (unsigned int)vcl_strlen(url);
+  unsigned int l = (unsigned int)std::strlen(url);
 
   // check for filenames beginning "file:".
-  if (l > 7 && vcl_strncmp(url, "file://", 7) == 0)
+  if (l > 7 && std::strncmp(url, "file://", 7) == 0)
     return true;
 
   // maybe it's an http URL?
-  if (l > 7 && vcl_strncmp(url, "http://", 7) == 0)
+  if (l > 7 && std::strncmp(url, "http://", 7) == 0)
     return true;
 
   // maybe it's an ftp URL?
-  if (l > 6 && vcl_strncmp(url, "ftp://", 6) == 0)
+  if (l > 6 && std::strncmp(url, "ftp://", 6) == 0)
     return true;
 
   return false;
@@ -569,9 +570,9 @@ static const char * encode_triplet(char data[3], unsigned int n)
 
 //=======================================================================
 
-vcl_string vul_url::encode_base64(const vcl_string& in)
+std::string vul_url::encode_base64(const std::string& in)
 {
-  vcl_string out;
+  std::string out;
   unsigned int i = 0, line_octets = 0;
   const unsigned int l = (unsigned int)(in.size());
   char data[3];
@@ -618,7 +619,7 @@ vcl_string vul_url::encode_base64(const vcl_string& in)
 
 //=======================================================================
 
-static int get_next_char(const vcl_string &in, unsigned int *i)
+static int get_next_char(const std::string &in, unsigned int *i)
 {
   while (*i < in.size())
   {
@@ -648,14 +649,14 @@ static int get_next_char(const vcl_string &in, unsigned int *i)
 
 //=======================================================================
 
-vcl_string vul_url::decode_base64(const vcl_string& in)
+std::string vul_url::decode_base64(const std::string& in)
 {
   int c;
   char data[3];
 
   unsigned int i=0;
   const unsigned int l = (unsigned int)(in.size());
-  vcl_string out;
+  std::string out;
   while (i < l)
   {
     data[0] = data[1] = data[2] = 0;

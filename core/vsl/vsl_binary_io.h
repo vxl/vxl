@@ -9,18 +9,19 @@
 // You should include this file if you want to do binary_io
 //
 // Also included are a set of functions
-// vsl_print_summary(vcl_ostream& os, bool b)
+// vsl_print_summary(std::ostream& os, bool b)
 // for basic types to ensure that templated classes
 // vsl_print_summaries can work with all types
 
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
-#include <vcl_fstream.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <iosfwd>
+#include <string>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <map>
+#include <utility>
 #include <vxl_config.h>
 #include <vsl/vsl_export.h>
-//: A binary output adaptor for any vcl_ostream
+//: A binary output adaptor for any std::ostream
 // Currently the main use of this is to encourage streams to be opened
 // in binary mode (ie. without CR/LF conversion)
 //
@@ -39,10 +40,10 @@ class vsl_b_ostream
   // so that the
   // IO version and magic number can be written by this constructor.
   // User is responsible for deleting os after deleting the adaptor
-  vsl_b_ostream(vcl_ostream *os);
+  vsl_b_ostream(std::ostream *os);
 
   //: A reference to the adaptor's stream
-  vcl_ostream& os() const;
+  std::ostream& os() const;
 
   //: Virtual destructor.
   virtual ~vsl_b_ostream() {}
@@ -87,11 +88,11 @@ class vsl_b_ostream
   //: The length of the b_stream header.
   // You can move to this offset from the start of the file to get to
   // the first real data item.
-  static VSL_EXPORT const vcl_streamoff header_length;
+  static VSL_EXPORT const std::streamoff header_length;
 
  protected:
   //: The member stream
-  vcl_ostream *os_;
+  std::ostream *os_;
 
   // Design notes: IMS
   // I used to think that a pointer and class name were needed to identify an
@@ -105,7 +106,7 @@ class vsl_b_ostream
   // different pointer sizes.
 
   //: The type of the serialisation records
-  typedef vcl_map<void *, vcl_pair<unsigned long, int>, vcl_less<void *> >
+  typedef std::map<void *, std::pair<unsigned long, int>, std::less<void *> >
     serialisation_records_type;
 
   //: The serialisation records
@@ -118,21 +119,21 @@ class vsl_b_ostream
 };
 
 
-//: An adapter for a vcl_ofstream to make it suitable for binary IO
+//: An adapter for a std::ofstream to make it suitable for binary IO
 class vsl_b_ofstream: public vsl_b_ostream
 {
  public:
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
-  vsl_b_ofstream(const vcl_string &filename,
-                 vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc):
-    vsl_b_ostream(new vcl_ofstream(filename.c_str(), mode | vcl_ios_binary)) {}
+  vsl_b_ofstream(const std::string &filename,
+                 std::ios::openmode mode = std::ios::out | std::ios::trunc):
+    vsl_b_ostream(new std::ofstream(filename.c_str(), mode | std::ios::binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the internal stream automatically on destruction.
   vsl_b_ofstream(const char *filename,
-                 vcl_ios_openmode mode = vcl_ios_out | vcl_ios_trunc) :
-    vsl_b_ostream(new vcl_ofstream(filename, mode | vcl_ios_binary)) {}
+                 std::ios::openmode mode = std::ios::out | std::ios::trunc) :
+    vsl_b_ostream(new std::ofstream(filename, mode | std::ios::binary)) {}
 
   //: Virtual destructor.
   virtual ~vsl_b_ofstream();
@@ -148,9 +149,9 @@ class vsl_b_ofstream: public vsl_b_ostream
 //: Test to see if a stream really is a binary vsl file.
 // \return false if we can't find magic numbers and correct version number.
 // The file pointer is reset to the beginning on leaving this function.
-bool vsl_b_istream_test(vcl_istream &is);
+bool vsl_b_istream_test(std::istream &is);
 
-//: An adaptor for any vcl_istream to make it suitable for binary input
+//: An adaptor for any std::istream to make it suitable for binary input
 // Currently the main use of this is to encourage file streams to be opened
 // in binary mode (ie. without CR/LF conversion)
 //
@@ -167,10 +168,10 @@ class vsl_b_istream
   // The stream (is) must be open (i.e. ready to be read from) so that the
   // IO version and magic number can be read by this constructor.
   // User is responsible for deleting is after deleting the adaptor
-  vsl_b_istream(vcl_istream *is);
+  vsl_b_istream(std::istream *is);
 
   //: A reference to the adaptor's stream
-  vcl_istream & is() const;
+  std::istream & is() const;
 
   //: Virtual destructor.so that it can be overloaded
   virtual ~vsl_b_istream() {}
@@ -214,10 +215,10 @@ class vsl_b_istream
 
  protected:
   //: The member stream
-  vcl_istream *is_;
+  std::istream *is_;
 
   //: The type of the serialisation records.
-  typedef vcl_map<unsigned long, vcl_pair<void *, int>, vcl_less<unsigned long> >
+  typedef std::map<unsigned long, std::pair<void *, int>, std::less<unsigned long> >
     serialisation_records_type;
 
   //: The serialisation records,
@@ -231,20 +232,20 @@ class vsl_b_istream
 };
 
 
-//: An adapter for a vcl_ifstream to make it suitable for binary IO
+//: An adapter for a std::ifstream to make it suitable for binary IO
 class vsl_b_ifstream: public vsl_b_istream
 {
  public:
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
-  vsl_b_ifstream(const vcl_string &filename, vcl_ios_openmode mode = vcl_ios_in):
-    vsl_b_istream(new vcl_ifstream(filename.c_str(),
-    mode | vcl_ios_binary)) {}
+  vsl_b_ifstream(const std::string &filename, std::ios::openmode mode = std::ios::in):
+    vsl_b_istream(new std::ifstream(filename.c_str(),
+    mode | std::ios::binary)) {}
 
   //: Create this adaptor from a file.
   // The adapter will delete the stream automatically on destruction.
-  vsl_b_ifstream(const char *filename, vcl_ios_openmode mode = vcl_ios_in):
-    vsl_b_istream(new vcl_ifstream(filename, mode | vcl_ios_binary)) {}
+  vsl_b_ifstream(const char *filename, std::ios::openmode mode = std::ios::in):
+    vsl_b_istream(new std::ifstream(filename, mode | std::ios::binary)) {}
 
   //: Virtual destructor.so that it can be overloaded
   virtual ~vsl_b_ifstream();
@@ -258,7 +259,7 @@ void vsl_b_write(vsl_b_ostream& os,bool b);
 //: Read bool from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,bool& b);
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, bool b )
+inline void vsl_print_summary(std::ostream& os, bool b )
 {  os << b; }
 
 //: Write char to vsl_b_ostream
@@ -266,7 +267,7 @@ void vsl_b_write(vsl_b_ostream& os,char n );
 //: Read char from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,char& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, char n )
+inline void vsl_print_summary(std::ostream& os, char n )
 {  os << n; }
 
 //: Write signed char to vsl_b_ostream
@@ -274,7 +275,7 @@ void vsl_b_write(vsl_b_ostream& os,signed char n );
 //: Read  signed char from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,signed char& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, signed char n )
+inline void vsl_print_summary(std::ostream& os, signed char n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
@@ -282,27 +283,27 @@ void vsl_b_write(vsl_b_ostream& os,unsigned char n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,unsigned char& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, unsigned char n )
+inline void vsl_print_summary(std::ostream& os, unsigned char n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
-void vsl_b_write(vsl_b_ostream& os,const vcl_string& n );
+void vsl_b_write(vsl_b_ostream& os,const std::string& n );
 //: Read  from vsl_b_istream
-void vsl_b_read(vsl_b_istream& is,vcl_string& n );
+void vsl_b_read(vsl_b_istream& is,std::string& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, const vcl_string& n )
+inline void vsl_print_summary(std::ostream& os, const std::string& n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
-// \deprecated in favour of vcl_string version.
+// \deprecated in favour of std::string version.
 void vsl_b_write(vsl_b_ostream& os,const char* s );
 //: Read  from vsl_b_istream
-// \deprecated in favour of vcl_string version.
+// \deprecated in favour of std::string version.
 // \note You must preallocate enough space at \p s for expected length of string.
 // This function is easy to crash mith a malformed data file.
 void vsl_b_read(vsl_b_istream& is,char* s );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, const char* s )
+inline void vsl_print_summary(std::ostream& os, const char* s )
 {  os << s; }
 
 
@@ -328,7 +329,7 @@ void vsl_b_write(vsl_b_ostream& os, int VCL_64BIT_ATTR n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is, int VCL_64BIT_ATTR &n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, int VCL_64BIT_ATTR n )
+inline void vsl_print_summary(std::ostream& os, int VCL_64BIT_ATTR n )
 {  os << int(n); }
 
 #undef VCL_64BIT_ATTR
@@ -338,7 +339,7 @@ void vsl_b_write(vsl_b_ostream& os,unsigned int n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,unsigned int& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, unsigned int n )
+inline void vsl_print_summary(std::ostream& os, unsigned int n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
@@ -346,7 +347,7 @@ void vsl_b_write(vsl_b_ostream& os,short n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,short& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, short n )
+inline void vsl_print_summary(std::ostream& os, short n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
@@ -354,7 +355,7 @@ void vsl_b_write(vsl_b_ostream& os,unsigned short n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,unsigned short& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, unsigned short n )
+inline void vsl_print_summary(std::ostream& os, unsigned short n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
@@ -362,7 +363,7 @@ void vsl_b_write(vsl_b_ostream& os,long n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,long& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, long n )
+inline void vsl_print_summary(std::ostream& os, long n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
@@ -370,7 +371,7 @@ void vsl_b_write(vsl_b_ostream& os,unsigned long n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,unsigned long& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, unsigned long n )
+inline void vsl_print_summary(std::ostream& os, unsigned long n )
 {  os << n; }
 
 #if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
@@ -380,7 +381,7 @@ void vsl_b_write(vsl_b_ostream& os,vxl_int_64 n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,vxl_int_64& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, vxl_int_64 n )
+inline void vsl_print_summary(std::ostream& os, vxl_int_64 n )
 {
   os << n;
 }
@@ -390,7 +391,7 @@ void vsl_b_write(vsl_b_ostream& os,vxl_uint_64 n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,vxl_uint_64& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, vxl_uint_64 n )
+inline void vsl_print_summary(std::ostream& os, vxl_uint_64 n )
 {
   os << n;
 }
@@ -403,7 +404,7 @@ void vsl_b_write(vsl_b_ostream& os,float n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,float& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, float n )
+inline void vsl_print_summary(std::ostream& os, float n )
 {  os << n; }
 
 //: Write  to vsl_b_ostream
@@ -412,7 +413,7 @@ void vsl_b_write(vsl_b_ostream& os,double n );
 //: Read  from vsl_b_istream
 void vsl_b_read(vsl_b_istream& is,double& n );
 //: Print to a stream
-inline void vsl_print_summary(vcl_ostream& os, double n )
+inline void vsl_print_summary(std::ostream& os, double n )
 { os << n; }
 
 

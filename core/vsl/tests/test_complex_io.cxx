@@ -1,5 +1,6 @@
 // This is core/vsl/tests/test_complex_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_complex_io.h>
 #include <testlib/testlib_test.h>
@@ -7,18 +8,18 @@
 
 void test_complex_io()
 {
-  vcl_cout << "*****************************\n"
-           << "Testing vcl_complex binary io\n"
+  std::cout << "*****************************\n"
+           << "Testing std::complex binary io\n"
            << "*****************************\n";
 
-  vcl_complex<float> c_float_out(1.23f, 4.56f);
+  std::complex<float> c_float_out(1.23f, 4.56f);
 
   vsl_b_ofstream bfs_out("vsl_complex_io_test.bvl.tmp");
   TEST("Created vsl_complex_io_test.bvl.tmp for writing", (!bfs_out), false);
   vsl_b_write(bfs_out, c_float_out);
   bfs_out.close();
 
-  vcl_complex<float> c_float_in;
+  std::complex<float> c_float_in;
 
   vsl_b_ifstream bfs_in("vsl_complex_io_test.bvl.tmp");
   TEST("Opened vsl_complex_io_test.bvl.tmp for reading", (!bfs_in), false);
@@ -28,10 +29,10 @@ void test_complex_io()
 
   vpl_unlink ("vsl_complex_io_test.bvl.tmp");
 
-  TEST("vcl_complex<float> out == in", c_float_out, c_float_in);
+  TEST("std::complex<float> out == in", c_float_out, c_float_in);
 
-  vsl_print_summary(vcl_cout, c_float_in);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, c_float_in);
+  std::cout << std::endl;
 }
 
 TESTMAIN(test_complex_io);

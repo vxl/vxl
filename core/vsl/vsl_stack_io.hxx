@@ -3,9 +3,10 @@
 #define vsl_stack_io_hxx_
 //:
 // \file
-// \brief  binary IO functions for vcl_stack<T>
+// \brief  binary IO functions for std::stack<T>
 // \author K.Y.McGaul
 
+#include <iostream>
 #include "vsl_stack_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
@@ -13,13 +14,13 @@
 //====================================================================================
 //: Write stack to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T>& v)
+void vsl_b_write(vsl_b_ostream& s, const std::stack<T>& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
   // Make a copy of v since we have to change a stack to get
   // the values out:
-  vcl_stack<T> tmp_stack = v;
+  std::stack<T> tmp_stack = v;
 
   unsigned int stack_size = (unsigned int)(v.size());
   vsl_b_write(s, stack_size);
@@ -33,14 +34,14 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T>& v)
 //====================================================================================
 //: Read stack from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
+void vsl_b_read(vsl_b_istream& is, std::stack<T>& v)
 {
   if (!is) return;
 
   while (!v.empty()) v.pop(); // clear stack, which has no clear() member
 
   unsigned int stack_size;
-  vcl_stack<T> tmp_stack;
+  std::stack<T> tmp_stack;
   short ver;
   vsl_b_read(is, ver);
   switch (ver)
@@ -63,9 +64,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_stack<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::stack<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -73,9 +74,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_stack<T>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
+void vsl_print_summary(std::ostream& os, const std::stack<T> &v)
 {
-  vcl_stack<T> tmp_stack = v;
+  std::stack<T> tmp_stack = v;
   os << "Stack length: " << v.size() << '\n';
 
   unsigned int stack_size = (unsigned int)(v.size());
@@ -94,8 +95,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_stack<T> &v)
 
 
 #define VSL_STACK_IO_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream& s, const vcl_stack<T >& v); \
-template void vsl_b_write(vsl_b_ostream& s, const vcl_stack<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_stack<T >& v)
+template void vsl_print_summary(std::ostream& s, const std::stack<T >& v); \
+template void vsl_b_write(vsl_b_ostream& s, const std::stack<T >& v); \
+template void vsl_b_read(vsl_b_istream& s, std::stack<T >& v)
 
 #endif // vsl_stack_io_hxx_

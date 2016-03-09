@@ -1,13 +1,14 @@
 // This is core/vil/tests/test_math_value_range.cxx
 
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vil/vil_math.h>
 
 
 static void test_math_value_range()
 {
-  vcl_cout << "******************************\n"
+  std::cout << "******************************\n"
            << " Testing vil_math_value_range\n"
            << "******************************\n";
 
@@ -21,11 +22,11 @@ static void test_math_value_range()
       int val = j*ni + i +1; // NB Ensure that data values not already sorted!
       img(i,j) = val;
 #ifdef DEBUG
-      vcl_cout << val << ' ';
+      std::cout << val << ' ';
 #endif
     }
 #ifdef DEBUG
-    vcl_cout << val << '\n';
+    std::cout << val << '\n';
 #endif
   }
 
@@ -57,8 +58,8 @@ static void test_math_value_range()
 
   // Test several percentiles at once
   unsigned int nfrac = 9;
-  vcl_vector<double> fraction(nfrac);
-  vcl_vector<double> true_value(nfrac);
+  std::vector<double> fraction(nfrac);
+  std::vector<double> true_value(nfrac);
   fraction[0] = 0.00;  true_value[0] =   1;
   fraction[1] = 0.05;  true_value[1] =   5;
   fraction[2] = 0.10;  true_value[2] =  10;
@@ -68,7 +69,7 @@ static void test_math_value_range()
   fraction[6] = 0.90;  true_value[6] =  90;
   fraction[7] = 0.95;  true_value[7] =  95;
   fraction[8] = 1.00;  true_value[8] = 100;
-  vcl_vector<int> value;
+  std::vector<int> value;
   vil_math_value_range_percentiles(img, fraction, value);
   bool all_correct = true;
   for (unsigned f=0; f<nfrac; ++f)

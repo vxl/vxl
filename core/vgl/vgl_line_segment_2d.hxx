@@ -3,17 +3,18 @@
 #define vgl_line_segment_2d_hxx_
 
 #include "vgl_line_segment_2d.h"
-#include <vcl_iostream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath>
 // stream operators
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_line_segment_2d<Type> const & p)
+std::ostream& operator<<(std::ostream& s, vgl_line_segment_2d<Type> const & p)
 {
   return s << "<vgl_line_segment_2d " << p.point1() << " to " << p.point2() << " >";
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_line_segment_2d<Type>& p)
+std::istream& operator>>(std::istream& s, vgl_line_segment_2d<Type>& p)
 {
   vgl_point_2d<Type> p1, p2;
   s >> p1 >> p2;
@@ -56,7 +57,7 @@ vgl_vector_2d<Type>  vgl_line_segment_2d<Type>::normal() const
 template <class Type>
 double vgl_line_segment_2d<Type>::slope_degrees() const
 {
-  static const double deg_per_rad = 45.0/vcl_atan2(1.0,1.0);
+  static const double deg_per_rad = 45.0/std::atan2(1.0,1.0);
   double dy = point2_.y()-point1_.y();
   double dx = point2_.x()-point1_.x();
   // do special cases separately, to avoid rounding errors:
@@ -65,7 +66,7 @@ double vgl_line_segment_2d<Type>::slope_degrees() const
   if (dy == dx) return dy<0 ? -135.0 : 45.0;
   if (dy+dx == 0) return dy<0 ? -45.0 : 135.0;
   // general case:
-  return deg_per_rad * vcl_atan2(dy,dx);
+  return deg_per_rad * std::atan2(dy,dx);
 }
 
 template <class Type>
@@ -73,13 +74,13 @@ double vgl_line_segment_2d<Type>::slope_radians() const
 {
   double dy = point2_.y()-point1_.y();
   double dx = point2_.x()-point1_.x();
-  return vcl_atan2(dy,dx);
+  return std::atan2(dy,dx);
 }
 
 #undef VGL_LINE_SEGMENT_2D_INSTANTIATE
 #define VGL_LINE_SEGMENT_2D_INSTANTIATE(Type) \
 template class vgl_line_segment_2d<Type >;\
-template vcl_istream& operator>>(vcl_istream&, vgl_line_segment_2d<Type >&);\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_line_segment_2d<Type > const&)
+template std::istream& operator>>(std::istream&, vgl_line_segment_2d<Type >&);\
+template std::ostream& operator<<(std::ostream&, vgl_line_segment_2d<Type > const&)
 
 #endif // vgl_line_segment_2d_hxx_

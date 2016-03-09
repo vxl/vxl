@@ -1,11 +1,12 @@
 // This is core/vil/tests/test_rotate_image.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vil/vil_rotate.h>
 
 static void test_rotate_image()
 {
-  vcl_cout << "**************************\n"
+  std::cout << "**************************\n"
            << " Testing vil_rotate_image\n"
            << "**************************\n";
 

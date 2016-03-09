@@ -20,14 +20,15 @@
 
 #include <vxl_config.h> // VXL_STDLIB_HAS_QSORT
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 #if VXL_STDLIB_HAS_QSORT
 # include <vcl_cstdlib.h>
 #else
 # include <vcl_functional.h>
-# include <vcl_iostream.h>
+# include <std::iostream.h>
 #endif
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 #include <vbl/vbl_sort.h>
 
@@ -47,9 +48,9 @@ inline
 void vbl_qsort_ascending(T* base, int n)
 {
 #if VXL_STDLIB_HAS_QSORT
-  vcl_qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
+  std::qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::ascend);
 #else
-  vcl_sort(base, base+n, vcl_less<T>());
+  std::sort(base, base+n, std::less<T>());
 #endif
 }
 
@@ -61,9 +62,9 @@ inline
 void vbl_qsort_descending(T* base, int n)
 {
 #if VXL_STDLIB_HAS_QSORT
-  vcl_qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::descend);
+  std::qsort(base, n, sizeof base[0], vbl_qsort_helper<T>::descend);
 #else
-  vcl_sort(base, base+n, vcl_less<T>());
+  std::sort(base, base+n, std::less<T>());
 #endif
 }
 
@@ -73,12 +74,12 @@ void vbl_qsort_descending(T* base, int n)
 // but this is easier, and faster in the 21st century.
 template <class T>
 inline
-void vbl_qsort_ascending(vcl_vector<T>& v)
+void vbl_qsort_ascending(std::vector<T>& v)
 {
 #if VXL_STDLIB_HAS_QSORT
-  vcl_qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
+  std::qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::ascend);
 #else
-  vcl_sort(v.begin(), v.end(), vcl_less<T>());
+  std::sort(v.begin(), v.end(), std::less<T>());
 #endif
 }
 
@@ -87,26 +88,26 @@ void vbl_qsort_ascending(vcl_vector<T>& v)
 // namely "operator>" and "operator==".
 template <class T>
 inline
-void vbl_qsort_descending(vcl_vector<T>& v)
+void vbl_qsort_descending(std::vector<T>& v)
 {
 #if VXL_STDLIB_HAS_QSORT
   //vector<>::iterator
-  vcl_qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
+  std::qsort(&v[0], v.size(), sizeof v[0], vbl_qsort_helper<T>::descend);
 #else
-  vcl_sort(v.begin(), v.end(), vcl_greater<T>());
+  std::sort(v.begin(), v.end(), std::greater<T>());
 #endif
 }
 
 //: Sort STL vector.
 template <class T>
 inline
-void vbl_qsort(vcl_vector<T>& v, int (*compare)(T const& a, T const& b))
+void vbl_qsort(std::vector<T>& v, int (*compare)(T const& a, T const& b))
 {
 #if VXL_STDLIB_HAS_QSORT
   //vector<>::iterator
-  vcl_qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
+  std::qsort(&v[0], v.size(), sizeof v[0], (vbl_qsort_compare_t)compare);
 #else
-  vcl_cerr << "Sorry, this type of qsort has not been implemented\n";
+  std::cerr << "Sorry, this type of qsort has not been implemented\n";
 #endif
 }
 
@@ -115,7 +116,7 @@ VCL_INSTANTIATE_INLINE(void vbl_qsort_ascending(T*,int));\
 VCL_INSTANTIATE_INLINE(void vbl_qsort_descending(T*,int))
 
 #define VBL_QSORT_INSTANTIATE_vector(T) \
-VCL_INSTANTIATE_INLINE(void vbl_qsort(vcl_vector<T >& v, \
+VCL_INSTANTIATE_INLINE(void vbl_qsort(std::vector<T >& v, \
                         int (*compare)(T const& a, T const& b)))
 
 #endif // vbl_qsort_h_

@@ -6,8 +6,9 @@
 
 #include "vgl_homg_plane_3d.h"
 #include <vcl_cassert.h>
-#include <vcl_cmath.h> // for std::sqrt and std::fabs(double)
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath> // for std::sqrt and std::fabs(double)
+#include <iostream>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_homg_line_3d_2_points.h>
@@ -66,15 +67,15 @@ void vgl_homg_plane_3d<Type>::normalize()
   double sum = a_*a_ + b_*b_ + c_*c_;
   if (sum<1e-12) // don't normalize plane at infinity
     return;
-  double den = vcl_sqrt(sum);
+  double den = std::sqrt(sum);
   double an= (double)a()/den; a_ = (Type)an;
   double bn= (double)b()/den; b_ = (Type)bn;
   double cn= (double)c()/den; c_ = (Type)cn;
   double dn= (double)d()/den; d_ = (Type)dn;
   //standardize so that largest of (|a|,|b|,|c|) is positive
-  if ((vcl_fabs(an)>=vcl_fabs(bn) && vcl_fabs(an)>=vcl_fabs(cn) && an < 0) ||
-      (vcl_fabs(bn)>vcl_fabs(an) && vcl_fabs(bn)>=vcl_fabs(cn) && bn < 0) ||
-      (vcl_fabs(cn)>vcl_fabs(an) && vcl_fabs(cn)>vcl_fabs(bn) && cn < 0))
+  if ((std::fabs(an)>=std::fabs(bn) && std::fabs(an)>=std::fabs(cn) && an < 0) ||
+      (std::fabs(bn)>std::fabs(an) && std::fabs(bn)>=std::fabs(cn) && bn < 0) ||
+      (std::fabs(cn)>std::fabs(an) && std::fabs(cn)>std::fabs(bn) && cn < 0))
     a_ = -a_, b_ = -b_, c_ = -c_, d_ = -d_;
   return;
 }
@@ -92,7 +93,7 @@ bool vgl_homg_plane_3d<Type>::operator==(vgl_homg_plane_3d<Type> const& p) const
 }
 
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p)
+std::ostream& operator<<(std::ostream& s, const vgl_homg_plane_3d<Type>& p)
 {
   return s << " <vgl_homg_plane_3d "
            << p.a() << " x + "
@@ -102,7 +103,7 @@ vcl_ostream& operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p)
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_homg_plane_3d<Type>& p)
+std::istream& operator>>(std::istream& s, vgl_homg_plane_3d<Type>& p)
 {
   Type a, b, c, d;
   s >> a >> b >> c >> d;
@@ -113,7 +114,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_homg_plane_3d<Type>& p)
 #undef VGL_HOMG_PLANE_3D_INSTANTIATE
 #define VGL_HOMG_PLANE_3D_INSTANTIATE(T) \
 template class vgl_homg_plane_3d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_plane_3d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_homg_plane_3d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_homg_plane_3d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_homg_plane_3d<T >&)
 
 #endif // vgl_homg_plane_3d_hxx_

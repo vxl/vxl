@@ -6,18 +6,19 @@
 // \file
 
 #include "vsl_indent.h"
-#include <vcl_iostream.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <map>
+#include <utility>
 
 const int default_tab = 2;
 
-typedef vcl_pair<int,int> indent_data_type;
+typedef std::pair<int,int> indent_data_type;
 
 // Get pointer to tab and indent data for os
-indent_data_type* indent_data(vcl_ostream& os)
+indent_data_type* indent_data(std::ostream& os)
 {
-  typedef vcl_map<void*, indent_data_type, vcl_less<void*> > maps2i_type;
+  typedef std::map<void*, indent_data_type, std::less<void*> > maps2i_type;
   // Global record of tab information for streams.
   // Allows data to persist beyond the lifetime of the indent object itself,
   // which may be mercifully brief
@@ -35,36 +36,36 @@ indent_data_type* indent_data(vcl_ostream& os)
 }
 
 //: Increments current indent for given stream
-void vsl_indent_inc(vcl_ostream& os)
+void vsl_indent_inc(std::ostream& os)
 {
   indent_data(os)->first++;
 }
 
 //: Decrements current indent for given stream
-void vsl_indent_dec(vcl_ostream& os)
+void vsl_indent_dec(std::ostream& os)
 {
   indent_data(os)->first--;
 }
 
 //: Set number of spaces per increment step
-void vsl_indent_set_tab(vcl_ostream& os, int t)
+void vsl_indent_set_tab(std::ostream& os, int t)
 {
   indent_data(os)->second = t;
 }
 
 //: Number of spaces per increment step
-int vsl_indent_tab(vcl_ostream& os)
+int vsl_indent_tab(std::ostream& os)
 {
   return indent_data(os)->second;
 }
 
 //: Set indentation to zero
-void vsl_indent_clear(vcl_ostream& os)
+void vsl_indent_clear(std::ostream& os)
 {
   indent_data(os)->first =0;
 }
 
-vcl_ostream& operator<<(vcl_ostream& os, const vsl_indent& /*indent*/)
+std::ostream& operator<<(std::ostream& os, const vsl_indent& /*indent*/)
 {
   indent_data_type* data = indent_data(os);
 

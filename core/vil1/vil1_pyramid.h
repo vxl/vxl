@@ -9,7 +9,8 @@
 // \author fsm
 
 #include <vil1/vil1_image.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //:
 // vil1_pyramid is \e not an image. It is like an array of images, with
@@ -32,7 +33,7 @@ struct vil1_pyramid
 
  private:
   cache_strategy cs;
-  vcl_vector<vil1_image> levels;
+  std::vector<vil1_image> levels;
 };
 
 #endif // vil1_pyramid_h_

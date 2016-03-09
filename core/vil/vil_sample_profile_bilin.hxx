@@ -46,9 +46,9 @@ void vil_sample_profile_bilin(vecType* v,
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
   const unsigned np = image.nplanes();
-  const vcl_ptrdiff_t istep = image.istep();
-  const vcl_ptrdiff_t jstep = image.jstep();
-  const vcl_ptrdiff_t pstep = image.planestep();
+  const std::ptrdiff_t istep = image.istep();
+  const std::ptrdiff_t jstep = image.jstep();
+  const std::ptrdiff_t pstep = image.planestep();
   double x=x0;
   double y=y0;
   const imType* plane0 = image.top_left_ptr();
@@ -104,9 +104,9 @@ void vil_sample_profile_bilin_edgena(vecType* v,
   const unsigned ni = image.ni();
   const unsigned nj = image.nj();
   const unsigned np = image.nplanes();
-  const vcl_ptrdiff_t istep = image.istep();
-  const vcl_ptrdiff_t jstep = image.jstep();
-  const vcl_ptrdiff_t pstep = image.planestep();
+  const std::ptrdiff_t istep = image.istep();
+  const std::ptrdiff_t jstep = image.jstep();
+  const std::ptrdiff_t pstep = image.planestep();
   double x=x0;
   double y=y0;
   const imType* plane0 = image.top_left_ptr();

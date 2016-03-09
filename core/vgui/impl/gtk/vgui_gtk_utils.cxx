@@ -10,8 +10,9 @@
 
 #include "vgui_gtk_utils.h"
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for vcl_abort()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cstdlib> // for std::abort()
 
 #include <vgui/vgui_gl.h>
 #include <gdk/gdkkeysyms.h>
@@ -40,7 +41,7 @@ vgui_button vgui_gtk_utils::translate_button(int button)
     return vgui_MIDDLE;
 #endif
   else
-    vcl_abort();
+    std::abort();
   return vgui_BUTTON_NULL;
 }
 
@@ -139,7 +140,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator>\n";
+      if (debug) std::cerr << " <separator>\n";
       GtkWidget* item = gtk_menu_item_new();
       gtk_menu_append(GTK_MENU(widget), item);
       gtk_widget_show(item);
@@ -147,7 +148,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
 
     else if (menu[i].is_command())
     {
-      if (debug) vcl_cerr << " <command>\n";
+      if (debug) std::cerr << " <command>\n";
       GtkWidget* item = gtk_menu_item_new_with_label(menu[i].name.c_str());
       gtk_signal_connect(GTK_OBJECT(item), "activate",
                          GTK_SIGNAL_FUNC(execute_command),
@@ -180,7 +181,7 @@ void vgui_gtk_utils::add_submenu(GtkWidget *widget, const vgui_menu& menu)
     }
     else if (menu[i].is_submenu())
     {
-      if (debug) vcl_cerr << " <submenu>\n";
+      if (debug) std::cerr << " <submenu>\n";
       GtkWidget* item = gtk_menu_item_new_with_label(menu[i].name.c_str());
       GtkWidget* submenu = gtk_menu_new();
 
@@ -199,7 +200,7 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
   {
     if (menu[i].is_separator())
     {
-      if (debug) vcl_cerr << " <separator>\n";
+      if (debug) std::cerr << " <separator>\n";
       GtkWidget* item = gtk_menu_item_new();
       if (!is_menubar)
         gtk_menu_append(GTK_MENU(widget), item);
@@ -207,7 +208,7 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
     }
     else if (menu[i].is_command())
     {
-      if (debug) vcl_cerr << " <command> " << menu[i].name << vcl_endl;
+      if (debug) std::cerr << " <command> " << menu[i].name << std::endl;
       GtkWidget* item = gtk_menu_item_new_with_label(menu[i].name.c_str());
 
       if (is_menubar)
@@ -246,7 +247,7 @@ void vgui_gtk_utils::set_menu(GtkWidget *widget, const vgui_menu& menu, bool is_
     }
     else if (menu[i].is_submenu())
     {
-      if (debug) vcl_cerr << " <submenu> " << menu[i].name << vcl_endl;
+      if (debug) std::cerr << " <submenu> " << menu[i].name << std::endl;
 
       GtkWidget* item = gtk_menu_item_new_with_label(menu[i].name.c_str());
       GtkWidget* submenu = gtk_menu_new();

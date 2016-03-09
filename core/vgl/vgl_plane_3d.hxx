@@ -12,9 +12,10 @@
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_tolerance.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <iostream>
 
 //: Construct from homogeneous plane
 template <class T>
@@ -57,7 +58,7 @@ vgl_plane_3d<T>::vgl_plane_3d (vgl_ray_3d<T> const& r0,
   // check if the rays are parallel
   const vgl_vector_3d<T>& v0 = r0.direction();
   const vgl_vector_3d<T>& v1 = r1.direction();
-  double  para = vcl_fabs(1.0-vcl_fabs(cos_angle(v0, v1)));
+  double  para = std::fabs(1.0-std::fabs(cos_angle(v0, v1)));
   bool parallel = para < vgl_tolerance<double>::position;
   // check if the ray origins are coincident
   const vgl_point_3d<T>& p0 = r0.origin();
@@ -113,7 +114,7 @@ bool vgl_plane_3d<T>::operator==(vgl_plane_3d<T> const& p) const
                      if ((v)!=0) os<<' '<<s; } }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& os, const vgl_plane_3d<T>& p)
+std::ostream& operator<<(std::ostream& os, const vgl_plane_3d<T>& p)
 {
   os << "<vgl_plane_3d"; vp(os,p.a(),"x"); vp(os,p.b(),"y"); vp(os,p.c(),"z");
   vp(os,p.d(),""); return os << " = 0 >";
@@ -122,20 +123,20 @@ vcl_ostream& operator<<(vcl_ostream& os, const vgl_plane_3d<T>& p)
 #undef vp
 
 template <class T>
-vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p)
+std::istream& operator>>(std::istream& is, vgl_plane_3d<T>& p)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
   bool formatted = false;
   T a, b, c, d;
-  is >> vcl_ws; // jump over any leading whitespace
+  is >> std::ws; // jump over any leading whitespace
   if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
   if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> vcl_ws >> a >> vcl_ws;
+  is >> std::ws >> a >> std::ws;
   if (is.eof()) return is;
   if (is.peek() == ',') is.ignore();
   else if (is.peek() == 'x') { is.ignore(); formatted=true; }
-  is >> vcl_ws >> b >> vcl_ws;
+  is >> std::ws >> b >> std::ws;
   if (is.eof()) return is;
   if (formatted) {
     if (is.eof()) return is;
@@ -143,7 +144,7 @@ vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p)
     else                  return is; // formatted input incorrect (TODO: throw an exception)
   }
   else if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> c >> vcl_ws;
+  is >> std::ws >> c >> std::ws;
   if (is.eof()) return is;
   if (formatted) {
     if (is.eof()) return is;
@@ -151,7 +152,7 @@ vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p)
     else                  return is; // formatted input incorrect (TODO: throw an exception)
   }
   else if (is.peek() == ',') is.ignore();
-  is >> vcl_ws >> d >> vcl_ws;
+  is >> std::ws >> d >> std::ws;
   if (paren) {
     if (is.eof()) return is;
     if (is.peek() == ')') is.ignore();
@@ -161,7 +162,7 @@ vcl_istream& operator>>(vcl_istream& is, vgl_plane_3d<T>& p)
     if (is.eof()) return is;
     if (is.peek() == '=') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
-    is >> vcl_ws;
+    is >> std::ws;
     if (is.peek() == '0') is.ignore();
     else                  return is; // closing parenthesis is missing (TODO: throw an exception)
   }
@@ -179,7 +180,7 @@ plane_coord_vectors(vgl_vector_3d<T>& uvec, vgl_vector_3d<T>& vvec) const
   // Since we have an int Template definition, we need to static cast input so VS is happy.
   // Note* currently there are only float and double Template defs. If long double is ever created,
   // this cast will need to get expanded to prevent loss of precision issues.
-  T dp = (T)1 - vcl_fabs(static_cast<double>(dot_product(n, Y)));
+  T dp = (T)1 - std::fabs(static_cast<double>(dot_product(n, Y)));
   T tol = ((T)1)/((T)10);
   if (dp>tol)//ok to use the Y axis to form the coordinate system
   {
@@ -227,7 +228,7 @@ vgl_plane_3d<T>::world_coords(vgl_point_2d<T> const& p2d) const
 #undef VGL_PLANE_3D_INSTANTIATE
 #define VGL_PLANE_3D_INSTANTIATE(T) \
 template class vgl_plane_3d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_plane_3d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_plane_3d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_plane_3d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_plane_3d<T >&)
 
 #endif // vgl_plane_3d_hxx_

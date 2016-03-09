@@ -30,7 +30,7 @@ class vgui_displaylist3D_tableau : public vgui_displaybase_tableau, public vgui_
   //: Constructor - don't use this, use vgui_displaylist3D_tableau_new.
   vgui_displaylist3D_tableau() {}
 
-  vcl_string type_name() const { return "vgui_displaylist3D_tableau"; }
+  std::string type_name() const { return "vgui_displaylist3D_tableau"; }
 
   bool handle(const vgui_event& e);
   bool mouse_down(int x, int y, vgui_button button, vgui_modifier modifier);
@@ -40,7 +40,7 @@ class vgui_displaylist3D_tableau : public vgui_displaybase_tableau, public vgui_
   ~vgui_displaylist3D_tableau() {}
 
  private:
-  void get_hits(float x, float y, vcl_vector<unsigned>& my_hits);
+  void get_hits(float x, float y, std::vector<unsigned>& my_hits);
 };
 
 //: Creates a smart-pointer to a vgui_displaylist3D_tableau.

@@ -6,9 +6,10 @@
 //
 
 #include <vnl/vnl_vector.h>
-#include <vcl_algorithm.h>
-#include <vcl_utility.h>
-#include <vcl_vector.h>
+#include <algorithm>
+#include <vcl_compiler.h>
+#include <utility>
+#include <vector>
 
 
 template <class TValue, class TIndex>
@@ -106,7 +107,7 @@ class vnl_index_sort
 
     for (TIndex ix = 0; ix < (TIndex) v.size(); ix++) s[ix] = ix;
 
-    vcl_sort(s.begin(), s.end(), c);
+    std::sort(s.begin(), s.end(), c);
   }
 
   //: reorder values from sorted indices

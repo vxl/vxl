@@ -3,16 +3,17 @@
 // \file
 
 
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vgl/vgl_box_3d.h>
 
-vpgl_affine_camera<double>* vpgl_affine_rectification::compute_affine_cam(const vcl_vector< vgl_point_2d<double> >& image_pts,
-                                                                          const vcl_vector< vgl_point_3d<double> >& world_pts)
+vpgl_affine_camera<double>* vpgl_affine_rectification::compute_affine_cam(const std::vector< vgl_point_2d<double> >& image_pts,
+                                                                          const std::vector< vgl_point_3d<double> >& world_pts)
 {
   vpgl_affine_camera<double> aff_camera;
   vpgl_affine_camera_compute::compute(image_pts, world_pts, aff_camera);
@@ -55,11 +56,11 @@ bool vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double
   FA.set_matrix(FAM);
 
   // check for zero elements
-  /*if (vcl_abs(FA.get_matrix()[0][0]) > 10*vcl_numeric_limits<double>::epsilon() ||
-      vcl_abs(FA.get_matrix()[0][1]) > 10*vcl_numeric_limits<double>::epsilon() ||
-      vcl_abs(FA.get_matrix()[1][0]) > 10*vcl_numeric_limits<double>::epsilon() ||
-      vcl_abs(FA.get_matrix()[1][1]) > 10*vcl_numeric_limits<double>::epsilon()) {
-      vcl_cerr << "In vpgl_affine_rectification::compute_affine_f() -- the computed matrix is not an affine fundamental matrix! the input cameras may have not been affine cameras!\n";
+  /*if (std::abs(FA.get_matrix()[0][0]) > 10*std::numeric_limits<double>::epsilon() ||
+      std::abs(FA.get_matrix()[0][1]) > 10*std::numeric_limits<double>::epsilon() ||
+      std::abs(FA.get_matrix()[1][0]) > 10*std::numeric_limits<double>::epsilon() ||
+      std::abs(FA.get_matrix()[1][1]) > 10*std::numeric_limits<double>::epsilon()) {
+      std::cerr << "In vpgl_affine_rectification::compute_affine_f() -- the computed matrix is not an affine fundamental matrix! the input cameras may have not been affine cameras!\n";
       return false;
   }*/
 
@@ -70,8 +71,8 @@ bool vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double
 //  image correspondences need to be passed to find homographies
 //  (if cameras are known, one can use known points in 3d in the observed scene, project them using the cameras and pass the image points to this routine)
 bool vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamental_matrix<double>& FA,
-                                                      const vcl_vector<vnl_vector_fixed<double, 3> >& img_p1,
-                                                      const vcl_vector<vnl_vector_fixed<double, 3> >& img_p2,
+                                                      const std::vector<vnl_vector_fixed<double, 3> >& img_p1,
+                                                      const std::vector<vnl_vector_fixed<double, 3> >& img_p2,
                                                       vnl_matrix_fixed<double, 3, 3>& H1,
                                                       vnl_matrix_fixed<double, 3, 3>& H2)
 {
@@ -95,7 +96,7 @@ bool vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamen
 
   unsigned m = img_p1.size();
   if (m != img_p2.size()) {
-    vcl_cerr << " In vpgl_affine_rectification::compute_rectification() -- img_p1 and img_p2 do not have equal size!\n";
+    std::cerr << " In vpgl_affine_rectification::compute_rectification() -- img_p1 and img_p2 do not have equal size!\n";
     return false;
   }
 
@@ -112,7 +113,7 @@ bool vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamen
   vnl_sparse_matrix_linear_system<double> ls(A,b);
   vnl_vector<double> scaling(2); scaling[0]=scaling[1]=0.0;
   vnl_lsqr lsqr(ls); lsqr.minimize(scaling);
-  vcl_cout << "scaling: " << scaling << vcl_endl;
+  std::cout << "scaling: " << scaling << std::endl;
 
   H2[0][0] = scaling[0]*H2[0][0]; H2[0][1] = scaling[0]*H2[0][1];
   H2[1][0] = scaling[0]*H2[1][0]; H2[1][1] = scaling[0]*H2[1][1];
@@ -130,7 +131,7 @@ bool vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamen
   vnl_sparse_matrix_linear_system<double> ls2(AA,b);
   vnl_vector<double> shear(3); shear[0]=shear[1]=shear[2]=0.0;
   vnl_lsqr lsqr2(ls2); lsqr2.minimize(shear);
-  vcl_cout << "shear: " << shear << vcl_endl;
+  std::cout << "shear: " << shear << std::endl;
 
   vnl_matrix_fixed<double, 3, 3> interm; interm.set_identity();
   interm[0][1] = -shear[1] / 2.0;

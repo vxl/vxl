@@ -4,7 +4,8 @@
 // Implementation is as described in http://en.wikipedia.org/wiki/Disjoint-set_data_structure
 
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <cstddef>
 
 #include "vbl_disjoint_sets.h"
 

@@ -4,7 +4,8 @@
 
 #include "vgl_1d_basis.h"
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 template <class T>
 vgl_1d_basis<T>::vgl_1d_basis(T const& o, T const& u, T const& i)
@@ -37,7 +38,7 @@ vgl_homg_point_1d<double> vgl_1d_basis<T>::project(T const& p)
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_1d_basis<T> const& b)
+std::ostream& operator<<(std::ostream& s, vgl_1d_basis<T> const& b)
 {
   s << "<vgl_1d_basis "<< b.origin() << ' ' << b.unity();
   if (!b.affine()) s << ' ' << b.inf_pt();
@@ -48,6 +49,6 @@ vcl_ostream& operator<<(vcl_ostream& s, vgl_1d_basis<T> const& b)
 #undef VGL_1D_BASIS_INSTANTIATE
 #define VGL_1D_BASIS_INSTANTIATE(T) \
 template class vgl_1d_basis<T >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_1d_basis<T > const&)
+template std::ostream& operator<<(std::ostream&, vgl_1d_basis<T > const&)
 
 #endif // vgl_1d_basis_hxx_

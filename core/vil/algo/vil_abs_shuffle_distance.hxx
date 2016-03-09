@@ -27,13 +27,13 @@ double vil_abs_shuffle_distance(const vil_image_view<T1>& image1,
   assert(image2.ni()==ni);
   assert(image2.nj()==nj);
 
-  vcl_ptrdiff_t istep1 = image1.istep(),  jstep1 = image1.jstep(),
+  std::ptrdiff_t istep1 = image1.istep(),  jstep1 = image1.jstep(),
                 istep2 = image2.istep(), jstep2 = image2.jstep();
 
   const T1* image1_row0 = image1.top_left_ptr();
   const T2* image2_row0 = image2.top_left_ptr();
 
-  vcl_vector<vcl_ptrdiff_t> offset;
+  std::vector<std::ptrdiff_t> offset;
   vil_compute_offsets(offset,element,istep2,jstep2);
 
   // Define box in which all element will be valid

@@ -1,11 +1,12 @@
 // This is core/vgui/impl/win32/vgui_win32_dialog_impl.cxx
 #include "vgui_win32_dialog_impl.h"
 
-#include <vcl_algorithm.h> // for vcl_find
-#include <vcl_cstdio.h> // for vcl_sprintf
-#include <vcl_cstddef.h> // for vcl_size_t
-#include <vcl_cstring.h> // for vcl_strlen()
-#include <vcl_iostream.h>
+#include <algorithm> // for std::find
+#include <cstdio> // for std::sprintf
+#include <vcl_compiler.h>
+#include <cstddef> // for std::size_t
+#include <cstring> // for std::strlen()
+#include <iostream>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_file_field.h>
 #include <vgui/internals/vgui_button_field.h>
@@ -27,11 +28,11 @@ struct vgui_win32_dialog_pushbutton;
 
 vgui_win32_dialog_impl::~vgui_win32_dialog_impl()
 {
-  for ( vcl_vector<inline_tab_data>::iterator
+  for ( std::vector<inline_tab_data>::iterator
         it = inline_tableaus.begin(); it != inline_tableaus.end(); ++it )
     delete it->adaptor;
 
-  for (vcl_vector<element>::iterator iter = elements.begin();
+  for (std::vector<element>::iterator iter = elements.begin();
        iter != elements.end(); ++iter) {
     if ( iter->type == button_elem )
       delete (vgui_win32_dialog_pushbutton *)iter->widget;
@@ -41,14 +42,14 @@ vgui_win32_dialog_impl::~vgui_win32_dialog_impl()
 // Structure to contain data for a choice field.
 struct vgui_win32_dialog_choice
 {
-  vcl_vector<vcl_string> names;
+  std::vector<std::string> names;
   int index;
 };
 
 
 // Make a choice widget
 void* vgui_win32_dialog_impl::choice_field_widget(const char* /*txt*/,
-                                                  const vcl_vector<vcl_string>& labels, int& val)
+                                                  const std::vector<std::string>& labels, int& val)
 {
   vgui_win32_dialog_choice *ch = new vgui_win32_dialog_choice;
   ch->names = labels;
@@ -84,7 +85,7 @@ struct vgui_win32_dialog_pushbutton
   { if ( hBitmap!=NULL ) DeleteObject(hBitmap); }
 
   unsigned short ctrl_id;
-  vcl_string label;
+  std::string label;
   HANDLE     hBitmap;
   unsigned   width, height;
 };
@@ -134,7 +135,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
     max_length += button_length+width_sep;
 
   field_length = field_height = 0;
-  for (vcl_vector<element>::iterator e_iter = elements.begin();
+  for (std::vector<element>::iterator e_iter = elements.begin();
        e_iter != elements.end(); ++e_iter) {
     element l = *e_iter;
     vgui_dialog_field *field = l.field;
@@ -149,7 +150,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
          l.type == string_elem || l.type == choice_elem ||
          l.type == color_csr || l.type == inline_color_csr ) {
       // a label and a edit box.
-      int w = vcl_strlen(field->label.c_str()) + edit_length;
+      int w = std::strlen(field->label.c_str()) + edit_length;
       int h = height_sep;
       if ( l.type == color_csr || l.type == inline_color_csr )
         h += height_sep; // plus a row for choose color button.
@@ -166,7 +167,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
     else if (l.type == bool_elem )
     {
       // a label
-      int w = vcl_strlen(field->label.c_str());
+      int w = std::strlen(field->label.c_str());
       int h = height_sep;
 
       field_length += w;
@@ -187,11 +188,11 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
       text = (char *)field->label.c_str();
       w = 0; h = 0;
       while ( text ) {
-        next_text = vcl_strchr(text, '\n');
+        next_text = std::strchr(text, '\n');
         if ( next_text )
           w1 = next_text-text;
         else
-          w1 = vcl_strlen(text);
+          w1 = std::strlen(text);
         text = next_text ? next_text+1 : NULL;
 
         if ( w < w1 ) w = w1;
@@ -226,7 +227,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
     else if (l.type == file_bsr || l.type == inline_file_bsr || l.type == dir_bsr)
     {
       // a label, an edit box, and a "Browse..." button
-      int w = vcl_strlen(field->label.c_str()) + browser_length;
+      int w = std::strlen(field->label.c_str()) + browser_length;
       int h = 2*height_sep;
 
       field_length += w;
@@ -246,7 +247,7 @@ void vgui_win32_dialog_impl::FindDialogSize(int &width, int &height,
       // the button width is the maximum of label length, image width
       // and default button width
       int w = (pb->width+cxChar-1)/cxChar;
-      int slen = vcl_strlen(field->label.c_str());
+      int slen = std::strlen(field->label.c_str());
       if ( w < slen )
         w = slen;
 
@@ -305,7 +306,7 @@ bool vgui_win32_dialog_impl::ask()
   RECT rect;
 
   // Find if line_break is used
-  for (vcl_vector<element>::iterator e_iter = elements.begin();
+  for (std::vector<element>::iterator e_iter = elements.begin();
        e_iter != elements.end(); ++e_iter) {
     if ( e_iter->type == line_br ) {
       use_line_break = true;
@@ -359,7 +360,7 @@ bool vgui_win32_dialog_impl::ask()
   unsigned short ctrl_count = 0;
   HWND hCtrlWnd;
   short dy = 0;
-  for (vcl_vector<element>::iterator e_iter = elements.begin();
+  for (std::vector<element>::iterator e_iter = elements.begin();
        e_iter != elements.end(); ++e_iter) {
     element l = *e_iter;
     vgui_dialog_field *field = l.field;
@@ -442,7 +443,7 @@ bool vgui_win32_dialog_impl::ask()
                               x, y, cx, cy, hWnd, (HMENU)wDlgCtrlId, hInstance, NULL);
 
       // Add optional strings to the list
-      for (vcl_vector<vcl_string>::iterator s_iter =  ch->names.begin();
+      for (std::vector<std::string>::iterator s_iter =  ch->names.begin();
            s_iter != ch->names.end(); ++s_iter)
         SendMessage(hCtrlWnd, CB_ADDSTRING, 0, (LPARAM)(LPCTSTR)s_iter->c_str());
 
@@ -468,11 +469,11 @@ bool vgui_win32_dialog_impl::ask()
       text = (char *)field->label.c_str();
       cx = 0; cy = 0;
       while ( text ) {
-        next_text = vcl_strchr(text, '\n');
+        next_text = std::strchr(text, '\n');
         if ( next_text )
           field_length = next_text-text;
         else
-          field_length = vcl_strlen(text);
+          field_length = std::strlen(text);
         if (cx<field_length)
           cx = field_length;
         cy++;
@@ -625,7 +626,7 @@ bool vgui_win32_dialog_impl::ask()
   UpdateWindow(hWnd);
 
   // Show inline tableaus
-  for ( vcl_size_t i = 0; i < inline_tableaus.size(); i++ )
+  for ( std::size_t i = 0; i < inline_tableaus.size(); i++ )
     inline_tableaus[i].adaptor->post_redraw();
 
   // Enter the message loop.
@@ -673,7 +674,7 @@ LRESULT vgui_win32_dialog_impl::DialogProc(HWND hDlg, UINT message, WPARAM wPara
       //BOOL bDrawFocusRect = !(lpDIS->itemState & ODS_NOFOCUSRECT);
 
       // Get button's info (label, bitmap)
-      vcl_vector<element>::iterator e_iter;
+      std::vector<element>::iterator e_iter;
       vgui_win32_dialog_pushbutton *pb;
       for ( e_iter = elements.begin(); e_iter != elements.end(); ++e_iter) {
          if ( e_iter->type == button_elem ) {
@@ -769,7 +770,7 @@ LRESULT vgui_win32_dialog_impl::DialogProc(HWND hDlg, UINT message, WPARAM wPara
 #if 0
         if (Themed) {
           // convert title to UNICODE obviously you don't need to do this if you are a UNICODE app.
-          int nTextLen = vcl_strlen(sTitle);
+          int nTextLen = std::strlen(sTitle);
           int mlen = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, (char *)sTitle, nTextLen + 1, NULL, 0);
           WCHAR* output = new WCHAR[mlen];
           if (output)
@@ -858,7 +859,7 @@ void vgui_win32_dialog_impl::OnOK()
 
   // Update values of all elements.
   control_count = 0;
-  for (vcl_vector<element>::iterator e_iter = elements.begin();
+  for (std::vector<element>::iterator e_iter = elements.begin();
        e_iter != elements.end(); ++e_iter) {
     element l = *e_iter;
     vgui_dialog_field *field = l.field;
@@ -945,7 +946,7 @@ BOOL vgui_win32_dialog_impl::OnBrowse(HWND hDlg, WORD wCtrlId)
 BOOL vgui_win32_dialog_impl::OnColor(HWND hDlg, WORD wCtrlId, LPTSTR lpColor)
 {
   char buffer[16];
-  vcl_string strColor;
+  std::string strColor;
 
   static CHOOSECOLOR cc;
   static COLORREF    crCustColors[16];
@@ -961,11 +962,11 @@ BOOL vgui_win32_dialog_impl::OnColor(HWND hDlg, WORD wCtrlId, LPTSTR lpColor)
   cc.lpTemplateName = NULL;
 
   if ( ChooseColor(&cc) ) {
-    vcl_sprintf(buffer, "%3d", GetRValue(cc.rgbResult));
+    std::sprintf(buffer, "%3d", GetRValue(cc.rgbResult));
     strColor += buffer;
-    vcl_sprintf(buffer, " %3d", GetGValue(cc.rgbResult));
+    std::sprintf(buffer, " %3d", GetGValue(cc.rgbResult));
     strColor += buffer;
-    vcl_sprintf(buffer, " %3d", GetBValue(cc.rgbResult));
+    std::sprintf(buffer, " %3d", GetBValue(cc.rgbResult));
     strColor += buffer;
     SetWindowText(GetDlgItem(hDlg, wCtrlId-1), strColor.c_str());
   }
@@ -979,24 +980,24 @@ COLORREF vgui_win32_dialog_impl::ColorStringToRGB(LPTSTR lpColor)
 {
   int r, g, b;
 
-  if ( vcl_strcmp(lpColor, "red") == 0 )
+  if ( std::strcmp(lpColor, "red") == 0 )
     return RGB(255, 0, 0);
-  if ( vcl_strcmp(lpColor, "green") == 0 )
+  if ( std::strcmp(lpColor, "green") == 0 )
     return RGB(0, 255, 0);
-  if ( vcl_strcmp(lpColor, "blue") == 0 )
+  if ( std::strcmp(lpColor, "blue") == 0 )
     return RGB(0, 0, 255);
-  if ( vcl_strcmp(lpColor, "yellow") == 0 )
+  if ( std::strcmp(lpColor, "yellow") == 0 )
     return RGB(255, 255, 0);
-  if ( vcl_strcmp(lpColor, "pink") == 0 )
+  if ( std::strcmp(lpColor, "pink") == 0 )
     return RGB(255, 0, 255);
-  if ( vcl_strcmp(lpColor, "cyan") == 0 )
+  if ( std::strcmp(lpColor, "cyan") == 0 )
     return RGB(0, 255, 255);
-  if ( vcl_strcmp(lpColor, "black") == 0 )
+  if ( std::strcmp(lpColor, "black") == 0 )
     return RGB(0, 0, 0);
-  if ( vcl_strcmp(lpColor, "white") == 0 )
+  if ( std::strcmp(lpColor, "white") == 0 )
     return RGB(255, 255, 255);
 
-  int ret = vcl_sscanf(lpColor, TEXT("%d%d%d"), &r, &g, &b);
+  int ret = std::sscanf(lpColor, TEXT("%d%d%d"), &r, &g, &b);
   if ( ret == 3 )
     return COLORREF(RGB(r, g, b));
   else // in case of senseless string.
@@ -1005,24 +1006,24 @@ COLORREF vgui_win32_dialog_impl::ColorStringToRGB(LPTSTR lpColor)
 
 inline bool vgui_win32_dialog_impl::IsFileBrowserButton(unsigned short ctrl_id)
 {
-  vcl_vector<unsigned short>::iterator result;
+  std::vector<unsigned short>::iterator result;
 
-  result = vcl_find(fb_ids.begin(), fb_ids.end(), ctrl_id);
+  result = std::find(fb_ids.begin(), fb_ids.end(), ctrl_id);
   return result == fb_ids.end() ? false : true;
 }
 
 
 inline bool vgui_win32_dialog_impl::IsColorChooserButton(unsigned short ctrl_id)
 {
-  vcl_vector<unsigned short>::iterator result;
+  std::vector<unsigned short>::iterator result;
 
-  result = vcl_find(cc_ids.begin(), cc_ids.end(), ctrl_id);
+  result = std::find(cc_ids.begin(), cc_ids.end(), ctrl_id);
   return result == cc_ids.end() ? false : true;
 }
 
 inline bool vgui_win32_dialog_impl::IsCallbackControl(unsigned short ctrl_id)
 {
-  for ( vcl_size_t i = 0; i < callback_controls.size(); i++ )
+  for ( std::size_t i = 0; i < callback_controls.size(); i++ )
     if ( ctrl_id == callback_controls[i].child_id )
       return true;
 
@@ -1031,7 +1032,7 @@ inline bool vgui_win32_dialog_impl::IsCallbackControl(unsigned short ctrl_id)
 
 vgui_win32_adaptor* vgui_win32_dialog_impl::find_adaptor(unsigned short ctrl_id)
 {
-  for ( vcl_size_t i = 0; i < inline_tableaus.size(); i++ )
+  for ( std::size_t i = 0; i < inline_tableaus.size(); i++ )
     if ( ctrl_id == inline_tableaus[i].childId )
       return inline_tableaus[i].adaptor;
 
@@ -1040,7 +1041,7 @@ vgui_win32_adaptor* vgui_win32_dialog_impl::find_adaptor(unsigned short ctrl_id)
 
 void vgui_win32_dialog_impl::dialog_dispatcher(int ctrl_id)
 {
-  for ( vcl_size_t i = 0; i < callback_controls.size(); i++ ) {
+  for ( std::size_t i = 0; i < callback_controls.size(); i++ ) {
     if ( ctrl_id == callback_controls[i].child_id ) {
       callback_controls[i].cmnd->execute();
       break;

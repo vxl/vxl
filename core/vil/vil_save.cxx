@@ -12,10 +12,11 @@
 
 #include "vil_save.h"
 
-#include <vcl_cctype.h>
-#include <vcl_cstring.h>
-#include <vcl_string.h>
-#include <vcl_iostream.h>
+#include <cctype>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <string>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 
 #include <vil/vil_open.h>
@@ -31,14 +32,14 @@ bool vil_save(const vil_image_view_base &im, char const* filename, char const* f
 {
   vil_stream* os = vil_open(filename, "w");
   if (!os || !os->ok()) {
-    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
+    std::cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, im.ni(), im.nj(),
                                                        im.nplanes() * vil_pixel_format_num_components(im.pixel_format()),
                                                        vil_pixel_format_component_format(im.pixel_format()), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
+    std::cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
 
@@ -82,16 +83,16 @@ char const *vil_save_guess_file_format(char const* filename)
   char const *file_format = "pnm"; // default file format
 
   // find last "."
-  char const *dot = vcl_strrchr(filename, '.');
+  char const *dot = std::strrchr(filename, '.');
   if (!dot) {
     // filename doesn't end in ".anything"
-    vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
+    std::cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
     file_format = "pnm";
   }
   else {
-    vcl_string ext_lower_case(dot);  // make a copy to convert the extension to lower case
+    std::string ext_lower_case(dot);  // make a copy to convert the extension to lower case
     for (unsigned int i=0; i<ext_lower_case.size(); ++i)
-      ext_lower_case[i] = (char)vcl_tolower(ext_lower_case[i]);
+      ext_lower_case[i] = (char)std::tolower(ext_lower_case[i]);
     // translate common extensions into known file formats.
     if (false) { }
 #define macro(ext, fmt) else if ( ext_lower_case == "." #ext ) file_format = #fmt
@@ -112,7 +113,7 @@ char const *vil_save_guess_file_format(char const* filename)
     macro(v2i, v2i);
 #undef macro
     else
-      vcl_cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
+      std::cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";
   }
 
   return file_format;
@@ -130,14 +131,14 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* file
 {
   vil_stream* os = vil_open(filename, "w");
   if (!os || !os->ok()) {
-    vcl_cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
+    std::cerr << __FILE__ ": Invalid stream for \"" << filename << "\"\n";
     return false;
   }
   vil_image_resource_sptr out = vil_new_image_resource(os, ir->ni(), ir->nj(),
                                                        ir->nplanes(),
                                                       ir->pixel_format(), file_format);
   if (!out) {
-    vcl_cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
+    std::cerr << __FILE__ ": (vil_save) Cannot save to type [" << file_format << "]\n";
     return false;
   }
   return vil_copy_deep(ir, out);

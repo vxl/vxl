@@ -1,6 +1,7 @@
 // This is core/vbl/tests/vbl_test_array.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
@@ -10,11 +11,11 @@
 
 static void vbl_test_array_1d()
 {
-  vcl_cout << "\n Testing vbl_array_1d<vbl_test_array_x>\n+++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_array_1d<vbl_test_array_x>\n+++++++++++++++++++++++++\n\n";
 
   vbl_array_1d<vbl_test_array_x> v;
 
-  vcl_cout << "size " << v.size() << '\n'
+  std::cout << "size " << v.size() << '\n'
            << "capacity " << v.capacity() << '\n';
 
   v.push_back(vbl_test_array_x(1, 2));
@@ -23,7 +24,7 @@ static void vbl_test_array_1d()
   v.push_back(vbl_test_array_x(-1.0, 2.0));
   v.push_back(v.back());
 
-  vcl_cout << "\nv = " << v
+  std::cout << "\nv = " << v
            << "size " << v.size() << '\n'
            << "capacity " << v.capacity() << '\n';
   TEST("size()", v.size(), 5);
@@ -41,11 +42,11 @@ static void vbl_test_array_1d()
 
 static void vbl_test_array_2d()
 {
-  vcl_cout << "\n Testing vbl_array_2d<vbl_test_array_x>\n+++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_array_2d<vbl_test_array_x>\n+++++++++++++++++++++++++\n\n";
 
   vbl_array_2d<vbl_test_array_x> v(1000,3000);
 
-  vcl_cout << "size " << v.size() << '\n'
+  std::cout << "size " << v.size() << '\n'
            << "rows " << v.rows() << '\n'
            << "columns " << v.columns() << '\n';
 
@@ -58,7 +59,7 @@ static void vbl_test_array_2d()
   v(1,1) = vbl_test_array_x(-1.0, 2.0);
   v(1,2) = v.end()[-4];
 
-  vcl_cout << "\nv =\n" << v
+  std::cout << "\nv =\n" << v
            << "size " << v.size() << '\n'
            << "rows " << v.rows() << '\n'
            << "cols " << v.columns() << '\n';
@@ -82,11 +83,11 @@ static void vbl_test_array_2d()
 
 static void vbl_test_array_3d()
 {
-  vcl_cout << "\n Testing vbl_array_3d<vbl_test_array_x>\n+++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_array_3d<vbl_test_array_x>\n+++++++++++++++++++++++++\n\n";
 
   vbl_array_3d<vbl_test_array_x> v(10,20,30);
 
-  vcl_cout << "size " << v.size() << '\n'
+  std::cout << "size " << v.size() << '\n'
            << "rows " << v.get_row2_count() << '\n'
            << "cols " << v.get_row3_count() << '\n'
            << "depth " << v.get_row1_count() << '\n';
@@ -100,7 +101,7 @@ static void vbl_test_array_3d()
   v(0,1,1) = vbl_test_array_x(-1.0, 2.0);
   v(0,1,2) = v.end()[-4];
 
-  vcl_cout << "\nv =\n" << v
+  std::cout << "\nv =\n" << v
            << "size " << v.size() << '\n'
            << "rows " << v.get_row2_count() << '\n'
            << "cols " << v.get_row3_count() << '\n'

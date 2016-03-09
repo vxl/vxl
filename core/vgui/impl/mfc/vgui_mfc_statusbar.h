@@ -17,8 +17,9 @@
 //   08-AUG-2000 Marko Bacic - Initial version.
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
 #include "StdAfx.h"
@@ -43,9 +44,9 @@ class vgui_mfc_statusbar : public vgui_statusbar
   //: MFC status bar object
   CStatusBar *statusbar;
   //: Text displayed on the statusbar
-  vcl_string linebuffer;
+  std::string linebuffer;
   vgui_statusbuf* statusbuf;
-  vcl_ostream out;
+  std::ostream out;
 };
 
 #endif // vgui_mfc_statusbar_h_

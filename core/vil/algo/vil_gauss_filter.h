@@ -6,7 +6,8 @@
 // \brief Smooths images.
 // \author Ian Scott
 
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil/vil_transpose.h>
@@ -70,9 +71,9 @@ class vil_gauss_filter_5tap_params
 //  Applies 5 element FIR filter in x and y.
 //  Assumes dest_im has sufficient data allocated.
 template <class srcT, class destT>
-void vil_gauss_filter_5tap(const srcT* src_im, vcl_ptrdiff_t src_ystep,
+void vil_gauss_filter_5tap(const srcT* src_im, std::ptrdiff_t src_ystep,
                            unsigned ni, unsigned nj,
-                           destT* dest_im, vcl_ptrdiff_t dest_ystep,
+                           destT* dest_im, std::ptrdiff_t dest_ystep,
                            const vil_gauss_filter_5tap_params& params,
                            destT* work);
 
@@ -110,7 +111,7 @@ inline void vil_gauss_filter_5tap(const vil_image_view<srcT>& src_im,
 // want filter.size() ~= sd*7, which will avoid significant truncation,
 // without wasting the outer taps on near-zero values.
 void vil_gauss_filter_gen_ntap(double sd, unsigned diff,
-                               vcl_vector<double> &filter_dest);
+                               std::vector<double> &filter_dest);
 
 //: Smooth a src_im to produce dest_im with gaussian of width sd
 //  Generates gaussian filter of width sd, using (2*half_width+1)
@@ -121,7 +122,7 @@ inline void vil_gauss_filter_1d(const vil_image_view<srcT>& src_im,
                                 vil_image_view<destT>& dest_im,
                                 double sd, unsigned half_width)
 {
-  vcl_vector<double> filter(2*half_width+1);
+  std::vector<double> filter(2*half_width+1);
   vil_gauss_filter_gen_ntap(sd,0,filter);
   vil_convolve_1d(src_im,dest_im,&filter[half_width],-int(half_width),half_width,
                   float(),vil_convolve_zero_extend,vil_convolve_zero_extend);
@@ -139,7 +140,7 @@ inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
                                 vil_convolve_boundary_option boundary = vil_convolve_zero_extend)
 {
   // Generate filter
-  vcl_vector<double> filter(2*half_width+1);
+  std::vector<double> filter(2*half_width+1);
   vil_gauss_filter_gen_ntap(sd,0,filter);
 
   // Apply 1D convolution along i direction
@@ -171,7 +172,7 @@ inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
                                 vil_convolve_boundary_option boundary = vil_convolve_zero_extend)
 {
   // Generate filter for i
-  vcl_vector<double> filter_i(2*half_width_i+1);
+  std::vector<double> filter_i(2*half_width_i+1);
   vil_gauss_filter_gen_ntap(sd_i,0,filter_i);
 
   // Apply 1D convolution along i direction
@@ -185,7 +186,7 @@ inline void vil_gauss_filter_2d(const vil_image_view<srcT>& src_im,
   vil_image_view<destT> dest_im_t = vil_transpose(dest_im);
 
   // Generate filter for j
-  vcl_vector<double> filter_j(2*half_width_j+1);
+  std::vector<double> filter_j(2*half_width_j+1);
   vil_gauss_filter_gen_ntap(sd_j,0,filter_j);
 
   vil_convolve_1d(work_im_t,dest_im_t,

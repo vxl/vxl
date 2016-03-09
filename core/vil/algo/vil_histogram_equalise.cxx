@@ -10,7 +10,7 @@
 //: Apply histogram equalisation to given image
 void vil_histogram_equalise(vil_image_view<vxl_byte>& image)
 {
-  vcl_vector<double> histo(256);
+  std::vector<double> histo(256);
   vil_histogram_byte(image,histo);
 
   // Create cumulative frequency curve
@@ -24,12 +24,12 @@ void vil_histogram_equalise(vil_image_view<vxl_byte>& image)
   double x0 = histo[lo];
   double s =255.1/(sum-x0);  // Smallest values get mapped to zero
 
-  vcl_vector<vxl_byte> lookup(256);
+  std::vector<vxl_byte> lookup(256);
   vxl_byte* lup = &lookup[0];
   for (unsigned i=0;i<256;++i) { lup[i]= vxl_byte(s*(histo[i]-x0)); }
 
   unsigned ni = image.ni(),nj = image.nj(),np = image.nplanes();
-  vcl_ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
+  std::ptrdiff_t istep=image.istep(),jstep=image.jstep(),pstep = image.planestep();
   vxl_byte* plane = image.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
   {

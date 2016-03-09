@@ -5,9 +5,10 @@
 // \file
 
 #include "vgl_homg_line_2d.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 
@@ -54,7 +55,7 @@ vgl_homg_line_2d<Type>::vgl_homg_line_2d (vgl_homg_point_2d<Type> const& p1,
 
 //: Print line equation to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& os, vgl_homg_line_2d<Type>const& l)
+std::ostream&  operator<<(std::ostream& os, vgl_homg_line_2d<Type>const& l)
 {
   os << "<vgl_homg_line_2d"; vp(os,l.a(),"x"); vp(os,l.b(),"y"); vp(os,l.c(),"w");
   return os << " = 0 >";
@@ -64,7 +65,7 @@ vcl_ostream&  operator<<(vcl_ostream& os, vgl_homg_line_2d<Type>const& l)
 
 //: Load in line parameters from stream
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is, vgl_homg_line_2d<Type>& p)
+std::istream&  operator>>(std::istream& is, vgl_homg_line_2d<Type>& p)
 {
   Type a,b,c;
   is >> a >> b >> c;
@@ -76,7 +77,7 @@ template <class Type>
 void vgl_homg_line_2d<Type>::normalize()
 {
   double sum = a_*a_ + b_*b_;
-  double den = vcl_sqrt(sum);
+  double den = std::sqrt(sum);
   if (den<1.0e-8)//don't normalize ideal line
     return;
   double an= (double)a()/den;
@@ -84,7 +85,7 @@ void vgl_homg_line_2d<Type>::normalize()
   double cn= (double)c()/den;
   //standardize so that a is positive unless a is smaller than b, then
   //standardize the sign of b
-  if (vcl_fabs(an)>vcl_fabs(bn))
+  if (std::fabs(an)>std::fabs(bn))
     if (an>0)
     {
       a_ = (Type)an;
@@ -117,7 +118,7 @@ void vgl_homg_line_2d<Type>::normalize()
 #undef VGL_HOMG_LINE_2D_INSTANTIATE
 #define VGL_HOMG_LINE_2D_INSTANTIATE(T) \
 template class vgl_homg_line_2d<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_line_2d<T >const&); \
-template vcl_istream& operator>>(vcl_istream&, vgl_homg_line_2d<T >&)
+template std::ostream& operator<<(std::ostream&, vgl_homg_line_2d<T >const&); \
+template std::istream& operator>>(std::istream&, vgl_homg_line_2d<T >&)
 
 #endif // vgl_homg_line_2d_hxx_

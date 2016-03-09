@@ -4,7 +4,8 @@
 #include <vil1/vil1_copy.h>
 
 #include <vxl_config.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <testlib/testlib_test.h>
 
@@ -15,7 +16,7 @@ static void test_copy(int argc, char* argv[])
   const char* filename = argv[1];
   if ( argc<2 ) {
     filename = default_filename;
-    vcl_cerr << "Using default input image " << filename << vcl_endl;
+    std::cerr << "Using default input image " << filename << std::endl;
   }
 
   vil1_image img = vil1_load( filename );

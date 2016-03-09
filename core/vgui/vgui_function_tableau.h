@@ -38,7 +38,7 @@ class vgui_function_tableau : public vgui_tableau
   vgui_function_tableau();
 
   //: Returns the type of this tableau ('vgui_function_tableau').
-  vcl_string type_name() const { return "vgui_function_tableau"; }
+  std::string type_name() const { return "vgui_function_tableau"; }
 
   //: Call the given function when a draw event occurs.
   void draw(function f) {draw_ = f;}

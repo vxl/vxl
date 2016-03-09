@@ -8,13 +8,14 @@
 //  Modifications
 // \endverbatim
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cstdlib>
 
 void vil_math_median_unimplemented()
 {
-  vcl_cerr << "vil_math_median is currently not implemented for this data type\n";
-  vcl_abort();
+  std::cerr << "vil_math_median is currently not implemented for this data type\n";
+  std::abort();
 }
 
 VCL_DEFINE_SPECIALIZATION

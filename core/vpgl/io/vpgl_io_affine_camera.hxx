@@ -35,16 +35,16 @@ void vsl_b_read(vsl_b_istream & is, vpgl_affine_camera<T> &camera)
      camera.set_viewing_distance(view_dist);
     break;
    default:
-    vcl_cerr << "I/O ERROR: vpgl_affine_camera::b_read(vsl_b_istream&)\n"
+    std::cerr << "I/O ERROR: vpgl_affine_camera::b_read(vsl_b_istream&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
 
 //: Print human readable summary of object to a stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T> & c)
+void vsl_print_summary(std::ostream& os,const vpgl_affine_camera<T> & c)
 {
   os << c << '\n';
 }
@@ -53,6 +53,6 @@ void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T> & c)
 #define VPGL_IO_AFFINE_CAMERA_INSTANTIATE(T) \
 template void vsl_b_write(vsl_b_ostream & os, vpgl_affine_camera<T > const& camera); \
 template void vsl_b_read(vsl_b_istream & is, vpgl_affine_camera<T > &camera); \
-template void vsl_print_summary(vcl_ostream& os,const vpgl_affine_camera<T > & b)
+template void vsl_print_summary(std::ostream& os,const vpgl_affine_camera<T > & b)
 
 #endif // vpgl_io_affine_camera_hxx_

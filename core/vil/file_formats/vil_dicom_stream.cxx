@@ -6,7 +6,8 @@
 #include <dcerror.h>
 
 #include <vcl_cassert.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 
 // ===========================================================================
 //                                                             stream producer
@@ -60,7 +61,7 @@ avail() const
   //apparently dicom streams only support 32 bit positions
   //whereas vil_streams now support 64 bit positions (when
   //available)
-  assert( n <= (vil_streampos)vcl_numeric_limits<Uint32>::max() );
+  assert( n <= (vil_streampos)std::numeric_limits<Uint32>::max() );
   return (Uint32)n;
 }
 
@@ -75,7 +76,7 @@ read( void *buf, Uint32 buflen )
   //apparently dicom streams only support 32 bit positions
   //whereas vil_streams now support 64 bit positions (when
   //available)
-  assert( n <= (vil_streampos)vcl_numeric_limits<Uint32>::max() );
+  assert( n <= (vil_streampos)std::numeric_limits<Uint32>::max() );
   return (Uint32)n;
 }
 

@@ -9,9 +9,9 @@
 
 //: Constructor
 vpgl_ba_fixed_k_lsqr::
-vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                     const vcl_vector<vgl_point_2d<double> >& image_points,
-                     const vcl_vector<vcl_vector<bool> >& mask)
+vpgl_ba_fixed_k_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                     const std::vector<vgl_point_2d<double> >& image_points,
+                     const std::vector<std::vector<bool> >& mask)
  : vpgl_bundle_adjust_lsqr(6,3,0,image_points,mask),
    K_(K)
 {
@@ -24,10 +24,10 @@ vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
 //  Each image point is assigned an inverse covariance (error projector) matrix
 // \note image points are not homogeneous because they require finite points to measure projection error
 vpgl_ba_fixed_k_lsqr::
-vpgl_ba_fixed_k_lsqr(const vcl_vector<vpgl_calibration_matrix<double> >& K,
-                     const vcl_vector<vgl_point_2d<double> >& image_points,
-                     const vcl_vector<vnl_matrix<double> >& inv_covars,
-                     const vcl_vector<vcl_vector<bool> >& mask)
+vpgl_ba_fixed_k_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+                     const std::vector<vgl_point_2d<double> >& image_points,
+                     const std::vector<vnl_matrix<double> >& inv_covars,
+                     const std::vector<std::vector<bool> >& mask)
  : vpgl_bundle_adjust_lsqr(6,3,0,image_points,inv_covars,mask),
    K_(K)
 {
@@ -133,7 +133,7 @@ vpgl_ba_fixed_k_lsqr::param_to_cam_matrix(int i,
 
 //: Create the parameter vector \p a from a vector of cameras
 vnl_vector<double>
-vpgl_ba_fixed_k_lsqr::create_param_vector(const vcl_vector<vpgl_perspective_camera<double> >& cameras)
+vpgl_ba_fixed_k_lsqr::create_param_vector(const std::vector<vpgl_perspective_camera<double> >& cameras)
 {
   vnl_vector<double> a(6*cameras.size(),0.0);
   for (unsigned int i=0; i<cameras.size(); ++i)
@@ -155,7 +155,7 @@ vpgl_ba_fixed_k_lsqr::create_param_vector(const vcl_vector<vpgl_perspective_came
 
 //: Create the parameter vector \p b from a vector of 3D points
 vnl_vector<double>
-vpgl_ba_fixed_k_lsqr::create_param_vector(const vcl_vector<vgl_point_3d<double> >& world_points)
+vpgl_ba_fixed_k_lsqr::create_param_vector(const std::vector<vgl_point_3d<double> >& world_points)
 {
   vnl_vector<double> b(3*world_points.size(),0.0);
   for (unsigned int j=0; j<world_points.size(); ++j){

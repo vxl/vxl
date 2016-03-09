@@ -17,8 +17,9 @@
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_sphere_3d.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> // for sqrt()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath> // for sqrt()
 
 static void testHomgLine2DClosestPoint()
 {
@@ -49,7 +50,7 @@ static void testHomgLine3DClosestPoints()
   vgl_homg_point_3d<double> p1, p2;
   vgl_homg_line_3d_2_points<double> l1;
   vgl_homg_line_3d_2_points<double> l2;
-  vcl_pair<vgl_homg_point_3d<double>, vgl_homg_point_3d<double> > pts;
+  std::pair<vgl_homg_point_3d<double>, vgl_homg_point_3d<double> > pts;
 
   // test for parallel lines
   p1.set(0,1,0); p2.set(1,0,0,0); l1.set(p1, p2);
@@ -57,13 +58,13 @@ static void testHomgLine3DClosestPoints()
   pts = vgl_closest_points(l1, l2);
   // result should be (1,0,0,0) for both pts
   if (pts.first!=pts.second)
-    vcl_cout << "parallel test failed, points should be equal.\n"
+    std::cout << "parallel test failed, points should be equal.\n"
              << "points are: " << pts.first << ' ' << pts.second
-             << vcl_endl;
+             << std::endl;
   else if (pts.first!=p2)
-    vcl_cout << "parallel test failed, points should be " << p2 << '\n'
+    std::cout << "parallel test failed, points should be " << p2 << '\n'
              << "points are: " << pts.first << ' ' << pts.second
-             << vcl_endl;
+             << std::endl;
   TEST("Parallel test", pts.first==pts.second && pts.first==p2, true);
   TEST_NEAR("Parallel distance test", vgl_distance(l1,l2), 5.0, 1e-8);
   TEST_NEAR("Parallel distance test", vgl_distance(l1,p1), 5.0, 1e-8);
@@ -76,13 +77,13 @@ static void testHomgLine3DClosestPoints()
   pts = vgl_closest_points(l1, l2);
   // result should be (1,1,1) for both pts
   if (pts.first != pts.second)
-    vcl_cout << "Intersect test failed, points should be equal\n"
+    std::cout << "Intersect test failed, points should be equal\n"
              << "points are: " << pts.first << ' ' << pts.second
-             << vcl_endl;
+             << std::endl;
   else if (pts.first != p2)
-    vcl_cout << "Intersect test failed, points should be " << p2 << '\n'
+    std::cout << "Intersect test failed, points should be " << p2 << '\n'
              << "points are: " << pts.first << ' ' << pts.second
-             << vcl_endl;
+             << std::endl;
   TEST("Intersect test", pts.first==pts.second && pts.first==p2, true);
   TEST_NEAR("Intersect distance test", vgl_distance(l1,l2), 0.0, 1e-8);
 
@@ -97,12 +98,12 @@ static void testHomgLine3DClosestPoints()
   p1.set(0,0,0); p2.set(1,1,0); l1.set(p1,p2);
   p1.set(1,0,0); p2.set(1,1,1); l2.set(p1,p2);
   pts = vgl_closest_points(l1,l2);
-  vcl_cout << "Closest points are: " << pts.first << ' ' << pts.second << '\n';
+  std::cout << "Closest points are: " << pts.first << ' ' << pts.second << '\n';
   TEST("Skew lines test", pts.first, vgl_homg_point_3d<double>(2,2,0,3));
   TEST("Skew lines test", pts.second,vgl_homg_point_3d<double>(3,1,1,3));
-  TEST_NEAR("Skew lines distance test", vgl_distance(pts.first,pts.second),1/vcl_sqrt(3.0),1e-8);
-  TEST_NEAR("Skew lines distance test", vgl_distance(l1,pts.second),1/vcl_sqrt(3.0),1e-8);
-  TEST_NEAR("Skew lines distance test", vgl_distance(pts.first,l2),1/vcl_sqrt(3.0),1e-8);
+  TEST_NEAR("Skew lines distance test", vgl_distance(pts.first,pts.second),1/std::sqrt(3.0),1e-8);
+  TEST_NEAR("Skew lines distance test", vgl_distance(l1,pts.second),1/std::sqrt(3.0),1e-8);
+  TEST_NEAR("Skew lines distance test", vgl_distance(pts.first,l2),1/std::sqrt(3.0),1e-8);
 }
 
 static void testHomgPlane3DClosestPoint()
@@ -170,13 +171,13 @@ static void testLine3DClosestPoint()
   TEST_NEAR("Distance test", vgl_distance(l,q), 5.0, 1e-8);
   q.set(1,2,7);
   TEST("3D non-coincident test", vgl_closest_point(q,l), p);
-  TEST_NEAR("Distance test", vgl_distance(q,l), vcl_sqrt(26.0), 1e-8);
+  TEST_NEAR("Distance test", vgl_distance(q,l), std::sqrt(26.0), 1e-8);
 }
 
 // Similar to test above, but uses parametric value.
 static void test_line_3d_2_points_closest_point_t()
 {
-  vcl_cout << "------------------------------------------------\n"
+  std::cout << "------------------------------------------------\n"
            << " Testing vgl_closest_point_t(line_3d_2_points):\n"
            << "------------------------------------------------\n";
 
@@ -199,7 +200,7 @@ static void test_line_3d_2_points_closest_point_t()
 
 static void test_line_segment_2d_closest_point()
 {
-  vcl_cout << "-----------------------------------------------------\n"
+  std::cout << "-----------------------------------------------------\n"
            << " Testing vgl_closest_point(line_segment_2d, point_2d)\n"
            << "-----------------------------------------------------\n";
 
@@ -224,7 +225,7 @@ static void test_line_segment_2d_closest_point()
 
 static void test_line_segment_3d_closest_point()
 {
-  vcl_cout << "-----------------------------------------------------\n"
+  std::cout << "-----------------------------------------------------\n"
           << " Testing vgl_closest_point(line_segment_3d, point_3d)\n"
           << "-----------------------------------------------------\n";
 
@@ -245,13 +246,13 @@ static void test_line_segment_3d_closest_point()
   TEST_NEAR("Distance test", vgl_distance(l,q), 5.0, 1e-8);
   q.set(1,2,7);
   TEST("3D non-coincident test", vgl_closest_point(q,l), p);
-  TEST_NEAR("Distance test", vgl_distance(q,l), vcl_sqrt(26.0), 1e-8);
+  TEST_NEAR("Distance test", vgl_distance(q,l), std::sqrt(26.0), 1e-8);
 }
 
 
 static void testPlane3DClosestPoint()
 {
-  vcl_cout << "------------------------------------------\n"
+  std::cout << "------------------------------------------\n"
            << " Testing vgl_closest_point(vgl_plane_3d):\n"
            << "------------------------------------------\n";
 
@@ -332,7 +333,7 @@ static void testPoly3DClosestPoint()
   TEST("3D non-closed polygon non-coincident test: point x", px, 2.0);
   TEST("3D non-closed polygon non-coincident test: point y", py, 2.0);
   TEST("3D non-closed polygon non-coincident test: point z", pz, 0.25);
-  TEST_NEAR("Distance test", vgl_distance_to_non_closed_polygon(poly_x,poly_y,poly_z,4, 1.5,1.5,0.25), vcl_sqrt(0.5), 1e-8);
+  TEST_NEAR("Distance test", vgl_distance_to_non_closed_polygon(poly_x,poly_y,poly_z,4, 1.5,1.5,0.25), std::sqrt(0.5), 1e-8);
 
   // test for coincident with closed polygon
   idx = vgl_closest_point_to_closed_polygon(px,py,pz, poly_x,poly_y,poly_z,4, 1.5,1.5,1.0);
@@ -354,7 +355,7 @@ static void testPoly3DClosestPoint()
 // Test for closest points on two 3D (non-homogeneous) lines
 static void testLine3DClosestPoints()
 {
-  vcl_cout << "--------------------------------------------------\n"
+  std::cout << "--------------------------------------------------\n"
            << " Testing vgl_closest_points(3D lines, non-homog):\n"
            << "--------------------------------------------------\n";
 
@@ -363,7 +364,7 @@ static void testLine3DClosestPoints()
     vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(1,0,0));
     vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0,0,1), vgl_point_3d<double>(0,1,1));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
                     u);
@@ -375,7 +376,7 @@ static void testLine3DClosestPoints()
     vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(1,0,0));
     vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(0,1,0));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
                     u);
@@ -387,7 +388,7 @@ static void testLine3DClosestPoints()
     vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(1,0,0));
     vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0,0,1), vgl_point_3d<double>(1,0,1));
     bool u=true;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
                     !u);
@@ -399,7 +400,7 @@ static void testLine3DClosestPoints()
     vgl_line_3d_2_points<double> l1(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(1,0,0));
     vgl_line_3d_2_points<double> l2(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(1,0,0));
     bool u=true;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
                     !u);
@@ -410,7 +411,7 @@ static void testLine3DClosestPoints()
 // Test for closest points on two 3D line segments
 static void testLineSegment3DClosestPoints()
 {
-  vcl_cout << "-----------------------------------------------\n"
+  std::cout << "-----------------------------------------------\n"
            << " Testing vgl_closest_points(3D line segments):\n"
            << "-----------------------------------------------\n";
 
@@ -419,7 +420,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(-1,0,0), vgl_point_3d<double>(1,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(0,-1,1), vgl_point_3d<double>(0,1,1));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
                     u);
@@ -431,7 +432,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(1,0,0), vgl_point_3d<double>(2,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(0,1,1), vgl_point_3d<double>(0,2,1));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(0,1,1) &&
                     u);
@@ -443,7 +444,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(1,0,0), vgl_point_3d<double>(2,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(0,-1,1), vgl_point_3d<double>(0,+1,1));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
                     u);
@@ -455,7 +456,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(1,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(0,1,0));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
                     u);
@@ -467,7 +468,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(1,0,0), vgl_point_3d<double>(2,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(-2,0,1), vgl_point_3d<double>(-1,0,1));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(-1,0,1) &&
                     u);
@@ -479,7 +480,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(2,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(-2,0,1), vgl_point_3d<double>(1,0,1));
     bool u=true;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
                     !u);
@@ -491,7 +492,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(1,0,0), vgl_point_3d<double>(2,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(-2,0,0), vgl_point_3d<double>(-1,0,0));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(1,0,0) &&
                     c.second==vgl_point_3d<double>(-1,0,0) &&
                     u);
@@ -503,7 +504,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(0,0,0), vgl_point_3d<double>(2,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(-2,0,0), vgl_point_3d<double>(0,0,0));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,0) &&
                     u);
@@ -515,7 +516,7 @@ static void testLineSegment3DClosestPoints()
     vgl_line_segment_3d<double> l1(vgl_point_3d<double>(-1,0,0), vgl_point_3d<double>(2,0,0));
     vgl_line_segment_3d<double> l2(vgl_point_3d<double>(-2,0,0), vgl_point_3d<double>(1,0,0));
     bool u=true;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(-1,0,0) &&
                     c.second==vgl_point_3d<double>(-1,0,0) &&
                     !u);
@@ -526,7 +527,7 @@ static void testLineSegment3DClosestPoints()
 // Test for closest points on two 3D line segments
 static void test_infinite_line_3d_closest_points()
 {
-  vcl_cout << "-------------------------------------------------\n"
+  std::cout << "-------------------------------------------------\n"
            << " Testing vgl_closest_points(3-d infinite lines):\n"
            << "-------------------------------------------------\n";
 
@@ -535,21 +536,21 @@ static void test_infinite_line_3d_closest_points()
     vgl_infinite_line_3d<double> l1(vgl_point_3d<double>(-1,0,0), vgl_point_3d<double>(1,0,0));
     vgl_infinite_line_3d<double> l2(vgl_point_3d<double>(0,2,1), vgl_point_3d<double>(0,3,1));
     bool u=false;
-    vcl_pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
+    std::pair<vgl_point_3d<double>, vgl_point_3d<double> > c = vgl_closest_points(l1, l2, &u);
     bool success = (c.first==vgl_point_3d<double>(0,0,0) &&
                     c.second==vgl_point_3d<double>(0,0,1) &&
                     u);
     TEST("Non-parallel, non-intersecting infinite lines", success, true);
 }
 static void test_sphere_3d_closest_point(){
-  vcl_cout << "-------------------------------------------------\n"
+  std::cout << "-------------------------------------------------\n"
            << " Testing vgl_closest_point(3-d sphere):\n"
            << "-------------------------------------------------\n";
   vgl_sphere_3d<double> s(1.0, 2.0, 3.0, 4.0);
   vgl_point_3d<double> p(5.0, 5.0, 5.0);
   vgl_point_3d<double> cp = vgl_closest_point(s, p);
   double x = 3.97113-cp.x(), y = 4.22834-cp.y(), z = 4.48556-cp.z();
-  double er = vcl_sqrt(x*x + y*y + z*z);
+  double er = std::sqrt(x*x + y*y + z*z);
   TEST_NEAR("Closest point on sphere", er, 0.0, 1.e-5);
 }
 

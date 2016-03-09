@@ -3,7 +3,8 @@
 // \brief Example of creating, processing and using an image data object
 // \author Ian Scott
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vil/vil_load.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_image_view.h>
@@ -14,11 +15,11 @@ int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-    vcl_cerr << "Specify an image filename\n";
+    std::cerr << "Specify an image filename\n";
     return 3;
   }
 
-  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout<<"Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we initialise an image data object.
@@ -27,12 +28,12 @@ int main(int argc, char** argv)
 
   if (!data)
   {
-    vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
+    std::cerr << "Couldn't load " << argv[1] <<std::endl;
     return 3;
   }
 
 
-  vcl_cout<<"Crop the image by 1 pixel around all sides.\n";
+  std::cout<<"Crop the image by 1 pixel around all sides.\n";
 
 
   // We can apply some operation to it.
@@ -44,10 +45,10 @@ int main(int argc, char** argv)
 
   vil_image_view<unsigned char> uc_view = cropped_data->get_view(0, cropped_data->ni(), 0, cropped_data->nj());
 
-  vcl_cout << "Created a view of type " << uc_view.is_a() << vcl_endl;
+  std::cout << "Created a view of type " << uc_view.is_a() << std::endl;
 
 
-  vil_print_all(vcl_cout,uc_view);
+  vil_print_all(std::cout,uc_view);
 
   return 0;
 }

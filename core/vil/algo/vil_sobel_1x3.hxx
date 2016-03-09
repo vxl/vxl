@@ -54,9 +54,9 @@ void vil_sobel_1x3(const vil_image_view<srcT>& src,
 
 template<class srcT, class destT>
 void vil_sobel_1x3_1plane(const srcT* src,
-                          vcl_ptrdiff_t s_istep, vcl_ptrdiff_t s_jstep,
-                          destT* gi, vcl_ptrdiff_t gi_istep, vcl_ptrdiff_t gi_jstep,
-                          destT* gj, vcl_ptrdiff_t gj_istep, vcl_ptrdiff_t gj_jstep,
+                          std::ptrdiff_t s_istep, std::ptrdiff_t s_jstep,
+                          destT* gi, std::ptrdiff_t gi_istep, std::ptrdiff_t gi_jstep,
+                          destT* gj, std::ptrdiff_t gj_istep, std::ptrdiff_t gj_jstep,
                           unsigned ni, unsigned nj)
 {
   const destT point5=static_cast<destT>(0.5);
@@ -96,10 +96,10 @@ void vil_sobel_1x3_1plane(const srcT* src,
   //     o2
   //  o4    o5
   //     o7
-  const vcl_ptrdiff_t o2 = s_jstep;
-  const vcl_ptrdiff_t o4 = -s_istep;
-  const vcl_ptrdiff_t o5 = s_istep;
-  const vcl_ptrdiff_t o7 = -s_jstep;
+  const std::ptrdiff_t o2 = s_jstep;
+  const std::ptrdiff_t o4 = -s_istep;
+  const std::ptrdiff_t o5 = s_istep;
+  const std::ptrdiff_t o7 = -s_jstep;
 
   const unsigned ni1 = ni-1;
   const unsigned nj1 = nj-1;

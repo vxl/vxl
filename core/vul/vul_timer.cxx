@@ -30,7 +30,8 @@
 //    what you get from a stop watch timer.
 //
 
-#include <vcl_ctime.h>
+#include <vcl_compiler.h>
+#include <ctime>
 #include <vcl_sys/time.h>
 # undef __USE_BSD
 
@@ -40,13 +41,13 @@ struct vul_timer_data
   tms usage0;                    // usage mark.
   struct timeval real0;          // wall clock mark.
 #else
- vcl_clock_t usage0;
+ std::clock_t usage0;
  struct _timeb real0;
 #endif
 };
 
 #include <vcl_climits.h>   // for CLK_TCK
-#include <vcl_iostream.h>
+#include <iostream>
 
 
 //#define CLK_TCK _sysconf(3) in <limits.h> has error
@@ -89,7 +90,7 @@ void vul_timer::mark()
 #endif
 #else
   // Win32 section
-  data->usage0 = vcl_clock();
+  data->usage0 = std::clock();
   _ftime(&data->real0);
 #endif
 }
@@ -138,7 +139,7 @@ long vul_timer::user()
   times(&usage);  // new user/system time
   return (usage.tms_utime - data->usage0.tms_utime) * 1000 / CLK_TCK;
 #else
-  vcl_clock_t usage = vcl_clock();
+  std::clock_t usage = std::clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
@@ -167,13 +168,13 @@ long vul_timer::all()
   return (usage.tms_utime + usage.tms_stime -
           data->usage0.tms_utime - data->usage0.tms_stime)  * 1000 / CLK_TCK;
 #else
-  vcl_clock_t usage = vcl_clock();
+  std::clock_t usage = std::clock();
   return (usage - data->usage0) / (CLOCKS_PER_SEC/1000);
 #endif
 }
 
 //: Display user and real time since the last mark.
-void vul_timer::print(vcl_ostream& s)
+void vul_timer::print(std::ostream& s)
 {
-  s << "Time: user " << user() / 1000.0 << ", real " << this->real() / 1000.0 << vcl_endl;
+  s << "Time: user " << user() / 1000.0 << ", real " << this->real() / 1000.0 << std::endl;
 }

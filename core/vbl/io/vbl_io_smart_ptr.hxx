@@ -10,7 +10,9 @@
 #include "vbl_io_smart_ptr.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_cstdlib.h> // vcl_abort()
+#include <vcl_compiler.h>
+#include <cstdlib> // std::abort()
+#include <iostream>
 
 //=========================================================================
 //: Binary save self to stream.
@@ -49,12 +51,12 @@ void vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T> &p)
     // </rant>
     if (!p.is_protected())
     {
-        vcl_cerr << "vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T>&):"
+        std::cerr << "vsl_b_write(vsl_b_ostream & os, const vbl_smart_ptr<T>&):"
                  << " You cannot\nsave unprotected smart pointers before saving"
                  << " a protected smart pointer\nto the same object. Either do"
                  << " not save unprotected smart pointers, or\nbe very careful"
                  << " about the order.\n";
-        vcl_abort();
+        std::abort();
     }
 
     id = os.add_serialisation_record(p.ptr());
@@ -106,9 +108,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
 
     if (first_time && !is_protected)  // This should have been
     {                                  //checked during saving
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
                << "           De-serialisation failure of non-protected smart_ptr\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
     unsigned long id; // Unique serial number indentifying object
@@ -126,9 +128,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
       // This checks that the saving stream and reading stream
       // both agree on whether or not this is the first time they
       // have seen this object.
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
                << "           De-serialisation failure\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
 
@@ -149,9 +151,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
     break;
    }
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_smart_ptr<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -159,7 +161,7 @@ void vsl_b_read(vsl_b_istream &is, vbl_smart_ptr<T> &p)
 //=====================================================================
 //: Output a human readable summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & p)
+void vsl_print_summary(std::ostream & os,const vbl_smart_ptr<T> & p)
 {
   if (p.is_protected())
     os <<"Unprotected ";
@@ -178,7 +180,7 @@ void vsl_print_summary(vcl_ostream & os,const vbl_smart_ptr<T> & p)
 
 #undef VBL_IO_SMART_PTR_INSTANTIATE
 #define VBL_IO_SMART_PTR_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vbl_smart_ptr<T > &); \
+template void vsl_print_summary(std::ostream &, const vbl_smart_ptr<T > &); \
 template void vsl_b_read(vsl_b_istream &, vbl_smart_ptr<T > &); \
 template void vsl_b_write(vsl_b_ostream &, const vbl_smart_ptr<T > &)
 

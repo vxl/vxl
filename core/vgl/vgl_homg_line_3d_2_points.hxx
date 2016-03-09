@@ -6,7 +6,8 @@
 
 #include "vgl_homg_line_3d_2_points.h"
 #include "vgl_tolerance.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_cassert.h>
 
 //***************************************************************************
@@ -85,7 +86,7 @@ vgl_homg_point_3d<Type> intersection(vgl_homg_line_3d_2_points<Type> const& l1, 
 //*****************************************************************************
 
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream &s,
+std::ostream& operator<<(std::ostream &s,
                         const vgl_homg_line_3d_2_points<Type> &p)
 {
   return s << "<vgl_homg_line_3d_2_points "
@@ -95,7 +96,7 @@ vcl_ostream& operator<<(vcl_ostream &s,
 #undef VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE
 #define VGL_HOMG_LINE_3D_2_POINTS_INSTANTIATE(T) \
 template class vgl_homg_line_3d_2_points<T >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_homg_line_3d_2_points<T > const&);\
+template std::ostream& operator<<(std::ostream&, vgl_homg_line_3d_2_points<T > const&);\
 template vgl_homg_point_3d<T > intersection(vgl_homg_line_3d_2_points<T > const&, vgl_homg_line_3d_2_points<T > const&)
 
 #endif // vgl_homg_line_3d_2_points_hxx_

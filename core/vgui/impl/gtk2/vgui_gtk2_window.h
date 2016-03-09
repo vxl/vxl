@@ -49,7 +49,7 @@ class vgui_gtk2_window : public vgui_window
   void show();
   void hide();
   void reshape(unsigned, unsigned);
-  void set_title(vcl_string const &);
+  void set_title(std::string const &);
 
   void set_menubar(const vgui_menu &menu);
 

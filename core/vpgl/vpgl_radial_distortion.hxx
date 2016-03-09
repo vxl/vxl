@@ -8,8 +8,9 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 
-#include <vcl_cmath.h>
-#include <vcl_limits.h>
+#include <cmath>
+#include <vcl_compiler.h>
+#include <limits>
 
 //: Distort a projected point on the image plane
 //  Calls the pure virtual radial distortion function
@@ -58,9 +59,9 @@ vpgl_radial_distortion<T>::undistort_radius( T radius, const T* init) const
 
   if (has_derivative_){
     // uses the Newton Method for root finding
-    T e = vcl_numeric_limits<T>::infinity();
-    T eps = vcl_numeric_limits<T>::epsilon();
-    for (unsigned int i=0; i<100 && vcl_abs(e)>eps ; ++i){
+    T e = std::numeric_limits<T>::infinity();
+    T eps = std::numeric_limits<T>::epsilon();
+    for (unsigned int i=0; i<100 && std::abs(e)>eps ; ++i){
       T f_result = distort_radius(result);
       e = radius - f_result*result;
       result += e/(distort_radius_deriv(result)*result + f_result);
@@ -68,10 +69,10 @@ vpgl_radial_distortion<T>::undistort_radius( T radius, const T* init) const
   }
   else{
     // uses the Newton Method with finite differences for root finding
-    T e = vcl_numeric_limits<T>::infinity();
-    T eps = vcl_numeric_limits<T>::epsilon();
+    T e = std::numeric_limits<T>::infinity();
+    T eps = std::numeric_limits<T>::epsilon();
     T df = T(0.001);
-    for (unsigned int i=0; i<100 && vcl_abs(e)>eps ; ++i){
+    for (unsigned int i=0; i<100 && std::abs(e)>eps ; ++i){
       T f_result = distort_radius(result);
       T f_result_df = distort_radius(result-df);
       e = radius - f_result*result;

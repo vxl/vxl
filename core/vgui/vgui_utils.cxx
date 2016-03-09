@@ -6,9 +6,10 @@
 // \date   Oct 99
 // \brief  See vgui_utils.h for a description of this file.
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <iostream>
 
 #include <vil1/vil1_rgba.h>
 #include <vil1/vil1_save.h>
@@ -243,7 +244,7 @@ void vgui_utils::begin_sw_overlay()
 void vgui_utils::end_sw_overlay()
 {
   if (gl_old_buffer == -1) {
-    vcl_cerr << "WARNING :  end_sw_overlay called before begin_sw_overlay\n";
+    std::cerr << "WARNING :  end_sw_overlay called before begin_sw_overlay\n";
     return;
   }
 
@@ -305,50 +306,50 @@ unsigned vgui_utils::leave_pick_mode()
   return glRenderMode(GL_RENDER);
 }
 
-void vgui_utils::process_hits(int num_hits, GLuint* ptr, vcl_vector<vcl_vector<unsigned> >& hits)
+void vgui_utils::process_hits(int num_hits, GLuint* ptr, std::vector<std::vector<unsigned> >& hits)
 {
 #ifdef DEBUG
-    vcl_cerr << "hits = " << num_hits << vcl_endl;
+    std::cerr << "hits = " << num_hits << std::endl;
 #endif
   // for each hit
    for (int i = 0; i < num_hits; i++) {
      GLuint num_names = *ptr;
 #ifdef DEBUG
-       vcl_cerr << "number of names for hit["<< i <<"] = " << num_names << vcl_endl;
+       std::cerr << "number of names for hit["<< i <<"] = " << num_names << std::endl;
 #endif
      ptr++;
 #ifdef DEBUG
-       vcl_cerr << " z1 is " << *ptr;
+       std::cerr << " z1 is " << *ptr;
 #endif
      ptr++;
 #ifdef DEBUG
-       vcl_cerr << "; z2 is " << *ptr << vcl_endl;
+       std::cerr << "; z2 is " << *ptr << std::endl;
 #endif
      ptr++;
 
-     vcl_vector<unsigned> names;
+     std::vector<unsigned> names;
 #ifdef DEBUG
-       vcl_cerr << " the name is ";
+       std::cerr << " the name is ";
 #endif
      // for each name
      for (unsigned int j = 0; j < num_names; j++) {
        names.push_back(*ptr);
 #ifdef DEBUG
-         vcl_cerr << *ptr << ' ';
+         std::cerr << *ptr << ' ';
 #endif
        ptr++;
      }
 #ifdef DEBUG
-       vcl_cerr << vcl_endl << "names.size() " << names.size() << vcl_endl;
+       std::cerr << std::endl << "names.size() " << names.size() << std::endl;
 #endif
      hits.push_back(names);
 
 #ifdef DEBUG
-       vcl_cerr << vcl_endl;
+       std::cerr << std::endl;
 #endif
    }
 #ifdef DEBUG
-     vcl_cerr << "hits.size() " << hits.size() << vcl_endl;
+     std::cerr << "hits.size() " << hits.size() << std::endl;
 #endif
 }
 
@@ -374,7 +375,7 @@ vgui_utils::bits_per_pixel(GLenum format, GLenum type)
 #endif
 #undef M
 
-  vcl_cerr << "vgui_utils::bits_per_pixel: UNKNOWN COMBO, format = " << format << ", type = " << type << vcl_endl;
-  vcl_abort();
+  std::cerr << "vgui_utils::bits_per_pixel: UNKNOWN COMBO, format = " << format << ", type = " << type << std::endl;
+  std::abort();
   return 0;
 }

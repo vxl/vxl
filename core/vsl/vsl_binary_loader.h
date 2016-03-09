@@ -14,7 +14,8 @@
 
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader_base.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //: Class to load objects by baseclass pointer.
 // An example of a singleton design pattern for loading
@@ -52,7 +53,7 @@ class vsl_binary_loader : public vsl_binary_loader_base
   static vsl_binary_loader<BaseClass>* instance_;
 
   //: List of concrete classes that this loader can deal with
-  vcl_vector<BaseClass*> object_;
+  std::vector<BaseClass*> object_;
 
  public :
   //: Constructor
@@ -71,7 +72,7 @@ class vsl_binary_loader : public vsl_binary_loader_base
   void add( const BaseClass& b) { object_.push_back(b.clone());}
 
   //: Return current list of class objects which can be loaded
-  const vcl_vector<BaseClass*>& object() { return object_; }
+  const std::vector<BaseClass*>& object() { return object_; }
 
   //: Loads object and sets base class pointer
   //  Determines which derived class object on is belongs
@@ -81,7 +82,7 @@ class vsl_binary_loader : public vsl_binary_loader_base
   //  If b not initially NULL, *b will be deleted.
   void load_object( vsl_b_istream& is, BaseClass*& b);
 
-  vcl_string is_a() const;
+  std::string is_a() const;
 };
 
 

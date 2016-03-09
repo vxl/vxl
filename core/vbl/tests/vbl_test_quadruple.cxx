@@ -1,11 +1,12 @@
 #include <testlib/testlib_test.h>
 #include <vbl/vbl_quadruple.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 static
 void vbl_test_quadruple()
 {
-  vcl_cout << "\n\n\n"
+  std::cout << "\n\n\n"
            << "********************\n"
            << " Test vbl_quadruple\n"
            << "********************\n";

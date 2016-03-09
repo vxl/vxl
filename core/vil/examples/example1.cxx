@@ -3,7 +3,8 @@
 // \brief Example of creating and filling a vil_image_view<T>.
 // \author Tim Cootes - Manchester
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
@@ -21,8 +22,8 @@ int main()
       for (unsigned i=0;i<ni;++i)
         image(i,j,p) = vxl_byte(i+10*j+100*p);
 
-  vcl_cout<<"Slow fill image\n";
-  vil_print_all(vcl_cout,image);
+  std::cout<<"Slow fill image\n";
+  vil_print_all(std::cout,image);
 
   // Fast fill
   vxl_byte* plane = image.top_left_ptr();
@@ -37,8 +38,8 @@ int main()
     }
   }
 
-  vcl_cout<<"Fast fill image\n";
-  vil_print_all(vcl_cout,image);
+  std::cout<<"Fast fill image\n";
+  vil_print_all(std::cout,image);
 
   return 0;
 }

@@ -11,6 +11,7 @@
 //   IMS - 22 June 2001 - Added IO for multimap
 // \endverbatim
 
+#include <iostream>
 #include "vsl_map_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>
@@ -19,12 +20,12 @@
 //====================================================================================
 //: Write map to binary stream
 template <class Key, class T, class Compare>
-void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare>& v)
+void vsl_b_write(vsl_b_ostream& s, const std::map<Key, T, Compare>& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
-  for (typename vcl_map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
+  for (typename std::map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
   {
     vsl_b_write(s,(*iter).first);
     vsl_b_write(s,(*iter).second);
@@ -34,7 +35,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare>& v)
 //====================================================================================
 //: Read map from binary stream
 template <class Key, class T, class Compare>
-void vsl_b_read(vsl_b_istream& is, vcl_map<Key, T, Compare>& v)
+void vsl_b_read(vsl_b_istream& is, std::map<Key, T, Compare>& v)
 {
   if (!is) return;
 
@@ -56,9 +57,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_map<Key, T, Compare>& v)
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_map<K, T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::map<K, T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -66,11 +67,11 @@ void vsl_b_read(vsl_b_istream& is, vcl_map<Key, T, Compare>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class Key, class T, class Compare>
-void vsl_print_summary(vcl_ostream& os, const vcl_map<Key, T, Compare> &v)
+void vsl_print_summary(std::ostream& os, const std::map<Key, T, Compare> &v)
 {
   os << "Map size: " << v.size() << '\n';
   unsigned i=0;
-  for (typename vcl_map<Key, T, Compare>::const_iterator iter = v.begin();
+  for (typename std::map<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {
     os << vsl_indent() << ' ' << i << ": ";
@@ -87,19 +88,19 @@ void vsl_print_summary(vcl_ostream& os, const vcl_map<Key, T, Compare> &v)
 
 
 #define VSL_MAP_IO_INSTANTIATE(Key, T, Compare) \
-template void vsl_print_summary(vcl_ostream&, const vcl_map<Key, T, Compare >&); \
-template void vsl_b_write(vsl_b_ostream& s, const vcl_map<Key, T, Compare >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_map<Key, T, Compare >& v)
+template void vsl_print_summary(std::ostream&, const std::map<Key, T, Compare >&); \
+template void vsl_b_write(vsl_b_ostream& s, const std::map<Key, T, Compare >& v); \
+template void vsl_b_read(vsl_b_istream& s, std::map<Key, T, Compare >& v)
 
 //====================================================================================
 //: Write multimap to binary stream
 template <class Key, class T, class Compare>
-void vsl_b_write(vsl_b_ostream& s, const vcl_multimap<Key, T, Compare>& v)
+void vsl_b_write(vsl_b_ostream& s, const std::multimap<Key, T, Compare>& v)
 {
   const short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
-  for (typename vcl_multimap<Key, T, Compare>::const_iterator iter = v.begin();
+  for (typename std::multimap<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end(); iter++)
   {
     vsl_b_write(s,(*iter).first);
@@ -110,7 +111,7 @@ void vsl_b_write(vsl_b_ostream& s, const vcl_multimap<Key, T, Compare>& v)
 //====================================================================================
 //: Read multimap from binary stream
 template <class Key, class T, class Compare>
-void vsl_b_read(vsl_b_istream& is, vcl_multimap<Key, T, Compare>& v)
+void vsl_b_read(vsl_b_istream& is, std::multimap<Key, T, Compare>& v)
 {
   if (!is) return;
 
@@ -128,13 +129,13 @@ void vsl_b_read(vsl_b_istream& is, vcl_multimap<Key, T, Compare>& v)
       T second_val;
       vsl_b_read(is, first_val);
       vsl_b_read(is, second_val);
-      v.insert( vcl_make_pair(first_val, second_val));
+      v.insert( std::make_pair(first_val, second_val));
     }
     break;
   default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_multimap<K, T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::multimap<K, T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -142,11 +143,11 @@ void vsl_b_read(vsl_b_istream& is, vcl_multimap<Key, T, Compare>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class Key, class T, class Compare>
-void vsl_print_summary(vcl_ostream& os, const vcl_multimap<Key, T, Compare> &v)
+void vsl_print_summary(std::ostream& os, const std::multimap<Key, T, Compare> &v)
 {
   os << "multimap size: " << v.size() << '\n';
   unsigned i=0;
-  for (typename vcl_multimap<Key, T, Compare>::const_iterator iter = v.begin();
+  for (typename std::multimap<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {
     os << ' ' << i << ": ";
@@ -161,8 +162,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_multimap<Key, T, Compare> &v)
 
 
 #define VSL_MULTIMAP_IO_INSTANTIATE(Key, T, Compare) \
-template void vsl_print_summary(vcl_ostream&, const vcl_multimap<Key, T, Compare >&); \
-template void vsl_b_write(vsl_b_ostream& s, const vcl_multimap<Key, T, Compare >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_multimap<Key, T, Compare >& v)
+template void vsl_print_summary(std::ostream&, const std::multimap<Key, T, Compare >&); \
+template void vsl_b_write(vsl_b_ostream& s, const std::multimap<Key, T, Compare >& v); \
+template void vsl_b_read(vsl_b_istream& s, std::multimap<Key, T, Compare >& v)
 
 #endif // vsl_map_io_hxx_

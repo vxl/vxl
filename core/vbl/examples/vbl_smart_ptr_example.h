@@ -4,7 +4,8 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
@@ -18,13 +19,13 @@
 class example_sp : public vbl_ref_count
 {
  public:
-  example_sp() { vcl_cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
+  example_sp() { std::cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
 
-  ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
+  ~example_sp() { std::cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
-  example_sp(example_sp const&) : vbl_ref_count() { vcl_cout<< "example_sp copy constructor, refcount=" << get_references()<<'\n'; }
+  example_sp(example_sp const&) : vbl_ref_count() { std::cout<< "example_sp copy constructor, refcount=" << get_references()<<'\n'; }
 
-  friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
+  friend std::ostream& operator<<(std::ostream& os, example_sp const& e) {
     int p = e.get_references();
     if (p < 1000) os << "example_sp, refcount=" << p;
     else          os << "example_sp, invalid";
@@ -40,8 +41,8 @@ class bigmatrix_impl : public vbl_ref_count
 {
  public:
   double data[256][256];
-  bigmatrix_impl() { vcl_cerr << "bigmatrix_impl ctor\n"; }
-  ~bigmatrix_impl() { vcl_cerr << "bigmatrix_impl dtor\n"; }
+  bigmatrix_impl() { std::cerr << "bigmatrix_impl ctor\n"; }
+  ~bigmatrix_impl() { std::cerr << "bigmatrix_impl dtor\n"; }
 };
 
 class bigmatrix

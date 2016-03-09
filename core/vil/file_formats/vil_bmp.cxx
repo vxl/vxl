@@ -6,16 +6,17 @@
 #include "vil_bmp.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
-#include <vcl_cstring.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <vector>
+#include <cstring>
 #include <vil/vil_stream.h>
 #include <vil/vil_property.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_exception.h>
 
-#define where (vcl_cerr << __FILE__ " : " << __LINE__ << " : ")
+#define where (std::cerr << __FILE__ " : " << __LINE__ << " : ")
 
 //--------------------------------------------------------------------------------
 
@@ -70,7 +71,7 @@ vil_bmp_image::vil_bmp_image(vil_stream* is)
 
 bool vil_bmp_image::get_property(char const * tag, void * value) const
 {
-  if (vcl_strcmp(vil_property_quantisation_depth, tag)==0)
+  if (std::strcmp(vil_property_quantisation_depth, tag)==0)
   {
     if (value)
       *static_cast<unsigned int*>(value) = core_hdr.bitsperpixel / nplanes();
@@ -87,13 +88,13 @@ vil_bmp_image::vil_bmp_image(vil_stream* vs, unsigned nx, unsigned ny,
   if (format != VIL_PIXEL_FORMAT_BYTE)
   {
     vil_exception_warning(vil_exception_pixel_formats_incompatible(VIL_PIXEL_FORMAT_BYTE, format, "vil_bmp_image::vil_bmp_image"));
-    //vcl_cerr << "Sorry -- pixel format " << format << " not yet supported\n";
+    //std::cerr << "Sorry -- pixel format " << format << " not yet supported\n";
     return;
   }
   if(nplanes != 1 && nplanes != 3 && nplanes != 4)
   {
     vil_exception_warning(vil_exception_unsupported_operation("vil_bmp_image::vil_bmp_image: invalid number of planes"));
-    //vcl_cerr << "Sorry -- pixel format " << format << " not yet supported\n";
+    //std::cerr << "Sorry -- pixel format " << format << " not yet supported\n";
     return;
   }
 
@@ -165,13 +166,13 @@ bool vil_bmp_image::read_header()
     return false;
   }
 #ifdef DEBUG
-  file_hdr.print(vcl_cerr); // blather
+  file_hdr.print(std::cerr); // blather
 #endif
 
   // read core header
   core_hdr.read(is_);
 #ifdef DEBUG
-  core_hdr.print(vcl_cerr); // blather
+  core_hdr.print(std::cerr); // blather
 #endif
   // allowed values for bitsperpixel are 1 4 8 16 24 32;
   // currently we only support 8, 24, and 32 - FIXME
@@ -192,7 +193,7 @@ bool vil_bmp_image::read_header()
     // probably an info header. read it now.
     info_hdr.read(is_);
 #ifdef DEBUG
-    info_hdr.print(vcl_cerr); // blather
+    info_hdr.print(std::cerr); // blather
 #endif
     if (info_hdr.compression)
     {
@@ -264,10 +265,10 @@ bool vil_bmp_image::read_header()
     else
       cmap_size = ccount*4;
 
-    vcl_vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
+    std::vector<uchar> cmap(cmap_size, 0); // use vector<> to avoid coreleak
     if (is_->read(/* xxx */&cmap[0], 1024L) != 1024L)
     {
-      vcl_cerr << "Error reading image palette\n";
+      std::cerr << "Error reading image palette\n";
       return false;
     }
 
@@ -303,7 +304,7 @@ bool vil_bmp_image::read_header()
 bool vil_bmp_image::write_header()
 {
 #ifdef DEBUG
-  vcl_cerr << "Writing BMP header\n"
+  std::cerr << "Writing BMP header\n"
            << ni() << 'x' << nj() << '@'
            << nplanes() << 'x' <<
            vil_pixel_format_sizeof_components(pixel_format()) << '\n';
@@ -329,9 +330,9 @@ bool vil_bmp_image::write_header()
   info_hdr.bitmap_size = data_size;
 
 #ifdef DEBUG
-  file_hdr.print(vcl_cerr);
-  core_hdr.print(vcl_cerr); // blather
-  info_hdr.print(vcl_cerr);
+  file_hdr.print(std::cerr);
+  core_hdr.print(std::cerr); // blather
+  info_hdr.print(std::cerr);
 #endif
   is_->seek(0L);
   file_hdr.write(is_);
@@ -383,8 +384,8 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
 
   vil_memory_chunk_sptr buf = new vil_memory_chunk(want_bytes_per_raster*ny, VIL_PIXEL_FORMAT_BYTE);
 
-  vcl_ptrdiff_t top_left_y0_in_mem = 0;
-  vcl_ptrdiff_t  ystep = want_bytes_per_raster;
+  std::ptrdiff_t top_left_y0_in_mem = 0;
+  std::ptrdiff_t  ystep = want_bytes_per_raster;
   unsigned int rows_to_skip = y0;
   if( core_hdr.height > 0 )
   {
@@ -430,8 +431,8 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
   }
 
   unsigned np;
-  vcl_ptrdiff_t plane_step = 1;
-  vcl_ptrdiff_t top_left_plane0_in_mem = 0;
+  std::ptrdiff_t plane_step = 1;
+  std::ptrdiff_t top_left_plane0_in_mem = 0;
   if( core_hdr.bitsperpixel == 8 )
   {
     np = 1;
@@ -461,7 +462,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
       // memory layout for pixel color values:
       // Form      BB GG RR AA BB GG RR AA ....
       // Change to RR GG BB AA RR GG BB AA ...
-      vcl_swap(data[0], data[2]);
+      std::swap(data[0], data[2]);
     }
 
     np = 4;

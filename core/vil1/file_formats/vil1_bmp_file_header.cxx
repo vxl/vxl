@@ -7,8 +7,9 @@
 // \author fsm
 
 #include "vil1_bmp_file_header.h"
-#include <vcl_iomanip.h> // for vcl_hex, vcl_dec
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iomanip> // for std::hex, std::dec
+#include <iostream>
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_16bit.h>
 #include <vil1/vil1_32bit.h>
@@ -28,17 +29,17 @@ vil1_bmp_file_header::vil1_bmp_file_header()
   bitmap_offset = 0;
 }
 
-void vil1_bmp_file_header::print(vcl_ostream &s) const
+void vil1_bmp_file_header::print(std::ostream &s) const
 {
   s << "vil1_bmp_file_header:\n"
-    << "  magic   : " << vcl_hex
+    << "  magic   : " << std::hex
     << "0x" << unsigned(magic[0]) << ' '
-    << "0x" << unsigned(magic[1]) << vcl_endl
-    << "  filesize: 0x" << file_size << vcl_endl
-    << "  reserved: 0x" << reserved1 << vcl_endl
-    << "  reserved: 0x" << reserved2 << vcl_endl
-    << "  offset  : 0x" << bitmap_offset << vcl_endl
-    << vcl_dec << vcl_endl;
+    << "0x" << unsigned(magic[1]) << std::endl
+    << "  filesize: 0x" << file_size << std::endl
+    << "  reserved: 0x" << reserved1 << std::endl
+    << "  reserved: 0x" << reserved2 << std::endl
+    << "  offset  : 0x" << bitmap_offset << std::endl
+    << std::dec << std::endl;
 }
 
 void vil1_bmp_file_header::read(vil1_stream *s)

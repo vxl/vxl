@@ -12,12 +12,13 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_closest_point.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vcl_cassert.h>
 
 // Define a file-scope vgl_nan constant
-static const double vgl_nan = vcl_sqrt(-1.0);
-static const double sqrteps = vcl_sqrt(vcl_numeric_limits<double>::epsilon());
+static const double vgl_nan = std::sqrt(-1.0);
+static const double sqrteps = std::sqrt(std::numeric_limits<double>::epsilon());
 static const double pi = 3.14159265358979323846;
 
 namespace
@@ -52,7 +53,7 @@ namespace
 //=======================================================================
 //: Check for coincident edges of triangles a and b
 //  \return a vector of the coincident edges
-vcl_vector<vcl_pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
+std::vector<std::pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
   const vgl_point_3d<double>& a_p1,
   const vgl_point_3d<double>& a_p2,
   const vgl_point_3d<double>& a_p3,
@@ -60,14 +61,14 @@ vcl_vector<vcl_pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
   const vgl_point_3d<double>& b_p2,
   const vgl_point_3d<double>& b_p3)
 {
-  vcl_vector<vcl_pair<unsigned,unsigned> > coinc_edges;
+  std::vector<std::pair<unsigned,unsigned> > coinc_edges;
 
   //create some convenient arrays for looping
   vgl_point_3d<double> a[3] = {a_p1, a_p2, a_p3};
   vgl_point_3d<double> b[3] = {b_p1, b_p2, b_p3};
-  vcl_pair<unsigned,unsigned> e[3] = { vcl_make_pair(0,1),
-                                       vcl_make_pair(1,2),
-                                       vcl_make_pair(2,0) };
+  std::pair<unsigned,unsigned> e[3] = { std::make_pair(0,1),
+                                       std::make_pair(1,2),
+                                       std::make_pair(2,0) };
 
   // Test each edge j of triangle a against each edge i of triangle b.
   for (unsigned j = 0; j < 3; ++j)
@@ -88,12 +89,12 @@ vcl_vector<vcl_pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
       double a2_dist = length(b[e[i].first] - a[e[j].second]) +
         length(b[e[i].second] - a[e[j].second]);
 
-      if ((vcl_fabs(e1_len - b1_dist) < sqrteps &&
-           vcl_fabs(e1_len - b2_dist) < sqrteps) ||
-          (vcl_fabs(e2_len - a1_dist) < sqrteps &&
-           vcl_fabs(e2_len - a2_dist) < sqrteps))
+      if ((std::fabs(e1_len - b1_dist) < sqrteps &&
+           std::fabs(e1_len - b2_dist) < sqrteps) ||
+          (std::fabs(e2_len - a1_dist) < sqrteps &&
+           std::fabs(e2_len - a2_dist) < sqrteps))
       {
-        coinc_edges.push_back(vcl_make_pair(j,i));
+        coinc_edges.push_back(std::make_pair(j,i));
         break;
       }
     }
@@ -142,7 +143,7 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
     return false;
 
   vgl_vector_3d<double> norm = plane.normal();
-  norm.set(vcl_fabs(norm.x()),vcl_fabs(norm.y()),vcl_fabs(norm.z()));
+  norm.set(std::fabs(norm.x()),std::fabs(norm.y()),std::fabs(norm.z()));
 
   unsigned i1 = 0; // Default is z.
   unsigned i2 = 1;
@@ -164,13 +165,13 @@ bool vgl_triangle_3d_test_inside(const vgl_point_3d<double>& i_pnt,
   double alpha = 0.0;
 
   //compute the barycentric vectors....& ignore numerical roundoff errors
-  double u0 = (vcl_fabs(point[i1]) < sqrteps ? 0 : point[i1]) - (vcl_fabs(vert0[i1]) < sqrteps ? 0 : vert0[i1]);
-  double v0 = (vcl_fabs(point[i2]) < sqrteps ? 0 : point[i2]) - (vcl_fabs(vert0[i2]) < sqrteps ? 0 : vert0[i2]);
+  double u0 = (std::fabs(point[i1]) < sqrteps ? 0 : point[i1]) - (std::fabs(vert0[i1]) < sqrteps ? 0 : vert0[i1]);
+  double v0 = (std::fabs(point[i2]) < sqrteps ? 0 : point[i2]) - (std::fabs(vert0[i2]) < sqrteps ? 0 : vert0[i2]);
 
-  double u1 = (vcl_fabs(vert1[i1]) < sqrteps ? 0 : vert1[i1]) - (vcl_fabs(vert0[i1]) < sqrteps ? 0 : vert0[i1]);
-  double u2 = (vcl_fabs(vert2[i1]) < sqrteps ? 0 : vert2[i1]) - (vcl_fabs(vert0[i1]) < sqrteps ? 0 : vert0[i1]);
-  double v1 = (vcl_fabs(vert1[i2]) < sqrteps ? 0 : vert1[i2]) - (vcl_fabs(vert0[i2]) < sqrteps ? 0 : vert0[i2]);
-  double v2 = (vcl_fabs(vert2[i2]) < sqrteps ? 0 : vert2[i2]) - (vcl_fabs(vert0[i2]) < sqrteps ? 0 : vert0[i2]);
+  double u1 = (std::fabs(vert1[i1]) < sqrteps ? 0 : vert1[i1]) - (std::fabs(vert0[i1]) < sqrteps ? 0 : vert0[i1]);
+  double u2 = (std::fabs(vert2[i1]) < sqrteps ? 0 : vert2[i1]) - (std::fabs(vert0[i1]) < sqrteps ? 0 : vert0[i1]);
+  double v1 = (std::fabs(vert1[i2]) < sqrteps ? 0 : vert1[i2]) - (std::fabs(vert0[i2]) < sqrteps ? 0 : vert0[i2]);
+  double v2 = (std::fabs(vert2[i2]) < sqrteps ? 0 : vert2[i2]) - (std::fabs(vert0[i2]) < sqrteps ? 0 : vert0[i2]);
 
   // calculate and compare barycentric coordinates
   if (u1 == 0)
@@ -221,8 +222,8 @@ bool vgl_triangle_3d_test_inside_simple(const vgl_point_3d<double>& i_pnt,
   vgl_vector_3d<double> vec2 = normalized(i_pnt - p2);
   vgl_vector_3d<double> vec3 = normalized(i_pnt - p3);
 
-  double int_ang = vcl_acos(dot_product(vec1,vec2)) + vcl_acos(dot_product(vec2,vec3)) + vcl_acos(dot_product(vec3,vec1));
-  double test_val = vcl_fabs(int_ang-(2*pi));
+  double int_ang = std::acos(dot_product(vec1,vec2)) + std::acos(dot_product(vec2,vec3)) + std::acos(dot_product(vec3,vec1));
+  double test_val = std::fabs(int_ang-(2*pi));
 
   return test_val < sqrteps;
 }
@@ -247,10 +248,10 @@ static vgl_triangle_3d_intersection_t same_side(
   vgl_vector_3d<double> e = E - A;
   double e_dot = dot_product(e, n);
 
-  if (vcl_abs(d_dot) < vcl_sqrt(
-                                vcl_numeric_limits<double>::epsilon()) *
-      vcl_max(1.0e-100, vcl_max(vcl_sqrt(A.x()*A.x()+A.y()*A.y()+A.z()*A.z()),
-                                vcl_sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) ) ) )
+  if (std::abs(d_dot) < std::sqrt(
+                                std::numeric_limits<double>::epsilon()) *
+      std::max(1.0e-100, std::max(std::sqrt(A.x()*A.x()+A.y()*A.y()+A.z()*A.z()),
+                                std::sqrt(D.x()*D.x()+D.y()*D.y()+D.z()*D.z()) ) ) )
   {
     return Coplanar;
   }
@@ -560,7 +561,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   double p_b[3];
   bool coplanar = false;
 
-  double TRI_TRI_EPS = 1000000*vcl_numeric_limits<double>::epsilon();
+  double TRI_TRI_EPS = 1000000*std::numeric_limits<double>::epsilon();
 
   //Firstly check if each triangle intersects
   // the plane of the other
@@ -584,9 +585,9 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 #endif // 0
 
   // coplanarity robustness check
-  if (vcl_fabs(d_b[0]) < TRI_TRI_EPS) d_b[0] = 0.0;
-  if (vcl_fabs(d_b[1]) < TRI_TRI_EPS) d_b[1] = 0.0;
-  if (vcl_fabs(d_b[2]) < TRI_TRI_EPS) d_b[2] = 0.0;
+  if (std::fabs(d_b[0]) < TRI_TRI_EPS) d_b[0] = 0.0;
+  if (std::fabs(d_b[1]) < TRI_TRI_EPS) d_b[1] = 0.0;
+  if (std::fabs(d_b[2]) < TRI_TRI_EPS) d_b[2] = 0.0;
 
   d_b1d_b2 = d_b[0]*d_b[1];
   d_b1d_b3 = d_b[0]*d_b[2];
@@ -616,9 +617,9 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 #endif // 0
 
   // coplanarity robustness check
-  if (vcl_fabs(d_a[0]) < TRI_TRI_EPS) d_a[0] = 0.0;
-  if (vcl_fabs(d_a[1]) < TRI_TRI_EPS) d_a[1] = 0.0;
-  if (vcl_fabs(d_a[2]) < TRI_TRI_EPS) d_a[2] = 0.0;
+  if (std::fabs(d_a[0]) < TRI_TRI_EPS) d_a[0] = 0.0;
+  if (std::fabs(d_a[1]) < TRI_TRI_EPS) d_a[1] = 0.0;
+  if (std::fabs(d_a[2]) < TRI_TRI_EPS) d_a[2] = 0.0;
 
   d_a1d_a2 = d_a[0]*d_a[1];
   d_a1d_a3 = d_a[0]*d_a[2];
@@ -640,7 +641,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
   // largest component of int_line?
   // to get a simplified 2D projection
-  int_line.set(vcl_fabs(int_line.x()),vcl_fabs(int_line.y()),vcl_fabs(int_line.z()));
+  int_line.set(std::fabs(int_line.x()),std::fabs(int_line.y()),std::fabs(int_line.z()));
 
   if (int_line.y()>=int_line.x() && int_line.y()>=int_line.z())
   { // Max component is y
@@ -858,13 +859,13 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   unsigned smallest1 = 0;
   if (isect_a[0] > isect_a[1])
   {
-    vcl_swap(isect_a[0], isect_a[1]);
+    std::swap(isect_a[0], isect_a[1]);
     smallest1 = 1;
   } // Now isect_a[0] <= isect_a[1]
   unsigned smallest2 = 0;
   if (isect_b[0] > isect_b[1])
   {
-    vcl_swap(isect_b[0], isect_b[1]);
+    std::swap(isect_b[0], isect_b[1]);
     smallest2 = 1;
   } // Now isect_b[0] <= isect_b[1]
 
@@ -1053,7 +1054,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
   double a=0.0, b=0.0, c=0.0, x0=0.0, x1=0.0; // although variables are safely initialised further down,
   double d=0.0, e=0.0, f=0.0, y0=0.0, y1=0.0; // these "=0.0" silence the compiler
   double xx, yy, xxyy, tmp;
-  double TRI_TRI_EPS = 100000*vcl_numeric_limits<double>::epsilon();
+  double TRI_TRI_EPS = 100000*std::numeric_limits<double>::epsilon();
 
   //Firstly check if each triangle intersects
   // the plane of the other
@@ -1078,9 +1079,9 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 #endif // 0
 
   // coplanarity robustness check
-  if (vcl_fabs(d_b1) < TRI_TRI_EPS) d_b1 = 0.0;
-  if (vcl_fabs(d_b2) < TRI_TRI_EPS) d_b2 = 0.0;
-  if (vcl_fabs(d_b3) < TRI_TRI_EPS) d_b3 = 0.0;
+  if (std::fabs(d_b1) < TRI_TRI_EPS) d_b1 = 0.0;
+  if (std::fabs(d_b2) < TRI_TRI_EPS) d_b2 = 0.0;
+  if (std::fabs(d_b3) < TRI_TRI_EPS) d_b3 = 0.0;
 
   d_b1d_b2 = d_b1*d_b2;
   d_b1d_b3 = d_b1*d_b3;
@@ -1111,9 +1112,9 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 #endif // 0
 
   // coplanarity robustness check
-  if (vcl_fabs(d_a1) < TRI_TRI_EPS) d_a1 = 0.0;
-  if (vcl_fabs(d_a2) < TRI_TRI_EPS) d_a2 = 0.0;
-  if (vcl_fabs(d_a3) < TRI_TRI_EPS) d_a3 = 0.0;
+  if (std::fabs(d_a1) < TRI_TRI_EPS) d_a1 = 0.0;
+  if (std::fabs(d_a2) < TRI_TRI_EPS) d_a2 = 0.0;
+  if (std::fabs(d_a3) < TRI_TRI_EPS) d_a3 = 0.0;
 
   d_a1d_a2 = d_a1*d_a2;
   d_a1d_a3 = d_a1*d_a3;
@@ -1135,7 +1136,7 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_triangle_intersection(
 
   // largest component of int_line?
   // to get a simplified 2D projection
-  int_line.set(vcl_fabs(int_line.x()),vcl_fabs(int_line.y()),vcl_fabs(int_line.z()));
+  int_line.set(std::fabs(int_line.x()),std::fabs(int_line.y()),std::fabs(int_line.z()));
 
   if (int_line.y()>=int_line.x() && int_line.y()>=int_line.z())
   { // Max component is y
@@ -1352,9 +1353,9 @@ vgl_triangle_3d_intersection_t vgl_triangle_3d_plane_intersection(
   double p3_d = i_plane.nx()*p3.x() + i_plane.ny()*p3.y() + i_plane.nz()*p3.z() + i_plane.d();
 
   // coplanarity robustness check
-  if (vcl_fabs(p1_d) < sqrteps) p1_d = 0.0;
-  if (vcl_fabs(p2_d) < sqrteps) p2_d = 0.0;
-  if (vcl_fabs(p3_d) < sqrteps) p3_d = 0.0;
+  if (std::fabs(p1_d) < sqrteps) p1_d = 0.0;
+  if (std::fabs(p2_d) < sqrteps) p2_d = 0.0;
+  if (std::fabs(p3_d) < sqrteps) p3_d = 0.0;
 
   vgl_line_3d_2_points<double> edge;
 

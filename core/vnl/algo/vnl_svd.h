@@ -22,7 +22,8 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Holds the singular value decomposition of a vnl_matrix.
 //
@@ -202,6 +203,6 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
 }
 
 VCL_TEMPLATE_EXPORT template <class T>
-vcl_ostream& operator<<(vcl_ostream&, vnl_svd<T> const& svd);
+std::ostream& operator<<(std::ostream&, vnl_svd<T> const& svd);
 
 #endif // vnl_svd_h_

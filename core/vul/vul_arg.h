@@ -16,10 +16,11 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_list.h>
-#include <vcl_iosfwd.h>
+#include <vector>
+#include <string>
+#include <list>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vxl_config.h>
 #include <vul/vul_export.h>
 
@@ -27,7 +28,7 @@
 class vul_arg_info_list;
 template <class T> class vul_arg;
 template <class T> void settype     (vul_arg<T> &);
-template <class T> void print_value (vcl_ostream &, vul_arg<T> const &);
+template <class T> void print_value (std::ostream &, vul_arg<T> const &);
 template <class T> int  parse       (vul_arg<T>*, char**);
 
 //: This is the base class for the templated vul_arg<T>s
@@ -58,7 +59,7 @@ class vul_arg_base
   //: Returns true if arg was set on the command line.
   bool set() const;
 
-  virtual vcl_ostream& print_value(vcl_ostream&) = 0;
+  virtual std::ostream& print_value(std::ostream&) = 0;
 
  public:   // Avoid errors on some compilers that don't follow
            // protected: directive correctly with type_
@@ -71,9 +72,9 @@ class vul_arg_base
   //: if true, this flag must be set on command line.
   bool required_;
   //: Option flag including "-" or "--".
-  vcl_string option_;
+  std::string option_;
   //: Description of argument.
-  vcl_string help_;
+  std::string help_;
 
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
                char const*helpstring, bool required= false);
@@ -195,7 +196,7 @@ class vul_arg : public vul_arg_base
   int parse(char ** argv) { return ::parse(this, argv); }
 
   //: print
-  vcl_ostream& print_value(vcl_ostream &s) {
+  std::ostream& print_value(std::ostream &s) {
     ::print_value(s, *this);
     return s; // << flush
   }
@@ -233,10 +234,10 @@ class vul_arg_info_list
   void set_help_description(char const* str) { description_ = str; }
 
  public://protected:
-  vcl_vector<vul_arg_base*> args_;
-  vcl_string help_;
-  vcl_string description_;
-  vcl_string command_precis_;
+  std::vector<vul_arg_base*> args_;
+  std::string help_;
+  std::string description_;
+  std::string command_precis_;
   bool verbose_;
   autonomy autonomy_;
 

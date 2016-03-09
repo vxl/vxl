@@ -17,7 +17,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/algo/vpgl_bundle_adjust_lsqr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 
 //: Static functions for bundle adjustment
@@ -48,7 +49,7 @@ class vpgl_bundle_adjust
   //: Return the number of iterations
   int num_iterations() const { return num_iterations_; }
   //: Return the weights a the end of the optimization
-  const vcl_vector<double>& final_weights() const { return weights_; }
+  const std::vector<double>& final_weights() const { return weights_; }
 
   //: Return the raw camera parameters
   const vnl_vector<double>& cam_params() const { return a_; }
@@ -60,8 +61,8 @@ class vpgl_bundle_adjust
   //  Find the mean axis between cameras and points, mirror the points about
   //  a plane perpendicular to this axis, and rotate the cameras 180 degrees
   //  around this axis
-  void depth_reverse(vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                     vcl_vector<vgl_point_3d<double> >& world_points);
+  void depth_reverse(std::vector<vpgl_perspective_camera<double> >& cameras,
+                     std::vector<vgl_point_3d<double> >& world_points);
 
   //: Bundle Adjust
   //
@@ -81,29 +82,29 @@ class vpgl_bundle_adjust
   //       img_points.push_back( all_image_points[c*num_world_points+dp] );
   //   }
   // }
-  bool optimize(vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                vcl_vector<vgl_point_3d<double> >& world_points,
-                const vcl_vector<vgl_point_2d<double> >& image_points,
-                const vcl_vector<vcl_vector<bool> >& mask);
+  bool optimize(std::vector<vpgl_perspective_camera<double> >& cameras,
+                std::vector<vgl_point_3d<double> >& world_points,
+                const std::vector<vgl_point_2d<double> >& image_points,
+                const std::vector<std::vector<bool> >& mask);
 
   //: Write cameras and points to a file in VRML 2.0 for debugging
-  static void write_vrml(const vcl_string& filename,
-                         const vcl_vector<vpgl_perspective_camera<double> >& cameras,
-                         const vcl_vector<vgl_point_3d<double> >& world_points);
+  static void write_vrml(const std::string& filename,
+                         const std::vector<vpgl_perspective_camera<double> >& cameras,
+                         const std::vector<vgl_point_3d<double> >& world_points);
 
  private:
   //: normalize image points to be mean centered with scale sqrt(2)
   // \return parameters such that original point are recovered as (ns*x+nx, ns*y+ny)
-  void normalize_points(vcl_vector<vgl_point_2d<double> >& image_points,
+  void normalize_points(std::vector<vgl_point_2d<double> >& image_points,
                         double& nx, double& ny, double& ns);
 
   // reflect the points about a plane
   void reflect_points(const vgl_plane_3d<double>& plane,
-                      vcl_vector<vgl_point_3d<double> >& points);
+                      std::vector<vgl_point_3d<double> >& points);
 
   // rotation the cameras 180 degrees around an axis
   void rotate_cameras(const vgl_vector_3d<double>& axis,
-                      vcl_vector<vpgl_perspective_camera<double> >& cameras);
+                      std::vector<vpgl_perspective_camera<double> >& cameras);
 
   //: The bundle adjustment error function
   vpgl_bundle_adjust_lsqr* ba_func_;
@@ -114,7 +115,7 @@ class vpgl_bundle_adjust
   //: The last global parameters
   vnl_vector<double> c_;
   //: The last estimated weights
-  vcl_vector<double> weights_;
+  std::vector<double> weights_;
 
   bool use_m_estimator_;
   double m_estimator_scale_;

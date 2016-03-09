@@ -14,7 +14,8 @@
 
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 
 //: The base class for all probability distributions.
 // There is a distinct polymorphic class hierarchy for each choice of
@@ -61,7 +62,7 @@ class vpdl_distribution
   //: Evaluate the log probability density at a point
   virtual T log_prob_density(const vector& pt) const
   {
-    return vcl_log(prob_density(pt));
+    return std::log(prob_density(pt));
   };
 
   //: Compute the gradient of the unnormalized density at a point

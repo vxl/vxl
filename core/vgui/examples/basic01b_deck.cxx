@@ -2,7 +2,8 @@
 // Images are loaded from the two filenames
 // on the command line.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vnl/vnl_math.h>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
@@ -15,7 +16,7 @@ int main(int argc, char **argv)
   vgui::init(argc, argv);
   if (argc <= 2)
   {
-    vcl_cerr << "Please give two image filenames on the command line\n";
+    std::cerr << "Please give two image filenames on the command line\n";
     return 0;
   }
   // Load two images(given in the first command line param)

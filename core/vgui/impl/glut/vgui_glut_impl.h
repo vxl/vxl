@@ -16,7 +16,7 @@ struct vgui_glut_impl : vgui_toolkit
   ~vgui_glut_impl();
 
   void init(int &, char **);
-  vcl_string name() const;
+  std::string name() const;
 
   vgui_window* produce_window(int width, int height,
                               vgui_menu const & menubar,

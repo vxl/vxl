@@ -1,7 +1,8 @@
 // Some tests for vgl_frustum_3d
 // J.L. Mundy December. 1, 2013
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_frustum_3d.h>
 #include <vgl/vgl_ray_3d.h>
@@ -25,11 +26,11 @@ static void test_all()
   vgl_ray_3d<double> r3(apex, dir3);
   double d0 = 5.0, d1 = 10.0;
   vgl_vector_3d<double> norm(0.0, 0.0, 1.0);
-  vcl_vector<vgl_ray_3d<double> > rays;
+  std::vector<vgl_ray_3d<double> > rays;
   rays.push_back(r0);  rays.push_back(r1);
   rays.push_back(r2);  rays.push_back(r3);
   vgl_frustum_3d<double> f(rays, norm, d0, d1);
-  vcl_cout << f;
+  std::cout << f;
   bool in = f.contains(0.0, 0.0, 2.5);
   bool not_in = !f.contains(10.0, 10.000001, 0.0);
   TEST("Frustum contains a point", in&&not_in, true);
@@ -42,12 +43,12 @@ static void test_all()
   bgood = bgood && (cent == vgl_point_3d<double>(0.0, 0.0, 2.5));
   TEST("Frustum bounding box and centroid", bgood,  true);
   bool conv = f.is_convex();
-  vcl_cout << (conv ? "Convex" : "Nonconvex") << vcl_endl;
+  std::cout << (conv ? "Convex" : "Nonconvex") << std::endl;
 }
 
 void test_frustum_3d()
 {
-  vcl_cout << "*****************************\n"
+  std::cout << "*****************************\n"
            << " Testing vgl_frustum_3d\n"
            << "*****************************\n\n";
 

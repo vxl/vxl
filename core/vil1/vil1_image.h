@@ -9,7 +9,8 @@
 // \brief A reference-counted image object.
 // \author fsm
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vil1/vil1_image_impl.h>
 
 //: A smart pointer to an actual image.
@@ -86,7 +87,7 @@ class vil1_image
   int get_size_bytes() const;
 
   //: Print a 1-line summary of contents
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 
   //------------ smart-pointer logic --------
 
@@ -156,7 +157,7 @@ class vil1_image
 };
 
 //: Print a 1-line summary of contents
-inline vcl_ostream& operator<<(vcl_ostream& s, vil1_image const& i)
+inline std::ostream& operator<<(std::ostream& s, vil1_image const& i)
 {
   return i.print(s);
 }

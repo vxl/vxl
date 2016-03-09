@@ -16,7 +16,8 @@
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vpdl/vpdt/vpdt_access.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vcl_cassert.h>
 
 
@@ -215,7 +216,7 @@ class vpdt_eigen_sym_matrix
     T val = T(0);
     for (unsigned int i = 0; i < dim; ++i){
       if (eigen_val_[i] <= T(0))
-        return vcl_numeric_limits<T>::infinity();
+        return std::numeric_limits<T>::infinity();
       T tmp = T(0);
       for (unsigned int j = 0; j < dim; ++j){
         tmp += eigen_vec_[j][i] * x[j];

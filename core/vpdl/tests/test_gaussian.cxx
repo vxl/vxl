@@ -1,14 +1,15 @@
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_gaussian.h>
-#include <vcl_string.h>
-#include <vcl_limits.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vnl/vnl_math.h> // for twopi
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_determinant.h>
-#include <vcl_iostream.h>
+#include <iostream>
 
 template <class T>
-void test_gaussian_type(T epsilon, const vcl_string& type_name)
+void test_gaussian_type(T epsilon, const std::string& type_name)
 {
   // test dimension, zero variance
   {
@@ -67,13 +68,13 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
     vnl_vector_fixed<T,3> test_pt(T(1), T(1), T(1));
     TEST(("zero var mahalanobis dist <"+type_name+"> fixed").c_str(),
          gauss3.sqr_mahal_dist(test_pt),
-         vcl_numeric_limits<T>::infinity());
+         std::numeric_limits<T>::infinity());
     TEST(("zero var mahalanobis dist <"+type_name+"> scalar").c_str(),
          gauss1.sqr_mahal_dist(test_pt[0]),
-         vcl_numeric_limits<T>::infinity());
+         std::numeric_limits<T>::infinity());
     TEST(("zero var mahalanobis dist <"+type_name+"> variable").c_str(),
          gauss.sqr_mahal_dist(test_pt.as_ref()),
-         vcl_numeric_limits<T>::infinity());
+         std::numeric_limits<T>::infinity());
 
     // test zero variance probability
     TEST(("zero var probability density<"+type_name+"> fixed").c_str(),
@@ -86,13 +87,13 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
     // test zero variance log probability
     TEST(("zero var log probability density<"+type_name+"> fixed").c_str(),
          gauss3.log_prob_density(test_pt),
-         -vcl_numeric_limits<T>::infinity());
+         -std::numeric_limits<T>::infinity());
     TEST(("zero var log probability density<"+type_name+"> scalar").c_str(),
          gauss1.log_prob_density(test_pt[0]),
-         -vcl_numeric_limits<T>::infinity());
+         -std::numeric_limits<T>::infinity());
     TEST(("zero var log probability density<"+type_name+"> variable").c_str(),
          gauss.log_prob_density(test_pt.as_ref()),
-         -vcl_numeric_limits<T>::infinity());
+         -std::numeric_limits<T>::infinity());
   }
 
 
@@ -167,11 +168,11 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
               gauss.sqr_mahal_dist(test_pt.as_ref()), sqr_mahal_dist, epsilon);
 
     T two_pi = static_cast<T>(vnl_math::twopi);
-    T prob3 = static_cast<T>(1.0/vcl_sqrt(two_pi*two_pi*two_pi
+    T prob3 = static_cast<T>(1.0/std::sqrt(two_pi*two_pi*two_pi
                                           *vnl_determinant(covar))
-                             * vcl_exp(-sqr_mahal_dist/2) );
-    T prob1 = static_cast<T>(1.0/vcl_sqrt(two_pi*covar(0,0))
-                             * vcl_exp(-d[0]*d[0]/(2*covar(0,0))) );
+                             * std::exp(-sqr_mahal_dist/2) );
+    T prob1 = static_cast<T>(1.0/std::sqrt(two_pi*covar(0,0))
+                             * std::exp(-d[0]*d[0]/(2*covar(0,0))) );
 
     // test probability density virtual functions
     TEST_NEAR(("probability density <"+type_name+"> fixed").c_str(),
@@ -183,15 +184,15 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
 
     // test log probability density virtual functions
     TEST_NEAR(("probability density <"+type_name+"> fixed").c_str(),
-              dist3.log_prob_density(test_pt), vcl_log(prob3), epsilon);
+              dist3.log_prob_density(test_pt), std::log(prob3), epsilon);
     TEST_NEAR(("probability density <"+type_name+"> scalar").c_str(),
-              dist1.log_prob_density(test_pt[0]), vcl_log(prob1), epsilon);
+              dist1.log_prob_density(test_pt[0]), std::log(prob1), epsilon);
     TEST_NEAR(("probability density <"+type_name+"> variable").c_str(),
-              dist.log_prob_density(test_pt.as_ref()), vcl_log(prob3), epsilon);
+              dist.log_prob_density(test_pt.as_ref()), std::log(prob3), epsilon);
 
     // test gradient virtual functions against numerical difference
     vnl_vector_fixed<T,3> g3;
-    T dp = vcl_sqrt(epsilon);
+    T dp = std::sqrt(epsilon);
     T den = dist3.density(test_pt);
     T den_x = dist3.density(test_pt+vnl_vector_fixed<T,3>(dp,0,0));
     T den_y = dist3.density(test_pt+vnl_vector_fixed<T,3>(0,dp,0));
@@ -221,9 +222,9 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
     // test cumulative probability
     vnl_vector_fixed<T,3> test1(T(3), T(3), T(3));
     vnl_vector_fixed<T,3> cum_test1;
-    cum_test1[0] = (1+vnl_erf((test1[0]-mean[0])/vcl_sqrt(2*var[0])))/2;
-    cum_test1[1] = (1+vnl_erf((test1[1]-mean[1])/vcl_sqrt(2*var[1])))/2;
-    cum_test1[2] = (1+vnl_erf((test1[2]-mean[2])/vcl_sqrt(2*var[2])))/2;
+    cum_test1[0] = (1+vnl_erf((test1[0]-mean[0])/std::sqrt(2*var[0])))/2;
+    cum_test1[1] = (1+vnl_erf((test1[1]-mean[1])/std::sqrt(2*var[1])))/2;
+    cum_test1[2] = (1+vnl_erf((test1[2]-mean[2])/std::sqrt(2*var[2])))/2;
     T joint_cum_test1 = cum_test1[0] * cum_test1[1] * cum_test1[2];
     TEST(("cumulative probability 1 <"+type_name+"> fixed").c_str(),
          gauss3.cumulative_prob(mean), T(0.125));
@@ -241,9 +242,9 @@ void test_gaussian_type(T epsilon, const vcl_string& type_name)
     // test box probability
     vnl_vector_fixed<T,3> test2(T(-1), T(1), T(0));
     vnl_vector_fixed<T,3> cum_test2;
-    cum_test2[0] = (1+vnl_erf((test2[0]-mean[0])/vcl_sqrt(2*var[0])))/2;
-    cum_test2[1] = (1+vnl_erf((test2[1]-mean[1])/vcl_sqrt(2*var[1])))/2;
-    cum_test2[2] = (1+vnl_erf((test2[2]-mean[2])/vcl_sqrt(2*var[2])))/2;
+    cum_test2[0] = (1+vnl_erf((test2[0]-mean[0])/std::sqrt(2*var[0])))/2;
+    cum_test2[1] = (1+vnl_erf((test2[1]-mean[1])/std::sqrt(2*var[1])))/2;
+    cum_test2[2] = (1+vnl_erf((test2[2]-mean[2])/std::sqrt(2*var[2])))/2;
     T box_test = (cum_test1[0]-cum_test2[0])
     * (cum_test1[1]-cum_test2[1])
     * (cum_test1[2]-cum_test2[2]);

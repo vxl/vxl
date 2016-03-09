@@ -14,7 +14,7 @@
 #include "vgui_gtk2_window.h"
 #include "vgui_gtk2_dialog_impl.h"
 #ifdef DEBUG
-# include <vcl_iostream.h>
+# include <std::iostream.h>
 #endif
 
 vgui_gtk2* vgui_gtk2::instance()
@@ -26,7 +26,7 @@ vgui_gtk2* vgui_gtk2::instance()
 //--------------------------------------------------------------------------------
 //: Pure virtual function from vgui (this must be implemented).
 //  Returns the name of the GUI toolkit.
-vcl_string vgui_gtk2::name() const { return "gtk2"; }
+std::string vgui_gtk2::name() const { return "gtk2"; }
 
 
 //--------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ vcl_string vgui_gtk2::name() const { return "gtk2"; }
 void vgui_gtk2::init(int &argc, char **argv)
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_gtk2::init()\n";
+  std::cerr << "vgui_gtk2::init()\n";
 #endif
   gtk_init(&argc, &argv);
 }
@@ -45,7 +45,7 @@ void vgui_gtk2::init(int &argc, char **argv)
 void vgui_gtk2::run()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_gtk2::run()\n";
+  std::cerr << "vgui_gtk2::run()\n";
 #endif
   gtk_main();
 }
@@ -72,7 +72,7 @@ void vgui_gtk2::flush()
 void vgui_gtk2::quit()
 {
 #ifdef DEBUG
-  vcl_cerr << __FILE__ " : terminating GTK+ event loop\n";
+  std::cerr << __FILE__ " : terminating GTK+ event loop\n";
 #endif
   gtk_main_quit(); // capes@robots - causes the gtk event loop to return
 }

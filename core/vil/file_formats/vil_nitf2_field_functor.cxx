@@ -17,11 +17,11 @@ operator() (vil_nitf2_field_sequence* record,
   }
   vil_nitf2_field* field = record->get_field(tag);
   if (field != VXL_NULLPTR) {
-    vcl_string value;
+    std::string value;
     bool is_string_value = record->get_value(tag, indexes, value, true);
     if (is_string_value) {
-      // a blank vcl_string field actually yields a valid field value (an empty
-      // vcl_string) so test the value
+      // a blank std::string field actually yields a valid field value (an empty
+      // std::string) so test the value
       result = !value.empty();
     } else {
       // other types of blank fields do not yield a field; since it

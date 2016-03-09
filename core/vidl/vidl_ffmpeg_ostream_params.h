@@ -16,7 +16,8 @@
 //   Matt Leotta   3 Jan 2006   Adapted from code by Amitha Perera
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 //: A parameters struct for vidl_ffmpeg_ostream
 //
@@ -113,7 +114,7 @@ struct vidl_ffmpeg_ostream_params
   int video_qdiff_;
   float video_qblur_;
   float video_qcomp_;
-  vcl_string video_rc_eq_;
+  std::string video_rc_eq_;
   int debug_;
   int debug_mv_;
   int video_rc_buffer_size_;

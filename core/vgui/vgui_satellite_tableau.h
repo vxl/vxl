@@ -105,18 +105,18 @@ struct vgui_satellite_tableau_t : public vgui_tableau
   data    d;
 
   //: Name.
-  vcl_string n;
+  std::string n;
 
   //: Constructor - don't use this, use vgui_satellite_tableau_t_new.
   //  There is no vgui_satellite_tableau_t_sptr for this tableau.
   vgui_satellite_tableau_t(object *p_, method m_, data const &d_,
-                           vcl_string const &n_ = "")
+                           std::string const &n_ = "")
     : p(p_), m(m_), d(d_), n(n_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e, d); }
 
-  vcl_string type_name() const
-  { return vcl_string("vgui_satellite_tableau_t[") + n + vcl_string("]"); }
+  std::string type_name() const
+  { return std::string("vgui_satellite_tableau_t[") + n + std::string("]"); }
 
   vgui_menu a_menu;
   void add_popup(vgui_menu &mnu) { mnu.include(a_menu); }
@@ -141,17 +141,17 @@ struct vgui_satellite_tableau : public vgui_tableau
   method  m;
 
   //: Name.
-  vcl_string n;
+  std::string n;
 
   //: Constructor - don't use this, use vgui_satellite_tableau_new.
   //  There is no vgui_satellite_tableau_sptr for this tableau.
-  vgui_satellite_tableau(object *p_, method m_, vcl_string const &n_ = "")
+  vgui_satellite_tableau(object *p_, method m_, std::string const &n_ = "")
     : p(p_), m(m_), n(n_) { }
 
   bool handle(vgui_event const &e) { return (p && m) && (p->*m)(e); }
 
-  vcl_string type_name() const
-  { return vcl_string("vgui_satellite_tableau[") + n + vcl_string("]"); }
+  std::string type_name() const
+  { return std::string("vgui_satellite_tableau[") + n + std::string("]"); }
 
  protected:
   ~vgui_satellite_tableau() { p = 0; m = 0; }
@@ -167,7 +167,7 @@ struct vgui_satellite_tableau_t_new : public vgui_tableau_sptr_t<vgui_satellite_
   typedef vgui_tableau_sptr_t<impl > base;
   typedef typename impl::method method;
   vgui_satellite_tableau_t_new(object *p, method m, data const &d,
-                               vcl_string const&n=""):base(new impl(p,m,d,n)) {}
+                               std::string const&n=""):base(new impl(p,m,d,n)) {}
 };
 
 //----------------------------------------------------------------------------
@@ -178,7 +178,7 @@ struct vgui_satellite_tableau_new : public vgui_tableau_sptr_t<vgui_satellite_ta
   typedef vgui_satellite_tableau<object> impl;
   typedef vgui_tableau_sptr_t<impl > base;
   typedef typename impl::method method;
-  vgui_satellite_tableau_new(object *p, method m, vcl_string const &n = "")
+  vgui_satellite_tableau_new(object *p, method m, std::string const &n = "")
     : base(new impl(p, m, n)) { }
 };
 

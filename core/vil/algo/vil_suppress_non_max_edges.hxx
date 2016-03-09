@@ -9,7 +9,8 @@
 #include "vil_suppress_non_max_edges.h"
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_fill.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vcl_cassert.h>
 
 //: Given gradient images, computes magnitude image containing maximal edges
@@ -43,9 +44,9 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
   vil_fill_row(grad_mag,nj-1,destT(0));
   vil_fill_row(grad_mag,nj-2,destT(0));
 
-  const vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
-  const vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
-  const vcl_ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
+  const std::ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
+  const std::ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
+  const std::ptrdiff_t gm_istep = grad_mag.istep(), gm_jstep = grad_mag.jstep();
 
   const srcT * gi_data = &grad_i(0,0);
   const srcT * gj_data = &grad_j(0,0);
@@ -64,7 +65,7 @@ void vil_suppress_non_max_edges(const vil_image_view<srcT>& grad_i,
     for (unsigned i=2; i<=ihi; ++i, pgi+=gi_istep, pgj+=gj_istep,
                                     pgm+=gm_istep)
     {
-      double gmag=vcl_sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
+      double gmag=std::sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
       if (gmag<grad_mag_threshold) *pgm=0;
       else
       {
@@ -126,8 +127,8 @@ namespace {
 //  \code
 //    double theta = grad_mag_orient_offset(i,j,1);
 //    double offset = grad_mag_orient_offset(i,j,2);
-//    double x = i + vcl_cos(theta)*offset;
-//    double y = j + vcl_sin(theta)*offset;
+//    double x = i + std::cos(theta)*offset;
+//    double y = j + std::sin(theta)*offset;
 //  \endcode
 //
 //  Note: Currently assumes single plane only.
@@ -158,10 +159,10 @@ void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i,
   vil_fill_row(grad_moo,nj-1,destT(0));
   vil_fill_row(grad_moo,nj-2,destT(0));
 
-  const vcl_ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
-  const vcl_ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
-  const vcl_ptrdiff_t gm_istep = grad_moo.istep(), gm_jstep = grad_moo.jstep();
-  const vcl_ptrdiff_t gm_pstep = grad_moo.planestep();
+  const std::ptrdiff_t gi_istep = grad_i.istep(), gi_jstep = grad_i.jstep();
+  const std::ptrdiff_t gj_istep = grad_j.istep(), gj_jstep = grad_j.jstep();
+  const std::ptrdiff_t gm_istep = grad_moo.istep(), gm_jstep = grad_moo.jstep();
+  const std::ptrdiff_t gm_pstep = grad_moo.planestep();
 
   const srcT * gi_data = &grad_i(0,0);
   const srcT * gj_data = &grad_j(0,0);
@@ -180,7 +181,7 @@ void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i,
     for (unsigned i=2; i<=ihi; ++i, pgi+=gi_istep, pgj+=gj_istep,
                                     pgm+=gm_istep)
     {
-      double gmag=vcl_sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
+      double gmag=std::sqrt(double(pgi[0]*pgi[0] + pgj[0]*pgj[0]));
       if (gmag<grad_mag_threshold){
         *pgm=0;
         *(pgm+gm_pstep)=0;
@@ -216,7 +217,7 @@ void vil_suppress_non_max_edges_subpixel(const vil_image_view<srcT>& grad_i,
             double peak;
             double offset = interpolate_parabola(g2mag, gmag, g1mag, peak);
             *pgm = destT(peak);
-            *(pgm+gm_pstep) = destT(vcl_atan2(dy,dx));
+            *(pgm+gm_pstep) = destT(std::atan2(dy,dx));
             *(pgm+2*gm_pstep) = destT(offset);
           }
         }

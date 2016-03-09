@@ -5,11 +5,12 @@
 // \file
 
 #include "vgl_line_2d_regression.h"
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vcl_cassert.h>
 
 //: Constructor
@@ -83,7 +84,7 @@ bool vgl_line_2d_regression<T>::fit_constrained(T x, T y)
 {
   if (npts_<1)
   {
-    vcl_cout << "In vgl_line_2d_regression<T>::fit_constrained() - less than 1 point\n";
+    std::cout << "In vgl_line_2d_regression<T>::fit_constrained() - less than 1 point\n";
     return false;
   }
   vnl_matrix_fixed<T, 2, 2> M;
@@ -105,7 +106,7 @@ double vgl_line_2d_regression<T>::get_rms_error(const T a, const T b, const T c)
     return 0;
   double t0 = Sxx_*a*a + 2*Sxy_*a*b + Syy_*b*b;
   double t1 = 2*Sx_*a*c + 2*Sy_*b*c + npts_*c*c;
-  double rms = vcl_sqrt(vcl_fabs(t0+t1)/((a*a+b*b)*npts_));
+  double rms = std::sqrt(std::fabs(t0+t1)/((a*a+b*b)*npts_));
   return rms;
 }
 
@@ -148,7 +149,7 @@ double vgl_line_2d_regression<T>::get_rms_error_est(vgl_point_2d<T> const&  p,
   double ds = d*d;
   if (increment)
     squared_error_ = squared_error_ + ds;
-  return vcl_sqrt(squared_error_/(npts_+1));
+  return std::sqrt(squared_error_/(npts_+1));
 }
 
 //----------------------------------------------------------------------------

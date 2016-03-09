@@ -5,7 +5,8 @@
 // \author Tim Cootes
 // \date   23 Feb 2005
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_abs_shuffle_distance.h>
 #include <vil/vil_crop.h>
@@ -19,7 +20,7 @@ static void asd_fill_image(vil_image_view<vxl_byte>& image)
 
 static void test_algo_abs_shuffle_distance()
 {
-  vcl_cout << "**********************************\n"
+  std::cout << "**********************************\n"
            << " Testing vil_abs_shuffle_distance\n"
            << "**********************************\n";
 
@@ -28,7 +29,7 @@ static void test_algo_abs_shuffle_distance()
 
   vil_structuring_element se;
   se.set_to_disk(1.5);
-  vcl_cout<<"Structuring element: "<<se<<vcl_endl;
+  std::cout<<"Structuring element: "<<se<<std::endl;
 
   asd_fill_image(image0);
 
@@ -46,9 +47,9 @@ static void test_algo_abs_shuffle_distance()
   TEST_NEAR("Shuffle dist to self, 2 pixel displacement",
             vil_abs_shuffle_distance(sub_im1,sub_im3,se,false),1.0,1e-6);
 
-  vcl_cout<<"Using larger radius: "<<vcl_endl;
+  std::cout<<"Using larger radius: "<<std::endl;
   se.set_to_disk(2.5);
-  vcl_cout<<"Structuring element: "<<se<<vcl_endl;
+  std::cout<<"Structuring element: "<<se<<std::endl;
   TEST_NEAR("Shuffle dist to self, 2 pixel displacement",
             vil_abs_shuffle_distance(sub_im1,sub_im3,se,false),0.0,1e-6);
 
@@ -57,11 +58,11 @@ static void test_algo_abs_shuffle_distance()
   image0.set_size(128,128);
   asd_fill_image(image0);
 
-  vcl_cout<<"Start."<<vcl_endl;
+  std::cout<<"Start."<<std::endl;
   double sum=0.0;
   for (unsigned i=0;i<100;++i)
     sum+=vil_abs_shuffle_distance(image0,image0,se,false);
-  vcl_cout<<"Stop."<<vcl_endl;
+  std::cout<<"Stop."<<std::endl;
 #endif // 0
 }
 

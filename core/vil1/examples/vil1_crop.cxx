@@ -1,8 +1,9 @@
 // This is core/vil1/examples/vil1_crop.cxx
 // Example: image cropping
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h> // for atoi()
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cstdlib> // for atoi()
 
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_load.h>
@@ -11,15 +12,15 @@
 int main(int argc, char ** argv)
 {
   if (argc != 7) {
-    vcl_cerr << "usage: vil1_crop in out x0 y0 width height\n";
+    std::cerr << "usage: vil1_crop in out x0 y0 width height\n";
     return -1;
   }
   char const* input_filename = argv[1];
   char const* output_filename = argv[2];
-  int x0 = vcl_atoi(argv[3]);
-  int y0 = vcl_atoi(argv[4]);
-  int w = vcl_atoi(argv[5]);
-  int h = vcl_atoi(argv[6]);
+  int x0 = std::atoi(argv[3]);
+  int y0 = std::atoi(argv[4]);
+  int w = std::atoi(argv[5]);
+  int h = std::atoi(argv[6]);
 
   vil1_image in = vil1_load(input_filename);
 

@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -22,7 +23,7 @@ static void test_ortho_procrustes()
   vnl_matrix_fixed<double, 3, 3> rrr = rr.as_matrix();
   trans[0]=10.0;   trans[1]=20.0; trans[2] = 30;
 
-  vcl_cout << "The ideal rotation\n" << rr << '\n'
+  std::cout << "The ideal rotation\n" << rr << '\n'
            << "The ideal translation\n" << trans << '\n';
 
   for (unsigned c = 0; c<5; ++c)
@@ -32,7 +33,7 @@ static void test_ortho_procrustes()
       v[r]=Y[r][c];
 
     vnl_vector_fixed<double, 3> trans_v = rrr*v + trans;
-    vcl_cout << "|Y|(" << c << ")=" << v.magnitude() << "  |X|(" << c
+    std::cout << "|Y|(" << c << ")=" << v.magnitude() << "  |X|(" << c
              << ")=" << trans_v.magnitude() << '\n';
 
     for (unsigned r = 0; r<3; ++r)
@@ -43,9 +44,9 @@ static void test_ortho_procrustes()
   double s = op.s();
   double error = op.residual_mean_sq_error();
   bool ok = op.compute_ok();
-  if(ok) vcl_cout << "Compute succeeded \n";
-  else vcl_cout << "Compute failed\n";
-  vcl_cout << "Procrustes rotation\n" << R << '\n'
+  if(ok) std::cout << "Compute succeeded \n";
+  else std::cout << "Compute failed\n";
+  std::cout << "Procrustes rotation\n" << R << '\n'
            << "Procrustes translation\n" << op.t() << '\n'
            << "scale = " << s << '\n'
            << "error = " << error << '\n';
@@ -60,9 +61,9 @@ static void test_ortho_procrustes()
   double s1 = op1.s();
   double error1 = op1.residual_mean_sq_error();
   ok = op.compute_ok();
-  if(ok) vcl_cout << "Compute with error succeeded \n";
-  else vcl_cout << "Compute failed\n";
-  vcl_cout << "Procrustes rotation\n" << R1 << '\n'
+  if(ok) std::cout << "Compute with error succeeded \n";
+  else std::cout << "Compute failed\n";
+  std::cout << "Procrustes rotation\n" << R1 << '\n'
            << "Procrustes angle\n" << R1.angle() << '\n'
            << "Procrustes axis\n" << R1.axis() << '\n'
            << "Procrustes translation\n" << op1.t() << '\n'

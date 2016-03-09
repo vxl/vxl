@@ -3,7 +3,8 @@
 // \brief Example of generating functions to manipulate views.
 // \author Tim Cootes - Manchester
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>
@@ -29,12 +30,12 @@ int main()
     for (unsigned i=0;i<ni;++i)
       image(i,j) = vxl_byte(i+10*j);
 
-  vcl_cout<<"Original image:\n";
-  vil_print_all(vcl_cout,image);
+  std::cout<<"Original image:\n";
+  vil_print_all(std::cout,image);
 
-  vcl_cout<<"\nCreate transposed view of plane\n";
+  std::cout<<"\nCreate transposed view of plane\n";
   vil_image_view<vxl_byte> transpose = transpose_view(image);
-  vil_print_all(vcl_cout,transpose);
+  vil_print_all(std::cout,transpose);
 
   return 0;
 }

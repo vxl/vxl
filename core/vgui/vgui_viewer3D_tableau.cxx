@@ -15,8 +15,9 @@
 
 #include "vgui_viewer3D_tableau.h"
 
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cmath>
+#include <iostream>
 #include <vbl/vbl_bool_ostream.h>
 
 #include <vgui/vgui_gl.h>
@@ -77,7 +78,7 @@ vgui_viewer3D_tableau::~vgui_viewer3D_tableau()
 {
 }
 
-vcl_string vgui_viewer3D_tableau::type_name() const {return "vgui_viewer3D_tableau";}
+std::string vgui_viewer3D_tableau::type_name() const {return "vgui_viewer3D_tableau";}
 
 static void draw_headlight()
 {
@@ -146,7 +147,7 @@ void vgui_viewer3D_tableau::setup_gl_matrices()
 void vgui_viewer3D_tableau::draw_before_child()
 {
 #ifdef DEBUG
-  vcl_cerr << "vgui_viewer3D_tableau::draw_before_child\n";
+  std::cerr << "vgui_viewer3D_tableau::draw_before_child\n";
 #endif
 
   // Setup OpenGL for 3D
@@ -217,7 +218,7 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
     if (spindata->viewer == this)
     {
 #ifdef DEBUG
-      vcl_cerr << "spinning\n"
+      std::cerr << "spinning\n"
                << "spin_data->delta_r = "
                << spindata->delta_r[0] << ' '
                << spindata->delta_r[1] << ' '
@@ -247,7 +248,7 @@ bool vgui_viewer3D_tableau::handle(const vgui_event& e)
 
   if (e.type == vgui_DRAW) {
 #ifdef DEBUG
-    vcl_cerr << "vgui_viewer3D_tableau vgui_DRAW\n";
+    std::cerr << "vgui_viewer3D_tableau vgui_DRAW\n";
 #endif
     draw_before_child();
 
@@ -282,7 +283,7 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
   if (c_mouse_rotate(button, modifier))
   {
 #ifdef DEBUG
-    vcl_cerr << "vgui_viewer3D_tableau::mouse_drag: left\n";
+    std::cerr << "vgui_viewer3D_tableau::mouse_drag: left\n";
 #endif
 
     GLdouble vp[4];
@@ -309,7 +310,7 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
   if (c_mouse_zoom(button, modifier))
   {
 #ifdef DEBUG
-    vcl_cerr << "vgui_viewer3D_tableau::mouse_drag: middle\n";
+    std::cerr << "vgui_viewer3D_tableau::mouse_drag: middle\n";
 #endif
 
     GLdouble vp[4];
@@ -320,18 +321,18 @@ bool vgui_viewer3D_tableau::mouse_drag(int x, int y, vgui_button button, vgui_mo
     double dx = (beginx - x) / width;
     double dy = (beginy - y) / height;
 
-    // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
-    // the first version is ambiguous when overloads exist for vcl_pow
-    double scalefactor = vcl_pow(5.0, dy);
+    // changed to std::pow(5,dy) to std::pow(5.0,dy)
+    // the first version is ambiguous when overloads exist for std::pow
+    double scalefactor = std::pow(5.0, dy);
     if (!lock_dolly)
       this->token.scale = static_cast<float>(lastpos.scale * scalefactor);
 
-    // changed to vcl_pow(5,dy) to vcl_pow(5.0,dy)
-    // the first version is ambiguous when overloads exist for vcl_pow
-    double zoomfactor = vcl_pow(5.0,dx);
+    // changed to std::pow(5,dy) to std::pow(5.0,dy)
+    // the first version is ambiguous when overloads exist for std::pow
+    double zoomfactor = std::pow(5.0,dx);
     if (!lock_zoom) {
       this->token.fov = static_cast<float>(lastpos.fov * zoomfactor);
-      vgui::out << "viewer3D : fov " << this->token.fov << vcl_endl;
+      vgui::out << "viewer3D : fov " << this->token.fov << std::endl;
     }
     this->post_redraw();
     return true;
@@ -362,7 +363,7 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
   if (this->allow_spinning && c_mouse_rotate(button, modifier))
   {
 #ifdef DEBUG
-    vcl_cerr << "vgui_viewer3D_tableau::mouse_up: left\n";
+    std::cerr << "vgui_viewer3D_tableau::mouse_up: left\n";
 #endif
 
     GLdouble vp[4];
@@ -400,7 +401,7 @@ bool vgui_viewer3D_tableau::mouse_up(int x, int y, vgui_button button, vgui_modi
 bool vgui_viewer3D_tableau::help()
 {
   // awf FIXME these need to come from this->c_*
-  vcl_cerr << "\n-- vgui_viewer3D_tableau ---------\n"
+  std::cerr << "\n-- vgui_viewer3D_tableau ---------\n"
            << "  rotate:    " << c_mouse_rotate.as_string() << '\n'
            << "  translate: " << c_mouse_translate.as_string() << '\n'
            << "  zoom: " << c_mouse_zoom.as_string() << '\n'
@@ -422,33 +423,33 @@ bool vgui_viewer3D_tableau::key_press(int, int, vgui_key key, vgui_modifier modi
 {
   if (c_lock_dolly(key, modifier)) {
     lock_dolly = !lock_dolly;
-    vgui::out << "viewer3D : dolly lock " << vbl_bool_ostream::on_off(lock_dolly) << vcl_endl;
+    vgui::out << "viewer3D : dolly lock " << vbl_bool_ostream::on_off(lock_dolly) << std::endl;
     return true;
   }
 
   if (c_lock_zoom(key, modifier)) {
     lock_zoom = !lock_zoom;
-    vgui::out << "viewer3D : zoom lock " << vbl_bool_ostream::on_off(lock_zoom) << vcl_endl;
+    vgui::out << "viewer3D : zoom lock " << vbl_bool_ostream::on_off(lock_zoom) << std::endl;
     return true;
   }
 
   if (c_lighting(key, modifier)) {
     this->lighting = !this->lighting;
-    vgui::out << "viewer3D : lighting " << vbl_bool_ostream::on_off(this->lighting) << vcl_endl;
+    vgui::out << "viewer3D : lighting " << vbl_bool_ostream::on_off(this->lighting) << std::endl;
     this->post_redraw();
     return true;
   }
 
   if (c_shading(key, modifier)) {
     this->smooth_shading = !this->smooth_shading;
-    vgui::out << "viewer3D : smooth shading " << vbl_bool_ostream::on_off(this->smooth_shading) << vcl_endl;
+    vgui::out << "viewer3D : smooth shading " << vbl_bool_ostream::on_off(this->smooth_shading) << std::endl;
     this->post_redraw();
     return true;
   }
 
   if (c_spinning(key, modifier)) {
     this->allow_spinning = !this->allow_spinning;
-    vgui::out << "viewer3D : allow spinning " << vbl_bool_ostream::on_off(this->allow_spinning) << vcl_endl;
+    vgui::out << "viewer3D : allow spinning " << vbl_bool_ostream::on_off(this->allow_spinning) << std::endl;
     return true;
   }
 
@@ -474,7 +475,7 @@ bool vgui_viewer3D_tableau::key_press(int, int, vgui_key key, vgui_modifier modi
 
   if (c_headlight(key, modifier)) {
     this->headlight = !this->headlight;
-    vgui::out << "viewer3D : headlight " << vbl_bool_ostream::on_off(this->headlight) << vcl_endl;
+    vgui::out << "viewer3D : headlight " << vbl_bool_ostream::on_off(this->headlight) << std::endl;
     this->post_redraw();
     return true;
   }

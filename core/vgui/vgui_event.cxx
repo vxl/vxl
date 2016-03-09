@@ -14,7 +14,8 @@
 // \endverbatim
 
 #include "vgui_event.h"
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vul/vul_get_timestamp.h>
 
 //----------------------------------------------------------------------------
@@ -122,7 +123,7 @@ static struct
 static const int fsm_event_table_size = sizeof(fsm_event_table)/sizeof(fsm_event_table[0]);
 
 //-----------------------------------------------------------------------------
-vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
+std::ostream& operator<<(std::ostream& s, vgui_event_type t)
 {
   for (int i=0; i<fsm_event_table_size; ++i)
     if (fsm_event_table[i].t == t)
@@ -131,7 +132,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event_type t)
 }
 
 //-----------------------------------------------------------------------------
-vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
+std::ostream& operator<<(std::ostream& s, vgui_event const& e)
 {
   s << "[type:" << e.type;
   if (e.key != vgui_KEY_NULL) s << ", key:" << vgui_key(e.key);
@@ -140,7 +141,7 @@ vcl_ostream& operator<<(vcl_ostream& s, vgui_event const& e)
   if (e.modifier != vgui_MODIFIER_NULL) s << ", modifiers:" << vgui_modifier(e.modifier);
   s << ", w(" << e.wx << ',' << e.wy << ')'
     << ", time:" << e.timestamp << "ms";
-  if (e.str != "") s << ", vcl_string:\"" << e.str << "\"";
+  if (e.str != "") s << ", std::string:\"" << e.str << "\"";
   return s << ']';
 }
 

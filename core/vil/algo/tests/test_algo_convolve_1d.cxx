@@ -1,31 +1,32 @@
 // This is core/vil/algo/tests/test_algo_convolve_1d.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_new.h>
 #include <vil/vil_crop.h>
 #include <vil/algo/vil_convolve_1d.h>
 
 
-inline void print_vector(const vcl_vector<double> & v)
+inline void print_vector(const std::vector<double> & v)
 {
-  vcl_cout << '{';
+  std::cout << '{';
   if (!v.empty())
-    vcl_cout << v[0];
+    std::cout << v[0];
   for (unsigned i =1; i < v.size(); ++i)
-    vcl_cout << ',' << v[i] ;
-  vcl_cout << '}';
+    std::cout << ',' << v[i] ;
+  std::cout << '}';
 }
 
 static void test_algo_convolve_1d_double()
 {
-  vcl_cout << "*************************\n"
+  std::cout << "*************************\n"
            << " Testing vil_convolve_1d\n"
            << "*************************\n";
 
   const int n = 10;
-  vcl_vector<double> src(n), dest(n+2);
+  std::vector<double> src(n), dest(n+2);
   for (int i=0;i<n;++i) src[i]=i+1;
   // edge -888.88 values are not part of the kernel proper, but to detect misreadings
   double kernel[5] = {-888.88, 1.0, 2.0, 3.0, -888.88};
@@ -41,7 +42,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("First full value",dest[2],10.0,1e-6);
   TEST_NEAR("Last full value",dest[n-1],6*n-8.0,1e-6);
 
-  vcl_cout<<"Testing vil_convolve_ignore_edge end type\n";
+  std::cout<<"Testing vil_convolve_ignore_edge end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
 
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -56,7 +57,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_convolve_no_extend end type\n";
+  std::cout<<"Testing vil_convolve_no_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
 
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
@@ -71,7 +72,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_convolve_no_extend end type with 5-tap filter\n";
+  std::cout << "Test vil_convolve_no_extend end type with 5-tap filter\n";
   // edge -888.88 values are not part of the kernel proper, but to detect misreadings
   double kernel2[7] = {-888.88, 1.0, 5.0, 8.0, 5.0, 1.0, -888.88};
   for (int i=0;i<n+2;++i) dest[i]=999;
@@ -89,7 +90,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_convolve_zero_extend end type\n";
+  std::cout<<"Testing vil_convolve_zero_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel[2],-1,1,
@@ -103,7 +104,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_convolve_zero_extend end type with 5-tap filter\n";
+  std::cout << "Test vil_convolve_zero_extend end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel2[3],-2,2,
@@ -119,9 +120,9 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_convolve_zero_extend end type with 4-tap filter\n";
+  std::cout << "Test vil_convolve_zero_extend end type with 4-tap filter\n";
   double kernel3[6] = {-888.88, 1.0, 3.0, 5.0, 1.0, -888.88};
-  vcl_vector<double> src2(n, 0.0);
+  std::vector<double> src2(n, 0.0);
   src2[0] = src2[n/2] = src2[n-1] = 1.0;
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src2[0],n,1, &dest[1],1,
@@ -129,9 +130,9 @@ static void test_algo_convolve_1d_double()
                   double(), // indicates accumulator type
                   vil_convolve_zero_extend,vil_convolve_zero_extend);
 
-  vcl_cout << "SRC: ";  print_vector(src2);
-  vcl_cout << "   DEST: "; print_vector(dest);
-  vcl_cout << vcl_endl;
+  std::cout << "SRC: ";  print_vector(src2);
+  std::cout << "   DEST: "; print_vector(dest);
+  std::cout << std::endl;
 
   TEST_NEAR("Start",dest[1], 5.0,1e-6);
   TEST_NEAR("Next",dest[2], 1.0,1e-6);
@@ -146,7 +147,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_convolve_constant_extend end type\n";
+  std::cout<<"Testing vil_convolve_constant_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel[2],-1,1,
@@ -160,7 +161,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_convolve_constant_extend end type with 5-tap filter\n";
+  std::cout << "Test vil_convolve_constant_extend end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel2[3],-2,2,
@@ -176,7 +177,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_convolve_reflect_extend end type\n";
+  std::cout<<"Testing vil_convolve_reflect_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel[2],-1,1,
@@ -190,7 +191,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_convolve_reflect_extend end type with 5-tap filter\n";
+  std::cout << "Test vil_convolve_reflect_extend end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel2[3],-2,2,
@@ -206,7 +207,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_convolve_periodic_extend end type\n";
+  std::cout<<"Testing vil_convolve_periodic_extend end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel[2],-1,1,
@@ -220,7 +221,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout<<"Testing vil_convolve_trim end type\n";
+  std::cout<<"Testing vil_convolve_trim end type\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel[2],-1,1,
@@ -234,7 +235,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_convolve_trim end type with 5-tap filter\n";
+  std::cout << "Test vil_convolve_trim end type with 5-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src[0],n,1, &dest[1],1,
                   &kernel2[3],-2,2,
@@ -250,16 +251,16 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "Test vil_convolve_trim end type with 4-tap filter\n";
+  std::cout << "Test vil_convolve_trim end type with 4-tap filter\n";
   for (int i=0;i<n+2;++i) dest[i]=999;
   vil_convolve_1d(&src2[0],n,1, &dest[1],1,
                   &kernel3[3],-2,1,
                   double(), // indicates accumulator type
                   vil_convolve_trim,vil_convolve_trim);
 
-  vcl_cout << "SRC: ";  print_vector(src2);
-  vcl_cout << "   DEST: "; print_vector(dest);
-  vcl_cout << vcl_endl;
+  std::cout << "SRC: ";  print_vector(src2);
+  std::cout << "   DEST: "; print_vector(dest);
+  std::cout << std::endl;
 
   TEST_NEAR("Start",dest[1], 5.0*10.0/9.0,1e-6);
   TEST_NEAR("Next",dest[2], 1.0,1e-6);
@@ -274,7 +275,7 @@ static void test_algo_convolve_1d_double()
   TEST_NEAR("No overrun start",dest[0],999,1e-6);
   TEST_NEAR("No overrun end",dest[n+1],999,1e-6);
 
-  vcl_cout << "\n\nvil_convolve_1d(vil_image_resource_sptr&,...)\n";
+  std::cout << "\n\nvil_convolve_1d(vil_image_resource_sptr&,...)\n";
 
   vil_image_resource_sptr mem = vil_new_image_resource(n,n,1,VIL_PIXEL_FORMAT_BYTE);
   vil_image_view<vxl_byte> v(n,n,1), v_out(n,n,1);

@@ -15,7 +15,8 @@
 //     011002 Peter Vanroose - vil1_save now respects top-is-first; vil1_save_raw not
 //\endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 class vil1_stream;
 #include <vil1/vil1_image.h>
 
@@ -32,26 +33,26 @@ bool vil1_save_raw(vil1_image const&, char const* filename, char const* file_for
 bool vil1_save_raw(vil1_image const &, vil1_stream* outstream, char const* file_format = "pnm");
 
 //: Save raw unsigned chars, deducing format from filename
-void vil1_save_gray(unsigned char const* p, int w, int h, vcl_string const& fn);
+void vil1_save_gray(unsigned char const* p, int w, int h, std::string const& fn);
 
 //: Save raw floats as gray.
 // No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
-void vil1_save_gray(float const* p, int w, int h, vcl_string const& fn);
+void vil1_save_gray(float const* p, int w, int h, std::string const& fn);
 
 //: Save raw doubles as gray.
 // No scaling is performed, so values would be 0..255.
 // File format is deduced from filename.
-void vil1_save_gray(double const* p, int w, int h, vcl_string const& fn);
+void vil1_save_gray(double const* p, int w, int h, std::string const& fn);
 
 
 //: Save raw RGB, deducing format from filename
-void vil1_save_rgb(unsigned char const* p, int w, int h, vcl_string const& fn);
+void vil1_save_rgb(unsigned char const* p, int w, int h, std::string const& fn);
 
 //: Save raw floats as RGB.  See vil1_save_gray.
-void vil1_save_rgb(float const* p, int w, int h, vcl_string const& fn);
+void vil1_save_rgb(float const* p, int w, int h, std::string const& fn);
 
 //: Save raw doubles as RGB.  See vil1_save_gray.
-void vil1_save_rgb(double const* p, int w, int h, vcl_string const& fn);
+void vil1_save_rgb(double const* p, int w, int h, std::string const& fn);
 
 #endif // vil1_save_h_

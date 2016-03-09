@@ -15,7 +15,8 @@
 #include <vnl/vnl_math.h>
 #include <vcsl/vcsl_graph.h>
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 int main()
 {
@@ -71,10 +72,10 @@ int main()
   // By inspection, corner should be (-3,2,1) in 'right' CS
   vnl_vector<double> cornerXF = WCS->from_local_to_cs(corner.as_ref(), right, 0);
 
-  vcl_cout << cornerXF[0] << ", " << cornerXF[1] << ", " << cornerXF[2] << '\n';
-  assert(vcl_abs(cornerXF[0]+3) < 1e-6);
-  assert(vcl_abs(cornerXF[1]-2) < 1e-6);
-  assert(vcl_abs(cornerXF[2]-1) < 1e-6);
+  std::cout << cornerXF[0] << ", " << cornerXF[1] << ", " << cornerXF[2] << '\n';
+  assert(std::abs(cornerXF[0]+3) < 1e-6);
+  assert(std::abs(cornerXF[1]-2) < 1e-6);
+  assert(std::abs(cornerXF[2]-1) < 1e-6);
 
   // Note that at this point, none of the smart pointers should be deleted
   // since smart pointers, by definition, clean up themselves:

@@ -1,6 +1,7 @@
 // This is core/vbl/tests/vbl_test_attributes.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vbl/vbl_array_1d.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
@@ -8,7 +9,7 @@
 
 static void vbl_test_attributes_1d()
 {
-  vcl_cout << "\n Testing vbl_attributes 1d\n +++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_attributes 1d\n +++++++++++++++++++++++++\n\n";
   const unsigned n = 10;
   vbl_array_1d<double> v(n,1.0);
   // set up minima at middle and two ends
@@ -26,7 +27,7 @@ static void vbl_test_attributes_1d()
 
 static void vbl_test_attributes_2d()
 {
-  vcl_cout << "\n Testing vbl_attributes 2d\n +++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_attributes 2d\n +++++++++++++++++++++++++\n\n";
   const unsigned nr = 10, nc = 5;
   vbl_array_2d<double> v(nr, nc, 1.0);
   v[0][0]=0.06;   v[nr/2][0]= 0.05;  v[0][nc-1]=0.04; v[0][1]=10.0;
@@ -43,7 +44,7 @@ static void vbl_test_attributes_2d()
 
 static void vbl_test_attributes_3d()
 {
-  vcl_cout << "\n Testing vbl_attributes 3d\n +++++++++++++++++++++++++\n\n";
+  std::cout << "\n Testing vbl_attributes 3d\n +++++++++++++++++++++++++\n\n";
   const unsigned n1 = 5, n2 = 4, n3 = 10;
   vbl_array_3d<double> v(n1, n2, n3, 1.0);
    v[0][0][0]=0.06;   v[n1/2][0][3]= 0.05;  v[0][n2-1][4]=0.04; v[0][1][5]=10.0;

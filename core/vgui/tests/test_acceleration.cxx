@@ -1,5 +1,6 @@
 // This is core/vgui/tests/test_acceleration.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vpl/vpl.h>
 
@@ -88,11 +89,11 @@ int main()
   GLenum format;
   GLenum type;
   vgui_accelerate::instance()->vgui_choose_cache_format (&format, &type);
-  vcl_cerr << "chosen format " << vcl_hex << format << "\nchosen type   " << type << '\n';
+  std::cerr << "chosen format " << std::hex << format << "\nchosen type   " << type << '\n';
 
   // GLX window code straight out of
   // http://www.eecs.tulane.edu/www/graphics/doc/OpenGL-Man-Pages/glXIntro.html
-  vcl_cerr << "Opening double-buffered, RGBA GLX context...\n\n";
+  std::cerr << "Opening double-buffered, RGBA GLX context...\n\n";
   Display* display = XOpenDisplay(0);
   XVisualInfo* visualinfo = glXChooseVisual (display, DefaultScreen(display), attribs);
   GLXContext context = glXCreateContext (display, visualinfo, 0, GL_TRUE);
@@ -112,31 +113,31 @@ int main()
 
   bool little_endian = (ImageByteOrder(display) == LSBFirst);
 
-  vcl_cerr << "GL_VERSION : " <<  (const char *) glGetString(GL_VERSION) << '\n'
+  std::cerr << "GL_VERSION : " <<  (const char *) glGetString(GL_VERSION) << '\n'
            << "GL_RENDERER : " << (const char *) glGetString(GL_RENDERER) << "\n\n"
            << "X Display -\n"
            << "      byte-order : " << (little_endian ? "little" : "big") << "-endian\n\n"
            << "XVisualInfo -\n"
            << "           depth : " << visualinfo->depth << '\n'
-           << "        red-mask : " << vcl_hex << visualinfo->red_mask << '\n'
-           << "      green-mask : " << vcl_hex << visualinfo->green_mask << '\n'
-           << "       blue-mask : " << vcl_hex << visualinfo->blue_mask << "\n\n"
+           << "        red-mask : " << std::hex << visualinfo->red_mask << '\n'
+           << "      green-mask : " << std::hex << visualinfo->green_mask << '\n'
+           << "       blue-mask : " << std::hex << visualinfo->blue_mask << "\n\n"
            << "GL Gets -\n";
   GLint data_int;
   glGetIntegerv(GL_RED_BITS, &data_int);
-  vcl_cerr << "        red-bits : " << data_int << '\n';
+  std::cerr << "        red-bits : " << data_int << '\n';
   glGetIntegerv(GL_GREEN_BITS, &data_int);
-  vcl_cerr << "      green-bits : " << data_int << '\n';
+  std::cerr << "      green-bits : " << data_int << '\n';
   glGetIntegerv(GL_BLUE_BITS, &data_int);
-  vcl_cerr << "       blue-bits : " << data_int << '\n';
+  std::cerr << "       blue-bits : " << data_int << '\n';
   glGetIntegerv(GL_ALPHA_BITS, &data_int);
-  vcl_cerr << "      alpha-bits : " << data_int << "\n\n";
+  std::cerr << "      alpha-bits : " << data_int << "\n\n";
 
 #if !VGUI_MESA
-  vcl_cerr << "   You are not using Mesa !!\n";
+  std::cerr << "   You are not using Mesa !!\n";
 #endif
 #ifndef HAS_HERMES
-  vcl_cerr << "   You do not have Hermes installed !!\n";
+  std::cerr << "   You do not have Hermes installed !!\n";
 #endif
 
   glViewport( 0, 0, 512, 512 );
@@ -162,7 +163,7 @@ int main()
 
   if (false)
   {
-    vcl_cerr << "\nvgui_glClear - ";
+    std::cerr << "\nvgui_glClear - ";
     int draws=0;
     int elapsed;
     vul_timer timer;
@@ -171,12 +172,12 @@ int main()
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
+    std::cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
 
   if (false)
   {
-    vcl_cerr << "\nglClear - ";
+    std::cerr << "\nglClear - ";
     int draws=0;
     int elapsed;
     vul_timer timer;
@@ -185,12 +186,12 @@ int main()
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
+    std::cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
 
   if (true)
   {
-    vcl_cerr << "\nUsing default (RGBA) format with glDrawPixels - ";
+    std::cerr << "\nUsing default (RGBA) format with glDrawPixels - ";
     int draws=0;
     int elapsed;
     vul_timer timer;
@@ -199,11 +200,11 @@ int main()
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
+    std::cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   if (true)
   {
-    vcl_cerr << "\nUsing recommended format with glDrawPixels - ";
+    std::cerr << "\nUsing recommended format with glDrawPixels - ";
     int draws=0;
     int elapsed;
     vul_timer timer;
@@ -212,11 +213,11 @@ int main()
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
+    std::cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
   if (true)
   {
-    vcl_cerr << "\nUsing recommended format with vgui_accelerate::instance()->vgui_glDrawPixels - ";
+    std::cerr << "\nUsing recommended format with vgui_accelerate::instance()->vgui_glDrawPixels - ";
     int draws=0;
     int elapsed;
     vul_timer timer;
@@ -225,62 +226,62 @@ int main()
       elapsed = timer.real();
       ++draws;
     } while (elapsed < 3000);
-    vcl_cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
+    std::cerr << 512*512*draws / (elapsed / 1000.0) << " pixels per second\n";
   }
 
   XMapWindow(display, window);
   XEvent event;
   XIfEvent(display, &event, WaitForNotify, (char*)window);
 
-  vcl_cerr << "Rendering 16-bit RGB pattern -\n";
+  std::cerr << "Rendering 16-bit RGB pattern -\n";
   pattern_RGB16(global_data);
-  vcl_cerr << "  glDrawPixels...\n";
+  std::cerr << "  glDrawPixels...\n";
   glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(2);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
+  std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),(void *)global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(2);
   glRasterPos2i(45,67);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
+  std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
   glPixelZoom(0.4f, 0.6f);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
+  std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
   glPixelZoom(1.8f, 0.3f);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
+  std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glClear(GL_COLOR_BUFFER_BIT);
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GLenum(GL_UNSIGNED_SHORT_5_6_5),global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 
 #if 0
-  vcl_cerr << "Rendering 24-bit RGB pattern -\n";
+  std::cerr << "Rendering 24-bit RGB pattern -\n";
   pattern_RGB24(global_data);
-  vcl_cerr << "  glDrawPixels...\n";
+  std::cerr << "  glDrawPixels...\n";
   glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
+  std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGB,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
 
-  vcl_cerr << "Rendering 32-bit RGB pattern -\n";
+  std::cerr << "Rendering 32-bit RGB pattern -\n";
   pattern_RGB16(global_data);
-  vcl_cerr << "  glDrawPixels...\n";
+  std::cerr << "  glDrawPixels...\n";
   glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);
-  vcl_cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
+  std::cerr << "  vgui_accelerate::instance()->vgui_glDrawPixels...\n";
   vgui_accelerate::instance()->vgui_glDrawPixels(512,512,GL_RGBA,GL_UNSIGNED_BYTE,global_data);
   glXSwapBuffers(display, window);
   vpl_sleep(1);

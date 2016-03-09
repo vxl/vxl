@@ -9,7 +9,8 @@
 #include "vil1_jpeg_compressor.h"
 #include "vil1_jpeg_destination_mgr.h"
 #include <vil1/vil1_stream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 vil1_jpeg_compressor::vil1_jpeg_compressor(vil1_stream *s)
   : stream(s)
@@ -47,7 +48,7 @@ bool vil1_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline
       jobj.in_color_space = JCS_RGB;
       break;
     default:
-      vcl_cerr << __FILE__ " : urgh!\n";
+      std::cerr << __FILE__ " : urgh!\n";
       return false;
     }
 
@@ -63,7 +64,7 @@ bool vil1_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline
 
   //
   if (line != jobj.next_scanline) {
-    vcl_cerr << "scanlines must be written in order\n";
+    std::cerr << "scanlines must be written in order\n";
     return false;
   }
 

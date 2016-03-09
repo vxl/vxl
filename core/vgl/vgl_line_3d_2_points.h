@@ -15,7 +15,8 @@
 //   Peter Vanroose  30 Mar 2007: Commented out deprecated intersection() functions.
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vcl_cassert.h>
 #include <vgl/vgl_point_3d.h> // data member of this class
 #include <vgl/vgl_vector_3d.h>
@@ -160,12 +161,12 @@ inline bool concurrent(l const& l1, l const& l2, l const& l3)
 //: Write to stream (verbose)
 // \relatesalso vgl_line_3d_2_points
 template <class Type>
-vcl_ostream &operator<<(vcl_ostream&s, l const& );
+std::ostream &operator<<(std::ostream&s, l const& );
 
 //: Read parameters from stream
 // \relatesalso vgl_line_3d_2_points
 template <class Type>
-vcl_istream &operator>>(vcl_istream &is, l &);
+std::istream &operator>>(std::istream &is, l &);
 
 #undef l
 

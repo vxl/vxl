@@ -4,11 +4,12 @@
 #include <vgl/xio/vgl_xio_vector_3d.h>
 
 #include <testlib/testlib_test.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <sstream>
 
 static void test_xio_box_3d()
 {
-  vcl_stringstream s;
+  std::stringstream s;
 
   vgl_box_3d<double> b3;
   x_write(s, b3);
@@ -18,7 +19,7 @@ static void test_xio_box_3d()
 
 static void test_xio_point_2d()
 {
-  vcl_stringstream s;
+  std::stringstream s;
 
   vgl_point_2d<double> p2(0.0,0.0);
   x_write(s, p2);
@@ -28,7 +29,7 @@ static void test_xio_point_2d()
 
 static void test_xio_point_3d()
 {
-  vcl_stringstream s;
+  std::stringstream s;
 
   vgl_point_3d<double> p3(0.0,0.0,0.0);
   x_write(s, p3);
@@ -38,7 +39,7 @@ static void test_xio_point_3d()
 
 static void test_xio_vector_3d()
 {
-  vcl_stringstream s;
+  std::stringstream s;
 
   vgl_vector_3d<double> v3;
   x_write(s, v3);

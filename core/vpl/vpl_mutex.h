@@ -15,7 +15,7 @@
 
 #if VXL_HAS_PTHREAD_H
 # include <pthread.h>
-# include <vcl_cerrno.h> // for EBUSY, I think
+# include <cerrno> // for EBUSY, I think
 struct vpl_mutex
 {
   vpl_mutex() { pthread_mutex_init(&mutex_, VXL_NULLPTR); }

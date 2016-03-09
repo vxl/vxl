@@ -29,8 +29,9 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_camera.h>
-#include <vcl_iosfwd.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
+#include <string>
 
 template <class T>
 class vpgl_generic_camera : public vpgl_camera<T>
@@ -39,11 +40,11 @@ class vpgl_generic_camera : public vpgl_camera<T>
 
   vpgl_generic_camera();
   vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays);
-  vpgl_generic_camera( vcl_vector<vbl_array_2d<vgl_ray_3d<T> > > const& rays,
-                                              vcl_vector<int> nrs,   vcl_vector<int> ncs  );
+  vpgl_generic_camera( std::vector<vbl_array_2d<vgl_ray_3d<T> > > const& rays,
+                                              std::vector<int> nrs,   std::vector<int> ncs  );
   virtual ~vpgl_generic_camera() {}
 
-  virtual vcl_string type_name() const { return "vpgl_generic_camera"; }
+  virtual std::string type_name() const { return "vpgl_generic_camera"; }
 
   //: The generic camera interface. u represents image column, v image row. Finds projection using a pyramid search over the rays and so not particularly efficient.
   virtual void project(const T x, const T y, const T z, T& u, T& v) const;
@@ -80,7 +81,7 @@ class vpgl_generic_camera : public vpgl_camera<T>
   void print_orig(int level);
 
   //: visualization
-  void print_to_vrml(int level, vcl_ostream& os);
+  void print_to_vrml(int level, std::ostream& os);
 
  protected:
   void nearest_ray_to_point(vgl_point_3d<T> const& p,
@@ -112,11 +113,11 @@ class vpgl_generic_camera : public vpgl_camera<T>
   // (level == 0 is the highest resolution)
   int n_levels_;
   //: num rows at each resolution level
-  vcl_vector<int> nr_;
+  std::vector<int> nr_;
   //: num cols at each resolution level
-  vcl_vector<int> nc_;
+  std::vector<int> nc_;
   //: the pyramid
-  vcl_vector<vbl_array_2d<vgl_ray_3d<T> > > rays_;
+  std::vector<vbl_array_2d<vgl_ray_3d<T> > > rays_;
 };
 
 #endif // vpgl_generic_camera_h_

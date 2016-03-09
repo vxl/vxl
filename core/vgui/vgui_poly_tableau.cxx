@@ -24,7 +24,8 @@
 
 #include "vgui_poly_tableau.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_cassert.h>
 
 #include <vgui/vgui_gl.h>
@@ -68,7 +69,7 @@ bool vgui_poly_tableau::item::inside(GLint const vp[4],int vx, int vy) const
   bool ans = (x<=rx && rx<x+w) && (y<=ry && ry<y+h);
   #ifdef DEBUG
   if (ans)
-    vcl_cerr << "Point "<< vx << ' '<< vy <<" inside sub-window: "<< id << '\n';
+    std::cerr << "Point "<< vx << ' '<< vy <<" inside sub-window: "<< id << '\n';
   #endif
   return ans;
 }
@@ -109,7 +110,7 @@ void vgui_poly_tableau::remove(int id)
       erase(i);
       return;
     }
-  vgui_macro_warning << "no such id " << id << vcl_endl;
+  vgui_macro_warning << "no such id " << id << std::endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -125,7 +126,7 @@ void vgui_poly_tableau::move(int id, float x, float y, float w, float h)
       post_redraw();
       return;
     }
-  vgui_macro_warning << "no such id " << id << vcl_endl;
+  vgui_macro_warning << "no such id " << id << std::endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -142,7 +143,7 @@ void vgui_poly_tableau::replace(int id, vgui_tableau_sptr const& tab)
         post_redraw();
       return;
     }
-  vgui_macro_warning << "no such id " << id << vcl_endl;
+  vgui_macro_warning << "no such id " << id << std::endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -181,7 +182,7 @@ int vgui_poly_tableau::add(vgui_tableau_sptr const& t, float x, float y,
   item it(this, t, x, y, w, h, ++counter) ;
   sub.push_back(it);
 #ifdef DEBUG
-  vcl_cerr << "id = " << sub.back().id << '\n'
+  std::cerr << "id = " << sub.back().id << '\n'
            << "x  = " << sub.back().x << '\n'
            << "y  = " << sub.back().y << '\n'
            << "w  = " << sub.back().w << '\n'
@@ -224,7 +225,7 @@ void vgui_poly_tableau::set_current(GLint const vp[4], int index)
 
   // switch :
 #ifdef DEBUG
-  vcl_cerr << "vgui_poly_tableau::set_current: switch from " << current << " to " << index << '\n';
+  std::cerr << "vgui_poly_tableau::set_current: switch from " << current << " to " << index << '\n';
 #endif
   current = index;
 
@@ -310,7 +311,7 @@ bool vgui_poly_tableau::handle(GLint const vp[4], vgui_event const &e)
 
 //-----------------------------------------------------------------------------
 //: Returns the type of this tableau ('vgui_poly_tableau').
-vcl_string vgui_poly_tableau::type_name() const
+std::string vgui_poly_tableau::type_name() const
 {
   return "vgui_poly_tableau";
 }

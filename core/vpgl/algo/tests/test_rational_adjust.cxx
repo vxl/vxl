@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
@@ -57,7 +58,7 @@ static void test_rational_adjust()
   vgl_point_3d<double> c6(44.351024, 33.290036, 36.203430);
   vgl_point_3d<double> c7(44.341150, 33.293502, 38.745071);
   vgl_point_3d<double> c8(44.352379, 33.294193, 44.503021);
-  vcl_vector<vgl_point_3d<double> > geo_points;
+  std::vector<vgl_point_3d<double> > geo_points;
   geo_points.push_back(c0);   geo_points.push_back(c1);
   geo_points.push_back(c2);   geo_points.push_back(c3);
   geo_points.push_back(c4);   geo_points.push_back(c5);
@@ -74,7 +75,7 @@ static void test_rational_adjust()
   vgl_point_2d<double> p7(11932.3, 22221.1);
   vgl_point_2d<double> p8(13441.2, 22089.2);
 
-  vcl_vector<vgl_point_2d<double> > img_points;
+  std::vector<vgl_point_2d<double> > img_points;
   img_points.push_back(p0);   img_points.push_back(p1);
   img_points.push_back(p2);   img_points.push_back(p3);
   img_points.push_back(p4);   img_points.push_back(p5);
@@ -84,7 +85,7 @@ static void test_rational_adjust()
   //New 3-d alignment
   vpgl_rational_camera<double> adj_rcam;
   vpgl_rational_adjust::adjust(rcam, img_points, geo_points,  adj_rcam);
-  vcl_cout << "\nInitial Cam\n" << rcam << '\n'
+  std::cout << "\nInitial Cam\n" << rcam << '\n'
            << "\nAdjusted Cam\n" << adj_rcam << '\n';
   double zoff = adj_rcam.offset(vpgl_rational_camera<double>::Z_INDX);
   TEST_NEAR("test adjust_geo",zoff, 35.1515 , 0.001);

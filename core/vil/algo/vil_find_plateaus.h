@@ -7,12 +7,13 @@
 // \author Tim Cootes, Kevin de Souza
 
 #include <vil/vil_image_view.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //: True if pixel at *im is greater than or equal to all 8 neighbours.
 // \sa vil_is_peak_3x3()
 template <class T>
-inline bool vil_is_plateau_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t j_step)
+inline bool vil_is_plateau_3x3(const T* im, std::ptrdiff_t i_step, std::ptrdiff_t j_step)
 {
   T v = *im;
   return v >= im[i_step]
@@ -31,8 +32,8 @@ inline bool vil_is_plateau_3x3(const T* im, vcl_ptrdiff_t i_step, vcl_ptrdiff_t 
 // \sa vil_find_peaks_3x3()
 // \relatesalso vil_image_view
 template <class T>
-inline void vil_find_plateaus_3x3(vcl_vector<unsigned>& pi,
-                                  vcl_vector<unsigned>& pj,
+inline void vil_find_plateaus_3x3(std::vector<unsigned>& pi,
+                                  std::vector<unsigned>& pj,
                                   const vil_image_view<T>& image,
                                   const T& min_thresh,
                                   bool clear_list=true)
@@ -42,7 +43,7 @@ inline void vil_find_plateaus_3x3(vcl_vector<unsigned>& pi,
     pj.resize(0);
   }
   const unsigned ni1=image.ni()-1,nj1=image.nj()-1;
-  const vcl_ptrdiff_t istep = image.istep(),jstep=image.jstep();
+  const std::ptrdiff_t istep = image.istep(),jstep=image.jstep();
   const T* row = image.top_left_ptr()+istep+jstep;
   for (unsigned j=1;j<nj1;++j,row+=jstep)
   {

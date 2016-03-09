@@ -36,7 +36,8 @@
 //
 // \endverbatim
 /////////////////////////////////////////////////////////////////////////////
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 //#include <vpgl/vpgl_dll.h>
@@ -109,12 +110,12 @@ class vpgl_lvcs : public vbl_ref_count
   cs_names get_cs_name() const;
   inline LenUnits local_length_unit() const{return this->localXYZUnit_;}
   inline AngUnits geo_angle_unit() const {return this->geo_angle_unit_;}
-  void print(vcl_ostream&) const;
-  bool save(vcl_string fname) { vcl_ofstream of(fname.c_str()); if (of) { print(of); return true; } return false; }
-  void read(vcl_istream& strm);
-  void write(vcl_ostream& strm);  // write just "read" would read
-  friend vcl_ostream& operator << (vcl_ostream& os, const vpgl_lvcs& local_coord_sys);
-  friend vcl_istream& operator >> (vcl_istream& os, vpgl_lvcs& local_coord_sys);
+  void print(std::ostream&) const;
+  bool save(std::string fname) { std::ofstream of(fname.c_str()); if (of) { print(of); return true; } return false; }
+  void read(std::istream& strm);
+  void write(std::ostream& strm);  // write just "read" would read
+  friend std::ostream& operator << (std::ostream& os, const vpgl_lvcs& local_coord_sys);
+  friend std::istream& operator >> (std::istream& os, vpgl_lvcs& local_coord_sys);
   bool operator==(vpgl_lvcs const& r) const;
 
   void get_utm_origin(double& x, double& y, double& elev, int& zone) const;

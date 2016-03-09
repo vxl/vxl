@@ -11,31 +11,32 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 
 //-------------------------------------------
 bool
 vpgl_fm_compute_2_point::compute(
-                                 const vcl_vector< vgl_homg_point_2d<double> >& pr,
-                                 const vcl_vector< vgl_homg_point_2d<double> >& pl,
+                                 const std::vector< vgl_homg_point_2d<double> >& pr,
+                                 const std::vector< vgl_homg_point_2d<double> >& pl,
                                  vpgl_fundamental_matrix<double>& fm )
 {
   // Check that there are at least 2 points.
   if ( pr.size() < 2 || pl.size() < 2 ) {
-    vcl_cerr << "vpgl_fm_compute_2_point: Need at least 2 point pairs.\n"
-             << "Number in each set: " << pr.size() << ", " << pl.size() << vcl_endl;
+    std::cerr << "vpgl_fm_compute_2_point: Need at least 2 point pairs.\n"
+             << "Number in each set: " << pr.size() << ", " << pl.size() << std::endl;
     return false;
   }
 
   // Check that the correspondence lists are the same size.
   if ( pr.size() != pl.size() ) {
-    vcl_cerr << "vpgl_fm_compute_2_point: Need correspondence lists of same size.\n";
+    std::cerr << "vpgl_fm_compute_2_point: Need correspondence lists of same size.\n";
     return false;
   }
 
   // Condition if necessary.
-  vcl_vector< vgl_homg_point_2d<double> > pr_norm, pl_norm;
+  std::vector< vgl_homg_point_2d<double> > pr_norm, pl_norm;
   vgl_norm_trans_2d<double> prnt, plnt;
   double sl = 1.0, sr = 1.0, cxl=0.0, cyl = 0.0, cxr = 0.0, cyr = 0.0;
   bool isotropic = true;

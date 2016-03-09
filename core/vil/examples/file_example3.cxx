@@ -3,7 +3,8 @@
 // \brief Example of creating, processing and using an image data object
 // \author Ian Scott
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
@@ -15,11 +16,11 @@ int main(int argc, char** argv)
 {
   if (argc < 2)
   {
-    vcl_cerr << "Specify an image filename\n";
+    std::cerr << "Specify an image filename\n";
     return 3;
   }
 
-  vcl_cout<<"Load " << argv[1] << " into an image data object\n";
+  std::cout<<"Load " << argv[1] << " into an image data object\n";
 
 
   // This is how we quickly load an image view.
@@ -28,11 +29,11 @@ int main(int argc, char** argv)
 
   if (!b_im)
   {
-    vcl_cerr << "Couldn't load " << argv[1] <<vcl_endl;
+    std::cerr << "Couldn't load " << argv[1] <<std::endl;
     return 3;
   }
 
-  vil_print_all(vcl_cout, b_im);
+  vil_print_all(std::cout, b_im);
 
   // We can apply some operation to it.
 

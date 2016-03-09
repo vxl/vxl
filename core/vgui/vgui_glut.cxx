@@ -4,10 +4,11 @@
 // \file
 // \author fsm
 
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
 
 extern "C"
 void vgui_glut_exit(int x)
 {
-  vcl_exit(x);
+  std::exit(x);
 }

@@ -2,13 +2,14 @@
 // Amitha Perera, Sep 2001.
 #include <testlib/testlib_test.h>
 
-#include <vcl_iostream.h>
+#include <iostream>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_distance.h>
-#include <vcl_cmath.h> // for vcl_sqrt()
+#include <vcl_compiler.h>
+#include <cmath> // for std::sqrt()
 
 
 static void test_point_to_polygon()
@@ -22,9 +23,9 @@ static void test_point_to_polygon()
   TEST_NEAR( "point to polygon 1 distance", vgl_distance( p, vgl_point_2d<float>( 6.0f, 1.0f ) ),
                                             1.0, 1e-5 );
   TEST_NEAR( "point to polygon 2 distance", vgl_distance( p, vgl_point_2d<float>( 6.0f, 6.0f ) ),
-                                            vcl_sqrt(2.0), 1e-5 );
+                                            std::sqrt(2.0), 1e-5 );
   TEST_NEAR( "point to polygon 3 distance", vgl_distance( p, vgl_point_2d<float>( 3.0f, 4.0f ) ),
-                                            vcl_sqrt(0.5), 1e-5 );
+                                            std::sqrt(0.5), 1e-5 );
   TEST( "point to polygon argument swap", vgl_distance( p, vgl_point_2d<float>( 3.0f, 4.0f ) ),
                                           vgl_distance( vgl_point_2d<float>( 3.0f, 4.0f ), p ));
 }
@@ -51,7 +52,7 @@ static void test_point_to_3D_line_segment()
 
 static void test_point_to_line_segment_2d()
 {
-  vcl_cout << "-------------------------------------------------------\n"
+  std::cout << "-------------------------------------------------------\n"
            << "Testing vgl_distance(vgl_line_segment_2d, vgl_point_2d)\n"
            << "-------------------------------------------------------\n";
   vgl_point_2d<double> p(1, 0);
@@ -66,7 +67,7 @@ static void test_point_to_line_segment_2d()
   TEST("Interchange arguments OK?", d_la==d_al, true);
   TEST("Test point a OK?", d_al==1.0, true);
   TEST("Test point b OK?", vgl_distance(b, l)==1.0, true);
-  TEST_NEAR("Test point c OK?", vgl_distance(c,l), vcl_sqrt(2.0), 1e-9);
+  TEST_NEAR("Test point c OK?", vgl_distance(c,l), std::sqrt(2.0), 1e-9);
 }
 
 

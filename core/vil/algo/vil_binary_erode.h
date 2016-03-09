@@ -10,7 +10,7 @@
 #include <vil/vil_border.h>
 
 //: Return false if any im[offset[k]] is zero
-inline bool vil_binary_erode(const bool* im, const vcl_ptrdiff_t* offset, unsigned n)
+inline bool vil_binary_erode(const bool* im, const std::ptrdiff_t* offset, unsigned n)
 {
   for (unsigned i=0;i<n;++i) if (!im[offset[i]]) return false;
   return true;

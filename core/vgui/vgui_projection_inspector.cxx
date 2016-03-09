@@ -6,8 +6,9 @@
 // \brief  See vgui_projection_inspector.h for a description of this file.
 
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h> // vcl_abort()
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cstdlib> // std::abort()
+#include <iostream>
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3.h>
@@ -17,7 +18,7 @@
 
 //------------------------------------------------------------------------------
 
-void vgui_projection_inspector::print(vcl_ostream& strm) const
+void vgui_projection_inspector::print(std::ostream& strm) const
 {
   strm << "vgui_projection_inspector: {\n"
        << "VP = " << vp[0] << ' ' << vp[1] << ' ' << vp[2] << ' ' << vp[3] << '\n';
@@ -65,7 +66,7 @@ bool vgui_projection_inspector::back_project(double const x[3],
   double mag = X_.two_norm();
   if (mag == 0)
   {
-    vcl_cerr << "mag=0, X_=" << X_ << vcl_endl;
+    std::cerr << "mag=0, X_=" << X_ << std::endl;
     return false;
   }
 
@@ -183,7 +184,7 @@ void vgui_projection_inspector::inspect()
   {
     diagonal_scale_3d = false;
 #ifdef DEBUG
-     vcl_cerr << "T =\n" << T << '\n';
+     std::cerr << "T =\n" << T << '\n';
 #endif
   }
 }
@@ -193,9 +194,9 @@ void vgui_projection_inspector::window_to_image_coordinates(int x,int y,
 {
   if (!diagonal_scale_3d)
   {
-    vcl_cerr << "vgui_projection_inspector::window_to_image_coordinates() - ERROR: Need diagonal GL matrices\n";
-    print(vcl_cerr);
-    vcl_abort();
+    std::cerr << "vgui_projection_inspector::window_to_image_coordinates() - ERROR: Need diagonal GL matrices\n";
+    print(std::cerr);
+    std::abort();
   }
 
   // size of viewport :

@@ -7,7 +7,8 @@
 //  \author Tim Cootes
 
 #include <vcl_atomic_count.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <cstddef>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>
 
@@ -20,7 +21,7 @@ class vil_memory_chunk
     void *data_;
 
     //: Number of elements (bytes)
-    vcl_size_t size_;
+    std::size_t size_;
 
     //: Indicate what format data is (used for binary IO)
     // Should always be a scalar type.
@@ -36,7 +37,7 @@ class vil_memory_chunk
     //: Allocate n bytes of memory
     // \param pixel_format indicates what format to be used for binary IO,
     // and should always be a scalar type.
-    vil_memory_chunk(vcl_size_t n, vil_pixel_format pixel_format);
+    vil_memory_chunk(std::size_t n, vil_pixel_format pixel_format);
 
     //: Copy ctor
     vil_memory_chunk(const vil_memory_chunk&);
@@ -66,7 +67,7 @@ class vil_memory_chunk
     vil_pixel_format pixel_format() const { return pixel_format_; }
 
     //: Number of bytes allocated
-    vcl_size_t size() const { return size_; }
+    std::size_t size() const { return size_; }
 
     //: Create space for n bytes
     //  pixel_format indicates what format to be used for binary IO

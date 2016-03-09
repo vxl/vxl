@@ -8,7 +8,8 @@
 
 #include <vcl_cassert.h>
 #include <vil/vil_image_view.h>
-#include <vcl_algorithm.h>
+#include <vcl_compiler.h>
+#include <algorithm>
 
 //: Fill view with given value
 //  O(size).
@@ -17,14 +18,14 @@ template<class T>
 void vil_fill(vil_image_view<T>& view, T value)
 {
   if (view.is_contiguous())
-    vcl_fill(view.begin(), view.end(), value);
+    std::fill(view.begin(), view.end(), value);
 
   unsigned ni = view.ni();
-  vcl_ptrdiff_t istep=view.istep();
+  std::ptrdiff_t istep=view.istep();
   unsigned nj = view.nj();
-  vcl_ptrdiff_t jstep=view.jstep();
+  std::ptrdiff_t jstep=view.jstep();
   unsigned np = view.nplanes();
-  vcl_ptrdiff_t pstep = view.planestep();
+  std::ptrdiff_t pstep = view.planestep();
 
   T* plane = view.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
@@ -41,7 +42,7 @@ void vil_fill(vil_image_view<T>& view, T value)
 //: Fill data[i*step] (i=0..n-1) with given value
 // \sa vil_fill_line(vil_image_view<T>)
 template<class T>
-void vil_fill_line(T* data, unsigned n, vcl_ptrdiff_t step, T value)
+void vil_fill_line(T* data, unsigned n, std::ptrdiff_t step, T value)
 {
   T* end_data = data + n*step;
   while (data!=end_data) { *data=value; data+=step; }
@@ -129,9 +130,9 @@ void vil_fill_line(vil_image_view<T> &im,
 template<class T>
 void vil_fill_row(vil_image_view<T>& view, unsigned j, T value)
 {
-  unsigned ni = view.ni();      vcl_ptrdiff_t istep=view.istep();
-  assert(j<view.nj());          vcl_ptrdiff_t jstep=view.jstep();
-  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep=view.planestep();
+  unsigned ni = view.ni();      std::ptrdiff_t istep=view.istep();
+  assert(j<view.nj());          std::ptrdiff_t jstep=view.jstep();
+  unsigned np = view.nplanes(); std::ptrdiff_t pstep=view.planestep();
 
   T* row = view.top_left_ptr() + j*jstep;
   for (unsigned p=0;p<np;++p,row += pstep)
@@ -144,9 +145,9 @@ void vil_fill_row(vil_image_view<T>& view, unsigned j, T value)
 template<class T>
 void vil_fill_col(vil_image_view<T>& view, unsigned i, T value)
 {
-  assert(i<view.ni());          vcl_ptrdiff_t istep=view.istep();
-  unsigned nj = view.nj();      vcl_ptrdiff_t jstep=view.jstep();
-  unsigned np = view.nplanes(); vcl_ptrdiff_t pstep=view.planestep();
+  assert(i<view.ni());          std::ptrdiff_t istep=view.istep();
+  unsigned nj = view.nj();      std::ptrdiff_t jstep=view.jstep();
+  unsigned np = view.nplanes(); std::ptrdiff_t pstep=view.planestep();
 
   T* col_top = view.top_left_ptr() + i*istep;
   for (unsigned p=0;p<np;++p,col_top += pstep)
@@ -167,8 +168,8 @@ void vil_fill_mask(vil_image_view<srcT>& image,
   assert(ni==mask.ni() && nj==mask.nj());
   assert(mask.nplanes()==1 ||  mask.nplanes() ==np);
 
-  vcl_ptrdiff_t istepA=image.istep(),jstepA=image.jstep(),pstepA = image.planestep();
-  vcl_ptrdiff_t istepB=mask.istep(),jstepB=mask.jstep(),pstepB = mask.planestep();
+  std::ptrdiff_t istepA=image.istep(),jstepA=image.jstep(),pstepA = image.planestep();
+  std::ptrdiff_t istepB=mask.istep(),jstepB=mask.jstep(),pstepB = mask.planestep();
 
   // If only one mask plane, apply to all image planes
   // Setting pstepB to 0 ensures that the same mask is used for each pass
@@ -197,10 +198,10 @@ template<class T>
 inline
 void vil_fill_disk(vil_image_view<T>& image, double ci, double cj, double r, T value)
 {
-  unsigned ilo = vcl_max(0,int(ci-r));
-  unsigned ihi = vcl_max(0,vcl_min(int(image.ni()-1),int(ci+r+1.0)));
-  unsigned jlo = vcl_max(0,int(cj-r));
-  unsigned jhi = vcl_max(0,vcl_min(int(image.nj()-1),int(cj+r+1.0)));
+  unsigned ilo = std::max(0,int(ci-r));
+  unsigned ihi = std::max(0,std::min(int(image.ni()-1),int(ci+r+1.0)));
+  unsigned jlo = std::max(0,int(cj-r));
+  unsigned jhi = std::max(0,std::min(int(image.nj()-1),int(cj+r+1.0)));
 
   double r2 = r*r;
   for (unsigned j=jlo;j<=jhi;++j)

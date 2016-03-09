@@ -3,8 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_list.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <list>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 
@@ -20,16 +21,16 @@
 class example_sp : public vbl_ref_count
 {
  public:
-  example_sp() { vcl_cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
+  example_sp() { std::cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
 
- ~example_sp() { vcl_cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
+ ~example_sp() { std::cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
   example_sp(example_sp const&) : vbl_ref_count()
   {
-    vcl_cout << "example_sp copy constructor, refcount=" << get_references() << '\n';
+    std::cout << "example_sp copy constructor, refcount=" << get_references() << '\n';
   }
 
-  friend vcl_ostream& operator<<(vcl_ostream& os, example_sp const& e) {
+  friend std::ostream& operator<<(std::ostream& os, example_sp const& e) {
     int p = e.get_references();
     if (p < 1000) os << "example_sp, refcount=" << p;
     else          os << "example_sp, invalid";
@@ -45,37 +46,37 @@ typedef vbl_smart_ptr<example_sp> example_sp_sptr;
 
 void main1()
 {
-  vcl_list<example_sp_sptr> l;
+  std::list<example_sp_sptr> l;
 
-  vcl_cout << "example_sp starts\n";
+  std::cout << "example_sp starts\n";
   example_sp* ptr;
   {
     example_sp_sptr sp; // refcount not incremented: no assignment yet
-    vcl_cout << "example_sp_sptr created\n";
+    std::cout << "example_sp_sptr created\n";
     {
       ptr = new example_sp; // refcount not incremented: no smart pointer
-      vcl_cout << *ptr << " created\n";
+      std::cout << *ptr << " created\n";
 
       sp = ptr; // refcount incremented: assignment to smart pointer
-      vcl_cout << *sp << " assigned\n";
+      std::cout << *sp << " assigned\n";
 
       l.push_back(sp); // refcount incremented (assignment to list entry)
-      vcl_cout << *sp << " put on list\n";
+      std::cout << *sp << " put on list\n";
 
       example_sp_sptr sp2 = sp; // copy constructor: refcount incremented
-      vcl_cout << *sp << " copied to sp2" << *sp2 << '\n';
+      std::cout << *sp << " copied to sp2" << *sp2 << '\n';
 
     } // sp2 goes out of scope: refcount goes down
-    vcl_cout << "Copy of " << *sp << " is now out of scope\n";
+    std::cout << "Copy of " << *sp << " is now out of scope\n";
 
   } // sp goes out of scope: refcount goes down
-  vcl_cout << "Smart pointer of " << *ptr << " is now out of scope\n";
+  std::cout << "Smart pointer of " << *ptr << " is now out of scope\n";
 
-  vcl_cout << "Clearing list\n";
+  std::cout << "Clearing list\n";
   l.pop_back(); // sp removed from list: refcount goes down to 0, destructor called
 
   // So at this point, ptr points to deallocated memory...
-  vcl_cout << "List copy of " << *ptr << " has been removed, ptr freed\n";
+  std::cout << "List copy of " << *ptr << " has been removed, ptr freed\n";
 }
 
 //== end of first main program ==//
@@ -88,8 +89,8 @@ class bigmatrix_impl : public vbl_ref_count
 {
  public:
   double data[256][256];
-  bigmatrix_impl() { vcl_cout << "bigmatrix_impl ctor\n"; }
-  ~bigmatrix_impl() { vcl_cout << "bigmatrix_impl dtor\n"; }
+  bigmatrix_impl() { std::cout << "bigmatrix_impl ctor\n"; }
+  ~bigmatrix_impl() { std::cout << "bigmatrix_impl dtor\n"; }
 };
 
 class bigmatrix
@@ -107,13 +108,13 @@ void main2()
 {
   bigmatrix A, B, C;
 
-  vcl_cout << "one million swaps..." << vcl_flush;
+  std::cout << "one million swaps..." << std::flush;
   for (unsigned i=0; i<1000000; ++i) {
     C = A;
     A = B;
     B = C;
   }
-  vcl_cout << "done\n";
+  std::cout << "done\n";
 }
 
 //== end of second main program ==//

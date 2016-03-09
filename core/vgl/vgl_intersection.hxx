@@ -7,9 +7,10 @@
 
 #include "vgl_intersection.h"
 
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <limits>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <cmath>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>
@@ -25,7 +26,7 @@
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_lineseg_test.hxx>
-#include <vcl_vector.h>
+#include <vector>
 
 static double eps = 1.0e-8; // tolerance for intersections
 inline bool vgl_near_zero(double x) { return x < eps && x > -eps; }
@@ -198,7 +199,7 @@ template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
 {
   // find the box corners
-  vcl_vector<vgl_point_3d<T> > corners;
+  std::vector<vgl_point_3d<T> > corners;
   corners.push_back(b.min_point());
   corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y(), b.min_z()));
   corners.push_back(vgl_point_3d<T> (b.min_x()+b.width(), b.min_y()+b.height(), b.min_z()));
@@ -507,10 +508,10 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
     b0=l1.point1().y(),b1=l1.point2().y(),b2=l2.point1().y(),b3=l2.point2().y(),
     c0=l1.point1().z(),c1=l1.point2().z(),c2=l2.point1().z(),c3=l2.point2().z();
   T t1 = (b3-b2)*(a1-a0)-(a3-a2)*(b1-b0), t2 = (b0-b2)*(a1-a0)-(a0-a2)*(b1-b0);
-  if (vcl_abs(t1) < 0.000001)
+  if (std::abs(t1) < 0.000001)
   {
     t1 = (c3-c2)*(a1-a0)-(a3-a2)*(c1-c0), t2 = (c0-c2)*(a1-a0)-(a0-a2)*(c1-c0);
-    if (vcl_abs(t1) < 0.000001)
+    if (std::abs(t1) < 0.000001)
       t1 = (c3-c2)*(b1-b0)-(b3-b2)*(c1-c0), t2 = (c0-c2)*(b1-b0)-(b0-b2)*(c1-c0);
   }
 
@@ -605,7 +606,7 @@ vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& line,
 
   if (denom == 0)
   {
-    const T inf = vcl_numeric_limits<T>::infinity();
+    const T inf = std::numeric_limits<T>::infinity();
     // Line is either parallel or coplanar
     // If the distance from a line endpoint to the plane is zero, coplanar
     if (vgl_distance(line.point1(), plane)==0.0)
@@ -641,20 +642,20 @@ bool vgl_intersection(vgl_line_segment_3d<T> const& line,
   // The calculation of both denom and numerator are both very dodgy numerically, especially if
   // denom or numerator is small compared to the summands. It would be good to find a more
   // numerically stable solution. IMS.
-  const double tol = vcl_numeric_limits<T>::epsilon() * 10e3;
+  const double tol = std::numeric_limits<T>::epsilon() * 10e3;
 
   double denom = plane.a()*dir.x() +
                  plane.b()*dir.y() +
                  plane.c()*dir.z();
 
-  if (vcl_abs(denom) < tol)
+  if (std::abs(denom) < tol)
   {
     // Line is either parallel or coplanar
     // If the distance from a line endpoint to the plane is zero, coplanar
     if (vgl_distance(line.point1(), plane)!=0.0)
       return false;
 
-    const T inf = vcl_numeric_limits<T>::infinity();
+    const T inf = std::numeric_limits<T>::infinity();
     i_pt.set(inf,inf,inf);
     return true;
   }
@@ -681,20 +682,20 @@ bool vgl_intersection(vgl_infinite_line_3d<T> const& line,
   // The calculation of both denom and numerator are both very dodgy numerically, especially if
   // denom or numerator is small compared to the summands. It would be good to find a more
   // numerically stable solution. IMS.
-  const double tol = vcl_numeric_limits<T>::epsilon() * 10e3;
+  const double tol = std::numeric_limits<T>::epsilon() * 10e3;
 
   double denom = plane.a()*dir.x() +
                  plane.b()*dir.y() +
                  plane.c()*dir.z();
 
-  if (vcl_abs(denom) < tol)
+  if (std::abs(denom) < tol)
   {
     // Line is either parallel or coplanar
     // If the distance from a line endpoint to the plane is zero, coplanar
     if (vgl_distance(pt, plane)!=0.0)
       return false;
 
-    const T inf = vcl_numeric_limits<T>::infinity();
+    const T inf = std::numeric_limits<T>::infinity();
     i_pt.set(inf,inf,inf);
     return true;
   }
@@ -719,20 +720,20 @@ bool vgl_intersection(vgl_ray_3d<T> const& ray,
   // The calculation of both denom and numerator are both very dodgy numerically, especially if
   // denom or numerator is small compared to the summands. It would be good to find a more
   // numerically stable solution. IMS.
-  const double tol = vcl_numeric_limits<T>::epsilon() * 10e3;
+  const double tol = std::numeric_limits<T>::epsilon() * 10e3;
 
   double denom = plane.a()*dir.x() +
                  plane.b()*dir.y() +
                  plane.c()*dir.z();
 
-  if (vcl_abs(denom) < tol)
+  if (std::abs(denom) < tol)
   {
     // Line is either parallel or coplanar
     // If the distance from a line endpoint to the plane is zero, coplanar
     if (vgl_distance(pt, plane)!=0.0)
       return false;
 
-    const T inf = vcl_numeric_limits<T>::infinity();
+    const T inf = std::numeric_limits<T>::infinity();
     i_pt.set(inf,inf,inf);
     return true;
   }
@@ -759,7 +760,7 @@ bool vgl_intersection( const vgl_line_2d<T> &line0,
 
   T delta, delta_x, delta_y, x, y;
   delta = a0*b1 - a1*b0;
-  if ( vcl_abs(delta) <= vgl_tolerance<T>::position ) // Lines are parallel
+  if ( std::abs(delta) <= vgl_tolerance<T>::position ) // Lines are parallel
     return false;
   delta_x = -c0*b1 + b0*c1; delta_y = -a0*c1 + a1*c0;
   x = delta_x / delta; y = delta_y / delta;
@@ -792,9 +793,9 @@ bool vgl_intersection(vgl_plane_3d<T> const& plane0,
   if (vgl_near_zero(mag)) // planes are parallel (or coincident)
     return false;
   t/=mag; // create unit vector
-  double tx = vcl_fabs(static_cast<double>(t.x_));
-  double ty = vcl_fabs(static_cast<double>(t.y_));
-  double tz = vcl_fabs(static_cast<double>(t.z_));
+  double tx = std::fabs(static_cast<double>(t.x_));
+  double ty = std::fabs(static_cast<double>(t.y_));
+  double tz = std::fabs(static_cast<double>(t.z_));
   // determine maximum component of t
   char component = 'x';
   if (ty>=tx&&ty>=tz)
@@ -1005,10 +1006,10 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_box_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, vcl_vector<vgl_point_2d<T> > const& p)
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, std::vector<vgl_point_2d<T> > const& p)
 {
-  vcl_vector<vgl_point_2d<T> > r;
-  typename vcl_vector<vgl_point_2d<T> >::const_iterator i;
+  std::vector<vgl_point_2d<T> > r;
+  typename std::vector<vgl_point_2d<T> >::const_iterator i;
   for (i = p.begin(); i != p.end(); ++i)
     if (vgl_intersection(b, *i))
       r.push_back(*i);
@@ -1019,10 +1020,10 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_box_2d<T> const& b, vcl_vector
 // \relatesalso vgl_point_2d
 // \relatesalso vgl_box_2d
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vcl_vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b)
+std::vector<vgl_point_2d<T> > vgl_intersection(std::vector<vgl_point_2d<T> > const& p, vgl_box_2d<T> const& b)
 {
-  vcl_vector<vgl_point_2d<T> > r;
-  typename vcl_vector<vgl_point_2d<T> >::const_iterator i;
+  std::vector<vgl_point_2d<T> > r;
+  typename std::vector<vgl_point_2d<T> >::const_iterator i;
   for (i = p.begin(); i != p.end(); ++i)
     if (vgl_intersection(b, *i))
       r.push_back(*i);
@@ -1033,10 +1034,10 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vcl_vector<vgl_point_2d<T> > const
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
-vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector<vgl_point_3d<T> > const& p)
+std::vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, std::vector<vgl_point_3d<T> > const& p)
 {
-  vcl_vector<vgl_point_3d<T> > r;
-  typename vcl_vector<vgl_point_3d<T> >::const_iterator i;
+  std::vector<vgl_point_3d<T> > r;
+  typename std::vector<vgl_point_3d<T> >::const_iterator i;
   for (i = p.begin(); i != p.end(); ++i)
     if (vgl_intersection(b, *i))
       r.push_back(*i);
@@ -1047,10 +1048,10 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vgl_box_3d<T> const& b, vcl_vector
 // \relatesalso vgl_point_3d
 // \relatesalso vgl_box_3d
 template <class T>
-vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b)
+std::vector<vgl_point_3d<T> > vgl_intersection(std::vector<vgl_point_3d<T> > const& p, vgl_box_3d<T> const& b)
 {
-  vcl_vector<vgl_point_3d<T> > r;
-  typename vcl_vector<vgl_point_3d<T> >::const_iterator i;
+  std::vector<vgl_point_3d<T> > r;
+  typename std::vector<vgl_point_3d<T> >::const_iterator i;
   for (i = p.begin(); i != p.end(); ++i)
     if (vgl_intersection(b, *i))
       r.push_back(*i);
@@ -1058,16 +1059,16 @@ vcl_vector<vgl_point_3d<T> > vgl_intersection(vcl_vector<vgl_point_3d<T> > const
 }
 
 template <class T>
-vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
+std::vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
                                               vgl_line_2d<T> const& line) {
-  vcl_vector<vgl_point_2d<T> > ret;
-  T tol = vcl_sqrt(vgl_tolerance<T>::position);
+  std::vector<vgl_point_2d<T> > ret;
+  T tol = std::sqrt(vgl_tolerance<T>::position);
   T a = line.a(), b = line.b(), c = line.c();
-  T norm = vcl_sqrt(a*a + b*b);
+  T norm = std::sqrt(a*a + b*b);
   a/=norm; b/=norm; c/=norm;
   unsigned ns = poly.num_sheets();
   for (unsigned s = 0; s<ns; ++s) {
-    vcl_vector<vgl_point_2d<T> > sh = poly[s];
+    std::vector<vgl_point_2d<T> > sh = poly[s];
     unsigned nv = static_cast<unsigned>(sh.size());
     for (unsigned i = 0; i<nv; ++i) {
       unsigned next = (i+1)%nv;
@@ -1078,7 +1079,7 @@ vcl_vector<vgl_point_2d<T> > vgl_intersection(vgl_polygon<T> const& poly,
       T ad_b = a*pb.x() +b*pb.y() +c;
       bool sign_a = ad_a>T(0);
       bool sign_b = ad_b>T(0);
-      bool zero = vcl_abs(ad_a)<tol;
+      bool zero = std::abs(ad_a)<tol;
       //cases
       // 1) no intersections
       // 2) current vertex intersects
@@ -1127,8 +1128,8 @@ vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const& plane, vgl_pointset_3
 template <class T>
 vgl_pointset_3d<T> vgl_intersection(vgl_box_3d<T> const& box, vgl_pointset_3d<T> const& ptset){
   unsigned npts = ptset.npts();
-  vcl_vector<vgl_point_3d<T> > pts;
-  vcl_vector<vgl_vector_3d<T> > normals;
+  std::vector<vgl_point_3d<T> > pts;
+  std::vector<vgl_vector_3d<T> > normals;
   bool hasn = ptset.has_normals();
   for(unsigned i = 0; i<npts; ++i){
     vgl_point_3d<T> p = ptset.p(i);
@@ -1148,10 +1149,10 @@ vgl_pointset_3d<T> vgl_intersection(vgl_box_3d<T> const& box, vgl_pointset_3d<T>
 #define VGL_INTERSECTION_BOX_INSTANTIATE(T) \
 template vgl_box_2d<T > vgl_intersection(vgl_box_2d<T > const&,vgl_box_2d<T > const&); \
 template vgl_box_3d<T > vgl_intersection(vgl_box_3d<T > const&,vgl_box_3d<T > const&); \
-template vcl_vector<vgl_point_2d<T > > vgl_intersection(vgl_box_2d<T > const&,vcl_vector<vgl_point_2d<T > > const&); \
-template vcl_vector<vgl_point_2d<T > > vgl_intersection(vcl_vector<vgl_point_2d<T > > const&,vgl_box_2d<T > const&); \
-template vcl_vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const&,vcl_vector<vgl_point_3d<T > > const&); \
-template vcl_vector<vgl_point_3d<T > > vgl_intersection(vcl_vector<vgl_point_3d<T > > const&,vgl_box_3d<T > const&); \
+template std::vector<vgl_point_2d<T > > vgl_intersection(vgl_box_2d<T > const&,std::vector<vgl_point_2d<T > > const&); \
+template std::vector<vgl_point_2d<T > > vgl_intersection(std::vector<vgl_point_2d<T > > const&,vgl_box_2d<T > const&); \
+template std::vector<vgl_point_3d<T > > vgl_intersection(vgl_box_3d<T > const&,std::vector<vgl_point_3d<T > > const&); \
+template std::vector<vgl_point_3d<T > > vgl_intersection(std::vector<vgl_point_3d<T > > const&,vgl_box_3d<T > const&); \
 template bool vgl_intersection(vgl_box_2d<T > const&,vgl_line_2d<T > const&,vgl_point_2d<T >&,vgl_point_2d<T >&); \
 template bool vgl_intersection(vgl_box_2d<T> const&,vgl_line_segment_2d<T> const&, vgl_line_segment_2d<T>& ); \
 template bool vgl_intersection(vgl_box_3d<T > const&,vgl_plane_3d<T > const&); \
@@ -1177,7 +1178,7 @@ template bool vgl_intersection(vgl_point_2d<T > const&,vgl_point_2d<T > const&,v
 template bool vgl_intersection(vgl_box_2d<T > const&,vgl_polygon<T > const&); \
 template bool vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_line_segment_3d<T > &); \
 template bool vgl_intersection(vgl_plane_3d<T > const&,vgl_plane_3d<T > const&,vgl_infinite_line_3d<T >&); \
-template vcl_vector<vgl_point_2d<T > > vgl_intersection(vgl_polygon<T > const&, vgl_line_2d<T > const&); \
+template std::vector<vgl_point_2d<T > > vgl_intersection(vgl_polygon<T > const&, vgl_line_2d<T > const&); \
 VGL_INTERSECTION_BOX_INSTANTIATE(T)
 
 #endif // vgl_intersection_hxx_

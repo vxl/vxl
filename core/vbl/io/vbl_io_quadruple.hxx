@@ -37,7 +37,7 @@ void vsl_b_read(vsl_b_istream& s, vbl_quadruple<S, T, U, V>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class S, class T, class U, class V>
-void vsl_print_summary(vcl_ostream& os, const vbl_quadruple<S, T, U, V> &v)
+void vsl_print_summary(std::ostream& os, const vbl_quadruple<S, T, U, V> &v)
 {
   os << "(";
   vsl_print_summary(os, v.first);
@@ -53,7 +53,7 @@ void vsl_print_summary(vcl_ostream& os, const vbl_quadruple<S, T, U, V> &v)
 
 #undef VBL_QUADRUPLE_INSTANTIATE
 #define VBL_QUADRUPLE_INSTANTIATE(S, T, U, V ) \
-template void vsl_print_summary(vcl_ostream& s, const vbl_quadruple<S, T, U, V >& v); \
+template void vsl_print_summary(std::ostream& s, const vbl_quadruple<S, T, U, V >& v); \
 template void vsl_b_write(vsl_b_ostream& s, const vbl_quadruple<S, T, U, V > & v); \
 template void vsl_b_read(vsl_b_istream& s, vbl_quadruple<S, T, U, V > & v)
 

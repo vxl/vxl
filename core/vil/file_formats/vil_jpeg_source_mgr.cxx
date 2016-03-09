@@ -12,19 +12,20 @@
 
 #include "vil_jpeg_source_mgr.h"
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h> // for vcl_size_t
-#include <vcl_limits.h> //for vcl_numeric_limits
+#include <cstddef> // for std::size_t
+#include <vcl_compiler.h>
+#include <limits> //for std::numeric_limits
 #include <vil/vil_stream.h>
 
 #define STATIC /*static*/
 
-// In ANSI C, and indeed any rational implementation, vcl_size_t is also the
+// In ANSI C, and indeed any rational implementation, std::size_t is also the
 // type returned by sizeof().  However, it seems there are some irrational
 // implementations out there, in which sizeof() returns an int even though
-// vcl_size_t is defined as long or unsigned long.  To ensure consistent results
+// std::size_t is defined as long or unsigned long.  To ensure consistent results
 // we always use this SIZEOF() macro in place of using sizeof() directly.
 //
-#define SIZEOF(object) ((vcl_size_t) sizeof(object))
+#define SIZEOF(object) ((std::size_t) sizeof(object))
 
 // Implement a jpeg_source_manager for vil_stream *.
 // Adapted by fsm from the FILE * version in jdatasrc.c
@@ -42,7 +43,7 @@ vil_jpeg_init_source (j_decompress_ptr cinfo)
   vil_jpeg_srcptr src = ( vil_jpeg_srcptr )( cinfo->src );
 
 #ifdef DEBUG
-  vcl_cerr << "vil_jpeg_init_source() " << src << '\n';
+  std::cerr << "vil_jpeg_init_source() " << src << '\n';
 #endif
 
   // We reset the empty-input-file flag for each image,
@@ -102,8 +103,8 @@ vil_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
   src->base.next_input_byte = src->buffer;
   //original JPEG (non-j2k) files aren't usually very big
   //so this assert should be no problem
-  assert( (vcl_size_t)nbytes <= vcl_numeric_limits< vcl_size_t >::max() );
-  src->base.bytes_in_buffer = (vcl_size_t)nbytes;
+  assert( (std::size_t)nbytes <= std::numeric_limits< std::size_t >::max() );
+  src->base.bytes_in_buffer = (std::size_t)nbytes;
   src->start_of_file = FALSE;
 
   return TRUE;
@@ -134,8 +135,8 @@ vil_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
       // note we assume that fill_input_buffer will never return FALSE,
       // so suspension need not be handled.
     }
-    src->base.next_input_byte += (vcl_size_t) num_bytes;
-    src->base.bytes_in_buffer -= (vcl_size_t) num_bytes;
+    src->base.next_input_byte += (std::size_t) num_bytes;
+    src->base.bytes_in_buffer -= (std::size_t) num_bytes;
   }
 }
 
@@ -165,7 +166,7 @@ vil_jpeg_stream_src_set (j_decompress_ptr cinfo, vil_stream *vs)
   assert(! ( vil_jpeg_srcptr )( cinfo->src )); // check unused
 
 #ifdef DEBUG
-  vcl_cerr << "vil_jpeg_stream_src_set() : creating new data source\n";
+  std::cerr << "vil_jpeg_stream_src_set() : creating new data source\n";
 #endif
 
   vil_jpeg_srcptr src = (vil_jpeg_srcptr) // allocate

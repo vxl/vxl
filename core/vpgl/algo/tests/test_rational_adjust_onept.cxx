@@ -1,5 +1,6 @@
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_3d.h>
@@ -84,21 +85,21 @@ static void test_rational_adjust_onept()
   //single image correspondence to correct cameras
   vgl_point_2d<double> p1(25479.9, 409.113), p2(17528.2, 14638);
 
-  vcl_vector<vgl_point_2d<double> > corrs;
+  std::vector<vgl_point_2d<double> > corrs;
   corrs.push_back(p1);   corrs.push_back(p2);
 
-  vcl_vector<vpgl_rational_camera<double> > cams(2);
+  std::vector<vpgl_rational_camera<double> > cams(2);
   cams[0]= rcam1;
   cams[1]= rcam2;
-  vcl_vector<vgl_vector_2d<double> > cam_trans;
+  std::vector<vgl_vector_2d<double> > cam_trans;
 
   vgl_point_3d<double> intersection;
   bool good  = vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans,
                                                   intersection);
   TEST("vpgl_rational_adjust_onept::adjust", good, true);
-  vcl_cout << "3-d intersection point " << intersection <<'\n';
+  std::cout << "3-d intersection point " << intersection <<'\n';
   for (unsigned i = 0; i<2; ++i)
-    vcl_cout << "T[" << i << "] " << cam_trans[i] << '\n';
+    std::cout << "T[" << i << "] " << cam_trans[i] << '\n';
 
   double elevation = 34.5121;
   vgl_point_2d<double> ap0(1.14572,1.67109);
@@ -126,9 +127,9 @@ static void test_rational_adjust_onept()
   good  = vpgl_rational_adjust_onept::adjust(cams, corrs, cam_trans,
                                              intersection);
   TEST("vpgl_rational_adjust_onept::adjust", good, true);
-  vcl_cout << "3-d intersection point " << intersection <<'\n';
+  std::cout << "3-d intersection point " << intersection <<'\n';
   for (unsigned i = 0; i<2; ++i)
-    vcl_cout << "T[" << i << "] " << cam_trans[i] << '\n';
+    std::cout << "T[" << i << "] " << cam_trans[i] << '\n';
 
   cams[0].image_offset(u01, v01);
   cams[1].image_offset(u02, v02);

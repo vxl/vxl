@@ -23,9 +23,10 @@
 #include <vul/vul_file_iterator.h>
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h> // for std::sort()
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <algorithm> // for std::sort()
 
 #include <vnl/vnl_trace.h>
 
@@ -202,12 +203,12 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
 
 #if 0
   T dp = dot_product(look, up);
-  bool singularity = vcl_fabs(vcl_fabs(static_cast<double>(dp))-1.0)<1e-08;
+  bool singularity = std::fabs(std::fabs(static_cast<double>(dp))-1.0)<1e-08;
   assert(!singularity);
 #endif
   vgl_vector_3d<T> z = look;
 
-  if (vcl_fabs(dot_product<T>(u,z)-T(1))<1e-5)
+  if (std::fabs(dot_product<T>(u,z)-T(1))<1e-5)
   {
     T r[] = { 1, 0, 0,
               0, 1, 0,
@@ -216,7 +217,7 @@ void vpgl_perspective_camera<T>::look_at(const vgl_homg_point_3d<T>& point,
     vnl_matrix_fixed<T,3,3> R(r);
     set_rotation(vgl_rotation_3d<T>(R));
   }
-  else if (vcl_fabs(dot_product<T>(u,z)-T(-1))<1e-5)
+  else if (std::fabs(dot_product<T>(u,z)-T(-1))<1e-5)
   {
     T r[] = { 1, 0, 0,
             0, 1, 0,
@@ -419,7 +420,7 @@ postmultiply(const vpgl_perspective_camera<T>& camera,
 
 //: Write vpgl_perspective_camera to stream
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s,
+std::ostream&  operator<<(std::ostream& s,
                          vpgl_perspective_camera<Type> const& p)
 {
   vnl_matrix_fixed<Type, 3, 3> k = p.get_calibration().get_matrix();
@@ -434,7 +435,7 @@ vcl_ostream&  operator<<(vcl_ostream& s,
 
 //: Read camera from stream
 template <class Type>
-vcl_istream&  operator >>(vcl_istream& s,
+std::istream&  operator >>(std::istream& s,
                           vpgl_perspective_camera<Type>& p)
 {
   vnl_matrix_fixed<Type, 3, 3> k, Rm;
@@ -453,11 +454,11 @@ vcl_istream&  operator >>(vcl_istream& s,
 
 //: Save in ascii format
 template <class Type>
-void vpgl_perspective_camera<Type>::save(vcl_string cam_path)
+void vpgl_perspective_camera<Type>::save(std::string cam_path)
 {
-  vcl_ofstream os(cam_path.c_str());
+  std::ofstream os(cam_path.c_str());
   if (!os.is_open()) {
-    vcl_cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
+    std::cout << "unable to open output stream in vpgl_proj_camera<T>::save(.)\n";
     return;
   }
   os << *this << '\n';
@@ -466,7 +467,7 @@ void vpgl_perspective_camera<Type>::save(vcl_string cam_path)
 
 //: Write vpgl_perspective_camera to a vrml file
 template <class Type>
-void vrml_write(vcl_ostream& str, vpgl_perspective_camera<Type> const& p, double rad)
+void vrml_write(std::ostream& str, vpgl_perspective_camera<Type> const& p, double rad)
 {
   vgl_point_3d<Type> cent =  p.get_camera_center();
     str << "Transform {\n"
@@ -489,14 +490,14 @@ void vrml_write(vcl_ostream& str, vpgl_perspective_camera<Type> const& p, double
         <<  " ]\n"
         << "}\n";
     vgl_vector_3d<Type> r = p.principal_axis();
-    vcl_cout<<"principal axis :" <<r<<vcl_endl;
+    std::cout<<"principal axis :" <<r<<std::endl;
     vnl_vector_fixed<Type,3> yaxis(0.0, 1.0, 0.0), pvec(r.x(), r.y(), r.z());
     vgl_rotation_3d<Type> rot(yaxis, pvec);
     vnl_quaternion<Type> q = rot.as_quaternion();
 
     //vnl_double_3 axis = q.axis();
     vnl_vector_fixed<Type,3> axis = q.axis();
-    vcl_cout<<"quaternion "<<axis<< " angle "<<q.angle()<<"\n\n";
+    std::cout<<"quaternion "<<axis<< " angle "<<q.angle()<<"\n\n";
     double ang = q.angle();
     str <<  "Transform {\n"
         << " translation " << cent.x()+6*rad*r.x() << ' ' << cent.y()+6*rad*r.y()
@@ -524,33 +525,33 @@ void vrml_write(vcl_ostream& str, vpgl_perspective_camera<Type> const& p, double
 
 //: Return a list of camera's, loaded from the (name sorted) files from the given directory
 template <class T>
-vcl_vector<vpgl_perspective_camera<T> > cameras_from_directory(vcl_string dir, T)
+std::vector<vpgl_perspective_camera<T> > cameras_from_directory(std::string dir, T)
 {
-  vcl_vector<vpgl_perspective_camera<T> > camlist;
+  std::vector<vpgl_perspective_camera<T> > camlist;
   if (!vul_file::is_directory(dir.c_str()) ) {
-    vcl_cerr << "cameras_from_directory: " << dir << " is not a directory\n";
+    std::cerr << "cameras_from_directory: " << dir << " is not a directory\n";
     return camlist;
   }
 
   //get all of the cam and image files, sort them
-  vcl_string camglob=dir+"/*";
+  std::string camglob=dir+"/*";
   vul_file_iterator file_it(camglob.c_str());
-  vcl_vector<vcl_string> cam_files;
+  std::vector<std::string> cam_files;
   while (file_it) {
-    vcl_string camName(file_it());
+    std::string camName(file_it());
     cam_files.push_back(camName);
     ++file_it;
   }
-  vcl_sort(cam_files.begin(), cam_files.end());
+  std::sort(cam_files.begin(), cam_files.end());
 
   //take sorted lists and load from file
-  for (vcl_vector<vcl_string>::iterator iter = cam_files.begin();
+  for (std::vector<std::string>::iterator iter = cam_files.begin();
        iter != cam_files.end(); ++iter)
   {
-    vcl_ifstream ifs(iter->c_str());
+    std::ifstream ifs(iter->c_str());
     vpgl_perspective_camera<T> pcam;
     if (!ifs.is_open()) {
-      vcl_cerr << "Failed to open file " << *iter << '\n';
+      std::cerr << "Failed to open file " << *iter << '\n';
     }
     else  {
       ifs >> pcam;
@@ -568,7 +569,7 @@ double vpgl_persp_cam_distance( const vpgl_perspective_camera<T>& cam1, const vp
 
   vgl_rotation_3d<T> R(ray1, ray2);
   double trace = vnl_trace(R.as_matrix());
-  return vcl_acos((trace-1.0)/2.0);  // dist is theta
+  return std::acos((trace-1.0)/2.0);  // dist is theta
 }
 
 template <class T>
@@ -602,7 +603,7 @@ vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam,
   vgl_point_2d<T> ur(T(2.0*pp.x()), T(0));
   vgl_point_2d<T> lr(T(2.0*pp.x()), T(2.0*pp.y()));
   vgl_point_2d<T> ll(T(0), T(2.0*pp.y()));
-  vcl_vector<vgl_ray_3d<T> > corner_rays;
+  std::vector<vgl_ray_3d<T> > corner_rays;
   corner_rays.push_back(cam.backproject_ray(lr));
   corner_rays.push_back(cam.backproject_ray(ur));
   corner_rays.push_back(cam.backproject_ray(ul));
@@ -628,11 +629,11 @@ template vgl_vector_3d<T> vpgl_persp_cam_base_line_vector(const vpgl_perspective
                                                           const vpgl_perspective_camera<T>& cam2); \
 template vgl_rotation_3d<T> vpgl_persp_cam_relative_orientation(const vpgl_perspective_camera<T>& cam1, \
                                                                 const vpgl_perspective_camera<T>& cam2); \
-template void vrml_write(vcl_ostream &s, const vpgl_perspective_camera<T >&, double rad); \
-template vcl_vector<vpgl_perspective_camera<T > > cameras_from_directory(vcl_string dir, T); \
+template void vrml_write(std::ostream &s, const vpgl_perspective_camera<T >&, double rad); \
+template std::vector<vpgl_perspective_camera<T > > cameras_from_directory(std::string dir, T); \
  template vgl_frustum_3d<T> frustum(vpgl_perspective_camera<T> const& cam, T d_near, T d_far); \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_perspective_camera<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vpgl_perspective_camera<T >&)
+template std::ostream& operator<<(std::ostream&, const vpgl_perspective_camera<T >&); \
+template std::istream& operator>>(std::istream&, vpgl_perspective_camera<T >&)
 
 
 #endif // vpgl_perspective_camera_hxx_

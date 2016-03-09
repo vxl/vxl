@@ -12,8 +12,9 @@
 //   14.11.2005 Chanop Silpa-Anan  adapted to QT 3.3.5 for X11/Mac
 // \endverbatim
 
-#include <vcl_string.h>
-#include <vcl_iosfwd.h>
+#include <string>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 #include <vgui/vgui_statusbuf.h>
 #include <vgui/vgui_statusbar.h>
@@ -32,9 +33,9 @@ class vgui_qt_statusbar :
    int write(const char* text, int n);
    int write(const char* text);
 
-   vcl_string linebuffer;
+   std::string linebuffer;
    vgui_statusbuf* statusbuf;
-   vcl_ostream out;
+   std::ostream out;
 
  private:
    QMainWindow *parent_;

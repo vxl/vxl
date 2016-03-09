@@ -76,7 +76,7 @@ build_rotmatrix(float m[4][4], float q[4]);
 
 /*
  * This function computes a quaternion based on an axis (defined by
- * the given vcl_vector) and an angle about which to rotate.  The angle is
+ * the given std::vector) and an angle about which to rotate.  The angle is
  * expressed in radians.  The result is put into the third argument.
  */
 void

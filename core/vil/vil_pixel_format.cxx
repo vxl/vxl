@@ -10,8 +10,9 @@
 // \endverbatim
 
 #include <vcl_cassert.h>
-#include <vcl_complex.h>
-#include <vcl_string.h>
+#include <complex>
+#include <vcl_compiler.h>
+#include <string>
 
 static unsigned component_size[] =
 {
@@ -68,8 +69,8 @@ static unsigned component_size[] =
   sizeof(float),       //  VIL_PIXEL_FORMAT_RGBA_FLOAT
   0,                   //  VIL_PIXEL_FORMAT_RGBA_LONG_DOUBLE
 
-  sizeof(vcl_complex<float>),   // VIL_PIXEL_FORMAT_COMPLEX_FLOAT
-  sizeof(vcl_complex<double>),  // VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
+  sizeof(std::complex<float>),   // VIL_PIXEL_FORMAT_COMPLEX_FLOAT
+  sizeof(std::complex<double>),  // VIL_PIXEL_FORMAT_COMPLEX_DOUBLE
 };
 
 
@@ -219,7 +220,7 @@ vil_pixel_format vil_pixel_format_component_format(enum vil_pixel_format f)
 
 
 //: output a pretty string representing the pixel format.
-vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
+std::ostream & operator << (std::ostream &os, vil_pixel_format f)
 {
   switch (f)
   {
@@ -278,7 +279,7 @@ vcl_ostream & operator << (vcl_ostream &os, vil_pixel_format f)
 // This uses the same encoding as operator<<.
 vil_pixel_format vil_pixel_format_from_string(const char * s)
 {
-  vcl_string str(s);
+  std::string str(s);
   if (str == "VIL_PIXEL_FORMAT_UNKNOWN") return VIL_PIXEL_FORMAT_UNKNOWN;
 #if VXL_HAS_INT_64
   if (str == "vxl_uint_64") return VIL_PIXEL_FORMAT_UINT_64;

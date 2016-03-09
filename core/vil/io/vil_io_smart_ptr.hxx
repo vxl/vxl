@@ -6,6 +6,7 @@
 // \brief Serialised binary IO functions for vil_smart_ptr<T>
 // \author Tim Cootes/Ian Scott (Manchester)
 
+#include <iostream>
 #include "vil_io_smart_ptr.h"
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_smart_ptr.h>
@@ -91,9 +92,9 @@ void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
       // This checks that the saving stream and reading stream
       // both agree on whether or not this is the first time they
       // have seen this object.
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
                << "           De-serialisation failure\n";
-      is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
     }
 
@@ -111,9 +112,9 @@ void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
     break;
    }
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vil_smart_ptr<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -121,7 +122,7 @@ void vsl_b_read(vsl_b_istream &is, vil_smart_ptr<T> &p)
 //=====================================================================
 //: Output a human readable summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream & os,const vil_smart_ptr<T> & p)
+void vsl_print_summary(std::ostream & os,const vil_smart_ptr<T> & p)
 {
   os << "Smart ptr to ";
   if (p.ptr())
@@ -169,7 +170,7 @@ void vsl_b_write(vsl_b_ostream& os, const vil_smart_ptr<T> *p)
 }
 
 template<class T>
-void vsl_print_summary(vcl_ostream, const vil_smart_ptr<T> *p)
+void vsl_print_summary(std::ostream, const vil_smart_ptr<T> *p)
 {
   if (p==0)
     os << "NULL PTR";
@@ -183,7 +184,7 @@ void vsl_print_summary(vcl_ostream, const vil_smart_ptr<T> *p)
 
 #undef VIL_IO_SMART_PTR_INSTANTIATE
 #define VIL_IO_SMART_PTR_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vil_smart_ptr<T > &); \
+template void vsl_print_summary(std::ostream &, const vil_smart_ptr<T > &); \
 template void vsl_b_read(vsl_b_istream &, vil_smart_ptr<T > &); \
 template void vsl_b_write(vsl_b_ostream &, const vil_smart_ptr<T > &)
 

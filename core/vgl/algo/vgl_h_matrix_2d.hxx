@@ -6,14 +6,16 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_limits.h>
-#include <vcl_cstdlib.h> // for exit()
-#include <vcl_fstream.h>
+#include <limits>
+#include <vcl_compiler.h>
+#include <cstdlib> // for exit()
+#include <fstream>
+#include <iostream>
 #include <vcl_cassert.h>
-# include <vcl_deprecated.h>
+#include <vcl_deprecated.h>
 
 template <class T>
-vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_istream& s)
+vgl_h_matrix_2d<T>::vgl_h_matrix_2d(std::istream& s)
 {
   t12_matrix_.read_ascii(s);
 }
@@ -21,24 +23,24 @@ vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_istream& s)
 template <class T>
 vgl_h_matrix_2d<T>::vgl_h_matrix_2d(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good())
-    vcl_cerr << "vgl_h_matrix_2d::read: Error opening " << filename << vcl_endl;
+    std::cerr << "vgl_h_matrix_2d::read: Error opening " << filename << std::endl;
   else
     t12_matrix_.read_ascii(f);
 }
 
 template <class T>
-vgl_h_matrix_2d<T>::vgl_h_matrix_2d(vcl_vector<vgl_homg_point_2d<T> > const& points1,
-                                    vcl_vector<vgl_homg_point_2d<T> > const& points2)
+vgl_h_matrix_2d<T>::vgl_h_matrix_2d(std::vector<vgl_homg_point_2d<T> > const& points1,
+                                    std::vector<vgl_homg_point_2d<T> > const& points2)
 {
   vnl_matrix<T> W;
   assert(points1.size() == points2.size());
   unsigned int numpoints = points1.size();
   if (numpoints < 4)
   {
-    vcl_cerr << "\nvhl_h_matrix_2d - minimum of 4 points required\n";
-    vcl_exit(0);
+    std::cerr << "\nvhl_h_matrix_2d - minimum of 4 points required\n";
+    std::exit(0);
   }
 
   W.set_size(2*numpoints, 9);
@@ -156,13 +158,13 @@ vgl_h_matrix_2d<T>::operator()(vgl_homg_line_2d<T> const& l) const
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_h_matrix_2d<T> const& h)
+std::ostream& operator<<(std::ostream& s, vgl_h_matrix_2d<T> const& h)
 {
   return s << h.get_matrix();
 }
 
 template <class T>
-bool vgl_h_matrix_2d<T>::read(vcl_istream& s)
+bool vgl_h_matrix_2d<T>::read(std::istream& s)
 {
   t12_matrix_.read_ascii(s);
   return s.good() || s.eof();
@@ -171,9 +173,9 @@ bool vgl_h_matrix_2d<T>::read(vcl_istream& s)
 template <class T>
 bool vgl_h_matrix_2d<T>::read(char const* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!f.good())
-    vcl_cerr << "vgl_h_matrix_2d::read: Error opening " << filename << vcl_endl;
+    std::cerr << "vgl_h_matrix_2d::read: Error opening " << filename << std::endl;
   return read(f);
 }
 
@@ -233,7 +235,7 @@ vgl_h_matrix_2d<T>::set(vnl_matrix_fixed<T,3,3> const& H)
 //-------------------------------------------------------------------
 template <class T>
 bool vgl_h_matrix_2d<T>::
-projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
+projective_basis(std::vector<vgl_homg_point_2d<T> > const& points)
 {
   if (points.size()!=4)
     return false;
@@ -249,7 +251,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
 
   if (! point_matrix.is_finite() || point_matrix.has_nans())
   {
-    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
              << " given points have infinite or NaN values\n";
     this->set_identity();
     return false;
@@ -257,7 +259,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
   vnl_svd<T> svd1(point_matrix.as_ref(), 1e-8); // size 3x4
   if (svd1.rank() < 3)
   {
-    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
              << " At least three out of the four points are nearly collinear\n";
     this->set_identity();
     return false;
@@ -276,7 +278,7 @@ projective_basis(vcl_vector<vgl_homg_point_2d<T> > const& points)
 
   if (! back_matrix.is_finite() || back_matrix.has_nans())
   {
-    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
              << " back matrix has infinite or NaN values\n";
     this->set_identity();
     return false;
@@ -306,7 +308,7 @@ bool vgl_h_matrix_2d<T>::is_euclidean() const
   R *= R.transpose();
   R(0,0) -= T(1);
   R(1,1) -= T(1);
-  return R.absolute_value_max() <= 10*vcl_numeric_limits<T>::epsilon();
+  return R.absolute_value_max() <= 10*std::numeric_limits<T>::epsilon();
 }
 
 template <class T>
@@ -317,7 +319,7 @@ bool vgl_h_matrix_2d<T>::is_identity() const
 
 //-------------------------------------------------------------------
 template <class T>
-bool vgl_h_matrix_2d<T>::projective_basis(vcl_vector<vgl_homg_line_2d<T> > const& lines)
+bool vgl_h_matrix_2d<T>::projective_basis(std::vector<vgl_homg_line_2d<T> > const& lines)
 {
   if (lines.size()!=4)
     return false;
@@ -333,7 +335,7 @@ bool vgl_h_matrix_2d<T>::projective_basis(vcl_vector<vgl_homg_line_2d<T> > const
 
   if (! line_matrix.is_finite() || line_matrix.has_nans())
   {
-    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
              << " given lines have infinite or NaN values\n";
     this->set_identity();
     return false;
@@ -341,7 +343,7 @@ bool vgl_h_matrix_2d<T>::projective_basis(vcl_vector<vgl_homg_line_2d<T> > const
   vnl_svd<T> svd1(line_matrix.as_ref(), 1e-8); // size 3x4
   if (svd1.rank() < 3)
   {
-    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
              << " At least three out of the four lines are nearly concurrent\n";
     this->set_identity();
     return false;
@@ -358,7 +360,7 @@ bool vgl_h_matrix_2d<T>::projective_basis(vcl_vector<vgl_homg_line_2d<T> > const
 
   if (! back_matrix.is_finite() || back_matrix.has_nans())
   {
-    vcl_cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
+    std::cerr << "vgl_h_matrix_2d<T>::projective_basis():\n"
              << " back matrix has infinite or NaN values\n";
     this->set_identity();
     return false;
@@ -388,7 +390,7 @@ vgl_h_matrix_2d<T>&
 vgl_h_matrix_2d<T>::set_rotation(T theta)
 {
   double theta_d = (double)theta;
-  double c = vcl_cos(theta_d), s = vcl_sin(theta_d);
+  double c = std::cos(theta_d), s = std::sin(theta_d);
   t12_matrix_[0][0] = (T)c;   t12_matrix_[0][1] = -(T)s;
   t12_matrix_[1][0] = (T)s;   t12_matrix_[1][1] = (T)c;
   return *this;
@@ -409,8 +411,8 @@ vgl_h_matrix_2d<T>&
 vgl_h_matrix_2d<T>::set_similarity(T s, T theta,
                                    T tx, T ty)
 {
-  T a=s*vcl_cos(theta);
-  T b=s*vcl_sin(theta);
+  T a=s*std::cos(theta);
+  T b=s*std::sin(theta);
   t12_matrix_[0][0] = a; t12_matrix_[0][1] = -b; t12_matrix_[0][2] = tx;
   t12_matrix_[1][0] = b; t12_matrix_[1][1] =  a; t12_matrix_[1][2] = ty;
   t12_matrix_[2][0]=T(0); t12_matrix_[2][1]=T(0); t12_matrix_[2][2] = T(1);
@@ -502,7 +504,7 @@ vgl_h_matrix_2d<T>::get_translation_vector() const
 #undef VGL_H_MATRIX_2D_INSTANTIATE
 #define VGL_H_MATRIX_2D_INSTANTIATE(T) \
 template class vgl_h_matrix_2d<T >; \
-template vcl_ostream& operator << (vcl_ostream& s, vgl_h_matrix_2d<T > const& h); \
-template vcl_istream& operator >> (vcl_istream& s, vgl_h_matrix_2d<T >& h)
+template std::ostream& operator << (std::ostream& s, vgl_h_matrix_2d<T > const& h); \
+template std::istream& operator >> (std::istream& s, vgl_h_matrix_2d<T >& h)
 
 #endif // vgl_h_matrix_2d_hxx_

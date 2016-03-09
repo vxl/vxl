@@ -14,15 +14,16 @@
 //   26-APR-2002  K.Y.McGaul - Added doxygen style comments.
 // \endverbatim
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <string>
 
 //: Convert a string naming a colour to a string of the RGB values.
-vcl_string text_to_color(const vcl_string&);
+std::string text_to_color(const std::string&);
 //: Given a string naming a colour, return its red value.
-float red_value(const vcl_string&);
+float red_value(const std::string&);
 //: Given a string naming a colour, return its green value.
-float green_value(const vcl_string&);
+float green_value(const std::string&);
 //: Given a string naming a colour, return its blue value.
-float blue_value(const vcl_string&);
+float blue_value(const std::string&);
 
 #endif // vgui_color_text_h_

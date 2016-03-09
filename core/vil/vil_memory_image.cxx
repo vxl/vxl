@@ -13,7 +13,8 @@
 
 #include "vil_memory_image.h"
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil/vil_image_view.h>
 #include <vil/vil_copy.h>
@@ -56,13 +57,13 @@ vil_memory_image::vil_memory_image(unsigned n_i, unsigned n_j, unsigned n_planes
    macro(VIL_PIXEL_FORMAT_BOOL ,   bool)
    macro(VIL_PIXEL_FORMAT_FLOAT ,  float)
    macro(VIL_PIXEL_FORMAT_DOUBLE , double)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
-    vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n"
-                "\t unknown format " << format << vcl_endl;
-    vcl_abort();
+    std::cerr << "ERROR: vil_memory_image::vil_memory_image\n"
+                "\t unknown format " << format << std::endl;
+    std::abort();
   }
 }
 
@@ -87,13 +88,13 @@ vil_memory_image::vil_memory_image(vil_image_view_base const &view)
    macro(VIL_PIXEL_FORMAT_BOOL ,   bool )
    macro(VIL_PIXEL_FORMAT_FLOAT ,  float )
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
-    vcl_cerr << "ERROR: vil_memory_image::vil_memory_image\n\tunknown format "
+    std::cerr << "ERROR: vil_memory_image::vil_memory_image\n\tunknown format "
              << vil_pixel_format_component_format(view.pixel_format()) << '\n';
-    vcl_abort();
+    std::abort();
   }
   assert (view_->ni() == view.ni() && view_->nj() == view.nj());
 }
@@ -129,8 +130,8 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
    macro(VIL_PIXEL_FORMAT_BOOL , bool )
    macro(VIL_PIXEL_FORMAT_FLOAT , float )
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
     return VXL_NULLPTR;
@@ -165,8 +166,8 @@ vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned n_i,
    macro(VIL_PIXEL_FORMAT_BOOL , bool )
    macro(VIL_PIXEL_FORMAT_FLOAT , float )
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
     return VXL_NULLPTR;
@@ -190,9 +191,9 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
     if (v.memory_chunk() == w.memory_chunk()) \
     { \
       if (&v(i0,j0) != w.top_left_ptr()) { \
-        vcl_cerr << "ERROR: vil_memory_image::put_view()\n" \
+        std::cerr << "ERROR: vil_memory_image::put_view()\n" \
                  << "different window from that used in get_view()\n"; \
-        vcl_abort(); } \
+        std::abort(); } \
       else return true; /* The user has already modified the data in place. */ \
     } \
     vil_copy_to_window(w, v, i0, j0); \
@@ -211,12 +212,12 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
    macro(VIL_PIXEL_FORMAT_BOOL , bool )
    macro(VIL_PIXEL_FORMAT_FLOAT , float )
    macro(VIL_PIXEL_FORMAT_DOUBLE , double )
-   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  vcl_complex<float>)
-   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , vcl_complex<double>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_FLOAT ,  std::complex<float>)
+   macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
-    vcl_cerr << "WARNING: vil_memory_image::put_view()\n"
-             << "\t Unexpected pixel type" << view_->pixel_format() << vcl_endl;
+    std::cerr << "WARNING: vil_memory_image::put_view()\n"
+             << "\t Unexpected pixel type" << view_->pixel_format() << std::endl;
     return 0;
   }
 }

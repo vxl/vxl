@@ -3,8 +3,9 @@
 //:
 // \file
 
-#include <vcl_iostream.h>
-#include <vcl_vector.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <vector>
 
 //: Choose precision in printouts.
 //
@@ -16,10 +17,10 @@
 // moved here because gcc 2.7 choked
 static vnl_matlab_print_format the_format = vnl_matlab_print_format_short;
 //: the rest of the stack is stored in this vector.
-static vcl_vector<int> *format_stack = VXL_NULLPTR;
+static std::vector<int> *format_stack = VXL_NULLPTR;
 //: call this to initialize the format stack.
 static void vnl_matlab_print_format_init()
-{ if (!format_stack) format_stack = new vcl_vector<int>; }
+{ if (!format_stack) format_stack = new std::vector<int>; }
 
 void vnl_matlab_print_format_push(vnl_matlab_print_format f)
 {
@@ -32,7 +33,7 @@ void vnl_matlab_print_format_pop()
 {
   vnl_matlab_print_format_init();
   if (format_stack->empty())
-    vcl_cerr << __FILE__ ": format stack empty\n";
+    std::cerr << __FILE__ ": format stack empty\n";
   else {
     the_format = vnl_matlab_print_format(format_stack->back());
     format_stack->pop_back();

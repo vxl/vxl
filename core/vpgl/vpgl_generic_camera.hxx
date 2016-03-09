@@ -7,14 +7,15 @@
 #include "vpgl_generic_camera.h"
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_cassert.h>
-#include <vcl_cmath.h>
+#include <vcl_compiler.h>
+#include <cmath>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_plane_3d.h>
-#include <vcl_iostream.h>
+#include <iostream>
 #include <vnl/vnl_math.h>
 
 //-------------------------------------------
@@ -55,9 +56,9 @@ vpgl_generic_camera<T>::
         double dim = nc;
         if (nr<nc)
             dim = nr;
-        double lv = vcl_log(dim)/vcl_log(2.0);
+        double lv = std::log(dim)/std::log(2.0);
         n_levels_ = static_cast<int>(lv);// round down
-        if (dim*vcl_pow(0.5, static_cast<double>(n_levels_-1)) < 32.0) n_levels_--;
+        if (dim*std::pow(0.5, static_cast<double>(n_levels_-1)) < 32.0) n_levels_--;
         if (n_levels_<=0) n_levels_ = 1;
         rays_.resize(n_levels_);
         nr_.resize(n_levels_);
@@ -78,8 +79,8 @@ vpgl_generic_camera<T>::
 //------------------------------------------
 template <class T>
 vpgl_generic_camera<T>::
-    vpgl_generic_camera( vcl_vector<vbl_array_2d<vgl_ray_3d<T> > > const& rays,
-    vcl_vector<int> nrs,   vcl_vector<int> ncs  )
+    vpgl_generic_camera( std::vector<vbl_array_2d<vgl_ray_3d<T> > > const& rays,
+    std::vector<int> nrs,   std::vector<int> ncs  )
 {
     assert(rays.size()>0 && nrs.size()>0 && ncs.size()>0);
     //compute bounds on ray origins
@@ -200,8 +201,8 @@ void vpgl_generic_camera<T>::
     vgl_plane_3d<T> pl(-nr.direction(), p);
     bool valid_inter = true;
     // find intersection of nearest ray with the plane
-    vcl_vector<vgl_point_3d<T> > inter_pts;
-    vcl_vector<vgl_point_2d<T> > img_pts;
+    std::vector<vgl_point_3d<T> > inter_pts;
+    std::vector<vgl_point_2d<T> > img_pts;
     vgl_point_3d<T> ipt;
     valid_inter = vgl_intersection(nr, pl, ipt);
     inter_pts.push_back(ipt);
@@ -213,7 +214,7 @@ void vpgl_generic_camera<T>::
     if (nearest_r>0 && !horiz) {
         vgl_ray_3d<T> r = rays_[0][nearest_r-1][nearest_c];
         valid_inter = vgl_intersection(r, pl, ipt);
-        if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
+        if(std::fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
         {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(0.0, -1.0));
@@ -223,7 +224,7 @@ void vpgl_generic_camera<T>::
     if (nearest_c>0 && !vert) {
         vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c-1];
         valid_inter = vgl_intersection(r, pl, ipt);
-        if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
+        if(std::fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
         {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(-1.0, 0.0));
@@ -234,7 +235,7 @@ void vpgl_generic_camera<T>::
     if (nearest_c<nrght && !vert ) {
         vgl_ray_3d<T> r = rays_[0][nearest_r][nearest_c+1];
         valid_inter = vgl_intersection(r, pl, ipt);
-        if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
+        if(std::fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
         {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(1.0, 0.0));
@@ -245,7 +246,7 @@ void vpgl_generic_camera<T>::
     if (nearest_r<nbl && !horiz ) {
         vgl_ray_3d<T> r = rays_[0][nearest_r+1][nearest_c];
         valid_inter = vgl_intersection(r, pl, ipt);
-        if(vcl_fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
+        if(std::fabs((ipt-inter_pts[0]).length())  > vnl_math::eps)
         {
             inter_pts.push_back(ipt);
             img_pts.push_back(vgl_point_2d<T>(0.0, 1.0));
@@ -316,8 +317,8 @@ vgl_ray_3d<T> vpgl_generic_camera<T>::ray(const T u, const T v) const
         return rays_[0][iv][iu];
     // u or v is sub-pixel so find interpolated ray
     //find neighboring rays and pixel distances to the sub-pixel location
-    vcl_vector<double> dist;
-    vcl_vector<vgl_ray_3d<T> > nrays;
+    std::vector<double> dist;
+    std::vector<vgl_ray_3d<T> > nrays;
     // closest ray (the lower left corner pixel in this case)
     vgl_ray_3d<T> ru = rays_[0][iv][iu];
     nrays.push_back(ru);
@@ -371,14 +372,14 @@ void vpgl_generic_camera<T>::print_orig(int level)
     for (int r = 0; r<nr_[level]; ++r) {
         for (int c = 0; c<nc_[level]; ++c) {
             vgl_point_3d<T> o = rays_[level][r][c].origin();
-            vcl_cout << '(' << o.x() << ' ' << o.y() << ") ";
+            std::cout << '(' << o.x() << ' ' << o.y() << ") ";
         }
-        vcl_cout << '\n';
+        std::cout << '\n';
     }
 }
 
 template <class T>
-void vpgl_generic_camera<T>::print_to_vrml(int level, vcl_ostream& os)
+void vpgl_generic_camera<T>::print_to_vrml(int level, std::ostream& os)
 {
     for (int r = 0; r<nr_[level]; ++r) {
         for (int c = 0; c<nc_[level]; ++c) {

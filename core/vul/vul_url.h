@@ -14,9 +14,10 @@
 // 8 Nov 2002 - Peter Vanroose - corrected HTTP client request syntax
 // \endverbatim
 
-#include <vcl_istream.h>
-#include <vcl_iostream.h> // needed for vcl_ios_in and vcl_ios_openmode
-#include <vcl_string.h>
+#include <istream>
+#include <iostream> // needed for std::ios::in and std::ios::openmode
+#include <vcl_compiler.h>
+#include <string>
 
 //: Functions to test and open streams via a URL
 // Currently supports file and HTTP only.
@@ -30,7 +31,7 @@ class vul_url
   // If URL is "http://..." open using vul_http_open
   // If URL is "ftp://..." attempt ftp
   // Otherwise assume it is a filename and open with given mode
-  static vcl_istream* open(const char* url, vcl_ios_openmode mode=vcl_ios_in );
+  static std::istream* open(const char* url, std::ios::openmode mode=std::ios::in );
 
   //: Does that URL exist
   // If the URL does not begin with a recognised scheme identifier, the function will
@@ -46,10 +47,10 @@ class vul_url
   static bool is_file(const char* url);
 
   //: Encode a string of chars into base64 format
-  static vcl_string encode_base64(const vcl_string& in);
+  static std::string encode_base64(const std::string& in);
 
   //: Decode a string of chars from base64 format
-  static vcl_string decode_base64(const vcl_string& in);
+  static std::string decode_base64(const std::string& in);
 };
 
 #endif // vul_url_h_

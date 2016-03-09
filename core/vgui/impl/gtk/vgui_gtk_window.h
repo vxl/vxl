@@ -44,7 +44,7 @@ class vgui_gtk_window : public vgui_window
 
   void show();
   void hide();
-  void set_title(vcl_string const &);
+  void set_title(std::string const &);
 
   void set_menubar(const vgui_menu &menu);
   //: Returns the current adaptor (OpenGL widget holder).

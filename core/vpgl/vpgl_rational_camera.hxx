@@ -5,8 +5,9 @@
 // \file
 
 #include "vpgl_rational_camera.h"
-#include <vcl_vector.h>
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <fstream>
 #include <vsl/vsl_binary_io.h>
 //#include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>
@@ -31,8 +32,8 @@ vpgl_rational_camera<T>::vpgl_rational_camera()
 //: Constructor with an array encoding of the coefficients
 template <class T>
 vpgl_rational_camera<T>::
-vpgl_rational_camera(vcl_vector<vcl_vector<T> > const& rational_coeffs,
-                     vcl_vector<vpgl_scale_offset<T> > const& scale_offsets)
+vpgl_rational_camera(std::vector<std::vector<T> > const& rational_coeffs,
+                     std::vector<vpgl_scale_offset<T> > const& scale_offsets)
 {
   this->set_coefficients(rational_coeffs);
   this->set_scale_offsets(scale_offsets);
@@ -40,10 +41,10 @@ vpgl_rational_camera(vcl_vector<vcl_vector<T> > const& rational_coeffs,
 
 template <class T>
 vpgl_rational_camera<T>::
-vpgl_rational_camera(vcl_vector<T> const& neu_u,
-                     vcl_vector<T> const& den_u,
-                     vcl_vector<T> const& neu_v,
-                     vcl_vector<T> const& den_v,
+vpgl_rational_camera(std::vector<T> const& neu_u,
+                     std::vector<T> const& den_u,
+                     std::vector<T> const& neu_v,
+                     std::vector<T> const& den_v,
                      const T x_scale, const T x_off,
                      const T y_scale, const T y_off,
                      const T z_scale, const T z_off,
@@ -103,7 +104,7 @@ vpgl_rational_camera<T>* vpgl_rational_camera<T>::clone(void) const
 
 template <class T>
 void vpgl_rational_camera<T>::
-set_coefficients(vcl_vector<vcl_vector<T> > const& rational_coeffs)
+set_coefficients(std::vector<std::vector<T> > const& rational_coeffs)
 {
   for (unsigned j = 0; j<4; ++j)
     for (unsigned i = 0; i<20; ++i)
@@ -112,15 +113,15 @@ set_coefficients(vcl_vector<vcl_vector<T> > const& rational_coeffs)
 
 template <class T>
 void vpgl_rational_camera<T>::
-set_scale_offsets(vcl_vector<vpgl_scale_offset<T> > const& scale_offsets)
+set_scale_offsets(std::vector<vpgl_scale_offset<T> > const& scale_offsets)
 {
   scale_offsets_=scale_offsets;
 }
 
 template <class T>
-vcl_vector<vcl_vector<T> > vpgl_rational_camera<T>::coefficients() const
+std::vector<std::vector<T> > vpgl_rational_camera<T>::coefficients() const
 {
-  vcl_vector<vcl_vector<T> > result(4);
+  std::vector<std::vector<T> > result(4);
   for (unsigned j = 0; j<4; ++j)
   {
     result[j].resize(20);
@@ -228,7 +229,7 @@ vgl_point_2d<T> vpgl_rational_camera<T>::project(vgl_point_3d<T> world_point)con
 
 //: print the camera parameters
 template <class T>
-void vpgl_rational_camera<T>::print(vcl_ostream& s) const
+void vpgl_rational_camera<T>::print(std::ostream& s) const
 {
   vpgl_scale_offset<T> sox = scale_offsets_[X_INDX];
   vpgl_scale_offset<T> soy = scale_offsets_[Y_INDX];
@@ -341,12 +342,12 @@ void vpgl_rational_camera<T>::print(vcl_ostream& s) const
 }
 
 template <class T>
-bool vpgl_rational_camera<T>::save(vcl_string cam_path)
+bool vpgl_rational_camera<T>::save(std::string cam_path)
 {
-  vcl_ofstream file_out;
+  std::ofstream file_out;
   file_out.open(cam_path.c_str());
   if (!file_out.good()) {
-    vcl_cerr << "error: bad filename: " << cam_path << vcl_endl;
+    std::cerr << "error: bad filename: " << cam_path << std::endl;
     return false;
   }
   file_out.precision(12);
@@ -422,7 +423,7 @@ bool vpgl_rational_camera<T>::save(vcl_string cam_path)
 
 //: Write to stream
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_rational_camera<T >& c )
+std::ostream&  operator<<(std::ostream& s, const vpgl_rational_camera<T >& c )
 {
   c.print(s);
   return s;
@@ -430,12 +431,12 @@ vcl_ostream&  operator<<(vcl_ostream& s, const vpgl_rational_camera<T >& c )
 
 //: read from a file
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
+vpgl_rational_camera<T>* read_rational_camera(std::string cam_path)
 {
-  vcl_ifstream file_inp;
+  std::ifstream file_inp;
   file_inp.open(cam_path.c_str());
   if (!file_inp.good()) {
-    vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
+    std::cout << "error: bad filename: " << cam_path << std::endl;
     return 0;
   }
   vpgl_rational_camera<T>* rcam = read_rational_camera<T>(file_inp);
@@ -444,15 +445,15 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_string cam_path)
 }
 //: read from an open istream
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
+vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
 {
-  vcl_vector<T> neu_u;
-  vcl_vector<T> den_u;
-  vcl_vector<T> neu_v;
-  vcl_vector<T> den_v;
+  std::vector<T> neu_u;
+  std::vector<T> den_u;
+  std::vector<T> neu_v;
+  std::vector<T> den_v;
   T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
 
-  vcl_string input;
+  std::string input;
   char bulk[100];
 
   while (!istr.eof()) {
@@ -580,7 +581,7 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
   map[19]=16;
 
   if ((neu_u.size() != 20) || (den_u.size() != 20)) {
-    vcl_cerr << "the input is not a valid rational camera\n";
+    std::cerr << "the input is not a valid rational camera\n";
     return 0;
   }
 
@@ -619,22 +620,22 @@ vpgl_rational_camera<T>* read_rational_camera(vcl_istream& istr)
 //: Creates a rational camera from a txt file
 // \relatesalso vpgl_rational_camera
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
+vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
 {
-  vcl_ifstream istr;
+  std::ifstream istr;
   istr.open(cam_path.c_str());
   if (!istr.good()) {
-    vcl_cout << "error: bad filename: " << cam_path << vcl_endl;
+    std::cout << "error: bad filename: " << cam_path << std::endl;
     return 0;
   }
 
-  vcl_vector<T> neu_u;
-  vcl_vector<T> den_u;
-  vcl_vector<T> neu_v;
-  vcl_vector<T> den_v;
+  std::vector<T> neu_u;
+  std::vector<T> den_u;
+  std::vector<T> neu_v;
+  std::vector<T> den_v;
   T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
 
-  vcl_string input;
+  std::string input;
   char bulk[100];
 
   while (!istr.eof()) {
@@ -763,7 +764,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
   map[19]=16;
 
   if ((neu_u.size() != 20) || (den_u.size() != 20)) {
-    vcl_cerr << "the input is not a valid rational camera\n";
+    std::cerr << "the input is not a valid rational camera\n";
     return 0;
   }
 
@@ -804,7 +805,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(vcl_string cam_path)
 
 //: Read from stream
 template <class T>
-vcl_istream&  operator >>(vcl_istream& s, vpgl_rational_camera<T >& c )
+std::istream&  operator >>(std::istream& s, vpgl_rational_camera<T >& c )
 {
   vpgl_rational_camera<T>* cptr = read_rational_camera<T>(s);
   c = *cptr;
@@ -816,11 +817,11 @@ vcl_istream&  operator >>(vcl_istream& s, vpgl_rational_camera<T >& c )
 #define vpgl_RATIONAL_CAMERA_INSTANTIATE(T) \
 template class vpgl_scale_offset<T >; \
 template class vpgl_rational_camera<T >; \
-template vcl_ostream& operator<<(vcl_ostream&, const vpgl_rational_camera<T >&); \
-template vcl_istream& operator>>(vcl_istream&, vpgl_rational_camera<T >&); \
-template vpgl_rational_camera<T > * read_rational_camera(vcl_string); \
-template vpgl_rational_camera<T > * read_rational_camera(vcl_istream&); \
-template vpgl_rational_camera<T > * read_rational_camera_from_txt(vcl_string);
+template std::ostream& operator<<(std::ostream&, const vpgl_rational_camera<T >&); \
+template std::istream& operator>>(std::istream&, vpgl_rational_camera<T >&); \
+template vpgl_rational_camera<T > * read_rational_camera(std::string); \
+template vpgl_rational_camera<T > * read_rational_camera(std::istream&); \
+template vpgl_rational_camera<T > * read_rational_camera_from_txt(std::string);
 
 
 #endif // vpgl_rational_camera_hxx_

@@ -6,9 +6,10 @@
 
 #include "vgl_p_matrix.h"
 
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_cmath.h>
+#include <iostream>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <cmath>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_inverse.h>
@@ -34,7 +35,7 @@ vgl_p_matrix<T>::vgl_p_matrix() :
 //--------------------------------------------------------------
 //
 template <class T>
-vgl_p_matrix<T>::vgl_p_matrix(vcl_istream& i) :
+vgl_p_matrix<T>::vgl_p_matrix(std::istream& i) :
   svd_(0)
 {
   read_ascii(i);
@@ -131,30 +132,30 @@ vgl_homg_plane_3d<T> vgl_p_matrix<T>::backproject(const vgl_homg_line_2d<T>& l) 
 
 //-----------------------------------------------------------------------------
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, const vgl_p_matrix<T>& p)
+std::ostream& operator<<(std::ostream& s, const vgl_p_matrix<T>& p)
 {
   return s << p.get_matrix();
 }
 
 //-----------------------------------------------------------------------------
 template <class T>
-vcl_istream& operator>>(vcl_istream& i, vgl_p_matrix<T>& p)
+std::istream& operator>>(std::istream& i, vgl_p_matrix<T>& p)
 {
   p.read_ascii(i);
   return i;
 }
 
-static bool ok(vcl_istream& f) { return f.good() || f.eof(); }
+static bool ok(std::istream& f) { return f.good() || f.eof(); }
 
 template <class T>
-bool vgl_p_matrix<T>::read_ascii(vcl_istream& f)
+bool vgl_p_matrix<T>::read_ascii(std::istream& f)
 {
   vnl_matrix_ref<T> ref = this->p_matrix_.as_ref();
   f >> ref;
   clear_svd();
 
   if (!ok(f)) {
-    vcl_cerr << "vgl_p_matrix::read_ascii: Failed to load P matrix\n";
+    std::cerr << "vgl_p_matrix::read_ascii: Failed to load P matrix\n";
     return false;
   }
   else
@@ -164,21 +165,21 @@ bool vgl_p_matrix<T>::read_ascii(vcl_istream& f)
 template <class T>
 vgl_p_matrix<T> vgl_p_matrix<T>::read(const char* filename)
 {
-  vcl_ifstream f(filename);
+  std::ifstream f(filename);
   if (!ok(f)) {
-    vcl_cerr << "vgl_p_matrix::read: Failed to open P matrix file " << filename << vcl_endl;
+    std::cerr << "vgl_p_matrix::read: Failed to open P matrix file " << filename << std::endl;
     return vgl_p_matrix<T>();
   }
 
   vgl_p_matrix<T> P;
   if (!P.read_ascii(f))
-    vcl_cerr << "vgl_p_matrix::read: Failed to read P matrix file " << filename << vcl_endl;
+    std::cerr << "vgl_p_matrix::read: Failed to read P matrix file " << filename << std::endl;
 
   return P;
 }
 
 template <class T>
-vgl_p_matrix<T> vgl_p_matrix<T>::read(vcl_istream& s)
+vgl_p_matrix<T> vgl_p_matrix<T>::read(std::istream& s)
 {
   vgl_p_matrix<T> P;
   s >> P;
@@ -210,7 +211,7 @@ template <class T>
 vgl_homg_point_3d<T> vgl_p_matrix<T>::get_focal() const
 {
   if (svd()->singularities() > 1) {
-    vcl_cerr << "vgl_p_matrix::get_focal:\n"
+    std::cerr << "vgl_p_matrix::get_focal:\n"
              << "  Nullspace dimension is " << svd()->singularities()
              << "\n  Returning an invalid point (a vector of zeros)\n";
     return vgl_homg_point_3d<T>(0,0,0,0);
@@ -236,7 +237,7 @@ bool vgl_p_matrix<T>::is_canonical(T tol) const
   for (int r = 0; r < 3; ++r)
     for (int c = 0; c < 4; ++c) {
       T d = r==c ? p_matrix_(r,c)-1 : p_matrix_(r,c);
-      if (vcl_fabs(d) > tol)
+      if (std::fabs(d) > tol)
         return false;
     }
   return true;
@@ -485,8 +486,8 @@ vgl_p_matrix<T>::fix_cheirality()
 
   T scale = 1;
 #if 0 // Used to scale by 1/det, but it's a bad idea if det is small
-  if (vcl_fabs(det - 1) > 1e-8) {
-    vcl_cerr << "vgl_p_matrix::fix_cheirality: Flipping, determinant is " << det << vcl_endl;
+  if (std::fabs(det - 1) > 1e-8) {
+    std::cerr << "vgl_p_matrix::fix_cheirality: Flipping, determinant is " << det << std::endl;
   }
 
   scale = 1/det;
@@ -526,7 +527,7 @@ bool vgl_p_matrix<T>::looks_conditioned()
 {
   T cond = svd()->W(0) / svd()->W(2);
 #ifdef DEBUG
-  vcl_cerr << "vgl_p_matrix::looks_conditioned: cond = " << cond << '\n';
+  std::cerr << "vgl_p_matrix::looks_conditioned: cond = " << cond << '\n';
 #endif
   return cond < 100;
 }
@@ -549,7 +550,7 @@ vgl_p_matrix<T> vgl_p_matrix<T>::premultiply(vnl_matrix_fixed<T,3,3> const& H) c
 #define VGL_P_MATRIX_INSTANTIATE(T) \
 template class vgl_p_matrix<T >; \
 template vgl_p_matrix<T > operator*(const vgl_p_matrix<T >& P, const vgl_h_matrix_3d<T >& H); \
-template vcl_ostream& operator<<(vcl_ostream& s, const vgl_p_matrix<T >& h); \
-template vcl_istream& operator>>(vcl_istream& s, vgl_p_matrix<T >& h)
+template std::ostream& operator<<(std::ostream& s, const vgl_p_matrix<T >& h); \
+template std::istream& operator>>(std::istream& s, vgl_p_matrix<T >& h)
 
 #endif // vgl_p_matrix_hxx_

@@ -3,8 +3,9 @@
 // \brief Testing I/O of all possible PNM file formats
 // \author Peter Vanroose
 
-#include <vcl_fstream.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <fstream>
+#include <iostream>
 
 #include <vpl/vpl.h>
 #include <vul/vul_temp_filename.h>
@@ -19,13 +20,13 @@ static void test(char const* magic, int comps, int bits, int maxval)
   char const* ext = ".pgm";
   if ( comps == 3 )
     ext = ".ppm";
-  vcl_string tmp_nam = vul_temp_filename();
+  std::string tmp_nam = vul_temp_filename();
   if ( tmp_nam == "" )
     tmp_nam = "t";
   tmp_nam += ext;
   char const *file = tmp_nam.c_str();
   {
-    vcl_ofstream f(file, vcl_ios_binary);
+    std::ofstream f(file, std::ios::binary);
 #ifdef LEAVE_IMAGES_BEHIND
       vpl_chmod(file, 0666); // -rw-rw-rw-
 #endif
@@ -46,7 +47,7 @@ static void test(char const* magic, int comps, int bits, int maxval)
   vil1_image i = vil1_load(file);
 
   if (i) {
-    vcl_cout<< "test vil1_load: size " << i.width() << 'x' << i.height() << ", "
+    std::cout<< "test vil1_load: size " << i.width() << 'x' << i.height() << ", "
             << i.components() << " component(s), "
             << i.bits_per_component() << " bits (magic " << magic << ")\n";
 
@@ -65,16 +66,16 @@ static void test(char const* magic, int comps, int bits, int maxval)
     if (magic[1] > '3')
     {
       int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != j+'A') break;
-      vcl_cout << j << '\n';
+      std::cout << j << '\n';
     }
     else
     {
       int j=0; for (; 8*j < 6*i.bits_per_component(); ++j) if (buf[j] != 5+7*j+9*j*j) break;
-      vcl_cout << j << '\n';
+      std::cout << j << '\n';
     }
   } else {
     TEST("loading temp file", false, true);
-    vcl_cerr << "Failed to load " << file << vcl_endl;
+    std::cerr << "Failed to load " << file << std::endl;
   }
 
 #ifndef LEAVE_IMAGES_BEHIND

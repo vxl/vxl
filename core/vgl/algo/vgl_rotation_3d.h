@@ -24,14 +24,15 @@
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cmath.h>
+#include <cmath>
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vgl/vgl_tolerance.h>
-#include <vcl_vector.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <iostream>
 
 template <class T>
 class vgl_rotation_3d
@@ -106,9 +107,9 @@ class vgl_rotation_3d
       }
       else { // rotation axis not defined for rotation of pi
         // construct a vector v along the min component axis of a
-        double ax = vcl_fabs(static_cast<double>(a[0]));
-        double ay = vcl_fabs(static_cast<double>(a[1]));
-        double az = vcl_fabs(static_cast<double>(a[2]));
+        double ax = std::fabs(static_cast<double>(a[0]));
+        double ay = std::fabs(static_cast<double>(a[1]));
+        double az = std::fabs(static_cast<double>(a[2]));
         vnl_vector_fixed<T,3> v(T(0));
         double amin = ax; v[0]=T(1);
         if (ay<amin) { amin = ay; v[0]=T(0); v[1]=T(1); }
@@ -119,7 +120,7 @@ class vgl_rotation_3d
         return;
       }
     }
-    double angl = vcl_asin(cmag)+aa;
+    double angl = std::asin(cmag)+aa;
     q_ = vnl_quaternion<T>(c/c.magnitude(), angl);
   }
 
@@ -272,7 +273,7 @@ class vgl_rotation_3d
 // ----------------------------------------------------------------
 
 template <class T>
-vcl_istream& operator>>(vcl_istream& s, vgl_rotation_3d<T> &R)
+std::istream& operator>>(std::istream& s, vgl_rotation_3d<T> &R)
 {
   vnl_quaternion<T> q;
   s >> q;
@@ -281,7 +282,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_rotation_3d<T> &R)
 }
 
 template <class T>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_rotation_3d<T> const& R)
+std::ostream& operator<<(std::ostream& s, vgl_rotation_3d<T> const& R)
 {
   return s << R.as_quaternion();
 }
@@ -292,10 +293,10 @@ vcl_ostream& operator<<(vcl_ostream& s, vgl_rotation_3d<T> const& R)
 //: In-place rotation of a vector of homogeneous points
 // \note This is more efficient than calling vgl_rotation_3d::rotate() on each
 template <class T> inline
-void vgl_rotate_3d(vgl_rotation_3d<T> const& rot, vcl_vector<vgl_homg_point_3d<T> >& pts)
+void vgl_rotate_3d(vgl_rotation_3d<T> const& rot, std::vector<vgl_homg_point_3d<T> >& pts)
 {
   vnl_matrix_fixed<T,3,3> R = rot.as_3matrix();
-  for (typename vcl_vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
+  for (typename std::vector<vgl_homg_point_3d<T> >::iterator itr = pts.begin();
        itr != pts.end();  ++itr)
   {
     vgl_homg_point_3d<T>& p = *itr;

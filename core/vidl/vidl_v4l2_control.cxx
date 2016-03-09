@@ -9,9 +9,10 @@
 
 
 #include "vidl_v4l2_control.h"
-#include <vcl_cstdio.h> // for std::snprintf()
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <cstdio> // for std::snprintf()
+#include <cstring>
+#include <iostream>
 
 extern "C" {
 #include <sys/ioctl.h>
@@ -55,7 +56,7 @@ vidl_v4l2_control * vidl_v4l2_control::new_control(const v4l2_queryctrl& ctr, in
 void vidl_v4l2_control::set_value(int v) const
 {
   struct v4l2_control control;
-  vcl_memset (&control, 0, sizeof (control));
+  std::memset (&control, 0, sizeof (control));
   control.id = ctrl_.id;
   control.value = v;
   ioctl (fd, VIDIOC_S_CTRL, &control); // error ignored
@@ -64,7 +65,7 @@ void vidl_v4l2_control::set_value(int v) const
 int vidl_v4l2_control::get_value() const
 {
   struct v4l2_control control;
-  vcl_memset (&control, 0, sizeof (control));
+  std::memset (&control, 0, sizeof (control));
   control.id = ctrl_.id;
   ioctl (fd, VIDIOC_G_CTRL, &control); // error ignored
   return control.value;
@@ -88,10 +89,10 @@ void vidl_v4l2_control_integer::set_100(int value) const
   set_value(value);
 }
 
-vcl_string vidl_v4l2_control_integer::description() const
+std::string vidl_v4l2_control_integer::description() const
 {
   char cad[256];
-  vcl_snprintf(cad,256,"Control \"%s\": integer (min: %d, max: %d, step: %d, default: %d)",
+  std::snprintf(cad,256,"Control \"%s\": integer (min: %d, max: %d, step: %d, default: %d)",
                (const char *) ctrl_.name, minimum(), maximum(), step(), default_value());
   return cad;
 }
@@ -102,23 +103,23 @@ vidl_v4l2_control_menu::vidl_v4l2_control_menu(const v4l2_queryctrl& ctr, int f)
                                                                 vidl_v4l2_control(ctr,f)
 {
   struct v4l2_querymenu menu;
-  vcl_memset(&menu, 0, sizeof (menu));
+  std::memset(&menu, 0, sizeof (menu));
   menu.id= ctrl_.id;
   for (menu.index = ctrl_.minimum; (int) menu.index <= ctrl_.maximum;menu.index++) {
                 if (0 == ioctl (fd, VIDIOC_QUERYMENU, &menu)) {
                         items.push_back((char *)menu.name);
                 } else {
-                        //vcl_cerr << "VIDIOC_QUERYMENU\n";
+                        //std::cerr << "VIDIOC_QUERYMENU\n";
                         items.clear(); // control menu is not added to the list
                         return;
                 }
         }
 }
 
-vcl_string vidl_v4l2_control_menu::description() const
+std::string vidl_v4l2_control_menu::description() const
 {
   char cad[256];
-  vcl_snprintf(cad,256,"Control \"%s\": menu (%d items, default: %d)",
+  std::snprintf(cad,256,"Control \"%s\": menu (%d items, default: %d)",
                (const char *) ctrl_.name, n_items(), default_value());
   return cad;
 }

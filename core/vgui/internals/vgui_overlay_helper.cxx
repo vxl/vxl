@@ -9,7 +9,8 @@
 #include "vgui_overlay_helper.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_macro.h>
@@ -17,7 +18,7 @@
 #include <vgui/vgui_adaptor.h>
 #include <vgui/internals/vgui_accelerate.h>
 
-#define trace if (true) { } else vcl_cerr
+#define trace if (true) { } else std::cerr
 
 vgui_overlay_helper::vgui_overlay_helper(vgui_adaptor *a)
   : adaptor(a)

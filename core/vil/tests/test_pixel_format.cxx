@@ -1,6 +1,7 @@
 // This is core/vil/tests/test_pixel_format.cxx
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_rgb.h>
 #include <vil/vil_pixel_format.h>
@@ -22,7 +23,7 @@ static void test_pixel_format()
        vil_pixel_format_component_format(vil_pixel_format_of(vil_rgba<vxl_byte>())),
        VIL_PIXEL_FORMAT_BYTE);
 
-  vcl_cout << VIL_PIXEL_FORMAT_RGBA_DOUBLE << '\n' <<
+  std::cout << VIL_PIXEL_FORMAT_RGBA_DOUBLE << '\n' <<
               VIL_PIXEL_FORMAT_RGBA_INT_32 << '\n' <<
               VIL_PIXEL_FORMAT_RGBA_UINT_32 << '\n' <<
               VIL_PIXEL_FORMAT_RGBA_INT_16 << '\n' <<
@@ -30,7 +31,7 @@ static void test_pixel_format()
               VIL_PIXEL_FORMAT_RGBA_BYTE << '\n' <<
               VIL_PIXEL_FORMAT_RGBA_SBYTE << '\n' <<
               VIL_PIXEL_FORMAT_RGBA_FLOAT << '\n' <<
-              VIL_PIXEL_FORMAT_RGBA_DOUBLE << vcl_endl;
+              VIL_PIXEL_FORMAT_RGBA_DOUBLE << std::endl;
 }
 
 TESTMAIN(test_pixel_format);

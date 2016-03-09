@@ -9,7 +9,8 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 //: Compute a pyramid of difference of gaussian images
 //  Computes each layer of a pyramid by smoothing
@@ -27,12 +28,12 @@
 //  \relatesalso vil_image_view
 template<class T>
 void vil_dog_pyramid(const vil_image_view<T>& src_image,
-                     vcl_vector<vil_image_view<T> >& smooth_pyramid,
-                     vcl_vector<vil_image_view<T> >& dog_pyramid,
+                     std::vector<vil_image_view<T> >& smooth_pyramid,
+                     std::vector<vil_image_view<T> >& dog_pyramid,
                      unsigned min_size)
 {
   // Compute number of levels to build
-  unsigned n = vcl_min(src_image.ni(),src_image.nj());
+  unsigned n = std::min(src_image.ni(),src_image.nj());
   unsigned nL = 0;
   while (n>min_size) { nL++; n=(2*n)/3; }
 

@@ -23,7 +23,8 @@
 #include <vgl/algo/vgl_orient_box_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 template <class T>
 class vgl_orient_box_3d_operators
@@ -35,7 +36,7 @@ class vgl_orient_box_3d_operators
     vgl_box_3d<T> bb; bb.add(p); return bb;
   }
 
-  static vgl_orient_box_3d<T> minimal_box(vcl_vector<vgl_point_3d<T> > const& plist);
+  static vgl_orient_box_3d<T> minimal_box(std::vector<vgl_point_3d<T> > const& plist);
 };
 
 #define VGL_ORIENT_BOX_3D_OPERATORS_INSTANTIATE(T) extern "Please #include <vgl/vgl_orient_box_3d_operators.hxx> instead"

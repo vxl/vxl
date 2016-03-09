@@ -25,9 +25,9 @@
 //  x(100,200,3) = 100.2003;
 //  x.put(200,300,4, 200.3004);
 //
-//  vcl_cout << "123 = " << x(1,2,3) << vcl_endl
-//           << "222 = " << x(2,2,2) << vcl_endl
-//           << "333 is full? " << x.fullp(3,3,3) << vcl_endl
+//  std::cout << "123 = " << x(1,2,3) << std::endl
+//           << "222 = " << x(2,2,2) << std::endl
+//           << "333 is full? " << x.fullp(3,3,3) << std::endl
 //           << x;
 // \endcode
 //
@@ -50,16 +50,17 @@ typedef vxl_uint_32 ulonglong;
 # error "only implemented with 32 and 64-bit ints"
 #endif
 
-#include <vcl_functional.h>
-#include <vcl_map.h>
-#include <vcl_iosfwd.h>
+#include <functional>
+#include <vcl_compiler.h>
+#include <map>
+#include <iosfwd>
 
 template <class T>
 class vbl_big_sparse_array_3d
 {
  protected:
   // Data Members--------------------------------------------------------------
-  typedef vcl_map<ulonglong, T, vcl_less<ulonglong> > Map;
+  typedef std::map<ulonglong, T, std::less<ulonglong> > Map;
   Map storage_;
 
  public:
@@ -88,11 +89,11 @@ class vbl_big_sparse_array_3d
   unsigned int count_nonempty() const { return (unsigned int)(storage_.size()); }
 
   // Data Control--------------------------------------------------------------
-  vcl_ostream& print(vcl_ostream&) const;
+  std::ostream& print(std::ostream&) const;
 };
 
 template <class T>
-inline vcl_ostream& operator<<(vcl_ostream&s,vbl_big_sparse_array_3d<T>const& a)
+inline std::ostream& operator<<(std::ostream&s,vbl_big_sparse_array_3d<T>const& a)
 {
   return a.print(s);
 }

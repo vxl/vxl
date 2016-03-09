@@ -1,8 +1,9 @@
 // This is core/vil/algo/tests/test_algo_colour_space.cxx
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_colour_space.h>
-// not used? #include <vcl_iostream.h>
-#include <vcl_cmath.h>
+// not used? #include <iostream>
+#include <vcl_compiler.h>
+#include <cmath>
 
 static void test_algo_colour_space()
 {
@@ -15,25 +16,25 @@ static void test_algo_colour_space()
   vil_colour_space_RGB_to_YUV(red_rgb, color1);
   vil_colour_space_YUV_to_RGB(color1, color2);
   TEST("Test RGB/YUV on red",
-       vcl_abs(red_rgb[0]-color2[0])<1e-12 &&
-       vcl_abs(red_rgb[1]-color2[1])<1e-12 &&
-       vcl_abs(red_rgb[2]-color2[2])<1e-12, true);
+       std::abs(red_rgb[0]-color2[0])<1e-12 &&
+       std::abs(red_rgb[1]-color2[1])<1e-12 &&
+       std::abs(red_rgb[2]-color2[2])<1e-12, true);
 
   // test on green
   vil_colour_space_RGB_to_YUV(green_rgb, color1);
   vil_colour_space_YUV_to_RGB(color1, color2);
   TEST("Test RGB/YUV on green",
-       vcl_abs(green_rgb[0]-color2[0])<1e-12 &&
-       vcl_abs(green_rgb[1]-color2[1])<1e-12 &&
-       vcl_abs(green_rgb[2]-color2[2])<1e-12, true);
+       std::abs(green_rgb[0]-color2[0])<1e-12 &&
+       std::abs(green_rgb[1]-color2[1])<1e-12 &&
+       std::abs(green_rgb[2]-color2[2])<1e-12, true);
 
   // test on blue
   vil_colour_space_RGB_to_YUV(blue_rgb, color1);
   vil_colour_space_YUV_to_RGB(color1, color2);
   TEST("Test RGB/YUV on blue",
-       vcl_abs(blue_rgb[0]-color2[0])<1e-12 &&
-       vcl_abs(blue_rgb[1]-color2[1])<1e-12 &&
-       vcl_abs(blue_rgb[2]-color2[2])<1e-12, true);
+       std::abs(blue_rgb[0]-color2[0])<1e-12 &&
+       std::abs(blue_rgb[1]-color2[1])<1e-12 &&
+       std::abs(blue_rgb[2]-color2[2])<1e-12, true);
 
 
   //// Test YPbPr ////
@@ -42,50 +43,50 @@ static void test_algo_colour_space()
   vil_colour_space_RGB_to_YPbPr_601(red_rgb, color1);
   vil_colour_space_YPbPr_601_to_RGB(color1, color2);
   TEST("Test RGB/YPbPr on red",
-       vcl_abs(red_rgb[0]-color2[0])<1e-6 &&
-       vcl_abs(red_rgb[1]-color2[1])<1e-6 &&
-       vcl_abs(red_rgb[2]-color2[2])<1e-6, true);
+       std::abs(red_rgb[0]-color2[0])<1e-6 &&
+       std::abs(red_rgb[1]-color2[1])<1e-6 &&
+       std::abs(red_rgb[2]-color2[2])<1e-6, true);
 
   // test on green
   vil_colour_space_RGB_to_YPbPr_601(green_rgb, color1);
   vil_colour_space_YPbPr_601_to_RGB(color1, color2);
   TEST("Test RGB/YPbPr on green",
-       vcl_abs(green_rgb[0]-color2[0])<1e-6 &&
-       vcl_abs(green_rgb[1]-color2[1])<1e-6 &&
-       vcl_abs(green_rgb[2]-color2[2])<1e-6, true);
+       std::abs(green_rgb[0]-color2[0])<1e-6 &&
+       std::abs(green_rgb[1]-color2[1])<1e-6 &&
+       std::abs(green_rgb[2]-color2[2])<1e-6, true);
 
   // test on blue
   vil_colour_space_RGB_to_YPbPr_601(blue_rgb, color1);
   vil_colour_space_YPbPr_601_to_RGB(color1, color2);
   TEST("Test RGB/YPbPr on blue",
-       vcl_abs(blue_rgb[0]-color2[0])<1e-6 &&
-       vcl_abs(blue_rgb[1]-color2[1])<1e-6 &&
-       vcl_abs(blue_rgb[2]-color2[2])<1e-6, true);
+       std::abs(blue_rgb[0]-color2[0])<1e-6 &&
+       std::abs(blue_rgb[1]-color2[1])<1e-6 &&
+       std::abs(blue_rgb[2]-color2[2])<1e-6, true);
 
   // Test YIQ
   // test on red
   vil_colour_space_RGB_to_YIQ(red_rgb, color1);
   vil_colour_space_YIQ_to_RGB(color1, color2);
   TEST("Test RGB/YIQ on red",
-       vcl_abs(red_rgb[0]-color2[0])<1e-6 &&
-       vcl_abs(red_rgb[1]-color2[1])<1e-6 &&
-       vcl_abs(red_rgb[2]-color2[2])<1e-6, true);
+       std::abs(red_rgb[0]-color2[0])<1e-6 &&
+       std::abs(red_rgb[1]-color2[1])<1e-6 &&
+       std::abs(red_rgb[2]-color2[2])<1e-6, true);
 
   // test on green
   vil_colour_space_RGB_to_YIQ(green_rgb, color1);
   vil_colour_space_YIQ_to_RGB(color1, color2);
   TEST("Test RGB/YIQ on green",
-       vcl_abs(green_rgb[0]-color2[0])<1e-6 &&
-       vcl_abs(green_rgb[1]-color2[1])<1e-6 &&
-       vcl_abs(green_rgb[2]-color2[2])<1e-6, true);
+       std::abs(green_rgb[0]-color2[0])<1e-6 &&
+       std::abs(green_rgb[1]-color2[1])<1e-6 &&
+       std::abs(green_rgb[2]-color2[2])<1e-6, true);
 
   // test on blue
   vil_colour_space_RGB_to_YIQ(blue_rgb, color1);
   vil_colour_space_YIQ_to_RGB(color1, color2);
   TEST("Test RGB/YIQ on blue",
-       vcl_abs(blue_rgb[0]-color2[0])<1e-6 &&
-       vcl_abs(blue_rgb[1]-color2[1])<1e-6 &&
-       vcl_abs(blue_rgb[2]-color2[2])<1e-6, true);
+       std::abs(blue_rgb[0]-color2[0])<1e-6 &&
+       std::abs(blue_rgb[1]-color2[1])<1e-6 &&
+       std::abs(blue_rgb[2]-color2[2])<1e-6, true);
 
   //// Test YCbCr ////
 

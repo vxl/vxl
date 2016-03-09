@@ -31,19 +31,19 @@ vil_nitf2_classification::type_field_defs_map & vil_nitf2_classification::s_fiel
 
 const vil_nitf2_field_definitions* vil_nitf2_classification::
 get_field_definitions(const file_version& version,
-                      vcl_string tag_prefix, vcl_string pretty_name_prefix)
+                      std::string tag_prefix, std::string pretty_name_prefix)
 {
   vil_nitf2_field_definitions* field_defs = VXL_NULLPTR;
   if (version == V_NITF_20 || version == V_NITF_21) {
     type_field_defs_key key =
-      vcl_make_pair(version, vcl_make_pair(tag_prefix, pretty_name_prefix));
+      std::make_pair(version, std::make_pair(tag_prefix, pretty_name_prefix));
     type_field_defs_map::const_iterator map_entry = s_field_definitions().find(key);
     if (map_entry != s_field_definitions().end()) {
       field_defs = map_entry->second;
     } else {
       field_defs = new vil_nitf2_field_definitions();
       add_field_defs(field_defs, version, tag_prefix, pretty_name_prefix);
-      s_field_definitions().insert(vcl_make_pair(key, field_defs));
+      s_field_definitions().insert(std::make_pair(key, field_defs));
     }
   }
   else
@@ -53,10 +53,10 @@ get_field_definitions(const file_version& version,
 
 void vil_nitf2_classification::
 add_field_defs(vil_nitf2_field_definitions* defs, const file_version& version,
-               vcl_string tag_prefix, vcl_string pretty_name_prefix)
+               std::string tag_prefix, std::string pretty_name_prefix)
 {
-  const vcl_string& tp = tag_prefix;
-  const vcl_string np = pretty_name_prefix + " ";
+  const std::string& tp = tag_prefix;
+  const std::string np = pretty_name_prefix + " ";
   switch (version)
   {
    case V_NITF_20:
@@ -76,7 +76,7 @@ add_field_defs(vil_nitf2_field_definitions* defs, const file_version& version,
     .field(tp+"SCTLN", np+"Security Control Number",  NITF_STR_ECSA(20), true, VXL_NULLPTR, VXL_NULLPTR)
     .field(tp+"SDWNG", np+"Security Downgrade",       NITF_STR_ECSA(6),  true, VXL_NULLPTR, VXL_NULLPTR)
     .field(tp+"SDEVT", np+"Downgrading Event",        NITF_STR_ECSA(40), true, VXL_NULLPTR,
-           new vil_nitf2_field_value_one_of<vcl_string>(tp+"SDWNG", "999998"));
+           new vil_nitf2_field_value_one_of<std::string>(tp+"SDWNG", "999998"));
     break;
    case V_NITF_21:
     (*defs)

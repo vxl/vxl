@@ -35,7 +35,7 @@ class vil_nitf2_scalar_field : public vil_nitf2_field
   virtual bool value(double&) const { return false; }
   virtual bool value(char&) const { return false; }
   virtual bool value(void*&) const { return false; }
-  virtual bool value(vcl_string&) const { return false; }
+  virtual bool value(std::string&) const { return false; }
   virtual bool value(vil_nitf2_location*&) const { return false; }
   virtual bool value(vil_nitf2_date_time&) const { return false; }
   virtual bool value(vil_nitf2_tagged_record_sequence&) const { return false; }

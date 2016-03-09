@@ -13,8 +13,9 @@
 //                          - Set event.ascii_char to be the actual key stroke.
 // \endverbatim
 
-#include <vcl_iostream.h>
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_event.h>
@@ -171,13 +172,13 @@ void vgui_mfc_adaptor::swap_buffers()
 //: Change the default popup menu to the given one (not yet implemented).
 void vgui_mfc_adaptor::set_default_popup(vgui_menu)
 {
-  vcl_cerr << "vgui_mfc_adaptor::set_default_popup\n";
+  std::cerr << "vgui_mfc_adaptor::set_default_popup\n";
 }
 
 //: Return the default popup menu (not yet implemented).
 vgui_menu vgui_mfc_adaptor::get_popup()
 {
-  vcl_cerr<< "vgui_mfc_adaptor::get_popup\n";
+  std::cerr<< "vgui_mfc_adaptor::get_popup\n";
   return vgui_menu();
 }
 
@@ -269,13 +270,13 @@ HGLRC vgui_mfc_adaptor::setup_for_gl( CDC* pDC, DWORD dwFlags )
 
   if (0 == pixelformat) {
     ::AfxMessageBox("ChoosePixelFormat failed.");
-    vcl_cerr<<"Error code:"<<GetLastError();
+    std::cerr<<"Error code:"<<GetLastError();
     return 0;
   }
   if ( FALSE == SetPixelFormat( pDC->GetSafeHdc(), pixelformat, &pfd ) )
   {
     AfxMessageBox("SetPixelFormat failed.");
-    vcl_cerr<<"Error code:"<<GetLastError();
+    std::cerr<<"Error code:"<<GetLastError();
     return 0;
   }
 
@@ -465,7 +466,7 @@ void vgui_mfc_adaptor::kill_timer(int id)
 void vgui_mfc_adaptor::OnDraw(CDC* pDC)
 {
   if (debug)
-    vcl_cerr << "OnDraw\n";
+    std::cerr << "OnDraw\n";
   // post_redraw();
 
   service_redraws();
@@ -568,8 +569,8 @@ void mfc_key(UINT nChar, UINT nFlags, int *the_key, int *the_ascii_char)
   {
     unsigned short buf[1024];
     unsigned char lpKeyState[256];
-    vcl_memset(lpKeyState, 0, 256);
-    vcl_memset(buf, 0, 256);
+    std::memset(lpKeyState, 0, 256);
+    std::memset(buf, 0, 256);
 
     int is_ok = ToAscii(nChar, nFlags & 0xff, lpKeyState, buf, 0);
     if (is_ok == 1)
@@ -635,7 +636,7 @@ void vgui_mfc_adaptor::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 void vgui_mfc_adaptor::domouse(vgui_event_type et, UINT nFlags, CPoint point, vgui_button b)
 {
 #if 0
-  vcl_cerr <<"vgui_mfc_adaptor::domouse: wo = "<< point.x<<", "<< point.y<<'\n';
+  std::cerr <<"vgui_mfc_adaptor::domouse: wo = "<< point.x<<", "<< point.y<<'\n';
 #endif
   // awf: BLETCH. This offset is consistent over resize, depth, screen position, machines,
   // and I can't find it... Sorry.
@@ -742,7 +743,7 @@ void vgui_mfc_adaptor::OnMouseMove(UINT nFlags, CPoint point)
 BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 #ifdef DEBUG
-  vcl_cerr << "Mouse wheel events are not handled\n";
+  std::cerr << "Mouse wheel events are not handled\n";
 #endif
   return FALSE;
 }

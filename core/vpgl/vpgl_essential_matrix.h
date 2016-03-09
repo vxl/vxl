@@ -18,7 +18,8 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 #include "vpgl_perspective_camera.h"
 #include "vpgl_calibration_matrix.h"
@@ -71,10 +72,10 @@ bool extract_left_camera(const vpgl_essential_matrix<T>& E,
 //:vpgl_essential_matrix stream I/O
 
 template <class T>
-vcl_ostream&  operator<<(vcl_ostream& s, vpgl_essential_matrix<T> const& p);
+std::ostream&  operator<<(std::ostream& s, vpgl_essential_matrix<T> const& p);
 
 //: Read vpgl_perspective_camera  from stream
 template <class T>
-vcl_istream&  operator>>(vcl_istream& s, vpgl_essential_matrix<T>& p);
+std::istream&  operator>>(std::istream& s, vpgl_essential_matrix<T>& p);
 
 #endif // vpgl_essential_matrix_h_

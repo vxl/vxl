@@ -17,7 +17,8 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: A templated smart pointer class
 // This class requires that the class being templated over has
@@ -202,11 +203,11 @@ inline bool operator!= (T const* p, vbl_smart_ptr<T> const& a)
   return a.as_pointer() != p;
 }
 
-// GCC need a vcl_ostream operator. It need not be inline
+// GCC need a std::ostream operator. It need not be inline
 // because if you're about to make a system call you can afford the
 // cost of a function call.
 template <class T>
-vcl_ostream& operator<< (vcl_ostream&, vbl_smart_ptr<T> const&);
+std::ostream& operator<< (std::ostream&, vbl_smart_ptr<T> const&);
 
 #define VBL_SMART_PTR_INSTANTIATE(T) \
 extern "please include vbl/vbl_smart_ptr.txx instead"

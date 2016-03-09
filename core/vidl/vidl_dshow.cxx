@@ -13,12 +13,13 @@
 #include <vidl/vidl_pixel_format.h>
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
-#include <vcl_map.h>
-#include <vcl_utility.h>
-#include <vcl_iterator.h>
-#include <vcl_algorithm.h>
+#include <iostream>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <map>
+#include <utility>
+#include <iterator>
+#include <algorithm>
 
 //-------------------------------------------------------------------------
 // Helper class, which should only concern this implementation.
@@ -32,8 +33,8 @@ namespace
    public:
     void find_capture_devices();
     void print_capture_device_names() const;
-    vcl_vector<vcl_string> get_capture_device_names() const;
-    CComPtr<IMoniker> get_capture_device_moniker(const vcl_string& name) const;
+    std::vector<std::string> get_capture_device_names() const;
+    CComPtr<IMoniker> get_capture_device_moniker(const std::string& name) const;
 
     //const CComPtr<IBaseFilter>& get_capture_device(int dev_num) const;
 
@@ -52,7 +53,7 @@ namespace
 
     static com_manager* instance_;
 
-    vcl_map<vcl_string,CComPtr<IMoniker> > capture_devices_;
+    std::map<std::string,CComPtr<IMoniker> > capture_devices_;
   };
 
   com_manager* com_manager::instance_ = 0;
@@ -94,8 +95,8 @@ namespace
       &cap_device_enum, 0);
     if (hr != S_OK) // might be S_FALSE, and FAILED(S_FALSE) != true
     {
-      vcl_cerr << "Category doesn't exist or is empty.\n"
-               << DSHOW_GET_ERROR_TEXT(hr) << vcl_endl;
+      std::cerr << "Category doesn't exist or is empty.\n"
+               << DSHOW_GET_ERROR_TEXT(hr) << std::endl;
       return;
     }
 
@@ -108,9 +109,9 @@ namespace
                                   reinterpret_cast<void**>(&property_bag));
       if (FAILED(hr))
       {
-        vcl_cerr << "BindToStorage failed for device "
+        std::cerr << "BindToStorage failed for device "
                  << capture_devices_.size() + 1 << '\n'
-                 << DSHOW_GET_ERROR_TEXT(hr) << vcl_endl;
+                 << DSHOW_GET_ERROR_TEXT(hr) << std::endl;
         continue;
       }
       else
@@ -123,16 +124,16 @@ namespace
 
           //capture_devices_.push_back(
           //  device_wrapper(moniker, var.bstrVal, false));
-          capture_devices_.insert(vcl_pair<vcl_string,CComPtr<IMoniker> >(
-            vcl_string(CW2A(var.bstrVal)), moniker));
+          capture_devices_.insert(std::pair<std::string,CComPtr<IMoniker> >(
+            std::string(CW2A(var.bstrVal)), moniker));
         }
         else
         {
-          vcl_ostringstream oss;
+          std::ostringstream oss;
           oss << capture_devices_.size();
 
           //capture_devices_.push_back(device_wrapper(moniker,L"N/A" + oss.str(),false));
-          capture_devices_.insert(vcl_pair<vcl_string,CComPtr<IMoniker> >(
+          capture_devices_.insert(std::pair<std::string,CComPtr<IMoniker> >(
             "N/A " + oss.str(), moniker));
         }
       }
@@ -144,20 +145,20 @@ namespace
   //: Print existing capture devices.
   void com_manager::print_capture_device_names(void) const
   {
-    //vcl_ostream_iterator<vcl_string> out(vcl_cout, "\n");
-    vcl_vector<vcl_string> names = get_capture_device_names();
+    //std::ostream_iterator<std::string> out(std::cout, "\n");
+    std::vector<std::string> names = get_capture_device_names();
 
-    vcl_copy(names.begin(),
+    std::copy(names.begin(),
              names.end(),
-             vcl_ostream_iterator<vcl_string>(vcl_cout, "\n"));
+             std::ostream_iterator<std::string>(std::cout, "\n"));
   }
 
   //: Get existing capture devices.
-  vcl_vector<vcl_string> com_manager::get_capture_device_names(void) const
+  std::vector<std::string> com_manager::get_capture_device_names(void) const
   {
-    vcl_vector<vcl_string> names;
+    std::vector<std::string> names;
 
-    vcl_map<vcl_string,CComPtr<IMoniker> >::const_iterator iterator
+    std::map<std::string,CComPtr<IMoniker> >::const_iterator iterator
       = capture_devices_.begin();
 
     while (iterator != capture_devices_.end())
@@ -171,9 +172,9 @@ namespace
 
   //: Get IMoniker associated with name (call find_capture_devices first).
   CComPtr<IMoniker>
-  com_manager::get_capture_device_moniker(const vcl_string& name) const
+  com_manager::get_capture_device_moniker(const std::string& name) const
   {
-    vcl_map<vcl_string,CComPtr<IMoniker> >::const_iterator iterator
+    std::map<std::string,CComPtr<IMoniker> >::const_iterator iterator
       = capture_devices_.find(name);
 
     return iterator != capture_devices_.end() ? iterator->second : 0;
@@ -193,7 +194,7 @@ namespace
   class guid_name_list
   {
    public:
-    static vcl_string get_name(const GUID& guid);
+    static std::string get_name(const GUID& guid);
 
    private:
     static guid_string_entry names[];
@@ -210,7 +211,7 @@ namespace
   unsigned int guid_name_list::count
     = sizeof(guid_name_list::names) / sizeof(guid_name_list::names[0]);
 
-  vcl_string guid_name_list::get_name(const GUID &guid)
+  std::string guid_name_list::get_name(const GUID &guid)
   {
     if (guid == GUID_NULL) { return "GUID_NULL"; }
 
@@ -220,7 +221,7 @@ namespace
     }
 
     // return guids FOURCC instead.
-    vcl_string fourcc;
+    std::string fourcc;
     fourcc.push_back(static_cast<char>((guid.Data1 & 0x000000FF)      ));
     fourcc.push_back(static_cast<char>((guid.Data1 & 0x0000FF00) >>  8));
     fourcc.push_back(static_cast<char>((guid.Data1 & 0x00FF0000) >> 16));
@@ -239,17 +240,17 @@ void vidl_dshow::initialize_com(void)
 }
 
 //: Get an error description for the given HRESULT.
-vcl_string
+std::string
 vidl_dshow::get_error_text(const char* file, int line, HRESULT hr)
 {
   TCHAR err[MAX_ERROR_TEXT_LEN];
   DWORD result = AMGetErrorText(hr, err, MAX_ERROR_TEXT_LEN);
 
-  vcl_ostringstream oss;
+  std::ostringstream oss;
   oss << file << ':' << line << ':';
   result
     ? oss << CT2A(err)
-    : oss << "Unknown Error (" << vcl_hex << hr << ')';
+    : oss << "Unknown Error (" << std::hex << hr << ')';
 
   return oss.str();
 }
@@ -262,12 +263,12 @@ void vidl_dshow::register_in_rot(IUnknown* unknown, DWORD& reg)
   CComPtr<IRunningObjectTable> rot;
   DSHOW_ERROR_IF_FAILED(GetRunningObjectTable(0, &rot));
 
-  vcl_wostringstream oss;
+  std::wostringstream oss;
   oss << L"FilterGraph "
-      << vcl_hex << reinterpret_cast<DWORD>(unknown)
+      << std::hex << reinterpret_cast<DWORD>(unknown)
       << L" pid "
-      << vcl_hex << GetCurrentProcessId();
-  //vcl_wcout << oss.str() << vcl_endl;
+      << std::hex << GetCurrentProcessId();
+  //std::wcout << oss.str() << std::endl;
 
   CComPtr<IMoniker> moniker;
   DSHOW_ERROR_IF_FAILED(
@@ -286,7 +287,7 @@ void vidl_dshow::remove_from_rot(DWORD reg)
 
 //: Save filter graph to a *.grf file.
 void vidl_dshow::save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                    const vcl_string& filename)
+                                    const std::string& filename)
 {
   assert(filter_graph != 0);
 
@@ -299,7 +300,7 @@ void vidl_dshow::save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
                                          0, &storage));
 
   CComPtr<IStream> stream;
-  //const vcl_wstring stream_name = L"ActiveMovieGraph";
+  //const std::wstring stream_name = L"ActiveMovieGraph";
   DSHOW_ERROR_IF_FAILED(storage->CreateStream(L"ActiveMovieGraph",
                                               STGM_CREATE
                                               | STGM_WRITE
@@ -316,7 +317,7 @@ void vidl_dshow::save_graph_to_file(const CComPtr<IFilterGraph2>& filter_graph,
 
 //: Load filter graph from a *.grf file.
 void vidl_dshow::load_graph_from_file(const CComPtr<IFilterGraph2>& filter_graph,
-                                      const vcl_wstring& filename)
+                                      const std::wstring& filename)
 {
   assert(filter_graph != 0);
 
@@ -347,13 +348,13 @@ void vidl_dshow::load_graph_from_file(const CComPtr<IFilterGraph2>& filter_graph
 }
 
 //: Get GUID name or FOURCC.
-vcl_string vidl_dshow::get_guid_name(const GUID& guid)
+std::string vidl_dshow::get_guid_name(const GUID& guid)
 {
   return guid_name_list::get_name(guid);
 }
 
 //: Get multimedia subtype GUID from FOURCC.
-GUID vidl_dshow::get_guid_from_fourcc(const vcl_string& fourcc)
+GUID vidl_dshow::get_guid_from_fourcc(const std::string& fourcc)
 {
   unsigned long fourcc_cast = static_cast<unsigned long>(fourcc[0])
                             | static_cast<unsigned long>(fourcc[1]) <<  8
@@ -494,7 +495,7 @@ void vidl_dshow::print_capture_device_names(void)
 }
 
 //: Get a list of capture device names (i.e., FriendlyName)
-vcl_vector<vcl_string> vidl_dshow::get_capture_device_names(void)
+std::vector<std::string> vidl_dshow::get_capture_device_names(void)
 {
   com_manager& com = com_manager::instance();
 
@@ -505,7 +506,7 @@ vcl_vector<vcl_string> vidl_dshow::get_capture_device_names(void)
 
 //: Get IMoniker associated with name.
 CComPtr<IMoniker>
-vidl_dshow::get_capture_device_moniker(const vcl_string& name)
+vidl_dshow::get_capture_device_moniker(const std::string& name)
 {
   com_manager& com = com_manager::instance();
 

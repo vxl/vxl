@@ -9,11 +9,12 @@
 #include "vnl_block.h"
 
 #include <vcl_cassert.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 void vnl_block_raise_exception(char const *FILE, int LINE, char const *why)
 {
-  vcl_cerr << FILE << ":" << LINE << ": " << why << vcl_endl;
+  std::cerr << FILE << ":" << LINE << ": " << why << std::endl;
   assert(!"raise_exeption() called");
   // throw;
 }

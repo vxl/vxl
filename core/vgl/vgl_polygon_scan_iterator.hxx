@@ -5,10 +5,11 @@
 // \file
 
 #include "vgl_polygon_scan_iterator.h"
-#include <vcl_cstring.h>
-#include <vcl_cmath.h>
-#include <vcl_iostream.h>
-#include <vcl_algorithm.h>
+#include <cstring>
+#include <vcl_compiler.h>
+#include <cmath>
+#include <iostream>
+#include <algorithm>
 
 // It used to be necessary to add 0.5 to the scanline coordinates
 // obtained from a vgl_polygon_scan_iterator. Presumably this had
@@ -67,13 +68,13 @@ struct compare_crossedges
 template <class T>
 inline static void local_qsort(typename vgl_polygon_scan_iterator<T>::vertind* yverts, int numverts, vgl_polygon<T>& p)
 {
-  vcl_sort(yverts, yverts + numverts, compare_vertind<T>(&p[0]));
+  std::sort(yverts, yverts + numverts, compare_vertind<T>(&p[0]));
 }
 
 template <class T>
 inline static void local_qsort(typename vgl_polygon_scan_iterator<T>::crossedge* crossedges, int numcrossedges)
 {
-  vcl_sort(crossedges, crossedges + numcrossedges, compare_crossedges<T>());
+  std::sort(crossedges, crossedges + numcrossedges, compare_crossedges<T>());
 }
 
 //===============================================================
@@ -150,7 +151,7 @@ void vgl_polygon_scan_iterator<T>::init()
       i++;
     }
   if ( i != numverts )
-    vcl_cout << "Error:  i does not equal numverts!\n";
+    std::cout << "Error:  i does not equal numverts!\n";
 
   // sort vertices by y coordinate
   local_qsort<T>(yverts, numverts, poly_);
@@ -163,26 +164,26 @@ void vgl_polygon_scan_iterator<T>::init()
   if (have_window)
   {
     if (boundp)
-      y0 = (int)MAX(win.min_y(), vcl_floor( miny - vgl_polygon_scan_iterator_offset));
+      y0 = (int)MAX(win.min_y(), std::floor( miny - vgl_polygon_scan_iterator_offset));
     else
-      y0 = (int)MAX(win.min_y(), vcl_ceil( miny - vgl_polygon_scan_iterator_offset));
+      y0 = (int)MAX(win.min_y(), std::ceil( miny - vgl_polygon_scan_iterator_offset));
 
     if (boundp)
-      y1 = (int)MIN(win.max_y()-1, vcl_ceil( maxy - vgl_polygon_scan_iterator_offset));
+      y1 = (int)MIN(win.max_y()-1, std::ceil( maxy - vgl_polygon_scan_iterator_offset));
     else
-      y1 = (int)MIN(win.max_y()-1, vcl_floor( maxy - vgl_polygon_scan_iterator_offset));
+      y1 = (int)MIN(win.max_y()-1, std::floor( maxy - vgl_polygon_scan_iterator_offset));
   }
   else
   {
     if (boundp)
-      y0 = (int)vcl_floor( miny - vgl_polygon_scan_iterator_offset);
+      y0 = (int)std::floor( miny - vgl_polygon_scan_iterator_offset);
     else
-      y0 = (int)vcl_ceil( miny - vgl_polygon_scan_iterator_offset);
+      y0 = (int)std::ceil( miny - vgl_polygon_scan_iterator_offset);
 
     if (boundp)
-      y1 = (int)vcl_ceil( maxy - vgl_polygon_scan_iterator_offset);
+      y1 = (int)std::ceil( maxy - vgl_polygon_scan_iterator_offset);
     else
-      y1 = (int)vcl_floor(  maxy - vgl_polygon_scan_iterator_offset);
+      y1 = (int)std::floor(  maxy - vgl_polygon_scan_iterator_offset);
   }
 }
 
@@ -202,7 +203,7 @@ void vgl_polygon_scan_iterator<T>::delete_edge( vertind v )
     if ( j >= numcrossedges ) return;
 
     numcrossedges--;
-    vcl_memmove(&crossedges[j], &crossedges[j+1],
+    std::memmove(&crossedges[j], &crossedges[j+1],
                 (numcrossedges-j)*sizeof( crossedges[0] ));
 }
 
@@ -258,7 +259,7 @@ void vgl_polygon_scan_iterator<T>::reset()
 template <class T>
 static inline int irnd(T x)
 {
-  return (int)vcl_floor(x + 0.5);
+  return (int)std::floor(x + 0.5);
 }
 
 template <class T>
@@ -293,10 +294,10 @@ bool vgl_polygon_scan_iterator<T>::next( )
       fxr = crossedges[curcrossedge+1].x;
       if (boundp)
         // left end of span with boundary
-        xl = (int)vcl_floor( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
+        xl = (int)std::floor( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
       else
         // left end of span without boundary
-        xl = (int)vcl_ceil( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
+        xl = (int)std::ceil( crossedges[curcrossedge].x - vgl_polygon_scan_iterator_offset);
 
       if ( have_window && xl < irnd(win.min_x()) )
       {
@@ -306,10 +307,10 @@ bool vgl_polygon_scan_iterator<T>::next( )
 
       if ( boundp )
         //right end of span with boundary
-        xr = (int)vcl_ceil( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
+        xr = (int)std::ceil( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
       else
         // right end of span without boundary
-        xr = (int)vcl_floor( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
+        xr = (int)std::floor( crossedges[curcrossedge+1].x - vgl_polygon_scan_iterator_offset);
 
       if ( have_window && xr >= irnd(win.max_x()) )
       {
@@ -345,9 +346,9 @@ bool vgl_polygon_scan_iterator<T>::next( )
       // of the earlier rounding (ceil/floor).
       if ( boundp ) {
         if ( y == y0 )
-          fy = vcl_floor(get_y( yverts[ 0 ] ));
+          fy = std::floor(get_y( yverts[ 0 ] ));
         else if ( y == y1 ) {
-          fy = vcl_ceil(get_y( yverts[ numverts - 1 ] ));
+          fy = std::ceil(get_y( yverts[ numverts - 1 ] ));
           not_last = false;
         }
         else
@@ -419,19 +420,19 @@ void vgl_polygon_scan_iterator<T>::get_prev_vert( vertind v, vertind & prevvert 
 template <class T>
 void vgl_polygon_scan_iterator<T>::display_chains()
 {
-    vcl_cout << "Number of Chains: " << poly_.num_sheets() << vcl_endl
-             << "Number of Vertices: " << numverts << vcl_endl;
+    std::cout << "Number of Chains: " << poly_.num_sheets() << std::endl
+             << "Number of Vertices: " << numverts << std::endl;
     for (unsigned int c = 0; c < poly_.num_sheets(); ++c )
     {
-        vcl_cout << "---- Chain # " << c << " ----\n"
-                 << "  Length: " << poly_[ c ].size() << vcl_endl;
+        std::cout << "---- Chain # " << c << " ----\n"
+                 << "  Length: " << poly_[ c ].size() << std::endl;
         for (unsigned int v = 0; v < poly_[ c ].size(); v++ )
         {
-            vcl_cout << "  [ " << poly_[ c ][ v ].x()
+            std::cout << "  [ " << poly_[ c ][ v ].x()
                      << ' ' << poly_[ c ][ v ].y() << " ]\n";
         }
     }
-    vcl_cout << vcl_flush;
+    std::cout << std::flush;
 }
 
 //===============================================================
@@ -440,16 +441,16 @@ void vgl_polygon_scan_iterator<T>::display_chains()
 template <class T>
 void vgl_polygon_scan_iterator<T>::display_crossedges()
 {
-    vcl_cout << "----- CROSSEDGES -----\n"
-             << "numcrossedges: " << numcrossedges << vcl_endl;
+    std::cout << "----- CROSSEDGES -----\n"
+             << "numcrossedges: " << numcrossedges << std::endl;
     for (int i = 0; i< numcrossedges; i++ )
     {
-        vcl_cout << "x = " << crossedges[i].x << '\n'
+        std::cout << "x = " << crossedges[i].x << '\n'
                  << "y = " << crossedges[i].dx << '\n'
                  << "v: chainnum=" << crossedges[i].v.chainnum
                  << ", vertnum=" << crossedges[i].v.vertnum << '\n';
     }
-    vcl_cout << "---------------------\n" << vcl_flush;
+    std::cout << "---------------------\n" << std::flush;
 }
 
 #undef VGL_POLYGON_SCAN_ITERATOR_INSTANTIATE

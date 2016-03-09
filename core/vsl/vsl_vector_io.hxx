@@ -3,23 +3,24 @@
 #define vsl_vector_io_hxx_
 //:
 // \file
-// \brief binary IO functions for vcl_vector<T>
+// \brief binary IO functions for std::vector<T>
 // \author Tim Cootes
 
 #include "vsl_vector_io.h"
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_b_read_block_old.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_cassert.h>
 #include <vsl/vsl_indent.h>
 
 //====================================================================================
 //: Write vector to binary stream
 template <class T>
-void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T>& v)
+void vsl_b_write(vsl_b_ostream& s, const std::vector<T>& v)
 {
-  vcl_size_t n = v.size();
+  std::size_t n = v.size();
   // There is nothing in the STL standard that says that vector<> has
   // to store its data in a contiguous memory block. However, most
   // implementations do store data this way.
@@ -45,7 +46,7 @@ template <class T> bool vsl_is_char(const T&) { return false; }
 //====================================================================================
 //: Read vector from binary stream
 template <class T>
-void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
+void vsl_b_read(vsl_b_istream& is, std::vector<T>& v)
 {
   if (!is) return;
 
@@ -92,9 +93,9 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vcl_vector<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, std::vector<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -102,7 +103,7 @@ void vsl_b_read(vsl_b_istream& is, vcl_vector<T>& v)
 //====================================================================================
 //: Output a human readable summary to the stream
 template <class T>
-void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
+void vsl_print_summary(std::ostream& os, const std::vector<T> &v)
 {
   os << vsl_indent() << "Vector length: " << v.size() << '\n';
   for (unsigned int i=0; i<v.size() && i<5; i++)
@@ -119,8 +120,8 @@ void vsl_print_summary(vcl_ostream& os, const vcl_vector<T> &v)
 
 
 #define VSL_VECTOR_IO_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream& s, const vcl_vector<T >& v); \
-template void vsl_b_write(vsl_b_ostream& s, const vcl_vector<T >& v); \
-template void vsl_b_read(vsl_b_istream& s, vcl_vector<T >& v)
+template void vsl_print_summary(std::ostream& s, const std::vector<T >& v); \
+template void vsl_b_write(vsl_b_ostream& s, const std::vector<T >& v); \
+template void vsl_b_read(vsl_b_istream& s, std::vector<T >& v)
 
 #endif // vsl_vector_io_hxx_

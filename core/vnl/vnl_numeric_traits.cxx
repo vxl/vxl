@@ -10,7 +10,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_numeric_traits.h"
-#include <vcl_complex.h>
+#include <vcl_compiler.h>
+#include <complex>
 #include <vxl_config.h>
 
 static const long s16 = 0x7fffL;
@@ -94,17 +95,17 @@ VCL_CONSTEXPR long double vnl_numeric_traits<long double>::maxval VCL_STATIC_CON
 
 // Must use constructor-call syntax for initialization of complex
 // specializations for Borland compiler.
-const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::zero(0.0f);
-const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::zero(0.0);
-const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::zero(0.0);
+const std::complex<float> vnl_numeric_traits<std::complex<float> >::zero(0.0f);
+const std::complex<double> vnl_numeric_traits<std::complex<double> >::zero(0.0);
+const std::complex<long double> vnl_numeric_traits<std::complex<long double> >::zero(0.0);
 
-const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::one(1.0f);
-const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::one(1.0);
-const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::one(1.0);
+const std::complex<float> vnl_numeric_traits<std::complex<float> >::one(1.0f);
+const std::complex<double> vnl_numeric_traits<std::complex<double> >::one(1.0);
+const std::complex<long double> vnl_numeric_traits<std::complex<long double> >::one(1.0);
 
 // Unknown, so undefined. Will cause link errors if someone refers to it.
-//const vcl_complex<float> vnl_numeric_traits<vcl_complex<float> >::maxval;
-//const vcl_complex<double> vnl_numeric_traits<vcl_complex<double> >::maxval;
-//const vcl_complex<long double> vnl_numeric_traits<vcl_complex<long double> >::maxval;
+//const std::complex<float> vnl_numeric_traits<std::complex<float> >::maxval;
+//const std::complex<double> vnl_numeric_traits<std::complex<double> >::maxval;
+//const std::complex<long double> vnl_numeric_traits<std::complex<long double> >::maxval;
 
 //--------------------------------------------------------------------------------

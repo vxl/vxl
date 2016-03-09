@@ -6,7 +6,8 @@
 
 #include "vgl_fit_lines_2d.h"
 #include <vgl/algo/vgl_line_2d_regression.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vcl_cassert.h>
 
 //--------------------------------------------------------------
@@ -27,7 +28,7 @@ void vgl_fit_lines_2d<T>::add_point(vgl_point_2d<T> const& p)
 {
   curve_.push_back(p);
 #ifdef DEBUG
-  vcl_cout << p << '\n';
+  std::cout << p << '\n';
 #endif
 }
 
@@ -53,7 +54,7 @@ void vgl_fit_lines_2d<T>::output(unsigned int start_index, unsigned int end_inde
   assert(start_index < curve_.size() && end_index <= curve_.size());
   vgl_line_segment_2d<T> line(curve_[start_index], curve_[end_index-1]);
 #ifdef DEBUG
-  vcl_cout << "output " << line << '\n';
+  std::cout << "output " << line << '\n';
 #endif
   for(unsigned i=start_index; i<end_index; ++i)
     curve_indices_[i] = segs_.size();
@@ -66,7 +67,7 @@ bool vgl_fit_lines_2d<T>::fit()
   if (curve_.size()<min_length_)
   {
     if(verbose_)
-      vcl_cout << "In vgl_fit_lines_2d<T>::fit() - "
+      std::cout << "In vgl_fit_lines_2d<T>::fit() - "
                << "number of points < min_length " << min_length_ << '\n';
     return false;
   }

@@ -45,10 +45,10 @@ static void test_4_plane_tiff()
     for (unsigned j = 0; j<dv.nj(); ++j)
     {
       for (unsigned i = 0; i<dv.ni(); ++i)
-        vcl_cout << dv(i, j, p) << ' ' ;
-      vcl_cout << '\n';
+        std::cout << dv(i, j, p) << ' ' ;
+      std::cout << '\n';
     }
-    vcl_cout << '\n';
+    std::cout << '\n';
   }
 #endif
   unsigned short vp10 = dv(0,0,0);

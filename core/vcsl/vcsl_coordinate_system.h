@@ -17,7 +17,8 @@
 #include <vbl/vbl_ref_count.h>
 #include <vcsl/vcsl_coordinate_system_sptr.h>
 #include <vcsl/vcsl_axis_sptr.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vnl/vnl_vector.h>
 class vcsl_spatial;
 
@@ -80,7 +81,7 @@ class vcsl_coordinate_system
   //***************************************************************************
 
   //: List of axes
-  vcl_vector<vcsl_axis_sptr> axes_;
+  std::vector<vcsl_axis_sptr> axes_;
 };
 
 #endif // vcsl_coordinate_system_h_

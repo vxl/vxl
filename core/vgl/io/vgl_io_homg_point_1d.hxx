@@ -6,6 +6,7 @@
 // \author Peter Vanroose
 // \date 24 Oct 2002
 
+#include <iostream>
 #include "vgl_io_homg_point_1d.h"
 
 //============================================================================
@@ -38,9 +39,9 @@ void vsl_b_read(vsl_b_istream& is, vgl_homg_point_1d<T> & p)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T>&)\n"
              << "           Unknown version number "<< v << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -49,13 +50,13 @@ void vsl_b_read(vsl_b_istream& is, vgl_homg_point_1d<T> & p)
 //============================================================================
 //: Output a human readable summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream& os, vgl_homg_point_1d<T> const& p)
+void vsl_print_summary(std::ostream& os, vgl_homg_point_1d<T> const& p)
 {
   os<<'('<<p.x()<<','<<p.w()<<')';
 }
 
 #define VGL_IO_HOMG_POINT_1D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream&, vgl_homg_point_1d<T > const&); \
+template void vsl_print_summary(std::ostream&, vgl_homg_point_1d<T > const&); \
 template void vsl_b_read(vsl_b_istream&, vgl_homg_point_1d<T > &); \
 template void vsl_b_write(vsl_b_ostream&, vgl_homg_point_1d<T > const&)
 

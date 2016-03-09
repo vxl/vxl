@@ -27,42 +27,42 @@ class vgl_h_matrix_2d_compute_linear : public vgl_h_matrix_2d_compute
  protected:
   //: compute from matched points
   virtual
-  bool compute_p(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                 vcl_vector<vgl_homg_point_2d<double> > const& points2,
+  bool compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
+                 std::vector<vgl_homg_point_2d<double> > const& points2,
                  vgl_h_matrix_2d<double>& H);
 
   //:compute from matched lines
   virtual
-  bool compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                 vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+  bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+                 std::vector<vgl_homg_line_2d<double> > const& lines2,
                  vgl_h_matrix_2d<double>& H);
 
   //:compute from matched lines with weight vector
   virtual
-  bool compute_l(vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                 vcl_vector<vgl_homg_line_2d<double> > const& lines2,
-                 vcl_vector<double> const& weights,
+  bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
+                 std::vector<vgl_homg_line_2d<double> > const& lines2,
+                 std::vector<double> const& weights,
                  vgl_h_matrix_2d<double>& H);
 
   //:compute from matched points and lines
   virtual
-  bool compute_pl(vcl_vector<vgl_homg_point_2d<double> > const& points1,
-                  vcl_vector<vgl_homg_point_2d<double> > const& points2,
-                  vcl_vector<vgl_homg_line_2d<double> > const& lines1,
-                  vcl_vector<vgl_homg_line_2d<double> > const& lines2,
+  bool compute_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
+                  std::vector<vgl_homg_point_2d<double> > const& points2,
+                  std::vector<vgl_homg_line_2d<double> > const& lines1,
+                  std::vector<vgl_homg_line_2d<double> > const& lines2,
                   vgl_h_matrix_2d<double>& H);
 
   //:Assumes all corresponding points have equal weight
   bool solve_linear_problem(int equ_count,
-                            vcl_vector<vgl_homg_point_2d<double> > const& p1,
-                            vcl_vector<vgl_homg_point_2d<double> > const& p2,
+                            std::vector<vgl_homg_point_2d<double> > const& p1,
+                            std::vector<vgl_homg_point_2d<double> > const& p2,
                             vgl_h_matrix_2d<double>& H);
 
   //: for lines, the solution should be weighted by line length
   bool
-  solve_weighted_least_squares(vcl_vector<vgl_homg_line_2d<double> > const& l1,
-                               vcl_vector<vgl_homg_line_2d<double> > const& l2,
-                               vcl_vector<double> const& w,
+  solve_weighted_least_squares(std::vector<vgl_homg_line_2d<double> > const& l1,
+                               std::vector<vgl_homg_line_2d<double> > const& l2,
+                               std::vector<double> const& w,
                                vgl_h_matrix_2d<double>& H);
 
  public:

@@ -5,7 +5,9 @@
 // \file
 
 #include "vsl_binary_loader.h"
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <vector>
 
 template<class BaseClass>
 vsl_binary_loader<BaseClass>& vsl_binary_loader<BaseClass>::instance()
@@ -47,7 +49,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   // pointer should either point to a real object, or be set to 0 - IMS.
   delete b;   // Delete old object pointed to by b
 
-  vcl_string name;
+  std::string name;
   vsl_b_read(is,name);
 
   if (name=="VSL_NULL_PTR")
@@ -67,12 +69,12 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   }
   else
   {
-    vcl_cerr << "\n I/O ERROR: " << is_a() << "::load_object: "
+    std::cerr << "\n I/O ERROR: " << is_a() << "::load_object: "
              << "class name <" << name << "> not in list of loaders\n"
              << object_.size()<<" valid loaders:\n";
     for (unsigned int j=0; j<object_.size(); ++j)
-      vcl_cerr << object_[j]->is_a() << vcl_endl;
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << object_[j]->is_a() << std::endl;
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -87,7 +89,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
     b->b_write(bfs);
   }
   else
-    vsl_b_write(bfs, vcl_string("VSL_NULL_PTR"));
+    vsl_b_write(bfs, std::string("VSL_NULL_PTR"));
 }
 
 template <class BaseClass>
@@ -96,8 +98,8 @@ vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = 0;
 
 #undef VSL_BINARY_LOADER_INSTANTIATE
 #define VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T) \
-VCL_DEFINE_SPECIALIZATION vcl_string vsl_binary_loader<T >::is_a() const \
-{  return vcl_string("vsl_binary_loader<" #T ">"); }\
+VCL_DEFINE_SPECIALIZATION std::string vsl_binary_loader<T >::is_a() const \
+{  return std::string("vsl_binary_loader<" #T ">"); }\
 template class vsl_binary_loader<T >
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T); \

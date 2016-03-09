@@ -40,7 +40,7 @@ class vgui_gtk2 : public vgui_toolkit
 
  protected:
   //: Returns the name of the GUI toolkit ("gtk2").
-  virtual vcl_string name() const;
+  virtual std::string name() const;
 
   //: Run the event loop.
   virtual void run();

@@ -18,7 +18,8 @@
 // 13 Jul 2001 Peter Vanroose     bug fix in inside() when box is empty
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vcl_cassert.h>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -114,7 +115,7 @@ class vbl_bounding_box_base
     return vol;
   }
 
-  vcl_ostream& print(vcl_ostream& s) const;
+  std::ostream& print(std::ostream& s) const;
 
   inline T const* min() const { return min_; }
   inline T const* max() const { return max_; }
@@ -204,6 +205,6 @@ bool meet(vbl_bounding_box_base<T,DIM_> const &a,
 
 // VC50 has trouble with this
 template <class T, class DIM_>
-vcl_ostream& operator << (vcl_ostream& s, const vbl_bounding_box_base<T,DIM_>& bbox);
+std::ostream& operator << (std::ostream& s, const vbl_bounding_box_base<T,DIM_>& bbox);
 
 #endif // vbl_bounding_box_h_

@@ -1,32 +1,33 @@
 #include "vil_tiff_header.h"
-#include <vcl_iostream.h>
-#include <vcl_cstdio.h>
-#include <vcl_ctime.h>
+#include <iostream>
+#include <cstdio>
+#include <vcl_compiler.h>
+#include <ctime>
 
 #if HAS_GEOTIFF
 #include <vil/file_formats/vil_geotiff_header.h>
 #endif
 
-static vcl_string date_and_time()
+static std::string date_and_time()
 {
-  vcl_time_t clock;
-  struct vcl_tm *t_m;
-  clock = vcl_time(VXL_NULLPTR);
-  t_m = vcl_localtime(&clock);
+  std::time_t clock;
+  struct std::tm *t_m;
+  clock = std::time(VXL_NULLPTR);
+  t_m = std::localtime(&clock);
   char tmp[20];
   char datetime[20];
-  vcl_strftime(tmp,sizeof(datetime),"%Y-%m-%d %H:%M:%S",t_m);
+  std::strftime(tmp,sizeof(datetime),"%Y-%m-%d %H:%M:%S",t_m);
   // changed from "%c", to make it generic, size=19, and avoid compiler warning
-  vcl_sprintf(datetime,"%19s",tmp);
-  return vcl_string(datetime);
+  std::sprintf(datetime,"%19s",tmp);
+  return std::string(datetime);
 }
 
-static void read_string(TIFF* tif, ttag_t tag, vcl_string& stag, vcl_string const& deflt = "not_defined")
+static void read_string(TIFF* tif, ttag_t tag, std::string& stag, std::string const& deflt = "not_defined")
 {
   char* adr = VXL_NULLPTR;
   TIFFGetField(tif, tag, &adr);
   if (adr)
-    stag = vcl_string(adr);
+    stag = std::string(adr);
   else
     stag = deflt;
 }
@@ -55,7 +56,7 @@ static void read_float_tag(TIFF* tif, ttag_t tag, float& val, bool& valid, float
 #if 0 // unused static function
 //assumes array is resized properly
 static bool read_long_array(TIFF* tif, ttag_t tag,
-                            vcl_vector<vxl_uint_32>& array)
+                            std::vector<vxl_uint_32>& array)
 {
   vxl_uint_32 * a;
   if (TIFFGetField(tif, tag, &a))
@@ -87,7 +88,7 @@ static void write_float_tag(TIFF* tif, ttag_t tag, float const val, bool const v
 }
 #endif
 
-static void write_string(TIFF* tif, ttag_t tag, vcl_string const& stag)
+static void write_string(TIFF* tif, ttag_t tag, std::string const& stag)
 {
   TIFFSetField(tif, tag, stag.c_str());
 }
@@ -97,7 +98,7 @@ bool vil_tiff_header::read_header()
 {
   //DEBUG
 #ifdef DEBUG
-  vcl_cout << date_and_time() << '\n';
+  std::cout << date_and_time() << '\n';
 #endif
   //====
   //Determine the endian state of the file and machine
@@ -132,11 +133,11 @@ bool vil_tiff_header::read_header()
     color_map.resize(size);
     for (unsigned i = 0; i<size; ++i)
     {
-      vcl_vector<vxl_uint_16> rgb(3);
+      std::vector<vxl_uint_16> rgb(3);
       rgb[0]=cm[0][i];  rgb[1]=cm[1][i];  rgb[2]=cm[2][i];
       color_map[i] = rgb;
 #ifdef DEBUG
-      vcl_cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
+      std::cout << "RGB[" << i << "]=(" << rgb[0] << ' ' << rgb[1] << ' ' << rgb[2] << ")\n";
 #endif
     }
     color_map_valid = true;
@@ -181,7 +182,7 @@ bool vil_tiff_header::read_header()
     //      vxl_uint_32 size = strips_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = strips_per_image();
     for (vxl_uint_32 i = 0; i<size; ++i)
-      vcl_cout << "SBC[" << i << "]=" << strip_byte_counts[i] << '\n';
+      std::cout << "SBC[" << i << "]=" << strip_byte_counts[i] << '\n';
 #endif
   }
 
@@ -194,7 +195,7 @@ bool vil_tiff_header::read_header()
     //      vxl_uint_32 size = strips_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = strips_per_image();
       for (vxl_uint_32 i = 0; i<size; ++i)
-      vcl_cout << "SOFF[" << i << "]=" << strip_offsets[i] << '\n';
+      std::cout << "SOFF[" << i << "]=" << strip_offsets[i] << '\n';
   }
 #endif
   read_short_tag(tif_,TIFFTAG_THRESHHOLDING, thresholding);
@@ -215,7 +216,7 @@ bool vil_tiff_header::read_header()
     //      vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = tiles_per_image();
     for (vxl_uint_32 i = 0; i<size; ++i)
-      vcl_cout << "TOFF[" << i << "]=" << tile_offsets[i] << '\n';
+      std::cout << "TOFF[" << i << "]=" << tile_offsets[i] << '\n';
   }
 #endif
 
@@ -228,7 +229,7 @@ bool vil_tiff_header::read_header()
     //      vxl_uint_32 size = tiles_per_image()*samples_per_pixel.val;
     vxl_uint_32 size = tiles_per_image();
     for (vxl_uint_32 i = 0; i<size; ++i)
-      vcl_cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n';
+      std::cout << "TBC[" << i << "]=" << tile_byte_counts[i] << '\n';
   }
 #endif
   return this->compute_pixel_format();

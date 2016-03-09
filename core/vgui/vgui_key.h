@@ -8,7 +8,8 @@
 // \file
 // \brief Enumeration of possible key strokes.
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 
 //: Enumeration of possible key strokes.
 enum vgui_key
@@ -83,6 +84,6 @@ enum vgui_key
 //  You may compare a vgui_key_CTRL'ed to an event.ascii_key.
 vgui_key vgui_key_CTRL(int character);
 
-vcl_ostream& operator<<(vcl_ostream& s, vgui_key k);
+std::ostream& operator<<(std::ostream& s, vgui_key k);
 
 #endif // vgui_key_h_

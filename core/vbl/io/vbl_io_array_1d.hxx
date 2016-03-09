@@ -6,6 +6,7 @@
 // \brief  binary IO functions for vbl_array_1d<T>
 // \author K.Y.McGaul
 
+#include <iostream>
 #include "vbl_io_array_1d.h"
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_array_1d.h>
@@ -52,9 +53,9 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
     break;
 
    default:
-    vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_1d<T>&)\n"
+    std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&, vbl_array_1d<T>&)\n"
              << "           Unknown version number "<< ver << '\n';
-    is.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+    is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
     return;
   }
 }
@@ -63,21 +64,21 @@ void vsl_b_read(vsl_b_istream &is, vbl_array_1d<T> & p)
 //===========================================================================
 //: Output a human readable summary to the stream
 template<class T>
-void vsl_print_summary(vcl_ostream & os,const vbl_array_1d<T> & p)
+void vsl_print_summary(std::ostream & os,const vbl_array_1d<T> & p)
 {
-  os<<"Length: "<<p.size()<<vcl_endl;
+  os<<"Length: "<<p.size()<<std::endl;
   for (unsigned int i =0; i < p.size() && i < 5; i++ )
   {
     os << ' ' << i << ": ";
     vsl_print_summary(os, p[i]);
-    os << vcl_endl;
+    os << std::endl;
   }
   if (p.size() > 5)
     os << " ...\n";
 }
 
 #define VBL_IO_ARRAY_1D_INSTANTIATE(T) \
-template void vsl_print_summary(vcl_ostream &, const vbl_array_1d<T > &); \
+template void vsl_print_summary(std::ostream &, const vbl_array_1d<T > &); \
 template void vsl_b_read(vsl_b_istream &, vbl_array_1d<T > &); \
 template void vsl_b_write(vsl_b_ostream &, const vbl_array_1d<T > &)
 

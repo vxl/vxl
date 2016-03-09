@@ -2,12 +2,13 @@
 // Amitha Perera, Sep 2001.
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_polygon.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <fstream>
 
 static void test_simple_polygon()
 {
-  vcl_cout << "Simple polygon\n";
+  std::cout << "Simple polygon\n";
 
   // Simple triangle
   vgl_polygon<double> p;
@@ -15,7 +16,7 @@ static void test_simple_polygon()
   p.push_back( 0.0, 0.0 );
   p.push_back( 5.0, 0.0 );
   p.push_back( 5.0, 1.0 );
-  p.print(vcl_cout);
+  p.print(std::cout);
 
   TEST("inside (1)",  p.contains( 0.0,  0.0 ), true );
   TEST("inside (2)",  p.contains( 5.0,  0.0 ), true );
@@ -35,7 +36,7 @@ static void test_simple_polygon()
 
 static void test_disjoint_polygon()
 {
-  vcl_cout << "Disjoint polygons\n";
+  std::cout << "Disjoint polygons\n";
 
   // Simple triangle
   vgl_polygon<float> p;
@@ -48,7 +49,7 @@ static void test_disjoint_polygon()
   p.push_back( 10.0f, 10.0f );
   p.push_back( 15.0f, 10.0f );
   p.push_back( 15.0f, 11.0f );
-  p.print(vcl_cout);
+  p.print(std::cout);
 
   TEST("inside poly1",p.contains(  2.5f,  0.3f ), true );
   TEST("inside poly2",p.contains( 12.5f, 10.3f ), true );
@@ -63,7 +64,7 @@ static void test_disjoint_polygon()
 
 static void test_holey_polygon()
 {
-  vcl_cout << "Polygon with holes\n";
+  std::cout << "Polygon with holes\n";
 
   // Simple triangle
   vgl_polygon<double> p;
@@ -76,7 +77,7 @@ static void test_holey_polygon()
   p.push_back( 3.0, 0.5 );
   p.push_back( 4.0, 0.5 );
   p.push_back( 4.0, 0.1 );
-  p.print(vcl_cout);
+  p.print(std::cout);
 
   TEST("inside",      p.contains( 2.5,  0.3 ), true );
   TEST("outside (1)", p.contains( 2.5,  0.6 ), false );
@@ -85,22 +86,22 @@ static void test_holey_polygon()
   TEST("outside (4)", p.contains( 2.0, -1.0 ), false );
   TEST("outside (5)", p.contains(-2.5, -0.5 ), false );
   TEST("outside (6)", p.contains( 3.9,  0.4 ), false );
-  vcl_ofstream os("./temp");
+  std::ofstream os("./temp");
   p.print(os);
   // read the poly
   os.close();
-  vcl_ifstream is("./temp");
+  std::ifstream is("./temp");
   vgl_polygon<double> pr;
   is >>pr;
-  pr.print(vcl_cout);
+  pr.print(std::cout);
   TEST("inside after read",      pr.contains( 2.5,  0.3 ), true );
 }
 
 static void test_self_intersection()
 {
-  vcl_cout << "compute polygon self intersections\n";
-  vcl_vector<vcl_pair<unsigned,unsigned> > e1, e2;
-  vcl_vector<vgl_point_2d<double> > ip;
+  std::cout << "compute polygon self intersections\n";
+  std::vector<std::pair<unsigned,unsigned> > e1, e2;
+  std::vector<vgl_point_2d<double> > ip;
 
   {
     vgl_polygon<double> p;
@@ -170,9 +171,9 @@ static void test_self_intersection()
     p.push_back( 0.5, 2.5 );
 
     // the correct solutions, but order may be incorrect
-    typedef vcl_pair<unsigned,unsigned> upair;
-    vcl_vector<upair> e1s(5), e2s(5);
-    vcl_vector<vgl_point_2d<double> > ips(5);
+    typedef std::pair<unsigned,unsigned> upair;
+    std::vector<upair> e1s(5), e2s(5);
+    std::vector<vgl_point_2d<double> > ips(5);
     e1s[0]=upair(0,0);  e2s[0]=upair(0,2);  ips[0]=vgl_point_2d<double>(.5,.5);
     e1s[1]=upair(0,0);  e2s[1]=upair(2,0);  ips[1]=vgl_point_2d<double>(.75,.75);
     e1s[2]=upair(0,1);  e2s[2]=upair(2,3);  ips[2]=vgl_point_2d<double>(.5,1);
@@ -214,9 +215,9 @@ static void test_self_intersection()
     p.push_back( 0.0, 3.0 );
 
     // the correct solutions, but order may be incorrect
-    typedef vcl_pair<unsigned,unsigned> upair;
-    vcl_vector<upair> e1s(12), e2s(12);
-    vcl_vector<vgl_point_2d<double> > ips(12);
+    typedef std::pair<unsigned,unsigned> upair;
+    std::vector<upair> e1s(12), e2s(12);
+    std::vector<vgl_point_2d<double> > ips(12);
     e1s[0]=upair(0,0);  e2s[0]=upair(0,3);  ips[0]=vgl_point_2d<double>(0,1);
     e1s[1]=upair(0,1);  e2s[1]=upair(0,3);  ips[1]=vgl_point_2d<double>(0,1);
     e1s[2]=upair(0,0);  e2s[2]=upair(0,4);  ips[2]=vgl_point_2d<double>(0,1);

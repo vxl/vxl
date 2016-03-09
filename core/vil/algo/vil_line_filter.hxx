@@ -24,17 +24,17 @@ void vil_line_filter<Type>::light_lines_3x3(vil_image_view<vxl_byte>& line_dir,
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
   unsigned nj = image.nj();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
 
   line_dir.set_size(ni,nj,1);
   line_str.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t d_istep = line_dir.istep();
-  vcl_ptrdiff_t d_jstep = line_dir.jstep();
+  std::ptrdiff_t d_istep = line_dir.istep();
+  std::ptrdiff_t d_jstep = line_dir.jstep();
   vxl_byte* d_data  = line_dir.top_left_ptr();
-  vcl_ptrdiff_t s_istep = line_str.istep();
-  vcl_ptrdiff_t s_jstep = line_str.jstep();
+  std::ptrdiff_t s_istep = line_str.istep();
+  std::ptrdiff_t s_jstep = line_str.jstep();
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
@@ -51,12 +51,12 @@ void vil_line_filter<Type>::light_lines_3x3(vil_image_view<vxl_byte>& line_dir,
   int nj1 = nj-1;
 
   // Relative positions of points to be sampled
-  vcl_ptrdiff_t nistep = -istep;
-  vcl_ptrdiff_t njstep = -jstep;
-  vcl_ptrdiff_t xjstep = istep+jstep;
-  vcl_ptrdiff_t ynistep = jstep-istep;
-  vcl_ptrdiff_t xnjstep = istep-jstep;
-  vcl_ptrdiff_t ninjstep = -istep-jstep;
+  std::ptrdiff_t nistep = -istep;
+  std::ptrdiff_t njstep = -jstep;
+  std::ptrdiff_t xjstep = istep+jstep;
+  std::ptrdiff_t ynistep = jstep-istep;
+  std::ptrdiff_t xnjstep = istep-jstep;
+  std::ptrdiff_t ninjstep = -istep-jstep;
 
   for (int y=1;y<nj1;++y)
   {
@@ -117,17 +117,17 @@ void vil_line_filter<Type>::dark_lines_3x3(vil_image_view<vxl_byte>& line_dir,
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
   unsigned nj = image.nj();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
 
   line_dir.set_size(ni,nj,1);
   line_str.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t d_istep = line_dir.istep();
-  vcl_ptrdiff_t d_jstep = line_dir.jstep();
+  std::ptrdiff_t d_istep = line_dir.istep();
+  std::ptrdiff_t d_jstep = line_dir.jstep();
   vxl_byte* d_data  = line_dir.top_left_ptr();
-  vcl_ptrdiff_t s_istep = line_str.istep();
-  vcl_ptrdiff_t s_jstep = line_str.jstep();
+  std::ptrdiff_t s_istep = line_str.istep();
+  std::ptrdiff_t s_jstep = line_str.jstep();
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
@@ -144,12 +144,12 @@ void vil_line_filter<Type>::dark_lines_3x3(vil_image_view<vxl_byte>& line_dir,
   int nj1 = nj-1;
 
   // Relative positions of points to be sampled
-  vcl_ptrdiff_t nistep = -istep;
-  vcl_ptrdiff_t njstep = -jstep;
-  vcl_ptrdiff_t xjstep = istep+jstep;
-  vcl_ptrdiff_t ynistep = jstep-istep;
-  vcl_ptrdiff_t xnjstep = istep-jstep;
-  vcl_ptrdiff_t ninjstep = -istep-jstep;
+  std::ptrdiff_t nistep = -istep;
+  std::ptrdiff_t njstep = -jstep;
+  std::ptrdiff_t xjstep = istep+jstep;
+  std::ptrdiff_t ynistep = jstep-istep;
+  std::ptrdiff_t xnjstep = istep-jstep;
+  std::ptrdiff_t ninjstep = -istep-jstep;
 
   for (int y=1;y<nj1;++y)
   {
@@ -211,17 +211,17 @@ void vil_line_filter<Type>::light_lines_5x5(vil_image_view<vxl_byte>& line_dir,
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
   unsigned nj = image.nj();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
 
   line_dir.set_size(ni,nj,1);
   line_str.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t d_istep = line_dir.istep();
-  vcl_ptrdiff_t d_jstep = line_dir.jstep();
+  std::ptrdiff_t d_istep = line_dir.istep();
+  std::ptrdiff_t d_jstep = line_dir.jstep();
   vxl_byte* d_data  = line_dir.top_left_ptr();
-  vcl_ptrdiff_t s_istep = line_str.istep();
-  vcl_ptrdiff_t s_jstep = line_str.jstep();
+  std::ptrdiff_t s_istep = line_str.istep();
+  std::ptrdiff_t s_jstep = line_str.jstep();
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
@@ -242,25 +242,25 @@ void vil_line_filter<Type>::light_lines_5x5(vil_image_view<vxl_byte>& line_dir,
   int nj2 = nj-2;
 
   // Relative positions of points to be sampled
-  vcl_ptrdiff_t i1a = -2*istep;
-  vcl_ptrdiff_t i1b = -istep;
-  vcl_ptrdiff_t i1c = istep;
-  vcl_ptrdiff_t i1d = 2*istep;
+  std::ptrdiff_t i1a = -2*istep;
+  std::ptrdiff_t i1b = -istep;
+  std::ptrdiff_t i1c = istep;
+  std::ptrdiff_t i1d = 2*istep;
 
-  vcl_ptrdiff_t i2c = istep+jstep;
-  vcl_ptrdiff_t i2a = -2*i2c;
-  vcl_ptrdiff_t i2b = -1*i2c;
-  vcl_ptrdiff_t i2d = 2*i2c;
+  std::ptrdiff_t i2c = istep+jstep;
+  std::ptrdiff_t i2a = -2*i2c;
+  std::ptrdiff_t i2b = -1*i2c;
+  std::ptrdiff_t i2d = 2*i2c;
 
-  vcl_ptrdiff_t i3a = -2*jstep;
-  vcl_ptrdiff_t i3b = -1*jstep;
-  vcl_ptrdiff_t i3c = jstep;
-  vcl_ptrdiff_t i3d = 2*jstep;
+  std::ptrdiff_t i3a = -2*jstep;
+  std::ptrdiff_t i3b = -1*jstep;
+  std::ptrdiff_t i3c = jstep;
+  std::ptrdiff_t i3d = 2*jstep;
 
-  vcl_ptrdiff_t i4c = istep-jstep;
-  vcl_ptrdiff_t i4a = -2*i4c;
-  vcl_ptrdiff_t i4b = -1*i4c;
-  vcl_ptrdiff_t i4d = 2*i4c;
+  std::ptrdiff_t i4c = istep-jstep;
+  std::ptrdiff_t i4a = -2*i4c;
+  std::ptrdiff_t i4b = -1*i4c;
+  std::ptrdiff_t i4d = 2*i4c;
 
   for (int y=2;y<nj2;++y)
   {
@@ -319,17 +319,17 @@ void vil_line_filter<Type>::dark_lines_5x5(vil_image_view<vxl_byte>& line_dir,
   assert(image.nplanes()==1);
   unsigned ni = image.ni();
   unsigned nj = image.nj();
-  vcl_ptrdiff_t istep = image.istep();
-  vcl_ptrdiff_t jstep = image.jstep();
+  std::ptrdiff_t istep = image.istep();
+  std::ptrdiff_t jstep = image.jstep();
 
   line_dir.set_size(ni,nj,1);
   line_str.set_size(ni,nj,1);
 
-  vcl_ptrdiff_t d_istep = line_dir.istep();
-  vcl_ptrdiff_t d_jstep = line_dir.jstep();
+  std::ptrdiff_t d_istep = line_dir.istep();
+  std::ptrdiff_t d_jstep = line_dir.jstep();
   vxl_byte* d_data  = line_dir.top_left_ptr();
-  vcl_ptrdiff_t s_istep = line_str.istep();
-  vcl_ptrdiff_t s_jstep = line_str.jstep();
+  std::ptrdiff_t s_istep = line_str.istep();
+  std::ptrdiff_t s_jstep = line_str.jstep();
   float* s_data = line_str.top_left_ptr();
 
   // Cannot calculate line strength in borders
@@ -350,25 +350,25 @@ void vil_line_filter<Type>::dark_lines_5x5(vil_image_view<vxl_byte>& line_dir,
   int nj2 = nj-2;
 
   // Relative positions of points to be sampled
-  vcl_ptrdiff_t i1a = -2*istep;
-  vcl_ptrdiff_t i1b = -istep;
-  vcl_ptrdiff_t i1c = istep;
-  vcl_ptrdiff_t i1d = 2*istep;
+  std::ptrdiff_t i1a = -2*istep;
+  std::ptrdiff_t i1b = -istep;
+  std::ptrdiff_t i1c = istep;
+  std::ptrdiff_t i1d = 2*istep;
 
-  vcl_ptrdiff_t i2c = istep+jstep;
-  vcl_ptrdiff_t i2a = -2*i2c;
-  vcl_ptrdiff_t i2b = -1*i2c;
-  vcl_ptrdiff_t i2d = 2*i2c;
+  std::ptrdiff_t i2c = istep+jstep;
+  std::ptrdiff_t i2a = -2*i2c;
+  std::ptrdiff_t i2b = -1*i2c;
+  std::ptrdiff_t i2d = 2*i2c;
 
-  vcl_ptrdiff_t i3a = -2*jstep;
-  vcl_ptrdiff_t i3b = -1*jstep;
-  vcl_ptrdiff_t i3c = jstep;
-  vcl_ptrdiff_t i3d = 2*jstep;
+  std::ptrdiff_t i3a = -2*jstep;
+  std::ptrdiff_t i3b = -1*jstep;
+  std::ptrdiff_t i3c = jstep;
+  std::ptrdiff_t i3d = 2*jstep;
 
-  vcl_ptrdiff_t i4c = istep-jstep;
-  vcl_ptrdiff_t i4a = -2*i4c;
-  vcl_ptrdiff_t i4b = -1*i4c;
-  vcl_ptrdiff_t i4d = 2*i4c;
+  std::ptrdiff_t i4c = istep-jstep;
+  std::ptrdiff_t i4a = -2*i4c;
+  std::ptrdiff_t i4b = -1*i4c;
+  std::ptrdiff_t i4d = 2*i4c;
 
   for (int y=2;y<nj2;++y)
   {

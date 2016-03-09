@@ -11,7 +11,7 @@
 
 template <class T>
 vgl_orient_box_3d<T>
-vgl_orient_box_3d_operators<T>::minimal_box(vcl_vector<vgl_point_3d<T> > const& plist)
+vgl_orient_box_3d_operators<T>::minimal_box(std::vector<vgl_point_3d<T> > const& plist)
 {
   if (plist.size() == 0)
     return vgl_box_3d<T>(); // an empty box

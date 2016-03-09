@@ -13,7 +13,8 @@
 // the same change.
 
 #include <vcl_cassert.h>
-#include <vcl_cstddef.h>
+#include <vcl_compiler.h>
+#include <cstddef>
 #include <vil/vil_image_view.h>
 #include <vil/vil_na.h>
 
@@ -22,7 +23,7 @@
 //  No bound checks are done.
 template<class T>
 inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
-                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                      std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   int p1x=int(x);
   double normx = x-p1x;
@@ -46,7 +47,7 @@ inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
 template<class T>
 inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
                                       int /*nx*/, int /*ny*/,
-                                      vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                      std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   return vil_bilin_interp_unsafe(x, y, data, xstep, ystep);
 }
@@ -56,7 +57,7 @@ inline double vil_bilin_interp_unsafe(double x, double y, const T* data,
 //  No bound checks are done.
 template<class T>
 inline double vil_bilin_interp_raw(double x, double y, const T* data,
-                                   vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                   std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   int p1x=int(x);
   double normx = x-p1x;
@@ -85,7 +86,7 @@ inline double vil_bilin_interp_raw(double x, double y, const T* data,
 template<class T>
 inline double vil_bilin_interp_raw(double x, double y, const T* data,
                                    int /*nx*/, int /*ny*/,
-                                   vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                   std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   return vil_bilin_interp_raw(x, y, data, xstep, ystep);
 }
@@ -97,7 +98,7 @@ inline double vil_bilin_interp_raw(double x, double y, const T* data,
 template<class T>
 inline double vil_bilin_interp_safe(double x, double y, const T* data,
                                     int nx, int ny,
-                                    vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                    std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   if (x<0) return 0.0;
   if (y<0) return 0.0;
@@ -114,7 +115,7 @@ inline double vil_bilin_interp_safe(double x, double y, const T* data,
 template<class T>
 inline double vil_bilin_interp_safe_edgena(double x, double y, const T* data,
                                            int nx, int ny,
-                                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                           std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   if (x<0 || y<0 || x>nx-1 || y>ny-1) return vil_na(double());
   return vil_bilin_interp_raw(x,y,data,xstep,ystep);
@@ -155,7 +156,7 @@ inline double vil_bilin_interp_safe_edgena(const vil_image_view<T> &view,
 template<class T>
 inline double vil_bilin_interp(double x, double y, const T* data,
                                int nx, int ny,
-                               vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                               std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   assert (x>=0);
   assert (y>=0);
@@ -186,7 +187,7 @@ inline double vil_bilin_interp(const vil_image_view<T> &view,
 template<class T>
 inline double vil_bilin_interp_safe_extend(double x, double y, const T* data,
                                            int nx, int ny,
-                                           vcl_ptrdiff_t xstep, vcl_ptrdiff_t ystep)
+                                           std::ptrdiff_t xstep, std::ptrdiff_t ystep)
 {
   if (x<0) x= 0.0;
   if (y<0) y= 0.0;

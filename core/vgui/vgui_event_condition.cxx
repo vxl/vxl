@@ -10,7 +10,8 @@
 
 #include "vgui_event_condition.h"
 
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <sstream>
 #include <vgui/vgui_event.h>
 
 //----------------------------------------------------------------------------
@@ -128,9 +129,9 @@ bool vgui_event_condition::operator()(vgui_button b, vgui_modifier m) const
 
 //----------------------------------------------------------------------------
 //: Return a string describing the event condition.
-vcl_string vgui_event_condition::as_string(int  /*field_width*/) const
+std::string vgui_event_condition::as_string(int  /*field_width*/) const
 {
-  vcl_string r;
+  std::string r;
   if (modifier & vgui_SHIFT)
     r += "shift ";
   if (modifier & vgui_CTRL)
@@ -145,12 +146,12 @@ vcl_string vgui_event_condition::as_string(int  /*field_width*/) const
   if (button == vgui_RIGHT) r += "right";
 
   if (vgui_key/*egcs for i386 needs cast*/(key) != vgui_KEY_NULL) {
-    vcl_ostringstream s;
+    std::ostringstream s;
     s << key;
     r += s.str();
   }
   if (vgui_key/*egcs for i386 needs cast*/(ascii_char) != vgui_KEY_NULL) {
-    vcl_ostringstream s;
+    std::ostringstream s;
     s << ascii_char;
     r += s.str();
   }

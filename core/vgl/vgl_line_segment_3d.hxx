@@ -4,17 +4,18 @@
 
 #include "vgl_line_segment_3d.h"
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 // stream operators
 template <class Type>
-vcl_ostream& operator<<(vcl_ostream& s, vgl_line_segment_3d<Type> const & p)
+std::ostream& operator<<(std::ostream& s, vgl_line_segment_3d<Type> const & p)
 {
   return s << "<vgl_line_segment_3d " << p.point1() << " to " << p.point2() << " >";
 }
 
 template <class Type>
-vcl_istream& operator>>(vcl_istream& s, vgl_line_segment_3d<Type>& p)
+std::istream& operator>>(std::istream& s, vgl_line_segment_3d<Type>& p)
 {
   vgl_point_3d<Type> p1, p2;
   s >> p1 >> p2;
@@ -25,7 +26,7 @@ vcl_istream& operator>>(vcl_istream& s, vgl_line_segment_3d<Type>& p)
 #undef VGL_LINE_SEGMENT_3D_INSTANTIATE
 #define VGL_LINE_SEGMENT_3D_INSTANTIATE(Type) \
 template class vgl_line_segment_3d<Type >;\
-template vcl_istream& operator>>(vcl_istream&, vgl_line_segment_3d<Type >&);\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_line_segment_3d<Type > const&)
+template std::istream& operator>>(std::istream&, vgl_line_segment_3d<Type >&);\
+template std::ostream& operator<<(std::ostream&, vgl_line_segment_3d<Type > const&)
 
 #endif // vgl_line_segment_3d_hxx_

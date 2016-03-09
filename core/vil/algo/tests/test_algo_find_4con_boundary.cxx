@@ -1,26 +1,27 @@
 #include <vxl_config.h>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_find_4con_boundary.h>
 #include <vil/vil_crop.h>
 
-static void show_boundary(const vcl_vector<int>& bi,const vcl_vector<int>& bj)
+static void show_boundary(const std::vector<int>& bi,const std::vector<int>& bj)
 {
   for (unsigned int i=0;i<bi.size();++i)
-    vcl_cout<<'('<<bi[i]<<','<<bj[i]<<')';
-  vcl_cout<<vcl_endl;
+    std::cout<<'('<<bi[i]<<','<<bj[i]<<')';
+  std::cout<<std::endl;
 }
 
 static void test_algo_find_4con_boundary_below_byte()
 {
-  vcl_cout<<"=== Testing vil_find_4con_boundary_below_threshold ===\n";
+  std::cout<<"=== Testing vil_find_4con_boundary_below_threshold ===\n";
   vil_image_view<vxl_byte> image(10,11);
 
   // Create 3 x 3 square
   image.fill(10);
   vil_crop(image, 4,3, 5,3).fill(1);
 
-  vcl_vector<int> bi,bj;
+  std::vector<int> bi,bj;
   vil_find_4con_boundary_below_threshold(bi,bj,image,vxl_byte(7),5,5);
 
   show_boundary(bi,bj);
@@ -88,14 +89,14 @@ static void test_algo_find_4con_boundary_below_byte()
 
 static void test_algo_find_4con_boundary_above_byte()
 {
-  vcl_cout<<"=== Testing vil_find_4con_boundary_above_threshold ===\n";
+  std::cout<<"=== Testing vil_find_4con_boundary_above_threshold ===\n";
   vil_image_view<vxl_byte> image(10,11);
 
   // Create 3 x 3 square
   image.fill(10);
   vil_crop(image, 4,3, 5,3).fill(17);
 
-  vcl_vector<int> bi,bj;
+  std::vector<int> bi,bj;
   vil_find_4con_boundary_above_threshold(bi,bj,image,vxl_byte(12),5,5);
 
   show_boundary(bi,bj);

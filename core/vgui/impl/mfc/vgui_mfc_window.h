@@ -67,7 +67,7 @@ class vgui_mfc_window : public vgui_window
   void enable_vscrollbar(bool);
   void reshape(unsigned, unsigned);
   void reposition(int,int);
-  void set_title(vcl_string const &);
+  void set_title(std::string const &);
 
   //: Set the position of the horizontal scrollbar, returns old position
   virtual int set_hscrollbar(int pos);

@@ -28,7 +28,7 @@ class vgui_quit_tableau : public vgui_tableau
   bool handle(vgui_event const &);
 
   //: Return the type of this tableau ('vgui_quit_tableau').
-  vcl_string type_name() const;
+  std::string type_name() const;
 
  protected:
   //: Destructor - called by vgui_quit_tableau_sptr.

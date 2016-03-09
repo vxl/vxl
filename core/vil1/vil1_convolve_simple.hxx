@@ -8,14 +8,15 @@
 #include "vil1_convolve_simple.h"
 
 #include <vcl_cassert.h>
-#include <vcl_algorithm.h>
-#include <vcl_vector.h>
+#include <algorithm>
+#include <vcl_compiler.h>
+#include <vector>
 
 #ifndef TRACE
 #define TRACE 0
 #endif
 #if TRACE
-#include <vcl_iostream.h>
+#include <iostream>
 #endif
 
 //--------------------------------------------------------------------------------
@@ -38,8 +39,8 @@ void vil1_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
   //?? typedef typename vil1_ip_traits<O* const*>::pixel_type OutType;
 
 #if TRACE
-  vcl_cerr << "w1 h1 = " << w1 << ' ' << h1 << vcl_endl;
-  vcl_cerr << "w2 h2 = " << w2 << ' ' << h2 << vcl_endl;
+  std::cerr << "w1 h1 = " << w1 << ' ' << h1 << std::endl;
+  std::cerr << "w2 h2 = " << w2 << ' ' << h2 << std::endl;
 #endif
 
   // here we go : vrrrm.. vrrrm..
@@ -51,10 +52,10 @@ void vil1_convolve_simple(I1 const* const* input1, unsigned w1, unsigned h1,
       // bounds.
       // The type unification complains there is no max(int, unsigned)
       // template. Hence the explicit casts.
-      int ibeg = vcl_max(int( 0), int(io-w2+1));
-      int iend = vcl_min(int(w1), int(io+1));
-      int jbeg = vcl_max(int( 0), int(jo-h2+1));
-      int jend = vcl_min(int(h1), int(jo+1));
+      int ibeg = std::max(int( 0), int(io-w2+1));
+      int iend = std::min(int(w1), int(io+1));
+      int jbeg = std::max(int( 0), int(jo-h2+1));
+      int jend = std::min(int(h1), int(jo+1));
 
       // accumulate
       for (int j1=jbeg; j1<jend; ++j1) {
@@ -96,27 +97,27 @@ void vil1_convolve_simple(vil1_memory_image_of<I1> const &input1,    // input 1
   assert( output.in_range(xo, yo, w1+w2-1, h1+h2-1) );
 
   //
-  vcl_vector<I1 const *> in1(h1);
+  std::vector<I1 const *> in1(h1);
   for (unsigned k=0; k<h1; ++k)
     in1[k] = input1[y1+k] + x1;
 #if TRACE
-  vcl_cerr << in1.size() << " rasters in in1\n";
+  std::cerr << in1.size() << " rasters in in1\n";
 #endif
 
   //
-  vcl_vector<I2 const *> in2(h2);
+  std::vector<I2 const *> in2(h2);
   for (unsigned k=0; k<h2; ++k)
     in2[k] = input2[y2+k] + x2;
 #if TRACE
-  vcl_cerr << in2.size() << " rasters in in2\n";
+  std::cerr << in2.size() << " rasters in in2\n";
 #endif
 
   //
-  vcl_vector<O *> out(h1+h2-1);
+  std::vector<O *> out(h1+h2-1);
   for (unsigned k=0; k<h1+h2-1; ++k)
     out[k] = output[yo+k] + xo;
 #if TRACE
-  vcl_cerr << out.size() << " rasters in out\n";
+  std::cerr << out.size() << " rasters in out\n";
 #endif
 
   // call the simpler routine (see comment above for explanation of hack).

@@ -6,12 +6,13 @@
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_iostream.h>
-#include <vcl_cmath.h> // for std::sqrt
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cmath> // for std::sqrt
 //:
 template <class Type>
 vgl_frustum_3d<Type>::
-vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
+vgl_frustum_3d(std::vector<vgl_ray_3d<Type> >  const& corner_rays,
                vgl_vector_3d<Type> const& norm, Type d0, Type d1){
 
   //Construct cone bounding planes. Their surface normals point outward from
@@ -28,14 +29,14 @@ vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
   // find a point on the near plane
   vgl_vector_3d<Type> dir = r0.direction();
   // ray shouldn't be perpendicular to near plane normal
-  double er = vcl_fabs(cos_angle(norm, dir));
+  double er = std::fabs(cos_angle(norm, dir));
   assert(er > vgl_tolerance<double>::position);
   double dp = dot_product(norm, dir);
   // the normal to the near parallel face must point to the apex
   // since the apex is, by defintion, outside the frustum volume
   vgl_vector_3d<Type> snorm = norm;
   if(dp>0) snorm = -norm;
-  double dp_mag = vcl_fabs(dp);
+  double dp_mag = std::fabs(dp);
   double tau_near = d0/dp_mag;
   vgl_point_3d<Type> p_near = apex_ + (tau_near*dir);
   vgl_plane_3d<Type> pln_near(snorm, p_near);
@@ -92,7 +93,7 @@ vgl_frustum_3d(vcl_vector<vgl_ray_3d<Type> >  const& corner_rays,
   // find the side cone planes and associated face verts
   // each side face has four vertices, two on the near face and two
   // on the far face
-  vcl_vector<int>& top_verts = faces_[near_plane_];
+  std::vector<int>& top_verts = faces_[near_plane_];
   for(int i = 0; i<nc; ++i){
     int j = top_verts[i];
     int j_next = top_verts[(i+1)%nc];
@@ -116,7 +117,7 @@ bool vgl_frustum_3d<Type>::operator==(vgl_frustum_3d<Type> const& other) const{
   if(!(apex_ == other.apex()))
     return false;
   int n = static_cast<int>(verts_.size());
-  const vcl_vector<vgl_point_3d<Type> >& o_verts = other.verts();
+  const std::vector<vgl_point_3d<Type> >& o_verts = other.verts();
   // could be round off error
   for(int i = 0; i<n; ++i){
     double dif = (verts_[i] - o_verts[i]).length();
@@ -157,10 +158,10 @@ bool vgl_frustum_3d<Type>::is_convex() const{
   if(n==3) return true;
   // n > 3
   // get the vertex map for the top face
-  vcl_map<int, vcl_vector<int> >::const_iterator vit;
+  std::map<int, std::vector<int> >::const_iterator vit;
   vit = faces_.find(near_plane_);//use find since [] is non-const
   if(vit==faces_.end()) return false;
-  const vcl_vector<int>& vindx = (*vit).second;
+  const std::vector<int>& vindx = (*vit).second;
   vgl_vector_3d<Type> v = verts_[vindx[1]]-verts_[vindx[0]];
   vgl_vector_3d<Type> v_pre = verts_[vindx[2]]-verts_[vindx[1]];
   vgl_vector_3d<Type> cr = cross_product(v, v_pre);
@@ -201,9 +202,9 @@ bool vgl_frustum_3d<Type>::contains(vgl_point_3d<Type> const& p) const{
 }
 
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, vgl_frustum_3d<Type> const& f){
+std::ostream&  operator<<(std::ostream& s, vgl_frustum_3d<Type> const& f){
   s << "<vgl_frustum_3d [\n";
-  const vcl_vector<vgl_point_3d<Type> >& verts = f.verts();
+  const std::vector<vgl_point_3d<Type> >& verts = f.verts();
   int n = static_cast<int>(verts.size());
   for(int i = 0; i<n; ++i)
     s << verts[i] << '\n';
@@ -213,6 +214,6 @@ vcl_ostream&  operator<<(vcl_ostream& s, vgl_frustum_3d<Type> const& f){
 #undef VGL_FRUSTUM_3D_INSTANTIATE
 #define VGL_FRUSTUM_3D_INSTANTIATE(Type) \
 template class vgl_frustum_3d<Type >;\
-template vcl_ostream& operator<<(vcl_ostream&, vgl_frustum_3d<Type > const& f)
+template std::ostream& operator<<(std::ostream&, vgl_frustum_3d<Type > const& f)
 
 #endif //vgl_frustum_3d_hxx_

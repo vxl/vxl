@@ -5,8 +5,9 @@
 // \author Peter Vanroose
 // \date   4 November 2008
 
-#include <vcl_iostream.h>
-#include <vcl_cstdlib.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <cstdlib>
 #include <vgui/vgui.h>
 #include <vgui/vgui_image_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
@@ -29,11 +30,11 @@ struct example_tableau : public vgui_image_tableau
     {
       if (e.wy < 10) {
         ++current_file;
-        if (current_file >= nr_files) vcl_exit(0);
+        if (current_file >= nr_files) std::exit(0);
         set_image(filenames[current_file]);
         post_redraw();
       }
-      else vcl_cout << filenames[current_file] << "\t" << e.wx << "\t" << e.wy << vcl_endl;
+      else std::cout << filenames[current_file] << "\t" << e.wx << "\t" << e.wy << std::endl;
       return true; // event has been used
     }
 
@@ -58,7 +59,7 @@ int main(int argc,char **argv)
   vgui::init(argc, argv);
   if (argc <= 1)
   {
-    vcl_cerr << "Please give an image filename on the command line\n";
+    std::cerr << "Please give an image filename on the command line\n";
     return 0;
   }
 

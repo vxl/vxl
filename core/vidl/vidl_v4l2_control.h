@@ -11,8 +11,9 @@
 //     10 Nov 2008 Created (A. Garrido)
 //\endverbatim
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <string>
+#include <vector>
 
 extern "C" {
 //#include <asm/types.h>          /* for videodev2.h */
@@ -41,9 +42,9 @@ class vidl_v4l2_control
     v4l2_ctrl_type type() const { return (v4l2_ctrl_type)ctrl_.type; }
     //: Name of control
     // \return name the driver assign to the control
-    vcl_string name() const { return  (const char *) ctrl_.name; }
+    std::string name() const { return  (const char *) ctrl_.name; }
     //: A 1-line brief description
-    virtual vcl_string description() const= 0;
+    virtual std::string description() const= 0;
     //: Id of control
     // \return ID (for example, V4L2_CID_BRIGHTNESS corresponds to brightness)
     int id() const { return ctrl_.id; }
@@ -97,7 +98,7 @@ class vidl_v4l2_control_integer: public vidl_v4l2_control
     // \return value in range 0-100
     int get_100() const { return (get_value()-ctrl_.minimum)*100/(ctrl_.maximum-ctrl_.minimum); }
     //: A 1-line brief description
-    virtual vcl_string description() const;
+    virtual std::string description() const;
     //: Reset control
     virtual void reset() const { set(default_value()); }
 };
@@ -105,7 +106,7 @@ class vidl_v4l2_control_integer: public vidl_v4l2_control
 //: A class for handle a control of type menu
 class vidl_v4l2_control_menu: public vidl_v4l2_control
 {
-    vcl_vector<vcl_string> items;
+    std::vector<std::string> items;
   public:
     vidl_v4l2_control_menu(const v4l2_queryctrl& ctr, int f);
     //: Number of items
@@ -113,7 +114,7 @@ class vidl_v4l2_control_menu: public vidl_v4l2_control
     unsigned int n_items() const { return items.size();}
     //: Item i
     // \return string assigned to item i
-    vcl_string get(unsigned int i) const { return items[i]; }
+    std::string get(unsigned int i) const { return items[i]; }
     //: Select item i
     void set(unsigned int i) const { if (i<n_items()) set_value((int) i); }
     //: Get the value of the control
@@ -122,7 +123,7 @@ class vidl_v4l2_control_menu: public vidl_v4l2_control
     //: Default value of this control
     unsigned int default_value() const { return ctrl_.default_value; }
     //: A 1-line brief description
-    virtual vcl_string description() const;
+    virtual std::string description() const;
     //: Reset control
     virtual void reset() const { set(default_value()); }
 };
@@ -139,7 +140,7 @@ class vidl_v4l2_control_boolean: public vidl_v4l2_control
     //: Default value of this control
     bool default_value() const { return ctrl_.default_value; }
     //: A 1-line brief description
-    virtual vcl_string description() const
+    virtual std::string description() const
        { return "Control \""+name()+"\": boolean (default: "+(default_value()?"true":"false")+")"; }
     //: Reset control
     virtual void reset() const { set(default_value()); }
@@ -153,7 +154,7 @@ class vidl_v4l2_control_button: public vidl_v4l2_control
     //: Push button
     void push() const { set_value(1); }
     //: A 1-line brief description
-    virtual vcl_string description() const { return "Control \""+name()+"\": button"; }
+    virtual std::string description() const { return "Control \""+name()+"\": button"; }
 };
 
 #endif // vidl_v4l2_control_h_

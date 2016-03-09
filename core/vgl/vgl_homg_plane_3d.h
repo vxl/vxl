@@ -20,7 +20,8 @@
 //   Peter Vanroose 7 March 2009: Added normalize(), similar to the one in vgl_homg_line_2d<T>
 // \endverbatim
 
-#include <vcl_iosfwd.h>
+#include <vcl_compiler.h>
+#include <iosfwd>
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d and vgl_homg_point_3d
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_cassert.h>
@@ -108,10 +109,10 @@ inline bool is_ideal(vgl_homg_plane_3d<Type> const& p, Type tol=(Type)0) { retur
 // stream operators
 
 template <class Type>
-vcl_ostream&  operator<<(vcl_ostream& s, const vgl_homg_plane_3d<Type>& p);
+std::ostream&  operator<<(std::ostream& s, const vgl_homg_plane_3d<Type>& p);
 
 template <class Type>
-vcl_istream&  operator>>(vcl_istream& is, vgl_homg_plane_3d<Type>& p);
+std::istream&  operator>>(std::istream& is, vgl_homg_plane_3d<Type>& p);
 
 #define VGL_HOMG_PLANE_3D_INSTANTIATE(T) extern "please include vgl/vgl_homg_plane_3d.txx first"
 

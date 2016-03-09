@@ -5,13 +5,14 @@
 #include "vil_nitf2_data_mask_table.h"
 
 #include <vil/vil_stream.h>
-#include <vcl_string.h>
+#include <string>
 #include <vcl_cassert.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <cstdlib>
 
 vil_nitf2_data_mask_table::vil_nitf2_data_mask_table(
   unsigned int num_blocks_x, unsigned int num_blocks_y,
-  unsigned int num_bands, const vcl_string i_mode )
+  unsigned int num_bands, const std::string i_mode )
   : num_blocks_x( num_blocks_x ),
     num_blocks_y( num_blocks_y ),
     num_bands( num_bands ),
@@ -20,7 +21,7 @@ vil_nitf2_data_mask_table::vil_nitf2_data_mask_table(
 
 bool vil_nitf2_data_mask_table::parse( vil_stream* stream )
 {
-  //get the vcl_fixed width stuff first
+  //get the std::fixed width stuff first
   if ( stream->read( (void*)(&IMDATOFF),  4 ) != 4 ||
       stream->read( (void*)(&BMRLNTH),   2 ) != 2 ||
       stream->read( (void*)(&TMRLNTH),   2 ) != 2 ||
@@ -39,7 +40,7 @@ bool vil_nitf2_data_mask_table::parse( vil_stream* stream )
   //TPXCDLNTH
   unsigned short width = TPXCDLNTH / 8;
   if ( TPXCDLNTH % 8 != 0 ) width++;
-  void* val = vcl_malloc( width );
+  void* val = std::malloc( width );
 //  if ( stream->read( &val, width ) != width ) return false;
   if ( stream->read( val, width ) != width ) return false;
   maybe_endian_swap( (char*)val, width, width );
@@ -78,7 +79,7 @@ bool vil_nitf2_data_mask_table::parse( vil_stream* stream )
   }
 
 
-  //now do the pad pixel vcl_vector
+  //now do the pad pixel std::vector
   if ( TMRLNTH != 0 ){
     TMR_n_BND_m.resize( num_blocks_x );
     for ( i = 0 ; i < num_blocks_y ; i++ ){
@@ -138,7 +139,7 @@ void swap16(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 2; i += 2)
   {
-    vcl_swap( a[i+0], a[i+1] );
+    std::swap( a[i+0], a[i+1] );
   }
 }
 
@@ -147,8 +148,8 @@ void swap32(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 4; i += 4)
   {
-    vcl_swap( a[i+0], a[i+3] );
-    vcl_swap( a[i+1], a[i+2] );
+    std::swap( a[i+0], a[i+3] );
+    std::swap( a[i+1], a[i+2] );
   }
 }
 
@@ -157,10 +158,10 @@ void swap64(char *a, unsigned n)
 {
   for (unsigned i = 0; i < n * 8; i += 8)
   {
-    vcl_swap( a[i+0], a[i+7] );
-    vcl_swap( a[i+1], a[i+6] );
-    vcl_swap( a[i+2], a[i+5] );
-    vcl_swap( a[i+3], a[i+4] );
+    std::swap( a[i+0], a[i+7] );
+    std::swap( a[i+1], a[i+6] );
+    std::swap( a[i+2], a[i+5] );
+    std::swap( a[i+3], a[i+4] );
   }
 }
 

@@ -4,6 +4,7 @@
 //:
 // \file
 
+#include <iostream>
 #include "vgl_io_h_matrix_2d.h"
 #include <vsl/vsl_binary_io.h>
 
@@ -38,9 +39,9 @@ void vsl_b_read(vsl_b_istream &bfs, vgl_h_matrix_2d<T>& v)
       v.set(2,0,tx); v.set(2,0,ty); v.set(2,2,tt);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vgl_h_matrix_2d::b_read(vsl_b_istream&)\n"
+      std::cerr << "I/O ERROR: vgl_h_matrix_2d::b_read(vsl_b_istream&)\n"
                << "           Unknown version number "<< version << '\n';
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }

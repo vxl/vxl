@@ -7,12 +7,13 @@
 // \author Ian Scott, Imorphics 2011
 
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_cstddef.h> // for ptrdiff_t and size_t
-#include <vcl_functional.h>
-#include <vcl_utility.h>
-#include <vcl_algorithm.h>
-#include <vcl_iterator.h>
+#include <vector>
+#include <cstddef> // for ptrdiff_t and size_t
+#include <functional>
+#include <utility>
+#include <algorithm>
+#include <vcl_compiler.h>
+#include <iterator>
 
 
 //: A fast read and batch-write map-style collection.
@@ -20,31 +21,31 @@
 // It has all the const-access map fundtions, but its contents can only be modified all-at-once.
 // You can not get a key,value pair, but you can get access to all the compactly-stored values for
 // a given key.
-template <typename K, typename T, typename C=vcl_less<K> >
+template <typename K, typename T, typename C=std::less<K> >
 class vbl_batch_compact_multimap
 {
  public:
   typedef K key_type;
   typedef T value_type;
   //: The type of data in the inputted sequence.
-  typedef typename vcl_pair<key_type, value_type> input_type;
+  typedef typename std::pair<key_type, value_type> input_type;
   typedef C key_compare;
   typedef unsigned index_type;
-  typedef typename vcl_vector<key_type> key_container_type;
-  typedef typename vcl_vector<index_type> index_container_type;
-  typedef typename vcl_vector<value_type> value_container_type;
+  typedef typename std::vector<key_type> key_container_type;
+  typedef typename std::vector<index_type> index_container_type;
+  typedef typename std::vector<value_type> value_container_type;
 
   typedef typename key_container_type::const_iterator const_key_iterator;
   typedef typename value_container_type::const_iterator const_value_iterator;
 
   protected:
   //: The type of container used internally to process inputted data.
-  typedef typename vcl_vector<input_type> input_container_type;
+  typedef typename std::vector<input_type> input_container_type;
 
  public:
   //: A comparator to sort input data, by ignoring the value in pair<key, value>
   class input_compare
-  : public vcl_binary_function<input_type, input_type, bool>
+  : public std::binary_function<input_type, input_type, bool>
   {
    public:
     friend class vbl_batch_compact_multimap<key_type, value_type, key_compare>;
@@ -63,7 +64,7 @@ class vbl_batch_compact_multimap
   vbl_batch_compact_multimap(CI start, CI finish)
   {
     input_container_type in(start, finish);
-    vcl_sort(in.begin(), in.end(), input_compare(key_compare()));
+    std::sort(in.begin(), in.end(), input_compare(key_compare()));
     assign_sorted(in.begin(), in.end());
   }
 
@@ -72,7 +73,7 @@ class vbl_batch_compact_multimap
   void assign(CI start, CI finish)
   {
     input_container_type in(start, finish);
-    vcl_sort(in.begin(), in.end(), input_compare(key_compare()));
+    std::sort(in.begin(), in.end(), input_compare(key_compare()));
     assign_sorted(in.begin(), in.end());
   }
 
@@ -87,7 +88,7 @@ class vbl_batch_compact_multimap
     assert(is_sorted(start, finish, input_compare(key_compare())));
     while (start != finish)
     {
-     typename vcl_iterator_traits<CI>::value_type::first_type const & last_start_val = start->first;
+     typename std::iterator_traits<CI>::value_type::first_type const & last_start_val = start->first;
       keys_.push_back(start->first);
       indices_.push_back(values_.size());
       values_.push_back(start->second);
@@ -120,7 +121,7 @@ class vbl_batch_compact_multimap
   const_value_iterator values_begin() const { return values_.begin(); }
   const_value_iterator values_end() const { return values_.end(); }
   bool empty() const { return values_.empty(); }
-  vcl_size_t size() const { return values_.size(); }
+  std::size_t size() const { return values_.size(); }
 
   // const map API
 
@@ -129,7 +130,7 @@ class vbl_batch_compact_multimap
   //   next greatest element if no match is found.
   const_value_iterator lower_bound(const key_type& x) const
   {
-    const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
+    const_key_iterator k_it = std::lower_bound(keys_.begin(), keys_.end(),
                                               x, key_compare() );
 
     return values_.begin() + indices_[k_it - keys_.begin()];
@@ -140,28 +141,28 @@ class vbl_batch_compact_multimap
   //   next greatest element if no match is found.
   const_value_iterator upper_bound(const key_type& x) const
   {
-    const_key_iterator k_it = vcl_upper_bound(keys_.begin(), keys_.end(),
+    const_key_iterator k_it = std::upper_bound(keys_.begin(), keys_.end(),
                                               x, key_compare() );
 
     return values_.begin() + indices_[k_it - keys_.begin()];
   }
 
   //: A more efficient  make_pair(lower_bound(...), upper_bound(...))
-  vcl_pair<const_value_iterator, const_value_iterator> equal_range(const key_type& x) const
+  std::pair<const_value_iterator, const_value_iterator> equal_range(const key_type& x) const
   {
     // This appears particularly slow in MSVC10 with no optimisation. In particular it appears slower
-    // than vcl_map dereference.
-    const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
+    // than std::map dereference.
+    const_key_iterator k_it = std::lower_bound(keys_.begin(), keys_.end(),
                                               x, key_compare() );
 
     if (k_it == keys_end() || *k_it != x)
     {
       const_value_iterator v_it=values_.begin() + indices_[k_it - keys_.begin()];
-      return vcl_make_pair(v_it, v_it);
+      return std::make_pair(v_it, v_it);
     }
     else
     {
-      return vcl_make_pair(values_.begin() + indices_[k_it - keys_.begin()],
+      return std::make_pair(values_.begin() + indices_[k_it - keys_.begin()],
                            values_.begin() + indices_[k_it - keys_.begin() + 1u] );
     }
   }
@@ -169,7 +170,7 @@ class vbl_batch_compact_multimap
   //: Finds the first value with key matching \p x, or returns values_end() if no match,
   const_value_iterator find(const key_type& x) const
   {
-    const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
+    const_key_iterator k_it = std::lower_bound(keys_.begin(), keys_.end(),
                                               x, key_compare() );
 
     if (k_it == keys_end() || *k_it != x)
@@ -179,9 +180,9 @@ class vbl_batch_compact_multimap
   }
 
   //: Finds the number of values matching key \p x,
-  vcl_size_t count(const key_type& x) const
+  std::size_t count(const key_type& x) const
   {
-    const_key_iterator k_it = vcl_lower_bound(keys_.begin(), keys_.end(),
+    const_key_iterator k_it = std::lower_bound(keys_.begin(), keys_.end(),
                                               x, key_compare() );
 
     if (k_it == keys_end() || *k_it != x)

@@ -6,12 +6,13 @@
 #include <vgui/vgui_blender_tableau.h>
 #include <vgui/vgui_viewer2D_tableau.h>
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 int main(int argc, char ** argv)
 {
   if (argc < 3) {
-    vcl_cerr << "Provide two images as arguments\n";
+    std::cerr << "Provide two images as arguments\n";
     return 1;
   }
 

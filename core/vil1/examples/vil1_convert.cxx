@@ -1,6 +1,7 @@
 // Example: format conversion.
 
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 
 #include <vil1/vil1_save.h>
 #include <vil1/vil1_load.h>
@@ -8,7 +9,7 @@
 int main(int argc, char ** argv)
 {
   if (argc != 4) {
-    vcl_cerr << "usage: vil1_convert in out format\n";
+    std::cerr << "usage: vil1_convert in out format\n";
     return -1;
   }
   char const* input_filename = argv[1];

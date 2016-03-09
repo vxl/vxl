@@ -1,5 +1,6 @@
 // This is core/vgl/io/tests/test_box_3d_io.cxx
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
 #include <vgl/vgl_box_3d.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_box_3d.h>
@@ -8,7 +9,7 @@
 
 static void test_box_3d_double_io()
 {
-  vcl_cout << "*******************************\n"
+  std::cout << "*******************************\n"
            << " Testing vgl_box_3d<double> io\n"
            << "*******************************\n";
 
@@ -32,8 +33,8 @@ static void test_box_3d_double_io()
 
   TEST ("p_out==p_in",p_out, p_in);
 
-  vsl_print_summary(vcl_cout, p_out);
-  vcl_cout << vcl_endl;
+  vsl_print_summary(std::cout, p_out);
+  std::cout << std::endl;
   vsl_indent_clear_all_data();
 }
 
