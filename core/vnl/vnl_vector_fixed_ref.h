@@ -32,7 +32,7 @@ class vnl_vector_fixed_ref_const
   const T* data_;
 
  public:
-  typedef unsigned int size_type;
+  typedef size_t size_type;
 
   vnl_vector_fixed_ref_const(vnl_vector_fixed<T,n> const& rhs) : data_(rhs.data_block()) {}
 
