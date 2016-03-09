@@ -905,7 +905,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         cam_local_rat->project(loc_x, loc_y, loc_z, iu, iv);
         unsigned iuu = (unsigned)vcl_floor(iu + 0.5f);
         unsigned ivv = (unsigned)vcl_floor(iv + 0.5f);
-        if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
+        if (iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
           // make it a 2x2 region with this point at the center
           vcl_vector<vsol_point_2d_sptr> vsol_pts;
           vsol_pts.push_back(new vsol_point_2d(iu-1, iv-1));

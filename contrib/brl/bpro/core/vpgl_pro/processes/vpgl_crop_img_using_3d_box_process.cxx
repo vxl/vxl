@@ -253,15 +253,15 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
 
   // store output
-  unsigned i0 = (unsigned)bb->get_min_x();
-  unsigned j0 = (unsigned)bb->get_min_y();
+  int i0 = bb->get_min_x();
   unsigned ni = (unsigned)bb->width();
-  unsigned nj = (unsigned)bb->height();
-
   if(i0 < 0) {
     ni += i0;
     i0 = 0;
   }
+
+  int j0 = bb->get_min_y();
+  unsigned nj = (unsigned)bb->height();
   if(j0 < 0) {
     nj += j0;
     j0 = 0;
@@ -431,7 +431,7 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
     vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
     return false;
   }
-  if (i0 < 0 || i0 > img_res_sptr->ni() || j0 < 0 || j0 > img_res_sptr->nj())
+  if (i0 > img_res_sptr->ni() || j0 > img_res_sptr->nj())
   {
     vcl_cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << vcl_endl;
     return false;
