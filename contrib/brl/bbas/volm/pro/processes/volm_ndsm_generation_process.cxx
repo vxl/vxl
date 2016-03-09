@@ -244,18 +244,18 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
   for (unsigned i = 0; i < o_ni; i++)
   {
     if (i%1000 == 0)
-      vcl_cout << i << '.' << vcl_flush;
-    unsigned start_i = i - half_size;
-    unsigned end_i   = i + half_size;
+    vcl_cout << i << '.' << vcl_flush;
+    int start_i = i - half_size;
     if (start_i < 0)  start_i = 0;
-    if (end_i > o_ni)   end_i = o_ni;
+    unsigned end_i   = i + half_size;
+    if (end_i >= o_ni)   end_i = o_ni-1;
     for (unsigned j = 0; j < o_nj; j++)
     {
       // compute the search range
-      unsigned start_j = j - half_size;
-      unsigned end_j   = j + half_size;
+      int start_j = j - half_size;
       if (start_j < 0) start_j = 0;
-      if (end_j > o_nj) end_j = o_nj;
+      unsigned end_j   = j + half_size;
+      if (end_j >= o_nj) end_j = o_nj-1;
       if (i == 11000 && j == 10000) {
         vcl_cout << "(" << i << "," << j << ") -- start: (" << start_i << "," << start_j << "), end: (" << end_i << "," << end_j << ")" << vcl_endl;
       }

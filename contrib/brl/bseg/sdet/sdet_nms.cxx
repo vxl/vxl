@@ -15,24 +15,6 @@
 // Constructors
 //----------------------------------------------------------------
 
-//: default constructor
-sdet_nms::sdet_nms():
-  thresh_(0.0),
-  parabola_fit_type_(sdet_nms_params::PFIT_3_POINTS),
-  margin_(1),
-  rel_thresh_(2.5),
-  use_adaptive_thresh_(true),
-  dir_x_(vil_image_view<double>(0,0,1)), // FIXME: this does not make sense: reference member is initialized to a temporary that doesn't persist after the constructor exits
-  dir_y_(vil_image_view<double>(0,0,1)), // idem
-  grad_mag_(vil_image_view<double>(0,0,1)), // idem
-  x_(0,0, 0.0),
-  y_(0,0, 0.0),
-  dir_(0,0, 0.0),
-  mag_(0,0, 0.0),
-  deriv_(0,0, 0.0)
-{
-}
-
 //: Constructor from a parameter block, gradient magnitudes given as an image and directions given as component image
 sdet_nms::sdet_nms(const sdet_nms_params& nsp, const vil_image_view<double>& dir_x,
                    const vil_image_view<double>& dir_y, const vil_image_view<double>& grad_mag) :
