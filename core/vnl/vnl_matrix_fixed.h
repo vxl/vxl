@@ -105,7 +105,7 @@ class vnl_matrix_fixed
 
  public:
   typedef vnl_matrix_fixed<T,num_rows,num_cols> self;
-  typedef unsigned int size_type;
+  typedef size_t size_type;
 
   //: Construct an empty num_rows*num_cols matrix
   vnl_matrix_fixed() {}

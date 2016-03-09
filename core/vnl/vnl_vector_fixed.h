@@ -90,7 +90,7 @@ class vnl_vector_fixed
 
  public:
   typedef vnl_vector_fixed<T,n> self;
-  typedef unsigned int size_type;
+  typedef size_t size_type;
   // Compile-time accessible attribute to get the dimensionality of the vector.
   enum { SIZE = n };
 

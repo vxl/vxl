@@ -257,7 +257,7 @@ class vnl_vector
 
   //: Type defs for iterators
   typedef T element_type;
-  typedef unsigned  size_type;
+  typedef size_t  size_type;
 
   //: Type defs for iterators
   typedef T       *iterator;
